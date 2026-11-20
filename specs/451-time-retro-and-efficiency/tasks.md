@@ -65,11 +65,11 @@ landing on its own, each small; T22 last.
 
 ### The hook-suite split (FR-010)
 
-- [ ] T20 [perf] The shard form - `tests/hooks/test-<name>.<k>.sh`, each shard a job under the suite's stamp key, the suite stamped green only when every shard is, the companion check accepting shards - in the `hooks-test` recipe and `tests/hooks/hookrun.sh`; `tests/hooks/test-entry-gate.sh` split by its two cases (D17; FR-010, SC-004)
+- [ ] T20 [perf] The shard form - `tests/hooks/test-<name>.<k>.sh`, each shard a job under the suite's stamp key, the suite stamped green only when every shard is, the companion check accepting shards - in the `hooks-test` recipe and `tests/hooks/hookrun.sh`, proved on `tests/hooks/test-parts.sh` split in two; the entry-gate split moved to T21 with the other two (the session, 2026-11-20) (D17; FR-010, SC-004)
       research: rendering
       held: Makefile
       verify: red first - a scratch roster's sharded fixture suite runs both shards and stamps only when both are green; `make hooks-test HOOKS_ALL=1`, each `.git/hooks-test/test-entry-gate.*.s` about 20 s or less (`SHARD_BAR_S`, GUESS); the case count before and after equal; `make quick`
-- [ ] T21 [perf] `tests/hooks/test-l7r-gate.sh` and `tests/hooks/test-sync-with-main.sh` split into shards by their case groups (D17; FR-010, SC-004)
+- [ ] T21 [perf] `tests/hooks/test-l7r-gate.sh`, `tests/hooks/test-sync-with-main.sh` and `tests/hooks/test-entry-gate.sh` (by its two cases, moved from T20) split into shards by their case groups (D17; FR-010, SC-004)
       research: rendering
       verify: each suite's case count before and after equal; `make hooks-test HOOKS_ALL=1`, each shard's kept seconds about 20 or less; `make quick`
 
@@ -86,9 +86,13 @@ landing on its own, each small; T22 last.
       research: rendering
 - [ ] T34 [perf] No make target formats one file (found by T14, 2026-11-20): make format reformats every crate, so a builder beside another's in-progress files formats with bare rustfmt outside make - make format FILE=<path> (or CRATE=) formats only what it names, red first
       research: rendering
-- [ ] T35 [perf] Two timing tests fail under load (found by T12, 2026-11-20): rustc's another_runs_holder_is_waited_for_named_and_past_the_ceiling_refused expects two waiting lines inside a 60 ms ceiling at a 10 ms poll and saw one under make static's load, and test-land-tooling.sh case 2b fails under the full hooks-test run and passes alone - a red gate on correct work; each test's timing taken from what it measures (an event, a count, or a ceiling scaled by a calibration loop), never a bare wall-clock bound, red first under induced load
+- [ ] T35 [perf] Two timing tests fail under load (found by T12, 2026-11-20): rustc's another_runs_holder_is_waited_for_named_and_past_the_ceiling_refused expects two waiting lines inside a 60 ms ceiling at a 10 ms poll and saw one under make static's load, and test-land-tooling.sh case 2b fails under the full hooks-test run and passes alone - a red gate on correct work; each test's timing taken from what it measures (an event, a count, or a ceiling scaled by a calibration loop), never a bare wall-clock bound, red first under induced load; its land-tooling half (case 2b) folded into T20 by T20's plan review (2026-11-20), so T35 holds the rustc test alone
       research: rendering
 - [ ] T36 The archived deferrals T17's replay found (2026-11-20): 449 T156, T200, T201, T208, T218, T219, T221, T224, T239 and 451 T02 (a class fix with no instance count), T03, T16, T26 deferred without a filed task or order in plan-done.md - for each, the deferred defect found carried by an open or ticked task, or filed now (each named), or shown fixed; history is not re-judged, so this is read by hand once
       research: rendering
 - [ ] T37 [perf] The plan-review bundle cuts a decision at its list (found by T19's plan review, 2026-11-20): spec-cited.md stops D16 at 'Two things make the comparison real:' and drops the bullets, as it stopped D15 at a colon for T17's review - a reviewer judges a decision without its text, and asks a round for it; every cited decision carried whole, its lists included, red first on D15 and D16
+      research: rendering
+- [ ] T38 [perf] Gate crates' tests read the real environment through the guard (found by T32, 2026-11-20): with L7R_FEATURE_DIRECTORY and L7R_EVENTS_DIR exported (a page session exports the first; nothing stops a session exporting either), 49 tests of 7 gate crates fail - arbiter 12, bundle 2, land 17, measure 1, owed 1, reviews 10, rustc 6 - all reading through the guard's shared::env, whose test map is cfg(test) of the guard alone, at 17 call sites (feature_dir, log_path, append_row, append_row_for); each read handed an environment reader carried with the crate's root (the guard's explicit-env variants made public, never a cargo feature turning the guard's test map on for dependents, never a test's remove_var), red first with both exported, every gate crate swept
+      research: rendering
+- [ ] T39 [perf] A FRESH=1 test run may replay another run's result (found by T32, 2026-11-20): two make rust-test CRATE=rust/guard FRESH=1 runs queued behind one target-directory lock both reported 'finished in 4.21s', where alone it takes 2.82-3.20 s - if a run waiting on the lock takes the holder's kept result, a fresh run reports green without running; measured first (two FRESH runs started together, each one's test binary execution counted), fixed red first if so
       research: rendering

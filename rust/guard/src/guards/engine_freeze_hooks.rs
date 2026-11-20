@@ -56,8 +56,8 @@ fn decide(event: &Event, session: &Session) -> Vec<Answer> {
                 root: PathBuf::from("/proc"),
                 mine: std::process::id(),
             },
-            stale: std::env::var("AGENT_STALE_S")
-                .ok()
+            // `shared::env`: a test's own environment (feature 451 T32)
+            stale: crate::shared::env::opt("AGENT_STALE_S")
                 .and_then(|v| v.parse().ok())
                 .unwrap_or(300),
             tree: std::env::var("L7R_GUARD_TREE")

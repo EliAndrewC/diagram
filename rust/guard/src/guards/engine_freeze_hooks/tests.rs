@@ -195,7 +195,7 @@ fn what_is_not_the_guards_business_passes() {
         json!({"tool_name": "NotebookEdit", "tool_input": {"notebook_path": notebook.to_string_lossy()}, "transcript_path": "not-a-transcript"}),
     );
     assert!(no_session.is_empty());
-    std::env::set_var("AGENT_STALE_S", "300");
+    crate::shared::env::set("AGENT_STALE_S", "300"); // the test thread's own (feature 451 T32)
     let e = Event {
         name: "PreToolUse".to_owned(),
         input: json!({"tool_name": "Edit", "tool_input": {"file_path": "/tmp/x"}}),

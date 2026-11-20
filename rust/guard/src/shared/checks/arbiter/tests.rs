@@ -74,6 +74,24 @@ fn the_feature_is_read_in_its_order() {
 }
 
 #[test]
+fn the_feature_pointers_are_the_test_threads_own() {
+    // feature 451 T32: `feature_dir` reads its two pointers through `shared::env`, the test thread's own map - so a session's
+    // exported `L7R_FEATURE_DIRECTORY` (a page session's) never reaches a test, and a test that names one sees exactly it
+    use crate::shared::env::{set, unset};
+    let d = clone_at("feature-env");
+    std::fs::create_dir_all(d.join("specs/414-a")).unwrap();
+    std::fs::write(d.join(".specify/feature.json"), "x").unwrap();
+    assert_eq!(feature_dir(&d, ""), None);
+    set("SPECIFY_FEATURE", "414-a");
+    assert_eq!(feature_dir(&d, ""), Some(d.join("specs/414-a")));
+    set("L7R_FEATURE_DIRECTORY", "specs/mine/");
+    assert_eq!(feature_dir(&d, ""), Some(d.join("specs/mine")));
+    unset("L7R_FEATURE_DIRECTORY");
+    unset("SPECIFY_FEATURE");
+    assert_eq!(feature_dir(&d, ""), None);
+}
+
+#[test]
 fn rulings_and_owed_triggers_read_back() {
     let d = clone_at("rulings");
     assert!(owed(&d).is_empty());

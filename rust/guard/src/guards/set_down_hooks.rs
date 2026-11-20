@@ -321,7 +321,8 @@ pub(crate) fn judge(event: &Event, session: &Session, seam: Option<String>) -> V
 }
 
 fn decide(event: &Event, session: &Session) -> Vec<Answer> {
-    judge(event, session, std::env::var("SET_DOWN_ROOT").ok())
+    // `shared::env`: a test reads its own environment, never a session's export (feature 451 T32)
+    judge(event, session, crate::shared::env::opt("SET_DOWN_ROOT"))
 }
 
 #[cfg(test)]

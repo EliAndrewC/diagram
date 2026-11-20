@@ -97,8 +97,9 @@ impl Config {
         }
     }
 
+    /// The configuration from the environment, through `shared::env` (a test's own, feature 451 T32).
     fn read() -> Self {
-        Self::from_env(&|k| std::env::var(k).ok(), uid())
+        Self::from_env(&crate::shared::env::opt, uid())
     }
 
     fn stamp(&self) -> PathBuf {

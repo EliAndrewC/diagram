@@ -52,10 +52,8 @@ pub fn now(clone: &Path) -> i64 {
     let c = clone.to_string_lossy();
     let fixture = c.contains("/test-") || c.contains("/tmp.") || c.starts_with("/tmp/");
     if fixture {
-        if let Some(n) = std::env::var("PAIR_NOW")
-            .ok()
-            .and_then(|n| n.trim().parse().ok())
-        {
+        // `shared::env`: a test's own environment, so its seamed clock never reaches another test's (feature 451 T32)
+        if let Some(n) = crate::shared::env::opt("PAIR_NOW").and_then(|n| n.trim().parse().ok()) {
             return n;
         }
     }

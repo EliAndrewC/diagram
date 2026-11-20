@@ -375,7 +375,7 @@ fn the_environment_sets_the_paths_and_the_command_line_its_modes() {
     assert!(set.age == Duration::from_secs(3 * DAY) && !set.off);
     assert_eq!(cli(&args(&["bogus"])).code, 2);
     assert_eq!(size(12_345_678), "12.3 MB");
-    std::env::set_var("L7R_SELF_CHECK", "1");
+    crate::shared::env::set("L7R_SELF_CHECK", "1"); // the test thread's own (feature 451 T32)
     let e = Event {
         name: "UserPromptSubmit".to_owned(),
         input: json!({}),

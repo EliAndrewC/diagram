@@ -373,7 +373,8 @@ working tree (the 2026-07-22 collision). Work in {c} - if it does not exist: git
             clone.display()
         )));
     }
-    let mut dispatcher = std::env::var("L7R_DISPATCHER").unwrap_or_default();
+    // `shared::env`: a test reads its own environment, never a session's export (feature 451 T32)
+    let mut dispatcher = crate::shared::env::var("L7R_DISPATCHER");
     if dispatcher.is_empty() {
         dispatcher = forked_from(sid, &cx.session.sessions_dir);
     }

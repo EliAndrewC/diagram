@@ -38,7 +38,7 @@
    "declared": "spec-fidelity"
   },
   "## Decisions": {
-   "sha256": "cc9cb76e21d3ebfc831235795d8c6e077f80fcbe1ed741107276ba7251025cbd",
+   "sha256": "0c6714ab51d84a135f5bf30e3a945063199749bf2f956a1f71d8a2b43ab2835b",
    "verdict": "CLEAR",
    "reviewed": "2026-11-20",
    "declared": "spec-fidelity"
@@ -278,19 +278,19 @@
    "declared": "spec-fidelity"
   },
   "### T20 (FR-010: three suites set the floor of every `make hooks-test` - research R10)": {
-   "sha256": "5c5b0eb28928f1d901cdbe058c378e14b00b0fddc207d0b9e0f28b442faf84b3",
+   "sha256": "eba631536c31ab16a8604ae39291a803d2d71c96c54c908dedbd95d07e1bac8a",
    "verdict": "CLEAR",
    "reviewed": "2026-11-20",
    "declared": "spec-fidelity"
   },
   "### T20 Approach (checklist part A)": {
-   "sha256": "25fca10bfd6f4edb7527cf90af2abfc59712984fd565c39b88729967743f8913",
+   "sha256": "975248dee4c2ba4b49004093a77c69ec10fa117d543e21f316fe818b7c675a54",
    "verdict": "CLEAR",
    "reviewed": "2026-11-20",
    "declared": "spec-fidelity"
   },
   "### T20 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)": {
-   "sha256": "6da289dbe140d8dabcea059f60f5e033a1a04ff4d3e16ce32f8c5230ff3729c3",
+   "sha256": "60e79ef5aa273be1f6acf73469de961eb4b121c41b1eabf5fe765a6f130f819c",
    "verdict": "CLEAR",
    "reviewed": "2026-11-20",
    "declared": "spec-fidelity"
@@ -463,14 +463,8 @@
    "reviewed": "2026-11-20",
    "declared": "spec-fidelity"
   },
-  "### T32 (<why: the finding or measurement that files it>)": {
-   "sha256": "8d928cd7fd63c39c407a0e271d1194c29b29706b660756d052020080a2a26a1d",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-20",
-   "declared": "spec-fidelity"
-  },
   "### T32 Approach (checklist part A)": {
-   "sha256": "40c013361bea4d84657700f3fd80ba26fb9f7af1c3f745ac924d3080d463e32c",
+   "sha256": "565e265bb4d52c5e82d62f6b5dd9b90a0adfe4aa2e67e660b81621ed042cc24a",
    "verdict": "CLEAR",
    "reviewed": "2026-11-20",
    "declared": "spec-fidelity"
@@ -519,6 +513,54 @@
   },
   "### T36 Approach (checklist part A)": {
    "sha256": "6be6f06c252eba1d25c30c6d58725e4ef5f70a1ed9ad505e301b9a90b3ee869a",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity"
+  },
+  "### T32 (the guard's own tests read the real environment: with `L7R_FEATURE_DIRECTORY` exported, as a page session exports it, 17-20 tests of the check state and its guards failed, found by T14, observed 2026-11-20, method: T14's `make rust-test` log)": {
+   "sha256": "ed6e6e313fe3601702d027d63abe2ca51f327f5c6d892d553ff715221b880974",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity"
+  },
+  "### T37 (<why: the finding or measurement that files it>)": {
+   "sha256": "3bc738067b7ab9bff4e3e2068baa73aca000ac8048017b4c2f2b779ab1d43d4e",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity"
+  },
+  "### T37 Approach (checklist part A)": {
+   "sha256": "4fcd7d678a98d7d9c2d341431259fc60ccaa8506d3a6310b5ae059bd0e7b14e3",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity"
+  },
+  "### T38 (<why: the finding or measurement that files it>)": {
+   "sha256": "b1541c0bac596efa05efb02c23dd2f84a01624056ba7065ff015729ff8770569",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity"
+  },
+  "### T38 Approach (checklist part A)": {
+   "sha256": "77e344a8ae148d97dafcdf4409c182200974bf4f636dceb6e1e18dc97c867b5c",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity"
+  },
+  "### T38 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)": {
+   "sha256": "f98e6174cfbdcc0647f654643583bbe9d77efb643575cef2a42a34390758cf9c",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity"
+  },
+  "### T39 (<why: the finding or measurement that files it>)": {
+   "sha256": "c44f9f760cc6ecadfab0a30864c57b79e7d9261a5ca2a62fdb55f1cfd64f984c",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity"
+  },
+  "### T39 Approach (checklist part A)": {
+   "sha256": "95d1082f0040c44b002f8e14a01bf1e47557d150a957f07d326e14a52237c043",
    "verdict": "CLEAR",
    "reviewed": "2026-11-20",
    "declared": "spec-fidelity"
@@ -4150,6 +4192,258 @@
      "why": "Neither is a wrong outcome. The log rows are the measurement's own records, in an untracked log. The index line misdirects no tool and blocks no work. The QUICK_OK help/FREE_TEXT gap is fixed in this task, not deferred."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-20",
+   "blocks": [
+    "### T20 (FR-010: three suites set the floor of every `make hooks-test` - research R10)",
+    "### T20 Approach (checklist part A)",
+    "### T20 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T20-scope",
+     "summary": "T20 builds and proves the shard form on test-parts.sh (split into test-parts.1.sh and test-parts.2.sh); the three slow suites, entry-gate.sh included, are split in T21, which lands before T22.",
+     "class": "within",
+     "why": "D17 in the accepted spec settles exactly this split of work: 'T20 builds the form, proved on test-parts.sh; T21 splits the three'. FR-010's three suites are all still split, by T21. The GM's 2026-11-20 order to do the improvements first is kept by T21 landing before T22. Nothing the GM asked for is dropped."
+    },
+    {
+     "id": "T20-shard-form",
+     "summary": "A shard is tests/hooks/test-<name>.<k>.sh with k all digits, run in numeric order with gaps allowed. Each shard is its own job <guard>.<k> with its own .rc/.log/.s/.reads, and stamps nothing.",
+     "class": "within",
+     "why": "This is D17's 'treats each shard as a job', and the .s file is the place SC-004 measures. It is an implementation detail of FR-010 and narrows nothing."
+    },
+    {
+     "id": "T20-stamp",
+     "summary": "hookrun.sh --close stamps the suite once (its sha, its trace from every shard's reads, and its shard list .jobs), and only when every shard's job is ok. One red or missing shard leaves it unstamped.",
+     "class": "within",
+     "why": "This is D17's 'stamps the suite green when every shard is'."
+    },
+    {
+     "id": "T20-key",
+     "summary": "The recipe gives each shard its own key through deps --keys and hashes the guard's key with its shards' keys. A traced suite is skipped only while its shard list matches the kept .jobs, so an edited or added shard reruns the suite. No change to rust/guard.",
+     "class": "within",
+     "why": "This keeps D17's 'keyed by the suite's stamp key' and makes the skip correct for split suites. It is an implementation choice that narrows nothing."
+    },
+    {
+     "id": "T20-companion",
+     "summary": "The GUARD WITHOUT A TEST check reads hookrun.sh --jobs once and accepts a guard's suite or its shards, including a single shard. It fails the run on SUITE AND SHARDS BOTH (a suite beside its own shards) and on SHARD WITHOUT ITS SUITE (a shard no rostered guard owns, which nothing would ever run).",
+     "class": "within",
+     "why": "D17 says the companion check 'accepts shards' and that a shard stands 'beside nothing else of that name'. SUITE AND SHARDS BOTH enforces that clause. SHARD WITHOUT ITS SUITE keeps a split from silently dropping cases, which is the plan's own constraint that every case still runs. Both only refuse a broken split of the requested kind and reach nothing else, so they enforce FR-010 and add no unrequested behavior."
+    },
+    {
+     "id": "T20-red-first-and-measure",
+     "summary": "16 new pins in test-parts.2.sh are proved red against HEAD's hookrun.sh. Done is measured by HOOKS_ALL=1 before and after runs and the shards' .s files. The plan expects no wall-time saving in T20 itself; the saving is T21's.",
+     "class": "within",
+     "why": "The tests only enforce the requested shard form. The measurement follows SC-004 and the GM's performance-first ruling (FR-013). Having T20 save nothing on its own follows from D17's split of work between T20 and T21."
+    },
+    {
+     "id": "T20-left-land-tooling-2b",
+     "summary": "test-land-tooling.sh case 2b, a wall-clock assertion that failed once under load and passed on rerun, is left unfixed in T20 and handed to the launcher to file (DEFER_FORM_OK).",
+     "class": "within",
+     "why": "The GM never asked to fix this assertion and it is not part of FR-010, so leaving it narrows nothing he asked for. The section records it, says why it is not fixed here (outside T20's files), and routes it to be filed. Whether the deferral satisfies FR-009's form is make decide's mechanical check, not a fidelity question."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-20",
+   "blocks": [
+    "### T20 (FR-010: three suites set the floor of every `make hooks-test` - research R10)",
+    "### T20 Approach (checklist part A)",
+    "### T20 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T20-scope",
+     "summary": "T20 builds the shard form only, proved on test-parts.sh (split 6 + 7 cases plus 16 new pins); the three slow suites' splits, entry-gate.sh included, are T21's, landing before T22",
+     "class": "within",
+     "why": "D17 settles exactly this split of work: 'T20 builds the form, proved on test-parts.sh; T21 splits the three'. The found-and-left entry-gate deferral is that same assignment, not a defect left; every case of test-parts.sh still runs (13 before, 6 + 23 after)."
+    },
+    {
+     "id": "shard-form",
+     "summary": "A shard is tests/hooks/test-<name>.<k>.sh with k all digits, run in numeric order with gaps allowed; each shard is its own job <guard>.<k> with its own .rc/.log/.s/.reads and stamps nothing",
+     "class": "within",
+     "why": "D17's 'tests/hooks/test-<name>.<k>.sh ... treats each shard as a job keyed by the suite's stamp key'; the per-shard .s is the measure D17 and SC-004 name."
+    },
+    {
+     "id": "stamp-on-close",
+     "summary": "hookrun.sh --close stamps the suite (sha, trace from every shard's reads, shard list .jobs) only when every shard's job is ok; one red or missing shard leaves it unstamped",
+     "class": "within",
+     "why": "D17: 'stamps the suite green when every shard is'. One stamp per suite is the mechanism that delivers that without losing shards' reads."
+    },
+    {
+     "id": "key-and-rerun",
+     "summary": "Recipe keys each shard as its own name via deps --keys and hashes the guard's key with its shards' keys; an edited or added shard reruns the suite; no change to rust/guard",
+     "class": "within",
+     "why": "Implementation of D17's 'keyed by the suite's stamp key'; it keeps the skip-when-unchanged behavior correct for shards and narrows nothing."
+    },
+    {
+     "id": "companion-check",
+     "summary": "GUARD WITHOUT A TEST accepts a guard's suite or its shards (one hookrun.sh --jobs call); a suite beside its own shards fails as SUITE AND SHARDS BOTH; an orphan shard fails as SHARD WITHOUT ITS SUITE; a single-shard guard is accepted",
+     "class": "within",
+     "why": "D17: 'its companion check accepts shards for a guard's companion' and shards sit 'beside nothing else of that name'. The two refusals only fail when D17's form is broken, so they enforce what was asked."
+    },
+    {
+     "id": "case-2b-barrier",
+     "summary": "test-land-tooling.sh case 2b's wall-clock overlap bound (.checks < 1.8) is replaced by a barrier: each job marks its start and waits up to 20 s for the other's mark, and the case asserts both saw the other; timings stay recorded as numbers",
+     "class": "within",
+     "why": "A check that refused correct work under load (3 of 3 failed at load, recorded) is a defect, and fixing it is owed under fix-as-we-go. It still enforces the same property, that the two jobs overlap: run one after the other it went red 2 of 2. It narrows nothing the GM asked for."
+    },
+    {
+     "id": "perf-expectation",
+     "summary": "T20 expects no wall saving (parts.sh was never on the critical path); the saving is T21's; before/after equal within noise",
+     "class": "within",
+     "why": "It follows from D17's T20/T21 division; FR-010's 20 s bar is met by T21's splits, and SHARD_BAR_S is never a gate per D17."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-20",
+   "blocks": [
+    "### T32 (the guard's own tests read the real environment: with `L7R_FEATURE_DIRECTORY` exported, as a page session exports it, 17-20 tests of the check state and its guards failed, found by T14, observed 2026-11-20, method: T14's `make rust-test` log)",
+    "### T32 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T32-reader",
+     "summary": "One environment reader for the guard crate, shared::env (process variable outside cfg(test), a per-test-thread map under it); consulted::var and VARS become re-exports of it (T24's seam, one map); the swept reads and the 7 set_var tests converted to it; arbiter/tests.rs pins the seam.",
+     "class": "within",
+     "why": "A design choice for how the guard's tests stop reading a session's exports. It removes nothing the request or spec asks for, and it keeps test lines out of a real feature's event log, which make where-time reads (FR-005, SC-001)."
+    },
+    {
+     "id": "T32-left-process-wide",
+     "summary": "log::quiet's GUARD_LOG_DIR, set once for the whole process by design (T009), and the binary's own main.rs and bench.rs are left as they are.",
+     "class": "within",
+     "why": "The block reports no wrong outcome from either: one value set once, and the binary's own reads of its environment. A difference from the task line's wording that is not a defect is within what was asked (constitution XIV v2.36.0) and needs no ruling."
+    },
+    {
+     "id": "T32-measure-state-dir",
+     "summary": "An exported MEASURE_STATE_DIR is ruled not a defect: a test created the directory empty and wrote nothing into it.",
+     "class": "within",
+     "why": "An empty directory changes no outcome: no test result, no log, no map. Under the GM's definition this is not a defect, so leaving it is within what was asked."
+    },
+    {
+     "id": "T32-no-poll-hooks",
+     "summary": "no_poll_hooks, named by T14's run, failed in none of 4 exported runs or the sweep's 91, so it is named in the report rather than fixed.",
+     "class": "within",
+     "why": "The failure was not reproduced, so there is no known defect left. Reporting it keeps the evidence in view, which leaves nothing that was asked out."
+    },
+    {
+     "id": "T32-perf-class",
+     "summary": "T32 is tagged [perf] under FR-013, so a non-performance task is refused task-start while it stays open, and the Stop hook names it first.",
+     "class": "within",
+     "why": "FR-013 counts work that makes the builders' loop faster. A guard test that goes red only because of the shell's exports costs every page-session builder a round on a false red, so clearing it is that kind of work. Under FR-013 the tag puts T32 first; it does not widen what the feature does."
+    },
+    {
+     "id": "T32-gate-crates-T38",
+     "summary": "The gate crates' 49 tests in 7 crates, red with L7R_FEATURE_DIRECTORY and L7R_EVENTS_DIR exported (a known defect that T32 found), are not fixed in T32. They are filed as T38, which lands before T22: a reader of the environment threaded to 17 call sites in 7 crates, each crate owing its own test, lint and cover.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This is a known defect left by this section, so it is a narrowing and is presumed wrong. The block's own grounds, that it is 'a task's worth of work' and that each crate owes its own test, lint and cover, are cost arguments and carry no weight. What carries it is the GM's approved improvements. Improvement 4 says briefs 'default to fixing in the task', and a default admits a stated exception. Improvement 1, 'A fresh builder per stage', asks for one builder per bounded piece of work, and 17 call sites in 7 crates outside the guard are a separate piece. The defect is also not dropped: it is filed as T38 and ordered before T22, so it is fixed before work moves on. The ruling rests on two things the bundle does not show. First, T38 must exist and be tagged [perf]: by this block's own reasoning it is the same class of work as T32, and without the tag FR-013 would hold it behind other performance tasks. Second, T38 must actually land before T22. If either is untrue, the deferral is NOT LEGITIMATE."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-20",
+   "blocks": [
+    "### T32 (the guard's own tests read the real environment: with `L7R_FEATURE_DIRECTORY` exported, as a page session exports it, 17-20 tests of the check state and its guards failed, found by T14, observed 2026-11-20, method: T14's `make rust-test` log)",
+    "### T32 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T32-reader",
+     "summary": "One environment reader for the guard crate, shared::env (opt, var; test-build set, unset): the process variable outside cfg(test), a per-test-thread map under it; consulted::var and VARS become re-exports of it (T24's seam, one map); arbiter/tests.rs pins the seam.",
+     "class": "within",
+     "why": "Implementation design of the fix T32 exists for. The defect is a wrong outcome: guard tests go red because a page session's shell exports a variable. A builder no longer losing rounds to that red serves the GM's 2026-11-20 request to put performance improvements first (FR-013: the builders' loop). Nothing the GM asked for is narrowed."
+    },
+    {
+     "id": "T32-sweep-fixes",
+     "summary": "Fix the 6 tests that the 79-variable sweep showed moving (RECORD_CHECKS_DIR, L7R_GUARD_TREE, SET_DOWN_ROOT, L7R_PERMIT_NOW x2, L7R_DISPATCHER), and stop the event-log tests writing fixture logs into an exported L7R_EVENTS_DIR.",
+     "class": "within",
+     "why": "Known defects of the same kind, fixed in the task that found them (fix as we go). The stray event-log writes matter directly to this feature, because they corrupt the logs that where-time and the GM's retrospective read."
+    },
+    {
+     "id": "T32-setvar-tests",
+     "summary": "Convert the 7 tests that set the process environment to set the test thread's own map, converting their reads with them.",
+     "class": "within",
+     "why": "Same mechanism, same task. It widens no behavior beyond the guard crate's tests."
+    },
+    {
+     "id": "T32-left-guard-log-dir",
+     "summary": "Leave log::quiet's GUARD_LOG_DIR set once for the whole process (T009), and leave the binary's main.rs and bench.rs reading the real environment.",
+     "class": "within",
+     "why": "Neither is a wrong outcome. GUARD_LOG_DIR is set once on purpose, to keep test logs out of real ones. main.rs and bench.rs are not tests and must read the real environment. The GM's request asks for no rule against process-environment mutation; that wording is the task line's own. Leaving a difference that works is not a narrowing (constitution XIV)."
+    },
+    {
+     "id": "T32-left-not-defects",
+     "summary": "Leave MEASURE_STATE_DIR (a test created the directory empty and wrote nothing into it) and the reads that the sweep showed moving no test, as not defects.",
+     "class": "within",
+     "why": "Measured to produce no wrong outcome (ls of the exported directory; per-var.tsv). Under constitution XIV these are not defects, and nothing the GM asked is left undone."
+    },
+    {
+     "id": "T32-gate-crates-T38",
+     "summary": "The gate crates' tests reading the real environment through the guard (49 tests in 7 crates red with L7R_FEATURE_DIRECTORY and L7R_EVENTS_DIR exported) are not fixed in T32. They are filed as T38, ordered to land before T22, with the reason stated: the guard's test map is cfg(test) of the guard alone, so the fix is a reader threaded to 17 call sites in 7 crates, each owing its own test, lint and cover.",
+     "class": "within",
+     "why": "The defect is not dropped or left unfixed in the feature. It is scheduled as its own task in the same feature, with a stated reason and an ordering, which is what FR-009 requires of a deferral. T32's filed scope is the guard crate's own tests, so moving work outside that crate into a separate task narrows nothing the GM asked for. This would be a finding only if T38 were not performance-tagged or never landed, and this block cannot show either."
+    },
+    {
+     "id": "T32-no-poll-hooks",
+     "summary": "no_poll_hooks, named by T14's run, is not fixed: it failed in none of 4 exported runs and none of the sweep's 91, and it is named in the report.",
+     "class": "within",
+     "why": "No wrong outcome was reproduced, so no known defect is left. Naming it in the report is the honest handling."
+    },
+    {
+     "id": "T32-perf-tag",
+     "summary": "T32 is classed as performance work ([perf], FR-013): a builder's make rust-test on the guard is green whatever the session exports.",
+     "class": "within",
+     "why": "FR-013 counts 'the builders' loop faster' as performance work. A false red that costs a builder a round falls inside that definition and inside the GM's 2026-11-20 'prioritize performance improvements'."
+    },
+    {
+     "id": "T32-order-exits",
+     "summary": "Order: after T24 (its seam is reused), independent of T20. Exits: crate-scoped lint and cover, make quick, make static once, make hooks-test; on red, the task is set down and any claim that it cannot be done goes through make arbiter-ask.",
+     "class": "within",
+     "why": "The ordering and exits are consistent with FR-007 (make static once, crate-scoped checks while iterating). Nothing requested is narrowed."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-20",
+   "blocks": [
+    "## Decisions",
+    "### T37 (<why: the finding or measurement that files it>)",
+    "### T37 Approach (checklist part A)",
+    "### T38 (<why: the finding or measurement that files it>)",
+    "### T38 Approach (checklist part A)",
+    "### T38 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)",
+    "### T39 (<why: the finding or measurement that files it>)",
+    "### T39 Approach (checklist part A)",
+    "(removed) ### T32 (<why: the finding or measurement that files it>)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D17 (amended)",
+     "summary": "The shard work is split across two tasks: T20 builds the shard form (runner job keyed by the suite's stamp key, companion check accepting shards), proved on test-parts.sh; T21 splits the three slowest suites (entry-gate.sh by its two cases, the other two by case groups) to about 20 s a shard.",
+     "class": "within",
+     "why": "The only change to the Decisions block (diffed against its CLEAR text: lines 186-187). It allocates FR-010's existing work to two tasks and keeps the target (the three slowest suites, each shard about 20 s or less, SC-004) whole; proving the form on one more suite is verification of the requested split, not new scope, and nothing the GM asked for (improvement 5) is dropped."
+    },
+    {
+     "id": "T37, T38, T39 template sections",
+     "summary": "Three new tasks' unfilled template sections (title, Approach table, checklist part A, Found and left, Performance work; T38 also the performance-checklist template).",
+     "class": "within",
+     "why": "Placeholders only: no approach, constraint, exception or scope is stated, so they settle nothing the spec left open. They will be judged when filled and decided."
+    },
+    {
+     "id": "T32 template section removed",
+     "summary": "An unfilled template section for T32 deleted by hand.",
+     "class": "within",
+     "why": "Its earlier text (CLEAR) was the bare placeholder with no decision in it, so its removal withdraws no decision and narrows nothing."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -5492,6 +5786,118 @@
      "summary": "Found and left: the two real-tree probe rows in ~/.claude/guard-log and the rust/gate/CLAUDE.md task row not naming task_add/quick.rs are judged not defects.",
      "class": "within",
      "why": "Neither is a wrong outcome. The log rows are the measurement's own records, in an untracked log. The index line misdirects no tool and blocks no work. The QUICK_OK help/FREE_TEXT gap is fixed in this task, not deferred."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T20": {
+   "section_sha256": "24698bdbec7696c48a9504750d0a45840f7d949fc0283113f67b6d15ef3e7c2b",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T20-scope",
+     "summary": "T20 builds the shard form only, proved on test-parts.sh (split 6 + 7 cases plus 16 new pins); the three slow suites' splits, entry-gate.sh included, are T21's, landing before T22",
+     "class": "within",
+     "why": "D17 settles exactly this split of work: 'T20 builds the form, proved on test-parts.sh; T21 splits the three'. The found-and-left entry-gate deferral is that same assignment, not a defect left; every case of test-parts.sh still runs (13 before, 6 + 23 after)."
+    },
+    {
+     "id": "shard-form",
+     "summary": "A shard is tests/hooks/test-<name>.<k>.sh with k all digits, run in numeric order with gaps allowed; each shard is its own job <guard>.<k> with its own .rc/.log/.s/.reads and stamps nothing",
+     "class": "within",
+     "why": "D17's 'tests/hooks/test-<name>.<k>.sh ... treats each shard as a job keyed by the suite's stamp key'; the per-shard .s is the measure D17 and SC-004 name."
+    },
+    {
+     "id": "stamp-on-close",
+     "summary": "hookrun.sh --close stamps the suite (sha, trace from every shard's reads, shard list .jobs) only when every shard's job is ok; one red or missing shard leaves it unstamped",
+     "class": "within",
+     "why": "D17: 'stamps the suite green when every shard is'. One stamp per suite is the mechanism that delivers that without losing shards' reads."
+    },
+    {
+     "id": "key-and-rerun",
+     "summary": "Recipe keys each shard as its own name via deps --keys and hashes the guard's key with its shards' keys; an edited or added shard reruns the suite; no change to rust/guard",
+     "class": "within",
+     "why": "Implementation of D17's 'keyed by the suite's stamp key'; it keeps the skip-when-unchanged behavior correct for shards and narrows nothing."
+    },
+    {
+     "id": "companion-check",
+     "summary": "GUARD WITHOUT A TEST accepts a guard's suite or its shards (one hookrun.sh --jobs call); a suite beside its own shards fails as SUITE AND SHARDS BOTH; an orphan shard fails as SHARD WITHOUT ITS SUITE; a single-shard guard is accepted",
+     "class": "within",
+     "why": "D17: 'its companion check accepts shards for a guard's companion' and shards sit 'beside nothing else of that name'. The two refusals only fail when D17's form is broken, so they enforce what was asked."
+    },
+    {
+     "id": "case-2b-barrier",
+     "summary": "test-land-tooling.sh case 2b's wall-clock overlap bound (.checks < 1.8) is replaced by a barrier: each job marks its start and waits up to 20 s for the other's mark, and the case asserts both saw the other; timings stay recorded as numbers",
+     "class": "within",
+     "why": "A check that refused correct work under load (3 of 3 failed at load, recorded) is a defect, and fixing it is owed under fix-as-we-go. It still enforces the same property, that the two jobs overlap: run one after the other it went red 2 of 2. It narrows nothing the GM asked for."
+    },
+    {
+     "id": "perf-expectation",
+     "summary": "T20 expects no wall saving (parts.sh was never on the critical path); the saving is T21's; before/after equal within noise",
+     "class": "within",
+     "why": "It follows from D17's T20/T21 division; FR-010's 20 s bar is met by T21's splits, and SHARD_BAR_S is never a gate per D17."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T32": {
+   "section_sha256": "62223132fbe25e07082d9f9ed8ec7c685cd37c0a0068f087e8cfabe004872c20",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T32-reader",
+     "summary": "One environment reader for the guard crate, shared::env (opt, var; test-build set, unset): the process variable outside cfg(test), a per-test-thread map under it; consulted::var and VARS become re-exports of it (T24's seam, one map); arbiter/tests.rs pins the seam.",
+     "class": "within",
+     "why": "Implementation design of the fix T32 exists for. The defect is a wrong outcome: guard tests go red because a page session's shell exports a variable. A builder no longer losing rounds to that red serves the GM's 2026-11-20 request to put performance improvements first (FR-013: the builders' loop). Nothing the GM asked for is narrowed."
+    },
+    {
+     "id": "T32-sweep-fixes",
+     "summary": "Fix the 6 tests that the 79-variable sweep showed moving (RECORD_CHECKS_DIR, L7R_GUARD_TREE, SET_DOWN_ROOT, L7R_PERMIT_NOW x2, L7R_DISPATCHER), and stop the event-log tests writing fixture logs into an exported L7R_EVENTS_DIR.",
+     "class": "within",
+     "why": "Known defects of the same kind, fixed in the task that found them (fix as we go). The stray event-log writes matter directly to this feature, because they corrupt the logs that where-time and the GM's retrospective read."
+    },
+    {
+     "id": "T32-setvar-tests",
+     "summary": "Convert the 7 tests that set the process environment to set the test thread's own map, converting their reads with them.",
+     "class": "within",
+     "why": "Same mechanism, same task. It widens no behavior beyond the guard crate's tests."
+    },
+    {
+     "id": "T32-left-guard-log-dir",
+     "summary": "Leave log::quiet's GUARD_LOG_DIR set once for the whole process (T009), and leave the binary's main.rs and bench.rs reading the real environment.",
+     "class": "within",
+     "why": "Neither is a wrong outcome. GUARD_LOG_DIR is set once on purpose, to keep test logs out of real ones. main.rs and bench.rs are not tests and must read the real environment. The GM's request asks for no rule against process-environment mutation; that wording is the task line's own. Leaving a difference that works is not a narrowing (constitution XIV)."
+    },
+    {
+     "id": "T32-left-not-defects",
+     "summary": "Leave MEASURE_STATE_DIR (a test created the directory empty and wrote nothing into it) and the reads that the sweep showed moving no test, as not defects.",
+     "class": "within",
+     "why": "Measured to produce no wrong outcome (ls of the exported directory; per-var.tsv). Under constitution XIV these are not defects, and nothing the GM asked is left undone."
+    },
+    {
+     "id": "T32-gate-crates-T38",
+     "summary": "The gate crates' tests reading the real environment through the guard (49 tests in 7 crates red with L7R_FEATURE_DIRECTORY and L7R_EVENTS_DIR exported) are not fixed in T32. They are filed as T38, ordered to land before T22, with the reason stated: the guard's test map is cfg(test) of the guard alone, so the fix is a reader threaded to 17 call sites in 7 crates, each owing its own test, lint and cover.",
+     "class": "within",
+     "why": "The defect is not dropped or left unfixed in the feature. It is scheduled as its own task in the same feature, with a stated reason and an ordering, which is what FR-009 requires of a deferral. T32's filed scope is the guard crate's own tests, so moving work outside that crate into a separate task narrows nothing the GM asked for. This would be a finding only if T38 were not performance-tagged or never landed, and this block cannot show either."
+    },
+    {
+     "id": "T32-no-poll-hooks",
+     "summary": "no_poll_hooks, named by T14's run, is not fixed: it failed in none of 4 exported runs and none of the sweep's 91, and it is named in the report.",
+     "class": "within",
+     "why": "No wrong outcome was reproduced, so no known defect is left. Naming it in the report is the honest handling."
+    },
+    {
+     "id": "T32-perf-tag",
+     "summary": "T32 is classed as performance work ([perf], FR-013): a builder's make rust-test on the guard is green whatever the session exports.",
+     "class": "within",
+     "why": "FR-013 counts 'the builders' loop faster' as performance work. A false red that costs a builder a round falls inside that definition and inside the GM's 2026-11-20 'prioritize performance improvements'."
+    },
+    {
+     "id": "T32-order-exits",
+     "summary": "Order: after T24 (its seam is reused), independent of T20. Exits: crate-scoped lint and cover, make quick, make static once, make hooks-test; on red, the task is set down and any claim that it cannot be done goes through make arbiter-ask.",
+     "class": "within",
+     "why": "The ordering and exits are consistent with FR-007 (make static once, crate-scoped checks while iterating). Nothing requested is narrowed."
     }
    ],
    "verdict": "CLEAR"

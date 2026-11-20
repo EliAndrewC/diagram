@@ -150,13 +150,14 @@ fn the_loop_ends_with_its_state_directory_and_fails_without_one() {
 fn the_command_line_answers_each_mode() {
     let args = |a: &[&str]| a.iter().map(|s| (*s).to_owned()).collect::<Vec<_>>();
     let (root, c) = world("cli");
-    std::env::set_var("STALL_SESSIONS_DIR", root.join("no-sessions"));
-    std::env::set_var("STALL_STATE_DIR", root.join("once-state"));
+    // the test thread's own environment (feature 451 T32): the process's, set here, stayed set for every later test
+    crate::shared::env::set("STALL_SESSIONS_DIR", root.join("no-sessions"));
+    crate::shared::env::set("STALL_STATE_DIR", root.join("once-state"));
     let once = with(&args(&["once"]), &c);
     assert!(once.code == 0 && once.stdout.is_empty());
     assert_eq!(with(&args(&["run"]), &c).code, 0);
     assert_eq!(cli(&args(&[])).code, 2);
     let e = event();
-    std::env::set_var("L7R_SELF_CHECK", "1");
+    crate::shared::env::set("L7R_SELF_CHECK", "1");
     assert!(decide(&e, &Session::from_input(&e.input)).is_empty());
 }

@@ -58,8 +58,9 @@ impl Config {
         }
     }
 
+    /// The configuration from the environment, through `shared::env` (a test's own, feature 451 T32).
     fn read() -> Self {
-        Self::from_env(&|k| std::env::var(k).ok())
+        Self::from_env(&crate::shared::env::opt)
     }
 
     fn wrapper(&self) -> String {
@@ -153,7 +154,7 @@ pub(crate) fn with(args: &[String], c: &Config) -> Reply {
         },
         Some("once") => {
             let lines = pass::run_pass(
-                &pass::Paths::from_env(&|k| std::env::var(k).ok()),
+                &pass::Paths::from_env(&crate::shared::env::opt),
                 pass::now(),
             );
             Reply {

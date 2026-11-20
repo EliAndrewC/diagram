@@ -150,8 +150,9 @@ fn the_command_line_answers_each_mode() {
     );
     assert_eq!(cli(&args(&["pending", at])).stdout, "w\n");
     assert_eq!(cli(&args(&["ack", "/proc/nope/x", "i"])).code, 1);
-    std::env::set_var("AGENT_WATCH_TICKS", "2");
-    std::env::set_var("AGENT_TICK_S", "0");
+    // the test thread's own environment (feature 451 T32), not the process's
+    crate::shared::env::set("AGENT_WATCH_TICKS", "2");
+    crate::shared::env::set("AGENT_TICK_S", "0");
     assert_eq!(cli(&args(&["watch", at])).code, 0);
     assert_eq!(cli(&args(&["ack", at])).code, 2);
     assert_eq!(cli(&args(&[])).code, 2);

@@ -162,7 +162,8 @@ fn decide(event: &Event, session: &Session) -> Vec<Answer> {
     judge(
         event,
         session,
-        &Config::from_env(&|k| std::env::var(k).ok(), now_ms),
+        // `shared::env`: a test's own environment (feature 451 T32)
+        &Config::from_env(&crate::shared::env::opt, now_ms),
     )
 }
 

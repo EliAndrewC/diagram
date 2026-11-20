@@ -42,13 +42,14 @@ fn the_pairing_state_keeps_its_other_fields() {
 
 #[test]
 fn the_clock_is_seamed_only_in_a_temporary_tree() {
-    std::env::set_var("PAIR_NOW", "1234");
+    // the test thread's own environment (feature 451 T32): the process's, set here, raced every pair test under `/tmp`
+    crate::shared::env::set("PAIR_NOW", "1234");
     assert_eq!(now(Path::new("/tmp/x")), 1234);
     assert_eq!(now(Path::new("/a/test-b")), 1234);
     assert!(now(Path::new("/home/c")) > 1_700_000_000);
-    std::env::set_var("PAIR_NOW", "not a number");
+    crate::shared::env::set("PAIR_NOW", "not a number");
     assert!(now(Path::new("/tmp/x")) > 1_700_000_000);
-    std::env::remove_var("PAIR_NOW");
+    crate::shared::env::unset("PAIR_NOW");
     assert!(wall() > 1_700_000_000);
 }
 

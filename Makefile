@@ -325,22 +325,31 @@ hooks-test:     ## [tests] run every tests/hooks/test-*-hooks.sh, and prove each
 	export HOOKS_SHIM="$$("$$root/scripts/hooks/l7r-guard.sh" trace shim "$$gitdir" 2>/dev/null)" HOOKS_ROOT="$$root"; \
 	: "THE LAUNCHERS' BINARIES BUILT AND CHECKED ONCE A RUN (feature 449 T205): each call of l7r-gate.sh or l7r-guard.sh walked its Rust sources to see whether to build, about 1,400 and 2,000 paths, and under the read recorder each path was a line of the suite's log - sync-with-main's run wrote 1,260,877 lines; with the fresh binaries named here a call skips the walk and hookrun.sh records the sources once a suite (an empty name, where a build failed, leaves every call to walk as before)"; \
 	export L7R_GATE_FRESH="$$(L7R_GATE_PRINT_FRESH=1 "$$root/scripts/gates/l7r-gate.sh" 2>/dev/null </dev/null)" L7R_GUARD_FRESH="$$(L7R_GUARD_PRINT_FRESH=1 "$$root/scripts/hooks/l7r-guard.sh" 2>/dev/null </dev/null)"; \
-	keys=$$("$$root/scripts/hooks/l7r-guard.sh" deps --keys $$roster); \
+	: "A SPLIT SUITE'S SHARDS ARE KEYED TOO (feature 451 T20, plan D17): deps seeds a guard's key from test-<name>.sh, which a split suite no longer has, so each shard is keyed as a name of its own and the suite's sha is its guard's key and its shards' keys hashed together - an edited shard reruns the suite"; \
+	shards=$$(for f in "$$root"/tests/hooks/test-*.[0-9]*.sh; do [ -f "$$f" ] && basename "$$f"; done); \
+	keys=$$("$$root/scripts/hooks/l7r-guard.sh" deps --keys $$roster $$shards); \
+	owned=$$(for b in $$roster; do t=test-$${b%.py}; case $$t in *.sh) ;; *) t=$$t.sh ;; esac; printf '%s ' "$$t"; done); \
+	pairs=$$("$$root/tests/hooks/hookrun.sh" --jobs "$$root/tests/hooks" $$owned); \
 	for h in $$root/scripts/hooks/*-hooks.sh $$root/scripts/gates/review-gate.sh $$root/scripts/gates/entry-gate.sh $$root/scripts/gates/claims-gate.sh $$root/scripts/gates/cohort-gate.sh $$root/scripts/gates/plan-gate.sh $$root/scripts/gates/l7r-gate.sh $$root/scripts/sync-with-main.sh $$root/scripts/land-tooling.sh $$root/scripts/hooks/l7r-guard.sh $$root/tests/hooks/parts.sh $$(find $$root/tests/hooks -maxdepth 1 -lname guard-shim.sh | sort); do \
 	  b=$$(basename $$h); case $$b in test-*) continue ;; esac; case " $$seen " in *" $$b "*) continue ;; esac; seen="$$seen $$b"; \
 	  t=test-$${b%.py}; case $$t in *.sh) ;; *) t=$$t.sh ;; esac; \
-	  if [ ! -f "$$root/tests/hooks/$$t" ]; then \
-	    printf '\n\033[1mGUARD WITHOUT A TEST: %s has no tests/hooks/%s\033[0m\n' "$$b" "$$t"; \
+	  jobs=$$(printf '%s\n' "$$pairs" | awk -v t="$$t" '$$1 == t { $$1 = ""; print substr($$0, 2) }'); \
+	  if [ "$$jobs" = "!" ]; then fail="$$fail $$b"; continue; fi; \
+	  if [ -z "$$jobs" ]; then \
+	    printf '\n\033[1mGUARD WITHOUT A TEST: %s has no tests/hooks/%s, nor its shards tests/hooks/%s.<k>.sh\033[0m\n' "$$b" "$$t" "$${t%.sh}"; \
 	    printf 'A guard ships with its companion. Without one, nothing can tell whether it still\n'; \
 	    printf 'fires - or whether it fires on correct work, which is the more expensive failure.\n\n'; \
 	    fail="$$fail $$b"; continue; \
 	  fi; \
-	  case "$$traced" in *" $$b "*) skipped=$$((skipped+1)); continue ;; esac; \
+	  case "$$traced" in *" $$b "*) if [ "$$jobs" = "$$t" ] || [ "$$(cat "$$gitdir/hooks-test/$$b.jobs" 2>/dev/null | tr '\n' ' ')" = "$$jobs " ]; then skipped=$$((skipped+1)); continue; fi ;; esac; \
 	  sha=$$(printf '%s\n' "$$keys" | awk -v b="$$b" '$$1 == b { print $$2 }'); mkdir -p "$$gitdir/hooks-test"; \
 	  [ -n "$$sha" ] || sha=unkeyed-$$RANDOM; \
+	  if [ "$$jobs" != "$$t" ]; then sha=$$( { echo "$$sha"; for j in $$jobs; do printf '%s\n' "$$keys" | awk -v b="$$j" '$$1 == b { print $$2 }'; done; } | sha256sum | cut -c1-16); fi; \
 	  if [ -z "$(HOOKS_ALL)" ] && [ "$$(cat "$$gitdir/hooks-test/$$b" 2>/dev/null)" = "$$sha" ]; then skipped=$$((skipped+1)); continue; fi; \
-	  n=$$((n+1)); printf '%s %s %s\n' "$$b" "$$t" "$$sha" >> "$$work/todo"; \
+	  n=$$((n+1)); for j in $$jobs; do printf '%s %s %s\n' "$$b" "$$j" "$$sha" >> "$$work/todo"; done; \
+	  [ "$$jobs" = "$$t" ] || printf '%s %s %s\n' "$$b" "$$sha" "$$jobs" >> "$$work/close"; \
 	done; \
+	"$$root/tests/hooks/hookrun.sh" --orphans "$$root/tests/hooks" $$owned || fail="$$fail shard-without-its-suite"; \
 	: "THE LONGEST SUITES START FIRST (feature 449 T125): in roster order the run ended on idle-tests, 36 s started 19.6 s in; ordered by each suite's last seconds (hookrun.sh keeps them in .git/hooks-test/<suite>.s), a suite never timed first, the full run measured 52.4 s against 59.6 s (2026-11-12)"; \
 	: "THE USER-LEVEL SELF-TEST RUNS BESIDE THE SUITES (feature 449 T122): run after the fan-out it added its 3.8 s to every full run alone, against a wall of about 35 s (2026-11-17); its pass, its failure and its stamp are read after the fan-out as before"; \
 	uh="$$HOME/.claude/hooks/test-missing-program-hook.sh"; mph=""; \
@@ -348,11 +357,12 @@ hooks-test:     ## [tests] run every tests/hooks/test-*-hooks.sh, and prove each
 	if [ -f "$$uh" ] && [ -z "$(HOOKS_ALL)" ] && [ "$$(cat "$$gitdir/hooks-test/missing-program-hook" 2>/dev/null)" = "$$uk" ]; then skipped=$$((skipped+1)); \
 	elif [ -f "$$uh" ]; then { bash "$$uh" > "$$work/missing-program-hook.log" 2>&1; echo $$? > "$$work/missing-program-hook.exit"; } < /dev/null & mph=$$!; fi; \
 	if [ -s "$$work/todo" ]; then \
-	  while read -r b rest; do printf '%s %s %s\n' "$$(cat "$$gitdir/hooks-test/$$b.s" 2>/dev/null || echo 9999)" "$$b" "$$rest"; done < "$$work/todo" | sort -s -k1,1 -rn | cut -d' ' -f2- > "$$work/todo.sorted" && mv "$$work/todo.sorted" "$$work/todo"; \
+	  while read -r b t sha; do k=$${t%.sh}; k=$${k##*.}; case $$k in ''|*[!0-9]*) id=$$b ;; *) id=$$b.$$k ;; esac; printf '%s %s %s %s\n' "$$(cat "$$gitdir/hooks-test/$$id.s" 2>/dev/null || echo 9999)" "$$b" "$$t" "$$sha"; done < "$$work/todo" | sort -s -k1,1 -rn | cut -d' ' -f2- > "$$work/todo.sorted" && mv "$$work/todo.sorted" "$$work/todo"; \
 	  mkdir -p "$$gitdir/hooks-test"; \
 	  ns=$$(wc -l < "$$work/todo"); [ "$$ns" -gt $(HOOKS_JOBS) ] && ns=$(HOOKS_JOBS); pm=$$(( $(CPU_COUNT) / (ns > 0 ? ns : 1) )); \
 	  [ "$$pm" -gt 8 ] && pm=8; [ "$$pm" -lt 1 ] && pm=1; export PARTS_MAX=$$pm; \
 	  xargs -P $(HOOKS_JOBS) -L1 -a "$$work/todo" "$$root/tests/hooks/hookrun.sh" "$$work" "$$gitdir" || true; \
+	  if [ -s "$$work/close" ]; then while read -r b sha js; do "$$root/tests/hooks/hookrun.sh" --close "$$work" "$$gitdir" "$$b" "$$sha" $$js; done < "$$work/close"; fi; \
 	  for rc in "$$work"/*.rc; do \
 	    [ -f "$$rc" ] || continue; \
 	    b=$$(basename "$$rc" .rc); \

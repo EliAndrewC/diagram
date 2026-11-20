@@ -466,7 +466,11 @@ fn new_cause(state: &Value, unit: &str, batch: &str) -> bool {
 
 /// Whether the record store says every unit the bundle carries on `subject` is answered at its fingerprint; else the fingerprint of the first that is not.
 fn moved_since_answer(root: &Path, text_of: &str, subject: &str) -> String {
-    let store = record_store(root, std::env::var("RECORD_CHECKS_DIR").ok().as_deref());
+    // `shared::env`: a test reads its own environment, never a session's export (feature 451 T32)
+    let store = record_store(
+        root,
+        crate::shared::env::opt("RECORD_CHECKS_DIR").as_deref(),
+    );
     UNIT_FP
         .captures_iter(text_of)
         .map_while(Result::ok)

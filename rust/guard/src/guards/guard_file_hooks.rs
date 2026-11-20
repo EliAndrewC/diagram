@@ -114,7 +114,7 @@ pub fn cli(args: &[String]) -> Reply {
     }
     let (real, at) = (
         real_path(file),
-        now_from(std::env::var("L7R_PERMIT_NOW").ok()),
+        now_from(crate::shared::env::opt("L7R_PERMIT_NOW")),
     );
     let usage =
         "Usage: make guard-edit FILE=<guard file> WHY=\"<why this edit to a guard is legitimate>\"";
@@ -235,6 +235,8 @@ pub(crate) fn held(file: &str) -> bool {
     (guarded && !hit(&HELD_SUITE, file)) || guard_source(file)
 }
 
+/// The time a permit is granted and judged at: `L7R_PERMIT_NOW`, read through `shared::env` (a test's own environment, never a
+/// session's export, feature 451 T32), else the clock.
 fn now_from(env: Option<String>) -> f64 {
     let seam = env.and_then(|n| n.parse().ok());
     let clock = SystemTime::now()
@@ -357,7 +359,7 @@ fn decide(event: &Event, session: &Session) -> Vec<Answer> {
     judge(
         event,
         session,
-        now_from(std::env::var("L7R_PERMIT_NOW").ok()),
+        now_from(crate::shared::env::opt("L7R_PERMIT_NOW")),
     )
 }
 

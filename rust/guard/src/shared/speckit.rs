@@ -509,7 +509,8 @@ pub fn gm_rows(d: &Path) -> Result<usize, String> {
 /// # Errors
 /// A file that cannot be read, or an active-task mark that is not an object.
 pub fn holding(d: &Path) -> Result<Vec<String>, String> {
-    holding_with(d, &std::env::var("L7R_LAND_TICKS").unwrap_or_default())
+    // `shared::env`: a test's own environment, never a landing's export (feature 451 T32)
+    holding_with(d, &crate::shared::env::var("L7R_LAND_TICKS"))
 }
 
 /// [`holding`], the landing's tasks handed in rather than read from `L7R_LAND_TICKS`: the Rust land asks it in process (feature 449

@@ -49,8 +49,9 @@ impl Limits {
         }
     }
 
+    /// The limits from the environment, through `shared::env` (a test's own, feature 451 T32).
     fn read() -> Self {
-        Self::from_env(&|k| std::env::var(k).ok())
+        Self::from_env(&crate::shared::env::opt)
     }
 }
 

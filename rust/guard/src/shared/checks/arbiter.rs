@@ -60,11 +60,13 @@ pub fn asked_feature(root: &Path, trigger: &str) -> Option<PathBuf> {
     (dirs.len() == 1).then(|| dirs[0].clone())
 }
 
-/// The environment's two feature pointers, read once per call of the public functions.
+/// The environment's two feature pointers, read once per call of the public functions - through `shared::env`, which a test
+/// build reads from the test thread's own map, so a session's exported `L7R_FEATURE_DIRECTORY` never reaches a test (feature 451
+/// T32: a page session's export turned 17 tests of the check state and its guards, T24's defect in this crate's own tests).
 fn feature_env() -> (String, String) {
     (
-        std::env::var("L7R_FEATURE_DIRECTORY").unwrap_or_default(),
-        std::env::var("SPECIFY_FEATURE").unwrap_or_default(),
+        crate::shared::env::var("L7R_FEATURE_DIRECTORY"),
+        crate::shared::env::var("SPECIFY_FEATURE"),
     )
 }
 

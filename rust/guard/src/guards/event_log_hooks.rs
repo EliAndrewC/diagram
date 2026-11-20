@@ -625,7 +625,7 @@ fn reversal(log: &Path, path: &Value, old: &Value, new: &Value) -> bool {
 /// A feature's event log (`event_log.log_path`): under `L7R_EVENTS_DIR`, else the clone's common git dir; `_unassigned` for no feature.
 #[must_use]
 pub fn log_path(root: &Path, feature: &str) -> PathBuf {
-    log_path_in(root, feature, &|k| std::env::var(k).ok())
+    log_path_in(root, feature, &crate::shared::env::opt)
 }
 
 fn log_path_in(root: &Path, feature: &str, env: &dyn Fn(&str) -> Option<String>) -> PathBuf {
@@ -836,9 +836,13 @@ fn write_line(path: &Path, row: Map<String, Value>) -> Option<PathBuf> {
 /// a line of no event is no event); None outside a clone the log can be made in.
 #[must_use]
 pub fn append_row(root: &Path, row: Map<String, Value>) -> Option<PathBuf> {
-    append_row_in(root, None, row, &now_stamp(SystemTime::now()), &|k| {
-        std::env::var(k).ok()
-    })
+    append_row_in(
+        root,
+        None,
+        row,
+        &now_stamp(SystemTime::now()),
+        &crate::shared::env::opt,
+    )
 }
 
 /// [`append_row`] for a tool that knows the line's feature (feature 451 T06: a landing's `F=`): filed in the feature `feature` names - a
@@ -852,7 +856,7 @@ pub fn append_row_for(root: &Path, feature: &str, row: Map<String, Value>) -> Op
         Some(feature),
         row,
         &now_stamp(SystemTime::now()),
-        &|k| std::env::var(k).ok(),
+        &crate::shared::env::opt,
     )
 }
 
@@ -887,9 +891,14 @@ pub(crate) fn append_row_in(
 pub fn record(payload: &Value) {
     if payload.is_object() {
         let here = std::env::current_dir().unwrap_or_default();
-        let _ = append(payload, &now_stamp(SystemTime::now()), &here, &|k| {
-            std::env::var(k).ok()
-        });
+        // `shared::env`, here and in the writers above: a test reads its own environment, so a session's exported
+        // `L7R_EVENTS_DIR` never takes a test's lines into its real log (feature 451 T32, observed 2026-11-20)
+        let _ = append(
+            payload,
+            &now_stamp(SystemTime::now()),
+            &here,
+            &crate::shared::env::opt,
+        );
     }
 }
 

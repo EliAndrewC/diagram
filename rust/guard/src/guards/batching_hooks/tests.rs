@@ -188,8 +188,9 @@ fn each_session_keeps_its_own_window() {
     assert!(
         matches!(&got[..], [Answer::Print(t)] if t.contains("tool=unknown") && t.contains("a_b.state3"))
     );
-    std::env::set_var("BATCH_THRESHOLD", "3");
-    std::env::set_var("BATCH_STATE_DIR", d.join("real"));
+    // the test thread's own environment (feature 451 T32): the process's, set here, stayed set for every later batching test
+    crate::shared::env::set("BATCH_THRESHOLD", "3");
+    crate::shared::env::set("BATCH_STATE_DIR", d.join("real"));
     let real = Event {
         name: "status".to_owned(),
         input: json!({}),

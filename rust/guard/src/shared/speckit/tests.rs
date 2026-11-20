@@ -281,9 +281,10 @@ fn only_the_active_task_holds_and_a_landing_that_ticks_it_does_not() {
         holding(&d).unwrap(),
         ["a pass under it  <- open under the active task T7702: land it with make land F=7 T=T7702"]
     );
-    std::env::set_var("L7R_LAND_TICKS", "T7700 T7702");
+    // the test thread's own environment (feature 451 T32), not the process's, which raced every other holding test
+    crate::shared::env::set("L7R_LAND_TICKS", "T7700 T7702");
     assert!(holding(&d).unwrap().is_empty());
-    std::env::remove_var("L7R_LAND_TICKS");
+    crate::shared::env::unset("L7R_LAND_TICKS");
     let e = at.join("specs/000-y");
     put(&e, "tasks.md", "- [ ] T7705 x\n");
     put(

@@ -128,10 +128,17 @@ land scripts/new.sh; rc=$?
 ok "landed, the clone's side kept and named" '[ "$rc" -eq 0 ] && [ "$(on_main scripts/new.sh)" = "v3" ] && grep -q "keeping the clone.s side of its own earlier landing: scripts/new.sh" "$T/out"'
 
 echo "2b. the guard suites and the tooling tests run side by side, each timed; a failing one is named (383 amendment 2, D22)"
+# THE OVERLAP IS MET, NOT TIMED (feature 451 T20, T35's land-tooling half): each job marks its start and waits, up to 20 s, for the
+# other's mark; both saw the other only if they ran side by side, and run one after the other the first never does. Load cannot break it.
+# A bound on the checks step's seconds can: the old `.checks < 1.8` with two `sleep 1` jobs failed 3 of 3 under load, and
+# `.checks < guard-suites + tooling-tests - 0.5` with two `sleep 2` jobs failed at least 2 of 3 in each of two tries, measured 2026-11-20 (case 2b alone at nice 10 beside 44 busy loops).
 setup
-LAND_TOOLING_CHECKS= LAND_TOOLING_GUARDS='sleep 1' LAND_TOOLING_TOOLING='sleep 1' land scripts/a.sh; rc=$?
+F="$T/overlap"; rm -rf "$F"; mkdir -p "$F"
+meet() { printf 'touch %s/%s; i=0; while [ ! -e %s/%s ] && [ $i -lt 200 ]; do sleep 0.1; i=$((i+1)); done; [ -e %s/%s ] && touch %s/%s.saw; true' "$F" "$1" "$F" "$2" "$F" "$2" "$F" "$1"; }
+LAND_TOOLING_CHECKS= LAND_TOOLING_GUARDS="$(meet guards tooling)" LAND_TOOLING_TOOLING="$(meet tooling guards)" land scripts/a.sh; rc=$?
 ok "landed with both jobs" '[ "$rc" -eq 0 ]'
-ok "they overlapped: the checks took less than the two jobs one after the other" 'tail -1 "$C/.git/land-tooling-steps.jsonl" | jq -e ".steps | .[\"guard-suites\"] >= 1 and .[\"tooling-tests\"] >= 1 and .checks < 1.8" >/dev/null'
+ok "they overlapped: each job saw the other start before it ended" '[ -e "$F/guards.saw" ] && [ -e "$F/tooling.saw" ]'
+ok "...and each job and the checks step are timed" 'tail -1 "$C/.git/land-tooling-steps.jsonl" | jq -e ".steps | (.[\"guard-suites\"] | type == \"number\") and (.[\"tooling-tests\"] | type == \"number\") and (.checks | type == \"number\")" >/dev/null'
 setup
 LAND_TOOLING_CHECKS= LAND_TOOLING_GUARDS='echo guard-out; exit 1' LAND_TOOLING_TOOLING='true' land scripts/a.sh; rc=$?
 ok "a failing job is named and lands nothing" '[ "$rc" -ne 0 ] && grep -q "checks failed in the worktree (guard-suites" "$T/out" && grep -q guard-out "$C/.git/land-tooling.log" && [ "$(on_main scripts/a.sh | tail -1)" = "two" ]'

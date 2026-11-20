@@ -132,25 +132,11 @@ pub fn home(root: &Path) -> PathBuf {
     mirror.join(".specify")
 }
 
-/// An environment variable, "" where unset or not text.
-#[cfg(not(test))]
-#[must_use]
-pub fn var(name: &str) -> String {
-    std::env::var(name).unwrap_or_default()
-}
-
+/// An environment variable, "" where unset or not text: the guard's one reader (`shared::env`, feature 451 T32), a test build's
+/// the test thread's own map.
+pub use crate::shared::env::var;
 #[cfg(test)]
-thread_local! {
-    /// The tests' environment: each test thread its own, so a test that names a variable never races another.
-    pub static VARS: std::cell::RefCell<std::collections::HashMap<String, String>> = std::cell::RefCell::default();
-}
-
-/// An environment variable, read from the test thread's own map.
-#[cfg(test)]
-#[must_use]
-pub fn var(name: &str) -> String {
-    VARS.with(|v| v.borrow().get(name).cloned().unwrap_or_default())
-}
+pub use crate::shared::env::VARS;
 
 /// `context`: the feature, clone and session a ledger line is written under, as a mapping in that order.
 ///

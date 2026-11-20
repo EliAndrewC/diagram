@@ -8,6 +8,7 @@ pub mod checks;
 pub mod cited_url;
 pub mod consulted;
 pub mod difflib;
+pub mod env;
 pub mod escape;
 pub mod html_text;
 pub mod iso;

@@ -93,9 +93,10 @@ impl Session {
                     .split("/.clones/")
                     .next()
                     .map_or(t.clone(), PathBuf::from),
-                // no work tree: the tree the guard runs from, as `derive_main` fell back to the script's own
-                None => std::env::var("L7R_GUARD_TREE")
-                    .map_or_else(|_| PathBuf::from("/diagram"), PathBuf::from),
+                // no work tree: the tree the guard runs from, as `derive_main` fell back to the script's own (`shared::env`: a test
+                // reads its own environment, never a session's exported tree, feature 451 T32)
+                None => crate::shared::env::opt("L7R_GUARD_TREE")
+                    .map_or_else(|| PathBuf::from("/diagram"), PathBuf::from),
             }
         })
     }
