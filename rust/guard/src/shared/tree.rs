@@ -13,6 +13,8 @@ use serde_json::{json, Value};
 
 use super::shape::strip_heredocs;
 
+mod py_c;
+
 fn re(pattern: &str) -> Regex {
     crate::shared::regex::build(pattern)
         .unwrap_or_else(|e| unreachable!("a guard's own pattern: {e}"))
@@ -101,7 +103,18 @@ static FUNCTION_DEF: LazyLock<Regex> = LazyLock::new(|| re(r"^\s*[\w-]+\s*\(\s*\
 static DUP_FD: LazyLock<Regex> = LazyLock::new(|| re(r"\d*>&[0-9-]"));
 static DEV_NULL: LazyLock<Regex> = LazyLock::new(|| re(r"\d*>\s*/dev/null"));
 static ASSIGNMENT_WORD: LazyLock<Regex> = LazyLock::new(|| re(r"^[A-Za-z_]\w*="));
-static PYTHON: LazyLock<Regex> = LazyLock::new(|| re(r"^python3?$"));
+/// The interpreter's name, a minor version included (`python3.12`; 451 T31 - before it, only `python`, `python3`).
+static PYTHON: LazyLock<Regex> = LazyLock::new(|| re(r"^python(?:3(?:\.\d+)?)?$"));
+/// Python's flags that take no argument, any of which may stand before `-c` or cluster with it (`-I -c`, `-Ic`; 451 T31).
+const PY_FLAGS: &str = "bBdEhiIOPqRsSuvVx";
+/// The text before a quote that `python3 -c` runs, in the shape `writes_in` reads as one: the interpreter, then `-c` (451 T31).
+static PYTHON_C_BEFORE: LazyLock<Regex> = LazyLock::new(|| {
+    re(&format!(
+        r"(?:^|[\s;&|(])(?:[^\s;&|()]*/)?python(?:3(?:\.\d+)?)?(?:[ \t]+(?:-[{PY_FLAGS}]*[WX][ \t]*[^\s;&|()'\x22]+|-[{PY_FLAGS}]+))*[ \t]+-[{PY_FLAGS}]*c[ \t]+$"
+    ))
+});
+/// The word a `python3 -c` program is carried as through the walk: its index among the walk's programs (451 T31).
+static PROGRAM: LazyLock<Regex> = LazyLock::new(|| re(r"^__py_c_(\d+)__$"));
 
 fn found(p: &Regex, text: &str) -> bool {
     p.is_match(text).unwrap_or(false)
@@ -164,24 +177,87 @@ fn relpath(path: &str, start: &str) -> String {
     }
 }
 
-/// A quoted string kept as its body where it is one plain word (a path), else blanked to an empty pair (`_quotes_to_paths`).
-fn quotes_to_paths(cmd: &str) -> String {
-    QUOTED
+/// A `python3 -c` program: its quote and its body as the command line holds it.
+type Program = (char, String);
+
+/// A quoted string kept as its body where it is one plain word (a path), else blanked to an empty pair (`_quotes_to_paths`); a
+/// program `python3 -c` runs is carried out beside the text, the word `__py_c_<n>__` standing in its place, so `writes_in` can
+/// judge whether it only reads without the program's own `;`, `(` and `|` splitting the walk (451 T31).
+fn quotes_to_paths(cmd: &str) -> (String, Vec<Program>) {
+    let mut programs = Vec::new();
+    let text = QUOTED
         .replace_all(cmd, |c: &Captures| {
             let body = c.get(2).map_or("", |m| m.as_str());
-            if found(&PLAIN_QUOTE_BODY, body) {
+            let quote = c.get(1).map_or("", |m| m.as_str());
+            let at = c.get(0).map_or(0, |m| m.start());
+            if found(&PYTHON_C_BEFORE, &cmd[..at]) {
+                programs.push((quote.chars().next().unwrap_or('"'), body.to_owned()));
+                format!("__py_c_{}__", programs.len() - 1)
+            } else if found(&PLAIN_QUOTE_BODY, body) {
                 body.to_owned()
             } else {
-                c.get(1).map_or("", |m| m.as_str()).repeat(2)
+                quote.repeat(2)
             }
         })
-        .into_owned()
+        .into_owned();
+    (text, programs)
 }
 
-fn sanitize(cmd: &str) -> String {
-    let text = quotes_to_paths(&strip_heredocs(cmd));
+fn sanitize(cmd: &str) -> (String, Vec<Program>) {
+    let (text, programs) = quotes_to_paths(&strip_heredocs(cmd));
     let text = DUP_FD.replace_all(&text, " ");
-    DEV_NULL.replace_all(&text, " ").into_owned()
+    (DEV_NULL.replace_all(&text, " ").into_owned(), programs)
+}
+
+/// The index of the `-c` that makes a Python command line run a program, past the flags before it (`python3 -I -W x -c`, `-Ic`;
+/// 451 T31 - before it only a `-c` second word was read, so `python3 -I -c` was never judged at all); None where it runs a file,
+/// a module or stdin.
+fn python_c(toks: &[&str]) -> Option<usize> {
+    let mut i = 1;
+    while let Some(t) = toks.get(i) {
+        let flags = t.strip_prefix('-').filter(|f| !f.starts_with('-'))?;
+        let cluster = flags.trim_start_matches(|c| PY_FLAGS.contains(c));
+        match cluster {
+            "c" => return Some(i),
+            "" if !flags.is_empty() => {}
+            "W" | "X" => i += 1, // its argument the next word
+            _ if cluster.starts_with(['W', 'X']) => {} // its argument glued on
+            _ => return None,
+        }
+        i += 1;
+    }
+    None
+}
+
+/// Whether a Python command line runs a program from its stdin - `python3 -`, `python3 <<BODY`, `python3 < p.py`, `| python3` -
+/// rather than a `-c` program, a module or a script (451 T31).
+fn python_stdin(toks: &[&str]) -> bool {
+    let mut i = 1;
+    while let Some(t) = toks.get(i) {
+        if *t == "-" || t.starts_with('<') {
+            return true;
+        }
+        let Some(flags) = t.strip_prefix('-').filter(|f| !f.starts_with('-')) else {
+            return false; // a script, or a long option (`--version`)
+        };
+        let cluster = flags.trim_start_matches(|c| PY_FLAGS.contains(c));
+        match cluster {
+            "" => {}
+            "W" | "X" => i += 1, // its argument the next word
+            _ if cluster.starts_with(['W', 'X']) => {}
+            _ => return false, // `-c`, `-m`
+        }
+        i += 1;
+    }
+    true
+}
+
+/// Whether the word after `python3 -c` carries a program that only reads, run in `eff` (451 T31; anything else is D5's write).
+fn program_reads(word: Option<&&str>, programs: &[Program], eff: Option<&str>) -> bool {
+    word.and_then(|w| PROGRAM.captures(w).ok().flatten())
+        .and_then(|c| c.get(1)?.as_str().parse::<usize>().ok())
+        .and_then(|n| programs.get(n))
+        .is_some_and(|(quote, body)| py_c::reads(body, *quote, eff))
 }
 
 type Env = HashMap<String, String>;
@@ -458,15 +534,33 @@ fn perl_in_place(token: &str) -> bool {
 }
 
 /// Every write in one segment (`_writes_in`).
-fn writes_in(seg: &str, env: &Env, home: &str, eff: Option<&str>) -> Vec<Write> {
+fn writes_in(
+    seg: &str,
+    programs: &[Program],
+    stdin_program: bool,
+    env: &Env,
+    home: &str,
+    eff: Option<&str>,
+) -> Vec<Write> {
     let mut found_writes = Vec::new();
     let toks = words(seg);
     if let Some(head) = toks.first() {
         let base = head.rsplit('/').next().unwrap_or(head);
         if *head == "git" {
             found_writes.extend(git_write(&toks, env, home, eff));
-        } else if base == "make" || (found(&PYTHON, base) && toks.get(1) == Some(&"-c")) {
+        } else if base == "make" {
             found_writes.push((eff.map(str::to_owned), "shell"));
+        } else if let Some(at) = python_c(&toks).filter(|_| found(&PYTHON, base)) {
+            // 451 T31: a program that only reads stays in the walk MARKED "read" - no guard's verdict counts it a write, and the
+            // guards that read a walk's targets for where a command lands (house style, gm-tree) see what they saw before
+            // - and a command that also runs a stdin program keeps it D5's write: the walk judges no stdin program, and the
+            // `-c` write was what refused the heredoc writers standing in the mirror (parse#72, window#61)
+            let how = if !stdin_program && program_reads(toks.get(at + 1), programs, eff) {
+                "read"
+            } else {
+                "shell"
+            };
+            found_writes.push((eff.map(str::to_owned), how));
         } else if (base == "sed"
             && toks[1..]
                 .iter()
@@ -530,7 +624,16 @@ pub struct Walk {
 #[must_use]
 pub fn walk(cmd: &str, start: Option<&str>, main: &str, home: &str) -> Walk {
     let env = env_from(cmd, start, home);
-    let text = sanitize(cmd);
+    let (text, programs) = sanitize(cmd);
+    let stdin_program = segments(&text).iter().any(|p| match p {
+        Piece::Seg(s) => {
+            let toks = words(s);
+            toks.first()
+                .is_some_and(|h| found(&PYTHON, h.rsplit('/').next().unwrap_or(h)))
+                && python_stdin(&toks)
+        }
+        _ => false,
+    });
     let mut eff: Option<String> = start.map(str::to_owned);
     let mut hint = classify(eff.as_deref(), main); // where the shell was last KNOWN to be (spec D6)
     let (mut stack, mut targets, mut cd_into_main) = (Vec::new(), Vec::new(), false);
@@ -565,7 +668,7 @@ pub fn walk(cmd: &str, start: Option<&str>, main: &str, home: &str) -> Walk {
             eff = None;
             continue;
         }
-        for (path, how) in writes_in(&seg, &env, home, eff.as_deref()) {
+        for (path, how) in writes_in(&seg, &programs, stdin_program, &env, home, eff.as_deref()) {
             let mut class = classify(path.as_deref(), main);
             if class == "unknown" {
                 class = if hint == "main" { "main" } else { "elsewhere" }; // D6: unknown resolves toward main
@@ -640,6 +743,11 @@ impl Verdict {
     }
 }
 
+/// Whether a re-judged walk's target still writes in main: a `python3 -c` read (how "read", 451 T31) is no write.
+fn lands_in_main(t: &Target) -> bool {
+    t.class == "main" && t.how != "read"
+}
+
 /// The verdict for one hook input; `resolved` says the caller already tried to find the clone (`judge`).
 #[must_use]
 pub fn judge(
@@ -702,7 +810,7 @@ pub fn judge(
     let mut new = rewrite_cds(cmd, main, clone);
     let mut prepended = false;
     let mut w2 = walk(&new, start, main, home);
-    if w2.targets.iter().any(|t| t.class == "main") && w.standing == "main" {
+    if w2.targets.iter().any(lands_in_main) && w.standing == "main" {
         let sub = start
             .filter(|c| *c != main)
             .map(|c| relpath(c, main))
@@ -716,7 +824,7 @@ pub fn judge(
         prepended = true;
         w2 = walk(&new, start, main, home);
     }
-    if w2.targets.iter().any(|t| t.class == "main") {
+    if w2.targets.iter().any(lands_in_main) {
         return out("refuse", "shape", cause); // re-judged and still lands in main: never emit that
     }
     v.prepended = Some(prepended);

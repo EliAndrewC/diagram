@@ -40,7 +40,10 @@ pub(crate) fn offending(event: &Event, tree: &str, home: &str) -> Option<String>
     walk(cmd, standing, tree, home)
         .targets
         .into_iter()
-        .find(|t| !t.segment.trim_start().starts_with("git") && t.class == "main")
+        // a `python3 -c` program that only reads is a target marked "read", no write (451 T31)
+        .find(|t| {
+            !t.segment.trim_start().starts_with("git") && t.class == "main" && t.how != "read"
+        })
         .map(|t| t.path.unwrap_or_else(|| tree.to_owned()))
 }
 

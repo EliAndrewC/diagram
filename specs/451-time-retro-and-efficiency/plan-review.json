@@ -451,14 +451,8 @@
    "reviewed": "2026-11-20",
    "declared": "spec-fidelity"
   },
-  "### T31 (<why: the finding or measurement that files it>)": {
-   "sha256": "cef4d3e34a951d121ca35b17f84a573b993896ffd5b44ea46f73b7b7ff210318",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-20",
-   "declared": "spec-fidelity"
-  },
   "### T31 Approach (checklist part A)": {
-   "sha256": "5ff55e0deba4b939481105de0ea8a6d4f4fd6495c94367058f13e70c178cdc42",
+   "sha256": "f90a55bc51d2b2f3cfd4843d0cbf411f9144addd4f56a7e299f6514e0957f6c3",
    "verdict": "CLEAR",
    "reviewed": "2026-11-20",
    "declared": "spec-fidelity"
@@ -553,14 +547,8 @@
    "reviewed": "2026-11-20",
    "declared": "spec-fidelity"
   },
-  "### T40 (<why: the finding or measurement that files it>)": {
-   "sha256": "6b99a98460c15bc52318b7cc85daacaca1b18bcb79c24ec8f7c75b57db92f0e1",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-20",
-   "declared": "spec-fidelity"
-  },
   "### T40 Approach (checklist part A)": {
-   "sha256": "6d82502538217ed57c18c13887c6c63c7abf76140397762709c8eb874ff84f9c",
+   "sha256": "91c01f05dfc8dd722f4ee877a60d95e5f65bd045c908f6f5d67b76cf55d45503",
    "verdict": "CLEAR",
    "reviewed": "2026-11-20",
    "declared": "spec-fidelity"
@@ -591,6 +579,42 @@
   },
   "### T41 Approach (checklist part A)": {
    "sha256": "704d164c180c168b3eed36c414fe963025aa718757ee5ca985dcf076a0ed9277",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity"
+  },
+  "### T31 (found by T15's corpus replay, 2026-11-20: main-tree refused `python3 -c \"data = open('$SP/x.html','rb').read() ...\"` - a read - as a write where the shell stands, with no escape, the same before and after T15's shared-reader fix; observed 2026-11-20, method: T15's replay of the main-tree refusals corpus)": {
+   "sha256": "059eb3a780caae3976cea73c3e1dd5b1c32d0fd89ddbd1ff06bd93fb162d84e5",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity"
+  },
+  "### T40 (T21's finding: `make hooks-test`'s full-run wall is entry-gate's suite plus 2-3 s, measured 2026-11-20 (T21's full runs), its case-4 chain of record gates the last thing running)": {
+   "sha256": "1e79f7eb3a49016560943b81ac0340bd59ee4269cfed857e904e2d75fdb6644e",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity"
+  },
+  "### T42 (<why: the finding or measurement that files it>)": {
+   "sha256": "705d957a6d25118f0e9446097faecaaac699c3e251d99d70176f4c3203453e7c",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity"
+  },
+  "### T42 Approach (checklist part A)": {
+   "sha256": "001e2b4dc467cdfb866bfd3a5b2d04608e1fd89905ce8d90d13828a77eebb0dd",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity"
+  },
+  "### T43 (<why: the finding or measurement that files it>)": {
+   "sha256": "e4326b04b3fb6180c18ca28045ac4f7f1b27a14822b60d6a2b0b0340175fe246",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity"
+  },
+  "### T43 Approach (checklist part A)": {
+   "sha256": "7d4d2faae893df559cd7ebe33d34fc4dbd173959e079c22ada2e98c71a9c9495",
    "verdict": "CLEAR",
    "reviewed": "2026-11-20",
    "declared": "spec-fidelity"
@@ -4819,6 +4843,152 @@
      "why": "The removed text carried no decision - only template placeholders - so removing it narrows nothing in the request or the spec; it reads as T34's section leaving the open plan as the task finishes."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-20",
+   "blocks": [
+    "### T31 (found by T15's corpus replay, 2026-11-20: main-tree refused `python3 -c \"data = open('$SP/x.html','rb').read() ...\"` - a read - as a write where the shell stands, with no escape, the same before and after T15's shared-reader fix; observed 2026-11-20, method: T15's replay of the main-tree refusals corpus)",
+    "### T31 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D5-narrowed",
+     "summary": "Feature 204's D5 ('every python3 -c is a write') narrowed: a -c program a denylist of known writers judges read-only (read-mode opens only, no substitution/expansion, no relative or locally-answerable import) is marked how=read and is no write, unless the command also runs Python from stdin.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Not a narrowing of feature 451's request or spec (the D5/D6 in spec-cited.md are 451's own decisions; 204's D5 is known only as the plan quotes it). Ruled anyway. rulings.md is empty, so the session's own ruling carries no weight; the ground is the constitution's defect definition: a guard that refuses or rewrites a read refuses good work. D5's premise ('its cost is now zero') is measured false where no clone resolves (80 corpus rows refused clone-unresolved, 79 rewritten, replay 2026-11-20). D5's purpose (no false allow) is kept by the conservative conditions and the stdin rule (parse#72, window#61 refused as before). The denylist ends in '...', so its full reach is not visible in the bundle; not a finding."
+    },
+    {
+     "id": "stdin-rule",
+     "summary": "A -c read stays a write when any segment of the same command runs Python from stdin (python3 -, heredoc, < file, | python3).",
+     "class": "within",
+     "why": "Keeps T31 from turning measured heredoc writers (parse#72, window#61) from refused into allowed; it adds no allowance."
+    },
+    {
+     "id": "stdin-rule-cost",
+     "summary": "Three real heredoc reads (main-tree#147, window#339, window#361) stay refused or rewritten, as before T31, as the stdin rule's cost; recorded under Found and left and homed in T42, which retires the stdin rule once stdin bodies are judged, landing before T22.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The previous round's BLOCKED asked for exactly this: the known defect now has a home. Found and left names the three rows, how they were found (the replays' rows that moved back against the stage-1 build, each hand-read), why T31 does not fix them (no stdin reader exists, and lifting the rule without one lets parse#72's and window#61's writes through - trading a refused read for an allowed write), and a filed task (T42) that retires the rule once stdin bodies are judged, ordered before T22. T31 does not worsen these rows (they were refused or rewritten before it). Limit: T42's own task line (said in the dispatch to commit to retiring the rule, red first on these three rows) is not in the bundle; the block's own words 'which retires the rule once stdin bodies are judged' are what was read."
+    },
+    {
+     "id": "script-runs",
+     "summary": "Four rows that also run a script (main-tree#103 scratch script; window#60, #62, #308 the mirror's own test suites and hooks), refused or moved before only by the -c write, now run as typed without being shown to write nothing.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "T31 changes nothing about how a script run is judged: the same commands without the -c read are allowed today, so their earlier refusal was a side effect of the defect fixed (a read misjudged as a write). The hand-read found no writer in any of the four, unlike parse#72/window#61, so no defect is shown, and keeping a misjudged read refused to cover an unjudged segment would keep the defect. Item 1's 'every write is still moved or refused as before' slightly overstates this for these rows; item 4 discloses it."
+    },
+    {
+     "id": "heredoc-bodies-T42",
+     "summary": "Judging Python heredoc/stdin bodies for writes (301 corpus rows main-tree allows before and after) deferred to T42, landing before T22.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "A defect left (writes in the mirror passed), but it predates T31 and T31 does not worsen it (301 allowed before and after, measured 2026-11-20). It is outside the -c scope, needs a new reader with its own replay, is recorded under Found and left with its reason, and is homed in a filed task (T42) with an ordering (before T22)."
+    },
+    {
+     "id": "gm-tree-skip",
+     "summary": "gm_tree_hooks offending skips the read mark, so a read in gm-assistant's tree is no longer refused.",
+     "class": "within",
+     "why": "The same defect (a read refused) in the second guard that reads a walk's targets; red first (gmred.log)."
+    },
+    {
+     "id": "fixture-relabel",
+     "summary": "main-tree-refusals-2026-09.json relabeled: 57 rows rewrote->allowed, matching the replay's main-tree moves; main-tree#147 stays rewrote.",
+     "class": "within",
+     "why": "Records the fix's measured outcome; no new behavior."
+    },
+    {
+     "id": "curl-o-rows",
+     "summary": "curl -o writes the walk does not judge left as is; their targets are absolute scratch paths outside the mirror.",
+     "class": "within",
+     "why": "Measured 2026-11-20 at 0 rows writing into the mirror, so no defect is left."
+    },
+    {
+     "id": "perf-tag",
+     "summary": "T31 tagged [perf] under FR-013 (builders' loop), not filed with PERF=1.",
+     "class": "within",
+     "why": "FR-013 accepts either PERF=1 or a [perf] tag; each refused or rewritten read costs a builder a model round trip, builders'-loop speed in FR-013's sense."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-20",
+   "blocks": [
+    "### T40 (T21's finding: `make hooks-test`'s full-run wall is entry-gate's suite plus 2-3 s, measured 2026-11-20 (T21's full runs), its case-4 chain of record gates the last thing running)",
+    "### T40 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "goal-restated",
+     "summary": "T40's goal restated from 'the full run's wall falls' to 'the suite measurably faster alone and in an incremental run that reruns it', after measurement showed the full run's wall now set by the run's total work over its 8 jobs rather than this suite.",
+     "class": "within",
+     "why": "What the GM asked (improvement 5, approved 2026-11-19) is a faster `make hooks-test`; FR-010 asks that the slow suites be split into shards of about 20 s, and FR-013 that performance work go first. Neither the request nor the spec names the full run's wall as the target; that was this task's own first framing. The restated goal still serves the request: the incremental run, the common case, fell 2.2-5.9 s per alternated pair with the suite still setting its wall, and the suite alone fell about 3.7 s. Dropping the full-run target cuts nothing the GM asked for. The measured reason it cannot be the target (once cut, the suite no longer sets the wall, and the cuts remove no CPU work) is a physical limit on what this task's files can reach, not a convenience."
+    },
+    {
+     "id": "cut-1-answers-side-by-side",
+     "summary": "The three --answer calls in answer_all run together and are then waited on; this moves work and removes none.",
+     "class": "within",
+     "why": "A test-suite speed change that keeps every case and assertion. The gate's output was held identical, and the suite still goes red on a broken gate (12 passed, 1 failed with --unanswered dropped)."
+    },
+    {
+     "id": "cut-2-sparse-clone",
+     "summary": "The fixture clones with --no-checkout and makes a sparse checkout of the three paths the suite uses (8,499 of 28,472 files); case 7's find is quiet when dev/bypass-log is absent.",
+     "class": "within",
+     "why": "It removes checkout and index work. Both clones were driven through the eight states and the outputs diffed identical, and case 7 still counts the bypass records before and after one gate. Nothing the suite checks is dropped."
+    },
+    {
+     "id": "cuts-kept-cpu-flat",
+     "summary": "Both cuts are kept although CPU-seconds did not fall (incremental 158-182 before against 171-190 after; system time down about 3 s, user time up about 12 s).",
+     "class": "within",
+     "why": "The request is for a faster `make hooks-test` in wall time. CPU-seconds are not part of what was asked, and the wall was measured faster in the common case and alone. A flat or slightly higher CPU cost is a cost, not a wrong outcome (constitution XIV), so keeping the cuts narrows nothing."
+    },
+    {
+     "id": "rejected-shallow-and-shared",
+     "summary": "A --depth 1 single-pack clone and a fixture shared between cases were rejected on measurement.",
+     "class": "within",
+     "why": "Design choices among ways to speed up the suite, with measured reasons. Nothing requested is dropped."
+    },
+    {
+     "id": "base-reread-deferred-T43",
+     "summary": "Every owed-units computation re-reads 1,951 base blobs (0.63-1.13 s of each 1.4-1.6 s computation). The fix is deferred to T43, a change to the owed crate's Delta::fetch outside this task's files, filed to land before T22.",
+     "class": "within",
+     "why": "This is a performance cost, not a defect: no wrong outcome, no check's verdict changes. It is filed as its own task, not left unfiled, and ordered ahead of T22, so FR-013's performance-first order still reaches it. It also reaches every gate run, including the push, not only this suite. Putting it in a separate task with its own landing is scheduling, not a narrowing of what was asked."
+    },
+    {
+     "id": "push-gate-skip-diff-not-defect",
+     "summary": "push-gate skip's unscoped `git diff --name-only HEAD` (0.24 s a gate run on the full clone) is judged not a defect and is not filed.",
+     "class": "within",
+     "why": "Under constitution XIV a defect is a wrong outcome, and a 0.24 s cost is not one. FR-013 orders performance tasks first but does not require every observed cost to be filed. A real gate pays this once a push, and the sparse clone already shrinks the index this suite walks. Nothing the GM asked for is left undone."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-20",
+   "blocks": [
+    "### T42 (<why: the finding or measurement that files it>)",
+    "### T42 Approach (checklist part A)",
+    "### T43 (<why: the finding or measurement that files it>)",
+    "### T43 Approach (checklist part A)",
+    "(removed) ### T31 (<why: the finding or measurement that files it>)",
+    "(removed) ### T40 (<why: the finding or measurement that files it>)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T42/T43 template sections",
+     "summary": "Two new task sections added as the unfilled standard template (heading, Approach placeholder, empty step table, checklist part A placeholders, Found-and-left and Performance-work placeholders); every field is a <placeholder>, nothing is decided.",
+     "class": "within",
+     "why": "An unfilled template settles nothing the spec leaves open. Its Found-and-left placeholder states D15's deferral form (fix in the task by default; a deferral names why, T<n> and lands before T<m>; a class fix carries observed/method), and its Performance-work placeholder states FR-013's [perf]/PERF=1 test. Both match the accepted spec and the GM's 2026-11-19 approval and 2026-11-20 performance-first words. They neither narrow nor add to them."
+    },
+    {
+     "id": "removed T31/T40 template headings",
+     "summary": "The empty template headings of T31 and T40 are removed now that those tasks' sections are written.",
+     "class": "within",
+     "why": "The removed text (earlier.md) was the bare unfilled template, judged CLEAR. Deleting a placeholder whose section has been written removes no decision and no requirement."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -6497,6 +6667,122 @@
      "class": "narrowing",
      "ruling": "LEGITIMATE",
      "why": "Ruled separately from (a), because a message's wording is not a 'route the guard does not read' and T33's class argument does not reach it. Only the location argument carries it. That argument is enough: the message text lives in rust/guard, where T31's builder works now, so the same purpose-level and exit-level reasons as (a) apply. The interim harm is reduced inside T34 itself, since `make format`'s own failure tip and `make help` now name FILE= and CRATE=. The block's 'Filed as T33' covers its whole bullet, both the guard gap and the message, so T33 owes the message fix as well as the refusal. A T33 that fixes only the refusal would leave (b) unfixed."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T31": {
+   "section_sha256": "ccd4d29f4d6486cfb01d6af7232ed44123f8e418dd4d1188152d2da1b5aaac4b",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D5-narrowed",
+     "summary": "Feature 204's D5 ('every python3 -c is a write') narrowed: a -c program a denylist of known writers judges read-only (read-mode opens only, no substitution/expansion, no relative or locally-answerable import) is marked how=read and is no write, unless the command also runs Python from stdin.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Not a narrowing of feature 451's request or spec (the D5/D6 in spec-cited.md are 451's own decisions; 204's D5 is known only as the plan quotes it). Ruled anyway. rulings.md is empty, so the session's own ruling carries no weight; the ground is the constitution's defect definition: a guard that refuses or rewrites a read refuses good work. D5's premise ('its cost is now zero') is measured false where no clone resolves (80 corpus rows refused clone-unresolved, 79 rewritten, replay 2026-11-20). D5's purpose (no false allow) is kept by the conservative conditions and the stdin rule (parse#72, window#61 refused as before). The denylist ends in '...', so its full reach is not visible in the bundle; not a finding."
+    },
+    {
+     "id": "stdin-rule",
+     "summary": "A -c read stays a write when any segment of the same command runs Python from stdin (python3 -, heredoc, < file, | python3).",
+     "class": "within",
+     "why": "Keeps T31 from turning measured heredoc writers (parse#72, window#61) from refused into allowed; it adds no allowance."
+    },
+    {
+     "id": "stdin-rule-cost",
+     "summary": "Three real heredoc reads (main-tree#147, window#339, window#361) stay refused or rewritten, as before T31, as the stdin rule's cost; recorded under Found and left and homed in T42, which retires the stdin rule once stdin bodies are judged, landing before T22.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The previous round's BLOCKED asked for exactly this: the known defect now has a home. Found and left names the three rows, how they were found (the replays' rows that moved back against the stage-1 build, each hand-read), why T31 does not fix them (no stdin reader exists, and lifting the rule without one lets parse#72's and window#61's writes through - trading a refused read for an allowed write), and a filed task (T42) that retires the rule once stdin bodies are judged, ordered before T22. T31 does not worsen these rows (they were refused or rewritten before it). Limit: T42's own task line (said in the dispatch to commit to retiring the rule, red first on these three rows) is not in the bundle; the block's own words 'which retires the rule once stdin bodies are judged' are what was read."
+    },
+    {
+     "id": "script-runs",
+     "summary": "Four rows that also run a script (main-tree#103 scratch script; window#60, #62, #308 the mirror's own test suites and hooks), refused or moved before only by the -c write, now run as typed without being shown to write nothing.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "T31 changes nothing about how a script run is judged: the same commands without the -c read are allowed today, so their earlier refusal was a side effect of the defect fixed (a read misjudged as a write). The hand-read found no writer in any of the four, unlike parse#72/window#61, so no defect is shown, and keeping a misjudged read refused to cover an unjudged segment would keep the defect. Item 1's 'every write is still moved or refused as before' slightly overstates this for these rows; item 4 discloses it."
+    },
+    {
+     "id": "heredoc-bodies-T42",
+     "summary": "Judging Python heredoc/stdin bodies for writes (301 corpus rows main-tree allows before and after) deferred to T42, landing before T22.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "A defect left (writes in the mirror passed), but it predates T31 and T31 does not worsen it (301 allowed before and after, measured 2026-11-20). It is outside the -c scope, needs a new reader with its own replay, is recorded under Found and left with its reason, and is homed in a filed task (T42) with an ordering (before T22)."
+    },
+    {
+     "id": "gm-tree-skip",
+     "summary": "gm_tree_hooks offending skips the read mark, so a read in gm-assistant's tree is no longer refused.",
+     "class": "within",
+     "why": "The same defect (a read refused) in the second guard that reads a walk's targets; red first (gmred.log)."
+    },
+    {
+     "id": "fixture-relabel",
+     "summary": "main-tree-refusals-2026-09.json relabeled: 57 rows rewrote->allowed, matching the replay's main-tree moves; main-tree#147 stays rewrote.",
+     "class": "within",
+     "why": "Records the fix's measured outcome; no new behavior."
+    },
+    {
+     "id": "curl-o-rows",
+     "summary": "curl -o writes the walk does not judge left as is; their targets are absolute scratch paths outside the mirror.",
+     "class": "within",
+     "why": "Measured 2026-11-20 at 0 rows writing into the mirror, so no defect is left."
+    },
+    {
+     "id": "perf-tag",
+     "summary": "T31 tagged [perf] under FR-013 (builders' loop), not filed with PERF=1.",
+     "class": "within",
+     "why": "FR-013 accepts either PERF=1 or a [perf] tag; each refused or rewritten read costs a builder a model round trip, builders'-loop speed in FR-013's sense."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T40": {
+   "section_sha256": "eb77685131655569189fdc2b91575b3d1bbb3a4875f3827d61de413b69075897",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "goal-restated",
+     "summary": "T40's goal restated from 'the full run's wall falls' to 'the suite measurably faster alone and in an incremental run that reruns it', after measurement showed the full run's wall now set by the run's total work over its 8 jobs rather than this suite.",
+     "class": "within",
+     "why": "What the GM asked (improvement 5, approved 2026-11-19) is a faster `make hooks-test`; FR-010 asks that the slow suites be split into shards of about 20 s, and FR-013 that performance work go first. Neither the request nor the spec names the full run's wall as the target; that was this task's own first framing. The restated goal still serves the request: the incremental run, the common case, fell 2.2-5.9 s per alternated pair with the suite still setting its wall, and the suite alone fell about 3.7 s. Dropping the full-run target cuts nothing the GM asked for. The measured reason it cannot be the target (once cut, the suite no longer sets the wall, and the cuts remove no CPU work) is a physical limit on what this task's files can reach, not a convenience."
+    },
+    {
+     "id": "cut-1-answers-side-by-side",
+     "summary": "The three --answer calls in answer_all run together and are then waited on; this moves work and removes none.",
+     "class": "within",
+     "why": "A test-suite speed change that keeps every case and assertion. The gate's output was held identical, and the suite still goes red on a broken gate (12 passed, 1 failed with --unanswered dropped)."
+    },
+    {
+     "id": "cut-2-sparse-clone",
+     "summary": "The fixture clones with --no-checkout and makes a sparse checkout of the three paths the suite uses (8,499 of 28,472 files); case 7's find is quiet when dev/bypass-log is absent.",
+     "class": "within",
+     "why": "It removes checkout and index work. Both clones were driven through the eight states and the outputs diffed identical, and case 7 still counts the bypass records before and after one gate. Nothing the suite checks is dropped."
+    },
+    {
+     "id": "cuts-kept-cpu-flat",
+     "summary": "Both cuts are kept although CPU-seconds did not fall (incremental 158-182 before against 171-190 after; system time down about 3 s, user time up about 12 s).",
+     "class": "within",
+     "why": "The request is for a faster `make hooks-test` in wall time. CPU-seconds are not part of what was asked, and the wall was measured faster in the common case and alone. A flat or slightly higher CPU cost is a cost, not a wrong outcome (constitution XIV), so keeping the cuts narrows nothing."
+    },
+    {
+     "id": "rejected-shallow-and-shared",
+     "summary": "A --depth 1 single-pack clone and a fixture shared between cases were rejected on measurement.",
+     "class": "within",
+     "why": "Design choices among ways to speed up the suite, with measured reasons. Nothing requested is dropped."
+    },
+    {
+     "id": "base-reread-deferred-T43",
+     "summary": "Every owed-units computation re-reads 1,951 base blobs (0.63-1.13 s of each 1.4-1.6 s computation). The fix is deferred to T43, a change to the owed crate's Delta::fetch outside this task's files, filed to land before T22.",
+     "class": "within",
+     "why": "This is a performance cost, not a defect: no wrong outcome, no check's verdict changes. It is filed as its own task, not left unfiled, and ordered ahead of T22, so FR-013's performance-first order still reaches it. It also reaches every gate run, including the push, not only this suite. Putting it in a separate task with its own landing is scheduling, not a narrowing of what was asked."
+    },
+    {
+     "id": "push-gate-skip-diff-not-defect",
+     "summary": "push-gate skip's unscoped `git diff --name-only HEAD` (0.24 s a gate run on the full clone) is judged not a defect and is not filed.",
+     "class": "within",
+     "why": "Under constitution XIV a defect is a wrong outcome, and a 0.24 s cost is not one. FR-013 orders performance tasks first but does not require every observed cost to be filed. A real gate pays this once a push, and the sparse clone already shrinks the index this suite walks. Nothing the GM asked for is left undone."
     }
    ],
    "verdict": "CLEAR"

@@ -100,3 +100,42 @@ fn the_mirror_is_the_work_trees_top_cut_at_its_clones() {
     .is_empty());
     assert!(decide(&none, &Session::from_input(&json!({}))).len() <= 1);
 }
+
+/// 451 T31: a `python3 -c` that only reads is not a write where the shell stands - the T15 replay's
+/// `python3 -c "data = open('$SP/x.html','rb').read() ..."` was refused with no clone to move it to - while a program that
+/// writes, a redirect, a `tee`, and a program that runs the tree's own code are still writes.
+#[test]
+fn a_python_read_standing_in_the_mirror_is_not_a_write_and_a_python_write_still_is() {
+    let (m, _c) = tree("pyread");
+    let read = "SP=/tmp/sp; python3 -c \"\ndata = open('$SP/x.html','rb').read()\nfor enc in ['utf-8','cp932']:\n    print(enc, len(data.decode(enc, 'replace')))\n\"";
+    assert!(run(read, &m, &m, "nobody").is_empty(), "a read refused");
+    for read in [
+        "python3 -c 'import json; print(json.load(open(\"a.json\", encoding=\"utf-8\"))[\"k\"])'",
+        "python3 -c \"import sys,json; print(json.load(sys.stdin).get('x'))\"",
+        "python3 -c 'print(1)'",
+    ] {
+        assert!(run(read, &m, &m, "nobody").is_empty(), "{read}");
+    }
+    std::fs::create_dir_all(m.join("l7r")).unwrap();
+    let refused = |c: &str| matches!(&run(c, &m, &m, "nobody")[..], [Answer::Refuse(w)] if w.contains("cannot be resolved"));
+    for write in [
+        "python3 -c \"open('o.txt','w').write('x')\"",
+        "python3 -c \"open('o.txt', mode='a')\"",
+        "python3 -c \"m = 'w'; open('o.txt', m)\"",
+        "python3 -c \"import pathlib; pathlib.Path('o').write_text('x')\"",
+        "python3 -c \"import os; os.remove('f')\"",
+        "python3 -c \"print('$(rm f)')\"",
+        "python3 -c 'print(1)' > out.txt",
+        "python3 -c 'print(1)' | tee out.txt",
+        "python3 -c 'import l7r'",
+        "python3 -c 'from . import x'",
+        "cd $UNSET && python3 -c 'import json'",
+        "python3 -c print",
+        // window#61's shape: the heredoc writes, judged by no one, so the command's `-c` read stays D5's write
+        "python3 - <<'PY'\nimport pathlib\np = pathlib.Path('hm.py'); p.write_text('x')\nPY\npython3 -c 'print(1)'",
+        // parse#72's: a heredoc rewrites a module, a `-c` checks it parses
+        "python3 - <<'PYEOF'\nimport pathlib\np=pathlib.Path('f.py')\np.write_text(p.read_text())\nPYEOF\npython3 -c \"import ast,sys; ast.parse(open('f.py').read()); print('parses ok')\"",
+    ] {
+        assert!(refused(write), "{write}");
+    }
+}

@@ -655,31 +655,119 @@ None.
 reverted. Not filed with `PERF=1`: no engine stage's counted operations or time.
 
 <!-- plan-archive: T30 to T30 moved to plan-done.md, 2026-11-20 (feature 375 FR-044) -->
-### T31 (<why: the finding or measurement that files it>)
+### T31 (found by T15's corpus replay, 2026-11-20: main-tree refused `python3 -c "data = open('$SP/x.html','rb').read() ..."` - a read - as a write where the shell stands, with no escape, the same before and after T15's shared-reader fix; observed 2026-11-20, method: T15's replay of the main-tree refusals corpus)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: the cause is feature 204's D5, `rust/guard/src/shared/tree.rs` `writes_in` reading every `python3 -c` as a write where the
+  shell stands. D5 (feature 204 spec): *"`python3 -c` remains a write. It was a false positive on read-only diagnostics, but its cost is
+  now zero: from the clone it is allowed; from main it is moved. Narrowing the write list would reopen the false-allow direction for no
+  saving."* Its "zero cost" fails where the clone cannot be resolved: the move becomes the refusal `clone-unresolved`. And a read moved
+  to the clone is still a model-visible rewrite. Refusing a read is a wrong outcome (constitution XIV; the session's ruling,
+  2026-11-20), so D5 is NARROWED here: a `-c` program that a denylist of known writers judges read-only is not a write, unless the
+  same command also runs a Python program from stdin.
+  - `shared/tree/py_c.rs` (new): `reads(body, quote, dir)` judges a program a read only when no known writer appears in it (a
+    DENYLIST of calls and modules: `write`, `remove`, `shutil`, `subprocess`, `.dump(`, `save*(`, `getattr(`, `urlretrieve`, ...;
+    `replace(` only with `os`/`Path` in the program); every `open(` is in a read mode (no `*`/`**` argument, no non-literal mode);
+    no command substitution, and no shell expansion outside a Python literal (a `#` comment's quotes opening none), in a
+    double-quoted body; no relative import; and no import that the directory it runs in could answer (the tree's own code, which
+    can write anything), with any import a write where the directory is unknown. Anything else stays D5's write.
+  - `tree.rs`: `sanitize` carries each `-c` program out beside the text, `__py_c_<n>__` standing in its place, so the program's own
+    `;`, `(` and `|` do not split the walk. `writes_in` finds the `-c` past the interpreter's flags (`python3 -I -c`, `-Ic`,
+    `-W x -c`) and a minor version (`python3.12`), and keeps a read program in the walk as a target MARKED `how = "read"`. `judge`'s
+    write tests and its re-judge (`lands_in_main`) skip that mark, so house style still sees where the command lands, as before.
+    `walk` marks no `-c` a read where any segment of the command runs Python from stdin (`python3 -`, `python3 <<BODY`,
+    `python3 < p.py`, `| python3`; `python_stdin`): the walk judges no stdin program, and D5's write of the `-c` beside it was what
+    refused the heredoc writers parse#72 and window#61. The heredoc itself gets no target, and a `-c` program's own stdin is data.
+  - `gm_tree_hooks.rs` `offending` skips the mark too, so a read standing in gm-assistant's tree is no longer refused.
+  - red first, the tests before the code, each in `/tmp/t31/`, all `make rust-test CRATE=rust/guard`, 2026-11-20:
+    - the read refused: 673 passed, 1 failed (`red-first.log`);
+    - the classifier's gaps: 15 of 18 new write cases judged reads (`red3.log`);
+    - gm-tree refusing a read: 676 passed, 1 failed (`gmred.log`);
+    - the stdin rule and the comment: 674 passed, 3 failed (`red4.log`) - window#61's shape allowed by main-tree with no clone,
+      the walk's stdin cases marked `read`, `# don't\n$CODE` judged a read; parse#72 and window#61 themselves allowed by the
+      stage-1 binary's replay (`after1.nobody.main-tree-hooks.tsv`) and refused by the final one (`after3`);
+    - green: 677 of 677 (`green4.log`); 678 of 678 once the walk's Python cases became their own test, for its length
+      (`final-test.log`).
+  - replays (the four corpora, 1,134 rows, measured 2026-11-20 (`/tmp/t31/scripts/replay.sh`); before = HEAD's binary, after =
+    the final one; SID `t` resolves a clone, `nobody` resolves none):
+    - house-style, gm-tree, make-only alone (`t`), gm-tree alone (`nobody`): 0 moved, 0 outputs changed each, measured 2026-11-20 (`replay.sh`, `cmp.sh`);
+    - main-tree alone, measured 2026-11-20 (`replay.sh`, `cmp.sh`), `nobody`: 80 refused -> allowed; `t`: 79 rewrote -> allowed and window#308 refused -> allowed; 0 other
+      outputs changed;
+    - all guards, measured 2026-11-20 (`replay.sh`, `cmp.sh`), `t`: 79 rewrote -> allowed and window#308 refused -> allowed; `nobody`: 80 refused -> allowed; a second `t` run
+      0 differences (no noise);
+    - against the stage-1 binary (no stdin rule), measured 2026-11-20 (`cmp.sh` after1 vs after3): exactly 5 moved back - parse#72, window#61 (heredoc writers), main-tree#147,
+      window#339, window#361 (heredoc reads beside a `-c` read) - the same 5 an independent scan of the 85 stage-1 moves for a
+      stdin Python program predicted. Under all guards window#61 stays refused by guard-file-hooks and its output is back to
+      HEAD's.
+    - the final source rebuilt and all eight runs replayed again, measured 2026-11-20 (`cmp.sh` against the previous build's):
+      0 verdicts and 0 outputs changed.
+  - fixture: `tests/hooks/fixtures/main-tree-refusals-2026-09.json` relabeled, measured 2026-11-20 (its verdicts against the
+    main-tree replay, `t`), 57 rows rewrote -> allowed (expected 167 allowed, 6
+    rewrote), exactly the replay's main-tree# moves; main-tree#147 stays rewrote.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| a `python3 -c` read is no write (main-tree, gm-tree) | n/a - no map | n/a | none | n/a |
 
 ### T31 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** No map changes. A builder's read-only `python3 -c` diagnostic standing in the mirror or in
+   gm-assistant's tree runs as typed: it is neither refused nor rewritten. Every write is still moved or refused as before.
+2. **The constraints.** T31's line (measure on the corpora, fix the refusal of correct work, red first); feature 204 D5, quoted above
+   and narrowed here (a read judged by a denylist of known writers is no write, unless the command also runs a stdin program); D6
+   (unknown resolves toward main) untouched; the guards that read a walk's targets (house style, gm-tree, the bench) see the same
+   targets; 100% line coverage of the guard crate.
+3. **Where each comes from.** G: the session's ruling, 2026-11-20 - refusing a read is a wrong outcome (constitution XIV), so
+   narrowing D5 is right, and the stdin rule's cost (3 reads refused again) is within D5's scope as the session set it. R: feature
+   204 spec D5 and D6. O: the replays above, measured 2026-11-20.
+4. **Do they describe the world here?** Measured on the four corpora by replay, and each moved row hand-read as a WHOLE command,
+   not its `-c` program alone: every head of every segment listed (`/tmp/t31/scripts/heads.py`) and each one that is not a known
+   read judged. That read found the two heredoc writers (parse#72, window#61) the `-c` write had been covering, measured 2026-11-20 (`heads.py`
+   and a hand-read). The `curl -o`
+   writes the walk does not judge were measured 2026-11-20 (a hand-read of the moved rows) at 0 rows to cover: their targets
+   (main-tree#112, #122; window#416 has none) are absolute scratch paths outside the mirror. The script runs were measured
+   2026-11-20 (the same hand-read) at 4 rows left under the walk's standing policy that a script run is no write (`python3 x.py`
+   pinned empty), not shown to write nothing: main-tree#103 runs a scratch script, window#60, #62 and #308 run the mirror's own
+   test suites and hooks, and in each the `-c` write was the only thing that moved or refused it, so each now runs as typed.
+5. **The order.** After T15 (its replay found this); beside T33 (the guard-file guard, a different file).
+6. **The exits.** Green: the red tests green; the replays; `make rust-test CRATE=rust/guard` and the crate's lint, format and cover;
+   `make quick`; `make static` (once); `make hooks-test`. Red: what failed recorded and the task set down, a claim that it cannot be
+   done ruled through `make arbiter-ask`.
+7. **The search smell.** Every reader of a walk's targets was found: `judge` (`named`/`shell`, and the re-judge), `explain`
+   (`named` only), `Verdict::context` (logs `how`), `gm_tree_hooks::offending`, `house_style_hooks::lands_outside` (paths only) and
+   `suite_tools/bench.rs` (paths only); no script or test reads the logged `how`. Read 2026-11-20 (`grep '\.targets\|\.how'` over
+   `rust/guard/src`, `grep '"how"'` over `scripts/ tests/ Makefile`).
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** The read refused with no clone is allowed (`red-first.log` -> `green4.log`); 80 corpus rows refused with no
+   clone and 79 rewritten with one now run as typed, every move accounted above; 0 moves on the other guards alone; the heredoc
+   writers parse#72 and window#61 refused as before.
+10. **Before moving a constant.** n/a - no constant.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** Nothing on a map. The fix is not a restatement: refusing a read is the wrong outcome (constitution XIV), so
+    D5's claim *"python3 -c remains a write"* is narrowed in the code, the session ruling it. A builder sees its read run where it
+    was refused (`clone-unresolved`) or rewritten into the clone. The narrowing stops where the walk stops seeing: a command that
+    also runs a Python program from stdin keeps its `-c` a write, because the walk judges no stdin program and D5's write was the
+    only thing refusing such a heredoc's writes in the mirror (parse#72, window#61); its cost is 3 heredoc reads refused or
+    rewritten again (main-tree#147, window#339, window#361), as before T31.
 
-**Found and left?** <none - or each item with its visible effect or the research finding it breaks; an item with neither is not a defect and is not filed>
+**Found and left?**
+- The stdin rule keeps three real reads refused or rewritten: main-tree#147, window#339 and window#361 (each runs a `-c` read beside
+  a stdin Python program that only reads), observed 2026-11-20, method: the replays of item 9, the rows that moved back against the
+  earlier build, each hand-read. Not fixed here: telling those programs' bodies from a writer's needs the stdin reader T31 does not
+  build, and lifting the rule without it lets parse#72's and window#61's writes through. Filed as T42 (which retires the rule once
+  stdin bodies are judged); lands before T22.
+- A Python heredoc (or other stdin program) that writes, standing in the mirror, is judged by no one: measured 2026-11-20
+  (`heredoc_writers.py` over the replays), in the four corpora 331 rows
+  run a stdin Python program whose body holds a known writer standing in the mirror; main-tree with no clone resolvable allows 301
+  of them before and after T31 and refuses 30 (28 for another write in the command, parse#72 and window#61 by T31's
+  stdin rule); of the 301, 85 have no `cd` in the command and 42 of those name a
+  relative path. Not fixed here: judging a heredoc body is a new reader with its own replay and moves, past T31's `-c` scope, and
+  T31's stdin rule keeps every row it refused before refused. Filed as T42; lands before T22. observed 2026-11-20, method: every
+  corpus row's heredocs after a `python3` scanned for a known writer (`/tmp/t31/scripts/heredoc_writers.py`) against the before and
+  after main-tree replays.
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** yes - a `[perf]` task in FR-013's sense (the builders' loop): each refused or rewritten read cost a model
+round trip; the corpora hold 80 such refusals and 79 such rewrites. Not filed with `PERF=1`: no engine stage's counted operations
+or time.
 
 
 <!-- plan-archive: T32 to T14 moved to plan-done.md, 2026-11-20 (feature 375 FR-044) -->
@@ -782,14 +870,123 @@ reverted. Not filed with `PERF=1`: no engine stage's counted operations or time.
 
 <!-- plan-archive: T39 to T32 moved to plan-done.md, 2026-11-20 (feature 375 FR-044) -->
 <!-- plan-archive: T39 to T39 moved to plan-done.md, 2026-11-20 (feature 375 FR-044) -->
-### T40 (<why: the finding or measurement that files it>)
+### T40 (T21's finding: `make hooks-test`'s full-run wall is entry-gate's suite plus 2-3 s, measured 2026-11-20 (T21's full runs), its case-4 chain of record gates the last thing running)
+
+- **Approach**: measured first, then two cuts in `tests/hooks/test-entry-gate.sh` alone; no gate command's code changed.
+  - **Where the chain's time goes.** Case 4 (`case_answers`) is one clone and six computations of the tree's owed units, one after
+    another: the listing `answer_all` reads, its three `--answer` calls (quote-check, record-format, modal-research), and two gates.
+    Alone, the clone took 1.66-1.70 s (0.79 user, 0.87 sys) and each computation 1.40-1.64 s of wall and 2.4-3.4 CPU-seconds, the first on a
+    fresh clone 2.1 s, measured 2026-11-20 (`/usr/bin/time` and `EPOCHREALTIME` around each, a scratch clone of HEAD with case 3's reword, load 0.6-14).
+    Of a computation, 0.63-1.13 s is one `git cat-file --batch` of 1,951 base blobs (the record's pages at the merge base, read whole for a one-page
+    delta), the rest the binary's own work, measured 2026-11-20 (a `git` shim first on PATH timing each call and teeing `cat-file`'s input).
+    A gate run is one `entry-gate.sh`, three launcher and binary pairs (`push-gate skip` 0.30 s, its unscoped `git diff --name-only HEAD`
+    0.24 s of it, `record-owed --unanswered`, `log guard`) and 23 git processes, measured 2026-11-20 (`bash -x` with `EPOCHREALTIME` in PS4, the shim).
+    What repeats: the owed units, computed six times on states that differ by one sentence, each reading the same 1,951 base blobs again,
+    and a checkout of all 28,472 tracked files when the gate reads the record's pages and the pop-ups' files.
+    Under a full run's load the same steps stretch: the clone 6.7-17.5 s, `answer_all` 28.5-32.0 s, a gate 12.6-21.1 s, measured
+    2026-11-20 (the suite's steps timed by a `tick` line in an instrumented copy, run alone at load 22-43, the host loaded by other builders' replays and builds).
+    No profiler reaches the binary here (`perf` opens no event and `strace` cannot attach in this container, observed 2026-11-20), so the binary's
+    own share is read from the git calls' gaps.
+  - **Cut 1, the answers side by side.** The three `--answer` calls write different units' records (one file a unit in the answers'
+    store; the dispatch state they touch is taken under its lock), so `answer_all` starts them together and waits: the chain's six computations
+    in series become four. This moves work, it removes none.
+  - **Cut 2, a sparse clone.** `fixture` clones with `--no-checkout` and checks out `research/questions`, `research/sources` and
+    `l7r/diagram/interactive` (cone mode, so the top-level files too), 8,499 of the 28,472 tracked files: 0.59-0.61 s against 1.61-1.67 s alone, measured
+    2026-11-20 (`/usr/bin/time`, four alternated pairs of a full and a sparse clone of the clone, load 2.6-2.8), and a smaller index for every gate's `git diff` and `git status`. Held to the full clone's behavior: both clones driven through the
+    eight states the suite drives (clean, comment, reword, `ENTRY_DRIFT_OK`, answered, stale, `RECORD_CHECKS_OK`, restored), the gate's output and
+    exit code and `record-owed`'s listings diffed, identical, 175 lines each, measured 2026-11-20 (a script driving both). Case 7 counts the bypass
+    records under `dev/bypass-log/`, absent from the sparse clone, so its `find` now says nothing when the folder is not there; the count is
+    still the before and after of one gate.
+  - **Rejected, measured.** A single-pack shallow clone (`--depth 1`): 6.96 s and 14.3 CPU-seconds to make, and a computation on it 1.45 s
+    against 1.44 s on the plain clone, measured 2026-11-20 (`/usr/bin/time`, the same delta) - the base reads cost the same in one pack or 38.
+    A fixture shared by the two cases: each edits its own page in place and the clone is under a second, so a copy saves nothing a sparse
+    clone does not.
+  - **Kept the same.** Every case, every assertion, the cases' order and the two parts; still red where its behavior breaks: with
+    `entry-gate.sh` asking `record-owed` without `--unanswered` (answers ignored), the new suite fails `answered units ship` (12 passed,
+    1 failed), measured 2026-11-20 (a scratch clone with that one-line change and the new suite).
+  - **The wall.** Two scratch clones of HEAD c71c168ebe, `after` carrying the new suite, `make hooks-test HOOKS_ALL=1` alternated, HOOKS_JOBS 8,
+    `L7R_MODEL_CACHE` set (a clone has no model cache of its own).
+    Before 43.8 and 44.0 s, entry-gate's suite 39.7 and 41.9 s, measured 2026-11-20 (`EPOCHREALTIME` around make, each run's "ran" line, load 19.7 and 16.0 at their starts).
+    After 44.4 and 44.2 s, entry-gate's suite 32.4 and 34.2 s, measured 2026-11-20 (the same method, load 16.8 and 15.1 at their starts, `after` dirty in the suite and `before` clean).
+    A third pair, 52.2 s and 72.5 s, overlapped another builder's replays and is dropped, measured 2026-11-20 (the same method).
+    So the suite fell about 7.5 s and the wall did not move, sync-with-main's suite the longest at 33.7 and 35.7 s and the wall ending 8-11 s after it, measured 2026-11-20 (the same runs).
+  - **The equal-dirt pair** settles that confound: both scratch suites carry the same inert `tick` lines, run before, after, after,
+    before, `/usr/bin/time` around make, each suite's end read from its `.git/hooks-test/<suite>.s` mtime against make's start.
+    Before 41.3 s and 491 CPU-seconds at load 17.1, entry-gate's suite 39.2 s ending at 40.3 s, measured 2026-11-20 (`/tmp/t40/s2/run.sh`).
+    Before again 62.3 s and 729 CPU-seconds at load 20.4, the suite 59.1 s ending at 61.0 s, measured 2026-11-20 (the same script).
+    After 37.0 s and 461 CPU-seconds at load 12.0, the suite 27.7 s ending at 28.8 s, sync-with-main 27.3 s ending at 28.4 s, the last suite ending at 35.6 s, measured 2026-11-20 (the same script).
+    After again 55.0 s and 634 CPU-seconds at load 14.2, sync-with-main 39.0 s ending at 40.0 s, the suite 36.5 s ending at 37.5 s, the last suite ending at 52.6 s, measured 2026-11-20 (the same script).
+    So the chain no longer sets the full run's wall: before, the wall was the suite's end plus 1 s, and after, the short suites dealt last end 7-15 s past it, the wall the run's whole work over its eight jobs, measured 2026-11-20 (the four runs above).
+    The walls' 4.3 and 7.3 s are not read as a saving, the loads differing by 3-5 between the pair's runs, measured 2026-11-20 (the same runs).
+  - **The incremental run, the common case** (the session's ruling: keep the cuts if the suite is measurably faster alone and in an
+    incremental run that reruns it). Each run appends a comment line to `scripts/gates/entry-gate.sh` in its scratch clone and runs
+    `make hooks-test`, which reruns entry-gate's suite, l7r-gate's three shards and sync-with-main's, alternated before, after, after,
+    before, twice.
+    Before 29.4, 24.5, 24.2 and 23.5 s, entry-gate's suite 27.6, 23.0, 22.7 and 22.0 s, measured 2026-11-20 (the same script, load 9.9-20.1).
+    After 23.5, 21.5, 20.9 and 21.3 s, the suite 21.8, 20.0, 19.4 and 19.8 s, measured 2026-11-20 (the same script and loads).
+    The wall is the suite's end plus 0.4-0.5 s in every run, so here the suite still sets it, and each back-to-back pair fell 2.2-5.9 s, about 3 s at the lower loads, measured 2026-11-20 (the eight runs).
+    CPU-seconds did not fall, 158-182 before and 171-190 after, system time down about 3 s and user time up about 12 s, measured 2026-11-20 (`/usr/bin/time`).
+  - **Alone.** The old and new suites alternated (old, new, new, old, twice).
+    Old 13.3, 15.1, 15.5 and 16.9 s, new 10.5, 11.7, 12.3 and 11.4 s, CPU-seconds 41.7-48.7 against 44.0-47.6, measured 2026-11-20 (`/usr/bin/time` around `/tmp/t40/run1.sh`, load 4.5-6.8).
+    One part at a time, old 22.4 and 24.9 s, case 4 12.1 and 13.3 s, the rest 9.5 and 10.8 s, measured 2026-11-20 (`PARTS_MAX=1`, alternated, each case's first and last `tick`, load 2.6-3.3).
+    New 17.7 and 17.4 s, case 4 9.6 and 9.3 s, the rest 7.8 and 7.8 s, so `WEIGHT` is now 9 and 8, measured 2026-11-20 (the same method).
+    The landed suite passes 13 of 13 at `PARTS_MAX=1` in 16.6 s and at `PARTS_MAX=2` in 9.5 s, measured 2026-11-20 (`tests/hooks/test-entry-gate.sh` run alone).
+    So the cuts save about 3.7 s of wall alone and about 3 s in an incremental run, and no CPU, measured 2026-11-20 (the figures above).
+    The sparse clone's system time saved is spent again as user time, likely the three computations sharing the cores (a GUESS, unmeasured: no profiler here).
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+| the answers side by side, a sparse clone | n/a - no map | n/a | none | n/a |
+
+### T40 Approach (checklist part A)
+
+1. **The goal, in the world.** A faster `make hooks-test`: the suite measurably faster alone and in an incremental run that reruns it, the
+   common case (the session's ruling, 2026-11-20, once the full run's wall proved set by other suites); no map changes.
+2. **The constraints.** FR-010, FR-013; the suite checks what it checked (every case and assertion, each red when its behavior breaks); only
+   the suite and this section edited (T31 works in `rust/guard`).
+3. **Where each comes from.** G: improvement 5 (the GM 2026-11-19, a faster `make hooks-test`); O: T21's full-run figures and this task's step timings.
+4. **Do they describe the world here?** Measured on scratch clones of HEAD, the git calls by a shim, the suite's steps by an instrumented copy, the wall back to back.
+5. **The order.** After T21 (its finding); beside T31 (different files).
+6. **The exits.** Green: the suite faster alone and in an incremental run that reruns it, the suite green at `PARTS_MAX` 1 and 2 and red on a broken gate. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** One landing.
+9. **Done, measured.** The suite alone, old and new alternated; an incremental `make hooks-test` after an edit to `entry-gate.sh` and a
+   full `HOOKS_ALL=1` run, on two scratch clones of HEAD equally dirty, alternated, wall and CPU-seconds by `/usr/bin/time`, each suite's end, the load noted.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** Nothing a reader of a map sees; no check's verdict changes (the gate's output identical at every state). Not a defect: a speed change.
+
+**Found and left?**
+- Every computation of the owed units reads the record's pages at the merge base whole, 1,951 blobs by `git cat-file`, though a page the
+  delta does not touch reads the same in the working tree: 0.63-1.13 s of each 1.4-1.6 s computation, measured 2026-11-20 (the shim's
+  `cat-file` timing). Not fixed here: a change to the `owed` crate's `Delta::fetch`, outside this task's files, and it cuts every gate
+  run, the push's too, not this suite alone. Filed as T43; lands before T22.
+- `push-gate skip`'s `git diff --name-only HEAD` walks the whole index, 0.24 s a gate run on the full clone, observed 2026-11-20 (the shim).
+  Not a defect: no wrong outcome, a cost, and not filed: a real gate pays it once a push, and this suite's sparse clone already
+  shrinks the index it walks.
+
+**Performance work?** yes - a `[perf]` task (451 FR-013: the guard suites' wall). Its answers:
+
+1. **Where does the time go?** Into six computations of the owed units in series and a full checkout (the approach's figures).
+2. **Removes work, or only moves it?** The sparse clone removes work (about 20,000 fewer files checked out and indexed per case); the answers
+   side by side only move it, three computations at once where they ran in turn.
+3. **What do you expect it to save, and why?** About two computations and most of a clone off the chain, 3-4 s alone and more under a full run's
+   load, where each step stretched 4-10x (a GUESS from the step timings).
+4. **How does the work grow with the settlement?** n/a - no settlement; with the record it grows as its pages do.
+5. **What did the before and after show, and under what conditions?** The approach's figures.
+   Alone 13.3-16.9 s before and 10.5-12.3 s after, measured 2026-11-20 (load 4.5-6.8).
+   An incremental run after an edit to `entry-gate.sh` 23.5-29.4 s before and 20.9-23.5 s after, each pair 2.2-5.9 s faster, CPU-seconds unchanged or higher, measured 2026-11-20 (load 9.9-20.1).
+   In a full run the suite fell 7.5-12 s but stopped setting the wall, now the run's whole work over eight jobs, 41.3 and 62.3 s before against 37.0 and 55.0 s after, measured 2026-11-20 (the equal-dirt pair, loads 12-20).
+6. **Did any map move, and does it still keep the research?** No map.
+
+### T41 (<why: the finding or measurement that files it>)
 
 - **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
 
-### T40 Approach (checklist part A)
+### T41 Approach (checklist part A)
 
 1. **The goal, in the world.** <the place as it should be>
 2. **The constraints.** <the FRs, decisions and pages it holds to>
@@ -809,14 +1006,41 @@ reverted. Not filed with `PERF=1`: no engine stage's counted operations or time.
 **Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
 
 
-### T41 (<why: the finding or measurement that files it>)
+### T42 (<why: the finding or measurement that files it>)
 
 - **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
 
-### T41 Approach (checklist part A)
+### T42 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+
+### T43 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T43 Approach (checklist part A)
 
 1. **The goal, in the world.** <the place as it should be>
 2. **The constraints.** <the FRs, decisions and pages it holds to>

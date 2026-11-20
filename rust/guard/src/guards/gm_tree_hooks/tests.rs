@@ -78,10 +78,18 @@ fn a_bash_write_lands_by_invocation_never_by_mention() {
     assert_eq!(offending(&var, G, "/h"), Some(G.to_owned()));
     let unresolved = event(
         "Bash",
-        &json!({"command": "python3 -c 'x' # gm-assistant"}),
+        &json!({"command": "python3 -c 'open(\"x\", \"w\")' # gm-assistant"}),
         G,
     );
     assert_eq!(offending(&unresolved, G, "/h").as_deref(), Some(G));
+    // 451 T31: a `python3 -c` that only reads (the walk's target marked "read") is no write in gm-assistant's tree either
+    for read in [
+        "python3 -c 'x' # gm-assistant",
+        "python3 -I -c \"import json; print(json.load(open('setting/a.json'))['k'])\" # gm-assistant",
+    ] {
+        let read = event("Bash", &json!({ "command": read }), G);
+        assert_eq!(offending(&read, G, "/h"), None);
+    }
 }
 
 #[test]

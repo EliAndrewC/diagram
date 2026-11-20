@@ -18,6 +18,8 @@ GATE="$HERE/../../scripts/gates/entry-gate.sh"
 # dealt beside the rest by tests/hooks/parts.sh (`run_parts`, PARTS_MAX-capped like every split suite), each clone the case's own:
 # its page, its bypass log, its guard log and its answers' store, all removed with it.
 T="$(mktemp -d)"; trap 'rm -rf "$T"' EXIT
+# the clone's sparse set (fixture): what the gate reads of a tree - the record's pages and the pop-ups' files (feature 451 T40)
+SPARSE="research/questions research/sources l7r/diagram/interactive"
 PASS=0; FAIL=0
 ok() { if [ "$1" = "$2" ]; then PASS=$((PASS+1)); else FAIL=$((FAIL+1)); printf '  FAIL %s: got %s want %s\n' "$3" "$1" "$2"; fi; }
 # fixture: a fresh clone in its own directory under the part's $T, the page and its pristine copy, and throwaway stores - a suite that
@@ -26,7 +28,14 @@ ok() { if [ "$1" = "$2" ]; then PASS=$((PASS+1)); else FAIL=$((FAIL+1)); printf 
 fixture() {
   local d; d=$(mktemp -d -p "$T")
   ROOT="$d/clone"
-  git clone -q "$REAL" "$ROOT" || { echo "test-entry-gate: could not clone $REAL"; exit 1; }
+  # A SPARSE CLONE (feature 451 T40): the gate reads the record's pages and the pop-ups' files (`l7r-gate record record-owed`'s
+  # LISTED and WATCHED paths) and the delta, which git answers for a path left out as unchanged; checking out all the tree's
+  # 28,472 files (8,499 here) cost each case about 1 s of its clone (1.6 s against 0.6 s, measured 2026-11-20) and each gate the
+  # index of them all, and the gate's output at every state this suite drives was the full clone's line for line, measured
+  # 2026-11-20 (both clones driven through the eight states, the gate's output, exit code and `record-owed` listing diffed; the
+  # T40 plan section). A gate that comes to read a path outside SPARSE reads it as absent here: widen SPARSE with it.
+  git clone -q --no-checkout "$REAL" "$ROOT" && git -C "$ROOT" sparse-checkout set --cone $SPARSE && git -C "$ROOT" checkout -q ||
+    { echo "test-entry-gate: could not clone $REAL"; exit 1; }
   PAGE="$ROOT/research/questions/0094-rooms-for-a-parley-across-a-border.html"
   BL="$ROOT/dev/bypass-log"
   BAK="$d/page.bak"; cp "$PAGE" "$BAK"
@@ -46,6 +55,8 @@ edit() {
 # together - its notes on a question by `--q` and `--notes k,k`, its other subjects by `--kind s,s` - so the same units are
 # answered, and case 4 still proves every one of them is (the gate goes quiet). The three modal-research units are answered
 # as a session answers them, by one `CHECK=modal-research` (its agent's three checks): 11 calls became 3.
+# SIDE BY SIDE (feature 451 T40): the three answer different checks' units, each into its own unit's record (one file a unit in the
+# answers' store), so none waits on another; one after another they were half of case 4's chain, the full hook run's last suite.
 answer_all() {
   local g="$HERE/../../scripts/gates/l7r-gate.sh" check q notes kinds
   "$g" record record-owed --root "$ROOT" --unanswered --slugs | awk '
@@ -55,16 +66,16 @@ answer_all() {
       else { sep = (c in kinds) ? "," : ""; kinds[c] = kinds[c] sep s } }
     END { for (k in notes) { split(k, p, "|"); c = p[1]; print k "|" notes[k] "|" (c in done ? "" : kinds[c]); done[c] = 1 }
           for (c in kinds) if (!(c in done)) print c "|||" kinds[c] }' |
-  while IFS='|' read -r check q notes kinds; do
-    "$g" record record-owed --root "$ROOT" --answer "$check" --result 0/0/0 ${q:+--q "$q"} ${notes:+--notes "$notes"} \
-      ${kinds:+--kind "$kinds"} --reason "the suite answers its own edits" >/dev/null
-  done
+  { while IFS='|' read -r check q notes kinds; do
+      "$g" record record-owed --root "$ROOT" --answer "$check" --result 0/0/0 ${q:+--q "$q"} ${notes:+--notes "$notes"} \
+        ${kinds:+--kind "$kinds"} --reason "the suite answers its own edits" >/dev/null &
+    done; wait; }
 }
 
 # The throwaway clone carries no delta of its own: its origin/main is the HEAD it was cloned from, so nothing is owed before
 # the suite's edits and case 1 holds that.
 
-case_main() {  # cases 1-3 and 5-8, one clone; 3 record gates, about 5 s alone (2026-11-19)
+case_main() {  # cases 1-3 and 5-8, one clone; 3 record gates, about 8 s alone (2026-11-20, PARTS_MAX=1)
 fixture
 
 # 1. a tree with no record change is quiet - the guard must not fire on correct work
@@ -92,7 +103,7 @@ ok "$r" 0 "the refusal names the unit and its bundle command"
 ( cd "$ROOT" && ENTRY_DRIFT_OK="a probe moved no finding" "$GATE" >/dev/null 2>&1 ); ok $? 1 "ENTRY_DRIFT_OK leaves the other units owed"
 
 # 7. a real RECORD_CHECKS_OK reason discharges every unit AND lands in dev/bypass-log/
-before=$(find "$BL" -name '*.json' | wc -l)
+before=$(find "$BL" -name '*.json' 2>/dev/null | wc -l)   # none: the sparse clone leaves dev/ out (T40)
 ( cd "$ROOT" && RECORD_CHECKS_OK="a probe sentence, no check owed" "$GATE" >/dev/null 2>&1 ); ok $? 0 "a reason discharges it"
 after=$(find "$BL" -name '*.json' | wc -l)
 ok "$after" "$((before+1))" "the reason is recorded in dev/bypass-log/"
@@ -103,7 +114,7 @@ cp "$BAK" "$PAGE"
 ( cd "$ROOT" && "$GATE" >/dev/null 2>&1 ); ok $? 0 "quiet again once the page is restored"
 }
 
-case_answers() {  # case 4, its own clone; 6 record gates, about 10 s alone (2026-11-19)
+case_answers() {  # case 4, its own clone; 6 record gates, three side by side, about 9.5 s alone (2026-11-20, PARTS_MAX=1)
 fixture
 # case 3's reword, the state case 4 answers
 edit "a short way apart." "a short distance apart."
@@ -116,7 +127,7 @@ edit "a short distance apart." "a short walk apart."
 }
 
 CASES=(case_answers case_main)
-declare -A WEIGHT=([case_answers]=10 [case_main]=5)  # seconds, each alone, measured 2026-11-19
+declare -A WEIGHT=([case_answers]=9 [case_main]=8)  # seconds, each alone, measured 2026-11-20 (PARTS_MAX=1, the T40 plan section)
 # shellcheck source=/dev/null
 source "$HERE/parts.sh"
 run_parts 2

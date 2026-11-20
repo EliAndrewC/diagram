@@ -230,11 +230,63 @@ fn the_walk_reads_each_tool_and_its_paths() {
         "shell"
     );
     assert_eq!(walk("python3 -c 'x'", Some("/tmp"), &m, h).targets.len(), 1);
-    assert!(walk("python3 x.py", Some("/tmp"), &m, h).targets.is_empty());
     assert!(walk("cat <<EOF\ntouch /tmp/x\nEOF", None, &m, h)
         .targets
         .is_empty());
     assert!(walk("{ echo; }", None, &m, h).targets.is_empty());
+}
+
+#[test]
+fn the_walk_judges_a_python_program_a_read_or_a_write() {
+    let (_dir, m, _c) = mirror("python");
+    let h = "/home/u";
+    // 451 T31: a program that only reads stays a target MARKED "read" (its own `;` and `|` not splitting the walk), one that
+    // can write and an unquoted one stay "shell"; the flags before `-c` and a minor version are read through
+    let hows = |cmd: &str| -> Vec<&'static str> {
+        walk(cmd, Some("/tmp"), &m, h)
+            .targets
+            .iter()
+            .map(|t| t.how)
+            .collect()
+    };
+    assert_eq!(
+        hows("python3 -c \"import sys; print(sys.argv | 1)\" a && python3 -c 'x'"),
+        ["read", "read"]
+    );
+    assert_eq!(hows("python3 -c 'open(\"x\", \"w\")'"), ["shell"]);
+    assert_eq!(hows("python3 -c x"), ["shell"]);
+    assert_eq!(
+        hows("python3 -I -c 'print(1)'; python3.12 -W ignore -Xdev -Ic 'open(\"x\", \"w\")'"),
+        ["read", "shell"]
+    );
+    assert_eq!(
+        hows("/usr/bin/python3 -B -c \"open('o', 'a')\"; python3 -W -c 'x'"),
+        ["shell"]
+    );
+    assert!(hows("python3 -m json.tool x; python3 --version; python3 - <<<x").is_empty());
+    assert!(walk("python3 x.py", Some("/tmp"), &m, h).targets.is_empty());
+    // 451 T31: a command that also runs a Python program from stdin (a heredoc, `-`, a pipe) keeps its `-c` read a write - the
+    // walk judges no stdin program, and D5's write of the `-c` was what refused parse#72's and window#61's heredoc writers;
+    // the heredoc itself is no target, and a `-c` program's own stdin is data
+    let heredoc =
+        "python3 - <<'PY'\nimport pathlib\np = pathlib.Path('x'); p.write_text('y')\nPY\n";
+    assert!(hows(heredoc).is_empty());
+    for cmd in [
+        format!("{heredoc}python3 -c 'print(1)'"),
+        "python3 -c 'print(1)'; python3 <<EOF\nprint(2)\nEOF".to_owned(),
+        "python3 -c 'print(1)' && cat p.py | python3 -u".to_owned(),
+        "python3 -c 'print(1)'; python3 -I - a < p.py".to_owned(),
+    ] {
+        assert_eq!(hows(&cmd), ["shell"], "{cmd}");
+    }
+    assert_eq!(
+        hows("python3 -c 'import sys; print(sys.stdin.read())' <<EOF\ndata\nEOF"),
+        ["read"]
+    );
+    assert_eq!(
+        hows("python3 -m json.tool <<EOF\n{}\nEOF\npython3 -c 'print(1)'; python3 --version"),
+        ["read"]
+    );
 }
 
 #[test]

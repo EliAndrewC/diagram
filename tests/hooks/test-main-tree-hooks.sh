@@ -79,7 +79,15 @@ says "  ...and gives the read route" "git -C $MAIN <read>"
 run "$MAIN" "echo x > notes.md";                     check "standing in the mirror, a relative redirect -> rewritten" 0 "$RC"
 run "$MAIN/specs" "echo x > f";                      check "standing in a SUBDIRECTORY of the mirror -> rewritten" 0 "$RC"
 rewritten "  ...to the same subdirectory of the clone" "cd $WORKER/specs && echo x > f"
-run "$MAIN" "python3 -c 'print(1)'";                 check "standing in the mirror, python3 -c (spec D5: still a write) -> rewritten, free" 0 "$RC"
+run "$MAIN" "python3 -c \"open('o.txt','w').write('x')\""; check "standing in the mirror, a python3 -c that writes (spec D5) -> rewritten, free" 0 "$RC"
+rewritten "  ...into the clone" "cd $WORKER && python3 -c"
+# 451 T31: D5 restated - a python3 -c shown to only read is no write, so with no clone to move it to it is not refused
+SID=nobody
+run "$MAIN" "SP=/tmp/sp; python3 -c \"data = open('\$SP/x.html','rb').read(); print(len(data))\""
+check "standing in the mirror, no clone resolvable, a python3 -c that only READS -> allowed (451 T31)" 0 "$RC"; untouched "  ...untouched"
+run "$MAIN" "python3 -c \"open('o.txt','w').write('x')\""; check "  ...and the same with one that WRITES -> refused" 2 "$RC"
+run "$MAIN" "python3 -c 'print(1)' | tee out.txt";  check "  ...and a read piped into tee -> refused" 2 "$RC"
+SID=t
 run "$MAIN" "cd \$UNSET && git commit -am x";        check "standing in the mirror, cd through an UNSET variable (D6: unknown resolves toward main) -> rewritten" 0 "$RC"
 run "$MAIN" "grep -rn MAIN_TREE_OK scripts/ && git commit -am x"
 check "the escape token merely GREPPED for -> not an escape; rewritten like any other" 0 "$RC"
