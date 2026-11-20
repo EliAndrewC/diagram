@@ -10,7 +10,7 @@ use crate::shared::escape::{escape_or_refuse, Escape};
 use crate::shared::log;
 use crate::shared::session::Session;
 use crate::shared::state::field;
-use crate::shared::tree::{classify, normpath, walk};
+use crate::shared::tree::{classify, normpath, walk_judged};
 
 /// The guard.
 pub const GUARD: Guard = Guard {
@@ -37,10 +37,11 @@ pub(crate) fn offending(event: &Event, tree: &str, home: &str) -> Option<String>
     if !cmd.contains("gm-assistant") && !standing.is_some_and(|c| c.starts_with(tree)) {
         return None;
     }
-    walk(cmd, standing, tree, home)
+    walk_judged(cmd, standing, tree, home)
         .targets
         .into_iter()
-        // a `python3 -c` program that only reads is a target marked "read", no write (451 T31)
+        // a `python3 -c` program that only reads is a target marked "read", no write (451 T31); a stdin program that can write
+        // is a write where the shell stands (451 T42)
         .find(|t| {
             !t.segment.trim_start().starts_with("git") && t.class == "main" && t.how != "read"
         })

@@ -1,6 +1,17 @@
 //! The event log's command line: a hook payload appended in a scratch clone, a transcript converted, the usage.
 
-use super::cli;
+use l7r_guard::shared::env::Rooted;
+
+// Each test reads its own environment, never the session's exports (feature 451 T38): this `cli` shadows the crate's.
+fn cli(args: &[String], stdin: &mut dyn std::io::Read) -> crate::Reply {
+    super::cli_in(args, stdin, Rooted::with(".", &[]).reader())
+}
+
+#[test]
+fn the_process_reader_answers_the_usage_as_its_own() {
+    let r = super::cli(&args(&["nonsense"]), &mut &b""[..]);
+    assert_eq!(r.code, cli(&args(&["nonsense"]), &mut &b""[..]).code);
+}
 
 fn args(list: &[&str]) -> Vec<String> {
     list.iter().map(|s| (*s).to_owned()).collect()

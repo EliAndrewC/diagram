@@ -4,6 +4,28 @@ use serde_json::{json, Value};
 
 use super::super::tests::{commit, events, feature, hamlet, put, repo};
 use super::*;
+use std::path::Path;
+
+// Each test reads its own environment, never the session's exports (feature 451 T38): the readers below shadow the crate's.
+fn own(root: &Path) -> Rooted {
+    Rooted::with(root, &[])
+}
+
+fn active_feature(root: &Path) -> String {
+    super::active_feature(&own(root))
+}
+
+fn glyph_due(root: &Path, units: &[Unit], at: Option<f64>) -> (Vec<Unit>, Vec<(Unit, String)>) {
+    super::glyph_due(&own(root), units, at)
+}
+
+fn mark_landing(root: &Path, on: bool) {
+    super::mark_landing(&own(root), on);
+}
+
+fn glyph_cli(root: &Path, slug: &str, gate: bool, escaped: bool) -> (i32, String) {
+    super::glyph_cli(&own(root), slug, gate, escaped)
+}
 
 fn glyph_unit() -> Unit {
     Unit {
@@ -251,5 +273,5 @@ fn on_the_hour_a_plain_dispatch_opens_the_batch() {
     assert_eq!(glyph_cli(&r, slug, false, false), (0, String::new()));
     assert_eq!(clock(&r)["900-x"]["batch"], json!([slug]));
     let nogit = super::super::tests::dir("nogit-batch");
-    open_batch(&nogit, &[glyph_unit()], 1.0);
+    open_batch(&own(&nogit), &[glyph_unit()], 1.0);
 }

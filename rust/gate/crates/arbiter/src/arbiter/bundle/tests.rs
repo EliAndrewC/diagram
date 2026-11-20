@@ -1,5 +1,10 @@
 //! The arbiter's bundle end to end, on a scratch record with a check state, an owed record and a feature.
 
+/// A root carrying an empty environment: each test reads its own, never the session's exports (feature 451 T38).
+fn own(root: &std::path::Path) -> l7r_guard::shared::env::Rooted {
+    l7r_guard::shared::env::Rooted::with(root.to_path_buf(), &[])
+}
+
 use std::path::Path;
 
 use serde_json::json;
@@ -38,7 +43,7 @@ fn bundle_cli(root: &Path, extra: &[&str]) -> Reply {
     let r = root.to_string_lossy().into_owned();
     let mut a = vec!["--root", r.as_str()];
     a.extend(extra);
-    cli(&args(&a))
+    cli_in(&args(&a), &own(std::path::Path::new(".")))
 }
 
 #[test]
@@ -342,10 +347,10 @@ fn the_rare_paths_of_the_arbiters_bundle() {
         .unwrap()
         .kept
         .is_empty());
-    assert_eq!(counted(&plain, "u"), 0);
-    assert_eq!(counted(&root, "quote-check|q:0094"), 0);
+    assert_eq!(counted(&own(&plain), "u"), 0);
+    assert_eq!(counted(&own(&root), "quote-check|q:0094"), 0);
     put(&root, ".specify/feature.json", "{}");
-    assert_eq!(counted(&root, "quote-check|q:0094"), 0);
+    assert_eq!(counted(&own(&root), "quote-check|q:0094"), 0);
     feature(&root);
     owed(
         &root,

@@ -5,7 +5,7 @@ use std::path::Path;
 use serde_json::{json, Value};
 
 use super::answers::{
-    amendment1_depiction_answered, answer, answered, file_outside, keep_reading,
+    amendment1_depiction_answered, answer, answered, file_outside, file_outside_in, keep_reading,
     legacy_depiction_answered, read_answer, reply_checks, settle, store, unanswered, write_answer,
     Named,
 };
@@ -22,7 +22,8 @@ use crate::record::testkit::{commit, edit_everything, git, put, record, record_a
 fn run(root: &Path, args: &[&str]) -> crate::Reply {
     let mut all = vec!["--root".to_owned(), root.to_string_lossy().into_owned()];
     all.extend(args.iter().map(|s| (*s).to_owned()));
-    cli(&all)
+    // its own environment, never the session's (feature 451 T38)
+    super::cli_in(&all, &l7r_guard::shared::env::Rooted::with(".", &[]))
 }
 
 fn none() -> Named<'static> {
@@ -147,9 +148,10 @@ fn the_store_keeps_every_answer_and_settles() {
         ["modal-accuracy", "modal-references", "modal-gaps"]
     );
     assert!(reply_checks("nothing").is_empty());
+    let own = l7r_guard::shared::env::Rooted::with(&root, &[]);
     assert!(file_outside(&root, "c", "no heading").unwrap().is_empty());
     assert_eq!(
-        file_outside(&root, "c", "**OUTSIDE THE CHANGE**:\n- `f` | b | x\n")
+        file_outside_in(&own, "c", "**OUTSIDE THE CHANGE**:\n- `f` | b | x\n")
             .unwrap()
             .len(),
         1
@@ -157,8 +159,8 @@ fn the_store_keeps_every_answer_and_settles() {
     assert!(root.join("specs/_unfiled/found.jsonl").is_file());
     // the finding in the house style, a straight-quoted word too: found.jsonl is a JSON record (feature 449 T242); its file as given
     let brit = format!("behavio{}", "ur");
-    let got = file_outside(
-        &root,
+    let got = file_outside_in(
+        &own,
         "c",
         &format!("**OUTSIDE THE CHANGE**:\n- `{brit}.md` | b | the \"{brit}\" \u{2013} off\n"),
     )
@@ -474,6 +476,14 @@ fn the_store_and_its_siblings_with_the_test_variable_given() {
         std::path::PathBuf::from("/x/y")
     );
     assert!(store_given(&root, Some("".into())).ends_with(".git/record-checks"));
+    // the store a root's own environment names (feature 451 T38), and none named there though the process may export one
+    let rooted = l7r_guard::shared::env::Rooted::with(&*root, &[("RECORD_CHECKS_DIR", "/x/z")]);
+    assert_eq!(
+        super::answers::store_in(&rooted),
+        std::path::PathBuf::from("/x/z")
+    );
+    let unnamed = l7r_guard::shared::env::Rooted::with(&*root, &[]);
+    assert!(super::answers::store_in(&unnamed).ends_with(".git/record-checks"));
     let base = top.join("sib");
     let main = record_at(&base.join(".clones/main"));
     std::fs::create_dir_all(base.join(".clones/sib/.git/record-checks")).unwrap();

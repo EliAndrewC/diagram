@@ -176,7 +176,7 @@ fn a_gate_or_cohort_that_cannot_start_is_a_raise() {
     fx.land.make = "/no/such/make".to_owned();
     assert!(fx.land.run_gate("done").is_err());
     assert!(fx.land.start_cohort().is_err());
-    fx.land.root = fx.dir.join("none");
+    fx.land.root = fx.land.root.at(fx.dir.join("none"));
     assert!(fx.land.start_cohort().is_err());
     stop_cohort(None);
     let mut done = std::process::Command::new("true").spawn().unwrap();

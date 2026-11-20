@@ -17,6 +17,7 @@
 //! appended to (`O_APPEND`, as the hooks write - both readers sort by `t`, and `reversal` reads a log as a set); the source is rewritten
 //! through a temporary file, any line a live hook appended meanwhile carried over before the rename.
 
+use l7r_guard::shared::env::Reader;
 use std::collections::{BTreeMap, HashMap};
 use std::fmt::Write as _;
 use std::io::Write as _;
@@ -51,7 +52,7 @@ struct Given {
     dry: bool,
 }
 
-fn given(args: &[String]) -> Option<Given> {
+fn given(args: &[String], env: &Reader) -> Option<Given> {
     let mut root = None;
     let mut dir = None;
     let mut projects = None;
@@ -68,13 +69,12 @@ fn given(args: &[String]) -> Option<Given> {
     }
     let root = root?;
     let dir = dir.unwrap_or_else(|| {
-        l7r_guard::guards::event_log_hooks::log_path(&root, "x")
+        l7r_guard::guards::event_log_hooks::log_path_in(&root, "x", env)
             .parent()
             .map_or_else(PathBuf::new, Path::to_path_buf)
     });
-    let projects = projects.unwrap_or_else(|| {
-        PathBuf::from(std::env::var("HOME").unwrap_or_default()).join(".claude/projects")
-    });
+    let projects = projects
+        .unwrap_or_else(|| PathBuf::from(env("HOME").unwrap_or_default()).join(".claude/projects"));
     Some(Given {
         root,
         dir,
@@ -393,7 +393,13 @@ fn write_back(path: &Path, mut kept: Vec<u8>, mut read: usize) -> Result<(), Str
 /// The command: every log in the directory re-filed (or, `--dry-run`, only counted), the counts printed.
 #[must_use]
 pub fn cli(args: &[String]) -> Reply {
-    let Some(g) = given(args) else {
+    cli_in(args, &l7r_guard::shared::env::opt)
+}
+
+/// [`cli`] reading the environment `env` (feature 451 T38: a test's own, never a session's exports).
+#[must_use]
+pub fn cli_in(args: &[String], env: &Reader) -> Reply {
+    let Some(g) = given(args, env) else {
         return reply(String::new(), USAGE.to_owned(), 2);
     };
     let mut facts = Facts::new(&g.root, &g.projects);

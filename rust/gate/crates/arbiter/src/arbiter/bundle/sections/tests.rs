@@ -1,5 +1,10 @@
 //! The arbiter bundle's sections, each on a scratch repository.
 
+/// A root carrying an empty environment: each test reads its own, never the session's exports (feature 451 T38).
+fn own(root: &std::path::Path) -> l7r_guard::shared::env::Rooted {
+    l7r_guard::shared::env::Rooted::with(root.to_path_buf(), &[])
+}
+
 use serde_json::{json, Value};
 
 use super::*;
@@ -151,21 +156,21 @@ fn the_cascade_and_the_oscillation() {
         .map(|e| e.to_string() + "\n")
         .collect::<String>()
         + "not json\n\n";
-    let path = l7r_guard::guards::event_log_hooks::log_path(&root, "500-f");
+    let path = l7r_guard::guards::event_log_hooks::log_path_in(&root, "500-f", own(&root).reader());
     put(
         &root,
         &path.strip_prefix(&root).unwrap().to_string_lossy(),
         &log,
     );
-    let all = flow_sections(&root, &out, Some(&d), &[]).unwrap();
+    let all = flow_sections(&own(&root), &out, Some(&d), &[]).unwrap();
     assert!(
         all[0].contains("the last 3 edits and dispatches on the feature")
             && all[1].contains("- /x/notes/a.html at 10:00:02: an edit put back")
     );
-    let mine = flow_sections(&root, &out, Some(&d), &["notes/a.html".to_owned()]).unwrap();
+    let mine = flow_sections(&own(&root), &out, Some(&d), &["notes/a.html".to_owned()]).unwrap();
     assert!(mine[0].contains("the last 2 edits on the unit's files,"));
     let none = flow_sections(
-        &root,
+        &own(&root),
         &out,
         None,
         &["research/questions/0094-trade.html".to_owned()],
@@ -178,7 +183,7 @@ fn the_cascade_and_the_oscillation() {
     assert!(std::fs::read_to_string(out.join("cascade.txt"))
         .unwrap()
         .contains(" commit "));
-    assert!(flow_sections(&root, &root.join("research/STYLE.md"), None, &[]).is_err());
+    assert!(flow_sections(&own(&root), &root.join("research/STYLE.md"), None, &[]).is_err());
 }
 
 #[test]

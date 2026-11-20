@@ -5,15 +5,21 @@
 //! comments, kept in git history.
 
 use std::collections::HashMap;
-use std::path::Path;
 use std::sync::LazyLock;
 
 use fancy_regex::{Captures, Regex};
-use serde_json::{json, Value};
 
 use super::shape::strip_heredocs;
 
 mod py_c;
+mod python;
+mod verdict;
+
+use python::{
+    carry_heredocs, program_reads, python_c, stdin_program, Program, Stdin, HEREDOC_WORD, PYTHON,
+    PYTHON_C_BEFORE,
+};
+pub use verdict::{context_line, explain, judge, Verdict};
 
 fn re(pattern: &str) -> Regex {
     crate::shared::regex::build(pattern)
@@ -103,19 +109,6 @@ static FUNCTION_DEF: LazyLock<Regex> = LazyLock::new(|| re(r"^\s*[\w-]+\s*\(\s*\
 static DUP_FD: LazyLock<Regex> = LazyLock::new(|| re(r"\d*>&[0-9-]"));
 static DEV_NULL: LazyLock<Regex> = LazyLock::new(|| re(r"\d*>\s*/dev/null"));
 static ASSIGNMENT_WORD: LazyLock<Regex> = LazyLock::new(|| re(r"^[A-Za-z_]\w*="));
-/// The interpreter's name, a minor version included (`python3.12`; 451 T31 - before it, only `python`, `python3`).
-static PYTHON: LazyLock<Regex> = LazyLock::new(|| re(r"^python(?:3(?:\.\d+)?)?$"));
-/// Python's flags that take no argument, any of which may stand before `-c` or cluster with it (`-I -c`, `-Ic`; 451 T31).
-const PY_FLAGS: &str = "bBdEhiIOPqRsSuvVx";
-/// The text before a quote that `python3 -c` runs, in the shape `writes_in` reads as one: the interpreter, then `-c` (451 T31).
-static PYTHON_C_BEFORE: LazyLock<Regex> = LazyLock::new(|| {
-    re(&format!(
-        r"(?:^|[\s;&|(])(?:[^\s;&|()]*/)?python(?:3(?:\.\d+)?)?(?:[ \t]+(?:-[{PY_FLAGS}]*[WX][ \t]*[^\s;&|()'\x22]+|-[{PY_FLAGS}]+))*[ \t]+-[{PY_FLAGS}]*c[ \t]+$"
-    ))
-});
-/// The word a `python3 -c` program is carried as through the walk: its index among the walk's programs (451 T31).
-static PROGRAM: LazyLock<Regex> = LazyLock::new(|| re(r"^__py_c_(\d+)__$"));
-
 fn found(p: &Regex, text: &str) -> bool {
     p.is_match(text).unwrap_or(false)
 }
@@ -177,14 +170,10 @@ fn relpath(path: &str, start: &str) -> String {
     }
 }
 
-/// A `python3 -c` program: its quote and its body as the command line holds it.
-type Program = (char, String);
-
 /// A quoted string kept as its body where it is one plain word (a path), else blanked to an empty pair (`_quotes_to_paths`); a
 /// program `python3 -c` runs is carried out beside the text, the word `__py_c_<n>__` standing in its place, so `writes_in` can
 /// judge whether it only reads without the program's own `;`, `(` and `|` splitting the walk (451 T31).
-fn quotes_to_paths(cmd: &str) -> (String, Vec<Program>) {
-    let mut programs = Vec::new();
+fn quotes_to_paths(cmd: &str, mut programs: Vec<Program>) -> (String, Vec<Program>) {
     let text = QUOTED
         .replace_all(cmd, |c: &Captures| {
             let body = c.get(2).map_or("", |m| m.as_str());
@@ -204,60 +193,11 @@ fn quotes_to_paths(cmd: &str) -> (String, Vec<Program>) {
 }
 
 fn sanitize(cmd: &str) -> (String, Vec<Program>) {
-    let (text, programs) = quotes_to_paths(&strip_heredocs(cmd));
+    let mut programs = Vec::new();
+    let carried = carry_heredocs(cmd, &mut programs);
+    let (text, programs) = quotes_to_paths(&carried, programs);
     let text = DUP_FD.replace_all(&text, " ");
     (DEV_NULL.replace_all(&text, " ").into_owned(), programs)
-}
-
-/// The index of the `-c` that makes a Python command line run a program, past the flags before it (`python3 -I -W x -c`, `-Ic`;
-/// 451 T31 - before it only a `-c` second word was read, so `python3 -I -c` was never judged at all); None where it runs a file,
-/// a module or stdin.
-fn python_c(toks: &[&str]) -> Option<usize> {
-    let mut i = 1;
-    while let Some(t) = toks.get(i) {
-        let flags = t.strip_prefix('-').filter(|f| !f.starts_with('-'))?;
-        let cluster = flags.trim_start_matches(|c| PY_FLAGS.contains(c));
-        match cluster {
-            "c" => return Some(i),
-            "" if !flags.is_empty() => {}
-            "W" | "X" => i += 1, // its argument the next word
-            _ if cluster.starts_with(['W', 'X']) => {} // its argument glued on
-            _ => return None,
-        }
-        i += 1;
-    }
-    None
-}
-
-/// Whether a Python command line runs a program from its stdin - `python3 -`, `python3 <<BODY`, `python3 < p.py`, `| python3` -
-/// rather than a `-c` program, a module or a script (451 T31).
-fn python_stdin(toks: &[&str]) -> bool {
-    let mut i = 1;
-    while let Some(t) = toks.get(i) {
-        if *t == "-" || t.starts_with('<') {
-            return true;
-        }
-        let Some(flags) = t.strip_prefix('-').filter(|f| !f.starts_with('-')) else {
-            return false; // a script, or a long option (`--version`)
-        };
-        let cluster = flags.trim_start_matches(|c| PY_FLAGS.contains(c));
-        match cluster {
-            "" => {}
-            "W" | "X" => i += 1, // its argument the next word
-            _ if cluster.starts_with(['W', 'X']) => {}
-            _ => return false, // `-c`, `-m`
-        }
-        i += 1;
-    }
-    true
-}
-
-/// Whether the word after `python3 -c` carries a program that only reads, run in `eff` (451 T31; anything else is D5's write).
-fn program_reads(word: Option<&&str>, programs: &[Program], eff: Option<&str>) -> bool {
-    word.and_then(|w| PROGRAM.captures(w).ok().flatten())
-        .and_then(|c| c.get(1)?.as_str().parse::<usize>().ok())
-        .and_then(|n| programs.get(n))
-        .is_some_and(|(quote, body)| py_c::reads(body, *quote, eff))
 }
 
 type Env = HashMap<String, String>;
@@ -334,54 +274,62 @@ pub fn classify(path: Option<&str>, main: &str) -> &'static str {
 /// One piece of a command split at its separators: a segment, or a subshell's opening or closing (`_segments`).
 #[derive(Debug, PartialEq, Eq)]
 enum Piece {
-    Seg(String),
+    /// A segment, and whether a pipe feeds it the stdout of the segment before (451 T42: `cat <<'PY' | python3`).
+    Seg(String, bool),
     Push,
     Pop,
 }
 
 fn segments(text: &str) -> Vec<Piece> {
     let chars: Vec<char> = text.chars().collect();
-    let (mut out, mut buf, mut i) = (Vec::new(), String::new(), 0);
-    let flush = |buf: &mut String, out: &mut Vec<Piece>| {
+    let (mut out, mut buf, mut i, mut piped) = (Vec::new(), String::new(), 0, false);
+    let flush = |buf: &mut String, out: &mut Vec<Piece>, piped: bool| {
         let seg = buf.trim().to_owned();
         buf.clear();
         if !seg.is_empty() {
-            out.push(Piece::Seg(seg));
+            out.push(Piece::Seg(seg, piped));
         }
     };
     while i < chars.len() {
         let ch = chars[i];
         let next = chars.get(i + 1).copied();
         if (ch == '&' && next == Some('&')) || (ch == '|' && next == Some('|')) {
-            flush(&mut buf, &mut out);
+            flush(&mut buf, &mut out, piped);
+            piped = false;
             i += 2;
         } else if ch == '$' && next == Some('(') {
-            flush(&mut buf, &mut out);
+            flush(&mut buf, &mut out, piped);
             out.push(Piece::Push);
+            piped = false;
             i += 2;
         } else if (ch == '|' || ch == '&') && buf.ends_with('>') {
             buf.push(ch); // `>|` and `>&` belong to the redirection, not a separator (feature 429)
             i += 1;
         } else if matches!(ch, ';' | '|' | '&' | '\n') {
-            flush(&mut buf, &mut out);
+            // a pipe at a line's end still feeds the next line's segment
+            if !(ch == '\n' && buf.trim().is_empty()) {
+                flush(&mut buf, &mut out, piped);
+                piped = ch == '|';
+            }
             i += 1;
         } else if ch == '(' {
-            flush(&mut buf, &mut out);
+            flush(&mut buf, &mut out, piped);
             out.push(Piece::Push);
             i += 1;
         } else if ch == ')' {
-            flush(&mut buf, &mut out);
+            flush(&mut buf, &mut out, piped);
             out.push(Piece::Pop);
+            piped = false;
             i += 1;
         } else if ch == '{' || ch == '}' {
-            flush(&mut buf, &mut out);
+            flush(&mut buf, &mut out, piped);
             i += 1;
         } else {
             buf.push(ch);
             i += 1;
         }
     }
-    flush(&mut buf, &mut out);
+    flush(&mut buf, &mut out, piped);
     out
 }
 
@@ -537,7 +485,6 @@ fn perl_in_place(token: &str) -> bool {
 fn writes_in(
     seg: &str,
     programs: &[Program],
-    stdin_program: bool,
     env: &Env,
     home: &str,
     eff: Option<&str>,
@@ -553,9 +500,8 @@ fn writes_in(
         } else if let Some(at) = python_c(&toks).filter(|_| found(&PYTHON, base)) {
             // 451 T31: a program that only reads stays in the walk MARKED "read" - no guard's verdict counts it a write, and the
             // guards that read a walk's targets for where a command lands (house style, gm-tree) see what they saw before
-            // - and a command that also runs a stdin program keeps it D5's write: the walk judges no stdin program, and the
-            // `-c` write was what refused the heredoc writers standing in the mirror (parse#72, window#61)
-            let how = if !stdin_program && program_reads(toks.get(at + 1), programs, eff) {
+            // (`walk` makes it D5's write again beside a stdin program it cannot read, 451 T42)
+            let how = if program_reads(toks.get(at + 1), programs, eff) {
                 "read"
             } else {
                 "shell"
@@ -620,25 +566,30 @@ pub struct Walk {
     pub standing: &'static str,
 }
 
-/// The effective directory through the command, and every write with where it lands (`walk`).
+/// The effective directory through the command, and every write with where it lands (`walk`), as the guards that read a walk's
+/// paths see it (house style, make-only, the bench): a Python program run from stdin is no target, as before 451 T42 - house
+/// style's D11 holds a program heredoc's writes unknowable, its case table pinning that one beside a `/tmp` log is left alone.
 #[must_use]
 pub fn walk(cmd: &str, start: Option<&str>, main: &str, home: &str) -> Walk {
+    walk_in(cmd, start, main, home, false)
+}
+
+/// The walk as the tree guards judge it (main-tree, gm-tree; 451 T42): a Python program run from stdin whose body can write is a
+/// write where the shell stands.
+#[must_use]
+pub fn walk_judged(cmd: &str, start: Option<&str>, main: &str, home: &str) -> Walk {
+    walk_in(cmd, start, main, home, true)
+}
+
+fn walk_in(cmd: &str, start: Option<&str>, main: &str, home: &str, stdin_writes: bool) -> Walk {
     let env = env_from(cmd, start, home);
     let (text, programs) = sanitize(cmd);
-    let stdin_program = segments(&text).iter().any(|p| match p {
-        Piece::Seg(s) => {
-            let toks = words(s);
-            toks.first()
-                .is_some_and(|h| found(&PYTHON, h.rsplit('/').next().unwrap_or(h)))
-                && python_stdin(&toks)
-        }
-        _ => false,
-    });
     let mut eff: Option<String> = start.map(str::to_owned);
     let mut hint = classify(eff.as_deref(), main); // where the shell was last KNOWN to be (spec D6)
     let (mut stack, mut targets, mut cd_into_main) = (Vec::new(), Vec::new(), false);
+    let (mut prev, mut unread) = (None::<String>, false);
     for piece in segments(&text) {
-        let seg = match piece {
+        let (seg, piped) = match piece {
             Piece::Push => {
                 stack.push((eff.clone(), hint));
                 continue;
@@ -649,8 +600,9 @@ pub fn walk(cmd: &str, start: Option<&str>, main: &str, home: &str) -> Walk {
                 }
                 continue;
             }
-            Piece::Seg(s) => s,
+            Piece::Seg(s, piped) => (s, piped),
         };
+        let upstream = prev.replace(seg.clone()).filter(|_| piped);
         let toks = words(&seg);
         if matches!(toks.first(), Some(&"cd" | &"pushd")) {
             eff = match toks.get(1) {
@@ -668,7 +620,26 @@ pub fn walk(cmd: &str, start: Option<&str>, main: &str, home: &str) -> Walk {
             eff = None;
             continue;
         }
-        for (path, how) in writes_in(&seg, &programs, stdin_program, &env, home, eff.as_deref()) {
+        let mut writes = writes_in(&seg, &programs, &env, home, eff.as_deref());
+        // 451 T42: a Python program run from stdin is judged by T31's reader as a `-c` program is - a writer is a write where
+        // the shell stands; a read is no target, as no stdin program was before; one the walk cannot read keeps every `-c`
+        // read of the command D5's write (T31's stdin rule, now for that case alone), since that write was what refused
+        // parse#72's and window#61's heredoc writers before their bodies were judged
+        match stdin_program(
+            &toks,
+            upstream.as_deref(),
+            &programs,
+            &env,
+            home,
+            eff.as_deref(),
+        ) {
+            Stdin::Unread => unread = true,
+            Stdin::Program(q, body) if stdin_writes && !py_c::reads(&body, q, eff.as_deref()) => {
+                writes.insert(0, (eff.clone(), "shell"));
+            }
+            Stdin::None | Stdin::Program(..) => {}
+        }
+        for (path, how) in writes {
             let mut class = classify(path.as_deref(), main);
             if class == "unknown" {
                 class = if hint == "main" { "main" } else { "elsewhere" }; // D6: unknown resolves toward main
@@ -677,8 +648,17 @@ pub fn walk(cmd: &str, start: Option<&str>, main: &str, home: &str) -> Walk {
                 path,
                 class,
                 how,
-                segment: seg.chars().take(120).collect(),
+                segment: HEREDOC_WORD
+                    .replace_all(&seg, "<<BODY")
+                    .chars()
+                    .take(120)
+                    .collect(),
             });
+        }
+    }
+    if unread {
+        for t in targets.iter_mut().filter(|t| t.how == "read") {
+            t.how = "shell";
         }
     }
     Walk {
@@ -687,237 +667,6 @@ pub fn walk(cmd: &str, start: Option<&str>, main: &str, home: &str) -> Walk {
         cd_into_main,
         standing: classify(start, main),
     }
-}
-
-/// Every command-position `cd <main>[/sub]` of the original text made `cd <clone>[/sub]` (`_rewrite_cds`).
-fn rewrite_cds(cmd: &str, main: &str, clone: &str) -> String {
-    let pat = re(&format!(
-        r#"(?m)((?:^|[;&|(\n]|&&|\|\|)\s*(?:\(\s*)?(?:cd|pushd)\s+)(["']?){}(?=/(?!\.clones(?:/|$))|["'\s;&|)]|$)"#,
-        fancy_regex::escape(main)
-    ));
-    pat.replace_all(cmd, |c: &Captures| {
-        format!(
-            "{}{}{clone}",
-            c.get(1).map_or("", |m| m.as_str()),
-            c.get(2).map_or("", |m| m.as_str())
-        )
-    })
-    .into_owned()
-}
-
-/// The verdict on one hook input (`judge`): its kind, reason and cause, the walk's context, and a rewrite's command.
-#[derive(Debug, Clone)]
-pub struct Verdict {
-    pub verdict: &'static str,
-    pub reason: &'static str,
-    pub cause: &'static str,
-    pub cwd: Option<String>,
-    pub walk: Walk,
-    pub clone: Option<String>,
-    pub prepended: Option<bool>,
-    pub command: Option<String>,
-}
-
-impl Verdict {
-    /// The verdict as the Python's JSON, its `hook` left out (`log-context`).
-    #[must_use]
-    pub fn context(&self) -> Value {
-        let targets: Vec<Value> = self
-            .walk
-            .targets
-            .iter()
-            .map(|t| json!({"path": t.path, "class": t.class, "how": t.how, "segment": t.segment}))
-            .collect();
-        let mut ctx = json!({
-            "cwd": self.cwd, "standing": self.walk.standing, "final_dir": self.walk.final_dir, "cd_into_main": self.walk.cd_into_main,
-            "targets": targets, "clone": self.clone,
-        });
-        if let Some(p) = self.prepended {
-            ctx["prepended"] = Value::Bool(p);
-        }
-        let mut out = json!({"verdict": self.verdict, "reason": self.reason, "cause": self.cause, "context": ctx});
-        if let Some(c) = &self.command {
-            out["command"] = Value::String(c.clone());
-        }
-        out
-    }
-}
-
-/// Whether a re-judged walk's target still writes in main: a `python3 -c` read (how "read", 451 T31) is no write.
-fn lands_in_main(t: &Target) -> bool {
-    t.class == "main" && t.how != "read"
-}
-
-/// The verdict for one hook input; `resolved` says the caller already tried to find the clone (`judge`).
-#[must_use]
-pub fn judge(
-    input: &Value,
-    main: &str,
-    clone: Option<&str>,
-    home: &str,
-    resolved: bool,
-) -> Verdict {
-    let ti = input.get("tool_input").cloned().unwrap_or(Value::Null);
-    let cmd = ti.get("command").and_then(Value::as_str).unwrap_or("");
-    let start = input
-        .get("cwd")
-        .and_then(Value::as_str)
-        .filter(|c| !c.is_empty());
-    let main = main.trim_end_matches('/');
-    let w = walk(cmd, start, main, home);
-    let named = w
-        .targets
-        .iter()
-        .any(|t| t.class == "main" && t.how == "named");
-    let shell = w
-        .targets
-        .iter()
-        .any(|t| t.class == "main" && t.how == "shell");
-    let mut v = Verdict {
-        verdict: "allow",
-        reason: "no-write-in-main",
-        cause: "",
-        cwd: start.map(str::to_owned),
-        walk: w.clone(),
-        clone: clone.map(str::to_owned),
-        prepended: None,
-        command: None,
-    };
-    let mut out = |verdict, reason, cause| {
-        (v.verdict, v.reason, v.cause) = (verdict, reason, cause);
-        v.clone()
-    };
-    if named {
-        return out("refuse", "named-main", "named");
-    }
-    if !shell {
-        return out("allow", "no-write-in-main", "");
-    }
-    let cause = if w.cd_into_main { "cd" } else { "standing" };
-    let Some(clone) = clone else {
-        return out(
-            if resolved { "refuse" } else { "needs-clone" },
-            "clone-unresolved",
-            cause,
-        );
-    };
-    if !Path::new(clone).join(".git").exists() {
-        return out("refuse", "clone-missing", cause);
-    }
-    if found(&FUNCTION_DEF, cmd) {
-        return out("refuse", "shape", cause);
-    }
-    let mut new = rewrite_cds(cmd, main, clone);
-    let mut prepended = false;
-    let mut w2 = walk(&new, start, main, home);
-    if w2.targets.iter().any(lands_in_main) && w.standing == "main" {
-        let sub = start
-            .filter(|c| *c != main)
-            .map(|c| relpath(c, main))
-            .unwrap_or_default();
-        let at = if sub.is_empty() || sub == "." {
-            clone.to_owned()
-        } else {
-            join(clone, &sub)
-        };
-        new = format!("cd {at} && {new}");
-        prepended = true;
-        w2 = walk(&new, start, main, home);
-    }
-    if w2.targets.iter().any(lands_in_main) {
-        return out("refuse", "shape", cause); // re-judged and still lands in main: never emit that
-    }
-    v.prepended = Some(prepended);
-    v.command = Some(new);
-    (v.verdict, v.reason, v.cause) = ("rewrite", "moved-to-clone", cause);
-    v
-}
-
-/// What the session is told of a rewrite into its clone (`_context_line`).
-#[must_use]
-pub fn context_line(v: &Verdict, main: &str) -> String {
-    let clone = v.clone.as_deref().unwrap_or("");
-    let opening = if v.cause == "cd" {
-        format!(
-            "This command cd'd into {main} - the MIRROR, main's tree, never a workspace - and then wrote there. The cd was rewritten to \
-your clone, {clone}, at the same relative position"
-        )
-    } else {
-        format!(
-            "Your shell was standing in {}, inside {main} - the MIRROR, main's tree, never a workspace - so this command's write would have \
-landed in main. It was rewritten to run in your clone: `cd {clone}` was prepended",
-            v.cwd.as_deref().unwrap_or("None")
-        )
-    };
-    format!(
-        "{opening}, and the shell stays in the clone for later commands. Read main with `git -C {main} <read>`; do everything else in the \
-clone (CLAUDE.md, 'Session clones'). Rewritten rather than refused: a refusal costs a model round trip to say the same thing. \
-(rust/guard/src/guards/main_tree_hooks.rs; feature 204)"
-    )
-}
-
-/// The refusal text, naming the actual cause (`explain`).
-#[must_use]
-pub fn explain(v: &Verdict, main: &str) -> String {
-    let clone = v.clone.as_deref().unwrap_or("<your clone under .clones/>");
-    let where_ = match v.cause {
-        "named" => "this command names a path inside the mirror and writes to it".to_owned(),
-        "cd" => format!("this command cds into {main} - the MIRROR - and then writes there"),
-        _ => format!(
-            "your shell is standing in {}, inside {main} - the MIRROR - and this command writes where it stands",
-            v.cwd.as_deref().unwrap_or("None")
-        ),
-    };
-    let mut lines = vec![
-        format!("BLOCKED: {where_}."),
-        String::new(),
-        "Main is the integration point, never a workspace. The only write a session makes there is".to_owned(),
-        "render-sync, and that names the tree with `git -C` from sync-with-main.sh rather than cd-ing.".to_owned(),
-        String::new(),
-    ];
-    match v.reason {
-        "named-main" => {
-            let named: Vec<String> = v
-                .walk
-                .targets
-                .iter()
-                .filter(|t| t.class == "main" && t.how == "named")
-                .map(|t| {
-                    t.path.clone().unwrap_or_else(|| {
-                        format!("a target this cannot resolve, in `{}`", t.segment)
-                    })
-                })
-                .collect();
-            lines.push(format!("Named: {}", named.join(", ")));
-            lines.push("A write that merely LANDS in main because of where the shell stands is moved to your clone".to_owned());
-            lines.push("(feature 204); one that names main by its path says what it means, and a guard never guesses at".to_owned());
-            lines.push(format!("that. Do it in your clone instead: {clone}."));
-        }
-        "clone-unresolved" => {
-            lines.push("It would have been moved to your clone, but this session's clone cannot be resolved: no claim".to_owned());
-            lines.push("under .clones/.session-clones, no /rename record in the transcript, no sessions entry. Ask the".to_owned());
-            lines.push("GM to /rename the session, then work in .clones/<kebab-name>.".to_owned());
-        }
-        "clone-missing" => {
-            lines.push(format!("It would have been moved to your clone, {clone}, which does not exist yet. Create it:"));
-            lines.push(format!(
-                "  git clone {main} {clone} && ( cd {clone} && scripts/sync-with-main.sh sync-in )"
-            ));
-        }
-        _ => {
-            lines.push("It would have been moved to your clone, but the command's shape could not be rewritten safely".to_owned());
-            lines.push("(it opens with a function definition, or the cd into main is reached through a variable and".to_owned());
-            lines.push(format!("cannot be located in the original text). Run it as `( cd {clone} && ... )` yourself."));
-        }
-    }
-    lines.push(String::new());
-    lines.push(format!("Reading main stays fine: `git -C {main} <read>`. If this genuinely needs to write in main, put"));
-    lines.push(
-        "MAIN_TREE_OK in the command with the reason, and the reason ships with it.".to_owned(),
-    );
-    lines.push(String::new());
-    lines.push("(rust/guard/src/guards/main_tree_hooks.rs; features 169 and 204)".to_owned());
-    lines.join("\n")
 }
 
 #[cfg(test)]

@@ -24,7 +24,8 @@
 use std::path::Path;
 use std::time::SystemTime;
 
-use l7r_guard::guards::event_log_hooks::{append_row_for, now_stamp};
+use l7r_guard::guards::event_log_hooks::{append_row_with, now_stamp};
+use l7r_guard::shared::env::Rooted;
 use serde_json::{json, Value};
 
 use super::Land;
@@ -49,10 +50,11 @@ impl Land {
     /// A step's line, `began` its start, `code` how it went.
     pub(super) fn phase_line(&self, step: &str, began: SystemTime, code: i32) {
         let tasks = self.landing_tasks.borrow();
-        let _ = append_row_for(
+        let _ = append_row_with(
             &self.root,
-            &self.landing_feature.borrow(),
+            Some(&self.landing_feature.borrow()),
             row(&self.root, step, began, code, &self.make_target, &tasks),
+            self.root.reader(),
         );
     }
 
@@ -80,14 +82,19 @@ impl Land {
         let tasks = self.landing_tasks.borrow();
         let mut line = row(&self.root, "end", began, code, &self.make_target, &tasks);
         line.insert("landed".into(), Value::Bool(self.pushed.get()));
-        let _ = append_row_for(&self.root, &self.landing_feature.borrow(), line);
+        let _ = append_row_with(
+            &self.root,
+            Some(&self.landing_feature.borrow()),
+            line,
+            self.root.reader(),
+        );
     }
 }
 
 /// The `end` line of a landing refused before it began (`main`'s refusals: no note, no feature directory), filed in the feature its
 /// `F=` names where it names one.
 pub(super) fn end(
-    root: &Path,
+    root: &Rooted,
     feature: &str,
     tasks: &[String],
     began: SystemTime,
@@ -96,7 +103,7 @@ pub(super) fn end(
 ) {
     let mut line = row(root, "end", began, code_of(done), make, tasks);
     line.insert("landed".into(), Value::Bool(false));
-    let _ = append_row_for(root, feature, line);
+    let _ = append_row_with(root, Some(feature), line, root.reader());
 }
 
 /// A step's exit code: its own, or 1 for a raise (the landing's raise exits 1, `finish`).

@@ -3,6 +3,12 @@
 use serde_json::json;
 
 use super::*;
+
+// Each test reads its own environment, never the session's exports (feature 451 T38): this `section` shadows the crate's, which
+// the first test also asks, on a tree with no check state.
+fn section(root: &Path, out: &Path, manifest: &str) -> Result<String, Fail> {
+    section_in(&Rooted::with(root, &[]), out, manifest)
+}
 use crate::record::bundle::tests::{scratch, state};
 use crate::record::testkit::{commit, put};
 
@@ -12,6 +18,7 @@ fn the_rounds_rulings_and_replies_of_a_unit() {
     let out = root.join("out");
     let manifest = "owed-checks: quote-check, record-format\nunit: quote-check:0094#k fp\nunit: record-format:0094 fp\n";
     assert_eq!(section(&root, &out, manifest).unwrap(), "");
+    assert_eq!(super::section(&root, &out, manifest).unwrap(), "");
     put(&root, "specs/500-f/spec.md", "spec");
     commit(&root, "the feature");
     put(
@@ -68,7 +75,7 @@ fn the_rounds_rulings_and_replies_of_a_unit() {
     std::fs::write(root.join("blocked"), "a file").unwrap();
     assert!(section(&root, &root.join("blocked"), manifest).is_err());
     put(&root, ".specify/feature.json", "{}");
-    assert!(feature_start(&root) == 0.0);
+    assert!(feature_start(&Rooted::with(root.to_path_buf(), &[])) == 0.0);
 }
 
 #[test]

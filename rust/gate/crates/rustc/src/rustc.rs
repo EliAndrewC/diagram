@@ -46,7 +46,8 @@ static PUB_FN: LazyLock<Regex> =
 
 /// Where everything runs, read once from the environment.
 pub struct World {
-    root: PathBuf,
+    /// The tree, and the environment its guard reads see (feature 451 T38: a test's own, never a session's exports).
+    root: l7r_guard::shared::env::Rooted,
     target: PathBuf,
     cargo: String,
     path_dir: PathBuf,
@@ -773,7 +774,7 @@ fn world_here(make: String) -> World {
         hamlet_spec: var("HAMLET_SPEC"),
         cover_work: std::env::var_os("L7R_RUST_COVER_WORK").map(PathBuf::from),
         make,
-        root: tree,
+        root: l7r_guard::shared::env::Rooted::process(tree),
     }
 }
 

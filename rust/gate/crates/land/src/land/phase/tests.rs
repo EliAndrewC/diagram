@@ -166,7 +166,14 @@ fn main_s_refusal_is_filed_by_its_feature_word() {
     let nothing = || {};
     let args = owned(&["449", "T1"]);
     assert_eq!(
-        super::super::main(&args, &fx.root, " ", &super::super::scripts_of, &nothing),
+        super::super::main(
+            &args,
+            &fx.root,
+            " ",
+            &super::super::scripts_of,
+            &nothing,
+            &l7r_guard::shared::env::Rooted::with(".", &[])
+        ),
         Ok(2)
     );
     let log = std::fs::read_to_string(fx.root.join(".git/l7r-events/449-x.jsonl")).unwrap();
@@ -276,12 +283,26 @@ fn main_s_refusals_write_an_end() {
     let args = |a: &[&str]| owned(a);
     let nothing = || {};
     assert_eq!(
-        super::super::main(&args(&["449"]), &fx.root, NOTE, &scripts, &nothing),
+        super::super::main(
+            &args(&["449"]),
+            &fx.root,
+            NOTE,
+            &scripts,
+            &nothing,
+            &l7r_guard::shared::env::Rooted::with(".", &[])
+        ),
         Ok(2)
     );
     assert!(lines(&fx.root).is_empty());
     assert_eq!(
-        super::super::main(&args(&["449", "T1 T2"]), &fx.root, " ", &scripts, &nothing),
+        super::super::main(
+            &args(&["449", "T1 T2"]),
+            &fx.root,
+            " ",
+            &scripts,
+            &nothing,
+            &l7r_guard::shared::env::Rooted::with(".", &[])
+        ),
         Ok(2)
     );
     assert_eq!(end_of(&fx.root)["tasks"], serde_json::json!(["T1", "T2"]));
@@ -290,7 +311,14 @@ fn main_s_refusals_write_an_end() {
     put(&other, "x", "");
     l7r_gate_core::ci::fixtures::git(&other, &["init", "-q"]);
     assert_eq!(
-        super::super::main(&args(&["7", "T3"]), &other, NOTE, &scripts, &nothing),
+        super::super::main(
+            &args(&["7", "T3"]),
+            &other,
+            NOTE,
+            &scripts,
+            &nothing,
+            &l7r_guard::shared::env::Rooted::with(".", &[])
+        ),
         Ok(2)
     );
     assert_eq!(end_of(&other)["tasks"], serde_json::json!(["T3"]));
@@ -395,7 +423,14 @@ fn a_comma_list_names_every_task_it_lists() {
     for t in ["T1,T2", "T1, T2", " T1 ,, T2 ", "T1 T2"] {
         let args = owned(&["449", t]);
         assert_eq!(
-            super::super::main(&args, &fx.root, " ", &super::super::scripts_of, &nothing),
+            super::super::main(
+                &args,
+                &fx.root,
+                " ",
+                &super::super::scripts_of,
+                &nothing,
+                &l7r_guard::shared::env::Rooted::with(".", &[])
+            ),
             Ok(2)
         );
     }
@@ -408,7 +443,14 @@ fn a_comma_list_names_every_task_it_lists() {
     // commas alone name no task: the usage, as an empty T= is
     let args = owned(&["449", " , "]);
     assert_eq!(
-        super::super::main(&args, &fx.root, NOTE, &super::super::scripts_of, &nothing),
+        super::super::main(
+            &args,
+            &fx.root,
+            NOTE,
+            &super::super::scripts_of,
+            &nothing,
+            &l7r_guard::shared::env::Rooted::with(".", &[])
+        ),
         Ok(2)
     );
 }

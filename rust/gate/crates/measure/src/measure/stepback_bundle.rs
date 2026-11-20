@@ -36,6 +36,8 @@ type Row = Map<String, Value>;
 pub struct Env {
     pub home: PathBuf,
     pub now: f64,
+    /// The environment the tree is read with (feature 451 T38: a test's own, never a session's exports); its path unused.
+    pub base: l7r_guard::shared::env::Rooted,
 }
 
 /// `_lines`: a JSONL file's objects read with `errors="replace"`, none where it is no file.
@@ -615,7 +617,7 @@ fn run(
         .filter(|t| !t.is_empty())
         .map_or_else(|| py_path(given), PathBuf::from);
     let since = match p.text("--since", "") {
-        "" => checkpoint_since(&checkpoint::state(&root, None), env.now),
+        "" => checkpoint_since(&checkpoint::state_in(&env.base.at(&root), None), env.now),
         s => replay_time(s)?,
     };
     let until = match p.text("--until", "") {

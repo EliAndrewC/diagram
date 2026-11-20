@@ -3,6 +3,7 @@
 //! feature 449 T89). The clock is `<git dir>/glyph-clock.json`, `{<feature>: {"batch_at", "batch", "reopened", ...}}`; the push's
 //! refusal marks the work landing (`glyph-landing`); the pair guard's dispatches are `pairing-state.json`'s `dispatched`.
 
+use l7r_guard::shared::env::Rooted;
 use std::path::{Path, PathBuf};
 
 use serde_json::{json, Map, Value};
@@ -30,8 +31,9 @@ fn nowhere() -> PathBuf {
 /// The feature whose hour a glyph check keeps, or "" (D54): `.specify/feature.json` names one, it exists, and `make speckit-todo`
 /// does not read it closed.
 #[must_use]
-pub fn active_feature(root: &Path) -> String {
-    let Some(d) = l7r_guard::shared::checks::arbiter::feature_dir(root, "") else {
+pub fn active_feature(root: &Rooted) -> String {
+    let Some(d) = l7r_guard::shared::checks::arbiter::feature_dir_in(root, "", root.reader())
+    else {
         return String::new();
     };
     // the state asked in process (feature 449 T118, `ask:449-T83-scope`); one the Python could not read answered "", which is not closed
@@ -160,7 +162,11 @@ pub fn mine(root: &Path, feature: &str) -> Map<String, Value> {
 }
 
 /// `(the glyph units due, the glyph units owed and waiting with when each comes due)` - plan D53-D55.
-pub fn glyph_due(root: &Path, units: &[Unit], at: Option<f64>) -> (Vec<Unit>, Vec<(Unit, String)>) {
+pub fn glyph_due(
+    root: &Rooted,
+    units: &[Unit],
+    at: Option<f64>,
+) -> (Vec<Unit>, Vec<(Unit, String)>) {
     let now = at.unwrap_or_else(now);
     let glyph: Vec<Unit> = units
         .iter()
@@ -220,7 +226,7 @@ pub fn glyph_due(root: &Path, units: &[Unit], at: Option<f64>) -> (Vec<Unit>, Ve
 }
 
 /// A glyph dispatch passed on the hour, or under `GLYPH_DUE_OK`, opens a batch (D53, D55).
-fn open_batch(root: &Path, units: &[Unit], at: f64) {
+fn open_batch(root: &Rooted, units: &[Unit], at: f64) {
     let feature = active_feature(root);
     let Some(g) = gitdir(root) else { return };
     if feature.is_empty() {
@@ -240,7 +246,7 @@ fn open_batch(root: &Path, units: &[Unit], at: f64) {
 }
 
 /// `review-gate.sh`'s refusal for an unanswered glyph unit sets the marker; a clean push clears it (D55).
-pub fn mark_landing(root: &Path, on: bool) {
+pub fn mark_landing(root: &Rooted, on: bool) {
     let Some(g) = gitdir(root) else { return };
     if on {
         let body = json!({"feature": active_feature(root), "at": now()});
@@ -256,7 +262,7 @@ pub fn mark_landing(root: &Path, on: bool) {
 /// `--glyph-gate SLUG` (`gate`): 0 when the unit may be dispatched now, else 1 naming when it comes due. `--glyph-dispatched
 /// SLUG`: a passed dispatch on the hour or under the escape opens a batch. `(exit, stdout)`.
 #[must_use]
-pub fn glyph_cli(root: &Path, slug: &str, gate: bool, escaped: bool) -> (i32, String) {
+pub fn glyph_cli(root: &Rooted, slug: &str, gate: bool, escaped: bool) -> (i32, String) {
     let units = all_owed(root).1;
     let Some(unit) = units.iter().find(|u| u.slug() == slug) else {
         return (0, String::new());

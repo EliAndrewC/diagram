@@ -5,7 +5,22 @@ use std::path::Path;
 
 use serde_json::Value;
 
-use super::{cli, given, write_back};
+use super::write_back;
+use l7r_guard::shared::env::Rooted;
+
+// Each test reads its own environment, never the session's exports (feature 451 T38): these shadow the crate's.
+fn cli(args: &[String]) -> crate::Reply {
+    super::cli_in(args, Rooted::with(".", &[]).reader())
+}
+
+fn given(args: &[String]) -> Option<super::Given> {
+    super::given(args, Rooted::with(".", &[]).reader())
+}
+
+#[test]
+fn the_process_reader_answers_the_usage_as_its_own() {
+    assert_eq!(super::cli(&args(&[])).code, cli(&args(&[])).code);
+}
 
 fn args(list: &[&str]) -> Vec<String> {
     list.iter().map(|s| (*s).to_owned()).collect()

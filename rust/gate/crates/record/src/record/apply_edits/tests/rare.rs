@@ -142,7 +142,8 @@ fn a_store_that_cannot_be_written_and_a_ledger_held_or_unreadable() {
     let also = notes.replace(&k, &k.replace("</li>", " Also.</li>"));
     std::fs::write(root.join(NOTES), also).unwrap();
     // the store cannot be written: the round cannot settle, and the edits stand
-    let store = crate::record::owed::answers::store(&root);
+    let store =
+        crate::record::owed::answers::store_in(&l7r_guard::shared::env::Rooted::with(&*root, &[]));
     let _ = std::fs::remove_dir_all(&store);
     std::fs::write(&store, "a file where the store goes").unwrap();
     let unsettled = run(

@@ -6,7 +6,8 @@ use std::process::Command;
 use std::sync::LazyLock;
 
 use fancy_regex::Regex;
-use l7r_guard::guards::event_log_hooks::log_path;
+use l7r_guard::guards::event_log_hooks::log_path_in;
+use l7r_guard::shared::env::Rooted;
 // the event log's one reader, the guard's since feature 449 T119 (`ask:449-T83-scope`): `make feature-report` reads through it too
 use l7r_guard::guards::event_log_hooks::read::{read_jsonl, reversals};
 use l7r_guard::shared::checks::rounds::ROUND_CAP;
@@ -290,12 +291,18 @@ pub fn capped_round_cause(
 
 /// The cascade and the oscillation - for a unit, only the edits and reversals on its own files (343's rulings).
 pub fn flow_sections(
-    root: &Path,
+    root: &Rooted,
     out: &Path,
     d: Option<&Path>,
     files: &[String],
 ) -> Result<Vec<String>, Fail> {
-    let log = d.map(|d| log_path(root, &d.file_name().unwrap_or_default().to_string_lossy()));
+    let log = d.map(|d| {
+        log_path_in(
+            root,
+            &d.file_name().unwrap_or_default().to_string_lossy(),
+            root.reader(),
+        )
+    });
     let events = log
         .filter(|l| l.is_file())
         .map_or_else(Vec::new, |l| read_jsonl(&l).unwrap_or_default());

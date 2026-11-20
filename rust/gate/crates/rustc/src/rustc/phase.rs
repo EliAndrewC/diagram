@@ -8,7 +8,7 @@
 use std::path::Path;
 use std::time::SystemTime;
 
-use l7r_guard::guards::event_log_hooks::{append_row, now_stamp};
+use l7r_guard::guards::event_log_hooks::{append_row_with, now_stamp};
 use serde_json::json;
 
 use super::{shown, World};
@@ -53,5 +53,10 @@ pub(super) fn wrote<P: AsRef<Path>>(
         "ev": "Phase", "src": "rust", "step": step, "crates": crates, "t0": now_stamp(began), "t1": t1, "t": t1,
         "code": code, "make": world.make, "clone": world.root.display().to_string(),
     });
-    let _ = append_row(&world.root, row.as_object().cloned().unwrap_or_default());
+    let _ = append_row_with(
+        &world.root,
+        None,
+        row.as_object().cloned().unwrap_or_default(),
+        world.root.reader(),
+    );
 }

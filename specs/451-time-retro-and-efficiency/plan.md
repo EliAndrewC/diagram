@@ -714,42 +714,58 @@ reverted. Not filed with `PERF=1`: no engine stage's counted operations or time.
 
 <!-- plan-archive: T37 to T18 moved to plan-done.md, 2026-11-20 (feature 375 FR-044) -->
 <!-- plan-archive: T37 to T37 moved to plan-done.md, 2026-11-20 (feature 375 FR-044) -->
-### T38 (<why: the finding or measurement that files it>)
+### T38 (the gate crates' tests read the real environment through the guard: with `L7R_FEATURE_DIRECTORY` and `L7R_EVENTS_DIR` exported, 49 tests of 7 gate crates failed, found by T32, observed 2026-11-20, method: T32's per-crate sweep, `/tmp/t32-sweep/all2/summary.txt`)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: the guard's explicit-environment variants made public, and each gate crate hands them the environment its root
+  carries. The seam is `shared::env::Rooted`, a root and an environment reader together, which derefs to the root, so a
+  `&Rooted` goes where a `&Path` went. `Rooted::process` reads the process's environment and `Rooted::with` a test's own map.
+  Beside it are `shared::env::Reader` and the guard's `_in` functions: `checks::arbiter::{feature_dir_in, rulings_in, aside_in,
+  blocking_in, batch_triggers_in, trip_in, try_trip_in}` and `event_log_hooks::{log_path_in, append_row_with, record_in}`. The old
+  names are wrappers over `shared::env::opt`; `try_trip` had no caller left and is gone. No cargo feature is used and no test
+  sets the process's environment.
+  - red first, both variables exported: arbiter 12, bundle 2, land 17, measure 1, owed 1, reviews 10, rustc 6 failed (49), measured 2026-11-20 (`make rust-test CRATE=rust/gate/crates/<crate> FRESH=1` per crate, `/tmp/t38/red-*.log`); and land's `main_s_refusal_is_filed_by_its_feature_word` wrote `449-x.jsonl` into the exported events directory, measured 2026-11-20 (`find /tmp/t38/events-red`).
+  - per crate, the fix: owed - `cli_in`, `run_in`, `file_outside_in`, `triage::bundle_in` and `triage::refusal_in` taking its store, and `answers::store_in`, the answer store a root's own environment names (`RECORD_CHECKS_DIR` read through `Rooted::opt`; the computation's own `store_in` renamed `store_named`); reviews - `glyph`, `checkpoint` (`state_in`, `hold_in`, `cli_in`, its `SPECIFY_FEATURE` read through the root) and `owed_in`; rustc - `World.root` a `Rooted`; measure - `event_log::cli_in` and `refile::cli_in` with a `&Reader`, step-back's `Env.base`; bundle - `earlier::section_in`, and `modal`'s chain (`cli_in`, `main`, `bundles`, `bundle`, `held_back`) on a `Rooted`, its answer store from `owed::store_in` handed to `triage::refusal_in` and `order_hold`, and `CHECK_ORDER_OK` read through the root; record - `apply_edits::cli_in`, `round::run` and `Round::settle` on a `Rooted`, the round settling into `owed::store_in`; land - `Land.root` a `Rooted`, `main` given its base, `phase::end` through it; arbiter - every function holding a guard read takes `&Rooted`, `cli_in` and `bundle::cli_in` built from `Rooted::process`. Each crate's tests shadow the readers with their own environment (`own()`), and one test asks each process wrapper on a path that reads nothing.
+  - red first, `RECORD_CHECKS_DIR` exported alone into an empty store (`make rust-test CRATE=rust/gate/crates/<crate> FRESH=1`, record once, then bundle twice): record 3 failed (the three `rounds` settling tests); bundle 0 on the empty store and 1 on the second run (`modal::tests::an_answered_check_holds_nothing`, the first run's answer read back); and the exported store gained 3 answer files the tests wrote (`modal-form%3Ahamlet%2Fwell`, `quote-check%3A0094%23k`, `record-format%3A0094`), measured 2026-11-20 (`/tmp/t38/rcd/red-summary.txt`, `red-*.log`, `ls /tmp/t38/rcd/store-red`). Owed's own reads are none in its tests (`answers::record_checks_dir`), but a dependent links owed's normal build, so its tests read and wrote the process's store through `owed::store` and `triage::refusal`; record's `a_store_that_cannot_be_written_and_a_ledger_held_or_unreadable` ran `remove_dir_all` on that store to make it unwritable - with it exported, a session's real answer records, read 2026-11-20 (`apply_edits/tests/rare.rs`).
+  - the sweep before the fix: the 78 variables T32 swept exported at once moved 12 tests more than the two named, owed 11 and land 1, measured 2026-11-20 (`make rust-test` per crate, `/tmp/t38/sweep/before-all`); the 75 left with `L7R_FEATURE_DIRECTORY`, `L7R_EVENTS_DIR` and `RECORD_CHECKS_DIR` taken out moved none (7 crates green), measured 2026-11-20 (`/tmp/t38/sweep/before-rest/summary.tsv`). The 12 were owed's own `std::env::var_os("RECORD_CHECKS_DIR")` (3 reads, now `answers::record_checks_dir`, none in the crate's tests) and land's replay, which set `RECORD_CHECKS_DIR` in the process around `triage::bundle`; the replay now hands `bundle_in` its store, and its test of the `restore` helper that set and removed a process variable went with the helper.
+  - the cargo-feature route, checked before ruling it out: a dev-dependency feature (core's `testkit`, the precedent) reaches no normal build - `cargo tree -p l7r_gate -e normal,build,features -i l7r_gate_core` and the same for `-p l7r_gate_rustc` name `default` alone - but reaches every target of that package's test build, its binary included (`-e features` names `testkit`), measured 2026-11-20 (`cargo tree`, 4 runs). So T32's claim is narrower than stated: the tool binaries (`cargo build --profile tool`) never get the feature, but a test build's `l7r-rust` would. The route stays out because the task line forbids it (T38's words: "never a cargo feature turning the guard's test map on for dependents").
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| the gate crates' environment reader | n/a - no map | n/a | none | n/a |
 
 ### T38 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** No map changes. A gate crate's tests reach the same lines whatever the builder's shell exports, and write nothing into a session's real logs; before the fix, 49 failed and one fixture log landed in the exported directory, measured 2026-11-20 (`make rust-test` per crate, `/tmp/t38/red-*.log`, `find /tmp/t38/events-red`).
+2. **The constraints.** T38's line: each read handed an environment reader carried with the crate's root, the guard's explicit-env variants made public, never a cargo feature, never a test's `remove_var`, red first with both exported, every gate crate swept. T32's seam (`shared::env`, the guard's own test map), which stays as it is. 100% line coverage of each changed crate by its own tests, measured 2026-11-20 (`l7r-gate.sh rust cover --crate <crate>`, `/tmp/t38/final/cover-*.log`, `/tmp/t38/cover-*.log`).
+3. **Where each comes from.** O: T32's sweep, measured 2026-11-20 (`/tmp/t32-sweep/all2/summary.txt`); O: the red-first run, 49 failed, measured 2026-11-20 (`/tmp/t38/red-summary.txt`); R: T32's section in plan-done.md (the seam it built and why it stops at the guard); the task as filed (T38's line).
+4. **Do they describe the world here?** Yes. A page session exports `L7R_FEATURE_DIRECTORY` (`rust/gate/crates/pages/src/runner/work.rs`, read 2026-11-20), and that export with `L7R_EVENTS_DIR` reproduced T32's 49 exactly, crate by crate, measured 2026-11-20 (`/tmp/t38/red-summary.txt`).
+5. **The order.** After T32 (its seam, reused). Independent of T42, which edits `shared/tree*` and the main-tree and gm-tree guards in the same clone; none of those files is touched here. Lands before T22.
+6. **The exits.** Green: each of the 7 crates and the guard green plain and exported, and the sweep of every gate crate green, the store's dependents twice against one store and the store left empty, measured 2026-11-20 (`/tmp/t38/final/plain.tsv`, `/tmp/t38/sweep/after3/summary.tsv`, `per-var.tsv`, `twice.tsv`, `store-files.txt`); each changed crate's lint and cover clean, measured 2026-11-20 (`/tmp/t38/final/lintcover.tsv`, `/tmp/t38/lintcover.tsv`, `/tmp/t38/rcd/lc/summary2.tsv`: lint owed, bundle, record, land, arbiter and cover owed, bundle, record after the store fix, `summary.tsv`: lint reviews, measure and cover reviews); `make quick`, `make static` (once), `make hooks-test`. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** The 17 call sites T32 counted were the direct ones, observed 2026-11-20, method: T32's count in its section of plan-done.md. The reds also reached the environment through `event_log_hooks::record` (measure's hook), `arbiter::try_trip` (reviews' checkpoint), and `rulings`, `aside`, `blocking` and `batch_triggers` (arbiter, bundle), each reading the feature pointer inside the guard, measured 2026-11-20 (the red tests' panics traced to their calls, `/tmp/t38/red-*.log`). Each got its `_in`.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** 0 failed in the 7 crates with both variables exported, measured 2026-11-20 (`make rust-test CRATE=rust/gate/crates/<crate> FRESH=1`, `/tmp/t38/fix{1..7}-summary.txt`); every gate crate (27), the gate and the guard green with T32's variables exported at once (77, `L7R_GUARD_CARGO` out, below), the 7 and record green with each of the 3 movers exported alone (24 runs), owed and 6 of the 7 crates that link it (bundle, record, arbiter, land, claims, trials; the seventh, `rust/gate`, was not in the twice run, and was green against the seeded store below) green twice each against one exported store, and bundle green with all 78, measured 2026-11-20 (`/tmp/t38/sweep/after3.sh`: `after3/summary.tsv`, `per-var.tsv`, `twice.tsv`); the exported answer store held no file after the sweep, 3 before the fix, measured 2026-11-20 (`after3/store-files.txt`, `/tmp/t38/rcd/store-red`); the exported events directory held only the runner's own `Phase` lines, one file, `451-time-retro-and-efficiency.jsonl`, measured 2026-11-20 (`after3/events-files.txt`, `grep -v Phase` empty).
+10. **Before moving a constant.** n/a - no constant.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** Nothing on a map. A builder in a page session no longer sees 49 gate tests red that are only its shell's exports, and a builder with `L7R_EVENTS_DIR` exported no longer gets a test's `end` line in a real feature's log, which `make where-time` and T13 and T14 read: 1 log before, 0 after, measured 2026-11-20 (`find` over the exported directory, `/tmp/t38/events-red`, `/tmp/t38/sweep/after2/events-files.txt`).
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?**
+- The sweep's 12 more (owed 11, land 1: `RECORD_CHECKS_DIR`, the crates' own reads, and land's replay setting it in the process around a call): fixed here, measured 2026-11-20 (`/tmp/t38/sweep/before-all`, `/tmp/t38/sweep/after2/per-var.tsv`).
+- `checks`' file-scale test: `owed/answers.rs` passed the 1,000-line bar at 1,012 lines with this task's `_in` functions, measured 2026-11-20 (`/tmp/t38/sweep/after-all/rust_gate_crates_checks.log`). Fixed here: its command-line half was split into `answers/cli.rs`, leaving 807 lines with `store_in`, measured 2026-11-20 (`wc -l`). The same test names `rust/guard/src/shared/tree.rs` at 1,064 lines, measured 2026-11-20 (the same log). Not fixed here: the file is T42's, mid-edit in this clone by another builder and outside T38's files. Filed as T42; lands before T22. T42's split has since left it at 673 lines, and `make quick` was clean, measured 2026-11-20 (`wc -l`, `/tmp/t38/rcd/quick.log`).
+- The bundle crate's `check` and `keys` bundles reach `earlier::section` through its process wrapper (`modal`'s now hands `section_in` its root). Not a defect: the read is the active feature and its rulings, so no test outcome moved with any variable exported (`/tmp/t38/sweep/before-rest`, `after3`) and nothing is written. This bullet first said the same of `modal` for every variable, which was wrong for `RECORD_CHECKS_DIR`: `modal`'s order hold and triage refusal read the process's answer store, and record's round settled into it, measured 2026-11-20 (the red first above); fixed here.
+- `L7R_GUARD_CARGO=cargo`: the handoff read 19 bundle reds (`depiction` and `modal`, each `key must be a string at line 1 column 2`) in the 78-variable run as its, since the 77 without it left 1, measured 2026-11-20 (`/tmp/t38/sweep/after2/rust_gate_crates_bundle.log`, `bundle-nocargo.log`). Not borne out: exported alone it moved none, and with all 78 after the store fix bundle was green, measured 2026-11-20 (`/tmp/t38/rcd/guard-cargo-bundle.log`, `after3/bundle-78.log`). The cause of the 19 is a GUESS, not measured: the shared exported store, which earlier crates' tests had filled; `after3.sh` deleted that store before anyone read it, so it cannot be checked now. Read only by the hook launcher (`scripts/hooks/l7r-guard.sh`) and the guard's bench, it is a runner variable, so the sweep's list drops it as T32's runner names were dropped: 77 swept in `after3`, measured 2026-11-20 (`wc -l /tmp/t38/sweep/vars77.list`, 78 in `vars.list`). Not a defect: no test outcome moves with it, measured 2026-11-20 (the two logs above).
+- `Delta::store` and `sibling_stores` still read the process's `RECORD_CHECKS_DIR` (`owed/answers.rs`, `record_checks_dir()`), reached from other crates through arbiter's `owed_units` -> `owed::unanswered` and record's `record-owed` -> `owed::cli`. Checked, no read: with `RECORD_CHECKS_DIR` pointing at a store seeded with the red run's 3 answer files, owed, bundle, record, arbiter, land, claims, trials and `rust/gate` were each green once (0 failed; 86, 78, 86, 32, 77, 161, 129, 8 passed), and `diff -r` of the store against its untouched copy was empty, measured 2026-11-20 (`make rust-test CRATE=<c> FRESH=1` per crate, `/tmp/t38/seededrun/run.sh`, `summary.txt`, `diff.txt`). Why, read 2026-11-20: arbiter's tests hand `owed_units` their units through `sections::GIVEN`, and no record test dispatches `record-owed`. Not a defect: a test reaches neither read, so `Delta` is not given the store at construction; the binary's reads are the real ones.
+- T32's cargo-feature claim: narrower than stated - a dev-dependency feature reaches a package's test build, its binary included, but never the tool binaries - measured 2026-11-20 (`cargo tree`, the Approach above); not a defect, the route stays out by the task's words.
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** yes (a `[perf]` task, 451 FR-013: a builder's `make rust-test` on the gate crates is green whatever the session exports, so no round is spent on a red that is the shell's); not engine speed.
 
 ### T38 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)
 
-1. **Where does the time go?** <the stage and the loop: its counted operations, `make work-budget` (a hamlet stage) or `make budget-sheets` (a Mode A stage)>
-2. **Removes work, or only moves it?** <fewer candidates, a screen, a kept result, an index, an early stop, a better algorithm,
-   a loop into C - or an inlining, a merge, a builtin written out: never the goal, only where the time evidence shows a gain>
-3. **What do you expect it to save, and why?** <a share of the stage's profiled time>
-4. **How does the work grow with the settlement?** <the growth exponent between sizes, and whether this bends it>
-5. **What did the before and after show, and under what conditions?** <the counted operations before and after, and any wall
-   time with the host's load - evidence, not a pass>
-6. **Did any map move, and does it still keep the research?** <`make maps-moved`, the cohort>
+1. **Where does the time go?** In a builder's rounds, not in a stage: a page session's builder met 49 reds that were its shell's, measured 2026-11-20 (`/tmp/t38/red-summary.txt`); no hamlet or Mode A stage is touched.
+2. **Removes work, or only moves it?** Removes it: the round spent reading a red that the code did not cause; the read itself costs the same (a map or the process's `getenv` behind one indirect call).
+3. **What do you expect it to save, and why?** One red round a page-session builder would spend per gate-crate run, the 49 reds of `/tmp/t38/red-summary.txt`, measured 2026-11-20 (that log); no stage time.
+4. **How does the work grow with the settlement?** It does not: no settlement code changes, measured 2026-11-20 (`git diff --stat`, no `rust/phases` or `rust/mode_a` file).
+5. **What did the before and after show, and under what conditions?** 49 failed before, 0 after, both exported, the host shared with T42's builder, measured 2026-11-20 (`/tmp/t38/red-summary.txt`, `/tmp/t38/fix{1..7}-summary.txt`).
+6. **Did any map move, and does it still keep the research?** No map: no engine or pool file changes, measured 2026-11-20 (`git diff --stat`).
 
 
 <!-- plan-archive: T39 to T32 moved to plan-done.md, 2026-11-20 (feature 375 FR-044) -->
@@ -758,14 +774,89 @@ reverted. Not filed with `PERF=1`: no engine stage's counted operations or time.
 <!-- plan-archive: T40 to T40 moved to plan-done.md, 2026-11-20 (feature 375 FR-044) -->
 <!-- plan-archive: T41 to T34 moved to plan-done.md, 2026-11-20 (feature 375 FR-044) -->
 <!-- plan-archive: T41 to T41 moved to plan-done.md, 2026-11-20 (feature 375 FR-044) -->
-### T42 (<why: the finding or measurement that files it>)
+### T42 (found by T31, 2026-11-20: a Python program run from stdin that writes, standing in the mirror, was judged by no one, and T31's stdin rule kept three real reads refused or rewritten - main-tree#147, window#339, window#361; observed 2026-11-20, method: T31's replays and `heredoc_writers.py`)
+
+- **Approach**: a Python program run from stdin is judged by T31's denylist reader (`shared/tree/py_c.rs` `reads`) as a `-c` program is, and T31's stdin rule is retired for every program the walk can read.
+  - `shared/tree/python.rs` (new, split from `tree.rs` with `tree/verdict.rs` for the file-scale bar, `tree.rs` 1,064 lines measured 2026-11-20 (`make task-add`'s `make quick`, check file-scale), 673 after, measured 2026-11-20 (`wc -l`)): `carry_heredocs` carries each heredoc's body out beside the text, `<<__py_h_<n>__` standing in its place (`shape::strip_heredocs`' span and opener words, with an index), its quote recorded - a quoted delimiter (`'PY'`, `"PY"`, `\PY`) literal, an unquoted one `'h'`, which the shell expands. `stdin_program` finds what a Python segment runs from stdin (`python_stdin`'s shapes): its own heredoc, its own `< file` (resolved where the shell stands, a regular file only - a device such as `/dev/tty` would wait), or, through a pipe, what an upstream `cat` prints (one heredoc or one readable file). Anything else - a variable, a here-string, a missing file, a directory, any other upstream - is a program the walk cannot read.
+  - `tree.rs` `walk_in`: a readable program that `reads` judges a writer is a write where the shell stands (`how = "shell"`, D5's form for `-c`), first among the segment's writes; one that only reads is no target, as no stdin program was before; one the walk cannot read keeps every `-c` read of the command D5's write (T31's rule, now that case alone, as the task keeps it: "a program fed from a variable or a file outside the command stays judged as T31 left it"). `segments` marks a segment a single `|` feeds (a pipe at a line's end feeds the next line). A target's segment shows `<<BODY`, as before.
+  - Two walks: `walk_judged` (the tree guards: `judge`, its re-judge, `gm_tree_hooks::offending`) judges stdin programs; `walk` (house style, make-only, the bench) sees none, as before - house style's D11 holds a program heredoc's writes unknowable, and its case table pins `python3 - <<'PY' > /tmp/gate.log` with a `write_text` body left alone: the first build's single walk failed that case, measured 2026-11-20 (`make rust-test CRATE=rust/guard`, `/tmp/t42/green1.log`).
+  - `py_c.rs`: the quote `'h'` - an unquoted heredoc's body undoes the shell's `\\`, `\$` and `` \` `` but not `\"` (two characters there), and a command substitution in it is a write as in a double-quoted `-c`. And `re.compile(` is read past before the writers are sought (`RE_COMPILE`): it builds a pattern, never code; the builtin `compile` and any other name's `.compile(` stay a write. Found by the replay's hand-read: window#307's first heredoc, a read, was judged a writer on it.
+  - red first, each in `/tmp/t42/`, all `make rust-test CRATE=rust/guard`, measured 2026-11-20 (`make rust-test CRATE=rust/guard`, the logs named): the rows and shapes before the code, 677 passed, 3 failed (`red-first.log`) - main-tree#147 refused (window#339 and #361 behind it in the same test; all three refused by HEAD's binary in the replay, `ihead.nobody.main-tree-hooks.tsv`), the heredoc writer with no `-c` beside it allowed, the walk's stdin forms; `re.compile` 680 passed, 1 failed (`red2-compile.log`); green 681 of 681 (`green3.log`, `final-test.log`, `split-test.log` after the split).
+  - replays: the four corpora, 1,134 rows, through all guards and main-tree, gm-tree and house style alone, SID `t` (a clone resolves) and `nobody` (none), measured 2026-11-20 (`/tmp/t42/scripts/replay.sh`, `runall.sh`, `cmp.sh`). Before = HEAD's source built alone (`git archive`), after = HEAD plus T42's files alone, since a second builder's edits shared the clone; HEAD's isolated binary against the clone's build before any edit, 0 differences, and a second HEAD run, 0 (no noise), measured 2026-11-20 (`cmp.sh`):
+    - main-tree alone, measured 2026-11-20 (`replay.sh`, `cmp.sh`): `nobody` 93 allowed -> refused, 3 refused -> allowed (main-tree#147, window#339, window#361); `t` 93 allowed -> rewrote, the same 3 rewrote -> allowed; 0 other outputs changed;
+    - all guards, measured 2026-11-20 (`replay.sh`, `cmp.sh`): `nobody` 58 allowed -> refused, 28 rewrote -> refused (house style's rewrite now beside main-tree's refusal), 3 refused -> allowed, 7 refused by another guard before and after with output changed; `t` 58 allowed -> rewrote, 3 rewrote -> allowed, 28 rewrote with output changed (main-tree's rewrite joined to house style's); the changed rows are exactly main-tree's 96 moves (`t`: 89, the 7 refused by another guard unchanged);
+    - gm-tree alone and house style alone, measured 2026-11-20 (`replay.sh`, `cmp.sh`), `t` and `nobody`: 0 moved, 0 outputs changed;
+    - the `re.compile` fix alone, measured 2026-11-20 (`cmp.sh`, the build before it against the build after): 0 moved.
+    - the final source (after the split and the lint fixes) rebuilt and all eight runs replayed again, measured 2026-11-20 (`cmp.sh` against the previous build's): 0 verdicts and 0 outputs changed.
+  - the 93 moves by class, measured 2026-11-20 (`/tmp/t42/scripts/classify.py` and a hand-read of each body): 78 a writer now caught (a write call - `write_text`, `open(..., 'w')`, `mkdir`, `rename`, `shutil`, `.save(`, `.dump(`); 12 run the tree's own code standing in the mirror (`l7r` modules, `_hm_house`, `covered_by` and a `specs/` module by `sys.path` or `importlib`, the mirror's house-style hook by `subprocess`), a writer now caught - from the clone they run the clone's code. They are caught by the denylist's names (`sys.path`, `importlib` with its `exec`, `subprocess`), not by T31's import rule: a replay with the mirror seeded with the tree's top-level names moved 0 rows against the unseeded one, HEAD's build and T42's, `t` and `nobody`, measured 2026-11-20 (`/tmp/t42/scripts/replay-seeded.sh`, `cmp.sh`); 2 run a module the walk cannot see (window#260's scratch `style_fix`, window#315's `measure_geom`, both through `sys.path`), the denylist's closed side as for `-c`; 1 a read now refused or rewritten (window#307: `subprocess.run(["git", "-C", root, "ls-files"])`), below.
+  - against T31's 331 (`heredoc_writers.py`), measured 2026-11-20 (`heredoc_writers.py` over the replays, a cd classifier and a hand-read): 80 moved; 30 refused before and after; 221 allowed before and after, each standing in a clone or outside the mirror where its heredoc runs - 189 after a `cd` into a clone, 12 inside `( cd <clone> && ...` (the script's cd test misses a subshell's), 16 after a `cd` outside, parse#184, refusals#26 and window#301 after a `cd` into a clone first (refusals#26's Python is a `cat` heredoc's text, never run), main-tree#150 a relative `cd` inside a clone - and none of the 221 names a mirror path in its body. The 13 moves outside the 331 are 11 of the 12 tree-code runs (`sys.path` or `importlib`) and window#260's and window#315's bodies, whose names the script's narrower list does not hold; the twelfth tree-code run (window#299, the house-style hook by `subprocess`) and window#307 are among the 80, measured 2026-11-20 (`/tmp/t42/moved93.cls`). A correction to T31's line: its "301 allowed" counted by the recorded cwd, not by where the shell stands at the heredoc, so a heredoc run after a `cd` into a clone was counted as standing in the mirror; placed by where the shell stands, the 221 above stand in a clone or outside the mirror.
+  - parse#72 and window#61 stay refused, each now by its own heredoc's target (the test asserts every `shell` target is a `python3 -` heredoc segment), measured 2026-11-20 (`a_python_program_run_from_stdin_is_judged_by_its_body`).
+  - fixture: `tests/hooks/fixtures/main-tree-refusals-2026-09.json` relabeled from the `t` replay, measured 2026-11-20 (`cmp.sh` over its `main-tree#` rows): rows 16, 43, 44, 144 and 169 allowed -> rewrote, row 147 rewrote -> allowed (expected 163 allowed, 10 rewrote); the main-tree suite gains a heredoc writer standing in the mirror -> rewritten.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+| a stdin Python program judged by its body (main-tree, gm-tree) | n/a - no map | n/a | none | n/a |
+
+### T42 Approach (checklist part A)
+
+1. **The goal, in the world.** No map changes. A builder's Python heredoc that writes, standing in the mirror, is moved to the clone (or refused where none resolves), as a `-c` writer is; one that only reads runs as typed, and so does a `-c` read beside it. Every write caught before is still caught.
+2. **The constraints.** T42's line (judge a heredoc body through py_c, red first on parse#72's shape and the three rows, the replay's moves accounted, T31's stdin rule retired); feature 204 D5 as T31 narrowed it (a read judged by the denylist is no write); D6 (unknown resolves toward main) untouched; house style's D11 (a program heredoc's writes unknowable) kept by its own walk; 100% line coverage of the guard crate; the file-scale bar.
+3. **Where each comes from.** R: feature 204 spec D5, D6; house style's D11 at its case table (`case_tables/house_style_cases.rs`). G: the session's ruling of 2026-11-20 that T31 records - refusing a read is a wrong outcome (constitution XIV). O: the replays above, measured 2026-11-20.
+4. **Do they describe the world here?** Measured on the four corpora by replay, each of the 93 moved bodies hand-read for what it writes or runs, and the 221 unmoved writers each placed by where the shell stands at its heredoc, measured 2026-11-20 (`classify.py`, `heredoc_writers.py`, the cd classifier and a hand-read).
+5. **The order.** After T31 (its reader and its stdin rule); before T22; beside T38 (the gate crates' env reads, other files).
+6. **The exits.** Green: the red tests green; the replays, every move accounted; `make rust-test CRATE=rust/guard` and the crate's lint, format and cover for its own files; `make quick`; `make static` (once); `make hooks-test`. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** Every reader of a walk was found: `judge` and its re-judge, `gm_tree_hooks::offending` (now `walk_judged`), `house_style_hooks::lands_outside`, `make_only_hooks::walked_write` and `suite_tools/bench.rs` (`walk`, their view unchanged: 0 moves, measured 2026-11-20 (`cmp.sh`), under house style and the guards together beyond main-tree's), read 2026-11-20 (`grep 'tree::walk\| walk('` over `rust/guard/src`); no other guard carries a heredoc's body into the walk.
+8. **The budget.** One landing.
+9. **Done, measured.** The three reads run as typed (`red-first.log` -> `final-test.log`; the replays' 3 moves); parse#72 and window#61 refused by their own heredocs; 93 stdin programs standing in the mirror now judged, 92 of them writers or runs of code the walk cannot see, every move accounted above, measured 2026-11-20 (`cmp.sh`, `classify.py`).
+10. **Before moving a constant.** n/a - no constant.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** Nothing on a map. A builder sees its heredoc writer moved to the clone, or refused with no clone, where it ran in the mirror unjudged; its heredoc read and a `-c` read beside it run where T31 refused or rewrote them. The fix is not a restatement: a write in the mirror judged by no one and a read refused are both wrong outcomes (constitution XIV).
+
+**Found and left?**
+- window#307 runs two heredocs that only read and is refused with no clone, rewritten with one: its second lists tracked files with `subprocess.run(["git", "-C", root, "ls-files"])`, and `subprocess` is on T31's denylist, observed 2026-11-20, method: every moved body hand-read for what it writes or runs. Not fixed here: telling a read-only `git` argv from any other command is an argv reader past the denylist, which judges a call by its name; the same program as a `-c` is refused so since T31. Filed as T44; lands before T22.
+- `re.compile` judged a writer (the same row's first heredoc, and any `-c` read that builds a pattern): fixed here.
+- house style's verdict varied under load: one house-style-alone replay with no clone resolvable (`nobody`), run under load on the build before the split, flipped 8 rows rewrote -> allowed (parse#87, window#125, #343, #369, #395, #417, #418, #462) and changed 3 rows' output (window#344, #396, #402); a rerun of the same build and the split build's run gave 0 moves, observed 2026-11-20, method: `cmp.sh` over every replay pair (`/tmp/t42/cmp-final.txt`, `cmp-noise.txt`, `cmp-split.txt`). Not fixed here: T42 leaves house style's walk and verdict as they were (0 moves in every steady replay), and the timing dependence is not yet found - it is measured first, under induced load. Filed as T45; lands before T22.
+
+**Performance work?** yes - a `[perf]` task in FR-013's sense (the builders' loop): each refused or rewritten read costs a model round trip; the corpora hold 3 such reads now allowed and 93 stdin programs standing in the mirror now judged, measured 2026-11-20 (`cmp.sh`). Not filed with `PERF=1`: no engine stage's counted operations or time.
+
+
+<!-- plan-archive: T43 to T40 moved to plan-done.md, 2026-11-20 (feature 375 FR-044) -->
+<!-- plan-archive: T43 to T43 moved to plan-done.md, 2026-11-20 (feature 375 FR-044) -->
+
+### T44 (<why: the finding or measurement that files it>)
 
 - **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
 
-### T42 Approach (checklist part A)
+### T44 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+### T45 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T45 Approach (checklist part A)
 
 1. **The goal, in the world.** <the place as it should be>
 2. **The constraints.** <the FRs, decisions and pages it holds to>
@@ -785,5 +876,29 @@ reverted. Not filed with `PERF=1`: no engine stage's counted operations or time.
 **Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
 
 
-<!-- plan-archive: T43 to T40 moved to plan-done.md, 2026-11-20 (feature 375 FR-044) -->
-<!-- plan-archive: T43 to T43 moved to plan-done.md, 2026-11-20 (feature 375 FR-044) -->
+### T46 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T46 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+

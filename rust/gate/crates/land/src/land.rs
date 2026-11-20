@@ -33,6 +33,7 @@ mod memory;
 mod phase;
 mod stop;
 
+use l7r_guard::shared::env::Rooted;
 use std::cell::RefCell;
 use std::fmt::Write as _;
 use std::io::Write as _;
@@ -76,8 +77,8 @@ const USAGE: &str =
 
 /// One landing: the tree it lands, where its tools are, and what it has exported to the commands it runs.
 pub struct Land {
-    /// The repository root.
-    root: PathBuf,
+    /// The repository root, and the environment its guard reads see (feature 451 T38: a test's own, never a session's exports).
+    root: Rooted,
     /// The gate tree's `scripts/` (`L7R_GATE_TREE`, which `l7r-gate.sh` sets; the root's where unset): `land.py`'s own `HERE`.
     scripts: PathBuf,
     /// The interpreter ruff runs under (`sys.executable` in the Python).
@@ -134,8 +135,14 @@ impl Land {
     /// The landing of `root`, its tools under `scripts`, as the process runs it.
     #[must_use]
     pub fn new(root: &Path, scripts: &Path) -> Self {
+        Self::new_in(&Rooted::process(root), scripts)
+    }
+
+    /// [`Land::new`] with the root's environment carried (feature 451 T38).
+    #[must_use]
+    pub fn new_in(root: &Rooted, scripts: &Path) -> Self {
         Self {
-            root: root.to_path_buf(),
+            root: root.clone(),
             scripts: scripts.to_path_buf(),
             python: "python3".to_owned(),
             make: "make".to_owned(),
@@ -718,6 +725,7 @@ pub fn cli(args: &[String], cwd: &Path) -> Reply {
             &std::env::var("LAND_NOTE").unwrap_or_default(),
             &scripts_of,
             &stop::catch_term,
+            &Rooted::process(cwd),
         )
     };
     finish(done, cwd)
@@ -739,6 +747,7 @@ fn main(
     note: &str,
     scripts: &dyn Fn(&Path) -> PathBuf,
     catch_term: &dyn Fn(),
+    base: &Rooted,
 ) -> Result<i32, String> {
     let tasks = args.get(1).map_or_else(Vec::new, |t| task_ids(t));
     if args.len() != 2 || tasks.is_empty() {
@@ -749,7 +758,7 @@ fn main(
     catch_term();
     // THE LANDING'S `end` LINE (feature 451 T06): from here every exit is a landing's, refused or not, and writes one
     let began = std::time::SystemTime::now();
-    let root = l7r_gate_task::tick::repo_root(cwd);
+    let root = base.at(l7r_gate_task::tick::repo_root(cwd));
     let refused = |code: i32| {
         let make = phase::run_target(Path::new("/proc"), std::process::id());
         phase::end(&root, &args[0], &tasks, began, &Ok(code), &make);
@@ -770,7 +779,7 @@ fn main(
         );
         return refused(2);
     };
-    Land::new(&root, &scripts(&root)).landing(&d, &tasks, &note, began)
+    Land::new_in(&root, &scripts(&root)).landing(&d, &tasks, &note, began)
 }
 
 #[cfg(test)]

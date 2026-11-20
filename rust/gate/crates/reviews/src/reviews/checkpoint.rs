@@ -7,6 +7,7 @@
 //!
 //! `l7r-gate reviews checkpoint open|hold|status|due|switch [on|off] [--why W] [--root DIR] [--tool T] [--agent A]`.
 
+use l7r_guard::shared::env::Rooted;
 use std::path::{Path, PathBuf};
 
 use serde_json::{json, Map, Value};
@@ -141,7 +142,14 @@ fn idle(root: &Path, feature: &str, since: f64, at: f64) -> f64 {
 }
 
 /// `{feature, suspended, due, since, hour, open, units, units_since}`; `{feature, due: false}` with no feature or no event log.
+#[must_use]
 pub fn state(root: &Path, at: Option<f64>) -> Map<String, Value> {
+    state_in(&Rooted::process(root), at)
+}
+
+/// [`state`] with the root's environment carried (feature 451 T38).
+#[must_use]
+pub fn state_in(root: &Rooted, at: Option<f64>) -> Map<String, Value> {
     let at = at.unwrap_or_else(now);
     let feature = active_feature(root);
     let start = if feature.is_empty() {
@@ -228,12 +236,12 @@ fn text(m: &Map<String, Value>, k: &str) -> String {
 }
 
 /// `make step-back`: the hour's trigger, opened once - its time and the units owed then kept with it; refused before the hour is up.
-fn open_checkpoint(root: &Path, at: f64, exported: &str) -> Result<String, String> {
+fn open_checkpoint(root: &Rooted, at: f64, exported: &str) -> Result<String, String> {
     let why = misaligned(root, exported);
     if !why.is_empty() {
         return Err(why);
     }
-    let st = state(root, Some(at));
+    let st = state_in(root, Some(at));
     let open = text(&st, "open");
     if !open.is_empty() {
         return Ok(open);
@@ -283,7 +291,7 @@ fn open_checkpoint(root: &Path, at: f64, exported: &str) -> Result<String, Strin
     mine.insert("checkpoint_units".to_owned(), json!(units));
     mine.insert("units_since".to_owned(), json!(stamp));
     save(path.as_deref(), clock);
-    l7r_guard::shared::checks::arbiter::try_trip(
+    l7r_guard::shared::checks::arbiter::try_trip_in(
         root,
         &trigger,
         "hour",
@@ -291,6 +299,7 @@ fn open_checkpoint(root: &Path, at: f64, exported: &str) -> Result<String, Strin
         &format!("the feature's hourly step-back, hour {hour}"),
         &json!(at),
         "",
+        root.reader(),
     )?;
     Ok(trigger)
 }
@@ -375,8 +384,15 @@ fn undispatched(root: &Path, units: &[String], since: f64) -> Vec<String> {
 }
 
 /// The refusal `make tick` prints while the checkpoint holds it, or "".
+#[must_use]
 pub fn hold(root: &Path, at: Option<f64>) -> String {
-    let st = state(root, at);
+    hold_in(&Rooted::process(root), at)
+}
+
+/// [`hold`] with the root's environment carried (feature 451 T38).
+#[must_use]
+pub fn hold_in(root: &Rooted, at: Option<f64>) -> String {
+    let st = state_in(root, at);
     if text(&st, "feature").is_empty()
         || !st.contains_key("since")
         || st.get("suspended") == Some(&json!(true))
@@ -417,12 +433,12 @@ pub fn hold(root: &Path, at: Option<f64>) -> String {
 }
 
 /// The refusal a `make done` or an agent dispatch gets when the feature's hour is up and its step-back is not yet open, or "".
-fn due(root: &Path, tool: &str, atype: &str, at: f64) -> String {
+fn due(root: &Rooted, tool: &str, atype: &str, at: f64) -> String {
     if tool == "Agent" && atype == "round-arbiter" {
         return String::new();
     }
     let mark = gitdir(root).map(|g| g.join(ADMITTED));
-    let st = state(root, Some(at));
+    let st = state_in(root, Some(at));
     if st.get("due") != Some(&json!(true)) || !text(&st, "open").is_empty() {
         if let Some(m) = mark.as_deref().filter(|_| tool == "Agent") {
             let _ = std::fs::write(m, format!("{}\n", l7r_guard::shared::pyjson::py_float(at)));
@@ -452,7 +468,14 @@ fn usage(why: &str) -> Reply {
 }
 
 /// `checkpoint.py`'s command line.
+#[must_use]
 pub fn cli(args: &[String]) -> Reply {
+    cli_in(args, &Rooted::process("."))
+}
+
+/// [`cli`] with the environment its root is read with: `base`'s (feature 451 T38: a test's own, never a session's exports).
+#[must_use]
+pub fn cli_in(args: &[String], base: &Rooted) -> Reply {
     let specs = [
         Spec::value("--why"),
         Spec::value("--root"),
@@ -480,6 +503,7 @@ pub fn cli(args: &[String]) -> Reply {
     let root = git(&py_path(asked), &["rev-parse", "--show-toplevel"])
         .filter(|t| !t.is_empty())
         .map_or_else(|| py_path(asked), PathBuf::from);
+    let root = base.at(root);
     let lines = |s: String, code: i32| {
         if s.is_empty() {
             reply(String::new(), String::new(), 0)
@@ -503,11 +527,7 @@ pub fn cli(args: &[String]) -> Reply {
             }
             Err(e) => reply(String::new(), format!("step-back: {e}\n"), 2),
         },
-        "open" => match open_checkpoint(
-            &root,
-            now(),
-            &std::env::var("SPECIFY_FEATURE").unwrap_or_default(),
-        ) {
+        "open" => match open_checkpoint(&root, now(), &root.var("SPECIFY_FEATURE")) {
             Ok(t) => reply(t + "\n", String::new(), 0),
             Err(e) => reply(String::new(), format!("step-back: {e}\n"), 1),
         },
@@ -515,9 +535,9 @@ pub fn cli(args: &[String]) -> Reply {
             due(&root, p.text("--tool", ""), p.text("--agent", ""), now()),
             1,
         ),
-        "hold" => lines(hold(&root, None), 1),
+        "hold" => lines(hold_in(&root, None), 1),
         _ => reply(
-            l7r_guard::shared::pyjson::dumps(&Value::Object(state(&root, None)), Some(1), true)
+            l7r_guard::shared::pyjson::dumps(&Value::Object(state_in(&root, None)), Some(1), true)
                 + "\n",
             String::new(),
             0,

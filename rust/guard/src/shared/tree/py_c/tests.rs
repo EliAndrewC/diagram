@@ -30,6 +30,14 @@ fn a_program_that_only_reads_is_a_read() {
         ("print(open(\\\"a\\\").read().replace('a', 'b'))", '"'),
         ("import ast; ast.literal_eval('1')", '"'),
         ("print(1)", '\''),
+        // 451 T42: `re.compile` builds a pattern, no code - window#307's first heredoc, a read judged a write on it
+        (
+            "import re; R = re.compile(r'x'); print(R.findall(open('a').read()))",
+            '\'',
+        ),
+        // an unquoted heredoc's body (`'h'`): `$X` inside a literal, `\"` two characters there
+        ("print(\"a\\\"$X\")", 'h'),
+        ("print('$HOME')", 'h'),
     ] {
         assert!(reads(body, q, Some("/nonexistent-t31")), "{body}");
     }
@@ -54,6 +62,13 @@ fn a_program_that_can_write_is_a_write() {
         ("import json; json.dump({}, f)", '"'),
         ("import subprocess; subprocess.run(['rm', 'f'])", '"'),
         ("print('$(rm f)')", '"'),
+        // 451 T42: the builtin `compile` (and `re.compile` named by anything but `re`) stays a write
+        ("exec(compile('x', 'f', 'exec'))", '\''),
+        ("c = compile; pre.compile('x')", '\''),
+        ("import sre; sre.compile('x')", '\''),
+        ("print('$(rm f)')", 'h'),
+        ("print(`rm f`)", 'h'),
+        ("$CODE", 'h'),
         ("print('`rm f`')", '"'),
         ("from . import x", '\''),
         // the shell expands a name outside Python's literals into code before Python sees it

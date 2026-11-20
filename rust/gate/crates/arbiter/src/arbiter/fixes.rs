@@ -4,6 +4,7 @@ use std::path::{Path, PathBuf};
 
 use l7r_guard::shared::checks;
 use l7r_guard::shared::checks::arbiter as core;
+use l7r_guard::shared::env::Rooted;
 use serde_json::{json, Map, Value};
 
 use super::{
@@ -14,8 +15,8 @@ use super::{
 // cannot build on this crate; `arbiter.rs` re-exports them.
 use l7r_gate_reviews::reviews::closing::open_fixes;
 
-pub(super) fn fix_home(root: &Path, trigger: &str) -> Option<PathBuf> {
-    let active = core::feature_dir(root, "");
+pub(super) fn fix_home(root: &Rooted, trigger: &str) -> Option<PathBuf> {
+    let active = core::feature_dir_in(root, "", root.reader());
     let named = HOUR_TRIGGER
         .captures(trigger)
         .ok()
@@ -98,13 +99,13 @@ fn is_test_file(root: &Path, test: &str) -> bool {
 
 /// `hm_arbiter.settle_fix`: close an open tooling fix in the feature that holds it; a declined one becomes a question for the GM.
 pub(super) fn settle_fix(
-    root: &Path,
+    root: &Rooted,
     trigger: &str,
     status: &str,
     note: &str,
     test: &str,
 ) -> Result<Value, Stop> {
-    let home = fix_home(root, trigger).or_else(|| core::feature_dir(root, ""));
+    let home = fix_home(root, trigger).or_else(|| core::feature_dir_in(root, "", root.reader()));
     let d =
         home.ok_or_else(|| Stop::Refused("no active feature (.specify/feature.json)".to_owned()))?;
     let name = d
@@ -162,12 +163,12 @@ pub(super) fn settle_fix(
 
 /// `hm_arbiter.nit_answers`: the wording an `accept` ruling asked to fix in passing, made, answers the accepted unit again.
 pub(super) fn nit_answers(
-    root: &Path,
+    root: &Rooted,
     trigger: &str,
     old: &str,
     new: &str,
 ) -> Result<Vec<String>, Stop> {
-    let ruled = core::rulings(root, "");
+    let ruled = core::rulings_in(root, "", root.reader());
     let r = ruled
         .get(trigger)
         .filter(|r| text(r, "ruling") == "accept" && text(r, "kind") == "round");

@@ -27,7 +27,37 @@ fn clock_of(root: &Path) -> Value {
 fn cp(root: &Path, a: &[&str]) -> Reply {
     let mut all: Vec<String> = a.iter().map(|s| (*s).to_owned()).collect();
     all.extend(["--root".to_owned(), root.to_string_lossy().into_owned()]);
-    cli(&all)
+    cli_in(&all, &own(Path::new(".")))
+}
+
+// Each test reads its own environment, never the session's exports (feature 451 T38): the readers below shadow the crate's,
+// handed a root that carries an empty one.
+fn own(root: &Path) -> Rooted {
+    Rooted::with(root, &[])
+}
+
+fn state(root: &Path, at: Option<f64>) -> Map<String, Value> {
+    super::state_in(&own(root), at)
+}
+
+fn hold(root: &Path, at: Option<f64>) -> String {
+    super::hold_in(&own(root), at)
+}
+
+fn due(root: &Path, tool: &str, atype: &str, at: f64) -> String {
+    super::due(&own(root), tool, atype, at)
+}
+
+fn open_checkpoint(root: &Path, at: f64, exported: &str) -> Result<String, String> {
+    super::open_checkpoint(&own(root), at, exported)
+}
+
+#[test]
+fn the_process_readers_answer_as_their_own_on_a_tree_with_no_feature() {
+    let d = super::super::tests::dir("process-readers");
+    assert_eq!(super::state(&d, None), state(&d, None));
+    assert_eq!(super::hold(&d, None), hold(&d, None));
+    assert_eq!(super::cli(&["status".to_owned(), "bad".to_owned()]).code, 2);
 }
 
 #[test]

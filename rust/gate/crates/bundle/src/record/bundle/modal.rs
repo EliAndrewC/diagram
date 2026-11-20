@@ -9,6 +9,7 @@ use std::sync::LazyLock;
 
 use fancy_regex::{Captures, Regex};
 use l7r_guard::shared::checks::{load, reply, state_path};
+use l7r_guard::shared::env::Rooted;
 use l7r_guard::shared::html_text::unescape;
 use l7r_guard::shared::py_text::{split, strip};
 use serde_json::Value;
@@ -23,7 +24,7 @@ use crate::record::args::{parse_with, Parsed, Spec};
 use crate::record::modals::{
     self, Modal, DEPICTION_CHECK, FORM_CHECK, MODAL_DIRS, ORDER, RESEARCH_AGENT, RESEARCH_CHECKS,
 };
-use crate::record::owed::{answered, store, units as owed_units};
+use crate::record::owed::{answered, store_in, units as owed_units};
 use crate::record::py_lines;
 use crate::record::repo::{fail, read_text, Fail};
 use crate::record::triage;
@@ -420,15 +421,15 @@ fn research_held_in(root: &Path, uid: &str, text: &str, base: &Path) -> Vec<Stri
     out
 }
 
-/// Why `for_` must wait on `m`: a check BEFORE it in the order has a unit owed and unanswered (feature 375 amendment 3, FR-019a).
-fn order_hold(root: &Path, m: &Modal, for_: &str, rows: &[Unit]) -> String {
-    let s = store(root);
+/// Why `for_` must wait on `m`: a check BEFORE it in the order has a unit owed and unanswered in the answer records `s` (feature
+/// 375 amendment 3, FR-019a).
+fn order_hold(s: &Path, m: &Modal, for_: &str, rows: &[Unit]) -> String {
     let at = ORDER.iter().position(|a| *a == for_).unwrap_or(0);
     for agent in &ORDER[..at] {
         for c in modals::agent_units(agent) {
             let slug = format!("{c}:{}", m.uid());
             if let Some(u) = rows.iter().find(|u| u.slug == slug) {
-                if !answered(&s, &u.slug, &u.fingerprint, &u.reading) {
+                if !answered(s, &u.slug, &u.fingerprint, &u.reading) {
                     return format!(
                         "{} is owed and unanswered - a pop-up's checks run in order, form, then research, then depiction (feature 375 amendment 3: run together, each one's edits re-owed the others). First: make modal-bundle KIND=\"{}\" FOR={agent}",
                         u.slug,
@@ -576,7 +577,7 @@ fn research_parts(
 /// The refusals before a bundle is written; Some(exit) where one stands.
 fn held_back(
     run: &mut Run,
-    root: &Path,
+    root: &Rooted,
     m: &Modal,
     (for_, reason, order_ok): (&str, &str, &str),
     rows: &[Unit],
@@ -590,7 +591,9 @@ fn held_back(
         })
         .map(|u| (u.slug.clone(), u.occasion.clone(), u.fingerprint.clone()))
         .collect();
-    let refused = triage::refusal(root, m, for_, Some(&modal_rows))?;
+    // the store its root's environment names (feature 451 T38): a test's own, never a session's exported one
+    let store = store_in(root);
+    let refused = triage::refusal_in(root, &store, m, for_, Some(&modal_rows))?;
     if !refused.is_empty() && split(reason).len() < 2 {
         run.warn(&format!(
             "modal-bundle: {refused}. A check the GM asked for, or a backfill: REASON=\"<why>\""
@@ -602,7 +605,7 @@ fn held_back(
             "modal-bundle: bundled without its triage, because: {reason}"
         ));
     }
-    let held = order_hold(root, m, for_, rows);
+    let held = order_hold(&store, m, for_, rows);
     let first = strip(order_ok).to_owned();
     if !held.is_empty() && split(&first).len() < 2 {
         run.warn(&format!("modal-bundle: {held}. To bundle it anyway: CHECK_ORDER_OK=\"<why>\" (two words or more; the MANIFEST records it)"));
@@ -660,7 +663,7 @@ fn manifest_lines(m: &Modal, for_: &str, put: &Put, beside: bool) -> Result<Vec<
 /// # Errors
 ///
 /// Where what it reads, writes or runs fails: the error says which and why.
-pub fn bundle(run: &mut Run, root: &Path, kind: &str, ask: &Ask<'_>) -> Result<i32, Fail> {
+pub fn bundle(run: &mut Run, root: &Rooted, kind: &str, ask: &Ask<'_>) -> Result<i32, Fail> {
     let (for_, out_arg, reason) = (ask.for_, ask.out, ask.reason);
     let now = modals::modals_now(root, true)?;
     let Some(m) = modals::find(&now, kind).cloned() else {
@@ -746,7 +749,7 @@ pub fn bundle(run: &mut Run, root: &Path, kind: &str, ask: &Ask<'_>) -> Result<i
         String::new()
     };
     let text = manifest.join("\n") + "\n" + &owed_lines(root, &m, for_, &rows)? + &escape;
-    let full = format!("{text}{}", earlier::section(root, &out, &text)?);
+    let full = format!("{text}{}", earlier::section_in(root, &out, &text)?);
     write(&out.join("MANIFEST.md"), &full)?;
     run.say(&format!(
         "modal-bundle: {} file(s) in {} - hand the {for_} agent {}",
@@ -758,7 +761,7 @@ pub fn bundle(run: &mut Run, root: &Path, kind: &str, ask: &Ask<'_>) -> Result<i
 }
 
 /// ONE AGENT FOR SEVERAL POP-UPS OF ONE CHECK (feature 385 T02, plan D12): each its own bundle, one top MANIFEST.
-fn bundles(run: &mut Run, root: &Path, kinds: &[&str], ask: &Ask<'_>) -> Result<i32, Fail> {
+fn bundles(run: &mut Run, root: &Rooted, kinds: &[&str], ask: &Ask<'_>) -> Result<i32, Fail> {
     let (for_, out_arg) = (ask.for_, ask.out);
     let out = if out_arg.is_empty() {
         default_root().join(format!("modal-batch-{for_}"))
@@ -845,6 +848,12 @@ fn specs() -> [Spec; 5] {
 /// `record modal-bundle ...`.
 #[must_use]
 pub fn cli(args: &[String]) -> Reply {
+    cli_in(args, &Rooted::process("."))
+}
+
+/// [`cli`] with the environment its root is read with: `base`'s (feature 451 T38: a test's own, never a session's exports).
+#[must_use]
+pub fn cli_in(args: &[String], base: &Rooted) -> Reply {
     let p = match parse_with(args, &specs(), 1) {
         Ok(p) if p.positional.is_empty() => {
             return super::usage("modal-bundle", "the following arguments are required: kind")
@@ -861,14 +870,14 @@ pub fn cli(args: &[String]) -> Reply {
         }
         Err(complaint) => return super::usage("modal-bundle", &complaint),
     };
-    let root = super::resolve(p.text("--root", "."));
+    let root = base.at(super::resolve(p.text("--root", ".")));
     let mut run = Run::new(&root);
-    let order_ok = std::env::var("CHECK_ORDER_OK").unwrap_or_default();
+    let order_ok = root.var("CHECK_ORDER_OK");
     let done = main(&mut run, &root, &p, &order_ok);
     run.reply(done)
 }
 
-fn main(run: &mut Run, root: &Path, p: &Parsed, order_ok: &str) -> Result<i32, Fail> {
+fn main(run: &mut Run, root: &Rooted, p: &Parsed, order_ok: &str) -> Result<i32, Fail> {
     let kind = p.positional[0].as_str();
     let ask = Ask {
         for_: p.text("--for", FORM_CHECK),

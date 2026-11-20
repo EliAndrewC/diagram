@@ -10,6 +10,7 @@ use fancy_regex::Regex;
 use l7r_guard::guards::house_style_hooks::americanize_json;
 use l7r_guard::shared::checks;
 use l7r_guard::shared::checks::arbiter as core;
+use l7r_guard::shared::env::Rooted;
 use l7r_guard::shared::log::civil;
 use l7r_guard::shared::pyjson;
 use l7r_guard::shared::sha256;
@@ -413,7 +414,7 @@ fn append_jsonl(path: &Path, row: &Value) -> Result<(), Stop> {
 ///
 /// A declined or refused ruling.
 pub fn record_ruling(
-    root: &Path,
+    root: &Rooted,
     trigger: &str,
     ruling: &Value,
     declared: &str,
@@ -423,14 +424,14 @@ pub fn record_ruling(
     if declared != ROUND_ARBITER {
         return Err(Stop::Declined("declined: only the `round-arbiter` subagent records a ruling (AS=round-arbiter) - a declaration, recorded, not a proof".to_owned()));
     }
-    if let Some(prior) = core::rulings(root, trigger).get(trigger) {
+    if let Some(prior) = core::rulings_in(root, trigger, root.reader()).get(trigger) {
         if !rekeys(prior, trigger, ruling)
             || unit_content_key(root, &core::unit_of(trigger)).is_empty()
         {
             return Err(Stop::Refused(format!("{trigger} is already ruled - one ruling per trigger, binding; the session neither re-asks nor overrules")));
         }
     }
-    let batched = core::batch_triggers(root, &[]);
+    let batched = core::batch_triggers_in(root, &[], root.reader());
     let others: Vec<&String> = batched.iter().filter(|t| *t != trigger).collect();
     let with_trigger = core::batch_triggers(root, &[trigger.to_owned()]);
     if !batch && with_trigger.iter().any(|t| t == trigger) && !others.is_empty() {
@@ -441,7 +442,7 @@ pub fn record_ruling(
     }
     let hour = trigger.starts_with("hour:");
     let (fix, fix_on, measure) = validate_ruling(ruling, hour, batch)?;
-    let d = core::feature_dir(root, trigger).ok_or_else(|| {
+    let d = core::feature_dir_in(root, trigger, root.reader()).ok_or_else(|| {
         Stop::Refused(
             "no active feature (.specify/feature.json) to record the ruling in".to_owned(),
         )
@@ -539,7 +540,7 @@ fn batch_plan(ruling: &Value, triggers: &[String]) -> Result<Vec<(String, Value)
 ///
 /// A declined or refused batch.
 pub fn record_batch(
-    root: &Path,
+    root: &Rooted,
     ruling: &Value,
     declared: &str,
     now: Option<&str>,
@@ -587,7 +588,7 @@ pub fn record_batch(
     if declared != ROUND_ARBITER {
         return Err(Stop::Declined("declined: only the `round-arbiter` subagent records a ruling (AS=round-arbiter) - a declaration, recorded, not a proof".to_owned()));
     }
-    let ruled = core::rulings(root, "");
+    let ruled = core::rulings_in(root, "", root.reader());
     let mut done: Vec<&String> = triggers.iter().filter(|t| ruled.contains_key(*t)).collect();
     done.sort();
     if !done.is_empty() {
@@ -660,8 +661,8 @@ fn load_ruling(path: &str) -> Result<Value, Stop> {
     Ok(americanize_json(&parsed))
 }
 
-fn feature_label(root: &Path) -> String {
-    core::feature_dir(root, "").map_or_else(
+fn feature_label(root: &Rooted) -> String {
+    core::feature_dir_in(root, "", root.reader()).map_or_else(
         || "none".to_owned(),
         |d| {
             d.file_name()
@@ -670,7 +671,7 @@ fn feature_label(root: &Path) -> String {
     )
 }
 
-fn ruled_cli(root: &Path, trigger: &str, file: &str, who: &str) -> Reply {
+fn ruled_cli(root: &Rooted, trigger: &str, file: &str, who: &str) -> Reply {
     let row =
         match load_ruling(file).and_then(|r| record_ruling(root, trigger, &r, who, None, false)) {
             Ok(r) => r,
@@ -681,7 +682,7 @@ fn ruled_cli(root: &Path, trigger: &str, file: &str, who: &str) -> Reply {
     let owed = crate::plan::approach_ruled(root, t);
     let plan_review = t.starts_with("round:spec-fidelity|plan:") || text(&row, "review") == "plan";
     if plan_review && matches!(text(&row, "ruling"), "accept" | "process-fault") {
-        if let Some(d) = core::feature_dir(root, t) {
+        if let Some(d) = core::feature_dir_in(root, t, root.reader()) {
             let named = crate::plan::arbiter_accept_listed(&d, t);
             let _ = writeln!(
                 out,
@@ -723,7 +724,7 @@ fn claims_accept(root: &Path, keys: &str, trigger: &str) -> String {
     format!("{}\n", (done.stdout + &done.stderr).trim())
 }
 
-fn ruled_batch_cli(root: &Path, file: &str, who: &str) -> Reply {
+fn ruled_batch_cli(root: &Rooted, file: &str, who: &str) -> Reply {
     let rows = match load_ruling(file).and_then(|r| record_batch(root, &r, who, None)) {
         Ok(r) => r,
         Err(stop) => return stop.reply("arbiter-ruled"),
@@ -738,7 +739,7 @@ fn ruled_batch_cli(root: &Path, file: &str, who: &str) -> Reply {
     ok(out)
 }
 
-fn ask_cli(root: &Path, args: &[String]) -> Reply {
+fn ask_cli(root: &Rooted, args: &[String]) -> Reply {
     let (subject, why) = (args[0].trim(), args[1].trim());
     let review = args.get(2).map_or("", |r| r.trim());
     if !ASK_SUBJECT.is_match(subject).unwrap_or(false)
@@ -754,7 +755,7 @@ fn ask_cli(root: &Path, args: &[String]) -> Reply {
         return fail(format!("arbiter-ask: REVIEW= is spec, plan or claims:<key>;<key> (the review whose verdict the ruling stands as), or left out - not {}\n", py_repr(review)), 2);
     }
     let trigger = format!("ask:{subject}");
-    if core::rulings(root, &trigger).contains_key(&trigger) {
+    if core::rulings_in(root, &trigger, root.reader()).contains_key(&trigger) {
         return fail(format!("arbiter-ask: {trigger} is already ruled - one ruling per trigger, binding; ask a new SUBJECT for a new question\n"), 1);
     }
     let stands = if review.is_empty() {
@@ -763,7 +764,7 @@ fn ask_cli(root: &Path, args: &[String]) -> Reply {
         format!("(REVIEW={review}: an accept stands as the {review} review's verdict)")
     };
     let detail = format!("{why} {stands}");
-    let _ = core::trip(
+    let _ = core::trip_in(
         root,
         &trigger,
         "ask",
@@ -771,6 +772,7 @@ fn ask_cli(root: &Path, args: &[String]) -> Reply {
         detail.trim(),
         &Value::Null,
         review,
+        root.reader(),
     );
     let mut out = format!("arbiter-ask: {trigger} recorded - the round arbiter rules on it, not the GM (its ruling reaches him only as a kept for_gm question, feature 432); dispatch `round-arbiter` with the MANIFEST below\n");
     if !stands.is_empty() {
@@ -783,7 +785,7 @@ fn ask_cli(root: &Path, args: &[String]) -> Reply {
     ok(out)
 }
 
-fn fix_cli(root: &Path, args: &[String]) -> Reply {
+fn fix_cli(root: &Rooted, args: &[String]) -> Reply {
     let status = args[0].as_str();
     let ids: Vec<&str> = args[1].split_whitespace().collect();
     let note = &args[2];
@@ -832,7 +834,7 @@ fn fix_cli(root: &Path, args: &[String]) -> Reply {
     ))
 }
 
-fn nit_cli(root: &Path, args: &[String]) -> Reply {
+fn nit_cli(root: &Rooted, args: &[String]) -> Reply {
     match nit_answers(root, &args[0], &args[1], &args[2]) {
         Err(Stop::Declined(why) | Stop::Refused(why)) => {
             fail(format!("arbiter-nit: refused - {why}\n"), 1)
@@ -854,16 +856,16 @@ fn nit_cli(root: &Path, args: &[String]) -> Reply {
 /// `l7r-gate arbiter <verb>`: what `make arbiter-*`, `make done`'s first step and the review gate run.
 #[must_use]
 pub fn cli(args: &[String]) -> Reply {
-    cli_in(args, &root_dir())
+    cli_in(args, &Rooted::process(root_dir()))
 }
 
-fn cli_in(args: &[String], root: &Path) -> Reply {
+fn cli_in(args: &[String], root: &Rooted) -> Reply {
     let verb = args.first().map_or("", String::as_str);
     match (verb, args.len()) {
         ("ruled", 5) if args[3] == "--as" => ruled_cli(root, &args[1], &args[2], &args[4]),
         ("ruled-batch", 4) if args[2] == "--as" => ruled_batch_cli(root, &args[1], &args[3]),
         ("gate-held", 1) => {
-            let why = core::refusal(&core::blocking(root, "", true), None);
+            let why = core::refusal(&core::blocking_in(root, "", true, root.reader()), None);
             if why.is_empty() {
                 ok(String::new())
             } else {
@@ -872,7 +874,7 @@ fn cli_in(args: &[String], root: &Path) -> Reply {
         }
         ("spec-verdict", 2) => Reply { code: i32::from(spec_verdict(Path::new(&args[1])).is_empty()), stdout: String::new(), stderr: String::new() },
         ("spec-ruled", 2) => Reply { code: i32::from(spec_ruled(Path::new(&args[1])).is_empty()), stdout: String::new(), stderr: String::new() },
-        ("unit-ruled", 3) => Reply { code: i32::from(core::feature_dir(root, "").is_none_or(|d| unit_ruled(&d, &args[1], &args[2]).is_empty())), stdout: String::new(), stderr: String::new() },
+        ("unit-ruled", 3) => Reply { code: i32::from(core::feature_dir_in(root, "", root.reader()).is_none_or(|d| unit_ruled(&d, &args[1], &args[2]).is_empty())), stdout: String::new(), stderr: String::new() },
         ("ask", 3 | 4) => ask_cli(root, &args[1..]),
         ("fix", 4 | 5) if matches!(args[1].as_str(), "done" | "declined") => fix_cli(root, &args[1..]),
         ("nit", 4) => nit_cli(root, &args[1..]),

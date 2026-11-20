@@ -13,7 +13,8 @@ use std::io::Read;
 use std::path::Path;
 
 use l7r_guard::guards::event_log_hooks::read::{from_transcript, read_jsonl};
-use l7r_guard::guards::event_log_hooks::record;
+use l7r_guard::guards::event_log_hooks::record_in;
+use l7r_guard::shared::env::Reader;
 use serde_json::Value;
 
 use super::reply;
@@ -25,18 +26,24 @@ const USAGE: &str = "    l7r-gate measure event-log hook                        
 /// prints one JSON line an event, and anything else is the usage, exit 2.
 #[must_use]
 pub fn cli(args: &[String], stdin: &mut dyn Read) -> Reply {
+    cli_in(args, stdin, &l7r_guard::shared::env::opt)
+}
+
+/// [`cli`] reading the environment `env` (feature 451 T38: a test's own, so its hook line never reaches a session's exported
+/// `L7R_EVENTS_DIR`).
+pub fn cli_in(args: &[String], stdin: &mut dyn Read, env: &Reader) -> Reply {
     match (args.first().map(String::as_str), args.get(1)) {
         (Some("hook"), _) => {
             let mut text = String::new();
             if stdin.read_to_string(&mut text).is_ok() {
                 let text = if text.is_empty() { "{}" } else { text.as_str() };
                 if let Ok(payload) = serde_json::from_str::<Value>(text) {
-                    record(&payload);
+                    record_in(&payload, env);
                 }
             }
             reply(String::new(), String::new(), 0)
         }
-        (Some("refile"), _) => refile::cli(&args[1..]),
+        (Some("refile"), _) => refile::cli_in(&args[1..], env),
         (Some("from-transcript"), Some(path)) => match read_jsonl(Path::new(path))
             .map_err(|e| format!("OSError: {path}: {e}"))
             .and_then(|rows| from_transcript(&rows))

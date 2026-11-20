@@ -8,6 +8,7 @@ use l7r_guard::shared::checks::arbiter as core;
 use l7r_guard::shared::checks::reply;
 use l7r_guard::shared::checks::rounds::subject_of_path;
 use l7r_guard::shared::checks::{load, state_path};
+use l7r_guard::shared::env::Rooted;
 use l7r_guard::shared::py_text::split;
 use serde_json::{Map, Value};
 
@@ -430,7 +431,7 @@ fn subject_parts(
 ///
 /// Where what it reads, writes or runs fails: the error says which and why.
 pub fn bundle(
-    root: &Path,
+    root: &Rooted,
     trigger: &str,
     out: &Path,
     allow_missing: &str,
@@ -440,7 +441,8 @@ pub fn bundle(
         .get(trigger)
         .cloned()
         .unwrap_or_else(|| Value::Object(Map::new()));
-    let d = trigger_feature_dir(root, trigger).or_else(|| core::feature_dir(root, trigger));
+    let d = trigger_feature_dir(root, trigger)
+        .or_else(|| core::feature_dir_in(root, trigger, root.reader()));
     if out.exists() {
         remove_tree(out)?;
     }
@@ -524,10 +526,10 @@ fn batch_dir(trigger: &str) -> String {
 }
 
 /// The rounds the dispatch counter holds for `unit` in the active feature; 0 where it holds none.
-fn counted(root: &Path, unit: &str) -> u64 {
+fn counted(root: &Rooted, unit: &str) -> u64 {
     let state =
         load(&state_path(&root.to_string_lossy()).unwrap_or_else(|| PathBuf::from("/nonexistent")));
-    let Some(d) = core::feature_dir(root, "") else {
+    let Some(d) = core::feature_dir_in(root, "", root.reader()) else {
         return 0;
     };
     if state.get("feature").and_then(Value::as_str)
@@ -543,7 +545,7 @@ fn counted(root: &Path, unit: &str) -> u64 {
 }
 
 /// Each round trigger the session NAMED whose `@N` is not the unit's next round, with the one to ask about (352's check session).
-fn misnumbered(root: &Path, triggers: &[String]) -> Vec<String> {
+fn misnumbered(root: &Rooted, triggers: &[String]) -> Vec<String> {
     let fired = core::owed(root);
     let mut out = Vec::new();
     for t in triggers {
@@ -563,7 +565,12 @@ fn misnumbered(root: &Path, triggers: &[String]) -> Vec<String> {
 }
 
 /// ONE bundle for every owed round trigger (FR-017; the GM 2026-10-11), each trigger's own bundle beneath it.
-fn batch(root: &Path, out: &Path, allow_missing: &str, extra: &[String]) -> Result<PathBuf, Stop> {
+fn batch(
+    root: &Rooted,
+    out: &Path,
+    allow_missing: &str,
+    extra: &[String],
+) -> Result<PathBuf, Stop> {
     let wrong = misnumbered(root, extra);
     if !wrong.is_empty() {
         return Err(Stop::Value(format!(
@@ -571,7 +578,7 @@ fn batch(root: &Path, out: &Path, allow_missing: &str, extra: &[String]) -> Resu
             wrong.join("; ")
         )));
     }
-    let triggers = core::batch_triggers(root, extra);
+    let triggers = core::batch_triggers_in(root, extra, root.reader());
     if triggers.is_empty() {
         return Err(Stop::Value(
             "no round trigger is owed a ruling - nothing to batch".to_owned(),
@@ -593,7 +600,7 @@ fn batch(root: &Path, out: &Path, allow_missing: &str, extra: &[String]) -> Resu
     if !gaps.is_empty() {
         return Err(Stop::Missing(gaps));
     }
-    let aside = core::aside(root);
+    let aside = core::aside_in(root, root.reader());
     let mut parts = vec![
         format!("# Round arbiter BATCH bundle (feature 375, FR-017)\n\n{} round triggers reached the cap together. Read each unit's own bundle below; they are likely related (one round of the same checks on related pop-ups or pages).\n", triggers.len()),
         format!("Clone root (for `make arbiter-ruled`): {}\n", shown(root)),
@@ -654,7 +661,14 @@ fn answer(mut run: Run, done: Result<PathBuf, Stop>) -> Reply {
 }
 
 /// `arbiter bundle ...`.
+#[must_use]
 pub fn cli(args: &[String]) -> Reply {
+    cli_in(args, &Rooted::process("."))
+}
+
+/// [`cli`] with the environment its root is read with: `base`'s (feature 451 T38: a test's own, never a session's exports).
+#[must_use]
+pub fn cli_in(args: &[String], base: &Rooted) -> Reply {
     let p = match parse_with(args, &specs(), 1) {
         Ok(p) => p,
         Err(complaint) => {
@@ -681,7 +695,7 @@ pub fn cli(args: &[String]) -> Reply {
         }
         return reply_of_run(String::new(), format!("arbiter-ask: {}. Roll the pool under every route the question offers (the sheets: `make rust-test CRATE=rust/mode_a`, the pool sweep; the hamlets: `make cohort`) and cite it - in WHY or a FILES= summary - before asking: `make arbiter-ask SUBJECT=... WHY=\"...\" FILES=\"<the summaries>\"`\n", gaps.join("; ")), 2);
     }
-    let root = resolve(p.text("--root", "."));
+    let root = base.at(resolve(p.text("--root", ".")));
     let slug = {
         let s = dashed(&trigger.to_lowercase());
         s[s.len().saturating_sub(60)..].to_owned()

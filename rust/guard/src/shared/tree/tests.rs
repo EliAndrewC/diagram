@@ -2,7 +2,7 @@ use std::path::PathBuf;
 
 use serde_json::json;
 
-use super::{classify, context_line, explain, join, judge, normpath, relpath, walk};
+use super::{classify, context_line, explain, join, judge, normpath, relpath, walk, walk_judged};
 
 /// A mirror with a clone under `.clones/` that has a `.git`.
 fn mirror(tag: &str) -> (crate::shared::tempdir::TempDir, String, String) {
@@ -243,7 +243,7 @@ fn the_walk_judges_a_python_program_a_read_or_a_write() {
     // 451 T31: a program that only reads stays a target MARKED "read" (its own `;` and `|` not splitting the walk), one that
     // can write and an unquoted one stay "shell"; the flags before `-c` and a minor version are read through
     let hows = |cmd: &str| -> Vec<&'static str> {
-        walk(cmd, Some("/tmp"), &m, h)
+        walk_judged(cmd, Some("/tmp"), &m, h)
             .targets
             .iter()
             .map(|t| t.how)
@@ -265,19 +265,24 @@ fn the_walk_judges_a_python_program_a_read_or_a_write() {
     );
     assert!(hows("python3 -m json.tool x; python3 --version; python3 - <<<x").is_empty());
     assert!(walk("python3 x.py", Some("/tmp"), &m, h).targets.is_empty());
-    // 451 T31: a command that also runs a Python program from stdin (a heredoc, `-`, a pipe) keeps its `-c` read a write - the
-    // walk judges no stdin program, and D5's write of the `-c` was what refused parse#72's and window#61's heredoc writers;
-    // the heredoc itself is no target, and a `-c` program's own stdin is data
+    // 451 T42 (T31's stdin rule retired): a stdin program is judged by its own body, and the `-c` read beside one the walk
+    // reads is a read; beside one it cannot read (a missing file, any other upstream) the `-c` stays D5's write, as T31 had it
     let heredoc =
         "python3 - <<'PY'\nimport pathlib\np = pathlib.Path('x'); p.write_text('y')\nPY\n";
-    assert!(hows(heredoc).is_empty());
+    assert_eq!(hows(heredoc), ["shell"]);
+    assert_eq!(
+        hows(&format!("{heredoc}python3 -c 'print(1)'")),
+        ["shell", "read"]
+    );
+    assert_eq!(
+        hows("python3 -c 'print(1)'; python3 <<EOF\nprint(2)\nEOF"),
+        ["read"]
+    );
     for cmd in [
-        format!("{heredoc}python3 -c 'print(1)'"),
-        "python3 -c 'print(1)'; python3 <<EOF\nprint(2)\nEOF".to_owned(),
-        "python3 -c 'print(1)' && cat p.py | python3 -u".to_owned(),
-        "python3 -c 'print(1)'; python3 -I - a < p.py".to_owned(),
+        "python3 -c 'print(1)' && cat p.py | python3 -u",
+        "python3 -c 'print(1)'; python3 -I - a < p.py",
     ] {
-        assert_eq!(hows(&cmd), ["shell"], "{cmd}");
+        assert_eq!(hows(cmd), ["shell"], "{cmd}");
     }
     assert_eq!(
         hows("python3 -c 'import sys; print(sys.stdin.read())' <<EOF\ndata\nEOF"),
@@ -441,4 +446,94 @@ fn a_rewrite_moves_the_write_and_is_re_judged() {
             )
             .contains("None")
     );
+}
+
+#[test]
+fn the_walk_judges_a_python_program_run_from_stdin() {
+    let (dir, m, _c) = mirror("stdin");
+    let h = "/home/u";
+    let hows = |cmd: &str| -> Vec<&'static str> {
+        walk_judged(cmd, Some(&m), &m, h)
+            .targets
+            .iter()
+            .map(|t| t.how)
+            .collect()
+    };
+    // 451 T42: a heredoc's body is judged by T31's reader - a writer is a write where the shell stands, a read no target (as
+    // every heredoc was before), and the `-c` read beside a read is a read: T31's stdin rule is retired for a judged program
+    let writer = "python3 - <<'PY'\nimport pathlib\np = pathlib.Path('x'); p.write_text('y')\nPY\n";
+    let reader =
+        "python3 - a.html <<'PY'\nimport sys, re\nprint(len(open(sys.argv[1]).read()))\nPY\n";
+    assert_eq!(hows(writer), ["shell"]);
+    let w = walk_judged(writer, Some(&m), &m, h);
+    assert_eq!(w.targets[0].segment, "python3 -  <<BODY");
+    // the readers of a walk's paths (house style, make-only, the bench) see no stdin program, as before: house style's D11
+    assert!(walk(writer, Some(&m), &m, h).targets.is_empty());
+    assert!(hows(reader).is_empty());
+    assert_eq!(hows(&format!("{reader}python3 -c 'print(1)'")), ["read"]);
+    assert_eq!(
+        hows(&format!("{writer}python3 -c 'print(1)'")),
+        ["shell", "read"]
+    );
+    assert_eq!(
+        hows(&format!("cat <<'PY' > n.py\nopen('o', 'w')\nPY\n{reader}")),
+        ["shell"]
+    );
+    for (cmd, want) in [
+        ("python3 <<EOF\nprint(1)\nEOF", &[][..]),
+        ("python3 -I <<-EOF\n\tprint(1)\n\tEOF", &[]),
+        // an unquoted delimiter: the shell expands the body first, a quoted one (`'EOF'`, `"EOF"`, `\EOF`) leaves it literal
+        ("python3 <<EOF\nprint('$(rm f)')\nEOF", &["shell"]),
+        ("python3 <<EOF\nprint(`rm f`)\nEOF", &["shell"]),
+        ("python3 <<EOF\n$CODE\nEOF", &["shell"]),
+        ("python3 <<EOF\nprint('$HOME')\nEOF", &[]),
+        // in a heredoc `\"` is two characters, so this `$X` stands inside the literal
+        ("python3 <<EOF\nprint(\"a\\\"$X\")\nEOF", &[]),
+        ("python3 <<'EOF'\nprint('$(rm f)')\nEOF", &[]),
+        ("python3 <<\"EOF\"\nprint(`x`)\nEOF", &[]),
+        ("python3 <<\\EOF\n$CODE\nEOF", &[]),
+        ("python3 - <<'PY' | tee out.txt\nprint(1)\nPY", &["shell"]),
+        // a pipe from `cat` of a heredoc or a readable file is the program; any other source is not judged
+        ("cat <<'PY' | python3\nopen('o', 'w')\nPY", &["shell"]),
+        ("cat <<'PY' | python3 -u\nprint(1)\nPY", &[]),
+        ("python3 < $D/w.py", &[]),
+    ] {
+        assert_eq!(hows(cmd), want, "{cmd}");
+    }
+    std::fs::create_dir_all(format!("{m}/l7r")).unwrap();
+    std::fs::create_dir_all(format!("{m}/sub")).unwrap();
+    for (f, body) in [
+        ("w.py", "open('o', 'w')\n"),
+        ("r.py", "print(1)\n"),
+        ("sub/w.py", "import os; os.remove('f')\n"),
+    ] {
+        std::fs::write(format!("{m}/{f}"), body).unwrap();
+    }
+    for (cmd, want) in [
+        ("python3 - <<'PY'\nimport l7r\nPY", &["shell"][..]),
+        ("cat w.py | python3", &["shell"]),
+        ("cat r.py | python3 -", &[]),
+        ("cat -- r.py | python3", &[]),
+        ("python3 < w.py", &["shell"]),
+        ("python3 - x <r.py", &[]),
+        ("D=sub; python3 < $D/w.py", &["shell"]),
+        ("python3 < sub", &[]),
+    ] {
+        assert_eq!(hows(cmd), want, "{cmd}");
+    }
+    // a program the walk cannot read - a variable, a missing file, a directory, any other upstream - is judged as T31 left it:
+    // no target of its own, and a `-c` read beside it D5's write
+    for cmd in [
+        "echo \"$CODE\" | python3",
+        "python3 <<<\"$CODE\"",
+        "python3 < missing.py",
+        "python3 < sub",
+        "cat a.py b.py | python3",
+        "curl -s u | python3 -",
+    ] {
+        assert!(hows(cmd).is_empty(), "{cmd}");
+        let beside = format!("{cmd}; python3 -c 'print(1)'");
+        assert_eq!(hows(&beside), ["shell"], "{cmd}");
+    }
+    drop(dir);
 }

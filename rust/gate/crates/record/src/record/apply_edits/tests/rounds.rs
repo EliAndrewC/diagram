@@ -145,7 +145,7 @@ fn settling(tag: &str) -> (l7r_guard::shared::tempdir::TempDir, std::path::PathB
     let root = record(tag);
     edit_everything(&root);
     assemblable(&root);
-    let store = answers::store(&root);
+    let store = answers::store_in(&l7r_guard::shared::env::Rooted::with(&*root, &[]));
     (root, store)
 }
 

@@ -5,7 +5,7 @@ use std::path::Path;
 
 use l7r_gate_core::record::testkit::{put, record, PAGE};
 
-use super::{blocks, cli, Block};
+use super::{blocks, Block};
 
 mod rare;
 mod rounds;
@@ -34,7 +34,8 @@ pub(super) fn run(root: &Path, reply: &str, extra: &[&str]) -> l7r_gate_core::Re
         root.to_string_lossy().into_owned(),
     ];
     args.extend(extra.iter().map(|s| (*s).to_owned()));
-    cli(&args, root)
+    // the test's own environment (feature 451 T38): its round settles into its own store, never a session's exported one
+    super::cli_in(&args, &l7r_guard::shared::env::Rooted::with(root, &[]))
 }
 
 pub(super) fn page(root: &Path) -> String {

@@ -7,6 +7,7 @@
 //! `l7r-gate reviews owed [--root DIR] [--why | --units | --undrawn | --check-declared | --check-drawn | --glyph-gate SLUG | --glyph-dispatched SLUG |
 //! --landing-mark on|off] [--landing] [--escaped]`.
 
+use l7r_guard::shared::env::Rooted;
 use std::collections::{BTreeMap, BTreeSet};
 use std::fmt::Write as _;
 use std::path::{Path, PathBuf};
@@ -699,6 +700,12 @@ pub fn all_owed(root: &Path) -> (String, Vec<Unit>, Vec<String>) {
 /// The units DUE: every non-glyph unit, and the glyph units the feature's hour makes due; at `landing`, every owed unit.
 #[must_use]
 pub fn owed(root: &Path, landing: bool) -> (String, Vec<Unit>, Vec<String>) {
+    owed_in(&Rooted::process(root), landing)
+}
+
+/// [`owed`] with the root's environment carried (feature 451 T38).
+#[must_use]
+pub fn owed_in(root: &Rooted, landing: bool) -> (String, Vec<Unit>, Vec<String>) {
     let (desc, units, problems) = all_owed(root);
     if landing {
         return (desc, units, problems);
@@ -811,6 +818,12 @@ fn usage(why: &str) -> Reply {
 /// `review_owed.py`'s command line.
 #[must_use]
 pub fn cli(args: &[String]) -> Reply {
+    cli_in(args, &Rooted::process("."))
+}
+
+/// [`cli`] with the environment its root is read with: `base`'s (feature 451 T38: a test's own, never a session's exports).
+#[must_use]
+pub fn cli_in(args: &[String], base: &Rooted) -> Reply {
     let specs = [
         Spec::value("--root"),
         Spec::flag("--why"),
@@ -864,11 +877,11 @@ pub fn cli(args: &[String]) -> Reply {
             1,
         );
     };
-    let root = PathBuf::from(top);
+    let root = base.at(top);
     run(&root, &p, mark)
 }
 
-fn run(root: &Path, p: &crate::record::args::Parsed, mark: &str) -> Reply {
+fn run(root: &Rooted, p: &crate::record::args::Parsed, mark: &str) -> Reply {
     let check = if p.on("--check-declared") {
         Some(check_declared as fn(&Path) -> Option<String>)
     } else if p.on("--check-drawn") {

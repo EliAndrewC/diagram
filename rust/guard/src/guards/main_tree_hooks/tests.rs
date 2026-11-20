@@ -131,10 +131,74 @@ fn a_python_read_standing_in_the_mirror_is_not_a_write_and_a_python_write_still_
         "python3 -c 'from . import x'",
         "cd $UNSET && python3 -c 'import json'",
         "python3 -c print",
-        // window#61's shape: the heredoc writes, judged by no one, so the command's `-c` read stays D5's write
+        // window#61's shape: the heredoc writes, refused by its own body since T42 (the `-c` read beside it is no write)
         "python3 - <<'PY'\nimport pathlib\np = pathlib.Path('hm.py'); p.write_text('x')\nPY\npython3 -c 'print(1)'",
         // parse#72's: a heredoc rewrites a module, a `-c` checks it parses
         "python3 - <<'PYEOF'\nimport pathlib\np=pathlib.Path('f.py')\np.write_text(p.read_text())\nPYEOF\npython3 -c \"import ast,sys; ast.parse(open('f.py').read()); print('parses ok')\"",
+    ] {
+        assert!(refused(write), "{write}");
+    }
+}
+
+/// One corpus row's command (`tests/hooks/fixtures`), the mirror's path `/diagram` made `main`'s as the replays make it.
+fn corpus_row(file: &str, n: usize, main: &Path) -> (String, Option<String>) {
+    let dir = concat!(env!("CARGO_MANIFEST_DIR"), "/../../tests/hooks/fixtures/");
+    let v: serde_json::Value =
+        serde_json::from_str(&std::fs::read_to_string(format!("{dir}{file}")).unwrap()).unwrap();
+    let swap = |s: &str| {
+        crate::shared::regex::build(r#"(?<![\w./-])/diagram(?=/|[\s"';&|):]|$)"#)
+            .unwrap()
+            .replace_all(s, main.to_string_lossy().as_ref())
+            .into_owned()
+    };
+    let row = v.get("rows").or_else(|| v.get("commands")).unwrap()[n].clone();
+    let cmd = row.get("command").map_or(row.clone(), Clone::clone);
+    let at = row.get("cwd").and_then(|c| c.as_str()).map(swap);
+    (swap(cmd.as_str().unwrap()), at)
+}
+
+/// 451 T42: a Python program run from stdin is judged by T31's reader as a `-c` program is, so T31's stdin rule is retired -
+/// the three corpus rows it kept refused (each a `-c` read beside a heredoc that only reads) run as typed, and the heredoc
+/// writers it covered (parse#72, window#61) are refused by their own heredocs.
+#[test]
+fn a_python_program_run_from_stdin_is_judged_by_its_body() {
+    let (m, _c) = tree("pystdin");
+    let refused = |c: &str| matches!(&run(c, &m, &m, "nobody")[..], [Answer::Refuse(_)]);
+    for (file, n) in [
+        ("main-tree-refusals-2026-09.json", 147),
+        ("command-window-2026-09-13.json", 339),
+        ("command-window-2026-09-13.json", 361),
+    ] {
+        let (cmd, at) = corpus_row(file, n, &m);
+        let here = at.map_or(m.clone(), std::path::PathBuf::from);
+        std::fs::create_dir_all(&here).unwrap();
+        let ran = run(&cmd, &here, &m, "nobody").is_empty();
+        assert!(ran, "{file}#{n} refused");
+    }
+    let ms = m.to_string_lossy().into_owned();
+    for (file, n) in [
+        ("bash-parse-corpus-2026-09.json", 72),
+        ("command-window-2026-09-13.json", 61),
+    ] {
+        let (cmd, _) = corpus_row(file, n, &m);
+        let w = crate::shared::tree::walk_judged(&cmd, Some(ms.as_str()), &ms, "/h");
+        let by: Vec<&str> = w
+            .targets
+            .iter()
+            .filter(|t| t.how == "shell")
+            .map(|t| t.segment.as_str())
+            .collect();
+        let heredocs = !by.is_empty()
+            && by
+                .iter()
+                .all(|s| s.starts_with("python3 -") && s.contains("<<BODY"));
+        assert!(heredocs, "{file}#{n}: {by:?}");
+        assert!(refused(&cmd), "{file}#{n}");
+    }
+    // their shapes with no `-c` beside them: before T42 the heredoc alone was judged by no one and allowed
+    for write in [
+        "python3 - <<'PY'\nimport pathlib\np = pathlib.Path('hm.py'); p.write_text('x')\nPY",
+        "python3 <<EOF\nopen('o.txt', 'w').write('x')\nEOF",
     ] {
         assert!(refused(write), "{write}");
     }

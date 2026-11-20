@@ -246,7 +246,14 @@ fn clone_with_an_hour(r: &Path) -> (PathBuf, Env) {
         ".claude/guard-log/20261101T080005-a.json",
         r#"{"event": "blocked", "guard": "g", "sid": "s1"}"#,
     );
-    (root, Env { home, now: t(3600) })
+    (
+        root,
+        Env {
+            home,
+            now: t(3600),
+            base: l7r_guard::shared::env::Rooted::with(".", &[]),
+        },
+    )
 }
 
 #[test]

@@ -313,7 +313,10 @@ pub(super) fn fx(tag: &str) -> Fx {
     let scripts = dir.join("tree/scripts");
     let bin = dir.join("bin");
     let answers = Rc::new(Answers::default());
-    let mut land = Land::new(&root, &scripts);
+    let mut land = Land::new_in(
+        &l7r_guard::shared::env::Rooted::with(root.clone(), &[]),
+        &scripts,
+    );
     land.python = bin.join("python").to_string_lossy().into_owned();
     land.make = bin.join("make").to_string_lossy().into_owned();
     land.said = Some(RefCell::default());
@@ -608,7 +611,7 @@ fn the_fresh_block_follows_only_an_engine_landing_that_adds_more_than_counters()
     assert!(!fx.land.counter_only().unwrap());
     // a git directory the log cannot be opened in
     let mut broken = fx;
-    broken.land.root = broken.dir.join("no-such");
+    broken.land.root = broken.land.root.at(broken.dir.join("no-such"));
     assert!(broken.land.start_fresh_block().is_err());
 }
 
@@ -648,24 +651,60 @@ fn main_refuses_what_land_py_refused_before_it_landed() {
     let scripts = |_: &Path| fx.dir.join("tree/scripts");
     let args = |a: &[&str]| a.iter().map(|s| (*s).to_owned()).collect::<Vec<_>>();
     assert_eq!(
-        super::main(&args(&["449"]), &fx.root, NOTE, &scripts, &nothing),
+        super::main(
+            &args(&["449"]),
+            &fx.root,
+            NOTE,
+            &scripts,
+            &nothing,
+            &l7r_guard::shared::env::Rooted::with(".", &[])
+        ),
         Ok(2)
     );
     assert_eq!(
-        super::main(&args(&["449", " "]), &fx.root, NOTE, &scripts, &nothing),
+        super::main(
+            &args(&["449", " "]),
+            &fx.root,
+            NOTE,
+            &scripts,
+            &nothing,
+            &l7r_guard::shared::env::Rooted::with(".", &[])
+        ),
         Ok(2)
     );
     assert_eq!(
-        super::main(&args(&["449", "T1"]), &fx.root, "  ", &scripts, &nothing),
+        super::main(
+            &args(&["449", "T1"]),
+            &fx.root,
+            "  ",
+            &scripts,
+            &nothing,
+            &l7r_guard::shared::env::Rooted::with(".", &[])
+        ),
         Ok(2)
     );
     assert_eq!(
-        super::main(&args(&["7", "T1"]), &fx.root, NOTE, &scripts, &nothing),
+        super::main(
+            &args(&["7", "T1"]),
+            &fx.root,
+            NOTE,
+            &scripts,
+            &nothing,
+            &l7r_guard::shared::env::Rooted::with(".", &[])
+        ),
         Ok(2)
     );
     // a landing from main whose tasks.md cannot be read: the first pass raises before any tool runs
     std::fs::write(fx.root.join("specs/449-x/tasks.md"), [0xff]).unwrap();
-    assert!(super::main(&args(&["449", "T1"]), &fx.root, NOTE, &scripts, &nothing).is_err());
+    assert!(super::main(
+        &args(&["449", "T1"]),
+        &fx.root,
+        NOTE,
+        &scripts,
+        &nothing,
+        &l7r_guard::shared::env::Rooted::with(".", &[])
+    )
+    .is_err());
 }
 
 #[test]
@@ -695,7 +734,10 @@ fn nothing() {}
 #[test]
 fn a_landing_with_nothing_captured_prints_its_lines() {
     let fx = fx("land-print");
-    let mut land = Land::new(&fx.root, &fx.dir.join("tree/scripts"));
+    let mut land = Land::new_in(
+        &l7r_guard::shared::env::Rooted::with(fx.root.clone(), &[]),
+        &fx.dir.join("tree/scripts"),
+    );
     land.said = None;
     land.say("a line on stdout");
     land.warn("a line on stderr");
@@ -735,4 +777,11 @@ fn a_command_that_cannot_start_or_speaks_no_text_is_a_raise() {
         .tick(&d, "T2", "n")
         .unwrap_err()
         .contains("the tick raised on T2"));
+}
+
+/// The process's landing reads the process's environment, its root as given (feature 451 T38: every other test reads its own).
+#[test]
+fn the_process_landing_keeps_its_root() {
+    let land = Land::new(Path::new("/r"), Path::new("/r/scripts"));
+    assert_eq!(land.root.path(), Path::new("/r"));
 }

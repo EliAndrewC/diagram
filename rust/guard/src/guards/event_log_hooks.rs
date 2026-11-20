@@ -628,7 +628,9 @@ pub fn log_path(root: &Path, feature: &str) -> PathBuf {
     log_path_in(root, feature, &crate::shared::env::opt)
 }
 
-fn log_path_in(root: &Path, feature: &str, env: &dyn Fn(&str) -> Option<String>) -> PathBuf {
+/// [`log_path`] with its environment given (feature 451 T38: a gate crate passes the reader its root carries, `shared::env::Rooted`).
+#[must_use]
+pub fn log_path_in(root: &Path, feature: &str, env: &dyn Fn(&str) -> Option<String>) -> PathBuf {
     let base = env("L7R_EVENTS_DIR")
         .filter(|d| !d.is_empty())
         .map_or_else(|| common_git_dir(root).join("l7r-events"), PathBuf::from);
@@ -836,13 +838,7 @@ fn write_line(path: &Path, row: Map<String, Value>) -> Option<PathBuf> {
 /// a line of no event is no event); None outside a clone the log can be made in.
 #[must_use]
 pub fn append_row(root: &Path, row: Map<String, Value>) -> Option<PathBuf> {
-    append_row_in(
-        root,
-        None,
-        row,
-        &now_stamp(SystemTime::now()),
-        &crate::shared::env::opt,
-    )
+    append_row_with(root, None, row, &crate::shared::env::opt)
 }
 
 /// [`append_row`] for a tool that knows the line's feature (feature 451 T06: a landing's `F=`): filed in the feature `feature` names - a
@@ -851,13 +847,19 @@ pub fn append_row(root: &Path, row: Map<String, Value>) -> Option<PathBuf> {
 /// feature's log for its landings, would not see it). A word naming no one feature leaves the chain as it was.
 #[must_use]
 pub fn append_row_for(root: &Path, feature: &str, row: Map<String, Value>) -> Option<PathBuf> {
-    append_row_in(
-        root,
-        Some(feature),
-        row,
-        &now_stamp(SystemTime::now()),
-        &crate::shared::env::opt,
-    )
+    append_row_with(root, Some(feature), row, &crate::shared::env::opt)
+}
+
+/// [`append_row`] (`feature` None) or [`append_row_for`] with its environment given (feature 451 T38): a gate crate's line read through
+/// the reader its root carries, so a test's line never reaches a session's exported `L7R_EVENTS_DIR`.
+#[must_use]
+pub fn append_row_with(
+    root: &Path,
+    feature: Option<&str>,
+    row: Map<String, Value>,
+    env: &dyn Fn(&str) -> Option<String>,
+) -> Option<PathBuf> {
+    append_row_in(root, feature, row, &now_stamp(SystemTime::now()), env)
 }
 
 pub(crate) fn append_row_in(
@@ -889,16 +891,16 @@ pub(crate) fn append_row_in(
 /// The payload's line appended now, from the process's directory and environment; nothing for a payload that is no object, which the
 /// Python's `payload.get` raised on and its hook swallowed (`event_log.py hook`, feature 449 T119).
 pub fn record(payload: &Value) {
+    // `shared::env`, here and in the writers above: a test reads its own environment, so a session's exported
+    // `L7R_EVENTS_DIR` never takes a test's lines into its real log (feature 451 T32, observed 2026-11-20)
+    record_in(payload, &crate::shared::env::opt);
+}
+
+/// [`record`] with its environment given (feature 451 T38: the gate's `measure event-log hook`, whose test reads its own).
+pub fn record_in(payload: &Value, env: &dyn Fn(&str) -> Option<String>) {
     if payload.is_object() {
         let here = std::env::current_dir().unwrap_or_default();
-        // `shared::env`, here and in the writers above: a test reads its own environment, so a session's exported
-        // `L7R_EVENTS_DIR` never takes a test's lines into its real log (feature 451 T32, observed 2026-11-20)
-        let _ = append(
-            payload,
-            &now_stamp(SystemTime::now()),
-            &here,
-            &crate::shared::env::opt,
-        );
+        let _ = append(payload, &now_stamp(SystemTime::now()), &here, env);
     }
 }
 

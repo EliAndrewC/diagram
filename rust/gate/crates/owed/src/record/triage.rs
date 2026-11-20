@@ -244,13 +244,27 @@ fn manifest_parts(by_page: &ByPage, blocks: &Changed, modals: &[(String, Modal)]
 ///
 /// Where what it reads, writes or runs fails: the error says which and why.
 pub fn bundle(root: &Path, out: &Path, base: &str) -> Result<Option<(PathBuf, usize)>, Fail> {
+    bundle_in(root, out, base, &owed::store(root))
+}
+
+/// [`bundle`] reading the answer records `store` (feature 451 T38: a landing's replay names its own store here, where it set
+/// `RECORD_CHECKS_DIR` in the process's environment around the call).
+///
+/// # Errors
+///
+/// Where what it reads, writes or runs fails: the error says which and why.
+pub fn bundle_in(
+    root: &Path,
+    out: &Path,
+    base: &str,
+    store: &Path,
+) -> Result<Option<(PathBuf, usize)>, Fail> {
     let base = if base.is_empty() {
         merge_base(root)
     } else {
         base.to_owned()
     };
-    let store = owed::store(root);
-    let units = pending(root, &base, &store, None)?;
+    let units = pending(root, &base, store, None)?;
     if units.is_empty() {
         return Ok(None);
     }
@@ -276,9 +290,9 @@ pub fn bundle(root: &Path, out: &Path, base: &str) -> Result<Option<(PathBuf, us
             .filter(named)
         {
             let now = read_universal(&root.join(&path))?.unwrap_or_default();
-            let key = (path.clone(), baseline(&store, slug, &path));
+            let key = (path.clone(), baseline(store, slug, &path));
             if !blocks.contains_key(&key) {
-                let before = page_before(root, &store, slug, &path, &base, &mut read);
+                let before = page_before(root, store, slug, &path, &base, &mut read);
                 blocks.insert(key.clone(), changed_blocks(&before, &now));
             }
             by_page
@@ -454,8 +468,23 @@ pub fn refusal(
     check: &str,
     owed: Option<&[(String, String, String)]>,
 ) -> Result<String, Fail> {
+    refusal_in(root, &owed::store(root), m, check, owed)
+}
+
+/// [`refusal`] reading the answer records `store` (feature 451 T38: `make modal-bundle` names the store its root's environment
+/// gives, so a dependent's test never reads a session's exported one).
+///
+/// # Errors
+///
+/// Where what it reads, writes or runs fails: the error says which and why.
+pub fn refusal_in(
+    root: &Path,
+    store: &Path,
+    m: &Modal,
+    check: &str,
+    owed: Option<&[(String, String, String)]>,
+) -> Result<String, Fail> {
     let base = merge_base(root);
-    let store = owed::store(root);
     let slugs: HashSet<String> = if check == RESEARCH_AGENT {
         RESEARCH_CHECKS
             .iter()
@@ -464,7 +493,7 @@ pub fn refusal(
     } else {
         HashSet::from([format!("{check}:{}", m.uid())])
     };
-    let mut waiting: Vec<String> = pending(root, &base, &store, owed)?
+    let mut waiting: Vec<String> = pending(root, &base, store, owed)?
         .into_iter()
         .map(|p| p.0)
         .filter(|s| slugs.contains(s))

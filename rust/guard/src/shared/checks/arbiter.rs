@@ -63,12 +63,16 @@ pub fn asked_feature(root: &Path, trigger: &str) -> Option<PathBuf> {
 /// The environment's two feature pointers, read once per call of the public functions - through `shared::env`, which a test
 /// build reads from the test thread's own map, so a session's exported `L7R_FEATURE_DIRECTORY` never reaches a test (feature 451
 /// T32: a page session's export turned 17 tests of the check state and its guards, T24's defect in this crate's own tests).
-fn feature_env() -> (String, String) {
+fn feature_env(env: Env) -> (String, String) {
     (
-        crate::shared::env::var("L7R_FEATURE_DIRECTORY"),
-        crate::shared::env::var("SPECIFY_FEATURE"),
+        env("L7R_FEATURE_DIRECTORY").unwrap_or_default(),
+        env("SPECIFY_FEATURE").unwrap_or_default(),
     )
 }
+
+/// The environment an `_in` function reads (feature 451 T38): `shared::env::opt` for the process's, a `Rooted`'s reader for a
+/// dependent's own.
+type Env<'a> = &'a dyn Fn(&str) -> Option<String>;
 
 /// `feature_dir` with its environment given: a page session's own first, then the exported feature whose directory exists, then `.specify/feature.json`.
 #[must_use]
@@ -96,7 +100,14 @@ pub fn feature_dir_from(root: &Path, trigger: &str, own: &str, named: &str) -> O
 /// The active feature (`hm_arbiter.feature_dir`).
 #[must_use]
 pub fn feature_dir(root: &Path, trigger: &str) -> Option<PathBuf> {
-    let (own, named) = feature_env();
+    feature_dir_in(root, trigger, &crate::shared::env::opt)
+}
+
+/// [`feature_dir`] with its environment given (feature 451 T38: a gate crate passes the reader its root carries,
+/// `shared::env::Rooted`, so its tests read their own and never a session's exported pointer).
+#[must_use]
+pub fn feature_dir_in(root: &Path, trigger: &str, env: Env) -> Option<PathBuf> {
+    let (own, named) = feature_env(env);
     feature_dir_from(root, trigger, &own, &named)
 }
 
@@ -109,8 +120,8 @@ pub fn owed(root: &Path) -> Map<String, Value> {
     }
 }
 
-fn mine(root: &Path, v: &Value) -> bool {
-    let d = feature_dir(root, "");
+fn mine(root: &Path, v: &Value, env: Env) -> bool {
+    let d = feature_dir_in(root, "", env);
     super::falsy(v.get("feature"))
         || d.is_none()
         || d.is_some_and(|d| v.get("feature").and_then(Value::as_str) == Some(name_of(&d).as_str()))
@@ -119,9 +130,15 @@ fn mine(root: &Path, v: &Value) -> bool {
 /// The owed triggers another feature fired, left out of this feature's holds and named so none vanishes (`hm_arbiter.aside`).
 #[must_use]
 pub fn aside(root: &Path) -> Vec<String> {
+    aside_in(root, &crate::shared::env::opt)
+}
+
+/// [`aside`] with its environment given (feature 451 T38).
+#[must_use]
+pub fn aside_in(root: &Path, env: Env) -> Vec<String> {
     let mut out: Vec<String> = owed(root)
         .iter()
-        .filter(|(_, v)| !mine(root, v))
+        .filter(|(_, v)| !mine(root, v, env))
         .map(|(t, v)| {
             let feature = v.get("feature").map_or_else(String::new, py_text);
             format!("{t} (feature {feature})")
@@ -134,8 +151,14 @@ pub fn aside(root: &Path) -> Vec<String> {
 /// `{trigger: its ruling}` of the active feature, or of the feature `trigger` names.
 #[must_use]
 pub fn rulings(root: &Path, trigger: &str) -> Map<String, Value> {
+    rulings_in(root, trigger, &crate::shared::env::opt)
+}
+
+/// [`rulings`] with its environment given (feature 451 T38).
+#[must_use]
+pub fn rulings_in(root: &Path, trigger: &str, env: Env) -> Map<String, Value> {
     let mut out = Map::new();
-    let Some(d) = feature_dir(root, trigger) else {
+    let Some(d) = feature_dir_in(root, trigger, env) else {
         return out;
     };
     for line in super::reply::py_lines(
@@ -213,9 +236,15 @@ pub fn lapsed(root: &Path, prefix: &str, content: Option<&str>) -> u64 {
 /// The unruled triggers that hold the next dispatch on `unit`, or with `gate` the next `make done`.
 #[must_use]
 pub fn blocking(root: &Path, unit: &str, gate: bool) -> Vec<String> {
+    blocking_in(root, unit, gate, &crate::shared::env::opt)
+}
+
+/// [`blocking`] with its environment given (feature 451 T38).
+#[must_use]
+pub fn blocking_in(root: &Path, unit: &str, gate: bool, env: Env) -> Vec<String> {
     let mut out: Vec<String> = owed(root)
         .iter()
-        .filter(|(_, v)| mine(root, v))
+        .filter(|(_, v)| mine(root, v, env))
         .filter(|(_, v)| {
             let kind = text(v, "kind");
             if gate {
@@ -234,10 +263,18 @@ pub fn blocking(root: &Path, unit: &str, gate: bool) -> Vec<String> {
 /// Every round trigger owed now but a spec review's own, plus any round the session names (`hm_arbiter.batch_triggers`).
 #[must_use]
 pub fn batch_triggers(root: &Path, extra: &[String]) -> Vec<String> {
+    batch_triggers_in(root, extra, &crate::shared::env::opt)
+}
+
+/// [`batch_triggers`] with its environment given (feature 451 T38).
+#[must_use]
+pub fn batch_triggers_in(root: &Path, extra: &[String], env: Env) -> Vec<String> {
     let own = owed(root)
         .into_iter()
         .filter(|(t, v)| {
-            text(v, "kind") == "round" && !t.starts_with("round:spec-fidelity|") && mine(root, v)
+            text(v, "kind") == "round"
+                && !t.starts_with("round:spec-fidelity|")
+                && mine(root, v, env)
         })
         .map(|(t, _)| t);
     let mut out: Vec<String> = own
@@ -438,15 +475,25 @@ pub fn trip(
     when: &Value,
     review: &str,
 ) -> bool {
-    try_trip(root, trigger, kind, unit, detail, when, review).unwrap_or(false)
+    trip_in(
+        root,
+        trigger,
+        kind,
+        unit,
+        detail,
+        when,
+        review,
+        &crate::shared::env::opt,
+    )
 }
 
-/// Record a trigger once (a second firing changes nothing); true when it is new; `Err` where the file could not be written (the door's Python caller raises, as `hm_arbiter.trip` did). `now` is the epoch time written, null for the clock's; `review` names the spec or plan review an ask is about.
-///
-/// # Errors
-///
-/// The lock or the owed file cannot be had.
-pub fn try_trip(
+/// [`trip`] with its environment given (feature 451 T38).
+#[must_use]
+#[allow(
+    clippy::too_many_arguments,
+    reason = "trip's seven, and the environment it reads"
+)]
+pub fn trip_in(
     root: &Path,
     trigger: &str,
     kind: &str,
@@ -454,8 +501,33 @@ pub fn try_trip(
     detail: &str,
     when: &Value,
     review: &str,
+    env: Env,
+) -> bool {
+    try_trip_in(root, trigger, kind, unit, detail, when, review, env).unwrap_or(false)
+}
+
+/// Record a trigger once (a second firing changes nothing); true when it is new; `Err` where the file could not be written (the door's Python caller raises, as `hm_arbiter.trip` did). `now` is the epoch time written, null for the clock's; `review` names the spec or plan review an ask is about; `env` the
+/// environment its feature is read with (feature 451 T38: its one caller outside [`trip`], the reviews crate's checkpoint, passes the
+/// reader its root carries, so the environment-reading `try_trip` it replaced is gone).
+///
+/// # Errors
+///
+/// The lock or the owed file cannot be had.
+#[allow(
+    clippy::too_many_arguments,
+    reason = "try_trip's seven, and the environment it reads"
+)]
+pub fn try_trip_in(
+    root: &Path,
+    trigger: &str,
+    kind: &str,
+    unit: &str,
+    detail: &str,
+    when: &Value,
+    review: &str,
+    env: Env,
 ) -> Result<bool, String> {
-    if rulings(root, trigger).contains_key(trigger) {
+    if rulings_in(root, trigger, env).contains_key(trigger) {
         return Ok(false);
     }
     let common = common_dir(root);
@@ -464,7 +536,7 @@ pub fn try_trip(
         if state.get(trigger).is_some() {
             return false;
         }
-        let d = feature_dir(root, trigger);
+        let d = feature_dir_in(root, trigger, env);
         let mut row = Map::new();
         row.insert("kind".to_owned(), json!(kind));
         row.insert("unit".to_owned(), json!(unit));

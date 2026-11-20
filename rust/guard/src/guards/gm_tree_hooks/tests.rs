@@ -90,6 +90,22 @@ fn a_bash_write_lands_by_invocation_never_by_mention() {
         let read = event("Bash", &json!({ "command": read }), G);
         assert_eq!(offending(&read, G, "/h"), None);
     }
+    // 451 T42: a heredoc's Python program is judged by its body - one that writes, standing in the tree, is a write there
+    let heredoc = |body: &str| {
+        event(
+            "Bash",
+            &json!({ "command": format!("python3 - <<'PY'\n{body}\nPY\n# gm-assistant") }),
+            G,
+        )
+    };
+    assert_eq!(
+        offending(&heredoc("open('x', 'w').write('y')"), G, "/h").as_deref(),
+        Some(G)
+    );
+    assert_eq!(
+        offending(&heredoc("print(open('setting/a.md').read())"), G, "/h"),
+        None
+    );
 }
 
 #[test]

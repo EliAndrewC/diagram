@@ -6,6 +6,9 @@
 //! in could answer (the tree's own code, which can write anything); anything else stays a write, as D5 had it. The judgment is a
 //! DENYLIST of known writers - the calls, modules and argument shapes below - not a proof: a writer it does not name passes as a
 //! read, so each one found is added with its case.
+//!
+//! 451 T42: the same reader judges a program run from stdin - a heredoc's body (an unquoted delimiter's expanded by the shell
+//! first, a quoted one's literal) or a readable file's text - so `reads` takes the quote `'h'` for an unquoted heredoc's body.
 
 use std::path::Path;
 use std::sync::LazyLock;
@@ -23,6 +26,9 @@ static WRITES: LazyLock<Regex> = LazyLock::new(|| {
         r"write|\.touch\(|mkdir|makedirs|unlink|remove|rmdir|rmtree|rename|shutil|subprocess|system\(|popen|spawn|exec|\beval\(|__import__|importlib|runpy|\.dump\(|\bsave\w*\(|\bto_[a-z]+\(|tofile|chmod|chown|symlink|link_to|hardlink|\blink\(|truncate|os\.open|fdopen|sqlite3|dbm|shelve|tarfile|zipfile|tempfile|copy|move|sys\.path|setattr|getattr\(|vars\(|globals\(|__builtins__|__dict__|\bcompile\(|urlretrieve|FileIO|GzipFile|fileinput|utime|mknod|mkfifo|ctypes",
     )
 });
+/// `re.compile(` builds a pattern, never code, so it is read past before the writers are sought; the builtin `compile` and any
+/// other name's `.compile(` stay a write (451 T42: window#307's heredoc, a read, judged a write on its `re.compile`).
+static RE_COMPILE: LazyLock<Regex> = LazyLock::new(|| re(r"(?<![\w.])re\.compile\("));
 /// `replace(` writes only as `os.replace` or a `Path`'s (`str.replace`, the common read, cannot reach either without these names).
 static REPLACE: LazyLock<Regex> = LazyLock::new(|| re(r"replace\("));
 static PATHS: LazyLock<Regex> = LazyLock::new(|| re(r"\bos\b|Path|pathlib"));
@@ -44,16 +50,19 @@ fn found(p: &Regex, text: &str) -> bool {
     p.is_match(text).unwrap_or(false)
 }
 
-/// The program Python receives - a double-quoted body with the shell's `\"`, `\\`, `\$` and `` \` `` undone - and the byte offsets in it where the shell expands a `$` first (none in a single-quoted body).
+/// The program Python receives - a double-quoted body with the shell's `\"`, `\\`, `\$` and `` \` `` undone, an unquoted
+/// heredoc's (`'h'`) with all but `\"` undone (there `\"` is two characters, 451 T42) - and the byte offsets in it where the
+/// shell expands a `$` first (none in a single-quoted body, a quoted heredoc's or a file's, `'\''`).
 fn expansions(body: &str, quote: char) -> (String, Vec<usize>) {
-    if quote != '"' {
+    if quote == '\'' {
         return (body.to_owned(), Vec::new());
     }
+    let escapes = if quote == 'h' { "\\$`" } else { "\"\\$`" };
     let (mut out, mut at) = (String::new(), Vec::new());
     let mut chars = body.char_indices().peekable();
     while let Some((i, c)) = chars.next() {
         match (c, chars.peek()) {
-            ('\\', Some(&(_, n))) if "\"\\$`".contains(n) => {
+            ('\\', Some(&(_, n))) if escapes.contains(n) => {
                 out.push(n);
                 chars.next();
             }
@@ -204,16 +213,18 @@ fn imports(program: &str) -> Option<Vec<String>> {
     )
 }
 
-/// Whether the program `body` (quoted with `quote` on the command line), run in `dir`, only reads.
+/// Whether the program `body` (quoted with `quote` on the command line, `'h'` an unquoted heredoc's), run in `dir`, only reads.
 pub(super) fn reads(body: &str, quote: char, dir: Option<&str>) -> bool {
-    if quote == '"' && (body.contains("$(") || body.contains('`')) {
+    if quote != '\'' && (body.contains("$(") || body.contains('`')) {
         return false; // the shell runs a command substitution before Python sees the program
     }
     let (program, at) = expansions(body, quote);
     if outside_literals(&program, &at) {
         return false; // the shell puts text into the program's code before Python sees it
     }
-    if found(&WRITES, &program) || (found(&REPLACE, &program) && found(&PATHS, &program)) {
+    if found(&WRITES, &RE_COMPILE.replace_all(&program, "re.pattern("))
+        || (found(&REPLACE, &program) && found(&PATHS, &program))
+    {
         return false;
     }
     if !opens_read(&program) {

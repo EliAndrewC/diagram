@@ -153,7 +153,9 @@ PY";                                                 check "the commonest corpus
 run "$MAIN" "cp $MAIN/f /tmp/";                      check "copying FROM the mirror is a read -> allowed" 0 "$RC"
 run "$MAIN" "mkdir -p /tmp/x/y && touch /tmp/x/y/z"; check "mkdir and touch under /tmp -> allowed" 0 "$RC"
 run "$MAIN" "$(printf "python3 - <<'PY'\nprint(1)\nPY")"
-check "a python heredoc while standing in main (not in the write list, as before) -> allowed" 0 "$RC"
+check "a python heredoc that only reads, standing in main -> allowed (451 T42: its body judged a read)" 0 "$RC"
+run "$MAIN" "$(printf "python3 - <<'PY'\nimport pathlib\npathlib.Path('o.txt').write_text('x')\nPY")"
+check "  ...and one whose body WRITES -> rewritten, free (451 T42)" 0 "$RC"; rewritten "  ...into the clone" "cd $WORKER && python3 -"
 run "$MAIN" "curl -s https://example.org -o /tmp/page.html"; check "curl -o into /tmp -> allowed" 0 "$RC"
 
 echo "--- 4. a MENTION is not an invocation; the escape is ---"

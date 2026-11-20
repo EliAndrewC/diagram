@@ -511,20 +511,14 @@
    "reviewed": "2026-11-20",
    "declared": "spec-fidelity"
   },
-  "### T38 (<why: the finding or measurement that files it>)": {
-   "sha256": "b1541c0bac596efa05efb02c23dd2f84a01624056ba7065ff015729ff8770569",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-20",
-   "declared": "spec-fidelity"
-  },
   "### T38 Approach (checklist part A)": {
-   "sha256": "77e344a8ae148d97dafcdf4409c182200974bf4f636dceb6e1e18dc97c867b5c",
+   "sha256": "ec4d90160deaaa4c484c0f46a7521ba8e03fdfb06433069be653a0bc41ff2e11",
    "verdict": "CLEAR",
    "reviewed": "2026-11-20",
    "declared": "spec-fidelity"
   },
   "### T38 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)": {
-   "sha256": "f98e6174cfbdcc0647f654643583bbe9d77efb643575cef2a42a34390758cf9c",
+   "sha256": "69f16d9b3b0db18b1feabc7ad123e0fcab56c89363321047faac4092571646f0",
    "verdict": "CLEAR",
    "reviewed": "2026-11-20",
    "declared": "spec-fidelity"
@@ -589,14 +583,8 @@
    "reviewed": "2026-11-20",
    "declared": "spec-fidelity"
   },
-  "### T42 (<why: the finding or measurement that files it>)": {
-   "sha256": "705d957a6d25118f0e9446097faecaaac699c3e251d99d70176f4c3203453e7c",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-20",
-   "declared": "spec-fidelity"
-  },
   "### T42 Approach (checklist part A)": {
-   "sha256": "001e2b4dc467cdfb866bfd3a5b2d04608e1fd89905ce8d90d13828a77eebb0dd",
+   "sha256": "4b65ee61ebe0f6c0d6363ed00ce892b1b51d223a5680067a61fe5c9a1f76bf35",
    "verdict": "CLEAR",
    "reviewed": "2026-11-20",
    "declared": "spec-fidelity"
@@ -615,6 +603,54 @@
   },
   "### T43 (T40's finding: every owed computation read the record's pages at the merge base whole, 1,951 blobs by one `git cat-file --batch` for a one-page delta, 0.63-1.13 s of each 1.4-1.6 s computation, measured 2026-11-20 (T40's `git` shim))": {
    "sha256": "0c57647cca27d619b5dfe53345ecbcb1b9f092e7b387c250b90082cd037d67a0",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity"
+  },
+  "### T42 (found by T31, 2026-11-20: a Python program run from stdin that writes, standing in the mirror, was judged by no one, and T31's stdin rule kept three real reads refused or rewritten - main-tree#147, window#339, window#361; observed 2026-11-20, method: T31's replays and `heredoc_writers.py`)": {
+   "sha256": "2b8f5212bc847b429492003c8f00719bbbac70b5b64cd0a1a15c48004d28b8d4",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity"
+  },
+  "### T38 (the gate crates' tests read the real environment through the guard: with `L7R_FEATURE_DIRECTORY` and `L7R_EVENTS_DIR` exported, 49 tests of 7 gate crates failed, found by T32, observed 2026-11-20, method: T32's per-crate sweep, `/tmp/t32-sweep/all2/summary.txt`)": {
+   "sha256": "e44f0b75b880a4ed050f30b5b94cd0d99cd2ba9e223a2cab676a9348333a3bee",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity"
+  },
+  "### T44 (<why: the finding or measurement that files it>)": {
+   "sha256": "8fd06ddb7c5affad290c7b19cbc28651b157ac6678e637476a1dee9fb0ac62d1",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity"
+  },
+  "### T44 Approach (checklist part A)": {
+   "sha256": "2e66f92724da2df6c1292677a53b75c2826abdc5bf3e39b80d32257d9426a91d",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity"
+  },
+  "### T45 (<why: the finding or measurement that files it>)": {
+   "sha256": "8d8a57f3d8c072ad64d6f8c8f67eac130bafa3dddf1ae7b5b6e19dbf6be1ea7a",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity"
+  },
+  "### T45 Approach (checklist part A)": {
+   "sha256": "83905e9d729d7be51145630d015cc42a50b1e868d4329256b71ab9e8a6ec88fb",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity"
+  },
+  "### T46 (<why: the finding or measurement that files it>)": {
+   "sha256": "a6d6d7f4558672edd2e620e93d1efdf44b07626217925d97bafdf5b200fdbf4d",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity"
+  },
+  "### T46 Approach (checklist part A)": {
+   "sha256": "fb86b02562ac853e421713f4d7d04d55dac5d5219564afc60d03c42cd8745e7e",
    "verdict": "CLEAR",
    "reviewed": "2026-11-20",
    "declared": "spec-fidelity"
@@ -5283,6 +5319,396 @@
      "why": "Shows the checks still do their job after a speed change (their verdicts unchanged); the printed-path difference is accepted rather than held to exactness, consistent with the GM's 2026-11-18 rule."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-20",
+   "blocks": [
+    "### T42 (found by T31, 2026-11-20: a Python program run from stdin that writes, standing in the mirror, was judged by no one, and T31's stdin rule kept three real reads refused or rewritten - main-tree#147, window#339, window#361; observed 2026-11-20, method: T31's replays and `heredoc_writers.py`)",
+    "### T42 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T42-1 stdin program judged by py_c reads",
+     "summary": "A Python program run from stdin (own heredoc, own < regular file, or an upstream cat of one heredoc or readable file) is judged by T31's denylist reader as a -c program is: a writer is a shell-standing write, a read is no target; T31's stdin rule retired for every readable program.",
+     "class": "within",
+     "why": "Fixes two defects in the constitution XIV sense (a write in the mirror judged by no one passes bad work; three real reads refused or rewritten refuse good work), which fix-as-we-go (GM 2026-11-18) requires, found by T31 inside this feature. It narrows nothing the GM asked for."
+    },
+    {
+     "id": "T42-2 an unreadable stdin program keeps T31's rule",
+     "summary": "A variable, here-string, missing file, directory, device or other upstream is a program the walk cannot read; the command's -c reads stay D5 writes as T31 left them.",
+     "class": "within",
+     "why": "The task line itself keeps that case ('a program fed from a variable or a file outside the command stays judged as T31 left it'); behavior is unchanged from HEAD for that case and is the denylist's closed side, so nothing is newly left and no ruling is owed."
+    },
+    {
+     "id": "T42-3 two walks",
+     "summary": "walk_judged (judge, its re-judge, gm_tree_hooks::offending) sees stdin programs; walk (house style, make-only, bench) does not, keeping house style's D11 and its pinned case.",
+     "class": "within",
+     "why": "Limits the change to the guards whose wrong outcomes were found; the other readers' behavior is unchanged (0 moves measured by replay). This is the scope of the fix, not a narrowing of any request clause."
+    },
+    {
+     "id": "T42-4 unquoted-heredoc quote 'h'",
+     "summary": "An unquoted heredoc body undoes the shell's escapes and treats a command substitution as a write, like a double-quoted -c.",
+     "class": "within",
+     "why": "Implementation correctness of T42-1; decides nothing the request or spec leaves open."
+    },
+    {
+     "id": "T42-5 re.compile read past",
+     "summary": "re.compile( is not a writer; the builtin compile and any other .compile( stay writes.",
+     "class": "within",
+     "why": "A defect (a read judged a writer) found by this task's replay and fixed in it, as fix-as-we-go asks; the conservative remainder keeps every write caught before still caught."
+    },
+    {
+     "id": "T42-6 fixture relabeled and suite case added",
+     "summary": "main-tree-refusals-2026-09.json relabeled from the t replay (5 allowed->rewrote, 1 rewrote->allowed); a heredoc writer in the mirror -> rewritten added.",
+     "class": "within",
+     "why": "The fixture follows the fixed behavior (a check's verdicts changing as a bug is fixed is expected, GM 2026-11-18); the new case is a red-first test enforcing the fix."
+    },
+    {
+     "id": "T42-7 window#307 left, filed as T44",
+     "summary": "window#307's read-only heredoc that calls subprocess.run([git, -C, root, ls-files]) moves from allowed to refused/rewritten under T42 (subprocess is on T31's denylist); the argv reader that would let it through is filed as T44, landing before T22.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "It leaves a defect (a read refused) and T42 newly produces this one occurrence, so it is a narrowing and owes a ruling. It is legitimate on the GM's own words: 'we should fix all known bugs in each step before moving on to porting the next step' (2026-11-18) puts the unit at the step, and T44 is filed and ordered to land before T22, the next step. It is also a separate mechanism (an argv reader past a name denylist), and the same program as -c has been refused this way since T31, so T42 extends existing closed-side behavior to one more spelling rather than inventing a new refusal. The alternative, keeping heredocs unjudged, leaves 78 mirror writers uncaught, a worse defect. The ruling holds only while T44 lands before T22; a plan that lets T22 start with T44 open carries a known defect into the next step."
+    },
+    {
+     "id": "T42-8 tagged [perf], not PERF=1",
+     "summary": "T42 is classed performance work under FR-013 (the builders' loop: each wrongly refused read costs a model round trip), tagged [perf] and not filed with PERF=1.",
+     "class": "within",
+     "why": "FR-013 accepts either PERF=1 or a [perf] tag, and names the builders' loop as performance work; removing wrong refusals shortens it. It is mainly a correctness fix, which fix-as-we-go orders first in any case, so the class changes nothing the GM asked for."
+    },
+    {
+     "id": "T42-9 order and exits",
+     "summary": "After T31, before T22, beside T38; green exits include make static once; red sets the task down and goes to make arbiter-ask.",
+     "class": "within",
+     "why": "Consistent with FR-007 (make static once before the landing) and with fix-as-we-go's order; decides nothing against the request."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-20",
+   "blocks": [
+    "### T42 (found by T31, 2026-11-20: a Python program run from stdin that writes, standing in the mirror, was judged by no one, and T31's stdin rule kept three real reads refused or rewritten - main-tree#147, window#339, window#361; observed 2026-11-20, method: T31's replays and `heredoc_writers.py`)",
+    "### T42 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T42-approach",
+     "summary": "A Python program run from stdin (own heredoc, own < regular file, or an upstream cat of one heredoc/file) is judged by T31's py_c denylist reader as a -c program is; T31's stdin rule is retired for every program the walk can read.",
+     "class": "within",
+     "why": "A defect fix in both directions: a writer standing in the mirror judged by no one (a check passing bad work) and three reads refused or rewritten (a check refusing good work), both wrong outcomes under constitution XIV. Nothing the GM or the spec asked for is narrowed; every write caught before is still caught (replays: 0 other outputs changed)."
+    },
+    {
+     "id": "T42-unreadable-keeps-T31",
+     "summary": "A stdin program the walk cannot read (variable, here-string, missing file, directory, device, any other upstream) keeps T31's rule: every -c read of the command is a write.",
+     "class": "within",
+     "why": "The block quotes T42's own task line for exactly this case ('a program fed from a variable or a file outside the command stays judged as T31 left it'); it narrows nothing asked and holds the closed side for what cannot be read."
+    },
+    {
+     "id": "T42-two-walks",
+     "summary": "walk_judged (judge, its re-judge, gm_tree offending) judges stdin programs; walk (house style, make-only, bench) sees none, as before.",
+     "class": "within",
+     "why": "Keeps house style's D11 (a program heredoc's writes unknowable) and its pinned case unchanged; the replays show 0 moves under house style and gm-tree alone. It leaves those readers as they were rather than narrowing anything requested."
+    },
+    {
+     "id": "T42-py_c-quote-and-re-compile",
+     "summary": "py_c gains the unquoted-heredoc quote 'h' (shell un-escaping, command substitution a write) and reads past re.compile( (a pattern, not code); builtin compile and other .compile( stay writes.",
+     "class": "within",
+     "why": "The first is what judging an unquoted heredoc body correctly needs; the second fixes a defect found by the replay's hand-read (window#307's read judged a writer). Both are defect fixes; the re.compile replay moved 0 rows."
+    },
+    {
+     "id": "T42-split-fixture-record",
+     "summary": "tree.rs split into tree/python.rs and tree/verdict.rs for the file-scale bar; main-tree refusals fixture relabeled from the t replay (5 allowed->rewrote, 1 rewrote->allowed); T31's '301 allowed' line corrected to place each heredoc by where the shell stands.",
+     "class": "within",
+     "why": "Housekeeping and record correction: a check's expected verdicts changing as a bug is fixed is expected (fix as we go), and restating a record to match measurement narrows nothing."
+    },
+    {
+     "id": "T42-left-window307-T44",
+     "summary": "window#307's second heredoc, a read (subprocess.run git ls-files), is now refused with no clone / rewritten with one, because subprocess is on T31's denylist; left, filed as T44, lands before T22.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This narrows T42's own goal (a read runs as typed) and is a defect left: T42 moves this row from allowed to refused by extending to stdin the rule the -c form has had since T31. The difficulty of an argv reader legitimates nothing. What makes it legitimate is the GM's own rule (2026-11-18): known defects are fixed before moving on to the next step, not necessarily inside the task that finds them. T44 is filed and placed before T22, the same point T42's own order names, so the defect is not carried into the next step. With a clone resolvable (the builders' case) the row is rewritten to run in the clone, not refused. Not retiring the -c/stdin denylist entry here also avoids leaving 92 writers unjudged."
+    },
+    {
+     "id": "T42-left-house-style-flake-T45",
+     "summary": "House style's verdict varied under load in one nobody replay (8 rows flipped, 3 outputs changed; reruns 0); left, filed as T45, measured first under induced load, lands before T22.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "A pre-existing defect in code T42 does not touch (house style's walk and verdict unchanged, 0 moves in every steady replay) whose cause is not yet found. It is not carried into the next step: T45 lands before T22, which satisfies the GM's fix-before-moving-on rule. Ruled separately from window#307 because it is unlike it: T42 did not create it."
+    },
+    {
+     "id": "T42-perf-classification",
+     "summary": "T42 declared performance work in FR-013's sense ([perf], the builders' loop: a refused read costs a model round trip), not filed with PERF=1.",
+     "class": "within",
+     "why": "FR-013 takes either PERF=1 or a [perf] tag, and names the builders' loop. On the plain reading the task carries [perf]. The task line itself is not in the bundle, so the tag is taken from the block's own statement. The claim is thin (3 reads freed against 93 newly judged), but the work is owed as a defect fix regardless, and the classification narrows nothing the GM asked."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-20",
+   "blocks": [
+    "### T42 (found by T31, 2026-11-20: a Python program run from stdin that writes, standing in the mirror, was judged by no one, and T31's stdin rule kept three real reads refused or rewritten - main-tree#147, window#339, window#361; observed 2026-11-20, method: T31's replays and `heredoc_writers.py`)",
+    "### T42 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T42-approach",
+     "summary": "A Python program run from stdin (own heredoc, own < regular file, or an upstream cat of one heredoc/file) is judged by T31's py_c denylist reader as a -c program is; T31's stdin rule is retired for every program the walk can read.",
+     "class": "within",
+     "why": "A defect fix in both directions: a writer standing in the mirror judged by no one (a check passing bad work) and three reads refused or rewritten (a check refusing good work), both wrong outcomes under constitution XIV. Nothing the GM or the spec asked for is narrowed; every write caught before is still caught (replays: 0 other outputs changed)."
+    },
+    {
+     "id": "T42-unreadable-keeps-T31",
+     "summary": "A stdin program the walk cannot read (variable, here-string, missing file, directory, device, any other upstream) keeps T31's rule: every -c read of the command is a write.",
+     "class": "within",
+     "why": "The block quotes T42's own task line for exactly this case ('a program fed from a variable or a file outside the command stays judged as T31 left it'); it narrows nothing asked and holds the closed side for what cannot be read."
+    },
+    {
+     "id": "T42-two-walks",
+     "summary": "walk_judged (judge, its re-judge, gm_tree offending) judges stdin programs; walk (house style, make-only, bench) sees none, as before.",
+     "class": "within",
+     "why": "Keeps house style's D11 (a program heredoc's writes unknowable) and its pinned case unchanged; the replays show 0 moves under house style and gm-tree alone. It leaves those readers as they were rather than narrowing anything requested."
+    },
+    {
+     "id": "T42-py_c-quote-and-re-compile",
+     "summary": "py_c gains the unquoted-heredoc quote 'h' (shell un-escaping, command substitution a write) and reads past re.compile( (a pattern, not code); builtin compile and other .compile( stay writes.",
+     "class": "within",
+     "why": "The first is what judging an unquoted heredoc body correctly needs; the second fixes a defect found by the replay's hand-read (window#307's read judged a writer). Both are defect fixes; the re.compile replay moved 0 rows."
+    },
+    {
+     "id": "T42-split-fixture-record",
+     "summary": "tree.rs split into tree/python.rs and tree/verdict.rs for the file-scale bar; main-tree refusals fixture relabeled from the t replay (5 allowed->rewrote, 1 rewrote->allowed); T31's '301 allowed' line corrected to place each heredoc by where the shell stands.",
+     "class": "within",
+     "why": "Housekeeping and record correction: a check's expected verdicts changing as a bug is fixed is expected (fix as we go), and restating a record to match measurement narrows nothing."
+    },
+    {
+     "id": "T42-left-window307-T44",
+     "summary": "window#307's second heredoc, a read (subprocess.run git ls-files), is now refused with no clone / rewritten with one, because subprocess is on T31's denylist; left, filed as T44, lands before T22.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This narrows T42's own goal (a read runs as typed) and is a defect left: T42 moves this row from allowed to refused by extending to stdin the rule the -c form has had since T31. The difficulty of an argv reader legitimates nothing. What makes it legitimate is the GM's own rule (2026-11-18): known defects are fixed before moving on to the next step, not necessarily inside the task that finds them. T44 is filed and placed before T22, the same point T42's own order names, so the defect is not carried into the next step. With a clone resolvable (the builders' case) the row is rewritten to run in the clone, not refused. Not retiring the -c/stdin denylist entry here also avoids leaving 92 writers unjudged."
+    },
+    {
+     "id": "T42-left-house-style-flake-T45",
+     "summary": "House style's verdict varied under load in one nobody replay (8 rows flipped, 3 outputs changed; reruns 0); left, filed as T45, measured first under induced load, lands before T22.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "A pre-existing defect in code T42 does not touch (house style's walk and verdict unchanged, 0 moves in every steady replay) whose cause is not yet found. It is not carried into the next step: T45 lands before T22, which satisfies the GM's fix-before-moving-on rule. Ruled separately from window#307 because it is unlike it: T42 did not create it."
+    },
+    {
+     "id": "T42-perf-classification",
+     "summary": "T42 declared performance work in FR-013's sense ([perf], the builders' loop: a refused read costs a model round trip), not filed with PERF=1.",
+     "class": "within",
+     "why": "FR-013 takes either PERF=1 or a [perf] tag, and names the builders' loop. On the plain reading the task carries [perf]. The task line itself is not in the bundle, so the tag is taken from the block's own statement. The claim is thin (3 reads freed against 93 newly judged), but the work is owed as a defect fix regardless, and the classification narrows nothing the GM asked."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-20",
+   "blocks": [
+    "### T38 (the gate crates' tests read the real environment through the guard: with `L7R_FEATURE_DIRECTORY` and `L7R_EVENTS_DIR` exported, 49 tests of 7 gate crates failed, found by T32, observed 2026-11-20, method: T32's per-crate sweep, `/tmp/t32-sweep/all2/summary.txt`)",
+    "### T38 Approach (checklist part A)",
+    "### T38 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T38-perf",
+     "summary": "T38 is filed as performance work under FR-013: gate crates' tests stop reading the builder's shell exports, so a builder no longer spends a round on 49 reds caused by its shell, and a test no longer writes into or deletes a real event log or answer store.",
+     "class": "within",
+     "why": "FR-013 counts work that makes the builders' loop faster as performance work, and the GM asked on 2026-11-20 that performance work go first. Tests that fail because of the environment and tests that delete real answer records are wrong outcomes, so fixing them is also fix-as-we-go work."
+    },
+    {
+     "id": "seam",
+     "summary": "The seam is shared::env::Rooted, a root with its own env reader that derefs to &Path. It is threaded through every call site that reads the guard (owed, reviews, rustc, measure, bundle, record, land, arbiter). The guard's explicit-env _in variants are made public, and the old names become wrappers over shared::env::opt.",
+     "class": "within",
+     "why": "This is how the fix is built. It does not narrow FR-013 or the request."
+    },
+    {
+     "id": "no-cargo-feature",
+     "summary": "The cargo dev-dependency feature route was measured with cargo tree and ruled out. It would reach a package's whole test build, its binary included, and the task line forbids it.",
+     "class": "within",
+     "why": "Choosing between two ways to build the fix is not a narrowing. The choice is measured, and the GM's request does not depend on it."
+    },
+    {
+     "id": "no-process-env-in-tests",
+     "summary": "No test sets the process's environment. Land's restore helper, which set and removed a process variable, is removed together with its test.",
+     "class": "within",
+     "why": "A test that set a process variable was part of the defect, so removing it is part of the fix."
+    },
+    {
+     "id": "try_trip-removed",
+     "summary": "try_trip had no caller left and is deleted.",
+     "class": "within",
+     "why": "Removing dead code inside the fix changes no behavior anyone asked to keep."
+    },
+    {
+     "id": "sweep-12-fixed",
+     "summary": "The 78-variable sweep moved 12 more tests (owed 11, land 1) through RECORD_CHECKS_DIR. Those 12 are fixed here: owed's own reads go behind answers::record_checks_dir, and land's replay hands bundle_in its store.",
+     "class": "within",
+     "why": "These are defects of the same kind, found during this step and fixed in it, as fix-as-we-go requires."
+    },
+    {
+     "id": "answers-split",
+     "summary": "owed/answers.rs went over the 1,000-line bar at 1,012 lines. Its command-line half is split into answers/cli.rs, leaving 807 lines.",
+     "class": "within",
+     "why": "The task's own growth tripped the file-scale check, and the plan fixes that here."
+    },
+    {
+     "id": "tree-rs-to-T42",
+     "summary": "rust/guard/src/shared/tree.rs at 1,064 lines belongs to T42 and is left to T42. T42's split has since brought it to 673 lines, and make quick is clean.",
+     "class": "within",
+     "why": "Another task owns the file and has already fixed it (measured), so no known defect is carried past this step."
+    },
+    {
+     "id": "check-keys-earlier-section",
+     "summary": "The bundle crate's check and keys bundles still reach earlier::section through its process wrapper. The plan says this is not a defect: no test outcome moved with any variable exported, and nothing is written.",
+     "class": "within",
+     "why": "The before-rest and after3 sweeps measured no wrong outcome. By the constitution XIV definition, a read that moves no outcome is a difference, not a defect, so leaving it needs no ruling."
+    },
+    {
+     "id": "guard-cargo-dropped",
+     "summary": "L7R_GUARD_CARGO is classed as a runner variable and dropped from the swept list (77 swept). The 19 bundle reds once attributed to it were not borne out: exported alone it moved none, and bundle was green with all 78 after the store fix.",
+     "class": "within",
+     "why": "Only bundle was measured for this variable: exported alone it moved none, and with all 78 after the store fix bundle was green (guard-cargo-bundle.log, bundle-78.log). The 27-crate after3 sweep ran with 77 variables. Which variables the sweep lists is not part of the GM's request or of FR-013, and no wrong outcome is shown, so it is within."
+    },
+    {
+     "id": "delta-store-left",
+     "summary": "Delta::store and sibling_stores still read the process's RECORD_CHECKS_DIR. Against a seeded exported store, the 8 crates that reach them were each green and the store was unchanged (diff -r empty). No test reaches either read, and in the binary they are the real reads.",
+     "class": "within",
+     "why": "A wrong outcome was checked for and none was found (measured). In production the process read is the correct behavior. Not a defect."
+    },
+    {
+     "id": "t32-claim-restated",
+     "summary": "T32's cargo-feature claim is restated as narrower than T32 said: the feature reaches a test build's binary but never the tool binaries.",
+     "class": "within",
+     "why": "Correcting a claim to match measurement changes no code, so it is not a narrowing."
+    },
+    {
+     "id": "twice-run-rust-gate",
+     "summary": "rust/gate was left out of the run twice against one store and was covered instead by the seeded-store run (green, store unchanged).",
+     "class": "within",
+     "why": "This is exit-evidence coverage inside the task, it is measured, and it narrows nothing that was asked."
+    },
+    {
+     "id": "exits-and-order",
+     "summary": "Exits: 7 crates and the guard green both plain and exported, every gate crate swept, 100% coverage of each changed crate, make static once. Order: after T32, independent of T42, lands before T22. Budget: one landing.",
+     "class": "within",
+     "why": "These are exit conditions and ordering inside the task. They narrow nothing in the request or in FR-013."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-20",
+   "blocks": [
+    "### T38 (the gate crates' tests read the real environment through the guard: with `L7R_FEATURE_DIRECTORY` and `L7R_EVENTS_DIR` exported, 49 tests of 7 gate crates failed, found by T32, observed 2026-11-20, method: T32's per-crate sweep, `/tmp/t32-sweep/all2/summary.txt`)",
+    "### T38 Approach (checklist part A)",
+    "### T38 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)",
+    "### T44 (<why: the finding or measurement that files it>)",
+    "### T44 Approach (checklist part A)",
+    "### T45 (<why: the finding or measurement that files it>)",
+    "### T45 Approach (checklist part A)",
+    "### T46 (<why: the finding or measurement that files it>)",
+    "### T46 Approach (checklist part A)",
+    "(removed) ### T38 (<why: the finding or measurement that files it>)",
+    "(removed) ### T42 (<why: the finding or measurement that files it>)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T38-seam",
+     "summary": "The guard's explicit-environment `_in` variants made public; each gate crate hands them a `shared::env::Rooted` (root plus environment reader, derefs to the root); old names stay as wrappers over `shared::env::opt`; no cargo feature, no test sets the process environment.",
+     "class": "within",
+     "why": "This is the task as filed (the gate crates' tests read the real environment through the guard) under FR-013's performance work on the builders' loop: a builder's gate-crate run is no longer red from its shell's exports. Nothing the request or spec asks for is dropped."
+    },
+    {
+     "id": "T38-try_trip-removed",
+     "summary": "`arbiter::try_trip` had no caller left and is deleted.",
+     "class": "within",
+     "why": "Removing a function with no caller narrows nothing the GM or the spec asked for."
+    },
+    {
+     "id": "T38-record-checks-dir",
+     "summary": "The fix widened to `RECORD_CHECKS_DIR` (owed's own reads, land's replay setting it in the process, record's round and bundle's modal chain reading and writing the process's answer store), all fixed here, red first and measured.",
+     "class": "within",
+     "why": "Fixing a defect found in the task, in the task (fix as we go, constitution XIV): tests writing into and deleting a session's real answer store is a wrong outcome. It widens the work; it narrows nothing."
+    },
+    {
+     "id": "T38-answers-split",
+     "summary": "`owed/answers.rs` split, its command-line half moved to `answers/cli.rs`, to get back under the file-scale test's 1,000-line bar.",
+     "class": "within",
+     "why": "A check this task tripped, fixed in the task."
+    },
+    {
+     "id": "T38-tree-rs-deferral",
+     "summary": "`rust/guard/src/shared/tree.rs` over the file-scale bar (1,064 lines) not fixed here: deferred to T42, lands before T22; T42's split has since left it at 673 lines and `make quick` clean.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Leaving a failing check to another task is a narrowing, so it is ruled. Legitimate because: (1) the GM approved improvement 4 (2026-11-19), and FR-009/D15 provide for exactly this deferral, with why it is not fixed here, a filed task and an order; (2) the block carries all three: the file was another builder's, mid-edit in this clone; filed as T42; lands before T22; (3) the defect is measured gone (673 lines, make quick clean, 2026-11-20), so no known defect is carried past this step."
+    },
+    {
+     "id": "T38-check-keys-wrapper",
+     "summary": "Bundle's `check` and `keys` bundles still reach `earlier::section` through its process wrapper: not a defect (reads only the active feature and its rulings, writes nothing, no test outcome moved under any exported variable).",
+     "class": "within",
+     "why": "Per constitution XIV v2.36.0 a defect is a wrong outcome. Measured: no test moved with every variable exported, and nothing is written. A path that only differs from the seam's form, with no wrong outcome, needs no ruling, and leaving it is not a narrowing of the GM's request or of FR-013."
+    },
+    {
+     "id": "T38-delta-store",
+     "summary": "`Delta::store` and `sibling_stores` still read the process's `RECORD_CHECKS_DIR`: not a defect, since no test reaches them (shown by a seeded-store run of 8 crates, green and the store unchanged under diff -r); the binary's reads are the real ones.",
+     "class": "within",
+     "why": "Measured to have no wrong outcome: no test reads or writes the real store through them, and the production binary reading the real store is correct behavior. Not a defect, so leaving it narrows nothing."
+    },
+    {
+     "id": "T38-guard-cargo-dropped",
+     "summary": "`L7R_GUARD_CARGO` dropped from the sweep's variable list as a runner variable (77 swept). The 19 bundle reds once attributed to it are not borne out: exported alone it moved none, and bundle was green with all 78 after the store fix. Their cause (the shared pre-filled store) is labeled a guess.",
+     "class": "within",
+     "why": "Within: 'every gate crate swept' is the task line's wording, not the GM's or the spec's. The variable was measured alone and in the full 78-variable set for the bundle crate only (guard-cargo-bundle.log, after3/bundle-78.log), with no outcome moved; the other gate crates were swept with 77. Dropping it there rests on the block's unlabelled statement that only the hook launcher and the guard's bench read it, following T32's precedent of dropping runner names. No red is left to carry, and the unmeasured cause of the earlier 19 is labeled a guess, not stated as fact."
+    },
+    {
+     "id": "T38-cargo-feature-claim",
+     "summary": "T32's claim about the cargo-feature route restated as narrower (a dev-dependency feature reaches a package's test build, binary included, never the tool binaries); the route stays out by the task line's words.",
+     "class": "within",
+     "why": "Restating a claim to match measurement (cargo tree) and keeping to the task's own exclusion. No requested behavior is dropped."
+    },
+    {
+     "id": "T38-order-exits",
+     "summary": "Order: after T32, independent of T42, lands before T22. Exits: the 7 crates and the guard green plain and exported, the sweep of every gate crate green, the store left empty, lint and cover clean, `make static` once, `make quick`, `make hooks-test`.",
+     "class": "within",
+     "why": "Ordering and acceptance measurements inside the task. `make static` once matches FR-007's intent."
+    },
+    {
+     "id": "T38-restore-helper-removed",
+     "summary": "Land's `restore` helper, which set and removed a process variable around `triage::bundle`, is deleted with its test; the replay now hands `bundle_in` its store.",
+     "class": "within",
+     "why": "The task forbids a test changing the process environment, and the helper existed only to do that. Its test goes with it because nothing is left for it to test, and the replay's behavior is still covered through `bundle_in`."
+    },
+    {
+     "id": "T38-rust-gate-not-twice",
+     "summary": "`rust/gate` left out of the twice-against-one-store run; it was green once against the seeded store with diff -r empty, and is in the 27-crate sweep.",
+     "class": "within",
+     "why": "An acceptance measurement inside the task, with the gap stated openly and covered by the seeded-store run. It narrows nothing the GM or the spec asked for."
+    },
+    {
+     "id": "T38-perf-classification",
+     "summary": "Marked `[perf]` under FR-013 (removes builders' red rounds caused by the shell's exports), not engine speed; the performance checklist is answered with stage-time n/a and no map moved.",
+     "class": "within",
+     "why": "FR-013 counts work that makes the builders' loop faster as performance work. The claim is backed by the 49-before / 0-after measurement."
+    },
+    {
+     "id": "T44-T45-T46-templates",
+     "summary": "Three new tasks' template sections (T44 from T42, T45 and T46 from T42's builders), all placeholders.",
+     "class": "within",
+     "why": "Unfilled templates decide nothing."
+    },
+    {
+     "id": "removed-T38-T42-template-headings",
+     "summary": "The T38 and T42 template headings removed: T38's replaced by its built section above, T42's template removed.",
+     "class": "within",
+     "why": "Their earlier text (earlier.md) was pure placeholder with no decision, so removing them loses no decision."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -7207,6 +7633,156 @@
      "summary": "Owed output checked against the HEAD build on eight real commits plus the reword (53 listing pairs, three triage bundles, fingerprint cross-checks); triage outputs differ only in the printed --out path, accepted.",
      "class": "within",
      "why": "Shows the checks still do their job after a speed change (their verdicts unchanged); the printed-path difference is accepted rather than held to exactness, consistent with the GM's 2026-11-18 rule."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T42": {
+   "section_sha256": "ee39c1fdd396bf71d5072ec8c7694347ba0eba6cc8c5dd807c9e2562ecdc9317",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T42-approach",
+     "summary": "A Python program run from stdin (own heredoc, own < regular file, or an upstream cat of one heredoc/file) is judged by T31's py_c denylist reader as a -c program is; T31's stdin rule is retired for every program the walk can read.",
+     "class": "within",
+     "why": "A defect fix in both directions: a writer standing in the mirror judged by no one (a check passing bad work) and three reads refused or rewritten (a check refusing good work), both wrong outcomes under constitution XIV. Nothing the GM or the spec asked for is narrowed; every write caught before is still caught (replays: 0 other outputs changed)."
+    },
+    {
+     "id": "T42-unreadable-keeps-T31",
+     "summary": "A stdin program the walk cannot read (variable, here-string, missing file, directory, device, any other upstream) keeps T31's rule: every -c read of the command is a write.",
+     "class": "within",
+     "why": "The block quotes T42's own task line for exactly this case ('a program fed from a variable or a file outside the command stays judged as T31 left it'); it narrows nothing asked and holds the closed side for what cannot be read."
+    },
+    {
+     "id": "T42-two-walks",
+     "summary": "walk_judged (judge, its re-judge, gm_tree offending) judges stdin programs; walk (house style, make-only, bench) sees none, as before.",
+     "class": "within",
+     "why": "Keeps house style's D11 (a program heredoc's writes unknowable) and its pinned case unchanged; the replays show 0 moves under house style and gm-tree alone. It leaves those readers as they were rather than narrowing anything requested."
+    },
+    {
+     "id": "T42-py_c-quote-and-re-compile",
+     "summary": "py_c gains the unquoted-heredoc quote 'h' (shell un-escaping, command substitution a write) and reads past re.compile( (a pattern, not code); builtin compile and other .compile( stay writes.",
+     "class": "within",
+     "why": "The first is what judging an unquoted heredoc body correctly needs; the second fixes a defect found by the replay's hand-read (window#307's read judged a writer). Both are defect fixes; the re.compile replay moved 0 rows."
+    },
+    {
+     "id": "T42-split-fixture-record",
+     "summary": "tree.rs split into tree/python.rs and tree/verdict.rs for the file-scale bar; main-tree refusals fixture relabeled from the t replay (5 allowed->rewrote, 1 rewrote->allowed); T31's '301 allowed' line corrected to place each heredoc by where the shell stands.",
+     "class": "within",
+     "why": "Housekeeping and record correction: a check's expected verdicts changing as a bug is fixed is expected (fix as we go), and restating a record to match measurement narrows nothing."
+    },
+    {
+     "id": "T42-left-window307-T44",
+     "summary": "window#307's second heredoc, a read (subprocess.run git ls-files), is now refused with no clone / rewritten with one, because subprocess is on T31's denylist; left, filed as T44, lands before T22.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This narrows T42's own goal (a read runs as typed) and is a defect left: T42 moves this row from allowed to refused by extending to stdin the rule the -c form has had since T31. The difficulty of an argv reader legitimates nothing. What makes it legitimate is the GM's own rule (2026-11-18): known defects are fixed before moving on to the next step, not necessarily inside the task that finds them. T44 is filed and placed before T22, the same point T42's own order names, so the defect is not carried into the next step. With a clone resolvable (the builders' case) the row is rewritten to run in the clone, not refused. Not retiring the -c/stdin denylist entry here also avoids leaving 92 writers unjudged."
+    },
+    {
+     "id": "T42-left-house-style-flake-T45",
+     "summary": "House style's verdict varied under load in one nobody replay (8 rows flipped, 3 outputs changed; reruns 0); left, filed as T45, measured first under induced load, lands before T22.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "A pre-existing defect in code T42 does not touch (house style's walk and verdict unchanged, 0 moves in every steady replay) whose cause is not yet found. It is not carried into the next step: T45 lands before T22, which satisfies the GM's fix-before-moving-on rule. Ruled separately from window#307 because it is unlike it: T42 did not create it."
+    },
+    {
+     "id": "T42-perf-classification",
+     "summary": "T42 declared performance work in FR-013's sense ([perf], the builders' loop: a refused read costs a model round trip), not filed with PERF=1.",
+     "class": "within",
+     "why": "FR-013 takes either PERF=1 or a [perf] tag, and names the builders' loop. On the plain reading the task carries [perf]. The task line itself is not in the bundle, so the tag is taken from the block's own statement. The claim is thin (3 reads freed against 93 newly judged), but the work is owed as a defect fix regardless, and the classification narrows nothing the GM asked."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T38": {
+   "section_sha256": "6c82c8fe93328c52b3e833b9a4566a45ce175624f3a441d001eb1f7b3d74da7c",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T38-perf",
+     "summary": "T38 is filed as performance work under FR-013: gate crates' tests stop reading the builder's shell exports, so a builder no longer spends a round on 49 reds caused by its shell, and a test no longer writes into or deletes a real event log or answer store.",
+     "class": "within",
+     "why": "FR-013 counts work that makes the builders' loop faster as performance work, and the GM asked on 2026-11-20 that performance work go first. Tests that fail because of the environment and tests that delete real answer records are wrong outcomes, so fixing them is also fix-as-we-go work."
+    },
+    {
+     "id": "seam",
+     "summary": "The seam is shared::env::Rooted, a root with its own env reader that derefs to &Path. It is threaded through every call site that reads the guard (owed, reviews, rustc, measure, bundle, record, land, arbiter). The guard's explicit-env _in variants are made public, and the old names become wrappers over shared::env::opt.",
+     "class": "within",
+     "why": "This is how the fix is built. It does not narrow FR-013 or the request."
+    },
+    {
+     "id": "no-cargo-feature",
+     "summary": "The cargo dev-dependency feature route was measured with cargo tree and ruled out. It would reach a package's whole test build, its binary included, and the task line forbids it.",
+     "class": "within",
+     "why": "Choosing between two ways to build the fix is not a narrowing. The choice is measured, and the GM's request does not depend on it."
+    },
+    {
+     "id": "no-process-env-in-tests",
+     "summary": "No test sets the process's environment. Land's restore helper, which set and removed a process variable, is removed together with its test.",
+     "class": "within",
+     "why": "A test that set a process variable was part of the defect, so removing it is part of the fix."
+    },
+    {
+     "id": "try_trip-removed",
+     "summary": "try_trip had no caller left and is deleted.",
+     "class": "within",
+     "why": "Removing dead code inside the fix changes no behavior anyone asked to keep."
+    },
+    {
+     "id": "sweep-12-fixed",
+     "summary": "The 78-variable sweep moved 12 more tests (owed 11, land 1) through RECORD_CHECKS_DIR. Those 12 are fixed here: owed's own reads go behind answers::record_checks_dir, and land's replay hands bundle_in its store.",
+     "class": "within",
+     "why": "These are defects of the same kind, found during this step and fixed in it, as fix-as-we-go requires."
+    },
+    {
+     "id": "answers-split",
+     "summary": "owed/answers.rs went over the 1,000-line bar at 1,012 lines. Its command-line half is split into answers/cli.rs, leaving 807 lines.",
+     "class": "within",
+     "why": "The task's own growth tripped the file-scale check, and the plan fixes that here."
+    },
+    {
+     "id": "tree-rs-to-T42",
+     "summary": "rust/guard/src/shared/tree.rs at 1,064 lines belongs to T42 and is left to T42. T42's split has since brought it to 673 lines, and make quick is clean.",
+     "class": "within",
+     "why": "Another task owns the file and has already fixed it (measured), so no known defect is carried past this step."
+    },
+    {
+     "id": "check-keys-earlier-section",
+     "summary": "The bundle crate's check and keys bundles still reach earlier::section through its process wrapper. The plan says this is not a defect: no test outcome moved with any variable exported, and nothing is written.",
+     "class": "within",
+     "why": "The before-rest and after3 sweeps measured no wrong outcome. By the constitution XIV definition, a read that moves no outcome is a difference, not a defect, so leaving it needs no ruling."
+    },
+    {
+     "id": "guard-cargo-dropped",
+     "summary": "L7R_GUARD_CARGO is classed as a runner variable and dropped from the swept list (77 swept). The 19 bundle reds once attributed to it were not borne out: exported alone it moved none, and bundle was green with all 78 after the store fix.",
+     "class": "within",
+     "why": "Only bundle was measured for this variable: exported alone it moved none, and with all 78 after the store fix bundle was green (guard-cargo-bundle.log, bundle-78.log). The 27-crate after3 sweep ran with 77 variables. Which variables the sweep lists is not part of the GM's request or of FR-013, and no wrong outcome is shown, so it is within."
+    },
+    {
+     "id": "delta-store-left",
+     "summary": "Delta::store and sibling_stores still read the process's RECORD_CHECKS_DIR. Against a seeded exported store, the 8 crates that reach them were each green and the store was unchanged (diff -r empty). No test reaches either read, and in the binary they are the real reads.",
+     "class": "within",
+     "why": "A wrong outcome was checked for and none was found (measured). In production the process read is the correct behavior. Not a defect."
+    },
+    {
+     "id": "t32-claim-restated",
+     "summary": "T32's cargo-feature claim is restated as narrower than T32 said: the feature reaches a test build's binary but never the tool binaries.",
+     "class": "within",
+     "why": "Correcting a claim to match measurement changes no code, so it is not a narrowing."
+    },
+    {
+     "id": "twice-run-rust-gate",
+     "summary": "rust/gate was left out of the run twice against one store and was covered instead by the seeded-store run (green, store unchanged).",
+     "class": "within",
+     "why": "This is exit-evidence coverage inside the task, it is measured, and it narrows nothing that was asked."
+    },
+    {
+     "id": "exits-and-order",
+     "summary": "Exits: 7 crates and the guard green both plain and exported, every gate crate swept, 100% coverage of each changed crate, make static once. Order: after T32, independent of T42, lands before T22. Budget: one landing.",
+     "class": "within",
+     "why": "These are exit conditions and ordering inside the task. They narrow nothing in the request or in FR-013."
     }
    ],
    "verdict": "CLEAR"

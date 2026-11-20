@@ -186,7 +186,7 @@ impl Delta {
 
     /// The clone's answer records (`owed::store`): `RECORD_CHECKS_DIR`, else under [`Self::git_dir`].
     pub fn store(&mut self) -> PathBuf {
-        super::owed::answers::store_in(std::env::var_os("RECORD_CHECKS_DIR"), &mut || {
+        super::owed::answers::store_named(super::owed::answers::record_checks_dir(), &mut || {
             self.git_dir()
         })
     }

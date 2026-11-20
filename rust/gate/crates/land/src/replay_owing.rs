@@ -335,20 +335,15 @@ fn triage_bundle(
     }
     let store = base.join(format!("store-{}", short(rev, 10)));
     let out = base.join(format!("triage-{}", short(rev, 10)));
-    let was = std::env::var_os("RECORD_CHECKS_DIR");
-    // a relative `--out` names it from the worktree, the door's working directory in the Python
-    std::env::set_var("RECORD_CHECKS_DIR", under(at_wt, &store));
-    let done = l7r_gate_owed::record::triage::bundle(at_wt, &under(at_wt, &out), parent);
-    restore("RECORD_CHECKS_DIR", was);
-    done.map(|_| ())
-}
-
-/// A variable put back as it was before a call set it.
-fn restore(key: &str, was: Option<std::ffi::OsString>) {
-    match was {
-        Some(v) => std::env::set_var(key, v),
-        None => std::env::remove_var(key),
-    }
+    // a relative `--out` names it from the worktree, the door's working directory in the Python; the store handed to the bundle,
+    // never set in the process's environment around it (feature 451 T38: a test that set it raced every other reader of it)
+    l7r_gate_owed::record::triage::bundle_in(
+        at_wt,
+        &under(at_wt, &out),
+        parent,
+        &under(at_wt, &store),
+    )
+    .map(|_| ())
 }
 
 /// `json.loads` of what a snippet printed.

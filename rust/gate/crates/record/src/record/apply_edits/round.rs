@@ -8,6 +8,8 @@ use std::collections::{BTreeMap, HashSet};
 use std::fmt::Write as _;
 use std::path::Path;
 
+use l7r_guard::shared::env::Rooted;
+
 use super::{apply, text, touched_questions, unapply_by_hand, words_of, Block};
 use crate::record::owed::answers;
 use crate::record::{modals, owed, units};
@@ -155,11 +157,11 @@ impl Round {
     }
 
     /// `settle`: each owed unit the blocks alone moved, answered or pending; a record-format unit raising a new word stays owed.
-    fn settle(&self, root: &Path) -> Result<Vec<String>, String> {
+    fn settle(&self, root: &Rooted) -> Result<Vec<String>, String> {
         let all: Vec<String> = self.checks.iter().chain(&self.earlier).cloned().collect();
         // run only for a round that names its checks (`run`), so the Python's `if self.checks else {}` has no other side here
         let after = fingerprints(root, &all)?;
-        let store = answers::store(root);
+        let store = answers::store_in(root);
         let mut out = Vec::new();
         for (slug, fp) in &after {
             let before = self.before.get(slug).cloned().unwrap_or_default();
@@ -219,7 +221,7 @@ pub(super) fn named(e: &str) -> String {
 
 /// `main` from the blocks on: the hand-applied pass, the blocks applied inside the settling, the tally.
 pub(super) fn run(
-    root: &Path,
+    root: &Rooted,
     report: &str,
     found: &[Block],
     skip: &HashSet<usize>,

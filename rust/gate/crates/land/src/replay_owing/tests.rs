@@ -224,9 +224,4 @@ fn the_counts_are_the_python_s() {
         Ok(())
     );
     assert!(super::triage_bundle(true, "0123456789", &dir, "HEAD", &dir).is_ok());
-    assert!(std::env::var_os("RECORD_CHECKS_DIR").is_none());
-    super::restore("L7R_REPLAY_TEST_RESTORE", Some("x".into()));
-    assert_eq!(std::env::var("L7R_REPLAY_TEST_RESTORE").as_deref(), Ok("x"));
-    super::restore("L7R_REPLAY_TEST_RESTORE", None);
-    assert!(std::env::var_os("L7R_REPLAY_TEST_RESTORE").is_none());
 }

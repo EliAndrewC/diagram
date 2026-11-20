@@ -15,6 +15,7 @@ use fancy_regex::Regex;
 use l7r_gate_research::prepass::prepass_words;
 use l7r_gate_research::pyre::py;
 use l7r_guard::guards::house_style_hooks::americanize;
+use l7r_guard::shared::env::Rooted;
 use l7r_guard::shared::py_text::{repr, strip};
 use l7r_guard::shared::pyjson::{dumps, py_str};
 use serde_json::{json, Value};
@@ -370,6 +371,13 @@ fn usage(e: &str) -> Reply {
 /// `l7r-gate record apply-edits <report> [--root R] [--skip 2,5] [--dry-run]`.
 #[must_use]
 pub fn cli(args: &[String], cwd: &Path) -> Reply {
+    cli_in(args, &Rooted::process(cwd))
+}
+
+/// [`cli`] in `cwd` with the environment it carries (feature 451 T38): a test's own, so a round settles into its own answer
+/// records and never a session's exported `RECORD_CHECKS_DIR`.
+#[must_use]
+pub fn cli_in(args: &[String], cwd: &Rooted) -> Reply {
     let specs = [
         Spec::value("--root"),
         Spec::value("--skip"),
@@ -380,7 +388,7 @@ pub fn cli(args: &[String], cwd: &Path) -> Reply {
         Ok(_) => return usage("the following arguments are required: report"),
         Err(e) => return usage(&e),
     };
-    let root = l7r_gate_research::resolve(&cwd.join(p.text("--root", ".")));
+    let root = cwd.at(l7r_gate_research::resolve(&cwd.join(p.text("--root", "."))));
     let report = match reply_text(&cwd.join(&p.positional[0])) {
         Ok(r) => r,
         Err(e) => {

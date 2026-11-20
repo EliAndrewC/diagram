@@ -21,6 +21,27 @@ fn run_on(root: &Path) -> Run {
     Run::new(root)
 }
 
+/// A root read with the test's own environment (feature 451 T38): never a session's exported `RECORD_CHECKS_DIR` or
+/// `CHECK_ORDER_OK`.
+fn own(root: &Path) -> l7r_guard::shared::env::Rooted {
+    l7r_guard::shared::env::Rooted::with(root, &[])
+}
+
+/// [`super::bundle`] on [`own`].
+fn bundle(run: &mut Run, root: &Path, kind: &str, ask: &Ask<'_>) -> Result<i32, Fail> {
+    super::bundle(run, &own(root), kind, ask)
+}
+
+/// [`super::bundles`] on [`own`].
+fn bundles(run: &mut Run, root: &Path, kinds: &[&str], ask: &Ask<'_>) -> Result<i32, Fail> {
+    super::bundles(run, &own(root), kinds, ask)
+}
+
+/// [`super::cli`] on [`own`].
+fn cli(args: &[String]) -> Reply {
+    cli_in(args, &own(Path::new(".")))
+}
+
 #[test]
 fn the_text_helpers() {
     assert_eq!(visible("<!-- c --><p>a &amp; <b>b</b></p>\n x"), "a & b x");
@@ -48,6 +69,8 @@ fn the_prepass() {
     assert!(p.stdout.starts_with("prepass - ") && p.stdout.contains("<- OUTSIDE THE BAND"));
     assert_eq!(cli(&args(&["Nope", "--prepass", "--root", &r])).code, 2);
     assert_eq!(cli(&args(&[])).code, 2);
+    // the process's wrapper, on a line that reads nothing
+    assert_eq!(super::cli(&args(&[])).code, 2);
     assert_eq!(cli(&args(&["x", "--for", "bogus"])).code, 2);
     assert_eq!(cli(&args(&["x", "--bogus"])).code, 2);
     put(&root, WELL, &format!("Name: Well\nForm: particular\nAbout: {} this project. The record says so.\nGuesses: - One. Two. Three. Four.\nEntry: research/questions/0777-none.html\n", "word ".repeat(90)));
@@ -523,9 +546,9 @@ fn an_answered_check_holds_nothing() {
         .cloned()
         .unwrap();
     let rows = owed_units(&root, None, None, &["modal"], &m.uid()).unwrap();
-    assert!(!order_hold(&root, &m, "modal-research", &rows).is_empty());
+    let s = store_in(&own(&root));
+    assert!(!order_hold(&s, &m, "modal-research", &rows).is_empty());
     let form = rows.iter().find(|u| u.check() == FORM_CHECK).unwrap();
-    crate::record::owed::write_answer(&store(&root), &form.slug, &form.fingerprint, "clean", None)
-        .unwrap();
-    assert!(order_hold(&root, &m, "modal-research", &rows).is_empty());
+    crate::record::owed::write_answer(&s, &form.slug, &form.fingerprint, "clean", None).unwrap();
+    assert!(order_hold(&s, &m, "modal-research", &rows).is_empty());
 }

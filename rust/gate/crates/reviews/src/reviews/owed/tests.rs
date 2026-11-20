@@ -11,6 +11,15 @@ use super::super::tests::{
 };
 use super::*;
 
+// Each test reads its own environment, never the session's exports (feature 451 T38): the readers below shadow the crate's.
+fn own(root: &Path) -> Rooted {
+    Rooted::with(root, &[])
+}
+
+fn owed(root: &Path, landing: bool) -> (String, Vec<Unit>, Vec<String>) {
+    super::owed_in(&own(root), landing)
+}
+
 fn slugs(units: &[Unit]) -> Vec<String> {
     units.iter().map(Unit::slug).collect()
 }
@@ -22,7 +31,7 @@ fn owed_slugs(root: &Path) -> Vec<String> {
 fn cli_in(root: &Path, extra: &[&str]) -> Reply {
     let mut a = vec!["--root".to_owned(), root.to_string_lossy().into_owned()];
     a.extend(extra.iter().map(|s| (*s).to_owned()));
-    cli(&a)
+    super::cli_in(&a, &own(Path::new(".")))
 }
 
 #[test]

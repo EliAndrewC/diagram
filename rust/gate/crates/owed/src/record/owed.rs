@@ -3,6 +3,7 @@
 pub mod answers;
 pub mod reply;
 
+use l7r_guard::shared::env::Rooted;
 use std::collections::{HashMap, HashSet};
 use std::path::Path;
 use std::sync::LazyLock;
@@ -13,7 +14,7 @@ use serde_json::{json, Value};
 
 pub use answers::{
     answer, answered, file_outside, keep_reading, read_answer, reply_checks, reply_of, settle,
-    store, unanswered, write_answer, Named, FIXED,
+    store, store_in, unanswered, write_answer, Named, FIXED,
 };
 
 use super::args::{parse, Parsed, Spec};
@@ -593,6 +594,12 @@ fn flags() -> [Spec; 15] {
 /// `record record-owed ...`.
 #[must_use]
 pub fn cli(args: &[String]) -> Reply {
+    cli_in(args, &Rooted::process("."))
+}
+
+/// [`cli`] with the environment its root is read with: `base`'s (feature 451 T38: a test's own, never a session's exports).
+#[must_use]
+pub fn cli_in(args: &[String], base: &Rooted) -> Reply {
     let parsed = match parse(args, &flags()) {
         Ok(p) => p,
         Err(complaint) => {
@@ -610,7 +617,7 @@ pub fn cli(args: &[String]) -> Reply {
             code: 1,
         };
     }
-    answers::run(Path::new(&top), &parsed).unwrap_or_else(|why| Reply {
+    answers::run_in(&base.at(top), &parsed).unwrap_or_else(|why| Reply {
         stdout: String::new(),
         stderr: why + "\n",
         code: 1,

@@ -9,6 +9,7 @@ use l7r_guard::guards::event_log_hooks::verdict_of;
 use l7r_guard::shared::checks::arbiter as core;
 use l7r_guard::shared::checks::rounds::{notes_of_manifest, subjects_of_manifest, PAGE_CHECKS};
 use l7r_guard::shared::checks::{load, reply, state_path};
+use l7r_guard::shared::env::Rooted;
 use serde_json::Value;
 
 use crate::arbiter::bundle::marks::{last_edits, mark_rounds, reply_of, subject_files};
@@ -22,8 +23,8 @@ const INTRO: &str = "Earlier rounds of this check on this subject in this featur
 static OWED: LazyLock<Regex> = LazyLock::new(|| pyre(r"(?m)^owed-checks: (.+)$"));
 
 /// When the active feature began (its `spec.md`'s first commit), or 0.0.
-fn feature_start(root: &Path) -> f64 {
-    let Some(d) = core::feature_dir(root, "") else {
+fn feature_start(root: &Rooted) -> f64 {
+    let Some(d) = core::feature_dir_in(root, "", root.reader()) else {
         return 0.0;
     };
     let spec = d.join("spec.md");
@@ -216,6 +217,15 @@ fn unit_section(
 ///
 /// Where what it reads, writes or runs fails: the error says which and why.
 pub fn section(root: &Path, out: &Path, manifest: &str) -> Result<String, Fail> {
+    section_in(&Rooted::process(root), out, manifest)
+}
+
+/// [`section`] with the root's environment carried (feature 451 T38): the active feature and its rulings read through it.
+///
+/// # Errors
+///
+/// Where what it reads or writes fails: the error says which and why.
+pub fn section_in(root: &Rooted, out: &Path, manifest: &str) -> Result<String, Fail> {
     let owed = OWED
         .captures(manifest)
         .ok()
@@ -236,7 +246,11 @@ pub fn section(root: &Path, out: &Path, manifest: &str) -> Result<String, Fail> 
     if checks.is_empty() || subjects.is_empty() {
         return Ok(String::new());
     }
-    let (state, rulings, since) = (load(&path), core::rulings(root, ""), feature_start(root));
+    let (state, rulings, since) = (
+        load(&path),
+        core::rulings_in(root, "", root.reader()),
+        feature_start(root),
+    );
     let notes: Vec<String> = notes_of_manifest(manifest).into_iter().collect();
     let mut body = Vec::new();
     for c in &checks {

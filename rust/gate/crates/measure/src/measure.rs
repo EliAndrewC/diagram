@@ -67,6 +67,7 @@ pub fn cli(args: &[String], root: &Path) -> crate::Reply {
             &stepback_bundle::Env {
                 home: home(),
                 now: tool_yield::now(),
+                base: l7r_guard::shared::env::Rooted::process("."),
             },
         ),
         Some("fix-yield") => fix_yield::cli(rest, &home()),
