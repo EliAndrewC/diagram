@@ -446,3 +446,87 @@ them: a fallback task is the log's own feature's start, so it always names a tas
 
 **Performance work?** no
 
+<!-- plan-archive: archived 2026-11-20 -->
+### T06 (FR-003: a landing's cheap pass, gate, claims round and push are one span - the spec's User Story 1)
+
+- **Approach**: D5 in `rust/gate/crates/land` (not held), and the writer's feature in `rust/guard/src/guards/event_log_hooks.rs`
+  and `event_log_hooks/filed.rs` (held: `make guard-edit` on each first). A new `land/phase.rs` writes each line through
+  `append_row_for`, in T05's row
+  form (`ev` `Phase`, `src` `land`, `step`, `t0`, `t1`, `t` its `t1`, `code`, `make`, `clone`), each carrying the first task landed as
+  `task`; `land.rs` wraps each step, `long_runs.rs` the cohort. The steps TILE the
+  landing, every part of it booked to one:
+  - `cheap`: the first pass, every cheap refusal; code 2 when one refuses.
+  - `gate`: the second pass whole - the delta's engine and counter-only reads, the green-gate stamp, the gates it names (`make done`,
+    `make hooks-test`, `make page-check`) or a machinery delta's guard suites, a landing cohort run alone, the records and `pool/` maps
+    they regenerated committed, the work-budget review.
+  - `cohort`: `make cohort-landing`, beside the gate (from its start to its wait, or to its stop by a red gate, its code then minus the
+    signal) or alone after a covered gate; NESTED in the `gate` line's span, never past it, so a reader books it inside the gate.
+  - `claims`: the wait for the claims round and the ledger rows its passes owe; code 2 when the wait refuses.
+  - `push`: the ticks, their commit, the one push carrying both, a failed push's revert.
+  - `end`: from the arguments read to the landing's verdict, with `tasks` (the ids asked, split as `main` splits them, D16's commas
+    T18's) and `landed`. THE PUSH IS THE LANDING (the plan review's T06-stop-after-push): the `end` is written the moment the push
+    goes out (exit 0, or 3), `landed` true and its code the push's, so no later stop leaves a pushed landing reading unlanded; a
+    landing that never pushed writes its `end` at its exit, `landed` false. A step that raises writes code 1, as the landing's raise
+    exits; a step that did not run writes no line.
+  - `after-push`: the push's tail, after the `end` - the fresh block's start and the work-budget view after an engine landing; a
+    raise there is its own line's code, the `end` standing at the push's (the process still exits 1).
+  - `main`'s own refusals (no `NOTE=`, no feature directory) are refused landings of the tasks they name and write an `end`; a usage
+    refusal names no task and writes none.
+  - `landed` is the push gone out - exit 0, or 3 (`MERGED`: other sessions' edits merged, the ticks standing) - so a landing whose
+    push went out and whose tail raised, or that exited 3, is still a landing: its code alone would read it refused. D7's
+    rework, D10's and D11's landing, T13's and T14's lines and the data model's Landing read `landed`, restated with this task.
+  - THE LINE'S FEATURE: `append_row_for(root, feature, row)` beside `append_row` (T05's callers unchanged) files a line in the
+    feature its word names - a `specs/` directory or the one `specs/<word>-*`, read first as a make command's `F=` is - before T26's
+    chain asks a task's start; a blank word or one naming no feature leaves the chain as it was. The landing names `d`'s directory,
+    `main`'s refusals the `F=` word, so a landing of a task never started in the clone is filed in its own feature's log, not
+    feature.json's marked `fallback`, where T13 and T14 would not see its `end`.
+  - `make` is the outermost `make`'s first goal, read from `/proc` as T05's lines read theirs (`land-batch` runs the same command),
+    `land` with no `make` above.
+  - A stopped landing (`make land-stop`, TERM) writes no line past its last finished step: the guard's handler exits at once, and a
+    file write is no signal handler's work. Stopped before its push went out, it reads as no landing, never as refused; stopped in
+    the push's tail, its `end` is already written, `landed` true. The one window left is a stop while `sync-with-main.sh done` runs,
+    after the remote took the push but before the script exits: the landing cannot know the push went out until the script says
+    so, and the push's own tick commit on main records it.
+
+  Red first: the land tests' fake world writes `cheap`, `gate`, `claims`, `push`, `end` and `after-push` in order, each span
+  inside the end's but the tail's, after it; a tail that raises after the push `end` at 0, `landed` true, before `after-push` at 1;
+  a refused first pass `cheap` and `end` at code 2, a raising one at code 1; a red gate `gate` and `end` at code 1; a claims wait run out
+  `claims` at 2; a failed push `push` at 1, `landed` false; a push that merged `end` at 3, `landed` true; a landing of `T1 T2` an `end`
+  whose `tasks` is both ids (T13 and T14 read a landing from this line); `main`'s refusals an `end`; the cohort beside the gate, stopped
+  by a red gate, and alone, each its own line; an unstarted task's lines, and `main`'s refused `end`, filed in the landed feature's
+  log, not feature.json's; the writer's own case (`a_gate_tools_row_names_its_feature`: a feature named over the chain, a number
+  naming its one directory, a word naming none or blank left to the chain) seen red first; the make target from a fake `/proc`.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+| the landing's phase lines | n/a - no map | n/a | none | n/a |
+
+### T06 Approach (checklist part A)
+
+1. **The goal, in the world.** No map changes; a landing's time is split by step - every step of it booked, the cohort inside the
+   gate - and a refused landing is counted from its own `end` line.
+2. **The constraints.** FR-003; D5; a failed, refused or raising landing still writes its `end`; the lines are T05's form, through
+   the one writer (`append_row_for`); the held writer is edited under `make guard-edit`, its other callers unchanged.
+3. **Where each comes from.** G: the approved "make land its phases' seconds"; O: `land.rs`'s and `long_runs.rs`'s pass order read
+   2026-11-20; the push's exit 3 (`MERGED`) read in `tick_and_push`.
+4. **Do they describe the world here?** The steps are `land.rs`'s own passes.
+   The clean landing's fixture writes 5 lines, measured 2026-11-20 (`make rust-test CRATE=rust/gate/crates/land`, its clean case).
+   The crate's 74 tests run in 0.35 s with the lines written, measured 2026-11-20 (that run's `test result` line).
+5. **The order.** After T04 (`append_row`); beside T05 (another crate); before T10, T13 and T14, which read the `end` line.
+6. **The exits.** Green: the land tests, the crate's lint, format and coverage. Red: what failed recorded and the task set down, a
+   claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** One landing.
+9. **Done, measured.** The fake-world cases green, seen red first.
+   13 of 71 failed on the skeleton, measured 2026-11-20 (`make rust-test CRATE=rust/gate/crates/land` before the writer).
+   The writer's feature case failed before the writer read it, measured 2026-11-20 (`make rust-test CRATE=rust/guard`, 1 of 627).
+   The end-at-the-push cases failed first, measured 2026-11-20 (`make rust-test CRATE=rust/gate/crates/land`, 2 of 74).
+   This task's own landing writes its phases (read off the log after it).
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** n/a - new lines, red first.
+
+**Found and left?** none
+
+**Performance work?** no
+
