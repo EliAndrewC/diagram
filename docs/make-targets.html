@@ -28,7 +28,7 @@ footer{margin-top:3rem;padding-top:1rem;border-top:1px solid var(--line);color:v
 </style>
 <main>
 <h1>make targets</h1>
-<p class=lede>Every target in the diagram skill's Makefile, grouped. 185 documented. Generated from the Makefile - edit the target's <code>##</code> line, not this page.</p>
+<p class=lede>Every target in the diagram skill's Makefile, grouped. 186 documented. Generated from the Makefile - edit the target's <code>##</code> line, not this page.</p>
 <h2>Tests</h2>
 <p class=sec>The four tiers, cheapest first. Where a test LIVES decides when it runs, so these differ by scope rather than by filter.</p>
 <div class=scroll><table><tr><th>target</th><th>arguments</th><th>what it is</th></tr>
@@ -147,6 +147,7 @@ footer{margin-top:3rem;padding-top:1rem;border-top:1px solid var(--line);color:v
 <tr><td class=n>make downloads-sync</td><td class=a>&ndash;</td><td>on the GM&#x27;s word &quot;sync&quot;: the GM&#x27;s copy of the download list replaced from research/to-download.md - refused while it holds anything not ingested (feature 313)</td></tr>
 <tr><td class=n>make downloads-tag</td><td class=a>&ndash;</td><td>tag every download-list entry [money] or [diagram] after its number, derived from the questions its Rests-on line points at (the GM, 2026-10-20); download-add tags a new entry itself</td></tr>
 <tr><td class=n>make engine-key</td><td class=a><div class=ad><span class=an>REF=&lt;commit&gt;</span><span class=aw>which commit to key (default: HEAD)</span></div></td><td>the content hash the gate and the push key on</td></tr>
+<tr><td class=n>make events-refile</td><td class=a>DRY</td><td>re-file the event-log lines written before 451 T26 under the feature of the task each carries (its dispatch&#x27;s brief, else its task id), idempotent, its counts printed (feature 451 T26)   [DRY=1]</td></tr>
 <tr><td class=n>make feature-report</td><td class=a><div class=ad><span class=an>F=&lt;NNN&gt;</span><span class=aw>the feature</span></div><div class=ad><span class=an>SINCE</span></div><div class=ad><span class=an>TRANSCRIPT</span></div><div class=ad><span class=an>UNTIL</span></div><div class=ad><span class=an>WRITE</span></div></td><td>where a feature&#x27;s time and dispatches went, as a table, from the event log, the run log and git</td></tr>
 <tr><td class=n>make figures</td><td class=a>SPEC</td><td>re-run every recorded measurement and report what moved   [SPEC=specs/NNN-slug; default every spec with a measurements.json]</td></tr>
 <tr><td class=n>make fix-yield</td><td class=a>F</td><td>did each tooling fix save what it was meant to: its measure&#x27;s rate before its ruling and since it was made (feature 385 T119)</td></tr>

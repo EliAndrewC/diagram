@@ -63,15 +63,16 @@ fn a_dike_pond_polder_rolls_through_its_seat_and_its_waterside_reeds() {
         r.stages.contains(&"waterward") && r.polder.as_ref().is_some_and(|s| s.converted.is_some())
     );
     assert!(r.svg.contains(DIKE_EARTH_FOR_TEST));
-    // the dike's two faces copied into the fringe's one outline, a point each (feature 449 T226: uncounted before)
+    // the fringe reads the dike's outer face and the two sluices' channels, a point each (449 T236: the two faces' copy gone)
     #[cfg(feature = "counters")]
     {
-        let d = &r.polder.as_ref().unwrap().dike;
+        let s = r.polder.as_ref().unwrap();
         let ward = r.by_stage.iter().find(|s| s.0 == "waterward").unwrap();
         assert_eq!(
-            ward.1.get("read@stage_waterward"),
-            Some(&((d.outer.len() + d.inner.len()) as u64))
+            ward.1.get("read@dike"),
+            Some(&((s.dike.outer.len() + s.polder.feeder.len() + s.outfall.len()) as u64))
         );
+        assert_eq!(ward.1.get("read@stage_waterward"), None);
     }
     assert!(manifest(&r).contains("\"grain_acres\": {\"field\": null, \"hem\": null}"));
     let rice = roll(&parse(r#"{"name": "R", "seed": 5, "households": 12, "down_deg": 0, "field_archetype": "polder_grid", "pins": {"paddy_rest": "unsettled"}}"#).unwrap()).unwrap();

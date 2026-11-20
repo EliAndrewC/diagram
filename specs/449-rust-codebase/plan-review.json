@@ -1236,6 +1236,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-20",
    "declared": "spec-fidelity"
+  },
+  "### T236 (T234: the polder's reed strip ran over the dike's corners, the feeder's end and the outfall's start, across the channel mouths the sluices shut; and impl-drift on T234: roll_polder's decision of where the village may sit had no claim)": {
+   "sha256": "9d150a62f38edb3c02e0b151a303194988fdf380ff9f7a37567d702dfabd7807",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity"
+  },
+  "### T236 Approach (checklist part A)": {
+   "sha256": "08b6dba4df20030babe4f74bce2380d90677548d0128641b3f64f982196aa927",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -16248,6 +16260,135 @@
      "why": "An internal design choice that touches nothing that was asked."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-20",
+   "blocks": [
+    "### T236 (T234: the polder's reed strip ran over the dike's corners, the feeder's end and the outfall's start, across the channel mouths the sluices shut; and impl-drift on T234: roll_polder's decision of where the village may sit had no claim)",
+    "### T236 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T236-face",
+     "summary": "The strip is laid from the dike's outer-face corners nearest the flank, carried round the corner to the box's corner, so it meets the dike point for point and the next strip at the corner diagonal; the notch step-in, the 32 bins (BINS), STRIP_CUT_HW and the two-face outline removed.",
+     "class": "within",
+     "why": "Fixes a wrong outcome T234 found (reeds drawn on the dike and onto the next face, against 0019/0027's fringe outside the outer face), as the GM's 2026-11-18 fix-as-we-go asks. The corner diagonal is labeled GUESS where no page speaks. Removing GUESS constants with the rules that read them changes no requirement."
+    },
+    {
+     "id": "T236-channel-cut",
+     "summary": "Each straight reach of the feeder and outfall is boxed (drawn width, half a width past each end); a box that reaches the strip's edge or span end cuts the strip, a shorter one pushes the face out over its span; pieces wholly past the dike's extent are dropped.",
+     "class": "within",
+     "why": "Implements 0027's band cut where a channel crosses and 0074's reeds kept out of the water, on the defect T234 measured (57/45/341 ft of channel under reeds on Kuwabata, 583/13 ft on R, now none). The square box is labeled CONVENTION and the run past a corner GUESS, so this is not an unflagged exception."
+    },
+    {
+     "id": "T236-west-bank-past-corner",
+     "summary": "Past Kuwabata's south-west corner the outfall's east bank is reeded and its west bank bare, because the west strip's run past the corner is cut off at the channel.",
+     "class": "within",
+     "why": "The block records that none of 0019/0027/0074 says whether reeds stand on a channel's far bank past the dike's corner, and labels it GUESS. This is a difference, not a contradicted finding, so it is not a defect under constitution XIV as the GM framed it on 2026-11-19."
+    },
+    {
+     "id": "T236-kuwabata-bend-box",
+     "summary": "The outfall's 45-degree first reach leaves a bare box of about 28 by 27 ft between the dike and the bend on Kuwabata.",
+     "class": "within",
+     "why": "A small, observed and labeled cost of the square-box CONVENTION. Reeds are kept out of the water, and a bare patch this size at the corner contradicts no page. It is a difference, not a wrong outcome."
+    },
+    {
+     "id": "T236-oblique-R-gap",
+     "summary": "On an obliquely falling polder the axis-square boxes take the reeds beside a slantwise reach: R's foot strip is bare to full depth for 455.5 ft beside the outfall. Left, because no pool map falls obliquely.",
+     "class": "within",
+     "why": "No drawn map reads wrong. Item 9 measures one pool map moved (Kuwabata, which is axis-aligned) and 10 unchanged, and R is a test configuration. The change removes reeds from water on R (583 ft before) and introduces none, so nothing regresses. Under the GM's 2026-11-19 rule ('produce maps which look fine') and constitution XIV's defect definition, a cost on a configuration no map exercises is a recorded difference, not a defect carried into the next step. It is recorded in Found and left. The ruling holds only while no pool map falls obliquely; once one does, this gap is a defect owed."
+    },
+    {
+     "id": "T236-fold-zigzag",
+     "summary": "The face assumes a flank's corners run one way along the axis; a fold would zigzag it (none seen on Kuwabata or R).",
+     "class": "within",
+     "why": "A recorded assumption with no observed wrong outcome. It is not a known defect."
+    },
+    {
+     "id": "T236-settlement-over-dike",
+     "summary": "The settlement ground drawn over Kuwabata's north dike and head canal (the seat is handed the fields' outline, not the dike) is left out of this task as a placement change of its own. Part 2 claims that ring as a GUESS recording its cost.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This is a wrong outcome on a pool map, so it is a defect, and the GM's 2026-11-18 rule is that each step's known defects are fixed before the next step's port begins. That rule is per step, not per task. The dispatch states the defect is filed as T239, ordered before T158 (the next step's work), and this ruling rests on that statement, which the bundle cannot confirm: the block itself says only 'not this task's'. Fixing it changes the seat's candidates and placement, a separate change from the waterside strips, so splitting it does not gut the rule's purpose as long as T239 lands before T158. If T239 were not ordered before the next step, this would be NOT LEGITIMATE. Part 2's GUESS claim records the cost honestly and does not preserve the defect."
+    },
+    {
+     "id": "T236-glyph-check-set-aside",
+     "summary": "The marsh glyph-check on Kuwabata that the change owes is set aside at rust-only. It is undetected by reviews owed (T238's gap) and declared under the feature's Occasions.",
+     "class": "within",
+     "why": "Feature 444 FR-023: while the port switch stands at rust-only, a glyph-check for a pool hamlet that a Rust stage moves is not owed until the switch is thrown back. The detection gap is filed separately as T238."
+    },
+    {
+     "id": "T236-work-count-rise",
+     "summary": "The waterward.polder counted work rose from its accepted 2,125/2,908 to 4,990/7,110 (0.18/0.19 of budget; exponent 0.511 against the budget's 0.464 plus an allowance of 0.05, so 0.514). Re-acceptance is left to a work-budget audit and the caller.",
+     "class": "within",
+     "why": "The new code stays inside its derived budget and growth allowance, so the GM's 2026-11-19 / T199 efficiency rule is not breached. Re-accepting is a process step that narrows nothing. This verdict does NOT settle item 8's open question (whether re-accepting an accepted stage needs the GM's words), and it does not clear the work-budget ratchet's refusal."
+    },
+    {
+     "id": "T236-roll-polder-claim",
+     "summary": "roll_polder's placement decision gets its claim: ring = fields' outline (cites 0019, GUESS), wet ground cites 0081, the lines and unhanded pond GUESS, the strips after the seat cite 0019.",
+     "class": "within",
+     "why": "Pays an impl-drift owed under the claims rule (444 FR-021, unchanged by FR-023) and changes no behavior."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-20",
+   "blocks": [
+    "### T236 (T234: the polder's reed strip ran over the dike's corners, the feeder's end and the outfall's start, across the channel mouths the sluices shut; and impl-drift on T234: roll_polder's decision of where the village may sit had no claim)",
+    "### T236 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T236-face",
+     "summary": "The strip is laid from the dike's outer face itself (its corners nearest the flank, in axis order, carried round the corner to the box's corner); the notch step-in, the 32 bins, BINS and STRIP_CUT_HW go.",
+     "class": "within",
+     "why": "Fixes a defect (reeds drawn on the dike and over its corners, a wrong outcome against pages 0019/0027) found by T234; fix-as-we-go within the step is what the GM asked (2026-11-18). The corner meeting at the diagonal is labeled GUESS where no page speaks."
+    },
+    {
+     "id": "T236-bed-difference",
+     "summary": "Each straight reach of the feeder and outfall has its bed (drawn width, carried half a width past each end) taken out of the strip along its own four sides by a Weiler-Atherton difference, replacing the axis-boxed cut.",
+     "class": "within",
+     "why": "Fixes the defect of reeds over the channels the sluices shut and the bare ground beside slanting banks (0074: reeds to the water's edge and out of the water); a defect fix, not a difference-from-expected."
+    },
+    {
+     "id": "T236-run-past-ends",
+     "summary": "A bed reaching an end of the strip's span ends the run past the dike's end square across at its nearest point; a piece wholly past the dike's extent (cut off by a channel past a corner) is dropped, leaving the outfall's west bank past Kuwabata's south-west corner bare.",
+     "class": "within",
+     "why": "No page places reeds on a channel's far bank past the dike's corner (labeled GUESS at the unit); past the flank's own extent the strip is the run-past, so a bare far bank there contradicts no research finding and is not a wrong outcome."
+    },
+    {
+     "id": "T236-roll-polder-claim",
+     "summary": "Part 2: roll_polder's choice of the field outline as the seat's ring, its lines, pond and strip ordering get a claim (0019, 0081, and GUESSes recording cost); no code change.",
+     "class": "within",
+     "why": "Answers the impl-drift finding on T234 by claiming the existing decision; claims are the project's standing rule (FR-021 unchanged) and add no behavior."
+    },
+    {
+     "id": "T236-settlement-over-dike-to-T239",
+     "summary": "The settlement's reserved ground drawn over Kuwabata's north dike and head canal is a seat placement change filed as T239, landing before T158, the step's close.",
+     "class": "within",
+     "why": "A known defect, but fixed within the same step before the next step's port begins, which is what the GM's 'fix all known bugs in each step before moving on' asks; it is a placement change of a different stage, not this task's mechanism."
+    },
+    {
+     "id": "T236-glyph-check-set-aside",
+     "summary": "The marsh glyph-check on Kuwabata is declared under 449's Occasions, named by reviews owed, set aside at rust-only and recorded under feature 444 FR-023; its undetected-without-declaration gap is T238, before T158.",
+     "class": "within",
+     "why": "FR-023 (accepted, GM amendment 8) states a glyph-check for a pool hamlet a Rust stage moves is not owed while the switch stands rust-only; the detection gap is a tooling defect fixed within the step (T238 before T158)."
+    },
+    {
+     "id": "T236-latent-cases",
+     "summary": "A reach starting inside a strip with no earlier bed from the dike, and a fold at a corner zigzagging the face, are left; no map draws either.",
+     "class": "within",
+     "why": "Neither is a wrong outcome on any map (every sluice channel reaches the strip from the dike; no fold on Kuwabata or R); under constitution XIV v2.36.0 a case no map draws is not a defect owed."
+    },
+    {
+     "id": "T236-work-budget",
+     "summary": "waterward.polder's counted work rises to 3,929 and 5,501 (about 0.14 and 0.15 of budget, exponent 0.49 against 0.464 + 0.05 allowance); the ratchet refusal is routed through a MODE AUDIT and budget-accept by the caller.",
+     "class": "within",
+     "why": "Arithmetic re-derived: 3929/27296=0.144, 5501/37653=0.146, log2(5501/3929)=0.486; within the derived budget and its allowance, and the work budgets (FR-022) are kept, not bypassed; whether a re-accept needs the GM's words is left open to the gate, not waived."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -28506,6 +28647,62 @@
      "summary": "the item reader repeats the claims crate's item_end rather than sharing it, because claims builds on this crate",
      "class": "within",
      "why": "An internal design choice that touches nothing that was asked."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T236": {
+   "section_sha256": "b8a13ebf3a6d6a6111a5fb4eaa7082e4e116715fb91570f300006e103ebdf0ea",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T236-face",
+     "summary": "The strip is laid from the dike's outer face itself (its corners nearest the flank, in axis order, carried round the corner to the box's corner); the notch step-in, the 32 bins, BINS and STRIP_CUT_HW go.",
+     "class": "within",
+     "why": "Fixes a defect (reeds drawn on the dike and over its corners, a wrong outcome against pages 0019/0027) found by T234; fix-as-we-go within the step is what the GM asked (2026-11-18). The corner meeting at the diagonal is labeled GUESS where no page speaks."
+    },
+    {
+     "id": "T236-bed-difference",
+     "summary": "Each straight reach of the feeder and outfall has its bed (drawn width, carried half a width past each end) taken out of the strip along its own four sides by a Weiler-Atherton difference, replacing the axis-boxed cut.",
+     "class": "within",
+     "why": "Fixes the defect of reeds over the channels the sluices shut and the bare ground beside slanting banks (0074: reeds to the water's edge and out of the water); a defect fix, not a difference-from-expected."
+    },
+    {
+     "id": "T236-run-past-ends",
+     "summary": "A bed reaching an end of the strip's span ends the run past the dike's end square across at its nearest point; a piece wholly past the dike's extent (cut off by a channel past a corner) is dropped, leaving the outfall's west bank past Kuwabata's south-west corner bare.",
+     "class": "within",
+     "why": "No page places reeds on a channel's far bank past the dike's corner (labeled GUESS at the unit); past the flank's own extent the strip is the run-past, so a bare far bank there contradicts no research finding and is not a wrong outcome."
+    },
+    {
+     "id": "T236-roll-polder-claim",
+     "summary": "Part 2: roll_polder's choice of the field outline as the seat's ring, its lines, pond and strip ordering get a claim (0019, 0081, and GUESSes recording cost); no code change.",
+     "class": "within",
+     "why": "Answers the impl-drift finding on T234 by claiming the existing decision; claims are the project's standing rule (FR-021 unchanged) and add no behavior."
+    },
+    {
+     "id": "T236-settlement-over-dike-to-T239",
+     "summary": "The settlement's reserved ground drawn over Kuwabata's north dike and head canal is a seat placement change filed as T239, landing before T158, the step's close.",
+     "class": "within",
+     "why": "A known defect, but fixed within the same step before the next step's port begins, which is what the GM's 'fix all known bugs in each step before moving on' asks; it is a placement change of a different stage, not this task's mechanism."
+    },
+    {
+     "id": "T236-glyph-check-set-aside",
+     "summary": "The marsh glyph-check on Kuwabata is declared under 449's Occasions, named by reviews owed, set aside at rust-only and recorded under feature 444 FR-023; its undetected-without-declaration gap is T238, before T158.",
+     "class": "within",
+     "why": "FR-023 (accepted, GM amendment 8) states a glyph-check for a pool hamlet a Rust stage moves is not owed while the switch stands rust-only; the detection gap is a tooling defect fixed within the step (T238 before T158)."
+    },
+    {
+     "id": "T236-latent-cases",
+     "summary": "A reach starting inside a strip with no earlier bed from the dike, and a fold at a corner zigzagging the face, are left; no map draws either.",
+     "class": "within",
+     "why": "Neither is a wrong outcome on any map (every sluice channel reaches the strip from the dike; no fold on Kuwabata or R); under constitution XIV v2.36.0 a case no map draws is not a defect owed."
+    },
+    {
+     "id": "T236-work-budget",
+     "summary": "waterward.polder's counted work rises to 3,929 and 5,501 (about 0.14 and 0.15 of budget, exponent 0.49 against 0.464 + 0.05 allowance); the ratchet refusal is routed through a MODE AUDIT and budget-accept by the caller.",
+     "class": "within",
+     "why": "Arithmetic re-derived: 3929/27296=0.144, 5501/37653=0.146, log2(5501/3929)=0.486; within the derived budget and its allowance, and the work budgets (FR-022) are kept, not bypassed; whether a re-accept needs the GM's words is left open to the gate, not waived."
     }
    ],
    "verdict": "CLEAR"

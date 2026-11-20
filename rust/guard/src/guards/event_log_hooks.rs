@@ -9,7 +9,9 @@
 //! `PreToolUse`, `PostToolUse`, `SubagentStart`, `SubagentStop`, `UserPromptSubmit` and Stop payload, to `<git common dir>/l7r-events/<feature
 //! dir>.jsonl` (`_unassigned.jsonl` with no feature). Fields: `t` (UTC), `sid`, `ev`, and where they apply `tool`, `id` (`tool_use_id`),
 //! `cat` (`category`; a Bash call's by the category table, `BUCKETS`, feature 451 D2), `make` (a Bash call's make target) and `task`
-//! (the task a tick, task-start, decide or land names, else a subagent's brief's, else the clone's last start - 451 D2), `path`, `old`/`new`
+//! (the task a tick, task-start, decide or land names, else the dispatch's brief's, else its feature's start in force - 451 D2), `fallback`
+//! (the line's feature was only the session's or feature.json's, nothing on the line naming one - 451 T26, `filed.rs`, which also says
+//! which feature's log a line goes to), `path`, `old`/`new`
 //! (digests of an Edit's strings - the reversal wire) and `heading`, `agent`/`aid`/`manifest`/`unit`/`waiver` (an agent's type, id, the
 //! MANIFEST its prompt names, its unit, a round on the GM's waiver), `by` (the subagent whose tool call it is, feature 385 amendment 4),
 //! `ms` (`PostToolUse`'s duration), `gm` (a prompt the GM typed, not a notification), `verdict` (a returned agent's verdict word, or
@@ -702,37 +704,9 @@ fn log_path_in(root: &Path, feature: &str, env: &dyn Fn(&str) -> Option<String>)
     ))
 }
 
-/// The task a line with no `T=` serves (D2): a subagent's - the `T<n>` its meta file's `description` names
-/// (`<transcript_path without .jsonl>/subagents/agent-<agent_id>.meta.json`, research R2; one read a call) - else the clone's last
-/// `task-starts.jsonl` entry for the log's feature. A file missing or unreadable is no task, never an error: the hook never refuses.
-fn task_of(payload: &Value, root: &Path, feature: &str) -> Option<String> {
-    let aid = text_of(payload.get("agent_id"));
-    let transcript = text_of(payload.get("transcript_path"));
-    if !aid.is_empty() && !transcript.is_empty() {
-        let session = transcript.strip_suffix(".jsonl").unwrap_or(&transcript);
-        let meta = Path::new(session).join(format!("subagents/agent-{aid}.meta.json"));
-        let named = std::fs::read_to_string(meta)
-            .ok()
-            .and_then(|t| serde_json::from_str::<Value>(&t).ok())
-            .and_then(|m| first_group(&TASK_NAMED, &text_of(m.get("description"))));
-        if named.is_some() {
-            return named;
-        }
-    }
-    if feature.is_empty() {
-        return None;
-    }
-    let starts = std::fs::read_to_string(common_git_dir(root).join("task-starts.jsonl")).ok()?;
-    starts
-        .lines()
-        .rev()
-        .filter_map(|l| serde_json::from_str::<Value>(l.trim()).ok())
-        .find(|e| e.get("feature").and_then(Value::as_str) == Some(feature))
-        .map(|e| text_of(e.get("task")))
-        .filter(|t| !t.is_empty())
-}
-
-/// Append the payload's line to its feature's log; None outside any clone (`append`).
+/// Append the payload's line to its feature's log - the feature of the task it carries, feature.json's only where nothing else says
+/// (451 T26, [`filed`]); None outside any clone (`append`). A file missing or unreadable is no task, never an error: the hook never
+/// refuses.
 pub(crate) fn append(
     payload: &Value,
     t: &str,
@@ -750,15 +724,17 @@ pub(crate) fn append(
         .filter(|c| !c.is_empty())
         .map_or_else(|| here.to_path_buf(), PathBuf::from);
     let root = clone_root(&cwd)?;
-    let feature = feature_of(&root, env);
-    let path = log_path_in(&root, &feature, env);
+    let mut row = line(payload, t);
+    let carried = row.get("task").and_then(Value::as_str).map(str::to_owned);
+    let to = filed::filed(payload, carried.as_deref(), &root, env);
+    let path = log_path_in(&root, &to.feature, env);
     let base = path.parent().map_or_else(PathBuf::new, Path::to_path_buf);
     std::fs::create_dir_all(&base).ok()?;
-    let mut row = line(payload, t);
-    if !row.contains_key("task") {
-        if let Some(task) = task_of(payload, &root, &feature) {
-            row.insert("task".into(), Value::from(task));
-        }
+    if let Some(task) = to.task {
+        row.insert("task".into(), Value::from(task));
+    }
+    if to.fallback {
+        row.insert("fallback".into(), Value::Bool(true));
     }
     let edit = row.get("ev") == Some(&Value::from("PreToolUse"))
         && row.get("tool") == Some(&Value::from("Edit"));
@@ -808,7 +784,10 @@ fn decide(event: &Event, _session: &Session) -> Vec<Answer> {
     Vec::new()
 }
 
+mod filed;
 pub mod read;
+
+pub use filed::brief_feature;
 
 #[cfg(test)]
 mod tests;

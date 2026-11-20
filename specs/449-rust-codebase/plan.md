@@ -791,14 +791,49 @@ tests/hooks/                 # the suites, the verdict replay through phase 1
 **Performance work?** <no - or yes, and its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
 
 
-### T236 (<why: the finding or measurement that files it>)
+### T236 (T234: the polder's reed strip ran over the dike's corners, the feeder's end and the outfall's start, across the channel mouths the sluices shut; and impl-drift on T234: roll_polder's decision of where the village may sit had no claim)
+
+- **Approach**: the waterward stage (`rust/phases/src/waterward.rs`) lays each water-facing flank's strip from the dike's outer face itself, and stops it at the bank of each channel that crosses the dike at a sluice. Three mechanisms put reeds where they did not belong, each measured on Kuwabata with a probe test printing the strips (measured 2026-11-20 (a temporary test in `driver/polder.rs`, removed)): the notch step-in pushed the face 40 ft in through each sluice's notch (the dike's widest breadth, `widths.1`), to x 2381.4 at the west strip's north end, past the inner face at 2328, over the dike, the inlet and the feeder's end; the end bins, binned by the outermost of the flank's half, took the next face's points, so the east strip's first bin sat at x 3181.9, 280 ft along the north dike (measured 2026-11-20 (the probe test)); and the strips ran past the dike's corners, over the outfall's first reach and down its straight run 280 ft through the foot's strip (measured 2026-11-20 (the probe test)). Now: the face is the outer face's own corners that stand nearest the flank (of the box round the dike), in order along the axis, carried one corner on round the dike's corner and out to the box's corner, so the strip meets the dike point for point, meets the next flank's strip at the corner's diagonal, and never turns onto the next face (the 32 bins and `BINS` gone); each straight reach of the feeder and the outfall has its bed (its drawn width, carried half a width past each end so a bend's corner is covered) taken out of the strip along the bed's own four sides (`difference`, a Weiler and Atherton walk of the strip's ring against the convex bed), so the reeds run to each bank of a slanting reach as of a square one and round a reach's end where it stops inside the strip; a bed reaching either end of the strip's span ends its run past the dike's end square across at the bed's nearest point past the dike's extent; and a piece wholly past the dike's own extent, the run past a corner the channel cuts off, is dropped. A first version boxed each reach's bed square to the map's axes and cut or bit the strip by that box (a CONVENTION the claims check judged MISLABELED, since a reader sees the bare ground beside a slanting bank): a reach 30 degrees off square across the 280 ft foot strip left the reeds 156 ft along the strip from its nearest bank at worst, and a reach 45 degrees off square ending inside the strip 56 ft (measured 2026-11-20 (the new test `the_reeds_reach_each_bank_of_a_slanting_channel` against the boxing stage, `make rust-test CRATE=rust/phases`)); now 0.5 ft, the test's sampling step, on both (measured 2026-11-20 (the same test, green)). Feet of the outfall's course with bare strip ground half a foot past a bank (a probe sampling each reach every foot, against the same flanks' strips laid with no channel): Kuwabata's 45-degree first reach 29 and 31 ft on its two banks before, 0 and 0 after (measured 2026-11-20 (the probe test)); R's two reaches 28 and 32 ft and 510 and 520 ft before, 1 and 1 ft each after, the foot of each bed's carry past a bend (measured 2026-11-20 (a temporary probe test in `waterward/tests.rs`, removed)). The notch's cut (`STRIP_CUT_HW`, a GUESS) and the copy of the dike's two faces into one outline went with the step-in. Before, red first: Kuwabata's west strip had 57 ft of the feeder and 45 ft of the outfall under its reeds and its foot strip 341 ft of the outfall, and its three strips 258, 258 and 259 ft of edge on the dike (measured 2026-11-20 (the new test against the unchanged stage)); the oblique polder R (seed 5, falling 30 degrees) 583 and 13 ft of the outfall under two strips and 140, 157 and 62 ft of edge on the dike (measured 2026-11-20 (the new test `the_waterside_strips_stop_at_the_sluices_channels_and_keep_off_the_dike` against the unchanged stage, `make rust-test CRATE=rust/phases`)); after, none on either, and Kuwabata's foot strip reaches the outfall's bank on its straight run (measured 2026-11-20 (the same test, green)). The stage's counted work on the polder rose from its accepted 2,125 and 2,908 to 4,990 and 7,110 at 10 and 20 households with the boxing version, 0.18 and 0.19 times its budget, growing at an exponent of 0.511 against its budget's 0.464 (the accept allows 0.05 over it, 0.514) (measured 2026-11-20 (`make work-budget`, every walk of the new code counted)); 6,898 and 9,763 before each reach's box was first tested against the strip's (measured 2026-11-20 (the same, the step before)); 3,929 and 5,501 with each bed taken out along its sides, about 0.14 and 0.15 times its budget (27,296 and 37,653), growing at an exponent of 0.49 (measured 2026-11-20 (`make work-budget WRITE=1`, after the difference's three passes over the ring were counted)): a bed whose box misses a piece's box is asked once, a bed that reaches a piece walks its ring against the bed's four sides (4 tests a corner) plus the difference's passes over the ring (its direction, its every-corner-within check and its inside test, each tallied), where the box test walked it three times (12 a corner), the face read at the strip's ends by halving, and the run-past ends found by cutting the bed to the run past (a constant per bed). `roll_polder` gets its claim (part 2, below).
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+| the strip at the dike's outer face, never on it | the driver test, red first; the waterward face tests, written to the new face and not run red | `waterward.rs`'s `face` | Kuwabata's drawing | none |
+| the strip stopped at each sluice's channel | the driver test, red first; the waterward cut tests, written to the new cut and not run red; `the_reeds_reach_each_bank_of_a_slanting_channel`, red first (156 and 56 ft from the nearest bank against the boxing version, measured 2026-11-20 (`make rust-test CRATE=rust/phases`)) | `waterward.rs`'s `bed`, `difference`, `clip`, `face_at`, `pieces` (the boxing version's `bed_box` and `bite` gone); `polder.rs`'s `stage_waterward` | Kuwabata's drawing | none |
+| roll_polder's decision claimed | n/a: a claim | `polder.rs`'s `roll_polder` comment | none | none |
+
+### T236 Approach (checklist part A)
+
+1. **The goal, in the world.** A reader of a polder map sees reed marsh outside the dike on each flank that faces the water, running up to the dike's outer face and to each bank of the channels that pass through the dike at its sluices, and no reed on the dike or across a channel the sluices shut.
+2. **The constraints.** Page 0019 (water crosses the dike only at gated sluices; a reed fringe on the flanks that face the water); page 0027 (the band cut where a channel crosses; the outer face the water's edge); page 0074 (where a stream or ditch crosses the marsh the reeds run right to the water's edge and stay out of the water); feature 444 FR-023 (a hamlet's review set aside at rust-only and recorded); constitution XIV.
+3. **Where each comes from.** R: research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html, research/questions/0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html, research/questions/0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html; O: T234's finding and this task's measurements. None of the three pages says where one flank's fringe gives way to the next at a corner, or whether reeds stand on a channel's far bank past the dike's corner: both labeled GUESS at the unit. Where the strip stops at a channel is 0074's own rule ("How our maps draw the marsh's edge": where a stream or a ditch crosses the marsh the reeds are drawn right to the water's edge), each reach's bed taken out along its own sides; the boxing version's CONVENTION is gone.
+4. **Do they describe the world here?** Yes: Kuwabata's corners after the change show reeds meeting the dike's outer face, the two strips meeting at the south-east corner with no bare ground, the feeder clear at the north-west, and the foot's reeds on the outfall's east bank down its straight run (measured 2026-11-20 (`resvg` crops of the drawing's corners at 2 and 4 px a foot), before and after).
+5. **The order.** After T234, before T158.
+6. **The exits.** Green: the tests red first then green, `make rust-test CRATE=rust/phases`, `make quick`, `make static`, `make counters-inert` green. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** none
+8. **The budget.** One landing (gated: `rust/` code). Its push is refused by `make work-budget-review` while `waterward.polder` counts past its accepted figure (4,990 and 7,110 against an accepted 2,125 and 2,908, measured 2026-11-20 (`make work-budget-review ROUTE=GATED-LOCAL`); 3,929 and 5,501 once each bed is taken out along its sides, still past it, measured 2026-11-20 (`make work-budget WRITE=1`)). The route the code reads, not run: a MODE AUDIT (`make work-budget-bundle MODE=audit PHASE=waterward.polder`, the work-budget agent) reading WITHIN, then `make budget-accept`, which writes the new accepted figure; the ratchet's own header says no arbiter's accept clears its refusal and the GM's words do, so whether a re-accept on an accepted stage needs his words is open.
+9. **Done, measured.** No strip crosses the feeder or the outfall or lies on the dike on Kuwabata or R (measured 2026-11-20 (the driver test)); Kuwabata the one map moved (observed 2026-11-20, method: `make map MAP=--all` then `make maps-moved`: 1 moved, 10 unchanged); the marsh's glyph-check on Kuwabata declared under 449's Occasions, named by `reviews owed` as `glyph-check--marsh--kuwabata`, set aside at rust-only and recorded (feature 444 FR-023).
+10. **Before moving a constant.** `BINS` (32 bins along the face, a GUESS) and `STRIP_CUT_HW` (15 ft, a GUESS) removed with the rules that read them; `GAP_HALF_FT`'s claim restated (the reeds no longer step into its opening). `RUN_PAST`, `OFF_CANVAS` and `STRIP_DEPTH` unchanged.
+11. **Before fitting things into room.** n/a
+12. **Before any fix.** Reeds drawn over the dike's corners and band, over the feeder's end beside the inlet, and over the outfall's first reach and down its straight run: a channel the sluice shuts read as marsh, against 0074's reeds kept out of the water.
+
+**Part 2, roll_polder's claim.** The seat is handed the polder's field outline (`Polder::outline`, the plots' edge) as its ring, the field ditches, the feeder and the outfall as its lines, and the wild pond's reed fringe as its reeds; the waterside strips come after it. Claimed at `roll_polder`: the ring cites 0019's "a village is drawn hard against its own polder" (the page's own GUESS); the ring being the fields' edge, not the dike's, a GUESS that records its cost; the wet ground cites 0081 (a track keeps off wet ground); the lines and the unhanded pond a GUESS (no page says it); the strips after the seat cite 0019 (every flank but the landward one holds water back).
+
+**The glyph-check this owes.** Declared under 449's `## Occasions` (`placement-changed: marsh on kuwabata`), so `reviews owed --units --landing` names `glyph-check--marsh--kuwabata` (observed 2026-11-20, method: that command after `make map MAP=pool/hamlets/kuwabata`), set aside and recorded at rust-only by the review gate (feature 444 FR-023, T232's record); its detection without the declaration is T238's, which lands before T158, the step's close.
+
+**Found and left?** The settlement's ground on Kuwabata is drawn over the north dike and the head canal: its reserved ring runs from y 1865.5 to 2340, the plots' edge, while the dike's outer face stands at about y 2288 to 2296 (observed 2026-11-20, method: the reserved path in `kuwabata.driver.svg` against the strips probe's dike box), because the seat is handed the fields' outline and nothing for the dike or the ring canal, where 0019 draws the village a few steps off the dike; handing the dike's outer face as the ring changes the seat's candidates (one an outline edge: the plots' outline has 4, the dike's 124 and 182 points at 10 and 20 households, measured 2026-11-04 (`make stage-sizes`, `specs/444-work-budget-program/phases/waterward_polder.derivation.md`)) and its placement, a placement change of its own, not this task's: filed as T239, which lands before T158, the step's close. The glyph-check this change owes (the marsh on Kuwabata, its placement rules changed) is not detected by itself, since the change is in the stage, outside the driver's drawing code (observed 2026-11-20, method: `reviews owed --units --landing` on the working tree before the declaration) - T238's gap, which lands before T158; it is declared under 449's Occasions, so it is named, set aside at rust-only and recorded (the paragraph above). Fixed, no longer left: on a polder falling obliquely each reach once took the reeds in its axis-aligned box beside it, R's foot strip cut from x 2628.7 to 3084.2, 455.5 ft of its length bare to its full depth beside the outfall (measured 2026-11-20 (a temporary test printing each strip's box, removed)); each bed is now taken out along its own sides, R's two foot pieces now running to x 3073.2 and from x 2627.0 along the outfall's banks, 1 ft of the outfall's course with bare ground beside either bank (measured 2026-11-20 (a temporary probe test in `waterward/tests.rs` printing each strip's box and sampling each bank every foot, removed)). Past Kuwabata's south-west corner the outfall's east bank is reeded down its straight run and its west bank is bare, the west strip's run past the corner cut off at the channel (observed 2026-11-20, method: a 2 px a foot crop of the drawing's south-west corner). Fixed, no longer left: on Kuwabata the outfall's 45-degree first reach left a bare box of about 28 by 27 ft at the corner between the dike and the bend (observed 2026-11-20, method: a 4 px a foot crop of the drawing's south-west corner), the boxing CONVENTION's cost; now the reeds meet both banks of that stretch, the west strip's along its south-west bank and a triangle of each of the west and foot strips between the dike's corner and its north-east bank, the bare ground the bed alone (observed 2026-11-20, method: `make map MAP=pool/hamlets/kuwabata`, then a 4 px a foot `resvg` crop of x 2240 to 2370, y 3390 to 3500), 0 ft of that reach's course with bare ground beside either bank, against 29 and 31 ft before (measured 2026-11-20 (the probe test)). Those two triangles are new pieces of 3 corners each, so Kuwabata draws five strips where it drew three (measured 2026-11-20 (the probe test)). A reach that begins inside a strip with no earlier bed reaching it from the dike would now leave the reeds between the dike and its start, where the boxing version took the strip's whole depth; every sluice's channel reaches the strip from the dike, its next reach overlapping it by the carry, so no map draws that case. The face reads the dike's corners in order along the axis, which assumes the flank's own corners run one way along it; a fold at a corner would zigzag the face (none seen on Kuwabata or R). The work-budget ratchet refusal (item 8) is the caller's to clear.
+
+**Performance work?** no
+
+<!-- plan-archive: T237 to T234 moved to plan-done.md, 2026-11-20 (feature 375 FR-044) -->
+<!-- plan-archive: T237 to T237 moved to plan-done.md, 2026-11-20 (feature 375 FR-044) -->
+### T238 (<why: the finding or measurement that files it>)
 
 - **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
 
-### T236 Approach (checklist part A)
+### T238 Approach (checklist part A)
 
 1. **The goal, in the world.** <the place as it should be>
 2. **The constraints.** <the FRs, decisions and pages it holds to>
@@ -818,16 +853,41 @@ tests/hooks/                 # the suites, the verdict replay through phase 1
 **Performance work?** <no - or yes, and its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
 
 
-<!-- plan-archive: T237 to T234 moved to plan-done.md, 2026-11-20 (feature 375 FR-044) -->
-<!-- plan-archive: T237 to T237 moved to plan-done.md, 2026-11-20 (feature 375 FR-044) -->
-### T238 (<why: the finding or measurement that files it>)
+### T239 (<why: the finding or measurement that files it>)
 
 - **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
 
-### T238 Approach (checklist part A)
+### T239 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or each item with its visible effect or the research finding it breaks; an item with neither is not a defect and is not filed>
+
+**Performance work?** <no - or yes, and its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+
+### T240 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T240 Approach (checklist part A)
 
 1. **The goal, in the world.** <the place as it should be>
 2. **The constraints.** <the FRs, decisions and pages it holds to>

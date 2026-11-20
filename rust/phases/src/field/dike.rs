@@ -31,7 +31,7 @@ pub const WIDTH_WAVES: (f64, f64) = (9.0, 23.0);
 /// Half the opening a sluice cuts in the band (feet).
 ///
 /// Research:
-///     the gap - GUESS: research/questions/0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html silent on the cut's width, attesting only that the band is cut where a channel crosses; half of a 30 ft cut, the opening the shared dike drawing steps the reeds into (`DIKE_GAP_HW`)
+///     the gap - GUESS: research/questions/0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html silent on the cut's width, attesting only that the band is cut where a channel crosses; half of a 30 ft cut, the deleted engine's opening (`DIKE_GAP_HW`); the waterside reeds stop at the channel's bank, not at this gap (449 T236)
 pub const GAP_HALF_FT: f64 = 15.0;
 /// Each row's place across the band from the field side, and its trees' spacing along it (feet), willow then mulberry.
 ///

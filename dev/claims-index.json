@@ -34785,17 +34785,6 @@
   ],
   "verdict": "IN-STEP"
  },
- "rust/phases/src/driver/polder.rs::STRIP_CUT_HW#the strip's cut": {
-  "body": "f208ad96e59a170a",
-  "claim": "the strip's cut - GUESS: polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing puts reeds on the water-facing flanks but records no width; the deleted waterward stage's 15 ft",
-  "code": "e0882abe1f6dcbca",
-  "core": "8fd79110fc2dc078",
-  "date": "2026-11-08",
-  "note": "the page puts a reed fringe on the flanks that hold water back but gives no width, so 15 ft is a guess",
-  "pages": {},
-  "research": "",
-  "verdict": "IN-STEP"
- },
  "rust/phases/src/driver/polder.rs::STRIP_DEPTH#the strip's depth": {
   "body": "5b99e6086bb1ad67",
   "claim": "the strip's depth - GUESS: the page records no depth; the deleted waterward stage's 280 ft",
@@ -34914,32 +34903,82 @@
   ],
   "verdict": "IN-STEP"
  },
- "rust/phases/src/driver/polder.rs::roll_polder#the polder": {
-  "body": "af6c20d911ad4fa0",
-  "claim": "the polder - polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing: enclosed by its dike all the way round, from outside in the dike, the ring canal, the field ditches and the paddies",
-  "code": "3ff4fe65eadc2e59",
+ "rust/phases/src/driver/polder.rs::roll_polder#its lines and no pond": {
+  "body": "0b89cf14ae3692c1",
+  "claim": "its lines and no pond - GUESS: the field ditches, the feeder and the outfall handed as the lines `stage_seat` keeps its way out from crossing, as a comb's channels are; the wild pond not handed as a pond at its berth, the reed fringe round it standing for it",
+  "code": "328d0f161de60afd",
   "core": "02f6399c8c255638",
   "date": "2026-11-20",
-  "note": "the unit puts the stages together and lays out no polder of its own; it draws the polder from stage_polder, and the added draw_sluices draws the gates where water crosses the dike, as the page says",
+  "note": "ditches, feeder and outfall handed as lines; pond None, the fringe stands for it",
+  "pages": {},
+  "reads": "bdb5a83d048d151c",
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/driver/polder.rs::roll_polder#its wet ground": {
+  "body": "0b89cf14ae3692c1",
+  "claim": "its wet ground - village-lanes.drawing: a track keeps off wet ground - the wild pond's reed fringe handed as the seat's reeds",
+  "code": "13fc39fb9f7e8af9",
+  "core": "02f6399c8c255638",
+  "date": "2026-11-20",
+  "note": "the wild pond's reed fringe handed as the seat's reeds",
+  "pages": {
+   "0081-village-lanes.drawing.html": "84bf7e092c8fca20"
+  },
+  "reads": "bdb5a83d048d151c",
+  "research": "348d3cab06271e76",
+  "rests": [
+   "0081-village-lanes.drawing.html:48cdd569d493520c",
+   "0081-village-lanes.drawing.html:7237abd9ead63ebe"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/driver/polder.rs::roll_polder#the ring the fields' edge, not the dike's": {
+  "body": "0b89cf14ae3692c1",
+  "claim": "the ring the fields' edge, not the dike's - GUESS: polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing draws the village on the dry ground a few steps off the dike (its own GUESS), but the seat is handed neither the dike nor the ring canal inside it, so nothing keeps its ground off them; on Kuwabata the settlement's ground is drawn over the north dike and the head canal (found by feature 449 T236, left to feature 449 T239)",
+  "code": "fe5ff7da0aafff1c",
+  "core": "02f6399c8c255638",
+  "date": "2026-11-20",
+  "note": "known (449 T239): the seat's ring is `s.polder.outline` and `Ground` gets neither the dike nor the ring canal, so the settlement's ground can lie over them, not \"on the dry ground just off the dike\"; the departure as stated is what the code does; fix: code; effect: on Kuwabata the settlement's ground is drawn over the north dike and the head canal",
+  "pages": {},
+  "reads": "bdb5a83d048d151c",
+  "research": "",
+  "verdict": "DRIFTED"
+ },
+ "rust/phases/src/driver/polder.rs::roll_polder#the strips after the seat": {
+  "body": "0b89cf14ae3692c1",
+  "claim": "the strips after the seat - polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing: every flank but the landward one holds water back - the seat's side names the landward flank, so the waterside strips are laid once it is known (`stage_waterward`)",
+  "code": "d391f5e69a9e90d9",
+  "core": "02f6399c8c255638",
+  "date": "2026-11-20",
+  "note": "`flanks` drops the seat's compass side; the strips are laid after `stage_seat`",
   "pages": {
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "3012a8eb9aff8c32"
   },
   "reads": "bdb5a83d048d151c",
   "research": "765c28e2d975a432",
   "rests": [
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:9b079184810cacb3",
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:f981425220ab2e60"
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:c8a3bf21f642aa46"
   ],
   "verdict": "IN-STEP"
  },
- "rust/phases/src/driver/polder.rs::roll_polder#where the village may sit: the Ground built for stage_seat uses the polder's outline as its ring and keeps the village off the field ditches, the feeder, the outfall and the polder's reed fringe (the dry ground off the dike, §5, §6)": {
-  "code": "02f6399c8c255638",
+ "rust/phases/src/driver/polder.rs::roll_polder#the village against its polder": {
+  "body": "0b89cf14ae3692c1",
+  "claim": "the village against its polder - polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing: a village is drawn hard against its own polder, its houses pressing up to its fields (the page's own GUESS) - the polder's field outline (`Polder::outline`, the plots' edge) handed as the seat's ring, as a comb hands its fan",
+  "code": "035c55cc8b488c49",
   "core": "02f6399c8c255638",
   "date": "2026-11-20",
-  "note": "where the village may sit: the Ground built for stage_seat uses the polder's outline as its ring and keeps the village off the field ditches, the feeder, the outfall and the polder's reed fringe (the dry ground off the dike, §5, §6)",
-  "outside": true,
-  "research": "",
-  "verdict": "UNCLAIMED"
+  "note": "the field outline is handed as the ring, the page's own GUESS",
+  "pages": {
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "3012a8eb9aff8c32"
+  },
+  "reads": "bdb5a83d048d151c",
+  "research": "765c28e2d975a432",
+  "rests": [
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:8feb1eada8b008c2"
+  ],
+  "verdict": "IN-STEP"
  },
  "rust/phases/src/driver/polder.rs::sluice_channel#the channel it shuts": {
   "body": "4fc5931b971fe6a5",
@@ -35036,20 +35075,36 @@
   ],
   "verdict": "CANNOT-TELL"
  },
- "rust/phases/src/driver/polder.rs::stage_waterward#the reed strips": {
-  "body": "8bf6becfef142378",
-  "claim": "the reed strips - polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing: reeds on the flanks of a dike that face the water",
-  "code": "7c7ff39954da3499",
-  "core": "01da5e4aaff58745",
+ "rust/phases/src/driver/polder.rs::stage_waterward#the channels they stop at": {
+  "body": "4c4fd8c7b30d49f8",
+  "claim": "the channels they stop at - polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing: water crosses the dike only at gated sluices, the feeder at the inlet and the outfall's drain at the outfall, each at its drawn width (`FEEDER_W`, `RUN_W`); reed-beds-and-the-marshs-edge-yoshihara.drawing: the reeds drawn to the water's edge, kept out of the water",
+  "code": "3e661dd1faf89473",
+  "core": "37107798ae2dd111",
   "date": "2026-11-20",
-  "note": "reeds run along the dike's outer face, broken at its gaps; this matches the fringe on the flanks that hold water back; the marked lines only count work",
+  "note": "feeder at FEEDER_W and outfall at RUN_W, the two sluice channels; the reeds stop at their banks",
   "pages": {
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "3012a8eb9aff8c32"
   },
-  "reads": "e32abb4b30750e72",
+  "reads": "47bc512ccc91a5f1",
   "research": "765c28e2d975a432",
   "rests": [
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:152b5508568f62e5",
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:f981425220ab2e60"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/driver/polder.rs::stage_waterward#the reed strips": {
+  "body": "4c4fd8c7b30d49f8",
+  "claim": "the reed strips - polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing: reeds on the flanks of a dike that face the water",
+  "code": "ff101ced4359f035",
+  "core": "37107798ae2dd111",
+  "date": "2026-11-20",
+  "note": "the strips are laid off the dike's outer face on the waterward flanks",
+  "pages": {
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "3012a8eb9aff8c32"
+  },
+  "reads": "47bc512ccc91a5f1",
+  "research": "765c28e2d975a432",
+  "rests": [
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:c8a3bf21f642aa46"
   ],
   "verdict": "IN-STEP"
@@ -35696,8 +35751,8 @@
   "body": "1bb51551e58e7c56",
   "claim": "the driver's tests - NONE: fixtures and assertions; each rule's claim is at the unit it tests",
   "cleared": "counter-only (feature 446)",
-  "code": "4139fc33429fd354",
-  "core": "fd6eacbea691ba4d",
+  "code": "108e9c24d2006621",
+  "core": "7212a13331d6c97d",
   "date": "2026-11-19",
   "note": "assertions only",
   "pages": {},
@@ -37726,11 +37781,11 @@
  },
  "rust/phases/src/field/dike.rs::GAP_HALF_FT#the gap": {
   "body": "af13cfe47a8e9909",
-  "claim": "the gap - GUESS: polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing silent on the cut's width, attesting only that the band is cut where a channel crosses; half of a 30 ft cut, the opening the shared dike drawing steps the reeds into (`DIKE_GAP_HW`)",
-  "code": "2bbc50477ec35510",
+  "claim": "the gap - GUESS: polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing silent on the cut's width, attesting only that the band is cut where a channel crosses; half of a 30 ft cut, the deleted engine's opening (`DIKE_GAP_HW`); the waterside reeds stop at the channel's bank, not at this gap (449 T236)",
+  "code": "3d2875ee8520c028",
   "core": "5a609849526efd17",
-  "date": "2026-10-31",
-  "note": "the page says only that the band is cut where a channel crosses and gives no width for the cut, so 15 ft is a fair GUESS",
+  "date": "2026-11-20",
+  "note": "15 ft, half of a 30 ft cut; nothing in the bundle answers the width; the fringe no longer reads the gap",
   "pages": {},
   "research": "",
   "verdict": "IN-STEP"
@@ -44515,13 +44570,13 @@
   ],
   "verdict": "IN-STEP"
  },
- "rust/phases/src/waterward.rs::BINS#its search steps and tolerances": {
-  "body": "d20ea404971122ba",
-  "claim": "its search steps and tolerances - GUESS: no source could speak to it, a value of ours (feature 417 T38 pass N1, 2026-10-25) - 32 bins along the face",
-  "code": "de3712c813fe8e06",
-  "core": "9352453f8091f927",
-  "date": "2026-11-04",
-  "note": "resolution of the face trace, pages silent",
+ "rust/phases/src/waterward.rs::Crossing#the waterward fringe": {
+  "body": "f73996962f1b12af",
+  "claim": "the waterward fringe - NONE: the stage's machinery; each rule's claim is at the unit that keeps it",
+  "code": "4f7ebacd84f9261c",
+  "core": "5382da94e4516d70",
+  "date": "2026-11-20",
+  "note": "plumbing: a record of where a ring edge crosses a bed side",
   "pages": {},
   "research": "",
   "rests": [],
@@ -44551,6 +44606,18 @@
   "rests": [],
   "verdict": "IN-STEP"
  },
+ "rust/phases/src/waterward.rs::PAST_BED#the waterward fringe": {
+  "body": "c32306c3e50e600b",
+  "claim": "the waterward fringe - NONE: the stage's machinery; each rule's claim is at the unit that keeps it",
+  "code": "a667bdffe882209b",
+  "core": "45ee25e0fc6ec9f7",
+  "date": "2026-11-20",
+  "note": "a 1e-10 float tolerance, not a distance a reader would see",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
  "rust/phases/src/waterward.rs::RUN_PAST#its reed strip's run": {
   "body": "d1c2119fd7e70b7b",
   "claim": "its reed strip's run - GUESS: searched, the record silent (feature 417 T38, 2026-10-25) - 30 ft before the dike's start, 20 ft past its end",
@@ -44560,6 +44627,48 @@
   "note": "y0-30 / y1+20 and x0-30 / x1+20 as stated, pages silent",
   "pages": {},
   "research": "",
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/waterward.rs::Side#the waterward fringe": {
+  "body": "46f4ee2d50ef8787",
+  "claim": "the waterward fringe - NONE: the stage's machinery; each rule's claim is at the unit that keeps it",
+  "code": "4bc50cc817dd2225",
+  "core": "ce73e6e644a98029",
+  "date": "2026-11-20",
+  "note": "a type alias, plumbing",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/waterward.rs::bed#the channel's bed": {
+  "body": "a9c7b5f478e5b2f3",
+  "claim": "the channel's bed - reed-beds-and-the-marshs-edge-yoshihara.drawing: the bed its drawn width across and run square half a width past each end of every reach, so a bend's outer corner is covered and the reeds come to the water's edge and stay out of the water (about 3 ft past a channel's drawn end inside the strip)",
+  "code": "46d3ca5af6eb2e8b",
+  "core": "53bc77c94fb615e9",
+  "date": "2026-11-20",
+  "note": "the code builds a rectangle its drawn width across, squared off half a width past each end of every reach, which is what the reworded claim says; the reed-free gap of about 3 ft past a channel's drawn end contradicts no finding",
+  "pages": {
+   "0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html": "fb7c4bec76071ea3"
+  },
+  "research": "a44790630d28af23",
+  "rests": [
+   "0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html:73411ab3787c3b91",
+   "0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html:c7f27395e395df62",
+   "0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html:ecb2990932ed7ba1"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/waterward.rs::clip#the waterward fringe": {
+  "body": "efe4002106b1460c",
+  "claim": "the waterward fringe - NONE: the stage's machinery; each rule's claim is at the unit that keeps it",
+  "code": "565cf44d3d93feb7",
+  "core": "97d46e04abd25e5e",
+  "date": "2026-11-20",
+  "note": "clipping a ring to a half-plane, plain geometry",
+  "pages": {},
+  "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "rust/phases/src/waterward.rs::compass#the waterward fringe": {
@@ -44574,16 +44683,77 @@
   "rests": [],
   "verdict": "IN-STEP"
  },
- "rust/phases/src/waterward.rs::face#strip at the dike's outer face": {
-  "body": "517e5bbda2122b70",
-  "claim": "strip at the dike's outer face - GUESS: searched, the record silent (feature 417 T36 pass P2a, 2026-10-25); the reeds stop at the outermost face, stepping in through a notch",
-  "code": "ba32769c82529129",
-  "core": "a1e81c1d5dd5846f",
+ "rust/phases/src/waterward.rs::crossings#the waterward fringe": {
+  "body": "291730827b4c8afa",
+  "claim": "the waterward fringe - NONE: the stage's machinery; each rule's claim is at the unit that keeps it",
+  "code": "6145c60d9ebe4ee0",
+  "core": "eeef52f66db31650",
   "date": "2026-11-20",
-  "note": "the page puts a fringe on the water flanks but says nothing about where its edge stops or how it steps at a notch, so GUESS is right; the marked line only counts work",
+  "note": "finding where edges cross the bed, plain geometry",
   "pages": {},
-  "reads": "5e1c3a6c7eece7b8",
   "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/waterward.rs::depth#the waterward fringe": {
+  "body": "9fd01627e989b6da",
+  "claim": "the waterward fringe - NONE: the stage's machinery; each rule's claim is at the unit that keeps it",
+  "code": "652a2f09b8a16b6d",
+  "core": "01b91f94131f5da9",
+  "date": "2026-11-20",
+  "note": "a signed distance to one side, plain geometry",
+  "pages": {},
+  "reads": "22273de6516008f1",
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/waterward.rs::difference#the waterward fringe": {
+  "body": "97fa989627428d87",
+  "claim": "the waterward fringe - NONE: the stage's machinery; each rule's claim is at the unit that keeps it",
+  "code": "60ea7ff5dde44dae",
+  "core": "b703affe81cb1a59",
+  "date": "2026-11-20",
+  "note": "polygon difference against a four-sided bed; the split for a bed wholly inside is a step of the method, not a choice about the place",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/waterward.rs::face#strip at the dike's outer face": {
+  "body": "3da7b6b611030f72",
+  "claim": "strip at the dike's outer face - GUESS: searched, the record silent (feature 417 T36 pass P2a, 2026-10-25); the reeds stop at the outermost face, meeting it point for point and never on the band (polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing: the maps curve the dike's outer face with the water's edge)",
+  "code": "57c52ac2f318d761",
+  "core": "a9940b683037e08f",
+  "date": "2026-11-20",
+  "note": "the face runs through the outer ring's own points, rounded outward by 0.1, never inside the band; the bundle is silent",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/waterward.rs::face#the flank's own face": {
+  "body": "3da7b6b611030f72",
+  "claim": "the flank's own face - GUESS: no page says where one flank's fringe gives way to the next at a corner; a corner of the outline is the flank whose side of the box it stands nearest, the strip carried one corner past it and out to the box's corner, so two strips meeting at a corner leave no bare ground between them and neither turns onto the other's face",
+  "code": "fd25779159d9a7b5",
+  "core": "a9940b683037e08f",
+  "date": "2026-11-20",
+  "note": "each corner is filed to its nearest side, carried one corner past and out to the box's side",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/waterward.rs::face_at#the waterward fringe": {
+  "body": "a41f2eff0669ac60",
+  "claim": "the waterward fringe - NONE: the stage's machinery; each rule's claim is at the unit that keeps it",
+  "code": "c973637d9d9c7922",
+  "core": "c98505a0f3641731",
+  "date": "2026-11-20",
+  "note": "plumbing: finds a point by halving, interpolates linearly along the face's points and tallies the steps it took; it decides nothing physical",
+  "pages": {},
+  "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "rust/phases/src/waterward.rs::flanks#waterward flanks": {
@@ -44603,61 +44773,257 @@
   ],
   "verdict": "IN-STEP"
  },
- "rust/phases/src/waterward.rs::fringe#each notch one flank's": {
-  "body": "04b729284f530988",
-  "claim": "each notch one flank's - GUESS: no page assigns a notch to a flank; the flank whose face it stands nearest, so a cut near a corner bites one strip, not two",
-  "cleared": "counter-only (feature 446)",
-  "code": "23a77c713d92b400",
-  "core": "12b4674d84a60706",
-  "date": "2026-11-07",
-  "note": "the page is silent on which flank a sluice notch belongs to; the nearest face is a fair guess",
-  "pages": {},
-  "reads": "57ec1e6dc635e27a",
-  "research": "",
-  "triaged": "2026-11-20",
-  "verdict": "IN-STEP"
- },
  "rust/phases/src/waterward.rs::fringe#reed fringe on the waterward flanks": {
-  "body": "04b729284f530988",
+  "body": "5bf66663d52cf617",
   "claim": "reed fringe on the waterward flanks - polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing: a marsh strip off each water-facing flank",
-  "cleared": "counter-only (feature 446)",
-  "code": "0eeae45d0eef8537",
-  "core": "12b4674d84a60706",
-  "date": "2026-11-07",
-  "note": "one marsh strip `depth` deep off each flank `flanks()` returns, as \"a reed fringe along their west flank ... as every flank of a polder but the landward one does\"; the marked lines are count bookkeeping only",
+  "code": "1c72ffea9aa2d0b7",
+  "core": "a7bd02b13236e7e4",
+  "date": "2026-11-20",
+  "note": "one strip set per waterward flank, at STRIP_DEPTH off the outer face",
   "pages": {
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "3012a8eb9aff8c32"
   },
   "reads": "57ec1e6dc635e27a",
   "research": "765c28e2d975a432",
   "rests": [
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:152b5508568f62e5",
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:c8a3bf21f642aa46"
   ],
-  "triaged": "2026-11-20",
   "verdict": "IN-STEP"
  },
- "rust/phases/src/waterward/tests.rs::a_polder_s_strips_run_off_toward_the_frame_and_none_without_a_dike#the fringe's tests": {
-  "body": "da326d89f30f3203",
-  "claim": "the fringe's tests - NONE: fixtures and assertions, deciding nothing about the place",
-  "cleared": "counter-only (feature 446)",
-  "code": "4198bf615336a3d8",
-  "core": "00d4026353dd0c17",
-  "date": "2026-11-07",
-  "note": "test fixtures and assertions only",
+ "rust/phases/src/waterward.rs::fringe#stopped at each sluice's channel": {
+  "body": "5bf66663d52cf617",
+  "claim": "stopped at each sluice's channel - reed-beds-and-the-marshs-edge-yoshihara.drawing: the reeds drawn to the water's edge and kept out of the water itself (`pieces`)",
+  "code": "964775871ca47ae5",
+  "core": "a7bd02b13236e7e4",
+  "date": "2026-11-20",
+  "note": "each channel's bed is cut out of or bitten into the strip",
+  "pages": {
+   "0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html": "fb7c4bec76071ea3"
+  },
+  "reads": "57ec1e6dc635e27a",
+  "research": "a44790630d28af23",
+  "rests": [
+   "0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html:73411ab3787c3b91",
+   "0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html:ecb2990932ed7ba1"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/waterward.rs::nearest#the waterward fringe": {
+  "body": "adf92d32ae98674a",
+  "claim": "the waterward fringe - NONE: the stage's machinery; each rule's claim is at the unit that keeps it",
+  "code": "6c84b3f8a5c43f9a",
+  "core": "affa41d8bd7553ed",
+  "date": "2026-11-20",
+  "note": "nearest side of a box, ties to the first named",
   "pages": {},
   "research": "",
   "rests": [],
-  "triaged": "2026-11-20",
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/waterward.rs::pieces#the run past the cut dropped": {
+  "body": "52919978af66c136",
+  "claim": "the run past the cut dropped - GUESS: a piece left wholly past the dike's own extent is the strip's run past the dike's end (`RUN_PAST`, itself a GUESS) beyond the channel, dropped so the strip stops at the cut, and a bed reaching the end of the strip's span ends that run square across at the bed's nearest point past the dike's extent; a channel crossing mid-flank leaves reeds on both its banks, as reed-beds-and-the-marshs-edge-yoshihara.drawing lines each bank, but past a corner the far bank keeps only what another flank's strip lays there",
+  "code": "a9baec2aeb82012f",
+  "core": "c95616e44592b711",
+  "date": "2026-11-20",
+  "note": "code matches the claim: pieces wholly past the dike's extent are dropped, and a bed reaching an end of the span sets `to`/`from` to the bed's nearest point past the extent and ends the strip square there; the page says nothing about how far the strip runs past a dike's end, so GUESS is the right label",
+  "pages": {},
+  "research": "",
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/waterward.rs::pieces#the strip stops at the channel's bank": {
+  "body": "52919978af66c136",
+  "claim": "the strip stops at the channel's bank - reed-beds-and-the-marshs-edge-yoshihara.drawing: its section \"How our maps draw the marsh's edge\" - where a stream or a ditch crosses the marsh the reeds are drawn right to the water's edge, and kept out of the water itself - each reach's bed taken out along its own sides at its drawn width, slanting or square; the strip ends at the bank of the channel that crosses the dike at a sluice (polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing: water crosses the dike only at gated sluices; polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing: where a channel crosses the dike the band is cut), so no reed is drawn across the channel the sluice shuts",
+  "code": "c290a8ea50cb28ba",
+  "core": "c95616e44592b711",
+  "date": "2026-11-20",
+  "note": "each reach's bed is taken out of the strip along its own sides at its drawn width, slanting or square, so the reeds run to the water and stay out of it",
+  "pages": {
+   "0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html": "fb7c4bec76071ea3"
+  },
+  "research": "a44790630d28af23",
+  "rests": [
+   "0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html:73411ab3787c3b91",
+   "0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html:c7f27395e395df62",
+   "0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html:ecb2990932ed7ba1"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/waterward.rs::steps#the waterward fringe": {
+  "body": "846fabb60236c232",
+  "claim": "the waterward fringe - NONE: the stage's machinery; each rule's claim is at the unit that keeps it",
+  "code": "1f1a23ae7dbee88f",
+  "core": "7ca8cd1aa3c918f3",
+  "date": "2026-11-20",
+  "note": "a count of tests for a binary search, plumbing",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/waterward.rs::within#the waterward fringe": {
+  "body": "5f3be6a0b92c71b1",
+  "claim": "the waterward fringe - NONE: the stage's machinery; each rule's claim is at the unit that keeps it",
+  "code": "fc78b74a800131c5",
+  "core": "669fab309ec8dc16",
+  "date": "2026-11-20",
+  "note": "an inside-the-bed test, plain geometry",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/waterward/tests.rs::SQUARE#the fringe's tests": {
+  "body": "bdee70d34041f465",
+  "claim": "the fringe's tests - NONE: fixtures and assertions, deciding nothing about the place",
+  "code": "19fdcfb5fafc9b4a",
+  "core": "3c07431dd02db371",
+  "date": "2026-11-20",
+  "note": "fixture",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/waterward/tests.rs::a_bed_is_taken_out_of_a_ring_along_its_own_sides#the fringe's tests": {
+  "body": "8e761b2ebbdac33c",
+  "claim": "the fringe's tests - NONE: fixtures and assertions, deciding nothing about the place",
+  "code": "07ad29205494b5cd",
+  "core": "ce055ef3f2d1ecb8",
+  "date": "2026-11-20",
+  "note": "fixtures and assertions only",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/waterward/tests.rs::a_bed_that_takes_nothing_counts_every_pass_over_the_ring#the fringe's tests": {
+  "body": "4925c464221bcf83",
+  "claim": "the fringe's tests - NONE: fixtures and assertions, deciding nothing about the place",
+  "code": "73f94c7d526bc435",
+  "core": "acbc1a47ff44b6d1",
+  "date": "2026-11-20",
+  "note": "checks the test counter, decides nothing",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/waterward/tests.rs::a_point_is_the_side_it_stands_nearest#the fringe's tests": {
+  "body": "0cf29a4437d1e1fe",
+  "claim": "the fringe's tests - NONE: fixtures and assertions, deciding nothing about the place",
+  "code": "12cdc706f4212b6d",
+  "core": "740291f0af1f002f",
+  "date": "2026-11-20",
+  "note": "assertions",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/waterward/tests.rs::a_polder_s_strips_run_off_toward_the_frame_and_none_without_a_dike#the fringe's tests": {
+  "body": "50f69472aaf25880",
+  "claim": "the fringe's tests - NONE: fixtures and assertions, deciding nothing about the place",
+  "code": "9317a5a78a769787",
+  "core": "ae2537b516cbdf09",
+  "date": "2026-11-20",
+  "note": "fixtures and assertions (strip depth, the 20 ft frame margin, the count tallies); they check the fringe's rules but decide nothing about the place",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/waterward/tests.rs::a_square_reach_ending_inside_the_strip_is_bitten_out_of_one_piece#the fringe's tests": {
+  "body": "b156a7ff7864f5ba",
+  "claim": "the fringe's tests - NONE: fixtures and assertions, deciding nothing about the place",
+  "code": "af59ae6e7dc53b3f",
+  "core": "08316a6921745f89",
+  "date": "2026-11-20",
+  "note": "fixtures and assertions only",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/waterward/tests.rs::a_strip_stops_at_each_bank_of_the_channel_that_crosses_it#the fringe's tests": {
+  "body": "5e2dd96eb1939452",
+  "claim": "the fringe's tests - NONE: fixtures and assertions, deciding nothing about the place",
+  "code": "a252e48b0a6c6083",
+  "core": "450217149f336bad",
+  "date": "2026-11-20",
+  "note": "assertions",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/waterward/tests.rs::area#the fringe's tests": {
+  "body": "cb7b8fa54c8af6ee",
+  "claim": "the fringe's tests - NONE: fixtures and assertions, deciding nothing about the place",
+  "code": "a85e8a020a9546f5",
+  "core": "f2765c8e541ce17a",
+  "date": "2026-11-20",
+  "note": "an area helper",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/waterward/tests.rs::reaches#the fringe's tests": {
+  "body": "7bf477ad760cc17c",
+  "claim": "the fringe's tests - NONE: fixtures and assertions, deciding nothing about the place",
+  "code": "d2f15b272714f2f5",
+  "core": "781c5e5b937ac7db",
+  "date": "2026-11-20",
+  "note": "test helper",
+  "pages": {},
+  "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "rust/phases/src/waterward/tests.rs::ring#the fringe's tests": {
-  "body": "30f93e0b2c5766d2",
+  "body": "79b61ee21470db29",
   "claim": "the fringe's tests - NONE: fixtures and assertions, deciding nothing about the place",
-  "code": "42df1ce6990a054c",
-  "core": "4e1cc79a0d9f5b4c",
-  "date": "2026-11-04",
-  "note": "test fixture geometry",
+  "code": "5e152aa1aee471c6",
+  "core": "fd5d474f49128ce9",
+  "date": "2026-11-20",
+  "note": "fixture: a 4 x 21-point square ring, which is test geometry only",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/waterward/tests.rs::stand_off#the fringe's tests": {
+  "body": "f56a81900678c36f",
+  "claim": "the fringe's tests - NONE: fixtures and assertions, deciding nothing about the place",
+  "code": "d9bb0020a33b1240",
+  "core": "25607965fd833be4",
+  "date": "2026-11-20",
+  "note": "a measuring probe for tests; its 0.5 ft step is how finely it measures, not a fact about the place",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/waterward/tests.rs::the_face_is_read_between_its_points_and_held_past_its_ends#the fringe's tests": {
+  "body": "2b1fbc0150ef886b",
+  "claim": "the fringe's tests - NONE: fixtures and assertions, deciding nothing about the place",
+  "code": "35776d282151b0dd",
+  "core": "051c112e98fe8e38",
+  "date": "2026-11-20",
+  "note": "assertions",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/waterward/tests.rs::the_face_keeps_to_its_own_side_round_a_corner_and_never_runs_inside_the_ring#the fringe's tests": {
+  "body": "ff72caa9230aca7b",
+  "claim": "the fringe's tests - NONE: fixtures and assertions, deciding nothing about the place",
+  "code": "a6dd0810e416b44b",
+  "core": "22fe9803771b6a57",
+  "date": "2026-11-20",
+  "note": "assertions",
   "pages": {},
   "research": "",
   "rests": [],
@@ -44675,13 +45041,37 @@
   "rests": [],
   "verdict": "IN-STEP"
  },
- "rust/phases/src/waterward/tests.rs::the_strip_follows_the_dike_s_outer_face_and_steps_in_at_a_notch#the fringe's tests": {
-  "body": "c59807126ce5d6b9",
+ "rust/phases/src/waterward/tests.rs::the_reeds_reach_each_bank_of_a_slanting_channel#the fringe's tests": {
+  "body": "b18ea0014ea99d6e",
   "claim": "the fringe's tests - NONE: fixtures and assertions, deciding nothing about the place",
-  "code": "624a276eddc75273",
-  "core": "301727ccaa7f6c25",
-  "date": "2026-11-04",
-  "note": "fixture and assertions",
+  "code": "028f5d7845d116a9",
+  "core": "8aa7ca71f22d3f61",
+  "date": "2026-11-20",
+  "note": "fixtures and assertions only",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/waterward/tests.rs::the_run_past_the_dike_ends_at_a_channel_at_either_end_of_the_span#the fringe's tests": {
+  "body": "ee4b812b9ac4b130",
+  "claim": "the fringe's tests - NONE: fixtures and assertions, deciding nothing about the place",
+  "code": "8dede5680afae49e",
+  "core": "76a27f2a78b86b2b",
+  "date": "2026-11-20",
+  "note": "fixtures and assertions only",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/waterward/tests.rs::the_strip_follows_the_dike_s_outer_face#the fringe's tests": {
+  "body": "813a06d3fc868611",
+  "claim": "the fringe's tests - NONE: fixtures and assertions, deciding nothing about the place",
+  "code": "8f3194cf1a25d959",
+  "core": "cd14cbe6f5264c58",
+  "date": "2026-11-20",
+  "note": "assertions",
   "pages": {},
   "research": "",
   "rests": [],

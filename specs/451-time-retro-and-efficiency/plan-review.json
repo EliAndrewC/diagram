@@ -366,6 +366,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-20",
    "declared": "spec-fidelity"
+  },
+  "### T26 (the event log filed every line under `.specify/feature.json`, which `make task-start` rewrites to the feature started last: 50 lines of 451's T26 and T03 sat in 449's log as 449's, observed 2026-11-20, method: the 449 log's lines whose `task` is no 449 task, matched to `task-starts.jsonl`)": {
+   "sha256": "a68e6579fb9406249b92e1170ddc994c1386f082ae9f2a7a4ddb7a11c48f450d",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity"
+  },
+  "### T26 Approach (checklist part A)": {
+   "sha256": "262978e2f9f2910978ff21acb51edf0ad20582e7cb278a364a39f706d99ec097",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -1301,6 +1313,106 @@
      "why": "Harmless rows that never match. Every real target still gets its own row, so FR-001's classing is unaffected. Not a wrong outcome."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-20",
+   "blocks": [
+    "### T26 (the event log filed every line under `.specify/feature.json`, which `make task-start` rewrites to the feature started last: 50 lines of 451's T26 and T03 sat in 449's log as 449's, observed 2026-11-20, method: the 449 log's lines whose `task` is no 449 task, matched to `task-starts.jsonl`)",
+    "### T26 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T26-writer-chain",
+     "summary": "The writer files each event-log line by the feature of the task it carries: a make command's F=, else the dispatch brief (Agent description, else the subagent meta file's), else the task-start in force naming the line's task, else feature.json as before.",
+     "class": "within",
+     "why": "Request: a per-task breakdown 'kept for every feature' that can be reviewed historically; lines filed under whichever feature task-start named last book one feature's time to another, a wrong outcome of where-time/feature-report (FR-005, SC-001, SC-002). Fixing it is fix-as-we-go. Narrows nothing."
+    },
+    {
+     "id": "T26-brief-feature-hold",
+     "summary": "brief_feature reads the number before a task id, else a standalone (non-hyphenated) number naming a feature this clone has started a task of.",
+     "class": "within",
+     "why": "The mechanism that makes the brief rule work without misfiling FR-008-style ids and counts (the measured 2,707-line plain-number failure). Within the writer chain above. The two forms are unlike: a number before a task id names the feature the work served; a standalone number names a feature the brief mentions, which need not be the one served - see the by-brief entries."
+    },
+    {
+     "id": "T26-task-chain",
+     "summary": "Task: the command's T=, else the brief's T<n>, else the task-start in force for the LINE's feature; D2's 'the clone's last task-starts entry for the feature' read as the line's feature.",
+     "class": "within",
+     "why": "D2's 'the feature' is not narrowed; the line's own feature is the reading that makes D2's task field name a task of the log it sits in. Hook cost stays as D2 had it."
+    },
+    {
+     "id": "T26-refile-by-task-id",
+     "summary": "make events-refile moves a past line whose task is no task of its log's feature to the feature whose start of that id was in force at the line's time.",
+     "class": "within",
+     "why": "The re-file the task line names; repairs the historical data the GM asked to review (2026-11-19, the tooling question)."
+    },
+    {
+     "id": "T26-refile-by-brief-task-id-form",
+     "summary": "Extension beyond T26's line: the re-file also moves a past subagent/dispatch line whose brief names another feature by the number before a task id ('451 T26: ...').",
+     "class": "within",
+     "why": "Widens, does not narrow: it applies the writer's own brief rule to the past lines the task-id rule cannot reach (untasked or D2-fallback-tasked builder lines). Carried by 'review historical data on' and 'kept for every feature', and by fix-as-we-go on a measured misfiling defect; without it the 449/451 split stays wrong for most builder lines. The rule names the feature the work served. That the re-file has already run does not weigh on this classification."
+    },
+    {
+     "id": "T26-refile-by-brief-standalone-form",
+     "summary": "The re-file also moves lines on a brief's standalone feature number (no task id), including older closed features' lines (716 by brief); two flagged moves, 435->427 'Classify 427's call-cutting hunks' and 443->405 'Check the 405 per-claim draft'.",
+     "class": "within",
+     "why": "Not a narrowing, and the writer adopts the same source for live lines. But a standalone number names a feature the brief is ABOUT, which the block's own goal ('the feature whose task it served') does not guarantee. The bundle cannot settle the two flagged moves and this review does not rule them either way: the deciding fact is which task was in force in the dispatching session (435's, 443's) and whether the dispatched work was that task's own. An unverified attribution is not a known defect, so this does not block; the backup at /tmp/t26/backup/ keeps it reversible."
+    },
+    {
+     "id": "T26-refile-write",
+     "summary": "Moves appended O_APPEND to targets, duplicates skipped, source rewritten via temp file with bytes appended meanwhile carried over; idempotent second run.",
+     "class": "within",
+     "why": "Implementation of the re-file; measured no line lost."
+    },
+    {
+     "id": "T26-fallback-mark-live",
+     "summary": "A line nothing names is filed under feature.json's feature, its task that feature's start in force, and marked \"fallback\": true.",
+     "class": "within",
+     "why": "The 'plan for the lines with no task' the task line asks for; keeps guessed attribution apart so where-time/feature-report do not book it to whichever task feature.json named (FR-005, SC-001's unexplained share). Adds a field; narrows nothing."
+    },
+    {
+     "id": "T26-fallback-mark-past-lines",
+     "summary": "Past fallback lines are not marked by the re-file; a reader is to recognize them by shape (no by, a task, no carried T=).",
+     "class": "within",
+     "why": "Leaves a reader-side test rather than writing a mark. The stated shape does not match the block's own measurement: the 154 count also excludes Agent and subagent events, because a past subagent line whose brief named a task (and was never moved) has the same shape. The block should state the shape as measured. Not a narrowing of the request."
+    },
+    {
+     "id": "T26-fallback-mark-env-carveout",
+     "summary": "The fallback mark is omitted when the environment declared the feature.",
+     "class": "within",
+     "why": "Justified for L7R_FEATURE_DIRECTORY (a page session's declared feature is not a guess). The fallback chain also takes SPECIFY_FEATURE from the hook's environment, and the block does not say whether that counts as 'declared' or why; the seam should be stated. Not a narrowing."
+    },
+    {
+     "id": "T26-start-slack",
+     "summary": "START_SLACK 60 s, a GUESS bounded by measured task-start durations.",
+     "class": "within",
+     "why": "A tuning constant labeled GUESS; decides nothing the request or spec settles."
+    },
+    {
+     "id": "T26-left-refile-after-landing",
+     "summary": "Lines written until T26 lands are still filed by feature.json; make events-refile is owed once more after landing.",
+     "class": "within",
+     "why": "The reason is stated (the hooks run the mirror's binary until landing) and the re-run is idempotent, but the owed run has no carrier - no task, no landing step. It should be given one so the defect is not left in the logs. Not a narrowing."
+    },
+    {
+     "id": "T26-left-make-static",
+     "summary": "make static stopped at another builder's uncommitted rust/phases lint; T26's crates passed every step per crate and the tree-wide steps.",
+     "class": "within",
+     "why": "Another task's red, not T26's defect; the exits are the plan's own, not the request's."
+    },
+    {
+     "id": "T26-left-claude-md-rows",
+     "summary": "rust/guard and rust/gate CLAUDE.md index rows do not name filed.rs and refile.rs.",
+     "class": "within",
+     "why": "Index wording outside T26's files; no wrong outcome for the request."
+    },
+    {
+     "id": "T26-left-d6-to-T07",
+     "summary": "Dispatch line carries the brief's task now; the prompt's first line and the agent's tokens stay with T07 (D6).",
+     "class": "within",
+     "why": "D6 is T07's by the spec's own decision; T26 takes nothing from it."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -1448,6 +1560,104 @@
      "summary": "data-model.md rows push-checks and make-docs are not make targets and are kept as rows that never match",
      "class": "within",
      "why": "Harmless rows that never match. Every real target still gets its own row, so FR-001's classing is unaffected. Not a wrong outcome."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T26": {
+   "section_sha256": "8404451a3f5b3cceb01f4906d00c90cc2bf0ae387583205e9f90a67c4b5c7a06",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T26-writer-chain",
+     "summary": "The writer files each event-log line by the feature of the task it carries: a make command's F=, else the dispatch brief (Agent description, else the subagent meta file's), else the task-start in force naming the line's task, else feature.json as before.",
+     "class": "within",
+     "why": "Request: a per-task breakdown 'kept for every feature' that can be reviewed historically; lines filed under whichever feature task-start named last book one feature's time to another, a wrong outcome of where-time/feature-report (FR-005, SC-001, SC-002). Fixing it is fix-as-we-go. Narrows nothing."
+    },
+    {
+     "id": "T26-brief-feature-hold",
+     "summary": "brief_feature reads the number before a task id, else a standalone (non-hyphenated) number naming a feature this clone has started a task of.",
+     "class": "within",
+     "why": "The mechanism that makes the brief rule work without misfiling FR-008-style ids and counts (the measured 2,707-line plain-number failure). Within the writer chain above. The two forms are unlike: a number before a task id names the feature the work served; a standalone number names a feature the brief mentions, which need not be the one served - see the by-brief entries."
+    },
+    {
+     "id": "T26-task-chain",
+     "summary": "Task: the command's T=, else the brief's T<n>, else the task-start in force for the LINE's feature; D2's 'the clone's last task-starts entry for the feature' read as the line's feature.",
+     "class": "within",
+     "why": "D2's 'the feature' is not narrowed; the line's own feature is the reading that makes D2's task field name a task of the log it sits in. Hook cost stays as D2 had it."
+    },
+    {
+     "id": "T26-refile-by-task-id",
+     "summary": "make events-refile moves a past line whose task is no task of its log's feature to the feature whose start of that id was in force at the line's time.",
+     "class": "within",
+     "why": "The re-file the task line names; repairs the historical data the GM asked to review (2026-11-19, the tooling question)."
+    },
+    {
+     "id": "T26-refile-by-brief-task-id-form",
+     "summary": "Extension beyond T26's line: the re-file also moves a past subagent/dispatch line whose brief names another feature by the number before a task id ('451 T26: ...').",
+     "class": "within",
+     "why": "Widens, does not narrow: it applies the writer's own brief rule to the past lines the task-id rule cannot reach (untasked or D2-fallback-tasked builder lines). Carried by 'review historical data on' and 'kept for every feature', and by fix-as-we-go on a measured misfiling defect; without it the 449/451 split stays wrong for most builder lines. The rule names the feature the work served. That the re-file has already run does not weigh on this classification."
+    },
+    {
+     "id": "T26-refile-by-brief-standalone-form",
+     "summary": "The re-file also moves lines on a brief's standalone feature number (no task id), including older closed features' lines (716 by brief); two flagged moves, 435->427 'Classify 427's call-cutting hunks' and 443->405 'Check the 405 per-claim draft'.",
+     "class": "within",
+     "why": "Not a narrowing, and the writer adopts the same source for live lines. But a standalone number names a feature the brief is ABOUT, which the block's own goal ('the feature whose task it served') does not guarantee. The bundle cannot settle the two flagged moves and this review does not rule them either way: the deciding fact is which task was in force in the dispatching session (435's, 443's) and whether the dispatched work was that task's own. An unverified attribution is not a known defect, so this does not block; the backup at /tmp/t26/backup/ keeps it reversible."
+    },
+    {
+     "id": "T26-refile-write",
+     "summary": "Moves appended O_APPEND to targets, duplicates skipped, source rewritten via temp file with bytes appended meanwhile carried over; idempotent second run.",
+     "class": "within",
+     "why": "Implementation of the re-file; measured no line lost."
+    },
+    {
+     "id": "T26-fallback-mark-live",
+     "summary": "A line nothing names is filed under feature.json's feature, its task that feature's start in force, and marked \"fallback\": true.",
+     "class": "within",
+     "why": "The 'plan for the lines with no task' the task line asks for; keeps guessed attribution apart so where-time/feature-report do not book it to whichever task feature.json named (FR-005, SC-001's unexplained share). Adds a field; narrows nothing."
+    },
+    {
+     "id": "T26-fallback-mark-past-lines",
+     "summary": "Past fallback lines are not marked by the re-file; a reader is to recognize them by shape (no by, a task, no carried T=).",
+     "class": "within",
+     "why": "Leaves a reader-side test rather than writing a mark. The stated shape does not match the block's own measurement: the 154 count also excludes Agent and subagent events, because a past subagent line whose brief named a task (and was never moved) has the same shape. The block should state the shape as measured. Not a narrowing of the request."
+    },
+    {
+     "id": "T26-fallback-mark-env-carveout",
+     "summary": "The fallback mark is omitted when the environment declared the feature.",
+     "class": "within",
+     "why": "Justified for L7R_FEATURE_DIRECTORY (a page session's declared feature is not a guess). The fallback chain also takes SPECIFY_FEATURE from the hook's environment, and the block does not say whether that counts as 'declared' or why; the seam should be stated. Not a narrowing."
+    },
+    {
+     "id": "T26-start-slack",
+     "summary": "START_SLACK 60 s, a GUESS bounded by measured task-start durations.",
+     "class": "within",
+     "why": "A tuning constant labeled GUESS; decides nothing the request or spec settles."
+    },
+    {
+     "id": "T26-left-refile-after-landing",
+     "summary": "Lines written until T26 lands are still filed by feature.json; make events-refile is owed once more after landing.",
+     "class": "within",
+     "why": "The reason is stated (the hooks run the mirror's binary until landing) and the re-run is idempotent, but the owed run has no carrier - no task, no landing step. It should be given one so the defect is not left in the logs. Not a narrowing."
+    },
+    {
+     "id": "T26-left-make-static",
+     "summary": "make static stopped at another builder's uncommitted rust/phases lint; T26's crates passed every step per crate and the tree-wide steps.",
+     "class": "within",
+     "why": "Another task's red, not T26's defect; the exits are the plan's own, not the request's."
+    },
+    {
+     "id": "T26-left-claude-md-rows",
+     "summary": "rust/guard and rust/gate CLAUDE.md index rows do not name filed.rs and refile.rs.",
+     "class": "within",
+     "why": "Index wording outside T26's files; no wrong outcome for the request."
+    },
+    {
+     "id": "T26-left-d6-to-T07",
+     "summary": "Dispatch line carries the brief's task now; the prompt's first line and the agent's tokens stay with T07 (D6).",
+     "class": "within",
+     "why": "D6 is T07's by the spec's own decision; T26 takes nothing from it."
     }
    ],
    "verdict": "CLEAR"

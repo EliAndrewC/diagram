@@ -94,11 +94,6 @@ const FEEDER_W: f64 = 3.0;
 /// Research:
 ///     the tea hedge row's width - GUESS: a line 3 ft wide, the deleted ink's, carried as it stood; no page in the record sizes a hedge row on a polder's dike (impl-drift on feature 449 T226, 2026-11-20)
 const HEDGE_W: f64 = 3.0;
-/// The waterside strip's half-breadth at a cut (ft).
-///
-/// Research:
-///     the strip's cut - GUESS: research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html puts reeds on the water-facing flanks but records no width; the deleted waterward stage's 15 ft
-const STRIP_CUT_HW: f64 = 15.0;
 /// The waterside strip's depth off the dike (ft).
 ///
 /// Research:
@@ -344,35 +339,37 @@ fn draw_sluices(svg: &mut Svg, s: &PolderStage, missing: &mut Vec<String>) {
     }
 }
 
-/// The waterside reeds (stage 6, a polder's only): a strip outside the dike on each flank that faces the water.
+/// The waterside reeds (stage 6, a polder's only): a strip outside the dike on each flank that faces the water, stopped at the
+/// banks of the two channels that cross the dike at its sluices - the feeder into the inlet and the outfall's drain out of the tail.
 ///
 /// Research:
 ///     the reed strips - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: reeds on the flanks of a dike that face the water
+///     the channels they stop at - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: water crosses the dike only at gated sluices, the feeder at the inlet and the outfall's drain at the outfall, each at its drawn width (`FEEDER_W`, `RUN_W`); research/questions/0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html: the reeds drawn to the water's edge, kept out of the water
 fn stage_waterward(p: &Plan, s: &PolderStage, seated: Option<&Seated>) -> Fringe {
     let rad = p.down_deg.to_radians();
-    let ring: Vec<(f64, f64)> = s
-        .dike
-        .outer
-        .iter()
-        .chain(s.dike.inner.iter().rev())
-        .copied()
-        .collect();
-    // the dike's two faces copied into the one outline the fringe reads, a point each (feature 449 T226: uncounted before)
-    let copied = ring.len() as u64;
-    let mut ward = fringe(
-        &[(ring, s.dike.gaps.clone())],
-        s.dike.widths.1,
-        STRIP_CUT_HW,
+    fringe(
+        &s.dike.outer,
+        &[
+            (s.polder.feeder.as_slice(), FEEDER_W),
+            (s.outfall.as_slice(), RUN_W),
+        ],
         STRIP_DEPTH,
         (p.w, p.h),
         (rad.cos(), rad.sin()),
         seated.and_then(|x| x.frames.first()).map(|f| f.out),
-    );
-    crate::counts::tally(&mut ward.counts, "read@stage_waterward", copied);
-    ward
+    )
 }
 
-/// The hamlet on a polder: the block, its seat and its waterside reeds, drawn.
+/// The hamlet on a polder: the block, its seat and its waterside reeds, drawn. The seat is handed the polder's own ground: the
+/// field outline as the ring it seats against, the field ditches, the feeder and the outfall as the lines its way out may not
+/// cross, and the wild pond's reed fringe as wet ground; the waterside strips come after it, laid off the flanks it does not take.
+///
+/// Research:
+///     the village against its polder - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: a village is drawn hard against its own polder, its houses pressing up to its fields (the page's own GUESS) - the polder's field outline (`Polder::outline`, the plots' edge) handed as the seat's ring, as a comb hands its fan
+///     the ring the fields' edge, not the dike's - GUESS: research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html draws the village on the dry ground a few steps off the dike (its own GUESS), but the seat is handed neither the dike nor the ring canal inside it, so nothing keeps its ground off them; on Kuwabata the settlement's ground is drawn over the north dike and the head canal (found by feature 449 T236, left to feature 449 T239)
+///     its wet ground - research/questions/0081-village-lanes.drawing.html: a track keeps off wet ground - the wild pond's reed fringe handed as the seat's reeds
+///     its lines and no pond - GUESS: the field ditches, the feeder and the outfall handed as the lines `stage_seat` keeps its way out from crossing, as a comb's channels are; the wild pond not handed as a pond at its berth, the reed fringe round it standing for it
+///     the strips after the seat - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: every flank but the landward one holds water back - the seat's side names the landward flank, so the waterside strips are laid once it is known (`stage_waterward`)
 pub(super) fn roll_polder(p: Plan) -> Rolled {
     let s = stage_polder(&p);
     let mut refusals = Vec::new();
@@ -398,8 +395,7 @@ pub(super) fn roll_polder(p: Plan) -> Rolled {
     for strip in &ward.strips {
         svg.reeds(strip);
     }
-    // the sluices on top, above the water and the reeds, as the deleted `sluice_gate` drew them: the waterside strip covers the
-    // dike's corners where they stand
+    // the sluices on top, above the water and the reeds, as the deleted `sluice_gate` drew them
     draw_sluices(&mut svg, &s, &mut refusals);
     // the settlement's ground marked, as on a comb (`roll`)
     if let Some(frame) = seated.as_ref().and_then(|x| x.frames.first()) {
@@ -457,6 +453,7 @@ mod tests {
     };
     use crate::driver::{roll, spec::parse};
     use crate::field::fan::Pt;
+    use crate::field::geom::{dist, inside, seg_dist};
 
     fn dot(a: Pt, b: Pt) -> f64 {
         a.0 * b.0 + a.1 * b.1
@@ -563,6 +560,132 @@ mod tests {
             assert_eq!(r.ink.get("sluice gate"), Some(&10));
             assert!(!r.refusals.join("\n").contains("sluice"));
         }
+    }
+
+    /// Whether segments `ab` and `cd` cross or touch.
+    fn crosses(a: Pt, b: Pt, c: Pt, d: Pt) -> bool {
+        let side = |p: Pt, q: Pt, r: Pt| (q.0 - p.0) * (r.1 - p.1) - (q.1 - p.1) * (r.0 - p.0);
+        let (d1, d2) = (side(c, d, a), side(c, d, b));
+        let (d3, d4) = (side(a, b, c), side(a, b, d));
+        d1 * d2 <= 0.0 && d3 * d4 <= 0.0
+    }
+
+    /// The least distance between segments `ab` and `cd`: nothing where they cross.
+    fn seg_seg(a: Pt, b: Pt, c: Pt, d: Pt) -> f64 {
+        let apart = [
+            seg_dist(a, c, d),
+            seg_dist(b, c, d),
+            seg_dist(c, a, b),
+            seg_dist(d, a, b),
+        ]
+        .into_iter()
+        .fold(f64::INFINITY, f64::min);
+        f64::from(u8::from(!crosses(a, b, c, d))) * apart
+    }
+
+    /// The segment `a` to `b` walked every foot, both ends included.
+    #[expect(
+        clippy::cast_possible_truncation,
+        clippy::cast_sign_loss,
+        reason = "a segment's length in whole feet, a small positive count"
+    )]
+    fn walk(a: Pt, b: Pt) -> impl Iterator<Item = Pt> {
+        let n = dist(a, b).ceil().max(1.0) as u32;
+        (0..=n).map(move |k| {
+            let t = f64::from(k) / f64::from(n);
+            (a.0 + (b.0 - a.0) * t, a.1 + (b.1 - a.1) * t)
+        })
+    }
+
+    /// Feet of a channel's course (each of its segments walked every foot) lying in a strip or within its half-width of one.
+    fn feet_under(strip: &[Pt], course: &[Pt], w: f64) -> usize {
+        let edges: Vec<(Pt, Pt)> = (0..strip.len())
+            .map(|i| (strip[i], strip[(i + 1) % strip.len()]))
+            .collect();
+        course
+            .windows(2)
+            .flat_map(|s| walk(s[0], s[1]))
+            .filter(|&p| {
+                inside(p, strip)
+                    || edges
+                        .iter()
+                        .any(|&(a, b)| seg_dist(p, a, b) < w / 2.0 - 1e-6)
+            })
+            .count()
+    }
+
+    /// THE REEDS STOP AT THE CUT (449 T236): on Kuwabata and a polder falling obliquely, no waterside strip crosses a sluice's
+    /// channel - the feeder into the inlet, the outfall's drain out of the tail - or comes within its half-width of one; no strip
+    /// lies on the dike: each strip's edges, walked every foot, stay off the band inside its outer face (half a foot of rounding
+    /// allowed); and on Kuwabata the foot's reeds reach the outfall's bank. Red before T236: Kuwabata's west strip had 57 ft of
+    /// the feeder and 45 ft of the outfall under its reeds and its foot strip 341 ft of the outfall, and its three strips 258, 258
+    /// and 259 ft of edge on the dike.
+    #[test]
+    fn the_waterside_strips_stop_at_the_sluices_channels_and_keep_off_the_dike() {
+        let (mut got, mut want) = (Vec::new(), Vec::new());
+        for spec in [
+            r#"{"name": "Kuwabata", "seed": 21, "households": 16, "down_deg": 90, "field_archetype": "mulberry_dike_fishpond", "pond_layout": "mosaic", "dike_crop": "mulberry"}"#,
+            r#"{"name": "R", "seed": 5, "households": 12, "down_deg": 30, "field_archetype": "polder_grid"}"#,
+        ] {
+            let r = roll(&parse(spec).unwrap()).unwrap();
+            let s = r.polder.as_ref().unwrap();
+            let ward = r.waterward.as_ref().unwrap();
+            assert!(!ward.strips.is_empty());
+            let name = &r.plan.name;
+            let channels = [
+                ("feeder", s.polder.feeder.as_slice(), super::FEEDER_W),
+                ("outfall", s.outfall.as_slice(), super::RUN_W),
+            ];
+            for (i, strip) in ward.strips.iter().enumerate() {
+                for &(channel, course, w) in &channels {
+                    let near = (0..strip.len())
+                        .flat_map(|j| {
+                            course.windows(2).map(move |c| {
+                                seg_seg(strip[j], strip[(j + 1) % strip.len()], c[0], c[1])
+                            })
+                        })
+                        .fold(f64::INFINITY, f64::min);
+                    let under = feet_under(strip, course, w);
+                    got.push(format!(
+                        "{name} strip {i} over the {channel}: {under} ft of its course under the reeds, within its half-width {}",
+                        near < w / 2.0 - 1e-6
+                    ));
+                    want.push(format!(
+                        "{name} strip {i} over the {channel}: 0 ft of its course under the reeds, within its half-width false"
+                    ));
+                }
+                let on_dike = (0..strip.len())
+                    .flat_map(|j| walk(strip[j], strip[(j + 1) % strip.len()]))
+                    .filter(|&p| {
+                        // both asked of every point, so the walk off the band is read whole
+                        let deep = (0..s.dike.outer.len()).all(|k| {
+                            seg_dist(
+                                p,
+                                s.dike.outer[k],
+                                s.dike.outer[(k + 1) % s.dike.outer.len()],
+                            ) > 0.5
+                        });
+                        inside(p, &s.dike.outer) && deep
+                    })
+                    .count();
+                got.push(format!(
+                    "{name} strip {i} on the dike: {on_dike} ft of its edge inside the outer face"
+                ));
+                want.push(format!(
+                    "{name} strip {i} on the dike: 0 ft of its edge inside the outer face"
+                ));
+            }
+            // on Kuwabata the foot's reeds run to the outfall's bank where it runs straight out down the fall, not short of it
+            if name == "Kuwabata" {
+                let run = (s.outfall[1], s.outfall[2]);
+                assert!(ward
+                    .strips
+                    .iter()
+                    .flatten()
+                    .any(|&p| (seg_dist(p, run.0, run.1) - super::RUN_W / 2.0).abs() < 1e-6));
+            }
+        }
+        assert_eq!(got, want);
     }
 
     /// A sluice whose channel is not known is not drawn: the gap is named, not guessed.

@@ -541,3 +541,179 @@ fn a_line_with_no_t_carries_the_agents_task_else_the_clones() {
     std::fs::remove_file(d.join(".specify/feature.json")).unwrap();
     assert_eq!(task(&call(None)), None);
 }
+
+/// Feature 451 T26: one clone working two features, `.specify/feature.json` naming `449-b`, the one whose task started last; a `451 T26`
+/// builder, a `449 T236` builder, briefs naming only a task, only a feature, or neither.
+struct Builders {
+    d: crate::shared::tempdir::TempDir,
+    cwd: String,
+    transcript: String,
+}
+
+type Filed = (String, Option<String>, bool);
+
+impl Builders {
+    fn new(tag: &str) -> Self {
+        let d = clone(tag);
+        let cwd = d.to_string_lossy().into_owned();
+        for f in ["449-b", "451-a", "450-c"] {
+            std::fs::create_dir_all(d.join("specs").join(f)).unwrap();
+        }
+        std::fs::write(
+            d.join(".specify/feature.json"),
+            r#"{"feature_directory": "specs/449-b"}"#,
+        )
+        .unwrap();
+        std::fs::write(
+            d.join(".git/task-starts.jsonl"),
+            concat!(
+                "{\"feature\": \"449-b\", \"task\": \"T226\", \"utc\": \"2026-11-20T05:00:00Z\"}\n",
+                "{\"feature\": \"451-a\", \"task\": \"T03\", \"utc\": \"2026-11-20T07:00:00Z\"}\n",
+                "{\"feature\": \"451-a\", \"task\": \"T26\", \"utc\": \"2026-11-20T08:00:00Z\"}\n",
+                "{\"feature\": \"449-b\", \"task\": \"T236\", \"utc\": \"2026-11-20T08:00:01Z\"}\n",
+            ),
+        )
+        .unwrap();
+        let transcript = session_files(
+            &d,
+            "a451",
+            r#"{"description":"451 T26: each line under its own feature"}"#,
+        );
+        for (aid, brief) in [
+            ("a449", "449 T236: the reed strip"),
+            ("anum", "T226: polder counters"),
+            ("afeat", "spec-fidelity plan review of 451, round 2"),
+            ("anone", "record-format 0054 r3"),
+            ("acount", "Arbiter: FR-451 and 450 owed claims"),
+        ] {
+            session_files(&d, aid, &format!(r#"{{"description":"{brief}"}}"#));
+        }
+        Self { d, cwd, transcript }
+    }
+
+    fn bash(&self, by: Option<&str>, command: &str, ev: &str) -> Value {
+        let mut p = json!({"hook_event_name": ev, "cwd": self.cwd, "transcript_path": self.transcript, "tool_name": "Bash", "tool_input": {"command": command}});
+        if let Some(aid) = by {
+            p["agent_id"] = json!(aid);
+        }
+        p
+    }
+
+    /// The log a payload's line went to, its task, and whether it is marked `fallback`.
+    fn filed(&self, p: &Value) -> Filed {
+        let log = append(p, "T", &self.d, &none).unwrap();
+        let row = last_line(&log);
+        (
+            log.file_stem().unwrap().to_string_lossy().into_owned(),
+            row.get("task").and_then(Value::as_str).map(str::to_owned),
+            row.get("fallback").is_some(),
+        )
+    }
+}
+
+fn want(f: &str, t: &str, fb: bool) -> Filed {
+    (f.to_owned(), Some(t.to_owned()), fb)
+}
+
+/// Each line is filed under the feature of the task it carries: a command's `F=`, the dispatch's brief, the task-start in force for
+/// its task.
+#[test]
+fn two_features_builders_in_one_clone_each_line_in_its_own_log() {
+    let b = Builders::new("two-builders");
+    // each builder's own calls, by its brief
+    assert_eq!(
+        b.filed(&b.bash(Some("a451"), "make static", "PreToolUse")),
+        want("451-a", "T26", false)
+    );
+    assert_eq!(
+        b.filed(&b.bash(Some("a449"), "make static", "PreToolUse")),
+        want("449-b", "T236", false)
+    );
+    // a brief naming a task and no feature: the feature that started that task
+    assert_eq!(
+        b.filed(&b.bash(Some("anum"), "ls", "PostToolUse")),
+        want("449-b", "T226", false)
+    );
+    // a brief naming a feature and no task: that feature's task-start in force
+    assert_eq!(
+        b.filed(&b.bash(Some("afeat"), "ls", "PostToolUse")),
+        want("451-a", "T26", false)
+    );
+    // the main session's landing and task start: the command's F=, both halves of the call
+    for ev in ["PreToolUse", "PostToolUse"] {
+        assert_eq!(
+            b.filed(&b.bash(None, "make land F=451 T=T03 NOTE=x", ev)),
+            want("451-a", "T03", false)
+        );
+        assert_eq!(
+            b.filed(&b.bash(None, "make task-start F=451 T=T26", ev)),
+            want("451-a", "T26", false)
+        );
+    }
+    assert_eq!(
+        b.filed(&b.bash(None, "make tick F=449 T=T236", "PreToolUse")),
+        want("449-b", "T236", false)
+    );
+    // F= with no T=: that feature's task in force; F= naming the whole directory
+    assert_eq!(
+        b.filed(&b.bash(None, "make where-time F=451", "PreToolUse")),
+        want("451-a", "T26", false)
+    );
+    assert_eq!(
+        b.filed(&b.bash(None, "make where-time F=451-a", "PreToolUse")),
+        want("451-a", "T26", false)
+    );
+    // a feature with no task started: filed under it with no task
+    assert_eq!(
+        b.filed(&b.bash(None, "make where-time F=450", "PreToolUse")),
+        ("450-c".to_owned(), None, false)
+    );
+    // the dispatch's own line, by its description; a builder's own dispatch with none, by its own brief
+    let agent = json!({"hook_event_name": "PreToolUse", "cwd": b.cwd, "tool_name": "Agent", "tool_input": {"description": "451 T26: each line", "prompt": "x"}});
+    assert_eq!(b.filed(&agent), want("451-a", "T26", false));
+    let nested = json!({"hook_event_name": "PreToolUse", "cwd": b.cwd, "transcript_path": b.transcript, "agent_id": "a449", "tool_name": "Agent", "tool_input": {"prompt": "x"}});
+    assert_eq!(b.filed(&nested), want("449-b", "T236", false));
+    // a subagent's stop, by its brief
+    let stop = json!({"hook_event_name": "SubagentStop", "cwd": b.cwd, "transcript_path": b.transcript, "agent_id": "a451", "agent_type": "general-purpose"});
+    assert_eq!(b.filed(&stop), want("451-a", "T26", false));
+}
+
+/// Where nothing on the line says: feature.json's feature, its task in force, the line marked `fallback`.
+#[test]
+fn a_line_nothing_names_is_filed_by_feature_json_and_marked() {
+    let b = Builders::new("two-builders-fallback");
+    assert_eq!(
+        b.filed(&b.bash(None, "make static", "PreToolUse")),
+        want("449-b", "T236", true)
+    );
+    assert_eq!(
+        b.filed(&b.bash(Some("anone"), "ls", "PreToolUse")),
+        want("449-b", "T236", true)
+    );
+    // a brief's counts and hyphenated ids name no feature: 451 only inside `FR-451`, 450 a feature this clone never started
+    assert_eq!(
+        b.filed(&b.bash(Some("acount"), "ls", "PreToolUse")),
+        want("449-b", "T236", true)
+    );
+    // an F= naming no single feature directory says nothing
+    assert_eq!(
+        b.filed(&b.bash(None, "make where-time F=4", "PreToolUse")),
+        want("449-b", "T236", true)
+    );
+    // a session that declares its feature (a page session's L7R_FEATURE_DIRECTORY, a SPECIFY_FEATURE naming one) is not marked
+    let p = b.bash(None, "make static", "PreToolUse");
+    for (k, v) in [
+        ("L7R_FEATURE_DIRECTORY", "specs/451-a/"),
+        ("SPECIFY_FEATURE", "451-a"),
+    ] {
+        let log = append(&p, "T", &b.d, &|e: &str| (e == k).then(|| v.to_owned())).unwrap();
+        assert!(log.ends_with("451-a.jsonl"), "{k}");
+        assert!(last_line(&log).get("fallback").is_none(), "{k}");
+    }
+    // a SPECIFY_FEATURE naming no feature declares nothing
+    let log = append(&p, "T", &b.d, &|e: &str| {
+        (e == "SPECIFY_FEATURE").then(|| "999-none".to_owned())
+    })
+    .unwrap();
+    assert_eq!(last_line(&log).get("fallback"), Some(&json!(true)));
+}

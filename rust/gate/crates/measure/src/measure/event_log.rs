@@ -5,6 +5,7 @@
 //! ```text
 //! l7r-gate measure event-log hook                        read one hook payload on stdin, append its line
 //! l7r-gate measure event-log from-transcript <jsonl>     print the transcript's events as lines
+//! l7r-gate measure event-log refile --root <tree> ...    re-file the lines written before 451 T26 (`refile.rs`)
 //! ```
 
 use std::fmt::Write as _;
@@ -18,7 +19,7 @@ use serde_json::Value;
 use super::reply;
 use crate::Reply;
 
-const USAGE: &str = "    l7r-gate measure event-log hook                        read one hook payload on stdin, append its line\n    l7r-gate measure event-log from-transcript <jsonl>     print the transcript's events as lines\n\n";
+const USAGE: &str = "    l7r-gate measure event-log hook                        read one hook payload on stdin, append its line\n    l7r-gate measure event-log from-transcript <jsonl>     print the transcript's events as lines\n    l7r-gate measure event-log refile --root <tree>        re-file each line under the feature of the task it carries\n\n";
 
 /// The command line: `hook` never refuses and never prints (a hook on every tool call must not be able to stop one), `from-transcript`
 /// prints one JSON line an event, and anything else is the usage, exit 2.
@@ -35,6 +36,7 @@ pub fn cli(args: &[String], stdin: &mut dyn Read) -> Reply {
             }
             reply(String::new(), String::new(), 0)
         }
+        (Some("refile"), _) => refile::cli(&args[1..]),
         (Some("from-transcript"), Some(path)) => match read_jsonl(Path::new(path))
             .map_err(|e| format!("OSError: {path}: {e}"))
             .and_then(|rows| from_transcript(&rows))
@@ -55,6 +57,8 @@ pub fn cli(args: &[String], stdin: &mut dyn Read) -> Reply {
         _ => reply(String::new(), USAGE.to_owned(), 2),
     }
 }
+
+pub mod refile;
 
 #[cfg(test)]
 mod tests;

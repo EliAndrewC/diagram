@@ -9,6 +9,7 @@ nothing behind it in physical reality, so each is `research: rendering`.
 
 - none: phase 1 moves the guards that run on Claude Code's tool calls; no map feature, glyph, placement rule or research page changes.
 - glyph-redrawn: sluice gate on kuwabata - T234: the polder's sluice redrawn from an 8 ft square on its point to the frame across its channel 0179's drawing page draws (board, two posts, crossbeam, windlass drum, 20 ft post to post); set aside at rust-only (444 FR-023)
+- placement-changed: marsh on kuwabata - T236: the waterside reed strip laid from the dike's outer face itself and stopped at the banks of the feeder and the outfall where they cross the dike at the sluices, no longer over the dike's corners or across the channel mouths; set aside at rust-only (444 FR-023)
 
 ## Tasks
 
@@ -52,6 +53,10 @@ MVP: T001-T005 and the first guard, `pair-hooks` (T006): the dispatcher in every
 - [ ] T236 The polder's reed strip covers the dike's corners and the sluice cuts (found by T234, 2026-11-20): the strip outside the dike runs over the dike's corners, the feeder's end and the outfall's start, where it should stop at the sluice cuts - a reader sees reeds across the channel mouths the sluices shut; the strip stopped at each cut, red first, the glyph-check it owes recorded deferred (feature 444 FR-023); lands before T158; and roll_polder's unclaimed decision of where the village may sit (the polder's outline as the seat's ring, kept off the ditches, the feeder, the outfall and the reed fringe) given its claim (impl-drift on T234, 2026-11-20)
       research: rendering
 - [ ] T238 A Rust stage's placement change owes no review where a Python one did (found by T237, 2026-11-20): reviews owed's drawing and placement code paths now include the Rust driver (T237), but a change to a Rust stage's placement outside the driver (rust/phases' stages, the Mode A compound's layout) owes nothing and refuses nothing, where the deleted Python's placement code owed its review - measured first (what the old CODE pattern owed for a placement change, and what reviews/docs/reviews.md's occasions say a moved map owes), and the Rust stages held to the same occasions, red first; lands before T158; and one review-gate run at rust-only on a hamlet unit found by T237's detection alone (no declared Occasions line), shown set aside and recorded in dev/deferred-reviews.jsonl (T237's plan review, 2026-11-20)
+      research: rendering
+- [ ] T239 Kuwabata's settlement ground is drawn over the north dike and the head canal (found by T236, 2026-11-20): roll_polder hands the seat the fields' outline as its ring, so the settlement's ground runs to the plots' edge (y 2340) past the dike (about y 2288-2296), where 0019 puts a village a few steps off its own polder's dike - a wrong outcome a reader sees; the seat handed the dike's outline (its candidates and placement change, measured), the claim restated, red first, the glyph and placement reviews it owes recorded deferred (feature 444 FR-023); lands before T158
+      research: rendering
+- [ ] T240 Two polder drawing points the claims check could not confirm (impl-drift on T236, 2026-11-20): the seat is laid before the waterside reed strips and handed only the wild pond's fringe as reeds, so the settlement's track out may cross the dike's outer reed strips against 0081 (every way keeps off every marsh's reeds); and nothing may draw the denser band of reeds that 0074 says lines each bank of a channel through reeds - each measured on Kuwabata's drawing first, and a wrong outcome found fixed, red first; lands before T158
       research: rendering
 - [ ] GM review (make gm-reviewed F=449) [lands-open]
       research: rendering
