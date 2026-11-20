@@ -701,3 +701,6 @@
 - [x] T239 Kuwabata's settlement ground is drawn over the north dike and the head canal (found by T236, 2026-11-20): roll_polder hands the seat the fields' outline as its ring, so the settlement's ground runs to the plots' edge (y 2340) past the dike (about y 2288-2296), where 0019 puts a village a few steps off its own polder's dike - a wrong outcome a reader sees; the seat handed the dike's outline (its candidates and placement change, measured), the claim restated, red first, the glyph and placement reviews it owes recorded deferred (feature 444 FR-023); lands before T158
       research: rendering
       verify: DONE. landed: the polder's settlement stands off the dike
+- [x] T242 make plan-verdict writes a reviewer's words into plan-review.json without the house style, so a British spelling in a decision id (the British form of 'behavior', in T238's round-2 verdict, 2026-11-20) turns the next make quick red on a file no builder may edit - the record writer applies the house-style correction (spelling, dashes) to the text it writes, red first; lands before T158
+      research: rendering
+      verify: DONE. landed: the recorders write the house style
