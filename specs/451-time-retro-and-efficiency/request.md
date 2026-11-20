@@ -11,3 +11,24 @@
 ## 2026-11-19, the approval
 
 > All 6 of your proposed improvements sound good so please do all of that, along with your 4 proposed ideas for filling ion what's missing from gathering this kind of data.  And let's make sure all of the enforcement is real enforcement and not just instructions.
+
+## What "your proposed improvements" and "your 4 proposed ideas" refer to
+
+The session's own words, as put to the GM on 2026-11-19 just before his approval (not the GM's words; quoted so the review reads what
+he approved):
+
+> **Improvements, ranked by minutes they'd have saved in this window:**
+> 1. **Keep builder contexts small: 44–95 min.** A builder's model calls slow down as its context grows: 10 s per thousand output tokens under 200k, 23 s per thousand over 700k. T152 and T221 each passed 1.3 million tokens. A fresh builder per stage, with a handoff file, would fix it. That figure is a correlation, so the saving is an estimate.
+> 2. **Stop using `make static` as the edit loop: 26–52 min.** T152 ran it 24 times; T227 and T229 ran it 13 times between them, rebuilding coverage at 1.5–3 minutes a run. A crate-scoped check while iterating, with `make static` once at the end, would do the same job.
+> 3. **Make agents start long runs the way the session can track: 18 min.** T225 started `make static` with a plain `&`, so no completion notice came, and it sat idle for 15 minutes. A guard refusing that pattern, plus a shorter poll loop on my side, would close it.
+> 4. **Fewer plan re-rounds: about 10 min.** Briefs that default to fixing in the task, and that ask for full coverage up front, would avoid most of them.
+> 5. **Split the three slowest hook suites: about 8 min.** Each takes 30–40 s and sets the floor on every `make hooks-test`.
+> 6. **Smaller landing fixes: about 5 min.** Accept commas in `T=`, and run `make quick` after `task-add`.
+
+> **What's missing, and what I'd change:**
+> 1. **Categories.** The categorizer maps only `make quick`, `test-file`, `done` and a few spec-kit targets. `make static`, `rust-test` and `hooks-test` all land in "other tool" (206 of 208 minutes). The fix maps make targets to tests, compile, gate, land, review and docs.
+> 2. **Which run a wait was waiting on.** `where-time` sees the waits between turns, but can't tell whether a land, a gate or a test run was behind them, because a background run's end is never logged. The fix logs that end from its completion notice.
+> 3. **Phases inside one make run.** Compiling, testing and the gate's other phases aren't separated in the log. The fix has the Rust checks and `make land` append their phase seconds as event lines.
+> 4. **An agent's token cost.** Not logged today. The fix records it at each agent's stop.
+>
+> Then `where-time` and `feature-report` read those new lines, and `where-time` gains an `UNTIL=`. A breakdown like today's becomes one command, kept for every feature, with no new tool to learn.
