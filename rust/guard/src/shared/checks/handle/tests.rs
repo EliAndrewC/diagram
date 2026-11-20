@@ -515,7 +515,11 @@ fn a_make_done_past_a_million_steps_is_seen() {
         "plain words of a long text ".repeat(50_000)
     );
     assert_eq!(
-        within(move || super::MAKE_DONE.is_match(&command).ok()),
+        within(move || Some(
+            crate::shared::make::invoked(&command)
+                .iter()
+                .any(|t| t == "done")
+        )),
         Some(true)
     );
 }

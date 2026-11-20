@@ -126,6 +126,13 @@ fn a_gate_is_an_invocation_not_a_mention() {
     assert!(!is_gate_invocation("cat <<EOF\nmake done\nEOF"));
     assert!(!is_gate_invocation("make -n done"));
     assert!(!is_gate_invocation("make doneish"));
+    // feature 451 T02: the one make detector - a mention is no gate, a shell's `-c` string and a timed run are
+    assert!(!is_gate_invocation("echo make done"));
+    assert!(is_gate_invocation("bash -c 'make done'"));
+    assert!(is_gate_invocation("(timeout 2400 make done > log) &"));
+    assert!(is_gate_invocation(
+        "cat <<EOF\nmake -n done\nEOF\nmake done"
+    ));
 }
 
 #[test]

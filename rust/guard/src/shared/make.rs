@@ -1,7 +1,9 @@
 //! The make invocations a command makes (`scripts/hooks/lib/hm_make.py`, the parts `gate-hooks` reads - feature 449 T007 decision
-//! (a)): the targets it INVOKES, a mention never one; and the quick-and-done combination. Each pattern is the Python's verbatim (research
-//! R8); the rest of `hm_make.py` moves with the guards that read it (T028, T029). `classify`'s verdict through a bare pytest and the view
-//! it read a command by left with pytest (feature 449 T213).
+//! (a)): the targets it INVOKES, a mention never one; and the quick-and-done combination. `invoked` is the ONE reading of which make
+//! targets a command runs (feature 451 D1, FR-001): the event log's writer and every guard asking "does this command run target T" read
+//! it, so a timed, locked, backgrounded or subshelled run is read the same by all of them - two detectors disagreed before it (research
+//! R1: `timeout 2400 make static` logged no target, `(make static) &` was invisible to the guards). `classify`'s verdict through a bare
+//! pytest and the view it read a command by left with pytest (feature 449 T213).
 
 use std::collections::BTreeSet;
 use std::sync::LazyLock;
@@ -10,9 +12,23 @@ use fancy_regex::Regex;
 
 use super::shape::{strip_heredocs, strip_quotes};
 
-/// A command position: the start, or after `;`, `|`, `&&`, `||` or a newline, past `timeout N`, `env` and `VAR=value` prefixes.
-pub(crate) const POS: &str =
-    r"(?:^|[\n;|]|&&|\|\|)\s*(?:timeout\s+\S+\s+|env\s+|[A-Za-z_][A-Za-z0-9_]*=\S*\s+)*";
+/// A command position: the start, or after `;`, `|`, `&`, `&&`, `||`, `(`, `{ `, a newline or the quote opening a shell's `-c` string, past the words that run the command after
+/// them - a further `(` or `{`, a shell keyword (`if`, `then`, `do`, `else`, `elif`, `while`, `until`, `!`), `timeout [opts] N`, `flock
+/// [opts] <file>`, `nice [-n N]`, `nohup`, `time [-p]`, `env [opts]` and `VAR=value` (feature 451 D1: the event log's writer took `(`,
+/// the keywords and `time`, the guards `timeout`, `env` and `VAR=`; `flock`, `nice`, `nohup`, `{` and a lone `&` neither).
+pub(crate) const POS: &str = concat!(
+    r#"(?:^|[\n;|&(]|\{\s|(?:^|[\s/])(?:ba|da|z)?sh\s+(?:-[a-z]+\s+)*-[a-z]*c\s+["'])\s*(?:"#,
+    r"[({]\s*",
+    r"|(?:if|then|do|else|elif|while|until|!)\s+",
+    r"|timeout\s+(?:-[ks]\s*\S+\s+|--?[a-z][\w-]*(?:=\S+)?\s+)*\S+\s+",
+    r"|flock\s+(?:-[wE]\s*\S+\s+|-\S+\s+)*\S+\s+",
+    r"|nice\s+(?:-n\s*\S+\s+|-\S+\s+)*",
+    r"|nohup\s+",
+    r"|time\s+(?:-p\s+)?",
+    r"|env\s+(?:-u\s*\S+\s+|-\S+\s+)*",
+    r"|[A-Za-z_][A-Za-z0-9_]*=\S*\s+",
+    r")*"
+);
 /// A Python interpreter, by any path.
 pub(crate) const PY: &str = r"(?:\S*/)?python3?";
 
@@ -21,70 +37,97 @@ fn re(pattern: &str) -> Regex {
         .unwrap_or_else(|e| unreachable!("a guard's own pattern: {e}"))
 }
 
-static TARGET: LazyLock<Regex> = LazyLock::new(|| {
+// A call: make (or `$(MAKE)`) at a command position, its words read after it; or the gate's crate-scoped form
+// `l7r-gate.sh rust <cmd>`, which `make rust-<cmd>` runs (feature 451 D1).
+static CALL: LazyLock<Regex> = LazyLock::new(|| {
     re(&format!(
-        r"{POS}(?:\$\(MAKE\)|make)\s+(?:-\S+(?:\s+\S+)?\s+)*(?:[A-Za-z_][A-Za-z0-9_]*=\S*\s+)*([a-z][\w-]*)"
+        r"{POS}(?:(?:\$\(MAKE\)|make)(?:[ \t]|$)|(?:\S*/)?l7r-gate\.sh\s+rust\s+([a-z][\w-]*))"
     ))
 });
-static GOALS: LazyLock<Regex> = LazyLock::new(|| {
-    re(&format!(
-        r"{POS}(?:\$\(MAKE\)|make)((?:\s+(?:-\S+|[A-Za-z_][A-Za-z0-9_]*=\S*|[./~]\S*|[a-z][\w-]*))*)"
-    ))
-});
+// The gate's path quoted whole (`"$root/scripts/gates/l7r-gate.sh" rust test`), unquoted before the quotes are blanked.
+static GATE_QUOTED: LazyLock<Regex> = LazyLock::new(|| re(r#""[^"\n]*/l7r-gate\.sh""#));
 static GOAL: LazyLock<Regex> = LazyLock::new(|| re(r"^[a-z][\w-]*$"));
 static SEP: LazyLock<Regex> = LazyLock::new(|| re(r"\s*(?:&&|\|\||;|\n)\s*"));
 static MAKE_HEAD: LazyLock<Regex> =
     LazyLock::new(|| re(r"^(?:[A-Za-z_][A-Za-z0-9_]*=\S*\s+)*(?:\$\(MAKE\)|make)\b"));
 static QUICK: LazyLock<Regex> = LazyLock::new(|| re(r"\s+quick\b"));
+// A lone `&` (a job backgrounded, not `&&`, `>&` or `&>`): `POS` reads a call after it but `SEP` does not split there, so
+// `make quick & make done` would be rebuilt as a bare `make & make done` (feature 451 T02).
+static LONE_AMP: LazyLock<Regex> = LazyLock::new(|| re(r"(?:^|[^&>])&(?:[^&>]|$)"));
 
-/// The arguments `-C dir` and `-f file` take, never goals.
-const TAKES_ARG: [&str; 8] = [
+/// The arguments `-C dir`, `-f file`, `-I dir`, `-o file` and `-W file` take, never goals.
+const TAKES_ARG: [&str; 10] = [
     "-C",
     "-f",
     "--directory",
     "--file",
     "--makefile",
+    "-I",
+    "--include-dir",
     "-o",
     "--old-file",
     "-W",
 ];
+/// The flags whose argument is optional, taken only when it is a number (`-j 4 done`).
+const TAKES_NUMBER: [&str; 4] = ["-j", "--jobs", "-l", "--load-average"];
 
-/// Every make TARGET `cmd` INVOKES (`targets`): heredocs and quoted strings blanked, a target counted only at a command position,
-/// past any flags and `VAR=value` prefixes - the first goal of each call.
-#[must_use]
-pub fn targets(cmd: &str) -> BTreeSet<String> {
-    // NO `make`, NO PATTERN (T007, measured 2026-11-08): a hook call is a process, so each pattern compiles on every call - 4.6 ms
-    // of a plain `ls`'s 11.4 - and a target needs `make` or `$(MAKE)` spelled in the command
-    if !cmd.contains("make") && !cmd.contains("MAKE") {
-        return BTreeSet::new();
+/// The goals of one make call, read from the words after `make` up to the end of its simple command: a flag, its argument and a
+/// `VAR=value` passed over, a path word too (`hm_make._goals`); any other word (a redirect, a stray number) ends the call.
+fn goals_of(rest: &str, out: &mut Vec<String>) {
+    let end = rest
+        .find([';', '|', '&', '\n', ')', '`'])
+        .unwrap_or(rest.len());
+    let mut words = rest[..end].split_whitespace().peekable();
+    while let Some(word) = words.next() {
+        if TAKES_ARG.contains(&word) {
+            words.next();
+        } else if TAKES_NUMBER.contains(&word) {
+            words.next_if(|w| w.bytes().all(|b| b.is_ascii_digit()));
+        } else if let Some(goal) =
+            Some(word.trim_end_matches(['"', '\''])).filter(|w| GOAL.is_match(w).unwrap_or(false))
+        {
+            // the last goal of a `-c` string carries its closing quote
+            out.push(goal.to_owned());
+        } else if !(word.starts_with(['-', '.', '/', '~']) || is_assignment(word)) {
+            break;
+        }
     }
-    let clean = strip_quotes(&strip_heredocs(cmd));
-    TARGET
-        .captures_iter(&clean)
-        .map_while(Result::ok)
-        .filter_map(|c| c.get(1))
-        .map(|m| m.as_str().to_owned())
-        .collect()
 }
 
-/// Every goal of every make call in `seg` (`_goals`), an argument of `-C`/`-f` never one.
-fn goals(seg: &str) -> BTreeSet<String> {
-    let clean = strip_quotes(&strip_heredocs(seg));
-    let mut out = BTreeSet::new();
-    for c in GOALS.captures_iter(&clean).map_while(Result::ok) {
-        let mut skip = false;
-        for word in c.get(1).map_or("", |m| m.as_str()).split_whitespace() {
-            if std::mem::take(&mut skip) {
-                continue;
-            }
-            if TAKES_ARG.contains(&word) {
-                skip = true;
-            } else if GOAL.is_match(word).unwrap_or(false) {
-                out.insert(word.to_owned());
-            }
+fn is_assignment(word: &str) -> bool {
+    word.split_once('=').is_some_and(|(name, _)| {
+        name.starts_with(|c: char| c.is_ascii_alphabetic() || c == '_')
+            && name.chars().all(|c| c.is_ascii_alphanumeric() || c == '_')
+    })
+}
+
+/// Every make target `cmd` RUNS, in command order (feature 451 D1): heredocs and quoted strings blanked (the string after `-c`, which
+/// an interpreter runs, kept), a call counted only at a command position (`POS`), every goal of each call, and `l7r-gate.sh rust <cmd>`
+/// read as `rust-<cmd>`. A mention is never one (constitution XVIII).
+#[must_use]
+pub fn invoked(cmd: &str) -> Vec<String> {
+    // NO `make`, NO PATTERN (T007, measured 2026-11-08): a hook call is a process, so each pattern compiles on every call - 4.6 ms
+    // of a plain `ls`'s 11.4 - and a target needs `make`, `$(MAKE)` or the gate spelled in the command
+    if !cmd.contains("make") && !cmd.contains("MAKE") && !cmd.contains("l7r-gate") {
+        return Vec::new();
+    }
+    let unquoted = GATE_QUOTED.replace_all(cmd, "l7r-gate.sh");
+    let clean = strip_quotes(&strip_heredocs(&unquoted));
+    let mut out = Vec::new();
+    for c in CALL.captures_iter(&clean).map_while(Result::ok) {
+        if let Some(gate) = c.get(1) {
+            out.push(format!("rust-{}", gate.as_str()));
+        } else if let Some(call) = c.get(0) {
+            goals_of(&clean[call.end()..], &mut out);
         }
     }
     out
+}
+
+/// The set of make targets `cmd` runs (`targets`): `invoked`'s, order and repeats dropped.
+#[must_use]
+pub fn targets(cmd: &str) -> BTreeSet<String> {
+    invoked(cmd).into_iter().collect()
 }
 
 fn balanced(text: &str) -> bool {
@@ -100,12 +143,13 @@ pub fn combine(cmd: &str) -> Option<String> {
     if cmd.is_empty()
         || cmd.contains("GATE_OK")
         || cmd.contains("<<")
+        || LONE_AMP.is_match(cmd).unwrap_or(false)
         || !cmd.contains("quick")
         || !cmd.contains("done")
     {
         return None;
     }
-    let all = goals(cmd);
+    let all = targets(cmd);
     if !has(&all, "quick") || !has(&all, "done") {
         return None;
     }
@@ -120,7 +164,7 @@ pub fn combine(cmd: &str) -> Option<String> {
     let (mut kept, mut dropped): (Vec<(String, &str)>, bool) = (Vec::new(), false);
     for (i, seg) in segs.iter().enumerate() {
         let sep = joints.get(i).copied().unwrap_or("");
-        let got = goals(seg);
+        let got = targets(seg);
         let makeish = MAKE_HEAD.is_match(seg.trim()).unwrap_or(false) && balanced(seg);
         if makeish && has(&got, "quick") && !has(&got, "done") {
             dropped = true;
@@ -130,7 +174,7 @@ pub fn combine(cmd: &str) -> Option<String> {
             let rebuilt = QUICK.replace(seg, "").into_owned();
             let mut want = got.clone();
             want.remove("quick");
-            if goals(&rebuilt) != want {
+            if targets(&rebuilt) != want {
                 return None;
             }
             kept.push((rebuilt, sep));
@@ -159,7 +203,7 @@ pub fn combine(cmd: &str) -> Option<String> {
         .trim_end_matches(['&', '|', ';', ' ', '\n'])
         .trim()
         .to_owned();
-    let left = goals(&out);
+    let left = targets(&out);
     (!out.is_empty() && out != cmd && has(&left, "done") && !has(&left, "quick")).then_some(out)
 }
 

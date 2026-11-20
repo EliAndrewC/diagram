@@ -1,4 +1,4 @@
-use super::{combine, targets};
+use super::{combine, invoked, targets};
 
 fn set(items: &[&str]) -> std::collections::BTreeSet<String> {
     items.iter().map(|s| (*s).to_owned()).collect()
@@ -47,4 +47,58 @@ fn quick_and_done_together_become_done_alone() {
     assert_eq!(combine("(make quick && make done"), None);
     assert_eq!(combine("make quick-run quick done"), None);
     assert_eq!(combine("timeout 5 make quick && make done"), None);
+    // feature 451 T02: a backgrounded quick is left alone, a redirect's `&` is not a background
+    assert_eq!(combine("make quick & make done"), None);
+    assert_eq!(
+        combine("make quick 2>&1 && make done").as_deref(),
+        Some("make done")
+    );
+}
+
+/// Feature 451 T02's cases (plan, T02 Approach; research R1): the command, and the targets it runs in command order.
+const T02_CASES: [(&str, &[&str]); 26] = [
+    ("timeout 2400 make static", &["static"]),
+    ("timeout -k 5 1800 make rust-test", &["rust-test"]),
+    ("flock /tmp/x make rust-test", &["rust-test"]),
+    ("flock -w 10 /tmp/x make rust-test", &["rust-test"]),
+    ("(make hooks-test > log) &", &["hooks-test"]),
+    ("{ make static; } &", &["static"]),
+    ("VAR=x make static &", &["static"]),
+    ("env X=1 make static &", &["static"]),
+    ("nice -n 5 make static", &["static"]),
+    ("time make static", &["static"]),
+    ("if true; then make static; fi", &["static"]),
+    ("sleep 1 & make static", &["static"]),
+    ("cd x && make quick; make done", &["quick", "done"]),
+    ("make -j 4 done", &["done"]),
+    (
+        "scripts/gates/l7r-gate.sh rust test --crate rust/guard",
+        &["rust-test"],
+    ),
+    ("make quick done", &["quick", "done"]),
+    ("make -j done", &["done"]),
+    ("make -C dir -I inc FULL=1 ./x land T=T02 2>&1", &["land"]),
+    ("make static; make static", &["static", "static"]),
+    ("bash -c \"cd x && make static\"", &["static"]),
+    (
+        "\"$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh\" rust test",
+        &["rust-test"],
+    ),
+    ("$(MAKE) done", &["done"]),
+    ("make 9lives", &[]),
+    ("echo make static", &[]),
+    ("cat <<EOF\nmake static\nEOF", &[]),
+    ("grep -n 'make static' Makefile", &[]),
+];
+
+/// Each case through the one detector (`invoked`), its set (`targets`) and the event log's first (`make_target`).
+#[test]
+fn t02_every_form_yields_its_targets_through_every_reader() {
+    use crate::guards::event_log_hooks::make_target;
+    for (cmd, want) in T02_CASES {
+        assert_eq!(invoked(cmd), want, "{cmd}");
+        assert_eq!(targets(cmd), set(want), "{cmd}");
+        let first = want.first().copied().unwrap_or("");
+        assert_eq!(make_target(cmd), first, "{cmd}");
+    }
 }

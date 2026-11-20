@@ -32,6 +32,10 @@ fn a_plain_call_concerns_nothing_and_a_record_call_does() {
     assert_eq!(bash("make quick"), None);
     assert_eq!(bash("make done"), Some("pretool-bash"));
     assert_eq!(bash("FULL=1 make -s done"), Some("pretool-bash"));
+    // feature 451 T02: the gate read by the one make detector, past `timeout` and `flock`
+    assert_eq!(bash("timeout 2400 make done"), Some("pretool-bash"));
+    assert_eq!(bash("flock /tmp/x make done"), Some("pretool-bash"));
+    assert_eq!(bash("echo make done"), None);
     assert_eq!(bash("make apply-edits FROM=x"), Some("pretool-bash"));
     assert_eq!(edit("/r/notes.md"), None);
     assert_eq!(edit("/r/rust/guard/src/a.rs"), None);

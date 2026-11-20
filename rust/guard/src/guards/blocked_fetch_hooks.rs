@@ -37,11 +37,15 @@ fn re(pattern: &str) -> Regex {
 static FETCHER: LazyLock<Regex> = LazyLock::new(|| {
     re(r"(?:^|[\s;&|(`$])(?:curl|wget|lynx|w3m|xh|https?)\s|python3?\s+-m\s+urllib")
 });
-static MAKE_FETCH: LazyLock<Regex> = LazyLock::new(|| {
-    re(
-        r"(?:^|[\s;&|(])make\s+(?:-[Cs]\s*\S+\s+)*(?:source-pages|archive|archive-sources|reserve|source-outcome|quote-verbatim)\b",
-    )
-});
+/// The make targets that fetch, read by the one make detector (feature 451 D1 - its own pattern took `echo make archive` for one).
+const MAKE_FETCH: [&str; 6] = [
+    "source-pages",
+    "archive",
+    "archive-sources",
+    "reserve",
+    "source-outcome",
+    "quote-verbatim",
+];
 static URL: LazyLock<Regex> =
     LazyLock::new(|| re(r#"(?i)(?:https?://)?(?:[a-z0-9-]+\.)+[a-z]{2,}(?:/[^\s'"<>)]*)?"#));
 static HEREDOC: LazyLock<Regex> =
@@ -102,7 +106,10 @@ fn fetch_of(event: &Event) -> Option<Fetch> {
         return None;
     }
     let cmd = field(input, "command");
-    let (fetcher, maker) = (found(&FETCHER, cmd), found(&MAKE_FETCH, cmd));
+    let maker = crate::shared::make::invoked(cmd)
+        .iter()
+        .any(|t| MAKE_FETCH.contains(&t.as_str()));
+    let fetcher = found(&FETCHER, cmd);
     if !(fetcher || maker) {
         return None;
     }

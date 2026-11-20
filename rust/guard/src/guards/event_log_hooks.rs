@@ -82,10 +82,6 @@ macro_rules! pattern {
     };
 }
 
-pattern!(
-    MAKE,
-    r"(?m)(?:^|[;&|(]\s*|\b(?:then|do|else|time)\s+)(?:[A-Z_][A-Z0-9_]*=\S*\s+)*make\s+(?:-[CfIjo]\s+\S+\s+|-{1,2}[\w-]+(?:=\S+)?\s+|[A-Z_]+=\S*\s+)*([a-z][\w-]*)"
-);
 pattern!(MANIFEST, r#"(/[^\s`"'<>)]*MANIFEST\.md)"#);
 pattern!(
     FINDING_COUNT,
@@ -190,13 +186,14 @@ pub fn verdict_of(text: &str) -> String {
     String::new()
 }
 
-/// The first make target a Bash command runs, or "" (`make_target`).
+/// The first make target a Bash command runs, or "" (`make_target`): `shared::make::invoked`'s first, the one detector the guards
+/// read too (feature 451 D1 - the writer's own pattern took no `timeout N` or `flock F`, so a timed run logged no target).
 #[must_use]
 pub fn make_target(command: &str) -> String {
-    let text = command
-        .split_once("<<")
-        .map_or(command, |(before, _)| before);
-    first_group(&MAKE, text).unwrap_or_default()
+    crate::shared::make::invoked(command)
+        .into_iter()
+        .next()
+        .unwrap_or_default()
 }
 
 /// What kind of subagent this is (`agent_category`).

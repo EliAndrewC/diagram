@@ -34751,24 +34751,39 @@
   "rests": [],
   "verdict": "IN-STEP"
  },
- "rust/phases/src/driver/polder.rs::SLUICE_FT#the sluice gate's size": {
-  "body": "48b99e939d683c85",
-  "claim": "the sluice gate's size - DEVIATION water-gates-and-sluices-shuimen.drawing: a square 8 ft on a side on each sluice's point, the deleted ink's, carried as it stood, where the page draws a sluice as a board between two posts across its channel, a field channel's spanning about 16 to 24 ft - a departure the code keeps until feature 449 T234",
-  "code": "82de929803489692",
-  "core": "12d295935dd0736d",
+ "rust/phases/src/driver/polder.rs::SLUICE_SPAN_FT#the sluice's span": {
+  "body": "cf3f7f6f54bf7675",
+  "claim": "the sluice's span - water-gates-and-sluices-shuimen.drawing: the frame's span drawn true, post to post, a field channel's sluice spanning about 16 to 24 ft and a wider channel's bank to bank; 20 ft, the band's middle and the deleted `sluice_gate`'s default where no span was given, a GUESS (the page's band is its own GUESS)",
+  "code": "892a51be6ae2136a",
+  "core": "f0243cacd6dc5da9",
   "date": "2026-11-20",
-  "note": "known (449 T234): `SLUICE_FT = 8.0` gives each sluice point an 8 ft square, where the page draws a timber board across its channel between two posts with its span drawn true, post to post, about 16 to 24 ft on a field channel; the claim states this departure correctly; fix: code; effect: a map reader sees a small 8 ft block on each sluice point instead of a board-and-posts frame across the channel, so it does not read as a gate across the water",
+  "note": "20 ft sits in the middle of the page's 16 to 24 ft field-channel band; a fixed point on a range is allowed",
   "pages": {
    "0179-water-gates-and-sluices-shuimen.drawing.html": "54c4f48049320f90"
   },
   "research": "e305ba29a00899a2",
   "rests": [
-   "0179-water-gates-and-sluices-shuimen.drawing.html:088c44a5ca24eaf0",
    "0179-water-gates-and-sluices-shuimen.drawing.html:5bfc7981ce08c3b7",
-   "0179-water-gates-and-sluices-shuimen.drawing.html:65c2e2ee17e2dda0",
+   "0179-water-gates-and-sluices-shuimen.drawing.html:65c2e2ee17e2dda0"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/driver/polder.rs::SLUICE_TIMBER_FT#the timbers drawn larger than life": {
+  "body": "c3a9a64ac045c822",
+  "claim": "the timbers drawn larger than life - water-gates-and-sluices-shuimen.drawing: the frame's timbers and its drum drawn at the smallest size the map draws anything, a CONVENTION, as the wells are; the deleted `sluice_gate`'s sizes at a hamlet's scale (a 2.8 ft board, 2 by 4 ft posts, a 1.2 ft beam 3.1 ft off, a 2.2 ft drum), carried as they stood",
+  "code": "28b5f6770773e25d",
+  "core": "1846ec244f7f5b97",
+  "date": "2026-11-20",
+  "note": "the timbers and drum are drawn at minimum size, a CONVENTION, as the page says",
+  "pages": {
+   "0179-water-gates-and-sluices-shuimen.drawing.html": "54c4f48049320f90"
+  },
+  "research": "e305ba29a00899a2",
+  "rests": [
+   "0179-water-gates-and-sluices-shuimen.drawing.html:5bfc7981ce08c3b7",
    "0179-water-gates-and-sluices-shuimen.drawing.html:b61cf64d7fc5dad2"
   ],
-  "verdict": "DRIFTED"
+  "verdict": "IN-STEP"
  },
  "rust/phases/src/driver/polder.rs::STRIP_CUT_HW#the strip's cut": {
   "body": "f208ad96e59a170a",
@@ -34790,6 +34805,18 @@
   "note": "the page places the reed marsh and fringe but gives no depth, so 280 ft is a guess",
   "pages": {},
   "research": "",
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/driver/polder.rs::SluiceFrame#a sluice's frame": {
+  "body": "bac707e05797519f",
+  "claim": "a sluice's frame - NONE: the record's type, holding what `sluice_frame` decides",
+  "code": "29d4f30991fe75be",
+  "core": "0ddc01caa5632297",
+  "date": "2026-11-20",
+  "note": "a record type that holds what sluice_frame decides and decides nothing itself",
+  "pages": {},
+  "research": "",
+  "rests": [],
   "verdict": "IN-STEP"
  },
  "rust/phases/src/driver/polder.rs::crown_fill#the polder's paint": {
@@ -34817,48 +34844,155 @@
   "verdict": "IN-STEP"
  },
  "rust/phases/src/driver/polder.rs::draw_polder#the pocket pond's ring": {
-  "body": "66a84aa363e350b9",
+  "body": "a5f4347b1ff80095",
   "claim": "the pocket pond's ring - GUESS: flooded ground 2.5 ft wide round the pond inside a bund line 2.2 ft wide, the deleted ink's; no page sizes the margin",
-  "code": "01f3e3834d6385dc",
-  "core": "396a41e10c8ca6b6",
+  "code": "d1731a4dcc9badd7",
+  "core": "d1eb427215845d00",
   "date": "2026-11-20",
-  "note": "GUESS; no cited page sizes a pocket pond's flooded margin or its bund",
+  "note": "the code matches the claim: the fill is ink::FLOODED at prx+2.5 and pry+2.5, inside an ink::AZE stroke 2.2 wide. The page says nothing about the margin round a field or pocket pond, so GUESS is the right label",
   "pages": {},
-  "reads": "f76db7fb7ea295c2",
+  "reads": "dacb6fbf9728b3b1",
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  "rust/phases/src/driver/polder.rs::draw_polder#the polder drawn": {
-  "body": "66a84aa363e350b9",
-  "claim": "the polder drawn - CONVENTION: the deleted `ink.dike` and `dikeponds`, each record drawn as the engine drew it",
-  "code": "751c1e69d0e11fa7",
-  "core": "396a41e10c8ca6b6",
+  "body": "a5f4347b1ff80095",
+  "claim": "the polder drawn - CONVENTION: the deleted `ink.dike` and `dikeponds`, each record drawn as the engine drew it, the sluices apart",
+  "code": "0cc3f41335dd4952",
+  "core": "d1eb427215845d00",
   "date": "2026-11-20",
-  "note": "the code chooses colors, stroke weights, layer order and kind tags, which are drawing conventions; the sizes a reader could take as facts about the place (the feeder ditch's width FEEDER_W, the hedge row's width HEDGE_W, the sluice's square SLUICE_FT, the pond ring's 2.5 ft margin) sit in named constants or under the pocket ring's GUESS claim, and the marked lines only swap literals for those constants",
+  "note": "a CONVENTION for the drawing; the sluices are no longer drawn here, as the claim says",
   "pages": {},
-  "reads": "f76db7fb7ea295c2",
+  "reads": "dacb6fbf9728b3b1",
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
+ "rust/phases/src/driver/polder.rs::draw_sluices#on top": {
+  "body": "fc877f78ad61615a",
+  "claim": "on top - CONVENTION: the frame drawn above the water and the reeds, as the deleted `sluice_gate` drew it (its top layer)",
+  "code": "ffc09c1273c8b8c3",
+  "core": "9369cadd57809e1b",
+  "date": "2026-11-20",
+  "note": "nothing inside draw_sluices sets the layer; the claim is true only if its caller runs it after draw_polder (reeds, water, dike) and after any later water or marsh layer. I need the caller's code (the stage that calls draw_polder and draw_sluices)",
+  "pages": {},
+  "reads": "cc568008dd481174",
+  "research": "",
+  "rests": [],
+  "verdict": "CANNOT-TELL"
+ },
+ "rust/phases/src/driver/polder.rs::draw_sluices#the board's place": {
+  "body": "fc877f78ad61615a",
+  "claim": "the board's place - GUESS: water-gates-and-sluices-shuimen.drawing sets the board a few steps down the channel from the junction so that it plainly crosses the channel it blocks, not the one it branches from; a polder's sluice point is where its one channel crosses the dike's inner face, no other channel meeting it there, so the board is drawn on the point itself",
+  "code": "dd5b4e7245c84a2f",
+  "core": "9369cadd57809e1b",
+  "date": "2026-11-20",
+  "note": "the page's junction rule assumes a junction; a polder's sluice point has none, so drawing the board on the point is a choice the record is silent on, and GUESS fits",
+  "pages": {},
+  "reads": "cc568008dd481174",
+  "research": "",
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/driver/polder.rs::draw_sluices#the sluices drawn": {
+  "body": "fc877f78ad61615a",
+  "claim": "the sluices drawn - water-gates-and-sluices-shuimen.drawing: each a frame across the channel that crosses the dike at its point, at that channel's drawn width; none drawn where no channel is known, the gap named rather than guessed",
+  "code": "a90d4f549a52bc91",
+  "core": "9369cadd57809e1b",
+  "date": "2026-11-20",
+  "note": "each frame is laid across the channel found at its point, sized by that channel's drawn width; a sluice with no channel is skipped and the gap pushed to `missing`; one glyph, no open or shut form",
+  "pages": {
+   "0179-water-gates-and-sluices-shuimen.drawing.html": "54c4f48049320f90"
+  },
+  "reads": "cc568008dd481174",
+  "research": "e305ba29a00899a2",
+  "rests": [
+   "0179-water-gates-and-sluices-shuimen.drawing.html:067bd7a407956917",
+   "0179-water-gates-and-sluices-shuimen.drawing.html:088c44a5ca24eaf0",
+   "0179-water-gates-and-sluices-shuimen.drawing.html:30803fa2df4a125c",
+   "0179-water-gates-and-sluices-shuimen.drawing.html:b61cf64d7fc5dad2"
+  ],
+  "verdict": "IN-STEP"
+ },
  "rust/phases/src/driver/polder.rs::roll_polder#the polder": {
-  "body": "8e295ceaf2849138",
+  "body": "af6c20d911ad4fa0",
   "claim": "the polder - polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing: enclosed by its dike all the way round, from outside in the dike, the ring canal, the field ditches and the paddies",
-  "code": "111b539c5d42cab1",
-  "core": "3976591ed9442d27",
-  "date": "2026-11-07",
-  "note": "puts the polder, seat and waterward stages together; nothing here contradicts the enclosure order",
+  "code": "3ff4fe65eadc2e59",
+  "core": "02f6399c8c255638",
+  "date": "2026-11-20",
+  "note": "the unit puts the stages together and lays out no polder of its own; it draws the polder from stage_polder, and the added draw_sluices draws the gates where water crosses the dike, as the page says",
   "pages": {
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "3012a8eb9aff8c32"
   },
   "reads": "bdb5a83d048d151c",
   "research": "765c28e2d975a432",
   "rests": [
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:6b26009a944726e2",
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:9b079184810cacb3"
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:9b079184810cacb3",
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:f981425220ab2e60"
   ],
-  "triaged": "2026-11-19",
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/driver/polder.rs::roll_polder#where the village may sit: the Ground built for stage_seat uses the polder's outline as its ring and keeps the village off the field ditches, the feeder, the outfall and the polder's reed fringe (the dry ground off the dike, §5, §6)": {
+  "code": "02f6399c8c255638",
+  "core": "02f6399c8c255638",
+  "date": "2026-11-20",
+  "note": "where the village may sit: the Ground built for stage_seat uses the polder's outline as its ring and keeps the village off the field ditches, the feeder, the outfall and the polder's reed fringe (the dry ground off the dike, §5, §6)",
+  "outside": true,
+  "research": "",
+  "verdict": "UNCLAIMED"
+ },
+ "rust/phases/src/driver/polder.rs::sluice_channel#the channel it shuts": {
+  "body": "4fc5931b971fe6a5",
+  "claim": "the channel it shuts - water-gates-and-sluices-shuimen.drawing: the board lies across the channel it blocks; on a polder the channel that crosses the dike at the sluice (polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing: water crosses the dike only at gated sluices), the feeder at the inlet and the outfall's drain at the outfall, found by its course rather than pinned",
+  "code": "3f4bbd788e167f49",
+  "core": "01297ddc30c5cd38",
+  "date": "2026-11-20",
+  "note": "the channel is found by its course (the feeder or outfall segment through the point), and its direction gives the board's line; the 1e-6 tolerance is plumbing",
+  "pages": {
+   "0179-water-gates-and-sluices-shuimen.drawing.html": "54c4f48049320f90"
+  },
+  "research": "e305ba29a00899a2",
+  "rests": [
+   "0179-water-gates-and-sluices-shuimen.drawing.html:067bd7a407956917",
+   "0179-water-gates-and-sluices-shuimen.drawing.html:cf888beb9dde091c"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/driver/polder.rs::sluice_frame#the frame across its channel": {
+  "body": "058d384ebbd99254",
+  "claim": "the frame across its channel - water-gates-and-sluices-shuimen.drawing: a sluice drawn as a timber board across its channel between two posts, with the crossbeam and windlass that lifted it, the frame's span drawn true, post to post - about 16 to 24 ft on a field channel (`SLUICE_SPAN_FT`), bank to bank on a wider one; the frame itself the page's GUESS from how a lifting gate works",
+  "code": "85f8cc051b2e0fb2",
+  "core": "2023aa9f060d0e7c",
+  "date": "2026-11-20",
+  "note": "board between two posts, a crossbeam with the drum at its center, span 20 ft and grown to w + 2 posts so the posts stand on the banks of a wider channel",
+  "pages": {
+   "0179-water-gates-and-sluices-shuimen.drawing.html": "54c4f48049320f90"
+  },
+  "reads": "760aed89bb35fc21",
+  "research": "e305ba29a00899a2",
+  "rests": [
+   "0179-water-gates-and-sluices-shuimen.drawing.html:088c44a5ca24eaf0",
+   "0179-water-gates-and-sluices-shuimen.drawing.html:5bfc7981ce08c3b7",
+   "0179-water-gates-and-sluices-shuimen.drawing.html:65c2e2ee17e2dda0",
+   "0179-water-gates-and-sluices-shuimen.drawing.html:b61cf64d7fc5dad2"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/driver/polder.rs::sluice_frame#the timbers": {
+  "body": "058d384ebbd99254",
+  "claim": "the timbers - water-gates-and-sluices-shuimen.drawing: drawn larger than life, a CONVENTION (`SLUICE_TIMBER_FT`)",
+  "code": "d8049a9a99fe4077",
+  "core": "2023aa9f060d0e7c",
+  "date": "2026-11-20",
+  "note": "board, post, beam and drum sizes come from SLUICE_TIMBER_FT, a minimum-size CONVENTION",
+  "pages": {
+   "0179-water-gates-and-sluices-shuimen.drawing.html": "54c4f48049320f90"
+  },
+  "reads": "760aed89bb35fc21",
+  "research": "e305ba29a00899a2",
+  "rests": [
+   "0179-water-gates-and-sluices-shuimen.drawing.html:5bfc7981ce08c3b7"
+  ],
   "verdict": "IN-STEP"
  },
  "rust/phases/src/driver/polder.rs::stage_polder#the dike-pond's split": {

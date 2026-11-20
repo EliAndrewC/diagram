@@ -1212,6 +1212,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-20",
    "declared": "spec-fidelity"
+  },
+  "### T234 (T226: the polder's sluice gate was drawn as a small square, where page 0179 draws a board and frame across the channel)": {
+   "sha256": "a15410917e491b377d56c0bd6aee3b60715a9b118d10292243a6f9db7258506c",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity"
+  },
+  "### T234 Approach (checklist part A)": {
+   "sha256": "ac0b58814c54aad3a345b0851bf11e4e1b0bade6f397874d2d487309e2306d18",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -16060,6 +16072,76 @@
      "why": "Ordering and exits inside the approved plan. Neither narrows anything the GM asked for."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-20",
+   "blocks": [
+    "### T234 (T226: the polder's sluice gate was drawn as a small square, where page 0179 draws a board and frame across the channel)",
+    "### T234 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T234-a",
+     "summary": "Each sluice drawn as page 0179 draws it: a timber board across its channel between two posts, with crossbeam and windlass, span true post to post, replacing the small square",
+     "class": "within",
+     "why": "Fixes a known defect found in T226 (a drawn size the research contradicts, a reader cannot read a square as a gate) as the GM's 2026-11-18 rule asks: fix known bugs in each step before porting the next; the drawing follows the research page rather than the Python's."
+    },
+    {
+     "id": "T234-b",
+     "summary": "The channel is found from the channels' own geometry (the one whose line passes through the sluice's point: the feeder for the inlet, the drain's first stretch for the outfall); a sluice whose channel cannot be found is refused by name, never guessed",
+     "class": "within",
+     "why": "Derives the direction rather than pinning it (the rebuild-from-derivations rule of 2026-11-19); refusing an unfindable case names a failure rather than drawing a wrong gate, and excludes no case that draws correctly today."
+    },
+    {
+     "id": "T234-c",
+     "summary": "Span 20 ft, labeled GUESS at the middle of the page's 16-24 ft field-channel band, grown so each post stands on a bank on a wider channel; SLUICE_FT removed",
+     "class": "within",
+     "why": "A sourced, labeled value from the page's own band; growing it for wider channels keeps the drawing true to what the page draws (a gate spanning bank to bank)."
+    },
+    {
+     "id": "T234-d",
+     "summary": "Timber sizes a labeled CONVENTION, drawn larger than life so they read",
+     "class": "within",
+     "why": "A legibility convention, labeled as such, inside what the page allows; no research claim is contradicted and the goal (a reader sees a gate across the water) is served."
+    },
+    {
+     "id": "T234-e",
+     "summary": "Sluices drawn over the reeds, as the deleted ink drew them",
+     "class": "within",
+     "why": "Draw order chosen so the gate is visible; under the reeds both sluices were hidden, which would defeat the fix's purpose."
+    },
+    {
+     "id": "T234-f",
+     "summary": "The claim restated to the page and the departure wording removed",
+     "class": "within",
+     "why": "The code now matches the page, so the claim's recorded departure no longer exists; restating it keeps the claim true."
+    },
+    {
+     "id": "T234-g",
+     "summary": "Kuwabata's glyph-check declared under Occasions and deferred while the port switch stands at rust-only",
+     "class": "within",
+     "why": "Feature 444 FR-023 (GM-approved amendment 8/10) states a glyph-check the review gate owes for a pool hamlet a Rust stage moves is not owed while the switch stands, owed when it is thrown back; declaring it keeps it owed rather than dropped."
+    },
+    {
+     "id": "T234-h",
+     "summary": "Found and left: the reed strip covering the dike's corners and sluice cuts filed as T236, and reviews-owed owing no review for an undeclared Rust drawing change filed as T237, both landing before T158",
+     "class": "within",
+     "why": "Both defects are filed as their own tasks and land before the next step (T158), which is what the GM's 2026-11-18 'fix all known bugs in each step before moving on' asks; neither is carried into the next step."
+    },
+    {
+     "id": "T234-i",
+     "summary": "The page's sluice name not drawn, since the hamlet maps draw no element captions",
+     "class": "within",
+     "why": "A difference from the page's own drawing, not a wrong outcome: no map reads wrong and no research finding is contradicted (constitution XIV v2.36.0, the GM 2026-11-19); no defect is left."
+    },
+    {
+     "id": "T234-j",
+     "summary": "Ordered after T226 and before T158; exits, budget of one gated landing, and done measured as Kuwabata's two sluices drawn as frames across their channels",
+     "class": "within",
+     "why": "Sequencing and exits inside the feature's process; the done measure is the fix's own goal."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -28158,6 +28240,74 @@
      "summary": "The task runs after T233 and before T158; its exits are the counting tests red then green, make quick, make static, make counters-inert, make hooks-test and the audit judged",
      "class": "within",
      "why": "Ordering and exits inside the approved plan. Neither narrows anything the GM asked for."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T234": {
+   "section_sha256": "c1177e43b697c6f11475276904844361a2cc8f18d54a53d32f93573cf2911cc6",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T234-a",
+     "summary": "Each sluice drawn as page 0179 draws it: a timber board across its channel between two posts, with crossbeam and windlass, span true post to post, replacing the small square",
+     "class": "within",
+     "why": "Fixes a known defect found in T226 (a drawn size the research contradicts, a reader cannot read a square as a gate) as the GM's 2026-11-18 rule asks: fix known bugs in each step before porting the next; the drawing follows the research page rather than the Python's."
+    },
+    {
+     "id": "T234-b",
+     "summary": "The channel is found from the channels' own geometry (the one whose line passes through the sluice's point: the feeder for the inlet, the drain's first stretch for the outfall); a sluice whose channel cannot be found is refused by name, never guessed",
+     "class": "within",
+     "why": "Derives the direction rather than pinning it (the rebuild-from-derivations rule of 2026-11-19); refusing an unfindable case names a failure rather than drawing a wrong gate, and excludes no case that draws correctly today."
+    },
+    {
+     "id": "T234-c",
+     "summary": "Span 20 ft, labeled GUESS at the middle of the page's 16-24 ft field-channel band, grown so each post stands on a bank on a wider channel; SLUICE_FT removed",
+     "class": "within",
+     "why": "A sourced, labeled value from the page's own band; growing it for wider channels keeps the drawing true to what the page draws (a gate spanning bank to bank)."
+    },
+    {
+     "id": "T234-d",
+     "summary": "Timber sizes a labeled CONVENTION, drawn larger than life so they read",
+     "class": "within",
+     "why": "A legibility convention, labeled as such, inside what the page allows; no research claim is contradicted and the goal (a reader sees a gate across the water) is served."
+    },
+    {
+     "id": "T234-e",
+     "summary": "Sluices drawn over the reeds, as the deleted ink drew them",
+     "class": "within",
+     "why": "Draw order chosen so the gate is visible; under the reeds both sluices were hidden, which would defeat the fix's purpose."
+    },
+    {
+     "id": "T234-f",
+     "summary": "The claim restated to the page and the departure wording removed",
+     "class": "within",
+     "why": "The code now matches the page, so the claim's recorded departure no longer exists; restating it keeps the claim true."
+    },
+    {
+     "id": "T234-g",
+     "summary": "Kuwabata's glyph-check declared under Occasions and deferred while the port switch stands at rust-only",
+     "class": "within",
+     "why": "Feature 444 FR-023 (GM-approved amendment 8/10) states a glyph-check the review gate owes for a pool hamlet a Rust stage moves is not owed while the switch stands, owed when it is thrown back; declaring it keeps it owed rather than dropped."
+    },
+    {
+     "id": "T234-h",
+     "summary": "Found and left: the reed strip covering the dike's corners and sluice cuts filed as T236, and reviews-owed owing no review for an undeclared Rust drawing change filed as T237, both landing before T158",
+     "class": "within",
+     "why": "Both defects are filed as their own tasks and land before the next step (T158), which is what the GM's 2026-11-18 'fix all known bugs in each step before moving on' asks; neither is carried into the next step."
+    },
+    {
+     "id": "T234-i",
+     "summary": "The page's sluice name not drawn, since the hamlet maps draw no element captions",
+     "class": "within",
+     "why": "A difference from the page's own drawing, not a wrong outcome: no map reads wrong and no research finding is contradicted (constitution XIV v2.36.0, the GM 2026-11-19); no defect is left."
+    },
+    {
+     "id": "T234-j",
+     "summary": "Ordered after T226 and before T158; exits, budget of one gated landing, and done measured as Kuwabata's two sluices drawn as frames across their channels",
+     "class": "within",
+     "why": "Sequencing and exits inside the feature's process; the done measure is the fix's own goal."
     }
    ],
    "verdict": "CLEAR"

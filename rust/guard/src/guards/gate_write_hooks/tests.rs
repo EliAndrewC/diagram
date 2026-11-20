@@ -111,6 +111,12 @@ fn a_running_gate_refuses_a_change_it_would_see() {
         &w.bash("make record-checked X=1"),
         "make record-checked"
     ));
+    // feature 451 T02: the target the one make detector reads, never a word of an argument
+    assert!(refused(
+        &w.bash("timeout 60 make accept X=1"),
+        "make accept (it writes a tracked record)"
+    ));
+    assert!(w.bash("make land T=T1 NOTE=tick").is_empty());
     assert!(w.bash("tail -3 log").is_empty() && w.bash("make append LINE=x").is_empty());
     assert!(w.run("Read", &json!({"file_path": "/x"})).is_empty());
     assert!(w
@@ -193,11 +199,9 @@ fn a_write_after_many_triggers_is_seen_in_linear_time() {
     let found = within(move || {
         (
             super::GIT_WRITE.is_match(&git).ok(),
-            super::MAKE_WRITE
-                .captures(&make)
-                .ok()
-                .flatten()
-                .map(|c| c[1].to_owned()),
+            crate::shared::make::invoked(&make)
+                .into_iter()
+                .find(|t| super::MAKE_WRITE.contains(&t.as_str())),
         )
     });
     assert_eq!(found, (Some(true), Some("tick".to_owned())));

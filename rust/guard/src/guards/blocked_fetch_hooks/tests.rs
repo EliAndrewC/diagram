@@ -228,6 +228,9 @@ fn the_small_readers() {
             && call("make -Cdir reserve KEY=x").is_some()
     );
     assert!(call("echo curl").is_none());
+    // feature 451 T02: a fetching target read by the one make detector - a mention is none, a timed run is one
+    assert!(call("echo make archive").is_none());
+    assert!(call("(timeout 60 make reserve KEY=x) &").is_some());
     let e = event("Bash", &json!({"command": "ls"}), "/");
     assert!(decide(&e, &Session::from_input(&e.input)).is_empty());
 }

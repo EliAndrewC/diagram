@@ -15,7 +15,6 @@ mod state;
 
 use std::path::{Path, PathBuf};
 
-use fancy_regex::Regex;
 use serde_json::Value;
 
 use crate::protocol::{Answer, Event, Guard};
@@ -147,24 +146,11 @@ fn judge(cx: &Ctx) -> Vec<Answer> {
     pretool(cx)
 }
 
-static HEREDOC: std::sync::LazyLock<Regex> =
-    std::sync::LazyLock::new(|| crate::shared::regex::build(r"(?s)<<\s*.?(\w+).?.*?\n\1").unwrap());
-static QUOTED: std::sync::LazyLock<Regex> =
-    std::sync::LazyLock::new(|| crate::shared::regex::build(r#"'[^']*'|"[^"]*""#).unwrap());
-static INVOKES_GATE: std::sync::LazyLock<Regex> = std::sync::LazyLock::new(|| {
-    crate::shared::regex::build(r#"(^|[;&|(]|[[:space:]])make([[:space:]]+[A-Za-z0-9_=./"-]+)*[[:space:]]+done([[:space:]]|$)"#).unwrap()
-});
-
-/// An INVOCATION of the gate, not a mention of one (`is_gate_invocation`): heredocs and quoted strings blanked, a dry run excepted,
-/// the pattern matched line by line as `grep -E` matches it.
+/// An INVOCATION of the gate, not a mention of one (`is_gate_invocation`): `done` among the targets `shared::make::invoked` reads (feature
+/// 451 D1 - its own pattern took `echo make done` for the gate and missed a shell's `-c` string), a dry run excepted.
 #[must_use]
 pub fn is_gate_invocation(cmd: &str) -> bool {
-    if !cmd.contains("make") {
-        return false;
-    }
-    let a = HEREDOC.replace_all(cmd, " ");
-    let stripped = QUOTED.replace_all(&a, " ");
-    let padded = format!(" {stripped} ");
+    use crate::shared::shape::{strip_heredocs, strip_quotes};
     let dry = [
         "-n",
         "--dry-run",
@@ -173,12 +159,14 @@ pub fn is_gate_invocation(cmd: &str) -> bool {
         "-q",
         "--question",
     ];
-    if dry.iter().any(|f| padded.contains(&format!(" make {f} "))) {
+    if !crate::shared::make::invoked(cmd)
+        .iter()
+        .any(|t| t == "done")
+    {
         return false;
     }
-    stripped
-        .lines()
-        .any(|l| INVOKES_GATE.is_match(l).unwrap_or(false))
+    let padded = format!(" {} ", strip_quotes(&strip_heredocs(cmd)));
+    !dry.iter().any(|f| padded.contains(&format!(" make {f} ")))
 }
 
 fn pretool(cx: &Ctx) -> Vec<Answer> {

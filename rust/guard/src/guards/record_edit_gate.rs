@@ -15,9 +15,6 @@ fn re(pattern: &str) -> Regex {
     crate::shared::regex::build(pattern).unwrap_or_else(|e| unreachable!("{e}"))
 }
 
-// `hm_checks._handle`'s `make done` test, verbatim: the arbiter's holds refuse the gate.
-static MAKE_DONE: LazyLock<Regex> =
-    LazyLock::new(|| re(r"(?m)(?:^|[;&|(]\s*)(?:[A-Z_]+=\S*\s+)*make\s+(?:-\S+\s+)*done\b"));
 // The files `hm_checks.subject_of_path` freezes and `hm_record.page_dir_for` re-aims.
 static RECORD_FILE: LazyLock<Regex> = LazyLock::new(|| {
     re(
@@ -58,7 +55,8 @@ pub(crate) fn mode_for(event: &Event, from: &Path) -> Option<&'static str> {
         let cmd = field(input, "command");
         return (holding(from)
             || cmd.contains("apply-edits")
-            || (cmd.contains("done") && found(&MAKE_DONE, cmd)))
+            // the gate as `checks::handle` reads it, through the one make detector (feature 451 D1): the arbiter's holds refuse it
+            || (cmd.contains("done") && crate::shared::make::invoked(cmd).iter().any(|t| t == "done")))
         .then_some("pretool-bash");
     }
     let file = field(input, "file_path");

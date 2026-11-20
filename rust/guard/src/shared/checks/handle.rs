@@ -34,8 +34,6 @@ fn re(pattern: &str) -> Regex {
 
 static MANIFEST_PATH: LazyLock<Regex> = LazyLock::new(|| re(r#"(/[^\s`"'<>)]*MANIFEST\.md)"#));
 static TRIGGER_LINE: LazyLock<Regex> = LazyLock::new(|| re(r"(?m)^trigger: (.+)$"));
-static MAKE_DONE: LazyLock<Regex> =
-    LazyLock::new(|| re(r"(?m)(?:^|[;&|(]\s*)(?:[A-Z_]+=\S*\s+)*make\s+(?:-\S+\s+)*done\b"));
 static UNIT_UID: LazyLock<Regex> = LazyLock::new(|| re(r"^unit: (\S+)"));
 
 fn manifest_of(prompt: &str) -> (String, String) {
@@ -475,7 +473,12 @@ fn edit_mode(state: &Value, payload: &Value, ti: &Value, tool: &str, t: f64) -> 
         let command = text(ti, "command");
         if let Some(r) = root
             .as_deref()
-            .filter(|_| MAKE_DONE.is_match(command).unwrap_or(false))
+            // the gate, read by the one make detector (feature 451 D1), as `record_edit_gate`'s prefilter reads it
+            .filter(|_| {
+                crate::shared::make::invoked(command)
+                    .iter()
+                    .any(|t| t == "done")
+            })
         {
             let blocking = arbiter::blocking(r, "", true);
             if !blocking.is_empty() && !escaped("ARBITER_OK", command) {

@@ -36,12 +36,9 @@ static GIT_WRITE: LazyLock<Regex> = LazyLock::new(|| {
     crate::shared::regex::build(r"(?:\A|(?<=[;&|]))(?>[^;&|]*?\bgit\b)[^;&|]*\b(commit|add)\b")
         .unwrap_or_else(|e| unreachable!("{e}"))
 });
-static MAKE_WRITE: LazyLock<Regex> = LazyLock::new(|| {
-    crate::shared::regex::build(
-        r"(?:\A|(?<=[;&|]))(?>[^;&|]*?\bmake\b)[^;&|]*?\b(record-checked|tick|accept)\b",
-    )
-    .unwrap_or_else(|e| unreachable!("{e}"))
-});
+/// The make targets that write a tracked record, read by the one make detector (feature 451 D1 - its own pattern took any word after
+/// `make`, so `make land NOTE=tick` read as a tick).
+const MAKE_WRITE: [&str; 3] = ["record-checked", "tick", "accept"];
 
 /// What one decision reads.
 pub(crate) struct Ctx {
@@ -199,8 +196,10 @@ fn gate_refusal(event: &Event, c: &Ctx) -> Option<String> {
     if GIT_WRITE.is_match(cmd).unwrap_or(false) {
         return (!unseen(c, &["--quiet"])).then(|| "a git commit or add of a change the gate sees (it moves HEAD, or what the gate compares against it)".to_owned());
     }
-    let found = MAKE_WRITE.captures(cmd).ok().flatten()?;
-    Some(format!("make {} (it writes a tracked record)", &found[1]))
+    let found = crate::shared::make::invoked(cmd)
+        .into_iter()
+        .find(|t| MAKE_WRITE.contains(&t.as_str()))?;
+    Some(format!("make {found} (it writes a tracked record)"))
 }
 
 /// The working tree a directory stands in, or the directory itself outside one.
