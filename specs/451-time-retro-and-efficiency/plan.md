@@ -996,5 +996,123 @@ None.
 **Performance work?** <no - or yes, and its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
 
 
-<!-- plan-archive: T26 to T03 moved to plan-done.md, 2026-11-20 (feature 375 FR-044) -->
-<!-- plan-archive: T26 to T26 moved to plan-done.md, 2026-11-20 (feature 375 FR-044) -->
+### T26 (the event log filed every line under `.specify/feature.json`, which `make task-start` rewrites to the feature started last: 50 lines of 451's T26 and T03 sat in 449's log as 449's, observed 2026-11-20, method: the 449 log's lines whose `task` is no 449 task, matched to `task-starts.jsonl`)
+
+- **Approach**: the writer files a line by the feature of the task it carries, in a new module
+  `rust/guard/src/guards/event_log_hooks/filed.rs` (held: `make guard-edit` first, as was `event_log_hooks.rs`, which now calls it):
+  - the FEATURE, first that says: a make command's `F=` (one `specs/<F>` or `specs/<F>-*`); else the dispatch's brief - an Agent
+    call's own `description`, else the subagent's meta file's (D2's read) - through `brief_feature`; else the feature whose task-start
+    in force names the line's task (else the latest that started it); else the FALLBACK, `feature_of` as before (`L7R_FEATURE_DIRECTORY`,
+    then `SPECIFY_FEATURE` in the hook's own environment, then feature.json), the line marked `"fallback": true` unless the
+    environment declared it (a page session's `L7R_FEATURE_DIRECTORY` is that session's feature, not a guess).
+  - `brief_feature`: the number before a task id (`451 T26: ...`, `spec-fidelity on 451 T03's section`); else a number standing
+    alone, not inside a hyphenated word, naming a feature this clone has started a task of. Without that hold a plain-number rule moved
+    2,707 lines, 545 of them to `008-mode-a-composition` on "FR-008", measured 2026-11-20 (`make events-refile DRY=1`, the plain rule).
+  - the TASK: the command's `T=` (`line`, unchanged); else the brief's `T<n>`; else the task-start in force for the line's own
+    feature - D2's fallback, now of the line's feature, not of feature.json's. No `tasks.md` is read on a hook: one `task-starts.jsonl`
+    read and at most one meta read a line, as D2 had, and the `specs/` listing only when an `F=` or a brief's number asks.
+  - Red first, `two_features_builders_in_one_clone_each_line_in_its_own_log` (the guard's `event_log_hooks/tests.rs`): one clone,
+    feature.json naming `449-b`, a `451 T26` builder, a `449 T236` builder, briefs naming only a task or only a feature, the main
+    session's `make land F=451 T=T03` and `make task-start F=451 T=T26` (both halves of each call), a dispatch's own line, a subagent's
+    stop, a brief whose numbers are counts and `FR-` ids, and calls nothing names.
+    - before: the 451 builder's `make static` filed under `449-b` carrying `T26`.
+    - before: 617 passed and that 1 failed, measured 2026-11-20 (`make rust-test CRATE=rust/guard`).
+    - after: 619 passed, the case split in two for clippy's function length (`a_line_nothing_names_is_filed_by_feature_json_and_marked`
+      the fallback half), measured 2026-11-20 (`make rust-test CRATE=rust/guard`).
+    - the new lines of both crates 100% covered, measured 2026-11-20 (`l7r-gate.sh rust cover --crate`).
+  - The re-file, `make events-refile [DRY=1]` (`l7r-gate measure event-log refile`, new
+    `rust/gate/crates/measure/src/measure/event_log/refile.rs`, its tests `refile/tests.rs`; not held): the writer's chain run backwards
+    over every log of the clone, in two rules - BY BRIEF (a subagent's line, a dispatch's own line, its brief naming another feature
+    through the same `brief_feature`, unless the line carries its own `T=` of its log's feature; its task its own carried `T=` where the
+    new feature has it, else the brief's, else kept where it is the new feature's, else that feature's start in force at the line's
+    time) and BY TASK ID (T26's line: a task no task of its log's
+    feature, `tasks.md` and `tasks-done.md`, moves to the feature whose start of that id was in force at the line's time, when that
+    feature has the id). The second rule needs the time: `T03` is a task of 16 features and `T01` of 21, observed 2026-11-20, method:
+    the ids of every feature with a log in the clone, so "names one of another feature" is read as the start this clone made of it.
+  - BY BRIEF IS AN EXTENSION of T26's stated re-file rule, which names only the task id; it is the writer's own brief rule applied to
+    the past lines that rule cannot reach (the lines with no task, or a fallback task, below), and it made most of the moves (item 9),
+    so the plan review rules on it. Without it the re-file moves only the by-task-id lines and leaves every untasked builder line where
+    feature.json put it.
+  - The moves are appended to their targets (`O_APPEND`, as the hooks write; both readers sort by `t` and `reversal` reads a log as a
+    set), a line already there skipped; the source is rewritten through a temporary file, bytes a live hook appended meanwhile carried
+    over before the rename.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+| the line's feature, the re-file | n/a - no map | n/a | none | n/a |
+
+### T26 Approach (checklist part A)
+
+1. **The goal, in the world.** No map changes; each event-log line is in the log of the feature whose task it served, so
+   `where-time` and `feature-report` book each feature's own time when two features are worked in one clone.
+2. **The constraints.** T26's line (the brief, the task-start in force for that feature, the make target's `F=`; feature.json only where
+   nothing else says; red first with two features' builders in one clone; the re-file by task id; a plan for the lines with no task);
+   D2 (the task field, its meta read); the hook never refuses, never prints, and stays cheap; T03's red cases stay green.
+3. **Where each comes from.** O: the misfiled lines (the title's figure); O: the dry runs below; the task as filed (T26's line, T03's
+   plan review rounds 1 and 3).
+4. **Do they describe the world here?** The briefs and the starts were read, not assumed:
+   - of the main session's 30 latest dispatches, measured 2026-11-20 (their subagent meta files' descriptions):
+     - 12 name feature and task (`451 T26: ...`), measured 2026-11-20 (as above).
+     - 7 a task only (`T226: polder counters`, resolved by its start), measured 2026-11-20 (as above).
+     - 6 a feature only, measured 2026-11-20 (as above).
+     - 5 neither, filed by the fallback, measured 2026-11-20 (as above).
+   - the clone's starts resolve every task-id line to one feature, 0 left, measured 2026-11-20 (`make events-refile`).
+5. **The order.** After T03 (the task field); before T07, T08 and T14, the readers of the task field.
+6. **The exits.** Green: the red case, `make rust-test` on `rust/guard` and `rust/gate/crates/measure`, `make quick`, `make static`,
+   `make hooks-test`. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** One: a brief's plain numbers are mostly counts and source ids (the `brief_feature` hold above).
+8. **The budget.** One landing.
+9. **Done, measured.** The re-file on this clone's logs:
+   - 212,481 lines read in 28 logs, measured 2026-11-20 (`make events-refile DRY=1`).
+   - 1,734 lines moved, 0 left unresolved, measured 2026-11-20 (`make events-refile`).
+   - 449 -> 451: 818 lines, 813 by brief and 5 by task id, measured 2026-11-20 (`make events-refile`).
+   - 451 -> 449: 187 lines, 186 by brief and 1 by task id, measured 2026-11-20 (`make events-refile`).
+   - older features, the same defect: 729 lines across 16 pairs, 13 by task id, measured 2026-11-20 (`make events-refile`).
+   - among them 415 -> 405: 7 lines of 405's T106, measured 2026-11-20 (`make events-refile`), the case `task_start.rs` names.
+   - all moves: 1,715 by brief and 19 by task id, measured 2026-11-20 (`make events-refile`).
+   - a second run: 0 lines moved, measured 2026-11-20 (`make events-refile`).
+   - the moved lines' tasks: 872 added, 3 changed, 0 removed, measured 2026-11-20 (the backup against the logs, line by line).
+   - a carried `T=` replaced: 0, measured 2026-11-20 (the same comparison, lines whose `make` is a tick, task-start, decide or land).
+   - no line lost: 212,435 lines before, 212,488 after, 0 missing and 53 new (live hooks), measured 2026-11-20 (a script comparing a
+     copy of the logs taken first with the logs after, the `task` field set aside).
+   - replayed through the clone's hook shim: a 451 builder's `make static` and the main session's `make land F=451 T=T26` filed in
+     451's log, a bare `git status` in 449's with `fallback`, observed 2026-11-20, method: three payloads piped to
+     `tests/hooks/event-log-hooks.sh` with `L7R_EVENTS_DIR` pointed at a scratch directory.
+10. **Before moving a constant.** n/a - one new knob, labeled GUESS beside it: the re-file's slack for a start's own lines
+    (`START_SLACK`), 60 s, a GUESS bounded by the calls it must cover:
+    - 322 of 335 `task-start` calls took 60 s or less, measured 2026-11-20 (the `ms` of every log's `task-start` `PostToolUse` line).
+    - their p90 9.4 s, measured 2026-11-20 (the same lines).
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** A reader of `make where-time F=451` or `F=449` sees each feature's own builders' time; nothing on a map.
+
+**The lines with no task, or whose task came from D2's fallback** (T03's plan review, round 3). The re-file by task id cannot reach
+them: a fallback task is the log's own feature's start, so it always names a task of its log. They are filed so:
+- A SUBAGENT's line with no `T=` is filed by its dispatch's brief where it names a feature, or a task whose start does; the re-file
+  reaches the past ones by the same brief (item 9's by-brief counts), its task re-derived. A brief naming neither is filed as the next
+  bullet says.
+  - such briefs: 25 of the 30 in item 4, observed 2026-11-20, method: item 4's count.
+- A line nothing names - the main session's own calls with no `F=`, a brief naming neither feature nor task - is filed under the
+  fallback, feature.json's feature, its task that feature's start in force, and marked `"fallback": true`, so T07, T08 and T14 can keep
+  that time apart rather than book it to whichever task feature.json named. A past such line carries no mark; its shape is the same
+  (no `by`, a `task`, no carried `T=`), which a reader can test.
+  - such lines: 154 of the two logs' 1,555 since 451's first start, measured 2026-11-20 (the logs after the re-file: no `by`, no Agent or subagent event, no carried `T=`).
+- D2's text ("the clone's last `task-starts.jsonl` entry for the feature") stands, read as the line's feature.
+
+**Found and left?**
+- The live hooks run the mirror's guard binary, so lines written until T26 lands are still filed by feature.json. `make
+  events-refile` is owed once more after the landing; it is idempotent, so a re-run moves only those lines.
+- The re-file also moved older, closed features' lines (item 9's older pairs, 716 of them by brief); their feature reports, if
+  regenerated, now book that time where the briefs put it. Two are judgment calls the plan review may rule the other way: "Classify
+  427's call-cutting hunks" (435's log to 427's) and "Check the 405 per-claim draft" (443's to 405's) may have been the dispatching
+  feature's own work. A copy of the logs from before the re-file is at `/tmp/t26/backup/` (a wholesale restore would drop the lines
+  appended since).
+- `make static` stopped at `rust lint` on `rust/phases`, another builder's uncommitted work in this clone (still red on its own
+  `rust lint --crate rust/phases`); T26's crates passed every step of the recipe run per crate (lint, format, cover, dead) and the
+  tree-wide steps (file-scale, claims coverage, spec-lint, conflict, make-docs after `make docs` regenerated the targets page).
+- `rust/guard/CLAUDE.md`'s `event_log_hooks` row does not name `filed.rs`, nor `rust/gate/CLAUDE.md`'s `measure` row `event_log/refile.rs`;
+  both indexes are outside T26's files.
+- An Agent dispatch line now carries its brief's task where the brief names one; T07 (D6) still owes the prompt's first line where the
+  description names none, and the agent's tokens.
+
+**Performance work?** no
+
