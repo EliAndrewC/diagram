@@ -22,10 +22,18 @@
       research: rendering
       held: rust/guard/src/guards/event_log_hooks.rs (and event_log_hooks/filed.rs)
       verify: DONE. landed: the landing's phase lines
+- [x] T14 [perf] The third `make static`: a new guard `static_runs_hooks` refusing a task's third run since its last landing that succeeded, or since its first start if it has never landed (a later `task-start` resets nothing), naming the crate-scoped checks for the crates its delta changes; `STATIC_RUNS_A_TASK` (GUESS, 2) (D11; FR-007, FR-012, SC-003, SC-005)
+      research: rendering
+      held: rust/guard/src/guards/static_runs_hooks.rs (new), rust/guard/src/guards.rs, rust/guard/src/lib.rs
+      verify: DONE. landed in batch T14+T16: a third make static refused; the slow poll refused
 - [x] T15 [perf] A run the harness cannot track: `no_poll_hooks` refuses a make or cargo job detached by a lone `&` unless a `wait` at a command position covers it (in the job's own list and shell, unconditional, not backgrounded; bare, `wait $!` with no `&` between, or `wait %N` naming it), or started under `nohup` or `setsid` at a command position, or followed by a `disown` in any form (bare, `%N`, `-h`, `-a`) whatever `wait` follows, naming `run_in_background`; `DETACH_OK` (D12; FR-008, FR-012, SC-003)
       research: rendering
       held: rust/guard/src/guards/no_poll_hooks.rs
       verify: DONE. landed in batch T18+T24+T28+T29+T15+T30: performance work first, and four of the improvements
+- [x] T16 [perf] A main-session wait slower than its check: `no_poll_hooks` refuses, on the POLL_OK and the file-watching paths, a loop whose longest `sleep` is over `POLL_CHECK_S` (GUESS, 60 s) from a payload with no `agent_id`, naming the 60 s form; `SLOW_POLL_OK` (D13; FR-008, FR-012, SC-003)
+      research: rendering
+      held: rust/guard/src/guards/no_poll_hooks.rs
+      verify: DONE. landed in batch T14+T16: a third make static refused; the slow poll refused
 - [x] T18 [perf] `make land T="T1,T2"` read as `T="T1 T2"`, in `rust/gate/crates/land/src/land.rs` and `make land`'s help (D16; FR-011); lands before T08, so a land line naming two tasks is booked to both (T03's plan review, 2026-11-20)
       research: rendering
       held: Makefile (the help line only)

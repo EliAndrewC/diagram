@@ -474,94 +474,7 @@ other two by their case groups, until each shard's kept seconds is about 20 or l
 
 **Performance work?** yes - a `[perf]` task (FR-013): it makes the work after it faster; no engine timing, so no checklist
 
-### T14 (FR-007: `make static` was the edit loop - the spec's User Story 3)
-
-- **Approach**: D11, a new guard `static_runs_hooks` (PreToolUse Bash, registered before `shell_check_hooks`). Held:
-  `rust/guard/src/guards/static_runs_hooks.rs` (new) and its `tests.rs`, `rust/guard/src/guards.rs`, `rust/guard/src/lib.rs`, and two
-  edits to the event log's writer, `event_log_hooks.rs` (`filed_at`: where a payload's line is filed - clone, feature, log, task - by
-  the writer's own chain, nothing written) and `event_log_hooks/fields.rs` (`makes`, below) (`make guard-edit` on each first); the link
-  `tests/hooks/static-runs-hooks.sh` and its suite `tests/hooks/test-static-runs-hooks.sh`.
-  - **The count, as built.** The call's feature and task are `filed_at`'s - the chain that files the call's own line - so the main
-    session's lines (a `fallback` line among them) and its builders' share one count by task, keyed on (feature, task) by reading only
-    that feature's log through `event_log_hooks::read::read_jsonl`. A RUN is a `PreToolUse` line of the task whose `make` is `static` or
-    whose `makes` holds it, and whose call RAN - a `PostToolUse` or `PostToolUseFailure` line carries its `id`. Deliberate deviation from
-    D11's "PreToolUse lines": a call another guard refused (`make static &`, refused by `no_poll_hooks`) leaves a `PreToolUse` line and
-    no other and ran nothing, and counting it would spend a run; 1 of 33 such lines in 451's log and 8 of 340 in 449's, measured
-    2026-11-20 (the logs' `make: static` `PreToolUse` lines with no line of their `id`, `jq`), and a call known refused - this builder's
-    own `sed -i` refused by `guard_file_hooks`, 2026-11-20T14:35:13Z - left its `PreToolUse` line and no line after it in any feature's
-    log, measured 2026-11-20 (every `.git/l7r-events/*.jsonl` searched for its `id`). The cost: a foreground run still in flight
-    in another session of the same task is not yet counted. The call being judged is never counted: in the whole chain
-    `event_log_hooks` writes its line first, and its `id` is set aside (and has no result line yet).
-  - **Since.** The task's last landing that went out - an `end` line whose `landed` is true and whose `tasks` (not `task`, which is its
-    first id) names it, whatever its `code` - strictly after; else its FIRST `task-starts.jsonl` entry for the feature, from that second
-    on (a start's `utc` is to the second, a line's `t` to the millisecond: a second's stamp is compared as `.000Z`); else every line.
-  - **A compound command** (writer fix, found here): a line's `make` is its call's first target alone, so `make rust-test CRATE=x &&
-    make static` logged no `static` while D11's trigger (`invoked` holds `static`) fires on it; the writer now adds `makes`, every
-    target, where a call runs more than one, and the count reads both.
-  - **The refusal** names, per crate the delta changes (`git diff --name-only` of `origin/main`'s merge base plus `git ls-files --others
-    --exclude-standard`, each `rust/` path mapped to the nearest `Cargo.toml` holding `[package]`): `make rust-test CRATE=<c>` and
-    `scripts/gates/l7r-gate.sh rust lint --crate <c>`, `rust format --check --crate <c>`, `rust cover --crate <c>` (only `rust-test`
-    takes `CRATE=` in the Makefile); with no crate in the delta, `make quick`. Then `make static` once before `make land`, and
-    `STATIC_OK="<reason>"` (recorded `escaped`/`static-ok`; a bare token refused). Each named command passes the guards that read a Bash
-    command (`gate`, `measure`, `no-poll`, `make-only`, `shell-check`), pinned by a test. A call whose line carries no task passes,
-    written to the guard log as `passed`/`no-task` (D10's precedent).
-  - **Red first**, each case in the unit tests and the suite: two runs of T06 after its start refuse a third, naming the crates' checks;
-    a landing with `landed` true resets it at exit 0, at exit 3 and as the second of a batch's `tasks`; a refused landing (`landed`
-    false, exit 1 and exit 0) and another task's landing reset nothing; a run before the first start is not counted; two runs, a second
-    T06 start, a third: refused; another task's run, another target's, a refused call and the call's own id are not counted, a
-    `makes` run and a failed run are; `STATIC_OK` with a reason passes and is recorded; a mention passes; the main session's call and
-    the builder's (its meta file's brief) share the count; the event log's `append` writing the call's own line and then this guard's
-    answer, both handed no process environment (an exported `L7R_FEATURE_DIRECTORY` would refile them), the call's own line is no run.
-  - **Left to the landing** (outside this builder's brief, which named the guard, its registration, tests and suite and this section):
-    the `docs/guards.md` row and the `STATIC_RUNS_A_TASK` knob in its knob table (D14), and the `rust/guard/CLAUDE.md` mention - T14's
-    own, owed before it is ticked.
-
-| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
-|---|---|---|---|---|
-| the count | n/a - no map | n/a | none | n/a |
-
-### T14 Approach (checklist part A)
-
-1. **The goal, in the world.** No map changes; the crate-scoped checks are the edit loop, `make static` the check before landing.
-2. **The constraints.** FR-007, FR-012; D2 (the task field), D11.
-3. **Where each comes from.** G: the approved "a crate-scoped check while iterating, with make static once at the end"; O: research R6.
-4. **Do they describe the world here?** R6 timed the log read the guard makes. On 451's log (1,297,362 bytes, 5,372 lines) a `make
-   static` call takes the guard about 0.06 s and any other Bash call about 0.011 s, measured 2026-11-20 (`l7r-guard.sh --only
-   static-runs-hooks PreToolUse` on a `make static` and a `make quick` payload in this clone, `$EPOCHREALTIME` around each, the warm
-   runs). Replayed on the same log, 6 of its 22 `make static` calls carrying a task would have been refused - T03's third and fourth,
-   T25's third and fourth, T06's third, T18's third - measured 2026-11-20 (a Python mirror of the guard's `runs()`, applied to each such
-   call over the log's earlier lines and the clone's `task-starts.jsonl`).
-5. **The order.** In lane A after T18 and T28 (the GM 2026-11-20 order, FR-013); it needs no other refusal, only T03's `task` on each line and T06's landing `end` line naming its tasks.
-6. **The exits.** Green: the cases above. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** None.
-8. **The budget.** One landing.
-9. **Done, measured.** With the refusal's condition switched off (`runs < usize::MAX`), 8 of the 11 new count tests failed (the other
-   three: the time compare, the crates of a delta, and a mention or no task, which pass with it off) and the suite 9 of 17 checks, measured 2026-11-20 (`make rust-test CRATE=rust/guard`, `tests/hooks/test-static-runs-hooks.sh`); with the
-   writer's `makes` switched off, its test failed, 1 of 656, measured 2026-11-20 (`make rust-test CRATE=rust/guard`). Green after:
-   656 of 656 and 17 of 17, measured 2026-11-20 (the same runs); the crate's lint and line coverage clean, measured 2026-11-20
-   (`l7r-gate.sh rust lint --crate rust/guard` and `rust cover --crate rust/guard`, `L7R_RUST_FRESH=1`).
-10. **Before moving a constant.** n/a - a new knob, labeled GUESS.
-11. **Before fitting things into room.** n/a.
-12. **Before any fix.** n/a.
-
-**Found and left?**
-- T14's own, written before its tick (the session wrote them, 2026-11-20): the `docs/guards.md` row, the `STATIC_RUNS_A_TASK` row of its knob
-  table (D14), the `rust/guard/CLAUDE.md` mention, and D11's text restated to what is built (a run is a call that ran; `makes`) with
-  the event log's field list in `data-model.md`.
-- The guard crate's tests read the process's environment: with `L7R_FEATURE_DIRECTORY` exported (a page session exports it), 17 to
-  20 tests of other guards fail (`checks_hooks`, `check_bundle_hooks`, `pair_hooks`, `review_round_hooks`, `shared::checks::arbiter`,
-  `no_poll_hooks`), measured 2026-11-20 (`make rust-test CRATE=rust/guard FRESH=1` with it exported; with `L7R_EVENTS_DIR` alone, green).
-  Not fixed here: it is in six other guards' tests, outside T14's files. How every instance was found: the crate's whole test run under
-  the export. Filed as T32; lands before T22 (SC-005 is measured on work that runs these tests).
-- `guard_file_hooks` refused this builder's `sed -i` on a guard file but let a Python heredoc write the same files (each under a
-  `make guard-edit` permit, so no edit went unpermitted). Not fixed here: `guard_file_hooks` is outside T14's files. Filed as T33; lands
-  before T22.
-- No make target formats one file: `make format` formats every crate, which would have rewritten T16's files in flight, so the new test
-  file was formatted with the toolchain's `rustfmt` alone. Not fixed here (a Makefile change, outside T14's files). Filed as T34; lands
-  before T22.
-
-**Performance work?** yes - a `[perf]` task (FR-013): it makes the work after it faster; no engine timing, so no checklist
-
+<!-- plan-archive: T14 to T14 moved to plan-done.md, 2026-11-20 (feature 375 FR-044) -->
 ### T15 (FR-008: T225's `make static` with a plain `&` sat untracked - the spec's User Story 4, research R4)
 
 - **Approach**: D12 in `no_poll_hooks`. Held: `rust/guard/src/guards/no_poll_hooks.rs` (`make guard-edit` first). Red first: R4's
@@ -610,37 +523,7 @@ other two by their case groups, until each shard's kept seconds is about 20 or l
 
 **Performance work?** yes - a `[perf]` task (FR-013): it makes the work after it faster; no engine timing, so no checklist
 
-### T16 (FR-008: the main session's waits checked every 420 to 600 s, observed 2026-11-19, method: the wait commands of the main session's transcript - the spec's User Story 4, research R5)
-
-- **Approach**: D13 in `no_poll_hooks`. Held: `rust/guard/src/guards/no_poll_hooks.rs` (`make guard-edit` first). Red first: R5's
-  observed POLL_OK loop with `sleep 60` then `sleep 420`, from the main session, refused naming the knob's form; the same loop at
-  `sleep 60` throughout passes; the same slow loop from a subagent (`agent_id` set) passes; a file-watching wait from the main
-  session sleeping past the knob refused; `SLOW_POLL_OK="..."` passes and is recorded.
-
-| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
-|---|---|---|---|---|
-| the slow wait | n/a - no map | n/a | none | n/a |
-
-### T16 Approach (checklist part A)
-
-1. **The goal, in the world.** No map changes; the main session learns of an idle agent within a minute.
-2. **The constraints.** FR-008, FR-012; D13; the existing no-poll cases unchanged.
-3. **Where each comes from.** G: the approved "a shorter poll loop on my side", made a refusal by the GM's "real enforcement"; O: research R5.
-4. **Do they describe the world here?** R5's loops are the session's own.
-5. **The order.** After T15 (the same file).
-6. **The exits.** Green: the five cases, grown in the unit tests to 12 firing loops each judged foreground and backgrounded (24 refused: R5's loop, a POLL_OK file test, a `while sleep 480` head, the file wait at `480`, `8m`, `60.5`, `1m 30s`, `2h`, `1d`, a second sleep of `90s`, a nested loop's `120`, a `/bin/sleep 300`), 7 quiet loops each both ways (14 passing: the 60 s loops, `1m`, `0.5`, a quoted `"sleep 480"`, a POLL_OK sleep with no loop, a sleep after the loop's `done`), a subagent's slow loops both ways answered as before T16 (4), and a loop inside `bash -c "..."` refused - measured 2026-11-20 (the case arrays of `no_poll_hooks/tests.rs`, counted). The plan reviews' notes: 12 more firing loops each both ways (24 refused: 6 whose `sleep` takes a variable the command sets past the knob - `N=480;`, `export N=8m;`, `"$N"`, a later `N=480` over `N=30`, `N=480 bash -c '...'`, `N="480"` - and 6 whose length is still unreadable - `$N` set nowhere, `$WAIT`, `$N` beside an unrelated `M=480`, `"$((N * 2))"`, `$(cat /tmp/n)`, `infinity`), 2 quiet both ways (`N=30`, `N=5` quoted), a subagent's `until curl -s x; do sleep $N; done` refused as a busy-wait, and 4 thin `SLOW_POLL_OK` reasons (empty, one word quoted or bare, one word after the colon) refused for their reason - measured 2026-11-20 (the case arrays of `no_poll_hooks/tests.rs`, counted); the no-poll suite 136 of 136, 12 of them T16's - measured 2026-11-20 (`tests/hooks/test-no-poll-hooks.sh`, one logged run). The R5 fixture is the main session's own wait, verbatim (its `sleep 60`, then `sleep 420`), and every main-session Bash call of the transcripts with `POLL_OK` and a `sleep` of 300 or more, replayed through the built guard with its own backgrounding: 47 commands, the 45 waits among them all refused naming the 60 s form, the 2 others heredocs writing a test file and passing, after the unreadable length was refused as before it - measured 2026-11-20 (a Python reader over `~/.claude/projects/-diagram*/*.jsonl`, no sidechain, each command piped through `tests/hooks/no-poll-hooks.sh pretool`, HEAD's guard beside it). Every verdict of the four corpora, HEAD's guard against T16's, foreground, from the main session: 0 of 1,134 moved - measured 2026-11-20 (the same reader over `tests/hooks/fixtures/*.json`, both binaries). The four frozen corpora through the pace check: 1,134 commands, each judged foreground and backgrounded from the main session, 0 refused; a raw grep finds 3 with a loop word and a `sleep` over 60, each a heredoc's payload - measured 2026-11-20 (`the_frozen_corpora_through_the_pace_check`, and a Python grep over `tests/hooks/fixtures/*.json`, read by hand). Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** None.
-8. **The budget.** One landing.
-9. **Done, measured.** Red first: before the check, 24 of 24 firing judgments unrefused, and the escape test red because a lone `SLOW_POLL_OK` read as a reasoned `POLL_OK` (the escape reader matches a token anywhere, so the longer token held the shorter) - measured 2026-11-20 (`make rust-test CRATE=rust/guard`, one logged run). The check deleted (`slow_poll` returning None): 24 of 24 firing judgments red, with the escape and the self-trip tests - measured 2026-11-20 (`make rust-test CRATE=rust/guard`, one logged run); the suite's 6 firing and escape cases red on a binary without the check - measured 2026-11-20 (`tests/hooks/test-no-poll-hooks.sh`, one logged run). The build: `slow_poll` in `no_poll_hooks/pace.rs`, the pace check split out of `no_poll_hooks.rs` when it passed the 1,000-line bar (constitution X clause 13), called first in the POLL_OK-escaped branch (ahead of the bracketing and the ceiling) and before `file_wait`; a payload with an `agent_id` passes untouched. The pace is the longest `sleep` at a command position inside a loop, from its keyword to its matching `done`, the head counted (a `while sleep` loop), the units `s`, `m`, `h`, `d` read and several numbers summed, as GNU `sleep` reads them; a `sleep` given a variable the command sets (`N=480`, `export`, quoted, an env prefix) is read at the largest value it is set to, and any length still unreadable after that (a variable set nowhere, an arithmetic, a substitution, `infinity`) is refused as endless, naming the literal `sleep 60` form - the plan-blocks review's ruling, as D12 refuses an unreadable `wait $P`; a redirection after a `sleep` is no length; a `-c` string a shell runs is read too, since the sanitized form blanks it while the ceiling reaches it. The refusal names the command with every `sleep` over the knob at `sleep 60`; `SLOW_POLL_OK` is masked before `POLL_OK` is asked for, so a lone `SLOW_POLL_OK` grants nothing `POLL_OK` grants. Red first for the reviews' notes: the 6 set-variable loops and the 6 unreadable ones, 24 judgments, unrefused before the reader worked them out - measured 2026-11-20 (`make rust-test CRATE=rust/guard`, two logged runs); the thin `SLOW_POLL_OK` reasons are a plain pin, the shared escape reader refusing each before the change - measured 2026-11-20 (`make rust-test CRATE=rust/guard`, one logged run). Found on the way and fixed: a loop whose `sleep` takes a variable never reached the loop branch, since `SLEEP_RE` and `sleep_in_loop` ask for a digit, so `until curl -s x; do sleep $N; done` passed even the busy-wait refusal; HEAD's guard lets it through - observed 2026-11-20, method: the command piped through the mirror's `tests/hooks/no-poll-hooks.sh pretool`, rc 0; the branch is now entered where the pace reader finds a `sleep` in a loop. Self-trip: the guard's rewrites (the file wait's proof and ceiling, the POLL_OK ceiling, the bracketed pattern, the scoped make wait) and each form at the knob it offers, fed back from the main session, are never refused for their pace; the offers and the POLL_OK rewrites are refused for nothing - measured 2026-11-20 (`the_guards_own_rewrites_and_offer_pass_its_pace_check`). The ceiling adds `-ge 5400` and no `sleep`, so it cannot raise the pace.
-10. **Before moving a constant.** n/a - a new knob, `POLL_CHECK_S` 60 s, labeled GUESS at its point of change.
-11. **Before fitting things into room.** n/a.
-12. **Before any fix.** The guard refused its own file-wait rewrite when run again (as its ceiling's "wait again if it is still working" invites), as a busy-wait: `shared::wait`'s condition grammar did not read the proof-of-life clause `proof_of_life` adds, so the wait stopped being a file watch. It was not caused by T16: HEAD's guard refused the same command at `sleep 5` - observed 2026-11-20, method: the rewrite piped through the mirror's `tests/hooks/no-poll-hooks.sh pretool`. The fix: the grammar drops the guard's own clause (plain, and fitted inside double quotes) as it drops the ceiling's, and `proof_of_life` reads the condition as given, so it adds no second clause. Red first: 3 tests red before the fix (the guard's rewrite fed back, the file wait's own test now asking for no answer at all, and `wait`'s unit test over the until, while and quoted forms), green after - measured 2026-11-20 (`make rust-test CRATE=rust/guard`, two logged runs). The file wait's test had hidden it, since `rewritten()` reads a refusal as no rewrite; it now asks that the fed-back wait get no answer, and the suite replays the rewrite through `untouched`.
-
-**Found and left?**
-- `POLL_CHECK_S` goes into D14's knob table with T22, which lands before the close (T22 is the close).
-
-**Performance work?** yes - a `[perf]` task (FR-013): it makes the work after it faster; no engine timing, so no checklist
-
+<!-- plan-archive: T16 to T16 moved to plan-done.md, 2026-11-20 (feature 375 FR-044) -->
 ### T17 (FR-009: two of the window's first-round plan-review blocks were deferrals with no order - the spec's User Story 5)
 
 - **Approach**: D15 in `rust/gate/crates/plan` (`lint.rs`, `plan.rs::decide` for the open test, `template.rs`; not held) and `make decide`'s `DEFER_FORM_OK`. Held: the root
