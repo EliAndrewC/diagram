@@ -149,9 +149,10 @@ another feature is refused.
 - **FR-005**: `make where-time` and `make feature-report` read FR-001 to FR-004's lines into columns for tests, compile, gate, land,
   review, background run and model; report the wall clock on the critical path apart from the summed agent-minutes; count the rework
   (refused landings, plan re-rounds, agents nudged); and `make where-time` takes `UNTIL=`.
-- **FR-006**: A guard refuses a subagent's tool call once its context is past a threshold (a knob, GUESS: 400k tokens, the size past
-  which the window's calls ran 14.8 s per 1,000 output tokens against 11.9 below, measured 2026-11-19 (the 3,280 builder calls bucketed by context size)), but for writing its handoff file, naming the file
-  and the next step; and refuses a SendMessage resuming an agent past the threshold, naming a fresh dispatch.
+- **FR-006**: A guard refuses a subagent's tool call once its context is past a threshold, but for writing its handoff file, naming
+  the file and the next step; and refuses a SendMessage resuming an agent past the threshold, naming a fresh dispatch. The threshold is a
+  knob, GUESS: 400k tokens. Past that size the window's builder calls ran 14.8 s per 1,000 output tokens against 11.9 s below it
+  (measured 2026-11-19 (the 3,280 builder calls bucketed by context size)).
 - **FR-007**: A guard refuses a third `make static` in one task since its last landing, naming the crate-scoped checks for the crates
   the task's delta changes.
 - **FR-008**: A guard refuses a make target or cargo run put in the background inside a Bash call (`&`, `nohup`, `setsid`, `disown`),
@@ -173,8 +174,8 @@ another feature is refused.
 
 ### Measurable Outcomes
 
-- **SC-001**: For a window of real work, `make where-time F= SINCE= UNTIL=` books under 10% of the wall clock as unexplained waiting,
-  against 80% today (`where-time` for 2026-11-19 14:00Z on, measured 2026-11-19).
+- **SC-001**: For a window of real work, `make where-time F= SINCE= UNTIL=` books under a tenth of the wall clock as unexplained
+  waiting (a target, GUESS). Today it books 678 of 845 minutes so (measured 2026-11-19 (`make where-time F=449 SINCE=2026-11-19T14:00:00Z`)).
 - **SC-002**: The 2026-11-19 retrospective's per-task table and totals can be reproduced from the event log by that one command, within
   a tolerance of 10% on each bucket (a target, GUESS), for work done after this feature lands.
 - **SC-003**: Each of the six fixes' refusals fires on its red fixture and passes its compliant case (FR-012).
