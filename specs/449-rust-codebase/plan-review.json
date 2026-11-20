@@ -1224,6 +1224,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-20",
    "declared": "spec-fidelity"
+  },
+  "### T237 (T234: a change to a Rust stage's drawing owed no glyph-check until an Occasions line declared it by hand)": {
+   "sha256": "f294140b443e3b18443968cc66d5c17b860cf71c268c38a94b00d686315a3099",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity"
+  },
+  "### T237 Approach (checklist part A)": {
+   "sha256": "f5e49cc5c7165f1c6b8e3ae204482dcd809f4eb00ad8eb4e18866036c9db06c8",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -16142,6 +16154,100 @@
      "why": "Sequencing and exits inside the feature's process; the done measure is the fix's own goal."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-20",
+   "blocks": [
+    "### T237 (T234: a change to a Rust stage's drawing owed no glyph-check until an Occasions line declared it by hand)",
+    "### T237 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D1-detect-by-item-token-diff",
+     "summary": "reviews owed compares the Rust engines' drawing code item by item, base against now; an item whose comment-free tokens differ is changed and owes the glyph-check of each element it redraws, on the first map of its engine's kind that draws it, merged with the declared route's unit",
+     "class": "within",
+     "why": "This fixes the defect T234 found: a redrawn glyph shipped without a judgment unless someone declared it, a check passing bad work (constitution XIV; the GM 2026-11-18: 'fix all known bugs in each step'). The declared route is kept and the two routes share a slug."
+    },
+    {
+     "id": "D2-no-size-audit",
+     "summary": "a detected drawing change owes the glyph-check only, with no size-audit",
+     "class": "within",
+     "why": "The block cites docs/reviews.md as owing a glyph-check when an element's glyph is redrawn. That text is not in the bundle, so this ruling rests on the block's own quote of the rule. Nothing in 449's request or spec index asks for a size-audit on this occasion."
+    },
+    {
+     "id": "D3-attribution-rules",
+     "summary": "draw functions in the hamlet driver are read by line (the last svg.kind above each changed line); Mode A marks are read whole, with their callees' kinds; writer methods, helpers and constants owe what their uses redraw (a free function's call is never a method's of the same name); a roll is read line by line; a type, import or test owes nothing",
+     "class": "within",
+     "why": "This is the mechanism for 'owes the glyph-check of each element it redraws'. On T234's commit it owes the sluice gate alone, and 48 of the 55 non-drawing functions owe nothing (dated one-shot labels). It is a design choice inside the fix."
+    },
+    {
+     "id": "D4-whole-legend-fallback",
+     "summary": "where the elements cannot be told (a kind chosen at run time, a line above a draw function's first kind, a mark past a draw call), each engine map's whole legend is owed, and the occasion says so",
+     "class": "within",
+     "why": "This owes more checks than the change redraws, never fewer, so no bad work passes."
+    },
+    {
+     "id": "D5-legend-now-else-base",
+     "summary": "a map's legend is read from its drawing now, else from its drawing at the base",
+     "class": "within",
+     "why": "The unit still stands when the change left a hamlet not current. This keeps the fix from missing a case."
+    },
+    {
+     "id": "D6-drawing-code-scope",
+     "summary": "the drawing code is the hamlet driver (rust/phases/src/driver.rs, driver/) and the Mode A compound engine (compound.rs, emit.rs, emit_parts.rs); hand sheets stay under CODE",
+     "class": "within",
+     "why": "This is measured (a grep of the writer and kind calls over rust/, dated). The stages outside the driver name no kind and touch no writer, so this list is the set of Rust code that redraws a glyph."
+    },
+    {
+     "id": "D7-first-map-of-kind",
+     "summary": "an element drawn by several maps is judged on the first map that draws it, which may not be the map the change touched",
+     "class": "within",
+     "why": "This is the declared route's existing choice. The glyph-check judges the element's glyph, which is the same on every map that draws it. Today the one such case (the polder's ditches) is not told and falls to the whole legend."
+    },
+    {
+     "id": "D8-rust-stage-placement-left",
+     "summary": "a Rust stage's placement change (rust/phases/src outside the driver) owes nothing and is not refused undeclared, where a Python one is refused under CODE; not filed by this task",
+     "class": "within",
+     "why": "Today this produces no wrong outcome. FR-023 (spec-cited.md): 'a settlement-review FR-019 owes, or a glyph-check the review gate owes, for a pool hamlet a Rust stage moves, is not owed while the switch stands - each is owed, for every pool hamlet the port moved, when it is thrown back.' The Rust stages draw the live (pool) hamlets, so while the switch stands at rust-only no review is owed for such a change, and failing to detect one passes nothing bad. The gap is live from the moment the switch is thrown back, so it has to be filed before then."
+    },
+    {
+     "id": "D9-declared-route-no-map",
+     "summary": "the declared route resolves its map from the drawings now only, so with a hamlet not current it owes a unit on no map, with a problem line; left as is",
+     "class": "within",
+     "why": "This is a behavior of the existing declared route. The review gate redraws before it reads the route, so the case produces no wrong outcome."
+    },
+    {
+     "id": "D10-mode-a-marks-whole",
+     "summary": "Mode A marks are read whole, so a one-line change to parts owes all ten kinds that parts and well tag",
+     "class": "within",
+     "why": "This owes more checks than the change redraws, never fewer. It is a cost and not a wrong outcome, so it is not a defect."
+    },
+    {
+     "id": "D11-moved-file",
+     "summary": "a file that was only moved owes what its items redraw, where CODE's refusal sets a moved file aside",
+     "class": "within",
+     "why": "This errs toward owing a check. It narrows nothing that was asked."
+    },
+    {
+     "id": "D12-docs-edited",
+     "summary": "edits docs/reviews.md and rust/gate/CLAUDE.md to say what is owed",
+     "class": "within",
+     "why": "This documents the behavior the fix enforces."
+    },
+    {
+     "id": "D13-set-aside-read-not-run",
+     "summary": "the rust-only set-aside of the detected hamlet units is read from the gate's rule (pool find on the slug's last part), not run",
+     "class": "within",
+     "why": "This is a verification choice, not a narrowing. The detected units carry the declared route's slug form, which ends in the hamlet, so FR-023's set-aside reaches them by the same rule. The block's runs exercise the lookup only, never the gate's set-aside on a hamlet unit that has no declared line."
+    },
+    {
+     "id": "D14-item-reader-duplicated",
+     "summary": "the item reader repeats the claims crate's item_end rather than sharing it, because claims builds on this crate",
+     "class": "within",
+     "why": "An internal design choice that touches nothing that was asked."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -28308,6 +28414,98 @@
      "summary": "Ordered after T226 and before T158; exits, budget of one gated landing, and done measured as Kuwabata's two sluices drawn as frames across their channels",
      "class": "within",
      "why": "Sequencing and exits inside the feature's process; the done measure is the fix's own goal."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T237": {
+   "section_sha256": "f558139b225a4e9e27333374db28c6900887e7b8d1fdaf52e888b877748e28e4",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D1-detect-by-item-token-diff",
+     "summary": "reviews owed compares the Rust engines' drawing code item by item, base against now; an item whose comment-free tokens differ is changed and owes the glyph-check of each element it redraws, on the first map of its engine's kind that draws it, merged with the declared route's unit",
+     "class": "within",
+     "why": "This fixes the defect T234 found: a redrawn glyph shipped without a judgment unless someone declared it, a check passing bad work (constitution XIV; the GM 2026-11-18: 'fix all known bugs in each step'). The declared route is kept and the two routes share a slug."
+    },
+    {
+     "id": "D2-no-size-audit",
+     "summary": "a detected drawing change owes the glyph-check only, with no size-audit",
+     "class": "within",
+     "why": "The block cites docs/reviews.md as owing a glyph-check when an element's glyph is redrawn. That text is not in the bundle, so this ruling rests on the block's own quote of the rule. Nothing in 449's request or spec index asks for a size-audit on this occasion."
+    },
+    {
+     "id": "D3-attribution-rules",
+     "summary": "draw functions in the hamlet driver are read by line (the last svg.kind above each changed line); Mode A marks are read whole, with their callees' kinds; writer methods, helpers and constants owe what their uses redraw (a free function's call is never a method's of the same name); a roll is read line by line; a type, import or test owes nothing",
+     "class": "within",
+     "why": "This is the mechanism for 'owes the glyph-check of each element it redraws'. On T234's commit it owes the sluice gate alone, and 48 of the 55 non-drawing functions owe nothing (dated one-shot labels). It is a design choice inside the fix."
+    },
+    {
+     "id": "D4-whole-legend-fallback",
+     "summary": "where the elements cannot be told (a kind chosen at run time, a line above a draw function's first kind, a mark past a draw call), each engine map's whole legend is owed, and the occasion says so",
+     "class": "within",
+     "why": "This owes more checks than the change redraws, never fewer, so no bad work passes."
+    },
+    {
+     "id": "D5-legend-now-else-base",
+     "summary": "a map's legend is read from its drawing now, else from its drawing at the base",
+     "class": "within",
+     "why": "The unit still stands when the change left a hamlet not current. This keeps the fix from missing a case."
+    },
+    {
+     "id": "D6-drawing-code-scope",
+     "summary": "the drawing code is the hamlet driver (rust/phases/src/driver.rs, driver/) and the Mode A compound engine (compound.rs, emit.rs, emit_parts.rs); hand sheets stay under CODE",
+     "class": "within",
+     "why": "This is measured (a grep of the writer and kind calls over rust/, dated). The stages outside the driver name no kind and touch no writer, so this list is the set of Rust code that redraws a glyph."
+    },
+    {
+     "id": "D7-first-map-of-kind",
+     "summary": "an element drawn by several maps is judged on the first map that draws it, which may not be the map the change touched",
+     "class": "within",
+     "why": "This is the declared route's existing choice. The glyph-check judges the element's glyph, which is the same on every map that draws it. Today the one such case (the polder's ditches) is not told and falls to the whole legend."
+    },
+    {
+     "id": "D8-rust-stage-placement-left",
+     "summary": "a Rust stage's placement change (rust/phases/src outside the driver) owes nothing and is not refused undeclared, where a Python one is refused under CODE; not filed by this task",
+     "class": "within",
+     "why": "Today this produces no wrong outcome. FR-023 (spec-cited.md): 'a settlement-review FR-019 owes, or a glyph-check the review gate owes, for a pool hamlet a Rust stage moves, is not owed while the switch stands - each is owed, for every pool hamlet the port moved, when it is thrown back.' The Rust stages draw the live (pool) hamlets, so while the switch stands at rust-only no review is owed for such a change, and failing to detect one passes nothing bad. The gap is live from the moment the switch is thrown back, so it has to be filed before then."
+    },
+    {
+     "id": "D9-declared-route-no-map",
+     "summary": "the declared route resolves its map from the drawings now only, so with a hamlet not current it owes a unit on no map, with a problem line; left as is",
+     "class": "within",
+     "why": "This is a behavior of the existing declared route. The review gate redraws before it reads the route, so the case produces no wrong outcome."
+    },
+    {
+     "id": "D10-mode-a-marks-whole",
+     "summary": "Mode A marks are read whole, so a one-line change to parts owes all ten kinds that parts and well tag",
+     "class": "within",
+     "why": "This owes more checks than the change redraws, never fewer. It is a cost and not a wrong outcome, so it is not a defect."
+    },
+    {
+     "id": "D11-moved-file",
+     "summary": "a file that was only moved owes what its items redraw, where CODE's refusal sets a moved file aside",
+     "class": "within",
+     "why": "This errs toward owing a check. It narrows nothing that was asked."
+    },
+    {
+     "id": "D12-docs-edited",
+     "summary": "edits docs/reviews.md and rust/gate/CLAUDE.md to say what is owed",
+     "class": "within",
+     "why": "This documents the behavior the fix enforces."
+    },
+    {
+     "id": "D13-set-aside-read-not-run",
+     "summary": "the rust-only set-aside of the detected hamlet units is read from the gate's rule (pool find on the slug's last part), not run",
+     "class": "within",
+     "why": "This is a verification choice, not a narrowing. The detected units carry the declared route's slug form, which ends in the hamlet, so FR-023's set-aside reaches them by the same rule. The block's runs exercise the lookup only, never the gate's set-aside on a hamlet unit that has no declared line."
+    },
+    {
+     "id": "D14-item-reader-duplicated",
+     "summary": "the item reader repeats the claims crate's item_end rather than sharing it, because claims builds on this crate",
+     "class": "within",
+     "why": "An internal design choice that touches nothing that was asked."
     }
    ],
    "verdict": "CLEAR"

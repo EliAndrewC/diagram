@@ -51,7 +51,9 @@ pub(super) fn re(pattern: &str) -> Regex {
 }
 
 static DATA_KIND: LazyLock<Regex> = LazyLock::new(|| re(r#"data-kind="([^"]+)""#));
-/// Drawing or placement code - never the incremental gate in `l7r/diagram/ci/`, which draws and places nothing.
+/// Drawing or placement code - never the incremental gate in `l7r/diagram/ci/`, which draws and places nothing. The Rust engines'
+/// drawing code is not here: a change to it owes the glyph-check of each element it redraws, read from the change (`redrawn`, 449
+/// T237), so it is never refused for want of an Occasions line.
 // a pool map's drawing is its spec - a hamlet's `.spec.json`, a compound's `.compound.json`, a hand sheet's `.svg` - since feature 449 T221
 // deleted the `.gen.py` files that wrapped them
 static CODE: LazyLock<Regex> = LazyLock::new(|| {
@@ -587,6 +589,7 @@ pub fn detected(tree: &Tree, base: &str) -> Vec<Unit> {
         .map(|d| d.name.clone())
         .collect();
     units.extend(element_units(&owed, &sheets));
+    units.extend(redrawn::units(tree, base, &before));
     units
 }
 
@@ -707,17 +710,9 @@ pub fn owed(root: &Path, landing: bool) -> (String, Vec<Unit>, Vec<String>) {
 
 /// Drawing or placement code the delta touches (committed, staged, unstaged or untracked), less what it only moved.
 fn touched_code(root: &Path, base: &str) -> Vec<String> {
-    let diff = if base.is_empty() {
-        String::new()
-    } else {
-        git(root, &["diff", "--name-only", base]).unwrap_or_default()
-    };
-    let untracked = git(root, &["ls-files", "--others", "--exclude-standard"]).unwrap_or_default();
-    let names: BTreeSet<String> = diff
-        .lines()
-        .chain(untracked.lines())
-        .filter(|p| !p.is_empty() && found(&CODE, p) && !p.contains("/tests/"))
-        .map(str::to_owned)
+    let names: BTreeSet<String> = redrawn::delta_paths(root, base)
+        .into_iter()
+        .filter(|p| found(&CODE, p) && !p.contains("/tests/"))
         .collect();
     let listed: Vec<String> = names.iter().cloned().collect();
     let moved = moved_only(root, base, &listed);
@@ -918,6 +913,7 @@ fn run(root: &Path, p: &crate::record::args::Parsed, mark: &str) -> Reply {
 
 mod declared;
 pub mod deferred;
+mod redrawn;
 pub use declared::declared;
 #[cfg(test)]
 pub use declared::occasions_section;

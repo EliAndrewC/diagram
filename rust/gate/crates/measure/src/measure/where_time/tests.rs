@@ -29,6 +29,9 @@ fn categories_go_to_buckets_and_gaps_to_tasks() {
         ("waiting: general-purpose", "other subagent"),
         ("dispatching: other subagent", "other subagent"),
         ("edit", "tools"),
+        // feature 451 T03: the writer books every test target `tests` (D2); a past log's `quick test` keeps its column
+        ("tests", "gate/tests"),
+        ("quick test", "gate/tests"),
     ] {
         assert_eq!(bucket(cat), want, "{cat}");
     }

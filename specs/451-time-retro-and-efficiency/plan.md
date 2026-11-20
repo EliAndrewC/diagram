@@ -268,7 +268,29 @@ other two by their case groups, until each shard's kept seconds is about 20 or l
 11. **Before fitting things into room.** n/a.
 12. **Before any fix.** n/a - new rows and a new field.
 
-**Found and left?** none
+**Found and left?**
+- The bundle crate's coverage depends on the caller's environment. With `SPECIFY_FEATURE` exported, `make static` fails cover on
+  `rust/gate/crates/bundle/src/record/helpers.rs` line 537: `consulted::context`'s error arm, which a test reaches only when no
+  feature is set. Without the export the crate's cover is clean (observed 2026-11-20, method: `make static` with and without the
+  export, then `l7r-gate.sh rust cover --crate rust/gate/crates/bundle`). Not fixed here because the crate is outside T03's files; filed as T24 (the test given its own
+  environment), which lands before T08 reads the columns.
+- Two features' lanes share this clone, and `.specify/feature.json` names 449. So the hook writes this clone's lines to the 449 log,
+  whichever feature's work they are. A 451 builder's `T03` in the 449 log then reads as 449's T03: the `task` field names the task but
+  not its feature. Not fixed here because the line's feature is chosen where the line is filed, the same field T26 corrects: filed as T26 (each line
+  filed under the feature of the task it carries), which lands before T07, T08 and T14, the readers of the task field. The lines written
+  between T03's landing and T26's are re-filed by T26 itself: a line whose task names no task of its log's feature but one of another
+  feature's is moved to that feature's log - the two features' ids never collide (451's are two digits, `T03`; 449's three, `T003`;
+  observed 2026-11-20, method: the task ids of both features' tasks.md and tasks-done.md) - so no reader books one feature's time to the other's.
+- An Agent dispatch line with no `T=` carries the clone's active task (its dispatcher's) until T07 reads the task from its
+  `description` (D6).
+- The live hooks run the mirror's guard binary, so lines written before this lands still say `other tool`. "Done, measured" was
+  replayed through the clone's hook shim: this session's `make static` call logged `cat` `tests` and `task` `T03` (observed
+  2026-11-20, method: the call's payload piped to `tests/hooks/event-log-hooks.sh` with `L7R_EVENTS_DIR` pointed at a scratch
+  directory). It is owed again on a live line after landing.
+- `T="T1,T2"` books only `T1` (T18).
+- The readers still book by the frozen `cat`, and `where_time.rs` only learned the new `tests` word. Booking by `make` through
+  `bucket_of` is T08's.
+- `data-model.md`'s rows `push-checks` and `make-docs` are not make targets. They are kept as rows that never match.
 
 **Performance work?** no
 
@@ -1007,6 +1029,33 @@ None.
 |---|---|---|---|---|
 
 ### T25 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or each item with its visible effect or the research finding it breaks; an item with neither is not a defect and is not filed>
+
+**Performance work?** <no - or yes, and its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+
+### T26 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T26 Approach (checklist part A)
 
 1. **The goal, in the world.** <the place as it should be>
 2. **The constraints.** <the FRs, decisions and pages it holds to>

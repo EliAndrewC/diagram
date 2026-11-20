@@ -32,12 +32,21 @@ echo "event-log-hooks:"
 fire '{"hook_event_name":"PreToolUse","session_id":"s1","cwd":"'"$CLONE"'/sub/dir","tool_name":"Bash","tool_use_id":"tu1","tool_input":{"command":"cd x && make quick ALL=1"}}'
 rc=$?
 [ "$rc" = 0 ] && [ ! -s "$T/out" ] && ok "a call is logged silently, exit 0" || no "silent exit 0" "rc=$rc out=$(cat "$T/out")"
-[ "$(field ev)" = PreToolUse ] && [ "$(field cat)" = "quick test" ] && [ "$(field make)" = quick ] && [ "$(field id)" = tu1 ] \
-  && ok "a make quick is a quick test, its target and tool_use_id kept" || no "quick test" "$(last)"
+[ "$(field ev)" = PreToolUse ] && [ "$(field cat)" = tests ] && [ "$(field make)" = quick ] && [ "$(field id)" = tu1 ] \
+  && ok "a make quick is a test, its target and tool_use_id kept" || no "quick test" "$(last)"
 [ -n "$(field t)" ] && [ "$(field sid)" = s1 ] && ok "time and session on the line" || no "time and session" "$(last)"
 
 fire '{"hook_event_name":"PreToolUse","session_id":"s1","cwd":"'"$CLONE"'","tool_name":"Bash","tool_use_id":"tu2","tool_input":{"command":"make test-file FILE=tests/x.py"}}'
-[ "$(field cat)" = "test file" ] && ok "make test-file is a test file" || no "test file" "$(last)"
+[ "$(field cat)" = tests ] && ok "make test-file is a test" || no "test file" "$(last)"
+# feature 451 T03 (D2): the category table - the old categorizer booked these three and the gate's own form "other tool"
+for c in "make static" "timeout 2400 make rust-test CRATE=rust/guard" "make hooks-test" "scripts/gates/l7r-gate.sh rust test --crate rust/guard"; do
+  fire '{"hook_event_name":"PreToolUse","session_id":"s1","cwd":"'"$CLONE"'","tool_name":"Bash","tool_use_id":"tt","tool_input":{"command":"'"$c"'"}}'
+  [ "$(field cat)" = tests ] && ok "$c is a test" || no "$c" "$(last)"
+done
+fire '{"hook_event_name":"PreToolUse","session_id":"s1","cwd":"'"$CLONE"'","tool_name":"Bash","tool_use_id":"tl","tool_input":{"command":"make land F=999 T=T05"}}'
+[ "$(field cat)" = land ] && [ "$(field task)" = T05 ] && ok "a make land is a landing, its task its T=" || no "land" "$(last)"
+fire '{"hook_event_name":"PreToolUse","session_id":"s1","cwd":"'"$CLONE"'","tool_name":"Bash","tool_use_id":"tf","tool_input":{"command":"make frobnicate"}}'
+[ "$(field cat)" = "other tool" ] && [ "$(field make)" = frobnicate ] && ok "a target the table does not know is other, its target kept" || no "unknown target" "$(last)"
 fire '{"hook_event_name":"PreToolUse","session_id":"s1","cwd":"'"$CLONE"'","tool_name":"Bash","tool_use_id":"tu3","tool_input":{"command":"make done 2>&1 | tee log"}}'
 [ "$(field cat)" = gate ] && ok "make done is a gate" || no "gate" "$(last)"
 fire '{"hook_event_name":"PreToolUse","session_id":"s1","cwd":"'"$CLONE"'","tool_name":"Bash","tool_use_id":"tu4","tool_input":{"command":"grep -n make Makefile"}}'

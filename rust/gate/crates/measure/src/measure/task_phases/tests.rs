@@ -27,6 +27,9 @@ fn a_cohort_or_gate_run_is_measured() {
         (json!({"make": "x", "cat": "gate"}), true),
         (json!({"make": "verify"}), true),
         (json!({"make": "quick"}), false),
+        // feature 451 T03: the writer's `tests` bucket is no gate run; its `gate` rows (`verify-wait`, `work-budget-review`, ...) are
+        (json!({"make": "static", "cat": "tests"}), false),
+        (json!({"make": "verify-wait", "cat": "gate"}), true),
         (json!({"cat": "gate"}), false),
     ] {
         assert_eq!(measured_run(e.as_object().unwrap()), want, "{e}");

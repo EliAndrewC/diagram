@@ -8,7 +8,8 @@
 //! timestamps that allow us to mechanically and trivially calculate these numbers"*. THE LINE (feature 375 plan D7): one JSON line a
 //! `PreToolUse`, `PostToolUse`, `SubagentStart`, `SubagentStop`, `UserPromptSubmit` and Stop payload, to `<git common dir>/l7r-events/<feature
 //! dir>.jsonl` (`_unassigned.jsonl` with no feature). Fields: `t` (UTC), `sid`, `ev`, and where they apply `tool`, `id` (`tool_use_id`),
-//! `cat` (`category`), `make` (a Bash call's make target) and `task` (the task a tick, task-start or decide names), `path`, `old`/`new`
+//! `cat` (`category`; a Bash call's by the category table, `BUCKETS`, feature 451 D2), `make` (a Bash call's make target) and `task`
+//! (the task a tick, task-start, decide or land names, else a subagent's brief's, else the clone's last start - 451 D2), `path`, `old`/`new`
 //! (digests of an Edit's strings - the reversal wire) and `heading`, `agent`/`aid`/`manifest`/`unit`/`waiver` (an agent's type, id, the
 //! MANIFEST its prompt names, its unit, a round on the GM's waiver), `by` (the subagent whose tool call it is, feature 385 amendment 4),
 //! `ms` (`PostToolUse`'s duration), `gm` (a prompt the GM typed, not a notification), `verdict` (a returned agent's verdict word, or
@@ -105,7 +106,10 @@ pattern!(
     r"(?mi)\brecorded (PASS|NEEDS-WORK|NOT-REVIEWABLE) for\b|^\s*VERDICT:\s*(pass|needs-work|not-reviewable)\b"
 );
 pattern!(NUMBER, r"\b\d+\b");
-pattern!(TASK, r"\bT=(T\d+[a-z]?)\b");
+// a command's `T=`, quoted or not (`T="T05"`); a list's first only - `T="T1,T2"` read whole is T18's
+pattern!(TASK, r#"\bT=["']?(T\d+[a-z]?)\b"#);
+// the `T<n>` an agent's brief names (`451 T07: ...`)
+pattern!(TASK_NAMED, r"\b(T\d+[a-z]?)\b");
 pattern!(UNIT, r"\bUNIT:\s*(\S+)");
 pattern!(GITDIR, r"gitdir:\s*(.+)");
 
@@ -196,6 +200,179 @@ pub fn make_target(command: &str) -> String {
         .unwrap_or_default()
 }
 
+/// THE CATEGORY TABLE (feature 451 T03, FR-001, plan D2): a make target - and the gate's own `l7r-gate.sh rust <cmd>`, which
+/// `shared::make::invoked` reads as `rust-<cmd>` (D1) - to the bucket its minutes go to. The writer books a Bash call's `cat` by it and both
+/// readers (`where_time.rs`, `feature_report/tables.rs`) book a line by its `make` field through [`bucket_of`], so a past log re-books too.
+/// WHY: the old categorizer knew `quick`, `test-file`, `done` and three spec-kit targets, and booked 210 of a window's tool-minutes "other
+/// tool" - `static` 30.8, `format` 20.9, `hooks-test` 20.2, `rust-test` 16.6, `render-sync` 6.1, `map` 3.6 of them (observed 2026-11-20,
+/// method: the `ms` of the 449 log's `PostToolUse` lines since 2026-11-19T14:00Z, summed by `make`; research R1). Rows are
+/// `data-model.md`'s, finished from the Makefile's `## [tag]` lines; moving a target between buckets is a one-line change. `compile` is
+/// no target's: it is the `build`/`cover-build` phase lines inside a tests run (D4, T05), booked by the readers (T08).
+pub const BUCKETS: [(&str, &[&str]); 7] = [
+    // TESTS: what checks a change while iterating - the `[tests]`/`[static]` checks, the crates' tests and the gate's own crate-scoped
+    // forms of them (`rust-test`, `rust-cover`, `rust-lint`, `rust-format`, ...; never a bare `rust-` prefix: `rust-hamlet` is a counting
+    // run). `format` is `rust-format` over every crate (data-model's row); `test-file` is pytest's, gone with 449 T213, kept for past logs.
+    // `map` (and the one-map drivers `hamlet`, `compound`, `sheet-render`, with `maps-moved` and a sheet's `pack-audit`) is HERE, not with
+    // `cohort` under gate: the dev loop pairs it with `make quick` ("Iterate on that ONE map, `make quick` while iterating",
+    // `l7r/diagram/CLAUDE.md`) - it is the iteration's own run on the changed engine's output, where a cohort is the after-the-fix sweep
+    // the landing's gate reads. `work-budget` and `budget-sheets` check counted work against its budget, as a test checks a figure.
+    (
+        "tests",
+        &[
+            "quick",
+            "test-file",
+            "static",
+            "format",
+            "rust-test",
+            "hooks-test",
+            "counters-inert",
+            "test-times",
+            "rust-cover",
+            "rust-lint",
+            "rust-format",
+            "rust-test-counters",
+            "rust-dead",
+            "rust-uncovered",
+            "rust-test-times",
+            "preflight",
+            "rust-tooling",
+            "inline-census",
+            "page-check",
+            "parts-sweep",
+            "coverage-exempt",
+            "map",
+            "hamlet",
+            "compound",
+            "sheet-render",
+            "maps-moved",
+            "pack-audit",
+            "work-budget",
+            "budget-sheets",
+        ],
+    ),
+    // GATE: the whole gate and what holds a push or a landing on it - `done` and its paired and idle forms, the wait on it, the cohorts
+    // (data-model's row), a gated push's conditions, the push's work-budget ratchet; each a span `task_phases::measured_run` lists in a
+    // task's timeline. `push-checks` is the gate crate's verb (no make target today), kept as data-model names it.
+    (
+        "gate",
+        &[
+            "done",
+            "verify",
+            "verify-wait",
+            "idle-tests",
+            "push-checks",
+            "cohort",
+            "cohort-landing",
+            "gated-check",
+            "work-budget-review",
+        ],
+    ),
+    // LAND: a landing and its stop.
+    ("land", &["land", "land-batch", "land-tooling", "land-stop"]),
+    // REVIEW: a plan's review, a check's bundle and what is owed one, a check's verdict and its arbiter, the GM's filter - the time a
+    // review costs the session around its agents.
+    (
+        "review",
+        &[
+            "plan-delta",
+            "plan-verdict",
+            "decide",
+            "check-bundle",
+            "claims-bundle",
+            "arbiter-bundle",
+            "modal-bundle",
+            "record-owed",
+            "claims-owed",
+            "claims-triage",
+            "claims-triaged",
+            "claims-checked",
+            "claims-report",
+            "claims-report-only",
+            "claims-known",
+            "claims-carry",
+            "claims-coverage",
+            "impl-check",
+            "modal-triage",
+            "modal-triaged",
+            "modal-prepass",
+            "translation-owed",
+            "record-checked",
+            "record-prepass",
+            "style-prepass",
+            "quote-verbatim",
+            "review-verdict",
+            "review-accept",
+            // the settlement-review's paired gate's state (green, running or red): a query about a review, no gate run of its own
+            "review-paired-gate",
+            "review-census",
+            "review-cost",
+            "ledger-owed",
+            "check-closed",
+            "accept",
+            "arbiter-ask",
+            "arbiter-ruled",
+            "arbiter-nit",
+            "arbiter-fix-done",
+            "arbiter-fix-declined",
+            "gm-escalated",
+            "step-back",
+            "work-budget-bundle",
+        ],
+    ),
+    // DOCS: what builds a page someone reads - the `[docs]` targets, `make docs`, the reports (`feature-report` by data-model's row,
+    // `where-time` its sibling over the same reader). `render-sync` is HERE: it rebuilds main's renders, the pool index and the record
+    // site for the GM to browse (`scripts/sync-with-main.sh`), run by both `done` and `sync-in`, so it is no landing's own step.
+    (
+        "docs",
+        &[
+            "docs",
+            "make-docs",
+            "record",
+            "feature-report",
+            "where-time",
+            "render-sync",
+            "pool-index",
+            "pool-index-if-stale",
+            "building-programs",
+            "citations",
+            "footnote-census",
+            "glossary",
+            "source-tags-contract",
+            "money-candidates",
+            "money-conversions",
+            "fragment-move",
+        ],
+    ),
+    // SPEC-KIT STEP: the feature's own bookkeeping (data-model's row; the old categorizer's `tick` and `claim`; `plan-verdict` is now a
+    // review's).
+    (
+        "spec-kit step",
+        &[
+            "tick",
+            "claim",
+            "task-start",
+            "task-add",
+            "set-down",
+            "plan-archive",
+            "trial",
+            "trial-review",
+            "use-feature",
+            "speckit-todo",
+        ],
+    ),
+    // OTHER: every target not above, and a Bash call with none - `bucket_of`'s fallback, never a row.
+    ("other", &[]),
+];
+
+/// The bucket a make target's minutes go to (D2): its [`BUCKETS`] row, else `other` - never dropped (spec edge case).
+#[must_use]
+pub fn bucket_of(target: &str) -> &'static str {
+    BUCKETS
+        .iter()
+        .find(|(_, targets)| targets.contains(&target))
+        .map_or("other", |(bucket, _)| bucket)
+}
+
 /// What kind of subagent this is (`agent_category`).
 #[must_use]
 pub fn agent_category(agent_type: &str, prompt: &str) -> &'static str {
@@ -249,12 +426,11 @@ pub fn category(tool: &str, ti: &Map<String, Value>) -> &'static str {
         return "edit";
     }
     match tool {
-        "Bash" => match make_target(&text_of(ti.get("command"))).as_str() {
-            "quick" => "quick test",
-            "test-file" => "test file",
-            "done" => "gate",
-            "tick" | "claim" | "plan-verdict" => "spec-kit step",
-            _ => "other tool",
+        // a Bash call by the table (D2); its `other` stays the line's `other tool`, the one word every tool with nothing more specific
+        // carries, which the readers' `other tool` tables read
+        "Bash" => match bucket_of(&make_target(&text_of(ti.get("command")))) {
+            "other" => "other tool",
+            bucket => bucket,
         },
         "Agent" => agent_category(
             &text_of(ti.get("subagent_type")),
@@ -369,7 +545,7 @@ fn tool_fields(out: &mut Map<String, Value>, tool: &str, ti: &Map<String, Value>
         let command = text_of(ti.get("command"));
         let target = make_target(&command);
         if !target.is_empty() {
-            if ["tick", "task-start", "decide"].contains(&target.as_str()) {
+            if ["tick", "task-start", "decide", "land"].contains(&target.as_str()) {
                 if let Some(task) = first_group(&TASK, &command) {
                     out.insert("make".into(), Value::from(target.clone()));
                     out.insert("task".into(), Value::from(task));
@@ -526,6 +702,36 @@ fn log_path_in(root: &Path, feature: &str, env: &dyn Fn(&str) -> Option<String>)
     ))
 }
 
+/// The task a line with no `T=` serves (D2): a subagent's - the `T<n>` its meta file's `description` names
+/// (`<transcript_path without .jsonl>/subagents/agent-<agent_id>.meta.json`, research R2; one read a call) - else the clone's last
+/// `task-starts.jsonl` entry for the log's feature. A file missing or unreadable is no task, never an error: the hook never refuses.
+fn task_of(payload: &Value, root: &Path, feature: &str) -> Option<String> {
+    let aid = text_of(payload.get("agent_id"));
+    let transcript = text_of(payload.get("transcript_path"));
+    if !aid.is_empty() && !transcript.is_empty() {
+        let session = transcript.strip_suffix(".jsonl").unwrap_or(&transcript);
+        let meta = Path::new(session).join(format!("subagents/agent-{aid}.meta.json"));
+        let named = std::fs::read_to_string(meta)
+            .ok()
+            .and_then(|t| serde_json::from_str::<Value>(&t).ok())
+            .and_then(|m| first_group(&TASK_NAMED, &text_of(m.get("description"))));
+        if named.is_some() {
+            return named;
+        }
+    }
+    if feature.is_empty() {
+        return None;
+    }
+    let starts = std::fs::read_to_string(common_git_dir(root).join("task-starts.jsonl")).ok()?;
+    starts
+        .lines()
+        .rev()
+        .filter_map(|l| serde_json::from_str::<Value>(l.trim()).ok())
+        .find(|e| e.get("feature").and_then(Value::as_str) == Some(feature))
+        .map(|e| text_of(e.get("task")))
+        .filter(|t| !t.is_empty())
+}
+
 /// Append the payload's line to its feature's log; None outside any clone (`append`).
 pub(crate) fn append(
     payload: &Value,
@@ -544,10 +750,16 @@ pub(crate) fn append(
         .filter(|c| !c.is_empty())
         .map_or_else(|| here.to_path_buf(), PathBuf::from);
     let root = clone_root(&cwd)?;
-    let path = log_path_in(&root, &feature_of(&root, env), env);
+    let feature = feature_of(&root, env);
+    let path = log_path_in(&root, &feature, env);
     let base = path.parent().map_or_else(PathBuf::new, Path::to_path_buf);
     std::fs::create_dir_all(&base).ok()?;
-    let row = line(payload, t);
+    let mut row = line(payload, t);
+    if !row.contains_key("task") {
+        if let Some(task) = task_of(payload, &root, &feature) {
+            row.insert("task".into(), Value::from(task));
+        }
+    }
     let edit = row.get("ev") == Some(&Value::from("PreToolUse"))
         && row.get("tool") == Some(&Value::from("Edit"));
     let null = Value::Null;

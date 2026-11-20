@@ -53,6 +53,8 @@ MVP: T001-T005 and the first guard, `pair-hooks` (T006): the dispatcher in every
       research: rendering
 - [ ] T237 reviews owed owes no review for a Rust drawing change that is not declared (found by T234, 2026-11-20): its list of drawing-code paths (the CODE pattern in rust/gate/crates/reviews/src/reviews/owed.rs) has no rust/ entry, so a change to a Rust stage's drawing (T234's sluice frame) owed no glyph-check until an Occasions line was written by hand - a check passing the bad; the Rust stages' and the Mode A engine's drawing code counted as drawing code, so a change to it owes the glyph-check of each element it redraws, red first; lands before T158
       research: rendering
+- [ ] T238 A Rust stage's placement change owes no review where a Python one did (found by T237, 2026-11-20): reviews owed's drawing and placement code paths now include the Rust driver (T237), but a change to a Rust stage's placement outside the driver (rust/phases' stages, the Mode A compound's layout) owes nothing and refuses nothing, where the deleted Python's placement code owed its review - measured first (what the old CODE pattern owed for a placement change, and what reviews/docs/reviews.md's occasions say a moved map owes), and the Rust stages held to the same occasions, red first; lands before T158; and one review-gate run at rust-only on a hamlet unit found by T237's detection alone (no declared Occasions line), shown set aside and recorded in dev/deferred-reviews.jsonl (T237's plan review, 2026-11-20)
+      research: rendering
 - [ ] GM review (make gm-reviewed F=449) [lands-open]
       research: rendering
       verify: the GM reviewed every row (make gm-review lists them)

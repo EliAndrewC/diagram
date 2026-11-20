@@ -7,8 +7,8 @@ use std::time::{Duration, UNIX_EPOCH};
 use serde_json::{json, Value};
 
 use super::{
-    agent_category, append, category, common_git_dir, feature_of, line, make_target, now_stamp,
-    typed_prompt, verdict_of,
+    agent_category, append, bucket_of, category, common_git_dir, feature_of, line, make_target,
+    now_stamp, typed_prompt, verdict_of,
 };
 
 fn clone(tag: &str) -> crate::shared::tempdir::TempDir {
@@ -59,11 +59,11 @@ fn a_call_has_its_target_and_its_category() {
     );
     assert_eq!(
         category("Bash", &ti(json!({"command": "make quick"}))),
-        "quick test"
+        "tests"
     );
     assert_eq!(
         category("Bash", &ti(json!({"command": "make test-file FILE=x"}))),
-        "test file"
+        "tests"
     );
     assert_eq!(
         category("Bash", &ti(json!({"command": "make tick"}))),
@@ -393,4 +393,151 @@ fn a_payload_naming_no_event_writes_no_line() {
         assert!(append(&payload, "T", &d, &none).is_none(), "{payload}");
     }
     assert!(!d.join(".git/l7r-events").exists());
+}
+
+/// Feature 451 T03 (FR-001, D2): the old categorizer knew `quick`, `test-file`, `done` and three spec-kit targets, so `make static`,
+/// `make rust-test`, `make hooks-test` and the gate's own `l7r-gate.sh rust test` were all "other tool" - 210 of the window's tool-minutes
+/// (research R1). One table books a target by its bucket; a target it does not know is `other`, never dropped.
+#[test]
+fn the_category_table_books_a_target_by_its_bucket() {
+    for (target, want) in [
+        ("static", "tests"),
+        ("rust-test", "tests"),
+        ("hooks-test", "tests"),
+        ("quick", "tests"),
+        ("format", "tests"),
+        ("map", "tests"),
+        ("done", "gate"),
+        ("cohort-landing", "gate"),
+        ("land", "land"),
+        ("land-tooling", "land"),
+        ("plan-delta", "review"),
+        ("decide", "review"),
+        ("record", "docs"),
+        ("render-sync", "docs"),
+        ("tick", "spec-kit step"),
+        ("rust-hamlet", "other"),
+        ("frobnicate", "other"),
+        ("", "other"),
+    ] {
+        assert_eq!(bucket_of(target), want, "{target}");
+    }
+    let ti = |c: &str| {
+        json!({ "command": c })
+            .as_object()
+            .cloned()
+            .unwrap_or_default()
+    };
+    for (command, want) in [
+        ("make static", "tests"),
+        ("timeout 2400 make rust-test CRATE=rust/guard", "tests"),
+        ("(make hooks-test > /tmp/h.log 2>&1) &", "tests"),
+        (
+            "scripts/gates/l7r-gate.sh rust test --crate rust/guard",
+            "tests",
+        ),
+        ("make land F=451 T=T05", "land"),
+        ("make frobnicate", "other tool"),
+        ("ls", "other tool"),
+    ] {
+        assert_eq!(category("Bash", &ti(command)), want, "{command}");
+    }
+}
+
+/// Feature 451 T03 (D2): a line carries `task` where one is known - a `tick`, `task-start`, `decide` or `land` command's `T=` first.
+#[test]
+fn a_commands_task_is_its_t() {
+    for (command, want) in [
+        ("make land F=451 T=T05", Some("T05")),
+        ("make land F=451 T=\"T05\"", Some("T05")),
+        ("make land F=451 T='T05'", Some("T05")),
+        ("make decide F=451 T=T7a", Some("T7a")),
+        ("make static T=T05", None),
+    ] {
+        let row = line(
+            &json!({"tool_name": "Bash", "tool_input": {"command": command}}),
+            "T",
+        );
+        assert_eq!(row.get("task").and_then(|v| v.as_str()), want, "{command}");
+    }
+}
+
+fn session_files(d: &Path, aid: &str, meta: &str) -> String {
+    let transcript = d.join("projects/s1.jsonl");
+    std::fs::create_dir_all(d.join("projects/s1/subagents")).unwrap();
+    std::fs::write(
+        d.join(format!("projects/s1/subagents/agent-{aid}.meta.json")),
+        meta,
+    )
+    .unwrap();
+    transcript.to_string_lossy().into_owned()
+}
+
+fn last_line(log: &Path) -> Value {
+    let text = std::fs::read_to_string(log).unwrap();
+    serde_json::from_str(text.lines().last().unwrap()).unwrap()
+}
+
+/// Feature 451 T03 (D2): no `T=` - a subagent's line carries the `T<n>` its meta file's `description` names; else, and for the main
+/// session, the clone's last `task-starts.jsonl` entry for the log's feature. Nothing found, no field; a file that is missing or does not
+/// parse is no error.
+#[test]
+fn a_line_with_no_t_carries_the_agents_task_else_the_clones() {
+    let d = clone("task");
+    let cwd = d.to_string_lossy().into_owned();
+    let transcript = session_files(
+        &d,
+        "ab1",
+        r#"{"agentType":"general-purpose","description":"451 T07: the agent's cost","toolUseId":"tu"}"#,
+    );
+    session_files(
+        &d,
+        "nodesc",
+        r#"{"agentType":"general-purpose","description":"read the log"}"#,
+    );
+    session_files(&d, "bad", "not json");
+    let call = |by: Option<&str>| {
+        let mut p = json!({"hook_event_name": "PreToolUse", "cwd": cwd, "transcript_path": transcript, "tool_name": "Bash", "tool_input": {"command": "make static"}});
+        if let Some(aid) = by {
+            p["agent_id"] = json!(aid);
+        }
+        p
+    };
+    let task = |p: &Value| {
+        let log = append(p, "T", &d, &none).unwrap();
+        last_line(&log).get("task").cloned()
+    };
+    // no task-starts.jsonl yet: a main-session call names none
+    assert_eq!(task(&call(None)), None);
+    assert_eq!(task(&call(Some("ab1"))), Some(json!("T07")));
+    std::fs::write(
+        d.join(".git/task-starts.jsonl"),
+        concat!(
+            "{\"feature\": \"999-a\", \"task\": \"T02\", \"utc\": \"2026-11-20T01:00:00Z\"}\n",
+            "not json\n",
+            "{\"feature\": \"999-a\", \"task\": \"T03\", \"utc\": \"2026-11-20T02:00:00Z\"}\n",
+            "{\"feature\": \"449-other\", \"task\": \"T237\", \"utc\": \"2026-11-20T03:00:00Z\"}\n",
+            "\n",
+        ),
+    )
+    .unwrap();
+    assert_eq!(task(&call(None)), Some(json!("T03")));
+    assert_eq!(task(&call(Some("ab1"))), Some(json!("T07")));
+    for aid in ["nodesc", "bad", "missing"] {
+        assert_eq!(task(&call(Some(aid))), Some(json!("T03")), "{aid}");
+    }
+    // a subagent's own stop is its line too (D10 reads an agent's first line)
+    let stop = json!({"hook_event_name": "SubagentStop", "cwd": cwd, "transcript_path": transcript, "agent_id": "ab1", "agent_type": "general-purpose"});
+    assert_eq!(task(&stop), Some(json!("T07")));
+    // a command's own T= wins
+    let mut land = call(Some("ab1"));
+    land["tool_input"]["command"] = json!("make land F=999 T=T09");
+    assert_eq!(task(&land), Some(json!("T09")));
+    // no transcript path: the clone's
+    let mut bare = call(Some("ab1"));
+    bare.as_object_mut().unwrap().remove("transcript_path");
+    assert_eq!(task(&bare), Some(json!("T03")));
+    // no feature: no task-starts entry is the log's
+    std::fs::remove_file(d.join(".specify/feature.json")).unwrap();
+    assert_eq!(task(&call(None)), None);
 }

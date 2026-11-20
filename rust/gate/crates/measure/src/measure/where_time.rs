@@ -33,7 +33,10 @@ use crate::Reply;
 const WAIT_WORK: &str = "waiting on work";
 const WAIT_GM: &str = "the GM";
 const GM_AWAY: &str = "the GM away";
-const BUCKET: [(&str, &str); 20] = [
+// `tests` is the event-log writer's bucket for every test target since feature 451 T03 (the guard's `event_log_hooks::BUCKETS`, D2); `quick
+// test` and `test file` stay for past logs. Booking a line by its `make` field through that table is T08's.
+const BUCKET: [(&str, &str); 21] = [
+    ("tests", "gate/tests"),
     ("thinking", "model"),
     ("writing the spec", "model"),
     ("waiting: spec-fidelity", "plan review"),

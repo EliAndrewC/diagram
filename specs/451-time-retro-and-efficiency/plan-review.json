@@ -80,7 +80,7 @@
    "declared": "spec-fidelity"
   },
   "### T03 Approach (checklist part A)": {
-   "sha256": "f191ef5480cad404b5a7030b39ea34bec59cbe5b81ab668ddd653079535ca3b6",
+   "sha256": "0166cf3a2d32f22b5e262bf3ce652483cd28a3a4f4d7b2fca831875995ddf770",
    "verdict": "CLEAR",
    "reviewed": "2026-11-20",
    "declared": "spec-fidelity"
@@ -1231,6 +1231,76 @@
      "why": "Checked against spec-index: FR-003 asks the Rust checks to append build, test and cover seconds per crate, and nothing T23 decides drops or changes those lines. Whether lock-wait seconds should be booked as their own phase is a design question FR-003 does not settle, not a narrowing."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-20",
+   "blocks": [
+    "### T03 (FR-001: 210 of the window's tool-minutes booked \"other tool\", observed 2026-11-20, method: the `ms` of the log's PostToolUse lines since 14:00Z summed by `cat` - research R1)",
+    "### T03 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T03-approach",
+     "summary": "D2 in the writer: one bucket_of table in event_log_hooks.rs, rows from data-model.md finished from the Makefile's targets (format, render-sync, map among them), each commented",
+     "class": "within",
+     "why": "FR-001 and D2 verbatim: make targets and l7r-gate.sh rust runs classed into the approved buckets by one shared table; finishing the rows from the real targets is what FR-001 needs to reach the 206 of 208 'other tool' minutes the approved item 1 names."
+    },
+    {
+     "id": "T03-red-cases",
+     "summary": "Red first: static, rust-test, hooks-test and l7r-gate.sh rust test as tests; land as land; an unknown target as other; task from the subagent meta file, from T=, else the clone's active task",
+     "class": "within",
+     "why": "Each case is a sentence of FR-001 or D2 (unknown target is other; task from T=, meta file, else task-starts). Tests that only fail when the requested classing is absent are enforcement of the request."
+    },
+    {
+     "id": "T03-order",
+     "summary": "After T02; before T07, T08 and T14, which read the table and the task field",
+     "class": "within",
+     "why": "Sequencing only; nothing asked is dropped."
+    },
+    {
+     "id": "T03-left-T24",
+     "summary": "The bundle crate's cover fails under an exported SPECIFY_FEATURE; filed as T24, landing before T08",
+     "class": "within",
+     "why": "A defect outside T03's files and outside the request, not left unfixed: filed in this feature and ordered before the reader of the columns. Nothing the GM asked for is narrowed."
+    },
+    {
+     "id": "T03-left-T26",
+     "summary": "Lines filed to the 449 log by feature.json whichever feature's work they are; T26 files each line under its task's feature, lands before T07, T08, T14, and re-files the lines written between T03's landing and its own (ids disjoint: 451 two-digit, 449 three-digit, observed 2026-11-20 with method)",
+     "class": "within",
+     "why": "Round 2's finding was that lines written in the interim stayed booked to the wrong feature, defeating 'for each task ... a breakdown' and 'kept for every feature'. The block now has T26 re-file those lines by a rule that works because the id sets are disjoint, observed with its method, and orders T26 before every reader of the task field. No interim line is left misbooked when a reader runs, so nothing asked is narrowed."
+    },
+    {
+     "id": "T03-left-agent-task",
+     "summary": "An Agent dispatch line with no T= carries the dispatcher's active task until T07 reads it from the description (D6)",
+     "class": "within",
+     "why": "D6 is delivered in T07 within this feature; T03 delivers D2's fallback, which is what D2 says for a line with no named task."
+    },
+    {
+     "id": "T03-left-live",
+     "summary": "Done-measured replayed through the clone's hook shim, since the live hooks run the mirror's binary; owed again on a live line after landing",
+     "class": "within",
+     "why": "The measurement is taken (dated, method stated) and the live check is kept as owed, not dropped."
+    },
+    {
+     "id": "T03-left-T18",
+     "summary": "T=\"T1,T2\" books only T1; filed as T18",
+     "class": "within",
+     "why": "Comma handling in T= is FR-011, already in this feature; T03 does not narrow it, and T18 is the task that delivers it."
+    },
+    {
+     "id": "T03-left-readers",
+     "summary": "Readers still book by the frozen cat; where_time.rs only learns the new 'tests' word; booking by make through bucket_of is T08's",
+     "class": "within",
+     "why": "D2's reader half and FR-005 are delivered by T08 in this feature; a split of work between tasks, not a narrowing."
+    },
+    {
+     "id": "T03-dead-rows",
+     "summary": "data-model.md rows push-checks and make-docs are not make targets and are kept as rows that never match",
+     "class": "within",
+     "why": "Harmless rows that never match. Every real target still gets its own row, so FR-001's classing is unaffected. Not a wrong outcome."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -1310,6 +1380,74 @@
      "summary": "A lock wait of up to 1800 s is reported on stderr only; the block says nothing about how it is counted in FR-003's per-crate build/test/cover seconds or FR-001's classing",
      "class": "within",
      "why": "Checked against spec-index: FR-003 asks the Rust checks to append build, test and cover seconds per crate, and nothing T23 decides drops or changes those lines. Whether lock-wait seconds should be booked as their own phase is a design question FR-003 does not settle, not a narrowing."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T03": {
+   "section_sha256": "340bfd8df22a73beb7afb4b6d0fe9fbb1953b043f780c2626895a316e4858584",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T03-approach",
+     "summary": "D2 in the writer: one bucket_of table in event_log_hooks.rs, rows from data-model.md finished from the Makefile's targets (format, render-sync, map among them), each commented",
+     "class": "within",
+     "why": "FR-001 and D2 verbatim: make targets and l7r-gate.sh rust runs classed into the approved buckets by one shared table; finishing the rows from the real targets is what FR-001 needs to reach the 206 of 208 'other tool' minutes the approved item 1 names."
+    },
+    {
+     "id": "T03-red-cases",
+     "summary": "Red first: static, rust-test, hooks-test and l7r-gate.sh rust test as tests; land as land; an unknown target as other; task from the subagent meta file, from T=, else the clone's active task",
+     "class": "within",
+     "why": "Each case is a sentence of FR-001 or D2 (unknown target is other; task from T=, meta file, else task-starts). Tests that only fail when the requested classing is absent are enforcement of the request."
+    },
+    {
+     "id": "T03-order",
+     "summary": "After T02; before T07, T08 and T14, which read the table and the task field",
+     "class": "within",
+     "why": "Sequencing only; nothing asked is dropped."
+    },
+    {
+     "id": "T03-left-T24",
+     "summary": "The bundle crate's cover fails under an exported SPECIFY_FEATURE; filed as T24, landing before T08",
+     "class": "within",
+     "why": "A defect outside T03's files and outside the request, not left unfixed: filed in this feature and ordered before the reader of the columns. Nothing the GM asked for is narrowed."
+    },
+    {
+     "id": "T03-left-T26",
+     "summary": "Lines filed to the 449 log by feature.json whichever feature's work they are; T26 files each line under its task's feature, lands before T07, T08, T14, and re-files the lines written between T03's landing and its own (ids disjoint: 451 two-digit, 449 three-digit, observed 2026-11-20 with method)",
+     "class": "within",
+     "why": "Round 2's finding was that lines written in the interim stayed booked to the wrong feature, defeating 'for each task ... a breakdown' and 'kept for every feature'. The block now has T26 re-file those lines by a rule that works because the id sets are disjoint, observed with its method, and orders T26 before every reader of the task field. No interim line is left misbooked when a reader runs, so nothing asked is narrowed."
+    },
+    {
+     "id": "T03-left-agent-task",
+     "summary": "An Agent dispatch line with no T= carries the dispatcher's active task until T07 reads it from the description (D6)",
+     "class": "within",
+     "why": "D6 is delivered in T07 within this feature; T03 delivers D2's fallback, which is what D2 says for a line with no named task."
+    },
+    {
+     "id": "T03-left-live",
+     "summary": "Done-measured replayed through the clone's hook shim, since the live hooks run the mirror's binary; owed again on a live line after landing",
+     "class": "within",
+     "why": "The measurement is taken (dated, method stated) and the live check is kept as owed, not dropped."
+    },
+    {
+     "id": "T03-left-T18",
+     "summary": "T=\"T1,T2\" books only T1; filed as T18",
+     "class": "within",
+     "why": "Comma handling in T= is FR-011, already in this feature; T03 does not narrow it, and T18 is the task that delivers it."
+    },
+    {
+     "id": "T03-left-readers",
+     "summary": "Readers still book by the frozen cat; where_time.rs only learns the new 'tests' word; booking by make through bucket_of is T08's",
+     "class": "within",
+     "why": "D2's reader half and FR-005 are delivered by T08 in this feature; a split of work between tasks, not a narrowing."
+    },
+    {
+     "id": "T03-dead-rows",
+     "summary": "data-model.md rows push-checks and make-docs are not make targets and are kept as rows that never match",
+     "class": "within",
+     "why": "Harmless rows that never match. Every real target still gets its own row, so FR-001's classing is unaffected. Not a wrong outcome."
     }
    ],
    "verdict": "CLEAR"
