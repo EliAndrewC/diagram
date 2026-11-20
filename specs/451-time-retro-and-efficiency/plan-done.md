@@ -232,3 +232,106 @@ them: a fallback task is the log's own feature's start, so it always names a tas
 
 **Performance work?** no
 
+<!-- plan-archive: archived 2026-11-20 -->
+### T25 (`make decide`'s lint stopped at its first finding: a section with four findings took four runs and four turns to clear, found writing T23's section, 2026-11-20)
+
+- **Approach**: each rule of the plan lint (`rust/gate/crates/plan/src/plan/lint.rs`) now runs to the section's end and returns
+  every finding with its span in the section, where it returned its first. `lint::findings` gathers them in the rules' order, and
+  `lint::render` reports them in one refusal: the number first, then each rule's words once with its findings beneath, each placed
+  by its plan.md line. `make decide` (`plan.rs`' `decide`) adds the approach gate's refusal to that report, where the lint's first
+  finding used to stop the run before the gate was asked. `make plan-delta` reports every changed block's findings and the open
+  tasks with no approach block the same way. A finding is placed through the rewrites the rules read (a fenced block blanked, a
+  code span replaced) by `Rewritten`, which keeps each rule's text exactly as before and maps the offsets back on the side.
+  `lint::plan_lines` places a section joined from several headings of one task line by line, in the plan's order.
+  A label rule's finding is merged into an earlier one only where both found the very same span, since one label clears both. A
+  clause inside a longer finding stays, because its own label is owed.
+  Each rule's refusal now states its unit and where its label must sit:
+  - the unit figure's unit is the clause, cut at `;` too and even inside a code span, so a label at a sentence's end does not
+    cover a clause before its `;`;
+  - the GM quote's unit runs to a sentence's end or a blank line, so a bullet list with no blank line and no full stop is one;
+  - item 4's unit is the sentence, cut after `. ` and at each unindented line, and only `measured <date> (<method>)` or `m:` pass
+    there, the observed form and a research label refused there though they pass elsewhere;
+  - the count's and the differential's unit is the sentence, cut outside code spans and not at `;`;
+  - the red exit's unit is item 6 of each Approach block.
+  The item-4 rule now reads item 4 of every Approach block (part A or B) in the section, and one under no heading, where it read
+  only the first `4. **` item (`ITEM4.find`): a re-answered block's unlabeled figure reached its plan review unrefused. A
+  performance checklist's item 4 is not read, because that block prompts and never gates. Read unrestricted, it would have
+  refused 444's T26 and T27 on theirs.
+  Red first: `a_second_approach_blocks_item_4_is_read_too`, with an unlabeled figure in a second Approach block's item 4:
+  - before: 0 of 1 found, measured 2026-11-20 (`make rust-test CRATE=rust/gate/crates/plan`, `/tmp/t25/red2.log`).
+  - after: 1 of 1 found, measured 2026-11-20 (`make rust-test CRATE=rust/gate/crates/plan`).
+  The fix's reach over 949 sections of every `specs/*/plan.md` and `plan-done.md`: 0 verdicts moved and 51 item-4 findings appear in 28 sections, every one already refused for another finding, measured 2026-11-20 (the throwaway dump, `/tmp/t25/before2.tsv` against `/tmp/t25/after3.tsv`).
+  The 28 sections, measured 2026-11-20 (the same dump): 385's plan-done T03, T08, T10 and T41; 405's plan T16, T17, T27, T131, T133
+  and T147; 405's plan-done T09, T16, T18, T19, T20, T26, T29, T43, T53, T55, T57, T96, T107, T116, T118, T119, T134 and T135.
+  The reporting change moved no rule's verdict, measured 2026-11-20 (a throwaway test dumping `lint::refusal` over every task section of every `specs/*/plan.md` and `plan-done.md` before and after the change, then deleted).
+  Over 946 sections, 0 verdicts moved and each old first finding is in the new report, measured 2026-11-20 (the same dump, `/tmp/t25/t25-before.tsv` against `/tmp/t25/t25-after.tsv`).
+  Of the 492 refused sections, 353 hold more than one finding, which today's lint reports in one run, not one each, measured 2026-11-20 (the same dump, its finding counts).
+  Red first: `decide_reports_every_finding_of_the_section_in_one_run` - a fixture section with a unit figure, a GM quote that
+  request.md does not hold and an unlabeled item-4 figure, run through `decide`:
+  - before: 1 of 3 findings reported, the GM quote alone, measured 2026-11-20 (`make rust-test CRATE=rust/gate/crates/plan`, `/tmp/t25/t25-red-kept.log`).
+  - after: 3 of 3 in one refusal, each with its plan.md line, measured 2026-11-20 (`make rust-test CRATE=rust/gate/crates/plan`).
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+| every finding reported | n/a - no map | n/a | none | n/a |
+
+### T25 Approach (checklist part A)
+
+1. **The goal, in the world.** No map changes. A plan author meets every finding of a section in one `make decide` run, each
+   with its line and its fix, and with the unit that its rule reads.
+2. **The constraints.** T25's line (every finding of the section together, each with its line, red first with a fixture of
+   three); its brief (no rule's verdict changes, only how it reports; a rule whose unit surprises its author says so in its
+   refusal); a verdict moves only where a bug is fixed (the item-4 rule's first match); every line of the crate covered by
+   its own tests; the edits held to `rust/gate/crates/plan/`.
+3. **Where each comes from.** O: the task as filed (T25's line, found writing T23's section). O: the brief's ground rules for this task.
+4. **Do they describe the world here?** Yes - measured 2026-11-20 (the verdict dump above): before the change each rule returned its first finding and `refusal` returned the first rule's, and 353 of 492 refused sections held more than one.
+5. **The order.** Independent of T03-T24. It touches the plan crate alone, beside T23's `rustc` and the builder in `rust/phases/`.
+6. **The exits.** Green: the red-first test green, `make rust-test CRATE=rust/gate/crates/plan`, `make quick`, `make static`,
+   `make hooks-test`, and the verdict dump moving no verdict but where a bug is fixed. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** One landing.
+9. **Done, measured.** The two red-first tests and four new lint tests green, 135 of the crate's tests, measured 2026-11-20 (`make rust-test CRATE=rust/gate/crates/plan`).
+10. **Before moving a constant.** n/a - no constant moves and no rule's pattern changes; the item-4 rule gains a filter by its
+    block's heading (`APPROACH_BLOCK`).
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** An author sees every finding of a section in one run, not one a run, and is told each rule's unit, and a
+    re-answered Approach block's unlabeled item-4 figure is refused before its review. The plan lint is the check it puts right. Nothing on a map.
+
+**Found and left?** none
+
+**Performance work?** no
+
+
+<!-- plan-archive: T26 to T03 moved to plan-done.md, 2026-11-20 (feature 375 FR-044) -->
+<!-- plan-archive: T26 to T26 moved to plan-done.md, 2026-11-20 (feature 375 FR-044) -->
+
+<!-- plan-archive: archived 2026-11-20 -->
+### T27 (T25: the item-4 rule read only a section's first Approach block)
+
+- **Approach**: no change of its own: withdrawn, its fix folded into T25 by T25's plan review (2026-11-20), which ruled the deferral NOT LEGITIMATE; the item-4 rule now reads every Approach block's item 4 there, red first.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+| none of its own | n/a | none | none | none |
+
+<!-- plan-archive: archived 2026-11-20 -->
+### T27 Approach (checklist part A)
+
+1. **The goal, in the world.** Every Approach block's item 4 is read by the lint.
+2. **The constraints.** T25's plan review.
+3. **Where each comes from.** R: T25's plan review.
+4. **Do they describe the world here?** Yes: T25's red-first test reads a second block's item 4 (measured 2026-11-20 (T25's test)).
+5. **The order.** With T25.
+6. **The exits.** Green: T25 ticked. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** none
+8. **The budget.** No landing of its own beyond the tick.
+9. **Done, measured.** T25 ticked with the fix.
+10. **Before moving a constant.** n/a
+11. **Before fitting things into room.** n/a
+12. **Before any fix.** Nothing of its own: its fix landed in T25.
+
+**Found and left?** none
+
+**Performance work?** no
+
+
