@@ -7,6 +7,10 @@
       research: rendering
       held: rust/guard/src/shared/make.rs, rust/guard/src/guards/event_log_hooks.rs
       verify: DONE. landed: one shared make-target detector
+- [x] T03 The category table and the line's task: the shared `bucket_of` table (`data-model.md`'s rows, with `format`, `render-sync` and `map` placed) in `rust/guard/src/guards/event_log_hooks.rs`, `category()` booking a Bash call by it, and `task` on every line where known - a command's `T=` (`tick`, `task-start`, `decide`, `land`), a subagent's meta `description`, else the clone's active task (D2; FR-001, SC-002)
+      research: rendering
+      held: rust/guard/src/guards/event_log_hooks.rs
+      verify: DONE. landed: the shared category table and the task on every line
 - [x] T23 Two builders' cargo runs in one clone corrupt each other's coverage (found by T02, 2026-11-20): T02's make static ran beside T234's cargo in the same target directory and failed on corrupt or missing coverage profiles in seven crates, a collision, not a result - the Rust checks take one lock a target directory for the length of a run, the second waiting (named, with how long) rather than racing, red first with two concurrent runs
       research: rendering
       verify: DONE. landed: one lock a target directory for the Rust checks
