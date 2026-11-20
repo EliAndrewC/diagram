@@ -689,3 +689,6 @@
 - [x] T234 The polder's sluice gate drawn as an 8 ft square (found by T226, 2026-11-19): 0179-water-gates-and-sluices-shuimen.drawing.html draws a sluice as a board and frame across its channel, spanning about 16 to 24 ft on a field channel, and T226 labeled the square DEVIATION with no reason for deviating - a drawn size the research contradicts (constitution XIV: a wrong outcome a reader of the map sees); the gate drawn as the page draws it, across the channel at its width, the claim restated to the page, the glyph-check it owes recorded deferred (feature 444 FR-023); lands before T158
       research: rendering
       verify: DONE. landed: the polder's sluice drawn as page 0179 draws it
+- [x] T237 reviews owed owes no review for a Rust drawing change that is not declared (found by T234, 2026-11-20): its list of drawing-code paths (the CODE pattern in rust/gate/crates/reviews/src/reviews/owed.rs) has no rust/ entry, so a change to a Rust stage's drawing (T234's sluice frame) owed no glyph-check until an Occasions line was written by hand - a check passing the bad; the Rust stages' and the Mode A engine's drawing code counted as drawing code, so a change to it owes the glyph-check of each element it redraws, red first; lands before T158
+      research: rendering
+      verify: DONE. landed: Rust drawing code owes the glyph-checks it redraws
