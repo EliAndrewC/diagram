@@ -14,6 +14,7 @@ use l7r_guard::shared::tempdir::{Held, TempDir};
 
 mod cover;
 mod kept;
+mod runlock;
 mod side;
 mod times;
 

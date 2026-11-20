@@ -23,6 +23,7 @@ use crate::Reply;
 
 mod cover;
 mod kept;
+mod runlock;
 mod side;
 mod times;
 use cover::uncovered_each;
@@ -760,11 +761,34 @@ fn dispatch(world: &World, args: &[String]) -> Reply {
     }
 }
 
+/// THE RUN'S LOCK (feature 451 T23, `rustc/runlock.rs`): a check holds every directory it writes for its whole length, shared with
+/// the checks of its own run (the outermost `make`), waited for by another run's; a usage error writes nothing and takes none.
+fn locked_dispatch(world: &World, args: &[String], taker: &runlock::Taker) -> Reply {
+    let mut words = args.to_vec();
+    if let Some(first) = words.first_mut().filter(|w| *w == "test-times") {
+        "test".clone_into(first);
+    }
+    if parse(&words).is_none() {
+        return dispatch(world, args);
+    }
+    let held = runlock::take(&runlock::dirs_of(world), taker, &args[0], &mut |line| {
+        eprint!("{line}");
+    });
+    match held {
+        Ok(_held) => dispatch(world, args),
+        Err(why) => Reply {
+            stdout: String::new(),
+            stderr: why,
+            code: 1,
+        },
+    }
+}
+
 /// `l7r-gate rust <cmd> [--crate DIR]... [--check]`.
 #[must_use]
 pub fn cli(args: &[String]) -> Reply {
     let world = world_here();
-    let reply = dispatch(&world, args);
+    let reply = locked_dispatch(&world, args, &runlock::Taker::here());
     crate::stamp::record_for(
         &world.root,
         USAGE_LOG_TOOL,

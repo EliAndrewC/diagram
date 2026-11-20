@@ -354,6 +354,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-20",
    "declared": "spec-fidelity"
+  },
+  "### T23 (two builders' cargo runs in one clone corrupted each other's coverage: T02's `make static` beside T234's cargo failed on corrupt or missing coverage profiles in seven crates, observed 2026-11-20, method: T02's `make static` log)": {
+   "sha256": "47659170c04a4cb5e43bd28cdcd4040a6be061e85112fd0ded477973c549948e",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity"
+  },
+  "### T23 Approach (checklist part A)": {
+   "sha256": "014586e061a03c2441a27f080bfeaa8ceef7f924b2f89b7590419889ca6de23a",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -1137,6 +1149,170 @@
      "why": "FR-010 and SC-004 as written; the approved 'Split the three slowest hook suites'."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-20",
+   "blocks": [
+    "### T23 (two builders' cargo runs in one clone corrupted each other's coverage: T02's `make static` beside T234's cargo failed on corrupt or missing coverage profiles in seven crates, observed 2026-11-20, method: T02's `make static` log)",
+    "### T23 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T23-task",
+     "summary": "File and build a cross-run lock on a clone's cargo target directory, a fix none of the six improvements or four ideas names",
+     "class": "within",
+     "why": "A widening, not a narrowing: nothing the GM asked for is dropped. It fixes a measured defect, a check refusing good work: two builders' runs corrupted each other's coverage (T02's make static, 2 of 12 real-cargo pairs failed). That serves the request's purpose, time lost to tooling, because a spurious coverage failure means another make static run at 1.5-3 min, the waste improvement 2 targets. Fixing a known defect found during the work is the standing rule, not an exception."
+    },
+    {
+     "id": "T23-scope",
+     "summary": "Lock every directory a l7r-rust run writes (the clone's target directory with its cover-*/view/<crate> trees, and any override's target and coverage directory), sorted, for the process's whole length",
+     "class": "within",
+     "why": "This narrows nothing in request.md or spec-index.md, which do not ask for this lock. Every directory the block names is locked, in sorted order, which avoids lock-order deadlock. From the bundle alone I cannot verify that the other party in the incident (T234's cargo) went through l7r-rust; the lock covers 'l7r-gate rust <cmd>' runs only. That is a premise left unmeasured, not a narrowing of anything asked."
+    },
+    {
+     "id": "T23-run-identity",
+     "summary": "A run is the outermost make above the process; checks one make runs side by side (static beside counters-inert in make done), and runs nested in a run's tests, share it and do not wait on each other; with no make above, the process is its own run",
+     "class": "within",
+     "why": "This is the plan's one 'except when': runs under one outermost make share the lock. It narrows nothing in request.md. The why rests on what was measured. The make done shape (rust cover beside rust test-counters under one parent named make) joined one run, had 0 waits and both exited 0. In 12 of 12 real-cargo pairs with separate parents, the second run waited. The 5-overlaps red shows that two takers sharing one run id get no protection. The bundle has no measurement of two builders' make runs getting distinct run ids under the real harness. Not blocking: that premise is the obvious one (each builder's Bash call starts its own make), but it is unmeasured here."
+    },
+    {
+     "id": "T23-membership",
+     "summary": "A member is a pid plus start time, gone when the process is; a killed run leaves nothing to clear",
+     "class": "within",
+     "why": "This is how the lock is implemented. A stale holder cannot wedge later runs, and no manual clearing step is needed."
+    },
+    {
+     "id": "T23-wait",
+     "summary": "A second run waits, printing a line on stderr at once and every 30 s (GUESS) that names the holder (pid, check, run's make line and pid, since when) and the seconds waited",
+     "class": "within",
+     "why": "This narrows nothing in request.md or spec-index.md. A wait named and timed, rather than a race, is the mechanism the block describes. The 30 s interval is labeled GUESS."
+    },
+    {
+     "id": "T23-ceiling-refusal",
+     "summary": "Past L7R_RUST_LOCK_CEILING (default 1800 s, GUESS) the check refuses, naming the holder and 'kill <run pid>'",
+     "class": "within",
+     "why": "Real enforcement in the GM's sense ('real enforcement and not just instructions'): the binary itself waits and refuses, and no prose asks builders to avoid overlapping. FR-012's first line lists only the refusals of FR-006 to FR-009 and FR-011, so it does not require a red-first test here. The block names a red-first test only for taking turns. For the refusal it claims only that the crate is at 100% of its lines, which shows the path ran, not that a test proves the refusal fires. The block does not say how a zero or unparseable ceiling is handled. The block calls the lock-off switch used for the cost measurement 'temporary', and item 10's list of new knobs does not include it; that list is the only evidence it does not ship. Two conditions stand, neither blocking the class: no off-switch ships, and a test shows the ceiling refusal fires."
+    },
+    {
+     "id": "T23-usage-error",
+     "summary": "A usage error takes no lock",
+     "class": "within",
+     "why": "Such a run writes nothing to a target directory, so it has nothing to protect."
+    },
+    {
+     "id": "T23-granularity",
+     "summary": "The lock is per process, not per crate; side.rs and the coverage pass's threads run inside it",
+     "class": "within",
+     "why": "A coarser lock excludes more than a per-crate lock would, never less, so it does not narrow the protection."
+    },
+    {
+     "id": "T23-red-first",
+     "summary": "Red first: two_runs_in_one_target_directory_take_turns with a fake cargo noting overlaps (3 before, 0 after, 5 when both takers share one run id), plus 12 real-cargo pairs (2 of 12 failed before, 0 after)",
+     "class": "within",
+     "why": "A test that fails only when the requested lock is absent enforces the task. It is not unrequested scope."
+    },
+    {
+     "id": "T23-knobs",
+     "summary": "New knobs: ceiling 1800 s, 30 s wait-line interval, 0.5 s poll, record lock 10 s, each labeled GUESS",
+     "class": "within",
+     "why": "Tuning values for the mechanism, each labeled GUESS. They change nothing that was asked."
+    },
+    {
+     "id": "T23-order",
+     "summary": "Independent of T03-T22; land before any other task's make static runs beside a builder's in this clone",
+     "class": "within",
+     "why": "Sequencing only. No requested item is deferred or dropped."
+    },
+    {
+     "id": "T23-wait-accounting",
+     "summary": "A lock wait of up to 1800 s is reported on stderr only; the block says nothing about how it is counted in FR-003's per-crate build/test/cover seconds or FR-001's classing",
+     "class": "within",
+     "why": "Checked against spec-index: FR-003 asks the Rust checks to append build, test and cover seconds per crate, and nothing T23 decides drops or changes those lines. Whether lock-wait seconds should be booked as their own phase is a design question FR-003 does not settle, not a narrowing."
+    }
+   ]
   }
- ]
+ ],
+ "tasks": {
+  "T23": {
+   "section_sha256": "fa1bb563fbfc6d546c7d9705dd8dca402c71b267e27c6072af5f3fc18cfb0605",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T23-task",
+     "summary": "File and build a cross-run lock on a clone's cargo target directory, a fix none of the six improvements or four ideas names",
+     "class": "within",
+     "why": "A widening, not a narrowing: nothing the GM asked for is dropped. It fixes a measured defect, a check refusing good work: two builders' runs corrupted each other's coverage (T02's make static, 2 of 12 real-cargo pairs failed). That serves the request's purpose, time lost to tooling, because a spurious coverage failure means another make static run at 1.5-3 min, the waste improvement 2 targets. Fixing a known defect found during the work is the standing rule, not an exception."
+    },
+    {
+     "id": "T23-scope",
+     "summary": "Lock every directory a l7r-rust run writes (the clone's target directory with its cover-*/view/<crate> trees, and any override's target and coverage directory), sorted, for the process's whole length",
+     "class": "within",
+     "why": "This narrows nothing in request.md or spec-index.md, which do not ask for this lock. Every directory the block names is locked, in sorted order, which avoids lock-order deadlock. From the bundle alone I cannot verify that the other party in the incident (T234's cargo) went through l7r-rust; the lock covers 'l7r-gate rust <cmd>' runs only. That is a premise left unmeasured, not a narrowing of anything asked."
+    },
+    {
+     "id": "T23-run-identity",
+     "summary": "A run is the outermost make above the process; checks one make runs side by side (static beside counters-inert in make done), and runs nested in a run's tests, share it and do not wait on each other; with no make above, the process is its own run",
+     "class": "within",
+     "why": "This is the plan's one 'except when': runs under one outermost make share the lock. It narrows nothing in request.md. The why rests on what was measured. The make done shape (rust cover beside rust test-counters under one parent named make) joined one run, had 0 waits and both exited 0. In 12 of 12 real-cargo pairs with separate parents, the second run waited. The 5-overlaps red shows that two takers sharing one run id get no protection. The bundle has no measurement of two builders' make runs getting distinct run ids under the real harness. Not blocking: that premise is the obvious one (each builder's Bash call starts its own make), but it is unmeasured here."
+    },
+    {
+     "id": "T23-membership",
+     "summary": "A member is a pid plus start time, gone when the process is; a killed run leaves nothing to clear",
+     "class": "within",
+     "why": "This is how the lock is implemented. A stale holder cannot wedge later runs, and no manual clearing step is needed."
+    },
+    {
+     "id": "T23-wait",
+     "summary": "A second run waits, printing a line on stderr at once and every 30 s (GUESS) that names the holder (pid, check, run's make line and pid, since when) and the seconds waited",
+     "class": "within",
+     "why": "This narrows nothing in request.md or spec-index.md. A wait named and timed, rather than a race, is the mechanism the block describes. The 30 s interval is labeled GUESS."
+    },
+    {
+     "id": "T23-ceiling-refusal",
+     "summary": "Past L7R_RUST_LOCK_CEILING (default 1800 s, GUESS) the check refuses, naming the holder and 'kill <run pid>'",
+     "class": "within",
+     "why": "Real enforcement in the GM's sense ('real enforcement and not just instructions'): the binary itself waits and refuses, and no prose asks builders to avoid overlapping. FR-012's first line lists only the refusals of FR-006 to FR-009 and FR-011, so it does not require a red-first test here. The block names a red-first test only for taking turns. For the refusal it claims only that the crate is at 100% of its lines, which shows the path ran, not that a test proves the refusal fires. The block does not say how a zero or unparseable ceiling is handled. The block calls the lock-off switch used for the cost measurement 'temporary', and item 10's list of new knobs does not include it; that list is the only evidence it does not ship. Two conditions stand, neither blocking the class: no off-switch ships, and a test shows the ceiling refusal fires."
+    },
+    {
+     "id": "T23-usage-error",
+     "summary": "A usage error takes no lock",
+     "class": "within",
+     "why": "Such a run writes nothing to a target directory, so it has nothing to protect."
+    },
+    {
+     "id": "T23-granularity",
+     "summary": "The lock is per process, not per crate; side.rs and the coverage pass's threads run inside it",
+     "class": "within",
+     "why": "A coarser lock excludes more than a per-crate lock would, never less, so it does not narrow the protection."
+    },
+    {
+     "id": "T23-red-first",
+     "summary": "Red first: two_runs_in_one_target_directory_take_turns with a fake cargo noting overlaps (3 before, 0 after, 5 when both takers share one run id), plus 12 real-cargo pairs (2 of 12 failed before, 0 after)",
+     "class": "within",
+     "why": "A test that fails only when the requested lock is absent enforces the task. It is not unrequested scope."
+    },
+    {
+     "id": "T23-knobs",
+     "summary": "New knobs: ceiling 1800 s, 30 s wait-line interval, 0.5 s poll, record lock 10 s, each labeled GUESS",
+     "class": "within",
+     "why": "Tuning values for the mechanism, each labeled GUESS. They change nothing that was asked."
+    },
+    {
+     "id": "T23-order",
+     "summary": "Independent of T03-T22; land before any other task's make static runs beside a builder's in this clone",
+     "class": "within",
+     "why": "Sequencing only. No requested item is deferred or dropped."
+    },
+    {
+     "id": "T23-wait-accounting",
+     "summary": "A lock wait of up to 1800 s is reported on stderr only; the block says nothing about how it is counted in FR-003's per-crate build/test/cover seconds or FR-001's classing",
+     "class": "within",
+     "why": "Checked against spec-index: FR-003 asks the Rust checks to append build, test and cover seconds per crate, and nothing T23 decides drops or changes those lines. Whether lock-wait seconds should be booked as their own phase is a design question FR-003 does not settle, not a narrowing."
+    }
+   ],
+   "verdict": "CLEAR"
+  }
+ }
 }

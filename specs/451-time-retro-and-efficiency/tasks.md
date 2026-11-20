@@ -128,3 +128,5 @@ MVP is T02-T11 (User Story 1: the retrospective is one command). Each refusal (T
       research: rendering
 - [ ] T24 A gate test reads the real environment (found by T02, 2026-11-20): rust/gate/crates/bundle/src/record/helpers/tests.rs (about line 377) means to reach helpers.rs:537's error path by writing [1] into feature.json, but l7r_guard compiled without cfg(test) reads SPECIFY_FEATURE from the real environment, so with it exported the path is skipped, the test still passes (it accepts 0 or 1) and make static's coverage goes red - the test given its own environment, asserting the one outcome it means, red first with SPECIFY_FEATURE exported
       research: rendering
+- [ ] T25 make decide's figure lint stops at its first finding (found writing T23's section, 2026-11-20): an unlabeled figure is reported one a run, so a section with four took four runs and four turns to clear - it reports every finding of the section together, each with its line, as make done reports every failure together, red first with a fixture section holding three
+      research: rendering
