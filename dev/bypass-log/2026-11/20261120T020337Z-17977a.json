@@ -1,0 +1,6 @@
+{
+  "utc": "2026-11-20T02:03:37Z",
+  "target": "plan-gate tick 449-rust-codebase",
+  "commit": "888d20fd9",
+  "why": "T222 reviewed CLEAR by spec-fidelity on 2026-11-19; later templates are unworked"
+}
