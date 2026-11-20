@@ -852,34 +852,7 @@ tests/hooks/                 # the suites, the verdict replay through phase 1
 
 
 <!-- plan-archive: T220 to T219 moved to plan-done.md, 2026-11-19 (feature 375 FR-044) -->
-### T221 (T219's SOUND derivation: the generation key re-read and hashed every engine source for every map; the driver is rebuilt from it)
-
-- **Approach**: rebuilt from `derivations/T219-pipeline.md` with the phase guard on, in the `pool` crate T220 made: one read table a clone, each distinct read one row held by its stat (re-hashed under the racy-file rule against the filesystem's clock); a changed read removes, durably, the entry of every map its row names before the row takes the new digest; a map publishes into its entry (artifacts renamed in, the table written, the meta renamed last) and is hard-linked into its folder; each engine is identified by its binary's GNU build id; the font set held by its directories' and files' stats; the table locked for the run; the legacy tree always FROZEN. `make map MAP=<folder|file|name>` (and `MAP=--all`) runs any pool map, hamlets included, printing CACHED, REGENERATED with the reason, or FROZEN; `GEN=` is refused naming the `MAP=` form. The engines draw into a staging folder (`--out`); the Mode A engine reports the files it looked for and did not find as reads (red first: a looked-for file created later now regenerates its sheet); a read that changed while the engine ran leaves the map drawn but unpublished, so the next run draws it again (red first with the rule switched off). `bundle_door`'s `is_current` is the cache asked in process. The six `.gen.py`, `interactive/sheet.py`, `pipeline/regen.py` and `pipeline/rollcache.py` are deleted, unread. `render-sync` draws every live map through the driver first (`render-maps`), and was run on the final tree in a scratch worktree (observed 2026-11-19, method: `make render-sync` there, exit 0, every live map drawn). That run showed `render_cache.py`'s own index, which finds maps by their `.gen.py`, now writing a page that lists nothing, so `sync-with-main.sh` writes the Rust index after render-sync under the same lock and main keeps it (observed 2026-11-19, method: the same run, then `make pool-index`: 30 maps), until T222 deletes `render_cache.py` and that line. No drawn sheet changes: the four hand sheets are byte-identical to main's and the two generated sheets differ only by the old render cache's stamp comment (observed 2026-11-19, method: `cmp` and a line diff of the worktree's sheets against main's), so no before-and-after page is owed. A warm all-hit run counts pool 1,589 (0.84x its budget 1,894) and legacy 170 (1.00x) (measured 2026-11-19 (`make work-budget-review`, the second of two back-to-back runs)); the pool is lower than derived because the sheets read 235 distinct files where the derivation counted 297, and the font set holds 145 rows where it counted 180 (measured 2026-11-19 (the counters by kind)). A warm `--all` takes 0.1 s, a cold one 22.6 s (measured 2026-11-19 (`make map MAP=--all`, timed)). `gencache.py` and `_census.py` stay: main's `render_cache.py` imports them until T222, which deletes them (observed 2026-11-19, method: HEAD's render-sync run with the deletions applied, read by exit code only).
-
-| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
-|---|---|---|---|---|
-| the driver and the cache | the cache's tests (ordering, misses, the racy rule, publish), the mode_a reads tests, the moved callers' suites | the `pool` crate's cache, mode_a's `--out` and reads, the callers | every map regenerates once (a new cache) | none |
-
-### T221 Approach (checklist part A)
-
-1. **The goal, in the world.** Drawing a map does work in proportion to what changed, any pool map is drawn by one command, and no map is served from a cache built from content it was not built from.
-2. **The constraints.** The GM's 2026-10-30 and 2026-11-19 words; the derivation's contract, Keeps and budget; the phase guard; T219's second judgment's race note.
-3. **Where each comes from.** G: request.md; O: T157's scoping; the derivation and its verdicts.
-4. **Do they describe the world here?** Yes: the counts are the real pool's (measured 2026-11-19, as above), and an inotify audit of three sheets found every file the engine opened reported (observed 2026-11-19, method: inotify over the sheets' runs; ptrace is blocked in the container).
-5. **The order.** After T227 and T225; then T229 (a guard fix, no port), then T222, which closes this step's pipeline work; both land before T158, the step's close, and before the next step's port begins.
-6. **The exits.** Green: the tests, `make quick`, `make static`, `make counters-inert`, `make hooks-test`, `make work-budget-review` green, and render-sync run on the final tree in a scratch worktree. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** none: each read checked once a run.
-8. **The budget.** Pool 1,894, legacy 170 (T219); this landing counts 1,589 and 170.
-9. **Done, measured.** The review's pipeline line counted whole, and a second `--all` CACHED throughout.
-10. **Before moving a constant.** n/a
-11. **Before fitting things into room.** n/a
-12. **Before any fix.** The old key re-hashed every engine source for every map, and a looked-for file created later left its sheet stale: both defects. Every map regenerates once on the first run (a new cache); a spec edit now counts as drawing code for reviews owed; `make verify` and the review gate draw hamlets too; `PROFILE=1` and `REGEN_FROZEN=1` are gone with the Python engine they acted on.
-
-**Found and left?** Checks left reading what no longer exists (measure probe's pool changes, which match nothing; preflight's roll-census read; land's census variable filter) and whether one failing map should stop render-sync before the record site: added to T222's line (2026-11-19). The Python cache's old entries under `.gencache/<map>/` are left on disk.
-
-**Performance work?** no - a rebuild from a derivation, held to its budget.
-
-
+<!-- plan-archive: T221 to T219 moved to plan-done.md, 2026-11-20 (feature 375 FR-044) -->
 ### T222 (<why: the finding or measurement that files it>)
 
 - **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
