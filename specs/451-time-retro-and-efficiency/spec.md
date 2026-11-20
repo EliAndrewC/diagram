@@ -19,8 +19,8 @@ could be cheap and historical. The 2026-11-19 retrospective of 828 wall-clock mi
 and its subagents' transcripts, the gate's run records, the landing logs)) found builder agents' model turns 55% of the wall clock,
 test runs 19%, review agents 9%, landings 2%, guards at most about 3%; and six cheap fixes worth, by its estimates, 110 to 190 minutes of
 that window. It had to be assembled by hand: `make where-time` booked 678 of its 845 minutes as "waiting on work" and every gate and
-test column 0, because the guard's event log (`.git/l7r-events/<feature>.jsonl`), which records every tool call with its duration,
-agent and make target, classes 206 of 208 tool-minutes as "other tool" and keeps no end for a background run, no phase inside a make
+test column 0 (measured 2026-11-19 (`make where-time F=449 SINCE=2026-11-19T14:00:00Z`)), because the guard's event log (`.git/l7r-events/<feature>.jsonl`), which records every tool call with its duration,
+agent and make target, classes 206 of 208 tool-minutes as "other tool" (measured 2026-11-19 (the `ms` of the log's PostToolUse lines since 14:00Z, summed by `cat`)) and keeps no end for a background run, no phase inside a make
 run and no token cost of an agent.
 
 ## User Scenarios & Testing *(mandatory)*
@@ -56,7 +56,7 @@ context size): 10 s per 1,000 output tokens under 200k tokens, 23 s over 700k). 
 write a handoff file of what is done and what is left, and stop; the main session dispatches a fresh agent with it. A SendMessage that
 would resume an agent already past the size is refused the same way.
 
-**Why this priority**: the largest saving the retrospective found, 44 to 95 minutes of a 14-hour window, on the critical path.
+**Why this priority**: the largest saving the retrospective found, 44 to 95 minutes of a 14-hour window, on the critical path - an estimate from a correlation (measured 2026-11-19 (the per-1,000-output-token rates by context size applied to the calls' own output tokens, at the 200-400k rate for calls over 400k and at the under-200k rate for calls over 200k)).
 
 **Independent Test**: a subagent tool call whose transcript reports a context past the threshold is refused with the handoff named; one
 under it passes; a SendMessage to an agent past it is refused.
@@ -76,7 +76,7 @@ A builder runs `make static` a third time in one task since the last landing. It
 the same question for the crate being edited, and an escape with a reason.
 
 **Why this priority**: 124 runs at about 35 s in the window (measured 2026-11-19 (the subagent transcripts' Bash spans)), the second
-largest saving, 26 to 52 minutes.
+largest saving, 26 to 52 minutes (measured 2026-11-19 (the runs capped at two a task, 34 against 124, at each run's own measured time: 52 minutes, or 26 if half the extra runs were needed)).
 
 **Independent Test**: a third `make static` in one task is refused with the crate-scoped checks named; the first two pass; a run
 after a landing starts the count again; the escape with a reason passes and is recorded.
@@ -150,7 +150,7 @@ another feature is refused.
   review, background run and model; report the wall clock on the critical path apart from the summed agent-minutes; count the rework
   (refused landings, plan re-rounds, agents nudged); and `make where-time` takes `UNTIL=`.
 - **FR-006**: A guard refuses a subagent's tool call once its context is past a threshold (a knob, GUESS: 400k tokens, the size past
-  which the window's calls ran 14.8 s per 1,000 output tokens against 11.9 below), but for writing its handoff file, naming the file
+  which the window's calls ran 14.8 s per 1,000 output tokens against 11.9 below, measured 2026-11-19 (the 3,280 builder calls bucketed by context size)), but for writing its handoff file, naming the file
   and the next step; and refuses a SendMessage resuming an agent past the threshold, naming a fresh dispatch.
 - **FR-007**: A guard refuses a third `make static` in one task since its last landing, naming the crate-scoped checks for the crates
   the task's delta changes.
@@ -176,7 +176,7 @@ another feature is refused.
 - **SC-001**: For a window of real work, `make where-time F= SINCE= UNTIL=` books under 10% of the wall clock as unexplained waiting,
   against 80% today (`where-time` for 2026-11-19 14:00Z on, measured 2026-11-19).
 - **SC-002**: The 2026-11-19 retrospective's per-task table and totals can be reproduced from the event log by that one command, within
-  10% on each bucket, for work done after this feature lands.
+  a tolerance of 10% on each bucket (a target, GUESS), for work done after this feature lands.
 - **SC-003**: Each of the six fixes' refusals fires on its red fixture and passes its compliant case (FR-012).
 - **SC-004**: No hook-suite shard takes more than about 20 s (measured the same way the suites' timings are now).
 - **SC-005**: In the first full day after landing, `make static` runs per task fall to at most two but for recorded escapes, and no
