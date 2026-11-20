@@ -18,10 +18,6 @@
 - [x] T05 The Rust checks' phase lines: `build`, `test`, `cover-build` (per family), `cover-run`, `lint` and `format` per crate, each with its wall-clock span, through `append_row`, in `rust/gate/crates/rustc/src/rustc.rs`, `rustc/cover.rs`, `rustc/side.rs`, `rustc/kept.rs` (D4; FR-003); and every reader outside measure's load_events filters the event log by kind before it reads a line's time - reviews/glyph.rs takes the log's first event as the feature's start, which a Phase line would become (T04, 2026-11-20), red first
       research: rendering
       verify: DONE. landed: the Rust checks' phase lines
-- [x] T06 The landing's phase lines: `cheap`, `gate`, `cohort`, `claims`, `push` and an `end` with the exit code and `tasks` (the ids it was asked to land), in `rust/gate/crates/land/src/land.rs` and `land/long_runs.rs`, each line filed in the landed feature's log by `append_row_for` (D5; FR-003)
-      research: rendering
-      held: rust/guard/src/guards/event_log_hooks.rs (and event_log_hooks/filed.rs)
-      verify: DONE. landed: the landing's phase lines
 - [x] T23 Two builders' cargo runs in one clone corrupt each other's coverage (found by T02, 2026-11-20): T02's make static ran beside T234's cargo in the same target directory and failed on corrupt or missing coverage profiles in seven crates, a collision, not a result - the Rust checks take one lock a target directory for the length of a run, the second waiting (named, with how long) rather than racing, red first with two concurrent runs
       research: rendering
       verify: DONE. landed: one lock a target directory for the Rust checks

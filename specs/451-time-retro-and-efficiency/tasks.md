@@ -40,6 +40,10 @@ landing on its own, each small; T22 last.
 
 ### The event-log data (FR-001 to FR-004)
 
+- [ ] T06 The landing's phase lines: `cheap`, `gate`, `cohort`, `claims`, `push` and an `end` with the exit code and `tasks` (the ids it was asked to land), in `rust/gate/crates/land/src/land.rs` and `land/long_runs.rs`, each line filed in the landed feature's log by `append_row_for` (D5; FR-003)
+      research: rendering
+      held: rust/guard/src/guards/event_log_hooks.rs (and event_log_hooks/filed.rs)
+      verify: red first - the land tests' fake world writes the lines in order and a refused landing's `end` carries its code, a `T="T1 T2"` landing's `end` names both tasks, an unstarted task's lines are filed in the landed feature's log, the `end` is written the moment the push goes out (`landed` true) before the push's tail (`after-push`); `make rust-test CRATE=rust/gate/crates/land`; `make rust-test CRATE=rust/guard`; `make hooks-test`; this task's own landing's lines read off the log; `make quick`
 - [ ] T07 An agent's cost and task: `task` on the Agent dispatch line from its description, and `tok` (in, cached, created, out, each `message.id` once), `ctx` and `task` (from the meta file) on each SubagentStop line, in `rust/guard/src/guards/event_log_hooks.rs` (D6; FR-004)
       research: rendering
       held: rust/guard/src/guards/event_log_hooks.rs (and event_log_hooks/fields.rs)
