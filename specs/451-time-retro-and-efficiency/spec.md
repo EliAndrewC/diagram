@@ -53,20 +53,20 @@ columns equal the fixture's known sums.
 
 A builder agent serves one task; on a long task it reaches the context size at which its model calls slow (measured 2026-11-19 (3,280 builder calls by
 context size): 10 s per 1,000 output tokens under 200k tokens, 23 s over 700k). Its next tool call is refused, naming the handoff:
-write a handoff file of what is done and what is left, and stop; the main session dispatches a fresh agent with it. A SendMessage that
-would resume an agent already past the size is refused the same way.
+write a handoff file of what is done and what is left, and stop; the main session dispatches a fresh builder with it. A SendMessage that
+would resume a builder already past the size, or one whose task has landed, is refused the same way. A defined review agent is not a builder.
 
 **Why this priority**: the largest saving the retrospective found, 44 to 95 minutes of a 14-hour window, on the critical path - an estimate from a correlation (measured 2026-11-19 (the per-1,000-output-token rates by context size applied to the calls' own output tokens, at the 200-400k rate for calls over 400k and at the under-200k rate for calls over 200k)).
 
-**Independent Test**: a subagent tool call whose transcript reports a context past the threshold is refused with the handoff named; one
-under it passes; a SendMessage to an agent past it is refused.
+**Independent Test**: a builder's tool call whose transcript reports a context past the threshold is refused with the handoff named; one
+under it passes; a defined review agent past it passes; a SendMessage to a builder past it, or to one whose task has landed, is refused.
 
 **Acceptance Scenarios**:
 
-1. **Given** a subagent whose last model call's context is past the threshold, **When** it makes a tool call other than writing its
+1. **Given** a builder whose last model call's context is past the threshold, **When** it makes a tool call other than writing its
    handoff file, **Then** the call is refused naming the handoff file's path and the next step.
-2. **Given** the same agent writing its handoff file, **Then** the write passes.
-3. **Given** the main session resuming such an agent by SendMessage, **Then** it is refused naming a fresh dispatch with the handoff.
+2. **Given** the same builder writing its handoff file, **Then** the write passes.
+3. **Given** the main session resuming such a builder by SendMessage, **Then** it is refused naming a fresh dispatch with the handoff.
 
 ---
 
@@ -92,14 +92,15 @@ after a landing starts the count again; the escape with a reason passes and is r
 ### User Story 4 - A long run is one the session can track (Priority: P2)
 
 A make target or cargo run started with `&`, `nohup`, `setsid` or `disown` inside a Bash call is refused, naming the Bash tool's
-background form, whose completion wakes the session. A permitted wait loop that checks less often than every 60 s is refused, naming the 60 s form; the session's own waits checked every
+background form, whose completion wakes the session. A permitted wait loop in the main session that checks less often than every 60 s is refused, naming the 60 s form; the main session's waits checked every
 420 to 600 s on 2026-11-19 (observed 2026-11-19, method: the wait commands of the main session's transcript).
 
 **Why this priority**: the only stretches with nothing running were an agent's untracked run (14.9 minutes) and a long poll (2.9
 minutes) (measured 2026-11-19 (the transcripts' idle spans)).
 
 **Independent Test**: `( make static > log ) &` in a Bash call is refused with the background form named; `make static` in a
-background Bash call passes; a long-running make in the foreground passes.
+background Bash call passes; a long-running make in the foreground passes; a main-session wait checking every 120 s is refused and
+one checking every 60 s passes.
 
 ---
 
@@ -112,8 +113,9 @@ section, naming the form.
 **Why this priority**: two of the seven first-round plan-review blocks in the window were deferrals with no order (measured 2026-11-19
 (the spec-fidelity verdicts)), each a review round of several minutes.
 
-**Independent Test**: a section whose found-and-left item names a defect with no task id is refused; one naming `T123, which lands
-before T124` passes; `none` passes.
+**Independent Test**: a found-and-left item deferring a defect with no task id is refused; one naming its task and order but no reason it
+is not fixed in the task is refused; one with a reason, `T123` and "lands before T124" passes; `none` passes; a fix naming a class of
+defect with no line on how every instance was found is refused, and one with that line labeled with its method passes.
 
 ---
 
@@ -161,8 +163,8 @@ another feature, or failing any other quick check, is withdrawn and refused.
 - **FR-007**: A guard refuses a third `make static` in one task since its last landing, naming the crate-scoped checks for the crates
   the task's delta changes.
 - **FR-008**: A guard refuses a make target or cargo run put in the background inside a Bash call (`&`, `nohup`, `setsid`, `disown`),
-  naming the Bash tool's background form; and the no-poll guard refuses a permitted wait loop that checks less often than every 60 s
-  (a knob, GUESS), naming the 60 s form.
+  naming the Bash tool's background form; and the no-poll guard refuses a permitted wait loop in the main session that checks less
+  often than every 60 s (a knob, GUESS), naming the 60 s form.
 - **FR-009**: `make decide` refuses a plan section whose found-and-left item defers a defect unless it states why the defect is not
   fixed in this task, its filed task id and its order ("lands before ..."); and refuses a section whose fix names a class of defect
   (every writer, every form, every file of a kind) without a line saying how every instance of the class was found, labeled as an
@@ -191,11 +193,11 @@ another feature, or failing any other quick check, is withdrawn and refused.
 - **SC-003**: Each of the six fixes' refusals fires on its red fixture and passes its compliant case (FR-012).
 - **SC-004**: No hook-suite shard takes more than about 20 s (measured the same way the suites' timings are now).
 - **SC-005**: In the first full day after landing, `make static` runs per task fall to at most two but for recorded escapes, and no
-  agent's context passes the threshold but for a recorded escape.
+  builder's context passes the threshold but for a recorded escape.
 
 ## Assumptions
 
-- The thresholds (400k tokens; the third static run; 20 s a shard; the 60 s poll) are GUESS knobs from one day's measurement, retuned
+- The thresholds (300k tokens; the third static run; 20 s a shard; the main session's 60 s poll) are GUESS knobs from one day's measurement, retuned
   from the new data (`make tunables`).
 - The Claude Code hook payloads carry what the guards need: a subagent's transcript path (for its context size) and the background
   run's completion notice; where one does not, the plan says what it reads instead.
@@ -205,3 +207,4 @@ another feature, or failing any other quick check, is withdrawn and refused.
 
 - 2026-11-19, round 0 (spec-fidelity, MODE 2): NOT-REVIEWABLE - six figures without labels (not a round).
 - 2026-11-19, round 1 (spec-fidelity, MODE 2): CHANGES REQUIRED, 5 items - FR-009 enforced the deferral's form, not fixing in the task by default, and carried nothing of "full coverage up front" (now: a deferral states why it is not fixed in the task; a fix of a class says how every instance was found); FR-011 ran one lint rule where `make quick` was approved (now: `make quick`'s checks); the poll interval was an instruction (now: the no-poll guard refuses a slower wait); FR-006 reached every subagent, replaced the approved per-stage fresh builder with a size cap and overstated its saving (now: builders only, one task a builder with a resume after its landing refused, the cap a 300k backstop between the two figures); "agents nudged" traced to nothing (dropped).
+- 2026-11-19, round 2 (spec-fidelity-verify, MODE 3): CHANGES REQUIRED, 4 items - User Story 2 and SC-005 still reached every agent (now: builders, with a review agent passing and a landed builder's resume refused in the test); the Assumptions kept the old 400k (now 300k); User Story 5's test passed what FR-009 refuses (now: its five cases); the slower-wait refusal reached every agent's Bash (now: the main session's waits, as approved).
