@@ -38,7 +38,7 @@
    "declared": "spec-fidelity"
   },
   "## Decisions": {
-   "sha256": "637de547211e6afa5ee43c4974224babd2406c20c85fe5ec124b4a72ec3b4b8b",
+   "sha256": "cc9cb76e21d3ebfc831235795d8c6e077f80fcbe1ed741107276ba7251025cbd",
    "verdict": "CLEAR",
    "reviewed": "2026-11-20",
    "declared": "spec-fidelity"
@@ -182,13 +182,13 @@
    "declared": "spec-fidelity"
   },
   "### T12 (FR-006: builders past a large context slowed the window's critical path - the spec's User Story 2, research R3)": {
-   "sha256": "593607077c2dcea24863a5ae82cba35d43180503dd9c95494f89ab06c59b9ba2",
+   "sha256": "fd99e64a0721615101519e3fa436ebf894bfa28b7e593af5a9b1b00157bb4ab2",
    "verdict": "CLEAR",
    "reviewed": "2026-11-20",
    "declared": "spec-fidelity"
   },
   "### T12 Approach (checklist part A)": {
-   "sha256": "9b2315c1505b6b3c69669923c94548248f642921e127c58dfff044badb23fa86",
+   "sha256": "5ec9cbaf894e0362a3dc11378eedbc459b44b7d5bedd73a9aeaa460b578cc959",
    "verdict": "CLEAR",
    "reviewed": "2026-11-20",
    "declared": "spec-fidelity"
@@ -242,13 +242,13 @@
    "declared": "spec-fidelity"
   },
   "### T17 (FR-009: two of the window's first-round plan-review blocks were deferrals with no order - the spec's User Story 5)": {
-   "sha256": "003a9c10512c4c34b340ab125a4b13b93aa1ec64c91455ee58480305c1a43719",
+   "sha256": "dedd4be60d19c9a7f6c6cf0607d7b94b227c5c172f4324b9849011120877dbca",
    "verdict": "CLEAR",
    "reviewed": "2026-11-20",
    "declared": "spec-fidelity"
   },
   "### T17 Approach (checklist part A)": {
-   "sha256": "5c5f9488085bf561f3a6c02ccfa4245809ef8137fb7d80711d50c70d2c96bdc7",
+   "sha256": "6fd5ef914b65ff054f0c459c0448f62c8fd15c141ac3b9d7fadd982d4dd2014d",
    "verdict": "CLEAR",
    "reviewed": "2026-11-20",
    "declared": "spec-fidelity"
@@ -495,6 +495,30 @@
   },
   "### T34 Approach (checklist part A)": {
    "sha256": "34da7b670a79a861d678e0d2e7d161402cab1eb498c12fcb9d9572e76270b78d",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity"
+  },
+  "### T35 (<why: the finding or measurement that files it>)": {
+   "sha256": "d8b58ae3193980712b572abe14c57afc3d5ece6e6b86d181ec41cd10a3928b1a",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity"
+  },
+  "### T35 Approach (checklist part A)": {
+   "sha256": "87b99844e52c5320ea8a8458e35a3576828a2bcea71ee2dbc890c9c2ddf5ee28",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity"
+  },
+  "### T36 (<why: the finding or measurement that files it>)": {
+   "sha256": "dc847b818b674c921f73c225ed0aaff49dc81e77696f7385e745860981bc66f4",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity"
+  },
+  "### T36 Approach (checklist part A)": {
+   "sha256": "6be6f06c252eba1d25c30c6d58725e4ef5f70a1ed9ad505e301b9a90b3ee869a",
    "verdict": "CLEAR",
    "reviewed": "2026-11-20",
    "declared": "spec-fidelity"
@@ -3323,6 +3347,479 @@
      "why": "T16 is improvement 3 of the six the GM approved ('a shorter poll loop on my side', 18 min). The GM ruled on 2026-11-20 that those fixes come first because 'doing those first makes everything after them faster'. Under FR-013 it makes the builders' loop faster."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-20",
+   "blocks": [
+    "## Decisions",
+    "### T12 (FR-006: builders past a large context slowed the window's critical path - the spec's User Story 2, research R3)",
+    "### T12 Approach (checklist part A)",
+    "### T17 (FR-009: two of the window's first-round plan-review blocks were deferrals with no order - the spec's User Story 5)",
+    "### T17 Approach (checklist part A)",
+    "### T35 (<why: the finding or measurement that files it>)",
+    "### T35 Approach (checklist part A)",
+    "### T36 (<why: the finding or measurement that files it>)",
+    "### T36 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D9/T12-handoff-name-and-tools",
+     "summary": "Past the cap the handoff passes as a Write, Edit or Read of <git common dir>/l7r-handoffs/<task>-<agent id>.md (any file there ending <agent id>.md is the agent's); every other call refused naming it.",
+     "class": "within",
+     "why": "FR-006 lets through 'writing its handoff file'. Edit is a write; Read of that one file is what the Write tool needs before it can overwrite the file. Keying by agent id keeps each builder to its own file, and another agent's handoff is refused. Nothing outside the handoff is let through."
+    },
+    {
+     "id": "D9/T12-permit-to-T13",
+     "summary": "The per-agent `make context-ok` permit is built with T13 (D10's resume) instead of T12; until then CONTEXT_OK in a Bash call is the recorded escape. Deferral formed: why, filed as T13, lands before T22.",
+     "class": "within",
+     "why": "The permit stays in the plan and in this feature. It moves to the task that builds the resume it serves, so this is a change of order inside the feature, not a cut from what was asked. Until T13 lands the cap is still enforced, with a recorded two-word escape through Bash (FR-012). The missing permit only makes the guard stricter, which matches the GM's 'real enforcement and not just instructions'."
+    },
+    {
+     "id": "T12-fail-open-no-reading",
+     "summary": "No transcript file, or no assistant row with nonzero usage in the tail (at most 16 MiB), passes; only assistant rows count, and a zero row is synthetic.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The cap is on a context the guard measures. Where there is nothing to measure the rule cannot be applied at all. Counting only assistant rows is the measured way to read the builder's own context (user rows carry the child's usage, observed 2026-11-20), so it is how the rule is met, not a way around it."
+    },
+    {
+     "id": "T12-fail-open-bad-agent-id",
+     "summary": "An agent_id that is not a plain name (letters, digits, -, _) passes.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Such an id cannot safely be joined into the transcript path or the handoff name, so the guard cannot read the context or name the handoff file, which is the cap's one exit. Real agent ids are plain names (the captured payloads), so in practice this does not weaken the rule."
+    },
+    {
+     "id": "T12-outside-clone",
+     "summary": "A call outside any clone passes.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "FR-006's one exit is a handoff file under <git common dir>/l7r-handoffs, and D8 decides who is a builder from the clone's .claude/agents. Outside a clone neither exists. A refusal there would leave no exit to write and no way to tell a builder from a defined agent, so the rule as written cannot be applied."
+    },
+    {
+     "id": "T12-escape-and-tests",
+     "summary": "CONTEXT_OK=\"<reason>\" in a Bash command passes and is recorded; a bare one is refused. Red-first and check-deleted runs recorded.",
+     "class": "within",
+     "why": "This is FR-012's escape and its red-first proof."
+    },
+    {
+     "id": "D15/T17-pass-forms",
+     "summary": "An item passes as `none`, `fixed here` (or fixed before its tick, or before T<own> lands) or `not a defect` / `no wrong outcome`; an item that names a filed or order id is judged as a deferral whatever else it says.",
+     "class": "within",
+     "why": "FR-009 refuses an item that DEFERS a defect. An item fixed in the task defers nothing, and one that is not a defect (constitution XIV) is not a deferred defect. Any item naming a task it is filed under is still judged as a deferral, so these phrases cannot be used to dodge the rule. The earlier D15 demanded the form of every non-none item, which went past FR-009, so this brings the plan back to the spec rather than narrowing it."
+    },
+    {
+     "id": "D15/T17-deferral-words",
+     "summary": "A deferral owes `Not fixed here` with two words of reason, `filed as T<n>` (or `added to` / `folded into`), `lands before T<m>`, ids distinct, each filed (timeless, plan-delta) and open (decide).",
+     "class": "within",
+     "why": "These are FR-009's 'why the defect is not fixed in this task, its filed task id and its order'. Adding to or folding into an existing task is still a filed task id."
+    },
+    {
+     "id": "T17-class-vocabulary",
+     "summary": "A class fix is detected by `every` / `all the` before writer, reader, form, file, caller, instance, copy, site or guard, or `each of the`; it owes an observed/measured label with its method; checklist item 12 is judged too.",
+     "class": "within",
+     "why": "FR-009 defines a class by its examples: every writer, every form, every file of a kind. The detector catches all three and more. A bare `all` would refuse correct text such as 'all tests pass'."
+    },
+    {
+     "id": "D15/T17-escape-recorded-by-tool",
+     "summary": "DEFER_FORM_OK is read from the environment and recorded by the tool itself (guard log rule defer-form-ok, and dev/bypass-log/), only on a run that passes or excuses a finding; plan-delta honors a decide-time escape and takes its own; a thin reason is refused on both verbs.",
+     "class": "within",
+     "why": "FR-012 asks for an escape whose reason is recorded, and this records it once. Changing the mechanism from $(LOGESCAPE) to the T28 form changes how the record is written, not what the requirement covers."
+    },
+    {
+     "id": "T17-archived-sections",
+     "summary": "plan-done.md sections are never judged (decide and plan-delta read plan.md only); the replay's 28 refusals are all archived.",
+     "class": "within",
+     "why": "FR-009 refuses at `make decide`. Archived sections are never decided again. No live plan.md section is refused (replay measured 2026-11-20)."
+    },
+    {
+     "id": "T35-T36-templates",
+     "summary": "Two new task sections left as the unfilled template, whose Found-and-left placeholder states D15's form.",
+     "class": "within",
+     "why": "Placeholders decide nothing. The placeholder's wording is D15's 'template states the form'."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-20",
+   "blocks": [
+    "### T17 (FR-009: two of the window's first-round plan-review blocks were deferrals with no order - the spec's User Story 5)",
+    "### T17 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "pass-fixed-in-task",
+     "summary": "A found-and-left item that says it is fixed in the task (fixed here, fixed in this task, before its tick, before T<own> lands) passes without a reason, filed id and order, unless it names an id it is filed as or lands before.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "D15's visible sentence requires every non-none item to carry reason, id and order, so this narrows D15's text. But FR-009 refuses only an item that DEFERS a defect, and an item fixed in the task defers nothing; the GM approved 'briefs that default to fixing in the task', so requiring a filed task id of an item that is fixed would contradict the request. The guard that an item naming a filed/order id is judged as a deferral keeps the pass from being used to hide one."
+    },
+    {
+     "id": "pass-no-defect",
+     "summary": "An item that says it is not a defect (not a defect, no wrong outcome, constitution XIV) passes.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Narrows D15's 'any non-none item' wording, but FR-009's own words reach only an item that 'defers a defect', and constitution XIV (the GM 2026-11-19) holds that a difference with no wrong outcome is not a defect and is not to be fixed. Demanding a filed fix task for a non-defect would apply a standard the GM struck. Same id-naming guard applies."
+    },
+    {
+     "id": "deferral-form",
+     "summary": "A deferral owes 'Not fixed here' plus two words of reason, filed as T<n> (or added to / folded into), lands before T<m> (lists read whole), order id not equal to filed id, each id a box of tasks.md or tasks-done.md; make decide adds that each id is an unticked box now.",
+     "class": "within",
+     "why": "This is FR-009's three parts (why, filed id, order) made checkable; added to / folded into still name a filed task id; the open test at make decide makes the order real enforcement as the GM asked."
+    },
+    {
+     "id": "class-trigger-words",
+     "summary": "A class fix is detected by every/all the before writer, reader, form, file, caller, instance, copy, site or guard, or 'each of the', and then owes an observed/measured line with its method.",
+     "class": "within",
+     "why": "FR-009's named forms (every writer, every form, every file of a kind) are all reached and the list is a superset of them; a mechanical trigger has to be a word test, and nothing FR-009 names falls outside it."
+    },
+    {
+     "id": "class-trigger-location",
+     "summary": "The class test reads the found-and-left items and checklist item 12 (Before any fix).",
+     "class": "within",
+     "why": "FR-009 asks about the section's FIX; in the plan template the fix is declared in item 12 and the found-and-left answer, so reading those is reading the fix."
+    },
+    {
+     "id": "plan-delta-timeless-half",
+     "summary": "make plan-delta runs the timeless half (form and ids filed in tasks.md or tasks-done.md) on a changed block; a section whose deferral's task has since landed is not refused.",
+     "class": "within",
+     "why": "FR-009 names make decide; running the same rule on a later edit only enforces it against a decided section being changed into an unformed one (the GM: 'real enforcement and not just instructions'). Not requiring the ids to be open after landing narrows nothing FR-009 asks, which is a check at decision time."
+    },
+    {
+     "id": "escape-carried-forward",
+     "summary": "A section decided under DEFER_FORM_OK passes make plan-delta after its block changes, the escape found in the guard log; the escape excuses only deferral findings.",
+     "class": "within",
+     "why": "It relaxes only the plan-delta check, which is enforcement beyond FR-009's make decide; at make decide, where FR-009 places the refusal, nothing is relaxed, and the escape was recorded with its reason as FR-012 requires."
+    },
+    {
+     "id": "escape-recording",
+     "summary": "The tool records DEFER_FORM_OK itself (guard log rule defer-form-ok and dev/bypass-log/) instead of D15's $(LOGESCAPE) line, and only on a run that passes (decide once decided, plan-delta only where it excused a finding); a thin reason is refused.",
+     "class": "within",
+     "why": "FR-012 asks for an escape of two words or more that is recorded; it is recorded, once, whenever it is used. A run that is refused or excuses nothing did not use the escape. Mechanism choice; D15's text is restated to match (found-and-left)."
+    },
+    {
+     "id": "plan-delta-log-read",
+     "summary": "make plan-delta reads the guard log only for a changed block with a deferral finding, once a run, parsing only files naming the rule.",
+     "class": "within",
+     "why": "A cost choice that changes no outcome."
+    },
+    {
+     "id": "archived-not-judged",
+     "summary": "plan-done.md is never read by make decide or plan-delta and the tick and landing call neither, so the 28 refused archived sections are not re-judged.",
+     "class": "within",
+     "why": "FR-009 is a refusal at make decide of a section being decided; archived sections were decided and ticked before the rule existed and no make decide runs on them. Nothing FR-009 asks is left out."
+    },
+    {
+     "id": "found-and-left-session-fixes",
+     "summary": "Makefile FREE_TEXT and help lines for DEFER_FORM_OK, D15 restated, docs/guards.md row and rust/gate/CLAUDE.md plan row are fixed by the session before T17 lands, outside the builder's brief.",
+     "class": "within",
+     "why": "Fixed before the task lands, not deferred; matches the GM-approved default of fixing in the task."
+    },
+    {
+     "id": "perf-tag",
+     "summary": "T17 is tagged [perf] under FR-013.",
+     "class": "within",
+     "why": "It is improvement 4 of the six the GM ordered first on 2026-11-20 ('doing those first makes everything after them faster'), and it shortens the builders' loop, which FR-013 names."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-20",
+   "blocks": [
+    "### T12 (FR-006: builders past a large context slowed the window's critical path - the spec's User Story 2, research R3)",
+    "### T12 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "guard-shape",
+     "summary": "a new guard context_cap_hooks, PreToolUse *, after event_log_hooks in guards(); its files held by make guard-edit",
+     "class": "within",
+     "why": "FR-006 asks for a guard refusing a builder's tool call past a threshold; this is where and how it is placed. Nothing the request or FR-006 says is narrowed."
+    },
+    {
+     "id": "first-step-capture",
+     "summary": "payloads captured from Claude Code itself (claude -p, a scratch hook) rather than a dump in the clone, pinned as payloads.json",
+     "class": "within",
+     "why": "A method for finding the payload's real keys (agent_id, agent_type, transcript_path), labeled with date and method; it decides nothing about what is refused."
+    },
+    {
+     "id": "D8-who",
+     "summary": "no agent_id passes before any read (main session); an agent_type naming the clone's .claude/agents/<type>.md passes on a stat",
+     "class": "within",
+     "why": "FR-006 defines a builder as an agent with a task's brief, not a defined review agent; the main session is not an agent. Carries D8 as accepted."
+    },
+    {
+     "id": "non-plain-agent-id-passes",
+     "summary": "an agent_id that is not letters, digits, - and _ passes",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Both the cap's measure (the transcript at subagents/agent-<agent_id>.jsonl) and its one exit (the handoff file named by the agent id) are paths built from the id; an id that cannot be joined into a path leaves neither a context to measure nor a handoff to name, so refusing would refuse with no exit. The same capture shows builders' ids are plain names, so ordinary work does not reach this path and FR-006's enforcement is not gutted."
+    },
+    {
+     "id": "context-measure",
+     "summary": "context = input + cache_read + cache_creation tokens of the last assistant row with usage above zero; user rows carrying a child's usage and zero rows skipped",
+     "class": "within",
+     "why": "FR-006 caps the builder's context; this measures the builder's own model call and excludes rows that are not its model calls (measured: user rows hold the child's usage). It makes the cap measure what FR-006 names."
+    },
+    {
+     "id": "nothing-read-passes",
+     "summary": "no transcript file, or no such row in the tail, passes",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Where no context is recorded there is no figure to compare with FR-006's threshold; refusing on no evidence would refuse builders that are under it. The capture (2026-11-20) shows the transcript exists beside transcript_path for a builder, so ordinary work does not reach this path and the request's 'real enforcement' holds."
+    },
+    {
+     "id": "16MiB-read-bound",
+     "summary": "the tail is read backwards in 64 KiB steps to at most 16 MiB (both GUESS); a builder whose last usage row lies further back passes",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "What lies after the last assistant row is that turn's tool results; 16 MiB of them with no assistant row between is not a shape ordinary work produces, so a builder past the cap is not let through by it in practice. The bound is a labeled GUESS knob. Not measured that no real tail exceeds it - a premise worth a count from the event log when the knob is retuned, not a block."
+    },
+    {
+     "id": "cap-value",
+     "summary": "CONTEXT_CAP_TOKENS GUESS 300,000; at the cap passes",
+     "class": "within",
+     "why": "FR-006's own knob and value, labeled GUESS."
+    },
+    {
+     "id": "handoff-write",
+     "summary": "past the cap every call is refused but the handoff file's Write, the refusal naming the file and the next step (write what is done and left, stop, reply with the path; the session dispatches a fresh builder)",
+     "class": "within",
+     "why": "FR-006 verbatim ('but for writing its handoff file, naming the file and the next step'), and the approved improvement 1 ('a fresh builder per stage, with a handoff file')."
+    },
+    {
+     "id": "handoff-edit",
+     "summary": "an Edit of the handoff file is let through beside its Write",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Implied by FR-006's own words: the exception is 'writing its handoff file', and an Edit of that file is writing it. Confined to the agent's own handoff, it cannot carry task work, so the cap's purpose (no builder works on past a large context) survives."
+    },
+    {
+     "id": "handoff-read",
+     "summary": "a Read of the handoff file is let through beside its Write",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Ground that holds regardless of the stated tool behavior: a Read confined to the agent's own handoff file yields only what the builder itself wrote there, so it cannot carry task work and does not gut the cap's purpose, while the stated reason (the Write tool will not overwrite an unread file) would otherwise leave a builder with an existing handoff no exit. That premise about the Write tool carries no date and method in the block; it is not what this ruling rests on."
+    },
+    {
+     "id": "handoff-suffix-match",
+     "summary": "any file in <git common dir>/l7r-handoffs/ whose name ends <agent id>.md counts as the agent's handoff",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Applying the literal one-name rule, recomputed at each call from the event log's task, could refuse the very file the refusal named if the chain's task moved between them, leaving the builder no exit - defeating FR-006's handoff. Agent ids are unique, so no builder can write another's handoff (a case the suite refuses), and every such file sits in the handoff directory, where writing cannot carry task work. Ruled as stated, 'any file there' = in that directory."
+    },
+    {
+     "id": "handoff-name-task",
+     "summary": "the handoff is named <task>-<agent id>.md from the event log's chain (filed_at), or <agent id>.md where the line carries no task",
+     "class": "within",
+     "why": "Naming the file FR-006 requires; no case is excused."
+    },
+    {
+     "id": "outside-clone-passes",
+     "summary": "a call outside any clone passes",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "On what the block establishes: D8's test of who is a builder is a stat of the clone's .claude/agents/, and the handoff path is under the clone's git common dir; outside a clone there is neither a who nor an exit to name, so a refusal there could refuse defined review agents and leave a builder no handoff to write. The premise that builders' calls are made inside clones in ordinary work is not measured in the block and no suite case is listed for this path - worth a count, not a block."
+    },
+    {
+     "id": "escape-context-ok",
+     "summary": "CONTEXT_OK=\"<reason>\" in a Bash command, recorded as context-ok; a bare one refused",
+     "class": "within",
+     "why": "FR-012: an escape of a reason of two words or more, recorded."
+    },
+    {
+     "id": "permit-deferred-to-T13",
+     "summary": "D9's make context-ok AID= WHY= per-agent permit not built in T12; filed as T13, to land before T22; CONTEXT_OK in Bash the recorded escape meanwhile",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Judged against FR-012, not D9 (which this task restated): every refusal the cap issues today has a recorded route past it - the refusal's compliant step (the handoff, always let through) and CONTEXT_OK in a Bash call, recorded - so FR-012's escape exists and no builder is trapped. The permit was the session's design for a resumed builder (D10's resume); it is filed and ordered, not dropped. Nothing the GM asked for is left out."
+    },
+    {
+     "id": "lane-order",
+     "summary": "in the performance lane after T15 and T16, before T13",
+     "class": "within",
+     "why": "FR-013 and the GM 2026-11-20 ('let's prioritize those remaining improvement fixes'); T12 is improvement 1."
+    },
+    {
+     "id": "red-first-and-whole-chain",
+     "summary": "red-first unit and suite runs, the check-deleted run red, and the handoff Write's case through the whole guard chain",
+     "class": "within",
+     "why": "FR-012's red-first test and D9's whole-chain case; enforcement of what was asked."
+    },
+    {
+     "id": "docs-and-D9-restated",
+     "summary": "docs/guards.md row and knob-table row, rust/guard/CLAUDE.md mention, D9 restated to what was built, written by the session before the tick",
+     "class": "within",
+     "why": "D14's knob table and keeping the spec true to the built guard; no behavior added or excused."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-20",
+   "blocks": [
+    "### T12 (FR-006: builders past a large context slowed the window's critical path - the spec's User Story 2, research R3)",
+    "### T12 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "guard-shape",
+     "summary": "a new guard context_cap_hooks, PreToolUse *, after event_log_hooks in guards(); its files held by make guard-edit",
+     "class": "within",
+     "why": "FR-006 asks for a guard refusing a builder's tool call past a threshold; this is where and how it is placed. Nothing the request or FR-006 says is narrowed."
+    },
+    {
+     "id": "first-step-capture",
+     "summary": "payloads captured from Claude Code itself (claude -p, a scratch hook) rather than a dump in the clone, pinned as payloads.json",
+     "class": "within",
+     "why": "A method for finding the payload's real keys (agent_id, agent_type, transcript_path), labeled with date and method; it decides nothing about what is refused."
+    },
+    {
+     "id": "D8-who",
+     "summary": "no agent_id passes before any read (main session); an agent_type naming the clone's .claude/agents/<type>.md passes on a stat",
+     "class": "within",
+     "why": "FR-006 defines a builder as an agent with a task's brief, not a defined review agent; the main session is not an agent. Carries D8 as accepted."
+    },
+    {
+     "id": "non-plain-agent-id-passes",
+     "summary": "an agent_id that is not letters, digits, - and _ passes",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Both the cap's measure (the transcript at subagents/agent-<agent_id>.jsonl) and its one exit (the handoff file named by the agent id) are paths built from the id; an id that cannot be joined into a path leaves neither a context to measure nor a handoff to name, so refusing would refuse with no exit. The same capture shows builders' ids are plain names, so ordinary work does not reach this path and FR-006's enforcement is not gutted."
+    },
+    {
+     "id": "context-measure",
+     "summary": "context = input + cache_read + cache_creation tokens of the last assistant row with usage above zero; user rows carrying a child's usage and zero rows skipped",
+     "class": "within",
+     "why": "FR-006 caps the builder's context; this measures the builder's own model call and excludes rows that are not its model calls (measured: user rows hold the child's usage). It makes the cap measure what FR-006 names."
+    },
+    {
+     "id": "nothing-read-passes",
+     "summary": "no transcript file, or no such row in the tail, passes",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Where no context is recorded there is no figure to compare with FR-006's threshold; refusing on no evidence would refuse builders that are under it. The capture (2026-11-20) shows the transcript exists beside transcript_path for a builder, so ordinary work does not reach this path and the request's 'real enforcement' holds."
+    },
+    {
+     "id": "16MiB-read-bound",
+     "summary": "the tail is read backwards in 64 KiB steps to at most 16 MiB (both GUESS; the 16 MiB now labeled with the window's largest builder transcript, 50 MB scanned whole in 0.07 s, measured 2026-11-20, research R2); a builder whose last usage row lies further back passes",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "What lies after the last assistant row is that turn's tool results; 16 MiB of them with no assistant row between is not a shape ordinary work produces, so a builder past the cap is not let through by it in practice. The bound is a labeled GUESS knob, and the figure now beside it (a whole 50 MB transcript scanned in 0.07 s) is labeled with date and method; it speaks to cost, not to how far back a last usage row can sit, so it neither strengthens nor weakens this ruling. Not measured that no real tail exceeds 16 MiB - worth a count from the event log when the knob is retuned, not a block."
+    },
+    {
+     "id": "cap-value",
+     "summary": "CONTEXT_CAP_TOKENS GUESS 300,000; at the cap passes",
+     "class": "within",
+     "why": "FR-006's own knob and value, labeled GUESS."
+    },
+    {
+     "id": "handoff-write",
+     "summary": "past the cap every call is refused but the handoff file's Write, the refusal naming the file and the next step (write what is done and left, stop, reply with the path; the session dispatches a fresh builder)",
+     "class": "within",
+     "why": "FR-006 verbatim ('but for writing its handoff file, naming the file and the next step'), and the approved improvement 1 ('a fresh builder per stage, with a handoff file')."
+    },
+    {
+     "id": "handoff-edit",
+     "summary": "an Edit of the handoff file is let through beside its Write",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Implied by FR-006's own words: the exception is 'writing its handoff file', and an Edit of that file is writing it. Confined to the agent's own handoff, it cannot carry task work, so the cap's purpose (no builder works on past a large context) survives."
+    },
+    {
+     "id": "handoff-read",
+     "summary": "a Read of the handoff file is let through beside its Write",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Ground that holds regardless of the stated tool behavior: a Read confined to the agent's own handoff file yields only what the builder itself wrote there, so it cannot carry task work and does not gut the cap's purpose, while the stated reason (the Write tool will not overwrite an unread file) would otherwise leave a builder with an existing handoff no exit. That premise about the Write tool carries no date and method in the block; it is not what this ruling rests on."
+    },
+    {
+     "id": "handoff-suffix-match",
+     "summary": "any file in <git common dir>/l7r-handoffs/ whose name ends <agent id>.md counts as the agent's handoff",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Applying the literal one-name rule, recomputed at each call from the event log's task, could refuse the very file the refusal named if the chain's task moved between them, leaving the builder no exit - defeating FR-006's handoff. Agent ids are unique, so no builder can write another's handoff (a case the suite refuses), and every such file sits in the handoff directory, where writing cannot carry task work. Ruled as stated, 'any file there' = in that directory. On the earlier aside: the session reports is_handoff compares the canonicalized parent directory with the handoff directory, so a path such as l7r-handoffs/../x-<id>.md resolves outside it and is refused; the carve-out stays confined to that directory."
+    },
+    {
+     "id": "handoff-name-task",
+     "summary": "the handoff is named <task>-<agent id>.md from the event log's chain (filed_at), or <agent id>.md where the line carries no task",
+     "class": "within",
+     "why": "Naming the file FR-006 requires; no case is excused."
+    },
+    {
+     "id": "outside-clone-passes",
+     "summary": "a call outside any clone passes",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "On what the block establishes: D8's test of who is a builder is a stat of the clone's .claude/agents/, and the handoff path is under the clone's git common dir; outside a clone there is neither a who nor an exit to name, so a refusal there could refuse defined review agents and leave a builder no handoff to write. The premise that builders' calls are made inside clones in ordinary work is not measured in the block and no suite case is listed for this path - worth a count, not a block."
+    },
+    {
+     "id": "escape-context-ok",
+     "summary": "CONTEXT_OK=\"<reason>\" in a Bash command, recorded as context-ok; a bare one refused",
+     "class": "within",
+     "why": "FR-012: an escape of a reason of two words or more, recorded."
+    },
+    {
+     "id": "permit-deferred-to-T13",
+     "summary": "D9's make context-ok AID= WHY= per-agent permit not built in T12; filed as T13, to land before T22; CONTEXT_OK in Bash the recorded escape meanwhile",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Judged against FR-012, not D9 (which this task restated): every refusal the cap issues today has a recorded route past it - the refusal's compliant step (the handoff, always let through) and CONTEXT_OK in a Bash call, recorded - so FR-012's escape exists and no builder is trapped. The permit was the session's design for a resumed builder (D10's resume); it is filed and ordered, not dropped. Nothing the GM asked for is left out."
+    },
+    {
+     "id": "lane-order",
+     "summary": "in the performance lane after T15 and T16, before T13",
+     "class": "within",
+     "why": "FR-013 and the GM 2026-11-20 ('let's prioritize those remaining improvement fixes'); T12 is improvement 1."
+    },
+    {
+     "id": "red-first-and-whole-chain",
+     "summary": "red-first unit and suite runs, the check-deleted run red, and the handoff Write's case through the whole guard chain",
+     "class": "within",
+     "why": "FR-012's red-first test and D9's whole-chain case; enforcement of what was asked."
+    },
+    {
+     "id": "docs-and-D9-restated",
+     "summary": "docs/guards.md row and knob-table row, rust/guard/CLAUDE.md mention, D9 restated to what was built, written by the session before the tick",
+     "class": "within",
+     "why": "D14's knob table and keeping the spec true to the built guard; no behavior added or excused."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-20",
+   "blocks": [
+    "## Decisions"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D15-class-fix-trigger",
+     "summary": "An item or fix names a class of defect when it says 'every' or 'all the' before writer, reader, form, file, caller, instance, copy, site or guard, or 'each of the ...'. A bare 'all' is not a trigger. Such an item must carry an 'observed <date>, method: ...' line. This replaces the plan's earlier list, which made any 'all ...' a trigger.",
+     "class": "within",
+     "why": "FR-009's class is defined by its examples: every writer, every form, every file of a kind. The trigger catches all three and adds more nouns. Dropping the plan's own earlier bare 'all ...' narrows nothing in request.md or the spec, which never name 'all'. This is the vocabulary already ruled within as T17-class-vocabulary. The changed sentence only makes D15's text say what T17 built."
+    },
+    {
+     "id": "D15-deferral-form",
+     "summary": "A deferral states why it is not fixed here, 'filed as T<n>' (or 'added to' / 'folded into') and 'lands before T<m>'. The two ids must differ. Both must be filed, which is checked in lint::refusal on decide and plan-delta, and both must be open, which is checked in decide alone. An item passes as none, fixed here or not a defect.",
+     "class": "within",
+     "why": "This is FR-009's why, filed task id and order. Text unchanged since the CLEAR."
+    },
+    {
+     "id": "D15-escape",
+     "summary": "DEFER_FORM_OK on decide and plan-delta, read from the environment and recorded by the tool (the guard log and dev/bypass-log/). plan-delta honors an escape recorded at decide time.",
+     "class": "within",
+     "why": "This is FR-012's recorded escape. Text unchanged since the CLEAR."
+    },
+    {
+     "id": "D9-context-cap",
+     "summary": "context_cap_hooks refuses a builder's call past CONTEXT_CAP_TOKENS, except for writing its own handoff file. The per-agent context-ok permit is built with T13.",
+     "class": "within",
+     "why": "This is FR-006's cap and its handoff exit. Text unchanged since the CLEAR, which ruled it within."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -4329,6 +4826,218 @@
      "summary": "No make target formats one file; filed as T34, landing before T22.",
      "class": "within",
      "why": "A tooling gap rather than a defect; filing it narrows nothing of the request."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T17": {
+   "section_sha256": "6bddf58a05761c00868351d071889eb26c2e86eedc52e2667c4d3f24cf0356a5",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "pass-fixed-in-task",
+     "summary": "A found-and-left item that says it is fixed in the task (fixed here, fixed in this task, before its tick, before T<own> lands) passes without a reason, filed id and order, unless it names an id it is filed as or lands before.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "D15's visible sentence requires every non-none item to carry reason, id and order, so this narrows D15's text. But FR-009 refuses only an item that DEFERS a defect, and an item fixed in the task defers nothing; the GM approved 'briefs that default to fixing in the task', so requiring a filed task id of an item that is fixed would contradict the request. The guard that an item naming a filed/order id is judged as a deferral keeps the pass from being used to hide one."
+    },
+    {
+     "id": "pass-no-defect",
+     "summary": "An item that says it is not a defect (not a defect, no wrong outcome, constitution XIV) passes.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Narrows D15's 'any non-none item' wording, but FR-009's own words reach only an item that 'defers a defect', and constitution XIV (the GM 2026-11-19) holds that a difference with no wrong outcome is not a defect and is not to be fixed. Demanding a filed fix task for a non-defect would apply a standard the GM struck. Same id-naming guard applies."
+    },
+    {
+     "id": "deferral-form",
+     "summary": "A deferral owes 'Not fixed here' plus two words of reason, filed as T<n> (or added to / folded into), lands before T<m> (lists read whole), order id not equal to filed id, each id a box of tasks.md or tasks-done.md; make decide adds that each id is an unticked box now.",
+     "class": "within",
+     "why": "This is FR-009's three parts (why, filed id, order) made checkable; added to / folded into still name a filed task id; the open test at make decide makes the order real enforcement as the GM asked."
+    },
+    {
+     "id": "class-trigger-words",
+     "summary": "A class fix is detected by every/all the before writer, reader, form, file, caller, instance, copy, site or guard, or 'each of the', and then owes an observed/measured line with its method.",
+     "class": "within",
+     "why": "FR-009's named forms (every writer, every form, every file of a kind) are all reached and the list is a superset of them; a mechanical trigger has to be a word test, and nothing FR-009 names falls outside it."
+    },
+    {
+     "id": "class-trigger-location",
+     "summary": "The class test reads the found-and-left items and checklist item 12 (Before any fix).",
+     "class": "within",
+     "why": "FR-009 asks about the section's FIX; in the plan template the fix is declared in item 12 and the found-and-left answer, so reading those is reading the fix."
+    },
+    {
+     "id": "plan-delta-timeless-half",
+     "summary": "make plan-delta runs the timeless half (form and ids filed in tasks.md or tasks-done.md) on a changed block; a section whose deferral's task has since landed is not refused.",
+     "class": "within",
+     "why": "FR-009 names make decide; running the same rule on a later edit only enforces it against a decided section being changed into an unformed one (the GM: 'real enforcement and not just instructions'). Not requiring the ids to be open after landing narrows nothing FR-009 asks, which is a check at decision time."
+    },
+    {
+     "id": "escape-carried-forward",
+     "summary": "A section decided under DEFER_FORM_OK passes make plan-delta after its block changes, the escape found in the guard log; the escape excuses only deferral findings.",
+     "class": "within",
+     "why": "It relaxes only the plan-delta check, which is enforcement beyond FR-009's make decide; at make decide, where FR-009 places the refusal, nothing is relaxed, and the escape was recorded with its reason as FR-012 requires."
+    },
+    {
+     "id": "escape-recording",
+     "summary": "The tool records DEFER_FORM_OK itself (guard log rule defer-form-ok and dev/bypass-log/) instead of D15's $(LOGESCAPE) line, and only on a run that passes (decide once decided, plan-delta only where it excused a finding); a thin reason is refused.",
+     "class": "within",
+     "why": "FR-012 asks for an escape of two words or more that is recorded; it is recorded, once, whenever it is used. A run that is refused or excuses nothing did not use the escape. Mechanism choice; D15's text is restated to match (found-and-left)."
+    },
+    {
+     "id": "plan-delta-log-read",
+     "summary": "make plan-delta reads the guard log only for a changed block with a deferral finding, once a run, parsing only files naming the rule.",
+     "class": "within",
+     "why": "A cost choice that changes no outcome."
+    },
+    {
+     "id": "archived-not-judged",
+     "summary": "plan-done.md is never read by make decide or plan-delta and the tick and landing call neither, so the 28 refused archived sections are not re-judged.",
+     "class": "within",
+     "why": "FR-009 is a refusal at make decide of a section being decided; archived sections were decided and ticked before the rule existed and no make decide runs on them. Nothing FR-009 asks is left out."
+    },
+    {
+     "id": "found-and-left-session-fixes",
+     "summary": "Makefile FREE_TEXT and help lines for DEFER_FORM_OK, D15 restated, docs/guards.md row and rust/gate/CLAUDE.md plan row are fixed by the session before T17 lands, outside the builder's brief.",
+     "class": "within",
+     "why": "Fixed before the task lands, not deferred; matches the GM-approved default of fixing in the task."
+    },
+    {
+     "id": "perf-tag",
+     "summary": "T17 is tagged [perf] under FR-013.",
+     "class": "within",
+     "why": "It is improvement 4 of the six the GM ordered first on 2026-11-20 ('doing those first makes everything after them faster'), and it shortens the builders' loop, which FR-013 names."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T12": {
+   "section_sha256": "3c6fd67f25903d8b43529ea8a6612554dde5e56a0a4b8d6e7792affb2caf49d0",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "guard-shape",
+     "summary": "a new guard context_cap_hooks, PreToolUse *, after event_log_hooks in guards(); its files held by make guard-edit",
+     "class": "within",
+     "why": "FR-006 asks for a guard refusing a builder's tool call past a threshold; this is where and how it is placed. Nothing the request or FR-006 says is narrowed."
+    },
+    {
+     "id": "first-step-capture",
+     "summary": "payloads captured from Claude Code itself (claude -p, a scratch hook) rather than a dump in the clone, pinned as payloads.json",
+     "class": "within",
+     "why": "A method for finding the payload's real keys (agent_id, agent_type, transcript_path), labeled with date and method; it decides nothing about what is refused."
+    },
+    {
+     "id": "D8-who",
+     "summary": "no agent_id passes before any read (main session); an agent_type naming the clone's .claude/agents/<type>.md passes on a stat",
+     "class": "within",
+     "why": "FR-006 defines a builder as an agent with a task's brief, not a defined review agent; the main session is not an agent. Carries D8 as accepted."
+    },
+    {
+     "id": "non-plain-agent-id-passes",
+     "summary": "an agent_id that is not letters, digits, - and _ passes",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Both the cap's measure (the transcript at subagents/agent-<agent_id>.jsonl) and its one exit (the handoff file named by the agent id) are paths built from the id; an id that cannot be joined into a path leaves neither a context to measure nor a handoff to name, so refusing would refuse with no exit. The same capture shows builders' ids are plain names, so ordinary work does not reach this path and FR-006's enforcement is not gutted."
+    },
+    {
+     "id": "context-measure",
+     "summary": "context = input + cache_read + cache_creation tokens of the last assistant row with usage above zero; user rows carrying a child's usage and zero rows skipped",
+     "class": "within",
+     "why": "FR-006 caps the builder's context; this measures the builder's own model call and excludes rows that are not its model calls (measured: user rows hold the child's usage). It makes the cap measure what FR-006 names."
+    },
+    {
+     "id": "nothing-read-passes",
+     "summary": "no transcript file, or no such row in the tail, passes",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Where no context is recorded there is no figure to compare with FR-006's threshold; refusing on no evidence would refuse builders that are under it. The capture (2026-11-20) shows the transcript exists beside transcript_path for a builder, so ordinary work does not reach this path and the request's 'real enforcement' holds."
+    },
+    {
+     "id": "16MiB-read-bound",
+     "summary": "the tail is read backwards in 64 KiB steps to at most 16 MiB (both GUESS; the 16 MiB now labeled with the window's largest builder transcript, 50 MB scanned whole in 0.07 s, measured 2026-11-20, research R2); a builder whose last usage row lies further back passes",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "What lies after the last assistant row is that turn's tool results; 16 MiB of them with no assistant row between is not a shape ordinary work produces, so a builder past the cap is not let through by it in practice. The bound is a labeled GUESS knob, and the figure now beside it (a whole 50 MB transcript scanned in 0.07 s) is labeled with date and method; it speaks to cost, not to how far back a last usage row can sit, so it neither strengthens nor weakens this ruling. Not measured that no real tail exceeds 16 MiB - worth a count from the event log when the knob is retuned, not a block."
+    },
+    {
+     "id": "cap-value",
+     "summary": "CONTEXT_CAP_TOKENS GUESS 300,000; at the cap passes",
+     "class": "within",
+     "why": "FR-006's own knob and value, labeled GUESS."
+    },
+    {
+     "id": "handoff-write",
+     "summary": "past the cap every call is refused but the handoff file's Write, the refusal naming the file and the next step (write what is done and left, stop, reply with the path; the session dispatches a fresh builder)",
+     "class": "within",
+     "why": "FR-006 verbatim ('but for writing its handoff file, naming the file and the next step'), and the approved improvement 1 ('a fresh builder per stage, with a handoff file')."
+    },
+    {
+     "id": "handoff-edit",
+     "summary": "an Edit of the handoff file is let through beside its Write",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Implied by FR-006's own words: the exception is 'writing its handoff file', and an Edit of that file is writing it. Confined to the agent's own handoff, it cannot carry task work, so the cap's purpose (no builder works on past a large context) survives."
+    },
+    {
+     "id": "handoff-read",
+     "summary": "a Read of the handoff file is let through beside its Write",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Ground that holds regardless of the stated tool behavior: a Read confined to the agent's own handoff file yields only what the builder itself wrote there, so it cannot carry task work and does not gut the cap's purpose, while the stated reason (the Write tool will not overwrite an unread file) would otherwise leave a builder with an existing handoff no exit. That premise about the Write tool carries no date and method in the block; it is not what this ruling rests on."
+    },
+    {
+     "id": "handoff-suffix-match",
+     "summary": "any file in <git common dir>/l7r-handoffs/ whose name ends <agent id>.md counts as the agent's handoff",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Applying the literal one-name rule, recomputed at each call from the event log's task, could refuse the very file the refusal named if the chain's task moved between them, leaving the builder no exit - defeating FR-006's handoff. Agent ids are unique, so no builder can write another's handoff (a case the suite refuses), and every such file sits in the handoff directory, where writing cannot carry task work. Ruled as stated, 'any file there' = in that directory. On the earlier aside: the session reports is_handoff compares the canonicalized parent directory with the handoff directory, so a path such as l7r-handoffs/../x-<id>.md resolves outside it and is refused; the carve-out stays confined to that directory."
+    },
+    {
+     "id": "handoff-name-task",
+     "summary": "the handoff is named <task>-<agent id>.md from the event log's chain (filed_at), or <agent id>.md where the line carries no task",
+     "class": "within",
+     "why": "Naming the file FR-006 requires; no case is excused."
+    },
+    {
+     "id": "outside-clone-passes",
+     "summary": "a call outside any clone passes",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "On what the block establishes: D8's test of who is a builder is a stat of the clone's .claude/agents/, and the handoff path is under the clone's git common dir; outside a clone there is neither a who nor an exit to name, so a refusal there could refuse defined review agents and leave a builder no handoff to write. The premise that builders' calls are made inside clones in ordinary work is not measured in the block and no suite case is listed for this path - worth a count, not a block."
+    },
+    {
+     "id": "escape-context-ok",
+     "summary": "CONTEXT_OK=\"<reason>\" in a Bash command, recorded as context-ok; a bare one refused",
+     "class": "within",
+     "why": "FR-012: an escape of a reason of two words or more, recorded."
+    },
+    {
+     "id": "permit-deferred-to-T13",
+     "summary": "D9's make context-ok AID= WHY= per-agent permit not built in T12; filed as T13, to land before T22; CONTEXT_OK in Bash the recorded escape meanwhile",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Judged against FR-012, not D9 (which this task restated): every refusal the cap issues today has a recorded route past it - the refusal's compliant step (the handoff, always let through) and CONTEXT_OK in a Bash call, recorded - so FR-012's escape exists and no builder is trapped. The permit was the session's design for a resumed builder (D10's resume); it is filed and ordered, not dropped. Nothing the GM asked for is left out."
+    },
+    {
+     "id": "lane-order",
+     "summary": "in the performance lane after T15 and T16, before T13",
+     "class": "within",
+     "why": "FR-013 and the GM 2026-11-20 ('let's prioritize those remaining improvement fixes'); T12 is improvement 1."
+    },
+    {
+     "id": "red-first-and-whole-chain",
+     "summary": "red-first unit and suite runs, the check-deleted run red, and the handoff Write's case through the whole guard chain",
+     "class": "within",
+     "why": "FR-012's red-first test and D9's whole-chain case; enforcement of what was asked."
+    },
+    {
+     "id": "docs-and-D9-restated",
+     "summary": "docs/guards.md row and knob-table row, rust/guard/CLAUDE.md mention, D9 restated to what was built, written by the session before the tick",
+     "class": "within",
+     "why": "D14's knob table and keeping the spec true to the built guard; no behavior added or excused."
     }
    ],
    "verdict": "CLEAR"

@@ -130,10 +130,11 @@ builder with an unnamed brief pass). Named for the plan review.
 
 **D9 - The context cap** (FR-006; R2). A new guard, `context_cap_hooks`, PreToolUse `*`. For a builder it reads its transcript's tail
 (`<transcript_path without .jsonl>/subagents/agent-<agent_id>.jsonl`, backwards to the last `usage`) and, past `CONTEXT_CAP_TOKENS`
-(GUESS, 300,000 tokens, the spec's knob), refuses every tool call but a Write of `<git common dir>/l7r-handoffs/<task or agent id>.md`,
+(GUESS, 300,000 tokens, the spec's knob), refuses every tool call but a Write, Edit or Read of `<git common dir>/l7r-handoffs/<task>-<agent id>.md` (the Write tool reads a file
+before it overwrites one; any file there ending `<agent id>.md` counts, so a task changed between refusal and Write still agrees; T12),
 naming that path and the next step: write what is done and what is left, then stop; the session dispatches a fresh builder with it.
 The main session and a defined agent are never read. The escape (FR-012): `CONTEXT_OK="<reason>"` in a Bash command, or, for any
-tool, a permit the session grants for that agent, `make context-ok AID=<agent id> WHY="<reason>"` (the guard-edit permit's mechanism,
+tool, a permit the session grants for that agent (built with T13, the resume it serves), `make context-ok AID=<agent id> WHY="<reason>"` (the guard-edit permit's mechanism,
 `l7r-guard.sh permit grant context-cap:<agent id> "<reason>"`, recorded in the guard log; a new Makefile target, so held). The handoff
 Write is the cap's one exit, so its case runs through the whole guard chain (no `--only`), proving no other guard refuses a write under
 the git dir.
@@ -217,12 +218,14 @@ must carry why it is not fixed in this task, a task id `T<n>` and an order "land
   finds both ids still filed.
 
 An item or fix naming a class of defect
-("every writer", "every form", "every file of a kind", "each of the ...", "all ...") must carry a line `observed <date>, method: ...`
-saying how every instance was found. The template's `**Found and left?**` placeholder states the form. `DEFER_FORM_OK` on `make
-decide` escapes, through `$(LOGESCAPE)`. It holds on the `plan-delta` path too, since `lint::refusal` runs there: `make decide` under
+("every" or "all the" before writer, reader, form, file, caller, instance, copy, site or guard, or "each of the ..."; a bare "all" is
+not one - "all tests pass" is correct text; T17) must carry a line `observed <date>, method: ...`
+saying how every instance was found. The template's `**Found and left?**` placeholder states the form. The built form (T17): an item passes as `none`, `fixed here` (or fixed before the task's tick) or `not a defect`; a deferral states
+`Not fixed here: <why>`, `filed as T<n>` (or `added to` / `folded into`) and `lands before T<m>`. `DEFER_FORM_OK` on `make
+decide` escapes, read from the environment and recorded by the tool itself (the guard log and `dev/bypass-log/`), as T28's escape is. It holds on the `plan-delta` path too, since `lint::refusal` runs there: `make decide` under
 the escape records it in the guard log naming the feature and the task, and `make plan-delta` reads those records and does not run
 `deferral_unformed` on that task's section, so a section decided under the escape is not refused when its block later changes;
-`make plan-delta` also takes `DEFER_FORM_OK` itself, through `$(LOGESCAPE)` (a held Makefile line), for a section never decided. No
+`make plan-delta` also takes `DEFER_FORM_OK` itself, the same way, for a section never decided. No
 open section of any plan is refused by it today (R9).
 
 **D16 - The landing's commas and task-add's quick check** (FR-011; R7, R8). `land.rs::main` splits `T=` on commas and whitespace.
@@ -406,15 +409,41 @@ other two by their case groups, until each shard's kept seconds is about 20 or l
 
 ### T12 (FR-006: builders past a large context slowed the window's critical path - the spec's User Story 2, research R3)
 
-- **Approach**: D8 and D9, a new guard `context_cap_hooks`. Held: `rust/guard/src/guards/context_cap_hooks.rs` (new),
-  `rust/guard/src/guards.rs`, `rust/guard/src/lib.rs` (its place in `guards()`, after `event_log_hooks`) (`make guard-edit` on each
-  first); with its link `tests/hooks/context-cap-hooks.sh` -> `guard-shim.sh`, its suite `tests/hooks/test-context-cap-hooks.sh`, its
-  `docs/guards.md` row and knob, its `rust/guard/CLAUDE.md` mention. FIRST STEP: capture one real subagent PreToolUse payload (a
-  one-shot dump from the guard under `L7R_GUARD_DUMP`, removed before the landing) and pin it as the fixture, confirming `agent_type`
-  and the derived transcript path (R2's "schema, not yet observed"). Red first: a builder fixture past the cap refused naming the
-  handoff path; under it passes; its Write of the handoff passes, alone and through the whole guard chain; a defined agent past it
-  passes; the main session passes; `CONTEXT_OK` in a Bash call and a `make context-ok` permit each pass and are recorded. Held too: the
-  root `Makefile` (`make context-ok`).
+- **Approach**: D8 and D9, a new guard `context_cap_hooks`, PreToolUse `*`, in `guards()` after `event_log_hooks` (`protocol::run`
+  calls every guard whatever another answers, so a refused call's line is written either way). Held: `rust/guard/src/guards/context_cap_hooks.rs` (new), `rust/guard/src/guards.rs`, `rust/guard/src/lib.rs`
+  (`make guard-edit` on each first); its unit tests `context_cap_hooks/tests.rs`, its fixture `context_cap_hooks/payloads.json`, its
+  link `tests/hooks/context-cap-hooks.sh` -> `guard-shim.sh` and its suite `tests/hooks/test-context-cap-hooks.sh`.
+  - THE FIRST STEP, done another way: settings run the mirror's `/diagram/scripts/hooks/l7r-guard.sh`, so a dump in the clone sees no
+    live call. The capture is from Claude Code itself: measured 2026-11-20 (Claude Code 2.1.325, `claude -p` from a scratch directory, a PreToolUse hook writing its stdin to a file; the main session dispatching a general-purpose builder, then a defined agent of the scratch directory's `.claude/agents/`, each one Bash call).
+    Pinned as `payloads.json`. A builder's call carries `agent_id` and `agent_type` `general-purpose`, and a defined agent's its
+    own name (`probe-check`). The main session's carries neither key. `transcript_path` is the session's, and
+    `<it without .jsonl>/subagents/agent-<agent_id>.jsonl` exists beside it (same capture).
+  - WHO (D8): no `agent_id` passes, before any read. An `agent_type` naming the clone's `.claude/agents/<type>.md` passes on a stat.
+    So does an `agent_id` that is not a plain name (letters, digits, `-`, `_`), since it cannot be joined into a path.
+  - THE CONTEXT (D9): the own transcript read backwards in 64 KiB steps (GUESS), at most 16 MiB (GUESS: the window's largest builder
+    transcript, 50 MB, scanned whole in 0.07 s, measured 2026-11-20 (`time` on a Python line scan of it, research R2)), to the last `type: assistant` row whose
+    `message.usage` sums above zero (`input_tokens + cache_read_input_tokens + cache_creation_input_tokens`).
+    - Only an `assistant` row counts: in the same capture, 2 `user` rows holding Agent results carried the child's `usage`, measured 2026-11-20 (`jq` over the probe's two transcripts, rows not `assistant` holding `usage`).
+    - A row of zero is a synthetic message, not a model call.
+    - Nothing read (no file, no such row in the tail) passes.
+  - Past `CONTEXT_CAP_TOKENS` (GUESS, 300,000; at the cap passes), every tool call is refused but a Write, Edit or Read of
+    `<git common dir>/l7r-handoffs/<task>-<agent id>.md`, or `<agent id>.md` where the call's line carries no task. The task is
+    the event log's own chain (`filed_at`). Any file there whose name ends `<agent id>.md` is the agent's, so the named file and the
+    Write agree even if the chain's task moves between them, and no two builders share one. The Read lets a written handoff be
+    overwritten (the Write tool refuses a file it has not read). The refusal names the file and the next step: write what is done
+    and left, stop, reply with the path, and the main session dispatches a fresh builder with it.
+  - A call outside any clone passes.
+  - A Write there from a background builder passed the live chain, observed 2026-11-20, method: this task's builder writing `.git/l7r-handoffs/probe-<its id>.md` in its clone, then removing it.
+  - THE ESCAPE: `CONTEXT_OK="<reason>"` in a Bash command, recorded (`context-ok`); a bare one refused. D9's `make context-ok`
+    permit is NOT built (see Found and left).
+  - Red first, measured 2026-11-20 (`make rust-test CRATE=rust/guard` and the suite against a stub `judge` returning None): 4 of the guard's 7 unit tests failed, and 8 of the suite's 14 cases.
+    Green: 666 of 666 and 16 of 16, measured 2026-11-20 (the same two runs with the real `judge`, after the coverage cases and the
+    task-named handoff's whole-chain case).
+    With the check deleted, 9 of 15 suite cases were red, measured 2026-11-20 (the suite with `tokens <= cap || true`).
+  - The cases: a builder past the cap refused (Bash, Edit, Grep) naming its handoff; its handoff's Write, Edit and Read passing;
+    another agent's handoff refused; a builder under or at the cap passing; the main session passing; a defined agent past it passing;
+    `CONTEXT_OK` passing and recorded, and a bare one refused. The handoff's Write runs through the WHOLE chain and passes, while the
+    chain refuses any other Write past the cap.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
@@ -430,12 +459,19 @@ other two by their case groups, until each shard's kept seconds is about 20 or l
 6. **The exits.** Green: the five cases. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
 7. **The search smell.** None.
 8. **The budget.** One landing.
-9. **Done, measured.** The suite's five cases; the check deleted, the firing case red.
+9. **Done, measured.** The suite's cases, 16 of 16, and the unit tests; the check deleted, the 9 firing cases red (the Approach's figures).
 10. **Before moving a constant.** n/a - a new knob, labeled GUESS.
 11. **Before fitting things into room.** n/a.
 12. **Before any fix.** n/a - a new refusal.
 
-**Found and left?** none
+**Found and left?**
+- T12's own, written before its tick by the session (T14's precedent): the `docs/guards.md` row and the `CONTEXT_CAP_TOKENS` row of its
+  knob table (D14), the `rust/guard/CLAUDE.md` mention, and D9 restated to what is built. That means the handoff's name
+  `<task>-<agent id>.md`, its Edit and Read let through, and no permit. The builder's brief held it to the guard's files and this section.
+- D9's second escape, the `make context-ok AID= WHY=` per-agent permit, is not built: a builder resumed past the cap under D10's
+  escape meets this cap on its next call. Not fixed here: it needs a root `Makefile` target and `guard_file_hooks::cli`'s `grantable`
+  widened, outside this task's files, and it serves D10's resume (the session's ruling, 2026-11-20). Filed as T13; lands before T22.
+  Until then `CONTEXT_OK` in a Bash call is the recorded escape (FR-012).
 
 **Performance work?** yes - a `[perf]` task (FR-013): it makes the work after it faster; no engine timing, so no checklist
 
@@ -526,16 +562,54 @@ other two by their case groups, until each shard's kept seconds is about 20 or l
 <!-- plan-archive: T16 to T16 moved to plan-done.md, 2026-11-20 (feature 375 FR-044) -->
 ### T17 (FR-009: two of the window's first-round plan-review blocks were deferrals with no order - the spec's User Story 5)
 
-- **Approach**: D15 in `rust/gate/crates/plan` (`lint.rs`, `plan.rs::decide` for the open test, `template.rs`; not held) and `make decide`'s `DEFER_FORM_OK`. Held: the root
-  `Makefile` (`make guard-edit FILE=Makefile` first). Red first: User Story 5's five cases and seven more - a deferral with no task id
-  refused; task and order but no reason refused; a reason, `T123` and "lands before T124" passes, both unticked boxes of the fixture
-  feature's `tasks.md`; `none` passes; a class fix with no labeled line refused and with one passes; a deferral whose task id `T999` is
-  filed nowhere refused; one whose "lands before" id is filed nowhere refused; one whose own id is a ticked box (or in
-  `tasks-done.md`) refused; one whose "lands before" id is ticked (or in `tasks-done.md`) refused; "T123 lands before T123" refused; a
-  reason and a filed open task id with no "lands before" refused; and the passing section, decided, then T124 ticked: `make
-  plan-delta` over its block does not refuse it; a deferral with no order decided under `DEFER_FORM_OK`, then its block changed:
-  `make plan-delta` does not refuse it (the guard log's escape record read); `DEFER_FORM_OK` on `make plan-delta` passes and is
-  recorded.
+- **Approach**: D15 in `rust/gate/crates/plan`, not held: the rule in `plan/lint/deferral.rs` (its kinds and words in `lint.rs`), the
+  escape in `plan/defer.rs`, threaded through `plan.rs`'s `decide` and `plan_delta`; the template's placeholder states the form
+  (`plan/template.rs`). The Makefile is not touched: `DEFER_FORM_OK` set on `make decide` or `make plan-delta` reaches the binary's
+  environment (make exports a command-line variable to its recipes), and the tool reads it and records it itself, in the guard log
+  (rule `defer-form-ok`, detail `<feature> <task>: <reason>`) and `dev/bypass-log/` - T28's form for `PERF_LATER_OK`, a departure
+  from D15's `$(LOGESCAPE)` line, which would record it twice. It is recorded only on a run that passes: `make decide` once the section
+  is decided (a refused run is not "decided under the escape"), `make plan-delta` only where it excused a finding. `make decide F=451
+  T=T17 DEFER_FORM_OK=x` through make refused for its thin reason, observed 2026-11-20, method: the logged run, `/tmp/t17/decide-thin.log`.
+- **The rule.** The answer is read from `**Found and left?**` to the next bold line, heading, comment or rule; each `- ` item is one
+  item, and an answer with no list is one item. An answer opening with `none` (the template's `<none - ...>` among them) passes. An item
+  passes when it says it is fixed in the task (`fixed here`, `fixed in this task`, `before its tick`, `before T<own> lands`; never `not
+  fixed here`) or no defect (`not a defect`, `no wrong outcome`, constitution XIV) - unless it names an id it is filed as or lands
+  before, when it is judged as the deferral it holds. A deferral owes `Not fixed here` with a colon, dash, parenthesis or "because" and
+  two words of reason; `filed as T<n>` (or `added to`, `folded into`); `lands before T<m>` (a list `T07, T08 and T14` read whole);
+  no order id equal to a filed id; and each id a box of `tasks.md` or `tasks-done.md` - the timeless half, which `make plan-delta` runs
+  on a changed block. `make decide` alone adds the OPEN test: each id an unticked box of `tasks.md` now. A found-and-left item or an
+  item 12 naming a class (`every` or `all the` before writer, reader, form, file, caller, instance, copy, site or guard; `each of the`)
+  owes `observed <date>, method: ...` or a `measured <date> (<method>)` label. Every finding joins T25's one report, placed by its
+  plan.md line, with the form to write in its rule's words.
+- **The escape on the plan-delta path.** `make plan-delta` reads the guard log only for a changed block with a deferral finding, and
+  then once a run: the live log held 90,507 files, read in 0.31 s warm and about 11 s cold, measured 2026-11-20 (`find | xargs grep -l`
+  over `~/.claude/guard-log`, and a cold `xargs cat`), so a run whose blocks are formed never reads it. A file is parsed only when its
+  text holds the rule's name.
+- **Red first**: 10 of 148 tests red before the rule was written, its functions returning nothing, measured 2026-11-20 (`make
+  rust-test CRATE=rust/gate/crates/plan`, `/tmp/t17/red-first.log`); each refused form and each passing form is a case - no task id, no
+  reason, no order, all three missing, T16's real answer, a task id filed nowhere (`T999`), an order id filed nowhere (`T998`), "T123
+  lands before T123", a filed id or an order id ticked or in `tasks-done.md` (refused at `make decide`, passed by the timeless half), a
+  bare `Not fixed here.`, one bad item among good ones placed by its own span; passing: `none`, the old and new placeholders, the whole
+  template, a formed deferral (a reason, `T123`, "lands before T124" and a list), `fixed here`, `before its tick`, `before T17 lands`,
+  `not a defect`, `no wrong outcome`, T14's real answer; the class fix with and without its line, in an item and in item 12; through
+  the command line, `make decide` passing the formed section and refusing five unformed ones with their plan.md line, the decided
+  section passing `make plan-delta` once T124 is ticked, an id filed nowhere refused by `make plan-delta`, a section decided under
+  `DEFER_FORM_OK` passing `make plan-delta` after its block changed while the same block undecided is refused, `DEFER_FORM_OK` on `make
+  plan-delta` passing and recorded, a thin reason refused on both verbs, the escape leaving the section's other findings, and an
+  archived section never judged.
+- **Green, and the check deleted**: 151 of 151, measured 2026-11-20 (`make rust-test CRATE=rust/gate/crates/plan`,
+  `/tmp/t17/green4.log`), the crate's line coverage, dead code and format clean, measured 2026-11-20 (`l7r-gate.sh rust cover|dead
+  --crate rust/gate/crates/plan`, rustfmt's check). The rule's three functions returning nothing again: 10 tests red, measured
+  2026-11-20 (the same, `/tmp/t17/deleted.log`). The escape's two effects removed: 2 tests red, measured 2026-11-20 (the same,
+  `/tmp/t17/escape-deleted.log`). The escape recorded before the refusal: 1 test red, measured 2026-11-20 (the same, `/tmp/t17/record-early.log`).
+- **The replay** over every task section of every `specs/*/plan.md` and `plan-done.md` (T25's method, a throwaway test calling the
+  rule's three functions on each section with its feature's boxes, then deleted): 959 sections, 28 refused with 50 findings, every one
+  a ticked section of a `plan-done.md` (24 of 449, 4 of 451) and none of any `plan.md`, measured 2026-11-20 (`/tmp/t17/replay.tsv`). The
+  timeless half alone refuses the same 28, measured 2026-11-20 (the same dump: the open test's findings fall only in sections already refused).
+- **History.** `make decide` reads the task's section of `plan.md` and `make plan-delta` only the changed blocks of `plan.md`; neither
+  reads `plan-done.md`, and the tick and the landing call neither (D15), so an archived section's old form never holds a landing - pinned
+  by `an_archived_section_is_never_judged`. A section still in `plan.md` whose deferral's task has since landed is not refused when its
+  block changes, since `make plan-delta` asks only that its ids are filed.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
@@ -546,17 +620,24 @@ other two by their case groups, until each shard's kept seconds is about 20 or l
 1. **The goal, in the world.** No map changes; a deferral is fixed in the task by default, and a class fix is complete up front.
 2. **The constraints.** FR-009, FR-012; D15; constitution XIV.
 3. **Where each comes from.** G: the approved "briefs that default to fixing in the task, and that ask for full coverage up front"; O: research R9.
-4. **Do they describe the world here?** R9 found no open section the rule would refuse.
+4. **Do they describe the world here?** Yes: no section of any `plan.md` is refused by the rule, and the refused sections are archived ones, measured 2026-11-20 (the throwaway replay, `/tmp/t17/replay.tsv`).
 5. **The order.** After T16.
-6. **The exits.** Green: the fourteen cases. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+6. **The exits.** Green: the plan crate's cases and the replay. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
 7. **The search smell.** None.
 8. **The budget.** One landing.
-9. **Done, measured.** The plan crate's cases; the check deleted, the firing cases red.
+9. **Done, measured.** The plan crate green, the check deleted, the escape removed and the early record each red, measured 2026-11-20 (`make rust-test CRATE=rust/gate/crates/plan`, four logged runs).
 10. **Before moving a constant.** n/a.
 11. **Before fitting things into room.** n/a.
-12. **Before any fix.** n/a.
+12. **Before any fix.** n/a - a new refusal; no section of a live plan is refused by it.
 
-**Found and left?** none
+**Found and left?**
+- The root Makefile (held) names `DEFER_FORM_OK` nowhere: it is not in `FREE_TEXT`, so a `$` in its reason is expanded by make, and
+  neither `decide`'s nor `plan-delta`'s help line names the escape. Fixed by the session before T17 lands (outside this builder's
+  brief), as T28's `PERF_LATER_OK` was: the word added to `FREE_TEXT` and the escape named in both help lines.
+- D15's text, `docs/guards.md` and `rust/gate/CLAUDE.md` do not say what is built: D15 names a `$(LOGESCAPE)` line and neither the pass
+  forms (`fixed here`, `not a defect`) nor `added to` and `folded into`; `docs/guards.md` has a row for `PLAN_REVIEW_OK` and none for
+  this refusal or `DEFER_FORM_OK`; the `plan` row of `rust/gate/CLAUDE.md` names neither `plan/defer.rs` nor `plan/lint/deferral.rs`.
+  Fixed by the session before T17 lands (outside this builder's brief): D15 restated to this section, the guards row, and the index.
 
 **Performance work?** yes - a `[perf]` task (FR-013): it makes the work after it faster; no engine timing, so no checklist
 
@@ -956,6 +1037,60 @@ reverted. Not filed with `PERF=1`: no engine stage's counted operations or time.
 12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
 
 **Found and left?** <none - or each item with its visible effect or the research finding it breaks; an item with neither is not a defect and is not filed>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+
+### T35 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T35 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+
+### T36 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T36 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
 
 **Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
 

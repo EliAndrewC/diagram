@@ -17,6 +17,11 @@ fn first(found: Vec<((usize, usize), String)>) -> String {
         .map_or_else(String::new, |(_, t)| t)
 }
 
+/// No block's deferral finding excused (`make plan-delta` with no escape and none recorded).
+fn never(_: &str) -> bool {
+    false
+}
+
 /// Each of `words` is in `told`, each miss naming itself and the whole report.
 fn holds(told: &str, words: &[&str]) {
     for w in words {
@@ -176,14 +181,14 @@ fn each_refusal_is_named_in_its_own_words() {
     assert_eq!(refusal(&dir, "plain\n"), "");
     std::fs::write(dir.join("tasks.md"), "- [ ] T02 b\n").unwrap();
     let text = format!("# p\n\n{}", approach("T01", RED));
-    let told = plan_refusal(&dir, &text, &[]);
+    let told = plan_refusal(&dir, &text, &[], &never);
     assert!(told.contains("open tasks with no") && told.contains("T02"));
     assert_eq!(
-        plan_refusal(&dir, "# p\n", &[("plain\n".to_owned(), 4)]),
+        plan_refusal(&dir, "# p\n", &[("plain\n".to_owned(), 4)], &never),
         ""
     );
     assert!(
-        plan_refusal(&dir, "# p\n", &[("It takes 48 s.\n".to_owned(), 4)])
+        plan_refusal(&dir, "# p\n", &[("It takes 48 s.\n".to_owned(), 4)], &never)
             .contains("a figure with a unit")
     );
 }
@@ -445,9 +450,9 @@ fn a_finding_is_placed_by_its_plan_line() {
     let joined = &sections["T01"];
     assert!(!plan.contains(joined.as_str()));
     let told = super::decide_refusal(
-        &dir,
         plan,
         joined,
+        &super::decide_findings(&dir, joined),
         Some("the approach gate's words".to_owned()),
     );
     assert!(told.starts_with("3 findings"), "{told}");
@@ -457,7 +462,12 @@ fn a_finding_is_placed_by_its_plan_line() {
     );
     holds(&told, &["(2) the approach gate's words"]);
     assert!(!told.contains("9 s"));
-    let told = super::decide_refusal(&dir, plan, &sections["T02"], None);
+    let told = super::decide_refusal(
+        plan,
+        &sections["T02"],
+        &super::decide_findings(&dir, &sections["T02"]),
+        None,
+    );
     assert!(told.contains("plan.md:9: It takes 9 s."), "{told}");
     // a line not in the plan keeps the place of the line before it (the first line, line 1); the blank line after is line 2
     assert_eq!(super::plan_lines(plan, "## T03 not here\n"), [1, 2]);
@@ -468,6 +478,7 @@ fn a_finding_is_placed_by_its_plan_line() {
             "It takes 9 s.\n".to_owned(),
             plan.find("It takes 9").unwrap(),
         )],
+        &never,
     );
     assert!(delta.contains("plan.md:9: It takes 9 s."), "{delta}");
 }
@@ -493,4 +504,35 @@ fn a_second_approach_blocks_item_4_is_read_too() {
     assert_eq!(unlabeled_figure(part_b).len(), 1);
     let perf = "### T05 Performance checklist (prompts, never a gate)\n\n4. **Growth.** An exponent of 1.2.\n";
     assert_eq!(unlabeled_figure(perf), []);
+}
+
+/// A block's deferral findings are dropped where its task is excused, and only there (feature 451 T17, D15); the rule's words and the
+/// class fix's are in the report.
+#[test]
+fn a_blocks_deferral_is_excused_by_its_task() {
+    let dir = scratch("t17-excused");
+    std::fs::write(dir.join("tasks.md"), "- [ ] T05 a\n").unwrap();
+    let block = "## T05 x\n\n**Found and left?**\n- The wells break.\n- Every writer drops a line; fixed here.\n".to_owned();
+    let told = plan_refusal(&dir, &block, &[(block.clone(), 0)], &never);
+    holds(
+        &told,
+        &[
+            "2 findings",
+            "defers a defect without its form",
+            "a fix of a class of defect",
+            "plan.md:4: [no reason, no task id, no order] - The wells break.",
+        ],
+    );
+    assert_eq!(
+        plan_refusal(&dir, &block, &[(block.clone(), 0)], &|t| t == "T05"),
+        ""
+    );
+    let other = block.replace("T05", "T06");
+    assert!(!plan_refusal(&dir, &other, &[(other.clone(), 0)], &|t| t == "T05").is_empty());
+    let untitled = "plain\n\n**Found and left?** The wells break.\n".to_owned();
+    assert!(
+        !plan_refusal(&dir, &untitled, &[(untitled.clone(), 0)], &|t| !t
+            .is_empty())
+        .is_empty()
+    );
 }

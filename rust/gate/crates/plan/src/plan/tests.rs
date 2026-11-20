@@ -105,6 +105,22 @@ pub(super) fn run(root: &Path, words: &[&str]) -> crate::Reply {
     run_with(root, words, "")
 }
 
+/// `run` with `DEFER_FORM_OK` set to `why` in the environment the command reads (no process variable is set: feature 451 T32).
+pub(super) fn run_deferred(root: &Path, words: &[&str], why: &str) -> crate::Reply {
+    quiet_census();
+    let owned: Vec<String> = words.iter().map(|s| (*s).to_owned()).collect();
+    let why = why.to_owned();
+    answer(
+        &owned,
+        root,
+        &root.join("bundles"),
+        "bash",
+        &mut "".as_bytes(),
+        &no_claims,
+        &move |k| (k == "DEFER_FORM_OK").then(|| why.clone()),
+    )
+}
+
 /// The claims tools, as a plan test sees them: nothing owed a triage.
 fn no_claims(_: &[String]) -> crate::Reply {
     crate::Reply {
@@ -124,10 +140,11 @@ fn run_with(root: &Path, words: &[&str], stdin: &str) -> crate::Reply {
         "bash",
         &mut stdin.as_bytes(),
         &no_claims,
+        &|_| None,
     )
 }
 
-fn write_json(dir: &Path, name: &str, value: &Value) -> String {
+pub(super) fn write_json(dir: &Path, name: &str, value: &Value) -> String {
     let path = dir.join(name);
     std::fs::write(&path, value.to_string()).unwrap();
     path.display().to_string()

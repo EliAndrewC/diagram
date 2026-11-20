@@ -1,0 +1,61 @@
+{
+  "_captured": "measured 2026-11-20 (Claude Code 2.1.325, claude -p from a scratch directory, a PreToolUse hook writing its stdin to a file: the main session dispatching a general-purpose builder, then a defined agent of the scratch directory .claude/agents/probe-check.md; each one Bash call)",
+  "builder": {
+    "session_id": "9dc7a22a-f5b1-4da4-a5dd-a0d377bb604a",
+    "transcript_path": "/home/agent/.claude/projects/-tmp-t12-probe-oaROUJ/9dc7a22a-f5b1-4da4-a5dd-a0d377bb604a.jsonl",
+    "cwd": "/tmp/t12-probe.oaROUJ",
+    "prompt_id": "e7a63a61-c86a-4db0-9552-35199ec4fb93",
+    "permission_mode": "bypassPermissions",
+    "agent_id": "af3dc58915037d8d6",
+    "agent_type": "general-purpose",
+    "effort": {
+      "level": "medium"
+    },
+    "hook_event_name": "PreToolUse",
+    "tool_name": "Bash",
+    "tool_input": {
+      "command": "echo builder-probe",
+      "description": "Print builder-probe string"
+    },
+    "tool_use_id": "toolu_01822B4CSYEr9CJkudmBKD1K"
+  },
+  "defined": {
+    "session_id": "9dc7a22a-f5b1-4da4-a5dd-a0d377bb604a",
+    "transcript_path": "/home/agent/.claude/projects/-tmp-t12-probe-oaROUJ/9dc7a22a-f5b1-4da4-a5dd-a0d377bb604a.jsonl",
+    "cwd": "/tmp/t12-probe.oaROUJ",
+    "prompt_id": "e7a63a61-c86a-4db0-9552-35199ec4fb93",
+    "permission_mode": "bypassPermissions",
+    "agent_id": "afeedffa6f5959727",
+    "agent_type": "probe-check",
+    "effort": {
+      "level": "medium"
+    },
+    "hook_event_name": "PreToolUse",
+    "tool_name": "Bash",
+    "tool_input": {
+      "command": "echo defined-probe",
+      "description": "Echo probe string"
+    },
+    "tool_use_id": "toolu_01GxgZGk7yapmtEfek7G79dH"
+  },
+  "main": {
+    "session_id": "9dc7a22a-f5b1-4da4-a5dd-a0d377bb604a",
+    "transcript_path": "/home/agent/.claude/projects/-tmp-t12-probe-oaROUJ/9dc7a22a-f5b1-4da4-a5dd-a0d377bb604a.jsonl",
+    "cwd": "/tmp/t12-probe.oaROUJ",
+    "prompt_id": "e7a63a61-c86a-4db0-9552-35199ec4fb93",
+    "permission_mode": "bypassPermissions",
+    "effort": {
+      "level": "medium"
+    },
+    "hook_event_name": "PreToolUse",
+    "tool_name": "Agent",
+    "tool_input": {
+      "description": "Run echo probe command",
+      "prompt": "Run the Bash command `echo builder-probe` and reply with its output only.",
+      "subagent_type": "general-purpose",
+      "model": "haiku",
+      "run_in_background": false
+    },
+    "tool_use_id": "toolu_01N6RLscZhKZmNbH1uNBQf6j"
+  }
+}

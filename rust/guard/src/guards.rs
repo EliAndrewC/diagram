@@ -34,6 +34,7 @@ mod case_tables;
 pub mod claims_file_hooks;
 pub mod clone_sync_hooks;
 pub mod conflict_marker_hooks;
+pub mod context_cap_hooks;
 pub mod discard_hooks;
 pub mod download_copy_hooks;
 pub mod engine_freeze_hooks;

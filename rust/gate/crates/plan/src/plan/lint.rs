@@ -8,6 +8,8 @@ use std::sync::LazyLock;
 use fancy_regex::{Captures, Regex};
 
 use super::sections::re;
+
+mod deferral;
 use crate::checks::{figure_pattern, one_shot_pattern};
 
 // The red exit the hint quotes: the template's own (feature 449 T135, one text where this held a copy).
@@ -150,6 +152,22 @@ enum Kind {
     Differential,
     Count,
     RedExit,
+    /// A found-and-left deferral without its form (feature 451 T17, D15).
+    Deferral,
+    /// A deferral to a task not open when `make decide` judges it (D15: the decision's half alone).
+    DeferralClosed,
+    /// A fix of a class of defect with no labeled line on how every instance was found (D15).
+    ClassFix,
+}
+
+impl Finding {
+    /// Whether `DEFER_FORM_OK` reaches this finding: the deferral's form and the class fix's line (D15).
+    pub(super) fn deferral(&self) -> bool {
+        matches!(
+            self.kind,
+            Kind::Deferral | Kind::DeferralClosed | Kind::ClassFix
+        )
+    }
 }
 
 /// One sentence's words as a finding shows them: its whitespace collapsed, at most 160 characters.
@@ -452,6 +470,18 @@ pub(super) fn findings(spec_dir: &Path, section: &str) -> Vec<Finding> {
             }
         }
     }
+    let boxes = deferral::boxes(spec_dir);
+    for (kind, found) in [
+        (Kind::Deferral, deferral::unformed(section, &boxes)),
+        (Kind::ClassFix, deferral::class_unlabeled(section)),
+    ] {
+        out.extend(found.into_iter().map(|((start, end), text)| Finding {
+            kind,
+            start,
+            end,
+            text,
+        }));
+    }
     out.extend(
         missing_red_exits(section)
             .into_iter()
@@ -475,6 +505,9 @@ fn told(kind: Kind) -> String {
         Kind::Differential => "a differential's case count that cites no verify report - run `make diff-run CASES=<cases file> VERIFY=1` (every case's new side rerun against the kept old sides) and cite the report it writes, `<cases>.diff-run/reports/diff-run-verify-<UTC>.json`, in the sentence beside its label, as in \"16 cases, 0 differing (measured 2026-11-16 (`make diff-run ... VERIFY=1`, `t161/cases.diff-run/reports/diff-run-verify-20261116T120000Z.json`))\"; a hand-written loop's or an incremental run's count does not stand (feature 449 T161). The unit: the sentence, cut after a `.` and whitespace (a space or a line break) outside a code span, at a blank line, and where a bullet, a numbered item, a heading or a table row starts".to_owned(),
         Kind::Count => "a count whose sentence carries no label - `observed <YYYY-MM-DD>, method: ...`, `measured <YYYY-MM-DD> (<method>)` or `m:<key>`; re-read it from the run's own record after the last edit (T145's forwarders were 198 and 66 lines, reported 183 and 57) and label it where it stands (feature 449 T159). The unit: the sentence, cut after a `.` and whitespace (a space or a line break) outside a code span, at a blank line, and where a bullet, a numbered item, a heading or a table row starts - not at `;`, so one label anywhere in the sentence covers it".to_owned(),
         Kind::RedExit => format!("an approach block's item 6 routes no red result through `make arbiter-ask` - give it D35's red exit, as `make task-add`'s template words it (feature 430 D5): \"{RED_EXIT_HINT}\" The unit: item 6 of each `### Txx Approach` block, to the next numbered item or heading; the task of each block"),
+        Kind::Deferral => "a found-and-left item defers a defect without its form - fix it in this task by default; an item fixed here says `fixed here`, one that is not a defect says `not a defect` (constitution XIV); a deferral states `Not fixed here: <why>`, `filed as T<n>` (a box of tasks.md, `make task-add`) and `lands before T<m>` (another open task), as \"Not fixed here: it is in the wells stage, outside this task's files. Filed as T32; lands before T22.\" (feature 451 T17, D15). The unit: each `- ` item of the `**Found and left?**` answer, to the next item or bold line; an answer with no list is one item. Taken for a reason: `make decide ... DEFER_FORM_OK=\"<reason>\"`, recorded".to_owned(),
+        Kind::DeferralClosed => "a found-and-left deferral names a task that is not open - a ticked box or an entry of tasks-done.md defers to nothing: file it as an open task (`make task-add`) and order it before an open one (feature 451 T17, D15). Judged once, at `make decide`; `make plan-delta` asks only that the ids are filed. Taken for a reason: `make decide ... DEFER_FORM_OK=\"<reason>\"`, recorded".to_owned(),
+        Kind::ClassFix => "a fix of a class of defect (every writer, every form, every file of a kind, each of the ..., all the ...) with no line on how every instance was found - add `observed <YYYY-MM-DD>, method: <how every instance was found>` (or `measured <YYYY-MM-DD> (<method>)`) to it (feature 451 T17, D15). The unit: each `**Found and left?**` item, and item 12 (`Before any fix`) of each Approach block. Taken for a reason: `make decide ... DEFER_FORM_OK=\"<reason>\"`, recorded".to_owned(),
     }
 }
 
@@ -501,6 +534,9 @@ pub(super) fn render(
         Kind::Differential,
         Kind::Count,
         Kind::RedExit,
+        Kind::Deferral,
+        Kind::DeferralClosed,
+        Kind::ClassFix,
     ] {
         let mut of: Vec<&Finding> = found.iter().filter(|f| f.kind == kind).collect();
         if of.is_empty() {
@@ -518,6 +554,19 @@ pub(super) fn render(
         let _ = write!(text, "\n({n}) {why}");
     }
     text
+}
+
+/// The task id a block's heading opens with, or "".
+fn block_task(body: &str) -> String {
+    let title = body
+        .lines()
+        .next()
+        .unwrap_or("")
+        .trim_start_matches('#')
+        .trim();
+    l7r_guard::shared::plan_text::leading_task(title)
+        .unwrap_or("")
+        .to_owned()
 }
 
 /// The 1-based line of offset `at` in `text`.
@@ -547,17 +596,34 @@ pub(super) fn plan_lines(plan: &str, section: &str) -> Vec<usize> {
         .collect()
 }
 
-/// Why `make decide` refuses `task`'s section of `plan`, or "": every finding of the lint, each placed by its plan.md line, and the
-/// approach gate's refusal, `more`, in the same report.
+/// Every finding `make decide` makes of `section`: the lint's, and the deferrals to a task not open now (D15: judged at the decision).
+pub(super) fn decide_findings(spec_dir: &Path, section: &str) -> Vec<Finding> {
+    let mut out = findings(spec_dir, section);
+    let boxes = deferral::boxes(spec_dir);
+    out.extend(
+        deferral::closed(section, &boxes)
+            .into_iter()
+            .map(|((start, end), text)| Finding {
+                kind: Kind::DeferralClosed,
+                start,
+                end,
+                text,
+            }),
+    );
+    out
+}
+
+/// Why `make decide` refuses `task`'s section of `plan`, or "": every finding of `found` (see [`decide_findings`]), each placed by its
+/// plan.md line, and the approach gate's refusal, `more`, in the same report.
 pub(super) fn decide_refusal(
-    spec_dir: &Path,
     plan: &str,
     section: &str,
+    found: &[Finding],
     more: Option<String>,
 ) -> String {
     let lines = plan_lines(plan, section);
     render(
-        &findings(spec_dir, section),
+        found,
         &|at| {
             let i = line_at(section, at) - 1;
             format!("plan.md:{}", lines.get(i).copied().unwrap_or(0))
@@ -578,11 +644,21 @@ pub(super) fn refusal(spec_dir: &Path, section: &str) -> String {
 
 /// Why `make plan-delta` writes no bundle, or "" (feature 430 T05, D5: a plan review is never dispatched on what a script can see):
 /// every finding of every changed block, each placed by its plan.md line, and the open tasks with no approach block, in one report.
-/// `bodies` are the blocks with their offsets in `plan`.
-pub(super) fn plan_refusal(spec_dir: &Path, plan: &str, bodies: &[(String, usize)]) -> String {
+/// `bodies` are the blocks with their offsets in `plan`. A block's deferral findings are dropped where `excused` answers true for its
+/// task (the id its heading opens with, or ""): asked only of a block that has one, since its answer reads the guard log (D15).
+pub(super) fn plan_refusal(
+    spec_dir: &Path,
+    plan: &str,
+    bodies: &[(String, usize)],
+    excused: &dyn Fn(&str) -> bool,
+) -> String {
     let mut found = Vec::new();
     for (body, offset) in bodies {
-        found.extend(findings(spec_dir, body).into_iter().map(|mut f| {
+        let mut own = findings(spec_dir, body);
+        if own.iter().any(Finding::deferral) && excused(&block_task(body)) {
+            own.retain(|f| !f.deferral());
+        }
+        found.extend(own.into_iter().map(|mut f| {
             f.start += offset;
             f
         }));

@@ -8,6 +8,7 @@
 
 mod approach;
 mod bundle;
+mod defer;
 mod engine_edit;
 mod history;
 mod lint;
@@ -178,7 +179,13 @@ fn parse_file(path: &str) -> Result<Value, Stop> {
     serde_json::from_str(&text).map_err(|e| Stop::Refused(e.to_string()))
 }
 
-fn decide(words: &[String], root: &Path, out_root: &Path, claims: &Claims) -> crate::Reply {
+fn decide(
+    words: &[String],
+    root: &Path,
+    out_root: &Path,
+    claims: &Claims,
+    env: defer::Env<'_>,
+) -> crate::Reply {
     let verb = words[0].as_str();
     let dir = resolve(&words[1], root);
     let plan = dir
@@ -197,15 +204,28 @@ fn decide(words: &[String], root: &Path, out_root: &Path, claims: &Claims) -> cr
         .and_then(Path::parent)
         .unwrap_or(root)
         .to_owned();
-    // every finding of the lint and the approach gate's refusal in one report (feature 451 T25), where the first stopped the run
+    // every finding of the lint and the approach gate's refusal in one report (feature 451 T25), where the first stopped the run;
+    // the deferral's form taken for a reason, recorded so `make plan-delta` takes it too (feature 451 T17, D15)
+    let mut found = lint::decide_findings(&dir, &section);
+    let taken = match defer::taken(env, "decide") {
+        Err(thin) => return fail(thin, 2),
+        Ok(taken) => taken,
+    };
+    if taken.is_some() {
+        found.retain(|f| !f.deferral());
+    }
     let why = lint::decide_refusal(
-        &dir,
         &plan,
         &section,
+        &found,
         approach::refusal(&dir, &top, &words[2]),
     );
     if !why.is_empty() {
         return fail(format!("decide: refused - {why}\n"), 2);
+    }
+    // recorded once the section is decided, never on a refused run: plan-delta reads it as "decided under the escape" (D15)
+    if let Some(reason) = &taken {
+        defer::record(&top, &dir, &words[2], reason);
     }
     let prompt = if wording_only(&section) {
         Ok(format!("decide: {}'s section is wording only - no plan review is owed and no bundle is built; `make tick` checks its commits against it", words[2]))
@@ -218,7 +238,7 @@ fn decide(words: &[String], root: &Path, out_root: &Path, claims: &Claims) -> cr
     }
 }
 
-fn plan_delta(dir: &Path, out_root: &Path, claims: &Claims) -> crate::Reply {
+fn plan_delta(dir: &Path, out_root: &Path, claims: &Claims, env: defer::Env<'_>) -> crate::Reply {
     let plan = dir.join("plan.md");
     let review = read_review(dir);
     let text = std::fs::read_to_string(&plan).unwrap_or_default();
@@ -245,24 +265,38 @@ fn plan_delta(dir: &Path, out_root: &Path, claims: &Claims) -> crate::Reply {
         .filter(|(k, ..)| keys.contains(k))
         .map(|(_, b, at)| (b, at))
         .collect();
-    let why = lint::plan_refusal(dir, &text, &bodies);
+    let taken = match defer::taken(env, "plan-delta") {
+        Err(thin) => return fail(thin, 2),
+        Ok(taken) => taken,
+    };
+    let top = dir
+        .parent()
+        .and_then(Path::parent)
+        .unwrap_or(Path::new("."));
+    // a section decided under DEFER_FORM_OK keeps it when its block changes; the guard log is read only for a block that asks
+    let decided = std::cell::OnceCell::new();
+    let used = std::cell::Cell::new(false);
+    let excused = |task: &str| {
+        used.set(taken.is_some());
+        taken.is_some()
+            || (!task.is_empty()
+                && decided
+                    .get_or_init(|| defer::decided_under(dir))
+                    .contains(task))
+    };
+    let why = lint::plan_refusal(dir, &text, &bodies, &excused);
     if !why.is_empty() {
         return fail(
             format!("plan-delta: refused, no bundle written - {why}\n"),
             1,
         );
     }
+    // recorded only where it excused a finding of a run that writes its bundle
+    if let (Some(reason), true) = (&taken, used.get()) {
+        defer::record(top, dir, "plan-delta", reason);
+    }
     match bundle::delta_prompt(dir, out_root, &keys) {
-        Ok(prompt) => reply(
-            prompt + "\n",
-            triage_hint(
-                dir.parent()
-                    .and_then(Path::parent)
-                    .unwrap_or(Path::new(".")),
-                claims,
-            ),
-            0,
-        ),
+        Ok(prompt) => reply(prompt + "\n", triage_hint(top, claims), 0),
         Err(why) => fail(why + "\n", 1),
     }
 }
@@ -411,6 +445,7 @@ fn answer(
     python: &str,
     stdin: &mut dyn Read,
     claims: &Claims,
+    env: defer::Env<'_>,
 ) -> crate::Reply {
     let verb = words.first().map_or("", String::as_str);
     let n = words.len();
@@ -429,7 +464,7 @@ fn answer(
             let why = task::decision_refusal(Path::new(words.get(1).map_or(".", String::as_str)));
             reply(if why.is_empty() { why.clone() } else { format!("{why}\n") }, String::new(), i32::from(!why.is_empty()))
         }
-        ("decide" | "section-sha", 3) => decide(words, root, out_root, claims),
+        ("decide" | "section-sha", 3) => decide(words, root, out_root, claims, env),
         ("record" | "record-blocks", 5) if words[3] == "--as" => record_verb(words, root),
         ("record-task", 6) if words[4] == "--as" => record_verb(words, root),
         ("slim" | "archive" | "delta", 2) => {
@@ -451,7 +486,7 @@ fn answer(
                     let tasks = if moved.is_empty() { "none ticked".to_owned() } else { moved.join(", ") };
                     said(format!("plan-archive: {} task section(s) moved to {name}/plan-done.md: {list}\nplan-archive: {} ticked task(s) moved to {name}/tasks-done.md: {tasks}\n", ids.len(), moved.len()))
                 }
-                _ => plan_delta(&dir, out_root, claims),
+                _ => plan_delta(&dir, out_root, claims, env),
             }
         }
         ("owed", 2) => match owed(Path::new(&words[1])) {
@@ -504,7 +539,13 @@ pub fn cli(words: &[String], root: &Path, claims: &Claims) -> crate::Reply {
         "python3",
         &mut std::io::stdin(),
         claims,
+        &environment,
     )
+}
+
+/// A variable of the process's environment, as `DEFER_FORM_OK` reaches the binary from make's command line (feature 451 T17).
+fn environment(name: &str) -> Option<String> {
+    std::env::var(name).ok()
 }
 
 #[cfg(test)]

@@ -14,7 +14,7 @@
 FREE_TEXT = UNITS WITH KEYS KEY CLASS KIND SUBJECT REASON GROWTH_REASON SPREAD NOTE WHY WORDS TITLE MSG FINDING OLD NEW RESULT \
 	FIXED_BY OUTCOME SOUGHT SOURCE STATUS WRITE LINE Q Q_JA Q_ZH Q_KO QUESTION TERMS K MARK URL REVIEW APPROVED REREAD \
 	ARBITER_OK PREFLIGHT_OK REF_WHY SET_DOWN_OK HOLD_OK MISSING_OK COVER_OK NOT_OWED_OK PLAN_REVIEW_OK KEY_CAP_OK WRITE_CAP_OK \
-	CHECK_ORDER_OK URLS MATCH NONE SHARD EXTRA IMAGES DIRS LAND SUITES PERF_LATER_OK
+	CHECK_ORDER_OK URLS MATCH NONE SHARD EXTRA IMAGES DIRS LAND SUITES PERF_LATER_OK DEFER_FORM_OK
 $(foreach v,$(FREE_TEXT),$(if $(filter command line environment,$(origin $(v))),$(eval override $(v) := $$(value $(v)))$(eval export $(v))))
 
 .PHONY: modal-bundle modal-prepass done docs static format guard _reference bypass-audit quick page-check tick claim speckit-todo audit guard-edit guard-log scratch-sweep hooks-test citations fragment-move \
@@ -494,7 +494,7 @@ plan-verdict:   ## [project] {internal} record a plan review - the spec-fidelity
 ##  AS=spec-fidelity   who is recording - only the subagent may pass this, and nothing else distinguishes the shells
 	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" plan $(if $(ARBITER),arbiter-accept "$(F)" "$(ARBITER)",$(if $(BLOCKS),record-blocks "$(F)",$(if $(TASK),record-task "$(F)" "$(TASK)",record "$(F)")) "$(abspath $(FILE))" --as "$(or $(AS),main)")
 
-plan-delta:     ## [project] the review a plan owes since amendment 11: only its blocks changed since their CLEAR verdict, on a lean bundle (feature 375 FR-043)   F=<feature>
+plan-delta:     ## [project] the review a plan owes since amendment 11: only its blocks changed since their CLEAR verdict, on a lean bundle (feature 375 FR-043); a found-and-left deferral without its form refused, escape DEFER_FORM_OK="<reason>" (451 T17)   F=<feature>
 	@if [ -z "$(F)" ]; then printf 'make plan-delta: F=<feature> is required\n' >&2; exit 2; fi
 	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" plan delta "$(F)"
 
@@ -580,7 +580,7 @@ task-start:     ## [project] name the task you are starting, so its checks wait 
 	$(if $(HOLD_OK),$(LOGESCAPE) HOLD_OK "$$HOLD_OK",@:)
 	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" task-start "$(F)" "$(T)"
 
-decide:         ## [project] the spec-fidelity dispatch that rules on one task's plan section before its checks (feature 375)   F=375 T=T13
+decide:         ## [project] the spec-fidelity dispatch that rules on one task's plan section before its checks (feature 375); a found-and-left deferral without its reason, filed task and order, or naming no open task, refused, escape DEFER_FORM_OK="<reason>" (451 T17)   F=375 T=T13
 	@if [ -z "$(F)" ] || [ -z "$(T)" ]; then printf 'make decide: F=<feature> and T=<task id> are required\n' >&2; exit 2; fi
 	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" plan decide "$(F)" "$(T)"
 
