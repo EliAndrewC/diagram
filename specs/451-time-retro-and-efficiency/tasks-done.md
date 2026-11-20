@@ -58,6 +58,9 @@
       research: rendering
       held: Makefile
       verify: DONE. landed in batch T20+T32: the shard form; the guard's tests read their own environment
+- [x] T21 [perf] The three slowest suites split into shards where it speeds the run (measured 2026-11-20: `tests/hooks/test-l7r-gate.sh` split in three, about 6 s off an incremental run; `test-sync-with-main.sh` and `test-entry-gate.sh` kept whole, their splits saving nothing; the full run's wall set by entry-gate's case-4 chain) (D17; FR-010, SC-004)
+      research: rendering
+      verify: DONE. landed in batch T21+T35: the l7r-gate split; the run lock's test on a stepped clock
 - [x] T23 Two builders' cargo runs in one clone corrupt each other's coverage (found by T02, 2026-11-20): T02's make static ran beside T234's cargo in the same target directory and failed on corrupt or missing coverage profiles in seven crates, a collision, not a result - the Rust checks take one lock a target directory for the length of a run, the second waiting (named, with how long) rather than racing, red first with two concurrent runs
       research: rendering
       verify: DONE. landed: one lock a target directory for the Rust checks
@@ -85,3 +88,6 @@
 - [x] T32 [perf] Guard tests read the real environment (found by T14, 2026-11-20): with L7R_FEATURE_DIRECTORY exported (page sessions export it) 17-20 tests of checks_hooks, check_bundle_hooks, pair_hooks, review_round_hooks, shared::checks::arbiter and no_poll_hooks fail - T24's defect in the guard's own tests; each test given its own environment (no process-env mutation), asserting the one outcome it means, red first with the variable exported, and every other variable the guard reads swept the same way
       research: rendering
       verify: DONE. landed in batch T20+T32: the shard form; the guard's tests read their own environment
+- [x] T35 [perf] Two timing tests fail under load (found by T12, 2026-11-20): rustc's another_runs_holder_is_waited_for_named_and_past_the_ceiling_refused expects two waiting lines inside a 60 ms ceiling at a 10 ms poll and saw one under make static's load, and test-land-tooling.sh case 2b fails under the full hooks-test run and passes alone - a red gate on correct work; each test's timing taken from what it measures (an event, a count, or a ceiling scaled by a calibration loop), never a bare wall-clock bound, red first under induced load; its land-tooling half (case 2b) folded into T20 by T20's plan review (2026-11-20), so T35 holds the rustc test alone
+      research: rendering
+      verify: DONE. landed in batch T21+T35: the l7r-gate split; the run lock's test on a stepped clock

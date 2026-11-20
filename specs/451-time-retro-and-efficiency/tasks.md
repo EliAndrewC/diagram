@@ -65,10 +65,6 @@ landing on its own, each small; T22 last.
 
 ### The hook-suite split (FR-010)
 
-- [ ] T21 [perf] The three slowest suites split into shards where it speeds the run (measured 2026-11-20: `tests/hooks/test-l7r-gate.sh` split in three, about 6 s off an incremental run; `test-sync-with-main.sh` and `test-entry-gate.sh` kept whole, their splits saving nothing; the full run's wall set by entry-gate's case-4 chain) (D17; FR-010, SC-004)
-      research: rendering
-      verify: each suite's case count before and after equal; `make hooks-test HOOKS_ALL=1`, each shard's kept seconds about 20 or less; `make quick`
-
 ### The close
 
 - [ ] T22 The close: on the first full day of work after T02-T21 land, SC-001 (`make where-time F= SINCE= UNTIL=`, unexplained waiting under a tenth), SC-002 (the day's per-task table from the log against a hand join of the transcripts, each bucket within a tenth), SC-005 (static runs per task, builders' largest contexts, every escape listed), `docs/guards.md`'s knob table complete (D14), then `make feature-report F=451 WRITE=1` (SC-001, SC-002, SC-003, SC-005); and CONTEXT_CAP_TOKENS retuned on the day's per-call speed by context: on 2026-11-20 builders reached their first edit at a median 162k of context (90th percentile 254k, 5 of 99 past 300k) and peaked at a median 498k (99 of 114 past 300k), measured 2026-11-20 (the session's subagent transcripts, the last usage before each builder's first Edit or Write, and its largest) - so at 300k most tasks hand off once; the first real firing stopped T13's builder before any edit
@@ -79,8 +75,6 @@ landing on its own, each small; T22 last.
 - [ ] T33 guard_file_hooks refuses sed -i on a guard source but lets a Python heredoc write it (found by T14, 2026-11-20): a held file written through python3 -c, a heredoc-fed interpreter or tee is a write like sed -i - refused without a live make guard-edit permit, red first on each form, through T15's shared readers
       research: rendering
 - [ ] T34 [perf] No make target formats one file (found by T14, 2026-11-20): make format reformats every crate, so a builder beside another's in-progress files formats with bare rustfmt outside make - make format FILE=<path> (or CRATE=) formats only what it names, red first
-      research: rendering
-- [ ] T35 [perf] Two timing tests fail under load (found by T12, 2026-11-20): rustc's another_runs_holder_is_waited_for_named_and_past_the_ceiling_refused expects two waiting lines inside a 60 ms ceiling at a 10 ms poll and saw one under make static's load, and test-land-tooling.sh case 2b fails under the full hooks-test run and passes alone - a red gate on correct work; each test's timing taken from what it measures (an event, a count, or a ceiling scaled by a calibration loop), never a bare wall-clock bound, red first under induced load; its land-tooling half (case 2b) folded into T20 by T20's plan review (2026-11-20), so T35 holds the rustc test alone
       research: rendering
 - [ ] T36 The archived deferrals T17's replay found (2026-11-20): 449 T156, T200, T201, T208, T218, T219, T221, T224, T239 and 451 T02 (a class fix with no instance count), T03, T16, T26 deferred without a filed task or order in plan-done.md - for each, the deferred defect found carried by an open or ticked task, or filed now (each named), or shown fixed; history is not re-judged, so this is read by hand once
       research: rendering
