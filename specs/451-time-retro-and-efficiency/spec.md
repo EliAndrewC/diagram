@@ -4,7 +4,7 @@
 
 **Created**: 2026-11-19
 
-**Status**: Draft
+**Status**: APPROVED by `spec-fidelity` - round 3 verdict FAITHFUL (2026-11-19)
 
 **Approved**: the GM, 2026-11-19, "All 6 of your proposed improvements sound good so please do all of that, along with your 4 proposed ideas for filling ion what's missing from gathering this kind of data.  And let's make sure all of the enforcement is real enforcement and not just instructions."
 
@@ -208,3 +208,4 @@ another feature, or failing any other quick check, is withdrawn and refused.
 - 2026-11-19, round 0 (spec-fidelity, MODE 2): NOT-REVIEWABLE - six figures without labels (not a round).
 - 2026-11-19, round 1 (spec-fidelity, MODE 2): CHANGES REQUIRED, 5 items - FR-009 enforced the deferral's form, not fixing in the task by default, and carried nothing of "full coverage up front" (now: a deferral states why it is not fixed in the task; a fix of a class says how every instance was found); FR-011 ran one lint rule where `make quick` was approved (now: `make quick`'s checks); the poll interval was an instruction (now: the no-poll guard refuses a slower wait); FR-006 reached every subagent, replaced the approved per-stage fresh builder with a size cap and overstated its saving (now: builders only, one task a builder with a resume after its landing refused, the cap a 300k backstop between the two figures); "agents nudged" traced to nothing (dropped).
 - 2026-11-19, round 2 (spec-fidelity-verify, MODE 3): CHANGES REQUIRED, 4 items - User Story 2 and SC-005 still reached every agent (now: builders, with a review agent passing and a landed builder's resume refused in the test); the Assumptions kept the old 400k (now 300k); User Story 5's test passed what FR-009 refuses (now: its five cases); the slower-wait refusal reached every agent's Bash (now: the main session's waits, as approved).
+- 2026-11-19, round 3 (spec-fidelity-verify, MODE 3): FAITHFUL - round 2's four items resolved, nothing new made false or unrequested.
