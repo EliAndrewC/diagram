@@ -85,6 +85,9 @@
 - [x] T30 [perf] Withdrawn: folded into T15 (T15's plan review, 2026-11-20, ruled leaving the shared readers' defects NOT LEGITIMATE). The shared shell readers miss forms (found by T15, 2026-11-20): shared::shape::strip_heredocs misses `cat <<'EOF' > f` (words after the delimiter), strip_quotes keeps a string after `-c ` (`grep -c "make x &"`) and blanks one after `bash -lc`, and shared::make::invoked misses `setsid make`, `bash -lc "make x"` and a goal-less make - every guard and the event log's make detector share them (T15 works around them in no_poll_hooks; the event log booked a landing launched after a python3 -c string as other tool, T08's note); fixed in the shared code, T15's work-arounds retired onto it, red first on each form
       research: rendering
       verify: DONE. landed in batch T18+T24+T28+T29+T15+T30: performance work first, and four of the improvements
+- [x] T31 [perf] main-tree refuses a read as a write (found by T15's corpus replay, 2026-11-20): `python3 -c "data = open('$SP/x.html','rb').read() ..."` is refused with no escape as a write where the shell stands, the same before and after T15's shared-reader fix - measure it on the corpora (the main-tree refusals whose command only reads), and fix a refusal of correct work in the guard, red first
+      research: rendering
+      verify: DONE. landed in batch T31+T40: python3 -c reads let through; entry-gate's suite faster
 - [x] T32 [perf] Guard tests read the real environment (found by T14, 2026-11-20): with L7R_FEATURE_DIRECTORY exported (page sessions export it) 17-20 tests of checks_hooks, check_bundle_hooks, pair_hooks, review_round_hooks, shared::checks::arbiter and no_poll_hooks fail - T24's defect in the guard's own tests; each test given its own environment (no process-env mutation), asserting the one outcome it means, red first with the variable exported, and every other variable the guard reads swept the same way
       research: rendering
       verify: DONE. landed in batch T20+T32: the shard form; the guard's tests read their own environment
@@ -100,3 +103,6 @@
 - [x] T39 [perf] A FRESH=1 test run may replay another run's result (found by T32, 2026-11-20): two make rust-test CRATE=rust/guard FRESH=1 runs queued behind one target-directory lock both reported 'finished in 4.21s', where alone it takes 2.82-3.20 s - if a run waiting on the lock takes the holder's kept result, a fresh run reports green without running; measured first (two FRESH runs started together, each one's test binary execution counted), fixed red first if so
       research: rendering
       verify: DONE. landed in batch T37+T39: whole decisions in the bundle; FRESH not a replay
+- [x] T40 [perf] entry-gate's case-4 chain sets hooks-test's full-run wall (found by T21, 2026-11-20): in every full run the wall was entry-gate's seconds plus 2-3 s, about 10 s ahead of the next suite, its case 4 a chain of record gates on one clone's state (9.4 s alone, 31-46 s in a full run); splitting it or more job slots did not shorten it - measure where the chain's time goes (alone and under the full run's load) and cut it, held to the suite still checking what it checks
+      research: rendering
+      verify: DONE. landed in batch T31+T40: python3 -c reads let through; entry-gate's suite faster
