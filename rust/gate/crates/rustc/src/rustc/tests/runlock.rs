@@ -272,3 +272,18 @@ fn the_ceiling_is_a_knob_in_seconds() {
     assert_eq!(ceiling_of(Some("soon")), Duration::from_secs(1800));
     assert_eq!(ceiling_of(None), Duration::from_secs(1800));
 }
+
+#[test]
+fn a_one_file_format_takes_no_lock_and_never_waits_on_another_run() {
+    let (root, _, _) = two_crates();
+    let world = world_with(&root, "exit 0");
+    crate::write_executable(&world.path_dir.join("rustfmt"), "#!/bin/sh\ncat\n");
+    stage(&world.target, 900_010, me().start);
+    // another run holds the target directory: a check is refused at once (ceiling 0), the one-file format runs
+    let held = locked_dispatch(&world, &["dead".to_owned()], &taker(900_011, 0));
+    assert!(held.stderr.contains("REFUSED"), "{}", held.stderr);
+    let words = ["format", "--file", "rust/a/src/lib.rs"].map(str::to_owned);
+    let done = locked_dispatch(&world, &words, &taker(900_011, 0));
+    assert_eq!(done.code, 0, "{}", done.stderr);
+    assert!(done.stdout.contains("already formatted"), "{}", done.stdout);
+}

@@ -481,14 +481,8 @@
    "reviewed": "2026-11-20",
    "declared": "spec-fidelity"
   },
-  "### T34 (<why: the finding or measurement that files it>)": {
-   "sha256": "e32d546a9a2b805a3893dc93b7d84cf7964a6327add449a9b7810b0596cf7e01",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-20",
-   "declared": "spec-fidelity"
-  },
   "### T34 Approach (checklist part A)": {
-   "sha256": "34da7b670a79a861d678e0d2e7d161402cab1eb498c12fcb9d9572e76270b78d",
+   "sha256": "14ecd48f2484960a64a121dde7c02dc46ae1c8e5d7b881685e477b70f56dc892",
    "verdict": "CLEAR",
    "reviewed": "2026-11-20",
    "declared": "spec-fidelity"
@@ -579,6 +573,24 @@
   },
   "### T37 (the plan-review bundle cut a decision at its list: `spec-cited.md` stopped D16 at \"Two things make the comparison real:\" and D15 at its colon, so the reviewer judged each without its bullets, observed 2026-11-20, method: T19's and T17's plan reviews and T18's bundle rebuilt, `/tmp/t37-before/T18/spec-cited.md`)": {
    "sha256": "0ad31c08042ca9d6d5b6641deb9783358143430f1d5174c439cb9ba1f49fac4d",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity"
+  },
+  "### T34 (found by T14, 2026-11-20: four builders formatted with a bare `rustfmt` outside make, because `make format` rewrites every crate and another builder's in-progress files with them)": {
+   "sha256": "fbf1b6b1c7586e7c0f3112ad9557b1bc37678add06653ba1426a1c9118e94266",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity"
+  },
+  "### T41 (<why: the finding or measurement that files it>)": {
+   "sha256": "c7acd81c8cd71d90707c2eb7ee551557ad20076090866957c935957d6e9ffb56",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity"
+  },
+  "### T41 Approach (checklist part A)": {
+   "sha256": "704d164c180c168b3eed36c414fe963025aa718757ee5ca985dcf076a0ed9277",
    "verdict": "CLEAR",
    "reviewed": "2026-11-20",
    "declared": "spec-fidelity"
@@ -4736,6 +4748,77 @@
    ],
    "verdict": "CLEAR",
    "decisions": []
+  },
+  {
+   "reviewed": "2026-11-20",
+   "blocks": [
+    "### T34 (found by T14, 2026-11-20: four builders formatted with a bare `rustfmt` outside make, because `make format` rewrites every crate and another builder's in-progress files with them)",
+    "### T34 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T34-D1",
+     "summary": "Add `make format FILE=<path...>` and `make format CRATE=<dir>`, which format only what they name; bare `make format` is unchanged.",
+     "class": "within",
+     "why": "A [perf] task on the builders' loop under FR-013, which comes from the GM's 2026-11-20 'can we in general priotitize performance improvements going forward?'. It is also the same kind of fix as approved improvement 2 (a crate-scoped step while iterating instead of a whole-tree one). Nothing asked for is narrowed, since the whole-tree form stays as it was."
+    },
+    {
+     "id": "T34-D2",
+     "summary": "The one-file path feeds the file to the toolchain's rustfmt on standard input, run from the file's directory (so rustfmt.toml is found), with --edition taken from the owning crate's Cargo.toml (2015 where it names none), and writes the file only where rustfmt passed and changed it.",
+     "class": "within",
+     "why": "This is how the requested behavior gets done. Standard input was chosen on a dated scratch measurement showing that a path argument rewrites the file's `mod` children, which would break 'formats only what it names'. The plan's step 9 records that `--check --crate` was clean after FILE= runs, so the output matches cargo fmt."
+    },
+    {
+     "id": "T34-D3",
+     "summary": "A Cargo.toml edition that is not a literal (for example an inherited one) is refused on the FILE= path.",
+     "class": "within",
+     "why": "This refuses an input it cannot read rather than guessing an edition and formatting wrongly. CRATE= and bare `make format` still cover such a crate. It does not narrow anything the request or spec asks for."
+    },
+    {
+     "id": "T34-D4",
+     "summary": "FILE=/CRATE= format takes no run lock and never waits on another run's tests, because it builds nothing.",
+     "class": "within",
+     "why": "This serves the performance purpose (FR-013, the builders' loop) and does not narrow any requirement."
+    },
+    {
+     "id": "T34-D5",
+     "summary": "FILE= given together with CRATE= is refused (exit 2), and the `format` failure's tip names CRATE= and FILE= instead of bare `make format`.",
+     "class": "within",
+     "why": "Usage guarding, and pointing builders at the scoped forms, serve the task's own purpose (not rewriting another builder's in-progress files). Nothing is narrowed."
+    },
+    {
+     "id": "T34-FL1a",
+     "summary": "Found and left (a): the make-only guard does not refuse a bare `rustfmt`. Deferred to T33 (held writes through a route the guard does not read), which lands before T22.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This is a narrowing because the block calls it a defect (a check that lets bad work through), and approved improvement 4 makes fixing in the task the default for briefs. FR-009, judged against its index line only since the bundle carries nothing more, requires a deferral to state why the defect is not fixed here, and this one does. The guard is rust/guard, where T31's builder has work in progress. Fixing it inside T34 means editing, linting and covering a crate that holds another builder's half-done files, which is the clobbering of in-progress work that T34 exists to stop, and T34's green exit cannot be met honestly over that crate now. So a literal fix-in-task would defeat the task's purpose. The defect is not left: it is filed in this feature as T33, with an order (before T22), and T33's class (writes by a route the guard does not read) matches it exactly."
+    },
+    {
+     "id": "T34-FL1b",
+     "summary": "Found and left (b): the make-only guard's block message advertises bare `make format`, which rewrites every crate. Deferred with (a), 'Filed as T33'.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Ruled separately from (a), because a message's wording is not a 'route the guard does not read' and T33's class argument does not reach it. Only the location argument carries it. That argument is enough: the message text lives in rust/guard, where T31's builder works now, so the same purpose-level and exit-level reasons as (a) apply. The interim harm is reduced inside T34 itself, since `make format`'s own failure tip and `make help` now name FILE= and CRATE=. The block's 'Filed as T33' covers its whole bullet, both the guard gap and the message, so T33 owes the message fix as well as the refusal. A T33 that fixes only the refusal would leave (b) unfixed."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-20",
+   "blocks": [
+    "### T41 (<why: the finding or measurement that files it>)",
+    "### T41 Approach (checklist part A)",
+    "(removed) ### T34 (<why: the finding or measurement that files it>)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T34-block-removed",
+     "summary": "T34's section, an unfilled template placeholder (earlier text: only placeholders and an empty step table, verdict CLEAR), is removed from the plan.",
+     "class": "within",
+     "why": "The removed text carried no decision - only template placeholders - so removing it narrows nothing in the request or the spec; it reads as T34's section leaving the open plan as the task finishes."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -6362,6 +6445,58 @@
      "summary": "The heading-carry defect found while doing the work is fixed here, pinned by a red-first test.",
      "class": "within",
      "why": "Fixed in the task, nothing deferred; consistent with fixing known defects as found."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T34": {
+   "section_sha256": "a0fdd92bd399ebc8ecf7812c73cdd2314c6730ce62fa0bafc06dbecff010b1e7",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T34-D1",
+     "summary": "Add `make format FILE=<path...>` and `make format CRATE=<dir>`, which format only what they name; bare `make format` is unchanged.",
+     "class": "within",
+     "why": "A [perf] task on the builders' loop under FR-013, which comes from the GM's 2026-11-20 'can we in general priotitize performance improvements going forward?'. It is also the same kind of fix as approved improvement 2 (a crate-scoped step while iterating instead of a whole-tree one). Nothing asked for is narrowed, since the whole-tree form stays as it was."
+    },
+    {
+     "id": "T34-D2",
+     "summary": "The one-file path feeds the file to the toolchain's rustfmt on standard input, run from the file's directory (so rustfmt.toml is found), with --edition taken from the owning crate's Cargo.toml (2015 where it names none), and writes the file only where rustfmt passed and changed it.",
+     "class": "within",
+     "why": "This is how the requested behavior gets done. Standard input was chosen on a dated scratch measurement showing that a path argument rewrites the file's `mod` children, which would break 'formats only what it names'. The plan's step 9 records that `--check --crate` was clean after FILE= runs, so the output matches cargo fmt."
+    },
+    {
+     "id": "T34-D3",
+     "summary": "A Cargo.toml edition that is not a literal (for example an inherited one) is refused on the FILE= path.",
+     "class": "within",
+     "why": "This refuses an input it cannot read rather than guessing an edition and formatting wrongly. CRATE= and bare `make format` still cover such a crate. It does not narrow anything the request or spec asks for."
+    },
+    {
+     "id": "T34-D4",
+     "summary": "FILE=/CRATE= format takes no run lock and never waits on another run's tests, because it builds nothing.",
+     "class": "within",
+     "why": "This serves the performance purpose (FR-013, the builders' loop) and does not narrow any requirement."
+    },
+    {
+     "id": "T34-D5",
+     "summary": "FILE= given together with CRATE= is refused (exit 2), and the `format` failure's tip names CRATE= and FILE= instead of bare `make format`.",
+     "class": "within",
+     "why": "Usage guarding, and pointing builders at the scoped forms, serve the task's own purpose (not rewriting another builder's in-progress files). Nothing is narrowed."
+    },
+    {
+     "id": "T34-FL1a",
+     "summary": "Found and left (a): the make-only guard does not refuse a bare `rustfmt`. Deferred to T33 (held writes through a route the guard does not read), which lands before T22.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This is a narrowing because the block calls it a defect (a check that lets bad work through), and approved improvement 4 makes fixing in the task the default for briefs. FR-009, judged against its index line only since the bundle carries nothing more, requires a deferral to state why the defect is not fixed here, and this one does. The guard is rust/guard, where T31's builder has work in progress. Fixing it inside T34 means editing, linting and covering a crate that holds another builder's half-done files, which is the clobbering of in-progress work that T34 exists to stop, and T34's green exit cannot be met honestly over that crate now. So a literal fix-in-task would defeat the task's purpose. The defect is not left: it is filed in this feature as T33, with an order (before T22), and T33's class (writes by a route the guard does not read) matches it exactly."
+    },
+    {
+     "id": "T34-FL1b",
+     "summary": "Found and left (b): the make-only guard's block message advertises bare `make format`, which rewrites every crate. Deferred with (a), 'Filed as T33'.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Ruled separately from (a), because a message's wording is not a 'route the guard does not read' and T33's class argument does not reach it. Only the location argument carries it. That argument is enough: the message text lives in rust/guard, where T31's builder works now, so the same purpose-level and exit-level reasons as (a) apply. The interim harm is reduced inside T34 itself, since `make format`'s own failure tip and `make help` now name FILE= and CRATE=. The block's 'Filed as T33' covers its whole bullet, both the guard gap and the message, so T33 owes the message fix as well as the refusal. A T33 that fixes only the refusal would leave (b) unfixed."
     }
    ],
    "verdict": "CLEAR"

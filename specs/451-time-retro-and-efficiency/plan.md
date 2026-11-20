@@ -711,32 +711,33 @@ reverted. Not filed with `PERF=1`: no engine stage's counted operations or time.
 **Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
 
 
-### T34 (<why: the finding or measurement that files it>)
+### T34 (found by T14, 2026-11-20: four builders formatted with a bare `rustfmt` outside make, because `make format` rewrites every crate and another builder's in-progress files with them)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: `make format FILE=<path>` (several: `FILE="a.rs b.rs"`) formats only the files named, `make format CRATE=<dir>` only that crate; bare `make format` is unchanged. The Makefile hands `--file` and `--crate` to `l7r-gate rust format` (`rust/gate/crates/rustc/src/rustc.rs`); the one-file path is `rustc/fmtfile.rs`, the toolchain's rustfmt (`~/.cargo/bin/rustfmt`, `cargo_exe`'s rule) fed the file on standard input, run from the file's directory (where rustfmt finds a `rustfmt.toml`, as `cargo fmt` does), `--edition` the owning crate's `Cargo.toml` literal (2015, cargo's default, where it names none; a non-literal refused), the file written only where rustfmt passed and changed it. Standard input, not a path: measured 2026-11-20 (a scratch crate whose `main.rs` declared `mod k;`, rustfmt 1.8.0-stable): `rustfmt --edition 2021 main.rs` rewrote `k.rs`, the same file on standard input left `k.rs` byte for byte. It builds nothing, so it takes no run lock and never waits on another run's tests. `FILE=` with `CRATE=` is refused (exit 2); the `format` failure's tip names `CRATE=` and `FILE=` instead of bare `make format`.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| `make format FILE=` / `CRATE=` | n/a - no map | n/a | none | n/a |
 
 ### T34 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** A builder formats its own file, or its own crate, through make, and nothing of another builder's in-progress work moves.
+2. **The constraints.** T34's line in tasks.md (FILE= or CRATE= formats only what it names, red first); feature 449's make-only rule (`dev/rust-tooling.md`: the crates are formatted through make); the gate crates' 100% line coverage; `make format` alone unchanged.
+3. **Where each comes from.** O: T14's finding, four builders on 2026-11-20 formatting with bare rustfmt; O: the children measurement above; R: `dev/rust-tooling.md` "format"; G: none beyond the task line.
+4. **Do they describe the world here?** Yes, measured 2026-11-20 (`make -n format FILE=rust/gate/crates/rustc/src/rustc.rs`): the recipe before the change was `l7r-gate.sh rust format` with no file word, so a FILE= run formatted all 33 crates under `rust/` (measured 2026-11-20, `find rust -name Cargo.toml` holding `[package]`).
+5. **The order.** After T17 (the deferral form below); beside T31 (rust/guard, untouched here).
+6. **The exits.** Green: the new tests pass, the crate's lint, format and cover clean (every line, the crates' floor), `make quick`, `make static`, `make hooks-test`. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None: one read of the format step (`check`'s `cargo fmt --manifest-path`) and one scratch measurement settled the design.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** Red first, measured 2026-11-20 (`make rust-test CRATE=rust/gate/crates/rustc` with `tests/fmtfile.rs` written before `fmtfile.rs`): 7 of 75 failed, among them `a_file_run_formats_that_file_alone_with_its_crates_edition`, which asserts another crate's unformatted file and the named file's own `mod` child keep their bytes; green, measured 2026-11-20 (the same command): 78 passed. On the real tree, measured 2026-11-20 (`make format FILE=rust/gate/crates/rustc/src/rustc.rs`, wall clock): 0.06 s, its unformatted child `rustc/fmtfile.rs` and every other file byte for byte (sha1 of `git status --porcelain`, of `git diff -- rust/guard` and of the child, before and after), and `make format CRATE=rust/gate/crates/rustc` ran in 1.15 s, `rust/guard`'s diff unchanged, measured 2026-11-20 (wall clock, the same sha1s), after the FILE= runs `l7r-gate rust format --check --crate rust/gate/crates/rustc` was clean, so the one-file path formats as `cargo fmt` does, measured 2026-11-20 (that command).
+10. **Before moving a constant.** n/a - no constant.
+11. **Before fitting things into room.** n/a - no room.
+12. **Before any fix.** A builder sees `make format FILE=` and `CRATE=` in `make help` and the failure tip, and the wrong outcome it fixes is another builder's in-progress files rewritten by a whole-tree format; no map changes.
 
-**Found and left?** <none - or each item with its visible effect or the research finding it breaks; an item with neither is not a defect and is not filed>
+**Found and left?**
+- The make-only guard does not refuse a bare `rustfmt` (T34's line; four builders on 2026-11-20), and its block message advertises bare `make format`, which rewrites every crate. Not fixed here: the guard is `rust/guard`, where T31's builder works now, and the class is T33's (a held write through a route the guard does not read). Filed as T33; lands before T22.
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
-
+**Performance work?** Yes (a `[perf]` task, 451 FR-013: the builders' loop) - a one-file format in 0.06 s, measured 2026-11-20 (wall clock of `make format FILE=rust/gate/crates/rustc/src/rustc.rs`), where a whole-tree format ran rustfmt over 33 crates and waited on the run lock; not an engine-speed task, so no performance checklist.
 
 <!-- plan-archive: T35 to T20 moved to plan-done.md, 2026-11-20 (feature 375 FR-044) -->
 <!-- plan-archive: T35 to T35 moved to plan-done.md, 2026-11-20 (feature 375 FR-044) -->
@@ -817,6 +818,33 @@ reverted. Not filed with `PERF=1`: no engine stage's counted operations or time.
 |---|---|---|---|---|
 
 ### T40 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+
+### T41 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T41 Approach (checklist part A)
 
 1. **The goal, in the world.** <the place as it should be>
 2. **The constraints.** <the FRs, decisions and pages it holds to>

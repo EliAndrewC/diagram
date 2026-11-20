@@ -1076,8 +1076,8 @@ test-times:      ## [project] each test of a crate timed alone by T99's method (
 	@if [ -z "$(CRATE)" ]; then printf 'make test-times: CRATE=<crate dir> is required - e.g. make test-times CRATE=rust/mode_a\n' >&2; exit 2; fi
 	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" rust test-times --crate "$(CRATE)"
 
-format:         ## [static] rustfmt over the Rust phases' crates (feature 444 T17)
-	"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" rust format
+format:         ## [static] rustfmt over the Rust phases' crates (feature 444 T17), or over CRATE=<dir>'s alone, or FILE=<path>'s alone - that file, not its mod children, with its crate's edition (451 T34)   [CRATE=<dir>] [FILE="<path> ..."]
+	"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" rust format $(foreach c,$(CRATE),--crate "$(c)") $(foreach f,$(FILE),--file "$(f)")
 
 # THE PORT SWITCH (feature 444 amendment 8, FR-023; the GM 2026-11-07: "the functionality of a make done or a make land are both
 # going to have to change temporarily"): at rust-only, make done rolls no map - no map-rolling test, no reference map, no floor that

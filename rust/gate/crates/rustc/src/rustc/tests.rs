@@ -13,6 +13,7 @@ use crate::checks::scratch;
 use l7r_guard::shared::tempdir::{Held, TempDir};
 
 mod cover;
+mod fmtfile;
 mod kept;
 mod phases;
 mod runlock;
@@ -397,7 +398,7 @@ fn the_arguments_are_parsed_and_each_failure_says_its_fix() {
     let world = world_with(&root, "exit 1");
     assert_eq!(dispatch(&world, &args(&["nothing"])).code, 2);
     for (cmd, fix) in [
-        ("format", "run `make format`"),
+        ("format", "run `make format CRATE=<dir>`"),
         ("test", "fix the failing test cargo names"),
         ("hamlet", "fix the stage"),
         ("test-no-counters", "hangs on the counters"),

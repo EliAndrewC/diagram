@@ -22,6 +22,7 @@ use l7r_guard::shared::tempdir::TempDir;
 use crate::Reply;
 
 mod cover;
+mod fmtfile;
 mod kept;
 mod phase;
 mod runlock;
@@ -521,7 +522,7 @@ fn cover_ran(got: &BTreeMap<String, Vec<u32>>) -> Ran {
 fn fix_for(cmd: &str) -> &'static str {
     match cmd {
         "lint" => "fix what clippy names (an exception is `#[expect(lint, reason = \"...\")]`)",
-        "format" => "run `make format`",
+        "format" => "run `make format CRATE=<dir>` (or `FILE=<path>`, one file alone; bare `make format` rewrites every crate)",
         "test" => "fix the failing test cargo names",
         "cover" => "test the lines llvm-cov names, from the crate's tests",
         "dead" => "delete the pub fn it names, or call it",
@@ -777,6 +778,10 @@ fn world_here(make: String) -> World {
 }
 
 fn dispatch(world: &World, args: &[String]) -> Reply {
+    // `make format FILE=<path>` (feature 451 T34, `fmtfile.rs`): the files named, alone
+    if args.iter().any(|a| a == "--file") {
+        return fmtfile::format_files(world, args);
+    }
     // `test-times` (feature 449 T169) times tests and keeps no result, so it is not one of the checks `parse` reads
     if args.first().map(String::as_str) == Some("test-times") {
         let mut rest = args.to_vec();
@@ -789,7 +794,7 @@ fn dispatch(world: &World, args: &[String]) -> Reply {
         return Reply {
             stdout: String::new(),
             stderr: format!(
-                "usage: l7r-gate rust {{{}}} [--crate DIR]... [--check]\n       l7r-gate rust test-times --crate DIR...\n",
+                "usage: l7r-gate rust {{{}}} [--crate DIR]... [--check]\n       l7r-gate rust format --file PATH... [--check]\n       l7r-gate rust test-times --crate DIR...\n",
                 COMMANDS.join(",")
             ),
             code: 2,
@@ -809,6 +814,7 @@ fn locked_dispatch(world: &World, args: &[String], taker: &runlock::Taker) -> Re
     if let Some(first) = words.first_mut().filter(|w| *w == "test-times") {
         "test".clone_into(first);
     }
+    // a usage error writes nothing, and nor does a one-file format (`--file`, which `parse` does not read, T34): neither takes the lock
     if parse(&words).is_none() {
         return dispatch(world, args);
     }
