@@ -22,6 +22,10 @@
       research: rendering
       held: rust/guard/src/guards/event_log_hooks.rs (and event_log_hooks/filed.rs)
       verify: DONE. landed: the landing's phase lines
+- [x] T12 [perf] The context cap: a new guard `context_cap_hooks` refusing a builder's tool call past `CONTEXT_CAP_TOKENS` (GUESS, 300k) but the Write of its handoff file, naming the file and the next step; its first step one real subagent PreToolUse payload captured and pinned as the fixture (D8, D9; FR-006, FR-012, SC-003, SC-005)
+      research: rendering
+      held: rust/guard/src/guards/context_cap_hooks.rs (new), rust/guard/src/guards.rs, rust/guard/src/lib.rs, Makefile (`make context-ok`)
+      verify: DONE. landed in batch T12+T17: the builder context cap; unordered deferrals refused
 - [x] T14 [perf] The third `make static`: a new guard `static_runs_hooks` refusing a task's third run since its last landing that succeeded, or since its first start if it has never landed (a later `task-start` resets nothing), naming the crate-scoped checks for the crates its delta changes; `STATIC_RUNS_A_TASK` (GUESS, 2) (D11; FR-007, FR-012, SC-003, SC-005)
       research: rendering
       held: rust/guard/src/guards/static_runs_hooks.rs (new), rust/guard/src/guards.rs, rust/guard/src/lib.rs
@@ -34,6 +38,10 @@
       research: rendering
       held: rust/guard/src/guards/no_poll_hooks.rs
       verify: DONE. landed in batch T14+T16: a third make static refused; the slow poll refused
+- [x] T17 [perf] The deferral's form: `make decide` refuses a found-and-left deferral without its reason, task id and order, or whose task id or "lands before" id names no OPEN task (an unticked box of the feature's `tasks.md`) when `make decide` judges it, or whose order names its own id, and a class fix without its labeled line on how every instance was found, in `rust/gate/crates/plan/src/plan/lint.rs` (the timeless parts, which `make plan-delta` runs too) and `plan.rs::decide` (the open test alone); the template's placeholder states the form (`plan/template.rs`); `DEFER_FORM_OK` on `make decide`, honored by `make plan-delta` for a section decided under it and taken by `make plan-delta` too (D15; FR-009, FR-012, SC-003)
+      research: rendering
+      held: Makefile
+      verify: DONE. landed in batch T12+T17: the builder context cap; unordered deferrals refused
 - [x] T18 [perf] `make land T="T1,T2"` read as `T="T1 T2"`, in `rust/gate/crates/land/src/land.rs` and `make land`'s help (D16; FR-011); lands before T08, so a land line naming two tasks is booked to both (T03's plan review, 2026-11-20)
       research: rendering
       held: Makefile (the help line only)
