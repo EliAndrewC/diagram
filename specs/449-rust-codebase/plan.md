@@ -853,31 +853,32 @@ tests/hooks/                 # the suites, the verdict replay through phase 1
 
 <!-- plan-archive: T220 to T219 moved to plan-done.md, 2026-11-19 (feature 375 FR-044) -->
 <!-- plan-archive: T221 to T219 moved to plan-done.md, 2026-11-20 (feature 375 FR-044) -->
-### T222 (<why: the finding or measurement that files it>)
+### T222 (T157's scoping: main's render-sync ran the Python render cache, so a compound spec edit alone left main's svg, png and page stale; T221 left checks reading what no longer exists)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: render-sync rebuilt on the Rust alone, with the phase guard on and the old Python never read. What `render_cache.py` did for main was found from its callers and outputs, never its source (observed 2026-11-19, method: the distinct lines of `.clones/.render-sync.log` over its 943 runs, `sync-with-main.sh`'s comments, `.gitignore`'s and the outputs on main's disk): it drew the maps (now the driver, `pool map --all`), refreshed `pool/index.html` (`pool index`), built the record's site when its stamp moved (`record site-stale --root`, "the record's site fresh/rebuilt"), stamped each hand sheet in a `.<map>.render-cache` sidecar (the cache keys the sheet now; four sidecars are left on main's disk, still ignored), counted the frozen tree and warned of an exhibit with no render (dropped: the index lists each exhibit with what its folder holds, and an exhibit's render can never be regenerated). `make render-sync` is that one recipe now, its prerequisite the Makefile's `guard` (main refused but under `DIAGRAM_ALLOW_MAIN=1`, which `sync-with-main.sh` sets under the lock, as before); it renders the tree it runs in, taking the Python's `ARGS` (`--skill-dir/--main-repo`) only where they name that tree (a clone's sync script not yet merged past T222 still passes main's path) and refusing them otherwise; T221's second locked `pool-index` line and `render-maps` are gone. **A failing map stops neither the index nor the site** (the suggestion taken, measured): the driver draws every other map first and neither later step reads a map's drawing, so the recipe runs all three and exits 1 at the end. In a scratch worktree of the final tree with one compound's program broken, the other ten maps were served or drawn (a changed later sheet REGENERATED after the failure), the index stayed at 30 maps, the site was rebuilt from a changed fragment, and make exited 2 with `render-sync: FAILED - a map (above); every other step ran` (measured 2026-11-19 (the worktree, `DIAGRAM_ALLOW_MAIN=1 make render-sync`)); a map failing on every pass costs the runner 0.38-0.40 s a pass (measured 2026-11-19 (the same, two passes timed)). Found doing it: the runner called `render_sync || rc=$?`, where bash ignores `set -e`, so a failed make fell through to the dirty check's 0 and the status read ok - `render_sync` now returns make's code. Deleted unread: `render_cache.py`, `record_build.py`, `pipeline/codeid.py`, `gencache.py`, `_census.py`, `pool_index.py`, `pool_index.css`, `pool_index_text.json`, `_invocation.py`, `pipeline/__init__.py`, `buildings/__init__.py`, `poolmaps.py` (each remaining module and `bundle_door.py`'s verbs imported by exit code: 38 of 38 and 6 of 6 exit 0, observed 2026-11-19); `pipeline/CLAUDE.md` folded into `dev/cache.md` and the directory removed; the Makefile's `RUN`, pyproject's pyrefly block (nothing runs pyrefly), pillow (no importer). The three checks: the probe's pool section, which filtered hamlets on a `.gen.py` no map has and printed nothing for every hamlet, is removed and says so (`NOT COMPARED`): the Rust driver writes a hamlet's drawing to its gitignored `.driver.json`, so no committed manifest holds HEAD's, and drawing HEAD in a worktree is a probe of its own (the easier route, taken and said); preflight's roll-census read and land's `L7R_ROLL_CENSUS` filter are removed - nothing writes the census, and no driver artifact is tracked (observed 2026-11-19, method: `git ls-files` over every map's owed artifacts), so an absent census only made the tree check stricter, and no red is owed. The pool index linked a hamlet's `.png` and `.html` - main's are the deleted Python's last, stale since 2026-11-07 - and now links only what the driver writes. The hamlets' missing picture and page are recorded on feature 444's T42. Render-sync end to end on the final tree in a scratch worktree: a cold run drew all 11 live maps, wrote the index at 30 maps and rebuilt the site in 171 s (measured 2026-11-19 (the worktree, timed); a cold cargo build of the engines in a new target directory), run as `DIAGRAM_ALLOW_MAIN=1 make render-sync ARGS="--skill-dir <wt> --main-repo <wt>"`, exit 0; the next run served all 11 CACHED, the index unchanged at 30 and the site fresh in 0.40 s, exit 0, no tracked pool file dirty (measured 2026-11-19 (the worktree, timed)).
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| render-sync on the Rust | `test-sync-with-main.sh` cases Y (the real Makefile against a stub gate) and Z (the runner's status), the pool index's leftovers test, the probe's and preflight's tests | none: no map-drawing code changes (the stages and the Mode A engine are untouched) | none: the drawn sheets are the driver's, as T221 left them | none |
 
 ### T222 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
-8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+1. **The goal, in the world.** Main's maps, pool index and record site are current after every landing, drawn by the Rust alone, a failure in one map visible in the runner's status without stale pages elsewhere; no check reads a file nothing writes.
+2. **The constraints.** The GM's 2026-10-30 rule (rebuild, never re-implement) and the phase guard; the derivation T219's contract; the main-tree rule and the sync lock (`docs/session-clones.md`); constitution XIV.
+3. **Where each comes from.** G: request.md, the 2026-10-30 words; O: T157's scoping, T221's found-and-left, the render-sync log and the measurements above.
+4. **Do they describe the world here?** Yes: the duties are the log's own lines over 943 runs (measured 2026-11-19 (the distinct lines of `.clones/.render-sync.log`)), and the failing-map behavior was measured on the real driver (measured 2026-11-19 (a scratch worktree with one compound's program broken)).
+5. **The order.** After T221 and T229; closes T157's pipeline work, before T158.
+6. **The exits.** Green: `make quick`, `make static`, `make hooks-test`, the red-first tests, render-sync run twice on the final tree in a scratch worktree. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** none
+8. **The budget.** One landing; the pipeline stage's counts not re-measured (the walk, the driver and the cache untouched; the index's row rule reads only the walk's names).
+9. **Done, measured.** A warm render-sync serves every map CACHED with the index at 30 and the site fresh; a broken map leaves the rest drawn, the index and site current, and the status FAILED.
+10. **Before moving a constant.** n/a
+11. **Before fitting things into room.** n/a
+12. **Before any fix.** A reader of main's pool index no longer meets a hamlet's stale Python picture or page as the hamlet's own; a failed render now reads FAILED in the status, where it read ok.
 
-**Found and left?** <none - or each item with its visible effect or the research finding it breaks; an item with neither is not a defect and is not filed>
+**Found and left?** `make probe` cannot run at all: `make cohort` (the Rust driver) prints no `record committed` line, so the probe stops at "the cohort wrote no record" before any comparison (observed 2026-11-19, method: no writer of the line under `rust/`); and `make map`'s closing `maps-moved` line, like `make maps-moved`, compares tracked `.json` manifests, which a hamlet's drawing no longer is (its tracked `<name>.json` is the deleted Python's, never rewritten), so it says unchanged for every hamlet - feature 429's "did the wave move a map?" passes the bad for hamlets. Both filed as T230, which lands before T158 (2026-11-19). Nothing under `l7r/diagram/` is run by make but `tools/claims.py` (through `scripts/bundle_door.py` and `scripts/record/claims_counters.py`); `interactive/`, `work_counts.py` and `knobs.json` are read as text if at all; `codeid.py`'s `split_ids` has no caller; shapely and scipy have no importer; `l7r/diagram/CLAUDE.md`'s `switches.py` row names a file that does not exist - each added to T158, the deletion close (2026-11-19).
 
-**Performance work?** <no - or yes, and its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** no - a rebuild onto the derivation's driver; render-sync's warm pass 0.40 s (measured 2026-11-19 (the worktree, timed)).
 
 
 <!-- plan-archive: T223 to T218 moved to plan-done.md, 2026-11-19 (feature 375 FR-044) -->
@@ -943,3 +944,30 @@ tests/hooks/                 # the suites, the verdict replay through phase 1
 
 
 <!-- plan-archive: T229 to T229 moved to plan-done.md, 2026-11-20 (feature 375 FR-044) -->
+
+### T230 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T230 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or each item with its visible effect or the research finding it breaks; an item with neither is not a defect and is not filed>
+
+**Performance work?** <no - or yes, and its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+

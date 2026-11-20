@@ -1,5 +1,5 @@
-//! Refuse unless this process runs under this project's make (feature 127; the check for `l7r-gate`'s own binaries, the round arbiter's `ask:449-T064-slices`). `l7r/diagram/_invocation.py` keeps the same check for the Python's
-//! own processes until phase 4: each decides for its own process, and neither calls the other.
+//! Refuse unless this process runs under this project's make (feature 127; the check for `l7r-gate`'s own binaries, the round arbiter's `ask:449-T064-slices`). The Python's own check, `l7r/diagram/_invocation.py`,
+//! was deleted by feature 449 T222 with the last Python it guarded; this is the one left.
 
 use std::path::{Path, PathBuf};
 

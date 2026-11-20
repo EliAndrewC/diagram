@@ -2,9 +2,9 @@
 
 Things you RUN when a map comes out wrong or a number needs measuring, and the builders and audits the gate and the
 record call. **Nothing in this directory is imported by a generator or by the engine** - that is the membership rule
-for the folder, and it is what makes these modules safe to change without thinking about map output. (They are still
-inside `gencache.engine_files()`, deliberately: the cache stays conservative rather than clever about what can reach a
-gen. See [`../pipeline/CLAUDE.md`](../pipeline/CLAUDE.md).)
+for the folder, and it is what makes these modules safe to change without thinking about map output. (No engine is
+Python any more: the Rust generation cache keys a map on its engine's binary and the files it reports reading,
+[`dev/cache.md`](../../../dev/cache.md).)
 
 Run them through their `make` targets at the repository root (named in the table; `docs/make-targets.html` lists each
 target's arguments). A tool with no target of its own is run by a test or by another target, never by a bare

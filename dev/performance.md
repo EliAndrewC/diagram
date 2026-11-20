@@ -37,7 +37,7 @@ and costs its memory back - put that cost to the GM, with this table, before tak
 |---|---|---|---|
 | A picture renders at most 3 tiles at once (`raster.TILE_WORKERS`) | a 20-household render's peak ~970 -> ~540 MB | render 2.2 -> 3.2 s | specs/324-render-memory R2-R3 |
 | The stitch child decodes one tile at a time (`raster._PICTURE_CHILD`) | the child 300 -> ~185 MB | none measured | specs/324 R2 |
-| The post-landing render step runs at most 4 maps at once (`render_cache.RENDER_JOBS`) | its peak 1.73 -> 1.12 GB, p90 737 -> 434 MB | ~60 -> ~72 s, detached | specs/324 R1-R3 |
+| RETIRED (feature 449 T222): the post-landing render step ran at most 4 maps at once (`render_cache.RENDER_JOBS`); its Rust replacement, `make render-sync`, draws the maps one at a time in one driver, so there is no width to trade | its peak 1.73 -> 1.12 GB, p90 737 -> 434 MB | ~60 -> ~72 s, detached | specs/324 R1-R3 |
 | Each tile renders only its part of the map (`raster.tile_doc`) | that render's peak ~540 -> ~370 MB | ~+0.3 s | specs/326-tile-clip R2, R4 |
 | 6 test workers, not 10 (`XDIST_WORKERS`, the Makefile note) | a gate's peak ~4.5 -> ~3.1 GB | ~20% of the gate's time on a QUIET machine only; none under the sessions' usual load | the Makefile note at XDIST_WORKERS |
 

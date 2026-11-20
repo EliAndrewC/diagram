@@ -33,8 +33,9 @@ Three findings drove it, in order of weight:
    which names `compound` among the engine imports it keys the cache on). What the modes share now
    is common infrastructure both import: the one caption placer (`l7r/diagram/labels/`, feature 266,
    used by the settlement engine, `compound.py` and the hand-drawn sheets), the interactive page
-   (`l7r/diagram/interactive/`, with a Mode A kind registry beside the Mode B classes), the render
-   cache and pool index (`l7r/diagram/pipeline/`), and the sheet-follows-its-map rule (a Mode A
+   (`l7r/diagram/interactive/`, with a Mode A kind registry beside the Mode B classes), the generation
+   cache, its driver and the pool index (`rust/gate/crates/pool/`, which replaced the Python `pipeline/` package in feature 449
+   T220-T222), and the sheet-follows-its-map rule (a Mode A
    sheet of a place a settlement map draws is checked against that map's manifest -
    `rust/mode_a/src/audit/mapmatch.rs`, feature 257). A split would put that infrastructure in a third
    package both depend on; it would not separate the two.

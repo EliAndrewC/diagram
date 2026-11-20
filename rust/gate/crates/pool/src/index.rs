@@ -55,10 +55,17 @@ fn href(map: &Map, suffix: &str) -> String {
     }
 }
 
+/// The files beside a map that are its own: a hamlet's are what the Rust driver writes, so a `.png`, `.html` or `.svg` there - the deleted
+/// Python engine's last picture, page and drawing (feature 444 T39), stale since - is never linked as the hamlet's (feature 449 T222).
+fn owns(map: &Map, suffix: &str) -> bool {
+    map.has(suffix) && !(map.kind == Kind::Hamlet && matches!(suffix, ".png" | ".html" | ".svg"))
+}
+
 /// One map's row: its name (its page's link where it has one), its kind, and its picture and notes where its folder holds them.
 fn row(map: &Map) -> String {
     let name = escape(&map.name);
-    let shown = if map.has(".html") {
+    let paged = owns(map, ".html");
+    let shown = if paged {
         format!(
             "<a class=\"name\" href=\"{}\">{name}</a>",
             escape(&href(map, ".html"))
@@ -67,7 +74,7 @@ fn row(map: &Map) -> String {
         format!("<span class=\"name\">{name}</span>")
     };
     let mut links = Vec::new();
-    if !map.has(".html") {
+    if !paged {
         links.push("<span class=\"muted\">no rendered page</span>".to_owned());
     }
     // a hamlet's own drawing is the Rust driver's `<map>.driver.svg`
@@ -77,7 +84,7 @@ fn row(map: &Map) -> String {
         (".driver.svg", "driver drawing"),
         (".notes.md", "notes"),
     ] {
-        if map.has(suffix) && !(suffix == ".svg" && map.has(".png")) {
+        if owns(map, suffix) && !(suffix == ".svg" && owns(map, ".png")) {
             links.push(format!(
                 "<a href=\"{}\">{what}</a>",
                 escape(&href(map, suffix))

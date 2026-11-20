@@ -36,8 +36,6 @@ const FEATURE_RECORDS: [&str; 4] = [
 ];
 /// The landing cohort's records: a NEW one is a run beside the gate committing its result (405 T48, D21).
 const COHORT_LOG: &str = "dev/cohort-log/";
-/// What a pool map's roll writes beside its generator (feature 385 T87, plan D108).
-const MAP_OUTPUTS: [&str; 5] = [".json", ".png", ".svg", ".html", ".webp"];
 
 /// Each run is recorded for `make tool-yield`, as `usage_log` records a Python tool's.
 const USAGE_LOG_TOOL: &str = "preflight";
@@ -283,41 +281,6 @@ pub fn seen_moves(
         .collect()
 }
 
-/// The map outputs of every pool map the gate's own run rolled, by its roll census (feature 385 T87, plan D108).
-#[must_use]
-pub fn rolled_outputs(root: &Path, census: &Path) -> BTreeSet<String> {
-    let mut out = BTreeSet::new();
-    let top = root;
-    for line in std::fs::read_to_string(census).unwrap_or_default().lines() {
-        let Ok(record) = serde_json::from_str::<Value>(line) else {
-            continue;
-        };
-        let generator = PathBuf::from(record["gen"].as_str().unwrap_or(""));
-        let name = generator
-            .file_name()
-            .unwrap_or_default()
-            .to_string_lossy()
-            .into_owned();
-        let Some(stem) = name
-            .strip_suffix(".gen.py")
-            .filter(|_| record["kind"] == "roll")
-        else {
-            continue;
-        };
-        let parent = generator.parent().unwrap_or(&generator);
-        let dir = std::fs::canonicalize(parent).unwrap_or_else(|_| parent.to_owned());
-        let Ok(rel) = dir.strip_prefix(top) else {
-            continue;
-        };
-        out.extend(
-            MAP_OUTPUTS
-                .iter()
-                .map(|ext| format!("{}/{stem}{ext}", rel.display())),
-        );
-    }
-    out
-}
-
 /// Probe test files a diagnosis left in the tree (`tests/**/test_zz_probe*.py`): each runs in the full suite and can turn it red on its own.
 #[must_use]
 pub fn stray_probes(root: &Path) -> Vec<String> {
@@ -357,7 +320,6 @@ pub struct Asked {
     pub skip_quick: bool,
     pub tree_snap: String,
     pub tree_check: String,
-    pub census: String,
     pub would_write: String,
     pub content: String,
     pub quiet: bool,
@@ -376,7 +338,6 @@ pub fn parse(args: &[String]) -> Asked {
             "--root" => a.root = value(),
             "--tree-snap" => a.tree_snap = value(),
             "--tree-check" => a.tree_check = value(),
-            "--census" => a.census = value(),
             "--would-write" => a.would_write = value(),
             "--content" => a.content = value(),
             "--skip-quick" => a.skip_quick = true,
@@ -411,21 +372,9 @@ fn tree_check(root: &Path, tools: &Tools, a: &Asked, say: &mut dyn std::io::Writ
         return 0;
     };
     let moved = seen_moves(root, tools, &before, &tree(root));
-    let census = if a.census.is_empty() {
-        root.join(".git/roll-census.jsonl")
-    } else {
-        PathBuf::from(&a.census)
-    };
-    let rolled = rolled_outputs(root, &census);
-    let (rerolled, moved): (Vec<String>, Vec<String>) =
-        moved.into_iter().partition(|m| rolled.contains(m));
-    if !rerolled.is_empty() {
-        let _ = writeln!(
-            say,
-            "preflight: re-rolled by the gate - commit them (feature 385 T87):\n  {}",
-            rerolled.join("\n  ")
-        );
-    }
+    // NO ROLL CENSUS (feature 449 T222): a move the gate's own roll made was excused by the census `_census.py` wrote, read here. The
+    // Python roll that wrote it is gone, and the Rust driver writes only gitignored renders (a hamlet's `.driver.svg` and `.driver.json`,
+    // a sheet's picture and page), which this snapshot never holds; so every tracked move is the tree moving, with nothing to excuse.
     if moved.is_empty() {
         return 0;
     }

@@ -6,10 +6,10 @@ comment, a docstring, a constant's claim string, a blank line or reformatting le
 it. One definition, read three ways:
 
 - `semantic_bytes` - a whole file, what the Rust gate's stamp hashes for `make done` (asked by `rust/gate/crates/core/src/codeid.rs`, stdlib
-  only, because it runs inside the guards and must not import the engine package) and `ci/delta.py` through it; the engine's
-  keys read it through `l7r/diagram/pipeline/codeid.py`, a shim that loads this file;
-- `split_ids` - a module's top level and each function, what the roll and map key (`gencache.split_sources`) hashes per
-  executed function;
+  only, because it runs inside the guards and must not import the engine package) and `ci/delta.py` through it (the Python
+  engine's keys, which read it through a shim, went with the Python generation cache, feature 449 T222);
+- `split_ids` - a module's top level and each function, what the Python generation cache keyed per executed function; no
+  caller is left since that cache was deleted (feature 449 T222);
 - `strip_docstrings` - the rule itself, for a caller holding a tree.
 
 WHY (GM 2026-08-26, feature 133 T11; feature 426): a record-the-why comment is REQUIRED at the point of change in this project
@@ -19,8 +19,8 @@ declined: `co_consts` carries docstrings and the line table every comment's line
 its bytes - unparseable is still content.
 
 What is CONTENT is not stripped here but by the caller choosing bytes: the interactive class registry's docstrings are the
-modal text (`interactive/classes/_base.py` returns `cls.__doc__`), so `gencache` and `render_cache` key `interactive/` on its
-bytes, as `gate-stamp`'s `RAW_AREAS` do.
+modal text (`interactive/classes/_base.py` returns `cls.__doc__`), so `gate-stamp`'s `RAW_AREAS` key `interactive/` on its
+bytes.
 
 Research: hashing plumbing - NONE
 """

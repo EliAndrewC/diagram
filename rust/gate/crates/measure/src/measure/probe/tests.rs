@@ -7,7 +7,7 @@ use std::process::Command;
 
 use serde_json::json;
 
-use super::{cli, compare, drive, manifest_diff, mark, record_of, verdicts, Live, Runs, Verdicts};
+use super::{cli, compare, drive, mark, record_of, verdicts, Live, Runs, Verdicts};
 
 fn sets(list: &[(i64, &[&str])]) -> Verdicts {
     list.iter()
@@ -59,18 +59,6 @@ fn every_seed_is_printed_beside_head_s_and_a_new_failing_check_is_worse() {
     assert!(gone[0].contains("not rolled") && gone[0].contains("now: -"));
 }
 
-#[test]
-fn a_manifest_s_moved_fields_are_listed_by_path_points_as_drawn() {
-    let old =
-        json!({"lanes": [{"pts": [[1.04, 2.0]], "w": 3}], "meta": {"x": 1}, "houses": [1, 2]});
-    let new = json!({"lanes": [{"pts": [[1.0, 2.0]], "w": 5}], "meta": {"x": 1, "y": 2}, "houses": [1, 2, 3]});
-    assert_eq!(
-        manifest_diff(&old, &new),
-        ["houses", "lanes[0].w", "meta.y"]
-    );
-    assert_eq!(manifest_diff(&json!(1), &json!(2)), ["(the manifest)"]);
-}
-
 fn git(dir: &Path, args: &[&str]) {
     assert!(Command::new("git")
         .arg("-C")
@@ -88,7 +76,6 @@ fn repo(tag: &str) -> l7r_guard::shared::tempdir::TempDir {
     git(&root, &["config", "user.email", "t@t"]);
     git(&root, &["config", "user.name", "t"]);
     std::fs::create_dir_all(root.join("pool/hamlets/a")).unwrap();
-    std::fs::write(root.join("pool/hamlets/a/a.gen.py"), "x\n").unwrap();
     std::fs::write(root.join("pool/hamlets/a/a.spec.json"), "{}\n").unwrap();
     std::fs::write(root.join("pool/hamlets/a/a.json"), "{\"lanes\": 1}\n").unwrap();
     std::fs::write(root.join("pool/hamlets/a/notes.txt"), "x\n").unwrap();
@@ -165,33 +152,32 @@ impl Runs for Fake {
                 },
             );
         }
-        if cmd.iter().any(|w| w == "cohort") {
-            let who = if dir.file_name().unwrap() == "head" {
-                "head"
-            } else {
-                "now"
-            };
-            self.rolls.borrow_mut().push(who.to_owned());
-            let seed: i64 = cmd
-                .iter()
-                .find_map(|a| a.strip_prefix("SEED="))
-                .map_or(1, |s| s.parse().unwrap());
-            *self.n.borrow_mut() += 1;
-            let n = *self.n.borrow();
-            let bad = self.failing.borrow().get(who).cloned().unwrap_or_default();
-            let seeds: Vec<_> = [seed, seed + 1].iter().map(|s| json!({"seed": s, "failures": if bad.contains(s) { json!(["c[1]"]) } else { json!([]) }})).collect();
-            let path = self.root.join(format!("dev/cohort-log/{n}.json"));
-            std::fs::create_dir_all(path.parent().unwrap()).unwrap();
-            std::fs::write(path, json!({"seeds": seeds}).to_string()).unwrap();
-            if !*self.record.borrow() {
-                return (0, "no record".to_owned());
-            }
-            return (
-                0,
-                format!("record committed (pass): dev/cohort-log/{n}.json"),
-            );
+        // the probe runs nothing else since its pool section left (449 T222): every other command is a cohort roll
+        assert!(cmd.iter().any(|w| w == "cohort"), "the probe ran {cmd:?}");
+        let who = if dir.file_name().unwrap() == "head" {
+            "head"
+        } else {
+            "now"
+        };
+        self.rolls.borrow_mut().push(who.to_owned());
+        let seed: i64 = cmd
+            .iter()
+            .find_map(|a| a.strip_prefix("SEED="))
+            .map_or(1, |s| s.parse().unwrap());
+        *self.n.borrow_mut() += 1;
+        let n = *self.n.borrow();
+        let bad = self.failing.borrow().get(who).cloned().unwrap_or_default();
+        let seeds: Vec<_> = [seed, seed + 1].iter().map(|s| json!({"seed": s, "failures": if bad.contains(s) { json!(["c[1]"]) } else { json!([]) }})).collect();
+        let path = self.root.join(format!("dev/cohort-log/{n}.json"));
+        std::fs::create_dir_all(path.parent().unwrap()).unwrap();
+        std::fs::write(path, json!({"seeds": seeds}).to_string()).unwrap();
+        if !*self.record.borrow() {
+            return (0, "no record".to_owned());
         }
-        (0, String::new())
+        (
+            0,
+            format!("record committed (pass): dev/cohort-log/{n}.json"),
+        )
     }
 }
 
@@ -210,8 +196,7 @@ fn head_is_rolled_once_per_engine_key_and_the_probe_is_red_on_a_worse_seed() {
     assert_eq!(got.code, 1);
     assert!(
         got.stdout.contains("NEW FAILURE")
-            && got.stdout.contains("the pool against HEAD:")
-            && got.stdout.contains("a: unchanged")
+            && got.stdout.contains("the pool against HEAD: NOT COMPARED")
     );
     assert_eq!(h.rolls.borrow().iter().filter(|r| *r == "head").count(), 2);
     h.rolls.borrow_mut().clear();
@@ -220,11 +205,11 @@ fn head_is_rolled_once_per_engine_key_and_the_probe_is_red_on_a_worse_seed() {
     let again = say(&["--exitfirst", "--jobs", "2"], &root, &h);
     assert_eq!(again.code, 0);
     assert_eq!(h.rolls.borrow().iter().filter(|r| *r == "head").count(), 0);
-    assert!(again.stdout.contains("a: 1 field(s) moved - lanes"));
+    assert!(!again.stdout.contains("a: unchanged") && again.stdout.contains("NOT COMPARED"));
 }
 
 #[test]
-fn a_cohort_that_writes_no_record_stops_the_probe_and_many_moved_fields_are_trimmed() {
+fn a_cohort_that_writes_no_record_stops_the_probe() {
     let root = repo("probe-none");
     let h = Fake::new(&root);
     *h.record.borrow_mut() = false;
@@ -232,15 +217,8 @@ fn a_cohort_that_writes_no_record_stops_the_probe_and_many_moved_fields_are_trim
     assert!(got.code == 1 && got.stderr.contains("wrote no record"));
     *h.record.borrow_mut() = true;
     h.failing.borrow_mut().insert("now".to_owned(), vec![1]);
-    let many: serde_json::Map<String, serde_json::Value> =
-        (0..12).map(|n| (format!("k{n}"), json!(n))).collect();
-    std::fs::write(
-        root.join("pool/hamlets/a/a.json"),
-        serde_json::Value::Object(many).to_string(),
-    )
-    .unwrap();
     let wide = say(&["--exitfirst"], &root, &h);
-    assert!(wide.stdout.contains(" ...") && wide.stdout.contains("EXITFIRST stopped at the first"));
+    assert!(wide.stdout.contains("EXITFIRST stopped at the first"));
     let bad = say(&["--wt", "/no/such/tree"], &root, &h);
     assert_eq!(bad.code, 1);
 }

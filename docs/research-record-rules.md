@@ -541,7 +541,7 @@ the small pages (*"the links to our research from the interactive HTML maps shou
 
 **Built, never committed.** *"We should definitely stop checking the assembled files into source control"* - and
 *"I do want these files to end up on main"*: render-sync builds the site on the main checkout when a fragment, an
-asset or the build's code changed (the stamp of `record/site/write.rs`, which `pipeline/record_build.py` forwards to since feature 449 T148), the map renders' model. Nothing in the engine,
+asset or the build's code changed (the stamp of `record/site/write.rs`, which render-sync asks through `l7r-gate record site-stale` since feature 449 T222; the Python forwarder deleted), the map renders' model. Nothing in the engine,
 the tools or the tests reads a built page: they read the record through the in-memory assembly
 (`sources.record_text`), so a fresh clone needs no build to work.
 

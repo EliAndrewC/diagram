@@ -89,8 +89,8 @@ so they are covered by tests instead: the gate holds ONE floor, 100% over the wh
 A frozen map's defects against post-freeze rules are expected, not bugs; the fix is conversion.
 The frozen maps' renders (svg + png) are **write-once exhibits** (GM 2026-08-16), because nothing
 can faithfully re-derive them once the engine drifts. Since feature 178 no render is tracked, so the
-copies on disk in the mirror ARE the exhibit (`render_cache` never re-runs a legacy gen and warns
-when one is missing), and a hand edit to an exhibit is made to those copies and to the tracked
+copies on disk in the mirror ARE the exhibit (nothing re-runs a legacy map: the Rust pool walk classifies it FROZEN, and
+the pool index lists it with what its folder holds), and a hand edit to an exhibit is made to those copies and to the tracked
 manifest together. A converted map's renders are derived by its live generator like every other
 live map's (section 5, criterion 4).
 
@@ -338,5 +338,5 @@ real consumer, so the seam is observed rather than predicted.
   rules to generated maps without moving hand-authored ones. (Largely historical since the freeze:
   new rules no longer need gating, because legacy maps are never re-gated.)
 - **Frozen** - a legacy map's permanent state since 2026-08-16: its artifacts kept as
-  exhibits, gen never re-run, gate never re-applied. `pipeline/poolmaps.py` holds the classification.
+  exhibits, gen never re-run, gate never re-applied. The Rust pool walk (`rust/gate/crates/pool/src/walk.rs`) holds the classification.
 - **`make done`** - the full lint/type/test/coverage run.

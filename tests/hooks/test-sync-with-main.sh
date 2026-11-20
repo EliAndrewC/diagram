@@ -592,6 +592,60 @@ expect_out "mirror lock stayed busy"
 [ "$(git -C "$D/main/.clones/c" rev-parse HEAD)" = "$(git -C "$D/github.git" rev-parse main)" ] && PASS=$((PASS+1)) || { echo "FAIL  the clone did not merge GitHub main past a busy mirror"; FAIL=$((FAIL+1)); }
 }
 
+case_29() {  # 1 s
+echo "Y. render-sync runs the Rust only: every map, then the pool index and the record site, a failing map stopping neither (449 T222)"
+# the REAL Makefile's render-sync, in a throwaway repository whose gate is a stub: it writes each command it was handed, one a line,
+# and fails `pool map --all` when MAP_FAILS is set (as the driver does when one map's engine refuses it, having drawn the others).
+# Red on the recipe before T222: render-maps (since removed) was a prerequisite, so a failed map stopped make before the record site was looked at.
+local R=$T/render-sync; mkdir -p "$R/scripts/gates" "$R/dev"; cp "$HERE/../../Makefile" "$R/Makefile"; echo '{}' > "$R/dev/switches.json"
+cat > "$R/scripts/gates/l7r-gate.sh" <<'STUB'
+#!/usr/bin/env bash
+case "${1:-} ${2:-}" in "log "*|"switches "*) exit 0 ;; esac
+echo "$*" >> "$(git rev-parse --show-toplevel)/.calls"
+case "$*" in
+  "pool map --all") echo "CACHED       pool/x/a"; [ -z "${MAP_FAILS:-}" ] || { echo "make map: pool/x/b: its engine refused it (exit 1)" >&2; exit 1; } ;;
+  "pool index") echo "pool index: pool/index.html written (2 maps)" ;;
+  "record site-stale"*) echo fresh ;;
+esac
+STUB
+chmod +x "$R/scripts/gates/l7r-gate.sh"; git -C "$R" init -q
+local want; want=$(printf 'pool map --all\npool index\nrecord site-stale --root %s' "$R")
+OUT=$(cd "$R" && MAP_FAILS=1 make --no-print-directory render-sync 2>&1); local rc=$?
+[ "$rc" -ne 0 ] && yes_ || no_ "a failed map: render-sync exited 0, so the runner's status would say ok"
+[ "$(cat "$R/.calls" 2>/dev/null)" = "$want" ] && yes_ || no_ "a failed map: the index and the site were not brought up to date after it - the stub was handed: $(cat "$R/.calls" 2>/dev/null | paste -sd '|')"
+expect_out "pool/x/b: its engine refused it"
+expect_out "render-sync: FAILED"
+rm -f "$R/.calls"
+OUT=$(cd "$R" && make --no-print-directory render-sync 2>&1); check "every map drawn: render-sync exits 0" 0 $?
+[ "$(cat "$R/.calls" 2>/dev/null)" = "$want" ] && yes_ || no_ "render-sync did not run the driver, the index and the site, in that order: $(cat "$R/.calls" 2>/dev/null | paste -sd '|')"
+expect_out "render-sync: the record's site fresh (research/site/index.html)"
+# the main-tree guard: a tree holding .clones/ is main, refused without the GM's override, which sync-with-main.sh sets
+rm -f "$R/.calls"; mkdir -p "$R/.clones"
+OUT=$(cd "$R" && make --no-print-directory render-sync 2>&1); local rc2=$?
+[ "$rc2" -ne 0 ] && [ ! -e "$R/.calls" ] && yes_ || no_ "render-sync ran in a main tree without DIAGRAM_ALLOW_MAIN=1 (rc=$rc2)"
+OUT=$(cd "$R" && DIAGRAM_ALLOW_MAIN=1 make --no-print-directory render-sync 2>&1); check "main with DIAGRAM_ALLOW_MAIN=1: render-sync runs" 0 $?
+# the tree rendered is the one it runs in: render_cache's ARGS are taken where they name it (a clone's sync script not yet merged past
+# T222 still passes them), and refused naming that where they name another tree or anything else
+OUT=$(cd "$R" && DIAGRAM_ALLOW_MAIN=1 make --no-print-directory render-sync ARGS="--skill-dir $R --main-repo $R/." 2>&1); check "render-sync ARGS naming its own tree runs" 0 $?
+OUT=$(cd "$R" && DIAGRAM_ALLOW_MAIN=1 make --no-print-directory render-sync ARGS="--skill-dir $R --main-repo /elsewhere" 2>&1); check "render-sync ARGS naming another tree refused" 2 $?
+expect_out "renders the tree it runs in"
+OUT=$(cd "$R" && DIAGRAM_ALLOW_MAIN=1 make --no-print-directory render-sync ARGS="wip/x.svg" 2>&1); check "render-sync ARGS of anything else refused" 2 $?
+expect_out "which it does not take"
+}
+
+case_30() {  # 1 s
+echo "Z. a render-sync that fails is FAILED in the runner's status, never ok (449 T222)"
+# found by T222: the runner calls `render_sync || rc=$?`, and bash ignores `set -e` inside a `||` context, so the function went on past a
+# failed `make render-sync` to the dirty check and returned its 0 - the status read ok over a failed render, and the next sync-in
+# warned of nothing
+D=$(topology rf)
+printf 'render-sync:\n\t@echo "make map: pool/x/b: its engine refused it (exit 1)" >&2; exit 1\n' > "$D/main/Makefile"
+OUT=$(cd "$D/main/.clones/c" && CLONE_MAIN="$D/main" CLONE_GITHUB="$D/github.git" GITHUB_TOKEN=unused "$SYNC" render-sync 2>&1); local rc=$?
+[ "$rc" -ne 0 ] && yes_ || no_ "render-sync exited 0 over a failed make render-sync"
+( cd "$D/main/.clones/c" && CLONE_MAIN="$D/main" CLONE_GITHUB="$D/github.git" GITHUB_TOKEN=unused "$SYNC" render-sync-runner >/dev/null 2>&1 )
+grep -q '^FAILED .* exit [1-9]' "$D/main/.clones/.render-sync.status" 2>/dev/null && yes_ || no_ "the runner's status after a failed render: $(cat "$D/main/.clones/.render-sync.status" 2>/dev/null)"
+}
+
 # GUARD_EDIT_OK: feature 375 amendment 4 (FR-022) - THE CASES RUN IN PARALLEL PARTS. This suite is held to the whole scripts
 # tree (feature 172: its push path reaches scripts at run time), so every script change re-runs it, and at 202-230 s it was
 # the long pole of a parallel hooks-test (specs/375-enforced-wave-process/research.md R3). Each case builds its own fixture
@@ -599,8 +653,8 @@ expect_out "mirror lock stayed busy"
 # longest first onto the lightest part (the times are the measured ones beside each case; a new case without one counts
 # 10 s), each part a subshell with its own $T, HOME and guard log. Every check still runs and is counted; a part that ends
 # before a case reports fails the suite and names the case. SYNC_PARTS=1 runs them one after another, as before.
-CASES=(case_01 case_02 case_03 case_04 case_05 case_06 case_07 case_08 case_09 case_10 case_11 case_11b case_11c case_11d case_12 case_13 case_14 case_15 case_16 case_17 case_18 case_19 case_20 case_21 case_22 case_23 case_24 case_25 case_26 case_27 case_27b case_28)
-declare -A WEIGHT=([case_01]=1 [case_02]=1 [case_03]=1 [case_04]=1 [case_05]=1 [case_06]=1 [case_07]=1 [case_08]=1 [case_09]=1 [case_10]=1 [case_11]=1 [case_11b]=1 [case_11c]=2 [case_11d]=3 [case_12]=1 [case_13]=1 [case_14]=1 [case_15]=2 [case_16]=1 [case_17]=2 [case_18]=1 [case_19]=1 [case_20]=1 [case_21]=2 [case_22]=1 [case_23]=1 [case_24]=1 [case_25]=1 [case_26]=1 [case_27]=1 [case_27b]=1 [case_28]=1)  # seconds, each case alone less the suite's start and template (about 0.85 s), measured 2026-11-19 (feature 449 T205; case_17 6.6 s before its lock holder was killed whole)
+CASES=(case_01 case_02 case_03 case_04 case_05 case_06 case_07 case_08 case_09 case_10 case_11 case_11b case_11c case_11d case_12 case_13 case_14 case_15 case_16 case_17 case_18 case_19 case_20 case_21 case_22 case_23 case_24 case_25 case_26 case_27 case_27b case_28 case_29 case_30)
+declare -A WEIGHT=([case_01]=1 [case_02]=1 [case_03]=1 [case_04]=1 [case_05]=1 [case_06]=1 [case_07]=1 [case_08]=1 [case_09]=1 [case_10]=1 [case_11]=1 [case_11b]=1 [case_11c]=2 [case_11d]=3 [case_12]=1 [case_13]=1 [case_14]=1 [case_15]=2 [case_16]=1 [case_17]=2 [case_18]=1 [case_19]=1 [case_20]=1 [case_21]=2 [case_22]=1 [case_23]=1 [case_24]=1 [case_25]=1 [case_26]=1 [case_27]=1 [case_27b]=1 [case_28]=1 [case_29]=1 [case_30]=1)  # seconds, each case alone less the suite's start and template (about 0.85 s), measured 2026-11-19 (feature 449 T205; case_17 6.6 s before its lock holder was killed whole)
 # SYNC_CASES="case_11 case_17" runs only those cases - to time one case where it lives (feature 383 amendment 3, plan D27); the
 # runner itself is tests/hooks/parts.sh since amendment 4 (plan D28), shared by every split suite
 [ -n "${SYNC_CASES:-}" ] && PARTS_CASES=$SYNC_CASES

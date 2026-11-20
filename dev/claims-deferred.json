@@ -1,8 +1,6 @@
 {
  "why": "feature 328 amendment 8 (the GM 2026-10-07): code only the legacy hand-authored villages, towns and cities run; its findings are DEFERRED, not fixed, until those settlements convert to scripted generation (derived by specs/328-match-the-research/audit/scope.py)",
  "units": [
-  "l7r/diagram/_invocation.py::_Ladder",
-  "l7r/diagram/_invocation.py::_reason",
   "rust/mode_a/src/dwellings.rs::BUSINESS_KINDS",
   "rust/mode_a/src/dwellings.rs::HOUSEHOLD",
   "l7r/diagram/interactive/choices.py::not_choices",

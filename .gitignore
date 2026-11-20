@@ -68,8 +68,6 @@ __pycache__
 #    every fresh clone - so every map after it in the walk never renders either. The list is
 #    enumerated rather than derived ON PURPOSE: which plans are hand-drawn is a curation decision,
 #    and a new one is a deliberate line here rather than something a glob infers.
-#    `render_cache.is_cacheable` asks `git check-ignore` ("Mode A magistracy svgs are tracked source -
-#    never stamped, always regenerated"), so it follows this file and needs no edit of its own.
 #
 # The ONLY renders still tracked are `tests/fixtures/*-red.svg`: hand-broken by a person to prove a
 # check fires, with no generator anywhere. That is the whole exception list now.
@@ -86,7 +84,8 @@ pool/magistracies/county-magistracy-example/county-magistracy-example.svg
 pool/magistracies/ochiba-roundtrip-test/ochiba-roundtrip-test.svg
 !pool/country-shrines/*/*.svg
 pool/*/*/*.html
-# A hand-drawn sheet's render-cache stamp (its svg is tracked, so the stamp sits beside it - render_cache._sidecar).
+# A hand-drawn sheet's stamp from the Python render cache, deleted by feature 449 T222: nothing writes one now, but main still holds
+# four, so the line stays until they are gone (removed, they would show as untracked in the mirror).
 pool/*/*/.*.render-cache
 legacy-hand-authored-pool/*/*/*.svg
 legacy-hand-authored-pool/*/*/*.png

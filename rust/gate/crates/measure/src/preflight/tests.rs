@@ -3,9 +3,7 @@
 use std::collections::{BTreeMap, BTreeSet};
 use std::path::Path;
 
-use super::{
-    parse, rolled_outputs, run, seen_moves, stray_probes, tree, tree_moved, unseen, Asked, Tools,
-};
+use super::{parse, run, seen_moves, stray_probes, tree, tree_moved, unseen, Asked, Tools};
 
 fn git(dir: &Path, args: &[&str]) -> String {
     let done = std::process::Command::new("git")
@@ -94,8 +92,6 @@ fn flags_are_read() {
             "s",
             "--tree-check",
             "c",
-            "--census",
-            "e",
             "--would-write",
             "w",
             "--content",
@@ -112,11 +108,10 @@ fn flags_are_read() {
             a.root.as_str(),
             a.tree_snap.as_str(),
             a.tree_check.as_str(),
-            a.census.as_str(),
             a.would_write.as_str(),
             a.content.as_str()
         ),
-        ("r", "s", "c", "e", "w", "t")
+        ("r", "s", "c", "w", "t")
     );
     assert!(a.skip_quick && a.quiet);
     assert_eq!(parse(&[]).root, ".");
@@ -333,55 +328,23 @@ fn a_snapshot_that_cannot_be_written_fails() {
 }
 
 #[test]
-fn a_pool_map_the_gate_rolled_itself_is_no_tree_move_and_another_maps_still_is() {
+fn a_pool_map_written_while_the_gate_ran_is_a_tree_move() {
+    // a tracked map file moved under the gate is named whatever wrote it: no roll census excuses one since 449 T222
     let root = repo("pf-rolled");
-    for m in ["kuwa", "other"] {
-        let d = root.join("pool/hamlets").join(m);
-        std::fs::create_dir_all(&d).unwrap();
-        std::fs::write(d.join(format!("{m}.gen.py")), "x = 1\n").unwrap();
-        std::fs::write(d.join(format!("{m}.json")), "{}\n").unwrap();
-    }
+    let d = root.join("pool/hamlets/kuwa");
+    std::fs::create_dir_all(&d).unwrap();
+    std::fs::write(d.join("kuwa.json"), "{}\n").unwrap();
     git(&root, &["add", "-A"]);
     git(&root, &["commit", "-qm", "maps"]);
     let t = tools(&root, "", "exit 1");
-    let snap = snap_of(&root, &t);
-    let census = root.join("census.jsonl");
-    std::fs::write(
-        &census,
-        format!(
-            "{{\"kind\": \"roll\", \"gen\": \"{}/pool/hamlets/kuwa/kuwa.gen.py\"}}\n",
-            root.display()
-        ),
-    )
-    .unwrap();
-    std::fs::write(
-        root.join("pool/hamlets/kuwa/kuwa.json"),
-        "{\"rolled\": 1}\n",
-    )
-    .unwrap();
     let check = Asked {
-        tree_check: snap,
-        census: census.display().to_string(),
+        tree_check: snap_of(&root, &t),
         ..asked(&root)
     };
+    std::fs::write(d.join("kuwa.json"), "{\"rolled\": 1}\n").unwrap();
     let (code, out) = go(&check, &t);
-    assert!(code == 0 && out.contains("re-rolled by the gate - commit them"));
-    std::fs::write(
-        root.join("pool/hamlets/other/other.json"),
-        "{\"hand\": 1}\n",
-    )
-    .unwrap();
-    let (code, out) = go(&check, &t);
-    assert!(code == 1 && out.contains("pool/hamlets/other/other.json"));
-}
-
-#[test]
-fn only_a_rolled_generator_under_the_root_names_outputs() {
-    let root = repo("pf-census");
-    let census = root.join("c.jsonl");
-    std::fs::write(&census, "not json\n{\"kind\": \"view\", \"gen\": \"x/a.gen.py\"}\n{\"kind\": \"roll\", \"gen\": \"/elsewhere/b.gen.py\"}\n{\"kind\": \"roll\", \"gen\": \"x/c.py\"}\n{\"kind\": \"roll\"}\n").unwrap();
-    assert!(rolled_outputs(&root, &census).is_empty());
-    assert!(rolled_outputs(&root, &root.join("none")).is_empty());
+    assert!(code == 1 && out.contains("pool/hamlets/kuwa/kuwa.json"));
+    assert!(!out.contains("re-rolled by the gate"));
 }
 
 #[test]

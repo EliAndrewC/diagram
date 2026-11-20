@@ -15,9 +15,9 @@
 # disagree, CLAUDE.md wins and this script has a bug.
 #
 # RENDER MODEL (GM 2026-07-22): renders no longer flow clone -> main by copy. render-sync
-# REGENERATES main's diagram renders in place from main's own committed tip (via l7r/diagram/pipeline/render_cache.py),
-# so a render in main is a pure function of main's code and can never be a stale copy. A content
-# hash stamped into each derived svg makes the regen a cheap no-op when nothing a map depends on
+# REGENERATES main's diagram renders in place from main's own committed tip (`make render-sync`: the Rust driver, the pool index
+# and the record site, feature 449 T222), so a render in main is a pure function of main's code and can never be a stale copy. The
+# generation cache (.gencache/rust) makes the regen a cheap no-op when nothing a map reads
 # changed. This retired the whole copy machinery: no clone-side pre-render, no rsync, no tip-guard,
 # no byte-verify, and sync-in no longer pulls renders into the clone.
 #
@@ -26,8 +26,8 @@
 #   push            stop-work: refuse dirty tree, locked pull+push, overlap advisory (exit 3 =
 #                   the pull merged other sessions' edits into files your commits touched -
 #                   rerun the relevant gate NOW and fix forward)
-#   render-sync     locked, cache-short-circuited regen of main's diagram renders IN PLACE from
-#                   main's tip (DIAGRAM_ALLOW_MAIN=1 for that one sanctioned regen-in-main)
+#   render-sync     locked, cache-short-circuited regen of main's diagram renders, pool index and record site IN PLACE
+#                   from main's tip (DIAGRAM_ALLOW_MAIN=1 for that one sanctioned regen-in-main)
 #   done            push, then render-sync (the common full stop-work)
 set -euo pipefail
 
@@ -446,35 +446,31 @@ render_sync() {
   # old build-in-clone-then-rsync-copy machinery). Renders now become a pure function of main's
   # committed code - nothing is copied, so nothing can be copied stale (the fragility that copy
   # approach had: whether a clone had touched a given render was situational, so a stale copy
-  # could linger in main). l7r/diagram/pipeline/render_cache.py runs each generator FROM ITS OWN DIRECTORY (the Mode A
-  # cwd trap) and short-circuits on a content hash stamped into each derived svg: an unconditional
-  # post-push regen is therefore cheap - only maps whose source actually changed re-run, so a push
-  # that touched no map's inputs costs little while still self-healing every render from tip. (It said ~0.3s; measured
-  # 17-28 s on 2026-10-02 because the hand-drawn sheets were never cached - they are now, beside their tracked svg.)
+  # could linger in main). `make render-sync` (feature 449 T222, the Rust only) draws every live map through the generation
+  # cache, which keys each map on its engine's build id and the files it read, so an unconditional post-push regen is cheap - only
+  # maps whose inputs changed re-run (a warm run 0.1 s, measured 2026-11-19 by T221) - then writes the pool index and builds the
+  # record's site when its stamp differs from its inputs. A map that fails stops neither the index nor the site; the target exits
+  # non-zero at the end, and the runner records FAILED.
   # GUARD_EDIT_OK: comment correction only
   #
   # Under the procedure LOCK for the whole regen: main is a push-to-checkout target (updateInstead),
   # so another session's push mid-regen would rewrite the engine under us and mix tips across maps.
   # DIAGRAM_ALLOW_MAIN=1 stands the engine's main-tree guard down for this ONE sanctioned
-  # regen-in-main. No tip-guard is needed - regenerating whatever tip main currently holds is
-  # correct, and a second runner finds every stamp fresh and skips (the cache makes redundant
+  # regen-in-main (the Makefile's `guard`, render-sync's prerequisite). No tip-guard is needed - regenerating whatever tip main
+  # currently holds is correct, and a second runner finds every map cached and skips (the cache makes redundant
   # regens ~free, which is what retires the old TIP-GUARD/last-writer-wins hazard entirely).
   # THROUGH THE MAKE TARGET, not a bare interpreter (feature 127, FR-009). This was the last
   # operation in the repo invoked outside make, and it was exempted in an early draft of the spec on
   # the grounds that render-sync is a LEGITIMATE caller. The fidelity review rejected that: legitimate
   # WORK does not imply a legitimate INVOCATION ROUTE, and compliance cost exactly this line.
-  (cd "$MAIN" && flock "$LOCK" env DIAGRAM_ALLOW_MAIN=1 make --no-print-directory render-sync ARGS="--skill-dir $MAIN --main-repo $MAIN")
-  # THE RUST INDEX WRITTEN LAST (feature 449 T221): render_cache's own index finds maps by their .gen.py, gone with T221, so it writes
-  # a page listing nothing; the Rust index, written after it under the same lock, is the one main keeps - until T222 deletes
-  # render_cache and this line with it.
-  (cd "$MAIN" && flock "$LOCK" make --no-print-directory pool-index)
-  # --skill-dir, not --pool: since feature 161 the pool is TWO trees under the skill dir
-  # (pool/ live, legacy-hand-authored-pool/ frozen), and render_cache walks both from that one
-  # root - it warns about a frozen exhibit whose render is missing, and that job followed the
-  # exhibits out of pool/.
-  # A generator writes its TRACKED .json (and a Mode A its tracked .svg) alongside the gitignored
-  # renders; a deterministic gen reproduces those byte-identically, so main stays clean. If any
-  # tracked pool file is left dirty, a generator is nondeterministic - surface it loudly (it would
+  # The tree rendered is the one make runs in (cd "$MAIN"): the --skill-dir/--main-repo ARGS went with render_cache.py (T222).
+  # ITS EXIT IS KEPT AND RETURNED (feature 449 T222): the runner calls `render_sync || rc=$?`, and bash ignores `set -e` inside a `||`
+  # context, so a failed make here once fell through to the dirty check's 0 and the runner's status read ok over a failed render
+  # (red first: test-sync-with-main.sh case Z).
+  local rc=0
+  (cd "$MAIN" && flock "$LOCK" env DIAGRAM_ALLOW_MAIN=1 make --no-print-directory render-sync) || rc=$?
+  # The engines write only gitignored renders (a hamlet's .driver.svg and .driver.json, a sheet's picture and page), so main stays
+  # clean. If any tracked pool file is left dirty, something wrote a source - surface it loudly (it would
   # also block the next session's updateInstead push), but do not auto-revert: the GM decides.
   local dirty
   dirty=$(git -C "$MAIN" status --porcelain -- "$POOL" "$LEGACY_POOL" | grep -E '^[ MARC]M ' || true)
@@ -483,6 +479,7 @@ render_sync() {
     printf '%s\n' "$dirty" >&2
     echo "sync-with-main: investigate before the next push - main must be clean for updateInstead" >&2
   fi
+  return "$rc"
 }
 
 # THE BACKGROUND RENDER (the prompt hook's path; see SYNC_LOCK_WAIT above). Detached from the hook - its own session,

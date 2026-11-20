@@ -19,7 +19,7 @@ $(foreach v,$(FREE_TEXT),$(if $(filter command line environment,$(origin $(v))),
 
 .PHONY: modal-bundle modal-prepass done docs static format guard _reference bypass-audit quick page-check tick claim speckit-todo audit guard-edit guard-log scratch-sweep hooks-test citations fragment-move \
 	 switches _switch \
-	 map cohort cohort-landing hamlet placement-stages pool-index pool-index-if-stale compound render-sync render-maps idle-tests \
+	 map cohort cohort-landing hamlet placement-stages pool-index pool-index-if-stale compound render-sync idle-tests \
 	 pack-audit help \
 	 notes-census glossary page-lit picture-diff \
 	 ci-status gated-check
@@ -125,9 +125,6 @@ done:            ## [tests] tier 3, the whole gate: lint, the static checks, the
 
 COHORT_FRESH = 4
 
-# RUN carries make's @ prefix, so a $(RUN) line must start its recipe line, never follow a `\` continuation.
-RUN = @python3 -m l7r.diagram
-
 # ---- iteration switches (dev/switches.json) ----
 SWITCH = "$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" switches
 
@@ -153,7 +150,7 @@ _switch:
 # ---- expensive: they generate ----
 verify:         ## [tests] THE PAIRED RUN: start the gate and dispatch the settlement-review together (feature 151)
 	@printf '\033[1mverify\033[0m: the gate and the independent review run TOGETHER - neither alone (GM 2026-08-29).\n'
-	@root=$$(git rev-parse --show-toplevel) && "$$root/scripts/gates/l7r-gate.sh" delta key worktree > "$$root/.git/pairing-key" || true  # NOT $(RUN): it carries a leading @, which is a literal argument once it is not at the start of a recipe line
+	@root=$$(git rev-parse --show-toplevel) && "$$root/scripts/gates/l7r-gate.sh" delta key worktree > "$$root/.git/pairing-key" || true
 	@root=$$(git rev-parse --show-toplevel) && printf 'engine key %s\n' "$$(cut -c1-12 "$$root/.git/pairing-key" 2>/dev/null)"
 	  @root=$$(git rev-parse --show-toplevel); undeclared=$$("$$root/scripts/gates/l7r-gate.sh" reviews owed --root "$$root" --check-declared); \
 	  [ -z "$$undeclared" ] || printf '\n\033[1mOCCASIONS NOT DECLARED\033[0m: %s\n' "$$undeclared"
@@ -250,14 +247,21 @@ compound:       ## [maps] compose a Mode A compound sheet from its feet-based pr
 	@if [ -z "$(SPEC)" ]; then printf 'make compound: SPEC=<map>.compound.json is required - e.g. make compound SPEC=pool/magistracies/county-magistracy-example/county-magistracy-example.compound.json\n' >&2; exit 2; fi
 	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" mode-a compound "$(SPEC)"
 
-# EVERY LIVE MAP THROUGH THE RUST CACHE FIRST (feature 449 T221): the .gen.py files render_cache ran are gone, so main's renders are drawn
-# by `make map MAP=--all` (render-maps) before render_cache's record site and stamps; T222 rebuilds render-sync on the walk and this key.
-# A prerequisite, not a recipe line: render-sync stays the one-line `$(RUN)` recipe the make-only guard's entry-point rewrite reads.
-render-sync: render-maps ## [maps] {internal} regenerate MAIN's renders (called by sync-with-main.sh; not for hand use)
-	$(RUN).pipeline.render_cache $(ARGS)
-
-render-maps:    ## [maps] {internal} every live pool map drawn or served through the generation cache (render-sync's first step, 449 T221)
-	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" pool map --all
+# MAIN'S RENDERS, THE RUST ONLY (feature 449 T222): every live map drawn or served through the generation cache, then the pool index, then
+# the record's site built when its stamp differs from its inputs - the three duties render_cache.py held, its log's three lines. A map that
+# fails stops neither later step (the driver draws every other map first; the index and the site do not depend on one map), and the
+# recipe exits 1 at the end, so the runner's status file says FAILED. `guard` keeps it out of main's tree but under DIAGRAM_ALLOW_MAIN=1,
+# which sync-with-main.sh sets under the sync lock. It renders the tree it runs in: render_cache's ARGS (--skill-dir/--main-repo) are taken
+# only where they name that tree - a clone's sync-with-main.sh not yet merged past T222 still passes main's own path - and refused otherwise.
+render-sync: guard ## [maps] {internal} regenerate MAIN's renders (called by sync-with-main.sh; not for hand use): every live map, the pool index, the record site
+	@here="$$(cd "$$(git rev-parse --show-toplevel)" && pwd -P)"; set -- $(ARGS); while [ $$# -gt 0 ]; do \
+	  case "$$1" in --skill-dir|--main-repo) [ "$$(cd "$${2:-/nonexistent}" 2>/dev/null && pwd -P)" = "$$here" ] || { printf 'render-sync: ARGS names %s %s, not this tree - it renders the tree it runs in (feature 449 T222): cd there and run it with no ARGS\n' "$$1" "$${2:-<nothing>}" >&2; exit 2; }; shift 2 ;; \
+	  *) printf 'render-sync: ARGS holds %s, which it does not take - it renders the tree it runs in (feature 449 T222): cd there and run it with no ARGS\n' "$$1" >&2; exit 2 ;; esac; done
+	@g="$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh"; root="$$(git rev-parse --show-toplevel)"; failed=""; \
+	"$$g" pool map --all || failed="$$failed a map (above)"; \
+	"$$g" pool index || failed="$$failed the pool index"; \
+	if site=$$("$$g" record site-stale --root "$$root"); then printf "render-sync: the record's site %s (research/site/index.html)\n" "$$site"; else failed="$$failed the record's site"; fi; \
+	[ -z "$$failed" ] || { printf 'render-sync: FAILED -%s; every other step ran\n' "$$failed" >&2; exit 1; }
 
 # ---- cheap: they read a recorded artifact ----
 

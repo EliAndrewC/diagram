@@ -15,6 +15,12 @@ use serde_json::{json, Value};
 use super::reply;
 
 const SEEDS: usize = 48;
+
+/// THE POOL IS NOT COMPARED (feature 449 T222): the probe once regenerated each hamlet's `.gen.py` and listed the fields of its committed
+/// `<name>.json` that moved against HEAD's. Both went with the Python engine (444 T39, 449 T221): the Rust driver draws a hamlet into its
+/// gitignored `.driver.json`, so no committed manifest holds HEAD's drawing, and the section filtered on a file no map has - it printed
+/// nothing for every hamlet, which read as a pool unchanged. Said, never silent, until a comparison draws HEAD too.
+const POOL_NOT_COMPARED: &str = "\nthe pool against HEAD: NOT COMPARED by the probe since feature 449 T222 - a hamlet's drawing is its gitignored .driver.json, so no committed manifest holds HEAD's; nothing here says which maps the change moved. `make map MAP=--all` draws the pool, but its REGENERATED says only what moved since that tree last drew a map, not against HEAD\n";
 type Verdicts = BTreeMap<i64, Vec<String>>;
 
 static RECORD: LazyLock<Regex> = LazyLock::new(|| {
@@ -165,60 +171,6 @@ fn compare(head: &Verdicts, now: &Verdicts) -> (Vec<String>, usize) {
     (lines, worse)
 }
 
-/// A value as the manifest compares it: points rounded to the tenth they are drawn at.
-fn drawn(v: &Value) -> Value {
-    match v {
-        Value::Number(n) if n.is_f64() => format!("{:.1}", n.as_f64().unwrap_or(0.0))
-            .parse::<f64>()
-            .map_or(Value::Null, Value::from),
-        Value::Array(a) => Value::Array(a.iter().map(drawn).collect()),
-        Value::Object(o) => Value::Object(o.iter().map(|(k, x)| (k.clone(), drawn(x))).collect()),
-        other => other.clone(),
-    }
-}
-
-fn joined(path: &str, key: &str) -> String {
-    if path.is_empty() {
-        key.to_owned()
-    } else {
-        format!("{path}.{key}")
-    }
-}
-
-fn diff(a: &Value, b: &Value, path: &str, out: &mut Vec<String>) {
-    match (a, b) {
-        (Value::Object(x), Value::Object(y)) => {
-            let keys: BTreeSet<&String> = x.keys().chain(y.keys()).collect();
-            for k in keys {
-                diff(
-                    x.get(k).unwrap_or(&Value::Null),
-                    y.get(k).unwrap_or(&Value::Null),
-                    &joined(path, k),
-                    out,
-                );
-            }
-        }
-        (Value::Array(x), Value::Array(y)) if x.len() == y.len() => {
-            for (i, (p, q)) in x.iter().zip(y).enumerate() {
-                diff(p, q, &format!("{path}[{i}]"), out);
-            }
-        }
-        _ if a == b => {}
-        _ => out.push(if path.is_empty() {
-            "(the manifest)".to_owned()
-        } else {
-            path.to_owned()
-        }),
-    }
-}
-
-/// Each field path whose value differs, as drawn; a list of a different length is one change at its path.
-fn manifest_diff(old: &Value, new: &Value) -> Vec<String> {
-    let mut out = Vec::new();
-    diff(&drawn(old), &drawn(new), "", &mut out);
-    out
-}
-
 fn cohort_cmd(jobs: &str, seed: Option<i64>) -> Vec<String> {
     let mut cmd = words(&[
         "make",
@@ -335,55 +287,6 @@ impl Probe<'_> {
         Ok((landing, fresh))
     }
 
-    /// Each live hamlet with a generator, regenerated in `wt`, its manifest's changed fields against HEAD's committed one: the hamlets
-    /// from the one pool walk (feature 449 T220), each folder's generator asked of its listing.
-    fn pool_changes(&self, wt: &Path) -> Vec<String> {
-        let mut gens: Vec<PathBuf> = l7r_gate_pool::walk(wt)
-            .in_tree(l7r_gate_pool::LIVE)
-            .filter(|m| m.kind == l7r_gate_pool::Kind::Hamlet && m.has(".gen.py"))
-            .map(|m| m.file(".gen.py"))
-            .collect();
-        gens.sort();
-        gens.iter()
-            .map(|gen| {
-                let rel_gen = gen.strip_prefix(wt).unwrap_or(gen).display().to_string();
-                self.h.run(
-                    &words(&[
-                        "make",
-                        "--no-print-directory",
-                        "map",
-                        &format!("GEN={rel_gen}"),
-                    ]),
-                    wt,
-                );
-                let name = gen
-                    .parent()
-                    .and_then(Path::file_name)
-                    .unwrap_or_default()
-                    .to_string_lossy()
-                    .into_owned();
-                let rel = format!("pool/hamlets/{name}/{name}.json");
-                let head = git(self.h, self.root, &["show", &format!("HEAD:{rel}")]);
-                let before: Value = serde_json::from_str(&head).unwrap_or(json!({}));
-                let after: Value = serde_json::from_str(
-                    &std::fs::read_to_string(wt.join(&rel)).unwrap_or_default(),
-                )
-                .unwrap_or_default();
-                let moved = manifest_diff(&before, &after);
-                if moved.is_empty() {
-                    format!("  {name}: unchanged")
-                } else {
-                    format!(
-                        "  {name}: {} field(s) moved - {}{}",
-                        moved.len(),
-                        moved.iter().take(8).cloned().collect::<Vec<_>>().join(", "),
-                        if moved.len() > 8 { " ..." } else { "" }
-                    )
-                }
-            })
-            .collect()
-    }
-
     fn run(&self, wt: &Path) -> Result<(String, i32), String> {
         let block: i64 = self.cohort(&["fresh-seed", "HEAD"]).parse().unwrap_or(0);
         let (head_landing, head_fresh) = self.baseline(block)?;
@@ -407,11 +310,7 @@ impl Probe<'_> {
                 lines.join("\n")
             );
         }
-        let _ = write!(
-            out,
-            "\nthe pool against HEAD:\n{}\n",
-            self.pool_changes(wt).join("\n")
-        );
+        out.push_str(POOL_NOT_COMPARED);
         let _ = writeln!(
             out,
             "\nprobe: {worse} seed(s) worse than HEAD{}",

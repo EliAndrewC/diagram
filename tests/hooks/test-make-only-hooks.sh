@@ -274,22 +274,21 @@ refused_because() { # label, command, the text the refusal must carry
 }
 echo
 echo "5. AN ENGINE ENTRY POINT A MAKE TARGET WRAPS IS REWRITTEN INTO IT (feature 212)"
-# the render sync stands in for `building_programs`, ported to Rust and deleted by feature 449 T168, and for the pool index, whose
-# recipe runs the Rust pool walk since feature 449 T220 (GUARD_EDIT_OK: the stand-in moved, nothing loosened); the CHECK=1 form (a
-# recipe's `$(if $(X),--flag,)`) no longer has a one-line Python recipe in the Makefile, and stays tested in make_only_hooks/tests.rs's fixture
-rewritten "render sync -> make render-sync" "python3 -m l7r.diagram.pipeline.render_cache 2>&1 | grep -i complete" "make render-sync 2>&1 | grep -i complete"
+# the switches are the one Python-shaped wrapper left in the real Makefile: render-sync, the last `$(RUN).<module>` recipe, runs the Rust
+# since feature 449 T222 and `RUN` left the Makefile with it (GUARD_EDIT_OK: the stand-ins moved, nothing loosened). The `$(ARGS)`,
+# `$(if ...)` and `$(or ...)` forms of a one-line `$(RUN)` recipe stay tested in make_only_hooks/tests.rs's fixture Makefile.
+refused_because "the Rust render-sync wraps the Python one no more" "python3 -m l7r.diagram.pipeline.render_cache 2>&1 | grep -i complete" "no make target wraps"
 refused_because "the Rust pool index wraps the Python one no more" "python3 -m l7r.diagram.pipeline.pool_index" "no make target wraps"
 rewritten "a recipe's literal argument" "python3 -m l7r.diagram.switches show" "make switches"
+rewritten "a rewrite keeps the pipe after it" "python3 -m l7r.diagram.switches show 2>&1 | grep -i claims" "make switches 2>&1 | grep -i claims"
 refused_because "a ported module is wrapped no more" "python3 -m l7r.diagram.tools.building_programs --check" "no make target wraps"
 # the compound draft stands in for `pack_audit`, whose recipe runs the Rust since feature 449 T175 (its `__main__.py` deleted)
 refused_because "the ported audit is wrapped no more" "python3 -m l7r.diagram.tools.pack_audit wip/x.svg" "no make target wraps"
-# the render sync stands in for the compound draft, whose recipe runs the Rust generator since feature 449 T152 (`compound.py` deleted)
-rewritten "a \$(ARGS) recipe takes the rest" "python3 -m l7r.diagram.pipeline.render_cache wip/x.svg" 'make render-sync ARGS="wip/x.svg"'
 refused_because "a module nothing wraps lists what is" "python3 -m l7r.diagram.tools.scatter_audit pool/hamlets/x" "no make target wraps"
-refused_because "...and the list names a wrapped module" "python3 -m l7r.diagram.tools.scatter_audit pool/hamlets/x" "make render-sync"
+refused_because "...and the list names a wrapped module" "python3 -m l7r.diagram.tools.scatter_audit pool/hamlets/x" "make switches"
 refused_because "arguments the recipe cannot carry" "python3 -m l7r.diagram.switches --nonsense" "cannot carry"
 refused_because "a multi-line recipe (REF_FIRST) does not wrap" "python3 -m l7r.diagram.hamletgen --seed 4" "no make target wraps"
-ev "python3 -m l7r.diagram.pipeline.render_cache" | "$HOOK" pretool 2>/dev/null | grep -q "make render-sync" \
+ev "python3 -m l7r.diagram.switches show" | "$HOOK" pretool 2>/dev/null | grep -q "make switches" \
   && { echo "  ok      the context names the module and the target"; PASS=$((PASS+1)); } \
   || { echo "  FAIL    the entry-point rewrite's context is silent"; FAIL=$((FAIL+1)); }
 

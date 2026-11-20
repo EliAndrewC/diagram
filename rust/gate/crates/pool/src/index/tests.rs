@@ -37,6 +37,24 @@ fn every_map_has_a_row_linking_what_its_folder_holds() {
     assert!(html.ends_with("</ul>\n</main>\n</body>\n</html>\n"));
 }
 
+/// A hamlet's row links only what the Rust driver writes (feature 449 T222): a `.png`, `.html` or `.svg` beside its spec is the deleted
+/// Python engine's last picture, page or drawing (444 T39), stale since, which main's hamlets still held - linked, it showed the GM a
+/// map no engine draws as the hamlet's own.
+#[test]
+fn a_hamlet_links_the_driver_s_drawing_never_the_python_s_leftovers() {
+    let root = fixture("index-leftovers");
+    for end in [".png", ".html", ".svg"] {
+        put(&root, &format!("pool/hamlets/a/a{end}"), "x");
+    }
+    let html = page(&mut walk(&root));
+    assert!(html.contains("<li><span class=\"name\">a</span> <span class=\"kind\">hamlet</span> <span class=\"links\"><span class=\"muted\">no rendered page</span> &middot; <a href=\"hamlets/a/a.driver.svg\">driver drawing</a> &middot; <a href=\"hamlets/a/a.notes.md\">notes</a></span></li>"));
+    assert!(
+        !html.contains("hamlets/a/a.html")
+            && !html.contains("hamlets/a/a.png")
+            && !html.contains("hamlets/a/a.svg\"")
+    );
+}
+
 /// A tree with no maps says so; one map is "1 map"; a name is escaped; nothing unclassified, nothing said of it.
 #[test]
 fn an_empty_tree_says_so_and_a_name_is_escaped() {
@@ -61,12 +79,12 @@ fn the_index_is_written_only_when_it_differs() {
     assert_eq!(first, page(&mut walk(&root)));
     assert!(!write(&root, &mut walk(&root)).unwrap());
     assert!(!compare(&root, &mut walk(&root)).1);
-    put(&root, "pool/hamlets/a/a.html", "x");
+    put(&root, "pool/magistracies/c/c.html", "x");
     assert!(compare(&root, &mut walk(&root)).1);
     assert!(write(&root, &mut walk(&root)).unwrap());
     assert!(std::fs::read_to_string(root.join(INDEX))
         .unwrap()
-        .contains("href=\"hamlets/a/a.html\""));
+        .contains("href=\"magistracies/c/c.html\""));
     // no temporary file is left
     assert_eq!(std::fs::read_dir(root.join("pool")).unwrap().count(), 5);
 }

@@ -10,10 +10,40 @@ The short always-on version of each rule is in the engine index, [`l7r/diagram/C
 `make map MAP=<folder|spec>` draws any live pool map - a hamlet, a generated compound or a hand sheet - through one Rust driver
 (`rust/gate/crates/pool/src/map.rs`) over the generation cache (`rust/gate/crates/pool/src/cache.rs`), both rebuilt from
 `specs/449-rust-codebase/derivations/T219-pipeline.md` and never from the Python they replaced (`pipeline/regen.py`, `rollcache.py`,
-the six `.gen.py` wrappers and `interactive/sheet.py`, deleted; `pipeline/gencache.py` and `_census.py` stay only because
-`render_cache.py` imports them, and leave with it in T222). The walk's kind names the engine and the spec: a hamlet's `.spec.json`
+the six `.gen.py` wrappers and `interactive/sheet.py`, deleted with T221; the rest of `l7r/diagram/pipeline/` - `gencache.py`,
+`render_cache.py`, `poolmaps.py`, `pool_index.py`, `record_build.py`, `codeid.py`, with `_census.py` and `_invocation.py` - deleted with
+T222, and this file holds what that directory's index did). The walk's kind names the engine and the spec: a hamlet's `.spec.json`
 (the `hamlet` binary of `rust/phases`), a compound's `.compound.json` and a hand sheet's `.svg` (`l7r-mode-a compound` and
 `hand-sheet`). `MAP=--all` does every live map in one run; the review gate asks `l7r_gate_pool::is_current` in process, read-only.
+
+    make map MAP=pool/hamlets/sawada        # one map: CACHED, REGENERATED (with why) or FROZEN
+    make map MAP=--all                      # every live map (render-sync's first step runs the same driver)
+    make rust-test CRATE=rust/mode_a        # the pool sweep: every pool sheet through its tier's checks
+
+## The pool walk - ask it, never glob (feature 161; Rust since 449 T220)
+
+`l7r_gate_pool::walk` (`rust/gate/crates/pool/src/walk.rs`) lists each pool directory once and classifies each map folder once - a
+hamlet, a generated compound, a hand sheet, a frozen exhibit, or reported - keeping its entry names so a consumer asks `Map::has` of
+the listing; the shell asks it as `l7r-gate pool find <map> [<suffix>]`, and `l7r-gate pool list` lists every map. No consumer globs,
+lists or greps the pool's shape itself: feature 161 found ten hand-rolled walks drifted apart. The two failure directions are not
+symmetric - a consumer that collects too MUCH trips its own assertions, one that collects too LITTLE is simply green (the probe's pool
+section, filtering hamlets on a `.gen.py` no map had after T221, printed nothing for every hamlet until T222) - so a consumer names the
+trees and kinds it means. `pool/index.html` is written from the walk (`index.rs`), every map of both trees; a hamlet's row links only
+what the Rust driver writes, never the deleted Python engine's `.png`, `.html` or `.svg` left beside it (T222).
+
+## Main's renders: `make render-sync` (feature 449 T222)
+
+`scripts/sync-with-main.sh render-sync` (and its background runner after every landing, logging to `.clones/.render-sync.log` and
+`.clones/.render-sync.status`) runs `make render-sync` in main under the sync lock with `DIAGRAM_ALLOW_MAIN=1`, the one sanctioned run in
+main's tree (the Makefile's `guard` refuses it there otherwise). It does the three things the Python render cache did, its log's three
+lines, with no Python: every live map through the driver (`pool map --all`), the pool index (`pool index`), and the record's site
+built when its stamp - the record's files, the glossary and the gate binary - differs (`record site-stale --root`, printing `fresh` or
+`rebuilt`). **A map that fails stops neither the index nor the site**: the driver draws every other map first and the two later steps
+read no map's drawing, so the recipe runs all three and exits 1 at the end, the runner's status then reading FAILED (decided and
+measured by T222). It renders the tree it runs in, taking the Python's `ARGS=--skill-dir/--main-repo` only where they name that tree. What the Python did and
+nothing does now: the frozen tree's count and its warning on an exhibit with no render (the index lists each exhibit with the links its
+folder holds, and an exhibit's render can never be regenerated), and the `.<map>.render-cache` stamp beside a hand sheet, left on disk
+in main and still ignored by `.gitignore`.
 
 ## What re-keys a map
 

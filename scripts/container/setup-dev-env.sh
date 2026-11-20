@@ -106,7 +106,6 @@ check_all() {
     # shapely backs the /diagram seam-closing pass (waterfields/seams.py) - the one place the
     # field engine needs real polygon booleans, so a missing wheel breaks map generation, not a test
     _t "python: shapely (diagram field engine)"  "python3 -c 'import shapely'"
-    _t "python: pillow (render_cache, crop_map)" "python3 -c 'import PIL'"
     # dev deps - the quality gate itself (pytest and its plugins left with the Python tests, feature 449 T213)
     _t "python: ruff pyrefly"                    "python3 -m ruff --version; pyrefly --version"
     # the claude() wrapper that appends this repo's standing authorizations to the system prompt.

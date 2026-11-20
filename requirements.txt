@@ -7,8 +7,6 @@ numpy==2.5.1
     # via
     #   scipy
     #   shapely
-pillow==12.3.0
-    # via -r requirements.in
 scipy==1.16.3
     # via -r requirements.in
 shapely==2.1.2

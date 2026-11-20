@@ -3,10 +3,10 @@
 WHY: prose a reader sees - the glossary, the sibling texts, the place card's wording, the page's fixed
 phrases - used to be Python constants, which made every wording edit an ENGINE change: it re-keyed the
 gate (a dict literal is executable code, so `gate-stamp`'s docstring-stripped AST moved), chilled the
-roll cache (the page writer, `page.py` until feature 449 T150 ported it to Rust, imported these modules while writing a map's page, and `gencache` hashes every
-imported module's top level), and cost the whole ten-minute suite. Feature 205 paid that for one
+roll cache (the page writer, `page.py` until feature 449 T150 ported it to Rust, imported these modules while writing a map's page, and the Python generation cache, deleted by
+feature 449 T222, hashed every imported module's top level), and cost the whole ten-minute suite. Feature 205 paid that for one
 glossary term. A `.json` under `assets/` is an ASSET: outside the engine key, outside the roll-cache
-key (`gencache.record` does not record a `.json` read), inside gate-stamp's `page` area and the render
+key (the Python cache recorded no `.json` read), inside gate-stamp's `page` area and the render
 fingerprint - so an edit owes `make page-check` and regenerates the pages on landing, exactly like the
 stylesheet. The criterion for what moves is what a thing IS, never its size: content a reader sees
 moves; data the engine executes on (`overlap/taxonomy.py`, the hit-region keys) stays code.

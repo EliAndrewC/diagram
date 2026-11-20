@@ -174,8 +174,7 @@ impl Land {
         Ok(super::code_of(status.map_err(super::io)?))
     }
 
-    /// `make cohort-landing` in its own process group, beside the gate (405 T48, D21): its rolls are no gate's (the census variables
-    /// removed), its reference check leaves the gate's `roll-cache-class` alone, its output to a log under the git dir.
+    /// `make cohort-landing` in its own process group, beside the gate (405 T48, D21): its rolls are no gate's, its reference check leaves the gate's `roll-cache-class` alone, its output to a log under the git dir.
     fn start_cohort(&self) -> Result<(Child, PathBuf), String> {
         let (jobs, avail) = self.cohort_jobs()?;
         let log = self.git_dir()?.join("land-cohort.log");
@@ -183,16 +182,11 @@ impl Land {
         let sink = std::fs::File::create(&log).map_err(super::io)?;
         let err = sink.try_clone().map_err(super::io)?;
         let jobs = format!("JOBS={jobs}");
-        // the process's environment less the census variables, then what the landing exported, as `land.py`'s dict comprehension
-        // over `os.environ` built it
+        // the process's environment, then what the landing exported (the roll census's variables it once dropped went with
+        // `_census.py`, their one reader, feature 449 T222)
         let mut cmd = Command::new(&self.make);
         cmd.args(["--no-print-directory", "cohort-landing", &jobs])
             .current_dir(&self.root)
-            .env_clear()
-            .envs(
-                std::env::vars_os()
-                    .filter(|(k, _)| !k.to_string_lossy().starts_with("L7R_ROLL_CENSUS")),
-            )
             .envs(self.exported.borrow().iter().cloned());
         let child = cmd
             .env("L7R_REF_NO_CLASS", "1")

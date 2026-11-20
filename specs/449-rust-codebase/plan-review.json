@@ -1110,6 +1110,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-20",
    "declared": "spec-fidelity"
+  },
+  "### T222 (T157's scoping: main's render-sync ran the Python render cache, so a compound spec edit alone left main's svg, png and page stale; T221 left checks reading what no longer exists)": {
+   "sha256": "f6272b74f19014ddc5a61d47aeff007a3e4e3c2066e83db32b67a283daba3c29",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity"
+  },
+  "### T222 Approach (checklist part A)": {
+   "sha256": "2f3dd6bd82ae25d716d5c2ef322e0c6ae1d78f9e5ac26c39cd527dfbd2d6248b",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -15471,6 +15483,104 @@
      "why": "Scheduling, plus how the live hook is deployed. It leaves no defect: the fix is complete in the clone and takes effect when it lands."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-20",
+   "blocks": [
+    "### T222 (T157's scoping: main's render-sync ran the Python render cache, so a compound spec edit alone left main's svg, png and page stale; T221 left checks reading what no longer exists)",
+    "### T222 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D1 rebuild-on-rust",
+     "summary": "render-sync rebuilt on the Rust alone, phase guard on; render_cache.py's duties found from its callers, log and outputs, never its source",
+     "class": "within",
+     "why": "The GM's 2026-10-30 rule carried 2026-11-19 (rebuild, never re-implement) and FR-001; finding the duties from callers and outputs is FR-002's caller-facing test."
+    },
+    {
+     "id": "D2 duties-mapped",
+     "summary": "the maps drawn by the driver (pool map --all), the index by pool index, the record site by record site-stale; the per-sheet .render-cache sidecar stamp replaced by the cache keying the sheet, four stale gitignored sidecars left on disk",
+     "class": "within",
+     "why": "Each duty a caller reads is still done, in another form (FR-002: outputs may differ). Leaving four ignored, unread sidecars is a difference, not a wrong outcome (XIV v2.36.0)."
+    },
+    {
+     "id": "D3 exhibit-warning-dropped",
+     "summary": "the frozen-tree count and the warning of an exhibit with no render are dropped",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Taken separately: the count and the warning had no action (an exhibit's render can never be regenerated), and what the warning told a reader still reaches them, since the index lists each exhibit with what its folder holds. FR-002 lets a diagnostic's form change. A reader of the index still learns that a render is missing, so the rule's purpose stays intact."
+    },
+    {
+     "id": "D4 one-recipe",
+     "summary": "make render-sync is one recipe, prerequisite guard, main refused but under DIAGRAM_ALLOW_MAIN=1 set by sync-with-main.sh under the lock; T221's second locked pool-index line and render-maps removed",
+     "class": "within",
+     "why": "Keeps the main-tree rule and the lock as before, and consolidates without dropping a duty."
+    },
+    {
+     "id": "D5 args-same-tree",
+     "summary": "the Python's ARGS (--skill-dir/--main-repo) accepted only where they name the tree render-sync runs in, refused otherwise",
+     "class": "within",
+     "why": "Every caller the plan names (sync-with-main, an unmerged clone's script passing main's path while running in main) still works (FR-002 callers find what they read). Refusing a mismatched path loudly, where the tree could otherwise go unrendered without a word, removes no used capability."
+    },
+    {
+     "id": "D6 failure-continues",
+     "summary": "a failing map stops neither the index nor the site; every step runs and the recipe exits non-zero with a FAILED line",
+     "class": "within",
+     "why": "Serves the goal that main is current after every landing and that a failure shows up. Measured on the real driver."
+    },
+    {
+     "id": "D7 runner-status-fix",
+     "summary": "the runner's render_sync || rc=$? (set -e ignored, status read ok on failure) fixed to return make's code",
+     "class": "within",
+     "why": "A tool that answered wrongly (a defect, XIV v2.36.0), fixed as we go (GM 2026-11-18)."
+    },
+    {
+     "id": "D8 python-deleted",
+     "summary": "render_cache.py, record_build.py, codeid.py, gencache.py, _census.py, pool_index.py/.css/_text.json, _invocation.py, two __init__.py, poolmaps.py deleted; pipeline/CLAUDE.md folded into dev/cache.md; Makefile RUN, pyrefly block and pillow removed",
+     "class": "within",
+     "why": "FR-001 and FR-003: the replacement passes, so its Python goes. The remaining modules were checked by import (38/38, 6/6). FR-001b already retired the Python-only static checks, and nothing runs pyrefly."
+    },
+    {
+     "id": "D9 probe-pool-section",
+     "summary": "the probe's pool section, which filtered hamlets on a .gen.py no map has and printed nothing, is removed and prints NOT COMPARED; drawing HEAD in a worktree is not built",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The section already compared nothing and read as a silent pass, a check passing bad work. Saying NOT COMPARED removes that defect without losing any comparison that worked. The question it existed to answer, whether a change moved a hamlet, is filed with the maps-moved hamlet defect as T230, which lands before T158, so the GM's fix-before-the-next-step rule (2026-11-18) is honored."
+    },
+    {
+     "id": "D10 roll-census-removed",
+     "summary": "preflight's roll-census read and land's L7R_ROLL_CENSUS filter removed, no red owed",
+     "class": "within",
+     "why": "Nothing writes the census and no driver artifact is tracked (observed by git ls-files). With the census absent the check was already at its strictest, so removing the read loosens nothing. This is T221's found-and-left fixed."
+    },
+    {
+     "id": "D11 index-links",
+     "summary": "the pool index links only what the driver writes, dropping the hamlets' stale Python .png/.html; the hamlets' missing picture and page recorded on feature 444's T42",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Taken separately. (a) Dropping the stale links fixes a wrong outcome: a reader met a picture stale since 2026-11-07 as the hamlet's own. (b) Leaving the hamlets without a picture or page here is legitimate because building one inside render-sync would mean porting the deleted Python's renderer, which the GM's rule forbids (rebuild from derivations, never re-implement), or doing feature 444's derivation work. The gap is truthful (absent, not wrong) and is recorded where that work lives."
+    },
+    {
+     "id": "D12 found-and-left-T230",
+     "summary": "make probe cannot run (make cohort writes no record committed line), and maps-moved says unchanged for every hamlet; both filed as T230, landing before T158",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Both are defects (a tool that cannot run; a check that passes bad work). They were found during this step and are fixed before the next step begins (T158 follows), which is exactly what the GM's 2026-11-18 rule asks. Neither is carried past the step."
+    },
+    {
+     "id": "D13 leftovers-to-T158",
+     "summary": "the remaining l7r/diagram Python (claims.py and the files read as text only), the uncalled split_ids, shapely and scipy, and the CLAUDE.md row naming a missing switches.py added to T158, the deletion close",
+     "class": "within",
+     "why": "Deletion of Python with no remaining use belongs to the close the plan already orders next (FR-001). None of these is a wrong map outcome needing a fix in this task."
+    },
+    {
+     "id": "D14 exits-budget",
+     "summary": "exits (quick, static, hooks-test, red-first tests, two render-sync runs in a scratch worktree); pipeline counts not re-measured; no fresh block vs HEAD and no manifests moved",
+     "class": "within",
+     "why": "Verification of the requested work. No map-drawing code changes, so no map comparison is owed."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -27146,6 +27256,102 @@
      "summary": "after T221, before T222; found and left: the holds reach sessions once the mirror fast-forwards",
      "class": "within",
      "why": "Scheduling, plus how the live hook is deployed. It leaves no defect: the fix is complete in the clone and takes effect when it lands."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T222": {
+   "section_sha256": "425993cbd79595cef59d82bcc852f38bee8f4cfe9ed7abcd969c1c0d78c6e5ca",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D1 rebuild-on-rust",
+     "summary": "render-sync rebuilt on the Rust alone, phase guard on; render_cache.py's duties found from its callers, log and outputs, never its source",
+     "class": "within",
+     "why": "The GM's 2026-10-30 rule carried 2026-11-19 (rebuild, never re-implement) and FR-001; finding the duties from callers and outputs is FR-002's caller-facing test."
+    },
+    {
+     "id": "D2 duties-mapped",
+     "summary": "the maps drawn by the driver (pool map --all), the index by pool index, the record site by record site-stale; the per-sheet .render-cache sidecar stamp replaced by the cache keying the sheet, four stale gitignored sidecars left on disk",
+     "class": "within",
+     "why": "Each duty a caller reads is still done, in another form (FR-002: outputs may differ). Leaving four ignored, unread sidecars is a difference, not a wrong outcome (XIV v2.36.0)."
+    },
+    {
+     "id": "D3 exhibit-warning-dropped",
+     "summary": "the frozen-tree count and the warning of an exhibit with no render are dropped",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Taken separately: the count and the warning had no action (an exhibit's render can never be regenerated), and what the warning told a reader still reaches them, since the index lists each exhibit with what its folder holds. FR-002 lets a diagnostic's form change. A reader of the index still learns that a render is missing, so the rule's purpose stays intact."
+    },
+    {
+     "id": "D4 one-recipe",
+     "summary": "make render-sync is one recipe, prerequisite guard, main refused but under DIAGRAM_ALLOW_MAIN=1 set by sync-with-main.sh under the lock; T221's second locked pool-index line and render-maps removed",
+     "class": "within",
+     "why": "Keeps the main-tree rule and the lock as before, and consolidates without dropping a duty."
+    },
+    {
+     "id": "D5 args-same-tree",
+     "summary": "the Python's ARGS (--skill-dir/--main-repo) accepted only where they name the tree render-sync runs in, refused otherwise",
+     "class": "within",
+     "why": "Every caller the plan names (sync-with-main, an unmerged clone's script passing main's path while running in main) still works (FR-002 callers find what they read). Refusing a mismatched path loudly, where the tree could otherwise go unrendered without a word, removes no used capability."
+    },
+    {
+     "id": "D6 failure-continues",
+     "summary": "a failing map stops neither the index nor the site; every step runs and the recipe exits non-zero with a FAILED line",
+     "class": "within",
+     "why": "Serves the goal that main is current after every landing and that a failure shows up. Measured on the real driver."
+    },
+    {
+     "id": "D7 runner-status-fix",
+     "summary": "the runner's render_sync || rc=$? (set -e ignored, status read ok on failure) fixed to return make's code",
+     "class": "within",
+     "why": "A tool that answered wrongly (a defect, XIV v2.36.0), fixed as we go (GM 2026-11-18)."
+    },
+    {
+     "id": "D8 python-deleted",
+     "summary": "render_cache.py, record_build.py, codeid.py, gencache.py, _census.py, pool_index.py/.css/_text.json, _invocation.py, two __init__.py, poolmaps.py deleted; pipeline/CLAUDE.md folded into dev/cache.md; Makefile RUN, pyrefly block and pillow removed",
+     "class": "within",
+     "why": "FR-001 and FR-003: the replacement passes, so its Python goes. The remaining modules were checked by import (38/38, 6/6). FR-001b already retired the Python-only static checks, and nothing runs pyrefly."
+    },
+    {
+     "id": "D9 probe-pool-section",
+     "summary": "the probe's pool section, which filtered hamlets on a .gen.py no map has and printed nothing, is removed and prints NOT COMPARED; drawing HEAD in a worktree is not built",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The section already compared nothing and read as a silent pass, a check passing bad work. Saying NOT COMPARED removes that defect without losing any comparison that worked. The question it existed to answer, whether a change moved a hamlet, is filed with the maps-moved hamlet defect as T230, which lands before T158, so the GM's fix-before-the-next-step rule (2026-11-18) is honored."
+    },
+    {
+     "id": "D10 roll-census-removed",
+     "summary": "preflight's roll-census read and land's L7R_ROLL_CENSUS filter removed, no red owed",
+     "class": "within",
+     "why": "Nothing writes the census and no driver artifact is tracked (observed by git ls-files). With the census absent the check was already at its strictest, so removing the read loosens nothing. This is T221's found-and-left fixed."
+    },
+    {
+     "id": "D11 index-links",
+     "summary": "the pool index links only what the driver writes, dropping the hamlets' stale Python .png/.html; the hamlets' missing picture and page recorded on feature 444's T42",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Taken separately. (a) Dropping the stale links fixes a wrong outcome: a reader met a picture stale since 2026-11-07 as the hamlet's own. (b) Leaving the hamlets without a picture or page here is legitimate because building one inside render-sync would mean porting the deleted Python's renderer, which the GM's rule forbids (rebuild from derivations, never re-implement), or doing feature 444's derivation work. The gap is truthful (absent, not wrong) and is recorded where that work lives."
+    },
+    {
+     "id": "D12 found-and-left-T230",
+     "summary": "make probe cannot run (make cohort writes no record committed line), and maps-moved says unchanged for every hamlet; both filed as T230, landing before T158",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Both are defects (a tool that cannot run; a check that passes bad work). They were found during this step and are fixed before the next step begins (T158 follows), which is exactly what the GM's 2026-11-18 rule asks. Neither is carried past the step."
+    },
+    {
+     "id": "D13 leftovers-to-T158",
+     "summary": "the remaining l7r/diagram Python (claims.py and the files read as text only), the uncalled split_ids, shapely and scipy, and the CLAUDE.md row naming a missing switches.py added to T158, the deletion close",
+     "class": "within",
+     "why": "Deletion of Python with no remaining use belongs to the close the plan already orders next (FR-001). None of these is a wrong map outcome needing a fix in this task."
+    },
+    {
+     "id": "D14 exits-budget",
+     "summary": "exits (quick, static, hooks-test, red-first tests, two render-sync runs in a scratch worktree); pipeline counts not re-measured; no fresh block vs HEAD and no manifests moved",
+     "class": "within",
+     "why": "Verification of the requested work. No map-drawing code changes, so no map comparison is owed."
     }
    ],
    "verdict": "CLEAR"

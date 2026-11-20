@@ -53,30 +53,10 @@ max-statements = 100
 # (f'<rect fill="{c}"/>'), so leaving quotes as-authored avoids needless churn/risk.
 quote-style = "preserve"
 
-# ---- pyrefly (the type checker the gate runs - feature 142) ------------------------------
-# pyrefly (Meta, Rust) is THE type checker (feature 142, GM 2026-08-28): a full cold check of the engine
-# is ~0.6 s with nothing resident, where mypy needed 12.7 s cold or a 400-600 MB daemon per clone to
-# reach 0.13 s (specs/142-rust-type-checker/research.md R2). ty (Astral) was measured too and is as
-# fast, but has no rule for a missing annotation - the property the project's strict discipline
-# rests on (R3) - so pyrefly. mypy is GONE (the GM, 2026-08-28: "get rid of mypy now completely") -
-# not in the lockfiles, no mypy config block; `project-includes` below is the one list of checked files.
-#
+# ---- the namespace portion -------------------------------------------------------------------
 # `l7r` is a PEP 420 namespace portion (feature 119) - no `__init__.py`, deliberately, so that the
-# webapp's `l7r.app` and this engine's `l7r.diagram.*` share one parent package. `search-path = ["."]`
-# says where module paths begin, so each file has exactly one identity. Do NOT "fix" this by adding
-# `l7r/__init__.py` - that silently hides the webapp's portion (tests/test_namespace_portion.py).
-[tool.pyrefly]
-python-version = "3.14"
-search-path = ["."]                      # `l7r` is a namespace portion: module roots start here
-project-includes = ["l7r/diagram/pipeline/pool_index.py", "l7r/diagram/pipeline/poolmaps.py"]  # the rest of the list was deleted Python (feature 449 T213 pruned it)
-
-# The mypy-strict rule set, enabled by NAME rather than pyrefly's `strict` preset: that preset also
-# turns on implicit-any-lambda (167 hits) and implicit-any-empty-container (163) which mypy strict
-# never asked for (research R3). Each rule here is the flag mypy --strict used to set:
-[tool.pyrefly.errors]
-unannotated-parameter = true      # disallow_untyped_defs / disallow_incomplete_defs
-unannotated-return = true         # disallow_untyped_defs
-unannotated-attribute = true      # (class attributes; stricter than mypy was - 0 hits)
-implicit-any-type-argument = true # disallow_any_generics
-no-any-return-implicit = true     # warn_return_any
-unused-ignore = true              # warn_unused_ignores
+# webapp's `l7r.app` and this project's `l7r.diagram.*` share one parent package. Do NOT "fix" this by
+# adding `l7r/__init__.py` - that silently hides the webapp's portion.
+#
+# The pyrefly configuration that stood here was deleted by feature 449 T222: its last two checked files
+# (`pool_index.py`, `poolmaps.py`) were deleted, and nothing in the Makefile runs pyrefly.
