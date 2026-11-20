@@ -91,3 +91,9 @@
 - [x] T35 [perf] Two timing tests fail under load (found by T12, 2026-11-20): rustc's another_runs_holder_is_waited_for_named_and_past_the_ceiling_refused expects two waiting lines inside a 60 ms ceiling at a 10 ms poll and saw one under make static's load, and test-land-tooling.sh case 2b fails under the full hooks-test run and passes alone - a red gate on correct work; each test's timing taken from what it measures (an event, a count, or a ceiling scaled by a calibration loop), never a bare wall-clock bound, red first under induced load; its land-tooling half (case 2b) folded into T20 by T20's plan review (2026-11-20), so T35 holds the rustc test alone
       research: rendering
       verify: DONE. landed in batch T21+T35: the l7r-gate split; the run lock's test on a stepped clock
+- [x] T37 [perf] The plan-review bundle cuts a decision at its list (found by T19's plan review, 2026-11-20): spec-cited.md stops D16 at 'Two things make the comparison real:' and drops the bullets, as it stopped D15 at a colon for T17's review - a reviewer judges a decision without its text, and asks a round for it; every cited decision carried whole, its lists included, red first on D15 and D16
+      research: rendering
+      verify: DONE. landed in batch T37+T39: whole decisions in the bundle; FRESH not a replay
+- [x] T39 [perf] A FRESH=1 test run may replay another run's result (found by T32, 2026-11-20): two make rust-test CRATE=rust/guard FRESH=1 runs queued behind one target-directory lock both reported 'finished in 4.21s', where alone it takes 2.82-3.20 s - if a run waiting on the lock takes the holder's kept result, a fresh run reports green without running; measured first (two FRESH runs started together, each one's test binary execution counted), fixed red first if so
+      research: rendering
+      verify: DONE. landed in batch T37+T39: whole decisions in the bundle; FRESH not a replay

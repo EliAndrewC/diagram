@@ -1376,3 +1376,104 @@ filed with `PERF=1`: the checklist's questions measure an engine stage's counted
 static`. Not filed with `PERF=1`: no engine stage's counted operations or time.
 
 
+<!-- plan-archive: archived 2026-11-20 -->
+### T37 (the plan-review bundle cut a decision at its list: `spec-cited.md` stopped D16 at "Two things make the comparison real:" and D15 at its colon, so the reviewer judged each without its bullets, observed 2026-11-20, method: T19's and T17's plan reviews and T18's bundle rebuilt, `/tmp/t37-before/T18/spec-cited.md`)
+
+- **Approach**: the one writer of a cited text is `paragraphs` in `rust/gate/crates/plan/src/plan/bundle.rs`, which `build` (this
+  feature's decisions), `foreign` (another feature's decisions and requirements) and `requirements` (the bulleted requirements) share;
+  it ended each match at the first blank line, which is where a decision's list begins. Now each match runs to the next match or the
+  next heading; one written as a list item (a bulleted requirement or decision) stops sooner, at a blank line its own indented lines
+  do not follow (`item_end`), so an item keeps its nested table or list and no longer takes a heading with no blank line before it.
+  A requirement written as a heading is read as before, to the next heading. `spec-cited.md` has no size cap, today or after, and none is added.
+  - the writer's two limits are untouched, read 2026-11-20 (`bundle.rs`): `TOO_LONG` bounds a written-out id range, the name's character limit the directory.
+  - red first, the tests before the code: 2 failed of 153 (`a_decision_is_carried_whole_with_its_lists` on the fixture `bundle/fixtures/451-d14-d17.md`, this plan's decisions from the knobs' to the shards' verbatim at 07cc8f2cd1, D15 missing "Both ids name an OPEN task"; `a_list_item_runs_on_into_its_indented_lines_only`, a requirement cut before its table), measured 2026-11-20 (`make rust-test CRATE=rust/gate/crates/plan`, `/tmp/t37-red.log`).
+  - green: 153 of 153, measured 2026-11-20 (`make rust-test CRATE=rust/gate/crates/plan`, `/tmp/t37-green.log`); the crate's format, lint and cover clean, measured 2026-11-20 (`l7r-gate.sh rust format|lint|cover --crate rust/gate/crates/plan`, `/tmp/t37-lfc.log`).
+  - the real bundle: T18's (`plan decide 451 T18`, which cites D16) `spec-cited.md` 2,078 to 2,999 bytes and the whole bundle 13,783 to 14,704 bytes (+6.7%), D16's bullets and its `QUICK_OK` line now in it, measured 2026-11-20 (`wc -c` over `/tmp/l7r-check/plan-451-time-retro-and-efficiency-T18/` before and after).
+  - every plan: 141 of 1,310 decisions grow, their text 829,259 to 875,706 characters over all of them (+5.6%), measured 2026-11-20 (a Python reading of both rules over `specs/*/plan.md` + `plan-done.md`, `/tmp/t37-scripts/survey.py`).
+  - the largest, 6,648 characters (a decision of feature 317 with seven bullets), measured 2026-11-20 (the same reading).
+  - D15 257 to 2,666 characters and D16 583 to 1,504, measured 2026-11-20 (the same reading).
+  - 38 of 4,658 bulleted requirements change, measured 2026-11-20 (the same reading over `specs/*/spec.md`, `/tmp/t37-scripts/fr.py`).
+  - every decision or requirement that shrinks loses only a heading line the old cut carried (43 decisions, of features 383, 385, 405, 415, 417, 420, 429 and 433, and 3 requirements, of 179 and 383), measured 2026-11-20 (the same reading: each shrunk text is the old one less a tail holding a heading line).
+  - no new text holds an odd number of code-fence lines, so no heading stop falls inside a fenced block: 0 of 5,968, measured 2026-11-20 (the same reading).
+  - observed 2026-11-20, method: every writer of a cited text found by reading `bundle.rs`'s callers of `DECISION`, `ITEM` and `paragraphs` and grepping `rust/gate/crates` for `paragraphs(` and the decision pattern - `paragraphs` is the one; the arbiter's `marks.rs` names a decision only as a verdict's subject.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+| a cited decision or requirement carried whole | n/a - no map | n/a | none | n/a |
+
+<!-- plan-archive: archived 2026-11-20 -->
+### T37 Approach (checklist part A)
+
+1. **The goal, in the world.** No map changes; a plan reviewer reads every decision and requirement the blocks cite whole, its lists and tables included, so it asks no round for the text.
+2. **The constraints.** T37's line (every cited decision carried whole, its lists included; red first on D15 and D16); the lean plan bundle of feature 375's amendment 11 (the bundle stays the cited text, not the plan); 100% line coverage of the plan crate by its own tests.
+3. **Where each comes from.** O: T19's plan review (D16 cut) and T17's (D15 cut), observed 2026-11-20, method: their reviews' asks; O: T18's bundle before the fix, measured 2026-11-20 (`/tmp/t37-before/T18/spec-cited.md` ending at "Two things make the comparison real:").
+4. **Do they describe the world here?** Yes: every decision of this plan is a bold paragraph, its bullets after a blank line, read 2026-11-20 (plan.md's Decisions); the grown decisions read as their own text (bullets, a table, a decision's layers), read 2026-11-20 (`/tmp/t37-scripts/survey.py`).
+5. **The order.** Independent of the other lanes; beside T39 (another crate, `rustc`).
+6. **The exits.** Green: the two red tests green, `make rust-test` on the plan crate, its lint, format and cover, `make quick`, `make static` (once), `make hooks-test`. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** none - one writer, its three callers read 2026-11-20 (the grep above).
+8. **The budget.** One landing.
+9. **Done, measured.** T18's rebuilt bundle carries D16 whole, both bullets and `QUICK_OK`, measured 2026-11-20 (`grep` over its `spec-cited.md`).
+10. **Before moving a constant.** n/a - no constant moves; no cap is added.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** Nothing on a map; a plan reviewer no longer judges a decision cut at its colon, nor reads a heading carried under a requirement as its text.
+
+**Found and left?**
+- A bulleted requirement or decision with no blank line before the next heading carried that heading into the bundle (43 decisions and 3 requirements), a reviewer reading a heading as a requirement's text: fixed here (`item_end` and the heading stop, pinned by `a_list_item_runs_on_into_its_indented_lines_only`).
+
+**Performance work?** yes - a `[perf]` task in FR-013's sense: a decision cut at its list costs a plan review a round to ask for it (T17's and T19's). Not an engine stage: no counted operations, no performance checklist.
+
+<!-- plan-archive: archived 2026-11-20 -->
+### T39 (a FRESH=1 run queued behind the target-directory lock might replay the holder's kept result: T32's two `make rust-test CRATE=rust/guard FRESH=1` runs both said "finished in 4.21s", found by T32, observed 2026-11-20, method: T32's transcript, `/tmp/t32-final-plain.log` and `/tmp/t32-final-exported.log` at 17:30-17:31 UTC)
+
+- **Approach**: measure, then close. **Not a defect**: a FRESH run that waits on the lock runs its own tests. Nothing changes in
+  the code; the claim "a waiter replays the holder's result" is withdrawn (constitution XIV).
+  - Two FRESH runs started together each ran both guard test binaries once, the second after the first ended (run1 at
+    +0.30-2.94 s, run2 at +5.81-8.33 s from the start, libtest 2.60 s and 2.48 s), measured 2026-11-20 (cargo's target runner
+    `CARGO_TARGET_X86_64_UNKNOWN_LINUX_GNU_RUNNER` set to a script logging each test-binary execution, `/tmp/t39/execs.log`, since
+    `strace` is refused here with no `CAP_SYS_PTRACE`).
+  - The second run printed the lock's waiting line ("waiting 0 s for the target directory, held by" the first run's pid),
+    measured 2026-11-20 (`/tmp/t39/run2.log`).
+  - Three FRESH runs started together made 6 executions, 2 a run, one run at a time, libtest 2.46 s, 2.49 s and 2.70 s, measured
+    2026-11-20 (the same runner log).
+  - A non-FRESH run after them said `test unchanged on rust/guard - its last green result stands` and printed no `test result:`
+    line, measured 2026-11-20 (`/tmp/t39/control.log`). The runner sees only what cargo launches, so this control rests on that
+    stdout line, not on the empty runner log.
+  - T32's own incident: the guard's `Phase` rows show two separate builds and two test runs, 17:30:29.095-17:30:34.279 and
+    17:31:00.858-17:31:06.044 UTC (5.18 s and 5.19 s), one per run, measured 2026-11-20 (the `Phase` rows of
+    `.git/l7r-events/451-time-retro-and-efficiency.jsonl`, where a `test` row is written only by `stepped` or `side::run_built`,
+    which execute, never on the "stands" path, read 2026-11-20 in `rustc.rs`).
+  - The code agrees. `locked_dispatch` takes the lock before `answer` asks any kept result. `runlock.rs` holds membership only, no
+    result. `Verdict::ask` returns "does not stand" on `world.no_reuse` (`L7R_RUST_FRESH`) before it compares any kept key
+    (`kept.rs`). The kept store holds keys, never output (`keep_line`). Read 2026-11-20.
+  - So a `finished in` line comes only from a binary that ran. libtest's `finished in` is the first binary's own wall time, and it
+    varies a lot between runs that all ran, 2.46-4.21 s over runs whose test phase spans 5.14-5.19 s, measured 2026-11-20 (the runs
+    above, T32's logs and the `Phase` rows). The two 4.21 s values matching to the hundredth is unexplained (a GUESS: chance under
+    the sweep's load). It is no sign of replay, since both runs executed.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+| the measurement (no code change) | n/a - no map, no code | n/a | none | n/a |
+
+<!-- plan-archive: archived 2026-11-20 -->
+### T39 Approach (checklist part A)
+
+1. **The goal, in the world.** A `FRESH=1` run always executes its crates' tests, even when it waits behind another run's lock, and reports its own result. Measured 2026-11-20: it already does (runner log `/tmp/t39/execs.log`, 2 executions per run in 5 of 5 FRESH runs).
+2. **The constraints.** Feature 451 T23 (the run lock) and 449 T93 (kept results, `FRESH=1` "every crate fresh"); constitution XIV (a defect is a wrong outcome).
+3. **Where each comes from.** O: T32's two 4.21 s lines, observed 2026-11-20 (T32's transcript); O: the runner log, measured 2026-11-20 (`/tmp/t39/execs.log`); O: the `Phase` rows of T32's two runs, measured 2026-11-20 (`.git/l7r-events/451-time-retro-and-efficiency.jsonl`); R: `rustc.rs`, `runlock.rs`, `kept.rs`, read 2026-11-20.
+4. **Do they describe the world here?** Yes. The concurrent runs went through the lock's wait, its waiting line in 3 of 5 runs' stderr, measured 2026-11-20 (`/tmp/t39/run2.log`, `run3.log`, `run4.log`). This is the path T32 saw, whose run waited 0 s and then 30 s, measured 2026-11-20 (the waiting lines in T32's transcript).
+5. **The order.** After T23 (the lock) and T32 (the finding); no task waits on this one.
+6. **The exits.** Green: every FRESH run, waiter or holder, logs its own test-binary executions, measured 2026-11-20 (2 runs then 3 runs together, 10 executions, `/tmp/t39/execs.log`). Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None. The matching 4.21 s figures were the only signal, and the `Phase` rows show two executions behind them, measured 2026-11-20 (`Phase` rows at 17:30:29 and 17:31:00 UTC).
+8. **The budget.** One landing.
+9. **Done, measured.** Not a defect: 5 of 5 concurrent FRESH runs executed both guard test binaries (10 of 10 executions, one run at a time), measured 2026-11-20 (cargo target-runner log, `/tmp/t39/execs.log`). T32's two runs each wrote their own build and test `Phase` rows, measured 2026-11-20 (the 451 event log).
+10. **Before moving a constant.** n/a - no constant.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** Nothing: not a defect. No run reported green without running, measured 2026-11-20 (the runner log and the `Phase` rows). The task's claim is restated: a waiter takes the holder's kept result only when it is not FRESH and its key matches, which is the kept-result design (449 T93). A FRESH waiter runs. Existing pin: `a_moved_binary_or_a_failed_build_runs_and_a_fresh_run_runs_every_crate` (`rust/gate/crates/rustc/src/rustc/tests/kept.rs`), where a fresh run over kept green results runs all 5 crates, measured 2026-11-20 (read in the test's `test_runs(&fresh)` assertion).
+
+**Found and left?**
+- The rust-checks summary line quotes only the first `test result:` line of a crate's `cargo test`, so the guard's second test binary's result is not shown, observed 2026-11-20 (`/tmp/t39/run1.log` against the 2 executions in `/tmp/t39/execs.log`). Not a defect: a failure in any binary turns the crate's code and prints cargo's full output, so no wrong outcome.
+- The matching hundredths (4.21 s twice): not a defect, unexplained (GUESS: chance under load); both runs executed, measured 2026-11-20 (the `Phase` rows).
+
+**Performance work?** yes (a `[perf]` task, 451 FR-013: it asked whether a builder's FRESH run could report green without running). It closes with no change; not engine speed.
+
+
