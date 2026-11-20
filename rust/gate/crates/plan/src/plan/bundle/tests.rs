@@ -535,3 +535,46 @@ fn a_decision_past_a_megabyte_of_plan_is_read() {
         ["D1", "D2"]
     );
 }
+
+/// A decision is carried whole, its lists included, to the next decision or heading (feature 451 T37, found by T19's plan review
+/// 2026-11-20): the fixture is 451's plan.md D14 to D17 verbatim as of 07cc8f2cd1, where `spec-cited.md` stopped D15 at its colon and
+/// D16 at "Two things make the comparison real:", the first blank line, and a reviewer judged each without its bullets.
+#[test]
+fn a_decision_is_carried_whole_with_its_lists() {
+    let plan = include_str!("fixtures/451-d14-d17.md");
+    let got = paragraphs(plan, &DECISION);
+    let d15 = got["D15"].as_str().unwrap();
+    assert!(d15.starts_with("**D15 - The deferral's form**"));
+    assert!(
+        d15.contains("- **Both ids name an OPEN task**")
+            && d15.contains("- **Judged once, at the decision.**")
+    );
+    assert!(d15.ends_with("No\nopen section of any plan is refused by it today (R9).\n"));
+    let d16 = got["D16"].as_str().unwrap();
+    assert!(d16.contains("Two things make the comparison real:\n\n- **Every check runs to its own end in both runs.**"));
+    assert!(d16.contains("- **Findings are compared, not checks.**"));
+    assert!(d16.ends_with("`QUICK_OK` on `make task-add` escapes, through `$(LOGESCAPE)`.\n"));
+    // the last decision stops at the next heading, and each stops at the next decision
+    assert!(got["D17"].as_str().unwrap().ends_with("never a gate).\n"));
+    assert!(!got["D14"].as_str().unwrap().contains("D15 - "));
+}
+
+/// A list item - an FR or SC, a decision written as a bullet - runs on across a blank line only into its own indented lines, and
+/// stops at a heading with no blank line before it (feature 451 T37: 383's FR-041 carried the `### Amendment 7` heading under it).
+#[test]
+fn a_list_item_runs_on_into_its_indented_lines_only() {
+    let spec = "- **FR-004**: What owes what:\n\n  | a | b |\n  |---|---|\n\n- **FR-005** next\n  its line\n\nA paragraph of the section, not the item's.\n\n- **FR-041** The sweep.\n  classed\n### Amendment 7\n\n- **FR-042** x";
+    let got = requirements(spec);
+    assert_eq!(
+        got["FR-004"],
+        "- **FR-004**: What owes what:\n\n  | a | b |\n  |---|---|\n"
+    );
+    assert_eq!(got["FR-005"], "- **FR-005** next\n  its line\n");
+    assert_eq!(got["FR-041"], "- **FR-041** The sweep.\n  classed\n");
+    assert_eq!(got["FR-042"], "- **FR-042** x\n");
+    let plan = "- D9 - THE RULE: body\n\n\n  - its own clause\n\n- not D9's\n";
+    assert_eq!(
+        paragraphs(plan, &DECISION)["D9"],
+        "- D9 - THE RULE: body\n\n\n  - its own clause\n"
+    );
+}

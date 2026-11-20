@@ -517,14 +517,8 @@
    "reviewed": "2026-11-20",
    "declared": "spec-fidelity"
   },
-  "### T37 (<why: the finding or measurement that files it>)": {
-   "sha256": "3bc738067b7ab9bff4e3e2068baa73aca000ac8048017b4c2f2b779ab1d43d4e",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-20",
-   "declared": "spec-fidelity"
-  },
   "### T37 Approach (checklist part A)": {
-   "sha256": "4fcd7d678a98d7d9c2d341431259fc60ccaa8506d3a6310b5ae059bd0e7b14e3",
+   "sha256": "303c1cdf0c6295d91c600b2f083c787ffc9acc5960f9cc86668eed9c221f088a",
    "verdict": "CLEAR",
    "reviewed": "2026-11-20",
    "declared": "spec-fidelity"
@@ -547,14 +541,8 @@
    "reviewed": "2026-11-20",
    "declared": "spec-fidelity"
   },
-  "### T39 (<why: the finding or measurement that files it>)": {
-   "sha256": "c44f9f760cc6ecadfab0a30864c57b79e7d9261a5ca2a62fdb55f1cfd64f984c",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-20",
-   "declared": "spec-fidelity"
-  },
   "### T39 Approach (checklist part A)": {
-   "sha256": "95d1082f0040c44b002f8e14a01bf1e47557d150a957f07d326e14a52237c043",
+   "sha256": "7377142007bb10322fa44099fd1e1d2df0c4cf4f92c12a3d62acda8472bce6b9",
    "verdict": "CLEAR",
    "reviewed": "2026-11-20",
    "declared": "spec-fidelity"
@@ -579,6 +567,18 @@
   },
   "### T40 Approach (checklist part A)": {
    "sha256": "6d82502538217ed57c18c13887c6c63c7abf76140397762709c8eb874ff84f9c",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity"
+  },
+  "### T39 (a FRESH=1 run queued behind the target-directory lock might replay the holder's kept result: T32's two `make rust-test CRATE=rust/guard FRESH=1` runs both said \"finished in 4.21s\", found by T32, observed 2026-11-20, method: T32's transcript, `/tmp/t32-final-plain.log` and `/tmp/t32-final-exported.log` at 17:30-17:31 UTC)": {
+   "sha256": "2d6aec36a49c3697e02ee29de6980edc1ed53e7d79c4da84e86273180720c7b1",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity"
+  },
+  "### T37 (the plan-review bundle cut a decision at its list: `spec-cited.md` stopped D16 at \"Two things make the comparison real:\" and D15 at its colon, so the reviewer judged each without its bullets, observed 2026-11-20, method: T19's and T17's plan reviews and T18's bundle rebuilt, `/tmp/t37-before/T18/spec-cited.md`)": {
+   "sha256": "0ad31c08042ca9d6d5b6641deb9783358143430f1d5174c439cb9ba1f49fac4d",
    "verdict": "CLEAR",
    "reviewed": "2026-11-20",
    "declared": "spec-fidelity"
@@ -4653,6 +4653,89 @@
      "why": "The removed text (earlier.md, verdict CLEAR) held no decision - only placeholders - so deleting it drops no requirement, deferral or found-and-left item from the plan."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-20",
+   "blocks": [
+    "### T39 (a FRESH=1 run queued behind the target-directory lock might replay the holder's kept result: T32's two `make rust-test CRATE=rust/guard FRESH=1` runs both said \"finished in 4.21s\", found by T32, observed 2026-11-20, method: T32's transcript, `/tmp/t32-final-plain.log` and `/tmp/t32-final-exported.log` at 17:30-17:31 UTC)",
+    "### T39 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T39-close",
+     "summary": "Close T39 with no code change: a FRESH=1 run that waits on the target-directory lock runs its own tests (runner log: 10 of 10 executions over 5 concurrent FRESH runs; T32's two runs each wrote their own build and test Phase rows); the claim that a waiter replays the holder's result is withdrawn.",
+     "class": "within",
+     "why": "The task asked whether a FRESH run could report green without running. The measurement and the code reading show it cannot, so there is no wrong outcome to fix. Withdrawing a claim the measurement refutes is what constitution XIV asks for. Nothing in request.md or FR-013 is narrowed."
+    },
+    {
+     "id": "T39-left-summary-line",
+     "summary": "Leave as it is that the rust-checks summary line quotes only the first `test result:` line of a crate's cargo test.",
+     "class": "within",
+     "why": "This is a display difference, not a wrong outcome: per the section, a failure in any binary fails the crate and prints cargo's full output. The GM did not ask for it, and it is not a defect under constitution XIV. The section says why it is not a defect, which is what FR-009 requires."
+    },
+    {
+     "id": "T39-left-hundredths",
+     "summary": "Leave the matching 4.21 s figures unexplained, labeled as a GUESS (chance under load).",
+     "class": "within",
+     "why": "Both runs executed, as the Phase rows measured on 2026-11-20 show, so the match is not a sign of replay and there is no wrong outcome. Leaving a harmless coincidence unexplained narrows nothing that was asked."
+    },
+    {
+     "id": "T39-perf-class",
+     "summary": "T39 stays a [perf] task under FR-013 and closes with no change.",
+     "class": "within",
+     "why": "The section records the task's existing FR-013 classification. It adds no scope and removes none."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-20",
+   "blocks": [
+    "### T37 (the plan-review bundle cut a decision at its list: `spec-cited.md` stopped D16 at \"Two things make the comparison real:\" and D15 at its colon, so the reviewer judged each without its bullets, observed 2026-11-20, method: T19's and T17's plan reviews and T18's bundle rebuilt, `/tmp/t37-before/T18/spec-cited.md`)",
+    "### T37 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T37-writer",
+     "summary": "The one cited-text writer (`paragraphs` in bundle.rs, shared by build, foreign and requirements) runs each match to the next match or next heading instead of the first blank line, so a cited decision or requirement reaches the reviewer whole with its lists and tables.",
+     "class": "within",
+     "why": "Serves FR-013 and the approved improvement 4 ('Fewer plan re-rounds'): the cut text cost T17's and T19's reviews a round each. It widens what the reviewer is given; it narrows nothing the GM asked for."
+    },
+    {
+     "id": "T37-item-end",
+     "summary": "A match written as a list item (bulleted requirement or decision) stops at a blank line its own indented lines do not follow (`item_end`), and no longer carries a following heading; a requirement written as a heading is read as before.",
+     "class": "within",
+     "why": "Same purpose as the writer fix: the reviewer gets the item's own text, nested lists included, and not an unrelated heading. The 43 decisions and 3 requirements that shrink lose only a heading line the old cut wrongly carried - a defect fixed in the task, not a narrowing."
+    },
+    {
+     "id": "T37-no-cap",
+     "summary": "No size cap is added to spec-cited.md; the bundle grows (T18's +6.7%, all decisions +5.6%).",
+     "class": "within",
+     "why": "Carrying the cited text whole is the point of the task; adding no cap keeps nothing out. Feature 375 amendment 11's lean bundle (cited text, not the plan) is kept, since only cited items are carried."
+    },
+    {
+     "id": "T37-perf-tag",
+     "summary": "T37 is filed as a [perf] task under FR-013.",
+     "class": "within",
+     "why": "FR-013 counts work that makes the builders' loop faster, and the request's approved improvement 4 names fewer plan re-rounds as a time saving; a decision cut at its colon costs a review round. This is FR-013's own definition applied, not a carve-out from it."
+    },
+    {
+     "id": "T37-found-left",
+     "summary": "The heading-carry defect found while doing the work is fixed here, pinned by a red-first test.",
+     "class": "within",
+     "why": "Fixed in the task, nothing deferred; consistent with fixing known defects as found."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-20",
+   "blocks": [
+    "(removed) ### T37 (<why: the finding or measurement that files it>)",
+    "(removed) ### T39 (<why: the finding or measurement that files it>)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": []
   }
  ],
  "tasks": {
@@ -6209,6 +6292,76 @@
      "summary": "entry-gate's case-4 chain filed as its own performance task",
      "class": "within",
      "why": "Serves improvement 5's purpose (a faster hooks-test) and the GM's 2026-11-20 'prioritize performance improvements' (FR-013); adds no departure from requested scope."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T39": {
+   "section_sha256": "2b5a0380d9219fc3e6937edffc5601e9c261ba910c839de4d391d21f6ad896b0",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T39-close",
+     "summary": "Close T39 with no code change: a FRESH=1 run that waits on the target-directory lock runs its own tests (runner log: 10 of 10 executions over 5 concurrent FRESH runs; T32's two runs each wrote their own build and test Phase rows); the claim that a waiter replays the holder's result is withdrawn.",
+     "class": "within",
+     "why": "The task asked whether a FRESH run could report green without running. The measurement and the code reading show it cannot, so there is no wrong outcome to fix. Withdrawing a claim the measurement refutes is what constitution XIV asks for. Nothing in request.md or FR-013 is narrowed."
+    },
+    {
+     "id": "T39-left-summary-line",
+     "summary": "Leave as it is that the rust-checks summary line quotes only the first `test result:` line of a crate's cargo test.",
+     "class": "within",
+     "why": "This is a display difference, not a wrong outcome: per the section, a failure in any binary fails the crate and prints cargo's full output. The GM did not ask for it, and it is not a defect under constitution XIV. The section says why it is not a defect, which is what FR-009 requires."
+    },
+    {
+     "id": "T39-left-hundredths",
+     "summary": "Leave the matching 4.21 s figures unexplained, labeled as a GUESS (chance under load).",
+     "class": "within",
+     "why": "Both runs executed, as the Phase rows measured on 2026-11-20 show, so the match is not a sign of replay and there is no wrong outcome. Leaving a harmless coincidence unexplained narrows nothing that was asked."
+    },
+    {
+     "id": "T39-perf-class",
+     "summary": "T39 stays a [perf] task under FR-013 and closes with no change.",
+     "class": "within",
+     "why": "The section records the task's existing FR-013 classification. It adds no scope and removes none."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T37": {
+   "section_sha256": "6b8d3535a7b83a03d183a914b954b5ddb4fcd9a36b50ca02652f682c4c898b2e",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T37-writer",
+     "summary": "The one cited-text writer (`paragraphs` in bundle.rs, shared by build, foreign and requirements) runs each match to the next match or next heading instead of the first blank line, so a cited decision or requirement reaches the reviewer whole with its lists and tables.",
+     "class": "within",
+     "why": "Serves FR-013 and the approved improvement 4 ('Fewer plan re-rounds'): the cut text cost T17's and T19's reviews a round each. It widens what the reviewer is given; it narrows nothing the GM asked for."
+    },
+    {
+     "id": "T37-item-end",
+     "summary": "A match written as a list item (bulleted requirement or decision) stops at a blank line its own indented lines do not follow (`item_end`), and no longer carries a following heading; a requirement written as a heading is read as before.",
+     "class": "within",
+     "why": "Same purpose as the writer fix: the reviewer gets the item's own text, nested lists included, and not an unrelated heading. The 43 decisions and 3 requirements that shrink lose only a heading line the old cut wrongly carried - a defect fixed in the task, not a narrowing."
+    },
+    {
+     "id": "T37-no-cap",
+     "summary": "No size cap is added to spec-cited.md; the bundle grows (T18's +6.7%, all decisions +5.6%).",
+     "class": "within",
+     "why": "Carrying the cited text whole is the point of the task; adding no cap keeps nothing out. Feature 375 amendment 11's lean bundle (cited text, not the plan) is kept, since only cited items are carried."
+    },
+    {
+     "id": "T37-perf-tag",
+     "summary": "T37 is filed as a [perf] task under FR-013.",
+     "class": "within",
+     "why": "FR-013 counts work that makes the builders' loop faster, and the request's approved improvement 4 names fewer plan re-rounds as a time saving; a decision cut at its colon costs a review round. This is FR-013's own definition applied, not a carve-out from it."
+    },
+    {
+     "id": "T37-found-left",
+     "summary": "The heading-carry defect found while doing the work is fixed here, pinned by a red-first test.",
+     "class": "within",
+     "why": "Fixed in the task, nothing deferred; consistent with fixing known defects as found."
     }
    ],
    "verdict": "CLEAR"

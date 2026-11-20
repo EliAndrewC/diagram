@@ -39,6 +39,8 @@ static SPEC_AMEND: LazyLock<Regex> = LazyLock::new(|| re(r"(?m)^### Amendment (\
 static KEY_AMEND: LazyLock<Regex> = LazyLock::new(|| re(r"\bAmendment (\d+)\b"));
 static BODY_AMEND: LazyLock<Regex> = LazyLock::new(|| re(r"^\s*#+ Amendment (\d+)\b"));
 static NEXT_TOP: LazyLock<Regex> = LazyLock::new(|| re(r"(?m)^#{1,4} "));
+/// A heading of any level, where a cited decision or requirement ends (451 T37).
+static HEADING: LazyLock<Regex> = LazyLock::new(|| re(r"(?m)^#{1,6} "));
 static NEXT_TWO: LazyLock<Regex> = LazyLock::new(|| re(r"(?m)^##"));
 static MKEY: LazyLock<Regex> = LazyLock::new(|| re(r"\bm:([a-z0-9][a-z0-9-]*)"));
 static BLOCK_TASK: LazyLock<Regex> = LazyLock::new(|| re(r"^#+ (T\d+)\b"));
@@ -73,7 +75,24 @@ fn expand_ranges(text: &str) -> String {
         .into_owned()
 }
 
-/// `{id: its paragraph}`: each match to the next blank line or the next item.
+/// Where a list item's text ends inside `window` (which starts at the item): at the first blank line whose next line is not indented,
+/// so an item runs on into its own indented lines, a nested list or table among them, and stops before its siblings' text.
+fn item_end(window: &str) -> usize {
+    let mut from = 0;
+    while let Some(p) = window[from..].find("\n\n") {
+        let blank = from + p;
+        let rest = window[blank..].trim_start_matches('\n');
+        if !rest.starts_with([' ', '\t']) {
+            return blank;
+        }
+        from = window.len() - rest.len();
+    }
+    window.len()
+}
+
+/// `{id: its text}`, each carried whole (feature 451 T37: a cut at the first blank line stopped D15 at its colon and D16 at "Two things
+/// make the comparison real:", and a reviewer judged each without its bullets). Each match runs to the next match or the next heading;
+/// one written as a list item (`- **FR-NNN**`, `- **D7**`) stops sooner, at a blank line its own indented lines do not follow.
 fn paragraphs(text: &str, pattern: &Regex) -> Map<String, Value> {
     let starts: Vec<(usize, String)> = pattern
         .captures_iter(text)
@@ -82,21 +101,24 @@ fn paragraphs(text: &str, pattern: &Regex) -> Map<String, Value> {
         .collect();
     let mut out = Map::new();
     for (i, (at, id)) in starts.iter().enumerate() {
-        let blank = text[*at..].find("\n\n").map(|p| at + p);
-        let next = starts.get(i + 1).map(|(a, _)| *a);
-        let end = blank
-            .into_iter()
-            .chain(next)
-            .filter(|x| *x > 0)
-            .min()
-            .unwrap_or(text.len());
+        let next = starts.get(i + 1).map_or(text.len(), |(a, _)| *a);
+        // the heading after the match's first line: a match's own line never opens with `#`
+        let line_end = text[*at..next].find('\n').map_or(next, |p| at + p);
+        let mut end = HEADING
+            .find(&text[line_end..next])
+            .ok()
+            .flatten()
+            .map_or(next, |h| line_end + h.start());
+        if text[*at..].starts_with("- ") {
+            end = at + item_end(&text[*at..end]);
+        }
         out.entry(id.clone())
             .or_insert_with(|| Value::from(format!("{}\n", text[*at..end].trim_end())));
     }
     out
 }
 
-/// `{FR or SC id: its text}`: a `- **FR-NNN**` item to its paragraph's end, a `### FR-NNN` heading to the next heading.
+/// `{FR or SC id: its text}`: a `- **FR-NNN**` item as `paragraphs` carries it, a `### FR-NNN` heading to the next heading.
 fn requirements(spec: &str) -> Map<String, Value> {
     let mut out = paragraphs(spec, &ITEM);
     for c in HEAD_ITEM.captures_iter(spec).map_while(Result::ok) {
