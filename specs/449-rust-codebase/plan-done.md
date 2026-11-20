@@ -6096,33 +6096,3 @@ censuses empty (work breakdown 8, FR-010).
 **Performance work?** no
 
 
-<!-- plan-archive: archived 2026-11-20 -->
-### T234 (T226: the polder's sluice gate was drawn as a small square, where page 0179 draws a board and frame across the channel)
-
-- **Approach**: each sluice is drawn as page 0179 draws it: a timber board across the channel it shuts between two posts, with its crossbeam and windlass, its span drawn true post to post. The channel is found from the channel's own geometry, the channel whose line passes through the sluice's point, and the board laid across that stretch (the inlet across the feeder, the outfall across the drain's first stretch); a sluice whose channel cannot be found is refused by name, never guessed. Its span is 20 ft (GUESS, the middle of the page's 16 to 24 ft band for a field channel and the deleted sluice's default), grown to stand each post on a bank on a wider channel; the timber sizes are a CONVENTION, drawn larger than life as the page allows; the sluices are drawn over the reeds, as the deleted ink drew them, since under them both were hidden. The claim is restated to the page and the departure wording removed. Red first: the span read 8 against 20, the old square found at its point, the no-channel case (measured 2026-11-20 (the new tests against a stub drawing the square)). Kuwabata, the pool's one polder, is the one map that moved: its record's sluice-gate mark count 2 to 10 (observed 2026-11-20, method: `make map MAP=--all` then `make maps-moved`). Its glyph-check is declared under `## Occasions` and deferred at rust-only (feature 444 FR-023).
-
-| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
-|---|---|---|---|---|
-| the sluice drawn across its channel | the polder's sluice tests | `polder.rs`'s sluice | Kuwabata's drawing | none |
-
-<!-- plan-archive: archived 2026-11-20 -->
-### T234 Approach (checklist part A)
-
-1. **The goal, in the world.** A reader of a polder map sees each sluice as a gate across the water it shuts.
-2. **The constraints.** Page 0179; the derive-don't-pin rule (the direction from the channel's geometry); feature 444 FR-023 (the glyph-check deferred).
-3. **Where each comes from.** R: research/questions/0179-water-gates-and-sluices-shuimen.drawing.html; O: T226's finding.
-4. **Do they describe the world here?** Yes: the frame crops read across the feeder and across the drain (observed 2026-11-20, method: crops of both corners of Kuwabata's drawing).
-5. **The order.** After T226, before T158.
-6. **The exits.** Green: the tests red first then green, `make rust-test CRATE=rust/phases`, `make quick`, `make static`, `make counters-inert` green. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** none
-8. **The budget.** One landing (gated).
-9. **Done, measured.** Kuwabata's two sluices drawn as frames across their channels; the glyph-check recorded deferred.
-10. **Before moving a constant.** `SLUICE_FT` gone; the span's claim on the page, labeled.
-11. **Before fitting things into room.** n/a
-12. **Before any fix.** A small square on each sluice's point, which a reader could not read as a gate: a drawn size the research contradicts.
-
-**Found and left?** The reed strip covers the dike's corners and the sluice cuts: filed as T236, which lands before T158, since it is the reed-strip stage's fix, not the sluice's. `reviews owed` owed no review for this undeclared Rust drawing change: filed as T237, which lands before T158. The page's sluice name is not drawn, since the hamlet maps draw no element captions: no wrong outcome of this task.
-
-**Performance work?** no
-
-
