@@ -225,7 +225,9 @@ impl Delta {
         ran(&self.root, &args)
     }
 
-    /// `git diff --name-status --no-renames base [head] -- WATCHED`, asked once for each pair; the refusal where git failed.
+    /// `git diff --name-status --no-renames base [head] -- WATCHED`, asked once for each pair; the refusal where git failed
+    /// in a repository (a corrupt index), and nothing where there is no repository at all (`rev-parse --git-dir` fails,
+    /// asked only after a failed diff): nothing to judge, as before T43 (`land`'s replay runs the triage in a bare directory).
     fn status(&mut self, base: &str, head: Option<&str>) -> Result<&str, Fail> {
         let root = &self.root;
         self.status
@@ -235,7 +237,13 @@ impl Delta {
                 args.extend(head);
                 args.push("--");
                 args.extend(Self::WATCHED);
-                ran(root, &args)
+                ran(root, &args).or_else(|refused| {
+                    if ran(root, &["rev-parse", "--git-dir"]).is_ok() {
+                        Err(refused)
+                    } else {
+                        Ok(String::new())
+                    }
+                })
             })
             .as_deref()
             .map_err(Clone::clone)

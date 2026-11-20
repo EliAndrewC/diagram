@@ -245,3 +245,15 @@ fn a_diff_git_cannot_run_is_refused_not_read_as_nothing_changed() {
         && refused.ends_with(&repair);
     assert!(said, "{refused}");
 }
+
+#[test]
+fn a_tree_with_no_repository_has_nothing_changed() {
+    // no repository at all is nothing to judge, as before T43 (`land`'s replay test runs the triage in a bare directory);
+    // only a repository whose diff fails is refused
+    let dir = crate::checks::scratch("delta-no-repo");
+    std::fs::create_dir_all(dir.join("research/questions")).unwrap();
+    assert_eq!(
+        Delta::new(&dir).changed("HEAD", None, &["research/questions"]),
+        Ok(String::new())
+    );
+}

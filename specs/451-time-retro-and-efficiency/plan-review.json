@@ -614,7 +614,7 @@
    "declared": "spec-fidelity"
   },
   "### T43 (T40's finding: every owed computation read the record's pages at the merge base whole, 1,951 blobs by one `git cat-file --batch` for a one-page delta, 0.63-1.13 s of each 1.4-1.6 s computation, measured 2026-11-20 (T40's `git` shim))": {
-   "sha256": "98c32d9f29c909315b8fcf38758cc050711de2e78c61d70e798d969add402f2c",
+   "sha256": "0c57647cca27d619b5dfe53345ecbcb1b9f092e7b387c250b90082cd037d67a0",
    "verdict": "CLEAR",
    "reviewed": "2026-11-20",
    "declared": "spec-fidelity"
@@ -5195,6 +5195,94 @@
      "why": "Shows the checks still do their job after a speed change (their verdicts unchanged); the printed-path difference is accepted rather than held to exactness, consistent with the GM's 2026-11-18 rule."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-20",
+   "blocks": [
+    "### T43 (T40's finding: every owed computation read the record's pages at the merge base whole, 1,951 blobs by one `git cat-file --batch` for a one-page delta, 0.63-1.13 s of each 1.4-1.6 s computation, measured 2026-11-20 (T40's `git` shim))",
+    "### T43 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T43-scope",
+     "summary": "T43 is filed as [perf] work under FR-013 (the owed computation every gate run, push and landing pays).",
+     "class": "within",
+     "why": "The GM 2026-11-20: 'can we in general priotitize performance improvements going forward?' and 'doing those first makes everything after them faster'; FR-013 defines perf work as making the checks, gate or landings faster, which this is."
+    },
+    {
+     "id": "T43-rule",
+     "summary": "Delta::fetch reads a base file from the working tree when the cached diff does not name it, ls-files -v does not flag it assume-unchanged/skip-worktree, it is a plain file and holds no carriage return; decoded as cat_blobs decodes, so texts equals cat_blobs.",
+     "class": "within",
+     "why": "A speed change that removes work; the conservative conditions keep every owed unit the same, so no check's verdict changes. Nothing the GM asked is narrowed."
+    },
+    {
+     "id": "T43-any-rev",
+     "summary": "The rule applies at any revision, so --between's reads shrink too.",
+     "class": "within",
+     "why": "Same speed change over the same function; no behavior asked for is removed."
+    },
+    {
+     "id": "T43-rejected-cache",
+     "summary": "Rejected keying the base read by merge base and reusing it across computations.",
+     "class": "within",
+     "why": "A design choice among speedups; it keeps an existing invariant of delta.rs and narrows nothing requested."
+    },
+    {
+     "id": "T43-tests",
+     "summary": "Red-first tests on a cost counter (blobs_asked: 11 to 1) and texts-equals-cat_blobs across edited/deleted/skip-worktree/link/CR/untracked/assume-unchanged states.",
+     "class": "within",
+     "why": "Enforcement of the task's own hold (owed output the same, base read shrunk); a test that fails only when the requested behavior is absent serves the request."
+    },
+    {
+     "id": "T43-fail-closed-read",
+     "summary": "If the cached git diff or ls-files -v fails, nothing is called unchanged and every base name goes to cat-file, as before T43; tested by corrupting the index.",
+     "class": "within",
+     "why": "Closes a wrong outcome the new read path would otherwise introduce (edited tree read as the base, so the record family owes nothing); fixing a found defect in the step is the standing rule, not a narrowing."
+    },
+    {
+     "id": "T43-refuse-failed-diff",
+     "summary": "Delta::changed returns git's error on a failed diff in a repository (a corrupt index), and every owed computation reading it refuses with 'cannot tell what changed ... repair the index' rather than owing nothing (or owing everything).",
+     "class": "within",
+     "why": "A found defect (a check passing bad work: six modal-research units went unowed on a corrupt index, measured) fixed in the step where found, red first; the refusal is confined to the failed-diff case the defect lives in, and choosing refusal over a flood is design, not a narrowing of anything asked."
+    },
+    {
+     "id": "T43-norepo-split",
+     "summary": "The failed-diff refusal is split: where the diff fails and git rev-parse --git-dir fails too (no repository at all, asked only after a failed diff), changed is empty and nothing is owed, as before T43; a repository whose diff fails (a corrupt index) is refused. Red first (a_tree_with_no_repository_has_nothing_changed), prompted by land's replay_owing test running triage in a bare directory.",
+     "class": "within",
+     "why": "Keeps the pre-T43 behavior for a directory with nothing to judge (no repository, so no base and no delta) - not a wrong outcome, and the defect the refusal fixes (a corrupt index leaving six modal units unowed) is still refused, since rev-parse --git-dir succeeds on a repository whose index is corrupt. Confining a defect fix to the case the defect lives in narrows nothing the GM asked; the GM's request is performance work and this preserves existing tested behavior rather than removing any."
+    },
+    {
+     "id": "T43-others-left",
+     "summary": "ls-files --others still reads a failure as no untracked files; a tree with no repository owes nothing, as the command-line tests and land's replay test pin.",
+     "class": "within",
+     "why": "Not a defect left: the no-repository behavior is pinned as intended, and a corrupt index (the failure case found) is refused earlier by changed wherever there is a base."
+    },
+    {
+     "id": "T43-ls-files-alone-untested",
+     "summary": "A failed ls-files -v with a good diff rides the same fail-closed rule and has no test of its own; no state was found that fails one and not the other.",
+     "class": "within",
+     "why": "Coverage of a case not shown to exist; the rule covers it, and no wrong outcome is left."
+    },
+    {
+     "id": "T43-entry-drift-left",
+     "summary": "Entry-drift's own RevReader still reads the 297 pop-up files at the base (0.025 s, about 2% of the computation) and is not filed.",
+     "class": "within",
+     "why": "A small cost, not a defect (no wrong outcome); FR-013 orders perf work first but does not require every measured cost be removed, so leaving a 2% cost narrows nothing the GM asked."
+    },
+    {
+     "id": "T43-edit-reach",
+     "summary": "Only the owed crate (delta.rs, a doc comment in owed.rs) and this section edited; ordered after T40, before T22, beside T41.",
+     "class": "within",
+     "why": "Scope and ordering inside the task as filed; consistent with FR-013's perf-first ordering."
+    },
+    {
+     "id": "T43-verification",
+     "summary": "Owed output checked against the HEAD build on eight real commits plus the reword (53 listing pairs, three triage bundles, fingerprint cross-checks); triage outputs differ only in the printed --out path, accepted.",
+     "class": "within",
+     "why": "Shows the checks still do their job after a speed change (their verdicts unchanged); the printed-path difference is accepted rather than held to exactness, consistent with the GM's 2026-11-18 rule."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -7038,7 +7126,7 @@
    "verdict": "CLEAR"
   },
   "T43": {
-   "section_sha256": "ff5eb1ae5582b0a489f83ad310586e6b0a7673893b235e213419edd49cbc8104",
+   "section_sha256": "ea569e06067531d88c4c3860176749dd01e3a5e91b76b633b889ff56fed7b196",
    "reviewed": "2026-11-20",
    "declared": "spec-fidelity",
    "decisions": [
@@ -7080,13 +7168,19 @@
     },
     {
      "id": "T43-refuse-failed-diff",
-     "summary": "Delta::changed returns git's error on a failed diff, and every owed computation reading it refuses with 'cannot tell what changed ... repair the index' rather than owing nothing (or owing everything).",
+     "summary": "Delta::changed returns git's error on a failed diff in a repository (a corrupt index), and every owed computation reading it refuses with 'cannot tell what changed ... repair the index' rather than owing nothing (or owing everything).",
      "class": "within",
      "why": "A found defect (a check passing bad work: six modal-research units went unowed on a corrupt index, measured) fixed in the step where found, red first; the refusal is confined to the failed-diff case the defect lives in, and choosing refusal over a flood is design, not a narrowing of anything asked."
     },
     {
+     "id": "T43-norepo-split",
+     "summary": "The failed-diff refusal is split: where the diff fails and git rev-parse --git-dir fails too (no repository at all, asked only after a failed diff), changed is empty and nothing is owed, as before T43; a repository whose diff fails (a corrupt index) is refused. Red first (a_tree_with_no_repository_has_nothing_changed), prompted by land's replay_owing test running triage in a bare directory.",
+     "class": "within",
+     "why": "Keeps the pre-T43 behavior for a directory with nothing to judge (no repository, so no base and no delta) - not a wrong outcome, and the defect the refusal fixes (a corrupt index leaving six modal units unowed) is still refused, since rev-parse --git-dir succeeds on a repository whose index is corrupt. Confining a defect fix to the case the defect lives in narrows nothing the GM asked; the GM's request is performance work and this preserves existing tested behavior rather than removing any."
+    },
+    {
      "id": "T43-others-left",
-     "summary": "ls-files --others still reads a failure as no untracked files; a tree with no repository owes nothing, as existing command-line tests pin.",
+     "summary": "ls-files --others still reads a failure as no untracked files; a tree with no repository owes nothing, as the command-line tests and land's replay test pin.",
      "class": "within",
      "why": "Not a defect left: the no-repository behavior is pinned as intended, and a corrupt index (the failure case found) is refused earlier by changed wherever there is a base."
     },
