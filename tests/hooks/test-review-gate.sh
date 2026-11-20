@@ -49,7 +49,9 @@ drawn() {
   printf '#!/bin/sh\n[ "$1" = hamlet ] && { echo "%s/.git/stand-in-hamlet"; exit 0; }\nexit 1\n' "$PWD" > scripts/gates/l7r-gate.sh
   chmod +x scripts/gates/l7r-gate.sh; printf 'scripts/\n.gencache/\n*.driver.json\n' >> .git/info/exclude
   printf '%s' "$1" > "$POOL/m.driver.json"
-  python3 - "$PWD" <<'PY'
+  # GUARD_EDIT_OK: feature 449 T231 - the cache entry is written by a script the fixture keeps, so a stub `map` target (b1) redraws
+  # the hamlet as the Rust driver would: its census written and its entry made current again
+  cat > .git/draw.py <<'PY'
 import hashlib, json, os, sys
 root = sys.argv[1]
 eng = "sha256:" + hashlib.sha256(open(os.path.join(root, ".git/stand-in-hamlet"), "rb").read()).hexdigest()
@@ -65,6 +67,7 @@ os.makedirs(entry, exist_ok=True)
 open(os.path.join(root, ".gencache/rust/reads.tsv"), "w").write("# l7r pool read table 1\n")
 open(os.path.join(entry, "meta.json"), "w").write(json.dumps(meta))
 PY
+  python3 .git/draw.py "$PWD"
 }
 
 check() { # label repo expected
@@ -82,6 +85,18 @@ prerepo() {  # a repo whose main already holds specs/900-x/spec.md with the give
   git add -A; git commit -qm base; git branch -q -M main; git checkout -q -b work
 }
 
+# GUARD_EDIT_OK: feature 449 T231 - a hamlet edited on a branch and not redrawn, its main holding a stub `map` target with this recipe
+b1() {  # repo, the stub map target's recipe
+  mkrepo "$1" withmap; git checkout -q main
+  printf 'map:\n\t@%s\n' "$2" >> Makefile
+  git add -A; git commit -qm gen; git update-ref refs/remotes/origin/main main; git checkout -q -b stale
+  echo '{"seed": 2}' > "$POOL/m.spec.json"; git add -A; git commit -qm "the hamlet edited, not redrawn" -m "Occasion: none: reseeded, no rule changed"
+}
+said() { ( cd "$T/$1" && "$GATE" main..HEAD 2>&1 ); }
+has() {  # label, repo, condition (run in the repo; a here-string, never a pipe into `grep -q`, which pipefail fails on its SIGPIPE)
+  if ( cd "$T/$2" && eval "$3" ); then echo "  ok      $1"; PASS=$((PASS+1)); else echo "  FAIL    $1"; FAIL=$((FAIL+1)); fi
+}
+REDRAW='cp .git/next-census pool/hamlets/m/m.driver.json && python3 .git/draw.py "$$PWD" && touch .git/redrawn'
 NEW='{"v":2,"ink_classes":{"farmhouse":1,"well":1}}'  # a constant the cases share, defined before them (383 amendment 4)
 case_1() {
 echo "1. IT FIRES on work that skipped a mandated review"
@@ -101,14 +116,35 @@ check "a map gaining an element with no review recorded" b blocked
 if [ -f "$T/b/.git/glyph-landing" ]; then echo "  ok      ...and marks the work landing, so its glyph dispatch is due (375 amendment 9)"; PASS=$((PASS+1))
 else echo "  FAIL    the refused push did not mark the work landing"; FAIL=$((FAIL+1)); fi
 
-# GUARD_EDIT_OK: feature 375 follow-up (2026-10-10) - a render older than main's reads as a new element; the gate redraws
-# what an owed unit sits on (the stub `map` puts main's census back, as a real redraw did for 374's corridor) and asks again
-# GUARD_EDIT_OK: feature 449 T221 - the map is drawn by `make map MAP=` as the hamlet its spec makes it, no .gen.py written
-mkrepo b1 withmap; git checkout -q main
-printf 'map:\n\t@printf %%s %s > %s\n' "'{\"v\":1,\"ink_classes\":{\"farmhouse\":1}}'" "$POOL/m.json" >> Makefile
-git add -A; git commit -qm gen; git update-ref refs/remotes/origin/main main; git checkout -q -b stale
-echo work >> seed.txt; git add -A; git commit -qm work; echo "$NEW" > "$POOL/m.json"
-check "a stale render that its redraw clears owes nothing" b1 ok
+# GUARD_EDIT_OK: feature 375 follow-up (2026-10-10) - a render older than main's read as a new element, so the gate redraws first
+# GUARD_EDIT_OK: feature 449 T231 - and RED FIRST: this case edited the tracked m.json, which no reader has read since T230 (a live
+# hamlet's elements are its Rust drawing's), so it passed without testing anything. Now the hamlet's SPEC is edited and not redrawn:
+# its drawing is not current, `reviews owed` cannot know its elements, and the gate must redraw it (`make map MAP=`, the stub below
+# writing the census the redraw draws and making the cache entry current) before it asks what is owed
+b1 b1 "$REDRAW"; printf '%s' "$NEW" > .git/next-census
+check "a hamlet edited and not redrawn, at integrated: refused" b1 blocked
+has "...because the gate redrew it" b1 '[ -f .git/redrawn ]'
+has "...and the glyph-check its redraw owes has no verdict" b1 'grep -q "glyph-check--well--m is owed and has no verdict record" <<<"$(said b1)"'
+mkdir -p "$T/b1/.git/review-verdicts"; echo '{"map":"glyph-check--well--m","engine_key":"k","verdict":"PASS","findings":[]}' > "$T/b1/.git/review-verdicts/glyph-check--well--m.json"
+check "...and ships once that glyph-check returned PASS" b1 ok
+b1 b1s "$REDRAW"; printf '%s' '{"v":1,"ink_classes":{"farmhouse":1}}' > .git/next-census
+check "a hamlet whose redraw draws nothing new owes nothing" b1s ok
+has "...redrawn all the same" b1s '[ -f .git/redrawn ]'
+b1 b1f 'echo "the hamlet engine panicked: no seat for the well" >&2; exit 1'
+check "a redraw that fails: refused" b1f blocked
+has "...naming what the draw said and the fix" b1f 'o="$(said b1f)"; grep -q "the hamlet engine panicked" <<<"$o" && grep -q "make map MAP=pool/hamlets/m" <<<"$o"'
+b1 b1n 'touch .git/redrawn'
+check "a redraw that leaves the drawing not current: refused" b1n blocked
+has "...naming the map" b1n 'grep -q "pool/hamlets/m is still not current" <<<"$(said b1n)"'
+mkrepo b1c withmap; printf 'map:\n\t@touch .git/redrawn\n' >> Makefile; echo work >> seed.txt; git add -A; git commit -qm work
+check "a current drawing is not redrawn" b1c ok
+has "...the map target never run" b1c '[ ! -f .git/redrawn ]'
+# GUARD_EDIT_OK: feature 449 T231 - A FRESH TREE (land-tooling's worktree, a new clone) draws nothing, so every map reads not current;
+# a push whose delta touches no engine path (`l7r-gate delta engine-paths`, the route's one list) changes no drawing, so it redraws none
+mkrepo b1t withmap; printf 'map:\n\t@touch .git/redrawn\n' >> Makefile; git add -A; git commit -qm gen; git update-ref refs/remotes/origin/main HEAD
+rm -rf .gencache; echo tooling >> seed.txt; git add -A; git commit -qm tooling
+check "a fresh tree's push that touches no engine path ships" b1t ok
+has "...nothing redrawn" b1t '[ ! -f .git/redrawn ]'
 
 # The two shapes the bare `grep FAITHFUL` used to let through (feature 156, 2026-08-29). The first is
 # the dangerous one: a spec a reviewer REJECTED shipped as if it had passed.
@@ -326,6 +362,10 @@ echo '{"map":"glyph-check--well--m","engine_key":"stale","verdict":"PASS","findi
 check "a stale record on a hamlet's map, the switch at integrated: refused" r4 blocked
 ( cd "$T/r4" && echo '{"port": {"state": "rust-only"}}' > dev/switches.json && git add -A && git commit -qm rust-only )
 check "...at rust-only it waits for the throw back and ships, no map redrawn" r4 ok
+# GUARD_EDIT_OK: feature 449 T231 - at rust-only no hamlet is redrawn for the gate: its units are set aside, so the redraw buys nothing
+b1 r5 'touch .git/redrawn'; echo '{"port": {"state": "rust-only"}}' > dev/switches.json; git add -A; git commit -qm rust-only
+check "a hamlet edited and not redrawn, at rust-only: ships" r5 ok
+has "...not redrawn" r5 '[ ! -f .git/redrawn ]'
 }
 
 # GUARD_EDIT_OK: feature 383 amendment 4 (plan D28) - the sections as cases, run in parallel parts (tests/hooks/parts.sh)

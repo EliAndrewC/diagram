@@ -1164,6 +1164,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-20",
    "declared": "spec-fidelity"
+  },
+  "### T231 (T230: the review gate did not redraw a map whose drawing was not current, so an edited map could ship without the glyph-check it owes)": {
+   "sha256": "7f031949d2a93e05cf18bf571069a6478ea329732599f40d44eccf44a8c81458",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity"
+  },
+  "### T231 Approach (checklist part A)": {
+   "sha256": "bf54a609fe41aca84c3c63fb2bb8f228819ffa72d4d49e579ed5330b9fb98eca",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -15742,6 +15754,65 @@
      "why": "Ordering and acceptance for the defect fix. No scope is narrowed."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-20",
+   "blocks": [
+    "### T231 (T230: the review gate did not redraw a map whose drawing was not current, so an edited map could ship without the glyph-check it owes)",
+    "### T231 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T231-1",
+     "summary": "`reviews owed --undrawn` lists each live map whose drawing the cache does not serve as current (hamlets and generated compounds; a hand sheet's .svg is its own spec), answered in one process by l7r_gate_pool::Currency",
+     "class": "within",
+     "why": "The mechanism of the fix for T230's defect (an edited map shipping without its owed glyph-check); a wrong outcome fixed as found (the GM 2026-11-18, 'fix broken things as we find them'; FR-002's exception for a check improved on purpose). Excluding hand sheets drops no case: their .svg is their spec and is always current."
+    },
+    {
+     "id": "T231-2",
+     "summary": "review-gate.sh redraws each not-current map through `make map MAP=` before asking what is owed, refuses a failed redraw or one still not current with the fix named; the old per-unit redraw folded in",
+     "class": "within",
+     "why": "This is the defect fix itself: the gate now owes the glyph-check of the map as it will ship. Refusing a failed redraw enforces that, adding no behavior beyond it."
+    },
+    {
+     "id": "T231-3",
+     "summary": "The redraw runs only when the push touches an engine path (`l7r-gate delta engine-paths`); a non-engine push, even from a fresh tree, builds and draws nothing",
+     "class": "within",
+     "why": "A push that touches no input a drawing reads edits no map, so no glyph-check comes due from it. The engine list was checked against the cache's read table (T231-5), so nothing a drawing reads is outside the trigger. No edited map falls outside the fix."
+    },
+    {
+     "id": "T231-4",
+     "summary": "The page-only inputs (modal texts, page assets, knobs.json, linked research fragments) stay off the engine list, by the GM's feature 188 ruling, pinned as not-engine in the delta's test",
+     "class": "within",
+     "why": "Keeps a standing GM ruling. None of these inputs changes a sheet's .svg or a hamlet's census, so no map edit escapes its glyph-check through them."
+    },
+    {
+     "id": "T231-5",
+     "summary": "l7r/diagram/buildings/types.json, read by the Mode A engine for every compound, is put on all three lists (the delta, the stamp's area, the landing's list), red first",
+     "class": "within",
+     "why": "A defect of the same class found while fixing T230 (an edit to a drawing's input landed DIRECT with no make done and no sweep). It is fixed in this step under the GM's 2026-11-18 rule that each step's known bugs are fixed before the next. The change only widens the gate to something it should already have caught."
+    },
+    {
+     "id": "T231-6",
+     "summary": "The shared legend reader gives every caller (make verify, the pair guard, the checkpoint, the snapshot) a not-current problem line for a compound, where it used to read a stale .svg silently",
+     "class": "within",
+     "why": "A wrong outcome: checks were passing on a stale drawing. It is the same defect that T230 found in the gate, reached through the other callers of one shared reader, and fixing it is enforcement, not new scope."
+    },
+    {
+     "id": "T231-7",
+     "summary": "While the port switch stands at rust-only (its state now), review-gate.sh skips redrawing hamlets; the gate names each hamlet unit it sets aside as waiting for the switch thrown back to integrated (FR-023); at integrated every hamlet not current is redrawn and its units owed (the red cases)",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This narrows the fix's reach (hamlets are not redrawn now), but the narrowing is already implied by the GM's own words. Feature 444 FR-023 (amendments 8 and 10, the GM 2026-11-07) says a glyph-check that the review gate owes for a pool hamlet a Rust stage moves 'is not owed while the switch stands', and is owed for every pool hamlet the port moved when the switch is thrown back. Amendment 10, 'immediately stop running all of the python map generating code', also rules out the Python pipeline that a hamlet redraw would run now. Taking each case separately: compounds (Mode A, Rust) are still redrawn and owed, so the skip covers hamlets alone. At rust-only the Python stages are frozen (FR-001b: 'we are no longer changing it'), so any hamlet change comes from the port, which is the class FR-023 defers. The deferral is not a drop: the red cases pin that at integrated every hamlet not current is redrawn and its units owed, and the gate names each unit it sets aside, so the deferred debt stays visible. The purpose of the request (an edited map does not ship un-checked) is kept on the terms the GM set for the port."
+    },
+    {
+     "id": "T231-8",
+     "summary": "Order: after T230, before T158; exits and budget as in checklist part A",
+     "class": "within",
+     "why": "Sequencing and procedure. This follows the GM's 2026-11-18 rule that each step's known defects are fixed before the next step's port, and narrows nothing."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -27624,6 +27695,63 @@
      "summary": "Runs after T222 and before T158. The exits are tests that fail first and then pass, plus quick, static and hooks-test, or a set-down with the arbiter asked. Done when make map MAP=--all counts every live map and reviews owed names the two owed checks",
      "class": "within",
      "why": "Ordering and acceptance for the defect fix. No scope is narrowed."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T231": {
+   "section_sha256": "c39e8e22a1e031ef394f67daf529dcafae65b9321d3ad95774ef847f12bf6d31",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T231-1",
+     "summary": "`reviews owed --undrawn` lists each live map whose drawing the cache does not serve as current (hamlets and generated compounds; a hand sheet's .svg is its own spec), answered in one process by l7r_gate_pool::Currency",
+     "class": "within",
+     "why": "The mechanism of the fix for T230's defect (an edited map shipping without its owed glyph-check); a wrong outcome fixed as found (the GM 2026-11-18, 'fix broken things as we find them'; FR-002's exception for a check improved on purpose). Excluding hand sheets drops no case: their .svg is their spec and is always current."
+    },
+    {
+     "id": "T231-2",
+     "summary": "review-gate.sh redraws each not-current map through `make map MAP=` before asking what is owed, refuses a failed redraw or one still not current with the fix named; the old per-unit redraw folded in",
+     "class": "within",
+     "why": "This is the defect fix itself: the gate now owes the glyph-check of the map as it will ship. Refusing a failed redraw enforces that, adding no behavior beyond it."
+    },
+    {
+     "id": "T231-3",
+     "summary": "The redraw runs only when the push touches an engine path (`l7r-gate delta engine-paths`); a non-engine push, even from a fresh tree, builds and draws nothing",
+     "class": "within",
+     "why": "A push that touches no input a drawing reads edits no map, so no glyph-check comes due from it. The engine list was checked against the cache's read table (T231-5), so nothing a drawing reads is outside the trigger. No edited map falls outside the fix."
+    },
+    {
+     "id": "T231-4",
+     "summary": "The page-only inputs (modal texts, page assets, knobs.json, linked research fragments) stay off the engine list, by the GM's feature 188 ruling, pinned as not-engine in the delta's test",
+     "class": "within",
+     "why": "Keeps a standing GM ruling. None of these inputs changes a sheet's .svg or a hamlet's census, so no map edit escapes its glyph-check through them."
+    },
+    {
+     "id": "T231-5",
+     "summary": "l7r/diagram/buildings/types.json, read by the Mode A engine for every compound, is put on all three lists (the delta, the stamp's area, the landing's list), red first",
+     "class": "within",
+     "why": "A defect of the same class found while fixing T230 (an edit to a drawing's input landed DIRECT with no make done and no sweep). It is fixed in this step under the GM's 2026-11-18 rule that each step's known bugs are fixed before the next. The change only widens the gate to something it should already have caught."
+    },
+    {
+     "id": "T231-6",
+     "summary": "The shared legend reader gives every caller (make verify, the pair guard, the checkpoint, the snapshot) a not-current problem line for a compound, where it used to read a stale .svg silently",
+     "class": "within",
+     "why": "A wrong outcome: checks were passing on a stale drawing. It is the same defect that T230 found in the gate, reached through the other callers of one shared reader, and fixing it is enforcement, not new scope."
+    },
+    {
+     "id": "T231-7",
+     "summary": "While the port switch stands at rust-only (its state now), review-gate.sh skips redrawing hamlets; the gate names each hamlet unit it sets aside as waiting for the switch thrown back to integrated (FR-023); at integrated every hamlet not current is redrawn and its units owed (the red cases)",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This narrows the fix's reach (hamlets are not redrawn now), but the narrowing is already implied by the GM's own words. Feature 444 FR-023 (amendments 8 and 10, the GM 2026-11-07) says a glyph-check that the review gate owes for a pool hamlet a Rust stage moves 'is not owed while the switch stands', and is owed for every pool hamlet the port moved when the switch is thrown back. Amendment 10, 'immediately stop running all of the python map generating code', also rules out the Python pipeline that a hamlet redraw would run now. Taking each case separately: compounds (Mode A, Rust) are still redrawn and owed, so the skip covers hamlets alone. At rust-only the Python stages are frozen (FR-001b: 'we are no longer changing it'), so any hamlet change comes from the port, which is the class FR-023 defers. The deferral is not a drop: the red cases pin that at integrated every hamlet not current is redrawn and its units owed, and the gate names each unit it sets aside, so the deferred debt stays visible. The purpose of the request (an edited map does not ship un-checked) is kept on the terms the GM set for the port."
+    },
+    {
+     "id": "T231-8",
+     "summary": "Order: after T230, before T158; exits and budget as in checklist part A",
+     "class": "within",
+     "why": "Sequencing and procedure. This follows the GM's 2026-11-18 rule that each step's known defects are fixed before the next step's port, and narrows nothing."
     }
    ],
    "verdict": "CLEAR"

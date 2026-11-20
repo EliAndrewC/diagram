@@ -75,6 +75,9 @@ fn every_path_kind_is_pinned() {
         "rust/phases/src/field.rs",
         "rust/phases/Cargo.toml",
         "rust/phases/Cargo.lock",
+        // the building types' declaration, which the Mode A engine draws every compound from and the pool walk classifies every sheet's
+        // tier by (449 T231: an edit to it landed DIRECT, judged by no `make done` and no sweep, its drawings left not current)
+        "l7r/diagram/buildings/types.json",
     ] {
         assert!(is_engine(path), "{path}");
     }
@@ -91,6 +94,12 @@ fn every_path_kind_is_pinned() {
         "pyproject.toml",
         "scripts/gates/codeid.py",
         "l7r/diagram/interactive/assets/page.js",
+        // what only the PAGE reads - its modal texts, its assets, the knobs - is the page's, not the route's (feature 188, the GM
+        // 2026-09-05: "there's no actual reason to rerun all the tests for style sheet changes")
+        "l7r/diagram/interactive/assets/modals/sheet/torii.md",
+        "l7r/diagram/interactive/assets/glossary.json",
+        "l7r/diagram/knobs.json",
+        "l7r/diagram/buildings/types.json.bak",
         "docs/a.md",
         "rust/phases/README.md",
     ] {

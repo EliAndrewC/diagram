@@ -137,3 +137,37 @@ fn counts_on_the_pool_are_the_second_runs_and_name_what_it_did_not_serve() {
         "{err}"
     );
 }
+
+/// `Currency` (449 T231): many maps asked in one process name each engine's binary once - the launcher started once an engine, where
+/// `is_current` starts it for every map - and answer as `is_current` does: a drawn hamlet and compound current, an edited one not, a
+/// frozen exhibit and a name no map bears never.
+#[test]
+fn currency_asks_each_engine_once_and_answers_as_is_current() {
+    use crate::cache::engine::{Binaries, Engine};
+    use std::cell::RefCell;
+    use std::path::PathBuf;
+    use std::rc::Rc;
+    struct Counted(crate::cache::tests::Stand, Rc<RefCell<Vec<Engine>>>);
+    impl Binaries for Counted {
+        fn binary(&mut self, e: Engine) -> Result<PathBuf, String> {
+            self.1.borrow_mut().push(e);
+            self.0.binary(e)
+        }
+    }
+    let mut f = crate::cache::tests::fixture("currency");
+    f.verdicts(&["h", "c"]);
+    let stand = std::mem::replace(
+        &mut f.stand,
+        crate::cache::tests::Stand(std::collections::BTreeMap::new()),
+    );
+    let asked_of = Rc::new(RefCell::new(Vec::new()));
+    let mut c = super::Currency::with(&f.root, Box::new(Counted(stand, Rc::clone(&asked_of))));
+    let asked: Vec<bool> = ["h", "c", "h", "c", "v", "zz"]
+        .iter()
+        .map(|t| c.of(t))
+        .collect();
+    assert_eq!(asked, [true, true, true, true, false, false]);
+    assert_eq!(*asked_of.borrow(), [Engine::Hamlet, Engine::ModeA]);
+    f.edit("pool/magistracies/c/c.compound.json", "{\"edited\": 1}");
+    assert!(!c.of("c"));
+}

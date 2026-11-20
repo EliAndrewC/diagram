@@ -44,6 +44,7 @@ const AREAS: [Area; 4] = [
         // (`every_engine_path_is_in_the_diagram_area`) holds the two lists together
         patterns: &[
             "*.py",
+            "l7r/*/buildings/types.json",
             "rust/*.rs",
             "rust/*Cargo.toml",
             "rust/*Cargo.lock",

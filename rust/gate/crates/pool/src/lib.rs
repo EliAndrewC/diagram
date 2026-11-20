@@ -18,8 +18,9 @@
 //!
 //! Research: plumbing - NONE: finds the pool's maps and lists them, and decides nothing about a place
 
+use std::collections::BTreeMap;
 use std::fmt::Write as _;
-use std::path::Path;
+use std::path::{Path, PathBuf};
 
 pub mod cache;
 pub mod counts;
@@ -179,20 +180,68 @@ fn counts_cli(root: &Path, tree: &str, binaries: &mut dyn cache::engine::Binarie
 /// question, asked read-only and building no engine ([`cache::is_current`]); a frozen exhibit or a name no map bears is not.
 #[must_use]
 pub fn is_current(root: &Path, target: &str) -> bool {
-    let w = walk(root);
-    map::resolve(root, &w, target).is_ok_and(|m| {
-        m.tree == LIVE
-            && m.kind.is_live()
-            && cache::is_current(
-                root,
-                m,
-                &mut cache::engine::Launcher {
-                    root: root.to_path_buf(),
-                    build: false,
-                },
-                cache::Options::current().skip_render,
-            )
-    })
+    Currency::new(root).of(target)
+}
+
+/// [`is_current`] asked of many maps in one process (449 T231): the pool walked once and each engine's launcher asked once, where a
+/// call of [`is_current`] each walks the pool and starts the launcher again - `reviews owed` asks it of every live map on every push.
+pub struct Currency {
+    root: PathBuf,
+    walk: Walk,
+    binaries: Remembered,
+}
+
+impl Currency {
+    /// Over the tree at `root`, its engines named by the launcher, building none.
+    #[must_use]
+    pub fn new(root: &Path) -> Self {
+        Self::with(
+            root,
+            Box::new(cache::engine::Launcher {
+                root: root.to_path_buf(),
+                build: false,
+            }),
+        )
+    }
+
+    /// Over the tree at `root`, its engines named by `binaries`.
+    #[must_use]
+    pub fn with(root: &Path, binaries: Box<dyn cache::engine::Binaries>) -> Self {
+        Self {
+            root: root.to_path_buf(),
+            walk: walk(root),
+            binaries: Remembered {
+                inner: binaries,
+                known: BTreeMap::new(),
+            },
+        }
+    }
+
+    /// Whether the map `target` names is served by the generation cache now.
+    pub fn of(&mut self, target: &str) -> bool {
+        let skip = cache::Options::current().skip_render;
+        map::resolve(&self.root, &self.walk, target).is_ok_and(|m| {
+            m.tree == LIVE
+                && m.kind.is_live()
+                && cache::is_current(&self.root, m, &mut self.binaries, skip)
+        })
+    }
+}
+
+/// Each engine's binary as `inner` first named it (or failed to), asked once a run.
+struct Remembered {
+    inner: Box<dyn cache::engine::Binaries>,
+    known: BTreeMap<cache::engine::Engine, Result<PathBuf, String>>,
+}
+
+impl cache::engine::Binaries for Remembered {
+    fn binary(&mut self, engine: cache::engine::Engine) -> Result<PathBuf, String> {
+        let inner = &mut self.inner;
+        self.known
+            .entry(engine)
+            .or_insert_with(|| inner.binary(engine))
+            .clone()
+    }
 }
 
 /// The command line, from the tree at `root`.

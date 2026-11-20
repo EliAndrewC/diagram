@@ -155,14 +155,58 @@ if [ -n "$undeclared" ]; then
   printf '%s\n' "$undeclared"
   fail="$fail occasions"; rules="$rules occasions-undeclared"
 fi
+# GUARD_EDIT_OK: feature 449 T231 - A DRAWING NOT CURRENT IS REDRAWN BEFORE THE ASK. A live hamlet's elements are its Rust drawing's
+# census (T230), unknown while the generation cache does not serve that drawing as current, and a generated compound's are its `.svg`
+# as last drawn: so a map edited and not redrawn owed nothing, and at integrated an edited hamlet shipped without the glyph-check its new
+# element owes. `reviews owed --undrawn` names each such map (`<kind>\t<folder>`; nothing, one walk and a cache read, when nothing is
+# stale) and each is drawn by `make map MAP=` before anything is asked. A draw that fails, or leaves the map still not current, refuses:
+# what the reviews owe is not known. At rust-only a hamlet is not redrawn - its units are set aside below, so the draw buys nothing.
+# (This replaces feature 375's redraw of what each owed unit sat on, after the ask: a stale render is a drawing not current, redrawn
+# here; a hand sheet's legend is its own `.svg`, its spec, which no redraw changes.)
+# A PUSH THAT TOUCHES NO ENGINE PATH REDRAWS NOTHING (449 T231): a fresh tree - land-tooling's worktree, a new clone - has drawn
+# nothing, so every map reads not current, and a redraw there cost an engine's cold build and every compound drawn (every hamlet too at
+# integrated) on a push that changes no drawing. The engine paths are the route's one list (`delta engine-paths`, `tree/delta.rs`
+# `is_engine`), which holds every file a drawing is drawn from; what only the page reads (feature 188) changes no legend. A map left
+# not current reads as a problem line, never as a legend, so nothing stale is owed or missed.
+port=""
+undrawn=""
+if [ -n "$(printf '%s\n' "$changed" | "$RG_HERE/l7r-gate.sh" delta engine-paths 2>/dev/null)" ]; then
+  undrawn="$("$RG_HERE/l7r-gate.sh" reviews owed --root "$ROOT" --undrawn 2>/dev/null)"
+fi
+if [ -n "$undrawn" ]; then
+  port="$(cd "$ROOT" && "$RG_HERE/l7r-gate.sh" cohort port 2>/dev/null || echo integrated)"
+  redrawn=""
+  while IFS=$'\t' read -r kind at; do
+    [ -n "$at" ] || continue
+    if [ "$kind" = hamlet ] && [ "$port" = "rust-only" ]; then continue; fi
+    if drew="$(cd "$ROOT" && make -s map MAP="$at" </dev/null 2>&1)"; then
+      redrawn="$redrawn $at"
+    else
+      printf '\n\033[1mREVIEW GATE: %s is not drawn as it stands, and its redraw failed - the reviews it owes are not known.\033[0m\n' "$at"
+      printf '%s\n' "$drew" | tail -n 8
+      printf 'Fix what the draw names, then `make map MAP=%s` until it says REGENERATED or CACHED, and push again.\n' "$at"
+      fail="$fail $at"; rules="$rules map-redraw-failed"
+    fi
+  done <<<"$undrawn"
+  if [ -n "$redrawn" ]; then
+    while IFS=$'\t' read -r kind at; do
+      case " $redrawn " in *" $at "*) ;; *) continue ;; esac
+      printf '\n\033[1mREVIEW GATE: %s is still not current after `make map MAP=%s` drew it.\033[0m\n' "$at" "$at"
+      printf 'The generation cache does not serve the drawing it just made, so the reviews it owes are not known. Run\n'
+      printf '`make map MAP=%s` and read its REGENERATED line; drawn under another DIAGRAM_SKIP_RENDER than this push, draw it\n' "$at"
+      printf 'under this one; else the cache'"'"'s currency check and its draw disagree (rust/gate/crates/pool/src/cache.rs).\n'
+      fail="$fail $at"; rules="$rules map-redraw-not-current"
+    done < <("$RG_HERE/l7r-gate.sh" reviews owed --root "$ROOT" --undrawn 2>/dev/null)
+  fi
+fi
 owed_units="$("$RG_HERE/l7r-gate.sh" reviews owed --root "$ROOT" --landing 2>/dev/null || true)"
 # AT RUST-ONLY A HAMLET'S MAP REVIEWS WAIT FOR THE THROW BACK (feature 444 FR-023; the GM 2026-11-07: "You should immediately stop
 # running all of the python map generating code as well"): no hamlet map is rolled through the Python stages while the port switch
 # stands at rust-only (`make map` rolled Inashiro and Kashikawa through them in a landing's cheap refusals), so a review of one is not
 # refused; it is owed again when the switch is thrown back to integrated. Every other unit is asked as before.
-# GUARD_EDIT_OK: feature 449 T221 - a hamlet's map IS redrawn below now: `make map` runs the Rust hamlet driver (a tenth of a second,
-# no Python), which writes its .driver.svg and .json and leaves the tracked manifest the review reads alone
-port="$(cd "$ROOT" && "$RG_HERE/l7r-gate.sh" cohort port 2>/dev/null || echo integrated)"
+# GUARD_EDIT_OK: feature 449 T221 - `make map` runs the Rust hamlet driver now (a tenth of a second, no Python); T231 - a hamlet not
+# current is redrawn above at integrated, and at rust-only is not, its units set aside here
+[ -n "$port" ] || [ -z "$owed_units" ] || port="$(cd "$ROOT" && "$RG_HERE/l7r-gate.sh" cohort port 2>/dev/null || echo integrated)"
 if [ "$port" = "rust-only" ] && [ -n "$owed_units" ]; then
   kept=""
   for unit in $owed_units; do
@@ -174,21 +218,6 @@ if [ "$port" = "rust-only" ] && [ -n "$owed_units" ]; then
     fi
   done
   owed_units="${kept# }"
-fi
-# GUARD_EDIT_OK: feature 375 follow-up (2026-10-10) - A STALE RENDER IS NO OCCASION. A sheet's SVG is a gitignored render,
-# and a clone never re-renders on a merge (GM 2026-07-22), so a render drawn before main moved read as an element "new to"
-# its sheet: a spec-only push owed 374's glyph-check and size-audit on a corridor main no longer drew. Redraw what each owed
-# unit sits on (`make map` answers CACHED when the render is current), then ask again.
-if [ -n "$owed_units" ]; then
-  for on in $("$RG_HERE/l7r-gate.sh" reviews owed --root "$ROOT" --landing --units 2>/dev/null | awk -F'\t' '{print $4}' | sort -u); do
-    # GUARD_EDIT_OK: feature 449 T221 - the unit's live map asked of the one pool walk (its kind and folder) and drawn by the one
-    # driver, `make map MAP=<folder>`, where its `.gen.py` (deleted) was run; a hamlet is the Rust driver's tenth of a second now
-    f="$("$RG_HERE/l7r-gate.sh" pool find "$on" 2>/dev/null)"
-    case "${f%%	*}" in
-      hamlet|compound|hand-sheet) ( cd "$ROOT" && make -s map MAP="${f#*	}" >/dev/null 2>&1 ) ;;
-    esac
-  done
-  owed_units="$("$RG_HERE/l7r-gate.sh" reviews owed --root "$ROOT" --landing 2>/dev/null || true)"
 fi
 if [ -n "$owed_units" ]; then
   tree_key="$( cd "$ROOT" 2>/dev/null && make -s engine-key REF=worktree 2>/dev/null | tr -d '[:space:]' )"

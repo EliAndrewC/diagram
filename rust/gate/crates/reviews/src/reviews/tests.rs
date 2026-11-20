@@ -62,7 +62,7 @@ pub(super) fn tools(root: &Path) {
     std::fs::create_dir_all(root.join("scripts/gates")).unwrap();
     l7r_gate_core::write_executable(
         &root.join("scripts/gates/l7r-gate.sh"),
-        "#!/bin/sh\nd=$(dirname \"$0\")/../..\nif [ \"$1\" = hamlet ]; then echo \"$(cd \"$d\" && pwd)/.git/engine.bin\"; exit 0; fi\nif [ \"$1\" = check ]; then [ -f \"$d/.git/no-pattern\" ] && { echo no pattern >&2; exit 1; }; echo '(?<![\\w.])\\d[\\d,]*(?:\\.\\d+)?\\s*(?:px|s)(?![\\w-])'; exit 0; fi\n[ -f .git/green ]\n",
+        "#!/bin/sh\nd=$(dirname \"$0\")/../..\ncase \"$1\" in hamlet|mode-a) echo \"$(cd \"$d\" && pwd)/.git/engine.bin\"; exit 0;; esac\nif [ \"$1\" = check ]; then [ -f \"$d/.git/no-pattern\" ] && { echo no pattern >&2; exit 1; }; echo '(?<![\\w.])\\d[\\d,]*(?:\\.\\d+)?\\s*(?:px|s)(?![\\w-])'; exit 0; fi\n[ -f .git/green ]\n",
     );
     put(
         root,
@@ -140,22 +140,47 @@ pub(super) fn drawn(root: &Path, name: &str, classes: &[&str]) {
 
 /// The driver's current drawing of `name` with this record (`drawn`'s, its text given).
 pub(super) fn drawn_as(root: &Path, name: &str, record: &str) {
-    use l7r_gate_pool::cache::{engine, entry, stat, table, DIR, ENTRIES, TABLE};
-    use std::os::unix::fs::MetadataExt as _;
-    let dir = root.join("pool/hamlets").join(name);
     put(
         root,
         &format!("pool/hamlets/{name}/{name}.driver.json"),
         record,
     );
+    entry(
+        root,
+        "hamlets",
+        name,
+        "hamlet",
+        ".spec.json",
+        ".driver.json",
+    );
+}
+
+/// A generated compound, drawn and current (449 T231): its program, its `.svg` tagging these kinds and the cache entry the Mode A
+/// engine's stand-in names, as `drawn` does for a hamlet.
+pub(super) fn compound(root: &Path, name: &str, kinds: &[&str]) {
+    sheet(root, "pool", name, kinds);
+    put(
+        root,
+        &format!("pool/compounds/{name}/{name}.compound.json"),
+        "{}",
+    );
+    entry(root, "compounds", name, "mode-a", ".compound.json", ".svg");
+}
+
+/// The generation cache's entry for `pool/<tier>/<name>`, drawn by `engine` (the stand-in the stub launcher names) from its spec, with
+/// its one artifact, so the drawing is served as current.
+fn entry(root: &Path, tier: &str, name: &str, engine: &str, spec: &str, artifact: &str) {
+    use l7r_gate_pool::cache::{engine as eng, entry, stat, table, DIR, ENTRIES, TABLE};
+    use std::os::unix::fs::MetadataExt as _;
+    let dir = root.join("pool").join(tier).join(name);
     let bin = root.join(".git/engine.bin");
     std::fs::write(&bin, "a stand-in engine").unwrap();
-    let spec = dir.join(format!("{name}.spec.json"));
-    let artifact = format!("{name}.driver.json");
+    let spec = dir.join(format!("{name}{spec}"));
+    let artifact = format!("{name}{artifact}");
     let md = std::fs::metadata(dir.join(&artifact)).unwrap();
     let meta = entry::Meta {
-        engine: "hamlet".to_owned(),
-        engine_id: engine::identity(&bin).unwrap().0,
+        engine: engine.to_owned(),
+        engine_id: eng::identity(&bin).unwrap().0,
         skip_render: false,
         spec: entry::Record {
             path: spec.display().to_string(),
@@ -172,7 +197,7 @@ pub(super) fn drawn_as(root: &Path, name: &str, record: &str) {
         key: "k".to_owned(),
         reads: 0,
     };
-    let at = root.join(DIR).join(ENTRIES).join("hamlets").join(name);
+    let at = root.join(DIR).join(ENTRIES).join(tier).join(name);
     std::fs::create_dir_all(&at).unwrap();
     std::fs::write(at.join(entry::META), meta.json()).unwrap();
     std::fs::write(root.join(DIR).join(TABLE), format!("{}\n", table::HEADER)).unwrap();

@@ -4,7 +4,7 @@
 //! feature's `## Occasions` section (or a tweak's `Occasion:` commit line) declares. The reasons behind each rule stand in the
 //! Python's comments, kept in git history; the words a person reads are the Python's.
 //!
-//! `l7r-gate reviews owed [--root DIR] [--why | --units | --check-declared | --glyph-gate SLUG | --glyph-dispatched SLUG |
+//! `l7r-gate reviews owed [--root DIR] [--why | --units | --undrawn | --check-declared | --glyph-gate SLUG | --glyph-dispatched SLUG |
 //! --landing-mark on|off] [--landing] [--escaped]`.
 
 use std::collections::{BTreeMap, BTreeSet};
@@ -314,7 +314,8 @@ fn has_census(text: Option<&str>) -> bool {
 }
 
 /// One folder's elements now: a live hamlet's the Rust driver's ink census, read only where the generation cache serves that drawing
-/// as current (else the elements it draws are not known, and the problem says how to draw it); a sheet's its kinds. (A folder read by
+/// as current (else the elements it draws are not known, and the problem says how to draw it); a sheet's its kinds, a generated
+/// compound's only where its drawing is current too (449 T231). (A folder read by
 /// its `<name>.json` alone is a frozen exhibit, which only the legacy tree holds and which owes no review: `Folder::exempt`.)
 fn legend_of(
     d: &Folder,
@@ -334,6 +335,13 @@ fn legend_of(
         } else {
             Err("its Rust drawing records no ink census (drawn before 449 T230)".to_owned())
         };
+    }
+    // A GENERATED COMPOUND'S `.svg` IS ITS DRAWING (449 T231): read as last drawn whatever its program says now, so an edit not redrawn
+    // owed none of the reviews its new elements owe, and no caller was told; a hand sheet's `.svg` is its spec, current by being it
+    if d.kind == Kind::Compound && d.tree != LEGACY && !current(d) {
+        return Err(
+            "its drawing is not current, so the elements it draws are not known".to_owned(),
+        );
     }
     Ok(if d.has(".svg") {
         Some(sheet_kinds(Some(&read_replace(&d.file(".svg")))))
@@ -370,7 +378,7 @@ impl Legends {
     }
 }
 
-/// `legends`: each non-exempt folder's elements now, and a problem for each live hamlet whose elements are not known; a folder the pool
+/// `legends`: each non-exempt folder's elements now, and a problem for each live hamlet or compound whose elements are not known; a folder the pool
 /// walk could not classify is no map and draws nothing (feature 449 T220).
 pub fn legends(
     root: &Path,
@@ -394,7 +402,24 @@ pub fn legends(
     (out, problems)
 }
 
-/// What the owed lookup reads once a run: the folders, their legends now, and the hamlets whose legends are not known.
+/// The live maps whose drawing is a render the generation cache keeps and does not serve as current (449 T231), `(kind, folder)`: a
+/// hamlet, whose elements are its Rust drawing's census and so unknown (a problem line, never a unit), and a generated compound, whose
+/// `.svg` would be read as it was last drawn - so an edit not redrawn owed none of the reviews its new elements owe. The review gate
+/// redraws each before it asks what is owed. A hand sheet is never listed: its `.svg` is its spec, the legend read from it is the
+/// sheet as it is now (`spec_of`), and a redraw changes only its page. A legacy folder is frozen and is never drawn.
+pub fn undrawn(
+    root: &Path,
+    all: &[Folder],
+    current: &mut dyn FnMut(&Folder) -> bool,
+) -> Vec<(&'static str, String)> {
+    all.iter()
+        .filter(|d| d.tree != LEGACY && matches!(d.kind, Kind::Hamlet | Kind::Compound))
+        .filter(|d| !current(d))
+        .map(|d| (d.kind.tag(), rel(root, &d.path)))
+        .collect()
+}
+
+/// What the owed lookup reads once a run: the folders, their legends now, and the hamlets and compounds whose legends are not known.
 pub struct Tree<'a> {
     pub root: &'a Path,
     pub folders: Vec<Folder>,
@@ -403,12 +428,14 @@ pub struct Tree<'a> {
 }
 
 impl<'a> Tree<'a> {
-    /// The tree, a live hamlet's drawing asked of the generation cache read-only (`l7r_gate_pool::is_current`, no engine built).
+    /// The tree, a live hamlet's or compound's drawing asked of the generation cache read-only (`l7r_gate_pool::Currency`, no engine
+    /// built; one walk and one launcher start an engine, 449 T231).
     #[must_use]
     pub fn read(root: &'a Path) -> Self {
         let folders = folders(root);
+        let mut currency = l7r_gate_pool::Currency::new(root);
         let (legends, problems) = legends(root, &folders, &mut |d| {
-            l7r_gate_pool::is_current(root, &d.path.display().to_string())
+            currency.of(&d.path.display().to_string())
         });
         Self {
             root,
@@ -697,9 +724,10 @@ pub fn ruling(desc: &str, units: &[Unit], problems: &[String]) -> String {
     }
 }
 
-const MODES: [&str; 6] = [
+const MODES: [&str; 7] = [
     "--why",
     "--units",
+    "--undrawn",
     "--check-declared",
     "--glyph-gate",
     "--glyph-dispatched",
@@ -717,6 +745,7 @@ pub fn cli(args: &[String]) -> Reply {
         Spec::value("--root"),
         Spec::flag("--why"),
         Spec::flag("--units"),
+        Spec::flag("--undrawn"),
         Spec::flag("--check-declared"),
         Spec::value("--glyph-gate"),
         Spec::value("--glyph-dispatched"),
@@ -731,7 +760,7 @@ pub fn cli(args: &[String]) -> Reply {
     };
     if p.on("--help") {
         return reply(
-            "usage: l7r-gate reviews owed [--root DIR] [--why | --units | --check-declared | --glyph-gate SLUG | --glyph-dispatched SLUG | --landing-mark {on,off}] [--landing] [--escaped]\n".to_owned(),
+            "usage: l7r-gate reviews owed [--root DIR] [--why | --units | --undrawn | --check-declared | --glyph-gate SLUG | --glyph-dispatched SLUG | --landing-mark {on,off}] [--landing] [--escaped]\n".to_owned(),
             String::new(),
             0,
         );
@@ -774,6 +803,19 @@ fn run(root: &Path, p: &crate::record::args::Parsed, mark: &str) -> Reply {
             || reply(String::new(), String::new(), 0),
             |r| reply(r + "\n", String::new(), 1),
         );
+    }
+    if p.on("--undrawn") {
+        // the folders alone, no base read and no legend: what a gate run with nothing stale pays for the question
+        let mut currency = l7r_gate_pool::Currency::new(root);
+        let out = undrawn(root, &folders(root), &mut |d| {
+            currency.of(&d.path.display().to_string())
+        })
+        .into_iter()
+        .fold(String::new(), |mut o, (kind, at)| {
+            let _ = writeln!(o, "{kind}\t{at}");
+            o
+        });
+        return reply(out, String::new(), 0);
     }
     if !mark.is_empty() {
         glyph::mark_landing(root, mark == "on");

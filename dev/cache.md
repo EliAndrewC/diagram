@@ -14,7 +14,7 @@ the six `.gen.py` wrappers and `interactive/sheet.py`, deleted with T221; the re
 `render_cache.py`, `poolmaps.py`, `pool_index.py`, `record_build.py`, `codeid.py`, with `_census.py` and `_invocation.py` - deleted with
 T222, and this file holds what that directory's index did). The walk's kind names the engine and the spec: a hamlet's `.spec.json`
 (the `hamlet` binary of `rust/phases`), a compound's `.compound.json` and a hand sheet's `.svg` (`l7r-mode-a compound` and
-`hand-sheet`). `MAP=--all` does every live map in one run; the review gate asks `l7r_gate_pool::is_current` in process, read-only.
+`hand-sheet`). `MAP=--all` does every live map in one run; `reviews owed` asks `l7r_gate_pool::Currency` in process, read-only (one walk, each engine's launcher started once, 449 T231), and the review gate redraws by `make map` each map `reviews owed --undrawn` names before it asks what is owed.
 
     make map MAP=pool/hamlets/sawada        # one map: CACHED, REGENERATED (with why) or FROZEN
     make map MAP=--all                      # every live map (render-sync's first step runs the same driver)

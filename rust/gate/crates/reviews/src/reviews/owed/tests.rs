@@ -6,7 +6,7 @@ use std::path::Path;
 use serde_json::json;
 
 use super::super::tests::{
-    commit, drawn, drawn_as, events, feature, hamlet, map, put, repo, sh, sheet, tools,
+    commit, compound, drawn, drawn_as, events, feature, hamlet, map, put, repo, sh, sheet, tools,
 };
 use super::*;
 
@@ -194,6 +194,41 @@ fn a_hamlet_drawing_not_current_or_with_no_census_is_a_problem() {
     );
     assert!(first.contains(want), "{first}");
     assert!(ruling("x", &[], &problems).contains(" | PROBLEMS: pool/hamlets/m: "));
+}
+
+/// RED FIRST (449 T231): a generated compound's legend is its drawn `.svg`, which was read as last drawn whatever its program said - so an
+/// edit to the program not redrawn owed none of the reviews its new elements owe, and every caller (`make verify`, the pair guard, the
+/// checkpoint) read the stale legend with no problem line. Its legend is read only where the cache serves the drawing as current now.
+#[test]
+fn a_compound_drawing_not_current_is_a_problem_not_a_stale_legend() {
+    let r = repo("compound-stale");
+    compound(&r, "c", &["gate"]);
+    commit(&r, "sheet");
+    sh(&r, "git update-ref refs/remotes/origin/main HEAD");
+    // drawn again with a bell, and current: owed
+    compound(&r, "c", &["gate", "bell"]);
+    assert_eq!(owed_slugs(&r), ["glyph-check--bell--c", "size-audit--bell"]);
+    assert!(all_owed(&r).2.is_empty());
+    // its program edited and not redrawn: the `.svg` as last drawn is no legend
+    put(&r, "pool/compounds/c/c.compound.json", "{\"edited\": 1}");
+    let (_, units, problems) = all_owed(&r);
+    assert!(units.is_empty(), "{units:?}");
+    assert_eq!(
+        problems,
+        ["pool/compounds/c: its drawing is not current, so the elements it draws are not known - `make map MAP=pool/compounds/c` \
+          draws it, and the reviews it owes are read from that"]
+    );
+    // a legacy compound is frozen, never drawn by the cache: what it has is read as it stands (here no `.svg`, so no legend), no problem
+    put(
+        &r,
+        "legacy-hand-authored-pool/compounds/old/old.compound.json",
+        "{}",
+    );
+    let (_, units, problems) = all_owed(&r);
+    assert_eq!(
+        (slugs(&units), problems.len()),
+        (vec!["building-review--old".to_owned()], 1)
+    );
 }
 
 /// The base's census of a hamlet: main's mirror copy of its `.driver.json`, else (none there keeps a census) its tracked `<name>.json`
@@ -486,6 +521,32 @@ fn the_command_line_refuses_undeclared_code_until_an_occasion_is_declared() {
     );
     feature(&r, "900-x", "- [ ] T1\n\n## Occasions\n\n- none: a test\n");
     assert_eq!(out(&["--check-declared"]).code, 0);
+}
+
+/// RED FIRST (449 T231): `--undrawn` names each live map whose drawing the generation cache does not serve as current - a hamlet, whose
+/// elements are then unknown, and a generated compound, whose `.svg` would be read as last drawn - so the review gate can redraw it
+/// before it asks what is owed; a hand sheet (its `.svg` is its spec) and a legacy folder never.
+#[test]
+fn the_command_line_names_the_maps_whose_drawing_is_not_current() {
+    let r = repo("cli-undrawn");
+    hamlet(&r, "m", &["well"]);
+    sheet(&r, "pool", "hall", &["engawa"]);
+    sheet(&r, "legacy-hand-authored-pool", "oldhall", &["altar"]);
+    let out = |extra: &[&str]| cli_in(&r, extra);
+    assert_eq!(out(&["--undrawn"]).stdout, "");
+    // the hamlet edited and not redrawn; a compound whose program the cache never drew
+    put(&r, "pool/hamlets/m/m.spec.json", "{\"seed\": 2}");
+    put(&r, "pool/compounds/c/c.compound.json", "{}");
+    let named = out(&["--undrawn"]);
+    assert_eq!(
+        (named.code, named.stdout.as_str()),
+        (0, "compound\tpool/compounds/c\nhamlet\tpool/hamlets/m\n")
+    );
+    assert_eq!(out(&["--undrawn", "--why"]).code, 2);
+    // a compound the cache serves as current is not listed
+    let all = folders(&r);
+    let listed = undrawn(&r, &all, &mut |d| d.name == "c");
+    assert_eq!(listed, [("hamlet", "pool/hamlets/m".to_owned())]);
 }
 
 /// The command line's refusals, its help, the landing mark and the glyph gate (split as above).

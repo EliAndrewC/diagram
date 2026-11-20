@@ -24,8 +24,12 @@ use crate::codeid::{self, stated, Cache};
 /// tiers alone; the frozen exhibits' notes stay documentation, read by no check while none carries a census block.
 /// A pool map's spec is its `.spec.json` or `.compound.json` (`.json` covers both) or its `.svg` since feature 449 T221, which deleted
 /// the six `.gen.py` files and drew every map through one Rust driver: a `.gen.py` names no map's code now, and is no engine.
+/// The building types' declaration `l7r/diagram/buildings/types.json` is engine (449 T231): the Mode A engine draws every compound from
+/// it and the pool walk tells each sheet's tier by it, so an edit to it landed DIRECT with no sweep and every compound's drawing not
+/// current. What only the page reads (its modal texts, `assets/`, `knobs.json`, the research fragments its modals link) stays out: the
+/// page's, not the route's (feature 188, the GM 2026-09-05: "there's no actual reason to rerun all the tests for style sheet changes").
 pub(crate) const ENGINE_DIRS: [(&str, &[&str]); 4] = [
-    ("l7r/", &[".py"]),
+    ("l7r/", &[".py", "/buildings/types.json"]),
     ("rust/", &[".rs", "Cargo.toml", "Cargo.lock"]),
     ("pool/", &[".json", ".svg", ".notes.md"]),
     ("legacy-hand-authored-pool/", &[".json"]),

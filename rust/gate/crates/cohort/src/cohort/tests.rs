@@ -827,12 +827,14 @@ fn the_landing_engine_is_codeid_s_list() {
         "rust/gate/src/lib.rs",
         "rust/Cargo.toml",
         "rust/gate/Cargo.lock",
+        "l7r/diagram/buildings/types.json",
     ] {
         assert!(is_landing_engine(yes), "{yes}");
     }
     for no in [
         "scripts/land.py",
         "l7r/diagram/a.md",
+        "l7r/diagram/knobs.json",
         "rust/gate/CLAUDE.md",
         "pool/a.py",
         "pool/a.md",
