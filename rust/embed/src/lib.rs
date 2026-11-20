@@ -5,7 +5,7 @@
 //! binary: the gate's `semantic` crate runs `l7r-embed serve` through `scripts/gates/l7r-gate.sh embed` and never compiles ONNX Runtime.
 //!
 //! [`paths`] finds the model and the runtime, [`tok`] loads the tokenizer, [`pool`] normalizes, [`serve`] answers, [`model`] runs ONNX
-//! Runtime (the one part only the real model reaches: `tests/hooks/test-l7r-gate.sh` drives it, the unit tests a stand-in [`Network`]).
+//! Runtime (the one part only the real model reaches: `tests/hooks/test-l7r-gate.3.sh` drives it, the unit tests a stand-in [`Network`]).
 
 pub mod model;
 pub mod paths;

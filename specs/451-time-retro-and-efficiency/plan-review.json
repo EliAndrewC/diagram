@@ -296,13 +296,13 @@
    "declared": "spec-fidelity"
   },
   "### T21 (FR-010: the other two of the three slowest suites)": {
-   "sha256": "7eb70a0f621df0f6b7563f640ba088fe5cc6247c8de9bf6bfa2430747430f966",
+   "sha256": "55d666d6ba085a5eef30adb0dd5b84378a406bc149c0277b1220f9166c55de74",
    "verdict": "CLEAR",
    "reviewed": "2026-11-20",
    "declared": "spec-fidelity"
   },
   "### T21 Approach (checklist part A)": {
-   "sha256": "ab0c81f662aa75f4506fa09208ec621c9aaef5fb309ddd41b28aea35322ff441",
+   "sha256": "3999c33b8ea88bfbebcf1cd8ca2d0441e2651410c02a5858a55d1bfda4a5f055",
    "verdict": "CLEAR",
    "reviewed": "2026-11-20",
    "declared": "spec-fidelity"
@@ -493,14 +493,8 @@
    "reviewed": "2026-11-20",
    "declared": "spec-fidelity"
   },
-  "### T35 (<why: the finding or measurement that files it>)": {
-   "sha256": "d8b58ae3193980712b572abe14c57afc3d5ece6e6b86d181ec41cd10a3928b1a",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-20",
-   "declared": "spec-fidelity"
-  },
   "### T35 Approach (checklist part A)": {
-   "sha256": "87b99844e52c5320ea8a8458e35a3576828a2bcea71ee2dbc890c9c2ddf5ee28",
+   "sha256": "4c5f85f7feab493e1b1f2f288cab2961d08b46e1f16a87cd95ea43adec183026",
    "verdict": "CLEAR",
    "reviewed": "2026-11-20",
    "declared": "spec-fidelity"
@@ -561,6 +555,30 @@
   },
   "### T39 Approach (checklist part A)": {
    "sha256": "95d1082f0040c44b002f8e14a01bf1e47557d150a957f07d326e14a52237c043",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity"
+  },
+  "### T35 (rustc's `another_runs_holder_is_waited_for_named_and_past_the_ceiling_refused` asked for two waiting lines inside a 60 ms ceiling at a 10 ms poll of the wall clock and saw one under `make static`'s load, a red gate on correct work, observed 2026-11-20, method: T12's `make static` log; its land-tooling half folded into T20)": {
+   "sha256": "70d4f1a47cce22f24c64a2d6bb118d0b720263f161ed7a1e730869924ab38808",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity"
+  },
+  "### T21 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)": {
+   "sha256": "6c6e135ddd35fc77cb14f5cd555bf639bddc341508c16d84bf2b93a503b98271",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity"
+  },
+  "### T40 (<why: the finding or measurement that files it>)": {
+   "sha256": "6b99a98460c15bc52318b7cc85daacaca1b18bcb79c24ec8f7c75b57db92f0e1",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity"
+  },
+  "### T40 Approach (checklist part A)": {
+   "sha256": "6d82502538217ed57c18c13887c6c63c7abf76140397762709c8eb874ff84f9c",
    "verdict": "CLEAR",
    "reviewed": "2026-11-20",
    "declared": "spec-fidelity"
@@ -4444,6 +4462,197 @@
      "why": "Its earlier text (CLEAR) was the bare placeholder with no decision in it, so its removal withdraws no decision and narrows nothing."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-20",
+   "blocks": [
+    "### T35 (rustc's `another_runs_holder_is_waited_for_named_and_past_the_ceiling_refused` asked for two waiting lines inside a 60 ms ceiling at a 10 ms poll of the wall clock and saw one under `make static`'s load, a red gate on correct work, observed 2026-11-20, method: T12's `make static` log; its land-tooling half folded into T20)",
+    "### T35 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T35-clock-seam",
+     "summary": "runlock's wait reads time through a Clock seam (now, sleep) on the Taker: Wall (Instant, thread::sleep) in a run, Stepped in the test; the run's behavior and L7R_RUST_LOCK_CEILING (wall-clock seconds) unchanged",
+     "class": "within",
+     "why": "Fixes a defect in the constitution's sense - a check that refuses correct work (make static red on correct work, T12's log, reproduced 10 of 10 on a shared core). A red gate on correct work costs a make static rerun, which is the time the request's improvement 2 and FR-013's perf priority are about; nothing the GM asked for is narrowed and the run's behavior is unchanged."
+    },
+    {
+     "id": "T35-exact-count",
+     "summary": "the test asserts exactly 6 waiting lines (0 to 50 ms, refused at 60) on the stepped clock where it asked >= 2",
+     "class": "within",
+     "why": "A tighter assertion on a deterministic event count, shown red with the behavior broken (left 1, right 6). Not the struck bitwise-exactness standard: it holds no port to a replaced output, it checks the wait's own behavior."
+    },
+    {
+     "id": "T35-reads-cap",
+     "summary": "a wait that never ends reads the stepped clock past READS=100 and panics rather than hangs",
+     "class": "within",
+     "why": "Makes the never-ends failure a red test instead of a hang; shown red with the ceiling broken. Enforcement of the fix, no new behavior in a run."
+    },
+    {
+     "id": "T35-other-tests-wall",
+     "summary": "the crate's other runlock tests keep the wall clock (two_runs_in_one_target_directory_take_turns at a 60 s ceiling against two 0.1 s calls; a_refusal_is_the_checks_reply asserting a refusal only), so Wall stays covered",
+     "class": "within",
+     "why": "Neither has failed; both stayed green 5 of 5 on the shared core that failed the old test 10 of 10, one has about 300x headroom and the other asserts nothing timed. A difference from T35's 'never a bare wall-clock bound' wording with no wrong outcome is not a defect (constitution XIV), so leaving them is not a defect left and needs no ruling; they also keep the Wall path covered."
+    },
+    {
+     "id": "T35-perf-tag",
+     "summary": "the task is performance work under FR-013 by its [perf] tag, not filed with PERF=1 (no engine stage's operations or time)",
+     "class": "within",
+     "why": "FR-013 names both routes ('filed with PERF=1 or tagged [perf]') and counts a task making the gate or the builders' loop faster; the choice of route is inside the requirement."
+    },
+    {
+     "id": "T35-land-half-to-T20",
+     "summary": "the land-tooling half of the finding is folded into T20; T35 is independent of the other lanes",
+     "class": "within",
+     "why": "Ordering and task boundaries only; the land-tooling wall-clock finding stays owned (T20), nothing is dropped."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-20",
+   "blocks": [
+    "### T21 (FR-010: the other two of the three slowest suites)",
+    "### T21 Approach (checklist part A)",
+    "### T21 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T21-l7r-gate-split",
+     "summary": "Split tests/hooks/test-l7r-gate.sh into three shards (41 + 9 + 5 of its 55 checks), each making its own state",
+     "class": "within",
+     "why": "The split FR-010 / improvement 5 asks for, applied to one of the three named suites; every case still runs; shards 1.3/7.5/5.7 s alone, under the about-20 s bar; measured to save about 6 s of an incremental run."
+    },
+    {
+     "id": "T21-sync-with-main-put-back",
+     "summary": "test-sync-with-main.sh is left whole (its split was built, measured and reverted)",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Improvement 5's own stated purpose (request.md) is that these suites 'set the floor on every make hooks-test', and the GM's 2026-11-20 words put the point as speed ('makes everything after them faster'; prioritize performance). The block's own measurements show this split defeats that purpose concretely: it does not set any wall (entry-gate sets the full run's), full runs with all three split equal HEAD (mean 44.0 vs 43.9 s), the incremental run is slightly SLOWER with it split (12.7/12.1 s all-three-split vs 11.8/11.8 s l7r-gate-alone), and its shards cost 8.7 + 7.7 + 4.0 s against 5.0-7.7 s whole - the template run three times, added CPU on a host measured CPU-bound (11.6-12.5 cores busy). Not a cost or convenience argument: the split was implemented and reverted on measurement. Gap noted, not decisive: the found-and-left names only entry-gate past the 20 s bar and never states sync-with-main's full-run seconds whole (the next suite is about 10 s behind entry-gate's ~40 s), so a second miss of SC-004's letter may be undisclosed; it should be stated there."
+    },
+    {
+     "id": "T21-entry-gate-put-back",
+     "summary": "test-entry-gate.sh is left whole, past the about-20 s bar in a full run (38.6-44.4 s); its case-4 chain of record gates is filed as its own performance task",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Same purpose test against request.md (improvement 5: 'sets the floor on every make hooks-test'). Splitting by its two cases does not lower the floor: full runs equal, and after an edit of it the split is slower (23.1/23.3 s vs 22.4/22.8 s whole); the wall is its case-4 chain, which a case split cannot shorten, and more job slots did not help either. Doing the literal split would ship a measured slowdown under the name of a speedup. This ruling rests on the chain being filed as its own task (the block: 'the chain itself is the lever, filed as its own task'), so the request's purpose - entry-gate no longer setting the floor - is still pursued rather than dropped; were that task not filed, the ruling would not hold. The 20 s bar is itself recorded as a GUESS, never a gate (D17), and the request names no figure."
+    },
+    {
+     "id": "T21-helpers-copied",
+     "summary": "Shard helpers copied into each shard rather than sourced from a lib file, so l7r-guard deps keys them",
+     "class": "within",
+     "why": "Implementation means of the split, following T20's shard form; changes no scope."
+    },
+    {
+     "id": "T21-pointers",
+     "summary": "Three pointers to test-l7r-gate.sh repointed to test-l7r-gate.3.sh; the seven to test-sync-with-main.sh left as the suite stays",
+     "class": "within",
+     "why": "Consequence of the kept split; stated with its search (git grep of the three names)."
+    },
+    {
+     "id": "T21-parts-max-fixes",
+     "summary": "Fix test-parts.1.sh (unsets PARTS_MAX) and test-pair-hooks.sh (one part runs as its own process), both red in every PARTS_MAX=1 run",
+     "class": "within",
+     "why": "Suites failing on good work are defects found while doing this task (a wrong outcome, constitution XIV); fixing them as found is the standing rule, and they block measuring the job counts the task needed to measure."
+    },
+    {
+     "id": "T21-hooks-jobs-8",
+     "summary": "HOOKS_JOBS stays 8 after measuring 6, 8, 12 and 16",
+     "class": "within",
+     "why": "No change made; the measurement shows higher counts add CPU-seconds and no wall."
+    },
+    {
+     "id": "T21-chain-task-filed",
+     "summary": "entry-gate's case-4 chain filed as its own performance task",
+     "class": "within",
+     "why": "Serves improvement 5's purpose (a faster hooks-test) and the GM's 2026-11-20 'prioritize performance improvements'; adds no requested-scope departure."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-20",
+   "blocks": [
+    "### T21 (FR-010: the other two of the three slowest suites)",
+    "### T21 Approach (checklist part A)",
+    "### T21 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T21-l7r-gate-split",
+     "summary": "Split tests/hooks/test-l7r-gate.sh into three shards (41 + 9 + 5 of its 55 checks), each making its own state",
+     "class": "within",
+     "why": "The split FR-010 / D17 / improvement 5 asks for, applied to one of the three named suites; every case still runs; shards 1.3/7.5/5.7 s alone, under the about-20 s bar; measured to save about 6 s of an incremental run and to cost nothing measurable in a full one."
+    },
+    {
+     "id": "T21-sync-with-main-put-back",
+     "summary": "test-sync-with-main.sh is left whole (its split was built, measured and reverted); its full-run 26.8-40.2 s past the 20 s bar is now stated in found-and-left",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Improvement 5's stated purpose (request.md) is that these suites 'set the floor on every make hooks-test', and the GM's 2026-11-20 words put the point as speed ('doing those first makes everything after them faster'). The block's measurements show the split defeats that purpose: full runs equal HEAD (mean 44.0 vs 43.9 s), the incremental run after a sync-with-main edit is slower with it split (12.7/12.1 s all-three vs 11.8/11.8 s l7r-gate alone), and its shards (8.7 + 7.7 + 4.0 s) cost more than the 5.0-7.7 s whole. It does not set the wall: re-read from the named logs /tmp/t21m/r1-4 and rm1-4-head-j8-c22.log, entry-gate finishes 10.1-14.8 s after it in every one of those eight runs, and its range 26.8-40.2 s matches them (40.2 is rm1, a run whose entry-gate took 51.5 s and which the entry-gate list drops as overlapped; without it 26.8-31.0 s - the stated range is the wider, not a hidden one). The earlier gap (SC-004's letter missed by a second suite, undisclosed) is closed: it is disclosed with figures and reasoning. Leaving a GUESS bar (D17) unmet with no wrong outcome is not a defect left (constitution XIV), so this is not deferral of a defect."
+    },
+    {
+     "id": "T21-entry-gate-put-back",
+     "summary": "test-entry-gate.sh is left whole, past the about-20 s bar in a full run (38.6-44.4 s); its case-4 chain of record gates is filed as its own performance task (T40, per the dispatch)",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Same purpose test against request.md improvement 5. Splitting by its two cases does not lower the floor: full runs equal, and after an edit of it the split is slower (23.1/23.3 s vs 22.4/22.8 s whole); the wall is its case-4 chain, which a case split cannot shorten, and more job slots did not help. The literal split would ship a measured slowdown under the name of a speedup. The ruling rests on the chain being pursued as its own task so the request's purpose (entry-gate no longer setting the floor) is not dropped; the dispatch states it is filed as T40, an open [perf] box, which under FR-013 / SC-006 goes first. The 20 s bar is a GUESS, never a gate (D17); the request names no figure."
+    },
+    {
+     "id": "T21-helpers-copied",
+     "summary": "Shard helpers copied into each shard rather than sourced from a lib file, so l7r-guard deps keys them",
+     "class": "within",
+     "why": "Implementation means of the split, following T20's shard form; changes no scope."
+    },
+    {
+     "id": "T21-pointers",
+     "summary": "Three pointers to test-l7r-gate.sh repointed to test-l7r-gate.3.sh; the seven to test-sync-with-main.sh left as the suite stays",
+     "class": "within",
+     "why": "Consequence of the kept split; the enumeration states its search (git grep of the three names)."
+    },
+    {
+     "id": "T21-parts-max-fixes",
+     "summary": "Fix test-parts.1.sh (unsets PARTS_MAX) and test-pair-hooks.sh (one part runs as its own process), both red in every PARTS_MAX=1 run",
+     "class": "within",
+     "why": "Suites failing on good work are defects found while doing this task (a wrong outcome, constitution XIV); fixing them as found is the standing rule, and they blocked measuring the job counts this task needed."
+    },
+    {
+     "id": "T21-hooks-jobs-8",
+     "summary": "HOOKS_JOBS stays 8 after measuring 6, 8, 12 and 16",
+     "class": "within",
+     "why": "No change made; the measurement shows higher counts add CPU-seconds and no wall."
+    },
+    {
+     "id": "T21-chain-task-filed",
+     "summary": "entry-gate's case-4 chain filed as its own performance task",
+     "class": "within",
+     "why": "Serves improvement 5's purpose (a faster hooks-test) and the GM's 2026-11-20 'prioritize performance improvements' (FR-013); adds no departure from requested scope."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-20",
+   "blocks": [
+    "### T40 (<why: the finding or measurement that files it>)",
+    "### T40 Approach (checklist part A)",
+    "(removed) ### T35 (<why: the finding or measurement that files it>)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T40-template",
+     "summary": "T40's plan section is added as the unfilled task template (heading, Approach, step table, checklist part A, found-and-left, performance-work prompts) with every slot still a placeholder",
+     "class": "within",
+     "why": "Every field is a placeholder; the block settles no scope, constraint, order, exit or deferral, so it narrows nothing the request or spec carries (FR-009/D15 deferral form and FR-013 performance prompt appear only as the template's own questions)."
+    },
+    {
+     "id": "T35-template-removed",
+     "summary": "T35's plan section, which was likewise only the unfilled template, is removed",
+     "class": "within",
+     "why": "The removed text (earlier.md, verdict CLEAR) held no decision - only placeholders - so deleting it drops no requirement, deferral or found-and-left item from the plan."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -5898,6 +6107,108 @@
      "summary": "Order: after T24 (its seam is reused), independent of T20. Exits: crate-scoped lint and cover, make quick, make static once, make hooks-test; on red, the task is set down and any claim that it cannot be done goes through make arbiter-ask.",
      "class": "within",
      "why": "The ordering and exits are consistent with FR-007 (make static once, crate-scoped checks while iterating). Nothing requested is narrowed."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T35": {
+   "section_sha256": "752d5eb7ca179bf2336254152c201d75e84e57247c0164edb5664a803a587ca6",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T35-clock-seam",
+     "summary": "runlock's wait reads time through a Clock seam (now, sleep) on the Taker: Wall (Instant, thread::sleep) in a run, Stepped in the test; the run's behavior and L7R_RUST_LOCK_CEILING (wall-clock seconds) unchanged",
+     "class": "within",
+     "why": "Fixes a defect in the constitution's sense - a check that refuses correct work (make static red on correct work, T12's log, reproduced 10 of 10 on a shared core). A red gate on correct work costs a make static rerun, which is the time the request's improvement 2 and FR-013's perf priority are about; nothing the GM asked for is narrowed and the run's behavior is unchanged."
+    },
+    {
+     "id": "T35-exact-count",
+     "summary": "the test asserts exactly 6 waiting lines (0 to 50 ms, refused at 60) on the stepped clock where it asked >= 2",
+     "class": "within",
+     "why": "A tighter assertion on a deterministic event count, shown red with the behavior broken (left 1, right 6). Not the struck bitwise-exactness standard: it holds no port to a replaced output, it checks the wait's own behavior."
+    },
+    {
+     "id": "T35-reads-cap",
+     "summary": "a wait that never ends reads the stepped clock past READS=100 and panics rather than hangs",
+     "class": "within",
+     "why": "Makes the never-ends failure a red test instead of a hang; shown red with the ceiling broken. Enforcement of the fix, no new behavior in a run."
+    },
+    {
+     "id": "T35-other-tests-wall",
+     "summary": "the crate's other runlock tests keep the wall clock (two_runs_in_one_target_directory_take_turns at a 60 s ceiling against two 0.1 s calls; a_refusal_is_the_checks_reply asserting a refusal only), so Wall stays covered",
+     "class": "within",
+     "why": "Neither has failed; both stayed green 5 of 5 on the shared core that failed the old test 10 of 10, one has about 300x headroom and the other asserts nothing timed. A difference from T35's 'never a bare wall-clock bound' wording with no wrong outcome is not a defect (constitution XIV), so leaving them is not a defect left and needs no ruling; they also keep the Wall path covered."
+    },
+    {
+     "id": "T35-perf-tag",
+     "summary": "the task is performance work under FR-013 by its [perf] tag, not filed with PERF=1 (no engine stage's operations or time)",
+     "class": "within",
+     "why": "FR-013 names both routes ('filed with PERF=1 or tagged [perf]') and counts a task making the gate or the builders' loop faster; the choice of route is inside the requirement."
+    },
+    {
+     "id": "T35-land-half-to-T20",
+     "summary": "the land-tooling half of the finding is folded into T20; T35 is independent of the other lanes",
+     "class": "within",
+     "why": "Ordering and task boundaries only; the land-tooling wall-clock finding stays owned (T20), nothing is dropped."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T21": {
+   "section_sha256": "1f52070df77667198dcf2f7f8167eaee857c5e08f9b377a90df5cb28524810b4",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T21-l7r-gate-split",
+     "summary": "Split tests/hooks/test-l7r-gate.sh into three shards (41 + 9 + 5 of its 55 checks), each making its own state",
+     "class": "within",
+     "why": "The split FR-010 / D17 / improvement 5 asks for, applied to one of the three named suites; every case still runs; shards 1.3/7.5/5.7 s alone, under the about-20 s bar; measured to save about 6 s of an incremental run and to cost nothing measurable in a full one."
+    },
+    {
+     "id": "T21-sync-with-main-put-back",
+     "summary": "test-sync-with-main.sh is left whole (its split was built, measured and reverted); its full-run 26.8-40.2 s past the 20 s bar is now stated in found-and-left",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Improvement 5's stated purpose (request.md) is that these suites 'set the floor on every make hooks-test', and the GM's 2026-11-20 words put the point as speed ('doing those first makes everything after them faster'). The block's measurements show the split defeats that purpose: full runs equal HEAD (mean 44.0 vs 43.9 s), the incremental run after a sync-with-main edit is slower with it split (12.7/12.1 s all-three vs 11.8/11.8 s l7r-gate alone), and its shards (8.7 + 7.7 + 4.0 s) cost more than the 5.0-7.7 s whole. It does not set the wall: re-read from the named logs /tmp/t21m/r1-4 and rm1-4-head-j8-c22.log, entry-gate finishes 10.1-14.8 s after it in every one of those eight runs, and its range 26.8-40.2 s matches them (40.2 is rm1, a run whose entry-gate took 51.5 s and which the entry-gate list drops as overlapped; without it 26.8-31.0 s - the stated range is the wider, not a hidden one). The earlier gap (SC-004's letter missed by a second suite, undisclosed) is closed: it is disclosed with figures and reasoning. Leaving a GUESS bar (D17) unmet with no wrong outcome is not a defect left (constitution XIV), so this is not deferral of a defect."
+    },
+    {
+     "id": "T21-entry-gate-put-back",
+     "summary": "test-entry-gate.sh is left whole, past the about-20 s bar in a full run (38.6-44.4 s); its case-4 chain of record gates is filed as its own performance task (T40, per the dispatch)",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Same purpose test against request.md improvement 5. Splitting by its two cases does not lower the floor: full runs equal, and after an edit of it the split is slower (23.1/23.3 s vs 22.4/22.8 s whole); the wall is its case-4 chain, which a case split cannot shorten, and more job slots did not help. The literal split would ship a measured slowdown under the name of a speedup. The ruling rests on the chain being pursued as its own task so the request's purpose (entry-gate no longer setting the floor) is not dropped; the dispatch states it is filed as T40, an open [perf] box, which under FR-013 / SC-006 goes first. The 20 s bar is a GUESS, never a gate (D17); the request names no figure."
+    },
+    {
+     "id": "T21-helpers-copied",
+     "summary": "Shard helpers copied into each shard rather than sourced from a lib file, so l7r-guard deps keys them",
+     "class": "within",
+     "why": "Implementation means of the split, following T20's shard form; changes no scope."
+    },
+    {
+     "id": "T21-pointers",
+     "summary": "Three pointers to test-l7r-gate.sh repointed to test-l7r-gate.3.sh; the seven to test-sync-with-main.sh left as the suite stays",
+     "class": "within",
+     "why": "Consequence of the kept split; the enumeration states its search (git grep of the three names)."
+    },
+    {
+     "id": "T21-parts-max-fixes",
+     "summary": "Fix test-parts.1.sh (unsets PARTS_MAX) and test-pair-hooks.sh (one part runs as its own process), both red in every PARTS_MAX=1 run",
+     "class": "within",
+     "why": "Suites failing on good work are defects found while doing this task (a wrong outcome, constitution XIV); fixing them as found is the standing rule, and they blocked measuring the job counts this task needed."
+    },
+    {
+     "id": "T21-hooks-jobs-8",
+     "summary": "HOOKS_JOBS stays 8 after measuring 6, 8, 12 and 16",
+     "class": "within",
+     "why": "No change made; the measurement shows higher counts add CPU-seconds and no wall."
+    },
+    {
+     "id": "T21-chain-task-filed",
+     "summary": "entry-gate's case-4 chain filed as its own performance task",
+     "class": "within",
+     "why": "Serves improvement 5's purpose (a faster hooks-test) and the GM's 2026-11-20 'prioritize performance improvements' (FR-013); adds no departure from requested scope."
     }
    ],
    "verdict": "CLEAR"

@@ -48,6 +48,31 @@ pub(super) struct Taker {
     pub(super) poll: Duration,
     pub(super) say_every: Duration,
     pub(super) mutex_s: f64,
+    pub(super) clock: Box<dyn Clock>,
+}
+
+/// What a waiter reads the time from and sleeps on: the wall clock in a run, a stepped one in a test (feature 451 T35). The wait's
+/// test asked for two waiting lines inside a 60 ms ceiling at a 10 ms poll of the wall clock and saw one under `make static`'s load:
+/// one poll's sleep outlasted the ceiling. A stepped clock moves by the poll at each sleep, so the count of lines is the ceiling over
+/// the poll whatever the host is doing.
+pub(super) trait Clock: Send + Sync {
+    /// The time since the clock's own origin.
+    fn now(&self) -> Duration;
+    /// Wait out `d` (the wall clock sleeps the thread).
+    fn sleep(&self, d: Duration);
+}
+
+/// The wall clock, its origin the instant it holds.
+pub(super) struct Wall(pub(super) Instant);
+
+impl Clock for Wall {
+    fn now(&self) -> Duration {
+        self.0.elapsed()
+    }
+
+    fn sleep(&self, d: Duration) {
+        std::thread::sleep(d);
+    }
 }
 
 /// The fields after the command name of `/proc/<pid>/stat` (the name may hold spaces and parentheses; it ends at the last `)`).
@@ -142,6 +167,7 @@ impl Taker {
             poll: POLL,
             say_every: SAY_EVERY,
             mutex_s: MUTEX_S,
+            clock: Box::new(Wall(Instant::now())),
         }
     }
 }
@@ -280,14 +306,15 @@ pub(super) fn take<'a>(
         taker,
         token,
     };
-    let began = Instant::now();
-    let mut said: Option<Instant> = None;
+    let began = taker.clock.now();
+    let mut said: Option<Duration> = None;
     for dir in dirs {
         std::fs::create_dir_all(dir)
             .map_err(|e| format!("rust-checks: cannot make {}: {e}\n", dir.display()))?;
         while let Some(other) = try_join(dir, taker, cmd, &held.token)? {
-            let waited = began.elapsed().as_secs();
-            if began.elapsed() >= taker.ceiling {
+            let at = taker.clock.now();
+            let waited = at.saturating_sub(began).as_secs();
+            if at.saturating_sub(began) >= taker.ceiling {
                 return Err(format!(
                     "rust-checks: REFUSED - {} is still held after {waited} s by {}. Two runs in one target directory corrupt each other's coverage profiles (feature 451 T23). Wait for that run to end, or stop it (`kill {}`); the ceiling is L7R_RUST_LOCK_CEILING seconds ({}).\n",
                     dir.display(),
@@ -296,15 +323,15 @@ pub(super) fn take<'a>(
                     taker.ceiling.as_secs()
                 ));
             }
-            if said.is_none_or(|t| t.elapsed() >= taker.say_every) {
+            if said.is_none_or(|t| at.saturating_sub(t) >= taker.say_every) {
                 say(&format!(
                     "rust-checks: waiting {waited} s for {}, held by {} - two runs in one target directory corrupt each other's coverage (feature 451 T23)\n",
                     dir.display(),
                     holder(&other)
                 ));
-                said = Some(Instant::now());
+                said = Some(at);
             }
-            std::thread::sleep(taker.poll);
+            taker.clock.sleep(taker.poll);
         }
         held.dirs.push(dir.clone());
     }

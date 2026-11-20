@@ -5,6 +5,11 @@
 # Before T101 a TERM left run_parts' work directory behind; a second `trap ... EXIT` replacing the suite's own was the leak two other
 # suites had, so the suite's trap is checked to still run.
 set -u
+# GUARD_EDIT_OK: feature 451 T21 - the fixture suites below must split into two parts to make the work directory these checks read;
+# the runner's PARTS_MAX (CPU_COUNT / HOOKS_JOBS) is 1 at HOOKS_JOBS 12 or more on 22 cores, or at 8 on an 8-core host, and turned
+# run_parts serial: "the run made its work directory" and the TERM checks failed at every such run, measured 2026-11-20
+# (make hooks-test HOOKS_ALL=1 HOOKS_JOBS=12 and 16, four runs each)
+unset PARTS_MAX
 P="$(cd "$(dirname "$0")" && pwd)/parts.sh"
 pass=0 fail=0
 check() { if eval "$2"; then pass=$((pass + 1)); else fail=$((fail + 1)); echo "FAIL: $1"; fi; }

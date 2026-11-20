@@ -505,7 +505,7 @@ reset_prereq
 # change hooks-test waited on this suite (specs/375-enforced-wave-process/research.md R3). Each part re-runs the setup above in
 # its own process - its own fixture, temporary files and guard log - and then only its cases (CASES), dealt longest first by
 # the measured seconds beside each case (10 s for a new one). Every check still runs and is counted; a part that ends before
-# a case reports fails the suite and names it. SUITE_PARTS=1 runs the cases one after another in this process, as before.
+# a case reports fails the suite and names it. SUITE_PARTS=1 runs the cases one after another in one process of its own.
 ALL_CASES=(case_01 case_02 case_03 case_04 case_05 case_06 case_07 case_08 case_09 case_10 case_11 case_11b case_11c case_12 case_13 case_14 case_14b case_14c case_15 case_16)
 declare -A WEIGHT=([case_01]=9 [case_02]=3 [case_03]=1 [case_04]=1 [case_05]=1 [case_06]=1 [case_07]=1 [case_08]=3 [case_09]=1 [case_10]=1 [case_11]=5 [case_11b]=5 [case_11c]=5 [case_12]=6 [case_13]=3 [case_14]=6 [case_14b]=6 [case_14c]=4 [case_15]=3 [case_16]=6)  # seconds, each alone, measured 2026-10-17 (383 amendment 4)
 if [ -n "${CASES:-}" ]; then
@@ -525,7 +525,13 @@ SUITE_PARTS=${SUITE_PARTS:-8}  # 8, not 4 (feature 383 amendment 4): with case_1
 # GUARD_EDIT_OK: feature 383 amendment 4 - PARTS_MAX (set by hooks-test's runner) caps the parts, as tests/hooks/parts.sh does: suites x parts hit the shared memory cap
 [ -n "${PARTS_MAX:-}" ] && [ "$SUITE_PARTS" -gt "$PARTS_MAX" ] && SUITE_PARTS=$PARTS_MAX
 if [ "$SUITE_PARTS" -le 1 ]; then
-  for c in "${ALL_CASES[@]}"; do "$c"; done
+  # GUARD_EDIT_OK: feature 451 T21 - one part is still a process of its own, as each part is: run in this shell, the cases left the
+  # fixture state that the blocks after the parts read, and "past the hour, a dispatch is refused" failed at every PARTS_MAX=1 run
+  # (HOOKS_JOBS 12 or more on 22 cores, or 8 on an 8-core host), measured 2026-11-20 (PARTS_MAX=1 bash tests/hooks/test-pair-hooks.sh)
+  out=$(CASES="${ALL_CASES[*]}" bash "${BASH_SOURCE[0]}" 2>&1); grep -v '^@@' <<< "$out"
+  counts=$(grep "^@@counts " <<< "$out" | tail -1)
+  if [ -n "$counts" ]; then set -- $counts; pass=$((pass + $2)); fail=$((fail + $3))
+  else echo "FAIL  the cases' process ended before it reported its counts"; fail=$((fail + 1)); fi
 else
   W=$(mktemp -d); declare -a LOAD PART
   for ((k = 0; k < SUITE_PARTS; k++)); do LOAD[k]=0; PART[k]=""; done

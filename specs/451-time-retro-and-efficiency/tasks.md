@@ -65,7 +65,7 @@ landing on its own, each small; T22 last.
 
 ### The hook-suite split (FR-010)
 
-- [ ] T21 [perf] `tests/hooks/test-l7r-gate.sh`, `tests/hooks/test-sync-with-main.sh` and `tests/hooks/test-entry-gate.sh` (by its two cases, moved from T20) split into shards by their case groups (D17; FR-010, SC-004)
+- [ ] T21 [perf] The three slowest suites split into shards where it speeds the run (measured 2026-11-20: `tests/hooks/test-l7r-gate.sh` split in three, about 6 s off an incremental run; `test-sync-with-main.sh` and `test-entry-gate.sh` kept whole, their splits saving nothing; the full run's wall set by entry-gate's case-4 chain) (D17; FR-010, SC-004)
       research: rendering
       verify: each suite's case count before and after equal; `make hooks-test HOOKS_ALL=1`, each shard's kept seconds about 20 or less; `make quick`
 
@@ -89,4 +89,6 @@ landing on its own, each small; T22 last.
 - [ ] T38 [perf] Gate crates' tests read the real environment through the guard (found by T32, 2026-11-20): with L7R_FEATURE_DIRECTORY and L7R_EVENTS_DIR exported (a page session exports the first; nothing stops a session exporting either), 49 tests of 7 gate crates fail - arbiter 12, bundle 2, land 17, measure 1, owed 1, reviews 10, rustc 6 - all reading through the guard's shared::env, whose test map is cfg(test) of the guard alone, at 17 call sites (feature_dir, log_path, append_row, append_row_for); each read handed an environment reader carried with the crate's root (the guard's explicit-env variants made public, never a cargo feature turning the guard's test map on for dependents, never a test's remove_var), red first with both exported, every gate crate swept
       research: rendering
 - [ ] T39 [perf] A FRESH=1 test run may replay another run's result (found by T32, 2026-11-20): two make rust-test CRATE=rust/guard FRESH=1 runs queued behind one target-directory lock both reported 'finished in 4.21s', where alone it takes 2.82-3.20 s - if a run waiting on the lock takes the holder's kept result, a fresh run reports green without running; measured first (two FRESH runs started together, each one's test binary execution counted), fixed red first if so
+      research: rendering
+- [ ] T40 [perf] entry-gate's case-4 chain sets hooks-test's full-run wall (found by T21, 2026-11-20): in every full run the wall was entry-gate's seconds plus 2-3 s, about 10 s ahead of the next suite, its case 4 a chain of record gates on one clone's state (9.4 s alone, 31-46 s in a full run); splitting it or more job slots did not shorten it - measure where the chain's time goes (alone and under the full run's load) and cut it, held to the suite still checking what it checks
       research: rendering

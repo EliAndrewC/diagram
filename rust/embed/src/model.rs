@@ -3,7 +3,7 @@
 //! and `token_type_ids` - zeros - where it declares them), its first output read and each row's first token taken (`PoolingType.CLS`).
 //!
 //! The one part of the crate only the real model and runtime reach: `#[cfg(not(test))]`, its lines run by the kept end-to-end case in
-//! `tests/hooks/test-l7r-gate.sh` (the T146 pattern), the unit tests feeding [`crate::serve`] a stand-in [`crate::Network`].
+//! `tests/hooks/test-l7r-gate.3.sh` (the T146 pattern), the unit tests feeding [`crate::serve`] a stand-in [`crate::Network`].
 
 #[cfg(not(test))]
 use crate::{paths, Network, Options};

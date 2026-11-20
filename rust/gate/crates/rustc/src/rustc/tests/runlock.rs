@@ -1,14 +1,17 @@
 //! One run at a time in a target directory (feature 451 T23).
 
 use std::path::Path;
-use std::time::Duration;
+use std::sync::atomic::{AtomicU64, Ordering};
+use std::time::{Duration, Instant};
 
 use serde_json::json;
 
 use super::{two_crates, world_with};
 use crate::checks::scratch;
 use crate::rustc::locked_dispatch;
-use crate::rustc::runlock::{ceiling_of, dirs_of, mutex, run_of, take, Proc, Taker, MUTEX, RECORD};
+use crate::rustc::runlock::{
+    ceiling_of, dirs_of, mutex, run_of, take, Clock, Proc, Taker, Wall, MUTEX, RECORD,
+};
 
 /// A fake cargo that notes when it is entered while another call is inside it: `mkdir` is atomic, so of two calls at once one finds
 /// the directory made.
@@ -38,6 +41,33 @@ fn taker(run: u64, ceiling_ms: u64) -> Taker {
         poll: Duration::from_millis(10),
         say_every: Duration::ZERO,
         mutex_s: 5.0,
+        clock: Box::new(Wall(Instant::now())),
+    }
+}
+
+/// A clock that moves only when slept on, by the sleep (feature 451 T35): a wait's lines are counted against the ceiling over the
+/// poll, not against how long the host took to run them. A wait that never ends reads it past `READS` and panics, not hangs.
+#[derive(Default)]
+struct Stepped {
+    at_ns: AtomicU64,
+    reads: AtomicU64,
+}
+
+const READS: u64 = 100;
+
+impl Clock for Stepped {
+    fn now(&self) -> Duration {
+        let n = self.reads.fetch_add(1, Ordering::Relaxed);
+        assert!(
+            n < READS,
+            "the wait read the clock {READS} times: it never ended"
+        );
+        Duration::from_nanos(self.at_ns.load(Ordering::Relaxed))
+    }
+
+    fn sleep(&self, d: Duration) {
+        self.at_ns
+            .fetch_add(u64::try_from(d.as_nanos()).unwrap(), Ordering::Relaxed);
     }
 }
 
@@ -103,13 +133,17 @@ fn a_check_of_the_same_run_joins_without_waiting() {
 fn another_runs_holder_is_waited_for_named_and_past_the_ceiling_refused() {
     let dir = scratch("runlock-wait");
     stage(&dir, 900_004, me().start);
-    let t = taker(900_005, 60);
+    let t = Taker {
+        clock: Box::new(Stepped::default()),
+        ..taker(900_005, 60)
+    };
     let mut said = Vec::new();
     let held = take(&[dir.to_path_buf()], &t, "cover", &mut |l| {
         said.push(l.to_owned());
     });
     let why = held.err().unwrap();
-    assert!(said.len() >= 2, "said each poll at say_every 0: {said:?}");
+    // a 60 ms ceiling at a 10 ms poll: waited 0, 10, ... 50 ms, a line each at say_every 0, refused at 60
+    assert_eq!(said.len(), 6, "said each poll at say_every 0: {said:?}");
     assert!(
         said[0].starts_with("rust-checks: waiting 0 s for "),
         "{}",
