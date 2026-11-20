@@ -185,14 +185,14 @@ another feature, or failing any other quick check, is withdrawn and refused.
 
 ### Measurable Outcomes
 
-- **SC-001**: For a window of real work, `make where-time F= SINCE= UNTIL=` books under a tenth of the wall clock as unexplained
+- **SC-001** (FR-001, FR-002, FR-003, FR-005): For a window of real work, `make where-time F= SINCE= UNTIL=` books under a tenth of the wall clock as unexplained
   waiting (a target, GUESS).
-  Today it books 678 of 845 minutes so (observed 2026-11-19, method: `make where-time F=449 SINCE=2026-11-19T14:00:00Z`).
-- **SC-002**: The 2026-11-19 retrospective's per-task table and totals can be reproduced from the event log by that one command, within
+  Today it books 678 of 845 minutes so (observed 2026-11-19, method: `make where-time F=449 SINCE=2026-11-19T14:00:00Z`; research.md R1).
+- **SC-002** (FR-001, FR-002, FR-003, FR-004, FR-005): The 2026-11-19 retrospective's per-task table and totals can be reproduced from the event log by that one command, within
   a tolerance of 10% on each bucket (a target, GUESS), for work done after this feature lands.
-- **SC-003**: Each of the six fixes' refusals fires on its red fixture and passes its compliant case (FR-012).
-- **SC-004**: No hook-suite shard takes more than about 20 s (measured the same way the suites' timings are now).
-- **SC-005**: In the first full day after landing, `make static` runs per task fall to at most two but for recorded escapes, and no
+- **SC-003**: Each of the six fixes' refusals fires on its red fixture and passes its compliant case (FR-006, FR-007, FR-008, FR-009, FR-011, FR-012).
+- **SC-004**: No hook-suite shard takes more than about 20 s (measured the same way the suites' timings are now) (FR-010).
+- **SC-005** (FR-006, FR-007): In the first full day after landing, `make static` runs per task fall to at most two but for recorded escapes, and no
   builder's context passes the threshold but for a recorded escape.
 
 ## Assumptions

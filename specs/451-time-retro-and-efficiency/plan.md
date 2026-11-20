@@ -1,0 +1,868 @@
+# Implementation Plan: where the time goes, and the six cheap fixes
+
+**Branch**: none - `main` in the clone (`SPECIFY_FEATURE=451-time-retro-and-efficiency`) | **Date**: 2026-11-20 | **Spec**: `spec.md`
+
+**Input**: `spec.md` (APPROVED, `spec-fidelity` round 3 FAITHFUL), `request.md`.
+
+## Summary
+
+Four kinds of new event line - one category table the writer and readers share, a background run's end, a make run's phases, an
+agent's token cost - and `make where-time` and `make feature-report` reading them into the GM's columns with `UNTIL=`. Then six
+refusals, each red first with an escape and a message naming the compliant command: a builder past its context cap (and its resume),
+a third `make static` in a task, a make or cargo run detached inside a Bash call, a main-session wait slower than its check interval, a
+deferral with no reason, task or order, and a task-add line that fails `make quick`; plus `make land T="T1,T2"`. Last, the three
+slowest hook suites split into shards. The measurements behind every decision are `research.md` (R1-R12), each with its method.
+
+## Technical Context
+
+**Language/Version**: Rust (the workspace `rust/Cargo.toml`). **Primary Dependencies**: the guard crate `rust/guard` (`l7r-guard`)
+and the gate crates `rust/gate/crates/{measure,rustc,land,plan,task}`; no new outside crate. **Storage**: the clone's event log
+`<git common dir>/l7r-events/<feature>.jsonl`, `task-starts.jsonl`, the guard log. **Testing**: each crate's own tests (`make rust-test
+CRATE=<dir>`, 100% line coverage of new code by its own tests), the guard suites (`make hooks-test`), `make quick`, the landing's
+`make done`. **Target Platform**: this container's Claude Code 2.1.325 hooks. **Project Type**: tooling. **Performance Goals**: a guard
+on every tool call adds no process and reads at most one transcript tail (R2); a count reads the event log only on the call it judges
+(R6). **Constraints**: the held files (R11) - each task that edits one says so and runs `make guard-edit FILE=<file> WHY="<reason>"`
+first. **Scale/Scope**: no map, no engine code, no research claim.
+
+**Single-artifact target**: N/A - no generator change.
+
+## Performance bookends
+
+N/A: no generator change, no stage's counted work moves.
+
+## Constitution Check
+
+- **I, II**: N/A - no UI in this repository.
+- **III, IV, V, VII, VIII, IX, XI**: N/A - no pool content, no SOURCE block, no setting prose, no kanji.
+- **VI**: PASS - each task names its verification: its crate's tests with the red case first, `make hooks-test` for a guard, `make
+  quick`, and the landing's `make done`; the closing task measures SC-001, SC-002 and SC-005 on real work.
+- **X**: PASS - the only Python touched is none; the Rust owes 100% of its new lines from its own tests, functions and files at human
+  scale (`check file-scale`): `event_log_hooks.rs` is 605 lines (observed 2026-11-20, method: `wc -l`) and gains three tasks' fields, so T04 moves the writer's tool fields
+  into `event_log_hooks/fields.rs` if the file would pass the file cap.
+- **XII**: N/A - nothing a generator asserts about the world; every task is `research: rendering`.
+- **XIII**: PASS - baseline before the first edit: `make hooks-test HOOKS_ALL=1` and `make rust-test` on unmodified code in a detached
+  worktree (`git worktree add --detach`), recorded in T02's section; zero new failures at each landing. What each change is held to:
+  its tests, its callers' reads (the two readers, the arbiter's bundle), its guard suites; a differing report is not a regression.
+- **XIV**: PASS - two defects found while measuring are fixed in the task that touches them: the two disagreeing make detectors (R1,
+  T02), and the readers booking by the frozen `cat` (R1, T08).
+- **XVI**: PASS - built as the spec's FRs; the places this plan reads the spec narrowly or broadly are each named for the plan review
+  (T01): D4 (phases per family where FR-003 says per crate), D8 (the builder), D11 (the main session's runs counted), D12 (`cmd &
+  wait` passes) and D14 (`make tunables`).
+- **XVIII**: PASS - each refusal ships with its suite case firing and its quiet case, proven by deleting the check (FR-012).
+- **XIX**: N/A - nothing placed on a map.
+
+## What the measurements changed (research.md)
+
+- **No hook marks a background run's end** (R2). The main session's end comes from its `<task-notification>` prompt; a subagent's own
+  background run's end reaches no hook at all, so the reader takes it from the subagent's transcript (D3).
+- **A subagent's `transcript_path` is the session's** (R2); its own transcript is derived from `agent_id` (D9).
+- **Coverage builds per family and runs side by side** (R6), so phase lines carry wall-clock spans, never per-crate sums (D4).
+- **The observed slow waits are POLL_OK-escaped loops** checking every 60 s and then sleeping 300-1500 s (R5), so the slow-poll refusal
+  sits on the escaped path and judges the longest sleep (D13).
+- **`make tunables` does not walk the tooling crates** (R12), so the knobs are recorded where the guards' rules are (D14).
+
+## Decisions
+
+**D1 - One make detector** (FR-001; R1). `shared::make` gains `invoked(cmd) -> Vec<String>`, the targets in command order, at a command
+position that also takes `(`, `flock <file>`, `nice`, `time` and `timeout N`; `targets()` becomes its set. The event-log writer's own
+`MAKE` pattern is deleted and `make_target` is `invoked(cmd).first()`. The gate's own crate-scoped form `scripts/gates/l7r-gate.sh rust
+<cmd>` is read as the target `rust-<cmd>`. Every guard reading `shared::make` then sees `(make static) &` and `timeout 2400 make static`.
+
+**D2 - The category table and the line's task** (FR-001; R1). One `pub` table in `event_log_hooks.rs`, `bucket_of(target)`, its rows
+in `data-model.md`; `category()` books a Bash call by it, and both readers book a line by its `make` field through the same function,
+falling back to `cat` only for a line with no `make` - so a past log is re-booked too. A target the table does not know is `other`.
+Every line carries `task` where one is known: the `T=` of a `tick`, `task-start`, `decide` or `land` command; else, for a subagent's
+call, the `T<n>` its meta file's `description` names (`<session dir>/subagents/agent-<agent_id>.meta.json`, read once a call); else the
+clone's last `task-starts.jsonl` entry for the feature.
+
+**D3 - A background run's end** (FR-002; R2). The PostToolUse of a `run_in_background` call records `bg`, the `backgroundTaskId`. A
+`UserPromptSubmit` whose prompt holds `<task-notification>` with a `<tool-use-id>` writes a `BgEnd` line: that id, the task id, its
+status and exit code. Every `Stop` and `SubagentStop` line records `inflight` from `background_tasks`. The readers (T08) pair a launch
+with its `BgEnd`; for a subagent's launch with none, they read the subagent transcript's `queued_command` attachment holding the same
+`<tool-use-id>`, its row's timestamp the end; a launch with no end anywhere is open to the window's end. A wait between turns is booked
+to the runs `inflight` names on the `Stop` that opened it, else to the launch whose span holds it.
+
+**D4 - A make run's phases** (FR-003; R6). `event_log_hooks::append_row(root, row)`, the line writer the hooks use, made callable by the
+gate's tools in process (the gate crates already build on `l7r_guard`). `rustc` writes a `Phase` line at each step's end: `build` and
+`test` per crate where `Verdict::ask` builds and `side.rs` runs, `cover-build` per family in `cover.rs::build`, `cover-run` per crate,
+`lint` and `format` per crate - each with its wall-clock `t0` and `t1`. The readers book, inside the Bash call or background span that
+holds them, the union of the `build`/`cover-build` spans as compile and the rest as tests. A `Phase` line has no hook payload, so it
+carries `sid` from the process's `CLAUDE_CODE_SESSION_ID` (a subagent's Bash holds its session's id, the same the hooks log, and
+`CLAUDE_CODE_CHILD_SESSION`, but no agent id: observed 2026-11-20, method: this planning agent's own Bash environment against its
+lines in the 451 event log), its `make` target and its clone; the reader ties it to the Bash call or background run of that session,
+clone and target whose span holds it, and where two such spans overlap, to the one that started last before the phase began. Per
+crate is what the runner can time: a coverage build serves a family of crates at once, so its line names the family's crates (a
+narrow reading of FR-003's "per crate", named for the plan review).
+
+**D5 - The landing's phases** (FR-003). `land` writes a `Phase` line for each of its steps - `cheap` (the first pass), `gate` (`make
+done`), `cohort` (`make cohort-landing`), `claims` (the wait), `push` - and a last `end` line with its exit code, so a refused landing is
+counted from the landing's own line (FR-005's rework), not guessed from a tool response.
+
+**D6 - An agent's cost and task** (FR-004; R2). The Agent call's PreToolUse line records `task` from its `description` (else its
+prompt's first line). Each `SubagentStop` line records `tok` (`in`, `cached`, `created`, `out`), summed over `agent_transcript_path` with
+each `message.id` counted once, `ctx` (its last call's context), and `task` from the agent's meta file. A stop is cumulative; the reader
+keeps the last per `aid`.
+
+**D7 - The readers** (FR-005). `where-time` gains the columns tests, compile, gate, land, review, background run and model, from D2 to
+D6, and `UNTIL=` (the Makefile passes `--until`); the CRITICAL PATH is the window's wall clock partitioned by what the main session was
+doing or waiting on (a wait booked by D3 to its run), and beside it the summed agent-minutes, each agent's span and tokens under its
+task; the REWORK counts refused landings (D5's `end` lines with a non-zero code) and plan re-rounds (a task's `spec-fidelity` and
+`spec-fidelity-verify` dispatches after its first). `feature-report` reads the same columns through the same functions (one place:
+`where_time.rs`'s new `columns` module), keeping its existing `UNTIL=`.
+
+**D8 - Who is a builder** (FR-006; R3). A payload with `agent_id` whose `agent_type` names no `.claude/agents/<agent_type>.md` in the
+clone. Measured, this catches every builder that passed the cap and, among defined agents, one call; it also catches a general-purpose
+agent dispatched without a task, which is judged by the same cap (the spec defines a builder as "an agent dispatched with a task's
+brief, not a defined review agent"; every general-purpose dispatch here is one with a brief, and requiring a `T<n>` in it would let a
+builder with an unnamed brief pass). Named for the plan review.
+
+**D9 - The context cap** (FR-006; R2). A new guard, `context_cap_hooks`, PreToolUse `*`. For a builder it reads its transcript's tail
+(`<transcript_path without .jsonl>/subagents/agent-<agent_id>.jsonl`, backwards to the last `usage`) and, past `CONTEXT_CAP_TOKENS`
+(GUESS, 300,000 tokens, the spec's knob), refuses every tool call but a Write of `<git common dir>/l7r-handoffs/<task or agent id>.md`,
+naming that path and the next step: write what is done and what is left, then stop; the session dispatches a fresh builder with it.
+The main session and a defined agent are never read. The escape (FR-012): `CONTEXT_OK="<reason>"` in a Bash command, or, for any
+tool, a permit the session grants for that agent, `make context-ok AID=<agent id> WHY="<reason>"` (the guard-edit permit's mechanism,
+`l7r-guard.sh permit grant context-cap:<agent id> "<reason>"`, recorded in the guard log; a new Makefile target, so held). The handoff
+Write is the cap's one exit, so its case runs through the whole guard chain (no `--only`), proving no other guard refuses a write under
+the git dir.
+
+**D10 - A builder resumed** (FR-006). The same guard, on SendMessage: `to` is the agent id (R2); refused where that agent is a builder
+past the cap, or its task (its meta `description`'s `T<n>`) is ticked in the feature's `tasks.md` or archived in `tasks-done.md`,
+naming a fresh dispatch with the handoff file or the next task's brief. Escape: `CONTEXT_OK` in the message's `summary`.
+
+**D11 - The third `make static`** (FR-007; R6). A new guard, `static_runs_hooks`, PreToolUse Bash, where `invoked` (D1) holds `static`:
+it counts the event log's `make: static` PreToolUse lines of this call's task (D2) after the later of its last `task-starts.jsonl`
+entry and its last landing (a `land` line naming it); the third and later is refused, naming the crate-scoped checks for the crates the
+task's delta changes (`l7r_gate_tree`'s delta is the gate's; the guard lists the changed files' crates from `git diff --name-only` of
+the merge base), `make static` once before the landing, and `STATIC_OK`. Every session and agent's run counts, the main session's too:
+the spec counts runs in a task, not in an agent. Knob `STATIC_RUNS_A_TASK`, GUESS, 2.
+
+**D12 - A run the harness cannot track** (FR-008; R4). In `no_poll_hooks`: a job holding `make` or `cargo` (D1's detector, and
+`cargo` at a command position) followed by a lone `&` with no `wait` later in the command, or started under `nohup`, `setsid` or
+`disown` AT A COMMAND POSITION, is refused naming the Bash tool's `run_in_background`; `DETACH_OK` escapes. `cmd & wait $!` passes: the
+call does not return before the run ends, so the harness tracks it (R4's six cases).
+
+**D13 - A main-session wait slower than its check** (FR-008; R5). In `no_poll_hooks`, on both permitted paths - the POLL_OK-escaped
+loop and the file-watching wait - before either returns: a payload with no `agent_id` whose loop body's longest `sleep` is over
+`POLL_CHECK_S` (GUESS, 60 s) is refused naming the same loop with every sleep at 60 s or less; `SLOW_POLL_OK` escapes. The red fixture
+is the observed form (R5).
+
+**D14 - Where the knobs are recorded** (spec Assumptions; R12). Each constant carries `GUESS` and the spec's reason at its point of
+change, and `docs/guards.md` gains a knob table (knob, value, label, the data that retunes it: FR-004's tokens, the static counts, the
+waits, the shard times). `make tunables` is not extended to the tooling crates: its walk skips them on purpose (claims are the
+engine's), and the spec names it only as where retuning happens. Named for the plan review.
+
+**D15 - The deferral's form** (FR-009; R9). `lint::refusal` gains `deferral_unformed`: a `**Found and left?**` item that is not `none`
+must carry why it is not fixed in this task, a task id `T<n>` and an order "lands before T<n>"; an item or fix naming a class of defect
+("every writer", "every form", "every file of a kind", "each of the ...", "all ...") must carry a line `observed <date>, method: ...`
+saying how every instance was found. The template's `**Found and left?**` placeholder states the form. `DEFER_FORM_OK` on `make
+decide` escapes, through `$(LOGESCAPE)`. No open section of any plan is refused by it today (R9).
+
+**D16 - The landing's commas and task-add's quick check** (FR-011; R7, R8). `land.rs::main` splits `T=` on commas and whitespace.
+`task-add` runs `make quick` after it writes; on a red it withdraws what it wrote and runs `make quick` again: green, it refuses naming
+the failure and that the line was withdrawn; red again, the failure is not the line's, so it restores the line and reports the
+failure. `QUICK_OK` on `make task-add` escapes, through `$(LOGESCAPE)`.
+
+**D17 - Shards** (FR-010; R10). A suite may be split into `tests/hooks/test-<name>.<k>.sh` beside nothing else of that name: the runner
+(`make hooks-test` and `tests/hooks/hookrun.sh`) treats each shard as a job keyed by the suite's stamp key and stamps the suite green
+when every shard is, and its companion check accepts shards for a guard's companion. `entry-gate.sh` splits by its two cases; the
+other two by their case groups, until each shard's kept seconds is about 20 or less in a full run (`SHARD_BAR_S`, GUESS, measured as
+`.git/hooks-test/<shard>.s`, never a gate).
+
+## Task sections
+
+### T01 (the plan review the tick and the push require, feature 243)
+
+- **Approach**: `spec-fidelity` reads `request.md`, `spec.md` and this plan and rules on each decision that narrows what was asked -
+  D4, D8, D11, D12 and D14 named for it - recorded with `make plan-verdict F=451 FILE=<json> AS=spec-fidelity`.
+
+### T01 Approach (checklist part A)
+
+1. **The goal, in the world.** No map changes; the plan does what the GM approved, no less and no more.
+2. **The constraints.** The spec's FR-001 to FR-012; the GM's words in `request.md`; constitution XVI.
+3. **Where each comes from.** G: `request.md`'s approval; O: `research.md`.
+4. **Do they describe the world here?** The reviewer reads the plan against the request, not against itself.
+5. **The order.** Before any other task is ticked.
+6. **The exits.** Green: a CLEAR `plan-review.json`. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** One review round, at most five.
+9. **Done, measured.** `plan-review.json` CLEAR for this `plan.md`.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** n/a - a review, not a fix.
+
+**Found and left?** none
+
+**Performance work?** no
+
+### T02 (FR-001: two make detectors that disagree, so a timed or subshelled make run logs no target - research R1)
+
+- **Approach**: D1, in the guard crate. Held: `rust/guard/src/shared/make.rs`, `rust/guard/src/guards/event_log_hooks.rs` (`make
+  guard-edit` on each first). Red first: `timeout 2400 make static`, `flock /tmp/x make rust-test` and `(make hooks-test > log) &` each
+  yield their target; `echo make static` and a heredoc's `make` yield none; the guards reading `shared::make` keep their suites'
+  verdicts.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+| the detector | n/a - no map | n/a | none | n/a |
+
+### T02 Approach (checklist part A)
+
+1. **The goal, in the world.** No map changes; one reading of which make targets a command runs, shared by the log and every guard.
+2. **The constraints.** FR-001; D1; the guards that read `shared::make` (gate, make-only, measure, shell-check) unchanged in verdict on their suites; constitution XVIII (a mention is not an invocation).
+3. **Where each comes from.** G: the GM's approval of "maps make targets to tests, compile, gate, land, review and docs"; O: research R1.
+4. **Do they describe the world here?** R1's join of the log to the transcripts shows which commands carried no target and why.
+5. **The order.** First: the table, the readers and the new guards all read this detector.
+6. **The exits.** Green: the red cases pass, `make rust-test CRATE=rust/guard` and `make hooks-test` green. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** One landing.
+9. **Done, measured.** The red cases green; the XIII baseline (`make hooks-test HOOKS_ALL=1`, `make rust-test`) taken in a detached worktree before the first edit and matched after.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** `timeout 2400 make static` is today booked "other tool" and `(make static) &` is invisible to every guard reading `shared::make` - a tool answering wrongly.
+
+**Found and left?** none
+
+**Performance work?** no
+
+### T03 (FR-001: 210 of the window's tool-minutes booked "other tool" - research R1)
+
+- **Approach**: D2, in the writer. Held: `rust/guard/src/guards/event_log_hooks.rs` (`make guard-edit` first). The table's rows are
+  `data-model.md`'s, finished from the Makefile's targets, `format`, `render-sync` and `map` among them (R1's largest after the tests),
+  each row commented with why. Red first: `make static`, `make rust-test`, `make hooks-test` and `l7r-gate.sh rust test --crate
+  rust/guard` class as tests, `make land` as land, `make frobnicate` as other; a subagent's call carries its meta file's task, a `make
+  land T=T05` line carries `T05`, a main-session call the clone's active task.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+| the table, the task field | n/a - no map | n/a | none | n/a |
+
+### T03 Approach (checklist part A)
+
+1. **The goal, in the world.** No map changes; every make run of a window is booked under its bucket and its task.
+2. **The constraints.** FR-001; D2; the hook never refuses and never prints; one meta-file read a subagent call at most.
+3. **Where each comes from.** G: the approved categories; O: research R1 (the targets and their minutes), R2 (the meta file).
+4. **Do they describe the world here?** R1's minutes by target name the rows that matter most.
+5. **The order.** After T02; before T07, T08 and T14, which read the table and the task field.
+6. **The exits.** Green: the red cases. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** One landing.
+9. **Done, measured.** The red cases green; a real `make static` in the clone logs `cat` tests and its task.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** n/a - new rows and a new field.
+
+**Found and left?** none
+
+**Performance work?** no
+
+### T04 (FR-002: no line marks a background run's end, so a wait cannot be booked to the run behind it - research R2)
+
+- **Approach**: D3's writer half: `bg` on a backgrounded PostToolUse, the `BgEnd` line from a notification prompt, `inflight` on Stop
+  and SubagentStop; D4's `append_row`, public for the gate's tools; and the one reader's guard against the new kinds:
+  `rust/gate/crates/measure/src/measure/events.rs::load_events` sets `BgEnd` and `Phase` lines aside from the time-gap stream (else a
+  `Phase` line inside a `make static` call would book the rest of the call "thinking", and a line of no session would form a session of
+  its own, the T207 failure) and returns them for T08 and T09. Held: `rust/guard/src/guards/event_log_hooks.rs` (`make guard-edit`
+  first); the tool fields move to `event_log_hooks/fields.rs` if the file would pass the file cap. Red first: a fixture notification
+  prompt (R2's observed shell form) writes a `BgEnd` with its tool-use id, status and exit code; an agent notification writes none; a
+  Stop payload with two `background_tasks` writes both under `inflight`; a log holding a `BgEnd` and a `Phase` line gives `make
+  where-time` and `make feature-report` the tables the log without them gives.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+| the end line and the in-flight runs | n/a - no map | n/a | none | n/a |
+
+### T04 Approach (checklist part A)
+
+1. **The goal, in the world.** No map changes; a background run's start and end are both in the log.
+2. **The constraints.** FR-002; D3, D4; the hook never refuses and never prints; today's readers unchanged by the new kinds until T08 and T09 read them.
+3. **Where each comes from.** G: the GM's approval of "logs that end from its completion notice"; O: research R2 (the schema, the notification texts).
+4. **Do they describe the world here?** The notification's `<tool-use-id>` was read from the window's own transcript queue rows (observed 2026-11-20, method: research R2).
+5. **The order.** After T03; before T05 and T06 (`append_row`) and T09, which reads the lines.
+6. **The exits.** Green: the fixture cases pass. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** One landing.
+9. **Done, measured.** The three red cases green; one real background run in the clone writes its `BgEnd` (read off the log).
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** n/a - new lines, no defect.
+
+**Found and left?** none
+
+**Performance work?** no
+
+### T05 (FR-003: a make run's compile, tests and coverage are one span in the log - research R6)
+
+- **Approach**: D4's rust half in `rust/gate/crates/rustc` (not held): a `Phase` line at each step's end through `append_row`. Red
+  first: a fixture crate's `rust test` and `rust cover` runs in a scratch tree write `build`, `test`, `cover-build` and `cover-run`
+  lines whose spans nest inside the call's.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+| the rust checks' phase lines | n/a - no map | n/a | none | n/a |
+
+### T05 Approach (checklist part A)
+
+1. **The goal, in the world.** No map changes; a `make static` run's compile and test time are told apart.
+2. **The constraints.** FR-003; D4; a kept green result writes no phase (it ran nothing).
+3. **Where each comes from.** G: the GM's "how much time are we spending on recompiling things"; O: research R6 (family builds, side-by-side runs).
+4. **Do they describe the world here?** R6 read the build and run sites in `cover.rs`, `side.rs` and `Verdict::ask`.
+5. **The order.** After T04 (`append_row`).
+6. **The exits.** Green: the fixture's phase lines. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** One landing.
+9. **Done, measured.** The fixture case green; one real `make rust-test CRATE=rust/gate/crates/plan` writes its phases.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** n/a.
+
+**Found and left?** none
+
+**Performance work?** no
+
+### T06 (FR-003: a landing's cheap pass, gate, claims round and push are one span - the spec's User Story 1)
+
+- **Approach**: D5 in `rust/gate/crates/land` (not held). Red first: the land tests' fake world writes `cheap`, `gate`, `claims`,
+  `push` and `end` lines in order, a refused landing's `end` with its non-zero code.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+| the landing's phase lines | n/a - no map | n/a | none | n/a |
+
+### T06 Approach (checklist part A)
+
+1. **The goal, in the world.** No map changes; a landing's time is split by step and a refused one is counted.
+2. **The constraints.** FR-003; D5; a failed landing still writes its `end`.
+3. **Where each comes from.** G: the approved "make land its phases' seconds"; O: `land.rs`'s pass order read.
+4. **Do they describe the world here?** The steps are `land.rs`'s own passes.
+5. **The order.** After T04.
+6. **The exits.** Green: the land tests. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** One landing.
+9. **Done, measured.** The fake-world case green; this task's own landing writes its phases (read off the log).
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** n/a.
+
+**Found and left?** none
+
+**Performance work?** no
+
+### T07 (FR-004: no agent's token cost is logged, nor the task it served - research R2)
+
+- **Approach**: D6 in the writer. Held: `rust/guard/src/guards/event_log_hooks.rs` (`make guard-edit` first). Red first: a fixture
+  agent transcript with a repeated `message.id` sums each call once; its meta file's "T202: ..." description gives `task: T202`; an
+  Agent dispatch "T08: ..." records `task: T08`.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+| the agent's cost and task | n/a - no map | n/a | none | n/a |
+
+### T07 Approach (checklist part A)
+
+1. **The goal, in the world.** No map changes; each agent's tokens are in the log under its task.
+2. **The constraints.** FR-004; D6; the hook never refuses.
+3. **Where each comes from.** G: the approved "records it at each agent's stop"; O: research R2 (the stop payload, the dedup, the meta file).
+4. **Do they describe the world here?** R2 summed a real builder transcript with the dedup.
+5. **The order.** After T04; before T10.
+6. **The exits.** Green: the fixture cases. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** One landing.
+9. **Done, measured.** The fixture cases green; one real agent's stop in the clone carries `tok` (read off the log).
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** n/a.
+
+**Found and left?** none
+
+**Performance work?** no
+
+### T08 (FR-005: `make where-time` booked most of the window as "waiting on work" and every gate and test column zero - the spec's Why)
+
+- **Approach**: D7's columns in `rust/gate/crates/measure` (`where_time.rs` and a new `where_time/columns.rs`, not held): D2's booking
+  by `make`, D4's compile split, and `UNTIL=`. Held: the root `Makefile` (the `where-time` recipe's `--until`; `make guard-edit
+  FILE=Makefile` first). Red first: User Story 1's acceptance scenarios 1 and 3 as fixtures - `make static`, `make rust-test` and `make
+  hooks-test` under tests; a `make static` whose cover-build phase is two thirds of its span split into compile and tests - and a past
+  log re-booked by its `make` field.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+| the columns, the compile split, UNTIL | n/a - no map | n/a | none | n/a |
+
+### T08 Approach (checklist part A)
+
+1. **The goal, in the world.** No map changes; one command reads off where a window's time went.
+2. **The constraints.** FR-005; SC-001; D2, D4, D7; the arbiter's bundle and `feature-report` read the same event reader unchanged.
+3. **Where each comes from.** G: the GM's retrospective request; O: research R1 (the readers read the frozen `cat`), R6.
+4. **Do they describe the world here?** The fixture is built from R2's and R6's observed line shapes.
+5. **The order.** After T02-T07.
+6. **The exits.** Green: the fixture sums. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** One landing.
+9. **Done, measured.** The fixture green; `make where-time F=451 SINCE=<this task's start> UNTIL=<now>` books this task's own runs under their columns.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** The readers book by the frozen `cat`, so a past log can never be re-booked - a tool answering wrongly; fixed by booking by `make`.
+
+**Found and left?** none
+
+**Performance work?** no
+
+### T09 (FR-002, FR-005: a wait cannot be booked to the run behind it - the spec's User Story 1 scenario 2, research R2)
+
+- **Approach**: D3's reader half in `where_time/columns.rs` (not held): a launch paired with its end - the log's `BgEnd`, else the
+  subagent transcript's `queued_command` row holding its `<tool-use-id>`, else open to the window's end - and a between-turns wait
+  booked to the runs its `Stop` line names `inflight`, else to the launch whose span holds it. Red first: a background `make land`, its
+  `BgEnd` and the wait it caused booked to land; a subagent's run ended by its transcript's attachment; a run with no end booked open
+  from its start, never zero.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+| the background column | n/a - no map | n/a | none | n/a |
+
+### T09 Approach (checklist part A)
+
+1. **The goal, in the world.** No map changes; a wait is booked to the run that caused it.
+2. **The constraints.** FR-002, FR-005; D3, D7; the spec's edge case (a run whose notice never came is open, not zero).
+3. **Where each comes from.** G: the approved "which run a wait was waiting on"; O: research R2 (where each kind of end is found).
+4. **Do they describe the world here?** R2 found the subagent ends in the subagent transcripts, not in any hook.
+5. **The order.** After T08.
+6. **The exits.** Green: the three fixture cases. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** One landing.
+9. **Done, measured.** The fixture green; a real background run in the clone booked to its target.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** n/a.
+
+**Found and left?** none
+
+**Performance work?** no
+
+### T10 (FR-005: the wall clock on the critical path apart from the agent-minutes, the agents' tokens, the rework)
+
+- **Approach**: D7's critical path, agents and rework in `where_time/columns.rs` (not held). Red first: a fixture with two agents
+  overlapping a main-session wait books the wait once on the critical path and both agents' spans and tokens under their tasks; a
+  landing `end` with code 1 and a second `spec-fidelity` dispatch count as rework.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+| the critical path, the agents, the rework | n/a - no map | n/a | none | n/a |
+
+### T10 Approach (checklist part A)
+
+1. **The goal, in the world.** No map changes; the report says what held the day and what was spent beside it.
+2. **The constraints.** FR-005; D5, D6, D7.
+3. **Where each comes from.** G: the approved breakdown; O: the 2026-11-19 retrospective's own split of wall clock and agent-minutes (spec Why).
+4. **Do they describe the world here?** The fixture overlaps agents as the window's builders did.
+5. **The order.** After T09.
+6. **The exits.** Green: the fixture. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** One landing.
+9. **Done, measured.** The fixture green.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** n/a.
+
+**Found and left?** none
+
+**Performance work?** no
+
+### T11 (FR-005: `make feature-report` reads the same columns)
+
+- **Approach**: `feature_report.rs` and `feature_report/tables.rs` (not held) read T08 and T10's `columns` in process, its `UNTIL=`
+  kept. Red first: the same fixture through `feature-report` gives the same sums as through `where-time`.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+| the report's columns | n/a - no map | n/a | none | n/a |
+
+### T11 Approach (checklist part A)
+
+1. **The goal, in the world.** No map changes; both reports agree.
+2. **The constraints.** FR-005; D7 (one place).
+3. **Where each comes from.** G: the approved "where-time and feature-report read those new lines".
+4. **Do they describe the world here?** One fixture read by both.
+5. **The order.** After T10.
+6. **The exits.** Green: equal sums. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** One landing.
+9. **Done, measured.** The fixture's two readings equal; `make feature-report F=451` shows the columns.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** n/a.
+
+**Found and left?** none
+
+**Performance work?** no
+
+### T12 (FR-006: builders past a large context slowed the window's critical path - the spec's User Story 2, research R3)
+
+- **Approach**: D8 and D9, a new guard `context_cap_hooks`. Held: `rust/guard/src/guards/context_cap_hooks.rs` (new),
+  `rust/guard/src/guards.rs`, `rust/guard/src/lib.rs` (its place in `guards()`, after `event_log_hooks`) (`make guard-edit` on each
+  first); with its link `tests/hooks/context-cap-hooks.sh` -> `guard-shim.sh`, its suite `tests/hooks/test-context-cap-hooks.sh`, its
+  `docs/guards.md` row and knob, its `rust/guard/CLAUDE.md` mention. FIRST STEP: capture one real subagent PreToolUse payload (a
+  one-shot dump from the guard under `L7R_GUARD_DUMP`, removed before the landing) and pin it as the fixture, confirming `agent_type`
+  and the derived transcript path (R2's "schema, not yet observed"). Red first: a builder fixture past the cap refused naming the
+  handoff path; under it passes; its Write of the handoff passes, alone and through the whole guard chain; a defined agent past it
+  passes; the main session passes; `CONTEXT_OK` in a Bash call and a `make context-ok` permit each pass and are recorded. Held too: the
+  root `Makefile` (`make context-ok`).
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+| the cap | n/a - no map | n/a | none | n/a |
+
+### T12 Approach (checklist part A)
+
+1. **The goal, in the world.** No map changes; no builder works on with a context past the cap.
+2. **The constraints.** FR-006, FR-012; D8, D9; constitution XVIII (fires and stays quiet, escape first).
+3. **Where each comes from.** G: the approved "a fresh builder per stage, with a handoff file"; R: none; O: research R2, R3; the cap a GUESS knob (spec FR-006).
+4. **Do they describe the world here?** R3 counted which agents pass the cap by type.
+5. **The order.** After T11; the first refusal.
+6. **The exits.** Green: the five cases. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** One landing.
+9. **Done, measured.** The suite's five cases; the check deleted, the firing case red.
+10. **Before moving a constant.** n/a - a new knob, labeled GUESS.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** n/a - a new refusal.
+
+**Found and left?** none
+
+**Performance work?** no
+
+### T13 (FR-006: a SendMessage resuming a builder past the cap, or one whose task has landed)
+
+- **Approach**: D10 in `context_cap_hooks`. Held: `rust/guard/src/guards/context_cap_hooks.rs` (`make guard-edit` first). Red first:
+  a SendMessage to a builder fixture past the cap refused; to one whose task is ticked refused; to a defined agent passes; to a builder
+  under the cap with its task open passes; `CONTEXT_OK` in the summary passes and is recorded.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+| the resume | n/a - no map | n/a | none | n/a |
+
+### T13 Approach (checklist part A)
+
+1. **The goal, in the world.** No map changes; a builder serves one task and stays small.
+2. **The constraints.** FR-006, FR-012; D10.
+3. **Where each comes from.** G: the approved "one task a builder"; O: research R2 (`to` is the agent id).
+4. **Do they describe the world here?** R2 read the window's SendMessage inputs.
+5. **The order.** After T12.
+6. **The exits.** Green: the five cases. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** One landing.
+9. **Done, measured.** The suite's cases; the check deleted, the firing cases red.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** n/a.
+
+**Found and left?** none
+
+**Performance work?** no
+
+### T14 (FR-007: `make static` was the edit loop - the spec's User Story 3)
+
+- **Approach**: D11, a new guard `static_runs_hooks`. Held: `rust/guard/src/guards/static_runs_hooks.rs` (new),
+  `rust/guard/src/guards.rs`, `rust/guard/src/lib.rs` (`make guard-edit` on each first); its link, suite, `docs/guards.md` row and knob,
+  `rust/guard/CLAUDE.md` mention. Red first: a fixture log with two `make static` lines of T06 after its start refuses a third, naming
+  the changed crates' checks; a run after a `land` line naming T06 passes; a task with no landing counts from its start;
+  `STATIC_OK="..."` passes and is recorded.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+| the count | n/a - no map | n/a | none | n/a |
+
+### T14 Approach (checklist part A)
+
+1. **The goal, in the world.** No map changes; the crate-scoped checks are the edit loop, `make static` the check before landing.
+2. **The constraints.** FR-007, FR-012; D2 (the task field), D11.
+3. **Where each comes from.** G: the approved "a crate-scoped check while iterating, with make static once at the end"; O: research R6.
+4. **Do they describe the world here?** R6 timed the log read the guard makes.
+5. **The order.** After T13; needs T02's `task` on each line.
+6. **The exits.** Green: the four cases. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** One landing.
+9. **Done, measured.** The suite's cases; the check deleted, the firing case red.
+10. **Before moving a constant.** n/a - a new knob, labeled GUESS.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** n/a.
+
+**Found and left?** none
+
+**Performance work?** no
+
+### T15 (FR-008: T225's `make static` with a plain `&` sat untracked - the spec's User Story 4, research R4)
+
+- **Approach**: D12 in `no_poll_hooks`. Held: `rust/guard/src/guards/no_poll_hooks.rs` (`make guard-edit` first). Red first: R4's
+  observed `(make static > /tmp/t225-static.log 2>&1; echo END >> ...) & sleep 1` refused naming `run_in_background`; `nohup make
+  rust-test` refused; `for c in git setsid make; do ...` passes (a word, not a command); `make static > log 2>&1 & wait $!` passes;
+  `make static` with `run_in_background` passes; `DETACH_OK="..."` passes and is recorded.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+| the detached run | n/a - no map | n/a | none | n/a |
+
+### T15 Approach (checklist part A)
+
+1. **The goal, in the world.** No map changes; every long run is one whose end wakes the session.
+2. **The constraints.** FR-008, FR-012; D1 (the detector), D12; constitution XVIII (a mention is not an invocation).
+3. **Where each comes from.** G: the approved "a guard refusing that pattern"; O: research R4.
+4. **Do they describe the world here?** R4's cases are the session's own commands.
+5. **The order.** After T14.
+6. **The exits.** Green: the six cases. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** One landing.
+9. **Done, measured.** The suite's cases; the check deleted, the firing cases red.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** n/a.
+
+**Found and left?** none
+
+**Performance work?** no
+
+### T16 (FR-008: the main session's waits checked every 420 to 600 s - the spec's User Story 4, research R5)
+
+- **Approach**: D13 in `no_poll_hooks`. Held: `rust/guard/src/guards/no_poll_hooks.rs` (`make guard-edit` first). Red first: R5's
+  observed POLL_OK loop with `sleep 60` then `sleep 420`, from the main session, refused naming the knob's form; the same loop at
+  `sleep 60` throughout passes; the same slow loop from a subagent (`agent_id` set) passes; a file-watching wait from the main
+  session sleeping past the knob refused; `SLOW_POLL_OK="..."` passes and is recorded.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+| the slow wait | n/a - no map | n/a | none | n/a |
+
+### T16 Approach (checklist part A)
+
+1. **The goal, in the world.** No map changes; the main session learns of an idle agent within a minute.
+2. **The constraints.** FR-008, FR-012; D13; the existing no-poll cases unchanged.
+3. **Where each comes from.** G: the approved "a shorter poll loop on my side", made a refusal by the GM's "real enforcement"; O: research R5.
+4. **Do they describe the world here?** R5's loops are the session's own.
+5. **The order.** After T15 (the same file).
+6. **The exits.** Green: the five cases and the no-poll suite. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** One landing.
+9. **Done, measured.** The suite's cases; the check deleted, the firing cases red.
+10. **Before moving a constant.** n/a - a new knob, labeled GUESS.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** n/a.
+
+**Found and left?** none
+
+**Performance work?** no
+
+### T17 (FR-009: two of the window's first-round plan-review blocks were deferrals with no order - the spec's User Story 5)
+
+- **Approach**: D15 in `rust/gate/crates/plan` (`lint.rs`, `template.rs`; not held) and `make decide`'s `DEFER_FORM_OK`. Held: the root
+  `Makefile` (`make guard-edit FILE=Makefile` first). Red first: User Story 5's five cases - a deferral with no task id refused; task
+  and order but no reason refused; a reason, `T123` and "lands before T124" passes; `none` passes; a class fix with no labeled line
+  refused and with one passes.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+| the deferral's form | n/a - no map | n/a | none | n/a |
+
+### T17 Approach (checklist part A)
+
+1. **The goal, in the world.** No map changes; a deferral is fixed in the task by default, and a class fix is complete up front.
+2. **The constraints.** FR-009, FR-012; D15; constitution XIV.
+3. **Where each comes from.** G: the approved "briefs that default to fixing in the task, and that ask for full coverage up front"; O: research R9.
+4. **Do they describe the world here?** R9 found no open section the rule would refuse.
+5. **The order.** After T16.
+6. **The exits.** Green: the five cases. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** One landing.
+9. **Done, measured.** The plan crate's cases; the check deleted, the firing cases red.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** n/a.
+
+**Found and left?** none
+
+**Performance work?** no
+
+### T18 (FR-011: `T="T1,T2"` read as one task - research R7)
+
+- **Approach**: D16's first half in `rust/gate/crates/land/src/land.rs` (not held) and `make land`'s help. Red first: `T="T1,T2"`
+  lands both in the land tests' fake world; `T="T1, T2"` too.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+| the commas | n/a - no map | n/a | none | n/a |
+
+### T18 Approach (checklist part A)
+
+1. **The goal, in the world.** No map changes; a comma list lands.
+2. **The constraints.** FR-011; D16.
+3. **Where each comes from.** G: the approved "Accept commas in T="; O: research R7.
+4. **Do they describe the world here?** Feature 448's plan wrote the comma form.
+5. **The order.** After T17.
+6. **The exits.** Green: the two cases. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** One landing.
+9. **Done, measured.** The land tests' cases.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** A comma list is refused as one unknown task - valid input refused, a defect.
+
+**Found and left?** none
+
+**Performance work?** no
+
+### T19 (FR-011: a task-add line that `make quick` refuses was found only at the landing - research R8)
+
+- **Approach**: D16's second half in `rust/gate/crates/task/src/task_add.rs` (not held) and `make task-add`'s `QUICK_OK`. Held: the root
+  `Makefile` (`make guard-edit FILE=Makefile` first). Red first: a fixture task-add line citing a bare requirement id another feature defines is
+  withdrawn and refused; a clean line stays; a quick already red without the line keeps the line and reports.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+| the quick check | n/a - no map | n/a | none | n/a |
+
+### T19 Approach (checklist part A)
+
+1. **The goal, in the world.** No map changes; a task line that would refuse a landing never lands in `tasks.md`.
+2. **The constraints.** FR-011, FR-012; D16.
+3. **Where each comes from.** G: the approved "run make quick after task-add"; O: research R8.
+4. **Do they describe the world here?** R8 read the crates task-add builds on.
+5. **The order.** After T18.
+6. **The exits.** Green: the three cases. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** One landing.
+9. **Done, measured.** The task crate's cases; the check deleted, the firing case red.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** n/a.
+
+**Found and left?** none
+
+**Performance work?** no
+
+### T20 (FR-010: three suites set the floor of every `make hooks-test` - research R10)
+
+- **Approach**: D17's runner and the first split. Held: the root `Makefile` (`make guard-edit FILE=Makefile` first); not held:
+  `tests/hooks/hookrun.sh`, `tests/hooks/test-entry-gate.sh` split into `test-entry-gate.1.sh` and `.2.sh` by its two cases. Red first:
+  a scratch roster with a sharded fixture suite runs both shards, stamps the suite only when both are green, and its companion check
+  passes.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+| the shard form, entry-gate | n/a - no map | n/a | none | n/a |
+
+### T20 Approach (checklist part A)
+
+1. **The goal, in the world.** No map changes; no one suite holds the run's wall time.
+2. **The constraints.** FR-010, SC-004; D17; every case of the split suite still runs.
+3. **Where each comes from.** G: the approved "Split the three slowest hook suites"; O: research R10.
+4. **Do they describe the world here?** R10 read the kept seconds of a full run.
+5. **The order.** After T19.
+6. **The exits.** Green: each shard's kept seconds about 20 or less in a full run. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** One landing.
+9. **Done, measured.** `make hooks-test HOOKS_ALL=1`, then `.git/hooks-test/test-entry-gate.*.s` read.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** n/a.
+
+**Found and left?** none
+
+**Performance work?** yes - its answers below.
+
+### T20 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)
+
+1. **Where does the time go?** One suite's cases run one after another inside its job.
+2. **Removes work, or only moves it?** Moves it onto idle jobs; the cases are unchanged.
+3. **What do you expect it to save, and why?** The run's wall time falls toward the next slowest suite's.
+4. **How does the work grow with the settlement?** n/a - no settlement.
+5. **What did the before and after show, and under what conditions?** The kept seconds of a full run before and after, with the host's load.
+6. **Did any map move, and does it still keep the research?** No map.
+
+### T21 (FR-010: the other two of the three slowest suites)
+
+- **Approach**: D17's split of `tests/hooks/test-l7r-gate.sh` and `tests/hooks/test-sync-with-main.sh` (not held) by their case groups.
+  Red first: none new - every case of both suites still runs (the case count before and after equal) and each shard is green.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+| the two splits | n/a - no map | n/a | none | n/a |
+
+### T21 Approach (checklist part A)
+
+1. **The goal, in the world.** No map changes; no shard past the bar.
+2. **The constraints.** FR-010, SC-004; D17.
+3. **Where each comes from.** G: the approved split; O: research R10.
+4. **Do they describe the world here?** Measured in the same full run as T20.
+5. **The order.** After T20.
+6. **The exits.** Green: each shard's kept seconds about 20 or less in a full run. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** One landing.
+9. **Done, measured.** `make hooks-test HOOKS_ALL=1`, then the shards' `.s` files read.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** n/a.
+
+**Found and left?** none
+
+**Performance work?** yes - as T20's.
+
+### T22 (the close: SC-001, SC-002, SC-005 on real work, and the feature report)
+
+- **Approach**: after T02-T21 have landed and a full day of work has run on them: `make where-time F=<the day's feature> SINCE= UNTIL=`
+  read against SC-001; the day's per-task table reproduced from the log against a hand join of the transcripts for SC-002; the static
+  runs per task and the builders' largest contexts read for SC-005, each escape listed; `docs/guards.md`'s knob table checked complete;
+  `make feature-report F=451 WRITE=1`.
+
+### T22 Approach (checklist part A)
+
+1. **The goal, in the world.** No map changes; the retrospective is one command and the six fixes hold.
+2. **The constraints.** SC-001, SC-002, SC-003, SC-005; D14.
+3. **Where each comes from.** G: the GM's request; the bars are the spec's GUESS targets.
+4. **Do they describe the world here?** Measured on the first full day after landing.
+5. **The order.** Last.
+6. **The exits.** Green: the measurements recorded in `report.md`, each against its bar; a bar missed is reported with its number and the knob it retunes. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** One landing.
+9. **Done, measured.** `report.md` written by `make feature-report F=451 WRITE=1`, with the three measurements.
+10. **Before moving a constant.** A knob retuned names its data and its old and new value in `docs/guards.md`.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** n/a.
+
+**Found and left?** none
+
+**Performance work?** no
+
+## Project Structure
+
+### Documentation (this feature)
+
+```text
+specs/451-time-retro-and-efficiency/
+├── plan.md, research.md, data-model.md, quickstart.md
+├── contracts/refusals.md
+└── tasks.md
+```
+
+### Source Code
+
+```text
+rust/guard/src/shared/make.rs                       # T02 (held)
+rust/guard/src/guards/event_log_hooks.rs (+ fields.rs)   # T02, T04, T07 (held)
+rust/guard/src/guards/context_cap_hooks.rs          # T12, T13 (held, new)
+rust/guard/src/guards/static_runs_hooks.rs          # T14 (held, new)
+rust/guard/src/guards/no_poll_hooks.rs              # T15, T16 (held)
+rust/guard/src/{guards.rs,lib.rs}                   # T12, T14 (held)
+rust/gate/crates/rustc/src/rustc/{cover,side,kept}.rs   # T05
+rust/gate/crates/land/src/land.rs                   # T06, T18
+rust/gate/crates/measure/src/measure/where_time.rs (+ columns.rs), feature_report*   # T08-T11
+rust/gate/crates/plan/src/plan/{lint,template}.rs   # T17
+rust/gate/crates/task/src/task_add.rs               # T19
+Makefile                                            # T08, T17, T19, T20 (held)
+tests/hooks/{hookrun.sh,test-entry-gate*.sh,test-l7r-gate*.sh,test-sync-with-main*.sh,test-context-cap-hooks.sh,test-static-runs-hooks.sh}
+docs/guards.md, rust/guard/CLAUDE.md, rust/gate/CLAUDE.md
+```
+
+**Structure Decision**: the existing guard and gate crates; two new guard modules, nothing else new.
+
+## Complexity Tracking
+
+None.
