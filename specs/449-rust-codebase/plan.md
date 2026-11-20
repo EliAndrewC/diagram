@@ -820,14 +820,44 @@ tests/hooks/                 # the suites, the verdict replay through phase 1
 **Performance work?** <no - or yes, and its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
 
 
-### T239 (<why: the finding or measurement that files it>)
+### T239 (T236's finding: Kuwabata's settlement's ground drawn over the north dike and the head canal, the seat handed the plots' edge as its ring)
+
+- **Approach**: `roll_polder` (`rust/phases/src/driver/polder.rs`) hands the seat a ring off the dike's outer face (`off_the_dike`) where it handed the plots' edge (`Polder::outline`): each of the block's four sides pushed straight out to the outer face at its widest on that side, the sides met again at their corners, the outer face read once and its projections tallied to the seat (`test@seat_ring`). Before, red first: the settlement's ground had 27,322 ft2 inside the dike's outer face and 2,784 ft2 on the head canal on Kuwabata, measured 2026-11-20 (the new test `the_settlement_stands_off_the_dike_and_the_head_canal` against the unchanged stage, `make rust-test CRATE=rust/phases`); and 26,583 and 3,168 ft2 on the grid polder R (seed 5, falling 30 degrees), measured 2026-11-20 (the same red run). After: 0 and 0 on both, measured 2026-11-20 (the same test, green); 0 and 0 on three more polders (R falling 0 degrees, S seed 9 falling 60, T seed 13 a dike-pond falling 120) against 26,237 / 3,520, 30,201 / 3,503 and 23,359 / 0 before, measured 2026-11-20 (a temporary probe test in `driver/polder.rs` sampling the ground every foot, removed). The seat's candidates: 2 margins of the 4 sides before and after on all five, measured 2026-11-20 (the probe, `seat::margins::candidates` on each ring); the ladder kept 2 frames on Kuwabata and on R falling 0 and 1 on the other three before and after, measured 2026-11-20 (the probe, `Seated::frames`). The placement: Kuwabata's anchor moved from (2875.0, 2340.0) to (2875.3, 2288.0) and the band's middle from (2875.0, 2169.8) to (2875.3, 2117.8), its back still due north, measured 2026-11-20 (the probe); its dashed ground from y 1865.5 to 2340 now runs y 1813.6 to 2288, measured 2026-11-20 (the drawing's reserved path, the mirror's `kuwabata.driver.svg` against the clone's after `make map MAP=--all`). The alternative priced: handing the outer face itself, as T236 proposed, offered 82, 68, 68, 89 and 69 candidates on the five polders against 2, measured 2026-11-20 (the probe, `candidates` on `dike.outer`, its 164, 136, 136, 178 and 138 stations); T236's "4 to 124-182" counted the ring's points (4 corners against 124 and 182 dike points at 10 and 20 households), not candidates, measured 2026-11-04 (`make stage-sizes`, T236's own citation). Not taken: each wave of the breadth turns a margin's back, and the ranking's work grows with the stations.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+| the seat handed a ring off the dike's outer face | `the_settlement_stands_off_the_dike_and_the_head_canal`, red first; `the_ring_off_the_dike_holds_the_outer_face_and_touches_it`, written to the new ring and not run red | `polder.rs`'s `off_the_dike`, `roll_polder` | Kuwabata's drawing (the settlement's ground alone) | none |
+| roll_polder's claim restated to 0019 | n/a: a claim | `polder.rs`'s `roll_polder` comment, `off_the_dike`'s | none | none |
+
+### T239 Approach (checklist part A)
+
+1. **The goal, in the world.** A reader of a polder map sees the settlement's ground on the dry ground just off the dike's outer face, never over the dike, the ring canal inside it or the fields.
+2. **The constraints.** Page 0019 (the village on the dry ground just off the dike, a few steps off it, and hard against its own polder; the ring canal round the inside foot of the dike); page 0027 (the outer face the inner one pushed out by a breadth changing along the length); feature 444 FR-023 (a review owed at rust-only set aside and recorded); constitution XIV.
+3. **Where each comes from.** R: research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html, research/questions/0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html; O: T236's finding and this task's measurements. "A few steps" is the page's own GUESS; the houses stand `STANDOFF_FT` off the ring, the side held straight at the dike's widest a GUESS labeled at `off_the_dike`.
+4. **Do they describe the world here?** Yes: Kuwabata's ground now starts at y 2288, the north dike's outer face at its widest, where it started at 2340, the plots' edge, 52 ft in over the dike and the head canal, measured 2026-11-20 (the drawing's reserved path, mirror against clone).
+5. **The order.** After T236, before T158.
+6. **The exits.** Green: the test red first then green, `make rust-test CRATE=rust/phases`, `make quick`, `make static`, `make counters-inert` green; each polder form's 48 cohort seeds rolling clean, measured 2026-11-20 (`make cohort N=48 FIELD=<form>`). Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** none
+8. **The budget.** One landing (gated: `rust/` code). `seat.polder` counts 2,185 and 2,875 at 10 and 20 households against 1,682 and 2,089 before, measured 2026-11-20 (`make work-budget` before, `make work-budget WRITE=1` after); the ring's pass is 480 and 712 of it (`test@seat_ring`, four sides a station), measured 2026-11-20 (the WRITE=1 run's record); the stage has no budget and no accepted figure, so nothing holds it.
+9. **Done, measured.** No square foot of the settlement's ground inside the dike's outer face or on the head canal on Kuwabata or R, measured 2026-11-20 (the driver test); 0 of 48 seeds refused or broke a rule on each of `polder_grid` and `mulberry_dike_fishpond` before and after, measured 2026-11-20 (`make cohort N=48 FIELD=<form>`); Kuwabata the one map moved, 1 moved and 10 unchanged, measured 2026-11-20 (`make map MAP=--all` then `make maps-moved`).
+10. **Before moving a constant.** n/a: no constant moves; `STANDOFF_FT`, `RING_FT` and the dike's breadth unchanged.
+11. **Before fitting things into room.** n/a: the seat moves out by the dike's breadth and the canal's offset, and no roll lost its seat or a rung of its ladder (item 9).
+12. **Before any fix.** The settlement's dashed ground drawn across Kuwabata's north dike and head canal, over the polder's own water and earthwork, where 0019 puts the village on dry ground off the dike.
+
+**The reviews this owes.** None: the only marks that move on Kuwabata are the settlement's dashed ground and its label (and the crop with them), the driver's placeholder (`svg.kind("-")`, no registry element), and the ink census is unchanged, measured 2026-11-20 (the mirror's drawing and record against the clone's after `make map MAP=--all`). The review lookup leaves `-` out of a map's legend (`NOT_ELEMENTS`), so no glyph or placement unit can name it; declared under 449's Occasions as a `none:` line, and `reviews owed --units --landing` names no unit and no problem after `make map MAP=pool/hamlets/kuwabata`, measured 2026-11-20 (that command).
+
+**Found and left?** (1) The polder's finished-map check (`check.rs`'s `polder_checks`) asks only whether the seat's middle stands inside the plots' edge, so the cohort could not have caught the ground over the dike: the 48-seed cohorts read 0 broken before the fix as after, measured 2026-11-20 (`make cohort`); a check of the settlement's ground against the dike's outer face is not written here. (2) A declaration `- placement-changed: - on kuwabata` is read by `reviews owed` as a unit `glyph-check--` with no map rather than refused, measured 2026-11-20 (a trial line, removed): a malformed declaration owes a unit nobody can run. (3) 0019 draws the village to the east, on the landward shore; the seat picks its side by the wind and the fall, and on Kuwabata takes the north, measured 2026-11-20 (the probe's back, due north): the landward flank is whatever side the seat takes (`stage_waterward`), so the reeds follow it, and nothing ties the seat to a shore.
+
+**Performance work?** no
+
+### T240 (<why: the finding or measurement that files it>)
 
 - **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
 
-### T239 Approach (checklist part A)
+### T240 Approach (checklist part A)
 
 1. **The goal, in the world.** <the place as it should be>
 2. **The constraints.** <the FRs, decisions and pages it holds to>
@@ -847,14 +877,14 @@ tests/hooks/                 # the suites, the verdict replay through phase 1
 **Performance work?** <no - or yes, and its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
 
 
-### T240 (<why: the finding or measurement that files it>)
+### T241 (<why: the finding or measurement that files it>)
 
 - **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
 
-### T240 Approach (checklist part A)
+### T241 Approach (checklist part A)
 
 1. **The goal, in the world.** <the place as it should be>
 2. **The constraints.** <the FRs, decisions and pages it holds to>

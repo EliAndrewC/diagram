@@ -192,16 +192,19 @@ fn decide(words: &[String], root: &Path, out_root: &Path, claims: &Claims) -> cr
     if verb == "section-sha" {
         return said(digest(section.as_bytes()) + "\n");
     }
-    let why = lint::refusal(&dir, &section);
-    if !why.is_empty() {
-        return fail(format!("decide: refused - {why}\n"), 2);
-    }
     let top = dir
         .parent()
         .and_then(Path::parent)
         .unwrap_or(root)
         .to_owned();
-    if let Some(why) = approach::refusal(&dir, &top, &words[2]) {
+    // every finding of the lint and the approach gate's refusal in one report (feature 451 T25), where the first stopped the run
+    let why = lint::decide_refusal(
+        &dir,
+        &plan,
+        &section,
+        approach::refusal(&dir, &top, &words[2]),
+    );
+    if !why.is_empty() {
         return fail(format!("decide: refused - {why}\n"), 2);
     }
     let prompt = if wording_only(&section) {
@@ -237,10 +240,10 @@ fn plan_delta(dir: &Path, out_root: &Path, claims: &Claims) -> crate::Reply {
             "plan-delta: no block of {name}'s plan is owed a review\n"
         ));
     }
-    let bodies: Vec<String> = blocks(&text)
+    let bodies: Vec<(String, usize)> = blocks(&text)
         .into_iter()
         .filter(|(k, ..)| keys.contains(k))
-        .map(|(_, b, _)| b)
+        .map(|(_, b, at)| (b, at))
         .collect();
     let why = lint::plan_refusal(dir, &text, &bodies);
     if !why.is_empty() {

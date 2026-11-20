@@ -378,6 +378,30 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-20",
    "declared": "spec-fidelity"
+  },
+  "### T25 (`make decide`'s lint stopped at its first finding: a section with four findings took four runs and four turns to clear, found writing T23's section, 2026-11-20)": {
+   "sha256": "ecf04a641426cfbe47d89f6c7d39140fc3ee9c6159d03333cccb54256e88ff06",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity"
+  },
+  "### T25 Approach (checklist part A)": {
+   "sha256": "e248416cf8c786d1772ca2d341f4d900a024cd3fd27ad1d5a5b26513753ae88d",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity"
+  },
+  "### T27 (T25: the item-4 rule read only a section's first Approach block)": {
+   "sha256": "acea1a47c33f70274005dffdc48f97121656499677889fff24221f2a78409003",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity"
+  },
+  "### T27 Approach (checklist part A)": {
+   "sha256": "8950fc9ce0f21477c2dc6019ef2cca4b2914a22c77582340e3ed68f3386b7a39",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -1413,6 +1437,144 @@
      "why": "D6 is T07's by the spec's own decision; T26 takes nothing from it."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-20",
+   "blocks": [
+    "### T25 (`make decide`'s lint stopped at its first finding: a section with four findings took four runs and four turns to clear, found writing T23's section, 2026-11-20)",
+    "### T25 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D1 every rule runs to the section's end",
+     "summary": "Each plan-lint rule returns every finding with its span, gathered by lint::findings in rule order and rendered by lint::render as one refusal (count first, each rule's words once, findings beneath with plan.md lines).",
+     "class": "within",
+     "why": "This is T25's line itself: every finding of the section together, each with its line. It reduces the re-runs and turns spent clearing a plan section, the process-efficiency purpose of the 2026-11-19 request (improvement 4, fewer plan re-rounds)."
+    },
+    {
+     "id": "D2 decide adds the approach gate's refusal to the report",
+     "summary": "make decide no longer stops at the lint's first finding before asking the approach gate; the gate's refusal joins the one report.",
+     "class": "within",
+     "why": "Same purpose as D1: everything the section owes is reported in one run. No rule's verdict changes."
+    },
+    {
+     "id": "D3 plan-delta reports the same way",
+     "summary": "make plan-delta reports every changed block's findings and the open tasks lacking an approach block in the same all-findings form.",
+     "class": "within",
+     "why": "The same lint rendered by the second command that runs it; adding one-run reporting there changes no verdict and adds no new refusal. It serves the task's purpose rather than adding behavior."
+    },
+    {
+     "id": "D4 Rewritten maps offsets back",
+     "summary": "Findings are placed through the fenced-block and code-span rewrites by a Rewritten type that keeps each rule's text as before and maps offsets on the side; lint::plan_lines places a section joined from several headings.",
+     "class": "within",
+     "why": "Implementation of 'each with its line'; the rule text is explicitly kept unchanged, so verdicts are unaffected (measured: 0 of 946 sections moved)."
+    },
+    {
+     "id": "D5 label findings merged only on the identical span",
+     "summary": "A label rule's finding is merged into an earlier one only where both found the very same span; a clause inside a longer finding stays.",
+     "class": "within",
+     "why": "A presentation choice that keeps every owed label visible; it hides no finding, so nothing the task asked to report is dropped."
+    },
+    {
+     "id": "D6 each refusal states its unit and where its label sits",
+     "summary": "The unit figure, GM quote, item-4, count/differential and red-exit rules each state the unit they read in their refusal text.",
+     "class": "within",
+     "why": "T25's brief: a rule whose unit surprises its author says so in its refusal. The units listed describe the rules' existing behavior (the dump shows no verdict moved), not new rules."
+    },
+    {
+     "id": "D7 no rule's verdict moves; edits held to the plan crate",
+     "summary": "The change is reporting-only, checked by a before/after dump over every task section of every plan.md and plan-done.md, with edits confined to rust/gate/crates/plan/.",
+     "class": "within",
+     "why": "The brief's constraint, stated and measured (946 sections, 0 verdicts moved, each old first finding present in the new report, 2026-11-20)."
+    },
+    {
+     "id": "D8 found and left: ITEM4 reads only the first item 4",
+     "summary": "The item-4 rule lints only the first '4. **' of a section, so a re-answered Approach block's item 4 goes unlinted; not fixed here, filed as T27 to land before T17.",
+     "class": "within",
+     "why": "A real defect (a check passing bad work), but fixing it changes a rule's verdict, which T25's brief forbids; it is not part of what T25 or the GM's request asked T25 to do, so leaving it here narrows nothing asked. It is not dropped: it is filed as its own task with a stated landing order, and the section states why it is not fixed here (as FR-009 requires of a deferral)."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-20",
+   "blocks": [
+    "### T27 (T25: the item-4 rule read only a section's first Approach block)",
+    "### T27 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T27-withdrawn",
+     "summary": "T27 makes no change of its own; its fix (the item-4 rule reading every Approach block's item 4, not only the first) is folded into T25, red first, per T25's plan review which ruled the deferral NOT LEGITIMATE.",
+     "class": "within",
+     "why": "Nothing is dropped: the defect is still fixed, with a red-first test (FR-009, FR-012), only in T25 rather than a separate task. Moving where a fix lands does not narrow what the GM approved ('make sure all of the enforcement is real enforcement')."
+    },
+    {
+     "id": "T27-exits",
+     "summary": "Done when T25 is ticked with the fix; on red, the failure is recorded and the task set down, with any cannot-be-done claim ruled through make arbiter-ask; no landing of its own beyond the tick.",
+     "class": "within",
+     "why": "Bookkeeping that ties T27's completion to the task that carries its fix; it sets aside no requirement and leaves no defect unfixed."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-20",
+   "blocks": [
+    "### T25 (`make decide`'s lint stopped at its first finding: a section with four findings took four runs and four turns to clear, found writing T23's section, 2026-11-20)",
+    "### T25 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D1 every finding in one refusal",
+     "summary": "Each plan-lint rule runs to the section's end and returns every finding with its span; lint::findings gathers them, lint::render reports them in one refusal grouped by rule, each placed by its plan.md line; Rewritten maps offsets back without changing any rule's text.",
+     "class": "within",
+     "why": "Serves the approved improvement 4 (fewer plan re-rounds) and the request's purpose of cutting time lost to tooling: a section with four findings no longer takes four runs. Reporting only; 0 verdicts moved over 946 sections and every old first finding is in the new report (labeled dump, measured 2026-11-20)."
+    },
+    {
+     "id": "D2 decide adds the approach gate's refusal",
+     "summary": "make decide reports the approach gate's refusal beside the lint's findings instead of stopping at the lint's first.",
+     "class": "within",
+     "why": "Same purpose as D1: one run shows all of a section's refusals. No gate verdict changes."
+    },
+    {
+     "id": "D3 plan-delta reports the same way",
+     "summary": "make plan-delta reports every changed block's findings and the open tasks with no approach block in one report.",
+     "class": "within",
+     "why": "Extends the same reporting change to the other command that runs the lint; no verdict changes."
+    },
+    {
+     "id": "D4 merge only identical spans",
+     "summary": "A label rule's finding is merged into an earlier one only where both found the very same span; a clause inside a longer finding stays reported.",
+     "class": "within",
+     "why": "Reporting detail that keeps every owed label visible; drops nothing the lint refuses."
+    },
+    {
+     "id": "D5 each refusal states its unit",
+     "summary": "Each rule's refusal states the unit it reads and where its label must sit (unit figure: clause cut at ';'; GM quote: to sentence end or blank line; item 4: sentence, only measured/m: pass; count and differential: sentence; red exit: item 6).",
+     "class": "within",
+     "why": "Wording of refusals only, so an author fixes each finding in one pass; serves fewer re-rounds. Verdicts unchanged per the labeled dump."
+    },
+    {
+     "id": "D6 item-4 rule reads every Approach block's item 4",
+     "summary": "The item-4 rule reads item 4 of every Approach block (part A or B) and one under no heading, where it read only the first '4. **' item; red first a_second_approach_blocks_item_4_is_read_too 0 of 1 -> 1 of 1.",
+     "class": "within",
+     "why": "Fixes a defect in a check that passed bad work (a re-answered block's unlabelled figure reached review unrefused) - fix as we go, and real enforcement as the GM asked. It broadens enforcement, not narrows it. Reach measured and named: 0 verdicts moved over 949 sections, 51 new findings in 28 named sections (4 + 6 + 18 = 28), each already refused."
+    },
+    {
+     "id": "D7 performance checklist's item 4 not read",
+     "summary": "The item-4 rule filters by the Approach block heading (APPROACH_BLOCK), so a performance checklist's item 4 is not read.",
+     "class": "within",
+     "why": "Leaves no defect: the item-4 rule's subject is the Approach checklist's 'Do they describe the world here?' question, and the old rule read only the first '4. **' item, so it never read a performance checklist's item 4 as such; the change moved 0 verdicts over 949 sections (labeled dump, measured 2026-11-20). Nothing passes that the rule was meant to refuse. The block's '444 T26 and T27' sentence carries no measurement label and is not relied on here."
+    },
+    {
+     "id": "D8 constraints and exits",
+     "summary": "Edits held to rust/gate/crates/plan/; exits are the red-first tests, rust-test, quick, static, hooks-test and the verdict dump moving no verdict but where a bug is fixed; found and left: none.",
+     "class": "within",
+     "why": "Bounds the work to the task as filed; leaves no known defect (the item-4 bug is fixed in this task, not deferred)."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -1658,6 +1820,82 @@
      "summary": "Dispatch line carries the brief's task now; the prompt's first line and the agent's tokens stay with T07 (D6).",
      "class": "within",
      "why": "D6 is T07's by the spec's own decision; T26 takes nothing from it."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T25": {
+   "section_sha256": "241053226218ac363e5a4c02455baf52bd3fc24b9cafd1ca234946f65889a123",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D1 every finding in one refusal",
+     "summary": "Each plan-lint rule runs to the section's end and returns every finding with its span; lint::findings gathers them, lint::render reports them in one refusal grouped by rule, each placed by its plan.md line; Rewritten maps offsets back without changing any rule's text.",
+     "class": "within",
+     "why": "Serves the approved improvement 4 (fewer plan re-rounds) and the request's purpose of cutting time lost to tooling: a section with four findings no longer takes four runs. Reporting only; 0 verdicts moved over 946 sections and every old first finding is in the new report (labeled dump, measured 2026-11-20)."
+    },
+    {
+     "id": "D2 decide adds the approach gate's refusal",
+     "summary": "make decide reports the approach gate's refusal beside the lint's findings instead of stopping at the lint's first.",
+     "class": "within",
+     "why": "Same purpose as D1: one run shows all of a section's refusals. No gate verdict changes."
+    },
+    {
+     "id": "D3 plan-delta reports the same way",
+     "summary": "make plan-delta reports every changed block's findings and the open tasks with no approach block in one report.",
+     "class": "within",
+     "why": "Extends the same reporting change to the other command that runs the lint; no verdict changes."
+    },
+    {
+     "id": "D4 merge only identical spans",
+     "summary": "A label rule's finding is merged into an earlier one only where both found the very same span; a clause inside a longer finding stays reported.",
+     "class": "within",
+     "why": "Reporting detail that keeps every owed label visible; drops nothing the lint refuses."
+    },
+    {
+     "id": "D5 each refusal states its unit",
+     "summary": "Each rule's refusal states the unit it reads and where its label must sit (unit figure: clause cut at ';'; GM quote: to sentence end or blank line; item 4: sentence, only measured/m: pass; count and differential: sentence; red exit: item 6).",
+     "class": "within",
+     "why": "Wording of refusals only, so an author fixes each finding in one pass; serves fewer re-rounds. Verdicts unchanged per the labeled dump."
+    },
+    {
+     "id": "D6 item-4 rule reads every Approach block's item 4",
+     "summary": "The item-4 rule reads item 4 of every Approach block (part A or B) and one under no heading, where it read only the first '4. **' item; red first a_second_approach_blocks_item_4_is_read_too 0 of 1 -> 1 of 1.",
+     "class": "within",
+     "why": "Fixes a defect in a check that passed bad work (a re-answered block's unlabelled figure reached review unrefused) - fix as we go, and real enforcement as the GM asked. It broadens enforcement, not narrows it. Reach measured and named: 0 verdicts moved over 949 sections, 51 new findings in 28 named sections (4 + 6 + 18 = 28), each already refused."
+    },
+    {
+     "id": "D7 performance checklist's item 4 not read",
+     "summary": "The item-4 rule filters by the Approach block heading (APPROACH_BLOCK), so a performance checklist's item 4 is not read.",
+     "class": "within",
+     "why": "Leaves no defect: the item-4 rule's subject is the Approach checklist's 'Do they describe the world here?' question, and the old rule read only the first '4. **' item, so it never read a performance checklist's item 4 as such; the change moved 0 verdicts over 949 sections (labeled dump, measured 2026-11-20). Nothing passes that the rule was meant to refuse. The block's '444 T26 and T27' sentence carries no measurement label and is not relied on here."
+    },
+    {
+     "id": "D8 constraints and exits",
+     "summary": "Edits held to rust/gate/crates/plan/; exits are the red-first tests, rust-test, quick, static, hooks-test and the verdict dump moving no verdict but where a bug is fixed; found and left: none.",
+     "class": "within",
+     "why": "Bounds the work to the task as filed; leaves no known defect (the item-4 bug is fixed in this task, not deferred)."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T27": {
+   "section_sha256": "6f42c2b098716a8fb010832492b4dfafeafd146b9195c3e4f0015c6251746311",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T27-withdrawn",
+     "summary": "T27 makes no change of its own; its fix (the item-4 rule reading every Approach block's item 4, not only the first) is folded into T25, red first, per T25's plan review which ruled the deferral NOT LEGITIMATE.",
+     "class": "within",
+     "why": "Nothing is dropped: the defect is still fixed, with a red-first test (FR-009, FR-012), only in T25 rather than a separate task. Moving where a fix lands does not narrow what the GM approved ('make sure all of the enforcement is real enforcement')."
+    },
+    {
+     "id": "T27-exits",
+     "summary": "Done when T25 is ticked with the fix; on red, the failure is recorded and the task set down, with any cannot-be-done claim ruled through make arbiter-ask; no landing of its own beyond the tick.",
+     "class": "within",
+     "why": "Bookkeeping that ties T27's completion to the task that carries its fix; it sets aside no requirement and leaves no defect unfixed."
     }
    ],
    "verdict": "CLEAR"

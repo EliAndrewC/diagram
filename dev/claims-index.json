@@ -34903,80 +34903,110 @@
   ],
   "verdict": "IN-STEP"
  },
- "rust/phases/src/driver/polder.rs::roll_polder#its lines and no pond": {
-  "body": "0b89cf14ae3692c1",
-  "claim": "its lines and no pond - GUESS: the field ditches, the feeder and the outfall handed as the lines `stage_seat` keeps its way out from crossing, as a comb's channels are; the wild pond not handed as a pond at its berth, the reed fringe round it standing for it",
-  "code": "328d0f161de60afd",
-  "core": "02f6399c8c255638",
+ "rust/phases/src/driver/polder.rs::off_the_dike#a ring off the outer face": {
+  "body": "25f575694b42c7e9",
+  "claim": "a ring off the outer face - polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing: the village on the dry ground just off the dike (the page's own GUESS); polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing: the outer face the inner one pushed out by the breadth rolled along it",
+  "code": "4095273f00ef4930",
+  "core": "06907cd30648d9dd",
   "date": "2026-11-20",
-  "note": "ditches, feeder and outfall handed as lines; pond None, the fringe stands for it",
+  "note": "each side is pushed out to the dike's outer face at its widest reach, so the ring starts at the dike's foot on the dry side (the page's GUESS on village placement); the 0027 clause only describes the input `s.dike.outer`, which this function reads and does not build",
+  "pages": {
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "3012a8eb9aff8c32"
+  },
+  "research": "765c28e2d975a432",
+  "rests": [
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:6b26009a944726e2",
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:8feb1eada8b008c2",
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:9b079184810cacb3"
+  ],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/driver/polder.rs::off_the_dike#straight at the widest": {
+  "body": "25f575694b42c7e9",
+  "claim": "straight at the widest - GUESS: polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing: the breadth 14 to 40 ft, changing along the length, so a side held straight at its widest stands off a pinched stretch by up to the waves' spread, about 26 ft; the outer face itself handed instead (its 136 to 178 stations each a margin) offered 68 to 89 candidate seats on the five polders measured, their backs turned with each wave, where the four straight sides offer 2 (measured 2026-11-20, feature 449 T239) - priced and not taken",
+  "code": "d1fd7f686a7d08f6",
+  "core": "06907cd30648d9dd",
+  "date": "2026-11-20",
+  "note": "the bundled page does not say whether a village edge follows a wavering dike face or holds straight; this is a priced GUESS and the code holds each side straight at the widest reach (max over outer points, floored at 0)",
   "pages": {},
-  "reads": "bdb5a83d048d151c",
+  "research": "",
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/driver/polder.rs::off_the_dike#the corners": {
+  "body": "25f575694b42c7e9",
+  "claim": "the corners - NONE: two offset sides met at their crossing; a block's sides are never parallel at a corner",
+  "code": "614aa177634497eb",
+  "core": "06907cd30648d9dd",
+  "date": "2026-11-20",
+  "note": "meeting two offset sides at their crossing is geometry with no physical decision",
+  "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
- "rust/phases/src/driver/polder.rs::roll_polder#its wet ground": {
-  "body": "0b89cf14ae3692c1",
-  "claim": "its wet ground - village-lanes.drawing: a track keeps off wet ground - the wild pond's reed fringe handed as the seat's reeds",
-  "code": "13fc39fb9f7e8af9",
-  "core": "02f6399c8c255638",
+ "rust/phases/src/driver/polder.rs::roll_polder#its lines and no pond": {
+  "body": "b05149a4ff18d98c",
+  "claim": "its lines and no pond - GUESS: the field ditches, the feeder and the outfall handed as the lines `stage_seat` keeps its way out from crossing, as a comb's channels are; the wild pond not handed as a pond at its berth, the reed fringe round it standing for it",
+  "code": "6948f293e8a67140",
+  "core": "7ad3f22c130e711f",
   "date": "2026-11-20",
-  "note": "the wild pond's reed fringe handed as the seat's reeds",
+  "note": "the code hands the ditches, the feeder and the outfall as `lines`, sets `pond: None` and passes the fringe as the reeds; neither page says whether a settlement's way out may cross a channel, so GUESS is the right label, and the new ring off the dike leaves it true",
+  "pages": {},
+  "reads": "bdb5a83d048d151c",
+  "research": "",
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/driver/polder.rs::roll_polder#its wet ground": {
+  "body": "b05149a4ff18d98c",
+  "claim": "its wet ground - village-lanes.drawing: a track keeps off wet ground - the wild pond's reed fringe handed as the seat's reeds",
+  "code": "75d4fd119808b6f7",
+  "core": "7ad3f22c130e711f",
+  "date": "2026-11-20",
+  "note": "`reeds: vec![s.polder.fringe.clone()]` keeps the seat's ways off the wild pond's reed fringe, as \"Every way on these maps keeps off every marsh's reeds\" asks",
   "pages": {
    "0081-village-lanes.drawing.html": "84bf7e092c8fca20"
   },
   "reads": "bdb5a83d048d151c",
   "research": "348d3cab06271e76",
   "rests": [
-   "0081-village-lanes.drawing.html:48cdd569d493520c",
-   "0081-village-lanes.drawing.html:7237abd9ead63ebe"
+   "0081-village-lanes.drawing.html:48cdd569d493520c"
   ],
   "verdict": "IN-STEP"
  },
- "rust/phases/src/driver/polder.rs::roll_polder#the ring the fields' edge, not the dike's": {
-  "body": "0b89cf14ae3692c1",
-  "claim": "the ring the fields' edge, not the dike's - GUESS: polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing draws the village on the dry ground a few steps off the dike (its own GUESS), but the seat is handed neither the dike nor the ring canal inside it, so nothing keeps its ground off them; on Kuwabata the settlement's ground is drawn over the north dike and the head canal (found by feature 449 T236, left to feature 449 T239)",
-  "code": "fe5ff7da0aafff1c",
-  "core": "02f6399c8c255638",
-  "date": "2026-11-20",
-  "note": "known (449 T239): the seat's ring is `s.polder.outline` and `Ground` gets neither the dike nor the ring canal, so the settlement's ground can lie over them, not \"on the dry ground just off the dike\"; the departure as stated is what the code does; fix: code; effect: on Kuwabata the settlement's ground is drawn over the north dike and the head canal",
-  "pages": {},
-  "reads": "bdb5a83d048d151c",
-  "research": "",
-  "verdict": "DRIFTED"
- },
  "rust/phases/src/driver/polder.rs::roll_polder#the strips after the seat": {
-  "body": "0b89cf14ae3692c1",
+  "body": "b05149a4ff18d98c",
   "claim": "the strips after the seat - polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing: every flank but the landward one holds water back - the seat's side names the landward flank, so the waterside strips are laid once it is known (`stage_waterward`)",
-  "code": "d391f5e69a9e90d9",
-  "core": "02f6399c8c255638",
+  "code": "6646cc6dce11a961",
+  "core": "7ad3f22c130e711f",
   "date": "2026-11-20",
-  "note": "`flanks` drops the seat's compass side; the strips are laid after `stage_seat`",
+  "note": "`stage_waterward` runs after `stage_seat` and takes the seat's first frame's `out` as the landward flank, so the reed strips go on every other flank, as \"every flank of a polder but the landward one\" says",
   "pages": {
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "3012a8eb9aff8c32"
   },
   "reads": "bdb5a83d048d151c",
   "research": "765c28e2d975a432",
   "rests": [
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:152b5508568f62e5",
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:c8a3bf21f642aa46"
   ],
   "verdict": "IN-STEP"
  },
- "rust/phases/src/driver/polder.rs::roll_polder#the village against its polder": {
-  "body": "0b89cf14ae3692c1",
-  "claim": "the village against its polder - polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing: a village is drawn hard against its own polder, its houses pressing up to its fields (the page's own GUESS) - the polder's field outline (`Polder::outline`, the plots' edge) handed as the seat's ring, as a comb hands its fan",
-  "code": "035c55cc8b488c49",
-  "core": "02f6399c8c255638",
+ "rust/phases/src/driver/polder.rs::roll_polder#the village off its polder's dike": {
+  "body": "b05149a4ff18d98c",
+  "claim": "the village off its polder's dike - polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing: the village drawn on the dry ground just off the dike, a few steps off it (the page's own GUESS), and hard against its own polder (its GUESS) - the seat handed a ring off the dike's outer face (`off_the_dike`), as a comb hands its fan, so the settlement's ground runs out from the dike's foot and never over the dike or the ring canal inside it, its houses `STANDOFF_FT` off that ring",
+  "code": "da3f120b4eab7ab7",
+  "core": "7ad3f22c130e711f",
   "date": "2026-11-20",
-  "note": "the field outline is handed as the ring, the page's own GUESS",
+  "note": "the seat gets the `off_the_dike` ring as its ground, so the settlement starts outside the dike's outer face and never covers the dike or the ring canal inside it; the village is on dry ground just off the dike and hard against its own polder (both GUESSes on the page)",
   "pages": {
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "3012a8eb9aff8c32"
   },
   "reads": "bdb5a83d048d151c",
   "research": "765c28e2d975a432",
   "rests": [
-   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:8feb1eada8b008c2"
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:6b26009a944726e2",
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:8feb1eada8b008c2",
+   "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:9b079184810cacb3"
   ],
   "verdict": "IN-STEP"
  },

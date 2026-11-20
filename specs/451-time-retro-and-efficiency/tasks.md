@@ -124,3 +124,5 @@ MVP is T02-T11 (User Story 1: the retrospective is one command). Each refusal (T
       research: rendering
 - [ ] T25 make decide's figure lint stops at its first finding (found writing T23's section, 2026-11-20): an unlabeled figure is reported one a run, so a section with four took four runs and four turns to clear - it reports every finding of the section together, each with its line, as make done reports every failure together, red first with a fixture section holding three
       research: rendering
+- [ ] T27 Withdrawn: folded into T25 (T25's plan review, 2026-11-20, BLOCKED its deferral). make decide checks item 4 of a section's first Approach block only (found by T25, 2026-11-20): the item-4 rule reads only the section's first '4. **' item, so an unlabeled figure in a re-answered Approach block's item 4 reaches the plan review - every Approach block's item 4 read, red first with a section holding two; lands before T17
+      research: rendering

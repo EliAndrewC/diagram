@@ -307,9 +307,8 @@ fn decide_refuses_on_the_lint_and_on_the_checklist_before_any_review() {
     );
     let linted = run(&root, &["decide", "375", "T05"]);
     assert_eq!(linted.code, 2);
-    assert!(linted
-        .stderr
-        .contains("decide: refused - the section quotes the GM"));
+    assert!(linted.stderr.contains("decide: refused - 1 finding - "));
+    assert!(linted.stderr.contains("(1) the section quotes the GM"));
     feature_at(&root, Some(PLAN_TASKS), None, "376-y");
     std::fs::create_dir_all(root.join("docs")).unwrap();
     std::fs::write(
@@ -321,7 +320,34 @@ fn decide_refuses_on_the_lint_and_on_the_checklist_before_any_review() {
     assert_eq!(asked.code, 2);
     assert!(asked
         .stderr
-        .contains("decide: refused - T05 has no `### T05 Approach` block"));
+        .contains("(1) T05 has no `### T05 Approach` block"));
+}
+
+/// Feature 451 T25: a section with findings of three kinds is refused once with all three, each with its plan.md line and its fix - one
+/// run, where the lint stopped at its first finding and a section of four took four runs (2026-11-20).
+#[test]
+fn decide_reports_every_finding_of_the_section_in_one_run() {
+    let root = repo();
+    let plan = "# plan\n\n## T05 x\n\n- **Approach**: the check takes 48 s on a landing.\n\nAs the GM put it, \"not in the request at all\".\n\n### T05 Approach (checklist part A)\n\n4. **World.** The ratio is 7.\n6. **The exits.** Red: ruled through `make arbiter-ask`.\n";
+    feature_at(&root, Some(plan), None, "375-x");
+    let got = run(&root, &["decide", "375", "T05"]);
+    assert_eq!(got.code, 2);
+    let told = &got.stderr;
+    assert_eq!(told.matches("decide: refused").count(), 1, "{told}");
+    assert!(told.contains("3 findings"), "{told}");
+    for (line, words, fix) in [
+        (5, "takes 48 s", "a figure with a unit"),
+        (
+            7,
+            "not in the request at all",
+            "add the GM's words to request.md",
+        ),
+        (11, "The ratio is 7", "Approach item 4"),
+    ] {
+        let at = format!("plan.md:{line}");
+        let all = [at.as_str(), words, fix].iter().all(|w| told.contains(w));
+        assert!(all, "{told}");
+    }
 }
 
 #[test]

@@ -13,7 +13,7 @@ use super::{
     RESERVED_INK, RUN_W,
 };
 use crate::field::fan::Pt;
-use crate::field::geom::{dist, seg_dist};
+use crate::field::geom::{dist, seg_dist, unit};
 use crate::field::staged::{polder_stage, PolderStage};
 use crate::seat::Seated;
 use crate::waterward::{fringe, Fringe};
@@ -360,13 +360,61 @@ fn stage_waterward(p: &Plan, s: &PolderStage, seated: Option<&Seated>) -> Fringe
     )
 }
 
-/// The hamlet on a polder: the block, its seat and its waterside reeds, drawn. The seat is handed the polder's own ground: the
-/// field outline as the ring it seats against, the field ditches, the feeder and the outfall as the lines its way out may not
-/// cross, and the wild pond's reed fringe as wet ground; the waterside strips come after it, laid off the flanks it does not take.
+/// The ring the seat is handed on a polder: each side of the block's outline (the plots' edge, four sides) pushed straight out to
+/// the dike's outer face at its widest on that side, and the sides met again at their corners - so every point of the outer face
+/// lies inside it, and the settlement's ground laid off it stands off the dike. The outer face is read once, each point projected
+/// on every side's outward normal, tallied to the seat.
 ///
 /// Research:
-///     the village against its polder - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: a village is drawn hard against its own polder, its houses pressing up to its fields (the page's own GUESS) - the polder's field outline (`Polder::outline`, the plots' edge) handed as the seat's ring, as a comb hands its fan
-///     the ring the fields' edge, not the dike's - GUESS: research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html draws the village on the dry ground a few steps off the dike (its own GUESS), but the seat is handed neither the dike nor the ring canal inside it, so nothing keeps its ground off them; on Kuwabata the settlement's ground is drawn over the north dike and the head canal (found by feature 449 T236, left to feature 449 T239)
+///     a ring off the outer face - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: the village on the dry ground just off the dike (the page's own GUESS); research/questions/0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html: the outer face the inner one pushed out by the breadth rolled along it
+///     straight at the widest - GUESS: research/questions/0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html: the breadth 14 to 40 ft, changing along the length, so a side held straight at its widest stands off a pinched stretch by up to the waves' spread, about 26 ft; the outer face itself handed instead (its 136 to 178 stations each a margin) offered 68 to 89 candidate seats on the five polders measured, their backs turned with each wave, where the four straight sides offer 2 (measured 2026-11-20, feature 449 T239) - priced and not taken
+///     the corners - NONE: two offset sides met at their crossing; a block's sides are never parallel at a corner
+fn off_the_dike(outline: &[Pt], outer: &[Pt], counts: &mut HashMap<String, u64>) -> Vec<Pt> {
+    let sides = outline.len();
+    #[expect(clippy::cast_precision_loss, reason = "a ring's few corners")]
+    let mid = (
+        outline.iter().map(|p| p.0).sum::<f64>() / sides as f64,
+        outline.iter().map(|p| p.1).sum::<f64>() / sides as f64,
+    );
+    // each side's start, direction along it and outward normal
+    let frames: Vec<(Pt, Pt, Pt)> = (0..sides)
+        .map(|i| {
+            let (start, end) = (outline[i], outline[(i + 1) % sides]);
+            let along = unit(start, end);
+            let flip = (along.0 * (start.1 - mid.1) - along.1 * (start.0 - mid.0)).signum();
+            (start, along, (-along.1 * flip, along.0 * flip))
+        })
+        .collect();
+    // ONE PASS over the outer face, each point's reach past every side kept at its widest
+    let mut reach = vec![0.0_f64; sides];
+    for pt in outer {
+        for (r, &(start, _, nrm)) in reach.iter_mut().zip(&frames) {
+            *r = r.max((pt.0 - start.0) * nrm.0 + (pt.1 - start.1) * nrm.1);
+        }
+    }
+    crate::counts::tally(counts, "test@seat_ring", (outer.len() * sides) as u64);
+    let pushed: Vec<(Pt, Pt)> = frames
+        .iter()
+        .zip(&reach)
+        .map(|(&(start, along, nrm), &r)| ((start.0 + nrm.0 * r, start.1 + nrm.1 * r), along))
+        .collect();
+    (0..sides)
+        .map(|k| {
+            let ((from, dir), (to, dir_next)) = (pushed[(k + sides - 1) % sides], pushed[k]);
+            let t = ((to.0 - from.0) * dir_next.1 - (to.1 - from.1) * dir_next.0)
+                / (dir.0 * dir_next.1 - dir.1 * dir_next.0);
+            (from.0 + dir.0 * t, from.1 + dir.1 * t)
+        })
+        .collect()
+}
+
+/// The hamlet on a polder: the block, its seat and its waterside reeds, drawn. The seat is handed the polder's own ground: a ring
+/// off the dike's outer face as the ring it seats against (`off_the_dike`), the field ditches, the feeder and the outfall as the
+/// lines its way out may not cross, and the wild pond's reed fringe as wet ground; the waterside strips come after it, laid off
+/// the flanks it does not take.
+///
+/// Research:
+///     the village off its polder's dike - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: the village drawn on the dry ground just off the dike, a few steps off it (the page's own GUESS), and hard against its own polder (its GUESS) - the seat handed a ring off the dike's outer face (`off_the_dike`), as a comb hands its fan, so the settlement's ground runs out from the dike's foot and never over the dike or the ring canal inside it, its houses `STANDOFF_FT` off that ring
 ///     its wet ground - research/questions/0081-village-lanes.drawing.html: a track keeps off wet ground - the wild pond's reed fringe handed as the seat's reeds
 ///     its lines and no pond - GUESS: the field ditches, the feeder and the outfall handed as the lines `stage_seat` keeps its way out from crossing, as a comb's channels are; the wild pond not handed as a pond at its berth, the reed fringe round it standing for it
 ///     the strips after the seat - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: every flank but the landward one holds water back - the seat's side names the landward flank, so the waterside strips are laid once it is known (`stage_waterward`)
@@ -380,14 +428,19 @@ pub(super) fn roll_polder(p: Plan) -> Rolled {
         .map(|d| d.pts.as_slice())
         .chain([s.polder.feeder.as_slice(), s.outfall.as_slice()])
         .collect();
+    let mut ring_counts = HashMap::new();
+    let ring = off_the_dike(&s.polder.outline, &s.dike.outer, &mut ring_counts);
     let ground = Ground {
-        ring: &s.polder.outline,
+        ring: &ring,
         lines,
         brook: &[],
         reeds: vec![s.polder.fringe.clone()],
         pond: None,
     };
-    let seated = kept(stage_seat(&p, &ground), &mut refusals);
+    let mut seated = kept(stage_seat(&p, &ground), &mut refusals);
+    if let Some(x) = seated.as_mut() {
+        crate::counts::merge(&mut x.counts, &ring_counts);
+    }
     let ward = stage_waterward(&p, &s, seated.as_ref());
     let mut svg = Svg::default();
     draw_polder(&mut svg, &s);
@@ -684,6 +737,124 @@ mod tests {
                     .flatten()
                     .any(|&p| (seg_dist(p, run.0, run.1) - super::RUN_W / 2.0).abs() < 1e-6));
             }
+        }
+        assert_eq!(got, want);
+    }
+
+    /// The settlement's ground walked on a one-foot grid: the square feet of it inside the dike's outer face (deeper than half a
+    /// foot past it, the rounding allowed), and those within the head canal's half-width of its course.
+    #[expect(
+        clippy::cast_possible_truncation,
+        reason = "a grid's bounds in whole feet"
+    )]
+    fn ground_over(ground: &[Pt], s: &crate::field::staged::PolderStage) -> (usize, usize) {
+        let outer = &s.dike.outer;
+        let head = s.polder.ditches.iter().find(|d| d.seg == "feeder").unwrap();
+        let (lo, hi) = ground.iter().fold(
+            (
+                (f64::INFINITY, f64::INFINITY),
+                (f64::NEG_INFINITY, f64::NEG_INFINITY),
+            ),
+            |(lo, hi), p| {
+                (
+                    (lo.0.min(p.0), lo.1.min(p.1)),
+                    (hi.0.max(p.0), hi.1.max(p.1)),
+                )
+            },
+        );
+        let (mut dike, mut canal) = (0, 0);
+        for x in (lo.0.floor() as i64)..=(hi.0.ceil() as i64) {
+            for y in (lo.1.floor() as i64)..=(hi.1.ceil() as i64) {
+                #[expect(clippy::cast_precision_loss, reason = "whole feet on a map")]
+                let p = (x as f64 + 0.5, y as f64 + 0.5);
+                if !inside(p, ground) {
+                    continue;
+                }
+                let deep = (0..outer.len())
+                    .all(|k| seg_dist(p, outer[k], outer[(k + 1) % outer.len()]) > 0.5);
+                dike += usize::from(inside(p, outer) && deep);
+                canal += usize::from(
+                    head.pts
+                        .windows(2)
+                        .any(|c| seg_dist(p, c[0], c[1]) < head.w / 2.0),
+                );
+            }
+        }
+        (dike, canal)
+    }
+
+    /// The ring off the dike holds the whole outer face, each side touching it at its widest, on a block turned obliquely.
+    #[test]
+    fn the_ring_off_the_dike_holds_the_outer_face_and_touches_it() {
+        let (c, sn) = (30f64.to_radians().cos(), 30f64.to_radians().sin());
+        let at = |x: f64, y: f64| (100.0 + x * c - y * sn, 50.0 + x * sn + y * c);
+        let outline = [
+            at(0.0, 0.0),
+            at(0.0, 200.0),
+            at(300.0, 200.0),
+            at(300.0, 0.0),
+        ];
+        // a waving face, 20 to 40 ft out on each side
+        let outer: Vec<Pt> = (0..40)
+            .map(|k| {
+                let w = 30.0 + 10.0 * (f64::from(k) * 0.7).sin();
+                let t = f64::from(k % 10) / 10.0;
+                match k / 10 {
+                    0 => at(-w, 200.0 * t),
+                    1 => at(300.0 * t, 200.0 + w),
+                    2 => at(300.0 + w, 200.0 * (1.0 - t)),
+                    _ => at(300.0 * (1.0 - t), -w),
+                }
+            })
+            .collect();
+        let ring = super::off_the_dike(&outline, &outer, &mut std::collections::HashMap::new());
+        assert_eq!(ring.len(), 4);
+        // the same ring whichever way the block's corners turn
+        let mut back = outline;
+        back.reverse();
+        let mut turned = super::off_the_dike(&back, &outer, &mut std::collections::HashMap::new());
+        turned.reverse();
+        for (p, q) in ring.iter().zip(&turned) {
+            assert!(dist(*p, *q) < 1e-9, "{ring:?} against {turned:?}");
+        }
+        for &p in &outer {
+            let edge = (0..4)
+                .map(|i| seg_dist(p, ring[i], ring[(i + 1) % 4]))
+                .fold(f64::INFINITY, f64::min);
+            assert!(inside(p, &ring) || edge < 1e-9, "{p:?} outside {ring:?}");
+        }
+        for i in 0..4 {
+            let near = outer
+                .iter()
+                .map(|&p| seg_dist(p, ring[i], ring[(i + 1) % 4]))
+                .fold(f64::INFINITY, f64::min);
+            assert!(near < 1e-9, "side {i} stands {near} ft off the face");
+        }
+    }
+
+    /// THE SETTLEMENT STANDS OFF THE DIKE (449 T239): on Kuwabata and on a grid polder falling obliquely, no square foot of the
+    /// settlement's ground lies inside the dike's outer face - on the dike, the ring canal or the fields - nor within the head
+    /// canal's half-width of its course. Red before T239, the seat handed the plots' edge as its ring: Kuwabata's ground had
+    /// 27,322 ft2 inside the outer face and 2,784 ft2 on the head canal, the oblique polder's 26,583 and 3,168.
+    #[test]
+    fn the_settlement_stands_off_the_dike_and_the_head_canal() {
+        let (mut got, mut want) = (Vec::new(), Vec::new());
+        for spec in [
+            r#"{"name": "Kuwabata", "seed": 21, "households": 16, "down_deg": 90, "field_archetype": "mulberry_dike_fishpond", "pond_layout": "mosaic", "dike_crop": "mulberry"}"#,
+            r#"{"name": "R", "seed": 5, "households": 12, "down_deg": 30, "field_archetype": "polder_grid"}"#,
+        ] {
+            let r = roll(&parse(spec).unwrap()).unwrap();
+            let s = r.polder.as_ref().unwrap();
+            let frame = &r.seated.as_ref().expect("a seat").frames[0];
+            let (dike, head) = ground_over(&crate::driver::settlement_ground(frame), s);
+            got.push(format!(
+                "{}: {dike} ft2 inside the dike's outer face, {head} ft2 on the head canal",
+                r.plan.name
+            ));
+            want.push(format!(
+                "{}: 0 ft2 inside the dike's outer face, 0 ft2 on the head canal",
+                r.plan.name
+            ));
         }
         assert_eq!(got, want);
     }

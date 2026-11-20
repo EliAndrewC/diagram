@@ -1248,6 +1248,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-20",
    "declared": "spec-fidelity"
+  },
+  "### T239 (T236's finding: Kuwabata's settlement's ground drawn over the north dike and the head canal, the seat handed the plots' edge as its ring)": {
+   "sha256": "5983128298ce2223e244924bd90375ab0c38167e04f0dbea7aa177d73ea20894",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity"
+  },
+  "### T239 Approach (checklist part A)": {
+   "sha256": "f3aff466a4239e5a53ae252711b6e95766657e4e3d1b02769a80234cb7be9e59",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -16389,6 +16401,67 @@
      "why": "Arithmetic re-derived: 3929/27296=0.144, 5501/37653=0.146, log2(5501/3929)=0.486; within the derived budget and its allowance, and the work budgets (FR-022) are kept, not bypassed; whether a re-accept needs the GM's words is left open to the gate, not waived."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-20",
+   "blocks": [
+    "### T239 (T236's finding: Kuwabata's settlement's ground drawn over the north dike and the head canal, the seat handed the plots' edge as its ring)",
+    "### T239 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T239-ring",
+     "summary": "roll_polder hands the seat a ring off the dike's outer face (each side pushed straight out to the outer face at its widest on that side, corners re-met) where it handed the plots' edge",
+     "class": "within",
+     "why": "Fixes a defect in the sense the GM set (2026-11-18 'fix all known bugs in each step', 2026-11-19 what a defect is): the settlement's ground drawn over the dike and head canal contradicts page 0019's village on dry ground off the dike, a wrong outcome a reader sees. Holding each side straight at the dike's widest is a labeled GUESS that keeps the ground off the dike everywhere; it narrows nothing asked."
+    },
+    {
+     "id": "T239-not-outer-face",
+     "summary": "T236's proposal (hand the outer face itself, 82-89 candidates against 2) priced and not taken",
+     "class": "within",
+     "why": "A design choice between two ways to the same outcome; T236's proposal is a session finding, not the GM's request, and the chosen ring reaches 0 ft2 over the dike and canal on all five polders measured. Cost and design are not fidelity findings."
+    },
+    {
+     "id": "T239-claim",
+     "summary": "roll_polder's and off_the_dike's comments restate the claim to page 0019",
+     "class": "within",
+     "why": "Keeps the research claim matching the corrected behavior (FR-002: the research claims a piece carries hold)."
+    },
+    {
+     "id": "T239-reviews-none",
+     "summary": "No settlement-review or glyph-check owed: only the driver's placeholder ground ('-', no registry element) and its label move on Kuwabata, ink census unchanged; declared as a none: line under Occasions",
+     "class": "within",
+     "why": "FR-023 (feature 444) already suspends a settlement-review or glyph-check for a pool hamlet a Rust stage moves while the switch stands at rust-only; the block's own reason (no unit can name '-') reaches the same result. Nothing asked is narrowed."
+    },
+    {
+     "id": "T239-exits-budget",
+     "summary": "Exits (red-first test, make quick/static/counters-inert, 48-seed cohort per polder form) and budget (seat.polder rises 1,682/2,089 to 2,185/2,875; the stage has no accepted budget)",
+     "class": "within",
+     "why": "Verification of the requested fix and the work-budget record FR-022 keeps; the cohort is run voluntarily though FR-023 does not require it. No case excluded."
+    },
+    {
+     "id": "T239-left-1-polder-check",
+     "summary": "Found and left: polder_checks asks only whether the seat's middle is inside the plots' edge, so it passes ground over the dike; a check against the outer face not written here",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This is a defect (a check that passes bad work), so leaving it in T239 narrows 'fix all known bugs in each step'. But the GM's rule is per step ('before moving on to porting the next step'), and the dispatch states it is carried by filed task T240 before T158, the next step's port; deferral within the step to a filed task keeps the rule's purpose. Legitimate only so long as T240 lands before T158."
+    },
+    {
+     "id": "T239-left-2-malformed-declaration",
+     "summary": "Found and left: a malformed Occasions declaration '- placement-changed: - on kuwabata' is read as a unit glyph-check-- with no map rather than refused",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "A tool answering wrongly is a defect; it is outside this task's subject (the seat's ring) and is carried by filed task T238 before T158, which satisfies the GM's per-step rule. Legitimate on that filing."
+    },
+    {
+     "id": "T239-left-3-landward-side",
+     "summary": "Found and left: 0019 draws the village on the landward (east) shore; the seat picks its side by wind and fall (north on Kuwabata) and nothing ties it to a shore",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Whether the village stands on the landward side is a research-claim question (a possible defect, not a mere difference from the page's drawn orientation; 'east' itself is not owed). Left here and carried by filed task T240 before T158, inside the step, which is what the GM's 'fix all known bugs in each step before moving on' asks. Legitimate on that filing; if T240 finds the side reads fine and matches 0019's claim it closes by restating the claim, per the GM's 2026-11-19 rule."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -28703,6 +28776,65 @@
      "summary": "waterward.polder's counted work rises to 3,929 and 5,501 (about 0.14 and 0.15 of budget, exponent 0.49 against 0.464 + 0.05 allowance); the ratchet refusal is routed through a MODE AUDIT and budget-accept by the caller.",
      "class": "within",
      "why": "Arithmetic re-derived: 3929/27296=0.144, 5501/37653=0.146, log2(5501/3929)=0.486; within the derived budget and its allowance, and the work budgets (FR-022) are kept, not bypassed; whether a re-accept needs the GM's words is left open to the gate, not waived."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T239": {
+   "section_sha256": "67619de6e0cba4f6b5439aa7a9c580e7d71e50a76bd027ec951db3bb3b4bcb5e",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T239-ring",
+     "summary": "roll_polder hands the seat a ring off the dike's outer face (each side pushed straight out to the outer face at its widest on that side, corners re-met) where it handed the plots' edge",
+     "class": "within",
+     "why": "Fixes a defect in the sense the GM set (2026-11-18 'fix all known bugs in each step', 2026-11-19 what a defect is): the settlement's ground drawn over the dike and head canal contradicts page 0019's village on dry ground off the dike, a wrong outcome a reader sees. Holding each side straight at the dike's widest is a labeled GUESS that keeps the ground off the dike everywhere; it narrows nothing asked."
+    },
+    {
+     "id": "T239-not-outer-face",
+     "summary": "T236's proposal (hand the outer face itself, 82-89 candidates against 2) priced and not taken",
+     "class": "within",
+     "why": "A design choice between two ways to the same outcome; T236's proposal is a session finding, not the GM's request, and the chosen ring reaches 0 ft2 over the dike and canal on all five polders measured. Cost and design are not fidelity findings."
+    },
+    {
+     "id": "T239-claim",
+     "summary": "roll_polder's and off_the_dike's comments restate the claim to page 0019",
+     "class": "within",
+     "why": "Keeps the research claim matching the corrected behavior (FR-002: the research claims a piece carries hold)."
+    },
+    {
+     "id": "T239-reviews-none",
+     "summary": "No settlement-review or glyph-check owed: only the driver's placeholder ground ('-', no registry element) and its label move on Kuwabata, ink census unchanged; declared as a none: line under Occasions",
+     "class": "within",
+     "why": "FR-023 (feature 444) already suspends a settlement-review or glyph-check for a pool hamlet a Rust stage moves while the switch stands at rust-only; the block's own reason (no unit can name '-') reaches the same result. Nothing asked is narrowed."
+    },
+    {
+     "id": "T239-exits-budget",
+     "summary": "Exits (red-first test, make quick/static/counters-inert, 48-seed cohort per polder form) and budget (seat.polder rises 1,682/2,089 to 2,185/2,875; the stage has no accepted budget)",
+     "class": "within",
+     "why": "Verification of the requested fix and the work-budget record FR-022 keeps; the cohort is run voluntarily though FR-023 does not require it. No case excluded."
+    },
+    {
+     "id": "T239-left-1-polder-check",
+     "summary": "Found and left: polder_checks asks only whether the seat's middle is inside the plots' edge, so it passes ground over the dike; a check against the outer face not written here",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This is a defect (a check that passes bad work), so leaving it in T239 narrows 'fix all known bugs in each step'. But the GM's rule is per step ('before moving on to porting the next step'), and the dispatch states it is carried by filed task T240 before T158, the next step's port; deferral within the step to a filed task keeps the rule's purpose. Legitimate only so long as T240 lands before T158."
+    },
+    {
+     "id": "T239-left-2-malformed-declaration",
+     "summary": "Found and left: a malformed Occasions declaration '- placement-changed: - on kuwabata' is read as a unit glyph-check-- with no map rather than refused",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "A tool answering wrongly is a defect; it is outside this task's subject (the seat's ring) and is carried by filed task T238 before T158, which satisfies the GM's per-step rule. Legitimate on that filing."
+    },
+    {
+     "id": "T239-left-3-landward-side",
+     "summary": "Found and left: 0019 draws the village on the landward (east) shore; the seat picks its side by wind and fall (north on Kuwabata) and nothing ties it to a shore",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Whether the village stands on the landward side is a research-claim question (a possible defect, not a mere difference from the page's drawn orientation; 'east' itself is not owed). Left here and carried by filed task T240 before T158, inside the step, which is what the GM's 'fix all known bugs in each step before moving on' asks. Legitimate on that filing; if T240 finds the side reads fine and matches 0019's claim it closes by restating the claim, per the GM's 2026-11-19 rule."
     }
    ],
    "verdict": "CLEAR"

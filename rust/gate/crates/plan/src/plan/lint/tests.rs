@@ -9,6 +9,21 @@ use super::{
 };
 use crate::checks::scratch;
 
+/// The first finding's words, or "": the old form of each rule, which stopped at its first.
+fn first(found: Vec<((usize, usize), String)>) -> String {
+    found
+        .into_iter()
+        .next()
+        .map_or_else(String::new, |(_, t)| t)
+}
+
+/// Each of `words` is in `told`, each miss naming itself and the whole report.
+fn holds(told: &str, words: &[&str]) {
+    for w in words {
+        assert!(told.contains(w), "{w}: {told}");
+    }
+}
+
 const RED: &str = "Green: landed. Red: the failing tests recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.";
 
 fn approach(task: &str, item6: &str) -> String {
@@ -23,48 +38,56 @@ fn a_section_quoting_the_gm_with_words_not_in_the_request_is_refused() {
     let mention = "a `\"the GM\"` mention, and WHY=\"awaiting the GM on it\" - no quote of his.\n";
     assert_eq!(
         gm_quotes_missing(&format!("{ok}{mention}"), request),
-        Vec::<String>::new()
+        Vec::<(usize, String)>::new()
     );
     let missing = gm_quotes_missing(bad, request);
-    assert_eq!(missing, ["we either have or don't need tooling"]);
+    assert_eq!(
+        missing,
+        [(
+            bad.find("we either").unwrap(),
+            "we either have or don't need tooling".to_owned()
+        )]
+    );
 }
 
 #[test]
 fn an_item_4_figure_whose_sentence_carries_no_measurement_is_refused() {
     let head = "### T05 Approach (checklist part A)\n\n";
     let ok = format!("{head}4. **World.** Yes - measured 2026-10-19 (two warm runs): it took `4.4 s`, round 2 of seed 45, at 01:30Z for T10.\n5. **x.** y\n");
-    assert_eq!(unlabeled_figure(&ok), "");
+    assert_eq!(first(unlabeled_figure(&ok)), "");
     assert_eq!(
-        unlabeled_figure(&format!(
+        first(unlabeled_figure(&format!(
             "{head}4. **World.** See `make claims-owed F=385` and `dev/run-log/2026-10/x.json`.\n"
-        )),
+        ))),
         ""
     );
     assert_eq!(
-        unlabeled_figure(&ok.replace("5. **x.**", "Then it took 2.5 h.\n5. **x.**")),
+        first(unlabeled_figure(
+            &ok.replace("5. **x.**", "Then it took 2.5 h.\n5. **x.**")
+        )),
         "Then it took 2.5 h."
     );
     assert_ne!(
-        unlabeled_figure(&format!(
+        first(unlabeled_figure(&format!(
             "{head}4. **World.** It takes `4.4 s` (measured).\n"
-        )),
+        ))),
         ""
     );
     assert_eq!(
-        unlabeled_figure(&format!(
+        first(unlabeled_figure(&format!(
             "{head}4. **World.** It takes 19 degrees, m:turn-angle.\n"
-        )),
+        ))),
         ""
     );
-    assert_eq!(unlabeled_figure("no item four\n"), "");
+    assert_eq!(first(unlabeled_figure("no item four\n")), "");
 }
 
 #[test]
 fn a_figure_with_a_unit_anywhere_needs_a_label() {
-    assert!(
-        unlabeled_unit_figure("**D3 - x.** The check takes 48 s on a landing.\n")
-            .contains("takes 48 s")
-    );
+    assert!(first(unlabeled_unit_figure(
+        "**D3 - x.** The check takes 48 s on a landing.\n"
+    ))
+    .contains("takes 48 s"));
     for labeled in [
         "**D3 - x.** It takes 48 s, measured 2026-10-24 (feature 415 T03).\n",
         "**D3 - x.** It takes 48 s (observed 2026-10-24, method: the run log).\n",
@@ -76,14 +99,17 @@ fn a_figure_with_a_unit_anywhere_needs_a_label() {
         "**D1 - x.** The default, observed 2026-10-26, method: the memory watch, read the shared cap at\n9.3 of 10 GB.\n",
         "```\nit takes 48 s\n```\n",
     ] {
-        assert_eq!(unlabeled_unit_figure(labeled), "", "{labeled}");
+        assert_eq!(first(unlabeled_unit_figure(labeled)), "", "{labeled}");
     }
-    assert!(
-        unlabeled_unit_figure("**D1 - x.** Women did 31.6% of farm labor in the East.\n")
-            .contains("31.6%")
-    );
-    assert!(unlabeled_unit_figure("- **X**: the check covers 47% of the lines.\n").contains("47%"));
-    assert!(unlabeled_unit_figure("- one item.\n- the cap is 10 GB.\n").contains("10 GB"));
+    assert!(first(unlabeled_unit_figure(
+        "**D1 - x.** Women did 31.6% of farm labor in the East.\n"
+    ))
+    .contains("31.6%"));
+    assert!(first(unlabeled_unit_figure(
+        "- **X**: the check covers 47% of the lines.\n"
+    ))
+    .contains("47%"));
+    assert!(first(unlabeled_unit_figure("- one item.\n- the cap is 10 GB.\n")).contains("10 GB"));
 }
 
 #[test]
@@ -152,9 +178,12 @@ fn each_refusal_is_named_in_its_own_words() {
     let text = format!("# p\n\n{}", approach("T01", RED));
     let told = plan_refusal(&dir, &text, &[]);
     assert!(told.contains("open tasks with no") && told.contains("T02"));
-    assert_eq!(plan_refusal(&dir, "# p\n", &["plain\n".to_owned()]), "");
+    assert_eq!(
+        plan_refusal(&dir, "# p\n", &[("plain\n".to_owned(), 4)]),
+        ""
+    );
     assert!(
-        plan_refusal(&dir, "# p\n", &["It takes 48 s.\n".to_owned()])
+        plan_refusal(&dir, "# p\n", &[("It takes 48 s.\n".to_owned(), 4)])
             .contains("a figure with a unit")
     );
 }
@@ -167,23 +196,23 @@ fn a_quote_read_across_a_sentence_end_stops_there() {
             "the GM ended here. Then \"another quote\" stands.\n",
             request
         ),
-        Vec::<String>::new()
+        Vec::<(usize, String)>::new()
     );
     assert_eq!(
         gm_quotes_missing("the GM ended here\n\n\"another quote\"\n", request),
-        Vec::<String>::new()
+        Vec::<(usize, String)>::new()
     );
     assert_eq!(
         gm_quotes_missing("\"the GM\" in a quotation is a mention \"x y\"\n", request),
-        Vec::<String>::new()
+        Vec::<(usize, String)>::new()
     );
     assert_eq!(
         gm_quotes_missing("the GM: \"...\" and on\n", request),
-        Vec::<String>::new()
+        Vec::<(usize, String)>::new()
     );
     assert_eq!(
         gm_quotes_missing("the GM: \"zzz\" and \"zzz\"\n", request),
-        ["zzz"]
+        [(9, "zzz".to_owned())]
     );
 }
 
@@ -199,12 +228,16 @@ fn an_approach_block_ends_at_the_next_heading() {
 #[test]
 fn a_count_needs_a_label_in_its_sentence() {
     let t145 = "- **Approach**: five ported whole; `sources.py` and `attempts.py` cut to thin forwarders (183, 98 and 57 lines) that the importers call.\n";
-    assert!(unlabeled_count(t145).contains("57 lines"));
+    assert!(first(unlabeled_count(t145)).contains("57 lines"));
     assert!(refusal(Path::new("/no/such"), t145).contains("a count whose sentence"));
-    assert!(
-        unlabeled_count("The differential's 1,261 cases differ in two.\n").contains("1,261 cases")
-    );
-    assert!(unlabeled_count("- reads the 110 `.py` files under `l7r/`.\n").contains("110"));
+    assert!(first(unlabeled_count(
+        "The differential's 1,261 cases differ in two.\n"
+    ))
+    .contains("1,261 cases"));
+    assert!(first(unlabeled_count(
+        "- reads the 110 `.py` files under `l7r/`.\n"
+    ))
+    .contains("110"));
     for fine in [
         "Forwarders of 198, 98 and 66 lines (observed 2026-11-16, method: `wc -l`).\n",
         "Its 1,261 cases, measured 2026-11-16 (the harness).\n",
@@ -216,7 +249,7 @@ fn a_count_needs_a_label_in_its_sentence() {
         "```\n57 lines\n```\n",
         "Task T145 and FR-002 on 2026-11-16.\n",
     ] {
-        assert_eq!(unlabeled_count(fine), "", "{fine}");
+        assert_eq!(first(unlabeled_count(fine)), "", "{fine}");
     }
 }
 
@@ -229,13 +262,13 @@ fn a_differential_count_cites_the_runners_verify_report() {
     assert!(told.contains("make diff-run CASES=<cases file> VERIFY=1"));
     assert!(told.contains("109 cases"));
     let incremental = "The differential ran 16 cases (measured 2026-11-16 (`make diff-run`, `t161/cases.diff-run/reports/diff-run-incremental-20261116T120000Z.json`)).\n";
-    assert!(uncited_differential(incremental).contains("16 cases"));
+    assert!(first(uncited_differential(incremental)).contains("16 cases"));
     for refused in [
         "FR-002's same outputs over 1,261 `cmd` and `sources` cases.\n",
         "Same outputs on 16 Cases.\n",
         "Two differentials, 3 of 16 cases differing.\n",
     ] {
-        assert!(!uncited_differential(refused).is_empty(), "{refused}");
+        assert_ne!(first(uncited_differential(refused)), "", "{refused}");
     }
     let cited = "The differential's 16 cases, 0 differing (measured 2026-11-16 (`make diff-run CASES=t161/cases.json VERIFY=1`, `t161/cases.diff-run/reports/diff-run-verify-20261116T120000Z.json`)).\n";
     // a cited, labeled count passes the whole lint
@@ -262,7 +295,7 @@ fn a_differential_count_cites_the_runners_verify_report() {
         "The differential (T146) rows of 2026-11-16 differ.\n",
         "```\nthe differential's 16 cases\n```\n",
     ] {
-        assert_eq!(uncited_differential(fine), "", "{fine}");
+        assert_eq!(first(uncited_differential(fine)), "", "{fine}");
     }
 }
 
@@ -308,4 +341,156 @@ fn the_label_search_is_linear_in_its_sentence() {
     assert!(!super::has_label(&format!(
         "{long} measured 2026-11-18 without a method"
     )));
+}
+
+/// Feature 451 T25: each rule reports every finding of the section, each by its line, where it stopped at its first.
+#[test]
+fn every_finding_of_a_rule_is_reported_by_its_line() {
+    let section =
+        "# s\n\n```\nit takes 9 s\n```\n\nIt takes 48 s.\nIt takes 50 s.\n\n- the cap is 10 GB.\n";
+    let told = refusal(Path::new("/no/such"), section);
+    assert!(told.starts_with("3 findings - every one"), "{told}");
+    holds(&told, &["(1) a figure with a unit"]);
+    assert!(!told.contains("(2)"));
+    for line in [
+        "line 7: It takes 48 s.",
+        "line 8: It takes 50 s.",
+        "line 10: - the cap is 10 GB.",
+    ] {
+        assert!(told.contains(line), "{line}: {told}");
+    }
+    assert!(!told.contains("9 s"));
+    assert!(refusal(Path::new("/no/such"), "It takes 48 s.\n").starts_with("1 finding - "));
+}
+
+/// The units that surprised authors are stated in the refusal (feature 451 T25), and their verdicts are as they were.
+#[test]
+fn each_refusal_states_its_unit_and_where_the_label_sits() {
+    let none = Path::new("/no/such");
+    // the unit figure's clause: a label at the sentence's end does not reach the clause before its `;`
+    let clause = "It takes 48 s; the other took 3 h, measured 2026-11-20 (the log).\n";
+    let told = refusal(none, clause);
+    holds(&told, &["line 1: It takes 48 s;", "The unit: the clause"]);
+    // and it is cut inside a code span too, which the message says
+    let span = "It takes 48 s by `t.sh a. b`, measured 2026-11-20 (log).\n";
+    holds(
+        &refusal(none, span),
+        &[
+            "line 1: It takes 48 s by `t.sh a.",
+            "even inside a code span",
+        ],
+    );
+    assert!(!told.contains("3 h"), "{told}");
+    // the GM quote's paragraph: a bullet list with no blank line and no full stop is one
+    let request = scratch("t25-request");
+    std::fs::write(request.join("request.md"), "words\n").unwrap();
+    let list = "- the GM ruled it\n- the cap \"a word\" stands\n";
+    let told = refusal(&request, list);
+    holds(
+        &told,
+        &["line 2: \"a word\"", "a bullet list with no blank line"],
+    );
+    assert_eq!(
+        refusal(
+            &request,
+            "- the GM ruled it.\n- the cap \"a word\" stands\n"
+        ),
+        ""
+    );
+    // item 4 takes the measured form alone: the observed form, fine elsewhere, is refused there and the refusal says so
+    let observed = "### T05 Approach\n\n4. **World.** It took 7 tries (observed 2026-11-20, method: the log).\n";
+    let told = refusal(none, observed);
+    holds(&told, &["line 3:", "do not pass in item 4"]);
+    holds(&told, &["an unindented wrapped line starts a new sentence"]);
+    assert_eq!(
+        refusal(
+            none,
+            "It took 7 tries (observed 2026-11-20, method: the log).\n"
+        ),
+        ""
+    );
+}
+
+/// A label rule's finding is dropped only where an earlier one found the very same span; a clause inside a longer finding stays.
+#[test]
+fn a_finding_is_merged_only_where_one_label_clears_both() {
+    let none = Path::new("/no/such");
+    let same = format!("### T05 Approach\n\n4. **World.** It takes 48 s.\n6. **Exits.** {RED}\n");
+    let told = refusal(none, &same);
+    assert!(told.starts_with("1 finding"));
+    holds(&told, &["Approach item 4"]);
+    let clauses = format!(
+        "### T05 Approach\n\n4. **World.** It takes 48 s; it took 3 h.\n6. **Exits.** {RED}\n"
+    );
+    let told = refusal(none, &clauses);
+    assert!(told.starts_with("3 findings"), "{told}");
+    let clause = "line 3: **World.** It takes 48 s;";
+    holds(&told, &["Approach item 4", clause, "line 3: it took 3 h."]);
+    let reds = format!(
+        "{}\n{}",
+        approach("T01", "Green."),
+        approach("T02", "Green.")
+    );
+    let told = refusal(none, &reds);
+    holds(&told, &["line 1: T01", "line 8: T02"]);
+}
+
+/// A finding is placed by its plan.md line in a section that is one slice of the plan and in one joined from several (feature 451
+/// T25), and a fenced block before it moves no line.
+#[test]
+fn a_finding_is_placed_by_its_plan_line() {
+    let dir = scratch("t25-lines");
+    let plan = "# p\n\n## T01 a\n\nIt takes 48 s.\n\n## T02 b\n\nIt takes 9 s.\n\n## T01 again\n\n```\nx\n```\n\nIt takes 50 s.\n";
+    let sections = super::super::sections::task_sections(plan);
+    let joined = &sections["T01"];
+    assert!(!plan.contains(joined.as_str()));
+    let told = super::decide_refusal(
+        &dir,
+        plan,
+        joined,
+        Some("the approach gate's words".to_owned()),
+    );
+    assert!(told.starts_with("3 findings"), "{told}");
+    holds(
+        &told,
+        &["plan.md:5: It takes 48 s.", "plan.md:17: It takes 50 s."],
+    );
+    holds(&told, &["(2) the approach gate's words"]);
+    assert!(!told.contains("9 s"));
+    let told = super::decide_refusal(&dir, plan, &sections["T02"], None);
+    assert!(told.contains("plan.md:9: It takes 9 s."), "{told}");
+    // a line not in the plan keeps the place of the line before it (the first line, line 1); the blank line after is line 2
+    assert_eq!(super::plan_lines(plan, "## T03 not here\n"), [1, 2]);
+    let delta = plan_refusal(
+        &dir,
+        plan,
+        &[(
+            "It takes 9 s.\n".to_owned(),
+            plan.find("It takes 9").unwrap(),
+        )],
+    );
+    assert!(delta.contains("plan.md:9: It takes 9 s."), "{delta}");
+}
+
+/// The item-4 rule reads every item 4 of the section, not only the first (feature 451 T25, the coordinator's fold of T27: a
+/// re-answered Approach block's unlabeled figure reached the plan review unrefused).
+#[test]
+fn a_second_approach_blocks_item_4_is_read_too() {
+    let first = "### T05 Approach (checklist part A)\n\n4. **World.** Yes - measured 2026-11-20 (the log): 7 of them.\n";
+    let second =
+        "### T05 Approach (re-answered 2026-11-20T10:00Z)\n\n4. **World.** The ratio is 9.\n";
+    let section = format!("{first}\n{second}");
+    let found = unlabeled_figure(&section);
+    assert_eq!(found.len(), 1, "{found:?}");
+    assert_eq!(found[0].1, "**World.** The ratio is 9.");
+    let told = refusal(Path::new("/no/such"), &section);
+    holds(
+        &told,
+        &["Approach item 4", "line 7: **World.** The ratio is 9."],
+    );
+    // a part B block's item 4 is read; a performance checklist's, which prompts and never gates, is not
+    let part_b = "### T05 part B (2026-11-20T11:00Z)\n\n4. **A4 again.** It failed 3 times.\n";
+    assert_eq!(unlabeled_figure(part_b).len(), 1);
+    let perf = "### T05 Performance checklist (prompts, never a gate)\n\n4. **Growth.** An exponent of 1.2.\n";
+    assert_eq!(unlabeled_figure(perf), []);
 }
