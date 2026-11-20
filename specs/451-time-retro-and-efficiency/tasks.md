@@ -1,5 +1,7 @@
 # Tasks - feature 451, where the time goes, and the six cheap fixes
 
+Ticked tasks are archived in `tasks-done.md` (feature 449 T142): `make tick` moves each ticked task there with its lines; this file holds the open ones.
+
 **Input**: `plan.md` (D1-D17 and each task's section), `research.md` (R1-R12), `data-model.md`, `contracts/refusals.md`, `spec.md`.
 
 Every task is tooling, so every task is `research: rendering`. Each builder task is one guard or one reader, so no builder's context
@@ -34,9 +36,6 @@ MVP is T02-T11 (User Story 1: the retrospective is one command). Each refusal (T
 ## Tasks
 
 ### The plan review
-
-- [ ] T01 `spec-fidelity` PLAN REVIEW of plan.md, recorded with `make plan-verdict F=451 FILE=<json> AS=spec-fidelity` (the subagent runs it); the plan's narrow readings named for it - D4 (phases per family, not per crate), D8 (the builder), D11 (the main session's runs counted), D12 (`&` then a `wait` covering the job passes), D14 (`make tunables`) (feature 243)
-      research: rendering
 
 ### The event-log data (FR-001 to FR-004)
 
