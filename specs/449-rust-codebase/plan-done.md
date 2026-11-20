@@ -5974,3 +5974,34 @@ censuses empty (work breakdown 8, FR-010).
 **Performance work?** no
 
 
+<!-- plan-archive: archived 2026-11-20 -->
+### T231 (T230: the review gate did not redraw a map whose drawing was not current, so an edited map could ship without the glyph-check it owes)
+
+- **Approach**: `reviews owed --undrawn` lists each live map whose drawing the cache does not serve as current (hamlets and generated compounds; a hand sheet's `.svg` is its own spec, always current), answered in one process by `l7r_gate_pool::Currency` (one walk, each engine's launcher asked once). `review-gate.sh` redraws each through `make map MAP=` before it asks what is owed, refuses a failed redraw or one still not current with the fix named, and skips hamlets while the port switch stands at rust-only, the switch's state now: feature 444's FR-023 (the GM's 2026-11-07 words in `specs/444-work-budget-program/request.md`, amendment 10) defers a hamlet's map reviews to the switch's throw back to integrated, where they are owed for every pool hamlet the port moved, and the gate names each unit it sets aside (`waits for the port switch thrown back to integrated (FR-023)`), so a redraw of a hamlet there would serve only units it then sets aside; at integrated every hamlet not current is redrawn and its units owed, as the red cases show; the old per-unit redraw is folded into it. The redraw runs only when the push touches an engine path (`l7r-gate delta engine-paths`), so a non-engine push from a fresh tree builds and draws nothing. The engine list was checked against the cache's read table, and `l7r/diagram/buildings/types.json`, which the Mode A engine draws every compound from, was on none of the three lists, so an edit to it landed DIRECT with no `make done` and no sweep: it is on all three now (the delta, the stamp's area, the landing's list), red first. The page-only inputs (the modal texts, the page assets, `knobs.json`, the research fragments the modals link) stay off, by the GM's feature 188 ruling (2026-09-05, docs/gm-rulings.md), and pinned as not-engine in the delta's test; none changes a sheet's `.svg` or a hamlet's census. The shared legend reader gives every caller (`make verify`, the pair guard, the checkpoint, the snapshot) the not-current problem line for a compound, where it read a stale `.svg` silently. Red first: the gate suite failed 8 cases on the old gate (an edited, undrawn hamlet shipped at integrated, rc 0) and the non-engine skip's case 2 (measured 2026-11-19 (the suite against the old gate)); the legend test owed `glyph-check--bell--c` from a stale `.svg` on the old code (measured 2026-11-19 (the new test on the old `owed.rs`)). Cost: a non-engine push 0.17-0.19 s as before, a fresh tree's non-engine push 0.15 s with nothing drawn, an engine push with nothing stale 0.23-0.25 s against 0.20-0.22 s, a fresh tree's engine push 1.26 s the first run with the engine built (measured 2026-11-19 (the gate on this tree, timed)).
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+| the gate redraws what is not current; types.json is engine | the review-gate suite's b1 cases, the owed and pool tests, the delta and cohort tests | `owed.rs`, `pool/src/lib.rs`, `review-gate.sh`, `delta.rs`, `stamp.rs`, `cohort.rs` | none | none |
+
+<!-- plan-archive: archived 2026-11-20 -->
+### T231 Approach (checklist part A)
+
+1. **The goal, in the world.** An edited map owes its glyph-check before it ships, and an edit to a file a drawing reads is gated as engine.
+2. **The constraints.** Constitution XIV; the glyph-check's occasion; the GM's feature 188 ruling on page assets; T230's plan review (this lands before T158).
+3. **Where each comes from.** G: the 2026-09-05 ruling; O: T230's finding and this task's measurements.
+4. **Do they describe the world here?** Yes: the gate suite failed on the old gate as above, and the cache's read table names `types.json` (observed 2026-11-19, method: the table's rows against the engine list).
+5. **The order.** After T230, before T158.
+6. **The exits.** Green: the tests red first then green, `make quick`, `make static`, `make hooks-test` green. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** none
+8. **The budget.** One landing (gated).
+9. **Done, measured.** The suite's b1 cases green; a non-engine push from a fresh tree draws nothing.
+10. **Before moving a constant.** n/a
+11. **Before fitting things into room.** n/a
+12. **Before any fix.** An edited map could ship without its owed glyph-check, and a `types.json` edit landed ungated: defects. After an edit to a crate the Mode A engine builds from, `make verify` shows compound problem lines until `make map` runs, where it read the stale `.svg` silently.
+
+**Found and left?** none
+
+**Performance work?** no
+
+
+
