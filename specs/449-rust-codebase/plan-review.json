@@ -1188,6 +1188,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-20",
    "declared": "spec-fidelity"
+  },
+  "### T233 (T232's plan review: the settlement reviews feature 444 FR-023 defers might be lost the same way)": {
+   "sha256": "f24420a135805a6c4d3f73ce84780a2fcf404735b74f8bc3a5ea013e6b44cb5e",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity"
+  },
+  "### T233 Approach (checklist part A)": {
+   "sha256": "aab86c629263e5c116378767c2702fb4c9ea21b811feb0352699dbeaffbbf75b",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -15884,6 +15896,46 @@
      "why": "Sequencing, exits, budget and code placement; none narrows what was asked."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-20",
+   "blocks": [
+    "### T233 (T232's plan review: the settlement reviews feature 444 FR-023 defers might be lost the same way)",
+    "### T233 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D1",
+     "summary": "reviews deferred set-aside --moved keeps one open settlement-review row per live hamlet, written by the gate on every rust-only push, the five backfilled, all owed at the throw back",
+     "class": "within",
+     "why": "This is what feature 444 FR-023 asks for: a settlement-review FR-019 owes for a pool hamlet a Rust stage moves is not owed while the switch stands, and each is owed, for every pool hamlet the port moved, when it is thrown back. The block measured that nothing owed them at either switch state (observed 2026-11-19, method stated), so the rows make the requested deferral actually happen."
+    },
+    {
+     "id": "D1b",
+     "summary": "the moved set is the 5 hamlets of the live tree (pool/hamlets/); the 8 legacy frozen exhibits owe no deferred settlement-review",
+     "class": "within",
+     "why": "FR-023 owes the reviews for every pool hamlet the PORT MOVED. The block now defines live and shows, with a dated observation and its method, that the 5 live hamlets are drawn by the Rust driver alone since FR-024, and that the 8 legacy exhibits are served FROZEN with no engine drawing them and their last change only deleting their .gen.py wrappers. Measured independently: git log of legacy-hand-authored-pool/hamlets/ shows only ea5638968 (2026-11-07) and the 2026-10-07 feature 329 pure-rename move. Both are dated before or at the switch, and the first Rust stage dates from 2026-10-31. ea5638968 deleted only .gen.py files under legacy-hand-authored-pool/ (27 files, deletions only). No Rust stage ever drew the legacy hamlets, so leaving them out applies FR-023's own set and narrows nothing. Counting all 5 live hamlets as moved could only owe more reviews, never fewer. Done, measured now checks one owed review per hamlet of that set rather than a count."
+    },
+    {
+     "id": "D2",
+     "summary": "deferred rows keyed by hamlet name were dropped on a rename; a rename (git rename detection over the delta, spec moved with it) now carries each open row to the new name",
+     "class": "within",
+     "why": "This is a defect, a wrong outcome: a deferred review FR-023 owes was lost, so a check passed bad work. It was found doing the task and is fixed under FIX AS WE GO and constitution XIV, red first."
+    },
+    {
+     "id": "D3",
+     "summary": "a folder not at the base is new to the pool whatever its files hold (a new hamlet whose files matched one at the base read as moved and owed no settlement-review even at integrated)",
+     "class": "within",
+     "why": "This is a defect: a new map owed no review under docs/reviews.md's occasion for a map new to the pool, so a check passed bad work. The fix restores the existing rule and narrows nothing."
+    },
+    {
+     "id": "D4",
+     "summary": "found and left: if the switch is set back to rust-only after the integrated reviews, --moved owes every live hamlet again whether or not it moved",
+     "class": "within",
+     "why": "This is not a narrowing of what was asked. FR-023 throws the switch back to integrated once, when the last stage is Rust, and nothing asks for it to return to rust-only. In the reachable lifecycle no review is owed wrongly and none is lost, so no wrong outcome is left (constitution XIV v2.36.0). Even in that unreached state the error would be over-owing reviews, never dropping one the GM asked for."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -27880,6 +27932,44 @@
      "summary": "After T231, before T158; green and red exits (claims of impossibility via make arbiter-ask); one gated landing; port reader moved to core.",
      "class": "within",
      "why": "Sequencing, exits, budget and code placement; none narrows what was asked."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T233": {
+   "section_sha256": "bc115f77f4f52dbf30b1863a8661c6d0f9d180e10caeb0c1533186db0af449be",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D1",
+     "summary": "reviews deferred set-aside --moved keeps one open settlement-review row per live hamlet, written by the gate on every rust-only push, the five backfilled, all owed at the throw back",
+     "class": "within",
+     "why": "This is what feature 444 FR-023 asks for: a settlement-review FR-019 owes for a pool hamlet a Rust stage moves is not owed while the switch stands, and each is owed, for every pool hamlet the port moved, when it is thrown back. The block measured that nothing owed them at either switch state (observed 2026-11-19, method stated), so the rows make the requested deferral actually happen."
+    },
+    {
+     "id": "D1b",
+     "summary": "the moved set is the 5 hamlets of the live tree (pool/hamlets/); the 8 legacy frozen exhibits owe no deferred settlement-review",
+     "class": "within",
+     "why": "FR-023 owes the reviews for every pool hamlet the PORT MOVED. The block now defines live and shows, with a dated observation and its method, that the 5 live hamlets are drawn by the Rust driver alone since FR-024, and that the 8 legacy exhibits are served FROZEN with no engine drawing them and their last change only deleting their .gen.py wrappers. Measured independently: git log of legacy-hand-authored-pool/hamlets/ shows only ea5638968 (2026-11-07) and the 2026-10-07 feature 329 pure-rename move. Both are dated before or at the switch, and the first Rust stage dates from 2026-10-31. ea5638968 deleted only .gen.py files under legacy-hand-authored-pool/ (27 files, deletions only). No Rust stage ever drew the legacy hamlets, so leaving them out applies FR-023's own set and narrows nothing. Counting all 5 live hamlets as moved could only owe more reviews, never fewer. Done, measured now checks one owed review per hamlet of that set rather than a count."
+    },
+    {
+     "id": "D2",
+     "summary": "deferred rows keyed by hamlet name were dropped on a rename; a rename (git rename detection over the delta, spec moved with it) now carries each open row to the new name",
+     "class": "within",
+     "why": "This is a defect, a wrong outcome: a deferred review FR-023 owes was lost, so a check passed bad work. It was found doing the task and is fixed under FIX AS WE GO and constitution XIV, red first."
+    },
+    {
+     "id": "D3",
+     "summary": "a folder not at the base is new to the pool whatever its files hold (a new hamlet whose files matched one at the base read as moved and owed no settlement-review even at integrated)",
+     "class": "within",
+     "why": "This is a defect: a new map owed no review under docs/reviews.md's occasion for a map new to the pool, so a check passed bad work. The fix restores the existing rule and narrows nothing."
+    },
+    {
+     "id": "D4",
+     "summary": "found and left: if the switch is set back to rust-only after the integrated reviews, --moved owes every live hamlet again whether or not it moved",
+     "class": "within",
+     "why": "This is not a narrowing of what was asked. FR-023 throws the switch back to integrated once, when the last stage is Rust, and nothing asks for it to return to rust-only. In the reachable lifecycle no review is owed wrongly and none is lost, so no wrong outcome is left (constitution XIV v2.36.0). Even in that unreached state the error would be over-owing reviews, never dropping one the GM asked for."
     }
    ],
    "verdict": "CLEAR"

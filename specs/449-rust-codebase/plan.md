@@ -787,29 +787,31 @@ tests/hooks/                 # the suites, the verdict replay through phase 1
 <!-- plan-archive: T231 to T231 moved to plan-done.md, 2026-11-20 (feature 375 FR-044) -->
 <!-- plan-archive: T232 to T231 moved to plan-done.md, 2026-11-20 (feature 375 FR-044) -->
 <!-- plan-archive: T232 to T232 moved to plan-done.md, 2026-11-20 (feature 375 FR-044) -->
-### T233 (<why: the finding or measurement that files it>)
+### T233 (T232's plan review: the settlement reviews feature 444 FR-023 defers might be lost the same way)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: measured first. Nothing ever owed a settlement-review for a hamlet already in the pool, at either switch state: `docs/reviews.md` owes one for a map new to the pool, so the reviews feature 444 FR-019 owes for every pool hamlet the port moved were never set aside, and none was owed at the throw back (observed 2026-11-19, method: a clone of this clone with the switch thrown, `reviews owed --landing` naming only T232's two glyph-checks; and the review-gate suite's fixtures, a hamlet moved by a Rust stage at rust-only, landed and thrown back: clean). `reviews deferred set-aside --moved` now keeps one open `settlement-review--<hamlet>` row for each live hamlet, written by the gate on every rust-only push, and the five live hamlets are backfilled; at the throw back the five are owed. The live hamlets are exactly the pool hamlets the port moved: the pool holds 13 hamlets, the 5 of the live tree (`pool/hamlets/`: Inashiro, Kashikawa, Kuwabata, Mizuguchi, Sawada), drawn by the Rust driver alone since the Python engine's deletion (feature 444 FR-024), and the 8 frozen exhibits of the legacy tree, which no engine draws - the driver serves that tree FROZEN, never drawn, and their last change was ea5638968 of 2026-11-07, which deleted only their `.gen.py` wrappers, so their drawings are the Python's as they stood (observed 2026-11-19, method: `l7r-gate pool list` by tree and kind, and `git log` of `legacy-hand-authored-pool/hamlets/`). Two defects of the same kind found doing it: the deferred rows (T232's and these) were keyed by the hamlet's name, so a rename dropped them, and a hamlet new to the pool read as moved when any of its files matched one at the base, so it owed no settlement-review even at integrated (observed 2026-11-19, method: fixtures on the old binary, a `git mv` of a hamlet with open rows, and a new hamlet whose notes match another's). A rename (git's rename detection over the delta, its spec moved with it from a folder no longer in the pool) now carries each open row to the new name, and a folder not at the base is new to the pool whatever its files hold. Red first: the suite's case 6 failed 5 of 8 checks on the old gate, its rename case 3, and two new tests in the reviews crate on behavior (measured 2026-11-19 (the suite and the crate's tests against the old code)).
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| the moved hamlets' settlement-reviews owed at the throw back; rows carried across a rename | the suite's case 6, the deferred and owed tests | `deferred.rs`, `owed.rs`, `review-gate.sh` | none | none |
 
 ### T233 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
-8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+1. **The goal, in the world.** Every review the port deferred, and every review a new map owes, is owed when it is due, however the hamlet was renamed or drawn in between.
+2. **The constraints.** Feature 444 FR-019, FR-023 and FR-024; `docs/reviews.md`'s occasions; constitution XIV.
+3. **Where each comes from.** G: the GM's 2026-11-07 words (444's request.md); O: this task's measurements.
+4. **Do they describe the world here?** Yes: measured on the real tree and on fixtures as above.
+5. **The order.** After T232, before T158.
+6. **The exits.** Green: the tests red first then green, `make quick`, `make static`, `make hooks-test` green. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** none
+8. **The budget.** One landing (gated).
+9. **Done, measured.** Thrown back in scratch, a settlement-review owed for each hamlet of the live tree (the moved set, as above) and the two glyph-checks; a renamed hamlet's rows owed under its new name.
+10. **Before moving a constant.** n/a
+11. **Before fitting things into room.** n/a
+12. **Before any fix.** The reviews FR-019 owes were owed nowhere, a rename dropped deferred rows, and a new hamlet could owe no review: checks passing the bad.
 
-**Found and left?** <none - or each item with its visible effect or the research finding it breaks; an item with neither is not a defect and is not filed>
+**Found and left?** If the switch is set back to rust-only after the hamlets are reviewed at integrated, `--moved` owes every live hamlet again whether or not it moved: no wrong outcome while the switch only moves forward (it now stands at rust-only and is next thrown to integrated), so not filed.
 
-**Performance work?** <no - or yes, and its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** no
+
 

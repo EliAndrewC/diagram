@@ -388,6 +388,9 @@ has "...its unit recorded, committed" d1 'grep -q "glyph-check--well--m" dev/def
 check "...landed, then the switch thrown back: owed" d1 blocked
 has "...named as set aside at rust-only" d1 'grep -q "glyph-check--well--m is owed and has no verdict record" <<<"$(said d1)"'
 mkdir -p "$T/d1/.git/review-verdicts"; echo '{"map":"glyph-check--well--m","engine_key":"k","verdict":"PASS","findings":[]}' > "$T/d1/$V"
+# GUARD_EDIT_OK: feature 449 T233 - the hamlet the port drew at rust-only owes its settlement-review at the throw back too (case_6)
+SR=.git/review-verdicts/settlement-review--m.json
+echo '{"map":"settlement-review--m","engine_key":"k","verdict":"PASS","findings":[]}' > "$T/d1/$SR"
 ( cd "$T/d1" && echo "# spec" > specs/900-x/spec.md && git add -A && git commit -qm "a spec with no verdict" )
 check "...its review found on a push refused for another reason: refused" d1 blocked
 has "...and its review not recorded, so it stays owed" d1 '! grep -q "\"reviewed\"" dev/deferred-reviews.jsonl'
@@ -395,7 +398,7 @@ has "...and its review not recorded, so it stays owed" d1 '! grep -q "\"reviewed
 check "...and ships once its glyph-check returned PASS" d1 ok
 has "...its review recorded" d1 'grep -q "\"reviewed\":\"glyph-check--well--m\"" dev/deferred-reviews.jsonl'
 
-rm -f "$T/d1/$V"; ( cd "$T/d1" && landed work )
+rm -f "$T/d1/$V" "$T/d1/$SR"; ( cd "$T/d1" && landed work )
 check "...its review recorded on main: another clone with no verdict file owes it no more" d1 ok
 # the gate redraws a hamlet at rust-only too: a hamlet edited and not redrawn owed nothing it could set aside, so nothing was kept
 b1 d2 "$REDRAW"; printf '%s' "$NEW" > .git/next-census; echo '{"port": {"state": "rust-only"}}' > dev/switches.json; git add -A; git commit -qm rust-only
@@ -424,8 +427,42 @@ check "...drawn with a new element since, landed, thrown back: owed" d3 blocked
 has "...the element new since the set-aside" d3 'grep -q "glyph-check--well--m is owed" <<<"$(said d3)"'
 }
 
+# GUARD_EDIT_OK: feature 449 T233 - THE SETTLEMENT-REVIEW FEATURE 444 FR-019 OWES EVERY POOL HAMLET THE PORT MOVED: a hamlet already in
+# the pool owes none the delta detects (only a map new to the pool does), so a Rust stage that moved one at rust-only set nothing aside
+# and the throw back owed nothing (measured 2026-11-19 in scratch on the old gate: "review-gate: clean" at the throw back). Red first:
+# the old gate shipped this case's thrown push.
+case_6() {
+echo "6. A POOL HAMLET THE PORT MOVED OWES ITS SETTLEMENT-REVIEW AT THE THROW BACK (444 FR-019, 449 T233)"
+mkrepo s1 withmap; git checkout -q main; echo '{"port": {"state": "rust-only"}}' > dev/switches.json; git add -A; git commit -qm rust-only
+git update-ref refs/remotes/origin/main main; git checkout -q -B work main
+mkdir -p rust/phases/src; echo '// the port moves the hamlet' > rust/phases/src/stage.rs
+drawn '{"v":2,"ink_classes":{"farmhouse":3}}'; echo '{"v":2,"ink_classes":{"farmhouse":3}}' > "$POOL/m.json"
+git add -A; git commit -qm "a Rust stage moves the hamlet" -m "Occasion: none: the port's own roll"
+check "a hamlet the port moved, at rust-only: ships" s1 ok
+has "...its settlement-review recorded, committed" s1 'grep -q "\"unit\":\"settlement-review--m\"" dev/deferred-reviews.jsonl && git diff --quiet HEAD -- dev/deferred-reviews.jsonl'
+has "...once: a second push records nothing more" s1 'said s1 >/dev/null; [ "$(grep -c "settlement-review--m" dev/deferred-reviews.jsonl)" = 1 ]'
+( cd "$T/s1" && landed work && thrown )
+check "...landed, then the switch thrown back: owed" s1 blocked
+has "...named as set aside at rust-only" s1 'grep -q "settlement-review--m is owed and has no verdict record" <<<"$(said s1)"'
+mkdir -p "$T/s1/.git/review-verdicts"; echo '{"map":"settlement-review--m","engine_key":"k","verdict":"PASS","findings":[]}' > "$T/s1/.git/review-verdicts/settlement-review--m.json"
+check "...and ships once its settlement-review returned PASS" s1 ok
+has "...its review recorded" s1 'grep -q "\"reviewed\":\"settlement-review--m\"" dev/deferred-reviews.jsonl'
+# a row is keyed by its hamlet's name: renamed at rust-only (its spec moved with its folder, git's rename detection), the row is
+# carried to the new name by the gate, so the throw back owes it there (before T233 the rename dropped it)
+mkrepo s2 withmap; git checkout -q main; echo '{"port": {"state": "rust-only"}}' > dev/switches.json
+echo '{"unit":"settlement-review--m","check":"settlement-review","subject":"m","on":"m","occasion":"o","utc":"2026-11-19T00:00:00Z","commit":"x"}' > dev/deferred-reviews.jsonl
+git add -A; git commit -qm "rust-only, a row open"; git update-ref refs/remotes/origin/main main; git checkout -q -B work main
+git mv pool/hamlets/m pool/hamlets/m2; for f in spec.json json notes.md; do git mv "pool/hamlets/m2/m.$f" "pool/hamlets/m2/m2.$f"; done
+git commit -qm "the hamlet renamed" -m "Occasion: none: a rename"
+check "a hamlet renamed at rust-only: ships" s2 ok
+has "...its row carried to the new name, committed" s2 'grep -q "\"unit\":\"settlement-review--m2\"" dev/deferred-reviews.jsonl && git diff --quiet HEAD -- dev/deferred-reviews.jsonl'
+( cd "$T/s2" && landed work && thrown )
+check "...landed, then thrown back: owed under the new name" s2 blocked
+has "...named" s2 'grep -q "settlement-review--m2 is owed and has no verdict record" <<<"$(said s2)"'
+}
+
 # GUARD_EDIT_OK: feature 383 amendment 4 (plan D28) - the sections as cases, run in parallel parts (tests/hooks/parts.sh)
-CASES=(case_1 case_1b case_2 case_3 case_4 case_5)
+CASES=(case_1 case_1b case_2 case_3 case_4 case_5 case_6)
 declare -A WEIGHT=()
 # shellcheck source=/dev/null
 source "$HERE/parts.sh"

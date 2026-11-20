@@ -446,24 +446,6 @@ impl<'a> Tree<'a> {
     }
 }
 
-/// The tracked files of each of these folders, by one `git ls-files`.
-fn tracked(root: &Path, folders: &[String]) -> BTreeMap<String, Vec<String>> {
-    let mut out: BTreeMap<String, Vec<String>> =
-        folders.iter().map(|f| (f.clone(), Vec::new())).collect();
-    if folders.is_empty() {
-        return out;
-    }
-    let specs: Vec<String> = folders.iter().map(|f| format!("{f}/")).collect();
-    let mut args = vec!["ls-files", "--"];
-    args.extend(specs.iter().map(String::as_str));
-    for line in git(root, &args).unwrap_or_default().lines() {
-        if let Some(f) = folders.iter().find(|f| line.starts_with(&format!("{f}/"))) {
-            out.entry(f.clone()).or_default().push(line.to_owned());
-        }
-    }
-    out
-}
-
 fn element_units(
     owed: &BTreeMap<String, (String, String)>,
     sheets: &BTreeSet<String>,
@@ -530,21 +512,26 @@ pub fn detected(tree: &Tree, base: &str) -> Vec<Unit> {
         .iter()
         .filter(|d| !d.exempt() && d.drawn())
         .collect();
-    let unborn_rel: Vec<String> = live
+    let unborn: BTreeSet<String> = live
         .iter()
         .map(|d| rel(root, &d.path))
         .filter(|r| !at.existed(r))
         .collect();
-    let unborn = tracked(root, &unborn_rel);
-    let names: Vec<String> = unborn.values().flatten().cloned().collect();
-    let moved = moved_only(root, base, &names);
+    // A FOLDER NOT AT THE BASE IS NEW TO THE POOL unless the delta RENAMED it (449 T233): its spec moved with it, by git's rename
+    // detection. Before, it read as moved when any one of its files was a blob the base held, so a new hamlet whose spec or notes matched
+    // another's text owed no settlement-review, even at integrated (measured 2026-11-19 in a scratch fixture).
+    let moved_to: BTreeSet<String> = if unborn.is_empty() {
+        BTreeSet::new()
+    } else {
+        renamed(root, base, &tree.folders).into_values().collect()
+    };
     let mut new_folders: Vec<&Folder> = Vec::new();
     // each folder's legend at the base, in folder order: known now (a moved folder), or read at the base in one batch below
     let mut order: Vec<(String, AtBaseOrNow)> = Vec::new();
     for d in &live {
         let r = rel(root, &d.path);
-        if let Some(files) = unborn.get(&r) {
-            if files.iter().any(|f| moved.contains(f)) {
+        if unborn.contains(&r) {
+            if moved_to.contains(&r) {
                 order.push((
                     d.name.clone(),
                     Ok(tree.legends.get(&d.name).cloned().unwrap_or_default()),
@@ -601,6 +588,53 @@ pub fn detected(tree: &Tree, base: &str) -> Vec<Unit> {
         .collect();
     units.extend(element_units(&owed, &sheets));
     units
+}
+
+/// The spec a folder of this kind is drawn from, the file that names it: a hamlet's `.spec.json`, a compound's `.compound.json`, a hand
+/// sheet's `.svg`, a frozen exhibit's `.json`.
+fn spec_suffix(kind: Kind) -> Option<&'static str> {
+    match kind {
+        Kind::Hamlet => Some(".spec.json"),
+        Kind::Compound => Some(".compound.json"),
+        Kind::HandSheet => Some(".svg"),
+        Kind::Frozen => Some(".json"),
+        Kind::Report => None,
+    }
+}
+
+/// The folders the delta RENAMED, `old folder -> new folder` (each from the root): a folder whose spec git's rename detection over the
+/// delta (`git diff -M --diff-filter=R <base>`, the working tree against the base) finds moved from another folder, one no longer in the
+/// pool. A copy beside its source is no rename (git pairs only a path the delta removed), nor is a file moved within its own folder
+/// (449 T233).
+pub(crate) fn renamed(root: &Path, base: &str, folders: &[Folder]) -> BTreeMap<String, String> {
+    let mut out = BTreeMap::new();
+    if base.is_empty() {
+        return out;
+    }
+    let diff = git(
+        root,
+        &["diff", "-M", "--name-status", "--diff-filter=R", base, "--"],
+    )
+    .unwrap_or_default();
+    let standing: BTreeSet<String> = folders.iter().map(|d| rel(root, &d.path)).collect();
+    let pairs = diff.lines().filter_map(|line| {
+        let mut parts = line.split('\t').skip(1);
+        Some((parts.next()?, parts.next()?))
+    });
+    for (from, to) in pairs {
+        let Some(d) = folders
+            .iter()
+            .find(|d| spec_suffix(d.kind).is_some_and(|suffix| rel(root, &d.file(suffix)) == to))
+        else {
+            continue;
+        };
+        let old = from.rsplit_once('/').map_or("", |(dir, _)| dir).to_owned();
+        let new = rel(root, &d.path);
+        if !old.is_empty() && old != new && !standing.contains(&old) {
+            out.insert(old, new);
+        }
+    }
+    out
 }
 
 /// `moves.moved_only`, in-process: the names whose working-tree content is a blob the base already held.

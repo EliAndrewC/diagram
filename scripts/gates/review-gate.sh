@@ -231,7 +231,11 @@ record_commit() {
   git add -- dev/deferred-reviews.jsonl && git commit -q -m "$1" -- dev/deferred-reviews.jsonl \
     && printf 'review-gate: dev/deferred-reviews.jsonl committed - %s\n' "$1"
 }
-if [ "$port" = "rust-only" ] && { [ -n "$owed_units" ] || [ "${#unknown[@]}" -gt 0 ]; }; then
+# GUARD_EDIT_OK: feature 449 T233 - AT RUST-ONLY EVERY PUSH RECORDS THE HAMLETS THE PORT MOVED (444 FR-019: "its moved pool hamlets
+# owing their settlement-reviews"): a hamlet already in the pool owes no settlement-review the delta detects, so a Rust stage that moved
+# one set nothing aside and the throw back owed nothing (measured 2026-11-19 in scratch: "review-gate: clean"); `--moved` keeps a row
+# open for each live hamlet, written once (one pool walk when nothing is new)
+if [ "$port" = "rust-only" ]; then
   kept=""; aside=()
   for unit in $owed_units; do
     # GUARD_EDIT_OK: feature 449 T220 - a hamlet is what the one pool walk classifies as one (its spec), not a folder name's tier
@@ -244,7 +248,7 @@ if [ "$port" = "rust-only" ] && { [ -n "$owed_units" ] || [ "${#unknown[@]}" -gt
   done
   owed_units="${kept# }"
   # GUARD_EDIT_OK: feature 449 T232 - the units set aside and the hamlets not known, recorded until the throw back owes them
-  if ! "$RG_HERE/l7r-gate.sh" reviews deferred set-aside --root "$ROOT" --utc "$(date -u +%Y-%m-%dT%H:%M:%SZ)" "${unknown[@]}" "${aside[@]}"; then
+  if ! "$RG_HERE/l7r-gate.sh" reviews deferred set-aside --root "$ROOT" --utc "$(date -u +%Y-%m-%dT%H:%M:%SZ)" --moved "${unknown[@]}" "${aside[@]}"; then
     printf '\n\033[1mREVIEW GATE: the reviews set aside at rust-only could not be recorded.\033[0m\n'
     printf 'Without the record they are owed by nothing once this push lands (449 T232): fix what the line above names and push again.\n'
     fail="$fail deferred-record"; rules="$rules deferred-not-recorded"

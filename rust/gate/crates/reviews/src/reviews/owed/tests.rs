@@ -155,6 +155,53 @@ fn an_element_new_to_a_standing_map_is_owed_and_a_moved_folder_is_not_new() {
     assert!(owed_slugs(&r).is_empty(), "{:?}", owed_slugs(&r));
 }
 
+/// RED FIRST (449 T233): a folder not at the base read as MOVED when any one of its files was a blob the base held, so a new hamlet whose
+/// spec or notes matched another's text owed no settlement-review, even at integrated (measured 2026-11-19 in a scratch fixture). A map
+/// is new to the pool unless git's rename detection over the delta says its spec moved with it from a folder the delta removed.
+#[test]
+fn a_map_not_at_the_base_is_new_to_the_pool_whatever_its_files_hold() {
+    let r = repo("newmatch");
+    hamlet(&r, "m", &["well"]);
+    put(&r, "pool/hamlets/m/m.notes.md", "notes\n");
+    commit(&r, "map");
+    sh(&r, "git update-ref refs/remotes/origin/main HEAD");
+    // a new hamlet whose spec, census and notes are byte for byte m's
+    hamlet(&r, "n", &["well"]);
+    put(&r, "pool/hamlets/n/n.notes.md", "notes\n");
+    commit(&r, "a new hamlet");
+    assert_eq!(owed_slugs(&r), ["settlement-review--n"]);
+    // a copy beside its source is new too: rename detection pairs only a path the delta removed
+    sh(&r, "cp -r pool/hamlets/m pool/hamlets/c && cd pool/hamlets/c && mv m.spec.json c.spec.json && mv m.json c.json && mv m.notes.md c.notes.md");
+    commit(&r, "a copy");
+    assert_eq!(
+        owed_slugs(&r),
+        ["settlement-review--c", "settlement-review--n"]
+    );
+}
+
+/// Each kind's spec, the file whose rename is its folder's (449 T233).
+#[test]
+fn each_kind_names_its_spec() {
+    let all = [
+        Kind::Hamlet,
+        Kind::Compound,
+        Kind::HandSheet,
+        Kind::Frozen,
+        Kind::Report,
+    ]
+    .map(spec_suffix);
+    assert_eq!(
+        all,
+        [
+            Some(".spec.json"),
+            Some(".compound.json"),
+            Some(".svg"),
+            Some(".json"),
+            None
+        ]
+    );
+}
+
 /// RED FIRST (449 T230): a live hamlet's legend was its tracked `<name>.json`, the deleted Python's ink census, never rewritten - so an
 /// element the Rust driver draws that the Python never did was new to no map, and owed no glyph-check.
 #[test]
