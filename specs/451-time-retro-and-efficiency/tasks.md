@@ -39,10 +39,6 @@ MVP is T02-T11 (User Story 1: the retrospective is one command). Each refusal (T
 
 ### The event-log data (FR-001 to FR-004)
 
-- [ ] T02 One make detector: `shared::make::invoked` (the targets in command order, at a command position past `(`, `{`, `flock <file>`, `nice`, `time`, `timeout N`, `env` and `VAR=`), `targets()` its set, and the event-log writer's own `MAKE` pattern deleted for it; `scripts/gates/l7r-gate.sh rust <cmd>` read as `rust-<cmd>` (D1; FR-001); the XIII baseline taken first in a detached worktree
-      research: rendering
-      held: rust/guard/src/shared/make.rs, rust/guard/src/guards/event_log_hooks.rs
-      verify: red first - `timeout 2400 make static`, `flock /tmp/x make rust-test`, `(make hooks-test > log) &`, `{ make static; } &`, `VAR=x make static &` and `env X=1 make static &` each yield their target, `echo make static` and a heredoc's `make` yield none; every guard reading `shared::make` keeps its suite's verdicts; `make rust-test CRATE=rust/guard`; `make hooks-test`; `make quick`
 - [ ] T03 The category table and the line's task: the shared `bucket_of` table (`data-model.md`'s rows, with `format`, `render-sync` and `map` placed) in `rust/guard/src/guards/event_log_hooks.rs`, `category()` booking a Bash call by it, and `task` on every line where known - a command's `T=` (`tick`, `task-start`, `decide`, `land`), a subagent's meta `description`, else the clone's active task (D2; FR-001, SC-002)
       research: rendering
       held: rust/guard/src/guards/event_log_hooks.rs
