@@ -16645,7 +16645,7 @@
      "why": "Option (a) of the first round's NOT LEGITIMATE ruling, built for tasks.md lines, red first (a_declared_element_its_current_drawing_does_not_hold_is_refused, review-gate r12): fixes a found defect (a declared line shipping a unit on no map) as we go (GM 2026-11-18). A stale engine's drawing is not current (the currency question reads an engine older than its sources as no engine) and falls to D9r; make map rebuilds the hamlet driver from the tree's sources (measured in a scratch clone), and a_drawing_by_an_older_engine_refuses_no_declared_new_element pins that a correctly declared new element is not refused. Item 4's scratch run's prebuilt engine is now reconciled by reading: review-gate.sh redraws by the same make map launcher that builds (Launcher build: true), the prebuilt binary a scratch set-up artifact of timestamps; stated as read, not measured end to end. That claim reads the unit from the code's change and needs no element from the drawing, so nothing in this decision turns on it."
     },
     {
-     "id": "D9r residual: a map whose redraw failed keeps the old behaviour",
+     "id": "D9r residual: a map whose redraw failed keeps the old behavior",
      "summary": "A map still not current after the redraw (a failed draw at rust-only, or a drawing by an engine older than its sources), or an unmapped element while any live legend is unknown, is left a unit on no map plus a problem line, not refused; a commit line on such a map still answers",
      "class": "narrowing",
      "ruling": "LEGITIMATE",
@@ -29137,7 +29137,7 @@
      "why": "Option (a) of the first round's NOT LEGITIMATE ruling, built for tasks.md lines, red first (a_declared_element_its_current_drawing_does_not_hold_is_refused, review-gate r12): fixes a found defect (a declared line shipping a unit on no map) as we go (GM 2026-11-18). A stale engine's drawing is not current (the currency question reads an engine older than its sources as no engine) and falls to D9r; make map rebuilds the hamlet driver from the tree's sources (measured in a scratch clone), and a_drawing_by_an_older_engine_refuses_no_declared_new_element pins that a correctly declared new element is not refused. Item 4's scratch run's prebuilt engine is now reconciled by reading: review-gate.sh redraws by the same make map launcher that builds (Launcher build: true), the prebuilt binary a scratch set-up artifact of timestamps; stated as read, not measured end to end. That claim reads the unit from the code's change and needs no element from the drawing, so nothing in this decision turns on it."
     },
     {
-     "id": "D9r residual: a map whose redraw failed keeps the old behaviour",
+     "id": "D9r residual: a map whose redraw failed keeps the old behavior",
      "summary": "A map still not current after the redraw (a failed draw at rust-only, or a drawing by an engine older than its sources), or an unmapped element while any live legend is unknown, is left a unit on no map plus a problem line, not refused; a commit line on such a map still answers",
      "class": "narrowing",
      "ruling": "LEGITIMATE",
