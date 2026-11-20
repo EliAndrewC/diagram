@@ -172,6 +172,33 @@ OUT=$(L7R_GATE_TARGET="$FT" L7R_GATE_CARGO="$TMP/cargo" L7R_GATE_FRESH="$TMP/els
 [ -s "$TMP/cargo.calls" ]; check "another binary: the build was tried" 0 $?
 OUT=$(L7R_GATE_TARGET="$FT" L7R_GATE_CARGO="$TMP/cargo" L7R_GATE_PRINT_FRESH=1 "$STAMP" 2>&1); check "print-fresh: a stale binary whose build failed is not named" 1 $?
 
+# ---- a neighbor's uncompiling file (feature 451 T41): builders share a clone, so one builder's guard or gate-crate edit that does not
+# compile fails every other builder's gate command (measured 2026-11-20, a scratch clone). The refusal names the file from the tree's root
+# and what to do when it is not yours, and nothing runs on the binary built before it: a verdict must come from the code it judges --------
+NT="$TMP/neighbor-target"; mkdir -p "$NT/tool"; printf '#!/usr/bin/env bash\necho "stub $*"\n' > "$NT/tool/l7r-gate"; chmod +x "$NT/tool/l7r-gate"
+touch -d '2000-01-01' "$NT/tool/l7r-gate"; OLD=$(stat -c %Y "$NT/tool/l7r-gate")
+cat > "$TMP/cargo-broken" <<'EOF'
+#!/usr/bin/env bash
+# cargo's own form: a path relative to the workspace (rust/), twice for one file, and once absolute
+printf 'error: this file contains an unclosed delimiter\n  --> guard/src/shared.rs:36:18\n   |\n' >&2
+printf 'error[E0308]: mismatched types\n  --> guard/src/shared.rs:40:2\n' >&2
+printf 'error[E0425]: cannot find value\n  --> /abs/rust/gate/crates/owed/src/lib.rs:19:18\n' >&2
+printf 'error: could not compile `l7r_guard` (lib) due to 2 previous errors\n' >&2
+exit 101
+EOF
+chmod +x "$TMP/cargo-broken"
+OUT=$(L7R_GATE_TARGET="$NT" L7R_GATE_CARGO="$TMP/cargo-broken" "$STAMP" plan decide 451 T41 2>&1); check "a neighbor's uncompiling file: refused" 1 $?
+case $OUT in *"stub "*) echo "FAIL  the binary built before the edit ran: $OUT"; FAILED=1 ;; esac
+case $OUT in *"--> guard/src/shared.rs:36:18"*) : ;; *) echo "FAIL  cargo's own report still shown: $OUT"; FAILED=1 ;; esac
+case $OUT in *"l7r-gate: rust/guard/src/shared.rs, /abs/rust/gate/crates/owed/src/lib.rs do not compile, so l7r-gate is not built and no command runs on the one built before them"*) : ;;
+  *) echo "FAIL  the refusal names each file once, from the tree's root: $OUT"; FAILED=1 ;; esac
+case $OUT in *"l7r-gate: yours? fix what cargo names above. Not yours? another builder in this tree is mid-edit: leave it alone and re-run once it compiles"*) : ;;
+  *) echo "FAIL  the refusal says what to do with a neighbor's file: $OUT"; FAILED=1 ;; esac
+[ "$(stat -c %Y "$NT/tool/l7r-gate")" = "$OLD" ]; check "a neighbor's uncompiling file: the old binary is not stamped fresh" 0 $?
+OUT=$(L7R_GATE_TARGET="$NT" L7R_GATE_CARGO="$TMP/cargo-broken" L7R_GATE_PRINT_FRESH=1 "$STAMP" 2>&1); check "a neighbor's uncompiling file: print-fresh names no binary" 1 $?
+OUT=$(L7R_GATE_TARGET="$NT" L7R_GATE_CARGO="$TMP/cargo" "$STAMP" a b 2>&1); check "a failure with no file named: refused" 1 $?
+case $OUT in *"l7r-gate: the build failed - fix what cargo names above"*) : ;; *) echo "FAIL  a build that names no file keeps its line: $OUT"; FAILED=1 ;; esac
+
 # ---- the Mode A engine through the launcher (feature 449 T168): `l7r-gate.sh mode-a` builds and runs `l7r-mode-a`, its own program, and
 # `make building-programs CHECK=1`'s form of it finds the real page current ------------------------------------------------------------
 OUT=$("$STAMP" mode-a --version); check "mode-a: the launcher runs l7r-mode-a" 0 $?

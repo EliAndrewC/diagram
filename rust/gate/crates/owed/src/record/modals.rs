@@ -577,7 +577,7 @@ fn changed_pages(delta: &mut Delta, base: &str) -> Result<HashSet<String>, Fail>
     let mut changed: HashSet<String> = HashSet::new();
     if !base.is_empty() {
         changed.extend(
-            split(&delta.changed(base, None, &PAGES))
+            split(&delta.changed(base, None, &PAGES)?)
                 .into_iter()
                 .map(str::to_owned),
         );

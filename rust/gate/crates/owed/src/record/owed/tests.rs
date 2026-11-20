@@ -411,7 +411,7 @@ fn the_entry_drift_report_loads_the_registry_when_a_page_moved() {
 #[test]
 fn a_file_entry_owed_reads_starts_it_with_no_page_changed() {
     let root = record("owed-entry-reads");
-    let started = |root: &Path| super::entry_drift_owed(&mut Delta::new(root));
+    let started = |root: &Path| super::entry_drift_owed(&mut Delta::new(root)).unwrap();
     // nothing it reads changed: not started
     assert!(!started(&root));
     // a modal file of the registry, edited in the working tree: started

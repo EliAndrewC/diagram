@@ -92,7 +92,30 @@ elif stale; then
   # and refuses with the fix when that file's lld is not this toolchain's
   . "$TREE/scripts/hooks/lib/lld-path.sh"
   lld_missing "$TREE" && { echo "l7r-gate: not built" >&2; exit 1; }
-  ( cd "$TREE" && RUSTUP_HOME="${RUSTUP_HOME:-$real/.rustup}" CARGO_HOME="${CARGO_HOME:-$real/.cargo}" CARGO_TARGET_DIR="$TARGET" "$cargo" build --profile tool --quiet --manifest-path "$TREE/rust/Cargo.toml" "${PKG[@]}" ) || { echo "l7r-gate: the build failed - fix what cargo names above" >&2; exit 1; }
+  # A NEIGHBOR'S UNCOMPILING FILE (feature 451 T41): builders share a clone, so one builder's guard or gate-crate edit that does not
+  # compile failed every other builder's gate command - `make decide`, `make format`, `make speckit-todo`, each check - in 0.2-2.7 s, with
+  # a line telling them to fix it (measured 2026-11-20, a scratch clone with a broken rust/guard/src/shared.rs, then gate/crates/owed).
+  # The refusal now names each file cargo points at, from the tree's root, and what to do when it is not yours. It does NOT fall back to
+  # the binary built before: that binary is behind every source newer than it, and the gate links the guard's shared code (speckit
+  # parsing, regexes, logs, house style) into nearly every command, so its verdicts and records could come from code older than the code
+  # they judge. The commands that render no verdict and write no record a gate trusts (`rust format` writing, a bare `speckit-todo`
+  # listing, `coord lines`) were 6% of the week's 12,700 make targets (`.git/tool-usage.jsonl`, 2026-11-13 to 20), too few for the risk.
+  err=$(mktemp); ( cd "$TREE" && RUSTUP_HOME="${RUSTUP_HOME:-$real/.rustup}" CARGO_HOME="${CARGO_HOME:-$real/.cargo}" CARGO_TARGET_DIR="$TARGET" "$cargo" build --profile tool --quiet --manifest-path "$TREE/rust/Cargo.toml" "${PKG[@]}" ) 2> "$err"; rc=$?
+  cat "$err" >&2
+  if [ "$rc" -ne 0 ]; then
+    # cargo's `  --> guard/src/x.rs:36:18`: relative to the workspace, rust/; an absolute path (a registry crate's) is kept as it is
+    files=$(sed -n 's/^ *--> \([^:]*\):[0-9].*/\1/p' "$err" | awk '!seen[$0]++ { print (substr($0, 1, 1) == "/" ? $0 : "rust/" $0) }' | paste -sd, - | sed 's/,/, /g')
+    rm -f "$err"
+    if [ -n "$files" ]; then
+      case $files in *", "*) verb="do not compile" them=them ;; *) verb="does not compile" them=it ;; esac
+      echo "l7r-gate: $files $verb, so ${BIN##*/} is not built and no command runs on the one built before $them (a verdict must come from the code it judges)" >&2
+      echo "l7r-gate: yours? fix what cargo names above. Not yours? another builder in this tree is mid-edit: leave it alone and re-run once it compiles (\`git -C $TREE status --short\` lists the uncommitted edits)" >&2
+    else
+      echo "l7r-gate: the build failed - fix what cargo names above" >&2
+    fi
+    exit 1
+  fi
+  rm -f "$err"
   touch "$BIN"  # cargo leaves an up-to-date binary's time alone, and a source newer than it would ask again on every call
 fi
 # GUARD_EDIT_OK: feature 449 T205 - L7R_GATE_PRINT_FRESH=1: the binary, built above when stale, printed where it is now fresh

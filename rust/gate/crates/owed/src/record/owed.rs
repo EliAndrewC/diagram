@@ -56,8 +56,12 @@ pub fn merge_base(root: &Path) -> String {
 }
 
 /// The write-ups that differ between `base` and `head` (None: the working tree, untracked files included).
-fn changed_sources(delta: &mut Delta, base: &str, head: Option<&str>) -> HashSet<String> {
-    let mut names: Vec<String> = split(&delta.changed(base, head, &SOURCE_DIRS))
+fn changed_sources(
+    delta: &mut Delta,
+    base: &str,
+    head: Option<&str>,
+) -> Result<HashSet<String>, Fail> {
+    let mut names: Vec<String> = split(&delta.changed(base, head, &SOURCE_DIRS)?)
         .into_iter()
         .map(str::to_owned)
         .collect();
@@ -68,10 +72,10 @@ fn changed_sources(delta: &mut Delta, base: &str, head: Option<&str>) -> HashSet
                 .map(str::to_owned),
         );
     }
-    names
+    Ok(names
         .iter()
         .filter_map(|n| n.rsplit_once('/').map(|p| p.1.to_owned()))
-        .collect()
+        .collect())
 }
 
 fn html_files(dir: &Path) -> Vec<String> {
@@ -225,13 +229,13 @@ pub(crate) const ENTRY_READS: [&str; 4] = [
 
 /// Whether the entry-drift report must run for this delta: the family is asked, and a file it reads changed against the base, untracked
 /// files included, or the tree holds no modal files - the tree with no engine, where the Python's import failed and the run with it.
-fn entry_drift_owed(delta: &mut Delta) -> bool {
+fn entry_drift_owed(delta: &mut Delta) -> Result<bool, Fail> {
     let base = delta.entry_base();
     if base.is_empty() {
-        return false;
+        return Ok(false);
     }
-    let names = delta.changed(&base, None, &ENTRY_READS) + &delta.others(&ENTRY_READS);
-    !delta.root().join(modals::MODALS).is_dir() || names.lines().any(|n| !n.trim().is_empty())
+    let names = delta.changed(&base, None, &ENTRY_READS)? + &delta.others(&ENTRY_READS);
+    Ok(!delta.root().join(modals::MODALS).is_dir() || names.lines().any(|n| !n.trim().is_empty()))
 }
 
 fn entry_units(root: &Path, now: &Record) -> Result<Vec<Unit>, Fail> {
@@ -314,8 +318,9 @@ pub fn units(
     units_in(&mut Delta::new(root), base, head, families, uid)
 }
 
-/// Reads every file at `base` the asked families will read of it, by one `git cat-file --batch`: the record's pages and
-/// touched write-ups, translation's question pages where its base is this one, the pop-ups' files.
+/// Reads every file at `base` the asked families will read of it, by one `git cat-file --batch` for those the delta names
+/// and the working tree for the rest ([`Delta::fetch`]): the record's pages and touched write-ups, translation's question
+/// pages where its base is this one, the pop-ups' files.
 fn prefetch(
     delta: &mut Delta,
     base: &str,
@@ -353,9 +358,9 @@ pub fn units_in(
     let touched = if base.is_empty() {
         None
     } else {
-        Some(changed_sources(delta, &base, head))
+        Some(changed_sources(delta, &base, head)?)
     };
-    let entry = head.is_none() && has("entry-drift") && entry_drift_owed(delta);
+    let entry = head.is_none() && has("entry-drift") && entry_drift_owed(delta)?;
     if head.is_none() && !base.is_empty() {
         let asked = (has("record"), has("translation"), has("modal"));
         prefetch(delta, &base, touched.as_ref(), asked);

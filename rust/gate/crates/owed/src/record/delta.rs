@@ -1,14 +1,15 @@
 //! What one owed computation reads of the repository, read once and handed to each family (feature 449 T107): the revisions,
 //! the delta's names and untracked files, and a revision's listing and blobs. Each family once asked for them again: 24 `git`
 //! calls a computation on the owed tests' fixture, the base's question pages read by two `cat-file --batch` of 180 ms each on
-//! the real record. Held by the computation and passed down, never kept between computations.
+//! the real record. Held by the computation and passed down, never kept between computations. A file the working tree
+//! holds unchanged from a revision is read from the tree, so a one-page delta asks git for that page alone (feature 451 T43).
 
 use std::collections::{HashMap, HashSet};
 use std::path::{Path, PathBuf};
 
 use super::modals::MODALS;
 use super::owed::ENTRY_READS;
-use super::repo::{cat_blobs, git};
+use super::repo::{cat_blobs, git, universal, Fail};
 use super::units::{QUESTIONS, SOURCE_DIRS};
 
 /// The revisions the families diff against, each asked once and only when needed: HEAD and the merge base of it with
@@ -30,9 +31,11 @@ pub struct Delta {
     root: PathBuf,
     revs: Revs,
     common: Option<String>,
-    status: HashMap<(String, Option<String>), String>,
+    status: HashMap<(String, Option<String>), Result<String, Fail>>,
     others: Option<String>,
     trees: HashMap<String, Tree>,
+    flagged: Option<Result<HashSet<String>, Fail>>,
+    asked: usize,
 }
 
 /// Whether a line git printed names a path under `spec`: the pathspec's own match, a directory taken whole; a quoted path
@@ -44,6 +47,40 @@ fn under(line: &str, spec: &str) -> bool {
         || path
             .strip_prefix(dir)
             .is_some_and(|rest| rest.starts_with('/'))
+}
+
+/// A file git calls unchanged, read from the working tree as [`cat_blobs`] decodes its blob: None where it is no plain
+/// file (a link, or absent as a sparse checkout leaves it) or holds a carriage return (an end-of-line conversion could make
+/// its blob differ), so the blob is read instead.
+fn unchanged(path: &Path) -> Option<String> {
+    let plain = std::fs::symlink_metadata(path).is_ok_and(|m| m.is_file());
+    let bytes = std::fs::read(path)
+        .ok()
+        .filter(|b| plain && !b.contains(&b'\r'))?;
+    Some(String::from_utf8_lossy(&bytes).into_owned())
+}
+
+/// `git -C root args...`'s stdout as [`git`] reads it, else the refusal naming git's error: a diff or listing that printed
+/// nothing because it could not run is no answer that nothing changed, and owing everything instead would flood the
+/// checks (the session's ruling on T43, 2026-11-20).
+fn ran(root: &Path, args: &[&str]) -> Result<String, Fail> {
+    let (ok, out, err) = std::process::Command::new("git")
+        .arg("-C")
+        .arg(root)
+        .args(args)
+        .output()
+        .map_or((false, Vec::new(), b"git could not be run".to_vec()), |o| {
+            (o.status.success(), o.stdout, o.stderr)
+        });
+    if ok {
+        return Ok(universal(&String::from_utf8_lossy(&out)));
+    }
+    Err(format!(
+        "cannot tell what changed: git {} failed: {}; repair the index, e.g. git -C {} reset -q",
+        args[0],
+        String::from_utf8_lossy(&err).trim(),
+        root.display()
+    ))
 }
 
 /// The lines of `text` under any of `specs`, each ended as git ends it.
@@ -70,7 +107,15 @@ impl Delta {
             status: HashMap::new(),
             others: None,
             trees: HashMap::new(),
+            flagged: None,
+            asked: 0,
         }
+    }
+
+    /// How many objects this computation has asked `git cat-file` for: the base read's cost (feature 451 T43).
+    #[must_use]
+    pub fn blobs_asked(&self) -> usize {
+        self.asked
     }
 
     #[must_use]
@@ -150,18 +195,17 @@ impl Delta {
     /// `--name-status --no-renames` over them all. Without rename detection each path stands alone, so the shared listing
     /// filtered is the narrow one wherever no rename was possible: a rename pairs a deleted path with an added one under
     /// the same pathspec, and where `specs` hold both, or a status other than A, D, M or T, the narrow diff runs itself.
-    pub fn changed(&mut self, base: &str, head: Option<&str>, specs: &[&str]) -> String {
-        let root = &self.root;
-        let status = self
-            .status
-            .entry((base.to_owned(), head.map(str::to_owned)))
-            .or_insert_with(|| {
-                let mut args = vec!["diff", "--name-status", "--no-renames", base];
-                args.extend(head);
-                args.push("--");
-                args.extend(Self::WATCHED);
-                git(root, &args)
-            });
+    ///
+    /// # Errors
+    ///
+    /// Where git cannot run the diff (a corrupt index): the refusal names git's error and the repair.
+    pub fn changed(
+        &mut self,
+        base: &str,
+        head: Option<&str>,
+        specs: &[&str],
+    ) -> Result<String, Fail> {
+        let status = self.status(base, head)?;
         let (mut names, mut codes) = (String::new(), HashSet::new());
         for line in status.lines() {
             let (code, path) = line.split_once('\t').unwrap_or(("", line));
@@ -172,17 +216,34 @@ impl Delta {
         }
         let plain = codes.iter().all(|c| matches!(*c, "A" | "D" | "M" | "T"));
         if plain && !(codes.contains("A") && codes.contains("D")) {
-            return names;
+            return Ok(names);
         }
         let mut args = vec!["diff", "--name-only", base];
         args.extend(head);
         args.push("--");
         args.extend(specs);
-        git(root, &args)
+        ran(&self.root, &args)
+    }
+
+    /// `git diff --name-status --no-renames base [head] -- WATCHED`, asked once for each pair; the refusal where git failed.
+    fn status(&mut self, base: &str, head: Option<&str>) -> Result<&str, Fail> {
+        let root = &self.root;
+        self.status
+            .entry((base.to_owned(), head.map(str::to_owned)))
+            .or_insert_with(|| {
+                let mut args = vec!["diff", "--name-status", "--no-renames", base];
+                args.extend(head);
+                args.push("--");
+                args.extend(Self::WATCHED);
+                ran(root, &args)
+            })
+            .as_deref()
+            .map_err(Clone::clone)
     }
 
     /// What `git ls-files --others --exclude-standard -- specs` prints (`specs` under [`Self::WATCHED`]): untracked files
-    /// pair with nothing, so one listing filtered is exact.
+    /// pair with nothing, so one listing filtered is exact. A tree git cannot list (no repository at all) has none; a
+    /// corrupt index is refused by [`Self::changed`], which every family asks first wherever there is a base.
     pub fn others(&mut self, specs: &[&str]) -> String {
         let root = &self.root;
         let all = self.others.get_or_insert_with(|| {
@@ -191,6 +252,27 @@ impl Delta {
             git(root, &args)
         });
         filtered(all, specs)
+    }
+
+    /// The tracked files under [`Self::LISTED`] whose working copy git does not compare (`ls-files -v` tags them other
+    /// than `H`: assume-unchanged in lower case, skip-worktree `S`), so a diff's silence says nothing of them; None where
+    /// git failed.
+    fn flagged(&mut self) -> Option<&HashSet<String>> {
+        let root = &self.root;
+        self.flagged
+            .get_or_insert_with(|| {
+                let mut args = vec!["ls-files", "-v", "--"];
+                args.extend(Self::LISTED);
+                ran(root, &args).map(|out| {
+                    out.lines()
+                        .filter_map(|l| l.split_once(' '))
+                        .filter(|(tag, _)| *tag != "H")
+                        .map(|(_, path)| path.to_owned())
+                        .collect()
+                })
+            })
+            .as_ref()
+            .ok()
     }
 
     fn tree(&mut self, rev: &str) -> &mut Tree {
@@ -211,18 +293,46 @@ impl Delta {
     }
 
     /// Reads the files `names` at `rev` not read yet, by one `git cat-file --batch`: a caller about to ask for several
-    /// families' files names them all here first.
+    /// families' files names them all here first. A file `rev` lists that the working tree holds unchanged (no line of
+    /// the cached diff of `rev` against the tree names it, nor does `ls-files -v` flag it) is read from the tree instead,
+    /// as the same bytes: a one-page delta asked git for every page at the base, 1,951 blobs and 0.63-1.13 s of each
+    /// 1.4-1.6 s computation on the real record, measured 2026-11-20 (451 T40, a `git` shim timing `cat-file`), where the
+    /// tree's copies cost a file read each (feature 451 T43). Where the diff or `ls-files -v` failed, as a corrupt index
+    /// fails both, nothing is called unchanged and every name goes to `cat-file`: their silence would read every page
+    /// from the tree and owe nothing for the edits (the session's ruling on T43, 2026-11-20: failing closed).
     pub fn fetch(&mut self, rev: &str, names: &[String]) {
         let root = self.root.clone();
+        let moved: Option<HashSet<String>> = self.status(rev, None).ok().map(|status| {
+            status
+                .lines()
+                .map(|l| l.split_once('\t').map_or(l, |p| p.1).to_owned())
+                .collect()
+        });
+        let moved = moved.and_then(|mut moved| {
+            moved.extend(self.flagged()?.iter().cloned());
+            Some(moved)
+        });
         let tree = self.tree(rev);
+        let listed: HashSet<&str> = tree.listing.lines().collect();
         let mut seen = HashSet::new();
-        let missing: Vec<&String> = names
-            .iter()
-            .filter(|n| !tree.blobs.contains_key(*n) && seen.insert(*n))
-            .collect();
+        let mut missing = Vec::new();
+        for name in names {
+            if tree.blobs.contains_key(name) || !seen.insert(name) {
+                continue;
+            }
+            let same = listed.contains(name.as_str())
+                && moved.as_ref().is_some_and(|moved| !moved.contains(name));
+            match same.then(|| unchanged(&root.join(name))).flatten() {
+                Some(text) => drop(tree.blobs.insert(name.clone(), text)),
+                None => missing.push(name.clone()),
+            }
+        }
         let objects: Vec<String> = missing.iter().map(|n| format!("{rev}:{n}")).collect();
-        for (name, text) in missing.into_iter().zip(cat_blobs(&root, &objects)) {
-            tree.blobs.insert(name.clone(), text);
+        self.asked += objects.len();
+        let read = cat_blobs(&root, &objects);
+        let tree = self.tree(rev);
+        for (name, text) in missing.into_iter().zip(read) {
+            tree.blobs.insert(name, text);
         }
     }
 

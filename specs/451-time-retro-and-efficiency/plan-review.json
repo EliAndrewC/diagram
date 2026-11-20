@@ -571,14 +571,8 @@
    "reviewed": "2026-11-20",
    "declared": "spec-fidelity"
   },
-  "### T41 (<why: the finding or measurement that files it>)": {
-   "sha256": "c7acd81c8cd71d90707c2eb7ee551557ad20076090866957c935957d6e9ffb56",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-20",
-   "declared": "spec-fidelity"
-  },
   "### T41 Approach (checklist part A)": {
-   "sha256": "704d164c180c168b3eed36c414fe963025aa718757ee5ca985dcf076a0ed9277",
+   "sha256": "ea7f7e65625b5a081b58a6a4d802a3db7143d7343d40c5c14127e5cfd69c8e10",
    "verdict": "CLEAR",
    "reviewed": "2026-11-20",
    "declared": "spec-fidelity"
@@ -607,14 +601,20 @@
    "reviewed": "2026-11-20",
    "declared": "spec-fidelity"
   },
-  "### T43 (<why: the finding or measurement that files it>)": {
-   "sha256": "e4326b04b3fb6180c18ca28045ac4f7f1b27a14822b60d6a2b0b0340175fe246",
+  "### T43 Approach (checklist part A)": {
+   "sha256": "800628cf48a04a92ea5c9c0b6430f4fe6176f3b633aea140e61bef3575ba872e",
    "verdict": "CLEAR",
    "reviewed": "2026-11-20",
    "declared": "spec-fidelity"
   },
-  "### T43 Approach (checklist part A)": {
-   "sha256": "7d4d2faae893df559cd7ebe33d34fc4dbd173959e079c22ada2e98c71a9c9495",
+  "### T41 (T34's reading of `scripts/gates/l7r-gate.sh`: the launcher rebuilds `l7r-gate` when `rust/guard` changes and the gate links the guard, so one builder's uncompiling guard edit fails every other builder's gate command in a shared clone - read, not measured, until this task)": {
+   "sha256": "d22c800d0f2457735fe897117e95c16208d1ef097bfb898f6676061fdf5e52e5",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity"
+  },
+  "### T43 (T40's finding: every owed computation read the record's pages at the merge base whole, 1,951 blobs by one `git cat-file --batch` for a one-page delta, 0.63-1.13 s of each 1.4-1.6 s computation, measured 2026-11-20 (T40's `git` shim))": {
+   "sha256": "98c32d9f29c909315b8fcf38758cc050711de2e78c61d70e798d969add402f2c",
    "verdict": "CLEAR",
    "reviewed": "2026-11-20",
    "declared": "spec-fidelity"
@@ -4989,6 +4989,212 @@
      "why": "The removed text (earlier.md) was the bare unfilled template, judged CLEAR. Deleting a placeholder whose section has been written removes no decision and no requirement."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-20",
+   "blocks": [
+    "### T41 (T34's reading of `scripts/gates/l7r-gate.sh`: the launcher rebuilds `l7r-gate` when `rust/guard` changes and the gate links the guard, so one builder's uncompiling guard edit fails every other builder's gate command in a shared clone - read, not measured, until this task)",
+    "### T41 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T41-measure-then-launcher-only",
+     "summary": "Measure the failure in a scratch clone first, then change only the launcher's build-failure path; no gate crate changed.",
+     "class": "within",
+     "why": "A [perf] task under FR-013 (the builders' loop). The GM asked that performance work go first (2026-11-20) and named no mechanism for this one; confining the change to the launcher narrows nothing he or the spec asked for."
+    },
+    {
+     "id": "T41-named-file-refusal",
+     "summary": "On a failed build the launcher keeps cargo's report and adds each file cargo points at (from the tree root), an advice line (yours: fix it; not yours: leave it and re-run once it compiles) and the git status of uncommitted edits; a failure naming no file keeps the old line; it applies to any uncompiling source.",
+     "class": "within",
+     "why": "Serves FR-013's 'the builders' loop faster': it removes the old order to edit the neighbor's file. It does not change who is refused or when, so it adds no behavior beyond the message. Its red-first shard case (2 FAIL lines on the unfixed launcher) only checks that the message is there, so it enforces the task and is not added scope."
+    },
+    {
+     "id": "T41-no-last-good-binary-fallback",
+     "summary": "Do not build a fallback that runs the last good l7r-gate binary when the tree does not compile; the launcher stays fail-closed.",
+     "class": "within",
+     "why": "Neither the request nor the spec asks for a fallback. The GM's words call only for performance work to go first, and FR-013 defines it by tag. Not building one keeps existing behavior the plan must keep (feature 449 T061's fail-closed launcher, and the dispatch's rule that a gate check over a changed guard uses the new code), so it narrows nothing asked. If you read it against the task's own problem statement (others' commands blocked), it is still not a narrowing of the GM's request. On the merits it would be LEGITIMATE anyway: a fallback would let verdicts and push-trusted records come from a binary older than the code it judges, which defeats what the gate is for. The plan measured how much a fallback would cover: the commands that may run safely on an old binary were 787 of 12,700 make targets in a week (6%), and make decide (449 runs) and rust-test (2,414 runs) would still fail."
+    },
+    {
+     "id": "T41-old-binary-safety-rule",
+     "summary": "Rule: a command may run on a binary older than the tree only if it renders no verdict and writes no record a later gate or push trusts. Under it decide, task-start, every check, rust lint/test/cover/dead, format --check, speckit-todo's push routes, mode-a and hamlet fail; format writing, bare speckit-todo and coord lines pass.",
+     "class": "within",
+     "why": "It is the reason for not building the fallback, not an exception put into behavior: nothing in the plan runs an old binary under it. It is narrower than (and so consistent with) the fail-closed launcher. The plan's figures carry one-shot measured labels (2026-11-20, .git/tool-usage.jsonl kind:target, 2026-11-13 to 20), and the arithmetic holds (787/12,700 = 6.2%)."
+    },
+    {
+     "id": "T41-stale-ok-escape-untouched",
+     "summary": "L7R_GATE_STALE_OK=1 (T129) still runs the old binary, unchanged.",
+     "class": "within",
+     "why": "This is behavior that already exists. The plan neither widens nor removes it, and nothing the GM asked reaches it."
+    },
+    {
+     "id": "T41-order-exits-done",
+     "summary": "Lands after T40 and is independent of T43. Green exit: the shard's new cases pass and the real make decide against a broken guard prints the two lines. Done is measured (exit 2 in 0.23 s with the named file and the advice).",
+     "class": "within",
+     "why": "Sequencing and the measures of done; they narrow nothing the request or spec asks."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-20",
+   "blocks": [
+    "### T43 (T40's finding: every owed computation read the record's pages at the merge base whole, 1,951 blobs by one `git cat-file --batch` for a one-page delta, 0.63-1.13 s of each 1.4-1.6 s computation, measured 2026-11-20 (T40's `git` shim))",
+    "### T43 Approach (checklist part A)",
+    "(removed) ### T41 (<why: the finding or measurement that files it>)",
+    "(removed) ### T43 (<why: the finding or measurement that files it>)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T43-rule",
+     "summary": "Delta::fetch reads a base name the working tree holds unchanged (no diff line, not flagged by ls-files -v, plain file, no CR) from the tree, decoded as cat_blobs decodes; every other name still goes to cat-file.",
+     "class": "within",
+     "why": "A performance change to the gate's owed computation, the kind of work the GM ordered first (2026-11-20, FR-013); the owed units are held the same, so it narrows nothing asked."
+    },
+    {
+     "id": "T43-any-revision",
+     "summary": "The rule holds for any revision, so --between's two reads shrink too.",
+     "class": "within",
+     "why": "Same speed change, wider reach within the same function; no requested behavior altered."
+    },
+    {
+     "id": "T43-rejected-cache",
+     "summary": "Rejected keying the base read by merge base and reusing it across computations.",
+     "class": "within",
+     "why": "A design choice between two speedups; keeps delta.rs's existing no-state rule; narrows nothing the GM asked."
+    },
+    {
+     "id": "T43-red-first-counter",
+     "summary": "Delta::blobs_asked cost counter and tests red before, green after; tree-vs-blob equality test across file states.",
+     "class": "within",
+     "why": "Enforcement of the performance change and of its hold that output stays the same; serves FR-012/FR-013's spirit and the GM's 'real enforcement'."
+    },
+    {
+     "id": "T43-fail-closed",
+     "summary": "Where git diff or ls-files -v fails, nothing is called unchanged and every name goes to cat-file as before T43.",
+     "class": "within",
+     "why": "Fixes a defect the new rule would otherwise introduce (edits read as base on a corrupt index); restores prior behavior, fixed in the task as the constitution's fix-as-we-go requires."
+    },
+    {
+     "id": "T43-refuse-failed-diff",
+     "summary": "Delta::changed returns git's error and every owed computation refuses ('cannot tell what changed') instead of owing nothing on a failed diff.",
+     "class": "within",
+     "why": "A found defect (a check passing bad work: six modal units went unowed on a corrupt index, measured) fixed here by default, as the fix-as-we-go rule requires; not a narrowing of anything asked."
+    },
+    {
+     "id": "T43-others-unchanged",
+     "summary": "ls-files --others failing still reads as no untracked files (a tree with no repository owes nothing, as command-line tests pin).",
+     "class": "within",
+     "why": "Leaves existing, tested behavior that yields no wrong outcome (a corrupt index is caught by changed first); not a defect left, so no narrowing."
+    },
+    {
+     "id": "T43-entry-drift-left",
+     "summary": "Entry-drift's own RevReader still reads 297 pop-up objects at the base (about 0.025 s, ~2% of the computation), not filed.",
+     "class": "within",
+     "why": "A residual cost, not a wrong outcome, so not a defect; the GM asked performance work be prioritized, not that every measured cost in a touched path be removed. Leaving it narrows no requirement."
+    },
+    {
+     "id": "T43-scope",
+     "summary": "Only the owed crate edited (a doc comment in owed.rs); T41 works on l7r-gate.sh separately; order after T40, before T22.",
+     "class": "within",
+     "why": "Sequencing and file scope; nothing requested is dropped."
+    },
+    {
+     "id": "T43-no-map",
+     "summary": "Checklist items 10-12 and the step table n/a: no map moves, no pool manifest moves.",
+     "class": "within",
+     "why": "Accurate for a gate-tooling speed change; no request clause touched."
+    },
+    {
+     "id": "removed-templates",
+     "summary": "The empty template headings '### T41 (<why...>)' and '### T43 (<why...>)' are removed.",
+     "class": "within",
+     "why": "Placeholders with no content or decision; T43's as-built section replaces its own; removing T41's empty placeholder drops no decision (no T41 as-built block is in this bundle to judge)."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-20",
+   "blocks": [
+    "### T43 (T40's finding: every owed computation read the record's pages at the merge base whole, 1,951 blobs by one `git cat-file --batch` for a one-page delta, 0.63-1.13 s of each 1.4-1.6 s computation, measured 2026-11-20 (T40's `git` shim))",
+    "### T43 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T43-scope",
+     "summary": "T43 is filed as [perf] work under FR-013 (the owed computation every gate run, push and landing pays).",
+     "class": "within",
+     "why": "The GM 2026-11-20: 'can we in general priotitize performance improvements going forward?' and 'doing those first makes everything after them faster'; FR-013 defines perf work as making the checks, gate or landings faster, which this is."
+    },
+    {
+     "id": "T43-rule",
+     "summary": "Delta::fetch reads a base file from the working tree when the cached diff does not name it, ls-files -v does not flag it assume-unchanged/skip-worktree, it is a plain file and holds no carriage return; decoded as cat_blobs decodes, so texts equals cat_blobs.",
+     "class": "within",
+     "why": "A speed change that removes work; the conservative conditions keep every owed unit the same, so no check's verdict changes. Nothing the GM asked is narrowed."
+    },
+    {
+     "id": "T43-any-rev",
+     "summary": "The rule applies at any revision, so --between's reads shrink too.",
+     "class": "within",
+     "why": "Same speed change over the same function; no behavior asked for is removed."
+    },
+    {
+     "id": "T43-rejected-cache",
+     "summary": "Rejected keying the base read by merge base and reusing it across computations.",
+     "class": "within",
+     "why": "A design choice among speedups; it keeps an existing invariant of delta.rs and narrows nothing requested."
+    },
+    {
+     "id": "T43-tests",
+     "summary": "Red-first tests on a cost counter (blobs_asked: 11 to 1) and texts-equals-cat_blobs across edited/deleted/skip-worktree/link/CR/untracked/assume-unchanged states.",
+     "class": "within",
+     "why": "Enforcement of the task's own hold (owed output the same, base read shrunk); a test that fails only when the requested behavior is absent serves the request."
+    },
+    {
+     "id": "T43-fail-closed-read",
+     "summary": "If the cached git diff or ls-files -v fails, nothing is called unchanged and every base name goes to cat-file, as before T43; tested by corrupting the index.",
+     "class": "within",
+     "why": "Closes a wrong outcome the new read path would otherwise introduce (edited tree read as the base, so the record family owes nothing); fixing a found defect in the step is the standing rule, not a narrowing."
+    },
+    {
+     "id": "T43-refuse-failed-diff",
+     "summary": "Delta::changed returns git's error on a failed diff, and every owed computation reading it refuses with 'cannot tell what changed ... repair the index' rather than owing nothing (or owing everything).",
+     "class": "within",
+     "why": "A found defect (a check passing bad work: six modal-research units went unowed on a corrupt index, measured) fixed in the step where found, red first; the refusal is confined to the failed-diff case the defect lives in, and choosing refusal over a flood is design, not a narrowing of anything asked."
+    },
+    {
+     "id": "T43-others-left",
+     "summary": "ls-files --others still reads a failure as no untracked files; a tree with no repository owes nothing, as existing command-line tests pin.",
+     "class": "within",
+     "why": "Not a defect left: the no-repository behavior is pinned as intended, and a corrupt index (the failure case found) is refused earlier by changed wherever there is a base."
+    },
+    {
+     "id": "T43-ls-files-alone-untested",
+     "summary": "A failed ls-files -v with a good diff rides the same fail-closed rule and has no test of its own; no state was found that fails one and not the other.",
+     "class": "within",
+     "why": "Coverage of a case not shown to exist; the rule covers it, and no wrong outcome is left."
+    },
+    {
+     "id": "T43-entry-drift-left",
+     "summary": "Entry-drift's own RevReader still reads the 297 pop-up files at the base (0.025 s, about 2% of the computation) and is not filed.",
+     "class": "within",
+     "why": "A small cost, not a defect (no wrong outcome); FR-013 orders perf work first but does not require every measured cost be removed, so leaving a 2% cost narrows nothing the GM asked."
+    },
+    {
+     "id": "T43-edit-reach",
+     "summary": "Only the owed crate (delta.rs, a doc comment in owed.rs) and this section edited; ordered after T40, before T22, beside T41.",
+     "class": "within",
+     "why": "Scope and ordering inside the task as filed; consistent with FR-013's perf-first ordering."
+    },
+    {
+     "id": "T43-verification",
+     "summary": "Owed output checked against the HEAD build on eight real commits plus the reword (53 listing pairs, three triage bundles, fingerprint cross-checks); triage outputs differ only in the printed --out path, accepted.",
+     "class": "within",
+     "why": "Shows the checks still do their job after a speed change (their verdicts unchanged); the printed-path difference is accepted rather than held to exactness, consistent with the GM's 2026-11-18 rule."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -6783,6 +6989,130 @@
      "summary": "push-gate skip's unscoped `git diff --name-only HEAD` (0.24 s a gate run on the full clone) is judged not a defect and is not filed.",
      "class": "within",
      "why": "Under constitution XIV a defect is a wrong outcome, and a 0.24 s cost is not one. FR-013 orders performance tasks first but does not require every observed cost to be filed. A real gate pays this once a push, and the sparse clone already shrinks the index this suite walks. Nothing the GM asked for is left undone."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T41": {
+   "section_sha256": "5a5d53ae9b0f5085dcea7b0d8e66fe8374c76ebd79b5aa42a5662043806ff7aa",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T41-measure-then-launcher-only",
+     "summary": "Measure the failure in a scratch clone first, then change only the launcher's build-failure path; no gate crate changed.",
+     "class": "within",
+     "why": "A [perf] task under FR-013 (the builders' loop). The GM asked that performance work go first (2026-11-20) and named no mechanism for this one; confining the change to the launcher narrows nothing he or the spec asked for."
+    },
+    {
+     "id": "T41-named-file-refusal",
+     "summary": "On a failed build the launcher keeps cargo's report and adds each file cargo points at (from the tree root), an advice line (yours: fix it; not yours: leave it and re-run once it compiles) and the git status of uncommitted edits; a failure naming no file keeps the old line; it applies to any uncompiling source.",
+     "class": "within",
+     "why": "Serves FR-013's 'the builders' loop faster': it removes the old order to edit the neighbor's file. It does not change who is refused or when, so it adds no behavior beyond the message. Its red-first shard case (2 FAIL lines on the unfixed launcher) only checks that the message is there, so it enforces the task and is not added scope."
+    },
+    {
+     "id": "T41-no-last-good-binary-fallback",
+     "summary": "Do not build a fallback that runs the last good l7r-gate binary when the tree does not compile; the launcher stays fail-closed.",
+     "class": "within",
+     "why": "Neither the request nor the spec asks for a fallback. The GM's words call only for performance work to go first, and FR-013 defines it by tag. Not building one keeps existing behavior the plan must keep (feature 449 T061's fail-closed launcher, and the dispatch's rule that a gate check over a changed guard uses the new code), so it narrows nothing asked. If you read it against the task's own problem statement (others' commands blocked), it is still not a narrowing of the GM's request. On the merits it would be LEGITIMATE anyway: a fallback would let verdicts and push-trusted records come from a binary older than the code it judges, which defeats what the gate is for. The plan measured how much a fallback would cover: the commands that may run safely on an old binary were 787 of 12,700 make targets in a week (6%), and make decide (449 runs) and rust-test (2,414 runs) would still fail."
+    },
+    {
+     "id": "T41-old-binary-safety-rule",
+     "summary": "Rule: a command may run on a binary older than the tree only if it renders no verdict and writes no record a later gate or push trusts. Under it decide, task-start, every check, rust lint/test/cover/dead, format --check, speckit-todo's push routes, mode-a and hamlet fail; format writing, bare speckit-todo and coord lines pass.",
+     "class": "within",
+     "why": "It is the reason for not building the fallback, not an exception put into behavior: nothing in the plan runs an old binary under it. It is narrower than (and so consistent with) the fail-closed launcher. The plan's figures carry one-shot measured labels (2026-11-20, .git/tool-usage.jsonl kind:target, 2026-11-13 to 20), and the arithmetic holds (787/12,700 = 6.2%)."
+    },
+    {
+     "id": "T41-stale-ok-escape-untouched",
+     "summary": "L7R_GATE_STALE_OK=1 (T129) still runs the old binary, unchanged.",
+     "class": "within",
+     "why": "This is behavior that already exists. The plan neither widens nor removes it, and nothing the GM asked reaches it."
+    },
+    {
+     "id": "T41-order-exits-done",
+     "summary": "Lands after T40 and is independent of T43. Green exit: the shard's new cases pass and the real make decide against a broken guard prints the two lines. Done is measured (exit 2 in 0.23 s with the named file and the advice).",
+     "class": "within",
+     "why": "Sequencing and the measures of done; they narrow nothing the request or spec asks."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T43": {
+   "section_sha256": "ff5eb1ae5582b0a489f83ad310586e6b0a7673893b235e213419edd49cbc8104",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T43-scope",
+     "summary": "T43 is filed as [perf] work under FR-013 (the owed computation every gate run, push and landing pays).",
+     "class": "within",
+     "why": "The GM 2026-11-20: 'can we in general priotitize performance improvements going forward?' and 'doing those first makes everything after them faster'; FR-013 defines perf work as making the checks, gate or landings faster, which this is."
+    },
+    {
+     "id": "T43-rule",
+     "summary": "Delta::fetch reads a base file from the working tree when the cached diff does not name it, ls-files -v does not flag it assume-unchanged/skip-worktree, it is a plain file and holds no carriage return; decoded as cat_blobs decodes, so texts equals cat_blobs.",
+     "class": "within",
+     "why": "A speed change that removes work; the conservative conditions keep every owed unit the same, so no check's verdict changes. Nothing the GM asked is narrowed."
+    },
+    {
+     "id": "T43-any-rev",
+     "summary": "The rule applies at any revision, so --between's reads shrink too.",
+     "class": "within",
+     "why": "Same speed change over the same function; no behavior asked for is removed."
+    },
+    {
+     "id": "T43-rejected-cache",
+     "summary": "Rejected keying the base read by merge base and reusing it across computations.",
+     "class": "within",
+     "why": "A design choice among speedups; it keeps an existing invariant of delta.rs and narrows nothing requested."
+    },
+    {
+     "id": "T43-tests",
+     "summary": "Red-first tests on a cost counter (blobs_asked: 11 to 1) and texts-equals-cat_blobs across edited/deleted/skip-worktree/link/CR/untracked/assume-unchanged states.",
+     "class": "within",
+     "why": "Enforcement of the task's own hold (owed output the same, base read shrunk); a test that fails only when the requested behavior is absent serves the request."
+    },
+    {
+     "id": "T43-fail-closed-read",
+     "summary": "If the cached git diff or ls-files -v fails, nothing is called unchanged and every base name goes to cat-file, as before T43; tested by corrupting the index.",
+     "class": "within",
+     "why": "Closes a wrong outcome the new read path would otherwise introduce (edited tree read as the base, so the record family owes nothing); fixing a found defect in the step is the standing rule, not a narrowing."
+    },
+    {
+     "id": "T43-refuse-failed-diff",
+     "summary": "Delta::changed returns git's error on a failed diff, and every owed computation reading it refuses with 'cannot tell what changed ... repair the index' rather than owing nothing (or owing everything).",
+     "class": "within",
+     "why": "A found defect (a check passing bad work: six modal-research units went unowed on a corrupt index, measured) fixed in the step where found, red first; the refusal is confined to the failed-diff case the defect lives in, and choosing refusal over a flood is design, not a narrowing of anything asked."
+    },
+    {
+     "id": "T43-others-left",
+     "summary": "ls-files --others still reads a failure as no untracked files; a tree with no repository owes nothing, as existing command-line tests pin.",
+     "class": "within",
+     "why": "Not a defect left: the no-repository behavior is pinned as intended, and a corrupt index (the failure case found) is refused earlier by changed wherever there is a base."
+    },
+    {
+     "id": "T43-ls-files-alone-untested",
+     "summary": "A failed ls-files -v with a good diff rides the same fail-closed rule and has no test of its own; no state was found that fails one and not the other.",
+     "class": "within",
+     "why": "Coverage of a case not shown to exist; the rule covers it, and no wrong outcome is left."
+    },
+    {
+     "id": "T43-entry-drift-left",
+     "summary": "Entry-drift's own RevReader still reads the 297 pop-up files at the base (0.025 s, about 2% of the computation) and is not filed.",
+     "class": "within",
+     "why": "A small cost, not a defect (no wrong outcome); FR-013 orders perf work first but does not require every measured cost be removed, so leaving a 2% cost narrows nothing the GM asked."
+    },
+    {
+     "id": "T43-edit-reach",
+     "summary": "Only the owed crate (delta.rs, a doc comment in owed.rs) and this section edited; ordered after T40, before T22, beside T41.",
+     "class": "within",
+     "why": "Scope and ordering inside the task as filed; consistent with FR-013's perf-first ordering."
+    },
+    {
+     "id": "T43-verification",
+     "summary": "Owed output checked against the HEAD build on eight real commits plus the reword (53 listing pairs, three triage bundles, fingerprint cross-checks); triage outputs differ only in the printed --out path, accepted.",
+     "class": "within",
+     "why": "Shows the checks still do their job after a speed change (their verdicts unchanged); the printed-path difference is accepted rather than held to exactness, consistent with the GM's 2026-11-18 rule."
     }
    ],
    "verdict": "CLEAR"
