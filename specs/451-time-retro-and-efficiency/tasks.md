@@ -39,6 +39,10 @@ MVP is T02-T11 (User Story 1: the retrospective is one command). Each refusal (T
 
 ### The event-log data (FR-001 to FR-004)
 
+- [ ] T03 The category table and the line's task: the shared `bucket_of` table (`data-model.md`'s rows, with `format`, `render-sync` and `map` placed) in `rust/guard/src/guards/event_log_hooks.rs`, `category()` booking a Bash call by it, and `task` on every line where known - a command's `T=` (`tick`, `task-start`, `decide`, `land`), a subagent's meta `description`, else the clone's active task (D2; FR-001, SC-002)
+      research: rendering
+      held: rust/guard/src/guards/event_log_hooks.rs
+      verify: red first - `make static`, `make rust-test`, `make hooks-test` and `l7r-gate.sh rust test --crate rust/guard` class as tests, `make land` as land, `make frobnicate` as other; a subagent's call carries its meta file's task, a `make land T=T05` line carries `T05`; `make rust-test CRATE=rust/guard`; `make hooks-test`; `make quick`
 - [ ] T04 A background run's end: `bg` on a backgrounded Bash call's PostToolUse, a `BgEnd` line from a `<task-notification>` prompt with a `<tool-use-id>`, `inflight` on Stop and SubagentStop from `background_tasks`, and `append_row` public for the gate's tools, in `rust/guard/src/guards/event_log_hooks.rs` (its tool fields moved to `event_log_hooks/fields.rs` if the file would pass the file cap); and the one reader, `rust/gate/crates/measure/src/measure/events.rs::load_events`, setting the new kinds (`BgEnd`, `Phase`) aside from the time-gap stream until T08 and T09 read them (D3, D4; FR-002)
       research: rendering
       held: rust/guard/src/guards/event_log_hooks.rs (and event_log_hooks/fields.rs if made)
