@@ -6,6 +6,11 @@
 //!
 //! Plan T009's decisions: (a) `hm_shape.py`'s wait half is `shared::wait`; (b) the cron's minute is local, asked of `date +%M` on
 //! that branch alone; (c) a command's own process pattern is compiled by `fancy-regex`.
+//!
+//! A RUN THE HARNESS CANNOT TRACK (feature 451 T15, D12, FR-008): a make or cargo job detached by a lone `&` that no `wait` covers,
+//! started under `nohup` or `setsid`, or disowned, is refused naming the Bash tool's `run_in_background`; `DETACH_OK` escapes. The
+//! command is read by a small walk of its shell structure (`Shell`), never one pattern, since what covers a job is where its `wait`
+//! stands: the same shell, unconditional, not backgrounded.
 
 use std::path::PathBuf;
 use std::sync::LazyLock;
@@ -16,6 +21,7 @@ use serde_json::Value;
 use crate::protocol::{Answer, Event, Guard};
 use crate::shared::escape::{escape_or_refuse, Escape};
 use crate::shared::log::fire;
+use crate::shared::make::{invoked, POS};
 use crate::shared::session::Session;
 use crate::shared::shape::{strip_heredocs, strip_quotes};
 use crate::shared::state::field;
@@ -53,6 +59,20 @@ static DISGUISED: LazyLock<Regex> = LazyLock::new(|| {
 static PGREP_F: LazyLock<Regex> = LazyLock::new(|| {
     re(r"(?:\A|(?<=[|;&]))(?>[^|;&]*?\b(pgrep|pkill)\b)[^|;&]*[[:space:]]-[a-zA-Z]*f")
 });
+
+// A make or cargo run at a command position (D12): `invoked` names a make run's targets, so a goal it cannot read (`make $t`) names
+// none, and a cargo run is no make's.
+static RUNNER: LazyLock<Regex> =
+    LazyLock::new(|| re(&format!(r"{POS}(?:\$\(MAKE\)|make|cargo)(?:[\s;&|)]|$)")));
+// A simple command started under nohup or setsid, its options passed over: what follows is what it runs.
+static STARTER: LazyLock<Regex> =
+    LazyLock::new(|| re(&format!(r"\A{POS}(?:nohup|setsid)\s+(?:-\S+\s+)*")));
+// `"$!"` and `'%1'` unquoted before the quotes are blanked, so `wait "$!"` is read as the `wait $!` it is.
+static QUOTED_JOB: LazyLock<Regex> = LazyLock::new(|| re(r#"(["'])(\$!|%[0-9]+)\1"#));
+// A SHELL's `-c` just before a quote: the string `strip_quotes` keeps is an interpreter's, and only a shell's is walked as commands
+// (a `python3 -c` string is passed over).
+static SHELL_C: LazyLock<Regex> =
+    LazyLock::new(|| re(r"(?:^|[\s/;&|(])(?:ba|da|z|k)?sh\s+(?:-[A-Za-z-]*\s+)*-[A-Za-z]*c\s+$"));
 
 /// `grep -E`'s reading: a pattern matched against each line alone.
 fn grep(p: &Regex, text: &str) -> bool {
@@ -140,6 +160,11 @@ fn decide(event: &Event, session: &Session) -> Vec<Answer> {
 }
 
 pub(crate) fn judge(cx: &Ctx) -> Vec<Answer> {
+    // first, so neither POLL_OK nor CRON_OK is a second way past it, and run_in_background no exemption: a `&` inside a
+    // backgrounded call still returns before its job ends
+    if let Some(refused) = detach(cx) {
+        return refused;
+    }
     let ti = cx
         .event
         .input
@@ -220,6 +245,441 @@ pub(crate) fn judge(cx: &Ctx) -> Vec<Answer> {
     bracket_self_match(cx, "self-match", BRACKETED).unwrap_or_default()
 }
 
+/// A run the harness cannot track refused, or stood aside by `DETACH_OK` and its reason (D12); None where there is none.
+fn detach(cx: &Ctx) -> Option<Vec<Answer>> {
+    let rule = detached(&cx.cmd)?;
+    match escape_or_refuse(&cx.cmd, "DETACH_OK") {
+        Escape::Refused(text) => {
+            cx.log("blocked", "DETACH_OK-no-reason");
+            Some(vec![Answer::Refuse(text)])
+        }
+        Escape::Escaped(why) => {
+            fire(
+                "no-poll",
+                "escaped",
+                &why,
+                "detach-ok",
+                &cx.event.input,
+                cx.session,
+            );
+            None
+        }
+        Escape::None => {
+            cx.log("blocked", rule);
+            Some(vec![Answer::Refuse(detach_refusal(rule))])
+        }
+    }
+}
+
+/// The rule a command breaks by running make or cargo where the harness cannot track it (D12): `detached-nohup` (started under
+/// `nohup` or `setsid` at a command position), `detached-disown` (a `disown` after a make or cargo job's `&`, whatever `wait`
+/// follows, since a disowned job leaves the job table), `detached-amp` (a lone `&` no `wait` covers). Heredocs and quoted strings are
+/// payload, never commands (constitution XVIII); the string after `-c`, which a shell runs, is read as a shell of its own.
+pub(crate) fn detached(cmd: &str) -> Option<&'static str> {
+    // NO RUNNER OR NO DETACHING WORD, NO WALK: most commands end here, before any pattern compiles (as `invoked` does)
+    if !["make", "MAKE", "cargo", "l7r-gate"]
+        .iter()
+        .any(|w| cmd.contains(w))
+        || !["&", "nohup", "setsid"].iter().any(|w| cmd.contains(w))
+    {
+        return None;
+    }
+    // a line continuation is a blank to the shell, and to a nohup or setsid read at the start of its command
+    let joined = QUOTED_JOB
+        .replace_all(&strip_heredocs(cmd), "$2")
+        .replace("\\\n", "  ");
+    let scan = strip_quotes(&joined);
+    let mut sh = Shell {
+        src: &scan,
+        s: scan.as_bytes(),
+        i: 0,
+        lists: Vec::new(),
+        jobs: Vec::new(),
+        waits: Vec::new(),
+        disowns: Vec::new(),
+        started: false,
+    };
+    sh.list(None, Stop::Eof);
+    let held: Vec<usize> = (0..sh.jobs.len()).filter(|&j| sh.jobs[j].holds).collect();
+    if sh.started {
+        Some("detached-nohup")
+    } else if held
+        .iter()
+        .any(|&j| sh.disowns.iter().any(|&d| d > sh.jobs[j].amp))
+    {
+        Some("detached-disown")
+    } else {
+        held.iter()
+            .any(|&j| !sh.covered(j))
+            .then_some("detached-amp")
+    }
+}
+
+/// Whether `text` runs make or cargo: a make goal `invoked` reads (the one detector, D1), or a goal-less make or a cargo at a
+/// command position.
+fn holds(text: &str) -> bool {
+    !invoked(text).is_empty() || RUNNER.is_match(text).unwrap_or(false)
+}
+
+/// Where a list ends: the end of the command, a closing character (`)`, a quote, a backtick), or one of the reserved words.
+#[derive(Clone, Copy, PartialEq)]
+enum Stop {
+    Eof,
+    Close(u8),
+    Words(&'static [&'static str]),
+}
+
+const IF: Stop = Stop::Words(&["then", "elif", "else", "fi"]);
+const LOOP: Stop = Stop::Words(&["do", "done"]);
+const ARM: Stop = Stop::Words(&[";;", ";&", "esac"]);
+
+/// A job put in the background: where its `&` stands, the list and item it is, and whether it runs make or cargo.
+struct Job {
+    amp: usize,
+    list: usize,
+    item: usize,
+    holds: bool,
+}
+
+/// A `wait` that may cover a job: the first command of its and-or list, alone in its pipeline, not backgrounded; its words.
+struct Wait {
+    at: usize,
+    list: usize,
+    item: usize,
+    args: Vec<String>,
+}
+
+/// The walk over a sanitized command: each list's place in the one above it while that keeps the shell (None: the top, or a shell
+/// of its own - a `( )`, a `$( )`, a backtick, a `-c` string, a pipeline's part or a backgrounded group), and what was found.
+struct Shell<'a> {
+    src: &'a str,
+    s: &'a [u8],
+    i: usize,
+    lists: Vec<Option<(usize, usize)>>,
+    jobs: Vec<Job>,
+    waits: Vec<Wait>,
+    disowns: Vec<usize>,
+    started: bool,
+}
+
+impl Shell<'_> {
+    fn at(&self, b: u8) -> bool {
+        self.s.get(self.i) == Some(&b)
+    }
+
+    fn at2(&self, two: &[u8]) -> bool {
+        self.s[self.i..].starts_with(two)
+    }
+
+    /// Whether the reserved word `w` stands here, a word of its own.
+    fn word_at(&self, w: &str) -> bool {
+        self.s[self.i..].starts_with(w.as_bytes())
+            && self
+                .s
+                .get(self.i + w.len())
+                .is_none_or(|b| b" \t\n;&|)".contains(b))
+    }
+
+    /// Spaces, tabs, a line continuation, a comment, and newlines where asked, passed over.
+    fn blanks(&mut self, newlines: bool) {
+        while let Some(&b) = self.s.get(self.i) {
+            match b {
+                b' ' | b'\t' | b'\r' => self.i += 1,
+                b'\n' if newlines => self.i += 1,
+                b'#' => {
+                    while self.s.get(self.i).is_some_and(|c| *c != b'\n') {
+                        self.i += 1;
+                    }
+                }
+                _ => break,
+            }
+        }
+    }
+
+    /// A list, to its stop: the reserved word that ended it, or None at the end of the command.
+    fn list(&mut self, up: Option<(usize, usize)>, stop: Stop) -> Option<&'static str> {
+        let id = self.lists.len();
+        self.lists.push(up);
+        let mut item = 0;
+        loop {
+            self.blanks(true);
+            let &b = self.s.get(self.i)?;
+            let ended = match stop {
+                Stop::Close(c) => (b == c).then_some(""),
+                Stop::Words(ws) => ws.iter().copied().find(|w| self.word_at(w)),
+                Stop::Eof => None,
+            };
+            if let Some(k) = ended {
+                self.i += k.len().max(1);
+                return Some(k);
+            }
+            if b == b';' {
+                self.i += 1;
+                continue;
+            }
+            let before = self.i;
+            self.and_or(id, item, stop);
+            item += 1;
+            // a stray `)` ends no command and starts none
+            if self.i == before {
+                self.i += 1;
+            }
+        }
+    }
+
+    /// Lists made since `mark` that hung from (`list`, `item`) cut from it: they run in a shell of their own.
+    fn unshell(&mut self, mark: usize, list: usize, item: usize) {
+        for l in &mut self.lists[mark..] {
+            if *l == Some((list, item)) {
+                *l = None;
+            }
+        }
+    }
+
+    /// One and-or list, item `item` of list `list`: a job where a lone `&` ends it, a covering `wait`'s candidate where its first
+    /// pipeline is one.
+    fn and_or(&mut self, list: usize, item: usize, stop: Stop) {
+        let (start, mark) = (self.i, self.lists.len());
+        let wait = self.pipeline(list, item, stop);
+        while self.at2(b"&&") || self.at2(b"||") {
+            self.i += 2;
+            self.blanks(true);
+            self.pipeline(list, item, stop);
+        }
+        if self.at(b'&') {
+            let amp = self.i;
+            self.i += 1;
+            self.unshell(mark, list, item);
+            let holds = holds(self.src.get(start..amp).unwrap_or_default());
+            self.jobs.push(Job {
+                amp,
+                list,
+                item,
+                holds,
+            });
+        } else if let Some(args) = wait {
+            self.waits.push(Wait {
+                at: start,
+                list,
+                item,
+                args,
+            });
+        }
+    }
+
+    /// A pipeline: its first command's `wait` words where it is the only command; each part of a longer one its own shell.
+    fn pipeline(&mut self, list: usize, item: usize, stop: Stop) -> Option<Vec<String>> {
+        let mark = self.lists.len();
+        let wait = self.command(list, item, stop);
+        if !self.at(b'|') || self.at2(b"||") {
+            return wait;
+        }
+        while self.at(b'|') && !self.at2(b"||") {
+            self.i += 1 + usize::from(self.s.get(self.i + 1) == Some(&b'&'));
+            self.blanks(true);
+            self.command(list, item, stop);
+        }
+        self.unshell(mark, list, item);
+        None
+    }
+
+    /// One command: a compound's body walked as lists of this shell (a `( )` as one of its own), then its words; a simple command's
+    /// `wait` words returned, its `disown` and its start under `nohup` or `setsid` noted.
+    fn command(&mut self, list: usize, item: usize, stop: Stop) -> Option<Vec<String>> {
+        self.blanks(false);
+        let (start, up) = (self.i, Some((list, item)));
+        let head = if self.at(b'(') {
+            self.i += 1;
+            self.list(None, Stop::Close(b')'));
+            true
+        } else if self.word_at("{") {
+            self.i += 1;
+            self.list(up, Stop::Words(&["}"]));
+            true
+        } else if self.word_at("if") {
+            self.i += 2;
+            while matches!(self.list(up, IF), Some("then" | "elif" | "else")) {}
+            true
+        } else if self.word_at("while") || self.word_at("until") {
+            self.i += 5;
+            while self.list(up, LOOP) == Some("do") {}
+            true
+        } else if self.word_at("for") {
+            self.i += 3;
+            self.skip_to("do", stop);
+            self.list(up, Stop::Words(&["done"]));
+            true
+        } else if self.word_at("case") {
+            self.i += 4;
+            self.skip_to("in", stop);
+            self.arms(up);
+            true
+        } else {
+            false
+        };
+        let mut words = Vec::new();
+        loop {
+            self.blanks(false);
+            match self.s.get(self.i) {
+                None | Some(b';' | b'\n' | b'|' | b')') => break,
+                Some(b'&') if self.s.get(self.i + 1) != Some(&b'>') => break,
+                Some(&b) if stop == Stop::Close(b) => break,
+                _ => words.push(self.word(stop)),
+            }
+        }
+        if head {
+            return None;
+        }
+        let first = words.first().map(String::as_str);
+        if first == Some("disown") {
+            self.disowns.push(start);
+        }
+        let span = self.src.get(start..self.i).unwrap_or_default();
+        if STARTER
+            .find(span)
+            .ok()
+            .flatten()
+            .is_some_and(|m| holds(&span[m.end()..]))
+        {
+            self.started = true;
+        }
+        (first == Some("wait")).then(|| {
+            // a redirection is no job named, nor the file a lone operator (`2> /dev/null`) takes
+            let (mut args, mut operand) = (Vec::new(), false);
+            for w in &words[1..] {
+                if operand {
+                    operand = false;
+                } else if w.contains(['<', '>']) {
+                    operand = w.ends_with(['<', '>']);
+                } else {
+                    args.push(w.clone());
+                }
+            }
+            args
+        })
+    }
+
+    /// Whether the quote here opens a string a shell runs: one just after `sh`, `bash`, `dash` or `zsh` and its `-c`.
+    fn shell_runs(&self) -> bool {
+        let before = &self.src[..self.i];
+        let from = (before.len().saturating_sub(64)..=before.len())
+            .find(|&k| before.is_char_boundary(k))
+            .unwrap_or(0);
+        SHELL_C.is_match(&before[from..]).unwrap_or(false)
+    }
+
+    /// A quoted string no shell runs passed over to its close, a `\` escaping inside double quotes.
+    fn skip_quote(&mut self, q: u8) {
+        self.i += 1;
+        while let Some(&c) = self.s.get(self.i) {
+            self.i += 1;
+            if c == q {
+                return;
+            }
+            if c == b'\\' && q == b'"' {
+                self.i = (self.i + 1).min(self.s.len());
+            }
+        }
+    }
+
+    /// A `for` or `case` head's words passed over, to its `do` or `in`.
+    fn skip_to(&mut self, word: &str, stop: Stop) {
+        loop {
+            self.blanks(true);
+            if self.i >= self.s.len() || self.word_at(word) {
+                self.i = (self.i + word.len()).min(self.s.len());
+                return;
+            }
+            let before = self.i;
+            self.word(stop);
+            self.i += usize::from(self.i == before);
+        }
+    }
+
+    /// A `case`'s arms: each pattern passed over to its `)`, each arm walked to its `;;`, `;&` or the `esac`.
+    fn arms(&mut self, up: Option<(usize, usize)>) {
+        loop {
+            self.blanks(true);
+            if self.i >= self.s.len() || self.word_at("esac") {
+                self.i = (self.i + 4).min(self.s.len());
+                return;
+            }
+            while self.s.get(self.i).is_some_and(|b| *b != b')') {
+                self.i += 1;
+            }
+            self.i = (self.i + 1).min(self.s.len());
+            if !matches!(self.list(up, ARM), Some(";;" | ";&")) {
+                return;
+            }
+        }
+    }
+
+    /// One word, a `$( )`, `( )`, backtick or quoted span inside it walked as a shell of its own (a quoted span left after the
+    /// blanking is the string after `-c`, or empty).
+    fn word(&mut self, stop: Stop) -> String {
+        let start = self.i;
+        while let Some(&b) = self.s.get(self.i) {
+            match b {
+                b' ' | b'\t' | b'\n' | b';' | b'|' | b')' => break,
+                b'&' if self.i > start || self.s.get(self.i + 1) != Some(&b'>') => break,
+                _ if stop == Stop::Close(b) => break,
+                b'\\' => self.i = (self.i + 2).min(self.s.len()),
+                b'>' | b'<' if matches!(self.s.get(self.i + 1), Some(b'&' | b'|')) => self.i += 2,
+                b'"' | b'\'' if !self.shell_runs() => self.skip_quote(b),
+                b'(' | b'`' | b'"' | b'\'' => {
+                    self.i += 1;
+                    self.list(None, Stop::Close(if b == b'(' { b')' } else { b }));
+                }
+                _ => self.i += 1,
+            }
+        }
+        self.src.get(start..self.i).unwrap_or_default().to_owned()
+    }
+
+    /// Whether job `j` is covered: a `wait` later in its own list that waits for it - bare, `wait $!` with no other job's `&`
+    /// between, or `wait %N` naming its number among the command's jobs - or a bare `wait` in a list above it of the same shell
+    /// (after a loop or an `if`, `$!` and `%N` name one run of the job alone).
+    fn covered(&self, j: usize) -> bool {
+        let (mut list, mut item, mut own) = (self.jobs[j].list, self.jobs[j].item, true);
+        loop {
+            if self
+                .waits
+                .iter()
+                .any(|w| w.list == list && w.item > item && self.covers(w, j, own))
+            {
+                return true;
+            }
+            let Some((l, i)) = self.lists[list] else {
+                return false;
+            };
+            (list, item, own) = (l, i, false);
+        }
+    }
+
+    fn covers(&self, w: &Wait, j: usize, own: bool) -> bool {
+        let last = self.jobs.iter().rposition(|k| k.amp < w.at);
+        w.args.is_empty()
+            || own
+                && w.args
+                    .iter()
+                    .any(|a| *a == format!("%{}", j + 1) || (a == "$!" && last == Some(j)))
+    }
+}
+
+fn detach_refusal(rule: &str) -> String {
+    let what = match rule {
+        "detached-nohup" => "a make or cargo run is started under nohup or setsid, so it outlives the call and nothing tracks its end",
+        "detached-disown" => "a make or cargo job is disowned: it leaves the shell's job table, so no `wait` covers it and nothing tracks its end",
+        _ => "a make or cargo job is put in the background with a lone `&` and no `wait` covers it, so the call returns while it runs and nothing tracks its end",
+    };
+    format!(
+        "BLOCKED (no-poll): {what} (feature 451 FR-008: T225's `make static &` sat untracked, research R4).\n\nDo this instead: run it \
+as the Bash call itself with run_in_background: true; its completion notice wakes you.\nA job kept in the call passes when a `wait` \
+after it covers it - in the same shell, unconditional, not itself backgrounded, and bare,\n`wait $!` with no other `&` between, or \
+`wait %N` naming the job - since the call then returns only when the run ends.\nEscape: DETACH_OK=\"<reason>\" in the command.\n"
+    )
+}
+
 /// The permitted wait - a file watched - made safe: backgrounded, given a proof of life and a ceiling.
 fn file_wait(cx: &Ctx, ti: &Value) -> Vec<Answer> {
     let proof = proof_of_life(&cx.cmd, &cx.helper("writer-alive.sh"));
@@ -272,7 +732,8 @@ fn refuse_self_match(cx: &Ctx, cmd: &str) -> Option<Vec<Answer>> {
         "BLOCKED (no-poll): the process pattern {hit} matches this command's own text - it launches, or names, what it\nwaits for - \
 so the waiting shell finds itself and the wait never ends (2026-09-30: four hours past a finished roll).\nWait on the launched \
 process by its PID (`cmd > log 2>&1 & pid=$!; until ! kill -0 $pid; do sleep 10; done`), or on\nits log with run_in_background, \
-or on a make run with `scripts/gates/l7r-gate.sh own-make <target>`."
+or on a make run with `scripts/gates/l7r-gate.sh own-make <target>`. A make or cargo run itself\nis launched as the Bash call with \
+run_in_background, never detached (feature 451 D12)."
     ))])
 }
 

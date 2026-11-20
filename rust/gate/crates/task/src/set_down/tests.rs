@@ -303,3 +303,62 @@ fn python_s_truth_and_get() {
     assert!(get(Some(&json!(1.5)), "k").unwrap_err().contains("'float'"));
     assert!(get(Some(&json!(null)), "k").is_ok());
 }
+
+/// Feature 451 T29 (found landing T06, 2026-11-20): 449 was set down with T241 parked while `.git/active-task` still named 449 T241, so
+/// every push touching 449's specs was held as that task's. A set-down clears the clone's mark when it names the set-down feature.
+#[test]
+fn a_set_down_clears_its_feature_s_started_task_mark_and_a_later_start_sets_it_again() {
+    let dir = repo("set-down-mark");
+    let root = root_of(&dir);
+    let mark = root.join(".git/active-task");
+    let ours = "{\"feature\": \"9001-x\", \"task\": \"T02\"}\n";
+    // a refused set-down keeps the mark
+    std::fs::write(&mark, ours).unwrap();
+    let refused = cli_with(
+        &words(&["9001"]),
+        &root,
+        &env_of(&[("SET_DOWN_WHY", "one")]),
+    );
+    assert_eq!(refused.code, 2);
+    assert!(mark.exists());
+    // another feature's mark is left as it stands
+    put(&root, "specs/9002-y/spec.md", "**Status**: In progress\n");
+    let theirs = "{\"feature\": \"9002-y\", \"task\": \"T05\"}\n";
+    std::fs::write(&mark, theirs).unwrap();
+    assert_eq!(down(&root, &[]).code, 0);
+    assert_eq!(std::fs::read_to_string(&mark).unwrap(), theirs);
+    // a mark that cannot be read, or names no feature, fails nothing and stays
+    for text in [&b"not json"[..], &[0xff][..], &b"[1]"[..]] {
+        std::fs::write(&mark, text).unwrap();
+        assert_eq!(down(&root, &[]).code, 0);
+        assert_eq!(std::fs::read(&mark).unwrap(), text);
+    }
+    // the set-down feature's own: cleared, and said so
+    std::fs::write(&mark, ours).unwrap();
+    let said = down(&root, &[]);
+    assert_eq!(said.code, 0, "{}", said.stderr);
+    assert!(!mark.exists());
+    assert!(
+        said.stdout.contains("its started-task mark (T02) cleared"),
+        "{}",
+        said.stdout
+    );
+    // a mark of the feature naming no task: cleared, the task read as the Python's `str(None)`
+    std::fs::write(&mark, "{\"feature\": \"9001-x\"}\n").unwrap();
+    assert!(down(&root, &[])
+        .stdout
+        .contains("its started-task mark (None) cleared"));
+    assert!(!mark.exists());
+    // no mark at all: nothing to clear, nothing said of one
+    assert!(!down(&root, &[]).stdout.contains("mark"));
+    // a later task-start of the feature sets it again
+    let env = env_of(&[("L7R_GATE_TREE", &root.to_string_lossy())]);
+    assert_eq!(
+        crate::task_start::cli_with(&words(&["9001", "T01"]), &root, &env).code,
+        0
+    );
+    assert_eq!(
+        std::fs::read_to_string(&mark).unwrap(),
+        "{\"feature\": \"9001-x\", \"task\": \"T01\"}\n"
+    );
+}

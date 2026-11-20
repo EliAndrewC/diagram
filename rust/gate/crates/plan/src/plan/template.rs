@@ -34,7 +34,7 @@ pub const TEMPLATE: &str = concat!(r#"### {T} (<why: the finding or measurement 
 
 **Found and left?** <none - or each item with its visible effect or the research finding it breaks; an item with neither is not a defect and is not filed>
 
-**Performance work?** <no - or yes, and its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
 "#);
 
 /// What `make task-add ... PERF=1` appends to a performance task's section (feature 435, D2; the GM 2026-10-27: the checklist helps "us

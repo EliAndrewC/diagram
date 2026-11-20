@@ -34,6 +34,26 @@ use crate::Reply;
 static UNSAFE: std::sync::LazyLock<fancy_regex::Regex> =
     std::sync::LazyLock::new(|| crate::record::units::re(r"[^A-Za-z0-9.-]+"));
 
+/// The environment `source_pages` reads its ledger's context from: the process's.
+#[cfg(not(test))]
+fn env(name: &str) -> String {
+    consulted::var(name)
+}
+
+#[cfg(test)]
+thread_local! {
+    /// The tests' environment, each test thread its own and empty unless a test names a variable: the guard this crate builds on is
+    /// compiled without `cfg(test)`, so its own seam reads the shell's (feature 451 T24: an exported `SPECIFY_FEATURE` skipped the
+    /// `.specify/feature.json` path a test meant to reach, and the crate's coverage went red).
+    pub(crate) static VARS: std::cell::RefCell<std::collections::HashMap<String, String>> = std::cell::RefCell::default();
+}
+
+/// The environment `source_pages` reads its ledger's context from: the test thread's own map.
+#[cfg(test)]
+fn env(name: &str) -> String {
+    VARS.with(|v| v.borrow().get(name).cloned().unwrap_or_default())
+}
+
 fn reply(stdout: String, stderr: String, code: i32) -> Reply {
     Reply {
         stdout,
@@ -526,7 +546,7 @@ pub fn source_pages(args: &[String], cwd: &Path) -> Reply {
         vec![question.to_owned()]
     };
     let ledger = if ledger_on {
-        match consulted::context(&here) {
+        match consulted::context_from(&here, &env) {
             Ok(ctx) => Some(Ledger {
                 home: home.clone(),
                 ctx,

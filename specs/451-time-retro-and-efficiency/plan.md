@@ -424,7 +424,7 @@ other two by their case groups, until each shard's kept seconds is about 20 or l
 2. **The constraints.** FR-006, FR-012; D8, D9; constitution XVIII (fires and stays quiet, escape first).
 3. **Where each comes from.** G: the approved "a fresh builder per stage, with a handoff file"; R: none; O: research R2, R3; the cap a GUESS knob (spec FR-006).
 4. **Do they describe the world here?** R3 counted which agents pass the cap by type.
-5. **The order.** After T11; the first refusal.
+5. **The order.** In the performance lane (the GM 2026-11-20, FR-013), after T15 and T16 in lane B and before T13; it needs nothing T07-T11 make (D9 reads the builder's transcript itself).
 6. **The exits.** Green: the five cases. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
 7. **The search smell.** None.
 8. **The budget.** One landing.
@@ -435,7 +435,7 @@ other two by their case groups, until each shard's kept seconds is about 20 or l
 
 **Found and left?** none
 
-**Performance work?** no
+**Performance work?** yes - a `[perf]` task (FR-013): it makes the work after it faster; no engine timing, so no checklist
 
 ### T13 (FR-006: a SendMessage resuming a builder past the cap, or one whose task has landed)
 
@@ -470,7 +470,7 @@ other two by their case groups, until each shard's kept seconds is about 20 or l
 
 **Found and left?** none
 
-**Performance work?** no
+**Performance work?** yes - a `[perf]` task (FR-013): it makes the work after it faster; no engine timing, so no checklist
 
 ### T14 (FR-007: `make static` was the edit loop - the spec's User Story 3)
 
@@ -493,7 +493,7 @@ other two by their case groups, until each shard's kept seconds is about 20 or l
 2. **The constraints.** FR-007, FR-012; D2 (the task field), D11.
 3. **Where each comes from.** G: the approved "a crate-scoped check while iterating, with make static once at the end"; O: research R6.
 4. **Do they describe the world here?** R6 timed the log read the guard makes.
-5. **The order.** After T13; needs T03's `task` on each line and T06's landing `end` line naming its tasks.
+5. **The order.** In lane A after T18 and T28 (the GM 2026-11-20 order, FR-013); it needs no other refusal, only T03's `task` on each line and T06's landing `end` line naming its tasks.
 6. **The exits.** Green: the six cases. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
 7. **The search smell.** None.
 8. **The budget.** One landing.
@@ -504,7 +504,7 @@ other two by their case groups, until each shard's kept seconds is about 20 or l
 
 **Found and left?** none
 
-**Performance work?** no
+**Performance work?** yes - a `[perf]` task (FR-013): it makes the work after it faster; no engine timing, so no checklist
 
 ### T15 (FR-008: T225's `make static` with a plain `&` sat untracked - the spec's User Story 4, research R4)
 
@@ -519,7 +519,17 @@ other two by their case groups, until each shard's kept seconds is about 20 or l
   wait $!` refused, each going red when the disown check is deleted (the covering wait would pass them); `make static & disown -h;
   wait` and `make static & disown %1; wait` refused; `{ make static; } &`, `VAR=x make static &` and `env X=1 make
   static &` each refused (D1's detector reads the target past `{`, `VAR=` and `env`); `make static` with `run_in_background` passes; `DETACH_OK="..."` passes and is
-  recorded.
+  recorded. A compound that runs in another shell - a pipeline's part (`for t in a b; do make $t & done | cat; wait`, `{ make x & }
+  | cat; wait`), a `( )`, a backgrounded loop, one in `$( )` - is refused, since a later `wait` covers none of its jobs; a bare `wait`
+  after a loop, `if` or `case` body run in the same shell covers it (the plan review's ruling, LEGITIMATE, 2026-11-20).
+- **The shared readers, fixed here** (T30 folded in; the plan review of 2026-11-20 ruled leaving them NOT LEGITIMATE). Held also:
+  `rust/guard/src/shared/shape.rs`, `rust/guard/src/shared/make.rs` (`make guard-edit` first). Each red first in its own tests:
+  `strip_heredocs` takes a heredoc whose opener line goes on past its delimiter (`cat <<'EOF' > f`), keeping those words;
+  `strip_quotes` keeps a quoted string only after an interpreter's `-c`, its flags joined too (`bash -lc`, `sh -ec`, `python3 -c`),
+  never `grep -c` or `git -c`, and blanks the strings quoted inside a kept one; `invoked` reads `setsid [opts]` as a word that runs
+  what follows, `make;` as a call, and a goal-less make as `.DEFAULT_GOAL` (a goal it cannot read, `make $T`, still names none).
+  `no_poll_hooks` reads through them, its own heredoc and quote readers retired. Every guard reading them is replayed on the frozen
+  corpora before and after, each moved verdict named.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
@@ -531,18 +541,18 @@ other two by their case groups, until each shard's kept seconds is about 20 or l
 2. **The constraints.** FR-008, FR-012; D1 (the detector), D12; constitution XVIII (a mention is not an invocation).
 3. **Where each comes from.** G: the approved "a guard refusing that pattern"; O: research R4.
 4. **Do they describe the world here?** R4's cases are the session's own commands.
-5. **The order.** After T14.
-6. **The exits.** Green: the twenty-three cases. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+5. **The order.** First in lane B (the GM 2026-11-20 order, FR-013); it needs only T02's make detector, landed.
+6. **The exits.** Green: the twenty-three cases, grown in the suite to 35 refused and 28 passed (cargo, `disown -a`, `disown $!`, the mentions, `&&`, `&>`, `2>&1`, `|&`, a non-make job), with the plan review's 6 compound-in-a-pipeline cases refused and 2 waits inside the part passing - measured 2026-11-20 (the case arrays of `no_poll_hooks/tests.rs`, counted). The four frozen corpora through `detached`: 1,134 commands, 16 refused, each a real `setsid nohup make done ... &` or `nohup make done ... &` launch read by hand, so 0 false refusals - measured 2026-11-20 (`detached` over `tests/hooks/fixtures/*.json`). The 14 of the first replay grew to 16 as the shared readers were fixed: one launch chained after a heredoc whose opener went on past its delimiter, one after a line continuation into `setsid nohup make done`. Every guard before and after the shared fix, on the same corpora: 3 of 1,134 verdicts moved, each a correction - no-poll refuses the `setsid nohup make done &` launch; no-poll brackets a `pkill -f "pytest"` it missed, the old `strip_quotes` having kept `grep -c "[p]ytest"` and knocked its quote pairing out of line; main-tree honors a `# MAIN_TREE_OK:` reason the same misreading swallowed after a `python3 -c "..."`, so `tests/hooks/fixtures/main-tree-refusals-2026-09.json` row 130, recorded under the misreading, is re-labeled `rewrote` to `allowed` and its split 109/64 to 110/63 (the suite's own case: an escaped command is allowed, not rewritten) - measured 2026-11-20 (the `l7r-guard` binaries built just before and just after the shared fix, all guards, one PreToolUse call a command, inside a scratch clone, each in a fresh HOME, results diffed; the same binary twice gave 0 differences). Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
 7. **The search smell.** None.
 8. **The budget.** One landing.
-9. **Done, measured.** The suite's cases; the check deleted, the firing cases red.
+9. **Done, measured.** The suite's cases. Red first: 2 of the 2 new guard tests failed on the code before the check; the check deleted, 35 of 35 firing cases red; the disown check alone deleted, the 6 `disown ...; wait` cases red; after the review's fixes, the check deleted again, 35 of 35 red - measured 2026-11-20 (`make rust-test CRATE=rust/guard`, four logged runs). The plan review's 6 compound-in-a-pipeline cases were refused before they were added, so not red first; with the pipeline's subshell cut deleted, 5 of the 6 red, the sixth (`( make x & ) | cat; wait`) a shell of its own either way - measured 2026-11-20 (`make rust-test CRATE=rust/guard`, one logged run). The shared readers' 2 new tests (`shape`'s, `make`'s) failed before their fix - measured 2026-11-20 (`make rust-test CRATE=rust/guard`, one logged run). Their callers in the gate held: `land`'s `run_target` and `rustc`'s skip a goal-less make's `.DEFAULT_GOAL`, as they skipped its empty goal before (`land`'s test went red on it and green with the skip). The walk is a small shell parse in `no_poll_hooks` (`Shell`), reading through `shared::shape` and `shared::make::invoked`; a bare `wait` after a loop, `if` or `case` body in the same shell covers its jobs (the plan review: LEGITIMATE), `wait $!` and `wait %N` only in the job's own list.
 10. **Before moving a constant.** n/a.
 11. **Before fitting things into room.** n/a.
 12. **Before any fix.** n/a.
 
 **Found and left?** none
 
-**Performance work?** no
+**Performance work?** yes - a `[perf]` task (FR-013): it makes the work after it faster; no engine timing, so no checklist
 
 ### T16 (FR-008: the main session's waits checked every 420 to 600 s, observed 2026-11-19, method: the wait commands of the main session's transcript - the spec's User Story 4, research R5)
 
@@ -572,7 +582,7 @@ other two by their case groups, until each shard's kept seconds is about 20 or l
 
 **Found and left?** none
 
-**Performance work?** no
+**Performance work?** yes - a `[perf]` task (FR-013): it makes the work after it faster; no engine timing, so no checklist
 
 ### T17 (FR-009: two of the window's first-round plan-review blocks were deferrals with no order - the spec's User Story 5)
 
@@ -608,7 +618,7 @@ other two by their case groups, until each shard's kept seconds is about 20 or l
 
 **Found and left?** none
 
-**Performance work?** no
+**Performance work?** yes - a `[perf]` task (FR-013): it makes the work after it faster; no engine timing, so no checklist
 
 ### T18 (FR-011: `T="T1,T2"` read as one task - research R7)
 
@@ -636,7 +646,7 @@ other two by their case groups, until each shard's kept seconds is about 20 or l
 
 **Found and left?** none
 
-**Performance work?** no
+**Performance work?** yes - a `[perf]` task (FR-013): it makes the work after it faster; no engine timing, so no checklist
 
 ### T19 (FR-011: a task-add line that `make quick` refuses was found only at the landing - research R8)
 
@@ -668,7 +678,7 @@ other two by their case groups, until each shard's kept seconds is about 20 or l
 
 **Found and left?** none
 
-**Performance work?** no
+**Performance work?** yes - a `[perf]` task (FR-013): it makes the work after it faster; no engine timing, so no checklist
 
 ### T20 (FR-010: three suites set the floor of every `make hooks-test` - research R10)
 
@@ -861,45 +871,201 @@ None.
 
 **Performance work?** no
 
-### T24 (<why: the finding or measurement that files it>)
+### T24 (a gate test read the real environment: with `SPECIFY_FEATURE` exported, `make static`'s coverage of the bundle crate went red, observed 2026-11-20, method: T02's `make static` log)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: the guard's `consulted::context` gains `context_from(root, var)`, the same body with its environment handed in
+  (`context` delegates to it with the guard's own `var`, so every other caller is unchanged). The bundle crate's `source_pages` asks
+  `context_from(&here, &env)`, where `env` is the process's (`consulted::var`) in the binary and, under `cfg(test)`, a thread-local
+  map of the crate's own (`helpers::VARS`), empty unless a test names a variable - the guard's own `VARS` seam is compiled out of a
+  dependent crate's tests, so the bundle needs its own. The test at `helpers/tests.rs` asserts the one outcome it means (code 1 and
+  the exact `AttributeError` on a `[1]` pointer), then names `SPECIFY_FEATURE` in its own map and asserts the pointer skipped (code 0),
+  so the seam, not the shell, decides the branch.
+  - red first, the assertion made exact and run with `SPECIFY_FEATURE` exported: 77 passed, 1 failed (`tests.rs:389`, left 0, right 1), measured 2026-11-20 (`make rust-test CRATE=rust/gate/crates/bundle`, `/tmp/t24/red-exported.log`).
+  - the same test, `SPECIFY_FEATURE` unset: 78 of 78 passed, measured 2026-11-20 (`make rust-test CRATE=rust/gate/crates/bundle`, `/tmp/t24/red-unset.log`).
+  - after the fix, exported, run first so no kept result stood in: 78 of 78 passed, measured 2026-11-20 (`make rust-test CRATE=rust/gate/crates/bundle`, `/tmp/t24/green-exported.log`).
+  - the guard's suite after `context_from`: 627 of 627 passed, measured 2026-11-20 (`make rust-test CRATE=rust/guard`, `/tmp/t24/guard-test.log`).
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| the ledger context's environment | n/a - no map | n/a | none | n/a |
 
 ### T24 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** No map changes; the bundle crate's tests reach the same lines whatever the builder's shell exports,
+   so `make static`'s coverage of it is the code's, never the session's environment.
+2. **The constraints.** T24's line (the test given its own environment, asserting the one outcome it means, red first with
+   `SPECIFY_FEATURE` exported; lands before T08); 100% line coverage of each crate by its own tests; no process-environment mutation
+   in a test (it races the other tests on the thread pool).
+3. **Where each comes from.** O: T02's `make static` red on the bundle crate's coverage, observed 2026-11-20, method: T02's
+   `make static` log; O: the red-first run above, measured 2026-11-20 (`make rust-test`, exported); the task as filed (T24's line).
+4. **Do they describe the world here?** Yes: `l7r_guard::shared::consulted::var` is `std::env::var` outside `cfg(test)`, and a gate
+   crate's tests build the guard without it, read 2026-11-20 (`rust/guard/src/shared/consulted.rs`); the exported run reached code 0,
+   the unset run code 1, measured 2026-11-20 (the two logs above).
+5. **The order.** Before T08 (T03's plan review); independent of the land crate's work in this clone.
+6. **The exits.** Green: the exact assertions green with `SPECIFY_FEATURE` exported, `make rust-test` on the bundle crate and the
+   guard, `make quick`, `make static` (exported, once: the bundle crate's coverage clean), `make hooks-test`. Red: what failed recorded
+   and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** The sweep for tests that read a real variable and accept either outcome: `arbiter/tests.rs:579` (0 or 1;
+   its ask names feature 999, resolved by `asked_feature` before either environment pointer), `gate/src/lib.rs:309` (`github-token`,
+   the real repository's secrets), `record/tests.rs:301` (`money-conversions --check`, the real tree), `measure/spec/tests.rs:54`
+   (`<= 1`), `owed/.../answer_modes.rs:149` - none reads `SPECIFY_FEATURE`, so none flips with it; named in the report, outside
+   T24's edit scope. `bundle/.../modal.rs:866` reads `CHECK_ORDER_OK` raw, but its tests hand the escape to `bundle` directly:
+   78 of 78 passed with it exported, measured 2026-11-20 (`make rust-test CRATE=rust/gate/crates/bundle FRESH=1`, `/tmp/t24/probe-order-ok.log`).
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** The exact test green with `SPECIFY_FEATURE` exported, 78 of 78, measured 2026-11-20
+   (`make rust-test CRATE=rust/gate/crates/bundle`, `/tmp/t24/green-exported.log`), and `make static` exported with the bundle
+   crate's coverage clean.
+10. **Before moving a constant.** n/a - no constant.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** Nothing on a map; a builder who exports `SPECIFY_FEATURE` no longer sees `make static` red on the bundle
+    crate's coverage.
 
-**Found and left?** <none - or each item with its visible effect or the research finding it breaks; an item with neither is not a defect and is not filed>
+**Found and left?** none - the either-outcome tests the sweep found (item 7) read no variable this task's defect turns on, and
+each passes or fails the same with `SPECIFY_FEATURE` exported or not; they are named in the report, not filed.
 
-**Performance work?** <no - or yes, and its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** no
 
 
 <!-- plan-archive: T25 to T23 moved to plan-done.md, 2026-11-20 (feature 375 FR-044) -->
 <!-- plan-archive: T27 to T25 moved to plan-done.md, 2026-11-20 (feature 375 FR-044) -->
 <!-- plan-archive: T27 to T27 moved to plan-done.md, 2026-11-20 (feature 375 FR-044) -->
 
-### T28 (<why: the finding or measurement that files it>)
+### T28 (FR-013, the GM 2026-11-20: "can we in general priotitize performance improvements going forward?" - nothing ordered the work by it, observed 2026-11-20, method: `make task-start`'s source and the Stop hook's, read)
+
+- **Approach**: one reader of performance work, in the set-down guard (`rust/guard/src/guards/set_down_hooks.rs`), which the task gate
+  already builds on: `performance(id, title, plan)` - the `[perf]` tag among the bracketed tags right after a task's id (never a
+  `[perf]` its prose quotes: T28's own line does), or `make task-add ... PERF=1`'s one mark, the `### T<n> Performance checklist`
+  heading it writes into the task's plan section. The Stop hook's active test comes out of `verdict()` as `active()` - an open box but
+  the GM's, not set down since the feature's last task-start, not closed by its status line - and `next_performance(root, git dir,
+  prefer)` picks the open performance task to start next: of `prefer` first (counted active whatever was set down, since its start ends
+  that), then of each other feature started in this clone, the latest start first. Both the Stop hook's "start the next" and `make
+  task-start`'s refusal ask that one picker, so the hook never names a task the start refuses. `task_start.rs`'s `perf_first` reads
+  `PERF_LATER_OK` first (a reason of two words, refused short; both recorded in the guard log under `perf-first`), then refuses a task
+  that is not performance work naming the picked task and `make task-start F= T=` for it. The specs are read under the clone's
+  toplevel, where `resolve_feature` found the feature, never `L7R_GATE_TREE`.
+  - red first, the tests before the code: the guard's suite 4 failed of 631, measured 2026-11-20 (`make rust-test CRATE=rust/guard`, `/tmp/t28-guard-red-kept.log`); the task crate's 2 failed of 58, measured 2026-11-20 (`make rust-test CRATE=rust/gate/crates/task`, `/tmp/t28-task-red-kept.log`).
+  - green: the guard's 631 of 631 passed, measured 2026-11-20 (`make rust-test CRATE=rust/guard`, `/tmp/t28-guard-green.log`); the task crate's 59 of 59 with the task-add pin, measured 2026-11-20 (`make rust-test CRATE=rust/gate/crates/task`, `/tmp/t28-task-green.log`).
+  - each check deleted: the guard's 2 failed of 631 (the picker replaced by none), measured 2026-11-20 (`make rust-test CRATE=rust/guard`, `/tmp/t28-guard-deleted.log`); the task crate's 2 failed of 59 (the refusal's return dropped), measured 2026-11-20 (`make rust-test CRATE=rust/gate/crates/task`, `/tmp/t28-task-deleted.log`).
+  - the Stop hook on this clone after the tags names T12 with its `make task-start F=451 T=T12`, at 36 to 38 ms a run past its first build, measured 2026-11-20 (`tests/hooks/set-down-hooks.sh stop` with `SET_DOWN_ROOT`, three runs, `/tmp/t28-stop.err`).
+  - `make task-add` with a `[perf]` title writes `- [ ] T<n> [perf] ...` and the reader calls it performance work with no change to the tool, as it does PERF=1's checklist, measured 2026-11-20 (the task crate's `perf_1_and_a_perf_title_each_file_a_task_the_reader_calls_performance_work`, `/tmp/t28-task-green.log`).
+- **The tags** (the list measured: every open box of `specs/*/tasks.md`, 248 in 24 features, of which 4 features are not closed by their status line - 417, 444, 449, 451 - measured 2026-11-20, method: `grep '^- [ ] T'` per tasks.md and each spec's `**Status**` line). Tagged, each a task whose stated outcome is less time: 451's T12-T21 (the six cheap fixes and the suite split, the GM 2026-11-20: "doing those first makes everything after them faster"), T28 and T29 (tagged when filed); 444's T34 (`make done` and `make land` without the map-rolling tests and the landing cohort), T36 (the gate's wall time against its goal of well under a minute, as 444's T36 line records it) and T43 (the crate split, a one-line edit's build time). Already performance work by PERF=1's checklist, untagged: 444's T27 and T30. Considered and left: 451's T07-T11 (they measure where the time goes; they cut none) and T22 and T24 (a close; a coverage fix); 444's T29, T32 and T33 (a stage drawn in Rust, the Python it replaced deleted, so no live time is cut), T24, T25, T28, T31 (budgets and placements), T35 (which tests the gate runs), T39 (the engine's deletion, its trees already gone) and T42 (the driver); 449's T158 (a deletion), T203, T216 and T241 (checks that pass the bad), T197, T228, T235 and T240 (record, constitution, budget and drawing); 417's open boxes, whose engine (`l7r/diagram/hamletgen/`) is deleted, so tagging them would hold every start for work that speeds nothing; and every open box of the 20 features closed by their status line (Done, Withdrawn or Superseded), which no start reaches.
+- **"Performance work?", squared**: the question asks whether the task is performance work in FR-013's sense - yes for a `[perf]`
+  task; `PERF=1` is the other mark of one and the one that adds docs/performance-checklist.md's questions, which measure an engine
+  stage's counted operations and time. T12-T19 answered no in the checklist's sense; tagged, they are yes in FR-013's (found and left
+  below: the lines themselves).
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+| performance work first | n/a - no map | n/a | none | n/a |
+
+### T28 Approach (checklist part A)
+
+1. **The goal, in the world.** No map changes; a builder starting work in a clone is sent to the open performance task first, by
+   `make task-start` and by the Stop hook alike, unless a recorded reason says why this task goes first.
+2. **The constraints.** FR-013 (the reader, the refusal, its escape, the Stop hook's order, the active test shared), FR-012 (red
+   first, the check deleted and red, a reason of two words recorded, the message naming the compliant command), SC-006, T28's line;
+   100% line coverage of each crate by its own tests.
+3. **Where each comes from.** G: the GM 2026-11-20, request.md ("can we in general priotitize performance improvements going
+   forward?  I thought that was already a rule."); G: the order of the same day ("doing those first makes everything after them
+   faster"); O: the reds and greens above, measured 2026-11-20 (`make rust-test`).
+4. **Do they describe the world here?** PERF=1's only mark is the checklist heading, 6 headings across every plan.md, measured 2026-11-20 (`grep '^### T[0-9]* Performance checklist' specs/*/plan.md`); this clone's start log names 21 features, of which 451 and 417 are active (417 with 29 open boxes and none tagged), 444 and 449 set down since their last start, measured 2026-11-20 (`.git/task-starts.jsonl` and `.git/set-downs.jsonl` read against each tasks.md and status line).
+5. **The order.** Right after T18 (the task line); with T29, which the same set-down tool carries.
+6. **The exits.** Green: the reds above green, the checks deleted and red again, `make rust-test` on the guard and the task crate,
+   `make quick`, `make static` (once), `make hooks-test`. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** Every reader that anchors on the text right after a task's id was searched before the tags went in: none
+   reads it (the `phase:` key is an indented line of its own; `[lands-open]` ends a line), measured 2026-11-20 (`grep -F -- '- \['` over `rust/`).
+8. **The budget.** One landing.
+9. **Done, measured.** The Stop hook names an open performance task first on this clone, measured 2026-11-20 (`tests/hooks/set-down-hooks.sh stop`, `/tmp/t28-stop.err`), and `l7r-gate task-start 451 T07` over 451's own spec, tasks and plan refuses it naming `make task-start F=451 T=T12`, starts it under `PERF_LATER_OK`, and starts T12, both records listed by the guard log's reader, measured 2026-11-20 (a scratch repository, the gate's binary and `measure guard-log --guard perf-first`, `/tmp/t28-replay.H4wq/`).
+10. **Before moving a constant.** n/a - no constant.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** Nothing on a map; a builder sees `make task-start` refuse a task that is not performance work, naming the
+    performance task to start or `PERF_LATER_OK`.
+
+**Found and left?** Each of (a) to (c) is fixed by the session before T28 lands, outside this builder's brief: (a) the root Makefile (held) lists
+no `PERF_LATER_OK` in `FREE_TEXT`, so a `$` in its reason is expanded by make, and `task-start`'s help line does not name the escape -
+the word added to `FREE_TEXT` and the escape named in the help (the tool records the escape itself, as `plan.rs` records
+`PLAN_REVIEW_OK`, so no `$(LOGESCAPE)` line, which would record it twice - a departure from D15's and D16's make-side form); (b)
+`rust/gate/crates/plan/src/plan/template.rs`'s "Performance work?" placeholder still reads yes as the checklist's - restated to "yes
+for a `[perf]` task; `PERF=1` adds the checklist"; (c) T12-T19's sections answer "Performance work? no" - each one line flipped to
+yes after T18 lands, through one `make plan-delta F=451` round, since changing T18's decided block now would hold its landing.
+
+**Performance work?** yes - a `[perf]` task in FR-013's sense: it orders the work so the tasks that speed the rest land first. Not
+filed with `PERF=1`: the checklist's questions measure an engine stage's counted operations and time, and a refusal's order has neither.
+
+### T29 (`make set-down` left the feature's started-task mark: 449 was set down with T241 parked while `.git/active-task` still named 449 T241, so every push touching 449's specs was held and T06's landing refused, observed 2026-11-20, method: T06's refused landing and the revert of its ticks, `git log`)
+
+- **Approach**: `set_down.rs` gains `clear_mark`: once the set-down's row is written, the clone's `active-task` mark is removed when it
+  names the set-down feature, and the reply says so ("its started-task mark (T241) cleared"). A refused set-down, another feature's
+  mark, or a mark that cannot be read or names no feature, is left as it stands and fails nothing. The next `make task-start` of the
+  feature writes the mark again, as it always has.
+  - red first, the test before the code: 1 failed of 60 (the mark still there after the set-down), measured 2026-11-20 (`make rust-test CRATE=rust/gate/crates/task`, `/tmp/t29-red.log`).
+  - green: 60 of 60, measured 2026-11-20 (`make rust-test CRATE=rust/gate/crates/task`, `/tmp/t29-green.log`); the clear deleted: 1 failed of 60, measured 2026-11-20 (the same command, `/tmp/t29-deleted.log`).
+  - the incident replayed in a scratch repository: `speckit-todo --holding` named "T241 ... the active task" before the set-down and nothing after it, the mark gone, measured 2026-11-20 (`scripts/gates/l7r-gate.sh speckit-todo --holding` and `set-down 449`, `/tmp/t29-replay.LoEu/`).
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+| the mark cleared at a set-down | n/a - no map | n/a | none | n/a |
+
+### T29 Approach (checklist part A)
+
+1. **The goal, in the world.** No map changes; a feature set down holds no push touching its specs as a started task's.
+2. **The constraints.** T29's line (the mark cleared when it names the set-down feature, a later task-start restoring it, red first);
+   100% line coverage of the task crate by its own tests.
+3. **Where each comes from.** O: T06's refused landing, observed 2026-11-20, method: its landing's refusal and the reverted ticks;
+   O: the replay above, measured 2026-11-20 (`speckit-todo --holding` before and after).
+4. **Do they describe the world here?** The holding box reads the mark through `shared::speckit::active_task`, which answers no task where the mark is missing, read 2026-11-20 (`rust/guard/src/shared/speckit.rs`); the replay's holding list went from one line to none, measured 2026-11-20 (`/tmp/t29-replay.LoEu/after.log`).
+5. **The order.** With T28 (the same tool); independent of the other lanes.
+6. **The exits.** Green: the red test green, the clear deleted and red, `make rust-test` on the task crate, `make quick`, `make
+   static` (once), `make hooks-test`. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** Every reader of the mark was found: `shared::speckit::active_task`, `plan door active-task` (`plan/task.rs`)
+   and `task_start.rs`, its one writer; each reads a missing mark as no task, read 2026-11-20 (`grep active-task` over `rust/`).
+8. **The budget.** One landing.
+9. **Done, measured.** The replay's holding list empty after the set-down, measured 2026-11-20 (`/tmp/t29-replay.LoEu/after.log`).
+10. **Before moving a constant.** n/a - no constant.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** Nothing on a map; a set-down no longer leaves a push touching the feature's specs held as its parked task's.
+
+**Found and left?** none.
+
+**Performance work?** yes - a `[perf]` task in FR-013's sense: a push held by a stale mark cost T06 a refused landing and its ticks
+reverted. Not filed with `PERF=1`: no engine stage's counted operations or time.
+
+### T30 (the shared shell readers' gaps)
+
+- **Approach**: no change of its own: withdrawn, its fix folded into T15 by T15's plan review (2026-11-20), which ruled leaving the shared readers' defects NOT LEGITIMATE; T15 fixed strip_heredocs, strip_quotes and make::invoked, red first, and replayed the corpora through every guard.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+| none of its own | n/a | none | none | none |
+
+### T30 Approach (checklist part A)
+
+1. **The goal, in the world.** The shared shell readers read every form T15 found.
+2. **The constraints.** T15's plan review.
+3. **Where each comes from.** R: T15's plan review.
+4. **Do they describe the world here?** Yes: T15's shared tests failed before its fix (measured 2026-11-20 (T15's red-first run)).
+5. **The order.** With T15.
+6. **The exits.** Green: T15 ticked. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** none
+8. **The budget.** No landing of its own beyond the tick.
+9. **Done, measured.** T15 ticked with the fix.
+10. **Before moving a constant.** n/a
+11. **Before fitting things into room.** n/a
+12. **Before any fix.** Nothing of its own: its fix landed in T15.
+
+**Found and left?** none
+
+**Performance work?** yes - a `[perf]` task (FR-013), folded into T15
+
+
+### T31 (<why: the finding or measurement that files it>)
 
 - **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
 
-### T28 Approach (checklist part A)
+### T31 Approach (checklist part A)
 
 1. **The goal, in the world.** <the place as it should be>
 2. **The constraints.** <the FRs, decisions and pages it holds to>
@@ -916,5 +1082,5 @@ None.
 
 **Found and left?** <none - or each item with its visible effect or the research finding it breaks; an item with neither is not a defect and is not filed>
 
-**Performance work?** <no - or yes, and its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
 

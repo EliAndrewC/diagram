@@ -1,8 +1,8 @@
 {
  "about": "Every refusal by scripts/hooks/main-tree-hooks.sh from 2026-08-30 to 2026-09-07, recovered with its full command and cwd from the session transcripts (feature 204, research R3). Replayed by tests/hooks/test-main-tree-hooks.sh with /diagram substituted by a fake mirror; 'verdict' is what the reworked guard must return, 'expected' the split. Session ids were dropped.",
  "expected": {
-  "allowed": 109,
-  "rewrote": 64
+  "allowed": 110,
+  "rewrote": 63
  },
  "rows": [
   {
@@ -920,7 +920,7 @@
    "subagent": true,
    "cwd": "/diagram",
    "command": "SP=/tmp/claude-1000/-diagram/43a882a5-acbf-4d57-bbbb-39b5ff83f838/scratchpad/cite195\ncurl -s \"http://archive.org/wayback/available?url=knowledgebank.irri.org/grainQuality/module_4/popups/pu_drying.htm\"\necho\ncurl -sL -A \"Mozilla/5.0\" -o \"$SP/1073shoso.html\" \"https://1073shoso.jp/www/sankyo/detail.jsp?id=18666\"\nls -la \"$SP/1073shoso.html\"\npython3 -c \"\ndata = open('$SP/1073shoso.html','rb').read()\nfor enc in ['utf-8','shift_jis','euc-jp','cp932']:\n    try:\n        text = data.decode(enc)\n        if '\u30e1\u30fc\u30c8\u30eb' in text:\n            print('WORKS with', enc)\n            idx = text.find('\u6a39\u9ad8')\n            print(repr(text[max(0,idx-80):idx+200]))\n            break\n    except Exception as e:\n        print(enc, 'failed', e)\n\"\n# MAIN_TREE_OK: the write target is /tmp/claude-1000/-diagram/<session>/scratchpad/... (a per-session tmp scratchpad whose\n# mangled cwd label happens to contain the substring \"-diagram\"), NOT the /diagram git mirror; no write touches /diagram itself.",
-   "verdict": "rewrote"
+   "verdict": "allowed"
   },
   {
    "ts": "2026-09-06T22:47:53.009Z",

@@ -350,8 +350,10 @@ check "a launch-and-wait whose pattern matches the launch is refused (bracketed 
 check "...and so is a pkill whose pattern names a file the same command reads (it killed its own shell)" blocked \
   'pkill -f "miz4.log"; tail -3 /tmp/miz4.log'
 check "a pattern that does not match its own command is not refused" ok 'pgrep -fa "[c]herryd"; echo done'
+# (feature 451 T15: the launch itself is now refused as a run the harness cannot track, so the case carries DETACH_OK to reach the
+# scoping it pins)
 rewritten "the real one: a make wait with a PATH in its target is scoped, so the launching shell cannot count" \
-  'setsid nohup make map GEN=pool/hamlets/mizuguchi/mizuguchi.gen.py > /tmp/m.log 2>&1 & sleep 5; until ! pgrep -f "[m]ake map GEN=pool/hamlets/mizuguchi" > /dev/null; do sleep 10; done  # POLL_OK: a detached roll' \
+  'DETACH_OK="the 2026-09-30 detached roll, kept to pin its scoping" setsid nohup make map GEN=pool/hamlets/mizuguchi/mizuguchi.gen.py > /tmp/m.log 2>&1 & sleep 5; until ! pgrep -f "[m]ake map GEN=pool/hamlets/mizuguchi" > /dev/null; do sleep 10; done  # POLL_OK: a detached roll' \
   'l7r-gate.sh own-make map GEN=pool/hamlets/mizuguchi'
 NP_NEVER=$(mktemp)
 np_cmd=$(bgrun "until grep -q NEVER-WRITTEN $NP_NEVER; do sleep 1; done; echo FALSE-SUCCESS" 1 2>/dev/null | jq -r '.hookSpecificOutput.updatedInput.command // empty' 2>/dev/null)
@@ -427,9 +429,28 @@ check "...and inside a nested loop, after a done that only echoes" blocked 'whil
 
 }
 
+case_8() {
+echo "8. a make or cargo run the harness cannot track is refused, naming run_in_background (feature 451 T15, D12)"
+check "R4's run: a make detached by a lone & with no wait" blocked \
+  '(make static > /tmp/t225-static.log 2>&1; echo END >> /tmp/t225-static.log) & sleep 1'
+grep -q 'run_in_background: true; its completion notice wakes you' "$HOOK_ERR" \
+  && { echo "  ok      ...the refusal names run_in_background"; PASS=$((PASS+1)); } \
+  || { echo "  FAIL    the refusal does not name run_in_background"; FAIL=$((FAIL+1)); }
+check "nohup make" blocked 'nohup make rust-test'
+check "a disowned make, whatever wait follows" blocked 'make static & disown; wait'
+check "a make whose & a wait covers" ok 'make static > /tmp/s.log 2>&1 & wait $!'
+check "a mention in a commit message" ok 'git commit -m "make static & disown"'
+check "a background job that is no make" ok 'sleep 5 & echo hi'
+check "DETACH_OK with a reason" ok 'make static &  # DETACH_OK: a probe of the guard here'
+grep -rqs '"detach-ok"' "$GUARD_LOG_ROOT" \
+  && { echo "  ok      ...and the escape is recorded in the guard log"; PASS=$((PASS+1)); } \
+  || { echo "  FAIL    the DETACH_OK escape was not recorded"; FAIL=$((FAIL+1)); }
+check "a bare DETACH_OK" blocked 'make static &  # DETACH_OK'
+}
+
 # GUARD_EDIT_OK: feature 383 amendment 4 (plan D28) - the sections as cases, run in parallel parts (tests/hooks/parts.sh)
 part_env() { HOOK_ERR="$T/hook-err"; : > "$HOOK_ERR"; GUARD_LOG_ROOT=$GUARD_LOG_DIR; mkdir -p "$GUARD_LOG_ROOT"; }  # each part its own captured stderr and guard log
-CASES=(case_1 case_2 case_2b case_5 case_3 case_4 case_4b case_4c case_6 case_7 case_6b)
+CASES=(case_1 case_2 case_2b case_5 case_3 case_4 case_4b case_4c case_6 case_7 case_6b case_8)
 declare -A WEIGHT=()
 # shellcheck source=/dev/null
 source "$HERE/parts.sh"

@@ -97,6 +97,115 @@ fn closed_by_status(spec_dir: &Path) -> bool {
     crate::shared::speckit::closed_by_status(spec_dir).unwrap_or(false)
 }
 
+/// An open task of an active feature: its feature's directory name, its id and the rest of its line.
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct OpenTask {
+    /// The feature's directory name under `specs/`.
+    pub feature: String,
+    /// The task's id.
+    pub id: String,
+    /// The rest of its line.
+    pub title: String,
+}
+
+// FR-013's tag: `[perf]` among the bracketed tags right after the id (`- [ ] T28 [P] [perf] ...`), never a `[perf]` the title quotes - T28's
+// own line names "a [perf] tag" in its prose.
+static PERF_TAG: LazyLock<Regex> = LazyLock::new(|| re(r"^(?:\[[^\]\n]*\] +)*\[perf\](?: |$)"));
+
+/// Is a task performance work (feature 451 FR-013, the GM 2026-11-20: "can we in general priotitize performance improvements going
+/// forward?")? Its line carries the `[perf]` tag after its id, or it was filed with `make task-add ... PERF=1`, whose one mark is the
+/// checklist heading it writes into the task's plan section (`### T<n> Performance checklist`, the plan crate's `template::PERFORMANCE`;
+/// the task crate's test pins the two together). `title` is the line after the id, `plan` the feature's plan.md.
+#[must_use]
+pub fn performance(id: &str, title: &str, plan: &str) -> bool {
+    PERF_TAG.is_match(title).unwrap_or(false)
+        || re(&format!(
+            r"(?m)^### {} Performance checklist\b",
+            fancy_regex::escape(id)
+        ))
+        .is_match(plan)
+        .unwrap_or(false)
+}
+
+fn read(path: &Path) -> Result<String, String> {
+    std::fs::read_to_string(path).map_err(|e| format!("{}: {e}", path.display()))
+}
+
+/// THE ACTIVE TEST (feature 385 T70; feature 451 FR-013 names it as its own): a feature's open boxes, or none where it is not active -
+/// no open box but the GM's, set down at or after `since` (its last task-start), or closed by its spec's status line, asked last. With
+/// `starting`, the feature whose task is being started: its set-downs count for nothing, since the start ends them.
+fn active(
+    root: &Path,
+    downs: &[Value],
+    feature: &str,
+    since: &str,
+    starting: bool,
+) -> Result<Vec<(String, String)>, String> {
+    let spec_dir = root.join("specs").join(feature);
+    let tasks = spec_dir.join("tasks.md");
+    if feature.is_empty() || !tasks.is_file() {
+        return Ok(Vec::new());
+    }
+    let boxes = open_boxes(&read(&tasks)?);
+    let set_down = !starting
+        && downs
+            .iter()
+            .any(|r| field(r, "feature") == feature && field(r, "utc") >= since);
+    if boxes.is_empty() || set_down || closed_by_status(&spec_dir) {
+        return Ok(Vec::new());
+    }
+    Ok(boxes)
+}
+
+/// The clone's features by their last task-start, the latest first: (feature, its last start).
+fn started(git_dir: &Path) -> Result<Vec<(String, String)>, String> {
+    let mut last: Vec<(String, String)> = Vec::new();
+    for row in rows(&git_dir.join("task-starts.jsonl"))? {
+        let (feature, utc) = (field(&row, "feature"), field(&row, "utc"));
+        last.retain(|(f, _)| f != feature);
+        last.push((feature.to_owned(), utc.to_owned()));
+    }
+    last.reverse();
+    Ok(last)
+}
+
+/// The open performance task to start next (feature 451 FR-013): of `prefer` first (the feature whose task is being started, or the
+/// one the turn worked), then of each other ACTIVE feature by its last task-start, the latest first; within a feature, the first in its
+/// tasks.md. Active is [`active`]'s test over the clone's own start and set-down logs, so a feature never started in this clone is not
+/// active unless it is `prefer` (its task being started makes it so). The one picker the Stop hook's "start the next" and `make
+/// task-start`'s refusal share, so the hook never names a task the start refuses.
+///
+/// # Errors
+/// A start or set-down log, a tasks.md or a plan.md that cannot be read.
+pub fn next_performance(
+    root: &Path,
+    git_dir: &Path,
+    prefer: &str,
+) -> Result<Option<OpenTask>, String> {
+    let downs = rows(&git_dir.join("set-downs.jsonl"))?;
+    let mut order = started(git_dir)?;
+    if !prefer.is_empty() {
+        order.retain(|(f, _)| f != prefer);
+        order.insert(0, (prefer.to_owned(), String::new()));
+    }
+    for (feature, since) in order {
+        let boxes = active(root, &downs, &feature, &since, feature == prefer)?;
+        if boxes.is_empty() {
+            continue;
+        }
+        let plan_path = root.join("specs").join(&feature).join("plan.md");
+        let plan = if plan_path.is_file() {
+            read(&plan_path)?
+        } else {
+            String::new()
+        };
+        if let Some((id, title)) = boxes.into_iter().find(|(id, t)| performance(id, t, &plan)) {
+            return Ok(Some(OpenTask { feature, id, title }));
+        }
+    }
+    Ok(None)
+}
+
 /// None to let the turn end, else the refusal; an Err is a read error, which lets it end too.
 pub(crate) fn verdict(root: &Path, transcript: &str) -> Result<Option<String>, String> {
     let at = root.to_string_lossy();
@@ -121,30 +230,40 @@ pub(crate) fn verdict(root: &Path, transcript: &str) -> Result<Option<String>, S
         return Ok(None);
     };
     let (feature, since) = (field(last, "feature"), field(last, "utc"));
-    let spec_dir = root.join("specs").join(feature);
-    let tasks = spec_dir.join("tasks.md");
-    if feature.is_empty() || !tasks.is_file() {
-        return Ok(None);
-    }
-    let boxes = open_boxes(&std::fs::read_to_string(&tasks).map_err(|e| e.to_string())?);
+    let downs = rows(&git_dir.join("set-downs.jsonl"))?;
+    let boxes = active(root, &downs, feature, since, false)?;
     let Some((tid, title)) = boxes.first() else {
         return Ok(None);
     };
+    // the transcript last: the costly read (206 MB on 2026-10-26), where the status line is one small file
     let path = Path::new(transcript);
     if path.is_file() && !running(path).map_err(|e| e.to_string())?.is_empty() {
         return Ok(None);
     }
-    let set_down = rows(&git_dir.join("set-downs.jsonl"))?
-        .iter()
-        .any(|r| field(r, "feature") == feature && field(r, "utc") >= since);
-    if set_down || closed_by_status(&spec_dir) {
-        return Ok(None);
-    }
-    let short: String = title.chars().take(80).collect();
-    let number = feature.split('-').next().unwrap_or(feature);
+    let number = |f: &str| f.split('-').next().unwrap_or(f).to_owned();
+    // PERFORMANCE WORK FIRST (feature 451 FR-013): the next named is an open performance task where an active feature holds one; a
+    // reader's error names the feature's first box, as before, rather than let the refusal go
+    let next = match next_performance(root, &git_dir, feature).ok().flatten() {
+        Some(p) => {
+            let of = if p.feature == feature {
+                String::new()
+            } else {
+                format!(" of {}", p.feature)
+            };
+            let short: String = p.title.chars().take(80).collect();
+            format!(
+                "{} {short}{of} - performance work first, FR-013: make task-start F={} T={}",
+                p.id,
+                number(&p.feature),
+                p.id
+            )
+        }
+        None => format!("{tid} {}", title.chars().take(80).collect::<String>()),
+    };
     Ok(Some(format!(
-        "BLOCKED: feature {feature} has {} open task(s) and nothing is running - start the next ({tid} {short}), or set it down: make set-down F={number} WHY=\"<why it stops here>\" (feature 385 T70)",
-        boxes.len()
+        "BLOCKED: feature {feature} has {} open task(s) and nothing is running - start the next ({next}), or set it down: make set-down F={} WHY=\"<why it stops here>\" (feature 385 T70)",
+        boxes.len(),
+        number(feature)
     )))
 }
 

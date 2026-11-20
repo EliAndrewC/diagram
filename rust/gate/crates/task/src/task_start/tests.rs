@@ -143,3 +143,129 @@ fn a_task_s_block_runs_to_the_next_box() {
     assert_eq!(task_block(tasks, "T02"), "- [x] T02 b\n  more\n");
     assert_eq!(task_block(tasks, "T03"), "");
 }
+
+/// The census entries holding `needle`, the guard log these tests write to (`crate::tests::quiet_census`).
+fn census_with(needle: &str) -> usize {
+    std::fs::read_dir(crate::tests::quiet_census())
+        .map(|d| {
+            d.filter_map(Result::ok)
+                .filter(|e| std::fs::read_to_string(e.path()).is_ok_and(|t| t.contains(needle)))
+                .count()
+        })
+        .unwrap_or(0)
+}
+
+#[test]
+fn a_task_that_is_not_performance_work_waits_for_an_open_one() {
+    let dir = repo("start-perf");
+    let root = root_of(&dir);
+    let tree = root.to_string_lossy().into_owned();
+    let env = env_of(&[("L7R_GATE_TREE", &tree)]);
+    // T28's own line: a `[perf]` quoted in the prose of T01 marks nothing, T02's tag after its id does
+    put(
+        &root,
+        "specs/9001-x/tasks.md",
+        "- [ ] T01 the first, a [perf] tag quoted\n- [ ] T02 [perf] the faster gate\n- [x] T09 done\n",
+    );
+    let refused = cli_with(&words(&["9001", "T01"]), &root, &env);
+    assert_eq!(refused.code, 2, "{}", refused.stdout);
+    assert!(
+        refused.stderr.contains(
+            "9001-x T01 is not performance work, and 9001-x T02 is (T02 [perf] the faster gate)"
+        ),
+        "{}",
+        refused.stderr
+    );
+    assert!(
+        refused
+            .stderr
+            .contains("Start it first: make task-start F=9001 T=T02"),
+        "{}",
+        refused.stderr
+    );
+    assert!(
+        refused.stderr.contains("PERF_LATER_OK=\"<reason>\""),
+        "{}",
+        refused.stderr
+    );
+    assert!(!root.join(".git/active-task").exists());
+    // the performance task itself starts
+    assert_eq!(cli_with(&words(&["9001", "T02"]), &root, &env).code, 0);
+    // the escape: a reason of two words, recorded; one word refused
+    let short = env_of(&[("L7R_GATE_TREE", &tree), ("PERF_LATER_OK", "later")]);
+    let said = cli_with(&words(&["9001", "T01"]), &root, &short);
+    assert_eq!(said.code, 2);
+    assert!(
+        said.stderr.contains("PERF_LATER_OK needs a REASON"),
+        "{}",
+        said.stderr
+    );
+    // unique to this run: the census directory outlives it
+    let why = format!(
+        "waiting on the T18 landing (a start-perf test, {:?})",
+        std::time::SystemTime::now()
+    );
+    let escaped = env_of(&[("L7R_GATE_TREE", &tree), ("PERF_LATER_OK", &why)]);
+    let said = cli_with(&words(&["9001", "T01"]), &root, &escaped);
+    assert_eq!(said.code, 0, "{}", said.stderr);
+    assert_eq!(census_with(&why), 1);
+    assert!(census_with("later") >= 1);
+}
+
+#[test]
+fn perf_1_s_checklist_and_another_active_feature_count_too() {
+    let dir = repo("start-perf-other");
+    let root = root_of(&dir);
+    let env = env_of(&[("L7R_GATE_TREE", &root.to_string_lossy())]);
+    // PERF=1's mark: the checklist heading in the task's plan section
+    put(
+        &root,
+        "specs/9001-x/plan.md",
+        &format!(
+            "{}### T03 Performance checklist (prompts)\n",
+            crate::tests::plan(&["T01", "T02", "T03"])
+        ),
+    );
+    let said = cli_with(&words(&["9001", "T01"]), &root, &env);
+    assert_eq!(said.code, 2);
+    assert!(
+        said.stderr.contains("make task-start F=9001 T=T03"),
+        "{}",
+        said.stderr
+    );
+    put(
+        &root,
+        "specs/9001-x/plan.md",
+        &crate::tests::plan(&["T01", "T02", "T03"]),
+    );
+    // a feature started in this clone, not set down since, holding one: named, of its own feature
+    put(&root, "specs/9002-y/spec.md", "**Status**: In progress\n");
+    put(
+        &root,
+        "specs/9002-y/tasks.md",
+        "- [ ] T05 [perf] split the suite\n",
+    );
+    put(
+        &root,
+        ".git/task-starts.jsonl",
+        "{\"feature\": \"9002-y\", \"task\": \"T04\", \"utc\": \"2026-11-20T10:00:00Z\"}\n",
+    );
+    let said = cli_with(&words(&["9001", "T01"]), &root, &env);
+    assert_eq!(said.code, 2);
+    assert!(said.stderr.contains("and 9002-y T05 is"), "{}", said.stderr);
+    assert!(
+        said.stderr.contains("make task-start F=9002 T=T05"),
+        "{}",
+        said.stderr
+    );
+    // set down since its start: not active, the start passes
+    put(
+        &root,
+        ".git/set-downs.jsonl",
+        "{\"feature\": \"9002-y\", \"why\": \"a b\", \"utc\": \"2026-11-20T11:00:00Z\"}\n",
+    );
+    assert_eq!(cli_with(&words(&["9001", "T01"]), &root, &env).code, 0);
+    // a log that cannot be read raises
+    std::fs::write(root.join(".git/set-downs.jsonl"), [0xff]).unwrap();
+    assert_eq!(cli_with(&words(&["9001", "T01"]), &root, &env).code, 1);
+}

@@ -199,3 +199,38 @@ fn the_next_id_and_the_anchors_are_read_past_a_megabyte() {
             .ends_with("x\n\n## T03 - the close\n")
     );
 }
+
+/// Feature 451 FR-013: both of a task's performance marks, as `make task-add` writes them, read as performance work by the one reader
+/// the set-down guard and `make task-start` share - `PERF=1`'s checklist heading and a `[perf]` title - and a plain task not.
+#[test]
+fn perf_1_and_a_perf_title_each_file_a_task_the_reader_calls_performance_work() {
+    use l7r_guard::guards::set_down_hooks::performance;
+    let dir = repo("task-add-perf");
+    let root = root_of(&dir);
+    let d = root.join("specs/9001-x");
+    put(&root, "specs/9001-x/tasks.md", "- [x] T01 done\n");
+    put(&root, "specs/9001-x/plan.md", "");
+    let title_of = |id: &str| {
+        let tasks = std::fs::read_to_string(d.join("tasks.md")).unwrap();
+        let line = tasks
+            .lines()
+            .find(|l| l.starts_with(&format!("- [ ] {id} ")))
+            .unwrap()
+            .to_owned();
+        line[format!("- [ ] {id} ").len()..].to_owned()
+    };
+    assert_eq!(
+        cli(&words(&["9001", "--performance"]), &root, "a faster gate").code,
+        0
+    );
+    assert_eq!(
+        cli(&words(&["9001"]), &root, "[perf] a faster loop").code,
+        0
+    );
+    assert_eq!(cli(&words(&["9001"]), &root, "a plain task").code, 0);
+    let plan = std::fs::read_to_string(d.join("plan.md")).unwrap();
+    assert_eq!(title_of("T03"), "[perf] a faster loop");
+    assert!(performance("T02", &title_of("T02"), &plan));
+    assert!(performance("T03", &title_of("T03"), &plan));
+    assert!(!performance("T04", &title_of("T04"), &plan));
+}

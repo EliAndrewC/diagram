@@ -157,7 +157,8 @@ pub(super) fn run_target(proc_root: &Path, pid: u32) -> String {
 }
 
 /// A make's first goal from its NUL-separated command line, read as the event log's writer reads a command (D1, `invoked`): a word
-/// holding a space (`NOTE=two words`) is an assignment, as T05's `run_target` reads it.
+/// holding a space (`NOTE=two words`) is an assignment, as T05's `run_target` reads it. A goal-less make (`invoked`'s
+/// `.DEFAULT_GOAL`, feature 451 T15) names no goal here, so the run's target is read from the process above it.
 fn goal_of(cmdline: &[u8]) -> Option<String> {
     let words: Vec<String> = cmdline
         .split(|b| *b == 0)
@@ -174,6 +175,7 @@ fn goal_of(cmdline: &[u8]) -> Option<String> {
     l7r_guard::shared::make::invoked(&words.join(" "))
         .into_iter()
         .next()
+        .filter(|t| t != l7r_guard::shared::make::DEFAULT_GOAL)
 }
 
 #[cfg(test)]

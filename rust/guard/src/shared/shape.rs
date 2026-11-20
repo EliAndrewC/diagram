@@ -5,8 +5,11 @@ use std::sync::LazyLock;
 
 use fancy_regex::Regex;
 
+// A heredoc: its opener's words after the delimiter (`cat <<'EOF' > f`, `python3 - <<'PY' | tee o`) kept as group 2, since they are
+// the command's own; the Python's pattern took only a delimiter that ended its line, so such a body was read as commands (feature
+// 451 T15, T30 folded in: `cat <<'EOF' > f` holding `make static &` read as a detached make).
 static HEREDOC: LazyLock<Regex> = LazyLock::new(|| {
-    crate::shared::regex::build(r#"(?s)<<-?\s*['"]?(\w+)['"]?\n.*?\n\s*\1\b"#)
+    crate::shared::regex::build(r#"(?sm)<<-?[ \t]*['"\\]?(\w+)['"]?([^\n]*)\n.*?^[ \t]*\1\b"#)
         .expect("the heredoc pattern")
 });
 static QUOTED_HEREDOC: LazyLock<Regex> = LazyLock::new(|| {
@@ -23,14 +26,31 @@ static BACKTICK_SPAN: LazyLock<Regex> = LazyLock::new(|| {
     crate::shared::regex::build(r"(?<!\\)`[^`\n]*(?<!\\)`").expect("the backtick pattern")
 });
 static QUOTED: LazyLock<Regex> = LazyLock::new(|| {
-    crate::shared::regex::build(r#"(?s)(?<!-c )(?<!-c\t)(["'])(?:\\.|(?!\1).)*\1"#)
-        .expect("the quoted pattern")
+    crate::shared::regex::build(r#"(?s)(["'])(?:\\.|(?!\1).)*\1"#).expect("the quoted pattern")
+});
+// An interpreter's `-c` (its flags joined to it too, `bash -lc`, `sh -ec`) ending the text before a quote: the string after it is
+// run. The Python's lookbehind kept the string after any `-c ` (`grep -c "make x &"`, `git -c 'a=b'`) and blanked one after
+// `-lc` (feature 451 T15, T30 folded in).
+static INTERPRETER_C: LazyLock<Regex> = LazyLock::new(|| {
+    crate::shared::regex::build(
+        r"(?:^|[\s/;&|(])(?:(?:ba|da|z|k)?sh|python[0-9.]*|pypy[0-9.]*|node|perl|ruby)\s+(?:-[A-Za-z-]*\s+)*-[A-Za-z]*c[ \t]+$",
+    )
+    .expect("the interpreter pattern")
 });
 
-/// `cmd` with each heredoc's body replaced by ` <<BODY ` (`_strip_heredocs`).
+/// `cmd` with each heredoc's body replaced by ` <<BODY `, the opener's words after its delimiter kept (`_strip_heredocs`).
 #[must_use]
 pub fn strip_heredocs(cmd: &str) -> String {
-    HEREDOC.replace_all(cmd, " <<BODY ").into_owned()
+    HEREDOC.replace_all(cmd, " <<BODY $2").into_owned()
+}
+
+/// Whether `before` ends at an interpreter's `-c`, so the quote after it opens a string the interpreter runs; read over its last
+/// 64 bytes, which hold any such `-c`, so a long command is not rescanned a quote at a time.
+fn run_by_interpreter(before: &str) -> bool {
+    let from = (before.len().saturating_sub(64)..=before.len())
+        .find(|&k| before.is_char_boundary(k))
+        .unwrap_or(0);
+    INTERPRETER_C.is_match(&before[from..]).unwrap_or(false)
 }
 
 /// Every backtick span in `text` that bash would EXECUTE, in order (`hm_shape.executing_backticks`). A span inside single quotes, in a heredoc whose delimiter is quoted,
@@ -53,11 +73,21 @@ pub fn executing_backticks(text: &str, in_double: bool) -> Vec<String> {
     spans
 }
 
-/// `cmd` with each quoted string blanked to its two quote marks - but the one after `-c`, which an interpreter runs
-/// (`_strip_quotes`).
+/// `cmd` with each quoted string blanked to its two quote marks - but the one after an interpreter's `-c`, which it runs, kept with
+/// the strings quoted inside it blanked in turn (`_strip_quotes`).
 #[must_use]
 pub fn strip_quotes(cmd: &str) -> String {
-    QUOTED.replace_all(cmd, "$1$1").into_owned()
+    QUOTED
+        .replace_all(cmd, |c: &fancy_regex::Captures| {
+            let (whole, q) = (&c[0], &c[1]);
+            let at = c.get(0).map_or(0, |m| m.start());
+            if run_by_interpreter(&cmd[..at]) {
+                format!("{q}{}{q}", strip_quotes(&whole[1..whole.len() - 1]))
+            } else {
+                format!("{q}{q}")
+            }
+        })
+        .into_owned()
 }
 
 /// `text` with each match replaced by a space, and each match's group `group`.
@@ -149,5 +179,37 @@ mod tests {
             "python3 -c 'import pytest'"
         );
         assert_eq!(strip_quotes(r#"echo "a \" b" 'c'"#), r#"echo "" ''"#);
+    }
+
+    /// Feature 451 T15 (T30 folded in): a heredoc whose opener line goes on past its delimiter is still a heredoc, the opener's
+    /// words kept; a `-c` string is kept only where an interpreter runs it - `bash -lc` too, never `grep -c`.
+    #[test]
+    fn a_heredoc_with_words_after_it_and_a_dash_c_no_interpreter_runs() {
+        assert_eq!(
+            strip_heredocs("cat <<'EOF' > /tmp/n.md\nmake static &\nEOF\nls"),
+            "cat  <<BODY  > /tmp/n.md\nls"
+        );
+        assert_eq!(
+            strip_heredocs("python3 - <<'PY' | tee o\nmake x\nPY"),
+            "python3 -  <<BODY  | tee o"
+        );
+        assert_eq!(strip_heredocs("cat <<EOF\nEOF"), "cat  <<BODY ");
+        assert_eq!(
+            strip_quotes(r#"grep -c "make static &" t.jsonl"#),
+            r#"grep -c "" t.jsonl"#
+        );
+        assert_eq!(strip_quotes("git -c 'a=b' log"), "git -c '' log");
+        assert_eq!(
+            strip_quotes(r#"bash -lc "make x &""#),
+            r#"bash -lc "make x &""#
+        );
+        assert_eq!(
+            strip_quotes("/bin/sh -ec 'make x'; zsh -c 'y'"),
+            "/bin/sh -ec 'make x'; zsh -c 'y'"
+        );
+        assert_eq!(
+            strip_quotes(r#"python3.12 -c "import x""#),
+            r#"python3.12 -c "import x""#
+        );
     }
 }

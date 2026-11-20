@@ -72,7 +72,7 @@ const MERGED: i32 = 3;
 /// `scripts/tool-registry.json` registers.
 const USAGE_LOG_TOOL: &str = "land";
 const USAGE: &str =
-    "usage: land.py <feature> \"<T1 [T2 ...]>\"   (make land F=405 T=T12 NOTE=\"what was verified\")";
+    "usage: land.py <feature> \"<T1 [T2 ...]>\" (commas or spaces)   (make land F=405 T=T12 NOTE=\"what was verified\")";
 
 /// One landing: the tree it lands, where its tools are, and what it has exported to the commands it runs.
 pub struct Land {
@@ -723,6 +723,15 @@ pub fn cli(args: &[String], cwd: &Path) -> Reply {
     finish(done, cwd)
 }
 
+/// `T=`'s task ids, split on commas and whitespace (feature 451 T18, D16: `T="T1,T2"` was one unknown task `T1,T2`), the one reading
+/// every use of the list takes - the ticks, the `end` line's `tasks` and `L7R_LAND_TICKS`.
+fn task_ids(t: &str) -> Vec<String> {
+    l7r_guard::shared::py_text::split(&t.replace(',', " "))
+        .into_iter()
+        .map(str::to_owned)
+        .collect()
+}
+
 /// `main`: the arguments, the note and the feature checked, then the landing.
 fn main(
     args: &[String],
@@ -731,12 +740,7 @@ fn main(
     scripts: &dyn Fn(&Path) -> PathBuf,
     catch_term: &dyn Fn(),
 ) -> Result<i32, String> {
-    let tasks: Vec<String> = args.get(1).map_or_else(Vec::new, |t| {
-        l7r_guard::shared::py_text::split(t)
-            .into_iter()
-            .map(str::to_owned)
-            .collect()
-    });
+    let tasks = args.get(1).map_or_else(Vec::new, |t| task_ids(t));
     if args.len() != 2 || tasks.is_empty() {
         eprintln!("{USAGE}");
         return Ok(2);

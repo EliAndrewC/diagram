@@ -256,6 +256,8 @@ fn the_run_s_target_is_its_make_s_first_goal_or_the_gate_s_own_form() {
         run_target("/home/u/.cache/l7r-rust test --crate a", "test"),
         "rust-test"
     );
+    // a goal-less make names no goal (feature 451 T15: `invoked` reads it as `.DEFAULT_GOAL`)
+    assert_eq!(run_target("make -j 4", "lint"), "rust-lint");
     assert_eq!(step_of("test-counters"), Some("test"));
     assert_eq!(step_of("cover"), None);
 }

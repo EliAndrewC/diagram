@@ -9,7 +9,7 @@ use l7r_gate_research::fixture::{put, FILES};
 use l7r_gate_research::pages::{entry_dir, put as cache_put, Stored};
 use l7r_guard::shared::tempdir::TempDir;
 
-use super::{quote_verbatim, record_prepass, run, save_cached, source_pages, style_prepass};
+use super::{quote_verbatim, record_prepass, run, save_cached, source_pages, style_prepass, VARS};
 
 /// A clone holding the research crate's test record under `research/`, its mirror's ledger home beside it.
 fn world(tag: &str) -> (TempDir, PathBuf) {
@@ -375,18 +375,34 @@ fn source_pages_saves_from_the_cache_and_refuses_without_a_reason() {
     std::fs::write(root.join("research/source-attempts.jsonl"), "").unwrap();
     std::fs::create_dir_all(root.join(".specify")).unwrap();
     std::fs::write(root.join(".specify/feature.json"), "[1]").unwrap();
-    let ctx = source_pages(
-        &a(&[
-            &out,
-            "https://e.org/a",
-            "--question",
-            "none",
-            "--sought",
-            "y",
-        ]),
-        &root,
+    // The ledger's context read from this thread's own environment, never the shell's (feature 451 T24): with no feature named, the
+    // pointer is read and refused; with one named, the pointer is never read and the save goes on.
+    let ctx = || {
+        source_pages(
+            &a(&[
+                &out,
+                "https://e.org/a",
+                "--question",
+                "none",
+                "--sought",
+                "y",
+            ]),
+            &root,
+        )
+    };
+    let refused = ctx();
+    assert_eq!(refused.code, 1, "{}", refused.stderr);
+    assert_eq!(
+        refused.stderr,
+        "AttributeError: 'list' object has no attribute 'get'\n"
     );
-    assert!(ctx.code == 1 || ctx.code == 0);
+    VARS.with(|v| {
+        v.borrow_mut()
+            .insert("SPECIFY_FEATURE".to_owned(), "451-x".to_owned())
+    });
+    let named = ctx();
+    VARS.with(|v| v.borrow_mut().clear());
+    assert_eq!(named.code, 0, "{}", named.stderr);
     std::fs::remove_file(root.join(".specify/feature.json")).unwrap();
     std::fs::write(d.join("blocker"), "").unwrap();
     assert_eq!(

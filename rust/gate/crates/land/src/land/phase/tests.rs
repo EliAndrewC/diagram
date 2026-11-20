@@ -385,3 +385,62 @@ fn the_make_target_is_the_outermost_make_s_first_goal() {
     assert_eq!(super::run_target(&p, 12), "land");
     assert_eq!(super::run_target(&p, 99), "land");
 }
+
+/// `T="T1,T2"` and `T="T1, T2"` name two tasks, not one task `T1,T2` (feature 451 T18, D16): `main`'s reading is the list every use
+/// takes, its refused landing's `end` naming both.
+#[test]
+fn a_comma_list_names_every_task_it_lists() {
+    let fx = fx("phase-commas");
+    let nothing = || {};
+    for t in ["T1,T2", "T1, T2", " T1 ,, T2 ", "T1 T2"] {
+        let args = owned(&["449", t]);
+        assert_eq!(
+            super::super::main(&args, &fx.root, " ", &super::super::scripts_of, &nothing),
+            Ok(2)
+        );
+    }
+    let ends: Vec<Value> = lines(&fx.root)
+        .into_iter()
+        .filter(|l| l["step"] == "end")
+        .map(|l| l["tasks"].clone())
+        .collect();
+    assert_eq!(ends, vec![serde_json::json!(["T1", "T2"]); 4]);
+    // commas alone name no task: the usage, as an empty T= is
+    let args = owned(&["449", " , "]);
+    assert_eq!(
+        super::super::main(&args, &fx.root, NOTE, &super::super::scripts_of, &nothing),
+        Ok(2)
+    );
+}
+
+/// A landing of `T="T1,T2"` ticks both, hands both to the push's `L7R_LAND_TICKS` (which `sync-with-main.sh` reads) and names both in
+/// its `end` (feature 451 T18).
+#[test]
+fn a_comma_list_lands_every_task_it_lists() {
+    let fx = fx("phase-comma-land");
+    let d = fx.root.join("specs/449-x");
+    // a third task open, so ticking two does not close the feature
+    put(
+        &d,
+        "tasks.md",
+        &format!("{}- [ ] T3 three\n", super::super::tests::TASKS),
+    );
+    std::process::Command::new("git")
+        .args(["-C", &fx.root.to_string_lossy(), "commit", "-qam", "T3"])
+        .status()
+        .unwrap();
+    put(
+        &fx.stub,
+        "sync-with-main.sh_done.sh",
+        "printf '%s' \"$L7R_LAND_TICKS\" > \"$STUB_DIR/ticks\"\n",
+    );
+    let tasks = super::super::task_ids("T1,T2");
+    assert_eq!(fx.land.landing(&d, &tasks, NOTE, SystemTime::now()), Ok(0));
+    assert_eq!(
+        std::fs::read_to_string(fx.stub.join("ticks")).unwrap(),
+        "T1 T2"
+    );
+    let done = std::fs::read_to_string(d.join("tasks-done.md")).unwrap();
+    assert!(done.contains("- [x] T1 one") && done.contains("- [x] T2 two"));
+    assert_eq!(end_of(&fx.root)["tasks"], serde_json::json!(["T1", "T2"]));
+}

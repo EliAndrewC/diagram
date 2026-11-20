@@ -157,6 +157,19 @@ pub fn var(name: &str) -> String {
 /// # Errors
 /// Where the Python raised reading `.specify/feature.json`: its value not a mapping, its directory not text, its bytes not UTF-8.
 pub fn context(root: &Path) -> Result<Map<String, Value>, Fault> {
+    context_from(root, &var)
+}
+
+/// `context` with its environment given (`SPECIFY_FEATURE`, `L7R_PAGE_SESSION`, `CLAUDE_CODE_SESSION_ID`): a caller in another
+/// crate, whose tests see this crate built without `cfg(test)`, hands in its own source, so its test never reads the shell's
+/// (feature 451 T24: an exported `SPECIFY_FEATURE` skipped the `.specify/feature.json` path a gate test meant to reach).
+///
+/// # Errors
+/// As `context`.
+pub fn context_from(
+    root: &Path,
+    var: &dyn Fn(&str) -> String,
+) -> Result<Map<String, Value>, Fault> {
     let mut feature = var("SPECIFY_FEATURE");
     let pointer = root.join(".specify").join("feature.json");
     if feature.is_empty() && pointer.is_file() {

@@ -16,12 +16,14 @@ use super::{shown, World};
 /// The run's make target (plan D4): the outermost `make`'s first goal, read from its command line (the run lock's `run_what`) as the
 /// event log's writer reads a Bash call's (D1); with no `make` above, the gate's own form, `rust-<cmd>`, as D1 reads
 /// `l7r-gate.sh rust <cmd>`. A word the command line quotes (one holding a space, `NOTE="two words"`) is read as an assignment: the
-/// reader blanks a quoted string, and a blank ends the goals.
+/// reader blanks a quoted string, and a blank ends the goals. A goal-less make (`invoked`'s `.DEFAULT_GOAL`, feature 451 T15) names
+/// no goal, so the gate's own form stands.
 pub(super) fn run_target(run_what: &str, cmd: &str) -> String {
     let words: Vec<&str> = run_what.split('\'').step_by(2).collect();
     l7r_guard::shared::make::invoked(&words.join("QUOTED=1"))
         .into_iter()
         .next()
+        .filter(|t| t != l7r_guard::shared::make::DEFAULT_GOAL)
         .unwrap_or_else(|| format!("rust-{cmd}"))
 }
 

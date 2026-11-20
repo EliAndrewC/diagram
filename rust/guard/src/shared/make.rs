@@ -14,8 +14,9 @@ use super::shape::{strip_heredocs, strip_quotes};
 
 /// A command position: the start, or after `;`, `|`, `&`, `&&`, `||`, `(`, `{ `, a newline or the quote opening a shell's `-c` string, past the words that run the command after
 /// them - a further `(` or `{`, a shell keyword (`if`, `then`, `do`, `else`, `elif`, `while`, `until`, `!`), `timeout [opts] N`, `flock
-/// [opts] <file>`, `nice [-n N]`, `nohup`, `time [-p]`, `env [opts]` and `VAR=value` (feature 451 D1: the event log's writer took `(`,
-/// the keywords and `time`, the guards `timeout`, `env` and `VAR=`; `flock`, `nice`, `nohup`, `{` and a lone `&` neither).
+/// [opts] <file>`, `nice [-n N]`, `nohup`, `setsid [opts]`, `time [-p]`, `env [opts]` and `VAR=value` (feature 451 D1: the event log's
+/// writer took `(`, the keywords and `time`, the guards `timeout`, `env` and `VAR=`; `flock`, `nice`, `nohup`, `{` and a lone `&`
+/// neither; `setsid` added by T15).
 pub(crate) const POS: &str = concat!(
     r#"(?:^|[\n;|&(]|\{\s|(?:^|[\s/])(?:ba|da|z)?sh\s+(?:-[a-z]+\s+)*-[a-z]*c\s+["'])\s*(?:"#,
     r"[({]\s*",
@@ -24,6 +25,7 @@ pub(crate) const POS: &str = concat!(
     r"|flock\s+(?:-[wE]\s*\S+\s+|-\S+\s+)*\S+\s+",
     r"|nice\s+(?:-n\s*\S+\s+|-\S+\s+)*",
     r"|nohup\s+",
+    r"|setsid\s+(?:-\S+\s+)*",
     r"|time\s+(?:-p\s+)?",
     r"|env\s+(?:-u\s*\S+\s+|-\S+\s+)*",
     r"|[A-Za-z_][A-Za-z0-9_]*=\S*\s+",
@@ -41,7 +43,7 @@ fn re(pattern: &str) -> Regex {
 // `l7r-gate.sh rust <cmd>`, which `make rust-<cmd>` runs (feature 451 D1).
 static CALL: LazyLock<Regex> = LazyLock::new(|| {
     re(&format!(
-        r"{POS}(?:(?:\$\(MAKE\)|make)(?:[ \t]|$)|(?:\S*/)?l7r-gate\.sh\s+rust\s+([a-z][\w-]*))"
+        r"{POS}(?:(?:\$\(MAKE\)|make)(?=[\s;&|)`]|$)|(?:\S*/)?l7r-gate\.sh\s+rust\s+([a-z][\w-]*))"
     ))
 });
 // The gate's path quoted whole (`"$root/scripts/gates/l7r-gate.sh" rust test`), unquoted before the quotes are blanked.
@@ -72,8 +74,9 @@ const TAKES_ARG: [&str; 10] = [
 const TAKES_NUMBER: [&str; 4] = ["-j", "--jobs", "-l", "--load-average"];
 
 /// The goals of one make call, read from the words after `make` up to the end of its simple command: a flag, its argument and a
-/// `VAR=value` passed over, a path word too (`hm_make._goals`); any other word (a redirect, a stray number) ends the call.
-fn goals_of(rest: &str, out: &mut Vec<String>) {
+/// `VAR=value` passed over, a path word too (`hm_make._goals`); any other word (a redirect, a stray number) ends the call. True where
+/// the word that ended it may name a goal this reading cannot (`make $T`), so the call is not read as goal-less.
+fn goals_of(rest: &str, out: &mut Vec<String>) -> bool {
     let end = rest
         .find([';', '|', '&', '\n', ')', '`'])
         .unwrap_or(rest.len());
@@ -89,10 +92,16 @@ fn goals_of(rest: &str, out: &mut Vec<String>) {
             // the last goal of a `-c` string carries its closing quote
             out.push(goal.to_owned());
         } else if !(word.starts_with(['-', '.', '/', '~']) || is_assignment(word)) {
-            break;
+            // a redirection, or the quote closing a `-c` string, ends the words; anything else may be a goal unread
+            return !(word.contains(['<', '>']) || word.trim_matches(['"', '\'']).is_empty());
         }
     }
+    false
 }
+
+/// What a make call with no goal runs: the Makefile's default goal, named as make names it (feature 451 T15, T30 folded in - `make &`
+/// read as no invocation at all, so a detached goal-less make was invisible to every guard).
+pub const DEFAULT_GOAL: &str = ".DEFAULT_GOAL";
 
 fn is_assignment(word: &str) -> bool {
     word.split_once('=').is_some_and(|(name, _)| {
@@ -117,8 +126,11 @@ pub fn invoked(cmd: &str) -> Vec<String> {
     for c in CALL.captures_iter(&clean).map_while(Result::ok) {
         if let Some(gate) = c.get(1) {
             out.push(format!("rust-{}", gate.as_str()));
-        } else if let Some(call) = c.get(0) {
-            goals_of(&clean[call.end()..], &mut out);
+        } else {
+            let (end, before) = (c.get(0).map_or(clean.len(), |m| m.end()), out.len());
+            if !goals_of(&clean[end..], &mut out) && out.len() == before {
+                out.push(DEFAULT_GOAL.to_owned());
+            }
         }
     }
     out

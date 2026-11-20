@@ -14,7 +14,7 @@
 FREE_TEXT = UNITS WITH KEYS KEY CLASS KIND SUBJECT REASON GROWTH_REASON SPREAD NOTE WHY WORDS TITLE MSG FINDING OLD NEW RESULT \
 	FIXED_BY OUTCOME SOUGHT SOURCE STATUS WRITE LINE Q Q_JA Q_ZH Q_KO QUESTION TERMS K MARK URL REVIEW APPROVED REREAD \
 	ARBITER_OK PREFLIGHT_OK REF_WHY SET_DOWN_OK HOLD_OK MISSING_OK COVER_OK NOT_OWED_OK PLAN_REVIEW_OK KEY_CAP_OK WRITE_CAP_OK \
-	CHECK_ORDER_OK URLS MATCH NONE SHARD EXTRA IMAGES DIRS LAND SUITES
+	CHECK_ORDER_OK URLS MATCH NONE SHARD EXTRA IMAGES DIRS LAND SUITES PERF_LATER_OK
 $(foreach v,$(FREE_TEXT),$(if $(filter command line environment,$(origin $(v))),$(eval override $(v) := $$(value $(v)))$(eval export $(v))))
 
 .PHONY: modal-bundle modal-prepass done docs static format guard _reference bypass-audit quick page-check tick claim speckit-todo audit guard-edit guard-log scratch-sweep hooks-test citations fragment-move \
@@ -554,7 +554,7 @@ LAND_RUN = "$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" land
 land: export LAND_NOTE = $(NOTE)
 land: export LAND_BOXES = $(BOXES)
 land: export COVER_OK := $(COVER_OK)
-land:           ## [project] land one task or several and tick them: every cheap refusal first and together (the changed modules' coverage among them), then make done and make cohort-landing where needed (neither cohort on a counter-only delta, feature 446), the push, the ticks (feature 405 T33)   F=405 T="T12 [T13]" NOTE="what was verified" [BOXES=1 ticks a physical task's research boxes] [COVER_OK="<reason>"]
+land:           ## [project] land one task or several and tick them: every cheap refusal first and together (the changed modules' coverage among them), then make done and make cohort-landing where needed (neither cohort on a counter-only delta, feature 446), the push, the ticks (feature 405 T33); T= takes commas or spaces (451 T18)   F=405 T="T12 [T13]" (or T=T12,T13) NOTE="what was verified" [BOXES=1 ticks a physical task's research boxes] [COVER_OK="<reason>"]
 	@if [ -z "$(F)" ] || [ -z "$(T)" ]; then printf 'make land: F=<feature> and T="<task ids>" are required\n' >&2; exit 2; fi
 	$(if $(COVER_OK),$(LOGESCAPE) COVER_OK "$$COVER_OK",@:)
 	@$(LAND_RUN) "$(F)" "$(T)"
@@ -575,7 +575,7 @@ phase-read:     ## [project] let ONE of a started phase task's held old-code fil
 	@if [ -z "$(FILE)" ] || [ -z "$$WHY" ]; then printf 'make phase-read: FILE=<path> and WHY="<reason>" are required\n' >&2; exit 2; fi
 	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" phase-read allow "$(FILE)" "$$WHY"
 
-task-start:     ## [project] name the task you are starting, so its checks wait for its decisions' verdict; a phase task's old code is held from reading until it is ticked (features 375, 444)   F=375 T=T13
+task-start:     ## [project] name the task you are starting, so its checks wait for its decisions' verdict; a phase task's old code is held from reading until it is ticked (features 375, 444); refused while an open [perf] task waits in an active feature (451 FR-013), escape PERF_LATER_OK="<reason>", recorded by the tool   F=375 T=T13
 	@if [ -z "$(F)" ] || [ -z "$(T)" ]; then printf 'make task-start: F=<feature> and T=<task id> are required\n' >&2; exit 2; fi
 	$(if $(HOLD_OK),$(LOGESCAPE) HOLD_OK "$$HOLD_OK",@:)
 	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" task-start "$(F)" "$(T)"

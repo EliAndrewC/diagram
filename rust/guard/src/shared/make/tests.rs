@@ -20,6 +20,24 @@ fn a_target_is_invoked_at_a_command_position_never_mentioned() {
     assert_eq!(targets("grep make done"), set(&[]));
 }
 
+/// Feature 451 T15 (T30 folded in): `setsid` is a word that runs the command after it, a `bash -lc` string is run, a goal-less make
+/// runs the default goal - and a `grep -c` pattern or a heredoc with words after its delimiter is a mention.
+#[test]
+fn setsid_bash_lc_and_a_goal_less_make_are_invocations() {
+    assert_eq!(invoked("setsid make static"), ["static"]);
+    assert_eq!(invoked("setsid --fork make -s done"), ["done"]);
+    assert_eq!(invoked("bash -lc \"make x\""), ["x"]);
+    assert_eq!(invoked("make"), [".DEFAULT_GOAL"]);
+    assert_eq!(invoked("make -j4 > log 2>&1 &"), [".DEFAULT_GOAL"]);
+    assert_eq!(
+        invoked("cd x && make; make done"),
+        [".DEFAULT_GOAL", "done"]
+    );
+    assert!(invoked("grep -c \"make static\" log").is_empty());
+    assert!(invoked("cat <<'EOF' > n.md\nmake static\nEOF").is_empty());
+    assert!(invoked("echo make").is_empty());
+}
+
 #[test]
 fn quick_and_done_together_become_done_alone() {
     assert_eq!(

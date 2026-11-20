@@ -38,7 +38,7 @@
    "declared": "spec-fidelity"
   },
   "## Decisions": {
-   "sha256": "0d554c75bc59525f377450ba99a462475ac2134c01f673d4aaece63f87e36f33",
+   "sha256": "d853d52edda70f62bce0ad014ecc72a92d9f47a51a8122861341416d9e6efc7c",
    "verdict": "CLEAR",
    "reviewed": "2026-11-20",
    "declared": "spec-fidelity"
@@ -188,43 +188,43 @@
    "declared": "spec-fidelity"
   },
   "### T12 Approach (checklist part A)": {
-   "sha256": "08a6d9b8ec80d4406b0baa178a1df1675862d2e4415847bdfe199b2d0678ed95",
+   "sha256": "9b2315c1505b6b3c69669923c94548248f642921e127c58dfff044badb23fa86",
    "verdict": "CLEAR",
    "reviewed": "2026-11-20",
    "declared": "spec-fidelity"
   },
   "### T13 (FR-006: a SendMessage resuming a builder past the cap, or one whose task has landed)": {
-   "sha256": "bcc822c8531699e2bacee68ddaee3fbc3c7f393a280145bfa4de6ee16f4ac345",
+   "sha256": "5e9f6faae5e19e72a788017c9517ddcfa16e904ecb16f3f3e0667770d4dd969a",
    "verdict": "CLEAR",
    "reviewed": "2026-11-20",
    "declared": "spec-fidelity"
   },
   "### T13 Approach (checklist part A)": {
-   "sha256": "970cd3b332dc12ff40bacb9e42bc7f1298ce1669817e74a9b671d64611334032",
+   "sha256": "9116920ca9c84715234a6be19b6803526226e08546ac5afaee29d523235e8438",
    "verdict": "CLEAR",
    "reviewed": "2026-11-20",
    "declared": "spec-fidelity"
   },
   "### T14 (FR-007: `make static` was the edit loop - the spec's User Story 3)": {
-   "sha256": "f520804b7ea6be5167036e6930fac54e22c6fb0338a4ee607db330522b17a83f",
+   "sha256": "7603e83966e9f30076764d155b1af6f3262b8ad158a0b4daf48af503d396f681",
    "verdict": "CLEAR",
    "reviewed": "2026-11-20",
    "declared": "spec-fidelity"
   },
   "### T14 Approach (checklist part A)": {
-   "sha256": "c48b3b9a1005e82aedc78b720b10e56d32665de3ae8302367279f3fe477ef113",
+   "sha256": "792bb1a2af05844f4fb61bd297f814765d7ec47903db99398e56331d06fe062e",
    "verdict": "CLEAR",
    "reviewed": "2026-11-20",
    "declared": "spec-fidelity"
   },
   "### T15 (FR-008: T225's `make static` with a plain `&` sat untracked - the spec's User Story 4, research R4)": {
-   "sha256": "75c334a974a9062d275cc71fc426248635404a174c2e6025a71019d1a92f221c",
+   "sha256": "e789135ccfa45597df5301fb7396d3261eb98ae774998819f9ea21874f7d0228",
    "verdict": "CLEAR",
    "reviewed": "2026-11-20",
    "declared": "spec-fidelity"
   },
   "### T15 Approach (checklist part A)": {
-   "sha256": "953e3ba2722cc7837d582a5f09a4d36f8873f3bbe9c6e5ec6827de4d659f44b0",
+   "sha256": "e9f14f789dfef2f0996c1af27d2c5728891651c95bb271d0a36d1456f09bfeaa",
    "verdict": "CLEAR",
    "reviewed": "2026-11-20",
    "declared": "spec-fidelity"
@@ -236,7 +236,7 @@
    "declared": "spec-fidelity"
   },
   "### T16 Approach (checklist part A)": {
-   "sha256": "64892608f2528ac78fe164c38c31db0143c28d9f430c64151b8c3e46689a80f1",
+   "sha256": "9b0144d78a670cdf60db0eea74881b8b755a9caddad05bdffd45577079767a95",
    "verdict": "CLEAR",
    "reviewed": "2026-11-20",
    "declared": "spec-fidelity"
@@ -248,7 +248,7 @@
    "declared": "spec-fidelity"
   },
   "### T17 Approach (checklist part A)": {
-   "sha256": "64099d3c4e205e0f37aa5c058d9d7d6cadab242c790eaa377796d07ca279e553",
+   "sha256": "5c5f9488085bf561f3a6c02ccfa4245809ef8137fb7d80711d50c70d2c96bdc7",
    "verdict": "CLEAR",
    "reviewed": "2026-11-20",
    "declared": "spec-fidelity"
@@ -260,7 +260,7 @@
    "declared": "spec-fidelity"
   },
   "### T18 Approach (checklist part A)": {
-   "sha256": "53d4ff69e3d457143952f7a147bae7211bbf23a85904f0bd427d452df1f45b21",
+   "sha256": "7787dfecc8fa2773fca2d23dd7a5907f058ca52ec5ecd37106e1052779d3e652",
    "verdict": "CLEAR",
    "reviewed": "2026-11-20",
    "declared": "spec-fidelity"
@@ -272,7 +272,7 @@
    "declared": "spec-fidelity"
   },
   "### T19 Approach (checklist part A)": {
-   "sha256": "96aa0566fb96302e1ed6e34ac96d73b25c5e8ac8d14740608b693c36b511064d",
+   "sha256": "4bf65f83f761f6d65b6d7b2f5f9f5d59320b33c4d633fd36a010f341a9ccd085",
    "verdict": "CLEAR",
    "reviewed": "2026-11-20",
    "declared": "spec-fidelity"
@@ -403,14 +403,56 @@
    "reviewed": "2026-11-20",
    "declared": "spec-fidelity"
   },
-  "### T24 (<why: the finding or measurement that files it>)": {
-   "sha256": "8c296cb61d29561767bd907bb3876642c117283e74a2593add2441d8fbf9683c",
+  "### T24 Approach (checklist part A)": {
+   "sha256": "4d7692efb2e908aa223cbf403588cfa2c3653723b1d93c2928d8675745e7256b",
    "verdict": "CLEAR",
    "reviewed": "2026-11-20",
    "declared": "spec-fidelity"
   },
-  "### T24 Approach (checklist part A)": {
-   "sha256": "c0351f8099e6e18a37212739bb3ddf180234bbf736a8b3b0d7a2fd49de9dcc42",
+  "### T24 (a gate test read the real environment: with `SPECIFY_FEATURE` exported, `make static`'s coverage of the bundle crate went red, observed 2026-11-20, method: T02's `make static` log)": {
+   "sha256": "02ed9a9c18bb4cfc583a9670ec37c7abff66a6c109cbef71fbf62c4cfba69e1e",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity"
+  },
+  "### T29 (`make set-down` left the feature's started-task mark: 449 was set down with T241 parked while `.git/active-task` still named 449 T241, so every push touching 449's specs was held and T06's landing refused, observed 2026-11-20, method: T06's refused landing and the revert of its ticks, `git log`)": {
+   "sha256": "4076e8d50a09c63a4964c3a2b4e6ce37149fa6625a1fac0a7b194ade9491731d",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity"
+  },
+  "### T29 Approach (checklist part A)": {
+   "sha256": "4c8a27c228ccee88e27bd444ebd0b08ef01f7505ffdfefe9dab6ee727ddc7b75",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity"
+  },
+  "### T28 (FR-013, the GM 2026-11-20: \"can we in general priotitize performance improvements going forward?\" - nothing ordered the work by it, observed 2026-11-20, method: `make task-start`'s source and the Stop hook's, read)": {
+   "sha256": "56d430b7019607f9c2eb2c25bdeccce1023a3fd8cd1356adbac603349bbfc6ec",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity"
+  },
+  "### T28 Approach (checklist part A)": {
+   "sha256": "814f2469e17f1cbb93dc9df0ba0cb73927308ea6b2131c8bc917bf406495ff3a",
+   "verdict": "BLOCKED",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity"
+  },
+  "### T30 (<why: the finding or measurement that files it>)": {
+   "sha256": "1284e70f9b3f31bbb5393d45cb2d92f17cc137c6a9d51a4ef629df7371cfc57e",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity"
+  },
+  "### T30 Approach (checklist part A)": {
+   "sha256": "1efbcb8490a7d852f877ee70eaa491dd5a46ea84ef4600904ad2794b94dc07c6",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity"
+  },
+  "### T30 (the shared shell readers' gaps)": {
+   "sha256": "3761aa33d0a2a93f1e856bcc63e069eb70e44ef917936d7b0931f15904b66b93",
    "verdict": "CLEAR",
    "reviewed": "2026-11-20",
    "declared": "spec-fidelity"
@@ -1906,6 +1948,789 @@
      "why": "Last round's exception rested on implementation awkwardness ('no signal handler's work'). This one rests on knowledge: until the push command reports, the landing process does not hold the fact that the remote took the push, so no writer in the landing can record landed true in that interval. A pre-push guess would write a false landed whenever the push then fails. The rule is impossible here, not merely awkward, and the section has already shrunk the gap to that interval. The tick commit on main is not what makes this legitimate: D10 and D11 as cited read the end line, not main. The real outcome in the window is that the landing reads as open, never as refused. D7's rework count therefore stays right, D10 misses a resume of that task's builder, and D11 keeps that task's static count unreset. That is one rare interleaving (a manual stop during the push itself), with the outcome confined to that one task. This is the one case the previous round's requirement ('once a landing's push has gone out, a later stop must not leave it reading as unlanded') cannot reach. The ruling covers only the interval before the script reports the push went out. The block also says 'before the script exits'. If sync-with-main.sh reports success and then goes on working before it exits, that stretch is not unknowable: end must be written when the report comes, and an end held until the exit would be outside this ruling."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-20",
+   "blocks": [
+    "### T18 (FR-011: `T=\"T1,T2\"` read as one task - research R7)",
+    "### T18 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T18-scope",
+     "summary": "T18 carries only D16's first half (land.rs splits T= on commas and whitespace); task-add's quick check is left to another task",
+     "class": "within",
+     "why": "Splitting FR-011 between tasks narrows nothing about the feature. The request's improvement 6 ('Accept commas in T=') is carried whole here. The task-add half is not in this bundle, so whether it is planned elsewhere is for that task's own review."
+    },
+    {
+     "id": "T18-where",
+     "summary": "The change goes in rust/gate/crates/land/src/land.rs and make land's help text",
+     "class": "within",
+     "why": "Where the T= parser lives, plus documenting the accepted form. Both serve 'Accept commas in T='."
+    },
+    {
+     "id": "T18-cases",
+     "summary": "Red-first tests: T=\"T1,T2\" and T=\"T1, T2\" each land both tasks in the land tests' fake world",
+     "class": "within",
+     "why": "D16 splits on commas and whitespace, so both forms are what FR-011 asks for. A test that fails only when commas are not accepted is enforcement of the request ('real enforcement'), not unrequested scope."
+    },
+    {
+     "id": "T18-order",
+     "summary": "Ordered after T17",
+     "class": "within",
+     "why": "Sequencing among the approved improvement fixes, which the GM put first on 2026-11-20. Nothing is deferred behind non-improvement work."
+    },
+    {
+     "id": "T18-defect",
+     "summary": "Item 12 counts a comma list refused as one unknown task as a defect (valid input refused); found-and-left none; no map, no pool manifests",
+     "class": "within",
+     "why": "Matches the request's framing of the comma refusal as something to fix. Nothing is left unfixed."
+    },
+    {
+     "id": "T18-perf-label",
+     "summary": "'Performance work? no'",
+     "class": "within",
+     "why": "The label leaves nothing out and changes nothing in FR-011. The task is still placed among the six improvements the GM put first (order after T17). See the note on SC-006 in the reply."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-20",
+   "blocks": [
+    "### T24 (a gate test read the real environment: with `SPECIFY_FEATURE` exported, `make static`'s coverage of the bundle crate went red, observed 2026-11-20, method: T02's `make static` log)",
+    "### T24 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T24-seam-guard",
+     "summary": "The guard's consulted::context gains context_from(root, var) with the environment handed in; context delegates to it with the guard's own var, so other callers are unchanged.",
+     "class": "within",
+     "why": "An implementation choice for repairing a test that read the real environment (make static red on the bundle crate's coverage with SPECIFY_FEATURE exported). It changes no behavior the request or spec settles; the existing entry point keeps its behavior."
+    },
+    {
+     "id": "T24-seam-bundle",
+     "summary": "The bundle crate's source_pages asks context_from with the process environment in the binary and, under cfg(test), its own thread-local map (helpers::VARS), empty unless a test names a variable.",
+     "class": "within",
+     "why": "Test-only seam so the test, not the builder's shell, decides the branch; the binary still reads the process environment. Nothing in request.md or the spec is narrowed."
+    },
+    {
+     "id": "T24-test-exact",
+     "summary": "The test at helpers/tests.rs asserts the one outcome it means (code 1 and the exact AttributeError on a [1] pointer), then names SPECIFY_FEATURE in its own map and asserts the pointer skipped (code 0); red first with SPECIFY_FEATURE exported.",
+     "class": "within",
+     "why": "Makes the test assert exactly rather than depend on the environment; tightens a check, narrows nothing asked. Red-first runs carry dated methods."
+    },
+    {
+     "id": "T24-no-env-mutation",
+     "summary": "Constraint: no process-environment mutation in a test (it races other tests on the thread pool); 100% line coverage of each crate by its own tests kept.",
+     "class": "within",
+     "why": "A constraint on how the fix is made, not a reduction of any requested outcome."
+    },
+    {
+     "id": "T24-order",
+     "summary": "Lands before T08 (T03's plan review); independent of the land crate's work.",
+     "class": "within",
+     "why": "Ordering of a blocker repair (make static red stops landings); the spec does not settle T24's position and nothing requested is deferred by it."
+    },
+    {
+     "id": "T24-sweep-left",
+     "summary": "The sweep's other either-outcome tests (arbiter/tests.rs:579, gate/src/lib.rs:309, record/tests.rs:301, measure/spec/tests.rs:54, owed/.../answer_modes.rs:149) and modal.rs:866's raw CHECK_ORDER_OK read are named in the report, outside T24's edit scope, not filed.",
+     "class": "within",
+     "why": "Neither request.md nor the spec asks for these tests to be changed, and the plan states, with a measured probe for CHECK_ORDER_OK (78 of 78 exported, 2026-11-20), that none reads SPECIFY_FEATURE or flips with this task's defect. No wrong outcome is shown for them here, so leaving them is not a defect deferred and needs no ruling."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-20",
+   "blocks": [
+    "### T29 (`make set-down` left the feature's started-task mark: 449 was set down with T241 parked while `.git/active-task` still named 449 T241, so every push touching 449's specs was held and T06's landing refused, observed 2026-11-20, method: T06's refused landing and the revert of its ticks, `git log`)",
+    "### T29 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T29-clear",
+     "summary": "make set-down removes the clone's active-task mark once the set-down row is written, when the mark names the set-down feature, and says so in its reply; the next task-start writes it again",
+     "class": "within",
+     "why": "Fixes a defect in the sense of constitution XIV (a tool refusing valid work: a set-down feature's stale mark held every push touching its specs and refused T06's landing). It removes friction from the landings this feature exists to speed up (request 2026-11-20: prioritize the improvement fixes and performance work), and it matches FR-013's own reading that a set-down feature holds no started task. It narrows nothing that was asked."
+    },
+    {
+     "id": "T29-leave",
+     "summary": "A refused set-down, another feature's mark, or a mark that cannot be read or names no feature is left as it stands and fails nothing",
+     "class": "within",
+     "why": "None of these cases is the defect. Clearing another feature's mark, or clearing the mark after a refused set-down, would be wrong. Leaving an unreadable mark as it is does not take back any part of the stated goal: a set-down feature no longer holds pushes through its own mark."
+    },
+    {
+     "id": "T29-perf",
+     "summary": "Tagged [perf] in FR-013's sense (it makes the landings faster), not filed with PERF=1 because it touches no engine stage's counted operations or time",
+     "class": "within",
+     "why": "FR-013 defines performance work to include a task that makes the landings faster. A stale mark cost a refused landing and reverted ticks. The PERF=1 distinction follows FR-013's two routes as written."
+    },
+    {
+     "id": "T29-exits",
+     "summary": "Red-first test, 100% line coverage of the task crate, the clear deleted to show the test turns red, a scratch-repo replay of the incident, and the usual green exits",
+     "class": "within",
+     "why": "Verification that the fix does what it says. It is not new behavior."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-20",
+   "blocks": [
+    "### T28 (FR-013, the GM 2026-11-20: \"can we in general priotitize performance improvements going forward?\" - nothing ordered the work by it, observed 2026-11-20, method: `make task-start`'s source and the Stop hook's, read)",
+    "### T28 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T28-reader",
+     "summary": "One reader performance(id, title, plan): the [perf] tag among the bracketed tags right after a task's id (not a quoted [perf] in prose), or PERF=1's '### T<n> Performance checklist' heading.",
+     "class": "within",
+     "why": "FR-013 defines performance work as a task filed with PERF=1 or tagged [perf] on its line; the reader recognizes exactly those two marks."
+    },
+    {
+     "id": "T28-active",
+     "summary": "The Stop hook's active test comes out of verdict() as active() (open box but the GM's, not set down since the last task-start, not closed by status) and is shared by task-start.",
+     "class": "within",
+     "why": "FR-013 defines an active feature as exactly the Stop hook's own test in set_down_hooks.rs; sharing one function is how that definition is honored."
+    },
+    {
+     "id": "T28-picker",
+     "summary": "next_performance(root, git dir, prefer) picks the open performance task: the feature being started first (counted active even if set down, since its start ends that), then each other feature started in this clone, latest start first; both the Stop hook and task-start ask this one picker.",
+     "class": "within",
+     "why": "FR-013: task-start refuses while an open performance task exists in any active feature, and the Stop hook names one before any other. The active set is the Stop hook's own test (which reads this clone's start log); counting the feature being started as active widens, not narrows, the refusal; one picker for both keeps the hook from naming a task the start refuses."
+    },
+    {
+     "id": "T28-refusal-escape",
+     "summary": "task_start.rs perf_first reads PERF_LATER_OK first (reason of two words or more, refused short, recorded in the guard log under perf-first), then refuses a non-performance task naming the picked task and its make task-start F= T= command.",
+     "class": "within",
+     "why": "FR-013 (refusal naming the task and the command to start it, an escape of a reason) and FR-012 (two-word recorded escape, message naming the compliant command, red-first test with the check deleted - the reds, greens and deleted-check reds are recorded)."
+    },
+    {
+     "id": "T28-tree",
+     "summary": "Specs read under the clone's toplevel where resolve_feature found the feature, never L7R_GATE_TREE.",
+     "class": "within",
+     "why": "An implementation choice of where to read the tasks FR-013's test reads; it removes no case FR-013 covers."
+    },
+    {
+     "id": "T28-tags",
+     "summary": "Tagged [perf]: 451 T12-T21, T28, T29; 444 T34, T36, T43. 444 T27 and T30 already marked by PERF=1. Left untagged, each with its reason: 451 T07-T11, T22, T24; 444 T24, T25, T28, T29, T31-T33, T35, T39, T42; 449's listed open boxes; 417 (engine deleted); every box of the 20 closed features.",
+     "class": "within",
+     "why": "An application of FR-013's own definition (a task that makes the engine, checks, gate, landings or builders' loop faster) to the measured list of 248 open boxes; the tasks whose stated outcome is less time are tagged, including all six improvements the GM ordered first (T12-T21), and the left ones are measurement, correctness, deletion, budget or record work, or work on a deleted engine that would speed nothing. No performance-improving task is shown left out."
+    },
+    {
+     "id": "T28-perf-question",
+     "summary": "The plan template's 'Performance work?' question is read in FR-013's sense (yes for a [perf] task; PERF=1 is the other mark and adds the checklist); T12-T19's sections flip to yes.",
+     "class": "within",
+     "why": "Aligns the plan's own question with FR-013's definition; the caller reports (b) and (c) done, the latter reviewed in the plan-delta round beside this."
+    },
+    {
+     "id": "T28-self-mark",
+     "summary": "T28 is itself [perf]-tagged, not filed with PERF=1, since the checklist measures an engine stage's operations and time and a refusal's order has neither.",
+     "class": "within",
+     "why": "FR-013 accepts either mark; the tag makes T28 performance work in its sense."
+    },
+    {
+     "id": "T28-escape-record-form",
+     "summary": "PERF_LATER_OK added to the Makefile's FREE_TEXT and named in task-start's help; recorded once by the tool itself (as plan.rs records PLAN_REVIEW_OK), with no $(LOGESCAPE) make-side line - a stated departure from D15/D16's make-side form.",
+     "class": "within",
+     "why": "FR-012 asks that the escape be recorded; it is, once, in the guard log, and SC-006 reads it off the escape log. The departure is of mechanism, not of anything the GM or FR-012 required, and avoids a double record."
+    },
+    {
+     "id": "T28-order",
+     "summary": "T28 lands right after T18, with T29.",
+     "class": "within",
+     "why": "T28 is itself performance work and the GM's 2026-11-20 order puts the remaining improvement fixes first; placing it among them honors that order."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-20",
+   "blocks": [
+    "## Decisions",
+    "### T12 Approach (checklist part A)",
+    "### T13 (FR-006: a SendMessage resuming a builder past the cap, or one whose task has landed)",
+    "### T13 Approach (checklist part A)",
+    "### T14 (FR-007: `make static` was the edit loop - the spec's User Story 3)",
+    "### T14 Approach (checklist part A)",
+    "### T15 Approach (checklist part A)",
+    "### T16 Approach (checklist part A)",
+    "### T17 Approach (checklist part A)",
+    "### T18 Approach (checklist part A)",
+    "### T19 Approach (checklist part A)",
+    "### T28 (FR-013, the GM 2026-11-20: \"can we in general priotitize performance improvements going forward?\" - nothing ordered the work by it, observed 2026-11-20, method: `make task-start`'s source and the Stop hook's, read)",
+    "### T28 Approach (checklist part A)",
+    "### T29 (`make set-down` left the feature's started-task mark: 449 was set down with T241 parked while `.git/active-task` still named 449 T241, so every push touching 449's specs was held and T06's landing refused, observed 2026-11-20, method: T06's refused landing and the revert of its ticks, `git log`)",
+    "### T29 Approach (checklist part A)",
+    "(removed) ### T24 (<why: the finding or measurement that files it>)"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "D1",
+     "summary": "one make detector, invoked(cmd), also seeing (, {, flock, nice, time, timeout; l7r-gate.sh rust <cmd> read as rust-<cmd>",
+     "class": "within",
+     "why": "Unchanged since its CLEAR verdict; serves FR-001's classing of every make-target Bash call and the gate's crate-scoped form, which FR-001 names."
+    },
+    {
+     "id": "D2",
+     "summary": "one bucket_of table shared by the writer and both readers, past logs re-booked; each line's task by T=, subagent meta, else last task-start",
+     "class": "within",
+     "why": "Unchanged; FR-001 asks for one table the readers share; the task field serves FR-004/FR-005's per-task breakdown the GM asked for (2026-11-19, 'for each task')."
+    },
+    {
+     "id": "D3",
+     "summary": "BgEnd line from a non-agent task-notification, filed beside its launch; agent notices write none (SubagentStop is their end); waits booked to inflight runs",
+     "class": "within",
+     "why": "Unchanged; FR-002 verbatim. An agent's end is already logged by SubagentStop, so no run's end goes unlogged."
+    },
+    {
+     "id": "D4",
+     "summary": "Phase lines per crate, but a coverage build per family of crates",
+     "class": "narrowing",
+     "why": "Unchanged; FR-003 says per crate. The coverage build compiles a family in one process, so a per-crate split of its seconds does not exist to be logged; the line names the family's crates.",
+     "ruling": "LEGITIMATE"
+    },
+    {
+     "id": "D5",
+     "summary": "make land writes a Phase line per step and an end line with exit code, tasks and landed",
+     "class": "within",
+     "why": "FR-003 names the landing's phases; the end line serves FR-005's rework count and FR-006/FR-007's landing."
+    },
+    {
+     "id": "D6",
+     "summary": "SubagentStop records tokens (in, cached, created, out), ctx and task",
+     "class": "within",
+     "why": "Unchanged; FR-004 verbatim, plus created-cache tokens which are part of the token cost asked for."
+    },
+    {
+     "id": "D7",
+     "summary": "where-time columns, UNTIL=, critical path vs summed agent-minutes, rework; feature-report reads the same functions",
+     "class": "within",
+     "why": "FR-005 verbatim. Changed text: a refused landing is an end line with landed false, not a non-zero code - an exit 3 with ticks standing or a raise after the push went out is a landing, so counting it as rework would miscount; this follows FR-005's meaning."
+    },
+    {
+     "id": "D7-landed",
+     "summary": "a landing is defined as a make land whose push went out (code 0, or 3 with ticks standing, or a raise after the push), not as exit code 0, for D7, D10 and D11",
+     "class": "within",
+     "why": "A landing is the push going out; FR-006 ('whose task has landed') and FR-007 ('since its last landing') are about that event, and a code-0 test missed real landings. Corrects the definition toward the requirements' words; narrows nothing."
+    },
+    {
+     "id": "D8",
+     "summary": "a builder is an agent whose agent_type names no .claude/agents file, which also catches a general-purpose agent dispatched without a task",
+     "class": "within",
+     "why": "Unchanged; applies FR-006's own definition ('not a defined review agent'). It widens the cap's reach to unbriefed general-purpose agents, which FR-006's purpose (keep builder contexts small, approved improvement 1) covers; nothing asked for is narrowed."
+    },
+    {
+     "id": "D9",
+     "summary": "context_cap_hooks refuses every builder tool call past CONTEXT_CAP_TOKENS (GUESS 300k) but the handoff Write; escapes CONTEXT_OK and make context-ok",
+     "class": "within",
+     "why": "Unchanged; FR-006 and FR-012 verbatim, the knob value the spec's."
+    },
+    {
+     "id": "D10",
+     "summary": "SendMessage to a builder past the cap or whose task landed is refused; with no task found anywhere the landing check passes, recorded as 'context-cap: resume, no task', while the cap check still refuses",
+     "class": "narrowing",
+     "why": "Unchanged; FR-006 refuses a resume of a builder whose task has landed. Where no task can be found there is no task whose landing can be tested, so the check is impossible, not merely awkward; the pass is recorded and the cap half still applies.",
+     "ruling": "LEGITIMATE"
+    },
+    {
+     "id": "D11",
+     "summary": "a third make static per task since its last landing (landed true) or its first task-start is refused; later task-starts reset nothing; every session's runs count",
+     "class": "within",
+     "why": "FR-007 verbatim; changed text only adopts D7-landed's definition of a landing."
+    },
+    {
+     "id": "D12-covered",
+     "summary": "a make/cargo & followed by a wait that covers the job (bare wait, wait $!, wait %N, same shell, unconditional) passes",
+     "class": "narrowing",
+     "why": "Unchanged; FR-008 refuses backgrounding inside a Bash call. The approved improvement was 'a guard refusing that pattern', the pattern being a run started so that 'no completion notice came'. A call that waits does not return before the run ends, so the harness tracks it: the case is outside the pattern by the GM's approved words.",
+     "ruling": "LEGITIMATE"
+    },
+    {
+     "id": "D12-strict",
+     "summary": "nohup/setsid at a command position, any disown after the job's & (including disown -h), and a wait on a saved pid are refused",
+     "class": "within",
+     "why": "Unchanged; FR-008 names disown without exception; refusing the saved-pid form is stricter than asked, with a recorded escape and a compliant form named."
+    },
+    {
+     "id": "D13",
+     "summary": "main-session permitted wait loops whose longest sleep exceeds POLL_CHECK_S (GUESS 60 s) are refused; SLOW_POLL_OK",
+     "class": "within",
+     "why": "Unchanged; FR-008's second half verbatim."
+    },
+    {
+     "id": "D14",
+     "summary": "knobs labeled GUESS at their point of change and tabled in docs/guards.md; make tunables not extended to the tooling crates",
+     "class": "within",
+     "why": "Unchanged; the spec names make tunables only as where retuning happens and records knobs as GUESS; the knob table still records each one. Nothing the request asked for is dropped."
+    },
+    {
+     "id": "D15",
+     "summary": "deferral_unformed: reason, filed task id, 'lands before T<n>', ids differ, OPEN test at make decide only; class-of-defect fixes need an observed line; DEFER_FORM_OK honored on plan-delta too",
+     "class": "within",
+     "why": "Unchanged; FR-009 places the refusal in make decide, which is where the OPEN test runs; FR-012's escape recorded."
+    },
+    {
+     "id": "D16",
+     "summary": "land splits T= on commas; task-add runs quick's check lines each to its end, compares findings with and without the line, withdraws and refuses on a new one; QUICK_OK",
+     "class": "within",
+     "why": "Unchanged; FR-011 verbatim."
+    },
+    {
+     "id": "D17",
+     "summary": "hook suites split into shards until each is about 20 s, SHARD_BAR_S GUESS, measured not gated",
+     "class": "within",
+     "why": "Unchanged; FR-010 verbatim."
+    },
+    {
+     "id": "T12-T19-perf",
+     "summary": "T12-T19's 'Performance work?' answers flipped to yes: each a [perf] task under FR-013, no checklist",
+     "class": "within",
+     "why": "The GM 2026-11-20 asked to 'prioritize those remaining improvement fixes' and FR-013 defines performance work by the [perf] tag; T12-T19 are the six approved improvements. Re-reading the question in FR-013's sense is what the request asks."
+    },
+    {
+     "id": "T12-order",
+     "summary": "T12's order line still reads 'After T11', placing the first performance task after T11, which T28 lists as open, untagged and not performance work",
+     "class": "narrowing",
+     "why": "The GM 2026-11-20: 'let's prioritize those remaining improvement fixes ... doing those first makes everything after them faster', carried by FR-013. No dependency on T11 is stated: T12's constraints are FR-006, FR-012, D8, D9, none of which reads anything T07-T11 produce (D9 reads the transcript directly). The line was written before FR-013 and now contradicts both the GM's order and T28's own replay, which refuses task-start T07 in favour of T12. Fix: T12's order should read first of the performance lane (or name the real prerequisite, e.g. T03/T06, if any exists).",
+     "ruling": "NOT LEGITIMATE"
+    },
+    {
+     "id": "T13-T14-landed",
+     "summary": "T13's and T14's red fixtures restated from 'end code 0/1' to 'end landed true/false'",
+     "class": "within",
+     "why": "Follows D7-landed; the fixtures test the same requirement with the corrected definition."
+    },
+    {
+     "id": "T15-same-shell",
+     "summary": "D12's 'same list' read as the same shell: a bare wait in an enclosing list covers a job in a loop or if body (for t in a b; do make $t & done; wait passes)",
+     "class": "narrowing",
+     "why": "Widens what passes FR-008 beyond the earlier 'same list'. A bare wait in the same shell waits for every job of that shell, so the call does not return before the runs end and the harness tracks them: the case is outside 'that pattern' (no completion notice) for the same reason as D12-covered. This ruling reaches the bare wait the block shows; it does not reach a wait $! after a loop, which covers only the last iteration's job, and which the block does not say passes.",
+     "ruling": "LEGITIMATE"
+    },
+    {
+     "id": "T15-measured",
+     "summary": "the suite grown to 35 refused and 28 passed cases, four corpora replayed (1,134 commands, 14 refused, all real launches), red-first and check-deleted runs",
+     "class": "within",
+     "why": "Verification of FR-008 and FR-012's red-first test; dated with methods."
+    },
+    {
+     "id": "T28-reader",
+     "summary": "performance work read as the [perf] tag right after a task's id (not one quoted in prose) or PERF=1's checklist heading in the plan",
+     "class": "within",
+     "why": "FR-013 verbatim: 'filed with PERF=1 or tagged [perf] on its line'."
+    },
+    {
+     "id": "T28-active",
+     "summary": "the Stop hook's active test extracted as active() and shared: open box but the GM's, not set down since the last task-start, not closed by status",
+     "class": "within",
+     "why": "FR-013 names 'the Stop hook's own test, set_down_hooks.rs' as the meaning of an open performance task in an active feature."
+    },
+    {
+     "id": "T28-scope",
+     "summary": "the picker reads the preferred feature, then each other feature started in this clone, latest start first",
+     "class": "within",
+     "why": "FR-013's 'any active feature' is defined by the Stop hook's test, which is 'not set down since its last task-start' - a feature with no task-start in this clone has none for that test. The order among features only picks which task to name; the refusal fires if any active feature holds one."
+    },
+    {
+     "id": "T28-refusal",
+     "summary": "task_start's perf_first refuses a non-performance task naming the picked task and its make task-start; PERF_LATER_OK escape of two words, recorded under perf-first; the Stop hook names the same picker's task first",
+     "class": "within",
+     "why": "FR-013 and FR-012 verbatim; one picker for both so the hook never names a task the start refuses."
+    },
+    {
+     "id": "T28-escape-form",
+     "summary": "PERF_LATER_OK added to FREE_TEXT and the help line, recorded by the tool itself rather than a $(LOGESCAPE) line, departing from D15/D16's make-side form",
+     "class": "within",
+     "why": "FR-012 asks that the escape be recorded; it is, once. The form of recording is not something the request settles."
+    },
+    {
+     "id": "T28-tags-451",
+     "summary": "451's T12-T21, T28 and T29 tagged [perf]",
+     "class": "within",
+     "why": "T12-T21 are the six approved improvements and the suite split the GM ordered first (2026-11-20); T28 and T29 tagged when filed."
+    },
+    {
+     "id": "T28-left-451",
+     "summary": "451's T07-T11 (measure where the time goes), T22 (a close) and T24 (a coverage fix) left untagged",
+     "class": "within",
+     "why": "On the plan's own gloss (the task lines are not in the bundle): none states an outcome of less time; FR-013's criterion is a task that makes the engine, checks, gate, landings or builders' loop faster. The GM's 'remaining improvement fixes' were the six improvements, not the data half."
+    },
+    {
+     "id": "T28-tags-444",
+     "summary": "444's T34, T36, T43 tagged; T27 and T30 already performance work by PERF=1",
+     "class": "within",
+     "why": "On the plan's gloss each states a time outcome (gate and landing without map-rolling tests, the gate's wall time, a one-line edit's build time); FR-013 'in every feature'."
+    },
+    {
+     "id": "T28-left-444",
+     "summary": "444's T29, T32, T33, T24, T25, T28, T31, T35, T39, T42 left untagged",
+     "class": "within",
+     "why": "On the plan's gloss (task lines not in the bundle): ports whose replaced Python is deleted, budgets and placements, which tests the gate runs, a deletion, the driver - none states a time outcome. T35 beside the tagged T34 is not verifiable from the bundle; 444 is set down today, so no start is held either way."
+    },
+    {
+     "id": "T28-left-449",
+     "summary": "449's T158, T203, T216, T241, T197, T228, T235, T240 left untagged",
+     "class": "within",
+     "why": "On the plan's gloss: a deletion, checks that pass bad work, record/constitution/budget/drawing - correctness, not speed."
+    },
+    {
+     "id": "T28-left-417",
+     "summary": "417's open boxes left untagged",
+     "class": "within",
+     "why": "On the plan's gloss: their engine (hamletgen) is deleted, so they speed nothing; tagging would hold every start on work FR-013's criterion does not reach."
+    },
+    {
+     "id": "T28-left-closed",
+     "summary": "open boxes of the 20 features closed by Done/Withdrawn/Superseded status left untagged",
+     "class": "within",
+     "why": "FR-013 counts only active features; no start reaches a closed one."
+    },
+    {
+     "id": "T28-question",
+     "summary": "'Performance work?' read in FR-013's sense; the template's placeholder restated (PERF=1 adds the checklist)",
+     "class": "within",
+     "why": "Aligns the plan question with FR-013's definition; no requested behavior changes."
+    },
+    {
+     "id": "T28-found-left",
+     "summary": "Makefile FREE_TEXT/help, the template placeholder and T12-T19's answers fixed by the session before T28 lands",
+     "class": "within",
+     "why": "Each fixed before the task lands, none deferred to another task."
+    },
+    {
+     "id": "T29",
+     "summary": "make set-down clears the clone's active-task mark when it names the set-down feature; tagged [perf]",
+     "class": "within",
+     "why": "A tooling defect that held every push touching 449 and refused T06's landing (observed 2026-11-20); fixing a known defect as found is the standing rule, and a stale mark costing refused landings slows the landings FR-013 names. It adds a fix, narrows nothing asked."
+    },
+    {
+     "id": "removed-T24",
+     "summary": "T24's unfilled template section removed",
+     "class": "within",
+     "why": "The removed block was the empty placeholder ('<why: ...>', '<what changes ...>'); it decided nothing, so its removal drops no decision."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-20",
+   "blocks": [
+    "## Decisions",
+    "### T12 Approach (checklist part A)",
+    "### T13 (FR-006: a SendMessage resuming a builder past the cap, or one whose task has landed)",
+    "### T13 Approach (checklist part A)",
+    "### T14 (FR-007: `make static` was the edit loop - the spec's User Story 3)",
+    "### T14 Approach (checklist part A)",
+    "### T15 Approach (checklist part A)",
+    "### T16 Approach (checklist part A)",
+    "### T17 Approach (checklist part A)",
+    "### T18 Approach (checklist part A)",
+    "### T19 Approach (checklist part A)",
+    "(removed) ### T24 (<why: the finding or measurement that files it>)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D1",
+     "summary": "one make detector, invoked(cmd), also seeing (, {, flock, nice, time, timeout; l7r-gate.sh rust <cmd> read as rust-<cmd>",
+     "class": "within",
+     "why": "Unchanged since its CLEAR verdict; serves FR-001's classing of every make-target Bash call and the gate's crate-scoped form, which FR-001 names."
+    },
+    {
+     "id": "D2",
+     "summary": "one bucket_of table shared by the writer and both readers, past logs re-booked; each line's task by T=, subagent meta, else last task-start",
+     "class": "within",
+     "why": "Unchanged; FR-001 asks for one table the readers share; the task field serves FR-004/FR-005's per-task breakdown the GM asked for (2026-11-19, 'for each task')."
+    },
+    {
+     "id": "D3",
+     "summary": "BgEnd line from a non-agent task-notification, filed beside its launch; agent notices write none (SubagentStop is their end); waits booked to inflight runs",
+     "class": "within",
+     "why": "Unchanged; FR-002 verbatim. An agent's end is already logged by SubagentStop, so no run's end goes unlogged."
+    },
+    {
+     "id": "D4",
+     "summary": "Phase lines per crate, but a coverage build per family of crates",
+     "class": "narrowing",
+     "why": "Unchanged; FR-003 says per crate. The coverage build compiles a family in one process, so a per-crate split of its seconds does not exist to be logged; the line names the family's crates.",
+     "ruling": "LEGITIMATE"
+    },
+    {
+     "id": "D5",
+     "summary": "make land writes a Phase line per step and an end line with exit code, tasks and landed",
+     "class": "within",
+     "why": "FR-003 names the landing's phases; the end line serves FR-005's rework count and FR-006/FR-007's landing."
+    },
+    {
+     "id": "D6",
+     "summary": "SubagentStop records tokens (in, cached, created, out), ctx and task",
+     "class": "within",
+     "why": "Unchanged; FR-004 verbatim, plus created-cache tokens which are part of the token cost asked for."
+    },
+    {
+     "id": "D7",
+     "summary": "where-time columns, UNTIL=, critical path vs summed agent-minutes, rework; feature-report reads the same functions",
+     "class": "within",
+     "why": "FR-005 verbatim. Changed text: a refused landing is an end line with landed false, not a non-zero code - an exit 3 with ticks standing or a raise after the push went out is a landing, so counting it as rework would miscount; this follows FR-005's meaning."
+    },
+    {
+     "id": "D7-landed",
+     "summary": "a landing is defined as a make land whose push went out (code 0, or 3 with ticks standing, or a raise after the push), not as exit code 0, for D7, D10 and D11",
+     "class": "within",
+     "why": "A landing is the push going out; FR-006 ('whose task has landed') and FR-007 ('since its last landing') are about that event, and a code-0 test missed real landings. Corrects the definition toward the requirements' words; narrows nothing."
+    },
+    {
+     "id": "D8",
+     "summary": "a builder is an agent whose agent_type names no .claude/agents file, which also catches a general-purpose agent dispatched without a task",
+     "class": "within",
+     "why": "Unchanged; applies FR-006's own definition ('not a defined review agent'). It widens the cap's reach to unbriefed general-purpose agents, which FR-006's purpose (keep builder contexts small, approved improvement 1) covers; nothing asked for is narrowed."
+    },
+    {
+     "id": "D9",
+     "summary": "context_cap_hooks refuses every builder tool call past CONTEXT_CAP_TOKENS (GUESS 300k) but the handoff Write; escapes CONTEXT_OK and make context-ok",
+     "class": "within",
+     "why": "Unchanged; FR-006 and FR-012 verbatim, the knob value the spec's."
+    },
+    {
+     "id": "D10",
+     "summary": "SendMessage to a builder past the cap or whose task landed is refused; with no task found anywhere the landing check passes, recorded as 'context-cap: resume, no task', while the cap check still refuses",
+     "class": "narrowing",
+     "why": "Unchanged; FR-006 refuses a resume of a builder whose task has landed. Where no task can be found there is no task whose landing can be tested, so the check is impossible, not merely awkward; the pass is recorded and the cap half still applies.",
+     "ruling": "LEGITIMATE"
+    },
+    {
+     "id": "D11",
+     "summary": "a third make static per task since its last landing (landed true) or its first task-start is refused; later task-starts reset nothing; every session's runs count",
+     "class": "within",
+     "why": "FR-007 verbatim; changed text only adopts D7-landed's definition of a landing."
+    },
+    {
+     "id": "D12-covered",
+     "summary": "a make/cargo & followed by a wait that covers the job (bare wait, wait $!, wait %N, same shell, unconditional) passes",
+     "class": "narrowing",
+     "why": "Unchanged; FR-008 refuses backgrounding inside a Bash call. The approved improvement was 'a guard refusing that pattern', the pattern being a run started so that 'no completion notice came'. A call that waits does not return before the run ends, so the harness tracks it: the case is outside the pattern by the GM's approved words.",
+     "ruling": "LEGITIMATE"
+    },
+    {
+     "id": "D12-strict",
+     "summary": "nohup/setsid at a command position, any disown after the job's & (including disown -h), and a wait on a saved pid are refused",
+     "class": "within",
+     "why": "Unchanged; FR-008 names disown without exception; refusing the saved-pid form is stricter than asked, with a recorded escape and a compliant form named."
+    },
+    {
+     "id": "D13",
+     "summary": "main-session permitted wait loops whose longest sleep exceeds POLL_CHECK_S (GUESS 60 s) are refused; SLOW_POLL_OK",
+     "class": "within",
+     "why": "Unchanged; FR-008's second half verbatim."
+    },
+    {
+     "id": "D14",
+     "summary": "knobs labeled GUESS at their point of change and tabled in docs/guards.md; make tunables not extended to the tooling crates",
+     "class": "within",
+     "why": "Unchanged; the spec names make tunables only as where retuning happens and records knobs as GUESS; the knob table still records each one. Nothing the request asked for is dropped."
+    },
+    {
+     "id": "D15",
+     "summary": "deferral_unformed: reason, filed task id, 'lands before T<n>', ids differ, OPEN test at make decide only; class-of-defect fixes need an observed line; DEFER_FORM_OK honored on plan-delta too",
+     "class": "within",
+     "why": "Unchanged; FR-009 places the refusal in make decide, which is where the OPEN test runs; FR-012's escape recorded."
+    },
+    {
+     "id": "D16",
+     "summary": "land splits T= on commas; task-add runs quick's check lines each to its end, compares findings with and without the line, withdraws and refuses on a new one; QUICK_OK",
+     "class": "within",
+     "why": "Unchanged; FR-011 verbatim."
+    },
+    {
+     "id": "D17",
+     "summary": "hook suites split into shards until each is about 20 s, SHARD_BAR_S GUESS, measured not gated",
+     "class": "within",
+     "why": "Unchanged; FR-010 verbatim."
+    },
+    {
+     "id": "T12-T19-perf",
+     "summary": "T12-T19's 'Performance work?' answers flipped to yes: each a [perf] task under FR-013, no checklist",
+     "class": "within",
+     "why": "The GM 2026-11-20 asked to 'prioritize those remaining improvement fixes' and FR-013 defines performance work by the [perf] tag; T12-T19 are the six approved improvements. Re-reading the question in FR-013's sense is what the request asks."
+    },
+    {
+     "id": "T12-order",
+     "summary": "T12's order line now places it in the performance lane after T15 and T16 and before T13, needing nothing T07-T11 make (D9 reads the builder's transcript itself)",
+     "class": "within",
+     "why": "The GM 2026-11-20: 'let's prioritize those remaining improvement fixes ... doing those first makes everything after them faster', carried by FR-013. T12 now waits only on T15 and T16, both [perf] improvements; no non-performance task stands ahead of it, and its constraints (FR-006, FR-012, D8, D9) read nothing T07-T11 produce. The order among the six improvements is the plan's to choose. Non-fidelity note: with the unchanged lines T13 'After T12', T14 'After T13', T15 'After T14', the new line closes a cycle T12<T13<T14<T15<T12; every task in it is performance work, so no reading puts other work first - a plan-consistency defect (T15's stale 'After T14'), not a narrowing."
+    },
+    {
+     "id": "T13-T14-landed",
+     "summary": "T13's and T14's red fixtures restated from 'end code 0/1' to 'end landed true/false'",
+     "class": "within",
+     "why": "Follows D7-landed; the fixtures test the same requirement with the corrected definition."
+    },
+    {
+     "id": "T15-same-shell",
+     "summary": "D12's 'same list' read as the same shell: a bare wait in an enclosing list covers a job in a loop or if body (for t in a b; do make $t & done; wait passes)",
+     "class": "narrowing",
+     "why": "Widens what passes FR-008 beyond the earlier 'same list'. A bare wait in the same shell waits for every job of that shell, so the call does not return before the runs end and the harness tracks them: the case is outside 'that pattern' (no completion notice) for the same reason as D12-covered. This ruling reaches the bare wait the block shows; it does not reach a wait $! after a loop, which covers only the last iteration's job, and which the block does not say passes.",
+     "ruling": "LEGITIMATE"
+    },
+    {
+     "id": "T15-measured",
+     "summary": "the suite grown to 35 refused and 28 passed cases, four corpora replayed (1,134 commands, 14 refused, all real launches), red-first and check-deleted runs",
+     "class": "within",
+     "why": "Verification of FR-008 and FR-012's red-first test; dated with methods."
+    },
+    {
+     "id": "removed-T24",
+     "summary": "T24's unfilled template section removed",
+     "class": "within",
+     "why": "The removed block was the empty placeholder ('<why: ...>', '<what changes ...>'); it decided nothing, so its removal drops no decision."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-20",
+   "blocks": [
+    "### T14 Approach (checklist part A)",
+    "### T15 Approach (checklist part A)",
+    "### T29 (`make set-down` left the feature's started-task mark: 449 was set down with T241 parked while `.git/active-task` still named 449 T241, so every push touching 449's specs was held and T06's landing refused, observed 2026-11-20, method: T06's refused landing and the revert of its ticks, `git log`)",
+    "### T29 Approach (checklist part A)",
+    "### T30 (<why: the finding or measurement that files it>)",
+    "### T30 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T14-order",
+     "summary": "T14 (FR-007's third-make-static guard) moves from 'after T13' to lane A after T18 and T28, its real dependencies being only T03's task field and T06's landing end line, both landed.",
+     "class": "within",
+     "why": "Ordering among the six approved improvements and FR-013's rule; it drops a false dependency on T13 (which broke the T12-T15 order loop) and leaves FR-007 untouched. The GM's 2026-11-20 order puts the improvements first; it does not order them among themselves."
+    },
+    {
+     "id": "T15-order",
+     "summary": "T15 (FR-008's untracked-background guard) is first in lane B, needing only T02's make detector, landed.",
+     "class": "within",
+     "why": "Same as T14: an improvement put first, per the GM's 2026-11-20 'prioritize those remaining improvement fixes'; nothing in the spec is changed."
+    },
+    {
+     "id": "T15-review-fixes",
+     "summary": "The guard reads heredocs and quoted strings itself (a heredoc with words after its delimiter, a string after -c that no shell runs, a bash -lc string), and stops treating 'wait $!' or 'wait %N' after a loop as covering every run of it; the frozen corpora go from 14 to 15 refusals, every one a real detached make launch, 0 false.",
+     "class": "within",
+     "why": "Each fix makes the guard read FR-008 and D12 correctly: a heredoc body or a grep -c argument is a mention, not an invocation (constitution XVIII, cited by the block), and D12 already says 'wait $!' covers only the last job. The corpus refusal it adds is a real 'setsid nohup make done ... &', which FR-008 names. Nothing that was asked is narrowed."
+    },
+    {
+     "id": "T15-bare-wait-enclosing-list",
+     "summary": "A BARE 'wait' in an enclosing list of the same shell covers a make/cargo job inside a loop or if body ('for t in a b; do make $t & done; wait' passes), where D12 and T15's line say the wait must be in the job's own list; 'wait $!' and 'wait %N' still cover only in the job's own list.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This narrows the guard's literal reach under D12. It is legitimate because refusing the case would defeat the request's own purpose, not because it is more convenient. The approved fix was 'a guard refusing that pattern': T225's plain '&', whose end sent no completion notice so the session sat idle. D12 gives the reason a covering wait passes: 'Such a call does not return before the run ends, so the harness tracks it.' A bare wait waits for every child of its shell. This review measured it on 2026-11-20 by timing bash -c runs with $EPOCHREALTIME: 'for t in 1 2; do sleep 1.5 & done; wait' took 1.51 s and 'if true; then sleep 1.5 & fi; wait' took 1.51 s, so the call cannot return early and the run is tracked. Refusing it would block a tracked run that is not the pattern the GM approved refusing. The reading keeps every other condition D12 sets: command position, same shell (not a subshell), run unconditionally, not backgrounded. It does not widen to 'wait $!' or 'wait %N', which would be wrong after a loop. The earlier CLEAR text had accepted a broader wording ('same list read as same shell' for any wait); this one is tighter."
+    },
+    {
+     "id": "T29-clear-mark-at-set-down",
+     "summary": "A new task: 'make set-down' removes the clone's active-task mark when it names the feature being set down (not for a refused set-down, another feature's mark, or a mark that cannot be read). The next task-start writes the mark again. Red-first test, the clear deleted and red, and the incident replayed.",
+     "class": "within",
+     "why": "It narrows nothing that was asked. It fixes a defect in the sense of constitution XIV, a tool refusing valid work: the stale mark held every push touching 449 and refused T06's valid landing of this feature. A set-down is part of this feature's own mechanism, since FR-013's open-performance-task test reads 'not set down since its last task-start' and T28, the FR-013 task-start refusal, is the same tool. A set-down that still holds pushes as the parked task's does not set it down. The GM's 2026-11-20 reason for the order ('doing those first makes everything after them faster') covers a fix to a refused landing. The plan searched the mark's readers (grep active-task over rust/: shared::speckit::active_task, the plan door, task_start), and each reads a missing mark as no task."
+    },
+    {
+     "id": "T30-template",
+     "summary": "T30's section and its checklist are the unfilled task template, all placeholders.",
+     "class": "within",
+     "why": "It decides nothing yet: no approach, constraint, order or exit is stated. Once it is filled, the filled text is a changed block and is owed its own review."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-20",
+   "blocks": [
+    "### T30 (the shared shell readers' gaps)",
+    "### T30 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T30-withdrawn-folded-into-T15",
+     "summary": "T30 does no work of its own: the shared shell readers' fix (strip_heredocs, strip_quotes, make::invoked) was folded into T15 by T15's plan review and landed there red-first, with the corpora replayed through every guard; T30 closes when T15 ticks.",
+     "class": "within",
+     "why": "Nothing is narrowed or left: the defect T30 was filed for is fixed, only in a different task, because T15's plan review ruled leaving it NOT LEGITIMATE. Moving where a fix lands does not shrink what was asked; 'Found and left? none'."
+    },
+    {
+     "id": "T30-exits-and-done",
+     "summary": "Done is T15 ticked with the fix; the red exit records what failed, sets the task down, and routes any cannot-be-done claim through make arbiter-ask.",
+     "class": "within",
+     "why": "A completion condition and a standard failure route; it carves out no case and defers no defect."
+    },
+    {
+     "id": "T30-perf-tag",
+     "summary": "Kept as a [perf] task under FR-013, folded into T15.",
+     "class": "within",
+     "why": "Classification under FR-013's own definition (work that makes the checks/gate/builders' loop faster or correct); it narrows nothing the GM asked."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-20",
+   "blocks": [
+    "### T15 (FR-008: T225's `make static` with a plain `&` sat untracked - the spec's User Story 4, research R4)",
+    "### T15 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T15-D12",
+     "summary": "D12 is built in no_poll_hooks with the listed red-first cases. Plain & / nohup / setsid / disown on a make or cargo job is refused, naming run_in_background. A covering wait passes, DETACH_OK escapes and is recorded, and mentions pass.",
+     "class": "within",
+     "why": "FR-008, D12 and FR-012 settle this. It is the GM-approved improvement 3, 'a guard refusing that pattern'."
+    },
+    {
+     "id": "T15-bare-wait-same-shell",
+     "summary": "A bare wait after a loop, if or case body run in the same shell covers the jobs started inside that body. D12 literally asks for 'a command of the same list as the job's &'.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This is unchanged from the ruling of 2026-11-20. D12's own test is that a covering wait means the call 'does not return before the run ends, so the harness tracks it', and a bare wait 'waits for every job'. Bash runs (timed by EPOCHREALTIME, 2026-11-20) showed that a bare wait in the enclosing same-shell list waits for jobs started in for, if, while, case and { } bodies. Refusing those calls would refuse tracked, correct work, which is a defect under XIV. The purpose of the request, refusing the UNTRACKED pattern, stays whole. The block keeps the ruling's limit: compounds in another shell stay refused, and wait $! and wait %N cover only in the job's own list."
+    },
+    {
+     "id": "T15-other-shell-refused",
+     "summary": "A compound that runs in another shell stays refused even when a later wait follows. 6 compound-in-a-pipeline cases are pinned (for ...; done | cat; wait, { make x & } | cat; wait, ..., the sixth ( make x & ) | cat; wait), and 2 waits inside the part pass. For a bare ( ), a backgrounded loop and $( ), the block states they are refused.",
+     "class": "within",
+     "why": "This is D12's literal rule ('in the same shell (not in a ( ) or $( ) of its own)'), and it is the limit the previous ruling set. The block says the 6 pipeline cases were already refused before they were added. With the pipeline's subshell cut deleted, 5 of the 6 went red, and the sixth is a ( ), which is a separate shell whatever the pipeline does."
+    },
+    {
+     "id": "T15-pid-forms",
+     "summary": "wait $! and wait %N cover only in the job's own list.",
+     "class": "within",
+     "why": "This is D12's literal rule, the stricter reading."
+    },
+    {
+     "id": "T15-shared-readers-fixed",
+     "summary": "The shared readers' defects are fixed in T15, with T30 folded in. strip_heredocs takes a heredoc whose opener line continues past its delimiter. strip_quotes keeps a quoted string only after an interpreter's -c (flags joined: bash -lc, sh -ec, python3 -c), never after grep -c or git -c, and blanks the strings quoted inside a kept one. make::invoked reads setsid [opts] as a wrapper, reads 'make;' as a call, and reads a goal-less make as .DEFAULT_GOAL; a goal it cannot read (make $T) still names none. Each fix has a red-first test, and no_poll_hooks reads through these readers, with its own readers retired.",
+     "class": "within",
+     "why": "This answers the previous BLOCKED finding in the first way it offered: fix the shared readers in T15 and point the guard at them. These are defects (a check passing bad work or refusing good work). Fixing them in the task that found them is the GM-approved improvement 4 ('Briefs that default to fixing in the task') and fix-as-we-go, and it serves D1's single shared detector. It adds no behavior the request did not ask for. The gate's land and rustc callers skip a goal-less make's .DEFAULT_GOAL as they skipped its empty goal before, so they keep their behavior. make $T naming no goal is not a defect left. A goal held in a shell variable cannot be read from the command text, and the job is still refused when it is backgrounded: 'for t in a b; do make $t & done | cat; wait' is among the refused cases. 'Found and left? none' is now true."
+    },
+    {
+     "id": "T15-replay-and-relabel",
+     "summary": "Every guard is replayed on the four frozen corpora (1,134 commands) before and after the shared fix. 3 verdicts moved, each named as a correction: no-poll refuses a setsid nohup make done & launch; no-poll brackets a pkill -f \"pytest\" it had missed; main-tree honors a # MAIN_TREE_OK: reason that the old misreading swallowed. main-tree-refusals-2026-09.json row 130 is relabeled from rewrote to allowed, and its split moves from 109/64 to 110/63.",
+     "class": "within",
+     "why": "Under fix-as-we-go, a check's verdict changing as a bug is fixed is expected and is never a regression. Each moved verdict is named and shown to be a fix of the misreading. The relabeled row was recorded under that misreading, and the suite's own rule is that an escaped command is allowed, not rewritten. Correcting the label matches the guard's intended behavior. It does not change what the guard does."
+    },
+    {
+     "id": "T15-corpus-refusals",
+     "summary": "In the frozen corpora, the refusals (14 on the first replay, 16 now) are all real setsid nohup make done ... & / nohup make done ... & launches, read by hand, so there are 0 false refusals.",
+     "class": "within",
+     "why": "FR-008 and D12 name nohup and setsid at a command position without exception."
+    },
+    {
+     "id": "T15-disown",
+     "summary": "Any disown after a make or cargo job's & refuses the call whatever wait follows, disown -h included.",
+     "class": "within",
+     "why": "D12 settles this explicitly."
+    },
+    {
+     "id": "T15-order",
+     "summary": "Tagged [perf] and ordered first in lane B. It needs only T02's make detector, which has landed.",
+     "class": "within",
+     "why": "The GM, 2026-11-20: 'let's prioritize those remaining improvement fixes'. FR-013 puts performance work first, and this is one of the six approved improvements."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -2474,6 +3299,283 @@
      "class": "narrowing",
      "ruling": "LEGITIMATE",
      "why": "Last round's exception rested on implementation awkwardness ('no signal handler's work'). This one rests on knowledge: until the push command reports, the landing process does not hold the fact that the remote took the push, so no writer in the landing can record landed true in that interval. A pre-push guess would write a false landed whenever the push then fails. The rule is impossible here, not merely awkward, and the section has already shrunk the gap to that interval. The tick commit on main is not what makes this legitimate: D10 and D11 as cited read the end line, not main. The real outcome in the window is that the landing reads as open, never as refused. D7's rework count therefore stays right, D10 misses a resume of that task's builder, and D11 keeps that task's static count unreset. That is one rare interleaving (a manual stop during the push itself), with the outcome confined to that one task. This is the one case the previous round's requirement ('once a landing's push has gone out, a later stop must not leave it reading as unlanded') cannot reach. The ruling covers only the interval before the script reports the push went out. The block also says 'before the script exits'. If sync-with-main.sh reports success and then goes on working before it exits, that stretch is not unknowable: end must be written when the report comes, and an end held until the exit would be outside this ruling."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T18": {
+   "section_sha256": "cb6156643f240a8082611059cce5a7a4488e3c42f3450a7c454b206ab805782e",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T18-scope",
+     "summary": "T18 carries only D16's first half (land.rs splits T= on commas and whitespace); task-add's quick check is left to another task",
+     "class": "within",
+     "why": "Splitting FR-011 between tasks narrows nothing about the feature. The request's improvement 6 ('Accept commas in T=') is carried whole here. The task-add half is not in this bundle, so whether it is planned elsewhere is for that task's own review."
+    },
+    {
+     "id": "T18-where",
+     "summary": "The change goes in rust/gate/crates/land/src/land.rs and make land's help text",
+     "class": "within",
+     "why": "Where the T= parser lives, plus documenting the accepted form. Both serve 'Accept commas in T='."
+    },
+    {
+     "id": "T18-cases",
+     "summary": "Red-first tests: T=\"T1,T2\" and T=\"T1, T2\" each land both tasks in the land tests' fake world",
+     "class": "within",
+     "why": "D16 splits on commas and whitespace, so both forms are what FR-011 asks for. A test that fails only when commas are not accepted is enforcement of the request ('real enforcement'), not unrequested scope."
+    },
+    {
+     "id": "T18-order",
+     "summary": "Ordered after T17",
+     "class": "within",
+     "why": "Sequencing among the approved improvement fixes, which the GM put first on 2026-11-20. Nothing is deferred behind non-improvement work."
+    },
+    {
+     "id": "T18-defect",
+     "summary": "Item 12 counts a comma list refused as one unknown task as a defect (valid input refused); found-and-left none; no map, no pool manifests",
+     "class": "within",
+     "why": "Matches the request's framing of the comma refusal as something to fix. Nothing is left unfixed."
+    },
+    {
+     "id": "T18-perf-label",
+     "summary": "'Performance work? no'",
+     "class": "within",
+     "why": "The label leaves nothing out and changes nothing in FR-011. The task is still placed among the six improvements the GM put first (order after T17). See the note on SC-006 in the reply."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T24": {
+   "section_sha256": "eb52df7a0883d96b5ecea7b791b54691e6da35b6280862273fdaa9003021fe7a",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T24-seam-guard",
+     "summary": "The guard's consulted::context gains context_from(root, var) with the environment handed in; context delegates to it with the guard's own var, so other callers are unchanged.",
+     "class": "within",
+     "why": "An implementation choice for repairing a test that read the real environment (make static red on the bundle crate's coverage with SPECIFY_FEATURE exported). It changes no behavior the request or spec settles; the existing entry point keeps its behavior."
+    },
+    {
+     "id": "T24-seam-bundle",
+     "summary": "The bundle crate's source_pages asks context_from with the process environment in the binary and, under cfg(test), its own thread-local map (helpers::VARS), empty unless a test names a variable.",
+     "class": "within",
+     "why": "Test-only seam so the test, not the builder's shell, decides the branch; the binary still reads the process environment. Nothing in request.md or the spec is narrowed."
+    },
+    {
+     "id": "T24-test-exact",
+     "summary": "The test at helpers/tests.rs asserts the one outcome it means (code 1 and the exact AttributeError on a [1] pointer), then names SPECIFY_FEATURE in its own map and asserts the pointer skipped (code 0); red first with SPECIFY_FEATURE exported.",
+     "class": "within",
+     "why": "Makes the test assert exactly rather than depend on the environment; tightens a check, narrows nothing asked. Red-first runs carry dated methods."
+    },
+    {
+     "id": "T24-no-env-mutation",
+     "summary": "Constraint: no process-environment mutation in a test (it races other tests on the thread pool); 100% line coverage of each crate by its own tests kept.",
+     "class": "within",
+     "why": "A constraint on how the fix is made, not a reduction of any requested outcome."
+    },
+    {
+     "id": "T24-order",
+     "summary": "Lands before T08 (T03's plan review); independent of the land crate's work.",
+     "class": "within",
+     "why": "Ordering of a blocker repair (make static red stops landings); the spec does not settle T24's position and nothing requested is deferred by it."
+    },
+    {
+     "id": "T24-sweep-left",
+     "summary": "The sweep's other either-outcome tests (arbiter/tests.rs:579, gate/src/lib.rs:309, record/tests.rs:301, measure/spec/tests.rs:54, owed/.../answer_modes.rs:149) and modal.rs:866's raw CHECK_ORDER_OK read are named in the report, outside T24's edit scope, not filed.",
+     "class": "within",
+     "why": "Neither request.md nor the spec asks for these tests to be changed, and the plan states, with a measured probe for CHECK_ORDER_OK (78 of 78 exported, 2026-11-20), that none reads SPECIFY_FEATURE or flips with this task's defect. No wrong outcome is shown for them here, so leaving them is not a defect deferred and needs no ruling."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T29": {
+   "section_sha256": "0157af618107c50eaac4bd94f1900acdb53e0eb377f5863cf120ce20bf79c8f3",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T29-clear",
+     "summary": "make set-down removes the clone's active-task mark once the set-down row is written, when the mark names the set-down feature, and says so in its reply; the next task-start writes it again",
+     "class": "within",
+     "why": "Fixes a defect in the sense of constitution XIV (a tool refusing valid work: a set-down feature's stale mark held every push touching its specs and refused T06's landing). It removes friction from the landings this feature exists to speed up (request 2026-11-20: prioritize the improvement fixes and performance work), and it matches FR-013's own reading that a set-down feature holds no started task. It narrows nothing that was asked."
+    },
+    {
+     "id": "T29-leave",
+     "summary": "A refused set-down, another feature's mark, or a mark that cannot be read or names no feature is left as it stands and fails nothing",
+     "class": "within",
+     "why": "None of these cases is the defect. Clearing another feature's mark, or clearing the mark after a refused set-down, would be wrong. Leaving an unreadable mark as it is does not take back any part of the stated goal: a set-down feature no longer holds pushes through its own mark."
+    },
+    {
+     "id": "T29-perf",
+     "summary": "Tagged [perf] in FR-013's sense (it makes the landings faster), not filed with PERF=1 because it touches no engine stage's counted operations or time",
+     "class": "within",
+     "why": "FR-013 defines performance work to include a task that makes the landings faster. A stale mark cost a refused landing and reverted ticks. The PERF=1 distinction follows FR-013's two routes as written."
+    },
+    {
+     "id": "T29-exits",
+     "summary": "Red-first test, 100% line coverage of the task crate, the clear deleted to show the test turns red, a scratch-repo replay of the incident, and the usual green exits",
+     "class": "within",
+     "why": "Verification that the fix does what it says. It is not new behavior."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T28": {
+   "section_sha256": "8456a15ce34ed8d1d559e89a1fcfe801af5a9f8261a8a34385b4ffd7fde00e80",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T28-reader",
+     "summary": "One reader performance(id, title, plan): the [perf] tag among the bracketed tags right after a task's id (not a quoted [perf] in prose), or PERF=1's '### T<n> Performance checklist' heading.",
+     "class": "within",
+     "why": "FR-013 defines performance work as a task filed with PERF=1 or tagged [perf] on its line; the reader recognizes exactly those two marks."
+    },
+    {
+     "id": "T28-active",
+     "summary": "The Stop hook's active test comes out of verdict() as active() (open box but the GM's, not set down since the last task-start, not closed by status) and is shared by task-start.",
+     "class": "within",
+     "why": "FR-013 defines an active feature as exactly the Stop hook's own test in set_down_hooks.rs; sharing one function is how that definition is honored."
+    },
+    {
+     "id": "T28-picker",
+     "summary": "next_performance(root, git dir, prefer) picks the open performance task: the feature being started first (counted active even if set down, since its start ends that), then each other feature started in this clone, latest start first; both the Stop hook and task-start ask this one picker.",
+     "class": "within",
+     "why": "FR-013: task-start refuses while an open performance task exists in any active feature, and the Stop hook names one before any other. The active set is the Stop hook's own test (which reads this clone's start log); counting the feature being started as active widens, not narrows, the refusal; one picker for both keeps the hook from naming a task the start refuses."
+    },
+    {
+     "id": "T28-refusal-escape",
+     "summary": "task_start.rs perf_first reads PERF_LATER_OK first (reason of two words or more, refused short, recorded in the guard log under perf-first), then refuses a non-performance task naming the picked task and its make task-start F= T= command.",
+     "class": "within",
+     "why": "FR-013 (refusal naming the task and the command to start it, an escape of a reason) and FR-012 (two-word recorded escape, message naming the compliant command, red-first test with the check deleted - the reds, greens and deleted-check reds are recorded)."
+    },
+    {
+     "id": "T28-tree",
+     "summary": "Specs read under the clone's toplevel where resolve_feature found the feature, never L7R_GATE_TREE.",
+     "class": "within",
+     "why": "An implementation choice of where to read the tasks FR-013's test reads; it removes no case FR-013 covers."
+    },
+    {
+     "id": "T28-tags",
+     "summary": "Tagged [perf]: 451 T12-T21, T28, T29; 444 T34, T36, T43. 444 T27 and T30 already marked by PERF=1. Left untagged, each with its reason: 451 T07-T11, T22, T24; 444 T24, T25, T28, T29, T31-T33, T35, T39, T42; 449's listed open boxes; 417 (engine deleted); every box of the 20 closed features.",
+     "class": "within",
+     "why": "An application of FR-013's own definition (a task that makes the engine, checks, gate, landings or builders' loop faster) to the measured list of 248 open boxes; the tasks whose stated outcome is less time are tagged, including all six improvements the GM ordered first (T12-T21), and the left ones are measurement, correctness, deletion, budget or record work, or work on a deleted engine that would speed nothing. No performance-improving task is shown left out."
+    },
+    {
+     "id": "T28-perf-question",
+     "summary": "The plan template's 'Performance work?' question is read in FR-013's sense (yes for a [perf] task; PERF=1 is the other mark and adds the checklist); T12-T19's sections flip to yes.",
+     "class": "within",
+     "why": "Aligns the plan's own question with FR-013's definition; the caller reports (b) and (c) done, the latter reviewed in the plan-delta round beside this."
+    },
+    {
+     "id": "T28-self-mark",
+     "summary": "T28 is itself [perf]-tagged, not filed with PERF=1, since the checklist measures an engine stage's operations and time and a refusal's order has neither.",
+     "class": "within",
+     "why": "FR-013 accepts either mark; the tag makes T28 performance work in its sense."
+    },
+    {
+     "id": "T28-escape-record-form",
+     "summary": "PERF_LATER_OK added to the Makefile's FREE_TEXT and named in task-start's help; recorded once by the tool itself (as plan.rs records PLAN_REVIEW_OK), with no $(LOGESCAPE) make-side line - a stated departure from D15/D16's make-side form.",
+     "class": "within",
+     "why": "FR-012 asks that the escape be recorded; it is, once, in the guard log, and SC-006 reads it off the escape log. The departure is of mechanism, not of anything the GM or FR-012 required, and avoids a double record."
+    },
+    {
+     "id": "T28-order",
+     "summary": "T28 lands right after T18, with T29.",
+     "class": "within",
+     "why": "T28 is itself performance work and the GM's 2026-11-20 order puts the remaining improvement fixes first; placing it among them honors that order."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T15": {
+   "section_sha256": "839375d8d9fdfe4c698df7989eb0a1b03d93ca5808f4e2bad56101cfa3d29a56",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T15-D12",
+     "summary": "D12 is built in no_poll_hooks with the listed red-first cases. Plain & / nohup / setsid / disown on a make or cargo job is refused, naming run_in_background. A covering wait passes, DETACH_OK escapes and is recorded, and mentions pass.",
+     "class": "within",
+     "why": "FR-008, D12 and FR-012 settle this. It is the GM-approved improvement 3, 'a guard refusing that pattern'."
+    },
+    {
+     "id": "T15-bare-wait-same-shell",
+     "summary": "A bare wait after a loop, if or case body run in the same shell covers the jobs started inside that body. D12 literally asks for 'a command of the same list as the job's &'.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This is unchanged from the ruling of 2026-11-20. D12's own test is that a covering wait means the call 'does not return before the run ends, so the harness tracks it', and a bare wait 'waits for every job'. Bash runs (timed by EPOCHREALTIME, 2026-11-20) showed that a bare wait in the enclosing same-shell list waits for jobs started in for, if, while, case and { } bodies. Refusing those calls would refuse tracked, correct work, which is a defect under XIV. The purpose of the request, refusing the UNTRACKED pattern, stays whole. The block keeps the ruling's limit: compounds in another shell stay refused, and wait $! and wait %N cover only in the job's own list."
+    },
+    {
+     "id": "T15-other-shell-refused",
+     "summary": "A compound that runs in another shell stays refused even when a later wait follows. 6 compound-in-a-pipeline cases are pinned (for ...; done | cat; wait, { make x & } | cat; wait, ..., the sixth ( make x & ) | cat; wait), and 2 waits inside the part pass. For a bare ( ), a backgrounded loop and $( ), the block states they are refused.",
+     "class": "within",
+     "why": "This is D12's literal rule ('in the same shell (not in a ( ) or $( ) of its own)'), and it is the limit the previous ruling set. The block says the 6 pipeline cases were already refused before they were added. With the pipeline's subshell cut deleted, 5 of the 6 went red, and the sixth is a ( ), which is a separate shell whatever the pipeline does."
+    },
+    {
+     "id": "T15-pid-forms",
+     "summary": "wait $! and wait %N cover only in the job's own list.",
+     "class": "within",
+     "why": "This is D12's literal rule, the stricter reading."
+    },
+    {
+     "id": "T15-shared-readers-fixed",
+     "summary": "The shared readers' defects are fixed in T15, with T30 folded in. strip_heredocs takes a heredoc whose opener line continues past its delimiter. strip_quotes keeps a quoted string only after an interpreter's -c (flags joined: bash -lc, sh -ec, python3 -c), never after grep -c or git -c, and blanks the strings quoted inside a kept one. make::invoked reads setsid [opts] as a wrapper, reads 'make;' as a call, and reads a goal-less make as .DEFAULT_GOAL; a goal it cannot read (make $T) still names none. Each fix has a red-first test, and no_poll_hooks reads through these readers, with its own readers retired.",
+     "class": "within",
+     "why": "This answers the previous BLOCKED finding in the first way it offered: fix the shared readers in T15 and point the guard at them. These are defects (a check passing bad work or refusing good work). Fixing them in the task that found them is the GM-approved improvement 4 ('Briefs that default to fixing in the task') and fix-as-we-go, and it serves D1's single shared detector. It adds no behavior the request did not ask for. The gate's land and rustc callers skip a goal-less make's .DEFAULT_GOAL as they skipped its empty goal before, so they keep their behavior. make $T naming no goal is not a defect left. A goal held in a shell variable cannot be read from the command text, and the job is still refused when it is backgrounded: 'for t in a b; do make $t & done | cat; wait' is among the refused cases. 'Found and left? none' is now true."
+    },
+    {
+     "id": "T15-replay-and-relabel",
+     "summary": "Every guard is replayed on the four frozen corpora (1,134 commands) before and after the shared fix. 3 verdicts moved, each named as a correction: no-poll refuses a setsid nohup make done & launch; no-poll brackets a pkill -f \"pytest\" it had missed; main-tree honors a # MAIN_TREE_OK: reason that the old misreading swallowed. main-tree-refusals-2026-09.json row 130 is relabeled from rewrote to allowed, and its split moves from 109/64 to 110/63.",
+     "class": "within",
+     "why": "Under fix-as-we-go, a check's verdict changing as a bug is fixed is expected and is never a regression. Each moved verdict is named and shown to be a fix of the misreading. The relabeled row was recorded under that misreading, and the suite's own rule is that an escaped command is allowed, not rewritten. Correcting the label matches the guard's intended behavior. It does not change what the guard does."
+    },
+    {
+     "id": "T15-corpus-refusals",
+     "summary": "In the frozen corpora, the refusals (14 on the first replay, 16 now) are all real setsid nohup make done ... & / nohup make done ... & launches, read by hand, so there are 0 false refusals.",
+     "class": "within",
+     "why": "FR-008 and D12 name nohup and setsid at a command position without exception."
+    },
+    {
+     "id": "T15-disown",
+     "summary": "Any disown after a make or cargo job's & refuses the call whatever wait follows, disown -h included.",
+     "class": "within",
+     "why": "D12 settles this explicitly."
+    },
+    {
+     "id": "T15-order",
+     "summary": "Tagged [perf] and ordered first in lane B. It needs only T02's make detector, which has landed.",
+     "class": "within",
+     "why": "The GM, 2026-11-20: 'let's prioritize those remaining improvement fixes'. FR-013 puts performance work first, and this is one of the six approved improvements."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T30": {
+   "section_sha256": "33723825a309b82b8c4eda26347fee24f5bea6e3d976b5259c0c2868b8dc62ae",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T30-withdrawn-folded-into-T15",
+     "summary": "T30 does no work of its own: the shared shell readers' fix (strip_heredocs, strip_quotes, make::invoked) was folded into T15 by T15's plan review and landed there red-first, with the corpora replayed through every guard; T30 closes when T15 ticks.",
+     "class": "within",
+     "why": "Nothing is narrowed or left: the defect T30 was filed for is fixed, only in a different task, because T15's plan review ruled leaving it NOT LEGITIMATE. Moving where a fix lands does not shrink what was asked; 'Found and left? none'."
+    },
+    {
+     "id": "T30-exits-and-done",
+     "summary": "Done is T15 ticked with the fix; the red exit records what failed, sets the task down, and routes any cannot-be-done claim through make arbiter-ask.",
+     "class": "within",
+     "why": "A completion condition and a standard failure route; it carves out no case and defers no defect."
+    },
+    {
+     "id": "T30-perf-tag",
+     "summary": "Kept as a [perf] task under FR-013, folded into T15.",
+     "class": "within",
+     "why": "Classification under FR-013's own definition (work that makes the checks/gate/builders' loop faster or correct); it narrows nothing the GM asked."
     }
    ],
    "verdict": "CLEAR"
