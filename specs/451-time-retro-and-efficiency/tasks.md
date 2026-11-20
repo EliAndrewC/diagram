@@ -39,9 +39,6 @@ MVP is T02-T11 (User Story 1: the retrospective is one command). Each refusal (T
 
 ### The event-log data (FR-001 to FR-004)
 
-- [ ] T05 The Rust checks' phase lines: `build`, `test`, `cover-build` (per family), `cover-run`, `lint` and `format` per crate, each with its wall-clock span, through `append_row`, in `rust/gate/crates/rustc/src/rustc.rs`, `rustc/cover.rs`, `rustc/side.rs`, `rustc/kept.rs` (D4; FR-003); and every reader outside measure's load_events filters the event log by kind before it reads a line's time - reviews/glyph.rs takes the log's first event as the feature's start, which a Phase line would become (T04, 2026-11-20), red first
-      research: rendering
-      verify: red first - a fixture crate's `rust test` and `rust cover` in a scratch tree write nested phase lines, a kept green result writes none; `make rust-test CRATE=rust/gate/crates/rustc`; `make quick`
 - [ ] T06 The landing's phase lines: `cheap`, `gate`, `cohort`, `claims`, `push` and an `end` with the exit code and `tasks` (the ids it was asked to land), in `rust/gate/crates/land/src/land.rs` and `land/long_runs.rs` (D5; FR-003)
       research: rendering
       verify: red first - the land tests' fake world writes the lines in order and a refused landing's `end` carries its code, a `T="T1 T2"` landing's `end` names both tasks; `make rust-test CRATE=rust/gate/crates/land`; this task's own landing's lines read off the log; `make quick`
