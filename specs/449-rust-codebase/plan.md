@@ -722,34 +722,8 @@ tests/hooks/                 # the suites, the verdict replay through phase 1
 
 <!-- plan-archive: T217 to T218 moved to plan-done.md, 2026-11-20 (feature 375 FR-044) -->
 <!-- plan-archive: T217 to T217 moved to plan-done.md, 2026-11-20 (feature 375 FR-044) -->
-### T226 (T224: the polder waterward stage counted about a twentieth of its accepted figure, with three counters firing)
-
-- **Approach**: read against its derivation, the stage does little of what the derivation prices: about 25,700 of its 27,296 at 10 households is the old marsh drawing (rounding, waving, the clip to open ground, the keep-out grid, the marsh record), which the Rust never does - its brief let it draw the strip as a plain filled polygon (observed 2026-11-20, method: the stage's code read against the derivation's terms). What it does do and did not count is counted now: in `face()` each bin's fold and three more bin walks a flank, the outline's box pass, the notch filing at four a notch, the three flanks, and the dike outline's copy in `stage_waterward`, red first (`test@face` read 568 against 846, and `read@stage_waterward` its own red test). It counts 2,125 at 10 households and 2,908 at 20, 0.08x its budget (measured 2026-11-20 (`make work-budget WRITE=1`)). `make work-budget` now runs the polder form too and the audit bundle takes `PHASE=<stage>.<form>`, so the stage's audit has its counts. The review's reason for the valley waterward being uncounted is corrected: the driver runs waterward on a polder alone, so no roll of the valley form exists to count. The polder drawing's three sizes each carry their claim: the sluice gate (`SLUICE_FT`, DEVIATION from page 0179), the feeder (`FEEDER_W`, GUESS), the pocket pond's ring (worded as `draw_field`'s). `dev/work-budget.md` is refreshed from the run. Re-accepting the stage found `make budget-accept` recording it at 0: for a form it read only the Python-era `-spec.json` runs, under the stage's bare name, which they hold at 0; its message named 40 and 80 households whatever the stage's sizes; it recorded a size with no count as 0; and it took an audit path outside the repository (observed 2026-11-20, method: `make budget-accept PHASE=waterward.polder`, its write read back and reverted). Each is fixed red first - the newest run by its name's timestamp, the stage's own name and sizes, a missing count refused, the audit held in the repository - and the stage is accepted at its run's means, 2,125 at 10 households and 2,908 at 20 (measured 2026-11-20 (the run 20261120T053709Z-rust-e111c32c6, four rolls a size)), its audit `specs/444-work-budget-program/phases/waterward_polder.audit-1.txt` (WITHIN).
-
-| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
-|---|---|---|---|---|
-| the polder's uncounted work counted; its sizes claimed | the counting tests, the review's test, the work-budget and bundle tests | the polder counters, `work_budget.rs`, `work_budget_bundle/code.rs` | none (counters compile out; the sizes named, not changed) | none |
-
-### T226 Approach (checklist part A)
-
-1. **The goal, in the world.** A stage's counted work is the work it does, so the push's hold on it means something.
-2. **The constraints.** Feature 443/444's counting and budget rules; constitution XIV; the claims grammar.
-3. **Where each comes from.** O: T224's finding and this task's reading of the code.
-4. **Do they describe the world here?** Yes: the counts are the stage's own on the real rolls (measured 2026-11-20, as above).
-5. **The order.** After T233, before T158.
-6. **The exits.** Green: the counting tests red first then green, `make quick`, `make static`, `make counters-inert`, `make hooks-test` green, the audit judged. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** none
-8. **The budget.** One landing (gated).
-9. **Done, measured.** The polder stage's count with every loop it runs counted; the audit's verdict.
-10. **Before moving a constant.** n/a (the sizes are named, not moved).
-11. **Before fitting things into room.** n/a
-12. **Before any fix.** Work the stage did went uncounted: the hold could not see it grow. Nothing a reader of a map sees changes.
-
-**Found and left?** The sluice gate's 8 ft square (DEVIATION, its claim) against page 0179's board and frame across the channel: a wrong outcome, filed as T234, which lands before T158 (2026-11-20) - fixing it here would change a drawing inside a counting task. The valley waterward entry is a budget for a stage that never runs: it prints its reason and refuses nothing, no wrong outcome. The derivation's first budget still prices the old marsh drawing, about 8x the stage's work (measured 2026-11-20 (17,813 against 2,125 at 10 households)): filed as T235, a re-derivation, which lands before T158. The valley waterward entry also reads accepted at 0, which matches its count of 0 (the stage never runs): no wrong outcome.
-
-**Performance work?** no
-
-
+<!-- plan-archive: T226 to T224 moved to plan-done.md, 2026-11-20 (feature 375 FR-044) -->
+<!-- plan-archive: T226 to T226 moved to plan-done.md, 2026-11-20 (feature 375 FR-044) -->
 ### T228 (<why: the finding or measurement that files it>)
 
 - **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
