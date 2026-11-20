@@ -164,6 +164,23 @@ check "T220's form: python3 - rewriting a hook by a bound name" blocked "cd /x &
 p='scripts/hooks/a-hooks.sh'; s=open(p).read()
 open(p,'w').write(s)
 EOF"
+check "T229: sed -i over a guard source"         blocked "sed -i 's/a/b/' rust/guard/src/guards/make_only_hooks.rs"
+check "T229: a heredoc into the dispatcher script" blocked "cat > scripts/hooks/l7r-guard.sh <<'EOF'
+x
+EOF"
+check "T229: a guard's test file is ordinary"    ok      "cat >> rust/guard/src/guards/make_only_hooks/tests.rs <<'EOF'
+x
+EOF"
+check "T229: python3 writing a guard source"     blocked "python3 - <<'EOF'
+open('rust/guard/src/guards/make_only_hooks.rs','w').write('x')
+EOF"
+check "T229: sed -i over a guard data file"      blocked "sed -i 's/a/b/' rust/guard/src/guards/house_style_words.tsv"
+check "T229: python3 writing a guard data file"  blocked "python3 - <<'EOF'
+open('rust/guard/src/agent_model_rule.txt','w').write('x')
+EOF"
+check "T229: python3 writing a guard test file"  ok      "python3 - <<'EOF'
+open('rust/guard/src/guards/make_only_hooks/tests.rs','w').write('x')
+EOF"
 check "cp over the roster"                       blocked "cp /tmp/x tests/rolls.py"
 check "a cd, then a heredoc into the switches"   blocked "cd dev && cat > switches.json <<'EOF'
 {}

@@ -45,6 +45,11 @@ static READ_GUARD: LazyLock<Regex> = LazyLock::new(|| {
 static SUITE: LazyLock<Regex> = LazyLock::new(|| re(r"/tests/hooks/test-[\w-]+-hooks\.sh$"));
 static HOOK_SCRIPT: LazyLock<Regex> = LazyLock::new(|| re(r"/scripts/.*-hooks\.sh$"));
 static HELD_SUITE: LazyLock<Regex> = LazyLock::new(|| re(r"/tests/hooks/test-.*-hooks\.sh$"));
+/// The guards' own sources (T229, ask:449-guard-sources-held): every file under `rust/guard/src/` (the `.rs` and the data files the guards read) but the test files, the crate's manifest and the dispatcher script.
+static GUARD_SOURCE: LazyLock<Regex> = LazyLock::new(|| {
+    re(r"(/rust/guard/src/.+|/rust/guard/Cargo\.toml|/scripts/hooks/l7r-guard\.sh)$")
+});
+static GUARD_TEST: LazyLock<Regex> = LazyLock::new(|| re(r"(/tests\.rs|/tests/[^ ]*)$"));
 static RECIPE_COMMENT: LazyLock<Regex> =
     LazyLock::new(|| re(r#"^\t\s*@?\s*:\s+"((?:[^"\\]|\\.)*)""#));
 static UNESCAPED_SUBST: LazyLock<Regex> = LazyLock::new(|| re(r"(?<!\\)\$\$[({]"));
@@ -72,7 +77,12 @@ static GRANTED: LazyLock<Regex> = LazyLock::new(|| {
 
 /// The files `make guard-edit` grants (feature 170 amendment 1; feature 429: the guards live in scripts/hooks/).
 fn grantable(path: &str) -> bool {
-    (hit(&GRANTED, path) && !hit(&SUITE, path)) || root_makefile(path)
+    (hit(&GRANTED, path) && !hit(&SUITE, path)) || root_makefile(path) || guard_source(path)
+}
+
+/// A guard's source: a file under `rust/guard/src/` (not its `tests.rs` or a `tests/` directory), the crate's `Cargo.toml`, `scripts/hooks/l7r-guard.sh`.
+fn guard_source(file: &str) -> bool {
+    hit(&GUARD_SOURCE, file) && !hit(&GUARD_TEST, file)
 }
 
 /// `l7r-guard permit grant <file> <reason>` (`make guard-edit`, from `hm_guard_permit.py`, feature 449 T051): the reason stated once, outside the file, honored for an hour.
@@ -168,7 +178,7 @@ fn root_makefile(path: &str) -> bool {
 
 /// The text a Read of a guard file is told, or None.
 pub(crate) fn read_context(path: &str) -> Option<&'static str> {
-    let guard = hit(&READ_GUARD, path) || root_makefile(path);
+    let guard = hit(&READ_GUARD, path) || root_makefile(path) || guard_source(path);
     if !guard || hit(&SUITE, path) {
         return None;
     }
@@ -204,7 +214,7 @@ pub(crate) fn held(file: &str) -> bool {
         || file.ends_with("/tests/rolls.py")
         || file.ends_with("/dev/switches.json")
         || file.ends_with("/dev/work-budget.json");
-    guarded && !hit(&HELD_SUITE, file)
+    (guarded && !hit(&HELD_SUITE, file)) || guard_source(file)
 }
 
 fn now_from(env: Option<String>) -> f64 {

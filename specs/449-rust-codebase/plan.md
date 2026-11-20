@@ -942,29 +942,31 @@ tests/hooks/                 # the suites, the verdict replay through phase 1
 **Performance work?** <no - or yes, and its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
 
 
-### T229 (<why: the finding or measurement that files it>)
+### T229 (the round arbiter's ruling `ask:449-guard-sources-held`, continue: the port moved what a guard refuses into `rust/guard/src/`, and the held list did not follow)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: as the ruling says, `guard_file_hooks::held` now also holds every file under `rust/guard/src/` but the test files - the `.rs` sources and the data files the guards read (`agent_model_rule.txt`, `house_style_words.tsv`) (`tests.rs` and anything under a `tests/` directory), `rust/guard/Cargo.toml` and `scripts/hooks/l7r-guard.sh`, and `make guard-edit` grants the same files through the one predicate; the `tests/hooks/` suites and the Rust guard test files stay unheld. The shell route covers them: the make-only guard's pre-walk name gate and its write patterns, `python3` writes included, name the new files, and T227's matrix runs all 35 write forms against nine held files. The Read reminder fires for the new files too. Red first: the guard-file suite failed 9 cases on HEAD (an Edit or Write of a guard source or the dispatcher passing, a permit refused) and the make-only suite 2, and the matrix 15 (the `python3` heredoc and `-c`, a `for` loop's `sed -i` and `find -exec` against the new files) (measured 2026-11-19 (the suites and the matrix test against HEAD's guard)); and, once the data files were added, 2 more in each suite and the matrix with a data file as a held row (measured 2026-11-19 (the same suites against the `.rs`-only predicate)); all green now.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| the guard sources held | the guard-file and make-only suites' new cases, the matrix test, the unit tests | `guard_file_hooks.rs`, `make_only_hooks.rs` | none | none |
 
 ### T229 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** An edit that would change what a guard refuses carries a permit or a stated reason on the record, as an edit of the Makefile does.
+2. **The constraints.** The round arbiter's ruling; the root CLAUDE.md's guard rules; FIX AS WE GO.
+3. **Where each comes from.** R: `ask:449-guard-sources-held`; O: T227's finding.
+4. **Do they describe the world here?** Yes: the suites failed on HEAD as above.
+5. **The order.** After T221, before T222 (T229's line).
+6. **The exits.** Green: the suites red first then green, `make rust-test CRATE=rust/guard`, `make hooks-test`, `make static` green. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** none
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** The new cases green; `make guard-edit FILE=rust/guard/src/main.rs` grants and a guard test file is not a guard.
+10. **Before moving a constant.** n/a
+11. **Before fitting things into room.** n/a
+12. **Before any fix.** A guard's source edited with no permit could weaken it unrecorded: a ported check not doing its job.
 
-**Found and left?** <none - or each item with its visible effect or the research finding it breaks; an item with neither is not a defect and is not filed>
+**Found and left?** The new holds reach sessions once this lands and the mirror fast-forwards (the live hook runs the mirror's copy).
 
-**Performance work?** <no - or yes, and its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** no
+
 

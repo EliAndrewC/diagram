@@ -471,13 +471,30 @@ fn the_storing_target_is_a_plain_word_and_the_terminator_is_as_bash_reads_it() {
 }
 
 /// The guard files `guard_file_hooks::held` names, each as (path, a directory a session `cd`s into, the name it then writes).
-const HELD: [(&str, &str, &str); 6] = [
+const HELD: [(&str, &str, &str); 10] = [
     ("Makefile", "/diagram/.clones/s", "Makefile"),
     ("scripts/hooks/a-hooks.sh", "scripts/hooks", "a-hooks.sh"),
     (".claude/settings.json", ".claude", "settings.json"),
     ("tests/rolls.py", "tests", "rolls.py"),
     ("dev/switches.json", "dev", "switches.json"),
     ("dev/work-budget.json", "dev", "work-budget.json"),
+    // T229: the guards' own sources
+    (
+        "rust/guard/src/guards/make_only_hooks.rs",
+        "rust/guard/src/guards",
+        "make_only_hooks.rs",
+    ),
+    ("rust/guard/Cargo.toml", "rust/guard", "Cargo.toml"),
+    (
+        "rust/guard/src/guards/house_style_words.tsv",
+        "rust/guard/src/guards",
+        "house_style_words.tsv",
+    ),
+    (
+        "scripts/hooks/l7r-guard.sh",
+        "scripts/hooks",
+        "l7r-guard.sh",
+    ),
 ];
 
 /// Every form a session writes a file with from the shell (T227, measured on 2026-11-19), `{F}` the guard file, `{D}` and `{B}`
@@ -559,11 +576,34 @@ fn a_guard_file_read_or_mentioned_and_a_non_guard_written_are_left_alone() {
         "chmod +x scripts/hooks/a-hooks.sh",
         "echo 'sed -i s/a/b/ Makefile'",
         "make guard-edit FILE=Makefile WHY=\"a reason here\"",
+        "python3 - <<'EOF'\np='rust/guard/src/guards/make_only_hooks/tests.rs'; s=open(p).read()\nopen(p,'w').write(s)\nEOF",
+        "python3 -c \"open('rust/guard/src/shared/tests/tree.rs','w').write('x')\"",
+        "python3 -c \"open('rust/guard/src/guards/tests.rs','w').write('x')\"",
         "cd /x && python3 - <<'EOF'\np='scripts/gates/review-gate.sh'; s=open(p).read()\nopen(p,'w').write(s)\nEOF",
         "cd /x && python3 - <<'EOF'\np='tests/hooks/test-review-gate.sh'; s=open(p).read()\nopen(p,'w').write(s)\nEOF",
         "cat > scripts/gates/review-gate.sh <<'EOF'\nx\nEOF",
         "cd .claude && cat > settings.local.json <<'EOF'\nx\nEOF",
         "cd tests/hooks && cat > test-a-hooks.sh <<'EOF'\nx\nEOF",
+    ] {
+        assert_eq!(v(cmd), "ok", "{cmd}");
+    }
+}
+
+#[test]
+fn the_guards_own_sources_are_guard_writes_from_the_shell_but_their_tests_are_not() {
+    // T229 (ask:449-guard-sources-held): the walk judges by guard_file_hooks::held
+    for cmd in [
+        "sed -i s/a/b/ rust/guard/src/guards/make_only_hooks.rs",
+        "cat > scripts/hooks/l7r-guard.sh <<'EOF'\nx\nEOF",
+        "cd rust/guard && cat >> Cargo.toml <<'EOF'\nx\nEOF",
+        "cd rust/guard/src/shared && tee tree.rs",
+    ] {
+        assert_eq!(v(cmd), "guard-write", "{cmd}");
+    }
+    for cmd in [
+        "cat >> rust/guard/src/guards/make_only_hooks/tests.rs <<'EOF'\nx\nEOF",
+        "cd rust/guard/src/shared/tests && tee tree.rs",
+        "grep -n held rust/guard/src/guards/guard_file_hooks.rs",
     ] {
         assert_eq!(v(cmd), "ok", "{cmd}");
     }

@@ -1098,6 +1098,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-20",
    "declared": "spec-fidelity"
+  },
+  "### T229 (the round arbiter's ruling `ask:449-guard-sources-held`, continue: the port moved what a guard refuses into `rust/guard/src/`, and the held list did not follow)": {
+   "sha256": "1ec7d869461208d635d4499132730c35bbc0c7a43a2760b1f437be2e33a84c35",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity"
+  },
+  "### T229 Approach (checklist part A)": {
+   "sha256": "3f9869aec2fe61178860b62395080663c1d679bbeb019b6c9e56ef15100cfaee",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -15413,6 +15425,52 @@
      "why": "Consequences of the sound read set the GM's rebuild asks for: a spec a map reads is an input of that map. These widen coverage and narrow nothing that was asked."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-20",
+   "blocks": [
+    "### T229 (the round arbiter's ruling `ask:449-guard-sources-held`, continue: the port moved what a guard refuses into `rust/guard/src/`, and the held list did not follow)",
+    "### T229 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T229-held-set",
+     "summary": "guard_file_hooks::held holds every non-test file under rust/guard/src/ (the .rs sources and the two data files the guards read, agent_model_rule.txt and house_style_words.tsv), rust/guard/Cargo.toml and scripts/hooks/l7r-guard.sh",
+     "class": "within",
+     "why": "Carries ask:449-guard-sources-held's what (the non-test .rs sources, Cargo.toml, the dispatcher, held()'s own file). The data files go past the ruling's literal '.rs' but serve its stated why - an unrecorded edit that weakens what a guard refuses - since a guard reading a word list or a model rule refuses by that file's contents. It widens the hold, narrowing nothing."
+    },
+    {
+     "id": "T229-unheld",
+     "summary": "tests/hooks/ suites and the Rust guard test files (tests.rs and anything under a tests/ directory) stay unheld; 'a guard test file is not a guard' is part of done",
+     "class": "within",
+     "why": "The ruling's exact carve-out ('Leave tests/hooks/ suites and the Rust guard test files unheld'), which the arbiter made and the session did not write. It stays inside what the ruling named."
+    },
+    {
+     "id": "T229-permit",
+     "summary": "make guard-edit grants the same files through the one predicate",
+     "class": "within",
+     "why": "The permit route is the counterpart of the hold the ruling orders (a permit or a stated reason on the record, as for the Makefile); one predicate keeps the held list and the grant list from drifting apart."
+    },
+    {
+     "id": "T229-shell-route",
+     "summary": "the make-only guard's pre-walk name gate and write patterns (python3 writes included) name the new files; T227's matrix runs all 35 write forms against nine held files; the Read reminder fires for the new files",
+     "class": "within",
+     "why": "Enforcement of the ordered hold over the shell route as well as Edit/Write: with these taken out, a Bash write would slip past the hold, so it serves the ruling rather than adding behavior beyond the held files."
+    },
+    {
+     "id": "T229-red-first",
+     "summary": "the suites and the matrix red first on HEAD (9, 2, 15 cases, then 2 more each once the data files were added) and green now; exits are rust-test, hooks-test, static",
+     "class": "within",
+     "why": "The ruling's suite cases (a guard source and l7r-guard.sh refused without a permit, a test file passing) shown red first: this is verification of the requested behavior. The counts carry a one-shot dated label with the method."
+    },
+    {
+     "id": "T229-order-and-left",
+     "summary": "after T221, before T222; found and left: the holds reach sessions once the mirror fast-forwards",
+     "class": "within",
+     "why": "Scheduling, plus how the live hook is deployed. It leaves no defect: the fix is complete in the clone and takes effect when it lands."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -27044,6 +27102,50 @@
      "summary": "Every map regenerates once on the first run (new cache); a spec edit now counts as drawing code for reviews owed; make verify and the review gate draw hamlets too.",
      "class": "within",
      "why": "Consequences of the sound read set the GM's rebuild asks for: a spec a map reads is an input of that map. These widen coverage and narrow nothing that was asked."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T229": {
+   "section_sha256": "b18d5836a6710f9be1ef6ea62ded44be1eb657fad6751f1e25c0d12647e81843",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T229-held-set",
+     "summary": "guard_file_hooks::held holds every non-test file under rust/guard/src/ (the .rs sources and the two data files the guards read, agent_model_rule.txt and house_style_words.tsv), rust/guard/Cargo.toml and scripts/hooks/l7r-guard.sh",
+     "class": "within",
+     "why": "Carries ask:449-guard-sources-held's what (the non-test .rs sources, Cargo.toml, the dispatcher, held()'s own file). The data files go past the ruling's literal '.rs' but serve its stated why - an unrecorded edit that weakens what a guard refuses - since a guard reading a word list or a model rule refuses by that file's contents. It widens the hold, narrowing nothing."
+    },
+    {
+     "id": "T229-unheld",
+     "summary": "tests/hooks/ suites and the Rust guard test files (tests.rs and anything under a tests/ directory) stay unheld; 'a guard test file is not a guard' is part of done",
+     "class": "within",
+     "why": "The ruling's exact carve-out ('Leave tests/hooks/ suites and the Rust guard test files unheld'), which the arbiter made and the session did not write. It stays inside what the ruling named."
+    },
+    {
+     "id": "T229-permit",
+     "summary": "make guard-edit grants the same files through the one predicate",
+     "class": "within",
+     "why": "The permit route is the counterpart of the hold the ruling orders (a permit or a stated reason on the record, as for the Makefile); one predicate keeps the held list and the grant list from drifting apart."
+    },
+    {
+     "id": "T229-shell-route",
+     "summary": "the make-only guard's pre-walk name gate and write patterns (python3 writes included) name the new files; T227's matrix runs all 35 write forms against nine held files; the Read reminder fires for the new files",
+     "class": "within",
+     "why": "Enforcement of the ordered hold over the shell route as well as Edit/Write: with these taken out, a Bash write would slip past the hold, so it serves the ruling rather than adding behavior beyond the held files."
+    },
+    {
+     "id": "T229-red-first",
+     "summary": "the suites and the matrix red first on HEAD (9, 2, 15 cases, then 2 more each once the data files were added) and green now; exits are rust-test, hooks-test, static",
+     "class": "within",
+     "why": "The ruling's suite cases (a guard source and l7r-guard.sh refused without a permit, a test file passing) shown red first: this is verification of the requested behavior. The counts carry a one-shot dated label with the method."
+    },
+    {
+     "id": "T229-order-and-left",
+     "summary": "after T221, before T222; found and left: the holds reach sessions once the mirror fast-forwards",
+     "class": "within",
+     "why": "Scheduling, plus how the live hook is deployed. It leaves no defect: the fix is complete in the clone and takes effect when it lands."
     }
    ],
    "verdict": "CLEAR"

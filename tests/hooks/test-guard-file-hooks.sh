@@ -45,6 +45,16 @@ check blocked "$ROOT/dev/switches.json"
 check blocked "$ROOT/dev/switches.json" "x" "Write"
 check blocked "$ROOT/dev/work-budget.json"  # feature 443 T03: the work budgets, written by make budget-set / budget-change
 check blocked "$ROOT/dev/work-budget.json" "x" "Write"
+# feature 449 T229 - the guards' own sources (the port moved what a guard refuses into rust/guard/src/ and the dispatcher script)
+check blocked "$ROOT/rust/guard/src/guards/make_only_hooks.rs"
+check blocked "$ROOT/rust/guard/src/guards/make_only_hooks.rs" "x" "Write"
+check blocked "$ROOT/rust/guard/src/shared/tree.rs"
+check blocked "$ROOT/rust/guard/src/main.rs"
+check blocked "$ROOT/rust/guard/Cargo.toml"
+check blocked "$ROOT/rust/guard/src/agent_model_rule.txt"  # the data files a guard reads are guard sources too
+check blocked "$ROOT/rust/guard/src/guards/house_style_words.tsv"
+check blocked "$ROOT/scripts/hooks/l7r-guard.sh"
+check blocked "$ROOT/scripts/hooks/l7r-guard.sh" "x" "Write"
 
 echo
 echo "2. IT STAYS QUIET on everything else (FR-016)"
@@ -52,6 +62,9 @@ check ok "$ROOT/.claude/agents/frontend-review.md"
 check ok "$ROOT/.claude/agents/spec-fidelity.md"
 check ok "$ROOT/tests/hooks/test-gate-hooks.sh"
 check ok "$ROOT/tests/hooks/test-make-only-hooks.sh"
+check ok "$ROOT/rust/guard/src/guards/make_only_hooks/tests.rs"  # T229: the guards' test files stay ordinary
+check ok "$ROOT/rust/guard/src/shared/tests/tree.rs"
+check ok "$ROOT/rust/guard/src/guards/tests.rs"
 check ok "$ROOT/l7r/diagram/hamletgen/ways.py"
 check ok "$ROOT/tests/test_invocation.py"
 check ok "$ROOT/CLAUDE.md"
@@ -139,6 +152,11 @@ case8() { # label, expected, file, old_string, new_string [, clock]
   if { [ "$2" = ok ] && [ "$rc" -eq 0 ]; } || { [ "$2" = blocked ] && [ "$rc" -ne 0 ]; }; then echo "  ok      $1"; PASS=$((PASS+1))
   else echo "  FAIL    $1 (expected $2, rc=$rc)"; sed 's/^/          /' "$HOOK_ERR" | head -3; FAIL=$((FAIL+1)); fi; }
 T0=1000000000
+mkdir -p "$FIX/rust/guard/src/guards"; : >"$FIX/rust/guard/src/guards/a_hooks.rs"
+case8 "T229: no permit, a guard source is refused" blocked "$FIX/rust/guard/src/guards/a_hooks.rs" "a" "b" "$T0"
+L7R_PERMIT_NOW=$T0 "$HOOK" permit grant "$FIX/rust/guard/src/guards/a_hooks.rs" "T229 test of a guard source" >/dev/null 2>&1 \
+  && { echo "  ok      make guard-edit grants a guard source"; PASS=$((PASS+1)); } || { echo "  FAIL    make guard-edit refused a guard source"; FAIL=$((FAIL+1)); }
+case8 "T229: a live permit: the guard source edit is accepted" ok "$FIX/rust/guard/src/guards/a_hooks.rs" "a" "b" "$((T0 + 60))"
 case8 "no permit: the root Makefile is refused" blocked "$FIX/Makefile" "a" "b" "$T0"
 grep -q 'make guard-edit FILE=' "$HOOK_ERR" && { echo "  ok      the refusal names make guard-edit"; PASS=$((PASS+1)); } || { echo "  FAIL    the refusal does not name make guard-edit"; FAIL=$((FAIL+1)); }
 L7R_PERMIT_NOW=$T0 "$HOOK" permit grant "$FIX/Makefile" "x" >/dev/null 2>&1 && { echo "  FAIL    a one-word reason was granted"; FAIL=$((FAIL+1)); } || { echo "  ok      a short reason is not granted"; PASS=$((PASS+1)); }

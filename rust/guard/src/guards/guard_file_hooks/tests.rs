@@ -261,3 +261,33 @@ fn the_recipe_detector_fires_on_each_hazard_and_passes_each_safe_form() {
         .collect();
     assert_eq!(lines, ["3", "4"]);
 }
+
+#[test]
+fn the_guards_own_sources_are_held_and_granted_but_not_their_tests() {
+    // T229 (ask:449-guard-sources-held): every .rs under rust/guard/src/, the crate manifest and the dispatcher script
+    for held in [
+        "/r/rust/guard/src/guards/make_only_hooks.rs",
+        "/r/rust/guard/src/shared/tree.rs",
+        "/r/rust/guard/src/main.rs",
+        "/r/rust/guard/Cargo.toml",
+        "/r/rust/guard/src/agent_model_rule.txt",
+        "/r/rust/guard/src/guards/house_style_words.tsv",
+        "/r/scripts/hooks/l7r-guard.sh",
+    ] {
+        assert!(super::held(held), "{held} is held");
+        assert!(super::grantable(held), "{held} is granted");
+        assert!(read_context(held).is_some(), "{held} is told on a Read");
+    }
+    for loose in [
+        "/r/rust/guard/src/guards/make_only_hooks/tests.rs",
+        "/r/rust/guard/src/guards/tests.rs",
+        "/r/rust/guard/src/shared/tests/tree.rs",
+        "/r/rust/guard/src/guards/tests/words.tsv",
+        "/r/tests/hooks/test-make-only-hooks.sh",
+        "/r/rust/other/src/lib.rs",
+    ] {
+        assert!(!super::held(loose), "{loose} is not held");
+        assert!(!super::grantable(loose), "{loose} is not granted");
+        assert_eq!(read_context(loose), None);
+    }
+}
