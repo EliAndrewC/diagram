@@ -26,6 +26,10 @@
       research: rendering
       held: rust/guard/src/guards/context_cap_hooks.rs (new), rust/guard/src/guards.rs, rust/guard/src/lib.rs, Makefile (`make context-ok`)
       verify: DONE. landed in batch T12+T17: the builder context cap; unordered deferrals refused
+- [x] T13 [perf] A builder resumed: `context_cap_hooks` refuses a SendMessage to a builder past the cap, or to one whose task (D2's chain: its meta `description`'s `T<n>`, else its first line's `task`, else the `task-starts.jsonl` entry in force at its dispatch) has landed since its dispatch (D5's `end` line naming it, read by its `landed`, true) or is ticked or archived, naming a fresh dispatch with the handoff file; with no task found the landing check passes with a `no task` guard-log record, and the cap check still applies (D10; FR-006, FR-012, SC-003); and D9's per-agent permit `make context-ok AID= WHY=` (a root Makefile target and guard_file_hooks' grantable widened to a `context-cap:<agent id>` key), so a builder resumed past the cap under D10's escape gets through context_cap_hooks on its next call (T12's found-and-left, the session's ruling 2026-11-20), red first
+      research: rendering
+      held: rust/guard/src/guards/context_cap_hooks.rs
+      verify: DONE. landed in batch T13+T19: resume past the cap refused; task-add lints its line
 - [x] T14 [perf] The third `make static`: a new guard `static_runs_hooks` refusing a task's third run since its last landing that succeeded, or since its first start if it has never landed (a later `task-start` resets nothing), naming the crate-scoped checks for the crates its delta changes; `STATIC_RUNS_A_TASK` (GUESS, 2) (D11; FR-007, FR-012, SC-003, SC-005)
       research: rendering
       held: rust/guard/src/guards/static_runs_hooks.rs (new), rust/guard/src/guards.rs, rust/guard/src/lib.rs
@@ -46,6 +50,10 @@
       research: rendering
       held: Makefile (the help line only)
       verify: DONE. landed in batch T18+T24+T28+T29+T15+T30: performance work first, and four of the improvements
+- [x] T19 [perf] `make task-add` runs each of `make quick`'s checks to its own end over what it wrote and, on a red, again with the line withdrawn; where the with-line run has any failure (a check's finding, line numbers masked) the other lacks, the line stays withdrawn and it refuses naming those failures; the line is restored only when the failures are the same; `QUICK_OK` on `make task-add`, in `rust/gate/crates/task/src/task_add.rs` (D16; FR-011, FR-012, SC-003)
+      research: rendering
+      held: Makefile
+      verify: DONE. landed in batch T13+T19: resume past the cap refused; task-add lints its line
 - [x] T23 Two builders' cargo runs in one clone corrupt each other's coverage (found by T02, 2026-11-20): T02's make static ran beside T234's cargo in the same target directory and failed on corrupt or missing coverage profiles in seven crates, a collision, not a result - the Rust checks take one lock a target directory for the length of a run, the second waiting (named, with how long) rather than racing, red first with two concurrent runs
       research: rendering
       verify: DONE. landed: one lock a target directory for the Rust checks
