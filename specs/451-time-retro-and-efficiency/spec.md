@@ -51,7 +51,7 @@ columns equal the fixture's known sums.
 
 ### User Story 2 - A builder's context stays small (Priority: P1)
 
-A builder agent on a long task reaches the context size at which its model calls slow (measured 2026-11-19 (3,280 builder calls by
+A builder agent serves one task; on a long task it reaches the context size at which its model calls slow (measured 2026-11-19 (3,280 builder calls by
 context size): 10 s per 1,000 output tokens under 200k tokens, 23 s over 700k). Its next tool call is refused, naming the handoff:
 write a handoff file of what is done and what is left, and stop; the main session dispatches a fresh agent with it. A SendMessage that
 would resume an agent already past the size is refused the same way.
@@ -92,7 +92,8 @@ after a landing starts the count again; the escape with a reason passes and is r
 ### User Story 4 - A long run is one the session can track (Priority: P2)
 
 A make target or cargo run started with `&`, `nohup`, `setsid` or `disown` inside a Bash call is refused, naming the Bash tool's
-background form, whose completion wakes the session. The main session's own wait loops poll every 60 s, not 480 s.
+background form, whose completion wakes the session. A permitted wait loop that checks less often than every 60 s is refused, naming the 60 s form; the session's own waits checked every
+420 to 600 s on 2026-11-19 (observed 2026-11-19, method: the wait commands of the main session's transcript).
 
 **Why this priority**: the only stretches with nothing running were an agent's untracked run (14.9 minutes) and a long poll (2.9
 minutes) (measured 2026-11-19 (the transcripts' idle spans)).
@@ -104,8 +105,9 @@ background Bash call passes; a long-running make in the foreground passes.
 
 ### User Story 5 - A deferral is never left unordered (Priority: P3)
 
-A plan section's "Found and left?" item that defers a defect names its filed task and its order ("lands before ..."), or `make decide`
-refuses the section, naming the form.
+A plan section's "Found and left?" item that defers a defect says why it is not fixed in the task and names its filed task and its
+order ("lands before ..."), and a fix of a class of defect says how every instance of the class was found; or `make decide` refuses the
+section, naming the form.
 
 **Why this priority**: two of the seven first-round plan-review blocks in the window were deferrals with no order (measured 2026-11-19
 (the spec-fidelity verdicts)), each a review round of several minutes.
@@ -118,13 +120,13 @@ before T124` passes; `none` passes.
 ### User Story 6 - The slow hook suites and the small landing frictions (Priority: P3)
 
 `make hooks-test`'s three slowest suites are split so that none of the shards takes more than about 20 s, so the run's wall time is not
-held by one suite. `make land T="T1,T2"` is read as `T="T1 T2"`. `make task-add` runs the spec lint on the line it writes and refuses
-the line (leaving nothing written) where it cites another feature's requirement without naming the feature.
+held by one suite. `make land T="T1,T2"` is read as `T="T1 T2"`. `make task-add` runs `make quick`'s checks on what it writes and withdraws
+the line, refusing, where the line fails one.
 
 **Why this priority**: about 13 minutes in the window together (measured 2026-11-19 (the hook suites' timings; the refused landings)).
 
 **Independent Test**: each shard's measured time; a comma-separated `T=` lands both tasks; a task-add line citing a bare `FR-019` of
-another feature is refused.
+another feature, or failing any other quick check, is withdrawn and refused.
 
 ### Edge Cases
 
@@ -139,8 +141,9 @@ another feature is refused.
 
 ### Functional Requirements
 
-- **FR-001**: The event log classes each Bash call that runs a make target by its target into tests, compile, gate, land, review,
-  docs or other, by one table the readers share.
+- **FR-001**: The event log classes each Bash call that runs a make target, or the gate's own crate-scoped checks
+  (`scripts/gates/l7r-gate.sh rust ...`), by its target into tests, compile, gate, land, review, docs or other, by one table the
+  readers share.
 - **FR-002**: A background run's end is logged from its completion notice, with its span; a wait between turns is booked to the
   background run that was in flight.
 - **FR-003**: The Rust checks append their build, test and cover seconds per crate, and `make land` its phases' seconds (the cheap
@@ -148,19 +151,25 @@ another feature is refused.
 - **FR-004**: An agent's stop line carries its token cost (input, cached input, output) and its task where its dispatch names one.
 - **FR-005**: `make where-time` and `make feature-report` read FR-001 to FR-004's lines into columns for tests, compile, gate, land,
   review, background run and model; report the wall clock on the critical path apart from the summed agent-minutes; count the rework
-  (refused landings, plan re-rounds, agents nudged); and `make where-time` takes `UNTIL=`.
-- **FR-006**: A guard refuses a subagent's tool call once its context is past a threshold, but for writing its handoff file, naming
-  the file and the next step; and refuses a SendMessage resuming an agent past the threshold, naming a fresh dispatch. The threshold is a
-  knob, GUESS: 400k tokens.
-  Past it the builder calls ran 14.8 s per 1,000 output tokens, 11.9 s below (observed 2026-11-19, method: the 3,280 builder calls bucketed by context size).
+  (refused landings, plan re-rounds); and `make where-time` takes `UNTIL=`.
+- **FR-006**: A builder (an agent dispatched with a task's brief, not a defined review agent) serves one task: a SendMessage resuming a
+  builder whose task has landed is refused, naming a fresh dispatch; and within its task, a guard refuses a builder's tool call once its
+  context is past a threshold, but for writing its handoff file, naming the file and the next step, and refuses a SendMessage resuming a
+  builder past it. The threshold is a knob, GUESS: 300k tokens, between the window's two figures - a 400k cap would have saved about 44
+  minutes and a 200k one about 95 (the estimate of User Story 2), the knob tuned from FR-004's data.
+  Past 400k the builder calls ran 14.8 s per 1,000 output tokens, 11.9 s below (observed 2026-11-19, method: the 3,280 builder calls bucketed by context size).
 - **FR-007**: A guard refuses a third `make static` in one task since its last landing, naming the crate-scoped checks for the crates
   the task's delta changes.
 - **FR-008**: A guard refuses a make target or cargo run put in the background inside a Bash call (`&`, `nohup`, `setsid`, `disown`),
-  naming the Bash tool's background form; the main session's waits poll at 60 s.
-- **FR-009**: `make decide` refuses a plan section whose found-and-left item defers a defect without its filed task id and its order.
+  naming the Bash tool's background form; and the no-poll guard refuses a permitted wait loop that checks less often than every 60 s
+  (a knob, GUESS), naming the 60 s form.
+- **FR-009**: `make decide` refuses a plan section whose found-and-left item defers a defect unless it states why the defect is not
+  fixed in this task, its filed task id and its order ("lands before ..."); and refuses a section whose fix names a class of defect
+  (every writer, every form, every file of a kind) without a line saying how every instance of the class was found, labeled as an
+  observation with its method.
 - **FR-010**: The three slowest hook suites are split so each shard takes about 20 s or less.
-- **FR-011**: `make land` reads commas in `T=` as spaces; `make task-add` refuses, before writing, a line that cites another feature's
-  requirement without naming the feature.
+- **FR-011**: `make land` reads commas in `T=` as spaces; `make task-add` runs `make quick`'s checks over what it writes and, on any
+  failure the new line introduces, withdraws the line and refuses, naming the failure.
 - **FR-012**: Every refusal of FR-006 to FR-009 and FR-011 has a red-first test proving it fires (the check deleted, the test red), an
   escape of a reason of two words or more that is recorded, and a message naming the compliant command (the project's guard rules).
 
@@ -191,3 +200,8 @@ another feature is refused.
 - The Claude Code hook payloads carry what the guards need: a subagent's transcript path (for its context size) and the background
   run's completion notice; where one does not, the plan says what it reads instead.
 - Out of scope: changing what any check or review judges, and any map.
+
+## Review history
+
+- 2026-11-19, round 0 (spec-fidelity, MODE 2): NOT-REVIEWABLE - six figures without labels (not a round).
+- 2026-11-19, round 1 (spec-fidelity, MODE 2): CHANGES REQUIRED, 5 items - FR-009 enforced the deferral's form, not fixing in the task by default, and carried nothing of "full coverage up front" (now: a deferral states why it is not fixed in the task; a fix of a class says how every instance was found); FR-011 ran one lint rule where `make quick` was approved (now: `make quick`'s checks); the 60 s poll was an instruction (now: the no-poll guard refuses a slower wait); FR-006 reached every subagent, replaced the approved per-stage fresh builder with a size cap and overstated its saving (now: builders only, one task a builder with a resume after its landing refused, the cap a 300k backstop between the two figures); "agents nudged" traced to nothing (dropped).
