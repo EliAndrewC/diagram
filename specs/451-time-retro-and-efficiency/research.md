@@ -64,7 +64,12 @@ checked against the log and the transcripts where noted.
   shell's notice carries `<task-id>`, `<tool-use-id>` (the launching call's `tool_use_id`), `<output-file>`, `<status>` and a summary
   ending "(exit code N)"; an agent's carries `<task-id>` (its agent id), `<status>`, `<result>` and `<usage><subagent_tokens>,
   <tool_uses>, <duration_ms>` (observed 2026-11-20, method: the main transcript's queue rows). The launching call's PostToolUse
-  `tool_response` holds the same `backgroundTaskId` (same method).
+  `tool_response` holds the same `backgroundTaskId` (same method). An agent's notice carries `<tool-use-id>` TOO: 3,801 of 3,986 agent
+  notices hold one, beside all 1,992 shell notices (measured 2026-11-20 (T04: the `-diagram` and clone transcripts' enqueued notices,
+  tallied by summary and by a `<tool-use-id>` before any `<result>`)). So it is the summary that tells the two apart, a shell's opening
+  `Background command "` and an agent's `Agent "`, and not the id (T04's section). A shell's summary ends "completed (exit code N)",
+  "completed (exit code N: text)" or "failed with exit code N", and a run stopped at its time limit or by its session's end names no
+  code (measured 2026-11-20 (T04: the same transcripts' `<summary>` texts, tallied by form)).
 - **A subagent's own background run's notice never reaches a hook**: it lands in the subagent's transcript as an `attachment` row of
   type `queued_command` whose prompt is the `<task-notification>` (observed 2026-11-20, method: 57 of the session's 907 subagent
   transcripts hold one; the first read). So the reader takes those ends from the subagent transcripts, as `task_phases.rs` already reads

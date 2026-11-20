@@ -19,8 +19,10 @@
 //! Each element told is owed on the first map of the engine's kind (live pool first) whose legend draws it - the declared route's
 //! choice, so the two share a slug and merge; where it cannot be told, the whole legend of each such map is owed, each element once,
 //! and the occasion says so. A map's legend is its drawing now, else (not current: the change itself made it stale) its drawing at the
-//! base. No size-audit is owed: a redrawn glyph is judged, its size is not new to the map. Nothing is refused for an undeclared change
-//! here (`check_declared` reads `CODE` alone): what it owes is read from the change itself.
+//! base. No size-audit is owed: a redrawn glyph is judged, its size is not new to the map. A change that redraws an element is refused
+//! nothing for want of a declaration: what it owes is read from the change itself. A change of this code that redraws NO element (a
+//! stage function in the driver, a roll's line handing the stages their ground) places or plumbs, and is refused undeclared, as a
+//! stage's change is (`placed`, 449 T238).
 
 use std::collections::{BTreeMap, BTreeSet};
 use std::path::Path;
@@ -75,7 +77,7 @@ impl Marker {
 /// Measured 2026-11-20 (grep of `Svg::default`, `Svg::new`, `.kind(` and `data-kind=` over `rust/`, tests set aside): the hamlet
 /// driver's marks are all written in `rust/phases/src/driver.rs` and `driver/` (`svg.rs` the writer, `draw_*` and the two rolls); the
 /// stages under `rust/phases/src/` (field, sink, seat, hem, waterward, course) name no kind and touch no writer - their changes move
-/// what is placed, which `placement-changed` declares. The Mode A compound's `.svg` is written by `compound::sheet` alone (the one
+/// what is placed, which `placement-changed` declares, and the push is refused until one is declared (`placed`, 449 T238). The Mode A compound's `.svg` is written by `compound::sheet` alone (the one
 /// `emit::Svg::new` outside tests), through `compound/emit.rs` and `emit_parts.rs`; `caption_place` places its captions after, and the
 /// page writer and the raster draw the page around the sheet, never an element's mark. A hand sheet's marks are its `.svg`, its spec,
 /// which `CODE` names already.
@@ -335,6 +337,15 @@ impl Reach {
     fn named(kinds: Option<BTreeSet<String>>) -> Self {
         kinds.map_or_else(Self::whole, |told| Self { told, whole: false })
     }
+
+    /// Whether it redraws an element: one told that is no placeholder, or ones that cannot be told.
+    fn reaches(&self) -> bool {
+        self.whole
+            || self
+                .told
+                .iter()
+                .any(|k| !NOT_ELEMENTS.contains(&k.as_str()))
+    }
 }
 
 /// An engine's files at one side of the delta, as items, and what each item reaches (worked out once a run).
@@ -581,10 +592,16 @@ fn changed_lines(was: &[String], now: &[String], added: bool) -> Vec<usize> {
 }
 
 /// What item `i` of `world`, changed, redraws: an item read by line its changed lines (a roll's every line when the other side has
-/// none), any other item - and a draw function added or deleted whole - as a whole.
-fn redraws(world: &mut World, i: usize, other: Option<&[String]>, added: bool) -> Reach {
+/// none), any other item - and a draw function added or deleted whole - as a whole. And whether some of the change redraws no element
+/// (449 T238): a function or constant as a whole, or a changed line of an item read by line - a roll's line that hands the stages their
+/// ground, a line drawn under the placeholder mark `-` - which places or plumbs, and is the feature's to declare; a type never.
+fn redraws(world: &mut World, i: usize, other: Option<&[String]>, added: bool) -> (Reach, bool) {
     if !world.by_line(i) || (other.is_none() && world.items[i].role == Role::Draw) {
-        return world.reach(i);
+        let r = world.reach(i);
+        // a type redraws and places nothing by itself - the code that fills or reads it does (T234's `SluiceFrame`, which only the
+        // sluice's drawing fills, was read as placement and its redraw refused undeclared)
+        let silent = !r.reaches() && world.items[i].role != Role::Shape;
+        return (r, silent);
     }
     let own = world.items[i].lines.clone();
     let lines = match other {
@@ -592,12 +609,13 @@ fn redraws(world: &mut World, i: usize, other: Option<&[String]>, added: bool) -
         Some(o) => changed_lines(&own, o, false),
         None => (0..own.len()).collect(),
     };
-    let mut r = Reach::default();
+    let (mut r, mut silent) = (Reach::default(), false);
     for k in lines {
         let got = world.line(i, k);
+        silent |= !got.reaches();
         r.add(&got);
     }
-    r
+    (r, silent)
 }
 
 fn tokens(item: &Item) -> Vec<u8> {
@@ -624,6 +642,16 @@ pub(super) fn delta_paths(root: &Path, base: &str) -> BTreeSet<String> {
 type Files = Vec<(String, String)>;
 
 fn sides(root: &Path, base: &str, e: &Engine) -> (Files, Files) {
+    sides_of(root, base, e.paths, &|p| e.holds(p))
+}
+
+/// The files under `paths` that `holds`, now and at the base.
+fn sides_of(
+    root: &Path,
+    base: &str,
+    paths: &[&str],
+    holds: &dyn Fn(&str) -> bool,
+) -> (Files, Files) {
     let mut args = vec![
         "ls-files",
         "--cached",
@@ -631,19 +659,19 @@ fn sides(root: &Path, base: &str, e: &Engine) -> (Files, Files) {
         "--exclude-standard",
         "--",
     ];
-    args.extend(e.paths);
+    args.extend(paths);
     let now: Files = git(root, &args)
         .unwrap_or_default()
         .lines()
-        .filter(|p| e.holds(p))
+        .filter(|p| holds(p))
         .filter_map(|p| Some((p.to_owned(), std::fs::read_to_string(root.join(p)).ok()?)))
         .collect();
     let mut args = vec!["ls-tree", "-r", "--name-only", base, "--"];
-    args.extend(e.paths);
+    args.extend(paths);
     let listed: Vec<String> = git(root, &args)
         .unwrap_or_default()
         .lines()
-        .filter(|p| e.holds(p))
+        .filter(|p| holds(p))
         .map(str::to_owned)
         .collect();
     let asked: Vec<String> = listed.iter().map(|p| format!("{base}:{p}")).collect();
@@ -651,14 +679,20 @@ fn sides(root: &Path, base: &str, e: &Engine) -> (Files, Files) {
     (now, was)
 }
 
-/// What the delta's change to engine `e` redraws: each element told with the items that redraw it, and the items whose elements
-/// cannot be told.
+/// What the delta's change to engine `e` reaches: each element told with the items that redraw it, the items whose elements cannot be
+/// told, and the files with a change that redraws no element (`redraws`' silent part, 449 T238).
+struct EngineReach {
+    told: BTreeMap<String, BTreeSet<String>>,
+    whole: BTreeSet<String>,
+    silent: BTreeSet<String>,
+}
+
 fn engine_reach(
     e: &Engine,
     now_files: &[(String, String)],
     was_files: &[(String, String)],
     touched: &BTreeSet<String>,
-) -> (BTreeMap<String, BTreeSet<String>>, BTreeSet<String>) {
+) -> EngineReach {
     let (mut now, mut was) = (
         World::new(e.marker, now_files),
         World::new(e.marker, was_files),
@@ -672,7 +706,11 @@ fn engine_reach(
                 .map(|i| (i.file.clone(), i.name.clone())),
         );
     }
-    let (mut told, mut whole) = (BTreeMap::<String, BTreeSet<String>>::new(), BTreeSet::new());
+    let (mut told, mut whole, mut silent) = (
+        BTreeMap::<String, BTreeSet<String>>::new(),
+        BTreeSet::new(),
+        BTreeSet::new(),
+    );
     for (file, name) in keys {
         let (n, w) = (now.find(&file, &name), was.find(&file, &name));
         let (n_lines, w_lines) = (
@@ -685,11 +723,17 @@ fn engine_reach(
             }
         }
         let mut r = Reach::default();
-        if let Some(i) = n {
-            r.add(&redraws(&mut now, i, w_lines.as_deref(), true));
-        }
-        if let Some(i) = w {
-            r.add(&redraws(&mut was, i, n_lines.as_deref(), false));
+        for (world, i, other, added) in [
+            (&mut now, n, w_lines.as_deref(), true),
+            (&mut was, w, n_lines.as_deref(), false),
+        ] {
+            if let Some(i) = i {
+                let (got, quiet) = redraws(world, i, other, added);
+                r.add(&got);
+                if quiet {
+                    silent.insert(file.clone());
+                }
+            }
         }
         let label = format!("{file} {name}");
         for k in r
@@ -703,7 +747,11 @@ fn engine_reach(
             whole.insert(label);
         }
     }
-    (told, whole)
+    EngineReach {
+        told,
+        whole,
+        silent,
+    }
 }
 
 /// The glyph-checks the delta's change to an engine's drawing code owes (`before`: each standing folder's legend at the base).
@@ -719,7 +767,7 @@ pub(super) fn units(tree: &Tree, base: &str, before: &Legends) -> Vec<Unit> {
             continue;
         }
         let (now, was) = sides(tree.root, base, e);
-        let (told, whole) = engine_reach(e, &now, &was, &mine);
+        let EngineReach { told, whole, .. } = engine_reach(e, &now, &was, &mine);
         let maps: Vec<(&str, &BTreeSet<String>)> = tree
             .folders
             .iter()
@@ -771,6 +819,9 @@ pub(super) fn units(tree: &Tree, base: &str, before: &Legends) -> Vec<Unit> {
     }
     out
 }
+
+mod placed;
+pub(super) use placed::placed;
 
 #[cfg(test)]
 mod tests;

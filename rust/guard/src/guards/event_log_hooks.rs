@@ -15,8 +15,13 @@
 //! (digests of an Edit's strings - the reversal wire) and `heading`, `agent`/`aid`/`manifest`/`unit`/`waiver` (an agent's type, id, the
 //! MANIFEST its prompt names, its unit, a round on the GM's waiver), `by` (the subagent whose tool call it is, feature 385 amendment 4),
 //! `ms` (`PostToolUse`'s duration), `gm` (a prompt the GM typed, not a notification), `verdict` (a returned agent's verdict word, or
-//! `clean` / `findings`). The gap from one `PostToolUse` to the next `PreToolUse` is the model's own time. A clone's git dir outlives its
-//! sessions and any compaction, and the report reads every clone's log for the feature.
+//! `clean` / `findings`), `bg` (a backgrounded call's `PostToolUse`: its run's task id) and `inflight` (a `Stop` or `SubagentStop`: the
+//! background runs in flight, 451 T04, `fields.rs`). Two line kinds are no hook event's own: `BgEnd`, a background shell's end, written
+//! beside the `UserPromptSubmit` of the main session's completion notice and filed beside its launch (`bg_end`: `id`, `bg`, `status`,
+//! `exit`, `t0`, the launch's `make`, `cat`, `task`, `fallback`; 451 T04, plan D3), and `Phase`, a gate tool's step ([`append_row`], plan D4); the
+//! readers set both aside from the time-gap stream (`measure::events::load_all`). The gap from one `PostToolUse` to the next `PreToolUse`
+//! is the model's own time. A clone's git dir outlives its sessions and any compaction, and the report reads every clone's log for the
+//! feature.
 //!
 //! Plan T012's decisions: (a) the line, the log's path and the append are in-process; (b) the reversal test runs here, and the
 //! trigger it owes is recorded by `hm_arbiter.py`, asked by path; (c) the event is the payload's; (d) the digests are SHA-1's.
@@ -519,7 +524,7 @@ pub fn line(payload: &Value, t: &str) -> Map<String, Value> {
         if let Some(by) = payload.get("agent_id").filter(|v| truthy(v)) {
             out.insert("by".into(), by.clone());
         }
-        tool_fields(&mut out, &name, ti, payload);
+        fields::tool_fields(&mut out, &name, ti, payload);
         if payload.get("duration_ms").is_some_and(Value::is_number) {
             out.insert("ms".into(), payload["duration_ms"].clone());
         }
@@ -538,75 +543,8 @@ pub fn line(payload: &Value, t: &str) -> Map<String, Value> {
             out.insert("verdict".into(), Value::from(verdict));
         }
     }
+    fields::run_fields(&mut out, &ev, payload);
     out
-}
-
-/// The fields a tool's own call adds to its line.
-fn tool_fields(out: &mut Map<String, Value>, tool: &str, ti: &Map<String, Value>, payload: &Value) {
-    if tool == "Bash" {
-        let command = text_of(ti.get("command"));
-        let target = make_target(&command);
-        if !target.is_empty() {
-            if ["tick", "task-start", "decide", "land"].contains(&target.as_str()) {
-                if let Some(task) = first_group(&TASK, &command) {
-                    out.insert("make".into(), Value::from(target.clone()));
-                    out.insert("task".into(), Value::from(task));
-                    return;
-                }
-            }
-            out.insert("make".into(), Value::from(target));
-        }
-    } else if EDIT_TOOLS.contains(&tool) {
-        let path = ti
-            .get("file_path")
-            .filter(|v| truthy(v))
-            .or_else(|| ti.get("notebook_path").filter(|v| truthy(v)));
-        out.insert("path".into(), or_empty(path));
-        if tool == "Edit" {
-            out.insert(
-                "old".into(),
-                Value::from(digest(&text_of(ti.get("old_string")))),
-            );
-            let new = text_of(ti.get("new_string"));
-            out.insert("new".into(), Value::from(digest(&new)));
-            if heading_only(&new) {
-                out.insert("heading".into(), Value::Bool(true));
-            }
-        } else if tool == "Write" {
-            out.insert(
-                "new".into(),
-                Value::from(digest(&text_of(ti.get("content")))),
-            );
-        }
-    } else if tool == "Agent" {
-        out.insert(
-            "agent".into(),
-            ti.get("subagent_type")
-                .filter(|v| truthy(v))
-                .cloned()
-                .unwrap_or_else(|| Value::from("general-purpose")),
-        );
-        let prompt = text_of(ti.get("prompt"));
-        if let Some(m) = first_group(&MANIFEST, &prompt) {
-            out.insert("manifest".into(), Value::from(m));
-        }
-        if let Some(u) = first_group(&UNIT, &prompt) {
-            out.insert(
-                "unit".into(),
-                Value::from(u.trim_end_matches([',', ';', '.'])),
-            );
-        }
-        if prompt.contains("REVIEW_ROUNDS_OK=") {
-            out.insert("waiver".into(), Value::from(1));
-        }
-        if let Some(aid) = payload
-            .get("tool_response")
-            .and_then(|r| r.get("agentId"))
-            .filter(|v| truthy(v))
-        {
-            out.insert("aid".into(), aid.clone());
-        }
-    }
 }
 
 /// Whether a check type has a round cap: the record checks, the claims check and the review checks (`feature_report.tripwires`' `capped`,
@@ -756,16 +694,151 @@ pub(crate) fn append(
             "",
         );
     }
+    let notice = (row.get("ev") == Some(&Value::from("UserPromptSubmit")))
+        .then(|| payload.get("prompt").and_then(Value::as_str))
+        .flatten()
+        .and_then(fields::notice_end);
+    let sid = row.get("sid").cloned().unwrap_or(Value::Null);
+    let task = row.get("task").and_then(Value::as_str).map(str::to_owned);
+    let written = write_line(&path, row)?;
+    if let Some(end) = notice {
+        bg_end(end, t, sid, &written, &base, (task, to.fallback));
+    }
+    Some(written)
+}
+
+/// A background run's END (feature 451 T04, FR-002, plan D3): the `BgEnd` line a shell's completion notice writes, filed BESIDE ITS
+/// LAUNCH - in the log holding the launching call's line, whose `make`, `cat`, `task` and `fallback` mark it copies and whose `t` is its `t0`, so the
+/// run's span is one pair of lines in one log. WHY beside the launch, not where the prompt's line goes: a notice payload names no
+/// command, agent or task, so `filed` gives it the fallback feature (feature.json's), while the launch was filed by its own `F=` or
+/// brief (T26) - with two features worked in one clone the end would sit in the other feature's log, and the launch's readers would
+/// book the run open to the window's end. A launch no log holds (a run from before this writer, or another clone's) ends beside the
+/// prompt, under its feature, task and mark. A notice whose launch line is an Agent call writes none: its `SubagentStop` is its end.
+fn bg_end(
+    mut end: Map<String, Value>,
+    t: &str,
+    sid: Value,
+    prompt_log: &Path,
+    logs: &Path,
+    (task, fallback): (Option<String>, bool),
+) {
+    let id = text_of(end.get("id"));
+    let mut row = Map::new();
+    row.insert("t".into(), Value::from(t));
+    row.insert("sid".into(), sid);
+    row.insert("ev".into(), Value::from("BgEnd"));
+    row.append(&mut end);
+    let to = match launch_line(logs, &id) {
+        Some((_, launch)) if launch.get("tool") == Some(&Value::from("Agent")) => return,
+        Some((log, launch)) => {
+            for key in ["make", "cat", "task", "fallback"] {
+                if let Some(v) = launch.get(key) {
+                    row.insert(key.into(), v.clone());
+                }
+            }
+            if let Some(t0) = launch.get("t") {
+                row.insert("t0".into(), t0.clone());
+            }
+            log
+        }
+        None => {
+            if let Some(task) = task {
+                row.insert("task".into(), Value::from(task));
+            }
+            if fallback {
+                row.insert("fallback".into(), Value::Bool(true));
+            }
+            prompt_log.to_path_buf()
+        }
+    };
+    let _ = write_line(&to, row);
+}
+
+/// The launching call's line for tool-use id `id` and its log: the `PreToolUse` (its start), else the `PostToolUse`, in the first of the
+/// logs under `dir` that holds one, the most recently written first (the launch is recent). Each log is scanned for the id's text before
+/// any line of it is parsed.
+fn launch_line(dir: &Path, id: &str) -> Option<(PathBuf, Map<String, Value>)> {
+    let needle = format!("\"id\":{}", Value::from(id));
+    let mut logs: Vec<(SystemTime, PathBuf)> = std::fs::read_dir(dir)
+        .ok()?
+        .filter_map(Result::ok)
+        .map(|e| e.path())
+        .filter(|p| p.extension().is_some_and(|x| x == "jsonl"))
+        .map(|p| {
+            let at = p
+                .metadata()
+                .and_then(|m| m.modified())
+                .unwrap_or(UNIX_EPOCH);
+            (at, p)
+        })
+        .collect();
+    logs.sort_by(|a, b| b.0.cmp(&a.0));
+    logs.into_iter().find_map(|(_, log)| {
+        let text = std::fs::read_to_string(&log).ok()?;
+        let hits: Vec<Map<String, Value>> = text
+            .lines()
+            .filter(|l| l.contains(&needle))
+            .filter_map(|l| serde_json::from_str::<Map<String, Value>>(l).ok())
+            .filter(|e| e.get("id") == Some(&Value::from(id)))
+            .collect();
+        ["PreToolUse", "PostToolUse"]
+            .iter()
+            .find_map(|ev| hits.iter().find(|e| e.get("ev") == Some(&Value::from(*ev))))
+            .cloned()
+            .map(|e| (log.clone(), e))
+    })
+}
+
+/// One line appended to a log, its directory made.
+fn write_line(path: &Path, row: Map<String, Value>) -> Option<PathBuf> {
+    std::fs::create_dir_all(path.parent()?).ok()?;
     let mut text = Value::Object(row).to_string();
     text.push('\n');
     std::fs::OpenOptions::new()
         .create(true)
         .append(true)
-        .open(&path)
+        .open(path)
         .ok()?
         .write_all(text.as_bytes())
         .ok()?;
-    Some(path)
+    Some(path.to_path_buf())
+}
+
+/// A line a gate tool writes in process (feature 451 D4: a make run's `Phase` lines, T05 and T06), through the writer the hooks use: filed
+/// by the task it carries as a hook's line is (T26's chain; a line naming none goes to the session's feature, marked), stamped now where
+/// it has no `t`, and given the session's id from the process's `CLAUDE_CODE_SESSION_ID` where it names none - a gate tool's line has no
+/// hook payload, and a subagent's Bash holds its session's id but no agent's (research R2). A row naming no `ev` writes nothing (T207:
+/// a line of no event is no event); None outside a clone the log can be made in.
+#[must_use]
+pub fn append_row(root: &Path, row: Map<String, Value>) -> Option<PathBuf> {
+    append_row_in(root, row, &now_stamp(SystemTime::now()), &|k| {
+        std::env::var(k).ok()
+    })
+}
+
+pub(crate) fn append_row_in(
+    root: &Path,
+    mut row: Map<String, Value>,
+    t: &str,
+    env: &dyn Fn(&str) -> Option<String>,
+) -> Option<PathBuf> {
+    if text_of(row.get("ev")).is_empty() {
+        return None;
+    }
+    row.entry("t").or_insert_with(|| Value::from(t));
+    if !row.get("sid").is_some_and(truthy) {
+        let sid = env("CLAUDE_CODE_SESSION_ID").unwrap_or_default();
+        row.insert("sid".into(), Value::from(sid));
+    }
+    let carried = row.get("task").and_then(Value::as_str).map(str::to_owned);
+    let to = filed::filed(&Value::Null, carried.as_deref(), root, env);
+    if let Some(task) = to.task {
+        row.insert("task".into(), Value::from(task));
+    }
+    if to.fallback {
+        row.insert("fallback".into(), Value::Bool(true));
+    }
+    write_line(&log_path_in(root, &to.feature, env), row)
 }
 
 /// The payload's line appended now, from the process's directory and environment; nothing for a payload that is no object, which the
@@ -784,6 +857,7 @@ fn decide(event: &Event, _session: &Session) -> Vec<Answer> {
     Vec::new()
 }
 
+mod fields;
 mod filed;
 pub mod read;
 

@@ -43,7 +43,7 @@ MVP is T02-T11 (User Story 1: the retrospective is one command). Each refusal (T
       research: rendering
       held: rust/guard/src/guards/event_log_hooks.rs (and event_log_hooks/fields.rs if made)
       verify: red first - research R2's observed shell notification writes its `BgEnd` (id, status, exit code), an agent notification writes none, a Stop with two `background_tasks` lists both; a log with a `BgEnd` and a `Phase` line gives `make where-time` and `make feature-report` the same tables as the log without them; one real background run in the clone writes its `BgEnd`; `make rust-test CRATE=rust/guard`; `make hooks-test`; `make quick`
-- [ ] T05 The Rust checks' phase lines: `build`, `test`, `cover-build` (per family), `cover-run`, `lint` and `format` per crate, each with its wall-clock span, through `append_row`, in `rust/gate/crates/rustc/src/rustc.rs`, `rustc/cover.rs`, `rustc/side.rs`, `rustc/kept.rs` (D4; FR-003)
+- [ ] T05 The Rust checks' phase lines: `build`, `test`, `cover-build` (per family), `cover-run`, `lint` and `format` per crate, each with its wall-clock span, through `append_row`, in `rust/gate/crates/rustc/src/rustc.rs`, `rustc/cover.rs`, `rustc/side.rs`, `rustc/kept.rs` (D4; FR-003); and every reader outside measure's load_events filters the event log by kind before it reads a line's time - reviews/glyph.rs takes the log's first event as the feature's start, which a Phase line would become (T04, 2026-11-20), red first
       research: rendering
       verify: red first - a fixture crate's `rust test` and `rust cover` in a scratch tree write nested phase lines, a kept green result writes none; `make rust-test CRATE=rust/gate/crates/rustc`; `make quick`
 - [ ] T06 The landing's phase lines: `cheap`, `gate`, `cohort`, `claims`, `push` and an `end` with the exit code and `tasks` (the ids it was asked to land), in `rust/gate/crates/land/src/land.rs` and `land/long_runs.rs` (D5; FR-003)
@@ -56,7 +56,7 @@ MVP is T02-T11 (User Story 1: the retrospective is one command). Each refusal (T
 
 ### The readers (FR-005)
 
-- [ ] T08 `make where-time`'s columns - tests, compile, gate, land, review, model - booked by `make` through the shared table, the compile split from the phase lines, and `UNTIL=`, in `rust/gate/crates/measure/src/measure/where_time.rs` and a new `where_time/columns.rs`; the `where-time` recipe's `--until` (D2, D4, D7; FR-005, SC-001)
+- [ ] T08 `make where-time`'s columns - tests, compile, gate, land, review, model - booked by `make` through the shared table, the compile split from the phase lines, and `UNTIL=`, in `rust/gate/crates/measure/src/measure/where_time.rs` and a new `where_time/columns.rs`; the `where-time` recipe's `--until` (D2, D4, D7; FR-005, SC-001); a background run's duration ends at the queue's enqueue row, never the BgEnd's t (when the notice reached the session, minutes late while the session is mid-turn: one enqueued 11:44:08, delivered 11:47:41; T04's plan review, 2026-11-20)
       research: rendering
       held: Makefile
       verify: red first - User Story 1's acceptance scenarios 1 and 3 as fixtures (`make static`, `make rust-test`, `make hooks-test` under tests; a `make static` whose cover-build phase is two thirds of its span split into compile and tests), a past log re-booked by its `make` field; `make where-time F=451 SINCE=<this task's start> UNTIL=<now>` books this task's runs; `make rust-test CRATE=rust/gate/crates/measure`; `make quick`

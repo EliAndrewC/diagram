@@ -78,8 +78,15 @@ call, the `T<n>` its meta file's `description` names (`<session dir>/subagents/a
 clone's last `task-starts.jsonl` entry for the feature.
 
 **D3 - A background run's end** (FR-002; R2). The PostToolUse of a `run_in_background` call records `bg`, the `backgroundTaskId`. A
-`UserPromptSubmit` whose prompt holds `<task-notification>` with a `<tool-use-id>` writes a `BgEnd` line: that id, the task id, its
-status and exit code. Every `Stop` and `SubagentStop` line records `inflight` from `background_tasks`. The readers (T08) pair a launch
+`UserPromptSubmit` whose prompt opens with a `<task-notification>` naming a `<tool-use-id>` before any `<result>` writes a `BgEnd` line:
+that id, the task id (`bg`), its status and exit code (`exit`, the summary's last `exit code N`, absent where it names none). That is
+only for a notice that is NOT an agent's: an agent's notice names its tool-use id too (R2), so a notice whose summary opens `Agent "`, or
+whose launch line is an Agent call, writes none, its `SubagentStop` being its end. A shell's, a Workflow's and a Monitor's notice each
+end a run the session can wait on, and each writes one. The line is FILED BESIDE ITS LAUNCH: in the log holding the launching call's
+line, whose `make`, `cat`, `task` and `fallback` mark it copies and whose `t` is its `t0`, since a notice names no command or brief and
+T26's chain would file it in feature.json's log, away from a launch filed by its `F=` or brief. A launch no log holds ends beside the
+prompt's line, under its task and mark. Its `t` is when the notice reached the session, not when the run ended: a notice waits in the
+queue while the session is mid-turn (T04's section). Every `Stop` and `SubagentStop` line records `inflight` from `background_tasks`. The readers (T08) pair a launch
 with its `BgEnd`; for a subagent's launch with none, they read the subagent transcript's `queued_command` attachment holding the same
 `<tool-use-id>`, its row's timestamp the end; a launch with no end anywhere is open to the window's end. A wait between turns is booked
 to the runs `inflight` names on the `Stop` that opened it, else to the launch whose span holds it.
@@ -253,6 +260,15 @@ other two by their case groups, until each shard's kept seconds is about 20 or l
   prompt (R2's observed shell form) writes a `BgEnd` with its tool-use id, status and exit code; an agent notification writes none; a
   Stop payload with two `background_tasks` writes both under `inflight`; a log holding a `BgEnd` and a `Phase` line gives `make
   where-time` and `make feature-report` the tables the log without them gives.
+- **As built (2026-11-20), where it departs from the approach above**:
+  - **An agent's notice names its `<tool-use-id>` too**: 3,801 of 3,986 agent notices carry one, beside all 1,992 shell notices, measured 2026-11-20 (the `-diagram` and clone transcripts' enqueued `<task-notification>` rows tallied by summary and by a `<tool-use-id>` before any `<result>`). R2's "an agent's carries `<task-id>` ... `<usage>`" omits it. So the id alone would write a `BgEnd` for every agent. A notice writes none where its summary opens `Agent "` or its launch line is an Agent call. Only the tags before a `<result>` are read, and the prompt must open with the notice. Each check was deleted alone and its case seen red.
+  - **A workflow's and a Monitor's notice write their end.** Each names its launch: 46 workflow notices and 128 Monitor notices ("stream ended", "script failed", a task stopped) carry an id, measured 2026-11-20 (same tally). Each is a background run the session can wait on, so it is booked like a shell's, a fixture pinning each. This is wider than data-model's "a background shell ended".
+  - **A `BgEnd`'s `t` is when the notice reached the session, not when the run ended.** A notice waits in the queue while the session is mid-turn. One run was enqueued at 11:44:08 and delivered at 11:47:41, observed 2026-11-20 (the queue's enqueue and remove rows of one notice). So the `t` is right for the end of a wait, but late for the run's span when the session was busy. T08 can take the end from the queue's enqueue row where it needs the span.
+  - **The end is filed beside its launch.** It goes in the log that holds the launching call's line, not feature.json's fallback log where the prompt's line goes (a notice names no command or brief, so T26's chain has nothing to file it by). It copies that line's `make`, `cat`, `task` and `fallback` mark, and its `t` as `t0`: the run's span. A launch no log holds ends beside the prompt, under its task and mark. Its fields are data-model's: `id`, `bg` (the task id; `task` stays the spec task), `status`, and `exit`, the summary's last `exit code N`, absent where the run was stopped or its session ended.
+  - **The lookup's cost**: 3.7 ms a notice whose launch is in the newest log, measured 2026-11-20 (20 replays through the clone's `l7r-guard`, beside the 15.7 MB 449 log). It is 15.4 ms where no log holds the launch and the whole 449 log is read, measured 2026-11-20 (same method). A prompt that is no notice takes 3.3 ms, measured 2026-11-20 (same method).
+  - **`append_row`** stamps `t` where the row has none. It takes `sid` from `CLAUDE_CODE_SESSION_ID` where the row names none, files the row by its `task` through T26's chain, and writes nothing for a row with no `ev`.
+  - **The reader**: `events::load_all` returns `Loaded { stream, aside }`, the `ASIDE` kinds kept apart, a line repeated whole kept once, and `load_events` returns the stream. The tool fields moved to `event_log_hooks/fields.rs` with `bg`, `inflight` and the notice's parse.
+  - **The live `BgEnd` was replayed, not seen live.** The hooks run the mirror's binary until this lands, and a subagent's own notice never reaches a hook (R2). So R2's shell notice was replayed through this clone's built `l7r-guard` with a launch and a scratch `L7R_EVENTS_DIR`, and wrote its `BgEnd` with `make`, `cat` and `t0`. The first real one is read off the main session's log after the landing.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|

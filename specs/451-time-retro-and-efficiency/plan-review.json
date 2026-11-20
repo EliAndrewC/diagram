@@ -38,7 +38,7 @@
    "declared": "spec-fidelity"
   },
   "## Decisions": {
-   "sha256": "6cf3d0e952c5b9eedea674f8579fd7ef4143c9aaaec46944984f41f37ff5e0de",
+   "sha256": "0d554c75bc59525f377450ba99a462475ac2134c01f673d4aaece63f87e36f33",
    "verdict": "CLEAR",
    "reviewed": "2026-11-20",
    "declared": "spec-fidelity"
@@ -86,7 +86,7 @@
    "declared": "spec-fidelity"
   },
   "### T04 (FR-002: no line marks a background run's end, so a wait cannot be booked to the run behind it - research R2)": {
-   "sha256": "bf82d12747a518c92299b8cc3c3e8215b87377441a2ca2d8c574f8a4c5afa9eb",
+   "sha256": "5cc6e4cb93f326fa363264d6c99e070bf8814db88d358580a12e4f817cc5f447",
    "verdict": "CLEAR",
    "reviewed": "2026-11-20",
    "declared": "spec-fidelity"
@@ -399,6 +399,18 @@
   },
   "### T27 Approach (checklist part A)": {
    "sha256": "8950fc9ce0f21477c2dc6019ef2cca4b2914a22c77582340e3ed68f3386b7a39",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity"
+  },
+  "### T24 (<why: the finding or measurement that files it>)": {
+   "sha256": "8c296cb61d29561767bd907bb3876642c117283e74a2593add2441d8fbf9683c",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity"
+  },
+  "### T24 Approach (checklist part A)": {
+   "sha256": "c0351f8099e6e18a37212739bb3ddf180234bbf736a8b3b0d7a2fd49de9dcc42",
    "verdict": "CLEAR",
    "reviewed": "2026-11-20",
    "declared": "spec-fidelity"
@@ -1575,6 +1587,142 @@
      "why": "Bounds the work to the task as filed; leaves no known defect (the item-4 bug is fixed in this task, not deferred)."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-20",
+   "blocks": [
+    "## Decisions",
+    "### T04 (FR-002: no line marks a background run's end, so a wait cannot be booked to the run behind it - research R2)",
+    "### T24 (<why: the finding or measurement that files it>)",
+    "### T24 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D3/T04 notice parse",
+     "summary": "A BgEnd is written only for a prompt that OPENS with a <task-notification> whose <tool-use-id> stands before any <result>.",
+     "class": "within",
+     "why": "FR-002 asks for a background run's end logged from its completion notice; this is how the notice is recognized, and it drops no notice: of 3,390 user rows carrying a <task-notification> in the -diagram and diagram-backlog transcripts of the last 4 days, none held two notices and none failed to open with one (observed 2026-11-20, method: python -I tally of user-type rows by count of <task-notification> and by whether the text opens with it)."
+    },
+    {
+     "id": "D3/T04 agent notices",
+     "summary": "An agent's notice (summary opening 'Agent \"' or an Agent launch line) writes no BgEnd; its SubagentStop is its end.",
+     "class": "within",
+     "why": "An agent's end is still logged, by SubagentStop, so FR-002's purpose of booking a wait to the run in flight still holds. The earlier CLEAR T04 approach already said an agent notification writes none; this only fixes the test after the measurement that agent notices carry a tool-use id too."
+    },
+    {
+     "id": "D3/T04 workflow and Monitor notices",
+     "summary": "A Workflow's and a Monitor's notice each write a BgEnd, wider than data-model's 'a background shell ended'.",
+     "class": "within",
+     "why": "FR-002 says 'a background run', not 'a background shell'. These are runs the session waits on, and booking a wait to them is the request's 'which run a wait was waiting on'. It widens data-model.md's wording, not the spec, and it is not unrequested scope."
+    },
+    {
+     "id": "D3/T04 filed beside its launch",
+     "summary": "The BgEnd goes in the log holding the launching call's line and copies that line's make, cat, task and fallback mark, with the launch's t as t0. A launch no log holds ends beside the prompt's line.",
+     "class": "within",
+     "why": "This serves FR-002's 'with its span' and its pairing of a wait to its run. Filing by T26's chain would put the end away from its launch. No requested behavior is cut."
+    },
+    {
+     "id": "D3/T04 t is notice arrival",
+     "summary": "A BgEnd's t is when the notice reached the session, which can be later than the run's end while the session is mid-turn. T08 may take the end from the queue's enqueue row where it needs the span.",
+     "class": "within",
+     "why": "FR-002 logs the end FROM the completion notice, and the notice's arrival is what the hook sees. The lateness only covers time when the session was mid-turn, so it was not waiting, and booking a wait between turns, FR-002's second clause, is unaffected. A run's own duration is read by T08, which has the enqueue row as its route; this block hands the reader no wrong wait booking."
+    },
+    {
+     "id": "T04 append_row behavior",
+     "summary": "append_row stamps t where absent, takes sid from CLAUDE_CODE_SESSION_ID, files the row by its task through T26's chain, and writes nothing for a row with no ev.",
+     "class": "within",
+     "why": "This is D4's writer for FR-003's Phase lines, already accepted. These are mechanics, not a change of what is logged."
+    },
+    {
+     "id": "T04 reader aside and dedupe",
+     "summary": "events::load_all returns the stream and the ASIDE kinds (BgEnd, Phase) separately, keeping a line repeated whole only once.",
+     "class": "within",
+     "why": "This is the already-CLEAR guard keeping the new kinds out of the time-gap stream (the T207 failure). Dropping exact duplicate lines removes no information."
+    },
+    {
+     "id": "T04 replayed not live",
+     "summary": "The live BgEnd was replayed through the clone's built l7r-guard, since hooks run the mirror's binary until landing. The first real one is read off the log after landing.",
+     "class": "within",
+     "why": "This is a verification route, not a scope decision, and it narrows no FR-002 behavior. No refusal is involved, so the GM's real-enforcement instruction is not engaged."
+    },
+    {
+     "id": "T24 template blocks",
+     "summary": "task-add's unfilled template for T24 (heading, approach, checklist part A).",
+     "class": "within",
+     "why": "Placeholders decide nothing. When filled, the block's digest changes and it is owed review again."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-20",
+   "blocks": [
+    "### T04 (FR-002: no line marks a background run's end, so a wait cannot be booked to the run behind it - research R2)",
+    "### T04 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T04-writer",
+     "summary": "D3's writer half: bg on a backgrounded PostToolUse, BgEnd from a notification prompt, inflight on Stop and SubagentStop; D4's append_row made public for the gate's tools",
+     "class": "within",
+     "why": "Exactly D3 and D4 as accepted; carries FR-002 and the approved 'logs that end from its completion notice'."
+    },
+    {
+     "id": "T04-reader-aside",
+     "summary": "load_all returns Loaded{stream, aside}: BgEnd and Phase lines kept out of the time-gap stream and handed to T08/T09; a line repeated whole is kept once",
+     "class": "within",
+     "why": "Keeps today's readers' booking unchanged until T08/T09 read the new kinds, so FR-005's reading is deferred to its own tasks, not dropped; nothing the GM asked for is narrowed."
+    },
+    {
+     "id": "T04-agent-notice",
+     "summary": "An agent's notice (summary opens 'Agent \"' or its launch is an Agent call) writes no BgEnd, its SubagentStop being its end",
+     "class": "within",
+     "why": "Settled in D3; an agent's end is already logged by SubagentStop, so every background run still gets an end line (FR-002)."
+    },
+    {
+     "id": "T04-workflow-monitor",
+     "summary": "Workflow and Monitor notices write a BgEnd like a shell's",
+     "class": "within",
+     "why": "Settled in D3; it widens data-model's 'a background shell', which serves FR-002's 'a background run's end' and the GM's 'which run a wait was waiting on' - not a narrowing."
+    },
+    {
+     "id": "T04-t-is-delivery",
+     "summary": "A BgEnd's t is when the notice reached the session, not the run's end; T08 takes the end from the queue's enqueue row where it needs the span",
+     "class": "within",
+     "why": "Settled in D3 (which cites this section); the GM approved logging the end 'from its completion notice', and the notice's arrival is right for the end of a wait. The span's true end is carried to T08 (the dispatch reports T08's line now holds the note), so FR-002's span is not given up."
+    },
+    {
+     "id": "T04-filed-beside-launch",
+     "summary": "The BgEnd goes in the log holding its launch, copying make/cat/task/fallback and taking the launch's t as t0; a launch no log holds ends beside the prompt",
+     "class": "within",
+     "why": "Settled in D3; it is what gives the end line its span (FR-002)."
+    },
+    {
+     "id": "T04-fields",
+     "summary": "Fields id, bg, status, exit (the summary's last 'exit code N', absent where stopped or the session ended)",
+     "class": "within",
+     "why": "Settled in D3 and data-model; an absent exit where none is named records what the notice holds."
+    },
+    {
+     "id": "T04-append-row",
+     "summary": "append_row stamps t where absent, takes sid from CLAUDE_CODE_SESSION_ID, files by task through T26's chain, writes nothing for a row with no ev",
+     "class": "within",
+     "why": "Settled in D4's 'carries sid from the process's CLAUDE_CODE_SESSION_ID'; the rest is the writer's mechanics."
+    },
+    {
+     "id": "T04-file-split",
+     "summary": "Tool fields moved to event_log_hooks/fields.rs under the file cap; edits held behind make guard-edit",
+     "class": "within",
+     "why": "Code layout; decides nothing of scope."
+    },
+    {
+     "id": "T04-live-replayed",
+     "summary": "The live BgEnd was replayed through the clone's built l7r-guard with a scratch events dir, the first real one read off the main session's log after landing",
+     "class": "within",
+     "why": "Timing of the done check, not of what is built; the hooks run the mirror's binary until landing, so a live end in the clone is not reachable before then, and the real one is still read. Nothing the GM asked for is dropped."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -1896,6 +2044,74 @@
      "summary": "Done when T25 is ticked with the fix; on red, the failure is recorded and the task set down, with any cannot-be-done claim ruled through make arbiter-ask; no landing of its own beyond the tick.",
      "class": "within",
      "why": "Bookkeeping that ties T27's completion to the task that carries its fix; it sets aside no requirement and leaves no defect unfixed."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T04": {
+   "section_sha256": "995558725fdc2ea7d8580324fb0b4e6c733bc363f6882dc1ef65fc16f3eff0ed",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T04-writer",
+     "summary": "D3's writer half: bg on a backgrounded PostToolUse, BgEnd from a notification prompt, inflight on Stop and SubagentStop; D4's append_row made public for the gate's tools",
+     "class": "within",
+     "why": "Exactly D3 and D4 as accepted; carries FR-002 and the approved 'logs that end from its completion notice'."
+    },
+    {
+     "id": "T04-reader-aside",
+     "summary": "load_all returns Loaded{stream, aside}: BgEnd and Phase lines kept out of the time-gap stream and handed to T08/T09; a line repeated whole is kept once",
+     "class": "within",
+     "why": "Keeps today's readers' booking unchanged until T08/T09 read the new kinds, so FR-005's reading is deferred to its own tasks, not dropped; nothing the GM asked for is narrowed."
+    },
+    {
+     "id": "T04-agent-notice",
+     "summary": "An agent's notice (summary opens 'Agent \"' or its launch is an Agent call) writes no BgEnd, its SubagentStop being its end",
+     "class": "within",
+     "why": "Settled in D3; an agent's end is already logged by SubagentStop, so every background run still gets an end line (FR-002)."
+    },
+    {
+     "id": "T04-workflow-monitor",
+     "summary": "Workflow and Monitor notices write a BgEnd like a shell's",
+     "class": "within",
+     "why": "Settled in D3; it widens data-model's 'a background shell', which serves FR-002's 'a background run's end' and the GM's 'which run a wait was waiting on' - not a narrowing."
+    },
+    {
+     "id": "T04-t-is-delivery",
+     "summary": "A BgEnd's t is when the notice reached the session, not the run's end; T08 takes the end from the queue's enqueue row where it needs the span",
+     "class": "within",
+     "why": "Settled in D3 (which cites this section); the GM approved logging the end 'from its completion notice', and the notice's arrival is right for the end of a wait. The span's true end is carried to T08 (the dispatch reports T08's line now holds the note), so FR-002's span is not given up."
+    },
+    {
+     "id": "T04-filed-beside-launch",
+     "summary": "The BgEnd goes in the log holding its launch, copying make/cat/task/fallback and taking the launch's t as t0; a launch no log holds ends beside the prompt",
+     "class": "within",
+     "why": "Settled in D3; it is what gives the end line its span (FR-002)."
+    },
+    {
+     "id": "T04-fields",
+     "summary": "Fields id, bg, status, exit (the summary's last 'exit code N', absent where stopped or the session ended)",
+     "class": "within",
+     "why": "Settled in D3 and data-model; an absent exit where none is named records what the notice holds."
+    },
+    {
+     "id": "T04-append-row",
+     "summary": "append_row stamps t where absent, takes sid from CLAUDE_CODE_SESSION_ID, files by task through T26's chain, writes nothing for a row with no ev",
+     "class": "within",
+     "why": "Settled in D4's 'carries sid from the process's CLAUDE_CODE_SESSION_ID'; the rest is the writer's mechanics."
+    },
+    {
+     "id": "T04-file-split",
+     "summary": "Tool fields moved to event_log_hooks/fields.rs under the file cap; edits held behind make guard-edit",
+     "class": "within",
+     "why": "Code layout; decides nothing of scope."
+    },
+    {
+     "id": "T04-live-replayed",
+     "summary": "The live BgEnd was replayed through the clone's built l7r-guard with a scratch events dir, the first real one read off the main session's log after landing",
+     "class": "within",
+     "why": "Timing of the done check, not of what is built; the hooks run the mirror's binary until landing, so a live end in the clone is not reachable before then, and the real one is still read. Nothing the GM asked for is dropped."
     }
    ],
    "verdict": "CLEAR"

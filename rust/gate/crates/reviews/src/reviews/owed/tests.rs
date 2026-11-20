@@ -6,7 +6,8 @@ use std::path::Path;
 use serde_json::json;
 
 use super::super::tests::{
-    commit, compound, drawn, drawn_as, events, feature, hamlet, map, put, repo, sh, sheet, tools,
+    commit, compound, drawn, drawn_as, events, feature, hamlet, map, put, repo, sh, sheet, started,
+    tools,
 };
 use super::*;
 
@@ -56,6 +57,8 @@ fn the_base_is_the_merge_base_else_head_else_nothing() {
     // with no base, every folder is new, every declared line owed, and untracked code needs declaring
     put(&empty, "l7r/diagram/x.py", "x\n");
     assert!(check_declared(&empty).is_some());
+    // (a frozen exhibit, a map the pool holds that owes no review of its own)
+    map(&empty, "legacy-hand-authored-pool", "m", &[]);
     feature(&empty, "900-x", "- [ ] T1\n\n## Occasions\n\n- gm-fix: m\n");
     assert_eq!(owed_slugs(&empty), ["fix-check--m"]);
     let r = repo("base");
@@ -360,9 +363,7 @@ fn a_feature_declares_its_occasions() {
         [
             "settlement-review--m",
             "building-review--s",
-            "glyph-check--ghost",
             "glyph-check--well--m",
-            "glyph-check--well",
             "size-audit--granary",
             "fix-check--m",
         ]
@@ -378,15 +379,20 @@ fn a_feature_declares_its_occasions() {
     assert_eq!(
         problems,
         [
-            "specs/900-x: placement-changed: 'well' is not drawn on 'nowhere'",
-            "specs/900-x: glyph-redrawn: 'ghost' is drawn on no pool map or sheet",
+            // a map the pool does not hold owes no unit (449 T238 round 2)
+            "`- placement-changed: well on nowhere` (specs/900-x) names `nowhere`, no pool map or sheet - the closest: m, s; write it \
+             `- placement-changed: <element>` or `- placement-changed: <element> on <map>`, the element a class the map draws, the map \
+             its folder's name",
+            // an element no current drawing holds owes no unit (449 T238 round 2, D9)
+            "`- glyph-redrawn: ghost` (specs/900-x) names `ghost`, which no pool map or sheet draws - the closest drawn kinds: gate, \
+             well; write the element as the drawing names it, or `- none: <why>` where nothing drawn is re-placed or redrawn",
             "specs/900-x: unknown occasion 'bogus' (one of glyph-redrawn, placement-changed, new-form, new-tier, layout-revised, new-program, gm-fix, none)",
         ]
     );
     let ruled = ruling("d", &units, &problems);
     assert!(ruled
         .starts_with("owed against d: settlement-review:m on m (declared new-form (specs/900-x))"));
-    assert!(ruled.contains("glyph-check:ghost on ? (") && ruled.contains(" | PROBLEMS: "));
+    assert!(ruled.contains("glyph-check:well on m (") && ruled.contains(" | PROBLEMS: "));
     assert_eq!(
         ruling("d", &[], &[]),
         "no review owed against d: no occasion in the delta"
@@ -511,6 +517,13 @@ fn committed_drawing_code_is_refused_until_an_occasion_is_declared() {
     commit(&r2, "code");
     assert!(check_declared(&r2).unwrap().contains("(l7r/diagram/x.py)"));
     feature(&r2, "900-x", "- [ ] T1\n\n## Occasions\n\n- none: a test\n");
+    assert!(check_declared(&r2).is_some());
+    started(&r2, "900-x", "T1");
+    feature(
+        &r2,
+        "900-x",
+        "- [ ] T1\n\n## Occasions\n\n- none: T1 - a test\n",
+    );
     assert_eq!(check_declared(&r2), None);
 }
 
@@ -566,7 +579,12 @@ fn the_command_line_refuses_undeclared_code_until_an_occasion_is_declared() {
         ),
         (1, true)
     );
-    feature(&r, "900-x", "- [ ] T1\n\n## Occasions\n\n- none: a test\n");
+    started(&r, "900-x", "T1");
+    feature(
+        &r,
+        "900-x",
+        "- [ ] T1\n\n## Occasions\n\n- none: T1 - a test\n",
+    );
     assert_eq!(out(&["--check-declared"]).code, 0);
 }
 
@@ -678,3 +696,7 @@ fn an_unclassified_folder_draws_nothing() {
     assert_eq!(tree.legends.first_drawing("kiln"), "");
     assert_eq!(tree.legends.first_drawing("well"), "m");
 }
+
+/// The declarations' own refusals (449 T238): a Rust stage's change, a declaration naming nothing or no pool map, and the one line
+/// that answers a delta - split from this file at the file-scale bar.
+mod declared;

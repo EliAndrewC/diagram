@@ -1260,6 +1260,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-20",
    "declared": "spec-fidelity"
+  },
+  "### T238 (T237: a Rust stage's placement change owed no review and refused nothing, where the deleted Python's placement code owed its declaration; T239: a declaration naming no element became a unit on no map)": {
+   "sha256": "0f93113e135f4669bb9b10cf87cff5dd383b8da6d0b60d5c6b2a6991dc82b518",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity"
+  },
+  "### T238 Approach (checklist part A)": {
+   "sha256": "6b2d416eba217a75b24f8912d049a2257d3126cb0f3a7ab0aefc36690ed8dfc8",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -16462,6 +16474,232 @@
      "why": "Whether the village stands on the landward side is a research-claim question (a possible defect, not a mere difference from the page's drawn orientation; 'east' itself is not owed). Left here and carried by filed task T240 before T158, inside the step, which is what the GM's 'fix all known bugs in each step before moving on' asks. Legitimate on that filing; if T240 finds the side reads fine and matches 0019's claim it closes by restating the claim, per the GM's 2026-11-19 rule."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-20",
+   "blocks": [
+    "### T238 (T237: a Rust stage's placement change owed no review and refused nothing, where the deleted Python's placement code owed its declaration; T239: a declaration naming no element became a unit on no map)",
+    "### T238 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D1 stage-file refusal",
+     "summary": "A .rs under rust/phases/src/ or rust/mode_a/src/compound/ (no drawing or test file; 45 files, now carrying its find) whose non-test items' comment-free tokens changed, and a drawing file's change that redraws no element, refuse undeclared; a change that redraws owes its glyph-check from the change",
+     "class": "within",
+     "why": "Restores for the Rust placers the refusal the deleted Python's CODE pattern held (FR-002: a ported check must still do its job); T237 found the Rust stages refused nothing, a check passing the bad. Fixed as found per the GM 2026-11-18 ('fix all known bugs in each step'). The count now names its search space (find, less the tests, drawing files and driver), as asked last round."
+    },
+    {
+     "id": "D2 comments, tests, imports, types, moves do not refuse",
+     "summary": "Narrower than the old file-level pattern; a type alone is no placement (the first version refused T234's SluiceFrame)",
+     "class": "within",
+     "why": "FR-002's exception: a check refusing correct work is fixed in its port. A comment-only or type-only change re-places nothing, and refusing T234's type was measured as refusing correct work. No known instance of a type alone moving an element; a difference with no wrong outcome is no defect (XIV, T196)."
+    },
+    {
+     "id": "D3 a tasks.md declaration naming nothing, or no known occasion, refused with its form",
+     "summary": "Refused by --check-declared whatever code the delta touches; the check reads no legend",
+     "class": "within",
+     "why": "Fixes a found defect (T239: a declaration naming no element became a unit on no map). Unknown kinds are the same defect. GM 2026-11-18, fix as we go."
+    },
+    {
+     "id": "D4 a tweak's misformed Occasion: commit line is a problem line, never refused",
+     "summary": "Owes no unit and is never refused, since a pushed commit message cannot be rewritten (also for --check-drawn's undrawn element)",
+     "class": "within",
+     "why": "No defect is left: the line owes no unrunnable unit, and it answers no undeclared code (D7), so placement code still needs a real declaration. Nothing passes bad work."
+    },
+    {
+     "id": "D5 only the started task's own line answers",
+     "summary": "An active feature's Occasions line answers only when it owns the started task (.git/active-task), not ticked at the base, in one of three owning forms; a mention answers nothing; wrapped lines joined",
+     "class": "within",
+     "why": "Fixes the round-1 defect measured on T236's delta (other tasks' and features' sections passed undeclared placement code). Every existing task-naming line still answers its own task. GM 2026-11-18, fix as we go."
+    },
+    {
+     "id": "D6 a line already on main still answers its unticked task",
+     "summary": "A declaration pushed with the spec, before the code, names the task all the same",
+     "class": "within",
+     "why": "The declaration's unit is the task (docs/reviews.md); a stale line is excluded by the tick test. Nothing asked for a per-push declaration."
+    },
+    {
+     "id": "D7 a misformed commit line answers no undeclared code",
+     "summary": "Only a commit Occasion: line that owes a runnable review answers the delta",
+     "class": "within",
+     "why": "Fixes a found defect (Occasion: bogus: x answered undeclared code), red first. GM 2026-11-18, fix as we go."
+    },
+    {
+     "id": "D8 a map or sheet the pool does not hold refused with its form, closest names offered",
+     "summary": "Every kind with a map or sheet slot; the pool walk runs only when an unlanded line names a map; a commit line so formed is a problem line owing no unit",
+     "class": "within",
+     "why": "Fixes a found defect (well on nowhere became a unit on no map); each slotted kind is the same defect. GM 2026-11-18, fix as we go."
+    },
+    {
+     "id": "D9 an element the named map's current drawing does not hold refused after the redraw (--check-drawn)",
+     "summary": "review-gate.sh asks reviews owed --check-drawn right after redrawing maps not current and before --landing; a tasks.md glyph line whose element the named map's legend (current drawing only) does not hold is refused with its form and closest drawn kinds; with no map named, refused once every live legend is known and none holds it; such a line owes no unit",
+     "class": "within",
+     "why": "This is option (a) of last round's NOT LEGITIMATE ruling, built: the defect (a declared line shipping a unit on no map no check can be dispatched for) is fixed where a current drawing exists, red first (a_declared_element_its_current_drawing_does_not_hold_is_refused, review-gate r12). Fixing a found defect as we go (GM 2026-11-18) is within the request."
+    },
+    {
+     "id": "D9r residual: a map whose redraw failed keeps the old behavior",
+     "summary": "A map still not current after the redraw (a failed draw at rust-only), or an unmapped element while any live legend is unknown, is left a unit on no map plus a problem line, not refused",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Physically impossible to decide, not merely awkward: with no current drawing there is nothing to tell a misnamed element from one new to the map, so a refusal there would refuse correct work (a guard refusing good work is itself a defect under XIV T196 and FR-002's exception). Option (b) of last round's ruling is met for this residual: no current drawing exists at any point the gate could refuse. And at rust-only feature 444 FR-023 makes a map that fails downstream of the Rust front information, never a defect owed by the landing, with the glyph-check for a pool hamlet a Rust stage moves not owed while the switch stands; the line still surfaces as a problem line. Each of the two cases (named map not current; no map named with some legend unknown) fails on the same ground, adjudicated separately: in both, the drawing that would decide is the one that does not exist."
+    },
+    {
+     "id": "D10 a two-task landing answered by the started task's line",
+     "summary": "Another task's placement code in the same landing rides on the started task's declaration; no known instance (T236's --stat, its 451 T26 files no placement code); not filed",
+     "class": "within",
+     "why": "The refusal's per-delta grain, as the old pattern had; the started task's line is written by the session landing the whole delta. Nothing asks per-task attribution inside a landing. Now worded as no known instance, with its method, as asked."
+    },
+    {
+     "id": "D11 docs/guards.md's stale review-gate row left",
+     "summary": "Names the deleted review_owed.py, not placed.rs; outside this task's files; rust/gate/CLAUDE.md and review-gate.sh's comment updated",
+     "class": "within",
+     "why": "A stale documentation row is no wrong outcome under XIV (T196): no map reads wrong, no check passes the bad or refuses the good, no tool fails."
+    },
+    {
+     "id": "D12 Mode A caption placers not stage code",
+     "summary": "caption_place.rs and place.rs place captions, no element",
+     "class": "within",
+     "why": "docs/reviews.md's occasion is the re-placement of an element; captions are no census element, so nothing the occasion covers is narrowed."
+    },
+    {
+     "id": "D13 detected hamlet units set aside at rust-only and recorded",
+     "summary": "The scratch gate run sets glyph-check--field-grave--inashiro aside into dev/deferred-reviews.jsonl",
+     "class": "within",
+     "why": "Settled by feature 444 FR-023, cited in full: a glyph-check owed for a pool hamlet a Rust stage moves is not owed while the switch stands, and is owed when it is thrown back."
+    },
+    {
+     "id": "D14 sheet placeholder marks are no element",
+     "summary": "sheet_kinds leaves out data-kind '-' and the compound's title, as ink_classes does",
+     "class": "within",
+     "why": "Fixes a found defect (a sheet with an unreadable base drawing owed glyph-check----county-magistracy-example), red first. GM 2026-11-18, fix as we go."
+    },
+    {
+     "id": "D15 --check-declared slower after round 2; --check-drawn adds 56-59 ms",
+     "summary": "The cost is the delta's code read that 449's section had let the check skip, and the new legend check after the redraw",
+     "class": "within",
+     "why": "The old speed came from the defect; no timing target in the request or spec reaches these checks, and restoring a check's job is FR-002's requirement."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-20",
+   "blocks": [
+    "### T238 (T237: a Rust stage's placement change owed no review and refused nothing, where the deleted Python's placement code owed its declaration; T239: a declaration naming no element became a unit on no map)",
+    "### T238 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D1 stage-file refusal",
+     "summary": "A .rs under rust/phases/src/ or rust/mode_a/src/compound/ (no drawing or test file; 45 files, now carrying its find) whose non-test items' comment-free tokens changed, and a drawing file's change that redraws no element, refuse undeclared; a change that redraws owes its glyph-check from the change",
+     "class": "within",
+     "why": "Restores for the Rust placers the refusal the deleted Python's CODE pattern held (FR-002: a ported check must still do its job); T237 found the Rust stages refused nothing, a check passing the bad. Fixed as found per the GM 2026-11-18 ('fix all known bugs in each step'). The count now names its search space (find, less the tests, drawing files and driver), as asked last round."
+    },
+    {
+     "id": "D2 comments, tests, imports, types, moves do not refuse",
+     "summary": "Narrower than the old file-level pattern; a type alone is no placement (the first version refused T234's SluiceFrame)",
+     "class": "within",
+     "why": "FR-002's exception: a check refusing correct work is fixed in its port. A comment-only or type-only change re-places nothing, and refusing T234's type was measured as refusing correct work. No known instance of a type alone moving an element; a difference with no wrong outcome is no defect (XIV, T196)."
+    },
+    {
+     "id": "D3 a tasks.md declaration naming nothing, or no known occasion, refused with its form",
+     "summary": "Refused by --check-declared whatever code the delta touches; the check reads no legend",
+     "class": "within",
+     "why": "Fixes a found defect (T239: a declaration naming no element became a unit on no map). Unknown kinds are the same defect. GM 2026-11-18, fix as we go."
+    },
+    {
+     "id": "D4 a tweak's misformed Occasion: commit line is a problem line, never refused",
+     "summary": "Owes no unit and is never refused, since a pushed commit message cannot be rewritten (also for --check-drawn's undrawn element)",
+     "class": "within",
+     "why": "No defect is left: a misformed commit line owes no unrunnable unit and answers no undeclared code (D7), and the one form --check-declared cannot see before the redraw, an element its map's current drawing does not hold, answers nothing at --check-drawn (D9c), so the delta's code is refused while the line itself, which cannot be rewritten, is not."
+    },
+    {
+     "id": "D5 only the started task's own line answers",
+     "summary": "An active feature's Occasions line answers only when it owns the started task (.git/active-task), not ticked at the base, in one of three owning forms; a mention answers nothing; wrapped lines joined",
+     "class": "within",
+     "why": "Fixes the round-1 defect measured on T236's delta (other tasks' and features' sections passed undeclared placement code). Every existing task-naming line still answers its own task. GM 2026-11-18, fix as we go."
+    },
+    {
+     "id": "D6 a line already on main still answers its unticked task",
+     "summary": "A declaration pushed with the spec, before the code, names the task all the same",
+     "class": "within",
+     "why": "The declaration's unit is the task (docs/reviews.md); a stale line is excluded by the tick test. Nothing asked for a per-push declaration."
+    },
+    {
+     "id": "D7 a misformed commit line answers no undeclared code",
+     "summary": "Only a commit Occasion: line that owes a runnable review answers the delta",
+     "class": "within",
+     "why": "Fixes a found defect (Occasion: bogus: x answered undeclared code), red first. GM 2026-11-18, fix as we go."
+    },
+    {
+     "id": "D8 a map or sheet the pool does not hold refused with its form, closest names offered",
+     "summary": "Every kind with a map or sheet slot; the pool walk runs only when an unlanded line names a map; a commit line so formed is a problem line owing no unit",
+     "class": "within",
+     "why": "Fixes a found defect (well on nowhere became a unit on no map); each slotted kind is the same defect. GM 2026-11-18, fix as we go."
+    },
+    {
+     "id": "D9 an element the named map's current drawing does not hold refused after the redraw (--check-drawn)",
+     "summary": "review-gate.sh asks reviews owed --check-drawn right after redrawing maps not current and before --landing; a tasks.md glyph line whose element the named map's legend (current drawing only) does not hold is refused with its form and closest drawn kinds; with no map named, refused once every live legend is known and none holds it; such a line owes no unit",
+     "class": "within",
+     "why": "Option (a) of the first round's NOT LEGITIMATE ruling, built for tasks.md lines, red first (a_declared_element_its_current_drawing_does_not_hold_is_refused, review-gate r12): fixes a found defect (a declared line shipping a unit on no map) as we go (GM 2026-11-18). A stale engine's drawing is not current (the currency question reads an engine older than its sources as no engine) and falls to D9r; make map rebuilds the hamlet driver from the tree's sources (measured in a scratch clone), and a_drawing_by_an_older_engine_refuses_no_declared_new_element pins that a correctly declared new element is not refused. Item 4's scratch run's prebuilt engine is now reconciled by reading: review-gate.sh redraws by the same make map launcher that builds (Launcher build: true), the prebuilt binary a scratch set-up artifact of timestamps; stated as read, not measured end to end. That claim reads the unit from the code's change and needs no element from the drawing, so nothing in this decision turns on it."
+    },
+    {
+     "id": "D9r residual: a map whose redraw failed keeps the old behaviour",
+     "summary": "A map still not current after the redraw (a failed draw at rust-only, or a drawing by an engine older than its sources), or an unmapped element while any live legend is unknown, is left a unit on no map plus a problem line, not refused; a commit line on such a map still answers",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Physically impossible to decide, not merely awkward: with no current drawing there is nothing to tell a misnamed element from one new to the map, so a refusal there would refuse correct work (a check refusing good work is itself a defect, XIV T196 and FR-002's exception). Option (b) of last round's ruling is met for this residual: no current drawing exists at any point the gate could refuse. The two cases (named map not current; no map named while some live legend is unknown) are adjudicated separately and each fails on the same ground: the drawing that would decide does not exist. The same ground covers a commit line on a not-current map answering at --check-drawn (D9c): no drawing exists that could tell its element wrong from new."
+    },
+    {
+     "id": "D9c a commit line naming an element its map's current drawing does not hold answers nothing at --check-drawn",
+     "summary": "At --check-drawn a well-formed commit Occasion: line answers the delta only if it is no glyph line, its map is not current, or its current drawing holds the element (answers_drawn); placement code only such lines answered is refused there as undeclared; the line itself is never refused; D9r unchanged - the mapped case only; see D9c-nomap",
+     "class": "within",
+     "why": "Last round's NOT LEGITIMATE ruling met by the option it named: an undrawn-element commit line answers no undeclared code at --check-drawn, red first (1 of 161 crate tests and review-gate r13, 2 of 111, failing before answers_drawn), so placement code with only a commit line naming an element its named map does not draw no longer ships unreviewed - the check-passing-the-bad defect is fixed in this step (GM 2026-11-18). Refusing the code, not the line, keeps D7's reason: a later commit can carry a line that answers. The not-current case it leaves is D9r's residual, ruled LEGITIMATE."
+    },
+    {
+     "id": "D9c-nomap a commit glyph line naming no map, whose element no current drawing holds",
+     "summary": "At --check-drawn a no-map commit glyph line is decided as the tasks.md side decides one (undrawn for both): it answers nothing once every live legend is known and none holds the element, answers when some legend holds it, and while any live legend is unknown it is D9r and answers; pinned by a_commit_line_naming_no_map_is_decided_by_every_legend (a pin, green on the D9c code as written, said so) and in the D9c table row",
+     "class": "within",
+     "why": "Last round's NOT LEGITIMATE ruling met exactly as it asked: the rule is now stated for the no-map case in all three branches, and the pin is named and labeled as a pin rather than red-first. Placement code answered only by a no-map commit line naming an element no current legend holds is refused at --check-drawn, so the check-passing-the-bad sibling of D9c is closed in this step (GM 2026-11-18, fix all known bugs in each step). The residual while a legend is unknown is D9r's, already ruled LEGITIMATE on the same ground (no drawing exists to tell a wrong name from a new element)."
+    },
+    {
+     "id": "D10 a two-task landing answered by the started task's line",
+     "summary": "Another task's placement code in the same landing rides on the started task's declaration; no known instance (T236's --stat, its 451 T26 files no placement code); not filed",
+     "class": "within",
+     "why": "The refusal's per-delta grain, as the old pattern had; the started task's line is written by the session landing the whole delta. Nothing asks per-task attribution inside a landing. Now worded as no known instance, with its method, as asked."
+    },
+    {
+     "id": "D11 docs/guards.md's stale review-gate row left",
+     "summary": "Names the deleted review_owed.py, not placed.rs; outside this task's files; rust/gate/CLAUDE.md and review-gate.sh's comment updated",
+     "class": "within",
+     "why": "A stale documentation row is no wrong outcome under XIV (T196): no map reads wrong, no check passes the bad or refuses the good, no tool fails."
+    },
+    {
+     "id": "D12 Mode A caption placers not stage code",
+     "summary": "caption_place.rs and place.rs place captions, no element",
+     "class": "within",
+     "why": "docs/reviews.md's occasion is the re-placement of an element; captions are no census element, so nothing the occasion covers is narrowed."
+    },
+    {
+     "id": "D13 detected hamlet units set aside at rust-only and recorded",
+     "summary": "The scratch gate run sets glyph-check--field-grave--inashiro aside into dev/deferred-reviews.jsonl",
+     "class": "within",
+     "why": "Settled by feature 444 FR-023, cited in full: a glyph-check owed for a pool hamlet a Rust stage moves is not owed while the switch stands, and is owed when it is thrown back."
+    },
+    {
+     "id": "D14 sheet placeholder marks are no element",
+     "summary": "sheet_kinds leaves out data-kind '-' and the compound's title, as ink_classes does",
+     "class": "within",
+     "why": "Fixes a found defect (a sheet with an unreadable base drawing owed glyph-check----county-magistracy-example), red first. GM 2026-11-18, fix as we go."
+    },
+    {
+     "id": "D15 --check-declared slower after round 2; --check-drawn adds 56-59 ms",
+     "summary": "The cost is the delta's code read that 449's section had let the check skip, and the new legend check after the redraw",
+     "class": "within",
+     "why": "The old speed came from the defect; no timing target in the request or spec reaches these checks, and restoring a check's job is FR-002's requirement. Each figure carries a dated method label."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -28835,6 +29073,123 @@
      "class": "narrowing",
      "ruling": "LEGITIMATE",
      "why": "Whether the village stands on the landward side is a research-claim question (a possible defect, not a mere difference from the page's drawn orientation; 'east' itself is not owed). Left here and carried by filed task T240 before T158, inside the step, which is what the GM's 'fix all known bugs in each step before moving on' asks. Legitimate on that filing; if T240 finds the side reads fine and matches 0019's claim it closes by restating the claim, per the GM's 2026-11-19 rule."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T238": {
+   "section_sha256": "ed48dbeb0eeb72c7a252c37bce5ff5a8b4027e845124e0f06356dba38017a10c",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D1 stage-file refusal",
+     "summary": "A .rs under rust/phases/src/ or rust/mode_a/src/compound/ (no drawing or test file; 45 files, now carrying its find) whose non-test items' comment-free tokens changed, and a drawing file's change that redraws no element, refuse undeclared; a change that redraws owes its glyph-check from the change",
+     "class": "within",
+     "why": "Restores for the Rust placers the refusal the deleted Python's CODE pattern held (FR-002: a ported check must still do its job); T237 found the Rust stages refused nothing, a check passing the bad. Fixed as found per the GM 2026-11-18 ('fix all known bugs in each step'). The count now names its search space (find, less the tests, drawing files and driver), as asked last round."
+    },
+    {
+     "id": "D2 comments, tests, imports, types, moves do not refuse",
+     "summary": "Narrower than the old file-level pattern; a type alone is no placement (the first version refused T234's SluiceFrame)",
+     "class": "within",
+     "why": "FR-002's exception: a check refusing correct work is fixed in its port. A comment-only or type-only change re-places nothing, and refusing T234's type was measured as refusing correct work. No known instance of a type alone moving an element; a difference with no wrong outcome is no defect (XIV, T196)."
+    },
+    {
+     "id": "D3 a tasks.md declaration naming nothing, or no known occasion, refused with its form",
+     "summary": "Refused by --check-declared whatever code the delta touches; the check reads no legend",
+     "class": "within",
+     "why": "Fixes a found defect (T239: a declaration naming no element became a unit on no map). Unknown kinds are the same defect. GM 2026-11-18, fix as we go."
+    },
+    {
+     "id": "D4 a tweak's misformed Occasion: commit line is a problem line, never refused",
+     "summary": "Owes no unit and is never refused, since a pushed commit message cannot be rewritten (also for --check-drawn's undrawn element)",
+     "class": "within",
+     "why": "No defect is left: a misformed commit line owes no unrunnable unit and answers no undeclared code (D7), and the one form --check-declared cannot see before the redraw, an element its map's current drawing does not hold, answers nothing at --check-drawn (D9c), so the delta's code is refused while the line itself, which cannot be rewritten, is not."
+    },
+    {
+     "id": "D5 only the started task's own line answers",
+     "summary": "An active feature's Occasions line answers only when it owns the started task (.git/active-task), not ticked at the base, in one of three owning forms; a mention answers nothing; wrapped lines joined",
+     "class": "within",
+     "why": "Fixes the round-1 defect measured on T236's delta (other tasks' and features' sections passed undeclared placement code). Every existing task-naming line still answers its own task. GM 2026-11-18, fix as we go."
+    },
+    {
+     "id": "D6 a line already on main still answers its unticked task",
+     "summary": "A declaration pushed with the spec, before the code, names the task all the same",
+     "class": "within",
+     "why": "The declaration's unit is the task (docs/reviews.md); a stale line is excluded by the tick test. Nothing asked for a per-push declaration."
+    },
+    {
+     "id": "D7 a misformed commit line answers no undeclared code",
+     "summary": "Only a commit Occasion: line that owes a runnable review answers the delta",
+     "class": "within",
+     "why": "Fixes a found defect (Occasion: bogus: x answered undeclared code), red first. GM 2026-11-18, fix as we go."
+    },
+    {
+     "id": "D8 a map or sheet the pool does not hold refused with its form, closest names offered",
+     "summary": "Every kind with a map or sheet slot; the pool walk runs only when an unlanded line names a map; a commit line so formed is a problem line owing no unit",
+     "class": "within",
+     "why": "Fixes a found defect (well on nowhere became a unit on no map); each slotted kind is the same defect. GM 2026-11-18, fix as we go."
+    },
+    {
+     "id": "D9 an element the named map's current drawing does not hold refused after the redraw (--check-drawn)",
+     "summary": "review-gate.sh asks reviews owed --check-drawn right after redrawing maps not current and before --landing; a tasks.md glyph line whose element the named map's legend (current drawing only) does not hold is refused with its form and closest drawn kinds; with no map named, refused once every live legend is known and none holds it; such a line owes no unit",
+     "class": "within",
+     "why": "Option (a) of the first round's NOT LEGITIMATE ruling, built for tasks.md lines, red first (a_declared_element_its_current_drawing_does_not_hold_is_refused, review-gate r12): fixes a found defect (a declared line shipping a unit on no map) as we go (GM 2026-11-18). A stale engine's drawing is not current (the currency question reads an engine older than its sources as no engine) and falls to D9r; make map rebuilds the hamlet driver from the tree's sources (measured in a scratch clone), and a_drawing_by_an_older_engine_refuses_no_declared_new_element pins that a correctly declared new element is not refused. Item 4's scratch run's prebuilt engine is now reconciled by reading: review-gate.sh redraws by the same make map launcher that builds (Launcher build: true), the prebuilt binary a scratch set-up artifact of timestamps; stated as read, not measured end to end. That claim reads the unit from the code's change and needs no element from the drawing, so nothing in this decision turns on it."
+    },
+    {
+     "id": "D9r residual: a map whose redraw failed keeps the old behaviour",
+     "summary": "A map still not current after the redraw (a failed draw at rust-only, or a drawing by an engine older than its sources), or an unmapped element while any live legend is unknown, is left a unit on no map plus a problem line, not refused; a commit line on such a map still answers",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Physically impossible to decide, not merely awkward: with no current drawing there is nothing to tell a misnamed element from one new to the map, so a refusal there would refuse correct work (a check refusing good work is itself a defect, XIV T196 and FR-002's exception). Option (b) of last round's ruling is met for this residual: no current drawing exists at any point the gate could refuse. The two cases (named map not current; no map named while some live legend is unknown) are adjudicated separately and each fails on the same ground: the drawing that would decide does not exist. The same ground covers a commit line on a not-current map answering at --check-drawn (D9c): no drawing exists that could tell its element wrong from new."
+    },
+    {
+     "id": "D9c a commit line naming an element its map's current drawing does not hold answers nothing at --check-drawn",
+     "summary": "At --check-drawn a well-formed commit Occasion: line answers the delta only if it is no glyph line, its map is not current, or its current drawing holds the element (answers_drawn); placement code only such lines answered is refused there as undeclared; the line itself is never refused; D9r unchanged - the mapped case only; see D9c-nomap",
+     "class": "within",
+     "why": "Last round's NOT LEGITIMATE ruling met by the option it named: an undrawn-element commit line answers no undeclared code at --check-drawn, red first (1 of 161 crate tests and review-gate r13, 2 of 111, failing before answers_drawn), so placement code with only a commit line naming an element its named map does not draw no longer ships unreviewed - the check-passing-the-bad defect is fixed in this step (GM 2026-11-18). Refusing the code, not the line, keeps D7's reason: a later commit can carry a line that answers. The not-current case it leaves is D9r's residual, ruled LEGITIMATE."
+    },
+    {
+     "id": "D9c-nomap a commit glyph line naming no map, whose element no current drawing holds",
+     "summary": "At --check-drawn a no-map commit glyph line is decided as the tasks.md side decides one (undrawn for both): it answers nothing once every live legend is known and none holds the element, answers when some legend holds it, and while any live legend is unknown it is D9r and answers; pinned by a_commit_line_naming_no_map_is_decided_by_every_legend (a pin, green on the D9c code as written, said so) and in the D9c table row",
+     "class": "within",
+     "why": "Last round's NOT LEGITIMATE ruling met exactly as it asked: the rule is now stated for the no-map case in all three branches, and the pin is named and labeled as a pin rather than red-first. Placement code answered only by a no-map commit line naming an element no current legend holds is refused at --check-drawn, so the check-passing-the-bad sibling of D9c is closed in this step (GM 2026-11-18, fix all known bugs in each step). The residual while a legend is unknown is D9r's, already ruled LEGITIMATE on the same ground (no drawing exists to tell a wrong name from a new element)."
+    },
+    {
+     "id": "D10 a two-task landing answered by the started task's line",
+     "summary": "Another task's placement code in the same landing rides on the started task's declaration; no known instance (T236's --stat, its 451 T26 files no placement code); not filed",
+     "class": "within",
+     "why": "The refusal's per-delta grain, as the old pattern had; the started task's line is written by the session landing the whole delta. Nothing asks per-task attribution inside a landing. Now worded as no known instance, with its method, as asked."
+    },
+    {
+     "id": "D11 docs/guards.md's stale review-gate row left",
+     "summary": "Names the deleted review_owed.py, not placed.rs; outside this task's files; rust/gate/CLAUDE.md and review-gate.sh's comment updated",
+     "class": "within",
+     "why": "A stale documentation row is no wrong outcome under XIV (T196): no map reads wrong, no check passes the bad or refuses the good, no tool fails."
+    },
+    {
+     "id": "D12 Mode A caption placers not stage code",
+     "summary": "caption_place.rs and place.rs place captions, no element",
+     "class": "within",
+     "why": "docs/reviews.md's occasion is the re-placement of an element; captions are no census element, so nothing the occasion covers is narrowed."
+    },
+    {
+     "id": "D13 detected hamlet units set aside at rust-only and recorded",
+     "summary": "The scratch gate run sets glyph-check--field-grave--inashiro aside into dev/deferred-reviews.jsonl",
+     "class": "within",
+     "why": "Settled by feature 444 FR-023, cited in full: a glyph-check owed for a pool hamlet a Rust stage moves is not owed while the switch stands, and is owed when it is thrown back."
+    },
+    {
+     "id": "D14 sheet placeholder marks are no element",
+     "summary": "sheet_kinds leaves out data-kind '-' and the compound's title, as ink_classes does",
+     "class": "within",
+     "why": "Fixes a found defect (a sheet with an unreadable base drawing owed glyph-check----county-magistracy-example), red first. GM 2026-11-18, fix as we go."
+    },
+    {
+     "id": "D15 --check-declared slower after round 2; --check-drawn adds 56-59 ms",
+     "summary": "The cost is the delta's code read that 449's section had let the check skip, and the new legend check after the redraw",
+     "class": "within",
+     "why": "The old speed came from the defect; no timing target in the request or spec reaches these checks, and restoring a check's job is FR-002's requirement. Each figure carries a dated method label."
     }
    ],
    "verdict": "CLEAR"

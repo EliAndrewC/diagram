@@ -3,7 +3,9 @@
 
 use std::path::Path;
 
-use super::super::super::tests::{commit, compound, drawn, feature, hamlet, put, repo, sh};
+use super::super::super::tests::{
+    commit, compound, drawn, feature, hamlet, put, repo, sh, started,
+};
 use super::super::{all_owed, check_declared, Unit};
 use super::*;
 
@@ -308,7 +310,15 @@ fn t234s_whole_change_owes_the_sluice_gate_alone() {
         "Frame { board: vec![",
         "Frame { board: vec![(at.0, at.1), ",
     );
+    // and a type new beside it, which only the frame's drawing fills (T234's `SluiceFrame`): a redraw asks no declaration (449 T238,
+    // red first: the type, redrawing nothing by itself, was read as placement and refused undeclared)
+    polder(
+        &r,
+        "struct Frame {",
+        "struct Posts {\n    n: usize,\n}\n\nstruct Frame {",
+    );
     assert_eq!(owed(&r), ["glyph-check--sluice-gate--kuwabata"]);
+    assert!(check_declared(&r).is_none());
     // a line of a draw function above the first kind it names may feed any of its marks
     reset(&r);
     polder(
@@ -596,4 +606,54 @@ fn with_no_base_nothing_is_owed_from_the_code() {
     sh(&empty, "git init -q");
     put(&empty, &format!("{DRIVER}/polder.rs"), POLDER);
     assert!(owed(&empty).is_empty());
+}
+
+/// RED FIRST (449 T238): a change to the driver's placement - a stage function, or a line of the roll that hands the stages their
+/// ground and does not touch the writer - redraws nothing, so it owes no glyph-check; it was refused nothing either, where the deleted
+/// Python's placement code was refused until the feature declared its occasions (T239's seat ring, in `roll_polder`). It is refused
+/// undeclared, naming the file; a drawing change beside it still owes its glyph-check; a comment or a test is no change.
+#[test]
+fn a_change_to_the_drivers_placement_is_refused_until_an_occasion_is_declared() {
+    let r = world("placed");
+    polder(&r, "(i as f64, 0.0)", "(i as f64, 1.0)");
+    assert!(owed(&r).is_empty());
+    assert!(check_declared(&r).unwrap().starts_with(
+        "drawing or placement code moved (rust/phases/src/driver/polder.rs) and no declaration answers"
+    ));
+    started(&r, "900-x", "T1");
+    feature(
+        &r,
+        "900-x",
+        "- [ ] T1\n\n## Occasions\n\n- none: T1 - the stage's own roll\n",
+    );
+    assert!(check_declared(&r).is_none());
+    sh(&r, "rm -rf specs .specify");
+    reset(&r);
+    polder(
+        &r,
+        "let s = stage_polder(n);",
+        "let s = stage_polder(n + 1);",
+    );
+    assert!(owed(&r).is_empty());
+    assert!(check_declared(&r).is_some());
+    polder(
+        &r,
+        "SLUICE_SPAN_FT: f64 = 20.0",
+        "SLUICE_SPAN_FT: f64 = 24.0",
+    );
+    assert_eq!(owed(&r), ["glyph-check--sluice-gate--kuwabata"]);
+    assert!(check_declared(&r).is_some());
+    reset(&r);
+    polder(
+        &r,
+        "// the frame across its channel",
+        "// the frame across the channel it shuts",
+    );
+    polder(
+        &r,
+        "svg.kind(\"only tested\");",
+        "svg.kind(\"only tested again\");",
+    );
+    edit(&r, &format!("{DRIVER}/tests.rs"), "\"x\"", "\"y\"");
+    assert!(check_declared(&r).is_none());
 }

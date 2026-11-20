@@ -4,7 +4,7 @@
 //! feature's `## Occasions` section (or a tweak's `Occasion:` commit line) declares. The reasons behind each rule stand in the
 //! Python's comments, kept in git history; the words a person reads are the Python's.
 //!
-//! `l7r-gate reviews owed [--root DIR] [--why | --units | --undrawn | --check-declared | --glyph-gate SLUG | --glyph-dispatched SLUG |
+//! `l7r-gate reviews owed [--root DIR] [--why | --units | --undrawn | --check-declared | --check-drawn | --glyph-gate SLUG | --glyph-dispatched SLUG |
 //! --landing-mark on|off] [--landing] [--escaped]`.
 
 use std::collections::{BTreeMap, BTreeSet};
@@ -51,9 +51,10 @@ pub(super) fn re(pattern: &str) -> Regex {
 }
 
 static DATA_KIND: LazyLock<Regex> = LazyLock::new(|| re(r#"data-kind="([^"]+)""#));
-/// Drawing or placement code - never the incremental gate in `l7r/diagram/ci/`, which draws and places nothing. The Rust engines'
-/// drawing code is not here: a change to it owes the glyph-check of each element it redraws, read from the change (`redrawn`, 449
-/// T237), so it is never refused for want of an Occasions line.
+/// Drawing or placement code - never the incremental gate in `l7r/diagram/ci/`, which draws and places nothing. The Rust engines' code
+/// is not here: a change that redraws an element owes its glyph-check, read from the change (`redrawn`, 449 T237), and is refused
+/// nothing for it; a change that redraws no element - a Rust stage, the compound's layout, the driver's own placement - is refused
+/// undeclared as these paths are (`redrawn::placed`, 449 T238).
 // a pool map's drawing is its spec - a hamlet's `.spec.json`, a compound's `.compound.json`, a hand sheet's `.svg` - since feature 449 T221
 // deleted the `.gen.py` files that wrapped them
 static CODE: LazyLock<Regex> = LazyLock::new(|| {
@@ -296,12 +297,14 @@ pub fn ink_classes(text: Option<&str>) -> BTreeSet<String> {
     }
 }
 
-/// The `data-kind`s a Mode A sheet's SVG tags.
+/// The `data-kind`s a Mode A sheet's SVG tags, less what is no element (its placeholder marks `-`, the compound's title among them: read
+/// as an element, a sheet whose base could not be read owed `glyph-check----<sheet>` and `size-audit--`, units nobody can run, 449 T238).
 pub fn sheet_kinds(text: Option<&str>) -> BTreeSet<String> {
     DATA_KIND
         .captures_iter(text.unwrap_or(""))
         .map_while(Result::ok)
         .filter_map(|c| c.get(1).map(|m| m.as_str().to_owned()))
+        .filter(|k| !NOT_ELEMENTS.contains(&k.as_str()))
         .collect()
 }
 
@@ -708,36 +711,64 @@ pub fn owed(root: &Path, landing: bool) -> (String, Vec<Unit>, Vec<String>) {
     (desc, kept, problems)
 }
 
-/// Drawing or placement code the delta touches (committed, staged, unstaged or untracked), less what it only moved.
-fn touched_code(root: &Path, base: &str) -> Vec<String> {
-    let names: BTreeSet<String> = redrawn::delta_paths(root, base)
-        .into_iter()
+/// Drawing or placement code the delta touches (committed, staged, unstaged or untracked), less what it only moved: `CODE`'s paths,
+/// and the Rust engines' placement code whose code changed (`redrawn::placed`, 449 T238).
+pub(super) fn touched_code(root: &Path, base: &str) -> Vec<String> {
+    let delta = redrawn::delta_paths(root, base);
+    let mut names: BTreeSet<String> = delta
+        .iter()
         .filter(|p| found(&CODE, p) && !p.contains("/tests/"))
+        .cloned()
         .collect();
+    names.extend(redrawn::placed(root, base, &delta));
     let listed: Vec<String> = names.iter().cloned().collect();
     let moved = moved_only(root, base, &listed);
     names.into_iter().filter(|n| !moved.contains(n)).collect()
 }
 
-/// The refusal when drawing or placement code moved and no active feature declares its occasions, else None.
+/// The refusal when drawing or placement code moved and no declaration answers this delta - a line of an active feature's `## Occasions`
+/// naming the task the landing holds, or a commit's `Occasion:` line (449 T238 round 2: before, any section answered, one whose lines
+/// had all landed or another feature's) - or when a declaration's form owes nothing anyone can run (449 T238: it read as declared, so
+/// nothing was refused, and its unit, on no map, could not be dispatched), else None. Neither reads a legend: what a declaration names
+/// is read from its words and the pool's folder names.
 #[must_use]
 pub fn check_declared(root: &Path) -> Option<String> {
     let (base, _) = base_of(root);
-    let code = touched_code(root, &base);
-    if code.is_empty() || declared(&Tree::read(root), &base).any_section {
-        return None;
+    let forms = declared::forms(root, &base);
+    let mut out: Vec<String> = Vec::new();
+    if !forms.misformed.is_empty() {
+        out.push(format!(
+            "an `## Occasions` declaration owes a review nobody can run: {}",
+            forms.misformed.join("; ")
+        ));
     }
+    let code = if forms.answered || !forms.tweak.is_empty() {
+        Vec::new()
+    } else {
+        touched_code(root, &base)
+    };
+    if !code.is_empty() {
+        out.push(undeclared(&code, &forms.why, &forms.task));
+    }
+    (!out.is_empty()).then(|| out.join("\n"))
+}
+
+/// The refusal's words for drawing or placement code moved with nothing declared for it: why no line answers, and the line to write,
+/// naming the started task (`task`, or `<task>`).
+pub(super) fn undeclared(code: &[String], why: &str, task: &str) -> String {
     let mut shown = code.iter().take(5).cloned().collect::<Vec<_>>().join(", ");
     if code.len() > 5 {
         let _ = write!(shown, " and {} more", code.len() - 5);
     }
-    Some(format!(
-        "drawing or placement code moved ({shown}) and no active feature's tasks.md has an `## Occasions` section, nor any commit \
-         of the delta an `Occasion:` line. Declare what the change re-places or redraws - `- placement-changed: <class>` (or `<class> on <map>` for the map it moved), \
-         `- glyph-redrawn: <class>`, ... or `- none: <why>` in the feature's tasks.md; a tweak with no feature puts \
-         `Occasion: glyph-redrawn: <class> - <why>` in its commit message \
-         (feature 294: whether a change is substantial is the feature's to declare, never silent)"
-    ))
+    let t = if task.is_empty() { "<task>" } else { task };
+    format!(
+        "drawing or placement code moved ({shown}) and no declaration answers this delta: {why}. Declare what the change re-places \
+         or redraws on a line of the started task's feature's `## Occasions`, naming the task - `- placement-changed: <element> on \
+         <map> - {t}: <why>`, `- glyph-redrawn: <element> on <map> - {t}: <why>`, ... or `- none: {t} - <why>`; a tweak with no \
+         feature puts `Occasion: none: <why>` (or `Occasion: glyph-redrawn: <element> - <why>`) in its commit message (feature 294: \
+         whether a change is substantial is the feature's to declare, never silent; 449 T238: a section naming only other tasks, or \
+         whose lines have all landed, answers nothing)"
+    )
 }
 
 /// The one-line answer a person or a guard message quotes.
@@ -762,11 +793,12 @@ pub fn ruling(desc: &str, units: &[Unit], problems: &[String]) -> String {
     }
 }
 
-const MODES: [&str; 7] = [
+const MODES: [&str; 8] = [
     "--why",
     "--units",
     "--undrawn",
     "--check-declared",
+    "--check-drawn",
     "--glyph-gate",
     "--glyph-dispatched",
     "--landing-mark",
@@ -785,6 +817,7 @@ pub fn cli(args: &[String]) -> Reply {
         Spec::flag("--units"),
         Spec::flag("--undrawn"),
         Spec::flag("--check-declared"),
+        Spec::flag("--check-drawn"),
         Spec::value("--glyph-gate"),
         Spec::value("--glyph-dispatched"),
         Spec::value("--landing-mark"),
@@ -798,7 +831,7 @@ pub fn cli(args: &[String]) -> Reply {
     };
     if p.on("--help") {
         return reply(
-            "usage: l7r-gate reviews owed [--root DIR] [--why | --units | --undrawn | --check-declared | --glyph-gate SLUG | --glyph-dispatched SLUG | --landing-mark {on,off}] [--landing] [--escaped]\n".to_owned(),
+            "usage: l7r-gate reviews owed [--root DIR] [--why | --units | --undrawn | --check-declared | --check-drawn | --glyph-gate SLUG | --glyph-dispatched SLUG | --landing-mark {on,off}] [--landing] [--escaped]\n".to_owned(),
             String::new(),
             0,
         );
@@ -836,8 +869,15 @@ pub fn cli(args: &[String]) -> Reply {
 }
 
 fn run(root: &Path, p: &crate::record::args::Parsed, mark: &str) -> Reply {
-    if p.on("--check-declared") {
-        return check_declared(root).map_or_else(
+    let check = if p.on("--check-declared") {
+        Some(check_declared as fn(&Path) -> Option<String>)
+    } else if p.on("--check-drawn") {
+        Some(check_drawn as fn(&Path) -> Option<String>)
+    } else {
+        None
+    };
+    if let Some(check) = check {
+        return check(root).map_or_else(
             || reply(String::new(), String::new(), 0),
             |r| reply(r + "\n", String::new(), 1),
         );
@@ -914,9 +954,9 @@ fn run(root: &Path, p: &crate::record::args::Parsed, mark: &str) -> Reply {
 mod declared;
 pub mod deferred;
 mod redrawn;
-pub use declared::declared;
 #[cfg(test)]
 pub use declared::occasions_section;
+pub use declared::{check_drawn, declared};
 
 #[cfg(test)]
 mod tests;

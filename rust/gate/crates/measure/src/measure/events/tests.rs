@@ -264,3 +264,27 @@ fn events_load_deduplicated_and_in_time_order() {
         .unwrap_err()
         .starts_with("TypeError"));
 }
+
+/// Feature 451 T04 (D3, D4): a `BgEnd` and a `Phase` line are set aside from the stream, returned in time order inside the window, two
+/// `Phase` lines of one session and second both kept (the stream's key would have made them one), a line read twice kept once.
+#[test]
+fn the_new_line_kinds_are_set_aside_from_the_stream() {
+    let d = crate::checks::scratch("measure-events-aside");
+    let lines = [
+        json!({"t": "2026-11-01T08:00:00Z", "sid": "s", "ev": "PreToolUse", "tool": "Bash", "id": "b1"}),
+        json!({"t": "2026-11-01T08:00:30.5Z", "sid": "s", "ev": "Phase", "step": "test", "crates": ["rust/a"]}),
+        json!({"t": "2026-11-01T08:00:30.2Z", "sid": "s", "ev": "Phase", "step": "build", "crates": ["rust/a"]}),
+        json!({"t": "2026-11-01T08:01:00Z", "sid": "s", "ev": "PostToolUse", "tool": "Bash", "id": "b1", "bg": "bx1"}),
+        json!({"t": "2026-11-01T08:09:00Z", "sid": "s", "ev": "BgEnd", "id": "b1", "bg": "bx1", "exit": 0}),
+        json!({"t": "2026-11-02T00:00:00Z", "sid": "s", "ev": "BgEnd", "id": "b2"}),
+    ]
+    .map(|v| v.to_string())
+    .join("\n");
+    let a = put(&d, "a.jsonl", &lines);
+    let b = put(&d, "b.jsonl", &lines);
+    let got = load_all(&[a, b], &[], "", "2026-11-01T23").unwrap();
+    let evs = |list: &[Event]| list.iter().map(|e| s(e, "ev")).collect::<Vec<_>>();
+    assert_eq!(evs(&got.stream), ["PreToolUse", "PostToolUse"]);
+    assert_eq!(evs(&got.aside), ["Phase", "Phase", "BgEnd"]);
+    assert_eq!(s(&got.aside[0], "step"), "build");
+}

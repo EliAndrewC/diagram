@@ -28,7 +28,22 @@ lives.
 
 **The declaration.** Every feature that touches drawing or placement code carries an `## Occasions` section in its `tasks.md`,
 one `- <occasion>: <argument>` line each, or `- none: <why>` - whether a change is substantial is the feature's call to
-DECLARE; a delta that touches drawing or placement code with no section is refused at push (`review-gate.sh`). A TWEAK -
+DECLARE; a delta that touches drawing or placement code is refused at push (`review-gate.sh`) until a declaration answers THAT
+delta: a line naming the task the landing holds (the clone's started task, `make task-start`, not ticked on main - `- none: T238 -
+<why>`, `- placement-changed: <element> on <map> - T238: <why>`, or a trailing `(... T238)`: the task the line's OWN, a mere
+mention inside another task's line answering nothing; a line already on main naming it counts), or a commit's `Occasion:`
+line owing a review someone can run. A section naming only other tasks, or another feature's, answers nothing (449 T238 round 2: before, any section did). The placement code
+is the Rust stages too - `rust/phases/src/` outside the driver and `rust/mode_a/src/compound/` beside its marks, a change to any
+non-test item - and any change of the engines' drawing code that redraws no element (a stage function in the driver, a roll's line
+handing the stages their ground), as the deleted Python's placement code was (449 T238, `owed/redrawn/placed.rs`); a comment, a test,
+a type or a file only moved is no change, and a change that redraws an element owes its glyph-check from the change and asks nothing.
+A `tasks.md` line that names no element, map, sheet or reason (`- placement-changed: - on kuwabata`), a map or sheet the pool does
+not hold (`- glyph-redrawn: well on nowhere`, refused naming the pool's closest names), or no known occasion, is refused with its form,
+never turned into a unit nobody can run; so is a glyph line naming an element its map's CURRENT drawing does not hold, refused after
+the gate redraws the maps not current (`reviews owed --check-drawn`, naming the map's closest drawn kinds; a map still not current is
+left, the element maybe new to it), and there a commit `Occasion:` line naming such an element answers nothing, so placement code
+only such lines declared is refused as undeclared; a commit's `Occasion:` line so formed owes nothing, answers nothing and is a problem
+line, never refused, since a commit message cannot be rewritten (449 T238). A TWEAK -
 a change done directly, with no spec-kit feature - declares in its commit message instead, one `Occasion: <occasion>: <argument>`
 line (GM 2026-10-01, the household shrine's torii); and a landed feature's section is not read again once every task is ticked; a feature that lands batch by batch owes only the lines its batch added, a line already on main having been judged at its push (feature 374 batch 4). The research
 behind the table is `specs/294-settlement-review-rethink/research.md` R1: every check of the three contracts sorted by what it

@@ -399,3 +399,43 @@ fn the_seventeenth_was_the_gm_away() {
     );
     assert!(t.agents.is_empty());
 }
+
+/// Feature 451 T04 (FR-002, plan D3, D4): the two line kinds the readers do not read yet - a background run's `BgEnd` and a make run's
+/// `Phase` - leave `make where-time` and `make feature-report` as they were until T08 and T09 read them. Read as events, a `Phase` line
+/// inside a Bash call splits the call's gap and books its rest to whatever the gap after a `Phase` is, a `BgEnd` splits a wait between
+/// turns, and a `Phase` line with no session forms a session of its own (the T207 failure).
+#[test]
+fn a_background_end_and_a_phase_line_leave_the_tables_as_they_were() {
+    let d = tree("measure-where-aside");
+    let root = d.display().to_string();
+    let e = super::super::feature_report::tests::env(&d);
+    let none = Path::new("/nonexistent");
+    let tables = || {
+        let where_time = cli(&args(&["901", "--root", &root]), &d.join("home"), none);
+        let report = super::super::feature_report::cli(&args(&["--root", &root, "901"]), &e, none);
+        assert_eq!((where_time.code, report.code), (0, 0));
+        // the report's own build time is the one line that differs run to run
+        let report: Vec<String> = report
+            .stdout
+            .lines()
+            .filter(|l| !l.starts_with("This report took"))
+            .map(str::to_owned)
+            .collect();
+        (where_time.stdout, report)
+    };
+    let before = tables();
+    let log = d.join(".git/l7r-events/901-s.jsonl");
+    let mut text = std::fs::read_to_string(&log).unwrap();
+    for line in [
+        // inside the Bash call b1 (08:03:00 to 08:04:00)
+        json!({"t": at("08:03:30"), "sid": "s", "ev": "Phase", "src": "rust", "step": "build", "crates": ["rust/guard"], "t0": at("08:03:01"), "t1": at("08:03:30"), "code": 0}),
+        // in the wait between the Stop at 08:05:03 and the agent's stop at 08:15:00
+        json!({"t": at("08:10:00"), "sid": "s", "ev": "BgEnd", "id": "b1", "bg": "bx1", "status": "completed", "exit": 0, "make": "map", "cat": "tests", "t0": at("08:03:00")}),
+        // a gate tool's line with no session to name
+        json!({"t": at("09:30:00"), "sid": "", "ev": "Phase", "src": "rust", "step": "test", "crates": ["rust/guard"], "t0": at("09:29:00"), "t1": at("09:30:00"), "code": 0}),
+    ] {
+        let _ = writeln!(text, "{line}");
+    }
+    std::fs::write(&log, text).unwrap();
+    assert_eq!(tables(), before);
+}

@@ -57,6 +57,8 @@ MVP: T001-T005 and the first guard, `pair-hooks` (T006): the dispatcher in every
       research: rendering
 - [ ] T241 A claims bundle leaves out a page its claims cite (found by impl-drift on T239, 2026-11-20): off_the_dike's claims cite research/questions/0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html, but the bundle held only 0019 and 0081, so the dike figures were judged without the page they cite and a later edit of 0027 cannot re-check them by block - a check passing unchecked; every page a bundled claim cites is in its bundle (or the bundle refuses, naming the page), red first; lands before T158
       research: rendering
+- [ ] T242 make plan-verdict writes a reviewer's words into plan-review.json without the house style, so a British spelling in a decision id (the British form of 'behavior', in T238's round-2 verdict, 2026-11-20) turns the next make quick red on a file no builder may edit - the record writer applies the house-style correction (spelling, dashes) to the text it writes, red first; lands before T158
+      research: rendering
 - [ ] GM review (make gm-reviewed F=449) [lands-open]
       research: rendering
       verify: the GM reviewed every row (make gm-review lists them)

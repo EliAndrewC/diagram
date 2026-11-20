@@ -237,6 +237,15 @@ pub(super) fn feature(root: &Path, name: &str, tasks: &str) {
     );
 }
 
+/// The clone's started task (`make task-start F=<feature> T=<task>`): its mark in the git common directory, as `task_start.rs` writes it.
+pub(super) fn started(root: &Path, feature: &str, task: &str) {
+    put(
+        root,
+        ".git/active-task",
+        &format!("{}\n", json!({"feature": feature, "task": task})),
+    );
+}
+
 /// The feature's event log: one event a row, `(seconds ago, ev, gm)`.
 pub(super) fn events(root: &Path, feature: &str, rows: &[(i64, &str, bool)]) {
     let now = l7r_guard::shared::checks::now();

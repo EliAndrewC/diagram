@@ -717,3 +717,5 @@ fn a_line_nothing_names_is_filed_by_feature_json_and_marked() {
     .unwrap();
     assert_eq!(last_line(&log).get("fallback"), Some(&json!(true)));
 }
+
+mod background;

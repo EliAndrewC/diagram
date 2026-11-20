@@ -407,17 +407,46 @@ fn key_text(v: &Value) -> String {
     v.to_string()
 }
 
-/// `load_events`: the events of every source, deduplicated, in time order, inside [since, until].
+/// The line kinds no hook event wrote (feature 451 T04, plan D3, D4): a background run's `BgEnd` and a gate tool's `Phase`. They are SET
+/// ASIDE from the time-gap stream every table reads, because a table books the gap between two events of a session: read as events, a
+/// `Phase` line inside a `make static` call would book the rest of the call to whatever follows a `Phase`, a `BgEnd` would split a wait
+/// between turns in two, and a `Phase` line of no session would form a session of its own (the T207 failure). T08 and T09 read them.
+pub const ASIDE: [&str; 2] = ["BgEnd", "Phase"];
+
+/// The events, and the lines set aside from them.
+#[derive(Debug, Default)]
+pub struct Loaded {
+    /// The time-gap stream: deduplicated, in time order (`load_events`).
+    pub stream: Vec<Event>,
+    /// The [`ASIDE`] kinds inside the window, in time order, a line repeated whole (one log read twice) kept once.
+    pub aside: Vec<Event>,
+}
+
+/// `load_events`: the events of every source, deduplicated, in time order, inside [since, until] - [`ASIDE`]'s kinds not among them.
 ///
 /// # Errors
 ///
-/// A source that cannot be read, a line or row that is no object, or an event whose time is no text: the Python's raise.
+/// As [`load_all`].
 pub fn load_events(
     logs: &[PathBuf],
     transcripts: &[PathBuf],
     since: &str,
     until: &str,
 ) -> Result<Vec<Event>, Raised> {
+    Ok(load_all(logs, transcripts, since, until)?.stream)
+}
+
+/// The events of every source and the lines set aside from them ([`Loaded`]).
+///
+/// # Errors
+///
+/// A source that cannot be read, a line or row that is no object, or an event whose time is no text: the Python's raise.
+pub fn load_all(
+    logs: &[PathBuf],
+    transcripts: &[PathBuf],
+    since: &str,
+    until: &str,
+) -> Result<Loaded, Raised> {
     let open = |p: &Path| read_jsonl(p).map_err(|e| format!("OSError: {}: {e}", p.display()));
     let mut rows: Vec<Event> = Vec::new();
     for p in logs {
@@ -433,6 +462,8 @@ pub fn load_events(
     }
     let mut seen: HashMap<Key, usize> = HashMap::new();
     let mut out: Vec<Event> = Vec::new();
+    let mut aside: Vec<Event> = Vec::new();
+    let mut aside_seen: std::collections::HashSet<String> = std::collections::HashSet::new();
     for e in rows {
         let t = or_s(&e, "t");
         // A ROW NAMING NO EVENT IS NO EVENT (T207): `{"sid": "", "ev": ""}` rows, which a test's empty payload (and on 11-08 the
@@ -448,6 +479,13 @@ pub fn load_events(
         if !get(&e, "t").is_string() {
             return Err("TypeError: an event's time is no text".to_owned());
         }
+        if ASIDE.iter().any(|k| is(&e, "ev", k)) {
+            // a `Phase` line has no id, and two steps of one session can end in one second: kept unless repeated whole
+            if aside_seen.insert(Value::Object(e.clone()).to_string()) {
+                aside.push(e);
+            }
+            continue;
+        }
         let ev = key_text(get(&e, "ev"));
         let key = if on(&e, "id") {
             Key::Two(ev, key_text(get(&e, "id")))
@@ -462,7 +500,8 @@ pub fn load_events(
         }
     }
     out.sort_by(|a, b| t_text(a).cmp(t_text(b)));
-    Ok(out)
+    aside.sort_by(|a, b| t_text(a).cmp(t_text(b)));
+    Ok(Loaded { stream: out, aside })
 }
 
 #[cfg(test)]

@@ -332,12 +332,71 @@ echo 'X = 1' > l7r/placer.py
 printf -- '- [x] T01 the placer\n      research: rendering\n' > specs/901-r/tasks.md
 echo '{"feature_directory":"specs/901-r"}' > .specify/feature.json; git add -A; git commit -qm placer
 check "placement code moved with no Occasions section in the active feature: refused" r3 blocked
-printf -- '## Occasions\n\n- none: a refactor, every element placed under rules already judged\n\n- [x] T01 the placer\n      research: rendering\n' > "$T/r3/specs/901-r/tasks.md"
-( cd "$T/r3" && git add -A && git commit -qm declared )
+# GUARD_EDIT_OK: feature 449 T238 round 2 - a section answers the delta only by a line naming the started task (`make task-start`)
+printf -- '## Occasions\n\n- none: T01 - a refactor, every element placed under rules already judged\n\n- [x] T01 the placer\n      research: rendering\n' > "$T/r3/specs/901-r/tasks.md"
+( cd "$T/r3" && printf '{"feature": "901-r", "task": "T01"}\n' > .git/active-task && git add -A && git commit -qm declared )
 check "...and shipped once the feature declares its occasions" r3 ok
 printf -- '## Occasions\n\n- placement-changed: farmhouse\n\n- [x] T01 the placer\n      research: rendering\n' > "$T/r3/specs/901-r/tasks.md"
 ( cd "$T/r3" && git add -A && git commit -qm re-placed )
 check "...but a declared re-placement owes its glyph check (the GM's tannery)" r3 blocked
+# GUARD_EDIT_OK: feature 449 T238 - RED FIRST: a Rust stage's placement change (`rust/phases/src/` outside the driver, the compound's
+# layout) owed nothing and refused nothing, where the deleted Python's placement code was refused until the feature declared
+mkrepo r7 withmap; mkdir -p rust/phases/src; printf 'const GAP_FT: f64 = 7.0;\n' > rust/phases/src/seat.rs; git add -A; git commit -qm stage
+git update-ref refs/remotes/origin/main HEAD; printf 'const GAP_FT: f64 = 8.0;\n' > rust/phases/src/seat.rs; git add -A; git commit -qm "the seat's gap"
+check "a Rust stage's placement change with no Occasions: refused" r7 blocked
+has "...naming the stage" r7 'grep -q "drawing or placement code moved (rust/phases/src/seat.rs)" <<<"$(said r7)"'
+( cd "$T/r7" && git commit -q --allow-empty -m "declared" -m "Occasion: none: the gap a guess moved, no element re-placed" )
+check "...and shipped once an occasion is declared" r7 ok
+mkrepo r8 withmap; mkdir -p rust/phases/src; printf 'const GAP_FT: f64 = 7.0;\n' > rust/phases/src/seat.rs; git add -A; git commit -qm stage
+git update-ref refs/remotes/origin/main HEAD; printf '// the seat\nconst GAP_FT: f64 = 7.0;\n' > rust/phases/src/seat.rs; git add -A; git commit -qm "a comment"
+check "...a comment on a Rust stage owes no declaration" r8 ok
+# GUARD_EDIT_OK: feature 449 T238 - RED FIRST: a declaration naming no element became the unit `glyph-check--`, on no map, which no
+# check can be dispatched for; it is refused with its form, with no code touched
+mkrepo r9 withmap; mkdir -p .specify specs/901-r
+printf -- '## Occasions\n\n- placement-changed: - on m\n\n- [ ] T01 the placer\n      research: rendering\n' > specs/901-r/tasks.md
+echo '{"feature_directory":"specs/901-r"}' > .specify/feature.json; git add -A; git commit -qm declared
+check "a declaration naming no element: refused" r9 blocked
+has "...with its form, never as an owed unit glyph-check--" r9 'o="$(said r9)"; grep -q "names no element - write it \`- placement-changed: <element>\`" <<<"$o" && ! grep -q "glyph-check-- is owed" <<<"$o"'
+printf -- '## Occasions\n\n- placement-changed: farmhouse on m\n\n- [ ] T01 the placer\n      research: rendering\n' > "$T/r9/specs/901-r/tasks.md"
+( cd "$T/r9" && git add -A && git commit -qm fixed && mkdir -p .git/review-verdicts \
+  && echo '{"map":"glyph-check--farmhouse--m","engine_key":"k","verdict":"PASS","findings":[]}' > .git/review-verdicts/glyph-check--farmhouse--m.json )
+check "...and shipped once it names the element and its review passed" r9 ok
+# GUARD_EDIT_OK: feature 449 T238 round 2 - RED FIRST: any `## Occasions` section silenced the refusal - one whose every line had landed,
+# another task's (T236's commit replayed undeclared, 444's and 451's sections in place); only a line naming the started task answers
+mkrepo r10 withmap; mkdir -p .specify specs/901-r specs/902-o rust/phases/src; printf 'const GAP_FT: f64 = 7.0;\n' > rust/phases/src/seat.rs
+printf -- '- [ ] T05 other work\n\n## Occasions\n\n- none: tooling only - no map feature, glyph or placement rule\n' > specs/902-o/tasks.md
+printf -- '- [x] T01 the old placer\n- [ ] T02 the seat\n      research: rendering\n\n## Occasions\n\n- none: T01 - a refactor\n' > specs/901-r/tasks.md
+echo '{"feature_directory":"specs/901-r"}' > .specify/feature.json; git add -A; git commit -qm sections; git update-ref refs/remotes/origin/main HEAD
+printf 'const GAP_FT: f64 = 8.0;\n' > rust/phases/src/seat.rs; sed -i 's/^- \[ \] T05/- [x] T05/' specs/902-o/tasks.md
+printf '{"feature": "901-r", "task": "T02"}\n' > .git/active-task; git add -A; git commit -qm "the seat's gap"
+check "placement code under sections naming only other tasks, their lines landed: refused" r10 blocked
+has "...naming the started task a line must name" r10 'grep -q "the started task, specs/901-r T02 (\`make task-start\`), is named by no line" <<<"$(said r10)"'
+printf -- '- none: T02 - the gap a guess moved, no element re-placed\n' >> "$T/r10/specs/901-r/tasks.md"
+( cd "$T/r10" && git add -A && git commit -qm declared )
+check "...and shipped once a line names the started task" r10 ok
+# GUARD_EDIT_OK: feature 449 T238 round 2 - RED FIRST: a declaration naming no pool map (`farmhouse on mm`) became a unit on no map; a
+# map's name is checked with no redraw, and refused with its form, naming the pool's closest maps
+mkrepo r11 withmap; mkdir -p .specify specs/901-r
+printf -- '## Occasions\n\n- placement-changed: farmhouse on mm\n\n- [ ] T01 the placer\n      research: rendering\n' > specs/901-r/tasks.md
+echo '{"feature_directory":"specs/901-r"}' > .specify/feature.json; git add -A; git commit -qm declared
+check "a declaration naming no pool map: refused" r11 blocked
+has "...with its form and the pool's closest map, owing no unit" r11 'o="$(said r11)"; grep -q "names \`mm\`, no pool map or sheet - the closest: m" <<<"$o" && ! grep -q "glyph-check--farmhouse is owed" <<<"$o"'
+# GUARD_EDIT_OK: feature 449 T238 round 2 (the plan review's D9) - RED FIRST: a declared element the map's current drawing does not hold
+# (`farmhous on m`) became a unit on no map nobody can run; after the redraw the legend is known, and the line is refused with its form
+mkrepo r12 withmap; mkdir -p .specify specs/901-r
+printf -- '## Occasions\n\n- glyph-redrawn: farmhous on m - T01\n\n- [ ] T01 the placer\n      research: rendering\n' > specs/901-r/tasks.md
+echo '{"feature_directory":"specs/901-r"}' > .specify/feature.json; git add -A; git commit -qm declared
+check "a declared element the map's drawing does not hold: refused" r12 blocked
+has "...with its form and the map's closest drawn kind, owing no unit" r12 'o="$(said r12)"; grep -q "names \`farmhous\`, which m.s drawing does not hold - its closest drawn kinds: farmhouse" <<<"$o" && ! grep -q "glyph-check--farmhous is owed" <<<"$o"'
+# GUARD_EDIT_OK: feature 449 T238 round 2 (the plan review's D9c) - RED FIRST: a commit `Occasion:` line naming an element its map does
+# not draw answered the delta's placement code and, owing no unit after D9, shipped it unreviewed; once drawn it answers nothing
+mkrepo r13 withmap; mkdir -p rust/phases/src; printf 'const GAP_FT: f64 = 7.0;\n' > rust/phases/src/seat.rs; git add -A; git commit -qm stage
+git update-ref refs/remotes/origin/main HEAD; printf 'const GAP_FT: f64 = 8.0;\n' > rust/phases/src/seat.rs; git add -A
+git commit -qm "the seat's gap" -m "Occasion: placement-changed: farmhous on m - the gap"
+check "placement code answered only by a commit line naming an element the map does not draw: refused" r13 blocked
+has "...as undeclared, after the redraw" r13 'grep -q "commit lines name only elements their maps. current drawings do not hold" <<<"$(said r13)"'
+( cd "$T/r13" && git commit -q --allow-empty -m "declared" -m "Occasion: none: the gap a guess moved, no element re-placed" )
+check "...and shipped once a commit line answers it" r13 ok
 
 mkrepo g; echo "# spec" > specs/900-x/spec.md; git add -A; git commit -qm s
 if ( cd "$T/g" && REVIEW_GATE_OK="superseded before implementation" "$GATE" main..HEAD >/dev/null 2>&1 ); then

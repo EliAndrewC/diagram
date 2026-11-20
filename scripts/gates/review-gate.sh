@@ -151,8 +151,11 @@ done
 # record at the engine key being pushed (feature 240's record, per unit since this feature). A map that moved and owes
 # nothing ships. The notes-file touch that stood in for a review on a never-reviewed map (2026-07-27) and the
 # rendering-only waiver (feature 248) went with the manifest trigger. And a delta that touches drawing or placement code
-# with no `## Occasions` section in any active feature is refused: whether a change is substantial is the feature's call
-# to DECLARE, never to leave silent (the GM's tannery example).
+# is refused until a declaration answers it: whether a change is substantial is the feature's call to DECLARE, never to
+# leave silent (the GM's tannery example). GUARD_EDIT_OK: feature 449 T238 round 2 - only a line of an active feature's
+# `## Occasions` whose own task is the started one (`make task-start`; `- none: T238 - <why>`, `- <kind>: <subject> - T238:
+# <why>`, or a trailing `(... T238)`), or a commit `Occasion:` line owing a review someone can run, answers it: any section
+# did before - one whose lines had all landed, another task's or feature's - and passed undeclared placement code.
 undeclared="$("$RG_HERE/l7r-gate.sh" reviews owed --root "$ROOT" --check-declared 2>/dev/null)"
 if [ -n "$undeclared" ]; then
   printf '\n\033[1mREVIEW GATE: the delta does not declare its occasions.\033[0m\n'
@@ -214,6 +217,18 @@ if [ -n "$undrawn" ]; then
       fail="$fail $at"; rules="$rules map-redraw-not-current"
     done < <("$RG_HERE/l7r-gate.sh" reviews owed --root "$ROOT" --undrawn 2>/dev/null)
   fi
+fi
+# GUARD_EDIT_OK: feature 449 T238 round 2 (the plan review's D9) - A DECLARED ELEMENT ITS MAP DOES NOT DRAW IS REFUSED HERE, after the
+# redraw: a glyph line naming an element the map's current drawing does not hold (`farmhous on m`) became a unit on no map that nobody
+# can run. `--check-declared` above runs before the redraw and cannot tell a stale drawing from a wrong name; here each map's legend is
+# its current drawing, and a map still not current is left as it was (the element may be new to it). And (D9c) a delta whose
+# placement code only commit `Occasion:` lines naming such elements answered is refused here as undeclared: the line owes no unit,
+# so the code would ship unreviewed. The redraw above builds the engine from this tree's sources (`make map`, measured 2026-11-20).
+misdrawn="$("$RG_HERE/l7r-gate.sh" reviews owed --root "$ROOT" --check-drawn 2>/dev/null)"
+if [ -n "$misdrawn" ]; then
+  printf '\n\033[1mREVIEW GATE: a declaration names an element its map does not draw.\033[0m\n'
+  printf '%s\n' "$misdrawn"
+  fail="$fail occasions-drawn"; rules="$rules occasions-undrawn"
 fi
 owed_units="$("$RG_HERE/l7r-gate.sh" reviews owed --root "$ROOT" --landing 2>/dev/null || true)"
 # AT RUST-ONLY A HAMLET'S MAP REVIEWS WAIT FOR THE THROW BACK (feature 444 FR-023; the GM 2026-11-07: "You should immediately stop
