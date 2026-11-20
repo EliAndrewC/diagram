@@ -1,14 +1,16 @@
 //! The cap against a temporary clone and a builder's transcript; the payloads are the real ones pinned in `payloads.json`. The suite
 //! (`tests/hooks/test-context-cap-hooks.sh`, replayed through the shim and, for the handoff, the whole chain) drives the binary.
 
+use std::fmt::Write as _;
 use std::path::{Path, PathBuf};
 
 use serde_json::{json, Value};
 
 use super::{
-    answer, context, is_handoff, judge, own_transcript, plain, refusal, tree_of, usage_of, Said,
-    CONTEXT_CAP_TOKENS, TAIL_BYTES,
+    answer, context, is_handoff, judge, now, own_transcript, permit_key, plain, refusal, tree_of,
+    usage_of, Said, Stale, CONTEXT_CAP_TOKENS, TAIL_BYTES,
 };
+use crate::guards::guard_file_hooks::cli;
 use crate::protocol::{run, Answer, Event};
 use crate::shared::session::Session;
 use crate::shared::tempdir::TempDir;
@@ -339,4 +341,366 @@ fn the_answers_and_their_records() {
         [Answer::Refuse(_)]
     ));
     assert!(ask(f.bash("main", "ls")).is_empty());
+}
+
+// ---- D10: a builder resumed (451 T13) ----
+
+const DISPATCH: &str = "toolu_dispatch";
+
+/// The verdict on a `SendMessage`, its handoff path blanked (the refusal's text is tested for it).
+fn sent(input: &Value) -> Option<Said> {
+    match verdict(input) {
+        Some(Said::Resume { agent, stale, .. }) => Some(Said::Resume {
+            agent,
+            stale,
+            handoff: PathBuf::new(),
+        }),
+        other => other,
+    }
+}
+
+impl Fixture {
+    /// The agent's meta file beside its transcript: its type, its brief's description, the Agent call that dispatched it.
+    fn meta(&self, aid: &str, kind: &str, description: &str) {
+        let d = self.dir.join("proj/sess/subagents");
+        std::fs::create_dir_all(&d).unwrap();
+        let m = json!({"agentType": kind, "isBuiltIn": kind == "general-purpose", "description": description, "toolUseId": DISPATCH});
+        std::fs::write(d.join(format!("agent-{aid}.meta.json")), m.to_string()).unwrap();
+    }
+
+    /// The feature's event log (451-x's, under the clone's git dir).
+    fn events(&self, lines: &[Value]) {
+        let d = self.clone().join(".git/l7r-events");
+        std::fs::create_dir_all(&d).unwrap();
+        let text: String = lines.iter().map(|r| r.to_string() + "\n").collect();
+        std::fs::write(d.join("451-x.jsonl"), text).unwrap();
+    }
+
+    /// The clone's task starts for 451-x, (task, utc) in order.
+    fn starts(&self, rows: &[(&str, &str)]) {
+        let text = rows.iter().fold(String::new(), |mut out, (t, u)| {
+            let _ = writeln!(
+                out,
+                "{{\"feature\": \"451-x\", \"task\": \"{t}\", \"utc\": \"{u}\"}}"
+            );
+            out
+        });
+        std::fs::write(self.clone().join(".git/task-starts.jsonl"), text).unwrap();
+    }
+
+    fn tasks(&self, text: &str) {
+        std::fs::write(self.clone().join("specs/451-x/tasks.md"), text).unwrap();
+    }
+
+    /// The main session's `SendMessage` to `to`, with `summary`.
+    fn send(&self, to: &str, summary: &str) -> Value {
+        self.input(
+            "main",
+            "SendMessage",
+            json!({"to": to, "summary": summary, "message": "go on"}),
+        )
+    }
+}
+
+/// A resume fixture: a builder at `tokens`, dispatched at 10:05 by the Agent call `DISPATCH`, its brief `description`, 451-x's T05
+/// and T06 open in tasks.md.
+fn resumed(tag: &str, tokens: u64, description: &str) -> Fixture {
+    let f = Fixture::new(tag, &[call(tokens)], Some("T05"));
+    f.meta(AID, "general-purpose", description);
+    f.tasks("- [ ] T05 a\n- [ ] T06 b\n");
+    f.starts(&[("T05", "2026-11-20T10:00:00Z")]);
+    f
+}
+
+fn agent_call() -> Value {
+    json!({"ev": "PreToolUse", "tool": "Agent", "id": DISPATCH, "task": "T06", "t": "2026-11-20T10:05:00.000Z"})
+}
+
+fn end(task: &str, landed: bool, t: &str) -> Value {
+    json!({"ev": "Phase", "step": "end", "landed": landed, "tasks": [task], "code": 0, "t": t})
+}
+
+fn landed(task: &str) -> Said {
+    Said::Resume {
+        agent: AID.to_owned(),
+        stale: Stale::Landed(task.to_owned()),
+        handoff: PathBuf::new(),
+    }
+}
+
+/// RED FIRST, D10's cases: a `SendMessage` to a builder past the cap, or to one whose task has landed since its dispatch or is ticked,
+/// refused; a landing refused or before the dispatch, an open task, a defined agent, passing.
+#[test]
+fn a_resume_of_a_builder_past_the_cap_or_landed_is_refused() {
+    // past the cap, its task open
+    let f = resumed("r-cap", 310_000, "451 T05: build it");
+    assert_eq!(
+        sent(&f.send(AID, "go on")),
+        Some(Said::Resume {
+            agent: AID.to_owned(),
+            stale: Stale::PastCap(310_000),
+            handoff: PathBuf::new()
+        })
+    );
+    // under the cap, its task open: passes
+    let f = resumed("r-open", 120_000, "451 T05: build it");
+    f.events(&[agent_call(), end("T05", false, "2026-11-20T10:30:00.000Z")]);
+    assert_eq!(sent(&f.send(AID, "go on")), None);
+    // its task ticked
+    f.tasks("- [x] T05 a\n- [ ] T06 b\n");
+    assert_eq!(sent(&f.send(AID, "go on")), Some(landed("T05")));
+    f.tasks("- [ ] T05 a\n- [ ] T06 b\n");
+    // landed in a background `make land`: the `end` line after the Agent call's PostToolUse
+    let post = json!({"ev": "PostToolUse", "tool": "Agent", "id": DISPATCH, "aid": AID, "t": "2026-11-20T10:06:00.000Z"});
+    f.events(&[
+        agent_call(),
+        post.clone(),
+        end("T05", true, "2026-11-20T10:07:00.000Z"),
+    ]);
+    assert_eq!(sent(&f.send(AID, "go on")), Some(landed("T05")));
+    // a landing that exited 3 but pushed (`landed` true) counts
+    let mut three = end("T05", true, "2026-11-20T10:07:00.000Z");
+    three["code"] = json!(3);
+    f.events(&[agent_call(), post.clone(), three]);
+    assert_eq!(sent(&f.send(AID, "go on")), Some(landed("T05")));
+    // its only landing refused, another task's landing, and a landing before its dispatch: pass
+    for l in [
+        end("T05", false, "2026-11-20T10:07:00.000Z"),
+        end("T06", true, "2026-11-20T10:07:00.000Z"),
+        end("T05", true, "2026-11-20T10:04:59.000Z"),
+    ] {
+        f.events(&[agent_call(), post.clone(), l]);
+        assert_eq!(sent(&f.send(AID, "go on")), None);
+    }
+    // a defined agent past the cap and landed passes; so does a `to` no path can take, an agent with no meta, and outside a clone
+    f.transcript(AID, &[call(900_000)]);
+    f.meta(AID, "review-x", "451 T05: review");
+    f.events(&[agent_call(), end("T05", true, "2026-11-20T10:07:00.000Z")]);
+    assert_eq!(sent(&f.send(AID, "go on")), None);
+    f.meta(AID, "general-purpose", "451 T05: build it");
+    assert_eq!(sent(&f.send("../x", "go on")), None);
+    // an agent with no meta file passes, recorded
+    assert_eq!(
+        sent(&f.send("a0000000000000000", "go on")),
+        Some(Said::ResumeNoMeta("a0000000000000000".to_owned()))
+    );
+    let mut outside = f.send(AID, "go on");
+    outside["cwd"] = json!(f.dir.join("proj"));
+    assert_eq!(sent(&outside), None);
+}
+
+/// D2's chain, never the latest start: a builder whose brief names no `T<n>` is read by its FIRST line's task, else the start in force
+/// at its dispatch - the Agent line's time, else its first line's, else its transcript's first row.
+#[test]
+fn a_resumed_builders_task_is_its_first_line_or_the_start_at_its_dispatch() {
+    let f = resumed("r-chain", 120_000, "a builder");
+    f.starts(&[
+        ("T05", "2026-11-20T10:00:00Z"),
+        ("T06", "2026-11-20T10:30:00Z"),
+    ]);
+    let first =
+        json!({"ev": "SubagentStart", "aid": AID, "task": "T05", "t": "2026-11-20T10:05:01.000Z"});
+    let later = json!({"ev": "PreToolUse", "tool": "Bash", "by": AID, "task": "T06", "t": "2026-11-20T10:40:00.000Z"});
+    let t05 = end("T05", true, "2026-11-20T10:20:00.000Z");
+    // its first line carries T05, landed since; its later lines and the later start carry the open T06
+    f.events(&[agent_call(), first.clone(), later.clone(), t05.clone()]);
+    assert_eq!(sent(&f.send(AID, "go on")), Some(landed("T05")));
+    // a first line by `by` serves as well, its time the dispatch where no Agent line is found
+    let by = json!({"ev": "PreToolUse", "tool": "Read", "by": AID, "task": "T05", "t": "2026-11-20T10:05:02.000Z"});
+    f.events(&[by, later.clone(), t05.clone()]);
+    assert_eq!(sent(&f.send(AID, "go on")), Some(landed("T05")));
+    // no line of its own carries a task: the start in force at the Agent line's time
+    f.events(&[agent_call(), t05.clone()]);
+    assert_eq!(sent(&f.send(AID, "go on")), Some(landed("T05")));
+    // no line at all: its transcript's first row's time is the dispatch (T05 ticked, T06 open - the latest start would pass it)
+    f.events(&[]);
+    f.tasks("- [x] T05 a\n- [ ] T06 b\n");
+    let mut row = call(120_000);
+    row["timestamp"] = json!("2026-11-20T10:10:00.000Z");
+    f.transcript(AID, &[row]);
+    assert_eq!(sent(&f.send(AID, "go on")), Some(landed("T05")));
+    // dispatched after T06's start: T06, open, passes
+    let mut row = call(120_000);
+    row["timestamp"] = json!("2026-11-20T10:31:00.000Z");
+    f.transcript(AID, &[row]);
+    assert_eq!(sent(&f.send(AID, "go on")), None);
+    // the brief's own `T<n>` is read first
+    f.meta(AID, "general-purpose", "451 T05: x");
+    assert_eq!(sent(&f.send(AID, "go on")), Some(landed("T05")));
+}
+
+/// No task found: under the cap it passes with a `no task` record; past the cap the cap check still refuses.
+#[test]
+fn a_resumed_builder_with_no_task_passes_under_the_cap_only() {
+    let f = Fixture::new("r-none", &[call(120_000)], None);
+    f.meta(AID, "general-purpose", "a builder");
+    assert_eq!(
+        sent(&f.send(AID, "go on")),
+        Some(Said::ResumeNoTask(AID.to_owned()))
+    );
+    f.transcript(AID, &[call(310_000)]);
+    assert_eq!(
+        sent(&f.send(AID, "go on")),
+        Some(Said::Resume {
+            agent: AID.to_owned(),
+            stale: Stale::PastCap(310_000),
+            handoff: PathBuf::new()
+        })
+    );
+}
+
+/// The escape, in the `SendMessage`'s summary, in the form the refusal prints; a bare one refused.
+#[test]
+fn context_ok_in_the_summary_escapes_a_resume() {
+    let f = resumed("r-escape", 310_000, "451 T05: build it");
+    assert_eq!(
+        sent(&f.send(
+            AID,
+            "CONTEXT_OK=\"its handoff is not yet written\" write it"
+        )),
+        Some(Said::Escaped("its handoff is not yet written".to_owned()))
+    );
+    assert!(matches!(
+        sent(&f.send(AID, "go on CONTEXT_OK")),
+        Some(Said::NoReason(t)) if t.contains("CONTEXT_OK with no reason")
+    ));
+    // a builder past its own cap sending one is refused by its own cap first
+    let mut own = f.input(
+        "builder",
+        "SendMessage",
+        json!({"to": "a0000000000000000", "summary": "x", "message": "x"}),
+    );
+    own["agent_type"] = json!("general-purpose");
+    assert!(matches!(verdict(&own), Some(Said::Refused { .. })));
+}
+
+/// A lone refusal's text, else what was answered.
+fn refused(answers: &[Answer]) -> String {
+    match answers {
+        [Answer::Refuse(t)] => t.clone(),
+        other => format!("not refused: {other:?}"),
+    }
+}
+
+/// The refusals' text and records: the fresh dispatch with the handoff file, the escape in the summary, the permit for what follows.
+#[test]
+fn a_resumes_refusal_names_the_fresh_dispatch_and_the_handoff() {
+    crate::shared::log::quiet();
+    let f = resumed("r-text", 310_000, "451 T05: build it");
+    let ask = |input: Value| {
+        let e = Event {
+            name: "PreToolUse".to_owned(),
+            input,
+        };
+        answer(&e, &Session::from_input(&e.input), Path::new("/"), &none)
+    };
+    // no handoff written: the file it would write, and the one resume that writes it
+    let text = refused(&ask(f.send(AID, "go on")));
+    let named = f.handoffs().join(format!("T05-{AID}.md"));
+    assert!(text.contains("310000 tokens, past the cap of 300000"));
+    assert!(text.contains(&named.display().to_string()), "{text}");
+    assert!(text.contains("not written yet"), "{text}");
+    assert!(text.contains("CONTEXT_OK=\"<reason>\" in the SendMessage's summary"));
+    assert!(text.contains(&format!("make context-ok AID={AID} WHY=")));
+    // a handoff written under another task's name is the one named
+    std::fs::create_dir_all(f.handoffs()).unwrap();
+    let written = f.handoffs().join(format!("T04-{AID}.md"));
+    std::fs::write(&written, "done; left").unwrap();
+    let text = refused(&ask(f.send(AID, "go on")));
+    assert!(text.contains(&written.display().to_string()) && !text.contains("not written yet"));
+    assert!(text.contains("Dispatch a fresh builder"), "{text}");
+    // landed: the next task's brief
+    f.transcript(AID, &[call(120_000)]);
+    f.tasks("- [x] T05 a\n");
+    let text = refused(&ask(f.send(AID, "go on")));
+    assert!(text.contains("T05 has landed or is ticked"), "{text}");
+    // the escape, no task and an open builder pass
+    assert!(ask(f.send(AID, "CONTEXT_OK=\"the handoff needs a pass\" go")).is_empty());
+    f.tasks("- [ ] T05 a\n");
+    assert_eq!(refused(&ask(f.send(AID, "go on"))), "not refused: []");
+    let g = Fixture::new("r-text-none", &[call(120_000)], None);
+    g.meta(AID, "general-purpose", "a builder");
+    assert!(ask(g.send(AID, "go on")).is_empty());
+    // an agent with no meta file passes, its record written
+    assert!(ask(g.send("a0000000000000000", "go on")).is_empty());
+}
+
+/// D9's permit, end to end: the resume escaped, `make context-ok`'s grant (the guard-edit permit's store, keyed
+/// `<clone>/context-cap:<agent id>`), and the builder's next call past the cap passing, recorded; another agent's permit is no permit.
+#[test]
+fn a_resume_escaped_then_permitted_lets_the_builders_next_call_through() {
+    crate::shared::log::quiet();
+    let f = resumed("r-permit", 310_000, "451 T05: build it");
+    assert!(crate::shared::tool::ask(
+        Path::new("/"),
+        "git",
+        &["init", "-q", &f.clone().to_string_lossy()],
+        ""
+    )
+    .ok());
+    // the resume, escaped
+    assert!(matches!(
+        sent(&f.send(AID, "CONTEXT_OK=\"one pass to write its handoff\" go")),
+        Some(Said::Escaped(_))
+    ));
+    // before the permit, its next call is refused
+    assert!(matches!(
+        verdict(&f.bash("builder", "make quick")),
+        Some(Said::Refused { .. })
+    ));
+    // another agent's permit does nothing
+    let other = format!("{}/context-cap:a0000000000000000", f.clone().display());
+    let args = |k: &str| {
+        [
+            "grant".to_owned(),
+            k.to_owned(),
+            "the resumed builder finishes its step".to_owned(),
+        ]
+    };
+    assert_eq!(cli(&args(&other)).code, 0);
+    assert!(matches!(
+        verdict(&f.bash("builder", "make quick")),
+        Some(Said::Refused { .. })
+    ));
+    // the grant, keyed as `make context-ok` keys it; a key with no agent id is no guard file
+    let key = permit_key(&f.clone(), AID);
+    assert_eq!(key, format!("{}/context-cap:{AID}", f.clone().display()));
+    // its grant says what it grants, in its own words, not guard-edit's
+    let grant = cli(&args(&key));
+    assert_eq!(grant.code, 0);
+    assert!(grant.stdout.starts_with(&format!(
+        "context-ok: agent {AID} may pass the context cap until "
+    )));
+    assert!(grant
+        .stdout
+        .ends_with(" - the resumed builder finishes its step\n"));
+    let store = std::fs::read_to_string(f.clone().join(".git/l7r-guard-permits.jsonl")).unwrap();
+    assert!(store.contains(&format!("\"file\":\"{key}\"")), "{store}");
+    assert_eq!(
+        cli(&args(&format!("{}/context-cap:", f.clone().display()))).code,
+        2
+    );
+    // the next call passes, its permit's reason recorded; the hook's entry passes it too
+    assert_eq!(
+        verdict(&f.bash("builder", "make quick")),
+        Some(Said::Permitted(
+            "the resumed builder finishes its step".to_owned()
+        ))
+    );
+    let e = Event {
+        name: "PreToolUse".to_owned(),
+        input: f.bash("builder", "make quick"),
+    };
+    assert!(answer(&e, &Session::from_input(&e.input), Path::new("/"), &none).is_empty());
+    // a permit an hour old is spent
+    let late = |k: &str| (k == "L7R_PERMIT_NOW").then(|| format!("{}", now(&none) + 3601.0));
+    assert!(matches!(
+        judge(
+            &f.bash("builder", "make quick"),
+            Path::new("/"),
+            &late,
+            CONTEXT_CAP_TOKENS
+        ),
+        Some(Said::Refused { .. })
+    ));
 }

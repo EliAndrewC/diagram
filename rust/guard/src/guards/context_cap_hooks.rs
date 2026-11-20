@@ -22,19 +22,34 @@
 //! overwritten (the Write tool refuses a file it has not read). A Write there passed the live guard chain from a background builder
 //! (observed 2026-11-20, method: this task's builder writing `.git/l7r-handoffs/probe-<its id>.md` in its clone, then removing it).
 //!
-//! The escape (FR-012): `CONTEXT_OK="<reason>"` in a Bash command, recorded. A call outside any clone passes.
+//! The escape (FR-012): `CONTEXT_OK="<reason>"` in a Bash command, recorded; or, for any tool, the session's per-agent permit
+//! `make context-ok AID= WHY=` (D9: the guard-edit permit's store, keyed `<clone>/context-cap:<agent id>`, an hour), each call it
+//! lets through recorded. A call outside any clone passes.
+//!
+//! A BUILDER RESUMED (D10, 451 T13): a `SendMessage` whose `to` is a builder (its meta `agent-<to>.meta.json` beside its transcript, its
+//! `agentType` no defined agent) is refused where that builder is past the cap, or its task - D2's chain: its brief's `T<n>`, else its
+//! FIRST log line's task (`by` or `aid`), else the `task-starts.jsonl` entry in force at its dispatch (the Agent call's log line by the
+//! meta's `toolUseId`, else its first line, else its transcript's first row) - has an `end` line, `landed` true, after that dispatch,
+//! or is ticked; the refusal names a fresh dispatch with the handoff. No task found passes, recorded `resume, no task`, under the cap
+//! only. Its escape: `CONTEXT_OK="<reason>"` in the `SendMessage`'s `summary`. Measured 2026-11-20 (the session transcript's `SendMessage`
+//! rows): a `SendMessage`'s input is `{to, summary, message}`, `to` the agent id; the builder's own log lines carry `by`, its
+//! `SubagentStart` and its Agent call's `PostToolUse` `aid` (grep of the clone's 451 log).
 
 use std::fs::File;
-use std::io::{Read as _, Seek, SeekFrom};
+use std::io::{BufRead as _, BufReader, Read as _, Seek, SeekFrom};
 use std::path::{Path, PathBuf};
+use std::time::{SystemTime, UNIX_EPOCH};
 
-use serde_json::Value;
+use serde_json::{json, Value};
 
+use crate::guards::event_log_hooks::read::read_jsonl;
 use crate::guards::event_log_hooks::{common_git_dir, filed_at};
+use crate::guards::guard_file_hooks::permit_reason;
 use crate::protocol::{Answer, Event, Guard};
 use crate::shared::escape::{escape_or_refuse, Escape};
 use crate::shared::log::fire;
 use crate::shared::session::Session;
+use crate::shared::speckit::tasks::{all_text, archived};
 use crate::shared::state::field;
 
 /// The guard.
@@ -78,6 +93,44 @@ enum Said {
         tokens: u64,
         handoff: PathBuf,
     },
+    /// Past the cap, let through by the session's `make context-ok` permit for this agent, its reason.
+    Permitted(String),
+    /// A resume of a builder whose task none of D2's rungs finds: passed, recorded.
+    ResumeNoTask(String),
+    /// A resume of an agent with no meta file beside its transcript: passed, recorded.
+    ResumeNoMeta(String),
+    /// A resume refused (D10): the agent and why it is stale.
+    Resume {
+        agent: String,
+        stale: Stale,
+        handoff: PathBuf,
+    },
+}
+
+/// Why a resumed builder is stale.
+#[derive(Debug, PartialEq, Eq)]
+enum Stale {
+    /// Past the cap, its context.
+    PastCap(u64),
+    /// Its task landed since its dispatch, or is ticked.
+    Landed(String),
+}
+
+/// The time a permit is judged at: `L7R_PERMIT_NOW` (the guard-edit permit's seam), else the clock.
+fn now(env: &dyn Fn(&str) -> Option<String>) -> f64 {
+    env("L7R_PERMIT_NOW")
+        .and_then(|n| n.parse().ok())
+        .unwrap_or_else(|| {
+            SystemTime::now()
+                .duration_since(UNIX_EPOCH)
+                .map_or(0.0, |d| d.as_secs_f64())
+        })
+}
+
+/// D9's permit key, the "file" `make context-ok` grants: `<the clone's top level>/context-cap:<agent id>`. The top level, not a bare
+/// key: the permit store is found by `git -C <its parent> rev-parse --absolute-git-dir`, which a bare key would run from `/`.
+fn permit_key(tree: &Path, agent: &str) -> String {
+    format!("{}/context-cap:{agent}", tree.display())
 }
 
 fn decide(event: &Event, session: &Session) -> Vec<Answer> {
@@ -121,11 +174,60 @@ fn answer(
             log("blocked", &format!("{agent}: {tokens} tokens"), "past-cap");
             vec![Answer::Refuse(refusal(tokens, &handoff))]
         }
+        Some(Said::Permitted(why)) => {
+            log("escaped", &why, "context-ok-permit");
+            Vec::new()
+        }
+        Some(Said::ResumeNoTask(agent)) => {
+            log(
+                "passed",
+                &format!("resume, no task: {agent}"),
+                "resume-no-task",
+            );
+            Vec::new()
+        }
+        Some(Said::ResumeNoMeta(agent)) => {
+            log(
+                "passed",
+                &format!("resume, no meta file: {agent}"),
+                "resume-no-meta",
+            );
+            Vec::new()
+        }
+        Some(Said::Resume {
+            agent,
+            stale,
+            handoff,
+        }) => {
+            let (detail, rule) = match &stale {
+                Stale::PastCap(n) => (format!("resume {agent}: {n} tokens"), "resume-past-cap"),
+                Stale::Landed(t) => (format!("resume {agent}: {t} landed"), "resume-landed"),
+            };
+            log("blocked", &detail, rule);
+            vec![Answer::Refuse(resume_refusal(&agent, &stale, &handoff))]
+        }
     }
 }
 
-/// The verdict on one hook input against the cap `cap`: None to pass it silently.
+/// The verdict on one hook input against the cap `cap`: None to pass it silently. A `SendMessage` is judged as a resume (D10) once its
+/// sender's own cap lets it through: a builder past its cap is refused its `SendMessage` as any other call.
 fn judge(
+    input: &Value,
+    here: &Path,
+    env: &dyn Fn(&str) -> Option<String>,
+    cap: u64,
+) -> Option<Said> {
+    let own = own_cap(input, here, env, cap);
+    if field(input, "tool_name") != "SendMessage"
+        || matches!(own, Some(Said::Refused { .. } | Said::NoReason(_)))
+    {
+        return own;
+    }
+    resume(input, here, env, cap)
+}
+
+/// The verdict on a call against its own builder's cap (D8, D9).
+fn own_cap(
     input: &Value,
     here: &Path,
     env: &dyn Fn(&str) -> Option<String>,
@@ -165,6 +267,11 @@ fn judge(
     {
         return Some(Said::Handoff(field(ti, "file_path").to_owned()));
     }
+    // D9'S PERMIT: `make context-ok AID= WHY=`, the session's grant for this one agent, an hour (the guard-edit permit's store)
+    let granted = permit_reason(&permit_key(&tree, agent), now(env));
+    if !granted.is_empty() {
+        return Some(Said::Permitted(granted));
+    }
     if tool == "Bash" {
         match escape_or_refuse(field(ti, "command"), TOKEN) {
             Escape::Escaped(why) => return Some(Said::Escaped(why)),
@@ -177,6 +284,191 @@ fn judge(
         tokens,
         handoff,
     })
+}
+
+/// D10: the verdict on a `SendMessage` resuming the agent `to` - refused where it is a builder past the cap, or whose task (D2's chain)
+/// has landed since its dispatch or is ticked; passed where nothing names it a builder, or anything it needs will not read.
+fn resume(
+    input: &Value,
+    here: &Path,
+    env: &dyn Fn(&str) -> Option<String>,
+    cap: u64,
+) -> Option<Said> {
+    let ti = input.get("tool_input")?;
+    let to = field(ti, "to");
+    if !plain(to) {
+        return None;
+    }
+    let tree = tree_of(&match field(input, "cwd") {
+        "" => here.to_path_buf(),
+        c => PathBuf::from(c),
+    })?;
+    // ITS META, beside its transcript: none (or none that reads), no telling a builder from a defined agent - passed, recorded
+    let session = field(input, "transcript_path");
+    let own = own_transcript(session, to)?;
+    let Some(meta) = std::fs::read_to_string(own.with_extension("meta.json"))
+        .ok()
+        .and_then(|t| serde_json::from_str::<Value>(&t).ok())
+    else {
+        return Some(Said::ResumeNoMeta(to.to_owned()));
+    };
+    let kind = field(&meta, "agentType");
+    if plain(kind)
+        && tree
+            .join(".claude/agents")
+            .join(format!("{kind}.md"))
+            .is_file()
+    {
+        return None;
+    }
+    let past = context(&own).filter(|&n| n > cap);
+    // its feature and log, as the agent's own line is filed; never that line's task, whose last rung is the latest start (D10)
+    let probe = json!({"hook_event_name": "PreToolUse", "agent_id": to, "transcript_path": session, "cwd": tree});
+    let (task, landed) = filed_at(&probe, here, env).map_or((None, false), |(root, f, log, _)| {
+        task_landed(&root, &f, &log, &meta, to, &own)
+    });
+    let stale = match (past, &task) {
+        (Some(n), _) => Stale::PastCap(n),
+        (None, Some(t)) if landed => Stale::Landed(t.clone()),
+        (None, Some(_)) => return None,
+        (None, None) => return Some(Said::ResumeNoTask(to.to_owned())),
+    };
+    match escape_or_refuse(field(ti, "summary"), TOKEN) {
+        Escape::Escaped(why) => Some(Said::Escaped(why)),
+        Escape::Refused(text) => Some(Said::NoReason(text)),
+        Escape::None => Some(Said::Resume {
+            agent: to.to_owned(),
+            stale,
+            handoff: handoff_of(&tree, task.as_deref(), to),
+        }),
+    }
+}
+
+/// A resumed builder's task by D2's chain - its brief's `T<n>`, else its FIRST log line's task, else the start in force at its
+/// dispatch - and whether it has landed since that dispatch (an `end` line, `landed` true, naming it) or is ticked.
+fn task_landed(
+    root: &Path,
+    feature: &str,
+    log: &Path,
+    meta: &Value,
+    agent: &str,
+    own: &Path,
+) -> (Option<String>, bool) {
+    let lines = read_jsonl(log).unwrap_or_default();
+    // the builder's own lines carry `by`, its SubagentStart and its Agent call's PostToolUse `aid`
+    let first = lines
+        .iter()
+        .find(|l| text(l, "by") == agent || text(l, "aid") == agent);
+    let call = field(meta, "toolUseId");
+    let dispatch = lines
+        .iter()
+        .find(|l| {
+            !call.is_empty()
+                && text(l, "ev") == "PreToolUse"
+                && text(l, "tool") == "Agent"
+                && text(l, "id") == call
+        })
+        .or(first)
+        .map(|l| stamp(text(l, "t")))
+        .filter(|t| !t.is_empty())
+        .or_else(|| first_timestamp(own));
+    let in_force = || {
+        let d = dispatch.as_deref()?;
+        std::fs::read_to_string(common_git_dir(root).join("task-starts.jsonl"))
+            .unwrap_or_default()
+            .lines()
+            .filter_map(|l| serde_json::from_str::<Value>(l.trim()).ok())
+            .filter(|e| {
+                text(e, "feature") == feature
+                    && !text(e, "task").is_empty()
+                    && stamp(text(e, "utc")).as_str() <= d
+            })
+            .next_back()
+            .map(|e| text(&e, "task").to_owned())
+    };
+    let Some(task) = task_named(field(meta, "description"))
+        .or_else(|| {
+            first
+                .map(|l| text(l, "task"))
+                .filter(|t| !t.is_empty())
+                .map(str::to_owned)
+        })
+        .or_else(in_force)
+    else {
+        return (None, false);
+    };
+    let since = |l: &&Value| {
+        dispatch
+            .as_deref()
+            .is_some_and(|d| stamp(text(l, "t")).as_str() > d)
+    };
+    let landed = lines.iter().filter(since).any(|l| {
+        text(l, "ev") == "Phase"
+            && text(l, "step") == "end"
+            && l.get("landed") == Some(&Value::Bool(true))
+            && l.get("tasks")
+                .and_then(Value::as_array)
+                .is_some_and(|ts| ts.iter().any(|t| t.as_str() == Some(task.as_str())))
+    }) || all_text(&root.join("specs").join(feature))
+        .is_ok_and(|t| archived(&t, &task));
+    (Some(task), landed)
+}
+
+fn text<'a>(line: &'a Value, k: &str) -> &'a str {
+    line.get(k).and_then(Value::as_str).unwrap_or("")
+}
+
+/// A time as one form compares (`static_runs_hooks`' rule): `task-starts.jsonl`'s `utc` is to the second, a log line's `t` and a
+/// transcript row's `timestamp` to the millisecond.
+fn stamp(t: &str) -> String {
+    match t.strip_suffix('Z') {
+        Some(head) if !head.contains('.') => format!("{head}.000Z"),
+        _ => t.to_owned(),
+    }
+}
+
+/// The first `timestamp` among a transcript's first rows: the dispatch where the log holds none.
+fn first_timestamp(own: &Path) -> Option<String> {
+    BufReader::new(File::open(own).ok()?)
+        .lines()
+        .take(16)
+        .map_while(Result::ok)
+        .filter_map(|l| serde_json::from_str::<Value>(&l).ok())
+        .map(|r| stamp(text(&r, "timestamp")))
+        .find(|t| !t.is_empty())
+}
+
+/// The first `T<n>` (a letter after it allowed) a brief's description names.
+fn task_named(description: &str) -> Option<String> {
+    description
+        .split(|c: char| !c.is_ascii_alphanumeric())
+        .find(|w| {
+            w.strip_prefix('T').is_some_and(|rest| {
+                let digits = rest.trim_end_matches(|c: char| c.is_ascii_lowercase());
+                !digits.is_empty()
+                    && digits.chars().all(|c| c.is_ascii_digit())
+                    && rest.len() - digits.len() <= 1
+            })
+        })
+        .map(str::to_owned)
+}
+
+/// The handoff a resumed builder's refusal names: a file it wrote (any there ending `<agent>.md`), else the one it would write.
+fn handoff_of(tree: &Path, task: Option<&str>, agent: &str) -> PathBuf {
+    let dir = common_git_dir(tree).join(HANDOFFS);
+    let mine = format!("{agent}.md");
+    std::fs::read_dir(&dir)
+        .ok()
+        .and_then(|es| {
+            es.filter_map(Result::ok)
+                .map(|e| e.path())
+                .filter(|p| {
+                    p.file_name()
+                        .is_some_and(|n| n.to_string_lossy().ends_with(&mine))
+                })
+                .max()
+        })
+        .unwrap_or_else(|| dir.join(task.map_or_else(|| mine.clone(), |t| format!("{t}-{mine}"))))
 }
 
 /// A name safe to join into a path: letters, digits, `-` and `_`, and not empty.
@@ -275,6 +567,37 @@ goes on in a fresh builder. The next step:\n\n\
      the one call this guard lets through:\n\n       {path}\n\n\
   2. Stop, and reply with that path. The main session dispatches a fresh builder with the file as its brief.\n\n\
 Escape: {TOKEN}=\"<reason>\" in a Bash command, recorded in the guard log.\n"
+    )
+}
+
+/// A resume's refusal (D10): why the builder is stale, the fresh dispatch with its handoff, the escape and the permit after it.
+fn resume_refusal(agent: &str, stale: &Stale, handoff: &Path) -> String {
+    let path = handoff.display();
+    let (why, brief) = match stale {
+        Stale::PastCap(n) => (
+            format!("its context is {n} tokens, past the cap of {CONTEXT_CAP_TOKENS}"),
+            "its handoff file as the brief",
+        ),
+        Stale::Landed(t) => (
+            format!("its task {t} has landed or is ticked since its dispatch"),
+            "the next task's brief (with its handoff file, if it wrote one)",
+        ),
+    };
+    let written = if handoff.is_file() {
+        String::new()
+    } else {
+        format!(
+            "\n     The file is not written yet: to have it written, resume {agent} once with {TOKEN}=\"<reason>\" in the\n     \
+SendMessage's summary, telling it to write that file and stop (that Write is the one call its cap lets through).\n"
+        )
+    };
+    format!(
+        "\n\u{1b}[1mBLOCKED: resuming builder {agent}: {why} (feature 451 FR-006, D10).\u{1b}[0m\n\n\
+A resumed builder carries its whole context into every call, and its calls slow as that grows (10 s per 1,000 output tokens\n\
+under 200k, 23 s over 700k); a builder serves one task. The next step:\n\n  \
+1. Dispatch a fresh builder (the Agent tool) with {brief}:\n\n       {path}\n{written}\n\
+Escape: {TOKEN}=\"<reason>\" in the SendMessage's summary, recorded in the guard log. A builder resumed past the cap is\n\
+still refused every call but its handoff's until the session grants it an hour: make context-ok AID={agent} WHY=\"<reason>\"\n"
     )
 }
 

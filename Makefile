@@ -14,10 +14,10 @@
 FREE_TEXT = UNITS WITH KEYS KEY CLASS KIND SUBJECT REASON GROWTH_REASON SPREAD NOTE WHY WORDS TITLE MSG FINDING OLD NEW RESULT \
 	FIXED_BY OUTCOME SOUGHT SOURCE STATUS WRITE LINE Q Q_JA Q_ZH Q_KO QUESTION TERMS K MARK URL REVIEW APPROVED REREAD \
 	ARBITER_OK PREFLIGHT_OK REF_WHY SET_DOWN_OK HOLD_OK MISSING_OK COVER_OK NOT_OWED_OK PLAN_REVIEW_OK KEY_CAP_OK WRITE_CAP_OK \
-	CHECK_ORDER_OK URLS MATCH NONE SHARD EXTRA IMAGES DIRS LAND SUITES PERF_LATER_OK DEFER_FORM_OK
+	CHECK_ORDER_OK URLS MATCH NONE SHARD EXTRA IMAGES DIRS LAND SUITES PERF_LATER_OK DEFER_FORM_OK QUICK_OK
 $(foreach v,$(FREE_TEXT),$(if $(filter command line environment,$(origin $(v))),$(eval override $(v) := $$(value $(v)))$(eval export $(v))))
 
-.PHONY: modal-bundle modal-prepass done docs static format guard _reference bypass-audit quick page-check tick claim speckit-todo audit guard-edit guard-log scratch-sweep hooks-test citations fragment-move \
+.PHONY: modal-bundle modal-prepass done docs static format guard _reference bypass-audit quick page-check tick claim speckit-todo audit guard-edit context-ok guard-log scratch-sweep hooks-test citations fragment-move \
 	 switches _switch \
 	 map cohort cohort-landing hamlet placement-stages pool-index pool-index-if-stale compound render-sync idle-tests \
 	 pack-audit help \
@@ -380,6 +380,12 @@ guard-edit: export GUARD_WHY = $(WHY)
 guard-edit:     ## [project] permit edits to one guard file for an hour, the reason recorded in the guard log - the root Makefile takes no marker comment (feature 170 amendment 1)   FILE=Makefile WHY="<why the edit is legitimate>"
 	@"$$(git rev-parse --show-toplevel)/scripts/hooks/l7r-guard.sh" permit grant "$(abspath $(FILE))" "$$GUARD_WHY"
 
+# D9's per-agent permit (feature 451 T13): the key is the clone's top level, not a bare `context-cap:<id>`, so the permit store is found.
+context-ok: export CONTEXT_WHY = $(WHY)
+context-ok:     ## [project] let one builder past the context cap for an hour, after its resume was escaped with CONTEXT_OK - each call it lets through recorded in the guard log (feature 451 T13, plan D9)   AID=<agent id> WHY="<why this builder goes on past the cap>"
+	@[ -n "$(AID)" ] && [ -n "$$CONTEXT_WHY" ] || { echo 'Usage: make context-ok AID=<agent id> WHY="<why this builder goes on past the cap>"' >&2; exit 2; }
+	@"$$(git rev-parse --show-toplevel)/scripts/hooks/l7r-guard.sh" permit grant "$$(git rev-parse --show-toplevel)/context-cap:$(AID)" "$$CONTEXT_WHY"
+
 # The sweep a prompt starts once a day (rust/guard/src/guards/scratch_sweep_hooks.rs), run now; DRY=1 takes no lock and stamps nothing.
 scratch-sweep:  ## [project] remove finished sessions' scratch under /tmp/claude-<uid> now - idle 3 days, held by no live process, never this session's (449 T103); DRY=1 lists what it would remove and the total   [DRY=1]
 	@"$$(git rev-parse --show-toplevel)/scripts/hooks/l7r-guard.sh" --scratch-sweep $(if $(DRY),dry,now)
@@ -474,7 +480,7 @@ found-close:    ## [project] close found.jsonl rows: FILED as a task, or SETTLED
 	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" record found close --feature "$$(ls -d specs/$(F)-* | head -1)" --rows "$(ROWS)" $(if $(TASK),--task "$(TASK)",) $(if $(WHY),--why "$$WHY",)
 
 task-add: export TASK_TITLE = $(TITLE)
-task-add:       ## [project] file a task box (and its plan section) with the next free id: F=385 TITLE="..." [SECTION=<file with {T} for the id>] [RESEARCH=physical] [PERF=1: a performance task, docs/performance-checklist.md's questions appended]
+task-add:       ## [project] file a task box (and its plan section) with the next free id: F=385 TITLE="..." [SECTION=<file with {T} for the id>] [RESEARCH=physical] [PERF=1: a performance task, docs/performance-checklist.md's questions appended]; make quick's checks run over what it wrote and a line they newly fail withdrawn and refused (451 T19), escape QUICK_OK="<reason>"
 	@if [ -z "$(F)" ]; then printf 'make task-add: F=<feature> is required\n' >&2; exit 2; fi
 	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" task-add "$(F)" $(if $(SECTION),--section "$(abspath $(SECTION))",) $(if $(filter physical,$(RESEARCH)),--physical,) $(if $(PERF),--performance,)
 

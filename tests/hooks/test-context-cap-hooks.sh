@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 # Tests for context-cap-hooks (feature 451 T12, FR-006, plan D8 and D9): a builder's tool call past CONTEXT_CAP_TOKENS (300,000) is
 # refused naming its handoff file and the next step, but for that file's Write; a builder under the cap, the main session and a
-# defined agent pass; CONTEXT_OK="<reason>" in a Bash command escapes, recorded.
+# defined agent pass; CONTEXT_OK="<reason>" in a Bash command escapes, recorded. A SendMessage resuming a builder past the cap, or
+# whose task has landed, is refused, the escape in its summary (D10, 451 T13); `make context-ok` lets a builder past the cap (D9).
 # Run: tests/hooks/test-context-cap-hooks.sh   (exit 0 = all green)
 #
 # Every case drives the REAL guard (through the shim, `l7r-guard --only context-cap-hooks PreToolUse`) with the REAL payloads pinned in
@@ -80,6 +81,53 @@ run builder Bash "$(bash_in 'CONTEXT_OK="the landing needs it" make land')"
 [ "$(ls "$GUARD_LOG_DIR" | wc -l)" -gt "$before" ] && grep -lq 'the landing needs it' "$GUARD_LOG_DIR"/* && ok "...and is recorded" || no "the escape left no record"
 run builder Bash "$(bash_in 'make quick CONTEXT_OK')"
 [ "$RC" -eq 2 ] && printf '%s' "$OUT" | grep -q 'CONTEXT_OK with no reason' && ok "a bare CONTEXT_OK is refused" || no "a bare escape passed" "(rc=$RC)"
+
+echo "6. a SendMessage resuming a builder (D10): past the cap or landed refused, the escape in its summary"
+META="$T/proj/sess/subagents/agent-$AID.meta.json"
+meta() { jq -nc --arg k "$1" --arg d "$2" '{agentType: $k, isBuiltIn: false, description: $d, toolUseId: "toolu_d"}' > "$META"; }
+send() { jq -nc --arg to "$AID" --arg s "$1" '{to: $to, summary: $s, message: "go on"}'; }
+meta general-purpose "451 T05: build it"
+context 310000
+run main SendMessage "$(send 'go on')"
+[ "$RC" -eq 2 ] && printf '%s' "$OUT" | grep -q "resuming builder $AID: its context is 310000 tokens" && printf '%s' "$OUT" | grep -q "make context-ok AID=$AID" && ok "a resume past the cap is refused, naming the fresh dispatch and the permit" || no "the resume passed" "(rc=$RC: $OUT)"
+grep -lq 'resume-past-cap' "$GUARD_LOG_DIR"/* && ok "...recorded" || no "no record of the refused resume"
+run main SendMessage "$(send 'CONTEXT_OK="one pass to write its handoff" go on')"
+[ "$RC" -eq 0 ] && grep -lq 'one pass to write its handoff' "$GUARD_LOG_DIR"/* && ok "CONTEXT_OK in the summary passes, recorded" || no "the summary's escape refused" "(rc=$RC: $OUT)"
+mkdir -p "$C/specs/451-x" "$C/.specify"
+printf '{"feature_directory": "specs/451-x"}' > "$C/.specify/feature.json"
+printf -- '- [x] T05 a\n' > "$C/specs/451-x/tasks.md"
+context 120000
+run main SendMessage "$(send 'go on')"
+[ "$RC" -eq 2 ] && printf '%s' "$OUT" | grep -q 'T05 has landed or is ticked' && ok "a resume of a builder whose task is ticked is refused" || no "the landed resume passed" "(rc=$RC: $OUT)"
+printf -- '- [ ] T05 a\n' > "$C/specs/451-x/tasks.md"
+run main SendMessage "$(send 'go on')"
+[ "$RC" -eq 0 ] && ok "a resume under the cap, its task open, passes" || no "an open resume refused" "(rc=$RC: $OUT)"
+meta general-purpose "a builder"; rm -f "$C/.specify/feature.json"
+run main SendMessage "$(send 'go on')"
+[ "$RC" -eq 0 ] && grep -lq 'resume-no-task' "$GUARD_LOG_DIR"/* && ok "no task found passes, with its no-task record" || no "the task-less resume" "(rc=$RC: $OUT)"
+rm -f "$META"
+run main SendMessage "$(send 'go on')"
+[ "$RC" -eq 0 ] && grep -lq 'resume-no-meta' "$GUARD_LOG_DIR"/* && ok "a resume of an agent with no meta file passes, recorded" || no "the meta-less resume" "(rc=$RC: $OUT)"
+meta review-x "451 T05: review"; context 900000
+run main SendMessage "$(send 'go on')"
+[ "$RC" -eq 0 ] && ok "a resume of a defined agent past the cap passes" || no "a defined agent's resume refused" "(rc=$RC: $OUT)"
+
+echo "7. D9's permit, end to end: the resume escaped, make context-ok, the builder's next call through"
+meta general-purpose "451 T05: build it"; context 310000
+git init -q "$C"
+# the Makefile runs the clone's own scripts/hooks/l7r-guard.sh: the fixture's hands on to this tree's
+mkdir -p "$C/scripts/hooks"; printf '#!/usr/bin/env bash\nexec "%s/scripts/hooks/l7r-guard.sh" "$@"\n' "$REPO" > "$C/scripts/hooks/l7r-guard.sh"; chmod +x "$C/scripts/hooks/l7r-guard.sh"
+run main SendMessage "$(send 'CONTEXT_OK="one pass to write its handoff" go on')"
+[ "$RC" -eq 0 ] && ok "the resume escaped" || no "the escaped resume refused" "(rc=$RC: $OUT)"
+run builder Bash "$(bash_in 'make quick')"
+[ "$RC" -eq 2 ] && ok "...its next call still refused before the permit" || no "the call passed with no permit" "(rc=$RC)"
+OUT=$(make -s -f "$REPO/Makefile" -C "$C" context-ok AID= WHY="x y" 2>&1); RC=$?
+[ "$RC" -ne 0 ] && printf '%s' "$OUT" | grep -q 'Usage: make context-ok AID=' && ok "make context-ok with no AID prints its usage" || no "a bare make context-ok" "(rc=$RC: $OUT)"
+OUT=$(make -s -f "$REPO/Makefile" -C "$C" context-ok AID="$AID" WHY="the resumed builder finishes its step" 2>&1); RC=$?
+[ "$RC" -eq 0 ] && grep -q "context-cap:$AID" "$C/.git/l7r-guard-permits.jsonl" && ok "make context-ok grants the agent's permit in the clone's store" || no "the grant failed" "(rc=$RC: $OUT)"
+printf '%s' "$OUT" | grep -q "^context-ok: agent $AID may pass the context cap until .* - the resumed builder finishes its step" && ok "...saying so in its own words" || no "the grant's wording" "($OUT)"
+run builder Bash "$(bash_in 'make quick')"
+[ "$RC" -eq 0 ] && grep -lq 'context-ok-permit' "$GUARD_LOG_DIR"/* && ok "...and the builder's next call past the cap passes, recorded" || no "the permitted call refused" "(rc=$RC: $OUT)"
 
 echo
 echo "context-cap-hooks: $PASS passed, $FAIL failed"

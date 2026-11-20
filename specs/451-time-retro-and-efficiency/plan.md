@@ -419,10 +419,27 @@ other two by their case groups, until each shard's kept seconds is about 20 or l
   after its dispatch was refused (`end` `landed` false) passes; to one under the cap with no task found anywhere passes and writes its `no task`
   record; to one past the cap with no task found refused (the cap check needs no task); to a
   defined agent passes; to a builder under the cap with its task open passes; `CONTEXT_OK` in the summary passes and is recorded.
+  And D9's permit (T12's found-and-left): `make context-ok AID= WHY=`, and the end-to-end resume - escaped, the permit granted, the
+  builder's next call past the cap passing.
+- **Built** (2026-11-20). `judge` runs the sender's own cap first (a builder past its cap is refused its SendMessage like any call),
+  then `resume()` on a SendMessage: `to` a plain id; its meta `agent-<to>.meta.json` beside its own transcript (none: pass); a defined
+  `agentType` passes; the cap from its own transcript; its feature and log from `filed_at` on a payload built as the agent's own (its
+  task never read from that, whose last rung is the latest start); its task by D2's chain (the brief's `T<n>`, its FIRST line by `by`
+  or `aid`, the start in force at its dispatch); its dispatch the Agent line whose `id` is the meta's `toolUseId`, else its first
+  line, else its transcript's first `timestamp`; landed = an `end` line, `landed` true, naming it, after the dispatch, or ticked in
+  `tasks.md`/`tasks-done.md`. Rules logged: `resume-past-cap`, `resume-landed`, `resume-no-task`, `resume-no-meta`, `context-ok`, `context-ok-permit`.
+  The permit: the Makefile keys it `$(git rev-parse --show-toplevel)/context-cap:<AID>` (a bare `context-cap:<AID>` would put
+  `git -C .` at `/` and find no store), `grantable` takes a `/context-cap:<plain id>` key, and the hook reads it past the cap after
+  the handoff check (`permit_reason`, an hour). Facts it rests on:
+  - a SendMessage's input is `{to, summary, message}`, `to` the agent id - measured 2026-11-20 (the session transcript's SendMessage tool_use rows);
+  - the main session's SendMessage is filed in the clone's own log, so its payload's `cwd` is the clone - measured 2026-11-20 (grep of the clone's 451 log for `"tool":"SendMessage"`);
+  - the meta file is `<session transcript without .jsonl>/subagents/agent-<id>.meta.json` = `{agentType, isBuiltIn, description, toolUseId}` - measured 2026-11-20 (the c6fd72d1 session's meta files read);
+  - the Agent call's PreToolUse line carries `id` == the meta's `toolUseId`, its PostToolUse and SubagentStart `aid`, the builder's own lines `by` - measured 2026-11-20 (grep of the 451 log for a toolUseId and its agent id).
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
 | the resume | n/a - no map | n/a | none | n/a |
+| the permit | n/a - no map | n/a | none | n/a |
 
 ### T13 Approach (checklist part A)
 
@@ -434,12 +451,23 @@ other two by their case groups, until each shard's kept seconds is about 20 or l
 6. **The exits.** Green: the ten cases. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
 7. **The search smell.** None.
 8. **The budget.** One landing.
-9. **Done, measured.** The suite's cases; the check deleted, the firing cases red.
+9. **Done, measured.** The suite's cases; the check deleted, the firing cases red. Red first: 6 new unit tests failing on stubs
+   - measured 2026-11-20 (`make rust-test CRATE=rust/guard`: 666 passed, 6 failed); green 672 passed; the resume call deleted, the
+   same 6 red, and the permit check deleted, the end-to-end test red - measured 2026-11-20 (the same run each time). The shell suite
+   28 passed - measured 2026-11-20 (`tests/hooks/test-context-cap-hooks.sh`, its D10 and permit cases through the real binary and `make context-ok`).
+   The two fixes below, red first: 670 passed, 2 failed and the suite 28 passed, 2 failed, then 672 passed and the suite 30 passed -
+   measured 2026-11-20 (`make rust-test CRATE=rust/guard` and the suite, before and after).
 10. **Before moving a constant.** n/a.
 11. **Before fitting things into room.** n/a.
 12. **Before any fix.** n/a.
 
-**Found and left?** none
+**Found and left?**
+- `make context-ok`'s grant printed guard-edit's words, `guard-edit: <clone>/context-cap:<id> may be edited until <time>`, naming no
+  file anyone edits: `guard_file_hooks::cli` now prints `context-ok: agent <id> may pass the context cap until <time> - <reason>` for a
+  `context-cap:` key (pinned in the end-to-end unit test and the suite). Fixed here.
+- A `SendMessage` to an agent with no meta file passed with no guard-log record, unlike `resume-no-task`, so such passes could not be
+  counted: it now passes as `ResumeNoMeta`, logged `resume, no meta file: <id>` under the rule `resume-no-meta` (the unit test and the
+  suite). Fixed here.
 
 **Performance work?** yes - a `[perf]` task (FR-013): it makes the work after it faster; no engine timing, so no checklist
 
@@ -524,12 +552,46 @@ other two by their case groups, until each shard's kept seconds is about 20 or l
 
 ### T19 (FR-011: a task-add line that `make quick` refuses was found only at the landing - research R8)
 
-- **Approach**: D16's second half in `rust/gate/crates/task/src/task_add.rs` (not held) and `make task-add`'s `QUICK_OK`. Held: the root
-  `Makefile` (`make guard-edit FILE=Makefile` first). Red first: a fixture task-add line citing a bare requirement id another feature defines is
-  withdrawn and refused; a clean line stays; a quick already red for another reason in an EARLIER check (a fixture ruff failure) plus
-  the line's own spec-lint failure: the line withdrawn and refused, naming the spec-lint failure alone (the case a sequential `make
-  quick` would hide); a quick already red where the line adds no failure - the existing finding sits below what task-add wrote in the
-  same file, its line number shifted - keeps the line and reports the failure as already there.
+- **Approach**: D16's second half in `rust/gate/crates/task/src/task_add.rs` and `task_add/quick.rs` (not held). After the box and the
+  section are written, task-add reads `make -n quick` (the recipe stays the one list; a backslash-continued line read as one) and runs
+  each line it keeps by `sh -c` to its own end, side by side; on a red it puts both files back to their bytes before the filing (a
+  plan.md it created removed), runs them again and compares: a failure is a check's `failed (exit N)` and each non-blank line it
+  prints, line and column numbers masked (`:12`, `:12:3`, `line 12` - never other digits, so FR-023 and FR-024 stay apart), as a
+  multiset. A failure only the with-line run has: the files stay as they were, refused (exit 2) naming those failures, recorded
+  `blocked/quick-red`. None: the line is put back and the red reported as already there. A `make -n quick` that cannot list (no
+  Makefile) refuses before anything is written. **Set aside**, as D16 says, only the stamp (`state write green-local`, `STAMP` in
+  `quick.rs`) and the closing `printf`: every other line of quick is run, all seven checks, so a check added to quick is run here
+  with nothing to update. No list of the checks that cannot read what task-add writes (ruff, house-style-delta's selftest,
+  question-size, file-scale and partial-citations read no `specs/` box or section): all seven side by side cost 0.12 s against 0.10 s
+  for the two that do, measured 2026-11-20 (`date +%s%N` around `sh -c`, shell `&` and `wait`, three runs), and such a list goes
+  stale silently when a check's inputs change (the lead's ruling, 2026-11-20). **Not the Makefile** (a deviation from D16's `$(LOGESCAPE)`, made because this
+  builder's files exclude the held Makefile): `QUICK_OK="<reason>"` is read from the environment and recorded by the tool (two words and eight characters, else refused
+  `blocked/QUICK_OK-no-reason` before anything is written; taken: `escaped/quick-ok`, `make guard-log GUARD=task-add`), as
+  `PERF_LATER_OK` is by `make task-start` (T28's precedent: no `$(LOGESCAPE)` line, which would record it twice); a command-line
+  variable reaches the binary without a `FREE_TEXT` entry, measured 2026-11-20 (`make task-add F=451 TITLE="... (FR-023)"
+  QUICK_OK="..."` run once, its one `escaped/quick-ok` row read in `make guard-log GUARD=task-add`, the files then put back). Red
+  first, the four cases on a fixture quick (an EARLY check red as a ruff failure reads, a LINT red on each `FR-4nn` as spec-lint's
+  check 4 reads a bare id): a line citing a bare id withdrawn and refused, both files byte-identical; a clean line stays; the early
+  check red plus the line's own lint failure: refused naming the lint failure alone (the case a sequential `make quick` hides); a
+  finding already there below the box, its line number shifted, keeps the line and reports it. Before the code all four were red, measured 2026-11-20 (`make rust-test
+  CRATE=rust/gate/crates/task`, 60 passed, 4 failed); with the check deleted (`checked`'s first run made empty) five were red, measured 2026-11-20 (the same command). Every line run (the
+  lead's ruling): the fixture's ruff line leaves a file, asserted present, red with the old skip of the ruff line put back, measured
+  2026-11-20 (the same command, 69 passed, 1 failed: "the ruff line did not run"). The tests' guard log: a test asserts the log is the
+  crate's scratch census BEFORE anything records, then takes `QUICK_OK` and finds the row there and in no file this process wrote in
+  `$HOME/.claude/guard-log`; a pin, since every recording test already goes through `repo()`, which sets `GUARD_LOG_DIR` - a mutation
+  red, not red first: with `repo()`'s `quiet_census()` taken out and the test run alone under a scratch `GUARD_LOG_DIR`, it failed on
+  the first assertion, measured 2026-11-20 (the test binary run alone, `left: "/tmp/t19b/scratch-log"`, the assertion then an
+  `assert_eq!`, since folded into one `assert!` over the same comparison for coverage); in the full suite the mutation passed, another
+  test having set the variable first, so the pin catches a leak only where nothing else sets it.
+- **The cost** of a template filing in 451 (`[perf] a timing probe`): 15-20 ms before T19 and 156-168 ms after, all seven checks
+  run, so about +0.15 s a filing, and a refused filing (a bare `FR-999`, the checks run twice) 321-573 ms, measured 2026-11-20 (a quiet
+  tree: a detached scratch worktree of HEAD, its delta against `origin/main` empty, "before" the `l7r-gate` built from it and "after"
+  the one built from the clone's tree, each run directly as `TASK_TITLE=... l7r-gate task-add 451` in that worktree, `date +%s%N`
+  around it, one warm-up and five timed runs, both files checked out after each; the machine shared with other builders' cargo
+  runs, load average 18-19 on 22 cores, which the refused figure's spread shows). Each quick line with a line filed, measured
+  2026-11-20 (`date +%s%N` around `sh -c`, three runs, the T19 diff in the delta): ruff 34-40 ms, house-style-delta's selftest
+  90-106, house-style-delta 98-109, question-size 43-46, file-scale 89-98, spec-lint --delta 68-88, partial-citations 58; all seven
+  one after another about 0.50 s and side by side 0.12 s, measured 2026-11-20 (the same method, shell `&` and `wait`).
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
@@ -550,7 +612,13 @@ other two by their case groups, until each shard's kept seconds is about 20 or l
 11. **Before fitting things into room.** n/a.
 12. **Before any fix.** n/a.
 
-**Found and left?** none
+**Found and left?**
+- `QUICK_OK` was not on `make task-add`'s help line nor in `FREE_TEXT`: fixed here, by the lead's Makefile half of this task.
+- The two `task-add` rows for T37 in `~/.claude/guard-log` (`blocked/quick-red` and `escaped/quick-ok`, "a probe of the escape for
+  T19"): not a defect - they are the real-tree probe's own records (the measurement above), not a test's; no test row reached the log
+  (none names `9001-x`), and the log is no tracked file.
+- `rust/gate/CLAUDE.md`'s `task` row names `task_add.rs` but not `task_add/quick.rs`: not a defect - no wrong outcome, an index line
+  outside this builder's files, reported to the lead.
 
 **Performance work?** yes - a `[perf]` task (FR-013): it makes the work after it faster; no engine timing, so no checklist
 
@@ -929,6 +997,33 @@ reverted. Not filed with `PERF=1`: no engine stage's counted operations or time.
 |---|---|---|---|---|
 
 ### T36 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+
+### T37 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T37 Approach (checklist part A)
 
 1. **The goal, in the world.** <the place as it should be>
 2. **The constraints.** <the FRs, decisions and pages it holds to>

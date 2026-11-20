@@ -194,13 +194,13 @@
    "declared": "spec-fidelity"
   },
   "### T13 (FR-006: a SendMessage resuming a builder past the cap, or one whose task has landed)": {
-   "sha256": "5e9f6faae5e19e72a788017c9517ddcfa16e904ecb16f3f3e0667770d4dd969a",
+   "sha256": "395df1ee48f262e5616bc067df2533229c5905486762b969c8aeacb756534eec",
    "verdict": "CLEAR",
    "reviewed": "2026-11-20",
    "declared": "spec-fidelity"
   },
   "### T13 Approach (checklist part A)": {
-   "sha256": "9116920ca9c84715234a6be19b6803526226e08546ac5afaee29d523235e8438",
+   "sha256": "405d27c651a808f99e7659e346709f333440d66ea691b20edebe5f95ccd4b410",
    "verdict": "CLEAR",
    "reviewed": "2026-11-20",
    "declared": "spec-fidelity"
@@ -266,13 +266,13 @@
    "declared": "spec-fidelity"
   },
   "### T19 (FR-011: a task-add line that `make quick` refuses was found only at the landing - research R8)": {
-   "sha256": "f6c37f220259c822bfb1e50d09c3738e3cad7110fac5ceac89d8ee4cac00f400",
+   "sha256": "f5fe9fe62bad3485170d29b72b44398186f32595db320164db2717e53aa9508a",
    "verdict": "CLEAR",
    "reviewed": "2026-11-20",
    "declared": "spec-fidelity"
   },
   "### T19 Approach (checklist part A)": {
-   "sha256": "4bf65f83f761f6d65b6d7b2f5f9f5d59320b33c4d633fd36a010f341a9ccd085",
+   "sha256": "82b4b6b941664e56ab1d5b42b3444c98bcaba1b6b3ae206088e320a407f7c506",
    "verdict": "CLEAR",
    "reviewed": "2026-11-20",
    "declared": "spec-fidelity"
@@ -3820,6 +3820,336 @@
      "why": "This is FR-006's cap and its handoff exit. Text unchanged since the CLEAR, which ruled it within."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-20",
+   "blocks": [
+    "### T13 (FR-006: a SendMessage resuming a builder past the cap, or one whose task has landed)",
+    "### T13 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T13-sender-cap-first",
+     "summary": "judge runs the sender's own cap first: a builder past its cap is refused its SendMessage like any other call",
+     "class": "within",
+     "why": "D9 refuses every tool call of a builder past the cap but the handoff write; a SendMessage is a tool call. Applies the accepted rule, narrows nothing."
+    },
+    {
+     "id": "T13-defined-agent-passes",
+     "summary": "a target whose meta agentType is a defined agent passes",
+     "class": "within",
+     "why": "FR-006 defines a builder as an agent dispatched with a task's brief, not a defined review agent; D9 says a defined agent is never read."
+    },
+    {
+     "id": "T13-no-meta-passes",
+     "summary": "a SendMessage whose target has no agent-<to>.meta.json beside the session transcript passes",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Without the meta file the guard cannot tell a builder from a defined review agent (agentType lives only there) and has no dispatch id; refusing there would refuse defined agents, which FR-006 excludes from the rule by definition. Telling the two apart is impossible in this case, which is more than awkward. The block measured (2026-11-20) that the session's dispatched agents carry the file, so the pass does not reach the ordinary builder. The past-cap and landed refusals both fire wherever the meta exists."
+    },
+    {
+     "id": "T13-task-at-dispatch",
+     "summary": "the target's task is found by the brief's T<n>, then its FIRST event line's task, then the task-start entry in force at its dispatch - not D2's last rung, the latest task-start",
+     "class": "within",
+     "why": "D10 refuses a builder whose task has landed since it was dispatched; the task in force at dispatch is that builder's task, while the latest start may be another task's. It is a more faithful reading of 'its task' and is tested with a later open task-start in the log. It refuses more often, not less."
+    },
+    {
+     "id": "T13-dispatch-time",
+     "summary": "dispatch time = the Agent PreToolUse line whose id is the meta's toolUseId, else the builder's first line, else its transcript's first timestamp",
+     "class": "within",
+     "why": "This is how D10's 'since it was dispatched' gets measured. Each fallback is an earlier-or-equal instant, so no landing that FR-006 counts is missed. The facts it rests on are dated and measured."
+    },
+    {
+     "id": "T13-landed-definition",
+     "summary": "landed = an end line with landed true naming the task after the dispatch (a background make land included), or the task ticked in tasks.md/tasks-done.md; a refused landing (landed false) does not count",
+     "class": "within",
+     "why": "FR-006 says 'whose task has landed'. A refused landing has not landed. Counting a tick with no time bound is broader than the rule, never narrower."
+    },
+    {
+     "id": "T13-no-task-under-cap",
+     "summary": "a target under the cap with no task found anywhere passes and writes a resume-no-task record; past the cap it is still refused",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The landed rule has no subject when no task can be found: the brief names no T<n>, the agent's first line carries none, and no task-start was in force at its dispatch. FR-006's builder is 'an agent dispatched with a task's brief', and an agent with no recoverable task cannot be told apart from a helper that has none. Refusing there would refuse non-builders, so fail-closed is not possible without contradicting FR-006's definition. The cap still applies in that case (tested: past the cap with no task, refused), and every pass is logged as resume-no-task, so the gap is measured rather than silent. It does not gut the purpose, which is one task per builder, enforced wherever a task exists."
+    },
+    {
+     "id": "T13-context-ok-summary",
+     "summary": "CONTEXT_OK in the SendMessage's summary passes and is recorded",
+     "class": "within",
+     "why": "It is D10's escape verbatim, and FR-012 requires an escape that is recorded."
+    },
+    {
+     "id": "T13-permit",
+     "summary": "make context-ok AID= WHY= grants a permit keyed $(git rev-parse --show-toplevel)/context-cap:<AID>, read by the hook past the cap after the handoff check, valid an hour",
+     "class": "within",
+     "why": "D9 specifies this permit built with T13 through the guard-edit permit mechanism. The toplevel prefix is how the existing store is found, which is a mechanism difference that works. The hour bounds an escape and loosens no refusal."
+    },
+    {
+     "id": "T13-perf-and-order",
+     "summary": "T13 is a [perf] task, ordered after T12, T03 and T06",
+     "class": "within",
+     "why": "It is improvement 1 of the six the GM approved (builder contexts small), and FR-013 says performance work goes first. The ordering follows its data dependencies."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-20",
+   "blocks": [
+    "### T13 (FR-006: a SendMessage resuming a builder past the cap, or one whose task has landed)",
+    "### T13 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T13-sender-cap-first",
+     "summary": "judge runs the sender's own cap first: a builder past its cap is refused its SendMessage like any other call",
+     "class": "within",
+     "why": "D9 refuses every tool call of a builder past the cap but the handoff write; a SendMessage is a tool call. Applies the accepted rule, narrows nothing."
+    },
+    {
+     "id": "T13-defined-agent-passes",
+     "summary": "a target whose meta agentType is a defined agent passes",
+     "class": "within",
+     "why": "FR-006 defines a builder as an agent dispatched with a task's brief, not a defined review agent; D9 says a defined agent is never read."
+    },
+    {
+     "id": "T13-no-meta-passes",
+     "summary": "a SendMessage whose target has no agent-<to>.meta.json beside the session transcript passes",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Without the meta file the guard cannot tell a builder from a defined review agent (agentType lives only there) and has no dispatch id; refusing there would refuse defined agents, which FR-006 excludes from the rule by definition. Telling the two apart is impossible in this case, which is more than awkward. The past-cap and landed refusals both fire wherever the meta exists."
+    },
+    {
+     "id": "T13-task-at-dispatch",
+     "summary": "the target's task is found by the brief's T<n>, then its FIRST event line's task, then the task-start entry in force at its dispatch - not D2's last rung, the latest task-start",
+     "class": "within",
+     "why": "D10 refuses a builder whose task has landed since it was dispatched; the task in force at dispatch is that builder's task, while the latest start may be another task's. It is a more faithful reading of 'its task' and is tested with a later open task-start in the log. It refuses more often, not less."
+    },
+    {
+     "id": "T13-dispatch-time",
+     "summary": "dispatch time = the Agent PreToolUse line whose id is the meta's toolUseId, else the builder's first line, else its transcript's first timestamp",
+     "class": "within",
+     "why": "This is how D10's 'since it was dispatched' gets measured. The Agent line is the dispatch itself. The fallbacks (the builder's first line, its transcript's first timestamp) are later-or-equal instants, but the gap ends at the builder's first logged act, before it could have worked on the task. A tick counts as landed with no time bound in any case, so a landing in that gap is still caught once ticked. It narrows nothing the rule reaches."
+    },
+    {
+     "id": "T13-landed-definition",
+     "summary": "landed = an end line with landed true naming the task after the dispatch (a background make land included), or the task ticked in tasks.md/tasks-done.md; a refused landing (landed false) does not count",
+     "class": "within",
+     "why": "FR-006 says 'whose task has landed'. A refused landing has not landed. Counting a tick with no time bound is broader than the rule, never narrower."
+    },
+    {
+     "id": "T13-no-task-under-cap",
+     "summary": "a target under the cap with no task found anywhere passes and writes a resume-no-task record; past the cap it is still refused",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The landed rule has no subject when no task can be found: the brief names no T<n>, the agent's first line carries none, and no task-start was in force at its dispatch. FR-006's builder is 'an agent dispatched with a task's brief', and an agent with no recoverable task cannot be told apart from a helper that has none. Refusing there would refuse non-builders, so fail-closed is not possible without contradicting FR-006's definition. The cap still applies in that case (tested: past the cap with no task, refused), and every pass is logged as resume-no-task, so the gap is measured rather than silent. It does not gut the purpose, which is one task per builder, enforced wherever a task exists."
+    },
+    {
+     "id": "T13-context-ok-summary",
+     "summary": "CONTEXT_OK in the SendMessage's summary passes and is recorded",
+     "class": "within",
+     "why": "It is D10's escape verbatim, and FR-012 requires an escape that is recorded."
+    },
+    {
+     "id": "T13-permit",
+     "summary": "make context-ok AID= WHY= grants a permit keyed $(git rev-parse --show-toplevel)/context-cap:<AID>, read by the hook past the cap after the handoff check, valid an hour",
+     "class": "within",
+     "why": "D9 specifies this permit built with T13 through the guard-edit permit mechanism. The toplevel prefix is how the existing store is found, which is a mechanism difference that works. The hour bounds an escape and loosens no refusal."
+    },
+    {
+     "id": "T13-perf-and-order",
+     "summary": "T13 is a [perf] task, ordered after T12, T03 and T06",
+     "class": "within",
+     "why": "It is improvement 1 of the six the GM approved (builder contexts small), and FR-013 says performance work goes first. The ordering follows its data dependencies."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-20",
+   "blocks": [
+    "### T13 (FR-006: a SendMessage resuming a builder past the cap, or one whose task has landed)",
+    "### T13 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T13-resume",
+     "summary": "D10 in context_cap_hooks: a SendMessage resuming a builder past the cap, or whose task has landed since its dispatch, is refused; escape CONTEXT_OK in the summary, recorded",
+     "class": "within",
+     "why": "FR-006 and D10 verbatim; FR-012's red-first, recorded escape; serves the approved improvement 1 ('a fresh builder per stage')."
+    },
+    {
+     "id": "T13-sender-cap-first",
+     "summary": "The sender's own cap is judged before resume(): a builder past its cap is refused its SendMessage like any call",
+     "class": "within",
+     "why": "D9 already refuses every tool call of a builder past the cap but the handoff write; this only orders the two checks."
+    },
+    {
+     "id": "T13-no-meta",
+     "summary": "A SendMessage to an id with no agent-<to>.meta.json passes, logged resume-no-meta",
+     "class": "within",
+     "why": "agentType lives only in the meta file and FR-006 exempts defined agents, so a target that cannot be identified as a builder is outside the requirement's reach; refusing it would reach past what was asked. The pass is logged so such cases are countable (found-and-left item 2)."
+    },
+    {
+     "id": "T13-no-task",
+     "summary": "No task found by D2's chain: under the cap passes with a no-task record; past the cap refused",
+     "class": "within",
+     "why": "The landed test needs a task and cannot apply without one; the cap clause of FR-006 still applies and is kept (the cap check needs no task). The pass is recorded."
+    },
+    {
+     "id": "T13-task-chain",
+     "summary": "The target's task: the brief's T<n>, else its first line's task (by/aid), else the task-starts entry in force at its dispatch - never the latest start",
+     "class": "within",
+     "why": "D2's chain read for the builder's own task; using the start in force at dispatch rather than the latest start serves FR-006's 'its task' and avoids attributing another, later task to it."
+    },
+    {
+     "id": "T13-landed",
+     "summary": "Landed = an end line with landed true naming the task after the dispatch (a background land included; a refused landing does not count), or the task ticked in tasks.md/tasks-done.md",
+     "class": "within",
+     "why": "FR-006 says 'whose task has landed' with no time bound; D10 adds 'since it was dispatched'. A ticked task is a landed one (make land ticks). Counting a ticked task without the dispatch bound stays inside FR-006's wording and does not narrow what is refused."
+    },
+    {
+     "id": "T13-dispatch-time",
+     "summary": "Dispatch time: the Agent line whose id is the meta's toolUseId, else the builder's first line, else its transcript's first timestamp",
+     "class": "within",
+     "why": "Mechanics for D10's 'since it was dispatched', resting on the measured facts listed."
+    },
+    {
+     "id": "T13-permit",
+     "summary": "make context-ok AID= WHY= grants a permit keyed <toplevel>/context-cap:<id>, read past the cap after the handoff check, valid an hour, recorded in the guard log",
+     "class": "within",
+     "why": "D9 names this permit, built with T13, on the guard-edit permit's mechanism; FR-012's recorded escape of a reason. The hour is a design constant, not a narrowing."
+    },
+    {
+     "id": "T13-found-fixed",
+     "summary": "Found and fixed here: context-ok's grant message reworded; resume-no-meta logged",
+     "class": "within",
+     "why": "Both defects fixed in the task, none deferred."
+    },
+    {
+     "id": "T13-order-perf",
+     "summary": "Ordered after T12, T03, T06; tagged [perf] under FR-013",
+     "class": "within",
+     "why": "Dependencies on the line's task and the land end line; FR-013 counts work making the builders' loop faster as performance work."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-20",
+   "blocks": [
+    "### T19 (FR-011: a task-add line that `make quick` refuses was found only at the landing - research R8)",
+    "### T19 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T19-list",
+     "summary": "The checks run are read from `make -n quick` (the recipe stays the one list), every line run, all seven checks, side by side; no hand-kept subset of checks that read specs/",
+     "class": "within",
+     "why": "FR-011 and the GM's 'run make quick after task-add': all of quick's checks run, and a check added to quick is run with nothing to update. Running them in parallel rather than one after another changes no verdict and is what makes the D16 comparison see a later check's failure behind an earlier red."
+    },
+    {
+     "id": "T19-setaside",
+     "summary": "Only the stamp (`state write green-local`) and the closing printf are set aside",
+     "class": "within",
+     "why": "Neither is a check: the stamp records that make quick passed, which task-add has not shown, and the printf checks nothing. No check of quick is dropped."
+    },
+    {
+     "id": "T19-compare",
+     "summary": "On a red, both files restored to their pre-filing bytes (a created plan.md removed), checks re-run, failures compared as a multiset of each check's exit line plus its non-blank lines with only line/column numbers masked; a failure only the with-line run has: files left restored, refused exit 2 naming those failures, recorded blocked/quick-red; none: the line put back and the red reported as already there",
+     "class": "within",
+     "why": "D16 and FR-011 as written: withdraw, re-run, compare, refuse naming the new failures, restore only where the failures are the same. Masking only line numbers is what lets the shifted-finding case match without merging distinct ids (FR-023/FR-024)."
+    },
+    {
+     "id": "T19-nomakefile",
+     "summary": "A `make -n quick` that cannot list refuses before anything is written",
+     "class": "within",
+     "why": "Fails closed: the alternative, filing unchecked, would let FR-011's check silently not run. It narrows nothing the GM asked for."
+    },
+    {
+     "id": "T19-escape",
+     "summary": "QUICK_OK=\"<reason>\" read from the environment and recorded by the tool (escaped/quick-ok), two words and eight characters or refused blocked/QUICK_OK-no-reason; not a Makefile $(LOGESCAPE) line, the Makefile help/FREE_TEXT half done by the lead",
+     "class": "within",
+     "why": "FR-012 requires a recorded escape of a reason of two words or more; the mechanism (tool-side recording, as PERF_LATER_OK) changes where it is recorded, not whether. The eight-character floor is the project's guard rule and only tightens the escape."
+    },
+    {
+     "id": "T19-tests",
+     "summary": "Red-first on four fixture cases (bare-id line refused with both files byte-identical; clean line stays; early ruff red plus the line's own lint failure refused naming the lint failure alone; shifted pre-existing finding keeps the line), the check deleted five red, a every-line-run assertion, and a guard-log isolation pin",
+     "class": "within",
+     "why": "Enforcement of FR-011 and FR-012's red-first requirement; the guard-log pin only keeps tests from writing the real log. Enforcement of what was asked, not scope."
+    },
+    {
+     "id": "T19-found-left",
+     "summary": "Two items left as not defects: the real-tree probe's two task-add rows in ~/.claude/guard-log, and rust/gate/CLAUDE.md's task row not naming task_add/quick.rs",
+     "class": "within",
+     "why": "Neither is a wrong outcome: the rows are the measurement's own records in an untracked log, and the index line still points a reader at task_add.rs beside its submodule. Each states why it is not a defect, as FR-009 asks; leaving a non-defect is within."
+    },
+    {
+     "id": "T19-perf",
+     "summary": "Filed [perf]; costs about +0.15 s per filing (0.32-0.57 s on a refused one) to save a failed landing",
+     "class": "within",
+     "why": "Unchanged from the earlier CLEAR block; FR-013's definition covers work that makes the landings faster, and the GM's improvement 6 asked for this check."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-20",
+   "blocks": [
+    "### T19 (FR-011: a task-add line that `make quick` refuses was found only at the landing - research R8)",
+    "### T19 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T19-a",
+     "summary": "Run every line `make -n quick` lists (all seven checks) after the filing, setting aside only the green stamp and the closing printf; no skip list of checks deemed unable to read what task-add writes.",
+     "class": "within",
+     "why": "The request (improvement 6) says 'run make quick after task-add' and FR-011 says task-add runs make quick's checks. Every check runs. The stamp and the printf are not checks: the stamp records a green state for the tree, and the printf prints a message. Leaving both out catches nothing less. Dropping the skip list widens what is checked rather than narrowing it."
+    },
+    {
+     "id": "T19-b",
+     "summary": "The kept lines run side by side, each by sh -c to its own end, read from the make -n listing (backslash continuations joined) so the recipe stays the one list.",
+     "class": "within",
+     "why": "This is how the checks are run, not which checks run. Running each line to its own end shows every failure, including one that a sequential make quick would hide behind an earlier red. That serves FR-011's 'on any failure the new line introduces'."
+    },
+    {
+     "id": "T19-c",
+     "summary": "On a red, both files are restored to their pre-filing bytes, the checks are re-run, and failures (failed (exit N) plus each non-blank line, with only line/column numbers masked) are compared as multisets. A failure only in the with-line run keeps the line withdrawn and refuses (exit 2), naming it. Otherwise the line is restored and the red is reported as already there.",
+     "class": "within",
+     "why": "This is FR-011 (withdraw and refuse, naming the failure, on a failure the new line introduces). The masking cannot hide a new failure: an identical message at a shifted line is still counted twice in the multiset, and only line/column digits are masked, so ids such as FR-023 and FR-024 stay distinct. The pre-existing case keeps the line, as FR-011 limits refusal to failures the new line introduces."
+    },
+    {
+     "id": "T19-d",
+     "summary": "A make -n quick that cannot list (no Makefile) refuses before anything is written.",
+     "class": "within",
+     "why": "Fails closed. Without a listing the requested check cannot run, so filing anyway would skip the enforcement the GM asked to be real. It adds no reach beyond FR-011."
+    },
+    {
+     "id": "T19-e",
+     "summary": "The QUICK_OK escape is read from the environment and recorded by the task-add tool itself (escaped/quick-ok in the guard log), not through the Makefile's $(LOGESCAPE), following T28's PERF_LATER_OK precedent. The Makefile's FREE_TEXT entry and help line are done by the lead.",
+     "class": "within",
+     "why": "FR-012 asks for an escape of a reason that is recorded. It is recorded, once, and a real-tree probe confirmed the row (escaped/quick-ok). The choice changes where the recording happens, not what is enforced or what can be escaped, so it does not narrow the request or the spec."
+    },
+    {
+     "id": "T19-f",
+     "summary": "The escape reason must be two words and eight characters, else refused blocked/QUICK_OK-no-reason before anything is written.",
+     "class": "within",
+     "why": "FR-012 asks for 'a reason of two words or more'. Requiring eight characters as well makes the escape harder to use, which does not narrow the enforcement. The GM asked that enforcement be real (2026-11-19 approval)."
+    },
+    {
+     "id": "T19-g",
+     "summary": "Tests: the four red-first cases, the check-deleted run (five red), the every-line pin (the ruff line asserted run), and the guard-log isolation pin.",
+     "class": "within",
+     "why": "Enforcement of FR-011 and FR-012's red-first requirement. Each test only fails when the requested behavior is absent."
+    },
+    {
+     "id": "T19-h",
+     "summary": "Found and left: the two real-tree probe rows in ~/.claude/guard-log and the rust/gate/CLAUDE.md task row not naming task_add/quick.rs are judged not defects.",
+     "class": "within",
+     "why": "Neither is a wrong outcome. The log rows are the measurement's own records, in an untracked log. The index line misdirects no tool and blocks no work. The QUICK_OK help/FREE_TEXT gap is fixed in this task, not deferred."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -5038,6 +5368,130 @@
      "summary": "docs/guards.md row and knob-table row, rust/guard/CLAUDE.md mention, D9 restated to what was built, written by the session before the tick",
      "class": "within",
      "why": "D14's knob table and keeping the spec true to the built guard; no behavior added or excused."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T13": {
+   "section_sha256": "254de3ab4f2b9367b2c26156bedce49b7be6494c7cf8a8ad88d527b308e4b932",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T13-resume",
+     "summary": "D10 in context_cap_hooks: a SendMessage resuming a builder past the cap, or whose task has landed since its dispatch, is refused; escape CONTEXT_OK in the summary, recorded",
+     "class": "within",
+     "why": "FR-006 and D10 verbatim; FR-012's red-first, recorded escape; serves the approved improvement 1 ('a fresh builder per stage')."
+    },
+    {
+     "id": "T13-sender-cap-first",
+     "summary": "The sender's own cap is judged before resume(): a builder past its cap is refused its SendMessage like any call",
+     "class": "within",
+     "why": "D9 already refuses every tool call of a builder past the cap but the handoff write; this only orders the two checks."
+    },
+    {
+     "id": "T13-no-meta",
+     "summary": "A SendMessage to an id with no agent-<to>.meta.json passes, logged resume-no-meta",
+     "class": "within",
+     "why": "agentType lives only in the meta file and FR-006 exempts defined agents, so a target that cannot be identified as a builder is outside the requirement's reach; refusing it would reach past what was asked. The pass is logged so such cases are countable (found-and-left item 2)."
+    },
+    {
+     "id": "T13-no-task",
+     "summary": "No task found by D2's chain: under the cap passes with a no-task record; past the cap refused",
+     "class": "within",
+     "why": "The landed test needs a task and cannot apply without one; the cap clause of FR-006 still applies and is kept (the cap check needs no task). The pass is recorded."
+    },
+    {
+     "id": "T13-task-chain",
+     "summary": "The target's task: the brief's T<n>, else its first line's task (by/aid), else the task-starts entry in force at its dispatch - never the latest start",
+     "class": "within",
+     "why": "D2's chain read for the builder's own task; using the start in force at dispatch rather than the latest start serves FR-006's 'its task' and avoids attributing another, later task to it."
+    },
+    {
+     "id": "T13-landed",
+     "summary": "Landed = an end line with landed true naming the task after the dispatch (a background land included; a refused landing does not count), or the task ticked in tasks.md/tasks-done.md",
+     "class": "within",
+     "why": "FR-006 says 'whose task has landed' with no time bound; D10 adds 'since it was dispatched'. A ticked task is a landed one (make land ticks). Counting a ticked task without the dispatch bound stays inside FR-006's wording and does not narrow what is refused."
+    },
+    {
+     "id": "T13-dispatch-time",
+     "summary": "Dispatch time: the Agent line whose id is the meta's toolUseId, else the builder's first line, else its transcript's first timestamp",
+     "class": "within",
+     "why": "Mechanics for D10's 'since it was dispatched', resting on the measured facts listed."
+    },
+    {
+     "id": "T13-permit",
+     "summary": "make context-ok AID= WHY= grants a permit keyed <toplevel>/context-cap:<id>, read past the cap after the handoff check, valid an hour, recorded in the guard log",
+     "class": "within",
+     "why": "D9 names this permit, built with T13, on the guard-edit permit's mechanism; FR-012's recorded escape of a reason. The hour is a design constant, not a narrowing."
+    },
+    {
+     "id": "T13-found-fixed",
+     "summary": "Found and fixed here: context-ok's grant message reworded; resume-no-meta logged",
+     "class": "within",
+     "why": "Both defects fixed in the task, none deferred."
+    },
+    {
+     "id": "T13-order-perf",
+     "summary": "Ordered after T12, T03, T06; tagged [perf] under FR-013",
+     "class": "within",
+     "why": "Dependencies on the line's task and the land end line; FR-013 counts work making the builders' loop faster as performance work."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T19": {
+   "section_sha256": "bcd247d2b7b24f0455c2b50501d254195e511af04dc87e0e0d602a1390432fb3",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T19-a",
+     "summary": "Run every line `make -n quick` lists (all seven checks) after the filing, setting aside only the green stamp and the closing printf; no skip list of checks deemed unable to read what task-add writes.",
+     "class": "within",
+     "why": "The request (improvement 6) says 'run make quick after task-add' and FR-011 says task-add runs make quick's checks. Every check runs. The stamp and the printf are not checks: the stamp records a green state for the tree, and the printf prints a message. Leaving both out catches nothing less. Dropping the skip list widens what is checked rather than narrowing it."
+    },
+    {
+     "id": "T19-b",
+     "summary": "The kept lines run side by side, each by sh -c to its own end, read from the make -n listing (backslash continuations joined) so the recipe stays the one list.",
+     "class": "within",
+     "why": "This is how the checks are run, not which checks run. Running each line to its own end shows every failure, including one that a sequential make quick would hide behind an earlier red. That serves FR-011's 'on any failure the new line introduces'."
+    },
+    {
+     "id": "T19-c",
+     "summary": "On a red, both files are restored to their pre-filing bytes, the checks are re-run, and failures (failed (exit N) plus each non-blank line, with only line/column numbers masked) are compared as multisets. A failure only in the with-line run keeps the line withdrawn and refuses (exit 2), naming it. Otherwise the line is restored and the red is reported as already there.",
+     "class": "within",
+     "why": "This is FR-011 (withdraw and refuse, naming the failure, on a failure the new line introduces). The masking cannot hide a new failure: an identical message at a shifted line is still counted twice in the multiset, and only line/column digits are masked, so ids such as FR-023 and FR-024 stay distinct. The pre-existing case keeps the line, as FR-011 limits refusal to failures the new line introduces."
+    },
+    {
+     "id": "T19-d",
+     "summary": "A make -n quick that cannot list (no Makefile) refuses before anything is written.",
+     "class": "within",
+     "why": "Fails closed. Without a listing the requested check cannot run, so filing anyway would skip the enforcement the GM asked to be real. It adds no reach beyond FR-011."
+    },
+    {
+     "id": "T19-e",
+     "summary": "The QUICK_OK escape is read from the environment and recorded by the task-add tool itself (escaped/quick-ok in the guard log), not through the Makefile's $(LOGESCAPE), following T28's PERF_LATER_OK precedent. The Makefile's FREE_TEXT entry and help line are done by the lead.",
+     "class": "within",
+     "why": "FR-012 asks for an escape of a reason that is recorded. It is recorded, once, and a real-tree probe confirmed the row (escaped/quick-ok). The choice changes where the recording happens, not what is enforced or what can be escaped, so it does not narrow the request or the spec."
+    },
+    {
+     "id": "T19-f",
+     "summary": "The escape reason must be two words and eight characters, else refused blocked/QUICK_OK-no-reason before anything is written.",
+     "class": "within",
+     "why": "FR-012 asks for 'a reason of two words or more'. Requiring eight characters as well makes the escape harder to use, which does not narrow the enforcement. The GM asked that enforcement be real (2026-11-19 approval)."
+    },
+    {
+     "id": "T19-g",
+     "summary": "Tests: the four red-first cases, the check-deleted run (five red), the every-line pin (the ruff line asserted run), and the guard-log isolation pin.",
+     "class": "within",
+     "why": "Enforcement of FR-011 and FR-012's red-first requirement. Each test only fails when the requested behavior is absent."
+    },
+    {
+     "id": "T19-h",
+     "summary": "Found and left: the two real-tree probe rows in ~/.claude/guard-log and the rust/gate/CLAUDE.md task row not naming task_add/quick.rs are judged not defects.",
+     "class": "within",
+     "why": "Neither is a wrong outcome. The log rows are the measurement's own records, in an untracked log. The index line misdirects no tool and blocks no work. The QUICK_OK help/FREE_TEXT gap is fixed in this task, not deferred."
     }
    ],
    "verdict": "CLEAR"

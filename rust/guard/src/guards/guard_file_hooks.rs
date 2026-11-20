@@ -77,7 +77,17 @@ static GRANTED: LazyLock<Regex> = LazyLock::new(|| {
 
 /// The files `make guard-edit` grants (feature 170 amendment 1; feature 429: the guards live in scripts/hooks/).
 fn grantable(path: &str) -> bool {
-    (hit(&GRANTED, path) && !hit(&SUITE, path)) || root_makefile(path) || guard_source(path)
+    // `<clone>/context-cap:<agent id>`: `make context-ok`'s per-agent permit past the context cap (451 T13, plan D9)
+    let context_cap = path.rsplit_once("/context-cap:").is_some_and(|(_, aid)| {
+        !aid.is_empty()
+            && aid
+                .chars()
+                .all(|c| c.is_ascii_alphanumeric() || c == '-' || c == '_')
+    });
+    (hit(&GRANTED, path) && !hit(&SUITE, path))
+        || root_makefile(path)
+        || guard_source(path)
+        || context_cap
 }
 
 /// A guard's source: a file under `rust/guard/src/` (not its `tests.rs` or a `tests/` directory), the crate's `Cargo.toml`, `scripts/hooks/l7r-guard.sh`.
@@ -139,11 +149,19 @@ pub fn cli(args: &[String]) -> Reply {
         "",
     )
     .out;
-    Reply {
-        stdout: format!(
+    // `make context-ok`'s grant says what it grants (451 T13): an agent past the context cap, not a file to edit
+    let stdout = match real.rsplit_once("/context-cap:") {
+        Some((_, aid)) => format!(
+            "context-ok: agent {aid} may pass the context cap until {} - {reason}\n",
+            until.trim()
+        ),
+        None => format!(
             "guard-edit: {real} may be edited until {} - {reason}\n",
             until.trim()
         ),
+    };
+    Reply {
+        stdout,
         stderr: String::new(),
         code: 0,
     }
