@@ -108,7 +108,10 @@ impl Fixture {
         Options {
             skip_render: self.root.join("skip").exists(),
             font_roots: vec![self.root.join("fonts"), self.root.join("no-fonts")],
-            lock_wait: 0.0,
+            // A FORKED CHILD HOLDS THE LOCK A MOMENT (449 T222's gate, 2026-11-19): another test's spawn forks while this one's lock file
+            // is open, and the child holds that open file until it execs, so a run taking the lock again in that window was refused at a
+            // 0 s wait - twice in the loaded counting build, never alone; the held-lock test asks for 0 s itself
+            lock_wait: 10.0,
         }
     }
 
@@ -520,7 +523,10 @@ fn a_held_lock_refuses_and_a_leftover_staging_folder_is_cleared() {
         .unwrap()
         .unwrap();
     let maps = f.maps(&["s"]);
-    let opts = f.opts();
+    let opts = Options {
+        lock_wait: 0.0,
+        ..f.opts()
+    };
     let err = run(
         &f.root,
         &maps,
