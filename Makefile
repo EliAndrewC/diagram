@@ -19,7 +19,7 @@ $(foreach v,$(FREE_TEXT),$(if $(filter command line environment,$(origin $(v))),
 
 .PHONY: modal-bundle modal-prepass done docs static format guard _reference bypass-audit quick page-check tick claim speckit-todo audit guard-edit guard-log scratch-sweep hooks-test citations fragment-move \
 	 switches _switch \
-	 map cohort cohort-landing hamlet placement-stages pool-index pool-index-if-stale compound render-sync idle-tests \
+	 map cohort cohort-landing hamlet placement-stages pool-index pool-index-if-stale compound render-sync render-maps idle-tests \
 	 pack-audit help \
 	 notes-census glossary page-lit picture-diff \
 	 ci-status gated-check
@@ -166,7 +166,7 @@ verify:         ## [tests] THE PAIRED RUN: start the gate and dispatch the settl
 	    mirror=""; case "$$root" in */.clones/*) mirror="$${root%%/.clones/*}";; esac; \
 	    for gen in $$("$$root/scripts/gates/l7r-gate.sh" reviews snapshot --root "$$root" --stale-renders $$maps); do \
 	      case "$$gen" in sheet:*) svg="$${gen#sheet:}"; printf 'verify: %s has no generator and no render - make sheet-render SHEET=%s OUT=%s, then make verify again\n' "$$svg" "$$svg" "$${svg%.svg}.png" >&2; exit 2;; esac; \
-	      printf 'verify: rendering %s (its render was missing or older than its map)\n' "$$gen"; $(MAKE) --no-print-directory map GEN="$$gen" >/dev/null || { printf 'verify: make map GEN=%s failed - run it by hand, then make verify again\n' "$$gen" >&2; exit 2; }; done; \
+	      printf 'verify: rendering %s (the generation cache does not serve it as it stands)\n' "$$gen"; $(MAKE) --no-print-directory map MAP="$$gen" >/dev/null || { printf 'verify: make map MAP=%s failed - run it by hand, then make verify again\n' "$$gen" >&2; exit 2; }; done; \
 	    snap=$$("$$root/scripts/gates/l7r-gate.sh" reviews snapshot --root "$$root" $${mirror:+--mirror "$$mirror"} --key "$$(cat "$$root/.git/pairing-key" 2>/dev/null)" $$maps); \
 	    n=$$(printf '%s\n' $$maps | wc -l); \
 	    printf 'owed: %s\n%s\n' "$$why" "$$snap"; \
@@ -180,25 +180,17 @@ verify:         ## [tests] THE PAIRED RUN: start the gate and dispatch the settl
 verify-wait:    ## [tests] wait for the gate `make verify` started, on ITS OWN log, and print its verdict - run it with run_in_background (exit 0 green, 1 red, 3 no log, 4 timed out, 5 the gate died)
 	@bash "$$(git rev-parse --show-toplevel)/scripts/gates/verify_wait.sh"
 
-map: export L7R_STAGE_PROFILE = $(if $(PROFILE),1,)
-map:            ## [maps] regenerate ONE pool sheet's gen and gate it (a hamlet: make hamlet)   GEN=pool/<tier>/<map>/<map>.gen.py [PROFILE=1: where the roll spent its time]
-##  GEN=<gen path>  which generator to re-run - required: a pool sheet's `pool/<tier>/<map>/<map>.gen.py`; a hamlet is a spec.json, rolled by `make hamlet SPEC=`
-##  PROFILE=1       also print where the roll spent its time, stage by stage
-##  REGEN_FROZEN=1  re-render a FROZEN legacy exhibit anyway - only on the GM's say-so (regen's --frozen-ok)
-	@if [ -z "$(GEN)" ]; then printf 'make map: GEN=pool/<tier>/<map>/<map>.gen.py is required - a pool sheet'\''s generator, e.g. make map GEN=pool/magistracies/ubame-magistracy/ubame-magistracy.gen.py; a hamlet is a spec.json, rolled by make hamlet SPEC=pool/hamlets/<name>/<name>.spec.json (the old default, inashiro.gen.py, is gone since feature 444; 449 T221 replaces this target)\n' >&2; exit 2; fi
-	$(RUN).pipeline.regen $(if $(REGEN_FROZEN),--frozen-ok,) $(GEN)
-	@g="$(GEN)"; s="$${g%.gen.py}"; \
-	if [ -f "$$s.json" ] && { [ ! -f "$$s.png" ] || [ ! -f "$$s.html" ]; }; then \
-	  echo "map: the cached entry carries no render (a gate filed it with rendering skipped) - rolling it uncached to draw one"; \
-	  $(patsubst @%,%,$(RUN)).pipeline.regen --no-cache "$$g"; \
-	fi
-	@g="$(GEN)"; s="$${g%.gen.py}"; \
-	if [ -f "$$s.html" ] && [ -n "$$(find l7r/diagram/interactive/assets -type f -newer "$$s.html" -print -quit)" ]; then \
-	  echo "map: a modal or page asset changed since the page was written - rolling it uncached to write the page again"; \
-	  $(patsubst @%,%,$(RUN)).pipeline.regen --no-cache "$$g"; \
-	fi
+# ONE RUST DRIVER FOR EVERY POOL MAP (feature 449 T221, rebuilt from specs/449-rust-codebase/derivations/T219-pipeline.md): the walk's kind
+# names the engine and the spec, the generation cache (rust/gate/crates/pool/src/cache.rs) serves the map or draws it. The two
+# `--no-cache` stanzas this recipe had are its keep now: an entry drawn with the picture skipped serves only a run that skips it, and a
+# modal or page asset is one of the reads every sheet reports (a miss among them), its change regenerating the sheets that read it.
+map:            ## [maps] draw ONE pool map through the generation cache (Rust since 449 T221) - a hamlet, a generated compound or a hand sheet - and say CACHED, REGENERATED (with why) or FROZEN   MAP=pool/<tier>/<map> (or a file in it, or its name; --all: every live map)
+##  MAP=<folder|spec>  the map: its folder pool/<tier>/<map>, any file in it (its .spec.json, .compound.json or .svg), or its bare name
+	@if [ -n "$(GEN)" ]; then printf 'make map: GEN= went with the .gen.py files (feature 449 T221) - name the map: make map MAP=%s\n' "$$(dirname "$(GEN)")" >&2; exit 2; fi
+	@if [ -z "$(MAP)" ]; then printf 'make map: MAP= is required - the map'\''s folder, a file in it, or its name, e.g. make map MAP=pool/magistracies/ubame-magistracy, make map MAP=pool/hamlets/sawada/sawada.spec.json, or make map MAP=--all for every live map\n' >&2; exit 2; fi
+	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" pool map "$(MAP)"
 	@$(MAKE) --no-print-directory pool-index-if-stale
-	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" measure maps-moved --only "$(GEN)"
+	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" measure maps-moved $(if $(filter --all,$(MAP)),,--only "$(MAP)")
 
 maps-moved:     ## [maps] which pool manifests differ from HEAD - the comparison a wave records, never a scratch copy (feature 429)
 	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" measure maps-moved --root "$$(git rev-parse --show-toplevel)"
@@ -258,8 +250,14 @@ compound:       ## [maps] compose a Mode A compound sheet from its feet-based pr
 	@if [ -z "$(SPEC)" ]; then printf 'make compound: SPEC=<map>.compound.json is required - e.g. make compound SPEC=pool/magistracies/county-magistracy-example/county-magistracy-example.compound.json\n' >&2; exit 2; fi
 	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" mode-a compound "$(SPEC)"
 
-render-sync:    ## [maps] {internal} regenerate MAIN's renders (called by sync-with-main.sh; not for hand use)
+# EVERY LIVE MAP THROUGH THE RUST CACHE FIRST (feature 449 T221): the .gen.py files render_cache ran are gone, so main's renders are drawn
+# by `make map MAP=--all` (render-maps) before render_cache's record site and stamps; T222 rebuilds render-sync on the walk and this key.
+# A prerequisite, not a recipe line: render-sync stays the one-line `$(RUN)` recipe the make-only guard's entry-point rewrite reads.
+render-sync: render-maps ## [maps] {internal} regenerate MAIN's renders (called by sync-with-main.sh; not for hand use)
 	$(RUN).pipeline.render_cache $(ARGS)
+
+render-maps:    ## [maps] {internal} every live pool map drawn or served through the generation cache (render-sync's first step, 449 T221)
+	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" pool map --all
 
 # ---- cheap: they read a recorded artifact ----
 

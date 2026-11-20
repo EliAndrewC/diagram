@@ -50,7 +50,7 @@ echo "1. IT FIRES - every row of the threat model (FR-015)"
 check "tier 1: a cohort run bare"              blocked "python3 -m l7r.diagram.tools.cohort_audit --count 48"
 check "tier 1: the generator run bare"         blocked "python3 -m l7r.diagram.hamletgen --batch 24"
 check "tier 1: a pool sweep run bare"          blocked "python3 -m l7r.diagram.pipeline.regen pool/hamlets/inashiro/inashiro.gen.py"
-check "tier 1: regen by script path"           blocked "python3 l7r/diagram/pipeline/regen.py pool/hamlets/x/x.gen.py"
+check "tier 1: an engine by script path"       blocked "python3 l7r/diagram/hamletgen/__main__.py --batch 24"
 check "tier 1: a bare cargo test (feature 444)" blocked "cargo test --manifest-path rust/phases/Cargo.toml"   # GUARD_EDIT_OK: feature 444 T17 - the bare-cargo rule's cases
 check "tier 1: a bare cargo clippy, by path"   blocked "~/.cargo/bin/cargo clippy --all-targets"
 check "make rust-test is the compliant form"   ok "make rust-test"
@@ -402,11 +402,16 @@ printf '%s\n' 'Run `make dead-four` first.' '`make dead-five` left with the Pyth
 got=$(dead_make_names "$S" | sed 's/^[^ ]* //' | tr '\n' ' ')
 [ "$got" = "make dead-one make dead-four " ] && { echo "  ok      the check fires on a message and an agent line, and passes a comment, a test tail, a retired line, a glob and English"; PASS=$((PASS+1)); } \
   || { echo "  FAIL    the dead-name check answered '$got' on its scratch tree (want: make dead-one make dead-four)"; FAIL=$((FAIL+1)); }
-# `make map` with no GEN is refused, naming the forms it takes, before anything runs:
+# `make map` with no MAP is refused, naming the forms it takes, before anything runs; the GEN= of the deleted .gen.py files (feature 449
+# T221) is refused naming the MAP= that does its job:
 out=$( cd "$FX" && make --no-print-directory map 2>&1 ); rc=$?
-[ "$rc" = 2 ] && [[ $out == *"GEN=pool/<tier>/<map>/<map>.gen.py"* ]] && [[ $out == *"make hamlet SPEC="* ]] \
-  && { echo "  ok      make map with no GEN is refused, naming the .gen.py form and make hamlet for a hamlet"; PASS=$((PASS+1)); } \
-  || { echo "  FAIL    make map with no GEN (exit $rc) did not refuse naming its forms: $(printf '%s' "$out" | head -3)"; FAIL=$((FAIL+1)); }
+[ "$rc" = 2 ] && [[ $out == *"MAP= is required"* ]] && [[ $out == *"make map MAP=pool/magistracies/ubame-magistracy"* ]] \
+  && { echo "  ok      make map with no MAP is refused, naming its forms"; PASS=$((PASS+1)); } \
+  || { echo "  FAIL    make map with no MAP (exit $rc) did not refuse naming its forms: $(printf '%s' "$out" | head -3)"; FAIL=$((FAIL+1)); }
+out=$( cd "$FX" && make --no-print-directory map GEN=pool/hamlets/x/x.gen.py 2>&1 ); rc=$?
+[ "$rc" = 2 ] && [[ $out == *"make map MAP=pool/hamlets/x"* ]] \
+  && { echo "  ok      make map GEN= is refused, naming the MAP= that replaced it"; PASS=$((PASS+1)); } \
+  || { echo "  FAIL    make map GEN= (exit $rc) did not refuse naming MAP=: $(printf '%s' "$out" | head -3)"; FAIL=$((FAIL+1)); }
 
 echo
 echo "passed $PASS, failed $FAIL"

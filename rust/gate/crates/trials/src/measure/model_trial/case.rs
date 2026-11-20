@@ -332,16 +332,15 @@ impl Trial {
     }
 }
 
-/// Draw map or sheet `name` in a checkout (renders are not tracked); its folder, or none. Its generator is asked of the checkout's one
-/// pool walk (feature 449 T220): the first live-pool folder of that name whose listing holds `<name>.gen.py`.
+/// Draw map or sheet `name` in a checkout (renders are not tracked); its folder, or none. The map is asked of the checkout's one pool walk
+/// (feature 449 T220): the first live-pool map of that name, drawn by `make map MAP=<its folder>` (T221, where its `.gen.py` was run).
 fn render(tree: &Path, name: &str) -> Option<PathBuf> {
     let pool = l7r_gate_pool::walk(tree);
     let map = pool
         .in_tree(l7r_gate_pool::LIVE)
-        .find(|m| m.name == name && m.has(".gen.py"))?;
-    let rel = format!("{}/{name}.gen.py", map.rel());
+        .find(|m| m.name == name && m.kind.is_live())?;
     let _ = Command::new("make")
-        .args(["--no-print-directory", "map", &format!("GEN={rel}")])
+        .args(["--no-print-directory", "map", &format!("MAP={}", map.rel())])
         .current_dir(tree)
         .output();
     Some(map.dir.clone())

@@ -8,7 +8,7 @@ measured off the finished map at 3 px = 1 ft) back through the perimeter-first c
 (feature 008; rebuilt in Rust from its derivation by feature 449 T152, `rust/mode_a/src/compound/`), to test whether
 the generator composes Ochiba the way the GM hand-composed it.
 
-Regenerate: `make map GEN=pool/magistracies/ochiba-roundtrip-test/ochiba-roundtrip-test.gen.py`. The program lives
+Regenerate: `make map MAP=pool/magistracies/ochiba-roundtrip-test`. The program lives
 in [`ochiba-roundtrip-test.compound.json`](ochiba-roundtrip-test.compound.json) (it was `ochiba_program()` in the gen until
 feature 449 T152), its research claims with it.
 

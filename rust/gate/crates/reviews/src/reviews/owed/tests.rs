@@ -148,7 +148,7 @@ fn an_element_new_to_a_standing_map_is_owed_and_a_moved_folder_is_not_new() {
     );
     assert_eq!(units[1].occasion, "'shrine' is new to m");
     // renamed by the delta: no new map, its legend the one it had
-    sh(&r, "git checkout -q -- pool && git mv pool/hamlets/m pool/hamlets/moved && git mv pool/hamlets/moved/m.json pool/hamlets/moved/moved.json && git mv pool/hamlets/moved/m.gen.py pool/hamlets/moved/moved.gen.py && git mv pool/hamlets/moved/m.spec.json pool/hamlets/moved/moved.spec.json");
+    sh(&r, "git checkout -q -- pool && git mv pool/hamlets/m pool/hamlets/moved && git mv pool/hamlets/moved/m.json pool/hamlets/moved/moved.json && git mv pool/hamlets/moved/m.spec.json pool/hamlets/moved/moved.spec.json");
     commit(&r, "rename");
     assert!(owed_slugs(&r).is_empty(), "{:?}", owed_slugs(&r));
 }
@@ -163,7 +163,8 @@ fn an_untracked_render_is_read_from_mains_mirror() {
         "git init -q && git config user.email t@t && git config user.name t",
     );
     put(&r, ".gitignore", "*.svg\n");
-    put(&r, "pool/compounds/s/s.gen.py", "#\n");
+    // the sheet stands in the base by a tracked file of its folder (its `.gen.py` until feature 449 T221)
+    put(&r, "pool/compounds/s/s.notes.md", "notes\n");
     sheet(&r, "pool", "s", &["gate", "bell"]);
     commit(&r, "sheet");
     sh(&r, "git update-ref refs/remotes/origin/main HEAD");
@@ -392,7 +393,7 @@ fn the_command_line_refuses_undeclared_code_until_an_occasion_is_declared() {
             refused.code,
             refused
                 .stdout
-                .starts_with("drawing or placement code moved (pool/hamlets/m/m.gen.py)")
+                .starts_with("drawing or placement code moved (pool/hamlets/m/m.spec.json)")
         ),
         (1, true)
     );

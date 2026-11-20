@@ -23,7 +23,7 @@ fn repo(tag: &str) -> l7r_guard::shared::tempdir::TempDir {
         let d = root.join("pool/hamlets").join(m);
         std::fs::create_dir_all(&d).unwrap();
         std::fs::write(d.join(format!("{m}.json")), "{\"board\": 0}\n").unwrap();
-        std::fs::write(d.join(format!("{m}.gen.py")), "# gen\n").unwrap();
+        std::fs::write(d.join(format!("{m}.spec.json")), "{}\n").unwrap();
     }
     git(&root, &["add", "."]);
     git(&root, &["commit", "-qm", "a"]);
@@ -58,23 +58,27 @@ fn nothing_moved_says_so() {
     );
 }
 
+/// `--only` one map, named by its folder, a file in it or its name (feature 449 T221); its spec edited is no manifest moved.
 #[test]
-fn only_reads_one_map_from_its_gen() {
+fn only_reads_one_map_named_as_make_map_names_it() {
     let root = repo("mm-only");
     std::fs::write(root.join(format!("{SAWADA}.json")), "{\"board\": 76.4}\n").unwrap();
-    assert!(moved(&root, Some("pool/hamlets/inashiro/inashiro.gen.py")).is_empty());
-    assert_eq!(
-        moved(&root, Some(&format!("{SAWADA}.gen.py"))),
-        [format!("{SAWADA}.json")]
-    );
+    std::fs::write(root.join(format!("{SAWADA}.spec.json")), "{\"seed\": 2}\n").unwrap();
+    assert!(moved(&root, Some("pool/hamlets/inashiro")).is_empty());
+    for named in [
+        "pool/hamlets/sawada",
+        "sawada",
+        &format!("{SAWADA}.spec.json"),
+    ] {
+        assert_eq!(moved(&root, Some(named)), [format!("{SAWADA}.json")]);
+    }
     assert_eq!(
         moved(&root, Some(&format!("{SAWADA}.json"))),
         [format!("{SAWADA}.json")]
     );
-    let got = cli(
-        &words(&["--only", "pool/hamlets/inashiro/inashiro.gen.py"]),
-        &root,
-    );
+    // a path no map folder bears is asked of git as it stands
+    assert!(moved(&root, Some("pool/nowhere/x.json")).is_empty());
+    let got = cli(&words(&["--only", "inashiro"]), &root);
     assert_eq!(
         got.stdout,
         "this map's manifest is unchanged against HEAD\n"

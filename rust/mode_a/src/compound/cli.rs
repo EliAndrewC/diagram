@@ -5,6 +5,8 @@
 //! files read (the spec, the type declaration, the modal files) for the generation cache, and the sheet's rolls and reports; a refusal is
 //! `{"error": ...}`, exit 1. `compound-counts <spec>` (the counting build alone) is the generator's counted work on its program, by the
 //! derivation's kinds, before any caption is placed - the figure `make budget-sheets PHASE=compound` compares with each sheet's budget.
+//! `--out DIR` writes the sheet, its picture and its page into DIR rather than beside the spec, the map's notes still read beside it: the
+//! generation cache draws a sheet into its staging folder and publishes the entry from there (feature 449 T221).
 //!
 //! Research: the compound sheet driver - NONE: the generator's steps in their order, each deciding where it is claimed
 
@@ -20,7 +22,7 @@ use crate::sheet::hand::{py_list, sheet_registry, Registry};
 use crate::types::Band;
 
 /// The command's usage line.
-pub const USAGE: &str = "usage: l7r-mode-a compound <map.compound.json>\n";
+pub const USAGE: &str = "usage: l7r-mode-a compound <map.compound.json> [--out DIR]\n";
 
 /// The spec's suffix; the sheet is written beside it under the map's name.
 pub const SUFFIX: &str = ".compound.json";
@@ -63,6 +65,7 @@ fn draw(
     tree: &Path,
     host: &Host,
     spec: &str,
+    out: Option<&Path>,
     registry: &Registry,
 ) -> Result<(crate::sheet::page::Census, Rolled), Error> {
     let stem = spec.strip_suffix(SUFFIX).ok_or_else(|| {
@@ -75,13 +78,29 @@ fn draw(
     let (text, rolled) = compose(&program, &bands)?;
     let placed = crate::caption_place::placed(&text)?;
     let svg = format!("{stem}.svg");
-    std::fs::write(&svg, &placed).map_err(|e| crate::py::os_error(&e, &svg))?;
+    let base = stem.rsplit('/').next().unwrap_or(stem);
+    let at = |ext: &str| {
+        out.map_or_else(
+            || std::path::PathBuf::from(format!("{stem}.{ext}")),
+            |dir| dir.join(format!("{base}.{ext}")),
+        )
+    };
+    let written = at("svg");
+    std::fs::write(&written, &placed)
+        .map_err(|e| crate::py::os_error(&e, &written.to_string_lossy()))?;
     if host.var("DIAGRAM_SKIP_RENDER") != Some("1") {
-        crate::labels::hand_sheet::render(&placed, Path::new(&format!("{stem}.png")))?;
+        crate::labels::hand_sheet::render(&placed, &at("png"))?;
     }
     let registry = registry(tree)?;
-    let census =
-        crate::sheet::page::write_sheet_page(tree, host, &svg, &registry, None, Some(&placed))?;
+    let census = crate::sheet::page::write_sheet_page(
+        tree,
+        host,
+        &svg,
+        &registry,
+        None,
+        Some(&placed),
+        out,
+    )?;
     Ok((census, rolled))
 }
 
@@ -95,11 +114,15 @@ pub fn main(args: &[String], tree: &Path, host: &Host) -> Reply {
 ///
 /// Research: a sheet with untagged ink or an unknown kind fails - CONVENTION: every drawn element carries a kind the registry knows, else the generator exits 1 naming them (feature 262, FR-006)
 pub fn run(args: &[String], tree: &Path, host: &Host, registry: &Registry) -> Reply {
-    let [spec] = args else {
-        return reply(String::new(), USAGE.to_owned(), 2);
+    let (spec, out) = match args {
+        [spec] if !spec.starts_with("--") => (spec, None),
+        [spec, flag, dir] | [flag, dir, spec] if flag == "--out" && !spec.starts_with("--") => {
+            (spec, Some(Path::new(dir)))
+        }
+        _ => return reply(String::new(), USAGE.to_owned(), 2),
     };
     let _ = crate::reads::take();
-    match draw(tree, host, spec, registry) {
+    match draw(tree, host, spec, out, registry) {
         Ok((census, (rolls, notes))) => {
             let reads: Vec<String> = crate::reads::take()
                 .iter()

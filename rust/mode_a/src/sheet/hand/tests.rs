@@ -37,15 +37,19 @@ fn well(_: &Path) -> Result<Vec<FeatureClass>, l7r_gate_research::Error> {
 }
 
 #[test]
-fn the_arguments_are_one_sheet_and_where_its_placed_text_goes() {
-    assert_eq!(parse(&words(&["a.svg"])), Some(("a.svg", None)));
+fn the_arguments_are_one_sheet_and_where_its_placed_text_and_its_outputs_go() {
+    assert_eq!(parse(&words(&["a.svg"])), Some(("a.svg", None, None)));
     assert_eq!(
         parse(&words(&["a.svg", "--placed", "o.svg"])),
-        Some(("a.svg", Some("o.svg")))
+        Some(("a.svg", Some("o.svg"), None))
     );
     assert_eq!(
         parse(&words(&["--placed", "o.svg", "a.svg"])),
-        Some(("a.svg", Some("o.svg")))
+        Some(("a.svg", Some("o.svg"), None))
+    );
+    assert_eq!(
+        parse(&words(&["--out", "d", "a.svg", "--placed", "o.svg"])),
+        Some(("a.svg", Some("o.svg"), Some("d")))
     );
     for bad in [
         &[][..],
@@ -54,6 +58,8 @@ fn the_arguments_are_one_sheet_and_where_its_placed_text_goes() {
         &["a.svg", "--x", "o.svg"],
         &["--placed", "o.svg", "--x"],
         &["--x"],
+        &["a.svg", "--out"],
+        &["a.svg", "--out", "d", "--out", "e"],
     ] {
         assert_eq!(parse(&words(bad)), None, "{bad:?}");
     }
@@ -88,6 +94,9 @@ fn a_sheet_is_placed_rendered_and_paged_and_its_reads_listed() {
         .map(|p| p.as_str().unwrap())
         .collect();
     assert!(reads.contains(&at.as_str()), "{reads:?}");
+    // the sheet's notes, looked for and not there, are a read too (feature 449 T221): created later, they re-key the sheet
+    let notes = dir.path().join("shrine.notes.md");
+    assert!(reads.contains(&notes.to_string_lossy().as_ref()));
     let placed = std::fs::read_to_string(&out).unwrap();
     assert_eq!(placed, crate::caption_place::placed(SHEET).unwrap());
     assert_ne!(placed, SHEET);
@@ -99,6 +108,19 @@ fn a_sheet_is_placed_rendered_and_paged_and_its_reads_listed() {
     assert_eq!(r.code, 0, "{}", r.stderr);
     let png = std::fs::read(dir.path().join("shrine.png")).unwrap();
     assert_eq!(&png[16..24], &[0, 0, 9, 96, 0, 0, 0, 24]);
+    // `--out DIR` (feature 449 T221): the picture and the page drawn there, the sheet's folder left as it was
+    let staged = dir.path().join("staged");
+    std::fs::create_dir(&staged).unwrap();
+    std::fs::write(&notes, "# Shrine\n").unwrap();
+    let to = staged.to_string_lossy().into_owned();
+    let r = run(&words(&[&at, "--out", &to]), &tree, &Host::default(), &well);
+    assert_eq!(r.code, 0, "{}", r.stderr);
+    assert!(staged.join("shrine.png").is_file() && staged.join("shrine.html").is_file());
+    let v: Value = serde_json::from_str(&r.stdout).unwrap();
+    assert!(v["reads"]
+        .as_array()
+        .unwrap()
+        .contains(&Value::from(notes.to_string_lossy().as_ref())));
 }
 
 #[test]

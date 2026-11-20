@@ -63,7 +63,7 @@ not the trigger.
 
 ## The prediction: what WOULD change it, and what to do then
 
-**The trigger is a Mode A GENERATOR, not a Mode A count.** A Mode A sheet's `.gen.py` today renders
+**The trigger is a Mode A GENERATOR, not a Mode A count.** A Mode A sheet's `.gen.py` (deleted by feature 449 T221: `make map`'s Rust driver draws every sheet now) rendered
 the hand-drawn svg, and `compound.py` writes a DRAFT that is then refined by hand (its two exemplars
 excepted). The trigger is the day drawing a building type feels like "given knobs X, Y, Z, lay out
 the estate" every run, the way `hamletgen` lays out a hamlet - Mode A then acquires its own knobs,

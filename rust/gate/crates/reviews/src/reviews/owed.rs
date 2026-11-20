@@ -52,8 +52,12 @@ pub(super) fn re(pattern: &str) -> Regex {
 
 static DATA_KIND: LazyLock<Regex> = LazyLock::new(|| re(r#"data-kind="([^"]+)""#));
 /// Drawing or placement code - never the incremental gate in `l7r/diagram/ci/`, which draws and places nothing.
+// a pool map's drawing is its spec - a hamlet's `.spec.json`, a compound's `.compound.json`, a hand sheet's `.svg` - since feature 449 T221
+// deleted the `.gen.py` files that wrapped them
 static CODE: LazyLock<Regex> = LazyLock::new(|| {
-    re(r"^(l7r/(?!diagram/ci/).+\.py|(pool|legacy-hand-authored-pool)/.+\.(gen\.py|svg))$")
+    re(
+        r"^(l7r/(?!diagram/ci/).+\.py|(pool|legacy-hand-authored-pool)/.+\.(spec\.json|compound\.json|svg))$",
+    )
 });
 
 pub(super) fn found(re: &Regex, text: &str) -> bool {

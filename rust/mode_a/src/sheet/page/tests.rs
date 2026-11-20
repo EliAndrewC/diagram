@@ -28,7 +28,7 @@ fn a_sheet_s_page_is_written_beside_it_and_its_census_returned() {
         ..Host::default()
     };
     let at = svg.to_string_lossy().into_owned();
-    let census = write_sheet_page(&tree, &host, &at, &registry, None, None).unwrap();
+    let census = write_sheet_page(&tree, &host, &at, &registry, None, None, None).unwrap();
     assert_eq!(
         (
             census.counts.len(),
@@ -43,6 +43,7 @@ fn a_sheet_s_page_is_written_beside_it_and_its_census_returned() {
             && html.contains("\"raster\": {\"r\": 0}")
     );
     assert!(html.contains("<title>Karo Plan - interactive map</title>"));
+    std::fs::create_dir_all(dir.path().join("out")).unwrap();
     let given = write_sheet_page(
         &tree,
         &host,
@@ -50,12 +51,15 @@ fn a_sheet_s_page_is_written_beside_it_and_its_census_returned() {
         &registry,
         Some(false),
         Some("<svg><rect data-kind=\"nope\"/></svg>"),
+        Some(&dir.path().join("out")),
     )
     .unwrap();
     assert_eq!(given.unregistered, ["nope"]);
+    // `out` (feature 449 T221): the page written there, under the sheet's name
+    assert!(dir.path().join("out/karo-plan.html").is_file());
     let missing = dir.path().join("none.svg").to_string_lossy().into_owned();
     assert_eq!(
-        write_sheet_page(&tree, &host, &missing, &registry, None, None)
+        write_sheet_page(&tree, &host, &missing, &registry, None, None, None)
             .unwrap_err()
             .kind,
         "FileNotFoundError"

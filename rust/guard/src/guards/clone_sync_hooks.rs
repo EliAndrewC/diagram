@@ -51,7 +51,8 @@ const BEHIND_TEST_TARGETS: [&str; 9] = [
 ];
 
 static ENGINE_PATH: LazyLock<Regex> = LazyLock::new(|| {
-    crate::shared::regex::build(r"^(l7r/.*\.py|pool/.*\.(gen\.py|json))$")
+    // a pool map's spec (`.spec.json`, `.compound.json`) or its hand-drawn sheet (`.svg`): its `.gen.py` left with feature 449 T221
+    crate::shared::regex::build(r"^(l7r/.*\.py|pool/.*\.(json|svg))$")
         .unwrap_or_else(|e| unreachable!("{e}"))
 });
 

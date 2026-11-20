@@ -20,11 +20,10 @@
 //!   first; writes .../UNIT/dispatch.md; prints one line per unit naming both directories, every file the clone did not have, and the
 //!   prompt file
 //! reviews snapshot --root CLONE --stale-renders UNIT...
-//!   the generator of each unit's map whose render is missing or older than its map (385 T26), one a line, and stops
+//!   the folder of each unit's live map the generation cache does not serve as it stands (385 T26; 449 T221), one a line, and stops
 //! ```
 
 use std::path::{Path, PathBuf};
-use std::time::UNIX_EPOCH;
 
 use l7r_gate_pool::{walk, Walk};
 use l7r_guard::shared::py_text::repr;
@@ -138,19 +137,6 @@ fn describe(rec: &Rec) -> String {
     )
 }
 
-/// `st_mtime` as Python's float reads it (`sec + nsec * 1e-9`), so two times compare as the Python compared them.
-fn mtime(p: &Path) -> Result<f64, String> {
-    let t = std::fs::metadata(p)
-        .and_then(|m| m.modified())
-        .map_err(|e| format!("FileNotFoundError: {e}: {}", p.display()))?;
-    #[expect(clippy::cast_precision_loss, reason = "Python's own float")]
-    let at = match t.duration_since(UNIX_EPOCH) {
-        Ok(d) => d.as_secs() as f64 + f64::from(d.subsec_nanos()) * 1e-9,
-        Err(e) => -(e.duration().as_secs() as f64 + f64::from(e.duration().subsec_nanos()) * 1e-9),
-    };
-    Ok(at)
-}
-
 fn rel(p: &Path, root: &Path) -> String {
     p.strip_prefix(root)
         .unwrap_or(p)
@@ -158,46 +144,35 @@ fn rel(p: &Path, root: &Path) -> String {
         .into_owned()
 }
 
-/// The generator (`pool/.../<map>.gen.py`, relative to `root`) of each owed unit's map whose `.png` or `.html` is missing or older than
-/// its `.gen.py` or `.json` - rendered by `make verify` before the snapshot (feature 385 T26, plan D48; the round arbiter's fix on
-/// hour:385-approach-checklist@12). An entry with no generator whose `.png` is missing is listed as `sheet:<its .svg>`, which `make verify`
-/// refuses, naming `make sheet-render` (spec-fidelity, T26 round 1: "every unit").
-fn stale_renders(root: &Path, units: &[&Unit]) -> Result<Vec<String>, String> {
+/// The folder (from `root`) of each owed unit's live map the generation cache would not serve as it stands - drawn by `make verify` with
+/// `make map MAP=` before the snapshot (feature 385 T26, plan D48; the round arbiter's fix on hour:385-approach-checklist@12; asked of the
+/// cache in process since feature 449 T221, where a render older than its `.gen.py` or `.json` was the test). A map no engine draws (a
+/// frozen exhibit's sheet) whose `.png` is missing is listed as `sheet:<its .svg>`, which `make verify` refuses, naming `make
+/// sheet-render` (spec-fidelity, T26 round 1: "every unit").
+fn stale_renders(root: &Path, units: &[&Unit]) -> Vec<String> {
     let mut out: Vec<String> = Vec::new();
     let pool = walk(root);
     for unit in units {
-        let Some(src) = (!unit.on.is_empty())
-            .then(|| map_dir(&pool, &unit.on))
+        let Some(map) = (!unit.on.is_empty())
+            .then(|| pool.folder(&unit.on))
             .flatten()
         else {
             continue;
         };
-        let file = |suffix: &str| src.join(format!("{}{suffix}", unit.on));
-        let gen = file(".gen.py");
-        if !gen.is_file() {
-            let svg = file(".svg");
-            if svg.is_file() && !file(".png").is_file() {
-                out.push(format!("sheet:{}", rel(&svg, root)));
-            }
+        let stale = if map.tree == l7r_gate_pool::LIVE && map.kind.is_live() {
+            (!l7r_gate_pool::is_current(root, &map.rel())).then(|| map.rel())
+        } else {
+            (map.has(".svg") && !map.has(".png"))
+                .then(|| format!("sheet:{}", rel(&map.file(".svg"), root)))
+        };
+        let Some(name) = stale else {
             continue;
-        }
-        let mut made = mtime(&gen)?;
-        if file(".json").is_file() {
-            made = made.max(mtime(&file(".json"))?);
-        }
-        let mut stale = false;
-        for r in [file(".png"), file(".html")] {
-            if !r.is_file() || mtime(&r)? < made {
-                stale = true;
-                break;
-            }
-        }
-        let name = rel(&gen, root);
-        if stale && !out.contains(&name) {
+        };
+        if !out.contains(&name) {
             out.push(name);
         }
     }
-    Ok(out)
+    out
 }
 
 /// `shutil.copy2`: the bytes, the mode, and the access and modification times.
@@ -456,7 +431,7 @@ pub fn cli(args: &[String]) -> Reply {
         .filter_map(|s| units.iter().rev().find(|u| u.slug() == *s))
         .collect();
     let said = if a.stale {
-        stale_renders(&root, &asked).map(|names| names.join("\n") + "\n")
+        Ok(stale_renders(&root, &asked).join("\n") + "\n")
     } else {
         snapshot(&root, mirror.as_deref(), &asked, &a.key)
             .map(|lines| lines.iter().flat_map(|l| [l.as_str(), "\n"]).collect())

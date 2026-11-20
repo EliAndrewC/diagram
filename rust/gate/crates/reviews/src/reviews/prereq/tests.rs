@@ -253,16 +253,15 @@ fn the_paired_gate_is_green_running_or_red() {
     assert_eq!(run_in(&r, &["gate-state"]).stdout, "green\n");
 }
 
-/// `check` as the command line runs it, the generation cache's answers the fixture's `bundle_door.py` would give - current unless
-/// `<gen>.stale` exists - asked in process: each Python start cost a test about 30 ms, eight of
-/// them 327 ms against FR-008's tenth of a second (feature 449 T167). The runner itself is asked where it is what a test tests
-/// (`the_runner_failing_or_the_figure_pattern_failing_fails_the_check`).
+/// `check` as the command line runs it, the generation cache's answer stood in for - current unless the map's folder holds `.stale` - so
+/// no test needs a published entry; the cache itself is asked where it is what a test tests
+/// (`the_cache_failing_or_the_figure_pattern_failing_fails_the_check`).
 fn check_in(root: &Path, a: &[&str]) -> Reply {
     let mut all: Vec<String> = a.iter().map(|s| (*s).to_owned()).collect();
     all.extend(["--clone".to_owned(), root.to_string_lossy().into_owned()]);
     let p = parse_with(&all, &specs(), 1).unwrap();
-    check_asking(root, &p, &mut |gen| {
-        Ok(json!(!Path::new(&format!("{gen}.stale")).exists()))
+    check_asking(root, &p, &mut |map| {
+        Ok(json!(!root.join(map).join(".stale").exists()))
     })
 }
 
@@ -309,17 +308,17 @@ fn a_check_names_every_unmet_prerequisite() {
          FR-006 figure(s) quoted with no record behind them: 1,234 px; 9 s - cite the `m:` key or record it\n"
     );
     // the map stale, a snapshot named, a missing render, a snapshot of an older map, no generator
-    put(&r, "pool/hamlets/m/m.gen.py.stale", "");
+    put(&r, "pool/hamlets/m/.stale", "");
     put(&r, ".git/p.md", "x");
     let stale = check(&["--maps", "m", "--gate-green", "yes"]);
     assert!(
-        stale
-            .stdout
-            .contains("FR-005 m: its generation key has moved"),
+        stale.stdout.contains(
+            "FR-005 m: the generation cache does not serve it as it stands - the map on disk is not what the engine draws now - `make map MAP=pool/hamlets/m`"
+        ),
         "{}",
         stale.stdout
     );
-    std::fs::remove_file(r.join("pool/hamlets/m/m.gen.py.stale")).unwrap();
+    std::fs::remove_file(r.join("pool/hamlets/m/.stale")).unwrap();
 }
 
 /// A snapshot the dispatch names must be whole and of the pool's map (split from the test above, feature 449 T167: its seven checks,
@@ -344,9 +343,9 @@ fn a_named_snapshot_must_be_whole_and_of_the_pools_map() {
         .contains("is of an older map than the pool's"));
 }
 
-/// A map whose folder lacks a render, or that has no generator, is refused; a whole one passes (split as above).
+/// A map whose folder lacks a render, or that no live map bears, is refused; a whole one passes (split as above).
 #[test]
-fn a_map_missing_a_render_or_a_generator_is_refused_and_a_whole_one_passes() {
+fn a_map_missing_a_render_or_no_live_map_is_refused_and_a_whole_one_passes() {
     let (r, p) = checked("whole");
     let check = |extra: &[&str]| {
         let mut a = vec!["check", "--prompt-file", &p];
@@ -360,7 +359,7 @@ fn a_map_missing_a_render_or_a_generator_is_refused_and_a_whole_one_passes() {
         .contains("its pool folder lacks .png"));
     assert!(check(&["--maps", "nosuch"])
         .stdout
-        .contains("nosuch: no pool generator by that name"));
+        .contains("nosuch: no live pool map by that name"));
     put(&r, "pool/hamlets/m/m.png", "x");
     let clean = check(&["--maps", "m"]);
     assert_eq!((clean.code, clean.stdout.as_str()), (0, ""));
@@ -371,7 +370,6 @@ fn a_map_missing_a_render_or_a_generator_is_refused_and_a_whole_one_passes() {
 fn a_sheet_is_checked_against_the_snapshot_its_unit_names() {
     let (r, p) = checked("sheet");
     sheet(&r, "pool", "s", &["gate"]);
-    put(&r, "pool/compounds/s/s.gen.py", "#\n");
     for ext in [".png", ".html"] {
         put(&r, &format!("pool/compounds/s/s{ext}"), "x");
     }
@@ -384,21 +382,31 @@ fn a_sheet_is_checked_against_the_snapshot_its_unit_names() {
     .contains("FR-005 s: the review snapshot the dispatch names lacks .svg .png .html"));
 }
 
-/// The generation cache's runner failing, and the figure pattern's, fail the check - through the command line and the fixture's real
-/// `bundle_door.py`, the one Python start of these tests (split from the test above, feature 449 T167).
+/// The generation cache that cannot answer, and the figure pattern's failing, fail the check; through the command line the cache is
+/// asked in process - a fixture with no cache serves nothing (feature 449 T221, where the fixture's `bundle_door.py` answered).
 #[test]
-fn the_runner_failing_or_the_figure_pattern_failing_fails_the_check() {
+fn the_cache_failing_or_the_figure_pattern_failing_fails_the_check() {
     let (r, p) = checked("broken");
     put(&r, ".git/p.md", "x");
+    let mut all: Vec<String> = ["check", "--prompt-file", &p, "--maps", "m", "--clone"]
+        .iter()
+        .map(|s| (*s).to_owned())
+        .collect();
+    all.push(r.to_string_lossy().into_owned());
+    let parsed = parse_with(&all, &specs(), 1).unwrap();
+    let broken = check_asking(&r, &parsed, &mut |_| Err("the cache: broken".to_owned()));
+    assert_eq!(
+        (broken.code, broken.stdout.as_str(), broken.stderr.as_str()),
+        (1, "", "the cache: broken")
+    );
     let check = |extra: &[&str]| {
         let mut a = vec!["check", "--prompt-file", &p];
         a.extend_from_slice(extra);
         run_in(&r, &a)
     };
-    put(&r, "pool/hamlets/m/m.gen.py.broken", "");
-    let broken = check(&["--maps", "m"]);
-    assert_eq!((broken.code, broken.stdout.as_str()), (1, ""));
-    std::fs::remove_file(r.join("pool/hamlets/m/m.gen.py.broken")).unwrap();
+    assert!(check(&["--maps", "m"])
+        .stdout
+        .contains("FR-005 m: the generation cache does not serve it"));
     put(&r, ".git/no-pattern", "");
     assert_eq!(check(&["--maps", ""]).code, 1);
     assert_eq!(check(&["--maps", ""]).stdout, "");

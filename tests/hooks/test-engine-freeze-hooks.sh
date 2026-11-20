@@ -42,7 +42,8 @@ edit "$ENG";                                  check "a glyph-check mid tool call
 says "the refusal names the running review" "a1 glyph-check live"
 says "the refusal names the route" "once every review and roll has returned"
 edit "$ENG" Write;                            check "Write is refused too" 2 "$RC"
-edit "$C/pool/hamlets/sawada/sawada.gen.py";  check "a pool gen is engine: refused" 2 "$RC"
+edit "$C/pool/hamlets/sawada/sawada.spec.json"; check "a pool map's spec is engine: refused (its .gen.py gone, 449 T221)" 2 "$RC"
+edit "$C/pool/magistracies/ubame/ubame.svg";  check "a hand sheet is engine: refused" 2 "$RC"
 edit "$C/pool/hamlets/sawada/sawada.json";    check "a pool manifest is engine: refused" 2 "$RC"
 mkdir -p "$C/rust/phases/src"; edit "$C/rust/phases/src/field.rs"; check "a Rust phase is engine: refused (444 T17)" 2 "$RC"  # GUARD_EDIT_OK: feature 444 T17 - the .rs engine case
 edit "$C/docs/usage.md";                      check "a doc edit passes" 0 "$RC"

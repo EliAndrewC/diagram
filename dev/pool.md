@@ -28,7 +28,7 @@ nothing else is added or deleted.
 **No generated render is tracked, anywhere** (feature 178, GM 2026-09-03: *"in general, the generated html pages
 should not be tracked just like the generated svg and png files should not be tracked"*; on the frozen exhibits,
 *"I don't see why we should be tracking those renders."*). A live map's renders rebuild with
-`make map GEN=pool/<tier>/<map>/<map>.gen.py`; the tracked source is the `.gen.py`, `.json` and `.notes.md`, plus the
+`make map MAP=pool/<tier>/<map>`; the tracked source is the spec (`.spec.json`, `.compound.json`), the `.json` and `.notes.md`, plus the
 `.svg` of a tier `l7r/diagram/buildings/types.json` declares hand-drawn (`tests/test_building_types.py` holds `.gitignore` to that
 declaration). Never commit a live map's svg/png.
 
@@ -91,7 +91,7 @@ finishing any conversion.**
 
 `hamletgen/` is the generator, a package whose
 `CLAUDE.md` (deleted with the Python hamlet engine, feature 444 T39) says which submodule holds which stage, so **load the one stage you
-need rather than the whole engine**; a map is rolled with `make map GEN=...`, a one-off hamlet with `make hamlet ARGS=...`. [`pool/hamlets/`](../pool/hamlets/)
+need rather than the whole engine**; a map is rolled with `make map MAP=...`, a one-off hamlet with `make hamlet ARGS=...`. [`pool/hamlets/`](../pool/hamlets/)
 holds its maps (`meta.generated_by` marks a scripted map). A session drawing anything but a hamlet still follows the
 specifications on its tier's research page (`research/contents.json#tiers` and the topic pages beside it). The lessons
 the experiment left are in [`lessons.md`](lessons.md).

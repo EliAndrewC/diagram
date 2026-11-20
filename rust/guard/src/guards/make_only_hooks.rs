@@ -79,7 +79,8 @@ lazy!(
 );
 lazy!(
     ENTRY_SCRIPT,
-    format!(r"{POS}{PY}\s+\S*l7r/diagram/(?:pipeline/regen|hamletgen/__main__)\.py")
+    // the Python pipeline's script left the pattern with its file (feature 449 T221): `make map` runs the Rust driver
+    format!(r"{POS}{PY}\s+\S*l7r/diagram/hamletgen/__main__\.py")
 );
 lazy!(
     CARGO,

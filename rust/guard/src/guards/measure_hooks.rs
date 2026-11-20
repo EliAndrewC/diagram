@@ -282,7 +282,7 @@ fn cadence(event: &Event, s: &Seams, log: &dyn Fn(&str, &str)) -> Option<Answer>
          after every small round of changes (GM 2026-10-08).\n\n\
          Do this instead, until the batch is done:\n \
          - after each fix: `make quick` (or `make rust-test CRATE=<the crate your change reaches>`) - seconds, never blocked\n \
-         - after a map-changing fix: regenerate the maps it touches (`make map GEN=...`) and `make notes-census`\n \
+         - after a map-changing fix: regenerate the maps it touches (`make map MAP=...`) and `make notes-census`\n \
          - claims: `make claims-owed` / `make claims-bundle` / impl-drift as you go - they are not the gate\n \
          - then ONE `make done` for the whole batch (feature 328: once per 4-5 waves, or before anything lands)\n\n\
          A run after a RED gate is not refused (that is fixing what it found). Re-issuing this command goes through.\n\

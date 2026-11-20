@@ -3,11 +3,10 @@
 //! these pin the branches.
 
 use std::path::{Path, PathBuf};
-use std::time::{Duration, SystemTime};
 
 use super::super::owed::Unit;
 use super::super::tests::{dir, map, put, repo, sheet};
-use super::{cli, copy2, flag_like, map_dir, mtime, parse, snapshot, stale_renders};
+use super::{cli, copy2, flag_like, map_dir, parse, snapshot, stale_renders};
 
 fn unit(check: &str, subject: &str, on: &str) -> Unit {
     Unit {
@@ -20,15 +19,6 @@ fn unit(check: &str, subject: &str, on: &str) -> Unit {
 
 fn words(w: &[&str]) -> Vec<String> {
     w.iter().map(|s| (*s).to_owned()).collect()
-}
-
-/// Set `rel`'s modification time `ago` seconds before now.
-fn aged(root: &Path, rel: &str, ago: u64) {
-    let at = SystemTime::now() - Duration::from_secs(ago);
-    std::fs::File::open(root.join(rel))
-        .unwrap()
-        .set_times(std::fs::FileTimes::new().set_modified(at))
-        .unwrap();
 }
 
 #[test]
@@ -45,17 +35,14 @@ fn an_owed_map_is_snapshot_from_the_clone_and_the_mirror() {
     map(&main, "pool", "m", &["house"]);
     put(&main, "pool/hamlets/m/m.html", "html");
     let r = clone.to_string_lossy().into_owned();
-    // a stale render named first: the clone's map has no .html
+    // a map the generation cache does not serve (the clone has no cache) named first, its folder for `make map MAP=`
     let stale = cli(&words(&[
         "--root",
         &r,
         "--stale-renders",
         "settlement-review--m",
     ]));
-    assert_eq!(
-        (stale.code, stale.stdout.as_str()),
-        (0, "pool/hamlets/m/m.gen.py\n")
-    );
+    assert_eq!((stale.code, stale.stdout.as_str()), (0, "pool/hamlets/m\n"));
     let got = cli(&words(&[
         "--ro",
         &r,
@@ -163,49 +150,33 @@ fn each_check_is_asked_its_own_question() {
         .starts_with("OSError"));
 }
 
+/// The stale renders (feature 449 T221): each live map the generation cache does not serve, by its folder and once however often it is
+/// asked; a map no engine draws only where its sheet has no picture; a unit on no map, or a map no folder bears, nothing.
 #[test]
-fn the_stale_renders_are_the_generators_whose_render_is_older() {
+fn the_stale_renders_are_the_live_maps_the_cache_does_not_serve() {
     let root = dir("snapshot-stale");
     map(&root, "pool", "a", &[]);
-    for rel in ["pool/hamlets/a/a.png", "pool/hamlets/a/a.html"] {
-        put(&root, rel, "r");
-    }
-    aged(&root, "pool/hamlets/a/a.gen.py", 100);
-    aged(&root, "pool/hamlets/a/a.json", 100);
     sheet(&root, "legacy-hand-authored-pool", "s", &[]);
+    sheet(&root, "legacy-hand-authored-pool", "w", &[]);
+    put(&root, "legacy-hand-authored-pool/compounds/w/w.png", "png");
     sheet(&root, "pool", "t", &[]);
-    put(&root, "pool/compounds/t/t.png", "png");
-    let (a, s, t, none) = (
+    let (a, s, t, w, none) = (
         unit("x", "a", "a"),
         unit("x", "s", "s"),
         unit("x", "t", "t"),
+        unit("x", "w", "w"),
         unit("x", "n", ""),
     );
     let gone = unit("x", "g", "g");
-    assert!(
-        stale_renders(&root, &[&a, &s, &t, &none, &gone]).unwrap()
-            == ["sheet:legacy-hand-authored-pool/compounds/s/s.svg"]
-    );
-    // a render older than the manifest, listed once however often it is asked
-    aged(&root, "pool/hamlets/a/a.html", 200);
     assert_eq!(
-        stale_renders(&root, &[&a, &a]).unwrap(),
-        ["pool/hamlets/a/a.gen.py"]
+        stale_renders(&root, &[&a, &s, &t, &w, &none, &gone, &a]),
+        [
+            "pool/hamlets/a",
+            "sheet:legacy-hand-authored-pool/compounds/s/s.svg",
+            "pool/compounds/t"
+        ]
     );
-    std::fs::remove_file(root.join("pool/hamlets/a/a.json")).unwrap();
-    assert_eq!(stale_renders(&root, &[&a]).unwrap().len(), 1);
-    assert!(mtime(&root.join("none"))
-        .unwrap_err()
-        .starts_with("FileNotFoundError"));
-    // a time before the epoch is a negative float, as `st_mtime` is
-    std::fs::File::open(root.join("pool/hamlets/a/a.gen.py"))
-        .unwrap()
-        .set_times(
-            std::fs::FileTimes::new()
-                .set_modified(std::time::UNIX_EPOCH - Duration::from_millis(1500)),
-        )
-        .unwrap();
-    assert!((mtime(&root.join("pool/hamlets/a/a.gen.py")).unwrap() + 1.5).abs() < 1e-9);
+    assert!(stale_renders(&root, &[&w, &none]).is_empty());
     assert!(copy2(&root.join("none"), &root.join("x"))
         .unwrap_err()
         .starts_with("OSError"));
@@ -302,14 +273,12 @@ fn a_raise_is_a_trace_and_exit_one() {
     assert!(got
         .stderr
         .starts_with("Traceback (most recent call last):\n  l7r-gate reviews snapshot\nOSError"));
-    // renders newer than the map: nothing stale, one empty line as `print("")` wrote
-    put(root, "pool/hamlets/m/m.png", "p");
-    put(root, "pool/hamlets/m/m.html", "h");
-    let fine = cli(&words(&[
+    // the map the cache does not serve (the clone has none), by its folder
+    let stale = cli(&words(&[
         "--root",
         &r,
         "--stale-renders",
         "settlement-review--m",
     ]));
-    assert_eq!(fine.stdout, "\n");
+    assert_eq!(stale.stdout, "pool/hamlets/m\n");
 }

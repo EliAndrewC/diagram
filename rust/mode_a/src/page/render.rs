@@ -340,10 +340,30 @@ fn document(tree: &Path, name: &str, svg: &str, blob: &str) -> Result<String, Er
 ///
 /// # Errors
 /// [`render_page`]'s, or the file unwritable.
-pub fn write_html(tree: &Path, host: &Host, path: &Path, mut p: Page<'_>) -> Result<(), Error> {
+pub fn write_html(tree: &Path, host: &Host, path: &Path, p: Page<'_>) -> Result<(), Error> {
     let text = path.to_string_lossy();
-    if let Some(base) = text.strip_suffix(".html") {
-        p.notes = crate::notes::read_map_notes(Path::new(&format!("{base}.notes.md")));
+    let notes = text
+        .strip_suffix(".html")
+        .map(|base| std::path::PathBuf::from(format!("{base}.notes.md")));
+    write_html_beside(tree, host, path, notes.as_deref(), p)
+}
+
+/// The page written at `path`, the map's notes read from `notes` (none: no notes): what [`write_html`] does with the notes beside the
+/// page, and what a sheet drawn into another folder asks with the notes beside its source (`--out`, feature 449 T221: the generation
+/// cache draws a sheet into its entry's staging folder, the map's notes staying in the map's folder).
+///
+/// # Errors
+/// [`render_page`]'s, or the file unwritable.
+pub fn write_html_beside(
+    tree: &Path,
+    host: &Host,
+    path: &Path,
+    notes: Option<&Path>,
+    mut p: Page<'_>,
+) -> Result<(), Error> {
+    let text = path.to_string_lossy();
+    if let Some(notes) = notes {
+        p.notes = crate::notes::read_map_notes(notes);
     }
     // THE FILE IS OPENED BEFORE THE PAGE IS RENDERED, as the Python's `with open(path, "w")` opened it (feature 449 T150's differential),
     // so an unwritable path refuses before any render - but NOT EMPTIED until the page is in hand (FIXED, feature 449 T183, T150's

@@ -36,20 +36,41 @@ DIR="$TMP/proj/sid-1/subagents"
 MAPDIR_F="$SKILL/pool/hamlets/testmap"
 # GUARD_EDIT_OK: feature 240 - a settlement-review dispatch now asks `review_prereq` first (`l7r-gate reviews prereq`, 449 T89), so the fixture
 # carries it, spec-lint (whose figure pattern it imports), a stub gate stamp (green while `.git/stub-gate-green`
-# exists) and a stub generation cache (current unless `<gen>.stale` exists), and a moved map is a WHOLE map.
+# exists) and a generation cache (`cached`, below), and a moved map is a WHOLE map.
 # GUARD_EDIT_OK: feature 240 - spec-lint imports `_spec_figures` since feature 239 (the figure pattern's one home)
 "$(dirname "$HOOK")/../../scripts/gates/l7r-gate.sh" check spec-lint --figure-pattern > "$CLONE/figure-pattern"   # the one definition of a figure, the Rust spec lint's
 REAL_GATE="$(cd "$(dirname "$HOOK")/../.." && pwd)/scripts/gates/l7r-gate.sh"
-printf '#!/usr/bin/env bash\n[ "$1" = check ] && exec cat "%s/figure-pattern"\n[ "$1" = reviews ] && exec "%s" "$@"   # feature 449 T89: the reviews are the real gate binary (the checks door left with T132)\n[ -f "$(git rev-parse --show-toplevel)/.git/stub-gate-green" ]\n' "$CLONE" "$REAL_GATE" >"$CLONE/scripts/gates/l7r-gate.sh"; chmod +x "$CLONE/scripts/gates/l7r-gate.sh"
-mkdir -p "$SKILL/l7r/diagram/pipeline"
-printf 'import os\n\ndef is_current(gen):\n    return not os.path.exists(gen + ".stale")\n' > "$SKILL/l7r/diagram/pipeline/gencache.py"
-# GUARD_EDIT_OK: feature 240 - REGULAR packages, as the engine's are. Under `make hooks-test` the real skill is on
-# PYTHONPATH, and a regular `l7r.diagram` anywhere on the path wins over a namespace portion, so a stub without
-# `__init__.py` was shadowed by the real generation cache and 14 cases went red that passed when run by hand.
-: > "$SKILL/l7r/diagram/__init__.py"; : > "$SKILL/l7r/diagram/pipeline/__init__.py"
+printf '#!/usr/bin/env bash\n[ "$1" = check ] && exec cat "%s/figure-pattern"\n[ "$1" = reviews ] && exec "%s" "$@"   # feature 449 T89: the reviews are the real gate binary (the checks door left with T132)\n[ "$1" = hamlet ] && { echo "%s/stand-in-hamlet"; exit 0; }\n[ -f "$(git rev-parse --show-toplevel)/.git/stub-gate-green" ]\n' "$CLONE" "$REAL_GATE" "$CLONE" >"$CLONE/scripts/gates/l7r-gate.sh"; chmod +x "$CLONE/scripts/gates/l7r-gate.sh"
+# GUARD_EDIT_OK: feature 449 T221 - THE GENERATION CACHE IS RUST, asked in process by the review gate: the fixture's stub launcher names a
+# stand-in hamlet engine (`l7r-gate.sh hamlet`), and `cached` writes a real cache entry for each map - its engine id the stand-in's whole
+# hash (no build-id note), its spec's stat and digest - so a map is current until its spec changes (the `<gen>.stale` stub before T221)
+printf 'stand-in hamlet engine\n' > "$CLONE/stand-in-hamlet"
+cached() { python3 - "$SKILL" <<'PY'
+import hashlib, json, os, sys
+root = sys.argv[1]
+eng = "sha256:" + hashlib.sha256(open(os.path.join(root, "stand-in-hamlet"), "rb").read()).hexdigest()
+cache = os.path.join(root, ".gencache/rust")
+os.makedirs(cache, exist_ok=True)
+open(os.path.join(cache, "reads.tsv"), "w").write("# l7r pool read table 1\n")
+hamlets = os.path.join(root, "pool/hamlets")
+for name in sorted(os.listdir(hamlets)) if os.path.isdir(hamlets) else []:
+    spec = os.path.join(hamlets, name, name + ".spec.json")
+    if not os.path.isfile(spec):
+        continue
+    st = os.stat(spec)
+    meta = {"engine": "hamlet", "engine_id": eng, "skip_render": os.environ.get("DIAGRAM_SKIP_RENDER") == "1",
+            "spec": {"path": f"pool/hamlets/{name}/{name}.spec.json", "hashed": str(4102444800 * 10**9),
+                     "stat": [str(st.st_size), str(st.st_mtime_ns), str(st.st_ctime_ns), str(st.st_ino)],
+                     "digest": hashlib.sha256(open(spec, "rb").read()).hexdigest()},
+            "artifacts": [], "key": "k", "reads": 0}
+    entry = os.path.join(cache, "entries/hamlets", name)
+    os.makedirs(entry, exist_ok=True)
+    open(os.path.join(entry, "meta.json"), "w").write(json.dumps(meta))
+PY
+}
 # GUARD_EDIT_OK: feature 449 T220 - each map folder carries its spec, which makes it a hamlet to the one pool walk (a manifest alone is
 # no map in the live pool)
-moved()   { mkdir -p "$MAPDIR_F"; printf '{"meta":{"name":"testmap"}}' > "$MAPDIR_F/testmap.json"; printf '# testmap\n' > "$MAPDIR_F/testmap.notes.md"; for ext in gen.py svg png html spec.json; do : > "$MAPDIR_F/testmap.$ext"; done; }
+moved()   { mkdir -p "$MAPDIR_F"; printf '{"meta":{"name":"testmap"}}' > "$MAPDIR_F/testmap.json"; printf '# testmap\n' > "$MAPDIR_F/testmap.notes.md"; for ext in svg png html spec.json; do : > "$MAPDIR_F/testmap.$ext"; done; cached; }
 unmoved() { rm -rf "$SKILL/pool"; }
 moved
 
@@ -74,13 +95,13 @@ permitted_with() { # label, payload, text the context must carry
      && ! printf '%s' "$out" | grep -q "updatedInput"; then ok; else bad "$1 (rc=$rc: $out)"; fi
 }
 verdict() { mkdir -p "$VERDICTS"; printf '{"map":"testmap","engine_key":"%s","verdict":"%s","findings":%s}' "${3:-$KEY}" "$1" "$2" > "$VERDICTS/settlement-review--testmap.json"; }
-reset_prereq() { rm -rf "$VERDICTS" "$CLONE/.git/review-dispositions" "$CLONE/specs" "$MAPDIR_F/testmap.gen.py.stale" "$CLONE/.git/stub-gate-green" "$CLONE/.git/pairing-state.json"; }
+reset_prereq() { rm -rf "$VERDICTS" "$CLONE/.git/review-dispositions" "$CLONE/specs" "$CLONE/.git/stub-gate-green" "$CLONE/.git/pairing-state.json"; }
 refused_for() { # label, payload, text the refusal must carry
   local out; out=$(run_pretool "$2"); local rc=$?
   if [ "$rc" -eq 2 ] && printf '%s' "$out" | grep -q -- "$3"; then ok; else bad "$1 (rc=$rc: $out)"; fi
 }
 green() { touch "$CLONE/.git/stub-gate-green"; }
-moved_two() { moved; mkdir -p "$MAPDIR_G"; printf '{"meta":{"name":"othermap"}}' > "$MAPDIR_G/othermap.json"; printf '# othermap\n' > "$MAPDIR_G/othermap.notes.md"; for ext in gen.py svg png html spec.json; do : > "$MAPDIR_G/othermap.$ext"; done; }
+moved_two() { moved; mkdir -p "$MAPDIR_G"; printf '{"meta":{"name":"othermap"}}' > "$MAPDIR_G/othermap.json"; printf '# othermap\n' > "$MAPDIR_G/othermap.notes.md"; for ext in svg png html spec.json; do : > "$MAPDIR_G/othermap.$ext"; done; cached; }
 snap_of() { mkdir -p "$CLONE/.git/review-snapshot/settlement-review--$1/clone"; cp "$SKILL/pool/hamlets/$1/$1".* "$CLONE/.git/review-snapshot/settlement-review--$1/clone/"; }
 note_says() { ( cd "$MIRROR" && printf '%s' "$1" | CLONE_MAIN="$MIRROR" "$HOOK" "${2:-pretool}" 2>&1 ); }
 
@@ -248,9 +269,9 @@ case_11b() {  # split from case_11 at its own reset (feature 383 amendment 4, pl
 moved; reset_prereq
 printf '{"engine_key":"%s"}' "$KEY" > "$CLONE/.git/verification-state.json"; green
 # FR-005: the map on disk must be what the engine draws now, and whole
-reset_prereq; green; touch "$MAPDIR_F/testmap.gen.py.stale"
+reset_prereq; green; printf '{"moved": 1}' > "$MAPDIR_F/testmap.spec.json"
 refused_for "a review of a map whose generation key moved is refused" "$REVIEW" "FR-005"
-rm -f "$MAPDIR_F/testmap.gen.py.stale" "$MAPDIR_F/testmap.png"
+: > "$MAPDIR_F/testmap.spec.json"; rm -f "$MAPDIR_F/testmap.png"
 # GUARD_EDIT_OK: feature 240 FR-005 - the earlier gate cases took a whole snapshot, and a whole snapshot is a
 # whole map for the reviewer; so the refusal is proven with the render gone from BOTH places, then permitted
 # again from the snapshot alone.

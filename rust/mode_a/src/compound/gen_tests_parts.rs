@@ -729,6 +729,20 @@ fn the_command_draws_a_spec_whole_or_refuses_it() {
             )
     );
     assert!(dir.path().join("t.png").exists());
+    // `--out DIR` (feature 449 T221): the sheet and its page drawn there, the spec's folder left as it was
+    let staged = dir.path().join("staged");
+    std::fs::create_dir(&staged).unwrap();
+    let to = staged.to_string_lossy().into_owned();
+    let r = super::cli::run(
+        &[to.clone(), "--out".into(), at.clone()][1..],
+        &tree,
+        &skip,
+        &known,
+    );
+    assert_eq!(r.code, 2);
+    let r = super::cli::run(&[at.clone(), "--out".into(), to], &tree, &skip, &known);
+    assert_eq!(r.code, 0, "{}", r.stderr);
+    assert!(staged.join("t.svg").is_file() && staged.join("t.html").is_file());
     let bad = dir.path().join("t.json").to_string_lossy().into_owned();
     let r = super::cli::run(&[bad], &tree, &skip, &known);
     assert!(r.code == 1 && r.stdout.contains("is named <map>.compound.json"));

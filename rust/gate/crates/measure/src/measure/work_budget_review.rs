@@ -86,7 +86,8 @@ const SHEET_COUNTERS: [Counter; 3] = [
         group: "mode-a",
         source: Source::Sheet,
     },
-    // the pool walk and its index (feature 449 T220): `l7r-pool counts <tree>`
+    // the whole pipeline stage (feature 449 T220, T221): the walk, the index and the generation cache's warm all-hit run, `l7r-pool
+    // counts <tree>` (the second of two runs back to back)
     Counter {
         stage: "pipeline",
         command: "counts",
@@ -97,22 +98,24 @@ const SHEET_COUNTERS: [Counter; 3] = [
     },
 ];
 
-/// A counted stage whose counter reaches only part of its derivation's kinds, with what it leaves out: printed beside its counts, so a
-/// count far under its budget is read as the part it is.
-const PARTLY_COUNTED: [(&str, &str); 1] = [(
-    "pipeline",
-    "the walk's and the index's kinds alone (T220); the generation key's, the read table's and the cache's are counted when T221 builds them",
-)];
-
-/// What the pool walk's counts read: its crate, the workspace's manifests, both pool trees and the building types declaration. The
-/// trees' renders are ignored files no key of the tree sees, so the walk's listing is asked too (`asked_sheets`).
-const PIPELINE_READS: [&str; 6] = [
+/// What the pipeline's counts read (feature 449 T220, T221): the pool crate, the workspace's manifests, both pool trees and the building
+/// types declaration; and, since the counting run holds the generation cache's read table (T221), what the table's rows are made of - the
+/// Mode A engine's crates (what a sheet reads is its code's to say; the hamlet driver reads its spec alone, so its code moves no row) and
+/// the files the sheets read (the page's assets and modals, the question fragments they link). The trees' renders are ignored files no
+/// key of the tree sees, so the walk's listing is asked too (`asked_sheets`).
+const PIPELINE_READS: [&str; 12] = [
     "rust/gate/crates/pool/",
     "rust/Cargo.toml",
     "rust/Cargo.lock",
     "pool/",
     "legacy-hand-authored-pool/",
-    "l7r/diagram/buildings/types.json",
+    "l7r/diagram/",
+    "rust/mode_a/",
+    "rust/gate/crates/core/",
+    "rust/gate/crates/registry/",
+    "rust/gate/crates/research/",
+    "rust/guard/",
+    "research/questions/",
 ];
 
 /// What the hamlet driver's counts read: its crate and the workspace's manifests.
@@ -154,7 +157,7 @@ fn kept_or_run(
     asked: &str,
     count: impl FnOnce() -> Result<String, String>,
 ) -> Result<(String, bool), String> {
-    // a `.py` under the reads (a pool `.gen.py`) is read by no counting run, and keying it would start Python
+    // a `.py` under the reads is read by no counting run, and keying it would start Python
     let key = worktree_key(root, "python3", reads, &|p| {
         Path::new(p).extension().is_none_or(|e| e != "py")
     })?;
@@ -426,13 +429,7 @@ fn hold_sheets(sheets: &Value, counted: &str, held: &mut Held) {
                 )),
             }
         }
-        let part = PARTLY_COUNTED
-            .iter()
-            .find(|(s, _)| *s == stage.as_str())
-            .map(|(_, what)| format!(" - counted: {what}"))
-            .unwrap_or_default();
-        held.lines
-            .push(format!("  {stage}: {}{part}", cells.join("; ")));
+        held.lines.push(format!("  {stage}: {}", cells.join("; ")));
     }
 }
 

@@ -2,7 +2,8 @@
 //! `specs/449-rust-codebase/derivations/T219-pipeline.md` (judged SOUND), never from the Python pipeline it replaces. One walk of both
 //! pool trees ([`walk`]), which every consumer of the pool asks in place of listing it on its own (the derivation's Keep 7) - the review
 //! tools, the probe, the model trial, the work-budget review, the review gate (through `l7r-gate pool find`), the Mode A engine's pool
-//! sweep - and the index it writes ([`index`]). The generation key, the read table and the cache are T221's.
+//! sweep - and the index it writes ([`index`]); and (T221) the generation cache ([`cache`]: the read table, the entries, the engines' ids)
+//! and the one driver every pool map is drawn by ([`map`], `make map MAP=<folder|spec>`).
 //!
 //! The commands, `l7r-gate pool <command>` in the gate and `l7r-pool <command>` as this crate's own program:
 //!
@@ -10,21 +11,26 @@
 //! - `find <map> [<suffix>]`: the map's kind tag and folder; with a suffix, the folder's `<map><suffix>` where the listing holds it.
 //!   Exit 1 where there is none.
 //! - `list`: every map folder, `tree tier name kind`, then what was reported.
-//! - `counts <tree>` (a counting build alone): the walk's and the index's counted work on that tree, one JSON line with its `total`.
+//! - `map <target>... | map --all` (T221): the maps drawn or served by the generation cache, `CACHED`, `REGENERATED` or `FROZEN` each.
+//! - `counts <tree>` (a counting build alone): the pipeline's counted work on that tree - the walk, the index and the cache over every
+//!   live map - on the SECOND of two runs back to back (the derivation's warm all-hit run; the first publishes what was not cached), one
+//!   JSON line with its `total`.
 //!
 //! Research: plumbing - NONE: finds the pool's maps and lists them, and decides nothing about a place
 
 use std::fmt::Write as _;
 use std::path::Path;
 
+pub mod cache;
 pub mod counts;
 pub mod index;
+pub mod map;
 pub mod walk;
 
 pub use walk::{walk, Kind, Map, Walk, DECLARATION, LEGACY, LIVE, TREES};
 
 const USAGE: &str =
-    "usage: pool index | find <map> [<suffix>] | list | counts <tree> (a counting build)\n";
+    "usage: pool index | find <map> [<suffix>] | list | map <map>... | map --all | counts <tree> (a counting build)\n";
 
 /// What a command says: `(stdout, stderr, exit code)`.
 pub type Said = (String, String, i32);
@@ -101,9 +107,40 @@ fn list_cli(root: &Path) -> Said {
     (out, reported(&w), 0)
 }
 
-/// `counts <tree>`: the walk and the index's rows composed and compared (the all-hit run: nothing written), that tree's counts.
+/// One run of the whole pipeline, as the counting run does it: the walk, the index's rows composed and compared (nothing written), and
+/// the cache over every live map; the run's counts, and the maps it did not serve from the cache.
 #[cfg(feature = "counters")]
-fn counts_cli(root: &Path, tree: &str) -> Said {
+fn pipeline_pass(
+    root: &Path,
+    binaries: &mut dyn cache::engine::Binaries,
+) -> Result<(counts::Counts, Vec<String>), String> {
+    let mut w = walk(root);
+    let _ = index::compare(root, &mut w);
+    let live: Vec<Map> = w
+        .in_tree(LIVE)
+        .filter(|m| m.kind.is_live())
+        .cloned()
+        .collect();
+    let outcomes = cache::run(
+        root,
+        &live,
+        true,
+        binaries,
+        &mut w.counts,
+        cache::Options::current(),
+    )?;
+    let missed = outcomes
+        .into_iter()
+        .filter(|o| o.verdict != cache::Verdict::Cached)
+        .map(|o| format!("{} ({:?})", o.map, o.verdict))
+        .collect();
+    Ok((w.counts, missed))
+}
+
+/// `counts <tree>`: the pipeline run twice back to back and the SECOND run's counts on that tree (the derivation's warm all-hit run: the
+/// first publishes whatever was not cached); a map the second did not serve is named on stderr.
+#[cfg(feature = "counters")]
+fn counts_cli(root: &Path, tree: &str, binaries: &mut dyn cache::engine::Binaries) -> Said {
     if !TREES.contains(&tree) {
         return (
             String::new(),
@@ -111,9 +148,18 @@ fn counts_cli(root: &Path, tree: &str) -> Said {
             2,
         );
     }
-    let mut w = walk(root);
-    let _ = index::compare(root, &mut w);
-    let kinds = w.counts.of(tree);
+    let second = pipeline_pass(root, binaries).and_then(|_| pipeline_pass(root, binaries));
+    let (counts, missed) = match second {
+        Ok(c) => c,
+        Err(why) => {
+            return (
+                String::new(),
+                format!("pool counts: the generation cache: {why}\n"),
+                1,
+            )
+        }
+    };
+    let kinds = counts.of(tree);
     let total: u64 = kinds.iter().map(|(_, n)| n).sum();
     let mut line = serde_json::Map::new();
     line.insert("tree".to_owned(), tree.into());
@@ -121,11 +167,32 @@ fn counts_cli(root: &Path, tree: &str) -> Said {
     for (k, n) in kinds {
         line.insert(k.to_owned(), n.into());
     }
-    (
-        format!("{}\n", serde_json::Value::Object(line)),
-        String::new(),
-        0,
-    )
+    let err = if missed.is_empty() {
+        String::new()
+    } else {
+        format!("pool counts: the second run did not serve {} from the cache - its count is not the all-hit run's\n", missed.join(", "))
+    };
+    (format!("{}\n", serde_json::Value::Object(line)), err, 0)
+}
+
+/// Whether the map `target` names (its folder, a file in it, or its name) is served by the generation cache now: the review gate's
+/// question, asked read-only and building no engine ([`cache::is_current`]); a frozen exhibit or a name no map bears is not.
+#[must_use]
+pub fn is_current(root: &Path, target: &str) -> bool {
+    let w = walk(root);
+    map::resolve(root, &w, target).is_ok_and(|m| {
+        m.tree == LIVE
+            && m.kind.is_live()
+            && cache::is_current(
+                root,
+                m,
+                &mut cache::engine::Launcher {
+                    root: root.to_path_buf(),
+                    build: false,
+                },
+                cache::Options::current().skip_render,
+            )
+    })
 }
 
 /// The command line, from the tree at `root`.
@@ -137,8 +204,24 @@ pub fn cli(args: &[String], root: &Path) -> Said {
         ["find", name] => find_cli(root, name, None),
         ["find", name, suffix] => find_cli(root, name, Some(suffix)),
         ["list"] => list_cli(root),
+        ["map", ref rest @ ..] => map::cli(
+            root,
+            rest,
+            &mut cache::engine::Launcher {
+                root: root.to_path_buf(),
+                build: true,
+            },
+            cache::Options::current(),
+        ),
         #[cfg(feature = "counters")]
-        ["counts", tree] => counts_cli(root, tree),
+        ["counts", tree] => counts_cli(
+            root,
+            tree,
+            &mut cache::engine::Launcher {
+                root: root.to_path_buf(),
+                build: true,
+            },
+        ),
         _ => (String::new(), USAGE.to_owned(), 2),
     }
 }

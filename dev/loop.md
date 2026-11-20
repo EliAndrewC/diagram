@@ -12,15 +12,14 @@ this box, and the levers already withdrawn are in [`test-cost.md`](test-cost.md)
 Run the red/green loop against the ONE map (or fixture) that shows the defect, where cycles are cheap, and reserve
 the whole gate for after that map is green:
 
-    make map GEN=pool/hamlets/sawada/sawada.gen.py       # regenerate ONE gen and gate it; PROFILE=1 for per-stage time
+    make map MAP=pool/hamlets/sawada       # draw ONE map through the generation cache: CACHED, REGENERATED or FROZEN
     make cohort N=24                                     # roll N seeds of the hamlet tier, fanned out (JOBS=<workers>)
     make rust-test CRATE=rust/mode_a                     # the pool sweep: every pool sheet through its tier's checks (`make maps` left with the Python engine, its name with 449 T223)
 
-`pipeline/regen.py` regenerates a map only if something that map depends on actually changed, and prints `CACHED`,
-`REGENERATED` or (a frozen legacy map) `FROZEN`. Multi-map runs fan out across worker processes (`default_jobs` in
-`sitegen/jobs.py` is the one definition of the cpus-minus-2 courtesy); parallelism cannot change a verdict (each map
-is a pure function of its spec; `gencache.store` publishes atomically), and output is printed in order, so a
-parallel run reads like a serial one. A whole-pool regen is an ITERATION convenience, never a pre-gate step: the gate
+`make map` (one Rust driver over the generation cache since feature 449 T221, [`dev/cache.md`](cache.md)) draws a map only if
+something that map depends on actually changed - its spec, a file its engine read or looked for, its engine's binary, the font set -
+and prints `CACHED`, `REGENERATED` with why, or (a frozen legacy map) `FROZEN`; `MAP=--all` does every live map in one run, the
+read table held once for all of them. A run holds the cache's lock, so two in one clone wait their turn. A whole-pool regen is an ITERATION convenience, never a pre-gate step: the gate
 verifies the pool itself and render-sync regenerates main's renders from main's own tip
 ([`docs/iteration-loop.md`](../docs/iteration-loop.md) has the evidence).
 

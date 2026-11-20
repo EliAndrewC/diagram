@@ -128,7 +128,7 @@ description: "Task list template for feature implementation"
 
 **Every implementation phase splits in two, and both halves are tasks:**
 
-1. `[US_] Make <the change> work on the REFERENCE settlement` - `make map GEN=<path>` does this
+1. `[US_] Make <the change> work on the REFERENCE settlement` - `make map MAP=<map>` does this
    after any failure, running the reference map alone (~1 min) and stopping at the first problem.
 2. `[US_] Extend <the change> across the pool` - once the reference map is clean, the same `make
    maps` goes on to the whole tier and reports every failure together. One command; it chooses.

@@ -87,7 +87,7 @@ pub const PALETTE_MAX: i64 = PALETTE_ROW * (PALETTE_ROW + 1);
 ///
 /// Research: the renders' serif - CONVENTION: `DejaVu Serif` for resvg's serif family, the map PNG's own face
 pub const RESVG_FONT_ARGS: [&str; 2] = ["--serif-family", "DejaVu Serif"];
-/// The widest raster a test may ask for while `DIAGRAM_SKIP_RENDER` is set (`_census.TEST_RENDER_PX`).
+/// The widest raster a test may ask for while `DIAGRAM_SKIP_RENDER` is set (the deleted Python's `TEST_RENDER_PX`, feature 213).
 pub const TEST_RENDER_PX: f64 = 1200.0;
 
 /// A map's viewBox: x, y, width, height.
@@ -373,7 +373,6 @@ pub fn picture_args(r: f64) -> Vec<String> {
 ///
 /// Research: the low-zoom picture - CONVENTION: one image of the whole map at `RASTER_R` px per map px, rendered in pixel-aligned tiles at once (features 200, 223)
 pub fn picture(host: &Host, svg_text: &str, r: f64, tiles: Option<i64>) -> Result<Vec<u8>, Error> {
-    host.census_record("render", "raster");
     let head = svg_text.find('>').map_or("", |at| &svg_text[..=at]);
     let vb = viewbox_of(head)?;
     let mut n = match (tiles.filter(|&t| t != 0), vb) {
@@ -434,16 +433,9 @@ pub type IdMap = (Vec<u8>, Vec<(String, String)>);
 /// One tile's render, by its place in the grid.
 type TileRender = (usize, Result<Vec<u8>, Error>);
 
-/// The names of the variables a render reads: the test-render switch and the roll census's.
-pub const HOST_VARS: [&str; 7] = [
-    "DIAGRAM_SKIP_RENDER",
-    "L7R_ROLL_CENSUS",
-    "L7R_ROLL_CENSUS_TEST",
-    "L7R_ROLL_CENSUS_REQUEST",
-    "L7R_ROLL_CENSUS_WORKER",
-    "L7R_COV_CONTEXT",
-    "L7R_ROLL_CENSUS_GEN",
-];
+/// The names of the variables a render reads: the test-render switch. (The roll census's, which a render appended a line to, left with the
+/// census's Python writer and its last reader, feature 449 T221: nothing has opened a census since the Python gate's pytest left, T213.)
+pub const HOST_VARS: [&str; 1] = ["DIAGRAM_SKIP_RENDER"];
 
 /// What a render reads of its host: [`HOST_VARS`] as they stand - handed in, so a test states its host rather than changing the process's.
 /// (The `resvg` program the Python looked up on the PATH is gone: the renderer is the crate, feature 449 T150.)
@@ -483,11 +475,11 @@ impl Host {
             .map(|(_, v)| v.as_str())
     }
 
-    /// `_census.refuse_render_in_a_test`: a raster wider than [`TEST_RENDER_PX`] while `DIAGRAM_SKIP_RENDER` is set is refused where it
+    /// The render guard (feature 213, the deleted Python's `refuse_render_in_a_test`): a raster wider than [`TEST_RENDER_PX`] while `DIAGRAM_SKIP_RENDER` is set is refused where it
     /// would be spawned (GM 2026-09-12: *"they keep getting added back in because we just forget and then don't notice"*).
     ///
     /// # Errors
-    /// That raster, as the Python's `RenderedInATest`.
+    /// That raster, a `RenderedInATest` (its Python module's name left with the module, feature 449 T221).
     ///
     /// Research: the render guard - NONE: test-suite bookkeeping, no map decision
     pub fn refuse_render_in_a_test(&self, what: &str, px: f64) -> Result<(), Error> {
@@ -495,9 +487,8 @@ impl Host {
             return Ok(());
         }
         let bar = TEST_RENDER_PX;
-        // named as the Python's traceback names it, its module with it
         Err(Error::new(
-            "l7r.diagram._census.RenderedInATest",
+            "RenderedInATest",
             format!(
                 "a test asked to render {what} at {} px wide, over the {bar:.0} px a test may ask for.\n\
                  Tests do not render real images - a map's PNG is resvg at ~420 MB and the page's picture a PIL child at\n\
@@ -510,32 +501,6 @@ impl Host {
                 crate::py::fixed(px, 0)
             ),
         ))
-    }
-
-    /// `_census.record(kind, what=...)`: one JSON line appended to the roll census when one is open; never fails.
-    pub fn census_record(&self, kind: &str, what: &str) {
-        let Some(path) = self.var("L7R_ROLL_CENSUS").filter(|p| !p.is_empty()) else {
-            return;
-        };
-        let now = std::time::SystemTime::now()
-            .duration_since(std::time::UNIX_EPOCH)
-            .map_or(0.0, |d| d.as_secs_f64());
-        let var = |n: &str| {
-            self.var(n)
-                .map_or(serde_json::Value::Null, serde_json::Value::from)
-        };
-        let row = serde_json::json!({
-            "kind": kind, "t": crate::py::round_to(now, 3), "pid": std::process::id(),
-            "test": var("L7R_ROLL_CENSUS_TEST"), "request": var("L7R_ROLL_CENSUS_REQUEST"),
-            "worker": var("L7R_ROLL_CENSUS_WORKER"), "context": var("L7R_COV_CONTEXT"),
-            "gen": var("L7R_ROLL_CENSUS_GEN"), "what": what,
-        });
-        let line = l7r_guard::shared::pyjson::dumps(&row, None, true) + "\n";
-        let _ = std::fs::OpenOptions::new()
-            .create(true)
-            .append(true)
-            .open(path)
-            .and_then(|mut f| std::io::Write::write_all(&mut f, line.as_bytes()));
     }
 
     /// The size a render asks for: the largest `--width`, or `--zoom` times the document's own width (`resvg_png`'s probe).

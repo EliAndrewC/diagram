@@ -25,7 +25,7 @@ __pycache__
 #   pool/<tier>/<map>/            LIVE. Regenerated and re-gated every run, so every render is
 #                                 DERIVED and ignored - a to-scale .svg is tens of MB (one
 #                                 primitive per crop row) and rebuilds on demand with
-#                                 `make map GEN=pool/<tier>/<map>/<map>.gen.py`.
+#                                 `make map MAP=pool/<tier>/<map>`.
 #   legacy-hand-authored-pool/    FROZEN exhibits (GM 2026-08-16). Their gens are never re-run, so
 #                                 once the engine drifted their renders stopped being reproducible:
 #                                 they are historical artifacts nothing can faithfully rebuild.

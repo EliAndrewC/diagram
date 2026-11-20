@@ -74,7 +74,8 @@ else echo "  FAIL    the refused push did not mark the work landing"; FAIL=$((FA
 
 # GUARD_EDIT_OK: feature 375 follow-up (2026-10-10) - a render older than main's reads as a new element; the gate redraws
 # what an owed unit sits on (the stub `map` puts main's census back, as a real redraw did for 374's corridor) and asks again
-mkrepo b1 withmap; git checkout -q main; echo "# gen" > "$POOL/m.gen.py"
+# GUARD_EDIT_OK: feature 449 T221 - the map is drawn by `make map MAP=` as the hamlet its spec makes it, no .gen.py written
+mkrepo b1 withmap; git checkout -q main
 printf 'map:\n\t@printf %%s %s > %s\n' "'{\"v\":1,\"ink_classes\":{\"farmhouse\":1}}'" "$POOL/m.json" >> Makefile
 git add -A; git commit -qm gen; git update-ref refs/remotes/origin/main main; git checkout -q -b stale
 echo work >> seed.txt; git add -A; git commit -qm work; echo "$NEW" > "$POOL/m.json"

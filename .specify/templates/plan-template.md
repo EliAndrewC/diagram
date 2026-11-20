@@ -38,7 +38,7 @@
 
 **Single-artifact target** (REQUIRED for any generator change, constitution VI): [the ONE named
 artifact this is proven on before any sweep - e.g. `pool/hamlets/inashiro.gen.py`. State its
-rebuild time. Iterate on it alone (`make map GEN=<path>`) and widen to the pool only once it is clean (`make cohort` for a hamlet cohort,
+rebuild time. Iterate on it alone (`make map MAP=<map>`) and widen to the pool only once it is clean (`make cohort` for a hamlet cohort,
 `make rust-test CRATE=rust/mode_a` for the pool sheets). If the feature adds a knob, name one artifact per knob
 VALUE.]
 
@@ -99,7 +99,7 @@ approval before /speckit-tasks may run.
   steps each task will run before being marked complete - `make done` for
   Python, the review checks a map's delta owes (`make verify` names them - feature 294's occasions),
   spot-check of delegated work. Every generator step is TWO steps (reference
-  settlement, `make map GEN=<path>`, then pool - `make cohort`), both as tasks.
+  settlement, `make map MAP=<map>`, then pool - `make cohort`), both as tasks.
 
 - **VII. De-Localized Generation by Default**: If the feature generates pool
   content, the plan MUST default to generic / reusable framing (clan-level

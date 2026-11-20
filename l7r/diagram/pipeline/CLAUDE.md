@@ -4,14 +4,13 @@ The BUILD side of the project. The other three sides are the drawing engines (`s
 `waterfields/`, `hamletgen/`, the Rust compound generator `rust/mode_a/src/compound/`) and the by-hand
 diagnostics ([`../tools/`](../tools/CLAUDE.md)). Drive it through `make` at the repository root:
 
-    make map GEN=pool/hamlets/sawada/sawada.gen.py    # one map: regenerated, or CACHED when nothing it depends on changed
+    make map MAP=pool/hamlets/sawada                  # one map: regenerated, or CACHED when nothing it depends on changed
     make rust-test CRATE=rust/mode_a                  # the pool sweep: every pool sheet through its tier's checks (`make maps` left with the Python engine)
 
 | module | what it is | measured for coverage |
 |---|---|---|
-| `gencache` | the generation cache: the KEY, `store`/`load`, and `gate_obtain` (the gate rides this cache since feature 026) | no - a driver |
-| `regen` | the ITERATION path: regenerate a map, or skip it when nothing it depends on changed | no - a driver |
-| `rollcache` | the ROLL cache the gate tests ride (feature 135): `obtain` serves a keyed roll or produces and records it. **ONE ROLL PER SPEC** (feature 213, GM 2026-09-07): `hamlet()`, `report()` and `report_deps()` are three views of one `roll:<spec>` subject, produced in a child process (`_in_child("module:function", arg)` runs any module-level producer by name), shared across the run's workers behind a per-subject lock so the first wave waits instead of each rolling (`_share_lock`), and bounded to `L7R_ROLL_SLOTS` concurrent children (`_roll_slot`); the reference and Kuwabata are read from the POOL (`tests/gate/_pool.py`). A covered child starts coverage itself and switches to the requester's coverage context for the roll alone (`gencache.child_coverage`), because the incremental gate selects tests by those contexts and a roll under no context would select no roller. The roll census (`_census.py`, `ci/rollverdict.py`, the roster `tests/rolls.py`) proves at every gate that no spec rolls twice. `keyed_to(..., child=...)` is the same child for a patched roll | yes |
+| (Rust) `rust/gate/crates/pool/src/cache.rs`, `map.rs` | THE GENERATION CACHE and `make map`'s one driver (feature 449 T221, rebuilt from `specs/449-rust-codebase/derivations/T219-pipeline.md`; `regen.py`, `rollcache.py`, the six `.gen.py` and `interactive/sheet.py` deleted with it): the read table, the entries, the engines' build ids; [`dev/cache.md`](../../../dev/cache.md) | the crate's own tests |
+| `gencache` | the Python generation cache, no longer what `make map` runs: kept only because `render_cache` imports it (with `_census.py`), and deleted with it (T222) | no - a driver |
 | `render_cache` | main's renders: a content-hash short-circuit so main regenerates its own renders from its own tip after the stop-work push | yes |
 | `poolmaps` | the Python pool listing, kept for the Python left in this package until T221 and T222 delete it; every Rust consumer asks the one pool walk, `rust/gate/crates/pool` (feature 449 T220) | yes |
 | `pool_index` | the Python index writer, no longer what `make pool-index` runs: the Rust pool walk (`rust/gate/crates/pool`, feature 449 T220) writes `pool/index.html` now, every map of both trees; kept only because `render_cache` imports it, and deleted with it (T222) | yes |

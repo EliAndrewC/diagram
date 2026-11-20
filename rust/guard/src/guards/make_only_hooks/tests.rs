@@ -25,7 +25,7 @@ fn each_verdict_has_its_shape() {
         ("make -f /tmp/x y", "foreign-makefile"),
         ("python3 -m l7r.diagram.tools.x", "engine-entry-point"),
         (
-            "python3 l7r/diagram/pipeline/regen.py a",
+            "python3 l7r/diagram/hamletgen/__main__.py a",
             "engine-entry-point",
         ),
         ("cargo test", "bare-cargo"),

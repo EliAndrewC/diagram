@@ -79,8 +79,8 @@ paying. Record the decision in the map's `.notes.md` so nobody re-discovers it a
 **Extended to a full FREEZE** (GM, 2026-08-16): the hand-authored pool is no longer regenerated OR
 re-gated at all. The legacy Mode B maps keep their .json/.svg/.png as permanent
 exhibits (still in `pool/index.html`), the `tests/test_villages.py` sweep covers scripted maps only, and
-`pipeline/regen.py` refuses a legacy gen (`FROZEN`; `--frozen-ok` overrides). `pipeline/poolmaps.py` is the
-classification all three tools share. What this buys: iteration on placement rules and checks costs
+`make map` answers `FROZEN` for a legacy exhibit and never draws it (its Rust driver, feature 449 T221; the Python `regen.py` and
+its `--frozen-ok` are gone). The one pool walk (`rust/gate/crates/pool`) is the classification every tool shares. What this buys: iteration on placement rules and checks costs
 nothing on maps whose authoring process is deprecated, and - the bigger half - **engine changes no
 longer need to hold the legacy pool byte-identical**, so new rules ship un-flagged and the
 byte-identity criterion below is retired. The known cost, accepted out loud: the above-hamlet wings

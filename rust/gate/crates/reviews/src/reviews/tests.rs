@@ -53,8 +53,8 @@ pub(super) fn commit(root: &Path, msg: &str) {
 }
 
 /// The stubs of what the port asks by command (a feature's state is asked in process since feature 449 T118): the gate wrapper (`stamp --fresh` green while `.git/green` exists; `check spec-lint --figure-pattern` a figure with `s` or
-/// `px`), the finished-run probe (`.git/live`'s lines), the bundle runner (`is_current`: current unless `<gen>.stale` exists), and
-/// the engine key.
+/// `px`), the finished-run probe (`.git/live`'s lines) and the engine key. (The generation cache is asked in process since feature 449
+/// T221, where `scripts/bundle_door.py`'s `is_current` was stubbed here.)
 pub(super) fn tools(root: &Path) {
     // written by `install`, another process, never by this one: a script this process writes while another test thread forks is
     // held open by that child until its exec, and running it then fails `Text file busy`, which `gate_state` reads as a red gate
@@ -68,11 +68,6 @@ pub(super) fn tools(root: &Path) {
         root,
         "scripts/hooks/finished-run-hooks.sh",
         "cat \"$2/.git/live\" 2>/dev/null\n",
-    );
-    put(
-        root,
-        "scripts/bundle_door.py",
-        "import json, os, sys\nfor line in sys.stdin:\n    ask = json.loads(line)\n    if os.path.exists(ask['args'][0] + '.broken'):\n        print(json.dumps({'error': 'Traceback: broken'}), flush=True)\n        continue\n    print(json.dumps({'ok': not os.path.exists(ask['args'][0] + '.stale')}), flush=True)\n",
     );
     put(
         root,
@@ -101,8 +96,8 @@ pub(super) fn repo(name: &str) -> l7r_guard::shared::tempdir::Held<PathBuf> {
     d
 }
 
-/// A map folder: its manifest with these ink classes, and its generator; in the live pool its spec too, which makes it a hamlet to the
-/// pool walk (feature 449 T220; a legacy folder with its manifest alone is a frozen exhibit).
+/// A map folder: its manifest with these ink classes; in the live pool its spec too, which makes it a hamlet to the pool walk (feature
+/// 449 T220; a legacy folder with its manifest alone is a frozen exhibit; its `.gen.py` left with T221).
 pub(super) fn map(root: &Path, tree: &str, name: &str, classes: &[&str]) {
     if tree == "pool" {
         put(
@@ -119,11 +114,6 @@ pub(super) fn map(root: &Path, tree: &str, name: &str, classes: &[&str]) {
         root,
         &format!("{tree}/hamlets/{name}/{name}.json"),
         &json!({"ink_classes": census}).to_string(),
-    );
-    put(
-        root,
-        &format!("{tree}/hamlets/{name}/{name}.gen.py"),
-        "# gen\n",
     );
 }
 

@@ -10,13 +10,16 @@ use std::path::Path;
 use super::reply;
 use crate::cohort::git;
 
-/// Pool manifests (`pool/**/*.json`) whose working-tree content differs from HEAD, untracked ones included.
+/// Pool manifests (`pool/**/*.json`, a map's spec - `.spec.json`, `.compound.json` - not among them) whose working-tree content differs
+/// from HEAD, untracked ones included; `only` one map's, named as `make map MAP=` names it (its folder, a file in it, or its name; feature
+/// 449 T221, where it was the map's `.gen.py`).
 pub fn moved(root: &Path, only: Option<&str>) -> Vec<String> {
+    let w = l7r_gate_pool::walk(root);
     let spec = only.map_or_else(
         || "pool".to_owned(),
         |o| {
-            o.strip_suffix(".gen.py")
-                .map_or_else(|| o.to_owned(), |stem| format!("{stem}.json"))
+            l7r_gate_pool::map::resolve(root, &w, o)
+                .map_or_else(|_| o.to_owned(), l7r_gate_pool::Map::rel)
         },
     );
     let changed = git(root, &["diff", "--name-only", "HEAD", "--", &spec]).1;
@@ -28,7 +31,12 @@ pub fn moved(root: &Path, only: Option<&str>) -> Vec<String> {
     let found: BTreeSet<&str> = changed
         .split_whitespace()
         .chain(new.split_whitespace())
-        .filter(|p| p.starts_with("pool/") && crate::checks::has_ext(p, "json"))
+        .filter(|p| {
+            p.starts_with("pool/")
+                && crate::checks::has_ext(p, "json")
+                && !p.ends_with(".spec.json")
+                && !p.ends_with(".compound.json")
+        })
         .collect();
     found.into_iter().map(str::to_owned).collect()
 }
@@ -39,7 +47,7 @@ fn flag<'a>(args: &'a [String], name: &str) -> Option<&'a str> {
         .map(|w| w[1].as_str())
 }
 
-/// `l7r-gate measure maps-moved [--root DIR] [--only <gen or manifest path>]`.
+/// `l7r-gate measure maps-moved [--root DIR] [--only <map: its folder, a file in it, or its name>]`.
 pub fn cli(args: &[String], root: &Path) -> crate::Reply {
     let only = flag(args, "--only");
     let hits = moved(flag(args, "--root").map_or(root, Path::new), only);

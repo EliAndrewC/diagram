@@ -157,8 +157,8 @@ fn every_held_stage_within_passes_printing_its_counts_and_what_it_could_not_coun
     assert!(out.contains("  placer: hand 90 (0.90x its budget 100); made 40 (0.80x its budget 50)"));
     assert!(out.contains("  compound: made 30 (0.75x its budget 40)"));
     // T220, red first: the pipeline was printed `UNCOUNTED pipeline: budgeted per sheet (2), but nothing counts it` until the pool walk
-    // was built; now each tree is counted by `l7r-pool counts <tree>`, the part it counts named
-    assert!(out.contains("  pipeline: pool 30 (1.50x its budget 20); legacy-hand-authored-pool 12 (1.00x its budget 12) - counted: the walk's and the index's kinds alone (T220)"));
+    // was built; each tree is counted by `l7r-pool counts <tree>`, the whole stage since T221 (no "counted:" part named)
+    assert!(out.contains("  pipeline: pool 30 (1.50x its budget 20); legacy-hand-authored-pool 12 (1.00x its budget 12)\n"));
     assert!(!out.contains("UNCOUNTED"));
     assert!(!out.contains("seat"), "a stage only budgeted is not held");
     // the counts are kept: the same code is not counted again, and a move of what a run reads re-counts that run alone

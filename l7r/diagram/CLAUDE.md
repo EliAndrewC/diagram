@@ -34,11 +34,11 @@ last efficient stage parked in `rust/parked/`), and the stage-by-stage reference
 | `rust/mode_a/src/compound/` and each generated sheet's `<map>.compound.json` | the Mode A compound generator (feature 449 T152: rebuilt in Rust from `specs/449-rust-codebase/derivations/T208-compound.md`; the Python `compound*.py` and `well_gear.py` deleted): the program read from its spec, the perimeter-first seating, the parts, the open ground, the sheet written; `l7r-mode-a compound <spec>` | you change a compound plan's draft or its program |
 | `rust/mode_a/src/dwellings.rs` (the Python `dwellings.py` deleted with the page writer it served, feature 449 T150) | what counts as a DWELLING, in one leaf module with no imports of its own | a count of houses or households disagrees between two readers |
 | `switches.py` | the iteration switch (feature 132) in `dev/switches.json`: remote on or off ([`docs/switches.md`](../../docs/switches.md)) | a remote run refused, or you throw the switch |
-| `_invocation.py`, `_census.py` | refuse an operation not invoked through this project's make; the roll census's writer (`_memory.py`, the heap trim after a test or a roll, left with pytest, feature 449 T213) | a refusal or the census fired |
+| `_invocation.py`, `_census.py` | refuse an operation not invoked through this project's make; the roll census's writer, kept only because `pipeline/render_cache.py` imports it until feature 449 T222 (the Rust raster's census hook left with T221; `_memory.py`, the heap trim after a test or a roll, left with pytest, T213) | a refusal or the census fired |
 | [`tools/`](tools/CLAUDE.md) | read-only diagnostics and audits | a map came out wrong and you need to ask WHY, or a number needs measuring |
 | [`tests/`](../../tests/CLAUDE.md) | the guard suites and the fixtures the Rust tests read; no Python test is left (feature 449 T211, T213) | you need to find a fixture or a guard's suite |
 
-`pool/` holds the shipped maps (`<name>.gen.py`, its manifest, render and `.notes.md`); `legacy-hand-authored-pool/` the frozen hand-authored exhibits.
+`pool/` holds the shipped maps (each folder its spec - a hamlet's `.spec.json`, a compound's `.compound.json`, a hand sheet's `.svg` - its renders and `.notes.md`; the `.gen.py` wrappers went with feature 449 T221); `legacy-hand-authored-pool/` the frozen hand-authored exhibits.
 
 ## The dev docs (load the one your task is in)
 
@@ -75,8 +75,9 @@ diagnosed and the tooling improved.
 - **Nothing runs outside make**: an engine entry point, a bare cargo or a foreign makefile is refused
   (`rust/guard/src/guards/make_only_hooks.rs`), and the engine refuses in-process calls too (`_invocation.py`). A refusal on correct
   work is a BUG in the guard to fix (it was always a MENTION mistaken for an INVOCATION).
-- `make map GEN=pool/<tier>/<map>/<map>.gen.py` regenerates one map and prints `CACHED` / `REGENERATED` / `FROZEN`;
-  `PROFILE=1` adds where its time went. Iterate on that ONE map, `make quick` while iterating, `make rust-test CRATE=<dir>`
+- `make map MAP=pool/<tier>/<map>` draws one map - a hamlet, a generated compound or a hand sheet - through the generation cache
+  (one Rust driver, `rust/gate/crates/pool/src/cache.rs`, feature 449 T221) and prints `CACHED` / `REGENERATED` (with why) / `FROZEN`
+  ([`dev/cache.md`](../../dev/cache.md)). Iterate on that ONE map, `make quick` while iterating, `make rust-test CRATE=<dir>`
   for one crate's tests. The Python tests, their planner and the coverage floor over Python were deleted (feature 449 FR-001b, the GM 2026-11-10), and pytest with them (T213); `make done` runs once, backgrounded, never polled.
 - **The cohort, by stage** (feature 386, the GM 2026-10-17): `make cohort` (the Rust driver, N seeds from SEED, each refusal or
   broken rule named) after each fix. The LANDING cohort (`make cohort-landing`, seeds 1-48 and the pinned rows, its record read by

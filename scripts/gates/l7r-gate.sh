@@ -46,6 +46,15 @@ if [ "${1:-}" = mode-a ]; then
   # GUARD_EDIT_OK: feature 449 T220 - the pool walk's crate, which the engine's pool sweep and audit build on
   SOURCES=("$TREE"/rust/mode_a "$TREE"/rust/gate/crates/registry "$TREE"/rust/gate/crates/research "$TREE"/rust/gate/crates/core "$TREE"/rust/gate/crates/pool)
 fi
+# THE HAMLET DRIVER AS AN ENGINE (feature 449 T221): `hamlet <spec>` runs `rust/phases`' `hamlet` binary built in the tool profile, so
+# the generation cache (`make map`) asks for it as it asks for `l7r-mode-a` - `L7R_GATE_PRINT_FRESH=1` builds it where stale and prints
+# its path, whose GNU build id is the hamlets' engine id. `make hamlet` and the cohorts keep running it by cargo (HAMLET_RUN).
+# GUARD_EDIT_OK: feature 449 T221 - a launcher arm for the hamlet driver, which the generation cache identifies by its built binary
+# (only as the first word: `rust hamlet ...`, the Rust checks' counting runs, has shifted `rust` off above and is `l7r-rust`'s)
+if [ "${1:-}" = hamlet ] && [ "$BIN" = "$TARGET/tool/l7r-gate" ]; then
+  shift; BIN="$TARGET/tool/hamlet"; PKG=(-p l7r_phases --bin hamlet)
+  SOURCES=("$TREE"/rust/phases)
+fi
 cargo=${L7R_GATE_CARGO:-}
 [ -n "$cargo" ] || { [ -x "$real/.cargo/bin/cargo" ] && cargo="$real/.cargo/bin/cargo" || cargo=cargo; }
 # every source the binary builds from: the guard crate's too, which both build on - before T93 a guard edit left `l7r-gate` stale

@@ -28,6 +28,6 @@ A bare `cargo` is refused and named its make target (`rust/guard/src/guards/make
 
 ## `tests/` is invisible to the generation cache, on purpose
 
-`gencache.engine_files()` and `render_cache.engine_fingerprint()` both prune this directory: a file here can never affect a
-map's cache key. If a generator needs a module, it belongs in the engine or in
-[`../l7r/diagram/pipeline/`](../l7r/diagram/pipeline/CLAUDE.md), never here.
+The Rust generation cache (feature 449 T221, [`dev/cache.md`](../dev/cache.md)) keys a map on its engine's binary and the files the
+engine reports reading, so a file here affects a map's key only if an engine reads it - and no engine should. (`render_cache`'s
+fingerprint prunes this directory too, until T222.)

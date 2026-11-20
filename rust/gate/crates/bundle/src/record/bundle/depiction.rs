@@ -425,12 +425,12 @@ fn stale_page(page: &Path, root: &Path) -> String {
         return String::new();
     };
     if svg.is_file() && s > h + Duration::from_secs(1) {
-        let generator = page.with_extension("gen.py");
+        let folder = page.parent().unwrap_or(page);
         return format!(
-            "{} is older than {} - its crop would show the drawing before the edit; regenerate it first: make map GEN={}",
+            "{} is older than {} - its crop would show the drawing before the edit; regenerate it first: make map MAP={}",
             page.file_name().unwrap_or_default().to_string_lossy(),
             svg.file_name().unwrap_or_default().to_string_lossy(),
-            relative(&generator, root)
+            relative(folder, root)
         );
     }
     String::new()

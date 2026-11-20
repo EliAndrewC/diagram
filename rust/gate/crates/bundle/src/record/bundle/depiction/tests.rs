@@ -125,7 +125,7 @@ fn a_stale_pool_page_is_refused() {
         .unwrap();
     let (code, run) = depiction(&root, &o);
     assert_eq!(code, -1);
-    assert!(run.err.contains("nocrop.html is older than nocrop.svg - its crop would show the drawing before the edit; regenerate it first: make map GEN=pool/hamlets/nocrop/nocrop.gen.py"));
+    assert!(run.err.contains("nocrop.html is older than nocrop.svg - its crop would show the drawing before the edit; regenerate it first: make map MAP=pool/hamlets/nocrop"));
 }
 
 /// A crop that outlasts its timeout. What was one test of the bundle with no crop and of every failure is three - the stale page here

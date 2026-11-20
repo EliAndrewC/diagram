@@ -267,5 +267,14 @@ OUT=$("$STAMP" mode-a --version); check "mode-a: the launcher runs l7r-mode-a" 0
 OUT=$(cd "$HERE/../.." && "$STAMP" mode-a building-programs --check); check "mode-a building-programs --check: the real page" 0 $?
 case $OUT in "building-programs: docs/building-programs.md is current") : ;; *) echo "FAIL  the check's line: $OUT"; FAILED=1 ;; esac
 
+# ---- the hamlet driver through the launcher (feature 449 T221): `l7r-gate.sh hamlet` is the tool build of `rust/phases`' `hamlet`, the
+# binary the generation cache identifies the hamlets' engine by; `rust hamlet ...` (the counting runs) stays `l7r-rust`'s ------------------
+HT="$TMP/hamlet-target"; mkdir -p "$HT/tool"
+for b in hamlet l7r-rust; do printf '#!/usr/bin/env bash\necho "%s $*"\n' "$b" > "$HT/tool/$b"; chmod +x "$HT/tool/$b"; touch -d '2100-01-01' "$HT/tool/$b"; done
+OUT=$(L7R_GATE_TARGET="$HT" L7R_GATE_CARGO="$TMP/cargo" L7R_GATE_PRINT_FRESH=1 "$STAMP" hamlet 2>&1); check "hamlet: the launcher names its tool build" 0 $?
+[ "$OUT" = "$HT/tool/hamlet" ]; check "hamlet: ...by its path ($OUT)" 0 $?
+OUT=$(L7R_GATE_TARGET="$HT" L7R_GATE_CARGO="$TMP/cargo" "$STAMP" rust hamlet --crate x 2>&1)
+[ "$OUT" = "l7r-rust hamlet --crate x" ]; check "rust hamlet: the Rust checks' runner, not the hamlet arm ($OUT)" 0 $?
+
 echo -----
 if [ "$FAILED" -eq 0 ]; then echo "all gate-stamp tests passed"; exit 0; else echo "SOME TESTS FAILED"; exit 1; fi

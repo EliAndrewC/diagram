@@ -199,7 +199,8 @@ pub fn title_of(path: &str) -> String {
     py_title(&stem.replace('-', " "))
 }
 
-/// `<map>.html` beside `<map>.svg`, from the sheet's own tags, and the sheet's census for the caller to report (`sheet.write_sheet_page`).
+/// `<map>.html` beside `<map>.svg` (or in `out`, the map's notes still read beside the sheet: the generation cache's staging folder, feature
+/// 449 T221), from the sheet's own tags, and the sheet's census for the caller to report (`sheet.write_sheet_page`).
 /// `with_raster` defaults to the render condition (no picture under `DIAGRAM_SKIP_RENDER=1`, feature 208); `svg` is the sheet's text when
 /// it is not the file's (a hand sheet's captions placed, feature 286). THE SHEET MARKS ITSELF (the GM 2026-09-27: highlighted text became
 /// unreadable): `data-sheet` keeps a sheet's lit text in the map's ink.
@@ -215,6 +216,7 @@ pub fn write_sheet_page(
     registry: &[FeatureClass],
     with_raster: Option<bool>,
     svg: Option<&str>,
+    out: Option<&Path>,
 ) -> Result<Census, Error> {
     let with_raster = with_raster.unwrap_or_else(|| host.var("DIAGRAM_SKIP_RENDER") != Some("1"));
     let read;
@@ -251,7 +253,15 @@ pub fn write_sheet_page(
         registry,
         within: Some(&kinds),
     };
-    crate::page::write_html(tree, host, Path::new(&format!("{cut}.html")), page)?;
+    let html = out.map_or_else(
+        || std::path::PathBuf::from(format!("{cut}.html")),
+        |dir| {
+            let base = cut.rsplit('/').next().unwrap_or(&cut);
+            dir.join(format!("{base}.html"))
+        },
+    );
+    let notes = std::path::PathBuf::from(format!("{cut}.notes.md"));
+    crate::page::write_html_beside(tree, host, &html, Some(&notes), page)?;
     let (counts, unclassed) = ink_census(&strings, &tags);
     let unregistered = unregistered_classes(&counts, registry);
     Ok(Census {

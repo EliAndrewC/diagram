@@ -165,7 +165,7 @@ The full spec and every failure mode: `docs/session-clones.md`.
   every piece of work; the prompt hook runs it.
 - Stop-work procedure, every time you stop: commit in the clone, then `scripts/sync-with-main.sh
   done` from inside it. The route is chosen from the delta, never by you: no engine code -> DIRECT (a
-  locked fast-forward push); engine code (`l7r/**/*.py`, `rust/**/*.rs`, `pool/*.gen.py|*.json|*.svg|*.notes.md` - a hand sheet and its notes too; a comment-only or
+  locked fast-forward push); engine code (`l7r/**/*.py`, `rust/**/*.rs`, `pool/*.json|*.svg|*.notes.md` - a map's spec, a hand sheet and its notes; a comment-only or
   formatting edit does not count) -> GATED on a green local `make done`. **`make land F= T=<task(s)> NOTE=` lands a task and ticks it**: every
   cheap refusal first and together, then `make done` and `make cohort-landing` only where needed (side by side, 405 T48) with the claims round beside them, the
   tick and ONE push carrying both (405 T50, T51).

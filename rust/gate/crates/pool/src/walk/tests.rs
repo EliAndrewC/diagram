@@ -158,8 +158,34 @@ fn the_walk_counts_the_derivations_terms_and_no_more() {
     put(&root, "pool/index.html", "x");
     let w = walk(&root);
     let blocks = TYPES.len().div_ceil(64) as u64;
+    // the walk's kinds; the cache's (T221) are none of the walk's work
+    let walked = [
+        "dir_list",
+        "dir_entry",
+        "classify",
+        "folder_kind",
+        "tier_lookup",
+        "tracked_lookup",
+        "file_read",
+        "parse_block",
+        "index_row",
+    ];
+    for tree in [LIVE, LEGACY] {
+        assert!(w
+            .counts
+            .of(tree)
+            .iter()
+            .all(|(k, n)| walked.contains(k) || *n == 0));
+    }
+    let of = |tree: &str| -> Vec<(&str, u64)> {
+        w.counts
+            .of(tree)
+            .into_iter()
+            .filter(|(k, _)| walked.contains(k))
+            .collect()
+    };
     assert_eq!(
-        w.counts.of(LIVE),
+        of(LIVE),
         [
             ("dir_list", 9),
             ("dir_entry", 23),
@@ -173,7 +199,7 @@ fn the_walk_counts_the_derivations_terms_and_no_more() {
         ]
     );
     assert_eq!(
-        w.counts.of(LEGACY),
+        of(LEGACY),
         [
             ("dir_list", 4),
             ("dir_entry", 7),

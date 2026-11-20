@@ -5,11 +5,13 @@
 //! `DIAGRAM_SKIP_RENDER=1` ([`crate::labels::hand_sheet::render`]), the page written from the placed text ([`super::page::write_sheet_page`],
 //! feature 277), and the census judged: ink with no kind, or a kind nobody wrote up, fails the sheet (exit 1, its line on stderr).
 //!
-//! The reply on stdout is one JSON line, as `sheet-page`'s ([`super::page::cli`]): the census and `reads`, every data file the command read,
-//! the tracked sheet first among them - the generation cache learns a generator's data files by spying on Python's `open()`, which cannot
-//! see this process, so `interactive/sheet.py`'s `draw_hand_sheet` opens each for reading in the generator's own process (feature 449
-//! T150's `reads.rs`). A refusal is `{"error": {"kind", "message"}}` with exit 1 and the traceback's last line on stderr.
-//! `--placed OUT` also writes the placed text: what the audit is run on to judge the sheet as drawn (T151's checks).
+//! The reply on stdout is one JSON line, as `sheet-page`'s ([`super::page::cli`]): the census and `reads`, every data file the command read
+//! or looked for (a miss is a read, [`crate::reads`]), the tracked sheet among them - what the pool's generation cache holds the sheet's
+//! entry against (`make map`, `rust/gate/crates/pool`'s `cache`, feature 449 T221, which replaced the Python generators that called this).
+//! A refusal is `{"error": {"kind", "message"}}` with exit 1 and the traceback's last line on stderr.
+//! `--placed OUT` also writes the placed text: what the audit is run on to judge the sheet as drawn (T151's checks). `--out DIR` writes the
+//! picture and the page into DIR rather than beside the sheet, the map's notes still read beside it: the generation cache draws a sheet into
+//! its staging folder and publishes the entry from there (feature 449 T221).
 //!
 //! Research: the hand sheet driver - NONE: the generator's four steps in its order, each deciding where it is claimed
 
@@ -25,17 +27,32 @@ use crate::labels::hand_sheet::render;
 use crate::raster::Host;
 
 /// The command's usage line.
-pub const USAGE: &str = "usage: l7r-mode-a hand-sheet <map.svg> [--placed OUT]\n";
+pub const USAGE: &str = "usage: l7r-mode-a hand-sheet <map.svg> [--placed OUT] [--out DIR]\n";
 
-/// What the command was asked: the sheet's path and where to write the placed text, if anywhere.
-fn parse(args: &[String]) -> Option<(&str, Option<&str>)> {
-    match args {
-        [path] if !path.starts_with("--") => Some((path, None)),
-        [path, flag, out] | [flag, out, path] if flag == "--placed" && !path.starts_with("--") => {
-            Some((path, Some(out)))
+/// What the command was asked: the sheet's path, where to write the placed text, and the folder its picture and page go to, if given.
+pub(crate) type Asked<'a> = (&'a str, Option<&'a str>, Option<&'a str>);
+
+/// The arguments read: one sheet, and each of `--placed OUT` and `--out DIR` at most once, in any order.
+pub(crate) fn parse(args: &[String]) -> Option<Asked<'_>> {
+    let (mut path, mut placed, mut out) = (None, None, None);
+    let mut words = args.iter().map(String::as_str);
+    while let Some(w) = words.next() {
+        let slot = match w {
+            "--placed" => &mut placed,
+            "--out" => &mut out,
+            flag if flag.starts_with("--") => return None,
+            _ if path.is_none() => {
+                path = Some(w);
+                continue;
+            }
+            _ => return None,
+        };
+        if slot.is_some() {
+            return None;
         }
-        _ => None,
+        *slot = Some(words.next()?);
     }
+    Some((path?, placed, out))
 }
 
 /// The sheet the arguments name, drawn whole; the registry the sheets' own (`compound_classes`, the modal files `compound_kinds` reads).
@@ -78,37 +95,52 @@ pub(crate) fn py_list(items: &[String]) -> String {
 fn draw(
     tree: &Path,
     host: &Host,
-    path: &str,
-    out: Option<&str>,
+    (path, placed_out, out): Asked<'_>,
     registry: &Registry,
 ) -> Result<super::page::Census, Error> {
     let svg = l7r_gate_core::record::read_text(Path::new(path))
         .map_err(|e| crate::py::os_error(&e, path))?;
     crate::reads::note(&std::path::absolute(path).unwrap_or_default()); // empty only for an empty path, refused above
     let text = placed(&svg)?;
-    if let Some(out) = out {
-        std::fs::write(out, &text).map_err(|e| crate::py::os_error(&e, out))?;
+    if let Some(at) = placed_out {
+        std::fs::write(at, &text).map_err(|e| crate::py::os_error(&e, at))?;
     }
     if host.var("DIAGRAM_SKIP_RENDER") != Some("1") {
         let stem: String = path
             .chars()
             .take(path.chars().count().saturating_sub(4))
             .collect();
-        render(&text, Path::new(&format!("{stem}.png")))?;
+        let png = out.map_or_else(
+            || std::path::PathBuf::from(format!("{stem}.png")),
+            |dir| {
+                let base = stem.rsplit('/').next().unwrap_or(&stem);
+                Path::new(dir).join(format!("{base}.png"))
+            },
+        );
+        render(&text, &png)?;
     }
     let registry = registry(tree)?;
-    super::page::write_sheet_page(tree, host, path, &registry, None, Some(&text))
+    super::page::write_sheet_page(
+        tree,
+        host,
+        path,
+        &registry,
+        None,
+        Some(&text),
+        out.map(Path::new),
+    )
 }
 
 /// The command run with `registry` for the sheets' own.
 ///
 /// Research: a sheet with untagged ink or an unknown kind fails - CONVENTION: every drawn element carries a kind the registry knows, else the generator exits 1 naming them, as loudly as the pool test (feature 262, FR-006)
 fn run(args: &[String], tree: &Path, host: &Host, registry: &Registry) -> Reply {
-    let Some((path, out)) = parse(args) else {
+    let Some(asked) = parse(args) else {
         return reply(String::new(), USAGE.to_owned(), 2);
     };
+    let path = asked.0;
     let _ = crate::reads::take(); // this run's reads alone
-    match draw(tree, host, path, out, registry) {
+    match draw(tree, host, asked, registry) {
         Ok(census) => {
             let reads: Vec<String> = crate::reads::take()
                 .iter()

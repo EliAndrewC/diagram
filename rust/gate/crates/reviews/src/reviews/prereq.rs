@@ -5,8 +5,8 @@
 //! record. And the reviewer's two calls: the paired gate's state, and the verdict record, the review's last act.
 //!
 //! `l7r-gate reviews prereq <check|accept|recorded|gate-state|verdict|named|content-key> --clone DIR [...]`. The generation cache's
-//! key comparison is `gencache.is_current`, asked of `scripts/bundle_door.py` (`ask:449-T89-reviews`), started only when `check`
-//! has a map to ask about and from the clone's own scripts, so a fixture clone's stub answers.
+//! answer is `l7r_gate_pool::is_current`, asked in process and read-only (feature 449 T221; `gencache.is_current` through
+//! `scripts/bundle_door.py` before it, `ask:449-T89-reviews`).
 
 use std::collections::{BTreeMap, BTreeSet};
 use std::fmt::Write as _;
@@ -21,7 +21,6 @@ use super::owed::{owed, pool_map_names};
 use super::{py_path, reply};
 use crate::cohort::truthy;
 use crate::record::args::{parse_with, Parsed, Spec};
-use crate::record::bundle::door::Runner;
 use crate::record::bundle::{head, py_repr, py_str};
 use crate::Reply;
 use l7r_gate_pool::{walk, Walk, LIVE};
@@ -201,21 +200,22 @@ fn has_findings(clone: &Path, name: &str) -> bool {
         .is_some_and(|v| get(&v, "verdict") != Some(&json!(NR)) && is(&v, "findings"))
 }
 
-/// The pool generator of a map: the first live-pool folder named `name` whose listing holds `<name>.gen.py`, from the one pool walk
-/// (feature 449 T220).
-fn gen_of<'a>(pool: &'a Walk, name: &str) -> Option<&'a l7r_gate_pool::Map> {
+/// The live map of that name - a hamlet, a generated compound or a hand sheet, each drawn by `make map` - from the one pool walk (feature
+/// 449 T220; T221, where it was the folder whose listing held `<name>.gen.py`).
+fn live_of<'a>(pool: &'a Walk, name: &str) -> Option<&'a l7r_gate_pool::Map> {
     pool.in_tree(LIVE)
-        .find(|m| m.name == name && m.has(".gen.py"))
+        .find(|m| m.name == name && m.kind.is_live())
 }
 
-/// The generation cache's key comparison for a generator's path.
+/// The generation cache's answer for a map's folder (from the clone's root): served as it stands, or not.
 pub type Current<'a> = dyn FnMut(&str) -> bool + 'a;
 
 fn same_bytes(a: &Path, b: &Path) -> bool {
     std::fs::read(a).ok() == std::fs::read(b).ok()
 }
 
-/// Each map whose generator's key has moved, or whose artifacts are not all where the reviewer will read them, with the reason (FR-005).
+/// Each map the generation cache would not serve as it stands, or whose artifacts are not all where the reviewer will read them, with the
+/// reason (FR-005).
 fn stale_maps(
     skill: &Path,
     names: &[String],
@@ -227,11 +227,10 @@ fn stale_maps(
     let snapshots = skill.join(".git").join("review-snapshot");
     let pool = walk(skill);
     for name in names {
-        let Some(map) = gen_of(&pool, name) else {
-            out.push(format!("{name}: no pool generator by that name"));
+        let Some(map) = live_of(&pool, name) else {
+            out.push(format!("{name}: no live pool map by that name"));
             continue;
         };
-        let gen = map.file(".gen.py");
         let parent = map.dir.clone();
         let snap = snapshot_of.get(name).unwrap_or(name);
         let in_snapshot = prompt.contains(&format!("review-snapshot/{snap}"));
@@ -247,25 +246,21 @@ fn stale_maps(
             .copied()
             .filter(|ext| !(file(&at, ext).is_file() || (sheet && *ext == ".json")))
             .collect();
-        let rel = gen
-            .strip_prefix(skill)
-            .unwrap_or(&gen)
-            .to_string_lossy()
-            .into_owned();
+        let rel = map.rel();
         let older = in_snapshot
             && missing.is_empty()
             && [".json", ".svg"].iter().any(|ext| {
                 file(&parent, ext).is_file() && !same_bytes(&file(&at, ext), &file(&parent, ext))
             });
         let gone = missing.join(" ");
-        if !current(&gen.to_string_lossy()) {
-            out.push(format!("{name}: its generation key has moved - the map on disk is not what the engine draws now - `make map GEN={rel}`"));
+        if !current(&rel) {
+            out.push(format!("{name}: the generation cache does not serve it as it stands - the map on disk is not what the engine draws now - `make map MAP={rel}`"));
         } else if older {
-            out.push(format!("{name}: the review snapshot the dispatch names is of an older map than the pool's - re-take it (`make verify`), or run `make map GEN={rel}` and dispatch against the pool folder without naming the snapshot"));
+            out.push(format!("{name}: the review snapshot the dispatch names is of an older map than the pool's - re-take it (`make verify`), or run `make map MAP={rel}` and dispatch against the pool folder without naming the snapshot"));
         } else if !missing.is_empty() && in_snapshot {
-            out.push(format!("{name}: the review snapshot the dispatch names lacks {gone} - re-take it (`make verify`), or run `make map GEN={rel}` and dispatch against the pool folder without naming the snapshot"));
+            out.push(format!("{name}: the review snapshot the dispatch names lacks {gone} - re-take it (`make verify`), or run `make map MAP={rel}` and dispatch against the pool folder without naming the snapshot"));
         } else if !missing.is_empty() {
-            out.push(format!("{name}: its pool folder lacks {gone} - a reviewer would read an incomplete map - `make map GEN={rel}`"));
+            out.push(format!("{name}: its pool folder lacks {gone} - a reviewer would read an incomplete map - `make map MAP={rel}`"));
         }
     }
     out
@@ -790,13 +785,13 @@ fn verdict_cli(clone: &Path, map: &str, p: &Parsed) -> Reply {
 }
 
 fn check_cli(clone: &Path, p: &Parsed) -> Reply {
-    let mut runner = Runner::new(clone);
-    check_asking(clone, p, &mut |gen| runner.ask("is_current", &json!([gen])))
+    check_asking(clone, p, &mut |map| {
+        Ok(Value::Bool(l7r_gate_pool::is_current(clone, map)))
+    })
 }
 
-/// `check` with the generation cache's answers from `ask`: the bundle runner's Python in a run, a stand-in in the tests, which start the
-/// Python only where the runner itself is what they test (feature 449 T167: eight Python starts made one test 327 ms against FR-008's
-/// tenth of a second).
+/// `check` with the generation cache's answers from `ask`: the pool crate's cache, asked in process, in a run (feature 449 T221); a
+/// stand-in in the tests.
 fn check_asking(
     clone: &Path,
     p: &Parsed,

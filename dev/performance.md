@@ -133,7 +133,7 @@ to WAITING for a core but not to needing more cycles for the same work, and `-n 
 workers here. Measured pairs, solo vs under-gate: hoshizora **12.4s / 35.7s**, kuwabata **16.8s /
 36.4s**, enokida **19.9s / 31.9s**, kikuta **10.9s / 36.2s**, minami **~54s / 154.8s**. Which map
 trips therefore depends on what else is on the box, so **diagnose before touching anything**: re-run
-the named gen ALONE (`make map GEN=pool/<tier>/<map>/<map>.gen.py PROFILE=1` with nothing else running). Far
+the named map ALONE (`make map MAP=pool/<tier>/<map>` with nothing else running; its `PROFILE=1` went with the Python engine). Far
 under budget alone means contention, not a regression.
 
 The resolution, and one dead end worth not re-walking:

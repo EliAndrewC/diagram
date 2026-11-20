@@ -22,11 +22,13 @@ use crate::codeid::{self, stated, Cache};
 /// sheet's typed counts and `**On map**:` declaration, a hamlet's census block (`rust/mode_a/src/census/pool_check.rs`) - so a notes-only
 /// edit that broke one landed DIRECT, judged by no sweep. Every pool tier's notes are read, so the whole of `pool/` counts, not the Mode A
 /// tiers alone; the frozen exhibits' notes stay documentation, read by no check while none carries a census block.
+/// A pool map's spec is its `.spec.json` or `.compound.json` (`.json` covers both) or its `.svg` since feature 449 T221, which deleted
+/// the six `.gen.py` files and drew every map through one Rust driver: a `.gen.py` names no map's code now, and is no engine.
 pub(crate) const ENGINE_DIRS: [(&str, &[&str]); 4] = [
     ("l7r/", &[".py"]),
     ("rust/", &[".rs", "Cargo.toml", "Cargo.lock"]),
-    ("pool/", &[".gen.py", ".json", ".svg", ".notes.md"]),
-    ("legacy-hand-authored-pool/", &[".gen.py", ".json"]),
+    ("pool/", &[".json", ".svg", ".notes.md"]),
+    ("legacy-hand-authored-pool/", &[".json"]),
 ];
 
 /// The gate's own decider is tooling, not engine (feature 132 FR-025, the GM: "the engine itself isn't using it ... which makes it test code").
@@ -39,7 +41,7 @@ fn semantic(path: &str) -> bool {
     SEMANTIC.iter().any(|s| path.ends_with(s))
 }
 
-/// A file Python runs, by its last extension (`.gen.py` too).
+/// A file Python runs, by its last extension.
 fn is_python(path: &str) -> bool {
     Path::new(path).extension().is_some_and(|e| e == "py")
 }

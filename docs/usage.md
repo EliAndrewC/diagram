@@ -87,7 +87,7 @@ Three further labeling rules (GM, 2026-07):
 
 The renderer is **resvg** (its setup and why there is no fallback: [`docs/container.md`](container.md)).
 
-- **Mode B** renders itself: `s.finish()` writes the SVG, the PNG at 2600 px and `<map>.html` - the interactive page (feature 134), where hovering a feature lights every feature of its kind and clicking it opens what it is, why it stands there and its sources ([`l7r/diagram/interactive/`](../l7r/diagram/interactive/CLAUDE.md)). Regenerate a map with `make map GEN=pool/<tier>/<map>/<map>.gen.py`; never call `resvg` by hand for one.
+- **Mode B** renders itself: `s.finish()` writes the SVG, the PNG at 2600 px and `<map>.html` - the interactive page (feature 134), where hovering a feature lights every feature of its kind and clicking it opens what it is, why it stands there and its sources ([`l7r/diagram/interactive/`](../l7r/diagram/interactive/CLAUDE.md)). Regenerate a map with `make map MAP=pool/<tier>/<map>`; never call `resvg` by hand for one.
 - **Mode A**: each sheet's gen renders its picture and page with the captions placed by the one placer; `make sheet-render SHEET=<svg> OUT=<png>` renders one to look at. 2400 px wide or more keeps the smallest labels (latrines, well annotations) legible.
 - Draw order (what paints over what): [`dev/placement.md`](../dev/placement.md), DRAW ORDER.
 - After rendering, **read the PNG back yourself with the Read tool** to verify legibility and correctness before declaring done. Per Constitution Principle I the author is not a reliable reviewer of their own visual output - but at minimum, look at it once before reporting it as ready.
@@ -104,10 +104,10 @@ Finished diagrams live in **two trees**, each `<tree>/<tier>/<map>/` - one folde
 
 `pool/index.html` (`make pool-index`, written by the Rust pool walk) lists every map of both trees on one page, grouped by tree and tier, each linking its rendered page where it has one. Each map is a set of files sharing the map's name, inside its own folder (e.g. `pool/hamlets/inashiro/inashiro.*`):
 
-- `<subject>.svg` - the drawing. **Mode A: this IS the source** (hand-authored, tracked). **Mode B: this is DERIVED** from the `.gen.py` + `.json`.
+- `<subject>.svg` - the drawing. **A hand sheet: this IS the source** (hand-authored, tracked). **A generated compound: DERIVED** from its `.compound.json`. A hamlet's drawing is `<subject>.driver.svg`, derived from its `.spec.json` by the Rust driver.
 - `<subject>.png`, `<subject>.html` - the raster and the interactive page (always derived, never tracked - feature 178)
 - `<subject>.notes.md` - design notes: intent, knob settings, deliberate choices, review log; the second source for the `building-review` / `settlement-review` checks. **Every pool subject carries one**: intent that lives only in gen comments means a future session cannot tell a deliberate oddity from a regression
-- `<subject>.gen.py` - the generator (Mode B), or the sheet's render script (Mode A)
+- `<subject>.spec.json` (a hamlet) or `<subject>.compound.json` (a generated compound) - the map's spec, which `make map MAP=pool/<tier>/<subject>` draws through the generation cache (the `.gen.py` wrappers went with feature 449 T221)
 - `<subject>.json` - the Mode B manifest: the record every rule, tool and interactive page reads
 
 What git tracks and why: [`dev/pool.md`](../dev/pool.md) and the comments in `.gitignore`.
@@ -126,7 +126,7 @@ Subject names: lowercase-kebab-case, descriptive (e.g., `ochiba-magistracy`, `wa
 - [`make pack-audit`](../rust/mode_a/src/audit.rs) - Mode A automated audit of a compound SVG; run it before presenting a compound plan
 - `overlap/` - the overlap taxonomy: which features may lie on which, and why
 - `tests/gate/` - the finished-map tests no placer unit test can replace
-- Legacy Mode B exhibits, one per form (read each one's `.gen.py` docstring and `.notes.md`):
+- Legacy Mode B exhibits, one per form (read each one's `.notes.md`; their generators are not in the tree):
   - [`villages/kikuta/`](../legacy-hand-authored-pool/villages/kikuta/) - pond-fed single comb-field, LINEAR ribbon village
   - [`villages/hikari-no-sato/`](../legacy-hand-authored-pool/villages/hikari-no-sato/) - the water-first SPLIT (multi-block) village
   - [`hamlets/moritono/`](../legacy-hand-authored-pool/hamlets/moritono/) - a hamlet beside a forest, water flowing E->W

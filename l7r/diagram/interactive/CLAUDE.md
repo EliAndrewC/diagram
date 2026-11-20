@@ -42,7 +42,7 @@ pairs, so they are read back out of the drawing:
 
 | file | look here when |
 |---|---|
-| `rust/mode_a/src/sheet.rs`, `sheet/page.rs` (`sheet.py` here is only the generators' two calls into it, `draw_hand_sheet` and `draw_compound_sheet`; its Python reader and `write_sheet_page` deleted, feature 449 T212) | a magistracy page lights the wrong thing, or the census names ink with no kind. Every element or group carries `data-kind="<key>"` (the nearest one wins; `"-"` rules it out); the reader tokenizes the sheet (never an XML round trip - the page carries the sheet's own bytes) and re-opens a group's opening tag around each differently-tagged piece, so a transform or inherited fill still applies. `element_kinds` is what the audit reads to find a program item by its tag. The page half - the pieces, the census, the page written - is `sheet/page.rs` (feature 449 T150) |
+| `rust/mode_a/src/sheet.rs`, `sheet/page.rs` (`sheet.py`, the generators' two calls into it, deleted with the generators by feature 449 T221; its Python reader and `write_sheet_page` by T212) | a magistracy page lights the wrong thing, or the census names ink with no kind. Every element or group carries `data-kind="<key>"` (the nearest one wins; `"-"` rules it out); the reader tokenizes the sheet (never an XML round trip - the page carries the sheet's own bytes) and re-opens a group's opening tag around each differently-tagged piece, so a transform or inherited fill still applies. `element_kinds` is what the audit reads to find a program item by its tag. The page half - the pieces, the census, the page written - is `sheet/page.rs` (feature 449 T150) |
 | [`compound_kinds/`](compound_kinds/__init__.py) | a magistracy modal says something wrong, or a new kind is drawn. The hamlet form exactly (one About-form file per kind under `assets/modals/sheet/`), a SEPARATE registry (`COMPOUND_CLASSES`, passed as `render_page(registry=)`) because a compound's well is written about a compound. Every kind is written from an existing finding; a kind no research section covers says `(no dedicated entry - recorded as silent)` and so lists no references - the gap the GM can see. The magistracies program in `buildings/types.json` names these kinds and states no class or why of its own: `programs.md` and the audit read the kind's guesses (`classification`, `rust/mode_a/src/types.rs`) |
 
 **A part is its own kind and lights with its parent** (feature 264, GM 2026-09-27: *"individual features inside of
@@ -57,8 +57,8 @@ outline with `fill="none"` (0 px changed) - and the pack audit folds such a rect
 `raster::palette_rgb`), and a sheet page's id map draws text unblended (`crisp_text`, set when `within=` is given),
 so a label never answers as its neighbor in the palette; hamlet id maps are untouched.
 
-Each pool sheet's `.gen.py` calls `draw_hand_sheet` (or `draw_compound_sheet`), which writes its page and fails if the census
-is not clean; the placer's `emit_svg` writes the kinds itself (`BuildingSpec.feature`). A map's own facts go in its
+Each pool sheet is drawn by `make map MAP=pool/<tier>/<map>` (`l7r-mode-a hand-sheet` or `compound`, through the generation cache,
+feature 449 T221), which writes its page and fails if the census is not clean; the placer's `emit_svg` writes the kinds itself (`BuildingSpec.feature`). A map's own facts go in its
 notes' "Map notes / Features" block keyed by kind, as for a hamlet. `tests/interactive/test_compound_kinds.py` holds
 every sheet complete, the registry closed over the five maps, and the GM's two examples (the threshold stones say
 they are the setting's; the hearing court lists its questions).
@@ -184,7 +184,7 @@ page (wrap, census, self-containment, present-only data); and `tests/full/intera
 the browser test (Playwright + Chromium): a hand-built SYNTHETIC map of one element per class, opened from
 `file://`, over which every behavior ruling is proved - hover, click, the modal's text against the
 registry, zoom and scroll, the hit boxes, the glossary, the sibling links.
-`make map GEN=pool/<tier>/<map>/<map>.gen.py` writes a Mode A sheet's real page (a hamlet's, `make hamlet SPEC=`); open it in a browser.
+`make map MAP=pool/<tier>/<map>` writes a Mode A sheet's real page (a hamlet's, `make hamlet SPEC=`); open it in a browser.
 
 **NO BROWSER TEST LOADS A ROLLED PAGE, AND NONE TIMES ANYTHING (GM 2026-09-07).** The rolled-page tests were retired
 the day the container crashed twice under the gate (they ran the package to 3.9 GiB against an 8 GiB cap). The GM:

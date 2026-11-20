@@ -32,7 +32,7 @@ pub mod value;
 pub use explain::{explanations, glossary_for, rendered_text, NOT_RENDERED};
 pub use hits::{hit_copies, hit_layer, hit_regions, part_of, wrap};
 pub use merge::merge_primitives;
-pub use render::{raster_wanted, render_page, write_html, Page};
+pub use render::{raster_wanted, render_page, write_html, write_html_beside, Page};
 
 /// The elements that put ink on the sheet; a `<g>` or `<clipPath>` draws nothing by itself.
 static INK: LazyLock<Regex> =

@@ -157,9 +157,11 @@ if [ -n "$undeclared" ]; then
 fi
 owed_units="$("$RG_HERE/l7r-gate.sh" reviews owed --root "$ROOT" --landing 2>/dev/null || true)"
 # AT RUST-ONLY A HAMLET'S MAP REVIEWS WAIT FOR THE THROW BACK (feature 444 FR-023; the GM 2026-11-07: "You should immediately stop
-# running all of the python map generating code as well"): no hamlet map is rolled while the port switch stands at rust-only, so a
-# review of one is neither redrawn below (`make map` rolled Inashiro and Kashikawa through the Python stages in a landing's cheap
-# refusals) nor refused; it is owed again when the switch is thrown back to integrated. Every other unit is asked as before.
+# running all of the python map generating code as well"): no hamlet map is rolled through the Python stages while the port switch
+# stands at rust-only (`make map` rolled Inashiro and Kashikawa through them in a landing's cheap refusals), so a review of one is not
+# refused; it is owed again when the switch is thrown back to integrated. Every other unit is asked as before.
+# GUARD_EDIT_OK: feature 449 T221 - a hamlet's map IS redrawn below now: `make map` runs the Rust hamlet driver (a tenth of a second,
+# no Python), which writes its .driver.svg and .json and leaves the tracked manifest the review reads alone
 port="$(cd "$ROOT" && "$RG_HERE/l7r-gate.sh" cohort port 2>/dev/null || echo integrated)"
 if [ "$port" = "rust-only" ] && [ -n "$owed_units" ]; then
   kept=""
@@ -179,9 +181,12 @@ fi
 # unit sits on (`make map` answers CACHED when the render is current), then ask again.
 if [ -n "$owed_units" ]; then
   for on in $("$RG_HERE/l7r-gate.sh" reviews owed --root "$ROOT" --landing --units 2>/dev/null | awk -F'\t' '{print $4}' | sort -u); do
-    # GUARD_EDIT_OK: feature 449 T220 - the unit's generator asked of the one pool walk's listing, not a find over the pool
-    g="$("$RG_HERE/l7r-gate.sh" pool find "$on" .gen.py 2>/dev/null)"
-    [ -n "$g" ] && ( cd "$ROOT" && make -s map GEN="$g" >/dev/null 2>&1 )
+    # GUARD_EDIT_OK: feature 449 T221 - the unit's live map asked of the one pool walk (its kind and folder) and drawn by the one
+    # driver, `make map MAP=<folder>`, where its `.gen.py` (deleted) was run; a hamlet is the Rust driver's tenth of a second now
+    f="$("$RG_HERE/l7r-gate.sh" pool find "$on" 2>/dev/null)"
+    case "${f%%	*}" in
+      hamlet|compound|hand-sheet) ( cd "$ROOT" && make -s map MAP="${f#*	}" >/dev/null 2>&1 ) ;;
+    esac
   done
   owed_units="$("$RG_HERE/l7r-gate.sh" reviews owed --root "$ROOT" --landing 2>/dev/null || true)"
 fi

@@ -17,8 +17,9 @@ the mistake. `tests/test_namespace_portion.py` guards it.
 
 The skill directory (three levels up) remains the `sys.path` root: `pool/`, `tests/`, the `Makefile`
 and `pyproject.toml` all stay there, which is why every pool generator's bootstrap block
-(`SKILL = dirname(dirname(HERE))`) is unchanged by the move. Modules are still run as modules from
-that directory - `python3 -m l7r.diagram.check_village`, `python3 -m l7r.diagram.pipeline.regen`.
+(`SKILL = dirname(dirname(HERE))`) was unchanged by the move. Modules are still run as modules from
+that directory, through their make targets (the pool's generators and `pipeline.regen` left with feature 449 T221: `make map` runs
+the Rust driver).
 
 What is in here, and which index to load, is in the skill's `CLAUDE.md` "Where things live" table.
 """

@@ -7,7 +7,7 @@ entirely in FEET (envelope, the reserved court-spine, and buildings sized in fee
 
 **Program type**: magistrate's manor (county magistracy) - the generic worked example.
 
-Regenerate: `make map GEN=pool/magistracies/county-magistracy-example/county-magistracy-example.gen.py`.
+Regenerate: `make map MAP=pool/magistracies/county-magistracy-example`.
 
 ## Knob settings
 

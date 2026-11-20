@@ -49,7 +49,7 @@ fn world(tag: &str) -> (l7r_guard::shared::tempdir::TempDir, Trial) {
         "---\nname: s\nmodel: opus\n---\nbody\n",
     )
     .unwrap();
-    std::fs::write(clone.join("pool/hamlets/x/x.gen.py"), "# gen\n").unwrap();
+    std::fs::write(clone.join("pool/hamlets/x/x.spec.json"), "{}\n").unwrap();
     std::fs::write(clone.join("pool/hamlets/x/x.json"), "{}\n").unwrap();
     std::fs::write(clone.join("pool/hamlets/x/other.txt"), "no\n").unwrap();
     git(&clone, &["add", "."]);

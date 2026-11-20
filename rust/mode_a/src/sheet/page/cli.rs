@@ -79,7 +79,7 @@ fn run(
             None
         };
         let registry = registry(tree)?;
-        super::write_sheet_page(tree, host, path, &registry, raster, text.as_deref())
+        super::write_sheet_page(tree, host, path, &registry, raster, text.as_deref(), None)
     })();
     match written {
         Ok(census) => {
@@ -216,12 +216,7 @@ mod tests {
         let big = tree.join("big.svg").to_string_lossy().into_owned();
         let wide = "<svg viewBox=\"0 0 900 900\" width=\"900\" height=\"900\"><rect data-kind=\"well\"/></svg>";
         let r = run(&[&big, "--with-raster", "--stdin"], wide);
-        assert!(
-            r.stderr
-                .starts_with("l7r.diagram._census.RenderedInATest: "),
-            "{}",
-            r.stderr
-        );
+        assert!(r.stderr.starts_with("RenderedInATest: "), "{}", r.stderr);
         assert!(!tree.join("big.html").exists());
         let nowhere = tree.join("no/dir/s.svg").to_string_lossy().into_owned();
         let r = run(&[&nowhere, "--with-raster", "--stdin"], wide);

@@ -12,39 +12,6 @@ fn a_host_is_read_from_the_process() {
 }
 
 #[test]
-fn the_census_takes_a_render_where_one_is_open() {
-    let dir = l7r_guard::shared::tempdir::TempDir::new("raster-census");
-    let at = dir.path().join("census.jsonl");
-    let var = |k: &str, v: &str| (k.to_owned(), v.to_owned());
-    let host = Host {
-        vars: vec![
-            var("L7R_ROLL_CENSUS", &at.to_string_lossy()),
-            var("L7R_ROLL_CENSUS_TEST", "t::x"),
-        ],
-        ..Host::default()
-    };
-    host.census_record("render", "raster");
-    let line: serde_json::Value =
-        serde_json::from_str(std::fs::read_to_string(&at).unwrap().trim()).unwrap();
-    assert_eq!(
-        (&line["kind"], &line["what"], &line["test"], &line["gen"]),
-        (
-            &"render".into(),
-            &"raster".into(),
-            &"t::x".into(),
-            &serde_json::Value::Null
-        )
-    );
-    // none open, or an empty name: nothing written, and nothing fails
-    Host::default().census_record("render", "raster");
-    Host {
-        vars: vec![var("L7R_ROLL_CENSUS", "")],
-        ..Host::default()
-    }
-    .census_record("render", "raster");
-}
-
-#[test]
 fn a_render_is_drawn_in_process_and_its_refusals_are_the_python_s() {
     let doc = "<svg viewBox=\"0 0 4 4\"><rect x=\"0\" fill=\"#123\"/></svg>";
     let args = |a: &[&str]| a.iter().map(|s| (*s).to_owned()).collect::<Vec<_>>();
@@ -60,7 +27,7 @@ fn a_render_is_drawn_in_process_and_its_refusals_are_the_python_s() {
     let refused = skip
         .resvg_png(doc, &args(&["--width", "2000"]))
         .unwrap_err();
-    assert_eq!(refused.kind, "l7r.diagram._census.RenderedInATest");
+    assert_eq!(refused.kind, "RenderedInATest");
     assert_eq!(
         uncaught(&skip.resvg_png(doc, &args(&["--width", "x"])).unwrap_err()),
         "ValueError: could not convert string to float: 'x'\n"

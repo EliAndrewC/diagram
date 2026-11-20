@@ -88,3 +88,52 @@ fn counts_prints_a_trees_work_and_writes_nothing() {
     assert_eq!(code, 2);
     assert!(err.contains("no tree nowhere"));
 }
+
+/// `map` with a name no map bears refuses before any engine is asked; the review gate's question answers no for a map with no cache,
+/// a frozen exhibit and a name no map bears (feature 449 T221).
+#[test]
+fn map_refuses_an_unknown_name_and_is_current_answers_no_without_a_cache() {
+    let root = fixture("cli-map");
+    let (_, err, code) = run(&root, &["map", "zz"]);
+    assert!(code == 1 && err.contains("no pool map is named zz"));
+    for target in ["a", "v", "zz"] {
+        assert!(!super::is_current(&root, target), "{target}");
+    }
+}
+
+/// `counts pool` (a counting build): the second of two runs back to back, every map served - the derivation's all-hit run, nothing hashed;
+/// a map the second run did not serve is named; a cache that cannot be written is the error.
+#[cfg(feature = "counters")]
+#[test]
+fn counts_on_the_pool_are_the_second_runs_and_name_what_it_did_not_serve() {
+    let mut f = crate::cache::tests::fixture("cli-counts-pool");
+    let (out, err, code) = super::counts_cli(&f.root, "pool", &mut f.stand);
+    assert_eq!((code, err.as_str()), (0, ""));
+    let line: serde_json::Value = serde_json::from_str(out.trim()).unwrap();
+    // nothing hashed but the stand-in engines, scripts with no build-id note, each whole once a run
+    let script_blocks: u64 = ["engines/mode-a", "engines/hamlet"]
+        .iter()
+        .map(|e| {
+            std::fs::metadata(f.root.join(e))
+                .unwrap()
+                .len()
+                .div_ceil(64)
+        })
+        .sum();
+    assert_eq!(
+        (line["hash_block"].as_u64(), line["engine_run"].as_u64()),
+        (Some(script_blocks), Some(0))
+    );
+    assert!(line["total"].as_u64().unwrap() > 0);
+    f.mode("refuse");
+    std::fs::remove_dir_all(f.root.join(".gencache")).unwrap();
+    let (_, err, _) = super::counts_cli(&f.root, "pool", &mut f.stand);
+    assert!(err.contains("did not serve pool/hamlets/h"), "{err}");
+    std::fs::remove_dir_all(f.root.join(".gencache")).unwrap();
+    crate::walk::tests::put(&f.root, ".gencache", "a file");
+    let (_, err, code) = super::counts_cli(&f.root, "pool", &mut f.stand);
+    assert!(
+        code == 1 && err.starts_with("pool counts: the generation cache: "),
+        "{err}"
+    );
+}
