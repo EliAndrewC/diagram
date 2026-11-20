@@ -363,34 +363,7 @@ tests/hooks/                 # the suites, the verdict replay through phase 1
 <!-- plan-archive: T152 to T208 moved to plan-done.md, 2026-11-19 (feature 375 FR-044) -->
 <!-- plan-archive: T152 to T152 moved to plan-done.md, 2026-11-19 (feature 375 FR-044) -->
 <!-- plan-archive: T156 to T156 moved to plan-done.md, 2026-11-19 (feature 375 FR-044) -->
-### T157 (the pipeline, phase 4 S12; split by its scoping of 2026-11-19 into five landings)
-
-- **Approach**: No change of its own: its work landed as T218 (the tooling fixes), T219 (the blind derivation of the walk and the key, SOUND, budget 2,064), T220 (the pool walk and the index), T221 (one driver and the generation cache) and T222 (render-sync on the Rust, the pipeline's Python deleted), each with its own section, review and landing; the findings on the way landed as T223, T224, T225, T227 and T229, and those still open are T226, T228 and T230, each ordered before T158.
-
-| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
-|---|---|---|---|---|
-| none of its own | n/a | none | none | none |
-
-### T157 Approach (checklist part A)
-
-1. **The goal, in the world.** Main draws, caches, indexes and renders every pool map through the Rust alone, at the work its derivation budgets.
-2. **The constraints.** The tasks that did its work, each reviewed and landed on its own.
-3. **Where each comes from.** O: those tasks' landings.
-4. **Do they describe the world here?** Yes: each landed on main (observed 2026-11-19, method: `git log` of main).
-5. **The order.** After T222; before T158.
-6. **The exits.** Green: every task that does its work ticked. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** none
-8. **The budget.** No landing of its own beyond the tick.
-9. **Done, measured.** T218, T219, T220, T221 and T222 are ticked; main renders through the Rust (its render-sync status `ok`).
-10. **Before moving a constant.** n/a
-11. **Before fitting things into room.** n/a
-12. **Before any fix.** Nothing of its own: its fixes landed in the tasks named above.
-
-**Found and left?** none
-
-**Performance work?** no
-
-
+<!-- plan-archive: T218 to T157 moved to plan-done.md, 2026-11-20 (feature 375 FR-044) -->
 ### T158 (<why: the finding or measurement that files it>)
 
 - **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
@@ -718,34 +691,8 @@ tests/hooks/                 # the suites, the verdict replay through phase 1
 <!-- plan-archive: T210 to T156 moved to plan-done.md, 2026-11-19 (feature 375 FR-044) -->
 <!-- plan-archive: T214 to T156 moved to plan-done.md, 2026-11-19 (feature 375 FR-044) -->
 <!-- plan-archive: T214 to T214 moved to plan-done.md, 2026-11-19 (feature 375 FR-044) -->
-### T215 (folded into T218, 2026-11-19)
-
-- **Approach**: No change of its own: `make map` with no `GEN` refused, naming its forms, landed in T218; T221 then replaced `GEN=` with `MAP=` and the one Rust driver.
-
-| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
-|---|---|---|---|---|
-| none of its own | n/a | none | none | none |
-
-### T215 Approach (checklist part A)
-
-1. **The goal, in the world.** `make map` with no argument names the forms it takes.
-2. **The constraints.** The tasks that did its work, each reviewed and landed on its own.
-3. **Where each comes from.** O: those tasks' landings.
-4. **Do they describe the world here?** Yes: each landed on main (observed 2026-11-19, method: `git log` of main).
-5. **The order.** With T218.
-6. **The exits.** Green: every task that does its work ticked. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** none
-8. **The budget.** No landing of its own beyond the tick.
-9. **Done, measured.** T218 is ticked.
-10. **Before moving a constant.** n/a
-11. **Before fitting things into room.** n/a
-12. **Before any fix.** Nothing of its own: its fixes landed in the tasks named above.
-
-**Found and left?** none
-
-**Performance work?** no
-
-
+<!-- plan-archive: T215 to T218 moved to plan-done.md, 2026-11-20 (feature 375 FR-044) -->
+<!-- plan-archive: T215 to T215 moved to plan-done.md, 2026-11-20 (feature 375 FR-044) -->
 ### T216 (<why: the finding or measurement that files it>)
 
 - **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
@@ -773,125 +720,8 @@ tests/hooks/                 # the suites, the verdict replay through phase 1
 **Performance work?** <no - or yes, and its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
 
 
-### T217 (folded into T218, 2026-11-19)
-
-- **Approach**: No change of its own: the `perf-gate` call that ran nothing removed from `make done`, and `measure_hooks`' tip naming the deleted `make cov-file` re-pointed, both in T218.
-
-| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
-|---|---|---|---|---|
-| none of its own | n/a | none | none | none |
-
-### T217 Approach (checklist part A)
-
-1. **The goal, in the world.** No make target named by `make done` or a guard's tip is missing.
-2. **The constraints.** The tasks that did its work, each reviewed and landed on its own.
-3. **Where each comes from.** O: those tasks' landings.
-4. **Do they describe the world here?** Yes: each landed on main (observed 2026-11-19, method: `git log` of main).
-5. **The order.** With T218.
-6. **The exits.** Green: every task that does its work ticked. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** none
-8. **The budget.** No landing of its own beyond the tick.
-9. **Done, measured.** T218 is ticked.
-10. **Before moving a constant.** n/a
-11. **Before fitting things into room.** n/a
-12. **Before any fix.** Nothing of its own: its fixes landed in the tasks named above.
-
-**Found and left?** none
-
-**Performance work?** no
-
-
-### T218 (T157's scoping, 2026-11-19: the pipeline's tooling named deleted scripts and missing targets, and an open question on the land route)
-
-- **Approach**: `make scatter-bases` ran a deleted script and two agent files named it; `cache-audit` sat in `.PHONY` with no rule; `sync-with-main.sh` carried an unused variable and seeded a dead roll store into every new clone; `make map` with no GEN defaulted to a file that no longer exists (T215); `make done FULL=1` called a `perf-gate` with no rule, which passed by running nothing, and measure_hooks' tips named a deleted `make cov-file` (T217). Each is removed or re-pointed, red first where behavior changes (a new section of the make-only suite: no recipe runs a missing script, every phase `make done` runs has a rule, `make map` without GEN refused naming its forms). The open question was measured and was a defect: an edit to a tracked hand-sheet svg was not counted as engine, so it landed DIRECT with no `make done` and no pool sweep (observed 2026-11-19, method: `l7r-gate delta engine-paths` on the Ubame sheet's path); a tracked pool svg now counts as engine, in the tree crate and the landing's cohort list, red first.
-
-| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
-|---|---|---|---|---|
-| the tooling fixes and the svg route | the make-only suite's section 7, the tree and cohort tests, the measure suite | `delta.rs`, `cohort.rs` | none | none |
-
-### T218 Approach (checklist part A)
-
-1. **The goal, in the world.** Every make target named runs something real, and an edit to a hand-drawn sheet is judged by the pool sweep before it lands.
-2. **The constraints.** Constitution XIV (a check passing the bad, a tool answering wrongly); T211's pool sweep.
-3. **Where each comes from.** O: T157's scoping and this task's measurement.
-4. **Do they describe the world here?** Yes: each was observed on the tree (observed 2026-11-19, method: the scoping's reads and the delta command above).
-5. **The order.** First of T157's landings, before T219.
-6. **The exits.** Green: the suites red first then green, `make quick`, `make static`, `make hooks-test` green. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** none
-8. **The budget.** One landing (gated: it changes Rust).
-9. **Done, measured.** The svg path now listed by `delta engine-paths`; `make map` without GEN refused.
-10. **Before moving a constant.** n/a
-11. **Before fitting things into room.** n/a
-12. **Before any fix.** Each changed item answered wrongly or ran nothing; the svg route let a sheet edit skip its checks.
-
-**Found and left?** More `.PHONY` names with no rule that pass by running nothing (perf-review on every push among them), a dead cache-audit guard, and a notes-only edit skipping the sweep: filed as their own task (2026-11-19).
-
-**Performance work?** no
-
-
-### T219 (T157's scoping, 2026-11-19: the generation key re-hashed every engine source per map, and the walk keyed a map on its .gen.py)
-
-- **Approach**: a derivation of the pipeline's walk and generation key written blind to `l7r/diagram/pipeline/` (`derivations/T219-pipeline.md`), in the pool-sheet form with the two trees as its sheets (the stage has no households): a warm run where nothing changed costs 2,064 counted operations (1,894 for `pool`, 170 for the legacy tree), about 172 a live map, judged SOUND by the `work-budget` agent on its second round (measured 2026-11-19 (the derivation's Totals)). The first round found the per-entry read records LOOSE (4,215 of a 6,061 run, measured 2026-11-19 (the first derivation's Totals)) and ruled a shared table of distinct reads, one row a path with its stat, digest and the maps that read it, which the derivation now uses, with the ordering that keeps no map served stale (an affected map's entry removed before its row takes a new digest) and a table lock. The budget is set (`make budget-set PHASE=pipeline`). The rebuild is T220-T222, phase tasks with the guard on.
-
-| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
-|---|---|---|---|---|
-| the derivation and the budget | n/a (measurement) | the derivation, its verdicts, `dev/work-budget.json`'s rows | none | none |
-
-### T219 Approach (checklist part A)
-
-1. **The goal, in the world.** Regenerating the pool does work in proportion to what changed, and the pool index lists every map.
-2. **The constraints.** The GM's 2026-10-30 and 2026-11-19 words; engine-plan.md's section on rebuilding from a derivation; feature 443/444's derivation form and rubric.
-3. **Where each comes from.** G: request.md; O: T157's scoping and the derivation's measured bounds.
-4. **Do they describe the world here?** Yes: the derivation's bounds are the pool as it stands (30 maps, 11 live, 297 distinct reads, measured 2026-11-19 (the derivation's own scripts over the tree and the cache's recorded reads)).
-5. **The order.** After T218 and T223, before T220-T222.
-6. **The exits.** Green: SOUND recorded and the budget set. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** Yes, and it is the finding: today's key reads and hashes every engine source for every map (T157's scoping, observed 2026-11-19).
-8. **The budget.** One landing; the rebuild is its own phase tasks.
-9. **Done, measured.** SOUND on verdict 2, and `budget-set` printed the per-tree budgets above.
-10. **Before moving a constant.** n/a
-11. **Before fitting things into room.** n/a
-12. **Before any fix.** Nothing a reader of a map sees: a derivation and a budget.
-
-**Found and left?** The Mode A page writer reports only the files it found, so a looked-for file created later leaves its sheet cached and stale; and a read first recorded on a miss is hashed after the engine read it, so a file changed in between could later be served stale. Both are owed by T221, written onto its line (2026-11-19).
-
-**Performance work?** no - a derivation; the rebuild that follows is.
-
-
-<!-- plan-archive: T220 to T219 moved to plan-done.md, 2026-11-19 (feature 375 FR-044) -->
-<!-- plan-archive: T221 to T219 moved to plan-done.md, 2026-11-20 (feature 375 FR-044) -->
-### T222 (T157's scoping: main's render-sync ran the Python render cache, so a compound spec edit alone left main's svg, png and page stale; T221 left checks reading what no longer exists)
-
-- **Approach**: render-sync rebuilt on the Rust alone, with the phase guard on and the old Python never read. What `render_cache.py` did for main was found from its callers and outputs, never its source (observed 2026-11-19, method: the distinct lines of `.clones/.render-sync.log` over its 943 runs, `sync-with-main.sh`'s comments, `.gitignore`'s and the outputs on main's disk): it drew the maps (now the driver, `pool map --all`), refreshed `pool/index.html` (`pool index`), built the record's site when its stamp moved (`record site-stale --root`, "the record's site fresh/rebuilt"), stamped each hand sheet in a `.<map>.render-cache` sidecar (the cache keys the sheet now; four sidecars are left on main's disk, still ignored), counted the frozen tree and warned of an exhibit with no render (dropped: the index lists each exhibit with what its folder holds, and an exhibit's render can never be regenerated). `make render-sync` is that one recipe now, its prerequisite the Makefile's `guard` (main refused but under `DIAGRAM_ALLOW_MAIN=1`, which `sync-with-main.sh` sets under the lock, as before); it renders the tree it runs in, taking the Python's `ARGS` (`--skill-dir/--main-repo`) only where they name that tree (a clone's sync script not yet merged past T222 still passes main's path) and refusing them otherwise; T221's second locked `pool-index` line and `render-maps` are gone. **A failing map stops neither the index nor the site** (the suggestion taken, measured): the driver draws every other map first and neither later step reads a map's drawing, so the recipe runs all three and exits 1 at the end. In a scratch worktree of the final tree with one compound's program broken, the other ten maps were served or drawn (a changed later sheet REGENERATED after the failure), the index stayed at 30 maps, the site was rebuilt from a changed fragment, and make exited 2 with `render-sync: FAILED - a map (above); every other step ran` (measured 2026-11-19 (the worktree, `DIAGRAM_ALLOW_MAIN=1 make render-sync`)); a map failing on every pass costs the runner 0.38-0.40 s a pass (measured 2026-11-19 (the same, two passes timed)). Found doing it: the runner called `render_sync || rc=$?`, where bash ignores `set -e`, so a failed make fell through to the dirty check's 0 and the status read ok - `render_sync` now returns make's code. Deleted unread: `render_cache.py`, `record_build.py`, `pipeline/codeid.py`, `gencache.py`, `_census.py`, `pool_index.py`, `pool_index.css`, `pool_index_text.json`, `_invocation.py`, `pipeline/__init__.py`, `buildings/__init__.py`, `poolmaps.py` (each remaining module and `bundle_door.py`'s verbs imported by exit code: 38 of 38 and 6 of 6 exit 0, observed 2026-11-19); `pipeline/CLAUDE.md` folded into `dev/cache.md` and the directory removed; the Makefile's `RUN`, pyproject's pyrefly block (nothing runs pyrefly), pillow (no importer). The three checks: the probe's pool section, which filtered hamlets on a `.gen.py` no map has and printed nothing for every hamlet, is removed and says so (`NOT COMPARED`): the Rust driver writes a hamlet's drawing to its gitignored `.driver.json`, so no committed manifest holds HEAD's, and drawing HEAD in a worktree is a probe of its own (the easier route, taken and said); preflight's roll-census read and land's `L7R_ROLL_CENSUS` filter are removed - nothing writes the census, and no driver artifact is tracked (observed 2026-11-19, method: `git ls-files` over every map's owed artifacts), so an absent census only made the tree check stricter, and no red is owed. The pool index linked a hamlet's `.png` and `.html` - main's are the deleted Python's last, stale since 2026-11-07 - and now links only what the driver writes. The hamlets' missing picture and page are recorded on feature 444's T42. Render-sync end to end on the final tree in a scratch worktree: a cold run drew all 11 live maps, wrote the index at 30 maps and rebuilt the site in 171 s (measured 2026-11-19 (the worktree, timed); a cold cargo build of the engines in a new target directory), run as `DIAGRAM_ALLOW_MAIN=1 make render-sync ARGS="--skill-dir <wt> --main-repo <wt>"`, exit 0; the next run served all 11 CACHED, the index unchanged at 30 and the site fresh in 0.40 s, exit 0, no tracked pool file dirty (measured 2026-11-19 (the worktree, timed)).
-
-| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
-|---|---|---|---|---|
-| render-sync on the Rust | `test-sync-with-main.sh` cases Y (the real Makefile against a stub gate) and Z (the runner's status), the pool index's leftovers test, the probe's and preflight's tests | none: no map-drawing code changes (the stages and the Mode A engine are untouched) | none: the drawn sheets are the driver's, as T221 left them | none |
-
-### T222 Approach (checklist part A)
-
-1. **The goal, in the world.** Main's maps, pool index and record site are current after every landing, drawn by the Rust alone, a failure in one map visible in the runner's status without stale pages elsewhere; no check reads a file nothing writes.
-2. **The constraints.** The GM's 2026-10-30 rule (rebuild, never re-implement) and the phase guard; the derivation T219's contract; the main-tree rule and the sync lock (`docs/session-clones.md`); constitution XIV.
-3. **Where each comes from.** G: request.md, the 2026-10-30 words; O: T157's scoping, T221's found-and-left, the render-sync log and the measurements above.
-4. **Do they describe the world here?** Yes: the duties are the log's own lines over 943 runs (measured 2026-11-19 (the distinct lines of `.clones/.render-sync.log`)), and the failing-map behavior was measured on the real driver (measured 2026-11-19 (a scratch worktree with one compound's program broken)).
-5. **The order.** After T221 and T229; closes T157's pipeline work, before T158.
-6. **The exits.** Green: `make quick`, `make static`, `make hooks-test`, the red-first tests, render-sync run twice on the final tree in a scratch worktree. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** none
-8. **The budget.** One landing; the pipeline stage's counts not re-measured (the walk, the driver and the cache untouched; the index's row rule reads only the walk's names).
-9. **Done, measured.** A warm render-sync serves every map CACHED with the index at 30 and the site fresh; a broken map leaves the rest drawn, the index and site current, and the status FAILED.
-10. **Before moving a constant.** n/a
-11. **Before fitting things into room.** n/a
-12. **Before any fix.** A reader of main's pool index no longer meets a hamlet's stale Python picture or page as the hamlet's own; a failed render now reads FAILED in the status, where it read ok.
-
-**Found and left?** `make probe` cannot run at all: `make cohort` (the Rust driver) prints no `record committed` line, so the probe stops at "the cohort wrote no record" before any comparison (observed 2026-11-19, method: no writer of the line under `rust/`); and `make map`'s closing `maps-moved` line, like `make maps-moved`, compares tracked `.json` manifests, which a hamlet's drawing no longer is (its tracked `<name>.json` is the deleted Python's, never rewritten), so it says unchanged for every hamlet - feature 429's "did the wave move a map?" passes the bad for hamlets. Both filed as T230, which lands before T158 (2026-11-19). Nothing under `l7r/diagram/` is run by make but `tools/claims.py` (through `scripts/bundle_door.py` and `scripts/record/claims_counters.py`); `interactive/`, `work_counts.py` and `knobs.json` are read as text if at all; `codeid.py`'s `split_ids` has no caller; shapely and scipy have no importer; `l7r/diagram/CLAUDE.md`'s `switches.py` row names a file that does not exist - each added to T158, the deletion close (2026-11-19).
-
-**Performance work?** no - a rebuild onto the derivation's driver; render-sync's warm pass 0.40 s (measured 2026-11-19 (the worktree, timed)).
-
-
-<!-- plan-archive: T223 to T218 moved to plan-done.md, 2026-11-19 (feature 375 FR-044) -->
-<!-- plan-archive: T224 to T223 moved to plan-done.md, 2026-11-19 (feature 375 FR-044) -->
-<!-- plan-archive: T224 to T224 moved to plan-done.md, 2026-11-19 (feature 375 FR-044) -->
-<!-- plan-archive: T225 to T223 moved to plan-done.md, 2026-11-19 (feature 375 FR-044) -->
-<!-- plan-archive: T225 to T225 moved to plan-done.md, 2026-11-19 (feature 375 FR-044) -->
+<!-- plan-archive: T217 to T218 moved to plan-done.md, 2026-11-20 (feature 375 FR-044) -->
+<!-- plan-archive: T217 to T217 moved to plan-done.md, 2026-11-20 (feature 375 FR-044) -->
 ### T226 (<why: the finding or measurement that files it>)
 
 - **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.

@@ -457,6 +457,9 @@
 - [x] T156 Phase 4 S11, the Mode A top and pytest's exit (ask:449-phase4-slices) Q6, Q9 - split by its scoping of 2026-11-19 into four landings: T210 (dead measurement tooling), T211 (the Rust pool sweep), T212 (the Python audit and its lockstep retired), T213 (pytest's exit); compound* went to T152, resvg is a library since T150, and the six .gen.py's one Rust sheet driver with a spec file per map is folded into T157, whose pipeline finds maps by their .gen.py; T156 is ticked when T210-T213 are
       research: rendering
       verify: DONE. landed in batch T156+T214: T156 done through T210-T213; T214 done by T213
+- [x] T157 Phase 4 S12, the pipeline (ask:449-phase4-slices) Q8 - split by its scoping of 2026-11-19 into T218 (tooling fixes, T215 and T217 folded in), T219 (the blind derivation of the map walk and generation key), T220 (phase: the pool walk and the index), T221 (phase: one sheet driver and the generation cache) and T222 (phase: render-sync); rollcache, pipeline/codeid, pipeline/__init__, _census and _invocation deleted unported in the landing that removes each one's last importer; T157 is ticked when T218-T222 are
+      research: rendering
+      verify: DONE. landed in batch T157+T215+T217: the pipeline, done through T218-T222
 - [x] T159 The pre-review count check: make decide refuses a count (lines, cases, files ...) whose sentence carries no label, the plan review's commonest unreviewable return (request.md 2026-11-16)
       research: rendering
       verify: DONE. landed: make decide refuses an unlabeled count; plan crate tests green, coverage complete; ask:449-T159-rounds
@@ -623,6 +626,12 @@
 - [x] T214 Done by T213 (2026-11-19): the make-only guard's pytest branch, the one that refused a mention, was deleted with pytest; rust/guard/src/guards/make_only_hooks/tests.rs::a_pytest_command_or_mention_is_left_alone pins that a mention passes. make_only_hooks refuses a mention of pytest as an invocation: T156's scoping (2026-11-19) was refused a read-only python3 -I -c whose string literal held the word pytest - a check refusing good work (constitution XIV); the guard matches an invocation, not a word in a quoted string, with a test red on the old guard
       research: rendering
       verify: DONE. landed in batch T156+T214: T156 done through T210-T213; T214 done by T213
+- [x] T215 Folded into T218 (2026-11-19). make map with no GEN defaults to pool/hamlets/inashiro/inashiro.gen.py, which no longer exists (the hamlets are spec.json since feature 444) - a tool answering wrongly; the default points at a map that exists, or GEN is required with the refusal naming the forms (2026-11-19)
+      research: rendering
+      verify: DONE. landed in batch T157+T215+T217: the pipeline, done through T218-T222
+- [x] T217 Folded into T218 (2026-11-19). Two make targets named but gone (found by T213, 2026-11-19, both broken before it): make done FULL=1 calls make perf-gate, which no Makefile target bears, so a full run fails there; and measure_hooks' messages (pinned by tests/hooks/test-measure-hooks.sh) still name make cov-file, deleted earlier - a tip naming a command that does not run (constitution XIV: a tool answering wrongly); each points at the target that does the job now, or the call is removed, with the suites updated
+      research: rendering
+      verify: DONE. landed in batch T157+T215+T217: the pipeline, done through T218-T222
 - [x] T218 T157a - the pipeline's tooling fixes (T157's first landing, no engine code): make scatter-bases (runs a deleted script) removed and fix-check.md and glyph-check.md re-pointed; cache-audit dropped from .PHONY and dev/cache.md; sync-with-main.sh's unused RENDER_CACHE_MOD and the dead roll store's seed_roll_cache retired (.gencache/rolls, 6.0 GB, never written since 2026-11-07); T215 (make map's default GEN) and T217 (perf-gate and cov-file named but gone) folded in; and the open question whether an edit to a tracked hand-sheet svg lands DIRECT with no pool sweep (tree/delta.rs counts only .gen.py and .json under pool/ as engine) measured and fixed if so (found by T157's scoping, 2026-11-19)
       research: rendering
       verify: DONE. landed: the pipeline's tooling fixes; a hand-sheet svg edit is engine
