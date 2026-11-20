@@ -1,0 +1,6 @@
+{
+  "utc": "2026-11-20T23:32:18Z",
+  "target": "plan-gate push",
+  "commit": "90afb2aa3f",
+  "why": "451 T44 reviewed CLEAR; T46 accepted by the round arbiter, 2026-11-20"
+}
