@@ -363,28 +363,32 @@ tests/hooks/                 # the suites, the verdict replay through phase 1
 <!-- plan-archive: T152 to T208 moved to plan-done.md, 2026-11-19 (feature 375 FR-044) -->
 <!-- plan-archive: T152 to T152 moved to plan-done.md, 2026-11-19 (feature 375 FR-044) -->
 <!-- plan-archive: T156 to T156 moved to plan-done.md, 2026-11-19 (feature 375 FR-044) -->
-### T157 (<why: the finding or measurement that files it>)
+### T157 (the pipeline, phase 4 S12; split by its scoping of 2026-11-19 into five landings)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: No change of its own: its work landed as T218 (the tooling fixes), T219 (the blind derivation of the walk and the key, SOUND, budget 2,064), T220 (the pool walk and the index), T221 (one driver and the generation cache) and T222 (render-sync on the Rust, the pipeline's Python deleted), each with its own section, review and landing; the findings on the way landed as T223, T224, T225, T227 and T229, and those still open are T226, T228 and T230, each ordered before T158.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| none of its own | n/a | none | none | none |
 
 ### T157 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
-8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
+1. **The goal, in the world.** Main draws, caches, indexes and renders every pool map through the Rust alone, at the work its derivation budgets.
+2. **The constraints.** The tasks that did its work, each reviewed and landed on its own.
+3. **Where each comes from.** O: those tasks' landings.
+4. **Do they describe the world here?** Yes: each landed on main (observed 2026-11-19, method: `git log` of main).
+5. **The order.** After T222; before T158.
+6. **The exits.** Green: every task that does its work ticked. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** none
+8. **The budget.** No landing of its own beyond the tick.
+9. **Done, measured.** T218, T219, T220, T221 and T222 are ticked; main renders through the Rust (its render-sync status `ok`).
+10. **Before moving a constant.** n/a
+11. **Before fitting things into room.** n/a
+12. **Before any fix.** Nothing of its own: its fixes landed in the tasks named above.
 
-**Performance work?** <no - or yes, and its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Found and left?** none
+
+**Performance work?** no
 
 
 ### T158 (<why: the finding or measurement that files it>)
@@ -714,31 +718,32 @@ tests/hooks/                 # the suites, the verdict replay through phase 1
 <!-- plan-archive: T210 to T156 moved to plan-done.md, 2026-11-19 (feature 375 FR-044) -->
 <!-- plan-archive: T214 to T156 moved to plan-done.md, 2026-11-19 (feature 375 FR-044) -->
 <!-- plan-archive: T214 to T214 moved to plan-done.md, 2026-11-19 (feature 375 FR-044) -->
-### T215 (<why: the finding or measurement that files it>)
+### T215 (folded into T218, 2026-11-19)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: No change of its own: `make map` with no `GEN` refused, naming its forms, landed in T218; T221 then replaced `GEN=` with `MAP=` and the one Rust driver.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| none of its own | n/a | none | none | none |
 
 ### T215 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
-8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+1. **The goal, in the world.** `make map` with no argument names the forms it takes.
+2. **The constraints.** The tasks that did its work, each reviewed and landed on its own.
+3. **Where each comes from.** O: those tasks' landings.
+4. **Do they describe the world here?** Yes: each landed on main (observed 2026-11-19, method: `git log` of main).
+5. **The order.** With T218.
+6. **The exits.** Green: every task that does its work ticked. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** none
+8. **The budget.** No landing of its own beyond the tick.
+9. **Done, measured.** T218 is ticked.
+10. **Before moving a constant.** n/a
+11. **Before fitting things into room.** n/a
+12. **Before any fix.** Nothing of its own: its fixes landed in the tasks named above.
 
-**Found and left?** <none - or each item with its visible effect or the research finding it breaks; an item with neither is not a defect and is not filed>
+**Found and left?** none
 
-**Performance work?** <no - or yes, and its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** no
 
 
 ### T216 (<why: the finding or measurement that files it>)
@@ -768,31 +773,32 @@ tests/hooks/                 # the suites, the verdict replay through phase 1
 **Performance work?** <no - or yes, and its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
 
 
-### T217 (<why: the finding or measurement that files it>)
+### T217 (folded into T218, 2026-11-19)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: No change of its own: the `perf-gate` call that ran nothing removed from `make done`, and `measure_hooks`' tip naming the deleted `make cov-file` re-pointed, both in T218.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| none of its own | n/a | none | none | none |
 
 ### T217 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
-8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+1. **The goal, in the world.** No make target named by `make done` or a guard's tip is missing.
+2. **The constraints.** The tasks that did its work, each reviewed and landed on its own.
+3. **Where each comes from.** O: those tasks' landings.
+4. **Do they describe the world here?** Yes: each landed on main (observed 2026-11-19, method: `git log` of main).
+5. **The order.** With T218.
+6. **The exits.** Green: every task that does its work ticked. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** none
+8. **The budget.** No landing of its own beyond the tick.
+9. **Done, measured.** T218 is ticked.
+10. **Before moving a constant.** n/a
+11. **Before fitting things into room.** n/a
+12. **Before any fix.** Nothing of its own: its fixes landed in the tasks named above.
 
-**Found and left?** <none - or each item with its visible effect or the research finding it breaks; an item with neither is not a defect and is not filed>
+**Found and left?** none
 
-**Performance work?** <no - or yes, and its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** no
 
 
 ### T218 (T157's scoping, 2026-11-19: the pipeline's tooling named deleted scripts and missing targets, and an open question on the land route)

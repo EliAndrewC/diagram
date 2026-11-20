@@ -272,10 +272,10 @@
    "declared": "round-arbiter"
   },
   "### T157 Approach (checklist part A)": {
-   "sha256": "81212083ef2f1057fcba1b18b6cd70d3c499324b6a026f45ec9917aebb0703dd",
+   "sha256": "232d3b375044e3744fdcc32809ef4d5f9d57dfb34618beef9d51d2d0088060da",
    "verdict": "CLEAR",
-   "reviewed": "2026-11-16",
-   "declared": "round-arbiter"
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity"
   },
   "### T158 (<why: the finding or measurement that files it>)": {
    "sha256": "ed621ed581a98464317c0bda08519177dc237dc731c36b52fcb31400d147b158",
@@ -1119,6 +1119,36 @@
   },
   "### T222 Approach (checklist part A)": {
    "sha256": "2f3dd6bd82ae25d716d5c2ef322e0c6ae1d78f9e5ac26c39cd527dfbd2d6248b",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity"
+  },
+  "### T217 (folded into T218, 2026-11-19)": {
+   "sha256": "8c556abe2837d4d68bc4d6a3f1eb05d4408631ef18da16a6ca3fe5d8c1d07b09",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity"
+  },
+  "### T217 Approach (checklist part A)": {
+   "sha256": "16186c0ff0f33f356803b5e40aea1813bbf6ea19904d850d068edbff4293a646",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity"
+  },
+  "### T215 (folded into T218, 2026-11-19)": {
+   "sha256": "0f5a23e3d298ddb39cdd94b025b52987dfbc2d86e1fbd6753add183767f9f95c",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity"
+  },
+  "### T215 Approach (checklist part A)": {
+   "sha256": "bb50eb90a4e1b96a522805598842d801677a50bce55412f292252f093964da77",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity"
+  },
+  "### T157 (the pipeline, phase 4 S12; split by its scoping of 2026-11-19 into five landings)": {
+   "sha256": "63609e547e09e3858fe0575993c444f3e79af8f98e78e2e148e7b194395da667",
    "verdict": "CLEAR",
    "reviewed": "2026-11-20",
    "declared": "spec-fidelity"
@@ -15581,6 +15611,84 @@
      "why": "Verification of the requested work. No map-drawing code changes, so no map comparison is owed."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-20",
+   "blocks": [
+    "### T217 (folded into T218, 2026-11-19)",
+    "### T217 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T217-fold",
+     "summary": "T217 does no work of its own: its two changes (the perf-gate call that ran nothing taken out of make done, measure_hooks' tip naming the deleted make cov-file re-pointed) are carried by T218.",
+     "class": "within",
+     "why": "Moving the work into another task drops none of it; both changes still land, so the goal (no make target named by make done or a guard's tip is missing) is still met. Task bookkeeping, not scope."
+    },
+    {
+     "id": "T217-perf-gate-call",
+     "summary": "The perf-gate call in make done that ran nothing is removed rather than kept or made to run something.",
+     "class": "within",
+     "why": "A call that runs nothing enforces nothing, so removing it loses no check the GM asked for and narrows nothing in request.md or the spec (FR-002: a ported check must still do its job; a no-op had none). It fixes a dangling target, which is the stated goal."
+    },
+    {
+     "id": "T217-done",
+     "summary": "Done is T218 ticked; red exit records the failure and sets the task down, with a cannot-be-done claim ruled through make arbiter-ask.",
+     "class": "within",
+     "why": "The done condition goes along with the fold; nothing is excepted and no exception is decided by the session itself."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-20",
+   "blocks": [
+    "### T215 (folded into T218, 2026-11-19)",
+    "### T215 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T215-fold",
+     "summary": "T215 makes no change of its own: its goal (`make map` with no argument refuses and names the forms it takes) landed in T218, and T221 later replaced GEN= with MAP= and the one Rust driver.",
+     "class": "within",
+     "why": "Folding a port task's work into the task that did it, and landed it after review, leaves the work done in full. Nothing the request or FR-002 asks for is dropped or narrowed (the GM, 2026-11-15: 'keep going with the port until all of the tooling is ported')."
+    },
+    {
+     "id": "T215-done",
+     "summary": "Done is measured as T218 ticked. The red exit records what failed, and any claim that it cannot be done goes to `make arbiter-ask`.",
+     "class": "within",
+     "why": "The exit conditions keep the goal. Neither one excepts a case or drops part of what was asked."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-20",
+   "blocks": [
+    "### T157 (the pipeline, phase 4 S12; split by its scoping of 2026-11-19 into five landings)",
+    "### T157 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T157-split",
+     "summary": "T157 does no work of its own: its scope (the pool maps drawn, cached, indexed and rendered through the Rust alone, the pipeline's Python deleted) landed as five tasks T218-T222, each with its own section, review and landing.",
+     "class": "within",
+     "why": "Only reorganizes how the work is delivered. The goal it keeps (every pool map through the Rust alone, the pipeline's Python deleted) is the full scope of the GM's 2026-11-07 request to make this a Rust codebase and the 2026-11-15 'keep going with the port until all of the tooling is ported'. Nothing is dropped. Splitting the work does not narrow it."
+    },
+    {
+     "id": "T157-done",
+     "summary": "Done is measured as T218-T222 ticked and main rendering through the Rust (render-sync status ok); a claim that it cannot be done goes to make arbiter-ask.",
+     "class": "within",
+     "why": "The done measure checks the outcome in the world (render-sync on the Rust), not just the bookkeeping. The derivation budget (T219, the GM's 2026-10-30 and 2026-11-19 rule against reimplementing the Python's algorithms) is owned by the task that derived it. Nothing the request asked for is exempted."
+    },
+    {
+     "id": "T157-open-findings",
+     "summary": "Findings from the way landed as T223, T224, T225, T227, T229; those still open (T226, T228, T230) are each ordered before T158.",
+     "class": "within",
+     "why": "This applies the GM's 2026-11-18 rule 'fix all known bugs in each step before moving on to porting the next step': the open findings are placed before the next step (T158), not carried past it. 'Found and left? none' agrees with that. Nothing known is left for after the next step."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -27352,6 +27460,78 @@
      "summary": "exits (quick, static, hooks-test, red-first tests, two render-sync runs in a scratch worktree); pipeline counts not re-measured; no fresh block vs HEAD and no manifests moved",
      "class": "within",
      "why": "Verification of the requested work. No map-drawing code changes, so no map comparison is owed."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T217": {
+   "section_sha256": "99af8fd3628e0ae5a72c5b72ed53306788b4f683c8d07750d79bae29b6a73e95",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T217-fold",
+     "summary": "T217 does no work of its own: its two changes (the perf-gate call that ran nothing taken out of make done, measure_hooks' tip naming the deleted make cov-file re-pointed) are carried by T218.",
+     "class": "within",
+     "why": "Moving the work into another task drops none of it; both changes still land, so the goal (no make target named by make done or a guard's tip is missing) is still met. Task bookkeeping, not scope."
+    },
+    {
+     "id": "T217-perf-gate-call",
+     "summary": "The perf-gate call in make done that ran nothing is removed rather than kept or made to run something.",
+     "class": "within",
+     "why": "A call that runs nothing enforces nothing, so removing it loses no check the GM asked for and narrows nothing in request.md or the spec (FR-002: a ported check must still do its job; a no-op had none). It fixes a dangling target, which is the stated goal."
+    },
+    {
+     "id": "T217-done",
+     "summary": "Done is T218 ticked; red exit records the failure and sets the task down, with a cannot-be-done claim ruled through make arbiter-ask.",
+     "class": "within",
+     "why": "The done condition goes along with the fold; nothing is excepted and no exception is decided by the session itself."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T215": {
+   "section_sha256": "d10d1a00bce15518fa7d775681c35adbefdf9542352df0c8991a9423eebf7a5a",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T215-fold",
+     "summary": "T215 makes no change of its own: its goal (`make map` with no argument refuses and names the forms it takes) landed in T218, and T221 later replaced GEN= with MAP= and the one Rust driver.",
+     "class": "within",
+     "why": "Folding a port task's work into the task that did it, and landed it after review, leaves the work done in full. Nothing the request or FR-002 asks for is dropped or narrowed (the GM, 2026-11-15: 'keep going with the port until all of the tooling is ported')."
+    },
+    {
+     "id": "T215-done",
+     "summary": "Done is measured as T218 ticked. The red exit records what failed, and any claim that it cannot be done goes to `make arbiter-ask`.",
+     "class": "within",
+     "why": "The exit conditions keep the goal. Neither one excepts a case or drops part of what was asked."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T157": {
+   "section_sha256": "220a78370b17d33b45bab021e16dac0a3ca86e5bf0175a5c49865b4462913365",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T157-split",
+     "summary": "T157 does no work of its own: its scope (the pool maps drawn, cached, indexed and rendered through the Rust alone, the pipeline's Python deleted) landed as five tasks T218-T222, each with its own section, review and landing.",
+     "class": "within",
+     "why": "Only reorganizes how the work is delivered. The goal it keeps (every pool map through the Rust alone, the pipeline's Python deleted) is the full scope of the GM's 2026-11-07 request to make this a Rust codebase and the 2026-11-15 'keep going with the port until all of the tooling is ported'. Nothing is dropped. Splitting the work does not narrow it."
+    },
+    {
+     "id": "T157-done",
+     "summary": "Done is measured as T218-T222 ticked and main rendering through the Rust (render-sync status ok); a claim that it cannot be done goes to make arbiter-ask.",
+     "class": "within",
+     "why": "The done measure checks the outcome in the world (render-sync on the Rust), not just the bookkeeping. The derivation budget (T219, the GM's 2026-10-30 and 2026-11-19 rule against reimplementing the Python's algorithms) is owned by the task that derived it. Nothing the request asked for is exempted."
+    },
+    {
+     "id": "T157-open-findings",
+     "summary": "Findings from the way landed as T223, T224, T225, T227, T229; those still open (T226, T228, T230) are each ordered before T158.",
+     "class": "within",
+     "why": "This applies the GM's 2026-11-18 rule 'fix all known bugs in each step before moving on to porting the next step': the open findings are placed before the next step (T158), not carried past it. 'Found and left? none' agrees with that. Nothing known is left for after the next step."
     }
    ],
    "verdict": "CLEAR"
