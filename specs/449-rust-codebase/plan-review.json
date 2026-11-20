@@ -1272,6 +1272,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-20",
    "declared": "spec-fidelity"
+  },
+  "### T242 (spec-fidelity's British form of 'behavior' in a decision id landed in plan-review.json three times on 2026-11-20, each turning `make quick` red and refusing a landing)": {
+   "sha256": "d1cef46b69b1ce355de3b3ffcf1b6e139e2bbeaaffbc5abf1a2a7a8559398f05",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity"
+  },
+  "### T242 Approach (checklist part A)": {
+   "sha256": "97097594e0efae2cbb1d206c68a0a25ac13d5686a0ec0c63d9b3d7be2d05cd85",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -16700,6 +16712,52 @@
      "why": "The old speed came from the defect; no timing target in the request or spec reaches these checks, and restoring a check's job is FR-002's requirement. Each figure carries a dated method label."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-20",
+   "blocks": [
+    "### T242 (spec-fidelity's British form of 'behavior' in a decision id landed in plan-review.json three times on 2026-11-20, each turning `make quick` red and refusing a landing)",
+    "### T242 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T242-1 recorders write in the house style",
+     "summary": "Every recorder that writes a reviewer's words into the repository applies the house-style correction the push's delta check enforces, so a recorded verdict never turns make quick red or refuses a landing.",
+     "class": "within",
+     "why": "A defect by constitution XIV's definition: a tool writes what its own check refuses and blocks landings, observed three times on 2026-11-20. The GM 2026-11-18: 'we want to use this port to fix broken things as we find them ... fix all known bugs in each step'. Nothing a map reader sees changes."
+    },
+    {
+     "id": "T242-2 the decision id styled too",
+     "summary": "plan-verdict styles each decision's id and nested lists, not only its free text; the id was earlier kept as given.",
+     "class": "within",
+     "why": "The plan states, from an observed grep over rust/ and scripts/, that nothing compares an id (status.rs names it, the arbiter bundle prints it, plan_rounds reads blocks alone), so styling it changes no caller's behavior (FR-002: a caller still finds what it reads). The id was the incident's own carrier."
+    },
+    {
+     "id": "T242-3 americanize_record and americanize_json",
+     "summary": "New guard functions hold only what the delta check holds in a non-prose file (code spans, corner brackets, curly quotes, q, blockquote), not straight quotes, and walk every JSON string, keys as written.",
+     "class": "within",
+     "why": "Matches the correction to the check it must satisfy; the measured scratch run (2 findings: plain and straight-quoted word) shows straight quotes are not held in JSON. Keys are schema names, not prose. Quotations the record can hold keep their words, per CLAUDE.md's quotation rule."
+    },
+    {
+     "id": "T242-4 the other recorders",
+     "summary": "The same correction applied to arbiter-ruled, claims-checked, gm-escalated, gm_review::question, record-checked's found.jsonl, and the ledger row from ledger-owed WRITE (americanize, Markdown, before the 110-character cut).",
+     "class": "within",
+     "why": "The same defect in each, measured, not assumed: 7 assertions failing across 5 crates before the change. Fixing a known defect class where it was found is what the GM asked for on 2026-11-18. The tests are enforcement, not unrequested scope."
+    },
+    {
+     "id": "T242-5 names and the GM's words left as written",
+     "summary": "found.jsonl's file and block fields kept as given (they name things); the GM's own words (WORDS=, GM_WORDS) never styled.",
+     "class": "within",
+     "why": "Neither narrows anything the GM asked for. A name is not prose, and restyling it would break what it names. The house style itself stops at quotations (CLAUDE.md), and FR-002 keeps a verbatim quotation exact."
+    },
+    {
+     "id": "T242-6 order and exits",
+     "summary": "Before T158, after T238 and T241; red-first tests, the changed crates' rust-test, quick, static and hooks-test green; one gated landing.",
+     "class": "within",
+     "why": "Sequencing and verification of the fix only; it narrows nothing."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -29190,6 +29248,50 @@
      "summary": "The cost is the delta's code read that 449's section had let the check skip, and the new legend check after the redraw",
      "class": "within",
      "why": "The old speed came from the defect; no timing target in the request or spec reaches these checks, and restoring a check's job is FR-002's requirement. Each figure carries a dated method label."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T242": {
+   "section_sha256": "a7e74f7bc43668dd9d1f1c03c2b49f6096512cc1a9fb190a91d139b079d37cfa",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T242-1 recorders write in the house style",
+     "summary": "Every recorder that writes a reviewer's words into the repository applies the house-style correction the push's delta check enforces, so a recorded verdict never turns make quick red or refuses a landing.",
+     "class": "within",
+     "why": "A defect by constitution XIV's definition: a tool writes what its own check refuses and blocks landings, observed three times on 2026-11-20. The GM 2026-11-18: 'we want to use this port to fix broken things as we find them ... fix all known bugs in each step'. Nothing a map reader sees changes."
+    },
+    {
+     "id": "T242-2 the decision id styled too",
+     "summary": "plan-verdict styles each decision's id and nested lists, not only its free text; the id was earlier kept as given.",
+     "class": "within",
+     "why": "The plan states, from an observed grep over rust/ and scripts/, that nothing compares an id (status.rs names it, the arbiter bundle prints it, plan_rounds reads blocks alone), so styling it changes no caller's behavior (FR-002: a caller still finds what it reads). The id was the incident's own carrier."
+    },
+    {
+     "id": "T242-3 americanize_record and americanize_json",
+     "summary": "New guard functions hold only what the delta check holds in a non-prose file (code spans, corner brackets, curly quotes, q, blockquote), not straight quotes, and walk every JSON string, keys as written.",
+     "class": "within",
+     "why": "Matches the correction to the check it must satisfy; the measured scratch run (2 findings: plain and straight-quoted word) shows straight quotes are not held in JSON. Keys are schema names, not prose. Quotations the record can hold keep their words, per CLAUDE.md's quotation rule."
+    },
+    {
+     "id": "T242-4 the other recorders",
+     "summary": "The same correction applied to arbiter-ruled, claims-checked, gm-escalated, gm_review::question, record-checked's found.jsonl, and the ledger row from ledger-owed WRITE (americanize, Markdown, before the 110-character cut).",
+     "class": "within",
+     "why": "The same defect in each, measured, not assumed: 7 assertions failing across 5 crates before the change. Fixing a known defect class where it was found is what the GM asked for on 2026-11-18. The tests are enforcement, not unrequested scope."
+    },
+    {
+     "id": "T242-5 names and the GM's words left as written",
+     "summary": "found.jsonl's file and block fields kept as given (they name things); the GM's own words (WORDS=, GM_WORDS) never styled.",
+     "class": "within",
+     "why": "Neither narrows anything the GM asked for. A name is not prose, and restyling it would break what it names. The house style itself stops at quotations (CLAUDE.md), and FR-002 keeps a verbatim quotation exact."
+    },
+    {
+     "id": "T242-6 order and exits",
+     "summary": "Before T158, after T238 and T241; red-first tests, the changed crates' rust-test, quick, static and hooks-test green; one gated landing.",
+     "class": "within",
+     "why": "Sequencing and verification of the fix only; it narrows nothing."
     }
    ],
    "verdict": "CLEAR"

@@ -163,7 +163,9 @@ fn build(
     for name in group.iter().filter_map(|m| package_name(m)) {
         args.extend(["-p".to_owned(), name]);
     }
+    let at = std::time::SystemTime::now();
     let built = run_in(Some(&world.root), &world.cargo, &args, env);
+    super::phase::wrote(world, "cover-build", group, at, built.code);
     said.push_str(&took(&format!("build of {} crate(s)", group.len()), began));
     if built.code != 0 && group.len() > 1 {
         return group
@@ -359,9 +361,11 @@ fn run_job(world: &World, job: Result<Job, (PathBuf, Ran)>) -> Done {
         Ok(job) => {
             let lcov = job.work.join(format!("lcov-{}.info", tag(&job.manifest)));
             let mut said = String::new();
+            let began = std::time::SystemTime::now();
             let done = leak_checked(&job.manifest, |tmp| {
                 run_one(world, &job, &lcov, tmp, &mut said)
             });
+            super::phase::wrote(world, "cover-run", &[&job.manifest], began, done.code);
             (job.manifest, lcov, done, said)
         }
         Err((manifest, why)) => (manifest, PathBuf::new(), why, String::new()),

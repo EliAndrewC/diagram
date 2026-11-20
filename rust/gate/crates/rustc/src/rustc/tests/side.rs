@@ -4,7 +4,7 @@ use super::*;
 
 /// A fake cargo whose `--no-run` build names two binaries a crate, its integration test first and its library's second, as cargo's JSON
 /// may; a `--doc` run is noted and passes.
-const TWO_BINARIES: &str = r#"d="$(dirname "$0")"; for m in "$@"; do :; done; c="$(basename "$(dirname "$m")")"
+pub(super) const TWO_BINARIES: &str = r#"d="$(dirname "$0")"; for m in "$@"; do :; done; c="$(basename "$(dirname "$m")")"
 case "$1 $2" in
   "test --no-run") echo '{"reason":"build-finished"}'
     echo '{"executable":"'"$d/$c"'-it","target":{"kind":["test"],"name":"it"}}'
@@ -13,7 +13,7 @@ esac
 exit 0"#;
 
 /// Two crates in a repository, `a` named `pkg-a`, with the fake build's four binaries in the world's target.
-fn built(tag: &str) -> (TempDir, Held<World>) {
+pub(super) fn built(tag: &str) -> (TempDir, Held<World>) {
     let (root, a, _) = kept_crates();
     std::fs::write(&a, "[package]\nname = \"pkg-a\"\n").unwrap();
     let world = world_with(&root, TWO_BINARIES);

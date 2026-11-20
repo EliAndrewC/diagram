@@ -7,7 +7,7 @@ use std::path::{Path, PathBuf};
 use std::sync::LazyLock;
 
 use fancy_regex::Regex;
-use l7r_guard::guards::house_style_hooks::americanize;
+use l7r_guard::guards::house_style_hooks::americanize_json;
 use l7r_guard::shared::checks;
 use l7r_guard::shared::checks::arbiter as core;
 use l7r_guard::shared::log::civil;
@@ -653,23 +653,11 @@ fn py_repr(s: &str) -> String {
     out
 }
 
-fn house_styled(value: &Value) -> Value {
-    match value {
-        Value::String(s) => Value::String(americanize(s)),
-        Value::Array(items) => Value::Array(items.iter().map(house_styled).collect()),
-        Value::Object(map) => Value::Object(
-            map.iter()
-                .map(|(k, v)| (k.clone(), house_styled(v)))
-                .collect(),
-        ),
-        other => other.clone(),
-    }
-}
-
 fn load_ruling(path: &str) -> Result<Value, Stop> {
     let body = std::fs::read_to_string(path).map_err(|e| Stop::Refused(e.to_string()))?;
     let parsed: Value = serde_json::from_str(&body).map_err(|e| Stop::Refused(e.to_string()))?;
-    Ok(house_styled(&parsed))
+    // every string as a JSON record takes it, a straight-quoted word too: arbiter.jsonl is no prose file to the delta check (449 T242)
+    Ok(americanize_json(&parsed))
 }
 
 fn feature_label(root: &Path) -> String {

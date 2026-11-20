@@ -849,29 +849,32 @@ tests/hooks/                 # the suites, the verdict replay through phase 1
 **Performance work?** <no - or yes, and its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
 
 
-### T242 (<why: the finding or measurement that files it>)
+### T242 (spec-fidelity's British form of 'behavior' in a decision id landed in plan-review.json three times on 2026-11-20, each turning `make quick` red and refusing a landing)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: every recorder that writes a reviewer's words into the repository writes them in the house style the push's delta check holds it to. `make plan-verdict`'s writer (`plan/record.rs`'s `house_style`) styled each decision's free text but wrote its `id` as given (`KEPT` held it with the digests, as "what the gate matches on"), and nothing compares an id - `status.rs` names a BLOCKED one and the arbiter's bundle prints it (observed 2026-11-20, method: `grep` of `"id"` over `rust/` and `scripts/`, `review_round_hooks.rs`'s `plan_rounds` reading blocks alone). The guard's `americanize` holds a straight-quoted `"..."` span as a quotation, which suits a prose file, but the delta check (`checks/house_style_delta.rs`) holds straight quotes only in a `.md`, `.html` or `.txt` file: a JSON record's straight-quoted British word is flagged (measured 2026-11-20 (a scratch git repository holding one untracked `r.json`, `l7r-gate check house-style-delta` on it: the plain and the straight-quoted word flagged, 2 findings, the curly-quoted and backticked ones held)). So the guard gains `americanize_record` (the same correction holding only what the delta check holds in a non-prose file: code spans, 「」, 『』, curly quotes, `<q>`, `<blockquote>`) and `americanize_json` (every string of a JSON value through it, keys as written), and each JSON recorder uses them: `make plan-verdict` (every string of each decision, the id and nested lists too), `make arbiter-ruled` (its own `house_styled` replaced), `make claims-checked` (each verdict note and UNCLAIMED decision), `make gm-escalated` (escalation-check's reason) and a GM question (`gm_review::question`, the arbiter's `for_gm` among its callers), and `make record-checked`'s OUTSIDE THE CHANGE findings into `found.jsonl` (each finding; its file and block as given, they name things); the ledger's row filled from an agent's reply (`make ledger-owed WRITE=`, a landing's cheap pass) takes `americanize` on its first line, the ledger being Markdown, styled before the 110-character cut.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| a decision's id, nested text and straight-quoted word recorded in the house style | `a_recorded_verdict_is_written_in_the_house_style_its_id_and_straight_quotes_too`, red first; `a_verdict_s_free_text_is_written_in_the_house_style_its_keys_as_given` restated (the id styled) | `plan/record.rs`'s `house_style` | none | none |
+| a JSON record's correction, straight quotes included | `a_record_s_text_is_americanized_straight_quotes_too`, `a_json_value_is_americanized_its_keys_as_written` | the guard's `house_style_hooks.rs` `americanize_record`, `americanize_json` | none | none |
+| the arbiter's ruling, the claims reply, the escalation reason and question, the found row, the ledger row | `a_ruling_is_read_in_the_house_style_straight_quotes_too`, `a_reply_is_read_in_each_form`, `escalation_checks_verdict_on_each_kind_of_row`, `a_question_is_written_owed_and_its_number_said`, `the_store_keeps_every_answer_and_settles`, `a_filled_row_reads_the_agents_reply`, each red first | `arbiter.rs`'s `load_ruling`; `claims/reply.rs`'s `parse_reply`; `gm_review.rs`'s `escalated`, `question`; `owed/answers.rs`'s `file_outside`; `ledger_passes/rows.rs`'s `filled_row` | none | none |
 
 ### T242 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
-8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+1. **The goal, in the world.** A reviewer's British spelling or dash never reaches the repository through a recorder, so a recorded verdict never turns `make quick` red or refuses a landing; a quotation the record can hold (curly quotes, `<q>`, a code span) keeps its own words.
+2. **The constraints.** CLAUDE.md's house style (American spellings, hyphens only, both stopping at a quotation); the delta check's reading of a non-prose file (straight quotes not held); the GM's own words (`WORDS=`, `GM_WORDS`) never styled; constitution XIV.
+3. **Where each comes from.** G: CLAUDE.md's house style and its quotation rule (GM 2026-09-06); R: `checks/house_style_delta.rs` and `house_style_hooks.rs`; O: the incident (`git show cae2a7c39`, two lines of plan-review.json, observed 2026-11-20) and the scratch delta-check run above.
+4. **Do they describe the world here?** Yes: the delta check flagged the straight-quoted word in a JSON file, 2 findings (measured 2026-11-20 (scratch repository, `l7r-gate check house-style-delta`)); the recorders' tests wrote the British form and an en dash into each record, 7 assertions failing across 5 crates before the change (measured 2026-11-20 (`make rust-test CRATE=` on plan, arbiter, reviews, owed, claims)).
+5. **The order.** Before T158 (T242's line); after T238 and T241.
+6. **The exits.** Green: the new tests red first then green, `make rust-test` on the changed crates and the guard, `make quick`, `make static`, `make hooks-test` green. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** none
+8. **The budget.** One landing (gated: `rust/` code).
+9. **Done, measured.** Red first: plan 1 of 136 tests failing (measured 2026-11-20 (`make rust-test CRATE=rust/gate/crates/plan` before the change)); arbiter 1 of 32, reviews 3 of 162, owed 1 of 81, claims 1 of 161 failing (measured 2026-11-20 (`make rust-test CRATE=` on each before the change)); green after: every one of them passing (measured 2026-11-20 (the same runs after the change)).
+10. **Before moving a constant.** n/a
+11. **Before fitting things into room.** n/a
+12. **Before any fix.** A recorded verdict holding a British spelling turned `make quick` red on a file no builder may edit and refused a landing (three times on 2026-11-20) - a tool writing what its own check refuses. Nothing a reader of a map sees changes.
 
-**Found and left?** <none - or each item with its visible effect or the research finding it breaks; an item with neither is not a defect and is not filed>
+**Found and left?** none
 
-**Performance work?** <no - or yes, and its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** no
 

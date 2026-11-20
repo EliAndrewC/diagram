@@ -152,6 +152,30 @@ fn the_state_counts_the_hour_less_the_waits_and_the_idle_gaps() {
     assert_eq!(state(&r, None)["hour"], json!(1));
 }
 
+/// A line no hook wrote is no event of the session's (feature 451 T05): a gate tool's `Phase` line, or a background run's `BgEnd`,
+/// inside an idle stretch leaves the stretch whole - 2940 s between the two tool calls, 1740 s of it idle - where read as an event it
+/// split the stretch in two and booked 540 s.
+#[test]
+fn a_phase_or_a_bgend_line_never_splits_an_idle_stretch() {
+    let r = repo("idle-aside");
+    events(
+        &r,
+        "900-x",
+        &[
+            (3000, "PreToolUse", false),
+            (1500, "Phase", false),
+            (1400, "BgEnd", false),
+            (60, "PreToolUse", false),
+        ],
+    );
+    assert!((idle(&r, "900-x", 0.0, now()) - 1740.0).abs() < 2.0);
+    let kinds: Vec<String> = events_log(&r, "900-x")
+        .iter()
+        .map(|(_, e)| ev(e).to_owned())
+        .collect();
+    assert_eq!(kinds, ["PreToolUse", "PreToolUse"]);
+}
+
 fn events_of(root: &Path) -> Vec<(f64, Value)> {
     events_log(root, "x")
 }

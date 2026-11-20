@@ -98,13 +98,13 @@
    "declared": "spec-fidelity"
   },
   "### T05 (FR-003: a make run's compile, tests and coverage are one span in the log - research R6)": {
-   "sha256": "85c781980c0b895778645de8411899d88d4c2771cf3fb8ca2ba051a0f0dde7df",
+   "sha256": "7feb66da3fffcced3e0e3f2e04427dcdcb474e2736fe5271a60ea0e14bedad94",
    "verdict": "CLEAR",
    "reviewed": "2026-11-20",
    "declared": "spec-fidelity"
   },
   "### T05 Approach (checklist part A)": {
-   "sha256": "16146a6cc7410bc8b4e325491a63c2cd406eeef0490d1619bf584453ad7dee0a",
+   "sha256": "9bc6c53b71eea4c3b167bc097a4d80bba5ba5cc65e047067fc0fb5ae67f1f3ca",
    "verdict": "CLEAR",
    "reviewed": "2026-11-20",
    "declared": "spec-fidelity"
@@ -1723,6 +1723,82 @@
      "why": "Timing of the done check, not of what is built; the hooks run the mirror's binary until landing, so a live end in the clone is not reachable before then, and the real one is still read. Nothing the GM asked for is dropped."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-20",
+   "blocks": [
+    "### T05 (FR-003: a make run's compile, tests and coverage are one span in the log - research R6)",
+    "### T05 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T05-test-fresh",
+     "summary": "A fresh run's one-crate-at-a-time cargo test in answer's loop is preceded by a `cargo test --no-run` with the run's own words, booked `build`, then the `cargo test`, booked `test`.",
+     "class": "within",
+     "why": "This is the split D4 and the GM's 'how much time are we spending on recompiling things' ask for, and it answers the earlier ruling. The extra call's cost carries a one-shot label (0.044-0.047 s, 2026-11-20, method stated). It is a phase line on the requested path, not a narrowing."
+    },
+    {
+     "id": "T05-test-no-counters",
+     "summary": "test-no-counters' cargo test gets the same split: a `--no-run` booked `build`, then the run booked `test`, both with its features.",
+     "class": "within",
+     "why": "Same split as the fresh run, adjudicated on its own. Its compile is now booked `build` and its tests `test`, as D4 asks. The earlier NOT LEGITIMATE no longer applies."
+    },
+    {
+     "id": "T05-test-no-binary",
+     "summary": "A build that named no binary: binary_key's `--no-run` already wrote its `build` line, and the following cargo test is booked `test` alone. A failed binary-key build is asked again plain and booked `build`, and nothing runs after it.",
+     "class": "within",
+     "why": "The earlier verdict left one question open: does the following cargo test recompile? The block answers it with a one-shot measurement (2026-11-20: no Compiling line, Finished in 0.03 s, method stated), and a red-first test pins it to one `build` line. So no compile is booked as tests. Re-asking a failed build plain is compile time booked `build`, which is the requested split."
+    },
+    {
+     "id": "T05-none-kept-dead",
+     "summary": "A kept green result and `dead` write no phase line.",
+     "class": "within",
+     "why": "A kept result ran nothing, and `dead` reads source text with no cargo, so there are no build, test or cover seconds to book."
+    },
+    {
+     "id": "T05-none-hamlet",
+     "summary": "`hamlet` writes no phase line.",
+     "class": "within",
+     "why": "It is a stage run of the work budget, not a check's build, test or cover, which are the kinds FR-003 names. Its Bash call is still booked whole under its make target by FR-001/FR-005."
+    },
+    {
+     "id": "T05-none-test-times",
+     "summary": "`test-times` writes no phase line.",
+     "class": "within",
+     "why": "It is a timing tool whose repeated runs are its own report, not the checks' phases. Its call is booked whole under its target by FR-001/FR-005."
+    },
+    {
+     "id": "T05-cover-build-family",
+     "summary": "cover-build writes one line per family's group (crates named), and a failed group's crates asked again one at a time each write their own.",
+     "class": "within",
+     "why": "This carries D4's own per-family reading, which D4 names for the plan review, and it is not a decision of this section. A coverage build serves the whole family at once, so it cannot be timed per crate."
+    },
+    {
+     "id": "T05-sites",
+     "summary": "Lines are written at kept.rs binary_key (build), side.rs run_built (test), cover.rs build (cover-build) and run_one (cover-run, none for a failed build), and lint and format per crate in answer's loop, never inside check.",
+     "class": "within",
+     "why": "These are D4's sites and kinds, and nothing is counted twice."
+    },
+    {
+     "id": "T05-row-fields",
+     "summary": "The Phase row carries src, step, crates, t0, t1 and code, plus make (the outermost make's first target via shared::make::invoked, or rust-<cmd>) and clone.",
+     "class": "within",
+     "why": "D4 names the make target and the clone, and D1 the rust-<cmd> reading."
+    },
+    {
+     "id": "T05-readers",
+     "summary": "glyph first_event and checkpoint events skip Phase/BgEnd lines through a list in reviews; stepback_bundle sessions_of and tool_yield tally_events skip them by measure's ASIDE (tally_events pinned); flow_sections, read::reversals and speckit_todo active are read and left alone.",
+     "class": "within",
+     "why": "This keeps the existing readers from mis-booking the new lines. It is part of making FR-003's lines work, and it adds no behavior."
+    },
+    {
+     "id": "T05-red-first-and-done",
+     "summary": "Fixture red-first cases for each kind (fresh and counting-free runs: build before test; no-binary: one build line) and each reader; done is measured by a real make rust-test writing its phases; ordered after T04.",
+     "class": "within",
+     "why": "These are verification and sequencing of the requested lines."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -2112,6 +2188,80 @@
      "summary": "The live BgEnd was replayed through the clone's built l7r-guard with a scratch events dir, the first real one read off the main session's log after landing",
      "class": "within",
      "why": "Timing of the done check, not of what is built; the hooks run the mirror's binary until landing, so a live end in the clone is not reachable before then, and the real one is still read. Nothing the GM asked for is dropped."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T05": {
+   "section_sha256": "65edfee6ddafa1e2495296df42f73d11ea2ce47e12b6372ded8ec1eef4baa54e",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T05-test-fresh",
+     "summary": "A fresh run's one-crate-at-a-time cargo test in answer's loop is preceded by a `cargo test --no-run` with the run's own words, booked `build`, then the `cargo test`, booked `test`.",
+     "class": "within",
+     "why": "This is the split D4 and the GM's 'how much time are we spending on recompiling things' ask for, and it answers the earlier ruling. The extra call's cost carries a one-shot label (0.044-0.047 s, 2026-11-20, method stated). It is a phase line on the requested path, not a narrowing."
+    },
+    {
+     "id": "T05-test-no-counters",
+     "summary": "test-no-counters' cargo test gets the same split: a `--no-run` booked `build`, then the run booked `test`, both with its features.",
+     "class": "within",
+     "why": "Same split as the fresh run, adjudicated on its own. Its compile is now booked `build` and its tests `test`, as D4 asks. The earlier NOT LEGITIMATE no longer applies."
+    },
+    {
+     "id": "T05-test-no-binary",
+     "summary": "A build that named no binary: binary_key's `--no-run` already wrote its `build` line, and the following cargo test is booked `test` alone. A failed binary-key build is asked again plain and booked `build`, and nothing runs after it.",
+     "class": "within",
+     "why": "The earlier verdict left one question open: does the following cargo test recompile? The block answers it with a one-shot measurement (2026-11-20: no Compiling line, Finished in 0.03 s, method stated), and a red-first test pins it to one `build` line. So no compile is booked as tests. Re-asking a failed build plain is compile time booked `build`, which is the requested split."
+    },
+    {
+     "id": "T05-none-kept-dead",
+     "summary": "A kept green result and `dead` write no phase line.",
+     "class": "within",
+     "why": "A kept result ran nothing, and `dead` reads source text with no cargo, so there are no build, test or cover seconds to book."
+    },
+    {
+     "id": "T05-none-hamlet",
+     "summary": "`hamlet` writes no phase line.",
+     "class": "within",
+     "why": "It is a stage run of the work budget, not a check's build, test or cover, which are the kinds FR-003 names. Its Bash call is still booked whole under its make target by FR-001/FR-005."
+    },
+    {
+     "id": "T05-none-test-times",
+     "summary": "`test-times` writes no phase line.",
+     "class": "within",
+     "why": "It is a timing tool whose repeated runs are its own report, not the checks' phases. Its call is booked whole under its target by FR-001/FR-005."
+    },
+    {
+     "id": "T05-cover-build-family",
+     "summary": "cover-build writes one line per family's group (crates named), and a failed group's crates asked again one at a time each write their own.",
+     "class": "within",
+     "why": "This carries D4's own per-family reading, which D4 names for the plan review, and it is not a decision of this section. A coverage build serves the whole family at once, so it cannot be timed per crate."
+    },
+    {
+     "id": "T05-sites",
+     "summary": "Lines are written at kept.rs binary_key (build), side.rs run_built (test), cover.rs build (cover-build) and run_one (cover-run, none for a failed build), and lint and format per crate in answer's loop, never inside check.",
+     "class": "within",
+     "why": "These are D4's sites and kinds, and nothing is counted twice."
+    },
+    {
+     "id": "T05-row-fields",
+     "summary": "The Phase row carries src, step, crates, t0, t1 and code, plus make (the outermost make's first target via shared::make::invoked, or rust-<cmd>) and clone.",
+     "class": "within",
+     "why": "D4 names the make target and the clone, and D1 the rust-<cmd> reading."
+    },
+    {
+     "id": "T05-readers",
+     "summary": "glyph first_event and checkpoint events skip Phase/BgEnd lines through a list in reviews; stepback_bundle sessions_of and tool_yield tally_events skip them by measure's ASIDE (tally_events pinned); flow_sections, read::reversals and speckit_todo active are read and left alone.",
+     "class": "within",
+     "why": "This keeps the existing readers from mis-booking the new lines. It is part of making FR-003's lines work, and it adds no behavior."
+    },
+    {
+     "id": "T05-red-first-and-done",
+     "summary": "Fixture red-first cases for each kind (fresh and counting-free runs: build before test; no-binary: one build line) and each reader; done is measured by a real make rust-test writing its phases; ordered after T04.",
+     "class": "within",
+     "why": "These are verification and sequencing of the requested lines."
     }
    ],
    "verdict": "CLEAR"

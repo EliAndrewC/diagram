@@ -44,15 +44,31 @@ pub fn active_feature(root: &Path) -> String {
         .unwrap_or_default()
 }
 
-/// When the feature began in this clone: the first event of `<git dir>/l7r-events/<feature>.jsonl`, or None.
+/// The line kinds no hook wrote (feature 451 T04, T05; plan D3, D4): a background run's `BgEnd` and a gate tool's `Phase`. `measure`'s
+/// `events::ASIDE`, which this crate cannot import (`measure` builds on `reviews`): every reader of the log outside `measure` that reads
+/// a line's time passes them over first, as `measure`'s `load_events` does - a `Phase` line written first would be the feature's start
+/// (`first_event`), and one inside an idle stretch would split it (`checkpoint.rs`'s `idle`).
+pub const ASIDE: [&str; 2] = ["BgEnd", "Phase"];
+
+/// Is the log's line a session's event, not one of the kinds `ASIDE` names?
+#[must_use]
+pub fn is_event(line: &Value) -> bool {
+    !ASIDE.contains(&line.get("ev").and_then(Value::as_str).unwrap_or(""))
+}
+
+/// When the feature began in this clone: the first event of `<git dir>/l7r-events/<feature>.jsonl`, the lines no hook wrote passed
+/// over (`ASIDE`), or None.
 #[must_use]
 pub fn first_event(root: &Path, feature: &str) -> Option<f64> {
     let path = gitdir(root)?
         .join("l7r-events")
         .join(format!("{feature}.jsonl"));
     let text = std::fs::read_to_string(path).ok()?;
-    let first: Value =
-        serde_json::from_str(text.split_inclusive('\n').next().unwrap_or("")).ok()?;
+    let first: Value = text
+        .split_inclusive('\n')
+        .map(serde_json::from_str::<Value>)
+        .find(|line| line.as_ref().ok().is_none_or(is_event))?
+        .ok()?;
     iso_seconds(first.get("t"))
 }
 

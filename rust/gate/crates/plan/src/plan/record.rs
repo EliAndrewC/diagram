@@ -5,7 +5,7 @@
 use std::collections::BTreeSet;
 use std::path::Path;
 
-use l7r_guard::guards::house_style_hooks::americanize;
+use l7r_guard::guards::house_style_hooks::americanize_json;
 use serde_json::{json, Map, Value};
 
 use super::approach::{checklist, owe};
@@ -16,16 +16,6 @@ use super::{pretty, today};
 
 const REVIEWER: &str = "spec-fidelity";
 const ACCEPTS: [&str; 2] = ["accept", "process-fault"];
-/// A verdict's fields written as given: what the gate matches on, never prose.
-const KEPT: [&str; 7] = [
-    "id",
-    "class",
-    "ruling",
-    "sha256",
-    "section_sha256",
-    "plan_sha256",
-    "verdict",
-];
 
 /// Why a recording was declined (exit 2) or refused (exit 1).
 #[derive(Debug, PartialEq, Eq)]
@@ -81,27 +71,16 @@ pub(super) fn derive_verdict(decisions: &[Value]) -> Result<&'static str, Stop> 
     )
 }
 
-/// Each decision's free text in the house style (feature 385 T88): its keys, classes, rulings and digests are written as given.
+/// Each decision in the house style (feature 385 T88), every string at any depth as a JSON record takes it (`americanize_json`), keys as
+/// written. WHY the id too (feature 449 T242): an id is prose nothing matches on (`status.rs` names a BLOCKED one, the arbiter's bundle
+/// prints it), and spec-fidelity's British form of 'behavior' in one, written as given, turned `make quick` red three times on
+/// 2026-11-20; a class, ruling or digest has no word the correction reaches.
 fn house_style(decisions: Option<&Value>) -> Option<Vec<Value>> {
-    let rows = decisions?.as_array()?;
     Some(
-        rows.iter()
-            .map(|d| match d.as_object() {
-                None => d.clone(),
-                Some(map) => Value::Object(
-                    map.iter()
-                        .map(|(k, v)| {
-                            let styled = match v.as_str() {
-                                Some(s) if !KEPT.contains(&k.as_str()) => {
-                                    Value::from(americanize(s))
-                                }
-                                _ => v.clone(),
-                            };
-                            (k.clone(), styled)
-                        })
-                        .collect(),
-                ),
-            })
+        decisions?
+            .as_array()?
+            .iter()
+            .map(americanize_json)
             .collect(),
     )
 }

@@ -219,6 +219,31 @@ fn a_tool_s_text_is_americanized_its_quotations_held_out() {
     );
 }
 
+/// Feature 449 T242: a JSON record's straight quotes are no quotation to the delta check, so they are corrected; the spans it holds
+/// everywhere are kept.
+#[test]
+fn a_record_s_text_is_americanized_straight_quotes_too() {
+    let brit = format!("behavio{}", "ur");
+    assert_eq!(
+        super::americanize_record(&format!(
+            "the {brit} \u{2013} \"{brit}\", \u{201c}{brit}\u{201d}, `{brit}`, <q>{brit}</q>"
+        )),
+        format!("the behavior - \"behavior\", \u{201c}{brit}\u{201d}, `{brit}`, <q>{brit}</q>")
+    );
+}
+
+#[test]
+fn a_json_value_is_americanized_its_keys_as_written() {
+    let brit = format!("behavio{}", "ur");
+    let got = super::americanize_json(&serde_json::json!({
+        brit.clone(): [format!("a {brit}"), {"n": 3, "t": format!("\"{brit}\"")}], "b": null, "c": true
+    }));
+    assert_eq!(
+        got,
+        serde_json::json!({brit.clone(): ["a behavior", {"n": 3, "t": "\"behavior\""}], "b": null, "c": true})
+    );
+}
+
 /// `f`'s answer, or a failure once it runs past 20 s (feature 449 T185: a quadratic search, or a scan over an error it repeats, must
 /// fail the test rather than hang it).
 fn within<T: Send + 'static>(f: impl FnOnce() -> T + Send + 'static) -> T {

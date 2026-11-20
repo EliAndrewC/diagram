@@ -110,7 +110,13 @@ pub fn filled_row(p: &Pass, place: &str, root: &Path) -> Result<String, String> 
             !strip(ln).is_empty() && !lead.starts_with('#') && !lead.starts_with("```")
         })
         .map_or("", |ln| ln.trim_matches([' ', '-', '*', '#']));
-    let first = if first.is_empty() { "-" } else { first };
+    // the reply's words in the house style (feature 449 T242), before the cut; the ledger is Markdown, so a quotation the prose rule
+    // holds, straight quotes among them, keeps its own words
+    let first = if first.is_empty() {
+        "-".to_owned()
+    } else {
+        l7r_guard::guards::house_style_hooks::americanize(first)
+    };
     let subject = text(p, "subject");
     let place_cell = group(&BUNDLE, subject)
         .unwrap_or_else(|| head(if subject.is_empty() { "?" } else { subject }, 80).to_owned());
@@ -120,7 +126,7 @@ pub fn filled_row(p: &Pass, place: &str, root: &Path) -> Result<String, String> 
         required(p, "check")?.to_owned(),
         place_cell,
         verdict,
-        head(first, 110).to_owned(),
+        head(&first, 110).to_owned(),
         if clean { "nothing" } else { "judgment" }.to_owned(),
         "-".to_owned(),
         format!("applied or filed as {place} records"),

@@ -23,6 +23,7 @@ use crate::Reply;
 
 mod cover;
 mod kept;
+mod phase;
 mod runlock;
 mod side;
 mod times;
@@ -56,6 +57,8 @@ pub struct World {
     hamlet_args: String,
     hamlet_spec: String,
     cover_work: Option<PathBuf>,
+    /// The run's make target, which each step's phase line names (feature 451 T05, `phase.rs`).
+    make: String,
 }
 
 struct Ran {
@@ -390,13 +393,13 @@ fn check(world: &World, cmd: &str, manifest: &Path, formatting_check: bool) -> R
                 plain
             }
         }
-        "test" => leak_checked(manifest, |tmp| {
-            cargo_in(world, &["test", "--quiet"], manifest, &[], Some(tmp))
-        }),
-        "test-counters" => leak_checked(manifest, |tmp| {
-            let args = ["test", "--quiet", "--all-features"];
-            cargo_in(world, &args, manifest, &[], Some(tmp))
-        }),
+        "test" | "test-counters" | "test-no-counters" => {
+            let words = test_args(cmd, manifest, false);
+            let args: Vec<&str> = words.iter().map(String::as_str).collect();
+            leak_checked(manifest, |tmp| {
+                cargo_in(world, &args, manifest, &[], Some(tmp))
+            })
+        }
         "hamlet" => {
             // `HAMLET_BIN` runs another of the crate's binaries, `HAMLET_DEV` it in the dev profile (feature 449 T224: the work-budget
             // review's Mode A counts, `l7r-mode-a` with its counters, whose dev build shares the test builds' dependencies - 19 s
@@ -416,14 +419,6 @@ fn check(world: &World, cmd: &str, manifest: &Path, formatting_check: bool) -> R
                 world.hamlet_args.split_whitespace().collect()
             };
             cargo(world, &args, manifest, &after)
-        }
-        "test-no-counters" => {
-            let flags = features_but(manifest, "counters");
-            let mut args = vec!["test", "--quiet"];
-            args.extend(flags.iter().map(String::as_str));
-            leak_checked(manifest, |tmp| {
-                cargo_in(world, &args, manifest, &[], Some(tmp))
-            })
         }
         "dead" => {
             let dead = dead_public(manifest);
@@ -459,6 +454,50 @@ fn check(world: &World, cmd: &str, manifest: &Path, formatting_check: bool) -> R
             &[],
         ),
     }
+}
+
+/// A test run's `cargo test` words: the counting build's every feature, the counting-free one's every feature but `counters`; `no_run`
+/// its build alone, the same build the run then finds fresh.
+fn test_args(cmd: &str, manifest: &Path, no_run: bool) -> Vec<String> {
+    let mut args = own(&["test"]);
+    if no_run {
+        args.push("--no-run".to_owned());
+    }
+    args.push("--quiet".to_owned());
+    match cmd {
+        "test-counters" => args.push("--all-features".to_owned()),
+        "test-no-counters" => args.extend(features_but(manifest, "counters")),
+        _ => {}
+    }
+    args
+}
+
+/// `check`, its phase line written where it is a step of its own (feature 451 T05, `phase::step_of`): here, in `answer`'s loop, and not
+/// inside `check`, whose coverage run writes its own lines in `uncovered_each`.
+///
+/// A TEST RUN'S BUILD BOOKED APART (feature 451 T05; the plan review 2026-11-20, the GM: "how much time are we spending on recompiling
+/// things"): the `cargo test` run here - a fresh run, `test-no-counters` - compiled inside its one call, and a fresh run is where a
+/// crate compiles from cold. Its build is asked first, `--no-run` with the run's own words, and booked `build`; the run then finds it
+/// fresh and is booked `test`. A build that fails is the crate's answer, in cargo's own words, and nothing runs after it. Where the
+/// binary key's build ran and passed (`built`: a build that named no binary), it wrote the `build` line and the run compiles nothing,
+/// so no build is asked again; where it failed, the build is asked again here, so the failure reads as cargo's and not as JSON.
+fn stepped(world: &World, cmd: &str, manifest: &Path, formatting_check: bool, built: bool) -> Ran {
+    if phase::step_of(cmd) == Some("test") && !built {
+        let words = test_args(cmd, manifest, true);
+        let args: Vec<&str> = words.iter().map(String::as_str).collect();
+        let began = std::time::SystemTime::now();
+        let built = cargo(world, &args, manifest, &[]);
+        phase::wrote(world, "build", &[manifest], began, built.code);
+        if built.code != 0 {
+            return built;
+        }
+    }
+    let began = std::time::SystemTime::now();
+    let done = check(world, cmd, manifest, formatting_check);
+    if let Some(step) = phase::step_of(cmd) {
+        phase::wrote(world, step, &[manifest], began, done.code);
+    }
+    done
 }
 
 /// A crate's coverage verdict: each file with the lines no test reaches.
@@ -602,9 +641,10 @@ fn answer(world: &World, cmd: &str, named: &[String], formatting_check: bool) ->
             );
             continue;
         }
+        let built = verdict.built;
         let done = together
             .remove(manifest)
-            .unwrap_or_else(|| check(world, cmd, manifest, formatting_check));
+            .unwrap_or_else(|| stepped(world, cmd, manifest, formatting_check, built));
         if cmd == "hamlet" {
             stdout.push_str(&done.stdout);
         }
@@ -705,7 +745,7 @@ fn cargo_exe(installed: &Path) -> String {
     }
 }
 
-fn world_here() -> World {
+fn world_here(make: String) -> World {
     let tree = std::env::var_os("L7R_GATE_TREE").map_or_else(crate::top, PathBuf::from);
     let home = PathBuf::from(std::env::var_os("HOME").unwrap_or_default());
     let name = tree
@@ -731,6 +771,7 @@ fn world_here() -> World {
         hamlet_args: var("HAMLET_ARGS"),
         hamlet_spec: var("HAMLET_SPEC"),
         cover_work: std::env::var_os("L7R_RUST_COVER_WORK").map(PathBuf::from),
+        make,
         root: tree,
     }
 }
@@ -787,8 +828,10 @@ fn locked_dispatch(world: &World, args: &[String], taker: &runlock::Taker) -> Re
 /// `l7r-gate rust <cmd> [--crate DIR]... [--check]`.
 #[must_use]
 pub fn cli(args: &[String]) -> Reply {
-    let world = world_here();
-    let reply = locked_dispatch(&world, args, &runlock::Taker::here());
+    let taker = runlock::Taker::here();
+    let cmd = args.first().map_or("", String::as_str);
+    let world = world_here(phase::run_target(&taker.run_what, cmd));
+    let reply = locked_dispatch(&world, args, &taker);
     crate::stamp::record_for(
         &world.root,
         USAGE_LOG_TOOL,

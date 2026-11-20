@@ -277,22 +277,33 @@ fn a_moved_binary_or_a_failed_build_runs_and_a_fresh_run_runs_every_crate() {
     let (root, world) = binary_world();
     assert_eq!(answer(&world, "test", &[], false).code, 0);
     assert_eq!(test_runs(&world), 2);
-    // a binary that moved runs; a build that fails runs, and its failure is cargo's to tell
+    // a binary that moved runs; a build that fails is asked again plain, so its failure is cargo's to tell, and nothing runs (feature
+    // 451 T05: the build booked apart from the run)
     test_binary(&world.target.join("exe"), "binary two");
     std::fs::write(root.join("rust/a/src/lib.rs"), "//! moved again\n").unwrap();
     assert_eq!(answer(&world, "test", &[], false).code, 0);
     assert_eq!(test_runs(&world), 3);
     std::fs::write(world.target.join("nobuild"), "").unwrap();
     std::fs::write(root.join("rust/a/src/lib.rs"), "//! and again\n").unwrap();
-    assert_eq!(answer(&world, "test", &[], false).code, 0);
-    assert_eq!(test_runs(&world), 4);
-    // a fresh run runs every crate and builds nothing first
+    let failed = answer(&world, "test", &[], false);
+    assert_eq!(failed.code, 1);
+    assert!(failed.stderr.contains("test FAILED on rust/a"));
+    assert_eq!(test_runs(&world), 3);
+    assert_eq!(
+        calls(&world)
+            .iter()
+            .filter(|c| c.starts_with("test --no-run --quiet --manifest"))
+            .count(),
+        1
+    );
+    std::fs::remove_file(world.target.join("nobuild")).unwrap();
+    // a fresh run runs every crate, each built first
     let fresh = world.map(|w| World {
         no_reuse: true,
         ..w
     });
     assert_eq!(answer(&fresh, "test", &[], false).code, 0);
-    assert_eq!(test_runs(&fresh), 6);
+    assert_eq!(test_runs(&fresh), 5);
 }
 
 #[test]

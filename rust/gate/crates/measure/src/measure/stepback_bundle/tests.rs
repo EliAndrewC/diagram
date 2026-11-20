@@ -79,6 +79,17 @@ fn the_dispatches_and_the_sessions() {
         ]
     );
     assert_eq!(sessions_of(&e, t(0), t(60)).unwrap(), ["s1", "s2"]);
+    // a line no hook wrote is no session's event (feature 451 T05): a gate tool's `Phase` line and a background run's `BgEnd` add no
+    // session, nor count toward one
+    let aside = rows(&[
+        json!({"t": at(4), "sid": "s2"}),
+        json!({"t": at(5), "sid": "s1"}),
+        json!({"t": at(6), "sid": "s1"}),
+        json!({"t": at(7), "ev": "Phase", "sid": "s9"}),
+        json!({"t": at(8), "ev": "BgEnd", "sid": "s2"}),
+        json!({"t": at(9), "ev": "BgEnd", "sid": "s2"}),
+    ]);
+    assert_eq!(sessions_of(&aside, t(0), t(60)).unwrap(), ["s1", "s2"]);
     let bad = rows(&[json!({"t": "x", "sid": "s"})]);
     assert!(dispatches(&bad, 0.0, 1.0).is_err() && sessions_of(&bad, 0.0, 1.0).is_err());
 }

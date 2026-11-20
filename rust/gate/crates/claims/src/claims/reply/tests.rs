@@ -17,6 +17,17 @@ fn a_reply_is_read_in_each_form() {
     );
     assert_eq!(v["d::e#f"].0, "DRIFTED");
     assert_eq!(u, vec![("a::b".to_owned(), "a choice".to_owned())]);
+    // the claims index is a JSON record, whose straight quotes the delta check does not hold: a straight-quoted word is corrected
+    // too, a curly quotation kept (feature 449 T242)
+    let brit = format!("behavio{}", "ur");
+    let (v, u) = parse_reply(&format!(
+        "VERDICT a::b#c IN-STEP - the \"{brit}\" \u{2013} \u{201c}{brit}\u{201d}\nUNCLAIMED a::b - a \"{brit}\""
+    ));
+    assert_eq!(
+        v["a::b#c"].1,
+        format!("the \"behavior\" - \u{201c}{brit}\u{201d}")
+    );
+    assert_eq!(u[0].1, "a \"behavior\"");
     // a DRIFTED note carries its fix and effect inside the note, between the outside tag and the rests (feature 449 T196)
     let (v, _) = parse_reply(
         "VERDICT g::h#i DRIFTED - [outside the change] 0.4 px short; fix: claim; effect: none [§2]",

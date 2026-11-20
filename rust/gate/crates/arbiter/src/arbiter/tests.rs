@@ -3,8 +3,8 @@ use std::path::Path;
 use serde_json::{json, Value};
 
 use super::{
-    batch_plan, cli_in, fix_hold, open_fixes, py_repr, record_batch, record_ruling, spec_body_sha,
-    spec_ruled, spec_verdict, unit_ruled, Stop,
+    batch_plan, cli_in, fix_hold, load_ruling, open_fixes, py_repr, record_batch, record_ruling,
+    spec_body_sha, spec_ruled, spec_verdict, unit_ruled, Stop,
 };
 
 fn clone_at(name: &str) -> l7r_guard::shared::tempdir::Held<std::path::PathBuf> {
@@ -339,6 +339,23 @@ fn open_fixes_are_listed_until_settled() {
             && hold.contains("    t1: newer")
             && hold.contains("make arbiter-fix-declined")
     );
+}
+
+/// Feature 449 T242: a ruling's text is written into `arbiter.jsonl`, a JSON record whose straight quotes the delta check does not hold,
+/// so a straight-quoted word is corrected too; a curly quotation and a code span keep their words, and keys are as written.
+#[test]
+fn a_ruling_is_read_in_the_house_style_straight_quotes_too() {
+    let brit = format!("behavio{}", "ur");
+    let dir = l7r_guard::shared::tempdir::TempDir::new("gate-arbiter-style");
+    let file = std::fs::canonicalize(&dir).unwrap().join("ruling.json");
+    let body = json!({"ruling": "accept", "why": [format!("the \"{brit}\" kept \u{2013} \u{201c}{brit}\u{201d}, `{brit}`")], brit.clone(): 1});
+    std::fs::write(&file, body.to_string()).unwrap();
+    let got = load_ruling(&file.to_string_lossy()).unwrap();
+    assert_eq!(
+        got["why"][0],
+        format!("the \"behavior\" kept - \u{201c}{brit}\u{201d}, `{brit}`")
+    );
+    assert_eq!(got[&brit], 1);
 }
 
 #[test]

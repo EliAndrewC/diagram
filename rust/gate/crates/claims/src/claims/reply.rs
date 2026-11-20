@@ -5,7 +5,7 @@ use std::collections::{BTreeMap, BTreeSet, HashMap, HashSet};
 use std::sync::LazyLock;
 
 use fancy_regex::{Captures, Regex};
-use l7r_guard::guards::house_style_hooks::americanize;
+use l7r_guard::guards::house_style_hooks::americanize_record;
 use l7r_guard::shared::py_text::strip;
 use serde_json::{json, Map, Value};
 
@@ -60,7 +60,8 @@ pub fn outside_tag(note: &str) -> (bool, String) {
 /// A reply parsed: (verdict, note) by key, and each UNCLAIMED (uid, decision).
 pub type Parsed = (HashMap<String, (String, String)>, Vec<(String, String)>);
 
-/// The verdicts by key, and each UNCLAIMED (uid, decision), from a check's reply; the notes in the house style.
+/// The verdicts by key, and each UNCLAIMED (uid, decision), from a check's reply; the notes in the house style a JSON record takes, a
+/// straight-quoted word corrected too (the claims index is no prose file to the delta check, feature 449 T242).
 pub fn parse_reply(text: &str) -> Parsed {
     let mut verdicts = HashMap::new();
     let mut unclaimed = Vec::new();
@@ -68,9 +69,12 @@ pub fn parse_reply(text: &str) -> Parsed {
         let line = bare(raw);
         if let Some(m) = VERDICT.captures(line).ok().flatten() {
             let key = m[1].trim_matches('`').to_owned();
-            verdicts.insert(key, (m[2].to_owned(), americanize(strip(&m[3]))));
+            verdicts.insert(key, (m[2].to_owned(), americanize_record(strip(&m[3]))));
         } else if let Some(m) = UNCLAIMED.captures(line).ok().flatten() {
-            unclaimed.push((m[1].trim_matches('`').to_owned(), americanize(strip(&m[2]))));
+            unclaimed.push((
+                m[1].trim_matches('`').to_owned(),
+                americanize_record(strip(&m[2])),
+            ));
         }
     }
     (verdicts, unclaimed)

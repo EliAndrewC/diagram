@@ -60,6 +60,21 @@ fn a_filled_row_reads_the_agents_reply() {
     )));
     let row = filled_row(&one(&pass("c", "dash", "", &json!({}))), "here", &root).unwrap();
     assert!(row.contains("| see reply | - |"));
+    // the reply's first line in the house style, a quotation held (feature 449 T242): the ledger is Markdown, so straight quotes hold too
+    let brit = format!("behavio{}", "ur");
+    put(
+        &root,
+        "p/s/subagents/agent-brit.jsonl",
+        &transcript(
+            &json!("go"),
+            &format!("the {brit} \u{2013} off, \u{201c}{brit}\u{201d} and \"{brit}\" held\n"),
+        ),
+    );
+    let row = filled_row(&one(&pass("c", "brit", "", &json!({}))), "here", &root).unwrap();
+    let want = format!(
+        "| see reply | the behavior - off, \u{201c}{brit}\u{201d} and \"{brit}\" held | judgment |"
+    );
+    assert!(row.contains(&want));
     let mut p = one(&pass("c", "", "", &json!({})));
     p.remove("check");
     assert!(filled_row(&p, "here", &root)

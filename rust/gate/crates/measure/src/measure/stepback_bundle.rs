@@ -196,6 +196,11 @@ pub fn refusals(sids: &[String], since: f64, until: f64, log: &Path) -> Vec<Stri
 pub fn sessions_of(events: &[Row], since: f64, until: f64) -> Result<Vec<String>, Raised> {
     let mut sids: Tally<String> = Tally::default();
     for e in events {
+        // a line no hook wrote (feature 451 T05: a gate tool's `Phase`, a background run's `BgEnd`) is no session's event: its
+        // `sid` is the process's, and it would add a session, or rank one, by a run's steps
+        if super::events::ASIDE.contains(&super::events::or_s(e, "ev").as_str()) {
+            continue;
+        }
         if e.get("sid").is_some_and(super::events::truthy) && e.contains_key("t") {
             let t = t_of(e)?;
             if since <= t && t <= until {

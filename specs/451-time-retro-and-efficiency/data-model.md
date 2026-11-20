@@ -14,7 +14,7 @@ or by its `append_row` (the gate's tools, in process). Fields today: `t`, `sid`,
 | `Stop`, `SubagentStop` | `inflight`: `[{id, type, make?}]` from `background_tasks` | the hook | every stop |
 | `SubagentStop` | `tok`: `{in, cached, created, out}` summed over the agent's transcript, deduped by `message.id`; `ctx`: the last call's context; `task`: the `T<n>` its meta `description` names | the hook | every agent stop (cumulative; the reader keeps the last per `aid`) |
 | `PreToolUse` (Agent) | `task`: the `T<n>` its `description` (else its prompt's first line) names | the hook | every dispatch |
-| `Phase` | `src` (`rust` or `land`), `step` (`build`, `test`, `cover-build`, `cover-run`, `lint`, `format`; `cheap`, `gate`, `cohort`, `claims`, `push`), `crates` (rust: the crate dirs), `t0`, `t1` (UTC, ms), `code` | `append_row`, called by `rustc` and `land` | each step's end |
+| `Phase` | `src` (`rust` or `land`), `step` (`build`, `test`, `cover-build`, `cover-run`, `lint`, `format`; `cheap`, `gate`, `cohort`, `claims`, `push`), `crates` (rust: the crate dirs), `t0`, `t1` (UTC, ms), `code`; `make` (the outermost `make`'s first target, `rust-<cmd>` with none above) and `clone` (the tree's root), plan D4 | `append_row`, called by `rustc` and `land` | each step's end |
 
 A line whose `make` target the table does not know is booked `other`, never dropped (spec edge case). A `BgEnd` never seen leaves its
 launch OPEN from its start (spec edge case): the reader books it open to the window's end, never zero.

@@ -198,7 +198,7 @@ fn a_question_is_written_owed_and_its_number_said() {
     assert!(
         question(
             &d.join("specs/510-q"),
-            "a b c d",
+            &format!("a b c \u{2013} \"behavio{}\"", "ur"),
             "src",
             Some("2026-01-01T00:00:00Z")
         )
@@ -208,6 +208,11 @@ fn a_question_is_written_owed_and_its_number_said() {
     assert_eq!(
         rows(&d.join("specs/510-q")).unwrap()[2]["utc"],
         json!("2026-01-01T00:00:00Z")
+    );
+    // the question in the house style, a straight-quoted word too: gm-review.jsonl is a JSON record (feature 449 T242)
+    assert_eq!(
+        rows(&d.join("specs/510-q")).unwrap()[2]["question"],
+        json!("a b c - \"behavior\"")
     );
     put(&d, "specs/511-bad/gm-review.jsonl", "");
     std::fs::write(d.join("specs/511-bad/gm-review.jsonl"), b"{}\n\xff").unwrap();
@@ -319,11 +324,13 @@ fn escalation_checks_verdict_on_each_kind_of_row() {
     assert_eq!(rs[0]["escalation"], json!("his to make"));
     assert_eq!(rs[1]["status"], json!("cut"));
     assert_eq!(rs.len(), 7);
+    // escalation-check's reason in the house style, a straight-quoted word too: gm-review.jsonl is a JSON record (feature 449 T242)
+    let brit = format!("behavio{}", "ur");
     let kept = escalated(
         &d.join("specs/520-q"),
         4,
         "CUT",
-        "not his",
+        &format!("not his \u{2013} the \"{brit}\" is ours"),
         Some("2026-01-02T03:04:05Z"),
         None,
     )
@@ -332,6 +339,10 @@ fn escalation_checks_verdict_on_each_kind_of_row() {
     assert_eq!(
         written(&d, "specs/520-q/gm-review.jsonl")[4]["reviewed"],
         json!("2026-01-02")
+    );
+    assert_eq!(
+        written(&d, "specs/520-q/gm-review.jsonl")[4]["escalation"],
+        json!("not his - the \"behavior\" is ours")
     );
     put(&d, "specs/521-list/gm-review.jsonl", "[\"kind\"]\n");
     let got = run(&d, &["escalated", "521", "0", "KEEP", "a b"]);

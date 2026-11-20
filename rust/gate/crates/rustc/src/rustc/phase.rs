@@ -1,0 +1,55 @@
+//! THE CHECKS' PHASE LINES (feature 451 T05, plan D4, FR-003; the GM: "how much time are we spending on recompiling things"): a
+//! `make static` was one span in the event log, its compile and its tests one figure. Each step a check runs writes one `Phase` line at
+//! its end, through the writer the hooks use (`append_row`): a test binary's `build` (`kept.rs`'s `binary_key`), its `test` run
+//! (`side.rs`, or a `cargo test` after its own `--no-run` build, `stepped`), a family's `cover-build` and each crate's `cover-run`
+//! (`cover.rs`), and a crate's `lint` and `format`. A kept result ran nothing and writes none; `dead`, `hamlet` and `test-times` write
+//! none either (no cargo; a stage run; a timing tool of its own). The readers book the `build` and `cover-build` spans as compile (T08).
+
+use std::path::Path;
+use std::time::SystemTime;
+
+use l7r_guard::guards::event_log_hooks::{append_row, now_stamp};
+use serde_json::json;
+
+use super::{shown, World};
+
+/// The run's make target (plan D4): the outermost `make`'s first goal, read from its command line (the run lock's `run_what`) as the
+/// event log's writer reads a Bash call's (D1); with no `make` above, the gate's own form, `rust-<cmd>`, as D1 reads
+/// `l7r-gate.sh rust <cmd>`. A word the command line quotes (one holding a space, `NOTE="two words"`) is read as an assignment: the
+/// reader blanks a quoted string, and a blank ends the goals.
+pub(super) fn run_target(run_what: &str, cmd: &str) -> String {
+    let words: Vec<&str> = run_what.split('\'').step_by(2).collect();
+    l7r_guard::shared::make::invoked(&words.join("QUOTED=1"))
+        .into_iter()
+        .next()
+        .unwrap_or_else(|| format!("rust-{cmd}"))
+}
+
+/// The step a check run in `answer`'s loop is, where it is one: a lint, a format, and a test run's `cargo test` (its build booked
+/// apart first, `stepped`).
+pub(super) fn step_of(cmd: &str) -> Option<&'static str> {
+    match cmd {
+        "lint" => Some("lint"),
+        "format" => Some("format"),
+        c if c.starts_with("test") => Some("test"),
+        _ => None,
+    }
+}
+
+/// One step's line, written at its end: its crates by their directories from the tree's root, `began` its start, `code` how it went;
+/// `t` is its end, and the line names the run's make target and the clone it ran in, which the readers tie it to a Bash call by.
+pub(super) fn wrote<P: AsRef<Path>>(
+    world: &World,
+    step: &str,
+    manifests: &[P],
+    began: SystemTime,
+    code: i32,
+) {
+    let t1 = now_stamp(SystemTime::now());
+    let crates: Vec<String> = manifests.iter().map(|m| shown(world, m.as_ref())).collect();
+    let row = json!({
+        "ev": "Phase", "src": "rust", "step": step, "crates": crates, "t0": now_stamp(began), "t1": t1, "t": t1,
+        "code": code, "make": world.make, "clone": world.root.display().to_string(),
+    });
+    let _ = append_row(&world.root, row.as_object().cloned().unwrap_or_default());
+}

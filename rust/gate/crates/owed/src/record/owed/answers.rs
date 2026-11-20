@@ -823,6 +823,9 @@ pub fn file_outside(
     let mut body = String::new();
     let mut out = Vec::new();
     for (file, block, finding) in rows {
+        // the check's finding in the house style a JSON record takes (feature 449 T242): found.jsonl is no prose file to the push's
+        // delta check, so a straight-quoted word is corrected too; its file and block name things and are written as given
+        let finding = l7r_guard::guards::house_style_hooks::americanize_record(&finding);
         let row = json!({"check": check, "file": file, "block": block, "finding": finding, "status": "open", "utc": utc});
         body.push_str(&pyjson::dumps(&row, None, false));
         body.push('\n');

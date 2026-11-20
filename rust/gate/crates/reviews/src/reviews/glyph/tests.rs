@@ -72,6 +72,26 @@ fn the_start_is_the_first_event_or_the_last_reopening() {
     assert_eq!(first_event(&r, "900-y"), None);
 }
 
+/// A line no hook wrote is never the feature's start (feature 451 T05): a gate tool's `Phase` line, or a background run's `BgEnd`,
+/// written first in the log, is passed over for the first event; a log of those alone has no start.
+#[test]
+fn a_phase_or_a_bgend_line_is_never_the_feature_s_start() {
+    let r = repo("start-aside");
+    put(
+        &r,
+        ".git/l7r-events/900-x.jsonl",
+        "{\"ev\": \"Phase\", \"t\": \"1970-01-01T00:00:30Z\"}\n{\"ev\": \"BgEnd\", \"t\": \"1970-01-01T00:00:40Z\"}\n\
+         {\"ev\": \"PreToolUse\", \"t\": \"1970-01-01T00:01:00Z\"}\n",
+    );
+    assert_eq!(first_event(&r, "900-x"), Some(60.0));
+    put(
+        &r,
+        ".git/l7r-events/900-y.jsonl",
+        "{\"ev\": \"Phase\", \"t\": \"1970-01-01T00:00:30Z\"}\n",
+    );
+    assert_eq!(first_event(&r, "900-y"), None);
+}
+
 /// The reopening read from the feature's history (split from the test above, feature 449 T167: the two on one repository took 107 ms
 /// against FR-008's tenth of a second).
 #[test]

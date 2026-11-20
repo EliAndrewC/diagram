@@ -196,6 +196,10 @@ pub fn tally_events(t: &mut Tools, rows: &[Row], usage_began: f64) {
     let mut post: HashSet<String> = HashSet::new();
     let mut failed: HashSet<String> = HashSet::new();
     for row in rows {
+        // a line no hook wrote (feature 451 T05: a gate tool's `Phase` names its run's make target) is passed over before its time
+        if super::super::events::ASIDE.contains(&or_s(row, "ev").as_str()) {
+            continue;
+        }
         let when = utc(&or_s(row, "t"));
         let id = || row.get("id").map_or_else(|| "None".to_owned(), py_str);
         if row.get("make").is_some_and(truthy) {

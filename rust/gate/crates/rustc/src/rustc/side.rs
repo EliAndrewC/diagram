@@ -51,9 +51,11 @@ pub(super) fn tests_side_by_side(
 /// One crate's built test binaries run as `cargo test` runs them - from the crate's directory, with cargo's variables and the run's own
 /// `TMPDIR` (`leak_checked`, T101) - in cargo's order, stopping at the first that fails as cargo does; then its doctests, where its
 /// sources hold a doc comment's code block, through `cargo test --doc`, the one part of `cargo test` that is no binary.
+/// Its `test` phase line is the whole crate's run, binaries and doctests (feature 451 T05).
 fn run_built(world: &World, cmd: &str, manifest: &Path, exes: &[String]) -> Ran {
     let dir = manifest.parent().unwrap_or(Path::new("."));
-    leak_checked(manifest, |tmp| {
+    let began = std::time::SystemTime::now();
+    let ran = leak_checked(manifest, |tmp| {
         let target = world
             .target_override
             .clone()
@@ -101,5 +103,7 @@ fn run_built(world: &World, cmd: &str, manifest: &Path, exes: &[String]) -> Ran 
             all.code = doc.code;
         }
         all
-    })
+    });
+    super::phase::wrote(world, "test", &[manifest], began, ran.code);
+    ran
 }

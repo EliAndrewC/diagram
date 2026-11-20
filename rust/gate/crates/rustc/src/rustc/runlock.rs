@@ -70,11 +70,20 @@ fn alive(proc_root: &Path, member: &Proc) -> bool {
     started(proc_root, member.pid) == Some(member.start)
 }
 
+/// A process's command line, a word holding a space quoted (feature 451 T05): the phase lines read the run's make target from it as
+/// a shell command (`phase::run_target`), and `make NOTE="two words" land` joined bare read `words` as a goal.
 fn cmdline(proc_root: &Path, pid: u64) -> String {
     let raw = std::fs::read(proc_root.join(pid.to_string()).join("cmdline")).unwrap_or_default();
     raw.split(|b| *b == 0)
         .filter(|w| !w.is_empty())
         .map(|w| String::from_utf8_lossy(w).into_owned())
+        .map(|w| {
+            if w.contains(char::is_whitespace) {
+                format!("'{w}'")
+            } else {
+                w
+            }
+        })
         .collect::<Vec<_>>()
         .join(" ")
 }

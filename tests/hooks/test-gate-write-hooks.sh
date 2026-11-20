@@ -11,8 +11,13 @@ bad() { echo "  FAIL    $1"; FAIL=$((FAIL+1)); }
 check() { if [ "$2" = "$3" ]; then ok "$1"; else bad "$1 (expected $2, got $3)"; fi; }
 
 R=$(mktemp -d); OTHER=$(mktemp -d)
+# THE FAKE GATE'S OWN SLEEP: a bare `pkill -f "sleep 30"` killed every such sleep on the machine - another copy of this suite's
+# fake gate (a second session, a builder beside it) among them, three cases then read "let through" (449 T242's run, 2026-11-20);
+# each run sleeps a length of its own, and kills only that
+NAP="30.$$"
+
 git -C "$R" init -q; git -C "$OTHER" init -q
-printf 'done:\n\t@sleep 30\n' > "$R/Makefile"
+printf 'done:\n\t@sleep %s\n' "$NAP" > "$R/Makefile"
 run() {  # run <dir> <json payload>: the hook's exit code, from that directory
   ( cd "$1" && printf '%s' "$2" | "$HOOK" pretool >/dev/null 2>"$R/err" ); echo $?
 }
@@ -45,7 +50,7 @@ check "a read: let through" 0 "$(run "$R" "$READ")"
 check "the escape: let through" 0 "$(run "$R" '{"tool_name":"Bash","tool_input":{"command":"GATE_WRITE_OK=\"a deliberate fix for the gate itself\" git -C . commit -qm x"}}')"
 check "another tree's command, its own gate not running: let through" 0 "$(run "$OTHER" "$COMMIT")"
 check "an Edit outside this tree: let through" 0 "$(run "$R" "$(printf '{"tool_name":"Edit","tool_input":{"file_path":"%s/b.txt"}}' "$OTHER")")"
-pkill -f "sleep 30" 2>/dev/null
+pkill -f "sleep $NAP" 2>/dev/null
 
 echo "--- 3. a change the gate does not see (feature 405 T41, D15) ---"
 # a tree with the gate's own tools: a docstring or comment in an engine file, or a claims-round record, passes; code does not
@@ -56,7 +61,7 @@ mkdir -p "$S/scripts/gates" "$S/l7r/diagram" "$S/dev"
 cp "$HERE/../../scripts/gates/codeid.py" "$S/scripts/gates/"; printf '#!/usr/bin/env bash\nexec "%s" "$@"\n' "$(cd "$HERE/../.." && pwd)/scripts/gates/l7r-gate.sh" > "$S/scripts/gates/l7r-gate.sh"; chmod +x "$S/scripts/gates/l7r-gate.sh"
 printf 'def f(x):\n    """Research: a claim - NONE"""\n    return x + 1\n' > "$S/l7r/diagram/m.py"
 printf '{}\n' > "$S/dev/claims-index.json"
-printf 'done:\n\t@sleep 30\n' > "$S/Makefile"
+printf 'done:\n\t@sleep %s\n' "$NAP" > "$S/Makefile"
 git -C "$S" add -A; git -C "$S" -c user.email=t@t -c user.name=t commit -qm base
 "$S/scripts/gates/l7r-gate.sh" preflight --root "$S" --tree-snap "$S/.git/gate-tree.json"
 ( cd "$S" && setsid nohup make done </dev/null >/dev/null 2>&1 & )
@@ -73,7 +78,7 @@ check "...and the gate's tree check reads the run as unmoved" 0 "$("$S/scripts/g
 sed -i 's/x + 1/x + 2/' "$S/l7r/diagram/m.py"
 check "a commit holding code: refused" 2 "$(run "$S" "$COMMIT")"
 check "...and the tree check names it" 1 "$("$S/scripts/gates/l7r-gate.sh" preflight --root "$S" --tree-check "$S/.git/gate-tree.json" >/dev/null; echo $?)"
-pkill -f "sleep 30" 2>/dev/null
+pkill -f "sleep $NAP" 2>/dev/null
 rm -rf "$S"
 
 # (section 4, a write while `make cache-audit` ran, left with that target - deleted by feature 449 T218 - and its guard, T223)

@@ -177,6 +177,30 @@ pub fn americanize(text: &str) -> String {
     correct(text, &HELD).0
 }
 
+/// Text a recorder writes into a JSON record, in the house style (feature 449 T242): as [`americanize`], but a straight-quoted span is
+/// corrected too, because the push's delta check (`checks/house_style_delta.rs`) holds straight quotes only in a prose file - a
+/// reviewer's straight-quoted British word in `plan-review.json` would otherwise turn `make quick` red. A quotation keeps its words in
+/// the spans that check holds everywhere: a code span, 「」, 『』, curly quotes, `<q>`, `<blockquote>`.
+#[must_use]
+pub fn americanize_record(text: &str) -> String {
+    correct(text, &SPAN).0
+}
+
+/// Every string of a JSON value through [`americanize_record`], at any depth; keys as written (they name, not say).
+#[must_use]
+pub fn americanize_json(value: &Value) -> Value {
+    match value {
+        Value::String(s) => Value::String(americanize_record(s)),
+        Value::Array(items) => Value::Array(items.iter().map(americanize_json).collect()),
+        Value::Object(map) => Value::Object(
+            map.iter()
+                .map(|(k, v)| (k.clone(), americanize_json(v)))
+                .collect(),
+        ),
+        other => other.clone(),
+    }
+}
+
 /// `cmd` with heredoc bodies and the insides of quoted strings blanked, at the same length: a separator inside quotes is not a separator.
 fn masked(cmd: &str) -> String {
     let mut bytes = cmd.as_bytes().to_vec();

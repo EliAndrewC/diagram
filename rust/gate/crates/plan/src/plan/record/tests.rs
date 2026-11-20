@@ -228,13 +228,40 @@ fn a_clear_task_section_records_its_blocks_reviewed() {
 #[test]
 fn a_verdict_s_free_text_is_written_in_the_house_style_its_keys_as_given() {
     let brit = format!("gr{}", "ey");
-    let got = house_style(Some(&json!([{"id": format!("D1-{brit}"), "class": "within", "why": format!("a {brit} band, <q>a {brit} quoted</q>"), "n": 3}, "stray"]))).unwrap();
+    let got = house_style(Some(&json!([{"id": format!("D1-{brit}"), "class": "within", "why": format!("a {brit} band, <q>a {brit} quoted</q>"), "n": 3}, format!("{brit}")]))).unwrap();
     assert_eq!(
         got[0],
-        json!({"id": format!("D1-{brit}"), "class": "within", "why": format!("a gray band, <q>a {brit} quoted</q>"), "n": 3})
+        json!({"id": "D1-gray", "class": "within", "why": format!("a gray band, <q>a {brit} quoted</q>"), "n": 3})
     );
-    assert_eq!(got[1], "stray");
+    assert_eq!(got[1], "gray");
     assert_eq!(house_style(None), None);
+}
+
+/// Feature 449 T242: spec-fidelity's British spelling in a decision id (2026-11-20, three times) landed in plan-review.json and turned
+/// `make quick` red; the id, a straight-quoted word (the delta check holds straight quotes only in a prose file) and a nested list
+/// are written in the house style, a curly quotation and a code span as given.
+#[test]
+fn a_recorded_verdict_is_written_in_the_house_style_its_id_and_straight_quotes_too() {
+    let (brit, en) = (format!("behavio{}", "ur"), '\u{2013}');
+    let dir = feature(Some(PLAN), None);
+    let decision = json!({"id": format!("D9r residual: the old {brit} {en} kept"), "class": "within",
+        "summary": format!("the \"{brit}\" field, \u{201c}{brit}\u{201d} and `{brit}` as given"), "why": [format!("a {brit} row")]});
+    record(
+        &dir,
+        &current(&[decision], "CLEAR", PLAN),
+        "spec-fidelity",
+        Some("2026-11-20"),
+    )
+    .unwrap();
+    let written = std::fs::read_to_string(dir.join("plan-review.json")).unwrap();
+    let got = &read(&dir)["decisions"][0];
+    assert_eq!(got["id"], "D9r residual: the old behavior - kept");
+    assert_eq!(
+        got["summary"],
+        format!("the \"behavior\" field, \u{201c}{brit}\u{201d} and `{brit}` as given")
+    );
+    assert_eq!(got["why"][0], "a behavior row");
+    assert!(!written.contains(en), "{written}");
 }
 
 #[test]

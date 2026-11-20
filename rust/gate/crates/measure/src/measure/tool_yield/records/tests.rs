@@ -50,6 +50,19 @@ fn the_arbiter_counts_from_its_first_dispatch() {
     );
 }
 
+/// A line no hook wrote is passed over before its time is read (feature 451 T05): a gate tool's `Phase` line names the run's make
+/// target, and is no run of it. A pin: `tally_events` branched on `ev` before it used the time, so no such line was ever counted.
+#[test]
+fn a_phase_or_a_bgend_line_is_no_run_of_its_target() {
+    let mut t = Tools::new();
+    let events = jsonl_of(
+        "{\"t\": \"2026-01-10T00:00:00Z\", \"ev\": \"Phase\", \"make\": \"static\", \"step\": \"build\"}\n\
+         {\"t\": \"2026-01-10T00:00:01Z\", \"ev\": \"BgEnd\", \"make\": \"static\", \"id\": \"x\"}\n",
+    );
+    tally_events(&mut t, &events, 0.0);
+    assert!(t.is_empty());
+}
+
 fn jsonl_of(text: &str) -> Vec<Row> {
     objects(text)
 }

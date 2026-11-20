@@ -11,7 +11,7 @@ use std::path::{Path, PathBuf};
 
 use serde_json::{json, Map, Value};
 
-use super::glyph::{active_feature, entry, feature_start, CLOCK, GLYPH_HOUR_S, PAIRING};
+use super::glyph::{active_feature, entry, feature_start, is_event, CLOCK, GLYPH_HOUR_S, PAIRING};
 use super::owed::all_owed;
 use super::{
     as_float, git, gitdir, int_of, iso_seconds, local_time, now, py_path, read_object, reply,
@@ -80,7 +80,8 @@ fn throw(root: &Path, state: &str, why: &str, at: f64) -> Result<Map<String, Val
     Ok(sw)
 }
 
-/// The feature's event log, each event with its time; an unreadable line skipped.
+/// The feature's event log, each event with its time; an unreadable line skipped, and a line no hook wrote passed over before its time
+/// is read (`glyph::ASIDE`, feature 451 T05).
 fn events(root: &Path, feature: &str) -> Vec<(f64, Value)> {
     let Some(path) = gitdir(root).map(|g| g.join("l7r-events").join(format!("{feature}.jsonl")))
     else {
@@ -90,7 +91,7 @@ fn events(root: &Path, feature: &str) -> Vec<(f64, Value)> {
     crate::record::repo::universal(&text)
         .lines()
         .filter_map(|raw| {
-            let e: Value = serde_json::from_str(raw).ok()?;
+            let e: Value = serde_json::from_str(raw).ok().filter(is_event)?;
             let t = iso_seconds(e.get("t"))?;
             Some((t, e))
         })

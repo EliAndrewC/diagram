@@ -155,6 +155,18 @@ fn the_store_keeps_every_answer_and_settles() {
         1
     );
     assert!(root.join("specs/_unfiled/found.jsonl").is_file());
+    // the finding in the house style, a straight-quoted word too: found.jsonl is a JSON record (feature 449 T242); its file as given
+    let brit = format!("behavio{}", "ur");
+    let got = file_outside(
+        &root,
+        "c",
+        &format!("**OUTSIDE THE CHANGE**:\n- `{brit}.md` | b | the \"{brit}\" \u{2013} off\n"),
+    )
+    .unwrap();
+    assert_eq!(got[0]["finding"], "the \"behavior\" - off");
+    assert_eq!(got[0]["file"], format!("{brit}.md"));
+    let written = std::fs::read_to_string(root.join("specs/_unfiled/found.jsonl")).unwrap();
+    assert!(written.contains("the \\\"behavior\\\" - off"), "{written}");
 }
 
 #[test]

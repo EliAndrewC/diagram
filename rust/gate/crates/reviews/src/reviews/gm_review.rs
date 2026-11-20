@@ -24,6 +24,7 @@ use std::path::{Component, Path, PathBuf};
 use std::process::Command;
 
 use fancy_regex::Regex;
+use l7r_guard::guards::house_style_hooks::americanize_record;
 use l7r_guard::shared::py_text::split;
 use l7r_guard::shared::pyjson::dumps;
 use serde_json::{json, Map, Value};
@@ -190,7 +191,8 @@ pub fn question(d: &Path, question: &str, source: &str, now: Option<&str>) -> R<
             "a question for the GM is a sentence he can answer - four words or more".to_owned(),
         ));
     }
-    let row = json!({"kind": QUESTION, "status": "owed", "question": question, "source": source,
+    // the question in the house style a JSON record takes (feature 449 T242), as `escalated`'s reason
+    let row = json!({"kind": QUESTION, "status": "owed", "question": americanize_record(question), "source": source,
                      "utc": now.map_or_else(utc_now, str::to_owned)});
     let n = rows(d)?.len();
     append(d, &row)?;
@@ -236,7 +238,9 @@ fn escalated(
             "ROW={row} is no question of {n} - make gm-review lists the owed ones"
         ));
     }
-    let mut reason = reason.to_owned();
+    // escalation-check's words in the house style a JSON record takes (feature 449 T242): gm-review.jsonl is no prose file to the
+    // push's delta check, so a straight-quoted word is corrected too
+    let mut reason = americanize_record(reason);
     if let Some(later) = superseded_by {
         if verdict != "CUT" {
             return refused("SUPERSEDED_BY closes a question: VERDICT=CUT".to_owned());

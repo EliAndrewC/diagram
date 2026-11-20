@@ -525,12 +525,16 @@ fn binary_key(
     all: &[PathBuf],
     ids: &BTreeMap<String, String>,
     compiler: &str,
+    passed: &mut bool,
 ) -> Option<(String, Vec<String>)> {
     let mut args = vec!["test", "--no-run", "--message-format=json", "--quiet"];
     if cmd == "test-counters" {
         args.push("--all-features");
     }
+    let began = std::time::SystemTime::now();
     let built = cargo(world, &args, manifest, &[]);
+    super::phase::wrote(world, "build", &[manifest], began, built.code);
+    *passed = built.code == 0;
     let exes = executables(&built.stdout);
     let order = test_targets(&built.stdout);
     if built.code != 0 || exes.is_empty() {
@@ -727,6 +731,9 @@ pub(super) struct Verdict {
     passed: Vec<String>,
     /// The test binaries the binary key's build named, in `cargo test`'s order: none unless that build ran and named some (T160).
     pub(super) exes: Vec<String>,
+    /// The binary key's build ran and passed (feature 451 T05): its `build` phase line is written and the test binaries are built, so a
+    /// `cargo test` after it - a build that named no binary - compiles nothing and is booked `test` alone.
+    pub(super) built: bool,
 }
 
 impl Verdict {
@@ -761,6 +768,7 @@ impl Verdict {
             passed_at: None,
             passed: Vec::new(),
             exes: Vec::new(),
+            built: false,
         };
         if world.no_reuse || verdict.key.is_none() {
             return (verdict, false);
@@ -769,9 +777,18 @@ impl Verdict {
             return (verdict, true);
         }
         if cmd.starts_with("test") {
-            if let Some((binary, exes)) =
-                k.and_then(|k| binary_key(world, cmd, manifest, &k.all, &k.ids, &k.compiler))
-            {
+            if let Some((binary, exes)) = k.and_then(|k| {
+                let compiler = &k.compiler;
+                binary_key(
+                    world,
+                    cmd,
+                    manifest,
+                    &k.all,
+                    &k.ids,
+                    compiler,
+                    &mut verdict.built,
+                )
+            }) {
                 verdict.binary = Some(binary);
                 verdict.exes = exes;
             }

@@ -167,7 +167,7 @@ fn the_run_is_the_outermost_make_above_the_process() {
         (50, "l7r-rust", 40, "l7r-rust\0cover\0"),
         (40, "sh", 30, "sh\0-c\0x\0"),
         (30, "make", 20, "make\0static\0"),
-        (20, "make", 10, "make\0done\0"),
+        (20, "make", 10, "make\0NOTE=two words\0done\0"),
         (10, "bash (x)", 1, "bash\0"),
     ] {
         let d = proc_root.join(pid.to_string());
@@ -182,7 +182,9 @@ fn the_run_is_the_outermost_make_above_the_process() {
         std::fs::write(d.join("cmdline"), line).unwrap();
     }
     let (run, what) = run_of(&proc_root, 50);
-    assert_eq!((run.pid, what.as_str()), (20, "make done"));
+    // a word holding a space is quoted, so the run's target is read past it (feature 451 T05)
+    assert_eq!((run.pid, what.as_str()), (20, "make 'NOTE=two words' done"));
+    assert_eq!(super::super::phase::run_target(&what, "test"), "done");
     assert_eq!(run.start, 2019);
     // a make's own shell is of the same run; a make is its own outermost one
     assert_eq!(run_of(&proc_root, 40).0.pid, 20);

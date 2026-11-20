@@ -14,6 +14,7 @@ use l7r_guard::shared::tempdir::{Held, TempDir};
 
 mod cover;
 mod kept;
+mod phases;
 mod runlock;
 mod side;
 mod times;
@@ -49,6 +50,7 @@ fn world_with(root: &Path, body: &str) -> Held<World> {
         hamlet_args: String::new(),
         hamlet_spec: "spec.json".to_owned(),
         cover_work: None,
+        make: "static".to_owned(),
         target: target.to_path_buf(),
     };
     target.hold(world)
@@ -573,6 +575,7 @@ fn the_real_cargo_tests_a_real_crate() {
         hamlet_args: String::new(),
         hamlet_spec: "spec.json".to_owned(),
         cover_work: None,
+        make: "static".to_owned(),
         target: target.to_path_buf(),
     };
     let got = answer(&world, "test", &[], false);
