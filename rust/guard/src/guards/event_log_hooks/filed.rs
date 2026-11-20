@@ -163,10 +163,12 @@ fn declared(root: &Path, env: &dyn Fn(&str) -> Option<String>) -> bool {
         || (!named.is_empty() && root.join("specs").join(named).is_dir())
 }
 
-/// Where the payload's line is filed; `carried` is the task its own command names (`T=`).
+/// Where the payload's line is filed; `carried` is the task its own command names (`T=`), `named` the feature a gate tool names for its
+/// own line (451 T06: a landing's `F=`), read first, as a make command's `F=` is.
 pub(super) fn filed(
     payload: &Value,
     carried: Option<&str>,
+    named: Option<&str>,
     root: &Path,
     env: &dyn Fn(&str) -> Option<String>,
 ) -> Filed {
@@ -179,11 +181,17 @@ pub(super) fn filed(
     } else {
         String::new()
     };
-    let said = if make_target(&command).is_empty() {
-        None
-    } else {
-        first_group(&FEATURE_ARG, &command).and_then(|w| specs.named(&w))
-    };
+    // a blank word names no feature (`specs/` itself is a directory)
+    let said = named
+        .filter(|w| !w.trim().is_empty())
+        .and_then(|w| specs.named(w))
+        .or_else(|| {
+            if make_target(&command).is_empty() {
+                None
+            } else {
+                first_group(&FEATURE_ARG, &command).and_then(|w| specs.named(&w))
+            }
+        });
     let brief = brief(payload);
     let starts = starts(root);
     let briefed = || {

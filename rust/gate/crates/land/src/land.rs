@@ -30,6 +30,7 @@ mod claims_wait;
 mod inproc;
 mod long_runs;
 mod memory;
+mod phase;
 mod stop;
 
 use std::cell::RefCell;
@@ -116,6 +117,17 @@ pub struct Land {
     /// can move it - `origin/main...HEAD` diffs from the merge base, which a later push to origin cannot move, as the clone's own commits
     /// are on no other session's branch (feature 449 T167: a clean landing's test spent a quarter of its time in five repeated fetches).
     fetched: std::cell::Cell<bool>,
+    /// The make target the landing runs under, which its phase lines name (feature 451 T06, [`phase::run_target`]).
+    make_target: String,
+    /// The tasks being landed, which each phase line carries the first of, and the feature landed (`d`'s name), whose log every line
+    /// is filed in (feature 451 T06: a task never started in the clone is still its feature's).
+    landing_tasks: RefCell<Vec<String>>,
+    landing_feature: RefCell<String>,
+    /// The push went out (exit 0, or 3 with other sessions' edits merged): the `end` line's `landed`, its code apart (feature 451 T06).
+    pushed: std::cell::Cell<bool>,
+    /// When the landing's arguments were read (the `end` line's `t0`), and whether its `end` is written - at the push, or at its exit.
+    began: std::cell::Cell<Option<std::time::SystemTime>>,
+    ended: std::cell::Cell<bool>,
 }
 
 impl Land {
@@ -142,6 +154,12 @@ impl Land {
             arbiter_ok: !std::env::var("ARBITER_OK").unwrap_or_default().is_empty(),
             inproc: Box::new(inproc::Real),
             fetched: std::cell::Cell::new(false),
+            make_target: phase::run_target(Path::new("/proc"), std::process::id()),
+            landing_tasks: RefCell::new(Vec::new()),
+            landing_feature: RefCell::new(String::new()),
+            pushed: std::cell::Cell::new(false),
+            began: std::cell::Cell::new(None),
+            ended: std::cell::Cell::new(false),
         }
     }
 
@@ -288,10 +306,17 @@ impl Land {
         Ok(())
     }
 
-    /// The landing, after its arguments: every pass, the ticks and the push; the exit code.
+    /// The landing, after its arguments: every pass, the ticks and the push; the exit code. Each step writes its phase line at its end
+    /// (feature 451 T06, [`phase`]): `cheap`, `gate`, `claims` and `push`, one after another, the cohort's nested in the gate's.
     fn land(&self, d: &Path, tasks: &[String], note: &str) -> Result<i32, String> {
+        self.landing_tasks.replace(tasks.to_vec());
+        self.landing_feature.replace(name_of(d));
         let mut claims: Vec<String> = Vec::new();
-        let stops = self.cheap_refusals(d, tasks, note, Some(&mut claims))?;
+        let mut stops: Vec<String> = Vec::new();
+        self.phase("cheap", || {
+            stops = self.cheap_refusals(d, tasks, note, Some(&mut claims))?;
+            Ok(if stops.is_empty() { 0 } else { 2 })
+        })?;
         if !stops.is_empty() {
             let every: Vec<String> = stops.into_iter().chain(claims).collect();
             self.warn(&format!(
@@ -306,32 +331,45 @@ impl Land {
                 head(first, 160)
             ));
         }
-        // the fresh block follows an engine landing, after its push (D5) - unless it only adds counter blocks (feature 446, FR-002),
-        // asked before the push moves the merge base
-        let engine_landed = self.engine_delta()?;
-        let counter_landed = engine_landed && self.counter_only()?;
-        let rc = self.long_runs()?;
+        let (mut engine_landed, mut counter_landed) = (false, false);
+        let rc = self.phase("gate", || {
+            // the fresh block follows an engine landing, after its push (D5) - unless it only adds counter blocks (feature 446,
+            // FR-002), asked before the push moves the merge base
+            engine_landed = self.engine_delta()?;
+            counter_landed = engine_landed && self.counter_only()?;
+            self.long_runs()
+        })?;
         if rc != 0 {
             return Ok(rc);
         }
-        let why = self.wait_for_claims(tasks, Some(d))?;
-        if !why.is_empty() {
-            self.warn(&claims_wait::claims_stop_line(&why));
-            return Ok(2);
+        let rc = self.phase("claims", || {
+            let why = self.wait_for_claims(tasks, Some(d))?;
+            if !why.is_empty() {
+                self.warn(&claims_wait::claims_stop_line(&why));
+                return Ok(2);
+            }
+            self.write_ledger(d)?; // the passes the claims round made beside the gate (405 T52, D27)
+            Ok(0)
+        })?;
+        if rc != 0 {
+            return Ok(rc);
         }
-        self.write_ledger(d)?; // the passes the claims round made beside the gate (405 T52, D27)
-        self.tick_and_push(d, tasks, note, engine_landed, counter_landed)
+        let rc = self.phase("push", || self.tick_and_push(d, tasks, note))?;
+        // THE PUSH IS THE LANDING (T06's plan review, T06-stop-after-push): its `end` written the moment the push went out, so no
+        // later stop - `make land-stop` in the tail below - leaves a pushed landing reading unlanded
+        if self.pushed.get() {
+            self.end_now(rc);
+        }
+        if rc != 0 {
+            return Ok(rc);
+        }
+        self.phase("after-push", || {
+            self.after_push(engine_landed, counter_landed).map(|()| 0)
+        })
     }
 
     /// ONE PUSH, THE TICKS IN IT (405 T51, D24): T13's landing pushed its work, then its ticks - two runs of every push check.
-    fn tick_and_push(
-        &self,
-        d: &Path,
-        tasks: &[String],
-        note: &str,
-        engine_landed: bool,
-        counter_landed: bool,
-    ) -> Result<i32, String> {
+    fn tick_and_push(&self, d: &Path, tasks: &[String], note: &str) -> Result<i32, String> {
         let rel = rel_of(&self.root, d);
         let how = if tasks.len() > 1 {
             format!("landed in batch {}", tasks.join("+"))
@@ -382,6 +420,7 @@ impl Land {
             &[&self.script("sync-with-main.sh"), "done"],
             &[("L7R_LAND_TICKS", &tasks.join(" "))],
         )?;
+        self.pushed.set(rc == 0 || rc == MERGED);
         if rc == MERGED {
             // PUSHED, WITH OTHER SESSIONS' EDITS MERGED INTO FILES IT TOUCHED (405 T107: T107's landing pushed its tick, then reverted it
             // in the clone as if nothing had landed, so the clone's next push would have unticked main): the ticks stand
@@ -394,6 +433,12 @@ impl Land {
             return Ok(rc);
         }
         self.say(&format!("land: {} landed and ticked", tasks.join(" ")));
+        Ok(0)
+    }
+
+    /// The push's tail, after the landing's `end` (feature 451 T06's `after-push` step): the fresh block after an engine landing and
+    /// the work budget's view.
+    fn after_push(&self, engine_landed: bool, counter_landed: bool) -> Result<(), String> {
         let line = self.fresh_block_after(engine_landed, counter_landed)?;
         if !line.is_empty() {
             self.say(&line);
@@ -403,7 +448,7 @@ impl Land {
             let view = l7r_gate_cohort::speckit_todo::work_budget_view::lines(&self.root)?;
             self.say(&view.join("\n"));
         }
-        Ok(0)
+        Ok(())
     }
 
     /// One task ticked, in process (`l7r_gate_task::tick::tick`, feature 449 T131, where `land.py` and then this land ran `tick-task.py`
@@ -698,12 +743,19 @@ fn main(
     }
     // A STOPPED LANDING STOPS ITS RUNS (405 T79), from here on, as `land.py` installed its handler past the usage check
     catch_term();
+    // THE LANDING'S `end` LINE (feature 451 T06): from here every exit is a landing's, refused or not, and writes one
+    let began = std::time::SystemTime::now();
+    let root = l7r_gate_task::tick::repo_root(cwd);
+    let refused = |code: i32| {
+        let make = phase::run_target(Path::new("/proc"), std::process::id());
+        phase::end(&root, &args[0], &tasks, began, &Ok(code), &make);
+        Ok(code)
+    };
     let note = strip(note).to_owned();
     if note.is_empty() {
         eprintln!("land: refused - NOTE= is empty; say what was verified, as make tick asks");
-        return Ok(2);
+        return refused(2);
     }
-    let root = l7r_gate_task::tick::repo_root(cwd);
     let Some(d) =
         l7r_gate_task::tick::spec_dir(&root, &args[0]).filter(|d| d.join("tasks.md").is_file())
     else {
@@ -712,9 +764,9 @@ fn main(
             args[0],
             root.display()
         );
-        return Ok(2);
+        return refused(2);
     };
-    Land::new(&root, &scripts(&root)).land(&d, &tasks, &note)
+    Land::new(&root, &scripts(&root)).landing(&d, &tasks, &note, began)
 }
 
 #[cfg(test)]

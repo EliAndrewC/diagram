@@ -664,7 +664,7 @@ pub(crate) fn append(
     let root = clone_root(&cwd)?;
     let mut row = line(payload, t);
     let carried = row.get("task").and_then(Value::as_str).map(str::to_owned);
-    let to = filed::filed(payload, carried.as_deref(), &root, env);
+    let to = filed::filed(payload, carried.as_deref(), None, &root, env);
     let path = log_path_in(&root, &to.feature, env);
     let base = path.parent().map_or_else(PathBuf::new, Path::to_path_buf);
     std::fs::create_dir_all(&base).ok()?;
@@ -811,13 +811,29 @@ fn write_line(path: &Path, row: Map<String, Value>) -> Option<PathBuf> {
 /// a line of no event is no event); None outside a clone the log can be made in.
 #[must_use]
 pub fn append_row(root: &Path, row: Map<String, Value>) -> Option<PathBuf> {
-    append_row_in(root, row, &now_stamp(SystemTime::now()), &|k| {
+    append_row_in(root, None, row, &now_stamp(SystemTime::now()), &|k| {
         std::env::var(k).ok()
     })
 }
 
+/// [`append_row`] for a tool that knows the line's feature (feature 451 T06: a landing's `F=`): filed in the feature `feature` names - a
+/// `specs/` directory, or the one `specs/<feature>-*`, read as a make command's `F=` is - before T26's chain asks a task's start, so a
+/// landing of a task never started in the clone is filed in its own feature's log, not the session's (where T13 and T14, reading a
+/// feature's log for its landings, would not see it). A word naming no one feature leaves the chain as it was.
+#[must_use]
+pub fn append_row_for(root: &Path, feature: &str, row: Map<String, Value>) -> Option<PathBuf> {
+    append_row_in(
+        root,
+        Some(feature),
+        row,
+        &now_stamp(SystemTime::now()),
+        &|k| std::env::var(k).ok(),
+    )
+}
+
 pub(crate) fn append_row_in(
     root: &Path,
+    feature: Option<&str>,
     mut row: Map<String, Value>,
     t: &str,
     env: &dyn Fn(&str) -> Option<String>,
@@ -831,7 +847,7 @@ pub(crate) fn append_row_in(
         row.insert("sid".into(), Value::from(sid));
     }
     let carried = row.get("task").and_then(Value::as_str).map(str::to_owned);
-    let to = filed::filed(&Value::Null, carried.as_deref(), root, env);
+    let to = filed::filed(&Value::Null, carried.as_deref(), feature, root, env);
     if let Some(task) = to.task {
         row.insert("task".into(), Value::from(task));
     }

@@ -6,6 +6,7 @@ use std::os::unix::process::CommandExt as _;
 use std::path::PathBuf;
 use std::process::{Child, Command};
 use std::sync::LazyLock;
+use std::time::SystemTime;
 
 use fancy_regex::Regex;
 use l7r_guard::shared::py_text::strip;
@@ -71,7 +72,7 @@ impl Land {
             && self.run(&[&gate, "cohort", "check"], &[])?.0 != 0
         {
             self.say("land: no landing cohort on this engine - make cohort-landing");
-            if self.make("cohort-landing")? != 0 {
+            if self.phase("cohort", || self.make("cohort-landing"))? != 0 {
                 self.warn("land: the landing cohort refused - nothing landed (above)");
                 return Ok(1);
             }
@@ -101,15 +102,20 @@ impl Land {
         // - and T19's landing spent 4.4 of its 7 minutes on the cohort after a green gate; none while the port switch stands at rust-only
         // (feature 444 FR-023): no landing waits on the Python stages' rolls
         let mut cohort = None;
+        let mut began = SystemTime::now();
         if targets.iter().any(|t| t == "done")
             && self.engine_delta()?
             && self.port()? != "rust-only"
             && self.run(&[&self.gate(), "cohort", "check"], &[])?.0 != 0
         {
+            began = SystemTime::now();
             cohort = Some(self.start_cohort()?);
         }
         let ran = self.gates_and_cohort(&targets, &mut cohort);
-        stop_cohort(cohort.as_mut().map(|(c, _)| c));
+        // the cohort's line, waited on or stopped (feature 451 T06): from its start beside the gate to its end
+        if let Some(code) = stop_cohort(cohort.as_mut().map(|(c, _)| c)) {
+            self.phase_line("cohort", began, code);
+        }
         if ran? != 0 {
             return Ok(1);
         }
@@ -275,15 +281,17 @@ impl Land {
     }
 }
 
-/// The cohort's whole process group ended - a red gate voids what it would record, and no exit leaves it running.
-fn stop_cohort(cohort: Option<&mut Child>) {
-    if let Some(child) = cohort {
-        if matches!(child.try_wait(), Ok(None)) {
-            stop::kill_group(child.id());
-            let _ = child.wait();
-        }
-        stop::release(child.id());
+/// The cohort's whole process group ended - a red gate voids what it would record, and no exit leaves it running; its exit code (a
+/// stopped one's minus the signal), None where none ran.
+fn stop_cohort(cohort: Option<&mut Child>) -> Option<i32> {
+    let child = cohort?;
+    if matches!(child.try_wait(), Ok(None)) {
+        stop::kill_group(child.id());
     }
+    // a child already waited on answers its status again
+    let status = child.wait();
+    stop::release(child.id());
+    Some(status.map_or(1, super::code_of))
 }
 
 #[cfg(test)]

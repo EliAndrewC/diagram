@@ -32,3 +32,11 @@ he approved):
 > 4. **An agent's token cost.** Not logged today. The fix records it at each agent's stop.
 >
 > Then `where-time` and `feature-report` read those new lines, and `where-time` gains an `UNTIL=`. A breakdown like today's becomes one command, kept for every feature, with no new tool to learn.
+
+## The GM, 2026-11-20, on the order (after the overnight report: the data half landed, none of the six improvements yet)
+
+"okay well let's prioritize those remaining improvement fixes, okay?  doing those first makes everything after them faster"
+
+## The GM, 2026-11-20, on performance work in general (asked right after the order above)
+
+"can we in general priotitize performance improvements going forward?  I thought that was already a rule."

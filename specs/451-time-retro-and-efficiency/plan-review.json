@@ -110,13 +110,13 @@
    "declared": "spec-fidelity"
   },
   "### T06 (FR-003: a landing's cheap pass, gate, claims round and push are one span - the spec's User Story 1)": {
-   "sha256": "abc41ac11b43645ae079ea8a2cf8c71274899cb629df2ee3f4bc0c8060616533",
+   "sha256": "9867617ae7bd49850156a8b384af7af02819d81f93e038902e3eb6ea91d17abe",
    "verdict": "CLEAR",
    "reviewed": "2026-11-20",
    "declared": "spec-fidelity"
   },
   "### T06 Approach (checklist part A)": {
-   "sha256": "19b1575b7385dc7d1ed678e78a58a1e5965ca9a4ffa44cd5f0cb9c0107482b1f",
+   "sha256": "f89f5d026801d6fe041e46cc2a50d292c8d2d82ebbac9b27110e2e0b4d3794fc",
    "verdict": "CLEAR",
    "reviewed": "2026-11-20",
    "declared": "spec-fidelity"
@@ -1799,6 +1799,113 @@
      "why": "These are verification and sequencing of the requested lines."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-20",
+   "blocks": [
+    "### T06 (FR-003: a landing's cheap pass, gate, claims round and push are one span - the spec's User Story 1)",
+    "### T06 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T06-order",
+     "summary": "T06 (data half, FR-003, 'Performance work? no') runs ahead of the refusals after the GM's 2026-11-20 reorder; it comes before T10, T13 and T14, which read its end line",
+     "class": "within",
+     "why": "The GM's 2026-11-20 words put the six improvements first. D10 and D11 (two of those improvements) read a landing from this end line, so T06 is a prerequisite of the improvement fixes. Doing it first serves the order."
+    },
+    {
+     "id": "T06-phase-writer",
+     "summary": "A new land/phase.rs writes each step's line through append_row_for in T05's row form (ev Phase, src land, step, t0, t1, t, code, make, clone). land.rs wraps each step and long_runs.rs the cohort",
+     "class": "within",
+     "why": "This is FR-003's 'make land its phases' seconds ... as event lines' and D5's Phase lines, written through the one writer."
+    },
+    {
+     "id": "T06-tiling",
+     "summary": "The steps tile the landing: cheap, gate (the whole second pass, wider than D5's '(make done)'), claims, push (the ticks, their commit, the push, a failed push's revert), and the push's tail booked to after-push",
+     "class": "within",
+     "why": "FR-003 names the cheap refusals, the gate, the claims round and the push. Booking every part of the landing to one of them serves the request's 'where our time went'. A wider gate books more of the landing's real time and drops nothing."
+    },
+    {
+     "id": "T06-cohort-nested",
+     "summary": "cohort has its own line, nested inside the gate line's span; its code is minus the signal when a red gate stops it",
+     "class": "within",
+     "why": "D5 lists cohort as a step. Nesting it keeps the time from being counted twice, and its own seconds are still on its own line."
+    },
+    {
+     "id": "T06-codes",
+     "summary": "cheap and claims write code 2 when they refuse; a raising step writes code 1; a step that did not run writes no line",
+     "class": "within",
+     "why": "These are D5's exit codes made concrete for each step."
+    },
+    {
+     "id": "T06-end-at-push",
+     "summary": "For a landing whose push went out, end is written the moment the push goes out (exit 0 or 3): landed true, and its code is the push's. It is no longer the last line, and a tail that raises leaves end at the push's code while the process exits 1. A landing that never pushed writes its end at its exit with landed false",
+     "class": "within",
+     "why": "D5's wording is 'a last end line with its exit code'. D5 says what that line is FOR: refusals counted from the landing's own line, and D10 and D11 reading whether a task landed. D7 reads landed 'whatever its code', so a pushed landing whose tail raised is a landing, and the tail's exit 1 still stands on the after-push line. No reader loses a fact. A refused landing still ends with its own code and landed false. This is the mechanism the previous round asked for, and it makes a stop in the tail read as landed. It departs from D5's wording, not from its outcome."
+    },
+    {
+     "id": "T06-after-push",
+     "summary": "A new step, after-push, books the push's tail (the fresh block's start, the work-budget view after an engine landing). It comes after end, and a raise there is its own line's code",
+     "class": "within",
+     "why": "FR-003 names 'the push' as a phase, and this is the push's tail, split out so that end can be written at the push. Every second is still booked to a named line. A new step name for part of a requested phase only makes the requested breakdown finer."
+    },
+    {
+     "id": "T06-end-tasks",
+     "summary": "end carries tasks split as main splits them (D16's commas, T18's) and landed",
+     "class": "within",
+     "why": "D5 requires tasks split as D16 splits them. D7 and D11 define landed on the end line."
+    },
+    {
+     "id": "T06-phase-task-first",
+     "summary": "Each phase line carries the first task landed as task; end carries every id asked",
+     "class": "within",
+     "why": "A run of several tasks cannot be divided between them. D5 puts the full list on end, which is where D7, D10 and D11 read a landing, and every second is still booked."
+    },
+    {
+     "id": "T06-main-refusals",
+     "summary": "main's own refusals (no NOTE=, no feature directory) write an end for the tasks they name; a usage refusal that names no task writes none",
+     "class": "within",
+     "why": "D5 defines end by 'the task ids it was asked to land'. A usage refusal was asked to land nothing, so D5 owes no line for it."
+    },
+    {
+     "id": "T06-landed",
+     "summary": "landed is true when the push went out (exit 0, or 3 MERGED). D7's rework, D10's and D11's landing, T13, T14 and the data model's Landing read landed, restated with this task",
+     "class": "within",
+     "why": "D7 and D11 in the accepted spec say exactly this. The restatement brings the other tasks into line with the spec and does not widen it."
+    },
+    {
+     "id": "T06-append-row-for",
+     "summary": "append_row_for(root, feature, row) beside append_row in the held writer (make guard-edit) files a line in the feature its word names, before T26's chain. A blank word or one naming no feature leaves the chain as it was, and T05's callers are unchanged",
+     "class": "within",
+     "why": "FR-005's readers read per feature. Without this, a landing of a task never started in the clone would be filed under fallback, where T13 and T14 would not find its end. It reaches only the new callers and adds no behavior beyond what the requested lines need."
+    },
+    {
+     "id": "T06-make-field",
+     "summary": "make is the outermost make's first goal, read from /proc as T05's lines read theirs; land when no make is above",
+     "class": "within",
+     "why": "This is T05's row form applied to this source."
+    },
+    {
+     "id": "T06-stop-before-push",
+     "summary": "A landing stopped (make land-stop, TERM) before its push went out writes no line past its last finished step and reads as open, never as refused",
+     "class": "within",
+     "why": "A stop is not a refusal, and a landing stopped before its push did not land. Reading it as open answers D7, D10 and D11 correctly. The running step's split is lost, but FR-002 still books the run's span."
+    },
+    {
+     "id": "T06-stop-after-push",
+     "summary": "A landing stopped in the push's tail (after-push) already has its end written, landed true",
+     "class": "within",
+     "why": "This closes the previous round's NOT LEGITIMATE finding. The end at the push now carries landed true before the tail starts, so D10 and D11 read the task as landed, and red-first cases cover a tail that raises after the push."
+    },
+    {
+     "id": "T06-stop-window",
+     "summary": "One window stays open. A stop while sync-with-main.sh done runs, after the remote took the push but before the script reports it, writes no end. The section points to the push's tick commit on main as the record",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Last round's exception rested on implementation awkwardness ('no signal handler's work'). This one rests on knowledge: until the push command reports, the landing process does not hold the fact that the remote took the push, so no writer in the landing can record landed true in that interval. A pre-push guess would write a false landed whenever the push then fails. The rule is impossible here, not merely awkward, and the section has already shrunk the gap to that interval. The tick commit on main is not what makes this legitimate: D10 and D11 as cited read the end line, not main. The real outcome in the window is that the landing reads as open, never as refused. D7's rework count therefore stays right, D10 misses a resume of that task's builder, and D11 keeps that task's static count unreset. That is one rare interleaving (a manual stop during the push itself), with the outcome confined to that one task. This is the one case the previous round's requirement ('once a landing's push has gone out, a later stop must not leave it reading as unlanded') cannot reach. The ruling covers only the interval before the script reports the push went out. The block also says 'before the script exits'. If sync-with-main.sh reports success and then goes on working before it exits, that stretch is not unknowable: end must be written when the report comes, and an end held until the exit would be outside this ruling."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -2262,6 +2369,111 @@
      "summary": "Fixture red-first cases for each kind (fresh and counting-free runs: build before test; no-binary: one build line) and each reader; done is measured by a real make rust-test writing its phases; ordered after T04.",
      "class": "within",
      "why": "These are verification and sequencing of the requested lines."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T06": {
+   "section_sha256": "fcc20099d07a39c02534fc457d36a12ef03760d6bda860272020a103f6c8143c",
+   "reviewed": "2026-11-20",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T06-order",
+     "summary": "T06 (data half, FR-003, 'Performance work? no') runs ahead of the refusals after the GM's 2026-11-20 reorder; it comes before T10, T13 and T14, which read its end line",
+     "class": "within",
+     "why": "The GM's 2026-11-20 words put the six improvements first. D10 and D11 (two of those improvements) read a landing from this end line, so T06 is a prerequisite of the improvement fixes. Doing it first serves the order."
+    },
+    {
+     "id": "T06-phase-writer",
+     "summary": "A new land/phase.rs writes each step's line through append_row_for in T05's row form (ev Phase, src land, step, t0, t1, t, code, make, clone). land.rs wraps each step and long_runs.rs the cohort",
+     "class": "within",
+     "why": "This is FR-003's 'make land its phases' seconds ... as event lines' and D5's Phase lines, written through the one writer."
+    },
+    {
+     "id": "T06-tiling",
+     "summary": "The steps tile the landing: cheap, gate (the whole second pass, wider than D5's '(make done)'), claims, push (the ticks, their commit, the push, a failed push's revert), and the push's tail booked to after-push",
+     "class": "within",
+     "why": "FR-003 names the cheap refusals, the gate, the claims round and the push. Booking every part of the landing to one of them serves the request's 'where our time went'. A wider gate books more of the landing's real time and drops nothing."
+    },
+    {
+     "id": "T06-cohort-nested",
+     "summary": "cohort has its own line, nested inside the gate line's span; its code is minus the signal when a red gate stops it",
+     "class": "within",
+     "why": "D5 lists cohort as a step. Nesting it keeps the time from being counted twice, and its own seconds are still on its own line."
+    },
+    {
+     "id": "T06-codes",
+     "summary": "cheap and claims write code 2 when they refuse; a raising step writes code 1; a step that did not run writes no line",
+     "class": "within",
+     "why": "These are D5's exit codes made concrete for each step."
+    },
+    {
+     "id": "T06-end-at-push",
+     "summary": "For a landing whose push went out, end is written the moment the push goes out (exit 0 or 3): landed true, and its code is the push's. It is no longer the last line, and a tail that raises leaves end at the push's code while the process exits 1. A landing that never pushed writes its end at its exit with landed false",
+     "class": "within",
+     "why": "D5's wording is 'a last end line with its exit code'. D5 says what that line is FOR: refusals counted from the landing's own line, and D10 and D11 reading whether a task landed. D7 reads landed 'whatever its code', so a pushed landing whose tail raised is a landing, and the tail's exit 1 still stands on the after-push line. No reader loses a fact. A refused landing still ends with its own code and landed false. This is the mechanism the previous round asked for, and it makes a stop in the tail read as landed. It departs from D5's wording, not from its outcome."
+    },
+    {
+     "id": "T06-after-push",
+     "summary": "A new step, after-push, books the push's tail (the fresh block's start, the work-budget view after an engine landing). It comes after end, and a raise there is its own line's code",
+     "class": "within",
+     "why": "FR-003 names 'the push' as a phase, and this is the push's tail, split out so that end can be written at the push. Every second is still booked to a named line. A new step name for part of a requested phase only makes the requested breakdown finer."
+    },
+    {
+     "id": "T06-end-tasks",
+     "summary": "end carries tasks split as main splits them (D16's commas, T18's) and landed",
+     "class": "within",
+     "why": "D5 requires tasks split as D16 splits them. D7 and D11 define landed on the end line."
+    },
+    {
+     "id": "T06-phase-task-first",
+     "summary": "Each phase line carries the first task landed as task; end carries every id asked",
+     "class": "within",
+     "why": "A run of several tasks cannot be divided between them. D5 puts the full list on end, which is where D7, D10 and D11 read a landing, and every second is still booked."
+    },
+    {
+     "id": "T06-main-refusals",
+     "summary": "main's own refusals (no NOTE=, no feature directory) write an end for the tasks they name; a usage refusal that names no task writes none",
+     "class": "within",
+     "why": "D5 defines end by 'the task ids it was asked to land'. A usage refusal was asked to land nothing, so D5 owes no line for it."
+    },
+    {
+     "id": "T06-landed",
+     "summary": "landed is true when the push went out (exit 0, or 3 MERGED). D7's rework, D10's and D11's landing, T13, T14 and the data model's Landing read landed, restated with this task",
+     "class": "within",
+     "why": "D7 and D11 in the accepted spec say exactly this. The restatement brings the other tasks into line with the spec and does not widen it."
+    },
+    {
+     "id": "T06-append-row-for",
+     "summary": "append_row_for(root, feature, row) beside append_row in the held writer (make guard-edit) files a line in the feature its word names, before T26's chain. A blank word or one naming no feature leaves the chain as it was, and T05's callers are unchanged",
+     "class": "within",
+     "why": "FR-005's readers read per feature. Without this, a landing of a task never started in the clone would be filed under fallback, where T13 and T14 would not find its end. It reaches only the new callers and adds no behavior beyond what the requested lines need."
+    },
+    {
+     "id": "T06-make-field",
+     "summary": "make is the outermost make's first goal, read from /proc as T05's lines read theirs; land when no make is above",
+     "class": "within",
+     "why": "This is T05's row form applied to this source."
+    },
+    {
+     "id": "T06-stop-before-push",
+     "summary": "A landing stopped (make land-stop, TERM) before its push went out writes no line past its last finished step and reads as open, never as refused",
+     "class": "within",
+     "why": "A stop is not a refusal, and a landing stopped before its push did not land. Reading it as open answers D7, D10 and D11 correctly. The running step's split is lost, but FR-002 still books the run's span."
+    },
+    {
+     "id": "T06-stop-after-push",
+     "summary": "A landing stopped in the push's tail (after-push) already has its end written, landed true",
+     "class": "within",
+     "why": "This closes the previous round's NOT LEGITIMATE finding. The end at the push now carries landed true before the tail starts, so D10 and D11 read the task as landed, and red-first cases cover a tail that raises after the push."
+    },
+    {
+     "id": "T06-stop-window",
+     "summary": "One window stays open. A stop while sync-with-main.sh done runs, after the remote took the push but before the script reports it, writes no end. The section points to the push's tick commit on main as the record",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Last round's exception rested on implementation awkwardness ('no signal handler's work'). This one rests on knowledge: until the push command reports, the landing process does not hold the fact that the remote took the push, so no writer in the landing can record landed true in that interval. A pre-push guess would write a false landed whenever the push then fails. The rule is impossible here, not merely awkward, and the section has already shrunk the gap to that interval. The tick commit on main is not what makes this legitimate: D10 and D11 as cited read the end line, not main. The real outcome in the window is that the landing reads as open, never as refused. D7's rework count therefore stays right, D10 misses a resume of that task's builder, and D11 keeps that task's static count unreset. That is one rare interleaving (a manual stop during the push itself), with the outcome confined to that one task. This is the one case the previous round's requirement ('once a landing's push has gone out, a later stop must not leave it reading as unlanded') cannot reach. The ruling covers only the interval before the script reports the push went out. The block also says 'before the script exits'. If sync-with-main.sh reports success and then goes on working before it exits, that stretch is not unknowable: end must be written when the report comes, and an end held until the exit would be outside this ruling."
     }
    ],
    "verdict": "CLEAR"

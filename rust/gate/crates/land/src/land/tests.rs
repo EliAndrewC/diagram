@@ -328,6 +328,8 @@ pub(super) fn fx(tag: &str) -> Fx {
     land.cpus = Some(16);
     land.boxes = false;
     land.arbiter_ok = false;
+    // the make target a landing names in its phase lines: `make land`'s, whatever make runs the tests (feature 451 T06)
+    land.make_target = "land".to_owned();
     land.inproc = Box::new(Fake(Rc::clone(&answers)));
     land.export("STUB_DIR", &stub.to_string_lossy());
     Fx {
@@ -557,7 +559,7 @@ fn a_work_budget_run_that_is_no_json_fails_the_landing_after_its_push() {
     assert!(land(&fx).is_err());
 }
 
-fn fx_engine_with_budget(tag: &str, run: &str) -> Fx {
+pub(super) fn fx_engine_with_budget(tag: &str, run: &str) -> Fx {
     let fx = fx(tag);
     fx.in_delta("l7r/diagram/a.py", "x = 1\n");
     put(

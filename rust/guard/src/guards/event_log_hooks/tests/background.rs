@@ -247,7 +247,14 @@ fn a_gate_tools_row_is_filed_stamped_and_named_by_its_session() {
         }
         row
     };
-    let log = append_row_in(&b.d, phase(Some("T03")), "2026-11-20T09:00:00.000Z", &env).unwrap();
+    let log = append_row_in(
+        &b.d,
+        None,
+        phase(Some("T03")),
+        "2026-11-20T09:00:00.000Z",
+        &env,
+    )
+    .unwrap();
     assert!(log.ends_with("451-a.jsonl"), "{}", log.display());
     let row = last_line(&log);
     assert_eq!(
@@ -263,26 +270,57 @@ fn a_gate_tools_row_is_filed_stamped_and_named_by_its_session() {
     let mut own = phase(None);
     own.insert("t".into(), json!("X"));
     own.insert("sid".into(), json!("s1"));
-    let log = append_row_in(&b.d, own, "T", &none).unwrap();
+    let log = append_row_in(&b.d, None, own, "T", &none).unwrap();
     assert!(log.ends_with("449-b.jsonl"), "{}", log.display());
     let row = last_line(&log);
     assert_eq!(
         (&row["t"], &row["sid"], &row["task"], &row["fallback"]),
         (&json!("X"), &json!("s1"), &json!("T236"), &json!(true))
     );
-    let row = last_line(&append_row_in(&b.d, phase(None), "T", &none).unwrap());
+    let row = last_line(&append_row_in(&b.d, None, phase(None), "T", &none).unwrap());
     assert_eq!(row["sid"], json!(""));
     let mut blank = phase(None);
     blank.insert("ev".into(), json!(""));
-    assert!(append_row_in(&b.d, blank, "T", &env).is_none());
-    assert!(append_row_in(&b.d, serde_json::Map::new(), "T", &env).is_none());
+    assert!(append_row_in(&b.d, None, blank, "T", &env).is_none());
+    assert!(append_row_in(&b.d, None, serde_json::Map::new(), "T", &env).is_none());
     let to = b.d.join("events");
     let elsewhere = |k: &str| (k == "L7R_EVENTS_DIR").then(|| to.to_string_lossy().into_owned());
     assert_eq!(
-        append_row_in(&b.d, phase(Some("T03")), "T", &elsewhere).unwrap(),
+        append_row_in(&b.d, None, phase(Some("T03")), "T", &elsewhere).unwrap(),
         to.join("451-a.jsonl")
     );
     // the public door: the process's own clock and environment
     let row = last_line(&super::super::append_row(&b.d, phase(Some("T03"))).unwrap());
     assert!(row["t"].as_str().unwrap().ends_with('Z'), "{row}");
+}
+
+/// A row whose feature the tool names (451 T06, a landing's `F=`): filed in that feature's log whatever its task's starts say - a task
+/// never started there is not the session's - its task kept and not marked; a word naming no one feature leaves T26's chain to file it.
+#[test]
+fn a_gate_tools_row_names_its_feature() {
+    let b = Builders::new("bg-append-row-for");
+    let row = |task: &str| {
+        let mut row = serde_json::Map::new();
+        row.insert("ev".into(), json!("Phase"));
+        row.insert("task".into(), json!(task));
+        row
+    };
+    // T99 was never started anywhere: the chain alone would file it by feature.json's 449-b, marked
+    let log = append_row_in(&b.d, Some("450-c"), row("T99"), "T", &none).unwrap();
+    assert!(log.ends_with("450-c.jsonl"), "{}", log.display());
+    let line = last_line(&log);
+    assert_eq!((&line["task"], line.get("fallback")), (&json!("T99"), None));
+    // the number alone names its one directory; T03, started in 451-a, still goes where the tool says
+    let log = append_row_in(&b.d, Some("449"), row("T03"), "T", &none).unwrap();
+    assert!(log.ends_with("449-b.jsonl"), "{}", log.display());
+    // a word naming no feature: the chain's own filing, T03 by its start
+    let log = append_row_in(&b.d, Some("7"), row("T03"), "T", &none).unwrap();
+    assert!(log.ends_with("451-a.jsonl"), "{}", log.display());
+    // a blank word names nothing, not `specs/` itself
+    let log = append_row_in(&b.d, Some(" "), row("T03"), "T", &none).unwrap();
+    assert!(log.ends_with("451-a.jsonl"), "{}", log.display());
+    // the public door
+    assert!(super::super::append_row_for(&b.d, "450-c", row("T99"))
+        .unwrap()
+        .ends_with("450-c.jsonl"));
 }

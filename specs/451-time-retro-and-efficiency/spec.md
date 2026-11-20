@@ -4,7 +4,7 @@
 
 **Created**: 2026-11-19
 
-**Status**: APPROVED by `spec-fidelity` - round 3 verdict FAITHFUL (2026-11-19)
+**Status**: APPROVED by `spec-fidelity` - round 3 verdict FAITHFUL (2026-11-19); the FR-013 amendment FAITHFUL in its round 2 (2026-11-20)
 
 **Approved**: the GM, 2026-11-19, "All 6 of your proposed improvements sound good so please do all of that, along with your 4 proposed ideas for filling ion what's missing from gathering this kind of data.  And let's make sure all of the enforcement is real enforcement and not just instructions."
 
@@ -172,7 +172,15 @@ another feature, or failing any other quick check, is withdrawn and refused.
 - **FR-010**: The three slowest hook suites are split so each shard takes about 20 s or less.
 - **FR-011**: `make land` reads commas in `T=` as spaces; `make task-add` runs `make quick`'s checks over what it writes and, on any
   failure the new line introduces, withdraws the line and refuses, naming the failure.
-- **FR-012**: Every refusal of FR-006 to FR-009 and FR-011 has a red-first test proving it fires (the check deleted, the test red), an
+- **FR-013**: Performance work goes first, in every feature (the GM 2026-11-20, request.md: "can we in general priotitize performance
+  improvements going forward?"). A task is performance work when it is filed with `PERF=1` or tagged `[perf]` on its line (a task
+  that makes the engine, the checks, the gate, the landings or the builders' loop faster). `make task-start` refuses a task that is
+  not performance work while an open performance task exists in any active feature - one with an open box, not closed by its spec's
+  Status line and not set down since its last task-start (the Stop hook's own test, `set_down_hooks.rs`) - naming that task and the
+  command to start it,
+  with an escape of a reason (a performance task waiting on another task's landing); and the Stop hook's "start the next" names an
+  open performance task before any other.
+- **FR-012**: Every refusal of FR-006 to FR-009, FR-011 and FR-013 has a red-first test proving it fires (the check deleted, the test red), an
   escape of a reason of two words or more that is recorded, and a message naming the compliant command (the project's guard rules).
 
 ### Key Entities
@@ -194,6 +202,10 @@ another feature, or failing any other quick check, is withdrawn and refused.
 - **SC-004**: No hook-suite shard takes more than about 20 s (measured the same way the suites' timings are now) (FR-010).
 - **SC-005** (FR-006, FR-007): In the first full day after landing, `make static` runs per task fall to at most two but for recorded escapes, and no
   builder's context passes the threshold but for a recorded escape.
+- **SC-006** (FR-013): After T28 lands, no task that is not performance work is started while an open performance task exists in an
+  active feature (FR-013's meaning) but
+  for a recorded escape (read off the task-starts record and the escape log), and every Stop-hook "start the next" names an open
+  performance task while one exists.
 
 ## Assumptions
 
@@ -209,3 +221,5 @@ another feature, or failing any other quick check, is withdrawn and refused.
 - 2026-11-19, round 1 (spec-fidelity, MODE 2): CHANGES REQUIRED, 5 items - FR-009 enforced the deferral's form, not fixing in the task by default, and carried nothing of "full coverage up front" (now: a deferral states why it is not fixed in the task; a fix of a class says how every instance was found); FR-011 ran one lint rule where `make quick` was approved (now: `make quick`'s checks); the poll interval was an instruction (now: the no-poll guard refuses a slower wait); FR-006 reached every subagent, replaced the approved per-stage fresh builder with a size cap and overstated its saving (now: builders only, one task a builder with a resume after its landing refused, the cap a 300k backstop between the two figures); "agents nudged" traced to nothing (dropped).
 - 2026-11-19, round 2 (spec-fidelity-verify, MODE 3): CHANGES REQUIRED, 4 items - User Story 2 and SC-005 still reached every agent (now: builders, with a review agent passing and a landed builder's resume refused in the test); the Assumptions kept the old 400k (now 300k); User Story 5's test passed what FR-009 refuses (now: its five cases); the slower-wait refusal reached every agent's Bash (now: the main session's waits, as approved).
 - 2026-11-19, round 3 (spec-fidelity-verify, MODE 3): FAITHFUL - round 2's four items resolved, nothing new made false or unrequested.
+- 2026-11-20, round 1 of the amendment pass (spec-fidelity-verify, MODE 3): CHANGES REQUIRED, 1 item - FR-013's "any active feature" undefined, so the refusal's reach is not set (now: defined as the Stop hook's open, not closed, not set-down test, and SC-006 the same).
+- 2026-11-20, round 2 of the amendment pass (spec-fidelity-verify, MODE 3): FAITHFUL - the round's item resolved (the active-feature test checked against `set_down_hooks.rs`'s `verdict()`), nothing new made false or unrequested.

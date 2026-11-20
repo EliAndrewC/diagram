@@ -14,7 +14,7 @@ or by its `append_row` (the gate's tools, in process). Fields today: `t`, `sid`,
 | `Stop`, `SubagentStop` | `inflight`: `[{id, type, make?}]` from `background_tasks` | the hook | every stop |
 | `SubagentStop` | `tok`: `{in, cached, created, out}` summed over the agent's transcript, deduped by `message.id`; `ctx`: the last call's context; `task`: the `T<n>` its meta `description` names | the hook | every agent stop (cumulative; the reader keeps the last per `aid`) |
 | `PreToolUse` (Agent) | `task`: the `T<n>` its `description` (else its prompt's first line) names | the hook | every dispatch |
-| `Phase` | `src` (`rust` or `land`), `step` (`build`, `test`, `cover-build`, `cover-run`, `lint`, `format`; `cheap`, `gate`, `cohort`, `claims`, `push`), `crates` (rust: the crate dirs), `t0`, `t1` (UTC, ms), `code`; `make` (the outermost `make`'s first target, `rust-<cmd>` with none above) and `clone` (the tree's root), plan D4 | `append_row`, called by `rustc` and `land` | each step's end |
+| `Phase` | `src` (`rust` or `land`), `step` (`build`, `test`, `cover-build`, `cover-run`, `lint`, `format`; `cheap`, `gate`, `cohort`, `claims`, `push`, `end`, `after-push`), `crates` (rust: the crate dirs), `t0`, `t1` (UTC, ms), `code`; `make` (the outermost `make`'s first target, `rust-<cmd>` with none above, `land` for a landing with none) and `clone` (the tree's root), plan D4; a landing's lines carry `task` (its first task), and its `end` `tasks` (every id asked) and `landed` (its push went out), plan D5 | `append_row`, called by `rustc` and `land` | each step's end; a landing's `end` the moment its push went out, else at its exit, refused or raised |
 
 A line whose `make` target the table does not know is booked `other`, never dropped (spec edge case). A `BgEnd` never seen leaves its
 launch OPEN from its start (spec edge case): the reader books it open to the window's end, never zero.
@@ -49,7 +49,7 @@ why; a target moved between buckets later is a one-line change.
 - **The agent's task** (plan D10, D2's chain): its meta `description`'s `T<n>`; else the `task` its FIRST event-log line carries;
   else the feature's `task-starts.jsonl` entry in force at its dispatch. None found: the landing check passes with a `context-cap:
   resume, no task` guard-log record; the cap check needs no task, so a builder past the cap is still refused.
-- **Landing** (D10 and D11 alike): a `Phase` `end` line of code 0 whose `tasks` names the task (plan D5), whether the landing ran in
+- **Landing** (D10 and D11 alike): a `Phase` `end` line whose `landed` is true (its push went out: code 0, or 3 with its ticks standing, or a raise after it) and whose `tasks` names the task (plan D5), whether the landing ran in
   the foreground or the background; a refused landing is none.
 - **Landed** (a resume refused): a landing of the agent's task after its dispatch, or the task a ticked box in the feature's `tasks.md`
   or in `tasks-done.md` (`shared::speckit::tasks`), whatever the log holds.

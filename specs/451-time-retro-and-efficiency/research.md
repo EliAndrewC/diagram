@@ -129,7 +129,8 @@ the main session is a payload with no `agent_id`. These are waits on an agent th
 - A task's starts are `.git/task-starts.jsonl`'s lines for it, and a task can have several: 48 of the 498 (feature, task) pairs in the
   clone's file have more than one line (observed 2026-11-20, method: the file's lines counted per feature and task in a Python
   reader). So a count reset at a task's LAST start would let a second `make task-start` zero it; plan D11 counts from the last landing,
-  else the FIRST start. A landing is a `make land` of it that succeeded: plan D5's `end` line of code 0 naming the tasks it landed
+  else the FIRST start. A landing is a `make land` of it that succeeded: plan D5's `end` line whose `landed` is true (its push went out,
+  code 0 or 3; T06), naming the tasks it landed
   (`land`'s `T=`, which the writer's task capture does not read today: it reads `T=` for `tick`, `task-start` and `decide` only). A
   refused landing is not a landing, and the `end` line carries its own tasks because a `run_in_background` landing's call returns before
   its `end` is written, so no span ties the two.
