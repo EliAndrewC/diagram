@@ -785,35 +785,8 @@ tests/hooks/                 # the suites, the verdict replay through phase 1
 <!-- plan-archive: T230 to T230 moved to plan-done.md, 2026-11-20 (feature 375 FR-044) -->
 <!-- plan-archive: T231 to T230 moved to plan-done.md, 2026-11-20 (feature 375 FR-044) -->
 <!-- plan-archive: T231 to T231 moved to plan-done.md, 2026-11-20 (feature 375 FR-044) -->
-### T232 (T231's plan review: the hamlet reviews feature 444 FR-023 defers might be tracked only by staleness)
-
-- **Approach**: measured first, in a scratch remote, mirror and clone: a hamlet's base census is the mirror's untracked `.driver.json`, its drawing on main, so once a push lands and main redraws the hamlet (the push's last step), nothing in the delta still owes a review set aside at rust-only; thrown back to integrated after that, the gate said clean - lost, and a hamlet edited and not redrawn set nothing aside at all (observed 2026-11-19, method: Mizuguchi's seed changed so it draws barley, pushed at rust-only, main redrawn, a later landing, the scratch switch thrown). Nothing recorded which reviews the port deferred. The gate now writes each set-aside unit to a tracked `dev/deferred-reviews.jsonl` (its time and commit; merged by union) and commits it with the push; at integrated `reviews owed` owes every open unit whose hamlet and element still stand, and a review found writes its `reviewed` row; the `REVIEW_GATE_OK` escape skips the refusal, never the record. At rust-only the gate now redraws a stale hamlet too (about 0.2 s, measured 2026-11-19 (the scratch run, timed)), reversing T231's skip, since a hamlet not redrawn records nothing; a failed draw there refuses nothing (FR-023). The two reviews already lost are backfilled (Kuwabata's wet paddy, Sawada's field pond: drawn by the Rust, absent from the last Python census), owed at the throw back (observed 2026-11-19, method: the switch thrown in a scratch worktree, `reviews owed --landing` naming both). Red first: 8 of 13 checks of the new case failed on the old gate, and the escaped push's 2 (measured 2026-11-19 (the review-gate suite against the old gate)).
-
-| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
-|---|---|---|---|---|
-| a deferred review recorded and owed at the throw back | the review-gate suite's case_5, the reviews crate's deferred tests | `owed/deferred.rs`, `review-gate.sh`, the port reader moved to `core` | none | none |
-
-### T232 Approach (checklist part A)
-
-1. **The goal, in the world.** A hamlet review deferred while the port switch is at rust-only is owed when it is thrown back, however the hamlet was drawn in between.
-2. **The constraints.** Feature 444 FR-023 (the deferral) and FR-019; constitution XIV; T231's plan review.
-3. **Where each comes from.** G: the GM's 2026-11-07 words (444's request.md, amendment 10); O: this task's measurement.
-4. **Do they describe the world here?** Yes: the scratch run lost the review as above.
-5. **The order.** After T231, before T158.
-6. **The exits.** Green: the case red on the old gate and green now, `make quick`, `make static`, `make hooks-test` green. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** none
-8. **The budget.** One landing (gated).
-9. **Done, measured.** In scratch, an un-redrawn edit recorded, pushed, redrawn on main, a later landing, the switch thrown: the review owed.
-10. **Before moving a constant.** n/a
-11. **Before fitting things into room.** n/a
-12. **Before any fix.** A deferred review was lost before the throw back: a check passing the bad. Two reviews were already lost and are owed again.
-
-**Found and left?** none
-
-**Performance work?** no
-
-
-
+<!-- plan-archive: T232 to T231 moved to plan-done.md, 2026-11-20 (feature 375 FR-044) -->
+<!-- plan-archive: T232 to T232 moved to plan-done.md, 2026-11-20 (feature 375 FR-044) -->
 ### T233 (<why: the finding or measurement that files it>)
 
 - **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
