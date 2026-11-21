@@ -26,7 +26,7 @@ for line in sys.stdin:
 
 /// The testkit's record with the stub runner, the style guide, the variant index, and the knob registry and choices table the modal
 /// bundles read in process (feature 449 T149, where the runner answered `knobs` and `knob_table`).
-pub fn scratch(tag: &str) -> l7r_guard::shared::tempdir::TempDir {
+pub fn scratch(tag: &str) -> l7r_shared::tempdir::TempDir {
     let root = record(tag);
     put(&root, "scripts/bundle_door.py", RUNNER);
     put(&root, "research/STYLE.md", "# Style\n");

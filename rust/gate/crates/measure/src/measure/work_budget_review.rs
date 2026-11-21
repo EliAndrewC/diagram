@@ -164,7 +164,7 @@ fn kept_or_run(
     let dir = common_git_dir(root)
         .ok_or("work-budget-review: no git directory to keep the counts in")?
         .join("work-budget-review");
-    let key = l7r_guard::shared::sha256::hex(format!("{KEPT_FORM}\0{key}\0{asked}").as_bytes());
+    let key = l7r_shared::sha256::hex(format!("{KEPT_FORM}\0{key}\0{asked}").as_bytes());
     let file = dir.join(format!("{group}-{}.txt", &key[..16]));
     if let Ok(text) = std::fs::read_to_string(&file) {
         return Ok((text, true));

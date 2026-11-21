@@ -12,8 +12,8 @@ use std::path::Path;
 use std::sync::LazyLock;
 
 use fancy_regex::Regex;
-use l7r_guard::shared::checks::pages::read_page;
-use l7r_guard::shared::pyjson::{dumps, sorted};
+use l7r_shared::checks::pages::read_page;
+use l7r_shared::pyjson::{dumps, sorted};
 use serde_json::{json, Map, Value};
 
 use super::index::{
@@ -44,7 +44,7 @@ fn blob_map(qdir: &Path) -> Option<std::path::PathBuf> {
         qdir,
         &["rev-parse", "--path-format=absolute", "--git-common-dir"],
     );
-    let common = l7r_guard::shared::py_text::strip(&common);
+    let common = l7r_shared::py_text::strip(&common);
     (!common.is_empty()).then(|| Path::new(common).join(BLOBS))
 }
 
@@ -80,7 +80,7 @@ pub fn keep_texts(qdir: &Path, units: &Map<String, Value>) -> Result<usize, Fail
         }
         let sha = crate::claims::stdin_git(qdir, &["hash-object", "-w", "--stdin"], &text);
         if let Some(sha) = sha {
-            blobs.insert(fp.clone(), json!(l7r_guard::shared::py_text::strip(&sha)));
+            blobs.insert(fp.clone(), json!(l7r_shared::py_text::strip(&sha)));
             kept += 1;
         }
     }
@@ -283,13 +283,13 @@ fn gather_code(
     }
     let entry = g.codes.get_mut(&uid).unwrap_or_else(|| unreachable!());
     entry.1.push(key.to_owned());
-    let line = l7r_guard::shared::py_text::strip(&row.claim.line);
+    let line = l7r_shared::py_text::strip(&row.claim.line);
     let added = entry
         .0
         .iter()
         .flat_map(|h| h.split('\n'))
         .filter_map(|x| x.strip_prefix('+'))
-        .map(l7r_guard::shared::py_text::strip);
+        .map(l7r_shared::py_text::strip);
     let mut hit = false;
     for x in added {
         if !line.is_empty() && x.contains(line) {
@@ -773,7 +773,7 @@ pub fn read_reply(
     warned: &mut String,
 ) -> Result<String, Fail> {
     let reply = crate::record::owed::answers::reply_of(root, path)?;
-    if l7r_guard::shared::py_text::strip(&reply).is_empty() {
+    if l7r_shared::py_text::strip(&reply).is_empty() {
         let _ = writeln!(
             warned,
             "{cmd}: refused - no reply text in {path}; {nothing}"

@@ -36,7 +36,7 @@ fn a_kept_cost_is_served_while_its_transcript_stands() {
     let root = projects(&env);
     let t = root.join("p/s/subagents/agent-a1.jsonl");
     let meta = std::fs::metadata(&t).unwrap();
-    let stat = json!([meta.len(), l7r_guard::shared::ledger::cost::py_mtime(&meta)]);
+    let stat = json!([meta.len(), l7r_shared::ledger::cost::py_mtime(&meta)]);
     let kept_file = env.cwd.join(".git/l7r-cache/ledger-settled.json");
     let ps = passes(&[
         pass("quote-check", "a1", "s", &json!({})),

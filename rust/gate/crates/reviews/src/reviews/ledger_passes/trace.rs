@@ -9,15 +9,15 @@ use std::path::{Path, PathBuf};
 use std::sync::LazyLock;
 
 use fancy_regex::Regex;
-use l7r_guard::shared::checks::reply::py_lines;
-use l7r_guard::shared::py_text::strip;
+use l7r_shared::checks::reply::py_lines;
+use l7r_shared::py_text::strip;
 use serde_json::Value;
 
 use super::{py_path, text, Env, Pass};
 use crate::record::bundle::py_str;
 
 fn re(pattern: &str) -> Regex {
-    l7r_guard::shared::regex::build(pattern).unwrap_or_else(|e| unreachable!("{e}"))
+    l7r_shared::regex::build(pattern).unwrap_or_else(|e| unreachable!("{e}"))
 }
 
 static FEATURE_DIR: LazyLock<Regex> = LazyLock::new(|| re(r"specs/(\d{3})-"));
@@ -168,14 +168,14 @@ fn unit_prompt(p: &Pass, transcripts: &Path) -> Result<String, String> {
             continue;
         }
         let content = match rec.get("message") {
-            Some(m) if !l7r_guard::shared::checks::falsy(Some(m)) => {
+            Some(m) if !l7r_shared::checks::falsy(Some(m)) => {
                 m.as_object().ok_or_else(|| no_get(m))?.get("content")
             }
             _ => None,
         };
         match content {
             None => {}
-            c if l7r_guard::shared::checks::falsy(c) => {}
+            c if l7r_shared::checks::falsy(c) => {}
             Some(Value::String(s)) => return Ok(s.clone()),
             Some(Value::Array(items)) => {
                 let mut said = Vec::new();

@@ -5,8 +5,8 @@ use std::process::Command;
 
 use super::{cli, load, missing, ranges, split};
 
-fn scratch(tag: &str) -> l7r_guard::shared::tempdir::TempDir {
-    let dir = l7r_guard::shared::tempdir::TempDir::new(&format!("gate-exempt-{tag}"));
+fn scratch(tag: &str) -> l7r_shared::tempdir::TempDir {
+    let dir = l7r_shared::tempdir::TempDir::new(&format!("gate-exempt-{tag}"));
     std::fs::create_dir_all(dir.join("dev")).unwrap();
     dir
 }
@@ -50,7 +50,7 @@ const LIVE: &str = r#"{"path": "a.py", "stages": ["seat", "hem"]}"#;
 const DONE: &str = r#"{"path": "b.py", "stages": ["sink"]}"#;
 const GONE: &str = r#"{"path": "gone.py", "stages": ["seat"]}"#;
 
-fn three(tag: &str) -> l7r_guard::shared::tempdir::TempDir {
+fn three(tag: &str) -> l7r_shared::tempdir::TempDir {
     let dir = scratch(tag);
     record(&dir, &[LIVE, DONE, GONE].join(","));
     file(&dir, "a.py");

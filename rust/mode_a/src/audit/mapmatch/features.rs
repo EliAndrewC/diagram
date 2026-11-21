@@ -9,7 +9,7 @@
 use std::path::Path;
 
 use l7r_gate_research::Error;
-use l7r_guard::shared::pyjson::truthy;
+use l7r_shared::pyjson::truthy;
 use serde_json::{Map, Value};
 
 use crate::audit::checks::min_of;
@@ -288,7 +288,7 @@ pub fn features(key: &str, cls: &str, recs: Option<&Value>) -> Result<Vec<MapFea
 pub fn load_map(path: &Path) -> Result<Value, Error> {
     let text = l7r_gate_core::record::read_text(path)
         .map_err(|e| crate::py::os_error(&e, &path.to_string_lossy()))?;
-    l7r_guard::shared::pyjson::loads(&text)
+    l7r_shared::pyjson::loads(&text)
         .map_err(|e| Error::new("json.decoder.JSONDecodeError", e.to_string()))
 }
 

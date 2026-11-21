@@ -84,7 +84,7 @@ pub fn lane(
         let row = archive_url(how.root, url, &who, client.as_mut(), store, false)?;
         let outcome = row
             .get("outcome")
-            .map_or_else(String::new, l7r_guard::shared::pyjson::py_str);
+            .map_or_else(String::new, l7r_shared::pyjson::py_str);
         (how.say)(&format!("{outcome:26} {url}"));
         out.push(row);
         if store.unpushed() >= PUSH_EVERY {

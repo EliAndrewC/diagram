@@ -43,7 +43,7 @@ const COLUMNS: [&str; 11] = [
 ];
 
 fn compiled(p: &str) -> Regex {
-    l7r_guard::shared::regex::build(p).unwrap_or_else(|e| unreachable!("{e}"))
+    l7r_shared::regex::build(p).unwrap_or_else(|e| unreachable!("{e}"))
 }
 
 static WALL: LazyLock<Regex> = LazyLock::new(|| compiled(r"(\d+(?:\.\d+)?)\s*s\b"));

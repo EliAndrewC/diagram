@@ -65,7 +65,7 @@ fn grams_fingerprints_and_overlap() {
     let long = "x".repeat(1200);
     assert_eq!(
         fingerprint(Some(&long)),
-        l7r_guard::shared::sha1::hex("x".repeat(1000).as_bytes())
+        l7r_shared::sha1::hex("x".repeat(1000).as_bytes())
     );
     assert_eq!(body_grams(Some("abc")).len(), 0);
     assert_eq!(body_grams(Some("ab  cd")), grams_of("ab cd", 10));

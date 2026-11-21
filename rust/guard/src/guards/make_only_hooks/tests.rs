@@ -615,12 +615,16 @@ fn the_guards_own_sources_are_guard_writes_from_the_shell_but_their_tests_are_no
         "cat > scripts/hooks/l7r-guard.sh <<'EOF'\nx\nEOF",
         "cd rust/guard && cat >> Cargo.toml <<'EOF'\nx\nEOF",
         "cd rust/guard/src/shared && tee tree.rs",
+        "cd rust/guard/shared/src && tee tree.rs",
+        "sed -i s/a/b/ rust/guard/shared/src/env.rs",
+        "cd rust/guard/shared && cat >> Cargo.toml <<'EOF'\nx\nEOF",
     ] {
         assert_eq!(v(cmd), "guard-write", "{cmd}");
     }
     for cmd in [
         "cat >> rust/guard/src/guards/make_only_hooks/tests.rs <<'EOF'\nx\nEOF",
         "cd rust/guard/src/shared/tests && tee tree.rs",
+        "cd rust/guard/shared/src/context && tee tests.rs",
         "grep -n held rust/guard/src/guards/guard_file_hooks.rs",
     ] {
         assert_eq!(v(cmd), "ok", "{cmd}");

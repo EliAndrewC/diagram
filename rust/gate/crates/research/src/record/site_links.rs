@@ -102,7 +102,7 @@ fn attr_at(text: &str, start: usize) -> Option<(usize, usize, usize)> {
         if c == '>' {
             return None;
         }
-        if l7r_guard::shared::py_text::is_space(c) {
+        if l7r_shared::py_text::is_space(c) {
             let next = at + c.len_utf8();
             if let Some(attr) = ["href=\"", "src=\""]
                 .iter()

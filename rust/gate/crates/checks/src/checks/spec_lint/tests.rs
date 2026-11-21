@@ -14,7 +14,7 @@ fn feature(
     spec: &str,
     tasks: Option<&str>,
     research: Option<&str>,
-) -> (l7r_guard::shared::tempdir::TempDir, PathBuf) {
+) -> (l7r_shared::tempdir::TempDir, PathBuf) {
     let root = scratch("spec-lint-test");
     let dir = root.join("specs/999-a-feature");
     std::fs::create_dir_all(&dir).unwrap();

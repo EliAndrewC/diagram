@@ -13,8 +13,8 @@ pub(crate) const TYPES: &str =
     r#"[{"tier": "magistracies"}, {"tier": "country-shrines"}, {"title": "no tier"}]"#;
 
 /// A tree holding one folder of every kind and every way a folder is reported.
-pub(crate) fn fixture(tag: &str) -> l7r_guard::shared::tempdir::TempDir {
-    let root = l7r_guard::shared::tempdir::TempDir::new(&format!("pool-walk-{tag}"));
+pub(crate) fn fixture(tag: &str) -> l7r_shared::tempdir::TempDir {
+    let root = l7r_shared::tempdir::TempDir::new(&format!("pool-walk-{tag}"));
     put(&root, DECLARATION, TYPES);
     for rel in [
         "pool/CLAUDE.md",

@@ -3,9 +3,9 @@
 use std::collections::{HashMap, HashSet};
 use std::path::Path;
 
-use l7r_guard::shared::py_text::split;
-use l7r_guard::shared::pyjson;
-use l7r_guard::shared::sha1;
+use l7r_shared::py_text::split;
+use l7r_shared::pyjson;
+use l7r_shared::sha1;
 use serde_json::{json, Map, Value};
 
 use super::args::{parse, Spec};
@@ -296,7 +296,7 @@ pub fn owed_in(delta: &mut Delta) -> Result<Vec<Row>, Fail> {
 /// `NotADirectoryError` on a file - exit 1, nothing on stdout. Its last line is kept; the traceback's text is not bound
 /// (`ask:449-usage-text`).
 fn no_directory(root: &Path) -> Option<String> {
-    let shown = l7r_guard::shared::py_text::repr(&root.to_string_lossy());
+    let shown = l7r_shared::py_text::repr(&root.to_string_lossy());
     match std::fs::metadata(root) {
         Ok(m) if m.is_dir() => None,
         Ok(_) => Some(format!(

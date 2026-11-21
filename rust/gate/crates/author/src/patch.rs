@@ -22,15 +22,14 @@ use std::sync::LazyLock;
 
 use fancy_regex::Regex;
 use l7r_gate_core::Reply;
-use l7r_guard::shared::py_text::{is_space, repr, split, SPACE_CLASS};
-use l7r_guard::shared::pyjson::py_str;
+use l7r_shared::py_text::{is_space, repr, split, SPACE_CLASS};
+use l7r_shared::pyjson::py_str;
 use serde_json::Value;
 
 use crate::{raised, read_strict, reply};
 
-static INDENT: LazyLock<Regex> = LazyLock::new(|| {
-    l7r_guard::shared::regex::build(r"^[ \t]*").unwrap_or_else(|e| unreachable!("{e}"))
-});
+static INDENT: LazyLock<Regex> =
+    LazyLock::new(|| l7r_shared::regex::build(r"^[ \t]*").unwrap_or_else(|e| unreachable!("{e}")));
 
 /// `anchor` as a pattern in which any run of whitespace matches any other run. A line wrap is whitespace, so an anchor copied from
 /// rendered prose matches the file's own wrapped copy of it; every other character is escaped, so `(`, `*` or `.` match literally.
@@ -40,7 +39,7 @@ fn anchor_regex(anchor: &str) -> Regex {
         .map(|w| fancy_regex::escape(w).into_owned())
         .collect();
     // every word escaped: the pattern always compiles
-    l7r_guard::shared::regex::build(&words.join(&format!("[{SPACE_CLASS}]+")))
+    l7r_shared::regex::build(&words.join(&format!("[{SPACE_CLASS}]+")))
         .unwrap_or_else(|e| unreachable!("{e}"))
 }
 

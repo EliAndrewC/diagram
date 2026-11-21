@@ -95,7 +95,7 @@ fn truth_and_int_and_slices() {
             py_int(s).unwrap_err(),
             Raised::Refused(format!(
                 "invalid literal for int() with base 10: {}",
-                l7r_guard::shared::py_text::repr(s)
+                l7r_shared::py_text::repr(s)
             ))
         );
     }

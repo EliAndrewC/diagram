@@ -3,8 +3,8 @@
 
 use std::path::Path;
 
-use l7r_guard::shared::checks;
-use l7r_guard::shared::pyjson;
+use l7r_shared::checks;
+use l7r_shared::pyjson;
 use serde_json::{json, Value};
 
 const BATCHES: &str = "modal-batches.json";

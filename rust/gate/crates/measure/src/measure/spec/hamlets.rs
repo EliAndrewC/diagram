@@ -8,8 +8,8 @@
 use std::fmt::Write as _;
 use std::path::{Path, PathBuf};
 
-use l7r_guard::shared::py_text::{py_float_of, repr};
-use l7r_guard::shared::pyjson::py_float;
+use l7r_shared::py_text::{py_float_of, repr};
+use l7r_shared::pyjson::py_float;
 use serde_json::Value;
 
 use super::super::events::{py_str, read_text, truthy, Raised};

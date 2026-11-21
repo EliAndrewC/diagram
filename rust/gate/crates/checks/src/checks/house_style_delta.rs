@@ -11,14 +11,14 @@ use super::moves::moved_only;
 use super::{git_text, Outcome};
 
 pub(super) const USAGE_LOG_TOOL: &str = "check-house-style-delta";
-const WORDS: &str = include_str!("../../../../../guard/src/guards/house_style_words.tsv");
+const WORDS: &str = include_str!("../../../../../guard/shared/src/guards/house_style_words.tsv");
 const EXEMPT_DIRS: [&str; 3] = ["/.clones/", "/host-l7r-repo/", "/tests/hooks/fixtures/"];
 
-/// A pattern with no step limit (`l7r_guard::shared::regex`, T185). WHY here first (feature 449 T151): a word-boundary pattern's search
+/// A pattern with no step limit (`l7r_shared::regex`, T185). WHY here first (feature 449 T151): a word-boundary pattern's search
 /// gave up past a million steps with an `Err` its `find_iter` repeated without advancing, so `.flatten()` over it never ended - a
 /// one-line JSON of 157 KB hung `make quick` past ten minutes (40 KB ran in 0.1 s; 60 KB never ended); an `Err` ends a scan.
 fn pattern(text: &str) -> Regex {
-    l7r_guard::shared::regex::build(text).unwrap()
+    l7r_shared::regex::build(text).unwrap()
 }
 
 fn british() -> Vec<&'static str> {

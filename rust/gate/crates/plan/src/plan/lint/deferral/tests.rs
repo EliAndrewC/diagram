@@ -8,7 +8,7 @@ use crate::checks::scratch;
 const TASKS: &str = "# Tasks\n\n- [ ] T123 open one\n- [ ] T124 open two\n- [x] T120 ticked\n- [ ] T22 the close\n- [ ] T32 a\n- [ ] T33 b\n- [ ] T34 c\n";
 const DONE: &str = "# Done\n\n- [x] T110 archived\n";
 
-fn fixture() -> (l7r_guard::shared::tempdir::TempDir, Boxes) {
+fn fixture() -> (l7r_shared::tempdir::TempDir, Boxes) {
     let dir = scratch("deferral");
     std::fs::write(dir.join("tasks.md"), TASKS).unwrap();
     std::fs::write(dir.join("tasks-done.md"), DONE).unwrap();

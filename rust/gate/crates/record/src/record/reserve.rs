@@ -16,9 +16,9 @@ use fancy_regex::Regex;
 use l7r_gate_pages::escape_log::{escape, Env};
 use l7r_gate_research::record::source_tags::{load_vocabulary, parse};
 use l7r_gate_research::resolve;
-use l7r_guard::shared::consulted;
-use l7r_guard::shared::py_text::{fmt_g, repr, strip};
-use l7r_guard::shared::pyjson::{dumps, py_str};
+use l7r_shared::consulted;
+use l7r_shared::py_text::{fmt_g, repr, strip};
+use l7r_shared::pyjson::{dumps, py_str};
 use serde_json::{json, Value};
 
 /// Each kind's directory under the clone, in `sorted(DIRS)` order.
@@ -53,7 +53,7 @@ fn os_error(e: std::io::Error) -> Refused {
     raised("OSError", e.to_string())
 }
 
-fn from_fault(f: l7r_guard::shared::blocked::Fault) -> Refused {
+fn from_fault(f: l7r_shared::blocked::Fault) -> Refused {
     raised(f.kind, f.message)
 }
 
@@ -137,7 +137,7 @@ fn ledger_rows(mirror: &Path) -> Result<Vec<serde_json::Map<String, Value>>, Ref
                 "AttributeError",
                 format!(
                     "'{}' object has no attribute 'get'",
-                    l7r_guard::shared::blocked::type_name(&other)
+                    l7r_shared::blocked::type_name(&other)
                 ),
             )),
         })
@@ -167,7 +167,7 @@ fn prefix_of(row: &serde_json::Map<String, Value>, default: i64) -> Result<i64, 
             "TypeError",
             format!(
                 "int() argument must be a string, a bytes-like object or a real number, not '{}'",
-                l7r_guard::shared::blocked::type_name(other)
+                l7r_shared::blocked::type_name(other)
             ),
         )),
     }
@@ -394,7 +394,7 @@ pub fn reserve(ask: &Ask<'_>) -> Result<PathBuf, Refused> {
         )));
     }
     let lock = mirror.join(".specify").join("prefixes.lock");
-    let held = l7r_guard::shared::tool::flock_within(&lock, ask.timeout).map_err(os_error)?;
+    let held = l7r_shared::tool::flock_within(&lock, ask.timeout).map_err(os_error)?;
     let Some(held) = held else {
         let at = lock.display();
         return Err(Refused::Refusal(format!(

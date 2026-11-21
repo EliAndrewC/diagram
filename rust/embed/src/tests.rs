@@ -2,7 +2,7 @@
 
 use std::path::Path;
 
-use l7r_guard::shared::tempdir::TempDir;
+use l7r_shared::tempdir::TempDir;
 
 use super::{cli, options, Network, Opener, Options, Reply};
 use crate::testkit::{model_dir, Stand, CONFIG, MAP};

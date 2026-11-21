@@ -305,7 +305,7 @@ fn now() -> String {
     let secs = std::time::SystemTime::now()
         .duration_since(std::time::UNIX_EPOCH)
         .map_or(0, |d| d.as_secs());
-    let (y, mo, d, h, mi, s) = l7r_guard::shared::log::civil(secs);
+    let (y, mo, d, h, mi, s) = l7r_shared::log::civil(secs);
     format!("{y:04}-{mo:02}-{d:02}T{h:02}:{mi:02}:{s:02}Z")
 }
 

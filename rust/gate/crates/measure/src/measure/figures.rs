@@ -18,14 +18,13 @@ use super::reply;
 
 const DEFAULT_BAND: f64 = 0.10;
 static PLACEHOLDER: LazyLock<Regex> = LazyLock::new(|| {
-    l7r_guard::shared::regex::build(r"<[A-Za-z][^<>]*>").unwrap_or_else(|e| unreachable!("{e}"))
+    l7r_shared::regex::build(r"<[A-Za-z][^<>]*>").unwrap_or_else(|e| unreachable!("{e}"))
 });
 static RETIRED_HARNESS: LazyLock<Regex> = LazyLock::new(|| {
-    l7r_guard::shared::regex::build(r"\bmake spec-harness\b")
-        .unwrap_or_else(|e| unreachable!("{e}"))
+    l7r_shared::regex::build(r"\bmake spec-harness\b").unwrap_or_else(|e| unreachable!("{e}"))
 });
 static DELETED_ENGINE: LazyLock<Regex> = LazyLock::new(|| {
-    l7r_guard::shared::regex::build(r"\bl7r[./]diagram[./](hamletgen|settlement|sitegen|waterfields|overlap|citybudget)\b|\btests/(hamletgen|settlement|sitegen|waterfields|overlap|citybudget)\b")
+    l7r_shared::regex::build(r"\bl7r[./]diagram[./](hamletgen|settlement|sitegen|waterfields|overlap|citybudget)\b|\btests/(hamletgen|settlement|sitegen|waterfields|overlap|citybudget)\b")
         .unwrap_or_else(|e| unreachable!("{e}"))
 });
 

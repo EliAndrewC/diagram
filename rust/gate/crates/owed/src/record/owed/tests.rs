@@ -23,7 +23,7 @@ fn run(root: &Path, args: &[&str]) -> crate::Reply {
     let mut all = vec!["--root".to_owned(), root.to_string_lossy().into_owned()];
     all.extend(args.iter().map(|s| (*s).to_owned()));
     // its own environment, never the session's (feature 451 T38)
-    super::cli_in(&all, &l7r_guard::shared::env::Rooted::with(".", &[]))
+    super::cli_in(&all, &l7r_shared::env::Rooted::with(".", &[]))
 }
 
 fn none() -> Named<'static> {
@@ -148,7 +148,7 @@ fn the_store_keeps_every_answer_and_settles() {
         ["modal-accuracy", "modal-references", "modal-gaps"]
     );
     assert!(reply_checks("nothing").is_empty());
-    let own = l7r_guard::shared::env::Rooted::with(&root, &[]);
+    let own = l7r_shared::env::Rooted::with(&root, &[]);
     assert!(file_outside(&root, "c", "no heading").unwrap().is_empty());
     assert_eq!(
         file_outside_in(&own, "c", "**OUTSIDE THE CHANGE**:\n- `f` | b | x\n")
@@ -477,12 +477,12 @@ fn the_store_and_its_siblings_with_the_test_variable_given() {
     );
     assert!(store_given(&root, Some("".into())).ends_with(".git/record-checks"));
     // the store a root's own environment names (feature 451 T38), and none named there though the process may export one
-    let rooted = l7r_guard::shared::env::Rooted::with(&*root, &[("RECORD_CHECKS_DIR", "/x/z")]);
+    let rooted = l7r_shared::env::Rooted::with(&*root, &[("RECORD_CHECKS_DIR", "/x/z")]);
     assert_eq!(
         super::answers::store_in(&rooted),
         std::path::PathBuf::from("/x/z")
     );
-    let unnamed = l7r_guard::shared::env::Rooted::with(&*root, &[]);
+    let unnamed = l7r_shared::env::Rooted::with(&*root, &[]);
     assert!(super::answers::store_in(&unnamed).ends_with(".git/record-checks"));
     let base = top.join("sib");
     let main = record_at(&base.join(".clones/main"));

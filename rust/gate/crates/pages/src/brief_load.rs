@@ -41,7 +41,7 @@ pub const CAP: usize = 4;
 pub const KINDS: [&str; 4] = ["check", "assertions", "split", "handover"];
 
 fn re(pattern: &str) -> Regex {
-    l7r_guard::shared::regex::build(pattern).unwrap_or_else(|e| unreachable!("{e}"))
+    l7r_shared::regex::build(pattern).unwrap_or_else(|e| unreachable!("{e}"))
 }
 
 // `re.match` anchors at the start, `re.fullmatch` at both ends: `^` and `\z` stand for them; `\Z` is the regex crate's `\z`
@@ -120,13 +120,13 @@ fn assignment_lists(text: &str) -> (String, String) {
         .ok()
         .flatten()
         .map_or_else(String::new, |c| c[1].to_owned());
-    let lines = l7r_guard::shared::speckit::splitlines(text);
+    let lines = l7r_shared::speckit::splitlines(text);
     let mut blocks = Vec::new();
     for (i, line) in lines.iter().enumerate() {
         if BLOCK_HEAD.is_match(line).unwrap_or(false) {
             let mut block = vec![*line];
             for nxt in &lines[i + 1..] {
-                if l7r_guard::shared::py_text::strip(nxt).is_empty()
+                if l7r_shared::py_text::strip(nxt).is_empty()
                     || BLOCK_END.is_match(nxt).unwrap_or(false)
                 {
                     break;
@@ -195,7 +195,7 @@ pub fn count(text: &str, record: &Path) -> Result<(usize, Vec<String>), String> 
                 }
                 new.extend(ids);
             } else {
-                let word = l7r_guard::shared::py_text::split(rest)
+                let word = l7r_shared::py_text::split(rest)
                     .first()
                     .map(|w| (*w).to_owned())
                     .ok_or_else(|| "IndexError: list index out of range".to_owned())?;
@@ -310,11 +310,11 @@ pub fn cli(args: &[String]) -> Reply {
             2,
         );
     }
-    let record = l7r_guard::shared::speckit::py_path(&args[0]);
+    let record = l7r_shared::speckit::py_path(&args[0]);
     let mut out = String::new();
     let mut bad = false;
     for b in &args[1..] {
-        let brief = l7r_guard::shared::speckit::py_path(b);
+        let brief = l7r_shared::speckit::py_path(b);
         let said = read_strict(&brief).and_then(|text| {
             let (kind, n, detail) = load(&text, &record)?;
             Ok((kind, n, detail, refusal(&brief, &text, &record)?))
@@ -324,7 +324,7 @@ pub fn cli(args: &[String]) -> Reply {
             Err(why) => return raised("brief-load", out, &why),
         };
         bad |= !why.is_empty();
-        let name = l7r_guard::shared::speckit::py_name(&brief);
+        let name = l7r_shared::speckit::py_name(&brief);
         let counted = if detail.is_empty() {
             "-".to_owned()
         } else {

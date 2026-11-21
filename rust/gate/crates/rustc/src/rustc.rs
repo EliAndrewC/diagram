@@ -17,7 +17,7 @@ use std::process::Command;
 use std::sync::LazyLock;
 
 use fancy_regex::Regex;
-use l7r_guard::shared::tempdir::TempDir;
+use l7r_shared::tempdir::TempDir;
 
 use crate::Reply;
 
@@ -37,7 +37,7 @@ use kept::{kept_reads, undeclared, undeclared_refusal, unit_tests_only, Kept, Re
 const USAGE_LOG_TOOL: &str = "rust_checks";
 const CRATES: &str = "rust";
 fn re(pattern: &str) -> Regex {
-    l7r_guard::shared::regex::build(pattern).unwrap_or_else(|e| unreachable!("{e}"))
+    l7r_shared::regex::build(pattern).unwrap_or_else(|e| unreachable!("{e}"))
 }
 
 static BUILD_HASH: LazyLock<Regex> = LazyLock::new(|| re(r"Cs[0-9A-Za-z]+_|17h[0-9a-f]{16}E"));
@@ -47,7 +47,7 @@ static PUB_FN: LazyLock<Regex> =
 /// Where everything runs, read once from the environment.
 pub struct World {
     /// The tree, and the environment its guard reads see (feature 451 T38: a test's own, never a session's exports).
-    root: l7r_guard::shared::env::Rooted,
+    root: l7r_shared::env::Rooted,
     target: PathBuf,
     cargo: String,
     path_dir: PathBuf,
@@ -196,7 +196,7 @@ fn leak_checked(manifest: &Path, go: impl FnOnce(&Path) -> Ran) -> Ran {
         .map(|e| e.file_name().to_string_lossy().into_owned())
         // the one directory a whole test process shares (`beside_binary`), which nothing in the process outlives to remove: it goes
         // with this run's directory on the next line
-        .filter(|n| n != l7r_guard::shared::tempdir::SHARED)
+        .filter(|n| n != l7r_shared::tempdir::SHARED)
         .collect();
     drop(tmp);
     if !left.is_empty() {
@@ -205,7 +205,7 @@ fn leak_checked(manifest: &Path, go: impl FnOnce(&Path) -> Ran) -> Ran {
         let _ = writeln!(
             done.stderr,
             "rust-checks: the tests left {} entr{} in their TMPDIR, which they must remove: {}\n  fix: hold the directory in an \
-             `l7r_guard::shared::tempdir::TempDir` (`TempDir::new(tag)`, or `checks::scratch(tag)`) for as long as the test uses it, so \
+             `l7r_shared::tempdir::TempDir` (`TempDir::new(tag)`, or `checks::scratch(tag)`) for as long as the test uses it, so \
              its Drop removes it on a return, a `?` or a panic",
             left.len(),
             if left.len() == 1 { "y" } else { "ies" },
@@ -774,7 +774,7 @@ fn world_here(make: String) -> World {
         hamlet_spec: var("HAMLET_SPEC"),
         cover_work: std::env::var_os("L7R_RUST_COVER_WORK").map(PathBuf::from),
         make,
-        root: l7r_guard::shared::env::Rooted::process(tree),
+        root: l7r_shared::env::Rooted::process(tree),
     }
 }
 

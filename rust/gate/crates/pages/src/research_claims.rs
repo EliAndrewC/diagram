@@ -36,8 +36,8 @@ use std::path::{Path, PathBuf};
 use std::sync::LazyLock;
 
 use fancy_regex::Regex;
-use l7r_guard::shared::py_text::strip;
-use l7r_guard::shared::speckit::{py_name, py_parent, splitlines};
+use l7r_shared::py_text::strip;
+use l7r_shared::speckit::{py_name, py_parent, splitlines};
 use serde_json::Value;
 
 use crate::{py_path, raised, reply, text};
@@ -53,7 +53,7 @@ pub fn sheet(var: Option<String>) -> PathBuf {
 }
 
 fn re(pattern: &str) -> Regex {
-    l7r_guard::shared::regex::build(pattern).unwrap_or_else(|e| unreachable!("{e}"))
+    l7r_shared::regex::build(pattern).unwrap_or_else(|e| unreachable!("{e}"))
 }
 
 static RELEASED: LazyLock<Regex> =
@@ -173,7 +173,7 @@ pub fn parse(line: &str) -> Option<Row> {
 }
 
 fn strip_start(text: &str) -> &str {
-    text.trim_start_matches(l7r_guard::shared::py_text::is_space)
+    text.trim_start_matches(l7r_shared::py_text::is_space)
 }
 
 /// Every feature number `make speckit-todo` reads as closed in the mirror's specs/ (and this clone's), in process (the guard's
@@ -181,7 +181,7 @@ fn strip_start(text: &str) -> &str {
 /// read once: a broken one retires nothing, as the command's raise did; a directory that cannot be read is skipped, as its `error:` line
 /// was. A top with no gate of its own retires nothing, as the Python's run of its missing `scripts/gates/l7r-gate.sh` did.
 fn settled_features(top: &Path) -> BTreeSet<String> {
-    use l7r_guard::shared::speckit::{state_given_vocabulary, vocabulary};
+    use l7r_shared::speckit::{state_given_vocabulary, vocabulary};
     let mut roots: Vec<PathBuf> = vec![mirror(top).join("specs"), top.join("specs")];
     roots.dedup();
     let dirs: Vec<PathBuf> = roots
@@ -277,7 +277,7 @@ fn distinct(
 /// The sheet's lines, none where it is no file.
 fn read_lines(sheet: &Path) -> String {
     if sheet.is_file() {
-        l7r_guard::shared::speckit::read_text(sheet).unwrap_or_default()
+        l7r_shared::speckit::read_text(sheet).unwrap_or_default()
     } else {
         String::new()
     }
@@ -296,7 +296,7 @@ fn locked(sheet: &Path) -> Result<std::fs::File, String> {
         .open(&lock)
         .map_err(fail)?;
     let refused = format!("{}: flock failed", lock.display());
-    l7r_guard::shared::tool::flock(&file, "-x")
+    l7r_shared::tool::flock(&file, "-x")
         .then_some(file)
         .ok_or(refused)
 }

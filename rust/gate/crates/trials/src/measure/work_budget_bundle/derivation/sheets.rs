@@ -22,7 +22,7 @@ use std::collections::BTreeMap;
 use std::sync::LazyLock;
 
 use fancy_regex::Regex;
-use l7r_guard::shared::py_text::strip;
+use l7r_shared::py_text::strip;
 
 use super::{
     arith, cells, finditer, fixed0, index_used, int_commas, lower, py_re, rounded, search,

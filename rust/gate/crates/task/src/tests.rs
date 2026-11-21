@@ -6,7 +6,7 @@ use std::path::{Path, PathBuf};
 use std::sync::OnceLock;
 
 use l7r_gate_core::ci::fixtures::{git, put, scratch};
-use l7r_guard::shared::tempdir::TempDir;
+use l7r_shared::tempdir::TempDir;
 
 use crate::tick::Ask;
 
@@ -18,7 +18,7 @@ pub(crate) const REASON: &str = "a test of the task gate";
 pub(crate) fn quiet_census() -> PathBuf {
     static DIR: OnceLock<PathBuf> = OnceLock::new();
     DIR.get_or_init(|| {
-        let dir = l7r_guard::shared::tempdir::beside_binary("gate-task-census");
+        let dir = l7r_shared::tempdir::beside_binary("gate-task-census");
         std::env::set_var("GUARD_LOG_DIR", &dir);
         dir
     })

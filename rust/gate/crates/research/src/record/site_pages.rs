@@ -11,7 +11,7 @@ use crate::record::contents::{self as ct, Section, Tag, Tags, Vocabulary};
 use crate::record::questions::Record;
 use crate::record::site_links::{section_dir, QUESTION_DIR};
 use crate::sources::linkify;
-use l7r_guard::shared::html_text::escape;
+use l7r_shared::html_text::escape;
 
 pub const TITLE: &str = "The research record";
 /// The two halves of the record, in the order they are read; a section is shown in a half only when it, or a subsection, holds a page of
@@ -299,6 +299,6 @@ pub fn nav_tree(
 pub fn nav_js(tree: &Value) -> String {
     format!(
         "// DERIVED FILE - written by `make record` from the record's fragments (features 301, 303). Never edit here.\nwindow.RECORD_NAV = {};\n",
-        l7r_guard::shared::pyjson::dumps(tree, None, false)
+        l7r_shared::pyjson::dumps(tree, None, false)
     )
 }

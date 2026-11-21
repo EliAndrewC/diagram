@@ -14,9 +14,9 @@ use std::path::Path;
 use std::sync::LazyLock;
 
 use fancy_regex::Regex;
-use l7r_guard::shared::html_text::unescape;
-use l7r_guard::shared::py_text::{repr, split, strip};
-use l7r_guard::shared::pyjson::py_str;
+use l7r_shared::html_text::unescape;
+use l7r_shared::py_text::{repr, split, strip};
+use l7r_shared::pyjson::py_str;
 use serde_json::{json, Map, Value};
 
 use crate::pyre::{casefold, py};
@@ -161,7 +161,7 @@ pub fn known_terms(glossary: &Map<String, Value>) -> Result<HashSet<String>> {
                 known.extend(s.chars().map(|c| casefold(&c.to_string())));
             }
             Some(Value::Object(m)) if !m.is_empty() => known.extend(m.keys().map(|k| casefold(k))),
-            Some(v) if l7r_guard::shared::pyjson::truthy(v) => {
+            Some(v) if l7r_shared::pyjson::truthy(v) => {
                 return Err(Error::new("TypeError", "object is not iterable"));
             }
             _ => {}

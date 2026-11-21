@@ -378,7 +378,7 @@ pub fn search(
         let list = Value::Array(all.into_iter().map(Value::String).collect());
         let dir = p.parent().unwrap_or(Path::new("."));
         std::fs::create_dir_all(dir).map_err(|e| Error(format!("{e}: '{}'", dir.display())))?;
-        std::fs::write(p, l7r_guard::shared::pyjson::dumps(&list, None, true))
+        std::fs::write(p, l7r_shared::pyjson::dumps(&list, None, true))
             .map_err(|e| Error(format!("{e}: '{}'", p.display())))?;
     }
     let held = rows.len() - fresh.len();

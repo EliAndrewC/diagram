@@ -75,13 +75,13 @@ fn read_strict(path: &Path) -> Result<String, String> {
 
 /// A file as `read_text(errors="replace")` reads it, "" where it cannot be read (the runner's `_read`).
 fn read_lossy(path: &Path) -> String {
-    l7r_guard::shared::speckit::read_text(path).unwrap_or_default()
+    l7r_shared::speckit::read_text(path).unwrap_or_default()
 }
 
 /// `(path.stem, path.suffix)` as Python 3.14 reads them: the suffix from the last dot of the name, unless the name starts with it (a
 /// name ending in a dot has the suffix `.`).
 fn py_suffix_stem(path: &Path) -> (String, String) {
-    let name = l7r_guard::shared::speckit::py_name(path);
+    let name = l7r_shared::speckit::py_name(path);
     match name.rfind('.') {
         Some(i) if i > 0 => (name[..i].to_owned(), name[i..].to_owned()),
         _ => (name, String::new()),
@@ -215,7 +215,7 @@ fn text(path: &Path) -> String {
 
 /// `pathlib.Path(text)` of a path given as text.
 fn py_path(text: &str) -> PathBuf {
-    l7r_guard::shared::speckit::py_path(text)
+    l7r_shared::speckit::py_path(text)
 }
 
 #[cfg(test)]

@@ -14,7 +14,7 @@ use std::sync::{Mutex, PoisonError};
 
 use l7r_gate_registry::about::FeatureClass;
 use l7r_gate_research::Error;
-use l7r_guard::shared::html_text::escape;
+use l7r_shared::html_text::escape;
 use serde_json::{json, Map, Value};
 
 use super::hits::{hit_layer, hit_regions, part_of, wrap};
@@ -86,7 +86,7 @@ fn defaults(
         if let Some(Value::Object(entry)) = data.get_mut(key) {
             let empty = entry
                 .get("on_this_map")
-                .is_none_or(|v| !l7r_guard::shared::pyjson::truthy(v));
+                .is_none_or(|v| !l7r_shared::pyjson::truthy(v));
             if empty {
                 entry.insert("on_this_map".to_owned(), Value::String(text));
             }
@@ -282,7 +282,7 @@ pub fn render_page(tree: &Path, host: &Host, p: &Page<'_>) -> Result<String, Err
     crate::reads::asset(tree, "glossary.json");
     let terms = l7r_gate_research::glossary::load(tree)?;
     let glossary = glossary_for(&data, &terms);
-    let blob = l7r_guard::shared::pyjson::dumps(
+    let blob = l7r_shared::pyjson::dumps(
         &json!({"classes": data, "glossary": glossary, "raster": payload}),
         None,
         false,

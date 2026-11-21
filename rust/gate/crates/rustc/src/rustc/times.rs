@@ -12,7 +12,7 @@ use std::fmt::Write as _;
 use std::path::Path;
 use std::time::Instant;
 
-use l7r_guard::shared::tempdir::TempDir;
+use l7r_shared::tempdir::TempDir;
 
 use super::cover::package_name;
 use super::kept::test_targets;

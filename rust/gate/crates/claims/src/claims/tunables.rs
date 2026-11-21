@@ -43,7 +43,7 @@ pub(super) static WARM: [&LazyLock<Regex>; 5] =
 
 /// `f"{v:g}"`: the guard's `py_text::fmt_g` since feature 449 T135, where `make set-down`'s and `make claim`'s refusals write a figure
 /// as Python's `:g` did and the crates below `claims` could not reach this copy (`ask:449-phase3-remainder`, one implementation, FR-003).
-pub use l7r_guard::shared::py_text::fmt_g;
+pub use l7r_shared::py_text::fmt_g;
 
 fn stated(value: f64, text: &str) -> bool {
     re(&format!(

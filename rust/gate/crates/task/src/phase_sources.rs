@@ -22,8 +22,8 @@ use std::path::{Path, PathBuf};
 use std::sync::LazyLock;
 
 use fancy_regex::Regex;
-use l7r_guard::shared::py_text::{split, SPACE_CLASS};
-use l7r_guard::shared::pyjson::dumps;
+use l7r_shared::py_text::{split, SPACE_CLASS};
+use l7r_shared::pyjson::dumps;
 use serde_json::{json, Value};
 
 use crate::tick::text::re;
@@ -196,7 +196,7 @@ fn allow(root: &Path, cwd: &Path, file: &str, why: &str, now: u64) -> Raise<(i32
     };
     if !holds(state.get("files"), &rel)? {
         let phase = state.get("phase").ok_or("KeyError: 'phase'")?;
-        let phase = l7r_guard::shared::pyjson::py_str(phase);
+        let phase = l7r_shared::pyjson::py_str(phase);
         return Ok((
             2,
             String::new(),
@@ -265,11 +265,11 @@ pub fn cli(args: &[String], cwd: &Path) -> Reply {
     };
     match done {
         Ok((code, out, err)) => {
-            l7r_guard::shared::usage::record(
+            l7r_shared::usage::record(
                 cwd,
                 USAGE_LOG_TOOL,
                 "check",
-                l7r_guard::shared::usage::exited(code),
+                l7r_shared::usage::exited(code),
             );
             reply(out, err, code)
         }

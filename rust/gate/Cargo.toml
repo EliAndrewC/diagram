@@ -38,7 +38,7 @@ l7r_gate_rustc = { path = "crates/rustc" }
 l7r_gate_task = { path = "crates/task" }
 l7r_gate_tree = { path = "crates/tree" }
 l7r_gate_trials = { path = "crates/trials" }
-l7r_guard = { path = "../guard" }
+l7r_shared = { path = "../guard/shared" }
 serde = { workspace = true }
 serde_json = { workspace = true }
 

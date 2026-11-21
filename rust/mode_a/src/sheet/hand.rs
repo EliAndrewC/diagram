@@ -79,10 +79,7 @@ pub(crate) type Registry = dyn Fn(&Path) -> Result<Vec<FeatureClass>, Error>;
 
 /// `['a', 'b']`: a list of strings as Python's `print` showed the generator's census.
 pub(crate) fn py_list(items: &[String]) -> String {
-    let shown: Vec<String> = items
-        .iter()
-        .map(|s| l7r_guard::shared::py_text::repr(s))
-        .collect();
+    let shown: Vec<String> = items.iter().map(|s| l7r_shared::py_text::repr(s)).collect();
     format!("[{}]", shown.join(", "))
 }
 

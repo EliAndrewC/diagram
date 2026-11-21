@@ -7,8 +7,8 @@ use std::path::Path;
 use std::sync::LazyLock;
 
 use fancy_regex::Regex;
-use l7r_guard::guards::event_log_hooks::read::reversals;
-use l7r_guard::guards::event_log_hooks::round_capped;
+use l7r_shared::guards::event_log_hooks::read::reversals;
+use l7r_shared::guards::event_log_hooks::round_capped;
 use serde_json::{Map, Value};
 
 use super::super::events::{

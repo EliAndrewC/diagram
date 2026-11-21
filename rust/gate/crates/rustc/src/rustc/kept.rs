@@ -9,7 +9,7 @@ use std::process::{Command, Stdio};
 use std::sync::LazyLock;
 
 use fancy_regex::Regex;
-use l7r_guard::shared::sha256;
+use l7r_shared::sha256;
 use serde_json::Value;
 
 use super::{cargo, crates, own, re, run, rust_text, World};

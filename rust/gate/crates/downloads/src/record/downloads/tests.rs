@@ -32,7 +32,7 @@ fn git(root: &Path, args: &[&str]) {
     assert!(done.status.success());
 }
 
-fn repo(tag: &str) -> l7r_guard::shared::tempdir::TempDir {
+fn repo(tag: &str) -> l7r_shared::tempdir::TempDir {
     let root = scratch(tag);
     git(&root, &["init", "-q"]);
     git(&root, &["config", "user.email", "t@t"]);
@@ -285,13 +285,7 @@ fn a_copy_entry_the_base_lacks_is_a_pending_text_edit() {
     assert!(!out.pending[0].1.starts_with("CONFLICT"));
 }
 
-fn synced(
-    tag: &str,
-    canon: &str,
-) -> (
-    l7r_guard::shared::tempdir::TempDir,
-    l7r_guard::shared::tempdir::TempDir,
-) {
+fn synced(tag: &str, canon: &str) -> (l7r_shared::tempdir::TempDir, l7r_shared::tempdir::TempDir) {
     let root = repo(tag);
     let inbox = scratch(&format!("{tag}-inbox"));
     put(&root, CANON, canon);
@@ -572,7 +566,7 @@ fn a_held_lock_is_a_refusal_naming_the_file() {
         .truncate(false)
         .open(&path)
         .unwrap();
-    assert!(l7r_guard::shared::tool::flock(&held, "-n"));
+    assert!(l7r_shared::tool::flock(&held, "-n"));
     let err = add::add(&c, &draft("T", "research/contents.json#a-section")).unwrap_err();
     assert!(
         err.starts_with("could not take the prefix lock within 0.05s:") && err.contains("(fuser ")

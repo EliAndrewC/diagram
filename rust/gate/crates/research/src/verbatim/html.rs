@@ -9,8 +9,8 @@ use std::fmt::Write as _;
 use std::sync::LazyLock;
 
 use fancy_regex::Regex;
-use l7r_guard::shared::html_text::unescape;
-use l7r_guard::shared::py_text::strip;
+use l7r_shared::html_text::unescape;
+use l7r_shared::py_text::strip;
 
 fn re(pattern: &str) -> Regex {
     crate::re(pattern)

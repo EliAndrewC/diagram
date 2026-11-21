@@ -33,7 +33,7 @@ fn world(
     comb: &str,
     polder: &str,
     totals: &str,
-) -> l7r_guard::shared::tempdir::TempDir {
+) -> l7r_shared::tempdir::TempDir {
     let root = l7r_gate_core::checks::scratch(tag);
     std::fs::create_dir_all(root.join("scripts/gates")).unwrap();
     std::fs::create_dir_all(root.join("dev")).unwrap();

@@ -19,7 +19,7 @@ fn put(root: &Path, rel: &str, text: &str) {
 
 const STATES: &str = r#"[{"id":"open"},{"id":"gm-full"},{"id":"gm-partial"},{"id":"paywalled"},{"id":"bot-refused"},{"id":"down"},{"id":"gone"},{"id":"never-read"}]"#;
 
-fn tree(tag_name: &str, recorded: &str) -> l7r_guard::shared::tempdir::TempDir {
+fn tree(tag_name: &str, recorded: &str) -> l7r_shared::tempdir::TempDir {
     let root = scratch(tag_name);
     put(
         &root,

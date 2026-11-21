@@ -20,7 +20,7 @@ fn measured(
     recorded: &Value,
     research: Option<&str>,
     number: u32,
-) -> l7r_guard::shared::tempdir::Held<PathBuf> {
+) -> l7r_shared::tempdir::Held<PathBuf> {
     let root = scratch("figures");
     let dir = root.join(format!("specs/{number}-a-feature"));
     std::fs::create_dir_all(&dir).unwrap();

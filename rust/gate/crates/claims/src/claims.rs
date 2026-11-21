@@ -138,8 +138,8 @@ pub fn flight_live(root: &Path) -> Result<Vec<String>, crate::record::repo::Fail
 
 /// A temporary directory no other run of this process or another takes, removed when it is dropped - on a `?` and a panic too
 /// (feature 449 T101): `tempfile.TemporaryDirectory`'s.
-pub fn temp_dir(tag: &str) -> l7r_guard::shared::tempdir::TempDir {
-    l7r_guard::shared::tempdir::TempDir::new(&format!("claims-{tag}"))
+pub fn temp_dir(tag: &str) -> l7r_shared::tempdir::TempDir {
+    l7r_shared::tempdir::TempDir::new(&format!("claims-{tag}"))
 }
 
 /// `git -C dir args...` fed `input`; its stdout, or None where it failed.
@@ -230,7 +230,7 @@ fn split_top(args: &[String]) -> Result<(String, &str, &[String]), String> {
 fn toplevel(root: &str) -> PathBuf {
     let top = crate::record::repo::git(Path::new(root), &["rev-parse", "--show-toplevel"]);
     let top = if top.is_empty() { root.to_owned() } else { top };
-    PathBuf::from(l7r_guard::shared::py_text::strip(&top))
+    PathBuf::from(l7r_shared::py_text::strip(&top))
 }
 
 /// THE PATTERNS COMPILED SIDE BY SIDE, ONCE A PROCESS (feature 449 T167): the crate's 48 patterns and core's took 25 ms to compile one

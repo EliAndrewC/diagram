@@ -163,7 +163,7 @@ pub fn plain_cursor(tree: &Path) -> Result<Vec<String>, Error> {
     crate::reads::asset(tree, "page-text.json");
     let text = l7r_gate_research::content::content(tree, "page-text.json")?;
     crate::py::iterate(text.get("plain_cursor").unwrap_or(&Value::Null))
-        .map(|v| v.iter().map(l7r_guard::shared::pyjson::py_str).collect())
+        .map(|v| v.iter().map(l7r_shared::pyjson::py_str).collect())
 }
 
 /// `notes.features.get(key, "")`.
@@ -175,8 +175,8 @@ fn on_this_map(notes: &MapNotes, key: &str) -> String {
 #[must_use]
 pub fn meta_str(meta: &Map<String, Value>, key: &str) -> String {
     meta.get(key)
-        .filter(|v| l7r_guard::shared::pyjson::truthy(v))
-        .map_or_else(String::new, l7r_guard::shared::pyjson::py_str)
+        .filter(|v| l7r_shared::pyjson::truthy(v))
+        .map_or_else(String::new, l7r_shared::pyjson::py_str)
 }
 
 /// A stub for a present key the registry does not know: it says so, never silence.

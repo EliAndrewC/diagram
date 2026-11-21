@@ -24,7 +24,7 @@ use std::sync::{Condvar, LazyLock, Mutex};
 use fancy_regex::Regex;
 use l7r_gate_research::pyre::py;
 use l7r_gate_research::Error;
-use l7r_guard::shared::html_text::unescape;
+use l7r_shared::html_text::unescape;
 
 use crate::py::{fmt_g, max, min};
 
@@ -309,7 +309,7 @@ pub fn tile_count(vb: Viewbox, r: f64) -> Result<i64, Error> {
             "ValueError",
             format!(
                 "expected a nonnegative input, got {}",
-                l7r_guard::shared::pyjson::py_float(area)
+                l7r_shared::pyjson::py_float(area)
             ),
         ));
     }
@@ -541,7 +541,7 @@ impl Host {
             render::png(&doc, args)?
         };
         if let Some(log) = &self.log {
-            let hex = l7r_guard::shared::sha256::hex;
+            let hex = l7r_shared::sha256::hex;
             let row = (hex(doc.as_bytes()), args.to_vec(), hex(&png));
             log.lock()
                 .unwrap_or_else(std::sync::PoisonError::into_inner)

@@ -5,7 +5,7 @@ use std::io::{BufRead, BufReader, Write};
 use std::net::TcpListener;
 use std::time::Duration;
 
-use l7r_guard::shared::tempdir::TempDir;
+use l7r_shared::tempdir::TempDir;
 use serde_json::json;
 
 use super::{get, identity, jar_cookies, jar_line, why, Ask};

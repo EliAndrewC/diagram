@@ -48,7 +48,7 @@ check blocked "$ROOT/dev/work-budget.json" "x" "Write"
 # feature 449 T229 - the guards' own sources (the port moved what a guard refuses into rust/guard/src/ and the dispatcher script)
 check blocked "$ROOT/rust/guard/src/guards/make_only_hooks.rs"
 check blocked "$ROOT/rust/guard/src/guards/make_only_hooks.rs" "x" "Write"
-check blocked "$ROOT/rust/guard/src/shared/tree.rs"
+check blocked "$ROOT/rust/guard/shared/src/tree.rs"
 check blocked "$ROOT/rust/guard/src/main.rs"
 check blocked "$ROOT/rust/guard/Cargo.toml"
 check blocked "$ROOT/rust/guard/src/agent_model_rule.txt"  # the data files a guard reads are guard sources too
@@ -63,7 +63,7 @@ check ok "$ROOT/.claude/agents/spec-fidelity.md"
 check ok "$ROOT/tests/hooks/test-gate-hooks.sh"
 check ok "$ROOT/tests/hooks/test-make-only-hooks.sh"
 check ok "$ROOT/rust/guard/src/guards/make_only_hooks/tests.rs"  # T229: the guards' test files stay ordinary
-check ok "$ROOT/rust/guard/src/shared/tests/tree.rs"
+check ok "$ROOT/rust/guard/shared/src/tests/tree.rs"
 check ok "$ROOT/rust/guard/src/guards/tests.rs"
 check ok "$ROOT/l7r/diagram/hamletgen/ways.py"
 check ok "$ROOT/tests/test_invocation.py"

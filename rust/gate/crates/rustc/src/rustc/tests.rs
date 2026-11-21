@@ -10,7 +10,7 @@ use super::{
     kept_reads, lcov_missed, parse, relative, run, tail, undeclared, verdict_key, Reads, World,
 };
 use crate::checks::scratch;
-use l7r_guard::shared::tempdir::{Held, TempDir};
+use l7r_shared::tempdir::{Held, TempDir};
 
 mod cover;
 mod fmtfile;
@@ -40,7 +40,7 @@ fn fake_cargo(dir: &Path, body: &str) -> String {
 fn world_with(root: &Path, body: &str) -> Held<World> {
     let target = scratch("rustc-target");
     let world = World {
-        root: l7r_guard::shared::env::Rooted::with(root, &[]),
+        root: l7r_shared::env::Rooted::with(root, &[]),
         cargo: fake_cargo(&target, body),
         path_dir: target.to_path_buf(),
         target_override: None,
@@ -565,7 +565,7 @@ fn the_real_cargo_tests_a_real_crate() {
     }
     let target = scratch("rustc-real-target");
     let world = World {
-        root: l7r_guard::shared::env::Rooted::with(root.to_path_buf(), &[]),
+        root: l7r_shared::env::Rooted::with(root.to_path_buf(), &[]),
         cargo: "cargo".to_owned(),
         path_dir: target.to_path_buf(),
         target_override: None,

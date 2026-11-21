@@ -13,7 +13,7 @@ l7r_gate_core = { path = "../core" }
 l7r_gate_owed = { path = "../owed" }
 l7r_gate_reviews = { path = "../reviews" }
 l7r_gate_task = { path = "../task" }
-l7r_guard = { path = "../../../guard" }
+l7r_shared = { path = "../../../guard/shared" }
 serde = { workspace = true }
 serde_json = { workspace = true }
 

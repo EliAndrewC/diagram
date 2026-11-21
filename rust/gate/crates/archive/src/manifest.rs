@@ -7,7 +7,7 @@ use std::fmt::Write as _;
 use std::path::{Path, PathBuf};
 
 use l7r_gate_research::record::archive::{self as rec, Cited};
-use l7r_guard::shared::pyjson::{dumps, py_str, sorted, truthy};
+use l7r_shared::pyjson::{dumps, py_str, sorted, truthy};
 use serde_json::{json, Map, Value};
 
 use crate::capture::{capture, split_large, PART};
@@ -104,15 +104,14 @@ pub fn load_row(path: &Path) -> Result<Value> {
             format!("'utf-8' codec can't decode: {e}"),
         )
     })?;
-    l7r_guard::shared::pyjson::loads(&text)
-        .map_err(|e| Error::new("JSONDecodeError", e.to_string()))
+    l7r_shared::pyjson::loads(&text).map_err(|e| Error::new("JSONDecodeError", e.to_string()))
 }
 
 /// The URL's row, or none where it is missing or not JSON.
 #[must_use]
 pub fn read_row(root: &Path, url: &str) -> Option<Map<String, Value>> {
     let text = std::fs::read_to_string(row_path(root, url)).ok()?;
-    match l7r_guard::shared::pyjson::loads(&text).ok()? {
+    match l7r_shared::pyjson::loads(&text).ok()? {
         Value::Object(m) => Some(m),
         _ => None,
     }
@@ -246,7 +245,7 @@ pub fn stamp() -> String {
     let secs = std::time::SystemTime::now()
         .duration_since(std::time::UNIX_EPOCH)
         .map_or(0, |d| d.as_secs());
-    let (y, mo, d, h, mi, s) = l7r_guard::shared::log::civil(secs);
+    let (y, mo, d, h, mi, s) = l7r_shared::log::civil(secs);
     format!("{y:04}{mo:02}{d:02}T{h:02}{mi:02}{s:02}Z")
 }
 
@@ -256,14 +255,14 @@ pub fn now_iso() -> String {
     let secs = std::time::SystemTime::now()
         .duration_since(std::time::UNIX_EPOCH)
         .map_or(0, |d| d.as_secs());
-    let (y, mo, d, h, mi, s) = l7r_guard::shared::log::civil(secs);
+    let (y, mo, d, h, mi, s) = l7r_shared::log::civil(secs);
     format!("{y:04}-{mo:02}-{d:02}T{h:02}:{mi:02}:{s:02}+00:00")
 }
 
 /// Where the working copy and its lock live: beside the page cache (`L7R_SOURCES_HOME` moves both).
 #[must_use]
 pub fn home_of(root: &Path) -> PathBuf {
-    l7r_guard::shared::consulted::home(root)
+    l7r_shared::consulted::home(root)
 }
 
 fn strings(v: &[String]) -> Value {

@@ -54,7 +54,7 @@ pub fn dispatcher(root: &str, own: &str) -> String {
         .iter()
         .map(|e| (e.file_name().to_string_lossy().into_owned(), e.path()))
         // `Path.glob("*")`, which takes a hidden name too
-        .filter(|(_, p)| p.is_file() && l7r_guard::shared::py_text::strip(&read_lossy(p)) == root)
+        .filter(|(_, p)| p.is_file() && l7r_shared::py_text::strip(&read_lossy(p)) == root)
         .map(|(n, p)| {
             let at = std::fs::metadata(&p)
                 .and_then(|m| m.modified())
@@ -200,9 +200,9 @@ fn then_briefs(script: &str, root: &str) -> Result<Vec<String>, String> {
         .output()
         .map_err(|e| format!("{script}: {e}"))?;
     let text = String::from_utf8(got.stdout).map_err(|e| format!("UnicodeDecodeError: {e}"))?;
-    Ok(l7r_guard::shared::speckit::splitlines(&text)
+    Ok(l7r_shared::speckit::splitlines(&text)
         .iter()
-        .map(|l| l7r_guard::shared::py_text::strip(l))
+        .map(|l| l7r_shared::py_text::strip(l))
         .filter(|l| !l.is_empty())
         .map(str::to_owned)
         .collect())

@@ -17,7 +17,7 @@
 //! appended to (`O_APPEND`, as the hooks write - both readers sort by `t`, and `reversal` reads a log as a set); the source is rewritten
 //! through a temporary file, any line a live hook appended meanwhile carried over before the rename.
 
-use l7r_guard::shared::env::Reader;
+use l7r_shared::env::Reader;
 use std::collections::{BTreeMap, HashMap};
 use std::fmt::Write as _;
 use std::io::Write as _;
@@ -26,7 +26,7 @@ use std::path::{Path, PathBuf};
 use fancy_regex::Regex;
 use serde_json::{Map, Value};
 
-use l7r_guard::guards::event_log_hooks::brief_feature;
+use l7r_shared::guards::event_log_hooks::brief_feature;
 
 use super::reply;
 use crate::measure::events::ts;
@@ -41,7 +41,7 @@ const CARRYING: [&str; 4] = ["tick", "task-start", "decide", "land"];
 const START_SLACK: f64 = 60.0;
 
 fn re(p: &str) -> Regex {
-    l7r_guard::shared::regex::build(p).unwrap_or_else(|e| unreachable!("a fixed pattern: {e}"))
+    l7r_shared::regex::build(p).unwrap_or_else(|e| unreachable!("a fixed pattern: {e}"))
 }
 
 /// What the run is given.
@@ -69,7 +69,7 @@ fn given(args: &[String], env: &Reader) -> Option<Given> {
     }
     let root = root?;
     let dir = dir.unwrap_or_else(|| {
-        l7r_guard::guards::event_log_hooks::log_path_in(&root, "x", env)
+        l7r_shared::guards::event_log_hooks::log_path_in(&root, "x", env)
             .parent()
             .map_or_else(PathBuf::new, Path::to_path_buf)
     });
@@ -103,7 +103,7 @@ impl Facts {
             .filter(|n| root.join("specs").join(n).is_dir())
             .collect();
         let starts = std::fs::read_to_string(
-            l7r_guard::guards::event_log_hooks::common_git_dir(root).join("task-starts.jsonl"),
+            l7r_shared::guards::event_log_hooks::common_git_dir(root).join("task-starts.jsonl"),
         )
         .unwrap_or_default()
         .lines()
@@ -141,7 +141,7 @@ impl Facts {
     fn has(&mut self, feature: &str, task: &str) -> bool {
         if !self.ids.contains_key(feature) {
             let d = self.root.join("specs").join(feature);
-            let all = l7r_guard::shared::speckit::tasks::all_text(&d).unwrap_or_default();
+            let all = l7r_shared::speckit::tasks::all_text(&d).unwrap_or_default();
             let ids = all
                 .lines()
                 .filter_map(|l| first(&self.task_box, l))
@@ -393,7 +393,7 @@ fn write_back(path: &Path, mut kept: Vec<u8>, mut read: usize) -> Result<(), Str
 /// The command: every log in the directory re-filed (or, `--dry-run`, only counted), the counts printed.
 #[must_use]
 pub fn cli(args: &[String]) -> Reply {
-    cli_in(args, &l7r_guard::shared::env::opt)
+    cli_in(args, &l7r_shared::env::opt)
 }
 
 /// [`cli`] reading the environment `env` (feature 451 T38: a test's own, never a session's exports).

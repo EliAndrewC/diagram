@@ -2,7 +2,7 @@
 
 use std::path::Path;
 
-use l7r_guard::shared::tempdir::TempDir;
+use l7r_shared::tempdir::TempDir;
 use serde_json::{json, Value};
 
 use super::known::{baselines, newly_failing, seeds_named, standing};

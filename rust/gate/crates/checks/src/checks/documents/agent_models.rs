@@ -20,8 +20,8 @@
 use std::collections::{BTreeMap, BTreeSet};
 use std::path::Path;
 
-use l7r_guard::shared::py_text::strip;
-use l7r_guard::shared::speckit::splitlines;
+use l7r_shared::py_text::strip;
+use l7r_shared::speckit::splitlines;
 
 use super::{files_in, re, read, rel, root};
 

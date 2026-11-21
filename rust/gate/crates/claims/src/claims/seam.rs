@@ -65,7 +65,7 @@ pub fn split(
         };
         let (path, qual) = (m[2].to_owned(), m[3].to_owned());
         let head = qual.split('.').next().unwrap_or_default().to_owned();
-        let line = l7r_guard::shared::py_text::strip(&ln).to_owned();
+        let line = l7r_shared::py_text::strip(&ln).to_owned();
         if reads.contains(&format!("{path}::{head}")) || reads.contains(&format!("{path}::{qual}"))
         {
             own.push(line);

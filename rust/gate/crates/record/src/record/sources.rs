@@ -12,12 +12,12 @@ use std::sync::LazyLock;
 
 use fancy_regex::Regex;
 use l7r_gate_research::pages::{cached, put, Stored};
-use l7r_guard::shared::attempts::{self, Ask, More};
-use l7r_guard::shared::blocked::Fault;
-use l7r_guard::shared::consulted::{self, norm};
-use l7r_guard::shared::html_text::unescape;
-use l7r_guard::shared::py_text::repr;
-use l7r_guard::shared::pyjson::{dumps, loads, py_str, truthy};
+use l7r_shared::attempts::{self, Ask, More};
+use l7r_shared::blocked::Fault;
+use l7r_shared::consulted::{self, norm};
+use l7r_shared::html_text::unescape;
+use l7r_shared::py_text::repr;
+use l7r_shared::pyjson::{dumps, loads, py_str, truthy};
 use serde_json::{json, Map, Value};
 
 use crate::record::args::{parse_with, Spec};
@@ -262,7 +262,7 @@ fn outcome(args: &[String], root: &Path, home: &Path) -> Reply {
         );
     }
     let (question, sought) = (p.text("--question", ""), p.text("--sought", ""));
-    let said = l7r_guard::shared::py_text::strip(said);
+    let said = l7r_shared::py_text::strip(said);
     let run = || -> Result<(String, String), (String, Fault)> {
         let ctx = consulted::context(root).map_err(early)?;
         let questions: Vec<String> = if question.is_empty() {
@@ -392,7 +392,7 @@ fn seed(per_url: &Path, root: &Path, home: &Path) -> Result<usize, Fault> {
         for ((feature, session), evs) in groups {
             let mut whys: Vec<String> = Vec::new();
             for e in evs.iter().filter(|e| e.get("why").is_some_and(truthy)) {
-                let w: String = l7r_guard::shared::py_text::collapse(&py_str(&e["why"]))
+                let w: String = l7r_shared::py_text::collapse(&py_str(&e["why"]))
                     .chars()
                     .take(200)
                     .collect();
@@ -496,7 +496,7 @@ fn import_saves(
         let text = String::from_utf8_lossy(&std::fs::read(&manifest).unwrap_or_default())
             .replace("\r\n", "\n");
         let dir = manifest.parent().unwrap_or(scratch).to_path_buf();
-        for row in l7r_guard::shared::checks::reply::py_lines(&text)
+        for row in l7r_shared::checks::reply::py_lines(&text)
             .into_iter()
             .skip(1)
         {
@@ -554,7 +554,7 @@ fn import_saves(
             clippy::cast_sign_loss,
             reason = "a file's modified time in whole seconds"
         )]
-        let (y, mo, d, h, mi, s) = l7r_guard::shared::log::civil(*newest as u64);
+        let (y, mo, d, h, mi, s) = l7r_shared::log::civil(*newest as u64);
         let fetched = format!("{y:04}-{mo:02}-{d:02}T{h:02}:{mi:02}:{s:02}+00:00");
         let origin = format!("import:{}", dir.display());
         let how = Stored {

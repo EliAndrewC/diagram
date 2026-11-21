@@ -58,7 +58,7 @@ fn few(root: &Path) -> Result<Loaded, Fail> {
 fn template() -> &'static Path {
     static DIR: std::sync::OnceLock<std::path::PathBuf> = std::sync::OnceLock::new();
     DIR.get_or_init(|| {
-        let root = l7r_guard::shared::tempdir::beside_binary("owed-entry-template");
+        let root = l7r_shared::tempdir::beside_binary("owed-entry-template");
         git(&root, &["init", "-q"]);
         // the committer named in the config file itself: two `git config` processes fewer
         let config = root.join(".git/config");
@@ -107,7 +107,7 @@ fn copy_tree(from: &Path, to: &Path) {
 }
 
 /// A copy of the template repository a test owns.
-fn repo(tag: &str) -> l7r_guard::shared::tempdir::TempDir {
+fn repo(tag: &str) -> l7r_shared::tempdir::TempDir {
     let root = crate::checks::scratch(tag);
     copy_tree(template(), &root);
     root

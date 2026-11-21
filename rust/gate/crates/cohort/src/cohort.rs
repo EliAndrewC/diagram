@@ -14,7 +14,7 @@ use std::process::{Command, Stdio};
 use std::sync::LazyLock;
 
 use fancy_regex::Regex;
-use l7r_guard::shared::sha256;
+use l7r_shared::sha256;
 use serde_json::Value;
 
 use crate::delta;
@@ -42,8 +42,8 @@ const REFUSING: [&str; 3] = [" NEWLY FAILING", " WORSENED", " NO BASELINE"];
 /// A scratch directory for one `ask_counters` call, removed when it is dropped (feature 449 T101). The process id alone is not
 /// enough: parallel tests share a process, and one call's cleanup deleted another's files, the cause of this crate's intermittent
 /// "codeid.py could not say" (2026-11-10); a `TempDir` is counted within the process too.
-fn counter_dir() -> l7r_guard::shared::tempdir::TempDir {
-    l7r_guard::shared::tempdir::TempDir::new("gate-counter")
+fn counter_dir() -> l7r_shared::tempdir::TempDir {
+    l7r_shared::tempdir::TempDir::new("gate-counter")
 }
 /// The paths whose bytes unchanged mean the same engine at once.
 pub const ENGINE_PATHS: [&str; 2] = ["l7r", "pool"];
@@ -53,7 +53,7 @@ pub const ENGINE_PATHS: [&str; 2] = ["l7r", "pool"];
 /// live pool `.notes.md` since 449 T223 (the pool sweep reads the notes: a hand sheet's typed counts, a hamlet's census block), and the
 /// building types' declaration since 449 T231 (every compound is drawn from it).
 static ENGINE: LazyLock<Regex> = LazyLock::new(|| {
-    l7r_guard::shared::regex::build(r"^(l7r/.*\.py|l7r/(?:.*/)?buildings/types\.json|pool/.*\.gen\.py|pool/.*\.json|pool/.*\.svg|pool/.*\.notes\.md|rust/.*\.rs|rust/(?:.*/)?Cargo\.(?:toml|lock))$")
+    l7r_shared::regex::build(r"^(l7r/.*\.py|l7r/(?:.*/)?buildings/types\.json|pool/.*\.gen\.py|pool/.*\.json|pool/.*\.svg|pool/.*\.notes\.md|rust/.*\.rs|rust/(?:.*/)?Cargo\.(?:toml|lock))$")
         .unwrap_or_else(|e| unreachable!("{e}"))
 });
 

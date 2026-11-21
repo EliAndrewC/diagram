@@ -4,7 +4,7 @@ use std::process::Command;
 
 use super::cli;
 
-pub(super) fn repo(tag: &str) -> l7r_guard::shared::tempdir::TempDir {
+pub(super) fn repo(tag: &str) -> l7r_shared::tempdir::TempDir {
     let dir = super::scratch(tag);
     for args in [
         vec!["init", "-q", "-b", "main"],

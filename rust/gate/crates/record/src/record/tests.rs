@@ -25,7 +25,7 @@ fn lines_split_as_python_splits_them() {
     assert!(py_lines("").is_empty());
 }
 
-fn canon_tree(tag: &str) -> l7r_guard::shared::tempdir::Held<Vec<PathBuf>> {
+fn canon_tree(tag: &str) -> l7r_shared::tempdir::Held<Vec<PathBuf>> {
     let a = crate::checks::scratch(tag);
     std::fs::create_dir_all(a.join("deep")).unwrap();
     std::fs::write(
@@ -87,7 +87,7 @@ fn no_term_is_refused() {
     assert_eq!(canon(&words(&[" | "]), &[]).code, 2);
 }
 
-fn money_tree(tag: &str, held: Option<&str>) -> (l7r_guard::shared::tempdir::TempDir, PathBuf) {
+fn money_tree(tag: &str, held: Option<&str>) -> (l7r_shared::tempdir::TempDir, PathBuf) {
     let root = crate::checks::scratch(tag);
     std::fs::create_dir_all(root.join("research/assets")).unwrap();
     if let Some(text) = held {
@@ -162,7 +162,7 @@ fn a_close_that_breaks_a_rule_is_refused_and_changes_nothing() {
     assert_eq!(r, rows());
 }
 
-fn feature(tag: &str) -> (l7r_guard::shared::tempdir::TempDir, String) {
+fn feature(tag: &str) -> (l7r_shared::tempdir::TempDir, String) {
     let dir = crate::checks::scratch(tag);
     let body: Vec<String> = rows().iter().map(ToString::to_string).collect();
     std::fs::write(dir.join("found.jsonl"), body.join("\n") + "\n\n").unwrap();

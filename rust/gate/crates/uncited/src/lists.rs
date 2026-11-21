@@ -7,8 +7,8 @@
 use std::io::Write as _;
 use std::path::Path;
 
-use l7r_guard::shared::consulted::{self, norm};
-use l7r_guard::shared::pyjson::{dumps, py_str, truthy, value_repr};
+use l7r_shared::consulted::{self, norm};
+use l7r_shared::pyjson::{dumps, py_str, truthy, value_repr};
 use serde_json::{json, Map, Value};
 
 use crate::set::work;
@@ -72,7 +72,7 @@ fn url_of(x: &Value) -> Result<String> {
 /// # Errors
 /// A blocked URL, a line with no URL, the lock or the write.
 pub fn write(root: &Path, lines: &[Value], rel: &str) -> Result<()> {
-    if rel == l7r_guard::shared::attempts::LOG {
+    if rel == l7r_shared::attempts::LOG {
         return Err(Error::new(
             "ValueError",
             "the attempts log is written by `add` (l7r-gate record attempts add), its one writer",
@@ -141,7 +141,7 @@ pub fn field(x: &Value, k: &str) -> Result<String> {
 /// # Errors
 /// A file that is not UTF-8.
 pub fn read(root: &Path, rel: &str) -> Result<Vec<Value>> {
-    Ok(l7r_guard::shared::attempts::read(root, rel)?)
+    Ok(l7r_shared::attempts::read(root, rel)?)
 }
 
 /// A kept page judged again NOT-KEPT (a duplicate found later, a page the filter kept in error): its line leaves the kept list and a
@@ -217,7 +217,7 @@ pub fn get<'v>(x: &'v Value, k: &str) -> Result<Option<&'v Value>> {
             "AttributeError",
             format!(
                 "'{}' object has no attribute 'get'",
-                l7r_guard::shared::blocked::type_name(other)
+                l7r_shared::blocked::type_name(other)
             ),
         )),
     }

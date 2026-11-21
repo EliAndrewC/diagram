@@ -11,7 +11,7 @@
 use std::collections::BTreeSet;
 
 use l7r_gate_research::Error;
-use l7r_guard::shared::pyjson::py_float;
+use l7r_shared::pyjson::py_float;
 
 use crate::grids::FTPX;
 use crate::py::{fmt_g, hypot, round_to, sum};

@@ -166,7 +166,7 @@ fn a_directory_is_read_as_text_alone() {
     assert_eq!(read_dir(&d).keys().collect::<Vec<_>>(), ["deep/a.md"]);
 }
 
-fn clone(tag: &str) -> l7r_guard::shared::tempdir::TempDir {
+fn clone(tag: &str) -> l7r_shared::tempdir::TempDir {
     let root = crate::checks::scratch(tag);
     for args in [
         &["init", "-q"][..],

@@ -7,7 +7,7 @@
 //! `l7r-gate reviews owed [--root DIR] [--why | --units | --undrawn | --check-declared | --check-drawn | --glyph-gate SLUG | --glyph-dispatched SLUG |
 //! --landing-mark on|off] [--landing] [--escaped]`.
 
-use l7r_guard::shared::env::Rooted;
+use l7r_shared::env::Rooted;
 use std::collections::{BTreeMap, BTreeSet};
 use std::fmt::Write as _;
 use std::path::{Path, PathBuf};
@@ -48,7 +48,7 @@ pub(super) const DECLARED: [(&str, &[&str]); 8] = [
 const NOT_ELEMENTS: [&str; 2] = ["-", "place"];
 
 pub(super) fn re(pattern: &str) -> Regex {
-    l7r_guard::shared::regex::build(pattern).unwrap_or_else(|e| unreachable!("{e}"))
+    l7r_shared::regex::build(pattern).unwrap_or_else(|e| unreachable!("{e}"))
 }
 
 static DATA_KIND: LazyLock<Regex> = LazyLock::new(|| re(r#"data-kind="([^"]+)""#));

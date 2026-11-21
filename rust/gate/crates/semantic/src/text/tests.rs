@@ -1,7 +1,7 @@
 //! A page as the index read it (feature 449 T138): the expected values are `semantic_index.py`'s own (observed 2026-11-16, in the
 //! interpreter).
 
-use l7r_guard::shared::tempdir::TempDir;
+use l7r_shared::tempdir::TempDir;
 
 use super::{fingerprint, first, passages, read_lossy, slice, squeeze, strip_html};
 

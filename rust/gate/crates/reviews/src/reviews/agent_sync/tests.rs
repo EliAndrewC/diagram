@@ -60,7 +60,7 @@ fn render_replaces_the_generated_part_and_keeps_the_agents_own_text() {
 }
 
 /// A scratch clone holding one agent file `c.md` that carries `dev/g.md`.
-fn scratch(name: &str) -> l7r_guard::shared::tempdir::Held<PathBuf> {
+fn scratch(name: &str) -> l7r_shared::tempdir::Held<PathBuf> {
     let d = dir(name);
     put(&d, "dev/g.md", "the rule\n");
     put(&d, ".claude/agents/c.md", "contract\n");

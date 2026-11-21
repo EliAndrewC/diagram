@@ -10,7 +10,7 @@
 use std::fmt::Write as _;
 use std::path::{Path, PathBuf};
 
-use l7r_guard::shared::pyjson::{py_float, py_str};
+use l7r_shared::pyjson::{py_float, py_str};
 use serde_json::Value;
 
 use crate::Reply;
@@ -260,7 +260,7 @@ fn runs(cwd: &Path, out: &mut Out) -> Result<(), String> {
             pad(field(r, "seconds")?, false, 4)?,
             pad(field(r, "result")?, true, 22)?,
             s(field(r, "commit")?),
-            l7r_guard::shared::py_text::strip(&tail)
+            l7r_shared::py_text::strip(&tail)
         ));
     }
     if last.is_empty() {
@@ -515,8 +515,8 @@ fn claims(cwd: &Path, out: &mut Out) -> Result<(), String> {
     if cwd.join(&p).is_file() {
         let bytes = std::fs::read(cwd.join(&p)).map_err(io)?;
         let text = String::from_utf8(bytes).map_err(|e| format!("UnicodeDecodeError: {e}"))?;
-        for l in l7r_guard::shared::speckit::splitlines(&text) {
-            if !l7r_guard::shared::py_text::strip(l).is_empty() {
+        for l in l7r_shared::speckit::splitlines(&text) {
+            if !l7r_shared::py_text::strip(l).is_empty() {
                 rows.push(
                     serde_json::from_str::<Value>(l)
                         .map_err(|e| format!("json.decoder.JSONDecodeError: {e}"))?,

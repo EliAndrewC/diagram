@@ -109,7 +109,7 @@ fn term_stops_every_held_group_and_exits_143() {
         hold(sleeper.id());
         catch_term();
         // an in-process call's first scratch directory, after the catch (the replaced-handler fault the differential found)
-        let _scratch = l7r_guard::shared::tempdir::TempDir::new("land-stop-scratch");
+        let _scratch = l7r_shared::tempdir::TempDir::new("land-stop-scratch");
         std::fs::write(&note, format!("{}\n", sleeper.id())).unwrap();
         std::thread::sleep(Duration::from_secs(30));
         return;

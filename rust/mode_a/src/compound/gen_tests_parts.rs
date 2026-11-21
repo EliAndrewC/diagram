@@ -684,7 +684,7 @@ fn none(_: &std::path::Path) -> Result<Vec<FeatureClass>, l7r_gate_research::Err
 fn the_command_draws_a_spec_whole_or_refuses_it() {
     let _log = crate::reads::taker();
     let tree = super::gen_tests_seat::tree();
-    let dir = l7r_guard::shared::tempdir::TempDir::new("compound-cli");
+    let dir = l7r_shared::tempdir::TempDir::new("compound-cli");
     let spec = dir.path().join("t.compound.json");
     let named = r#", "zones": [{"kind": "inner court", "x": 3, "y": 30, "w": 94, "h": 17}, {"kind": "outer court", "x": 3, "y": 53, "w": 94, "h": 30}]"#;
     let shed = b(
@@ -904,7 +904,7 @@ fn the_centered_search_reads_past_its_reach_and_a_sheet_unwritable_is_refused() 
     };
     assert_eq!(super::span::centered(&mut g, &ask, 100.0), Some(55.0));
     let _log = crate::reads::taker();
-    let dir = l7r_guard::shared::tempdir::TempDir::new("compound-cli-write");
+    let dir = l7r_shared::tempdir::TempDir::new("compound-cli-write");
     let spec = dir.path().join("w.compound.json");
     let named = r#", "zones": [{"kind": "inner court", "x": 3, "y": 3, "w": 94, "h": 44}, {"kind": "outer court", "x": 3, "y": 53, "w": 94, "h": 30}]"#;
     std::fs::write(&spec, super::gen_tests::small(named)).unwrap();

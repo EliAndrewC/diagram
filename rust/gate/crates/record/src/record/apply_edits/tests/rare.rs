@@ -9,7 +9,7 @@ use l7r_gate_core::record::testkit::{put, record, NOTES, PAGE};
 use super::{assemblable, edit, page, run, scratch};
 
 /// A record with an assembled registry.
-fn assembled(tag: &str) -> l7r_guard::shared::tempdir::TempDir {
+fn assembled(tag: &str) -> l7r_shared::tempdir::TempDir {
     let root = record(tag);
     assemblable(&root);
     root
@@ -142,8 +142,7 @@ fn a_store_that_cannot_be_written_and_a_ledger_held_or_unreadable() {
     let also = notes.replace(&k, &k.replace("</li>", " Also.</li>"));
     std::fs::write(root.join(NOTES), also).unwrap();
     // the store cannot be written: the round cannot settle, and the edits stand
-    let store =
-        crate::record::owed::answers::store_in(&l7r_guard::shared::env::Rooted::with(&*root, &[]));
+    let store = crate::record::owed::answers::store_in(&l7r_shared::env::Rooted::with(&*root, &[]));
     let _ = std::fs::remove_dir_all(&store);
     std::fs::write(&store, "a file where the store goes").unwrap();
     let unsettled = run(

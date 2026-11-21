@@ -15,7 +15,7 @@ use std::process::Command;
 use std::sync::LazyLock;
 
 use fancy_regex::Regex;
-use l7r_guard::shared::speckit::splitlines;
+use l7r_shared::speckit::splitlines;
 use serde_json::Value;
 
 use crate::tick::text::re;
@@ -67,7 +67,7 @@ fn same_pairs(tree: &Path, pairs: &[(Vec<u8>, Vec<u8>)]) -> Raise<Vec<bool>> {
     if pairs.is_empty() {
         return Ok(Vec::new());
     }
-    let dir = l7r_guard::shared::tempdir::TempDir::new("task-wording");
+    let dir = l7r_shared::tempdir::TempDir::new("task-wording");
     let mut names = Vec::with_capacity(pairs.len() * 2);
     for (i, (a, b)) in pairs.iter().enumerate() {
         for (side, data) in [("a", a), ("b", b)] {
@@ -116,7 +116,7 @@ fn changed_in_what_runs(root: &Path, tree: &Path, since: &str) -> Raise<Vec<Stri
     );
     let revs = text_of(&revs);
     let mut changes: Vec<(String, Vec<String>)> = Vec::new();
-    for c in l7r_guard::shared::py_text::split(&revs) {
+    for c in l7r_shared::py_text::split(&revs) {
         let (_, names) = git(
             root,
             &[
@@ -195,7 +195,7 @@ pub(crate) fn refusal(
     if falsy {
         return Ok(format!("{task}'s section says wording only, but it has no `make task-start` to read its commits from - start it, then tick"));
     }
-    let since = l7r_guard::shared::pyjson::py_str(&since);
+    let since = l7r_shared::pyjson::py_str(&since);
     let off = changed_in_what_runs(root, tree, &since)?;
     Ok(off.first().map_or(String::new(), |f| {
         format!("{task}'s section says wording only, but {f} changed in what runs - write its decision (`**D<n> - `) in place of the `{WORDING}` line and `make decide`")

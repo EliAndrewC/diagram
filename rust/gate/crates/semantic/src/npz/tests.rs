@@ -1,7 +1,7 @@
 //! The shards' format (feature 449 T138).
 
 use crate::testkit::q;
-use l7r_guard::shared::tempdir::TempDir;
+use l7r_shared::tempdir::TempDir;
 
 use super::{dos_time, f32_to_half, half_to_f32, read, write, Shard};
 

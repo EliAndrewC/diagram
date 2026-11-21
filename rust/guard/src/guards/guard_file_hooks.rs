@@ -47,7 +47,9 @@ static HOOK_SCRIPT: LazyLock<Regex> = LazyLock::new(|| re(r"/scripts/.*-hooks\.s
 static HELD_SUITE: LazyLock<Regex> = LazyLock::new(|| re(r"/tests/hooks/test-.*-hooks\.sh$"));
 /// The guards' own sources (T229, ask:449-guard-sources-held): every file under `rust/guard/src/` (the `.rs` and the data files the guards read) but the test files, the crate's manifest and the dispatcher script.
 static GUARD_SOURCE: LazyLock<Regex> = LazyLock::new(|| {
-    re(r"(/rust/guard/src/.+|/rust/guard/Cargo\.toml|/scripts/hooks/l7r-guard\.sh)$")
+    re(
+        r"(/rust/guard/(?:shared/)?src/.+|/rust/guard/(?:shared/)?Cargo\.toml|/scripts/hooks/l7r-guard\.sh)$",
+    )
 });
 static GUARD_TEST: LazyLock<Regex> = LazyLock::new(|| re(r"(/tests\.rs|/tests/[^ ]*)$"));
 static RECIPE_COMMENT: LazyLock<Regex> =

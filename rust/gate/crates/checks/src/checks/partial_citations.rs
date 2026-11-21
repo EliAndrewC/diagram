@@ -22,7 +22,7 @@ const CONFIRMED_NAME: &str = "partial-confirmations.jsonl";
 const UNREADABLE: [&str; 3] = ["paywalled", "gm-partial", "never-read"];
 
 fn compiled(pattern: &str) -> Regex {
-    l7r_guard::shared::regex::build(pattern).unwrap_or_else(|e| unreachable!("{e}"))
+    l7r_shared::regex::build(pattern).unwrap_or_else(|e| unreachable!("{e}"))
 }
 
 static NOTE: LazyLock<Regex> =

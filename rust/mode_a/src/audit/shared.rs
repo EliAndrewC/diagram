@@ -15,7 +15,7 @@ use std::sync::LazyLock;
 use fancy_regex::Regex;
 use l7r_gate_research::pyre::py;
 use l7r_gate_research::Error;
-use l7r_guard::shared::py_text::strip;
+use l7r_shared::py_text::strip;
 
 use super::checks::{first_max, wall_openings, WALL_OVERLAP_MIN_PX};
 use crate::grids::{coverage, perimeter_hugging_pct, CELL, FTPX, HUG_DEPTH_FT};

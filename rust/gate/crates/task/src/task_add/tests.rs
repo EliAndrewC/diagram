@@ -172,7 +172,7 @@ fn each_refusal_and_raise() {
 /// section after the close, their one search failed. The id is read to the end, bounded here so that the test cannot spin.
 #[test]
 fn the_next_id_and_the_anchors_are_read_past_a_megabyte() {
-    let dir = l7r_guard::shared::tempdir::TempDir::new("task-add-past-limit");
+    let dir = l7r_shared::tempdir::TempDir::new("task-add-past-limit");
     let d = dir.path().to_path_buf();
     std::fs::write(d.join("tasks.md"), "- [ ] T01 a\n").unwrap();
     let filler = "plain words of a finished section\n".repeat(40_000);
@@ -202,7 +202,7 @@ fn the_next_id_and_the_anchors_are_read_past_a_megabyte() {
 /// the set-down guard and `make task-start` share - `PERF=1`'s checklist heading and a `[perf]` title - and a plain task not.
 #[test]
 fn perf_1_and_a_perf_title_each_file_a_task_the_reader_calls_performance_work() {
-    use l7r_guard::guards::set_down_hooks::performance;
+    use l7r_shared::guards::set_down_hooks::performance;
     let (_dir, root) = quick_repo("task-add-perf");
     let d = root.join("specs/9001-x");
     put(&root, "specs/9001-x/tasks.md", "- [x] T01 done\n");
@@ -241,7 +241,7 @@ const EARLY: &str = "[ -f early-red ] || exit 0\necho 'l7r/a.py:3:1: F401 unused
 const LINT: &str = "grep -n 'FR-4[0-9][0-9]' \"$1\" | sed 's/^\\([0-9]*\\):.*\\(FR-4[0-9][0-9]\\).*/specs\\/9001-x\\/tasks.md:\\1: cites \\2, which spec.md does not define/' | grep . && exit 1\nexit 0\n";
 
 /// A [`repo`] fixture with the quick of [`QUICK_MAKEFILE`].
-pub(super) fn quick_repo(tag: &str) -> (l7r_guard::shared::tempdir::TempDir, std::path::PathBuf) {
+pub(super) fn quick_repo(tag: &str) -> (l7r_shared::tempdir::TempDir, std::path::PathBuf) {
     let dir = repo(tag);
     let root = root_of(&dir);
     put(&root, "Makefile", QUICK_MAKEFILE);

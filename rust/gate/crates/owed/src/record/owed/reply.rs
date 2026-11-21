@@ -12,7 +12,7 @@ use crate::record::repo::Fail;
 #[must_use]
 pub fn unescaped(text: &str) -> String {
     if text.contains("&lt;&lt;&lt;") && !text.contains("\n<<<") {
-        l7r_guard::shared::html_text::unescape(text)
+        l7r_shared::html_text::unescape(text)
     } else {
         text.to_owned()
     }
@@ -42,8 +42,8 @@ pub fn reply_text(path: &Path) -> Result<String, Fail> {
     }
     let bad = |what: &str| format!("AttributeError: {what}");
     let mut last = String::new();
-    for line in l7r_guard::shared::checks::reply::py_lines(&text) {
-        let Ok(rec) = l7r_guard::shared::pyjson::loads(line) else {
+    for line in l7r_shared::checks::reply::py_lines(&text) {
+        let Ok(rec) = l7r_shared::pyjson::loads(line) else {
             continue;
         };
         let Value::Object(rec) = rec else {
@@ -52,10 +52,7 @@ pub fn reply_text(path: &Path) -> Result<String, Fail> {
         if rec.get("type").and_then(Value::as_str) != Some("assistant") {
             continue;
         }
-        let msg = match rec
-            .get("message")
-            .filter(|m| l7r_guard::shared::pyjson::truthy(m))
-        {
+        let msg = match rec.get("message").filter(|m| l7r_shared::pyjson::truthy(m)) {
             None => serde_json::Map::new(),
             Some(Value::Object(m)) => m.clone(),
             Some(_) => return Err(bad("a message is not an object")),

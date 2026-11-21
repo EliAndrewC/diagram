@@ -38,13 +38,13 @@ mod testkit;
 /// Feature 312's list of the pages kept (the archive's [`l7r_gate_archive::ops::KEPT`], which reads it).
 pub const KEPT: &str = l7r_gate_archive::ops::KEPT;
 /// The pages not kept, each with its reasons: committed beside the record, union-merged.
-pub const NOT_KEPT: &str = l7r_guard::shared::attempts::NOT_KEPT;
+pub const NOT_KEPT: &str = l7r_shared::attempts::NOT_KEPT;
 /// The import check's lines (research.md R5).
 pub const MISFILED: &str = "specs/312-uncited-source-catalog/import-check.jsonl";
 /// The registry.
 pub const SOURCES: &str = "research/sources";
 /// The uncited works' group of the registry.
-pub const UNCITED: &str = l7r_guard::shared::attempts::UNCITED;
+pub const UNCITED: &str = l7r_shared::attempts::UNCITED;
 /// The reasons a page is not kept.
 pub const REASONS: [&str; 6] = [
     "off-topic",
@@ -73,7 +73,7 @@ pub fn squeeze(text: &str) -> String {
     let mut out = String::with_capacity(text.len());
     let mut space = false;
     for c in text.chars() {
-        if l7r_guard::shared::py_text::is_space(c) {
+        if l7r_shared::py_text::is_space(c) {
             if !space {
                 out.push(' ');
             }
@@ -89,7 +89,7 @@ pub fn squeeze(text: &str) -> String {
 /// `str.strip()`.
 #[must_use]
 pub fn strip(text: &str) -> &str {
-    l7r_guard::shared::py_text::strip(text)
+    l7r_shared::py_text::strip(text)
 }
 
 /// `len(text)`: its characters.
@@ -118,13 +118,13 @@ pub fn tokens(text: &str) -> usize {
 /// The local date, as the Python's `date.today()` read it.
 #[must_use]
 pub fn today() -> String {
-    l7r_guard::shared::attempts::today()
+    l7r_shared::attempts::today()
 }
 
 /// The tree whose `research/` holds the record's lists (`attempts.base`: the clone, or `L7R_ATTEMPTS_ROOT`).
 #[must_use]
 pub fn base(root: &Path) -> PathBuf {
-    l7r_guard::shared::attempts::base(root)
+    l7r_shared::attempts::base(root)
 }
 
 /// The record's directory a URL is checked against the blocked list by.
@@ -175,7 +175,7 @@ pub fn lines_keep(text: &str) -> Vec<&str> {
 /// `str.splitlines()`.
 #[must_use]
 pub fn lines(text: &str) -> Vec<&str> {
-    l7r_guard::shared::speckit::splitlines(text)
+    l7r_shared::speckit::splitlines(text)
 }
 
 /// A file read as `read_text(encoding="utf-8")` (universal newlines).
@@ -251,7 +251,7 @@ fn strerror(e: &std::io::Error) -> String {
 /// # Errors
 /// Not JSON (`JSONDecodeError`, the library's words: `ask:449-T066-json-message`).
 pub fn loads(text: &str) -> Result<serde_json::Value> {
-    l7r_guard::shared::pyjson::loads(text).map_err(|e| Error::new("JSONDecodeError", e.to_string()))
+    l7r_shared::pyjson::loads(text).map_err(|e| Error::new("JSONDecodeError", e.to_string()))
 }
 
 /// The name of a path (`Path.name`).

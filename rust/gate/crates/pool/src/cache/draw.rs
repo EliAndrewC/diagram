@@ -196,7 +196,7 @@ impl Run<'_> {
             "hash_block",
             usize::try_from((bytes.len() as u64).div_ceil(engine::BLOCK)).unwrap_or(0),
         );
-        let spec_digest = l7r_guard::shared::sha256::hex(&bytes);
+        let spec_digest = l7r_shared::sha256::hex(&bytes);
         let io = at(staging);
         let staged_spec = staging.join(spec.file_name().unwrap_or_default());
         let args = match m.kind {
@@ -383,7 +383,7 @@ impl Run<'_> {
                 digest: spec_digest,
             },
             artifacts: records,
-            key: l7r_guard::shared::sha256::hex(key_text.as_bytes()),
+            key: l7r_shared::sha256::hex(key_text.as_bytes()),
             reads: reads.len(),
         };
         self.count("record", 2 + artifacts.len());

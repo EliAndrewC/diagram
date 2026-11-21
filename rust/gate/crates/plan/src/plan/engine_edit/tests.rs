@@ -7,7 +7,7 @@ use serde_json::json;
 use super::super::tests::{git, repo};
 use super::cli;
 
-fn clone_with(file: &str, text: &str) -> l7r_guard::shared::tempdir::TempDir {
+fn clone_with(file: &str, text: &str) -> l7r_shared::tempdir::TempDir {
     let root = repo();
     for (path, body) in [("scripts/gates/l7r-gate.sh", "x\n"), (file, text)] {
         std::fs::create_dir_all(root.join(path).parent().unwrap()).unwrap();
@@ -92,7 +92,7 @@ fn the_edit_applied_once_or_everywhere() {
 }
 
 /// A clone holding an engine file with a docstring and the real `codeid.py`, which decides.
-fn with_codeid() -> l7r_guard::shared::tempdir::TempDir {
+fn with_codeid() -> l7r_shared::tempdir::TempDir {
     let root = clone_with("l7r/diagram/a.py", "\"\"\"Doc.\"\"\"\nX = 1\n");
     let real = Path::new(env!("CARGO_MANIFEST_DIR")).join("../../../../scripts");
     std::fs::create_dir_all(root.join("scripts/gates")).unwrap();

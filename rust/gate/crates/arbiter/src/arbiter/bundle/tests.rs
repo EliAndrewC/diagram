@@ -1,8 +1,8 @@
 //! The arbiter's bundle end to end, on a scratch record with a check state, an owed record and a feature.
 
 /// A root carrying an empty environment: each test reads its own, never the session's exports (feature 451 T38).
-fn own(root: &std::path::Path) -> l7r_guard::shared::env::Rooted {
-    l7r_guard::shared::env::Rooted::with(root.to_path_buf(), &[])
+fn own(root: &std::path::Path) -> l7r_shared::env::Rooted {
+    l7r_shared::env::Rooted::with(root.to_path_buf(), &[])
 }
 
 use std::path::Path;

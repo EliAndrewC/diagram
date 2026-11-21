@@ -4,7 +4,7 @@ use std::path::{Path, PathBuf};
 use std::process::Command;
 use std::sync::OnceLock;
 
-use l7r_guard::shared::tempdir::Held;
+use l7r_shared::tempdir::Held;
 use serde_json::{json, Value};
 
 use super::answer;
@@ -34,7 +34,7 @@ pub(super) fn within() -> Value {
 pub(super) fn quiet_census() -> PathBuf {
     static DIR: OnceLock<PathBuf> = OnceLock::new();
     DIR.get_or_init(|| {
-        let dir = l7r_guard::shared::tempdir::beside_binary("gate-plan-census");
+        let dir = l7r_shared::tempdir::beside_binary("gate-plan-census");
         std::env::set_var("GUARD_LOG_DIR", &dir);
         dir
     })
@@ -95,7 +95,7 @@ pub(super) fn git(root: &Path, args: &[&str]) -> String {
     String::from_utf8_lossy(&done.stdout).trim().to_owned()
 }
 
-pub(super) fn repo() -> l7r_guard::shared::tempdir::TempDir {
+pub(super) fn repo() -> l7r_shared::tempdir::TempDir {
     let root = scratch("plan-repo");
     git(&root, &["init", "-q", "-b", "main"]);
     root

@@ -9,8 +9,8 @@ use serde_json::json;
 use super::*;
 
 /// A fresh directory for one test.
-pub(super) fn dir(name: &str) -> l7r_guard::shared::tempdir::Held<std::path::PathBuf> {
-    let d = l7r_guard::shared::tempdir::TempDir::new(&format!("gate-reviews-{name}"));
+pub(super) fn dir(name: &str) -> l7r_shared::tempdir::Held<std::path::PathBuf> {
+    let d = l7r_shared::tempdir::TempDir::new(&format!("gate-reviews-{name}"));
     let root = std::fs::canonicalize(&d).unwrap();
     d.hold(root)
 }
@@ -79,7 +79,7 @@ pub(super) fn tools(root: &Path) {
 /// A repository with one commit, `origin/main` at it, and the stubbed tools (untracked): two git calls, the identity written into the
 /// repository's config and `origin/main` written as its ref file in process (feature 449 T167, FR-008: the shell and the three other
 /// git calls were six of the eight starts every test of the crate paid for its repository).
-pub(super) fn repo(name: &str) -> l7r_guard::shared::tempdir::Held<PathBuf> {
+pub(super) fn repo(name: &str) -> l7r_shared::tempdir::Held<PathBuf> {
     let d = dir(name);
     git_ok(&d, &["init", "-q"]);
     let config = d.join(".git/config");
@@ -186,7 +186,7 @@ fn entry(root: &Path, tier: &str, name: &str, engine: &str, spec: &str, artifact
             path: spec.display().to_string(),
             stat: stat::stat(&spec),
             hashed: 0,
-            digest: l7r_guard::shared::sha256::hex(&std::fs::read(&spec).unwrap()),
+            digest: l7r_shared::sha256::hex(&std::fs::read(&spec).unwrap()),
         },
         artifacts: vec![entry::Artifact {
             name: artifact,
@@ -248,7 +248,7 @@ pub(super) fn started(root: &Path, feature: &str, task: &str) {
 
 /// The feature's event log: one event a row, `(seconds ago, ev, gm)`.
 pub(super) fn events(root: &Path, feature: &str, rows: &[(i64, &str, bool)]) {
-    let now = l7r_guard::shared::checks::now();
+    let now = l7r_shared::checks::now();
     let lines: String = rows
         .iter()
         .map(|(ago, ev, gm)| {
@@ -257,7 +257,7 @@ pub(super) fn events(root: &Path, feature: &str, rows: &[(i64, &str, bool)]) {
             let secs = int_of(at);
             #[expect(clippy::cast_sign_loss, reason = "past the epoch")]
             let (year, month, day, hour, minute, second) =
-                l7r_guard::shared::log::civil(secs as u64);
+                l7r_shared::log::civil(secs as u64);
             let mut e =
                 json!({"t": format!("{year:04}-{month:02}-{day:02}T{hour:02}:{minute:02}:{second:02}Z"), "ev": ev});
             if *gm {

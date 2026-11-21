@@ -7,8 +7,8 @@
 use std::path::{Path, PathBuf};
 use std::process::{Command, Stdio};
 
-use l7r_guard::shared::log::{write as log_write, Entry};
-use l7r_guard::shared::sha256;
+use l7r_shared::log::{write as log_write, Entry};
+use l7r_shared::sha256;
 use serde_json::{json, Value};
 
 use crate::plan::{git_line, pretty};
@@ -229,7 +229,7 @@ const CHECKS: [Row; 23] = [
     Row("spec-lint selftest", Tool::Gate, &["check", "spec-lint", "--selftest"], "spec-lint selftest failed - the guard itself is broken; fix rust/gate/crates/checks/src/checks/spec_lint.rs before pushing", true, ""),
     Row("spec-lint", Tool::Gate, &["check", "spec-lint", "--delta", "{root}"], "spec-lint found something a review round would otherwise spend itself on (above) - feature 236, the GM: mistakes caught early and cheaply", false, ""),
     Row("speckit-todo check", Tool::Gate, &["speckit-todo", "--root", "{root}", "--check"], "an open feature does not say what it affects (above): add its **Affects** line - make speckit-todo CHECK=1 re-checks", false, ""),
-    Row("conflict selftest", Tool::Gate, &["check", "conflict", "--selftest"], "conflict-marker selftest failed - the guard itself is broken; fix rust/guard/src/guards/conflict_marker_hooks.rs before pushing", true, ""),
+    Row("conflict selftest", Tool::Gate, &["check", "conflict", "--selftest"], "conflict-marker selftest failed - the guard itself is broken; fix rust/guard/shared/src/guards/conflict_marker_hooks.rs before pushing", true, ""),
     Row("conflict", Tool::Gate, &["check", "conflict", "--tracked", "{root}"], "a tracked file still carries an unresolved merge conflict (above) - the history here is never rewritten, so resolve it before it lands, feature 241", false, ""),
     Row("record", Tool::InProcess(record_check), &["record", "check", "record"], "the record does not build cleanly (above; `make record CHECK=1` at the repository root names each refusal) - features 258 and 301", false, "research/sources"),
     Row("money-candidates", Tool::Gate, &["record", "money-candidates", "--check"], "an amount of money in the record is neither marked for the tooltip nor passed over (above) - mark it, or add `- <stem> | <amount> | <reason>` to specs/413-money-tooltip-on-the-record/backfill.md; feature 413", false, "research/sources"),

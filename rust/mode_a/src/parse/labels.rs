@@ -9,7 +9,7 @@ use std::sync::LazyLock;
 use fancy_regex::Regex;
 use l7r_gate_research::pyre::py;
 use l7r_gate_research::Error;
-use l7r_guard::shared::py_text::strip;
+use l7r_shared::py_text::strip;
 
 use super::{cp, Label, CAPS_RATIO, CHAR_W_BOLD, CHAR_W_BOLD_MIXED, CHAR_W_FRAC};
 use crate::py::{float, min, sum};

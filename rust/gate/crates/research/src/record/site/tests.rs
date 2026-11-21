@@ -14,7 +14,7 @@ use super::{
 };
 use crate::fixture::{put, tree};
 use crate::record::questions::QUESTIONS;
-use l7r_guard::shared::sha256;
+use l7r_shared::sha256;
 
 fn edit(root: &Path, e: &[Value]) {
     let rel = e[0]

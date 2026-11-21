@@ -5,7 +5,7 @@
 
 use std::path::{Path, PathBuf};
 
-use l7r_guard::shared::pyjson::py_str;
+use l7r_shared::pyjson::py_str;
 use serde_json::{json, Value};
 
 use super::{field, mkdir, rmdir, sorted_entries, unlink, write_table};

@@ -39,16 +39,16 @@ use fancy_regex::Regex;
 use l7r_gate_core::record::args::{parse_with, Spec};
 use l7r_gate_core::record::repo::{flock_within, mirror_of, utc_now};
 use l7r_gate_core::Reply;
-use l7r_guard::shared::checks::resolved;
-use l7r_guard::shared::py_text::{fmt_g, py_float_text, repr, strip};
-use l7r_guard::shared::pyjson::{dumps, py_str};
-use l7r_guard::shared::speckit::{py_name, py_path, splitlines};
+use l7r_shared::checks::resolved;
+use l7r_shared::py_text::{fmt_g, py_float_text, repr, strip};
+use l7r_shared::pyjson::{dumps, py_str};
+use l7r_shared::speckit::{py_name, py_path, splitlines};
 use serde_json::{json, Value};
 
 use crate::{raised, read_strict, reply};
 
 fn re(pattern: &str) -> Regex {
-    l7r_guard::shared::regex::build(pattern).unwrap_or_else(|e| unreachable!("{e}"))
+    l7r_shared::regex::build(pattern).unwrap_or_else(|e| unreachable!("{e}"))
 }
 
 // Python's `$` also matches before a final newline, so `\n?\z` stands for it; `\d` read as ASCII digits (Python's would take any decimal

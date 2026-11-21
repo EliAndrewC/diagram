@@ -24,7 +24,7 @@ pub const ENTRY_SCRIPTS: [&str; 3] = [
 ];
 
 fn compiled(pattern: &str) -> Regex {
-    l7r_guard::shared::regex::build(pattern).unwrap_or_else(|e| unreachable!("{e}"))
+    l7r_shared::regex::build(pattern).unwrap_or_else(|e| unreachable!("{e}"))
 }
 
 static HOOK: LazyLock<Regex> = LazyLock::new(|| compiled(r"scripts/hooks/([\w-]+)-hooks\.sh"));

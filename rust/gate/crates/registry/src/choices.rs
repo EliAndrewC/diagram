@@ -7,7 +7,7 @@
 use std::path::{Path, PathBuf};
 
 use l7r_gate_research::{Error, Result};
-use l7r_guard::shared::pyjson::{py_str, truthy};
+use l7r_shared::pyjson::{py_str, truthy};
 use serde_json::{json, Map, Value};
 
 use crate::about::{about_feature, parse_explanation, FeatureClass, MODALS};

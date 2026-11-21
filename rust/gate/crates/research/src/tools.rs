@@ -64,7 +64,7 @@ pub fn py_str(e: &Error) -> String {
         && ((e.message.starts_with('\'') && e.message.ends_with('\''))
             || (e.message.starts_with('"') && e.message.ends_with('"')));
     if e.kind == "KeyError" && !quoted {
-        l7r_guard::shared::py_text::repr(&e.message)
+        l7r_shared::py_text::repr(&e.message)
     } else {
         e.message.clone()
     }

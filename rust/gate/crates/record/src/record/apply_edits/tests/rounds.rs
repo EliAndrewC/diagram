@@ -16,7 +16,7 @@ const KYAKHTA: &str =
     "<p>A short distance apart.<sup class=\"fn\" data-note=\"k\"></sup> More here, now.</p>";
 
 /// A record with every kind of owed edit in its working tree, and the page's line the round tests edit.
-fn edited(tag: &str) -> (l7r_guard::shared::tempdir::TempDir, String, String) {
+fn edited(tag: &str) -> (l7r_shared::tempdir::TempDir, String, String) {
     let root = record(tag);
     edit_everything(&root);
     let current = page(&root);
@@ -141,11 +141,11 @@ fn a_skipped_block_the_refused_command_lines_and_a_tree_that_is_no_repository() 
 }
 
 /// A record with every kind of owed edit and an assembled registry, and its answer store.
-fn settling(tag: &str) -> (l7r_guard::shared::tempdir::TempDir, std::path::PathBuf) {
+fn settling(tag: &str) -> (l7r_shared::tempdir::TempDir, std::path::PathBuf) {
     let root = record(tag);
     edit_everything(&root);
     assemblable(&root);
-    let store = answers::store_in(&l7r_guard::shared::env::Rooted::with(&*root, &[]));
+    let store = answers::store_in(&l7r_shared::env::Rooted::with(&*root, &[]));
     (root, store)
 }
 

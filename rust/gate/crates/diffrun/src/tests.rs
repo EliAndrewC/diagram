@@ -4,7 +4,7 @@
 
 use std::path::{Path, PathBuf};
 
-use l7r_guard::shared::tempdir::TempDir;
+use l7r_shared::tempdir::TempDir;
 use serde_json::{json, Value};
 
 use crate::{cli, Ctx};
@@ -860,11 +860,11 @@ fn a_bare_world_compares_everything_under_it() {
     assert_eq!(kept["result"]["files"]["out/a2/f"].as_str(), Some("two\n"));
     // a separator that can match nothing is passed over
     assert_eq!(
-        crate::norm::sorted("b\na", &l7r_guard::shared::regex::build("\n*").unwrap()),
+        crate::norm::sorted("b\na", &l7r_shared::regex::build("\n*").unwrap()),
         "a\nb"
     );
     assert_eq!(
-        crate::norm::sorted("ba", &l7r_guard::shared::regex::build("x").unwrap()),
+        crate::norm::sorted("ba", &l7r_shared::regex::build("x").unwrap()),
         "ba"
     );
 }

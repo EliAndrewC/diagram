@@ -8,9 +8,9 @@ use std::cell::OnceCell;
 use std::path::Path;
 
 use fancy_regex::Regex;
-use l7r_guard::shared::blocked::{approval, load};
-pub use l7r_guard::shared::blocked::{host, refusal, Rule, DOMAINS};
-use l7r_guard::shared::pyjson::{py_str, value_repr};
+use l7r_shared::blocked::{approval, load};
+pub use l7r_shared::blocked::{host, refusal, Rule, DOMAINS};
+use l7r_shared::pyjson::{py_str, value_repr};
 
 use crate::record::archive;
 use crate::{Error, Result};
@@ -22,7 +22,7 @@ pub const CITATIONS: &str = "banned-citations.json";
 /// # Errors
 /// The list's refusal: no approval, no domain or reason, not JSON.
 pub fn domains(record_dir: &Path) -> Result<Vec<Rule>> {
-    Ok(l7r_guard::shared::blocked::domains(record_dir)?)
+    Ok(l7r_shared::blocked::domains(record_dir)?)
 }
 
 /// Every banned pattern, each compiled (`blocked.patterns`).
@@ -34,7 +34,7 @@ pub fn patterns(record_dir: &Path) -> Result<Vec<(Regex, Rule)>> {
     let mut out = Vec::new();
     for (m, raw) in rows {
         let text = py_str(&m);
-        let compiled = l7r_guard::shared::regex::build(&text).map_err(|e| {
+        let compiled = l7r_shared::regex::build(&text).map_err(|e| {
             Error::new(
                 "BlockedListError",
                 format!("{place}: pattern {} does not compile ({e})", value_repr(&m)),
@@ -71,7 +71,7 @@ impl<'d> Lists<'d> {
             let _ = self.domains.set(domains(self.dir)?);
         }
         let rules = self.domains.get().map_or(&[][..], Vec::as_slice);
-        Ok(l7r_guard::shared::blocked::blocked(url, rules).cloned())
+        Ok(l7r_shared::blocked::blocked(url, rules).cloned())
     }
 
     fn banned(&self, url: &str) -> Result<Option<Rule>> {

@@ -37,12 +37,12 @@ pub fn commit(dir: &Path, rel: &str, text: &str) {
 }
 
 /// A scratch directory of the test, removed when it is dropped.
-pub fn scratch(tag: &str) -> l7r_guard::shared::tempdir::TempDir {
-    l7r_guard::shared::tempdir::TempDir::new(&format!("gate-ci-{tag}"))
+pub fn scratch(tag: &str) -> l7r_shared::tempdir::TempDir {
+    l7r_shared::tempdir::TempDir::new(&format!("gate-ci-{tag}"))
 }
 
 /// A repository, with `origin/main` at its first commit, and one engine file.
-pub fn repo(tag: &str) -> l7r_guard::shared::tempdir::TempDir {
+pub fn repo(tag: &str) -> l7r_shared::tempdir::TempDir {
     let dir = scratch(tag);
     git(&dir, &["init", "-q", "-b", "main"]);
     git(&dir, &["config", "user.email", "t@t"]);

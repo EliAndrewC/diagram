@@ -11,7 +11,7 @@
 
 use std::path::{Path, PathBuf};
 
-use l7r_guard::shared::sha256;
+use l7r_shared::sha256;
 
 use super::{SiteFiles, SITE};
 use crate::{Error, Result};
@@ -153,7 +153,7 @@ pub fn fingerprint(tree: &Path, code: &[u8]) -> String {
 #[must_use]
 pub fn read_stamp(site_dir: &Path) -> String {
     crate::read(&site_dir.join(STAMP))
-        .map(|t| l7r_guard::shared::py_text::strip(&t).to_owned())
+        .map(|t| l7r_shared::py_text::strip(&t).to_owned())
         .unwrap_or_default()
 }
 

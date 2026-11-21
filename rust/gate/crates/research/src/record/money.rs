@@ -22,9 +22,9 @@ use serde_json::{Map, Value};
 
 use crate::pyre::py;
 use crate::{digit_value, Error, Result};
-use l7r_guard::shared::html_text::{escape, unescape};
-use l7r_guard::shared::py_text::{repr, strip};
-use l7r_guard::shared::pyjson::{py_str, truthy};
+use l7r_shared::html_text::{escape, unescape};
+use l7r_shared::py_text::{repr, strip};
+use l7r_shared::pyjson::{py_str, truthy};
 
 pub const CONVERSIONS: &str = "money-conversions.json";
 pub const AWAITING: &str = "money-eras-awaiting.json";
@@ -81,7 +81,7 @@ pub fn load(record_dir: &Path) -> Result<Table> {
                 "AttributeError",
                 format!(
                     "'{}' object has no attribute 'get'",
-                    l7r_guard::shared::blocked::type_name(&other)
+                    l7r_shared::blocked::type_name(&other)
                 ),
             ))
         }
@@ -476,7 +476,7 @@ pub fn annotate(markup: &str, place: &str, table: &Table) -> Result<(String, Vec
         }
         if VOID.contains(&name.as_str())
             || raw
-                .trim_end_matches(l7r_guard::shared::py_text::is_space)
+                .trim_end_matches(l7r_shared::py_text::is_space)
                 .ends_with('/')
         {
             continue;

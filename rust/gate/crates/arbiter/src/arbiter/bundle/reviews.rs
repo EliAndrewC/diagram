@@ -6,8 +6,8 @@ use std::path::{Path, PathBuf};
 use std::sync::LazyLock;
 
 use fancy_regex::Regex;
-use l7r_guard::shared::checks::reply;
-use l7r_guard::shared::py_text::strip;
+use l7r_shared::checks::reply;
+use l7r_shared::py_text::strip;
 use serde_json::{json, Map, Value};
 
 use super::marks::{mark_rounds, transcripts};
@@ -90,8 +90,7 @@ pub fn plan_rounds(d: &Path) -> (Vec<String>, PathBuf) {
                     field(x, "summary", ""),
                     field(x, "why", "")
                 );
-                s.trim_end_matches(l7r_guard::shared::py_text::is_space)
-                    .to_owned()
+                s.trim_end_matches(l7r_shared::py_text::is_space).to_owned()
             })
             .collect();
         if found.is_empty() {
@@ -147,7 +146,7 @@ fn first_prompt(transcript: &Path) -> String {
 
 /// The feature a review's dispatch REVIEWS (413-money-tooltip-on-the-record#1@6).
 fn reviewed_feature(prompt: &str) -> String {
-    let p = prompt.trim_start_matches(l7r_guard::shared::py_text::is_space);
+    let p = prompt.trim_start_matches(l7r_shared::py_text::is_space);
     REVIEWS
         .captures(p)
         .ok()

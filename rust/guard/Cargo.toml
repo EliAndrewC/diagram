@@ -14,6 +14,9 @@ reads = ["tests/hooks/", "Makefile", "scripts/"]
 name = "l7r_guard"
 
 [dependencies]
+# what every guard reads, the hook protocol and the guards the gate's crates call (feature 451 T58): its own crate, so a hook edit
+# rebuilds this crate alone
+l7r_shared = { path = "shared" }
 # the hook protocol's JSON, read and written (feature 449 plan, Complexity Tracking: the one crate phase 1 adds)
 serde = "1"
 # `float_roundtrip`: floats read as Python's `json.loads` reads them, the workspace's set (feature 449 T139, `rust/Cargo.toml`)
@@ -23,6 +26,10 @@ fancy-regex = "0.14"
 # a URL's host read as CPython's `urlsplit` reads it, NFKC included (feature 449 T148, `shared::url_host`): the workspace's pin, Unicode 16.0
 # as CPython 3.14.4's `unicodedata` (`rust/Cargo.toml`)
 unicode-normalization = "=0.1.24"
+
+# the guard's tests read their own environment map, as they did while `shared` was this crate's (feature 451 T32, T58)
+[dev-dependencies]
+l7r_shared = { path = "shared", features = ["test-env"] }
 
 [[bin]]
 name = "l7r-guard"

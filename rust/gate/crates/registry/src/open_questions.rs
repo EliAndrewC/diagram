@@ -19,7 +19,7 @@ use fancy_regex::Regex;
 use l7r_gate_research::pyre::py;
 use l7r_gate_research::sources::{question_text, research_questions};
 use l7r_gate_research::Result;
-use l7r_guard::shared::py_text::{collapse, strip};
+use l7r_shared::py_text::{collapse, strip};
 
 use crate::about::classes;
 

@@ -35,7 +35,7 @@ const SUFFIXES: [&str; 6] = [
 const USAGE: &str = "usage: make fragment-move FROM=research/questions/NNNN-<slug>.html TO=research/questions/NNNN-<new slug>.html\n";
 
 fn compiled(pattern: &str) -> Regex {
-    l7r_guard::shared::regex::build(pattern).unwrap_or_else(|e| unreachable!("{e}"))
+    l7r_shared::regex::build(pattern).unwrap_or_else(|e| unreachable!("{e}"))
 }
 
 /// A question's page: Python's `$` also stands before one final newline.

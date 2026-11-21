@@ -2,7 +2,7 @@
 
 use serde_json::json;
 
-use super::{decide, dirty, judge, shlex};
+use super::{decide, dirty, judge};
 use crate::protocol::{Answer, Event};
 use crate::shared::session::Session;
 use crate::shared::tool::ask;
@@ -51,19 +51,6 @@ fn run(cmd: &str, at: &str) -> Vec<Answer> {
 
 fn refused(got: &[Answer], words: &str) -> bool {
     matches!(got, [Answer::Refuse(t)] if t.contains(words))
-}
-
-#[test]
-fn a_command_is_split_as_shlex_splits_it() {
-    let words = |s: &str| shlex(s).unwrap();
-    assert_eq!(
-        words("git  checkout -- 'a b' \"c\\\"d\\x\" e\\ f # note"),
-        ["git", "checkout", "--", "a b", "c\"d\\x", "e f"]
-    );
-    assert_eq!(words("a#b c"), ["a"]);
-    assert_eq!(words("'' x"), ["", "x"]);
-    assert_eq!(shlex("it's"), None);
-    assert_eq!(words(""), Vec::<String>::new());
 }
 
 #[test]

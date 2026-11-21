@@ -356,7 +356,7 @@
    "declared": "spec-fidelity"
   },
   "### T58 Approach (checklist part A)": {
-   "sha256": "12970a3df6d9eb6e6b6048739d3180549b836e6a72d06a8cf8cb2e0aa4cf3ee8",
+   "sha256": "358c456e607ebc2cf43f607c53864b3da9b8b471dcc18ee3ba02142c216ac6d1",
    "verdict": "CLEAR",
    "reviewed": "2026-11-21",
    "declared": "spec-fidelity"
@@ -417,6 +417,12 @@
   },
   "### T64 Approach (checklist part A)": {
    "sha256": "665ae887894207f1225e4dac99bbaf929d377d10f72be86720f8cf1ad6b8c9ee",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity"
+  },
+  "### T58 (the finding as filed, restated by its measurement: every gate crate, `rust/gate`, `rust/mode_a`, the browser and the embedder named `l7r_guard`, so touching one hook compiled 32 crates where its own tests' edit compiled 1, measured 2026-11-21 (`/tmp/t58/scripts/measure.sh`: the file touched, then a warm `cargo test --offline --workspace --exclude l7r_phases --no-run` in a private target, the detached worktree at 3a60ac40e1); hook edits are 246 of the 520 non-test guard edits since 2026-11-01, so the split was built)": {
+   "sha256": "0f6cd69b1f3fba05e1de2acd3d2c32f3c24b830a37d53bf6e295feaaefafada7",
    "verdict": "CLEAR",
    "reviewed": "2026-11-21",
    "declared": "spec-fidelity"
@@ -7155,6 +7161,72 @@
      "why": "Placeholders decide nothing; each owes its own review at its decide."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-21",
+   "blocks": [
+    "### T58 (the finding as filed, restated by its measurement: every gate crate, `rust/gate`, `rust/mode_a`, the browser and the embedder named `l7r_guard`, so touching one hook compiled 32 crates where its own tests' edit compiled 1, measured 2026-11-21 (`/tmp/t58/scripts/measure.sh`: the file touched, then a warm `cargo test --offline --workspace --exclude l7r_phases --no-run` in a private target, the detached worktree at 3a60ac40e1); hook edits are 246 of the 520 non-test guard edits since 2026-11-01, so the split was built)",
+    "### T58 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D1 proceed past the task line's 'split only if hooks dominate'",
+     "summary": "The split was built although hooks did not dominate on either measure: 246 of 520 non-test edits (47%) and 40 of the 85 edit-caused rebuilds, against 45 for the shared set. The 105 gate-used-guard and pylex edits move into l7r_shared with it, so 274 of 520 edits still rebuild everything.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The condition is not in request.md or the accepted spec. It comes from the task line, which the bundle only restates (item 2), and the block does not flag it as a departure, it just says 'so the split was built'. Taken literally the condition is NOT met. It was a test of whether the split pays, and a literal reading defeats that purpose and the GM's 'prioritize performance improvements' (FR-013: 'makes ... the builders' loop faster'). Without the split, every one of the 520 edits rebuilds 32 crates. With it, the 246 hook edits (the largest category) rebuild 1 crate (1.1-1.2 s against 11.6-50.8 s) and make rust-test owes only the guard and checks. The cost is measured and small: 33 crates instead of 32 on a shared edit, plus a second compile of l7r_shared under test-env on shared edits, which was not timed. The ruling does not rest on the work already being done."
+    },
+    {
+     "id": "D2 the rebuild-count red first is a one-shot measurement, with no standing pin (T66 per the dispatch)",
+     "summary": "Item 9's 'red first' on the rebuild count is a before/after run of /tmp/t58/scripts/measure.sh, and nothing committed pins that a hook edit compiles one crate. The block does not mention the missing pin or T66.",
+     "class": "within",
+     "why": "The GM's request and the spec do not ask T58 for a standing pin. FR-012's red-first tests cover only the refusals of FR-006 to FR-009, FR-011 and FR-013. The task line's 'red first on the rebuild count' is met in its words by a measured red (32 crates) and a measured green (1). A missing regression pin is not a wrong outcome (a defect, constitution XIV), so leaving it is within. The section should still list it under Found-and-left with its task id and order for the record, because the dispatch says T66 exists and that cannot be checked from the bundle. This is a note, not a block."
+    },
+    {
+     "id": "D3 make-only's refusal of a read-only Python heredoc left to T63",
+     "summary": "A defect found during the task (the make-only guard refuses good work) is deferred to T63, which lands before T22.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "It is a real defect (a check that refuses good work) and it is left, so it is a narrowing. The accepted spec's FR-009 sets the terms for a deferral, and the block meets all three: why it is not fixed here (it is make-only's reading of a heredoc, not the split, and needs its own measurement and red first), the filed id (T63), and the order ('lands before T22', the close). It is fixed inside this feature before the close, and it blocks nothing in the meantime because it passes under a recorded escape."
+    },
+    {
+     "id": "D4 test-env feature and its double compile judged 'not a defect'",
+     "summary": "The guard's tests reach l7r_shared's test seams through a dev-dependency-only feature. In crate-a-call builds l7r_shared compiles twice, and a --workspace call could, in principle, give a gate binary the test thread's map.",
+     "class": "within",
+     "why": "Against the wrong-outcome definition: no lane makes the one call that unifies test-env into a gate binary. Shipped binaries are built '--profile tool -p', and the tool fingerprint shows features [] (measured). The double compile is a cost on l7r_shared edits only, and nothing works wrongly because of it. No defect is left."
+    },
+    {
+     "id": "D5 the crate's shape: l7r_shared under rust/guard/shared, the five gate-used guards, protocol and pylex moved whole, three tangles cut out, old paths re-exported",
+     "summary": "This is how the split is done.",
+     "class": "within",
+     "why": "It carries out the task's own split. The gate crates now build on the shared crate and none of them names l7r_guard (measured with cargo tree)."
+    },
+    {
+     "id": "D6 the guard-file patterns follow the move (guard_file_hooks, make_only GUARD_FILE and SOURCE_NAMES)",
+     "summary": "The guards' protection is extended to rust/guard/shared/src/.",
+     "class": "within",
+     "why": "Without this the moved guard sources would lose their protection, which would be a defect the split introduced. It is pinned red-first by two tests."
+    },
+    {
+     "id": "D7 hookbench's baseline also finds a guard under rust/guard/shared/src/guards/",
+     "summary": "This fixes a break the split caused, pinned by a y-hooks case.",
+     "class": "within",
+     "why": "It fixes a defect the step itself introduced, as fix-as-we-go asks."
+    },
+    {
+     "id": "D8 edits outside the brief's listed surface: docs, research/blocked-domains.json, scripts/hooks/lib, tests/hooks, rust/mode_a, browser, embed",
+     "summary": "Every reader of a moved path is updated so that it keeps working.",
+     "class": "within",
+     "why": "Each one was judged on its own. docs and scripts/hooks/lib appear in the block's text: the guardlog.sh and failed-open-log.sh comments, and 'the docs follow the move'. rust/mode_a, browser and embed appear as dependents whose manifests and paths now name l7r_shared. tests/hooks and research/blocked-domains.json do not appear in the bundle, so they are classed on the dispatch's description (a moved path's reader) and are unverified. Updating a reader of a moved path widens the work to keep everything working and narrows nothing that was asked. A move that left those readers stale would be the defect."
+    },
+    {
+     "id": "D9 apply via git apply --3way after T57/T62 landed, conflict kept with T62's words; make format over 24 dependents",
+     "summary": "Integration and formatting only.",
+     "class": "within",
+     "why": "Nothing that was asked is changed. The rustfmt joins come from the shorter paths."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -10180,6 +10252,70 @@
      "summary": "red-first Rust test and shell case, the crate's tests, lint, format, coverage, dead code, and the replay that allows the job and refuses a stranger",
      "class": "within",
      "why": "Tests that fail only when the requested fix is absent, plus a pin that the stranger is still refused. This is enforcement of the fix, not unrequested scope."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T58": {
+   "section_sha256": "a9969d6d9d24d1ef907029a230d2bc74e69dea1c1a10e63c82ac0e78943d049f",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D1 proceed past the task line's 'split only if hooks dominate'",
+     "summary": "The split was built although hooks did not dominate on either measure: 246 of 520 non-test edits (47%) and 40 of the 85 edit-caused rebuilds, against 45 for the shared set. The 105 gate-used-guard and pylex edits move into l7r_shared with it, so 274 of 520 edits still rebuild everything.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The condition is not in request.md or the accepted spec. It comes from the task line, which the bundle only restates (item 2), and the block does not flag it as a departure, it just says 'so the split was built'. Taken literally the condition is NOT met. It was a test of whether the split pays, and a literal reading defeats that purpose and the GM's 'prioritize performance improvements' (FR-013: 'makes ... the builders' loop faster'). Without the split, every one of the 520 edits rebuilds 32 crates. With it, the 246 hook edits (the largest category) rebuild 1 crate (1.1-1.2 s against 11.6-50.8 s) and make rust-test owes only the guard and checks. The cost is measured and small: 33 crates instead of 32 on a shared edit, plus a second compile of l7r_shared under test-env on shared edits, which was not timed. The ruling does not rest on the work already being done."
+    },
+    {
+     "id": "D2 the rebuild-count red first is a one-shot measurement, with no standing pin (T66 per the dispatch)",
+     "summary": "Item 9's 'red first' on the rebuild count is a before/after run of /tmp/t58/scripts/measure.sh, and nothing committed pins that a hook edit compiles one crate. The block does not mention the missing pin or T66.",
+     "class": "within",
+     "why": "The GM's request and the spec do not ask T58 for a standing pin. FR-012's red-first tests cover only the refusals of FR-006 to FR-009, FR-011 and FR-013. The task line's 'red first on the rebuild count' is met in its words by a measured red (32 crates) and a measured green (1). A missing regression pin is not a wrong outcome (a defect, constitution XIV), so leaving it is within. The section should still list it under Found-and-left with its task id and order for the record, because the dispatch says T66 exists and that cannot be checked from the bundle. This is a note, not a block."
+    },
+    {
+     "id": "D3 make-only's refusal of a read-only Python heredoc left to T63",
+     "summary": "A defect found during the task (the make-only guard refuses good work) is deferred to T63, which lands before T22.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "It is a real defect (a check that refuses good work) and it is left, so it is a narrowing. The accepted spec's FR-009 sets the terms for a deferral, and the block meets all three: why it is not fixed here (it is make-only's reading of a heredoc, not the split, and needs its own measurement and red first), the filed id (T63), and the order ('lands before T22', the close). It is fixed inside this feature before the close, and it blocks nothing in the meantime because it passes under a recorded escape."
+    },
+    {
+     "id": "D4 test-env feature and its double compile judged 'not a defect'",
+     "summary": "The guard's tests reach l7r_shared's test seams through a dev-dependency-only feature. In crate-a-call builds l7r_shared compiles twice, and a --workspace call could, in principle, give a gate binary the test thread's map.",
+     "class": "within",
+     "why": "Against the wrong-outcome definition: no lane makes the one call that unifies test-env into a gate binary. Shipped binaries are built '--profile tool -p', and the tool fingerprint shows features [] (measured). The double compile is a cost on l7r_shared edits only, and nothing works wrongly because of it. No defect is left."
+    },
+    {
+     "id": "D5 the crate's shape: l7r_shared under rust/guard/shared, the five gate-used guards, protocol and pylex moved whole, three tangles cut out, old paths re-exported",
+     "summary": "This is how the split is done.",
+     "class": "within",
+     "why": "It carries out the task's own split. The gate crates now build on the shared crate and none of them names l7r_guard (measured with cargo tree)."
+    },
+    {
+     "id": "D6 the guard-file patterns follow the move (guard_file_hooks, make_only GUARD_FILE and SOURCE_NAMES)",
+     "summary": "The guards' protection is extended to rust/guard/shared/src/.",
+     "class": "within",
+     "why": "Without this the moved guard sources would lose their protection, which would be a defect the split introduced. It is pinned red-first by two tests."
+    },
+    {
+     "id": "D7 hookbench's baseline also finds a guard under rust/guard/shared/src/guards/",
+     "summary": "This fixes a break the split caused, pinned by a y-hooks case.",
+     "class": "within",
+     "why": "It fixes a defect the step itself introduced, as fix-as-we-go asks."
+    },
+    {
+     "id": "D8 edits outside the brief's listed surface: docs, research/blocked-domains.json, scripts/hooks/lib, tests/hooks, rust/mode_a, browser, embed",
+     "summary": "Every reader of a moved path is updated so that it keeps working.",
+     "class": "within",
+     "why": "Each one was judged on its own. docs and scripts/hooks/lib appear in the block's text: the guardlog.sh and failed-open-log.sh comments, and 'the docs follow the move'. rust/mode_a, browser and embed appear as dependents whose manifests and paths now name l7r_shared. tests/hooks and research/blocked-domains.json do not appear in the bundle, so they are classed on the dispatch's description (a moved path's reader) and are unverified. Updating a reader of a moved path widens the work to keep everything working and narrows nothing that was asked. A move that left those readers stale would be the defect."
+    },
+    {
+     "id": "D9 apply via git apply --3way after T57/T62 landed, conflict kept with T62's words; make format over 24 dependents",
+     "summary": "Integration and formatting only.",
+     "class": "within",
+     "why": "Nothing that was asked is changed. The rustfmt joins come from the shorter paths."
     }
    ],
    "verdict": "CLEAR"

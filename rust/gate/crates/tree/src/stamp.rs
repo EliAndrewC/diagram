@@ -6,7 +6,7 @@ use std::io::Read;
 use std::path::{Path, PathBuf};
 use std::process::Command;
 
-use l7r_guard::shared::sha256;
+use l7r_shared::sha256;
 
 use crate::codeid::{self, stated, Cache};
 
@@ -332,7 +332,7 @@ const USAGE_LOG_TOOL: &str = "gate-stamp";
 /// One line in `<git common dir>/tool-usage.jsonl`, the record every refusing check leaves (feature 406): the guard's one writer
 /// (`shared::usage`, feature 449 T129), which never fails the tool.
 pub fn record_for(root: &Path, tool: &str, outcome: &str) {
-    l7r_guard::shared::usage::record(root, tool, "check", outcome);
+    l7r_shared::usage::record(root, tool, "check", outcome);
 }
 
 fn record(root: &Path, outcome: &str) {
@@ -341,7 +341,7 @@ fn record(root: &Path, outcome: &str) {
 
 /// Prove the hash still bites, since a checker never seen failing is not a checker; the failure, if it does not.
 fn selftest(root: &Path, python: &str) -> Result<(), String> {
-    let dir = l7r_guard::shared::tempdir::TempDir::new("gate-selftest");
+    let dir = l7r_shared::tempdir::TempDir::new("gate-selftest");
     selftest_in(&dir, root, python)
 }
 

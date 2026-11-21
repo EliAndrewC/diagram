@@ -5,7 +5,7 @@ use std::path::{Component, Path};
 use std::sync::LazyLock;
 
 use fancy_regex::Regex;
-use l7r_guard::guards::house_style_hooks::americanize;
+use l7r_shared::guards::house_style_hooks::americanize;
 use serde_json::{json, Map, Value};
 
 use crate::logs::{one_line, one_line_utf8};
@@ -20,7 +20,7 @@ const SITE: &str = "site";
 const GLOSSARY: &str = "l7r/diagram/interactive/assets/glossary.json";
 
 static STEM: LazyLock<Regex> = LazyLock::new(|| {
-    l7r_guard::shared::regex::build(r"^(\d{4})-[^.]+(?:\.drawing)?\.html$")
+    l7r_shared::regex::build(r"^(\d{4})-[^.]+(?:\.drawing)?\.html$")
         .unwrap_or_else(|e| unreachable!("{e}"))
 });
 

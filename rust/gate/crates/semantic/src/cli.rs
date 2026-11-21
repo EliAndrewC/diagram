@@ -35,7 +35,7 @@ fn usage(verb: &str, said: &str) -> Reply {
 
 /// argparse's `type=int`: Python's whitespace around, a sign, an underscore only between digits.
 fn py_int(flag: &str, raw: &str) -> Result<i64, String> {
-    let t = l7r_guard::shared::py_text::strip(raw);
+    let t = l7r_shared::py_text::strip(raw);
     let digits = t.strip_prefix(['+', '-']).unwrap_or(t);
     let b = digits.as_bytes();
     let ok = !b.is_empty()
@@ -62,7 +62,7 @@ pub struct Reach<'a> {
 
 /// The sources home: the archive's working copy and the model cache beside the page cache (`archive.home_of`).
 fn home_of(root: &Path) -> PathBuf {
-    l7r_guard::shared::consulted::home(root)
+    l7r_shared::consulted::home(root)
 }
 
 /// `l7r-gate record semantic <build|find> ...` from `cwd`'s repository, with the real working copy and embedder.
@@ -106,7 +106,7 @@ fn production() -> Reach<'static> {
 /// [`cli`] with what it reaches handed in.
 #[must_use]
 pub fn cli_with(args: &[String], cwd: &Path, reach: &Reach<'_>) -> Reply {
-    let root = l7r_guard::shared::consulted::repo_root(Some(cwd));
+    let root = l7r_shared::consulted::repo_root(Some(cwd));
     let home = home_of(&root);
     let rest = args.get(1..).unwrap_or(&[]);
     match args.first().map(String::as_str) {
@@ -215,7 +215,7 @@ fn header(
             out,
             ", {} already shown under key {}",
             found.held,
-            l7r_guard::shared::py_text::repr(key)
+            l7r_shared::py_text::repr(key)
         );
     }
     if found.found - found.held > found.rows.len() {
@@ -271,7 +271,7 @@ pub fn search_with(args: &[String], cwd: &Path, reach: &Reach<'_>) -> Reply {
         (Ok(a), Ok(b)) => (a, b),
         (Err(e), _) | (_, Err(e)) => return usage("search", &e),
     };
-    let strip = l7r_guard::shared::py_text::strip;
+    let strip = l7r_shared::py_text::strip;
     let questions: Vec<String> = p
         .all("--q")
         .into_iter()
@@ -297,7 +297,7 @@ pub fn search_with(args: &[String], cwd: &Path, reach: &Reach<'_>) -> Reply {
             2,
         );
     }
-    let root = l7r_guard::shared::consulted::repo_root(Some(cwd));
+    let root = l7r_shared::consulted::repo_root(Some(cwd));
     let home = home_of(&root);
     let dir = (reach.store)(&root, false).dir;
     if !questions.is_empty() && !crate::index_dir(&dir).is_dir() {

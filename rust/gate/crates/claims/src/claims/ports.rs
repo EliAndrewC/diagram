@@ -522,7 +522,7 @@ pub fn carry_deferred(deferred: &mut Value, map: &Map, cur: &Cur) -> bool {
 ///
 /// Where the file cannot be written.
 pub fn save_deferred(root: &Path, deferred: &Value) -> Result<(), Fail> {
-    let text = l7r_guard::shared::pyjson::dumps(deferred, Some(1), true) + "\n";
+    let text = l7r_shared::pyjson::dumps(deferred, Some(1), true) + "\n";
     std::fs::write(root.join(super::index::DEFERRED), text).map_err(fail)
 }
 
@@ -602,7 +602,7 @@ fn base_texts(
     root: &Path,
 ) -> Result<HashMap<String, String>, Fail> {
     let git = |args: &[&str]| {
-        l7r_guard::shared::py_text::strip(&crate::record::repo::git(root, args)).to_owned()
+        l7r_shared::py_text::strip(&crate::record::repo::git(root, args)).to_owned()
     };
     let mut base = git(&["merge-base", "HEAD", "origin/main"]);
     if base.is_empty() {

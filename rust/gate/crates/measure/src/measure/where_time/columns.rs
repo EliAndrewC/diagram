@@ -36,8 +36,8 @@ use std::path::Path;
 use std::sync::LazyLock;
 
 use fancy_regex::Regex;
-use l7r_guard::guards::event_log_hooks::bucket_of;
-use l7r_guard::shared::make::DEFAULT_GOAL;
+use l7r_shared::guards::event_log_hooks::bucket_of;
+use l7r_shared::make::DEFAULT_GOAL;
 use serde_json::Value;
 
 use super::super::events::{

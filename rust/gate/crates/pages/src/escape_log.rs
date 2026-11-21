@@ -13,10 +13,10 @@
 use std::path::{Path, PathBuf};
 use std::time::SystemTime;
 
-use l7r_guard::shared::escape::enough;
-use l7r_guard::shared::log::civil;
-use l7r_guard::shared::py_text::strip;
-use l7r_guard::shared::pyjson::dumps;
+use l7r_shared::escape::enough;
+use l7r_shared::log::civil;
+use l7r_shared::py_text::strip;
+use l7r_shared::pyjson::dumps;
 use serde_json::{json, Value};
 
 /// What the process reads of its environment for one escape, handed in so a test runs without touching the process's own.
@@ -114,11 +114,11 @@ fn log_at(
         .unwrap_or_else(|| "unknown".to_owned());
     let entry = json!({
         "utc": format!("{year:04}-{month:02}-{day:02}T{hour:02}:{min:02}:{sec:02}Z"), "guard": guard, "event": event, "rule": rule,
-        "session": sid, "session_name": l7r_guard::shared::speckit::py_name(&env.cwd), "cwd": env.cwd.to_string_lossy(), "tool": "",
+        "session": sid, "session_name": l7r_shared::speckit::py_name(&env.cwd), "cwd": env.cwd.to_string_lossy(), "tool": "",
         "transcript": "", "detail": detail.chars().take(200).collect::<String>(), "command": env.command,
         "context": context.cloned().unwrap_or(Value::Null),
     });
-    let _ = l7r_guard::shared::log::place(&log_dir(env), &dumps(&entry, Some(2), true), now);
+    let _ = l7r_shared::log::place(&log_dir(env), &dumps(&entry, Some(2), true), now);
 }
 
 #[cfg(test)]

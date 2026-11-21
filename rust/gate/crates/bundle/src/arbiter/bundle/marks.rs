@@ -5,9 +5,9 @@ use std::path::{Path, PathBuf};
 use std::sync::LazyLock;
 
 use fancy_regex::Regex;
-use l7r_guard::guards::event_log_hooks::verdict_of;
-use l7r_guard::shared::checks::reply;
-use l7r_guard::shared::py_text::{is_space, strip};
+use l7r_shared::checks::reply;
+use l7r_shared::guards::event_log_hooks::verdict_of;
+use l7r_shared::py_text::{is_space, strip};
 use serde_json::Value;
 
 use crate::difflib::{opcodes, Tag};

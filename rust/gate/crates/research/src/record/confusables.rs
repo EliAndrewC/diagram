@@ -8,8 +8,8 @@ use std::path::Path;
 use std::sync::LazyLock;
 
 use fancy_regex::Regex;
-use l7r_guard::shared::html_text::{escape, unescape};
-use l7r_guard::shared::py_text::collapse;
+use l7r_shared::html_text::{escape, unescape};
+use l7r_shared::py_text::collapse;
 use serde_json::Value;
 
 use crate::record::questions::Record;
@@ -35,11 +35,11 @@ pub struct Pair {
 
 /// `x[k]` of a pair's row, as Python indexes it.
 fn side(row: &Value, k: &str) -> Result<String> {
-    let kind = l7r_guard::shared::blocked::type_name(row);
+    let kind = l7r_shared::blocked::type_name(row);
     match row {
         Value::Object(m) => m
             .get(k)
-            .map(l7r_guard::shared::pyjson::py_str)
+            .map(l7r_shared::pyjson::py_str)
             .ok_or_else(|| Error::new("KeyError", format!("'{k}'"))),
         Value::String(_) => Err(Error::new(
             "TypeError",
@@ -72,7 +72,7 @@ pub fn load(record_dir: &Path) -> Result<Vec<Pair>> {
         Value::Object(m) => m.keys().map(|k| Value::from(k.as_str())).collect(),
         Value::String(t) => t.chars().map(|c| Value::from(c.to_string())).collect(),
         other => {
-            let kind = l7r_guard::shared::blocked::type_name(other);
+            let kind = l7r_shared::blocked::type_name(other);
             return Err(Error::new(
                 "TypeError",
                 format!("'{kind}' object is not iterable"),

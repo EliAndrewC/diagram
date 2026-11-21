@@ -4,7 +4,7 @@
 
 use std::path::Path;
 
-use l7r_guard::shared::pyjson;
+use l7r_shared::pyjson;
 use serde_json::{json, Map, Value};
 
 use crate::record::args::{parse, Spec};
@@ -143,7 +143,7 @@ pub fn cli(args: &[String], root: &Path) -> crate::Reply {
     s.insert("since".to_owned(), json!(since));
     s.insert(
         "until".to_owned(),
-        json!(l7r_guard::shared::py_text::strip(&git_out(
+        json!(l7r_shared::py_text::strip(&git_out(
             &tree,
             &["rev-parse", "--short", until]
         ))),

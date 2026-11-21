@@ -8,9 +8,9 @@ use std::rc::Rc;
 use std::sync::LazyLock;
 
 use fancy_regex::Regex;
-use l7r_guard::shared::checks::pages::read_page;
-use l7r_guard::shared::pyjson::{dumps, sorted};
-use l7r_guard::shared::sha256;
+use l7r_shared::checks::pages::read_page;
+use l7r_shared::pyjson::{dumps, sorted};
+use l7r_shared::sha256;
 use serde_json::{Map, Value};
 
 use super::grammar::Claim;
@@ -406,7 +406,7 @@ pub fn source_span(root: &Path, unit: &Unit) -> Result<Option<(usize, String)>, 
         && end < lines.len()
         && lstripped(&lines[end]).starts_with(['"', '\''])
     {
-        while end < lines.len() && !l7r_guard::shared::py_text::strip(&lines[end]).is_empty() {
+        while end < lines.len() && !l7r_shared::py_text::strip(&lines[end]).is_empty() {
             end += 1;
         }
     }

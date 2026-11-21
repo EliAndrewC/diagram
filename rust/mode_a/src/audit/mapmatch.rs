@@ -16,7 +16,7 @@ use std::sync::LazyLock;
 use fancy_regex::Regex;
 use l7r_gate_research::pyre::py;
 use l7r_gate_research::Error;
-use l7r_guard::shared::pyjson::{py_str, truthy};
+use l7r_shared::pyjson::{py_str, truthy};
 use serde_json::{Map, Value};
 
 use super::checks::{first_min, main_gate_passage, main_gate_passage_ft, min_of};
@@ -739,7 +739,7 @@ mod tests {
 
     #[test]
     fn a_manifest_is_read_as_json_load_reads_it() {
-        let dir = l7r_guard::shared::tempdir::TempDir::new("mode-a-mapmatch");
+        let dir = l7r_shared::tempdir::TempDir::new("mode-a-mapmatch");
         // a folder is no file, and a file that is not JSON is the decoder's refusal (its words the library's)
         assert_eq!(load_map(dir.path()).unwrap_err().kind, "IsADirectoryError");
         std::fs::write(dir.path().join("bad.json"), "{").unwrap();
@@ -761,7 +761,7 @@ mod tests {
     #[test]
     fn a_tree_with_no_legacy_pool_and_an_unreadable_pool_are_read_as_the_python_s() {
         use std::os::unix::fs::PermissionsExt as _;
-        let dir = l7r_guard::shared::tempdir::TempDir::new("mode-a-maps");
+        let dir = l7r_shared::tempdir::TempDir::new("mode-a-maps");
         let root = dir.path();
         let decl = "l7r/diagram/buildings/types.json";
         let real = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("../..");

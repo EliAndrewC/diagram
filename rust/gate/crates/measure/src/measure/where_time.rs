@@ -17,8 +17,8 @@ use std::path::{Path, PathBuf};
 use fancy_regex::Regex;
 use l7r_gate_core::record::args::{parse_with, Spec};
 use l7r_gate_core::record::py_lines;
-use l7r_guard::shared::py_text::strip;
-use l7r_guard::shared::pyjson::dumps;
+use l7r_shared::py_text::strip;
+use l7r_shared::pyjson::dumps;
 use serde_json::Value;
 
 use super::events::{
@@ -197,7 +197,7 @@ pub fn transcript_inputs(
             let Ok(bytes) = std::fs::read(&path) else {
                 continue;
             };
-            let text = l7r_guard::guards::event_log_hooks::read::universal(
+            let text = l7r_shared::guards::event_log_hooks::read::universal(
                 &String::from_utf8_lossy(&bytes),
             );
             for line in text

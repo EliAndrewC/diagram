@@ -104,7 +104,7 @@ fn a_path_is_written_as_pathlib_writes_it() {
 
 #[test]
 fn the_command_prints_writes_and_refuses_as_the_script_did() {
-    let dir = l7r_guard::shared::tempdir::TempDir::new("mode-a-size-table");
+    let dir = l7r_shared::tempdir::TempDir::new("mode-a-size-table");
     let at = |name: &str| dir.path().join(name).to_string_lossy().into_owned();
     let sheet = r#"<svg><rect x="0" y="0" width="30" height="3" data-kind="wall"/><circle cx="1" cy="1" r="3" data-kind="tub"/></svg>"#;
     std::fs::write(at("s.svg"), sheet).unwrap();

@@ -28,11 +28,7 @@ fn tasks(old_code: &str, derivation: Option<&str>) -> String {
 }
 
 /// A tree holding the derivation, the rebuilt module and the task `T01`'s block with `old_code` and `derivation`.
-fn tree(
-    tag: &str,
-    old_code: &str,
-    derivation: Option<&str>,
-) -> l7r_guard::shared::tempdir::TempDir {
+fn tree(tag: &str, old_code: &str, derivation: Option<&str>) -> l7r_shared::tempdir::TempDir {
     let root = crate::checks::scratch(tag);
     put(&root, DERIVATION, "# the derivation\n");
     put(&root, &format!("{NEW}.rs"), "pub fn f() {}\n");

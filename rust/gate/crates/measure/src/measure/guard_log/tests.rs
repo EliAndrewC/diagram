@@ -6,7 +6,7 @@ use serde_json::{json, Value};
 
 use super::cli;
 
-fn log(rows: &[Value]) -> l7r_guard::shared::tempdir::TempDir {
+fn log(rows: &[Value]) -> l7r_shared::tempdir::TempDir {
     let dir = crate::checks::scratch("guard-log");
     for (n, r) in rows.iter().enumerate() {
         std::fs::write(dir.join(format!("{n}.json")), r.to_string()).unwrap();

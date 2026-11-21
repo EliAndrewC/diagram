@@ -18,7 +18,7 @@ const FIT: [&str; 4] = [
     "fixtures_on_groves",
 ];
 static FIT_WORDS: LazyLock<Regex> = LazyLock::new(|| {
-    l7r_guard::shared::regex::build(r"(?i)\b(?:knots?|lane_knots|refused|unreached|room)\b")
+    l7r_shared::regex::build(r"(?i)\b(?:knots?|lane_knots|refused|unreached|room)\b")
         .unwrap_or_else(|e| unreachable!("{e}"))
 });
 

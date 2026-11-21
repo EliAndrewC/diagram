@@ -25,7 +25,7 @@ name = "l7r_browser"
 serde_json = { workspace = true }
 
 [dev-dependencies]
-l7r_guard = { path = "../guard" }
+l7r_shared = { path = "../guard/shared" }
 
 [[bin]]
 name = "l7r-browser"

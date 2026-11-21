@@ -28,8 +28,8 @@ fn commit(dir: &Path) {
 }
 
 /// A repository with the real `codeid.py`, one engine module and a branch `base` at its first commit.
-fn repo(tag: &str) -> l7r_guard::shared::tempdir::TempDir {
-    let dir = l7r_guard::shared::tempdir::TempDir::new(&format!("gate-delta-{tag}"));
+fn repo(tag: &str) -> l7r_shared::tempdir::TempDir {
+    let dir = l7r_shared::tempdir::TempDir::new(&format!("gate-delta-{tag}"));
     std::fs::create_dir_all(dir.join("scripts/gates")).unwrap();
     // the repository `git init -b main` and the two settings make, written as git writes them, and `base` below as `git branch` writes
     // it: four processes saved a test (feature 449 T167, each test under FR-008's tenth of a second)
@@ -219,11 +219,11 @@ fn a_key_over_some_paths_moves_with_them_alone() {
 
 #[test]
 fn a_tree_with_no_engine_keys_on_nothing() {
-    let dir = l7r_guard::shared::tempdir::TempDir::new("gate-delta-empty");
+    let dir = l7r_shared::tempdir::TempDir::new("gate-delta-empty");
     git(&dir, &["init", "-q"]);
     assert_eq!(
         engine_key_worktree(&dir, "python3").unwrap(),
-        l7r_guard::shared::sha256::hex(b"")
+        l7r_shared::sha256::hex(b"")
     );
 }
 

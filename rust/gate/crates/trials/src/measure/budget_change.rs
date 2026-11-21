@@ -25,8 +25,8 @@ use std::path::{Path, PathBuf};
 use serde_json::{Map, Value};
 
 use l7r_gate_core::record::args::{parse_with, Spec};
-use l7r_guard::shared::py_text::strip;
-use l7r_guard::shared::pyjson::py_float;
+use l7r_shared::py_text::strip;
+use l7r_shared::pyjson::py_float;
 
 use super::work_budget_bundle::{
     dumps_py, glob, loads, nonfinite, pool_sheets, py_re, read, sizes, R, RUNS,
@@ -109,18 +109,18 @@ fn verdict_of(path: &Path) -> R<String> {
         Err(_) => return Ok(String::new()),
     };
     let text = l7r_gate_core::record::repo::universal(&text);
-    let first = l7r_guard::shared::speckit::splitlines(&text)
+    let first = l7r_shared::speckit::splitlines(&text)
         .into_iter()
         .map(strip)
         .find(|l| !l.is_empty());
     Ok(first.map_or_else(String::new, |l| {
-        let word = l7r_guard::shared::py_text::split(l)[0];
+        let word = l7r_shared::py_text::split(l)[0];
         word.trim_matches(['*', ':', '`']).to_uppercase()
     }))
 }
 
 /// `float(text)`: the guard's `py_text` since feature 449 T136 (one implementation, FR-003).
-use l7r_guard::shared::py_text::py_float_text;
+use l7r_shared::py_text::py_float_text;
 
 /// `int(text)`: Python's whitespace around it, a sign, `_` between digits.
 fn py_int_text(text: &str) -> Option<i64> {

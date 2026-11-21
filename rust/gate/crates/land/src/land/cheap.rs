@@ -7,8 +7,8 @@ use std::path::{Path, PathBuf};
 use std::sync::LazyLock;
 
 use fancy_regex::Regex;
-use l7r_guard::shared::py_text::strip;
-use l7r_guard::shared::speckit::splitlines;
+use l7r_shared::py_text::strip;
+use l7r_shared::speckit::splitlines;
 
 use super::{head, name_of, py_read, rel_of, tail, Land};
 use crate::Reply;
@@ -19,7 +19,7 @@ static BOX: LazyLock<Regex> = LazyLock::new(|| re(r"(?m)^- \[([ xX])\] (\d\. \*\
 static FILED_INTO: LazyLock<Regex> = LazyLock::new(|| re(r"filed into (\S+) T\d+"));
 
 fn re(pattern: &str) -> Regex {
-    l7r_guard::shared::regex::build(pattern).unwrap_or_else(|e| unreachable!("{e}"))
+    l7r_shared::regex::build(pattern).unwrap_or_else(|e| unreachable!("{e}"))
 }
 
 /// A reply as `run` read a command's: its code, its stdout then its stderr.
@@ -435,7 +435,7 @@ fn task_block(text: &str, task: &str) -> String {
         r"(?ms)^- \[[ xX]\] {}\b.*?(?=^- \[|\z)",
         fancy_regex::escape(task)
     );
-    l7r_guard::shared::regex::build(&pattern)
+    l7r_shared::regex::build(&pattern)
         .ok()
         .and_then(|r| r.find(text).ok().flatten())
         .map_or_else(String::new, |m| m.as_str().to_owned())

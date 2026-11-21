@@ -212,7 +212,7 @@ fn a_cited_measurement_is_carried_whole() {
 const PLAN: &str = "# Plan\n\n**D1 - shared.** Every gate is checked once.\n\n## Batch 2\n\n### Wave 2 (T02)\n\n**D3 - the well.** The well stands by the lane (FR-002).\n\n## Notes\n\nA note.\n";
 const SPEC2: &str = "# Spec\n\n## Requirements\n\n- **FR-001 The sty.** A sty stands against the house.\n- **FR-002 The well.** A well stands by its lane.\n- **FR-003 Unrelated.** Something else entirely.\n\n## Success criteria\n\n- **SC-001** (FR-001) The sty is drawn.\n";
 
-fn feature() -> (l7r_guard::shared::tempdir::TempDir, std::path::PathBuf) {
+fn feature() -> (l7r_shared::tempdir::TempDir, std::path::PathBuf) {
     let root = repo();
     let dir = root.join("specs/999-x");
     std::fs::create_dir_all(&dir).unwrap();

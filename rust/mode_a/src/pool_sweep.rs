@@ -339,7 +339,7 @@ fn the_round_trips_corridor_is_drawn_as_one_passage() {
         .unwrap()
         .text;
     let all = |re: &str| -> Vec<String> {
-        l7r_guard::shared::regex::build(re)
+        l7r_shared::regex::build(re)
             .unwrap()
             .captures_iter(svg)
             .map_while(Result::ok)
@@ -388,7 +388,7 @@ fn the_pages_and_the_country_shrine_are_drawn_end_to_end() {
     let writer = crate::page::held::outcomes(&on_disk);
     let held = (writer.pages, writer.cases > 200, writer.refusals > 0);
     assert_eq!(held, (on_disk.len(), true, true));
-    let dir = l7r_guard::shared::tempdir::TempDir::new("mode-a-end-to-end");
+    let dir = l7r_shared::tempdir::TempDir::new("mode-a-end-to-end");
     let shrine = dir.path().join("hoshigaoka-shrine.svg");
     let tracked = tree.join("pool/country-shrines/hoshigaoka-shrine/hoshigaoka-shrine.svg");
     std::fs::copy(&tracked, &shrine).unwrap();

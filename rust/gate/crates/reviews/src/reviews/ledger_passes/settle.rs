@@ -3,10 +3,10 @@
 use std::collections::{BTreeMap, HashSet};
 use std::path::{Path, PathBuf};
 
-use l7r_guard::shared::checks::falsy;
-use l7r_guard::shared::checks::reply::{py_lines, read_lossy};
-use l7r_guard::shared::ledger::cost::{cells, cost, py_mtime, segments, subagent_files};
-use l7r_guard::shared::ledger::{cell, measured_rows, COLUMNS};
+use l7r_shared::checks::falsy;
+use l7r_shared::checks::reply::{py_lines, read_lossy};
+use l7r_shared::ledger::cost::{cells, cost, py_mtime, segments, subagent_files};
+use l7r_shared::ledger::{cell, measured_rows, COLUMNS};
 use serde_json::{json, Map, Value};
 
 use super::{field, norm, py_path, required, text, Pass};
@@ -113,7 +113,7 @@ fn read_kept(kept_file: Option<&Path>) -> Map<String, Value> {
 /// The kept costs written whole by a rename, `json.dumps(kept)`; a failure costs the next run its speed, never its answer.
 fn write_kept(kept_file: &Path, kept: Map<String, Value>) {
     let tmp = kept_file.with_extension("tmp");
-    let text = l7r_guard::shared::pyjson::dumps(&Value::Object(kept), None, true);
+    let text = l7r_shared::pyjson::dumps(&Value::Object(kept), None, true);
     let _ = kept_file
         .parent()
         .map_or(Ok(()), std::fs::create_dir_all)

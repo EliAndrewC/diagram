@@ -21,8 +21,8 @@ pub mod template;
 use std::io::Read;
 use std::path::{Path, PathBuf};
 
-use l7r_guard::shared::log::{civil, write as log_write, Entry};
-use l7r_guard::shared::{escape, sha256};
+use l7r_shared::log::{civil, write as log_write, Entry};
+use l7r_shared::{escape, sha256};
 use serde_json::{json, Value};
 
 use history::History;
@@ -479,7 +479,7 @@ fn answer(
                     let name = dir.file_name().unwrap_or_default().to_string_lossy();
                     // ...AND THE TICKED TASKS (feature 449 T142): `make plan-archive` is the one-time archive of a feature's tasks
                     // ticked before the tick moved them, the tick's own step run by hand
-                    let moved = match l7r_guard::shared::speckit::tasks::archive(&dir) {
+                    let moved = match l7r_shared::speckit::tasks::archive(&dir) {
                         Ok(moved) => moved,
                         Err(why) => return fail(format!("plan-archive: {why}\n"), 1),
                     };

@@ -20,8 +20,8 @@ use std::path::Path;
 use std::sync::LazyLock;
 
 use fancy_regex::Regex;
-use l7r_guard::shared::py_text::{collapse, strip};
-use l7r_guard::shared::pyjson::py_float;
+use l7r_shared::py_text::{collapse, strip};
+use l7r_shared::pyjson::py_float;
 use serde_json::json;
 
 use super::scope::Reader;

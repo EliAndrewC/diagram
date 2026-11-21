@@ -189,7 +189,7 @@ fn a_feature_resolves_from_a_path_a_number_or_a_name() {
     assert_eq!(resolve("243", &root), None, "two of them");
 }
 
-fn ticked_feature(plan: &str, tasks: &str) -> l7r_guard::shared::tempdir::Held<std::path::PathBuf> {
+fn ticked_feature(plan: &str, tasks: &str) -> l7r_shared::tempdir::Held<std::path::PathBuf> {
     let root = repo();
     let dir = feature_at(&root, Some(plan), None, "375-x");
     std::fs::write(dir.join("tasks.md"), tasks).unwrap();
@@ -277,7 +277,7 @@ fn a_ticked_task_is_a_column_zero_line_in_either_case() {
 
 const BLOCKS: &str = "# Plan\n\n**D1 - shared.** Every gate is checked once.\n\n## Batch 1\n\n### Wave 1 (T01)\n\n**D2 - the sty.** The sty stands by the house (FR-001).\n\n## Batch 2\n\n### Wave 2 (T02)\n\n**D3 - the well.** The well stands by the lane (FR-002).\n\n## Notes\n\nA note on the waves, 3 items.\n";
 
-fn reviewed(tasks: &str, plan: &str) -> l7r_guard::shared::tempdir::Held<std::path::PathBuf> {
+fn reviewed(tasks: &str, plan: &str) -> l7r_shared::tempdir::Held<std::path::PathBuf> {
     let root = repo();
     let dir = feature_at(&root, Some(plan), None, "999-x");
     std::fs::write(dir.join("tasks.md"), tasks).unwrap();

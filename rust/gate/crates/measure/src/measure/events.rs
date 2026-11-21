@@ -11,11 +11,11 @@ use std::collections::HashMap;
 use std::path::{Path, PathBuf};
 use std::process::{Command, Output};
 
-use l7r_guard::guards::event_log_hooks::common_git_dir;
-use l7r_guard::guards::event_log_hooks::read::{from_transcript, read_jsonl, universal};
-use l7r_guard::shared::iso;
-use l7r_guard::shared::log::civil;
-use l7r_guard::shared::py_text::{repr, strip};
+use l7r_shared::guards::event_log_hooks::common_git_dir;
+use l7r_shared::guards::event_log_hooks::read::{from_transcript, read_jsonl, universal};
+use l7r_shared::iso;
+use l7r_shared::log::civil;
+use l7r_shared::py_text::{repr, strip};
 use serde_json::{Map, Value};
 
 pub use l7r_gate_core::cohort::truthy;
@@ -36,7 +36,7 @@ static NULL: Value = Value::Null;
 /// A pattern of this port's own, compiled once.
 #[must_use]
 pub fn re(pattern: &str) -> fancy_regex::Regex {
-    l7r_guard::shared::regex::build(pattern).unwrap_or_else(|e| unreachable!("{e}"))
+    l7r_shared::regex::build(pattern).unwrap_or_else(|e| unreachable!("{e}"))
 }
 
 /// `e.get(key)`: the value, `None` where it is missing.
@@ -194,7 +194,7 @@ pub fn hhmm(t: f64) -> String {
 
 /// Python's `float()` of a value and of a text: the guard's `py_text` since feature 449 T136, where the review census reads them too
 /// (one implementation, FR-003).
-pub use l7r_guard::shared::py_text::{py_float_of, py_float_text};
+pub use l7r_shared::py_text::{py_float_of, py_float_text};
 
 /// `int(text)`: Python's whitespace stripped, a sign, ASCII digits with an underscore only between two.
 ///

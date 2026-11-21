@@ -33,7 +33,7 @@ pub fn float_of(v: &Value) -> Result<f64, Error> {
 /// A truthy value that is not iterable.
 pub fn items(v: Option<&Value>) -> Result<Vec<Value>, Error> {
     match v {
-        Some(v) if l7r_guard::shared::pyjson::truthy(v) => iterate(v),
+        Some(v) if l7r_shared::pyjson::truthy(v) => iterate(v),
         _ => Ok(Vec::new()),
     }
 }

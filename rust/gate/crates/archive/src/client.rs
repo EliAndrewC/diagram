@@ -127,10 +127,7 @@ impl Process {
             let _ = child.wait();
             return Err(Error::new(
                 "Error",
-                format!(
-                    "BrowserType.launch: {}",
-                    l7r_guard::shared::py_text::strip(&said)
-                ),
+                format!("BrowserType.launch: {}", l7r_shared::py_text::strip(&said)),
             ));
         }
         let scratch = std::env::temp_dir().join(format!(

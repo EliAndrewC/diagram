@@ -73,7 +73,7 @@ fn the_arguments_are_one_sheet_and_where_its_placed_text_and_its_outputs_go() {
 fn a_sheet_is_placed_rendered_and_paged_and_its_reads_listed() {
     let _log = crate::reads::taker();
     let tree = Path::new(env!("CARGO_MANIFEST_DIR")).join("../..");
-    let dir = l7r_guard::shared::tempdir::TempDir::new("hand-sheet");
+    let dir = l7r_shared::tempdir::TempDir::new("hand-sheet");
     let svg = dir.path().join("shrine.svg");
     std::fs::write(&svg, SHEET).unwrap();
     let at = svg.to_string_lossy().into_owned();
@@ -127,7 +127,7 @@ fn a_sheet_is_placed_rendered_and_paged_and_its_reads_listed() {
 fn a_census_that_fails_and_each_refusal_end_the_run() {
     let _log = crate::reads::taker();
     let tree = Path::new(env!("CARGO_MANIFEST_DIR")).join("../..");
-    let dir = l7r_guard::shared::tempdir::TempDir::new("hand-sheet-refused");
+    let dir = l7r_shared::tempdir::TempDir::new("hand-sheet-refused");
     let at = |name: &str| dir.path().join(name).to_string_lossy().into_owned();
     let skip = Host {
         vars: vec![("DIAGRAM_SKIP_RENDER".into(), "1".into())],

@@ -8,7 +8,7 @@ use super::{
     scripts_version, skip, Row, Tool, Tools, CHECKS,
 };
 use crate::checks::scratch;
-use l7r_guard::shared::sha256;
+use l7r_shared::sha256;
 
 fn git(repo: &Path, args: &[&str]) -> String {
     let done = Command::new("git")
@@ -26,7 +26,7 @@ fn git(repo: &Path, args: &[&str]) -> String {
 /// origin and fetched back (the push reads only `origin/main`), and the history written in one `git fast-import` where `git init`, an
 /// add, a commit, a push and a fetch started git a dozen times, most of a test's time against FR-008's tenth of a second (feature 449
 /// T167).
-fn repo() -> l7r_guard::shared::tempdir::Held<PathBuf> {
+fn repo() -> l7r_shared::tempdir::Held<PathBuf> {
     let (dir, _) = crate::fixture::built(
         "push",
         &[&[("scripts/g.sh", "gate\n"), ("l7r/a.py", "x = 1\n")]],
@@ -179,7 +179,7 @@ fn tools(tree: &Path, off: bool) -> Tools {
     }
 }
 
-fn tree() -> l7r_guard::shared::tempdir::Held<PathBuf> {
+fn tree() -> l7r_shared::tempdir::Held<PathBuf> {
     let root = repo();
     std::fs::create_dir_all(root.join("scripts/gates")).unwrap();
     crate::write_executable(

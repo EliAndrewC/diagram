@@ -5,7 +5,7 @@
 use std::path::{Path, PathBuf};
 use std::time::{SystemTime, UNIX_EPOCH};
 
-use l7r_guard::shared::log::civil;
+use l7r_shared::log::civil;
 use serde_json::{json, Value};
 
 use crate::codeid::{parsed, stated};
@@ -103,7 +103,7 @@ fn commit(root: &Path) -> String {
 /// A second red `make done` in a row owes the round arbiter a ruling before the next gate (feature 375 FR-010).
 fn second_red_gate(root: &Path, now: f64) -> Result<(), String> {
     let trigger = format!("red-gate@{}", utc(now));
-    l7r_guard::shared::checks::with_owed(&dir_of(root), &mut |owed| {
+    l7r_shared::checks::with_owed(&dir_of(root), &mut |owed| {
         if let Some(map) = owed.as_object_mut() {
             map.insert(trigger.clone(), json!({"detail": "a second red make done in a row", "kind": "red-gate", "t": now, "unit": ""}));
         }

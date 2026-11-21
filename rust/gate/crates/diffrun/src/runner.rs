@@ -22,7 +22,7 @@ use std::path::{Path, PathBuf};
 use std::sync::atomic::{AtomicUsize, Ordering};
 use std::time::{Instant, SystemTime, UNIX_EPOCH};
 
-use l7r_guard::shared::log::civil;
+use l7r_shared::log::civil;
 use serde_json::{json, Value};
 
 use crate::cases::{Case, Cases, Worlds};
@@ -101,10 +101,7 @@ pub fn case_id(name: &str) -> String {
         })
         .take(48)
         .collect();
-    format!(
-        "{safe}-{}",
-        &l7r_guard::shared::sha256::hex(name.as_bytes())[..10]
-    )
+    format!("{safe}-{}", &l7r_shared::sha256::hex(name.as_bytes())[..10])
 }
 
 /// A side's kept result: `<case id>.<side>.json`, and `<case id>.<side>.whole.json` for a whole world's where the file declares a sparse

@@ -31,7 +31,7 @@ fn only_words_the_reader_sees_are_rendered() {
 
 #[test]
 fn a_page_is_written_beside_its_map_with_its_notes() {
-    let dir = l7r_guard::shared::tempdir::TempDir::new("page-write");
+    let dir = l7r_shared::tempdir::TempDir::new("page-write");
     std::fs::write(
         dir.path().join("m.notes.md"),
         "## Map notes\n### Features\n- **well**: the map's own.\n",
@@ -74,7 +74,7 @@ fn a_page_is_written_beside_its_map_with_its_notes() {
 /// and a path that cannot be written is still refused before any render.
 #[test]
 fn a_refused_render_leaves_the_page_as_it_was() {
-    let dir = l7r_guard::shared::tempdir::TempDir::new("page-refused");
+    let dir = l7r_shared::tempdir::TempDir::new("page-refused");
     // strings and tags of different lengths: refused before any drawing, as any refused render is
     let page = || Page {
         strings: vec!["<svg>".into(), "</svg>".into()],

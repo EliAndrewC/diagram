@@ -3,12 +3,13 @@
 
 use std::collections::{BTreeMap, BTreeSet, HashMap};
 use std::os::unix::fs::PermissionsExt;
-use std::path::{Component, Path, PathBuf};
+use std::path::{Path, PathBuf};
 use std::sync::LazyLock;
 
 use fancy_regex::{Captures, Regex};
 
 use crate::shared::tool::ask;
+pub(crate) use crate::shared::tree::realpath;
 
 static LOOP: LazyLock<Regex> = LazyLock::new(|| {
     crate::shared::regex::build(r"(?m:^)(?>.*?\b(until|while)\b).*\bgrep\b")
@@ -25,35 +26,6 @@ static VAR: LazyLock<Regex> = LazyLock::new(|| {
 static WATCHED_PATH: LazyLock<Regex> = LazyLock::new(|| {
     crate::shared::regex::build(r"(?:/[\w.-]+)+\.\w+").unwrap_or_else(|e| unreachable!("{e}"))
 });
-
-/// `os.path.realpath`: a path that need not exist, its existing part's symlinks resolved.
-pub(crate) fn realpath(p: &Path) -> PathBuf {
-    let mut clean = PathBuf::new();
-    for c in p.components() {
-        match c {
-            Component::ParentDir => {
-                clean.pop();
-            }
-            Component::CurDir => {}
-            other => clean.push(other.as_os_str()),
-        }
-    }
-    let mut rest = Vec::new();
-    let mut at = clean.as_path();
-    loop {
-        if let Ok(real) = std::fs::canonicalize(at) {
-            return rest
-                .iter()
-                .rev()
-                .fold(real, |acc: PathBuf, n: &&std::ffi::OsStr| acc.join(n));
-        }
-        let (Some(up), Some(name)) = (at.parent(), at.file_name()) else {
-            return clean.clone();
-        };
-        rest.push(name);
-        at = up;
-    }
-}
 
 /// The working tree a path belongs to: its NEAREST enclosing `.git`, so a clone nested under the mirror is its own.
 pub(crate) fn owner(path: &Path) -> Option<PathBuf> {

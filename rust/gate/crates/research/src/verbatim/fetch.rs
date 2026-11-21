@@ -12,7 +12,7 @@ use std::fmt::Write as _;
 use std::path::{Path, PathBuf};
 use std::process::Command;
 
-use l7r_guard::shared::py_text::strip;
+use l7r_shared::py_text::strip;
 use unicode_normalization::UnicodeNormalization as _;
 
 use super::{decode, visible_text};
@@ -336,7 +336,7 @@ pub fn is_pdf(url: &str, content_type: &str) -> bool {
 /// `Pages.name_for`: an offline copy's file name, the URL's hash.
 #[must_use]
 pub fn name_for(url: &str) -> String {
-    let hex = l7r_guard::shared::sha256::hex(url.as_bytes());
+    let hex = l7r_shared::sha256::hex(url.as_bytes());
     format!("{}.html", &hex[..16])
 }
 
@@ -406,7 +406,7 @@ pub fn last_status(headers: &str) -> (u32, String, String) {
 
 impl Transport for Curl {
     fn open(&mut self, url: &str) -> Result<Response, String> {
-        let dir = l7r_guard::shared::tempdir::TempDir::new("quote-verbatim-fetch");
+        let dir = l7r_shared::tempdir::TempDir::new("quote-verbatim-fetch");
         let (head, body) = (dir.join("head"), dir.join("body"));
         let timeout = TIMEOUT.to_string();
         let done = Command::new(&self.program)

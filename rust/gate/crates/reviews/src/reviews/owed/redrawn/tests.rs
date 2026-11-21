@@ -211,7 +211,7 @@ pub fn sheet(k: &str) -> String {
 const DRIVER: &str = "rust/phases/src/driver";
 
 /// Two hamlets - the polder Kuwabata and the comb Inashiro - and a generated compound, the engines that draw them, all at the base.
-fn world(name: &str) -> l7r_guard::shared::tempdir::Held<std::path::PathBuf> {
+fn world(name: &str) -> l7r_shared::tempdir::Held<std::path::PathBuf> {
     let r = repo(name);
     hamlet(&r, "inashiro", &["paddy", "weir", "marsh"]);
     hamlet(

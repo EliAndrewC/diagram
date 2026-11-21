@@ -10,8 +10,8 @@
 use std::path::Path;
 
 use l7r_gate_core::record::args::{parse_with, Spec};
-use l7r_guard::shared::pyjson::dumps;
-use l7r_guard::shared::speckit::splitlines;
+use l7r_shared::pyjson::dumps;
+use l7r_shared::speckit::splitlines;
 use serde_json::{json, Map, Value};
 
 use super::events::{cmp_f, py_int, read_text, truthy, ts, Raised};

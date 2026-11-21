@@ -3,7 +3,7 @@
 //! WHY: `fancy_regex` 0.14 gives up a backtracking search past its step limit - a million by default - with an `Err` its iterators
 //! repeat without advancing, so a `.flatten()` over a `find_iter` retried forever at 100% CPU (`make quick` on a 157 KB one-line file,
 //! T151; `make decide` and `make task-add` on 449's 1 MB of plan, T194), and a single search past the limit quietly read as no match.
-//! T185 built every pattern through `l7r_guard::shared::regex` (the limit lifted, its comment has the measurements) and ended every
+//! T185 built every pattern through `l7r_shared::regex` (the limit lifted, its comment has the measurements) and ended every
 //! scan with `.map_while(Result::ok)`; this check refuses a new site of either kind, its message the compliant call.
 
 use std::path::Path;
@@ -13,7 +13,7 @@ use super::{files_under, read, rel, root};
 /// The files the rules do not read, each with its reason.
 const EXEMPT: [(&str, &str); 2] = [
     (
-        "rust/guard/src/shared/regex.rs",
+        "rust/guard/shared/src/regex.rs",
         "the shared constructor itself, and its test of the bounded default",
     ),
     (
@@ -38,7 +38,7 @@ const SKIPS: [&str; 4] = [
     ".filter_map(|r| r.ok())",
 ];
 
-const BUILD_FIX: &str = "keeps fancy_regex's 1,000,000-step limit, past which a search errs (a scan spins, a single search reads as no match) - build it with `l7r_guard::shared::regex::build(pattern)` (in the guard crate `crate::shared::regex::build`), or `regex::builder(pattern)` to set another option first";
+const BUILD_FIX: &str = "keeps fancy_regex's 1,000,000-step limit, past which a search errs (a scan spins, a single search reads as no match) - build it with `l7r_shared::regex::build(pattern)` (in the guard crate `crate::shared::regex::build`), or `regex::builder(pattern)` to set another option first";
 const SCAN_FIX: &str = "an error at the regex engine's limit repeats without advancing, so the scan can spin forever - end it on its first error with `.map_while(Result::ok)` (`.map_while(std::result::Result::ok)` where the crate's own `Result` shadows the standard one)";
 
 /// The index of the `)` that closes the `(` at `open`, string and character literals skipped; None where it never closes.

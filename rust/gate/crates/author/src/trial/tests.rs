@@ -3,7 +3,7 @@
 use std::path::Path;
 
 use l7r_gate_core::ci::fixtures::{git, put, scratch};
-use l7r_guard::shared::checks::resolved;
+use l7r_shared::checks::resolved;
 
 use super::{brief, bundle, measurement_only, review_cli, start_cli};
 

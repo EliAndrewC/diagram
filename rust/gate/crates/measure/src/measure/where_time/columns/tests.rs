@@ -73,8 +73,11 @@ fn the_default_goal_is_the_first_rule_unless_one_is_set() {
 #[test]
 fn the_python_c_launch_reads_make_land() {
     let cmd = "python3 -c \"\np='specs/449-rust-codebase/plan-review.json'; s=open(p).read(); open(p,'w').write(s.replace('be'+'haviour','behavior'))\"; git add -A && git commit -q -F - <<'EOF'\nthe verdict record's spelling (T242 carries the writer's fix)\n\nCo-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>\nEOF\nL=/home/agent/.claude/jobs/c6fd72d1/tmp/t238-land.log; PLAN_REVIEW_OK=\"T238 reviewed CLEAR by spec-fidelity on 2026-11-20\" make land F=449 T=T238 NOTE=\"a Rust stage's placement change owes its declaration\" > $L 2>&1; echo \"land $?\"; grep -E \"refused|holds|HEAD -> main|GATE|be.haviour\" $L | grep -v pre-existing | head -6 | cut -c1-220";
-    assert_eq!(l7r_guard::shared::make::invoked(cmd), ["land"]);
-    assert_eq!(l7r_guard::guards::event_log_hooks::make_target(cmd), "land");
+    assert_eq!(l7r_shared::make::invoked(cmd), ["land"]);
+    assert_eq!(
+        l7r_shared::guards::event_log_hooks::make_target(cmd),
+        "land"
+    );
 }
 
 #[test]

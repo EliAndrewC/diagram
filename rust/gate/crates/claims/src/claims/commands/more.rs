@@ -27,7 +27,7 @@ fn reply(root: &Path, text: &str) -> String {
 
 /// The fixture with its procedure's last section claimed, Python-free: the coverage's and the accept's tree (feature 449 T167 split the
 /// one test of both, over FR-008's tenth of a second, into three on a tree each; none reads what another wrote).
-fn covered(tag: &str) -> l7r_guard::shared::tempdir::TempDir {
+fn covered(tag: &str) -> l7r_shared::tempdir::TempDir {
     let root = fixture_rust_only(tag);
     let buildings = std::fs::read_to_string(root.join("docs/buildings.md")).unwrap();
     std::fs::write(
@@ -39,7 +39,7 @@ fn covered(tag: &str) -> l7r_guard::shared::tempdir::TempDir {
 }
 
 /// [`covered`], every claim recorded, and `GAP` turned DRIFTED.
-fn accepting(tag: &str) -> l7r_guard::shared::tempdir::TempDir {
+fn accepting(tag: &str) -> l7r_shared::tempdir::TempDir {
     let root = covered(tag);
     record_all(&root);
     let mut ix = index(&root);
@@ -185,7 +185,7 @@ fn a_recorded_tree_owes_nothing_and_an_unparsable_claim_is_no_unit() {
 
 /// The counter-only tree: four Python units recorded on `origin/main`, two of them changed with only their counters moved or not,
 /// the engine changed (feature 449 T167 split the test reading it into two, each on a tree of its own, over FR-008's tenth of a second).
-fn countered(tag: &str) -> l7r_guard::shared::tempdir::TempDir {
+fn countered(tag: &str) -> l7r_shared::tempdir::TempDir {
     let root = fixture(tag);
     counted_units(&root);
     // the recording written as `record_all` writes it, pinned by `the_recorded_state_is_what_record_all_writes`: a bundle and a record

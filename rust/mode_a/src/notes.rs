@@ -13,8 +13,8 @@ use std::sync::LazyLock;
 
 use fancy_regex::Regex;
 use l7r_gate_research::pyre::py;
-use l7r_guard::shared::py_text::{collapse, is_space, strip};
-use l7r_guard::shared::speckit::splitlines;
+use l7r_shared::py_text::{collapse, is_space, strip};
+use l7r_shared::speckit::splitlines;
 
 /// A heading line: the hashes give the level, the rest is the title.
 static HEADING: LazyLock<Regex> = LazyLock::new(|| py(r"^(#{1,6})[ \t]+(.*?)[ \t]*$"));

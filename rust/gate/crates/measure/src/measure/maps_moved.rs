@@ -258,7 +258,7 @@ fn one(clone: &mut Side, main: &mut Side, rel: &str) -> Answer {
     };
     let (a, b) = (names(&mine), names(&theirs));
     let digest = |root: &Path, name: &str| {
-        std::fs::read(root.join(rel).join(name)).map(|bytes| l7r_guard::shared::sha256::hex(&bytes))
+        std::fs::read(root.join(rel).join(name)).map(|bytes| l7r_shared::sha256::hex(&bytes))
     };
     // A PICTURE SKIPPED ON ONE SIDE (`DIAGRAM_SKIP_RENDER=1`) is no move: only what both drew is compared
     let moved: Vec<String> = a

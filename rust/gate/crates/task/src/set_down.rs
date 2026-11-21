@@ -19,9 +19,9 @@
 
 use std::path::{Path, PathBuf};
 
-use l7r_guard::shared::py_text::{fmt_g, split, strip};
-use l7r_guard::shared::pyjson::{dumps, py_str};
-use l7r_guard::shared::speckit::splitlines;
+use l7r_shared::py_text::{fmt_g, split, strip};
+use l7r_shared::pyjson::{dumps, py_str};
+use l7r_shared::speckit::splitlines;
 use serde_json::{json, Map, Value};
 
 use crate::phase_sources::glob::glob;

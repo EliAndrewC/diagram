@@ -487,7 +487,7 @@ fn report(path: &Path, tree: &Path) -> Result<String, l7r_gate_research::Error> 
 fn every_sheet_is_reported_and_every_check_runs_on_it() {
     use crate::audit::registry::{Context, CHECKS};
     let tree = Path::new(env!("CARGO_MANIFEST_DIR")).join("../..");
-    let dir = l7r_guard::shared::tempdir::TempDir::new("mode-a-check-fixtures");
+    let dir = l7r_shared::tempdir::TempDir::new("mode-a-check-fixtures");
     let fixtures = write(dir.path());
     let mut reds: Vec<PathBuf> = std::fs::read_dir(tree.join("tests/fixtures"))
         .unwrap()
@@ -682,7 +682,7 @@ const DRAWN_FOR: [(&str, &str, &[&str]); 8] = [
 fn each_fixture_fires_the_checks_it_was_drawn_for() {
     use crate::audit::registry::{Context, CHECKS};
     let tree = Path::new(env!("CARGO_MANIFEST_DIR")).join("../..");
-    let dir = l7r_guard::shared::tempdir::TempDir::new("mode-a-drawn-for");
+    let dir = l7r_shared::tempdir::TempDir::new("mode-a-drawn-for");
     let written = write(dir.path());
     let fired =
         |&(fixture, tier, checks): &(&'static str, &'static str, &'static [&'static str])| {

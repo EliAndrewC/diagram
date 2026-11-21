@@ -4,7 +4,7 @@ use super::keep_batches;
 
 #[test]
 fn the_batches_are_kept_whole_or_the_failure_named() {
-    let d = l7r_guard::shared::tempdir::TempDir::new("gate-core-door");
+    let d = l7r_shared::tempdir::TempDir::new("gate-core-door");
     assert!(std::process::Command::new("git")
         .arg("-C")
         .arg(&d)

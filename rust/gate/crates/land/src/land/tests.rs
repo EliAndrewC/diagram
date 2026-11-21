@@ -11,7 +11,7 @@ use std::time::Duration;
 
 use l7r_gate_core::ci::fixtures::{git, put, scratch};
 use l7r_gate_core::write_executable;
-use l7r_guard::shared::tempdir::TempDir;
+use l7r_shared::tempdir::TempDir;
 
 use super::inproc::Inproc;
 use super::Land;
@@ -216,7 +216,7 @@ const TOOLS: [&str; 7] = [
 fn template() -> &'static Path {
     static DIR: std::sync::OnceLock<PathBuf> = std::sync::OnceLock::new();
     DIR.get_or_init(|| {
-        let dir = l7r_guard::shared::tempdir::beside_binary("land-template");
+        let dir = l7r_shared::tempdir::beside_binary("land-template");
         let root = dir.join("repo");
         std::fs::create_dir_all(&root).unwrap();
         // the repository as `git init -b main` lays out what git reads of it - its HEAD, its object and ref directories and its config -
@@ -313,10 +313,7 @@ pub(super) fn fx(tag: &str) -> Fx {
     let scripts = dir.join("tree/scripts");
     let bin = dir.join("bin");
     let answers = Rc::new(Answers::default());
-    let mut land = Land::new_in(
-        &l7r_guard::shared::env::Rooted::with(root.clone(), &[]),
-        &scripts,
-    );
+    let mut land = Land::new_in(&l7r_shared::env::Rooted::with(root.clone(), &[]), &scripts);
     land.python = bin.join("python").to_string_lossy().into_owned();
     land.make = bin.join("make").to_string_lossy().into_owned();
     land.said = Some(RefCell::default());
@@ -657,7 +654,7 @@ fn main_refuses_what_land_py_refused_before_it_landed() {
             NOTE,
             &scripts,
             &nothing,
-            &l7r_guard::shared::env::Rooted::with(".", &[])
+            &l7r_shared::env::Rooted::with(".", &[])
         ),
         Ok(2)
     );
@@ -668,7 +665,7 @@ fn main_refuses_what_land_py_refused_before_it_landed() {
             NOTE,
             &scripts,
             &nothing,
-            &l7r_guard::shared::env::Rooted::with(".", &[])
+            &l7r_shared::env::Rooted::with(".", &[])
         ),
         Ok(2)
     );
@@ -679,7 +676,7 @@ fn main_refuses_what_land_py_refused_before_it_landed() {
             "  ",
             &scripts,
             &nothing,
-            &l7r_guard::shared::env::Rooted::with(".", &[])
+            &l7r_shared::env::Rooted::with(".", &[])
         ),
         Ok(2)
     );
@@ -690,7 +687,7 @@ fn main_refuses_what_land_py_refused_before_it_landed() {
             NOTE,
             &scripts,
             &nothing,
-            &l7r_guard::shared::env::Rooted::with(".", &[])
+            &l7r_shared::env::Rooted::with(".", &[])
         ),
         Ok(2)
     );
@@ -702,7 +699,7 @@ fn main_refuses_what_land_py_refused_before_it_landed() {
         NOTE,
         &scripts,
         &nothing,
-        &l7r_guard::shared::env::Rooted::with(".", &[])
+        &l7r_shared::env::Rooted::with(".", &[])
     )
     .is_err());
 }
@@ -735,7 +732,7 @@ fn nothing() {}
 fn a_landing_with_nothing_captured_prints_its_lines() {
     let fx = fx("land-print");
     let mut land = Land::new_in(
-        &l7r_guard::shared::env::Rooted::with(fx.root.clone(), &[]),
+        &l7r_shared::env::Rooted::with(fx.root.clone(), &[]),
         &fx.dir.join("tree/scripts"),
     );
     land.said = None;

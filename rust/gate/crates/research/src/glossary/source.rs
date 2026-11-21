@@ -118,7 +118,7 @@ pub fn split(raw: &str) -> Result<Vec<Map<String, Value>>> {
 fn term_text(entry: &Map<String, Value>) -> Result<String> {
     entry
         .get("term")
-        .map(l7r_guard::shared::pyjson::py_str)
+        .map(l7r_shared::pyjson::py_str)
         .ok_or_else(|| Error::new("KeyError", "'term'"))
 }
 
@@ -142,7 +142,7 @@ pub fn assemble(terms: &[Map<String, Value>]) -> Result<String> {
             .collect();
         out.insert(term, Value::Object(fields));
     }
-    Ok(l7r_guard::shared::pyjson::dumps(&Value::Object(out), Some(1), false) + "\n")
+    Ok(l7r_shared::pyjson::dumps(&Value::Object(out), Some(1), false) + "\n")
 }
 
 /// The one-time split: `glossary.json` into one file per term; refuses to leave a split that does not assemble back to the same bytes.
@@ -156,7 +156,7 @@ pub fn write_term_files(base: &Path) -> Result<Vec<String>> {
     let mut written = Vec::new();
     for (position, entry) in (1..).zip(split(&raw)?) {
         let name = file_name(position, &term_text(&entry)?);
-        let text = l7r_guard::shared::pyjson::dumps(&Value::Object(entry), Some(1), false) + "\n";
+        let text = l7r_shared::pyjson::dumps(&Value::Object(entry), Some(1), false) + "\n";
         write(&here.join(&name), &text)?;
         written.push(format!("{TERMS}/{name}"));
     }
@@ -202,14 +202,14 @@ pub fn term_files(base: &Path) -> Result<Vec<Map<String, Value>>> {
                 "AttributeError",
                 format!(
                     "'{}' object has no attribute 'get'",
-                    l7r_guard::shared::blocked::type_name(&entry)
+                    l7r_shared::blocked::type_name(&entry)
                 ),
             ));
         };
         // COMPARED IN THE ENCODE DIRECTION (the plan review of feature 259): decoding a filename is not injective once a term holds a `%`
         let said = entry
             .get("term")
-            .map_or_else(|| "None".to_owned(), l7r_guard::shared::pyjson::py_str);
+            .map_or_else(|| "None".to_owned(), l7r_shared::pyjson::py_str);
         if name != format!("{at:0DIGITS$}-{}.json", encode(&said)) {
             return Err(refused(format!("{TERMS}/{name}: its filename says `{}` and its content says `{said}` - one of the two is wrong", term_of(&name)?)));
         }
@@ -357,8 +357,8 @@ fn first_difference(want: &str, got: &str) -> String {
             let cut = |s: &[char]| -> String { s[at..(at + 40).min(s.len())].iter().collect() };
             return format!(
                 "first difference at character {at}: {} against {}",
-                l7r_guard::shared::py_text::repr(&cut(&w)),
-                l7r_guard::shared::py_text::repr(&cut(&g))
+                l7r_shared::py_text::repr(&cut(&w)),
+                l7r_shared::py_text::repr(&cut(&g))
             );
         }
     }

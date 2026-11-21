@@ -117,7 +117,7 @@ pub fn cli_in(args: &[String], tree: &Path, input: &mut dyn std::io::Read) -> Re
         }),
         (Some("stale-counts"), 2) => door(|| {
             let manifest = read(&rest[1])?;
-            let m = l7r_guard::shared::pyjson::loads(&manifest)
+            let m = l7r_shared::pyjson::loads(&manifest)
                 .map_err(|e| Error::new("json.decoder.JSONDecodeError", e.to_string()))?;
             Ok(lines(&census::stale_counts(&notes(&rest[0])?, &m)?))
         }),
@@ -216,7 +216,7 @@ mod tests {
     /// `sheet-render`: a hand sheet's picture with its captions placed (feature 449 T152, `make sheet-render`), and its refusal.
     #[test]
     fn a_hand_sheet_renders_with_its_captions_placed() {
-        let dir = l7r_guard::shared::tempdir::TempDir::new("mode-a-sheet-render");
+        let dir = l7r_shared::tempdir::TempDir::new("mode-a-sheet-render");
         let at = |name: &str| dir.path().join(name).to_string_lossy().into_owned();
         let svg = r##"<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 20"><rect x="0" y="0" width="40" height="20" fill="#EFE3C2" data-kind="-"/><rect x="5" y="5" width="30" height="10" fill="#DDB87A" data-kind="well" data-id="w"/><text font-size="3" data-kind="well" data-names="w">well</text></svg>"##;
         std::fs::write(at("s.svg"), svg).unwrap();
@@ -235,7 +235,7 @@ mod tests {
 
     #[test]
     fn the_doors_answer_as_the_python_drivers_did() {
-        let dir = l7r_guard::shared::tempdir::TempDir::new("mode-a-doors");
+        let dir = l7r_shared::tempdir::TempDir::new("mode-a-doors");
         let at = |name: &str| dir.path().join(name).to_string_lossy().into_owned();
         let svg = r##"<svg><rect id="precinct" x="0" y="0" width="9" height="9" fill="#fff"/><g fill="#8FB0C6"><circle cx="1" cy="1" r="1"/></g></svg>"##;
         std::fs::write(at("s.svg"), svg).unwrap();

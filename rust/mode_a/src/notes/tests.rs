@@ -22,7 +22,7 @@ fn the_block_reads_what_it_can_and_nothing_else() {
         read_map_notes(std::path::Path::new("/no/such.notes.md")),
         super::MapNotes::default()
     );
-    let dir = l7r_guard::shared::tempdir::TempDir::new("notes-read");
+    let dir = l7r_shared::tempdir::TempDir::new("notes-read");
     let at = dir.path().join("m.notes.md");
     std::fs::write(
         &at,

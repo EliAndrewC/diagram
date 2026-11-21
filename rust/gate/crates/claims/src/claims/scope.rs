@@ -8,7 +8,7 @@
 
 use std::path::{Path, PathBuf};
 
-use l7r_guard::shared::sha256;
+use l7r_shared::sha256;
 use serde_json::{json, Map, Value};
 
 use super::units::{all_rust_units, doc_units, from_json, rel, rglob, Pair, PROCEDURES};

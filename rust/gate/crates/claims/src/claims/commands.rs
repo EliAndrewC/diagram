@@ -248,7 +248,7 @@ fn owed_cmd(
 
 /// `str.split()`'s word count.
 fn words(text: &str) -> usize {
-    l7r_guard::shared::py_text::split(text).len()
+    l7r_shared::py_text::split(text).len()
 }
 
 fn bundle_cmd(
@@ -389,7 +389,7 @@ fn record_cmd(
         "nothing recorded",
         &mut o.err,
     )?;
-    if l7r_guard::shared::py_text::strip(&reply).is_empty() {
+    if l7r_shared::py_text::strip(&reply).is_empty() {
         return Ok(2);
     }
     let (reply, bad) = vet(
@@ -562,7 +562,7 @@ fn triaged_cmd(
         "nothing cleared",
         &mut o.err,
     )?;
-    if l7r_guard::shared::py_text::strip(&reply).is_empty() {
+    if l7r_shared::py_text::strip(&reply).is_empty() {
         return Ok(2);
     }
     let units = data["units"].as_object().cloned().unwrap_or_default();
@@ -700,7 +700,7 @@ fn carry_cmd(reader: &mut Reader, root: &Path, p: &Parsed, o: &mut Out) -> Resul
         } else {
             keys_text
                 .split(';')
-                .map(l7r_guard::shared::py_text::strip)
+                .map(l7r_shared::py_text::strip)
                 .filter(|k| !k.is_empty())
                 .map(str::to_owned)
                 .collect()

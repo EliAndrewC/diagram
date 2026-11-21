@@ -6,9 +6,9 @@ use std::path::{Path, PathBuf};
 use std::sync::LazyLock;
 
 use fancy_regex::Regex;
-use l7r_guard::shared::checks::pages::read_page;
-use l7r_guard::shared::py_text::strip;
-use l7r_guard::shared::pyjson;
+use l7r_shared::checks::pages::read_page;
+use l7r_shared::py_text::strip;
+use l7r_shared::pyjson;
 use serde_json::{json, Map, Value};
 
 use super::args::{parse, Parsed, Spec};

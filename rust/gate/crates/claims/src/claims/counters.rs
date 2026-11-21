@@ -98,7 +98,7 @@ pub fn counters_clear(
         return Ok(index);
     }
     let base = crate::record::repo::git(root, &["merge-base", "HEAD", "origin/main"]);
-    let base = l7r_guard::shared::py_text::strip(&base).to_owned();
+    let base = l7r_shared::py_text::strip(&base).to_owned();
     if base.is_empty() {
         return Ok(index);
     }

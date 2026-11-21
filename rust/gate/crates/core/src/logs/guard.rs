@@ -14,9 +14,9 @@ use std::os::unix::ffi::OsStrExt as _;
 use std::path::Path;
 use std::time::SystemTime;
 
-use l7r_guard::shared::log::{surrogate_escaped, write_entry, Entry};
-use l7r_guard::shared::pyjson::{loads, plain};
-use l7r_guard::shared::session::Session;
+use l7r_shared::log::{surrogate_escaped, write_entry, Entry};
+use l7r_shared::pyjson::{loads, plain};
+use l7r_shared::session::Session;
 use serde_json::{json, Value};
 
 use crate::Reply;

@@ -11,8 +11,8 @@ use std::sync::LazyLock;
 use fancy_regex::Regex;
 use l7r_gate_core::record::bundle::today;
 use l7r_gate_core::record::repo::git_out;
-use l7r_guard::shared::py_text::{repr, split};
-use l7r_guard::shared::pyjson::dumps;
+use l7r_shared::py_text::{repr, split};
+use l7r_shared::pyjson::dumps;
 use serde_json::{json, Map, Value};
 
 use super::super::events::{re, read_text, Raised};

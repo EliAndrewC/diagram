@@ -17,8 +17,8 @@
 use std::sync::LazyLock;
 
 use fancy_regex::Regex;
-use l7r_guard::shared::py_text::{strip, SPACE_CLASS};
-use l7r_guard::shared::speckit::splitlines;
+use l7r_shared::py_text::{strip, SPACE_CLASS};
+use l7r_shared::speckit::splitlines;
 use serde_json::Value;
 
 pub const RETRIES: u32 = 44;
@@ -30,11 +30,11 @@ const RETURNED: &str = " Your background agents returned while you waited - a he
 
 // `\d` read as ASCII digits, and Python's whitespace for `\s`: a reset time in other digits is a message no service writes
 static EPOCH: LazyLock<Regex> = LazyLock::new(|| {
-    l7r_guard::shared::regex::build(r"\|([0-9]{10})\b").unwrap_or_else(|e| unreachable!("{e}"))
+    l7r_shared::regex::build(r"\|([0-9]{10})\b").unwrap_or_else(|e| unreachable!("{e}"))
 });
 static RESETS: LazyLock<Regex> = LazyLock::new(|| {
     let s = format!("[{SPACE_CLASS}]");
-    l7r_guard::shared::regex::build(&format!(
+    l7r_shared::regex::build(&format!(
         r"(?i)resets?{s}+(?:at{s}+)?([0-9]{{1,2}})(?::([0-9]{{2}}))?{s}*([ap]m)"
     ))
     .unwrap_or_else(|e| unreachable!("{e}"))
@@ -104,7 +104,7 @@ pub fn wait_for(text: &str, attempt: u32, now: f64) -> i64 {
         return clamp(at as f64 - now + 120.0);
     }
     if let Some(c) = RESETS.captures(text).ok().flatten() {
-        let (y, mo, d, _, _, _) = l7r_guard::shared::log::civil(now as u64);
+        let (y, mo, d, _, _, _) = l7r_shared::log::civil(now as u64);
         let pm = c[3].eq_ignore_ascii_case("pm");
         let hour = c[1].parse::<i64>().unwrap_or(0) % 12 + if pm { 12 } else { 0 };
         let minute = c.get(2).map_or(0, |m| m.as_str().parse().unwrap_or(0));

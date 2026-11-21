@@ -18,7 +18,7 @@ fn sorted(set: HashSet<String>) -> Vec<String> {
 
 #[test]
 fn every_reader_is_the_pythons() {
-    let d = l7r_guard::shared::tempdir::TempDir::new("research-prepass");
+    let d = l7r_shared::tempdir::TempDir::new("research-prepass");
     let files: serde_json::Map<String, Value> = serde_json::from_str(FILES).unwrap();
     for (rel, text) in &files {
         // `R/` is the record's directory, spelled so the pointer check does not read a scratch record's files as the real one's
@@ -108,7 +108,7 @@ fn every_reader_is_the_pythons() {
 
 #[test]
 fn what_the_python_refused() {
-    let d = l7r_guard::shared::tempdir::TempDir::new("research-prepass-bad");
+    let d = l7r_shared::tempdir::TempDir::new("research-prepass-bad");
     let gloss = d.join(GLOSSARY);
     std::fs::create_dir_all(gloss.parent().unwrap()).unwrap();
     assert!(read_glossary(&d).unwrap().is_empty());

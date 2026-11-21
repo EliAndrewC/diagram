@@ -4,7 +4,7 @@
 use std::fmt::Write as _;
 use std::path::Path;
 
-use l7r_guard::guards::conflict_marker_hooks::{
+use l7r_shared::guards::conflict_marker_hooks::{
     conflicted, exemption_reason, has_conflict, staged_by, EXEMPT, HEAD_LINES,
 };
 

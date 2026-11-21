@@ -5,8 +5,8 @@ use std::collections::{BTreeMap, BTreeSet, HashMap, HashSet};
 use std::sync::LazyLock;
 
 use fancy_regex::{Captures, Regex};
-use l7r_guard::guards::house_style_hooks::americanize_record;
-use l7r_guard::shared::py_text::strip;
+use l7r_shared::guards::house_style_hooks::americanize_record;
+use l7r_shared::py_text::strip;
 use serde_json::{json, Map, Value};
 
 use super::index::{field, is, Index};
@@ -114,7 +114,7 @@ pub fn rests_of(note: &str, numbered: &Map<String, Value>) -> (String, Option<Ve
         .collect();
     (
         note[..start]
-            .trim_end_matches(l7r_guard::shared::py_text::is_space)
+            .trim_end_matches(l7r_shared::py_text::is_space)
             .to_owned(),
         Some(names.into_iter().collect()),
     )

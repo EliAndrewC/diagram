@@ -564,7 +564,7 @@ fn block_task(body: &str) -> String {
         .unwrap_or("")
         .trim_start_matches('#')
         .trim();
-    l7r_guard::shared::plan_text::leading_task(title)
+    l7r_shared::plan_text::leading_task(title)
         .unwrap_or("")
         .to_owned()
 }

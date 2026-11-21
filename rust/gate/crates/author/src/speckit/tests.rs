@@ -1,4 +1,4 @@
-use l7r_guard::shared::tempdir::TempDir;
+use l7r_shared::tempdir::TempDir;
 
 use super::cli;
 

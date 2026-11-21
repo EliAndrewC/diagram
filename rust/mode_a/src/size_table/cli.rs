@@ -9,7 +9,7 @@ use std::path::Path;
 
 use l7r_gate_core::Reply;
 use l7r_gate_research::Error;
-use l7r_guard::shared::py_text::repr;
+use l7r_shared::py_text::repr;
 
 use super::{render, table, to_json};
 use crate::py::{os_error, uncaught};

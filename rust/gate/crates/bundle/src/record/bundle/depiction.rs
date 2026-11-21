@@ -172,7 +172,7 @@ fn pool_page_with(root: &Path, key: &str, sheet: bool) -> Option<PathBuf> {
 
 /// `html.escape(text, quote=True)`: the guard's, one implementation (feature 449 T144).
 fn html_escape(text: &str) -> String {
-    l7r_guard::shared::html_text::escape(text, true)
+    l7r_shared::html_text::escape(text, true)
 }
 
 /// The first `n` characters of `text` from character `at`.
@@ -362,7 +362,7 @@ fn knobs_note(tree: &Path, doc: &str) -> Result<String, Fail> {
     for name in &names {
         let k = table
             .get(name)
-            .filter(|k| !l7r_guard::shared::checks::falsy(Some(k)));
+            .filter(|k| !l7r_shared::checks::falsy(Some(k)));
         let listed: Vec<String> = forms
             .get(name)
             .and_then(Value::as_array)
@@ -383,7 +383,7 @@ fn knobs_note(tree: &Path, doc: &str) -> Result<String, Fail> {
         if let Some(rule) = table
             .get(name)
             .and_then(|k| k.get("typing_rule"))
-            .filter(|r| !l7r_guard::shared::checks::falsy(Some(r)))
+            .filter(|r| !l7r_shared::checks::falsy(Some(r)))
         {
             parts.push(format!(
                 "The typing rule (which settlements may take each form):\n\n```python\n{}```\n",
@@ -399,7 +399,7 @@ fn knobs_note(tree: &Path, doc: &str) -> Result<String, Fail> {
                         "- `{}:{}: {}`",
                         relative(f, tree),
                         i + 1,
-                        l7r_guard::shared::py_text::strip(line)
+                        l7r_shared::py_text::strip(line)
                     ));
                     if hits.len() == 15 {
                         break 'files;

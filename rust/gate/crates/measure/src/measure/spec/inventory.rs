@@ -12,9 +12,9 @@ use std::path::{Path, PathBuf};
 use std::sync::LazyLock;
 
 use fancy_regex::Regex;
-use l7r_guard::shared::py_text::{repr, strip, SPACE_CLASS};
-use l7r_guard::shared::pyjson::py_float;
-use l7r_guard::shared::speckit::splitlines;
+use l7r_shared::py_text::{repr, strip, SPACE_CLASS};
+use l7r_shared::pyjson::py_float;
+use l7r_shared::speckit::splitlines;
 use serde_json::{json, Value};
 
 use super::super::events::{re, read_text, Raised};

@@ -8,7 +8,7 @@ use std::path::{Path, PathBuf};
 use std::sync::LazyLock;
 
 use fancy_regex::Regex;
-use l7r_guard::shared::py_text::{strip, SPACE_CLASS};
+use l7r_shared::py_text::{strip, SPACE_CLASS};
 use serde_json::{Map, Value};
 
 use super::py::{get, has, head, len, py_str, read_text, rstrip, text, truthy, wrap, Raised, R};

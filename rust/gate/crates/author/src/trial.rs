@@ -19,8 +19,8 @@ use std::fmt::Write as _;
 use std::path::{Path, PathBuf};
 
 use l7r_gate_core::Reply;
-use l7r_guard::shared::py_text::strip;
-use l7r_guard::shared::speckit::splitlines;
+use l7r_shared::py_text::strip;
+use l7r_shared::speckit::splitlines;
 
 use crate::{raised, read_strict, reply};
 
@@ -203,7 +203,7 @@ pub fn review_cli(args: &[String], tree: &Path, check_dir: &Path) -> Reply {
             "",
             &format!(
                 "ValueError: invalid literal for int() with base 10: {}",
-                l7r_guard::shared::py_text::repr(odd)
+                l7r_shared::py_text::repr(odd)
             ),
         );
     }

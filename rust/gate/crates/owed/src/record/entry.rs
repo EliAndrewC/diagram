@@ -25,7 +25,7 @@ use l7r_gate_registry::about::{
     classes, compound_classes, get, modal_rel, parse_explanation, FeatureClass, DATA_TAGS, TAGS,
 };
 use l7r_gate_registry::kinds::{Registry, HAMLET_REGISTRY, SHEET_REGISTRY};
-use l7r_guard::shared::checks::pages::read_page;
+use l7r_shared::checks::pages::read_page;
 
 use super::leaves::fragments_for;
 use super::modals::{read_at, MODAL_DIRS};
@@ -78,7 +78,7 @@ fn renamed_from(root: &Path, base: &str, rel: &str, slug: &str, drawing: &str) -
     let dir = rel.rsplit_once('/').map_or("", |p| p.0);
     let listing = git(root, &["ls-tree", "--name-only", &format!("{base}:{dir}")]);
     let tail = format!("-{slug}{drawing}.html");
-    let was: Vec<&str> = l7r_guard::shared::py_text::split(&listing)
+    let was: Vec<&str> = l7r_shared::py_text::split(&listing)
         .into_iter()
         .filter(|n| n.ends_with(&tail) && NUMBERED.is_match(n).unwrap_or(false))
         .collect();
@@ -94,7 +94,7 @@ fn moved_anchors(root: &Path, base: &str) -> Result<BTreeSet<String>, Fail> {
         root,
         &["diff", "--name-only", base, "--", &format!("{RESEARCH}/")],
     );
-    let names: Vec<&str> = l7r_guard::shared::py_text::split(&listed);
+    let names: Vec<&str> = l7r_shared::py_text::split(&listed);
     let olds = cat_blobs(
         root,
         &names

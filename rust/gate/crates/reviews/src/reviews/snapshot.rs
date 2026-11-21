@@ -26,7 +26,7 @@
 use std::path::{Path, PathBuf};
 
 use l7r_gate_pool::{walk, Walk};
-use l7r_guard::shared::py_text::repr;
+use l7r_shared::py_text::repr;
 
 use super::owed::{owed, Unit};
 use super::reply;

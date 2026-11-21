@@ -40,7 +40,7 @@ fn raises(_: &[&Path]) -> Result<Vec<Vec<String>>, String> {
 }
 
 /// A repository whose `origin/main` is its first commit.
-fn repo(tag: &str) -> l7r_guard::shared::tempdir::Held<std::path::PathBuf> {
+fn repo(tag: &str) -> l7r_shared::tempdir::Held<std::path::PathBuf> {
     let tmp = scratch(tag);
     let root = std::fs::canonicalize(&tmp).unwrap();
     git(&root, &["init", "-q", "-b", "main"]);

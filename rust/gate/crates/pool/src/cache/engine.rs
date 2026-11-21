@@ -171,7 +171,7 @@ pub fn identity(path: &Path) -> Result<(String, u64), String> {
     }
     let bytes = std::fs::read(path).map_err(|e| format!("{}: {e}", path.display()))?;
     Ok((
-        format!("sha256:{}", l7r_guard::shared::sha256::hex(&bytes)),
+        format!("sha256:{}", l7r_shared::sha256::hex(&bytes)),
         bytes.len() as u64,
     ))
 }

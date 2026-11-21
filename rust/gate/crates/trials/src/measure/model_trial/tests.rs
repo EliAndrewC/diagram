@@ -36,7 +36,7 @@ fn lines(path: &Path, records: &[Value]) {
 }
 
 /// A clone at `<scratch>/m/.clones/c` with one commit and an agent file, and the stand-in `claude`.
-fn world(tag: &str) -> (l7r_guard::shared::tempdir::TempDir, Trial) {
+fn world(tag: &str) -> (l7r_shared::tempdir::TempDir, Trial) {
     let top = crate::checks::scratch(tag);
     let clone = top.join("m/.clones/c");
     std::fs::create_dir_all(clone.join(".claude/agents")).unwrap();
@@ -352,12 +352,7 @@ fn case(
     tag: &str,
     prompt: &str,
     extra: &[&str],
-) -> (
-    l7r_guard::shared::tempdir::TempDir,
-    Trial,
-    PathBuf,
-    crate::Reply,
-) {
+) -> (l7r_shared::tempdir::TempDir, Trial, PathBuf, crate::Reply) {
     let (top, t) = world(tag);
     let tr = transcript(&top, prompt);
     let out = top.join("case");
@@ -474,7 +469,7 @@ fn prepare_names_what_is_not_a_fair_re_run() {
         .stdout
         .contains("MISSING (not a fair re-run): /tmp/l7r-nothing-here/x"));
     assert_eq!(meta(&out)["missing"][0], "/tmp/l7r-nothing-here/x");
-    let bundle = l7r_guard::shared::tempdir::TempDir::new("gate-mt-bundle");
+    let bundle = l7r_shared::tempdir::TempDir::new("gate-mt-bundle");
     std::fs::create_dir_all(bundle.join("deep")).unwrap();
     std::fs::write(bundle.join("deep/MANIFEST.md"), "x").unwrap();
     let tr = transcript(

@@ -54,7 +54,7 @@ fn diff_run(args: &[String]) -> Reply {
     l7r_gate_diffrun::cli(
         args,
         &l7r_gate_diffrun::Ctx {
-            log_dir: &l7r_guard::shared::log::dir(),
+            log_dir: &l7r_shared::log::dir(),
             session: std::env::var("CLAUDE_CODE_SESSION_ID").unwrap_or_default(),
             cwd: std::env::current_dir().unwrap_or_default(),
         },
@@ -78,7 +78,7 @@ fn cache_off(value: Option<&str>) -> bool {
 pub fn cli_os(args: &[std::ffi::OsString]) -> Reply {
     if let [verb, sub, rest @ ..] = args {
         if verb == "log" && sub == "guard" {
-            return logs::guard::cli(rest, &mut std::io::stdin(), &l7r_guard::shared::log::dir());
+            return logs::guard::cli(rest, &mut std::io::stdin(), &l7r_shared::log::dir());
         }
     }
     match args
@@ -173,7 +173,7 @@ pub fn cli(args: &[String]) -> Reply {
         Some("patch") => author::patch::cli(
             &args[1..],
             &mut std::io::stdin(),
-            &l7r_guard::shared::tempdir::TempDir::new("gate-patch-selftest"),
+            &l7r_shared::tempdir::TempDir::new("gate-patch-selftest"),
         ),
         // the page sessions' tools (feature 449 T137): the runner starts this binary again for its detached queue
         Some(verb @ ("page-session" | "brief-load" | "coord" | "research-claims")) => {
@@ -282,7 +282,7 @@ mod tests {
             assert_eq!(ask(&[verb]).code, 2, "{verb}");
         }
         assert_eq!(ask(&["patch", "--selftest"]).code, 0);
-        let dir = l7r_guard::shared::tempdir::TempDir::new("gate-cli-docs");
+        let dir = l7r_shared::tempdir::TempDir::new("gate-cli-docs");
         assert_eq!(ask(&["make-docs", dir.to_str().unwrap()]).code, 2);
         assert!(super::gate_tree().is_absolute());
     }
@@ -321,7 +321,7 @@ mod tests {
 
     #[test]
     fn content_ids_answers_each_file_and_names_what_it_cannot_read() {
-        let dir = l7r_guard::shared::tempdir::TempDir::new("gate-cli");
+        let dir = l7r_shared::tempdir::TempDir::new("gate-cli");
         std::fs::create_dir_all(dir.join("scripts/gates")).unwrap();
         std::fs::write(dir.join("a.txt"), "x\n").unwrap();
         std::fs::write(dir.join("b.py"), "y = 1\n").unwrap();

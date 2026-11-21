@@ -927,32 +927,150 @@ The T02 class, by kind (the grep's hits, each read):
 again after a green coverage pass answered for them); not engine speed, so no checklist answers.
 
 
-### T58 (<why: the finding or measurement that files it>)
+### T58 (the finding as filed, restated by its measurement: every gate crate, `rust/gate`, `rust/mode_a`, the browser and the embedder named `l7r_guard`, so touching one hook compiled 32 crates where its own tests' edit compiled 1, measured 2026-11-21 (`/tmp/t58/scripts/measure.sh`: the file touched, then a warm `cargo test --offline --workspace --exclude l7r_phases --no-run` in a private target, the detached worktree at 3a60ac40e1); hook edits are 246 of the 520 non-test guard edits since 2026-11-01, so the split was built)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: what the gate crates read of the guard moves into its own crate, `l7r_shared` at `rust/guard/shared` (under the
+  guard, so `family()` keeps one family and `kept.rs`'s nearest-directory owner gives it its own files): `src/shared/*` (its root
+  `shared.rs` now `shared/src/lib.rs`), `protocol`, the five guards the gate crates call (`event_log`, `house_style`,
+  `feature_approval`, `set_down`, `conflict_marker`, with `house_style_words.tsv`) and `suite_tools::pylex`, moved whole; the three
+  pieces of staying hooks they called (`discard_hooks`' `shlex` to `shape.rs`, `finished_run_hooks`' `realpath` to `tree.rs`,
+  `context_cap_hooks`' transcript reader to a new `context.rs` with its own tests) cut out beside them. The guard keeps every old path by
+  re-export (`pub use l7r_shared as shared`, `protocol`, the five modules, `pylex`, `shlex`, `realpath`), so the guard's files keep their `use`
+  lines but for the moved ones and the three that lost a piece (`discard_hooks`, `finished_run_hooks/runs.rs`, `context_cap_hooks`); the dependents' `l7r_guard::shared::` and `l7r_guard::guards::` paths and manifests name
+  `l7r_shared`, and none names `l7r_guard`. The guard's tests reach `shared`'s test seams (the thread's environment map, `quiet`,
+  `testkit`) through a `test-env` feature its dev-dependency alone turns on. The guard-file patterns (`guard_file_hooks`,
+  `make_only_hooks`' `GUARD_FILE` and `SOURCE_NAMES`) hold `rust/guard/shared/src/` and its manifest; `hookbench`'s baseline finds a
+  moved guard's source at a ref after the split; the path strings of the checks crate, the cohort push and the docs follow the move.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| the guard's shared readers split into `l7r_shared` | n/a - no map | n/a | none | n/a |
 
 ### T58 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** No map changes. A builder who edits a hook rebuilds the guard alone: no gate crate, `rust/gate`,
+   `rust/mode_a`, browser or embedder is compiled again, so `make rust-test` and the gate family's coverage build owe nothing after it.
+2. **The constraints.** T58's line: measured first how many guard edits touch the shared code against a single hook; split only if
+   hooks dominate; the gate crates build on the shared crate; red first on the rebuild count of a hook edit. FR-013. No shipped binary
+   reads the tests' environment. Every old path the guard's own files name keeps working. T57 had `rust/gate/crates/rustc`'s
+   `kept.rs` and T62 `clone_sync_hooks` open in the clone, so the change was built in a detached worktree at 3a60ac40e1 and applied
+   when the session said, after both landed.
+3. **Where each comes from.** O: the event logs of every clone and the mirror (item 4); O: `git log` of `rust/guard`; O: the
+   dependents' sources and `cargo tree`; O: the rebuild runs (item 4) and the red-first runs (item 9); G: FR-013 (the GM 2026-11-20,
+   request.md: "can we in general priotitize performance improvements going forward?"); the task as filed (T58's line).
+4. **Do they describe the world here?** Measured, not assumed:
+   - What the dependents use: 31 crates name `l7r_guard` (rust/gate, its 27 crates, `rust/mode_a`; the browser and embedder as a
+     dev-dependency), with about 1,560 `l7r_guard::shared::` paths; of the guards, `event_log_hooks` 25 uses, `house_style_hooks` 8,
+     `feature_approval_hooks` 2, `set_down_hooks` 2, `conflict_marker_hooks` 1, and `suite_tools::pylex` 1 (the registry crate's
+     tests), measured 2026-11-21 (the dependents' paths grepped, `cargo tree -i l7r_guard --depth 1`).
+   - How guard edits split: 754 Edit and Write calls under `rust/guard/` since 2026-11-01, deduplicated by call and path: 246 a hook,
+     169 `src/shared`, 105 a gate-used guard or `pylex`, none `src/protocol`, 231 a test file, 3 `CLAUDE.md` - hooks 246 of 520 non-test
+     edits (47%), measured 2026-11-21 06:14Z (`/tmp/t58/scripts/edits.py` over every clone's and the mirror's event log, the worktree's
+     own paths left out).
+   - How guard commits split: 147 since 2026-11-01 touch `rust/guard`: 56 a hook alone, 34 the shared set alone, 44 both, 12 tests
+     only, 1 other, measured 2026-11-21 (`/tmp/t58/scripts/commits.py`, `git log --name-only` to 3a60ac40e1; the shared set as
+     `l7r_shared` took it, `src/protocol` in it - its 3 commits since 2026-11-01 move one commit from hook-alone to both).
+   - What the rebuilds were:
+     - 160 real guard builds (Phase `build` lines naming `rust/guard` alone, over 2 s), median 17.5 s, measured 2026-11-21 (the
+       event logs' Phase lines).
+     - Put down to the edits in their clone since the build before: 40 a hook only, 45 the shared set, 30 tests only, 45 no edit seen
+       (a sync) - hooks 40 of the 85 a source edit caused, measured 2026-11-21 (the event logs' Phase and Edit lines).
+     - The wide gate-family coverage builds (24 crates or more): 25 runs, 1,220 s in all, which the commit windows could not attribute
+       to an edit, measured 2026-11-21 (`/tmp/t58/scripts/wide.py`).
+   - Before, the worktree at 3a60ac40e1 before the split:
+     - Touching `rust/guard/src/guards/readme_hooks.rs`: 32 crates compiled (the guard, the 27 gate crates, `rust/gate`,
+       `rust/mode_a`, browser, embedder), 12.0, 11.6, 20.4 and 50.8 s on a loaded machine, measured 2026-11-21 (`measure.sh`).
+     - Touching its `tests.rs`: 1 crate, 2.5 s, measured 2026-11-21 (`measure.sh`).
+     - Nothing touched: 0.2 s, measured 2026-11-21 (`measure.sh`).
+   - After, the same method on the split tree (the detached worktree at 3a60ac40e1 with the split); the times are load-bound, the
+     crate counts are the measure:
+     - Touching `readme_hooks.rs`: 1 crate (`l7r_guard`) in each of 3 runs, 1.2, 1.1 and 1.2 s at load average 2.5-2.8, measured
+       2026-11-21 (`measure.sh`, `/proc/loadavg` after each).
+     - Touching its `tests.rs`: 1 crate, 1.1 s, measured 2026-11-21 (`measure.sh`).
+     - Touching `rust/guard/shared/src/py_text.rs`: 33 crates (the 32 and `l7r_shared`) in each of 3 runs, 11.0, 14.2 and 28.3 s at
+       load 6.0-21.3 (other builders running), measured 2026-11-21 (`measure.sh`, `/proc/loadavg` after each).
+     - Nothing touched: 0.1 s, measured 2026-11-21 (`measure.sh`).
+     - One real code edit of a guard file (`suite_tools/bench.rs`): 1 crate in 5.8 s, measured 2026-11-21 (`measure.sh`).
+   - No shipped binary reads the tests' environment: the guard is built `cargo build --profile tool -p l7r_guard`
+     (`scripts/hooks/l7r-guard.sh`) and every gate binary `cargo build --profile tool -p <crate>` (`scripts/gates/l7r-gate.sh`),
+     builds that resolve no dev-dependency, and `hookbench`'s baseline `cargo build --release -p l7r_guard`; the `tool` profile's
+     `l7r_shared` fingerprint, after the gate built `l7r-gate` and `l7r-rust`, has features `[]`, measured 2026-11-21 (the scripts'
+     cargo lines read; `tool/.fingerprint/l7r_shared-*/lib-l7r_shared.json` in the worktree's private target).
+   - `rust/Cargo.lock` is untracked and no cargo call of the gate, the guard script or the Makefile passes `--locked` or `--frozen`,
+     so the new member enters each tree's lock on its first build, measured 2026-11-21 (the calls grepped).
+   - The edges after: `cargo tree -i l7r_guard --workspace` names no dependent; `l7r_shared` has 32 (the 31 and the guard), measured
+     2026-11-21 (`cargo tree --offline -i <crate> --workspace --depth 1 -e normal,dev`, the detached worktree).
+   - What `make rust-test` owes after a hook edit (`make rust-test` in the detached worktree, `L7R_GATE_TARGET` its private target,
+     each edit reverted after):
+     - One line of code in `batching_hooks.rs`'s `decide` (`std::hint::black_box(58_u8);`) ran `rust/guard` (410 tests) and
+       `rust/gate/crates/checks` (140, as at HEAD: it declares `reads = ["."]`, so any edit in the tree owes its run), the other 32
+       crates' results standing, 9.3 s at load 12.7, measured 2026-11-21 (`make rust-test`).
+     - A dead `const` alone ran `checks` only, the guard's test binary unchanged (449 T93's second key), measured 2026-11-21 (`make
+       rust-test`).
+     - With nothing touched after the full run, all 34 stood, 5.1 s, measured 2026-11-21 (`make rust-test`).
+5. **The order.** After T55 (the closing step); built beside T57 and T62 in a detached worktree at 3a60ac40e1, applied to the clone
+   after both landed (c156ccc564) with `git apply --3way` - one conflict, `rust/guard/CLAUDE.md`'s index rows, resolved with T62's
+   `clone_sync_hooks` words kept in the split's rows; `kept.rs` line 12 merged clean to `use l7r_shared::sha256;`; before T22, the
+   close.
+6. **The exits.** Green: the after count (a hook edit compiles the guard alone), `make rust-test`, lint, format, cover and dead on
+   `rust/guard` and `rust/guard/shared`, then in the clone `make quick` and `make closing-checks`.
+   Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None: the split's premise (what the dependents use is not the hooks) was measured from their paths before
+   anything moved, and the three tangles (`shlex`, `realpath`, the transcript reader) found by the first build, not guessed.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.**
+   - Red first, the rebuild count: the before run above is the red - touching one hook compiled 32 crates - and the after run is
+     the green, 1 crate, measured 2026-11-21 (`measure.sh`, item 4).
+   - Red first, the guard-file cases: with HEAD's patterns put back in the split tree (`guard_file_hooks`' regex, `make_only_hooks`'
+     `GUARD_FILE` and its 3 `SOURCE_NAMES`), `the_guards_own_sources_are_held_and_granted_but_not_their_tests` and
+     `the_guards_own_sources_are_guard_writes_from_the_shell_but_their_tests_are_not` failed, 2 failed (`cd rust/guard/shared/src &&
+     tee tree.rs` read `ok` where `guard-write` is owed), and passed with the new ones, 2 passed, measured 2026-11-21
+     (`/tmp/t58/scripts/redfirst.sh`: `cargo test -p l7r_guard --lib` on the two names, the files restored after).
+   - Red first, `hookbench`: with HEAD's `bench.rs`, `a_rust_baseline_is_built_at_the_ref_and_a_ref_with_no_guard_says_why` failed at
+     its new `y-hooks` case (a guard under `rust/guard/shared/src/guards/`), 1 failed, and passed with the fix, 0.08-0.09 s in three
+     runs, under feature 449's FR-008 tenth of a second, measured 2026-11-21 (`/tmp/t58/scripts/redbench.sh`; `cargo test --exact` three times,
+     each a fresh `TMPDIR`).
+   - The crate checks in the worktree: lint, format, cover (every line of `l7r_shared` reached by its own tests) and dead clean on
+     `rust/guard/shared` and `rust/guard`, and `make rust-test` green on 34 crates, measured 2026-11-21 (`l7r-gate.sh rust <check>
+     --crate`, `make rust-test`, the detached worktree). Their first pass found 7 `must_use_candidate`s and one `missing_panics_doc` on
+     items the split made pub, rustfmt's order of the moved files' `use` lines, and 48 lines of `l7r_shared` that only the guard's
+     tests had reached, observed 2026-11-21, method: the first lint and cover runs' findings read (`shlex`, `realpath`, `filed_at`, `makes`, `quote_state`, `loop_period`, `blocked`'s `items`, `env::opt`'s
+     `HOME`, `Session::resolve`): `shlex`'s test moved with it, and the rest are 6 tests of `l7r_shared`'s own and one assertion.
+   - In the clone, the patch applied onto c156ccc564 (T57 and T62 landed): `make rust-test` green on 34 crates (the guard 410 tests,
+     `l7r_shared` 311), lint, format, cover and dead clean on `rust/guard/shared` and `rust/guard`, and `make quick` clean, measured
+     2026-11-21 (each run once in the clone).
+   - `make closing-checks` (under `STATIC_OK`): the first run's `static` red on format in 24 dependents, whose `l7r_shared::` paths
+     are shorter than the `l7r_guard::shared::` they replaced, so rustfmt joins their lines - the worktree's format check had run on
+     the guard and `l7r_shared` alone - fixed by `make format` (54 files, formatting only); the second run green, `static` 601 s
+     (lint, format, cover and dead clean on 34 crates), `hooks-test` 64 s, `quick` 11 s, measured 2026-11-21 (`make closing-checks`'
+     table, the clone).
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** No reader of a map sees anything differently; the change is which crates a guard edit rebuilds, and the
+    guards, checks and gate commands read the same code under a new crate name.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?**
+- `hookbench`'s baseline looked for a guard's source at `rust/guard/src/guards/<module>.rs` alone, so at any ref after the split
+  `make hookbench event-log --against <ref>` (or house-style, feature-approval, set-down, conflict-marker) would say the guard "did
+  not exist at that ref". Fixed here: it looks in `rust/guard/shared/src/guards/` too, pinned by a `y-hooks` case in
+  `a_rust_baseline_is_built_at_the_ref_and_a_ref_with_no_guard_says_why`.
+- Two hook-library comments (`scripts/hooks/lib/guardlog.sh`, `failed-open-log.sh`) named `shared/session.rs`, a path the split
+  left behind. Fixed here: `shared/src/session.rs`. No doc names `shared/src.rs`, measured 2026-11-21 (`git grep` over the tree).
+- The make-only guard refused a read-only Python heredoc over the event log as a guard-file write (this task's first builder,
+  2026-11-21; it passed under the escape). Not fixed here: it is make-only's reading of a heredoc, not the split, and owes its own
+  measurement of the refusals and its red first. Filed as T63; lands before T22.
+- Nothing pins the rebuild count: a crate that adds `l7r_guard` back as a dependency fails no check, and a hook edit would rebuild
+  the 32 crates again (measured 2026-11-21, this section's before run: one hook touched, 32 crates rebuilt). Not fixed here: a pin is a check of its own in `make static`, outside the split. Filed as T66; lands before T22.
+- `test-env` reaches a dependent only in one cargo call that builds the guard's tests beside it; there a gate binary reads the test
+  thread's map (2 call sites, `measure`'s event-log CLIs, observed 2026-11-21, method: the dependents' `l7r_shared::env::opt` calls
+  grepped). No lane makes that call - `make rust-test` builds a crate a call, the
+  coverage build a family a call (the guard and `l7r_shared` one family), and every shipped binary is built `--profile tool -p` -
+  and this task's `--workspace --no-run` measurement ran nothing. Under the crate-a-call builds `l7r_shared` compiles twice, with
+  `test-env` for the guard's tests and without for the rest, a cost on an `l7r_shared` edit alone, observed 2026-11-21 (the debug
+  fingerprints: one `l7r_shared` with features `[]`, the guard's with `["test-env"]`). Not a defect: no wrong outcome in any lane.
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
-
+**Performance work?** yes (a `[perf]` task, 451 FR-013: it makes the builders' loop faster - a hook edit, about half of the guard's
+source edits, rebuilds the guard alone where it rebuilt every crate that named it); not engine speed, so no checklist answers.
 
 ### T59 (<why: the finding or measurement that files it>)
 
@@ -1071,6 +1189,87 @@ again after a green coverage pass answered for them); not engine speed, so no ch
 |---|---|---|---|---|
 
 ### T64 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+
+### T65 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T65 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+
+### T66 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T66 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+
+### T67 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T67 Approach (checklist part A)
 
 1. **The goal, in the world.** <the place as it should be>
 2. **The constraints.** <the FRs, decisions and pages it holds to>

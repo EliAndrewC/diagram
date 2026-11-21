@@ -10,9 +10,9 @@ use std::path::Path;
 use std::sync::LazyLock;
 
 use fancy_regex::Regex;
-use l7r_guard::shared::blocked::type_name;
-use l7r_guard::shared::py_text::strip;
-use l7r_guard::shared::pyjson::{dumps, py_str, sorted};
+use l7r_shared::blocked::type_name;
+use l7r_shared::py_text::strip;
+use l7r_shared::pyjson::{dumps, py_str, sorted};
 use serde_json::{Map, Value};
 
 use crate::{caps, re, Error, Result};

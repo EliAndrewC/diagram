@@ -3,7 +3,7 @@
 use std::os::unix::fs::PermissionsExt as _;
 use std::path::Path;
 
-use l7r_guard::shared::tempdir::TempDir;
+use l7r_shared::tempdir::TempDir;
 use serde_json::json;
 
 use super::{
@@ -155,7 +155,7 @@ fn a_page_is_stored_and_read_back_while_it_is_young() {
 #[test]
 fn the_archive_behind_a_page() {
     let d = TempDir::new("research-archived");
-    let uid = l7r_guard::shared::cited_url::url_id("https://a.org/doc.pdf");
+    let uid = l7r_shared::cited_url::url_id("https://a.org/doc.pdf");
     let row = d.join("root/research/archive").join(&uid[..2]);
     std::fs::create_dir_all(&row).unwrap();
     std::fs::create_dir_all(d.join("store/cap")).unwrap();
@@ -222,7 +222,7 @@ fn the_cache_before_the_network_and_the_archive_behind_it() {
     assert!(blocked.blocked && blocked.why.starts_with("a fetch refused"));
     assert_eq!(pages.get("http://a.org/p").unwrap().text, "live");
     assert!(pages.get("http://a.org/p").unwrap().cached.is_some());
-    let uid = l7r_guard::shared::cited_url::url_id("http://a.org/d.pdf");
+    let uid = l7r_shared::cited_url::url_id("http://a.org/d.pdf");
     std::fs::create_dir_all(d.join("research/archive").join(&uid[..2])).unwrap();
     std::fs::write(
         d.join("research/archive")

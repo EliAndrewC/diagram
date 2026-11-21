@@ -17,7 +17,7 @@ l7r_gate_archive = { path = "../archive" }
 l7r_gate_core = { path = "../core" }
 l7r_gate_downloads = { path = "../downloads" }
 l7r_gate_research = { path = "../research" }
-l7r_guard = { path = "../../../guard" }
+l7r_shared = { path = "../../../guard/shared" }
 serde_json = { workspace = true }
 
 [dev-dependencies]

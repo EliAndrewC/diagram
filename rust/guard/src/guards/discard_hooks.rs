@@ -11,6 +11,7 @@ use crate::protocol::{Answer, Event, Guard};
 use crate::shared::escape::{escape_or_refuse, Escape};
 use crate::shared::log;
 use crate::shared::session::Session;
+pub(crate) use crate::shared::shape::shlex;
 use crate::shared::state::field;
 use crate::shared::tool::{ask, ask_within};
 
@@ -21,52 +22,6 @@ pub const GUARD: Guard = Guard {
     matcher: "Bash",
     decide,
 };
-
-/// Python's `shlex.split(piece, comments=True)`, or None for an unclosed quote.
-pub(crate) fn shlex(piece: &str) -> Option<Vec<String>> {
-    let (mut out, mut word, mut started) = (Vec::new(), String::new(), false);
-    let mut chars = piece.chars().peekable();
-    let mut quote: Option<char> = None;
-    while let Some(c) = chars.next() {
-        match quote {
-            Some('\'') if c == '\'' => quote = None,
-            Some('"') if c == '"' => quote = None,
-            Some('"') if c == '\\' => match chars.peek() {
-                Some(&n @ ('"' | '\\')) => {
-                    word.push(n);
-                    chars.next();
-                }
-                _ => word.push(c),
-            },
-            Some(_) => word.push(c),
-            None => match c {
-                '\'' | '"' => (quote, started) = (Some(c), true),
-                '\\' => {
-                    word.extend(chars.next());
-                    started = true;
-                }
-                '#' => break,
-                c if c.is_whitespace() => {
-                    if started {
-                        out.push(std::mem::take(&mut word));
-                        started = false;
-                    }
-                }
-                c => {
-                    word.push(c);
-                    started = true;
-                }
-            },
-        }
-    }
-    if quote.is_some() {
-        return None;
-    }
-    if started {
-        out.push(word);
-    }
-    Some(out)
-}
 
 fn is_hash(s: &str) -> bool {
     (7..=40).contains(&s.len()) && s.chars().all(|c| matches!(c, '0'..='9' | 'a'..='f'))

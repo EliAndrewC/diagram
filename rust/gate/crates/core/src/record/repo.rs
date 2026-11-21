@@ -174,7 +174,7 @@ pub fn utc_now() -> String {
     let secs = std::time::SystemTime::now()
         .duration_since(std::time::UNIX_EPOCH)
         .map_or(0, |d| d.as_secs());
-    let (y, mo, d, h, mi, s) = l7r_guard::shared::log::civil(secs);
+    let (y, mo, d, h, mi, s) = l7r_shared::log::civil(secs);
     format!("{y:04}-{mo:02}-{d:02}T{h:02}:{mi:02}:{s:02}Z")
 }
 
@@ -199,7 +199,7 @@ pub fn mirror_of(root: &Path) -> std::path::PathBuf {
 ///
 /// The directory cannot be made or the file opened: what the Python's `mkdir` or `os.open` raised.
 pub fn flock_within(path: &Path, timeout: f64) -> Result<Option<std::fs::File>, Fail> {
-    l7r_guard::shared::tool::flock_within(path, timeout).map_err(fail)
+    l7r_shared::tool::flock_within(path, timeout).map_err(fail)
 }
 
 #[cfg(test)]

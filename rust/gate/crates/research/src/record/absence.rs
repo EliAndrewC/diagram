@@ -5,7 +5,7 @@
 use std::sync::LazyLock;
 
 use fancy_regex::Regex;
-use l7r_guard::shared::py_text::is_space;
+use l7r_shared::py_text::is_space;
 
 use crate::re;
 

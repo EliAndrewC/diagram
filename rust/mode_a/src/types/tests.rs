@@ -331,7 +331,7 @@ fn the_declaration_is_read_from_the_tree() {
 }
 
 /// A scratch tree holding every kind's modal file, minimal (the registry's testkit), and the page text its package reads.
-pub(crate) fn kinds_tree(tag: &str) -> l7r_guard::shared::tempdir::TempDir {
+pub(crate) fn kinds_tree(tag: &str) -> l7r_shared::tempdir::TempDir {
     let dir = l7r_gate_core::checks::scratch(tag);
     l7r_gate_registry::testkit::modals(dir.path(), "research/questions/x.html");
     let assets = dir.path().join("l7r/diagram/interactive/assets");

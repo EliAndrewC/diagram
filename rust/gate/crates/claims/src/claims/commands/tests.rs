@@ -266,7 +266,7 @@ fn a_re_check_is_refused_on_a_page_or_a_context_it_cannot_name() {
 
 /// The backfills' tree: the fixture with a Python constant, every claim recorded (feature 449 T167 split the test of the backfills, the
 /// rekey and the refingerprint, over FR-008's tenth of a second, into three, each on a tree of its own or none).
-fn backfilled(tag: &str) -> l7r_guard::shared::tempdir::TempDir {
+fn backfilled(tag: &str) -> l7r_shared::tempdir::TempDir {
     let root = fixture(tag);
     py_units(
         &root,
@@ -369,7 +369,7 @@ fn the_triage_clears_what_a_page_move_alone_owes_and_bundles_the_rest() {
 
 /// The triage's tree: every claim recorded on `origin/main`, Python-free (no Python unit), then two Rust claims' code and a procedure
 /// section changed (feature 449 T167 split the triage's test, over FR-008's tenth of a second, into three on a tree each).
-fn recorded(tag: &str) -> l7r_guard::shared::tempdir::TempDir {
+fn recorded(tag: &str) -> l7r_shared::tempdir::TempDir {
     let root = fixture_rust_only(tag);
     record_all(&root);
     commit_as_origin(&root, "recorded");
@@ -377,7 +377,7 @@ fn recorded(tag: &str) -> l7r_guard::shared::tempdir::TempDir {
 }
 
 /// [`recorded`] with two Rust claims' code and a procedure section changed.
-fn changed(tag: &str) -> l7r_guard::shared::tempdir::TempDir {
+fn changed(tag: &str) -> l7r_shared::tempdir::TempDir {
     let root = recorded(tag);
     let lib = std::fs::read_to_string(root.join("rust/phases/src/lib.rs")).unwrap();
     std::fs::write(

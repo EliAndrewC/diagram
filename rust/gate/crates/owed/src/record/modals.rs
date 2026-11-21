@@ -8,7 +8,7 @@ use std::sync::LazyLock;
 use fancy_regex::{Captures, Regex};
 use l7r_gate_registry::about::modal_rel;
 use l7r_gate_registry::kinds::{by_file, REGISTRIES};
-use l7r_guard::shared::py_text::{collapse, split, strip, SPACE_CLASS};
+use l7r_shared::py_text::{collapse, split, strip, SPACE_CLASS};
 use serde_json::{json, Map, Value};
 
 use super::delta::Delta;
@@ -780,7 +780,7 @@ pub fn cli(args: &[String]) -> crate::Reply {
     if parsed.on("--ids") {
         return match ids(&root) {
             Ok(v) => crate::Reply {
-                stdout: l7r_guard::shared::pyjson::dumps(&v, Some(1), false) + "\n",
+                stdout: l7r_shared::pyjson::dumps(&v, Some(1), false) + "\n",
                 stderr: String::new(),
                 code: 0,
             },

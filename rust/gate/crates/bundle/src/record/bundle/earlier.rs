@@ -5,11 +5,11 @@ use std::path::Path;
 use std::sync::LazyLock;
 
 use fancy_regex::Regex;
-use l7r_guard::guards::event_log_hooks::verdict_of;
-use l7r_guard::shared::checks::arbiter as core;
-use l7r_guard::shared::checks::rounds::{notes_of_manifest, subjects_of_manifest, PAGE_CHECKS};
-use l7r_guard::shared::checks::{load, reply, state_path};
-use l7r_guard::shared::env::Rooted;
+use l7r_shared::checks::arbiter as core;
+use l7r_shared::checks::rounds::{notes_of_manifest, subjects_of_manifest, PAGE_CHECKS};
+use l7r_shared::checks::{load, reply, state_path};
+use l7r_shared::env::Rooted;
+use l7r_shared::guards::event_log_hooks::verdict_of;
 use serde_json::Value;
 
 use crate::arbiter::bundle::marks::{last_edits, mark_rounds, reply_of, subject_files};
@@ -131,7 +131,7 @@ fn ruling_lines(
             );
             if let Some(what) = r
                 .get("what")
-                .filter(|w| !l7r_guard::shared::checks::falsy(Some(w)))
+                .filter(|w| !l7r_shared::checks::falsy(Some(w)))
             {
                 let _ = write!(
                     line,

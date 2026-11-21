@@ -205,9 +205,7 @@ pub fn spec_rounds(text: &str) -> Tally<String> {
             .find_map(|p| p.captures(line).ok().flatten());
         if let Some(c) = hit {
             out.add(
-                &c[1]
-                    .trim_matches(l7r_guard::shared::py_text::is_space)
-                    .to_owned(),
+                &c[1].trim_matches(l7r_shared::py_text::is_space).to_owned(),
                 1.0,
             );
         }
@@ -240,7 +238,7 @@ pub fn plan_blocks(root: &Path, name: &str, shas: &HashSet<&str>) -> Result<usiz
 ///
 /// A `tasks.md` or `tasks-done.md` that cannot be read as UTF-8.
 pub fn tasks_done(d: &Path) -> Result<(usize, usize), Raised> {
-    let text = l7r_guard::shared::speckit::tasks::joined(
+    let text = l7r_shared::speckit::tasks::joined(
         &super::super::events::text_if_file(&d.join("tasks.md"))?,
         &super::super::events::text_if_file(&d.join("tasks-done.md"))?,
     );
@@ -260,7 +258,7 @@ pub fn task_starts(root: &Path, name: &str) -> Result<Vec<(String, f64)>, Raised
         root,
         &["rev-parse", "--path-format=absolute", "--git-common-dir"],
     )?;
-    let common = l7r_guard::shared::py_text::strip(&common);
+    let common = l7r_shared::py_text::strip(&common);
     let mut out: Vec<(String, f64)> = Vec::new();
     if common.is_empty() {
         return Ok(out);

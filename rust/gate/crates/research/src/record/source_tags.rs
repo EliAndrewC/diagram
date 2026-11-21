@@ -8,10 +8,10 @@ use std::path::Path;
 use std::sync::LazyLock;
 
 use fancy_regex::Regex;
-use l7r_guard::shared::blocked::type_name;
-use l7r_guard::shared::html_text::escape;
-use l7r_guard::shared::py_text::strip;
-use l7r_guard::shared::pyjson::py_str;
+use l7r_shared::blocked::type_name;
+use l7r_shared::html_text::escape;
+use l7r_shared::py_text::strip;
+use l7r_shared::pyjson::py_str;
 use serde_json::Value;
 
 use crate::{caps, re, Error, Result};

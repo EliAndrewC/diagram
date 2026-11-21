@@ -13,7 +13,7 @@ use super::{commas, median, reply};
 
 const WAVE_N: usize = 4;
 static TOOL_USE_ID: LazyLock<Regex> = LazyLock::new(|| {
-    l7r_guard::shared::regex::build(r"<tool-use-id>(\S+?)</tool-use-id>")
+    l7r_shared::regex::build(r"<tool-use-id>(\S+?)</tool-use-id>")
         .unwrap_or_else(|e| unreachable!("{e}"))
 });
 

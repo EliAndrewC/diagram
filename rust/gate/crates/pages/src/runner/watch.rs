@@ -29,7 +29,7 @@ use std::path::{Path, PathBuf};
 use std::sync::mpsc;
 use std::time::{Duration, SystemTime};
 
-use l7r_guard::shared::pyjson::py_str;
+use l7r_shared::pyjson::py_str;
 use serde_json::Value;
 
 use super::retry::truthy;
@@ -72,7 +72,7 @@ pub(crate) fn now() -> f64 {
 
 /// Each line of a transcript that is a JSON object.
 fn entries(path: &str) -> Vec<serde_json::Map<String, Value>> {
-    l7r_guard::shared::speckit::splitlines(&read_lossy(Path::new(path)))
+    l7r_shared::speckit::splitlines(&read_lossy(Path::new(path)))
         .iter()
         .filter_map(|l| serde_json::from_str::<Value>(l).ok())
         .filter_map(|v| match v {
@@ -173,7 +173,7 @@ pub fn last_activity(projects: &str, sid: &str) -> Option<f64> {
     let mut paths = vec![PathBuf::from(transcript(projects, sid))];
     if let Ok(found) = std::fs::read_dir(&subagents) {
         paths.extend(found.filter_map(Result::ok).map(|e| e.path()).filter(|p| {
-            let n = l7r_guard::shared::speckit::py_name(p);
+            let n = l7r_shared::speckit::py_name(p);
             !n.starts_with('.') && p.extension().is_some_and(|x| x == "jsonl")
         }));
     }

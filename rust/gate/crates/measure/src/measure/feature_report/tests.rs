@@ -5,7 +5,7 @@ use std::path::Path;
 use std::process::Command;
 
 use l7r_gate_reviews::reviews::ledger_passes::Env;
-use l7r_guard::shared::tempdir::TempDir;
+use l7r_shared::tempdir::TempDir;
 use serde_json::{json, Value};
 
 use super::{cli, report, Ask, Stop};

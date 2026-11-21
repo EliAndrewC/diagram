@@ -9,8 +9,8 @@ use std::sync::Mutex;
 use l7r_gate_archive::backfill::{lanes, RECYCLE_EVERY};
 use l7r_gate_archive::fetch::{fetch, wayback, Client};
 use l7r_gate_research::pages::{put, Stored};
-use l7r_guard::shared::attempts::{self, More};
-use l7r_guard::shared::consulted;
+use l7r_shared::attempts::{self, More};
+use l7r_shared::consulted;
 use serde_json::json;
 
 use crate::lists::{line, not_kept};

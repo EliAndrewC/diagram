@@ -1,6 +1,6 @@
 //! The tokenizer as `fastembed` set it up (feature 449 T138).
 
-use l7r_guard::shared::tempdir::TempDir;
+use l7r_shared::tempdir::TempDir;
 use tokenizers::{PaddingDirection, TruncationDirection};
 
 use super::{encode, load};

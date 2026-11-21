@@ -10,7 +10,7 @@ use std::process::{Command, Stdio};
 use std::sync::LazyLock;
 
 use fancy_regex::Regex;
-use l7r_guard::shared::py_text::{is_space, repr, strip};
+use l7r_shared::py_text::{is_space, repr, strip};
 use serde_json::Value;
 
 /// How the Python left `main`: a `ValueError` it caught (`gm-review: refused - ...`), a `SystemExit` with its text, or an uncaught raise.
@@ -63,7 +63,7 @@ pub(super) fn text(r: &Value, key: &str) -> R<String> {
 /// `str(value)`.
 #[must_use]
 pub(super) fn py_str(v: &Value) -> String {
-    l7r_guard::shared::pyjson::py_str(v)
+    l7r_shared::pyjson::py_str(v)
 }
 
 /// The type name Python's message gives.
@@ -234,7 +234,7 @@ static WORDSEP: LazyLock<Regex> = LazyLock::new(|| {
         r#"[\w!"'&.,?]"#,
         r"[^\d\W]",
     );
-    l7r_guard::shared::regex::build(&format!(
+    l7r_shared::regex::build(&format!(
         r"({ws}+|(?<={wp})-{{2,}}(?=\w)|{nws}+?(?:-(?:(?<={lt}{lt}-)|(?<={lt}-{lt}-))(?={lt}-?{lt})|(?={ws}|\z)|(?<={wp})(?=-{{2,}}\w)))"
     ))
     .unwrap_or_else(|_| unreachable!("a fixed pattern"))

@@ -106,7 +106,7 @@ fn a_tree_with_nothing_to_read_reads_nothing() {
 /// The bare tree: a claims feature all done, its carried rows read, no `origin/main`, and an active feature with nothing filed - no
 /// Python module, as its Python half answered nothing (feature 449 T167 split the test of it, over FR-008's tenth of a second, into
 /// two, each on a tree of its own).
-fn bare(tag: &str) -> l7r_guard::shared::tempdir::TempDir {
+fn bare(tag: &str) -> l7r_shared::tempdir::TempDir {
     assert!(filed(None).unwrap().is_empty());
     assert_eq!(
         canon(std::path::Path::new("/no/such/place")),
@@ -160,7 +160,7 @@ fn an_index_that_is_no_table_or_no_json_raises() {
 /// The introduced finding's tree: every claim recorded on `origin/main`, then `Thing.m` changed and checked DRIFTED, `reach` relabeled
 /// and its index row answering a MISLABELED verdict, a row of a gone unit; Python-free, its Python half answering nothing (feature 449
 /// T167 split the test of it, over FR-008's tenth of a second, into three, each on a tree of its own); the reader and the units now.
-fn introduced(tag: &str) -> (l7r_guard::shared::tempdir::TempDir, Reader, Cur) {
+fn introduced(tag: &str) -> (l7r_shared::tempdir::TempDir, Reader, Cur) {
     let root = fixture_rust_only(tag);
     put(&root, "specs/405-claims/tasks.md", "- [x] T01 done\n");
     record_all(&root);

@@ -184,9 +184,10 @@ fn baseline(
     cargo: &str,
 ) -> Result<(String, Vec<String>, String), String> {
     let module = guard.name.replace('-', "_");
-    if tree
-        .join(format!("rust/guard/src/guards/{module}.rs"))
-        .is_file()
+    // a guard the gate reads lives in `l7r_shared` (rust/guard/shared, feature 451 T58); a ref before that split holds every guard under rust/guard/src
+    if ["rust/guard/src/guards", "rust/guard/shared/src/guards"]
+        .iter()
+        .any(|d| tree.join(format!("{d}/{module}.rs")).is_file())
     {
         let manifest = tree.join("rust/Cargo.toml").to_string_lossy().into_owned();
         let target = tree.join("target");

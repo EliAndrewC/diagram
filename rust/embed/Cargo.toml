@@ -29,7 +29,7 @@ serde_json = { workspace = true }
 tokenizers = { version = "=0.23.2", default-features = false, features = ["onig"] }
 
 [dev-dependencies]
-l7r_guard = { path = "../guard" }
+l7r_shared = { path = "../guard/shared" }
 
 [[bin]]
 name = "l7r-embed"

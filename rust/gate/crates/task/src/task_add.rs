@@ -27,9 +27,9 @@ use std::sync::LazyLock;
 
 use fancy_regex::Regex;
 use l7r_gate_plan::plan::template::{PERFORMANCE, RED_EXIT, TEMPLATE};
-use l7r_guard::shared::escape::enough;
-use l7r_guard::shared::log::Entry;
-use l7r_guard::shared::py_text::{strip, SPACE_CLASS};
+use l7r_shared::escape::enough;
+use l7r_shared::log::Entry;
+use l7r_shared::py_text::{strip, SPACE_CLASS};
 use serde_json::Value;
 
 use crate::tick::text::re;
@@ -54,7 +54,7 @@ fn next_id(d: &Path) -> Result<String, String> {
     let mut text = String::new();
     for name in [
         "tasks.md",
-        l7r_guard::shared::speckit::tasks::DONE,
+        l7r_shared::speckit::tasks::DONE,
         "plan.md",
         "plan-done.md",
     ] {
@@ -99,10 +99,10 @@ fn add_section(plan: &str, tid: &str, section: &str) -> String {
 
 /// A section whose checklist item 6 does not route a red result through `make arbiter-ask`.
 fn lacks_red_exit(section: &str) -> bool {
-    let item6 = l7r_guard::shared::speckit::splitlines(section)
+    let item6 = l7r_shared::speckit::splitlines(section)
         .into_iter()
         .find(|ln| {
-            ln.trim_start_matches(l7r_guard::shared::py_text::is_space)
+            ln.trim_start_matches(l7r_shared::py_text::is_space)
                 .starts_with("6.")
         })
         .unwrap_or("");
@@ -118,7 +118,7 @@ pub fn cli(words: &[String], cwd: &Path, title: &str) -> Reply {
 /// One guard-log entry of quick's refusal or its escape (`make guard-log GUARD=task-add`, `make audit`); never fails.
 fn record(event: &str, detail: &str, rule: &str) {
     let detail: String = detail.chars().take(400).collect();
-    let _ = l7r_guard::shared::log::write(&Entry {
+    let _ = l7r_shared::log::write(&Entry {
         guard: "task-add",
         event,
         detail: &detail,

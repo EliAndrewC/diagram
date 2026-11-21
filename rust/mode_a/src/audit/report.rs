@@ -13,7 +13,7 @@ use fancy_regex::Regex;
 use l7r_gate_core::Reply;
 use l7r_gate_research::pyre::py;
 use l7r_gate_research::Error;
-use l7r_guard::shared::py_text::strip;
+use l7r_shared::py_text::strip;
 
 use super::checks::{
     aligned_gaps, fire_water_adrift, gap_tag, main_gate_passage_ft, tubs_in_buildings,

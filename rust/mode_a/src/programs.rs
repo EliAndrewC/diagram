@@ -22,7 +22,7 @@ use fancy_regex::Regex;
 use l7r_gate_core::Reply;
 use l7r_gate_research::record::site_links::relpath;
 use l7r_gate_research::Error;
-use l7r_guard::shared::py_text::{fmt_g, repr};
+use l7r_shared::py_text::{fmt_g, repr};
 
 use crate::py::{os_error, uncaught};
 use crate::types::{classification, load_types, Band, BuildingType, Kinds};
@@ -105,7 +105,7 @@ pub fn render(btype: &BuildingType, kinds: &mut Kinds) -> Result<String, Error> 
 }
 
 static BLOCK: LazyLock<Regex> = LazyLock::new(|| {
-    l7r_guard::shared::regex::build(
+    l7r_shared::regex::build(
         r"(?s)<!-- types\.json:([a-z0-9-]+) -->\n(.*?)\n<!-- /types\.json:\1 -->",
     )
     .unwrap_or_else(|e| unreachable!("{e}"))

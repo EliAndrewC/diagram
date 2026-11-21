@@ -1,6 +1,6 @@
 //! The glyph crop (feature 449 T146), on the tests' Chromium: the steps run, the PNG and the kinds written, each refusal.
 
-use l7r_guard::shared::tempdir::TempDir;
+use l7r_shared::tempdir::TempDir;
 
 use super::{crop, options};
 use crate::page::Browser;

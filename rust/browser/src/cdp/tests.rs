@@ -3,7 +3,7 @@
 use std::path::Path;
 use std::time::{Duration, Instant};
 
-use l7r_guard::shared::tempdir::TempDir;
+use l7r_shared::tempdir::TempDir;
 use serde_json::{json, Value};
 
 use super::Cdp;

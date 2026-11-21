@@ -152,7 +152,7 @@ fn task_block(root: &Path, by: &str) -> Option<String> {
         .map(|e| e.path())
         .collect();
     dirs.sort();
-    let text = l7r_guard::shared::speckit::tasks::all_text(dirs.first()?).ok()?;
+    let text = l7r_shared::speckit::tasks::all_text(dirs.first()?).ok()?;
     let mut out: Option<String> = None;
     for line in text.lines() {
         let boxed = line.starts_with("- [");

@@ -113,16 +113,14 @@ pub fn floor_flags(root: &str) -> Vec<String> {
         excludes.insert(0, format!("{}/CLAUDE.md", parts[..i].join("/")));
     }
     flags.push("--settings".to_owned());
-    flags.push(l7r_guard::shared::pyjson::dumps(
+    flags.push(l7r_shared::pyjson::dumps(
         &json!({"claudeMdExcludes": excludes}),
         None,
         true,
     ));
     let appended: Vec<String> = PROMPT_FILES
         .iter()
-        .map(|f| {
-            l7r_guard::shared::py_text::strip(&read_lossy(Path::new(&py_join(root, f)))).to_owned()
-        })
+        .map(|f| l7r_shared::py_text::strip(&read_lossy(Path::new(&py_join(root, f)))).to_owned())
         .filter(|t| !t.is_empty())
         .collect();
     if !appended.is_empty() {
@@ -364,7 +362,7 @@ fn launch(args: &[String], exe: &Path, escape: &escape_log::Env, launcher: &str)
     if let Err(e) = std::fs::File::create(&run_log) {
         return raised("page-session", out, &format!("{run_log}: {e}"));
     }
-    let dumps = |v: &Value| l7r_guard::shared::pyjson::dumps(v, None, true);
+    let dumps = |v: &Value| l7r_shared::pyjson::dumps(v, None, true);
     let work = [
         root.clone(),
         name.clone(),

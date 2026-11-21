@@ -88,7 +88,7 @@ fn archivable(dir: &Path) -> Vec<String> {
     let plan = dir.join("plan.md");
     let text = read(&plan);
     // a task archived in tasks-done.md is ticked (feature 449 T142): its section may move once its review turns CLEAR after the task did
-    let tasks = l7r_guard::shared::speckit::tasks::all_text(dir).unwrap_or_default();
+    let tasks = l7r_shared::speckit::tasks::all_text(dir).unwrap_or_default();
     let done: BTreeSet<String> = re(r"(?m)^- \[[xX]\] (T\d+[a-z]?)\b")
         .captures_iter(&tasks)
         .map_while(Result::ok)
@@ -271,7 +271,7 @@ pub(super) fn push_owed(
         // ...or a ticked task archived in tasks-done.md (feature 449 T142): a feature whose ticked tasks all moved still owes its review
         let archived =
             show(root, reference, &format!("{feature}/tasks-done.md")).unwrap_or_default();
-        let tasks = l7r_guard::shared::speckit::tasks::joined(
+        let tasks = l7r_shared::speckit::tasks::joined(
             &String::from_utf8_lossy(&tasks),
             &String::from_utf8_lossy(&archived),
         );

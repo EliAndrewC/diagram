@@ -510,7 +510,7 @@ fn consulted_archives_the_kept_pages_in_lanes() {
 fn kept_three(w: &World) {
     let kept: String = ["https://k.org/1", "https://k.org/2", "https://j.org/3"]
         .iter()
-        .map(|u| json!({"url": l7r_guard::shared::consulted::norm(u), "raw": u}).to_string() + "\n")
+        .map(|u| json!({"url": l7r_shared::consulted::norm(u), "raw": u}).to_string() + "\n")
         .collect();
     l7r_gate_research::fixture::put(&w.root, KEPT, &kept);
 }

@@ -40,7 +40,7 @@ const SIGNALS: [&str; 16] = [
 const SONNET: &str = "claude-sonnet-5-5";
 
 fn compiled(pattern: &str) -> Regex {
-    l7r_guard::shared::regex::build(pattern).unwrap_or_else(|e| unreachable!("{e}"))
+    l7r_shared::regex::build(pattern).unwrap_or_else(|e| unreachable!("{e}"))
 }
 
 static WORDS: LazyLock<Vec<(&str, Regex)>> = LazyLock::new(|| {

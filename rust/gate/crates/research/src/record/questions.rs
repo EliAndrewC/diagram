@@ -8,7 +8,7 @@ use std::path::Path;
 use std::sync::LazyLock;
 
 use fancy_regex::Regex;
-use l7r_guard::shared::py_text::collapse;
+use l7r_shared::py_text::collapse;
 
 pub use crate::record::contents::Section;
 use crate::record::contents::{self as ct, Tags, Vocabulary};

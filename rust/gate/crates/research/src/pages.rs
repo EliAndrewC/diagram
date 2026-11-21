@@ -9,9 +9,9 @@ use std::path::{Path, PathBuf};
 use std::sync::LazyLock;
 
 use fancy_regex::Regex;
-use l7r_guard::shared::consulted::{self, norm};
-use l7r_guard::shared::py_text::{strip, SPACE_CLASS};
-use l7r_guard::shared::pyjson::{dumps, loads, py_str, truthy};
+use l7r_shared::consulted::{self, norm};
+use l7r_shared::py_text::{strip, SPACE_CLASS};
+use l7r_shared::pyjson::{dumps, loads, py_str, truthy};
 use serde_json::{json, Map, Value};
 
 use crate::verbatim::fetch::{Got, Pages};
@@ -30,7 +30,7 @@ static SENTENCES: LazyLock<Regex> = LazyLock::new(|| {
 });
 static PART_NUMBER: LazyLock<Regex> = LazyLock::new(|| re(r"\.p(\d+)\.txt$"));
 
-fn fault(f: l7r_guard::shared::blocked::Fault) -> Error {
+fn fault(f: l7r_shared::blocked::Fault) -> Error {
     Error::new(f.kind, f.message)
 }
 
@@ -104,7 +104,7 @@ pub fn parts(text: &str, size: usize) -> Vec<String> {
 /// `entry_dir`: where a URL's page is kept.
 #[must_use]
 pub fn entry_dir(home: &Path, url: &str) -> PathBuf {
-    let h = l7r_guard::shared::sha256::hex(norm(url).as_bytes());
+    let h = l7r_shared::sha256::hex(norm(url).as_bytes());
     home.join(CACHE).join(&h[..2]).join(h)
 }
 
@@ -169,7 +169,7 @@ pub fn cached(home: &Path, url: &str, max_age_days: f64, exact: bool) -> Result<
     let stamp = fetched
         .as_str()
         .ok_or_else(|| Error::new("TypeError", "fromisoformat: argument must be str"))?;
-    let (at, zone) = l7r_guard::shared::iso::moment(stamp)
+    let (at, zone) = l7r_shared::iso::moment(stamp)
         .ok_or_else(|| Error::new("ValueError", format!("Invalid isoformat string: '{stamp}'")))?;
     let zone = zone.ok_or_else(|| {
         Error::new(
@@ -294,7 +294,7 @@ pub fn refresh_wanted() -> bool {
 /// `archived_text`: (the readable text of the archive's capture of `url`, its capture date), or None.
 #[must_use]
 pub fn archived_text(url: &str, manifest_root: &Path, store: &Path) -> Option<(String, String)> {
-    let uid = l7r_guard::shared::cited_url::url_id(url);
+    let uid = l7r_shared::cited_url::url_id(url);
     let row = std::fs::read(
         manifest_root
             .join("research/archive")
@@ -371,11 +371,11 @@ impl CachedPages {
     /// # Errors
     /// The blocked list or the cache unreadable, a store that failed, or a URL `urlsplit` refuses.
     pub fn get(&mut self, url: &str) -> Result<Got> {
-        let rules = l7r_guard::shared::blocked::domains(&self.record_dir).map_err(fault)?;
-        if let Some(rule) = l7r_guard::shared::blocked::blocked(url, &rules) {
+        let rules = l7r_shared::blocked::domains(&self.record_dir).map_err(fault)?;
+        if let Some(rule) = l7r_shared::blocked::blocked(url, &rules) {
             let mut got = Got::state(
                 "UNFETCHABLE",
-                &l7r_guard::shared::blocked::refusal(url, rule, "a fetch"),
+                &l7r_shared::blocked::refusal(url, rule, "a fetch"),
             );
             got.blocked = true;
             return Ok(got);

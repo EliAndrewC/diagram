@@ -62,7 +62,7 @@ fn host(
     Host { proc, sys }
 }
 
-fn scratch(tag: &str) -> l7r_guard::shared::tempdir::TempDir {
+fn scratch(tag: &str) -> l7r_shared::tempdir::TempDir {
     crate::checks::scratch(&format!("runstats-{tag}"))
 }
 

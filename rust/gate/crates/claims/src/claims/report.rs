@@ -298,7 +298,7 @@ pub fn base_tree(git: &str, root: &Path, base: &str, into: &Path) -> Result<(), 
         if !archive.status.success() {
             return Err(format!(
                 "RuntimeError: claims: the base tree could not be read at {base}: {}",
-                l7r_guard::shared::py_text::strip(&String::from_utf8_lossy(&archive.stderr))
+                l7r_shared::py_text::strip(&String::from_utf8_lossy(&archive.stderr))
             ));
         }
         let tar = into.join("base.tar");
@@ -418,10 +418,10 @@ pub fn split_keys(text: &str, sep: char, known: &dyn Fn(&str) -> bool) -> Vec<St
     while i < parts.len() {
         let j = (i + 1..=parts.len())
             .rev()
-            .find(|&j| known(l7r_guard::shared::py_text::strip(&joined(i, j))))
+            .find(|&j| known(l7r_shared::py_text::strip(&joined(i, j))))
             .unwrap_or(i + 1);
         let key = joined(i, j);
-        let key = l7r_guard::shared::py_text::strip(&key);
+        let key = l7r_shared::py_text::strip(&key);
         if !key.is_empty() {
             keys.push(key.to_owned());
         }

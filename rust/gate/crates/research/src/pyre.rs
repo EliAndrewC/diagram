@@ -66,7 +66,7 @@ impl Class {
 /// as Python's `re.I` holds them ([`DOTTED_I`]).
 #[must_use]
 pub fn translate(pattern: &str) -> String {
-    let space = l7r_guard::shared::py_text::SPACE_CLASS;
+    let space = l7r_shared::py_text::SPACE_CLASS;
     let fold = ignores_case(pattern);
     let mut out = String::with_capacity(pattern.len() * 2);
     let (mut in_class, mut chars) = (false, pattern.chars().peekable());

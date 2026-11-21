@@ -15,7 +15,7 @@ fn outside(reply: &str) -> Vec<(String, String, String)> {
         }
         if let Ok(Some(r)) = ROW.captures(line) {
             rows.push((
-                l7r_guard::shared::py_text::strip(&r[1]).to_owned(),
+                l7r_shared::py_text::strip(&r[1]).to_owned(),
                 r[2].to_owned(),
                 r[3].to_owned(),
             ));
@@ -61,7 +61,7 @@ pub fn file_outside_in(
     for (file, block, finding) in rows {
         // the check's finding in the house style a JSON record takes (feature 449 T242): found.jsonl is no prose file to the push's
         // delta check, so a straight-quoted word is corrected too; its file and block name things and are written as given
-        let finding = l7r_guard::guards::house_style_hooks::americanize_record(&finding);
+        let finding = l7r_shared::guards::house_style_hooks::americanize_record(&finding);
         let row = json!({"check": check, "file": file, "block": block, "finding": finding, "status": "open", "utc": utc});
         body.push_str(&pyjson::dumps(&row, None, false));
         body.push('\n');

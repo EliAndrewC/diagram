@@ -31,7 +31,7 @@ fn port(root: &Path, state: &str) {
 }
 
 /// Main holds `m` drawing a farmhouse at rust-only; the work draws a well too.
-fn gained(name: &str) -> l7r_guard::shared::tempdir::Held<std::path::PathBuf> {
+fn gained(name: &str) -> l7r_shared::tempdir::Held<std::path::PathBuf> {
     let r = repo(name);
     hamlet(&r, "m", &["farmhouse"]);
     port(&r, "rust-only");

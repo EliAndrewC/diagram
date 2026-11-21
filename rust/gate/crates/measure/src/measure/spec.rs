@@ -75,8 +75,8 @@ fn record(path: &Path, entries: Vec<(&str, Value)>) -> Result<(), Raised> {
     for (key, entry) in entries {
         rec.insert(key.to_owned(), entry);
     }
-    let text = l7r_guard::shared::pyjson::dumps(
-        &l7r_guard::shared::pyjson::sorted(&Value::Object(rec)),
+    let text = l7r_shared::pyjson::dumps(
+        &l7r_shared::pyjson::sorted(&Value::Object(rec)),
         Some(1),
         true,
     );

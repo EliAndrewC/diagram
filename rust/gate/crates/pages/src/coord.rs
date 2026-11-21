@@ -23,8 +23,8 @@
 use std::io::{Read as _, Seek as _, SeekFrom, Write as _};
 use std::path::{Path, PathBuf};
 
-use l7r_guard::shared::py_text::strip;
-use l7r_guard::shared::speckit::{py_name, py_parent, splitlines};
+use l7r_shared::py_text::strip;
+use l7r_shared::speckit::{py_name, py_parent, splitlines};
 
 use crate::{py_path, raised, reply};
 use l7r_gate_core::Reply;
@@ -87,9 +87,9 @@ fn py_pattern(key: &str) -> String {
 ///
 /// The file cannot be read (`Err(Ok(why))`, the Python's raise), or KEY is no regular expression (`Err(Err(why))`).
 pub fn lines(path: &Path, key: &str) -> Result<Vec<String>, Result<String, String>> {
-    let text = l7r_guard::shared::speckit::read_text(path).map_err(Ok)?;
+    let text = l7r_shared::speckit::read_text(path).map_err(Ok)?;
     let all = splitlines(&text);
-    let rx = l7r_guard::shared::regex::build(&py_pattern(key)).map_err(|e| Err(e.to_string()))?;
+    let rx = l7r_shared::regex::build(&py_pattern(key)).map_err(|e| Err(e.to_string()))?;
     let hits: Vec<String> = all
         .iter()
         .enumerate()
@@ -143,7 +143,7 @@ pub fn ledger_row_problems(path: &Path, line: &str) -> Vec<String> {
     if py_name(path) != "review-ledger.md" || py_name(&py_parent(path)) != "dev" {
         return Vec::new();
     }
-    l7r_guard::shared::ledger::problems(&format!("{MEASURED_HEADING}\n{line}\n"))
+    l7r_shared::ledger::problems(&format!("{MEASURED_HEADING}\n{line}\n"))
         .iter()
         .map(|p| p.split_once(": ").map_or(p.as_str(), |(_, r)| r).to_owned())
         .collect()
@@ -152,7 +152,7 @@ pub fn ledger_row_problems(path: &Path, line: &str) -> Vec<String> {
 /// A ledger row closed with its cost cells: `line` (its cells up to `acted on`) then `wall | tokens |`.
 #[must_use]
 pub fn with_cost(line: &str, cells: &str) -> String {
-    let head = line.trim_end_matches(l7r_guard::shared::py_text::is_space);
+    let head = line.trim_end_matches(l7r_shared::py_text::is_space);
     let bar = if head.ends_with('|') { "" } else { " |" };
     format!("{head}{bar} {cells} |")
 }

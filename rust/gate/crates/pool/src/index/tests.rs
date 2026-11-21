@@ -58,7 +58,7 @@ fn a_hamlet_links_the_driver_s_drawing_never_the_python_s_leftovers() {
 /// A tree with no maps says so; one map is "1 map"; a name is escaped; nothing unclassified, nothing said of it.
 #[test]
 fn an_empty_tree_says_so_and_a_name_is_escaped() {
-    let root = l7r_guard::shared::tempdir::TempDir::new("pool-index-empty");
+    let root = l7r_shared::tempdir::TempDir::new("pool-index-empty");
     put(&root, crate::DECLARATION, "[]");
     put(&root, "pool/hamlets/a&b/a&b.spec.json", "x");
     let mut w = walk(&root);
@@ -92,7 +92,7 @@ fn the_index_is_written_only_when_it_differs() {
 /// A page that cannot be written (no pool/), or not renamed into place, is an error, and leaves no temporary file.
 #[test]
 fn an_index_that_cannot_be_written_is_an_error() {
-    let root = l7r_guard::shared::tempdir::TempDir::new("pool-index-nowhere");
+    let root = l7r_shared::tempdir::TempDir::new("pool-index-nowhere");
     assert!(write(&root, &mut walk(&root)).is_err());
     let root = fixture("index-blocked");
     put(&root, "pool/index.html/in-the-way", "x");

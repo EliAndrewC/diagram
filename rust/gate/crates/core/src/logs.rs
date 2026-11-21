@@ -6,9 +6,9 @@ use std::path::{Path, PathBuf};
 use std::sync::atomic::{AtomicU64, Ordering};
 use std::time::{SystemTime, UNIX_EPOCH};
 
-use l7r_guard::shared::log::civil;
-use l7r_guard::shared::pyjson::dumps;
-use l7r_guard::shared::sha256;
+use l7r_shared::log::civil;
+use l7r_shared::pyjson::dumps;
+use l7r_shared::sha256;
 use serde_json::{json, Map, Value};
 
 use crate::cohort::git;

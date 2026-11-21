@@ -89,7 +89,7 @@ fn a_tree_that_is_no_repository_and_a_root_that_is_not_there() {
     assert_eq!(owed(&plain).unwrap().len(), 1);
     // a directory with no record owes nothing: the parse is keyed by the parser built in, where it read two `.py` files off the tree
     // and failed with them missing (feature 449 T145)
-    let empty = l7r_guard::shared::tempdir::TempDir::new("translation-empty-root");
+    let empty = l7r_shared::tempdir::TempDir::new("translation-empty-root");
     let e = empty.to_string_lossy().into_owned();
     let none = cli(&args(&["--root", &e]));
     assert_eq!((none.code, none.stdout.as_str()), (0, "translation-owed: 0 translated quotation(s) new or changed since the merge base - each owes a translation-check\n"));

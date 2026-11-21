@@ -5,7 +5,7 @@
 use std::collections::BTreeSet;
 use std::path::Path;
 
-use l7r_guard::guards::house_style_hooks::americanize_json;
+use l7r_shared::guards::house_style_hooks::americanize_json;
 use serde_json::{json, Map, Value};
 
 use super::approach::{checklist, owe};

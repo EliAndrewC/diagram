@@ -268,6 +268,10 @@ fn the_guards_own_sources_are_held_and_granted_but_not_their_tests() {
     for held in [
         "/r/rust/guard/src/guards/make_only_hooks.rs",
         "/r/rust/guard/src/shared/tree.rs",
+        // the guard's shared crate (451 T58): its sources, its manifest and its data files
+        "/r/rust/guard/shared/src/tree.rs",
+        "/r/rust/guard/shared/Cargo.toml",
+        "/r/rust/guard/shared/src/guards/house_style_words.tsv",
         "/r/rust/guard/src/main.rs",
         "/r/rust/guard/Cargo.toml",
         "/r/rust/guard/src/agent_model_rule.txt",
@@ -282,6 +286,7 @@ fn the_guards_own_sources_are_held_and_granted_but_not_their_tests() {
         "/r/rust/guard/src/guards/make_only_hooks/tests.rs",
         "/r/rust/guard/src/guards/tests.rs",
         "/r/rust/guard/src/shared/tests/tree.rs",
+        "/r/rust/guard/shared/src/context/tests.rs",
         "/r/rust/guard/src/guards/tests/words.tsv",
         "/r/tests/hooks/test-make-only-hooks.sh",
         "/r/rust/other/src/lib.rs",

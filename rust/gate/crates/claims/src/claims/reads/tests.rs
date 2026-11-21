@@ -127,7 +127,7 @@ fn recorded(root: &std::path::Path, reads: bool) -> serde_json::Value {
     serde_json::Value::Object(out)
 }
 
-fn no_python(tag: &str) -> l7r_guard::shared::tempdir::TempDir {
+fn no_python(tag: &str) -> l7r_shared::tempdir::TempDir {
     crate::claims::tests::fixture_with(tag, &|root| {
         std::fs::remove_file(root.join("l7r/diagram/m.py")).unwrap();
     })

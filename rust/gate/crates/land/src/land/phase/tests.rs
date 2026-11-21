@@ -110,7 +110,7 @@ fn a_clean_landing_writes_each_step_in_order_and_its_end() {
     assert!(at(end, "t1") <= at(&all[5], "t0"));
     assert_eq!(
         at(end, "t0"),
-        l7r_guard::guards::event_log_hooks::now_stamp(began)
+        l7r_shared::guards::event_log_hooks::now_stamp(began)
     );
     assert_eq!(end["tasks"], serde_json::json!(["T1"]));
     assert_eq!(end["landed"], true);
@@ -172,7 +172,7 @@ fn main_s_refusal_is_filed_by_its_feature_word() {
             " ",
             &super::super::scripts_of,
             &nothing,
-            &l7r_guard::shared::env::Rooted::with(".", &[])
+            &l7r_shared::env::Rooted::with(".", &[])
         ),
         Ok(2)
     );
@@ -289,7 +289,7 @@ fn main_s_refusals_write_an_end() {
             NOTE,
             &scripts,
             &nothing,
-            &l7r_guard::shared::env::Rooted::with(".", &[])
+            &l7r_shared::env::Rooted::with(".", &[])
         ),
         Ok(2)
     );
@@ -301,7 +301,7 @@ fn main_s_refusals_write_an_end() {
             " ",
             &scripts,
             &nothing,
-            &l7r_guard::shared::env::Rooted::with(".", &[])
+            &l7r_shared::env::Rooted::with(".", &[])
         ),
         Ok(2)
     );
@@ -317,7 +317,7 @@ fn main_s_refusals_write_an_end() {
             NOTE,
             &scripts,
             &nothing,
-            &l7r_guard::shared::env::Rooted::with(".", &[])
+            &l7r_shared::env::Rooted::with(".", &[])
         ),
         Ok(2)
     );
@@ -429,7 +429,7 @@ fn a_comma_list_names_every_task_it_lists() {
                 " ",
                 &super::super::scripts_of,
                 &nothing,
-                &l7r_guard::shared::env::Rooted::with(".", &[])
+                &l7r_shared::env::Rooted::with(".", &[])
             ),
             Ok(2)
         );
@@ -449,7 +449,7 @@ fn a_comma_list_names_every_task_it_lists() {
             NOTE,
             &super::super::scripts_of,
             &nothing,
-            &l7r_guard::shared::env::Rooted::with(".", &[])
+            &l7r_shared::env::Rooted::with(".", &[])
         ),
         Ok(2)
     );

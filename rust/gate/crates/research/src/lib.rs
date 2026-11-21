@@ -48,8 +48,8 @@ impl fmt::Display for Error {
     }
 }
 
-impl From<l7r_guard::shared::blocked::Fault> for Error {
-    fn from(f: l7r_guard::shared::blocked::Fault) -> Self {
+impl From<l7r_shared::blocked::Fault> for Error {
+    fn from(f: l7r_shared::blocked::Fault) -> Self {
         Self::new(f.kind, f.message)
     }
 }
@@ -63,7 +63,7 @@ pub(crate) fn re(pattern: &str) -> fancy_regex::Regex {
     // NO BACKTRACK LIMIT IN PRACTICE (feature 449 T145): Python's `re` has none, and the regex crate's default of a million steps panicked
     // the record-prepass of the whole registry (`SOURCES.html`, a page of about two megabytes) where an `<em>` met no `</em>` and the
     // lazy scan to the end ran past it (observed 2026-11-16, the T145 differential's sweep); a pattern here runs to its answer as Python's did
-    l7r_guard::shared::regex::build(pattern).unwrap_or_else(|e| unreachable!("{e}"))
+    l7r_shared::regex::build(pattern).unwrap_or_else(|e| unreachable!("{e}"))
 }
 
 static DECIMAL: std::sync::LazyLock<fancy_regex::Regex> =
@@ -123,7 +123,7 @@ pub fn resolve(p: &std::path::Path) -> std::path::PathBuf {
 }
 
 /// Python's `\s`, as a regex class body.
-pub(crate) use l7r_guard::shared::py_text::SPACE_CLASS;
+pub(crate) use l7r_shared::py_text::SPACE_CLASS;
 
 /// `re.sub(pattern, "", text)`.
 pub(crate) fn drop_all(pattern: &fancy_regex::Regex, text: &str) -> String {

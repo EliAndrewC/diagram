@@ -420,7 +420,7 @@ printf '%s' "$Q_OUT" | grep -q 'WAIT TIMED OUT' && bash -n <(printf '%s\n' "$Q_O
   && { echo "  ok      a wait inside bash -c \"...\" gains its ceiling and still parses"; PASS=$((PASS+1)); } \
   || { echo "  FAIL    the ceiling inside double quotes broke the command: $Q_OUT"; FAIL=$((FAIL+1)); }
 # ...and so does its proof of life, escaped for the double quotes: a unit test of `shared::wait::proof_of_life` now
-# (`rust/guard/src/shared/wait/tests.rs`), since the case asked `hm_shape.py proof` by path, which feature 449 T129 deleted, and the
+# (`rust/guard/shared/src/wait/tests.rs`), since the case asked `hm_shape.py proof` by path, which feature 449 T129 deleted, and the
 # guard itself never reaches a loop inside `bash -c "..."` without an escape (its quoted body is not scanned)
 check "the R7 command: a sleep before a for loop, none inside it" ok \
   'pkill -f X ; sleep 1; cd /tmp; for p in $(pgrep -f Y); do echo "$p"; done'

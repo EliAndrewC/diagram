@@ -35,7 +35,7 @@ pub(super) fn run(root: &Path, reply: &str, extra: &[&str]) -> l7r_gate_core::Re
     ];
     args.extend(extra.iter().map(|s| (*s).to_owned()));
     // the test's own environment (feature 451 T38): its round settles into its own store, never a session's exported one
-    super::cli_in(&args, &l7r_guard::shared::env::Rooted::with(root, &[]))
+    super::cli_in(&args, &l7r_shared::env::Rooted::with(root, &[]))
 }
 
 pub(super) fn page(root: &Path) -> String {

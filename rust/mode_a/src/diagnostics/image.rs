@@ -74,7 +74,7 @@ fn other(bytes: &[u8], path: &str) -> Result<Rgb, Error> {
             "PIL.UnidentifiedImageError",
             format!(
                 "cannot identify image file {}",
-                l7r_guard::shared::py_text::repr(path)
+                l7r_shared::py_text::repr(path)
             ),
         )
     };
@@ -298,7 +298,7 @@ pub fn palette_key_of(k: &str) -> Result<Key, Error> {
             "ValueError",
             format!(
                 "invalid literal for int() with base 10: {}",
-                l7r_guard::shared::py_text::repr(k)
+                l7r_shared::py_text::repr(k)
             ),
         )
     };
@@ -330,11 +330,11 @@ pub fn decode_idmap(html: &str) -> Result<Option<IdMap>, Error> {
         return Ok(None);
     };
     let png = rgb(&b64decode(&data)?, "<the id map>")?;
-    let object = l7r_guard::shared::pyjson::loads(&palette)
+    let object = l7r_shared::pyjson::loads(&palette)
         .map_err(|e| Error::new("json.decoder.JSONDecodeError", e.to_string()))?;
     let mut keys = Vec::new();
     for (k, v) in object.as_object().into_iter().flatten() {
-        keys.push((palette_key_of(k)?, l7r_guard::shared::pyjson::py_str(v)));
+        keys.push((palette_key_of(k)?, l7r_shared::pyjson::py_str(v)));
     }
     Ok(Some(IdMap {
         width: png.width,

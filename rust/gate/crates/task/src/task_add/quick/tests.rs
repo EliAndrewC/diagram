@@ -124,7 +124,7 @@ fn a_file_that_cannot_be_put_back_raises() {
 #[test]
 fn an_escape_taken_by_a_test_lands_in_the_scratch_log_and_not_the_real_one() {
     let (_dir, root) = quick_repo("task-add-quick-log");
-    let scratch = l7r_guard::shared::log::dir() == quiet_census();
+    let scratch = l7r_shared::log::dir() == quiet_census();
     assert!(scratch, "a test records into the real guard log");
     let why = "the scratch-log pin of T19's tests";
     let taken = cli_with(

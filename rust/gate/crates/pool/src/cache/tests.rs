@@ -58,13 +58,13 @@ impl Binaries for Stand {
 /// the sheets share; a font root.
 pub(crate) struct Fixture {
     /// held so the scratch tree outlives the test
-    pub _held: l7r_guard::shared::tempdir::TempDir,
+    pub _held: l7r_shared::tempdir::TempDir,
     pub root: PathBuf,
     pub stand: Stand,
 }
 
 pub(crate) fn fixture(tag: &str) -> Fixture {
-    let dir = l7r_guard::shared::tempdir::TempDir::new(&format!("cache-{tag}"));
+    let dir = l7r_shared::tempdir::TempDir::new(&format!("cache-{tag}"));
     let root = std::fs::canonicalize(dir.path()).unwrap();
     put(&root, DECLARATION, TYPES);
     for (rel, text) in [
@@ -519,9 +519,7 @@ fn the_options_are_the_processes_and_a_frozen_map_has_no_spec() {
 fn a_held_lock_refuses_and_a_leftover_staging_folder_is_cleared() {
     let mut f = fixture("lock");
     let lock = f.root.join(DIR).join(super::LOCK);
-    let held = l7r_guard::shared::tool::flock_within(&lock, 0.0)
-        .unwrap()
-        .unwrap();
+    let held = l7r_shared::tool::flock_within(&lock, 0.0).unwrap().unwrap();
     let maps = f.maps(&["s"]);
     let opts = Options {
         lock_wait: 0.0,

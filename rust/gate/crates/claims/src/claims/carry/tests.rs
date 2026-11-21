@@ -95,7 +95,7 @@ fn the_switch_and_the_record() {
 
 /// The carry's tree: the claims feature and the active one committed as `origin/main` (feature 449 T167 split the test of where a carry is
 /// filed, over FR-008's tenth of a second, into three, each on a tree of its own).
-fn filing(tag: &str) -> l7r_guard::shared::tempdir::TempDir {
+fn filing(tag: &str) -> l7r_shared::tempdir::TempDir {
     let root = fixture(tag);
     feature(&root);
     commit_as_origin(&root, "features");
@@ -103,7 +103,7 @@ fn filing(tag: &str) -> l7r_guard::shared::tempdir::TempDir {
 }
 
 /// [`filing`] with the switch at `clean`.
-fn filing_clean(tag: &str) -> l7r_guard::shared::tempdir::TempDir {
+fn filing_clean(tag: &str) -> l7r_shared::tempdir::TempDir {
     let root = filing(tag);
     put(
         &root,
@@ -219,7 +219,7 @@ const KNOWN_ROW: &str = "{\"kind\": \"known-drift\", \"claim\": \"rust/phases/sr
 const KNOWN_TASKS: &str = "# Tasks\n\n- [ ] T01 fix `reach` [lands-open]\n- [x] T02 done\n- [ ] T03 open one\n- [ ] GM review (make gm-reviewed F=405) [lands-open]\n      research: rendering\n      verify: the GM reviewed every row (make gm-review lists them)\n";
 
 /// Every claim recorded on `origin/main`, then `reach` named for the claims feature's T01 in a commit of its own.
-fn pushed(tag: &str) -> l7r_guard::shared::tempdir::TempDir {
+fn pushed(tag: &str) -> l7r_shared::tempdir::TempDir {
     let root = crate::claims::tests::fixture_rust_only(tag);
     feature(&root);
     // the recording written as `record_all` writes it, pinned by `the_recorded_rust_units_are_what_record_all_writes`: a bundle and a
@@ -237,7 +237,7 @@ fn pushed(tag: &str) -> l7r_guard::shared::tempdir::TempDir {
 }
 
 /// [`pushed`] with `reach` checked DRIFTED and `GAP` recorded a DRIFTED finding outside the change.
-fn drifted(tag: &str) -> l7r_guard::shared::tempdir::TempDir {
+fn drifted(tag: &str) -> l7r_shared::tempdir::TempDir {
     let root = pushed(tag);
     let o = root.join("b").to_string_lossy().into_owned();
     claims(&root, &["bundle", "--units", REACH, "--out", &o]);
@@ -259,7 +259,7 @@ fn drifted(tag: &str) -> l7r_guard::shared::tempdir::TempDir {
 }
 
 /// [`drifted`] with the switch at `clean`.
-fn at_clean(tag: &str) -> l7r_guard::shared::tempdir::TempDir {
+fn at_clean(tag: &str) -> l7r_shared::tempdir::TempDir {
     let root = drifted(tag);
     put(
         &root,
@@ -270,7 +270,7 @@ fn at_clean(tag: &str) -> l7r_guard::shared::tempdir::TempDir {
 }
 
 /// [`at_clean`] with the known drift recorded for the GM, as `make claims-known` records it.
-fn known_recorded(tag: &str) -> l7r_guard::shared::tempdir::TempDir {
+fn known_recorded(tag: &str) -> l7r_shared::tempdir::TempDir {
     let root = at_clean(tag);
     put(&root, "specs/405-claims/tasks.md", KNOWN_TASKS);
     put(&root, "specs/405-claims/gm-review.jsonl", KNOWN_ROW);

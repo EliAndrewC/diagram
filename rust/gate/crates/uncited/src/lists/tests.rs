@@ -74,13 +74,9 @@ fn the_writer_appends_under_the_lock_and_refuses_a_blocked_url() {
         "'url'"
     );
     assert_eq!(
-        write(
-            w.root(),
-            &[json!({"url": "u"})],
-            l7r_guard::shared::attempts::LOG
-        )
-        .unwrap_err()
-        .kind,
+        write(w.root(), &[json!({"url": "u"})], l7r_shared::attempts::LOG)
+            .unwrap_err()
+            .kind,
         "ValueError"
     );
     w.put("research/not-kept.jsonl/x", "");

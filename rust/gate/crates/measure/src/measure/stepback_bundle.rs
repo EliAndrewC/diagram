@@ -18,8 +18,8 @@ use std::path::{Path, PathBuf};
 
 use l7r_gate_core::record::args::{parse_with, Spec};
 use l7r_gate_reviews::reviews::{checkpoint, git as review_git, gitdir, py_path};
-use l7r_guard::shared::log::civil;
-use l7r_guard::shared::speckit::splitlines;
+use l7r_shared::log::civil;
+use l7r_shared::speckit::splitlines;
 use serde_json::{Map, Value};
 
 use super::events::{cmp_f, fixed, head, hhmm, or_text, py_str, ts, Raised, Tally};
@@ -37,7 +37,7 @@ pub struct Env {
     pub home: PathBuf,
     pub now: f64,
     /// The environment the tree is read with (feature 451 T38: a test's own, never a session's exports); its path unused.
-    pub base: l7r_guard::shared::env::Rooted,
+    pub base: l7r_shared::env::Rooted,
 }
 
 /// `_lines`: a JSONL file's objects read with `errors="replace"`, none where it is no file.
@@ -363,7 +363,7 @@ fn time_md(records: &[Row], read: usize, since: f64, until: f64) -> Result<Strin
         let (long, cmd) = tools
             .longest
             .get(&k)
-            .ok_or_else(|| format!("KeyError: {}", l7r_guard::shared::py_text::repr(&k)))?;
+            .ok_or_else(|| format!("KeyError: {}", l7r_shared::py_text::repr(&k)))?;
         let count = tools.count.get(&k).copied().unwrap_or(0);
         rows.push(format!(
             "- {:5.1} min x{count:<3} {k} (longest {} s: `{cmd}`)",

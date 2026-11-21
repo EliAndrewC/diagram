@@ -85,7 +85,7 @@ fn walk<'a>(
     out: &mut Vec<Piece>,
 ) {
     if node.name.is_empty() {
-        if !l7r_guard::shared::py_text::strip(node.text).is_empty() {
+        if !l7r_shared::py_text::strip(node.text).is_empty() {
             out.push((
                 wrapped(node.text, chain, seen),
                 tag(inherited),

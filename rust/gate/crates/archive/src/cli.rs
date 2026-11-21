@@ -101,25 +101,22 @@ pub fn archive_one(
             format!(" for {key}")
         }
     );
-    let more = l7r_guard::shared::attempts::More {
+    let more = l7r_shared::attempts::More {
         key,
         route: "archive",
-        ..l7r_guard::shared::attempts::More::default()
+        ..l7r_shared::attempts::More::default()
     };
-    l7r_guard::shared::attempts::add(root, url, "unknown", &sought, "unknown", &more, &research)?;
+    l7r_shared::attempts::add(root, url, "unknown", &sought, "unknown", &more, &research)?;
     let text = |k: &str| {
         row.get(k)
-            .map_or_else(String::new, l7r_guard::shared::pyjson::py_str)
+            .map_or_else(String::new, l7r_shared::pyjson::py_str)
     };
     let reason = text("reason");
     let _ = write!(out, "archive: {} - {url}", text("outcome"));
     if !reason.is_empty() {
         let _ = write!(out, " ({reason})");
     }
-    if row
-        .get("path")
-        .is_some_and(l7r_guard::shared::pyjson::truthy)
-    {
+    if row.get("path").is_some_and(l7r_shared::pyjson::truthy) {
         let _ = write!(out, "\n  {}", rec::copy_link(&Value::Object(row)));
     }
     out.push('\n');
@@ -178,7 +175,7 @@ pub fn inbox_cli(root: &Path, args: &[String]) -> Reply {
 /// [`cli`] with what it reaches handed in.
 #[must_use]
 pub fn cli_with(args: &[String], cwd: &Path, reach: &Reach<'_>) -> Reply {
-    let root = l7r_guard::shared::consulted::repo_root(Some(cwd));
+    let root = l7r_shared::consulted::repo_root(Some(cwd));
     let rest = args.get(1..).unwrap_or(&[]);
     let start = reach.start;
     match args.first().map(String::as_str) {

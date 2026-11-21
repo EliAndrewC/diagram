@@ -18,8 +18,8 @@ use std::path::Path;
 
 use l7r_gate_core::Reply;
 use l7r_gate_research::Error;
-use l7r_guard::shared::pyjson::{loads, py_str, truthy};
-use l7r_guard::shared::pyjson::{plain, py_float};
+use l7r_shared::pyjson::{loads, py_str, truthy};
+use l7r_shared::pyjson::{plain, py_float};
 use serde_json::Value;
 
 use crate::py::{iterate, os_error, type_name, uncaught};

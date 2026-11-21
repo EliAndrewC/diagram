@@ -7,13 +7,13 @@ use std::path::{Path, PathBuf};
 use std::sync::LazyLock;
 
 use fancy_regex::Regex;
-use l7r_guard::guards::house_style_hooks::americanize_json;
-use l7r_guard::shared::checks;
-use l7r_guard::shared::checks::arbiter as core;
-use l7r_guard::shared::env::Rooted;
-use l7r_guard::shared::log::civil;
-use l7r_guard::shared::pyjson;
-use l7r_guard::shared::sha256;
+use l7r_shared::checks;
+use l7r_shared::checks::arbiter as core;
+use l7r_shared::env::Rooted;
+use l7r_shared::guards::house_style_hooks::americanize_json;
+use l7r_shared::log::civil;
+use l7r_shared::pyjson;
+use l7r_shared::sha256;
 use serde_json::{json, Map, Value};
 
 use crate::Reply;
@@ -27,7 +27,7 @@ const REVIEWS: [&str; 2] = ["spec", "plan"];
 const ROUND_ARBITER: &str = "round-arbiter";
 
 fn re(pattern: &str) -> Regex {
-    l7r_guard::shared::regex::build(pattern).unwrap_or_else(|e| unreachable!("{e}"))
+    l7r_shared::regex::build(pattern).unwrap_or_else(|e| unreachable!("{e}"))
 }
 
 static FAITHFUL_NOT: LazyLock<Regex> = LazyLock::new(|| re(r"(?i)NOT\s+\**FAITHFUL"));

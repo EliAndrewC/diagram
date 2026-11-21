@@ -2,9 +2,9 @@
 
 use std::path::{Path, PathBuf};
 
-use l7r_guard::shared::checks;
-use l7r_guard::shared::checks::arbiter as core;
-use l7r_guard::shared::env::Rooted;
+use l7r_shared::checks;
+use l7r_shared::checks::arbiter as core;
+use l7r_shared::env::Rooted;
 use serde_json::{json, Map, Value};
 
 use super::{

@@ -20,7 +20,7 @@ use std::path::{Path, PathBuf};
 use std::process::Command;
 
 use l7r_gate_core::Reply;
-use l7r_guard::shared::py_text::strip;
+use l7r_shared::py_text::strip;
 
 /// `l7r-gate tick|task-start|task-add|set-down|phase-read <args>` from `cwd`, as the binary dispatches them.
 #[must_use]
@@ -88,7 +88,7 @@ fn now_secs() -> u64 {
 /// `%Y-%m-%dT%H:%M:%SZ` of a UTC time.
 #[expect(clippy::many_single_char_names, reason = "the fields of a date")]
 fn utc_text(secs: u64) -> String {
-    let (y, m, d, h, mi, s) = l7r_guard::shared::log::civil(secs);
+    let (y, m, d, h, mi, s) = l7r_shared::log::civil(secs);
     format!("{y:04}-{m:02}-{d:02}T{h:02}:{mi:02}:{s:02}Z")
 }
 

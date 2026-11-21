@@ -7,8 +7,8 @@
 
 use std::path::Path;
 
-use l7r_guard::shared::py_text::strip;
-use l7r_guard::shared::speckit::splitlines;
+use l7r_shared::py_text::strip;
+use l7r_shared::speckit::splitlines;
 use serde_json::Value;
 
 use super::truthy;

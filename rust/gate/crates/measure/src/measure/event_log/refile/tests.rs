@@ -6,7 +6,7 @@ use std::path::Path;
 use serde_json::Value;
 
 use super::write_back;
-use l7r_guard::shared::env::Rooted;
+use l7r_shared::env::Rooted;
 
 // Each test reads its own environment, never the session's exports (feature 451 T38): these shadow the crate's.
 fn cli(args: &[String]) -> crate::Reply {

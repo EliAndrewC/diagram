@@ -1,7 +1,7 @@
 use std::ffi::OsString;
 use std::os::unix::ffi::OsStringExt as _;
 
-use l7r_guard::shared::tempdir::TempDir;
+use l7r_shared::tempdir::TempDir;
 use serde_json::Value;
 
 use super::cli;

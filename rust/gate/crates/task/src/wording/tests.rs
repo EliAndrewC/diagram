@@ -62,7 +62,7 @@ fn a_wording_only_task_is_refused_only_for_a_change_in_what_runs() {
 
 /// A repository whose wording-only task T01 started before the commits the test makes, and its reading of the refusal (feature 449 T167:
 /// the one test that held every case took over FR-008's tenth of a second, so the commits since a start are tests of their own).
-fn started_before(tag: &str) -> (l7r_guard::shared::tempdir::TempDir, std::path::PathBuf) {
+fn started_before(tag: &str) -> (l7r_shared::tempdir::TempDir, std::path::PathBuf) {
     let dir = repo(tag);
     let root = root_of(&dir);
     start(&root, &json!("2029-12-31T00:00:00Z"));

@@ -3,7 +3,7 @@
 //! feature 449 T89). The clock is `<git dir>/glyph-clock.json`, `{<feature>: {"batch_at", "batch", "reopened", ...}}`; the push's
 //! refusal marks the work landing (`glyph-landing`); the pair guard's dispatches are `pairing-state.json`'s `dispatched`.
 
-use l7r_guard::shared::env::Rooted;
+use l7r_shared::env::Rooted;
 use std::path::{Path, PathBuf};
 
 use serde_json::{json, Map, Value};
@@ -32,12 +32,11 @@ fn nowhere() -> PathBuf {
 /// does not read it closed.
 #[must_use]
 pub fn active_feature(root: &Rooted) -> String {
-    let Some(d) = l7r_guard::shared::checks::arbiter::feature_dir_in(root, "", root.reader())
-    else {
+    let Some(d) = l7r_shared::checks::arbiter::feature_dir_in(root, "", root.reader()) else {
         return String::new();
     };
     // the state asked in process (feature 449 T118, `ask:449-T83-scope`); one the Python could not read answered "", which is not closed
-    let state = || l7r_guard::shared::speckit::state(&d).unwrap_or_default();
+    let state = || l7r_shared::speckit::state(&d).unwrap_or_default();
     if !d.join("spec.md").is_file() || CLOSED.contains(&state().as_str()) {
         return String::new();
     }
@@ -97,7 +96,7 @@ pub fn last_reopening(root: &Path, feature: &str, since: f64) -> Option<f64> {
     for line in log.lines() {
         let (h, ct) = line.split_once(' ').unwrap_or((line, "0"));
         let ct: i64 = ct.trim().parse().unwrap_or(0);
-        let state = l7r_guard::guards::feature_approval_hooks::at_rev(&top, h, feature)
+        let state = l7r_shared::guards::feature_approval_hooks::at_rev(&top, h, feature)
             .map_or("", |r| r.state);
         if let Some((t, s)) = newer {
             if !s.is_empty() && !CLOSED.contains(&s) && CLOSED.contains(&state) {
@@ -252,7 +251,7 @@ pub fn mark_landing(root: &Rooted, on: bool) {
         let body = json!({"feature": active_feature(root), "at": now()});
         let _ = std::fs::write(
             g.join(LANDING),
-            l7r_guard::shared::pyjson::dumps(&body, None, true) + "\n",
+            l7r_shared::pyjson::dumps(&body, None, true) + "\n",
         );
     } else {
         let _ = std::fs::remove_file(g.join(LANDING));

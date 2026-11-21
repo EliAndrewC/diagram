@@ -63,9 +63,8 @@ pub(crate) fn every_census_block_is_its_manifest_s(root: &Path) {
         let text = l7r_gate_core::record::read_text(&notes).unwrap();
         let shown = notes.display().to_string();
         let manifest = PathBuf::from(format!("{}.json", shown.trim_end_matches(".notes.md")));
-        let m =
-            l7r_guard::shared::pyjson::loads(&l7r_gate_core::record::read_text(&manifest).unwrap())
-                .unwrap();
+        let m = l7r_shared::pyjson::loads(&l7r_gate_core::record::read_text(&manifest).unwrap())
+            .unwrap();
         let (i, j) = (
             text.find(super::BEGIN).unwrap(),
             text.find(super::END).unwrap(),

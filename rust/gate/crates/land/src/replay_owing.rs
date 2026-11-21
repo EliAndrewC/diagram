@@ -23,8 +23,8 @@ use std::path::{Path, PathBuf};
 use std::process::Command;
 
 use l7r_gate_core::record::args::{parse_with, Spec};
-use l7r_guard::shared::py_text::strip;
-use l7r_guard::shared::pyjson::dumps;
+use l7r_shared::py_text::strip;
+use l7r_shared::pyjson::dumps;
 use serde_json::{json, Map, Value};
 
 use crate::Reply;

@@ -23,8 +23,8 @@ use std::path::{Component, Path, PathBuf};
 use l7r_gate_reviews::reviews::closing::{
     carries, reasons, Closing, ImplCheck, Tools, GRANDFATHERED,
 };
-use l7r_guard::shared::pyjson::dumps;
-use l7r_guard::shared::speckit::{py_path, state};
+use l7r_shared::pyjson::dumps;
+use l7r_shared::speckit::{py_path, state};
 use serde_json::Value;
 
 use crate::Reply;

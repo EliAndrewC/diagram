@@ -160,7 +160,7 @@ pub fn report(
 ) -> Result<String, Error> {
     let mode = mode
         .as_str()
-        .map_or_else(|| l7r_guard::shared::pyjson::py_str(mode), str::to_owned);
+        .map_or_else(|| l7r_shared::pyjson::py_str(mode), str::to_owned);
     let mut lines = vec![format!(
         "lit: {key}  mode: {mode}  zoom: {:.2}x of fit",
         number(zoom, "the zoom")?
@@ -212,7 +212,7 @@ pub fn abspath(path: &str) -> String {
 /// # Errors
 /// The browser failed (its own words), or its answer is not what `lit` prints.
 pub fn shoot(launcher: &Path, page: &str, key: &str, vector: bool) -> Result<Shot, Error> {
-    let dir = l7r_guard::shared::tempdir::TempDir::new("page-lit");
+    let dir = l7r_shared::tempdir::TempDir::new("page-lit");
     let (before, after) = (dir.path().join("before.png"), dir.path().join("after.png"));
     let mut cmd = std::process::Command::new(launcher);
     cmd.args(["browser", "lit", page, key])

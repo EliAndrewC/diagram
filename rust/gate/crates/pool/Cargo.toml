@@ -24,9 +24,9 @@ counters = []
 
 [dependencies]
 serde_json = { workspace = true }
-# the generation cache's digests (`shared::sha256`) and its lock (`shared::tool::flock_within`), feature 449 T221: the guard is the base
-# every gate crate and the Mode A engine already build on, so naming it pulls nothing new into either
-l7r_guard = { path = "../../../guard" }
+# the generation cache's digests (`l7r_shared::sha256`) and its lock (`l7r_shared::tool::flock_within`), feature 449 T221: the guard's shared
+# crate is the base every gate crate and the Mode A engine already build on (451 T58), so naming it pulls nothing new into either
+l7r_shared = { path = "../../../guard/shared" }
 
 # the counting run's program (`l7r-gate.sh rust hamlet --crate rust/gate/crates/pool` with `HAMLET_BIN=l7r-pool`), and the walk,
 # index and map as commands; the gate reaches the same commands in process as `l7r-gate pool ...`

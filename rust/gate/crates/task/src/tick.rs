@@ -24,9 +24,9 @@ use std::fmt::Write as _;
 use std::path::{Path, PathBuf};
 use std::process::Command;
 
-use l7r_guard::shared::py_text::strip;
-use l7r_guard::shared::pyjson::dumps;
-use l7r_guard::shared::speckit::{py_path, tasks};
+use l7r_shared::py_text::strip;
+use l7r_shared::pyjson::dumps;
+use l7r_shared::speckit::{py_path, tasks};
 use serde_json::{json, Value};
 
 use crate::{raised, read_strict, reply, Reply};
@@ -263,7 +263,7 @@ pub fn tick(ask: &Ask, boxes: bool, landing: bool) -> Reply {
         }
         Err(Refused::Exit(why)) => return reply(out, format!("{why}\n"), 1),
     };
-    let remaining = l7r_guard::shared::speckit::splitlines(&new)
+    let remaining = l7r_shared::speckit::splitlines(&new)
         .iter()
         .filter(|l| l.starts_with("- [ ] "))
         .count();
@@ -335,7 +335,7 @@ pub fn tick(ask: &Ask, boxes: bool, landing: bool) -> Reply {
     } else {
         "changed"
     };
-    l7r_guard::shared::usage::record(root, USAGE_LOG_TOOL, "step", outcome);
+    l7r_shared::usage::record(root, USAGE_LOG_TOOL, "step", outcome);
     reply(out, err, 0)
 }
 
@@ -429,7 +429,7 @@ fn cli_with(words: &[String], cwd: &Path, env: Env) -> Reply {
     }
     let ticks = env("L7R_LAND_TICKS").unwrap_or_default();
     // the plan review of 405 D24: `--landing` is `make land`'s alone
-    if landing && !l7r_guard::shared::py_text::split(&ticks).contains(&task.as_str()) {
+    if landing && !l7r_shared::py_text::split(&ticks).contains(&task.as_str()) {
         return reply(String::new(), format!("tick: refused - --landing is `make land`'s, for a task it names in L7R_LAND_TICKS; {task} is not one - make land F={feature} T={task}\n"), 2);
     }
     tick(&Ask::with_env(&root, &dir, task, note, env), boxes, landing)

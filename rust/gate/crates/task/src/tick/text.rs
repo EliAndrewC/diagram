@@ -4,8 +4,8 @@
 use std::sync::LazyLock;
 
 use fancy_regex::Regex;
-use l7r_guard::shared::py_text::{is_space, repr, strip, SPACE_CLASS};
-use l7r_guard::shared::speckit::splitlines;
+use l7r_shared::py_text::{is_space, repr, strip, SPACE_CLASS};
+use l7r_shared::speckit::splitlines;
 
 /// Why a tick cannot be made: a refusal (`ValueError`, exit 2 where `make tick` reports it), or `--boxes` with no box to tick
 /// (`SystemExit` with its message, exit 1).
@@ -20,7 +20,7 @@ pub enum Refused {
 /// repeat without advancing - `make task-add`'s id scan over 449's 1.1 MB of tasks and plans spun without end on it (feature 449, found
 /// 2026-11-18: five minutes at 99.9% CPU, nothing written).
 pub(crate) fn re(pattern: &str) -> Regex {
-    l7r_guard::shared::regex::build(pattern).unwrap_or_else(|e| unreachable!("{e}"))
+    l7r_shared::regex::build(pattern).unwrap_or_else(|e| unreachable!("{e}"))
 }
 
 static PHYSICAL: LazyLock<Regex> = LazyLock::new(|| {

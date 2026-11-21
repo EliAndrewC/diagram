@@ -20,9 +20,9 @@ use l7r_gate_research::verbatim::{
     judge,
 };
 use l7r_gate_research::{record::notes::render_note, record::site_notes, record::store};
-use l7r_guard::shared::consulted;
-use l7r_guard::shared::py_text::repr;
-use l7r_guard::shared::pyjson::dumps;
+use l7r_shared::consulted;
+use l7r_shared::py_text::repr;
+use l7r_shared::pyjson::dumps;
 use serde_json::{json, Map, Value};
 
 use crate::record::args::{parse_with, Spec};
@@ -402,7 +402,7 @@ pub fn style_prepass(args: &[String], cwd: &Path) -> Reply {
     let variants = root.join("research/assets/glossary-variants.txt");
     let words: HashSet<String> = if variants.is_file() {
         match read(&variants) {
-            Ok(t) => l7r_guard::shared::checks::reply::py_lines(&t)
+            Ok(t) => l7r_shared::checks::reply::py_lines(&t)
                 .into_iter()
                 .map(|l| l.split('\t').next().unwrap_or("").to_owned())
                 .collect(),
@@ -449,7 +449,7 @@ fn source_refusal(
             2,
         ));
     }
-    if ledger && (question.is_empty() || l7r_guard::shared::py_text::strip(sought).is_empty()) {
+    if ledger && (question.is_empty() || l7r_shared::py_text::strip(sought).is_empty()) {
         return Some(reply(
             String::new(),
             format!("{}\n", source_pages::NEEDS_SOUGHT),
@@ -471,7 +471,7 @@ fn source_refusal(
         for x in closed {
             let f = |k: &str| {
                 x.get(k)
-                    .map_or_else(|| "None".to_owned(), l7r_guard::shared::pyjson::py_str)
+                    .map_or_else(|| "None".to_owned(), l7r_shared::pyjson::py_str)
             };
             let _ = writeln!(
                 err,
@@ -552,7 +552,7 @@ pub fn source_pages(args: &[String], cwd: &Path) -> Reply {
                 ctx,
                 questions,
                 root: here.clone(),
-                sought: l7r_guard::shared::py_text::strip(sought).to_owned(),
+                sought: l7r_shared::py_text::strip(sought).to_owned(),
             }),
             Err(e) => return reply(String::new(), format!("{}: {}\n", e.kind, e.message), 1),
         }

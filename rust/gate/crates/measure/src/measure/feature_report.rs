@@ -30,8 +30,8 @@ use std::time::Instant;
 use l7r_gate_core::record::args::{parse_with, Spec};
 use l7r_gate_core::record::bundle::resolve;
 use l7r_gate_reviews::reviews::ledger_passes::{passes, Env};
-use l7r_guard::guards::event_log_hooks::agent_category;
-use l7r_guard::guards::event_log_hooks::read::reversals;
+use l7r_shared::guards::event_log_hooks::agent_category;
+use l7r_shared::guards::event_log_hooks::read::reversals;
 
 use super::events::{
     event_logs, fixed, head, hm, load_events, or_s, spec_dir, t_text, Event, Raised, Tally,

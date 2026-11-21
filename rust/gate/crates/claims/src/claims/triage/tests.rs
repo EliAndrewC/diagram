@@ -23,7 +23,7 @@ fn units_doc(qual: &str, blocks: &[&str]) -> String {
 /// The fixture recorded, then a claimed dictionary, a page, a section and three units changed, and the index and snapshots as a
 /// triage reads them: (root, index, store).
 fn changed_everything() -> (
-    l7r_guard::shared::tempdir::TempDir,
+    l7r_shared::tempdir::TempDir,
     Map<String, Value>,
     Map<String, Value>,
 ) {
@@ -243,7 +243,7 @@ fn a_drifted_line_without_its_fix_is_refused_with_the_form() {
 
 /// The fixture recorded and committed as origin/main, the index's GAP row resting on no block: (root, index, store).
 fn recorded() -> (
-    l7r_guard::shared::tempdir::TempDir,
+    l7r_shared::tempdir::TempDir,
     Map<String, Value>,
     Map<String, Value>,
 ) {

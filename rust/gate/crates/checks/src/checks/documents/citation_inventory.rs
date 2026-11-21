@@ -8,7 +8,7 @@
 
 use std::path::{Path, PathBuf};
 
-use l7r_guard::shared::py_text::strip;
+use l7r_shared::py_text::strip;
 
 use super::{dirs_under, re, read, root};
 
@@ -65,7 +65,7 @@ fn rows(doc: &str) -> Option<Vec<Vec<String>>> {
     let start = doc.find(HEADING)?;
     let row = re(r"^\| \d+ \|");
     Some(
-        l7r_guard::shared::speckit::splitlines(&doc[start..])
+        l7r_shared::speckit::splitlines(&doc[start..])
             .into_iter()
             .filter(|l| row.is_match(l).unwrap_or(false))
             .map(cells)

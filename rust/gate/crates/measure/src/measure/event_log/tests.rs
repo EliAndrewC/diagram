@@ -1,6 +1,6 @@
 //! The event log's command line: a hook payload appended in a scratch clone, a transcript converted, the usage.
 
-use l7r_guard::shared::env::Rooted;
+use l7r_shared::env::Rooted;
 
 // Each test reads its own environment, never the session's exports (feature 451 T38): this `cli` shadows the crate's.
 fn cli(args: &[String], stdin: &mut dyn std::io::Read) -> crate::Reply {

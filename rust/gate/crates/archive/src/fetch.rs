@@ -8,8 +8,8 @@ use std::process::Command;
 use std::sync::LazyLock;
 
 use fancy_regex::Regex;
-use l7r_guard::shared::html_text::unescape;
-use l7r_guard::shared::py_text::{strip, SPACE_CLASS};
+use l7r_shared::html_text::unescape;
+use l7r_shared::py_text::{strip, SPACE_CLASS};
 use serde_json::Value;
 
 use crate::{Error, Result};
@@ -273,7 +273,7 @@ pub fn wayback(client: &mut dyn Client, url: &str) -> Result<Option<(String, Str
     let Ok(text) = std::str::from_utf8(&got.body) else {
         return Ok(None);
     };
-    let Ok(answer) = l7r_guard::shared::pyjson::loads(text) else {
+    let Ok(answer) = l7r_shared::pyjson::loads(text) else {
         return Ok(None);
     };
     let attribute = |v: &Value| -> Result<()> {
@@ -292,18 +292,14 @@ pub fn wayback(client: &mut dyn Client, url: &str) -> Result<Option<(String, Str
     attribute(snaps)?;
     let closest = snaps.get("closest").unwrap_or(&empty);
     attribute(closest)?;
-    let truthy = |k: &str| {
-        closest
-            .get(k)
-            .is_some_and(l7r_guard::shared::pyjson::truthy)
-    };
+    let truthy = |k: &str| closest.get(k).is_some_and(l7r_shared::pyjson::truthy);
     if !truthy("available") || !truthy("url") {
         return Ok(None);
     }
-    let at = l7r_guard::shared::pyjson::py_str(&closest["url"]).replacen("http://", "https://", 1);
+    let at = l7r_shared::pyjson::py_str(&closest["url"]).replacen("http://", "https://", 1);
     let when = closest
         .get("timestamp")
-        .map_or_else(String::new, l7r_guard::shared::pyjson::py_str);
+        .map_or_else(String::new, l7r_shared::pyjson::py_str);
     Ok(Some((at, when)))
 }
 

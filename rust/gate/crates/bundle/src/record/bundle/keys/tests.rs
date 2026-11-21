@@ -17,7 +17,7 @@ fn bundle(root: &Path, extra: &[&str]) -> Reply {
 }
 
 /// The scratch record a source bundle is built on: `key-a`'s write-up and a citation note, committed as `origin/main`.
-fn key_record(tag: &str) -> l7r_guard::shared::tempdir::TempDir {
+fn key_record(tag: &str) -> l7r_shared::tempdir::TempDir {
     let root = scratch(tag);
     put(
         &root,
@@ -31,7 +31,7 @@ fn key_record(tag: &str) -> l7r_guard::shared::tempdir::TempDir {
 }
 
 /// ...with every kind of edit since, `key-b`'s write-up, and a source-reader's earlier round returned and another running.
-fn key_record_edited(tag: &str) -> l7r_guard::shared::tempdir::TempDir {
+fn key_record_edited(tag: &str) -> l7r_shared::tempdir::TempDir {
     let root = key_record(tag);
     edit_everything(&root);
     put(

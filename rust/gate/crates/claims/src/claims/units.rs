@@ -6,8 +6,8 @@ use std::path::Path;
 use std::sync::LazyLock;
 
 use fancy_regex::Regex;
-use l7r_guard::shared::py_text::{collapse, strip};
-use l7r_guard::shared::sha256;
+use l7r_shared::py_text::{collapse, strip};
+use l7r_shared::sha256;
 use serde_json::Value;
 
 use super::grammar::{claims_of, lstrip, parse_claim, Claim};

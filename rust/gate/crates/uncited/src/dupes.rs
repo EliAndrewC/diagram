@@ -4,7 +4,7 @@
 use std::collections::{HashMap, HashSet};
 use std::path::Path;
 
-use l7r_guard::shared::consulted::{self, norm};
+use l7r_shared::consulted::{self, norm};
 
 use crate::entries::{entry_holding, merge};
 use crate::lists::{field, read, unkeep};
@@ -33,7 +33,7 @@ pub fn fingerprint(text: Option<&str>) -> String {
         return String::new();
     }
     let tail: String = body[200..].iter().collect();
-    l7r_guard::shared::sha1::hex(tail.as_bytes())
+    l7r_shared::sha1::hex(tail.as_bytes())
 }
 
 /// Every `n`-gram of a text's first `limit` characters, its whitespace squeezed first.

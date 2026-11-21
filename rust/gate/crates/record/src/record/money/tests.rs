@@ -14,7 +14,7 @@ fn put(root: &Path, name: &str, text: &str) {
     std::fs::write(path, text).unwrap();
 }
 
-fn record(tag: &str) -> l7r_guard::shared::tempdir::TempDir {
+fn record(tag: &str) -> l7r_shared::tempdir::TempDir {
     let root = crate::checks::scratch(tag);
     put(
         &root,

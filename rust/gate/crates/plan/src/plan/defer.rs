@@ -6,7 +6,7 @@
 use std::collections::BTreeSet;
 use std::path::Path;
 
-use l7r_guard::shared::escape;
+use l7r_shared::escape;
 use serde_json::Value;
 
 use super::{bypass_record, guard_log};
@@ -42,7 +42,7 @@ pub(super) fn record(root: &Path, dir: &Path, what: &str, why: &str) {
 pub(super) fn decided_under(dir: &Path) -> BTreeSet<String> {
     let lead = format!("{} ", dir.file_name().unwrap_or_default().to_string_lossy());
     let mut out = BTreeSet::new();
-    let entries = std::fs::read_dir(l7r_guard::shared::log::dir())
+    let entries = std::fs::read_dir(l7r_shared::log::dir())
         .into_iter()
         .flatten()
         .flatten();

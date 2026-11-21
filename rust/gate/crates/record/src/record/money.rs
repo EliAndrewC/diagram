@@ -13,7 +13,7 @@ use serde_json::Value;
 
 use super::reply;
 use crate::Reply;
-use l7r_guard::shared::html_text::unescape;
+use l7r_shared::html_text::unescape;
 
 const QUESTIONS: &str = "research/questions";
 const TABLE: &str = "research/assets/money-conversions.json";
@@ -44,7 +44,7 @@ const CENTS: (&str, &str) = ("cents", "dollar");
 const NUMBER: &str = r"\d[\d,]*(?:\.\d+)?(?:\s*-\s*\d[\d,]*(?:\.\d+)?)?";
 const DOLLAR: &str = r"\d[\d,]*(?:\.\d+)?(?:\s*-\s*\$?\d[\d,]*(?:\.\d+)?)?";
 fn compiled(p: &str) -> Regex {
-    l7r_guard::shared::regex::build(p).unwrap_or_else(|e| unreachable!("{e}"))
+    l7r_shared::regex::build(p).unwrap_or_else(|e| unreachable!("{e}"))
 }
 
 static MACRON: LazyLock<Regex> = LazyLock::new(|| compiled(r"\b(?:ryō|shū)(?![\w])"));

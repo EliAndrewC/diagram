@@ -10,8 +10,8 @@ use std::path::{Path, PathBuf};
 use std::sync::LazyLock;
 
 use fancy_regex::Regex;
-use l7r_guard::shared::attempts::{self, Ask, More};
-use l7r_guard::shared::consulted;
+use l7r_shared::attempts::{self, Ask, More};
+use l7r_shared::consulted;
 use serde_json::{Map, Value};
 
 use crate::pages::{parts, wrapped, CachedPages, PART};
@@ -34,7 +34,7 @@ static BLOB: LazyLock<Regex> =
 static HOST_CHARS: LazyLock<Regex> = LazyLock::new(|| re(r"[^a-z0-9.-]+"));
 static NUMBERED: LazyLock<Regex> = LazyLock::new(|| re(r"^(\d+)-"));
 
-fn fault(f: l7r_guard::shared::blocked::Fault) -> Error {
+fn fault(f: l7r_shared::blocked::Fault) -> Error {
     Error::new(f.kind, f.message)
 }
 
@@ -76,7 +76,7 @@ pub fn judged_before(root: &Path, url: &str, question: &str) -> Result<Vec<Value
 /// `reason_ok`: two words and eight characters, the project's bar for an escape's reason.
 #[must_use]
 pub fn reason_ok(reason: &str) -> bool {
-    use l7r_guard::shared::py_text::{split, strip};
+    use l7r_shared::py_text::{split, strip};
     strip(reason).chars().count() >= 8 && split(reason).len() >= 2
 }
 
@@ -99,7 +99,7 @@ pub fn file_for(index: usize, url: &str) -> String {
 /// `excerpt`: a long page cut to its front and a window around each quoted passage found in it; a short page whole.
 #[must_use]
 pub fn excerpt(text: &str, quotes: &[String]) -> String {
-    let words = |t: &str| l7r_guard::shared::py_text::collapse(t);
+    let words = |t: &str| l7r_shared::py_text::collapse(t);
     let flat: Vec<char> = words(text).chars().collect();
     if flat.len() <= LIMIT {
         return text.to_owned();
@@ -208,7 +208,7 @@ pub fn saved_rows(out: &Path) -> Result<Vec<Row>> {
     let text =
         String::from_utf8(raw).map_err(|e| Error::new("UnicodeDecodeError", e.to_string()))?;
     let text = text.replace("\r\n", "\n").replace('\r', "\n");
-    Ok(l7r_guard::shared::checks::reply::py_lines(&text)
+    Ok(l7r_shared::checks::reply::py_lines(&text)
         .into_iter()
         .skip(1)
         .map(|line| {

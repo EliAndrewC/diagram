@@ -56,7 +56,7 @@ fn run(
     .unwrap();
 }
 
-fn root() -> l7r_guard::shared::tempdir::TempDir {
+fn root() -> l7r_shared::tempdir::TempDir {
     let t = crate::checks::scratch("subagent-cache");
     run(
         &t,

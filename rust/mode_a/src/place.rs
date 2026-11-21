@@ -13,7 +13,7 @@ use std::collections::BTreeSet;
 use std::path::Path;
 
 use l7r_gate_research::Error;
-use l7r_guard::shared::pyjson::{py_str, truthy};
+use l7r_shared::pyjson::{py_str, truthy};
 use serde_json::{json, Map, Value};
 
 use crate::dwellings::{is_dwelling, HOUSEHOLD};
@@ -284,7 +284,7 @@ fn number(v: &Value) -> Option<f64> {
 fn population_int(v: &Value) -> Result<i64, Error> {
     match v {
         Value::Number(n) if n.is_i64() => Ok(n.as_i64().unwrap_or(0)),
-        Value::String(s) => l7r_guard::shared::py_text::strip(s)
+        Value::String(s) => l7r_shared::py_text::strip(s)
             .replace('_', "")
             .parse()
             .map_err(|_| {
@@ -292,7 +292,7 @@ fn population_int(v: &Value) -> Result<i64, Error> {
                     "ValueError",
                     format!(
                         "invalid literal for int() with base 10: {}",
-                        l7r_guard::shared::py_text::repr(s)
+                        l7r_shared::py_text::repr(s)
                     ),
                 )
             }),

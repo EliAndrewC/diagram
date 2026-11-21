@@ -64,7 +64,7 @@ pub fn units(text: &str) -> Vec<(usize, usize)> {
 
 /// `int()` of a stored reference's number.
 fn number(text: &str) -> Result<i64> {
-    let t = l7r_guard::shared::py_text::strip(text);
+    let t = l7r_shared::py_text::strip(text);
     let digits: Option<String> = t
         .chars()
         .enumerate()
@@ -79,7 +79,7 @@ fn number(text: &str) -> Result<i64> {
             "ValueError",
             format!(
                 "invalid literal for int() with base 10: {}",
-                l7r_guard::shared::py_text::repr(text)
+                l7r_shared::py_text::repr(text)
             ),
         )
     })

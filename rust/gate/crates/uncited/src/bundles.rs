@@ -8,8 +8,8 @@ use std::collections::BTreeSet;
 use std::fmt::Write as _;
 use std::path::{Path, PathBuf};
 
-use l7r_guard::shared::consulted;
-use l7r_guard::shared::pyjson::{dumps, py_str, truthy, value_repr};
+use l7r_shared::consulted;
+use l7r_shared::pyjson::{dumps, py_str, truthy, value_repr};
 use serde_json::{json, Map, Value};
 
 use crate::entries::written;
@@ -62,7 +62,7 @@ impl Contracts {
             .split_once("\n---\n")
             .ok_or_else(|| Error::new("IndexError", "list index out of range"))?;
         Ok(rest
-            .trim_start_matches(l7r_guard::shared::py_text::is_space)
+            .trim_start_matches(l7r_shared::py_text::is_space)
             .to_owned())
     }
 }
@@ -273,7 +273,7 @@ fn ids_of(d: &Path) -> Result<Map<String, Value>> {
             "TypeError",
             format!(
                 "argument of type '{}' is not a container or iterable",
-                l7r_guard::shared::blocked::type_name(&other)
+                l7r_shared::blocked::type_name(&other)
             ),
         )),
     }
@@ -313,7 +313,7 @@ pub fn read_verdicts(d: &Path) -> Result<Verdicts> {
                     "TypeError",
                     format!(
                         "cannot use '{t}' as a dict key (unhashable type: '{t}')",
-                        t = l7r_guard::shared::blocked::type_name(&pid)
+                        t = l7r_shared::blocked::type_name(&pid)
                     ),
                 ));
             }
@@ -364,7 +364,7 @@ fn reasons_ok(reasons: Option<&Value>) -> Result<bool> {
             "TypeError",
             format!(
                 "'{}' object is not iterable",
-                l7r_guard::shared::blocked::type_name(other)
+                l7r_shared::blocked::type_name(other)
             ),
         )),
     }
@@ -451,7 +451,7 @@ pub fn score(d: &Path, answers: &Value) -> Result<Value> {
             "AttributeError",
             format!(
                 "'{}' object has no attribute 'items'",
-                l7r_guard::shared::blocked::type_name(answers)
+                l7r_shared::blocked::type_name(answers)
             ),
         )
     })?;

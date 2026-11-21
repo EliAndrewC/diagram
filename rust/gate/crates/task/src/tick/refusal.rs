@@ -8,9 +8,9 @@ use std::path::{Path, PathBuf};
 use std::sync::LazyLock;
 
 use fancy_regex::Regex;
-use l7r_guard::shared::plan_text::task_sections;
-use l7r_guard::shared::py_text::{split, strip};
-use l7r_guard::shared::pyjson::py_str;
+use l7r_shared::plan_text::task_sections;
+use l7r_shared::py_text::{split, strip};
+use l7r_shared::pyjson::py_str;
 use serde_json::Value;
 
 use super::text::{boxes_refusal, re};
@@ -59,8 +59,7 @@ pub type Env<'e> = &'e dyn Fn(&str) -> Option<String>;
 /// The feature directory's state, by `make speckit-todo`'s one rule, in process (the Python ran `speckit-todo --each-state`, which
 /// raised on a nonzero exit).
 pub(crate) fn state(d: &Path) -> Result<String, String> {
-    l7r_guard::shared::speckit::state(d)
-        .map_err(|why| format!("speckit-todo: {}: {why}", d.display()))
+    l7r_shared::speckit::state(d).map_err(|why| format!("speckit-todo: {}: {why}", d.display()))
 }
 
 /// Why `make tick` may not tick in `d`, or "": its spec waits on a feature still open (`**Waits on**: NNN`, feature 375 D18).
@@ -161,7 +160,7 @@ fn landed_refusal(root: &Path, feature: &str, task: &str, note: &str) -> Raise<S
     let log = (!gd.is_empty()).then(|| PathBuf::from(&gd).join("land-tooling.jsonl"));
     let mut every: Vec<Value> = Vec::new();
     if let Some(log) = log.filter(|l| l.is_file()) {
-        for line in l7r_guard::shared::speckit::splitlines(&read_strict(&log)?) {
+        for line in l7r_shared::speckit::splitlines(&read_strict(&log)?) {
             if let Ok(v) = serde_json::from_str::<Value>(line) {
                 every.push(v);
             }

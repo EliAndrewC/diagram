@@ -27,13 +27,13 @@ fn root() -> PathBuf {
 }
 
 fn re(pattern: &str) -> Regex {
-    l7r_guard::shared::regex::build(pattern).unwrap()
+    l7r_shared::regex::build(pattern).unwrap()
 }
 
 /// A file as Python's `read_text` reads it (`\r\n` and `\r` read as `\n`), or "" where it cannot be read: a missing file fails the
 /// check that asked for its words, as the Python's raise did.
 fn read(path: &Path) -> String {
-    l7r_guard::shared::speckit::read_text(path).unwrap_or_default()
+    l7r_shared::speckit::read_text(path).unwrap_or_default()
 }
 
 /// `path` relative to `root`, as the Python's `relative_to` printed it.

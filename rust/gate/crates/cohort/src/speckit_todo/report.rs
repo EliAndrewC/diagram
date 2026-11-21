@@ -7,8 +7,8 @@ use std::path::{Path, PathBuf};
 use std::process::Command;
 use std::time::{SystemTime, UNIX_EPOCH};
 
-use l7r_guard::shared::py_text::split;
-use l7r_guard::shared::speckit::{
+use l7r_shared::py_text::split;
+use l7r_shared::speckit::{
     feature, feature_dirs, features, py_name, py_parent, vocabulary, Feature, STAGES, STATES,
 };
 
@@ -146,7 +146,7 @@ pub fn report(
 /// Feature 444's row followed, in place, by the work budget's standing record (feature 443 FR-007, plan D8).
 fn budget_under_444(out: &mut Vec<String>, root: &Path) -> Result<(), String> {
     let Some(at) = out.iter().position(|l| {
-        l.trim_start_matches(l7r_guard::shared::py_text::is_space)
+        l.trim_start_matches(l7r_shared::py_text::is_space)
             .starts_with("444-")
     }) else {
         return Ok(());

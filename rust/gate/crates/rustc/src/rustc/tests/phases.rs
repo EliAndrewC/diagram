@@ -7,7 +7,7 @@ use serde_json::Value;
 use super::side::built;
 use super::*;
 use crate::Reply;
-use l7r_guard::guards::event_log_hooks::now_stamp;
+use l7r_shared::guards::event_log_hooks::now_stamp;
 
 /// Every `Phase` line in the tree's event logs, in the order written (the log a line is filed in is the process's feature's, so every
 /// log is read).

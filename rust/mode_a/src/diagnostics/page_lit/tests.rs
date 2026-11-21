@@ -163,12 +163,8 @@ fn the_report_puts_the_most_changed_first() {
 
 /// A page with an id map, a page with none, the two shots, and the launcher's stand-in: `browser lit <page> <key> <before> <after>
 /// [--vector]`, copying the shots and answering - its key picks a failure. The directory, the launcher and the lit shot's PNG.
-fn world() -> (
-    l7r_guard::shared::tempdir::TempDir,
-    std::path::PathBuf,
-    Vec<u8>,
-) {
-    let dir = l7r_guard::shared::tempdir::TempDir::new("page-lit");
+fn world() -> (l7r_shared::tempdir::TempDir, std::path::PathBuf, Vec<u8>) {
+    let dir = l7r_shared::tempdir::TempDir::new("page-lit");
     let at = |n: &str| dir.path().join(n).to_string_lossy().into_owned();
     let png = png_of(
         2,
@@ -366,7 +362,7 @@ fn frames(ico: &[u8]) -> Vec<(u32, u32, Vec<u8>)> {
 /// wrote an icon with no image in it, is refused naming the format.
 #[test]
 fn an_icon_past_256_px_is_shrunk_into_pil_s_sizes() {
-    let dir = l7r_guard::shared::tempdir::TempDir::new("lit-ico");
+    let dir = l7r_shared::tempdir::TempDir::new("lit-ico");
     let at = |n: &str| dir.path().join(n).to_string_lossy().into_owned();
     super::save(&at("big.ico"), &gradient(300, 260)).unwrap();
     let got = frames(&std::fs::read(at("big.ico")).unwrap());

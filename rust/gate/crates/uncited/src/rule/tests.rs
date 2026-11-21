@@ -63,7 +63,7 @@ fn a_failed_fetchs_access_state() {
         ]
     );
     assert_eq!(access_of(&got(None)), "down");
-    assert_eq!(digest(" a \n b "), l7r_guard::shared::sha256::hex(b"a b"));
+    assert_eq!(digest(" a \n b "), l7r_shared::sha256::hex(b"a b"));
 }
 
 #[test]

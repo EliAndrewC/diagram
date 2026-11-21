@@ -3,8 +3,8 @@
 //! feature 449 T132 ported it (`ask:449-phase3-remainder` Q2 task B): every verb's Rust stays where the guards call it; the doors' loop
 //! left `core` with `owed-door`, the last door (feature 449 T149).
 
-use l7r_guard::shared::checks;
-use l7r_guard::shared::checks::handle;
+use l7r_shared::checks;
+use l7r_shared::checks::handle;
 
 use crate::Reply;
 

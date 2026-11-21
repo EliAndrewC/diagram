@@ -266,7 +266,7 @@ fn check_in(root: &Path, a: &[&str]) -> Reply {
 }
 
 /// A pool map `m` whose folder holds every render but its manifest, and the prompt file `.git/p.md`.
-fn checked(name: &str) -> (l7r_guard::shared::tempdir::Held<std::path::PathBuf>, String) {
+fn checked(name: &str) -> (l7r_shared::tempdir::Held<std::path::PathBuf>, String) {
     let r = repo(name);
     map(&r, "pool", "m", &["well"]);
     for ext in [".svg", ".png", ".html"] {

@@ -251,7 +251,7 @@ fn clone_with_an_hour(r: &Path) -> (PathBuf, Env) {
         Env {
             home,
             now: t(3600),
-            base: l7r_guard::shared::env::Rooted::with(".", &[]),
+            base: l7r_shared::env::Rooted::with(".", &[]),
         },
     )
 }

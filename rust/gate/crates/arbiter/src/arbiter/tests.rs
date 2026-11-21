@@ -1,8 +1,8 @@
 use std::path::Path;
 
 /// A root carrying an empty environment: each test reads its own, never the session's exports (feature 451 T38).
-fn own(root: &std::path::Path) -> l7r_guard::shared::env::Rooted {
-    l7r_guard::shared::env::Rooted::with(root.to_path_buf(), &[])
+fn own(root: &std::path::Path) -> l7r_shared::env::Rooted {
+    l7r_shared::env::Rooted::with(root.to_path_buf(), &[])
 }
 
 use serde_json::{json, Value};
@@ -12,8 +12,8 @@ use super::{
     spec_body_sha, spec_ruled, spec_verdict, unit_ruled, Stop,
 };
 
-fn clone_at(name: &str) -> l7r_guard::shared::tempdir::Held<std::path::PathBuf> {
-    let d = l7r_guard::shared::tempdir::TempDir::new(&format!("gate-arbiter-{name}"));
+fn clone_at(name: &str) -> l7r_shared::tempdir::Held<std::path::PathBuf> {
+    let d = l7r_shared::tempdir::TempDir::new(&format!("gate-arbiter-{name}"));
     let root = std::fs::canonicalize(&d).unwrap();
     assert!(std::process::Command::new("git")
         .arg("-C")
@@ -358,7 +358,7 @@ fn open_fixes_are_listed_until_settled() {
 #[test]
 fn a_ruling_is_read_in_the_house_style_straight_quotes_too() {
     let brit = format!("behavio{}", "ur");
-    let dir = l7r_guard::shared::tempdir::TempDir::new("gate-arbiter-style");
+    let dir = l7r_shared::tempdir::TempDir::new("gate-arbiter-style");
     let file = std::fs::canonicalize(&dir).unwrap().join("ruling.json");
     let body = json!({"ruling": "accept", "why": [format!("the \"{brit}\" kept \u{2013} \u{201c}{brit}\u{201d}, `{brit}`")], brit.clone(): 1});
     std::fs::write(&file, body.to_string()).unwrap();

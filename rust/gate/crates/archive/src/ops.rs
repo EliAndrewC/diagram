@@ -20,10 +20,10 @@ use std::fmt::Write as _;
 use std::path::{Path, PathBuf};
 use std::sync::{Arc, Mutex};
 
-use l7r_guard::shared::attempts;
-use l7r_guard::shared::cited_url::clean;
-use l7r_guard::shared::consulted::{self, norm};
-use l7r_guard::shared::pyjson::{dumps, py_str};
+use l7r_shared::attempts;
+use l7r_shared::cited_url::clean;
+use l7r_shared::consulted::{self, norm};
+use l7r_shared::pyjson::{dumps, py_str};
 use serde_json::{json, Map, Value};
 
 use crate::backfill::{lane, lanes, Lane};
@@ -95,7 +95,7 @@ pub fn field(x: &Value, k: &str) -> Result<String> {
             "TypeError",
             format!(
                 "'{}' object is not subscriptable",
-                l7r_guard::shared::blocked::type_name(other)
+                l7r_shared::blocked::type_name(other)
             ),
         )),
     }
@@ -112,7 +112,7 @@ pub fn get_text(x: &Value, k: &str) -> Result<String> {
             "AttributeError",
             format!(
                 "'{}' object has no attribute 'get'",
-                l7r_guard::shared::blocked::type_name(other)
+                l7r_shared::blocked::type_name(other)
             ),
         )),
     }
@@ -300,7 +300,7 @@ pub fn decimal(c: char) -> Option<u32> {
 /// them; past `i64` it saturates (no count here reaches it). None where Python raised `ValueError`.
 #[must_use]
 pub fn py_int(text: &str) -> Option<i64> {
-    let t = l7r_guard::shared::py_text::strip(text);
+    let t = l7r_shared::py_text::strip(text);
     let (neg, digits) = match t.strip_prefix('-') {
         Some(d) => (true, d),
         None => (false, t.strip_prefix('+').unwrap_or(t)),
@@ -337,7 +337,7 @@ pub fn resolve_matches(root: &Path, raw: &[String]) -> std::result::Result<Match
         let Some((name, value)) = m.split_once('=') else {
             continue;
         };
-        let Some(eid) = entry_id(l7r_guard::shared::py_text::strip(value)) else {
+        let Some(eid) = entry_id(l7r_shared::py_text::strip(value)) else {
             out.set(
                 name,
                 value
@@ -366,7 +366,7 @@ fn entry_mut<'a>(
             "TypeError",
             format!(
                 "'{}' object does not support item assignment",
-                l7r_guard::shared::blocked::type_name(other)
+                l7r_shared::blocked::type_name(other)
             ),
         )),
     }

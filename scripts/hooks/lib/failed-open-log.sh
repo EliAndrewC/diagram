@@ -3,8 +3,8 @@
 # has ever been built and the gate's has not been either (feature 449 T143, its plan review: "it is the only record that the guards did
 # not run, on exactly the fresh unbuilt tree where nothing else leaves one").
 #
-# WHY A SECOND WRITER, AND ONLY HERE: every other entry is the Rust's (`l7r-gate log guard`, over `rust/guard/src/shared/log.rs` and
-# `shared/session.rs`), and so is this one wherever the gate has a binary. Where neither binary exists there is nothing to run but the
+# WHY A SECOND WRITER, AND ONLY HERE: every other entry is the Rust's (`l7r-gate log guard`, over `rust/guard/shared/src/log.rs` and
+# `shared/src/session.rs`), and so is this one wherever the gate has a binary. Where neither binary exists there is nothing to run but the
 # shell, and `guard_log`'s inline Python - which wrote this entry before T143 - is gone. So this writes, with `jq` and the shell, the
 # bytes that Python wrote on this path: its fields in its order, `json.dumps(indent=2)` with every non-ASCII character escaped (`jq -a
 # --indent 2` escapes as `ensure_ascii` does), each field `payload.get(k) or ""`, the session's name as `clone-resolve.sh resolve`

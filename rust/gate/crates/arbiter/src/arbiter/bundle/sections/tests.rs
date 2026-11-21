@@ -1,8 +1,8 @@
 //! The arbiter bundle's sections, each on a scratch repository.
 
 /// A root carrying an empty environment: each test reads its own, never the session's exports (feature 451 T38).
-fn own(root: &std::path::Path) -> l7r_guard::shared::env::Rooted {
-    l7r_guard::shared::env::Rooted::with(root.to_path_buf(), &[])
+fn own(root: &std::path::Path) -> l7r_shared::env::Rooted {
+    l7r_shared::env::Rooted::with(root.to_path_buf(), &[])
 }
 
 use serde_json::{json, Value};
@@ -156,7 +156,8 @@ fn the_cascade_and_the_oscillation() {
         .map(|e| e.to_string() + "\n")
         .collect::<String>()
         + "not json\n\n";
-    let path = l7r_guard::guards::event_log_hooks::log_path_in(&root, "500-f", own(&root).reader());
+    let path =
+        l7r_shared::guards::event_log_hooks::log_path_in(&root, "500-f", own(&root).reader());
     put(
         &root,
         &path.strip_prefix(&root).unwrap().to_string_lossy(),

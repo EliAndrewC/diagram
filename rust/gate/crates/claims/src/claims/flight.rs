@@ -4,8 +4,8 @@
 
 use std::path::{Component, Path, PathBuf};
 
-use l7r_guard::shared::pyjson::py_float;
-use l7r_guard::shared::sha256;
+use l7r_shared::pyjson::py_float;
+use l7r_shared::sha256;
 use serde_json::Value;
 
 use crate::record::repo::{fail, Fail};
@@ -44,7 +44,7 @@ fn dir(root: &Path) -> PathBuf {
     let common = out
         .ok()
         .filter(|o| o.status.success())
-        .map(|o| l7r_guard::shared::py_text::strip(&String::from_utf8_lossy(&o.stdout)).to_owned())
+        .map(|o| l7r_shared::py_text::strip(&String::from_utf8_lossy(&o.stdout)).to_owned())
         .filter(|s| !s.is_empty())
         .map_or_else(|| root.join(".git"), PathBuf::from);
     let common = if common.is_absolute() {
@@ -75,7 +75,7 @@ pub fn mark(root: &Path, bundle: &Path) -> Result<(), Fail> {
     std::fs::create_dir_all(&d).map_err(fail)?;
     let text = format!(
         "{{\"bundle\": {}, \"at\": {}}}",
-        l7r_guard::shared::pyjson::ascii_string(&resolved(bundle).to_string_lossy(), true),
+        l7r_shared::pyjson::ascii_string(&resolved(bundle).to_string_lossy(), true),
         py_float(now())
     );
     std::fs::write(d.join(name(bundle)), text).map_err(fail)
@@ -92,7 +92,7 @@ fn float(v: Option<&Value>) -> Result<f64, Fail> {
         None => Ok(0.0),
         Some(Value::Number(n)) => Ok(n.as_f64().unwrap_or(0.0)),
         Some(Value::Bool(b)) => Ok(f64::from(u8::from(*b))),
-        Some(Value::String(s)) => l7r_guard::shared::py_text::strip(s)
+        Some(Value::String(s)) => l7r_shared::py_text::strip(s)
             .parse()
             .map_err(|_| format!("ValueError: could not convert string to float: {s:?}")),
         Some(other) => Err(format!(

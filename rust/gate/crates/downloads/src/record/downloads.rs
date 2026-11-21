@@ -30,7 +30,7 @@ const HIGH_RISK: &str = "specs/312-uncited-source-catalog/high-risk-sources.md";
 const USAGE: &str = "usage: l7r-gate record downloads import [--gm F] [--high-risk F] | ingest [--keep IDS] [--drop IDS] [--mark ID=STATE ...] | sync | add <draft.md> | check [--base REF] | selftest | tag\n";
 
 fn compiled(pattern: &str) -> Regex {
-    l7r_guard::shared::regex::build(pattern).unwrap_or_else(|e| unreachable!("{e}"))
+    l7r_shared::regex::build(pattern).unwrap_or_else(|e| unreachable!("{e}"))
 }
 
 /// `ingest`'s archive step: `record archive inbox <args>` from the clone, which `record`'s dispatch hands in (feature 449 T147: the
@@ -50,7 +50,7 @@ fn read(path: &Path) -> Result<String, String> {
 }
 
 fn sha(text: &str) -> String {
-    l7r_guard::shared::sha256::hex(text.as_bytes())
+    l7r_shared::sha256::hex(text.as_bytes())
 }
 
 /// `datetime.date.today()`: the local date, as `date(1)` reads the same zone.

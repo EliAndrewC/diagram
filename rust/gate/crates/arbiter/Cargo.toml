@@ -14,7 +14,7 @@ l7r_gate_core = { path = "../core" }
 l7r_gate_plan = { path = "../plan" }
 l7r_gate_pool = { path = "../pool" }
 l7r_gate_reviews = { path = "../reviews" }
-l7r_guard = { path = "../../../guard" }
+l7r_shared = { path = "../../../guard/shared" }
 serde = { workspace = true }
 serde_json = { workspace = true }
 

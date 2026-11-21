@@ -23,8 +23,8 @@ fn run_on(root: &Path) -> Run {
 
 /// A root read with the test's own environment (feature 451 T38): never a session's exported `RECORD_CHECKS_DIR` or
 /// `CHECK_ORDER_OK`.
-fn own(root: &Path) -> l7r_guard::shared::env::Rooted {
-    l7r_guard::shared::env::Rooted::with(root, &[])
+fn own(root: &Path) -> l7r_shared::env::Rooted {
+    l7r_shared::env::Rooted::with(root, &[])
 }
 
 /// [`super::bundle`] on [`own`].
@@ -103,7 +103,7 @@ fn the_prepass() {
 }
 
 /// The scratch record the modal bundles below are built on: the glossary's variants and three questions, two of them on water.
-fn wells(tag: &str) -> l7r_guard::shared::tempdir::TempDir {
+fn wells(tag: &str) -> l7r_shared::tempdir::TempDir {
     let root = scratch(tag);
     put(
         &root,
@@ -442,7 +442,7 @@ fn the_rare_paths_of_a_modal_bundle() {
 /// The record of the test above as it stood at its end, its well now of the particular form: the rest of what was one test of a modal
 /// bundle's rare paths, split in three on scratch records of their own - its five bundles together were past FR-008's tenth of a second
 /// (feature 449 T167).
-fn rare(tag: &str) -> l7r_guard::shared::tempdir::TempDir {
+fn rare(tag: &str) -> l7r_shared::tempdir::TempDir {
     let root = scratch(tag);
     put(
         &root,

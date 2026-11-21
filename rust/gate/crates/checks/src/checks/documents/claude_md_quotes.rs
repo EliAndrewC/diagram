@@ -27,6 +27,7 @@ fn sources(root: &Path) -> Vec<PathBuf> {
         .flat_map(|s| files_under(&scripts, s))
         .chain(files_in(&root.join(".claude/agents"), ".md"))
         .chain(files_under(&root.join("rust/guard/src"), ".rs"))
+        .chain(files_under(&root.join("rust/guard/shared/src"), ".rs"))
         .filter(|p| !p.components().any(|c| c.as_os_str() == "__pycache__"))
         .chain(
             [root.join(".claude/settings.json"), root.join("Makefile")]
@@ -52,7 +53,7 @@ fn quotes(root: &Path) -> Vec<(String, String, String)> {
             out.push((
                 rel(&p, root),
                 (*name).to_owned(),
-                l7r_guard::shared::py_text::strip(&caps[2]).to_owned(),
+                l7r_shared::py_text::strip(&caps[2]).to_owned(),
             ));
         }
     }

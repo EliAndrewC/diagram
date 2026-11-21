@@ -27,7 +27,7 @@ use std::cmp::Ordering;
 use std::collections::{BinaryHeap, HashMap};
 
 use l7r_gate_research::Error;
-use l7r_guard::shared::pyjson::truthy;
+use l7r_shared::pyjson::truthy;
 use serde_json::Value;
 
 use super::{get, items, number};

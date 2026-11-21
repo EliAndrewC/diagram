@@ -4,7 +4,7 @@ use std::collections::HashMap;
 use std::fmt::Write as _;
 use std::path::{Path, PathBuf};
 
-use l7r_guard::shared::tempdir::TempDir;
+use l7r_shared::tempdir::TempDir;
 use serde_json::json;
 
 use super::*;
@@ -163,7 +163,7 @@ fn what_a_reservation_refuses() {
         let _ = reserve(&ask("glossary", "p", &root, &none));
     }
     std::fs::write(mirror.join(".specify/prefixes.jsonl"), "").unwrap();
-    let held = l7r_guard::shared::tool::flock_within(&mirror.join(".specify/prefixes.lock"), 1.0)
+    let held = l7r_shared::tool::flock_within(&mirror.join(".specify/prefixes.lock"), 1.0)
         .unwrap()
         .unwrap();
     let mut a = ask("glossary", "late", &root, &none);

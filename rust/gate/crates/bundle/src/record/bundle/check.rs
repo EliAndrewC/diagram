@@ -8,10 +8,10 @@ use std::path::{Path, PathBuf};
 use std::sync::LazyLock;
 
 use fancy_regex::Regex;
-use l7r_guard::shared::checks::pages::read_page;
-use l7r_guard::shared::html_text::unescape;
-use l7r_guard::shared::py_text::collapse;
-use l7r_guard::shared::pyjson;
+use l7r_shared::checks::pages::read_page;
+use l7r_shared::html_text::unescape;
+use l7r_shared::py_text::collapse;
+use l7r_shared::pyjson;
 use serde_json::Value;
 
 use super::owed::{self as bo};
@@ -95,7 +95,7 @@ pub fn url_of(entry_html: &str) -> String {
         return String::new();
     };
     // the archive's trim, one implementation (`shared::cited_url`, feature 449 T144)
-    l7r_guard::shared::cited_url::trimmed(&unescape(found.as_str())).to_owned()
+    l7r_shared::cited_url::trimmed(&unescape(found.as_str())).to_owned()
 }
 
 /// The one registry file of a key: its four-digit prefix and the key, nothing between.
@@ -819,10 +819,7 @@ fn main(run: &mut Run, root: &Path, p: &Parsed) -> Result<i32, Fail> {
     let mut wanted: HashSet<String> = p
         .text("--notes", "")
         .split(',')
-        .map(|k| {
-            k.trim_matches(l7r_guard::shared::py_text::is_space)
-                .to_owned()
-        })
+        .map(|k| k.trim_matches(l7r_shared::py_text::is_space).to_owned())
         .filter(|k| !k.is_empty())
         .collect();
     if p.on("--print-notes") {

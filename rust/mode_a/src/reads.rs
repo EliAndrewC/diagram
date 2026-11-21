@@ -69,7 +69,7 @@ mod tests {
     /// directory is no file the writer reads, and is not noted.
     #[test]
     fn a_file_and_a_missing_one_are_noted_and_a_directory_is_not() {
-        let dir = l7r_guard::shared::tempdir::TempDir::new("reads");
+        let dir = l7r_shared::tempdir::TempDir::new("reads");
         let (here, gone) = (dir.path().join("here.css"), dir.path().join("gone.css"));
         std::fs::write(&here, "x").unwrap();
         note(&here);

@@ -10,13 +10,13 @@ use std::fmt::Write as _;
 use std::io::Write as _;
 use std::path::{Path, PathBuf};
 
-use l7r_guard::guards::set_down_hooks::{next_performance, performance};
-use l7r_guard::shared::escape::enough;
-use l7r_guard::shared::log::Entry;
-use l7r_guard::shared::plan_text::task_sections;
-use l7r_guard::shared::py_text::strip;
-use l7r_guard::shared::pyjson::dumps;
-use l7r_guard::shared::speckit::{py_parent, py_path};
+use l7r_shared::escape::enough;
+use l7r_shared::guards::set_down_hooks::{next_performance, performance};
+use l7r_shared::log::Entry;
+use l7r_shared::plan_text::task_sections;
+use l7r_shared::py_text::strip;
+use l7r_shared::pyjson::dumps;
+use l7r_shared::speckit::{py_parent, py_path};
 use serde_json::{json, Value};
 
 use crate::tick::text::re;
@@ -46,7 +46,7 @@ fn task_block(tasks: &str, task: &str) -> String {
 /// GUARD=perf-first`, `make audit`); never fails.
 fn record(event: &str, detail: &str, rule: &str) {
     let detail: String = detail.chars().take(400).collect();
-    let _ = l7r_guard::shared::log::write(&Entry {
+    let _ = l7r_shared::log::write(&Entry {
         guard: "perf-first",
         event,
         detail: &detail,

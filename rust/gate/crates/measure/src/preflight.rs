@@ -156,7 +156,7 @@ fn raw_areas(root: &Path, changes: &[&Change]) -> BTreeSet<String> {
 
 /// `codeid.py`'s batch answer, the one Python library that reads a program: for each change, are its two versions the same but for what the gate does not see?
 fn same_python(root: &Path, tools: &Tools, changes: &[&Change]) -> BTreeSet<String> {
-    let dir = l7r_guard::shared::tempdir::TempDir::new("preflight");
+    let dir = l7r_shared::tempdir::TempDir::new("preflight");
     let mut words = vec!["--same-program".to_owned()];
     for (i, (path, old, new)) in changes.iter().enumerate() {
         let (a, b) = (dir.join(format!("{i}.old")), dir.join(format!("{i}.new")));

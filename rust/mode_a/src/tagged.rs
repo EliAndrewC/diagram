@@ -19,7 +19,7 @@ use std::sync::LazyLock;
 use fancy_regex::Regex;
 use l7r_gate_research::pyre::py;
 use l7r_gate_research::Error;
-use l7r_guard::shared::py_text::collapse;
+use l7r_shared::py_text::collapse;
 
 use crate::labels::hand_sheet::read::{arc, bezier};
 use crate::labels::hand_sheet::DISC_SAG_PX;

@@ -17,7 +17,7 @@ use std::path::Path;
 use std::sync::LazyLock;
 
 use fancy_regex::Regex;
-use l7r_guard::shared::py_text::strip;
+use l7r_shared::py_text::strip;
 use serde_json::Value;
 
 use super::events::{

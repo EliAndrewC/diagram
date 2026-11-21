@@ -8,8 +8,8 @@ use std::sync::LazyLock;
 use fancy_regex::Regex;
 use serde_json::{json, Map, Value};
 
-use l7r_guard::shared::py_text::strip;
-use l7r_guard::shared::pyjson::py_str;
+use l7r_shared::py_text::strip;
+use l7r_shared::pyjson::py_str;
 
 use super::super::work_budget_bundle::{loads, num};
 use super::{
@@ -132,7 +132,7 @@ fn accepted_by(root: &Path, derivation: &str, phase: &str, trigger: &str) -> R<b
     if !path.is_file() {
         return Ok(false);
     }
-    for line in l7r_guard::shared::speckit::splitlines(&read(&path)?) {
+    for line in l7r_shared::speckit::splitlines(&read(&path)?) {
         let Ok(r) = loads(line) else {
             continue;
         };
@@ -180,7 +180,7 @@ fn missed_work(root: &Path, derivation: &str) -> R<Vec<String>> {
         return Ok(vec![]);
     };
     let body = after.split_once("\n## ").map_or(after, |(b, _)| b);
-    Ok(l7r_guard::shared::speckit::splitlines(body)
+    Ok(l7r_shared::speckit::splitlines(body)
         .into_iter()
         .filter_map(|ln| {
             ln.strip_prefix("- ")
@@ -506,7 +506,7 @@ pub(super) fn set_budget(root: &Path, pin: &Pin) -> R<String> {
         let bytes = std::fs::read(root.join(derivation)).unwrap_or_default();
         entry.insert(
             "derivation_sha".to_owned(),
-            json!(l7r_guard::shared::sha256::hex(&bytes)),
+            json!(l7r_shared::sha256::hex(&bytes)),
         );
         // its recorded work-budget verdicts
         let dir = root.join(derivation);

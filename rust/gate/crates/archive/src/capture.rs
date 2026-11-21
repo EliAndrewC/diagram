@@ -4,7 +4,7 @@
 
 use std::path::Path;
 
-use l7r_guard::shared::sha256;
+use l7r_shared::sha256;
 use serde_json::{json, Map, Value};
 
 use crate::fetch::{ext_of, failure, fetch, revision, snapshot_raw, wayback, Client, Fetched};

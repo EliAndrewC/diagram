@@ -149,7 +149,7 @@ fn required<'a>(p: &'a Pass, key: &str) -> Result<&'a str, String> {
 
 /// `re.sub(r"\s+", " ", cell).strip()`.
 fn norm(cell: &str) -> String {
-    l7r_guard::shared::py_text::collapse(cell)
+    l7r_shared::py_text::collapse(cell)
 }
 
 /// A ledger row of these cells: each normalized, its pipes turned to slashes.
@@ -168,7 +168,7 @@ fn usage(why: &str) -> Reply {
 
 /// The ledger write recorded in the gate tree's usage log as an automatic step (`_usage`), by the one writer (feature 449 T129).
 fn record_usage(env: &Env, outcome: &str) {
-    l7r_guard::shared::usage::record(&env.tree, USAGE_LOG_TOOL, "step", outcome);
+    l7r_shared::usage::record(&env.tree, USAGE_LOG_TOOL, "step", outcome);
 }
 
 /// The ledger opened to append, created as `open(..., "a")` creates it.

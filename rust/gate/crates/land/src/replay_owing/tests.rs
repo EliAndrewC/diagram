@@ -12,13 +12,13 @@ const OLD_MODAL_OWED: &str = "def owed(root, base):\n    return [('modal-depicti
 const OLD_CLAIMS: &str = "QUESTIONS = 'research/questions'\n\ndef current(root):\n    return root\n\ndef owed(cur, index, qdir, store):\n    import pathlib\n    return [['k1', 'new'], ['k2', 'triage']] if (pathlib.Path(cur) / 'second').exists() else [['k1', 'new']]\n";
 
 /// A history of three commits, the last two the replayed ones, its own `scripts/record/` stand-ins.
-fn history(tag: &str) -> (l7r_guard::shared::tempdir::TempDir, PathBuf, Vec<String>) {
+fn history(tag: &str) -> (l7r_shared::tempdir::TempDir, PathBuf, Vec<String>) {
     history_of(tag, 3)
 }
 
 /// The first `n` commits of `history`: a test replaying only the second needs no third, two git processes fewer (feature 449 T167;
 /// one `git fast-import` in place of the adds and commits measured slower, 15 ms against about 4 a commit).
-fn history_of(tag: &str, n: usize) -> (l7r_guard::shared::tempdir::TempDir, PathBuf, Vec<String>) {
+fn history_of(tag: &str, n: usize) -> (l7r_shared::tempdir::TempDir, PathBuf, Vec<String>) {
     let dir = scratch(tag);
     let root = dir.join("repo");
     std::fs::create_dir_all(&root).unwrap();

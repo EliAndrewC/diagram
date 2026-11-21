@@ -15,9 +15,9 @@ use std::path::{Component, Path, PathBuf};
 
 use l7r_gate_core::measure::tool_inventory::targets;
 use l7r_gate_core::record::args::{parse_with, Spec};
-use l7r_guard::shared::log::civil;
-use l7r_guard::shared::py_text::split;
-use l7r_guard::shared::speckit::splitlines;
+use l7r_shared::log::civil;
+use l7r_shared::py_text::split;
+use l7r_shared::speckit::splitlines;
 use serde_json::{json, Map, Value};
 
 use super::events::{git, or_s, py_str, re, truthy, Raised};

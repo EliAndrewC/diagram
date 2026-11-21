@@ -28,16 +28,16 @@ use std::path::Path;
 use std::sync::LazyLock;
 
 use fancy_regex::Regex;
-use l7r_guard::shared::checks::resolved;
-use l7r_guard::shared::py_text::{strip, SPACE_CLASS};
-use l7r_guard::shared::speckit::{py_path, splitlines};
+use l7r_shared::checks::resolved;
+use l7r_shared::py_text::{strip, SPACE_CLASS};
+use l7r_shared::speckit::{py_path, splitlines};
 
 use crate::Reply;
 
 const OUT: &str = "docs/make-targets.html";
 
 fn re(pattern: &str) -> Regex {
-    l7r_guard::shared::regex::build(&pattern.replace(r"\s", &format!("[{SPACE_CLASS}]")))
+    l7r_shared::regex::build(&pattern.replace(r"\s", &format!("[{SPACE_CLASS}]")))
         .unwrap_or_else(|e| unreachable!("{e}"))
 }
 
@@ -150,7 +150,7 @@ fn parse(text: &str) -> (Vec<Row>, Vec<String>) {
     let mut with_rule = BTreeSet::new();
     for caps in WITH_RULE.captures_iter(text).map_while(Result::ok) {
         with_rule.extend(
-            l7r_guard::shared::py_text::split(group(&caps, 1))
+            l7r_shared::py_text::split(group(&caps, 1))
                 .into_iter()
                 .map(str::to_owned),
         );
@@ -167,7 +167,7 @@ fn parse(text: &str) -> (Vec<Row>, Vec<String>) {
 
 /// `html.escape(text)`: `&`, `<`, `>`, `"` and `'` - the guard's, one implementation (feature 449 T144).
 fn escape(text: &str) -> String {
-    l7r_guard::shared::html_text::escape(text, true)
+    l7r_shared::html_text::escape(text, true)
 }
 
 /// The arguments column: each documented argument on its own line with what it DOES. An undocumented argument still shows (its bare

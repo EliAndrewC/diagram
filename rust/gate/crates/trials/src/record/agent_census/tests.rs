@@ -21,7 +21,7 @@ fn turn(id: &str, model: &str, n: i64) -> String {
 }
 
 /// A projects directory: one check run, two ad-hoc ones, a run outside the repository and one that never answered.
-fn projects(tag: &str) -> l7r_guard::shared::tempdir::TempDir {
+fn projects(tag: &str) -> l7r_shared::tempdir::TempDir {
     let root = crate::checks::scratch(tag);
     let run = "-diagram-x/s1/subagents";
     put(

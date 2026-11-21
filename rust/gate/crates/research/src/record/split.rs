@@ -6,7 +6,7 @@
 use std::sync::LazyLock;
 
 use fancy_regex::Regex;
-use l7r_guard::shared::py_text::repr;
+use l7r_shared::py_text::repr;
 
 use crate::{re, Error, Result};
 

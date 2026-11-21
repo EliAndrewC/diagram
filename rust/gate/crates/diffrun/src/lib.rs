@@ -20,9 +20,9 @@ use std::path::Path;
 use std::time::SystemTime;
 
 use l7r_gate_core::Reply;
-use l7r_guard::shared::escape::enough;
-use l7r_guard::shared::log::{civil, place};
-use l7r_guard::shared::pyjson::dumps;
+use l7r_shared::escape::enough;
+use l7r_shared::log::{civil, place};
+use l7r_shared::pyjson::dumps;
 use serde_json::json;
 
 use runner::Opts;
@@ -55,7 +55,7 @@ fn log_escape(ctx: &Ctx, event: &str, rule: &str, reason: &str, file: &str) {
     let (y, mo, d, h, mi, s) = civil(secs);
     let entry = json!({
         "utc": format!("{y:04}-{mo:02}-{d:02}T{h:02}:{mi:02}:{s:02}Z"), "guard": "diff-run", "event": event, "rule": rule,
-        "session": ctx.session, "session_name": l7r_guard::shared::speckit::py_name(&ctx.cwd), "cwd": ctx.cwd.to_string_lossy(),
+        "session": ctx.session, "session_name": l7r_shared::speckit::py_name(&ctx.cwd), "cwd": ctx.cwd.to_string_lossy(),
         "tool": "", "transcript": "", "detail": reason.chars().take(200).collect::<String>(),
         "command": format!("l7r-gate diff-run {file} --all"), "context": {"cases": file},
     });

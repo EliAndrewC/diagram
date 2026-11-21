@@ -15,7 +15,7 @@ use std::process::Command;
 use std::sync::LazyLock;
 
 use fancy_regex::{Captures, Regex};
-use l7r_guard::guards::feature_approval_hooks::{
+use l7r_shared::guards::feature_approval_hooks::{
     form_problem, FIRST as APPROVAL_FIRST, FORM as APPROVAL_FORM,
 };
 use serde_json::Value;
@@ -39,7 +39,7 @@ const FIGURE_SECTIONS: [&str; 4] = [
 const NARRATING_SECTIONS: [&str; 2] = ["decisions recorded", "review history"];
 
 fn re(pattern: &str) -> Regex {
-    l7r_guard::shared::regex::build(pattern).unwrap_or_else(|e| unreachable!("{e}"))
+    l7r_shared::regex::build(pattern).unwrap_or_else(|e| unreachable!("{e}"))
 }
 
 static POINTER: LazyLock<Regex> =

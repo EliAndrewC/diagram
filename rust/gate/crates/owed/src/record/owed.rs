@@ -3,13 +3,13 @@
 pub mod answers;
 pub mod reply;
 
-use l7r_guard::shared::env::Rooted;
+use l7r_shared::env::Rooted;
 use std::collections::{HashMap, HashSet};
 use std::path::Path;
 use std::sync::LazyLock;
 
 use fancy_regex::Regex;
-use l7r_guard::shared::py_text::split;
+use l7r_shared::py_text::split;
 use serde_json::{json, Value};
 
 pub use answers::{

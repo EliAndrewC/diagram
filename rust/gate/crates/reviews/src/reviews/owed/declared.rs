@@ -532,7 +532,7 @@ fn joined_entries(text: &str) -> Lines {
 /// every line had landed, another feature's (T236's commit, replayed with its own line taken out, was refused nothing).
 fn started_answers(root: &Path, features: &[String], shown: &mut Shown) -> (bool, String, String) {
     for f in features {
-        let task = l7r_guard::shared::speckit::active_task(&root.join(f)).unwrap_or_default();
+        let task = l7r_shared::speckit::active_task(&root.join(f)).unwrap_or_default();
         if task.is_empty() {
             continue;
         }

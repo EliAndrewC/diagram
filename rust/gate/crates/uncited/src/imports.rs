@@ -11,8 +11,8 @@ use fancy_regex::Regex;
 use l7r_gate_archive::backfill::lanes;
 use l7r_gate_archive::fetch::fetch;
 use l7r_gate_research::pages::{cached, entry_dir, put, Stored};
-use l7r_guard::shared::consulted::{self, norm};
-use l7r_guard::shared::pyjson::py_str;
+use l7r_shared::consulted::{self, norm};
+use l7r_shared::pyjson::py_str;
 use serde_json::{json, Value};
 
 use crate::fetch::{live_text, Lazy, Start};

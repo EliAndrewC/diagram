@@ -15,7 +15,7 @@ reads = ["tests/fixtures/rust/fixture/", ".cargo/"]
 fancy-regex = { workspace = true }
 l7r_gate_core = { path = "../core" }
 l7r_gate_tree = { path = "../tree" }
-l7r_guard = { path = "../../../guard" }
+l7r_shared = { path = "../../../guard/shared" }
 serde_json = { workspace = true }
 
 [dev-dependencies]

@@ -10,14 +10,14 @@
 //!     the ported Python's failures and arithmetic - NONE: how an error is printed, and Python's float arithmetic, rounding and formatting reproduced to the bit, deciding nothing about a building
 
 use l7r_gate_research::{digit_value, Error};
-use l7r_guard::shared::py_text::{py_float_text, repr};
+use l7r_shared::py_text::{py_float_text, repr};
 use serde_json::Value;
 
 /// The last line of the traceback `err` would have ended a Python run with: a `KeyError`'s message is its key's `repr`.
 #[must_use]
 pub fn uncaught(err: &Error) -> String {
     let message = if err.kind == "KeyError" {
-        l7r_guard::shared::py_text::repr(&err.message)
+        l7r_shared::py_text::repr(&err.message)
     } else {
         err.message.clone()
     };
@@ -53,7 +53,7 @@ pub fn os_error(err: &std::io::Error, path: &str) -> Error {
         kind,
         format!(
             "[Errno {code}] {strerror}: {}",
-            l7r_guard::shared::py_text::repr(path)
+            l7r_shared::py_text::repr(path)
         ),
     )
 }
@@ -155,14 +155,14 @@ pub fn sum(values: impl IntoIterator<Item = f64>) -> f64 {
     total
 }
 
-/// Python's `f"{v:g}"`: [`l7r_guard::shared::py_text::fmt_g`], a NaN named as Python names it (feature 449 T174, the size table's pixel
+/// Python's `f"{v:g}"`: [`l7r_shared::py_text::fmt_g`], a NaN named as Python names it (feature 449 T174, the size table's pixel
 /// positions).
 #[must_use]
 pub fn fmt_g(v: f64) -> String {
     if v.is_nan() {
         "nan".to_owned()
     } else {
-        l7r_guard::shared::py_text::fmt_g(v)
+        l7r_shared::py_text::fmt_g(v)
     }
 }
 

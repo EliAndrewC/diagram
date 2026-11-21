@@ -8,8 +8,8 @@ use super::{
     listing, matches, record, salt, selftest, GATE_RECIPE,
 };
 
-fn repo(tag: &str) -> l7r_guard::shared::tempdir::TempDir {
-    let dir = l7r_guard::shared::tempdir::TempDir::new(&format!("gate-stamp-{tag}"));
+fn repo(tag: &str) -> l7r_shared::tempdir::TempDir {
+    let dir = l7r_shared::tempdir::TempDir::new(&format!("gate-stamp-{tag}"));
     git(&dir, &["init", "-q", "-b", "main"]);
     git(&dir, &["config", "user.email", "t@t"]);
     git(&dir, &["config", "user.name", "t"]);
@@ -190,7 +190,7 @@ fn the_hash_is_salted_with_the_gate_s_standard_and_keeps_a_gone_file() {
     let gone = [dir.join("gone.txt")];
     let hash = hash_files(&gone, &dir, false, "salt", "python3").unwrap();
     let text = format!("{GATE_RECIPE}\0salt\0{}\0<missing>\0", gone[0].display());
-    assert_eq!(hash, l7r_guard::shared::sha256::hex(text.as_bytes()));
+    assert_eq!(hash, l7r_shared::sha256::hex(text.as_bytes()));
     put(&dir, "a.txt", "1\n");
     let file = [dir.join("a.txt")];
     let semantic = hash_files(&file, &dir, false, "", "python3").unwrap();
@@ -289,7 +289,7 @@ fn what_git_cannot_answer_refuses_rather_than_passes() {
     let refused = call(&dir, "python3", &["--check", "no-such-base"]);
     assert_eq!(refused.code, 1);
     assert!(refused.stderr.contains("git diff"));
-    let not_a_repo = l7r_guard::shared::tempdir::TempDir::new("gate-stamp-none");
+    let not_a_repo = l7r_shared::tempdir::TempDir::new("gate-stamp-none");
     std::fs::create_dir_all(&not_a_repo).unwrap();
     for args in [
         ["--key", "diagram"],
@@ -411,7 +411,7 @@ fn outside_a_repository_it_stands_aside_and_nothing_is_fresh() {
 }
 
 /// A repository that can answer for Python itself: the real `codeid.py`.
-fn with_codeid(tag: &str) -> l7r_guard::shared::tempdir::TempDir {
+fn with_codeid(tag: &str) -> l7r_shared::tempdir::TempDir {
     let dir = repo(tag);
     let real = Path::new(env!("CARGO_MANIFEST_DIR")).join("../../../../scripts");
     std::fs::create_dir_all(dir.join("scripts/gates")).unwrap();

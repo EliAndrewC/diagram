@@ -54,7 +54,7 @@ pub fn token_from(gate: &Path, mirror: &Path) -> String {
         .output()
         .map_or_else(
             |_| String::new(),
-            |o| l7r_guard::shared::py_text::strip(&String::from_utf8_lossy(&o.stdout)).to_owned(),
+            |o| l7r_shared::py_text::strip(&String::from_utf8_lossy(&o.stdout)).to_owned(),
         )
 }
 
@@ -101,7 +101,7 @@ impl Archive {
     /// The lock file cannot be made, or the lock is not had in time.
     pub fn locked(&self, timeout: f64) -> Result<std::fs::File> {
         let at = self.home.join(LOCK);
-        match l7r_guard::shared::tool::flock_within(&at, timeout) {
+        match l7r_shared::tool::flock_within(&at, timeout) {
             Ok(Some(f)) => Ok(f),
             Ok(None) => Err(Error::new(
                 "TimeoutError",
@@ -174,7 +174,7 @@ impl Archive {
                 "RuntimeError",
                 format!(
                     "could not clone the archive: {}",
-                    first_chars(l7r_guard::shared::py_text::strip(&said), 300)
+                    first_chars(l7r_shared::py_text::strip(&said), 300)
                 ),
             ));
         }
@@ -195,7 +195,7 @@ impl Archive {
     pub fn unpushed(&self) -> u64 {
         std::fs::read_to_string(self.home.join(UNPUSHED))
             .ok()
-            .and_then(|t| l7r_guard::shared::py_text::strip(&t).parse().ok())
+            .and_then(|t| l7r_shared::py_text::strip(&t).parse().ok())
             .unwrap_or(0)
     }
 
@@ -286,7 +286,7 @@ impl Archive {
         let done = self.git(&["push", "-q", "origin", "HEAD:main"], false)?;
         if !done.status.success() {
             let said = String::from_utf8_lossy(&done.stderr);
-            let said = first_chars(l7r_guard::shared::py_text::strip(&said), 300);
+            let said = first_chars(l7r_shared::py_text::strip(&said), 300);
             return Ok(if said.is_empty() {
                 format!("git push exited {}", done.status.code().unwrap_or(-1))
             } else {
@@ -350,7 +350,7 @@ pub fn first_chars(text: &str, n: usize) -> String {
 
 /// `f"{x:g}"` for a timeout.
 fn py_g(x: f64) -> String {
-    l7r_guard::shared::pyjson::py_float(x)
+    l7r_shared::pyjson::py_float(x)
         .trim_end_matches(".0")
         .to_owned()
 }
@@ -359,7 +359,7 @@ fn py_g(x: f64) -> String {
 fn py_list(items: &[&str]) -> String {
     let inner: Vec<String> = items
         .iter()
-        .map(|s| l7r_guard::shared::pyjson::value_repr(&serde_json::json!(s)))
+        .map(|s| l7r_shared::pyjson::value_repr(&serde_json::json!(s)))
         .collect();
     format!("[{}]", inner.join(", "))
 }

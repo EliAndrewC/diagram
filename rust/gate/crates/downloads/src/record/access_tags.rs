@@ -37,7 +37,7 @@ const MANIFEST: &str = "research/archive";
 const USAGE: &str = "usage: l7r-gate record access-tags report [--key K] [--json] | set <key|download:ID> <state> <date> <reason>\n";
 
 fn compiled(pattern: &str) -> Regex {
-    l7r_guard::shared::regex::build(pattern).unwrap_or_else(|e| unreachable!("{e}"))
+    l7r_shared::regex::build(pattern).unwrap_or_else(|e| unreachable!("{e}"))
 }
 
 static KEY_HEAD: LazyLock<Regex> = LazyLock::new(|| compiled(r#"<h3 id="([^"]+)""#));

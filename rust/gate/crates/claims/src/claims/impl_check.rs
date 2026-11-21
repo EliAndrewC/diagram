@@ -24,9 +24,9 @@ use std::path::{Path, PathBuf};
 use std::sync::LazyLock;
 
 use fancy_regex::Regex;
-use l7r_guard::shared::py_text::strip;
-use l7r_guard::shared::pyjson::dumps;
-use l7r_guard::shared::speckit::splitlines;
+use l7r_shared::py_text::strip;
+use l7r_shared::pyjson::dumps;
+use l7r_shared::speckit::splitlines;
 use serde_json::Value;
 
 use super::index::{current, load_map, owed, INDEX, QUESTIONS, STORE};
@@ -41,8 +41,7 @@ const RECORD: &str = "implementation-check.md";
 const USAGE: &str = "impl_check.py <feature dir>           what is owed and what is missing; exit 1 if anything is missing";
 
 fn re(p: &str) -> Regex {
-    l7r_guard::shared::regex::build(p)
-        .unwrap_or_else(|_| unreachable!("a pattern of the code's own"))
+    l7r_shared::regex::build(p).unwrap_or_else(|_| unreachable!("a pattern of the code's own"))
 }
 
 /// A findings page, under the project's old place too (before feature 329 moved it to the root a commit named its pages under it; the
@@ -123,7 +122,7 @@ fn py_int(s: &str) -> Result<i128, String> {
     let bad = || {
         format!(
             "ValueError: invalid literal for int() with base 10: {}",
-            l7r_guard::shared::py_text::repr(s)
+            l7r_shared::py_text::repr(s)
         )
     };
     if !ok {
@@ -191,7 +190,7 @@ fn shown(v: &Value) -> Result<String, String> {
         Value::Null | Value::Bool(false) | Value::String(_) => "-".to_owned(),
         Value::Number(n) if n.as_f64() == Some(0.0) => "-".to_owned(),
         Value::Bool(true) => "1".to_owned(),
-        Value::Number(_) => l7r_guard::shared::pyjson::py_str(v),
+        Value::Number(_) => l7r_shared::pyjson::py_str(v),
         Value::Array(a) if a.is_empty() => "-".to_owned(),
         Value::Object(o) if o.is_empty() => "-".to_owned(),
         _ => {

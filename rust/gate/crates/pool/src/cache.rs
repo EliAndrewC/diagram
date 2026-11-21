@@ -146,7 +146,7 @@ fn digest(path: &Path) -> (String, u64) {
         |_| ("-".to_owned(), 0),
         |b| {
             (
-                l7r_guard::shared::sha256::hex(&b),
+                l7r_shared::sha256::hex(&b),
                 (b.len() as u64).div_ceil(engine::BLOCK),
             )
         },
@@ -263,7 +263,7 @@ pub fn run(
     let io = at(&dir);
     std::fs::create_dir_all(&dir).map_err(&io)?;
     let wait = opts.lock_wait;
-    let lock = l7r_guard::shared::tool::flock_within(&dir.join(LOCK), wait)
+    let lock = l7r_shared::tool::flock_within(&dir.join(LOCK), wait)
         .map_err(&io)?
         .ok_or_else(|| {
             format!(
@@ -387,7 +387,7 @@ impl Run<'_> {
                 let _ = writeln!(t, "{p}\t{}", r.stat.cells().join("\t"));
                 t
             });
-        l7r_guard::shared::sha256::hex(text.as_bytes())
+        l7r_shared::sha256::hex(text.as_bytes())
     }
 
     /// The rows of a read set, kept for the map `id`: each row added or refreshed, a row whose digest moves first removing every other

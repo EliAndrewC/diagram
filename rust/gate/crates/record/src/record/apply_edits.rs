@@ -14,10 +14,10 @@ use std::sync::LazyLock;
 use fancy_regex::Regex;
 use l7r_gate_research::prepass::prepass_words;
 use l7r_gate_research::pyre::py;
-use l7r_guard::guards::house_style_hooks::americanize;
-use l7r_guard::shared::env::Rooted;
-use l7r_guard::shared::py_text::{repr, strip};
-use l7r_guard::shared::pyjson::{dumps, py_str};
+use l7r_shared::env::Rooted;
+use l7r_shared::guards::house_style_hooks::americanize;
+use l7r_shared::py_text::{repr, strip};
+use l7r_shared::pyjson::{dumps, py_str};
 use serde_json::{json, Value};
 
 use super::reserve::{reserve, Ask, Refused};
@@ -34,7 +34,7 @@ const ROOTS: [&str; 4] = [RECORD, MODALS, SHEET_MODALS, MODAL_FILES];
 const TERMS: &str = "l7r/diagram/interactive/assets/glossary/";
 
 static EDIT: LazyLock<Regex> = LazyLock::new(|| {
-    l7r_guard::shared::regex::build(
+    l7r_shared::regex::build(
         r"(?sm)^(?P<ind>[ \t]*)EDIT[ \t]+`?(?P<path>[^\n`]+?)`?[ \t]*\n\k<ind><<<\n(?P<old>.*?)\n\k<ind>===\n(?:(?P<new>.*?)\n)??\k<ind>>>>[ \t]*$",
     )
     .unwrap_or_else(|e| unreachable!("{e}"))
@@ -293,7 +293,7 @@ fn apply_term(root: &Path, b: &Term, dry: bool) -> Result<String, String> {
         .flatten()
     {
         if e.path().extension().is_some_and(|x| x == "json") {
-            let data: Value = l7r_guard::shared::pyjson::loads(&read(&e.path())?)
+            let data: Value = l7r_shared::pyjson::loads(&read(&e.path())?)
                 .map_err(|e| format!("JSONDecodeError: {e}"))?;
             let t = data.get("term").map_or_else(String::new, |v| {
                 v.as_str().map(str::to_lowercase).unwrap_or_default()
@@ -320,7 +320,7 @@ fn apply_term(root: &Path, b: &Term, dry: bool) -> Result<String, String> {
         url: "",
         tags: "",
         command: std::env::args().collect::<Vec<_>>().join(" "),
-        var: &l7r_guard::shared::consulted::var,
+        var: &l7r_shared::consulted::var,
     };
     match reserve(&ask) {
         Ok(path) => Ok(format!(
@@ -400,7 +400,7 @@ pub fn cli_in(args: &[String], cwd: &Rooted) -> Reply {
         }
     };
     let mut found = blocks(&report);
-    let form = l7r_guard::shared::checks::reply::py_lines(&report)
+    let form = l7r_shared::checks::reply::py_lines(&report)
         .into_iter()
         .map(strip)
         .find(|l| !l.is_empty())

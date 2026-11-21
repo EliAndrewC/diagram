@@ -215,7 +215,7 @@ fn write(dir: &Path, members: &[Value]) {
 
 /// The record's `flock`, held while it is read and written.
 pub(super) fn mutex(dir: &Path, secs: f64) -> Result<std::fs::File, String> {
-    match l7r_guard::shared::tool::flock_within(&dir.join(MUTEX), secs) {
+    match l7r_shared::tool::flock_within(&dir.join(MUTEX), secs) {
         Ok(Some(file)) => Ok(file),
         Ok(None) => Err(format!(
             "rust-checks: the lock record's own lock {} was held past {secs} s - a process stopped while it held it; it frees when that process ends\n",
@@ -261,7 +261,7 @@ fn holder(m: &Value) -> String {
         clippy::cast_sign_loss,
         reason = "a whole second since the epoch"
     )]
-    let (_, _, _, h, mi, s) = l7r_guard::shared::log::civil(m["t"].as_f64().unwrap_or(0.0) as u64);
+    let (_, _, _, h, mi, s) = l7r_shared::log::civil(m["t"].as_f64().unwrap_or(0.0) as u64);
     format!(
         "pid {} (`rust {}`), of the run `{}` (pid {}), since {h:02}:{mi:02}:{s:02} UTC",
         m["pid"],

@@ -8,7 +8,7 @@ use std::collections::{BTreeMap, BTreeSet};
 
 use fancy_regex::Regex;
 use l7r_gate_core::difflib::unified_diff;
-use l7r_guard::shared::sha256::hex;
+use l7r_shared::sha256::hex;
 use serde_json::{json, Value};
 
 use crate::cases::{Kind, Norm, Target};

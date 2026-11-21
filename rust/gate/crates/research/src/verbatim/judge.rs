@@ -8,7 +8,7 @@ use std::sync::LazyLock;
 
 use fancy_regex::Regex;
 use l7r_gate_core::difflib::{longest_match, opcodes, ratio, Tag};
-use l7r_guard::shared::py_text::{repr, SPACE_CLASS};
+use l7r_shared::py_text::{repr, SPACE_CLASS};
 use serde_json::{json, Map, Value};
 
 use super::fetch::Got;
@@ -306,8 +306,7 @@ pub fn judge_note(
 
 /// A citation's readability: READABLE is the live link's verdict, an archived text's confirmation counted only where that link answered.
 fn readability(results: &[Map<String, Value>], states: &[Got], fetched: bool) -> &'static str {
-    let flag =
-        |r: &Map<String, Value>, k: &str| r.get(k).is_some_and(l7r_guard::shared::pyjson::truthy);
+    let flag = |r: &Map<String, Value>, k: &str| r.get(k).is_some_and(l7r_shared::pyjson::truthy);
     if results.is_empty() {
         "-"
     } else if states.iter().all(|s| s.state == "OWN") {

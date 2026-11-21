@@ -48,7 +48,7 @@ fn canon(p: &Path) -> PathBuf {
 fn git_lines(root: &Path, args: &[&str]) -> Vec<String> {
     git(root, args)
         .lines()
-        .map(|l| l7r_guard::shared::py_text::strip(l).to_owned())
+        .map(|l| l7r_shared::py_text::strip(l).to_owned())
         .filter(|l| !l.is_empty())
         .collect()
 }
@@ -130,7 +130,7 @@ pub fn open_ids(d: &Path) -> Result<HashSet<String>, Fail> {
 pub fn rows(d: &Path) -> Result<Vec<Value>, Fail> {
     read_or_empty(&d.join(RECORD))?
         .lines()
-        .filter(|l| !l7r_guard::shared::py_text::strip(l).is_empty())
+        .filter(|l| !l7r_shared::py_text::strip(l).is_empty())
         .map(|l| serde_json::from_str(l).map_err(|e| format!("json.decoder.JSONDecodeError: {e}")))
         .collect()
 }
@@ -206,7 +206,7 @@ fn file_into(text: &str, task: &str, keys: &[String], by: &str) -> Result<String
 /// A new open box for the carried keys, its id one past every id of the feature's - `done` the ticked tasks archived in tasks-done.md,
 /// whose ids are taken (feature 449 T142).
 fn new_box(text: &str, done: &str, keys: &[String], ruling: &str) -> (String, String) {
-    let all = l7r_guard::shared::speckit::tasks::joined(text, done);
+    let all = l7r_shared::speckit::tasks::joined(text, done);
     let top = BOX
         .captures_iter(&all)
         .map_while(Result::ok)
@@ -314,10 +314,10 @@ pub fn carry(
     } else {
         format!("the round arbiter's ruling {ruling}")
     };
-    let done = l7r_guard::shared::speckit::tasks::done_text(&d)?;
+    let done = l7r_shared::speckit::tasks::done_text(&d)?;
     let (text, task) = if task.is_empty() {
         new_box(&text, &done, keys, ruling)
-    } else if l7r_guard::shared::speckit::tasks::archived(&done, task) {
+    } else if l7r_shared::speckit::tasks::archived(&done, task) {
         // a ticked task archived in tasks-done.md is ticked, not missing (feature 449 T142)
         return Err(format!(
             "{task} is ticked; file into an open task, or leave T= off for a new one"
@@ -347,7 +347,7 @@ pub fn carry(
 /// The claim key a classified line (`f"{verdict:<14} {key} - {note}"`) names.
 pub fn key_of(line: &str) -> String {
     let rest: String = line.chars().skip(14).collect();
-    l7r_guard::shared::py_text::strip(rest.split(" - ").next().unwrap_or_default()).to_owned()
+    l7r_shared::py_text::strip(rest.split(" - ").next().unwrap_or_default()).to_owned()
 }
 
 /// key -> `<feature> <task>` for every DRIFTED claim whose text names an open task row naming its unit, and every DRIFTED claim the arbiter accepted.
@@ -478,10 +478,9 @@ pub fn classified(reader: &mut Reader, root: &Path, at: &Reading) -> Result<Clas
     // a rebuilt file's old claims wait on what is owed under its `as` paths (ask:449-T152-rebuilt-claims)
     let owed_keys: Vec<String> = due.iter().map(|(k, _)| k.clone()).collect();
     let mut mb =
-        l7r_guard::shared::py_text::strip(&git(root, &["merge-base", "HEAD", "origin/main"]))
-            .to_owned();
+        l7r_shared::py_text::strip(&git(root, &["merge-base", "HEAD", "origin/main"])).to_owned();
     if mb.is_empty() {
-        l7r_guard::shared::py_text::strip(&git(root, &["rev-parse", "HEAD"])).clone_into(&mut mb);
+        l7r_shared::py_text::strip(&git(root, &["rev-parse", "HEAD"])).clone_into(&mut mb);
     }
     let base_index = if mb.is_empty() {
         Index::new()
@@ -668,7 +667,7 @@ pub fn record_known(reader: &mut Reader, root: &Path, at: &Reading) -> Result<Ve
         .filter_map(|l| KNOWN_LINE.captures(l).ok().flatten());
     for m in found {
         let (key, feat, task) = (key_of(&m[1]), m[2].to_owned(), m[3].to_owned());
-        let finding: String = l7r_guard::shared::py_text::strip(&m[1])
+        let finding: String = l7r_shared::py_text::strip(&m[1])
             .chars()
             .take(400)
             .collect();

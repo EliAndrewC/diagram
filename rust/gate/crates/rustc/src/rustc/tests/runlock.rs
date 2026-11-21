@@ -259,7 +259,7 @@ fn a_directory_that_cannot_be_made_or_locked_is_said() {
     let why = mutex(&file, 0.1).err().unwrap();
     assert!(why.contains("cannot open the lock record"), "{why}");
     // the record's own lock held elsewhere: said, not waited on forever
-    let _other = l7r_guard::shared::tool::flock_within(&dir.join(MUTEX), 1.0)
+    let _other = l7r_shared::tool::flock_within(&dir.join(MUTEX), 1.0)
         .unwrap()
         .unwrap();
     let why = mutex(&dir, 0.05).err().unwrap();

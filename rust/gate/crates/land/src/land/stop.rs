@@ -3,7 +3,7 @@
 //! own group - `make done` and the other runs it waits on run there - and exits 143, as `land.py`'s `_stopped` did. `make land-stop`
 //! ([`stop`]) sends that TERM to this tree's landing.
 //!
-//! The catch is the guard's one INT and TERM handler (`l7r_guard::shared::tempdir::before_exit`), which runs [`stopped`] first and then
+//! The catch is the guard's one INT and TERM handler (`l7r_shared::tempdir::before_exit`), which runs [`stopped`] first and then
 //! removes the process's scratch directories and exits as the signal would: a handler of the land's own was replaced the moment an
 //! in-process call made its first `TempDir` (the differential's stopped landing, 2026-11-12: exit 143 with its gate left running). An INT
 //! (a Ctrl-C) stops nothing more than the guard's handler does: `land.py`'s `KeyboardInterrupt` ran no `_stopped` either.
@@ -51,7 +51,7 @@ pub(super) fn release(pgid: u32) {
 
 /// TERM caught for the rest of the process.
 pub(super) fn catch_term() {
-    l7r_guard::shared::tempdir::before_exit(stopped);
+    l7r_shared::tempdir::before_exit(stopped);
 }
 
 /// `_stopped`, on TERM: TERM ignored from here, every held group stopped, then the landing's own group (the gate's `make` and every run

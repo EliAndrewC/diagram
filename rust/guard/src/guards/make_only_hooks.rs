@@ -36,7 +36,7 @@ pub const GUARD: Guard = Guard {
 /// CONVENTION: the landing lint's limit, as `hm_make.py` gave `ruff`.
 const LINT_LIMIT: Duration = Duration::from_secs(60);
 /// The guard files by name, for the patterns over a command's text; T229 added the guards' own sources (every file there but a test file).
-const GUARD_FILE: &str = r"[\w./-]*(?:Makefile|[\w-]*-hooks\.sh|settings\.json|tests/rolls\.py|dev/(?:switches|work-budget)\.json|rust/guard/src/(?!(?:[\w.-]+/)*tests(?:\.rs|/))[\w./-]+|rust/guard/Cargo\.toml|l7r-guard\.sh)";
+const GUARD_FILE: &str = r"[\w./-]*(?:Makefile|[\w-]*-hooks\.sh|settings\.json|tests/rolls\.py|dev/(?:switches|work-budget)\.json|rust/guard/(?:shared/)?src/(?!(?:[\w.-]+/)*tests(?:\.rs|/))[\w./-]+|rust/guard/(?:shared/)?Cargo\.toml|l7r-guard\.sh)";
 /// The names a command must hold before its writes are resolved: each guard file's last part, so a `cd` into its directory still
 /// names it (T227: `cd dev && cat > switches.json` held none of the old list, which had `tests/rolls.py` and no `dev/` file).
 const GUARD_NAMES: [&str; 6] = [
@@ -49,7 +49,7 @@ const GUARD_NAMES: [&str; 6] = [
 ];
 /// What else makes a command worth walking (T229): the guards' own sources, whose names are a directory and a script, not a suffix. They
 /// never "clear" a write the way `GUARD_NAMES` do - a `.rs` named in scratch overrules no pattern.
-const SOURCE_NAMES: [&str; 3] = ["guard/src", "Cargo.toml", "l7r-guard.sh"];
+const SOURCE_NAMES: [&str; 4] = ["guard/src", "shared/src", "Cargo.toml", "l7r-guard.sh"];
 /// The tools that change a file's mode, times or directory but never its text: a guard file `chmod +x`ed is not rewritten.
 const NOT_TEXT: [&str; 5] = ["chmod", "chown", "touch", "mkdir", "rmdir"];
 const SUITE_NAME: &str = "<a-suite>";

@@ -24,9 +24,9 @@ use std::path::{Component, Path, PathBuf};
 use std::process::Command;
 
 use fancy_regex::Regex;
-use l7r_guard::guards::house_style_hooks::americanize_record;
-use l7r_guard::shared::py_text::split;
-use l7r_guard::shared::pyjson::dumps;
+use l7r_shared::guards::house_style_hooks::americanize_record;
+use l7r_shared::py_text::split;
+use l7r_shared::pyjson::dumps;
 use serde_json::{json, Map, Value};
 
 use self::py::{get, has, py_int, py_str, read_text, text, wrote};
@@ -61,8 +61,7 @@ struct Ctx<'a> {
 /// A pattern the code itself writes (a feature's number is all it takes in), never one that fails to compile.
 #[must_use]
 fn re(p: &str) -> Regex {
-    l7r_guard::shared::regex::build(p)
-        .unwrap_or_else(|_| unreachable!("a pattern of the code's own"))
+    l7r_shared::regex::build(p).unwrap_or_else(|_| unreachable!("a pattern of the code's own"))
 }
 
 /// A feature's number: `int(d.name.split("-", 1)[0])`.
@@ -687,7 +686,7 @@ pub fn cli(args: &[String], impl_check: super::closing::ImplCheck) -> Reply {
         root: &root,
         tree: &tree,
         impl_check,
-        words: l7r_guard::shared::py_text::strip(&words),
+        words: l7r_shared::py_text::strip(&words),
         columns: &py::columns,
     };
     cli_in(args, &ctx)

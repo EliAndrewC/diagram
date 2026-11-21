@@ -31,7 +31,7 @@ const GATE_TARGETS: [&str; 4] = ["done", "verify", "maps", "test-full"];
 const NR: &str = "NOT-REVIEWABLE";
 
 fn re(pattern: &str) -> Regex {
-    l7r_guard::shared::regex::build(pattern).unwrap_or_else(|e| unreachable!("{e}"))
+    l7r_shared::regex::build(pattern).unwrap_or_else(|e| unreachable!("{e}"))
 }
 
 static BACKTICKS: LazyLock<Regex> = LazyLock::new(|| re(r"`[^`\n]*`"));
@@ -288,7 +288,7 @@ pub fn figure_pattern(tree: &Path) -> Result<Regex, String> {
     let pattern = String::from_utf8_lossy(&done.stdout)
         .trim()
         .replace(r"\w", r"\w\p{N}");
-    l7r_guard::shared::regex::build(&pattern).map_err(|e| e.to_string())
+    l7r_shared::regex::build(&pattern).map_err(|e| e.to_string())
 }
 
 /// Each measured figure in the dispatch that no record backs, by feature 239's convention (FR-006): the spec lint's own pattern.
@@ -544,7 +544,7 @@ pub fn content_key(clone: &Path, sheet: &str) -> String {
         data.extend(std::fs::read(folder.join(&name)).unwrap_or_default());
         data.push(0);
     }
-    l7r_guard::shared::sha256::hex(&data)[..16].to_owned()
+    l7r_shared::sha256::hex(&data)[..16].to_owned()
 }
 
 /// A unit's content key, its sheet looked up (`content-key`): what the review gate and the round arbiter ask.

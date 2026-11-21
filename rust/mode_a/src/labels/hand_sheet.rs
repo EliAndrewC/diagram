@@ -199,7 +199,7 @@ static LETTER: LazyLock<Regex> = LazyLock::new(|| py(r"\A\p{L}\z"));
 ///     its salts, guards and sentinels - NONE: they decide nothing about the place - 0.114 (Rec.601 luma weight (blue)); 16 (hex base); 0.299 (Rec.601 luma weight (red)); 0.587 (Rec.601 luma weight (green))
 #[must_use]
 pub fn luma(fill: Option<&str>) -> f64 {
-    let fill = l7r_guard::shared::py_text::strip(fill.unwrap_or_default());
+    let fill = l7r_shared::py_text::strip(fill.unwrap_or_default());
     // `re.fullmatch(r"#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})", fill)`
     let Some(h) = fill
         .strip_prefix('#')

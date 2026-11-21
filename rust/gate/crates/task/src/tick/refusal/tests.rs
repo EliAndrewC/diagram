@@ -140,7 +140,7 @@ fn a_landed_note_over_work_off_main_refuses() {
 
 /// The fixture with `scripts/a.py` changed and committed here, not on `origin/main`: where the landed note's other tests start (feature
 /// 449 T167: each `landed` reading fetches `origin`, and the one test that read them all took over FR-008's tenth of a second).
-fn worked(tag: &str) -> (l7r_guard::shared::tempdir::TempDir, std::path::PathBuf) {
+fn worked(tag: &str) -> (l7r_shared::tempdir::TempDir, std::path::PathBuf) {
     let dir = repo(tag);
     let root = root_of(&dir);
     put(&root, "scripts/a.py", "x = 2\n");

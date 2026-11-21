@@ -3,8 +3,10 @@
 //! one task at a time (T006-T049); until then the dispatcher holds none.
 
 pub mod guards;
-pub mod protocol;
-pub mod shared;
+// the hook protocol and what every guard reads live in `l7r_shared` (`shared/`, feature 451 T58), so the gate's crates build on it
+// and not on the hooks; re-exported here under their old names, so `crate::shared::...` and `crate::protocol::...` read as before
+pub use l7r_shared as shared;
+pub use l7r_shared::protocol;
 pub mod suite_tools;
 
 use protocol::{run, Event, Guard, Reply};

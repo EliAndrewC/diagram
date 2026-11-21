@@ -7,7 +7,7 @@
 # of the gate's and the guard's builds. `mode_a` is the Mode A engine (feature 449 T168, the engine port's step 1), its own binary
 # `l7r-mode-a` for the same reason: the geometry and rendering crates it will pull stay out of the gate's and the guard's builds.
 [workspace]
-members = ["phases", "guard", "gate", "gate/crates/*", "browser", "embed", "mode_a"]
+members = ["phases", "guard", "guard/shared", "gate", "gate/crates/*", "browser", "embed", "mode_a"]
 resolver = "2"
 
 # ONE FEATURE SET FOR EVERY GATE CRATE (feature 449 T92): a gate crate names an outside dependency only as `{ workspace = true }`, so

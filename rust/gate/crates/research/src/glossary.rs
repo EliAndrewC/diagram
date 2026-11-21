@@ -35,7 +35,7 @@ pub fn load(tree: &Path) -> Result<Vec<Term>> {
             "AttributeError",
             format!(
                 "'{}' object has no attribute 'items'",
-                l7r_guard::shared::blocked::type_name(&data)
+                l7r_shared::blocked::type_name(&data)
             ),
         ));
     };
@@ -61,9 +61,7 @@ fn term_of(term: &str, entry: &Value) -> Result<Term> {
         term: term.to_owned(),
         variants,
         definition: field("def")?.clone(),
-        cased: entry
-            .get("cased")
-            .is_some_and(l7r_guard::shared::pyjson::truthy),
+        cased: entry.get("cased").is_some_and(l7r_shared::pyjson::truthy),
     })
 }
 
@@ -96,7 +94,7 @@ pub fn record_glossary_js(terms: &[Term]) -> String {
         "// DERIVED FILE - written by `make glossary` from l7r/diagram/interactive/assets/glossary.json (features 207 and 209). Never\n\
          // edit here: add or change a term in glossary.json and run `make glossary`; the gate fails while the two differ.\n\
          window.RECORD_GLOSSARY = {};\n",
-        l7r_guard::shared::pyjson::dumps(&Value::Array(entries), Some(1), false)
+        l7r_shared::pyjson::dumps(&Value::Array(entries), Some(1), false)
     )
 }
 

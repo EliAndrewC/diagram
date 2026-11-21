@@ -63,7 +63,7 @@ fn recorded(root: &std::path::Path, python: bool) -> Map<String, Value> {
 fn cut(
     tag: &str,
     at_base: &dyn Fn(&std::path::Path, &mut Map<String, Value>),
-) -> l7r_guard::shared::tempdir::TempDir {
+) -> l7r_shared::tempdir::TempDir {
     let span = span_line();
     let root = fixture_with(tag, &|root| {
         py_units(

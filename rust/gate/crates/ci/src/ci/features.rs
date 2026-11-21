@@ -88,7 +88,7 @@ pub fn feature_status(root: &Path, name: Option<&str>) -> FeatureStatus {
             ..FeatureStatus::default()
         };
     };
-    let held = l7r_guard::shared::speckit::holding(&dir).unwrap_or_default();
+    let held = l7r_shared::speckit::holding(&dir).unwrap_or_default();
     let open_tasks = tasks
         .lines()
         .filter_map(|l| {

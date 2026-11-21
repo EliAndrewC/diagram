@@ -33,7 +33,7 @@ mod memory;
 mod phase;
 mod stop;
 
-use l7r_guard::shared::env::Rooted;
+use l7r_shared::env::Rooted;
 use std::cell::RefCell;
 use std::fmt::Write as _;
 use std::io::Write as _;
@@ -42,7 +42,7 @@ use std::path::{Path, PathBuf};
 use std::process::{Command, Stdio};
 use std::time::Duration;
 
-use l7r_guard::shared::py_text::strip;
+use l7r_shared::py_text::strip;
 
 use crate::Reply;
 
@@ -264,7 +264,7 @@ impl Land {
         let out = self
             .run(&["git", "diff", "--name-only", "origin/main...HEAD"], &[])?
             .1;
-        Ok(l7r_guard::shared::py_text::split(&out)
+        Ok(l7r_shared::py_text::split(&out)
             .into_iter()
             .map(str::to_owned)
             .collect())
@@ -587,7 +587,7 @@ fn reverted(rc: i32, out: &str, tick_sha: &str) -> String {
     let why = if out.is_empty() {
         format!("git revert exited {rc}")
     } else {
-        l7r_guard::shared::speckit::splitlines(out)[0].to_owned()
+        l7r_shared::speckit::splitlines(out)[0].to_owned()
     };
     let short = head(tick_sha, 9);
     format!("its ticks could NOT be reverted ({why}): the tick commit {short} stands in the clone. Resolve what the push left (a merge in progress: fix the conflicts and commit), then push it with scripts/sync-with-main.sh done - the tick goes with it - or drop it with git revert --no-edit {short}")
@@ -659,11 +659,11 @@ fn py_read(path: &Path) -> Result<String, String> {
 
 /// The run recorded in the working directory's repository (`usage_log.exited("land", code)`), by the one writer (feature 449 T129).
 fn record(cwd: &Path, code: i32) {
-    l7r_guard::shared::usage::record(
+    l7r_shared::usage::record(
         cwd,
         USAGE_LOG_TOOL,
         "check",
-        l7r_guard::shared::usage::exited(code),
+        l7r_shared::usage::exited(code),
     );
 }
 
@@ -734,7 +734,7 @@ pub fn cli(args: &[String], cwd: &Path) -> Reply {
 /// `T=`'s task ids, split on commas and whitespace (feature 451 T18, D16: `T="T1,T2"` was one unknown task `T1,T2`), the one reading
 /// every use of the list takes - the ticks, the `end` line's `tasks` and `L7R_LAND_TICKS`.
 fn task_ids(t: &str) -> Vec<String> {
-    l7r_guard::shared::py_text::split(&t.replace(',', " "))
+    l7r_shared::py_text::split(&t.replace(',', " "))
         .into_iter()
         .map(str::to_owned)
         .collect()

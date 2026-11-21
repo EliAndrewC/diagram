@@ -172,7 +172,7 @@ pub fn cli(args: &[String]) -> Reply {
     let tree = l7r_gate_research::resolve(Path::new(&root));
     match args.first().map(String::as_str) {
         Some("dump") => reply(
-            l7r_guard::shared::pyjson::dumps(&dump(&tree, &rest), Some(1), false) + "\n",
+            l7r_shared::pyjson::dumps(&dump(&tree, &rest), Some(1), false) + "\n",
             String::new(),
             0,
         ),

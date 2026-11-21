@@ -3,7 +3,7 @@
 use std::os::unix::fs::PermissionsExt as _;
 use std::path::Path;
 
-use l7r_guard::shared::tempdir::TempDir;
+use l7r_shared::tempdir::TempDir;
 
 use super::*;
 use crate::pages::{CachedPages, Inner};
@@ -109,7 +109,7 @@ fn each_page_is_saved_and_listed_and_a_second_save_adds() {
     let out = d.join("out");
     let ledger = Ledger {
         home: d.join("home"),
-        ctx: l7r_guard::shared::consulted::context(&root).unwrap(),
+        ctx: l7r_shared::consulted::context(&root).unwrap(),
         questions: vec!["0012".into()],
         root: root.clone(),
         sought: "the walls".into(),
@@ -143,14 +143,11 @@ fn each_page_is_saved_and_listed_and_a_second_save_adds() {
         std::fs::read_to_string(out.join("01-a.org.txt")).unwrap(),
         "One.\nTwo.\n"
     );
-    let logged =
-        l7r_guard::shared::attempts::read(&root, l7r_guard::shared::attempts::LOG).unwrap();
+    let logged = l7r_shared::attempts::read(&root, l7r_shared::attempts::LOG).unwrap();
     // an attempt for each pointer asked for, none for a blocked one
     assert_eq!(logged.len(), 3);
     assert_eq!(
-        l7r_guard::shared::consulted::read(&d.join("home"))
-            .unwrap()
-            .len(),
+        l7r_shared::consulted::read(&d.join("home")).unwrap().len(),
         2
     );
     // a second save keeps the fetched rows, retries the rest, and numbers past every file

@@ -12,8 +12,8 @@ use std::path::{Path, PathBuf};
 use std::sync::LazyLock;
 
 use fancy_regex::Regex;
-use l7r_guard::shared::checks::pages::read_page;
-use l7r_guard::shared::pyjson::{dumps, sorted};
+use l7r_shared::checks::pages::read_page;
+use l7r_shared::pyjson::{dumps, sorted};
 use serde_json::{json, Map, Value};
 
 use super::context::{Gather, Tables, CALLEES_MAX};
@@ -50,7 +50,7 @@ const HEAD: [&str; 5] = [
 /// path -> the lines the delta added or changed, against the merge base with `base`, the working tree included (405 T36).
 pub fn changed_lines(root: &Path, base: &str) -> HashMap<String, HashSet<usize>> {
     let mb = git(root, &["merge-base", "HEAD", base]);
-    let mb = l7r_guard::shared::py_text::strip(&mb);
+    let mb = l7r_shared::py_text::strip(&mb);
     let mut out: HashMap<String, HashSet<usize>> = HashMap::new();
     if mb.is_empty() {
         return out;

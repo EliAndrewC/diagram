@@ -6,8 +6,7 @@ use super::{digit_value, json, read, Error};
 fn an_error_prints_its_message_and_a_fault_becomes_one() {
     let e = Error::new("ValueError", "bad");
     assert_eq!(e.to_string(), "bad");
-    let f: Error =
-        l7r_guard::shared::blocked::Fault::new("BlockedListError", "x".to_owned()).into();
+    let f: Error = l7r_shared::blocked::Fault::new("BlockedListError", "x".to_owned()).into();
     assert_eq!((f.kind, f.message.as_str()), ("BlockedListError", "x"));
     assert!(json("{").is_err());
     assert_eq!(json("[1]").unwrap(), serde_json::json!([1]));
@@ -25,7 +24,7 @@ fn an_error_prints_its_message_and_a_fault_becomes_one() {
 
 #[test]
 fn a_path_resolves_as_python_resolves_it() {
-    let d = l7r_guard::shared::tempdir::TempDir::new("research-resolve");
+    let d = l7r_shared::tempdir::TempDir::new("research-resolve");
     let real = std::fs::canonicalize(&d).unwrap();
     std::fs::create_dir_all(real.join("a")).unwrap();
     std::os::unix::fs::symlink(real.join("a"), real.join("link")).unwrap();

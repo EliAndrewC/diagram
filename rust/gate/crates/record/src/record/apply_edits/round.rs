@@ -8,7 +8,7 @@ use std::collections::{BTreeMap, HashSet};
 use std::fmt::Write as _;
 use std::path::Path;
 
-use l7r_guard::shared::env::Rooted;
+use l7r_shared::env::Rooted;
 
 use super::{apply, text, touched_questions, unapply_by_hand, words_of, Block};
 use crate::record::owed::answers;

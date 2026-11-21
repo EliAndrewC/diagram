@@ -92,12 +92,12 @@ pub const PAGE: &str = "<h2 id=\"gap\">The gap</h2>\n<p class=\"intro\">Why.</p>
 pub const BUILDINGS: &str = "# Buildings\n\n## Walls\n<!-- Research: walls - CONVENTION -->\n<!-- Research: wall height - research/questions/0001-gap.html: 12 ft -->\n\nWalls stand.\n\n- a list item\n  continued\n| a | table |\n|---|---|\n\n### Deep\n\nNo claim here.\n\n##### Too deep\n";
 
 /// A repository with the probe's Rust, procedures, questions and Python half, committed and set as origin/main; its root.
-pub fn fixture(tag: &str) -> l7r_guard::shared::tempdir::TempDir {
+pub fn fixture(tag: &str) -> l7r_shared::tempdir::TempDir {
     fixture_with(tag, &|_| {})
 }
 
 /// [`fixture`], `more` writing its own files into the tree before the one commit (feature 449 T166: a commit fewer a test).
-pub fn fixture_with(tag: &str, more: &dyn Fn(&Path)) -> l7r_guard::shared::tempdir::TempDir {
+pub fn fixture_with(tag: &str, more: &dyn Fn(&Path)) -> l7r_shared::tempdir::TempDir {
     let root = crate::checks::scratch(tag);
     // the repository `git init -b main` makes, with its three settings, written as git writes them: four processes saved (feature 449
     // T166: each end-to-end test well within FR-008's tenth of a second)
@@ -136,7 +136,7 @@ pub fn fixture_with(tag: &str, more: &dyn Fn(&Path)) -> l7r_guard::shared::tempd
 
 /// [`fixture`] with no Python module under `l7r/diagram/`, so no command starts the Python half: for a test whose Python half answers
 /// nothing, its 16 ms start saved (feature 449 T167, FR-008's tenth of a second); the tests that read the Python half keep the module.
-pub fn fixture_rust_only(tag: &str) -> l7r_guard::shared::tempdir::TempDir {
+pub fn fixture_rust_only(tag: &str) -> l7r_shared::tempdir::TempDir {
     fixture_with(tag, &|root| {
         std::fs::remove_file(root.join("l7r/diagram/m.py")).unwrap();
     })

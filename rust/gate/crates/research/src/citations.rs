@@ -15,7 +15,7 @@ use crate::record::absence;
 use crate::record::source_tags::{section_heading, Catalog};
 use crate::sources::{link_target, linkify, Entry, WHAT_LABEL, WHY_LABEL};
 use crate::{drop_all, re};
-use l7r_guard::shared::py_text::{repr, strip};
+use l7r_shared::py_text::{repr, strip};
 
 static KEY_LINK: LazyLock<Regex> =
     LazyLock::new(|| re(r#"<a href="[^"]*"><code>([a-z0-9][a-z0-9-]*)</code></a>"#));
@@ -181,7 +181,7 @@ pub fn footnote_form(body: &str, canon: &std::collections::BTreeSet<String>) -> 
     let unrendered = absence::unrender(&body);
     if matches(
         &ABSENCE,
-        unrendered.trim_start_matches(l7r_guard::shared::py_text::is_space),
+        unrendered.trim_start_matches(l7r_shared::py_text::is_space),
     ) {
         if has_link {
             return Some("an absence note carries no key and no link".to_owned());

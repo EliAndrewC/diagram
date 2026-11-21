@@ -10,8 +10,8 @@ use std::sync::LazyLock;
 
 use fancy_regex::Regex;
 use l7r_gate_core::measure::tool_inventory::{ending, read_text};
-use l7r_guard::shared::py_text::{split, strip};
-use l7r_guard::shared::speckit::splitlines;
+use l7r_shared::py_text::{split, strip};
+use l7r_shared::speckit::splitlines;
 use serde_json::{Map, Value};
 
 use super::super::events::{or_s, py_str, re, truthy, ts, Raised};

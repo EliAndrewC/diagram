@@ -7,7 +7,7 @@ use std::sync::LazyLock;
 
 use fancy_regex::Regex;
 use l7r_gate_core::measure::tool_inventory::py_iter;
-use l7r_guard::shared::py_text::{collapse, is_space, repr, strip};
+use l7r_shared::py_text::{collapse, is_space, repr, strip};
 use serde_json::{Map, Value};
 
 use super::super::events::{head, hhmm, py_str, re, truthy, Raised, Tally};

@@ -8,7 +8,7 @@ use std::path::{Path, PathBuf};
 use std::process::{Command, Stdio};
 use std::sync::atomic::{AtomicUsize, Ordering};
 
-use l7r_guard::shared::sha256;
+use l7r_shared::sha256;
 use serde_json::json;
 
 use crate::codeid::{self, stated, Cache};

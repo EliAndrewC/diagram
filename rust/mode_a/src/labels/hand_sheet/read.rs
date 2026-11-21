@@ -16,7 +16,7 @@ use std::sync::LazyLock;
 use fancy_regex::Regex;
 use l7r_gate_research::pyre::py;
 use l7r_gate_research::Error;
-use l7r_guard::shared::py_text::strip;
+use l7r_shared::py_text::strip;
 
 use super::{
     block_half, char_w_of, luma, Attrs, Cap, Join, Shape, BUSY_FILLS, CENTER_ABOVE_BASELINE_EM,
@@ -797,7 +797,7 @@ fn text_shape(el: &Element, h: &Inherited, parent: Affine, here: usize) -> Shape
         group: h.group,
         at: here,
         ids: h.ids.clone(),
-        names: l7r_guard::shared::py_text::split(el.get("data-names").unwrap_or_default())
+        names: l7r_shared::py_text::split(el.get("data-names").unwrap_or_default())
             .into_iter()
             .map(str::to_owned)
             .collect(),

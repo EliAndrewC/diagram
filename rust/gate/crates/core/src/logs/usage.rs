@@ -6,7 +6,7 @@
 use std::io::Read;
 use std::path::Path;
 
-use l7r_guard::shared::{escape, py_text, usage};
+use l7r_shared::{escape, py_text, usage};
 
 use crate::Reply;
 

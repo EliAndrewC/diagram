@@ -1,6 +1,6 @@
 //! The lit page (feature 449 T150), on the tests' Chromium: the steps run, the zoom key pressed until vector mode, each refusal.
 
-use l7r_guard::shared::tempdir::TempDir;
+use l7r_shared::tempdir::TempDir;
 use serde_json::json;
 
 use super::{lit, options, ZOOM_STEPS};

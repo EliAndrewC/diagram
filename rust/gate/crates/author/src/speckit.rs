@@ -10,7 +10,7 @@ use std::cmp::Ordering;
 use std::path::Path;
 
 use l7r_gate_core::Reply;
-use l7r_guard::shared::pyjson::{py_str, truthy};
+use l7r_shared::pyjson::{py_str, truthy};
 use serde_json::Value;
 
 use crate::reply;

@@ -223,7 +223,7 @@ pub fn code_key(repo: &Path, program: &str, code: &[PathBuf]) -> String {
     let mut text = program.to_owned();
     for f in files {
         text.push('\x1f');
-        text.push_str(&l7r_guard::shared::sha256::hex(
+        text.push_str(&l7r_shared::sha256::hex(
             &std::fs::read(&f).unwrap_or_default(),
         ));
     }
@@ -267,12 +267,12 @@ impl Memo {
         let path = if off {
             None
         } else {
-            l7r_guard::shared::usage::common(root)
+            l7r_shared::usage::common(root)
                 .map(|d| d.join("l7r-cache").join(format!("memo-{name}.json")))
         };
         Self {
             path,
-            key: l7r_guard::shared::sha256::hex(parts.join("\x1f").as_bytes()),
+            key: l7r_shared::sha256::hex(parts.join("\x1f").as_bytes()),
         }
     }
 
@@ -294,7 +294,7 @@ impl Memo {
     /// Keep a pass, written whole; a file that cannot be written keeps nothing, as the Python's `keep` swallowed its own failure.
     pub fn keep(&self, out: &str, err: &str) {
         let Some(path) = &self.path else { return };
-        let row = l7r_guard::shared::pyjson::dumps(
+        let row = l7r_shared::pyjson::dumps(
             &json!({"key": self.key, "out": out, "err": err}),
             None,
             true,
@@ -472,11 +472,11 @@ pub fn cli(args: &[String], root: &Path, program: &str, today: &str) -> Run {
         }
     };
     if let Ok(r) = &ran {
-        l7r_guard::shared::usage::record(
+        l7r_shared::usage::record(
             root,
             USAGE_LOG_TOOL,
             "check",
-            l7r_guard::shared::usage::exited(r.code),
+            l7r_shared::usage::exited(r.code),
         );
     }
     ran

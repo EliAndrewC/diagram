@@ -16,7 +16,7 @@ fn a_sheet_s_page_is_written_beside_it_and_its_census_returned() {
         name: "Well".into(),
         ..Default::default()
     }];
-    let dir = l7r_guard::shared::tempdir::TempDir::new("sheet-page");
+    let dir = l7r_shared::tempdir::TempDir::new("sheet-page");
     let svg = dir.path().join("karo-plan.svg");
     std::fs::write(
         &svg,

@@ -189,7 +189,7 @@ fn shipped(kind: &str, m: &Value) -> Result<usize, Error> {
         other => return Err(Error::new("KeyError", other.to_owned())),
     };
     match get(m, key)? {
-        Some(v) if l7r_guard::shared::pyjson::truthy(v) => len(v),
+        Some(v) if l7r_shared::pyjson::truthy(v) => len(v),
         _ => Ok(0),
     }
 }

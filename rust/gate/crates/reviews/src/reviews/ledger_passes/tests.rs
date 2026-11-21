@@ -49,7 +49,7 @@ pub(super) fn pass(check: &str, agent: &str, subject: &str, extra: &serde_json::
 
 /// The scratch world: `<d>/repo` (a repository with its ledger, the feature's records and the pass log), `<d>/tree` (the gate's tree,
 /// a repository), `<d>/home/.claude/projects` (the transcripts).
-pub(super) fn world(tag: &str, log: &[String]) -> (l7r_guard::shared::tempdir::Held<PathBuf>, Env) {
+pub(super) fn world(tag: &str, log: &[String]) -> (l7r_shared::tempdir::Held<PathBuf>, Env) {
     let d = dir(&format!("ledger-{tag}"));
     let (repo, tree) = (d.join("repo"), d.join("tree"));
     for r in [&repo, &tree] {

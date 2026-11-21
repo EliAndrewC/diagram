@@ -15,8 +15,8 @@ use std::path::{Path, PathBuf};
 use std::sync::LazyLock;
 
 use fancy_regex::Regex;
-use l7r_guard::shared::py_text::{strip, SPACE_CLASS};
-use l7r_guard::shared::speckit::{read_text, splitlines};
+use l7r_shared::py_text::{strip, SPACE_CLASS};
+use l7r_shared::speckit::{read_text, splitlines};
 
 use crate::tick::refusal::state;
 use crate::tick::text::{lstrip, re};
@@ -122,7 +122,7 @@ fn holder(d: &Path) -> Raise<Option<PathBuf>> {
     else {
         return Ok(None);
     };
-    let parent = l7r_guard::shared::speckit::py_parent(d);
+    let parent = l7r_shared::speckit::py_parent(d);
     let prefix = format!("{n}-");
     let mut hits: Vec<PathBuf> = std::fs::read_dir(&parent)
         .into_iter()

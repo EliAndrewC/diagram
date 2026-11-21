@@ -5,17 +5,17 @@ use std::path::Path;
 use std::sync::LazyLock;
 
 use fancy_regex::Regex;
-use l7r_guard::guards::event_log_hooks::verdict_of;
-use l7r_guard::shared::checks::reply::{py_lines, reply_of};
-use l7r_guard::shared::ledger::cost::transcript;
-use l7r_guard::shared::py_text::{strip, SPACE_CLASS};
+use l7r_shared::checks::reply::{py_lines, reply_of};
+use l7r_shared::guards::event_log_hooks::verdict_of;
+use l7r_shared::ledger::cost::transcript;
+use l7r_shared::py_text::{strip, SPACE_CLASS};
 use serde_json::Value;
 
 use super::{field, required, row_of, text, Pass};
 use crate::record::bundle::head;
 
 fn re(pattern: &str) -> Regex {
-    l7r_guard::shared::regex::build(pattern).unwrap_or_else(|e| unreachable!("{e}"))
+    l7r_shared::regex::build(pattern).unwrap_or_else(|e| unreachable!("{e}"))
 }
 
 static BUNDLE: LazyLock<Regex> =
@@ -106,7 +106,7 @@ pub fn filled_row(p: &Pass, place: &str, root: &Path) -> Result<String, String> 
     let first = py_lines(&reply)
         .into_iter()
         .find(|ln| {
-            let lead = ln.trim_start_matches(l7r_guard::shared::py_text::is_space);
+            let lead = ln.trim_start_matches(l7r_shared::py_text::is_space);
             !strip(ln).is_empty() && !lead.starts_with('#') && !lead.starts_with("```")
         })
         .map_or("", |ln| ln.trim_matches([' ', '-', '*', '#']));
@@ -115,7 +115,7 @@ pub fn filled_row(p: &Pass, place: &str, root: &Path) -> Result<String, String> 
     let first = if first.is_empty() {
         "-".to_owned()
     } else {
-        l7r_guard::guards::house_style_hooks::americanize(first)
+        l7r_shared::guards::house_style_hooks::americanize(first)
     };
     let subject = text(p, "subject");
     let place_cell = group(&BUNDLE, subject)
@@ -156,7 +156,7 @@ fn get<'a>(value: &'a Value, key: &str) -> Result<Option<&'a Value>, String> {
 /// `x or {}`: a falsy value read as an empty object.
 fn or_empty(value: Option<&Value>) -> Value {
     value
-        .filter(|v| !l7r_guard::shared::checks::falsy(Some(v)))
+        .filter(|v| !l7r_shared::checks::falsy(Some(v)))
         .cloned()
         .unwrap_or_else(|| Value::Object(serde_json::Map::new()))
 }

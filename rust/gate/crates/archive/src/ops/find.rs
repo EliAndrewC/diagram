@@ -7,9 +7,9 @@ use std::fmt::Write as _;
 use std::path::{Path, PathBuf};
 use std::process::Command;
 
-use l7r_guard::shared::attempts::{self, Ask, More};
-use l7r_guard::shared::consulted::norm;
-use l7r_guard::shared::pyjson::py_str;
+use l7r_shared::attempts::{self, Ask, More};
+use l7r_shared::consulted::norm;
+use l7r_shared::pyjson::py_str;
 use serde_json::Value;
 
 use super::{field, os_error};
@@ -71,7 +71,7 @@ fn rows_hit(
         hits += 1;
         let local = row
             .get("path")
-            .filter(|p| l7r_guard::shared::pyjson::truthy(p))
+            .filter(|p| l7r_shared::pyjson::truthy(p))
             .map_or_else(
                 || "(no copy)".to_owned(),
                 |p| joined(&store.dir, &py_str(p)),
@@ -112,7 +112,7 @@ fn grep(word: &str, dir: &Path) -> Result<Vec<String>> {
         .output()
         .map_err(spawn_failed)?;
     Ok(
-        l7r_guard::shared::speckit::splitlines(&String::from_utf8_lossy(&done.stdout))
+        l7r_shared::speckit::splitlines(&String::from_utf8_lossy(&done.stdout))
             .into_iter()
             .filter(|f| !f.contains("/.git/"))
             .map(str::to_owned)
@@ -151,7 +151,7 @@ fn gm_hits(root: &Path, store: &Archive, key: &str, out: &mut String) -> Result<
         let entry = &table[name];
         let archived = entry
             .get("archived")
-            .filter(|a| l7r_guard::shared::pyjson::truthy(a));
+            .filter(|a| l7r_shared::pyjson::truthy(a));
         if let (true, Some(a)) = (
             strings(entry.get("keys")).iter().any(|k| k == key),
             archived,
@@ -197,7 +197,7 @@ fn word_hits<'w>(
     let by_dir: BTreeMap<String, String> = all.into_iter().map(|f| (parent(&f), f)).collect();
     let url_of: Vec<(String, String)> = rows
         .iter()
-        .filter(|r| r.get("path").is_some_and(l7r_guard::shared::pyjson::truthy))
+        .filter(|r| r.get("path").is_some_and(l7r_shared::pyjson::truthy))
         .map(|r| Ok((joined(&store.dir, &field(r, "path")?), field(r, "url")?)))
         .collect::<Result<_>>()?;
     let shown = words.join(" + ");
@@ -267,7 +267,7 @@ pub fn find(
     }
     let words: Vec<&str> = terms
         .split('|')
-        .map(l7r_guard::shared::py_text::strip)
+        .map(l7r_shared::py_text::strip)
         .filter(|t| !t.is_empty())
         .collect();
     // texts holding each word alone, by word in the order first asked (a dict: a word asked twice counts once) - the tip when none holds them all

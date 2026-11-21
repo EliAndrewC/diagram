@@ -32,7 +32,7 @@ use crate::record::split::split;
 use crate::record::{archive, blocked, store};
 use crate::sources::{page_text, Entry, Reader};
 use crate::{Error, Result};
-use l7r_guard::shared::html_text::escape;
+use l7r_shared::html_text::escape;
 
 mod pages;
 pub mod write;
@@ -121,7 +121,7 @@ pub fn lead_of(section: &str) -> String {
 /// naming a single section, as it is.
 #[must_use]
 pub fn canon_list(line: &str) -> String {
-    let stripped = l7r_guard::shared::py_text::strip(line);
+    let stripped = l7r_shared::py_text::strip(line);
     let Some(m) = CANON_LINE.captures(stripped).ok().flatten() else {
         return line.to_owned();
     };
@@ -136,7 +136,7 @@ pub fn canon_list(line: &str) -> String {
     {
         let all = u.get(0).map_or(0..0, |g| g.range());
         let name = drop(&JOIN, &rest[at..all.start]);
-        let name = l7r_guard::shared::py_text::strip(&name);
+        let name = l7r_shared::py_text::strip(&name);
         if name.is_empty() {
             u[1].clone_into(&mut whole);
         } else {
@@ -144,7 +144,7 @@ pub fn canon_list(line: &str) -> String {
         }
         at = all.end;
     }
-    if !l7r_guard::shared::py_text::strip(&rest[at..]).is_empty() || items.len() < 2 {
+    if !l7r_shared::py_text::strip(&rest[at..]).is_empty() || items.len() < 2 {
         return line.to_owned();
     }
     let whole = if whole.is_empty() {
@@ -214,7 +214,7 @@ impl Registry {
         Ok(Self {
             title: text_of(&h1[2]),
             title_id: h1[1].to_owned(),
-            intro: l7r_guard::shared::py_text::strip(&intro).to_owned(),
+            intro: l7r_shared::py_text::strip(&intro).to_owned(),
             groups: page
                 .sections
                 .iter()

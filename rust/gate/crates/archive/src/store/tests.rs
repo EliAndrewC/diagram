@@ -135,7 +135,7 @@ fn ensure_clones_once_a_push_that_fails_says_why_and_the_lock_waits() {
 /// together were twice FR-008's tenth of a second (feature 449 T167).
 #[test]
 fn an_empty_remote_is_cloned_onto_main_and_its_push_is_no_failure() {
-    let w = l7r_guard::shared::tempdir::TempDir::new("archive-store-empty");
+    let w = l7r_shared::tempdir::TempDir::new("archive-store-empty");
     let empty = w.path().join("empty.git");
     git(w.path(), &["init", "-q", "--bare", empty.to_str().unwrap()]);
     let mut fresh = Archive::new(
@@ -153,7 +153,7 @@ fn an_empty_remote_is_cloned_onto_main_and_its_push_is_no_failure() {
 
 #[test]
 fn a_remote_that_is_not_there_is_not_cloned() {
-    let w = l7r_guard::shared::tempdir::TempDir::new("archive-store-nowhere");
+    let w = l7r_shared::tempdir::TempDir::new("archive-store-nowhere");
     let mut store = Archive::new(w.path(), None);
     store.remote = w.path().join("nowhere.git").to_string_lossy().into_owned();
     let err = store.ensure().unwrap_err();

@@ -11,7 +11,7 @@ fn args(list: &[&str]) -> Vec<String> {
     list.iter().map(|s| (*s).to_owned()).collect()
 }
 
-fn record() -> l7r_guard::shared::tempdir::TempDir {
+fn record() -> l7r_shared::tempdir::TempDir {
     let root = scratch("registry-open");
     git(&root, &["init", "-q"]);
     git(&root, &["config", "user.email", "t@t"]);

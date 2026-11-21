@@ -21,7 +21,7 @@ fn args(list: &[&str]) -> Vec<String> {
 }
 
 /// A tree holding both registries, every kind written from `entry`: the check reads the Mode A kinds too (feature 449 T164).
-fn engine(tag: &str, entry: &str) -> l7r_guard::shared::tempdir::TempDir {
+fn engine(tag: &str, entry: &str) -> l7r_shared::tempdir::TempDir {
     let root = scratch(tag);
     crate::testkit::modals(&root, entry);
     root

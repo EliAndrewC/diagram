@@ -19,7 +19,7 @@ pub(super) const USAGE_LOG_TOOL: &str = "check-tool-signals";
 /// (`l7r-gate log usage`, the one writer's door since `usage_log.py` left, feature 449 T129), or a stated record.
 const RECORDS: [&str; 4] = ["guard_log", "usage_log", "log usage", "# TOOL_RECORD:"];
 fn compiled(pattern: &str) -> Regex {
-    l7r_guard::shared::regex::build(pattern).unwrap_or_else(|e| unreachable!("{e}"))
+    l7r_shared::regex::build(pattern).unwrap_or_else(|e| unreachable!("{e}"))
 }
 
 static CALLS: LazyLock<[Regex; 5]> = LazyLock::new(|| {
@@ -78,7 +78,7 @@ fn called(root: &Path) -> BTreeMap<String, String> {
     });
     for dir in [
         "rust/guard/src/guards",
-        "rust/guard/src/shared",
+        "rust/guard/shared/src",
         "rust/gate",
     ] {
         let mut rust = Vec::new();

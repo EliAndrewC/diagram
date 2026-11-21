@@ -18,7 +18,7 @@ use l7r_gate_core::measure::tool_inventory::{
     check_paths, ending, hook_guards, read_lossy, read_text, recipe, registry, targets,
 };
 use l7r_gate_core::record::args::{parse_with, Spec};
-use l7r_guard::shared::log::civil;
+use l7r_shared::log::civil;
 use serde_json::Value;
 
 use super::events::{py_str, re, Raised};
@@ -289,7 +289,7 @@ impl Inventory {
                 }
             }
         }
-        for line in l7r_guard::shared::speckit::splitlines(make_diff) {
+        for line in l7r_shared::speckit::splitlines(make_diff) {
             let m = HUNK
                 .captures(line)
                 .ok()
@@ -487,7 +487,7 @@ pub fn cli(args: &[String], root: &Path, home: &Path) -> Reply {
     if !KINDS.contains(&kind) {
         return usage(&format!(
             "argument --kind: invalid choice: {} (choose from '', 'guard', 'check', 'target', 'review', 'step')",
-            l7r_guard::shared::py_text::repr(kind)
+            l7r_shared::py_text::repr(kind)
         ));
     }
     let root = PathBuf::from(p.text("--root", &root.display().to_string()));

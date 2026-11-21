@@ -3,7 +3,7 @@
 use std::path::{Path, PathBuf};
 use std::time::{Duration, Instant};
 
-use l7r_guard::shared::tempdir::TempDir;
+use l7r_shared::tempdir::TempDir;
 
 use super::{launcher, netloc, Polite, Process, HOST_GAP};
 use crate::fetch::Client;

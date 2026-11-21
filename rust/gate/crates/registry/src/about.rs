@@ -19,7 +19,7 @@ use std::sync::LazyLock;
 use fancy_regex::Regex;
 use l7r_gate_research::pyre::py;
 use l7r_gate_research::{Error, Result};
-use l7r_guard::shared::py_text::{repr, split, strip};
+use l7r_shared::py_text::{repr, split, strip};
 use serde_json::{json, Value};
 
 use crate::conditions;
@@ -522,7 +522,7 @@ pub fn not_highlighted(tree: &Path) -> Result<Rulings> {
             .map(|r| {
                 std::array::from_fn(|i| {
                     r.get(i)
-                        .map_or_else(String::new, l7r_guard::shared::pyjson::py_str)
+                        .map_or_else(String::new, l7r_shared::pyjson::py_str)
                 })
             })
             .collect()

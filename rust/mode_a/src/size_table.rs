@@ -33,7 +33,7 @@ use std::sync::LazyLock;
 use fancy_regex::Regex;
 use l7r_gate_research::pyre::py;
 use l7r_gate_research::Error;
-use l7r_guard::shared::pyjson::{ascii_string, py_float};
+use l7r_shared::pyjson::{ascii_string, py_float};
 
 use crate::etree::{fromstring, Element};
 use crate::hand_sheet::start_tags;

@@ -9,7 +9,7 @@ use std::sync::{Arc, Mutex};
 
 use l7r_gate_registry::about::FeatureClass;
 use l7r_gate_research::Error;
-use l7r_guard::shared::pyjson::py_float;
+use l7r_shared::pyjson::py_float;
 use serde_json::{json, Map, Value};
 
 use crate::notes::{self, MapNotes};

@@ -1,6 +1,6 @@
 //! The command line (feature 449 T146).
 
-use l7r_guard::shared::tempdir::TempDir;
+use l7r_shared::tempdir::TempDir;
 
 use super::{cli, Reply};
 use crate::testkit::{fake_chrome, var_for};

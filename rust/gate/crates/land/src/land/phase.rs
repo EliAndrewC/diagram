@@ -24,8 +24,8 @@
 use std::path::Path;
 use std::time::SystemTime;
 
-use l7r_guard::guards::event_log_hooks::{append_row_with, now_stamp};
-use l7r_guard::shared::env::Rooted;
+use l7r_shared::env::Rooted;
+use l7r_shared::guards::event_log_hooks::{append_row_with, now_stamp};
 use serde_json::{json, Value};
 
 use super::Land;
@@ -179,10 +179,10 @@ fn goal_of(cmdline: &[u8]) -> Option<String> {
             }
         })
         .collect();
-    l7r_guard::shared::make::invoked(&words.join(" "))
+    l7r_shared::make::invoked(&words.join(" "))
         .into_iter()
         .next()
-        .filter(|t| t != l7r_guard::shared::make::DEFAULT_GOAL)
+        .filter(|t| t != l7r_shared::make::DEFAULT_GOAL)
 }
 
 #[cfg(test)]

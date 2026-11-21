@@ -13,7 +13,7 @@ fn ev(v: &Value) -> Event {
 }
 
 /// A scratch repository with one commit.
-fn repo(tag: &str) -> l7r_guard::shared::tempdir::TempDir {
+fn repo(tag: &str) -> l7r_shared::tempdir::TempDir {
     let d = crate::checks::scratch(tag);
     let run = |args: &[&str]| {
         assert!(std::process::Command::new("git")

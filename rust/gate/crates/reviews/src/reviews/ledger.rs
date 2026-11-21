@@ -8,8 +8,8 @@
 use std::fmt::Write as _;
 use std::path::{Path, PathBuf};
 
-use l7r_guard::shared::ledger::cost::{cells, cost, read_segments, transcript};
-use l7r_guard::shared::ledger::{measured_rows, problems, COLUMNS};
+use l7r_shared::ledger::cost::{cells, cost, read_segments, transcript};
+use l7r_shared::ledger::{measured_rows, problems, COLUMNS};
 use serde_json::json;
 
 use super::reply;

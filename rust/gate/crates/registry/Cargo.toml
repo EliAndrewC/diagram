@@ -18,7 +18,7 @@ reads = ["l7r/diagram/interactive/classes/", "l7r/diagram/interactive/compound_k
 fancy-regex = { workspace = true }
 l7r_gate_core = { path = "../core" }
 l7r_gate_research = { path = "../research" }
-l7r_guard = { path = "../../../guard" }
+l7r_shared = { path = "../../../guard/shared" }
 serde_json = { workspace = true }
 
 [features]

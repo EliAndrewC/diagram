@@ -13,8 +13,8 @@ use std::path::{Path, PathBuf};
 
 use l7r_gate_archive::ops::{head, py_int};
 use l7r_gate_core::record::args::{parse_with, Parsed, Spec};
-use l7r_guard::shared::consulted;
-use l7r_guard::shared::pyjson::dumps;
+use l7r_shared::consulted;
+use l7r_shared::pyjson::dumps;
 
 use crate::bundles::{apply, bundle, draft_bundles, score, Contracts};
 use crate::dupes::dedupe;
@@ -285,7 +285,7 @@ fn run(
             let mut seen = std::collections::HashSet::new();
             for u in pool {
                 if seen.insert(u.clone())
-                    && !done.contains(&l7r_guard::shared::consulted::norm(&u))
+                    && !done.contains(&l7r_shared::consulted::norm(&u))
                     && imported(&home, &u)?.is_some()
                     && wellformed(&u)
                 {

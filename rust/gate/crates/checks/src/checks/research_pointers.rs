@@ -52,12 +52,12 @@ const FIXTURES: [&str; 21] = [
     "rust/gate/crates/trials/src/measure/depiction_replay/", // the replay's tests name records of a scratch repository (feature 449 T88)
     "rust/guard/src/guards/check_bundle_hooks/", // a dispatch's fixture prompts name records of a scratch repository
     "rust/guard/src/guards/record_edit_hooks/",
-    "rust/guard/src/shared/checks/", // the check state's tests name fixture records
+    "rust/guard/shared/src/checks/", // the check state's tests name fixture records
 ];
 const EXEMPT_EXT: [&str; 5] = [".png", ".webp", ".jpg", ".pdf", ".gz"];
 
 fn pattern(text: &str) -> Regex {
-    l7r_guard::shared::regex::build(text).unwrap()
+    l7r_shared::regex::build(text).unwrap()
 }
 
 /// The forms every line is asked about.

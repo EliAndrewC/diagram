@@ -54,8 +54,7 @@ fn acquire(git_dir: &Path, pid: u64, proc_root: &Path, now: f64) -> String {
             clippy::cast_sign_loss,
             reason = "a whole second since the epoch"
         )]
-        let (_, _, _, h, mi, s) =
-            l7r_guard::shared::log::civil(held["t"].as_f64().unwrap_or(0.0) as u64);
+        let (_, _, _, h, mi, s) = l7r_shared::log::civil(held["t"].as_f64().unwrap_or(0.0) as u64);
         return format!("a `make done` is already running in this clone (pid {other}, started {h:02}:{mi:02}:{s:02}): two gates on one tree write the same maps and coverage files and fail together (feature 375 follow-up). Wait for its notification, or stop it first.");
     }
     let _ = std::fs::write(
@@ -81,7 +80,7 @@ fn reply(stderr: String, code: i32) -> Reply {
 
 /// Is a process under `proc_root` a make of this target, working inside `top`?
 fn own_make(proc_root: &Path, top: &Path, target: &str) -> bool {
-    let Ok(pattern) = l7r_guard::shared::regex::build(&format!("make {target}")) else {
+    let Ok(pattern) = l7r_shared::regex::build(&format!("make {target}")) else {
         return false;
     };
     let prefix = format!("{}/", top.display());

@@ -5,16 +5,15 @@ use std::path::Path;
 use std::sync::LazyLock;
 
 use fancy_regex::Regex;
-use l7r_guard::shared::py_text::is_space;
+use l7r_shared::py_text::is_space;
 
 use crate::{Error, Result, MODEL};
 
 static COMMENT: LazyLock<Regex> = LazyLock::new(|| {
-    l7r_guard::shared::regex::build(r"(?s)<!--.*?-->").unwrap_or_else(|e| unreachable!("{e}"))
+    l7r_shared::regex::build(r"(?s)<!--.*?-->").unwrap_or_else(|e| unreachable!("{e}"))
 });
-static TAG: LazyLock<Regex> = LazyLock::new(|| {
-    l7r_guard::shared::regex::build(r"<[^>]+>").unwrap_or_else(|e| unreachable!("{e}"))
-});
+static TAG: LazyLock<Regex> =
+    LazyLock::new(|| l7r_shared::regex::build(r"<[^>]+>").unwrap_or_else(|e| unreachable!("{e}")));
 
 /// `path.read_text(encoding="utf-8", errors="replace")`: bad bytes as U+FFFD, `\r\n` and a lone `\r` read as `\n` (universal newlines).
 ///
@@ -51,8 +50,8 @@ pub fn squeeze(text: &str) -> String {
 pub fn strip_html(text: &str) -> String {
     let text = COMMENT.replace_all(text, " ");
     let text = TAG.replace_all(&text, " ");
-    let text = l7r_guard::shared::html_text::unescape(&text);
-    l7r_guard::shared::py_text::strip(&squeeze(&text)).to_owned()
+    let text = l7r_shared::html_text::unescape(&text);
+    l7r_shared::py_text::strip(&squeeze(&text)).to_owned()
 }
 
 /// The (start, end) of each passage of `text` (its characters): cut at the last space before `size` characters, or at `size` where a run
@@ -85,7 +84,7 @@ pub fn passages(text: &[char], size: usize) -> Vec<(usize, usize)> {
 /// A passage's key: the model and its text (`fingerprint`), so a changed passage or a new model is embedded again.
 #[must_use]
 pub fn fingerprint(text: &str) -> String {
-    let mut h = l7r_guard::shared::sha1::hex(format!("{MODEL}\n{text}").as_bytes());
+    let mut h = l7r_shared::sha1::hex(format!("{MODEL}\n{text}").as_bytes());
     h.truncate(20);
     h
 }

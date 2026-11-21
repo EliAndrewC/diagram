@@ -8,8 +8,8 @@ use std::path::{Path, PathBuf};
 use std::sync::LazyLock;
 
 use fancy_regex::Regex;
-use l7r_guard::shared::consulted::{self, norm};
-use l7r_guard::shared::pyjson::{dumps, py_str, value_repr};
+use l7r_shared::consulted::{self, norm};
+use l7r_shared::pyjson::{dumps, py_str, value_repr};
 use serde_json::{json, Map, Value};
 
 use crate::lists::{drop_verdicts, field, line, read, unkeep, write};
@@ -91,7 +91,7 @@ fn sub<'v>(e: &'v Value, k: &str) -> Result<&'v Value> {
             "TypeError",
             format!(
                 "'{}' object is not subscriptable",
-                l7r_guard::shared::blocked::type_name(other)
+                l7r_shared::blocked::type_name(other)
             ),
         )),
     }
@@ -111,7 +111,7 @@ fn draft_line(
                 "TypeError",
                 format!(
                     "cannot use '{t}' as a dict key (unhashable type: '{t}')",
-                    t = l7r_guard::shared::blocked::type_name(id)
+                    t = l7r_shared::blocked::type_name(id)
                 ),
             ));
         }

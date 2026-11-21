@@ -11,7 +11,7 @@ use std::sync::LazyLock;
 use fancy_regex::Regex;
 use l7r_gate_research::pyre::py;
 use l7r_gate_research::Error;
-use l7r_guard::shared::html_text::escape;
+use l7r_shared::html_text::escape;
 use serde_json::Value;
 
 use super::value::{float_of, items, unpack2};
@@ -261,7 +261,7 @@ pub fn hit_regions(
     manifest: Option<&Value>,
     present: &std::collections::BTreeSet<String>,
 ) -> Result<String, Error> {
-    let Some(manifest) = manifest.filter(|m| l7r_guard::shared::pyjson::truthy(m)) else {
+    let Some(manifest) = manifest.filter(|m| l7r_shared::pyjson::truthy(m)) else {
         return Ok(String::new());
     };
     let mut out = String::new();
@@ -269,15 +269,12 @@ pub fn hit_regions(
         let role_of = |r: &str| roles.iter().find(|(k, _)| *k == r).map(|(_, c)| *c);
         for rec in items(manifest.get(key))? {
             let Value::Object(rec) = &rec else { continue };
-            if !rec
-                .get("poly")
-                .is_some_and(l7r_guard::shared::pyjson::truthy)
-            {
+            if !rec.get("poly").is_some_and(l7r_shared::pyjson::truthy) {
                 continue;
             }
             let role = rec
                 .get("role")
-                .map_or_else(|| "*".to_owned(), l7r_guard::shared::pyjson::py_str);
+                .map_or_else(|| "*".to_owned(), l7r_shared::pyjson::py_str);
             let Some(cls) = role_of(&role).or_else(|| role_of("*")) else {
                 continue;
             };
@@ -289,7 +286,7 @@ pub fn hit_regions(
             } else {
                 Value::Array(vec![rec["poly"].clone()])
             };
-            if !l7r_guard::shared::pyjson::truthy(&rings) {
+            if !l7r_shared::pyjson::truthy(&rings) {
                 continue;
             }
             let mut d = String::new();
@@ -399,7 +396,7 @@ pub fn hit_layer(
 fn footprint(rec: &serde_json::Map<String, Value>) -> Option<[f64; 5]> {
     let f = |k: &str| rec.get(k).and_then(|v| float_of(v).ok());
     let rot = match rec.get("rot") {
-        Some(v) if l7r_guard::shared::pyjson::truthy(v) => float_of(v).ok()?,
+        Some(v) if l7r_shared::pyjson::truthy(v) => float_of(v).ok()?,
         _ => 0.0,
     };
     Some([f("x")?, f("y")?, f("w")?, f("h")?, rot.to_radians()])

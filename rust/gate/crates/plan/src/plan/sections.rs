@@ -5,11 +5,11 @@ use std::collections::{BTreeMap, BTreeSet};
 use std::sync::LazyLock;
 
 use fancy_regex::Regex;
-use l7r_guard::shared::plan_text::HEAD;
-pub(super) use l7r_guard::shared::plan_text::{
+use l7r_shared::plan_text::HEAD;
+pub(super) use l7r_shared::plan_text::{
     blocks, leading_task, ordered_sections, task_sections, TASK_ID,
 };
-use l7r_guard::shared::sha256;
+use l7r_shared::sha256;
 
 /// Words a "typo" may never touch (feature 375 FR-005(b), plan D6): a number, a quantity, a negation or a quantifier changes a
 /// decision however few letters it moves - "two" -> "ten", "all" -> "any", "must" -> "may".
@@ -103,7 +103,7 @@ const TYPO_WORDS: usize = 3;
 /// over `fancy_regex` 0.14, each pattern's `find_iter` to the end; the label's lookaheads anchored first, `LABEL` in `lint.rs`), so the
 /// search runs to its end. The VM's stack limit still errs on a greedy span near a megabyte, which is why the scans end on an error.
 pub(super) fn re(pattern: &str) -> Regex {
-    l7r_guard::shared::regex::build(pattern).unwrap_or_else(|e| unreachable!("{e}"))
+    l7r_shared::regex::build(pattern).unwrap_or_else(|e| unreachable!("{e}"))
 }
 
 static WORD: LazyLock<Regex> = LazyLock::new(|| re(r"[A-Za-z0-9]+"));

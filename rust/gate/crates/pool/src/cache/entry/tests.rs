@@ -8,7 +8,7 @@ use crate::cache::stat::{stat, Stat};
 /// A meta reads back as it was written; one that does not read is none; an artifact's record is its file's.
 #[test]
 fn a_meta_round_trips_and_an_artifact_is_its_file() {
-    let dir = l7r_guard::shared::tempdir::TempDir::new("cache-entry");
+    let dir = l7r_shared::tempdir::TempDir::new("cache-entry");
     let f = dir.path().join("a.png");
     std::fs::write(&f, "png").unwrap();
     let a = artifact("a.png", &f).unwrap();
@@ -49,7 +49,7 @@ fn a_meta_round_trips_and_an_artifact_is_its_file() {
 /// lands on, and a copy stands in where a link cannot be made.
 #[test]
 fn an_entry_is_removed_meta_first_and_a_link_replaces_its_target() {
-    let dir = l7r_guard::shared::tempdir::TempDir::new("cache-entry-rm");
+    let dir = l7r_shared::tempdir::TempDir::new("cache-entry-rm");
     let e = dir.path().join("e");
     replace(&e.join(META), b"{}").unwrap();
     std::fs::write(e.join("a.png"), "png").unwrap();

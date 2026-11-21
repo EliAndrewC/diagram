@@ -35,7 +35,7 @@ use std::fmt::Write as _;
 use std::path::Path;
 
 use l7r_gate_core::record::args::{parse, Spec};
-use l7r_guard::shared::speckit::{
+use l7r_shared::speckit::{
     affects, closed_by_status, features, holding_with, py_path, state, state_given_vocabulary,
     vocabulary, Feature, Vocabulary, STAGES,
 };
@@ -64,11 +64,11 @@ fn raised(why: &str) -> Reply {
 
 /// The run recorded in the working directory's repository (`usage_log.exited`, its `root` None), by the one writer (feature 449 T129).
 fn record(cwd: &Path, code: i32) {
-    l7r_guard::shared::usage::record(
+    l7r_shared::usage::record(
         cwd,
         USAGE_LOG_TOOL,
         "check",
-        l7r_guard::shared::usage::exited(code),
+        l7r_shared::usage::exited(code),
     );
 }
 
@@ -251,7 +251,7 @@ fn known_tags(vocab: &Vocabulary) -> String {
 
 /// The open features that name no known tag, or an unknown one - none in a repository with no vocabulary.
 fn untagged<'a>(root: &Path, listed: &'a [Feature]) -> Vec<&'a Feature> {
-    if !root.join(l7r_guard::shared::speckit::AFFECTS).is_file() {
+    if !root.join(l7r_shared::speckit::AFFECTS).is_file() {
         return Vec::new();
     }
     listed

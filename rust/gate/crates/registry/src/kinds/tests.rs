@@ -24,7 +24,7 @@ fn python_kinds(registry: &Registry) -> Vec<(String, String, String)> {
     for name in names {
         let source = std::fs::read_to_string(dir.join(&name)).unwrap();
         let module = name.trim_end_matches(".py").to_owned();
-        for k in l7r_guard::suite_tools::pylex::kinds(&source).unwrap() {
+        for k in l7r_shared::suite_tools::pylex::kinds(&source).unwrap() {
             // no class carries modal text since feature 319
             assert_eq!(
                 (module.as_str(), k.name.as_str(), k.doc.as_str()),

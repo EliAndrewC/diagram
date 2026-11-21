@@ -53,7 +53,7 @@
 # has a size limit a heredoc-carrying command can exceed.
 #
 # THE ENTRY IS THE GUARD'S RUST (feature 449 T143, the round arbiter's `ask:449-phase4-slices` Q12): `l7r-gate log guard`, over the
-# guard's one writer (`rust/guard/src/shared/log.rs`) and its one resolver of the session's clone (`shared/session.rs`), where this ran
+# guard's one writer (`rust/guard/shared/src/log.rs`) and its one resolver of the session's clone (`shared/src/session.rs`), where this ran
 # two Python starts (`clone-resolve.sh resolve`, deleted, and the writer) on every firing. The gate's binary, not the guard's: every
 # caller but one has just run `l7r-gate.sh escape reason-ok`, and a suite's fixture tree stands `l7r-gate.sh` in as a link to the real
 # one. `L7R_GATE_STALE_OK` and `L7R_GATE_NO_BUILD`: the one hook-time caller, `l7r-guard.sh`'s no-binary path, must never wait on a

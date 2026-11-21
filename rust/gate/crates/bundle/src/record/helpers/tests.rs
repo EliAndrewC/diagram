@@ -7,7 +7,7 @@ use std::path::{Path, PathBuf};
 
 use l7r_gate_research::fixture::{put, FILES};
 use l7r_gate_research::pages::{entry_dir, put as cache_put, Stored};
-use l7r_guard::shared::tempdir::TempDir;
+use l7r_shared::tempdir::TempDir;
 
 use super::{quote_verbatim, record_prepass, run, save_cached, source_pages, style_prepass, VARS};
 

@@ -12,9 +12,9 @@ use std::fmt::Write as _;
 use std::io::Read;
 use std::path::Path;
 
-use l7r_guard::guards::event_log_hooks::read::{from_transcript, read_jsonl};
-use l7r_guard::guards::event_log_hooks::record_in;
-use l7r_guard::shared::env::Reader;
+use l7r_shared::env::Reader;
+use l7r_shared::guards::event_log_hooks::read::{from_transcript, read_jsonl};
+use l7r_shared::guards::event_log_hooks::record_in;
 use serde_json::Value;
 
 use super::reply;
@@ -26,7 +26,7 @@ const USAGE: &str = "    l7r-gate measure event-log hook                        
 /// prints one JSON line an event, and anything else is the usage, exit 2.
 #[must_use]
 pub fn cli(args: &[String], stdin: &mut dyn Read) -> Reply {
-    cli_in(args, stdin, &l7r_guard::shared::env::opt)
+    cli_in(args, stdin, &l7r_shared::env::opt)
 }
 
 /// [`cli`] reading the environment `env` (feature 451 T38: a test's own, so its hook line never reaches a session's exported

@@ -335,7 +335,7 @@ pub fn cli(args: &[String], root: &Path, utc: &str) -> crate::Reply {
 }
 
 fn utc_of(secs: u64) -> String {
-    let (y, mo, d, h, mi, s) = l7r_guard::shared::log::civil(secs);
+    let (y, mo, d, h, mi, s) = l7r_shared::log::civil(secs);
     format!("{y:04}-{mo:02}-{d:02}T{h:02}:{mi:02}:{s:02}Z")
 }
 

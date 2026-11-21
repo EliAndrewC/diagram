@@ -9,7 +9,7 @@ use std::hash::BuildHasher;
 use std::sync::LazyLock;
 
 use fancy_regex::{Captures, Regex};
-use l7r_guard::shared::py_text::{split, strip};
+use l7r_shared::py_text::{split, strip};
 
 use crate::pyre::py;
 use crate::re;

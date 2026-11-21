@@ -22,7 +22,7 @@ fn git(root: &Path, args: &[&str]) {
     assert!(crate::cohort::git(root, args).0, "{args:?}");
 }
 
-fn repo(tag: &str, files: &[(&str, &str)]) -> l7r_guard::shared::tempdir::TempDir {
+fn repo(tag: &str, files: &[(&str, &str)]) -> l7r_shared::tempdir::TempDir {
     let root = crate::checks::scratch(tag);
     for (rel, text) in files {
         put(&root, rel, text);

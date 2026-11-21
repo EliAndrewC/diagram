@@ -46,8 +46,8 @@ fn bytes_that_are_not_text_are_themselves() {
     );
 }
 
-fn repo(tag: &str) -> l7r_guard::shared::tempdir::TempDir {
-    let dir = l7r_guard::shared::tempdir::TempDir::new(&format!("gate-codeid-{tag}"));
+fn repo(tag: &str) -> l7r_shared::tempdir::TempDir {
+    let dir = l7r_shared::tempdir::TempDir::new(&format!("gate-codeid-{tag}"));
     assert!(Command::new("git")
         .arg("-C")
         .arg(&dir)
@@ -170,7 +170,7 @@ fn another_writers_entries_are_kept_and_a_broken_file_is_empty() {
 
 #[test]
 fn no_repository_is_an_empty_cache_nothing_is_written_to() {
-    let dir = l7r_guard::shared::tempdir::TempDir::new("gate-norepo");
+    let dir = l7r_shared::tempdir::TempDir::new("gate-norepo");
     let mut cache = Cache::at(&dir);
     assert!(cache.path.is_none() || cache.table.is_empty());
     assert_eq!(

@@ -17,8 +17,8 @@ use std::collections::{BTreeSet, HashMap};
 use std::path::Path;
 
 use l7r_gate_research::Error;
-use l7r_guard::shared::py_text::repr;
-use l7r_guard::shared::pyjson::{py_str, truthy, value_repr};
+use l7r_shared::py_text::repr;
+use l7r_shared::pyjson::{py_str, truthy, value_repr};
 use serde_json::{Map, Value};
 
 use crate::py::{iterate, os_error, type_name};
@@ -172,7 +172,7 @@ fn non_empty_text(v: &Value) -> bool {
 /// reproduced (the regex crate's differ); the differential normalizes them as the library's.
 fn compiled(pattern: &str) -> Result<(), Error> {
     let translated = l7r_gate_research::pyre::translate(&format!("(?i){pattern}"));
-    l7r_guard::shared::regex::build(&translated)
+    l7r_shared::regex::build(&translated)
         .map(|_| ())
         .map_err(|e| Error::new("re.PatternError", e.to_string()))
 }

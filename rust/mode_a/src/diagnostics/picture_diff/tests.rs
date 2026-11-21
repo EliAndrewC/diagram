@@ -130,7 +130,7 @@ fn the_lookup_takes_python_s_slices() {
 
 #[test]
 fn the_command_compares_pngs_and_svgs_and_refuses_as_the_python_did() {
-    let dir = l7r_guard::shared::tempdir::TempDir::new("picture-diff");
+    let dir = l7r_shared::tempdir::TempDir::new("picture-diff");
     let at = |n: &str| dir.path().join(n).to_string_lossy().into_owned();
     let mut px = vec![255_u8; 40 * 40 * 3];
     std::fs::write(at("a.png"), rgb_png(40, 40, &px)).unwrap();
@@ -198,7 +198,7 @@ fn the_command_compares_pngs_and_svgs_and_refuses_as_the_python_did() {
 
 #[test]
 fn the_ink_is_read_off_a_page_s_id_map_or_an_svg_s() {
-    let dir = l7r_guard::shared::tempdir::TempDir::new("picture-diff-ink");
+    let dir = l7r_shared::tempdir::TempDir::new("picture-diff-ink");
     let at = |n: &str| dir.path().join(n).to_string_lossy().into_owned();
     let mut px = vec![255_u8; 40 * 40 * 3];
     std::fs::write(at("a.png"), rgb_png(40, 40, &px)).unwrap();

@@ -27,8 +27,8 @@ use fancy_regex::Regex;
 use serde_json::{json, Map, Value};
 
 use l7r_gate_core::record::args::{parse_with, Spec};
-use l7r_guard::shared::py_text::{is_space, SPACE_CLASS};
-use l7r_guard::shared::pyjson::dumps;
+use l7r_shared::py_text::{is_space, SPACE_CLASS};
+use l7r_shared::pyjson::dumps;
 
 mod code;
 mod derivation;
@@ -81,7 +81,7 @@ pub(crate) fn py_re(pattern: &str) -> Regex {
             _ => out.push(c),
         }
     }
-    l7r_guard::shared::regex::build(&out).unwrap_or_else(|e| unreachable!("{pattern}: {e}"))
+    l7r_shared::regex::build(&out).unwrap_or_else(|e| unreachable!("{pattern}: {e}"))
 }
 
 /// Whether `c` is whitespace to Python.

@@ -8,8 +8,8 @@ use std::path::Path;
 use std::sync::LazyLock;
 
 use fancy_regex::Regex;
-use l7r_guard::shared::consulted::{self, norm};
-use l7r_guard::shared::pyjson::{py_str, truthy};
+use l7r_shared::consulted::{self, norm};
+use l7r_shared::pyjson::{py_str, truthy};
 
 use crate::lists::{field, get, read, urls_of};
 use crate::{key_of, name_of, py, read_text, registry_files, Result, KEPT, NOT_KEPT};
@@ -138,7 +138,7 @@ pub fn uncited_set(root: &Path) -> Result<Vec<String>> {
     for u in all {
         let n = work(&norm(&u));
         if !skip.contains(&n)
-            && l7r_guard::shared::blocked::blocked(&u, &rules).is_none()
+            && l7r_shared::blocked::blocked(&u, &rules).is_none()
             && !canon(&n)
             && seen.insert(n)
         {

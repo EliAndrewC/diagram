@@ -23,8 +23,8 @@ fn put(dir: &Path, rel: &str, text: &str) {
 }
 
 /// A repository whose `.py` ids come from a shell stand-in, one commit in.
-fn repo(tag: &str) -> (l7r_guard::shared::tempdir::TempDir, PathBuf, String) {
-    let dir = l7r_guard::shared::tempdir::TempDir::new(&format!("gate-state-{tag}"));
+fn repo(tag: &str) -> (l7r_shared::tempdir::TempDir, PathBuf, String) {
+    let dir = l7r_shared::tempdir::TempDir::new(&format!("gate-state-{tag}"));
     git(&dir, &["init", "-q", "-b", "main"]);
     git(&dir, &["config", "user.email", "t@t"]);
     git(&dir, &["config", "user.name", "t"]);
@@ -53,7 +53,7 @@ fn ask(dir: &Path, python: &str, args: &[&str]) -> crate::Reply {
 
 #[test]
 fn a_worktree_keeps_its_record_in_its_own_git_directory() {
-    let dir = l7r_guard::shared::tempdir::TempDir::new("gate-state-wt");
+    let dir = l7r_shared::tempdir::TempDir::new("gate-state-wt");
     std::fs::write(dir.join(".git"), "gitdir: /elsewhere/wt\n").unwrap();
     assert_eq!(
         state_file(&dir),

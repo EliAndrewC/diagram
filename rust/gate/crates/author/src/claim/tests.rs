@@ -3,7 +3,7 @@
 use std::path::{Path, PathBuf};
 
 use l7r_gate_core::ci::fixtures::{commit, git, put, scratch};
-use l7r_guard::shared::checks::resolved;
+use l7r_shared::checks::resolved;
 use serde_json::json;
 
 use super::{cli, kind, py_int, Reply};
@@ -16,7 +16,7 @@ fn ask(args: &[&str], cwd: &Path) -> Reply {
 }
 
 /// A mirror with main's `specs/` (195 twice), a fetched `origin/main`, a sibling clone's unpushed claim and the ledger; the clone `a`.
-fn mirror(tag: &str) -> (l7r_guard::shared::tempdir::TempDir, PathBuf, PathBuf) {
+fn mirror(tag: &str) -> (l7r_shared::tempdir::TempDir, PathBuf, PathBuf) {
     let dir = scratch(tag);
     let m = resolved(&dir);
     git(&m, &["init", "-q", "-b", "main"]);

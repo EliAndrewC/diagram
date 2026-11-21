@@ -3,7 +3,7 @@
 use std::cmp::Ordering;
 use std::path::{Path, PathBuf};
 
-use l7r_guard::shared::pyjson;
+use l7r_shared::pyjson;
 use serde_json::{json, Map, Value};
 
 use crate::Reply;

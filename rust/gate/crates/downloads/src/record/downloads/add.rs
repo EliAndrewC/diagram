@@ -285,7 +285,7 @@ fn iso_utc() -> String {
     let now = std::time::SystemTime::now()
         .duration_since(std::time::UNIX_EPOCH)
         .unwrap_or_default();
-    let (y, mo, d, h, mi, s) = l7r_guard::shared::log::civil(now.as_secs());
+    let (y, mo, d, h, mi, s) = l7r_shared::log::civil(now.as_secs());
     format!(
         "{y:04}-{mo:02}-{d:02}T{h:02}:{mi:02}:{s:02}.{:06}+00:00",
         now.subsec_micros()

@@ -152,7 +152,7 @@ mod tests {
         // the read log this test's runs take, no other test's run draining it meanwhile (feature 449 T151)
         let _log = crate::reads::taker();
         // a tree of its own, its registry empty: the whole registry's modal files would take the test past FR-008's tenth of a second
-        let dir = l7r_guard::shared::tempdir::TempDir::new("sheet-page-cli");
+        let dir = l7r_shared::tempdir::TempDir::new("sheet-page-cli");
         let tree = dir.path();
         let assets = tree.join(crate::page::ASSETS);
         std::fs::create_dir_all(&assets).unwrap();

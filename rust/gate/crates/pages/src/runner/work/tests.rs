@@ -34,7 +34,7 @@ echo '{"subtype": "success"}'
 "#;
 
 struct World {
-    _d: l7r_guard::shared::tempdir::TempDir,
+    _d: l7r_shared::tempdir::TempDir,
     root: String,
     stub: PathBuf,
     home: String,

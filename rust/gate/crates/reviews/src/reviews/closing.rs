@@ -28,8 +28,8 @@ use std::path::{Path, PathBuf};
 use std::sync::LazyLock;
 
 use fancy_regex::Regex;
-use l7r_guard::shared::checks;
-use l7r_guard::shared::py_text::{split, strip};
+use l7r_shared::checks;
+use l7r_shared::py_text::{split, strip};
 use serde_json::Value;
 
 use super::gm_review::name;
@@ -38,7 +38,7 @@ use super::gm_review::name;
 pub const GRANDFATHERED: &str = "scripts/gates/closed-before-375.txt";
 
 static CARRY: LazyLock<Regex> = LazyLock::new(|| {
-    l7r_guard::shared::regex::build(r"`?Carried:\s*(SC-\d+)\s*->\s*(\d+)\s+([\w.-]+)`?")
+    l7r_shared::regex::build(r"`?Carried:\s*(SC-\d+)\s*->\s*(\d+)\s+([\w.-]+)`?")
         .unwrap_or_else(|_| unreachable!("the carry pattern compiles"))
 });
 

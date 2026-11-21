@@ -44,7 +44,7 @@ l7r_gate_core = { path = "../gate/crates/core" }
 l7r_gate_pool = { path = "../gate/crates/pool" }
 l7r_gate_registry = { path = "../gate/crates/registry" }
 l7r_gate_research = { path = "../gate/crates/research" }
-l7r_guard = { path = "../guard" }
+l7r_shared = { path = "../guard/shared" }
 jpeg-encoder = { workspace = true }
 png = { workspace = true }
 resvg = { workspace = true }

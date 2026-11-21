@@ -9,8 +9,8 @@ use std::sync::LazyLock;
 use std::time::SystemTime;
 
 use fancy_regex::Regex;
-use l7r_guard::shared::py_text::strip;
-use l7r_guard::shared::speckit::splitlines;
+use l7r_shared::py_text::strip;
+use l7r_shared::speckit::splitlines;
 
 use super::{stop, Land};
 
@@ -28,7 +28,7 @@ static GATE_MACHINERY: LazyLock<Regex> =
     LazyLock::new(|| re(r"^(rust/gate/crates/land/.*|scripts/gates/.*|Makefile)$"));
 
 fn re(pattern: &str) -> Regex {
-    l7r_guard::shared::regex::build(pattern).unwrap_or_else(|e| unreachable!("{e}"))
+    l7r_shared::regex::build(pattern).unwrap_or_else(|e| unreachable!("{e}"))
 }
 
 /// The delta's paths that decide how a landing and its gate run.

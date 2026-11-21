@@ -5,8 +5,8 @@ use std::path::Path;
 use std::sync::LazyLock;
 
 use fancy_regex::Regex;
-use l7r_guard::shared::checks::pages::read_page;
-use l7r_guard::shared::escape::enough;
+use l7r_shared::checks::pages::read_page;
+use l7r_shared::escape::enough;
 
 use crate::record::modals;
 use crate::record::owed::{read_at, units as owed_units, FAMILIES};
@@ -334,7 +334,7 @@ fn modals_for(docs: &[(String, String)], page: &str) -> Vec<String> {
                 .and_then(|c| c.get(1))
                 .map(|m| {
                     m.as_str()
-                        .trim_matches(l7r_guard::shared::py_text::is_space)
+                        .trim_matches(l7r_shared::py_text::is_space)
                         .to_owned()
                 });
             format!("- {}", named.unwrap_or_else(|| cls.clone()))

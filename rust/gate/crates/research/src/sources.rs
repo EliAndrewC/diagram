@@ -13,9 +13,9 @@ use std::path::{Path, PathBuf};
 use std::sync::LazyLock;
 
 use fancy_regex::{Captures, Regex};
-use l7r_guard::shared::cited_url::trimmed;
-use l7r_guard::shared::html_text::unescape;
-use l7r_guard::shared::py_text::{collapse, strip};
+use l7r_shared::cited_url::trimmed;
+use l7r_shared::html_text::unescape;
+use l7r_shared::py_text::{collapse, strip};
 
 use crate::record::archive::entry_bodies;
 use crate::record::questions::Record;

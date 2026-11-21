@@ -17,14 +17,11 @@ use super::{int, newest_first, records, seeds_of, text, truthy, Repo, ENGINE_PAT
 
 const AUDIT: &str = "specs/328-match-the-research/audit";
 static SEEDS: LazyLock<Regex> = LazyLock::new(|| {
-    l7r_guard::shared::regex::build(
-        r"(?i)\bseeds?\s+((?:\d+(?:\s*,\s*|\s+and\s+|\s*,\s*and\s+)?)+)",
-    )
-    .unwrap_or_else(|e| unreachable!("{e}"))
+    l7r_shared::regex::build(r"(?i)\bseeds?\s+((?:\d+(?:\s*,\s*|\s+and\s+|\s*,\s*and\s+)?)+)")
+        .unwrap_or_else(|e| unreachable!("{e}"))
 });
-static NUMBER: LazyLock<Regex> = LazyLock::new(|| {
-    l7r_guard::shared::regex::build(r"\d+").unwrap_or_else(|e| unreachable!("{e}"))
-});
+static NUMBER: LazyLock<Regex> =
+    LazyLock::new(|| l7r_shared::regex::build(r"\d+").unwrap_or_else(|e| unreachable!("{e}")));
 
 /// Every seed number a row's words list after "seed" or "seeds".
 pub(super) fn seeds_named(words: &str) -> BTreeSet<i64> {

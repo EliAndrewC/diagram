@@ -21,11 +21,10 @@ const WINDOW_S: f64 = 300.0;
 /// A manifest line counts toward repeated text from this length: shorter ones are headings and separators.
 const LINE_MIN: usize = 40;
 
-static NUMBERS: LazyLock<Regex> = LazyLock::new(|| {
-    l7r_guard::shared::regex::build(r"[0-9]+").unwrap_or_else(|e| unreachable!("{e}"))
-});
+static NUMBERS: LazyLock<Regex> =
+    LazyLock::new(|| l7r_shared::regex::build(r"[0-9]+").unwrap_or_else(|e| unreachable!("{e}")));
 static WORDS: LazyLock<Regex> = LazyLock::new(|| {
-    l7r_guard::shared::regex::build(r"[a-z][a-z-]*").unwrap_or_else(|e| unreachable!("{e}"))
+    l7r_shared::regex::build(r"[a-z][a-z-]*").unwrap_or_else(|e| unreachable!("{e}"))
 });
 
 /// One subagent run.

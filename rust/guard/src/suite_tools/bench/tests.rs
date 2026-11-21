@@ -247,12 +247,18 @@ fn a_rust_baseline_is_built_at_the_ref_and_a_ref_with_no_guard_says_why() {
         "// the guard\n",
     )
     .unwrap();
+    std::fs::create_dir_all(dir.join("rust/guard/shared/src/guards")).unwrap();
+    std::fs::write(
+        dir.join("rust/guard/shared/src/guards/y_hooks.rs"),
+        "// a guard the gate reads, in l7r_shared\n",
+    )
+    .unwrap();
     std::fs::write(dir.join("rust/Cargo.toml"), "[workspace]\n").unwrap();
     git(&dir, &["add", "scripts", "rust"]);
     git(&dir, &["commit", "-q", "-m", "rust"]);
     git(&dir, &["tag", "rust"]);
     let cargo = exe(&dir.join("fake-cargo"), "mkdir -p \"$CARGO_TARGET_DIR/release\"; printf '#!/bin/bash\\ncat >/dev/null; echo told\\n' > \"$CARGO_TARGET_DIR/release/l7r-guard\"; chmod +x \"$CARGO_TARGET_DIR/release/l7r-guard\"");
-    let all = [stub("x-hooks")];
+    let all = [stub("x-hooks"), stub("y-hooks")];
     let ask = |words: &[&str], cargo: &str| {
         answer(&dir, &strings(words), &all, &dir.join("projects"), cargo)
     };
@@ -260,6 +266,9 @@ fn a_rust_baseline_is_built_at_the_ref_and_a_ref_with_no_guard_says_why() {
     assert!(
         rust.contains("its Rust guard built from that ref") && rust.contains("blocked -> silent")
     );
+    assert!(ask(&["y-hooks", "--against", "rust"], &cargo)
+        .stdout
+        .contains("its Rust guard built from that ref"));
     assert!(ask(&["x", "--against", "rust"], "false")
         .stderr
         .contains("would not build"));

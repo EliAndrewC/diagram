@@ -7,7 +7,7 @@
 //!
 //! `l7r-gate reviews checkpoint open|hold|status|due|switch [on|off] [--why W] [--root DIR] [--tool T] [--agent A]`.
 
-use l7r_guard::shared::env::Rooted;
+use l7r_shared::env::Rooted;
 use std::path::{Path, PathBuf};
 
 use serde_json::{json, Map, Value};
@@ -67,7 +67,7 @@ fn throw(root: &Path, state: &str, why: &str, at: f64) -> Result<Map<String, Val
     let person = named.as_deref().unwrap_or("unknown");
     let secs = int_of(at.floor());
     #[expect(clippy::cast_sign_loss, reason = "the clock is past the epoch")]
-    let (y, mo, d, h, mi, s) = l7r_guard::shared::log::civil(secs as u64);
+    let (y, mo, d, h, mi, s) = l7r_shared::log::civil(secs as u64);
     let mut sw = Map::new();
     sw.insert("state".to_owned(), json!(state));
     sw.insert("why".to_owned(), json!(why.trim()));
@@ -291,7 +291,7 @@ fn open_checkpoint(root: &Rooted, at: f64, exported: &str) -> Result<String, Str
     mine.insert("checkpoint_units".to_owned(), json!(units));
     mine.insert("units_since".to_owned(), json!(stamp));
     save(path.as_deref(), clock);
-    l7r_guard::shared::checks::arbiter::try_trip_in(
+    l7r_shared::checks::arbiter::try_trip_in(
         root,
         &trigger,
         "hour",
@@ -441,7 +441,7 @@ fn due(root: &Rooted, tool: &str, atype: &str, at: f64) -> String {
     let st = state_in(root, Some(at));
     if st.get("due") != Some(&json!(true)) || !text(&st, "open").is_empty() {
         if let Some(m) = mark.as_deref().filter(|_| tool == "Agent") {
-            let _ = std::fs::write(m, format!("{}\n", l7r_guard::shared::pyjson::py_float(at)));
+            let _ = std::fs::write(m, format!("{}\n", l7r_shared::pyjson::py_float(at)));
         }
         return String::new();
     }
@@ -537,8 +537,7 @@ pub fn cli_in(args: &[String], base: &Rooted) -> Reply {
         ),
         "hold" => lines(hold_in(&root, None), 1),
         _ => reply(
-            l7r_guard::shared::pyjson::dumps(&Value::Object(state_in(&root, None)), Some(1), true)
-                + "\n",
+            l7r_shared::pyjson::dumps(&Value::Object(state_in(&root, None)), Some(1), true) + "\n",
             String::new(),
             0,
         ),

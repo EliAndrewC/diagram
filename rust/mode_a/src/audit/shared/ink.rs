@@ -9,7 +9,7 @@ use std::sync::LazyLock;
 use fancy_regex::Regex;
 use l7r_gate_research::pyre::py;
 use l7r_gate_research::Error;
-use l7r_guard::shared::py_text::split;
+use l7r_shared::py_text::split;
 
 use crate::audit::checks::{max_of, min_of};
 use crate::etree::{fromstring, Element};

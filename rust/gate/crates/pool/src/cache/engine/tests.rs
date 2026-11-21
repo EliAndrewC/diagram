@@ -14,13 +14,13 @@ fn a_binary_is_its_build_id_and_any_other_file_its_hash() {
     let me = std::env::current_exe().unwrap();
     let (id, hashed) = identity(&me).unwrap();
     assert!(id.starts_with("gnu:") && id.len() > 20 && hashed == 0);
-    let dir = l7r_guard::shared::tempdir::TempDir::new("cache-engine");
+    let dir = l7r_shared::tempdir::TempDir::new("cache-engine");
     let script = dir.path().join("s");
     std::fs::write(&script, "#!/bin/sh\n").unwrap();
     assert_eq!(
         identity(&script).unwrap(),
         (
-            format!("sha256:{}", l7r_guard::shared::sha256::hex(b"#!/bin/sh\n")),
+            format!("sha256:{}", l7r_shared::sha256::hex(b"#!/bin/sh\n")),
             10
         )
     );
@@ -97,7 +97,7 @@ fn each_live_kind_names_its_engine() {
 /// is run from the root with the tree named to it.
 #[test]
 fn the_launcher_names_a_fresh_binary_or_says_why_not() {
-    let dir = l7r_guard::shared::tempdir::TempDir::new("cache-launcher");
+    let dir = l7r_shared::tempdir::TempDir::new("cache-launcher");
     let root = dir.path();
     let gates = root.join("scripts/gates");
     std::fs::create_dir_all(&gates).unwrap();

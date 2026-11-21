@@ -5,7 +5,7 @@ use std::io::Write as _;
 use std::process::{Command, Stdio};
 
 use l7r_gate_core::ci::fixtures::{git, scratch};
-use l7r_guard::shared::tempdir::TempDir;
+use l7r_shared::tempdir::TempDir;
 
 /// A repository whose history is `commits` on `main`, each a commit of its files, with `origin/main` at the commit `main_at` counts and
 /// the work tree and index at `main`; each commit's id, oldest first. Git's `fast-import` writes the whole history in one process, and

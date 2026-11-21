@@ -179,7 +179,7 @@ fn a_finished_section_is_archived_at_the_tick() {
     let d = root.join("specs/9001-x");
     // the plan reviewed CLEAR by the plan gate's own record, then T01's tick finishes its section
     let text = std::fs::read_to_string(d.join("plan.md")).unwrap();
-    let verdict = serde_json::json!({"plan_sha256": l7r_guard::shared::sha256::hex(text.as_bytes()), "decisions": [], "verdict": "CLEAR"});
+    let verdict = serde_json::json!({"plan_sha256": l7r_shared::sha256::hex(text.as_bytes()), "decisions": [], "verdict": "CLEAR"});
     let file = dir.join("verdict.json");
     std::fs::write(&file, verdict.to_string()).unwrap();
     let no_claims = |_: &[String]| crate::Reply {

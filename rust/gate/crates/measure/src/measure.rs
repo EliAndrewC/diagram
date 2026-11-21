@@ -67,7 +67,7 @@ pub fn cli(args: &[String], root: &Path) -> crate::Reply {
             &stepback_bundle::Env {
                 home: home(),
                 now: tool_yield::now(),
-                base: l7r_guard::shared::env::Rooted::process("."),
+                base: l7r_shared::env::Rooted::process("."),
             },
         ),
         Some("fix-yield") => fix_yield::cli(rest, &home()),
@@ -96,7 +96,7 @@ fn a_week_ago() -> String {
     let now = std::time::SystemTime::now()
         .duration_since(std::time::UNIX_EPOCH)
         .map_or(0, |d| d.as_secs());
-    let (y, m, d, ..) = l7r_guard::shared::log::civil(now.saturating_sub(7 * 86_400));
+    let (y, m, d, ..) = l7r_shared::log::civil(now.saturating_sub(7 * 86_400));
     format!("{y:04}-{m:02}-{d:02}")
 }
 

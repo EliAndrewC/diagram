@@ -1,0 +1,40 @@
+# What the guard's hooks and the gate's crates both read (feature 451 T58): the guard's `shared` modules, its hook protocol and the
+# guards whose code the gate's crates call (the event log and its readers, the house style's corrections, the feature approval's form,
+# the set-down's performance tasks, the conflict markers) and `pylex`. Split out of `rust/guard` because every gate crate, the Mode A
+# engine, the browser and the embedder built on the guard, so a hook edit rebuilt 32 crates (measured 2026-11-21, `cargo test --no-run`
+# after a touch of one hook, /tmp/t58); on this crate a hook edit rebuilds the guard alone. The guard re-exports it as `shared`.
+[package]
+name = "l7r_shared"
+version = "0.1.0"
+edition = "2021"
+publish = false
+
+# What the tests read of the tree at run time (feature 449 T93): the recorded command corpora (tests/hooks/fixtures/), the Makefile's
+# recipes and the hooks' helpers under scripts/ - the guard's own set, which these modules' tests carried with them.
+[package.metadata.l7r]
+reads = ["tests/hooks/", "Makefile", "scripts/"]
+
+[lib]
+name = "l7r_shared"
+
+[features]
+# THE TESTS' ENVIRONMENT FOR THE GUARD'S TESTS (feature 451 T58): `env` reads a test thread's own map in a test build (451 T32), which
+# `cfg(test)` alone gave the guard while these modules were its own; the guard's dev-dependency turns this on, so its tests read their
+# own map as before, and a gate crate's tests, which never name it, read the process's as before.
+test-env = []
+
+[dependencies]
+# the hook protocol's JSON, read and written (feature 449 plan, Complexity Tracking)
+serde = "1"
+# `float_roundtrip`: floats read as Python's `json.loads` reads them, the workspace's set (feature 449 T139, `rust/Cargo.toml`)
+serde_json = { version = "1", features = ["preserve_order", "float_roundtrip"] }
+# the guards' patterns, 43 of them with lookaround or backreferences (research R8)
+fancy-regex = "0.14"
+# a URL's host read as CPython's `urlsplit` reads it, NFKC included (feature 449 T148, `url_host`): the workspace's pin, Unicode 16.0
+unicode-normalization = "=0.1.24"
+
+[lints.clippy]
+all = { level = "deny", priority = -1 }
+pedantic = { level = "deny", priority = -1 }
+too_many_lines = "deny"
+allow_attributes_without_reason = "deny"

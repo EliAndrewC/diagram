@@ -6,11 +6,11 @@ use std::path::{Path, PathBuf};
 use std::sync::LazyLock;
 
 use fancy_regex::Regex;
-use l7r_guard::shared::checks;
-use l7r_guard::shared::env::Rooted;
-use l7r_guard::shared::escape::enough;
-use l7r_guard::shared::html_text::unescape;
-use l7r_guard::shared::pyjson;
+use l7r_shared::checks;
+use l7r_shared::env::Rooted;
+use l7r_shared::escape::enough;
+use l7r_shared::html_text::unescape;
+use l7r_shared::pyjson;
 use serde_json::{json, Map, Value};
 
 use super::{listing, units_in, zfill4, FAMILIES};
@@ -258,7 +258,7 @@ pub fn settle(store_dir: &Path, slug: &str, before: &str, after: &str) -> Result
 pub fn reply_checks(reply: &str) -> Vec<String> {
     let first = reply
         .lines()
-        .map(l7r_guard::shared::py_text::strip)
+        .map(l7r_shared::py_text::strip)
         .find(|l| !l.is_empty())
         .unwrap_or("");
     let found = REPLY_FIRST
@@ -359,7 +359,7 @@ fn adopt(s: &Path, others: &[PathBuf], slug: &str, fp: &str, reading: &str) -> R
 fn runs_of(text: &str) -> Vec<String> {
     let squeeze = |t: &str| {
         t.chars()
-            .filter(|c| !l7r_guard::shared::py_text::is_space(*c))
+            .filter(|c| !l7r_shared::py_text::is_space(*c))
             .collect::<String>()
     };
     let found: Vec<String> = RUN

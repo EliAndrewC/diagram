@@ -23,7 +23,7 @@ fn the_route_is_direct_with_no_engine_code_and_gated_with_it() {
 /// four git processes where `repo` and the commit took eight (feature 449 T167) - `git init`'s HEAD, object and ref directories and
 /// config written without the process, the committer and no automatic maintenance (a process each commit) in the config itself, and
 /// `origin/main` the first commit's loose ref copied.
-fn engine_delta(tag: &str) -> (l7r_guard::shared::tempdir::TempDir, String) {
+fn engine_delta(tag: &str) -> (l7r_shared::tempdir::TempDir, String) {
     let dir = scratch(tag);
     for sub in ["objects", "refs/heads", "refs/remotes/origin"] {
         std::fs::create_dir_all(dir.join(".git").join(sub)).unwrap();

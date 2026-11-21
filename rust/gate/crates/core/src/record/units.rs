@@ -4,10 +4,10 @@ use std::collections::{HashMap, HashSet};
 use std::sync::LazyLock;
 
 use fancy_regex::{Captures, Regex};
-use l7r_guard::shared::checks::pages::{read_page, words, Page};
-use l7r_guard::shared::html_text::unescape;
-use l7r_guard::shared::py_text::strip;
-use l7r_guard::shared::sha256;
+use l7r_shared::checks::pages::{read_page, words, Page};
+use l7r_shared::html_text::unescape;
+use l7r_shared::py_text::strip;
+use l7r_shared::sha256;
 use serde_json::{json, Value};
 
 /// The record's directory, its questions, and every directory of registry write-ups a check can be owed on.
@@ -22,7 +22,7 @@ const ABSENCE: &str = "no publicly readable source";
 /// Compiles a pattern the source spells out (`record_units`' own).
 #[must_use]
 pub fn re(pattern: &str) -> Regex {
-    l7r_guard::shared::regex::build(pattern).unwrap_or_else(|e| unreachable!("{e}"))
+    l7r_shared::regex::build(pattern).unwrap_or_else(|e| unreachable!("{e}"))
 }
 
 static TAG: LazyLock<Regex> = LazyLock::new(|| re(r"<[^>]+>"));

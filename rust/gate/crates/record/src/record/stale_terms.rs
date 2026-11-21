@@ -28,7 +28,7 @@ const SKIP_DIR: &str = "measure";
 const COMMON: &str = "the and for that this with from are was were has have had not but its their they them then than into onto over each when where which while will would should could may must can one two all any more most some such only also both here there what how why who does did done being been same other after before under between against about";
 
 fn compiled(p: &str) -> Regex {
-    l7r_guard::shared::regex::build(p).unwrap_or_else(|e| unreachable!("{e}"))
+    l7r_shared::regex::build(p).unwrap_or_else(|e| unreachable!("{e}"))
 }
 
 static TOKEN: LazyLock<Regex> =

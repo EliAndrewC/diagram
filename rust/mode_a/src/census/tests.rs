@@ -45,7 +45,7 @@ fn the_block_is_the_python_s() {
          retirement houses **0**\n- farmstead fixtures: True **1**, [1, 'a'] **1**, {'a': None} **1**\n- storehouses: **0** of **0** farmhouses"
     );
     // the numbers Python's JSON reads past serde's: NaN, an infinity, an integer past 64 bits
-    let kept = l7r_guard::shared::pyjson::loads(
+    let kept = l7r_shared::pyjson::loads(
         r#"{"kosatsuba":[{"x":NaN,"y":Infinity}], "farm_fixtures":[{"form":NaN},{"form":123456789012345678901234567890}]}"#,
     )
     .unwrap();
@@ -58,7 +58,7 @@ fn the_block_is_the_python_s() {
     assert!(census(&json!({"meta": {"x": 1}}))
         .unwrap()
         .contains("family form: **one_roof**"));
-    let huge = l7r_guard::shared::pyjson::loads(
+    let huge = l7r_shared::pyjson::loads(
         r#"{"houses":[{"x":123456789012345678901234567890,"y":-Infinity}]}"#,
     )
     .unwrap();
@@ -209,7 +209,7 @@ fn args(words: &[&str]) -> Vec<String> {
 
 #[test]
 fn the_command_rewrites_each_block_and_says_so() {
-    let dir = l7r_guard::shared::tempdir::TempDir::new("mode-a-census");
+    let dir = l7r_shared::tempdir::TempDir::new("mode-a-census");
     let at = |name: &str| dir.path().join(name).to_string_lossy().into_owned();
     let block = format!("{BEGIN}\n{}\n{END}", census(&json!({})).unwrap());
     for (name, notes) in [

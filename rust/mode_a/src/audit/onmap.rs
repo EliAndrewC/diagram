@@ -16,7 +16,7 @@ use std::sync::LazyLock;
 use fancy_regex::Regex;
 use l7r_gate_research::pyre::py;
 use l7r_gate_research::Error;
-use l7r_guard::shared::py_text::repr;
+use l7r_shared::py_text::repr;
 
 use crate::py::float;
 
@@ -156,7 +156,7 @@ mod tests {
 
     #[test]
     fn a_sheet_s_notes_are_read_beside_it() {
-        let dir = l7r_guard::shared::tempdir::TempDir::new("mode-a-onmap");
+        let dir = l7r_shared::tempdir::TempDir::new("mode-a-onmap");
         let svg = dir.path().join("s.svg").to_string_lossy().into_owned();
         assert_eq!(read_on_map(&svg).unwrap(), None);
         std::fs::write(

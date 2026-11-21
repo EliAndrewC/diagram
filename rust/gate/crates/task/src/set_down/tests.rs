@@ -4,7 +4,7 @@
 use std::path::Path;
 
 use l7r_gate_core::ci::fixtures::{put, scratch};
-use l7r_guard::shared::tempdir::TempDir;
+use l7r_shared::tempdir::TempDir;
 
 use super::{cli, cli_with, get, git_dir, truthy};
 use crate::tests::{env_of, repo, root_of};

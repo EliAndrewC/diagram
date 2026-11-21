@@ -18,7 +18,7 @@ fn git(dir: &Path, args: &[&str]) -> String {
 
 const A: &str = "l7r/diagram/a.py";
 
-fn repo(tag: &str) -> l7r_guard::shared::tempdir::TempDir {
+fn repo(tag: &str) -> l7r_shared::tempdir::TempDir {
     let root = crate::checks::scratch(tag);
     std::fs::create_dir_all(root.join("l7r/diagram")).unwrap();
     std::fs::create_dir_all(root.join("scripts/gates")).unwrap();

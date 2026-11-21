@@ -4,12 +4,12 @@ use std::path::{Path, PathBuf};
 use std::sync::LazyLock;
 
 use fancy_regex::Regex;
-use l7r_guard::shared::checks::arbiter as core;
-use l7r_guard::shared::checks::reply;
-use l7r_guard::shared::checks::rounds::subject_of_path;
-use l7r_guard::shared::checks::{load, state_path};
-use l7r_guard::shared::env::Rooted;
-use l7r_guard::shared::py_text::split;
+use l7r_shared::checks::arbiter as core;
+use l7r_shared::checks::reply;
+use l7r_shared::checks::rounds::subject_of_path;
+use l7r_shared::checks::{load, state_path};
+use l7r_shared::env::Rooted;
+use l7r_shared::py_text::split;
 use serde_json::{Map, Value};
 
 use crate::record::args::{parse_with, Spec};
@@ -105,7 +105,7 @@ fn round_lines(
     missing: &mut Vec<String>,
 ) -> Result<Vec<String>, Fail> {
     let c = field(v, "check", "None");
-    let verdict = l7r_guard::guards::event_log_hooks::verdict_of(r);
+    let verdict = l7r_shared::guards::event_log_hooks::verdict_of(r);
     let shown_verdict = if verdict.is_empty() {
         "no reply kept"
     } else {
@@ -317,7 +317,7 @@ fn gaps_of(
         .collect();
     if trigger.starts_with("reversal:")
         && rounds.is_empty()
-        && l7r_guard::shared::py_text::strip(diff).is_empty()
+        && l7r_shared::py_text::strip(diff).is_empty()
     {
         let what = if !subject.is_empty() {
             subject
@@ -700,7 +700,7 @@ pub fn cli_in(args: &[String], base: &Rooted) -> Reply {
         let s = dashed(&trigger.to_lowercase());
         s[s.len().saturating_sub(60)..].to_owned()
     };
-    let missing_ok = l7r_guard::shared::py_text::strip(p.text("--missing-ok", "")).to_owned();
+    let missing_ok = l7r_shared::py_text::strip(p.text("--missing-ok", "")).to_owned();
     if !missing_ok.is_empty() && split(p.text("--missing-ok", "")).len() < 2 {
         return reply_of_run(String::new(), "arbiter-bundle: MISSING_OK needs a reason of two words or more - MISSING_OK=\"<why the reply is gone>\"\n".to_owned(), 2);
     }

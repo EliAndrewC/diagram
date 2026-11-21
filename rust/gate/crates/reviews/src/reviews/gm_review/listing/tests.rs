@@ -4,7 +4,7 @@
 
 use std::path::PathBuf;
 
-use l7r_guard::shared::tempdir::Held;
+use l7r_shared::tempdir::Held;
 
 use super::super::super::tests::{dir, put};
 use super::super::tests::run_with;

@@ -81,3 +81,9 @@ landing on its own, each small; T22 last.
       research: rendering
 - [ ] T64 [perf] T55's order notice counts a code edit already landed (found 2026-11-21: the main session told at every make decide that its Makefile edit of 2026-11-20T15:48:51Z has no closing-checks after it, that edit landed hours before) - the notice reads the caller's last code edit since the task's last landing (static_runs_hooks' own landed rule), red first on an edit before a landing
       research: rendering
+- [ ] T65 [perf] The set-down guard counts a resumed agent as finished (found 2026-11-21: T58's builder resumed by SendMessage, running, and the Stop hook refused the turn as 'nothing is running') - set_down_hooks::running reads a launch and a notification as sets, and a SendMessage resume (its result's resumedAgentId) is no launch; the transcript read in order, an agent's last launch or resume after its last notification running, red first on a resume after a notice; lands after T58 (set_down_hooks moves into its new crate)
+      research: rendering
+- [ ] T66 [perf] Nothing pins T58's rebuild count (found by T58, 2026-11-21: a hook edit rebuilds the guard alone because no crate but the guard's own tests depends on l7r_guard; a crate that adds l7r_guard back fails nothing) - a check in make static refuses a dependency on l7r_guard from any crate but the binaries that ship it, naming l7r_shared, red first on a gate crate's Cargo.toml naming it
+      research: rendering
+- [ ] T67 The README guard refuses a cp of a hook's source to /tmp (found by T58's builder, 2026-11-21: cp rust/guard/src/guards/readme_hooks.rs /tmp/... refused as a README write) - the guard reads the destination's name, not the source's, red first on that cp
+      research: rendering

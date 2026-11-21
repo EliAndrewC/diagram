@@ -115,7 +115,7 @@ mod tests {
         );
         assert_eq!(roots(None, None).len(), 2);
         assert!(system_roots().len() >= 2);
-        let dir = l7r_guard::shared::tempdir::TempDir::new("cache-fonts");
+        let dir = l7r_shared::tempdir::TempDir::new("cache-fonts");
         let a = dir.path().join("a");
         std::fs::create_dir_all(a.join("sub")).unwrap();
         for f in ["x.ttf", "sub/y.OTC", "readme.txt"] {

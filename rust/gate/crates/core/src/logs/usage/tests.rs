@@ -8,7 +8,7 @@ fn words(list: &[&str]) -> Vec<String> {
     list.iter().map(|s| (*s).to_owned()).collect()
 }
 
-fn repo(tag: &str) -> l7r_guard::shared::tempdir::TempDir {
+fn repo(tag: &str) -> l7r_shared::tempdir::TempDir {
     let root = crate::checks::scratch(tag);
     assert!(std::process::Command::new("git")
         .arg("-C")

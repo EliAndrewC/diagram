@@ -8,10 +8,10 @@ use std::path::{Path, PathBuf};
 use std::sync::LazyLock;
 
 use fancy_regex::{Captures, Regex};
-use l7r_guard::shared::checks::{load, reply, state_path};
-use l7r_guard::shared::env::Rooted;
-use l7r_guard::shared::html_text::unescape;
-use l7r_guard::shared::py_text::{split, strip};
+use l7r_shared::checks::{load, reply, state_path};
+use l7r_shared::env::Rooted;
+use l7r_shared::html_text::unescape;
+use l7r_shared::py_text::{split, strip};
 use serde_json::Value;
 
 use super::earlier::{self, dispatches};
@@ -405,7 +405,7 @@ fn research_held_in(root: &Path, uid: &str, text: &str, base: &Path) -> Vec<Stri
         let aid = v
             .get("aid")
             .map(super::py_str)
-            .filter(|a| !l7r_guard::shared::checks::falsy(v.get("aid")) && !a.is_empty());
+            .filter(|a| !l7r_shared::checks::falsy(v.get("aid")) && !a.is_empty());
         if text_of.is_empty() {
             if let Some(aid) = aid {
                 text_of = transcript_of(base, &aid)

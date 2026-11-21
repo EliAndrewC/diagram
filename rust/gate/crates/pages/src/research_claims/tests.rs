@@ -20,7 +20,7 @@ fn put(root: &Path, rel: &str, text: &str) {
 
 /// A mirror with one clone `me` in git, its gate script, two features closed (one in the mirror, one in the clone) and one open, and
 /// feature 303's move record naming an old page's section (the question's path built from parts: no research pointer in a fixture).
-fn world(tag: &str) -> (l7r_guard::shared::tempdir::TempDir, PathBuf) {
+fn world(tag: &str) -> (l7r_shared::tempdir::TempDir, PathBuf) {
     let d = l7r_gate_core::ci::fixtures::scratch(tag);
     let top = std::fs::canonicalize(&*d).unwrap().join(".clones/me");
     std::fs::create_dir_all(&top).unwrap();

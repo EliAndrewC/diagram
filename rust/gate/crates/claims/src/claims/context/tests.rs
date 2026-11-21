@@ -33,7 +33,7 @@ impl Brook {
 pub const WIDTH: f64 = 3.0;
 ";
 
-fn tree(tag: &str) -> l7r_guard::shared::tempdir::TempDir {
+fn tree(tag: &str) -> l7r_shared::tempdir::TempDir {
     let root = crate::checks::scratch(tag);
     put(&root, "rust/eng/src/lib.rs", LIB);
     put(&root, "rust/eng/src/course.rs", "pub fn drawn(x: f64) -> f64 {\n    deeper(x)\n}\nfn deeper(x: f64) -> f64 {\n    x + DEEP\n}\npub const DEEP: f64 = 4.0;\npub const TWO: f64 = 2.0;\n");

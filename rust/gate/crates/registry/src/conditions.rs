@@ -10,8 +10,8 @@ use std::sync::LazyLock;
 use fancy_regex::Regex;
 use l7r_gate_research::pyre::py;
 use l7r_gate_research::{Error, Result};
-use l7r_guard::shared::py_text::{repr, strip};
-use l7r_guard::shared::pyjson::{py_str, value_repr};
+use l7r_shared::py_text::{repr, strip};
+use l7r_shared::pyjson::{py_str, value_repr};
 use serde_json::{Map, Value};
 
 /// `[knob=value]` or `[knob=value|value]`, at the start of an item.

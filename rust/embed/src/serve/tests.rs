@@ -1,6 +1,6 @@
 //! The serve loop (feature 449 T138).
 
-use l7r_guard::shared::tempdir::TempDir;
+use l7r_shared::tempdir::TempDir;
 
 use super::{embed, serve};
 use crate::testkit::{model_dir, Stand, CONFIG, MAP};

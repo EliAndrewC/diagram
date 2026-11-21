@@ -17,7 +17,7 @@ fn depiction(root: &Path, out: &str) -> (i32, Run) {
     let code = bundle(
         &mut run,
         // the test's own environment (feature 451 T38), never a session's exported answer store
-        &l7r_guard::shared::env::Rooted::with(root, &[]),
+        &l7r_shared::env::Rooted::with(root, &[]),
         "hamlet/well",
         &Ask {
             for_: "modal-depiction",

@@ -4,8 +4,8 @@ use std::collections::{BTreeMap, HashSet};
 use std::fmt::Write as _;
 use std::path::{Path, PathBuf};
 
-use l7r_guard::shared::checks::{load, state_path};
-use l7r_guard::shared::pyjson;
+use l7r_shared::checks::{load, state_path};
+use l7r_shared::pyjson;
 use serde_json::{json, Value};
 
 use super::check::{
@@ -150,7 +150,7 @@ pub fn scoped_verbatim(out: &Path, full_text: &str) -> Result<String, Fail> {
     }
     let kept_text = flat(&joined);
     let plain = flat(&untagged(&kept_text));
-    let truthy = |v: Option<&Value>| v.is_some_and(|v| !l7r_guard::shared::checks::falsy(Some(v)));
+    let truthy = |v: Option<&Value>| v.is_some_and(|v| !l7r_shared::checks::falsy(Some(v)));
     let footnotes: Vec<Value> = data
         .get("footnotes")
         .and_then(Value::as_array)
@@ -306,7 +306,7 @@ fn since_last_round(root: &Path, rows: &[Unit]) -> Result<String, Fail> {
                         v.get("state").and_then(Value::as_str),
                         Some("pending" | "running")
                     )
-                    && (l7r_guard::shared::checks::falsy(v.get("notes")) || notes.contains(&note))
+                    && (l7r_shared::checks::falsy(v.get("notes")) || notes.contains(&note))
             })
             .map(|v| v.get("t").and_then(Value::as_f64).unwrap_or(0.0))
             .fold(0.0_f64, f64::max);

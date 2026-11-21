@@ -25,7 +25,7 @@ pub fn default_root() -> PathBuf {
 #[must_use]
 pub fn default_root() -> PathBuf {
     static ROOT: std::sync::OnceLock<PathBuf> = std::sync::OnceLock::new();
-    ROOT.get_or_init(|| l7r_guard::shared::tempdir::beside_binary("l7r-check-tests"))
+    ROOT.get_or_init(|| l7r_shared::tempdir::beside_binary("l7r-check-tests"))
         .clone()
 }
 pub const MANIFEST: &str = "MANIFEST.md";
@@ -258,7 +258,7 @@ pub fn today() -> String {
 
 /// `text.rstrip()`: Python's whitespace off the end.
 pub fn rstrip(text: &str) -> &str {
-    text.trim_end_matches(l7r_guard::shared::py_text::is_space)
+    text.trim_end_matches(l7r_shared::py_text::is_space)
 }
 
 /// The first `n` characters of `text` (`text[:n]`).
@@ -269,11 +269,11 @@ pub fn head(text: &str, n: usize) -> &str {
 
 /// A JSON value as Python's `str()` and `repr()` print what `json.loads` made of it: the guard's `pyjson` since feature 449 T119, where the
 /// event-log reader the guard and the gate share names an edit's path by it (`ask:449-T83-scope`, one implementation).
-pub use l7r_guard::shared::pyjson::py_str;
+pub use l7r_shared::pyjson::py_str;
 
 /// A string as Python's `repr` prints it: the guard's `py_text::repr` since feature 449 T83, where the review ledger's lint names a
 /// cell by its repr and the guard crate cannot reach the gate's (`ask:449-T83-scope`, one implementation).
-pub use l7r_guard::shared::py_text::repr as py_repr;
+pub use l7r_shared::py_text::repr as py_repr;
 
 /// `dest.parent.mkdir(parents=True, exist_ok=True); dest.write_text(text)`.
 ///

@@ -8,7 +8,7 @@
 use std::path::Path;
 use std::time::SystemTime;
 
-use l7r_guard::guards::event_log_hooks::{append_row_with, now_stamp};
+use l7r_shared::guards::event_log_hooks::{append_row_with, now_stamp};
 use serde_json::json;
 
 use super::{shown, World};
@@ -20,10 +20,10 @@ use super::{shown, World};
 /// no goal, so the gate's own form stands.
 pub(super) fn run_target(run_what: &str, cmd: &str) -> String {
     let words: Vec<&str> = run_what.split('\'').step_by(2).collect();
-    l7r_guard::shared::make::invoked(&words.join("QUOTED=1"))
+    l7r_shared::make::invoked(&words.join("QUOTED=1"))
         .into_iter()
         .next()
-        .filter(|t| t != l7r_guard::shared::make::DEFAULT_GOAL)
+        .filter(|t| t != l7r_shared::make::DEFAULT_GOAL)
         .unwrap_or_else(|| format!("rust-{cmd}"))
 }
 

@@ -7,10 +7,10 @@ use std::path::Path;
 use std::sync::LazyLock;
 
 use fancy_regex::Regex;
-pub use l7r_guard::shared::cited_url::{clean, url_id};
-use l7r_guard::shared::html_text::escape;
-use l7r_guard::shared::py_text::is_space;
-use l7r_guard::shared::pyjson::{py_str, truthy};
+pub use l7r_shared::cited_url::{clean, url_id};
+use l7r_shared::html_text::escape;
+use l7r_shared::py_text::is_space;
+use l7r_shared::pyjson::{py_str, truthy};
 use serde_json::{Map, Value};
 
 use crate::record::questions::QUESTIONS;
@@ -196,7 +196,7 @@ fn iso_day(text: &str) -> Result<i64> {
             "ValueError",
             format!(
                 "Invalid isoformat string: {}",
-                l7r_guard::shared::py_text::repr(text)
+                l7r_shared::py_text::repr(text)
             ),
         )
     };

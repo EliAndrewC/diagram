@@ -2,7 +2,7 @@
 //! `a-b/z.txt`), takes hidden files, links to files and folders named `*.txt`, and enters no linked folder (observed 2026-11-16 on a tree
 //! of each case through `CPython` 3.14.4's `pathlib`).
 
-use l7r_guard::shared::tempdir::TempDir;
+use l7r_shared::tempdir::TempDir;
 
 use super::{files, groups, record_shard, text_of, File};
 use crate::testkit::{put, q};

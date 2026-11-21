@@ -110,7 +110,7 @@ mod tests {
     /// settles only before the time it is held against.
     #[test]
     fn a_stat_round_trips_its_cells_and_settles_only_before_its_hashing() {
-        let dir = l7r_guard::shared::tempdir::TempDir::new("cache-stat");
+        let dir = l7r_shared::tempdir::TempDir::new("cache-stat");
         let f = dir.path().join("f");
         std::fs::write(&f, "abc").unwrap();
         let s = stat(&f);

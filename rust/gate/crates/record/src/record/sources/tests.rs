@@ -4,7 +4,7 @@
 use std::os::unix::fs::PermissionsExt as _;
 use std::path::{Path, PathBuf};
 
-use l7r_guard::shared::tempdir::TempDir;
+use l7r_shared::tempdir::TempDir;
 use serde_json::json;
 
 use super::{attempts_cli, cli, mark_filled, registry};

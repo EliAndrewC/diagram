@@ -185,7 +185,7 @@ fn each_page_once_and_each_refusing_host_once() {
     );
     assert_eq!(pages.get("notes/x.html").unwrap().state, "OWN");
     assert!(pages.get("http://[bad/x").is_err());
-    let d = l7r_guard::shared::tempdir::TempDir::new("research-offline");
+    let d = l7r_shared::tempdir::TempDir::new("research-offline");
     std::fs::write(d.join(name_for("http://a.org/p")), "<p>saved</p>").unwrap();
     let mut off = Pages::new(Some(&d), Box::new(Curl::default()));
     assert_eq!(off.get("http://a.org/p").unwrap().text, "saved");

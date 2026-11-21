@@ -172,7 +172,7 @@ pub fn local_time(at: f64, fmt: &str) -> String {
 /// The epoch seconds now, as `time.time()`.
 #[must_use]
 pub fn now() -> f64 {
-    l7r_guard::shared::checks::now()
+    l7r_shared::checks::now()
 }
 
 /// `json.dumps(value, indent=1) + "\n"` written to `path`, as `Path.write_text` writes it.
@@ -181,10 +181,7 @@ pub fn now() -> f64 {
 ///
 /// Where what it reads, writes or runs fails: the error says which and why.
 pub fn write_json(path: &Path, value: &Value) -> std::io::Result<()> {
-    std::fs::write(
-        path,
-        l7r_guard::shared::pyjson::dumps(value, Some(1), true) + "\n",
-    )
+    std::fs::write(path, l7r_shared::pyjson::dumps(value, Some(1), true) + "\n")
 }
 
 /// An ISO time's epoch seconds as `datetime.fromisoformat(str(t).replace("Z", "+00:00")).timestamp()` reads one, or None.

@@ -7,7 +7,7 @@ use std::sync::LazyLock;
 
 use fancy_regex::Regex;
 use l7r_gate_archive::fetch::Fetched;
-use l7r_guard::shared::consulted;
+use l7r_shared::consulted;
 use serde_json::json;
 
 use crate::lists::{line, not_kept};
@@ -65,7 +65,7 @@ pub fn access_of(got: &Fetched) -> &'static str {
 /// `sha256` of a text, its whitespace squeezed and stripped.
 #[must_use]
 pub fn digest(text: &str) -> String {
-    l7r_guard::shared::sha256::hex(strip(&squeeze(text)).as_bytes())
+    l7r_shared::sha256::hex(strip(&squeeze(text)).as_bytes())
 }
 
 /// The verdicts no agent is needed for: no-substance by URL; duplicate by the text of a cited page or of a page earlier in the set.

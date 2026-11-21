@@ -38,7 +38,7 @@ fn commit(root: &Path, what: &str) {
 
 /// A mirror and its clone: (the scratch directory, the mirror, the clone). The launcher both trees run (`scripts/gates/l7r-gate.sh`)
 /// names one stand-in binary for either engine, as a fresh engine's launcher does under `L7R_GATE_PRINT_FRESH=1`.
-fn trees(tag: &str) -> (l7r_guard::shared::tempdir::TempDir, PathBuf, PathBuf) {
+fn trees(tag: &str) -> (l7r_shared::tempdir::TempDir, PathBuf, PathBuf) {
     let tmp = crate::checks::scratch(tag);
     let main = tmp.join("diagram");
     std::fs::create_dir_all(&main).unwrap();
@@ -123,7 +123,7 @@ fn draw(root: &Path, map: &str, artifacts: &[(&str, &str)], reads: &[&str], skip
             path: spec.display().to_string(),
             stat: stat(&spec),
             hashed: 0,
-            digest: l7r_guard::shared::sha256::hex(&std::fs::read(&spec).unwrap()),
+            digest: l7r_shared::sha256::hex(&std::fs::read(&spec).unwrap()),
         },
         artifacts: listed,
         key: "k".to_owned(),
@@ -136,7 +136,7 @@ fn draw(root: &Path, map: &str, artifacts: &[(&str, &str)], reads: &[&str], skip
     for read in reads {
         let at = root.join(read);
         let cells = stat(&at).cells().join("\t");
-        let digest = l7r_guard::shared::sha256::hex(&std::fs::read(&at).unwrap());
+        let digest = l7r_shared::sha256::hex(&std::fs::read(&at).unwrap());
         let _ = writeln!(text, "r\t{read}\t{cells}\t0\t{digest}\t{map}");
     }
     // a font the Mode A raster loads: a system file, the same file for both trees, never compared

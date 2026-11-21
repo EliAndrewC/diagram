@@ -7,7 +7,7 @@ use std::fmt::Write as _;
 use std::sync::LazyLock;
 
 use fancy_regex::{Captures, Regex};
-use l7r_guard::shared::py_text::is_space;
+use l7r_shared::py_text::is_space;
 
 use crate::re;
 

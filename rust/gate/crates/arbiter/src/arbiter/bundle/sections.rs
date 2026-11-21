@@ -6,14 +6,14 @@ use std::process::Command;
 use std::sync::LazyLock;
 
 use fancy_regex::Regex;
-use l7r_guard::guards::event_log_hooks::log_path_in;
-use l7r_guard::shared::env::Rooted;
+use l7r_shared::env::Rooted;
+use l7r_shared::guards::event_log_hooks::log_path_in;
 // the event log's one reader, the guard's since feature 449 T119 (`ask:449-T83-scope`): `make feature-report` reads through it too
-use l7r_guard::guards::event_log_hooks::read::{read_jsonl, reversals};
-use l7r_guard::shared::checks::rounds::ROUND_CAP;
-use l7r_guard::shared::checks::state_path;
-use l7r_guard::shared::log::civil;
-use l7r_guard::shared::py_text::strip;
+use l7r_shared::checks::rounds::ROUND_CAP;
+use l7r_shared::checks::state_path;
+use l7r_shared::guards::event_log_hooks::read::{read_jsonl, reversals};
+use l7r_shared::log::civil;
+use l7r_shared::py_text::strip;
 use serde_json::{json, Value};
 
 use crate::record::bundle::{findall, head, hit, py_str, pyre, shown, sort_paths, write};
@@ -69,7 +69,7 @@ pub fn text<'a>(v: &'a Value, k: &str) -> &'a str {
 
 /// Whether a value is what Python reads as true.
 pub fn truthy(v: Option<&Value>) -> bool {
-    !l7r_guard::shared::checks::falsy(v)
+    !l7r_shared::checks::falsy(v)
 }
 
 /// `str(v.get(k, default))`.
@@ -511,7 +511,7 @@ fn between(root: &Path, a: &Value, b: &Value) -> Vec<String> {
     }
     let stat = strip(&git_out(root, &["diff", "--stat", &ca, &cb])).to_owned();
     let diff = git_out(root, &["diff", &ca, &cb])
-        .trim_end_matches(l7r_guard::shared::py_text::is_space)
+        .trim_end_matches(l7r_shared::py_text::is_space)
         .to_owned();
     if stat.is_empty() && diff.is_empty() {
         return vec![format!("  (between these two: no diff from {ca} to {cb} - a commit is not in this clone, or nothing changed)")];
@@ -699,7 +699,7 @@ pub fn claims_section(root: &Path, texts: &[String]) -> Result<Vec<String>, Fail
     let numbers: BTreeSet<String> = texts
         .iter()
         .flat_map(|t| findall(&LOOSE, t, 0))
-        .map(|n| l7r_guard::shared::py_text::split(&n).join(" "))
+        .map(|n| l7r_shared::py_text::split(&n).join(" "))
         .collect();
     if names.is_empty() && numbers.is_empty() {
         return Ok(Vec::new());
