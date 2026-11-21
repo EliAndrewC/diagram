@@ -161,6 +161,37 @@ fn a_command_written_outside_is_silent_and_one_with_both_is_a_warning() {
     assert_eq!(report(&bash(&format!("cat 'a {WORD}/b'"))), Report::Silent);
 }
 
+/// 451 T45: a named path is a file, never a directory on the way to one. T42's replay ran its project under `mktemp -d /tmp/t42/run.XXXX`,
+/// and the one run whose letters were `run.py8Q` read `/tmp/t42/run.py` as a named file under /tmp, judged 11 project writes outside the
+/// project and left them silent: the verdict turned on the temporary directory's random letters, not on the command.
+#[test]
+fn a_directory_whose_name_runs_past_an_extension_names_no_file() {
+    let write = |dir: &str| {
+        report(&bash(&format!(
+            "cd /tmp/t45/{dir}/diagram/.clones/c && python3 - <<'PY'\np = 'docs/a.html'\nopen(p, 'w').write('the {WORD}')\nPY"
+        )))
+    };
+    for dir in ["run.ab8Q", "run.py8Q", "run.sh8Q", "run.md8Q", "run.json"] {
+        let got = updated(&write(dir), "command");
+        assert!(got.is_some_and(|c| c.contains(WORD_FIXED)), "{dir}");
+    }
+}
+
+/// ...and a file's extension keeps its letters: a scratch `.jsonl`, a transcript, a `.pyc` written from a program stay outside (a word
+/// boundary in place of them turned each into a correction of text under /tmp).
+#[test]
+fn a_file_named_past_its_extension_is_still_named() {
+    for path in [
+        "/tmp/a.py",
+        "/tmp/x.jsonl",
+        "/home/u/.claude/projects/p/s.jsonl",
+        "/tmp/x.pyc",
+    ] {
+        let program = format!("python3 - <<'PY'\nopen('{path}', 'w').write('the {WORD}')\nPY");
+        assert_eq!(report(&bash(&program)), Report::Silent, "{path}");
+    }
+}
+
 #[test]
 fn a_sed_beside_a_write_is_named_in_the_note_and_an_en_dash_is_corrected() {
     let got = report(&bash(&format!(

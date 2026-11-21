@@ -223,16 +223,10 @@
    "reviewed": "2026-11-20",
    "declared": "spec-fidelity"
   },
-  "### T45 (<why: the finding or measurement that files it>)": {
-   "sha256": "8d8a57f3d8c072ad64d6f8c8f67eac130bafa3dddf1ae7b5b6e19dbf6be1ea7a",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-20",
-   "declared": "spec-fidelity"
-  },
   "### T45 Approach (checklist part A)": {
-   "sha256": "83905e9d729d7be51145630d015cc42a50b1e868d4329256b71ab9e8a6ec88fb",
+   "sha256": "117b4add605afa5a3bc7acfebf3d8cb736abc1ab2ed44f5acdd66bc76fe5a432",
    "verdict": "CLEAR",
-   "reviewed": "2026-11-20",
+   "reviewed": "2026-11-21",
    "declared": "spec-fidelity"
   },
   "### T46 Approach (checklist part A)": {
@@ -253,16 +247,10 @@
    "reviewed": "2026-11-20",
    "declared": "spec-fidelity"
   },
-  "### T47 (<why: the finding or measurement that files it>)": {
-   "sha256": "7a542fe3838b569ed543db98b25fa8ea26791ca2493f70658406a81b3572dc9d",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-20",
-   "declared": "spec-fidelity"
-  },
   "### T47 Approach (checklist part A)": {
-   "sha256": "758105f55fc394e57a6aab41c7c99e6ededbcd4f31f593c220aa8a46f3ecbe48",
+   "sha256": "63ac0d157c2ca835cb2911af7d106eb5e8df8ae7d634ca51791b7e7fb9be68b6",
    "verdict": "CLEAR",
-   "reviewed": "2026-11-20",
+   "reviewed": "2026-11-21",
    "declared": "spec-fidelity"
   },
   "### T48 (<why: the finding or measurement that files it>)": {
@@ -275,6 +263,18 @@
    "sha256": "b4cd3ee436ac46da7168bd6a517e77c286b22774c9b94975a6ac18f91592caed",
    "verdict": "CLEAR",
    "reviewed": "2026-11-20",
+   "declared": "spec-fidelity"
+  },
+  "### T47 (the pages crate's cover left `runner/watch.rs` line 271 unreached in one `make static` run, observed 2026-11-20, method: T44's builder's `make static` cover line; a rerun reused the last green result)": {
+   "sha256": "53372fa3ca1ab41dee7b8929091179f5d4614332e58cbea94d3a88476f8848e9",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity"
+  },
+  "### T45 (one house-style-alone replay of T42's, no clone resolvable, flipped 8 rows from rewrote to allowed and changed 3 rows' output, and did not reproduce, observed 2026-11-20, method: T42's `cmp.sh` of `final.nobody.house-style-hooks.tsv` against `before`)": {
+   "sha256": "b6511003f4d759e116849ab7840b101ea859009a60a5ee8ef8dafc025bbfc2a0",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-21",
    "declared": "spec-fidelity"
   }
  },
@@ -5644,6 +5644,265 @@
      "why": "The template's standing exit; it decides nothing the request or spec left open and drops nothing asked for. The green exit is still an unfilled placeholder."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-20",
+   "blocks": [
+    "### T47 (the pages crate's cover left `runner/watch.rs` line 271 unreached in one `make static` run, observed 2026-11-20, method: T44's builder's `make static` cover line; a rerun reused the last green result)",
+    "### T47 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T47-scope",
+     "summary": "Fix a coverage flake: make static's cover of the pages crate left runner/watch.rs line 271 unreached on one run of correct work.",
+     "class": "within",
+     "why": "A check that refuses correct work is a defect (constitution XIV, feature 449 T196); fix-as-we-go asks for it to be fixed, and a red make static on correct work costs a rerun, which is the time the request's improvement 2 and the 2026-11-20 order go after."
+    },
+    {
+     "id": "T47-wait-param",
+     "summary": "watch() takes its wait as a parameter (impl FnMut(Duration) -> bool); a started watch's is the halt channel's recv_timeout, so behavior is unchanged; Watch::start, stop and work.rs untouched.",
+     "class": "within",
+     "why": "A test seam that keeps the watch's behavior in a queue as it was; it changes no behavior the GM asked to keep or change."
+    },
+    {
+     "id": "T47-tests",
+     "summary": "The racing test is replaced by a counted-check test driving every path with no branch turning on elapsed time (exact per-path counts asserted), plus one threaded test (a stall ended, a watch halted); shown red with each path broken.",
+     "class": "within",
+     "why": "Enforcement of the coverage the gate already requires, made deterministic; it drops no path the old test covered (the old test passed either break of 271), and the red-first runs show it catches more."
+    },
+    {
+     "id": "T47-class",
+     "summary": "The other branches resting on the same scheduling (265, 269, 276, the returned session's quiet) are moved to counted checks too; runner/tests.rs reaches none of them alone.",
+     "class": "within",
+     "why": "Fixes the whole class the defect belongs to rather than the one line; widens, does not narrow."
+    },
+    {
+     "id": "T47-constants",
+     "summary": "No constant moved (STALL_AFTER, STALL_CHECK, RETURNED_AFTER as they were); no map changes.",
+     "class": "within",
+     "why": "Leaves behavior as it was; nothing asked is narrowed."
+    },
+    {
+     "id": "T47-exits",
+     "summary": "Green exits: the crate's tests, lint, format and cover, make quick, make static once, make hooks-test; red: recorded and set down, an impossibility claim through make arbiter-ask.",
+     "class": "within",
+     "why": "Runs make static once, as FR-007 asks. Note: constraint 2 cites 'FR-008 (each test under a tenth of a second)', but this spec's FR-008 is the background-run guard; a mis-citation to fix in the text, not a narrowing."
+    },
+    {
+     "id": "T47-perf-tag",
+     "summary": "The task is tagged [perf] in FR-013's sense (the gate turned red on correct work costs a rerun) and not filed with PERF=1 (no engine stage's counted operations or time).",
+     "class": "within",
+     "why": "FR-013 counts a task that makes the gate or the builders' loop faster as performance work and accepts a [perf] tag; the tag changes only ordering, and narrows nothing asked."
+    },
+    {
+     "id": "T47-found-left",
+     "summary": "Found and left: none.",
+     "class": "within",
+     "why": "No defect is deferred."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-21",
+   "blocks": [
+    "### T47 (the pages crate's cover left `runner/watch.rs` line 271 unreached in one `make static` run, observed 2026-11-20, method: T44's builder's `make static` cover line; a rerun reused the last green result)",
+    "### T47 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T47-1 watch's wait a parameter",
+     "summary": "watch() takes its wait as an injected FnMut(Duration)->bool; a started watch passes the halt channel's recv_timeout, so Watch::start, stop and work.rs behave as before; tests pass a counting wait",
+     "class": "within",
+     "why": "Fixes a check that refuses correct work (make static's cover red on a scheduling race), which the project's fix-as-we-go rule and the request's efficiency purpose (fewer make static reruns, improvement 2) both want; queue behavior unchanged, constants unchanged, no map touched."
+    },
+    {
+     "id": "T47-2 the racing test replaced by two",
+     "summary": "a_quiet_session_is_ended_and_a_working_one_left_alone (five threads on wall-clock timing) replaced by each_check_takes_its_path_however_slow_the_host (counted checks, exact per-path counts) and a_started_watch_ends_a_stall_and_stops_when_halted (one threaded stall end, one halt)",
+     "class": "within",
+     "why": "Keeps every path the old test covered, now deterministically, plus the threaded start/stop; shown red when the raised path or the empty proc is broken, which the old test was not. Enforces the existing coverage requirement rather than adding scope."
+    },
+    {
+     "id": "T47-3 work/tests.rs's started watch left as is",
+     "summary": "the crate's other threaded watch test is read, measured idle and under load (green throughout, 30 s margin vs 1.6-5.2 s runs) and left unchanged; line 281 coverage held by the counted test",
+     "class": "within",
+     "why": "Not a defect: no wrong outcome measured, no assertion depends on thread timing, and its coverage contribution is no longer load-bearing. Leaving a non-defect as it is is not a narrowing."
+    },
+    {
+     "id": "T47-4 tagged [perf], not PERF=1",
+     "summary": "the task is classed performance work under FR-013 by the [perf] tag, on the ground that a red gate on correct work costs a builder a make static rerun",
+     "class": "within",
+     "why": "FR-013 defines performance work as filed with PERF=1 OR tagged [perf], covering work that makes the gate or the builders' loop faster; removing a spurious cover failure removes reruns of make static, the cost the GM's improvement 2 names. The PERF=1 / [perf] choice is one FR-013 leaves open."
+    },
+    {
+     "id": "T47-5 exits and constraints",
+     "summary": "red first, crate tests/lint/format/cover, make quick, make static once, make hooks-test; 100% crate line coverage; 449 FR-008 each test under 0.1 s; a claim it cannot be done goes to make arbiter-ask",
+     "class": "within",
+     "why": "Restates the project's and this feature's standing rules (FR-007's make static budget among them); narrows nothing."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-21",
+   "blocks": [
+    "### T47 (the pages crate's cover left `runner/watch.rs` line 271 unreached in one `make static` run, observed 2026-11-20, method: T44's builder's `make static` cover line; a rerun reused the last green result)",
+    "### T47 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T47-D1 the wait a parameter",
+     "summary": "watch() takes its wait as an FnMut(Duration)->bool; a started watch passes the halt channel's recv_timeout, so Watch::start, stop and work.rs are unchanged; the test passes a counter",
+     "class": "within",
+     "why": "A test seam that leaves the watch's behavior in a queue as it was; it serves the task's own goal (a gate that does not refuse correct work) and changes nothing the GM asked for."
+    },
+    {
+     "id": "T47-D2 the racing test replaced by two",
+     "summary": "the racing a_quiet_session_is_ended_and_a_working_one_left_alone is replaced by a counted-check test of every path (no branch turning on elapsed time) and one threaded test of a stall ended and a watch halted",
+     "class": "within",
+     "why": "Fixes a check that can refuse correct work (constitution XIV's defect; fix as we go), with the modeled red shown, each path broken and the new test red, and the threaded behavior still tested. It drops no coverage and asserts each path's count, which the old test could not."
+    },
+    {
+     "id": "T47-D3 the work tests' timing left as it is",
+     "summary": "the queue tests in runner/work/tests.rs, whose empty-proc pass count varies with scheduling, are left unchanged; line 281's cover is held by the counted check",
+     "class": "within",
+     "why": "By the plan's measured reading no assertion depends on the varying count (30/30 idle, 10/10 pinned green, each run 1.6-5.2 s against a 30 s margin), so this is a difference that works, not a defect; leaving it needs no ruling (constitution XIV v2.36.0, what a defect is)."
+    },
+    {
+     "id": "T47-D4 [perf] and not PERF=1",
+     "summary": "T47 is classed as performance work under FR-013 by the [perf] tag, since a gate red on correct work costs a builder a rerun of make static; not PERF=1 because it moves no engine stage's counted operations or time",
+     "class": "within",
+     "why": "FR-013 names the tag as one of its two forms and counts a task that makes the gate or the builders' loop faster; a cover that refuses correct work is a rerun of make static, which is what the request's improvement 2 was measured in. It takes no place ahead of the six improvements that they would not share, as they are performance work too."
+    },
+    {
+     "id": "T47-D5 449 FR-008 met on the measured minimum",
+     "summary": "the threaded test's 0.06-0.32 s under a host load of 44-52 is read against the no-thread test's 0.06-0.19 s in the same batch, so the spread is the host's and the test's own cost is under a tenth of a second",
+     "class": "within",
+     "why": "Not an exception to FR-008: the plan claims compliance, and its 0.06 s minimum over 35 runs is under the bound, beside a control test with no thread at the same floor. It argues the rule is met, not set aside."
+    },
+    {
+     "id": "T47-D6 exits and order",
+     "summary": "make static once at the end after crate-scoped checks; independent of the other lanes, T45 sharing only the target directory under the run lock; red is recorded and set down, a claim of impossibility ruled by make arbiter-ask",
+     "class": "within",
+     "why": "Follows FR-007's crate-scoped loop with one make static, and the project's standing exits; nothing is narrowed."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-21",
+   "blocks": [
+    "### T47 (the pages crate's cover left `runner/watch.rs` line 271 unreached in one `make static` run, observed 2026-11-20, method: T44's builder's `make static` cover line; a rerun reused the last green result)",
+    "### T47 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T47-D1 the wait a parameter",
+     "summary": "watch() takes its wait as an FnMut(Duration)->bool; a started watch passes the halt channel's recv_timeout, so Watch::start, stop and work.rs are unchanged; the test passes a counter",
+     "class": "within",
+     "why": "A test seam that leaves the watch's behavior in a queue as it was; it serves the task's own goal (a gate that does not refuse correct work) and changes nothing the GM asked for."
+    },
+    {
+     "id": "T47-D2 the racing test replaced by two",
+     "summary": "the racing a_quiet_session_is_ended_and_a_working_one_left_alone is replaced by a counted-check test of every path (no branch turning on elapsed time) and one threaded test of a stall ended and a watch halted",
+     "class": "within",
+     "why": "Fixes a check that can refuse correct work (constitution XIV's defect; fix as we go), with the modeled red shown, each path broken and the new test red, and the threaded behavior still tested. It drops no coverage and asserts each path's count, which the old test could not."
+    },
+    {
+     "id": "T47-D3 the work tests' timing left as it is",
+     "summary": "the queue tests in runner/work/tests.rs, whose empty-proc pass count varies with scheduling, are left unchanged; line 281's cover is held by the counted check",
+     "class": "within",
+     "why": "Structurally, per the plan's reading of work.rs and the stub, no halt can beat a check and the 30 s sleep is the one wall-clock margin, so no assertion turns on the varying empty-proc count; the green runs (30/30 idle, 10/10 pinned, 1.6-5.2 s each) agree. A difference that works, not a defect, so leaving it needs no ruling (constitution XIV v2.36.0)."
+    },
+    {
+     "id": "T47-D4 [perf] and not PERF=1",
+     "summary": "T47 is classed as performance work under FR-013 by the [perf] tag, since a gate red on correct work costs a builder a rerun of make static; not PERF=1 because it moves no engine stage's counted operations or time",
+     "class": "within",
+     "why": "FR-013 names the tag as one of its two forms and counts a task that makes the gate or the builders' loop faster. A cover that refuses correct work is a defect (a check refusing good work, constitution XIV) whose cost is a rerun of make static, the unit the request's improvement 2 was measured in. One observed miss and none reproduced in 60 fresh covers makes the saving small, but the class is the task's kind, not its size."
+    },
+    {
+     "id": "T47-D5 449 FR-008 met on the measured minimum",
+     "summary": "the threaded test's 0.06-0.32 s under a host load of 44-52 is read against the no-thread test's 0.06-0.19 s in the same batch, so the spread is the host's and the test's own cost is under a tenth of a second",
+     "class": "within",
+     "why": "Not an exception to FR-008: the plan claims compliance, and its 0.06 s minimum over 35 runs is under the bound, beside a control test with no thread at the same floor. It argues the rule is met, not set aside."
+    },
+    {
+     "id": "T47-D6 exits and order",
+     "summary": "make static once at the end after crate-scoped checks; independent of the other lanes, T45 sharing only the target directory under the run lock; red is recorded and set down, a claim of impossibility ruled by make arbiter-ask",
+     "class": "within",
+     "why": "Follows FR-007's crate-scoped loop with one make static, and the project's standing exits; nothing is narrowed."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-21",
+   "blocks": [
+    "### T45 (one house-style-alone replay of T42's, no clone resolvable, flipped 8 rows from rewrote to allowed and changed 3 rows' output, and did not reproduce, observed 2026-11-20, method: T42's `cmp.sh` of `final.nobody.house-style-hooks.tsv` against `before`)",
+    "### T45 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T45-cause",
+     "summary": "The flip is attributed to the replay's mktemp directory name (run.py8Q), not timing; the timing hypothesis is set aside on a forced-name reproduction (exactly T42's 8+3 rows) and a 30-run load series at 0.",
+     "class": "within",
+     "why": "Deciding the cause from measurement is how the task is carried out; it narrows nothing the request or spec asks for."
+    },
+    {
+     "id": "T45-fix",
+     "summary": "NAMED_PATH becomes [\\w./-]+\\.(?:md|py|sh|toml|json)\\w*(?![\\w/]): a file, never a directory on the way to one; extensions keep trailing letters (.jsonl, .pyc) so those writes keep their old verdicts; the \\b variant rejected after it changed four probe payloads.",
+     "class": "within",
+     "why": "Fixes a wrong outcome (the guard went silent on a write it should correct, by the letters of a random directory name) found by this feature's own step, which constitution XIV's fix-as-we-go asks to be fixed before the next step; keeping .jsonl/.pyc as before changes nothing else the guard does."
+    },
+    {
+     "id": "T45-left-GM_REQUEST",
+     "summary": "GM_REQUEST's open-ended pattern is left as is; HELD_SHAPES and PROSE_FILE already end bounded.",
+     "class": "within",
+     "why": "No wrong outcome is shown: a longer name it catches is only reported, never silenced or corrected wrongly, so leaving it is a difference, not a defect left (XIV's definition)."
+    },
+    {
+     "id": "T45-build-limit-left",
+     "summary": "The hook wrapper's 45 s build limit (L7R_GUARD_BUILD_SECS, feature 449 T004/D7) is left as the one bound on time, deliberate and outside the replay.",
+     "class": "within",
+     "why": "It did not cause the flip (the replay ran its binary directly, and the forced-name replay reproduces the flip without it); no wrong outcome is shown, so leaving it is not a defect left."
+    },
+    {
+     "id": "T45-exits-and-coverage",
+     "summary": "Red-first test, fix-deleted re-red, forced-name replay at 0, crate checks, 100% guard-crate coverage, make static once, one landing.",
+     "class": "within",
+     "why": "Verification that the fix does what it is for; it adds no behavior and honors FR-007's one-static-run purpose."
+    },
+    {
+     "id": "T45-not-perf",
+     "summary": "The section states T45 is not performance work despite its [perf] tag, leaves the tag's removal to the coordinator, and says its start is owed FR-013's escape with the reason 'a defect found by this step'.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "It may put a non-performance fix ahead of open performance work (if one was open at T45's start; the bundle does not show it), which narrows the GM's 2026-11-20 'prioritize performance improvements'. Legitimate because the exception is implied by the GM's own standing rule, not request.md but constitution XIV's fix-as-we-go (the GM 2026-11-18: 'we should fix all known bugs in each step before moving on'): the defect is a guard silent on a write it should correct, found by this feature's own step T42. The section does not carve the case out of FR-013: it reclassifies the mis-tag honestly and says FR-013's own escape is owed (owed, not yet recorded). One landing does not defeat the order's purpose ('doing those first makes everything after them faster')."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-21",
+   "blocks": [
+    "(removed) ### T45 (<why: the finding or measurement that files it>)",
+    "(removed) ### T47 (<why: the finding or measurement that files it>)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T45-template-removed",
+     "summary": "The unfilled template block '### T45 (<why: ...>)' (placeholder Approach line, empty step table) is deleted; T45's content stands under a named heading reviewed separately.",
+     "class": "within",
+     "why": "The removed block held only template placeholders and an empty table: it decided nothing, so deleting it narrows nothing the GM asked for (request.md) or the spec carries. The T45 [perf] untag and its FR-013 escape are not in this bundle's blocks and are not ruled here."
+    },
+    {
+     "id": "T47-template-removed",
+     "summary": "The unfilled template block '### T47 (<why: ...>)' (placeholder Approach line, empty step table) is deleted; T47's content stands under a named heading reviewed separately.",
+     "class": "within",
+     "why": "The removed block held only template placeholders and an empty table: it decided nothing, so deleting it narrows nothing the GM asked for or the spec carries."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -7828,6 +8087,95 @@
     }
    ],
    "verdict": "BLOCKED"
+  },
+  "T47": {
+   "section_sha256": "58ca42e19e6b6c695a263d12fff3194eac72ebf69063342471c1b30a906dd5b8",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T47-D1 the wait a parameter",
+     "summary": "watch() takes its wait as an FnMut(Duration)->bool; a started watch passes the halt channel's recv_timeout, so Watch::start, stop and work.rs are unchanged; the test passes a counter",
+     "class": "within",
+     "why": "A test seam that leaves the watch's behavior in a queue as it was; it serves the task's own goal (a gate that does not refuse correct work) and changes nothing the GM asked for."
+    },
+    {
+     "id": "T47-D2 the racing test replaced by two",
+     "summary": "the racing a_quiet_session_is_ended_and_a_working_one_left_alone is replaced by a counted-check test of every path (no branch turning on elapsed time) and one threaded test of a stall ended and a watch halted",
+     "class": "within",
+     "why": "Fixes a check that can refuse correct work (constitution XIV's defect; fix as we go), with the modeled red shown, each path broken and the new test red, and the threaded behavior still tested. It drops no coverage and asserts each path's count, which the old test could not."
+    },
+    {
+     "id": "T47-D3 the work tests' timing left as it is",
+     "summary": "the queue tests in runner/work/tests.rs, whose empty-proc pass count varies with scheduling, are left unchanged; line 281's cover is held by the counted check",
+     "class": "within",
+     "why": "Structurally, per the plan's reading of work.rs and the stub, no halt can beat a check and the 30 s sleep is the one wall-clock margin, so no assertion turns on the varying empty-proc count; the green runs (30/30 idle, 10/10 pinned, 1.6-5.2 s each) agree. A difference that works, not a defect, so leaving it needs no ruling (constitution XIV v2.36.0)."
+    },
+    {
+     "id": "T47-D4 [perf] and not PERF=1",
+     "summary": "T47 is classed as performance work under FR-013 by the [perf] tag, since a gate red on correct work costs a builder a rerun of make static; not PERF=1 because it moves no engine stage's counted operations or time",
+     "class": "within",
+     "why": "FR-013 names the tag as one of its two forms and counts a task that makes the gate or the builders' loop faster. A cover that refuses correct work is a defect (a check refusing good work, constitution XIV) whose cost is a rerun of make static, the unit the request's improvement 2 was measured in. One observed miss and none reproduced in 60 fresh covers makes the saving small, but the class is the task's kind, not its size."
+    },
+    {
+     "id": "T47-D5 449 FR-008 met on the measured minimum",
+     "summary": "the threaded test's 0.06-0.32 s under a host load of 44-52 is read against the no-thread test's 0.06-0.19 s in the same batch, so the spread is the host's and the test's own cost is under a tenth of a second",
+     "class": "within",
+     "why": "Not an exception to FR-008: the plan claims compliance, and its 0.06 s minimum over 35 runs is under the bound, beside a control test with no thread at the same floor. It argues the rule is met, not set aside."
+    },
+    {
+     "id": "T47-D6 exits and order",
+     "summary": "make static once at the end after crate-scoped checks; independent of the other lanes, T45 sharing only the target directory under the run lock; red is recorded and set down, a claim of impossibility ruled by make arbiter-ask",
+     "class": "within",
+     "why": "Follows FR-007's crate-scoped loop with one make static, and the project's standing exits; nothing is narrowed."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T45": {
+   "section_sha256": "20452c1616bed5790d7f067f9a918fa65c5bcbe37981f17e7c753a1dfe8f3d79",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T45-cause",
+     "summary": "The flip is attributed to the replay's mktemp directory name (run.py8Q), not timing; the timing hypothesis is set aside on a forced-name reproduction (exactly T42's 8+3 rows) and a 30-run load series at 0.",
+     "class": "within",
+     "why": "Deciding the cause from measurement is how the task is carried out; it narrows nothing the request or spec asks for."
+    },
+    {
+     "id": "T45-fix",
+     "summary": "NAMED_PATH becomes [\\w./-]+\\.(?:md|py|sh|toml|json)\\w*(?![\\w/]): a file, never a directory on the way to one; extensions keep trailing letters (.jsonl, .pyc) so those writes keep their old verdicts; the \\b variant rejected after it changed four probe payloads.",
+     "class": "within",
+     "why": "Fixes a wrong outcome (the guard went silent on a write it should correct, by the letters of a random directory name) found by this feature's own step, which constitution XIV's fix-as-we-go asks to be fixed before the next step; keeping .jsonl/.pyc as before changes nothing else the guard does."
+    },
+    {
+     "id": "T45-left-GM_REQUEST",
+     "summary": "GM_REQUEST's open-ended pattern is left as is; HELD_SHAPES and PROSE_FILE already end bounded.",
+     "class": "within",
+     "why": "No wrong outcome is shown: a longer name it catches is only reported, never silenced or corrected wrongly, so leaving it is a difference, not a defect left (XIV's definition)."
+    },
+    {
+     "id": "T45-build-limit-left",
+     "summary": "The hook wrapper's 45 s build limit (L7R_GUARD_BUILD_SECS, feature 449 T004/D7) is left as the one bound on time, deliberate and outside the replay.",
+     "class": "within",
+     "why": "It did not cause the flip (the replay ran its binary directly, and the forced-name replay reproduces the flip without it); no wrong outcome is shown, so leaving it is not a defect left."
+    },
+    {
+     "id": "T45-exits-and-coverage",
+     "summary": "Red-first test, fix-deleted re-red, forced-name replay at 0, crate checks, 100% guard-crate coverage, make static once, one landing.",
+     "class": "within",
+     "why": "Verification that the fix does what it is for; it adds no behavior and honors FR-007's one-static-run purpose."
+    },
+    {
+     "id": "T45-not-perf",
+     "summary": "The section states T45 is not performance work despite its [perf] tag, leaves the tag's removal to the coordinator, and says its start is owed FR-013's escape with the reason 'a defect found by this step'.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "It may put a non-performance fix ahead of open performance work (if one was open at T45's start; the bundle does not show it), which narrows the GM's 2026-11-20 'prioritize performance improvements'. Legitimate because the exception is implied by the GM's own standing rule, not request.md but constitution XIV's fix-as-we-go (the GM 2026-11-18: 'we should fix all known bugs in each step before moving on'): the defect is a guard silent on a write it should correct, found by this feature's own step T42. The section does not carve the case out of FR-013: it reclassifies the mis-tag honestly and says FR-013's own escape is owed (owed, not yet recorded). One landing does not defeat the order's purpose ('doing those first makes everything after them faster')."
+    }
+   ],
+   "verdict": "CLEAR"
   }
  }
 }

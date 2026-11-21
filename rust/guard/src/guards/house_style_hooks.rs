@@ -90,7 +90,11 @@ static HEREDOC_TO: LazyLock<Regex> = LazyLock::new(|| {
         r#"(?:\b(?:cat|tee)\s+(?:-a\s+)?(?:>>?\s*)?(?P<p1>/\S+)\s*<<-?\s*(?P<q1>['"]?)(?P<t1>\w+)\k<q1>|\bcat\s*<<-?\s*(?P<q2>['"]?)(?P<t2>\w+)\k<q2>\s*>>?\s*(?P<p2>/\S+))[^\n]*\n"#,
     )
 });
-static NAMED_PATH: LazyLock<Regex> = LazyLock::new(|| re(r"[\w./-]+\.(?:md|py|sh|toml|json)"));
+/// A name is a FILE, never a directory on the way to one (451 T45): `/tmp/t42/run.py8Q/diagram/...` named `/tmp/t42/run.py`, and a
+/// replay whose temporary directory's random letters began `py`, `sh` or `md` judged 11 project writes outside the project. The
+/// extension keeps the word characters after it (`.jsonl`, `.pyc`: a word boundary instead turned a /tmp `.jsonl` write into a correction).
+static NAMED_PATH: LazyLock<Regex> =
+    LazyLock::new(|| re(r"[\w./-]+\.(?:md|py|sh|toml|json)\w*(?![\w/])"));
 static EXEMPT: LazyLock<Regex> = LazyLock::new(|| {
     re(
         r"(^|/)(CLAUDE\.md|constitution\.md|l7r-style\.md|house_style_hooks\.rs|house_style_words\.tsv|house_style_cases\.rs|test-house-style-hooks\.sh|house_style_cases\.rs|house_style_delta\.rs|house_style_delta/tests\.rs|test_guard_firing_log\.py|hm_house\.py|mimetypes\.tsv)$",

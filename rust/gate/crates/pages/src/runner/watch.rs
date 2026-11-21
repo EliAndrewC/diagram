@@ -230,7 +230,11 @@ impl Watch {
     #[must_use]
     pub fn start(projects: String, sid: String, times: Times, proc: PathBuf) -> Self {
         let (halt, wait) = mpsc::channel::<()>();
-        let thread = std::thread::spawn(move || watch(&projects, &sid, times, &proc, &wait));
+        let thread = std::thread::spawn(move || {
+            watch(&projects, &sid, times, &proc, |every| {
+                wait.recv_timeout(every) == Err(mpsc::RecvTimeoutError::Timeout)
+            })
+        });
         Self { halt, thread }
     }
 
@@ -242,6 +246,9 @@ impl Watch {
     }
 }
 
+/// The watch's loop: `watch_on` waits out one check's interval and says whether to check again - a started watch's waits on its halt,
+/// a test's counts its checks, so each path is taken whatever the host's scheduler does (451 T47: the raised transcript's return went
+/// unreached once in `make static`'s coverage, its one check beaten by the test's halt).
 #[allow(
     clippy::cast_possible_truncation,
     clippy::cast_sign_loss,
@@ -252,12 +259,10 @@ fn watch(
     sid: &str,
     times: Times,
     proc: &Path,
-    wait: &mpsc::Receiver<()>,
+    mut watch_on: impl FnMut(Duration) -> bool,
 ) -> (bool, u64) {
     let began = now();
-    while wait.recv_timeout(Duration::from_secs_f64(times.check))
-        == Err(mpsc::RecvTimeoutError::Timeout)
-    {
+    while watch_on(Duration::from_secs_f64(times.check)) {
         // never before the watch began: a RESUMED session's transcript is as old as the wait that preceded it
         let quiet = now() - last_activity(projects, sid).unwrap_or(0.0).max(began);
         if quiet < times.after {

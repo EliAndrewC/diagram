@@ -1,6 +1,6 @@
 //! The transcript readings and the watch: a stall ended, a session whose agents returned ended sooner, a session still at work, or one
-//! whose transcript the Python's thread raised on, left alone. The processes a watch ends are this test's own `sleep`s, found through a
-//! scratch `/proc` that names them.
+//! whose transcript the Python's thread raised on, left alone - each path on counted checks, none on the host's timing (451 T47). The
+//! processes a watch ends are this test's own `sleep`s, found through a scratch `/proc` that names them.
 
 use std::path::Path;
 use std::time::Duration;
@@ -9,7 +9,7 @@ use serde_json::json;
 
 use super::{
     entries, last_activity, now, projects_dir, returned_file, session_pids, terminate, turn_ended,
-    undelivered, Times, Watch,
+    undelivered, watch, Times, Watch,
 };
 
 fn put(path: &Path, text: &str) {
@@ -130,16 +130,25 @@ fn quick(after: f64, returned: f64) -> Times {
     }
 }
 
-/// Every watch runs at once and the test waits on the one that must end its session (feature 449 T167: the five watches one after
-/// another, each given its own sleep, took 367 ms against FR-008's tenth of a second); a millisecond's check leaves each watch tens of
-/// checks inside the wait, so each path the watch can take is still taken.
+/// A wait that watches on for `checks` checks and then halts, counting each time it is asked - the watch's checks counted, never timed
+/// (451 T47: a path only a scheduler reached in time went unreached once in `make static`'s coverage, as T35's injected clock).
+fn counted(checks: u32, asked: &mut u32) -> impl FnMut(Duration) -> bool + '_ {
+    move |_| {
+        *asked += 1;
+        *asked <= checks
+    }
+}
+
+/// Each path the watch takes, its checks counted on this thread: a stall ended, a session whose agents returned ended though its quiet
+/// is short of `after`, a session still at work or whose turn ended with nothing waiting watched on, and one whose transcript the
+/// Python's thread raised on left on the first check. The bounds are infinities, so no branch turns on how long the host took.
 #[test]
-fn a_quiet_session_is_ended_and_a_working_one_left_alone() {
-    let d = l7r_gate_core::ci::fixtures::scratch("watch-stall");
+fn each_check_takes_its_path_however_slow_the_host() {
+    let d = l7r_gate_core::ci::fixtures::scratch("watch-paths");
     let (projects, proc) = (d.join("projects"), d.join("proc"));
     std::fs::create_dir_all(&projects).unwrap();
     let p = projects.to_string_lossy().into_owned();
-    // the turn ended with reports waiting: ended after `returned`, before `after`
+    let (never, always) = (f64::INFINITY, f64::NEG_INFINITY);
     put(
         &projects.join("r.jsonl"),
         &lines(&[
@@ -147,37 +156,60 @@ fn a_quiet_session_is_ended_and_a_working_one_left_alone() {
             json!({"type": "queue-operation", "operation": "enqueue", "content": "<task-notification>x</task-notification>"}),
         ]),
     );
-    // the turn ended with nothing waiting, or the session is still in a tool call: left alone until stopped
     put(
         &projects.join("e.jsonl"),
         &lines(&[json!({"type": "assistant", "message": {"stop_reason": "end_turn"}})]),
     );
-    // a transcript the Python's thread raised on: it watched no more
     put(
         &projects.join("t.jsonl"),
         &lines(&[json!({"type": "assistant", "message": "text"})]),
     );
-    // quiet past `after` (none: every check is past it), with nothing in `proc` at first: watched on until the process is there, then
-    // ended
-    let stall = Watch::start(p.clone(), "s".to_owned(), quick(0.0, 0.0), proc.clone());
+    let run = |sid: &str, times: Times, checks: u32| {
+        let mut asked = 0;
+        let seen = watch(&p, sid, times, &proc, counted(checks, &mut asked));
+        (seen, asked)
+    };
+    // still quiet short of `returned`, or its turn ended with nothing waiting: watched on until halted, every check taken
+    assert_eq!(run("q", quick(never, never), 3), ((false, 0), 4));
+    assert_eq!(run("e", quick(never, always), 3), ((false, 0), 4));
+    // the transcript the Python's thread raised on: it watched no more, on its first check, with checks left
+    assert_eq!(run("t", quick(never, always), 3), ((false, 0), 1));
+    // the turn ended with reports waiting: ended though short of `after`
     let mut returned = claude_in(&proc, "r");
-    let reports = Watch::start(p.clone(), "r".to_owned(), quick(60.0, 0.01), proc.clone());
-    let ended = Watch::start(p.clone(), "e".to_owned(), quick(60.0, 0.0), proc.clone());
-    let quiet = Watch::start(p.clone(), "q".to_owned(), quick(60.0, 30.0), proc.clone());
-    let raised = Watch::start(p, "t".to_owned(), quick(60.0, 0.0), proc.clone());
-    std::thread::sleep(Duration::from_millis(20));
-    let mut child = claude_in(&proc, "s");
+    assert_eq!(run("r", quick(never, always), 3).1, 1);
+    assert!(!returned.wait().unwrap().success());
+    // quiet past `after` with nothing in `proc`: watched on; the process there at the second check, ended
+    let (mut asked, mut child) = (0, None);
     let started = std::time::Instant::now();
-    while child.try_wait().unwrap().is_none() && started.elapsed() < Duration::from_secs(5) {
-        std::thread::sleep(Duration::from_millis(2));
-    }
-    let (stalled, idle) = stall.stop();
-    assert!(stalled);
-    assert_eq!(idle, 0);
-    let _ = child.wait();
-    let _ = returned.wait();
-    assert!(reports.stop().0);
-    assert_eq!(ended.stop(), (false, 0));
-    assert_eq!(quiet.stop(), (false, 0));
-    assert_eq!(raised.stop(), (false, 0));
+    let (stalled, idle) = watch(&p, "s", quick(always, always), &proc, |_| {
+        asked += 1;
+        if asked == 2 {
+            child = Some(claude_in(&proc, "s"));
+        }
+        asked <= 3
+    });
+    assert_eq!((stalled, asked), (true, 2));
+    assert!(idle <= started.elapsed().as_secs() + 1);
+    assert!(!child.unwrap().wait().unwrap().success());
+}
+
+/// A started watch ends a stalled session on its own thread, and one stopped while its session works says it stalled nothing; each
+/// waits on an event (the process ended, the thread joined), never on a sleep.
+#[test]
+fn a_started_watch_ends_a_stall_and_stops_when_halted() {
+    let d = l7r_gate_core::ci::fixtures::scratch("watch-stall");
+    let (projects, proc) = (d.join("projects"), d.join("proc"));
+    std::fs::create_dir_all(&projects).unwrap();
+    let p = projects.to_string_lossy().into_owned();
+    let mut child = claude_in(&proc, "s");
+    let stall = Watch::start(
+        p.clone(),
+        "s".to_owned(),
+        quick(f64::NEG_INFINITY, f64::NEG_INFINITY),
+        proc.clone(),
+    );
+    assert!(!child.wait().unwrap().success());
+    assert!(stall.stop().0);
+    let working = Watch::start(p, "q".to_owned(), quick(f64::INFINITY, f64::INFINITY), proc);
+    assert_eq!(working.stop(), (false, 0));
 }
