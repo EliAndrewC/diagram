@@ -15,7 +15,7 @@ use std::sync::LazyLock;
 
 use fancy_regex::Regex;
 
-use super::{phase, re, World};
+use super::{assertline, phase, re, World};
 use crate::Reply;
 
 static EDITION: LazyLock<Regex> = LazyLock::new(|| re(r#"(?m)^\s*edition\s*=\s*"([0-9]+)""#));
@@ -137,7 +137,18 @@ fn one(world: &World, named: &str, check: bool) -> Result<(String, bool), String
     let dir = file.parent().unwrap_or(&world.root);
     let got = rustfmt(world, dir, &edition, &text);
     let changes = got.as_ref().is_ok_and(|g| *g != text);
-    let failed = got.is_err() || (check && changes);
+    // what the pass made of an assert's message on a line of its own, named where it is written (451 T114)
+    let made = match &got {
+        Ok(formatted)
+            if changes
+                && !check
+                && assertline::counted(manifest.parent().unwrap_or(&world.root), &file) =>
+        {
+            assertline::created(&text, formatted)
+        }
+        _ => Vec::new(),
+    };
+    let failed = got.is_err() || (check && changes) || !made.is_empty();
     phase::wrote(world, "format", &[&manifest], began, i32::from(failed));
     Ok(match got {
         Err(words) => (format!("rust-checks: format FAILED on {shown}\n{words}"), true),
@@ -147,7 +158,8 @@ fn one(world: &World, named: &str, check: bool) -> Result<(String, bool), String
             true,
         ),
         Ok(formatted) => match std::fs::write(&file, formatted) {
-            Ok(()) => (format!("rust-checks: format on {shown}: formatted\n"), false),
+            Ok(()) if made.is_empty() => (format!("rust-checks: format on {shown}: formatted\n"), false),
+            Ok(()) => (assertline::listing(&[(shown, made)]), true),
             Err(e) => (format!("rust-checks: format FAILED on {shown}: {e}\n"), true),
         },
     })

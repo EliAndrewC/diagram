@@ -21,6 +21,7 @@ use l7r_shared::tempdir::TempDir;
 
 use crate::Reply;
 
+mod assertline;
 mod cover;
 mod fmtfile;
 mod kept;
@@ -445,16 +446,9 @@ fn check(world: &World, cmd: &str, manifest: &Path, formatting_check: bool) -> R
             eprint!("{said}");
             cover_ran(&got.remove(manifest).unwrap_or_default())
         }
-        _ => cargo(
-            world,
-            if formatting_check {
-                &["fmt", "--check"]
-            } else {
-                &["fmt"]
-            },
-            manifest,
-            &[],
-        ),
+        _ if formatting_check => cargo(world, &["fmt", "--check"], manifest, &[]),
+        // a message the pass put on a line of its own is named here, where it is written, not by a landing's cover (451 T114)
+        _ => assertline::format_crate(world, manifest),
     }
 }
 
@@ -523,7 +517,7 @@ fn cover_ran(got: &BTreeMap<String, Vec<u32>>) -> Ran {
 fn fix_for(cmd: &str) -> &'static str {
     match cmd {
         "lint" => "fix what clippy names (an exception is `#[expect(lint, reason = \"...\")]`)",
-        "format" => "run `make format CRATE=<dir>` (or `FILE=<path>`, one file alone; bare `make format` rewrites every crate)",
+        "format" => "run `make format CRATE=<dir>` (or `FILE=<path>`, one file alone; bare `make format` rewrites every crate); where it names an assert's message on a line of its own, bind the values to locals first so the assert fits one line",
         "test" => "fix the failing test cargo names",
         "cover" => "test the lines llvm-cov names, from the crate's tests",
         "dead" => "delete the pub fn it names, or call it",
