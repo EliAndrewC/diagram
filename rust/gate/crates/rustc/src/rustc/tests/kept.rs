@@ -338,28 +338,74 @@ fn a_named_crate_is_kept_and_its_key_follows_the_crates_it_builds_from() {
         .contains("lint unchanged on tests/fx"));
 }
 
-/// A crate's `cargo test` is its unit tests alone when it has no binary, integration test, example, bench or doctest (T111).
+/// A crate's `cargo test` is its unit tests alone when it has no binary holding a test, integration test, example, bench or doctest
+/// (T111; a binary with no test and a `text` block are none, T57).
 #[test]
 fn a_crate_whose_unit_tests_are_its_whole_cargo_test() {
     let (root, a, _) = two_crates();
     let dir = root.join("rust/a");
     assert!(super::super::unit_tests_only(&a));
-    for (path, text) in [
-        ("src/main.rs", "fn main() {}\n"),
-        ("tests/t.rs", "\n"),
-        ("examples/e.rs", "\n"),
+    // a binary that holds no test adds none to `cargo test` (feature 451 T57): a test, a `cfg(test)` or a module file it declares does
+    let in_main = "fn main() {}\n#[cfg(test)]\nmod t {\n    #[test]\n    fn x() {}\n}\n";
+    for (path, text, alone) in [
+        ("src/main.rs", "use std::io;\nfn main() {}\n", true),
+        ("src/bin/x.rs", "fn main() {}\n", true),
+        ("src/main.rs", in_main, false),
+        ("src/main.rs", "mod helper;\nfn main() {}\n", false),
+        (
+            "src/main.rs",
+            "pub(crate) mod helper;\nfn main() {}\n",
+            false,
+        ),
+        ("src/bin/x.rs", "#[test]\nfn x() {}\nfn main() {}\n", false),
+        ("tests/t.rs", "\n", false),
+        ("examples/e.rs", "\n", false),
+        ("benches/b.rs", "\n", false),
     ] {
         let at = dir.join(path);
         std::fs::create_dir_all(at.parent().unwrap()).unwrap();
         std::fs::write(&at, text).unwrap();
-        assert!(!super::super::unit_tests_only(&a), "{path}");
+        assert_eq!(super::super::unit_tests_only(&a), alone, "{path}: {text}");
         std::fs::remove_file(&at).unwrap();
         let _ = std::fs::remove_dir(at.parent().unwrap());
     }
     assert!(super::super::unit_tests_only(&a));
-    std::fs::write(&a, "[package]\n[[bin]]\nname = \"x\"\n").unwrap();
+    // a declared binary's own path is read; a declared test, example or bench is a target of its own
+    let tool = dir.join("tool/x.rs");
+    std::fs::create_dir_all(tool.parent().unwrap()).unwrap();
+    std::fs::write(&tool, "fn main() {}\n").unwrap();
+    std::fs::write(
+        &a,
+        "[package]\n[[bin]]\nname = \"x\"\npath = \"tool/x.rs\"\n",
+    )
+    .unwrap();
+    assert!(super::super::unit_tests_only(&a));
+    std::fs::write(&tool, in_main).unwrap();
     assert!(!super::super::unit_tests_only(&a));
+    for declared in ["[[test]]", "[[example]]", "[[bench]]"] {
+        std::fs::write(&a, format!("[package]\n{declared}\nname = \"x\"\n")).unwrap();
+        assert!(!super::super::unit_tests_only(&a), "{declared}");
+    }
     std::fs::write(&a, "[package]\n").unwrap();
+    // a `text` block is never a doctest, an indented line inside it neither; any other fence is one - in `side.rs`'s reading too,
+    // `has_doctests`, so `make rust-test` runs no `cargo test --doc` for a crate whose only blocks are `text` ones (T57)
+    for (text, doctest) in [
+        ("//! ```text\n//! a\n//!     b\n//! ```\n", false),
+        (
+            "/// ```text\n/// a\n/// ```\n///\n///     let x = 1;\npub fn f() {}\n",
+            true,
+        ),
+        (
+            "/// ```rust\n/// assert!(true);\n/// ```\npub fn f() {}\n",
+            true,
+        ),
+        ("/// ```ignore\n/// x\n/// ```\npub fn f() {}\n", true),
+        ("/// ```textual\n/// x\n/// ```\npub fn f() {}\n", true),
+    ] {
+        std::fs::write(dir.join("src/lib.rs"), text).unwrap();
+        assert_eq!(super::super::unit_tests_only(&a), !doctest, "{text}");
+        assert_eq!(super::super::kept::has_doctests(&a), doctest, "{text}");
+    }
     std::fs::write(
         dir.join("src/lib.rs"),
         "/// ```\n/// assert!(true);\n/// ```\npub fn f() {}\n",
@@ -387,7 +433,12 @@ fn a_crate_whose_unit_tests_are_its_whole_cargo_test() {
 #[test]
 fn a_coverage_pass_keeps_the_tests_of_a_crate_with_unit_tests_alone() {
     let (root, _, _) = kept_crates();
-    std::fs::write(root.join("rust/b/src/main.rs"), "fn main() {}\n").unwrap();
+    // a binary holding a test is a test target the coverage run (`--lib`) never builds (451 T57)
+    std::fs::write(
+        root.join("rust/b/src/main.rs"),
+        "fn main() {}\n#[test]\nfn t() {}\n",
+    )
+    .unwrap();
     let world = world_with(&root, LCOV_CARGO);
     std::fs::write(world.target.join("lcov"), "").unwrap();
     assert_eq!(answer(&world, "cover", &[], false).code, 0);
@@ -421,6 +472,64 @@ fn a_coverage_pass_keeps_the_tests_of_a_crate_with_unit_tests_alone() {
             .unwrap_or_default()
             .ends_with("rust/b"),
         "{direct}"
+    );
+}
+
+/// THE COVERED RUN ALONE (feature 451 T57): a crate with a binary that holds no test - the guard, the gate's binary, the engines - has
+/// its whole `cargo test` in the coverage run, so a failing test is caught there, by the crate's name, and a green pass answers for
+/// the crate's plain tests: `make rust-test` after it stands on it, building and running nothing. Before T57 such a crate's plain
+/// test binary was built and run again after every coverage pass (the guard's alone: 25 builds, 4.5 min, and 23 runs, 2.1 min, after
+/// a green coverage run with no edit between, measured 2026-11-21 over the event log's Phase lines since 2026-11-20T12:35Z).
+#[test]
+fn a_failing_test_is_caught_by_the_covered_run_alone_and_a_green_one_answers_for_the_plain_run() {
+    let (root, _, _) = kept_crates();
+    std::fs::write(
+        root.join("rust/b/src/main.rs"),
+        "//! the binary\nuse std::io;\nfn main() {}\n",
+    )
+    .unwrap();
+    let world = world_with(&root, LCOV_CARGO);
+    std::fs::write(world.target.join("lcov"), "").unwrap();
+    std::fs::write(world.target.join("failtest"), "").unwrap();
+    let red = answer(&world, "cover", &["rust/b".to_owned()], false);
+    assert_eq!(red.code, 1, "{}", red.stdout);
+    assert!(
+        red.stderr.contains("cover FAILED on rust/b"),
+        "{}",
+        red.stderr
+    );
+    // a red coverage pass answers for nothing: the plain run is still owed, and runs
+    let builds = || {
+        calls(&world)
+            .iter()
+            .filter(|c| c.starts_with("test --no-run --message-format=json"))
+            .count()
+    };
+    let before = builds();
+    let plain = answer(&world, "test", &["rust/b".to_owned()], false);
+    assert!(
+        !plain.stdout.contains("test unchanged on rust/b"),
+        "{}",
+        plain.stdout
+    );
+    assert_eq!(builds() - before, 1, "the plain test binary is built");
+    std::fs::remove_file(world.target.join("failtest")).unwrap();
+    std::fs::write(root.join("rust/b/src/lib.rs"), "//! y\n").unwrap();
+    assert_eq!(
+        answer(&world, "cover", &["rust/b".to_owned()], false).code,
+        0
+    );
+    let before = builds();
+    let plain = answer(&world, "test", &["rust/b".to_owned()], false);
+    assert!(
+        plain.stdout.contains("test unchanged on rust/b"),
+        "{}",
+        plain.stdout
+    );
+    assert_eq!(
+        builds(),
+        before,
+        "nothing built: the coverage pass answered"
     );
 }
 

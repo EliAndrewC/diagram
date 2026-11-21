@@ -220,6 +220,36 @@ fn forked_from(sid: &str, sessions_dir: &Path) -> String {
         .unwrap_or_default()
 }
 
+/// The session that parked `sid`'s job, or "": a job Claude Code runs in the background (a record of `kind: bg`) runs as `claude
+/// bg-spare --bg-spare <socket>`, whose command line names no parent and whose `jobs/<jobId>/state.json` names only itself, and the
+/// session it was parked from - still live, and claiming the same clone - names the job as its own record's `parkedJobId` (feature 451
+/// T62: the job's builders, its in-process subagents carrying its session id, were refused on the first edit of a clean clone by the
+/// interactive session that parked it, measured 2026-11-21). One pass over the records; a `jobId` or `parkedJobId` that is empty
+/// matches nothing, or every session that parked nothing would be every other's dispatcher.
+fn parked_by(sid: &str, sessions_dir: &Path) -> String {
+    let text = |d: &Value, k: &str| d.get(k).and_then(Value::as_str).unwrap_or("").to_owned();
+    let ids = |d: &Value| ["id", "sessionId", "session_id"].map(|k| text(d, k));
+    let records: Vec<Value> = std::fs::read_dir(sessions_dir)
+        .into_iter()
+        .flatten()
+        .filter_map(Result::ok)
+        .map(|e| e.path())
+        .filter(|p| p.extension().is_some_and(|x| x == "json"))
+        .filter_map(|p| serde_json::from_str(&std::fs::read_to_string(p).ok()?).ok())
+        .collect();
+    let jobs: Vec<String> = records
+        .iter()
+        .filter(|d| !sid.is_empty() && ids(d).iter().any(|i| i == sid))
+        .map(|d| text(d, "jobId"))
+        .filter(|j| !j.is_empty())
+        .collect();
+    records
+        .iter()
+        .find(|d| jobs.contains(&text(d, "parkedJobId")))
+        .and_then(|d| ids(d).into_iter().find(|i| !i.is_empty()))
+        .unwrap_or_default()
+}
+
 fn decide(event: &Event, session: &Session) -> Vec<Answer> {
     let tree = std::env::var("L7R_GUARD_TREE").map_or_else(
         |_| std::env::current_dir().unwrap_or_default(),
@@ -377,6 +407,9 @@ working tree (the 2026-07-22 collision). Work in {c} - if it does not exist: git
     let mut dispatcher = crate::shared::env::var("L7R_DISPATCHER");
     if dispatcher.is_empty() {
         dispatcher = forked_from(sid, &cx.session.sessions_dir);
+    }
+    if dispatcher.is_empty() {
+        dispatcher = parked_by(sid, &cx.session.sessions_dir);
     }
     let entries = (!sid.is_empty())
         .then(|| std::fs::read_dir(cx.mapdir()).ok())

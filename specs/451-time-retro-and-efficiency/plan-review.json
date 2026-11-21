@@ -74,13 +74,13 @@
    "declared": "spec-fidelity"
   },
   "### T09 (FR-002, FR-005: a wait cannot be booked to the run behind it - the spec's User Story 1 scenario 2, research R2)": {
-   "sha256": "4a5e39399da9c3144ce288a95f05f5e1f0cede9cf759c5bcd7ab87ebbe40a5c9",
+   "sha256": "0dd68a3fae8051768cf0af94082eb12f4455b515fb01e1c0ee6618695e5c49f3",
    "verdict": "CLEAR",
    "reviewed": "2026-11-21",
    "declared": "spec-fidelity"
   },
   "### T09 Approach (checklist part A)": {
-   "sha256": "409e27dc50a41799134dbdafa64b29860eee9cdfc7efbc670fc890dde578fb71",
+   "sha256": "1e60e9513e53ba9bb0b46392293f9a192c05e9051c09e3788baabc9c1d262049",
    "verdict": "CLEAR",
    "reviewed": "2026-11-21",
    "declared": "spec-fidelity"
@@ -277,12 +277,6 @@
    "reviewed": "2026-11-21",
    "declared": "spec-fidelity"
   },
-  "### T53 (<why: the finding or measurement that files it>)": {
-   "sha256": "33315efa2c60777687c319edf1916ac583be702df80d91d9b278c1e83cb5465e",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-21",
-   "declared": "spec-fidelity"
-  },
   "### T53 Approach (checklist part A)": {
    "sha256": "b672dbef88f10d8aaf9e8cdca83382c741298a515ebc241a1c8f8a8a288355e7",
    "verdict": "CLEAR",
@@ -315,6 +309,114 @@
   },
   "### T55 Approach (checklist part A)": {
    "sha256": "e0c9dd63715bae3d9cd3d65d9d5e9898c07b967234375782a01a8fcf9b657746",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity"
+  },
+  "### T57 (the finding as filed, restated by its measurement: `make static` builds and runs no plain test binary - the plain `build` and `test` time is `make rust-test`'s, the builders' loop, measured 2026-11-21 over the event log's Phase lines since 2026-11-20T12:35Z; what is built twice is a crate's tests in `make rust-test` and again in the coverage run, which answers for the plain run only where T111's `unit_tests_only` says the coverage run ran every test `cargo test` runs)": {
+   "sha256": "4204c596ab4982dcfdfbbe0f2627fbe805958931ead7a6c7e00821c8337e15e2",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity"
+  },
+  "### T57 Approach (checklist part A)": {
+   "sha256": "dd16a6fbbadbd61e39aab4f985d63af98f97a4439b4811adefe2f28bff55ca13",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity"
+  },
+  "### T62 (the finding as filed, restated by its measurement: the backstop refuses the job session's FIRST edit of a CLEAN clone, its main thread's and its builders' alike - every builder is an in-process subagent of the job `c6fd72d1` and carries its session id, and a dirty clone is let through before the backstop runs - because the live interactive session `d2dc8c63` that parked the job claims the clone and `forked_from` knows no parent of a `claude bg-spare` job; measured 2026-11-21 (the guard log, the 451 event log, the session records and a replay of the mirror's binary))": {
+   "sha256": "ffd0b7f00ae16297e8f38fa4080a9a9544b25b3db843a9df5858b53d73d90ed2",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity"
+  },
+  "### T62 Approach (checklist part A)": {
+   "sha256": "f4769ed338bcc37158d31f74e4503c6363be87062b4cc42a2d58a9ad6635ae6a",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity"
+  },
+  "### T56 (<why: the finding or measurement that files it>)": {
+   "sha256": "80de25c9b9377b8ff707a6fd30563cae0c62838e071fde8c08ab9d210f1c5819",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity"
+  },
+  "### T56 Approach (checklist part A)": {
+   "sha256": "5f9f8298779ff9ffdab0866bed59e48780f2f188d40979dc56915f9b73373892",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity"
+  },
+  "### T58 (<why: the finding or measurement that files it>)": {
+   "sha256": "ed3233f8f9f8c34ae1ecb41df89b01e6dfbb592ad3be9c4636d6e6c8d8f62c25",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity"
+  },
+  "### T58 Approach (checklist part A)": {
+   "sha256": "12970a3df6d9eb6e6b6048739d3180549b836e6a72d06a8cf8cb2e0aa4cf3ee8",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity"
+  },
+  "### T59 (<why: the finding or measurement that files it>)": {
+   "sha256": "d591e8427df3518576fd86b055e914395d9ce8e222b4e6cb67001cdbb001b84c",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity"
+  },
+  "### T59 Approach (checklist part A)": {
+   "sha256": "465696025ab44aa3a540c6714a7a68368a5f1a086c2f0f3d570497fc828f3d27",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity"
+  },
+  "### T60 (<why: the finding or measurement that files it>)": {
+   "sha256": "63d268457f6d61bc29b9873fcfe5a24570d6a9e60c8bdedced7894bedc596433",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity"
+  },
+  "### T60 Approach (checklist part A)": {
+   "sha256": "0db999cf099f3c981eefd2391d91bb1f7ef3be1694c3828b0df3b896031b3059",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity"
+  },
+  "### T61 (<why: the finding or measurement that files it>)": {
+   "sha256": "8306b54f730ebada3142fc5825962cccf5592b804d122c1302fd90efdae60020",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity"
+  },
+  "### T61 Approach (checklist part A)": {
+   "sha256": "475a307ad3090d826492fea4d55a9144a366f305978574b8cbeec788314578b0",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity"
+  },
+  "### T63 (<why: the finding or measurement that files it>)": {
+   "sha256": "309d4f35a32638efcff9a0ebabb035007508decf8a88d710a05cf22488c47e9f",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity"
+  },
+  "### T63 Approach (checklist part A)": {
+   "sha256": "7670d9cc89be7696ac0690eb9dd2c03b24ad701de21114fef8473a9322019840",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity"
+  },
+  "### T64 (<why: the finding or measurement that files it>)": {
+   "sha256": "647c0a3a20f8a4852aeb9808878510082e021fbdab5702e7088d5ab12621b81c",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity"
+  },
+  "### T64 Approach (checklist part A)": {
+   "sha256": "665ae887894207f1225e4dac99bbaf929d377d10f72be86720f8cf1ad6b8c9ee",
    "verdict": "CLEAR",
    "reviewed": "2026-11-21",
    "declared": "spec-fidelity"
@@ -6790,6 +6892,269 @@
      "why": "A restated measurement, not a decision about scope. 51+39+3=93. The difference from the first reading is put down to the pre-T04 bg rule and to the log having grown."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-21",
+   "blocks": [
+    "### T57 (the finding as filed, restated by its measurement: `make static` builds and runs no plain test binary - the plain `build` and `test` time is `make rust-test`'s, the builders' loop, measured 2026-11-21 over the event log's Phase lines since 2026-11-20T12:35Z; what is built twice is a crate's tests in `make rust-test` and again in the coverage run, which answers for the plain run only where T111's `unit_tests_only` says the coverage run ran every test `cargo test` runs)",
+    "### T57 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T57-restated-premise",
+     "summary": "The task line's premise (a plain build and test inside make static to drop) was measured false - static runs lint, format, cover and dead only; the double build is make rust-test's plain run after a green coverage pass, so that is what the task removes.",
+     "class": "within",
+     "why": "The line's own instruction is to measure first and drop the plain run where the covered run answers; acting on where the plain run actually is serves the same goal (a crate's tests built and run once per state of its inputs) under the GM's 2026-11-21 'file that as a performance task'. Nothing the GM asked is cut."
+    },
+    {
+     "id": "T57-widen-unit_tests_only",
+     "summary": "unit_tests_only refuses a binary only where it holds a test, cfg(test) or mod x; and a doc fence only where it is not text; eleven crates join T111's keep.",
+     "class": "within",
+     "why": "This is the mechanism by which 'dropped where the covered run answers' reaches the crates where it answers; each widened case (test-free binaries, text-only fences) is backed by a read of every crate's binaries and fences, with search spaces stated."
+    },
+    {
+     "id": "T57-checks-and-rustc-out",
+     "summary": "checks (a cfg(not(coverage)) test) and rustc (cfg(coverage) text in its tests) stay out of the keep.",
+     "class": "within",
+     "why": "The covered run does not answer for them, so the task line itself excludes them; not a narrowing of anything asked."
+    },
+    {
+     "id": "T57-static-and-rust-test-unchanged",
+     "summary": "make static unchanged (no plain run to drop); make rust-test's uninstrumented loop and has_doctests reading unchanged; land's counters-inert --all-features plain runs left.",
+     "class": "within",
+     "why": "The task line requires rust-test's fast loop unchanged; the --all-features runs are a cfg the default-feature coverage pass does not answer, so keeping them is the line's own 'where the covered run answers'."
+    },
+    {
+     "id": "T57-feature-unification-left",
+     "summary": "A family's coverage build unifies features (testkit), so a kept result for claims, land, trials and rust/gate may stand on a run with features the crate's own build lacks; left as not a defect.",
+     "class": "within",
+     "why": "A difference, not a shown wrong outcome (constitution XIV, GM 2026-11-19): item-adding gates fail the crate's own-features lint, and the push gate already rests on the coverage pass alone (static runs no plain test), so the keep opens no path to main that does not exist today; it changes only when a builder's loop reruns. The plan's 'no plain red in the window traces to it' is weak support (the log holds no failure text), but no defect is left on the evidence."
+    },
+    {
+     "id": "T57-T62-filed",
+     "summary": "The clone-claim backstop refusing the builder's edits in a kind: bg dispatcher's clone is filed as T62, landing before T22, not fixed here because T58 holds rust/guard in this clone.",
+     "class": "within",
+     "why": "A defect outside T57's scope, not part of what T57 was asked; filed with its id, its order before the close and its reason (FR-009's form), so it is not carried past the feature's close."
+    },
+    {
+     "id": "T57-perf",
+     "summary": "T57 is [perf] under FR-013 (the builders' loop faster).",
+     "class": "within",
+     "why": "FR-013 names the builders' loop as performance work, and the GM filed this as a performance task (2026-11-21)."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-21",
+   "blocks": [
+    "### T57 (the finding as filed, restated by its measurement: `make static` builds and runs no plain test binary - the plain `build` and `test` time is `make rust-test`'s, the builders' loop, measured 2026-11-21 over the event log's Phase lines since 2026-11-20T12:35Z; what is built twice is a crate's tests in `make rust-test` and again in the coverage run, which answers for the plain run only where T111's `unit_tests_only` says the coverage run ran every test `cargo test` runs)",
+    "### T57 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D1 restatement",
+     "summary": "make static is left unchanged because its Phase lines show it builds and runs no plain test; the double build is moved to where it actually happens, make rust-test after a green coverage pass, by widening T111's keep",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The task line asked for static's plain build and test to be dropped. Measured Phase lines (dated, per target) show static has neither, so dropping one is impossible. The plan goes after the duplication the line was about (a crate's tests built in rust-test and again in coverage), which serves the GM's perf-first ordering (request.md 2026-11-20/21)."
+    },
+    {
+     "id": "D2 widen unit_tests_only",
+     "summary": "a binary is refused only where it holds a test, cfg(test) or mod x; a doc fence is refused only where it is not a text block; eleven crates join the keep",
+     "class": "within",
+     "why": "This is the mechanism by which the covered run answers for the plain run wherever it actually does, which is what the task line asked. The plan measures each new admission (binaries read, fences listed, no integration tests, examples or benches)."
+    },
+    {
+     "id": "D3 checks stays out",
+     "summary": "checks is excluded for its cfg(not(coverage)) test",
+     "class": "within",
+     "why": "The covered run genuinely does not run that test, so it does not answer for checks' plain run. The line's own scope is 'where the covered run answers'."
+    },
+    {
+     "id": "D4 rustc stays out",
+     "summary": "rustc is excluded because its tests contain cfg(coverage) as text, which the conservative predicate refuses",
+     "class": "within",
+     "why": "A forgone saving, not a wrong outcome. T111's premise (no code reading cfg(coverage)) is applied as written, and nothing passes untested. This is a difference from the most a change could save, not a defect under XIV, and it narrows nothing the GM asked for."
+    },
+    {
+     "id": "D5 rust-test doctest reading",
+     "summary": "make rust-test is unchanged but for has_doctests, which now shares unit_tests_only's reading (holds_doctest), so the five text-only crates skip a cargo test --doc pass that ran no test",
+     "class": "within",
+     "why": "The constraint 'rust-test's fast uninstrumented loop unchanged' exists to keep the loop fast and uninstrumented, and it still is: no test stops running (all 10 fences are text, measured), and only an empty pass goes. A single reading keeps the keep and the run in agreement. This speeds the builders' loop, which FR-013 and the GM's perf priority cover."
+    },
+    {
+     "id": "D6 counters-inert left plain",
+     "summary": "land's --all-features plain runs of pool, rust/mode_a and rust/phases are left",
+     "class": "within",
+     "why": "The coverage run (default features) does not answer for an --all-features cfg, so this falls outside 'where the covered run answers'."
+    },
+    {
+     "id": "D7a feature unification, T111's existing keep",
+     "summary": "crates T111 already kept (owed, claims, land, trials) have covered tests run under unified features",
+     "class": "within",
+     "why": "Not T57's decision. It is T111's standing keep, reported as found and left, and no wrong outcome is shown."
+    },
+    {
+     "id": "D7b feature unification, rust/gate newly kept",
+     "summary": "T57 adds rust/gate to the keep, though its covered tests may run with owed's testkit (which switches owed's entry_lines seam) while its own plain build lacks it",
+     "class": "within",
+     "why": "Here the covered run answers under unified features, not the crate's own. The bundle shows a difference but no wrong outcome: the gate (make done, the push) already rests on the coverage run alone for these crates, and the crate's lint runs on its own features. Under XIV, a difference with no wrong outcome is not a defect, so leaving it needs no ruling."
+    },
+    {
+     "id": "D8 environment exposure",
+     "summary": "no verdict key carries the environment; attributed to T93, not new with T57",
+     "class": "within",
+     "why": "The plain run's own key already has the same exposure, so the keep adds none. The tests T32 found were fixed. No new defect is left."
+    },
+    {
+     "id": "D9 T62 clone-claim backstop",
+     "summary": "the guard's refusal of the builder's Edit and Write in a kind:bg dispatcher's clone is filed as T62 rather than fixed here",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "A defect (a tool refusing valid work) that T57 leaves. The deferral meets FR-009: it says why it is not fixed here (the fix is in rust/guard's clone_sync_hooks, where T58 works in this clone, and a guard edit rebuilds the gate crates T58 is counting), names its filed id (T62) and gives its order (lands before T22, the close). So it is fixed within the feature, before the close."
+    },
+    {
+     "id": "D10 order, exits, budget",
+     "summary": "after T55, beside T58, before T22; green and red exits; one landing",
+     "class": "within",
+     "why": "Scheduling inside the feature, consistent with FR-013, and it touches nothing T58 owns."
+    },
+    {
+     "id": "D11 perf classification",
+     "summary": "T57 is a [perf] task under FR-013",
+     "class": "within",
+     "why": "The GM, 2026-11-21: 'yes please file that as a performance task'. It makes the builders' loop faster."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-21",
+   "blocks": [
+    "### T62 (the finding as filed, restated by its measurement: the backstop refuses the job session's FIRST edit of a CLEAN clone, its main thread's and its builders' alike - every builder is an in-process subagent of the job `c6fd72d1` and carries its session id, and a dirty clone is let through before the backstop runs - because the live interactive session `d2dc8c63` that parked the job claims the clone and `forked_from` knows no parent of a `claude bg-spare` job; measured 2026-11-21 (the guard log, the 451 event log, the session records and a replay of the mirror's binary))",
+    "### T62 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T62-D1 parked_by as the backstop's third dispatcher source",
+     "summary": "clone_sync_hooks::parked_by treats the session whose record's parkedJobId equals this session's own jobId as its dispatcher, after L7R_DISPATCHER and forked_from, read in one pass over ~/.claude/sessions/*.json",
+     "class": "within",
+     "why": "Fixes a measured defect (a check refusing good work: the parked job's first edit of a clean clone refused, its builder falling back to exact-replacement scripts that skip every Edit and Write hook). That fallback defeats the GM's 'make sure all of the enforcement is real enforcement and not just instructions' (2026-11-19), and fixing known defects as found is the standing rule. It follows the same dispatcher pattern forked_from and L7R_DISPATCHER already carry, and widens nothing past the job's own parker."
+    },
+    {
+     "id": "T62-D2 empty ids match nothing",
+     "summary": "an empty jobId, parkedJobId or session id matches no record",
+     "class": "within",
+     "why": "Keeps the new source from matching every record that lacks the field; it keeps the backstop as strict as before for anything that is not a real parked job."
+    },
+    {
+     "id": "T62-D3 sid_is_live and the dirty-clone early exit unchanged",
+     "summary": "a live claimant that did not park the job still refuses it; two sessions never write one clone",
+     "class": "within",
+     "why": "Keeps the backstop's purpose (docs/session-clones.md) whole. The refusal is lifted only for the claimant's own parked job, and the red-first shell twin ('did NOT park -> still blocked') pins that."
+    },
+    {
+     "id": "T62-D4 no rule for a parker that starts a new conversation",
+     "summary": "the unmeasured case of a parked interactive session keeping parkedJobId under a new session id gets no rule",
+     "class": "within",
+     "why": "No such record was found, so a rule would be a guess. Leaving it out narrows nothing the request or spec asked for; the task's line names only parkedJobId equal to this jobId."
+    },
+    {
+     "id": "T62-D5 the claim restated by measurement, tasks.md line left as filed",
+     "summary": "'refuses every Edit and Write' restated as 'the first edit of a clean clone, the job's main thread included'; T62's tasks.md line kept for the dispatcher",
+     "class": "within",
+     "why": "A claim the measurement contradicts is fixed by restating the claim (constitution XIV). The fix covers the measured scope, which is wider than the builder-only reading, so nothing is narrowed."
+    },
+    {
+     "id": "T62-D6 edit scope and isolation from T57/T58",
+     "summary": "edits only in clone_sync_hooks and its tests, the shell suite, two docs rows and this section; T57's rustc crate and T58's worktree untouched",
+     "class": "within",
+     "why": "Limits the change to the defect's own mechanism and adds nothing unrequested."
+    },
+    {
+     "id": "T62-D7 order and performance classification",
+     "summary": "after T57's Found and left filed it, before T22; 'Performance work? no'; budget one landing",
+     "class": "within",
+     "why": "A guard fix that measures and speeds up nothing is correctly classed as not performance or measurement work under FR-013 and the GM's 2026-11-20 words, so the scheduler sees it as it is. Whether starting it ahead of an open performance task needs an escape is FR-013's guard's call at start time, and this section does not override it."
+    },
+    {
+     "id": "T62-D8 exits and done-measures",
+     "summary": "red-first Rust test and shell case, the crate's tests, lint, format, coverage, dead code, and the replay that allows the job and refuses a stranger",
+     "class": "within",
+     "why": "Tests that fail only when the requested fix is absent, plus a pin that the stranger is still refused. This is enforcement of the fix, not unrequested scope."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-21",
+   "blocks": [
+    "### T09 (FR-002, FR-005: a wait cannot be booked to the run behind it - the spec's User Story 1 scenario 2, research R2)",
+    "### T09 Approach (checklist part A)",
+    "### T56 (<why: the finding or measurement that files it>)",
+    "### T56 Approach (checklist part A)",
+    "### T57 Approach (checklist part A)",
+    "### T58 (<why: the finding or measurement that files it>)",
+    "### T58 Approach (checklist part A)",
+    "### T59 (<why: the finding or measurement that files it>)",
+    "### T59 Approach (checklist part A)",
+    "### T60 (<why: the finding or measurement that files it>)",
+    "### T60 Approach (checklist part A)",
+    "### T61 (<why: the finding or measurement that files it>)",
+    "### T61 Approach (checklist part A)",
+    "### T62 Approach (checklist part A)",
+    "### T63 (<why: the finding or measurement that files it>)",
+    "### T63 Approach (checklist part A)",
+    "### T64 (<why: the finding or measurement that files it>)",
+    "### T64 Approach (checklist part A)",
+    "(removed) ### T53 (<why: the finding or measurement that files it>)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T09-wait-total",
+     "summary": "T09's footnote figure for the waits between 451's turns on work corrected from 992 to 996 min, stated as the sum of the four parts the command prints (120+864+9+3), and the Found-and-left wording on the 253 model minutes made to say they moved to the waits and to the another-feature column",
+     "class": "within",
+     "why": "A corrected figure and a restated description of what D3/D7's reader (FR-002, FR-005) already measured; no design, scope or rule changes from the CLEAR text."
+    },
+    {
+     "id": "T57-premise-restated",
+     "summary": "T57's premise (a plain build/test inside make static) restated by measurement: make static runs no plain test; the double run is make rust-test's plain run beside a green coverage run, and the fix widens T111's keep to 11 more crates so make rust-test after a green coverage pass stands on it",
+     "class": "within",
+     "why": "Serves the GM's approved improvement 2 ('Stop using make static as the edit loop') and FR-013; a false task-line premise restated rather than a plain run invented to drop, per constitution XIV. Unchanged in substance from the CLEAR text; this round only adds the T32/verdict_key_with method and drops two script names."
+    },
+    {
+     "id": "T57-feature-unification",
+     "summary": "T57 leaves the family coverage build's feature unification (a crate's covered tests may run with a dependency's testkit) as not a defect",
+     "class": "within",
+     "why": "Already judged CLEAR; no wrong outcome shown (lint runs on a crate's own features, the gate already rests on the coverage run). A difference, not a defect, so leaving it is within what was asked."
+    },
+    {
+     "id": "T57-T62-deferral-restated",
+     "summary": "T57's Found-and-left item on the clone-claim backstop restated by T62's measurement: the first edit of a clean clone, not every Edit and Write; still filed as T62, lands before T22",
+     "class": "within",
+     "why": "A claim corrected to what was measured; the deferral's target and order are unchanged and T62 is built."
+    },
+    {
+     "id": "T62-closing-measurement",
+     "summary": "T62's Done-measured item completed: the coverage rerun clean and make closing-checks GREEN (static 70 s, hooks-test 62 s, quick 8 s), and the filed claim ('refuses every Edit and Write') restated as the first edit of a clean clone",
+     "class": "within",
+     "why": "Records the last measurements the CLEAR text named as owed; the fix (a bg job parked by the clone's live claimant edits; any other still refused) is unchanged."
+    },
+    {
+     "id": "T53-removed",
+     "summary": "T53's unfilled template block removed from plan.md by hand",
+     "class": "within",
+     "why": "The removed block held only the filing template - no approach, decision or narrowing - so its removal takes nothing from what the GM asked for or the spec requires."
+    },
+    {
+     "id": "T56-T58-T59-T60-T61-T63-T64-templates",
+     "summary": "Filed templates with no approach written (T58's being written by its builder; T63 Approach's digest moved only because make task-add appended T64's template beside it; T64 newly filed)",
+     "class": "within",
+     "why": "Placeholders decide nothing; each owes its own review at its decide."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -9677,6 +10042,144 @@
      "summary": "item 4's recount: 93 calls by 38 builders after their last code edit, 51 foreground (35.0 min), 39 background, 3 refused by other guards; 28 builders decided after their last edit, 21 before any check; the earlier 92/56/33 reading explained",
      "class": "within",
      "why": "A restated measurement, not a decision about scope. 51+39+3=93. The difference from the first reading is put down to the pre-T04 bg rule and to the log having grown."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T57": {
+   "section_sha256": "a4df9439173709ae59b731958eb997ef8de260738bb1c16df5365c73bf3294d7",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D1 restatement",
+     "summary": "make static is left unchanged because its Phase lines show it builds and runs no plain test; the double build is moved to where it actually happens, make rust-test after a green coverage pass, by widening T111's keep",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The task line asked for static's plain build and test to be dropped. Measured Phase lines (dated, per target) show static has neither, so dropping one is impossible. The plan goes after the duplication the line was about (a crate's tests built in rust-test and again in coverage), which serves the GM's perf-first ordering (request.md 2026-11-20/21)."
+    },
+    {
+     "id": "D2 widen unit_tests_only",
+     "summary": "a binary is refused only where it holds a test, cfg(test) or mod x; a doc fence is refused only where it is not a text block; eleven crates join the keep",
+     "class": "within",
+     "why": "This is the mechanism by which the covered run answers for the plain run wherever it actually does, which is what the task line asked. The plan measures each new admission (binaries read, fences listed, no integration tests, examples or benches)."
+    },
+    {
+     "id": "D3 checks stays out",
+     "summary": "checks is excluded for its cfg(not(coverage)) test",
+     "class": "within",
+     "why": "The covered run genuinely does not run that test, so it does not answer for checks' plain run. The line's own scope is 'where the covered run answers'."
+    },
+    {
+     "id": "D4 rustc stays out",
+     "summary": "rustc is excluded because its tests contain cfg(coverage) as text, which the conservative predicate refuses",
+     "class": "within",
+     "why": "A forgone saving, not a wrong outcome. T111's premise (no code reading cfg(coverage)) is applied as written, and nothing passes untested. This is a difference from the most a change could save, not a defect under XIV, and it narrows nothing the GM asked for."
+    },
+    {
+     "id": "D5 rust-test doctest reading",
+     "summary": "make rust-test is unchanged but for has_doctests, which now shares unit_tests_only's reading (holds_doctest), so the five text-only crates skip a cargo test --doc pass that ran no test",
+     "class": "within",
+     "why": "The constraint 'rust-test's fast uninstrumented loop unchanged' exists to keep the loop fast and uninstrumented, and it still is: no test stops running (all 10 fences are text, measured), and only an empty pass goes. A single reading keeps the keep and the run in agreement. This speeds the builders' loop, which FR-013 and the GM's perf priority cover."
+    },
+    {
+     "id": "D6 counters-inert left plain",
+     "summary": "land's --all-features plain runs of pool, rust/mode_a and rust/phases are left",
+     "class": "within",
+     "why": "The coverage run (default features) does not answer for an --all-features cfg, so this falls outside 'where the covered run answers'."
+    },
+    {
+     "id": "D7a feature unification, T111's existing keep",
+     "summary": "crates T111 already kept (owed, claims, land, trials) have covered tests run under unified features",
+     "class": "within",
+     "why": "Not T57's decision. It is T111's standing keep, reported as found and left, and no wrong outcome is shown."
+    },
+    {
+     "id": "D7b feature unification, rust/gate newly kept",
+     "summary": "T57 adds rust/gate to the keep, though its covered tests may run with owed's testkit (which switches owed's entry_lines seam) while its own plain build lacks it",
+     "class": "within",
+     "why": "Here the covered run answers under unified features, not the crate's own. The bundle shows a difference but no wrong outcome: the gate (make done, the push) already rests on the coverage run alone for these crates, and the crate's lint runs on its own features. Under XIV, a difference with no wrong outcome is not a defect, so leaving it needs no ruling."
+    },
+    {
+     "id": "D8 environment exposure",
+     "summary": "no verdict key carries the environment; attributed to T93, not new with T57",
+     "class": "within",
+     "why": "The plain run's own key already has the same exposure, so the keep adds none. The tests T32 found were fixed. No new defect is left."
+    },
+    {
+     "id": "D9 T62 clone-claim backstop",
+     "summary": "the guard's refusal of the builder's Edit and Write in a kind:bg dispatcher's clone is filed as T62 rather than fixed here",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "A defect (a tool refusing valid work) that T57 leaves. The deferral meets FR-009: it says why it is not fixed here (the fix is in rust/guard's clone_sync_hooks, where T58 works in this clone, and a guard edit rebuilds the gate crates T58 is counting), names its filed id (T62) and gives its order (lands before T22, the close). So it is fixed within the feature, before the close."
+    },
+    {
+     "id": "D10 order, exits, budget",
+     "summary": "after T55, beside T58, before T22; green and red exits; one landing",
+     "class": "within",
+     "why": "Scheduling inside the feature, consistent with FR-013, and it touches nothing T58 owns."
+    },
+    {
+     "id": "D11 perf classification",
+     "summary": "T57 is a [perf] task under FR-013",
+     "class": "within",
+     "why": "The GM, 2026-11-21: 'yes please file that as a performance task'. It makes the builders' loop faster."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T62": {
+   "section_sha256": "c2843f6d9584867853c8e9b200ac49bedc28c4487fea3ae1203c725e24c506a6",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T62-D1 parked_by as the backstop's third dispatcher source",
+     "summary": "clone_sync_hooks::parked_by treats the session whose record's parkedJobId equals this session's own jobId as its dispatcher, after L7R_DISPATCHER and forked_from, read in one pass over ~/.claude/sessions/*.json",
+     "class": "within",
+     "why": "Fixes a measured defect (a check refusing good work: the parked job's first edit of a clean clone refused, its builder falling back to exact-replacement scripts that skip every Edit and Write hook). That fallback defeats the GM's 'make sure all of the enforcement is real enforcement and not just instructions' (2026-11-19), and fixing known defects as found is the standing rule. It follows the same dispatcher pattern forked_from and L7R_DISPATCHER already carry, and widens nothing past the job's own parker."
+    },
+    {
+     "id": "T62-D2 empty ids match nothing",
+     "summary": "an empty jobId, parkedJobId or session id matches no record",
+     "class": "within",
+     "why": "Keeps the new source from matching every record that lacks the field; it keeps the backstop as strict as before for anything that is not a real parked job."
+    },
+    {
+     "id": "T62-D3 sid_is_live and the dirty-clone early exit unchanged",
+     "summary": "a live claimant that did not park the job still refuses it; two sessions never write one clone",
+     "class": "within",
+     "why": "Keeps the backstop's purpose (docs/session-clones.md) whole. The refusal is lifted only for the claimant's own parked job, and the red-first shell twin ('did NOT park -> still blocked') pins that."
+    },
+    {
+     "id": "T62-D4 no rule for a parker that starts a new conversation",
+     "summary": "the unmeasured case of a parked interactive session keeping parkedJobId under a new session id gets no rule",
+     "class": "within",
+     "why": "No such record was found, so a rule would be a guess. Leaving it out narrows nothing the request or spec asked for; the task's line names only parkedJobId equal to this jobId."
+    },
+    {
+     "id": "T62-D5 the claim restated by measurement, tasks.md line left as filed",
+     "summary": "'refuses every Edit and Write' restated as 'the first edit of a clean clone, the job's main thread included'; T62's tasks.md line kept for the dispatcher",
+     "class": "within",
+     "why": "A claim the measurement contradicts is fixed by restating the claim (constitution XIV). The fix covers the measured scope, which is wider than the builder-only reading, so nothing is narrowed."
+    },
+    {
+     "id": "T62-D6 edit scope and isolation from T57/T58",
+     "summary": "edits only in clone_sync_hooks and its tests, the shell suite, two docs rows and this section; T57's rustc crate and T58's worktree untouched",
+     "class": "within",
+     "why": "Limits the change to the defect's own mechanism and adds nothing unrequested."
+    },
+    {
+     "id": "T62-D7 order and performance classification",
+     "summary": "after T57's Found and left filed it, before T22; 'Performance work? no'; budget one landing",
+     "class": "within",
+     "why": "A guard fix that measures and speeds up nothing is correctly classed as not performance or measurement work under FR-013 and the GM's 2026-11-20 words, so the scheduler sees it as it is. Whether starting it ahead of an open performance task needs an escape is FR-013's guard's call at start time, and this section does not override it."
+    },
+    {
+     "id": "T62-D8 exits and done-measures",
+     "summary": "red-first Rust test and shell case, the crate's tests, lint, format, coverage, dead code, and the replay that allows the job and refuses a stranger",
+     "class": "within",
+     "why": "Tests that fail only when the requested fix is absent, plus a pin that the stranger is still refused. This is enforcement of the fix, not unrequested scope."
     }
    ],
    "verdict": "CLEAR"

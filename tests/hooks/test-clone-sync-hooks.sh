@@ -134,6 +134,13 @@ printf '%s' "$FMAIN/.clones/miscellaneous" > "$MAPDIR/sid-live-other"
 run pretool sid-me miscellaneous a.txt;        check "canonical clone claimed by a LIVE other session -> blocked" 2 "$RC"
 L7R_DISPATCHER=sid-live-other run pretool sid-me miscellaneous a.txt; check "a page session its LIVE claimant dispatched (L7R_DISPATCHER) -> allowed" 0 "$RC"
 L7R_DISPATCHER=sid-someone-else run pretool sid-me miscellaneous a.txt; check "a dispatcher that is NOT the live claimant -> still blocked" 2 "$RC"
+# feature 451 T62: a background job runs as `claude bg-spare`, naming no parent; the session it was parked from names its jobId as parkedJobId
+printf '{"id":"sid-live-other","name":"Diagram (city)","parkedJobId":"job-me"}' > "$SESS/$LIVE_PID.json"
+printf '{"id":"sid-me","name":"miscellaneous","kind":"bg","jobId":"job-me"}' > "$SESS/1001.json"
+run pretool sid-me miscellaneous a.txt;        check "a background job its LIVE claimant parked (parkedJobId) -> allowed" 0 "$RC"
+printf '{"id":"sid-me","name":"miscellaneous","kind":"bg","jobId":"job-other"}' > "$SESS/1001.json"
+run pretool sid-me miscellaneous a.txt;        check "a background job the live claimant did NOT park -> still blocked" 2 "$RC"
+sess "$LIVE_PID" sid-live-other "Diagram (city)"; sess 1001 sid-me miscellaneous
 rm -f "$MAPDIR/sid-live-other"
 
 printf '%s' "$FMAIN/.clones/miscellaneous" > "$MAPDIR/sid-dead-other"

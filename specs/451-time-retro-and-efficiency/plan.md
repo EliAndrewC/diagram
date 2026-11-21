@@ -871,31 +871,138 @@ The T02 class, by kind (the grep's hits, each read):
 **Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
 
 
-### T57 (<why: the finding or measurement that files it>)
+### T57 (the finding as filed, restated by its measurement: `make static` builds and runs no plain test binary - the plain `build` and `test` time is `make rust-test`'s, the builders' loop, measured 2026-11-21 over the event log's Phase lines since 2026-11-20T12:35Z; what is built twice is a crate's tests in `make rust-test` and again in the coverage run, which answers for the plain run only where T111's `unit_tests_only` says the coverage run ran every test `cargo test` runs)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: the coverage run's word for a crate's plain tests (T111: a green coverage pass keeps the crate's `test` result, so a
+  later `make rust-test` stands on it and builds and runs nothing) reaches every crate whose whole `cargo test` the coverage run
+  (`--lib`) runs. `unit_tests_only` (`rust/gate/crates/rustc/src/rustc/kept.rs`) refused any crate with a binary and any doc fence;
+  it now refuses a binary only where it holds a test, a `cfg(test)` or a `mod x;` (`BIN_TEST` over `src/main.rs`, `src/bin/` and each
+  `[[bin]]`'s path), and a fence only where it is not a `text` block (`TEXT_BLOCK`). Eleven crates join the keep - the guard,
+  `rust/gate`, `pool`, `cohort`, `measure`, `pages`, `reviews`, `rust/mode_a`, `rust/phases`, the browser and the embedder; `checks`
+  (a `cfg(not(coverage))` test) and `rustc` (its tests' `cfg(coverage)` text) stay out, observed 2026-11-21, method: the new and the
+  old predicate run over every crate's manifest and sources. `make static` itself is unchanged (it ran no plain test to drop), and
+  `make rust-test`'s runs are unchanged but for its doctest reading (`has_doctests`, `side.rs`), which takes the `text` blocks out as
+  `unit_tests_only` does (one reading, `holds_doctest`), so the five crates whose only blocks are `text` ones - `cohort`, `measure`,
+  `pages`, `reviews` and `rust/mode_a` - run no `cargo test --doc`, a pass that ran no test, observed 2026-11-21, method: the old
+  and the new reading run over every crate's sources. Nothing reads the plain run's output but the readers that book `build` as
+  compile.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| the coverage pass's word for a crate's plain tests | n/a - no map | n/a | none | n/a |
 
 ### T57 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** No map changes. A crate's tests are built and run once for one state of its inputs wherever one run
+   answers for both: after a green coverage pass (`make static`, `make closing-checks`, `make land`'s gate), `make rust-test` on a
+   crate whose whole `cargo test` that pass ran stands on it.
+2. **The constraints.** T57's line: measured first what the plain run catches that the covered run does not; static's plain build and
+   test dropped where the covered run answers; `make rust-test`'s fast uninstrumented loop unchanged; red first on a failing test
+   caught by the covered run alone. T111's premise (every test target in `--lib`, no code reading `cfg(coverage)`). FR-013. T58 owns
+   `rust/guard`'s layout and the gate crates' `Cargo.toml` in this clone; neither is touched.
+3. **Where each comes from.** O: the event log's Phase lines and Edit and Write lines since 2026-11-20T12:35Z (item 4); O: `cargo
+   tree -e features`; O: the crates' targets, sources and fences read; O: the red-first run and the guard's run (item 9); G: FR-013
+   (the GM 2026-11-20, request.md: "can we in general priotitize performance improvements going forward?"); the task as filed
+   (T57's line).
+4. **Do they describe the world here?** Measured, not assumed:
+   - `make static` runs `rust lint`, `format --check`, `cover` and `dead` and no `rust test`; its Phase lines are `cover-build` 31.4
+     min, `lint` 26.4, `cover-run` 20.8 and `format` 0.3, and no `build` or `test` line, measured 2026-11-21 (the Phase lines of every
+     clone's event logs since 2026-11-20T12:35Z, by their `make`).
+   - The plain `build` 83.7 min (733 lines) and `test` 44.1 min (687) are all `rust-test`'s, `make rust-test` or `l7r-gate.sh rust test`
+     with no make above, measured 2026-11-21 (the same lines).
+   - `land`'s plain 5.2 and 1.2 min are `counters-inert`'s `--all-features` run of `pool`, `rust/mode_a` and `rust/phases`, a cfg the
+     coverage run (default features) does not answer, measured 2026-11-21 (the same lines).
+   - The line's cover-build 73 and cover-run 44 min sum each step over every target (`rust-cover`, `static`, `land`,
+     `closing-checks`), measured 2026-11-21 (the same lines).
+   - The guard's share of the plain time is 53.6 min of build and 36.9 of test, T111 keeping no guard result since its `src/main.rs`
+     refused it, measured 2026-11-21 (the same lines, by crate).
+   - What `cargo test` runs that the coverage run does not, each read from the crates' manifests, targets, sources and doc fences:
+     - binaries: eight crates have one (`src/main.rs`, `src/bin/hamlet.rs`), none holding a test, a `cfg(test)` or a `mod x;`, their
+       test-cfg compile the lint's (`clippy --all-targets`), measured 2026-11-21 (each binary's source read).
+     - doctests: none - 10 fenced blocks in 10 files, every one `text`, and no indented block, measured 2026-11-21 (every
+       `//[/!]` line opening a fence listed, and the indented form searched).
+     - integration tests, examples and benches: none, measured 2026-11-21 (each crate's `tests/`, `examples/`, `benches/` and
+       manifest read).
+     - `cfg(coverage)`: one test, `checks`' `every_pointer_in_the_repository_resolves_to_a_fragment` (`cfg(not(coverage))`), whose job
+       the gate's preflight `check research-pointers` and the push's `research-pointers` row also do, so `checks` stays out of the
+       keep, measured 2026-11-21 (the sources searched for the cfg).
+     - features: a family's coverage build is one cargo call, which unifies features across its crates - `l7r_gate_owed` resolves with
+       `testkit` for `claims` built beside `arbiter`, with none alone, measured 2026-11-21 (`cargo tree -e features -p ...`); the plain
+       build is a crate's own (found and left, below).
+     - time bounds: 4 tests assert one, floors or a 5 s ceiling, stricter under instrumentation and never looser, measured
+       2026-11-21 (every `elapsed()` in an assertion read).
+     - environment: both runs inherit the session's environment, run from the crate's directory and give its tests their own
+       `TMPDIR` (`leak_checked`), measured 2026-11-21 (`run_in`, `cover.rs`'s `run_one` and `side.rs` read).
+   - What the plain run caught: nothing the covered run misses. 15 plain test reds came after a green coverage run of that crate
+     with no Edit or Write in the clone between, and each was read in the session's transcript at its time: 14 followed a shell edit
+     of the crate's own sources, a builder's red-first test or deliberate break by `python3`, `sed -i` or `cat >>` (`land`, `plan`
+     twice, `task`, `owed` five times, `pages` twice, `measure` twice and this task's `rustc`), its key moving so the plain run was
+     owed either way; the 15th, the guard's, was a `FRESH=1` run with the feature's variables exported (T32's sweep for tests reading
+     the session's environment, 17 failing), measured 2026-11-21 (each red's command and failures
+     read from session `c6fd72d1`'s transcripts). No key carries the environment, the plain run's own neither, so that exposure is
+     T93's, not new with T57, and T32 fixed the tests it found, observed 2026-11-21, method: `verdict_key_with` (kept.rs) read - its key is the command, the compiler and the input files - and T32's box read ticked.
+   - What the keep can save: on the eleven crates it adds, 112 plain `build` and `test` lines, 13.7 min of the plain 127.8, came after a
+     green coverage run with no edit between, measured 2026-11-21 (the same lines; an upper bound, as an edit made by the shell, or of
+     the tree a crate's tests read, is not seen there). The guard's own repeated loop is most of the rest (T58's ground).
+5. **The order.** After T55 (the closing step this task closes with); beside T58 (a different crate); before T22, the close.
+6. **The exits.** Green: the red-first test green, `make rust-test`, lint, format, cover and dead on `rust/gate/crates/rustc`, `make
+   quick`, `make closing-checks`.
+   Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** One: the task line's premise (a plain run inside `make static`) did not hold; the Phase lines' `make` field
+   was read per target before any code, and the finding restated above rather than a plain run invented to drop.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.**
+   - Red first: `a_failing_test_is_caught_by_the_covered_run_alone_and_a_green_one_answers_for_the_plain_run` (the fake cargo: a crate
+     whose binary holds no test, its covered test failing) and the new cases of `a_crate_whose_unit_tests_are_its_whole_cargo_test`
+     failed on the unfixed code, 2 failed and 77 passed - the covered run's failure named the crate, the plain run after it still owed,
+     and after a green pass the plain run did not stand - measured 2026-11-21 (`make rust-test CRATE=rust/gate/crates/rustc`); 79 passed
+     after, measured 2026-11-21 (the same).
+   - The doc pass, red first: the `text` cases of `a_crate_whose_unit_tests_are_its_whole_cargo_test`, now asking `has_doctests` the
+     same as `unit_tests_only`, and a `text`-only library beside a fenced one in
+     `a_crate_with_a_doctest_runs_cargo_s_doc_pass_with_its_features` (one `test --doc` call, not two) failed on the unfixed reading,
+     2 failed and 77 passed, measured 2026-11-21 (`make rust-test CRATE=rust/gate/crates/rustc`, `/tmp/t57/doc-red.log`); 79 passed
+     after, with the crate's format, lint, cover and dead clean, measured 2026-11-21 (the same, and each check on the crate).
+   - The doc pass's cost, each crate's `test` Phase span under `make rust-test CRATE=<crate> FRESH=1`, two runs before and two after,
+     at load average 19 before and 20 to 23 after on 22 cores, measured 2026-11-21 (the event log's Phase lines, `uptime` after each
+     set):
+     - `measure` 2.8 and 3.3 s, then 0.8 and 0.8 s, measured 2026-11-21 (the same).
+     - `rust/mode_a` 14.2 and 12.4 s, then 7.9 and 7.2 s, measured 2026-11-21 (the same).
+     - `cohort` 2.1 and 0.5 s, then 0.5 and 0.5 s, measured 2026-11-21 (the same).
+     - `pages` 0.2 and 0.2 s, then 0.3 and 0.4 s, measured 2026-11-21 (the same).
+     - `reviews` 1.6 and 1.5 s, then 3.4 and 3.5 s, measured 2026-11-21 (the same).
+   - The change takes a cargo call away and adds none, so the rises are the host's load, and about 2 s a run is saved on `measure`
+     and 5 s on `rust/mode_a`, observed 2026-11-21, method: the spans above, and the fake cargo's calls in the red-first test.
+   - The guard on the real tree, its key moved by a scratch file under `scripts/` its tests read: `rust cover --crate rust/guard` 11.1
+     s, then `make rust-test CRATE=rust/guard` 0.18 s ("test unchanged on rust/guard - its last green result stands"), where the plain
+     run that coverage pass now answers took 6.0 s (711 tests, its binary already built), measured 2026-11-21 (each timed by `date`
+     around it, the file removed after).
+   - `make static`, warm, before the change: 7.27 s, `checks`' and `task`'s coverage owed and 130 results kept, measured 2026-11-21
+     (`make static`, timed by `date` around it).
+   - `make static`, warm, after: 27.2 s for the same work - `checks`' and `task`'s coverage owed, 130 results kept - its coverage tests
+     4.7 s and 5.7 s against 0.6 s and 0.8 s before, on a machine at load average 29.6 on 22 cores, measured 2026-11-21 (`make static`
+     under `STATIC_OK`, timed by `date` around it, `uptime` after). The change moves nothing `make static` runs, so its time is not the
+     task's measure: the saving is the `make rust-test` after it, measured above. In `make closing-checks` it took 45 s beside
+     `hooks-test` and `quick`, three crates' coverage owed (the gate's binary rebuilt over the `rustc` edit), measured 2026-11-21
+     (`make closing-checks`' table).
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** No reader of a map sees anything differently; the change is when a builder's `make rust-test` reruns a
+    crate's tests, and every test it no longer reruns ran green in the coverage pass over the same inputs.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?**
+- The coverage build of a family unifies its crates' features, so a crate's covered tests may run with a dependency's `testkit` its
+  own build lacks (`owed` for `claims`, `land`, `trials` and `rust/gate` beside `arbiter`, `bundle` or `record`), and T111's keep
+  stands on that run - observed 2026-11-21, method: every `cfg(feature)` gate of the gate crates read (one switches behavior,
+  `owed`'s `entry_lines` seam; the rest add items, which a crate naming them without the feature fails to compile in its own lint)
+  and `cargo tree -e features` for one pair. Not a defect: a difference with no wrong outcome shown - a crate's lint runs on its own
+  features, and the gate (`make done`, the push) already rests on the coverage run alone for these crates' tests.
+- The clone-claim backstop refused this builder's first Edit of the clean clone (T62 measured it: the first edit of a clean clone, the main session's included, not every Edit and Write) in its own dispatcher's clone (a `kind: bg` job, which
+  `forked_from` does not know), so the edits went through exact-replacement scripts. Not fixed here: the fix is in
+  `rust/guard`'s `clone_sync_hooks`, where T58 is working in this clone, and a guard edit rebuilds the gate crates T58 is counting.
+  Filed as T62; lands before T22.
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** yes (a `[perf]` task, 451 FR-013: it makes the builders' loop faster - a crate's plain tests not built and run
+again after a green coverage pass answered for them); not engine speed, so no checklist answers.
 
 
 ### T58 (<why: the finding or measurement that files it>)
@@ -987,6 +1094,136 @@ The T02 class, by kind (the grep's hits, each read):
 |---|---|---|---|---|
 
 ### T61 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+
+### T62 (the finding as filed, restated by its measurement: the backstop refuses the job session's FIRST edit of a CLEAN clone, its main thread's and its builders' alike - every builder is an in-process subagent of the job `c6fd72d1` and carries its session id, and a dirty clone is let through before the backstop runs - because the live interactive session `d2dc8c63` that parked the job claims the clone and `forked_from` knows no parent of a `claude bg-spare` job; measured 2026-11-21 (the guard log, the 451 event log, the session records and a replay of the mirror's binary))
+
+- **Approach**: `clone_sync_hooks::parked_by` (`rust/guard/src/guards/clone_sync_hooks.rs`) is the backstop's third dispatcher
+  source, after `L7R_DISPATCHER` and `forked_from`: the session whose record's `parkedJobId` is the `jobId` of this session's own
+  record, read in one pass over `~/.claude/sessions/*.json`; a `jobId` or `parkedJobId` that is empty, and an empty session id, match
+  nothing. `sid_is_live` and the dirty-clone early exit are unchanged, so a live claimant that did not park the job still refuses
+  it. Measured 2026-11-21 (`~/.claude/guard-log` since the job's restart, 04:31:45Z by its record's `startedAt`): one `live-claim`
+  block, 05:48:45Z, session `c6fd72d1`, an Edit of `rust/gate/crates/rustc/src/rustc/tests/kept.rs`, which the 451 event log names
+  T57's builder `aeaf2fd365f14435e`; it was the first edit after the landing `3a60ac40e1` (05:34:28Z, a clean clone), and the 42 Edit
+  and Write calls into the clone before it and the 26 after it, to 06:18Z, all passed, the clone dirty each time (the event log's
+  PreToolUse and PostToolUse pairs since 04:31:45Z). This builder's own first Edit passed for the same reason: T57's work had dirtied the clone.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+| the parked job's dispatcher read | n/a - no map | n/a | none | n/a |
+
+### T62 Approach (checklist part A)
+
+1. **The goal, in the world.** No map changes. A job Claude Code runs in the background as `claude bg-spare`, parked from the session
+   that holds the clone, edits in that clone - its main thread and its builders - on a clean clone as on a dirty one; a job parked by
+   any other session, or by none, is still refused by a live claimant, so two sessions never write one clone.
+2. **The constraints.** T62's line (the dispatcher read from the live session whose record's `parkedJobId` is this session's `jobId`,
+   red first on a pair of records of that form); the backstop's purpose (`docs/session-clones.md`, the claim backstop: two sessions
+   must not share a working tree); T162's `--fork-session` path and `L7R_DISPATCHER` kept; new Rust lines covered by their own tests.
+   Edits only in `clone_sync_hooks` and its tests, the shell suite, the two docs rows and this section; T57's `rust/gate/crates/rustc`
+   and T58's worktree untouched.
+3. **Where each comes from.** O: the guard log, the 451 event log, the session records and the job's `state.json` (item 4); O: the
+   replay of the mirror's binary and the red runs (item 9); the task as filed (T62's line, from T57's Found and left).
+4. **Do they describe the world here?** Measured, not assumed:
+   - The job: `~/.claude/sessions/926570.json`, `kind: bg`, `jobId: c6fd72d1`, `sessionId: c6fd72d1-ab6c-...`, pid 926570 running
+     `claude bg-spare --bg-spare /tmp/cc-daemon-1000/.../af1141a3.claim.sock` (no `--fork-session`, no `--resume`); the claimant:
+     `663404.json`, `kind: interactive`, `sessionId: d2dc8c63-...`, `parkedJobId: c6fd72d1`, pid 663404 live, its claim
+     `.clones/.session-clones/d2dc8c63-...` naming `diagram-backlog` - measured 2026-11-21 (the two records, `/proc/<pid>/cmdline`, the
+     claim map).
+   - The builders are the job's own subagents: `~/.claude/jobs/c6fd72d1/state.json`'s `fan` lists the T62, T57 and T58 builders as
+     `local_agent`, this builder's shell's parent is pid 926570, and the event log carries the job's session id as `sid` with each
+     builder's `by` - measured 2026-11-21 (the job's state file, `/proc/<pid>/stat` up from this shell, the event log).
+   - No other link names the parker: the job's `state.json` gives `resumeSessionId` as its own id, and its command line names
+     nothing; each of the two session ids is in exactly one record, and the four live and dead records carrying a `parkedJobId` name
+     four different jobs - measured 2026-11-21 (`grep -l` of each id and `grep -o '"parkedJobId"...'` over `~/.claude/sessions`).
+   - The refusal is not the builder's alone: the mirror's `l7r-guard.good` replayed on a clean throwaway clone, `CLONE_MAIN` a temp
+     main whose claim map gives `d2dc8c63-...` the clone, the real sessions directory, refused the job's payload with no `agent_id`
+     and with T57's, both rc 2, `already occupied by another live session (d2dc8c63-...)` - measured 2026-11-21 (`/tmp/t62-repro`).
+   - Not measured: whether a parked interactive session that starts a new conversation keeps its `parkedJobId` under a new session
+     id; no such record was found, so no rule is written for it (a guess would be one).
+5. **The order.** After T57's Found and left filed it; before T22. Independent of T57 and T58 (no shared file).
+6. **The exits.** Green: the red-first test and the shell case green on the fix, the crate's tests, lint, format, coverage and dead
+   code green, the replay allowing the job and refusing a stranger. Red: what failed recorded and the task set down, a claim that it
+   cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None: `grep -rn "L7R_DISPATCHER\|forked_from" rust/ scripts/ tests/` finds two other readers of a
+   dispatcher, `agent_prefix_hooks` (the variable's presence marks a headless page session) and `stall_watchdog_hooks/pass.rs`
+   (a page session's dispatcher read from its environment), neither of which reads a background job's launcher - observed
+   2026-11-21, method: that grep.
+8. **The budget.** One landing.
+9. **Done, measured.** Red first, 2026-11-21: `make rust-test CRATE=rust/guard` with the test and without the fix, 711 passed and 1
+   failed, `a_parked_background_job_shares_its_parkers_clone` refused `already occupied by another live session (them)`; the shell
+   suite, 63 ok and 1 FAIL, `a background job its LIVE claimant parked (parkedJobId) -> allowed (expected rc=0, got rc=2)`, its twin
+   `... did NOT park -> still blocked` ok. Green on the fix, 2026-11-21: `make rust-test CRATE=rust/guard` 712 passed, 0 failed; the
+   shell suite 64 ok, 0 FAIL; `rust lint --crate rust/guard` clean; the replay (`/tmp/t62-repro`, the clone's freshly built
+   `l7r-guard.good`, a copy of the two real records beside a fabricated job `5ca1ab1e` parked by another session) let the job's
+   payload through, rc 0, and refused the other session's job, rc 2, `already occupied by another live session (d2dc8c63-...)`.
+   `rust dead` and `rust format --check` on `rust/guard` clean; `rust cover --crate rust/guard` first named one line no test reached,
+   the new test's own failure message on a line of its own (`"{got:?}"`), which went onto its assertion's line, and the run again was clean; `make
+   closing-checks` GREEN, static 70 s, hooks-test 62 s, quick 8 s (measured 2026-11-21, its combined result).
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** What a session sees differently: the job's first edit of a clean clone is let through, where it was refused
+   and its builder fell back to exact-replacement scripts that skip every Edit and Write hook (house style, guard-file, record
+   freezes). The claim as filed ("refuses every Edit and Write") is restated by the measurement above: the first edit of a clean
+   clone, the job's main thread included; T62's line in `tasks.md` is left as filed for the dispatcher.
+
+**Found and left?** none.
+
+**Performance work?** no.
+
+
+### T63 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T63 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+
+### T64 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T64 Approach (checklist part A)
 
 1. **The goal, in the world.** <the place as it should be>
 2. **The constraints.** <the FRs, decisions and pages it holds to>

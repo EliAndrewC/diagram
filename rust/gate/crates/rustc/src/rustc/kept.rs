@@ -50,6 +50,20 @@ const RUSTFMT: [&str; 4] = [
 static DOC_FENCE: LazyLock<Regex> = LazyLock::new(|| {
     re(r"(?m)^\s*//[/!].*```|(?:^\s*//[/!][ \t]*$|^(?!\s*//[/!]).*$|\A)\n?^\s*//[/!] {5,}\S")
 });
+/// A doc comment's `text` block, which rustdoc never runs (feature 451 T57): taken out, as an empty doc line, before a doctest is
+/// looked for (`holds_doctest`) - every fence of the workspace's but none was one, observed 2026-11-21, method: every `//[/!]` line
+/// opening a fence listed - so a crate whose only fences are `text` ones is still its unit tests alone, and `make rust-test` runs no
+/// `cargo test --doc` for it (`has_doctests`). Only `text`: a bare fence, `rust`, `ignore` or any other word is still one.
+static TEXT_BLOCK: LazyLock<Regex> = LazyLock::new(|| {
+    re(r"(?ms)^[ \t]*//[/!][ \t]*```text[ \t]*$.*?^[ \t]*//[/!][ \t]*```[ \t]*$\n?")
+});
+/// What makes a binary a test target of its own: a test (`#[test]`, `#[tokio::test]`), code under `cfg(test)`, or a module file it
+/// declares (`mod x;`), whose tests the coverage run (`--lib`) never builds (T57).
+static BIN_TEST: LazyLock<Regex> = LazyLock::new(|| {
+    re(
+        r"(?m)#\[\s*(?:\w+::)*test\b|\bcfg(?:_attr)?!?\s*\([^)]*\btest\b|^\s*(?:pub(?:\([^)]*\))?\s+)?mod\s+\w+\s*;",
+    )
+});
 /// Code that reads the coverage build's own cfg: `cfg(coverage)`, `cfg(not(coverage))`, `cfg!(...)` and `cfg_attr(...)` forms.
 static COVERAGE_CFG: LazyLock<Regex> =
     LazyLock::new(|| re(r"\bcfg(?:_attr)?!?\s*\([^)]*\bcoverage\b"));
@@ -587,10 +601,20 @@ pub(super) fn test_targets(stdout: &str) -> Vec<String> {
 }
 
 /// Does the crate's library hold a doctest - a doc comment's code block, which `cargo test` runs and no test binary holds (T160)? Read
-/// as `unit_tests_only` reads one: any fence counts, a `text` one too, so a doctest is never missed.
+/// as `unit_tests_only` reads one (`holds_doctest`): a fence or an indented block, but for a `text` block, which rustdoc never runs -
+/// so the five crates whose only blocks were `text` ones ran a `cargo test --doc` of no test on every `make rust-test` (feature 451
+/// T57).
 pub(super) fn has_doctests(manifest: &Path) -> bool {
     let src = manifest.parent().unwrap_or(Path::new(".")).join("src");
-    src.join("lib.rs").is_file() && DOC_FENCE.is_match(&rust_text(&src)).unwrap_or(true)
+    src.join("lib.rs").is_file() && holds_doctest(&rust_text(&src))
+}
+
+/// Do these sources hold a doctest: a code block (`DOC_FENCE`) once their `text` blocks are taken out (`TEXT_BLOCK`)? A pattern that
+/// cannot be read says yes, so a doctest is never missed.
+fn holds_doctest(sources: &str) -> bool {
+    TEXT_BLOCK
+        .try_replacen(sources, 0, "///\n")
+        .map_or(true, |docs| DOC_FENCE.is_match(&docs).unwrap_or(true))
 }
 
 /// The executables a `--message-format=json` build names.
@@ -836,19 +860,50 @@ impl Verdict {
     }
 }
 
-/// Is the crate's `cargo test` its unit tests alone - no binary, integration test, example, bench or doctest beside its library, which
-/// `cargo test` builds and runs and a coverage run (`--lib`) does not (T111)? A doc comment holding a code fence counts as a doctest.
+/// Is the crate's `cargo test` its unit tests alone - no binary holding a test, no integration test, example, bench or doctest beside
+/// its library, which `cargo test` builds and runs and a coverage run (`--lib`) does not (T111)? A doc comment holding a code block
+/// counts as a doctest, but for a `text` one (`holds_doctest`).
+///
+/// A BINARY THAT HOLDS NO TEST ADDS NONE (feature 451 T57; the GM 2026-11-20, FR-013): `cargo test` builds a binary target in its test
+/// cfg and runs its harness, which with no test in it runs nothing - every binary of the workspace's (`src/main.rs`, `src/bin/`, a
+/// `[[bin]]`'s path) held none, observed 2026-11-21, method: each read for `#[test]`, `cfg(test)` and `mod x;`. Its compiling is
+/// `make static`'s lint (`clippy --all-targets`, the binary's test cfg too) and the launchers' own builds. So the guard, the gate's
+/// binary, `pool`, the engines, the browser and the embedder, and the crates whose only fences are `text` ones, have their whole
+/// `cargo test` in the coverage run, and a green pass answers for their plain run: before T57 the guard's plain test binary was built
+/// and run again after its coverage pass, 25 builds (4.5 min) and 23 runs (2.1 min) after a green coverage run with no edit between,
+/// measured 2026-11-21 (the event log's Phase lines since 2026-11-20T12:35Z; an upper bound, as an edit made by the shell, or of the
+/// tree its tests read, is not seen there).
 pub(super) fn unit_tests_only(manifest: &Path) -> bool {
     let dir = manifest.parent().unwrap_or(Path::new("."));
     let text = std::fs::read_to_string(manifest).unwrap_or_default();
-    let targets = ["src/main.rs", "src/bin", "tests", "examples", "benches"];
-    let declared = ["[[bin]]", "[[test]]", "[[example]]", "[[bench]]"];
+    let targets = ["tests", "examples", "benches"];
+    let declared = ["[[test]]", "[[example]]", "[[bench]]"];
     let sources = rust_text(&dir.join("src"));
     // the premise a coverage pass rests on, held where it could break: code reading the coverage build's own cfg
     !targets.iter().any(|t| dir.join(t).exists())
         && !declared.iter().any(|d| text.contains(d))
-        && !DOC_FENCE.is_match(&sources).unwrap_or(true)
+        && !BIN_TEST.is_match(&bin_text(dir, &text)).unwrap_or(true)
+        && !holds_doctest(&sources)
         && !COVERAGE_CFG.is_match(&sources).unwrap_or(true)
+}
+
+/// The text of the crate's binaries: `src/main.rs`, every file under `src/bin/`, and each `[[bin]]`'s `path`.
+fn bin_text(dir: &Path, manifest: &str) -> String {
+    let mut text = std::fs::read_to_string(dir.join("src/main.rs")).unwrap_or_default();
+    text.push_str(&rust_text(&dir.join("src/bin")));
+    let mut in_bin = false;
+    for line in manifest.lines().map(str::trim) {
+        if line.starts_with('[') {
+            in_bin = line == "[[bin]]";
+        } else if let Some(path) = line
+            .strip_prefix("path")
+            .filter(|_| in_bin)
+            .and_then(|rest| rest.split('"').nth(1))
+        {
+            text.push_str(&std::fs::read_to_string(dir.join(path)).unwrap_or_default());
+        }
+    }
+    text
 }
 
 /// The refusal when a crate's sources read the tree undeclared.

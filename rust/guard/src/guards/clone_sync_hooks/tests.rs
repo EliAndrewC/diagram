@@ -7,7 +7,9 @@ use std::sync::OnceLock;
 
 use serde_json::{json, Value};
 
-use super::{both, decide, forbidden, forked_from, judge, notes, sid_is_live, tail, Ctx};
+use super::{
+    both, decide, forbidden, forked_from, judge, notes, parked_by, sid_is_live, tail, Ctx,
+};
 use crate::protocol::{Answer, Event};
 use crate::shared::session::Session;
 use crate::shared::tool::{ask, Said};
@@ -346,6 +348,67 @@ fn a_forked_background_session_shares_its_launchers_clone() {
         &not_forked,
         "already occupied by another live session (them)"
     ));
+}
+
+#[test]
+fn a_parked_background_job_shares_its_parkers_clone() {
+    // feature 451 T62: a job Claude Code runs in the background is `claude bg-spare`, whose command line names no parent; its record
+    // is `kind: bg` with a `jobId`, and the live session it was parked from names that job as its own record's `parkedJobId`
+    let w = World::new("parked");
+    let name = w.clone.file_name().unwrap().to_string_lossy().into_owned();
+    let spare = ["claude", "bg-spare", "--bg-spare", "/tmp/x.claim.sock"];
+    let mut procs = Vec::new();
+    for (args, rec) in [
+        // the claimant, which parked job j1; `u` parked j2 and claims nothing; `v`'s job j3 was parked by no one
+        (
+            &["claude"][..],
+            json!({"sessionId": "them", "kind": "interactive", "parkedJobId": "j1"}),
+        ),
+        (
+            &spare[..],
+            json!({"sessionId": "s", "kind": "bg", "jobId": "j1"}),
+        ),
+        (
+            &["claude"][..],
+            json!({"sessionId": "u", "kind": "interactive", "parkedJobId": "j2"}),
+        ),
+        (
+            &spare[..],
+            json!({"sessionId": "t", "kind": "bg", "jobId": "j2"}),
+        ),
+        (
+            &spare[..],
+            json!({"sessionId": "v", "kind": "bg", "jobId": "j3"}),
+        ),
+    ] {
+        let p = fake(args);
+        let mut rec = rec;
+        rec["name"] = json!(name);
+        std::fs::write(w.sessions.join(format!("{}.json", p.id())), rec.to_string()).unwrap();
+        procs.push(p);
+    }
+    w.claim("them", &w.clone);
+    // the refused first: an edit let through claims the clone for its session too
+    let parked_elsewhere = w.edit("t", "", &w.clone.join("a.txt"));
+    let parked_by_none = w.edit("v", "", &w.clone.join("a.txt"));
+    let parked = w.edit("s", "", &w.clone.join("a.txt"));
+    assert_eq!(parked_by("s", &w.sessions), "them");
+    assert_eq!(parked_by("t", &w.sessions), "u");
+    // no one parked j3; `them` has no job, and an empty job must not match the records that parked nothing
+    for sid in ["v", "them", "nobody", ""] {
+        assert_eq!(parked_by(sid, &w.sessions), "", "{sid}");
+    }
+    assert_eq!(parked_by("s", Path::new("/nowhere")), "");
+    for p in &mut procs {
+        let _ = p.kill();
+        let _ = p.wait();
+    }
+    assert!(!refused(&parked, "already occupied"), "{parked:?}");
+    // one line each: a message argument on a line of its own is a line only a failure reaches
+    let occupied = "already occupied by another live session (them)";
+    for got in [&parked_elsewhere, &parked_by_none] {
+        assert!(refused(got, occupied), "{got:?}");
+    }
 }
 
 #[test]

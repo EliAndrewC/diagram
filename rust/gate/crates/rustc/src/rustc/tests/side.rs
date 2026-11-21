@@ -118,6 +118,12 @@ fn a_crate_with_a_doctest_runs_cargo_s_doc_pass_with_its_features() {
     )
     .unwrap();
     std::fs::write(root.join("rust/b/src/lib.rs"), "//! ```\n//! x\n//! ```\n").unwrap();
+    // a library whose only block is a `text` one has no doctest, so no doc pass (feature 451 T57)
+    std::fs::write(
+        root.join("rust/a/src/lib.rs"),
+        "//! ```text\n//! x\n//! ```\n",
+    )
+    .unwrap();
     assert_eq!(answer(&world, "test-counters", &[], false).code, 0);
     let docs: Vec<String> = calls(&world)
         .into_iter()
@@ -126,7 +132,7 @@ fn a_crate_with_a_doctest_runs_cargo_s_doc_pass_with_its_features() {
     assert_eq!(docs.len(), 1, "{docs:?}");
     assert!(docs[0].starts_with("test --doc --quiet --all-features --manifest-path"));
     assert!(docs[0].ends_with("rust/b/Cargo.toml"));
-    // a library with no code block, a crate with no library, and a block found
+    // a library whose only block is `text`, a crate with no library, and a block found
     assert!(!super::super::kept::has_doctests(
         &root.join("rust/a/Cargo.toml")
     ));
