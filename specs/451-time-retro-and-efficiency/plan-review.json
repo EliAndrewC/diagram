@@ -272,10 +272,10 @@
    "declared": "round-arbiter"
   },
   "### T80 Approach (checklist part A)": {
-   "sha256": "a7f8f7c96549456ba364cd8b577de7d4e279f99396cba8a842aeeb5d4eb9658b",
+   "sha256": "85feec55a4ba6e6e2beb0c672a3fee11b6e7891df52b07dce96e60753b4bb3fa",
    "verdict": "CLEAR",
    "reviewed": "2026-11-21",
-   "declared": "round-arbiter"
+   "declared": "spec-fidelity"
   },
   "### T81 (<why: the finding or measurement that files it>)": {
    "sha256": "a1021d8d177a2d6fbb2662d68b4e87dfb2c36bff8e842bc23bf2bba1b32ba2b4",
@@ -633,6 +633,12 @@
   },
   "### T114 Approach (checklist part A)": {
    "sha256": "76fae507153267628936a558be91bfe0a05bbf5fe32527da72146bee6728f6a2",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity"
+  },
+  "### T80 (the plan hold's write-back restored nothing for a task whose own headings stand apart in the plan, yet answered \"the held text is written back\", found by T78 reading the code, 2026-11-21)": {
+   "sha256": "9feee74b78c58e43ecfb640c33baacb0839d09fa24635ae434a1a702a4d60fa7",
    "verdict": "CLEAR",
    "reviewed": "2026-11-21",
    "declared": "spec-fidelity"
@@ -10814,6 +10820,111 @@
      "why": "Scheduling among performance tasks; no clause of the request or spec is affected."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-21",
+   "blocks": [
+    "### T80 (the plan hold's write-back restored nothing for a task whose own headings stand apart in the plan, yet answered \"the held text is written back\", found by T78 reading the code, 2026-11-21)",
+    "### T80 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T80-measure",
+     "summary": "Measure the failure first in a scratch clone (444's T22 split section through HEAD's binary, T25 as the one-place control) and count the reach (8 of 169 sections in specs/*/plan.md).",
+     "class": "within",
+     "why": "Measuring a defect before fixing it is the project's standing rule; no part of the request is narrowed."
+    },
+    {
+     "id": "T80-fix",
+     "summary": "plan_text::section_places reads a section as the places its own headings stand; the snapshot keeps one text per place (held_places) and write_back pairs and restores each changed place by byte span; ordered_sections rebuilt on the spans with its output pinned unchanged.",
+     "class": "within",
+     "why": "Fixes a wrong outcome of the project's own tooling (a write not restored while the hook answered that it was) - fix-as-we-go work that narrows nothing the GM asked for."
+    },
+    {
+     "id": "T80-answer",
+     "summary": "The hook's answer stays byte-identical for a one-place section and for a block hold; for a split section it names the places written back, names a place it cannot find or a new one after NOT written back, and says NOTHING of it is written back when it restored nothing.",
+     "class": "within",
+     "why": "Corrects a false answer (\"written back\" when nothing was); changing the wording of output is not a fidelity concern, and the one-place answer is kept as it was."
+    },
+    {
+     "id": "D-a",
+     "summary": "The refusal path keeps judging the joined section text (T78's pin); the refusal of good work on split sections (a Write of 444's plan, unchanged, refused under a T22 hold) is filed as T120, to land before T22.",
+     "class": "within",
+     "why": "Not a narrowing of the request: the GM's words do not ask for this task, and the defect is not left unfixed - it is filed as its own task and ordered before T22, the one task that holds a split section in a live hold. The section says why it is not fixed here (the task line covers the write-back, and the shell case reverses a pin T78 set the same day), names the task and gives the order, which is the deferral shape FR-009 requires."
+    },
+    {
+     "id": "D-b",
+     "summary": "The two pairing defects found by this task's own pins (a held heading gone stood text twice; a renamed held block wrote one block's old text over the next) are fixed here.",
+     "class": "within",
+     "why": "Fixing the defects a task finds in its own code in that task is what fix-as-we-go asks; it adds no behavior beyond making the write-back correct."
+    },
+    {
+     "id": "T80-exits",
+     "summary": "Done: every test of T80's files green (393 of 395 in rust/guard/shared, the 2 failing being another task's uncommitted tree/tests/quotes.rs), lint/format/cover clean, T22 restored in either place, T25's and T57's answers and plans byte-identical to HEAD's in a replay, make closing-checks green.",
+     "class": "within",
+     "why": "The two failures are in a file T80 does not touch and that another task has not committed; the closing checks still gate the landing. The byte-identical replay is a regression check the task chose for itself, not an exactness standard set on a port."
+    },
+    {
+     "id": "T80-scope",
+     "summary": "The brief confines the change to the plan hold's code, plan_text, their tests, docs/guards.md's row and this section, and leaves T51's and T110's hooks untouched; marked not performance work.",
+     "class": "within",
+     "why": "This keeps the task to its own defect. It is a correctness fix to the hold, so calling it not performance work is accurate under FR-013 and does not affect scheduling."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-21",
+   "blocks": [
+    "### T80 (the plan hold's write-back restored nothing for a task whose own headings stand apart in the plan, yet answered \"the held text is written back\", found by T78 reading the code, 2026-11-21)",
+    "### T80 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T80 fix: section_places / held_places / write_back by place",
+     "summary": "A task's section is read as the places its own headings stand (ordered_sections rebuilt on them, output unchanged and pinned); the snapshot keeps one text per place and write_back restores each changed place by byte span, paired by order when counts match, else by heading, never writing an old text holding a place's heading past its first line.",
+     "class": "within",
+     "why": "This is the task's own line (restore each held place through plan_text's section reading). The pairing rule is design inside that ask, not a narrowing of it."
+    },
+    {
+     "id": "T80 answer wording",
+     "summary": "The answer stays the same for a one-place section and for a block hold; for a split section it names the places written back, names any place not found or new after NOT written back, and says NOTHING of it is written back when nothing was restored.",
+     "class": "within",
+     "why": "The task line asks that the answer say what was restored. A different message for the split case is what was asked, and leaving the one-place message unchanged narrows nothing."
+    },
+    {
+     "id": "D-a",
+     "summary": "The refusal keeps judging a write against the joined section (T78's pin). Only the write-back changes. The refusal's own defect, where a split section is judged by joined text so an unchanged Write is refused, is filed as T120, ordered to land before T22.",
+     "class": "narrowing",
+     "why": "A known defect is left: under a split section's hold, the refusal rejects an unchanged Write, which is a check refusing good work, measured in /tmp/t80/write-T22.out. That makes this a narrowing and not just a difference. Two of the section's reasons cannot carry the ruling on their own. 'T80's line is the write-back' is the session's own scope, and 'flips a pin T78 set today' preserves existing behavior. What carries it: the GM approved briefs that DEFAULT to fixing in the task (request item 4), and a default implies a reasoned exception. The accepted spec gives that exception its form in FR-009 (why, the filed id, the order), and the section meets all three: why stated, T120, 'lands before T22'. Purpose test: the purpose is fewer re-rounds and no defects silently carried. T80 closes the harmful half, a false 'written back' that left text corrupted or doubled. The deferred half fails safe, since it refuses where it should pass and the refusal can be escaped. It reaches none of 451's own sections (0 of the 8 split sections are in 451's plan, measured 2026-11-21, /tmp/t80/split.py). It also changes a pin reviewed today, so it needs its own red-first change and review and should not ride in a write-back fix. It is filed and ordered, not dropped. Caveat: from this bundle I cannot tell which T22 'lands before T22' means. The only T22 the block names is 444's, the measured hold subject, and I cannot see whether that task is open. The ruling assumes the order means 451's T22 and names a real, still-open task. If it does not, the deferral has no order and this ruling does not hold.",
+     "ruling": "LEGITIMATE"
+    },
+    {
+     "id": "D-b",
+     "summary": "Two pairing defects in the same write-back, found by its pins, are fixed here: a held heading gone left text standing twice, and a renamed held block had another block's old text written over the block after it.",
+     "class": "within",
+     "why": "These are wrong outcomes of the code this task changes (text doubled or lost in a plan). Fixing them widens the work toward correctness and narrows nothing (fix known defects as found)."
+    },
+    {
+     "id": "Red first: cases not seen red",
+     "summary": "On HEAD, 4 of 391 tests failed red. Each stopped at its first failing assert, so the near, both, renamed-heading, legacy-snapshot, gone-task and empty-before cases were never seen red. The section says so and goes on to green.",
+     "class": "within",
+     "why": "The task line's red-first is met: each new test was red on HEAD, for its stated failure. FR-012's per-refusal red-first covers the refusals of FR-006 to FR-009, FR-011 and FR-013, not this write-back. Reporting which asserts were not reached is disclosure and narrows nothing that was asked."
+    },
+    {
+     "id": "Exits and done: closing-checks static red on another task's file",
+     "summary": "Green exit: tests, lint, format and cover clean, T22 restored, replay unchanged, make closing-checks green. Done records 393 of 395 tests (the 2 failures are T83's uncommitted quotes.rs) and static red on that file alone, to be run once more when that file is whole.",
+     "class": "within",
+     "why": "The exit is not lowered. Closing-checks still owes a green run, which is deferred only until another task's file is whole, and no T80 file is excused."
+    },
+    {
+     "id": "Performance work? no",
+     "summary": "T80 is not classed as performance work under FR-013.",
+     "class": "within",
+     "why": "A correctness fix to the plan hold's write-back is not performance work, and it is not the measurement work the GM counted as performance on 2026-11-20."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -16779,6 +16890,57 @@
      "summary": "After T108's fold (9a11c3b6a4), beside T112 and T113, touching none of their files",
      "class": "within",
      "why": "Scheduling among performance tasks; no clause of the request or spec is affected."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T80": {
+   "section_sha256": "559ecc5b4f343b35f95fd4ed6c7b4ef7c83183708f80b3c5503b705458d2143c",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T80 fix: section_places / held_places / write_back by place",
+     "summary": "A task's section is read as the places its own headings stand (ordered_sections rebuilt on them, output unchanged and pinned); the snapshot keeps one text per place and write_back restores each changed place by byte span, paired by order when counts match, else by heading, never writing an old text holding a place's heading past its first line.",
+     "class": "within",
+     "why": "This is the task's own line (restore each held place through plan_text's section reading). The pairing rule is design inside that ask, not a narrowing of it."
+    },
+    {
+     "id": "T80 answer wording",
+     "summary": "The answer stays the same for a one-place section and for a block hold; for a split section it names the places written back, names any place not found or new after NOT written back, and says NOTHING of it is written back when nothing was restored.",
+     "class": "within",
+     "why": "The task line asks that the answer say what was restored. A different message for the split case is what was asked, and leaving the one-place message unchanged narrows nothing."
+    },
+    {
+     "id": "D-a",
+     "summary": "The refusal keeps judging a write against the joined section (T78's pin). Only the write-back changes. The refusal's own defect, where a split section is judged by joined text so an unchanged Write is refused, is filed as T120, ordered to land before T22.",
+     "class": "narrowing",
+     "why": "A known defect is left: under a split section's hold, the refusal rejects an unchanged Write, which is a check refusing good work, measured in /tmp/t80/write-T22.out. That makes this a narrowing and not just a difference. Two of the section's reasons cannot carry the ruling on their own. 'T80's line is the write-back' is the session's own scope, and 'flips a pin T78 set today' preserves existing behavior. What carries it: the GM approved briefs that DEFAULT to fixing in the task (request item 4), and a default implies a reasoned exception. The accepted spec gives that exception its form in FR-009 (why, the filed id, the order), and the section meets all three: why stated, T120, 'lands before T22'. Purpose test: the purpose is fewer re-rounds and no defects silently carried. T80 closes the harmful half, a false 'written back' that left text corrupted or doubled. The deferred half fails safe, since it refuses where it should pass and the refusal can be escaped. It reaches none of 451's own sections (0 of the 8 split sections are in 451's plan, measured 2026-11-21, /tmp/t80/split.py). It also changes a pin reviewed today, so it needs its own red-first change and review and should not ride in a write-back fix. It is filed and ordered, not dropped. Caveat: from this bundle I cannot tell which T22 'lands before T22' means. The only T22 the block names is 444's, the measured hold subject, and I cannot see whether that task is open. The ruling assumes the order means 451's T22 and names a real, still-open task. If it does not, the deferral has no order and this ruling does not hold.",
+     "ruling": "LEGITIMATE"
+    },
+    {
+     "id": "D-b",
+     "summary": "Two pairing defects in the same write-back, found by its pins, are fixed here: a held heading gone left text standing twice, and a renamed held block had another block's old text written over the block after it.",
+     "class": "within",
+     "why": "These are wrong outcomes of the code this task changes (text doubled or lost in a plan). Fixing them widens the work toward correctness and narrows nothing (fix known defects as found)."
+    },
+    {
+     "id": "Red first: cases not seen red",
+     "summary": "On HEAD, 4 of 391 tests failed red. Each stopped at its first failing assert, so the near, both, renamed-heading, legacy-snapshot, gone-task and empty-before cases were never seen red. The section says so and goes on to green.",
+     "class": "within",
+     "why": "The task line's red-first is met: each new test was red on HEAD, for its stated failure. FR-012's per-refusal red-first covers the refusals of FR-006 to FR-009, FR-011 and FR-013, not this write-back. Reporting which asserts were not reached is disclosure and narrows nothing that was asked."
+    },
+    {
+     "id": "Exits and done: closing-checks static red on another task's file",
+     "summary": "Green exit: tests, lint, format and cover clean, T22 restored, replay unchanged, make closing-checks green. Done records 393 of 395 tests (the 2 failures are T83's uncommitted quotes.rs) and static red on that file alone, to be run once more when that file is whole.",
+     "class": "within",
+     "why": "The exit is not lowered. Closing-checks still owes a green run, which is deferred only until another task's file is whole, and no T80 file is excused."
+    },
+    {
+     "id": "Performance work? no",
+     "summary": "T80 is not classed as performance work under FR-013.",
+     "class": "within",
+     "why": "A correctness fix to the plan hold's write-back is not performance work, and it is not the measurement work the GM counted as performance on 2026-11-20."
     }
    ],
    "verdict": "CLEAR"

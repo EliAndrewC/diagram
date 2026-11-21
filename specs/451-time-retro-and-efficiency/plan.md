@@ -779,31 +779,45 @@ docs/performance-checklist.md answers.
 <!-- plan-archive: T78 to T78 moved to plan-done.md, 2026-11-21 (feature 375 FR-044) -->
 <!-- plan-archive: T79 to T50 moved to plan-done.md, 2026-11-21 (feature 375 FR-044) -->
 <!-- plan-archive: T79 to T79 moved to plan-done.md, 2026-11-21 (feature 375 FR-044) -->
-### T80 (<why: the finding or measurement that files it>)
+### T80 (the plan hold's write-back restored nothing for a task whose own headings stand apart in the plan, yet answered "the held text is written back", found by T78 reading the code, 2026-11-21)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: one change, red first, after the measurement the task line asks for.
+  - the measurement: in a scratch clone (`/tmp/t80/c`), a live hold on 444's T22 - its three own headings in two places, `### T22` with `### T22 Approach`, and `### T22 part B` 229 lines on - and a write slipping through into either place: HEAD's binary kept one joined text in the snapshot, answered `the held text is written back` (exit 2), and left the change in the plan, for the far place and the near place alike; a section in one place (T25) was restored, measured 2026-11-21 (`/tmp/t80/measure.sh` through `/tmp/t80/bin-head`, a diff of the plan before and after; `/tmp/t80/head-split*.post.out`, `/tmp/t80/head-whole.post.out`).
+  - the reach: 8 of the 169 own task sections in `specs/*/plan.md`, the one file the hold reads, stand in more than one place, none in 451's, measured 2026-11-21 (`/tmp/t80/split.py`); over `specs/*/plan*.md` 53 of 931 by the same script, and 53 of 939 by T78's `/tmp/t78/split.py` on today's tree (its 51 of 898 when it filed T80), measured 2026-11-21 (both scripts).
+  - the fix: `plan_text::section_places` reads a task's section as the places it stands - its own headings' spans (`ordered_sections` now built on them, its output the same, pinned) with adjacent ones joined; the snapshot keeps one text a place (`planhold.rs` `held_places`), and `write_back` pairs each with where it stands now - by order where the plan holds as many places, else by its heading, never an old text holding a place's heading past its own first line, since writing it back would stand text twice - and writes back each changed place by its byte span, from the end. `held`, the section joined, stays what a write is judged against, so T78's refusals are unchanged (decision D-a).
+  - the answer: byte-identical where every changed place was written back and the section stands in one place, and for a block hold; a section in several places names the places written back (`the held text is written back in `### T22 part B (2026-11-04T07:16Z)` (1 of its 2 places changed)`); a held place it cannot find (`gone from the section`) or a place new since the call began it names after `NOT written back`, and a call that restored nothing reads `NOTHING of it is written back`, each with the `git -C <clone> diff` that shows the change and `make plan-verdict`'s refusal as what is left undone costs.
+  - found here, the same pairing: with a held heading gone, HEAD wrote the old text over the place left - the far place's heading gone stood the far part twice, the first heading gone stood the held body twice - and its block write-back zipped the held blocks left with the old ones by order, so one held heading renamed had T01's old text written over T02's block, T02's text gone; each pinned and fixed (decision D-b).
+  - red first: on HEAD's `planhold.rs` (with this task's `plan_text.rs` and tests) 4 of 391 failed - `a_split_section_is_written_back_in_each_place` (its far-place case, the plan still changed), `a_place_no_write_back_can_find_is_named` (the far part standing twice), `a_first_heading_gone_is_not_written_twice` and `a_held_block_is_written_back`'s renamed-block case (T02's block overwritten) - each test stopping at its first failing assert, so the near, both, renamed-heading, legacy-snapshot, gone-task and empty-before cases were not seen red; 387 passed, measured 2026-11-21 (`make rust-test CRATE=rust/guard/shared` in the scratch clone, `/tmp/t80/red3.log`; the first run in this clone, before the block and first-heading cases, 3 of 390 failed, `/tmp/t80/red.log`, its third the gone-task case saying "written back").
+  - green: every test of T80's files passes - 393 of the 395 in `rust/guard/shared`, the 2 failing `tree::tests::quotes`'s, another task's uncommitted `tree/tests/quotes.rs` - with lint clean, format clean on T80's files (the crate's one diff in `quotes.rs`) and 0 lines no test reaches, measured 2026-11-21 (`make rust-test`, then `l7r-gate.sh rust lint`, `format --check` and `cover --crate rust/guard/shared`, `/tmp/t80/green3.log`; the first closing check's one red, `held`'s unreadable-plan line no test reached once `restore` read `held_places`, fixed by building `held` on `held_places`, `/tmp/t80/closing2.log`); through the rebuilt binary (`/tmp/t80/bin-new`) 444's T22 is restored in either place and says which, and T25's answer is byte-identical to HEAD's, measured 2026-11-21 (`/tmp/t80/measure.sh`, `/tmp/t80/new-*.post.out`).
+  - the replay of 451's hold history: the transcripts hold 168 plan-review dispatches of 451 - 139 task holds and 29 block holds; of the 139 sections, on the last commit of `plan.md` before each dispatch, 128 stand in one place, 11 were not yet committed, none in several, measured 2026-11-21 (`/tmp/t80/replay_holds.py`). The one write-back 451's history records (T57's, 2026-11-21T06:01:04Z: its hook answer in the builder's transcript, and the tool-usage log's `planhold-restore` line that second) replayed with its real edit (`/tmp/t57/edit.py`, its old and new lines) on the first commit holding its new text (020185aed5) with the old put back: HEAD's binary and T80's give byte-identical answers and plans, both restored, measured 2026-11-21 (`/tmp/t80/replay_t57.sh`).
+  - decisions: D-a - the refusal keeps the joined section (T78's pin, reviewed today, a split section still refused on shared text) and the change is the write-back alone, as the task line asks; the refusal reading each place is filed as T120. D-b - the two pairing defects are fixed here: they are this write-back's own wrong outcomes (text standing twice, a block overwritten), found by its pins.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| the write-back in each place a section stands | n/a - no map | n/a | none | n/a |
 
 ### T80 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** No map changes. While a plan review runs, a write that slips through into any place a held task's section stands - its own headings together or apart - is written back when the call ends, and the answer says what was written back; a place it cannot find it names, and a call that restored nothing says so, not "written back".
+2. **The constraints.** T80's line (measured first in a scratch clone, then each held place restored through `plan_text`'s section reading and the answer saying what it restored, red first); its brief (only the plan hold's code, `plan_text`, their tests, `docs/guards.md`'s row and this section; T51's `make_only_hooks` and `gate_write_hooks` and T110's `tree::program` untouched; each assert on one line; a section not split unchanged in the replay).
+3. **Where each comes from.** O: this task's measurements of 2026-11-21 (the Approach) and T78's reading of the code (its plan-done.md section's Found item); G: none - the brief is the caller's.
+4. **Do they describe the world here?** Yes: the failure reproduces through HEAD's binary in a scratch clone for 444's T22 in either place while T25 is restored (`/tmp/t80/head-split*.post.out`, `/tmp/t80/head-whole.post.out`), measured 2026-11-21.
+5. **The order.** `plan_text`'s spans first (the same output, pinned), then the snapshot and write-back in `planhold.rs`, then the replay; the refusal path is untouched (D-a), T120 after.
+6. **The exits.** Green: `rust/guard/shared`'s and `rust/guard`'s tests, lint, format and cover clean, T22 restored in the scratch clone, the replay unchanged, `make closing-checks` green. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** none - the one write-back of a held plan is `planhold.rs`'s `restore` and `write_back`, the one snapshot `snapshot`: `grep -rln "plan_snaps\|write_back\|section_places" rust/ scripts/` (2026-11-21) names `plan_text.rs`, `planhold.rs`, `checks_hooks.rs`, their test files and `record_edit_gate/tests.rs`, and `event_log/refile.rs`'s own unrelated `write_back`.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** every test of T80's files green in `rust/guard/shared`, 393 of its 395, the 2 others another task's (`/tmp/t80/green3.log`, `make rust-test`), T22 restored in either place through the rebuilt binary (`/tmp/t80/new-split*.post.out`), T25's and T57's answers and plans byte-identical to HEAD's (`/tmp/t80/new-whole.post.out`, `/tmp/t80/new.r57.*`), and `make closing-checks T=T80 F=451`: hooks-test and quick green, static red on another task's file alone (`rust/guard/shared/src/tree/tests/quotes.rs`, T83's, nothing of T80's judged there), so it is run once more when that file is whole (`/tmp/t80/closing3.log`), measured 2026-11-21.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** A builder whose write slipped into a held section standing in several places was told its change was written back while it stayed, the review's verdict voided unseen until `make plan-verdict` refused it; and with a held heading gone or a held block renamed, the write-back stood text twice in the plan or wrote one block's text over another's - text a reader of the plan would see doubled or lost.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?**
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+- The write-back restored nothing for a task whose own headings stand apart, and answered "the held text is written back" - fixed here, observed 2026-11-21, method: the scratch clone's live hold on 444's T22 (each place) through HEAD's binary, and `/tmp/t80/split.py` over every `specs/*/plan.md` (8 such sections); `section_places` is the one reading of where a section stands.
+- A held heading gone had the old text written over the place left, text standing twice (the far part, or the held body), and a held block renamed had another block's old text written over the block after it - fixed here, observed 2026-11-21, method: `a_place_no_write_back_can_find_is_named`, `a_first_heading_gone_is_not_written_twice` and `a_held_block_is_written_back` on HEAD's `planhold.rs` (`/tmp/t80/red3.log`); `paired` is the one pairing.
+- The refusal judges a section standing in several places by its joined text, which stands nowhere in the plan: a Write of 444's plan unchanged was refused under a live T22 hold and passed under T25's, measured 2026-11-21 (`/tmp/t80/write-T22.out`, `/tmp/t80/write-T25.out`, through HEAD's binary), and a live foreground shell write on text every section shares is still refused for such a section alone (T78's pin). Not fixed here: T80's line is the write-back, and the shell case flips a pin T78 set today. Filed as T120; lands before T22.
+
+**Performance work?** no.
 
 
 <!-- plan-archive: T81 to T79 moved to plan-done.md, 2026-11-21 (feature 375 FR-044) -->
@@ -1324,4 +1338,31 @@ its own files; not engine speed, so no performance-checklist answers.
 **Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
 
 **Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+### T120 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T120 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
 
