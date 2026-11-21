@@ -1,0 +1,6 @@
+{
+  "utc": "2026-11-21T11:52:07Z",
+  "target": "plan-gate push",
+  "commit": "69a652dc69",
+  "why": "451 T60, T72 and T75 reviewed CLEAR by spec-fidelity on 2026-11-21; T67 accepted by the round arbiter as its plan verdict"
+}
