@@ -510,6 +510,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-21",
    "declared": "spec-fidelity"
+  },
+  "### T99 (the idle-tests suite's case 5 check \"the run started a FULL wait after the jump\" failed good work: red in T88's closing run `20261121T180015Z-555985` (33 of 34, at a load of 16.5 beside a make done; `/tmp/t88/closing-1.log` is the same run), green on the rerun unchanged; measured 2026-11-21 over this clone's 24 closing-check runs (12:46Z on), the suite ran in at least 15 (its name on the log's timing line or a failure; the rest skipped on an unchanged key) and that was case 5's one red; reproduced the same day, 8 of 8 copies red with the suite's own `date` started 0.5 s late and 1 of 8 at 0.2 s, measured 2026-11-21 (`slowrun.sh` over HEAD))": {
+   "sha256": "795dedfc87cdf7c29ce4f832fa6512f3a91db9d47269a88cb7ce7ab44d3c940f",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity"
+  },
+  "### T99 Approach (checklist part A)": {
+   "sha256": "7cb892d7286fc52d1eb6f66aea9325f8480e42ef5e01b8c35cf2089bac36490d",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -9653,6 +9665,160 @@
      "why": "Adjudicated each part. Python writes: the file name is absent from the log until T96 lands, so the test cannot see it; the gap already governs every started task other than the mark's under 405 D4 and land-alone's existing own-files refusal, so T101 adds no new class of exposure, and the fix is an already-filed open task (T96). 7-day bound: it is land-alone's own existing bound, reused rather than introduced. Neither removes anything the GM asked for in 451, and neither guts D4's purpose for the work the log does attribute."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-21",
+   "blocks": [
+    "### T99 (the idle-tests suite's case 5 check \"the run started a FULL wait after the jump\" failed good work: red in T88's closing run `20261121T180015Z-555985` (33 of 34, at a load of 16.5 beside a make done; `/tmp/t88/closing-1.log` is the same run), green on the rerun unchanged; measured 2026-11-21 over this clone's 24 closing-check runs (12:46Z on), the suite ran in at least 15 (its name on the log's timing line or a failure; the rest skipped on an unchanged key) and that was case 5's one red; reproduced the same day, 8 of 8 copies red with the suite's own `date` started 0.5 s late and 1 of 8 at 0.2 s, measured 2026-11-21 (`slowrun.sh` over HEAD))",
+    "### T99 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T99-A1",
+     "summary": "Case 5 is re-pinned by the guard's own events instead of slack: the clock seam holds the timer's first read on a gate until the first jump is written, jumps are paced by four timer reads each, each jump is stamped with $EPOCHREALTIME before it is written, jump k moves the clock B x 2^(k-1) s (B = 300) so each 'suspend detected' line decodes to the latest jump seen, and two checks pin the full wait after that jump (at least IDLE_WAIT_S of real seconds, and at least 24 timer reads), with a decode check on the reading.",
+     "class": "within",
+     "why": "T99's line asks for case 5 to hold under load by waiting on a condition rather than a clock, red first. A check that refuses good work is a defect under constitution XIV, and fixing it is fix-as-we-go. The fix keeps the regression the case exists for: a jump that is counted but does not restart the wait is red in every broken-guard batch (8/8, 16/16, 8/8, measured 2026-11-21). It also removes a timing used as a gate, which follows the 427 T03 ruling the plan cites."
+    },
+    {
+     "id": "T99-A2",
+     "summary": "The plan states the guard is left untouched and case 5's changes stay in tests/hooks/test-idle-tests-hooks.sh, which goes from 34 checks to 37.",
+     "class": "within",
+     "why": "This keeps to the brief as the plan quotes it (the test file alone, the guard only if a timestamp had to be exposed, and the plan says none had to be). The three added checks (the held reading, the decode, the ticks) only check case 5's own property, so they enforce what was asked."
+    },
+    {
+     "id": "T99-A3",
+     "summary": "Constants moved: the old check's 0.35 s slack is retired in favor of the IDLE_WAIT_S floor, and the jump size goes from 500 s to B x 2^(k-1) with B = 300, kept above IDLE_SUSPEND_S per jump and inside IDLE_GIVE_UP_S in total, by arithmetic.",
+     "class": "within",
+     "why": "These are internal test parameters that serve the fix in A1. The request has no requirement on them and no research claim moves."
+    },
+    {
+     "id": "T99-A4",
+     "summary": "Case 7's upper bound on a condition wait is raised from 8 s to 90 s (a GUESS), fixed here rather than left. It was red in 3 of 64 loaded HEAD copies.",
+     "class": "within",
+     "why": "This fixes a check that refused good work, a defect found by this task, in the same file. A bound that a green run never pays is not a timing gate. Fixing a known defect in the step is what fix-as-we-go asks for, so it is not unrequested scope."
+    },
+    {
+     "id": "T99-A5",
+     "summary": "Coverage: the new case 5 pins a full wait after the LAST jump the timer logged, not after ALL eight jumps as the old check implied. A timer that restarts on its first jump and never detects the later ones would pass, and the plan says so.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Against the GM's request and the spec this narrows nothing, because neither names case 5. It does narrow the old check's implied reach, and literal 'after all eight' would defeat T99's own purpose of not refusing good work. The plan reports that with the suite's sleep 1.0 s late a sound guard's wait legitimately ended after jump 1 alone (the stall path, 8 of 8 green copies under final.sh). A check demanding a run after all eight jumps would refuse that good work, which is the timing-as-gate the 427 T03 ruling forbids. The regression the case exists for, a jump counted without a restart, stays red in every broken-guard batch the plan reports. The plan states the remaining gap (a timer that detects only its first jump) openly, without claiming coverage it lacks."
+    },
+    {
+     "id": "T99-F1",
+     "summary": "Case 6's 'the losers deferred (0)' red (1 of 64 copies at load 133.7) is not fixed here, because it is outside case 5 and a design choice. It is filed as T104, to land before T22.",
+     "class": "within",
+     "why": "T99's scope is case 5. The defect is deferred with its reason, a filed task id and its order ('lands before T22'), which is the form FR-009 requires, and it is fixed before the step T99's own line is ordered against. It is not left unfixed."
+    },
+    {
+     "id": "T99-F2",
+     "summary": "The brief's T76 closing-run red was case 4b, not case 5. It was not reproduced in 472 copies, is not fixed here, and is filed as T104, to land before T22.",
+     "class": "within",
+     "why": "This corrects the brief's misattribution: the red is outside case 5 and has no diagnosis yet. It is deferred with its reason, a filed id and its order, so nothing the request or T99's line asks for is narrowed."
+    },
+    {
+     "id": "T99-O1",
+     "summary": "Order: after T88, before T22, independent of T97 and T101 (no shared file); budget one landing.",
+     "class": "within",
+     "why": "This follows T99's own line ('lands before T22') as the plan quotes it, and the plan reports no shared file with T97 or T101. Ordering is not a narrowing of what is built."
+    },
+    {
+     "id": "T99-O2",
+     "summary": "T99 is marked 'Performance work? No'.",
+     "class": "within",
+     "why": "The mark changes nothing about what T99 builds. The bundle does not show which task the GM's 2026-11-21 'file that as a performance task' names, and FR-013's meaning is cut at [...] in the index. So this ruling does not settle whether the mark is right, only that it narrows nothing this section implements. Whether the mark is right is FR-013 and SC-006's scheduling question."
+    },
+    {
+     "id": "T99-R1",
+     "summary": "Red first: T99's line asks for 'red first by a loaded run'. The plan reports that CPU load alone gave 0 of 96 case-5 reds on HEAD, so it takes its reproduction from a PATH shim delaying the suite shell's own date (8 of 8 red at 0.5 s, 1 of 8 at 0.2 s), alongside the original red in T88's loaded closing run (load 16.5).",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The literal form, a red produced on demand by load alone, was not obtainable: the plan reports 0 of 96 copies red at loads of 15.7 to 79.7, because load slowed the timer more than the shell. The failure it does reproduce has the mechanism the plan diagnoses (the test shell's own lag eating the margin), and the one loaded red that exists is the T88 run it starts from. Red-first exists to show that the check fails on the failure before the fix and passes after, and the shim does that (HEAD red 8 of 8, the final case green under the same shim at 1.0 s). This is not a narrowing of the GM's request, which does not mention case 5."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-21",
+   "blocks": [
+    "### T99 (the idle-tests suite's case 5 check \"the run started a FULL wait after the jump\" failed good work: red in T88's closing run `20261121T180015Z-555985` (33 of 34, at a load of 16.5 beside a make done; `/tmp/t88/closing-1.log` is the same run), green on the rerun unchanged; measured 2026-11-21 over this clone's 24 closing-check runs (12:46Z on), the suite ran in at least 15 (its name on the log's timing line or a failure; the rest skipped on an unchanged key) and that was case 5's one red; reproduced the same day, 8 of 8 copies red with the suite's own `date` started 0.5 s late and 1 of 8 at 0.2 s, measured 2026-11-21 (`slowrun.sh` over HEAD))",
+    "### T99 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T99-gate",
+     "summary": "Case 5's clock seam holds the timer's first reading behind a gate file. The first jump is written only once that reading is taken, so it lands inside the wait by a condition and not by the shell's timing.",
+     "class": "within",
+     "why": "This is the rule T99's line asks for ('wait on a condition, not a clock'), applied to the window that feature 169's eight jumps were betting on. It stays inside the suite."
+    },
+    {
+     "id": "T99-pacing",
+     "summary": "Each next jump waits for four of the timer's logged reads after the last one, so at least one tick falls between two jumps. Pacing ends once the run has started.",
+     "class": "within",
+     "why": "A condition replaces a 'sleep 0.15'. It makes the case hold under load, which is what T99 asks."
+    },
+    {
+     "id": "T99-stamps",
+     "summary": "Each jump is stamped before it is written, with bash's $EPOCHREALTIME and no fork of date.",
+     "class": "within",
+     "why": "This removes the shell lag that caused the red. It is a mechanism inside the asked fix."
+    },
+    {
+     "id": "T99-full-wait-checks",
+     "summary": "The full wait is pinned by the guard's own 'suspend detected' lines, with jump sizes B x 2^(k-1) decoded to name the latest jump seen. Two checks follow: the run starts at least IDLE_WAIT_S after that jump's stamp, and the timer reads its clock at least 24 times between seeing that jump and the run's start.",
+     "class": "within",
+     "why": "This restates case 5's property (a jump restarts the FULL wait) in the timer's own events rather than in slack. It is red first on HEAD under a shell lag and red on a broken guard, as T99's line requires."
+    },
+    {
+     "id": "T99-decode-check",
+     "summary": "A decode check holds the reading itself: every line on the B grid, the jumps contiguous, and as many lines as the record's suspends. The suite goes from 34 to 37 checks.",
+     "class": "within",
+     "why": "Its only job is to make the requested check read the guard's log correctly. That is enforcement of what was asked, not unrequested scope."
+    },
+    {
+     "id": "T99-guard-untouched",
+     "summary": "The guard's code is not changed. Only the test file changes.",
+     "class": "within",
+     "why": "This is inside the brief, which allowed the guard to change only to expose a timestamp. No timestamp had to be exposed."
+    },
+    {
+     "id": "T99-constants",
+     "summary": "The old 0.35 s slack is retired in favour of IDLE_WAIT_S as a hard floor. The jump size moves from 500 s to B x 2^(k-1) with B = 300 s, checked by arithmetic against IDLE_SUSPEND_S and IDLE_GIVE_UP_S.",
+     "class": "within",
+     "why": "These are the test's own GUESS constants, moved to serve the condition-based check. No research claim or map moves."
+    },
+    {
+     "id": "T99-coverage",
+     "summary": "The new check pins a full wait after the LAST JUMP THE TIMER LOGGED. It no longer implies that the run began after ALL eight jumps. A timer that detected only its first jump would pass, and the plan says so.",
+     "class": "within",
+     "why": "The old implication was a timing assumption: that the shell writes all eight jumps inside one wait. Under a lagging shell a sound timer correctly ends its wait between jumps (the measured 'sleep 1.0 s late' batch), so keeping that implication would keep the very false red T99 removes. The guard's contract (D3: a wall jump past the ticks restarts the wait) is pinned as before, and the plan measured that a non-restarting timer is red in every batch. The undetected-after-first timer is a hypothetical, not a known defect, so nothing defective is left."
+    },
+    {
+     "id": "T99-case7",
+     "summary": "Case 7's upper bound on a condition wait is raised from 8 s to 90 s, after 3 of 64 HEAD copies under load went red. It is fixed in this task.",
+     "class": "within",
+     "why": "A found defect (a check refusing good work under load) is fixed as it is found, with the bound case 4b already holds. A green run pays nothing, so this does not narrow what was asked."
+    },
+    {
+     "id": "T99-case6-deferred",
+     "summary": "Case 6's 'the losers deferred' went red in 1 of 64 copies at load 133.7. It is not fixed here: it is outside case 5 and its fix is a design choice. It is filed as T104, which lands before T22.",
+     "class": "within",
+     "why": "This narrows nothing T99 was asked for, because T99's line is case 5. The defect is not left: it is filed with a reason, a task id and an order, as FR-009 requires, and it lands before T22, the same point T99 lands before."
+    },
+    {
+     "id": "T99-case4b-not-reproduced",
+     "summary": "The brief cited T76's red as case 5, but it was case 4b, and it was not reproduced in 472 copies. It is filed as T104, which lands before T22.",
+     "class": "within",
+     "why": "It is outside case 5, was never reproduced, and is filed with a reason, an id and an order. Nothing in what was asked is dropped."
+    },
+    {
+     "id": "T99-not-performance",
+     "summary": "The plan labels T99 as not performance work.",
+     "class": "within",
+     "why": "This is the conservative direction under FR-013/SC-006: the label can only put T99 behind performance tasks, never ahead of them. It narrows no priority the GM set."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -14911,6 +15077,86 @@
      "class": "narrowing",
      "ruling": "LEGITIMATE",
      "why": "Adjudicated each part. Python writes: the file name is absent from the log until T96 lands, so the test cannot see it; the gap already governs every started task other than the mark's under 405 D4 and land-alone's existing own-files refusal, so T101 adds no new class of exposure, and the fix is an already-filed open task (T96). 7-day bound: it is land-alone's own existing bound, reused rather than introduced. Neither removes anything the GM asked for in 451, and neither guts D4's purpose for the work the log does attribute."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T99": {
+   "section_sha256": "ff8b6f093bf7e783958610c68f63d81626f21395fa5b867bf1fa5ef1c325bfa3",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T99-gate",
+     "summary": "Case 5's clock seam holds the timer's first reading behind a gate file. The first jump is written only once that reading is taken, so it lands inside the wait by a condition and not by the shell's timing.",
+     "class": "within",
+     "why": "This is the rule T99's line asks for ('wait on a condition, not a clock'), applied to the window that feature 169's eight jumps were betting on. It stays inside the suite."
+    },
+    {
+     "id": "T99-pacing",
+     "summary": "Each next jump waits for four of the timer's logged reads after the last one, so at least one tick falls between two jumps. Pacing ends once the run has started.",
+     "class": "within",
+     "why": "A condition replaces a 'sleep 0.15'. It makes the case hold under load, which is what T99 asks."
+    },
+    {
+     "id": "T99-stamps",
+     "summary": "Each jump is stamped before it is written, with bash's $EPOCHREALTIME and no fork of date.",
+     "class": "within",
+     "why": "This removes the shell lag that caused the red. It is a mechanism inside the asked fix."
+    },
+    {
+     "id": "T99-full-wait-checks",
+     "summary": "The full wait is pinned by the guard's own 'suspend detected' lines, with jump sizes B x 2^(k-1) decoded to name the latest jump seen. Two checks follow: the run starts at least IDLE_WAIT_S after that jump's stamp, and the timer reads its clock at least 24 times between seeing that jump and the run's start.",
+     "class": "within",
+     "why": "This restates case 5's property (a jump restarts the FULL wait) in the timer's own events rather than in slack. It is red first on HEAD under a shell lag and red on a broken guard, as T99's line requires."
+    },
+    {
+     "id": "T99-decode-check",
+     "summary": "A decode check holds the reading itself: every line on the B grid, the jumps contiguous, and as many lines as the record's suspends. The suite goes from 34 to 37 checks.",
+     "class": "within",
+     "why": "Its only job is to make the requested check read the guard's log correctly. That is enforcement of what was asked, not unrequested scope."
+    },
+    {
+     "id": "T99-guard-untouched",
+     "summary": "The guard's code is not changed. Only the test file changes.",
+     "class": "within",
+     "why": "This is inside the brief, which allowed the guard to change only to expose a timestamp. No timestamp had to be exposed."
+    },
+    {
+     "id": "T99-constants",
+     "summary": "The old 0.35 s slack is retired in favour of IDLE_WAIT_S as a hard floor. The jump size moves from 500 s to B x 2^(k-1) with B = 300 s, checked by arithmetic against IDLE_SUSPEND_S and IDLE_GIVE_UP_S.",
+     "class": "within",
+     "why": "These are the test's own GUESS constants, moved to serve the condition-based check. No research claim or map moves."
+    },
+    {
+     "id": "T99-coverage",
+     "summary": "The new check pins a full wait after the LAST JUMP THE TIMER LOGGED. It no longer implies that the run began after ALL eight jumps. A timer that detected only its first jump would pass, and the plan says so.",
+     "class": "within",
+     "why": "The old implication was a timing assumption: that the shell writes all eight jumps inside one wait. Under a lagging shell a sound timer correctly ends its wait between jumps (the measured 'sleep 1.0 s late' batch), so keeping that implication would keep the very false red T99 removes. The guard's contract (D3: a wall jump past the ticks restarts the wait) is pinned as before, and the plan measured that a non-restarting timer is red in every batch. The undetected-after-first timer is a hypothetical, not a known defect, so nothing defective is left."
+    },
+    {
+     "id": "T99-case7",
+     "summary": "Case 7's upper bound on a condition wait is raised from 8 s to 90 s, after 3 of 64 HEAD copies under load went red. It is fixed in this task.",
+     "class": "within",
+     "why": "A found defect (a check refusing good work under load) is fixed as it is found, with the bound case 4b already holds. A green run pays nothing, so this does not narrow what was asked."
+    },
+    {
+     "id": "T99-case6-deferred",
+     "summary": "Case 6's 'the losers deferred' went red in 1 of 64 copies at load 133.7. It is not fixed here: it is outside case 5 and its fix is a design choice. It is filed as T104, which lands before T22.",
+     "class": "within",
+     "why": "This narrows nothing T99 was asked for, because T99's line is case 5. The defect is not left: it is filed with a reason, a task id and an order, as FR-009 requires, and it lands before T22, the same point T99 lands before."
+    },
+    {
+     "id": "T99-case4b-not-reproduced",
+     "summary": "The brief cited T76's red as case 5, but it was case 4b, and it was not reproduced in 472 copies. It is filed as T104, which lands before T22.",
+     "class": "within",
+     "why": "It is outside case 5, was never reproduced, and is filed with a reason, an id and an order. Nothing in what was asked is dropped."
+    },
+    {
+     "id": "T99-not-performance",
+     "summary": "The plan labels T99 as not performance work.",
+     "class": "within",
+     "why": "This is the conservative direction under FR-013/SC-006: the label can only put T99 behind performance tasks, never ahead of them. It narrows no priority the GM set."
     }
    ],
    "verdict": "CLEAR"

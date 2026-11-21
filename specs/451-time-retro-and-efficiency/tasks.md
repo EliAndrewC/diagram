@@ -81,3 +81,5 @@ landing on its own, each small; T22 last.
       research: rendering
 - [ ] T100 The set-down guard read 'nothing is running' while a builder ran its own background coverage check (found 2026-11-21 after T65 and T85 landed: T88's close-out builder's last notice was interim, 'waiting on its own background work', its cover run live, and the Stop hook still refused the turn) - measured first whether the live guard binary carries T65's rule and what T65's own-transcript reading saw for that builder, then fixed red first on that shape
       research: rendering
+- [ ] T104 Two more of test-idle-tests-hooks.sh's cases can fail good work (found by T99, 2026-11-21): case 6, 'the losers deferred', red in 1 of 64 copies at a load of 133.7 (the three sessions' waits ended too far apart to contend for the lock, so the case never tested deferral), and case 4b, the skip, red in T76's closing run (3 of 34) and never reproduced in 472 copies - case 6 made to contend by condition (as T99 made case 5 start on one), and 4b measured first under a lagging shell (T99's method), each red first on a broken guard
+      research: rendering
