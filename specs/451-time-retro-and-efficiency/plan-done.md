@@ -6796,3 +6796,208 @@ performance checklist's answers are given in brief:
 6. **Did any map move?** No: a hook's answer; no research claim reads these patterns.
 
 
+<!-- plan-archive: archived 2026-11-21 -->
+### T96 (a Python program run from a heredoc or `-c` named no file in the event log's `writes`, so T86's closing checks still counted another builder's Python-written files as the caller's - T84's 5 plan- and task-crate files in T86's runs 2 and 3, and 15 of the night's 51 still-missed landed files, measured 2026-11-21 (T93's item 4, its replay); and land-alone's 'commit these' list read only Edit lines, so at T82-T101's landing it named 18 files and left out `bundle.rs`, `ready.rs`, `speckit.rs` and `land-alone.sh`, observed 2026-11-21 (the session's landing, T96's line))
+
+- **Approach**: the reader make-only already has, moved where the event log can call it, and land-alone's list reading the log as the closing checks do:
+  - THE MOVE: `program_names` and every helper and pattern it reads move from `rust/guard/src/guards/make_only_hooks/interp.rs` to
+    `rust/guard/shared/src/tree/program.rs` (`shared::tree::program`; `tree.rs` gains its `pub mod` line alone, 995 of the 1,000
+    lines, measured 2026-11-21 (`wc -l`)). One visitor, `each`, hands every hit in the old order (each single literal, then each joined pair) until told to stop:
+    `program_names` is its first, `all_program_names` every hit once. `interp.rs` keeps make-only's own - `guard_path`,
+    `program_names_guard`, the shell, Perl, Ruby and Node bodies, the `for` loops, `DEPTH` - and re-exports `program_names`, so
+    readme's and gate-write's guards, which call it there, are unedited. One reorder, results unchanged (every test a pure predicate):
+    the caller's `wanted` is asked before `joined_on`'s and `only_read`'s scans, so a literal naming no file reaches neither scan's
+    patterns - `joined_on` asked first reached `TAIL_BEFORE` on nearly every literal of every program: the event log's added time a
+    Python program's Bash end 20.88 ms with it first, 14.50 ms after (medians of 200, loads near 30-44), measured 2026-11-21
+    (`/tmp/t96/cost.py`, the binaries alternating, 3 runs each; THE BUILDS below for what was left).
+  - THE FIELD (`rust/guard/shared/src/guards/event_log_hooks/fields.rs`, `bash_writes`): after a writing target's own path, the files
+    its `program` names - `all_program_names(body, where it runs, reads, placed, an existing regular file)`. The fail direction, a
+    deliberate choice labeled here (the builder's, on the brief's "as literal paths resolved against the cwd"): gate-write's open side,
+    a literal only read (`open(L)`, `Path(L).read_text()`) naming nothing and one joined onto a base the program computes naming
+    nothing. WHY: a name too many sets the caller's own file apart in the closing checks, a wrong green, and lists a file a program only
+    read for a landing to commit; a name too few costs a saving. WHY A FILE ON DISK: a literal naming none (`'w'`, `'utf-8'`, a word of
+    the text it edits) is no write a reader can match; what it costs, a backgrounded program's file not yet written is missed.
+  - THE BUILDS (`shared::tree::program`): the field first added 14.50 ms a Python program's Bash end (THE MOVE's figure, its
+    reorder in), and 46 ms on a synthetic program whose literals name no file, measured 2026-11-21 (`/tmp/t96/probe.py`, a load of
+    44). WHERE IT WENT,
+    measured 2026-11-21 (`/tmp/t96/ms`, a scratch binary over `l7r_shared`: each of the reader's patterns built once in a fresh
+    process, `all_program_names` read twice in one, the medians of 31 processes' wall time at a load near 30, `ms-before.log`, and
+    the ungated and gated binaries alternating, 41 processes each, their thread's CPU time, `ms-cpu.log`): the reader's patterns
+    were `LazyLock`s, built on first use in a hook's process, and every program reached three - the literal pattern, `TRIPLE` and
+    `JOINED`, `print(1)` among them - and a literal naming a file the scans' 8 more and one of its own, `only_read`'s
+    `(['"])lit\1`, on every call, each 0.26 to 6.1 ms to build first in a process (`JOINED` 6.1, `TAIL_BEFORE` 3.8, the literal
+    pattern 2.0): a program naming no file read in 13.1 ms the first time against 0.11 ms the second, one naming 20 files in 7.1 ms
+    every time. The builds, not the scans. THE FIX, T97's form (its section in `plan-done.md`): the reader's other 10 patterns each a
+    `shared::regex::Lazy`, used as it is, its gate a necessary condition read where its pattern is anchored - a `..._BEFORE`
+    pattern's at the window's trimmed end (`open(`, `Path(`, `:`, a `,` with `spec_from_file_location(`, the last line's unclosed
+    `[`; `TAIL_BEFORE`'s a `/`, `+`, `==` or `!=`, or the last line's unclosed `(` after `Path` or `join` past a `,`, a string
+    method of `METHODS` - one list for its pattern and its gate - or `re.` and a word), an `..._AFTER` pattern's at its trimmed
+    start (`)`, `,`), `TRIPLE`'s a triple quote, `JOINED`'s a `join(` whose first argument is a literal before a `,`, or a `/` with a
+    literal ending before it and one starting after it (a bare quote each side let `'/'.join(`, `split('/')` and a Rust
+    `.join("x")` in a program's text pass on 83 of the corpus's 1,225 Python programs, the pattern matching 8, measured 2026-11-21,
+    `/tmp/t96/gates.py`, a Python `re` run over each whole command, an estimate); `only_read`'s uses two
+    plain searches, `'lit'` and `"lit"` (a literal holds no quote, so the two never overlap and together are what the pattern
+    found); and the literal pattern, reached by every program holding a quote and so the one build left on most (item 4's cost), read
+    as plain code (`literals`), as T97 read `PLAIN_QUOTE_BODY`. A deliberate addition, labeled: the brief asked that the reader build
+    only the patterns a program reaches; the literal pattern as plain code goes past it, the builder's choice on item 4's measure.
+    THE PIN: the build count (Red first); the gates' necessity (`each_gate_passes_wherever_its_pattern_matches`: each gated pattern
+    answers as its raw pattern on every prefix and suffix of 10 programs holding each shape and its near misses, Unicode whitespace
+    where `\s` stands); the literals' equivalence (`the_literals_are_what_the_literal_pattern_found`: the 10 programs' every suffix,
+    14 near misses, every character to U+3100, U+180E, U+200B and U+FEFF inside a literal); and item 4's replay.
+  - THE LIST (`scripts/land-alone.sh`, `split`): the closing checks' attribution (`scripts/gates/closing-checks.sh`) - an edit tool's
+    end its path, a Bash call's end (`PostToolUse` or `PostToolUseFailure`) its `writes`, the exact path; not a fallback line; not one
+    older than the file's last commit or than its own task's last landing. A deliberate addition, labeled: another task's files are
+    listed by their task, not landed (`left uncommitted in the clone, another task's`) - WHY, T82-T101's `ready.rs`, `speckit.rs` and
+    `land-alone.sh` were Write and Edit lines filed under T100 (T101's builder `a30ac631e43ef6d1c`, briefed as T100 and corrected to
+    T101 mid-task, measured 2026-11-21 (the 451 log's lines by its `by`, its handoff)), which no reading of the log can give to T101:
+    the list now shows them under T100 for the session to see; what it costs, one line more a landing alone where other tasks work.
+- **Red first**, measured 2026-11-21:
+  - the field (`event_log_hooks/tests/writes.rs`, `a_python_programs_literal_writes_are_named`: T84's read-modify-write heredoc, a
+    `-c` `write_text` after a `cd`, a `Path('sub') / 'status.rs'` join, a read beside a write and a redirect before it, a directory, a
+    computed base, a `-c` read) against HEAD's `fields.rs`: 363 passed, 1 failed (`make rust-test CRATE=rust/guard/shared`,
+    `/tmp/t96/red-rust.log`); fixed: 367 passed, the moved reader's 3 tests of its own beside it (`/tmp/t96/green-shared.log`), measured
+    2026-11-21 (`make rust-test`).
+  - the list (`land/alone/tests.rs`, `the_script_names_its_tasks_shell_written_files`: T1's Edit, Bash and failed Bash writes; a
+    start's line, a directory's, T2's, a line older than T1's landing) against HEAD's script: 86 passed, 1 failed, the list naming
+    `src/t1e.rs` alone (`make rust-test CRATE=rust/gate/crates/land`, `/tmp/t96/red-land.log`); fixed: 87 of 87 (`/tmp/t96/green-land2.log`).
+  - the move: the guard crate's 432 tests, make-only's, readme's and gate-write's unedited, pass (`make rust-test CRATE=rust/guard`,
+    `/tmp/t96/green-guard.log`; over the gated reader, `/tmp/t96/green-guard2.log`), measured 2026-11-21 (`make rust-test`).
+  - the builds (`tree/program/tests.rs`, `a_program_builds_only_the_patterns_it_reaches`: 8 programs, each read in a process of its
+    own as the event log reads it, its builds counted by `regex::BUILT`) against the moved reader before its gates: 367 passed, 1
+    failed - `print(1)` built `TRIPLE`, `LITERAL` and `JOINED` (`make rust-test CRATE=rust/guard/shared`, `/tmp/t96/red-builds.log`);
+    gated: 369 passed, the gates' necessity test beside it (`/tmp/t96/green-builds.log`); the literals read as plain code: 370, their
+    equivalence test beside it, each program holding a quote counted one build fewer - none for the four that name no file or only
+    assign one, 2 for an `open(`'s or a `Path(`'s write, 1 for a joined pair, 3 beside triple-quoted text (`/tmp/t96/green-builds2.log`).
+    `JOINED`'s gate tightened (THE FIX): a ninth program, `print('/'.join(x).split('/'), a + '/' + b, p.join("read.sh"))`, counted
+    0 builds, against the loose gate (a bare quote each side, `/tmp/t96/after4red`): 1 failed, it built `JOINED` (the program tests
+    alone: 5 passed, 1 failed, 357 filtered out, `/tmp/t96/red-tight.log`); tightened: the shared crate's 376 passed, the clone's
+    in-flight tests of other tasks among them (`/tmp/t96/green-builds4.log`). Over the corpus's 1,225 Python programs the tightened
+    gate passes 8, the pattern matches 8, none it matches gated out (measured 2026-11-21, `/tmp/t96/gates2.py`, `joined_could`
+    replicated in Python over each whole command, an estimate).
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+| a Python program's literal files in `writes`; land-alone's list by the closing checks' attribution | n/a - no map | n/a | none | n/a |
+
+<!-- plan-archive: archived 2026-11-21 -->
+### T96 Approach (checklist part A)
+
+1. **The goal, in the world.** No map changes. A builder's `make closing-checks T=<task>` sets aside a dirty file another task's
+   Python program wrote, as it sets aside one another task's Edit or redirect wrote; and a landing alone's 'commit these' list names
+   the files its tasks wrote by any route the log sees, so following it gives the landing every file its tests need.
+2. **The constraints.** T96's line (the reader moved, red first, before T22; land-alone's list on the same attribution); FR-013 (a
+   `[perf]` task: the builders' loop); FR-012 (red first); T86's and T93's split (exact path, fallback, task, commit window, landed
+   cutoff); T74's (the hook never refuses); make-only's behavior identical (the brief); the files the brief names - `make_only_hooks`,
+   `shared::tree::program`, `fields.rs`, `land-alone.sh`, their tests, docs, this section - and none of `set_down_hooks`, `speckit.rs`,
+   `shared::shape` or `shared::regex` (T102's and T103's; `shared::regex`'s `Lazy` is used as it is, the brief's word); nothing
+   committed. The brief's open problem before landing: the field's cost on every Python program's Bash end (THE BUILDS).
+3. **Where each comes from.** O: T93's replay and its misses (T93's item 4); O: this task's replays, cost, growth and reproduction
+   (item 4); the task as filed (T96's line).
+4. **Do they describe the world here?** Measured 2026-11-21, each by its method:
+   - MAKE-ONLY'S REPLAY: T93's corpus (`/tmp/t93/replay-cmd.jsonl`, 9,646 Bash commands, 2026-11-20T12:00Z to 2026-11-21T17:41Z),
+     each with its row's `cwd`, through make-only's, readme's and gate-write's decisions in ONE process, built over HEAD
+     (`/tmp/t96/head`, `git archive` of `58e78ea38f`) and over HEAD with T96's files alone (`/tmp/t96/after`), so no other builder's
+     in-flight file is in either: 0 changed verdicts of 9,646 in each guard (make-only 64 blocked both times), measured 2026-11-21
+     (`/tmp/t96/rp-src/main.rs`, `replay-head.jsonl` against `replay-after2.jsonl`, a Python diff), 25.8 MB peak (`/usr/bin/time -v`).
+     The reader with its literals read as plain code and `JOINED`'s loose gate (THE BUILDS; `/tmp/t96/after4`, HEAD with T96's files),
+     its replay run beside HEAD's, the ungated reader's and the gated one's with the literal pattern still a pattern (`after3`): 0
+     changed verdicts of 9,646 in each guard against HEAD's (make-only 64 blocked both), and its `writes` the ungated reader's and the
+     gated one's on every one of the 9,646, measured 2026-11-21 (`/tmp/t96/rdiff.py`, `rdiff2.log`: `replay-now-plain.jsonl` against
+     `replay-head.jsonl`, `replay-now-head.jsonl`, `replay-now-after2.jsonl`, `replay-now-fixed2.jsonl` and `replay-after2.jsonl`, 25.3
+     MB peak). The reader as it now stands (`JOINED`'s gate tightened, `/tmp/t96/after5`, `after4` with the clone's `program.rs` and
+     its tests), its replay run in one sitting beside HEAD's and the ungated reader's (`after`): 0 changed verdicts of 9,646 in each
+     guard against HEAD's (make-only 64 blocked both), its `writes` the ungated reader's on every one of the 9,646 and 586 commands'
+     changed against HEAD's (583 in the first replay: disk read today), HEAD's own replay unchanged from its first, measured 2026-11-21
+     (`rdiff-t5.log`: `replay-t5-final.jsonl` against `replay-t5-head.jsonl`, `replay-t5-after.jsonl`, `replay-now-plain.jsonl`,
+     24.8 MB peak, `time-t5-final.log`).
+   - THE FIELD'S REPLAY, the same process through the event log's own `line()`: 583 commands' `writes` gain 737 paths, 624 of them in
+     the clone, 112 under `/tmp/`, 0 lost, measured 2026-11-21 (the same diff) - disk read today, not at the call: a file since
+     deleted is not named, which undercounts.
+   - THE COVERAGE (T93's `recall.py` over both replays, `/tmp/t96/recall.py`: each call booked to its task by the 451 log's line, each
+     of the 18 landings since 2026-11-20T20:00 local against its tasks' files), measured 2026-11-21: of 883 landed files, Edit and Write
+     lines name 176, with HEAD's Bash `writes` 195, with T96's 220 (+25). T84's 5 (`plan.rs`, `plan/status.rs`, `plan/task.rs`,
+     `task_add.rs`, `tick/refusal.rs`): named by HEAD's walk 0, by T96's 5, measured 2026-11-21 (the same recall).
+   - THE PRECISION: of the files T96's names add to a landing's tasks, 55 are in that landing's diff and 1 is not
+     (`rust/guard/CLAUDE.md`, T66's Python write that T66 landed with no change to, T93's observed case), measured 2026-11-21 (the
+     recall's files outside its own exclusions of the sectioned specs and `dev/`); a seeded sample (seed 96) of 14 of the 624 added clone
+     paths, each the file a `p='<path>'; s=open(p).read()` edit program binds, measured 2026-11-21 (each literal's context read).
+   - THE COST, a Bash call's end, the guard binary `--only event-log-hooks PostToolUse` before and after, alternating, 3 runs each, a
+     command's time its median (`/tmp/t96/cost.py`, seed 96), at load averages near 30, measured 2026-11-21: the reader moved, every
+     pattern built where reached (before THE BUILDS), added 20.88 ms a changed command's end before THE MOVE's reorder and 14.50 ms
+     after it (medians of 200, p90 61 ms), 0.03 ms on 200 of the corpus (`cost.log`, `cost2.log`, wall time, loads 30-44). THE
+     BUILDS' fix by CPU time (user and sys, `os.wait4`'s rusage: a build is CPU, the load's waits are not), each command's the median
+     of 3 runs, the binaries alternating, 200 commands a sample, seed 96, measured 2026-11-21: against HEAD's, the ungated reader
+     added 25.19 ms a changed command's end (p90 34.98) and 6.24 ms a Python-program command's (p90 26.71), the gated reader 3.45
+     (p90 11.63) and 1.02 (p90 8.69), each -0.04 on 200 of the corpus (`/tmp/t96/cost3.py`, `cost3.log`, loads 14-36); in a second
+     run, the gated reader 0.91 (p90 6.60) and 1.28 (p90 10.49), and with its literals read as plain code 0.52 (p90 6.62) and 0.28
+     (p90 8.51), on 200 of the corpus 0.12 and -0.02 (`/tmp/t96/cost4.py`, `cost4.log`, loads 20-29). The before and after in ONE
+     run, the reader as it now stands (`JOINED`'s gate tightened): HEAD's binary, the ungated reader's and the final one's
+     alternating, by the same method (`/tmp/t96/cost5.py`, `cost5.log`, loads 13-25, measured 2026-11-21): against HEAD's, the
+     ungated reader added 3.67 ms a Python-program command's end (p90 13.60) and 18.70 a changed command's (p90 32.91), the final
+     reader 0.09 (p90 3.08) and 1.46 (p90 10.44), on 200 of the corpus -0.00 and -0.07. So a Python program's Bash end costs 0.09 ms
+     more than HEAD's (median CPU) where the ungated reader's cost 3.67 ms more, in the same run, measured 2026-11-21 (`cost5.log`), and of the 20 Python programs
+     it costs most (3.3 to 12.9 ms) 13 name a file the field adds, the programs that reach the scans' patterns, measured 2026-11-21
+     (`cost5-per.json` against the replays' `writes`). 1,225 of
+     the corpus's 9,646 commands (12.7%) run one (measured 2026-11-21, a Python `re` count over the corpus). HEAD's own median varies
+     with the machine's load run to run (a changed command's end 65.34 ms CPU in `cost3.log`, 23.04 in `cost4.log`, 40.77 in
+     `cost5.log`, measured 2026-11-21 (the three runs' logs)), so each added figure is a difference of medians within one alternating
+     run.
+   - THE GROWTH: 52,591 bytes on 536 of the replayed Bash ends the 451 log holds, 0.60% of the 8,758,135 bytes it gained over the
+     corpus's window (T93's figure), measured 2026-11-21 (each end's `writes` serialized as the hook writes it, after less before).
+   - THE LIST, T82-T101's landing reproduced: a detached worktree at `8577cb6b5d` (the landing's sections commit) holding
+     `e93d8cda07`'s 26 files uncommitted, the 451 log to 19:38:00Z with its paths moved to the worktree, and each landing builder's Bash
+     calls (9 builders by `by`, 734 commands from their transcripts) given T96's `writes`: HEAD's `split` names 17 (the session's run
+     named 18 in the live clone), T96's 18 - `bundle.rs` added, T82's Python write - with `ready.rs`, `speckit.rs`, `speckit/tests.rs`,
+     `land-alone.sh` and `tests/hooks/test-sync-with-main.sh` listed under T100, and `docs/guards.md`, `land.rs`, `land/cheap.rs` named
+     by no line, measured 2026-11-21 (`/tmp/t96/pylib-{head,new}.py split`, `split-*.txt`). So 1 of the 4 is named as the landing's
+     own and the other 3 are another task's lines, shown by task (the Approach's addition, item 12), measured 2026-11-21 (the same
+     reproduction).
+5. **The order.** After T93 (the field it extends) and T86 (the split land-alone now reads); before T22. Beside T102
+   (`set_down_hooks`, `speckit.rs`) and T103 (`shared::shape`, `shared::regex`), touching none of their files.
+6. **The exits.** Green: the field's and the list's tests red first, make-only's replay unchanged, and this task's own
+   `make closing-checks T=T96 F=451`. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through
+   `make arbiter-ask`.
+7. **The search smell.** None: the reader was replayed over T93's corpus through all three of its guards and the field, and the
+   landing's list reproduced (item 4).
+8. **The budget.** One landing. A Bash call's end: one literal scan of a Python program's body and a stat per literal, building only
+   the patterns its own text reaches (the Approach's THE BUILDS; item 4's cost).
+9. **Done, measured.** Red first (the Approach): 363 passed and 1 failed against HEAD's `fields.rs`, 367 fixed; 86 and 1 against
+   HEAD's script, 87 fixed; the guard crate's 432, measured 2026-11-21. The coverage: 220 of 883 landed files named against 195, T84's
+   5 named; make-only, readme and gate-write unchanged on 9,646 commands (item 4). The builds: 367 passed and 1 failed against the
+   ungated reader, 369 gated, 370 with the literals as plain code; `JOINED`'s loose gate 1 failed (the program tests alone, 5
+   passed), tightened 376 (Red first). The cost, in one run, measured 2026-11-21 (`/tmp/t96/cost5.py`, item 4): a Python program's Bash end 0.09 ms more than
+   HEAD's (median CPU, p90 3.08) where the ungated reader's cost 3.67 ms more (p90 13.60), a changed command's 1.46 where it cost
+   18.70. The
+   reader as it now stands: make-only, readme and gate-write unchanged on 9,646 commands, its `writes` the ungated reader's on all
+   (item 4). The crates' own checks: the guard's and land's lint, format and cover clean, the guard's 432 and land's 87 passed, the
+   shared crate's lint clean and its format and cover clean on T96's files (red only on T108's in-flight `house_style_hooks` and
+   `wait` tests, since formatted), measured 2026-11-21 (`/tmp/t96/crate-checks3.log`, `crate-checks4.log`). The closing checks
+   (`make closing-checks T=T96 F=451`, run 4, 214 s wall, measured 2026-11-21 (`/tmp/t96/closing-4.log`)): 13 of the clone's 18
+   uncommitted files judged as T96's, 5 as T108's; `make hooks-test` green and `make quick` clean; `make static`'s ruff,
+   file-scale, lint and format clean on 34 crates, its cover red only on lines of T108's in-flight tests
+   (`house_style_hooks/tests.rs`, `wait/tests.rs`), reported apart as T108's, T96's files covered. Run 3 stopped at T108's
+   then-unformatted `house_style_hooks` before judging a T96 file (`closing-3.log`).
+10. **Before moving a constant.** No constant: the reader's patterns move with their text unchanged, the other 10 each now built
+    behind its gate and the literal pattern read as plain code (the Approach's THE BUILDS; `TAIL_BEFORE`'s string methods one list,
+    `METHODS`, for its pattern and its gate); the window and cutoffs are the closing checks'.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** A builder's closing verdict read red on another builder's Python-written file (T86's runs 2 and 3, T84's 5
+    files, T93's item 4, measured 2026-11-21 (item 4's coverage)), and a landing alone's list left out a file its tests needed (`bundle.rs`): wrong outcomes, so the code is
+    fixed. What a builder sees differently: such a file listed apart with its task; a landing's refusal naming it to commit; a file
+    another task's line names listed under that task. Nothing on a map. And the moved reader, called on every Python program's Bash
+    end, built its patterns there whatever the program held (THE BUILDS): a cost on every such call, fixed here before landing.
+
+**Found and left?**
+- A builder's lines carry the task its brief named, after the coordinator re-numbers it mid-task: T101's builder, briefed as T100,
+  filed `ready.rs`, `speckit.rs` and `land-alone.sh`'s Write and Edit lines under T100, so land-alone's list at T82-T101's landing
+  named none of them, and the builder's own `make closing-checks T=T101` would have set them apart as T100's (a wrong green), observed
+  2026-11-21, method: the 451 log's lines by its `by` id against its handoff (`T100-a30ac631e43ef6d1c.md`). Its visible effect on the
+  list is fixed here (another task's files listed by task); the attribution itself is not fixed here: the line's task is
+  `event_log_hooks`' `filed.rs` and `dispatches.rs`, outside T96's files. Filed as T106; lands before T22.
+
+**Performance work?** yes - a `[perf]` task (451 FR-013): fewer closing runs red on another builder's files and fewer landings refused
+or missing a file, the builders' loop; not engine speed, so no performance checklist.
+
+
+<!-- plan-archive: T97 to T93 moved to plan-done.md, 2026-11-21 (feature 375 FR-044) -->
+<!-- plan-archive: T97 to T97 moved to plan-done.md, 2026-11-21 (feature 375 FR-044) -->
