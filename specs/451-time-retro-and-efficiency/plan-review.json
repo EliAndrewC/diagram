@@ -564,6 +564,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-21",
    "declared": "spec-fidelity"
+  },
+  "### T96 (a Python program run from a heredoc or `-c` named no file in the event log's `writes`, so T86's closing checks still counted another builder's Python-written files as the caller's - T84's 5 plan- and task-crate files in T86's runs 2 and 3, and 15 of the night's 51 still-missed landed files, measured 2026-11-21 (T93's item 4, its replay); and land-alone's 'commit these' list read only Edit lines, so at T82-T101's landing it named 18 files and left out `bundle.rs`, `ready.rs`, `speckit.rs` and `land-alone.sh`, observed 2026-11-21 (the session's landing, T96's line))": {
+   "sha256": "352af63891a8d0ac75720494b2962e1b8e0ad18cbb22d2af71033d6907da0f4c",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity"
+  },
+  "### T96 Approach (checklist part A)": {
+   "sha256": "340de67cdeb5ceb55025d928e96f19b7f69bc5deba9ee1a8309cb2be6c26f993",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -10206,6 +10218,52 @@
      "why": "FR-007 refuses a third make static and names the crate-scoped checks as the compliant command. The GM approved exactly that (improvement 2: crate-scoped checks while iterating). The landing's own gate still runs in full, so following the spec's own guard narrows nothing."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-21",
+   "blocks": [
+    "### T96 (a Python program run from a heredoc or `-c` named no file in the event log's `writes`, so T86's closing checks still counted another builder's Python-written files as the caller's - T84's 5 plan- and task-crate files in T86's runs 2 and 3, and 15 of the night's 51 still-missed landed files, measured 2026-11-21 (T93's item 4, its replay); and land-alone's 'commit these' list read only Edit lines, so at T82-T101's landing it named 18 files and left out `bundle.rs`, `ready.rs`, `speckit.rs` and `land-alone.sh`, observed 2026-11-21 (the session's landing, T96's line))",
+    "### T96 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "THE MOVE",
+     "summary": "program_names and its helpers move from make_only_hooks/interp.rs to shared::tree::program behind one visitor `each`; interp.rs re-exports program_names so readme's and gate-write's callers are unedited; the caller's `wanted` is asked before joined_on's and only_read's scans (results unchanged, guard verdicts unchanged on 9,646 replayed commands).",
+     "class": "within",
+     "why": "An internal relocation so the event log can call the reader make-only already has; it serves T96's line (the closing checks, which the GM filed as a performance task on 2026-11-21) and narrows nothing. The unchanged-verdict replay shows the moved check still does its job; it is not held to an exactness standard."
+    },
+    {
+     "id": "THE FIELD",
+     "summary": "bash_writes adds, after a writing target's path, the files a Python program's literals name, resolved against the cwd, only when the literal names an existing regular file; a literal only read, or joined onto a computed base, names nothing (labeled fail direction).",
+     "class": "within",
+     "why": "This is the fix T96's line asks for (a heredoc or -c Python program named no file in writes). The fail direction is a design choice inside that fix: a missed name leaves a file judged as the caller's (a red, a lost saving), while an extra name would give a wrong green, so it removes nothing the GM asked for. The cost it states (a file a backgrounded program has not yet written is missed) is a trade-off it names, not a wrong outcome left unfixed."
+    },
+    {
+     "id": "THE BUILDS",
+     "summary": "The reader's 10 other patterns are each a shared::regex::Lazy behind a gate that is a necessary condition, and the literal pattern is read as plain code (a labeled addition past the brief); JOINED's gate is tightened; pinned by the build-count, gate-necessity and literal-equivalence tests.",
+     "class": "within",
+     "why": "It fixes, before landing, a cost the field added to every Python program's Bash end (measured from 3.67 ms down to 0.09 ms median CPU in one run, cost5.log). That is performance work the GM asked to come first (FR-013, request 2026-11-20). Going past the brief is a choice inside the task, not something taken out of what was asked."
+    },
+    {
+     "id": "THE LIST",
+     "summary": "land-alone.sh's 'commit these' list reads the closing checks' attribution (Edit paths and Bash writes from PostToolUse and PostToolUseFailure, exact path, no fallback, inside the commit and landing window), and lists another task's files under that task rather than landing them (labeled addition).",
+     "class": "within",
+     "why": "T96's line names this defect (the list read only Edit lines and left out four files at T82-T101's landing), and fixing a landing tool that leaves out a file its tests need fixes a wrong outcome. Listing another task's files by task only shows the session files it would otherwise not see, and it lands none of them, so it adds no behavior beyond the fix."
+    },
+    {
+     "id": "Found and left: re-numbered builder's attribution",
+     "summary": "A builder re-numbered mid-task keeps filing its lines under the old task id; T96 fixes only the visible effect on the list and files the attribution fix as T106, outside T96's files (filed.rs, dispatches.rs), to land before T22.",
+     "class": "within",
+     "why": "T96's line never asks for this defect to be fixed. It is not dropped: it is filed as T106 with the reason it is not fixed here, its id and its order ('lands before T22'), as FR-009 requires, so it is fixed inside the feature before the step it would harm. Nothing the GM asked for is narrowed."
+    },
+    {
+     "id": "Performance classification and the n/a rows",
+     "summary": "T96 is tagged [perf] as builders'-loop work with no performance checklist (not engine speed), and its step table is n/a (no map).",
+     "class": "within",
+     "why": "The GM's 2026-11-21 words ('yes please file that as a performance task'), about the closing checks, and FR-013's definition (the builders' loop) cover the tag. No map changes, so the map rows do not apply."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -15827,6 +15885,50 @@
      "summary": "After two closing runs went RED only on make static's format check, a third make static was refused by FR-007's guard, so the crate-scoped format check (exit 0) stands for it, with lint, tests and cover clean before a whitespace-only rustfmt rewrap",
      "class": "within",
      "why": "FR-007 refuses a third make static and names the crate-scoped checks as the compliant command. The GM approved exactly that (improvement 2: crate-scoped checks while iterating). The landing's own gate still runs in full, so following the spec's own guard narrows nothing."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T96": {
+   "section_sha256": "1b2816c04e3ea23a21a481d94c1ea96e565aee8f6649e9847466d4185b27c35a",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "THE MOVE",
+     "summary": "program_names and its helpers move from make_only_hooks/interp.rs to shared::tree::program behind one visitor `each`; interp.rs re-exports program_names so readme's and gate-write's callers are unedited; the caller's `wanted` is asked before joined_on's and only_read's scans (results unchanged, guard verdicts unchanged on 9,646 replayed commands).",
+     "class": "within",
+     "why": "An internal relocation so the event log can call the reader make-only already has; it serves T96's line (the closing checks, which the GM filed as a performance task on 2026-11-21) and narrows nothing. The unchanged-verdict replay shows the moved check still does its job; it is not held to an exactness standard."
+    },
+    {
+     "id": "THE FIELD",
+     "summary": "bash_writes adds, after a writing target's path, the files a Python program's literals name, resolved against the cwd, only when the literal names an existing regular file; a literal only read, or joined onto a computed base, names nothing (labeled fail direction).",
+     "class": "within",
+     "why": "This is the fix T96's line asks for (a heredoc or -c Python program named no file in writes). The fail direction is a design choice inside that fix: a missed name leaves a file judged as the caller's (a red, a lost saving), while an extra name would give a wrong green, so it removes nothing the GM asked for. The cost it states (a file a backgrounded program has not yet written is missed) is a trade-off it names, not a wrong outcome left unfixed."
+    },
+    {
+     "id": "THE BUILDS",
+     "summary": "The reader's 10 other patterns are each a shared::regex::Lazy behind a gate that is a necessary condition, and the literal pattern is read as plain code (a labeled addition past the brief); JOINED's gate is tightened; pinned by the build-count, gate-necessity and literal-equivalence tests.",
+     "class": "within",
+     "why": "It fixes, before landing, a cost the field added to every Python program's Bash end (measured from 3.67 ms down to 0.09 ms median CPU in one run, cost5.log). That is performance work the GM asked to come first (FR-013, request 2026-11-20). Going past the brief is a choice inside the task, not something taken out of what was asked."
+    },
+    {
+     "id": "THE LIST",
+     "summary": "land-alone.sh's 'commit these' list reads the closing checks' attribution (Edit paths and Bash writes from PostToolUse and PostToolUseFailure, exact path, no fallback, inside the commit and landing window), and lists another task's files under that task rather than landing them (labeled addition).",
+     "class": "within",
+     "why": "T96's line names this defect (the list read only Edit lines and left out four files at T82-T101's landing), and fixing a landing tool that leaves out a file its tests need fixes a wrong outcome. Listing another task's files by task only shows the session files it would otherwise not see, and it lands none of them, so it adds no behavior beyond the fix."
+    },
+    {
+     "id": "Found and left: re-numbered builder's attribution",
+     "summary": "A builder re-numbered mid-task keeps filing its lines under the old task id; T96 fixes only the visible effect on the list and files the attribution fix as T106, outside T96's files (filed.rs, dispatches.rs), to land before T22.",
+     "class": "within",
+     "why": "T96's line never asks for this defect to be fixed. It is not dropped: it is filed as T106 with the reason it is not fixed here, its id and its order ('lands before T22'), as FR-009 requires, so it is fixed inside the feature before the step it would harm. Nothing the GM asked for is narrowed."
+    },
+    {
+     "id": "Performance classification and the n/a rows",
+     "summary": "T96 is tagged [perf] as builders'-loop work with no performance checklist (not engine speed), and its step table is n/a (no map).",
+     "class": "within",
+     "why": "The GM's 2026-11-21 words ('yes please file that as a performance task'), about the closing checks, and FR-013's definition (the builders' loop) cover the tag. No map changes, so the map rows do not apply."
     }
    ],
    "verdict": "CLEAR"
