@@ -1346,6 +1346,130 @@ engine speed, so no checklist.
 **Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
 
 
+### T111 (the stall-watchdog suite's case 4 slept a fixed 1 s and then asked whether a loop started by hand had exited on the lock: red at T92's landing, "expected no, got yes" at a load near 28 beside three builders, green on 2 of 2 reruns in the same worktree, observed 2026-11-21 (T92's landing log, as T111's line records it))
+
+- **Approach**: every fixed sleep in `tests/hooks/test-stall-watchdog-hooks.sh` before a check that needs something to have happened
+  becomes a wait for that event to a deadline, in the form of case 3's runner wait (`for _ in $(seq N); do <event> && break; sleep 0.1;
+  done`), and the check after it is unchanged, so a loop that never exits still fails it:
+  - THE EXIT, measured 2026-11-21 (`/tmp/t111-measure/measure.sh`: a `flock` holding a scratch `$STALL_STATE_DIR/lock`, the hook's `run`
+    started as the case starts it and polled with `kill -0` every 10 ms, `L7R_GUARD_FRESH` set as `make hooks-test` sets it, with and
+    without the read recorder's `LD_PRELOAD` as `hookrun.sh` sets it): at a load of 7 to 9, median 0.027 s and max 0.130 s (n=30, no
+    recorder), median 0.106 s and max 0.247 s (n=30, the recorder). Beside this task's own `make closing-checks`, a load of 14 to 17 and a
+    run queue up to 57, measured 2026-11-21 (the same script, the recorder, `/tmp/t111-measure/beside-closing-summary.txt`): median
+    0.049 s, p99 0.253 s, max 0.279 s (n=200). Beside 24 CPU spinners, a load of 22 to 27 and a run queue of 47 to 59, measured 2026-11-21
+    (the same script, `/tmp/t111-measure/loaded-summary.txt`): median 0.200 s and max 0.394 s (n=40, the recorder), median 0.179 s and max
+    0.265 s (n=20, no recorder). No sample reached the 1 s the landing's run passed, measured 2026-11-21 (the three runs above), so the
+    measurement did not reproduce the failure. A spinner is CPU load alone, where the landing's builders were cargo builds,
+    links and their IO, so the tail the landing met is not measured here, and the deadline is not derived from these figures.
+  - THE FIX, case 4: the first prompt's loop waited for until its pid file names a live process (the loop writes it once it holds the
+    lock, so the hand-started loop meets a held lock); the hand-started loop (`R2`, now in `PIDS` so a red run's cleanup ends it) waited
+    for until `kill -0` fails; the killed loop until its `/proc` entry goes (the prompt's own test of a dead loop; `kill -0` stays true
+    for a zombie); the revived loop until the pid file names a live process other than the killed one (the file outlives the killed
+    loop). Each deadline is 300 tries of 0.1 s, a GUESS only a red run pays. The second prompt's sleep of 1 s is dropped, not replaced,
+    observed 2026-11-21, method: reading the hook's `run` and `judge` (a second loop would meet the held lock and exit without writing
+    the pid, so no sleep could change that check's verdict). The lock
+    check's words lose "at once", which a deadline wait no longer measures: "exits on the lock, where one that took it would loop".
+  - THE FIX, case 3: the Python runner's old form (`page_session_runner.py --work` as the arguments of a `bash -c`) waited for until its
+    own argv is in `/proc/<pid>/cmdline`, where it slept a fixed 0.5 s, observed 2026-11-21, method: reading case 3 (before its exec the
+    process is a copy of the suite, and the check after it, that the old form exempts nothing, passed on that copy whatever the hook
+    makes of the old form).
+- **Red first**, measured 2026-11-21 (`/tmp/t111-red/run.sh <form> <mode>`: a copy of the suite, HEAD's for the old form and the
+  clone's for the new, only its `HERE` pinned to the clone's `tests/hooks` and its `HOOK` overridable, `L7R_GUARD_FRESH` set, each run's
+  log `/tmp/t111-red/<form>-<mode>.log`, the lines `/tmp/t111-red/summary.txt`, at a load of 11 to 15):
+  - unslowed, measured 2026-11-21 (`run.sh <form> base`): old 29 passed and 0 failed in 9.5 s, new 29 passed and 0 failed in 2.4 s.
+  - `slowrun`, the hook a wrapper (`/tmp/t111-red/slow-hook.sh`) that sleeps 2 s before a `run`, measured 2026-11-21 (`run.sh <form>
+    slowrun`): old 28 passed and 1 failed, "a second loop started by hand exits at once on the lock (expected no, got yes)", the
+    landing's failure, and new 29 passed and 0 failed.
+  - `slowstart`, a `setsid` first on `PATH` (`/tmp/t111-red/bin/setsid`) that starts the prompt's loop 2 s late and returns at once as
+    `setsid -f` does, measured 2026-11-21 (`run.sh <form> slowstart`): old 27 passed and 2 failed, "the first prompt starts the loop
+    (expected yes, got no)" and "a second prompt starts no other (expected , got <pid>)", and new 29 passed and 0 failed, the revived
+    loop's start slowed the same way and waited for.
+  - `slowrevive`, the same late start only where a loop has run before (`/tmp/t111-red/bin2/setsid`), so the revive alone is slowed,
+    measured 2026-11-21 (`run.sh <form> slowrevive`, `/tmp/t111-red/summary2.txt`, at a load of 31 to 36): old 28 passed and 1 failed,
+    "a dead loop is revived by the next prompt (expected yes, got no)", new 29 passed and 0 failed, and the new form green on each slowed
+    mode twice more at that load, 6 of 6 runs.
+  - `hang`, the wrapper's `run` a real loop on a lock of its own as a loop would run that the lock failed to hold, measured 2026-11-21
+    (`run.sh <form> hang`): old 28 passed and 1 failed, and new 28 passed and 1 failed at its deadline, "a second loop started by hand
+    exits on the lock, where one that took it would loop (expected no, got yes)", in 39.9 s.
+- **The sweep**, observed 2026-11-21, method: every line holding the word `sleep` in the 63 `tests/hooks/test-*.sh` outside
+  `test-no-poll-hooks.sh`'s command strings (87 lines in 12 suites, `grep -nw sleep`, comment lines dropped), each read with what follows
+  it and classified by whether the check after it needs something to have happened (a slow host fails it) or asserts that nothing did
+  (a slow host passes it vacuously):
+  - in this suite, fixed here, observed 2026-11-21, method: the sweep's read: line 104 (0.5 s, the old-form process's argv, vacuous, now
+    waited for), 121 (1 s, the loop's pid file), 124 (1 s, nothing it could change, dropped), 126 (1 s, the hand-started loop's exit), 128
+    (1 s, the killed loop's `/proc` entry) and 129 (1 s, the revived loop's pid).
+  - elsewhere, a slow host fails good work (filed as T115), observed 2026-11-21, method: the sweep's read: `test-clone-sync-hooks.sh` 186
+    and 273 (0.3 s for `exec -a make sleep 120`'s argv and cwd, which the hook's live-make test reads), 287 and `test-land-tooling.sh` 184
+    (0.3 s for the argv of an `exec -a make` `bash -c`, the pid then named in `gate.lock`), `test-idle-tests-hooks.sh` 76 (0.6 s for the
+    disarmed timer's exit and its arming file's removal), 83 (0.5 s for the arming file's removal, the timer's last step after its record)
+    and 202 (1.0 s for a gone session's timer to exit after its 0.3 s wait), `test-closing-checks.sh` 101 (0.3 s before `pgrep` finds no
+    check alive, where `stop` signals each tree and exits 130 without waiting for it), and `test-finished-run-hooks.sh`'s `settle`, a
+    deadline wait that returns 0 at its deadline, 1 s by default and 2 s at 40, so the check after it runs unready past the old sleep's
+    bound.
+  - their two shapes, measured 2026-11-21 (`/tmp/t111-measure/shapes.sh` beside T111's closing checks, at a load of 16 to 17, n=200): an
+    `exec -a make` start until its argv reads `make`, median 0.008 s and max 0.071 s, and a killed background child until `kill -0` fails,
+    median 0.012 s and max 0.059 s.
+  - elsewhere, vacuous under load (listed, not filed), observed 2026-11-21, method: the sweep's read: `test-idle-tests-hooks.sh` 73 (0.3 s,
+    then the timer alive, true from its fork), 182 (0.3 s after all three records, before reading the run log their runs finished
+    writing), 191 (0.8 s, then no run while a make runs) and 217 (3 s, then no end line ever), and `test-closing-checks.sh` 112 and 115
+    (0.2 s each, ordering two runs whose checks each read their own run's output).
+  - before a deadline wait, so costing nothing but their time, observed 2026-11-21, method: the sweep's read: `test-idle-tests-hooks.sh` 96
+    (before a 90 s wait), 210 (after the start line, before the prompt, inside the slow runner's 3 s) and 211 (before an 8 s wait).
+  - deadline waits already, observed 2026-11-21, method: the sweep's read: `test-closing-checks.sh` 25, 67 and 98, `test-gate-write-hooks.sh`
+    39 and 72, `test-sync-with-main.sh` 72, 373, 380 and 482 (and the fake renders' 361 and 472), `test-land-tooling.sh` 140,
+    `test-idle-tests-hooks.sh` 45 to 54 and 143, `test-engine-freeze-hooks.sh` 94 (5 s), `test-l7r-gate.2.sh` 35 (5 s) and this suite's 111
+    (300 s).
+  - a sleep that is the work, not a wait (a stand-in process, a lock holder, a fixture's body, an mtime step): `test-closing-checks.sh` 27,
+    `test-finished-run-hooks.sh`' Makefiles and waiters (77 to 113, 134 to 252), `test-gate-write-hooks.sh` 20, 57, 68 and 85,
+    `test-idle-tests-hooks.sh` 32, 57, 134 and 207, `test-l7r-guard.sh` 33, 46 and 164, `test-parts.1.sh` 37, `test-sync-with-main.sh` 383
+    and 590, `test-clone-sync-hooks.sh` 68 and 70, `test-engine-freeze-hooks.sh` 95 and 101, and this suite's stand-ins.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+| each fixed sleep of the stall-watchdog suite before a check that needs an event becomes a wait for it to a deadline; the one that could change nothing dropped | n/a - no map | n/a | none | n/a |
+
+### T111 Approach (checklist part A)
+
+1. **The goal, in the world.** No map changes. `make hooks-test`'s stall-watchdog suite passes on good work under load and still fails a
+   loop that never exits on the lock, a loop that never starts, and a dead loop that is never revived.
+2. **The constraints.** T111's line; FR-012 (red first); constitution XIII (no known regression: the suite's 29 checks the same) and XIV
+   (a check that fails good work is a defect, fixed here); the launcher's ground rules: `tests/hooks/test-stall-watchdog-hooks.sh` and
+   this section alone, nothing of T96's (`shared::tree`, `event_log_hooks`, `scripts/land-alone.sh`) or T113's (`make_only_hooks.rs`,
+   `no_poll_hooks/pace.rs`, `readme_hooks.rs`), no knob in the Rust hook, nothing committed.
+3. **Where each comes from.** O: T92's landing as T111's line records it; O: this task's exit timings, red-first runs and sweep (item 4).
+4. **Do they describe the world here?** Measured 2026-11-21, each by its method in the Approach: the exit timed at three loads (n=30, 30,
+   200, 40 and 20), none past 0.394 s and none reproducing the landing's 1 s; the old form red and the new green on a slowed `run`, a
+   slowed loop start and a slowed revive (`/tmp/t111-red/summary.txt`, `summary2.txt`), and the new form red on a loop that never exits (`/tmp/t111-red/summary.txt`); the sweep's 87 lines classified.
+5. **The order.** Beside T96 and T113, touching none of their files; before T115, which takes the same form to the other suites.
+6. **The exits.** Green: the red-first runs above and this task's own `make closing-checks T=T111 F=451`. Red: what failed recorded and
+   the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None: every `sleep` in the hook suites was read (the sweep's method), not a sample.
+8. **The budget.** One landing. A green run waits only for its events: the suite took 2.4 s against 9.5 s before, measured 2026-11-21
+   (`/tmp/t111-red/summary.txt`, the unslowed runs, load 14 to 15).
+9. **Done, measured.** Red first: old 28 passed and 1 failed, new 29 and 0, on the slowed `run`; old 27 and 2, new 29 and 0, on the slowed
+   start; old 28 and 1, new 29 and 0, on the slowed revive; the new form 6 of 6 green on the three slowed modes again at a load of 31 to 36;
+   new 28 and 1 at its deadline on a loop that never exits (measured 2026-11-21, `/tmp/t111-red/run.sh`). This task's own closing
+   run 1 (`20261121T214350Z-1968433`, measured 2026-11-21, `make closing-checks T=T111 F=451`): `make hooks-test` GREEN (144 s, this
+   suite 4.9 s) and `make quick` GREEN; `make static` RED on one crate alone, `rust/guard/shared`'s coverage run, 3 of 380 tests failing,
+   each in `guards::event_log_hooks::tests::renumbered` - another builder's uncommitted work (`event_log_hooks/tests.rs` and the untracked
+   `tests/renumbered.rs`, last written at 21:45:40Z and 21:48:49Z, after the run started at 21:43:50Z, so in no split it made), which no T111 file reaches:
+   T111 changes a shell suite and this section, no Rust; T113's format and lint red reported apart.
+10. **Before moving a constant.** No research constant, observed 2026-11-21, method: the sweep's read: the sleeps of 1 s were waits,
+    replaced by waits for their events, and the deadline of 300 tries of 0.1 s is a GUESS only a red run pays, labeled at the case.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** A defect, fixed here: a landing's `make hooks-test` red on good work under load; no map moves, no research claim
+    reads this suite.
+
+**Found and left?**
+- Eight fixed sleeps in four other hook suites, and `test-finished-run-hooks.sh`'s `settle`, wait 0.3 to 1.0 s (settle: 1 or 2 s, then
+  running its check anyway) for an event the next check needs, so a slow host fails good work there as it did here, observed 2026-11-21,
+  method: the sweep above. Not fixed here: the launcher gave T111 this suite alone, and each suite owes its own red first. Filed as T115;
+  lands before T22.
+
+**Performance work?** no - a test's correctness under load, the suite's own time falling from 9.5 s to 2.4 s as a side effect, measured
+2026-11-21 (`/tmp/t111-red/summary.txt`, the unslowed runs, item 8).
+
+
 ### T112 (<why: the finding or measurement that files it>)
 
 - **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
@@ -1381,6 +1505,32 @@ engine speed, so no checklist.
 |---|---|---|---|---|
 
 ### T113 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+### T115 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T115 Approach (checklist part A)
 
 1. **The goal, in the world.** <the place as it should be>
 2. **The constraints.** <the FRs, decisions and pages it holds to>

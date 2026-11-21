@@ -576,6 +576,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-21",
    "declared": "spec-fidelity"
+  },
+  "### T111 (the stall-watchdog suite's case 4 slept a fixed 1 s and then asked whether a loop started by hand had exited on the lock: red at T92's landing, \"expected no, got yes\" at a load near 28 beside three builders, green on 2 of 2 reruns in the same worktree, observed 2026-11-21 (T92's landing log, as T111's line records it))": {
+   "sha256": "943012a2a77b1fc8c583f7971a1dc5b8db6a0254dd85e6c62d573b15c4221403",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity"
+  },
+  "### T111 Approach (checklist part A)": {
+   "sha256": "38387b1add08f2e059df1d3df1e4db84ba8b64263d9f55e16991cb08ca18224a",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -10264,6 +10276,77 @@
      "why": "The GM's 2026-11-21 words ('yes please file that as a performance task'), about the closing checks, and FR-013's definition (the builders' loop) cover the tag. No map changes, so the map rows do not apply."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-21",
+   "blocks": [
+    "### T111 (the stall-watchdog suite's case 4 slept a fixed 1 s and then asked whether a loop started by hand had exited on the lock: red at T92's landing, \"expected no, got yes\" at a load near 28 beside three builders, green on 2 of 2 reruns in the same worktree, observed 2026-11-21 (T92's landing log, as T111's line records it))",
+    "### T111 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T111-case4-waits",
+     "summary": "Case 4's fixed 1 s sleeps before checks that need an event (the loop's pid file, the hand-started loop's exit, the killed loop's /proc entry, the revived loop's pid) become deadline waits for those events, the checks after them unchanged; R2 added to PIDS for cleanup.",
+     "class": "within",
+     "why": "This is exactly the defect T111's line names (a check failing good work under load, constitution XIV). The red-first runs show the old form red and the new form green on a slowed run, start and revive, and the new form still red on a loop that never exits, so the checks keep their job."
+    },
+    {
+     "id": "T111-case3-wait",
+     "summary": "Case 3's fixed 0.5 s sleep before checking the old-form runner becomes a wait until the runner's own argv is in /proc/<pid>/cmdline.",
+     "class": "within",
+     "why": "This goes beyond the line's case 4, but it is in the same suite and is the same kind of fix. Under load the check read a pre-exec copy of the suite and passed whatever the hook did, which is a check passing bad work. Fixing a known defect in the file the task owns is within scope and adds no behavior."
+    },
+    {
+     "id": "T111-drop-line124",
+     "summary": "The second prompt's 1 s sleep (line 124) is dropped, not replaced.",
+     "class": "within",
+     "why": "Reading the hook's run and judge shows that no sleep could change that check's verdict: a second loop meets the held lock and exits without writing the pid. Removing a wait that does nothing narrows nothing the GM asked for."
+    },
+    {
+     "id": "T111-wording-at-once",
+     "summary": "The lock check's message loses 'at once' and becomes 'exits on the lock, where one that took it would loop'.",
+     "class": "within",
+     "why": "The words now describe what a deadline wait measures. The hang run shows the check is still red on a loop that never exits, so the check's job is unchanged and only its label moved."
+    },
+    {
+     "id": "T111-deadline-guess",
+     "summary": "Each deadline is 300 tries of 0.1 s, labeled a GUESS that only a red run pays.",
+     "class": "within",
+     "why": "It is a test-harness bound, not a research constant, and it is labeled GUESS as the project's rules require. A green run pays only its events' latency (measured median 0.027 to 0.200 s, max 0.394 s)."
+    },
+    {
+     "id": "T111-defer-T115",
+     "summary": "Eight fixed sleeps in four other hook suites, plus test-finished-run-hooks.sh's settle, wait for an event the next check needs, so a slow host fails good work there too. They are not fixed here: filed as T115, lands before T22.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "By the block's own words this is a defect left, so it is ruled, not waved through. Neither the GM's request nor the spec asks for these suites to be fixed. The accepted spec's FR-009, which the session derived from the GM's approval of improvement 4, is the spec's own form for deferring a defect: it needs a why, a filed task id and an order, and the block carries all three (the why, T115, 'lands before T22'). The ruling relies on the second half of the why: each suite owes its own red-first run (FR-012's discipline, as T111's runs here show), which is a separate measured job per suite, not an awkwardness. The first half (the launcher scoped T111 to this suite) is a session's scoping and is given no weight. The purpose of improvement 4 (fewer plan re-rounds through fixing in the task) is not gutted: the defect is filed with a fixed order, not left open-ended."
+    },
+    {
+     "id": "T111-vacuous-listed",
+     "summary": "Six lines whose checks assert that nothing happened, or whose sleep cannot change the verdict, are listed but not filed: idle-tests 73, 182, 191, 217 and closing-checks 112, 115.",
+     "class": "within",
+     "why": "Each line was ruled separately from its text in the block. 73: the timer is alive from its fork, so the check is true whatever the delay. 182: the sleep comes before reading a log that is already fully written, so it cannot change the verdict. 191 and 217: the checks assert no run and no end line; a bounded window is the only form an assertion that nothing happened can take, and the check still catches the behavior on any run where the host is not delayed past the window. 112 and 115: sleeps that order two runs whose checks each read their own run's output, so the order cannot change the verdict. None of the six refuses good work, and none reads the wrong process. Line 104 did read the wrong process: under load it inspected the pre-exec copy of the suite and could pass whatever the hook did. None of the six is a wrong outcome under XIV v2.36.0, so leaving them narrows nothing."
+    },
+    {
+     "id": "T111-time-only-sleeps",
+     "summary": "Three sleeps in idle-tests (96, 210, 211) that sit before a deadline wait are left; they cost only their time.",
+     "class": "within",
+     "why": "They fail no good work and pass no bad work. A sleep before a deadline wait is not a defect, and the request does not ask for it to be removed."
+    },
+    {
+     "id": "T111-perf-no",
+     "summary": "The 'Performance work?' answer is no: this is a test's correctness under load, and the suite's fall from 9.5 s to 2.4 s is a side effect.",
+     "class": "within",
+     "why": "This is a scheduling label that narrows no requested work, and the task is being done either way. FR-013's full text was not in the bundle (its index line is cut), so the label was not checked against FR-013's full meaning. None of the GM's words that count a task as performance work (measurement tasks, the closing checks) names this test fix."
+    },
+    {
+     "id": "T111-closing-static-red",
+     "summary": "The closing run's make static red (3 tests in guards::event_log_hooks::tests::renumbered in rust/guard/shared) is put down to another builder's uncommitted work that T111 does not touch.",
+     "class": "within",
+     "why": "This records the exit evidence and does not narrow the request. The timestamps show the files were written after the run started, and T111 changes no Rust. Whether the landing accepts that is for the land machinery, not a fidelity finding."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -15929,6 +16012,75 @@
      "summary": "T96 is tagged [perf] as builders'-loop work with no performance checklist (not engine speed), and its step table is n/a (no map).",
      "class": "within",
      "why": "The GM's 2026-11-21 words ('yes please file that as a performance task'), about the closing checks, and FR-013's definition (the builders' loop) cover the tag. No map changes, so the map rows do not apply."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T111": {
+   "section_sha256": "538b3030f3d5c037ff0adde64fc0ab2b6d272096946787324e260d2831c48b11",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T111-case4-waits",
+     "summary": "Case 4's fixed 1 s sleeps before checks that need an event (the loop's pid file, the hand-started loop's exit, the killed loop's /proc entry, the revived loop's pid) become deadline waits for those events, the checks after them unchanged; R2 added to PIDS for cleanup.",
+     "class": "within",
+     "why": "This is exactly the defect T111's line names (a check failing good work under load, constitution XIV). The red-first runs show the old form red and the new form green on a slowed run, start and revive, and the new form still red on a loop that never exits, so the checks keep their job."
+    },
+    {
+     "id": "T111-case3-wait",
+     "summary": "Case 3's fixed 0.5 s sleep before checking the old-form runner becomes a wait until the runner's own argv is in /proc/<pid>/cmdline.",
+     "class": "within",
+     "why": "This goes beyond the line's case 4, but it is in the same suite and is the same kind of fix. Under load the check read a pre-exec copy of the suite and passed whatever the hook did, which is a check passing bad work. Fixing a known defect in the file the task owns is within scope and adds no behavior."
+    },
+    {
+     "id": "T111-drop-line124",
+     "summary": "The second prompt's 1 s sleep (line 124) is dropped, not replaced.",
+     "class": "within",
+     "why": "Reading the hook's run and judge shows that no sleep could change that check's verdict: a second loop meets the held lock and exits without writing the pid. Removing a wait that does nothing narrows nothing the GM asked for."
+    },
+    {
+     "id": "T111-wording-at-once",
+     "summary": "The lock check's message loses 'at once' and becomes 'exits on the lock, where one that took it would loop'.",
+     "class": "within",
+     "why": "The words now describe what a deadline wait measures. The hang run shows the check is still red on a loop that never exits, so the check's job is unchanged and only its label moved."
+    },
+    {
+     "id": "T111-deadline-guess",
+     "summary": "Each deadline is 300 tries of 0.1 s, labeled a GUESS that only a red run pays.",
+     "class": "within",
+     "why": "It is a test-harness bound, not a research constant, and it is labeled GUESS as the project's rules require. A green run pays only its events' latency (measured median 0.027 to 0.200 s, max 0.394 s)."
+    },
+    {
+     "id": "T111-defer-T115",
+     "summary": "Eight fixed sleeps in four other hook suites, plus test-finished-run-hooks.sh's settle, wait for an event the next check needs, so a slow host fails good work there too. They are not fixed here: filed as T115, lands before T22.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "By the block's own words this is a defect left, so it is ruled, not waved through. Neither the GM's request nor the spec asks for these suites to be fixed. The accepted spec's FR-009, which the session derived from the GM's approval of improvement 4, is the spec's own form for deferring a defect: it needs a why, a filed task id and an order, and the block carries all three (the why, T115, 'lands before T22'). The ruling relies on the second half of the why: each suite owes its own red-first run (FR-012's discipline, as T111's runs here show), which is a separate measured job per suite, not an awkwardness. The first half (the launcher scoped T111 to this suite) is a session's scoping and is given no weight. The purpose of improvement 4 (fewer plan re-rounds through fixing in the task) is not gutted: the defect is filed with a fixed order, not left open-ended."
+    },
+    {
+     "id": "T111-vacuous-listed",
+     "summary": "Six lines whose checks assert that nothing happened, or whose sleep cannot change the verdict, are listed but not filed: idle-tests 73, 182, 191, 217 and closing-checks 112, 115.",
+     "class": "within",
+     "why": "Each line was ruled separately from its text in the block. 73: the timer is alive from its fork, so the check is true whatever the delay. 182: the sleep comes before reading a log that is already fully written, so it cannot change the verdict. 191 and 217: the checks assert no run and no end line; a bounded window is the only form an assertion that nothing happened can take, and the check still catches the behavior on any run where the host is not delayed past the window. 112 and 115: sleeps that order two runs whose checks each read their own run's output, so the order cannot change the verdict. None of the six refuses good work, and none reads the wrong process. Line 104 did read the wrong process: under load it inspected the pre-exec copy of the suite and could pass whatever the hook did. None of the six is a wrong outcome under XIV v2.36.0, so leaving them narrows nothing."
+    },
+    {
+     "id": "T111-time-only-sleeps",
+     "summary": "Three sleeps in idle-tests (96, 210, 211) that sit before a deadline wait are left; they cost only their time.",
+     "class": "within",
+     "why": "They fail no good work and pass no bad work. A sleep before a deadline wait is not a defect, and the request does not ask for it to be removed."
+    },
+    {
+     "id": "T111-perf-no",
+     "summary": "The 'Performance work?' answer is no: this is a test's correctness under load, and the suite's fall from 9.5 s to 2.4 s is a side effect.",
+     "class": "within",
+     "why": "This is a scheduling label that narrows no requested work, and the task is being done either way. FR-013's full text was not in the bundle (its index line is cut), so the label was not checked against FR-013's full meaning. None of the GM's words that count a task as performance work (measurement tasks, the closing checks) names this test fix."
+    },
+    {
+     "id": "T111-closing-static-red",
+     "summary": "The closing run's make static red (3 tests in guards::event_log_hooks::tests::renumbered in rust/guard/shared) is put down to another builder's uncommitted work that T111 does not touch.",
+     "class": "within",
+     "why": "This records the exit evidence and does not narrow the request. The timestamps show the files were written after the run started, and T111 changes no Rust. Whether the landing accepts that is for the land machinery, not a fidelity finding."
     }
    ],
    "verdict": "CLEAR"
