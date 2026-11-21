@@ -416,7 +416,7 @@
    "declared": "spec-fidelity"
   },
   "### T92 Approach (checklist part A)": {
-   "sha256": "133f20b68a5e931e0d1712e0bd701150e8b5f5e4b70d6f183f2953a76e3b8da7",
+   "sha256": "63755b94e380f0bf9c37cafc032deef36eaf8346f0f0ed1bc3a107060324432a",
    "verdict": "CLEAR",
    "reviewed": "2026-11-21",
    "declared": "spec-fidelity"
@@ -543,6 +543,12 @@
   },
   "### T103 Approach (checklist part A)": {
    "sha256": "56642bc8a4fd934a299eb34f92fe1b6098ae9b2bd43af568c753184209415a24",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity"
+  },
+  "### T92 (an arbiter's accept with REVIEW=plan on one task's round recorded CLEAR for every changed block of the plan - `make arbiter-ruled` on `ask:451-T79-third-plan-round` replied \"28 plan block(s) recorded CLEAR\", 2 of them T79's - and wrote no task verdict, so the store the tick, the push, `plan decided` and T84's builder-stop guard read held T33's, T46's, T67's and T79's BLOCKED though each landed on an accept, measured 2026-11-21 (plan-review.json's history; T84's replay, its item 4))": {
+   "sha256": "bd58e329141e68b23c3817af491ff67c0497f1c478f122c8614d25be4aa4f2ed",
    "verdict": "CLEAR",
    "reviewed": "2026-11-21",
    "declared": "spec-fidelity"
@@ -10000,6 +10006,82 @@
      "why": "Keeping to the task's own files narrows nothing asked of T103. The red lint belongs to another task's file and is recorded as BLOCKED on T96, not waved off as T103's."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-21",
+   "blocks": [
+    "### T92 (an arbiter's accept with REVIEW=plan on one task's round recorded CLEAR for every changed block of the plan - `make arbiter-ruled` on `ask:451-T79-third-plan-round` replied \"28 plan block(s) recorded CLEAR\", 2 of them T79's - and wrote no task verdict, so the store the tick, the push, `plan decided` and T84's builder-stop guard read held T33's, T46's, T67's and T79's BLOCKED though each landed on an accept, measured 2026-11-21 (plan-review.json's history; T84's replay, its item 4))",
+    "### T92 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T92-D1-scope",
+     "summary": "An arbiter accept clears only the owed/BLOCKED blocks inside the sections of the tasks its trigger names (round trigger #<task>, or the ask subject's task ids via named_tasks), plus their removed blocks; a block outside every named span is not cleared. Scope is read from the trigger, never the question's prose.",
+     "class": "within",
+     "why": "A defect fix (fix as we go; constitution XIV's 'a check that passes bad work'): measured 2026-11-21, four accepts cleared 28, 10, 9 and 2 blocks outside the asked task's section, including T76's and T77's unreviewed changes. The rulings themselves scope the accept to the asked task ('This accept stands as the verdict of T79's plan review on the section as it reads now'; T67's and T33's likewise), and FR-043 keeps the verdict per block, so a task round's accept covering only that task's blocks implements what the arbiter ruled and narrows nothing the GM asked."
+    },
+    {
+     "id": "T92-D1-no-task-named",
+     "summary": "An accept whose trigger names no task (5 of 21 accepted plan asks, measured) clears the whole plan as before.",
+     "class": "within",
+     "why": "Keeps the existing behavior for asks whose subject was the plan (e.g. ask:420-plan-round3, whose ruling is 'The plan stands as it reads now'); the question was the plan, so the whole plan is its verdict's scope."
+    },
+    {
+     "id": "T92-D1-named-no-section",
+     "summary": "A named task with no section in plan.md or plan-done.md: the whole plan's scope, as plan decided (decision_refusal) reads such a task.",
+     "class": "within",
+     "why": "This is the one arm that keeps whole-plan clearing for a named task, and it is not the defect surviving. A task with no section anywhere has no blocks of its own, so its decisions can only be in the plan-stage blocks, and plan decided (decision_refusal) already reads it that way. For such a task the question put to the arbiter was the plan, so the accept's scope matches the question. The over-clearing the section fixes happened only where the named task HAD a section and blocks outside it were cleared too, and D1 ends that."
+    },
+    {
+     "id": "T92-D1-archived-section",
+     "summary": "A named task whose section is archived (plan-done.md only): nothing recorded, never the whole plan.",
+     "class": "within",
+     "why": "FR-044: no review reads plan-done.md and a removed section owes no review, so there is nothing to record; refusing to fall back to the whole plan prevents the over-clearing this task fixes."
+    },
+    {
+     "id": "T92-D1-convention",
+     "summary": "Labeled CONVENTION: the trigger is the scope source because its subject is already a machine-read id (the GM 2026-10-25, the algorithmically easier route where the record is silent).",
+     "class": "within",
+     "why": "A mechanism choice inside the fix, applying a standing GM rule; it decides no question the request or rulings settle differently."
+    },
+    {
+     "id": "T92-D2-task-verdict",
+     "summary": "Each named task's tasks.<id> is written CLEAR, declared round-arbiter, at its section digest, with the replaced reviewer entry kept as accepted_over; the tick, push, plan decided and T84's builder-stop guard read that one entry.",
+     "class": "within",
+     "why": "Feature 409 (an ask with REVIEW=plan stands as the plan review's verdict) and each cited ruling ('this accept is the plan review's verdict on T67's plan section') require the accept to BE the task verdict; measured 2026-11-21 the store held T33, T46, T67 and T79 BLOCKED though each landed on an accept - a gate reading wrong. Writing it fixes that defect."
+    },
+    {
+     "id": "T92-D3-output-and-batch",
+     "summary": "make arbiter-ruled names the scope, each heading recorded CLEAR and the task verdict; a batch's plan accept (BATCH=1) is applied as a single ruling's is.",
+     "class": "within",
+     "why": "The output change makes the fix visible where a bare count hid 28 blocks; the batch path recording a plan accept but never applying it is a found defect (observed 2026-11-21 by grep -rn arbiter_accept rust/), fixed here as fix-as-we-go requires."
+    },
+    {
+     "id": "T92-unreviewed-changes-ruled",
+     "summary": "The unreviewed changes the over-broad accepts cleared (T56 log path, T77 filing named, T76 make events-refile now takes FROM=) are ruled within and not re-reviewed, T76 being landed and archived.",
+     "class": "within",
+     "why": "This ruling is the reviewer's own, not the author's 'Ruled here', and it rests on the before/after fragments the section quotes, not on the blocks' full text, which the bundle does not carry. The section's counts check out (28 = 2 + T76's and T77's 2 + 24 templates; 10 = 2 + 1 + 7; 9 = 2 + 7). On those fragments: T56's log path and T77's naming its filed task are typo-scale. T76's change wires its own tool's FROM= argument into its own make target, which is within its task, narrows nothing and leaves no wrong outcome. T76's section is in plan-done.md, which FR-044 says no review reads."
+    },
+    {
+     "id": "T92-left-as-is",
+     "summary": "Left: task_refusal's deferral arm (the decide lint, a separate check), and the four stale BLOCKED entries in plan-review.json, not hand-edited.",
+     "class": "within",
+     "why": "Neither is a defect under constitution XIV: the deferral arm is a different check this task does not touch, and the four entries' sections are archived, so nothing that gates reads them (plan decided finds no section). No request clause asks for either."
+    },
+    {
+     "id": "T92-performance-class",
+     "summary": "Performance work? no.",
+     "class": "within",
+     "why": "T92 fixes plan-review record keeping: what an arbiter accept clears and writes. It neither saves time nor measures where time goes, so neither FR-013 nor the GM's 2026-11-20 widening to measurement work ('this kind of measurement task ... counted as a performance task') reaches it."
+    },
+    {
+     "id": "T92-order",
+     "summary": "Order: before T22, as its line says; beside T96 and T103, whose files it leaves.",
+     "class": "within",
+     "why": "Fix as we go: a known defect in the review gate is fixed before the next step. Sitting beside T96 and T103 is file-disjoint scheduling and defers nothing."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -15491,6 +15573,80 @@
      "summary": "Touches only shape.rs and shape/. Nothing of T99's or T102's files. T96's clippy errors in tree/program/tests.rs, which turned closing-checks run 1 RED, are left as T96's.",
      "class": "within",
      "why": "Keeping to the task's own files narrows nothing asked of T103. The red lint belongs to another task's file and is recorded as BLOCKED on T96, not waved off as T103's."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T92": {
+   "section_sha256": "e68eb0364bb5b1f34feb33adf934f9f0a33589316daf14b10bb07408a2f0ff07",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T92-D1-scope",
+     "summary": "An arbiter accept clears only the owed/BLOCKED blocks inside the sections of the tasks its trigger names (round trigger #<task>, or the ask subject's task ids via named_tasks), plus their removed blocks; a block outside every named span is not cleared. Scope is read from the trigger, never the question's prose.",
+     "class": "within",
+     "why": "A defect fix (fix as we go; constitution XIV's 'a check that passes bad work'): measured 2026-11-21, four accepts cleared 28, 10, 9 and 2 blocks outside the asked task's section, including T76's and T77's unreviewed changes. The rulings themselves scope the accept to the asked task ('This accept stands as the verdict of T79's plan review on the section as it reads now'; T67's and T33's likewise), and FR-043 keeps the verdict per block, so a task round's accept covering only that task's blocks implements what the arbiter ruled and narrows nothing the GM asked."
+    },
+    {
+     "id": "T92-D1-no-task-named",
+     "summary": "An accept whose trigger names no task (5 of 21 accepted plan asks, measured) clears the whole plan as before.",
+     "class": "within",
+     "why": "Keeps the existing behavior for asks whose subject was the plan (e.g. ask:420-plan-round3, whose ruling is 'The plan stands as it reads now'); the question was the plan, so the whole plan is its verdict's scope."
+    },
+    {
+     "id": "T92-D1-named-no-section",
+     "summary": "A named task with no section in plan.md or plan-done.md: the whole plan's scope, as plan decided (decision_refusal) reads such a task.",
+     "class": "within",
+     "why": "This is the one arm that keeps whole-plan clearing for a named task, and it is not the defect surviving. A task with no section anywhere has no blocks of its own, so its decisions can only be in the plan-stage blocks, and plan decided (decision_refusal) already reads it that way. For such a task the question put to the arbiter was the plan, so the accept's scope matches the question. The over-clearing the section fixes happened only where the named task HAD a section and blocks outside it were cleared too, and D1 ends that."
+    },
+    {
+     "id": "T92-D1-archived-section",
+     "summary": "A named task whose section is archived (plan-done.md only): nothing recorded, never the whole plan.",
+     "class": "within",
+     "why": "FR-044: no review reads plan-done.md and a removed section owes no review, so there is nothing to record; refusing to fall back to the whole plan prevents the over-clearing this task fixes."
+    },
+    {
+     "id": "T92-D1-convention",
+     "summary": "Labeled CONVENTION: the trigger is the scope source because its subject is already a machine-read id (the GM 2026-10-25, the algorithmically easier route where the record is silent).",
+     "class": "within",
+     "why": "A mechanism choice inside the fix, applying a standing GM rule; it decides no question the request or rulings settle differently."
+    },
+    {
+     "id": "T92-D2-task-verdict",
+     "summary": "Each named task's tasks.<id> is written CLEAR, declared round-arbiter, at its section digest, with the replaced reviewer entry kept as accepted_over; the tick, push, plan decided and T84's builder-stop guard read that one entry.",
+     "class": "within",
+     "why": "Feature 409 (an ask with REVIEW=plan stands as the plan review's verdict) and each cited ruling ('this accept is the plan review's verdict on T67's plan section') require the accept to BE the task verdict; measured 2026-11-21 the store held T33, T46, T67 and T79 BLOCKED though each landed on an accept - a gate reading wrong. Writing it fixes that defect."
+    },
+    {
+     "id": "T92-D3-output-and-batch",
+     "summary": "make arbiter-ruled names the scope, each heading recorded CLEAR and the task verdict; a batch's plan accept (BATCH=1) is applied as a single ruling's is.",
+     "class": "within",
+     "why": "The output change makes the fix visible where a bare count hid 28 blocks; the batch path recording a plan accept but never applying it is a found defect (observed 2026-11-21 by grep -rn arbiter_accept rust/), fixed here as fix-as-we-go requires."
+    },
+    {
+     "id": "T92-unreviewed-changes-ruled",
+     "summary": "The unreviewed changes the over-broad accepts cleared (T56 log path, T77 filing named, T76 make events-refile now takes FROM=) are ruled within and not re-reviewed, T76 being landed and archived.",
+     "class": "within",
+     "why": "This ruling is the reviewer's own, not the author's 'Ruled here', and it rests on the before/after fragments the section quotes, not on the blocks' full text, which the bundle does not carry. The section's counts check out (28 = 2 + T76's and T77's 2 + 24 templates; 10 = 2 + 1 + 7; 9 = 2 + 7). On those fragments: T56's log path and T77's naming its filed task are typo-scale. T76's change wires its own tool's FROM= argument into its own make target, which is within its task, narrows nothing and leaves no wrong outcome. T76's section is in plan-done.md, which FR-044 says no review reads."
+    },
+    {
+     "id": "T92-left-as-is",
+     "summary": "Left: task_refusal's deferral arm (the decide lint, a separate check), and the four stale BLOCKED entries in plan-review.json, not hand-edited.",
+     "class": "within",
+     "why": "Neither is a defect under constitution XIV: the deferral arm is a different check this task does not touch, and the four entries' sections are archived, so nothing that gates reads them (plan decided finds no section). No request clause asks for either."
+    },
+    {
+     "id": "T92-performance-class",
+     "summary": "Performance work? no.",
+     "class": "within",
+     "why": "T92 fixes plan-review record keeping: what an arbiter accept clears and writes. It neither saves time nor measures where time goes, so neither FR-013 nor the GM's 2026-11-20 widening to measurement work ('this kind of measurement task ... counted as a performance task') reaches it."
+    },
+    {
+     "id": "T92-order",
+     "summary": "Order: before T22, as its line says; beside T96 and T103, whose files it leaves.",
+     "class": "within",
+     "why": "Fix as we go: a known defect in the review gate is fixed before the next step. Sitting beside T96 and T103 is file-disjoint scheduling and defers nothing."
     }
    ],
    "verdict": "CLEAR"

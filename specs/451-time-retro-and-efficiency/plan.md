@@ -1088,31 +1088,98 @@ docs/performance-checklist.md answers.
 **Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
 
 
-### T92 (<why: the finding or measurement that files it>)
+### T92 (an arbiter's accept with REVIEW=plan on one task's round recorded CLEAR for every changed block of the plan - `make arbiter-ruled` on `ask:451-T79-third-plan-round` replied "28 plan block(s) recorded CLEAR", 2 of them T79's - and wrote no task verdict, so the store the tick, the push, `plan decided` and T84's builder-stop guard read held T33's, T46's, T67's and T79's BLOCKED though each landed on an accept, measured 2026-11-21 (plan-review.json's history; T84's replay, its item 4))
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: the accept clears the blocks its question names and writes the named tasks' verdicts, in the one function every door
+  calls - `plan::record::arbiter_accept` (`rust/gate/crates/plan/src/plan/record.rs`), which `make arbiter-ruled` and its batch (the
+  arbiter crate's `plan_accept`, `rust/gate/crates/arbiter/src/arbiter.rs`) and `make plan-verdict ARBITER=` (`l7r-gate plan
+  arbiter-accept`) reach:
+  - THE MEASUREMENT, measured 2026-11-21 (`/tmp/t92/measure.py`, `m3.py`, `m5.py`: every version of plan-review.json in git, each
+    accept's `block_reviews` row at the commit that added it, plan.md at that commit, each block's earlier reviewed text from
+    `.git/plan-seen`):
+    - `ask:451-T79-third-plan-round` (commit `d5e743e846`) cleared 28 blocks: T79's own 2, T76's and T77's changed blocks, and 24
+      `make task-add` templates, byte for byte (T80-T91, a section and an Approach each).
+    - `ask:451-T67-third-plan-round` (`69a652dc69`) cleared 10: T67's own 2, T56's changed block, 7 templates (T51 Approach, T71, T73,
+      T74).
+    - `ask:451-T33-third-round` (`aea9e74ea4`) cleared 9: T33's own 2, 7 templates (T48 Approach, T49-T51).
+    - `ask:451-T46-fourth-round` (`90afb2aa3f`) cleared 2, neither of them T46's (its blocks were CLEAR already): `## Complexity
+      Tracking` (a blank line) and T36 Approach (plan-archive lines and a blank line).
+    - The unreviewed changes among the other tasks' blocks: T56's a log path (`/tmp/t56/red-kept.log` to `red.log`); T77's "needs a
+      task the caller files" to "is filed as T78" (a filing named); T76's "`make events-refile` itself is left: the Makefile is not
+      among this task's files" to "takes `FROM=<events dir>` (wired by the session after the run ...)" - the one that changes what was
+      built, never judged by spec-fidelity. None is a narrowing decision. Ruled here: T76's is a `within` change (its own tool's
+      argument wired into its own make target) and a wrong outcome nowhere - no defect (constitution XIV), and T76 is landed and
+      archived, so it is not re-reviewed.
+    - The store now, measured 2026-11-21 (plan-review.json's `tasks`): T33, T46, T67 and T79 each `BLOCKED`, declared `spec-fidelity`.
+      All four sections are in plan-done.md, so `l7r-gate plan decided <root> 451 <task>` exits 0 for each only because it finds no
+      section - vacuous, not a verdict read.
+  - THE SCOPE (D1): read from the trigger alone, never from the question's prose (T33's ask names T49 to T51, filed, not asked about):
+    a round trigger's `#<task>` (the task whose rounds `review_round_hooks` counts), or the task ids of an ask's subject
+    (`ask:451-T79-third-plan-round`, `ask:427-plan-T07-T11`, `named_tasks`).
+    - A named task with a section in plan.md: the owed or BLOCKED blocks lying inside that section's spans, by offset (`section_spans`,
+      `task_sections`' own reading; a block outside every named span is not cleared - failing closed), its removed blocks, and its task
+      verdict (D2).
+    - No task named - 5 of the 21 accepted plan asks on record (`ask:420-plan-round3`, `443-plan-round-3`, `444-plan-round-3`,
+      `444-a11-plan-d7`, `449-phase2-plan-round3`; the 11 accepted round triggers each name one), measured 2026-11-21 (every
+      `specs/*/arbiter.jsonl`): the whole plan's, as before - the question was the plan.
+    - A named task with no section anywhere (plan.md or plan-done.md): the whole plan's, as `plan decided` reads such a task (its
+      decisions are the plan-stage review's, `decision_refusal`).
+    - A named task whose section is archived (plan-done.md alone), as a `make plan-verdict ARBITER=` re-applied after its tick meets:
+      nothing recorded, never the whole plan.
+    - Labeled CONVENTION, the builder's: where the record is silent, the algorithmically easier route (the GM 2026-10-25) - the trigger
+      is where the question's subject is already a machine-read id.
+  - THE VERDICT (D2): each named task's `tasks.<id>` written CLEAR, `declared: round-arbiter`, at its section's digest, its one
+    decision the trigger; the reviewer's entry it replaces kept beside it as `accepted_over` (an accept over an accept carries the
+    reviewer's forward). The tick (`owed_for`, through `judge_in`'s `ruled_tasks`), the push (`push_owed`, the same), `plan decided`
+    (`task_current`) and T84's builder-stop guard (`builder_stop_hooks.rs`, which asks `plan decided`) all read that entry, so the one
+    write reaches the four and none of their readings changes.
+  - THE OUTPUT (D3): `make arbiter-ruled` names the scope, each heading it recorded CLEAR and the task verdict, where a bare count hid
+    the 28; and a batch's plan accept (`make arbiter-ruled BATCH=1`) is applied as a single ruling's is - found here, measured 2026-11-21
+    (`ruled_batch_cli` read): it recorded the ruling and never applied it.
+  - Left as they are: the deferral arm of `task_refusal` (the decide lint's, a separate check); the four BLOCKED entries in
+    plan-review.json, not hand-edited (their sections archived, read by nothing that gates).
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| an accept clears the blocks its question names and writes the named tasks' verdicts; `arbiter-ruled` and its batch name them | n/a - no map | n/a | none | n/a |
 
 ### T92 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
-8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+1. **The goal, in the world.** No map changes. A round arbiter's accept on one task's plan round is that task's plan-review verdict
+   and no other's: the tick, the push, `plan decided` and the builder-stop guard read the task as reviewed, and a second task's or a
+   shared block changed since its review stays owed.
+2. **The constraints.** T92's line; feature 409 (an ask with REVIEW=plan stands as the plan review's verdict); feature 385 T16 (an
+   accept past the round cap); 375 FR-003a and FR-043 (a task's section, the blocks per digest); 451 T84 (the gate per task, the
+   builder-stop guard); the ground rules of the brief (the arbiter crate's ruling path and the plan crate's store alone).
+3. **Where each comes from.** G: the GM's process rulings that the arbiter's ruling is binding and is the review's verdict (409). O:
+   the measurement above; T84's replay (its item 4). R: none - a process task.
+4. **Do they describe the world here?** Yes, measured 2026-11-21 (the measurement above, on this clone's plan-review.json and git
+   history): the four accepts each cleared blocks outside the asked task's section and none wrote its task verdict.
+5. **The order.** Before T22, as its line says; beside T96 (`make_only_hooks/interp`, `shared::tree`'s program module,
+   `event_log_hooks/fields.rs`, `land-alone.sh`) and T103 (`shared::shape`, `shared::regex`), whose files this task leaves.
+6. **The exits.** Green: the red-first tests and this task's closing checks (`make closing-checks T=T92 F=451`). Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None: the one function both doors already call, and the store every reader already reads.
+8. **The budget.** One landing. The accept adds one read of plan-done.md and one heading scan of plan.md per ruling.
+9. **Done, measured.** The red-first pair, measured 2026-11-21 (`make rust-test CRATE=rust/gate/crates/plan` and `CRATE=rust/gate/crates/arbiter`
+   on the sources with the accept's new return type alone and HEAD's logic): the plan crate 161 passed and 4 failed
+   (`/tmp/t92/red-plan2.log`: T01's question cleared `## Shared` and `## T02 the wells` beside `## T01 the bath`; T01's task verdict
+   read `BLOCKED` where the shared block left owed keeps the block arm from carrying it; the two-task, archived-section and
+   removed-block cases), the arbiter crate 32 passed and 2 failed (`/tmp/t92/red-arbiter.log`: "4 plan block(s) recorded CLEAR - the
+   accept is the plan's verdict" on T01's ask; the batch applied nothing); with the fix, 166 and 34 passed and both crates' coverage
+   clean, measured 2026-11-21 (the same commands and `l7r-gate.sh rust cover`, `/tmp/t92/cover.log`), then this task's closing checks.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** A session sees `make arbiter-ruled` name the blocks and the task its accept recorded, its tick and push read
+    that task as reviewed, and a block the question did not name still owed - where the accept on T79's round recorded 28 blocks,
+    T76's and T77's changes among them, and left T79's verdict BLOCKED.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?**
+- `make arbiter-ruled BATCH=1` recorded a plan-review accept and never applied it as the review's verdict (a batch could carry a plan
+  round trigger or a REVIEW=plan ask; `ruled_batch_cli` called nothing of the plan): fixed here. Observed 2026-11-21, method: every
+  caller of the accept (`grep -rn arbiter_accept rust/`): `ruled_cli` and `l7r-gate plan arbiter-accept` call it, `ruled_batch_cli`
+  did not, and all three now reach the one scoped function.
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** no
 
 
 <!-- plan-archive: T93 to T86 moved to plan-done.md, 2026-11-21 (feature 375 FR-044) -->
