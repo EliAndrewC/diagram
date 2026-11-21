@@ -13,6 +13,7 @@ use crate::escape::drop_search_segments;
 use crate::log;
 use crate::protocol::{Answer, Event, Guard};
 use crate::session::Session;
+use crate::shape::quoted_spans;
 use crate::state::field;
 use crate::tree::walk;
 
@@ -75,14 +76,18 @@ static HELD_SHAPES: LazyLock<Vec<Regex>> = LazyLock::new(|| {
             r"[\w.~$-]*/[\w./~$-]+|[\w-]+\.(?:md|py|sh|html|json|jsonl|txt|toml|js|css|ya?ml|csv)\b",
         ),
         re(r#"(['"])[\w\\.?*+()\[\]{}|-]{1,40}\1"#),
-        re(
-            r#"(?s)re\.(?:compile|search|match|fullmatch|split|sub|subn|findall|finditer)\(\s*[rbuf]{0,2}(['"])(?:\\.|(?!\1).)*\1"#,
-        ),
     ]
+});
+/// A Python `re` call through its pattern argument's opening quote. The held shape was this and the quoted string after it,
+/// `(?s)re\.(...)\(\s*[rbuf]{0,2}(['"])(?:\\.|(?!\1).)*\1`, whose backtracking search held an argument nothing closes before forty
+/// escapes past 30 s of CPU (451 T108); the argument is read by shape's scan (`re_call_patterns`).
+static RE_CALL: LazyLock<Regex> = LazyLock::new(|| {
+    re(
+        r#"re\.(?:compile|search|match|fullmatch|split|sub|subn|findall|finditer)\(\s*[rbuf]{0,2}['"]"#,
+    )
 });
 static HEREDOC_BODY: LazyLock<Regex> =
     LazyLock::new(|| re(r#"(?s)<<-?\s*(['"]?)(\w+)\1[^\n]*\n(.*?)\n[ \t]*\2\b"#));
-static QUOTED_SPAN: LazyLock<Regex> = LazyLock::new(|| re(r#"(?s)(["'])(?:\\.|(?!\1).)*\1"#));
 static SEPARATOR: LazyLock<Regex> = LazyLock::new(|| re(r"&&|\|\||;|\||\n"));
 static SED_EXEC: LazyLock<Regex> = LazyLock::new(|| re(r"-exec\s+sed\b"));
 static HEREDOC_TO: LazyLock<Regex> = LazyLock::new(|| {
@@ -214,8 +219,10 @@ fn masked(cmd: &str) -> String {
         }
     }
     let blanked = String::from_utf8_lossy(&bytes).into_owned();
-    for m in QUOTED_SPAN.find_iter(&blanked).map_while(Result::ok) {
-        bytes[m.start() + 1..m.end() - 1].fill(b' ');
+    // the quoted strings read by shape's scan, as the pattern `(["'])(?:\\.|(?!\1).)*\1` found them: its backtracking search held a
+    // quote nothing closes before forty escapes past 30 s of CPU (451 T108)
+    for (at, end) in quoted_spans(&blanked) {
+        bytes[at + 1..end].fill(b' ');
     }
     String::from_utf8_lossy(&bytes).into_owned()
 }
@@ -296,7 +303,25 @@ fn held_ranges(cmd: &str) -> Vec<Held> {
                 .map(|m| (m.start(), m.end(), Kind::Mention)),
         );
     }
+    held.extend(re_call_patterns(cmd));
     held
+}
+
+/// Each Python `re` call's pattern argument, held from its `re.` through the quote closing it, as the held shape's search found
+/// them (451 T108): the argument is the scan's first quoted string of the text from the call's quote, where it opens there; a call
+/// whose quote nothing closes holds nothing, and the search goes on from the character after its `r`, past a closed one from its end.
+fn re_call_patterns(cmd: &str) -> Vec<Held> {
+    let (mut out, mut from) = (Vec::new(), 0);
+    while let Ok(Some(m)) = RE_CALL.find_from_pos(cmd, from) {
+        let quote = m.end() - 1;
+        if let Some(&(0, close)) = quoted_spans(&cmd[quote..]).first() {
+            out.push((m.start(), quote + close + 1, Kind::Mention));
+            from = quote + close + 1;
+        } else {
+            from = m.start() + 1;
+        }
+    }
+    out
 }
 
 /// The held ranges as one sorted, non-overlapping list; a range the sed shape covers stays a warning.

@@ -111,8 +111,9 @@ pub fn strip_quotes(cmd: &str) -> String {
 /// the one the search returns, takes a backslash with the character after it only where a quote of its kind still stands after the
 /// pair (else no reading from there reaches one), a backslash alone else, and closes at the first quote of its kind it meets; a quote
 /// nothing after it closes opens nothing. A test holds the two equal on every text to 7 characters over `"`, `'`, `\`, `a`, a newline
-/// and `é` (`tests/quotes.rs`).
-fn quoted_spans(text: &str) -> Vec<(usize, usize)> {
+/// and `é` (`tests/quotes.rs`). Public for `wait` and `house_style_hooks`, whose copies of the pattern hung the same way (451 T108).
+#[must_use]
+pub fn quoted_spans(text: &str) -> Vec<(usize, usize)> {
     let b = text.as_bytes();
     let last = |q: u8| b.iter().rposition(|&c| c == q);
     let (double, single) = (last(b'"'), last(b'\''));

@@ -322,3 +322,90 @@ fn a_spelling_past_a_million_steps_is_corrected() {
     assert!(old_limit.is_match(&text).is_err());
     assert!(within(move || super::americanize(&text)).ends_with(&format!("the {WORD_FIXED}")));
 }
+
+/// A heredoc body this guard leaves unblanked (`<<\EOF`, which `HEREDOC_BODY` does not read and the walk carries out) holding `text`
+/// and then a quote no later quote closes before forty escapes: 2^40 tries for the backtracking search of a quoted string (451 T108).
+fn unclosed_in_body(text: &str) -> String {
+    format!(
+        "cat <<\\EOF > f.md\n{WORD} {text}'{}\nEOF",
+        "\\n".repeat(40)
+    )
+}
+
+/// 451 T108: the separators' mask read the command's quoted strings with that search (`QUOTED_SPAN`); before the fix the guard gave
+/// no answer on the command in 10 s (measured 2026-11-21, the T108 plan section), and the plan, under [`within`]'s bound, none.
+#[test]
+fn a_quote_nothing_closes_is_masked_in_time() {
+    let (out, notes, _) = within(|| run(&unclosed_in_body("it")));
+    assert!(out.contains(WORD_FIXED) && !out.contains(WORD), "{out}");
+    assert!(!notes.is_empty());
+}
+
+/// 451 T108: a Python `re` call's pattern was held by the same search after its `(` (`HELD_SHAPES`); an unclosed one is read in time.
+#[test]
+fn a_pattern_argument_nothing_closes_is_held_in_time() {
+    let (out, notes, _) = within(|| run(&unclosed_in_body("re.compile(")));
+    assert!(out.contains(WORD_FIXED) && !out.contains(WORD), "{out}");
+    assert!(!notes.is_empty());
+}
+
+/// Every text of up to `n` of `pieces`, the empty one among them.
+fn texts_of(pieces: &[&str], n: usize) -> Vec<String> {
+    let (mut texts, mut longest) = (vec![String::new()], vec![String::new()]);
+    for _ in 0..n {
+        longest = longest
+            .iter()
+            .flat_map(|t| pieces.iter().map(move |p| format!("{t}{p}")))
+            .collect();
+        texts.extend(longest.iter().cloned());
+    }
+    texts
+}
+
+/// 451 T108: the mask blanks the quoted strings the pattern it replaced (`QUOTED_SPAN`, built here) found, on every text to 6
+/// characters over a double and a single quote, a backslash, a letter, a newline and a character of two bytes.
+#[test]
+fn the_mask_blanks_the_quoted_strings_the_pattern_found() {
+    let pattern = crate::regex::build(r#"(?s)(["'])(?:\\.|(?!\1).)*\1"#).unwrap();
+    for text in texts_of(&["\"", "'", "\\", "a", "\n", "é"], 6) {
+        let mut bytes = text.as_bytes().to_vec();
+        for m in pattern.find_iter(&text).map_while(Result::ok) {
+            bytes[m.start() + 1..m.end() - 1].fill(b' ');
+        }
+        assert_eq!(
+            super::masked(&text),
+            String::from_utf8_lossy(&bytes),
+            "{text:?}"
+        );
+    }
+}
+
+/// 451 T108: the `re` calls' arguments are held where the shape they replaced (built here) held them, on every text of up to 5 of
+/// these pieces - two calls, one with a blank before its argument, a prefix, the quotes, a backslash, a letter, a newline and `é`.
+#[test]
+fn a_pattern_argument_is_held_where_the_shape_held_it() {
+    let shape = crate::regex::build(r#"(?s)re\.(?:compile|search|match|fullmatch|split|sub|subn|findall|finditer)\(\s*[rbuf]{0,2}(['"])(?:\\.|(?!\1).)*\1"#).unwrap();
+    let pieces = [
+        "re.compile(",
+        "re.subn( ",
+        "r",
+        "'",
+        "\"",
+        "\\",
+        "a",
+        "\n",
+        "é",
+    ];
+    for text in texts_of(&pieces, 5) {
+        let want: Vec<(usize, usize)> = shape
+            .find_iter(&text)
+            .map_while(Result::ok)
+            .map(|m| (m.start(), m.end()))
+            .collect();
+        let got: Vec<(usize, usize)> = super::re_call_patterns(&text)
+            .into_iter()
+            .map(|(a, b, _)| (a, b))
+            .collect();
+        assert_eq!(got, want, "{text:?}");
+    }
+}

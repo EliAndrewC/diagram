@@ -1,7 +1,8 @@
 //! The shapes of a wait (`scripts/hooks/lib/hm_shape.py`'s wait half - feature 449 T009 decision (a)): a `sleep` inside a loop, the
 //! one permitted wait (backgrounded, watching a file) and its proof of life, a process pattern that matches its own command and its
 //! bracketing, the 90-minute ceiling, and a periodic report with the cron that keeps its schedule. Each pattern is the Python's
-//! verbatim (research R8); the reasons behind each stand in `hm_shape.py`'s comments, kept in git history.
+//! verbatim (research R8) but its `QUOTED`, a quoted string read by `shape::quoted_spans` (451 T108: the pattern backtracked
+//! exponentially on a quote nothing closes); the reasons behind each stand in `hm_shape.py`'s comments, kept in git history.
 
 use std::path::Path;
 use std::sync::LazyLock;
@@ -9,7 +10,7 @@ use std::sync::LazyLock;
 use fancy_regex::{Captures, Regex};
 use serde_json::Value;
 
-use super::shape::strip_quotes;
+use super::shape::{quoted_spans, strip_quotes};
 
 fn re(pattern: &str) -> Regex {
     crate::regex::build(pattern).unwrap_or_else(|e| unreachable!("a guard's own pattern: {e}"))
@@ -50,7 +51,6 @@ pattern!(
 pattern!(STDERR_NULL, r"\s2>\s*/dev/null");
 pattern!(SINGLE_PIPE, r"(?<!\|)\|(?!\|)");
 pattern!(JOIN, r"&&|\|\|");
-pattern!(QUOTED, r#"(?s)(["'])(?:\\.|(?!\1).)*\1"#);
 pattern!(QUOTE_PUNCT, r"[|<>;&]");
 pattern!(
     PROCMATCH,
@@ -127,12 +127,15 @@ fn cond_grammar(cond: &str) -> Option<String> {
     }
     let cond = CEILING_CLAUSE.replace_all(cond, " ");
     let cond = PROOF_CLAUSE.replace_all(&cond, " ");
-    let neutral = QUOTED.replace_all(&cond, |c: &Captures| {
-        let whole = c.get(0).map_or("", |m| m.as_str());
-        QUOTE_PUNCT
-            .replace_all(&whole[1..whole.len() - 1], "")
-            .into_owned()
-    });
+    // each quoted string its body, its punctuation dropped: the Python's `QUOTED` read by shape's scan, which answers where the
+    // pattern's backtracking search did not - a quote nothing closes before forty escapes held it past 10 s (451 T108)
+    let (mut neutral, mut from) = (String::new(), 0);
+    for (at, end) in quoted_spans(&cond) {
+        neutral.push_str(&cond[from..at]);
+        neutral.push_str(&QUOTE_PUNCT.replace_all(&cond[at + 1..end], ""));
+        from = end + 1;
+    }
+    neutral.push_str(&cond[from..]);
     Some(STDERR_NULL.replace_all(&neutral, " ").into_owned())
 }
 

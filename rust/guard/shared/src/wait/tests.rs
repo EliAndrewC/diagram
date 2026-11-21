@@ -278,3 +278,83 @@ fn a_loop_held_by_a_file_is_no_period() {
         json!({"run_in_background": true, "command": "while [ -f x ]; do date; sleep 60; done"});
     assert_eq!(periodic(&bg, "."), None);
 }
+
+/// The variable that makes a child run read the loop (451 T108).
+const LOOP_CHILD: &str = "L7R_WAIT_QUOTE_IN_TIME";
+
+/// A file-watching loop whose condition holds a quote no later quote closes, then forty escapes: 2^40 tries for the backtracking
+/// search `cond_grammar` once neutralized its quotes with (`QUOTED`, the pattern shape's `quoted_spans` replaced - 451 T103).
+fn unclosed_loop() -> String {
+    format!(
+        "until grep -q it's {} /tmp/a.log; do sleep 5; done",
+        "\\n".repeat(40)
+    )
+}
+
+/// 451 T108: the loop is read in a process of its own - this test run again as that process - under T103's deadline (a GUESS: the
+/// fixed read answers in milliseconds). Before the fix it gave no answer in 10 s (measured 2026-11-21, the T108 plan section).
+#[test]
+fn a_loop_whose_quote_nothing_closes_is_read_in_time() {
+    use std::time::{Duration, Instant};
+    if std::env::var_os(LOOP_CHILD).is_some() {
+        println!("T108 read {}", file_watching_loop(&unclosed_loop()));
+        return;
+    }
+    let mut child = std::process::Command::new(std::env::current_exe().unwrap())
+        .args([
+            "--exact",
+            "wait::tests::a_loop_whose_quote_nothing_closes_is_read_in_time",
+            "--nocapture",
+        ])
+        .env(LOOP_CHILD, "1")
+        .stdout(std::process::Stdio::piped())
+        .spawn()
+        .unwrap();
+    let deadline = Instant::now() + Duration::from_secs(10);
+    let done = loop {
+        let status = child.try_wait().unwrap();
+        if status.is_some() || Instant::now() > deadline {
+            break status;
+        }
+        std::thread::sleep(Duration::from_millis(20));
+    };
+    let _ = child.kill();
+    let out = child.wait_with_output().unwrap();
+    let said = String::from_utf8_lossy(&out.stdout);
+    assert!(
+        done.is_some_and(|s| s.success()),
+        "the loop was not read in 10 s: {said}"
+    );
+    // the quote closes nothing, so it neutralizes nothing: the grep of a file is still the permitted watch
+    assert!(said.contains("T108 read true"), "{said}");
+}
+
+/// 451 T108: a condition is neutralized as the pattern the scan replaced (`QUOTED`, built here) neutralized it - each quoted
+/// string its body, its punctuation dropped - on every text to 6 characters over a double and a single quote, a backslash, a letter,
+/// a pipe and a character of two bytes (none of them a ceiling's, a proof's or a discarded stderr's, which the grammar drops first).
+#[test]
+fn a_condition_is_neutralized_as_the_pattern_neutralized_it() {
+    let quoted = crate::regex::build(r#"(?s)(["'])(?:\\.|(?!\1).)*\1"#).unwrap();
+    let punct = crate::regex::build(r"[|<>;&]").unwrap();
+    let (mut texts, mut longest) = (vec![String::new()], vec![String::new()]);
+    for _ in 0..6 {
+        longest = longest
+            .iter()
+            .flat_map(|t| ['"', '\'', '\\', 'a', '|', 'é'].map(|c| format!("{t}{c}")))
+            .collect();
+        texts.extend(longest.iter().cloned());
+    }
+    for text in &texts {
+        let want = quoted.replace_all(text, |c: &fancy_regex::Captures| {
+            let whole = c.get(0).map_or("", |m| m.as_str());
+            punct
+                .replace_all(&whole[1..whole.len() - 1], "")
+                .into_owned()
+        });
+        assert_eq!(
+            super::cond_grammar(text).as_deref(),
+            Some(&*want),
+            "{text:?}"
+        );
+    }
+}
