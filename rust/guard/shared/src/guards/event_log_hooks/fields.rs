@@ -1,8 +1,10 @@
 //! A line's fields beyond its base: a tool call's own (moved here from `event_log_hooks.rs` by feature 451 T04, which would have passed
 //! the 1,000-line file cap), and a background run's (451 T04, FR-002, plan D3, research R2) - `bg` on a backgrounded call's
-//! `PostToolUse`, `inflight` on every `Stop` and `SubagentStop`, and what a completion notice gives its `BgEnd` line.
+//! `PostToolUse`, `inflight` on every `Stop` and `SubagentStop`, and what a completion notice gives its `BgEnd` line - and a Bash
+//! call's write targets, `writes` on its end's line (451 T93, [`bash_writes`]).
 
 use std::collections::HashMap;
+use std::path::Path;
 use std::sync::LazyLock;
 use std::time::{Duration, Instant};
 
@@ -113,6 +115,9 @@ pub(super) fn tool_fields(
 /// runs it waited on (T09). An empty list is written - nothing in flight is a fact the reader books by - and a payload with no list
 /// (a harness before the field) writes none.
 pub(super) fn run_fields(out: &mut Map<String, Value>, ev: &str, payload: &Value) {
+    if matches!(ev, "PostToolUse" | "PostToolUseFailure") {
+        bash_writes(out, payload);
+    }
     if ev == "PostToolUse" {
         if let Some(bg) = payload
             .get("tool_response")
@@ -138,6 +143,59 @@ pub(super) fn run_fields(out: &mut Map<String, Value>, ev: &str, payload: &Value
                 .collect();
             out.insert("inflight".into(), Value::Array(runs));
         }
+    }
+}
+
+/// A Bash call's WRITE TARGETS on its end's line (feature 451 T93): `writes`, the files `shared::tree`'s walk (`walk_judged`, the tree
+/// guards' walk) says the command wrote - a redirect, `sed -i` or `perl -pi`'s files, a file tool's (`cp`, `mv`, `tee`, `touch`, `rm`
+/// and the rest), `dd of=` - each an absolute path, once, in the walk's order. Left out: a program that only reads (`how` "read"), a
+/// target the walk cannot place, and a path that is a directory once the call has ended (a `make`, a `git` subcommand or a Python
+/// program writes where the shell stands, a directory, and `mkdir` makes one: no file a reader can match). A call naming none writes
+/// no field. Written on `PostToolUse` and `PostToolUseFailure` (a `sed -i F && make rust-test` red at its test still wrote F), never
+/// on the start: a start is a call that may be refused (8,370 Bash starts and 8,224 ends in 451's log since 2026-11-20T20:00Z, measured
+/// 2026-11-21, a Python count), so only an end says the command ran, and one line a call keeps the log's growth to one field. A
+/// backgrounded call's end comes at its launch, before its command has run: its writes are named all the same (the walk reads the
+/// command, not the disk), and a directory it has yet to make is named as a path, which names no file a reader can match.
+///
+/// WHY: T86's closing checks set aside the dirty files another task's lines name, and a Bash line named none - the Edit and Write
+/// lines named 127 of the 796 files 2026-11-21's landings changed, measured 2026-11-21 (T86's `/tmp/t86/recall.py`). Its reader is
+/// `scripts/gates/closing-checks.sh`, an exact path match, never a prefix: a `make` at the clone's root would claim the whole clone.
+/// No walk is reused: every guard that walks (main-tree, gm-tree, make-only, readme, gate-write) runs on `PreToolUse` alone, and each
+/// hook event is its own process, so none has walked when this line is written (observed 2026-11-21, method: each guard's `events`).
+/// WHAT IT COSTS: 3.89 ms a Bash call's end (median; p90 7.32, max 19.04), the hook alone at 2.98 ms before, measured 2026-11-21
+/// (`/tmp/t93/cost.py`: 600 of the night's commands through the binary `--only event-log-hooks PostToolUse` before and after, 3 runs
+/// each) - nearly all the walk's first use in a process, its patterns compiled (3.2-8.6 ms a first walk, 9-57 us a second, measured
+/// 2026-11-21, a scratch binary over `shared::tree`), which every Bash start already pays in main-tree; the walk itself is 69 us
+/// (median, p99 1.76 ms over 9,637 commands, measured the same way). The start was priced and not taken (the session's builder, T93).
+fn bash_writes(out: &mut Map<String, Value>, payload: &Value) {
+    if text_of(payload.get("tool_name")) != "Bash" {
+        return;
+    }
+    let command = text_of(payload.pointer("/tool_input/command"));
+    if command.trim().is_empty() {
+        return;
+    }
+    let cwd = text_of(payload.get("cwd"));
+    let home = crate::env::opt("HOME").unwrap_or_default();
+    let walk = crate::tree::walk_judged(
+        &command,
+        Some(cwd.as_str()).filter(|c| !c.is_empty()),
+        "",
+        &home,
+    );
+    let mut paths: Vec<String> = Vec::new();
+    for path in walk
+        .targets
+        .into_iter()
+        .filter(|t| t.how != "read")
+        .filter_map(|t| t.path)
+    {
+        if path.starts_with('/') && !paths.contains(&path) && !Path::new(&path).is_dir() {
+            paths.push(path);
+        }
+    }
+    if !paths.is_empty() {
+        out.insert("writes".into(), Value::from(paths));
     }
 }
 

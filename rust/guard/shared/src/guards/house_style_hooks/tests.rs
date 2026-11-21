@@ -275,19 +275,50 @@ fn a_json_value_is_americanized_its_keys_as_written() {
     );
 }
 
-/// `f`'s answer, or a failure once it runs past 20 s (feature 449 T185: a quadratic search, or a scan over an error it repeats, must
-/// fail the test rather than hang it).
+/// The CPU time past which a search fails its test, in nanoseconds of its own thread's: 30 s, a CONVENTION and a knob (451 T81), about
+/// 10x the spelling scan's 3.2 s on the host's slowest core and 4x its 7.4 s worst with 88 copies at once (measured 2026-11-21, `taskset`
+/// and 88 copies of the test binary, each timed around its process - the T81 plan section's item 4).
+const CPU_BOUND_NS: u64 = 30_000_000_000;
+
+/// `f`'s answer, or a failure once the thread running it has spent [`CPU_BOUND_NS`] on the CPU (feature 449 T185: a quadratic search,
+/// or a scan over an error it repeats, must fail the test rather than hang it). The bound is the work done - that thread's own CPU time,
+/// the first field of its `/proc/<pid>/task/<tid>/schedstat` - never the wall time (451 T81): a busy host stretches the wall time, not
+/// the work. 20 s of wall time failed this test's good work at a load of 82, and on one CPU shared 16 ways cut the scan off after 1.2 s
+/// of its CPU, where it needs 1.6 s.
 fn within<T: Send + 'static>(f: impl FnOnce() -> T + Send + 'static) -> T {
-    let (tx, rx) = std::sync::mpsc::channel();
-    let _run = std::thread::spawn(move || tx.send(f()));
-    rx.recv_timeout(std::time::Duration::from_secs(20))
-        .expect("the search ran past its bound")
+    use std::sync::mpsc::{channel, RecvTimeoutError::Timeout};
+    let (at, its_stat) = channel();
+    let (tx, rx) = channel();
+    let _run = std::thread::spawn(move || {
+        let me = std::fs::read_link("/proc/thread-self");
+        let _ = at.send(me.map(|t| std::path::Path::new("/proc").join(t).join("schedstat")));
+        tx.send(f())
+    });
+    let stat = its_stat.recv().expect("it starts").expect("a Linux /proc");
+    loop {
+        match rx.recv_timeout(std::time::Duration::from_millis(100)) {
+            Ok(answer) => return answer,
+            Err(e) => assert_eq!(e, Timeout, "the search panicked"),
+        }
+        // A thread that sent its answer and ended since has no file: 0, and the next receive takes the answer.
+        let ns: u64 = std::fs::read_to_string(&stat)
+            .ok()
+            .and_then(|s| s.split_whitespace().next()?.parse().ok())
+            .unwrap_or(0);
+        assert!(ns < CPU_BOUND_NS, "ran past its CPU bound: {ns} ns");
+    }
 }
 
 /// A text past a million steps (feature 449 T185, the edit guard T151's search named): the spelling scan's `.flatten()` repeated the
-/// error `fancy_regex` gave at its old limit without advancing, so the correction spun; it reads to the end.
+/// error `fancy_regex` gave at its old limit without advancing, so the correction spun; it reads to the end. The text is past that
+/// limit by the limit firing on it (451 T81), so a shorter text cannot leave this passing over a scan the limit would cut short.
 #[test]
 fn a_spelling_past_a_million_steps_is_corrected() {
     let text = format!("{}the {WORD}", "plain words of a long text ".repeat(50_000));
+    let old_limit = crate::regex::builder(&format!(r"(?i)\b{WORD}\b"))
+        .backtrack_limit(1_000_000)
+        .build()
+        .unwrap();
+    assert!(old_limit.is_match(&text).is_err());
     assert!(within(move || super::americanize(&text)).ends_with(&format!("the {WORD_FIXED}")));
 }

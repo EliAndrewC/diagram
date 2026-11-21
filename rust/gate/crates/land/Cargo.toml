@@ -22,3 +22,7 @@ l7r_gate_core = { path = "../core", features = ["testkit"] }
 
 [lints]
 workspace = true
+
+# the landing alone's tests run the script itself (451 T88)
+[package.metadata.l7r]
+reads = ["scripts/land-alone.sh"]

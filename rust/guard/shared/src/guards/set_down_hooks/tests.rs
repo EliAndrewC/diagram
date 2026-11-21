@@ -11,8 +11,8 @@ use crate::session::Session;
 use crate::tool::ask;
 
 const TASKS: &str = "- [x] T01 done\n- [ ] T02 the next thing\n- [ ] T03 later\n- [ ] GM review (make gm-reviewed F=385)\n";
-const START: &str =
-    "{\"feature\": \"385-x\", \"task\": \"T02\", \"utc\": \"2026-10-18T23:00:00Z\"}\n";
+// T03 started too (451 T88): with no task left never started, work running lets the turn end whatever the builder count
+const START: &str = "{\"feature\": \"385-x\", \"task\": \"T03\", \"utc\": \"2026-10-18T22:00:00Z\"}\n{\"feature\": \"385-x\", \"task\": \"T02\", \"utc\": \"2026-10-18T23:00:00Z\"}\n";
 
 /// A clone with a started feature and an empty transcript; `closed` gives its spec a status line that closes it.
 fn world(tag: &str, closed: &str) -> (crate::tempdir::TempDir, PathBuf, PathBuf) {
@@ -491,4 +491,178 @@ fn the_performance_reader_s_read_errors_are_errors() {
     std::fs::remove_file(git.join("set-downs.jsonl")).unwrap();
     std::fs::write(git.join("task-starts.jsonl"), [0xff_u8]).unwrap();
     assert!(next_performance(&c, &git, "385-x").is_err());
+}
+
+/// A running agent of the session with its meta file, as Claude Code keeps one beside the transcript.
+fn agent(tr: &Path, id: &str, depth: u64, description: &str) {
+    append(
+        tr,
+        &format!(r#"{{"toolUseResult": {{"agentId": "{id}"}}}}"#),
+    );
+    let dir = tr.with_extension("").join("subagents");
+    std::fs::create_dir_all(&dir).unwrap();
+    std::fs::write(
+        dir.join(format!("agent-{id}.meta.json")),
+        json!({"spawnDepth": depth, "description": description}).to_string(),
+    )
+    .unwrap();
+}
+
+/// 451 T88: ROLLING DISPATCH. Two builders run (T02 editing `rust/x/alpha.rs`, T03); a review agent and a builder's own helper are not
+/// builders. Of the open tasks never started, T04 (performance work) names T02's file and T05 comes after T04, so T06 is named - with
+/// task-start's escape, since T04 is open performance work - until a third builder runs, the knob is met, or no task is left.
+#[test]
+fn a_free_builder_slot_names_the_next_independent_open_task() {
+    let (_dir, c, tr) = world("roll", "no");
+    let events = c.join("events");
+    std::fs::create_dir_all(&events).unwrap();
+    crate::env::set("L7R_EVENTS_DIR", &events);
+    crate::env::unset("L7R_BUILDERS");
+    let edit = |task: &str, rel: &str, extra: &str| {
+        format!(
+            r#"{{"t":"2026-10-18T23:10:00Z","ev":"PostToolUse","tool":"Edit","cat":"edit","by":"a1","path":"{}/{rel}","task":"{task}"{extra}}}"#,
+            c.display()
+        )
+    };
+    std::fs::write(
+        events.join("385-x.jsonl"),
+        [
+            edit("T02", "rust/x/alpha.rs", ""),
+            edit("T02", "specs/385-x/plan.md", ""),
+            edit("T03", "rust/x/delta.rs", r#","fallback":true"#),
+            r#"{"ev":"PostToolUse","cat":"edit","not json"#.to_owned(),
+            edit("T09", "rust/x/epsilon.rs", ""),
+        ]
+        .join("\n"),
+    )
+    .unwrap();
+    std::fs::write(
+        c.join("specs/385-x/tasks.md"),
+        "- [x] T01 done\n- [ ] T02 the next thing\n- [ ] T03 later\n- [ ] T04 [perf] a faster `rust/x/alpha.rs`\n- [ ] T05 tidy after T04\n- [ ] T06 the gamma tool in `scripts/gamma.sh` and delta.rs and tests.rs\n- [ ] T07 epsilon.rs\n- [ ] GM review (make gm-reviewed F=385)\n",
+    )
+    .unwrap();
+    agent(&tr, "a1", 1, "385 T02: the next thing");
+    agent(&tr, "a2", 1, "385 T03 (fresh): later");
+    agent(&tr, "r1", 1, "spec-fidelity on 385's changed blocks");
+    agent(&tr, "h1", 2, "385 T02: a builder's own helper");
+    let text = said(&c, &tr).unwrap();
+    let free = text.contains("a builder slot is free - 2 of 3 builders running (385 T02, 385 T03)");
+    assert!(free, "{text}");
+    assert!(text.contains("(T06 the gamma tool"), "{text}");
+    assert!(text.contains("PERF_LATER_OK=\"385 T04, the open performance work, is started, waits on an open task or touches a running task's files\" make task-start F=385 T=T06"), "{text}");
+    assert!(text.contains("make set-down F=385 WHY="), "{text}");
+    // a performance task free to start is named first, with no escape
+    std::fs::write(
+        c.join("specs/385-x/tasks.md"),
+        "- [ ] T02 the next thing\n- [ ] T03 later\n- [ ] T06 the gamma tool\n- [ ] T08 [perf] a faster beta\n",
+    )
+    .unwrap();
+    let text = said(&c, &tr).unwrap();
+    let first = text.contains("(T08 [perf] a faster beta): make task-start F=385 T=T08,");
+    assert!(first, "{text}");
+    // the knob met: two builders of two
+    crate::env::set("L7R_BUILDERS", "2");
+    assert_eq!(said(&c, &tr), None);
+    crate::env::set("L7R_BUILDERS", "3");
+    // a third builder running: no slot free
+    agent(&tr, "a3", 1, "385 T08: a faster beta");
+    assert_eq!(said(&c, &tr), None);
+    append(&tr, &notice("a3", FINISHED));
+    assert!(said(&c, &tr).unwrap().contains("2 of 3 builders running"));
+    // nothing left never started
+    let starts = std::fs::read_to_string(c.join(".git/task-starts.jsonl")).unwrap();
+    std::fs::write(
+        c.join(".git/task-starts.jsonl"),
+        format!("{starts}{{\"feature\": \"385-x\", \"task\": \"T06\", \"utc\": \"2026-10-19T00:00:00Z\"}}\n{{\"feature\": \"385-x\", \"task\": \"T08\", \"utc\": \"2026-10-19T00:00:00Z\"}}\n"),
+    )
+    .unwrap();
+    assert_eq!(said(&c, &tr), None);
+    crate::env::unset("L7R_EVENTS_DIR");
+}
+
+/// 451 T88: a running builder whose feature has no directory or no log names no file; one in another feature is counted all the same.
+#[test]
+fn a_running_builder_with_no_log_names_no_file() {
+    let (_dir, c, tr) = world("roll-nolog", "no");
+    crate::env::set("L7R_EVENTS_DIR", c.join("no-events"));
+    crate::env::unset("L7R_BUILDERS");
+    std::fs::write(
+        c.join("specs/385-x/tasks.md"),
+        "- [ ] T02 the next thing\n- [ ] T03 later\n- [ ] T04 alpha.rs\n",
+    )
+    .unwrap();
+    agent(&tr, "a1", 1, "385 T02: the next thing");
+    agent(&tr, "a2", 1, "999 T01: a feature with no directory");
+    let text = said(&c, &tr).unwrap();
+    let counted = text.contains("2 of 3 builders running (385 T02, 999 T01)");
+    assert!(counted, "{text}");
+    assert!(text.contains("make task-start F=385 T=T04,"), "{text}");
+    crate::env::unset("L7R_EVENTS_DIR");
+}
+
+/// 451 T88 (its plan review, 2026-11-21): PERFORMANCE WORK FIRST ACROSS EVERY ACTIVE FEATURE (FR-013) - another active feature's open
+/// performance task is named before the started feature's own task that is not performance work.
+#[test]
+fn a_free_slot_names_another_feature_s_performance_task_first() {
+    let (_dir, c, tr) = world("roll-perf", "no");
+    let events = c.join("events");
+    std::fs::create_dir_all(&events).unwrap();
+    crate::env::set("L7R_EVENTS_DIR", &events);
+    crate::env::unset("L7R_BUILDERS");
+    std::fs::write(
+        c.join("specs/385-x/tasks.md"),
+        "- [ ] T02 the next thing\n- [ ] T03 later\n- [ ] T04 a plain tool\n",
+    )
+    .unwrap();
+    std::fs::create_dir_all(c.join("specs/386-y")).unwrap();
+    std::fs::write(
+        c.join("specs/386-y/tasks.md"),
+        "- [ ] T01 [perf] a faster gate\n",
+    )
+    .unwrap();
+    std::fs::write(
+        c.join("specs/386-y/spec.md"),
+        "# F\n\n**Status**: Implemented\n",
+    )
+    .unwrap();
+    let other = r#"{"feature": "386-y", "task": "T00", "utc": "2026-10-18T21:00:00Z"}"#;
+    std::fs::write(
+        c.join(".git/task-starts.jsonl"),
+        format!("{other}\n{START}"),
+    )
+    .unwrap();
+    agent(&tr, "a1", 1, "385 T02: the next thing");
+    let text = said(&c, &tr).unwrap();
+    let first = text.contains("(T01 [perf] a faster gate): make task-start F=386 T=T01,");
+    assert!(first, "{text}");
+    crate::env::unset("L7R_EVENTS_DIR");
+}
+
+/// 451 T88: what `free_slot` cannot read is an error, never a free slot: a running task's event log that is not text, the feature's
+/// plan that is not text, and an interim builder's own transcript that cannot be opened.
+#[test]
+fn a_free_slot_s_unreadable_reads_are_errors() {
+    use std::os::unix::fs::PermissionsExt;
+    let (_dir, c, tr) = world("roll-errors", "no");
+    let events = c.join("events");
+    std::fs::create_dir_all(&events).unwrap();
+    crate::env::set("L7R_EVENTS_DIR", &events);
+    crate::env::unset("L7R_BUILDERS");
+    agent(&tr, "a1", 1, "385 T02: the next thing");
+    let at = tr.to_string_lossy().into_owned();
+    std::fs::write(events.join("385-x.jsonl"), b"\xff\xfe\n").unwrap();
+    assert!(verdict(&c, &at).is_err());
+    std::fs::remove_file(events.join("385-x.jsonl")).unwrap();
+    std::fs::write(c.join("specs/385-x/plan.md"), b"\xff\xfe\n").unwrap();
+    assert!(verdict(&c, &at).is_err());
+    std::fs::remove_file(c.join("specs/385-x/plan.md")).unwrap();
+    assert!(verdict(&c, &at).is_ok());
+    agent(&tr, "a2", 1, "385 T03: later");
+    append(&tr, &notice("a2", WAITING));
+    let own = tr.with_extension("").join("subagents/agent-a2.jsonl");
+    std::fs::write(&own, "").unwrap();
+    std::fs::set_permissions(&own, std::fs::Permissions::from_mode(0o000)).unwrap();
+    assert!(verdict(&c, &at).is_err());
+    std::fs::set_permissions(&own, std::fs::Permissions::from_mode(0o644)).unwrap();
+    crate::env::unset("L7R_EVENTS_DIR");
 }

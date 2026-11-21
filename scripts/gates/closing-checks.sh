@@ -30,9 +30,11 @@
 # THE CALLER'S TASK (451 T86): `make closing-checks T=<task> [F=<feature>]` judges the files and crates the caller's task changed. About
 # 12 of 2026-11-21's closing runs went red only on another builder's half-done files in the same clone - a second `make static` under
 # STATIC_OK or a verdict left owed each (measured 2026-11-21, T86's plan section). The caller's files are the clone's uncommitted files
-# less those another task's edits alone name: a builder's Edit, Write or NotebookEdit line in any feature's event log (not a fallback
-# line, whose task is a guess; not one older than the file's last commit, a landed task's), naming another task and never this one. A
-# file no line names - a Bash write, a generated page - is the caller's, so a miss costs a saving, never a wrong verdict. The listing
+# less those another task's edits alone name: a builder's Edit, Write or NotebookEdit line in any feature's event log, or a Bash call's
+# end naming the file in its `writes` (the files the tree walk says it wrote, 451 T93; the exact path, never a directory's files) - not
+# a fallback line, whose task is a guess; not one older than the file's last commit or than its own task's last landing, a landed
+# task's (451 T93) - naming another task and never this one. A file no line names - a write the walk cannot see (a `make` target's, a generator's, a `git mv`'s), a generated page - is
+# the caller's, so a miss costs a saving, never a wrong verdict. The listing
 # goes to `make static` alone as L7R_RUST_CALLER: a crate whose check key reads none of it is red APART, not counted (`rustc.rs`), so
 # static runs on to its tree-wide steps. Those, hooks-test and quick stay counted whole (T86's plan section: every suite's key reads the
 # guard's and the gate's crates; the tree-wide steps fired on another task's file 0 times that night); a red whose every error names
@@ -61,7 +63,7 @@ if [ -n "$task" ]; then
   common=$(git rev-parse --path-format=absolute --git-common-dir)
   if python3 -I - "$(git rev-parse --show-toplevel)" "${L7R_EVENTS_DIR:-$common/l7r-events}" "$common/task-starts.jsonl" \
     "${CLOSING_FEATURE:-}" "$task" "$dir" > "$dir/split.txt" 2>&1 <<'PY'
-import datetime, glob, json, os, subprocess, sys, time
+import datetime, glob, json, os, re, subprocess, sys, time
 root, events, starts, feature, task, out = sys.argv[1:7]
 git = lambda *a: subprocess.run(['git', '-C', root, *a], capture_output=True, text=True, check=True).stdout
 # the clone's uncommitted files: every task's work in flight (a builder never commits; its landing does)
@@ -71,11 +73,18 @@ while i < len(recs):
     if len(r) > 3:
         dirty.add(r[3:])
         i += r[0] in 'RC'  # a rename's old path follows it
-# each file's last commit: an edit line older than it is a landed task's and claims nothing now (a GUESS window: 7 days)
-since, last, at = time.time() - 7 * 86400, {}, 0
-for l in git('log', '--since=7.days', '--format=@%ct', '--name-only').splitlines():
+# each file's last commit: an edit line older than it is a landed task's and claims nothing now (a GUESS window: 7 days); and each
+# task's last landing (`<feature>: T.. T.. ticked (make land)`): a line older than its own task's landing claims nothing either, the
+# file unchanged by that landing or not (451 T93: T66's 07:41Z edit of rust/guard/CLAUDE.md, after the file's last commit, landed
+# with no change to it and set the file apart from T93's own edit of it, observed 2026-11-21)
+since, last, landed, at = time.time() - 7 * 86400, {}, {}, 0
+for l in git('log', '--since=7.days', '--format=@%ct %s', '--name-only').splitlines():
     if l.startswith('@'):
-        at = int(l[1:])
+        at, _, subject = l[1:].partition(' ')
+        at = int(at)
+        m = re.match(r'(\S+): ((?:T\d+ )+)ticked \(make land\)', subject)
+        for t in (m.group(2).split() if m else []):
+            landed.setdefault((m.group(1), t), at)
     elif l:
         last.setdefault(l, at)
 logs = sorted(glob.glob(os.path.join(events, '*.jsonl')))
@@ -93,17 +102,25 @@ mine = lambda c: c[1] == task and mine_f in (None, c[0])
 pre, claims = root.rstrip('/') + '/', {}
 for p in logs:
     for l in open(p, errors='replace'):
-        if '"PostToolUse"' not in l or '"cat":"edit"' not in l:
+        # an edit tool's end names its path; a Bash call's end its `writes`, the files the tree walk says it wrote (451 T93)
+        edit = '"PostToolUse"' in l and '"cat":"edit"' in l
+        if not edit and '"writes":' not in l:
             continue
         try:
             d = json.loads(l)
         except ValueError:
             continue
-        rel = d.get('path', '')[len(pre):] if d.get('path', '').startswith(pre) else ''
-        if d.get('fallback') or not d.get('task') or rel not in dirty:
+        if d.get('fallback') or not d.get('task') or not str(d.get('ev', '')).startswith('PostToolUse'):
             continue
-        if datetime.datetime.fromisoformat(d['t'].replace('Z', '+00:00')).timestamp() >= last.get(rel, since):
-            claims.setdefault(rel, set()).add((stem(p), d['task']))
+        writes = d.get('writes') if isinstance(d.get('writes'), list) else []
+        # an exact path, never a prefix: a write the walk places where the shell stands is a directory, and claims no file in it
+        rels = {w[len(pre):] for w in ([d.get('path', '')] if edit else []) + writes if isinstance(w, str) and w.startswith(pre)} & dirty
+        at = datetime.datetime.fromisoformat(d['t'].replace('Z', '+00:00')).timestamp() if rels else 0
+        if at < landed.get((stem(p), d['task']), 0):
+            continue
+        for rel in rels:
+            if at >= last.get(rel, since):
+                claims.setdefault(rel, set()).add((stem(p), d['task']))
 others = {r: sorted(c) for r, c in claims.items() if not any(map(mine, c))}
 caller = sorted(dirty - set(others))
 with open(os.path.join(out, 'caller-files'), 'w') as f:

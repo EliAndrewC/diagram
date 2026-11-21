@@ -284,10 +284,10 @@
    "declared": "round-arbiter"
   },
   "### T81 Approach (checklist part A)": {
-   "sha256": "ec3a1121dc197e0d14e2afe1e1cb0eb07756abcd4c70d7c2b4425979f09791e1",
+   "sha256": "39eabe52957909c3d162e6fd0ecb523e423dd27a85ddae24a77d7cc3d1b764e1",
    "verdict": "CLEAR",
    "reviewed": "2026-11-21",
-   "declared": "round-arbiter"
+   "declared": "spec-fidelity"
   },
   "### T82 (<why: the finding or measurement that files it>)": {
    "sha256": "289700f215510cea7796f9589c98d95335d00f7eb02912b590cccc7081f2bd31",
@@ -350,10 +350,10 @@
    "declared": "round-arbiter"
   },
   "### T88 Approach (checklist part A)": {
-   "sha256": "e084c52b3c8f1ddfc197a4e18a5d2c3e8fc30e488d153a4bcbe2dbf795e21529",
+   "sha256": "86932edd641283922cf3bd079d8e073d602639aa674f0fbb07e0105322a1c79e",
    "verdict": "CLEAR",
    "reviewed": "2026-11-21",
-   "declared": "round-arbiter"
+   "declared": "spec-fidelity"
   },
   "### T89 (<why: the finding or measurement that files it>)": {
    "sha256": "da40ae34ba421a1066ff7780d781e556c8ee35029a0f0faeed027fdada539860",
@@ -428,7 +428,7 @@
    "declared": "spec-fidelity"
   },
   "### T93 Approach (checklist part A)": {
-   "sha256": "dbfc55e8377747e605a5fd1a6a3dad063f9ac0aeb608e8c955cd57552c7474bf",
+   "sha256": "95e77f86a6cbd9d88b4cfcc03aeeabec3a1105275770f50673d3d6f47319a562",
    "verdict": "CLEAR",
    "reviewed": "2026-11-21",
    "declared": "spec-fidelity"
@@ -453,6 +453,24 @@
   },
   "### T95 Approach (checklist part A)": {
    "sha256": "71d093218dc60bf00f90081098a5854e14553e6bce593ae7dc3e036dc51d7a5b",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity"
+  },
+  "### T93 (T86's closing checks could not set aside another task's shell-written files: the event log's Bash lines carried no write path, its Edit and Write lines naming 127 of the 796 files 2026-11-21's landings had changed, measured 2026-11-21 (T86's `/tmp/t86/recall.py`, T86's Found and left); T86's closing run 2 red only on such a file, another builder's `rust/gate/crates/task/src/task_add/tests.rs`)": {
+   "sha256": "1d9fa08d9eeb3d3e104fae12021e08bffe7010026124b54c07d56e9692bf415f",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity"
+  },
+  "### T81 (the million-step spelling test's 20 s wall bound failed good work under load, measured 2026-11-21: of the 69 `test` Phase lines on `rust/guard/shared` since T58 made it a crate, 7 red runs lasted 20 s or more (13:33Z to 14:08Z), 6 of them this test by name in the builders' transcripts (`--- FAILED`, panicked at its `recv_timeout` line), at a load average of 82.78 (T79's builder's `uptime`, 13:45Z); reproduced, measured 2026-11-21 (`/tmp/t81/slow.sh` and `load.sh 88`), on one CPU shared 16 ways (red at 20.08 s, the scan cut off after 1.25 s of CPU) and with 88 copies at once (33 of 88 red))": {
+   "sha256": "f7a4768104fdb25628330904937a3b9d5c8aa95e23d0208aa40db1a77a8b2221",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity"
+  },
+  "### T88 (builders ran three at once only 26% of the night's 580 minutes, a mean of 1.65, measured 2026-11-21 (each agent's span, T88's line): a landing refused any uncommitted file, so tasks landed in batches, and the Stop hook was silent whenever anything ran, so a freed builder slot sat empty)": {
+   "sha256": "e7e64a4d673b579ac8af2ea2e3da3260e286835dd9808214f784f84f24b48b2d",
    "verdict": "CLEAR",
    "reviewed": "2026-11-21",
    "declared": "spec-fidelity"
@@ -9102,6 +9120,252 @@
      "why": "The earlier text was a bare template that decided nothing, so removing it drops no decision and narrows nothing the request or spec asked for."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-21",
+   "blocks": [
+    "### T93 (T86's closing checks could not set aside another task's shell-written files: the event log's Bash lines carried no write path, its Edit and Write lines naming 127 of the 796 files 2026-11-21's landings had changed, measured 2026-11-21 (T86's `/tmp/t86/recall.py`, T86's Found and left); T86's closing run 2 red only on such a file, another builder's `rust/gate/crates/task/src/task_add/tests.rs`)",
+    "### T93 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T93-field-at-end",
+     "summary": "The write targets are logged on a Bash call's END lines (PostToolUse and PostToolUseFailure), not its start; the start was priced and not taken, and the failure end is included.",
+     "class": "within",
+     "why": "This is how T93's line gets done, and it is the more conservative choice: a refused call whose start would have claimed the caller's own file for another task would give a wrong green. It narrows nothing in the GM's request or the accepted spec."
+    },
+    {
+     "id": "T93-field-exclusions",
+     "summary": "writes leaves out programs that only read, targets the walk cannot place, and directories; no target means no field; the form is pinned.",
+     "class": "within",
+     "why": "A file that no line names stays the caller's, so an exclusion can only cost a saving, never give a wrong green. This choice is about precision, and it takes away nothing that was asked for. The Python-heredoc gap it creates is ruled on separately, as T93-python-heredoc-left."
+    },
+    {
+     "id": "T93-no-walk-reuse",
+     "summary": "No walk is reused or memoized, because no guard walks at PostToolUse (each hook event runs in its own process, observed with a method). A memo in shared::tree is not added.",
+     "class": "within",
+     "why": "The brief asked for reuse only where the process had already done the walk. The plan measured that this never happens, so the condition never holds and nothing asked for is dropped."
+    },
+    {
+     "id": "T93-exact-path-reader",
+     "summary": "closing-checks.sh claims a dirty file only by an exact edit path or writes path, never by a prefix, under T86's existing rules (no fallback line, a task named, newer than the last commit, never the caller's). The header's list of what stays the caller's is restated.",
+     "class": "within",
+     "why": "This is the reader half of the task's own goal. The exact-path rule stops a make at the clone root from claiming the whole clone for another task, which would be a wrong green."
+    },
+    {
+     "id": "T93-landed-line-claims-nothing",
+     "summary": "A log line older than its own task's last 'ticked (make land)' commit claims nothing. This fixes a T86 defect found during T93's own closing run (T66's stale Edit line on rust/guard/CLAUDE.md).",
+     "class": "within",
+     "why": "A defect found in the work is fixed in the task (fix as we go, constitution XIV). It is a wrong outcome (a caller's own red reported apart, a wrong green), it lives in a file the task already owns, and the red-first test is recorded."
+    },
+    {
+     "id": "T93-no-prefilter",
+     "summary": "A prefilter that would skip 35.5% of commands was measured and not taken: it would lose 6 files and add a second list of writers that could drift from the walk.",
+     "class": "within",
+     "why": "This is a design choice inside the task, and it keeps the full coverage the task asks for."
+    },
+    {
+     "id": "T93-no-clone-path-cut",
+     "summary": "writes keeps /tmp paths and is not cut to the clone's paths (1.56% log growth, measured).",
+     "class": "within",
+     "why": "A choice of form with a measured cost. It narrows nothing asked for."
+    },
+    {
+     "id": "T93-first-walk-cost-left",
+     "summary": "The first walk in a process costs 3.2-8.6 ms (about 3.89 ms added per Bash end, roughly 37 s a night). It is left in place, called not a defect, and proposed as a [perf] task of its own in shared::tree.",
+     "class": "within",
+     "why": "Every verdict and every line stays right, only slower, so under constitution XIV (v2.36.0) this is not a defect and needs no ruling. The cost is measured and stated, and it is passed on as a performance task rather than hidden."
+    },
+    {
+     "id": "T93-python-heredoc-left",
+     "summary": "Files written by a Python program run from a heredoc or -c get no writes entry: the walk places them where the shell stands. The reader for them, program_names, is in the guard crate, which the shared event log cannot reach. Filed as T96, to land before T22. Measured effect: T86's runs 2 and 3 stay red on the task and plan crates, and 15 of the night's 51 still-missed files.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "T93's own line covers 'shell-written files', and these are shell-written, so leaving them narrows the task as filed. The defect is not dropped and not carried past the next step. It is filed as T96, with its reason and its order ('lands before T22', T86's filing) as FR-009 requires, and every instance was measured and classed. The reason is concrete: shared cannot depend on the guard crate, so the reader for these programs lives outside T93's files. Splitting the fix this way does not undermine the request's purpose (performance work first, closing verdicts that are not red on another builder's files), because T93's part removes wrong reds now and introduces no wrong green."
+    },
+    {
+     "id": "T93-perf-classification",
+     "summary": "T93 is ordered as a [perf] task under FR-013 (the builders' loop), with no engine performance checklist.",
+     "class": "within",
+     "why": "The GM asked on 2026-11-21 that the closing-checks work be filed as a performance task, and FR-013 counts the builders' loop as performance work. T93 extends that work."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-21",
+   "blocks": [
+    "### T81 (the million-step spelling test's 20 s wall bound failed good work under load, measured 2026-11-21: of the 69 `test` Phase lines on `rust/guard/shared` since T58 made it a crate, 7 red runs lasted 20 s or more (13:33Z to 14:08Z), 6 of them this test by name in the builders' transcripts (`--- FAILED`, panicked at its `recv_timeout` line), at a load average of 82.78 (T79's builder's `uptime`, 13:45Z); reproduced, measured 2026-11-21 (`/tmp/t81/slow.sh` and `load.sh 88`), on one CPU shared 16 ways (red at 20.08 s, the scan cut off after 1.25 s of CPU) and with 88 copies at once (33 of 88 red))",
+    "### T81 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T81-cpu-bound",
+     "summary": "The million-step spelling test's 20 s wall-clock recv_timeout is replaced by a bound on the search thread's own CPU time (schedstat's first field, polled every 100 ms), failing past CPU_BOUND_NS; a panicked search thread fails at once.",
+     "class": "within",
+     "why": "Nothing in request.md or 451's FR-001 to FR-013 settles this test's bound, so the choice of measure is the task's own. The block reports T81's line as asking that the bound count steps not wall time, or a ceiling sized for a loaded host; fancy_regex 0.14 exposes no step count but the limit firing (the block's reading of its vm.rs), so the thread's CPU time is the work measure. It keeps the bound's filed purpose (T185's section: a spin fails rather than hangs) - M2 still fails, at 30022000592 ns of CPU - and ends the refusal of good work the block measured (6 reds by name, 33 of 88 under load.sh 88). A check that refuses good work is a defect under XIV, and fixing it is the task."
+    },
+    {
+     "id": "T81-30s-knob",
+     "summary": "CPU_BOUND_NS is 30 s, a CONVENTION and a knob, with its why beside it (10x the scan's 3.2 s on the slowest core, 4x its 7.4 s worst at 88 copies).",
+     "class": "within",
+     "why": "Choosing the ceiling's value is the task's own design choice, labeled as a convention with its measured basis; no research claim moves and the spec settles no value."
+    },
+    {
+     "id": "T81-premise-pin",
+     "summary": "The test also builds the house style's pattern shape with fancy_regex's old 1,000,000-step limit and asserts it errs on the text, so the text stays past the limit the test exists for.",
+     "class": "within",
+     "why": "Enforcement only: it makes the test keep testing what it was filed to test (the step limit), the 'pin the step budget by counting steps' half of T81's line; deleting the test's purpose would leave it nothing to check."
+    },
+    {
+     "id": "T81-test-file-only",
+     "summary": "No engine code and no guard code change: the house_style_hooks test file alone; T88's set_down_hooks, T88's land crate and T93's event_log_hooks/fields.rs untouched.",
+     "class": "within",
+     "why": "The defect is in the test's bound, not the scan: the block's slowed run cut HEAD's scan off at 1.25 s of CPU, and the 55 green loaded runs used 3.5-6.1 s each, both far under any spin. The brief bounds the files. Nothing the request or FR-013 asks is cut by it."
+    },
+    {
+     "id": "T81-eight-others-left",
+     "summary": "Eight other test files carrying the same 20 s wall bound (four in rust/guard/shared, three in the guard, one in reviews) are neither changed nor filed.",
+     "class": "within",
+     "why": "Under constitution XIV as the GM ruled 2026-11-19, a defect is a wrong outcome. The block censused the class (others.py, plus a --- FAILED census of every transcript) and found no transcripted failure of any of the eight but T185's own red-first run of 2026-11-19T02:05Z. Its unattributed reds (two guard-crate Phase reds at 20 s or more, named by no transcript, and the 13:56Z row) name no test, as the block itself says a long run alone does not. So no wrong outcome of these eight is measured. This crate's four take 0.2-0.66 s alone against this test's 1.6 s, and the other four were not timed. A latent difference with no measured wrong outcome is not a known defect, so fix-as-we-go does not reach it and leaving it is not a narrowing. The block names the CPU bound as the form to copy if one goes red."
+    },
+    {
+     "id": "T81-perf-tag",
+     "summary": "T81 is classed [perf] under 451 FR-013: a sound scan no longer fails a crate's tests under load, so builders stop re-running crates and chasing reds not theirs.",
+     "class": "within",
+     "why": "FR-013 counts a task that makes the gate or the builders' loop faster as performance work. A check that goes red on good work under load costs builders re-runs: the block counts 6 such reds by name, at a load reading of 82.78 taken between them. The GM asked that performance work come first (2026-11-20)."
+    },
+    {
+     "id": "T81-closing-checks-reds-left",
+     "summary": "Item 9 records make closing-checks red on two other tasks' files (clippy doc_markdown at T88's set_down_hooks.rs:296; a syntax error at line 181 of T93's closing-checks.sh), and T81 leaves both as they are.",
+     "class": "within",
+     "why": "The block itself says both files belong to in-flight tasks, T88 and T93, that the brief puts out of this task's reach ('beside T88 and T93, whose files it leaves'). This ruling rests on that statement, since the bundle holds no more. They are those tasks' own work, not defects this plan carries past its step, and neither the request nor FR-013 asks T81 to fix them. Exit 6 still names make closing-checks green as a condition; the block does not say how T81 meets it while they stand. That is a sequencing point for the caller, not a narrowing."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-21",
+   "blocks": [
+    "### T81 (the million-step spelling test's 20 s wall bound failed good work under load, measured 2026-11-21: of the 69 `test` Phase lines on `rust/guard/shared` since T58 made it a crate, 7 red runs lasted 20 s or more (13:33Z to 14:08Z), 6 of them this test by name in the builders' transcripts (`--- FAILED`, panicked at its `recv_timeout` line), at a load average of 82.78 (T79's builder's `uptime`, 13:45Z); reproduced, measured 2026-11-21 (`/tmp/t81/slow.sh` and `load.sh 88`), on one CPU shared 16 ways (red at 20.08 s, the scan cut off after 1.25 s of CPU) and with 88 copies at once (33 of 88 red))",
+    "### T81 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T81-A1",
+     "summary": "Replace the million-step spelling test's 20 s wall-clock bound with a bound on the search thread's own CPU time (read from /proc/<pid>/task/<tid>/schedstat every 100 ms), CPU_BOUND_NS = 30 s, a CONVENTION and a knob; a panicked thread fails at once.",
+     "class": "within",
+     "why": "The test refuses good work under load (measured: 6 named reds at load ~82, 33 of 88 red on the loaded reproduction) - a check that refuses correct work is a defect (constitution XIV) and fixing known defects is the GM's standing rule; the bound still serves T185's stated purpose (a spin fails rather than hangs), shown by mutant M2 failing at 30 s CPU, and honors 'time is never a gate'. Nothing the GM asked for is narrowed."
+    },
+    {
+     "id": "T81-A2",
+     "summary": "Pin the test's premise by the limit firing: a build of the house style pattern with fancy_regex's old 1,000,000-step limit must err on the test text.",
+     "class": "within",
+     "why": "Enforcement of what the test exists to catch (the step limit regression, mutant M1); it adds no behavior and only fails when the thing it guards is absent."
+    },
+    {
+     "id": "T81-A3",
+     "summary": "Scope: the test file alone - no engine code, no guard code, T88's and T93's files untouched.",
+     "class": "within",
+     "why": "Confines the fix to the defect; narrows nothing the request or spec asked for."
+    },
+    {
+     "id": "T81-F1",
+     "summary": "Found and left: eight other test files carrying the same 20 s wall bound, not filed, because none has failed by it outside T185's own red-first run (measured census).",
+     "class": "within",
+     "why": "Per constitution XIV a defect is a wrong outcome; no wrong outcome was measured for these eight, so leaving them is not deferring a defect and FR-009's filed-task requirement does not reach them."
+    },
+    {
+     "id": "T81-P1",
+     "summary": "Classed as performance work ([perf]) under FR-013: a sound scan no longer failing a crate's tests under load keeps builders from re-running and chasing reds not theirs.",
+     "class": "within",
+     "why": "FR-013 counts work that makes 'the builders' loop faster' as performance work, carrying the GM's 2026-11-20 'prioritize performance improvements going forward'; spurious reds cost builder re-runs, so the class fits."
+    },
+    {
+     "id": "T81-L1",
+     "summary": "T81 lands once T88's coverage is green (closing-checks red only on T88's files, none of T81's lines named).",
+     "class": "within",
+     "why": "Ordering of landings; it narrows nothing asked."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-21",
+   "blocks": [
+    "### T88 (builders ran three at once only 26% of the night's 580 minutes, a mean of 1.65, measured 2026-11-21 (each agent's span, T88's line): a landing refused any uncommitted file, so tasks landed in batches, and the Stop hook was silent whenever anything ran, so a freed builder slot sat empty)",
+    "### T88 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "a-landing-worktree",
+     "summary": "With other work uncommitted in the clone, make land runs whole in a persistent landing worktree <clone>-land at the clone's HEAD, under a lock, seeded with the clone's kept results; the clone then takes the landed tip (update-ref, merge-tree/commit-tree, three-way merge-file, conflict moves nothing, exit 4).",
+     "class": "within",
+     "why": "A design for a [perf] task under FR-013 (the landings). It narrows nothing the GM asked: the gate still judges the tree pushed, the push's dirty-tree refusal and the stamp's disk key are unchanged, and the two other ways are measured and rejected on their costs."
+    },
+    {
+     "id": "a-own-edits-refusal",
+     "summary": "The landing refuses the landing tasks' own edits still uncommitted (PostToolUse edit lines under the task naming a dirty file newer than its last commit), naming the git commit command; dirty files no task's edit names stay in the clone, not landed.",
+     "class": "within",
+     "why": "Keeps the landed tree the task's own work; no requested behavior is narrowed. Red-first pair recorded (78/3 then 81)."
+    },
+    {
+     "id": "b-rolling-dispatch",
+     "summary": "While something runs, the Stop hook refuses a stop when fewer than L7R_BUILDERS (GUESS 3) builders run and next_independent names an open task never started, after no open task, touching no running task's named files; escape is make set-down F= WHY=.",
+     "class": "within",
+     "why": "Adds a refusal in service of the builders' loop; it carries a reasoned, recorded escape and a named compliant command, and red-first is recorded (350/2 then 352). Narrows nothing asked."
+    },
+    {
+     "id": "b-order-perf-first",
+     "summary": "next_independent takes performance work first across every active feature, then the rest, feature-first then each active feature by its last task-start.",
+     "class": "within",
+     "why": "This is FR-013's own clause: the Stop hook's start-the-next names an open performance task before any other, across active features. The plan corrected an earlier feature-first ordering that broke it (r1 red, r2 green)."
+    },
+    {
+     "id": "b-perf-later-ok-named",
+     "summary": "Where the task the Stop hook names is not performance work, its named make task-start carries PERF_LATER_OK - which happens only when every open performance task is started, waits on an open task, or overlaps a running task's files.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This narrows how far FR-013's task-start refusal reaches in practice, so it is ruled. It uses FR-013's own escape, of a reason, recorded, for the case that escape names: a performance task that cannot start now because it waits on another task's landing (or is already running). The hook names a non-perf task only after no performance task can be started. Leaving slots empty in that case would not get performance work done any sooner, and would undo the GM's purpose ('doing those first makes everything after them faster'), which is ordering, not idling. Each start still needs the escape typed in and logged."
+    },
+    {
+     "id": "b-busy-files-rule",
+     "summary": "Overlap is read from a task line's named files or *_hooks modules against running tasks' edit lines, with specs/, .git/ and the ledger excluded and common basenames matched only with a path; a line naming nothing fails toward a start.",
+     "class": "within",
+     "why": "A design detail of the dispatch rule; its stated cost (two builders in one crate) is judged by T86's closing checks. Narrows nothing asked."
+    },
+    {
+     "id": "knob-L7R_BUILDERS",
+     "summary": "L7R_BUILDERS is a new knob, GUESS 3, labeled at its point of change (set_down_hooks.rs BUILDERS); D14's knob table row is T22's.",
+     "class": "within",
+     "why": "D14 asks for a GUESS label at the point of change, and T88 gives one. The knob table is a task the spec assigns elsewhere, so this sets no new rule. T22 has to list this knob when it builds the table."
+    },
+    {
+     "id": "444-set-down-vs-449-T244",
+     "summary": "449 T244's stop before the parked homestead stages is not built here; 444 is set down, so free_slot names no 444 stage task now, and a stop there passes by make set-down naming the GM's ruling.",
+     "class": "within",
+     "why": "The rolling-dispatch refusal does not force work the GM ruled to stop before: 444 is set down (measured from set-downs.jsonl and task-starts.jsonl), and the escape the refusal names takes his ruling as its WHY. T244 belongs to 449."
+    },
+    {
+     "id": "costs-disk",
+     "summary": "The landing worktree's own target (13 GB measured) is not pruned whole; only the sweep's per-crate variant rule trims it, and a hand-deleted clone leaves its -land until the directory goes.",
+     "class": "within",
+     "why": "A stated cost, not a wrong outcome; nothing the GM asked is narrowed."
+    },
+    {
+     "id": "left-T98-occupancy-after",
+     "summary": "The after-occupancy measurement is filed as T98, lands before T22, because it needs a night of rolling dispatch first.",
+     "class": "within",
+     "why": "It cannot be measured before a night runs on the change. It is filed with an order, as FR-009 requires, and the before-figure uses the replay's method, so before and after are measured one way."
+    },
+    {
+     "id": "left-T99-idle-tests-flake",
+     "summary": "test-idle-tests-hooks.sh's wall-clock case refused good work under load (red at load 16.5, green on rerun); filed as T99, lands before T22, as another guard's suite outside T88's files.",
+     "class": "within",
+     "why": "A defect, but T88 is not the one carrying it forward. It is filed with its reason, its id and its order, which is what FR-009 asks of a deferral. FIX AS WE GO's rule about steps applies to 449's port, and this defect is still put ahead of T22. The GM did not ask T88 to fix this suite."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -13929,6 +14193,194 @@
      "summary": "task_add/quick.rs's lines() drops any quick recipe line opening printf; today no check opens so.",
      "class": "within",
      "why": "Measured against the Makefile: no check is skipped, so nothing goes wrong. Under constitution XIV this is a difference, not a defect, and needs no ruling."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T93": {
+   "section_sha256": "ae4bd40efe730745dc7678efcebd1a27c8a11ef15ed2b10e7c257868cfd8bd17",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T93-field-at-end",
+     "summary": "The write targets are logged on a Bash call's END lines (PostToolUse and PostToolUseFailure), not its start; the start was priced and not taken, and the failure end is included.",
+     "class": "within",
+     "why": "This is how T93's line gets done, and it is the more conservative choice: a refused call whose start would have claimed the caller's own file for another task would give a wrong green. It narrows nothing in the GM's request or the accepted spec."
+    },
+    {
+     "id": "T93-field-exclusions",
+     "summary": "writes leaves out programs that only read, targets the walk cannot place, and directories; no target means no field; the form is pinned.",
+     "class": "within",
+     "why": "A file that no line names stays the caller's, so an exclusion can only cost a saving, never give a wrong green. This choice is about precision, and it takes away nothing that was asked for. The Python-heredoc gap it creates is ruled on separately, as T93-python-heredoc-left."
+    },
+    {
+     "id": "T93-no-walk-reuse",
+     "summary": "No walk is reused or memoized, because no guard walks at PostToolUse (each hook event runs in its own process, observed with a method). A memo in shared::tree is not added.",
+     "class": "within",
+     "why": "The brief asked for reuse only where the process had already done the walk. The plan measured that this never happens, so the condition never holds and nothing asked for is dropped."
+    },
+    {
+     "id": "T93-exact-path-reader",
+     "summary": "closing-checks.sh claims a dirty file only by an exact edit path or writes path, never by a prefix, under T86's existing rules (no fallback line, a task named, newer than the last commit, never the caller's). The header's list of what stays the caller's is restated.",
+     "class": "within",
+     "why": "This is the reader half of the task's own goal. The exact-path rule stops a make at the clone root from claiming the whole clone for another task, which would be a wrong green."
+    },
+    {
+     "id": "T93-landed-line-claims-nothing",
+     "summary": "A log line older than its own task's last 'ticked (make land)' commit claims nothing. This fixes a T86 defect found during T93's own closing run (T66's stale Edit line on rust/guard/CLAUDE.md).",
+     "class": "within",
+     "why": "A defect found in the work is fixed in the task (fix as we go, constitution XIV). It is a wrong outcome (a caller's own red reported apart, a wrong green), it lives in a file the task already owns, and the red-first test is recorded."
+    },
+    {
+     "id": "T93-no-prefilter",
+     "summary": "A prefilter that would skip 35.5% of commands was measured and not taken: it would lose 6 files and add a second list of writers that could drift from the walk.",
+     "class": "within",
+     "why": "This is a design choice inside the task, and it keeps the full coverage the task asks for."
+    },
+    {
+     "id": "T93-no-clone-path-cut",
+     "summary": "writes keeps /tmp paths and is not cut to the clone's paths (1.56% log growth, measured).",
+     "class": "within",
+     "why": "A choice of form with a measured cost. It narrows nothing asked for."
+    },
+    {
+     "id": "T93-first-walk-cost-left",
+     "summary": "The first walk in a process costs 3.2-8.6 ms (about 3.89 ms added per Bash end, roughly 37 s a night). It is left in place, called not a defect, and proposed as a [perf] task of its own in shared::tree.",
+     "class": "within",
+     "why": "Every verdict and every line stays right, only slower, so under constitution XIV (v2.36.0) this is not a defect and needs no ruling. The cost is measured and stated, and it is passed on as a performance task rather than hidden."
+    },
+    {
+     "id": "T93-python-heredoc-left",
+     "summary": "Files written by a Python program run from a heredoc or -c get no writes entry: the walk places them where the shell stands. The reader for them, program_names, is in the guard crate, which the shared event log cannot reach. Filed as T96, to land before T22. Measured effect: T86's runs 2 and 3 stay red on the task and plan crates, and 15 of the night's 51 still-missed files.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "T93's own line covers 'shell-written files', and these are shell-written, so leaving them narrows the task as filed. The defect is not dropped and not carried past the next step. It is filed as T96, with its reason and its order ('lands before T22', T86's filing) as FR-009 requires, and every instance was measured and classed. The reason is concrete: shared cannot depend on the guard crate, so the reader for these programs lives outside T93's files. Splitting the fix this way does not undermine the request's purpose (performance work first, closing verdicts that are not red on another builder's files), because T93's part removes wrong reds now and introduces no wrong green."
+    },
+    {
+     "id": "T93-perf-classification",
+     "summary": "T93 is ordered as a [perf] task under FR-013 (the builders' loop), with no engine performance checklist.",
+     "class": "within",
+     "why": "The GM asked on 2026-11-21 that the closing-checks work be filed as a performance task, and FR-013 counts the builders' loop as performance work. T93 extends that work."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T81": {
+   "section_sha256": "6ec587acfc71124356e3eedbbd50558ac6fd4554ee62f8847b9d938b649a4cc5",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T81-A1",
+     "summary": "Replace the million-step spelling test's 20 s wall-clock bound with a bound on the search thread's own CPU time (read from /proc/<pid>/task/<tid>/schedstat every 100 ms), CPU_BOUND_NS = 30 s, a CONVENTION and a knob; a panicked thread fails at once.",
+     "class": "within",
+     "why": "The test refuses good work under load (measured: 6 named reds at load ~82, 33 of 88 red on the loaded reproduction) - a check that refuses correct work is a defect (constitution XIV) and fixing known defects is the GM's standing rule; the bound still serves T185's stated purpose (a spin fails rather than hangs), shown by mutant M2 failing at 30 s CPU, and honors 'time is never a gate'. Nothing the GM asked for is narrowed."
+    },
+    {
+     "id": "T81-A2",
+     "summary": "Pin the test's premise by the limit firing: a build of the house style pattern with fancy_regex's old 1,000,000-step limit must err on the test text.",
+     "class": "within",
+     "why": "Enforcement of what the test exists to catch (the step limit regression, mutant M1); it adds no behavior and only fails when the thing it guards is absent."
+    },
+    {
+     "id": "T81-A3",
+     "summary": "Scope: the test file alone - no engine code, no guard code, T88's and T93's files untouched.",
+     "class": "within",
+     "why": "Confines the fix to the defect; narrows nothing the request or spec asked for."
+    },
+    {
+     "id": "T81-F1",
+     "summary": "Found and left: eight other test files carrying the same 20 s wall bound, not filed, because none has failed by it outside T185's own red-first run (measured census).",
+     "class": "within",
+     "why": "Per constitution XIV a defect is a wrong outcome; no wrong outcome was measured for these eight, so leaving them is not deferring a defect and FR-009's filed-task requirement does not reach them."
+    },
+    {
+     "id": "T81-P1",
+     "summary": "Classed as performance work ([perf]) under FR-013: a sound scan no longer failing a crate's tests under load keeps builders from re-running and chasing reds not theirs.",
+     "class": "within",
+     "why": "FR-013 counts work that makes 'the builders' loop faster' as performance work, carrying the GM's 2026-11-20 'prioritize performance improvements going forward'; spurious reds cost builder re-runs, so the class fits."
+    },
+    {
+     "id": "T81-L1",
+     "summary": "T81 lands once T88's coverage is green (closing-checks red only on T88's files, none of T81's lines named).",
+     "class": "within",
+     "why": "Ordering of landings; it narrows nothing asked."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T88": {
+   "section_sha256": "428d03b276155e54e3123e05c8966781c473c2eba161419e3bae4282a08361f3",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "a-landing-worktree",
+     "summary": "With other work uncommitted in the clone, make land runs whole in a persistent landing worktree <clone>-land at the clone's HEAD, under a lock, seeded with the clone's kept results; the clone then takes the landed tip (update-ref, merge-tree/commit-tree, three-way merge-file, conflict moves nothing, exit 4).",
+     "class": "within",
+     "why": "A design for a [perf] task under FR-013 (the landings). It narrows nothing the GM asked: the gate still judges the tree pushed, the push's dirty-tree refusal and the stamp's disk key are unchanged, and the two other ways are measured and rejected on their costs."
+    },
+    {
+     "id": "a-own-edits-refusal",
+     "summary": "The landing refuses the landing tasks' own edits still uncommitted (PostToolUse edit lines under the task naming a dirty file newer than its last commit), naming the git commit command; dirty files no task's edit names stay in the clone, not landed.",
+     "class": "within",
+     "why": "Keeps the landed tree the task's own work; no requested behavior is narrowed. Red-first pair recorded (78/3 then 81)."
+    },
+    {
+     "id": "b-rolling-dispatch",
+     "summary": "While something runs, the Stop hook refuses a stop when fewer than L7R_BUILDERS (GUESS 3) builders run and next_independent names an open task never started, after no open task, touching no running task's named files; escape is make set-down F= WHY=.",
+     "class": "within",
+     "why": "Adds a refusal in service of the builders' loop; it carries a reasoned, recorded escape and a named compliant command, and red-first is recorded (350/2 then 352). Narrows nothing asked."
+    },
+    {
+     "id": "b-order-perf-first",
+     "summary": "next_independent takes performance work first across every active feature, then the rest, feature-first then each active feature by its last task-start.",
+     "class": "within",
+     "why": "This is FR-013's own clause: the Stop hook's start-the-next names an open performance task before any other, across active features. The plan corrected an earlier feature-first ordering that broke it (r1 red, r2 green)."
+    },
+    {
+     "id": "b-perf-later-ok-named",
+     "summary": "Where the task the Stop hook names is not performance work, its named make task-start carries PERF_LATER_OK - which happens only when every open performance task is started, waits on an open task, or overlaps a running task's files.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This narrows how far FR-013's task-start refusal reaches in practice, so it is ruled. It uses FR-013's own escape, of a reason, recorded, for the case that escape names: a performance task that cannot start now because it waits on another task's landing (or is already running). The hook names a non-perf task only after no performance task can be started. Leaving slots empty in that case would not get performance work done any sooner, and would undo the GM's purpose ('doing those first makes everything after them faster'), which is ordering, not idling. Each start still needs the escape typed in and logged."
+    },
+    {
+     "id": "b-busy-files-rule",
+     "summary": "Overlap is read from a task line's named files or *_hooks modules against running tasks' edit lines, with specs/, .git/ and the ledger excluded and common basenames matched only with a path; a line naming nothing fails toward a start.",
+     "class": "within",
+     "why": "A design detail of the dispatch rule; its stated cost (two builders in one crate) is judged by T86's closing checks. Narrows nothing asked."
+    },
+    {
+     "id": "knob-L7R_BUILDERS",
+     "summary": "L7R_BUILDERS is a new knob, GUESS 3, labeled at its point of change (set_down_hooks.rs BUILDERS); D14's knob table row is T22's.",
+     "class": "within",
+     "why": "D14 asks for a GUESS label at the point of change, and T88 gives one. The knob table is a task the spec assigns elsewhere, so this sets no new rule. T22 has to list this knob when it builds the table."
+    },
+    {
+     "id": "444-set-down-vs-449-T244",
+     "summary": "449 T244's stop before the parked homestead stages is not built here; 444 is set down, so free_slot names no 444 stage task now, and a stop there passes by make set-down naming the GM's ruling.",
+     "class": "within",
+     "why": "The rolling-dispatch refusal does not force work the GM ruled to stop before: 444 is set down (measured from set-downs.jsonl and task-starts.jsonl), and the escape the refusal names takes his ruling as its WHY. T244 belongs to 449."
+    },
+    {
+     "id": "costs-disk",
+     "summary": "The landing worktree's own target (13 GB measured) is not pruned whole; only the sweep's per-crate variant rule trims it, and a hand-deleted clone leaves its -land until the directory goes.",
+     "class": "within",
+     "why": "A stated cost, not a wrong outcome; nothing the GM asked is narrowed."
+    },
+    {
+     "id": "left-T98-occupancy-after",
+     "summary": "The after-occupancy measurement is filed as T98, lands before T22, because it needs a night of rolling dispatch first.",
+     "class": "within",
+     "why": "It cannot be measured before a night runs on the change. It is filed with an order, as FR-009 requires, and the before-figure uses the replay's method, so before and after are measured one way."
+    },
+    {
+     "id": "left-T99-idle-tests-flake",
+     "summary": "test-idle-tests-hooks.sh's wall-clock case refused good work under load (red at load 16.5, green on rerun); filed as T99, lands before T22, as another guard's suite outside T88's files.",
+     "class": "within",
+     "why": "A defect, but T88 is not the one carrying it forward. It is filed with its reason, its id and its order, which is what FR-009 asks of a deferral. FIX AS WE GO's rule about steps applies to 449's port, and this defect is still put ahead of T22. The GM did not ask T88 to fix this suite."
     }
    ],
    "verdict": "CLEAR"

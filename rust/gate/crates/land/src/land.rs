@@ -25,6 +25,7 @@
 //! rust-owed`). `codeid.py` is no longer started: the engine paths are the cohort's one copy of `codeid.ENGINE`
 //! ([`l7r_gate_cohort::cohort::is_landing_engine`]).
 
+mod alone;
 mod cheap;
 mod claims_wait;
 mod inproc;
@@ -318,6 +319,9 @@ impl Land {
     fn land(&self, d: &Path, tasks: &[String], note: &str) -> Result<i32, String> {
         self.landing_tasks.replace(tasks.to_vec());
         self.landing_feature.replace(name_of(d));
+        if self.alone_owed()? {
+            return self.alone(d, tasks);
+        }
         let mut claims: Vec<String> = Vec::new();
         let mut stops: Vec<String> = Vec::new();
         self.phase("cheap", || {

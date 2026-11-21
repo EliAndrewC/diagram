@@ -8,7 +8,7 @@ use std::time::SystemTime;
 use l7r_gate_core::ci::fixtures::{put, scratch};
 use serde_json::Value;
 
-use super::super::tests::{fx, tool, Fx, NOTE};
+use super::super::tests::{fx, inner, tool, Fx, NOTE};
 
 /// Every landing line in the tree's event logs, in the order written (the log a line is filed in is its task's feature's, else the
 /// process's, so every log is read).
@@ -122,7 +122,8 @@ fn a_clean_landing_writes_each_step_in_order_and_its_end() {
 
 #[test]
 fn a_refused_first_pass_writes_its_line_and_the_end_with_its_code() {
-    let fx = fx("phase-cheap");
+    let mut fx = fx("phase-cheap");
+    inner(&mut fx);
     put(&fx.root, "untracked.txt", "x");
     assert_eq!(landing(&fx, &["T1"]), Ok(2));
     assert_eq!(steps(&fx.root), [s("cheap", 2), s("end", 2)]);
@@ -133,7 +134,8 @@ fn a_refused_first_pass_writes_its_line_and_the_end_with_its_code() {
 /// chain alone filed by feature.json's feature, marked `fallback`.
 #[test]
 fn the_lines_are_filed_in_the_landed_feature_even_unstarted() {
-    let fx = fx("phase-filed");
+    let mut fx = fx("phase-filed");
+    inner(&mut fx);
     put(
         &fx.root,
         ".specify/feature.json",
@@ -182,7 +184,8 @@ fn main_s_refusal_is_filed_by_its_feature_word() {
 
 #[test]
 fn a_first_pass_that_raises_writes_code_one() {
-    let fx = fx("phase-raise");
+    let mut fx = fx("phase-raise");
+    inner(&mut fx);
     std::fs::write(fx.root.join("specs/449-x/tasks.md"), [0xff]).unwrap();
     assert!(landing(&fx, &["T1"]).is_err());
     assert_eq!(steps(&fx.root), [s("cheap", 1), s("end", 1)]);

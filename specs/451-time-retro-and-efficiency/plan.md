@@ -945,31 +945,104 @@ docs/performance-checklist.md answers.
 **Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
 
 
-### T81 (<why: the finding or measurement that files it>)
+### T81 (the million-step spelling test's 20 s wall bound failed good work under load, measured 2026-11-21: of the 69 `test` Phase lines on `rust/guard/shared` since T58 made it a crate, 7 red runs lasted 20 s or more (13:33Z to 14:08Z), 6 of them this test by name in the builders' transcripts (`--- FAILED`, panicked at its `recv_timeout` line), at a load average of 82.78 (T79's builder's `uptime`, 13:45Z); reproduced, measured 2026-11-21 (`/tmp/t81/slow.sh` and `load.sh 88`), on one CPU shared 16 ways (red at 20.08 s, the scan cut off after 1.25 s of CPU) and with 88 copies at once (33 of 88 red))
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: the test's bound counts the work its search did, not the time the host gave it. `within`
+  (`rust/guard/shared/src/guards/house_style_hooks/tests.rs`) reads the search thread's own CPU time, the first field of its
+  `/proc/<pid>/task/<tid>/schedstat`, every 100 ms, and fails past `CPU_BOUND_NS` (30 s, a CONVENTION and a knob, 10x the scan's
+  slowest-core 3.2 s); a thread that panicked fails at once. The test also pins its premise by the limit firing: a build of the
+  house style's own pattern shape with fancy_regex's old 1,000,000-step limit errs on the text, so the text stays past the limit
+  the test exists for. No engine code, no guard code: the test file alone.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| the million-step test bounded by its search's CPU time | n/a - no map | n/a | none | n/a |
 
 ### T81 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** No map changes. `make rust-test`, `make static` and `make closing-checks` on a busy host no longer
+   fail the house style's million-step test while its scan is sound, and the regressions the test exists to catch still fail it: the
+   step limit back on a pattern (the scan stops short and the last word stays uncorrected), a scan over an error it repeats (a spin),
+   a quadratic search.
+2. **The constraints.** T81's line (measure first how often it went red in the Phase lines; pin the step budget by counting steps,
+   not wall time, or a ceiling sized for a loaded host; red first on a slowed run); the brief (house_style_hooks' tests alone, T88's
+   land crate and `set_down_hooks` and T93's `event_log_hooks/fields.rs` untouched); feature 449 T185's purpose for the bound (its
+   plan section: "each bounded by a 20 s timeout (a CONVENTION, T194's tests' bound) so a spin fails rather than hangs"); the
+   Makefile's performance rule ("time is never a gate"); the coverage rule (every new line run by its own tests); the regex rules
+   `documents/regex_scans.rs` holds over every file under `rust/` (no `Regex::new`, no `RegexBuilder::new`, no scan past an error).
+3. **Where each comes from.** O: the event log's Phase lines (item 4); O: the builders' transcripts; O: the slowed and loaded runs
+   (item 4, item 9); R: `plan-done.md`'s T185 section; the task as filed (T81's line, T78's and T79's builders' finding).
+4. **Do they describe the world here?** Measured 2026-11-21 (`/tmp/t81/phase.py`: every `test` Phase line on a `rust/guard` crate
+   in the clone's and the mirror's event logs): `rust/guard/shared` since T58 (07:23Z), 69 runs, 33 red, 7 of them red at 20 s or
+   more (13:33, 13:37, 13:40, 13:43, 13:56, 14:08, 14:08Z, 21.2-23.8 s) - and one green at 21.8 s, so a long run alone names no
+   test; the guard crate before it, measured 2026-11-21 (the same reading), 2 red at 20 s or more (2026-11-20T16:14Z and
+   2026-11-21T06:15Z), named by no transcript, unattributed.
+   Measured 2026-11-21 (`/tmp/t81/tx.py`: every session transcript's tool results naming the test with `panicked` or `FAILED`, a
+   run read twice counted once): 6 runs failed by name, each `panicked at .../house_style_hooks/tests.rs:284:10` (the
+   `recv_timeout(20 s)` line) and `finished in` 21.4-23.2 s - 13:33, 13:37, 13:41, 13:44, 14:09 and 14:10Z, the Phase rows of
+   13:33-14:08Z - and the 13:56Z row (T79's worktree `/tmp/t79/wt`) named in none; one more hit, 2026-11-19T02:05Z, is T185's own
+   red-first run (nine of the "past a million steps" tests failing in one result). Measured 2026-11-21 (`grep` of the 23
+   `.git/closing-checks/` runs' logs): 0 name it - those logs carry static's, hooks-test's and quick's output, not `make
+   rust-test`'s. The load, measured 2026-11-21 (T79's builder's `uptime` at 13:45:28Z, between its red runs): 82.78, 80.80, 53.08.
+   What the test costs (measured 2026-11-21, the test binary run alone with `--exact`, `taskset` to one CPU, timed around its
+   process by `/usr/bin/time`): 1.6-1.7 s on a 4.8 GHz core (CPU 1), 2.3 s on a 3.8 GHz core (CPU 12), 3.1 s on a 2.5 GHz core
+   (CPU 20, the slowest), and the coverage build's binary 1.5 s and 3.2 s on CPUs 1 and 20 - wall and CPU equal, unloaded.
+   Slowed, measured 2026-11-21 (`/tmp/t81/slow.sh`, the test on CPU 2 with 15 `yes` beside it, a sixteenth of a CPU): HEAD's test
+   red, `the search ran past its bound: Timeout` at 20.08 s, 1.25 s of CPU used (`slow-head.log`). Loaded, measured 2026-11-21
+   (`/tmp/t81/load.sh 88`, 88 copies at once on the 22 CPUs): HEAD's test red in 33 of 88, all at 20.0-20.2 s, the 55 green using
+   3.5-6.1 s of CPU each. fancy_regex 0.14, measured 2026-11-21 (its `src/vm.rs` read), counts its steps in a local of `run` and
+   exposes them only as the limit erring, so a step count is the limit firing or nothing; the thread's CPU time is the work done,
+   and the loaded run shows how far it stretches - see item 9.
+5. **The order.** After T78 and T79, whose builders found it; beside T88 and T93, whose files it leaves.
+6. **The exits.** Green: the test green on the slowed and loaded runs, red on the two mutants (item 9), the crate's tests, lint,
+   format and cover clean, `make closing-checks`. Red: what failed recorded and the task set down, a claim that it cannot be done
+   ruled through `make arbiter-ask`.
+7. **The search smell.** None: one test helper.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** Red first, measured 2026-11-21 on HEAD's test (the clone's test binary, `/tmp/t81/slow.sh` and `load.sh`):
+   on a sixteenth of a CPU red, `the search ran past its bound: Timeout` at 20.08 s wall with 1.25 s of CPU (`slow-head.log`);
+   measured 2026-11-21 (`load.sh 88`), 88 copies at once, 33 of 88 red at 20.0-20.2 s. Green, measured 2026-11-21 on the fix (a detached worktree at HEAD 8a8be07c2f,
+   `/tmp/t81/t81wt`, the new test file alone): the same sixteenth of a CPU green at 59.68 s wall, 3.59 s of CPU (`slow-new.log`);
+   measured 2026-11-21 (`load.sh 88`), 88 copies at once, 88 of 88 green, wall 13.0-35.4 s, CPU 5.3-7.4 s each (median 5.9 s) - so the CPU time stretches about 4.6x on
+   this host's mixed cores and shared threads at full load, where the wall time stretched 22x. The regressions it exists for,
+   measured 2026-11-21 in the same worktree (`/tmp/t81/mutant.sh`, `make rust-test CRATE=rust/guard/shared`): M1, house style's
+   `re()` built with fancy_regex's old 1,000,000-step limit - 345 passed, 1 failed, this test at its `ends_with` assertion (the
+   scan stopped short of the last word), 2.0 s alone; M2, measured 2026-11-21 (the same run), M1 with `.flatten()` over `sub_all`'s and
+   `correct`'s scans (T185's spin): 345 passed, 1 failed, `ran past its CPU bound: 30022000592 ns`, the crate's run 38.9 s; alone,
+   measured 2026-11-21 (`taskset` to CPU 1, `/usr/bin/time`), 30.07 s of CPU at 33.0 s wall; on a quarter of a CPU, measured
+   2026-11-21 (`slow.sh` with 3 `yes` beside it), 30.02 s of CPU at 120.8 s wall, the bound the same work either way and the wall
+   time the host's share. The
+   crate's checks on the fix, measured 2026-11-21 in the worktree (`make rust-test CRATE=rust/guard/shared`, `l7r-gate.sh rust lint`
+   and `cover --crate rust/guard/shared`, `make format FILE=`): 346 passed; lint, cover (every new line run by the test) and format
+   clean. `make closing-checks T=T81 F=451` on the clone, measured 2026-11-21 (run `20261121T175630Z`): hooks-test green (57
+   suites), quick clean, static red on another task's file alone - clippy's `doc_markdown` at T88's `set_down_hooks.rs:296`, which
+   stops `l7r_shared` compiling for all 33 crates' lint - and its report cut off by a syntax error at line 181 of T93's
+   `scripts/gates/closing-checks.sh`. Run again, measured 2026-11-21 (`make closing-checks T=T81 F=451`, run `20261121T180351Z`,
+   once T88's doc line had changed): hooks-test green (57 suites), quick green, static red on coverage alone in T88's files -
+   `set_down_hooks.rs` lines 329, 393 and 437 and its tests' 551, 565 and 603 in this crate, and the land crate's
+   `land/alone/tests.rs` - with lint and format clean on 34 crates and this crate's tests passing in the coverage run (12.0 s), no
+   line of this task's file named. So T81's own checks are clean, and it lands once T88's coverage is green (item 6's exit).
+10. **Before moving a constant.** The 20 s was a CONVENTION (T185's section); it becomes 30 s of the search's own CPU,
+    `CPU_BOUND_NS`, a CONVENTION and a knob, with its why beside it: 10x the scan's 3.2 s on the slowest core and 4x its 7.4 s worst at
+    88 copies at once (item 9). No research claim moves.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** What a builder sees differently: `make rust-test` on `rust/guard/shared` at a load of 80-odd no longer goes
+    red on `a_spelling_past_a_million_steps_is_corrected` while the scan is sound (6 such reds, measured 2026-11-21 (item 4's
+    transcripts)), and a spin fails after 30 s of the search's CPU (`CPU_BOUND_NS`, a CONVENTION and a knob) where it failed after
+    20 s of wall time (T185's CONVENTION). No map, no research claim.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?**
+- Not a defect, and not filed: eight other test files' `within` carry the same 20 s wall bound - four in this crate
+  (`checks/handle`, `checks/rounds`, `checks/fixloop`, `checks/planhold`), three in the guard (`gate_write_hooks`,
+  `finished_run_hooks/runs`, `no_poll_hooks`) and one in `reviews` (`ledger_passes/rows`) - and none has failed by it outside T185's
+  own red-first run, measured 2026-11-21 (`/tmp/t81/others.py` and a `--- FAILED` census of every transcript: each one's only
+  failures are of 2026-11-19T02:05Z, T185's run). This crate's four take 0.2-0.66 s alone (measured 2026-11-21, `--exact`,
+  `taskset` to CPU 1, `/usr/bin/time`) where this test takes 1.6 s; the other four not timed. No wrong outcome measured, so no
+  task; the CPU bound here is the form to copy if one goes red under load.
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** Yes, a `[perf]` task (451 FR-013): it makes the builders' loop faster - a sound scan no longer fails a crate's
+tests under load, so a builder does not re-run the crate or chase a red that is not theirs. Not an engine-speed task, so no
+docs/performance-checklist.md answers.
 
 
 ### T82 (<why: the finding or measurement that files it>)
@@ -1056,31 +1129,150 @@ docs/performance-checklist.md answers.
 **Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
 
 
-### T88 (<why: the finding or measurement that files it>)
+### T88 (builders ran three at once only 26% of the night's 580 minutes, a mean of 1.65, measured 2026-11-21 (each agent's span, T88's line): a landing refused any uncommitted file, so tasks landed in batches, and the Stop hook was silent whenever anything ran, so a freed builder slot sat empty)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**:
+  - (a) A TASK LANDS ON ITS OWN. With work uncommitted in the clone, `make land` runs nothing there (`land/alone.rs`, `alone_owed`):
+    `scripts/land-alone.sh` (1) refuses the landing tasks' own edits still uncommitted - a PostToolUse edit line filed under the task
+    names the dirty file, newer than its last commit (T86's reading, the other way round) - naming the `git commit ... -- <files>`, and
+    lists the dirty files no task's edit names, left in the clone, not landed; (2) one landing alone at a time (`land-alone.lock`); (3)
+    the persistent landing worktree `<clone>-land` created, or reset and moved to the clone's HEAD - the task's commit on the last
+    landed tip; (4) the clone's kept results seeded where newer (`.git/rust-checks`, `.git/hooks-test`, `cp -u`; `approach-owed.json`);
+    (5) `make land` whole in the worktree under `L7R_LAND_ALONE=1`, never routed again, its `end` line its own; (6) the clone takes the
+    landed tip: HEAD moved by `update-ref` (a merge made by `merge-tree --write-tree` and `commit-tree` where the clone committed
+    meanwhile), each changed file holding no clone work written from the tip, each holding some merged three ways (`git merge-file`),
+    merged again if a builder wrote it since it was read; any conflict moves nothing (exit 4, the `git merge` named). The script's own
+    refusals exit 6, the one exit whose `end` the clone's landing writes (exit 2).
+  - WHY THE WORKTREE, each way measured:
+    - its gate's cost: the kept keys are the files' contents, not their paths - a new worktree at HEAD, the clone's `.git/rust-checks`
+      copied in: `make static` GREEN in 114 s, every crate's lint, test, format and dead "unchanged", cover rebuilt on 2 crates in 43 s,
+      measured 2026-11-21 (`/tmp/t88/m1-static.log`, the worktree added in 1.28 s and the copy 0.03 s), where T48's cold worktree
+      without them took 2,321 s, measured 2026-11-21 (plan-done.md, T48's item 9). Warm, `make done` at HEAD GREEN in 143 s (preflight 54, hooks-test 86 - its suite results
+      not yet seeded then, seeded now), measured 2026-11-21 (`/tmp/t88/m2a-done.log` and its run record). A change in
+      `rust/guard/shared`, which every gate crate builds on, the first in this worktree's target: 898 s (counters-inert 171, static 871,
+      cover built cold for 33 crates), red only on house-style's timing test at a load of 37 (T81's), measured 2026-11-21
+      (`/tmp/t88/m3-done.log`); the same shape again, warm: `make done` GREEN in 324 s (its run record's 304: static 296, the cover
+      build of 33 crates warm, hooks-test 73 beside it, counters-inert 36), measured 2026-11-21 (`/tmp/t88/m4-done.log` and `.rc`, the run
+      record `20261121T180430350625-716734.json`, at a load of 16.5, T88's first closing checks running beside it for 104 s). The
+      clone's own landing gates: 16 `make done` runs, median 31 s, max 354 s, measured 2026-11-21 (`dev/run-log/2026-11/20261121*.json`).
+    - the gate in the clone, the other tasks' files set aside: its gate is the clone's (median 31 s), but for that span every other
+      builder's write is refused (`gate_write_hooks`: no write while this tree's `make done` runs) or lands on a file set aside - the
+      builders made 1.12 edits and 6.74 Bash calls a builder-minute, measured 2026-11-21 (the 451 event log's `by` lines over 961
+      builder-minutes), about 1.2 edits stopped per median landing with two others building, 13 at the 354 s maximum; each set-aside
+      file is written twice, so the builders' crates rebuild, and a builder's closing checks run meanwhile judge the set-aside tree.
+      Not taken.
+    - the task's files committed and judged alone in the clone: the gate then judges a tree that is not the one pushed, and the push
+      cannot go from a dirty clone at all - `sync-with-main.sh push` refuses it ("uncommitted changes - commit first") and the green-gate
+      stamp is keyed on the files on disk (`stamp.rs` `area_files`, `ls-files -co`). Not taken; T86's split is kept for the own-files
+      refusal alone.
+    - the take-back: the night's 30 tick and run-record commits changed tasks.md, tasks-done.md, plan.md and plan-done.md (14 or 15 each)
+      and `dev/` records alone, measured 2026-11-21 (`git log --since=2026-11-20T20:00 --name-only`), and 287 of the builders' 1,089
+      edits of 2026-11-21 were plan.md, measured 2026-11-21 (the 451 event log), so plan.md is the file merged three ways; `git status`
+      over the clone takes 0.04 s, measured 2026-11-21 (`/usr/bin/time`), so a held file's read and its rename are well under a second
+      apart, and a write between them is merged again.
+  - (b) ROLLING DISPATCH. Where something runs, `set_down_hooks`' verdict let the turn end; now it refuses it while a builder slot is
+    free (`free_slot`): fewer than `L7R_BUILDERS` (a GUESS of 3, the three T88's line measured against) builders running - a running
+    agent the session dispatched (`spawnDepth` 1) whose brief opens `<feature> T<n>`, as `builder_stop_hooks` reads one, each by
+    `still_running`'s rule over one reading of the transcript (`builders`: `running` alone leaves out an interim agent whenever another
+    plainly runs) - and an open task to start (`next_independent`): performance work first across every active feature
+    (FR-013), then the rest, each pass of the feature first and then each active one by its last task-start, a task never started in the clone (one started is running, waiting to land or set down), after no open task (`after
+    T<n>`), whose tasks.md line names no file or `*_hooks` module that a running task's own edit lines name (`busy_files`: `specs/`,
+    `.git/` and the ledger left out, every task writing them; `tests.rs`, `lib.rs`, `mod.rs`, `main.rs`, `plan.md`, `tasks.md`,
+    `spec.md`, `CLAUDE.md` matched only with a path). The refusal names its `make task-start` - with task-start's `PERF_LATER_OK` where
+    the named task is not performance work, so every open one is started, waits on an open task (`after T<n>`) or overlaps, since that
+    start refuses it otherwise - and `make set-down`. Measured first: in every below-three minute of 2026-11-21 07:50-17:30Z an independent open task was waiting - 389 of 389,
+    62 of 451's 95 task lines naming a file or module, measured 2026-11-21 (`/tmp/t88/occupancy.py`: each 451 builder's span from its
+    meta and transcript, each task's first line in tasks.md's history, its first task-start, this rule's overlap over the event log).
+    The replay reads that window's 580 minutes as 191 at three builders (33%), 64 at two, 264 at one and 61 at none, a mean of 1.66,
+    measured 2026-11-21 (`/tmp/t88/occupancy.py`, rerun): it counts 451's builders alone (a brief opening `451 T<n>`, `spawnDepth` 1), each from its transcript's first line to its last, where
+    T88's line read 153 minutes at three by its own reading of the spans; T98's before is the replay's, so before and after are one
+    method. A line naming nothing touches nothing the rule can tell: it fails toward a start, whose cost is two builders in one crate,
+    which T86's closing checks judge whole.
+  - THE COSTS, stated plainly:
+    - the disk: the landing worktree builds in a target directory of its own, `~/.cache/l7r-cargo-target/<clone>-land`, 13 GB after
+      M1-M4, measured 2026-11-21 (`du -sh`), on a disk 74 GB free, measured 2026-11-21 (`df -h`). It is not pruned whole: the scratch sweep never removes the
+      build directory of a directory under the clones directory (`scratch_sweep_hooks/sweep/cargo.rs`, `trees`), and `<clone>-land` is
+      one, so only the sweep's rule (b) trims each crate's variants past its newest four once they are idle. Nothing removes the
+      worktree itself: a clone deleted by hand leaves its `-land` and that target until the directory goes too, after which the sweep's
+      rule (a) takes the target once nothing in it changed in the threshold.
+    - the Stop hook: a stop it let through before now refuses - while something runs, fewer than `L7R_BUILDERS` builders run
+      (`builders`' reading of the transcript) and `next_independent` names an open task never started that touches no running task's
+      files. Where nothing runs, the set-down rule refuses as it did; where the slots are full or no independent task waits, the stop
+      passes. A deliberate stop passes by `make set-down F=<n> WHY="<why it stops here>"`, which the refusal names: a feature set down
+      has no active box, so the verdict returns before `free_slot`. 449 T244's stop before the parked homestead stages (the GM
+      2026-11-21) is not built: once it is, `make set-down` accepts the session's stop there, naming his ruling. Until then 444 is set
+      down (2026-11-07T20:55:20Z, after its last start, measured 2026-11-21 from the clone's `set-downs.jsonl` and `task-starts.jsonl`),
+      so neither rule names a 444 stage task; a 444 task started again before T244 lands would be one `free_slot` could name.
+- **Red first**, measured 2026-11-21: (b) with `free_slot` switched off (the early return restored): 350 passed, 2 failed (`make
+  rust-test CRATE=rust/guard/shared`, `/tmp/t88/shared-red.log`); on: 352 passed (`/tmp/t88/shared-test-1.log`). (a) with `alone_owed`
+  answering false and the script exiting before its take-back: 78 passed, 3 failed (`make rust-test CRATE=rust/gate/crates/land`,
+  `/tmp/t88/land-red.log`); restored: 81 passed (`/tmp/t88/land-test-2.log`) - the script's two tests a scratch clone with real git, a
+  bare origin and a stub `make` that ticks and pushes: T1 landed apart from T2's new file, the clone at origin's tip, T2's plan.md edit
+  merged over the tick; T1's own uncommitted edit refused before anything ran; a conflicting plan.md edit moving nothing; a commit made
+  in the clone mid-landing merged. (b)'s order, after its plan review: with the feature-first pass, the new test of another active
+  feature's performance task failed, 353 passed and 1 failed - the hook named 385 T04 with an escape saying 386 T01 "is started or
+  touches a running task's files", neither true (`/tmp/t88/r1-red.log`); performance work first across every active feature: 354 passed
+  (`/tmp/t88/r2-test.log`).
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| a landing with other work uncommitted runs whole in the landing worktree at HEAD; the clone takes the tip, its work kept | n/a - no map | n/a | none | n/a |
+| the Stop hook names the next independent open task while fewer than `L7R_BUILDERS` builders run | n/a - no map | n/a | none | n/a |
 
 ### T88 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
-8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+1. **The goal, in the world.** No map changes. A finished task lands while other builders keep building in the clone, its gate run on
+   the clone's HEAD alone; and a freed builder slot is filled at the session's next stop, so three builders run whenever there is
+   independent work.
+2. **The constraints.** T88's line; FR-013 (a `[perf]` task: the landings and the builders' loop) and task-start's performance-first
+   refusal; FR-012 (red first); FR-007 (the static-runs count); T86 (the event log read the other way round; the landing's gate judges
+   every crate); T84 (a builder's brief); T65 (`still_running`); the push's dirty-tree refusal and the stamp's disk key, unchanged; the
+   launcher's files only (the land crate, `set_down_hooks`, their tests, `docs/guards.md`, the script, this section); T93's
+   `event_log_hooks/fields.rs` and T81's house-style tests untouched; nothing committed or pushed.
+3. **Where each comes from.** O: the four worktree gates, the night's landing gates, the builders' edit rates, the take-back's files
+   and the occupancy replay (Approach, each measured 2026-11-21); R: the three ways the launcher named; the task as filed.
+4. **Do they describe the world here?** The worktree's kept results reused on a real tree, measured 2026-11-21 (`/tmp/t88/m1-static.log`:
+   34 crates' checks "unchanged"); the replay over the night's own builders, measured 2026-11-21 (`/tmp/t88/occupancy.py`); the running
+   builders read from this session's own metas (`451 T81`, `451 T93`, `451 T88`, measured 2026-11-21, `subagents/*.meta.json`).
+5. **The order.** After T86 (the split it reads, its closing checks); beside T93 (whose Bash write paths would name the files the
+   own-files refusal now cannot see) and T81, touching none of their files.
+6. **The exits.** Green: the two red-first pairs and this task's own closing checks (`make closing-checks T=T88 F=451`; past the task's
+   second `make static`, the crate-scoped checks the static-runs guard names, `make hooks-test` and `make quick`). Red: what failed
+   recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None: each of the three ways was measured (Approach) before the worktree was chosen.
+8. **The budget.** One landing. A landing alone adds a worktree move (1.28 s to add), the seed (0.03 s) and the take-back (git reads
+   of 0.04 s), measured 2026-11-21; the Stop hook's added read, where something runs: the running agents' metas and their features'
+   event logs (9.6 MB for 451, measured 2026-11-21, `ls -l`).
+9. **Done, measured.** The red-first pairs (350/2 then 352; 78/3 then 81, measured 2026-11-21), and the closing checks, measured
+   2026-11-21: the first `make closing-checks T=T88 F=451` RED, 2 of 3 (`.git/closing-checks/20261121T180015Z-555985/`) - static on
+   T88's own doc comment (clippy's `doc_markdown`: `PostToolUse` and `NotebookEdit` unquoted in `set_down_hooks.rs`, so `l7r_shared`
+   did not build and its 33 dependents' lint went red with it), fixed here; hooks-test on `test-idle-tests-hooks.sh`'s wall-clock case
+   (the run starting a FULL wait after the jump), run beside M4's `make done` at a load of 16.5, measured 2026-11-21 (M4's run
+   record); quick GREEN. A second was refused as T88's third `make static` (FR-007), so the checks the static-runs guard names ran
+   instead, measured 2026-11-21 (`/tmp/t88/c3-*` to `c6-*`, each log's last lines): lint, format
+   and tests GREEN on `rust/guard/shared`, `rust/gate/crates/land` and `rust/guard`; cover first RED on T88's own tests and code - 13
+   assert messages on lines of their own, which only a failing assert reaches (`alone/tests.rs` 10, `set_down_hooks/tests.rs` 3), and
+   three error paths of `free_slot`'s reads no test took (`set_down_hooks.rs` lines 329, 393, 437) - both fixed here (each condition
+   bound before its assert; `a_free_slot_s_unreadable_reads_are_errors`: an event log and a plan that are not text, an interim
+   builder's transcript that cannot be opened), then GREEN (shared 353 passed, land 81, each cover clean), and after the review's order fix shared 354 passed, its cover clean
+   (`/tmp/t88/r2-*`); `make hooks-test` GREEN, 57
+   suites run in 25 s, the idle-tests case among them, measured 2026-11-21 (`/tmp/t88/c6.rc`); `make quick` clean.
+10. **Before moving a constant.** n/a - `L7R_BUILDERS` is new, a GUESS of 3, a knob (its point of change `set_down_hooks.rs`
+    `BUILDERS`; D14's knob table is T22's).
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** A session sees a finished task landed while others build, and a refused stop naming the next task to start
+    while a builder slot is free; without it, a finished task waits for its batch (T48 and T78 CLEAR for hours behind T79).
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?**
+- The occupancy after this lands cannot be measured before a night runs on it (T88's line asks before and after): left unmeasured, a
+  finished task's batch wait and an empty builder slot stay unproven gone. Not fixed here: it needs a night of rolling dispatch and
+  landing alone first. Filed as T98; lands before T22.
+- `test-idle-tests-hooks.sh`'s wall-clock case failed good work under load: red in T88's first closing checks beside M4's `make done`
+  at a load of 16.5, measured 2026-11-21 (M4's run record), and green on the rerun with the idle-tests guard and its suite unchanged, measured 2026-11-21
+  (`/tmp/t88/c6.rc`); a gate beside busy builders is the case T88's landing alone makes usual. Not fixed here: another guard's suite,
+  outside T88's files. Filed as T99; lands before T22.
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** yes - a `[perf]` task (451 FR-013): the landings and the builders' loop; not engine speed, so no checklist.
 
 
 ### T89 (<why: the finding or measurement that files it>)
@@ -1191,31 +1383,142 @@ docs/performance-checklist.md answers.
 **Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
 
 
-### T93 (<why: the finding or measurement that files it>)
+### T93 (T86's closing checks could not set aside another task's shell-written files: the event log's Bash lines carried no write path, its Edit and Write lines naming 127 of the 796 files 2026-11-21's landings had changed, measured 2026-11-21 (T86's `/tmp/t86/recall.py`, T86's Found and left); T86's closing run 2 red only on such a file, another builder's `rust/gate/crates/task/src/task_add/tests.rs`)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: each Bash call's END names the files it wrote, and the closing checks read them:
+  - THE FIELD (`rust/guard/shared/src/guards/event_log_hooks/fields.rs`, `bash_writes`, called from `run_fields`): on a Bash call's
+    `PostToolUse` and `PostToolUseFailure` line, `writes` - the targets of `shared::tree::walk_judged` (the tree guards' walk) run on
+    the payload's command from its `cwd`, each an absolute path, once, in the walk's order; left out are a program that only reads
+    (`how` "read"), a target the walk cannot place, and a path that is a directory (a `make`, a `git` subcommand or a Python program
+    writes where the shell stands, a directory; `mkdir` makes one). No target, no field. The form is pinned (`"writes":[...]` after
+    `cat`, then the task the writer appends), and the suite's fixture lines copy it.
+  - WHY THE END, NOT THE START: a start may be a call that never ran (8,370 Bash starts against 8,224 ends in 451's log since
+    2026-11-20T20:00Z, measured 2026-11-21 (a Python count of the log's Bash lines by event)): a refused `sed -i F` claiming F for its
+    task would make the caller's own dirty F another's, a wrong green. The start was priced (the same walk at almost no cost there,
+    since main-tree has already compiled its patterns in that process, but every reader then joining each start to its end by id)
+    and not taken, chosen by T93's builder, 2026-11-21. The failure end is included: a `sed -i F && make rust-test` red at its test
+    still wrote F (73 Bash failure ends against 8,151 plain ends, the same count).
+  - NO WALK REUSED: the brief asked to reuse the call's walk where the process had already done it; none has. Every guard that walks
+    (main-tree, gm-tree, make-only, readme, gate-write) runs on `PreToolUse` alone, and each hook event is its own process, observed
+    2026-11-21, method: each guard's `events` and `.claude/settings.json`'s one dispatcher an event. A memo in `shared::tree` would be
+    outside the task's files and would find nothing to reuse at a call's end.
+  - THE READER (`scripts/gates/closing-checks.sh`, the split): a line claims each dirty file named exactly by its edit path or by its
+    `writes` - never a prefix, so a directory claims none of the files in it (a `make` at the clone's root would otherwise claim the
+    whole clone for another task) - under the rules an Edit line already met: not a fallback line, a task named, newer than the
+    file's last commit, another task's and never the caller's. The header's line on what stays the caller's is restated: a write the
+    walk cannot see (a `make` target's, a generator's, a `git mv`'s), a generated page.
+  - A LANDED TASK'S LINE CLAIMS NOTHING (a defect of T86's window found here, fixed here, constitution XIV): a line older than its
+    own task's last landing (`<feature>: T.. ticked (make land)`, read from the same 7-day `git log`) claims nothing, the file changed
+    by that landing or not. WHY: T93's own closing run set `rust/guard/CLAUDE.md`, which T93 edits, apart as T66's - T66's Edit at
+    07:41Z was newer than the file's last commit (T58's, 07:23Z), and T66 landed with no change to the file, so its line claimed the
+    file for 7 days (observed 2026-11-21, method: the run's split against the file's `git log` and its Edit lines). A file a caller
+    shares with a landed task's stale line was judged another's: in a crate, a red of the caller's own reported apart, a wrong green.
+    Bash lines, which name more files, widen it.
+- **Red first**, measured 2026-11-21:
+  - the field (`event_log_hooks/tests/writes.rs`, four tests: a call's files once each, no directory, `make` or read; the pinned
+    form; only a Bash call's end, failed or not, never its start, another tool's or a call naming none; a target the walk cannot place
+    names nothing; the logged line carries it) against HEAD's `fields.rs`: 346 passed, 4 failed (`make rust-test
+    CRATE=rust/guard/shared`, `/tmp/t93/red-rust.log`); fixed: 350 passed (`/tmp/t93/green-rust.log`).
+  - the reader (`tests/hooks/test-closing-checks.sh` case 6, three files more: T84's Bash write and its failed end's, set apart; a
+    file both tasks' Bash calls wrote, the caller's; a directory T84's line names claiming none of `rust/mine`'s files) against HEAD's
+    script: 41 passed, 3 failed (`/tmp/t93/red-suite.log`); fixed: 44 of 44 (`/tmp/t93/green-suite.log`).
+  - the landed task's line (case 6, one file more: T77's Bash write of `docs/reverted.md`, newer than the file's last commit, older
+    than `451-x: T77 T78 ticked (make land)`, an empty commit) against the script before the rule: 41 passed, 3 failed
+    (`/tmp/t93/landed-red.log`); with it: 44 of 44 (`/tmp/t93/landed-green.log`). On the clone, `rust/guard/CLAUDE.md` is T93's again
+    (the split with a no-op make, measured 2026-11-21).
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| a Bash call's end names its write targets; the closing checks set another task's aside, an exact path | n/a - no map | n/a | none | n/a |
 
 ### T93 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
-8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+1. **The goal, in the world.** No map changes. A builder's `make closing-checks T=<task>` sets aside a dirty file another task's
+   Bash call wrote - a redirect, `sed -i`, a file tool - as it sets aside one another task's Edit wrote, so its verdict is less often
+   red on another builder's shell-written file; a file no line names stays the caller's, so a miss still costs a saving, never a
+   wrong green.
+2. **The constraints.** T93's line; FR-013 (a `[perf]` task: the builders' loop); FR-012 (red first); T86's split and its rules
+   (fallback, task, commit window, never the caller's); T74's (the hook runs on every event and never refuses); T38's (a test reads
+   its own environment: `HOME` through `shared::env`); the launcher's files (`fields.rs` and its tests, the script's subtraction and
+   its suite case, `rust/guard/CLAUDE.md`'s row, `docs/guards.md`, this section) and nothing of `shared::tree`, the land crate,
+   `set_down_hooks` or `house_style_hooks`' tests; nothing committed.
+3. **Where each comes from.** O: T86's recall and its red runs (T86's section, item 9); O: this task's replay, cost and growth
+   measurements (item 4); the task as filed (T93's line) and T86's Found and left.
+4. **Do they describe the world here?** Measured 2026-11-21, each by its method:
+   - THE REPLAY: every Bash `tool_use` since 2026-11-20T12:00Z in the main session's transcript and its 202 subagent transcripts
+     written since, 9,637 commands, walked as `bash_writes` walks them in ONE process, 2.49 s wall, 9.8 MB peak, measured 2026-11-21
+     (`/tmp/t93/replay`, a scratch crate over `l7r_shared::tree`, under `/usr/bin/time -v`) - each command as the transcript holds it,
+     before any guard's rewrite. Of them 2,226 name a file, 3,765 paths (3,278 under `/tmp/`, 405 in the clone), measured 2026-11-21
+     (the replay's output, a Python count).
+   - THE COVERAGE: the 15 landings since 2026-11-20T20:00 local, 837 files changed, measured 2026-11-21 (T86's method,
+     `/tmp/t93/recall.py`, each replayed call booked to the task its log line names by tool-use id, 9,001 joined): Edit and Write lines name 149, with the replayed
+     `writes` 167 (+18); T58's 619 named by neither (its 325 joined calls name 2 clone files, 41 of them Python programs), so 149 to 167 of the other 218.
+     Of the 51 still missed, by the first Bash call of the landing's tasks naming the file's basename, measured 2026-11-21
+     (`/tmp/t93/misses.py`, a basename match, not proof): a Python program run from a heredoc or `-c` 15, which the walk places where the shell stands; no call of its
+     tasks 9 (`docs/make-targets.html` by `make docs`, the main session's own edits); a read, another write or another file of the name 27.
+   - T86'S RED RUNS, measured 2026-11-21 (the replay against each run's `caller-files` and the log's lines before the run): of the 18 files no edit
+     line named in runs 2 and 3, the walk names 4 as T84's - both files a red named (`task_add/tests.rs`, run 2's lint; `plan/tests.rs`,
+     run 3's cover) and the builder-stop suite's 2 - but the task and plan crates kept 5 files of the caller's set no line names
+     (`plan.rs`, `plan/status.rs`, `plan/task.rs`, `task_add.rs`, `tick/refusal.rs`, each written by T84's `python3 -I - <<'EOF'`
+     programs), so both crates were still counted: T93 alone would not have turned runs 2 or 3 green (run 3 was red on the guard crate
+     too, T86's own, its shape (d)).
+   - THE COST, a Bash call's end: the hook alone 2.98 ms before, 7.30 ms after (medians), 3.89 ms added (median, p90 7.32, p99 11.03,
+     max 19.04, mean 4.44), measured 2026-11-21 (`/tmp/t93/cost.py`: 600 of the night's commands, seed 93, through the guard binary
+     `--only event-log-hooks PostToolUse` before and after, `L7R_EVENTS_DIR` a scratch directory, alternating, 3 runs each, the
+     binary alone, not the dispatcher's whole event), about 37 s over the night's 8,224 Bash ends at the mean, measured 2026-11-21 (the
+     mean times the log's count of Bash ends). Its cause:
+     the walk's first use in a process compiles its patterns, 3.2-8.6 ms a first walk against 9-57 us a second (measured 2026-11-21,
+     the scratch binary's `-first` mode, 5 commands twice each in fresh processes); the walk itself is 69 us (median, p90 473 us, p99
+     1.76 ms, max 13.2 ms over the 9,637), measured 2026-11-21 (the replay's in-process timing). A prefilter skipping commands with no
+     `>` and no writing tool word would skip 35.5% and lose 6 files the walk names (measured 2026-11-21, the replay, a Python pass):
+     not taken, a second list of the walk's writers to drift from it.
+   - THE GROWTH: 136,650 bytes on the 8,758,135 the 451 log gained since 2026-11-20T12:00Z, 1.56%: 2,140 of its 9,354 replayed Bash
+     ends carry the field, 64 bytes each (measured 2026-11-21, the replay's `writes` serialized as the hook writes them, joined to the
+     log by id), the clone's paths alone 29,958 bytes, measured the same way - not cut to them: the line is filed in the session's clone, which a
+     path's prefix cannot tell from the cwd's tree (T74), and 1.56% is the whole cost.
+   - THE READER'S PASS: `closing-checks.sh` with a no-op make, `T=T93 F=451`, 370-454 ms before (median 394), 392-419 ms after (median
+     394), 3 runs each, measured 2026-11-21 (`CLOSING_MAKE` T86's `/tmp/t86/nomake`, `CLOSING_CHECKS_DIR` a scratch directory) - its
+     prefilter on `"writes":` adds the lines carrying it to the parsed set, 2,140 a night at the replay's rate. After the landed rule,
+     under a load average of 52: HEAD's script 5,263 and 2,944 ms, the new one 5,936 and 3,173 ms, alternating (measured 2026-11-21,
+     the same harness): the load's, not the change's.
+5. **The order.** After T86 (the split it extends) and T79 (the walk it reads); before T22, T86's filing. Beside T88 (the land crate,
+   `set_down_hooks`) and T81 (`house_style_hooks`' tests), touching none of their files.
+6. **The exits.** Green: the field's 4 tests and the suite's case 6, each red first (measured 2026-11-21 (the Approach's Red first)), and this task's own `make closing-checks T=T93
+   F=451`. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None: the walk was replayed over the night's commands, and its misses classed (item 4).
+8. **The budget.** One landing. A Bash call's end: one walk, 3.89 ms median, measured 2026-11-21 (item 4), and a stat per target, the reader, one more
+   field per line it already reads.
+9. **Done, measured.** Red first: the field's 4 tests (346 passed, 4 failed against HEAD's `fields.rs`; 350 passed fixed) and the
+   suite's case 6 (41 passed, 3 failed against HEAD's script; 44 of 44), measured 2026-11-21 (the Approach's Red first). The coverage:
+   167 of the night's 837 landed files named against 149, and 2 of the 7 task and plan crate files T86's runs 2 and 3 counted as the
+   caller's (item 4) - not enough alone to have turned either run green. This task's own closing runs (measured 2026-11-21, each run's directory and `split.txt`):
+   - run 1 (`20261121T175046Z-256921`), measured 2026-11-21 (the run's directory): hooks-test GREEN (191 s), quick GREEN (56 s), static RED (308 s) and tagged BLOCKED - its
+     every error clippy's `doc_markdown` on T88's half-done `set_down_hooks.rs`, in the same `l7r_shared` crate, so nothing of T93's
+     was judged there; the split, 8 of 10 dirty files T93's, 2 another's (T88's file, and T66's stale line on `rust/guard/CLAUDE.md`:
+     the landed-task defect, fixed after this run). The crate's cover alone (`l7r-gate.sh rust cover --crate rust/guard/shared`, `/tmp/t93/cover.log`): every line of `fields.rs`
+     and `tests/writes.rs` reached, red only on T88's (`set_down_hooks.rs` lines 310, 370 and 409, its tests' 548).
+10. **Before moving a constant.** No constant: the walk's rules are `shared::tree`'s, the reader's the split's (T86's 7-day window).
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** A builder's closing verdict read RED on another builder's shell-written file - T86's run 2 red only on T84's
+    `task_add/tests.rs`, written by a Bash call no line named (T86's item 9) - a second run or a verdict left owed: a wrong outcome,
+    so the code is fixed. What a builder sees differently: a dirty file another task's Bash call names is listed apart with its task;
+    a crate holding only such files is red apart, not counted. Nothing on a map.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?**
+- The walk's first use in a process costs 3.2-8.6 ms, its patterns compiled, against 9-57 us a walk after, measured 2026-11-21 (item
+  4), paid by every Bash start (main-tree's walk) and now by every Bash end: 3.89 ms of each end's 7.30 ms. Not a defect (constitution
+  XIV): every verdict and every line is right, only slower. Proposed to the session as a `[perf]` task of its own (the patterns are
+  `shared::tree`'s, `bind`'s, `py_c`'s and `python`'s, outside T93's files): measure each pattern's build and cut what dominates, both
+  events gaining.
+- A Python program run from a heredoc or `-c` names no file in `writes`: the walk places its writes where the shell stands, a
+  directory, while `make_only_hooks/interp.rs`' `program_names` already reads the files such a program writes - in the guard crate,
+  which `shared`'s event log cannot reach. Its visible effect, measured 2026-11-21 (item 4): T86's runs 2 and 3 stay red on the task
+  and plan crates with T93, 5 files of them T84's Python programs, and 15 of the night's 51 still-missed landed files. Not fixed here:
+  the reader is the guard crate's, outside T93's files. Filed as T96; lands before T22. Every instance observed 2026-11-21, method:
+  the replay's misses classed by the first call naming each file (item 4) and runs 2 and 3's caller files read against the replay.
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** yes - a `[perf]` task (451 FR-013): fewer closing runs red on another builder's files, the builders' loop; not
+engine speed, so no performance checklist.
 
 
 ### T94 (the land crate's tests read the session's `PLAN_REVIEW_OK` and write the real guard log, measured 2026-11-21 by T84 (the guard log's `plan-gate` rows naming the land tests' fixture feature `449-x`: 20-odd `plan-review-stale 449-x` blocks and `plan-review-ok 449-x: 451 T41 and T43 reviewed CLEAR ...`, the session's own escape text, taken by a fixture's tick during a landing's `make done`))
@@ -1253,6 +1556,141 @@ docs/performance-checklist.md answers.
 |---|---|---|---|---|
 
 ### T95 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+
+### T96 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T96 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+
+### T97 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T97 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+
+### T98 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T98 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+
+### T99 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T99 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+
+### T100 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T100 Approach (checklist part A)
 
 1. **The goal, in the world.** <the place as it should be>
 2. **The constraints.** <the FRs, decisions and pages it holds to>

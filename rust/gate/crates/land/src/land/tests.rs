@@ -187,6 +187,11 @@ impl Fx {
     }
 }
 
+/// The landing as the landing worktree's own run (451 T88, `L7R_LAND_ALONE`): a dirty tree is refused there, never sent to land alone.
+pub(super) fn inner(fx: &mut Fx) {
+    fx.land.root = l7r_shared::env::Rooted::with(fx.root.clone(), &[(super::alone::INNER, "1")]);
+}
+
 /// A tool of the stub tree as its stub logs it: its file name.
 pub(super) fn tool(rel: &str) -> String {
     rel.rsplit('/').next().unwrap_or_default().to_owned()
@@ -411,7 +416,8 @@ fn a_clean_landing_ticks_pushes_once_and_says_so() {
 
 #[test]
 fn every_cheap_refusal_is_said_together_and_nothing_runs_long() {
-    let fx = fx("land-refused");
+    let mut fx = fx("land-refused");
+    inner(&mut fx); // in the clone, uncommitted work sends the landing to land alone (451 T88)
     put(&fx.root, "untracked.txt", "x");
     *fx.answers.holding.borrow_mut() = "T9 nine  <- the active task\n".to_owned();
     *fx.answers.ledger.borrow_mut() = "| ? | owed |\n".to_owned();
@@ -654,7 +660,7 @@ fn main_refuses_what_land_py_refused_before_it_landed() {
             NOTE,
             &scripts,
             &nothing,
-            &l7r_shared::env::Rooted::with(".", &[])
+            &l7r_shared::env::Rooted::with(".", &[(super::alone::INNER, "1")])
         ),
         Ok(2)
     );
@@ -665,7 +671,7 @@ fn main_refuses_what_land_py_refused_before_it_landed() {
             NOTE,
             &scripts,
             &nothing,
-            &l7r_shared::env::Rooted::with(".", &[])
+            &l7r_shared::env::Rooted::with(".", &[(super::alone::INNER, "1")])
         ),
         Ok(2)
     );
@@ -676,7 +682,7 @@ fn main_refuses_what_land_py_refused_before_it_landed() {
             "  ",
             &scripts,
             &nothing,
-            &l7r_shared::env::Rooted::with(".", &[])
+            &l7r_shared::env::Rooted::with(".", &[(super::alone::INNER, "1")])
         ),
         Ok(2)
     );
@@ -687,7 +693,7 @@ fn main_refuses_what_land_py_refused_before_it_landed() {
             NOTE,
             &scripts,
             &nothing,
-            &l7r_shared::env::Rooted::with(".", &[])
+            &l7r_shared::env::Rooted::with(".", &[(super::alone::INNER, "1")])
         ),
         Ok(2)
     );
@@ -699,7 +705,7 @@ fn main_refuses_what_land_py_refused_before_it_landed() {
         NOTE,
         &scripts,
         &nothing,
-        &l7r_shared::env::Rooted::with(".", &[])
+        &l7r_shared::env::Rooted::with(".", &[(super::alone::INNER, "1")])
     )
     .is_err());
 }

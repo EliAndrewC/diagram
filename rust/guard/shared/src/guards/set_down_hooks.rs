@@ -216,15 +216,266 @@ fn running(path: &Path) -> std::io::Result<HashSet<String>> {
 /// # Errors
 /// The transcript, or the agent's own, cannot be read.
 pub fn still_running(path: &Path, id: &str) -> std::io::Result<bool> {
-    match read_in_order(path, "")?.ids.get(id) {
+    let read = read_in_order(path, "")?;
+    runs(&read, &subagents(path), id, &mut HashMap::new())
+}
+
+/// [`still_running`]'s rule for one id over a reading already made: launched or resumed, or interim and [`awake`].
+fn runs(
+    read: &Read,
+    dir: &Path,
+    id: &str,
+    known: &mut HashMap<String, bool>,
+) -> std::io::Result<bool> {
+    match read.ids.get(id) {
         Some(Said::Launched) => Ok(true),
-        Some(Said::Interim) => awake(
-            &path.with_extension("").join("subagents"),
-            id,
-            &mut HashMap::new(),
-        ),
+        Some(Said::Interim) => awake(dir, id, known),
         _ => Ok(false),
     }
+}
+
+/// The session's `subagents` directory, beside its transcript.
+fn subagents(path: &Path) -> PathBuf {
+    path.with_extension("").join("subagents")
+}
+
+/// ROLLING DISPATCH (feature 451 T88): how many builders run at once before the Stop hook stops naming the next task - `L7R_BUILDERS`,
+/// a GUESS of 3, the three at once T88's occupancy was measured against (3 builders 26% of 580 minutes, a mean of 1.65, measured
+/// 2026-11-21 from each agent's span).
+const BUILDERS: usize = 3;
+
+/// A builder's brief: the description `<feature number> T<n>...` of an agent the session dispatched (its meta's `spawnDepth` 1), as
+/// `builder_stop_hooks` (451 T84) reads one - its own reader is the guard crate's, which this crate cannot call.
+static BRIEF: LazyLock<Regex> = LazyLock::new(|| re(r"^\s*(\d{3})\s+(T\d+[a-z]?)\b"));
+/// What a task's line names of the tree: a file (a path, or a name with its extension) or a guard module (`*_hooks`).
+static NAMES: LazyLock<Regex> = LazyLock::new(|| {
+    re(r"[A-Za-z0-9_./-]*[A-Za-z0-9_]\.(?:rs|sh|py|md|json|toml)\b|\b[a-z][a-z0-9_]*_hooks\b")
+});
+/// A task its line says it comes after (`after T86`).
+static AFTER: LazyLock<Regex> = LazyLock::new(|| re(r"\bafter (T\d+[a-z]?)\b"));
+/// A name too common to tell one task's file from another's, unless its path is given.
+const GENERIC: &[&str] = &[
+    "tests.rs",
+    "lib.rs",
+    "mod.rs",
+    "main.rs",
+    "plan.md",
+    "tasks.md",
+    "spec.md",
+    "CLAUDE.md",
+];
+
+/// The (feature number, task) a running agent builds, read from its meta file; None for any agent but a builder.
+fn brief(dir: &Path, id: &str) -> Option<(String, String)> {
+    let meta: Value = serde_json::from_str(
+        &std::fs::read_to_string(dir.join(format!("agent-{id}.meta.json"))).ok()?,
+    )
+    .ok()?;
+    if meta.get("spawnDepth").and_then(Value::as_u64) != Some(1) {
+        return None;
+    }
+    let c = BRIEF
+        .captures(meta.get("description")?.as_str()?)
+        .ok()
+        .flatten()?;
+    Some((c[1].to_owned(), c[2].to_owned()))
+}
+
+/// The builders still running, each by [`still_running`]'s rule over ONE reading of the transcript (a transcript reached 206 MB): its
+/// (feature number, task), sorted. [`running`] alone would not do - it leaves out an interim agent whenever another plainly runs.
+fn builders(path: &Path) -> std::io::Result<Vec<(String, String)>> {
+    let read = read_in_order(path, "")?;
+    let dir = subagents(path);
+    let mut known = HashMap::new();
+    let mut out = Vec::new();
+    for id in read.ids.keys() {
+        if let Some(task) = brief(&dir, id) {
+            if runs(&read, &dir, id, &mut known)? {
+                out.push(task);
+            }
+        }
+    }
+    out.sort();
+    out.dedup();
+    Ok(out)
+}
+
+/// The feature directory a number names, or None.
+fn feature_dir(root: &Path, number: &str) -> Option<String> {
+    let mut names: Vec<String> = std::fs::read_dir(root.join("specs"))
+        .ok()?
+        .flatten()
+        .map(|e| e.file_name().to_string_lossy().into_owned())
+        .filter(|n| n.split('-').next() == Some(number))
+        .collect();
+    names.sort();
+    names.into_iter().next()
+}
+
+/// The files the running tasks' own edits name (451 T86's reading, the other way round): each `PostToolUse` Edit, Write or `NotebookEdit`
+/// line of the task's feature log, not a `fallback` one, filed under the task - relative to the root, those under `specs/` and `.git/`
+/// and the review ledger left out, since every task writes them.
+fn busy_files(root: &Path, running: &[(String, String)]) -> Result<HashSet<String>, String> {
+    let pre = format!("{}/", root.to_string_lossy().trim_end_matches('/'));
+    let mut out = HashSet::new();
+    for (number, task) in running {
+        let Some(feature) = feature_dir(root, number) else {
+            continue;
+        };
+        let log = super::event_log_hooks::log_path(root, &feature);
+        if !log.is_file() {
+            continue;
+        }
+        let text = std::fs::read_to_string(&log).map_err(|e| format!("{}: {e}", log.display()))?;
+        for line in text
+            .lines()
+            .filter(|l| l.contains(r#""cat":"edit""#) && l.contains(r#""PostToolUse""#))
+        {
+            let Ok(row) = serde_json::from_str::<Value>(line) else {
+                continue;
+            };
+            let rel = field(&row, "path").strip_prefix(&pre).unwrap_or("");
+            if row.get("fallback").and_then(Value::as_bool) == Some(true)
+                || field(&row, "task") != task
+                || rel.is_empty()
+                || rel.starts_with("specs/")
+                || rel.starts_with(".git/")
+                || rel == "dev/review-ledger.md"
+            {
+                continue;
+            }
+            out.insert(rel.to_owned());
+        }
+    }
+    Ok(out)
+}
+
+/// What a task's line names of the tree ([`NAMES`]), a name in [`GENERIC`] kept only with its path.
+fn names(title: &str) -> Vec<String> {
+    NAMES
+        .find_iter(title)
+        .map_while(Result::ok)
+        .map(|m| m.as_str().trim_matches(|c| c == '.' || c == '/').to_owned())
+        .filter(|n| n.contains('/') || !GENERIC.contains(&n.as_str()))
+        .collect()
+}
+
+/// Does a name a task's line gives reach a file: a path its suffix (or a directory above it), a bare name one of its parts.
+fn touches(name: &str, file: &str) -> bool {
+    if name.contains('/') {
+        return file.ends_with(name) || file.starts_with(&format!("{name}/"));
+    }
+    file.split('/')
+        .any(|p| p == name || p == format!("{name}.rs"))
+}
+
+/// The open task to start in a free builder slot (451 T88): performance work first across every active feature (FR-013), then the
+/// rest - each pass of `prefer` first, then of each other active feature by its last task-start (the order [`next_performance`]
+/// reads), in tasks.md's order - a task never
+/// started in this clone (one started is running, waiting to land, or set down: resumed or landed, never started again), whose line
+/// names no file a running task's edits name ([`busy_files`]; a line naming nothing touches nothing it can tell) and comes after no open
+/// task (`after T<n>`).
+fn next_independent(
+    root: &Path,
+    git_dir: &Path,
+    prefer: &str,
+    busy: &HashSet<String>,
+) -> Result<Option<OpenTask>, String> {
+    let downs = rows(&git_dir.join("set-downs.jsonl"))?;
+    let starts = rows(&git_dir.join("task-starts.jsonl"))?;
+    let mut order = started(git_dir)?;
+    order.retain(|(f, _)| f != prefer);
+    order.insert(0, (prefer.to_owned(), String::new()));
+    // performance work first across every active feature (FR-013; T88's plan review): the first other task is kept, not returned
+    let mut rest = None;
+    for (feature, since) in order {
+        let boxes = active(root, &downs, &feature, &since, feature == prefer)?;
+        let open: HashSet<&str> = boxes.iter().map(|(id, _)| id.as_str()).collect();
+        let plan_path = root.join("specs").join(&feature).join("plan.md");
+        let plan = if plan_path.is_file() {
+            read(&plan_path)?
+        } else {
+            String::new()
+        };
+        let free = |(id, title): &&(String, String)| {
+            !starts
+                .iter()
+                .any(|r| field(r, "feature") == feature && field(r, "task") == id)
+                && !AFTER
+                    .captures_iter(title)
+                    .map_while(Result::ok)
+                    .any(|c| open.contains(&c[1]))
+                && !names(title)
+                    .iter()
+                    .any(|n| busy.iter().any(|f| touches(n, f)))
+        };
+        let task = |(id, title): &(String, String)| OpenTask {
+            feature: feature.clone(),
+            id: id.clone(),
+            title: title.clone(),
+        };
+        if let Some(perf) = boxes
+            .iter()
+            .filter(free)
+            .find(|(id, t)| performance(id, t, &plan))
+        {
+            return Ok(Some(task(perf)));
+        }
+        rest = rest.or_else(|| boxes.iter().find(free).map(task));
+    }
+    Ok(rest)
+}
+
+/// A free builder slot's refusal (451 T88), or None: fewer than [`BUILDERS`] (`L7R_BUILDERS`) builders running and an independent open
+/// task to start ([`next_independent`]). A task that is not performance work, where an open one waits, gets `task-start`'s escape in
+/// its command, since that start refuses it otherwise (FR-013): every open performance task is started, waits on an open task or touches a running task's files.
+fn free_slot(
+    root: &Path,
+    git_dir: &Path,
+    feature: &str,
+    path: &Path,
+) -> Result<Option<String>, String> {
+    let knob = crate::env::opt("L7R_BUILDERS")
+        .and_then(|v| v.trim().parse().ok())
+        .unwrap_or(BUILDERS);
+    let running = builders(path).map_err(|e| e.to_string())?;
+    if running.len() >= knob {
+        return Ok(None);
+    }
+    let busy = busy_files(root, &running)?;
+    let Some(next) = next_independent(root, git_dir, feature, &busy)? else {
+        return Ok(None);
+    };
+    let number = next
+        .feature
+        .split('-')
+        .next()
+        .unwrap_or(&next.feature)
+        .to_owned();
+    let plan = std::fs::read_to_string(root.join("specs").join(&next.feature).join("plan.md"))
+        .unwrap_or_default();
+    let later = match next_performance(root, git_dir, &next.feature).ok().flatten() {
+        Some(p) if !performance(&next.id, &next.title, &plan) => format!(
+            "PERF_LATER_OK=\"{} {}, the open performance work, is started, waits on an open task or touches a running task's files\" ",
+            number_of(&p.feature),
+            p.id
+        ),
+        _ => String::new(),
+    };
+    let who: Vec<String> = running.iter().map(|(f, t)| format!("{f} {t}")).collect();
+    let short: String = next.title.chars().take(80).collect();
+    Ok(Some(format!(
+        "BLOCKED: a builder slot is free - {} of {knob} builders running ({}) - start the next independent open task, one touching none of their files ({} {short}): {later}make task-start F={number} T={}, then dispatch its builder (feature 451 T88, L7R_BUILDERS={knob}); or set the feature down: make set-down F={} WHY=\"<why it stops here>\"",
+        running.len(),
+        if who.is_empty() { "none".to_owned() } else { who.join(", ") },
+        next.id,
+        next.id,
+        number_of(feature)
+    )))
+}
+
+fn number_of(feature: &str) -> &str {
+    feature.split('-').next().unwrap_or(feature)
 }
 
 /// The feature's open boxes, the GM's review box left out.
@@ -384,7 +635,8 @@ pub(crate) fn verdict(root: &Path, transcript: &str) -> Result<Option<String>, S
     // the transcript last: the costly read (206 MB on 2026-10-26), where the status line is one small file
     let path = Path::new(transcript);
     if path.is_file() && !running(path).map_err(|e| e.to_string())?.is_empty() {
-        return Ok(None);
+        // something runs: the turn ends, but where a builder slot is free and an independent task waits (451 T88: dispatch rolls)
+        return free_slot(root, &git_dir, feature, path);
     }
     let number = |f: &str| f.split('-').next().unwrap_or(f).to_owned();
     // PERFORMANCE WORK FIRST (feature 451 FR-013): the next named is an open performance task where an active feature holds one; a

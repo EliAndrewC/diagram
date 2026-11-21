@@ -133,33 +133,44 @@ CLOSING_CHECKS_KEEP_MIN=0 run
 
 echo "6. two tasks' work in one clone (451 T86): the caller's files judged, another task's red apart and not counted"
 # A scratch clone: T86 (451) and T84 (451) mid-edit beside each other, and 449's T86. The caller's: its own Edit, a file both edited, a
-# Bash write no line names, a file a landed task's old line names, a fallback line's file; another task's: T84's crate, 449's T86's file.
+# Bash write no line names, a file a landed task's old line names, a fallback line's file, a file both tasks' Bash calls wrote (451 T93);
+# another task's: T84's crate, 449's T86's file, T84's Bash writes - a call's end and a failed end (`writes`, 451 T93) - while the
+# directory one of them names claims none of the files in it; and a landed task's line, newer than the file's last commit but older than
+# its own task's landing, which left the file unchanged, claims nothing (451 T93).
 C="$T/clone"; E="$C/.git/l7r-events"; rm -rf "$C" "$T/c6"; mkdir -p "$C/rust/mine/src" "$C/rust/other/src" "$C/docs" "$T/c6"
 git -C "$C" init -q && git -C "$C" config user.email t@t && git -C "$C" config user.name t
-for f in rust/mine/src/lib.rs rust/other/src/lib.rs docs/shared.md docs/landed.md; do echo base > "$C/$f"; done
+for f in rust/mine/src/lib.rs rust/other/src/lib.rs docs/shared.md docs/landed.md docs/reverted.md; do echo base > "$C/$f"; done
 git -C "$C" add -A && git -C "$C" commit -qm base
-for f in rust/mine/src/lib.rs rust/other/src/lib.rs docs/shared.md docs/landed.md rust/mine/src/new.rs rust/other/src/extra.rs docs/bash.md; do echo edit >> "$C/$f"; done
+GIT_COMMITTER_DATE="$(( $(date +%s) + 60 )) +0000" git -C "$C" commit -q --allow-empty -m '451-x: T77 T78 ticked (make land)'
+later=$(python3 -c 'import datetime, time; print(datetime.datetime.fromtimestamp(time.time() + 30, datetime.timezone.utc).strftime("%Y-%m-%dT%H:%M:%S.000Z"))')
+for f in rust/mine/src/lib.rs rust/other/src/lib.rs docs/shared.md docs/landed.md rust/mine/src/new.rs rust/other/src/extra.rs docs/bash.md \
+  docs/sed.md docs/failed.md docs/both.md docs/reverted.md; do echo edit >> "$C/$f"; done
 now=$(date -u +%Y-%m-%dT%H:%M:%S.000Z); mkdir -p "$E"
 line() { printf '{"t":"%s","ev":"PostToolUse","tool":"Edit","cat":"edit","by":"a1","path":"%s/%s","task":"%s"%s}\n' "$1" "$C" "$2" "$3" "${4:-}"; }
 { line "$now" rust/mine/src/lib.rs T86; line "$now" rust/other/src/lib.rs T84; line "$now" docs/shared.md T84; line "$now" docs/shared.md T86
   line 2020-01-01T00:00:00.000Z docs/landed.md T50; line "$now" docs/bash.md T84 ',"fallback":true'
-  printf '{"t":"%s","ev":"PreToolUse","tool":"Edit","cat":"edit","path":"%s/docs/bash.md","task":"T84"}\n' "$now" "$C"; } > "$E/451-x.jsonl"
+  printf '{"t":"%s","ev":"PreToolUse","tool":"Edit","cat":"edit","path":"%s/docs/bash.md","task":"T84"}\n' "$now" "$C"
+  # a Bash call's end as event_log_hooks writes it (the form `a_bash_calls_post_line_names_the_files_it_wrote` pins), its task appended
+  bashline() { printf '{"t":"%s","sid":"s","ev":"%s","tool":"Bash","id":"u","cat":"other tool","writes":[%s],"task":"%s"}\n' "$now" "$1" "$2" "$3"; }
+  bashline PostToolUse "\"$C/docs/sed.md\",\"$C/rust/mine\"" T84; bashline PostToolUseFailure "\"$C/docs/failed.md\"" T84
+  bashline PostToolUse "\"$C/docs/both.md\"" T84; bashline PostToolUse "\"$C/docs/both.md\"" T86
+  printf '{"t":"%s","ev":"PostToolUse","tool":"Bash","cat":"other tool","writes":["%s/docs/reverted.md"],"task":"T77"}\n' "$later" "$C"; } > "$E/451-x.jsonl"
 line "$now" rust/other/src/extra.rs T86 > "$E/449-y.jsonl"
 printf '{"feature": "449-y", "task": "T86", "utc": "2026-11-01T00:00:00Z"}\n{"feature": "451-x", "task": "T86", "utc": "2026-11-21T00:00:00Z"}\n' > "$C/.git/task-starts.jsonl"
 c6() { : > "$T/events"; OUT=$(cd "$C" && STUB_DIR="$T/c6" L7R_EVENTS_DIR="$E" STUB_SLEEP=0.1 "$@" "$SCRIPT" 2>&1); RC=$?; }
 echo rust/other/src/lib.rs > "$T/c6/static.red"
 c6 env CLOSING_TASK=T86
 d6=$(run_dir <(printf '%s' "$OUT"))
-[ "$(cat "$d6/caller-files" 2>/dev/null | tr '\n' ' ')" = "docs/bash.md docs/landed.md docs/shared.md rust/mine/src/lib.rs rust/mine/src/new.rs " ] \
-  && ok "the caller's files: its own edit, a shared file, a Bash write, a landed task's file, a fallback line's (the feature from its task-start)" \
+[ "$(cat "$d6/caller-files" 2>/dev/null | tr '\n' ' ')" = "docs/bash.md docs/both.md docs/landed.md docs/reverted.md docs/shared.md rust/mine/src/lib.rs rust/mine/src/new.rs " ] \
+  && ok "the caller's files: its own edit, a shared file, a Bash write no line names, a landed task's file, a fallback line's (the feature from its task-start), a file both tasks' Bash calls wrote, the files in a directory another's call names, a file a task's line names before that task landed" \
   || no "the caller's files" "$(cat "$d6/caller-files" "$d6/split.txt" 2>&1)"
-[ "$(cut -f1 "$d6/others" 2>/dev/null | tr '\n' ' ')" = "rust/other/src/extra.rs rust/other/src/lib.rs " ] && grep -q 'T86@449-y' "$d6/others" && grep -q 'T84@451-x' "$d6/others" \
-  && ok "another task's: T84's file and 449's T86's" || no "another task's files" "$(cat "$d6/others" 2>&1)"
+[ "$(cut -f1 "$d6/others" 2>/dev/null | tr '\n' ' ')" = "docs/failed.md docs/sed.md rust/other/src/extra.rs rust/other/src/lib.rs " ] && grep -q 'T86@449-y' "$d6/others" && grep -q 'T84@451-x' "$d6/others" \
+  && ok "another task's: T84's file, its Bash writes (a call's end and a failed end, 451 T93), and 449's T86's" || no "another task's files" "$(cat "$d6/others" 2>&1)"
 [ "$RC" -eq 0 ] && printf '%s' "$OUT" | grep -Eq '^  static +GREEN' && printf '%s' "$OUT" | grep -q 'closing-checks: GREEN' \
   && ok "the caller's run is GREEN beside the other's red crate" || no "the caller's verdict (exit $RC)" "$OUT"
 printf '%s' "$OUT" | grep -q "another task's red.*reported apart and not counted" && printf '%s' "$OUT" | grep -q '  lint red on rust/other - .*T84@451-x: rust/other/src/lib.rs' \
   && ok "the other's red named apart, with its task and file" || no "no apart section" "$OUT"
-printf '%s' "$OUT" | grep -q "judged as T86's: 5 of the clone's 7 uncommitted files (2 its own edits name, 3 no task's edit); another task's, its red reported apart: 2" \
+printf '%s' "$OUT" | grep -q "judged as T86's: 7 of the clone's 11 uncommitted files (3 its own edits name, 4 no task's edit); another task's, its red reported apart: 4" \
   && ok "the split is printed" || no "the split line" "$OUT"
 echo rust/mine/src/lib.rs > "$T/c6/static.red"; c6 env CLOSING_TASK=T86 CLOSING_FEATURE=451
 [ "$RC" -eq 1 ] && printf '%s' "$OUT" | grep -Eq '^  static +RED' && ! printf '%s' "$OUT" | grep -q "another task's red" \
