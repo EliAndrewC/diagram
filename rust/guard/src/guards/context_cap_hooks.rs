@@ -488,7 +488,7 @@ fn tree_of(cwd: &Path) -> Option<PathBuf> {
 }
 
 /// The subagent's own transcript, derived from the session's (D9; R2).
-fn own_transcript(session_transcript: &str, agent: &str) -> Option<PathBuf> {
+pub(crate) fn own_transcript(session_transcript: &str, agent: &str) -> Option<PathBuf> {
     let stem = session_transcript.strip_suffix(".jsonl")?;
     Some(
         Path::new(stem)
@@ -499,7 +499,7 @@ fn own_transcript(session_transcript: &str, agent: &str) -> Option<PathBuf> {
 
 /// The context of a transcript's last model call: its last `assistant` row's `usage`, read backwards in [`CHUNK`]s at most
 /// [`TAIL_BYTES`] deep; None where none is found.
-fn context(path: &Path) -> Option<u64> {
+pub(crate) fn context(path: &Path) -> Option<u64> {
     let mut f = File::open(path).ok()?;
     let mut pos = f.metadata().ok()?.len();
     // the bytes from `pos` to the end of what is not yet scanned
@@ -533,6 +533,25 @@ fn context(path: &Path) -> Option<u64> {
 
 /// The context one transcript row reports: an `assistant` row's `message.usage` summed, None for any other row or a sum of zero.
 fn usage_of(line: &[u8]) -> Option<u64> {
+    let c = call_of(line)?;
+    let sum = c.input + c.cached + c.created;
+    (sum > 0).then_some(sum)
+}
+
+/// One model call's usage as an `assistant` transcript row reports it - the one row reader [`context`] and the event log's `tok`
+/// (feature 451 T07, plan D6) share.
+#[derive(Debug, Default, Clone, PartialEq, Eq)]
+pub(crate) struct Call {
+    /// The row's `message.id`: one call's streamed reply is several rows of one id ("" where the row names none).
+    pub id: String,
+    pub input: u64,
+    pub cached: u64,
+    pub created: u64,
+    pub out: u64,
+}
+
+/// An `assistant` row's `message.usage`, None for any other row: a `user` row holding an Agent call's result carries that child's usage.
+pub(crate) fn call_of(line: &[u8]) -> Option<Call> {
     const NEEDLE: &[u8] = b"\"usage\"";
     if !line.windows(NEEDLE.len()).any(|w| w == NEEDLE) {
         return None;
@@ -541,10 +560,20 @@ fn usage_of(line: &[u8]) -> Option<u64> {
     if row.get("type").and_then(Value::as_str) != Some("assistant") {
         return None;
     }
-    let usage = row.get("message")?.get("usage")?;
+    let message = row.get("message")?;
+    let usage = message.get("usage")?;
     let n = |k: &str| usage.get(k).and_then(Value::as_u64).unwrap_or(0);
-    let sum = n("input_tokens") + n("cache_read_input_tokens") + n("cache_creation_input_tokens");
-    (sum > 0).then_some(sum)
+    Some(Call {
+        id: message
+            .get("id")
+            .and_then(Value::as_str)
+            .unwrap_or_default()
+            .to_owned(),
+        input: n("input_tokens"),
+        cached: n("cache_read_input_tokens"),
+        created: n("cache_creation_input_tokens"),
+        out: n("output_tokens"),
+    })
 }
 
 /// Whether `file` is this agent's handoff: in `dir`, its name ending `<agent>.md`.

@@ -261,9 +261,17 @@ the three - `entry-gate.sh` by its two cases, the other two by their case groups
 <!-- plan-archive: T06 to T06 moved to plan-done.md, 2026-11-20 (feature 375 FR-044) -->
 ### T07 (FR-004: no agent's token cost is logged, nor the task it served - research R2)
 
-- **Approach**: D6 in the writer. Held: `rust/guard/src/guards/event_log_hooks.rs` (`make guard-edit` first). Red first: a fixture
-  agent transcript with a repeated `message.id` sums each call once; its meta file's "T202: ..." description gives `task: T202`; an
-  Agent dispatch "T08: ..." records `task: T08`.
+- **Approach**: D6 in the writer. Held: `rust/guard/src/guards/event_log_hooks.rs` (`make guard-edit` first). Already on the log before
+  T07 (T26's `filed.rs`): an Agent dispatch's `task` from its `description`, and a stop's `task` from its meta file's `description`
+  (pinned by `a_line_with_no_t_carries_the_agents_task_else_the_clones`). Built here: `filed::filed` takes an Agent call's task from its
+  prompt's FIRST line where its description names none (the task only - the feature stays the description's, a prompt's line being
+  free text); `fields::agent_cost` writes `tok` (`in`, `cached`, `created`, `out`) and `ctx` on each `SubagentStop`, from the payload's
+  `agent_transcript_path` (else the transcript beside the session's), the whole file read row by row through `context_cap_hooks`'
+  row reader (`call_of`, split out of its `usage_of`; `context` and `own_transcript` made crate-visible, no copy), the last row of each
+  `message.id` standing for its call. No transcript, or no call in it, writes neither field. Red first (`tests/cost.rs`): one call
+  split across three rows whose last carries the whole output, counted once; a user row with usage and a non-JSON row no call; a
+  synthetic zero row neither tokens nor context; a builder with no meta file still costed, no `task`; a dispatch "T08: ..." gives
+  `T08`, a description naming none gives the prompt's first line's `T07`, never a later line's.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
@@ -274,12 +282,12 @@ the three - `entry-gate.sh` by its two cases, the other two by their case groups
 1. **The goal, in the world.** No map changes; each agent's tokens are in the log under its task.
 2. **The constraints.** FR-004; D6; the hook never refuses.
 3. **Where each comes from.** G: the approved "records it at each agent's stop"; O: research R2 (the stop payload, the dedup, the meta file).
-4. **Do they describe the world here?** R2 summed a real builder transcript with the dedup.
+4. **Do they describe the world here?** Yes: the T202 builder's 50 MB transcript is 723 assistant rows of 305 `message.id`s, each id's rows carrying one usage, measured 2026-11-20 (a Python scan of `agent-a791a87c02448854e.jsonl`); a sum over rows would read its output 1,317,955 tokens against 481,878, measured 2026-11-20 (the same scan).
 5. **The order.** After T04; before T10.
 6. **The exits.** Green: the fixture cases. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
 7. **The search smell.** None.
 8. **The budget.** One landing.
-9. **Done, measured.** The fixture cases green; one real agent's stop in the clone carries `tok` (read off the log).
+9. **Done, measured.** The fixture cases green (689 guard tests); the T202 builder's stop replayed through the built `l7r-guard --only event-log-hooks SubagentStop` writes `"task":"T202","tok":{"in":648,"cached":156727175,"created":899518,"out":481878},"ctx":899522`, R2's Python sum to the token, measured 2026-11-20 (the replay into a scratch `L7R_EVENTS_DIR`); the read costs that stop 0.27-0.35 s against 0.04 s with no transcript, measured 2026-11-20 (`/usr/bin/time`, four runs), once per agent stop.
 10. **Before moving a constant.** n/a.
 11. **Before fitting things into room.** n/a.
 12. **Before any fix.** n/a.
@@ -656,31 +664,68 @@ reverted. Not filed with `PERF=1`: no engine stage's counted operations or time.
 
 <!-- plan-archive: T30 to T30 moved to plan-done.md, 2026-11-20 (feature 375 FR-044) -->
 <!-- plan-archive: T31 to T15 moved to plan-done.md, 2026-11-20 (feature 375 FR-044) -->
-### T33 (<why: the finding or measurement that files it>)
+### T33 (four writes the guards read as none: T14's `cd rust/guard/src/guards && python3 - <<'EOF' ... open(p,'w')` rewrote a guard source the make-only guard refuses to `sed -i`, observed 2026-11-20, method: the T14 builder's transcript agent-a4a91e2ca23b89b21 at 14:32:16Z, found by `/tmp/t33/find_t14.py`; a builder's `git apply` and `cp` under T34's running `make land` failed static's cover, observed 2026-11-20, method: T34's refused landing; a bare `rustfmt` passed make-only, observed 2026-11-20, method: T34's found-and-left; `git diff --output=<file>` read as a read, observed 2026-11-20, method: T44's builder's report)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: four holes, each red first, in `rust/guard` (every guard source under `make guard-edit`).
+  - **1, an interpreter's write of a guard file** (`make_only_hooks.rs`, new `make_only_hooks/interp.rs`): `guard_write` reads what the
+    walk does not - a Python program's string literals resolved where the shell stands (a literal joined by `/` or `join(` read as one
+    path, a guard directory counted, a literal only read, a subprocess argv or a dict value exempt), a shell's `-c` or heredoc body judged
+    as a command of its own, a Perl/Ruby/Node body by the same literal reading, and a `for` loop's variable once per word. A shell write
+    of a guard file stays refused under a live permit, as `sed -i` is at HEAD (the permit is for the Edit tool, its block message says
+    so; `classify_at` never read one) - the task's "like sed -i" read as sed's rule, the decision `make decide` rules on.
+  - **2, a bare `rustfmt`**: refused as `bare-rustfmt`, and the bare-cargo message names `make format FILE=<path>` or `make format CRATE=<dir>`.
+  - **3, a shell write under a running gate** (`gate_write_hooks.rs`): `shell_write` refuses each write the walk places in the gated tree
+    that the gate would see (not `.git/`, not ignored, not `unseen --would-write`), a Python writer judged by its literals; and only a
+    literal that is a path where the shell stands counts (`program_names`'s `placed`: no placeholder, glob, URL or anchor, nothing joined
+    onto a base the program computes, no regex's, string method's or comparison's text) - an unresolvable path fails open, as the
+    walk's does. `chmod`'s mode and `chown`'s owner are no longer files (`shared/tree.rs`'s `tool_paths`).
+  - **4, git's writes outside `GIT_WRITES`** (`shared/tree.rs`): `git_output` - the writing options of the read-only subcommands (`--output`,
+    `archive -o`, `format-patch`, `bundle create`, `bugreport`, `diagnose`); a stash's `list` and `show` are reads (`stash` is in
+    `GIT_WRITES`, so the gate's shell-write check refused `git stash list` as a write of `.`); and the gate's commit-or-add rule reads
+    git's subcommand, not the word anywhere in the segment (a HEAD false refusal the gate replay found). The part-4 addition - `git_more`,
+    the writing forms of `switch`, `bisect`, `sparse-checkout`, `submodule`, `worktree`, `clone`, `init`, `config`, `fetch`, `notes`,
+    `update-ref` and `symbolic-ref`, built on the dispatch's ruling (2026-11-20) - was measured and dropped by the session's ruling
+    (2026-11-20): the replay of 1,134 commands caught no real write with it - it moved two rows, main-tree#10 and #11, both its own
+    false refusals, fixed and then dropped with it - and a review found three misreadings of it (`fetch -n` is `--no-tags`, one
+    value-option list for all twelve, `config --global` writes outside the repository) and a fourth of the gate's check (`git stash
+    list` refused, fixed here); filed as T50 (Found and left).
+  - red first: 685 passed, 5 failed (holes 1-4), measured 2026-11-20 (`make rust-test CRATE=rust/guard` in the detached worktree `/tmp/t33/wt`, `/tmp/t33/red1.log`); `a_python_write_carries_its_program` failed to compile at HEAD, measured 2026-11-20 (the same, `/tmp/t33/red2.log`).
+  - the round-3 replay's false refusals red first: 694 passed, 2 failed (`a_mode_or_an_owner_is_not_a_file_written`, `a_running_gate_lets_through_what_writes_outside_the_tree`), measured 2026-11-20 (`make rust-test CRATE=rust/guard` in the clone with T07's work, `/tmp/t33/red3-kept.log`).
+  - part 4 red first: 695 passed, 2 failed (`a_git_subcommand_that_writes_is_a_write_and_its_read_forms_are_not`, the dropped addition's test, deleted with it; the gate's `git notes add` refused, the commit-or-add rule's word), measured 2026-11-20 (the same, `/tmp/t33/red4.log`); the regex's and string methods' text: 696 passed, 1 failed, measured 2026-11-20 (the same, `/tmp/t33/red5.log`); the clone's destination (the dropped addition's): 696 passed, 1 failed, measured 2026-11-20 (the same, `/tmp/t33/red6.log`); with the addition dropped, `git stash list` refused by a running gate: 695 passed, 1 failed (`a_running_gate_lets_through_what_writes_outside_the_tree`), measured 2026-11-20 (the same, `/tmp/t33/red8.log`).
+  - green, the addition dropped: 696 of 696, T07's work beside it, measured 2026-11-20 (`make rust-test CRATE=rust/guard` in the clone, `/tmp/t33/green13.log`); the crate's lint, format and cover clean, measured 2026-11-20 (`scripts/gates/l7r-gate.sh rust lint --crate rust/guard`, `rust format --check`, `rust cover`, `/tmp/t33/lint6.log`, `/tmp/t33/fmtcheck6.log`, `/tmp/t33/cover8.log`); `make quick` clean and `make hooks-test` 55 guard suites green, 2 unchanged since green, measured 2026-11-20 (`/tmp/t33/quick2.log`, `/tmp/t33/hooks-test2.log`).
+  - the clone shapes, binary to binary (the dropped addition's, kept as its measurement): `git clone "a${PAT}b" /tmp/x/c` and a `\`-continued `git clone` into `/tmp` refused by main-tree with the after5 build and let through with the after6 build, `git clone https://h/o/r.git` (a write of the mirror's `r/`) refused by both and `git clone /diagram .clones/x` let through by both, measured 2026-11-20 (`--only main-tree-hooks` in the replay mirror, session `nobody`); with the addition dropped (after7) no `clone` is read as a write, as at HEAD.
+  - the replay (T42's `replay.sh` and `cmp.sh` over 1,134 rows x {all, make-only, main-tree, gm-tree, house-style} x session {t, nobody}, and the gate replay under a stand-in `make done` in the replay mirror, `.clones/` ignored as the mirror ignores it): HEAD against HEAD 0 moves, measured 2026-11-20 (`/tmp/t33/rp/noise.*`). Rounds 1-3 (the four holes): round 1 moved 5 rows allowed->refused under make-only, window#79 a correction and window#56, #299, #312, #267 false (a hook RUN by subprocess, a payload's dict value), fixed by `only_read`'s argv and dict exemptions, measured 2026-11-20 (`/tmp/t33/rp/cmp1.txt`); round 2 moved window#79 alone, measured 2026-11-20 (`/tmp/t33/rp/cmp2.txt`); round 3's gate replay moved 104 rows allowed->refused under gate-write alone, of which 18 wrote outside the tree (a chmod mode, an f-string placeholder or glob, the text between two literals, a URL, an anchor, a literal joined onto argv, a temporary directory or an imported constant, a module loaded by `spec_from_file_location`), measured 2026-11-20 (`/tmp/t33/rp/cmp3.txt`, each row's refusal re-run by `/tmp/t33/scripts/why.sh`), fixed and red first above; round 4 left window#280 and #358 (a regex's text, a string method's, a comparison's), fixed red first, measured 2026-11-20 (the after4 and after5 gate replays, `/tmp/t33/scripts/round4.sh`); the part-4 build (after5) moved main-tree#10, #11 allowed->refused under main-tree (a clone into the scratchpad whose URL held `${PAT}` or whose line ended in `\`, read as a clone where the shell stood), false, fixed red first, measured 2026-11-20 (the after5 replay, `/tmp/t33/rp/cmp6.txt`).
+  - the final build (after7, the addition dropped) against HEAD (the HEAD binary built 19:47 from 7f2074c705, past the last guard commit at 19:39), every move, the same as after6's: after6 -> after7 0 moves in every corpus and the gate replay, measured 2026-11-20 (`/tmp/t33/rp/cmp7.txt`); main-tree#10 and #11 no move against HEAD. After6's moves: make-only and all, both sessions - window#79 allowed->refused, a Python heredoc's `patch("scripts/hooks/house-style-hooks.sh", ...)` writing a held hook, a correction; main-tree and all, both sessions - refusals#132 and window#256 refused (or moved) -> allowed, `chmod +x $S/watchdog.sh` and `$S/hook.sh` into the scratchpad, read at HEAD as a mirror write of `+x`, corrections of HEAD's false refusal; gm-tree and house-style 0 moves, measured 2026-11-20 (`/tmp/t33/rp/cmp6.txt`). The gate replay, all guards: window#79 as above; parse#148, #171, #173, #229, refusals#88 and window#279 refused -> allowed, the commit-or-add rule's word `add` elsewhere in the segment (`moved.add(`, `git worktree add --detach /tmp/base176`, a scratchpad note's text), corrections; refusals#109, #110, #148 and #18 still refused by make-only and readme, gate-write's false commit-or-add line gone, measured 2026-11-20 (`/tmp/t33/scripts/guards-of.sh` on refusals#18, the HEAD and after6 builds). Gate-write alone: 10 refused -> allowed, the same commit-or-add rows; 84 allowed -> refused, each a write the walk or a literal places in the replay mirror's tree while its gate runs (15 under `tests/`, 15 `specs/`, 14 `l7r/`, 11 `research/`, 9 `scripts/`, the rest bare names in the mirror's top), corrections in the replay's setting, except window#72 (fixed in after8, below), measured 2026-11-20 (`/tmp/t33/rp/gate4-names.txt`, each row's refusal re-run). The part-4 subcommands in the corpora - `clone` 9 rows, `init` 7, `fetch` 7, `config` 10, `worktree add` 3, `symbolic-ref HEAD` 1, `sparse-checkout set` 1 - moved no other row, measured 2026-11-20 (a grep over the 1,134 rows, the after4-after6 comparisons).
+  - window#72 fixed (after8, the gate's `own_args`: a literal handed to a function the program defines blanked before `program_names`, so it fails open): after7 -> after8 0 moves in every non-gate corpus, both sessions, and in the gate replay under all guards; gate-write alone 3 rows refused -> allowed, so its 84 in-tree refusals against HEAD are 81 - window#72 (`edit("vegetation.html", ...)` writing `f"{R}/{rel}"` into another clone) a false refusal fixed, window#170 (`replace_note("citations/urban-features.html", ...)` writing `R / path`, `R = Path("research")`) and window#172 (`sub("research/urban-features.html", ...)` writing `Path(f)`) writes into the tree no longer read (Found and left); window#220 still refused, now naming `l7r/diagram/hamletgen/water.py`, the file it writes outside its helper, in place of the helper's `consts.py`, measured 2026-11-20 (`/tmp/t33/scripts/round4.sh after8`, `/tmp/t33/scripts/cmp8.sh`, `/tmp/t33/rp/cmp8.txt`, each moved row's refusal re-run by `/tmp/t33/scripts/why.sh` with the after7 and after8 builds). Under all guards window#72, #170 and #172 are main-tree's rewrite into the clone at HEAD and after, the same output. The final build (after9: `own_args` finds the `def`s and calls on `masked`'s copy, past strings and comments, the after8 build blanking every literal after a `def f(` named only in a string - window#220's `s.index("def brook_skirt(")` shape) against after8: 0 moves and 0 changed outputs in every corpus, both sessions, and the gate replay, measured 2026-11-20 (`/tmp/t33/scripts/round4.sh after9`, `/tmp/t33/scripts/cmp9.sh`, `/tmp/t33/rp/cmp9.txt`); against HEAD, gate-write alone 81 allowed -> refused and the 10 commit-or-add rows refused -> allowed.
+  - window#72 red first: 695 passed, 1 failed (`a_running_gate_lets_through_what_writes_outside_the_tree`, refused naming `vegetation.html`), measured 2026-11-20 (`make rust-test CRATE=rust/guard` in the clone, `/tmp/t33/red9.log`); a `def` or call named in a string or a comment red first: 695 passed, 2 failed (the same test, the `s.index("def f(")` and `# f(` shapes let through, and `a_literal_handed_to_the_programs_own_function_is_blanked`), measured 2026-11-20 (the same, `/tmp/t33/red10.log`); green 697 of 697, measured 2026-11-20 (`/tmp/t33/green16.log`); the crate's lint, format and cover clean, measured 2026-11-20 (`/tmp/t33/lint9.log`, `/tmp/t33/fmtcheck9.log`, `/tmp/t33/cover10.log`).
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| the four holes | n/a - no map | n/a | none | n/a |
 
 ### T33 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** No map changes; a guard file written through an interpreter, a bare rustfmt, a shell write under a running gate and git's writing options are each judged as the writes they are, and nothing correct is refused by the new reading.
+2. **The constraints.** T33's line (each form red first, through T15's shared readers - `shared::tree`'s walk); constitution XIII (no known regressions, measured by the replay); the gate's rule that a path it cannot resolve fails open; 100% line coverage of the guard crate by its own tests.
+3. **Where each comes from.** O: T14's transcript, observed 2026-11-20 (agent-a4a91e2ca23b89b21, 14:32:16Z); O: T34's refused landing, observed 2026-11-20; O: T44's report, observed 2026-11-20; G: the dispatch's ruling on part 4's hole (2026-11-20: add the git subcommands that write, replay, keep what corrects, narrow what refuses correct work), then the session's ruling (2026-11-20: drop the addition - no real write caught, four misreadings - and file the hole as T50, measure-first); neither is the GM's.
+4. **Do they describe the world here?** Yes: at HEAD a Python heredoc through a list loop, a `Path` join or `cd` with a bare name, `-c` with `os.path.join`, `bash -c`, a bash heredoc, `cat <<EOF | bash`, a Perl heredoc, `for f in ...; do tee $f` and every bare rustfmt were allowed, measured 2026-11-20 (`/tmp/t33/probe.sh` over `/tmp/t33/c1.jsonl`, `/tmp/t33/c2.jsonl` with the HEAD binary); the corpora run `clone` 9 times, `init` 7, `fetch` 7, `config` 10, `worktree add` 3, `symbolic-ref` 1 and `sparse-checkout set` 1, measured 2026-11-20 (a grep over the replay's 1,134 rows).
+5. **The order.** After T14 and T15 (their shared readers); lands with T07 (one clone, the crate compiled with both).
+6. **The exits.** Green: each red test green, the replay's moves each accounted, `make rust-test CRATE=rust/guard`, the crate's lint, format and cover, `make quick`, `make static` (once), `make hooks-test`. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** Every reader of the walk's targets was replayed: make-only, main-tree, gm-tree, house-style and gate-write, measured 2026-11-20 (`grep -rln shared::tree rust/guard/src`, the replay above); `guard_file_hooks` is not one (its matcher is Read, Edit and Write; the shell side of the guard-file rule is make-only's `guard-write`), read 2026-11-20 (`rust/guard/src/guards/guard_file_hooks.rs`).
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** Every red test green (697 of 697, T07's work beside it, the part-4 addition dropped) and every replay move accounted - against HEAD, the final (after9) build one make-only correction (window#79), two main-tree corrections (refusals#132, window#256), the gate's ten commit-or-add corrections and 81 gate-write refusals of writes in the tree (window#72's false refusal fixed here; window#170 and #172 unread, T49), measured 2026-11-20 (`make rust-test CRATE=rust/guard`, `/tmp/t33/green16.log`, `/tmp/t33/rp/cmp7.txt`, `/tmp/t33/rp/cmp8.txt`, `/tmp/t33/rp/cmp9.txt`).
+10. **Before moving a constant.** n/a - `DEPTH` (3, a body inside a body) is a CONVENTION, past any shape the corpora hold, measured 2026-11-20 (the replay: no row nests deeper).
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** Nothing on a map; each hole is a wrong outcome - a guard source rewritten past its guard (T14), a landing's gate failed by a write under it (T34) - and each false refusal the replay found was a correct command refused.
 
-**Found and left?** <none - or each item with its visible effect or the research finding it breaks; an item with neither is not a defect and is not filed>
+**Found and left?**
+- Fixed here, a false refusal this task's check introduced: a literal handed to a function of the program's own was counted where the shell stands, so window#72's `edit("vegetation.html", ...)`, whose function writes `f"{R}/{rel}"` into another clone, was refused under a running gate, measured 2026-11-20 (the after5 gate replay); the gate now fails open on it, as on any path it cannot place (make-only still counts it, fail-closed: window#79 still refused), red first and replayed above.
+- A write into the tree through a function of the program's own is not read by the gate: window#170 (`replace_note("citations/urban-features.html", ...)`, its function writing `R / path` with `R = Path("research")`) and window#172 (`sub("research/urban-features.html", ...)`, writing `Path(f)`) are let through under a running gate, as HEAD lets them through, measured 2026-11-20 (the after8 gate replay, `/tmp/t33/rp/cmp8.txt`). Not fixed here: placing such a literal means reading the function's body - which parameter reaches the write and onto what base - which no reader of `interp` does, and counting it unread refuses correct work (window#72). Filed as T49 (its task line restated by the session); lands before T22.
+- The twelve git subcommands outside `GIT_WRITES` that write (`switch`, `bisect`, `sparse-checkout`, `submodule`, `worktree`, `clone`, `init`, `config`, `fetch`, `notes`, `update-ref`, `symbolic-ref`) are still read as no write, measured 2026-11-20 (the after7 build). Not fixed here: the addition that read them caught no real write in the 1,134-row replay and a review found three misreadings of it, so the session's ruling (2026-11-20) dropped it for a measure-first task on a corpus that runs them in the mirror or a clone, each subcommand's options read from its own `-h`. Filed as T50; lands before T22.
+- Fixed here, HEAD's own false refusals the replays found: `chmod`'s mode and `chown`'s owner read as files written (refusals#132, window#256); the gate's commit-or-add rule matching the word `add` anywhere in a git segment (parse#148, #171, #173, #229, refusals#88, window#279); and `git stash list` / `show` read as a stash's write (no row in the corpora; the gate's new shell-write check refused it, and in the shared walk the fix also lets main-tree through them in the mirror: `git stash list` and `git stash show -p` refused by the HEAD build and let through by after7, a bare `git stash` refused by both, measured 2026-11-20, `--only main-tree-hooks` in a scratch mirror, session `nobody`).
+- A program run from a file (`python3 script.py`) is not read: its writes are judged by nothing but the walk. Measured 2026-11-20 (`/tmp/t33/sg/scripts.py`, `sources.py` and `wrap.py` over the 1,134 rows): 183 runs of a script file in 125 rows - 73 the repository's `scripts/`, 18 `tests/`, `l7r/` or `rust/` (those 91 not read), 65 a scratchpad's, 27 elsewhere; 59 scratch script names, 34 matched by basename to a heredoc in the corpora that writes one (one, `hookmatch.py`, a repository file), 25 with no source; the 48 row-and-script pairs, 41 bodies recovered, run through the after7 build's make-only as `python3 -` programs: 5 refused - window#215's `desc195.py` rewriting a clone's `Makefile` (a guard-file write make-only let through, a real case) and 4 false (window#302, #305, #306, #309 read or run `house-style-hooks.sh`); and 7 pairs rewrite a clone's research page, test or `Makefile` (main-tree#18, #89, #99, window#80, #215, #392, #393), a write the gate would see were that clone's gate running - the gate replay's mirror runs none of them. Not fixed here: reading a script means reading the file's text at the call, a reader no guard has, and the 4 false refusals show the literal reading would refuse correct work without its own replay. Filed as T51; lands before T22.
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** no.
 
 
 <!-- plan-archive: T34 to T14 moved to plan-done.md, 2026-11-20 (feature 375 FR-044) -->
@@ -732,6 +777,87 @@ reverted. Not filed with `PERF=1`: no engine stage's counted operations or time.
 |---|---|---|---|---|
 
 ### T48 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+
+### T49 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T49 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+
+### T50 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T50 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+
+### T51 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T51 Approach (checklist part A)
 
 1. **The goal, in the world.** <the place as it should be>
 2. **The constraints.** <the FRs, decisions and pages it holds to>

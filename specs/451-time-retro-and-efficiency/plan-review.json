@@ -50,15 +50,15 @@
    "declared": "spec-fidelity"
   },
   "### T07 (FR-004: no agent's token cost is logged, nor the task it served - research R2)": {
-   "sha256": "1cfc974863092bffbf9da308a98704672ef30828692c398eff4b67f9a499f81f",
+   "sha256": "ea0ca734343d769cd324f55c33d47f2da76fc447971c4f67f070e9e052191884",
    "verdict": "CLEAR",
-   "reviewed": "2026-11-20",
+   "reviewed": "2026-11-21",
    "declared": "spec-fidelity"
   },
   "### T07 Approach (checklist part A)": {
-   "sha256": "37a289b8a4a16edf3bdea119788a47e3228377998b106d9e1240b9d149bb0dd3",
+   "sha256": "a8cd32299757bdbad0fcdb0d45b90a5a4175f95beda0ba83701921f1af80656a",
    "verdict": "CLEAR",
-   "reviewed": "2026-11-20",
+   "reviewed": "2026-11-21",
    "declared": "spec-fidelity"
   },
   "### T08 (FR-005: `make where-time` booked most of the window as \"waiting on work\" and every gate and test column zero - the spec's Why)": {
@@ -193,17 +193,11 @@
    "reviewed": "2026-11-20",
    "declared": "spec-fidelity"
   },
-  "### T33 (<why: the finding or measurement that files it>)": {
-   "sha256": "39436775e84ae7abbc8b5e616db6820fd538e5c90f9947ae3c7bd680375bf18a",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-20",
-   "declared": "spec-fidelity"
-  },
   "### T33 Approach (checklist part A)": {
-   "sha256": "cfd62a5fada69ce3acb45a4bae7e825538ea7f7ea1839c483fac9fe4811431c1",
+   "sha256": "83e12b7204b361430a2129271f32cc9a046f6d7adab2c7ee3e07be4ee1ca2491",
    "verdict": "CLEAR",
-   "reviewed": "2026-11-20",
-   "declared": "spec-fidelity"
+   "reviewed": "2026-11-21",
+   "declared": "round-arbiter"
   },
   "### T36 (<why: the finding or measurement that files it>)": {
    "sha256": "dc847b818b674c921f73c225ed0aaff49dc81e77696f7385e745860981bc66f4",
@@ -217,42 +211,6 @@
    "reviewed": "2026-11-20",
    "declared": "round-arbiter"
   },
-  "### T44 Approach (checklist part A)": {
-   "sha256": "c27995be4e0ed49d495fd2faa12e6805b8b0489f2990c8209910e6a72fc8838e",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-20",
-   "declared": "spec-fidelity"
-  },
-  "### T45 Approach (checklist part A)": {
-   "sha256": "117b4add605afa5a3bc7acfebf3d8cb736abc1ab2ed44f5acdd66bc76fe5a432",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-21",
-   "declared": "spec-fidelity"
-  },
-  "### T46 Approach (checklist part A)": {
-   "sha256": "1a443e7c3519d8611d1982908bf4cdaa30465862002dfeaef92bd670394de3bb",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-20",
-   "declared": "spec-fidelity"
-  },
-  "### T44 (found by T42, 2026-11-20: window#307's second heredoc, a read, runs `subprocess.run([\"git\",\"-C\",root,\"ls-files\"])` and main-tree refused it with no clone resolvable and rewrote it with one, since `subprocess` is on T31's denylist of known writers; observed 2026-11-20, method: T42's replay and a hand-read of each moved body)": {
-   "sha256": "a042f088cb43c248ba18840ab18075fe00e6cb771b7b40631d420b0d4d1c697c",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-20",
-   "declared": "spec-fidelity"
-  },
-  "### T46 (T42's plan review was handed the wrong decisions: `spec-cited.md` carried 451's own D5, D6 and D11 for T42's \"feature 204 D5\", \"feature 204 spec D5, D6\" and \"house style's D11\", and `spec-index.md` cut FR-009 at \"unless it states why the defect is not\", observed 2026-11-20, method: T42's plan review and its bundle)": {
-   "sha256": "99348dc187dc33d5f418b98ada8f9ba6755e8e18c53f523196e190fee4678267",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-20",
-   "declared": "spec-fidelity"
-  },
-  "### T47 Approach (checklist part A)": {
-   "sha256": "63ac0d157c2ca835cb2911af7d106eb5e8df8ae7d634ca51791b7e7fb9be68b6",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-21",
-   "declared": "spec-fidelity"
-  },
   "### T48 (<why: the finding or measurement that files it>)": {
    "sha256": "6379478259667dd6106b61f5e9a1e1f55204eb710fc7eace6b24440528d74c42",
    "verdict": "CLEAR",
@@ -260,22 +218,52 @@
    "declared": "spec-fidelity"
   },
   "### T48 Approach (checklist part A)": {
-   "sha256": "b4cd3ee436ac46da7168bd6a517e77c286b22774c9b94975a6ac18f91592caed",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-20",
-   "declared": "spec-fidelity"
-  },
-  "### T47 (the pages crate's cover left `runner/watch.rs` line 271 unreached in one `make static` run, observed 2026-11-20, method: T44's builder's `make static` cover line; a rerun reused the last green result)": {
-   "sha256": "53372fa3ca1ab41dee7b8929091179f5d4614332e58cbea94d3a88476f8848e9",
+   "sha256": "8ab3980f20df0569d3b256095cb5ddd7015c6199711d72641b1609d4a30c9074",
    "verdict": "CLEAR",
    "reviewed": "2026-11-21",
-   "declared": "spec-fidelity"
+   "declared": "round-arbiter"
   },
-  "### T45 (one house-style-alone replay of T42's, no clone resolvable, flipped 8 rows from rewrote to allowed and changed 3 rows' output, and did not reproduce, observed 2026-11-20, method: T42's `cmp.sh` of `final.nobody.house-style-hooks.tsv` against `before`)": {
-   "sha256": "b6511003f4d759e116849ab7840b101ea859009a60a5ee8ef8dafc025bbfc2a0",
+  "### T33 (four writes the guards read as none: T14's `cd rust/guard/src/guards && python3 - <<'EOF' ... open(p,'w')` rewrote a guard source the make-only guard refuses to `sed -i`, observed 2026-11-20, method: the T14 builder's transcript agent-a4a91e2ca23b89b21 at 14:32:16Z, found by `/tmp/t33/find_t14.py`; a builder's `git apply` and `cp` under T34's running `make land` failed static's cover, observed 2026-11-20, method: T34's refused landing; a bare `rustfmt` passed make-only, observed 2026-11-20, method: T34's found-and-left; `git diff --output=<file>` read as a read, observed 2026-11-20, method: T44's builder's report)": {
+   "sha256": "3db459cb18a8cd54cf1e9af3fbf58ad1b1d765d58c6857b581da82732770815b",
    "verdict": "CLEAR",
    "reviewed": "2026-11-21",
-   "declared": "spec-fidelity"
+   "declared": "round-arbiter"
+  },
+  "### T49 (<why: the finding or measurement that files it>)": {
+   "sha256": "01677a85d9445a1f8375005f586f704bc656f61419ee149c3de3b73c6c58185e",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-21",
+   "declared": "round-arbiter"
+  },
+  "### T49 Approach (checklist part A)": {
+   "sha256": "91771b038d6b7402e2d1ccd49f9b796930b631e5e9c546645dfe80060cc2c169",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-21",
+   "declared": "round-arbiter"
+  },
+  "### T50 (<why: the finding or measurement that files it>)": {
+   "sha256": "41b4fcc8f051aee4f3c376d9672148738776429ace180da235c5b7ac55e9d395",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-21",
+   "declared": "round-arbiter"
+  },
+  "### T50 Approach (checklist part A)": {
+   "sha256": "b7fb19ae8530d62c96f47a808147c973cf413c1c220ec70fa66b91db9c28a0bf",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-21",
+   "declared": "round-arbiter"
+  },
+  "### T51 (<why: the finding or measurement that files it>)": {
+   "sha256": "97932b9ded5a65f7188296f60d3722ba67e1e4c29274bd86951aee31d8cedaac",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-21",
+   "declared": "round-arbiter"
+  },
+  "### T51 Approach (checklist part A)": {
+   "sha256": "a6e38661be89d27c7370ae0ccb3080d3d688aa95d130c186418dc365a1b10440",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-21",
+   "declared": "round-arbiter"
   }
  },
  "block_reviews": [
@@ -5903,6 +5891,213 @@
      "why": "The removed block held only template placeholders and an empty table: it decided nothing, so deleting it narrows nothing the GM asked for or the spec carries."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-21",
+   "blocks": [
+    "### T07 (FR-004: no agent's token cost is logged, nor the task it served - research R2)",
+    "### T07 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T07-where",
+     "summary": "D6 is built in the event-log writer, event_log_hooks.rs (guard-edit first), reusing T26's filed.rs for the task",
+     "class": "within",
+     "why": "Where the FR-004 writer lives is implementation; D6 already puts the cost and task on the event log's Agent and SubagentStop lines."
+    },
+    {
+     "id": "T07-task-from-prompt",
+     "summary": "filed::filed takes an Agent call's task from its prompt's FIRST line where the description names none; the feature stays the description's; never a later line",
+     "class": "within",
+     "why": "D6 states it word for word: task from its description, else its prompt's first line. Leaving the feature on the description only keeps free prompt text from setting more than D6 asks for; it does not narrow FR-004's task."
+    },
+    {
+     "id": "T07-fields",
+     "summary": "fields::agent_cost writes tok {in, cached, created, out} and ctx on every SubagentStop",
+     "class": "within",
+     "why": "FR-004 asks for input, cached input and output; D6, the accepted spec, already settles created and ctx. Nothing is dropped."
+    },
+    {
+     "id": "T07-transcript-source",
+     "summary": "The transcript is the payload's agent_transcript_path, else the transcript beside the session's, read whole row by row",
+     "class": "within",
+     "why": "D6 names agent_transcript_path. The fallback widens where a cost can be found, it narrows nothing."
+    },
+    {
+     "id": "T07-reader-reuse",
+     "summary": "Reuse context_cap_hooks' row reader (call_of split out of usage_of; context and own_transcript made crate-visible, no copy)",
+     "class": "within",
+     "why": "Implementation choice. It changes no behavior anything asked for."
+    },
+    {
+     "id": "T07-dedup",
+     "summary": "The last row of each message.id stands for its call, so each call is counted once",
+     "class": "within",
+     "why": "D6 says each message.id is counted once. Item 4's measurement (dated, method named) shows a sum over rows would overcount output by about 2.7x, so the rule does what it says it is for. The replay in item 9 matches R2's sum to the token."
+    },
+    {
+     "id": "T07-no-transcript",
+     "summary": "A stop with no transcript, or no call in its transcript, writes neither tok nor ctx",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "FR-004 puts a cost on every stop line, so this is a case the rule does not cover. But without a transcript the cost cannot be known at all, which is a real physical impossibility. Writing zero would put a false figure on the log and defeat SC-002's purpose of reproducing the retrospective's numbers. It is one case, and it stands alone."
+    },
+    {
+     "id": "T07-call-classes",
+     "summary": "A user row with usage, a non-JSON row and a synthetic zero row are not calls (no tokens, no context)",
+     "class": "within",
+     "why": "This defines what counts as a model call under D6's count and ctx's 'last call'. Such rows are not model calls, so leaving them out excludes no real cost."
+    },
+    {
+     "id": "T07-no-meta",
+     "summary": "A builder with no meta file is still costed and carries no task",
+     "class": "within",
+     "why": "FR-004 asks for a task only where the dispatch names one, and D6 takes the stop's task from the meta file. The cost is kept. Only a task that cannot be known is left off."
+    },
+    {
+     "id": "T07-never-refuses",
+     "summary": "The hook never refuses",
+     "class": "within",
+     "why": "FR-004 is logging. It asks for no refusal (FR-012 covers only FR-006 to FR-009, FR-011 and FR-013)."
+    },
+    {
+     "id": "T07-order",
+     "summary": "After T04, before T10; one landing",
+     "class": "within",
+     "why": "Sequencing. FR-004 sets no order, and the GM's 2026-11-20 priority on the six improvements concerns the order of those tasks, which this block does not reorder."
+    },
+    {
+     "id": "T07-stop-cost",
+     "summary": "The transcript read adds 0.27-0.35 s to each agent stop (against 0.04 s), once per stop, accepted; the block declares itself not performance work",
+     "class": "within",
+     "why": "The cost is measured and dated, and it is paid once per agent stop, not per tool call. The request accepted a stop-time record ('records it at each agent's stop'). No defect is left: nothing reads wrong and no tool hangs."
+    },
+    {
+     "id": "T07-done",
+     "summary": "Done when the fixture cases are green and the T202 stop replayed through the built guard writes R2's figures to the token",
+     "class": "within",
+     "why": "Verification of FR-004 itself. It enforces the request and adds no scope."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-21",
+   "blocks": [
+    "### T33 (four writes the guards read as none: T14's `cd rust/guard/src/guards && python3 - <<'EOF' ... open(p,'w')` rewrote a guard source the make-only guard refuses to `sed -i`, observed 2026-11-20, method: the T14 builder's transcript agent-a4a91e2ca23b89b21 at 14:32:16Z, found by `/tmp/t33/find_t14.py`; a builder's `git apply` and `cp` under T34's running `make land` failed static's cover, observed 2026-11-20, method: T34's refused landing; a bare `rustfmt` passed make-only, observed 2026-11-20, method: T34's found-and-left; `git diff --output=<file>` read as a read, observed 2026-11-20, method: T44's builder's report)",
+    "### T33 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "hole-1-interp",
+     "summary": "guard_write reads an interpreter's body (Python literals resolved where the shell stands, -c and heredoc bodies as commands, Perl/Ruby/Node by literal reading, a for loop's variable per word), fail-closed as make-only counts a literal",
+     "class": "within",
+     "why": "Closes an observed bypass of the guard-file rule (T14's Python heredoc rewrote a guard source); it makes an existing guard's refusal real, which is what 'real enforcement and not just instructions' asks of the guards this feature relies on. Its argv and dict-value exemptions answer false refusals the replay found red first."
+    },
+    {
+     "id": "hole-1-live-permit",
+     "summary": "A shell write of a guard file stays refused under a live guard-edit permit, as sed -i is at HEAD (the permit is for the Edit tool); 'like sed -i' read as sed's rule",
+     "class": "within",
+     "why": "Stricter, not narrower: it matches the existing sed -i rule at HEAD and the Edit tool route remains open under the permit, so no correct work loses its route. Nothing in request.md or the spec asks for a permit to open a shell path."
+    },
+    {
+     "id": "hole-2-bare-rustfmt",
+     "summary": "A bare rustfmt refused as bare-rustfmt; the message names make format FILE= / CRATE=",
+     "class": "within",
+     "why": "An observed pass of make-only (T34); refusing with the compliant command named is the project's guard rule, and it serves real enforcement."
+    },
+    {
+     "id": "hole-3-gate-write",
+     "summary": "shell_write refuses each write the walk or a Python literal places in the gated tree while the gate runs (not .git/, not ignored, not unseen --would-write)",
+     "class": "within",
+     "why": "Answers an observed failure (T34's landing failed by a write under its gate); the refusals the replay added (84 in the replay mirror) are each accounted as writes in the tree, and the false ones were fixed red first."
+    },
+    {
+     "id": "hole-3-fail-open-and-placed",
+     "summary": "Only a literal that is a path where the shell stands counts (no placeholder, glob, URL, anchor, computed base, regex/string-method/comparison text); an unresolvable path fails open, as the walk's does",
+     "class": "within",
+     "why": "Keeps the existing gate-write rule that an unresolvable path fails open, and the exclusions each answer a false refusal of correct work the round-3/4 replays found (18 rows, then window#280/#358). The request does not ask the gate-write guard to fail closed; refusing correct work would be a defect the GM's rule names. This is a separate rule from hole 1's fail-closed counting, and the two do not conflict: one guards guard sources, the other a running gate's tree."
+    },
+    {
+     "id": "chmod-chown-not-files",
+     "summary": "chmod's mode and chown's owner are no longer read as files (shared/tree.rs tool_paths)",
+     "class": "within",
+     "why": "Corrects a false refusal at HEAD (refusals#132, window#256: '+x' read as a mirror write), shown red first."
+    },
+    {
+     "id": "hole-4-git-output",
+     "summary": "git_output: the writing options of read-only subcommands (--output, archive -o, format-patch, bundle create, bugreport, diagnose) are writes",
+     "class": "within",
+     "why": "An observed miss (T44's builder: git diff --output read as a read); the class is enumerated with its forms, as FR-009 asks of a class fix."
+    },
+    {
+     "id": "hole-4-git-more",
+     "summary": "git_more: writing forms of switch, bisect, sparse-checkout, submodule, worktree, clone, init, config, fetch, notes, update-ref, symbolic-ref are writes, each read form none; clone/init <dir>/worktree add write the directory they name",
+     "class": "within",
+     "why": "Widens what counts as a write while each read form passes; the corpora's uses of these subcommands were counted and the replay moved no other row, and the clone false refusals (main-tree#10, #11) were fixed red first. Judged on its own: the block's 'ruling on part 4's hole' is a dispatch, not an arbiter ruling (rulings.md is empty) and not the GM's words, so it carries no authority here, and none is needed for a within decision."
+    },
+    {
+     "id": "gate-lets-git-dot-git-only",
+     "summary": "The gate lets through fetch, notes, config, init and worktree where they write only .git, as push, tag and branch",
+     "class": "within",
+     "why": "Prevents hole 4's new reading from refusing correct work under a running gate, consistent with the existing push/tag/branch treatment; red first (the gate's git notes add refused)."
+    },
+    {
+     "id": "commit-or-add-reads-subcommand",
+     "summary": "The gate's commit-or-add rule reads git's subcommand, not the word anywhere in the segment",
+     "class": "within",
+     "why": "Corrects ten false refusals at HEAD (moved.add(, git worktree add, a note's text), each accounted in the gate replay."
+    },
+    {
+     "id": "depth-3",
+     "summary": "DEPTH 3 (a body inside a body) as a convention",
+     "class": "within",
+     "why": "A reading limit past any nesting the corpora hold, measured by the replay; no requested behavior is cut by it."
+    },
+    {
+     "id": "order",
+     "summary": "After T14 and T15 (their shared readers); lands with T07 in one clone",
+     "class": "within",
+     "why": "Sequencing on shared code. Whether T33 runs ahead of the GM's 'improvements first' order (2026-11-20) is not visible in this bundle and is not ruled here."
+    },
+    {
+     "id": "found-left-window72",
+     "summary": "A literal handed to a function of the program's own is counted where the shell stands (fail-closed); window#72's correct write into another clone is refused under a running gate, waiting for the gate or GATE_WRITE_OK; filed as T49, lands before T22",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This is a defect left (a check refusing correct work), and this landing creates it: HEAD allowed the row. So the block's goal sentence 'nothing correct is refused' is untrue by this one row. The stated reason (no reader of interp reads a function's body) is an implementation-cost argument, which would not by itself legitimise anything. What carries it is the accepted spec's own deferral path, FR-009, from the GM-approved improvement 4: a found-and-left defect is allowed when it states why it is not fixed here, its filed task id and its order. All three are present (T49, 'lands before T22'), and the refusal names a recorded escape. The purpose test holds too. Failing open here would reopen the interpreter write the hole exists to close, so the fail-closed choice serves 'real enforcement'. The cost is one row of 1,134, it can be escaped, and its fix is ordered."
+    },
+    {
+     "id": "found-left-python-script-file",
+     "summary": "A Python program run from a file (python3 script.py) is not read; its writes are judged only by the walk; recorded as not a defect",
+     "class": "within",
+     "why": "Under the GM's defect rule (constitution XIV, 2026-11-19), a defect is a wrong outcome observed. The bundle shows none by this route, so leaving the form unread is within and needs no ruling. But the block's evidence does not establish its claim: 'no row's moved verdict turns on one' cannot detect a write the guards never read. The honest statement is that no row was searched for a script-file write of a guard source or into a gated tree. If such a row is ever found, it is an instance of hole 1/3's class and becomes a defect owed a fix or an FR-009 deferral."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-21",
+   "blocks": [
+    "### T33 (four writes the guards read as none: T14's `cd rust/guard/src/guards && python3 - <<'EOF' ... open(p,'w')` rewrote a guard source the make-only guard refuses to `sed -i`, observed 2026-11-20, method: the T14 builder's transcript agent-a4a91e2ca23b89b21 at 14:32:16Z, found by `/tmp/t33/find_t14.py`; a builder's `git apply` and `cp` under T34's running `make land` failed static's cover, observed 2026-11-20, method: T34's refused landing; a bare `rustfmt` passed make-only, observed 2026-11-20, method: T34's found-and-left; `git diff --output=<file>` read as a read, observed 2026-11-20, method: T44's builder's report)",
+    "### T33 Approach (checklist part A)",
+    "### T48 Approach (checklist part A)",
+    "### T49 (<why: the finding or measurement that files it>)",
+    "### T49 Approach (checklist part A)",
+    "### T50 (<why: the finding or measurement that files it>)",
+    "### T50 Approach (checklist part A)",
+    "### T51 (<why: the finding or measurement that files it>)",
+    "### T51 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "declared": "round-arbiter",
+   "decisions": [
+    {
+     "id": "ask:451-T33-third-round",
+     "class": "within",
+     "summary": "the round arbiter accepted the plan as it stands"
+    }
+   ]
   }
  ],
  "tasks": {
@@ -8176,6 +8371,174 @@
     }
    ],
    "verdict": "CLEAR"
+  },
+  "T07": {
+   "section_sha256": "846f57110ee26bfa4973acd43b73634867b3937fd61425c7bc9b4ef6980b98c9",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T07-where",
+     "summary": "D6 is built in the event-log writer, event_log_hooks.rs (guard-edit first), reusing T26's filed.rs for the task",
+     "class": "within",
+     "why": "Where the FR-004 writer lives is implementation; D6 already puts the cost and task on the event log's Agent and SubagentStop lines."
+    },
+    {
+     "id": "T07-task-from-prompt",
+     "summary": "filed::filed takes an Agent call's task from its prompt's FIRST line where the description names none; the feature stays the description's; never a later line",
+     "class": "within",
+     "why": "D6 states it word for word: task from its description, else its prompt's first line. Leaving the feature on the description only keeps free prompt text from setting more than D6 asks for; it does not narrow FR-004's task."
+    },
+    {
+     "id": "T07-fields",
+     "summary": "fields::agent_cost writes tok {in, cached, created, out} and ctx on every SubagentStop",
+     "class": "within",
+     "why": "FR-004 asks for input, cached input and output; D6, the accepted spec, already settles created and ctx. Nothing is dropped."
+    },
+    {
+     "id": "T07-transcript-source",
+     "summary": "The transcript is the payload's agent_transcript_path, else the transcript beside the session's, read whole row by row",
+     "class": "within",
+     "why": "D6 names agent_transcript_path. The fallback widens where a cost can be found, it narrows nothing."
+    },
+    {
+     "id": "T07-reader-reuse",
+     "summary": "Reuse context_cap_hooks' row reader (call_of split out of usage_of; context and own_transcript made crate-visible, no copy)",
+     "class": "within",
+     "why": "Implementation choice. It changes no behavior anything asked for."
+    },
+    {
+     "id": "T07-dedup",
+     "summary": "The last row of each message.id stands for its call, so each call is counted once",
+     "class": "within",
+     "why": "D6 says each message.id is counted once. Item 4's measurement (dated, method named) shows a sum over rows would overcount output by about 2.7x, so the rule does what it says it is for. The replay in item 9 matches R2's sum to the token."
+    },
+    {
+     "id": "T07-no-transcript",
+     "summary": "A stop with no transcript, or no call in its transcript, writes neither tok nor ctx",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "FR-004 puts a cost on every stop line, so this is a case the rule does not cover. But without a transcript the cost cannot be known at all, which is a real physical impossibility. Writing zero would put a false figure on the log and defeat SC-002's purpose of reproducing the retrospective's numbers. It is one case, and it stands alone."
+    },
+    {
+     "id": "T07-call-classes",
+     "summary": "A user row with usage, a non-JSON row and a synthetic zero row are not calls (no tokens, no context)",
+     "class": "within",
+     "why": "This defines what counts as a model call under D6's count and ctx's 'last call'. Such rows are not model calls, so leaving them out excludes no real cost."
+    },
+    {
+     "id": "T07-no-meta",
+     "summary": "A builder with no meta file is still costed and carries no task",
+     "class": "within",
+     "why": "FR-004 asks for a task only where the dispatch names one, and D6 takes the stop's task from the meta file. The cost is kept. Only a task that cannot be known is left off."
+    },
+    {
+     "id": "T07-never-refuses",
+     "summary": "The hook never refuses",
+     "class": "within",
+     "why": "FR-004 is logging. It asks for no refusal (FR-012 covers only FR-006 to FR-009, FR-011 and FR-013)."
+    },
+    {
+     "id": "T07-order",
+     "summary": "After T04, before T10; one landing",
+     "class": "within",
+     "why": "Sequencing. FR-004 sets no order, and the GM's 2026-11-20 priority on the six improvements concerns the order of those tasks, which this block does not reorder."
+    },
+    {
+     "id": "T07-stop-cost",
+     "summary": "The transcript read adds 0.27-0.35 s to each agent stop (against 0.04 s), once per stop, accepted; the block declares itself not performance work",
+     "class": "within",
+     "why": "The cost is measured and dated, and it is paid once per agent stop, not per tool call. The request accepted a stop-time record ('records it at each agent's stop'). No defect is left: nothing reads wrong and no tool hangs."
+    },
+    {
+     "id": "T07-done",
+     "summary": "Done when the fixture cases are green and the T202 stop replayed through the built guard writes R2's figures to the token",
+     "class": "within",
+     "why": "Verification of FR-004 itself. It enforces the request and adds no scope."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T33": {
+   "section_sha256": "d1d9c7e983cd79ba4f01251b779d962a6eb45cd1768b598f9929b42796329bf1",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T33-1-interp",
+     "summary": "Part 1: guard_write reads an inline interpreter body (Python literals resolved where the shell stands, -c/heredoc bodies as commands, Perl/Ruby/Node by the same literal reading, a for loop's variable per word), with a literal only read, a subprocess argv and a dict value exempt.",
+     "class": "within",
+     "why": "Closes the observed T14 hole (a heredoc rewrite of a guard source). The three exemptions each answer a measured false refusal of correct work (replay round 1: window#56, #299, #312, #267), and no real write in the 1,134 rows passes through them. That is a precision choice inside the task, not a narrowing of what was asked."
+    },
+    {
+     "id": "T33-1-permit",
+     "summary": "A shell or interpreter write of a guard file stays refused under a live guard-edit permit, as sed -i is at HEAD; the permit is for the Edit tool.",
+     "class": "within",
+     "why": "This keeps HEAD's rule for sed -i and extends it to the new forms. It narrows nothing, because the compliant route (the Edit tool under the permit) remains, and the block message names it."
+    },
+    {
+     "id": "T33-2-rustfmt",
+     "summary": "A bare rustfmt is refused as bare-rustfmt, and the message names make format FILE= / CRATE=.",
+     "class": "within",
+     "why": "Closes the observed T34 hole, with the compliant command named."
+    },
+    {
+     "id": "T33-3-gate-write",
+     "summary": "shell_write refuses a write that the walk or a Python literal places in the gated tree while its gate runs. Only a literal that resolves to a path where the shell stands counts, and an unresolvable path fails open, as the walk does.",
+     "class": "within",
+     "why": "Closes the observed T34 hole (git apply / cp under a running land). Failing open on an unresolvable path is the gate's existing rule, not a new carve-out, and the 18 outside-the-tree rows it lets through were measured as correct work."
+    },
+    {
+     "id": "T33-3-fail-closed-function-literal / window#72 (filed T49)",
+     "summary": "A literal handed to a function of the program's own is counted where the shell stands (fail-closed). window#72, a correct write into another clone that HEAD allowed, is now refused under a running gate. Left unfixed, filed as T49, lands before T22.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "This is the only item T33 leaves that makes HEAD worse. By the block's own account window#72 is a correct write that moves allowed->refused, a check refusing good work, which is a defect by constitution XIV. It contradicts the section's goal 1 ('nothing correct is refused by the new reading') and its constraint 2 (XIII, no known regressions). The reason given, that placing the literal needs the function's body and no reader of interp does, is a cost argument. It meets none of the criteria: nothing is physically impossible, the request implies no such case, and fixing it would not defeat the request's purpose. The block also stretches one justification over two unlike guards. It cites make-only's fail-closed count for this literal, while it states gate-write's own rule as failing open on a path it cannot place. The available escape (GATE_WRITE_OK, or waiting for the gate) does not make a false refusal correct, and a feature whose purpose is efficiency is worse off for a guard that stops correct work. FR-009's form (why, id, order) is met, but the form is not legitimacy. To clear it, window#72 is not refused by what lands in T33, or the section gives a reason that meets one of the three criteria."
+    },
+    {
+     "id": "T33-3-chmod-chown",
+     "summary": "chmod's mode and chown's owner are no longer read as files (shared/tree.rs tool_paths).",
+     "class": "within",
+     "why": "Fixes HEAD's own false refusals that the replay found (refusals#132, window#256), as FIX AS WE GO requires."
+    },
+    {
+     "id": "T33-4-git-output",
+     "summary": "git_output reads the writing options of the read-only subcommands (--output, archive -o, format-patch, bundle create, bugreport, diagnose). stash list/show are reads, and the gate's commit-or-add rule reads git's subcommand, not the word anywhere in the segment.",
+     "class": "within",
+     "why": "Closes the observed T44 hole (git diff --output read as a read). The stash and commit-or-add changes fix false refusals the replay measured (parse#148, #171, #173, #229, refusals#88, window#279), plus one the new check would otherwise have introduced."
+    },
+    {
+     "id": "T33-4-drop-git-more (filed T50)",
+     "summary": "The addition reading twelve git subcommands outside GIT_WRITES as writes was built, measured and dropped, and filed as a measure-first task T50, lands before T22.",
+     "class": "within",
+     "why": "The observed hole (git diff --output) is fixed. What is left is inherited from HEAD, and no wrong outcome is recorded for it: the replay of 1,134 rows caught no real write with the addition, and its only moves were its own false refusals. Under the defect definition nothing defective is left, so the drop does not narrow the request. The dispatch's and the session's rulings are not the GM's and carry no weight here; this is judged on the end state alone."
+    },
+    {
+     "id": "T33-found-left-script-files (filed T51)",
+     "summary": "A program run from a file (python3 script.py) is not read. One real case was found (window#215 rewriting a clone's Makefile), plus seven clone writes the gate would see. Filed as T51, lands before T22.",
+     "class": "within",
+     "why": "I read this as a fifth form outside T33's four observed holes, not as part of hole 1. Hole 1's mechanism reads a body handed inline to the interpreter, and a script file is a separate artifact needing a reader no guard has. HEAD has the same gap (T33 does not worsen it). It was found by a census the section records with its method, and it is filed with an id and an order under FR-009. If hole 1 were read as covering every interpreter write, this would be a narrowing whose reason (cost, plus the need for its own replay) meets no criterion. I chose the narrower reading of the task's observed forms."
+    },
+    {
+     "id": "T33-depth",
+     "summary": "DEPTH 3 for nested bodies, stated as a convention past any shape in the corpora.",
+     "class": "within",
+     "why": "Measured as covering every row; it narrows nothing asked."
+    },
+    {
+     "id": "T33-order-exits",
+     "summary": "After T14 and T15, lands with T07, one landing. Exits include make static once, plus rust-test, lint, format, cover, quick and hooks-test.",
+     "class": "within",
+     "why": "Sequencing and exits consistent with FR-007 (make static once) and the guard rules."
+    },
+    {
+     "id": "T33-performance",
+     "summary": "Performance work? no.",
+     "class": "within",
+     "why": "A classification. Whether T33 may start while a performance task is open is FR-013's guard's call on task state that the bundle does not carry; it is not a decision of this section."
+    }
+   ],
+   "verdict": "BLOCKED"
   }
  }
 }

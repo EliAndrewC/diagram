@@ -427,6 +427,7 @@ fn a_rewrite_moves_the_write_and_is_re_judged() {
                 class: "main",
                 how: "named",
                 segment: "seg".into(),
+                program: None,
             }],
             ..named.walk.clone()
         },
@@ -536,4 +537,126 @@ fn the_walk_judges_a_python_program_run_from_stdin() {
         assert_eq!(hows(&beside), ["shell"], "{cmd}");
     }
     drop(dir);
+}
+
+/// 451 T33: git's writing OPTIONS - found as T44 found its screen, each read-only subcommand's `--git-completion-helper` searched for an
+/// option naming an output file or directory - land where they name, relative to `-C` or the shell; a read without one writes nothing.
+#[test]
+fn a_git_option_that_writes_a_file_is_a_write_where_it_names() {
+    let (_d, m, _c) = mirror("git-output");
+    let h = "/home/u";
+    let at = |cmd: &str| -> Vec<(Option<String>, &'static str)> {
+        walk(cmd, Some(&m), &m, h)
+            .targets
+            .into_iter()
+            .map(|t| (t.path, t.how))
+            .collect()
+    };
+    let named = |p: &str| vec![(Some(p.to_owned()), "named")];
+    let here = |p: &str| vec![(Some(format!("{m}{p}")), "shell")];
+    assert_eq!(at("git diff --output=/tmp/x.patch"), named("/tmp/x.patch"));
+    assert_eq!(at("git diff --output x.patch HEAD"), here("/x.patch"));
+    assert_eq!(at("git -C /o log -p --output=l.txt"), named("/o/l.txt"));
+    assert_eq!(at("git show --output=s.txt HEAD"), here("/s.txt"));
+    assert_eq!(at("git diff-tree -p --output=/tmp/t HEAD"), named("/tmp/t"));
+    assert_eq!(at("git range-diff --output=r a...b"), here("/r"));
+    assert_eq!(at("git archive -o /tmp/a.tar HEAD"), named("/tmp/a.tar"));
+    assert_eq!(at("git archive --output=a.tar HEAD"), here("/a.tar"));
+    assert_eq!(at("git archive --output a.tar HEAD"), here("/a.tar"));
+    assert_eq!(at("git format-patch -1"), here(""));
+    assert_eq!(at("git format-patch -o /tmp/p -1"), named("/tmp/p"));
+    assert_eq!(at("git format-patch --output-directory=p -1"), here("/p"));
+    assert_eq!(
+        at("git format-patch --output-directory /tmp/p -1"),
+        named("/tmp/p")
+    );
+    assert_eq!(
+        at("git format-patch --output=/tmp/one.patch -1"),
+        named("/tmp/one.patch")
+    );
+    assert_eq!(at("git bundle create b.bundle HEAD"), here("/b.bundle"));
+    assert_eq!(at("git bugreport"), here(""));
+    assert_eq!(at("git diagnose -o /tmp/d"), named("/tmp/d"));
+    // a stash still writes where git runs, save its `list` and `show`
+    assert_eq!(at("git stash"), here(""));
+    assert_eq!(at("git stash pop"), here(""));
+    for read in [
+        "git stash list",
+        "git stash show -p stash@{0}",
+        "git diff",
+        "git diff --stat HEAD",
+        "git diff --output-indicator-new=+ HEAD",
+        "git log --oneline -3",
+        "git show HEAD:x",
+        "git archive HEAD",
+        "git format-patch --stdout -1",
+        "git bundle verify b.bundle",
+        "git bundle list-heads b.bundle",
+        "git ls-files -o",
+        "git status --porcelain",
+        "git diff --outpu=/tmp/x",
+    ] {
+        assert!(at(read).is_empty(), "{read}");
+    }
+}
+
+/// 451 T33, its round-3 gate replay (measured 2026-11-20): `chmod`'s mode and `chown`'s owner are not files - `chmod +x
+/// $C/scripts/a.sh` was refused as a write of `+x` where the shell stood (refusals#124, #125, #132, window#256).
+#[test]
+fn a_mode_or_an_owner_is_not_a_file_written() {
+    let (_d, m, _c) = mirror("chmod-mode");
+    let at = |cmd: &str| -> Vec<Option<String>> {
+        walk(cmd, Some(&m), &m, "/home/u")
+            .targets
+            .into_iter()
+            .map(|t| t.path)
+            .collect()
+    };
+    let named =
+        |ps: &[&str]| -> Vec<Option<String>> { ps.iter().map(|p| Some((*p).to_owned())).collect() };
+    assert_eq!(at("chmod +x /tmp/a.sh"), named(&["/tmp/a.sh"]));
+    assert_eq!(at("chmod 755 /tmp/a /tmp/b"), named(&["/tmp/a", "/tmp/b"]));
+    assert_eq!(at("chmod -R u+rw,go-w /tmp/d"), named(&["/tmp/d"]));
+    assert_eq!(at("chmod -x /tmp/a.sh"), named(&["/tmp/a.sh"]));
+    assert_eq!(at("chmod --reference=/tmp/r /tmp/a"), named(&["/tmp/a"]));
+    assert_eq!(at("chown -R u:g /tmp/d"), named(&["/tmp/d"]));
+    assert_eq!(at("chown --reference=/tmp/r /tmp/a"), named(&["/tmp/a"]));
+    assert_eq!(
+        at("rm -f /tmp/a +x"),
+        named(&["/tmp/a", &format!("{m}/+x")])
+    );
+}
+
+/// 451 T33: a Python write carries the program it comes from, so a guard can read which files its body names; any other write
+/// carries none.
+#[test]
+fn a_python_write_carries_its_program() {
+    let (_d, m, _c) = mirror("program");
+    let h = "/home/u";
+    let programs = |cmd: &str| -> Vec<Option<String>> {
+        walk_judged(cmd, Some(&m), &m, h)
+            .targets
+            .into_iter()
+            .map(|t| t.program.map(|p| p.trim_end().to_owned()))
+            .collect()
+    };
+    let body = "open('a.rs','w').write('x')";
+    assert_eq!(
+        programs(&format!("python3 - <<'EOF'\n{body}\nEOF")),
+        [Some(body.to_owned())]
+    );
+    assert_eq!(
+        programs(&format!("python3 -c \"{body}\" > /tmp/log")),
+        [Some(body.to_owned()), None]
+    );
+    assert_eq!(
+        programs(&format!("cat <<'EOF' | python3\n{body}\nEOF")),
+        [Some(body.to_owned())]
+    );
+    assert_eq!(programs("echo x > /tmp/a; sed -i s/a/b/ f"), [None, None]);
+    assert!(
+        walk(&format!("python3 - <<'EOF'\n{body}\nEOF"), Some(&m), &m, h)
+            .targets
+            .is_empty()
+    );
 }

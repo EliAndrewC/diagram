@@ -8,7 +8,7 @@
 //! - the FEATURE: a make command's `F=`; else the dispatch's brief - the Agent call's own `description`, or a subagent's meta file's -
 //!   the feature it names ([`brief_feature`]); else the feature whose task-start in force names the line's task; else the
 //!   FALLBACK, `feature_of` (the session's environment, then feature.json), and the line is marked `"fallback": true` unless the session's environment declared that feature;
-//! - the TASK: a `tick`, `task-start`, `decide` or `land` command's `T=` (`line`); else the `T<n>` the brief names; else the task-start
+//! - the TASK: a `tick`, `task-start`, `decide` or `land` command's `T=` (`line`); else the `T<n>` the brief names; else, for an Agent call, its prompt's first line's (451 T07); else the task-start
 //!   in force for the line's feature (D2's last entry, now of the line's own feature, not of feature.json's).
 //!
 //! A fallback line's task is a guess when two features are worked at once (the coordinator's own calls), so it says so: a reader of the
@@ -120,6 +120,19 @@ fn brief(payload: &Value) -> String {
         .unwrap_or_default()
 }
 
+/// An Agent call's prompt's first line, "" for any other call (a later line quotes other tasks).
+fn prompt_head(payload: &Value) -> &str {
+    if payload.get("tool_name").and_then(Value::as_str) != Some("Agent") {
+        return "";
+    }
+    payload
+        .get("tool_input")
+        .and_then(|t| t.get("prompt"))
+        .and_then(Value::as_str)
+        .and_then(|p| p.lines().next())
+        .unwrap_or_default()
+}
+
 /// The clone's task starts, (feature, task) in file order; a line that does not parse is skipped, a missing file is none.
 fn starts(root: &Path) -> Vec<(String, String)> {
     std::fs::read_to_string(common_git_dir(root).join("task-starts.jsonl"))
@@ -199,9 +212,12 @@ pub(super) fn filed(
             starts.iter().any(|(s, _)| s == f)
         })
     };
+    // an Agent call whose description names no task: its prompt's first line's (451 T07, plan D6) - the task only, the feature
+    // still the description's, since a prompt's line is free text a bare number in it could misfile
     let task = carried
         .map(str::to_owned)
-        .or_else(|| first_group(&TASK_NAMED, &brief));
+        .or_else(|| first_group(&TASK_NAMED, &brief))
+        .or_else(|| first_group(&TASK_NAMED, prompt_head(payload)));
     let feature = said
         .or_else(briefed)
         .or_else(|| task.as_deref().and_then(|t| started(&starts, t)));

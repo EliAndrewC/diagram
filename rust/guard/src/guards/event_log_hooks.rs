@@ -16,7 +16,8 @@
 //! MANIFEST its prompt names, its unit, a round on the GM's waiver), `by` (the subagent whose tool call it is, feature 385 amendment 4),
 //! `ms` (`PostToolUse`'s duration), `gm` (a prompt the GM typed, not a notification), `verdict` (a returned agent's verdict word, or
 //! `clean` / `findings`), `bg` (a backgrounded call's `PostToolUse`: its run's task id) and `inflight` (a `Stop` or `SubagentStop`: the
-//! background runs in flight, 451 T04, `fields.rs`). Two line kinds are no hook event's own: `BgEnd`, a background shell's end, written
+//! background runs in flight, 451 T04, `fields.rs`), `tok` and `ctx` (a `SubagentStop`: the agent's tokens, each call once, and its last
+//! call's context, 451 T07, `fields::agent_cost`). Two line kinds are no hook event's own: `BgEnd`, a background shell's end, written
 //! beside the `UserPromptSubmit` of the main session's completion notice and filed beside its launch (`bg_end`: `id`, `bg`, `status`,
 //! `exit`, `t0`, the launch's `make`, `cat`, `task`, `fallback`; 451 T04, plan D3), and `Phase`, a gate tool's step ([`append_row`], plan D4); the
 //! readers set both aside from the time-gap stream (`measure::events::load_all`). The gap from one `PostToolUse` to the next `PreToolUse`
@@ -700,6 +701,9 @@ pub(crate) fn append(
     }
     if to.fallback {
         row.insert("fallback".into(), Value::Bool(true));
+    }
+    if row.get("ev") == Some(&Value::from("SubagentStop")) {
+        fields::agent_cost(&mut row, payload);
     }
     let edit = row.get("ev") == Some(&Value::from("PreToolUse"))
         && row.get("tool") == Some(&Value::from("Edit"));

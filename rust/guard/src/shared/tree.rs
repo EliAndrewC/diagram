@@ -16,8 +16,8 @@ mod python;
 mod verdict;
 
 use python::{
-    carry_heredocs, program_reads, python_c, stdin_program, Program, Stdin, HEREDOC_WORD, PYTHON,
-    PYTHON_C_BEFORE,
+    carry_heredocs, program_of, program_reads, python_c, stdin_program, Program, Stdin,
+    HEREDOC_WORD, PYTHON, PYTHON_C_BEFORE,
 };
 pub use verdict::{context_line, explain, judge, Verdict};
 
@@ -109,6 +109,10 @@ static FUNCTION_DEF: LazyLock<Regex> = LazyLock::new(|| re(r"^\s*[\w-]+\s*\(\s*\
 static DUP_FD: LazyLock<Regex> = LazyLock::new(|| re(r"\d*>&[0-9-]"));
 static DEV_NULL: LazyLock<Regex> = LazyLock::new(|| re(r"\d*>\s*/dev/null"));
 static ASSIGNMENT_WORD: LazyLock<Regex> = LazyLock::new(|| re(r"^[A-Za-z_]\w*="));
+/// A chmod mode: octal, or symbolic clauses (`u+x`, `go-w,a+r`, `-x`).
+static CHMOD_MODE: LazyLock<Regex> = LazyLock::new(|| {
+    re(r"^(?:[0-7]{1,4}|[ugoa]*[-+=][rwxXstugo]*(?:,[ugoa]*[-+=][rwxXstugo]*)*)$")
+});
 fn found(p: &Regex, text: &str) -> bool {
     p.is_match(text).unwrap_or(false)
 }
@@ -395,18 +399,64 @@ fn git_write(toks: &[&str], env: &Env, home: &str, eff: Option<&str>) -> Option<
         }
     }
     let sub = *toks.get(i)?;
-    if !(GIT_WRITES.contains(&sub) || (sub == "branch" && branch_writes(&toks[i + 1..]))) {
-        return None;
+    let (at, at_how) = match c_path {
+        None => (eff.map(str::to_owned), "shell"),
+        Some(c) if strip_quote_chars(c).starts_with('/') => (resolve(c, env, home, eff), "named"),
+        Some(c) => (resolve(c, env, home, eff), "shell"),
+    };
+    // a stash's `list` and `show` only read (451 T33: its gate's shell-write check refused `git stash list` as a write of `.`)
+    let stash_reads = sub == "stash" && matches!(toks.get(i + 1).copied(), Some("list" | "show"));
+    if (GIT_WRITES.contains(&sub) && !stash_reads)
+        || (sub == "branch" && branch_writes(&toks[i + 1..]))
+    {
+        return Some((at, at_how));
     }
-    let Some(c) = c_path else {
-        return Some((eff.map(str::to_owned), "shell"));
+    // 451 T33: a read-only subcommand's writing option lands where it names, relative to where git runs
+    let args = &toks[i + 1..];
+    match git_output(sub, args)? {
+        None => Some((at, at_how)),
+        Some(file) => {
+            let (path, how) = path_write(file, env, home, at.as_deref());
+            Some((path, if how == "shell" { at_how } else { how }))
+        }
+    }
+}
+
+/// Where a subcommand outside `GIT_WRITES` writes a file (451 T33): `Some(Some(word))` the file or directory an option names,
+/// `Some(None)` where git runs, None nowhere. Found as T44 found its screen, measured 2026-11-20 (git 2.53.0, each subcommand's
+/// `--git-completion-helper` in a scratch repository, searched for an output file or directory): the diff options' `--output`
+/// (`diff`, `diff-tree`, `diff-files`, `diff-index`, `range-diff`, `rev-list`, and `log`, `show`, `whatchanged` through them),
+/// `archive`'s `-o`/`--output`, `format-patch`'s `-o`/`--output-directory` (else the files land where it runs, unless
+/// `--stdout`), `bundle create`'s file, `bugreport`'s and `diagnose`'s `-o`/`--output-directory`. git takes none of them
+/// abbreviated (`--outpu=`, `--outp=` exit 129, measured 2026-11-20), so only the whole name is read.
+#[expect(
+    clippy::option_option,
+    reason = "three answers: no write, a write where git runs, a write where a word names"
+)]
+fn git_output<'a>(sub: &str, args: &[&'a str]) -> Option<Option<&'a str>> {
+    let value = |names: &[&str]| -> Option<&'a str> {
+        args.iter().enumerate().find_map(|(k, a)| {
+            names.iter().find_map(|n| {
+                a.strip_prefix(n)
+                    .and_then(|rest| rest.strip_prefix('='))
+                    .or_else(|| (*a == *n).then(|| args.get(k + 1).copied()).flatten())
+            })
+        })
     };
-    let how = if strip_quote_chars(c).starts_with('/') {
-        "named"
-    } else {
-        "shell"
-    };
-    Some((resolve(c, env, home, eff), how))
+    if let Some(file) = value(&["--output"]) {
+        return Some(Some(file));
+    }
+    match sub {
+        "archive" => value(&["-o"]).map(Some),
+        "bundle" => args
+            .first()
+            .filter(|a| **a == "create")
+            .and(args.iter().skip(1).find(|a| !a.starts_with('-')))
+            .map(|f| Some(*f)),
+        "format-patch" if !args.contains(&"--stdout") => Some(value(&["-o", "--output-directory"])),
+        "bugreport" | "diagnose" => Some(value(&["-o", "--output-directory"])),
+        _ => None,
+    }
 }
 
 /// The paths a file tool writes (`_tool_paths`): `sed`'s files past its script, the last argument of a copy, else every argument.
@@ -435,6 +485,17 @@ fn tool_paths<'a>(tool: &str, toks: &[&'a str]) -> Vec<&'a str> {
             }
         }
         return keep;
+    }
+    // `chmod`'s mode and `chown`'s owner are its first operand, not a file, unless `--reference` stands for it (451 T33: its round-3
+    // gate replay refused `chmod +x $C/a.sh` as a write of `+x` where the shell stood, measured 2026-11-20); a mode may lead with
+    // `-` (`chmod -x F`), which no option of chmod's spells
+    let mut args = args;
+    if matches!(tool, "chmod" | "chown") && !args.iter().any(|t| t.starts_with("--reference")) {
+        if let Some(k) = args.iter().position(|t| {
+            !t.starts_with('-') || (tool == "chmod" && CHMOD_MODE.is_match(t).unwrap_or(false))
+        }) {
+            args.remove(k);
+        }
     }
     // `truncate -s 0 F` and `-r REF F` empty or resize F: the size and the reference file are its options' values, not files written (T227)
     let mut value_next = false;
@@ -548,13 +609,16 @@ fn writes_in(
     found_writes
 }
 
-/// One write found by the walk: where it lands, its class, how it was reached, and the segment it is in.
+/// One write found by the walk: where it lands, its class, how it was reached, the segment it is in, and the Python program it
+/// comes from (a `-c` program or one run from stdin, its body as the command line holds it; 451 T33: make-only reads which files a
+/// writer names), None for any other write.
 #[derive(Debug, Clone)]
 pub struct Target {
     pub path: Option<String>,
     pub class: &'static str,
     pub how: &'static str,
     pub segment: String,
+    pub program: Option<String>,
 }
 
 /// The walk's answer (`walk`).
@@ -621,6 +685,14 @@ fn walk_in(cmd: &str, start: Option<&str>, main: &str, home: &str, stdin_writes:
             continue;
         }
         let mut writes = writes_in(&seg, &programs, &env, home, eff.as_deref());
+        // the `-c` program's write is the segment's first, as `writes_in` finds it (451 T33)
+        let mut program = python_c(&toks)
+            .filter(|_| {
+                toks.first()
+                    .is_some_and(|h| found(&PYTHON, h.rsplit('/').next().unwrap_or(h)))
+            })
+            .and_then(|at| program_of(toks.get(at + 1), &programs))
+            .map(|(_, body)| body.clone());
         // 451 T42: a Python program run from stdin is judged by T31's reader as a `-c` program is - a writer is a write where
         // the shell stands; a read is no target, as no stdin program was before; one the walk cannot read keeps every `-c`
         // read of the command D5's write (T31's stdin rule, now for that case alone), since that write was what refused
@@ -636,10 +708,11 @@ fn walk_in(cmd: &str, start: Option<&str>, main: &str, home: &str, stdin_writes:
             Stdin::Unread => unread = true,
             Stdin::Program(q, body) if stdin_writes && !py_c::reads(&body, q, eff.as_deref()) => {
                 writes.insert(0, (eff.clone(), "shell"));
+                program = Some(body);
             }
             Stdin::None | Stdin::Program(..) => {}
         }
-        for (path, how) in writes {
+        for (k, (path, how)) in writes.into_iter().enumerate() {
             let mut class = classify(path.as_deref(), main);
             if class == "unknown" {
                 class = if hint == "main" { "main" } else { "elsewhere" }; // D6: unknown resolves toward main
@@ -653,6 +726,7 @@ fn walk_in(cmd: &str, start: Option<&str>, main: &str, home: &str, stdin_writes:
                     .chars()
                     .take(120)
                     .collect(),
+                program: if k == 0 { program.take() } else { None },
             });
         }
     }

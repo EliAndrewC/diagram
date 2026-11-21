@@ -136,6 +136,56 @@ pub(super) fn run_fields(out: &mut Map<String, Value>, ev: &str, payload: &Value
     }
 }
 
+/// An agent's cost on its `SubagentStop` line (feature 451 T07, plan D6, research R2): `tok`, its transcript's `in`, `cached`, `created`
+/// and `out` tokens, each model call once - one call's streamed reply is several `assistant` rows of one `message.id`, the last holding
+/// the whole output, so the last row of an id stands for it (a sum over rows read the T202 builder's output 1,317,955 tokens against its
+/// 481,878, 723 rows of 305 ids, measured 2026-11-20 (a Python scan of its 50 MB transcript)); `ctx`, its last call's context. Both are
+/// read by `context_cap_hooks`' row reader, the whole file for `tok` (a stop is cumulative: a resumed agent's file holds every leg, and
+/// the reader keeps the last line per `aid`). The transcript is the payload's `agent_transcript_path`, else the one beside the session's;
+/// none readable, or no call in it, writes neither field: the hook never refuses.
+pub(super) fn agent_cost(out: &mut Map<String, Value>, payload: &Value) {
+    use crate::guards::context_cap_hooks::{call_of, context, own_transcript, Call};
+    use std::io::BufRead as _;
+    let own = text_of(payload.get("agent_transcript_path"));
+    let path = if own.is_empty() {
+        own_transcript(
+            &text_of(payload.get("transcript_path")),
+            &text_of(payload.get("agent_id")),
+        )
+    } else {
+        Some(own.into())
+    };
+    let Some(file) = path.as_ref().and_then(|p| std::fs::File::open(p).ok()) else {
+        return;
+    };
+    let mut calls: Vec<Call> = Vec::new();
+    let mut at: std::collections::HashMap<String, usize> = std::collections::HashMap::new();
+    for row in std::io::BufReader::new(file)
+        .split(b'\n')
+        .map_while(Result::ok)
+    {
+        let Some(c) = call_of(&row) else { continue };
+        // a row naming no id is a call of its own
+        if let Some(&i) = at.get(&c.id).filter(|_| !c.id.is_empty()) {
+            calls[i] = c;
+        } else {
+            at.insert(c.id.clone(), calls.len());
+            calls.push(c);
+        }
+    }
+    let n = |f: fn(&Call) -> u64| calls.iter().map(f).sum::<u64>();
+    if n(|c| c.input + c.cached + c.created + c.out) == 0 {
+        return;
+    }
+    out.insert(
+        "tok".into(),
+        serde_json::json!({"in": n(|c| c.input), "cached": n(|c| c.cached), "created": n(|c| c.created), "out": n(|c| c.out)}),
+    );
+    if let Some(ctx) = path.as_deref().and_then(context) {
+        out.insert("ctx".into(), Value::from(ctx));
+    }
+}
+
 /// What a completion notice gives its `BgEnd` line (D3): `id` (the launching call's `<tool-use-id>`), `bg` (its `<task-id>`),
 /// `status` and `exit` - the LAST `exit code N` of its summary, the quoted description before it being free text; none where the run
 /// was stopped or its session ended. None for a prompt that is no notice (one the GM typed, quoting one, is his), a notice naming no

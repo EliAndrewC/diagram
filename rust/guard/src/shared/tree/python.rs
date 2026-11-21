@@ -91,12 +91,16 @@ fn python_stdin(toks: &[&str]) -> bool {
     true
 }
 
-/// Whether the word after `python3 -c` carries a program that only reads, run in `eff` (451 T31; anything else is D5's write).
-pub(super) fn program_reads(word: Option<&&str>, programs: &[Program], eff: Option<&str>) -> bool {
+/// The program the word after `python3 -c` carries (451 T31; T33 hands its body to the guards on the walk's target).
+pub(super) fn program_of<'a>(word: Option<&&str>, programs: &'a [Program]) -> Option<&'a Program> {
     word.and_then(|w| PROGRAM.captures(w).ok().flatten())
         .and_then(|c| c.get(1)?.as_str().parse::<usize>().ok())
         .and_then(|n| programs.get(n))
-        .is_some_and(|(quote, body)| py_c::reads(body, *quote, eff))
+}
+
+/// Whether the word after `python3 -c` carries a program that only reads, run in `eff` (451 T31; anything else is D5's write).
+pub(super) fn program_reads(word: Option<&&str>, programs: &[Program], eff: Option<&str>) -> bool {
+    program_of(word, programs).is_some_and(|(quote, body)| py_c::reads(body, *quote, eff))
 }
 
 /// The Python program a segment runs from its stdin (451 T42).

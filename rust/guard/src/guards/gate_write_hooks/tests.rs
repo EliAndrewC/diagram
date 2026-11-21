@@ -5,7 +5,7 @@ use std::path::{Path, PathBuf};
 
 use serde_json::{json, Value};
 
-use super::{decide, judge, top_of, Ctx};
+use super::{decide, judge, own_args, top_of, Ctx};
 use crate::guards::finished_run_hooks::runs::Procs;
 use crate::protocol::{Answer, Event};
 use crate::shared::session::Session;
@@ -52,9 +52,13 @@ impl World {
     }
 
     fn run(&self, tool: &str, input: &Value) -> Vec<Answer> {
+        self.run_at(tool, input, "")
+    }
+
+    fn run_at(&self, tool: &str, input: &Value, cwd: &str) -> Vec<Answer> {
         let e = Event {
             name: "PreToolUse".to_owned(),
-            input: json!({"tool_name": tool, "tool_input": input}),
+            input: json!({"tool_name": tool, "tool_input": input, "cwd": cwd}),
         };
         let s = Session::from_input(&e.input);
         judge(
@@ -205,4 +209,201 @@ fn a_write_after_many_triggers_is_seen_in_linear_time() {
         )
     });
     assert_eq!(found, (Some(true), Some("tick".to_owned())));
+}
+
+/// 451 T33: a SHELL write into the tree is refused while its gate runs, as an Edit and a commit are - on 2026-11-20 a builder's
+/// `git apply` and `cp` of guard files under T34's `make land` put unfinished code under its gate - asked of the same tree check;
+/// a write outside the tree, into `.git` or a path git ignores, and every read, pass.
+#[test]
+fn a_running_gate_refuses_a_shell_write_into_the_tree() {
+    let w = world("shell");
+    w.make(
+        60,
+        "/usr/bin/make",
+        "--no-print-directory done NO_CUTOFF=1",
+        &w.top,
+    );
+    std::fs::write(w.top.join(".gitignore"), "build/\n").unwrap();
+    std::fs::write(w.top.join("l7r/x/a.py"), "a\n").unwrap();
+    let run_git = |args: &[&str]| {
+        let mut all = vec![
+            "-C",
+            w.top.to_str().unwrap(),
+            "-c",
+            "user.email=t@t",
+            "-c",
+            "user.name=t",
+        ];
+        all.extend_from_slice(args);
+        assert!(ask(Path::new("/"), "git", &all, "").ok());
+    };
+    run_git(&["add", "-A"]);
+    run_git(&["commit", "-qm", "a"]);
+    let top = w.top.display().to_string();
+    for (cmd, rel) in [
+        ("git apply /tmp/p.patch".to_owned(), "."),
+        (format!("git -C {top} apply /tmp/p.patch"), "."),
+        ("cp /tmp/x l7r/x/a.py".to_owned(), "l7r/x/a.py"),
+        ("cp /tmp/x l7r/x/new.py".to_owned(), "l7r/x/new.py"),
+        ("mv l7r/x/a.py /tmp/a.py".to_owned(), "l7r/x/a.py"),
+        ("echo x | tee l7r/x/a.py".to_owned(), "l7r/x/a.py"),
+        (
+            "echo x | tee -a /tmp/log l7r/x/a.py".to_owned(),
+            "l7r/x/a.py",
+        ),
+        ("echo x > l7r/x/a.py".to_owned(), "l7r/x/a.py"),
+        (
+            "cd l7r && cat >> x/a.py <<'EOF'\nx\nEOF".to_owned(),
+            "l7r/x/a.py",
+        ),
+        ("sed -i s/a/b/ l7r/x/a.py".to_owned(), "l7r/x/a.py"),
+        (format!("cp /tmp/x {top}/l7r/x/a.py"), "l7r/x/a.py"),
+        // a Python program that writes, judged by the files it names
+        (
+            "python3 - <<'EOF'\nopen('l7r/x/a.py', 'w').write('x')\nEOF".to_owned(),
+            "l7r/x/a.py",
+        ),
+        (
+            "cd l7r && python3 -c \"open('x/a.py','w').write('x')\"".to_owned(),
+            "l7r/x/a.py",
+        ),
+    ] {
+        let got = w.bash(&cmd);
+        let named = refused(&got, &format!("a shell write of {rel}"));
+        assert!(named && refused(&got, "make verify-wait"), "{cmd}: {got:?}");
+    }
+    for cmd in [
+        "echo x | tee /tmp/t33-gate-a".to_owned(),
+        "cp l7r/x/a.py /tmp/b".to_owned(),
+        "python3 -c \"print(open('l7r/x/a.py').read())\"".to_owned(),
+        "make verify-wait".to_owned(),
+        "git status --porcelain".to_owned(),
+        "git log --oneline | head -3".to_owned(),
+        "git push".to_owned(),
+        "git diff --output=/tmp/d.patch".to_owned(),
+        "ls l7r > /dev/null 2>&1".to_owned(),
+        "echo x > build/out.log".to_owned(),
+        "echo x > .git/t33-scratch".to_owned(),
+        format!("cd /tmp && cp {top}/l7r/x/a.py b.py"),
+        "python3 - <<'EOF'\ns = open('l7r/x/a.py').read()\nopen('/tmp/t33-gate-b', 'w').write(s)\nEOF".to_owned(),
+        "python3 - <<'EOF'\nopen('build/x.log', 'w').write('x')\nEOF".to_owned(),
+    ] {
+        assert!(w.bash(&cmd).is_empty(), "{cmd}");
+    }
+    let elsewhere = w.run_at("Bash", &json!({"command": "cp a.py b.py"}), "/tmp");
+    assert!(elsewhere.is_empty());
+    std::fs::write(w.top.join("unseen"), "").unwrap();
+    assert!(w.bash("cp /tmp/x l7r/x/a.py").is_empty());
+}
+
+/// 451 T33's round-3 gate replay (1,134 rows under a stand-in `make done` in the replay mirror, measured 2026-11-20): of the 104
+/// rows the shell-write check newly refused, these shapes write OUTSIDE the tree and were refused for a word that is not where
+/// they write - a mode read as a file, the text between two string literals, an f-string's placeholder, a URL, an anchor, and a
+/// literal joined onto a base the guard cannot resolve (`sys.argv[1]`, a temporary directory, a constant imported).
+#[test]
+fn a_running_gate_lets_through_what_writes_outside_the_tree() {
+    let w = world("outside");
+    w.make(
+        60,
+        "/usr/bin/make",
+        "--no-print-directory done NO_CUTOFF=1",
+        &w.top,
+    );
+    let py = |body: &str| format!("python3 - <<'EOF'\n{body}\nEOF");
+    for cmd in [
+        // refusals#124, #132, window#256
+        "chmod +x /tmp/t33-gate-x.sh".to_owned(),
+        "chmod 755 /tmp/t33-gate-x.sh".to_owned(),
+        // main-tree#169, window#71, #275: the placeholder's base is a shell variable naming another tree
+        py("C = '/tmp/c'\nopen(f\"{C}/l7r/x/a.py\", 'w').write('x')"),
+        py("import glob\nfor f in glob.glob(f\"{SK}/pool/*/*.json\"):\n    open(f, 'w').write('x')"),
+        // refusals#144, window#29, #280, #299: the text between two literals
+        py("a = s.split(\",\")[0].split(\".\")\nopen('/tmp/t33-o', 'w').write(a)"),
+        py("t = re.sub(r'<b>', \"\", s).replace(\".join(u[\", \"\")\nopen('/tmp/t33-o', 'w').write(t)"),
+        // window#170, main-tree#43: a URL and an anchor
+        py("u = 'https://doi.org/10.1002/x.html'\nopen('/tmp/t33-o', 'w').write(u)"),
+        py("a = 'vegetation.md#fn-3'\nopen('/tmp/t33-o', 'w').write(a)"),
+        // window#175, #176, #298: joined onto argv
+        "python3 - /tmp/d <<'EOF'\nimport pathlib, sys\np = pathlib.Path(sys.argv[1]) / \"spec.md\"\np.write_text('x')\nEOF"
+            .to_owned(),
+        "python3 - /tmp/d <<'EOF'\nimport pathlib, sys\npathlib.Path(sys.argv[1], 'scripts', 'a.sh').write_text('x')\nEOF"
+            .to_owned(),
+        // window#68, #69: joined onto a temporary directory
+        py("import pathlib, tempfile\nd = pathlib.Path(tempfile.mkdtemp())\n(d / \"a.py\").write_text('x')"),
+        // ... past 200 characters of program before it (the context `joined_on` reads)
+        py(&format!(
+            "import pathlib, tempfile\n# {}\nd = pathlib.Path(tempfile.mkdtemp())\n(d / \"a.py\").write_text('x')",
+            "x".repeat(250)
+        )),
+        // window#358: joined onto a constant imported
+        py("import pathlib\nfrom m import RESEARCH_DIR\nsrc = pathlib.Path(RESEARCH_DIR, \"SOURCES.html\").read_text()\nopen('/tmp/t33-o', 'w').write(src)"),
+        // window#280, #358 (round 4): a regex's or a string method's text
+        py("import re\nn = len(re.findall(r\"summary.only\", s))\nopen('/tmp/t33-o', 'w').write(str(n))"),
+        py("for f in fs:\n    if f.endswith(\".html\"):\n        open('/tmp/t33-o', 'a').write(f)"),
+        py("t = s.replace('l7r/x/a.py', 'l7r/x/b.py')\nopen('/tmp/t33-o', 'w').write(t)"),
+        // window#358 (after5): a literal compared
+        py("for f in fs:\n    if f == \"SOURCES.html\" or f != 'a.py':\n        open('/tmp/t33-o', 'a').write(f)"),
+        // window#53: a module loaded from a file is read; the program writes its stdout elsewhere
+        "python3 - > /tmp/t33-ctx.txt <<'EOF'\nimport importlib.util\ns = importlib.util.spec_from_file_location('m', 'l7r/x/a.py')\nprint(s)\nEOF"
+            .to_owned(),
+        // parse#171, #173, refusals#88: the commit-or-add rule reads git's subcommand, not the word `add` anywhere in the segment
+        "git notes add -m x".to_owned(),
+        "git worktree add --detach /tmp/t33-gate-wt".to_owned(),
+        "git remote add t33 /tmp/t33-src".to_owned(),
+        "python3 -c 'moved = set(); moved.add(1)'; git status".to_owned(),
+        // a stash's read forms write nothing (`stash` is in the walk's GIT_WRITES)
+        "git stash list".to_owned(),
+        "git stash show -p".to_owned(),
+        // a ref's write past git's own options, as push, tag and branch are let through
+        "git --no-pager push origin main".to_owned(),
+        // window#72: a literal handed to a function of the program's own is placed where the function puts it, which the gate
+        // does not read - here onto a base of its own, outside the tree - so it fails open (round 2's NOT LEGITIMATE ruling)
+        py("R = \"/tmp/t33-r\"\ndef edit(rel, old, new, regex=False):\n    p = f\"{R}/{rel}\"; s = open(p, encoding=\"utf-8\").read()\n    open(p, \"w\", encoding=\"utf-8\").write(s.replace(old, new, 1))\nedit(\"vegetation.html\", 'a (b) \\'c\\'', \"d\")\nedit(\"citations/buildings.html\",\n     '<a href=\"x\">', f'<a href=\"{R}\">')"),
+        // window#172's shape: the function writes the literal where the shell stands, INTO the tree - unread, so it fails open
+        // with the rest (Found and left, T49)
+        py("def edit(p):\n    open(p, 'w').write('x')\nedit('l7r/x/b.py')"),
+    ] {
+        let got = w.bash(&cmd);
+        assert!(got.is_empty(), "{cmd}: {got:?}");
+    }
+    // the rule still refuses git's own commit and add, past its options
+    for cmd in ["git -C . commit -m x", "git --no-pager add -A"] {
+        let got = w.bash(cmd);
+        assert!(!got.is_empty(), "{cmd}: {got:?}");
+    }
+    // still refused: a literal the program writes where it stands, joined or bare, one handed to a library's function, one
+    // outside the call of a function the program defines, and one after a `def` or a call named only in a string or a comment
+    // (window#220's `s.index("def brook_skirt(")`, a heredoc patching Python source)
+    for cmd in [
+        py("s = open('/tmp/a').read()\ni = s.index(\"def f(\")\nopen('l7r/x/b.py', 'w').write(s)"),
+        py("def f(p):\n    pass\n# f(\nopen('l7r/x/b.py', 'w').write('x')"),
+        py("import pathlib\n(pathlib.Path('l7r') / 'x.py').write_text('x')"),
+        py("open('l7r/x/b.py', 'w').write('x')"),
+        py("import shutil\nshutil.copy('/tmp/a', 'l7r/x/b.py')"),
+        py("def edit(p):\n    pass\nedit('/tmp/a')\nopen('l7r/x/b.py', 'w').write('x')"),
+        py("def edit(p):\n    pass\nx.edit('l7r/x/b.py')\nopen(x, 'w')"),
+        "chmod +x l7r/x/a.py".to_owned(),
+    ] {
+        let got = w.bash(&cmd);
+        assert!(refused(&got, "a shell write of l7r"), "{cmd}: {got:?}");
+    }
+}
+
+/// 451 T33 (window#72): `own_args` blanks the strings of a call to a function the program defines, to its closing parenthesis
+/// past nested calls, comments, escapes and triple quotes, and leaves every other literal - a method of the same name, a string
+/// outside the call - as it was; with no `def` the program is untouched.
+#[test]
+fn a_literal_handed_to_the_programs_own_function_is_blanked() {
+    let body = "def f(a, b='w'):\n    pass\nf(g('ab'), # it's\n  '''x\"y''', \"c\\\"d\", '\u{3010}')\nx.f('k')\nopen('z')";
+    let want = "def f(a, b='$'):\n    pass\nf(g('$$'), # it's\n  '''$$$''', \"$$$$\", '$$$')\nx.f('k')\nopen('z')";
+    assert_eq!(own_args(body), want);
+    // a string the line ends before it closes, and a call that never closes, fail open to the end
+    assert_eq!(
+        own_args("def f(a): pass\nf('ab\n'c"),
+        "def f(a): pass\nf('$$\n'$"
+    );
+    assert_eq!(own_args("open('a.py', 'w')"), "open('a.py', 'w')");
+    // a `def` or a call inside a string or a comment is neither
+    let named = "s.index(\"def f(\")\nt = 'f(' # f(\nopen('a.py')";
+    assert_eq!(own_args(named), named);
 }

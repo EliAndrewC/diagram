@@ -21,7 +21,9 @@ use crate::shared::session::Session;
 use crate::shared::shape::{strip_heredocs, strip_quotes};
 use crate::shared::state::field;
 use crate::shared::tool::ask_within;
-use crate::shared::tree::{walk, Walk};
+use crate::shared::tree::{walk_judged, Walk};
+
+pub(crate) mod interp;
 
 /// The guard.
 pub const GUARD: Guard = Guard {
@@ -91,6 +93,14 @@ lazy!(
     format!(
         r"{POS}(?:\S*/)?cargo\s+(?:\+\S+\s+)?(?:build|test|run|clippy|check|fmt|llvm-cov|bench|nextest)\b"
     )
+);
+lazy!(
+    RUSTFMT,
+    format!(r"(?:{POS}|\bxargs\s+(?:-\S+\s+)*|-exec(?:dir)?\s+)(?:\S*/)?rustfmt(?![\w.-])")
+);
+lazy!(
+    RUSTFMT_INFO,
+    r"(?:\S*/)?rustfmt\s+(?:--version|-V|--help|-h)(?=\s*(?:$|[;&|\n)]))"
 );
 lazy!(
     BINARY,
@@ -243,7 +253,8 @@ pub(crate) fn classify(cmd: &str) -> String {
 /// written after a `cd` into `tests/hooks` (T227).
 fn walked_write(cmd: &str, here: &str) -> (bool, bool) {
     let home = std::env::var("HOME").unwrap_or_default();
-    let Walk { targets, .. } = walk(cmd, Some(here), "", &home);
+    // the judged walk (451 T33): a Python program run from stdin that writes is a write where the shell stands, as a `-c` one is
+    let Walk { targets, .. } = walk_judged(cmd, Some(here), "", &home);
     let text_tool = |seg: &str| {
         let head = seg.split_whitespace().next().unwrap_or_default();
         seg.contains('>') || !NOT_TEXT.contains(&head.rsplit('/').next().unwrap_or(head))
@@ -253,7 +264,16 @@ fn walked_write(cmd: &str, here: &str) -> (bool, bool) {
             .iter()
             .filter_map(|t| t.path.as_deref().map(|p| (p, t)))
     };
-    let on_guard = paths().any(|(p, t)| held(p) && text_tool(&t.segment));
+    // a program `py_c` judged a read writes nothing, where it stands too (451 T33: a `-c` read in a guard directory was refused);
+    // a writer is judged by where it stands and by the files its body names
+    let on_guard = targets.iter().filter(|t| t.how != "read").any(|t| {
+        t.path
+            .as_deref()
+            .is_some_and(|p| held(p) && text_tool(&t.segment))
+            || t.program
+                .as_deref()
+                .is_some_and(|b| interp::program_names_guard(b, t.path.as_deref(), true))
+    });
     let cleared = paths().any(|(p, _)| !held(p) && GUARD_NAMES.iter().any(|n| p.ends_with(n)));
     (on_guard, cleared)
 }
@@ -280,6 +300,11 @@ pub(crate) fn classify_at(cmd: &str, here: &str) -> String {
     if cmd.contains("cargo") && hit(&CARGO, &clean) {
         return "bare-cargo".to_owned();
     }
+    // 451 T33 (T34's found-and-left): a bare rustfmt, at a command position or run by `xargs` or `find -exec`; asking its version
+    // or help formats nothing
+    if cmd.contains("rustfmt") && hit(&RUSTFMT, &RUSTFMT_INFO.replace_all(&clean, " ")) {
+        return "bare-rustfmt".to_owned();
+    }
     // every replacement binary (FR-005): `l7r-rust` (T93), `l7r-browser` (T146), `l7r-embed` (T138) and `l7r-mode-a` (T168) too, which
     // `l7r-gate.sh rust`, `browser`, `embed` and `mode-a` run
     if (cmd.contains("l7r-") || cmd.contains("hamlet")) && hit(&BINARY, &clean) {
@@ -297,22 +322,42 @@ pub(crate) fn classify_at(cmd: &str, here: &str) -> String {
     {
         return "inline-override".to_owned();
     }
-    if GUARD_NAMES
+    if guard_write(cmd, here, 0) {
+        return "guard-write".to_owned();
+    }
+    "ok".to_owned()
+}
+
+/// Whether the command writes a guard file from the shell: the walk's writes, the patterns over the text, and (451 T33) what it
+/// writes through an interpreter - a shell's body judged as a command, another's by the files it names - and a `for` loop's
+/// variable read once per word, `depth` deep.
+fn guard_write(cmd: &str, here: &str, depth: usize) -> bool {
+    if !GUARD_NAMES
         .iter()
         .chain(&SOURCE_NAMES)
         .any(|n| cmd.contains(n))
     {
-        let (c, raw) = (
-            replace_suites(&clean),
-            replace_suites(&without_stored_text(cmd)),
-        );
-        let (on_guard, cleared) = walked_write(cmd, here);
-        let shell = on_guard || (!cleared && SHELL_WRITES.iter().any(|p| hit(p, &c)));
-        if shell || PY_WRITES.iter().any(|p| hit(p, &raw)) || write_via_name(&raw) {
-            return "guard-write".to_owned();
-        }
+        return false;
     }
-    "ok".to_owned()
+    let (c, raw) = (
+        replace_suites(&strip_quotes(&strip_heredocs(cmd))),
+        replace_suites(&without_stored_text(cmd)),
+    );
+    let (on_guard, cleared) = walked_write(cmd, here);
+    let shell = on_guard || (!cleared && SHELL_WRITES.iter().any(|p| hit(p, &c)));
+    let deeper = || {
+        depth < interp::DEPTH
+            && (interp::bodies(cmd).iter().any(|(shell, body)| {
+                if *shell {
+                    guard_write(body, here, depth + 1)
+                } else {
+                    interp::program_names_guard(body, Some(here), false)
+                }
+            }) || interp::loop_expansions(cmd)
+                .iter()
+                .any(|e| guard_write(e, here, depth + 1)))
+    };
+    shell || PY_WRITES.iter().any(|p| hit(p, &raw)) || write_via_name(&raw) || deeper()
 }
 
 /// `cmd` with heredoc bodies and quoted strings replaced by spaces of the same length, so a match in it sits at the same offset in the raw text.
@@ -674,7 +719,8 @@ pub(crate) fn judge(event: &Event, session: &Session, ctx: &Ctx) -> Vec<Answer> 
             }
             Vec::new()
         }
-        "bare-cargo" => refuse(&verdict, "cargo run outside make. The Rust phases are linted, formatted and tested through make, so the gate's lints and its shared target directory are the ones used.", "make static (clippy, rustfmt --check) | make format (rustfmt) | make rust-test (cargo test)"),
+        "bare-cargo" => refuse(&verdict, "cargo run outside make. The Rust phases are linted, formatted and tested through make, so the gate's lints and its shared target directory are the ones used.", "make static (clippy, rustfmt --check) | make format FILE=<path> or make format CRATE=<dir> (rustfmt, that file or crate alone) | make rust-test (cargo test)"),
+        "bare-rustfmt" => refuse(&verdict, "rustfmt run outside make. A format goes through make so it reaches the files meant and no others: a bare rustfmt follows a file's `mod` children and rewrites them too, and `make format` with no argument rewrites every crate.", "make format FILE=<path> (that file alone, its edition read from its crate) | make format CRATE=<dir> (one crate) | make static (rustfmt --check)"),
         "bare-binary" => refuse(&verdict, "a Rust binary run directly rather than through make. make is the one entry point (feature 449 FR-005): the guards' binary is built and driven by its wrapper, and a hamlet is rolled by its target.", "make hooks-test (the guards) | make hamlet SPEC=pool/hamlets/<name>/<name>.spec.json | make cohort"),
         "foreign-makefile" => refuse(&verdict, "a make driven by a named makefile. This project's targets are in its own Makefile, and a foreign one is the documented way to walk past every guard here.", "make <target>   (from the repository root)"),
         "engine-entry-point" => match wrapped(cmd, &makefile_for(given, &ctx.tree)) {

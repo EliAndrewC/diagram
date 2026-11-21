@@ -499,7 +499,7 @@ const HELD: [(&str, &str, &str); 10] = [
 
 /// Every form a session writes a file with from the shell (T227, measured on 2026-11-19), `{F}` the guard file, `{D}` and `{B}`
 /// its directory and name; the seventh is T220's own, which rewrote two files through a `python3 -` heredoc.
-const WRITE_FORMS: [&str; 35] = [
+const WRITE_FORMS: [&str; 50] = [
     "cat > {F} <<'EOF'\nx\nEOF",
     "cat <<'EOF' > {F}\nx\nEOF",
     "cat <<EOF >{F}\nx\nEOF",
@@ -535,6 +535,24 @@ const WRITE_FORMS: [&str; 35] = [
     "dd if=/tmp/x of={F} bs=1M",
     "truncate -s 0 {F}",
     "cd {D} && truncate --size=0 {B}",
+    // 451 T33: through an interpreter - a Python program naming the file by a loop, a join or where the shell stands (T14's
+    // own shape first: `cd` into the directory, then a heredoc writing the bare name), a shell or Perl body, a loop's variable
+    "cd {D} && python3 - <<'EOF'\nimport re\np='{B}'\ns=open(p).read()\nopen(p,'w').write(s)\nEOF",
+    "cd {D} && python3 -c \"open('{B}','w').write('x')\"",
+    "python3 - <<'EOF'\nimport pathlib\nfor f in ['{F}']:\n    p = pathlib.Path(f)\n    p.write_text(p.read_text())\nEOF",
+    "python3 - <<'EOF'\nfrom pathlib import Path\n(Path('{D}') / '{B}').write_text('y')\nEOF",
+    "python3 -c \"import os; open(os.path.join('{D}','{B}'),'w').write('x')\"",
+    "python3 <<'EOF'\nopen('{F}','w').write('x')\nEOF",
+    "cat <<'EOF' | python3\nopen('{F}','w').write('x')\nEOF",
+    "bash <<'EOF'\nsed -i s/a/b/ {F}\nEOF",
+    "bash -c 'sed -i s/a/b/ {F}'",
+    "sh -c \"echo x > {F}\"",
+    "cat <<'EOF' | bash\necho x >> {F}\nEOF",
+    "perl - <<'EOF'\nopen(F, '>', '{F}'); print F 'x';\nEOF",
+    "for f in {F} /tmp/x; do echo x | tee $f; done",
+    "for f in {F}; do sed -i s/a/b/ \"$f\"; done",
+    // window#79's shape: a helper handed the file
+    "python3 - <<'EOF'\nimport pathlib\ndef patch(path):\n    p = pathlib.Path(path); p.write_text(p.read_text())\npatch('{F}')\nEOF",
 ];
 
 /// A guard file WRITTEN from the shell is refused in every form a session uses, and every miss is listed at once (T227).
@@ -606,5 +624,70 @@ fn the_guards_own_sources_are_guard_writes_from_the_shell_but_their_tests_are_no
         "grep -n held rust/guard/src/guards/guard_file_hooks.rs",
     ] {
         assert_eq!(v(cmd), "ok", "{cmd}");
+    }
+}
+
+/// 451 T33: what T33's readers must leave alone - a tee or a copy outside the guard files, a Python program that reads a guard
+/// file (where the shell stands in a guard directory too: a `-c` read there was refused before T33), one that reads a guard file
+/// and writes elsewhere, a shell or Perl body that only reads, a loop writing scratch.
+#[test]
+fn reads_and_writes_elsewhere_through_an_interpreter_are_left_alone() {
+    for cmd in [
+        "echo x | tee /tmp/t33/out.txt",
+        "cp rust/guard/src/guards/make_only_hooks.rs /tmp/x",
+        "cd rust/guard/src/guards && python3 -c \"print(open('make_only_hooks.rs').read()[:5])\"",
+        "cd rust/guard/src/guards && python3 - <<'EOF'\nprint(open('make_only_hooks.rs').read())\nEOF",
+        "python3 - <<'EOF'\nimport json\nd = json.load(open('.claude/settings.json'))\nprint(d)\nEOF",
+        "python3 - <<'EOF'\ns = open('rust/guard/src/guards/make_only_hooks.rs').read()\nopen('/tmp/x', 'w').write(s)\nEOF",
+        "python3 - <<'EOF'\nfrom pathlib import Path\nt = Path('Makefile').read_text()\nPath('/tmp/targets').write_text(t)\nEOF",
+        "bash -c 'grep -n x Makefile'",
+        "bash <<'EOF'\ncat Makefile > /tmp/x\nEOF",
+        "for f in a b; do echo $f > /tmp/$f; done",
+        "for f in Makefile dev/switches.json; do wc -l $f; done",
+        "perl -ne 'print' Makefile",
+        "sh -c 'echo hi'",
+        // the replay's corrections: a hook RUN by subprocess (window#56, #299, #312), a hook payload's file (window#267)
+        "python3 - <<'EOF'\nimport subprocess\nsubprocess.run(['scripts/hooks/a-hooks.sh', 'pretool'], input='{}', text=True)\nEOF",
+        "cd /tmp && python3 -c \"import json; print(json.dumps({'file_path': '/x/scripts/hooks/gate-hooks.sh'}))\"",
+    ] {
+        assert_eq!(v(cmd), "ok", "{cmd}");
+    }
+}
+
+/// 451 T33 (T34's found-and-left): a bare `rustfmt` formats outside make, and both refusals name `make format FILE=` / `CRATE=`,
+/// never a bare `make format`, which rewrites every crate.
+#[test]
+fn a_bare_rustfmt_is_refused_naming_the_scoped_format() {
+    for cmd in [
+        "rustfmt rust/guard/src/guards/x.rs",
+        "rustfmt --check rust/guard/src/lib.rs",
+        "~/.cargo/bin/rustfmt --edition 2021 a.rs",
+        "cd rust && rustfmt guard/src/lib.rs",
+        "git diff --name-only | xargs rustfmt",
+        "find rust -name '*.rs' -exec rustfmt {} +",
+    ] {
+        assert_eq!(v(cmd), "bare-rustfmt", "{cmd}");
+    }
+    for cmd in [
+        "grep -rn rustfmt Makefile",
+        "which rustfmt",
+        "rustup component add rustfmt",
+        "echo 'rustfmt a.rs'",
+        "make format FILE=rust/guard/src/lib.rs",
+        "rustfmt --version",
+        "cat <<'EOF' > /tmp/n\nrustfmt a.rs\nEOF",
+    ] {
+        assert_eq!(v(cmd), "ok", "{cmd}");
+    }
+    let d = std::env::temp_dir();
+    for (cmd, rule) in [
+        ("rustfmt a.rs", "bare-rustfmt"),
+        ("cargo fmt", "bare-cargo"),
+    ] {
+        let got = run(cmd, &d, "sh");
+        let named =
+            refused(&got, "make format FILE=<path>") && refused(&got, "make format CRATE=<dir>");
+        assert!(named, "{rule}: {got:?}");
+        assert!(!refused(&got, "make format (rustfmt)"), "{rule}: {got:?}");
     }
 }

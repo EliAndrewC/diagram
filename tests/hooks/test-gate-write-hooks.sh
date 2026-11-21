@@ -47,6 +47,10 @@ check "git add: refused (a staged new file is in what the gate compares)" 2 "$(r
 check "make record-checked: refused (a REPLY files rows in a tracked found.jsonl)" 2 "$(run "$R" "$RECORD")"
 check "make modal-triaged (writes under .git only): let through" 0 "$(run "$R" '{"tool_name":"Bash","tool_input":{"command":"make modal-triaged BUNDLE=/tmp/b REPLY=/tmp/r"}}')"
 check "a read: let through" 0 "$(run "$R" "$READ")"
+# 451 T33: a shell write into the tree, as a builder's `git apply` and `cp` under T34's landing were; a write outside it runs
+check "a cp into the tree: refused (451 T33)" 2 "$(run "$R" '{"tool_name":"Bash","tool_input":{"command":"cp /tmp/x a.txt"}}')"
+check "a git apply in the tree: refused (451 T33)" 2 "$(run "$R" '{"tool_name":"Bash","tool_input":{"command":"git apply /tmp/p.patch"}}')"
+check "a tee to /tmp: let through (451 T33)" 0 "$(run "$R" '{"tool_name":"Bash","tool_input":{"command":"echo x | tee /tmp/t33-gate-write-suite"}}')"
 check "the escape: let through" 0 "$(run "$R" '{"tool_name":"Bash","tool_input":{"command":"GATE_WRITE_OK=\"a deliberate fix for the gate itself\" git -C . commit -qm x"}}')"
 check "another tree's command, its own gate not running: let through" 0 "$(run "$OTHER" "$COMMIT")"
 check "an Edit outside this tree: let through" 0 "$(run "$R" "$(printf '{"tool_name":"Edit","tool_input":{"file_path":"%s/b.txt"}}' "$OTHER")")"
