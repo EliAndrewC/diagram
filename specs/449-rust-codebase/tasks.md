@@ -57,6 +57,8 @@ MVP: T001-T005 and the first guard, `pair-hooks` (T006): the dispatcher in every
       research: rendering
 - [ ] T243 A pool-sheet stage of Mode A has no change, raise or accept path (found by 449 T201, re-read by 451 T36): budget_change/sheets.rs builds only the first budget and the comparison, read 2026-11-20 (its header), so a placer or compound sheet held past twice its budget after a SOUND re-derivation refuses every engine push with no raise or accept route, against 444 FR-022 (work the derivation missed raises it on a SOUND re-derivation) - make budget-change takes a pool-sheet stage for change, raise and accept as it takes a hamlet stage, red first on a pool-sheet raise, which HEAD refuses as not built; lands before T158
       research: rendering
+- [ ] T244 Stop before the parked hamlet stages, and talk first (the GM 2026-11-21, docs/gm-rulings.md: 'When you get to the point where you have ported everything else and then we're ready to go back to homesteads, then don't actually proceed. Why don't you go ahead and stop, and then we can talk more after everything else is done before you get started on that.') - a guard refuses a write that moves a parked stage (rust/parked/src/homesteads, track, appurtenances, law, ways) into rust/phases/src or declares it in rust/phases/src/lib.rs, and a make task-start of a feature-444 stage task, without GM_RESUMED="<the GM's words resuming it>" (recorded); and make set-down accepts the session's stop there, naming this ruling, so the set-down guard does not push the session into 444's open stage tasks; red first
+      research: rendering
 - [ ] GM review (make gm-reviewed F=449) [lands-open]
       research: rendering
       verify: the GM reviewed every row (make gm-review lists them)

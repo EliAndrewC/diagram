@@ -6,3 +6,6 @@ Rust baseline through `waterward` is fast and the GM resumes the next stage (the
 recent phase that runs quickly and efficiently"). The homesteads counted 13.2 million operations at 40 households against a
 budget of 4,118 (`dev/work-budget.md`, 2026-11-06). To resume one, move its files back under `rust/phases/src/` and declare it
 in `lib.rs`.
+
+**Do not resume one on the session's own judgment** (the GM, 2026-11-21, `docs/gm-rulings.md`, "Stop before homesteads, and talk first"): once
+everything else is ported, the session stops and talks with the GM before any parked stage's work starts.
