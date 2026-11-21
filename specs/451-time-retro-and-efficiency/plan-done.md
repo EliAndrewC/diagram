@@ -2184,3 +2184,179 @@ static`. Not filed with `PERF=1`: no engine stage's counted operations or time.
 
 **Performance work?** no
 
+<!-- plan-archive: archived 2026-11-21 -->
+### T33 (four writes the guards read as none: T14's `cd rust/guard/src/guards && python3 - <<'EOF' ... open(p,'w')` rewrote a guard source the make-only guard refuses to `sed -i`, observed 2026-11-20, method: the T14 builder's transcript agent-a4a91e2ca23b89b21 at 14:32:16Z, found by `/tmp/t33/find_t14.py`; a builder's `git apply` and `cp` under T34's running `make land` failed static's cover, observed 2026-11-20, method: T34's refused landing; a bare `rustfmt` passed make-only, observed 2026-11-20, method: T34's found-and-left; `git diff --output=<file>` read as a read, observed 2026-11-20, method: T44's builder's report)
+
+- **Approach**: four holes, each red first, in `rust/guard` (every guard source under `make guard-edit`).
+  - **1, an interpreter's write of a guard file** (`make_only_hooks.rs`, new `make_only_hooks/interp.rs`): `guard_write` reads what the
+    walk does not - a Python program's string literals resolved where the shell stands (a literal joined by `/` or `join(` read as one
+    path, a guard directory counted, a literal only read, a subprocess argv or a dict value exempt), a shell's `-c` or heredoc body judged
+    as a command of its own, a Perl/Ruby/Node body by the same literal reading, and a `for` loop's variable once per word. A shell write
+    of a guard file stays refused under a live permit, as `sed -i` is at HEAD (the permit is for the Edit tool, its block message says
+    so; `classify_at` never read one) - the task's "like sed -i" read as sed's rule, the decision `make decide` rules on.
+  - **2, a bare `rustfmt`**: refused as `bare-rustfmt`, and the bare-cargo message names `make format FILE=<path>` or `make format CRATE=<dir>`.
+  - **3, a shell write under a running gate** (`gate_write_hooks.rs`): `shell_write` refuses each write the walk places in the gated tree
+    that the gate would see (not `.git/`, not ignored, not `unseen --would-write`), a Python writer judged by its literals; and only a
+    literal that is a path where the shell stands counts (`program_names`'s `placed`: no placeholder, glob, URL or anchor, nothing joined
+    onto a base the program computes, no regex's, string method's or comparison's text) - an unresolvable path fails open, as the
+    walk's does. `chmod`'s mode and `chown`'s owner are no longer files (`shared/tree.rs`'s `tool_paths`).
+  - **4, git's writes outside `GIT_WRITES`** (`shared/tree.rs`): `git_output` - the writing options of the read-only subcommands (`--output`,
+    `archive -o`, `format-patch`, `bundle create`, `bugreport`, `diagnose`); a stash's `list` and `show` are reads (`stash` is in
+    `GIT_WRITES`, so the gate's shell-write check refused `git stash list` as a write of `.`); and the gate's commit-or-add rule reads
+    git's subcommand, not the word anywhere in the segment (a HEAD false refusal the gate replay found). The part-4 addition - `git_more`,
+    the writing forms of `switch`, `bisect`, `sparse-checkout`, `submodule`, `worktree`, `clone`, `init`, `config`, `fetch`, `notes`,
+    `update-ref` and `symbolic-ref`, built on the dispatch's ruling (2026-11-20) - was measured and dropped by the session's ruling
+    (2026-11-20): the replay of 1,134 commands caught no real write with it - it moved two rows, main-tree#10 and #11, both its own
+    false refusals, fixed and then dropped with it - and a review found three misreadings of it (`fetch -n` is `--no-tags`, one
+    value-option list for all twelve, `config --global` writes outside the repository) and a fourth of the gate's check (`git stash
+    list` refused, fixed here); filed as T50 (Found and left).
+  - red first: 685 passed, 5 failed (holes 1-4), measured 2026-11-20 (`make rust-test CRATE=rust/guard` in the detached worktree `/tmp/t33/wt`, `/tmp/t33/red1.log`); `a_python_write_carries_its_program` failed to compile at HEAD, measured 2026-11-20 (the same, `/tmp/t33/red2.log`).
+  - the round-3 replay's false refusals red first: 694 passed, 2 failed (`a_mode_or_an_owner_is_not_a_file_written`, `a_running_gate_lets_through_what_writes_outside_the_tree`), measured 2026-11-20 (`make rust-test CRATE=rust/guard` in the clone with T07's work, `/tmp/t33/red3-kept.log`).
+  - part 4 red first: 695 passed, 2 failed (`a_git_subcommand_that_writes_is_a_write_and_its_read_forms_are_not`, the dropped addition's test, deleted with it; the gate's `git notes add` refused, the commit-or-add rule's word), measured 2026-11-20 (the same, `/tmp/t33/red4.log`); the regex's and string methods' text: 696 passed, 1 failed, measured 2026-11-20 (the same, `/tmp/t33/red5.log`); the clone's destination (the dropped addition's): 696 passed, 1 failed, measured 2026-11-20 (the same, `/tmp/t33/red6.log`); with the addition dropped, `git stash list` refused by a running gate: 695 passed, 1 failed (`a_running_gate_lets_through_what_writes_outside_the_tree`), measured 2026-11-20 (the same, `/tmp/t33/red8.log`).
+  - green, the addition dropped: 696 of 696, T07's work beside it, measured 2026-11-20 (`make rust-test CRATE=rust/guard` in the clone, `/tmp/t33/green13.log`); the crate's lint, format and cover clean, measured 2026-11-20 (`scripts/gates/l7r-gate.sh rust lint --crate rust/guard`, `rust format --check`, `rust cover`, `/tmp/t33/lint6.log`, `/tmp/t33/fmtcheck6.log`, `/tmp/t33/cover8.log`); `make quick` clean and `make hooks-test` 55 guard suites green, 2 unchanged since green, measured 2026-11-20 (`/tmp/t33/quick2.log`, `/tmp/t33/hooks-test2.log`).
+  - the clone shapes, binary to binary (the dropped addition's, kept as its measurement): `git clone "a${PAT}b" /tmp/x/c` and a `\`-continued `git clone` into `/tmp` refused by main-tree with the after5 build and let through with the after6 build, `git clone https://h/o/r.git` (a write of the mirror's `r/`) refused by both and `git clone /diagram .clones/x` let through by both, measured 2026-11-20 (`--only main-tree-hooks` in the replay mirror, session `nobody`); with the addition dropped (after7) no `clone` is read as a write, as at HEAD.
+  - the replay (T42's `replay.sh` and `cmp.sh` over 1,134 rows x {all, make-only, main-tree, gm-tree, house-style} x session {t, nobody}, and the gate replay under a stand-in `make done` in the replay mirror, `.clones/` ignored as the mirror ignores it): HEAD against HEAD 0 moves, measured 2026-11-20 (`/tmp/t33/rp/noise.*`). Rounds 1-3 (the four holes): round 1 moved 5 rows allowed->refused under make-only, window#79 a correction and window#56, #299, #312, #267 false (a hook RUN by subprocess, a payload's dict value), fixed by `only_read`'s argv and dict exemptions, measured 2026-11-20 (`/tmp/t33/rp/cmp1.txt`); round 2 moved window#79 alone, measured 2026-11-20 (`/tmp/t33/rp/cmp2.txt`); round 3's gate replay moved 104 rows allowed->refused under gate-write alone, of which 18 wrote outside the tree (a chmod mode, an f-string placeholder or glob, the text between two literals, a URL, an anchor, a literal joined onto argv, a temporary directory or an imported constant, a module loaded by `spec_from_file_location`), measured 2026-11-20 (`/tmp/t33/rp/cmp3.txt`, each row's refusal re-run by `/tmp/t33/scripts/why.sh`), fixed and red first above; round 4 left window#280 and #358 (a regex's text, a string method's, a comparison's), fixed red first, measured 2026-11-20 (the after4 and after5 gate replays, `/tmp/t33/scripts/round4.sh`); the part-4 build (after5) moved main-tree#10, #11 allowed->refused under main-tree (a clone into the scratchpad whose URL held `${PAT}` or whose line ended in `\`, read as a clone where the shell stood), false, fixed red first, measured 2026-11-20 (the after5 replay, `/tmp/t33/rp/cmp6.txt`).
+  - the final build (after7, the addition dropped) against HEAD (the HEAD binary built 19:47 from 7f2074c705, past the last guard commit at 19:39), every move, the same as after6's: after6 -> after7 0 moves in every corpus and the gate replay, measured 2026-11-20 (`/tmp/t33/rp/cmp7.txt`); main-tree#10 and #11 no move against HEAD. After6's moves: make-only and all, both sessions - window#79 allowed->refused, a Python heredoc's `patch("scripts/hooks/house-style-hooks.sh", ...)` writing a held hook, a correction; main-tree and all, both sessions - refusals#132 and window#256 refused (or moved) -> allowed, `chmod +x $S/watchdog.sh` and `$S/hook.sh` into the scratchpad, read at HEAD as a mirror write of `+x`, corrections of HEAD's false refusal; gm-tree and house-style 0 moves, measured 2026-11-20 (`/tmp/t33/rp/cmp6.txt`). The gate replay, all guards: window#79 as above; parse#148, #171, #173, #229, refusals#88 and window#279 refused -> allowed, the commit-or-add rule's word `add` elsewhere in the segment (`moved.add(`, `git worktree add --detach /tmp/base176`, a scratchpad note's text), corrections; refusals#109, #110, #148 and #18 still refused by make-only and readme, gate-write's false commit-or-add line gone, measured 2026-11-20 (`/tmp/t33/scripts/guards-of.sh` on refusals#18, the HEAD and after6 builds). Gate-write alone: 10 refused -> allowed, the same commit-or-add rows; 84 allowed -> refused, each a write the walk or a literal places in the replay mirror's tree while its gate runs (15 under `tests/`, 15 `specs/`, 14 `l7r/`, 11 `research/`, 9 `scripts/`, the rest bare names in the mirror's top), corrections in the replay's setting, except window#72 (fixed in after8, below), measured 2026-11-20 (`/tmp/t33/rp/gate4-names.txt`, each row's refusal re-run). The part-4 subcommands in the corpora - `clone` 9 rows, `init` 7, `fetch` 7, `config` 10, `worktree add` 3, `symbolic-ref HEAD` 1, `sparse-checkout set` 1 - moved no other row, measured 2026-11-20 (a grep over the 1,134 rows, the after4-after6 comparisons).
+  - window#72 fixed (after8, the gate's `own_args`: a literal handed to a function the program defines blanked before `program_names`, so it fails open): after7 -> after8 0 moves in every non-gate corpus, both sessions, and in the gate replay under all guards; gate-write alone 3 rows refused -> allowed, so its 84 in-tree refusals against HEAD are 81 - window#72 (`edit("vegetation.html", ...)` writing `f"{R}/{rel}"` into another clone) a false refusal fixed, window#170 (`replace_note("citations/urban-features.html", ...)` writing `R / path`, `R = Path("research")`) and window#172 (`sub(<the urban-features record page>, ...)` writing `Path(f)`) writes into the tree no longer read (Found and left); window#220 still refused, now naming `l7r/diagram/hamletgen/water.py`, the file it writes outside its helper, in place of the helper's `consts.py`, measured 2026-11-20 (`/tmp/t33/scripts/round4.sh after8`, `/tmp/t33/scripts/cmp8.sh`, `/tmp/t33/rp/cmp8.txt`, each moved row's refusal re-run by `/tmp/t33/scripts/why.sh` with the after7 and after8 builds). Under all guards window#72, #170 and #172 are main-tree's rewrite into the clone at HEAD and after, the same output. The final build (after9: `own_args` finds the `def`s and calls on `masked`'s copy, past strings and comments, the after8 build blanking every literal after a `def f(` named only in a string - window#220's `s.index("def brook_skirt(")` shape) against after8: 0 moves and 0 changed outputs in every corpus, both sessions, and the gate replay, measured 2026-11-20 (`/tmp/t33/scripts/round4.sh after9`, `/tmp/t33/scripts/cmp9.sh`, `/tmp/t33/rp/cmp9.txt`); against HEAD, gate-write alone 81 allowed -> refused and the 10 commit-or-add rows refused -> allowed.
+  - window#72 red first: 695 passed, 1 failed (`a_running_gate_lets_through_what_writes_outside_the_tree`, refused naming `vegetation.html`), measured 2026-11-20 (`make rust-test CRATE=rust/guard` in the clone, `/tmp/t33/red9.log`); a `def` or call named in a string or a comment red first: 695 passed, 2 failed (the same test, the `s.index("def f(")` and `# f(` shapes let through, and `a_literal_handed_to_the_programs_own_function_is_blanked`), measured 2026-11-20 (the same, `/tmp/t33/red10.log`); green 697 of 697, measured 2026-11-20 (`/tmp/t33/green16.log`); the crate's lint, format and cover clean, measured 2026-11-20 (`/tmp/t33/lint9.log`, `/tmp/t33/fmtcheck9.log`, `/tmp/t33/cover10.log`).
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+| the four holes | n/a - no map | n/a | none | n/a |
+
+### T08 (FR-005: `make where-time` booked most of the window as "waiting on work" and every gate and test column zero - the spec's Why)
+
+- **Approach**: D7's columns in `rust/gate/crates/measure` (`where_time.rs` and a new `where_time/columns.rs`, not held): D2's booking
+  by `make`, D4's compile split, and `UNTIL=`. Held: the root `Makefile` (the `where-time` recipe's `--until`; `make guard-edit
+  FILE=Makefile` first). Red first: User Story 1's acceptance scenarios 1 and 3 as fixtures - `make static`, `make rust-test` and `make
+  hooks-test` under tests; a `make static` whose cover-build phase is two thirds of its span split into compile and tests - and a past
+  log re-booked by its `make` field.
+- **Built** (2026-11-21). TWO TABLES, because the work ran in the builders between the main session's turns, so a wall-clock partition
+  alone books it "waiting on work": the critical path (the existing per-task table, the main session's own gaps) and THE RUNS TABLE
+  (`columns::render`): every Bash call of every session and agent, foreground from its `PreToolUse` to its `PostToolUse` or
+  `PostToolUseFailure`, background from its launch to its end, under the task its own line names (else the mark), in machine minutes
+  that overlap and are never summed into the wall clock. Both book a call by `columns::line_bucket` - its `make` through the guard's
+  `bucket_of` (so a past log's frozen `cat` re-books), a goal-less make's `.DEFAULT_GOAL` read as the Makefile's default goal
+  (`columns::default_goal`: a `.DEFAULT_GOAL` it sets, else its first rule's first undotted target, `work-budget` here), a line with no
+  `make` by its frozen `cat` (`quick test` and `test file` are tests). The wall-clock table's `gate/tests` column becomes `tests`,
+  `compile`, `gate`, `land`, `review`, `docs` and `spec-kit step`.
+  - A background run ends at the main transcript's `queue-operation` `enqueue` row naming its `<tool-use-id>` (`columns::enqueued`),
+    else its `BgEnd`'s `t`, else the `TaskStop` call that stopped it (`columns::stopped`, the call's input read from the session's and
+    its subagents' transcripts, its time the call's own line), else open to the window's end. The `TaskStop` end is an addition the
+    plan did not name: without it ten runs builders had stopped were booked open, 6,070 machine minutes "other" of the window's 6,792,
+    measured 2026-11-21 (this reader over `--since 2026-11-20T04:33:00Z`, each open run's bg id found in a `TaskStop` input).
+  - Compile (D4) is the union of the `build` and `cover-build` phases a run holds, split out of ANY run, the rest staying the run's
+    bucket - a reading of D4's "the Bash call or background span that holds them" over data-model's "inside a tests run", since a
+    landing's or a gate's compile is compile. The critical path splits a main-session call's gap the same way. A phase ties to the run of
+    its session whose span holds it and whose target is its `make` OR whose task is its `task` - the task a deviation from D4: 567 of
+    the window's 984 compile phases (60.9 min) matched no holding run's target, 170 (12.1 min) once the task also ties, measured
+    2026-11-21 (`/tmp/t08/loose.py`, `loose2.py` and the reader's footnote over the 451 log since 04:33Z) - ranked by target, then
+    task, then the latest start. A phase tied to none is counted in the footnote, never dropped; one starting after the window is no
+    phase of it.
+  - A subagent's call (`by`) inside the main session's turn is booked as what the session was doing - the call it waits on, or the
+    model - so a builder's line no longer cuts the session's `make static` in two (`Booking`); between turns it keeps the wait open.
+  - A LANDING is booked land however it is launched: a call running several targets (its line's `makes`, T14's) is booked by the
+    first of them in `columns::PRECEDENCE` - land, gate, tests, review, docs, spec-kit step, other - in both tables, and a phase ties
+    to a run that runs its `make` at all. A landing's `gate` and `cohort` phases (`src: land`; never its `end`, the whole landing) are
+    split out as gate, less the compile inside them, as compile is, in the runs table and on the critical path (`columns::Split`). The
+    day's 19 landings were launched `make claims-owed ...; make ledger-owed; make land`, so by their first target they were review: the
+    runs table showed land 4.2 and gate 0.0 min against 27.4 min of their own gate phases, measured 2026-11-21 (the 451 log's `src:
+    land` Phase lines since 04:33Z summed, `/tmp/t08/scripts/landsum.py`).
+  - The session's own line moves the session's state on before a zero gap is skipped, and a subagent's `SubagentStart` or
+    `SubagentStop` keeps it: a background agent's `PostToolUse` and `SubagentStart` share a millisecond, so the skip had left the
+    launch's `other subagent` held for the thinking after it, and a builder's stop inside the session's own `make static` had booked
+    the rest of the call model (both found by T08's model check, below).
+  - `UNTIL=`: `--until` on the command line. The logs are read to their end so a run still going at `UNTIL` is clipped there, not
+    dropped; the tables' events are cut at it.
+  - T08's notes: the `make land` after a multi-line `python3 -c` string (bnikhrir8's launch, its command taken from the session
+    transcript) reads `land` through `shared::make::invoked` and `make_target` - T15's reader fixed it, so no red was owed, pinned by
+    `columns::tests::the_python_c_launch_reads_make_land`; the goal-less make as above.
+- **Red first**: `where_time::tests::the_columns_book_make_runs_compile_and_until` before the change: refused `--until` (exit 2),
+  then, `--until` alone wired, booked the fixture's `make static` as `tools` 3 and `gate/tests` 0 with no compile column and no runs
+  table (`/tmp/t08/red1.log`, `red2.log`). The landing: `columns::tests::a_landing_is_booked_land_and_its_gate_split_out` (the real
+  launch shape, its `makes` `["claims-owed","ledger-owed","land"]` and a task the landing's phases do not share) booked it `review`, and
+  `where_time::tests::a_landing_call_books_land_and_splits_its_gate` booked a foreground landing's whole 600 s review, none of it land,
+  gate or compile, observed 2026-11-21, method: `make rust-test CRATE=rust/gate/crates/measure` before the change (`/tmp/t08/red3.log`,
+  `red4.log`). `where_time::tests::a_builders_stop_inside_a_call_keeps_the_call` booked a
+  builder's stop inside a `make static` 60 s tests and 270 s model against 300 and 30, then, the stop fixed and its
+  zero-gap case added, a background agent's launch 601 s `other subagent` against 600 s model, observed 2026-11-21, method: the same
+  command before each fix (`red5.log`, `red6.log`). The aside test now holds `make feature-report` unchanged (T11's) and pins where-time's one
+  move, the runs table's 29 s of compile, measured 2026-11-21 (the test's fixture through the reader).
+- **Measured** (the command `make where-time F=451 SINCE=2026-11-20T04:33:00Z UNTIL=2026-11-21T03:07:24Z`, through the
+  recipe's `UNTIL=`), measured 2026-11-21 (the command; its `all` rows):
+
+| table | total min | model | tests | compile | gate | land | review | docs | spec-kit step | other / tools | waiting on work | the GM | idle |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| critical path (wall clock) | 1,354 | 342 | 0 | 0 | 0 | 0 | 1 | 3 | 4 | 5 | 866 | 6 | 126 |
+| runs (5,544 calls, machine min, 998.3 of it in the background, measured 2026-11-21 (the command)) | 1,345.7 | - | 312.3 | 132.9 | 14.4 | 5.3 | 11.5 | 2.8 | 4.6 | 861.9 | - | - | - |
+
+  The landings' share checks against their phase lines: gate 14.4 min is the 19 landings' gate and cohort phases (27.4 min) less the
+  13.0 min of compile inside them, and land 5.3 + gate 14.4 + that compile is 32.7 min against their `end` phases' 32.4, measured
+  2026-11-21 (`/tmp/t08/scripts/landsum.py` over the same window, and the command); compile and gate phases tied to no run 159 (9.5
+  min), from 170 once a phase ties by every target a run runs, measured 2026-11-21 (the command's footnote). Of the other, 709 min are
+  background runs no `make` names - the main session's poll-waits on its builders and the builders' measurement scripts - measured
+  2026-11-21 over the earlier window to 02:51:03Z (`/tmp/t08/bgprobe.py`, each run's command from the transcripts). The command's own
+  time, now that `stopped()` reads every subagent transcript, is 1.16-1.24 s wall with the binary already built and 7.25 s on a first run
+  that rebuilt it, measured 2026-11-21 (`/usr/bin/time` over the command above, five runs).
+- **The hand count** of 16:00-17:00Z by another method (each foreground call's `PostToolUse` `ms`, each background one
+  launch-to-enqueue, the table read from the guard's source; `/tmp/t08/hand.py`), each figure against the reader's over that hour:
+  all runs 4,785 s (79.8 min) against 80.6 min, measured 2026-11-21 (`hand.py` and the command); tests with compile 1,832 s (30.5
+  min) against 31.8 min, measured 2026-11-21 (the same); other 46.9 against 47.3 min, measured 2026-11-21 (the same); the hour's
+  compile phases summed 9.9 min against the reader's 7.8 tied plus 2.1 loose, measured 2026-11-21 (the same).
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+| the columns, the compile split, UNTIL | n/a - no map | n/a | none | n/a |
+
+### T08 Approach (checklist part A)
+
+1. **The goal, in the world.** No map changes; one command reads off where a window's time went.
+2. **The constraints.** FR-005; SC-001; D2, D4, D7; the arbiter's bundle and `feature-report` read the same event reader unchanged.
+3. **Where each comes from.** G: the GM's retrospective request; O: research R1 (the readers read the frozen `cat`), R6.
+4. **Do they describe the world here?** The fixture is built from R2's and R6's observed line shapes.
+5. **The order.** After T02-T07.
+6. **The exits.** Green: the fixture sums. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** One landing.
+9. **Done, measured.** The fixture green; `make where-time F=451 SINCE=<this task's start> UNTIL=<now>` books this task's own runs under their columns: T08's row of the runs table, 148 calls, 7.0 min - tests 1.6, compile 4.2, spec-kit 0.5, other 0.6 - measured 2026-11-21 (the **Measured** command, its T08 row).
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** The readers book by the frozen `cat`, so a past log can never be re-booked - a tool answering wrongly; fixed by booking by `make`.
+
+**Found and left?**
+- The `where-time` recipe's `--until` (held: the root `Makefile`): fixed here - before the task's tick, the session wired `$(if $(UNTIL),--until "$(UNTIL)",)`, and the **Measured** run went through it.
+- A subagent's background run whose notice reached only its own transcript (the `queued_command` attachment) ends here at its `BgEnd`, `TaskStop` or the window's end. Not fixed here: it is T09's (D3, its plan section names it). Filed as T09; lands before T10.
+- The critical path still books 866 of 1,354 minutes "waiting on work", measured 2026-11-21 (the command above). Not fixed here: booking a wait to the runs in flight is T09's and the critical path apart from the agents T10's. Filed as T09; lands before T10.
+- 159 compile and landing-gate phases (9.5 min) tie to no run, measured 2026-11-21 (the command above): not a defect, each counted and shown in the runs table's footnote, no wrong outcome.
+- The critical path's model column (342 min) is mostly between turns: the main session coordinates 449 and 451, and each hook line goes to the log of the feature active when it fired, so a turn's `Stop` often lands in 449's log and the 451 walk never sees the turn end - the 07:59:21Z `Stop` is in `449-rust-codebase.jsonl` alone, so 07:59:14-08:28:46 (29.5 min, the transcript silent from its `turn_duration` row to the 08:28:46 task notification) is booked model, observed 2026-11-21, method: the 451 and 449 logs and the session's transcript read over 07:58-08:29Z. Of the 479 minutes the 451 log holds the session in a turn, 349.7 lie between the transcript's `turn_duration` rows and the next prompt or notification, measured 2026-11-21 (`/tmp/t08/scripts/turns.py` over the same window and the session's transcript). Of the 355 of those minutes not booked idle, 235.4 are booked model, measured 2026-11-21 (`/tmp/t08/scripts/turns.py`, the between-turn stretches against the critical path's model column). The column rose 274 -> 342 with the `by` booking because the builder lines inside those stretches had been booked by their own categories, a different wrong, observed 2026-11-21, method: the longest stretches of `/tmp/t08/scripts/stretch.py` read against the transcript. Two smaller wrongs the check found are fixed here (the **Built** bullet on the session's state): 1.7 min of a builder's stop inside the session's `make static` (`/tmp/t08/scripts/modelcheck.py`), and the zero-gap skip, which the first fix uncovered moving 41 min to `other subagent` and `plan review`, measured 2026-11-21 (the command, before and after). Not fixed here: reading a session's turn lines from every feature's log decides how a turn spent on another feature is booked, which is the critical path apart from the agents - T10's (D5, D6). Folded into T10; lands before T11.
+
+**Performance work?** yes - a `[perf]` task under FR-013's measurement clause (the GM 2026-11-20): it measures where the time goes; no engine timing, so no checklist
+
+<!-- plan-archive: archived 2026-11-21 -->
+### T33 Approach (checklist part A)
+
+1. **The goal, in the world.** No map changes; a guard file written through an interpreter, a bare rustfmt, a shell write under a running gate and git's writing options are each judged as the writes they are, and nothing correct is refused by the new reading.
+2. **The constraints.** T33's line (each form red first, through T15's shared readers - `shared::tree`'s walk); constitution XIII (no known regressions, measured by the replay); the gate's rule that a path it cannot resolve fails open; 100% line coverage of the guard crate by its own tests.
+3. **Where each comes from.** O: T14's transcript, observed 2026-11-20 (agent-a4a91e2ca23b89b21, 14:32:16Z); O: T34's refused landing, observed 2026-11-20; O: T44's report, observed 2026-11-20; G: the dispatch's ruling on part 4's hole (2026-11-20: add the git subcommands that write, replay, keep what corrects, narrow what refuses correct work), then the session's ruling (2026-11-20: drop the addition - no real write caught, four misreadings - and file the hole as T50, measure-first); neither is the GM's.
+4. **Do they describe the world here?** Yes: at HEAD a Python heredoc through a list loop, a `Path` join or `cd` with a bare name, `-c` with `os.path.join`, `bash -c`, a bash heredoc, `cat <<EOF | bash`, a Perl heredoc, `for f in ...; do tee $f` and every bare rustfmt were allowed, measured 2026-11-20 (`/tmp/t33/probe.sh` over `/tmp/t33/c1.jsonl`, `/tmp/t33/c2.jsonl` with the HEAD binary); the corpora run `clone` 9 times, `init` 7, `fetch` 7, `config` 10, `worktree add` 3, `symbolic-ref` 1 and `sparse-checkout set` 1, measured 2026-11-20 (a grep over the replay's 1,134 rows).
+5. **The order.** After T14 and T15 (their shared readers); lands with T07 (one clone, the crate compiled with both).
+6. **The exits.** Green: each red test green, the replay's moves each accounted, `make rust-test CRATE=rust/guard`, the crate's lint, format and cover, `make quick`, `make static` (once), `make hooks-test`. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** Every reader of the walk's targets was replayed: make-only, main-tree, gm-tree, house-style and gate-write, measured 2026-11-20 (`grep -rln shared::tree rust/guard/src`, the replay above); `guard_file_hooks` is not one (its matcher is Read, Edit and Write; the shell side of the guard-file rule is make-only's `guard-write`), read 2026-11-20 (`rust/guard/src/guards/guard_file_hooks.rs`).
+8. **The budget.** One landing.
+9. **Done, measured.** Every red test green (697 of 697, T07's work beside it, the part-4 addition dropped) and every replay move accounted - against HEAD, the final (after9) build one make-only correction (window#79), two main-tree corrections (refusals#132, window#256), the gate's ten commit-or-add corrections and 81 gate-write refusals of writes in the tree (window#72's false refusal fixed here; window#170 and #172 unread, T49), measured 2026-11-20 (`make rust-test CRATE=rust/guard`, `/tmp/t33/green16.log`, `/tmp/t33/rp/cmp7.txt`, `/tmp/t33/rp/cmp8.txt`, `/tmp/t33/rp/cmp9.txt`).
+10. **Before moving a constant.** n/a - `DEPTH` (3, a body inside a body) is a CONVENTION, past any shape the corpora hold, measured 2026-11-20 (the replay: no row nests deeper).
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** Nothing on a map; each hole is a wrong outcome - a guard source rewritten past its guard (T14), a landing's gate failed by a write under it (T34) - and each false refusal the replay found was a correct command refused.
+
+**Found and left?**
+- Fixed here, a false refusal this task's check introduced: a literal handed to a function of the program's own was counted where the shell stands, so window#72's `edit("vegetation.html", ...)`, whose function writes `f"{R}/{rel}"` into another clone, was refused under a running gate, measured 2026-11-20 (the after5 gate replay); the gate now fails open on it, as on any path it cannot place (make-only still counts it, fail-closed: window#79 still refused), red first and replayed above.
+- A write into the tree through a function of the program's own is not read by the gate: window#170 (`replace_note("citations/urban-features.html", ...)`, its function writing `R / path` with `R = Path("research")`) and window#172 (`sub(<the urban-features record page>, ...)`, writing `Path(f)`) are let through under a running gate, as HEAD lets them through, measured 2026-11-20 (the after8 gate replay, `/tmp/t33/rp/cmp8.txt`). Not fixed here: placing such a literal means reading the function's body - which parameter reaches the write and onto what base - which no reader of `interp` does, and counting it unread refuses correct work (window#72). Filed as T49 (its task line restated by the session); lands before T22.
+- The twelve git subcommands outside `GIT_WRITES` that write (`switch`, `bisect`, `sparse-checkout`, `submodule`, `worktree`, `clone`, `init`, `config`, `fetch`, `notes`, `update-ref`, `symbolic-ref`) are still read as no write, measured 2026-11-20 (the after7 build). Not fixed here: the addition that read them caught no real write in the 1,134-row replay and a review found three misreadings of it, so the session's ruling (2026-11-20) dropped it for a measure-first task on a corpus that runs them in the mirror or a clone, each subcommand's options read from its own `-h`. Filed as T50; lands before T22.
+- Fixed here, HEAD's own false refusals the replays found: `chmod`'s mode and `chown`'s owner read as files written (refusals#132, window#256); the gate's commit-or-add rule matching the word `add` anywhere in a git segment (parse#148, #171, #173, #229, refusals#88, window#279); and `git stash list` / `show` read as a stash's write (no row in the corpora; the gate's new shell-write check refused it, and in the shared walk the fix also lets main-tree through them in the mirror: `git stash list` and `git stash show -p` refused by the HEAD build and let through by after7, a bare `git stash` refused by both, measured 2026-11-20, `--only main-tree-hooks` in a scratch mirror, session `nobody`).
+- A program run from a file (`python3 script.py`) is not read: its writes are judged by nothing but the walk. Measured 2026-11-20 (`/tmp/t33/sg/scripts.py`, `sources.py` and `wrap.py` over the 1,134 rows): 183 runs of a script file in 125 rows - 73 the repository's `scripts/`, 18 `tests/`, `l7r/` or `rust/` (those 91 not read), 65 a scratchpad's, 27 elsewhere; 59 scratch script names, 34 matched by basename to a heredoc in the corpora that writes one (one, `hookmatch.py`, a repository file), 25 with no source; the 48 row-and-script pairs, 41 bodies recovered, run through the after7 build's make-only as `python3 -` programs: 5 refused - window#215's `desc195.py` rewriting a clone's `Makefile` (a guard-file write make-only let through, a real case) and 4 false (window#302, #305, #306, #309 read or run `house-style-hooks.sh`); and 7 pairs rewrite a clone's research page, test or `Makefile` (main-tree#18, #89, #99, window#80, #215, #392, #393), a write the gate would see were that clone's gate running - the gate replay's mirror runs none of them. Not fixed here: reading a script means reading the file's text at the call, a reader no guard has, and the 4 false refusals show the literal reading would refuse correct work without its own replay. Filed as T51; lands before T22.
+
+**Performance work?** no.
+
+
+<!-- plan-archive: T34 to T14 moved to plan-done.md, 2026-11-20 (feature 375 FR-044) -->
+<!-- plan-archive: T34 to T34 moved to plan-done.md, 2026-11-20 (feature 375 FR-044) -->

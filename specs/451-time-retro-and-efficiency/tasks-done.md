@@ -26,6 +26,10 @@
       research: rendering
       held: rust/guard/src/guards/event_log_hooks.rs (and event_log_hooks/fields.rs)
       verify: DONE. landed in batch T07+T33: each agent's cost logged; four guard holes closed
+- [x] T08 [perf] `make where-time`'s columns - tests, compile, gate, land, review, model - booked by `make` through the shared table, the compile split from the phase lines, and `UNTIL=`, in `rust/gate/crates/measure/src/measure/where_time.rs` and a new `where_time/columns.rs`; the `where-time` recipe's `--until` (D2, D4, D7; FR-005, SC-001); a background run's duration ends at the queue's enqueue row, never the BgEnd's t (when the notice reached the session, minutes late while the session is mid-turn: one enqueued 11:44:08, delivered 11:47:41; T04's plan review, 2026-11-20); and T02's make detector measured on a launch whose command runs `make land` after a multi-line `python3 -c "..."` string: bnikhrir8's launch (2026-11-20 11:44:23) was booked cat 'other tool' with no make, where bl11iumpi's (a heredoc commit, then make land) read make land - fixed red first if T02's invoked() misses it; and a goal-less make, which shared::make::invoked reads as `.DEFAULT_GOAL` since T15, booked to the Makefile's default goal in the event log's `make` field, not as the literal word (T15's plan review, 2026-11-20)
+      research: rendering
+      held: Makefile
+      verify: DONE. landed in batch T08+T36: where-time's columns; the archived deferrals read
 - [x] T12 [perf] The context cap: a new guard `context_cap_hooks` refusing a builder's tool call past `CONTEXT_CAP_TOKENS` (GUESS, 300k) but the Write of its handoff file, naming the file and the next step; its first step one real subagent PreToolUse payload captured and pinned as the fixture (D8, D9; FR-006, FR-012, SC-003, SC-005)
       research: rendering
       held: rust/guard/src/guards/context_cap_hooks.rs (new), rust/guard/src/guards.rs, rust/guard/src/lib.rs, Makefile (`make context-ok`)
@@ -104,6 +108,9 @@
 - [x] T35 [perf] Two timing tests fail under load (found by T12, 2026-11-20): rustc's another_runs_holder_is_waited_for_named_and_past_the_ceiling_refused expects two waiting lines inside a 60 ms ceiling at a 10 ms poll and saw one under make static's load, and test-land-tooling.sh case 2b fails under the full hooks-test run and passes alone - a red gate on correct work; each test's timing taken from what it measures (an event, a count, or a ceiling scaled by a calibration loop), never a bare wall-clock bound, red first under induced load; its land-tooling half (case 2b) folded into T20 by T20's plan review (2026-11-20), so T35 holds the rustc test alone
       research: rendering
       verify: DONE. landed in batch T21+T35: the l7r-gate split; the run lock's test on a stepped clock
+- [x] T36 The archived deferrals T17's replay found (2026-11-20): 449 T156, T200, T201, T208, T218, T219, T221, T224, T239 and 451 T02 (a class fix with no instance count), T03, T16, T26 deferred without a filed task or order in plan-done.md - for each, the deferred defect found carried by an open or ticked task, or filed now (each named), or shown fixed; history is not re-judged, so this is read by hand once
+      research: rendering
+      verify: DONE. landed in batch T08+T36: where-time's columns; the archived deferrals read
 - [x] T37 [perf] The plan-review bundle cuts a decision at its list (found by T19's plan review, 2026-11-20): spec-cited.md stops D16 at 'Two things make the comparison real:' and drops the bullets, as it stopped D15 at a colon for T17's review - a reviewer judges a decision without its text, and asks a round for it; every cited decision carried whole, its lists included, red first on D15 and D16
       research: rendering
       verify: DONE. landed in batch T37+T39: whole decisions in the bundle; FRESH not a replay
