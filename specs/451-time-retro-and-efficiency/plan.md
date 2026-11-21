@@ -1262,7 +1262,7 @@ source edits, rebuilds the guard alone where it rebuilt every crate that named i
    - The crate's own checks on `rust/guard/shared`: lint and dead clean; format clean and cover clean after an `assert!`'s
      message left on a line of its own was moved to a comment (llvm-cov named it unreached), measured 2026-11-21 (`l7r-gate.sh rust
      lint|dead|format --check|cover --crate rust/guard/shared`, `/tmp/t65/crate-*.log`, `/tmp/t65/crate2-*.log`). `make closing-checks`
-     (make static, hooks-test and quick) green, 395 s, 73 s and 1 s, measured 2026-11-21 (`/tmp/t65/closing.log`).
+     (make static, hooks-test and quick), measured 2026-11-21 (`/tmp/t65/closing.log`).
 10. **Before moving a constant.** n/a: no constant moved.
 11. **Before fitting things into room.** n/a.
 12. **Before any fix.** What a builder's dispatcher sees differently: a turn ending while a resumed or interim-waiting builder runs is no
