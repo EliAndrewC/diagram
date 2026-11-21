@@ -624,6 +624,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-21",
    "declared": "spec-fidelity"
+  },
+  "### T114 (T108's landing: its builder's lint, tests and cover ran green, then `make format` split three asserts so each message stood on a line of its own, and the landing's cover refused them and a fourth line after 274 s, measured 2026-11-21 (`grep` of the feature's 57 landing logs under the coordinator's job directory): the only landing log of the 57 that named lines)": {
+   "sha256": "76d1fe66021239b6504e0813245670971c6a063b24dcff2a9baaaac5f8c1e357",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity"
+  },
+  "### T114 Approach (checklist part A)": {
+   "sha256": "76fae507153267628936a558be91bfe0a05bbf5fe32527da72146bee6728f6a2",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -10743,6 +10755,65 @@
      "why": "The census names its search space (both grep commands, every hit read), as FR-009 asks. The two patterns it leaves are argued not to be a defect, since they give no wrong outcome, so leaving them narrows nothing."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-21",
+   "blocks": [
+    "### T114 (T108's landing: its builder's lint, tests and cover ran green, then `make format` split three asserts so each message stood on a line of its own, and the landing's cover refused them and a fourth line after 274 s, measured 2026-11-21 (`grep` of the feature's 57 landing logs under the coordinator's job directory): the only landing log of the 57 that named lines)",
+    "### T114 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T114-route",
+     "summary": "Of the task's three routes, make format itself names each assert message it put on a line of its own (assertline.rs, called from rustc.rs format_crate and fmtfile.rs one()), with the rewrite and the fix, rather than rerunning cover after format or reordering make static",
+     "class": "within",
+     "why": "Picking one of the routes the task's own line offered, priced by measurement (0.16 s a file against a coverage build; static already stops at format --check, item 4 e). The goal - a landing's cover refusal caught where it is made - is the task's and serves FR-013's landings and builders' loop."
+    },
+    {
+     "id": "T114-red-exit",
+     "summary": "The run goes red (exit 1) naming file:line, macro, message and the fix, with the file still formatted, pinned by a red-first test",
+     "class": "within",
+     "why": "How the chosen route reports; FR-012-style red-first pin and the printed concrete fix. Formatting is still applied, so nothing the format pass did before is withdrawn."
+    },
+    {
+     "id": "T114-only-pass-made",
+     "summary": "Only lines the pass made are named: each changed file's text scanned before and after; an unchanged file skipped",
+     "class": "within",
+     "why": "The task is about lines make format creates after the builder's last cover; a line it did not make is not this task's."
+    },
+    {
+     "id": "T114-shapes",
+     "summary": "Only the shapes the fixture measured unrun are named (assert! message alone as inline capture, literal or worded format; any assert_eq! message alone; a format argument holding a call alone); assert!'s bare \"{}\" with a place argument, messages on the condition's line, one-line asserts, and unmeasured forms (debug_ forms, &x arguments) are not named, cover the backstop",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The literal rule ('any message on a line of its own') was measured (item 4 h) to name 94 lines the coverage run counts - refusing correct work, which is itself a defect (XIV) and would defeat the purpose of catching only what cover would refuse. The measured refusal record (item 4 a: 48 assert!, 15 assert_eq!, 6 format!, 1 unread; item 4 c: 3 assert!, 3 assert_eq!) contains no debug_ or borrow shape, so the shapes left unnamed leave no measured wrong outcome, and cover still catches any at landing - no defect is carried forward."
+    },
+    {
+     "id": "T114-closure",
+     "summary": "A closure no test calls (T108's fourth line, 306) is not named and is left to cover",
+     "class": "within",
+     "why": "Measured (item 4 f, cases c1, c2) to be unrun on one line or split, so no format pass makes it; it is outside a format-made-line check, and T108's fold removed it."
+    },
+    {
+     "id": "T114-not-scanned",
+     "summary": "Files under tests/ directories and items under #[cfg(feature = \"counters\")] are not scanned",
+     "class": "within",
+     "why": "Measured (item 4 g) absent from or lineless in the coverage reports, so cover never refuses them; naming them would refuse correct work."
+    },
+    {
+     "id": "T114-perf-brief",
+     "summary": "Classed [perf] under FR-013 (landings and builders' loop), the performance checklist answered in brief, saving stated as measured (1 of 57 landings, 274 s, 6 closing-check lines) not extrapolated",
+     "class": "within",
+     "why": "FR-013 names landings and the builders' loop as performance work; stating the measured saving and declining to count builders' own cover refusals as saving is accurate reporting, not a scope change."
+    },
+    {
+     "id": "T114-order",
+     "summary": "After T108's fold (9a11c3b6a4), beside T112 and T113, touching none of their files",
+     "class": "within",
+     "why": "Scheduling among performance tasks; no clause of the request or spec is affected."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -16651,6 +16722,63 @@
      "summary": "Found and left: none. A grep census of the class over rust/ found that only make_only_hooks/interp.rs:27 and :33's (?:\\\\.|[^\"\\\\])* remain, and they are left because their branches are disjoint and do not backtrack.",
      "class": "within",
      "why": "The census names its search space (both grep commands, every hit read), as FR-009 asks. The two patterns it leaves are argued not to be a defect, since they give no wrong outcome, so leaving them narrows nothing."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T114": {
+   "section_sha256": "9aebbf604cd100531f8719a3f330a9b54b21ab0fea1e7fa79fc116f7ab724915",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T114-route",
+     "summary": "Of the task's three routes, make format itself names each assert message it put on a line of its own (assertline.rs, called from rustc.rs format_crate and fmtfile.rs one()), with the rewrite and the fix, rather than rerunning cover after format or reordering make static",
+     "class": "within",
+     "why": "Picking one of the routes the task's own line offered, priced by measurement (0.16 s a file against a coverage build; static already stops at format --check, item 4 e). The goal - a landing's cover refusal caught where it is made - is the task's and serves FR-013's landings and builders' loop."
+    },
+    {
+     "id": "T114-red-exit",
+     "summary": "The run goes red (exit 1) naming file:line, macro, message and the fix, with the file still formatted, pinned by a red-first test",
+     "class": "within",
+     "why": "How the chosen route reports; FR-012-style red-first pin and the printed concrete fix. Formatting is still applied, so nothing the format pass did before is withdrawn."
+    },
+    {
+     "id": "T114-only-pass-made",
+     "summary": "Only lines the pass made are named: each changed file's text scanned before and after; an unchanged file skipped",
+     "class": "within",
+     "why": "The task is about lines make format creates after the builder's last cover; a line it did not make is not this task's."
+    },
+    {
+     "id": "T114-shapes",
+     "summary": "Only the shapes the fixture measured unrun are named (assert! message alone as inline capture, literal or worded format; any assert_eq! message alone; a format argument holding a call alone); assert!'s bare \"{}\" with a place argument, messages on the condition's line, one-line asserts, and unmeasured forms (debug_ forms, &x arguments) are not named, cover the backstop",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The literal rule ('any message on a line of its own') was measured (item 4 h) to name 94 lines the coverage run counts - refusing correct work, which is itself a defect (XIV) and would defeat the purpose of catching only what cover would refuse. The measured refusal record (item 4 a: 48 assert!, 15 assert_eq!, 6 format!, 1 unread; item 4 c: 3 assert!, 3 assert_eq!) contains no debug_ or borrow shape, so the shapes left unnamed leave no measured wrong outcome, and cover still catches any at landing - no defect is carried forward."
+    },
+    {
+     "id": "T114-closure",
+     "summary": "A closure no test calls (T108's fourth line, 306) is not named and is left to cover",
+     "class": "within",
+     "why": "Measured (item 4 f, cases c1, c2) to be unrun on one line or split, so no format pass makes it; it is outside a format-made-line check, and T108's fold removed it."
+    },
+    {
+     "id": "T114-not-scanned",
+     "summary": "Files under tests/ directories and items under #[cfg(feature = \"counters\")] are not scanned",
+     "class": "within",
+     "why": "Measured (item 4 g) absent from or lineless in the coverage reports, so cover never refuses them; naming them would refuse correct work."
+    },
+    {
+     "id": "T114-perf-brief",
+     "summary": "Classed [perf] under FR-013 (landings and builders' loop), the performance checklist answered in brief, saving stated as measured (1 of 57 landings, 274 s, 6 closing-check lines) not extrapolated",
+     "class": "within",
+     "why": "FR-013 names landings and the builders' loop as performance work; stating the measured saving and declining to count builders' own cover refusals as saving is accurate reporting, not a scope change."
+    },
+    {
+     "id": "T114-order",
+     "summary": "After T108's fold (9a11c3b6a4), beside T112 and T113, touching none of their files",
+     "class": "within",
+     "why": "Scheduling among performance tasks; no clause of the request or spec is affected."
     }
    ],
    "verdict": "CLEAR"

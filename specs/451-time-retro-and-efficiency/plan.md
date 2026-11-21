@@ -1297,6 +1297,104 @@ its own files; not engine speed, so no performance-checklist answers.
 
 <!-- plan-archive: T112 to T96 moved to plan-done.md, 2026-11-21 (feature 375 FR-044) -->
 <!-- plan-archive: T112 to T112 moved to plan-done.md, 2026-11-21 (feature 375 FR-044) -->
+### T114 (T108's landing: its builder's lint, tests and cover ran green, then `make format` split three asserts so each message stood on a line of its own, and the landing's cover refused them and a fourth line after 274 s, measured 2026-11-21 (`grep` of the feature's 57 landing logs under the coordinator's job directory): the only landing log of the 57 that named lines)
+
+- **Approach**: `make format` names each assert message it put on a line of its own, with the rewrite, where the format pass writes
+  it - `rust/gate/crates/rustc/src/rustc/assertline.rs`, called by the crate format (`check()`'s writing branch in `rustc.rs`,
+  `format_crate`) and the file format (`fmtfile.rs`'s `one()`); each compares the scan of a changed file's text before the pass with
+  its text after, so only a line the pass made is named; the run goes red (exit 1, the file still formatted), naming `file:line`,
+  the macro and the message, and the fix "bind the values to locals first so the assert fits one line", pinned by a test. The
+  shapes named are those a fixture measured unrun, and no other (item 4 f); a closure no test calls is no format pass's (item 4 f)
+  and is left to cover. The task's other two routes, priced from item 4: rerunning a crate's cover after `make format` costs a
+  coverage build where this costs 0.16 s a file, measured 2026-11-21 (`date` around `make format FILE=`, item 9); and
+  `make static` already runs `rust format --check` before `rust cover` and stops at the first red line, so cover never reads
+  unformatted code there - T108's static stopped at the format check and its cover never ran before the landing (item 4 e), which no
+  reordering of static changes.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+| `make format` (`FILE=`, `CRATE=` or bare) naming an assert message it put on a line of its own, with the rewrite | n/a - no map | n/a | none | n/a |
+
+### T114 Approach (checklist part A)
+
+1. **The goal, in the world.** No map changes. A builder whose `make format` splits an assert so its message stands on a line of
+   its own learns it from that `make format`, with the rewrite, and not from its landing's cover minutes later.
+2. **The constraints.** T114's line; FR-013 (a `[perf]` task: the landings and the builders' loop); FR-012 (red first); constitution
+   XIII (no known regressions: no line of the tree the coverage run counts is named); XIV (a defect is a wrong outcome: a line the
+   coverage run counts is no defect, so the rule names only what the fixture measured unrun); the user's rule that a check's
+   refusal prints the concrete fix, pinned by a test.
+3. **Where each comes from.** O: T108's landing log and its fold (`9a11c3b6a4`); O: this task's measurements (item 4); O: the
+   fixture's sixteen cases for the shapes (item 4 f). No G: no ruling of the GM's bears on it.
+4. **Do they describe the world here?** Measured 2026-11-21, each by its method:
+   - (a) The feature's cover refusals, measured 2026-11-21 (`/tmp/t114/scan.py` and `recover.py` over the coordinator's transcript and
+     its 1,627 builders' since 2026-11-20T04:35Z: each tool result naming `lines no test reaches`, each refused line's text read
+     from a later result showing that file's numbered lines before its next edit): 385 distinct refused lines, 191 texts recovered -
+     70 of them (37%) an assert's message on a line of its own (48 `assert!`, 15 `assert_eq!`, 6 a `format!` inside a message, 1
+     its macro unread), 17 a closure no test called, 104 other - and 194 not recovered, and not extrapolated.
+   - (b) The landings, measured 2026-11-21 (`grep` of the 57 landing logs): 2 refused at cover; 1 named lines, T108's four (three
+     messages, one closure); the other a failed test run (T102's, `lines no test reaches: 0`).
+   - (c) The closing checks, measured 2026-11-21 (`.git/closing-checks/*/static.log`, the 43 runs the 360-minute prune kept, 16:11Z
+     to 21:55Z): 10 refused at cover, 8 naming lines, 44 lines; 7 recovered by (a)'s method - 6 messages (3 `assert!`, 3
+     `assert_eq!`) and 1 closure; 37 not recovered. `dev/run-log/` records a gate's phases and verdict and no line, so it is no
+     source for the count.
+   - (e) Why the shape reached T108's landing, measured 2026-11-21 (T108's closing-check runs of 21:15:57Z and 21:19:09Z): both
+     stopped at `rust format --check` red on `rust/guard/shared`, so `make static`'s cover, after it, never read the formatted
+     code; its builder's own cover ran before `make format`.
+   - (f) Which shapes no passing test runs, measured 2026-11-21 (a copy of `tests/fixtures/rust/fixture` in a detached worktree,
+     `l7r-gate.sh rust cover`, toolchain 1.87.0, sixteen cases): unrun - an `assert!` message standing alone (an inline capture, a
+     plain literal, a worded `"text: {}"`), any `assert_eq!` message standing alone (`"{x:?}"`, `"{}"`, a literal), and a format
+     argument holding a call standing alone (`x.len()`); run - `assert!`'s bare `"{}"` and a place argument (`r.stderr`), a message
+     on its condition's line, a one-line assert. A closure no test calls is named on one line or split over three, measured
+     2026-11-21 (the same fixture's cases c1, c2), so no format pass makes it: T108's fourth line (306) is outside any
+     format-side check.
+   - (g) What the coverage report reads, measured 2026-11-21 (the kept `lcov-shared.info`, `lcov-pool.info`, `lcov-mode_a.info`): a
+     file under a `tests/` directory is absent (`shape/tests/quotes.rs`, holding the shape, its crate green); an item under
+     `#[cfg(feature = "counters")]` has no line (`pool/src/tests.rs:137`, `compound/gen_tests_seat.rs:543`). Neither is scanned.
+   - (h) No line the coverage run counts is named, measured 2026-11-21 (a probe test, not kept, over the worktree's 1,217 counted
+     `.rs` files at HEAD `e57207035b` with T108's pre-fold files put back): the scan names T108's three lines and nothing else. The
+     first rule tried ("any message on a line of its own"), measured 2026-11-21 (the same probe, and the kept reports' counts),
+     named 94 lines there the coverage run counts (73 with a count above 0 in the kept reports), every one an `assert!` with a bare
+     `"{}"` and a place - the case (f) measured run.
+5. **The order.** After T108 (its fold landed as `9a11c3b6a4`); beside T112 (`shared::tree`, `tree/program`) and T113
+   (`make_only_hooks`, `no_poll_hooks/pace`, `readme_hooks`, `shape`, `guards.rs`), touching none of their files.
+6. **The exits.** Green: the pins red first and green, the rustc crate's lint, tests and cover, the closing checks. Red: what failed
+   recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None: the shapes are the fixture's sixteen cases; a shape it did not measure (the `debug_` forms, a borrow
+   `&x` as an argument) is not named, cover the backstop.
+8. **The budget.** One landing. The scan is one pass of each changed file's text before the pass and one after; a file the pass
+   left unchanged is skipped.
+9. **Done, measured.** Red first, measured 2026-11-21 (`make format FILE=` over T108's two files with each of its three asserts on
+   one line, as before its `make format`, in the worktree with this change): exit 2 (make's, for the gate's 1), naming
+   `rust/guard/shared/src/wait/tests.rs:326` and `:357` and `rust/guard/shared/src/guards/house_style_hooks/tests.rs:378` with the
+   fix - the three message lines its landing's cover named after 274 s; 306, the closure, not named (item 4 f). Before this change
+   the same pass printed `formatted` and exited 0 (T108's run; its landing's log the first to name the lines). Green: the rustc
+   crate's 90 tests pass and its cover is clean, measured 2026-11-21 (`l7r-gate.sh rust test` and `rust cover --crate
+   rust/gate/crates/rustc`); `make format CRATE=rust/guard/shared` 2.9 s and `make format FILE=` on one file 0.16 s, measured
+   2026-11-21 (`date` around each, the worktree, a load average of 29.8 on 22 cores, `uptime`, `nproc`).
+10. **Before moving a constant.** No constant moved: the named shapes are item 4 f's measurement, labeled in the module's doc.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** No map changes: a reader of the maps sees nothing different. The defect is the gate's: a line a format pass
+   made, which no check named until a landing's cover did (T108: a landing refused after 274 s, measured 2026-11-21 (`grep` of
+   the 57 landing logs), its fold and a second landing).
+
+**Found and left?** none - T108's fourth line, a closure run only while a stat file stood, is no format pass's (item 4 f), and
+T108's fold removed it.
+
+**Performance work?** yes - a `[perf]` task (451 FR-013): the landings and the builders' loop; not engine speed, so the
+performance checklist's answers are given in brief:
+1. **Where does the time go?** In a landing's gate red at cover on a line `make format` made after the builder's last cover: T108's
+   cover verdict after 274 s, measured 2026-11-21 (`grep` of the 57 landing logs), then its fold and a second landing.
+2. **Removes work, or only moves it?** Removes it: the line is named by the format pass that makes it, a scan of the changed files'
+   text, and never reaches a landing's cover.
+3. **What it was expected to save, and why.** Estimated before (the task's line): a landing's cover refusal each time a format pass
+   splits an assert after the builder's last cover. Measured 2026-11-21 (item 4 b, c): 1 of the feature's 57 landing logs (T108's,
+   274 s to its cover's verdict, then a fold and a second landing) and 6 recovered message lines in the 43 kept closing-check runs;
+   the transcripts' 70 recovered message lines (item 4 a) are every cover run's, a builder's own among them, and are not a saving.
+4. **How does the work grow?** Linearly in the text of the files a pass changed, each read twice; nothing for a file it left alone.
+5. **Before and after, and under what conditions.** After only, measured 2026-11-21 (item 9: 0.16 s a file, 2.9 s a crate whose
+   files the pass left alone, a load average of 29.8 on 22 cores); before, the same pass named nothing.
+
+
 ### T115 (<why: the finding or measurement that files it>)
 
 - **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
