@@ -314,6 +314,88 @@ fn a_task_whose_only_start_is_stale_falls_to_the_feature_of_the_last_start() {
     );
 }
 
+/// 451 T76's live shape: the mirror's `_unassigned.jsonl`, written from /diagram before 451 T74 filed a call under its session's
+/// clone, re-filed into the clone's logs (`--from`): each moved line appended there once - one already there in its re-filed form
+/// (T74's merge) not twice - the source kept of only what no rule places, nothing created beside it, and the clone's own logs not
+/// re-filed by the run.
+#[test]
+fn a_second_directorys_log_is_refiled_into_the_clones_logs() {
+    let d = crate::checks::scratch("measure-refile-from");
+    world(&d);
+    let ev = d.join("events");
+    let mirror = d.join("mirror");
+    let merged = "{\"t\":\"2026-11-20T08:01:00Z\",\"sid\":\"s1\",\"ev\":\"PreToolUse\",\"id\":\"m1\",\"by\":\"a451\",\"task\":\"T26\"}";
+    put(&ev.join("451-a.jsonl"), &format!("{LOG451}{merged}\n"));
+    let kept =
+        "{\"t\":\"2026-11-20T08:05:00Z\",\"sid\":\"m\",\"ev\":\"Stop\",\"id\":\"mk\"}\nnot json\n";
+    let source = format!(
+        "{}{}{}{kept}",
+        // by brief, its re-filed form already in the clone's 451 log
+        "{\"t\":\"2026-11-20T08:01:00Z\",\"sid\":\"s1\",\"ev\":\"PreToolUse\",\"id\":\"m1\",\"by\":\"a451\",\"task\":\"T236\"}\n",
+        // by brief, not there yet
+        "{\"t\":\"2026-11-20T08:02:00Z\",\"sid\":\"s1\",\"ev\":\"PreToolUse\",\"id\":\"m2\",\"by\":\"a451\",\"task\":\"T236\"}\n",
+        // by task id, to a log the clone does not have yet
+        "{\"t\":\"2026-11-20T05:30:00Z\",\"sid\":\"m\",\"ev\":\"PreToolUse\",\"id\":\"m3\",\"task\":\"T226\"}\n",
+    );
+    put(&mirror.join("_unassigned.jsonl"), &source);
+    let root = d.display().to_string();
+    let dir = ev.display().to_string();
+    let from = mirror.display().to_string();
+    let projects = d.join("projects").display().to_string();
+    let run = |extra: &[&str]| {
+        let mut a = vec![
+            "--root",
+            &root,
+            "--dir",
+            &dir,
+            "--from",
+            &from,
+            "--projects",
+            &projects,
+        ];
+        a.extend_from_slice(extra);
+        cli(&args(&a))
+    };
+    let dry = run(&["--dry-run"]);
+    assert_eq!(dry.code, 0, "{}", dry.stderr);
+    for want in [
+        format!("refile: 5 lines read in 1 logs under {from}\n"),
+        "refile: _unassigned -> 451-a: 2 lines (2 by brief, 0 by task id)\n".to_owned(),
+        "refile: _unassigned -> 449-b: 1 lines (0 by brief, 1 by task id)\n".to_owned(),
+        "refile: 3 lines moved (dry run: nothing written)\n".to_owned(),
+    ] {
+        assert!(dry.stdout.contains(&want), "{want:?} in {}", dry.stdout);
+    }
+    assert_eq!(
+        std::fs::read_to_string(mirror.join("_unassigned.jsonl")).unwrap(),
+        source
+    );
+    assert!(!ev.join("449-b.jsonl").exists());
+    let r = run(&[]);
+    assert_eq!(r.code, 0, "{}", r.stderr);
+    assert_eq!(
+        std::fs::read_to_string(mirror.join("_unassigned.jsonl")).unwrap(),
+        kept
+    );
+    assert_eq!(
+        super::super::super::events::names(&mirror),
+        ["_unassigned.jsonl"]
+    );
+    // the clone's own misfiled c1 and c2 stay: only the source directory's logs are re-filed
+    assert_eq!(
+        ids(&ev.join("451-a.jsonl")),
+        ["c1:-", "c2:T226", "c3:T26", "m1:T26", "m2:T26"]
+    );
+    assert_eq!(ids(&ev.join("449-b.jsonl")), ["m3:T226"]);
+    let again = run(&[]);
+    assert!(
+        again.stdout.contains("refile: 0 lines moved\n"),
+        "{}",
+        again.stdout
+    );
+    assert_eq!(cli(&args(&["--root", &root, "--from"])).code, 2);
+}
+
 #[test]
 fn the_command_line_and_its_failures() {
     assert_eq!(cli(&args(&[])).code, 2);

@@ -23,6 +23,13 @@
 //! Idempotent: a moved line is filed where both rules leave it, and a line already in its target is not appended twice. The target is
 //! appended to (`O_APPEND`, as the hooks write - both readers sort by `t`, and `reversal` reads a log as a set); the source is rewritten
 //! through a temporary file, any line a live hook appended meanwhile carried over before the rename.
+//!
+//! `--from <events dir>` (451 T76): the logs re-filed are read from that directory and their kept lines written back there, the moved
+//! lines appended to `--dir`'s logs. WHY: the mirror's `.git/l7r-events/_unassigned.jsonl`, written from /diagram before 451 T74 filed a
+//! call under its session's clone, held 13 lines these rules file to 405, 430 and 449 and 2 that T74's merge had put in 451's log
+//! (observed 2026-11-21, method: this run without `--from` on a scratch copy of that file). Only a line the rules send to a feature
+//! other than its source log's name moves; a line they leave stays in the source, so a mirror's log of the clone's own feature is not
+//! merged by it (T74 merged its 451 log with a one-off script). The source directory gains no log: every target is `--dir`'s.
 
 use l7r_shared::env::Reader;
 use std::collections::{BTreeMap, HashMap};
@@ -39,7 +46,7 @@ use super::reply;
 use crate::measure::events::ts;
 use crate::Reply;
 
-const USAGE: &str = "usage: l7r-gate measure event-log refile --root <tree> [--dir <events dir>] [--projects <dir>] [--dry-run]\n";
+const USAGE: &str = "usage: l7r-gate measure event-log refile --root <tree> [--dir <events dir>] [--from <events dir>] [--projects <dir>] [--dry-run]\n";
 /// The commands whose `T=` a line carries as its own (`event_log_hooks::tool_fields`).
 const CARRYING: [&str; 4] = ["tick", "task-start", "decide", "land"];
 /// A task start's own lines come before its row (the `PreToolUse`) or within its call: a start this soon after the line still counts.
@@ -55,6 +62,8 @@ fn re(p: &str) -> Regex {
 struct Given {
     root: PathBuf,
     dir: PathBuf,
+    /// where the logs re-filed are read and written back, `dir` unless `--from` names another (451 T76)
+    from: PathBuf,
     projects: PathBuf,
     dry: bool,
 }
@@ -62,6 +71,7 @@ struct Given {
 fn given(args: &[String], env: &Reader) -> Option<Given> {
     let mut root = None;
     let mut dir = None;
+    let mut from = None;
     let mut projects = None;
     let mut dry = false;
     let mut it = args.iter();
@@ -69,6 +79,7 @@ fn given(args: &[String], env: &Reader) -> Option<Given> {
         match a.as_str() {
             "--root" => root = Some(PathBuf::from(it.next()?)),
             "--dir" => dir = Some(PathBuf::from(it.next()?)),
+            "--from" => from = Some(PathBuf::from(it.next()?)),
             "--projects" => projects = Some(PathBuf::from(it.next()?)),
             "--dry-run" => dry = true,
             _ => return None,
@@ -80,11 +91,13 @@ fn given(args: &[String], env: &Reader) -> Option<Given> {
             .parent()
             .map_or_else(PathBuf::new, Path::to_path_buf)
     });
+    let from = from.unwrap_or_else(|| dir.clone());
     let projects = projects
         .unwrap_or_else(|| PathBuf::from(env("HOME").unwrap_or_default()).join(".claude/projects"));
     Some(Given {
         root,
         dir,
+        from,
         projects,
         dry,
     })
@@ -318,14 +331,14 @@ struct Tally {
     left: usize,
 }
 
-/// One source log re-filed: its moves appended to their targets, its kept lines written back.
+/// One source log (in `from`) re-filed: its moves appended to their targets (in `dir`), its kept lines written back.
 fn refile_log(
     facts: &mut Facts,
     g: &Given,
     feature: &str,
     tally: &mut Tally,
 ) -> Result<(), String> {
-    let path = g.dir.join(format!("{feature}.jsonl"));
+    let path = g.from.join(format!("{feature}.jsonl"));
     let bytes = std::fs::read(&path).map_err(|e| format!("{}: {e}", path.display()))?;
     let body = String::from_utf8_lossy(&bytes);
     let mut kept = String::new();
@@ -403,7 +416,7 @@ pub fn cli_in(args: &[String], env: &Reader) -> Reply {
     };
     let mut facts = Facts::new(&g.root, &g.projects);
     let mut tally = Tally::default();
-    let logs: Vec<String> = super::super::events::names(&g.dir)
+    let logs: Vec<String> = super::super::events::names(&g.from)
         .into_iter()
         .filter_map(|n| n.strip_suffix(".jsonl").map(str::to_owned))
         .collect();
@@ -418,7 +431,7 @@ pub fn cli_in(args: &[String], env: &Reader) -> Reply {
         "refile: {} lines read in {} logs under {}",
         tally.read,
         logs.len(),
-        g.dir.display()
+        g.from.display()
     );
     let mut all = 0;
     for ((from, to), [brief, id, fallback]) in &tally.moved {

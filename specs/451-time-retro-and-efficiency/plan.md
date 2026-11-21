@@ -627,31 +627,48 @@ The T02 class, by kind (the grep's hits, each read):
 **Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
 
 
-### T50 (<why: the finding or measurement that files it>)
+### T50 (twelve git subcommands outside `GIT_WRITES` read as no write - `worktree`, `clone`, `init`, `switch`, `bisect`, `sparse-checkout`, `submodule`, `config`, `fetch`, `notes`, `update-ref`, `symbolic-ref` - found by T33, observed 2026-11-20, method: T33's part 4; T33's addition that read them was dropped, a review finding four misreadings)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: measured first, then read in `rust/guard/shared/src/tree/git.rs` (`git_write`, under `make guard-edit`; the git reading moved there out of `tree.rs`, which the reading put at 1,026 lines, past constitution X's 1,000-line bar, measured 2026-11-21 (`l7r-gate check file-scale .`) - a move, no change of behavior), its tests in `tree/tests.rs`, the main-tree and make-only rows of `docs/guards.md`. Every existing case is kept: `GIT_WRITES` (`commit`, `push`, `tag` among them, writes though they touch `.git` alone), a writing `branch` and T33's output options read as at HEAD; the `.git`-alone rule is the twelve's.
+  - the corpus: every transcript Bash command of the diagram projects that names one of the twelve - 995 distinct commands (by command and cwd) from 456 transcript files, measured 2026-11-21 (`/tmp/t50/scripts/extract.py`, `/tmp/t50/corpus.jsonl`); 981 invocations counted on segment heads with heredoc bodies and quoted strings dropped (the 995 are pattern hits; a `notes` hit, a `git -C clone status`, were prose or a path): `fetch` 424, `worktree` 266 (`add` 113, `remove` 90, `list` 50, `prune` 13), `clone` 126, `init` 86, `config` 43, `update-ref` 28, `sparse-checkout` 7 (`set` 6, `list` 1), `symbolic-ref` 1, and `switch`, `bisect`, `submodule`, `notes` none; standing in a clone 706, in the mirror 24, no cwd recorded 251 (the replay stands those in the mirror: a move on one is "mirror assumed", not an observed mirror run), measured 2026-11-21 (`/tmp/t50/scripts/recount.py`, `/tmp/t50/recount.txt`).
+  - what each form writes: 62 forms run in a scratch repository, its work tree, `.git`, the directory beside it and the home compared before and after, measured 2026-11-21 (git 2.53.0, `/tmp/t50/scripts/writes.sh`, `/tmp/t50/writes.txt`): the tree changes under `worktree add` of a path inside it, `clone` and `init -b main d` into one, `switch` to a branch, a start point or `--orphan`, `bisect start <bad> <good>` and `reset`, `sparse-checkout set`, `add` and `disable`, `submodule add`, `config -f`/`--file=`; a new directory beside it under `worktree add`, `remove` and `move`, `clone` and `init` elsewhere; the home under `config --global`; `.git` alone under `worktree prune` and `lock`, `init -q` in place, `switch -c nb` and `--detach` with no start point, `bisect start` with no or one revision and `--no-checkout`, every `config` set of `.git/config` (`--worktree` too), every `fetch` (`--dry-run` and `-n` too: `--dry-run` writes `.git`, not nothing), `notes add`, `update-ref`, `symbolic-ref HEAD <ref>`; nothing under `worktree list` and `repair`, `bisect log`, `view`, `terms`, `sparse-checkout list`, `submodule` and `status`, `config --get`, `get`, `--list`, `notes show`, `symbolic-ref HEAD`. Two re-measured, 2026-11-21: `bisect good`, `bad` and `reset` check out on 8 commits (3 left nothing to check out); `git init --bare` in an empty directory wrote 7 entries there (the first harness looked only at the top of the directory beside it).
+  - each subcommand's options that take the next word, read from its own `-h` (`git <sub> -h`, `git worktree <action> -h`, `git config set -h` and `get -h`, by `/tmp/t50/scripts/valued.py`, `/tmp/t50/gith/`), measured 2026-11-21 - one list a subcommand (`GIT_VALUED`); `bisect`'s `--term-*` show only `=` in its usage, yet `git bisect start --term-new fixed HEAD HEAD~5` named its term `fixed`, measured 2026-11-21; a clone's default directory as git names it - `/src/y/`, `/src/y/.git` and `file:///src/y` made `y`, `--bare` and `--mirror` made `y.git`, measured 2026-11-21.
+  - the reading (`git_tree`, `operands`, `clone_name`, `config_file`; `git_write` now answers every place it writes, `git_output`'s option reading shared as `option_value`): a form that changes a tree writes where it lands - the tree `worktree add`, `remove` and `move` name, `clone`'s second operand or the directory named from its repository where git runs, `init <dir>`, `config --file`'s file, `--global`'s `~/.gitconfig` and `--system`'s `/etc/gitconfig` - or where git runs (`switch`, `bisect`, `sparse-checkout`, `submodule`'s writing forms, `init --bare` of no directory); each form that writes `.git` alone or nothing is no write, and `fetch`, `notes`, `update-ref` and `symbolic-ref` reach `git_output`, which finds none, as at HEAD. A word the walk cut - a `\` at the line's end, or a word ending in the `$` of a `${` its segments split at - ends the operands read, and a place the walk cannot resolve is not placed: both fail open for these forms, which HEAD read as no write.
+  - red first: the new cases with HEAD's `tree.rs`, 322 passed, 3 failed (`a_git_subcommand_writes_where_a_tree_changes_and_not_for_git_alone`, `the_reviews_four_misreadings_stay_read`, `a_clone_lands_where_its_operands_say`, each on its first tree write read as none), measured 2026-11-21 (`make rust-test CRATE=rust/guard/shared` in the detached worktree `/tmp/t50/wt` at cabf09c2ae, `/tmp/t50/red2.log`; 325 tests then, 326 after the first was split in two for clippy's length bar); of the review's four pins, `fetch -n` and `git stash list` pass at HEAD and after (HEAD already reads no write for them, the readings they keep), `worktree add -f` and `config --global`'s home config are red at HEAD (the test stopped at the first); main-tree#10's `${PAT}` clone read as a clone where the shell stood: 324 passed, 1 failed, measured 2026-11-21 (the same, `/tmp/t50/green1.log`), fixed by the `$` cut; tx#63's scratch clone refused: 325 passed, 1 failed, measured 2026-11-21 (the same, `/tmp/t50/red3.log`), fixed by not placing an unresolved place.
+  - green: 326 of 326, measured 2026-11-21 (the same, `/tmp/t50/green3.log`).
+  - the replay - both corpora, T33's 1,134 fixture rows (`fx`) and the 995 transcript commands (`tx`), through every guard and each guard that reads the walk alone (main-tree, make-only, gm-tree, house-style, readme), sessions `t` and `nobody`, and the gate replay (gate-write alone and every guard) with a stand-in `make done` in the mirror and in every clone a row stands in, each row judged from where it stands, measured 2026-11-21 (`/tmp/t50/scripts/replay.sh`, `runall.sh`, `cmpall.sh`, T31's `cmp.sh`; 29,806 rows a run): HEAD against HEAD 0 moves, 0 changed outputs in all 28 (`/tmp/t50/rp/head*`); the first build (after) against HEAD moved one row, tx#63 (`T=$(mktemp -d); ...; git clone -q . $T/clone`, standing in the mirror, observed), allowed -> rewrote (`t`) and allowed -> refused (`nobody`) under main-tree, every guard and the gate's every guard - false, a scratch clone read toward the mirror (D6) - and nothing else, 0 changed outputs (`/tmp/t50/rp/cmp-head-after.txt`); the final build (after2, an unresolved place not placed) against HEAD: 0 moves and 0 changed outputs in all 28, both corpora, every guard, both sessions and the gate replay - 0 corrections, the one false move found and fixed - and against after, tx#63 alone moved back in its 5 files (`/tmp/t50/rp/cmp-head-after2.txt`, `cmp-after-after2.txt`).
+  - the guards' verdicts on the forms no corpus row runs, seeded through the HEAD and after2 builds, measured 2026-11-21 (`/tmp/t50/scripts/probe.sh`, `/tmp/t50/probe.txt`): standing in the mirror, `git switch other`, `git worktree add wt`, `git clone -q /x sub`, `git sparse-checkout set d` and `git init -q --bare` allowed at HEAD, rewrote into the clone after (`t`) and refused (`nobody`), `git -C <mirror> worktree add wt` allowed -> refused (it names the mirror); `git fetch -q origin`, `git config user.name x` and `git worktree add --detach /tmp/w` allowed by both; under a running gate in a clone, the first four allowed at HEAD and refused after, the last three allowed by both; `git config -f` of a guard file (`make_only_hooks.rs`, `--file=scripts/hooks/l7r-guard.sh`) allowed at HEAD, refused by make-only after.
+  - the crate checks: on the final code, after the split, `rust/guard/shared` and `rust/guard` test, lint and format clean, and cover clean on both once one test's assertion message, alone on its line, was folded into a comment (measured 2026-11-21, `l7r-gate.sh rust test|lint|format --check|cover --crate`).
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| the twelve's writes read | n/a - no map | n/a | none | n/a |
 
 ### T50 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** A form of the twelve that changes a work tree is a write where that tree is - so main-tree moves or refuses it in the mirror, a running gate refuses it in the tree it sees, make-only and the README and gm-tree guards see it - and one that writes only `.git` or nothing is not; `GIT_WRITES`, `branch` and T33's output options are read as before.
+2. **The constraints.** T50's line: measured first on a corpus that runs them in the mirror or a clone, each subcommand's options read from its own `-h`, added only where a move is a correction, red first; the dispatch (2026-11-21): read each form's real write - a tree write is a write, `.git` alone or nothing is not - keep every existing case, pin the review's four misreadings, replay before and after; constitution XIII and XIV.
+3. **Where each comes from.** O: T33's part 4 and its review, observed 2026-11-20 (`plan-done.md`'s T33 section, `.git/l7r-handoffs/T33-ad8241ada9e276e9f.md`); O: the corpus, the writes and each `-h`, measured 2026-11-21 (above); G: none - the dispatch's ground rules, not the GM's.
+4. **Do they describe the world here?** The corpus runs 8 of the twelve, 706 invocations standing in a clone and 24 in the mirror, measured 2026-11-21 (`recount.txt`); `switch`, `bisect`, `submodule` and `notes` never ran, so their reading rests on the scratch-repository measurement and its unit cases alone.
+5. **The order.** After T33 (which dropped the addition and filed this), beside T76 and T77, whose files it leaves; before T22.
+6. **The exits.** Green: the cases green, both crates' checks clean, the final build's replay moving no row against HEAD that is not a correction. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** The replay: the only move of the first build was a false one (tx#63), fixed red first; no row of either corpus runs a tree-writing form of the twelve in the mirror or a gated tree, so the replay shows no correction - the readings stand on the measured writes and their cases.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** The final build's replay against HEAD and the crate checks (above).
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** A form of the twelve that changes a work tree went unseen by every guard reading the walk: `git switch other`, `git worktree add wt`, `git clone -q /x sub`, `git sparse-checkout set d` or `git init -q --bare` standing in the mirror were let through at HEAD and are moved into the clone after, the first four under a running gate let through and refused after, and `git config -f` of a guard file let through and refused by make-only after (the probes above, measured 2026-11-21) - no corpus row ran one there; the decisions below, each for `make decide`:
+    - **D-a, every form's real write, not only a corpus correction.** T50's line says "added only where a move is a correction" and the dispatch "read each one's real write"; no corpus row runs a tree-writing form of the twelve where a guard would move it, so the dispatch's reading is followed: each form's write as measured, its cases red first, the replay holding that no row moves falsely.
+    - **D-b, `config --global` and `--system` are writes of their files** (`~/.gitconfig`, `/etc/gitconfig`; git writes the XDG file in the home when only it is there - the home either way), class elsewhere - the review's misreading was reading it where git runs; `.git/config`'s writes (local, `--worktree`) are none.
+    - **D-c, `init <dir>` is a write at `<dir>` without reading the disk:** an existing directory gets only its `.git`, which the walk cannot tell, so it reads the making; the class is the same for every corpus row (a scratch directory or a new subdirectory); `init`, `init .` and `init` where git runs write `.git` alone, none.
+    - **D-d, an unresolvable place fails open for these forms** (not D6's toward-main): HEAD read them as no write, and D6 refused tx#63's scratch clone.
+    - **D-e, a cut word fails open:** a `\` at the line's end or a `${` the segments split leaves the operands unread (main-tree#10 and #11, T33's two false refusals, read as a clone where the shell stood before).
+    - **D-f, `submodule foreach` is a write where git runs:** its command is unread, as an unread program is a write where the shell stands; `bisect`'s steps after `start` (`good`, `bad`, `skip`, `next`) may check out, so they are writes.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?**
+- The walk splits a `\`-continued line and a `${VAR}`'s braces into segments of their own, for every tool: standing in `/tmp`, `cp /tmp/a \` with the mirror's `b` on the next line and `D=<mirror>; cp /tmp/a ${D}/b` are let through by main-tree at HEAD and after while the one-line form and `$D/b` are refused, observed 2026-11-21, method: the HEAD and after2 builds `--only main-tree-hooks` on the four forms, session `t` (`/tmp/t50/probe2.txt`); and a write into `$T`, `T=$(mktemp -d)`, standing in the mirror is read toward the mirror (D6) - `T=$(mktemp -d); cp /tmp/a $T/clone` refused by main-tree at HEAD and after, a scratch write, observed 2026-11-21, method: both builds on that command (`/tmp/t50/mk.*`). Not fixed here: the walk's segmenting and D6 for every tool, outside this task's git reading (the dispatch's ground rules); the twelve's forms fail open there (D-d, D-e). Filed as T79; lands before T22.
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** no
 
 
 ### T51 (<why: the finding or measurement that files it>)
@@ -962,14 +979,160 @@ docs/performance-checklist.md answers.
 <!-- plan-archive: T73 to T73 moved to plan-done.md, 2026-11-21 (feature 375 FR-044) -->
 <!-- plan-archive: T74 to T21 moved to plan-done.md, 2026-11-21 (feature 375 FR-044) -->
 <!-- plan-archive: T74 to T74 moved to plan-done.md, 2026-11-21 (feature 375 FR-044) -->
-### T76 (<why: the finding or measurement that files it>)
+### T76 (the mirror's `.git/l7r-events/_unassigned.jsonl`, written from /diagram before T74 filed a call under its session's clone, held 15 lines the refile's rules place: 1 to 405, 11 to 430 and 1 to 449, none of them in this clone's logs, and 2 to 451 that T74's merge had already put in the clone's 451 log in their re-filed form, measured 2026-11-21 (the refile run without `--from` on a scratch copy, `/tmp/t76/scratch-refile.log`, and an exact-line count of each moved line in each clone's log); and, once T74 landed, no 451 log in the mirror to re-merge, measured 2026-11-21 (`ls` of the mirror's `.git/l7r-events/`))
+
+- **Approach**: `rust/gate/crates/measure/src/measure/event_log/refile.rs` gains `--from <events dir>`. The logs it re-files are read
+  from that directory and their kept lines written back there; the moved lines are appended to `--dir`'s logs. Without `--from` the
+  source is `--dir`, as before.
+  - Why the refile and not `merge.py`: the refile already places each line, skips a line already in its target, and rewrites its
+    source of exactly the lines it moved, carrying over a live hook's late bytes. `merge.py` merges one whole file into one target, so
+    it would have needed the split, three runs and a removal step added. The change is one field and one argument, its 100% coverage
+    one test, measured 2026-11-21 (`git diff -U0`: 5 code lines added and 4 changed, the usage text among them).
+  - Only a line the rules send to a feature other than its source log's name moves; a line they leave stays in the source. So a
+    mirror's log of the clone's own feature is not merged by `--from` (T74's 451 log needed `merge.py`), as the module doc says.
+  - A deliberate deviation from T76's line, labeled: the moved lines are APPENDED to their targets, the refile's own write, not
+    inserted in time order by the T74 merge's rules. WHY: the brief offers the refile route, and the readers sort by `t` (the refile's
+    module doc). What it costs: one out-of-order adjacent pair at each appended block, 405 1 to 2, 430 0 to 1, 449 290 to 291, 451 100
+    to 100 (nothing appended), measured 2026-11-21 (`/tmp/t76/verify.py`'s count of each `t` against the line before it,
+    `/tmp/t76/verify.log`). Who chose: the builder, on that count and the brief.
+  - `make events-refile` takes `FROM=<events dir>` (wired by the session after the run, its dry run of the mirror 0 to move, measured 2026-11-21); the run itself, before the wiring, was `scripts/gates/l7r-gate.sh
+    measure event-log refile --root <clone> --dir <clone>/.git/l7r-events --from /diagram/.git/l7r-events`, every path explicit, as
+    T74 ran `--dir`.
+- **Red first** (`refile::tests::a_second_directorys_log_is_refiled_into_the_clones_logs`). The scratch world is the clone's two
+  features plus a mirror directory whose `_unassigned.jsonl` holds a line by brief whose re-filed form is already in the clone's 451
+  log, one by brief that is not, one by task id to a log the clone does not have, and two lines no rule places. A dry run counts 3 and
+  writes nothing in either directory. The run appends the 2 new lines once, rewrites the source to the 2 kept lines, creates nothing
+  beside it, and leaves the clone's own misfiled lines where they are. A second run moves 0, and `--from` with no value is usage 2.
+  - before: 202 passed and the new case failed, the refile answering its usage (code 2) where 0 was asserted, measured 2026-11-21
+    (`make rust-test CRATE=rust/gate/crates/measure`, `/tmp/t76/red.log`).
+  - after: 203 passed, 0 failed, measured 2026-11-21 (the same command, `/tmp/t76/green.log`).
+- **The run** (`.git/l7r-handoffs/T76-scripts/backup/`, outside any `l7r-events` directory: the mirror's file as
+  `_unassigned.before.jsonl`, 5,296 lines, measured 2026-11-21 (`wc -l`), and this clone's 405, 430, 449 and 451 logs as
+  `<feature>.before.jsonl`):
+  - the dry run against the mirror: 5,296 lines read; 1 to 405, 11 to 430 (10 by brief, 1 by task id), 1 to 449, 2 to 451, 15 moved,
+    measured 2026-11-21 (`/tmp/t76/dry.log`).
+  - the run, with `MAIN_TREE_OK` and its reason: the same counts, 15 moved, measured 2026-11-21 (`/tmp/t76/run.log`). Of the 15, 13
+    were appended and 2 were already in the 451 log, measured 2026-11-21 (`/tmp/t76/verify.log`).
+  - the check: the mirror's file equals its snapshot less exactly the 15 raw lines, 5,281 lines, measured 2026-11-21
+    (`/tmp/t76/verify.py`, `/tmp/t76/verify.log`). Each of the 13 re-filed lines is in this clone's 405, 430 and 449 logs exactly once, the 2 in its 451 log exactly once, and 0 backed-up lines are missing from any
+    of the four, measured 2026-11-21 (`/tmp/t76/verify.py`, `/tmp/t76/verify.log`, exit 0).
+  - a second dry run: 5,281 read, 0 moved, measured 2026-11-21 (`/tmp/t76/dry2.log`).
+- **Which clone**: every line went to this clone's log, measured 2026-11-21 (`ls /diagram/.clones/*/.git/l7r-events/`):
+  - 405's log is also in `diagram-backlog-pages`, another session's clone, which was not written (last written 2026-10-22, measured
+    2026-11-21, `stat`). Its one line is session `d2dc8c63`'s, whose claim map names this clone.
+  - 430's and 449's logs are only in this clone. The 1 line from session `f16cf709` (claim map `diagram-memories`, no such clone now)
+    is in this clone's 430 log, measured 2026-11-21 (`/tmp/t76/verify.log`, the claim maps under `.clones/.session-clones/`).
+- **The re-merge** (T76's second part): nothing to move. The mirror's `.git/l7r-events/` held only `_unassigned.jsonl` after T74
+  landed (12:31Z), last written 2026-11-21T04:33:35Z, 5,296 lines, T74's count, measured 2026-11-21 (`ls`, `stat`, `wc -l`). So no 451
+  log was written there in the gap, and `merge.py` had nothing to merge or move to the backup.
+- **`make where-time F=430 SINCE=2026-10-26T15:00:00Z UNTIL=2026-10-26T18:00:00Z`**, after the run:
+  - T08's agent `a7b6ff002c779b263` (escalation-check, from 16:11 UTC) booked at 1 agent-minute, 56.8k tokens in and 2.1k out, the
+    window's agents 2 over 3 agent-minutes, measured 2026-11-21 (`make where-time`, `/tmp/t76/where-after.log`).
+  - No before run: where-time reads each clone's log under the fixed `/diagram/.clones` (`events::CLONES`) and ignores
+    `L7R_EVENTS_DIR`, so a before needs the live log edited. An empty `L7R_EVENTS_DIR` gave the same report, measured 2026-11-21
+    (`make where-time` with it, against `/tmp/t76/where-after.log`). Before the run, none of that agent's 9 lines were in any log
+    the report reads, all 9 only in the mirror's `_unassigned.jsonl`, measured 2026-11-21 (a `grep -c` of the agent id over every
+    log in each clone's `.git/l7r-events/` and the backups).
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+| the refile's `--from` source directory | n/a - no map | n/a | none | n/a |
+
+### T76 Approach (checklist part A)
+
+1. **The goal, in the world.** No map changes. Every line a session wrote into the mirror's `.git` that the refile's rules place is
+   in the log of its feature in the clone that holds that log, and gone from the mirror, so `make where-time` for 405, 430 and 449
+   in this clone books it. The mirror's file keeps only what no rule places.
+2. **The constraints.** T76's line and its brief:
+   - the mirror's lines the refile's rules file to other features, and those already merged into this one, put home with a dry run
+     first and backups, the mirror's file emptied of exactly what moved;
+   - this clone's copy only, never another session's clone;
+   - red first, since the refile gains the second source;
+   - the re-merge of any of this feature's lines written in the mirror in the gap;
+   - files: `refile.rs` and its tests, this section. T77's `planhold.rs` and T50's `tree*` are untouched, and nothing is committed.
+3. **Where each comes from.** O: the scratch refile and the exact-line counts (the heading); O: the red and green runs (Red first); O:
+   the dry run, the run, the check and the second dry run (The run); O: `ls` and `stat` of the clones and the mirror (Which clone,
+   The re-merge); the task as filed (T76's line) and T74's Found and left, which filed it.
+4. **Do they describe the world here?** Every figure is from the mirror's file, this clone's logs and the clones' `ls`, with this
+   clone's rules (its `specs/`, `task-starts.jsonl` and the sessions' subagent briefs), measured 2026-11-21 (The run). The red case
+   reproduces the live shape, including a line already merged in its re-filed form, in a scratch world.
+5. **The order.** After T74 (which landed the writer's fix and found these lines) and T26/T56 (the rules it reuses); before T22.
+6. **The exits.** Green: the red case green with every earlier case unedited, `make rust-test CRATE=rust/gate/crates/measure`,
+   `make closing-checks`, the check with 0 missing and the mirror's file its snapshot less the 15, and a second dry run of 0. Red:
+   what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None. The scratch run and the dry run against the mirror agreed on the counts, 1, 11, 1 and 2, and the
+   mirror's file after the run equals the scratch run's remainder, measured 2026-11-21 (`/tmp/t76/scratch-refile.log`,
+   `/tmp/t76/dry.log`, `/tmp/t76/verify.log`).
+8. **The budget.** One landing. The added work is none per line: the source directory is read in place of `--dir`, one path, measured
+   2026-11-21 (the code read).
+9. **Done, measured.**
+   - the red case green, 203 passed, measured 2026-11-21 (`make rust-test CRATE=rust/gate/crates/measure`).
+   - 13 lines appended to this clone's 405 (1), 430 (11) and 449 (1) logs, 2 already in 451, the mirror's file 5,296 to 5,281 lines,
+     0 missing, measured 2026-11-21 (`/tmp/t76/verify.log`).
+   - the measure crate's format, cover and dead clean, measured 2026-11-21 (`scripts/gates/l7r-gate.sh rust <check> --crate
+     rust/gate/crates/measure`, `/tmp/t76/measure-static.log`), and lint clean on all 34 crates, measured 2026-11-21 (`make
+     closing-checks`' static leg, `/tmp/t76/closing2.log`).
+   - `make closing-checks` red in 2 of its 3 legs on files that are not this task's: static's format on `rust/guard/shared`
+     (`planhold.rs` and its tests, T77's), and hooks-test's `idle-tests-hooks.sh`, 3 of 34, which passed in the run before with
+     this task's code in. quick green, measured 2026-11-21 (`/tmp/t76/closing2.log`). The second red in a row, so no third run.
+10. **Before moving a constant.** No constant moves.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** A reader of `make where-time F=430` in this clone sees the T08 escalation-check of 2026-10-26 booked, the
+    agent at 1 agent-minute, where none of its lines were in a log the report reads, measured 2026-11-21 (`/tmp/t76/where-after.log`,
+    a `grep -c` of the agent id over every log in each clone's `.git/l7r-events/` and the backups). Its dispatch, its start, its
+    three Bash calls and its stop, and session `f16cf709`'s Bash call of 16:28, are now in the 430 log, and 405's and 449's logs each
+    gain one Bash `PreToolUse` line (T07 of 2026-10-23, T127 of 2026-11-12), measured 2026-11-21 (`/tmp/t76/verify.log`, the moved
+    lines read). Nothing on a map.
+
+**Found and left?** none.
+
+**Performance work?** Yes, a `[perf]` task (451 FR-013): it makes the builders' loop faster to measure, since `make where-time` books
+the lines where it reads them, as T74 did. Not an engine-speed task, so no docs/performance-checklist.md answers.
+
+
+### T77 (the plan hold refused an Edit of the heading after a held section, found by T73's builder on 2026-11-21: `edit_hits` in `rust/guard/shared/src/checks/planhold.rs` read `a <= start + t.len()`; the guard log holds 3 refusals of that shape, measured 2026-11-21, method below)
+
+- **Approach**: `edit_hits` asks whether the edit's text OVERLAPS held text, both ends exclusive - `a < start + t.len() && start < a + old.len()` - in place of `start <= a && a <= start + t.len()`; the `replace_all` clause (`old` inside held text) stays. That fixes two wrong outcomes: an edit starting at the next section's heading was refused, and an edit starting before the held section and ending inside it passed the pre-call refusal (caught only by the write-back after a live hold's call; the task line said it was "still refused" - on HEAD it was not).
+  - red first, the test before the code: `an_edit_is_held_only_where_it_overlaps_the_section` (six cases on the suite's fixture: the next heading and an edit ending at the section's start pass; an edit running in from before it, the last held byte, one starting inside and running past, and the heading itself are refused) misjudged 2 of 6 on HEAD - `"## T02 other"` refused and `"# plan\n\n## T01 the bath"` passed - 322 passed, 1 failed, measured 2026-11-21 (`make rust-test CRATE=rust/guard/shared`, `/tmp/t77/red2.log`).
+  - green: 323 of 323, measured 2026-11-21 (`make rust-test CRATE=rust/guard/shared`, `/tmp/t77/green.log`).
+  - the log, measured 2026-11-21 (every `~/.claude/guard-log` entry naming the hold's refusal text; each Edit's `old_string` from its builder's transcript; each placed on the last commit of the plan before it, as the guard read the working tree this is an approximation): 26 record-edit refusals by the hold from 2026-10-19 to 2026-11-21, 6 Edit and 20 Bash. Of the 6 Edit refusals, 3 have T77's shape - T60 held and T67's heading edited (10:24:01 and 10:25:02, one edit retried, so 2 distinct edits), T71 held and T73's heading edited (12:15:52, T73's builder's) - each starting exactly at the held section's end on commits `fe0e24b02b` and `30f5b415f6`; the other 3 edited inside the held section (T15's and T44's placed by git history, T62's by its own builder on its own section). The fix passes the 3 and still refuses the 3.
+  - the Bash path, a defect for a live hold and a foreground call (round 1 of this section's plan review, 2026-11-21, decision 6), not fixed here (Found and left): a write to `plan.md` through a tool is refused when its command names a held heading, a held line of 16 or more characters, or a quoted string held text contains. Replayed on the 18 task-held Bash refusals (the 2 on block holds not replayed; same approximation): 8 matched text found only in the held section, 7 only text every section shares (the template's `|---|---|---|---|---|` and `8. **The budget.** One landing.`, an anchor `**Found and left?**` or `**Performance work?**`), so a write to ANOTHER section was refused - T44 held while T46's was written, T67's while T75's, T73's while T74's - and 3 could not be replayed (the held text was uncommitted then). The written text cannot be placed before the call runs - a program computes it, or reads it from a file (T46's `/tmp/t46-scripts/t46-section.md`) - and after it runs the write-back already places it exactly, but only for a LIVE hold (`snapshot` keeps only those) and a call that ends before its PostToolUse: the pre-call refusal is a pending hold's and a backgrounded write's only guard, and a template line is how it sees a rewrite of the held section anchored on short or computed text. For those two the refusal on shared text is the guard failing closed (round 1's decision 5). The 7 were neither: each names a launched agent with no "looks dead" tail (a live hold, from the log) and its call carries no `run_in_background` (foreground, from each call's transcript), measured 2026-11-21 - a check refusing good work, as the Edit shape did. The fix it wants: for a live hold and a foreground call, count only text standing in the plan inside held text alone (`live(&h, now)`, `snapshot`'s own filter, and `crate::wait::background`), leaving a change made through shared text to the write-back; it passes the 7 and keeps the 8. It is not built here because the write-back it would rest on does not run after every such call: `checks_hooks` (`rust/guard/src/guards/checks_hooks.rs`) runs `after` on `PostToolUse` and `SubagentStop` alone (its `events`, read 2026-11-21), so a foreground command that writes the held section and then exits non-zero (`PostToolUseFailure`) is written back by nothing, and today the pre-call refusal is its one guard. The fix spans that file, outside T77's brief, and is filed as T78.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+| `edit_hits`'s overlap bound | n/a - no map | n/a | none | n/a |
+
+### T77 Approach (checklist part A)
+
+1. **The goal, in the world.** No map changes. While a plan review runs, a builder's Edit of the section after the held one - its heading included - goes through, and an Edit that would change held text, wherever it starts, is refused before it runs.
+2. **The constraints.** T77's line (the bound exclusive at the section's end, red first on an edit starting at the next heading, an edit inside the held section still refused); its brief (an edit ending inside it refused too; the guard log measured for others of the shape; the Bash path ruled, left if right; only `planhold.rs`, its tests, the record-edit suite, the `docs/guards.md` row and this section edited); feature 385 T85's hold; FR-012 (a refusal fixed red first).
+3. **Where each comes from.** O: T73's builder's refusal of 2026-11-21 and the guard log's 26 (measured 2026-11-21, the Approach); G: none - the brief is the caller's.
+4. **Do they describe the world here?** Yes: the 3 Edit refusals of the shape start exactly at the held section's end on the commits before them, and the fixture's six cases reproduce both wrong outcomes on HEAD (measured 2026-11-21, `/tmp/t77/red2.log`).
+5. **The order.** None needed: T76's refile and T50's `tree*` files are untouched.
+6. **The exits.** Green: the shared crate's tests, lint, format and cover clean and `make closing-checks` green. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** none - the one reader of an Edit's place is `edit_hits`; the Python twin `hm_planhold.py` is gone (`scripts/hooks/lib/` checked 2026-11-21).
+8. **The budget.** One landing.
+9. **Done, measured.** 323 of 323 in `rust/guard/shared` (measured 2026-11-21, `/tmp/t77/green.log`); the crate's lint and line cover clean (measured 2026-11-21, `scripts/gates/l7r-gate.sh rust lint` and `rust cover`, each `--crate rust/guard/shared`, `/tmp/t77/lint.log`, `/tmp/t77/cover.log`); its format check red on two rewraps, clean after `make format` on the two files (measured 2026-11-21, `/tmp/t77/fmt2.log`); `make closing-checks` red on `static` alone, by another builder's half-edited `rust/guard/shared/src/tree.rs` (3 E0308 at lines 414-422 and its red tests, T50's), `hooks-test` and `quick` green (measured 2026-11-21, `/tmp/t77/closing.log`); so the crate was measured again on HEAD `cabf09c2ae` with this task's two files alone, in a detached worktree: 323 of 323, lint and format clean (`/tmp/t77/wt.log`), and line cover clean once the test's failure message no longer stood on a line of its own (`/tmp/t77/wt2.log`), measured 2026-11-21 (`scripts/gates/l7r-gate.sh rust test`, `lint`, `format --check`, `cover`, each `--crate rust/guard/shared`).
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** A builder's correct edit was refused (3 refusals in the log, each a lost call), and an edit that changed held text passed the pre-call refusal - for a pending hold, with no write-back, it would have voided the review's verdict unseen.
+
+**Found and left?**
+- An Edit starting before the held section and ending inside it was not refused before it ran (the task line's "still refused" did not hold on HEAD) - fixed here, observed 2026-11-21, method: the fixture's case `"# plan\n\n## T01 the bath"`, red on HEAD; every reader of an Edit's place is `edit_hits`.
+- A live hold's pre-call refusal of a foreground Bash write to ANOTHER section, on text every section shares (7 of the 18 replayed task-held refusals, all live and foreground, measured 2026-11-21; each a builder's lost call). Not fixed here: narrowing it is safe only once the write-back runs after a failed call too, in `checks_hooks.rs`, outside T77's brief. Filed as T78 (the write-back on `PostToolUseFailure` first, then the narrowing in `planhold.rs`); lands before T22.
+- A foreground Bash call that changes held text and then exits non-zero is never written back: `checks_hooks` has no `PostToolUseFailure` in its `events` (read 2026-11-21), so only the pre-call refusal stands between it and a voided verdict. Not fixed here: the same file, outside the brief. Filed as T78; lands before T22. Unmeasured: whether a foreground call the harness moves to the background at 180 s (observed 2026-11-21, method: T71's measurement of t151's call) gets its `PostToolUse` at the move or at its end - T78 measures it first.
+
+**Performance work?** no.
+
+
+### T78 (<why: the finding or measurement that files it>)
 
 - **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
 
-### T76 Approach (checklist part A)
+### T78 Approach (checklist part A)
 
 1. **The goal, in the world.** <the place as it should be>
 2. **The constraints.** <the FRs, decisions and pages it holds to>
@@ -989,14 +1152,14 @@ docs/performance-checklist.md answers.
 **Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
 
 
-### T77 (<why: the finding or measurement that files it>)
+### T79 (<why: the finding or measurement that files it>)
 
 - **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
 
-### T77 Approach (checklist part A)
+### T79 Approach (checklist part A)
 
 1. **The goal, in the world.** <the place as it should be>
 2. **The constraints.** <the FRs, decisions and pages it holds to>

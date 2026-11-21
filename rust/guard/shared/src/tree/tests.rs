@@ -602,6 +602,232 @@ fn a_git_option_that_writes_a_file_is_a_write_where_it_names() {
     }
 }
 
+/// A walk's writes as (path, how), standing in `m`, the home `/home/u`.
+fn git_writes(cmd: &str, m: &str) -> Vec<(Option<String>, &'static str)> {
+    walk(cmd, Some(m), m, "/home/u")
+        .targets
+        .into_iter()
+        .map(|t| (t.path, t.how))
+        .collect()
+}
+
+/// 451 T50: the twelve subcommands outside `GIT_WRITES`, each form's real write, measured 2026-11-21 (git 2.53.0, each form run in
+/// a scratch repository and its work tree, `.git`, the directory beside it and the home compared before and after,
+/// `/tmp/t50/scripts/writes.sh`): a form that changes a work tree writes where it lands - the new, removed or moved tree a
+/// `worktree`, `clone` or `init <dir>` names, `config --file`'s file - or where git runs (`switch`, `bisect`, `sparse-checkout`,
+/// `submodule`, a bare `init` of no directory); `config --global` writes the home's config; a form that writes only `.git` or
+/// nothing is no write.
+#[test]
+fn a_git_subcommand_writes_where_a_tree_changes_and_not_for_git_alone() {
+    let (_d, m, _c) = mirror("git-tree");
+    let at = |cmd: &str| git_writes(cmd, &m);
+    let named = |p: &str| vec![(Some(p.to_owned()), "named")];
+    let here = |p: &str| vec![(Some(format!("{m}{p}")), "shell")];
+    assert_eq!(at("git worktree add --detach -q /tmp/w"), named("/tmp/w"));
+    assert_eq!(at("git worktree add -b nb -q wt main"), here("/wt"));
+    assert_eq!(at("git -C /o worktree add --detach w"), named("/o/w"));
+    assert_eq!(at("git worktree remove --force /tmp/w"), named("/tmp/w"));
+    assert_eq!(
+        at("git worktree move /tmp/w w2"),
+        [named("/tmp/w"), here("/w2")].concat()
+    );
+    assert_eq!(at("git clone -q /src/y /tmp/c"), named("/tmp/c"));
+    assert_eq!(at("git clone -q -b other --depth 1 /src/y c"), here("/c"));
+    assert_eq!(at("git clone -q -- /src/y d"), here("/d"));
+    assert_eq!(at("git clone -q /src/y/"), here("/y"));
+    assert_eq!(at("git clone -q --shared /src/y/.git"), here("/y"));
+    assert_eq!(at("git clone -q https://h/o/r.git"), here("/r"));
+    assert_eq!(at("git clone -q --bare /src/y"), here("/y.git"));
+    assert_eq!(at("git clone --mirror h:o/r.git"), here("/r.git"));
+    // a name the walk cannot read: the clone lands where git runs
+    assert_eq!(at("git clone $R"), here(""));
+    assert_eq!(at("git init -q /tmp/i"), named("/tmp/i"));
+    assert_eq!(at("git init -q -b main --template /t d"), here("/d"));
+    assert_eq!(at("git init -q --bare /tmp/b.git"), named("/tmp/b.git"));
+    assert_eq!(at("git init --bare"), here(""));
+    assert_eq!(at("git -C /o switch main"), named("/o"));
+    for cmd in [
+        "git switch other",
+        "git switch -",
+        "git switch -c nb other",
+        "git switch --detach other",
+        "git switch --orphan nb",
+        "git bisect start HEAD HEAD~7",
+        "git bisect start --term-new fixed HEAD v1",
+        "git bisect good",
+        "git bisect skip",
+        "git bisect reset",
+        "git sparse-checkout set --cone d",
+        "git sparse-checkout add e",
+        "git sparse-checkout disable",
+        "git submodule add /src/y sm",
+        "git submodule --quiet update --init",
+        "git submodule deinit -f sm",
+        "git submodule foreach 'git pull'",
+    ] {
+        assert_eq!(at(cmd), here(""), "{cmd}");
+    }
+    assert_eq!(at("git config -f f.cfg a.b c"), here("/f.cfg"));
+    assert_eq!(
+        at("git config --file=/tmp/g.cfg --unset a.b"),
+        named("/tmp/g.cfg")
+    );
+    assert_eq!(at("git config set --file x.cfg a.b c"), here("/x.cfg"));
+    assert_eq!(at("git config -f x.cfg -e"), here("/x.cfg"));
+    assert_eq!(
+        at("git config --system --add a.b c"),
+        named("/etc/gitconfig")
+    );
+}
+
+/// 451 T50: the twelve's forms that write only `.git` or nothing (the same measurement as above) are no write.
+#[test]
+fn a_git_subcommand_that_writes_only_git_or_nothing_is_no_write() {
+    let (_d, m, _c) = mirror("git-none");
+    for none in [
+        "git worktree list",
+        "git worktree list --porcelain",
+        "git worktree prune -n --expire 1.day",
+        "git worktree lock --reason x /tmp/w",
+        "git worktree unlock /tmp/w",
+        "git worktree repair",
+        "git worktree add",
+        "git worktree add -q /tmp/${X}/w",
+        "git init",
+        "git init -q",
+        "git init -q .",
+        "git -C /tmp/x init -q -b main",
+        "git switch",
+        "git switch -c nb",
+        "git switch -C nb",
+        "git switch --detach",
+        "git bisect",
+        "git bisect start",
+        "git bisect start HEAD",
+        "git bisect start HEAD -- d",
+        "git bisect start --no-checkout HEAD v1",
+        "git bisect log",
+        "git bisect view",
+        "git bisect visualize",
+        "git bisect terms",
+        "git sparse-checkout list",
+        "git sparse-checkout check-rules --rules-file r",
+        "git submodule",
+        "git submodule status",
+        "git submodule --quiet init",
+        "git submodule sync --recursive",
+        "git submodule summary",
+        "git submodule absorbgitdirs",
+        "git config user.name x",
+        "git config set user.name x",
+        "git config --local a.b c",
+        "git config --worktree a.b c",
+        "git config user.name",
+        "git config --get user.name",
+        "git config get user.name",
+        "git config --list --show-origin",
+        "git config --global -l",
+        "git config --system --list",
+        "git config -f f.cfg --get a.b",
+        "git config get --file f.cfg a.b",
+        "git config --blob HEAD:f a.b c",
+        "git config --global --get-regexp x",
+        "git fetch -q origin",
+        "git fetch --dry-run origin",
+        "git -C /o fetch -q",
+        "git fetch origin main:main",
+        "git notes add -m x",
+        "git notes show",
+        "git update-ref refs/heads/x HEAD",
+        "git -C /o update-ref -d refs/x",
+        "git symbolic-ref HEAD",
+        "git symbolic-ref --short HEAD",
+        "git symbolic-ref HEAD refs/heads/other",
+    ] {
+        assert!(git_writes(none, &m).is_empty(), "{none}");
+    }
+}
+
+/// 451 T50: the four misreadings a review found in T33's dropped addition (2026-11-20), pinned: `fetch -n` is `--no-tags`, not a
+/// dry run - and no fetch writes the tree, `--dry-run` included (it writes `.git`, measured 2026-11-21); one value-option list
+/// for all twelve - each subcommand's own, from its `-h` (`-f` is `config`'s `--file` and `worktree`'s `--force`, `-n` `clone`'s
+/// `--no-checkout`, `-c` `clone`'s `--config` and `switch`'s `--create`); `config --global` writes the home's config, not where
+/// git runs; and a running gate's `git stash list` read as a write where git runs (fixed by T33).
+#[test]
+fn the_reviews_four_misreadings_stay_read() {
+    let (_d, m, _c) = mirror("git-review");
+    let at = |cmd: &str| git_writes(cmd, &m);
+    let named = |p: &str| vec![(Some(p.to_owned()), "named")];
+    assert!(at("git fetch -n origin").is_empty() && at("git fetch -q -n").is_empty());
+    assert_eq!(at("git worktree add -f /tmp/wt"), named("/tmp/wt"));
+    assert_eq!(at("git worktree add -f /tmp/wt other"), named("/tmp/wt"));
+    assert_eq!(at("git config -f /tmp/f.cfg a.b c"), named("/tmp/f.cfg"));
+    assert_eq!(at("git clone -n /src/y /tmp/c"), named("/tmp/c"));
+    assert_eq!(at("git clone -c a=b /src/y /tmp/c"), named("/tmp/c"));
+    assert_eq!(at("git init -b main /tmp/i"), named("/tmp/i"));
+    assert!(at("git switch -c nb").is_empty());
+    assert_eq!(
+        at("git config --global user.name x"),
+        named("/home/u/.gitconfig")
+    );
+    assert!(at("git stash list").is_empty() && at("git stash show -p").is_empty());
+}
+
+/// 451 T50: the shapes T33's dropped addition misread, kept as cases - main-tree#10 and #11 (a clone into the scratchpad, its URL
+/// holding `${PAT}`, read at its after5 build as a clone where the shell stood), a `\`-continued clone (its operands on a line the
+/// walk reads as a command of its own: its write is not placed, failing open as an unresolvable path does), and a clone into the
+/// session's clones from the mirror.
+#[test]
+fn a_clone_lands_where_its_operands_say() {
+    let (_d, m, _c) = mirror("git-clone");
+    let walked = |cmd: &str| walk(cmd, Some(&m), &m, "/home/u").targets;
+    // the writes of a command's `git clone` segment: (path, class); and that no other write is the mirror's
+    let clones = |cmd: &str| -> Vec<(Option<String>, &'static str)> {
+        let t = walked(cmd);
+        // every write but the clone's own lands elsewhere
+        assert!(t.iter().all(|t| t.how == "read" || t.class == "elsewhere"));
+        t.into_iter()
+            .filter(|t| t.segment.contains("git clone"))
+            .map(|t| (t.path, t.class))
+            .collect()
+    };
+    let sp = "/tmp/claude-1000/-diagram/x/scratchpad";
+    let pat = "PAT=$(python3 -c \"\nimport configparser;c=configparser.ConfigParser();c.read('/h/s.ini');print(c['g']['p'])\")";
+    assert_eq!(
+        clones(&format!(
+            "SP={sp}; {pat}; rm -rf $SP/clonetest; time git clone -q --filter=blob:none \"https://x-access-token:$PAT@github.com/o/diagram\" $SP/clonetest 2>&1 | tail -3"
+        )),
+        vec![(Some(format!("{sp}/clonetest")), "elsewhere")]
+    );
+    // the walk's segments split `${PAT}` at its braces, so the clone's operands are cut: not placed, never where the shell stands
+    assert!(clones(&format!(
+        "SP={sp}; {pat}; rm -rf $SP/clonetest; time git clone -q --filter=blob:none \"https://x-access-token:${{PAT}}@github.com/o/diagram\" $SP/clonetest 2>&1 | tail -3"
+    ))
+    .is_empty());
+    assert!(clones(&format!(
+        "SP={sp} && {pat} && git clone -q --filter=blob:none --no-checkout \"https://x:${{PAT}}@github.com/o/diagram\" $SP/repro2 && git -C $SP/repro2 checkout -q \"$SHA\" -- a"
+    ))
+    .is_empty());
+    assert!(walked("git clone -q \\\n  https://h/o/r.git /tmp/c").is_empty());
+    assert!(walked("git clone -q /src/y \\\n  /tmp/c").is_empty());
+    assert!(walked("git init -q \\\n  /tmp/i").is_empty());
+    // a place the walk cannot resolve is not read toward the mirror (D6) for these forms, which HEAD read as no write: T50's
+    // replay moved tx#63, a scratch clone standing in the mirror, allowed -> refused that way (measured 2026-11-21)
+    for open in [
+        "T=$(mktemp -d); git clone -q . $T/clone",
+        "git worktree add --detach $W",
+        "cd $X && git switch other",
+        "cd $X && git init -q --bare",
+    ] {
+        assert!(walked(open).is_empty(), "{open}");
+    }
+    let into = walked(&format!("git clone -q {m} .clones/x"));
+    assert_eq!(
+        (into[0].path.clone(), into[0].class),
+        (Some(format!("{m}/.clones/x")), "clone")
+    );
+}
+
 /// 451 T33, its round-3 gate replay (measured 2026-11-20): `chmod`'s mode and `chown`'s owner are not files - `chmod +x
 /// $C/scripts/a.sh` was refused as a write of `+x` where the shell stood (refusals#124, #125, #132, window#256).
 #[test]

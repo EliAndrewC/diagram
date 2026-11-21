@@ -170,10 +170,10 @@
    "declared": "round-arbiter"
   },
   "### T50 Approach (checklist part A)": {
-   "sha256": "b7fb19ae8530d62c96f47a808147c973cf413c1c220ec70fa66b91db9c28a0bf",
+   "sha256": "6fe4bc67cad4ebed9b12a165565ac1def5e141a6341bcc68271de16004066cf0",
    "verdict": "CLEAR",
    "reviewed": "2026-11-21",
-   "declared": "round-arbiter"
+   "declared": "spec-fidelity"
   },
   "### T51 (<why: the finding or measurement that files it>)": {
    "sha256": "97932b9ded5a65f7188296f60d3722ba67e1e4c29274bd86951aee31d8cedaac",
@@ -327,6 +327,36 @@
   },
   "### T74 (the event log filed a call under its cwd's tree: the mirror's `.git/l7r-events/451-time-retro-and-efficiency.jsonl` held 364 lines, all session `c6fd72d1-...`'s (whose claim map names this clone), 361 a builder's (`by` or `aid`) and 3 the main session's, tasks T13 176, T55 158, T10 28, T21 1 and none 1, from 2026-11-20T16:02:50Z to 2026-11-21T04:56:07Z, 0 of them in the clone's 451 log, measured 2026-11-21 (a Python count of both logs by session, key and exact line))": {
    "sha256": "b28685189ca0f2afa3a8f3813be2ab92678a0d3ac54de6cad43c4258676d9b0a",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity"
+  },
+  "### T76 (the mirror's `.git/l7r-events/_unassigned.jsonl`, written from /diagram before T74 filed a call under its session's clone, held 15 lines the refile's rules place: 1 to 405, 11 to 430 and 1 to 449, none of them in this clone's logs, and 2 to 451 that T74's merge had already put in the clone's 451 log in their re-filed form, measured 2026-11-21 (the refile run without `--from` on a scratch copy, `/tmp/t76/scratch-refile.log`, and an exact-line count of each moved line in each clone's log); and, once T74 landed, no 451 log in the mirror to re-merge, measured 2026-11-21 (`ls` of the mirror's `.git/l7r-events/`))": {
+   "sha256": "2eb4bb03201769ebe37cdea63acd767530fc290a3086ebd9896361cb132abb39",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity"
+  },
+  "### T76 Approach (checklist part A)": {
+   "sha256": "5be81b498823f10bafe1d81a8013861c7801a790a4641e3252acfe6002094b7b",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity"
+  },
+  "### T77 (the plan hold refused an Edit of the heading after a held section, found by T73's builder on 2026-11-21: `edit_hits` in `rust/guard/shared/src/checks/planhold.rs` read `a <= start + t.len()`; the guard log holds 3 refusals of that shape, measured 2026-11-21, method below)": {
+   "sha256": "bd77d9a2f0e5e6ffd270abd97d97b6ab6a3ab46dfd01db044f4d85797ec05f5d",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity"
+  },
+  "### T77 Approach (checklist part A)": {
+   "sha256": "6c0d3c1ddaf1dc51a34ba96112fcef4a81db8f891b15d0bc6b5c8e3354203a7c",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity"
+  },
+  "### T50 (twelve git subcommands outside `GIT_WRITES` read as no write - `worktree`, `clone`, `init`, `switch`, `bisect`, `sparse-checkout`, `submodule`, `config`, `fetch`, `notes`, `update-ref`, `symbolic-ref` - found by T33, observed 2026-11-20, method: T33's part 4; T33's addition that read them was dropped, a review finding four misreadings)": {
+   "sha256": "7034b6c098307c41eca2fa7b280c10f681a2e965f1cd71a45472dec0799f84f3",
    "verdict": "CLEAR",
    "reviewed": "2026-11-21",
    "declared": "spec-fidelity"
@@ -8351,6 +8381,235 @@
      "why": "Last round's BLOCKED asked for (a) a named step or (b) a filed task id for the re-merge ordered 'lands before T22'. The section now carries (b): a Found-and-left item stating the gap, its visible effect (a builder's stop booked open), why it is not fixed here (the gap closes only when the landing does, so the re-merge must follow it), the filed id T76 and the order 'lands before T22', which is FR-009's form. The window is physically unavoidable for T74 itself, and the defect it can reopen is now bound to be closed before T22, the retro that reads these figures, so the request's purpose (where-time books all of 451's work) is not gutted. T76's tasks.md line, said by the dispatch to carry merge.py --dry, run, --verify with 0 missing, the move to backup and the result recorded, is outside this bundle and was not read; the ruling rests on the section's binding, which is what was required."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-21",
+   "blocks": [
+    "### T76 (the mirror's `.git/l7r-events/_unassigned.jsonl`, written from /diagram before T74 filed a call under its session's clone, held 15 lines the refile's rules place: 1 to 405, 11 to 430 and 1 to 449, none of them in this clone's logs, and 2 to 451 that T74's merge had already put in the clone's 451 log in their re-filed form, measured 2026-11-21 (the refile run without `--from` on a scratch copy, `/tmp/t76/scratch-refile.log`, and an exact-line count of each moved line in each clone's log); and, once T74 landed, no 451 log in the mirror to re-merge, measured 2026-11-21 (`ls` of the mirror's `.git/l7r-events/`))",
+    "### T76 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D1 refile --from",
+     "summary": "The refile gains --from <events dir> as the source; moved lines appended to --dir's logs; merge.py not extended",
+     "class": "within",
+     "why": "Choice of mechanism for putting the mirror's misfiled lines home; neither request.md nor FR-013 constrains how. It serves FR-013's measurement clause (where-time books the lines where it reads them)."
+    },
+    {
+     "id": "D2 only cross-feature lines move",
+     "summary": "--from moves only lines the rules send to a feature other than the source log's name; a mirror's own-feature log is left to merge.py",
+     "class": "within",
+     "why": "Scope of the tool's reach; the one case it does not cover (the mirror's 451 log) is measured absent after T74 (ls of the mirror), so nothing asked for is left unmoved."
+    },
+    {
+     "id": "D3 appended, not inserted in time order",
+     "summary": "Moved lines are appended to their target logs rather than inserted in time order as T76's task line said",
+     "class": "within",
+     "why": "Line order is not in the GM's request or in FR-013; T76's line is the session's own task text. It is a difference that still works, not a defect: the logs were already out of time order before the run (449 had 290 out-of-order adjacent pairs, 405 had 1, measured 2026-11-21 verify.py), and after the run make where-time F=430 books the T08 agent whose lines were moved (where-after.log), which is the task's purpose working on the one log that went from 0 to 1 pairs. Under the 2026-11-19 defect rule a difference that still works stays within and needs no ruling."
+    },
+    {
+     "id": "D4 Makefile left",
+     "summary": "make events-refile not changed; the run used scripts/gates/l7r-gate.sh with every path explicit",
+     "class": "within",
+     "why": "No clause of the request or FR-013 asks for a make wrapper for this; the one-off run is done either way."
+    },
+    {
+     "id": "D5 this clone only",
+     "summary": "Every line went to this clone's logs; 405's log in diagram-backlog-pages (another session's clone) not written",
+     "class": "within",
+     "why": "Matches the brief's constraint; the 405 line's session claims this clone (claim map), and where-time reads every clone under /diagram/.clones, so the line is booked."
+    },
+    {
+     "id": "D6 f16cf709 line to this clone",
+     "summary": "One 430 line from a session whose claimed clone no longer exists is placed in this clone's 430 log",
+     "class": "within",
+     "why": "430's log exists only in this clone (ls of the clones); placing it where the only 430 log is serves the booking FR-013's measurement clause is for."
+    },
+    {
+     "id": "D7 re-merge a no-op",
+     "summary": "The re-merge of 451 lines written in the mirror in the gap moved nothing",
+     "class": "within",
+     "why": "Measured: the mirror held only _unassigned.jsonl, last written before T74 landed, at T74's line count (ls, stat, wc -l). Nothing narrowed."
+    },
+    {
+     "id": "D8 no before where-time run",
+     "summary": "A grep count of the agent id over every read log stands in for a before report",
+     "class": "within",
+     "why": "A measurement method, not a narrowing; the before state (0 of the agent's 9 lines in any read log) is measured, with its method."
+    },
+    {
+     "id": "D9 closing-checks red on others' files",
+     "summary": "make closing-checks red in 2 of 3 legs (format on T77's planhold.rs, idle-tests-hooks.sh 3 of 34), left; Found and left: none",
+     "class": "within",
+     "why": "Not a narrowing of the request or spec, and nothing in the bundle shows a defect this task carries forward: the format leg is another task's uncommitted in-flight file, and the hooks-test leg passed the run before with this task's code in; its cause is unattributed. Whether the landing may proceed is the gate's to decide, not a fidelity ruling."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-21",
+   "blocks": [
+    "### T77 (the plan hold refused an Edit of the heading after a held section, found by T73's builder on 2026-11-21: `edit_hits` in `rust/guard/shared/src/checks/planhold.rs` read `a <= start + t.len()`; the guard log holds 3 refusals of that shape, measured 2026-11-21, method below)",
+    "### T77 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "1-overlap-bound",
+     "summary": "edit_hits judges overlap with held text, both ends exclusive (a < start+len && start < a+old.len()), replacing start <= a <= start+len; replace_all clause kept",
+     "class": "within",
+     "why": "Fixes a check refusing good work (an Edit at the next section's heading refused; 3 such refusals in the guard log, measured with method) - a defect under constitution XIV, which the task line asks fixed. Keeping edits inside held text refused preserves what the hold is for."
+    },
+    {
+     "id": "2-edit-ending-inside-refused",
+     "summary": "an Edit starting before the held section and ending inside it is now refused before it runs",
+     "class": "within",
+     "why": "The task line said such an edit was 'still refused'; on HEAD it was not (red fixture case). Making the stated behavior true is the hold's own purpose (held text unchanged during review), and the brief names it."
+    },
+    {
+     "id": "3-red-first-test",
+     "summary": "six-case fixture test written first, red 2 of 6 on HEAD, green 323 of 323",
+     "class": "within",
+     "why": "FR-012 (a refusal fixed red first). Enforces the requested behavior; not unrequested scope."
+    },
+    {
+     "id": "4-fail-closed-kept",
+     "summary": "for a pending hold or a backgrounded Bash write, the pre-call refusal on shared template text stays as the guard failing closed",
+     "class": "within",
+     "why": "For those two cases the pre-call refusal is the only guard (no write-back), so refusing is the guard doing its job rather than a wrong outcome; the plan changes nothing about them and the defect it does find (live hold, foreground) is handled separately."
+    },
+    {
+     "id": "5-bash-live-foreground-left-to-T78",
+     "summary": "a live hold's pre-call refusal of a foreground Bash write to another section on shared template text (7 of 18 replayed refusals) is left, filed as T78, lands before T22",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "It is a defect (a check refusing good work) and the default is to fix in the task, but the narrowing is safe only once the write-back runs after a failed call (PostToolUseFailure), which checks_hooks.rs does not do today (read 2026-11-21); building the narrowing in planhold.rs alone would let a foreground command that writes held text and exits non-zero void a review verdict unseen - doing it here would defeat the hold's purpose. The item carries FR-009's form: why not here, filed id T78, order 'lands before T22', with the dependency ordered inside T78 (write-back first, then the narrowing). This answers round 1's BLOCKED, which was for leaving it unfiled."
+    },
+    {
+     "id": "6-posttoolusefailure-gap-left-to-T78",
+     "summary": "no write-back after a foreground Bash call that changes held text and exits non-zero (checks_hooks events lack PostToolUseFailure) is left, filed as T78, lands before T22; whether a call moved to the background at 180 s gets PostToolUse at the move or end is unmeasured and T78 measures it first",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The fix lives in checks_hooks.rs, a different guard than the one T77 corrects, and today the pre-call refusal (unchanged by T77) still covers the case, so T77 opens no new hole. Filed in FR-009's form with its id and order; the unmeasured premise is stated as unmeasured and assigned to be measured before it decides anything."
+    },
+    {
+     "id": "7-no-other-copy",
+     "summary": "edit_hits is the one reader of an Edit's place; the Python twin hm_planhold.py is gone",
+     "class": "within",
+     "why": "A census with its search space named (scripts/hooks/lib/ checked 2026-11-21); no copy carries the defect forward."
+    },
+    {
+     "id": "8-closing-checks-measured-in-worktree",
+     "summary": "make closing-checks red on static only from another builder's half-edited tree.rs (T50); the crate re-measured on HEAD with T77's two files alone in a detached worktree, all clean",
+     "class": "within",
+     "why": "A measurement route, not a change to what was asked; T50's files untouched per the order step."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-21",
+   "blocks": [
+    "### T50 (twelve git subcommands outside `GIT_WRITES` read as no write - `worktree`, `clone`, `init`, `switch`, `bisect`, `sparse-checkout`, `submodule`, `config`, `fetch`, `notes`, `update-ref`, `symbolic-ref` - found by T33, observed 2026-11-20, method: T33's part 4; T33's addition that read them was dropped, a review finding four misreadings)",
+    "### T50 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "move-to-tree-git-rs",
+     "summary": "The git reading moves out of tree.rs into tree/git.rs, a move with no change of behavior, because the reading put tree.rs at 1,026 lines, past constitution X's 1,000-line bar.",
+     "class": "within",
+     "why": "A file-scale constraint of the constitution met by a pure move; it narrows nothing asked."
+    },
+    {
+     "id": "keep-existing-cases",
+     "summary": "GIT_WRITES (commit, push, tag among them), a writing branch and T33's output options read as at HEAD; the .git-alone rule applies only to the twelve.",
+     "class": "within",
+     "why": "Leaves existing behavior untouched outside the task's twelve subcommands; no requested behavior is withheld."
+    },
+    {
+     "id": "fetch-notes-update-ref-symbolic-ref-no-write",
+     "summary": "fetch, notes, update-ref and symbolic-ref stay no-writes, reaching git_output as at HEAD.",
+     "class": "within",
+     "why": "Measured in the 62 scratch-repository forms: every measured form of these four writes .git alone or nothing (fetch --dry-run and -n included), so reading them as no write is the measured result, not a carve-out."
+    },
+    {
+     "id": "D-a",
+     "summary": "Read every form's real write as measured, not only forms where a corpus row's move is a correction.",
+     "class": "within",
+     "why": "Broadens rather than narrows: it fixes a check that passes bad work (tree-writing forms let through in the mirror, shown by the probes) for every form, red first, with the replay holding that no row moves falsely."
+    },
+    {
+     "id": "D-b",
+     "summary": "config --global and --system write ~/.gitconfig and /etc/gitconfig (elsewhere); .git/config writes (local, --worktree) are none.",
+     "class": "within",
+     "why": "Follows the measured writes and corrects one of the review's four misreadings; no case is excluded."
+    },
+    {
+     "id": "D-c",
+     "summary": "init <dir> is read as a write at <dir> without reading the disk; init, init . and init in place write .git alone, none.",
+     "class": "within",
+     "why": "Conservative reading consistent with the measurement (a new directory is written; an existing one gets only .git, which the walk cannot tell) - it errs toward seeing the write, not toward missing it."
+    },
+    {
+     "id": "D-d (named place: clone destination, worktree path, init <dir>, config --file)",
+     "summary": "Where the place a form names cannot be resolved (e.g. $T/clone with T=$(mktemp -d)), it is not placed and the form fails open, rather than D6's toward-the-mirror reading.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Measured: placing the unresolved place toward the mirror refused tx#63, a real corpus row's scratch clone - a check refusing good work, which is a defect by the GM's definition. The walk cannot resolve $T statically; resolving it, and D6's misplacing of scratch writes for every tool, is the filed walk defect T79 (why, id and order - lands before T22 - stated). The same scratch-$T pattern governs config -f and worktree paths, so the ground carries to them. Note the asymmetry: an unresolved cp target is still read toward the mirror while an unresolved git place is now not placed; T79 must settle both."
+    },
+    {
+     "id": "D-d (place is where git runs: switch, bisect, sparse-checkout, submodule, init --bare)",
+     "summary": "Where git's own working place cannot be resolved (e.g. after cd $T), the tree-changing form is not placed and fails open.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Not grounded on HEAD's reading: an unresolved working place is the same D6 scratch-$T case as tx#63 (cd $T; git init -q --bare would be refused toward the mirror), and the walk-wide fix of D6's placing is filed as T79, lands before T22. No form here has a resolvable place left unread."
+    },
+    {
+     "id": "D-e (named place cut: a clone destination, worktree path, init <dir>, config --file operand ending at a trailing backslash or a ${)",
+     "summary": "A cut word ends the operands read and the form fails open, rather than reading the place as where the shell stands.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Measured: reading it where the shell stood reproduced T33's two false refusals (main-tree#10 and #11, a ${PAT} clone), refusing good work. The walk hands the git reading a segment without the operand, so the true place cannot be read until the walk's segment splitting is fixed - the walk-wide defect filed as T79 (for every tool; cp /tmp/a \\ is let through the same way), lands before T22."
+    },
+    {
+     "id": "D-e (place is where git runs, operand cut: e.g. git switch \\ / other)",
+     "summary": "A cut operand of switch, bisect, sparse-checkout or submodule ends the operands read, so the form is judged on the operands before the cut.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The place (where git runs) is unaffected by the cut; only which form it is (switch <branch> writes the tree, switch -c nb writes .git alone) is unknowable, so failing either way misreads some form. The miss is an instance of the walk's backslash/${ segmenting defect, which the found-and-left names for every tool and files as T79 before T22; no corpus row runs these four at all. Grounded on the filed walk defect, not on HEAD's reading."
+    },
+    {
+     "id": "D-f",
+     "summary": "submodule foreach is a write where git runs (its command unread); bisect good, bad, skip and next are writes.",
+     "class": "within",
+     "why": "Errs toward seeing a write, matching the measurement (bisect steps checked out on 8 commits) and the existing rule that an unread program is a write where the shell stands."
+    },
+    {
+     "id": "found-and-left-T79",
+     "summary": "The walk's splitting of a backslash-continued line and ${VAR} into their own segments, and D6's toward-mirror reading of a mktemp scratch write, are left unfixed for every tool and filed as T79, landing before T22.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "A real defect (main-tree lets a continued-line cp into the mirror through, and refuses a scratch write), but pre-existing at HEAD, not worsened by T50, and a different mechanism (the walk's segmenting and placing for every tool) from this task's git reading. The deferral carries what FR-009 requires - why it is not fixed here, its filed id T79 and its order (lands before T22) - and is observed with its method; it is not carried past the next step unfiled."
+    },
+    {
+     "id": "bisect-term-valued",
+     "summary": "bisect's --term-* are read as taking the next word although its -h shows only the = form.",
+     "class": "within",
+     "why": "Measured (git bisect start --term-new fixed HEAD HEAD~5 named its term fixed); following git's real behavior over its usage line."
+    },
+    {
+     "id": "no-cwd-rows-in-mirror",
+     "summary": "The replay stands the 251 corpus rows with no recorded cwd in the mirror, labeling a move on one 'mirror assumed'.",
+     "class": "within",
+     "why": "A verification method choice, stricter rather than looser, and labeled as an assumption rather than an observation."
+    },
+    {
+     "id": "not-performance-work",
+     "summary": "T50 is declared not performance work.",
+     "class": "within",
+     "why": "A guard-reading fix; it neither improves performance nor measures it, so FR-013's ordering does not apply to it."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -12541,6 +12800,229 @@
      "summary": "T54's section counts 374's request.md as a right fire. It was not one (the line stood unedited, and its value is a re-wrapped word), and the restatement is left to T54's section.",
      "class": "within",
      "why": "It is a figure in a record that no check reads and is no wrong outcome, so it is not a defect under XIV. The correction is stated here and is outside this builder's file list."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T76": {
+   "section_sha256": "e28687645cafa131d1ec7856b698a395e775f3ea0ffff6c594ddb9f3ae98a24f",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D1 refile --from",
+     "summary": "The refile gains --from <events dir> as the source; moved lines appended to --dir's logs; merge.py not extended",
+     "class": "within",
+     "why": "Choice of mechanism for putting the mirror's misfiled lines home; neither request.md nor FR-013 constrains how. It serves FR-013's measurement clause (where-time books the lines where it reads them)."
+    },
+    {
+     "id": "D2 only cross-feature lines move",
+     "summary": "--from moves only lines the rules send to a feature other than the source log's name; a mirror's own-feature log is left to merge.py",
+     "class": "within",
+     "why": "Scope of the tool's reach; the one case it does not cover (the mirror's 451 log) is measured absent after T74 (ls of the mirror), so nothing asked for is left unmoved."
+    },
+    {
+     "id": "D3 appended, not inserted in time order",
+     "summary": "Moved lines are appended to their target logs rather than inserted in time order as T76's task line said",
+     "class": "within",
+     "why": "Line order is not in the GM's request or in FR-013; T76's line is the session's own task text. It is a difference that still works, not a defect: the logs were already out of time order before the run (449 had 290 out-of-order adjacent pairs, 405 had 1, measured 2026-11-21 verify.py), and after the run make where-time F=430 books the T08 agent whose lines were moved (where-after.log), which is the task's purpose working on the one log that went from 0 to 1 pairs. Under the 2026-11-19 defect rule a difference that still works stays within and needs no ruling."
+    },
+    {
+     "id": "D4 Makefile left",
+     "summary": "make events-refile not changed; the run used scripts/gates/l7r-gate.sh with every path explicit",
+     "class": "within",
+     "why": "No clause of the request or FR-013 asks for a make wrapper for this; the one-off run is done either way."
+    },
+    {
+     "id": "D5 this clone only",
+     "summary": "Every line went to this clone's logs; 405's log in diagram-backlog-pages (another session's clone) not written",
+     "class": "within",
+     "why": "Matches the brief's constraint; the 405 line's session claims this clone (claim map), and where-time reads every clone under /diagram/.clones, so the line is booked."
+    },
+    {
+     "id": "D6 f16cf709 line to this clone",
+     "summary": "One 430 line from a session whose claimed clone no longer exists is placed in this clone's 430 log",
+     "class": "within",
+     "why": "430's log exists only in this clone (ls of the clones); placing it where the only 430 log is serves the booking FR-013's measurement clause is for."
+    },
+    {
+     "id": "D7 re-merge a no-op",
+     "summary": "The re-merge of 451 lines written in the mirror in the gap moved nothing",
+     "class": "within",
+     "why": "Measured: the mirror held only _unassigned.jsonl, last written before T74 landed, at T74's line count (ls, stat, wc -l). Nothing narrowed."
+    },
+    {
+     "id": "D8 no before where-time run",
+     "summary": "A grep count of the agent id over every read log stands in for a before report",
+     "class": "within",
+     "why": "A measurement method, not a narrowing; the before state (0 of the agent's 9 lines in any read log) is measured, with its method."
+    },
+    {
+     "id": "D9 closing-checks red on others' files",
+     "summary": "make closing-checks red in 2 of 3 legs (format on T77's planhold.rs, idle-tests-hooks.sh 3 of 34), left; Found and left: none",
+     "class": "within",
+     "why": "Not a narrowing of the request or spec, and nothing in the bundle shows a defect this task carries forward: the format leg is another task's uncommitted in-flight file, and the hooks-test leg passed the run before with this task's code in; its cause is unattributed. Whether the landing may proceed is the gate's to decide, not a fidelity ruling."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T77": {
+   "section_sha256": "8b7432f054bce858c39e59766ad3c21b8e41051da3ccde3a5fe1dc5ca6390192",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "1-overlap-bound",
+     "summary": "edit_hits judges overlap with held text, both ends exclusive (a < start+len && start < a+old.len()), replacing start <= a <= start+len; replace_all clause kept",
+     "class": "within",
+     "why": "Fixes a check refusing good work (an Edit at the next section's heading refused; 3 such refusals in the guard log, measured with method) - a defect under constitution XIV, which the task line asks fixed. Keeping edits inside held text refused preserves what the hold is for."
+    },
+    {
+     "id": "2-edit-ending-inside-refused",
+     "summary": "an Edit starting before the held section and ending inside it is now refused before it runs",
+     "class": "within",
+     "why": "The task line said such an edit was 'still refused'; on HEAD it was not (red fixture case). Making the stated behavior true is the hold's own purpose (held text unchanged during review), and the brief names it."
+    },
+    {
+     "id": "3-red-first-test",
+     "summary": "six-case fixture test written first, red 2 of 6 on HEAD, green 323 of 323",
+     "class": "within",
+     "why": "FR-012 (a refusal fixed red first). Enforces the requested behavior; not unrequested scope."
+    },
+    {
+     "id": "4-fail-closed-kept",
+     "summary": "for a pending hold or a backgrounded Bash write, the pre-call refusal on shared template text stays as the guard failing closed",
+     "class": "within",
+     "why": "For those two cases the pre-call refusal is the only guard (no write-back), so refusing is the guard doing its job rather than a wrong outcome; the plan changes nothing about them and the defect it does find (live hold, foreground) is handled separately."
+    },
+    {
+     "id": "5-bash-live-foreground-left-to-T78",
+     "summary": "a live hold's pre-call refusal of a foreground Bash write to another section on shared template text (7 of 18 replayed refusals) is left, filed as T78, lands before T22",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "It is a defect (a check refusing good work) and the default is to fix in the task, but the narrowing is safe only once the write-back runs after a failed call (PostToolUseFailure), which checks_hooks.rs does not do today (read 2026-11-21); building the narrowing in planhold.rs alone would let a foreground command that writes held text and exits non-zero void a review verdict unseen - doing it here would defeat the hold's purpose. The item carries FR-009's form: why not here, filed id T78, order 'lands before T22', with the dependency ordered inside T78 (write-back first, then the narrowing). This answers round 1's BLOCKED, which was for leaving it unfiled."
+    },
+    {
+     "id": "6-posttoolusefailure-gap-left-to-T78",
+     "summary": "no write-back after a foreground Bash call that changes held text and exits non-zero (checks_hooks events lack PostToolUseFailure) is left, filed as T78, lands before T22; whether a call moved to the background at 180 s gets PostToolUse at the move or end is unmeasured and T78 measures it first",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The fix lives in checks_hooks.rs, a different guard than the one T77 corrects, and today the pre-call refusal (unchanged by T77) still covers the case, so T77 opens no new hole. Filed in FR-009's form with its id and order; the unmeasured premise is stated as unmeasured and assigned to be measured before it decides anything."
+    },
+    {
+     "id": "7-no-other-copy",
+     "summary": "edit_hits is the one reader of an Edit's place; the Python twin hm_planhold.py is gone",
+     "class": "within",
+     "why": "A census with its search space named (scripts/hooks/lib/ checked 2026-11-21); no copy carries the defect forward."
+    },
+    {
+     "id": "8-closing-checks-measured-in-worktree",
+     "summary": "make closing-checks red on static only from another builder's half-edited tree.rs (T50); the crate re-measured on HEAD with T77's two files alone in a detached worktree, all clean",
+     "class": "within",
+     "why": "A measurement route, not a change to what was asked; T50's files untouched per the order step."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T50": {
+   "section_sha256": "175d4b44aa9dd4e875e5b391d293dee336e62ab8b0a33b29e5c377c386071fd6",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "move-to-tree-git-rs",
+     "summary": "The git reading moves out of tree.rs into tree/git.rs, a move with no change of behavior, because the reading put tree.rs at 1,026 lines, past constitution X's 1,000-line bar.",
+     "class": "within",
+     "why": "A file-scale constraint of the constitution met by a pure move; it narrows nothing asked."
+    },
+    {
+     "id": "keep-existing-cases",
+     "summary": "GIT_WRITES (commit, push, tag among them), a writing branch and T33's output options read as at HEAD; the .git-alone rule applies only to the twelve.",
+     "class": "within",
+     "why": "Leaves existing behavior untouched outside the task's twelve subcommands; no requested behavior is withheld."
+    },
+    {
+     "id": "fetch-notes-update-ref-symbolic-ref-no-write",
+     "summary": "fetch, notes, update-ref and symbolic-ref stay no-writes, reaching git_output as at HEAD.",
+     "class": "within",
+     "why": "Measured in the 62 scratch-repository forms: every measured form of these four writes .git alone or nothing (fetch --dry-run and -n included), so reading them as no write is the measured result, not a carve-out."
+    },
+    {
+     "id": "D-a",
+     "summary": "Read every form's real write as measured, not only forms where a corpus row's move is a correction.",
+     "class": "within",
+     "why": "Broadens rather than narrows: it fixes a check that passes bad work (tree-writing forms let through in the mirror, shown by the probes) for every form, red first, with the replay holding that no row moves falsely."
+    },
+    {
+     "id": "D-b",
+     "summary": "config --global and --system write ~/.gitconfig and /etc/gitconfig (elsewhere); .git/config writes (local, --worktree) are none.",
+     "class": "within",
+     "why": "Follows the measured writes and corrects one of the review's four misreadings; no case is excluded."
+    },
+    {
+     "id": "D-c",
+     "summary": "init <dir> is read as a write at <dir> without reading the disk; init, init . and init in place write .git alone, none.",
+     "class": "within",
+     "why": "Conservative reading consistent with the measurement (a new directory is written; an existing one gets only .git, which the walk cannot tell) - it errs toward seeing the write, not toward missing it."
+    },
+    {
+     "id": "D-d (named place: clone destination, worktree path, init <dir>, config --file)",
+     "summary": "Where the place a form names cannot be resolved (e.g. $T/clone with T=$(mktemp -d)), it is not placed and the form fails open, rather than D6's toward-the-mirror reading.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Measured: placing the unresolved place toward the mirror refused tx#63, a real corpus row's scratch clone - a check refusing good work, which is a defect by the GM's definition. The walk cannot resolve $T statically; resolving it, and D6's misplacing of scratch writes for every tool, is the filed walk defect T79 (why, id and order - lands before T22 - stated). The same scratch-$T pattern governs config -f and worktree paths, so the ground carries to them. Note the asymmetry: an unresolved cp target is still read toward the mirror while an unresolved git place is now not placed; T79 must settle both."
+    },
+    {
+     "id": "D-d (place is where git runs: switch, bisect, sparse-checkout, submodule, init --bare)",
+     "summary": "Where git's own working place cannot be resolved (e.g. after cd $T), the tree-changing form is not placed and fails open.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Not grounded on HEAD's reading: an unresolved working place is the same D6 scratch-$T case as tx#63 (cd $T; git init -q --bare would be refused toward the mirror), and the walk-wide fix of D6's placing is filed as T79, lands before T22. No form here has a resolvable place left unread."
+    },
+    {
+     "id": "D-e (named place cut: a clone destination, worktree path, init <dir>, config --file operand ending at a trailing backslash or a ${)",
+     "summary": "A cut word ends the operands read and the form fails open, rather than reading the place as where the shell stands.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Measured: reading it where the shell stood reproduced T33's two false refusals (main-tree#10 and #11, a ${PAT} clone), refusing good work. The walk hands the git reading a segment without the operand, so the true place cannot be read until the walk's segment splitting is fixed - the walk-wide defect filed as T79 (for every tool; cp /tmp/a \\ is let through the same way), lands before T22."
+    },
+    {
+     "id": "D-e (place is where git runs, operand cut: e.g. git switch \\ / other)",
+     "summary": "A cut operand of switch, bisect, sparse-checkout or submodule ends the operands read, so the form is judged on the operands before the cut.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The place (where git runs) is unaffected by the cut; only which form it is (switch <branch> writes the tree, switch -c nb writes .git alone) is unknowable, so failing either way misreads some form. The miss is an instance of the walk's backslash/${ segmenting defect, which the found-and-left names for every tool and files as T79 before T22; no corpus row runs these four at all. Grounded on the filed walk defect, not on HEAD's reading."
+    },
+    {
+     "id": "D-f",
+     "summary": "submodule foreach is a write where git runs (its command unread); bisect good, bad, skip and next are writes.",
+     "class": "within",
+     "why": "Errs toward seeing a write, matching the measurement (bisect steps checked out on 8 commits) and the existing rule that an unread program is a write where the shell stands."
+    },
+    {
+     "id": "found-and-left-T79",
+     "summary": "The walk's splitting of a backslash-continued line and ${VAR} into their own segments, and D6's toward-mirror reading of a mktemp scratch write, are left unfixed for every tool and filed as T79, landing before T22.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "A real defect (main-tree lets a continued-line cp into the mirror through, and refuses a scratch write), but pre-existing at HEAD, not worsened by T50, and a different mechanism (the walk's segmenting and placing for every tool) from this task's git reading. The deferral carries what FR-009 requires - why it is not fixed here, its filed id T79 and its order (lands before T22) - and is observed with its method; it is not carried past the next step unfiled."
+    },
+    {
+     "id": "bisect-term-valued",
+     "summary": "bisect's --term-* are read as taking the next word although its -h shows only the = form.",
+     "class": "within",
+     "why": "Measured (git bisect start --term-new fixed HEAD HEAD~5 named its term fixed); following git's real behavior over its usage line."
+    },
+    {
+     "id": "no-cwd-rows-in-mirror",
+     "summary": "The replay stands the 251 corpus rows with no recorded cwd in the mirror, labeling a move on one 'mirror assumed'.",
+     "class": "within",
+     "why": "A verification method choice, stricter rather than looser, and labeled as an assumption rather than an observation."
+    },
+    {
+     "id": "not-performance-work",
+     "summary": "T50 is declared not performance work.",
+     "class": "within",
+     "why": "A guard-reading fix; it neither improves performance nor measures it, so FR-013's ordering does not apply to it."
     }
    ],
    "verdict": "CLEAR"

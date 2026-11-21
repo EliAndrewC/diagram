@@ -275,7 +275,9 @@ pub fn restore(state: &mut Value, root: Option<&Path>, tid: &str) -> String {
     String::new()
 }
 
-/// Whether held text `texts` would change under an Edit of the plan with `old`.
+/// Whether held text `texts` would change under an Edit of the plan with `old`: the edit's text overlaps held text, both ends
+/// exclusive (451 T77: `a <= start + t.len()` read an edit of the next section's heading as inside the held one, and an edit starting
+/// before the section and ending inside it went unseen), or `old` stands in held text (a `replace_all`).
 fn edit_hits(plan: &Path, texts: &[String], old: &str) -> bool {
     let current = std::fs::read_to_string(plan).unwrap_or_default();
     let at = if old.is_empty() {
@@ -286,7 +288,7 @@ fn edit_hits(plan: &Path, texts: &[String], old: &str) -> bool {
     texts.iter().any(|t| {
         current
             .find(t.as_str())
-            .is_some_and(|start| at.is_some_and(|a| start <= a && a <= start + t.len()))
+            .is_some_and(|start| at.is_some_and(|a| a < start + t.len() && start < a + old.len()))
     }) || texts.iter().any(|t| !old.is_empty() && t.contains(old))
 }
 

@@ -12,6 +12,7 @@ use fancy_regex::{Captures, Regex};
 
 use super::shape::strip_heredocs;
 
+mod git;
 mod py_c;
 mod python;
 mod verdict;
@@ -26,25 +27,6 @@ fn re(pattern: &str) -> Regex {
     crate::regex::build(pattern).unwrap_or_else(|e| unreachable!("a guard's own pattern: {e}"))
 }
 
-const GIT_WRITES: [&str; 17] = [
-    "commit",
-    "add",
-    "merge",
-    "rebase",
-    "reset",
-    "checkout",
-    "restore",
-    "rm",
-    "mv",
-    "apply",
-    "am",
-    "stash",
-    "cherry-pick",
-    "push",
-    "pull",
-    "clean",
-    "tag",
-];
 const FILE_TOOLS_ALL: [&str; 12] = [
     "vim", "vi", "nano", "emacs", "tee", "touch", "mkdir", "rmdir", "rm", "mv", "chmod", "chown",
 ];
@@ -52,48 +34,6 @@ const FILE_TOOLS_ALL: [&str; 12] = [
 const FILE_TOOLS_LAST: [&str; 4] = ["cp", "ln", "install", "rsync"];
 const WRAPPERS: [&str; 9] = [
     "sudo", "nohup", "setsid", "env", "command", "exec", "time", "nice", "builtin",
-];
-const BRANCH_WRITE_FLAGS: [&str; 16] = [
-    "-d",
-    "-D",
-    "-m",
-    "-M",
-    "-c",
-    "-C",
-    "-f",
-    "-u",
-    "--delete",
-    "--move",
-    "--copy",
-    "--force",
-    "--set-upstream-to",
-    "--unset-upstream",
-    "--edit-description",
-    "--track",
-];
-const BRANCH_LIST_FLAGS: [&str; 11] = [
-    "-l",
-    "--list",
-    "-r",
-    "--remotes",
-    "-a",
-    "--all",
-    "--contains",
-    "--no-contains",
-    "--merged",
-    "--no-merged",
-    "--points-at",
-];
-const BRANCH_LIST_SHOW: &str = "--show-current";
-const BRANCH_VALUE_FLAGS: [&str; 8] = [
-    "--contains",
-    "--no-contains",
-    "--merged",
-    "--no-merged",
-    "--points-at",
-    "--sort",
-    "--format",
-    "--column",
 ];
 
 static ASSIGN: LazyLock<Regex> = LazyLock::new(|| {
@@ -352,112 +292,8 @@ fn words(seg: &str) -> Vec<&str> {
     toks
 }
 
-fn branch_writes(args: &[&str]) -> bool {
-    let flags: Vec<&str> = args
-        .iter()
-        .filter(|a| a.starts_with('-'))
-        .map(|a| a.split('=').next().unwrap_or(a))
-        .collect();
-    if flags.iter().any(|f| BRANCH_WRITE_FLAGS.contains(f))
-        || args.iter().any(|a| a.starts_with("--set-upstream-to="))
-    {
-        return true;
-    }
-    let (mut names, mut skip) = (0, false);
-    for a in args {
-        if skip {
-            skip = false;
-        } else if a.starts_with('-') {
-            skip = BRANCH_VALUE_FLAGS.contains(a);
-        } else {
-            names += 1;
-        }
-    }
-    names > 0
-        && !flags
-            .iter()
-            .any(|f| BRANCH_LIST_FLAGS.contains(f) || *f == BRANCH_LIST_SHOW)
-}
-
 /// A write's target and whether the command named it (`named`) or it lands where the shell stands (`shell`).
 type Write = (Option<String>, &'static str);
-
-/// (target, how) where a git invocation writes (`_git_write`).
-fn git_write(toks: &[&str], env: &Env, home: &str, eff: Option<&str>) -> Option<Write> {
-    let (mut i, mut c_path) = (1, None);
-    while i < toks.len() {
-        let t = toks[i];
-        if (t == "-C" || t == "-c") && i + 1 < toks.len() {
-            if t == "-C" {
-                c_path = Some(toks[i + 1]);
-            }
-            i += 2;
-        } else if t.starts_with('-') {
-            i += 1;
-        } else {
-            break;
-        }
-    }
-    let sub = *toks.get(i)?;
-    let (at, at_how) = match c_path {
-        None => (eff.map(str::to_owned), "shell"),
-        Some(c) if strip_quote_chars(c).starts_with('/') => (resolve(c, env, home, eff), "named"),
-        Some(c) => (resolve(c, env, home, eff), "shell"),
-    };
-    // a stash's `list` and `show` only read (451 T33: its gate's shell-write check refused `git stash list` as a write of `.`)
-    let stash_reads = sub == "stash" && matches!(toks.get(i + 1).copied(), Some("list" | "show"));
-    if (GIT_WRITES.contains(&sub) && !stash_reads)
-        || (sub == "branch" && branch_writes(&toks[i + 1..]))
-    {
-        return Some((at, at_how));
-    }
-    // 451 T33: a read-only subcommand's writing option lands where it names, relative to where git runs
-    let args = &toks[i + 1..];
-    match git_output(sub, args)? {
-        None => Some((at, at_how)),
-        Some(file) => {
-            let (path, how) = path_write(file, env, home, at.as_deref());
-            Some((path, if how == "shell" { at_how } else { how }))
-        }
-    }
-}
-
-/// Where a subcommand outside `GIT_WRITES` writes a file (451 T33): `Some(Some(word))` the file or directory an option names,
-/// `Some(None)` where git runs, None nowhere. Found as T44 found its screen, measured 2026-11-20 (git 2.53.0, each subcommand's
-/// `--git-completion-helper` in a scratch repository, searched for an output file or directory): the diff options' `--output`
-/// (`diff`, `diff-tree`, `diff-files`, `diff-index`, `range-diff`, `rev-list`, and `log`, `show`, `whatchanged` through them),
-/// `archive`'s `-o`/`--output`, `format-patch`'s `-o`/`--output-directory` (else the files land where it runs, unless
-/// `--stdout`), `bundle create`'s file, `bugreport`'s and `diagnose`'s `-o`/`--output-directory`. git takes none of them
-/// abbreviated (`--outpu=`, `--outp=` exit 129, measured 2026-11-20), so only the whole name is read.
-#[expect(
-    clippy::option_option,
-    reason = "three answers: no write, a write where git runs, a write where a word names"
-)]
-fn git_output<'a>(sub: &str, args: &[&'a str]) -> Option<Option<&'a str>> {
-    let value = |names: &[&str]| -> Option<&'a str> {
-        args.iter().enumerate().find_map(|(k, a)| {
-            names.iter().find_map(|n| {
-                a.strip_prefix(n)
-                    .and_then(|rest| rest.strip_prefix('='))
-                    .or_else(|| (*a == *n).then(|| args.get(k + 1).copied()).flatten())
-            })
-        })
-    };
-    if let Some(file) = value(&["--output"]) {
-        return Some(Some(file));
-    }
-    match sub {
-        "archive" => value(&["-o"]).map(Some),
-        "bundle" => args
-            .first()
-            .filter(|a| **a == "create")
-            .and(args.iter().skip(1).find(|a| !a.starts_with('-')))
-            .map(|f| Some(*f)),
-        "format-patch" if !args.contains(&"--stdout") => Some(value(&["-o", "--output-directory"])),
-        "bugreport" | "diagnose" => Some(value(&["-o", "--output-directory"])),
-        _ => None,
-    }
-}
 
 /// The paths a file tool writes (`_tool_paths`): `sed`'s files past its script, the last argument of a copy, else every argument.
 fn tool_paths<'a>(tool: &str, toks: &[&'a str]) -> Vec<&'a str> {
@@ -555,7 +391,7 @@ fn writes_in(
     if let Some(head) = toks.first() {
         let base = head.rsplit('/').next().unwrap_or(head);
         if *head == "git" {
-            found_writes.extend(git_write(&toks, env, home, eff));
+            found_writes.extend(git::git_write(&toks, env, home, eff));
         } else if base == "make" {
             found_writes.push((eff.map(str::to_owned), "shell"));
         } else if let Some(at) = python_c(&toks).filter(|_| found(&PYTHON, base)) {

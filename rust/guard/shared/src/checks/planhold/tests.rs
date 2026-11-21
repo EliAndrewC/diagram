@@ -348,6 +348,44 @@ fn a_write_to_held_text_is_refused() {
     );
 }
 
+/// An Edit is refused when its text overlaps the held section, the section's end exclusive (451 T77, found by T73's builder on
+/// 2026-11-21: an edit of the next section's heading counted as inside the held one, the log's 3 Edit refusals of that shape).
+#[test]
+fn an_edit_is_held_only_where_it_overlaps_the_section() {
+    let root = clone_at("boundary");
+    feature(&root);
+    let plan = root
+        .join("specs/900-a/plan.md")
+        .to_string_lossy()
+        .into_owned();
+    let state = json!({"plan_holds": {"h": running("T01", &[], 900.0)}});
+    let edit = |old: &str| {
+        refusal(
+            &state,
+            Some(&root),
+            "Edit",
+            &json!({"file_path": plan, "old_string": old}),
+            1000.0,
+            false,
+        )
+    };
+    // (old_string, refused): the end and the start themselves are outside; the last held byte, a start before it running in, a start
+    // inside running past it, and the heading itself are inside
+    let cases = [
+        ("## T02 other", false),
+        ("# plan\n\n", false),
+        ("# plan\n\n## T01 the bath", true),
+        ("\n## T02 other", true),
+        ("here\n\n## T02", true),
+        ("## T01 the bath", true),
+    ];
+    let misjudged: Vec<&(&str, bool)> = cases
+        .iter()
+        .filter(|(old, refused)| edit(old).contains("T01's section") != *refused)
+        .collect();
+    assert_eq!(misjudged, Vec::<&(&str, bool)>::new());
+}
+
 /// `f`'s answer, or a failure once it runs past 20 s (feature 449 T185: a quadratic search, or a scan over an error it repeats, must
 /// fail the test rather than hang it).
 fn within<T: Send + 'static>(f: impl FnOnce() -> T + Send + 'static) -> T {
