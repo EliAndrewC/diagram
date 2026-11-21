@@ -276,3 +276,6 @@
 - [x] T102 [perf] Rolling dispatch names a task that waits on a measured day (found 2026-11-21: the Stop hook's free-slot refusal named T22, 'on the first full day of work after T02-T21 land', and T98, measured after a night of rolling dispatch) - a task line may carry a wait the hook reads (a 'waits:' clause naming the day or the landing it waits on, set on T22 and T98), and the free-slot reading skips a task whose wait is not met, red first
       research: rendering
       verify: DONE. landed: rolling dispatch skips a waiting task
+- [x] T103 [perf] shared::shape's strip_heredocs and strip_quotes build their patterns on every Bash command for every guard that calls them (found by T97, 2026-11-21: ungated, so no_poll_hooks ahead of main-tree and the other guards behind it each pay the first-use build T97 removed from the walk; about an eighth of the Bash-start event, an estimate) - measured first which guards call them and what each build costs per process, then each strip gated on the literal a match needs (as T97 gated the walk's patterns), red first on a build-count test
+      research: rendering
+      verify: DONE. landed: the shape strippers gated; the quote scan linear
