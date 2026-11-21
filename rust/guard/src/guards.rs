@@ -29,6 +29,7 @@ pub(crate) fn write_executable(path: &std::path::Path, text: &str) {
     std::fs::remove_file(&draft).unwrap();
 }
 
+pub mod builder_stop_hooks;
 #[cfg(test)]
 mod case_tables;
 pub mod claims_file_hooks;

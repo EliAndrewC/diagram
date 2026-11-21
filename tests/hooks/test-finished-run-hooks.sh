@@ -274,6 +274,31 @@ lstop; check "a detached verify gate: refused" 2 "$?"
 check "...and the refusal names make verify-wait, not a loop" yes "$(has "$(cat "$T/fr.err")" 'make verify-wait')"
 for p in $("$HOOK" live "$LV" | cut -d' ' -f1); do kill "$p" 2>/dev/null; done; settle '[ -z "$("$HOOK" live "$LV")" ]'
 
+echo "--- 10. a harness named by its version tracks its run; a still-running builder's run waits on the builder (451 T85) ---"
+# GUARD_EDIT_OK: 451 T85 - new cases, nothing existing loosened. A background session's harness is named by its version (comm
+# `2.1.325`, argv0 `claude bg-spare`, measured 2026-11-21), so `comm == claude` read every run it held as detached; and a run a
+# builder started is the builder's to wait on while it runs, its starter read from the event log's launch line for its task.
+rm -f "$LV/.git/live-run.told"
+mkdir -p "$T/v" "$T/ev" "$T/tmp/-diagram/s/tasks"; cp "$(command -v bash)" "$T/v/2.1.325"
+TO="$T/tmp/-diagram/s/tasks/bt85.output"
+( exec -a "claude bg-spare" "$T/v/2.1.325" -c "bash -c 'cd $LV && make sleeper; :' > $TO 2>&1; :" </dev/null >/dev/null 2>&1 & )
+settle '"$HOOK" live "$LV" | grep -q sleeper'
+check "a harness named by its version: the judge sees its run as tracked" yes "$(has "$("$HOOK" judge "$LV")" ' sleeper tracked ')"
+TR="$T/session.jsonl"; : > "$TR"
+vstop() { printf '{"session_id":"t","cwd":"%s","transcript_path":"%s"}' "$LV" "$TR" | L7R_EVENTS_DIR="$T/ev" "$HOOK" stop 2>"$T/fr.err"; }
+vstop >/dev/null; check "...and a stop lets it through" 0 "$?"
+printf '{"t":"T","sid":"t","ev":"PostToolUse","tool":"Bash","id":"u","by":"abuild","ms":4,"bg":"bt85"}\n' > "$T/ev/451-x.jsonl"
+printf '{"toolUseResult": {"agentId": "abuild"}}\n' > "$TR"
+OUT=$(vstop); RC=$?
+check "a run its still-running builder started lets the turn close" 0 "$RC"
+check "...naming the builder" yes "$(has "$OUT" 'its builder abuild is still running')"
+printf '%s\n' '{"type":"user","message":{"role":"user","content":"<task-notification>\n<task-id>abuild</task-id>\n<summary>Agent \"T85\" completed</summary>\n</task-notification>"}}' >> "$TR"
+vstop >/dev/null; check "...and once its builder has stopped, the run is refused" 2 "$?"
+check "...naming its output" yes "$(has "$(cat "$T/fr.err")" "output in $TO")"
+RULES3=$(jq -rs 'map(.event + "/" + (.rule // "None")) | join(" ")' "$GUARD_LOG_DIR"/*.json 2>/dev/null)
+check "the builder's run let through is recorded with its own rule" yes "$(has "$RULES3" "permitted/builder-running")"
+for p in $("$HOOK" live "$LV" | cut -d' ' -f1); do kill "$p" 2>/dev/null; done; pkill -f "$TO" 2>/dev/null; settle '[ -z "$("$HOOK" live "$LV")" ]'
+
 echo "-----"
 printf 'test-finished-run-hooks: passed %s, failed %s\n' "$PASS" "$FAIL"
 [ "$FAIL" = 0 ] || exit 1

@@ -12,6 +12,7 @@ use super::{
 use crate::checks::scratch;
 use l7r_shared::tempdir::{Held, TempDir};
 
+mod caller;
 mod cover;
 mod fmtfile;
 mod kept;

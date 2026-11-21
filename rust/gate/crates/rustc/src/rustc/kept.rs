@@ -365,6 +365,31 @@ pub(super) fn verdict_key_with(
             .cloned()
     };
     let mut hash: Vec<u8> = format!("{cmd}\n{compiler}\n").into_bytes();
+    for (path, id) in key_inputs(root, manifest, cmd, reads, all, ids, views) {
+        let read = declared.iter().any(|d| under(path, d));
+        // THE DEPENDENCIES' INTERFACE (T113): a lint key reads a file of a crate this one builds from by its interface
+        let theirs = cmd == "lint" && owner(path).is_some_and(|o| o != own);
+        let view = views.map(|(code, interface, _)| if theirs { interface } else { code });
+        let id = view
+            .and_then(|v| v.get(path))
+            .filter(|_| !read)
+            .map_or(id, String::as_str);
+        hash.extend(format!("{path} {id}\n").into_bytes());
+    }
+    sha256::hex(&hash)
+}
+
+/// The files a check's key of a crate reads (the paths [`verdict_key_with`] hashes): the crate's inputs, the files its Rust files compile
+/// in for a test or coverage key, and for the dead check its whole family. [`Kept::reads_any`] asks it of the caller's files (451 T86).
+fn key_inputs<'a>(
+    root: &Path,
+    manifest: &Path,
+    cmd: &str,
+    reads: Reads,
+    all: &[PathBuf],
+    ids: &'a BTreeMap<String, String>,
+    views: Option<Views<'a>>,
+) -> Vec<(&'a str, &'a str)> {
     let mut keyed: Vec<(&str, &str)> = inputs(root, manifest, reads, all, ids);
     // WHAT THE TESTS COMPILE IN (found under T113): a file a crate's sources include sits outside them where it is another crate's
     // (`guard` compiles in the record crate's HTML entity table), and no key of the crate read it, so a kept test result stood over a
@@ -393,18 +418,7 @@ pub(super) fn verdict_key_with(
         keyed.sort_unstable();
         keyed.dedup();
     }
-    for (path, id) in keyed {
-        let read = declared.iter().any(|d| under(path, d));
-        // THE DEPENDENCIES' INTERFACE (T113): a lint key reads a file of a crate this one builds from by its interface
-        let theirs = cmd == "lint" && owner(path).is_some_and(|o| o != own);
-        let view = views.map(|(code, interface, _)| if theirs { interface } else { code });
-        let id = view
-            .and_then(|v| v.get(path))
-            .filter(|_| !read)
-            .map_or(id, String::as_str);
-        hash.extend(format!("{path} {id}\n").into_bytes());
-    }
-    sha256::hex(&hash)
+    keyed
 }
 
 /// A lint that reads plain comments, configured: clippy's `SAFETY:` comment lints (the restriction group, not enabled 2026-11-11, the plan
@@ -740,6 +754,22 @@ impl Kept {
                 .to_owned(),
             all,
         }
+    }
+
+    /// Does `cmd`'s key of `manifest` read any of `files`? The kept key's own inputs ([`key_inputs`]), so a crate that builds on a
+    /// caller's crate, or whose tests read a caller's file, is the caller's too (451 T86).
+    pub(super) fn reads_any(
+        &self,
+        root: &Path,
+        cmd: &str,
+        manifest: &Path,
+        files: &BTreeSet<String>,
+    ) -> bool {
+        let views =
+            Some((&self.code, &self.interface, &self.includes)).filter(|_| BY_CODE.contains(&cmd));
+        key_inputs(root, manifest, cmd, self.reads, &self.all, &self.ids, views)
+            .iter()
+            .any(|(p, _)| files.contains(*p))
     }
 }
 

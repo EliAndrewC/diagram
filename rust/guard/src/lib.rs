@@ -60,6 +60,7 @@ pub fn guards() -> Vec<Guard> {
         guards::record_edit_hooks::GUARD,
         guards::check_bundle_hooks::GUARD,
         guards::checks_hooks::GUARD,
+        guards::builder_stop_hooks::GUARD,
         guards::static_runs_hooks::GUARD,
         // last, so no guard reads its rewrite of a commit message (T035 decision (d)): a guard ported later goes before it
         guards::shell_check_hooks::GUARD,
@@ -280,6 +281,7 @@ mod tests {
                     "record-edit-hooks",
                     "check-bundle-hooks",
                     "checks-hooks",
+                    "builder-stop-hooks",
                     "static-runs-hooks",
                     "shell-check-hooks"
                 ]

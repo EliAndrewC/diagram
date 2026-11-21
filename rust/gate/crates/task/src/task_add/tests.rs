@@ -4,11 +4,21 @@
 use l7r_gate_core::ci::fixtures::put;
 use l7r_gate_plan::plan::template::TEMPLATE;
 
-use super::{add_box, add_section, cli, lacks_red_exit, next_id};
+use super::{cli, lacks_red_exit, next_id, Insert};
 use crate::tests::{repo, root_of};
 
 fn words(a: &[&str]) -> Vec<String> {
     a.iter().map(|s| (*s).to_owned()).collect()
+}
+
+/// `tasks` with the box [`super::add_box`] puts in.
+fn add_box(tasks: &str, tid: &str, title: &str, physical: bool) -> String {
+    super::add_box(tasks, tid, title, physical).applied(tasks)
+}
+
+/// `plan` with the section [`super::add_section`] puts in.
+fn add_section(plan: &str, tid: &str, section: &str) -> String {
+    super::add_section(plan, tid, section).applied(plan)
 }
 
 #[test]
@@ -349,4 +359,251 @@ fn a_quick_that_cannot_be_listed_files_nothing() {
         refused.stderr
     );
     assert_eq!(bytes(&root), before);
+}
+
+/// Each filing's own text read back: its box in tasks.md and its section's heading in plan.md, by its id.
+fn own_lines(root: &std::path::Path, tid: &str, title: &str) -> (usize, usize) {
+    let d = root.join("specs/9001-x");
+    let tasks = std::fs::read_to_string(d.join("tasks.md")).unwrap();
+    let plan = std::fs::read_to_string(d.join("plan.md")).unwrap_or_default();
+    (
+        tasks.matches(&format!("- [ ] {tid} {title}\n")).count(),
+        plan.matches(&format!("### {tid} (")).count(),
+    )
+}
+
+/// RED FIRST (feature 451 T84): two `make task-add` of one feature at once, its quick red already and slow. Measured 2026-11-21 with
+/// the binary (`/tmp/t84/race.sh red 6 3`): 6 of 6 rounds lost both boxes and both sections, each run printing "filed ... already red
+/// ... so it is kept" - each restored the whole-file copies it took before its quick runs over the other's filing. The second starts a
+/// tenth of a second into the first's run of quick, which takes three tenths: both are kept, the second the next id.
+#[test]
+fn two_filings_at_once_keep_both_boxes_and_both_sections() {
+    let (_dir, root) = quick_repo("task-add-two-at-once");
+    put(&root, "Makefile", "quick:\n\t@sh slow.sh\n");
+    put(
+        &root,
+        "slow.sh",
+        "touch running; sleep 0.3; echo 'l7r/a.py:3:1: F401 unused import'; exit 1\n",
+    );
+    let first = {
+        let root = root.clone();
+        std::thread::spawn(move || cli(&words(&["9001"]), &root, "the first filing"))
+    };
+    let started = std::time::Instant::now();
+    while !root.join("running").exists() {
+        assert!(started.elapsed().as_secs() < 20, "quick never ran");
+        std::thread::sleep(std::time::Duration::from_millis(5));
+    }
+    std::thread::sleep(std::time::Duration::from_millis(100));
+    let second = cli(&words(&["9001"]), &root, "the second filing");
+    let first = first.join().unwrap();
+    assert_eq!(first.code, 0, "{}", first.stderr);
+    assert_eq!(second.code, 0, "{}", second.stderr);
+    assert!(first.stdout.contains("T10 filed"), "{}", first.stdout);
+    assert!(second.stdout.contains("T11 filed"), "{}", second.stdout);
+    let (first_own, second_own) = (
+        own_lines(&root, "T10", "the first filing"),
+        own_lines(&root, "T11", "the second filing"),
+    );
+    assert_eq!(first_own, (1, 1), "the first filing lost");
+    assert_eq!(second_own, (1, 1), "the second filing lost");
+}
+
+/// The other writer of [`a_refused_line_is_withdrawn_and_another_writer_s_lines_stay`] and its red-already twin: each run of quick
+/// appends its own line to tasks.md and to plan.md, numbered by the run, as a session's edit landing while quick runs would.
+const OTHER: &str = "n=$(( $(cat runs 2>/dev/null || echo 0) + 1 )); echo $n > runs\necho \"- another writer's line $n\" >> specs/9001-x/tasks.md\necho \"## another writer's section $n\" >> specs/9001-x/plan.md\n";
+
+/// RED FIRST (feature 451 T84): a line quick refuses is withdrawn by taking out its own box and section, never by writing back the
+/// files as they were before it - which threw away another writer's lines added while quick ran (measured 2026-11-21,
+/// `/tmp/t84/midedit-refused.sh 3 0.5`: 3 of 3 rounds lost a line appended half a second in).
+#[test]
+fn a_refused_line_is_withdrawn_and_another_writer_s_lines_stay() {
+    let (_dir, root) = quick_repo("task-add-withdrawn-other");
+    put(
+        &root,
+        "Makefile",
+        "quick:\n\t@sh other.sh\n\t@sh lint.sh specs/9001-x/tasks.md\n",
+    );
+    put(&root, "other.sh", OTHER);
+    let (tasks, plan) = bytes(&root);
+    let refused = cli(&words(&["9001"]), &root, "cite FR-404 bare");
+    assert_eq!(refused.code, 2, "{}", refused.stderr);
+    assert!(
+        refused.stderr.contains("T10 withdrawn"),
+        "{}",
+        refused.stderr
+    );
+    let d = root.join("specs/9001-x");
+    let mut want_tasks = String::from_utf8(tasks).unwrap();
+    want_tasks += "- another writer's line 1\n- another writer's line 2\n";
+    let mut want_plan = String::from_utf8(plan.unwrap()).unwrap();
+    want_plan += "## another writer's section 1\n## another writer's section 2\n";
+    assert_eq!(
+        std::fs::read_to_string(d.join("tasks.md")).unwrap(),
+        want_tasks
+    );
+    assert_eq!(
+        std::fs::read_to_string(d.join("plan.md")).unwrap(),
+        want_plan
+    );
+    // a plan.md the filing made is kept when another writer put lines in it, holding only theirs
+    std::fs::remove_file(d.join("plan.md")).unwrap();
+    assert_eq!(cli(&words(&["9001"]), &root, "FR-405 too").code, 2);
+    assert_eq!(
+        std::fs::read_to_string(d.join("plan.md")).unwrap(),
+        "## another writer's section 3\n## another writer's section 4\n"
+    );
+}
+
+/// RED FIRST (feature 451 T84): a red already there keeps the line with no copy of the files written back - which threw away another
+/// writer's edit made during the run without the line (measured 2026-11-21, `/tmp/t84/midedit.sh 3 1.5`: 3 of 3 rounds lost it; one
+/// made during the run with the line, 0 of 3).
+#[test]
+fn a_red_already_there_keeps_another_writer_s_lines_made_while_quick_ran() {
+    let (_dir, root) = quick_repo("task-add-already-other");
+    put(&root, "Makefile", "quick:\n\t@sh other.sh\n");
+    put(
+        &root,
+        "other.sh",
+        &format!("{OTHER}echo 'l7r/a.py:3:1: F401 unused import'\nexit 1\n"),
+    );
+    let kept = cli(&words(&["9001"]), &root, "a clean line");
+    assert_eq!(kept.code, 0, "{}", kept.stderr);
+    assert!(kept.stderr.contains("already red"), "{}", kept.stderr);
+    assert_eq!(own_lines(&root, "T10", "a clean line"), (1, 1));
+    let d = root.join("specs/9001-x");
+    let tasks = std::fs::read_to_string(d.join("tasks.md")).unwrap();
+    let plan = std::fs::read_to_string(d.join("plan.md")).unwrap();
+    for n in [1, 2] {
+        let (line, section) = (
+            format!("- another writer's line {n}\n"),
+            format!("## another writer's section {n}\n"),
+        );
+        assert!(tasks.contains(&line), "{line} lost");
+        assert!(plan.contains(&section), "{section} lost");
+    }
+}
+
+/// A withdrawal takes out the copy nearest where the text went - another writer's edit above it moves it - and none when no copy is
+/// left; a text that occurs twice loses only that one.
+#[test]
+fn a_withdrawal_takes_out_the_copy_nearest_where_it_went() {
+    let put_in = Insert {
+        at: 4,
+        text: "box\n".to_owned(),
+    };
+    assert_eq!(put_in.applied("one\ntwo\n"), "one\nbox\ntwo\n");
+    assert_eq!(put_in.withdrawn("one\nbox\ntwo\n").unwrap(), "one\ntwo\n");
+    // an edit above moved it five bytes on; a same-text line near the end is another's
+    assert_eq!(
+        put_in.withdrawn("zero\none\nbox\ntwo\nbox\n").unwrap(),
+        "zero\none\ntwo\nbox\n"
+    );
+    assert_eq!(put_in.withdrawn("one\ntwo\n"), None);
+}
+
+/// The lock path of the fixture's feature: `task-add-9001-x.lock` in the git common directory.
+fn lock_of(root: &std::path::Path) -> std::path::PathBuf {
+    l7r_gate_core::codeid::common_git_dir(root)
+        .unwrap()
+        .join("task-add-9001-x.lock")
+}
+
+/// Another filing holding the feature's lock past the wait (`L7R_TASK_ADD_LOCK_WAIT`): refused, nothing written, the lock file named;
+/// a lock file that cannot be opened raises, nothing written either.
+#[test]
+fn a_filing_that_cannot_take_the_lock_writes_nothing() {
+    let (_dir, root) = quick_repo("task-add-lock-held");
+    let before = bytes(&root);
+    let lock = lock_of(&root);
+    let held = l7r_shared::tool::flock_within(&lock, 0.0).unwrap().unwrap();
+    let env = crate::tests::env_of(&[("L7R_TASK_ADD_LOCK_WAIT", "0.05")]);
+    let refused = super::cli_with(&words(&["9001"]), &root, "a line", &env);
+    assert_eq!(refused.code, 2, "{}", refused.stderr);
+    assert!(
+        refused.stderr.contains(&format!(
+            "another make task-add of 9001-x still holds {} after 0.05 s",
+            lock.display()
+        )),
+        "{}",
+        refused.stderr
+    );
+    assert!(refused.stderr.contains("fuser -v"), "{}", refused.stderr);
+    assert_eq!(bytes(&root), before);
+    drop(held);
+    std::fs::remove_file(&lock).unwrap();
+    std::fs::create_dir_all(&lock).unwrap();
+    let raised = cli(&words(&["9001"]), &root, "a line");
+    assert_eq!(raised.code, 1, "{}", raised.stderr);
+    assert!(
+        raised.stderr.contains(&lock.display().to_string()),
+        "{}",
+        raised.stderr
+    );
+    assert_eq!(bytes(&root), before);
+}
+
+/// A box something else took out, or a plan.md it left unreadable, while quick ran: the withdrawal cannot take its own text out of
+/// it, and raises naming the file, writing nothing over it.
+#[test]
+fn a_withdrawal_whose_own_text_is_gone_raises() {
+    let (_dir, root) = quick_repo("task-add-own-gone");
+    put(
+        &root,
+        "Makefile",
+        "quick:\n\t@sed -i '/^- \\[ \\] T10 /d' specs/9001-x/tasks.md; exit 1\n",
+    );
+    let gone = cli(&words(&["9001"]), &root, "a line");
+    assert_eq!(gone.code, 1, "{}", gone.stderr);
+    assert!(
+        gone.stderr.contains("T10's box is no longer in")
+            && gone.stderr.contains("tasks.md as it was written"),
+        "{}",
+        gone.stderr
+    );
+    // the section is taken out all the same
+    assert_eq!(own_lines(&root, "T10", "a line"), (0, 0));
+    // a script, as a recipe line opening with `printf` is quick's closing line and never run
+    put(&root, "Makefile", "quick:\n\t@sh unreadable.sh\n");
+    put(
+        &root,
+        "unreadable.sh",
+        "printf '\\377' >> specs/9001-x/plan.md; exit 1\n",
+    );
+    let unreadable = cli(&words(&["9001"]), &root, "a line");
+    assert_eq!(unreadable.code, 1, "{}", unreadable.stderr);
+    assert!(
+        unreadable.stderr.contains("UnicodeDecodeError") && unreadable.stderr.contains("plan.md"),
+        "{}",
+        unreadable.stderr
+    );
+    // a plan.md something else removed while quick ran
+    std::fs::write(root.join("specs/9001-x/plan.md"), "").unwrap();
+    put(
+        &root,
+        "Makefile",
+        "quick:\n\t@rm specs/9001-x/plan.md; exit 1\n",
+    );
+    let removed = cli(&words(&["9001"]), &root, "a line");
+    assert_eq!(removed.code, 1, "{}", removed.stderr);
+    assert!(
+        removed.stderr.contains("plan.md: No such file"),
+        "{}",
+        removed.stderr
+    );
+}
+
+/// A tree git does not know: the lock goes in `<root>/.git`, the filing goes ahead.
+#[test]
+fn a_tree_outside_git_locks_in_its_own_git_directory() {
+    let dir = l7r_shared::tempdir::TempDir::new("task-add-no-git");
+    let root = dir.path().to_path_buf();
+    let outside = l7r_gate_core::codeid::common_git_dir(&root).is_none();
+    assert!(outside, "the scratch is inside a repository");
+    put(&root, "Makefile", "quick:\n\t@true\n");
+    put(&root, "specs/9001-x/tasks.md", "- [x] T01 done\n");
+    let filed = cli(&words(&["9001"]), &root, "a line");
+    assert_eq!(filed.code, 0, "{}", filed.stderr);
+    assert!(root.join(".git/task-add-9001-x.lock").is_file());
+    assert_eq!(own_lines(&root, "T02", "a line"), (1, 1));
 }

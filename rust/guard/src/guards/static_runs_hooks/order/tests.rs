@@ -2,7 +2,7 @@
 
 use serde_json::{json, Value};
 
-use super::{code_path, told, Told, TOKEN};
+use super::{closing_run, code_path, told, Told, TOKEN};
 
 const ROOT: &str = "/c";
 
@@ -41,11 +41,20 @@ fn said_text(n: Option<Told>) -> String {
     }
 }
 
+/// The caller's filing: the feature and task its own call's line goes under.
+fn t55() -> (String, Option<String>) {
+    (
+        "451-time-retro-and-efficiency".to_owned(),
+        Some("T55".to_owned()),
+    )
+}
+
 fn decide_said(lines: &[Value], by: &str) -> Option<Told> {
     told(
         &call(by, "make decide F=451 T=T55", false),
         &|| ROOT.to_owned(),
         &|| lines.to_vec(),
+        &t55,
     )
 }
 
@@ -59,7 +68,8 @@ fn a_decide_after_a_code_edit_with_no_closing_checks_started_since_is_told_the_o
     assert!(matches!(decide_said(&lines, "a1"), Some(Told::Decide(_))));
     let text = said_text(decide_said(&lines, "a1"));
     for want in [
-        "make closing-checks",
+        // the caller's own closing run (451 T86): a bare `make closing-checks` judges the whole clone, another task's red counted
+        "start `make closing-checks T=T55 F=451` now",
         "run_in_background",
         "rust/guard/src/x.rs",
         "make decide",
@@ -241,6 +251,11 @@ fn a_foreground_closing_check_is_refused_naming_the_background_and_nothing_else_
         read.set(read.get() + 1);
         String::new()
     };
+    // the caller's filing is asked only for what is said
+    let unasked = || -> (String, Option<String>) {
+        read.set(read.get() + 1);
+        t55()
+    };
     for (by, cmd) in [
         ("a1", "make static"),
         ("a1", "make hooks-test"),
@@ -256,42 +271,53 @@ fn a_foreground_closing_check_is_refused_naming_the_background_and_nothing_else_
             "STATIC_OK=\"the landing gate needs it\" make closing-checks",
         ),
     ] {
-        let got = told(&call(by, cmd, false), &root, &never);
+        let got = told(&call(by, cmd, false), &root, &never, &t55);
         assert!(matches!(got, Some(Told::Foreground(_))), "{cmd}");
         let text = said_text(got);
         for want in [
             "BLOCKED",
             "run_in_background: true",
-            "make closing-checks",
+            "`make closing-checks T=T55 F=451` runs make static",
             "FOREGROUND_OK=\"<reason>\"",
             "recorded",
         ] {
             assert!(text.contains(want), "{want} in {text}");
         }
-        assert!(told(&call(by, cmd, true), &root, &never).is_none(), "{cmd}");
+        let quiet = told(&call(by, cmd, true), &root, &never, &unasked);
+        assert!(quiet.is_none(), "{cmd}");
     }
-    assert!(
-        said_text(told(&call("a1", "make hooks-test", false), &root, &never))
-            .contains("`make hooks-test` in the foreground")
-    );
+    assert!(said_text(told(
+        &call("a1", "make hooks-test", false),
+        &root,
+        &never,
+        &t55
+    ))
+    .contains("`make hooks-test` in the foreground"));
     for cmd in [
         "make quick",
         "grep decide Makefile",
         "echo make static",
         "make rust-test CRATE=rust/guard",
     ] {
-        assert!(told(&call("a1", cmd, false), &root, &never).is_none());
+        assert!(told(&call("a1", cmd, false), &root, &never, &unasked).is_none());
     }
     assert_eq!(read.get(), 0);
     // the counters count: each read once by hand
-    assert!(never().is_empty() && root().is_empty());
-    assert_eq!(read.get(), 2);
+    assert!(never().is_empty() && root().is_empty() && unasked().1.is_some());
+    assert_eq!(read.get(), 3);
     assert_eq!(said_text(None), "");
 }
 
 #[test]
 fn the_foreground_refusal_is_escaped_by_a_reason_and_refused_without_one() {
-    let say = |cmd: &str| told(&call("a1", cmd, false), &String::new, &Vec::<Value>::new);
+    let say = |cmd: &str| {
+        told(
+            &call("a1", cmd, false),
+            &String::new,
+            &Vec::<Value>::new,
+            &t55,
+        )
+    };
     assert_eq!(
         say("FOREGROUND_OK=\"the next edit needs it\" make static"),
         Some(Told::Escaped("the next edit needs it".to_owned()))
@@ -316,5 +342,32 @@ fn the_foreground_refusal_is_escaped_by_a_reason_and_refused_without_one() {
     assert_eq!(
         say("FOREGROUND_OK=\"the next edit needs it\" make static && make decide F=451 T=T55"),
         Some(Told::Escaped("the next edit needs it".to_owned()))
+    );
+}
+
+#[test]
+fn the_closing_run_named_is_the_callers_task_and_feature_number() {
+    // 451 T86: `make closing-checks T=<task> F=<feature>` judges the caller's own files; F= takes the feature's number
+    assert_eq!(
+        closing_run("451-time-retro-and-efficiency", Some("T86")),
+        "make closing-checks T=T86 F=451"
+    );
+    assert_eq!(
+        closing_run("449", Some("T12")),
+        "make closing-checks T=T12 F=449"
+    );
+    // a call filed under no task, or outside any clone: the placeholders, never a bare whole-clone run
+    assert_eq!(
+        closing_run("451-time-retro-and-efficiency", None),
+        "make closing-checks T=<your task> F=451"
+    );
+    assert_eq!(
+        closing_run("", None),
+        "make closing-checks T=<your task> F=<feature>"
+    );
+    // a feature with no number before its first dash is named whole
+    assert_eq!(
+        closing_run("unassigned", Some("T1")),
+        "make closing-checks T=T1 F=unassigned"
     );
 }

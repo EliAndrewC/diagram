@@ -109,7 +109,12 @@ fn order_answer(
         at().map(|(root, ..)| root.to_string_lossy().into_owned())
             .unwrap_or_default()
     };
-    match order::told(input, &root, &read)? {
+    // the feature and task the call's own line is filed under: the closing run its notice and refusal name (451 T86)
+    let caller = || {
+        at().map(|(_, feature, _, task)| (feature, task))
+            .unwrap_or_default()
+    };
+    match order::told(input, &root, &read, &caller)? {
         order::Told::Decide(text) => {
             log(
                 "noticed",
@@ -330,11 +335,12 @@ fn refusal(feature: &str, task: &str, runs: usize, crates: &[String]) -> String 
             out
         })
     };
+    let run = order::closing_run(feature, Some(task));
     format!(
         "\n\u{1b}[1mBLOCKED: {task} of {feature} has run `make static` {runs} times since its last landing (feature 451 FR-007).\u{1b}[0m\n\n\
 `make static` is the check before a landing, not the edit loop: it runs every crate's checks. While iterating, run the\n\
 checks of the crates this task changes:\n\n{checks}\n\
-then `make static` once, before `make land` (or `make closing-checks` in the background: it runs make static, make hooks-test\n\
+then `make static` once, before `make land` (or `{run}` in the background: it runs make static, make hooks-test\n\
 and make quick at once, and is one run of `make static`) - a landing of {task} that goes out starts the count again; a later\n\
 `make task-start` does not.\n\n\
 Escape: {TOKEN}=\"<reason>\" in the command, recorded in the guard log.\n"

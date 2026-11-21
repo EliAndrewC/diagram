@@ -320,10 +320,10 @@
    "declared": "round-arbiter"
   },
   "### T84 Approach (checklist part A)": {
-   "sha256": "2e14f4381209be39c1dc576d1bcd6e6ee84e915bb3574f8db4bdf246f1cc7c2a",
+   "sha256": "ea6a6f5da153576e15a4907fdda1bc65a66986243b01b640bce1633871f5d739",
    "verdict": "CLEAR",
    "reviewed": "2026-11-21",
-   "declared": "round-arbiter"
+   "declared": "spec-fidelity"
   },
   "### T85 (<why: the finding or measurement that files it>)": {
    "sha256": "c7f853f11d9f08e9752ec4b0d48cdc0b6e83b9361ee9e433d33880caf9ef9ecf",
@@ -332,10 +332,10 @@
    "declared": "round-arbiter"
   },
   "### T85 Approach (checklist part A)": {
-   "sha256": "c3162ceee20f0e591b1b0bad20a59b066392a121f6bcdd627fe9bc5a58d676e0",
+   "sha256": "349ddd2c28994fa97a028ab65a060da5df6e8491fbef82cb815caa5d35f136c4",
    "verdict": "CLEAR",
    "reviewed": "2026-11-21",
-   "declared": "round-arbiter"
+   "declared": "spec-fidelity"
   },
   "### T86 (<why: the finding or measurement that files it>)": {
    "sha256": "75269bfec00092a62854f27465d4a6eb9b26e10bae57e0c85ad6ac86de557616",
@@ -344,10 +344,10 @@
    "declared": "round-arbiter"
   },
   "### T86 Approach (checklist part A)": {
-   "sha256": "ae8e6a950477fc6308e3b64d17661a8fb57c6b0b4b43fd4250e7664ad3f5174c",
+   "sha256": "955e0727c44617fe4d08fc3a4bb56e42933620674d824f127ec032ddca8e76d4",
    "verdict": "CLEAR",
    "reviewed": "2026-11-21",
-   "declared": "round-arbiter"
+   "declared": "spec-fidelity"
   },
   "### T87 (<why: the finding or measurement that files it>)": {
    "sha256": "81d65efea81f391c474b3352eea61adc789c0fdab1062a28618605deea11a8b7",
@@ -408,6 +408,24 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-21",
    "declared": "round-arbiter"
+  },
+  "### T85 (the finding as filed, restated by its measurement: of the main session's 24 run-still-going refusals of 2026-11-21 00:00-08:00 UTC, 14 named a run a builder still running had started and 10 the session's own background call's run, which the harness tracks but the guard did not see, and none a run whose builder had stopped, measured 2026-11-21 (each guard-log row matched to the event log's Stop line, its in-flight shells' launch lines and each builder's last notice in the session's transcript, `/tmp/t85-measure/final.py`))": {
+   "sha256": "bd32e4a1e054692783e12a024f59523add61d28b04aac62eb02cd463827f7b3e",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity"
+  },
+  "### T86 (a builder's closing checks went red on another builder's half-done files in the same clone: about 12 of the night's closing runs red only on another task's in-flight files, measured 2026-11-21 (the main session's reading of the night's runs, T86's line); 13 such red runs of 5 shapes, measured 2026-11-21 (item 4))": {
+   "sha256": "b5799a32defbebd8a61884044dfd19d15bee7a04407078a6ace75603a84d7bae",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity"
+  },
+  "### T84 (the finding as filed, measured 2026-11-21 over the night's 29 tasks: 43 builders, about 16 builder reports asking the session to file a task, and every MODE 4 plan review left to it; four causes, each measured in item 4: two concurrent `make task-add` runs could lose both filings, nothing held a builder's stop, only the briefs kept a builder from its own review, and the tick's and the push's plan gate judged the whole feature, so every landing took `PLAN_REVIEW_OK`)": {
+   "sha256": "d59818a1d51b3a37e94bb40c74b67c78e1a6ee624a225b9315d307115030d9b1",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -8807,6 +8825,216 @@
      "summary": "the round arbiter accepted the plan as it stands"
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-21",
+   "blocks": [
+    "### T85 (the finding as filed, restated by its measurement: of the main session's 24 run-still-going refusals of 2026-11-21 00:00-08:00 UTC, 14 named a run a builder still running had started and 10 the session's own background call's run, which the harness tracks but the guard did not see, and none a run whose builder had stopped, measured 2026-11-21 (each guard-log row matched to the event log's Stop line, its in-flight shells' launch lines and each builder's last notice in the session's transcript, `/tmp/t85-measure/final.py`))",
+    "### T85 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "starter-identity",
+     "summary": "The run's starter is read from its output path's task id and the event log's PostToolUse launch line (bg = id, by = the payload's agent_id), not from the env",
+     "class": "within",
+     "why": "The brief's constraint: the starter from the run's process (its env or the event log's launch line), not a guess; item 4 measured that the env carries no agent id, so the launch line is the one source that can name it."
+    },
+    {
+     "id": "no-by-is-the-sessions",
+     "summary": "A launch line with no by is the session's own background call, the harness's to wake, permitted",
+     "class": "within",
+     "why": "Feature 246's design as the brief states it: a run the harness tracks is let through. The 10 rows of the 24 are this case."
+    },
+    {
+     "id": "builder-running-permitted",
+     "summary": "A by still running by set_down_hooks' transcript reading (T65's) is the builder's, permitted with one line (builder-running)",
+     "class": "within",
+     "why": "The task's own finding: 14 of the 24 refusals named a run a still-running builder had started."
+    },
+    {
+     "id": "stopped-or-unknown-is-detached",
+     "summary": "Any other by - stopped, or the transcript cannot say - is judged as a detached run: watched by a waiter or refused once per root",
+     "class": "within",
+     "why": "Keeps the refusal the brief requires (still fire for a stopped builder's run) and takes the safe side where the starter's state cannot be read, as 'not a guess' asks."
+    },
+    {
+     "id": "no-launch-line-is-mid-call",
+     "summary": "A run no launch line names is a call an agent is still in, and stays the harness's",
+     "class": "within",
+     "why": "Measured 2026-11-20 23:22:49 (item 4): a background call's PostToolUse can arrive after the Stop. Items 1 and 12 state that a detached unwatched run and a stopped builder's run still refuse once per root, so the block does not let the main session's own detached run through; whether the code holds that is the tests' and the code review's job, not fidelity's."
+    },
+    {
+     "id": "still-running-reader",
+     "summary": "A new read-only set_down_hooks::still_running(path, id); running() and its verdict left as T65 left them",
+     "class": "within",
+     "why": "The brief names one public reader added to set_down_hooks, read-only, and running() unchanged; item 4 measured why running() alone misses interim builders (11 of 14)."
+    },
+    {
+     "id": "background-tasks-list-not-used",
+     "summary": "The Stop payload's background_tasks subagent list is not the reading used",
+     "class": "within",
+     "why": "Measured 2026-11-21 (item 4): every builder missing from a Stop's list had last sent an interim notice, so the list cannot say a builder is waiting on its own run. A choice of source inside the task."
+    },
+    {
+     "id": "harness-by-name-or-argv0",
+     "summary": "Procs::harness takes comm or argv[0]'s first word 'claude', so a version-named harness of a background session is the harness",
+     "class": "within",
+     "why": "A check refusing good work (the 10 rows), a defect found on the way and fixed in this task, as the project's fix-what-you-find rule asks; measured (6 harness processes, 4 version-named)."
+    },
+    {
+     "id": "finding-restated-by-measurement",
+     "summary": "The heading restates the finding by its measurement: 14 builder-started runs and 10 the session's own background call's run",
+     "class": "within",
+     "why": "The restatement widens the fix to the 10 rows the measurement found and drops nothing; no row is a stopped builder's. The filed T85 line itself is not in the bundle, so this is judged on the restatement as given."
+    },
+    {
+     "id": "builder-subagent-run-still-refuses",
+     "summary": "A run started by a builder's own sub-agent (an id the session's transcript never names) still reads as stopped and refuses, as before",
+     "class": "within",
+     "why": "Neither the request nor FR-013 says what this guard must cover, so this leaves nothing asked undone; and no wrong outcome is measured - none in the 24 rows, and the wider window's 34 (19, 14, 1 both) leave none unaccounted for. The default is the guard's safe side for a starter whose state cannot be read. Not a defect left, so FR-009's deferral form is not owed."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-21",
+   "blocks": [
+    "### T86 (a builder's closing checks went red on another builder's half-done files in the same clone: about 12 of the night's closing runs red only on another task's in-flight files, measured 2026-11-21 (the main session's reading of the night's runs, T86's line); 13 such red runs of 5 shapes, measured 2026-11-21 (item 4))",
+    "### T86 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T86-callers-files",
+     "summary": "The caller's files are the clone's uncommitted files less those that another task's non-fallback Edit/Write/NotebookEdit event-log lines alone name (newer than the file's last commit, inside a 7-day window); an unnamed file and a shared file are the caller's; the feature comes from F= or the latest task-start naming the task.",
+     "class": "within",
+     "why": "This is how the task's own fix is built (a closing run judges the caller's work, the [perf] builders' loop under FR-013). It errs to the safe side: a miss counts a file as the caller's and gives a false red, never a false green. Choosing it over the active-task mark and over a FILES=/CRATES= list is a design choice, and the plan measured all three."
+    },
+    {
+     "id": "T86-claims-window",
+     "summary": "A new GUESS knob: an edit line claims a file only if it is newer than the file's last commit, within 7 days.",
+     "class": "within",
+     "why": "A parameter of the mechanism. When it misjudges, it counts more files as the caller's, so it can only make the verdict stricter."
+    },
+    {
+     "id": "T86-per-crate-apart",
+     "summary": "In static's per-crate steps, a red crate whose kept-key inputs read none of the caller's files is reported APART and not counted. The key inputs are factored out of verdict_key_with so the two cannot drift. A crate that builds on a caller's crate, or whose tests read the caller's file, is the caller's. A listing or key that cannot be judged counts every crate.",
+     "class": "within",
+     "why": "This is the fix the task's line asks for (shape (a), 5 runs measured). Every case that cannot be judged falls back to counting, as before."
+    },
+    {
+     "id": "T86-treewide-and-hooks-counted",
+     "summary": "Tree-wide steps and hooks-test stay counted whole, and a crate holding both tasks' files is judged whole (shapes (d) and (e), 4 of the 13 measured runs, stay red).",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This narrows the task's aim of a verdict on the caller's own work, but separating these cases is impossible with the instrument the plan has. Every hooks-test suite's key reads 994-998 paths of the guard's and the gate's crates (measured with l7r-guard deps), so a suite run on another task's edit also ran the caller's code, and no key can clear it. A crate's lint and cover verdict is one verdict over the whole crate. The tree-wide steps, measured through quick's full runs, fired on no other task's file. A red that is kept is not a wrong green, and none of these cases is a check refusing work that could be shown good."
+    },
+    {
+     "id": "T86-blocked-tag",
+     "summary": "A counted red whose every error line names another task's file (the caller's crate or the gate binary unbuildable on another task's half-done dependency) is tagged BLOCKED, names the files and tasks, and stays red.",
+     "class": "within",
+     "why": "Nothing of the caller's was judged there, so keeping it red is correct. The tag only reports which task is responsible."
+    },
+    {
+     "id": "T86-no-T-whole-clone",
+     "summary": "With no T= the whole clone is judged as before. Only the script sets the listing, so make static, make done and a landing judge every crate by construction.",
+     "class": "within",
+     "why": "Keeps the landing's whole-tree check and the default unchanged. Nothing is narrowed."
+    },
+    {
+     "id": "T86-guard-wording",
+     "summary": "T55's decide notice and foreground refusal (order.rs) and the third-static refusal (static_runs_hooks.rs) now name 'make closing-checks T=<task> F=<feature>' from the call's filed task, or T=<your task> when the call is filed under no task. closing-checks.sh's rerun line names T= and F= as given.",
+     "class": "within",
+     "why": "Without this the fix cannot be reached: a builder told to run a bare make closing-checks gets the whole-clone verdict that T86 exists to replace. Fixing the third-static message beside the other two is the same defect (constitution XIV), and its red-first tests are recorded."
+    },
+    {
+     "id": "T86-found-and-left-unlogged-writer",
+     "summary": "Files another builder writes through Bash (sed -i, heredoc, generator) leave no Edit/Write line, so they count as the caller's. This is left to T93 (a write-path field on the event log's Bash lines in rust/guard/shared's event_log_hooks), which lands before T22.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "A defect, a false red on good work, is left out of T86, but it is not dropped. FR-009's deferral form is met in full: why it is not fixed here (a new field on the event log's Bash lines that every reader of the log meets, in another crate's files), the filed id T93, its order 'lands before T22', and an every-instance line labeled observed 2026-11-21 with its method. The GM approved 'briefs that default to fixing in the task' (improvement 4), which allows a deferral that states why. The miss is on the safe side (never a wrong green, and make done judges the whole tree). It does not gut T86's purpose: the 5 measured shape-(a) runs all came apart under the replayed rule."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-21",
+   "blocks": [
+    "### T84 (the finding as filed, measured 2026-11-21 over the night's 29 tasks: 43 builders, about 16 builder reports asking the session to file a task, and every MODE 4 plan review left to it; four causes, each measured in item 4: two concurrent `make task-add` runs could lose both filings, nothing held a builder's stop, only the briefs kept a builder from its own review, and the tick's and the push's plan gate judged the whole feature, so every landing took `PLAN_REVIEW_OK`)",
+    "### T84 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T84-1 task-add lock and own withdrawal",
+     "summary": "make task-add takes a per-feature flock held from the id's read through both quick runs, withdraws only its own box and section from the files as they are; past a 120 s wait (GUESS, knob L7R_TASK_ADD_LOCK_WAIT) it refuses, writing nothing and naming the lock file.",
+     "class": "within",
+     "why": "The brief asks to measure first and lock red first if two filings collide; item 4 measured 6 of 6 rounds losing both filings on a red quick, and item 9 shows red then green. It keeps FR-011's withdraw-and-refuse behavior and only stops it taking another writer's lines. A lock-wait timeout that refuses fails closed."
+    },
+    {
+     "id": "T84-2 nothing built for a builder's own review",
+     "summary": "No new code lets a builder dispatch its own spec-fidelity review: measured, every builder dispatch already passes every guard; only the briefs barred it.",
+     "class": "within",
+     "why": "The finding's cause is that instructions alone barred it; the measurement (35 calls, none refused) shows no guard stands in the way. That the review actually happens is enforced by T84-3's stop guard and the tick gate (T84-4), so this is not enforcement by instruction."
+    },
+    {
+     "id": "T84-3a builder-stop guard: who is held",
+     "summary": "builder_stop_hooks (SubagentStop) answers decision: block to a builder the session dispatched for a started, open task while l7r-gate plan decided says its section is not decided (the verdict store's current CLEAR, plus the decide lint's deferral findings).",
+     "class": "within",
+     "why": "The brief names SubagentStop and reading the verdict store rather than text; builder identity follows D8. A builder with no started task is not held here, but the tick and push gate still refuse its task's landing without a CLEAR section, so no unreviewed work lands through that gap."
+    },
+    {
+     "id": "T84-3b handoff-only state passes",
+     "summary": "A builder past T12's context cap, in its handoff-only state, may stop.",
+     "class": "within",
+     "why": "The brief requires it (the context cap's handoff-only state passing), and FR-006 sends that builder to a handoff and a fresh dispatch; the next builder is held by the same guard and the tick gate stays the backstop."
+    },
+    {
+     "id": "T84-3c the guard's escape",
+     "summary": "The stop guard has an escape of a recorded reason.",
+     "class": "within",
+     "why": "The brief and the project's guard rules (FR-012's form) require it. Approach item 3 does not spell the escape out; item 2 lists it as a constraint and the suite pins the guard (6 passed)."
+    },
+    {
+     "id": "T84-3d ASK_LIMIT 40 s",
+     "summary": "The guard's call to the gate is limited to 40 s (GUESS, under the hook's 60 s).",
+     "class": "within",
+     "why": "A new constant, labeled a GUESS. The section does not say which way a timeout goes (block or let the builder stop). Either way the tick and push gate (T84-4) still refuse an undecided section, so a timed-out ask cannot land unreviewed work. Noted, not blocking."
+    },
+    {
+     "id": "T84-4a plan gate per task: an open task's section not judged",
+     "summary": "The tick's and the push's plan gate (plan::tick_gate, task::push_owed) judges the blocks outside every task's section plus the sections of the task ticked and the tasks ticked before it, and never an open task's section; the land crate keeps no plan check of its own.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This narrows feature 243 / 375 D60's reach (every block owed) at the tick and push. Applying the whole-feature rule literally defeats its own purpose and the GM's 'real enforcement and not just instructions': measured, all 16 of 451's landings took PLAN_REVIEW_OK, 10 of them on correct work, so the gate had become a routine escape. 243's purpose is that a task is not ticked while its decisions lack a verdict. That holds: the ticked task's own section, earlier ticked sections and every shared block are still judged, and an open task's section is judged at its own tick. No task can be ticked or pushed while its own section lacks CLEAR at its digest. The red test a_tick_answers_for_its_own_section_the_ticked_ones_and_the_shared_blocks pins it."
+    },
+    {
+     "id": "T84-4b a filled template's old heading not owed",
+     "summary": "A '(removed) ### T<n> (<why: ...>)' block, the old heading of a filled task template, is not owed once T<n>'s section carries a CLEAR task verdict.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Adjudicated apart from 4a. D60 owes a deleted block because a decision deleted by hand is a change. A template's placeholder heading carries no decision: the text replacing it is the task's own section, already reviewed CLEAR at its digest. Measured: 4 of 16 landings owed only this. This holds only as far as the forgiveness is limited to the template's placeholder heading of the same task with a current CLEAR section, as the section states. A hand-deleted decision under any other heading stays owed."
+    },
+    {
+     "id": "T84-5 left: arbiter accept not recorded as a task verdict (T92)",
+     "summary": "A round-arbiter accept is not written to the verdict store as the task's verdict; T33, T46, T67 and T79 show BLOCKED there. Left to T92's line, lands before T22.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "A defect that refuses correct work, left in the FR-009 form: its visible effect, measured 2026-11-21, why it is not fixed here (the accept is written by make arbiter-ruled, outside this task's files), filed id T92, and 'lands before T22'. That is the form the four accepts in rulings.md treat as enough. One gap for T92 to cover: the new stop guard reads the same store, so a builder of a task the arbiter accepted would also be held at its stop, not only its tick and push. Same defect, same cure, and an escape exists."
+    },
+    {
+     "id": "T84-6 left: land crate tests take the session's PLAN_REVIEW_OK (T94)",
+     "summary": "The land crate's tests read the session's exported escape and write the real guard log; filed as T94, lands before T22.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "A defect (a test's verdict follows the session's exports, and make audit lists a fixture's escape as real) left in FR-009's form: the observation and its method, why (the land crate's tests are outside this task's files, and T84 makes the escape rare rather than gone), filed id T94, and its order."
+    },
+    {
+     "id": "T84-7 printf recipe lines: not a defect",
+     "summary": "task_add/quick.rs's lines() drops any quick recipe line opening printf; today no check opens so.",
+     "class": "within",
+     "why": "Measured against the Makefile: no check is skipped, so nothing goes wrong. Under constitution XIV this is a difference, not a defect, and needs no ruling."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -13433,6 +13661,210 @@
     }
    ],
    "verdict": "BLOCKED"
+  },
+  "T85": {
+   "section_sha256": "fcba9f82d7a56bb8510371844c589404f5aa32d1a2773b6d4ac547a31534cca5",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "starter-identity",
+     "summary": "The run's starter is read from its output path's task id and the event log's PostToolUse launch line (bg = id, by = the payload's agent_id), not from the env",
+     "class": "within",
+     "why": "The brief's constraint: the starter from the run's process (its env or the event log's launch line), not a guess; item 4 measured that the env carries no agent id, so the launch line is the one source that can name it."
+    },
+    {
+     "id": "no-by-is-the-sessions",
+     "summary": "A launch line with no by is the session's own background call, the harness's to wake, permitted",
+     "class": "within",
+     "why": "Feature 246's design as the brief states it: a run the harness tracks is let through. The 10 rows of the 24 are this case."
+    },
+    {
+     "id": "builder-running-permitted",
+     "summary": "A by still running by set_down_hooks' transcript reading (T65's) is the builder's, permitted with one line (builder-running)",
+     "class": "within",
+     "why": "The task's own finding: 14 of the 24 refusals named a run a still-running builder had started."
+    },
+    {
+     "id": "stopped-or-unknown-is-detached",
+     "summary": "Any other by - stopped, or the transcript cannot say - is judged as a detached run: watched by a waiter or refused once per root",
+     "class": "within",
+     "why": "Keeps the refusal the brief requires (still fire for a stopped builder's run) and takes the safe side where the starter's state cannot be read, as 'not a guess' asks."
+    },
+    {
+     "id": "no-launch-line-is-mid-call",
+     "summary": "A run no launch line names is a call an agent is still in, and stays the harness's",
+     "class": "within",
+     "why": "Measured 2026-11-20 23:22:49 (item 4): a background call's PostToolUse can arrive after the Stop. Items 1 and 12 state that a detached unwatched run and a stopped builder's run still refuse once per root, so the block does not let the main session's own detached run through; whether the code holds that is the tests' and the code review's job, not fidelity's."
+    },
+    {
+     "id": "still-running-reader",
+     "summary": "A new read-only set_down_hooks::still_running(path, id); running() and its verdict left as T65 left them",
+     "class": "within",
+     "why": "The brief names one public reader added to set_down_hooks, read-only, and running() unchanged; item 4 measured why running() alone misses interim builders (11 of 14)."
+    },
+    {
+     "id": "background-tasks-list-not-used",
+     "summary": "The Stop payload's background_tasks subagent list is not the reading used",
+     "class": "within",
+     "why": "Measured 2026-11-21 (item 4): every builder missing from a Stop's list had last sent an interim notice, so the list cannot say a builder is waiting on its own run. A choice of source inside the task."
+    },
+    {
+     "id": "harness-by-name-or-argv0",
+     "summary": "Procs::harness takes comm or argv[0]'s first word 'claude', so a version-named harness of a background session is the harness",
+     "class": "within",
+     "why": "A check refusing good work (the 10 rows), a defect found on the way and fixed in this task, as the project's fix-what-you-find rule asks; measured (6 harness processes, 4 version-named)."
+    },
+    {
+     "id": "finding-restated-by-measurement",
+     "summary": "The heading restates the finding by its measurement: 14 builder-started runs and 10 the session's own background call's run",
+     "class": "within",
+     "why": "The restatement widens the fix to the 10 rows the measurement found and drops nothing; no row is a stopped builder's. The filed T85 line itself is not in the bundle, so this is judged on the restatement as given."
+    },
+    {
+     "id": "builder-subagent-run-still-refuses",
+     "summary": "A run started by a builder's own sub-agent (an id the session's transcript never names) still reads as stopped and refuses, as before",
+     "class": "within",
+     "why": "Neither the request nor FR-013 says what this guard must cover, so this leaves nothing asked undone; and no wrong outcome is measured - none in the 24 rows, and the wider window's 34 (19, 14, 1 both) leave none unaccounted for. The default is the guard's safe side for a starter whose state cannot be read. Not a defect left, so FR-009's deferral form is not owed."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T86": {
+   "section_sha256": "9760128970cdaed7bcc167ab1501b0be012478d99b9641d6013ee1edcad7614a",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T86-callers-files",
+     "summary": "The caller's files are the clone's uncommitted files less those that another task's non-fallback Edit/Write/NotebookEdit event-log lines alone name (newer than the file's last commit, inside a 7-day window); an unnamed file and a shared file are the caller's; the feature comes from F= or the latest task-start naming the task.",
+     "class": "within",
+     "why": "This is how the task's own fix is built (a closing run judges the caller's work, the [perf] builders' loop under FR-013). It errs to the safe side: a miss counts a file as the caller's and gives a false red, never a false green. Choosing it over the active-task mark and over a FILES=/CRATES= list is a design choice, and the plan measured all three."
+    },
+    {
+     "id": "T86-claims-window",
+     "summary": "A new GUESS knob: an edit line claims a file only if it is newer than the file's last commit, within 7 days.",
+     "class": "within",
+     "why": "A parameter of the mechanism. When it misjudges, it counts more files as the caller's, so it can only make the verdict stricter."
+    },
+    {
+     "id": "T86-per-crate-apart",
+     "summary": "In static's per-crate steps, a red crate whose kept-key inputs read none of the caller's files is reported APART and not counted. The key inputs are factored out of verdict_key_with so the two cannot drift. A crate that builds on a caller's crate, or whose tests read the caller's file, is the caller's. A listing or key that cannot be judged counts every crate.",
+     "class": "within",
+     "why": "This is the fix the task's line asks for (shape (a), 5 runs measured). Every case that cannot be judged falls back to counting, as before."
+    },
+    {
+     "id": "T86-treewide-and-hooks-counted",
+     "summary": "Tree-wide steps and hooks-test stay counted whole, and a crate holding both tasks' files is judged whole (shapes (d) and (e), 4 of the 13 measured runs, stay red).",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This narrows the task's aim of a verdict on the caller's own work, but separating these cases is impossible with the instrument the plan has. Every hooks-test suite's key reads 994-998 paths of the guard's and the gate's crates (measured with l7r-guard deps), so a suite run on another task's edit also ran the caller's code, and no key can clear it. A crate's lint and cover verdict is one verdict over the whole crate. The tree-wide steps, measured through quick's full runs, fired on no other task's file. A red that is kept is not a wrong green, and none of these cases is a check refusing work that could be shown good."
+    },
+    {
+     "id": "T86-blocked-tag",
+     "summary": "A counted red whose every error line names another task's file (the caller's crate or the gate binary unbuildable on another task's half-done dependency) is tagged BLOCKED, names the files and tasks, and stays red.",
+     "class": "within",
+     "why": "Nothing of the caller's was judged there, so keeping it red is correct. The tag only reports which task is responsible."
+    },
+    {
+     "id": "T86-no-T-whole-clone",
+     "summary": "With no T= the whole clone is judged as before. Only the script sets the listing, so make static, make done and a landing judge every crate by construction.",
+     "class": "within",
+     "why": "Keeps the landing's whole-tree check and the default unchanged. Nothing is narrowed."
+    },
+    {
+     "id": "T86-guard-wording",
+     "summary": "T55's decide notice and foreground refusal (order.rs) and the third-static refusal (static_runs_hooks.rs) now name 'make closing-checks T=<task> F=<feature>' from the call's filed task, or T=<your task> when the call is filed under no task. closing-checks.sh's rerun line names T= and F= as given.",
+     "class": "within",
+     "why": "Without this the fix cannot be reached: a builder told to run a bare make closing-checks gets the whole-clone verdict that T86 exists to replace. Fixing the third-static message beside the other two is the same defect (constitution XIV), and its red-first tests are recorded."
+    },
+    {
+     "id": "T86-found-and-left-unlogged-writer",
+     "summary": "Files another builder writes through Bash (sed -i, heredoc, generator) leave no Edit/Write line, so they count as the caller's. This is left to T93 (a write-path field on the event log's Bash lines in rust/guard/shared's event_log_hooks), which lands before T22.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "A defect, a false red on good work, is left out of T86, but it is not dropped. FR-009's deferral form is met in full: why it is not fixed here (a new field on the event log's Bash lines that every reader of the log meets, in another crate's files), the filed id T93, its order 'lands before T22', and an every-instance line labeled observed 2026-11-21 with its method. The GM approved 'briefs that default to fixing in the task' (improvement 4), which allows a deferral that states why. The miss is on the safe side (never a wrong green, and make done judges the whole tree). It does not gut T86's purpose: the 5 measured shape-(a) runs all came apart under the replayed rule."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T84": {
+   "section_sha256": "f5f76714250209bc259b0fa0347cd5ac2732a33ef33adfb16f7421a095d1f85f",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T84-1 task-add lock and own withdrawal",
+     "summary": "make task-add takes a per-feature flock held from the id's read through both quick runs, withdraws only its own box and section from the files as they are; past a 120 s wait (GUESS, knob L7R_TASK_ADD_LOCK_WAIT) it refuses, writing nothing and naming the lock file.",
+     "class": "within",
+     "why": "The brief asks to measure first and lock red first if two filings collide; item 4 measured 6 of 6 rounds losing both filings on a red quick, and item 9 shows red then green. It keeps FR-011's withdraw-and-refuse behavior and only stops it taking another writer's lines. A lock-wait timeout that refuses fails closed."
+    },
+    {
+     "id": "T84-2 nothing built for a builder's own review",
+     "summary": "No new code lets a builder dispatch its own spec-fidelity review: measured, every builder dispatch already passes every guard; only the briefs barred it.",
+     "class": "within",
+     "why": "The finding's cause is that instructions alone barred it; the measurement (35 calls, none refused) shows no guard stands in the way. That the review actually happens is enforced by T84-3's stop guard and the tick gate (T84-4), so this is not enforcement by instruction."
+    },
+    {
+     "id": "T84-3a builder-stop guard: who is held",
+     "summary": "builder_stop_hooks (SubagentStop) answers decision: block to a builder the session dispatched for a started, open task while l7r-gate plan decided says its section is not decided (the verdict store's current CLEAR, plus the decide lint's deferral findings).",
+     "class": "within",
+     "why": "The brief names SubagentStop and reading the verdict store rather than text; builder identity follows D8. A builder with no started task is not held here, but the tick and push gate still refuse its task's landing without a CLEAR section, so no unreviewed work lands through that gap."
+    },
+    {
+     "id": "T84-3b handoff-only state passes",
+     "summary": "A builder past T12's context cap, in its handoff-only state, may stop.",
+     "class": "within",
+     "why": "The brief requires it (the context cap's handoff-only state passing), and FR-006 sends that builder to a handoff and a fresh dispatch; the next builder is held by the same guard and the tick gate stays the backstop."
+    },
+    {
+     "id": "T84-3c the guard's escape",
+     "summary": "The stop guard has an escape of a recorded reason.",
+     "class": "within",
+     "why": "The brief and the project's guard rules (FR-012's form) require it. Approach item 3 does not spell the escape out; item 2 lists it as a constraint and the suite pins the guard (6 passed)."
+    },
+    {
+     "id": "T84-3d ASK_LIMIT 40 s",
+     "summary": "The guard's call to the gate is limited to 40 s (GUESS, under the hook's 60 s).",
+     "class": "within",
+     "why": "A new constant, labeled a GUESS. The section does not say which way a timeout goes (block or let the builder stop). Either way the tick and push gate (T84-4) still refuse an undecided section, so a timed-out ask cannot land unreviewed work. Noted, not blocking."
+    },
+    {
+     "id": "T84-4a plan gate per task: an open task's section not judged",
+     "summary": "The tick's and the push's plan gate (plan::tick_gate, task::push_owed) judges the blocks outside every task's section plus the sections of the task ticked and the tasks ticked before it, and never an open task's section; the land crate keeps no plan check of its own.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This narrows feature 243 / 375 D60's reach (every block owed) at the tick and push. Applying the whole-feature rule literally defeats its own purpose and the GM's 'real enforcement and not just instructions': measured, all 16 of 451's landings took PLAN_REVIEW_OK, 10 of them on correct work, so the gate had become a routine escape. 243's purpose is that a task is not ticked while its decisions lack a verdict. That holds: the ticked task's own section, earlier ticked sections and every shared block are still judged, and an open task's section is judged at its own tick. No task can be ticked or pushed while its own section lacks CLEAR at its digest. The red test a_tick_answers_for_its_own_section_the_ticked_ones_and_the_shared_blocks pins it."
+    },
+    {
+     "id": "T84-4b a filled template's old heading not owed",
+     "summary": "A '(removed) ### T<n> (<why: ...>)' block, the old heading of a filled task template, is not owed once T<n>'s section carries a CLEAR task verdict.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Adjudicated apart from 4a. D60 owes a deleted block because a decision deleted by hand is a change. A template's placeholder heading carries no decision: the text replacing it is the task's own section, already reviewed CLEAR at its digest. Measured: 4 of 16 landings owed only this. This holds only as far as the forgiveness is limited to the template's placeholder heading of the same task with a current CLEAR section, as the section states. A hand-deleted decision under any other heading stays owed."
+    },
+    {
+     "id": "T84-5 left: arbiter accept not recorded as a task verdict (T92)",
+     "summary": "A round-arbiter accept is not written to the verdict store as the task's verdict; T33, T46, T67 and T79 show BLOCKED there. Left to T92's line, lands before T22.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "A defect that refuses correct work, left in the FR-009 form: its visible effect, measured 2026-11-21, why it is not fixed here (the accept is written by make arbiter-ruled, outside this task's files), filed id T92, and 'lands before T22'. That is the form the four accepts in rulings.md treat as enough. One gap for T92 to cover: the new stop guard reads the same store, so a builder of a task the arbiter accepted would also be held at its stop, not only its tick and push. Same defect, same cure, and an escape exists."
+    },
+    {
+     "id": "T84-6 left: land crate tests take the session's PLAN_REVIEW_OK (T94)",
+     "summary": "The land crate's tests read the session's exported escape and write the real guard log; filed as T94, lands before T22.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "A defect (a test's verdict follows the session's exports, and make audit lists a fixture's escape as real) left in FR-009's form: the observation and its method, why (the land crate's tests are outside this task's files, and T84 makes the escape rare rather than gone), filed id T94, and its order."
+    },
+    {
+     "id": "T84-7 printf recipe lines: not a defect",
+     "summary": "task_add/quick.rs's lines() drops any quick recipe line opening printf; today no check opens so.",
+     "class": "within",
+     "why": "Measured against the Makefile: no check is skipped, so nothing goes wrong. Under constitution XIV this is a difference, not a defect, and needs no ruling."
+    }
+   ],
+   "verdict": "CLEAR"
   }
  }
 }

@@ -17,6 +17,9 @@ use super::sections::{
 
 pub(super) const RECORD: &str = "plan-review.json";
 pub(super) const REMOVED: &str = "(removed) ";
+/// A ticked box of tasks.md or tasks-done.md and its id.
+static TICKED: std::sync::LazyLock<fancy_regex::Regex> =
+    std::sync::LazyLock::new(|| super::sections::re(r"(?m)^\s*- \[[xX]\] (T\d+[a-z]?)\b"));
 const HOW: &str = "dispatch `spec-fidelity` in its PLAN REVIEW mode with request.md, spec.md and plan.md, then record its JSON: make plan-verdict F=<feature> FILE=<json> AS=spec-fidelity";
 
 pub(super) fn text_of<'v>(value: &'v Value, key: &str) -> Option<&'v str> {
@@ -278,6 +281,90 @@ pub(super) fn judge(
     history: Option<&History>,
     done: &str,
 ) -> Option<(&'static str, String)> {
+    judge_in(plan, review_text, history, done, None)
+}
+
+/// The tasks a tick of `asked` answers for (feature 451 T84): `asked` and every task ticked before it - a `[x]` box of `tasks`, the
+/// feature's tasks.md and tasks-done.md joined.
+pub(super) fn scope_of(tasks: &str, asked: &[&str]) -> BTreeSet<String> {
+    TICKED
+        .captures_iter(tasks)
+        .map_while(Result::ok)
+        .map(|c| c[1].to_owned())
+        .chain(asked.iter().map(|t| (*t).to_owned()))
+        .collect()
+}
+
+/// [`owed`] for a tick of `asked` alone (feature 451 T84): the blocks outside every task's section, and the sections of `asked` and of
+/// the tasks ticked before it ([`scope_of`]).
+pub(super) fn owed_for(spec_dir: &Path, asked: &[&str]) -> Option<(&'static str, String)> {
+    let plan_path = spec_dir.join("plan.md");
+    let plan = std::fs::read(&plan_path).ok();
+    let review = std::fs::read_to_string(spec_dir.join(RECORD)).ok();
+    let done = std::fs::read_to_string(spec_dir.join("plan-done.md")).unwrap_or_default();
+    let tasks = l7r_shared::speckit::tasks::joined(
+        &std::fs::read_to_string(spec_dir.join("tasks.md")).unwrap_or_default(),
+        &std::fs::read_to_string(spec_dir.join(l7r_shared::speckit::tasks::DONE))
+            .unwrap_or_default(),
+    );
+    judge_in(
+        plan.as_deref(),
+        review.as_deref(),
+        Some(&History::new(&plan_path, "HEAD")),
+        &done,
+        Some(&scope_of(&tasks, asked)),
+    )
+}
+
+/// The keys a judgment `scope` answers for (feature 451 T84, D60's blocks read per task): a block outside every task's section always;
+/// a block of a task's section only where `scope` holds the task; a `(removed)` block of a task's own (its heading opens with the id,
+/// a filled template's old heading among them) only where `scope` holds the task and its section carries no CLEAR task verdict, which
+/// answers for every block it had. WHY: measured 2026-11-21 (feature 451's 16 landings of 2026-11-20/21, each replayed on its tick's
+/// tree): 14 were refused on the whole feature, 6 of them on other open tasks' sections or a filled template's old heading alone - an
+/// open task's section is reviewed when its own task is decided (feature 375 FR-003a), not before another task's tick.
+fn in_scope(
+    keys: Vec<String>,
+    review: &Value,
+    plan: &str,
+    scope: &BTreeSet<String>,
+) -> Vec<String> {
+    let spans: Vec<(String, (usize, usize))> = task_sections(plan)
+        .into_iter()
+        .filter_map(|(t, s)| span_of(plan, &s).map(|at| (t, at)))
+        .collect();
+    let offsets: BTreeMap<String, usize> =
+        blocks(plan).into_iter().map(|(k, _, at)| (k, at)).collect();
+    let cleared = |t: &str| {
+        review
+            .get("tasks")
+            .and_then(|all| all.get(t))
+            .and_then(|e| text_of(e, "verdict"))
+            == Some("CLEAR")
+    };
+    keys.into_iter()
+        .filter(|key| {
+            if let Some(gone) = key.strip_prefix(REMOVED) {
+                return leading_task(&heading_text(gone))
+                    .is_none_or(|t| scope.contains(t) && !cleared(t));
+            }
+            offsets.get(key).is_none_or(|at| {
+                spans
+                    .iter()
+                    .find(|(_, span)| inside(&[*span], *at))
+                    .is_none_or(|(t, _)| scope.contains(t))
+            })
+        })
+        .collect()
+}
+
+/// [`judge`], the blocks read only as far as `scope` reaches ([`in_scope`]); None reads every block.
+pub(super) fn judge_in(
+    plan: Option<&[u8]>,
+    review_text: Option<&str>,
+    history: Option<&History>,
+    done: &str,
+    scope: Option<&BTreeSet<String>>,
+) -> Option<(&'static str, String)> {
     let Some(plan) = plan else {
         return Some(("plan-missing", format!("no plan.md - the plan stage is owed before its review can be (spec D5); then {HOW}")));
     };
@@ -303,7 +390,11 @@ pub(super) fn judge(
         review["blocks"] = Value::Object(whole);
     }
     let ruled = ruled_tasks(&review, &text, history);
-    let (owed_keys, blocked) = block_status(&review, &text, &ruled, history, done);
+    let (mut owed_keys, mut blocked) = block_status(&review, &text, &ruled, history, done);
+    if let Some(scope) = scope {
+        owed_keys = in_scope(owed_keys, &review, &text, scope);
+        blocked = in_scope(blocked, &review, &text, scope);
+    }
     if !owed_keys.is_empty() {
         let shown: Vec<String> = owed_keys
             .iter()

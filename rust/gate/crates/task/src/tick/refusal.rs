@@ -237,7 +237,8 @@ pub fn refusal(ask: &Ask, landed: bool, boxes: bool) -> Raise<(String, String)> 
         note,
         ..
     } = *ask;
-    let (permitted, message) = l7r_gate_plan::plan::tick_gate(dir, root, ask.escaped.as_deref());
+    let (permitted, message) =
+        l7r_gate_plan::plan::tick_gate(dir, root, ask.escaped.as_deref(), task);
     let plan = dir.join("plan.md");
     let section = if plan.is_file() {
         task_sections(&read_strict(&plan)?).remove(task)

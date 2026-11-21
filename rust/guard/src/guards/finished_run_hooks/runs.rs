@@ -76,12 +76,27 @@ pub(crate) fn owner(path: &Path) -> Option<PathBuf> {
         .map(Path::to_path_buf)
 }
 
-/// What a root run's status is: `tracked` and `watched` will wake the session, `unwatched` is the one shape that can go unread.
+/// What a root run's status is: `tracked`, `builder` and `watched` will wake the session, `unwatched` is the one shape that can go
+/// unread.
 #[derive(Debug, PartialEq, Eq)]
 pub(crate) enum Status {
     Tracked(String),
+    /// Held by the harness and started by a builder still running (451 T85): the run wakes the builder, the builder's notice the
+    /// session. The builder's id, and the run's output.
+    Builder(String, String),
     Watched(u32, String),
     Unwatched(String),
+}
+
+/// Who started a run the harness holds, by its output file (451 T85; read by `super::starter`).
+#[derive(Debug, PartialEq, Eq)]
+pub(crate) enum Starter {
+    /// The session itself, or a call no launch line names yet: the harness wakes the agent in it (feature 246).
+    Harness,
+    /// A builder still running, its id.
+    Builder(String),
+    /// A builder that has stopped: only a waiter will wake the session for its run.
+    Stopped,
 }
 
 /// A root live make: one none of whose ancestors is a live make.
@@ -96,7 +111,7 @@ impl Root {
     /// What follows the target on its line: the log, or the waiter and its file.
     pub(crate) fn detail(&self) -> String {
         match &self.status {
-            Status::Tracked(d) | Status::Unwatched(d) => d.clone(),
+            Status::Tracked(d) | Status::Unwatched(d) | Status::Builder(_, d) => d.clone(),
             Status::Watched(pid, file) => format!("{pid} {file}"),
         }
     }
@@ -105,6 +120,7 @@ impl Root {
     pub(crate) fn line(&self) -> String {
         let word = match self.status {
             Status::Tracked(_) => "tracked",
+            Status::Builder(..) => "builder",
             Status::Watched(..) => "watched",
             Status::Unwatched(_) => "unwatched",
         };
@@ -144,6 +160,19 @@ impl Procs {
 
     fn comm(&self, pid: u32) -> String {
         self.read(pid, "comm").trim().to_owned()
+    }
+
+    /// Whether a process is the harness: named `claude`, or started as `claude ...` (451 T85). A background session's process is
+    /// named by its executable, `.../claude/versions/2.1.325`, and sets its first argument to `claude bg-spare` (measured
+    /// 2026-11-21 on this session's own, `/proc/<pid>/comm` and `cmdline`): read by its name alone, no harness was found, and every
+    /// run its background calls held read as detached - 10 of the session's 24 run-still-going refusals of 00:00-08:00 that day.
+    fn harness(&self, pid: u32) -> bool {
+        self.comm(pid) == "claude"
+            || self
+                .read(pid, "cmdline")
+                .split(['\0', ' '])
+                .next()
+                .is_some_and(|a| Path::new(a).file_name().is_some_and(|n| n == "claude"))
     }
 
     fn ppid(&self, pid: u32) -> u32 {
@@ -220,9 +249,20 @@ impl Procs {
             .collect()
     }
 
-    /// One [`Root`] per root live make, answered from the kernel by pid (feature 246): an ancestor named `claude` is the harness,
-    /// which wakes the session at exit; a loop naming the file the make writes is a waiter; neither is the run that can go unread.
+    /// One [`Root`] per root live make, answered from the kernel by pid (feature 246): an ancestor that is the harness wakes the
+    /// session at exit; a loop naming the file the make writes is a waiter; neither is the run that can go unread. Every run the
+    /// harness holds is its own: the command line's `judge` has no transcript to read a builder in.
     pub(crate) fn judge_runs(&self, clone: &Path) -> Vec<Root> {
+        self.judge_runs_by(clone, &|_| Starter::Harness)
+    }
+
+    /// [`Self::judge_runs`], a run the harness holds asked of `starter` by its output file (451 T85): a run a still-running builder
+    /// started waits on the builder, and one a stopped builder started is judged as a detached run - watched or unwatched.
+    pub(crate) fn judge_runs_by(
+        &self,
+        clone: &Path,
+        starter: &dyn Fn(&str) -> Starter,
+    ) -> Vec<Root> {
         let live = self.live_runs(clone);
         let loops = self.loops();
         let mut out = Vec::new();
@@ -231,7 +271,7 @@ impl Procs {
             if anc.iter().any(|a| live.contains_key(a)) {
                 continue; // a phase child: its root speaks for it
             }
-            let status = self.status(pid, &anc, &loops);
+            let status = self.status(pid, &anc, &loops, starter);
             out.push(Root {
                 pid,
                 target: target.clone(),
@@ -241,21 +281,27 @@ impl Procs {
         out
     }
 
-    fn status(&self, pid: u32, anc: &[u32], loops: &[(u32, BTreeSet<PathBuf>)]) -> Status {
-        if let Some(tracked) = anc.iter().copied().find(|a| self.comm(*a) == "claude") {
+    fn status(
+        &self,
+        pid: u32,
+        anc: &[u32],
+        loops: &[(u32, BTreeSet<PathBuf>)],
+        starter: &dyn Fn(&str) -> Starter,
+    ) -> Status {
+        let harness = anc.iter().copied().find(|a| self.harness(*a));
+        if let Some(tracked) = harness {
             let shell = anc.iter().copied().find(|a| self.ppid(*a) == tracked);
-            return Status::Tracked(
-                shell.map_or_else(|| "the harness".to_owned(), |s| self.stdout_of(s)),
-            );
+            let out = shell.map_or_else(|| "the harness".to_owned(), |s| self.stdout_of(s));
+            match starter(&out) {
+                Starter::Harness => return Status::Tracked(out),
+                Starter::Builder(agent) => return Status::Builder(agent, out),
+                Starter::Stopped => {} // nothing wakes the session for it but a waiter
+            }
         }
         let log = self.stdout_of(pid);
         let mut files = BTreeSet::new();
         add_file(&mut files, &log);
-        for a in anc
-            .iter()
-            .copied()
-            .take_while(|a| self.comm(*a) != "claude")
-        {
+        for a in anc.iter().copied().take_while(|a| Some(*a) != harness) {
             add_file(&mut files, &self.stdout_of(a));
             files.extend(files_named(&self.cmdline(a), &self.cwd_of(a)));
         }

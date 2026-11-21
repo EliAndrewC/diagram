@@ -525,7 +525,7 @@ fn a_tick_is_refused_then_escaped_only_with_a_reason_and_recorded() {
     let root = dir.parent().unwrap().parent().unwrap().to_owned();
     std::fs::create_dir_all(root.join("dev")).unwrap();
     let spec = dir.display().to_string();
-    let ask = |escaped: Option<&str>| super::tick_gate(&dir, &root, escaped);
+    let ask = |escaped: Option<&str>| super::tick_gate(&dir, &root, escaped, "T01");
     let (ok, refused) = ask(None);
     assert!(
         !ok && refused.contains("no current CLEAR review") && refused.contains("make plan-verdict")
@@ -720,4 +720,102 @@ fn what_the_other_tools_ask_of_the_plan_answers_nothing_on_an_empty_tree() {
     assert_eq!(super::resolve_feature("999", &root), None);
     assert_eq!(super::approach_ruled(&root, "t"), None);
     assert!(super::arbiter_accept_listed(&root, "t").is_empty());
+}
+
+/// RED FIRST (feature 451 T84): A TICK ANSWERS FOR ITS OWN TASK, THE TASKS TICKED BEFORE IT AND THE BLOCKS OUTSIDE EVERY TASK'S SECTION -
+/// never for an open task's section nobody's tick has reached. Measured 2026-11-21 (each of feature 451's 16 landings of 2026-11-20/21
+/// replayed on its tick's tree, `plan owed` with and without the other tasks' blocks): 14 of 16 were refused on the whole feature, and 6
+/// of those 14 on other open tasks' sections or a filled template's old heading alone, so each landing took `PLAN_REVIEW_OK`.
+#[test]
+fn a_tick_answers_for_its_own_section_the_ticked_ones_and_the_shared_blocks() {
+    let root = repo();
+    let template = PLAN_TASKS.replace(
+        "## T05 the bath (amendment 1)",
+        "## T05 (<why: the finding>)",
+    );
+    let dir = feature_at(&root, Some(&template), None, "375-x");
+    std::fs::create_dir_all(root.join("dev")).unwrap();
+    let boxes = "# Tasks\n\n- [ ] T05 the bath\n- [ ] T06 the wells\n";
+    std::fs::write(dir.join("tasks.md"), boxes).unwrap();
+    let src = write_json(&root, "w.json", &current(&[], "CLEAR", &template));
+    assert_eq!(
+        run(&root, &["record", "375", &src, "--as", "spec-fidelity"]).code,
+        0
+    );
+    // T05's builder fills its template - heading and body - and its section is reviewed; T06's is edited, nobody's tick yet
+    let plan = PLAN_TASKS
+        .replace(
+            "- the bath 10 x 8 ft (GUESS)",
+            "- the bath 10 x 8 ft (GUESS), measured from the plan",
+        )
+        .replace(
+            "- a well by the kitchen\n",
+            "- a well by the kitchen, its depth to be measured\n",
+        );
+    std::fs::write(dir.join("plan.md"), &plan).unwrap();
+    let sha = run(&root, &["section-sha", "375", "T05"])
+        .stdout
+        .trim()
+        .to_owned();
+    let v = write_json(
+        &root,
+        "t.json",
+        &json!({"section_sha256": sha, "decisions": []}),
+    );
+    assert_eq!(
+        run(
+            &root,
+            &["record-task", "375", "T05", &v, "--as", "spec-fidelity"]
+        )
+        .code,
+        0
+    );
+    let ask = |t: &str| super::tick_gate(&dir, &root, None, t);
+    // neither an open task's section nor T05's own old heading holds T05's tick
+    assert_eq!(ask("T05"), (true, String::new()));
+    // the builder-stop guard's question: T05 may stop, T06 not; a feature or task with no section, or an unread root, passes
+    let top = root.display().to_string();
+    assert_eq!(
+        run(&root, &["decided", &top, "375", "T05"]),
+        crate::Reply {
+            stdout: String::new(),
+            stderr: String::new(),
+            code: 0
+        }
+    );
+    let held = run(&root, &["decided", &top, "375", "T06"]);
+    assert_eq!(held.code, 1);
+    assert!(held.stdout.contains("375-x T06: its plan section carries no current CLEAR verdict - run `make decide F=375 T=T06`"), "{}", held.stdout);
+    for (f, t) in [("999", "T05"), ("375", "T09")] {
+        assert_eq!(run(&root, &["decided", &top, f, t]).code, 0);
+    }
+    // a deferral that names no filed task holds the stop, whatever the verdict
+    let deferred = format!("{plan}\n**Found and left?**\n- a leak in the drain, which floods the bath. Not fixed here: it needs a new pipe.\n");
+    std::fs::write(dir.join("plan.md"), &deferred).unwrap();
+    let held = run(&root, &["decided", &top, "375", "T06"]);
+    assert!(held.stdout.contains("; and a found-and-left deferral names no filed open task - file it (`make task-add F=375"), "{}", held.stdout);
+    std::fs::write(dir.join("plan.md"), &plan).unwrap();
+    // T06's own tick still owes its review
+    let (ok, why) = ask("T06");
+    assert!(!ok && why.contains("T06 the wells"), "{why}");
+    // T06 ticked: its section answers to every later tick, as the push's
+    std::fs::write(
+        dir.join("tasks.md"),
+        boxes.replace("- [ ] T06", "- [x] T06"),
+    )
+    .unwrap();
+    // a ticked task's stale section holds every later tick
+    assert!(!ask("T05").0);
+    std::fs::write(dir.join("tasks.md"), boxes).unwrap();
+    // a block outside every task's section, changed: every tick refused
+    std::fs::write(
+        dir.join("plan.md"),
+        plan.replace(
+            "Each tub by a door.",
+            "Each tub by a door, and a drain beside it.",
+        ),
+    )
+    .unwrap();
+    let (ok, why) = ask("T05");
+    assert!(!ok && why.contains("preamble"), "{why}");
 }

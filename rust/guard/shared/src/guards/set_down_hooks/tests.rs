@@ -199,6 +199,29 @@ fn an_interim_agent_with_no_transcript_of_its_own_is_not_running() {
     assert!(said(&c, &tr).is_some());
 }
 
+/// One agent asked by the same reading (451 T85, `finished_run_hooks`' reader): launched, interim with its own work running, ended.
+#[test]
+fn one_agent_is_asked_by_the_same_reading() {
+    use super::still_running;
+    let (_dir, _c, tr) = world("one", "no");
+    assert!(!still_running(&tr, "a5").unwrap(), "never named");
+    append(&tr, r#"{"toolUseResult": {"agentId": "a5"}}"#);
+    assert!(still_running(&tr, "a5").unwrap());
+    append(&tr, &notice("a5", WAITING));
+    // interim, and no transcript of its own
+    assert!(!still_running(&tr, "a5").unwrap());
+    own(
+        &tr,
+        "a5",
+        r#"{"isSidechain":true,"agentId":"a5","toolUseResult":{"backgroundTaskId":"b9"}}"#,
+    );
+    // interim, its own work running
+    assert!(still_running(&tr, "a5").unwrap());
+    append(&tr, &notice("a5", FINISHED));
+    assert!(!still_running(&tr, "a5").unwrap());
+    assert!(still_running(&tr.with_extension("gone"), "a5").is_err());
+}
+
 #[test]
 fn a_line_s_notices_are_read_in_their_order_each_by_its_own_summary() {
     let (_dir, c, tr) = world("order", "no");

@@ -32,7 +32,7 @@ footer{margin-top:3rem;padding-top:1rem;border-top:1px solid var(--line);color:v
 <h2>Tests</h2>
 <p class=sec>The four tiers, cheapest first. Where a test LIVES decides when it runs, so these differ by scope rather than by filter.</p>
 <div class=scroll><table><tr><th>target</th><th>arguments</th><th>what it is</th></tr>
-<tr><td class=n>make closing-checks</td><td class=a>FRESH HOOKS_ALL REASON</td><td>make static, make hooks-test and make quick at once, one combined result (each verdict and log; red if any is): start it with run_in_background once the code is done, then write the plan section and run make decide while it runs (451 T55)   [FRESH=1 REASON=&quot;...&quot;] [HOOKS_ALL=1]</td></tr>
+<tr><td class=n>make closing-checks</td><td class=a>F FRESH HOOKS_ALL REASON T</td><td>make static, make hooks-test and make quick at once, one combined result (each verdict and log; red if any is): start it with run_in_background once the code is done, then write the plan section and run make decide while it runs (451 T55); T= judges that task&#x27;s files and crates, another task&#x27;s red reported apart, not counted (451 T86)</td></tr>
 <tr><td class=n>make coverage-exempt</td><td class=a>PRUNE</td><td>the engine files the Rust port replaces, exempt from the coverage floor (dev/coverage-exempt.json; feature 448, the GM 2026-11-02); PRUNE=1 drops the stale entries   [PRUNE=1]</td></tr>
 <tr><td class=n>make done</td><td class=a>FULL INCREMENTAL</td><td>tier 3, the whole gate: lint, the static checks, the reference map, every test and the 100% floors; run once at the end, backgrounded</td></tr>
 <tr><td class=n>make hooks-test</td><td class=a>&ndash;</td><td>run every tests/hooks/test-*-hooks.sh, and prove each guard still has a companion</td></tr>

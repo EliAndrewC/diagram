@@ -8,8 +8,9 @@ use std::process::Command;
 use serde_json::Value;
 
 use super::history::History;
+use super::lint;
 use super::sections::{ordered_sections, re, task_sections, wording_only, TASK_ID};
-use super::status::{judge, owed, section_clear, task_current, RECORD};
+use super::status::{judge_in, owed, owed_for, scope_of, section_clear, task_current, RECORD};
 use super::today;
 use crate::codeid::common_git_dir;
 
@@ -73,7 +74,8 @@ pub(super) fn decision_refusal(root: &Path) -> String {
     if let Some(section) = task_sections(&text).get(&task) {
         if wording_only(section)
             || task_current(&review, &text, &task, Some(&history))
-            || (owed(&dir).is_none() && section_clear(&review, section, Some(&history)))
+            || (owed_for(&dir, &[&task]).is_none()
+                && section_clear(&review, section, Some(&history)))
         {
             return String::new();
         }
@@ -81,6 +83,44 @@ pub(super) fn decision_refusal(root: &Path) -> String {
         return format!("{name} {task}: its plan section carries no current CLEAR decision verdict - decide first, then check (feature 375 FR-003a): `make decide F={number} T={task}` names the review to dispatch");
     }
     owed(&dir).map_or(String::new(), |(rule, reason)| format!("{name} {task}: the plan has no section for this task and its plan-stage review is not current and CLEAR ({rule}) - decide first (feature 375 FR-003a): {reason}"))
+}
+
+/// Why a builder of `task` may not stop yet (feature 451 T84; `l7r-gate plan decided <root> <feature> <task>`, the builder-stop guard's
+/// question), or "": its section carries no current CLEAR verdict - the three ways [`decision_refusal`] reads one, the blocks judged for
+/// that task alone ([`owed_for`]) - or a found-and-left deferral in it names no filed open task (the decide lint's deferral findings,
+/// read again at the stop, so a section decided under `DEFER_FORM_OK` is held until its deferral is filed). A feature or task with no
+/// section passes: nothing here says it owes one.
+pub(super) fn task_refusal(root: &Path, feature: &str, task: &str) -> String {
+    let Some(dir) = resolve(feature, root) else {
+        return String::new();
+    };
+    let plan = dir.join("plan.md");
+    let text = read(&plan);
+    let Some(section) = task_sections(&text).remove(task) else {
+        return String::new();
+    };
+    let name = dir.file_name().unwrap_or_default().to_string_lossy();
+    let number = name.split('-').next().unwrap_or("");
+    let review = review_of(&dir);
+    let history = History::new(&plan, "HEAD");
+    let mut whys = Vec::new();
+    if !(wording_only(&section)
+        || task_current(&review, &text, task, Some(&history))
+        || (owed_for(&dir, &[task]).is_none() && section_clear(&review, &section, Some(&history))))
+    {
+        whys.push(format!("its plan section carries no current CLEAR verdict - run `make decide F={number} T={task}` and dispatch the MODE 4 review it prints yourself, then fix what it finds"));
+    }
+    let deferrals: Vec<_> = lint::decide_findings(&dir, &section)
+        .into_iter()
+        .filter(lint::Finding::deferral)
+        .collect();
+    if !deferrals.is_empty() {
+        whys.push(format!("a found-and-left deferral names no filed open task - file it (`make task-add F={number} TITLE=\"...\"`) and name it, or fix it here:\n{}", lint::decide_refusal(&text, &section, &deferrals, None).trim_end()));
+    }
+    if whys.is_empty() {
+        return String::new();
+    }
+    format!("{name} {task}: {}", whys.join("; and "))
 }
 
 /// The task sections `make plan-archive` may move (D62): every task their heading names ticked, and their verdict CLEAR.
@@ -283,11 +323,13 @@ pub(super) fn push_owed(
         let plan = show(root, reference, &format!("{feature}/plan.md"));
         let done = show(root, reference, &format!("{feature}/plan-done.md")).unwrap_or_default();
         let history = History::new(&root.join(&feature).join("plan.md"), reference);
-        if let Some((rule, reason)) = judge(
+        // the push answers for the ticked tasks' sections and the shared blocks, never an open task's (feature 451 T84)
+        if let Some((rule, reason)) = judge_in(
             plan.as_deref(),
             review.as_deref(),
             Some(&history),
             &String::from_utf8_lossy(&done),
+            Some(&scope_of(&tasks, &[])),
         ) {
             out.push((feature, rule, reason));
         }

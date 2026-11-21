@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 # Tests for scripts/gates/closing-checks.sh (`make closing-checks`, feature 451 T55): make static, make hooks-test and make quick at
 # once, one combined result - each verdict, its seconds and its log, the tail of a red one, red if any is red; a TERM stops all three;
-# each run under its own directory, so two runs in one clone read their own verdicts and logs, the old ones pruned (451 T72).
+# each run under its own directory, so two runs in one clone read their own verdicts and logs, the old ones pruned (451 T72);
+# with T=, the caller's task's files judged and another task's red reported apart, not counted (451 T86).
 # Run: tests/hooks/test-closing-checks.sh   (exit 0 = all green)
 #
 # The make is a stub (CLOSING_MAKE): each target sleeps - or, where its fixture dir holds <target>.hold, waits for that dir's
@@ -29,6 +30,19 @@ echo "end of $t${STUB_TAG:+ ($STUB_TAG)}"
 echo "end $t$tag $(date +%s%N)" >> "$ev"
 rc=$(cat "$d/$t.rc" 2>/dev/null || echo 0)
 [ "$rc" = 0 ] || echo "the failure of $t"
+# the rust checks' caller rule as rustc.rs answers it (451 T86, pinned in the rustc crate's tests): static.red names the half-done file;
+# a crate red on it is APART, exit 0, when L7R_RUST_CALLER's listing does not hold it; static.blocked makes the caller's crate red with
+# its one error in that file, as a crate that builds on a broken one is
+if [ "$t" = static ] && [ -e "$d/static.red" ]; then
+  red=$(cat "$d/static.red"); crate=${red%/src/*}
+  if [ -e "$d/static.blocked" ]; then
+    printf 'rust-checks: lint FAILED on rust/mine\nerror[E0308]: mismatched types\n   --> %s:3:1\n' "${red#rust/}"; exit 1
+  elif [ -n "${L7R_RUST_CALLER:-}" ] && ! grep -qx "$red" "$L7R_RUST_CALLER"; then
+    printf "rust-checks: APART lint red on %s - another task's: its lint key reads none of this task's files\nerror: half-done\n" "$crate"
+  else
+    printf 'rust-checks: lint FAILED on %s\nerror: half-done\n' "$crate"; exit 1
+  fi
+fi
 exit "$rc"
 EOF
 chmod +x "$T/make"
@@ -116,6 +130,53 @@ rm -f "$T"/*.rc; run
 [ -d "$(run_dir <(printf '%s' "$OUT"))" ] && [ "$T/logs/$(readlink "$T/logs/latest")" = "$(run_dir <(printf '%s' "$OUT"))" ] && ok "this run's directory kept, latest naming it" || no "this run's directory" "$(ls -la "$T/logs")"
 CLOSING_CHECKS_KEEP_MIN=0 run
 [ ! -e "$T/logs/20261121T000000Z-12" ] && [ -d "$(run_dir <(printf '%s' "$OUT"))" ] && ok "CLOSING_CHECKS_KEEP_MIN=0: every other run's directory pruned, its own kept" || no "the knob" "$(ls -la "$T/logs")"
+
+echo "6. two tasks' work in one clone (451 T86): the caller's files judged, another task's red apart and not counted"
+# A scratch clone: T86 (451) and T84 (451) mid-edit beside each other, and 449's T86. The caller's: its own Edit, a file both edited, a
+# Bash write no line names, a file a landed task's old line names, a fallback line's file; another task's: T84's crate, 449's T86's file.
+C="$T/clone"; E="$C/.git/l7r-events"; rm -rf "$C" "$T/c6"; mkdir -p "$C/rust/mine/src" "$C/rust/other/src" "$C/docs" "$T/c6"
+git -C "$C" init -q && git -C "$C" config user.email t@t && git -C "$C" config user.name t
+for f in rust/mine/src/lib.rs rust/other/src/lib.rs docs/shared.md docs/landed.md; do echo base > "$C/$f"; done
+git -C "$C" add -A && git -C "$C" commit -qm base
+for f in rust/mine/src/lib.rs rust/other/src/lib.rs docs/shared.md docs/landed.md rust/mine/src/new.rs rust/other/src/extra.rs docs/bash.md; do echo edit >> "$C/$f"; done
+now=$(date -u +%Y-%m-%dT%H:%M:%S.000Z); mkdir -p "$E"
+line() { printf '{"t":"%s","ev":"PostToolUse","tool":"Edit","cat":"edit","by":"a1","path":"%s/%s","task":"%s"%s}\n' "$1" "$C" "$2" "$3" "${4:-}"; }
+{ line "$now" rust/mine/src/lib.rs T86; line "$now" rust/other/src/lib.rs T84; line "$now" docs/shared.md T84; line "$now" docs/shared.md T86
+  line 2020-01-01T00:00:00.000Z docs/landed.md T50; line "$now" docs/bash.md T84 ',"fallback":true'
+  printf '{"t":"%s","ev":"PreToolUse","tool":"Edit","cat":"edit","path":"%s/docs/bash.md","task":"T84"}\n' "$now" "$C"; } > "$E/451-x.jsonl"
+line "$now" rust/other/src/extra.rs T86 > "$E/449-y.jsonl"
+printf '{"feature": "449-y", "task": "T86", "utc": "2026-11-01T00:00:00Z"}\n{"feature": "451-x", "task": "T86", "utc": "2026-11-21T00:00:00Z"}\n' > "$C/.git/task-starts.jsonl"
+c6() { : > "$T/events"; OUT=$(cd "$C" && STUB_DIR="$T/c6" L7R_EVENTS_DIR="$E" STUB_SLEEP=0.1 "$@" "$SCRIPT" 2>&1); RC=$?; }
+echo rust/other/src/lib.rs > "$T/c6/static.red"
+c6 env CLOSING_TASK=T86
+d6=$(run_dir <(printf '%s' "$OUT"))
+[ "$(cat "$d6/caller-files" 2>/dev/null | tr '\n' ' ')" = "docs/bash.md docs/landed.md docs/shared.md rust/mine/src/lib.rs rust/mine/src/new.rs " ] \
+  && ok "the caller's files: its own edit, a shared file, a Bash write, a landed task's file, a fallback line's (the feature from its task-start)" \
+  || no "the caller's files" "$(cat "$d6/caller-files" "$d6/split.txt" 2>&1)"
+[ "$(cut -f1 "$d6/others" 2>/dev/null | tr '\n' ' ')" = "rust/other/src/extra.rs rust/other/src/lib.rs " ] && grep -q 'T86@449-y' "$d6/others" && grep -q 'T84@451-x' "$d6/others" \
+  && ok "another task's: T84's file and 449's T86's" || no "another task's files" "$(cat "$d6/others" 2>&1)"
+[ "$RC" -eq 0 ] && printf '%s' "$OUT" | grep -Eq '^  static +GREEN' && printf '%s' "$OUT" | grep -q 'closing-checks: GREEN' \
+  && ok "the caller's run is GREEN beside the other's red crate" || no "the caller's verdict (exit $RC)" "$OUT"
+printf '%s' "$OUT" | grep -q "another task's red.*reported apart and not counted" && printf '%s' "$OUT" | grep -q '  lint red on rust/other - .*T84@451-x: rust/other/src/lib.rs' \
+  && ok "the other's red named apart, with its task and file" || no "no apart section" "$OUT"
+printf '%s' "$OUT" | grep -q "judged as T86's: 5 of the clone's 7 uncommitted files (2 its own edits name, 3 no task's edit); another task's, its red reported apart: 2" \
+  && ok "the split is printed" || no "the split line" "$OUT"
+echo rust/mine/src/lib.rs > "$T/c6/static.red"; c6 env CLOSING_TASK=T86 CLOSING_FEATURE=451
+[ "$RC" -eq 1 ] && printf '%s' "$OUT" | grep -Eq '^  static +RED' && ! printf '%s' "$OUT" | grep -q "another task's red" \
+  && ok "the caller's own red still fails" || no "the caller's red (exit $RC)" "$OUT"
+printf '%s' "$OUT" | grep -q 'then run `make closing-checks T=T86 F=451` once more' \
+  && ok "the red names the caller's own rerun, its T= and F=" || no "the rerun line drops T= (a bare one judges the whole clone)" "$OUT"
+c6 env CLOSING_TASK=T86 CLOSING_FEATURE=449
+d6=$(run_dir <(printf '%s' "$OUT"))
+grep -qx rust/other/src/extra.rs "$d6/caller-files" && ! grep -qx rust/mine/src/lib.rs "$d6/caller-files" && [ "$RC" -eq 0 ] \
+  && ok "F= names the feature: 449's T86 is another task than 451's" || no "F=449 (exit $RC)" "$(cat "$d6/caller-files" 2>&1; printf '%s' "$OUT")"
+echo rust/other/src/lib.rs > "$T/c6/static.red"; touch "$T/c6/static.blocked"; c6 env CLOSING_TASK=T86
+[ "$RC" -eq 1 ] && printf '%s' "$OUT" | grep -q "BLOCKED.*every error static printed is in another task's files - rust/other/src/lib.rs (T84@451-x)" \
+  && ok "a red of the caller's whose every error is in another task's file: BLOCKED, still red" || no "the blocked red (exit $RC)" "$OUT"
+rm -f "$T/c6/static.blocked"; c6 env -u CLOSING_TASK
+[ "$RC" -eq 1 ] && printf '%s' "$OUT" | grep -q 'no T= - every crate and file in the clone is judged as yours' && printf '%s' "$OUT" | grep -Eq '^  static +RED' \
+  && ok "no T=: the whole clone judged as before, the T= form named" || no "no T= (exit $RC)" "$OUT"
+rm -rf "$T/c6"
 
 echo
 echo "closing-checks: $PASS passed, $FAIL failed"

@@ -593,6 +593,29 @@ fn owed_coverage(
     got
 }
 
+/// THE CALLER'S FILES (feature 451 T86): a file listing, one path a line from the tree's root, the files of the task whose `make
+/// closing-checks` runs this check - the clone's uncommitted files less those another task's edits alone name (`closing-checks.sh`). WHY:
+/// about 12 of 2026-11-21's closing runs went red only on another builder's half-done files in the same clone, measured 2026-11-21 (the
+/// night's closing runs, T86's plan section). Only that script sets it, so `make static`, `make done` and a landing judge every crate.
+const CALLER: &str = "L7R_RUST_CALLER";
+
+/// Is a red crate the caller's: no caller named (every crate is), the listing unreadable, a check with no kept key, or a key that reads
+/// one of the caller's files - its own, a crate's it builds from, a file its tests read or compile in, its family's for the dead check.
+fn caller_reads(world: &World, cmd: &str, manifest: &Path, inputs: Option<&Kept>) -> bool {
+    let Some(listing) = world.root.opt(CALLER).filter(|v| !v.is_empty()) else {
+        return true;
+    };
+    // outside a repository the tree's ids are empty: no key can say what it reads
+    let (Ok(text), Some(kept)) = (
+        std::fs::read_to_string(listing),
+        inputs.filter(|k| !k.ids.is_empty()),
+    ) else {
+        return true;
+    };
+    let files: BTreeSet<String> = text.lines().map(str::to_owned).collect();
+    kept.reads_any(&world.root, cmd, manifest, &files)
+}
+
 fn answer(world: &World, cmd: &str, named: &[String], formatting_check: bool) -> Reply {
     let found = crates(&world.root, named);
     let (mut stdout, mut stderr) = (String::new(), String::new());
@@ -611,7 +634,7 @@ fn answer(world: &World, cmd: &str, named: &[String], formatting_check: bool) ->
         }
     }
     let inputs = reads.map(|r| Kept::read(world, cmd, r, &found));
-    let mut bad = 0;
+    let (mut bad, mut apart) = (0, 0);
     // every crate's kept result asked first, so the coverage the rest owe is built together (T105) and run side by side (T108)
     let asked: Vec<(&PathBuf, Option<(Verdict, bool)>)> = found
         .iter()
@@ -656,12 +679,14 @@ fn answer(world: &World, cmd: &str, named: &[String], formatting_check: bool) ->
             }
         }
         if done.code != 0 {
-            bad += 1;
-            let _ = writeln!(
-                stderr,
-                "rust-checks: {cmd} FAILED on {shown}\n{}{}",
-                done.stdout, done.stderr
-            );
+            let counted = caller_reads(world, cmd, manifest, inputs.as_ref());
+            *if counted { &mut bad } else { &mut apart } += 1;
+            let said = if counted {
+                format!("rust-checks: {cmd} FAILED on {shown}")
+            } else {
+                format!("rust-checks: APART {cmd} red on {shown} - another task's: its {cmd} key reads none of this task's files ({CALLER}, 451 T86), so not counted")
+            };
+            let _ = writeln!(stderr, "{said}\n{}{}", done.stdout, done.stderr);
         } else {
             keep_green(
                 world,
@@ -685,11 +710,11 @@ fn answer(world: &World, cmd: &str, named: &[String], formatting_check: bool) ->
             code: 1,
         };
     }
-    let _ = writeln!(
-        stdout,
-        "rust-checks: {cmd} clean on {} crate(s)",
-        found.len()
-    );
+    let clean = found.len() - apart;
+    let _ = match apart {
+        0 => writeln!(stdout, "rust-checks: {cmd} clean on {clean} crate(s)"),
+        _ => writeln!(stdout, "rust-checks: {cmd} clean on {clean} crate(s) of this task's; {apart} red on another task's files alone, reported apart"),
+    };
     Reply {
         stdout,
         stderr,

@@ -16,16 +16,29 @@
 //! task filed mid-feature needs neither.
 //!
 //! MAKE QUICK OVER WHAT IT WROTE (feature 451 T19, D16; FR-011): the box and section written, quick's checks run over them
-//! ([`quick`]); on a red they run again with both files as they were, and where the with-line run has a failure the other lacks, the
-//! files stay as they were and the filing is refused, naming those failures; a red the same without the line is reported as already
-//! there and the line kept. `QUICK_OK="<reason>"` files it anyway, recorded by the tool in the guard log (`make guard-log
+//! ([`quick`]); on a red they run again with the box and section taken out, and where the with-line run has a failure the other lacks,
+//! they stay out and the filing is refused, naming those failures; a red the same without the line is reported as already there and
+//! the line kept (put in again). `QUICK_OK="<reason>"` files it anyway, recorded by the tool in the guard log (`make guard-log
 //! GUARD=task-add`), as `PERF_LATER_OK` is by `make task-start`.
+//!
+//! ONE FILING AT A TIME, AND ONLY ITS OWN TEXT TAKEN OUT (feature 451 T84, measured 2026-11-21). The run snapshotted tasks.md and
+//! plan.md before it wrote, ran quick, and on a red wrote the whole-file snapshots back - its `was`, then its `now` - so any
+//! other edit of the two files made while quick ran went with them. Measured in a scratch tree, a stand-in quick sleeping 1 s and red
+//! with a finding outside specs/: two `task-add` 0.3 s apart lost BOTH boxes and both sections in 6 of 6 rounds, each run printing
+//! "filed ... already red ... so it is kept"; another writer's line appended during the run without the line was lost in 3 of 3 rounds,
+//! during the run with it in 0 of 3 (it was in `now`), and on a refusal in 3 of 3. With a green quick and no stagger 0 of 6 were lost,
+//! but the id's read then the write is an unlocked read-modify-write. So the run holds the feature's filing lock ([`lock`], an `flock`
+//! under the git common directory) from the id's read to quick's last run, and a withdrawal takes out of the CURRENT text the exact box
+//! and section this run put in ([`Insert::withdrawn`]), never a copy written back; a red already there runs quick without the line by
+//! withdrawing it and putting it in again by the same rules ([`Filing::put_in`]) - not on a copy of the tree, as quick's lines run in the
+//! root itself and read what they like of it.
 
 use std::fmt::Write as _;
 use std::path::Path;
 use std::sync::LazyLock;
 
 use fancy_regex::Regex;
+use l7r_gate_core::codeid::common_git_dir;
 use l7r_gate_plan::plan::template::{PERFORMANCE, RED_EXIT, TEMPLATE};
 use l7r_shared::escape::enough;
 use l7r_shared::log::Entry;
@@ -33,7 +46,7 @@ use l7r_shared::py_text::{strip, SPACE_CLASS};
 use serde_json::Value;
 
 use crate::tick::text::re;
-use crate::tick::{repo_root, spec_dir};
+use crate::tick::{repo_root, spec_dir, Env};
 use crate::{raised, read_strict, reply, write_file, Reply};
 
 const PHYSICAL: &str = "      - [ ] research pass  - [ ] source-reader confirmed  - [ ] quote-check confirmed  - [ ] source-applicability confirmed  - [ ] recorded and cited\n";
@@ -71,29 +84,59 @@ fn next_id(d: &Path) -> Result<String, String> {
     Ok(format!("T{:02}", top + 1))
 }
 
-fn add_box(tasks: &str, tid: &str, title: &str, physical: bool) -> String {
+/// What one filing puts into one file: `text` at byte `at` of the text it read.
+#[derive(Debug, Clone, PartialEq, Eq)]
+struct Insert {
+    at: usize,
+    text: String,
+}
+
+impl Insert {
+    /// `to` with the text put in.
+    fn applied(&self, to: &str) -> String {
+        format!("{}{}{}", &to[..self.at], self.text, &to[self.at..])
+    }
+
+    /// `now` with the text taken out - the copy nearest `at`, so the one put there when another writer's edit above it moved it - or
+    /// `None` when no copy is left.
+    fn withdrawn(&self, now: &str) -> Option<String> {
+        let at = now
+            .match_indices(self.text.as_str())
+            .map(|(i, _)| i)
+            .min_by_key(|i| i.abs_diff(self.at))?;
+        Some(format!("{}{}", &now[..at], &now[at + self.text.len()..]))
+    }
+}
+
+fn add_box(tasks: &str, tid: &str, title: &str, physical: bool) -> Insert {
     let research = if physical { "physical" } else { "rendering" };
     let boxed = format!(
         "- [ ] {tid} {title}\n      research: {research}\n{}",
         if physical { PHYSICAL } else { "" }
     );
     match GM_BOX.find(tasks).ok().flatten() {
-        Some(gm) => format!("{}{boxed}{}", &tasks[..gm.start()], &tasks[gm.start()..]),
-        None => format!(
-            "{tasks}{}{boxed}",
-            if tasks.ends_with('\n') { "" } else { "\n" }
-        ),
+        Some(gm) => Insert {
+            at: gm.start(),
+            text: boxed,
+        },
+        None => Insert {
+            at: tasks.len(),
+            text: format!("{}{boxed}", if tasks.ends_with('\n') { "" } else { "\n" }),
+        },
     }
 }
 
-fn add_section(plan: &str, tid: &str, section: &str) -> String {
+fn add_section(plan: &str, tid: &str, section: &str) -> Insert {
     let body = format!("{}\n\n", section.replace("{T}", tid).trim_end_matches('\n'));
     match CLOSE.find(plan).ok().flatten() {
-        Some(close) => format!("{}{body}{}", &plan[..close.start()], &plan[close.start()..]),
-        None => format!(
-            "{plan}{}\n{body}",
-            if plan.ends_with('\n') { "" } else { "\n" }
-        ),
+        Some(close) => Insert {
+            at: close.start(),
+            text: body,
+        },
+        None => Insert {
+            at: plan.len(),
+            text: format!("{}\n{body}", if plan.ends_with('\n') { "" } else { "\n" }),
+        },
     }
 }
 
@@ -130,7 +173,7 @@ fn record(event: &str, detail: &str, rule: &str) {
 }
 
 /// [`cli`] with the environment's variables read through `env` (a closure in the tests).
-pub(crate) fn cli_with(words: &[String], cwd: &Path, title: &str, env: crate::tick::Env) -> Reply {
+pub(crate) fn cli_with(words: &[String], cwd: &Path, title: &str, env: Env) -> Reply {
     let physical = words.iter().any(|a| a == "--physical");
     let performance = words.iter().any(|a| a == "--performance");
     let mut args: Vec<String> = words
@@ -183,7 +226,10 @@ pub(crate) fn cli_with(words: &[String], cwd: &Path, title: &str, env: crate::ti
         Ok(lines) => lines,
         Err(why) => return reply(String::new(), format!("task-add: refused, nothing written - make quick's checks cannot be listed, so what it writes cannot be checked (feature 451 T19): {why}\nRun it from the repository, whose Makefile has `quick:`.\n"), 2),
     };
-    let was = [d.join("tasks.md"), d.join("plan.md")].map(|p| std::fs::read(&p).ok());
+    let _held = match lock(&root, &d, env) {
+        Ok(held) => held,
+        Err(refused) => return refused,
+    };
     match file(
         &root,
         &d,
@@ -193,30 +239,132 @@ pub(crate) fn cli_with(words: &[String], cwd: &Path, title: &str, env: crate::ti
         physical,
         performance,
     ) {
-        Ok((out, err, tid)) => checked(&root, &d, &lines, &was, (out, err, &tid), &quick_ok)
-            .unwrap_or_else(|why| raised("task-add", String::new(), "", &why)),
+        Ok((out, err, filing, placed)) => {
+            checked(&root, &filing, &placed, &lines, (out, err), &quick_ok)
+                .unwrap_or_else(|why| raised("task-add", String::new(), "", &why))
+        }
         Err((err, why)) => raised("task-add", String::new(), &err, &why),
     }
 }
 
-/// `path` as `bytes` say, or gone when they are `None`.
-fn put_back(path: &Path, bytes: Option<&Vec<u8>>) -> Result<(), String> {
-    match bytes {
-        Some(b) => write_file(path, b),
-        None => std::fs::remove_file(path).map_err(|e| format!("{}: {e}", path.display())),
+/// How long a filing waits for another's lock, in seconds (GUESS, a knob: `L7R_TASK_ADD_LOCK_WAIT`, unmeasured): a filing holds it for
+/// two runs of quick's checks - T19 measured its seven lines side by side at 0.12 s - so this outlasts a slow pair many times over and
+/// still refuses a holder that hangs.
+const LOCK_WAIT_S: f64 = 120.0;
+
+/// The feature's filing lock (feature 451 T84), held from the id's read to quick's last run: an `flock` on
+/// `task-add-<feature>.lock` in the git common directory (`<root>/.git` where git names none), waited for up to [`LOCK_WAIT_S`];
+/// refused past it with nothing written, naming the lock file.
+fn lock(root: &Path, d: &Path, env: Env) -> Result<std::fs::File, Reply> {
+    let name = d.file_name().unwrap_or_default().to_string_lossy();
+    let path = common_git_dir(root)
+        .unwrap_or(root.join(".git"))
+        .join(format!("task-add-{name}.lock"));
+    let wait = env("L7R_TASK_ADD_LOCK_WAIT")
+        .and_then(|w| strip(&w).parse::<f64>().ok())
+        .unwrap_or(LOCK_WAIT_S);
+    match l7r_shared::tool::flock_within(&path, wait) {
+        Ok(Some(held)) => Ok(held),
+        Ok(None) => Err(reply(String::new(), format!("task-add: refused, nothing written - another make task-add of {name} still holds {} after {wait} s: two filings at once threw both away (feature 451 T84). Wait for it to end and file again; its process: fuser -v {}; the wait is L7R_TASK_ADD_LOCK_WAIT seconds.\n", path.display(), path.display()), 2)),
+        Err(e) => Err(raised("task-add", String::new(), "", &format!("{}: {e}", path.display()))),
     }
 }
 
-/// Quick's checks over what [`file`] wrote (D16): kept when green or red as before the line; else withdrawn - `was`, the two files'
-/// bytes before it - and refused, unless `QUICK_OK` gives a reason.
+/// One filing's own text: its id, its box's title and research line, and its section (`{T}` for the id), put into the CURRENT
+/// tasks.md and plan.md by [`Filing::put_in`] and taken out of them again by [`Filing::take_out`].
+struct Filing<'a> {
+    d: &'a Path,
+    tid: String,
+    title: &'a str,
+    physical: bool,
+    section: String,
+}
+
+/// Where a filing's text went: each file's [`Insert`], and whether the filing made plan.md.
+struct Placed {
+    tasks: Insert,
+    plan: Insert,
+    plan_made: bool,
+}
+
+/// A file's bytes as text, as they are now: no line ending rewritten, for only the filing's own text is taken out of them.
+fn current(path: &Path) -> Result<String, String> {
+    let bytes = std::fs::read(path).map_err(|e| format!("{}: {e}", path.display()))?;
+    String::from_utf8(bytes).map_err(|e| format!("UnicodeDecodeError: {}: {e}", path.display()))
+}
+
+impl Filing<'_> {
+    /// The box into tasks.md, before the GM's, and the section into plan.md, before the close, by the rules of [`add_box`] and
+    /// [`add_section`] over the files as they are now.
+    fn put_in(&self) -> Result<Placed, String> {
+        let (tasks_path, plan_path) = (self.d.join("tasks.md"), self.d.join("plan.md"));
+        let tasks = read_strict(&tasks_path)?;
+        let boxed = add_box(&tasks, &self.tid, self.title, self.physical);
+        write_file(&tasks_path, boxed.applied(&tasks).as_bytes())?;
+        let plan_made = !plan_path.is_file();
+        let plan = if plan_made {
+            String::new()
+        } else {
+            read_strict(&plan_path)?
+        };
+        let section = add_section(&plan, &self.tid, &self.section);
+        write_file(&plan_path, section.applied(&plan).as_bytes())?;
+        Ok(Placed {
+            tasks: boxed,
+            plan: section,
+            plan_made,
+        })
+    }
+
+    /// The box and the section taken out of the files as they are now, whatever else was written meanwhile, and a plan.md the filing
+    /// made removed when nothing else is in it; each file tried, then an error naming each that could not be.
+    fn take_out(&self, placed: &Placed) -> Result<(), String> {
+        let failed: Vec<String> = [
+            ("tasks.md", &placed.tasks, "box"),
+            ("plan.md", &placed.plan, "section"),
+        ]
+        .into_iter()
+        .filter_map(|(name, put, what)| self.take_one(name, put, what, placed.plan_made).err())
+        .collect();
+        if failed.is_empty() {
+            Ok(())
+        } else {
+            Err(failed.join("\n"))
+        }
+    }
+
+    /// One file's text taken out, as [`Filing::take_out`] says.
+    fn take_one(
+        &self,
+        name: &str,
+        put: &Insert,
+        what: &str,
+        plan_made: bool,
+    ) -> Result<(), String> {
+        let path = self.d.join(name);
+        let Some(left) = put.withdrawn(&current(&path)?) else {
+            return Err(format!("task-add: {}'s {what} is no longer in {} as it was written, so it cannot be taken out: something else edited it while make quick's checks ran; take it out by hand", self.tid, path.display()));
+        };
+        if name == "plan.md" && plan_made && left.is_empty() {
+            std::fs::remove_file(&path).map_err(|e| format!("{}: {e}", path.display()))
+        } else {
+            write_file(&path, left.as_bytes())
+        }
+    }
+}
+
+/// Quick's checks over what [`file`] wrote (D16): kept when green or red as before the line; else withdrawn - its own box and section
+/// taken out ([`Filing::take_out`]) - and refused, unless `QUICK_OK` gives a reason. On a red it is taken out for the run without it
+/// and, kept, put in again.
 fn checked(
     root: &Path,
-    d: &Path,
+    filing: &Filing<'_>,
+    placed: &Placed,
     lines: &[String],
-    was: &[Option<Vec<u8>>; 2],
-    (mut out, mut err, tid): (String, String, &str),
+    (mut out, mut err): (String, String),
     quick_ok: &str,
 ) -> Result<Reply, String> {
+    let tid = &filing.tid;
     let with = quick::run(root, lines);
     if with.is_empty() {
         let _ = writeln!(
@@ -226,19 +374,13 @@ fn checked(
         );
         return Ok(reply(out, err, 0));
     }
-    let paths = [d.join("tasks.md"), d.join("plan.md")];
-    let now = [std::fs::read(&paths[0]).ok(), std::fs::read(&paths[1]).ok()];
-    for (p, b) in paths.iter().zip(was) {
-        put_back(p, b.as_ref())?;
-    }
+    filing.take_out(placed)?;
     let without = quick::run(root, lines);
     let added = quick::introduced(&with, &without);
-    let name = d.file_name().unwrap_or_default().to_string_lossy();
+    let name = filing.d.file_name().unwrap_or_default().to_string_lossy();
     let listed: String = added.iter().map(quick::Failure::shown).collect();
     if added.is_empty() || !quick_ok.is_empty() {
-        for (p, b) in paths.iter().zip(&now) {
-            put_back(p, b.as_ref())?;
-        }
+        filing.put_in()?;
     }
     if added.is_empty() {
         let already: String = with.iter().map(quick::Failure::shown).collect();
@@ -256,19 +398,19 @@ fn checked(
         "quick-red",
     );
     let number = name.split('-').next().unwrap_or_default();
-    Ok(reply(String::new(), format!("{err}task-add: refused - {tid} withdrawn, tasks.md and plan.md as they were: make quick's checks fail on what it wrote and not without it (feature 451 FR-011):\n{listed}Fix the title or the section and file it again: make task-add F={number} TITLE=\"...\" - or file it anyway: make task-add F={number} TITLE=\"...\" QUICK_OK=\"<reason>\" (recorded)\n"), 2))
+    Ok(reply(String::new(), format!("{err}task-add: refused - {tid} withdrawn, its box and section taken out of tasks.md and plan.md: make quick's checks fail on what it wrote and not without it (feature 451 FR-011):\n{listed}Fix the title or the section and file it again: make task-add F={number} TITLE=\"...\" - or file it anyway: make task-add F={number} TITLE=\"...\" QUICK_OK=\"<reason>\" (recorded)\n"), 2))
 }
 
-/// The box and the section written: what was printed and the id, or what raised after what was printed.
-fn file(
+/// The box and the section written: what was printed, the filing and where its text went, or what raised after what was printed.
+fn file<'a>(
     root: &Path,
-    d: &Path,
-    title: &str,
+    d: &'a Path,
+    title: &'a str,
     section: &str,
     section_path: &Path,
     physical: bool,
     performance: bool,
-) -> Result<(String, String, String), (String, String)> {
+) -> Result<(String, String, Filing<'a>, Placed), (String, String)> {
     let mut err = String::new();
     let base = if section.is_empty() {
         TEMPLATE.to_owned()
@@ -280,23 +422,14 @@ fn file(
         err = format!("task-add: SECTION={section}'s checklist item 6 has no red exit through `make arbiter-ask` - the plan review will ask for: {RED_EXIT}\n");
     }
     let fail = |why: String| (err.clone(), why);
-    let tid = next_id(d).map_err(fail)?;
-    let tasks = read_strict(&d.join("tasks.md")).map_err(fail)?;
-    write_file(
-        &d.join("tasks.md"),
-        add_box(&tasks, &tid, title, physical).as_bytes(),
-    )
-    .map_err(fail)?;
-    let plan = if d.join("plan.md").is_file() {
-        read_strict(&d.join("plan.md")).map_err(fail)?
-    } else {
-        String::new()
+    let filing = Filing {
+        d,
+        tid: next_id(d).map_err(fail)?,
+        title,
+        physical,
+        section: text,
     };
-    write_file(
-        &d.join("plan.md"),
-        add_section(&plan, &tid, &text).as_bytes(),
-    )
-    .map_err(fail)?;
+    let placed = filing.put_in().map_err(fail)?;
     let rel = d.strip_prefix(root).map_err(|_| {
         fail(format!(
             "ValueError: {:?} is not in the subpath of {:?}",
@@ -305,7 +438,8 @@ fn file(
         ))
     })?;
     let out = format!(
-        "task-add: {tid} filed in {}, its section in {}{}\n",
+        "task-add: {} filed in {}, its section in {}{}\n",
+        filing.tid,
         rel.join("tasks.md").display(),
         rel.join("plan.md").display(),
         if section.is_empty() {
@@ -314,7 +448,7 @@ fn file(
             ""
         }
     );
-    Ok((out, err, tid))
+    Ok((out, err, filing, placed))
 }
 
 mod quick;

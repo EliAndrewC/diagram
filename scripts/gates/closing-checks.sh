@@ -26,6 +26,18 @@
 # CLOSING_CHECKS_KEEP_MIN minutes (a GUESS knob, 360: 36 times the longest run in this clone's usage records, 601 s of 25 runs,
 # measured 2026-11-21 (`.git/tool-usage.jsonl`, each closing-checks start paired with its end), so no live run is pruned; at about five
 # runs an hour, measured the same way, some 30 directories kept). The directory `latest` names is never pruned.
+#
+# THE CALLER'S TASK (451 T86): `make closing-checks T=<task> [F=<feature>]` judges the files and crates the caller's task changed. About
+# 12 of 2026-11-21's closing runs went red only on another builder's half-done files in the same clone - a second `make static` under
+# STATIC_OK or a verdict left owed each (measured 2026-11-21, T86's plan section). The caller's files are the clone's uncommitted files
+# less those another task's edits alone name: a builder's Edit, Write or NotebookEdit line in any feature's event log (not a fallback
+# line, whose task is a guess; not one older than the file's last commit, a landed task's), naming another task and never this one. A
+# file no line names - a Bash write, a generated page - is the caller's, so a miss costs a saving, never a wrong verdict. The listing
+# goes to `make static` alone as L7R_RUST_CALLER: a crate whose check key reads none of it is red APART, not counted (`rustc.rs`), so
+# static runs on to its tree-wide steps. Those, hooks-test and quick stay counted whole (T86's plan section: every suite's key reads the
+# guard's and the gate's crates; the tree-wide steps fired on another task's file 0 times that night); a red whose every error names
+# another task's file is marked BLOCKED, still red. With no T= every file and crate is the caller's, as before. `make done` and a
+# landing never set it.
 set -u
 mk=${CLOSING_MAKE:-make}
 base=${CLOSING_CHECKS_DIR:-$(git rev-parse --absolute-git-dir)/closing-checks}
@@ -43,6 +55,75 @@ find "$base" -mindepth 1 -maxdepth 1 -mmin +"$keep_min" \( -type d -name '[0-9]*
   case ${p##*/} in "$id" | "$cur") continue ;; esac
   rm -rf -- "$p"
 done
+# the caller's files and another task's (451 T86, the header): <run dir>/caller-files and <run dir>/others ("<path>\t<task>@<feature> ...")
+task=${CLOSING_TASK:-} caller=""
+if [ -n "$task" ]; then
+  common=$(git rev-parse --path-format=absolute --git-common-dir)
+  if python3 -I - "$(git rev-parse --show-toplevel)" "${L7R_EVENTS_DIR:-$common/l7r-events}" "$common/task-starts.jsonl" \
+    "${CLOSING_FEATURE:-}" "$task" "$dir" > "$dir/split.txt" 2>&1 <<'PY'
+import datetime, glob, json, os, subprocess, sys, time
+root, events, starts, feature, task, out = sys.argv[1:7]
+git = lambda *a: subprocess.run(['git', '-C', root, *a], capture_output=True, text=True, check=True).stdout
+# the clone's uncommitted files: every task's work in flight (a builder never commits; its landing does)
+dirty, recs, i = set(), git('status', '--porcelain=v1', '-z', '-uall').split('\0'), 0
+while i < len(recs):
+    r, i = recs[i], i + 1
+    if len(r) > 3:
+        dirty.add(r[3:])
+        i += r[0] in 'RC'  # a rename's old path follows it
+# each file's last commit: an edit line older than it is a landed task's and claims nothing now (a GUESS window: 7 days)
+since, last, at = time.time() - 7 * 86400, {}, 0
+for l in git('log', '--since=7.days', '--format=@%ct', '--name-only').splitlines():
+    if l.startswith('@'):
+        at = int(l[1:])
+    elif l:
+        last.setdefault(l, at)
+logs = sorted(glob.glob(os.path.join(events, '*.jsonl')))
+stem = lambda p: os.path.basename(p)[:-6]
+mine_f = next((stem(p) for p in logs if feature and (stem(p) == feature or stem(p).startswith(feature + '-'))), feature or None)
+if not feature and os.path.exists(starts):
+    for l in open(starts, errors='replace'):
+        try:
+            d = json.loads(l)
+        except ValueError:
+            continue
+        if d.get('task') == task:
+            mine_f = d.get('feature')
+mine = lambda c: c[1] == task and mine_f in (None, c[0])
+pre, claims = root.rstrip('/') + '/', {}
+for p in logs:
+    for l in open(p, errors='replace'):
+        if '"PostToolUse"' not in l or '"cat":"edit"' not in l:
+            continue
+        try:
+            d = json.loads(l)
+        except ValueError:
+            continue
+        rel = d.get('path', '')[len(pre):] if d.get('path', '').startswith(pre) else ''
+        if d.get('fallback') or not d.get('task') or rel not in dirty:
+            continue
+        if datetime.datetime.fromisoformat(d['t'].replace('Z', '+00:00')).timestamp() >= last.get(rel, since):
+            claims.setdefault(rel, set()).add((stem(p), d['task']))
+others = {r: sorted(c) for r, c in claims.items() if not any(map(mine, c))}
+caller = sorted(dirty - set(others))
+with open(os.path.join(out, 'caller-files'), 'w') as f:
+    f.writelines(r + '\n' for r in caller)
+with open(os.path.join(out, 'others'), 'w') as f:
+    f.writelines(r + '\t' + ' '.join(f'{t}@{ft}' for ft, t in c) + '\n' for r, c in sorted(others.items()))
+by = {}
+for r, c in sorted(others.items()):
+    for _, t in c:
+        by.setdefault(t, []).append(r)
+named = sum(r in claims for r in caller)
+print(f"closing-checks: judged as {task}'s: {len(caller)} of the clone's {len(dirty)} uncommitted files ({named} its own edits name, "
+      f"{len(caller) - named} no task's edit); another task's, its red reported apart: {len(others)}"
+      + ''.join(f"\n  {t}: {', '.join(rs[:6])}{' ...' if len(rs) > 6 else ''}" for t, rs in sorted(by.items())))
+PY
+  then caller=$dir/caller-files; cat "$dir/split.txt"
+  else printf 'closing-checks: could not tell T=%s files from another task'"'"'s, so every file is judged as yours:\n' "$task"; cat "$dir/split.txt"; fi
+else
+  printf 'closing-checks: no T= - every crate and file in the clone is judged as yours; `make closing-checks T=<task>` judges your task'"'"'s alone, another task'"'"'s red reported apart (451 T86)\n'
+fi
 pids=()
 
 # every process under pid, deepest first, so a make's recipe shells and their cargo go with it
@@ -57,13 +138,36 @@ trap stop INT TERM
 
 t0=$(date +%s)
 for c in "${checks[@]}"; do
-  ( s=$(date +%s); "$mk" --no-print-directory "$c" > "$dir/$c.log" 2>&1 < /dev/null; rc=$?
+  ( s=$(date +%s); if [ "$c" = static ] && [ -n "$caller" ]; then export L7R_RUST_CALLER=$caller; fi
+    "$mk" --no-print-directory "$c" > "$dir/$c.log" 2>&1 < /dev/null; rc=$?
     printf '%s %s\n' "$rc" "$(( $(date +%s) - s ))" > "$dir/$c.exit" ) &
   pids+=($!)
 done
 # `wait` returns early on a trapped signal, so the trap runs while the checks run
 for p in "${pids[@]}"; do wait "$p"; done
 
+# another task's files whose path is, or ends in, each path on stdin (a cargo error names a path from the workspace's directory)
+theirs() { awk -F'\t' 'NR == FNR { p[$1] = $2; next } { for (k in p) if (k == $0 || substr(k, length(k) - length($0)) == "/" $0) { print k "\t" p[k]; next } print "-\t" $0 }' "$dir/others" -; }
+# a counted red whose every error line names another task's file: nothing of the caller's was judged there (451 T86)
+blocked() {
+  local named hit
+  named=$(grep -oE '(-->|Diff in) [^ :]+' "$dir/$1.log" | awk '{print $NF}' | sed "s#^$(git rev-parse --show-toplevel)/##" | sort -u)
+  [ -n "$named" ] || return 0
+  hit=$(printf '%s\n' "$named" | theirs)
+  printf '%s\n' "$hit" | grep -q '^-' && return 0
+  printf '\n\033[1m  BLOCKED\033[0m: every error %s printed is in another task'"'"'s files - %s; nothing of yours was judged there, so it stays red: re-run once they compile\n' \
+    "$1" "$(printf '%s\n' "$hit" | awk -F'\t' '{print $1 " (" $2 ")"}' | sort -u | paste -sd, - | sed 's/,/, /g')"
+}
+# the crates the rust checks reported APART: red on another task's files alone, not counted (451 T86, rustc.rs)
+apart() {
+  local lines
+  lines=$(grep -E '^rust-checks: APART ' "$dir/static.log" 2>/dev/null | sed -E 's/^rust-checks: APART ([a-z-]+ red on [^ ]+).*/\1/' | sort -u)
+  [ -n "$lines" ] || return 0
+  printf '\n\033[1manother task'"'"'s red\033[0m, reported apart and not counted (451 T86; each in %s):\n' "$dir/static.log"
+  printf '%s\n' "$lines" | while read -r cmd _ _ crate; do
+    printf '  %s red on %s - %s\n' "$cmd" "$crate" "$(awk -F'\t' -v c="$crate/" 'index($1, c) == 1 { print $2 ": " $1 }' "$dir/others" | sort -u | head -4 | paste -sd';' - | sed 's/;/; /g; s/^$/no task'"'"'s file inside it (a crate it builds from is red)/')"
+  done
+}
 red=0
 printf '\n\033[1mclosing-checks\033[0m (make static, make hooks-test, make quick at once, %ss wall)\n' "$(( $(date +%s) - t0 ))"
 for c in "${checks[@]}"; do
@@ -76,11 +180,15 @@ for c in "${checks[@]}"; do
   [ "$rc" = 0 ] && continue
   printf '\n\033[1m== %s: the last 25 lines of %s ==\033[0m\n' "$c" "$dir/$c.log"
   tail -n 25 "$dir/$c.log"
+  [ -n "$caller" ] && blocked "$c"
 done
+[ -n "$caller" ] && apart
 # each run recorded, its outcome the combined one (feature 406 T03; CLOSING_GATE is the suite's stub)
 record() { "${CLOSING_GATE:-$(dirname "${BASH_SOURCE[0]}")/l7r-gate.sh}" log usage --tool closing-checks --kind check --outcome "$1" 2>/dev/null || true; }
 if [ "$red" -gt 0 ]; then
-  printf '\n\033[1mclosing-checks: RED\033[0m - %s of %s red; fix them all, then run `make closing-checks` once more (in the background).\n' "$red" "${#checks[@]}"
+  # the rerun as the caller starts it (451 T86): a bare one judges the whole clone, another task's red counted
+  again="make closing-checks${task:+ T=$task}${CLOSING_FEATURE:+ F=$CLOSING_FEATURE}"
+  printf '\n\033[1mclosing-checks: RED\033[0m - %s of %s red; fix them all, then run `%s` once more (in the background).\n' "$red" "${#checks[@]}" "$again"
   record refused
   exit 1
 fi

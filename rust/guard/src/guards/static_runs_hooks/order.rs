@@ -19,6 +19,9 @@
 //!   on edits landed, and the main session's 3 left are within 4 min of their edit, before its landing.
 //! - a foreground `make static`, `make hooks-test` or `make closing-checks` (no `run_in_background`) is REFUSED, naming
 //!   `run_in_background` and `make closing-checks`, recorded `blocked`; [`TOKEN`] with a reason escapes, recorded. It reads no log.
+//!
+//! Both name the closing run as the caller starts it, `make closing-checks T=<task> F=<feature>` ([`closing_run`], 451 T86): the task
+//! and feature the call's own event-log line is filed under (`event_log_hooks::filed_at`), asked only when something is said.
 //!   It is judged FIRST, on every command of the chain: a `make decide` chained with a foreground closing check, either order, is
 //!   refused, never covered by the decide notice (T55's open hole, closed red first).
 //!   `STATIC_OK` does not stand it aside: that escape is the run count's, and a builder past its count would get a foreground run with it.
@@ -88,11 +91,13 @@ fn names(line: &Value, target: &str) -> bool {
             .is_some_and(|ms| ms.iter().any(|m| m == target))
 }
 
-/// What the guard says of one call, if anything; `root` (the clone) and `lines` (the event log) are asked only for a `make decide`.
+/// What the guard says of one call, if anything; `root` (the clone) and `lines` (the event log) are asked only for a `make decide`,
+/// `caller` (the feature and task the call's own line is filed under) only for what is said.
 pub(super) fn told(
     input: &Value,
     root: &dyn Fn() -> String,
     lines: &dyn Fn() -> Vec<Value>,
+    caller: &dyn Fn() -> (String, Option<String>),
 ) -> Option<Told> {
     let tool = input.get("tool_input")?;
     let cmd = field(tool, "command");
@@ -107,16 +112,16 @@ pub(super) fn told(
         return Some(match escape_or_refuse(cmd, TOKEN) {
             Escape::Escaped(why) => Told::Escaped(why),
             Escape::Refused(text) => Told::NoReason(text),
-            Escape::None => Told::Foreground(foreground(ran)),
+            Escape::None => Told::Foreground(foreground(ran, &run_of(caller))),
         });
     }
     if targets.iter().any(|t| t == "decide") {
-        return decide(input, &root(), &lines());
+        return decide(input, &root(), &lines(), &|| run_of(caller));
     }
     None
 }
 
-fn decide(input: &Value, root: &str, lines: &[Value]) -> Option<Told> {
+fn decide(input: &Value, root: &str, lines: &[Value], run: &dyn Fn() -> String) -> Option<Told> {
     let by = field(input, "agent_id");
     let sid = field(input, "session_id");
     let mine = |l: &Value| {
@@ -148,10 +153,11 @@ fn decide(input: &Value, root: &str, lines: &[Value]) -> Option<Told> {
         let rel = path.strip_prefix(root).unwrap_or(path).trim_start_matches('/');
         Told::Decide(format!(
             "T55 order (feature 451): your last code edit not landed ({rel}, {}) has no `make closing-checks` started after it. Neither needs the \
-             other's result: start `make closing-checks` now with run_in_background: true (it runs make static, make hooks-test and make \
+             other's result: start `{}` now with run_in_background: true (it runs make static, make hooks-test and make \
              quick at once), and write the plan section and run `make decide` while it runs. When it ends, if you edited the section after \
              it started, `make quick` (seconds) covers the section.",
-            text(edit, "t")
+            text(edit, "t"),
+            run()
         ))
     })
 }
@@ -178,13 +184,37 @@ fn landings(lines: &[Value]) -> HashMap<&str, usize> {
     last
 }
 
-fn foreground(target: &str) -> String {
+/// The closing run a caller is told to start: `make closing-checks` for the task and feature its own call is filed under.
+fn run_of(caller: &dyn Fn() -> (String, Option<String>)) -> String {
+    let (feature, task) = caller();
+    closing_run(&feature, task.as_deref())
+}
+
+/// `make closing-checks` as the caller starts it (451 T86): `T=` its task and `F=` its feature's number, so the run judges the files
+/// and crates that task changed, another task's red apart. WHY NAMED: with no `T=` the run judges the whole clone, another builder's
+/// half-done crate counted - the verdict T86 exists to fix. A call filed under no task, or outside any clone, gets the placeholders.
+pub(super) fn closing_run(feature: &str, task: Option<&str>) -> String {
+    let number = feature.split('-').next().unwrap_or(feature);
+    let feature = if !number.is_empty() && number.bytes().all(|b| b.is_ascii_digit()) {
+        number
+    } else if feature.is_empty() {
+        "<feature>"
+    } else {
+        feature
+    };
+    format!(
+        "make closing-checks T={} F={feature}",
+        task.unwrap_or("<your task>")
+    )
+}
+
+fn foreground(target: &str, run: &str) -> String {
     format!(
         "\n\u{1b}[1mBLOCKED (static-runs, the closing step's order - feature 451 T55): `make {target}` in the foreground.\u{1b}[0m\n\n\
 It blocks you on a check while the work beside it waits: after builders' last code edits, 63 min of closing checks ran in the\n\
 foreground beside 158 min of writing that needs no check's result.\n\n\
 Do this instead: the same call with run_in_background: true; its completion notice wakes you. Once the code is done,\n\
-`make closing-checks` runs make static, make hooks-test and make quick at once with one combined result: start it with\n\
+`{run}` runs make static, make hooks-test and make quick at once with one combined result: start it with\n\
 run_in_background: true, then write the plan section and run `make decide` while it runs.\n\n\
 Escape: {TOKEN}=\"<reason>\" in the command, recorded in the guard log - for a run whose result your very next step needs, with\n\
 nothing to do beside it. (STATIC_OK is the run count's escape, not this one's.)\n"

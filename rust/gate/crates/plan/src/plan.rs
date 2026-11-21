@@ -114,11 +114,17 @@ fn bypass_record(root: &Path, place: &str, why: &str) {
     );
 }
 
-/// FR-001, FR-005 and FR-008 for `make tick`: (may tick, what to print) - the bypass recorded when `escaped` is a reason. Public since
+/// FR-001, FR-005 and FR-008 for `make tick` of `task`: (may tick, what to print) - the bypass recorded when `escaped` is a reason; the
+/// plan judged for `task`, the tasks ticked before it and the blocks outside every task's section (feature 451 T84, [`status::owed_for`]). Public since
 /// feature 449 T131: the tick's port (`l7r-gate tick`, the task gate's crate) asks it in process, where `tick-task.py` asked the door.
 #[must_use]
-pub fn tick_gate(spec_dir: &Path, root: &Path, escaped: Option<&str>) -> (bool, String) {
-    let Some((rule, reason)) = owed(spec_dir) else {
+pub fn tick_gate(
+    spec_dir: &Path,
+    root: &Path,
+    escaped: Option<&str>,
+    task: &str,
+) -> (bool, String) {
+    let Some((rule, reason)) = status::owed_for(spec_dir, &[task]) else {
         return (true, String::new());
     };
     let name = spec_dir.file_name().unwrap_or_default().to_string_lossy();
@@ -460,6 +466,10 @@ fn answer(
                 Err(stop) => stop_reply("arbiter-accept", stop),
             },
         },
+        ("decided", 4) => {
+            let why = task::task_refusal(Path::new(&words[1]), &words[2], &words[3]);
+            reply(if why.is_empty() { why.clone() } else { format!("{why}\n") }, String::new(), i32::from(!why.is_empty()))
+        }
         ("decided", 1 | 2) => {
             let why = task::decision_refusal(Path::new(words.get(1).map_or(".", String::as_str)));
             reply(if why.is_empty() { why.clone() } else { format!("{why}\n") }, String::new(), i32::from(!why.is_empty()))

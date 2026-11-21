@@ -209,6 +209,24 @@ fn running(path: &Path) -> std::io::Result<HashSet<String>> {
     Ok(out)
 }
 
+/// Whether one agent still runs by [`running`]'s reading of the session's transcript, for `finished_run_hooks` (451 T85: a run a
+/// still-running builder started is the builder's to wait on): launched or resumed since its last final notice, or its last word an
+/// interim notice and its own transcript [`awake`]. An id the transcript never names is not running.
+///
+/// # Errors
+/// The transcript, or the agent's own, cannot be read.
+pub fn still_running(path: &Path, id: &str) -> std::io::Result<bool> {
+    match read_in_order(path, "")?.ids.get(id) {
+        Some(Said::Launched) => Ok(true),
+        Some(Said::Interim) => awake(
+            &path.with_extension("").join("subagents"),
+            id,
+            &mut HashMap::new(),
+        ),
+        _ => Ok(false),
+    }
+}
+
 /// The feature's open boxes, the GM's review box left out.
 fn open_boxes(text: &str) -> Vec<(String, String)> {
     OPEN.captures_iter(text)

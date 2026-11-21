@@ -97,6 +97,15 @@ fn a_phase_child_speaks_through_its_root_and_each_status_has_its_line() {
         .line(),
         "1 t tracked o"
     );
+    assert_eq!(
+        Root {
+            pid: 1,
+            target: "t".to_owned(),
+            status: Status::Builder("a1".to_owned(), "o".to_owned())
+        }
+        .line(),
+        "1 t builder o"
+    );
 }
 
 #[test]

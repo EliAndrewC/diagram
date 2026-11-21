@@ -245,6 +245,173 @@ fn a_run_the_harness_tracks_or_a_waiter_watches_lets_the_turn_close() {
     );
 }
 
+/// The notices of the session's transcript as Claude Code writes them (`set_down_hooks`' own tests' shapes, 451 T65).
+fn notice(id: &str, summary: &str) -> String {
+    format!(
+        r#"{{"type":"user","message":{{"role":"user","content":"<task-notification>\n<task-id>{id}</task-id>\n<status>completed</status>\n<summary>{summary}</summary>\n</task-notification>"}}}}"#
+    )
+}
+
+impl World {
+    /// The harness as a background session's process is (451 T85, measured 2026-11-21 on this session's own): its `comm` its
+    /// executable's name, `.../claude/versions/2.1.325`, and its first argument `claude bg-spare`.
+    fn versioned_harness(&self, pid: u32) {
+        self.add(
+            pid,
+            "2.1.325",
+            1,
+            Path::new("/"),
+            &["claude bg-spare", "--bg-spare", "/tmp/x.claim.sock"],
+            None,
+        );
+    }
+
+    /// A run the harness `harness` holds: the shell it ran (pid 60) writing `tasks/<task>.output`, and `make <target>` (pid 100)
+    /// under it in the clone; the output file.
+    fn held_run(&self, harness: u32, task: &str, target: &str) -> PathBuf {
+        let tasks = self.root.join("tmp/-diagram/s/tasks");
+        std::fs::create_dir_all(&tasks).unwrap();
+        let out = tasks.join(format!("{task}.output"));
+        std::fs::write(&out, "").unwrap();
+        self.add(
+            60,
+            "bash",
+            harness,
+            Path::new("/"),
+            &["bash", "-c", "make"],
+            Some(&out),
+        );
+        self.add(100, "make", 60, &self.clone, &["make", target], Some(&out));
+        out
+    }
+
+    /// The event log's line for a background launch, as `event_log_hooks` writes it: `bg` the task, `by` the calling agent.
+    fn launched(&self, task: &str, by: Option<&str>) {
+        let dir = self.clone.join(".git/l7r-events");
+        std::fs::create_dir_all(&dir).unwrap();
+        let by = by.map_or_else(String::new, |a| format!(r#","by":"{a}""#));
+        let line = format!(
+            r#"{{"t":"T","sid":"t","ev":"PostToolUse","tool":"Bash","id":"u"{by},"ms":4,"bg":"{task}"}}"#
+        );
+        let log = dir.join("451-x.jsonl");
+        let had = std::fs::read_to_string(&log).unwrap_or_default();
+        std::fs::write(&log, had + &line + "\n").unwrap();
+    }
+
+    /// A Stop whose payload names the session's transcript.
+    fn stop_in(&self, transcript: &Path) -> Vec<Answer> {
+        let input = json!({"session_id": "t", "cwd": self.clone.to_string_lossy(), "transcript_path": transcript.to_string_lossy()});
+        let s = Session::from_input(&input);
+        let e = Event {
+            name: "Stop".to_owned(),
+            input,
+        };
+        judge(&e, &s, &self.ctx())
+    }
+
+    fn transcript(&self, lines: &[String]) -> PathBuf {
+        let tr = self.root.join("session.jsonl");
+        std::fs::write(&tr, lines.join("\n") + "\n").unwrap();
+        tr
+    }
+}
+
+/// 451 T85: a background session's harness is named by its version (`comm` `2.1.325`), so `comm == "claude"` found no harness and
+/// every run the session's own background call started read as detached: 10 of the 24 run-still-going refusals of 2026-11-21
+/// 00:00-08:00 were the session's own `make claims-owed ledger-owed land`, run in the background.
+#[test]
+fn a_harness_named_by_its_version_tracks_the_session_s_own_run() {
+    let w = world("versioned");
+    w.versioned_harness(50);
+    let out = w.held_run(50, "bmain", "land");
+    w.launched("bmain", None);
+    let tr = w.transcript(&[]);
+    let said = printed(&w.stop_in(&tr));
+    let woke = said.contains("the harness will wake this session")
+        && said.contains(&out.to_string_lossy().into_owned());
+    assert!(woke); // said names the harness's wake and the run's output
+    let args = vec!["judge".to_owned(), w.clone.to_string_lossy().into_owned()];
+    assert!(with(&args, &w.ctx()).stdout.contains(" land tracked "));
+}
+
+/// 451 T85: a run a builder started is the builder's to wait on while it runs - its own notice wakes the session - by
+/// `set_down_hooks`' reading (T65: launched or resumed, or interim with its own work going); once its final notice is in, nothing
+/// will, so the run is refused like a detached one, and a waiter on its output lets the turn close.
+#[test]
+fn a_run_its_still_running_builder_started_lets_the_turn_close_until_the_builder_stops() {
+    let w = world("builder");
+    w.versioned_harness(50);
+    let out = w.held_run(50, "bbuild", "rust-test");
+    w.launched("bbuild", Some("abuild"));
+    let launched = r#"{"toolUseResult": {"agentId": "abuild"}}"#.to_owned();
+    let tr = w.transcript(&[launched.clone()]);
+    let said = printed(&w.stop_in(&tr));
+    assert!(
+        said.contains(
+            "`make rust-test` (pid 100) is still going; its builder abuild is still running"
+        ) && said.contains(&out.to_string_lossy().into_owned())
+    );
+    // interim: the builder ended its turn waiting on its own background work, this run
+    let own = tr.with_extension("").join("subagents");
+    std::fs::create_dir_all(&own).unwrap();
+    std::fs::write(
+        own.join("agent-abuild.jsonl"),
+        r#"{"isSidechain":true,"agentId":"abuild","toolUseResult":{"backgroundTaskId":"bbuild"}}"#
+            .to_owned()
+            + "\n",
+    )
+    .unwrap();
+    let waiting = notice(
+        "abuild",
+        r#"Agent \"T85\" is waiting on its own background work"#,
+    );
+    let tr = w.transcript(&[launched.clone(), waiting.clone()]);
+    assert!(printed(&w.stop_in(&tr)).contains("its builder abuild is still running"));
+    // its final notice: the builder has stopped, and nothing will wake the session for its run
+    let tr = w.transcript(&[
+        launched,
+        waiting,
+        notice("abuild", r#"Agent \"T85\" completed"#),
+    ]);
+    let text = refused(&w.stop_in(&tr));
+    let named = format!("pid 100 `make rust-test`, output in {}", out.display());
+    assert!(text.contains(&named));
+    assert!(w.stop_in(&tr).is_empty(), "once per root run");
+    std::fs::remove_file(w.clone.join(".git/live-run.told")).unwrap();
+    let wait = format!("until grep -q X {}; do sleep 3; done", out.display());
+    w.add(200, "bash", 1, Path::new("/"), &["bash", "-c", &wait], None);
+    assert!(printed(&w.stop_in(&tr)).contains("a waiter (pid 200) is watching"));
+}
+
+/// 451 T85: under a harness named `claude` too, a stopped builder's run is refused; a launch whose agent the session's transcript
+/// never names (an agent's own sub-agent), or a transcript that cannot be read, is not a running builder either; a run whose launch
+/// no log names (a foreground call, or a background one whose `PostToolUse` line has not come - 4 s after the run started, 2026-11-20
+/// 23:22:49) is held by an agent mid-call, and stays the harness's (feature 246).
+#[test]
+fn a_stopped_or_unknown_builder_s_run_refuses_and_an_unlogged_one_stays_tracked() {
+    let w = world("stopped");
+    w.add(50, "claude", 1, Path::new("/"), &["claude"], None);
+    w.held_run(50, "bgone", "static");
+    w.launched("bother", Some("aother"));
+    let tr = w.transcript(&[
+        r#"{"toolUseResult": {"agentId": "agone"}}"#.to_owned(),
+        notice("agone", r#"Agent \"T84\" completed"#),
+    ]);
+    assert!(printed(&w.stop_in(&tr)).contains("the harness will wake this session"));
+    w.launched("bgone", Some("agone"));
+    assert!(refused(&w.stop_in(&tr)).contains("pid 100 `make static`"));
+    std::fs::remove_file(w.clone.join(".git/live-run.told")).unwrap();
+    let nested = world("nested");
+    nested.versioned_harness(50);
+    nested.held_run(50, "bsub", "static");
+    nested.launched("bsub", Some("asub"));
+    let empty = nested.transcript(&[]);
+    assert!(refused(&nested.stop_in(&empty)).contains("pid 100 `make static`"));
+    std::fs::remove_file(nested.clone.join(".git/live-run.told")).unwrap();
+    // no transcript
+    assert!(refused(&nested.run("Stop")).contains("pid 100 `make static`"));
+}
+
 #[test]
 fn a_waiter_on_a_dead_producer_is_reported_and_the_marker_cleared() {
     let w = world("stale");

@@ -983,8 +983,10 @@ quick:           ## [tests] tier 2: lint and the fast tree checks (no Python tes
 # THE CLOSING CHECKS AT ONCE (feature 451 T55): a builder's three closing checks ran one after another while it wrote its plan section,
 # decide and report, none of which needs their result; started in the background the moment the code is done, they run side by side.
 # One run of `make static` for static-runs-hooks; FRESH=1 REASON= and HOOKS_ALL=1 reach the checks as on their own targets.
-closing-checks:  ## [tests] make static, make hooks-test and make quick at once, one combined result (each verdict and log; red if any is): start it with run_in_background once the code is done, then write the plan section and run make decide while it runs (451 T55)   [FRESH=1 REASON="..."] [HOOKS_ALL=1]
-	@"$$(git rev-parse --show-toplevel)/scripts/gates/closing-checks.sh"
+# THE CALLER'S TASK (451 T86): T= (F= when two features share a task number) judges the files and crates that task changed, another
+# task's red in the same clone reported apart and not counted (the script's header); with no T= the whole clone, as before.
+closing-checks:  ## [tests] make static, make hooks-test and make quick at once, one combined result (each verdict and log; red if any is): start it with run_in_background once the code is done, then write the plan section and run make decide while it runs (451 T55); T= judges that task's files and crates, another task's red reported apart, not counted (451 T86)   T=<task> [F=<feature>] [FRESH=1 REASON="..."] [HOOKS_ALL=1]
+	@CLOSING_TASK="$(T)" CLOSING_FEATURE="$(F)" "$$(git rev-parse --show-toplevel)/scripts/gates/closing-checks.sh"
 
 bypass-audit:    ## [project] every escape token taken, with the reason its user gave   (the FULL prompt reads this)
 	@why="$$REF_WHY"; \

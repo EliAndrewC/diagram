@@ -486,7 +486,10 @@ fn a_closing_checks_run_is_a_static_run_and_a_call_of_it_is_counted() {
     );
     assert_eq!(said(&one, "make closing-checks"), None);
     assert_eq!(said(&one, "echo make closing-checks"), None);
-    assert!(refusal(F, "T06", 2, &[]).contains("make closing-checks"));
+    // the closing run it names is the task's own (451 T86): with no T= it would judge the whole clone
+    assert!(
+        refusal(F, "T06", 2, &[]).contains("`make closing-checks T=T06 F=451` in the background")
+    );
 }
 
 #[test]
@@ -565,6 +568,9 @@ fn through_the_guard_a_foreground_closing_check_is_refused_beside_the_count() {
     let past = clone("fg-past", &[("T06", "2026-11-20T10:00:00Z")], &two_runs());
     let both = refusals(&at(foreground(&past, "make closing-checks")));
     assert_eq!(both.len(), 2);
+    // both name the caller's own closing run, its task and feature read from the call's filing in the clone (451 T86)
+    let run = "make closing-checks T=T06 F=451";
+    assert!(both.iter().all(|r| r.contains(run)), "{both:?}");
     assert!(
         both[0].contains("has run `make static` 2 times")
             && both[1].contains("run_in_background: true")

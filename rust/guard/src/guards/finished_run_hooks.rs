@@ -19,7 +19,7 @@ use crate::shared::state::field;
 
 pub(crate) mod runs;
 
-use runs::{Procs, Root, Status};
+use runs::{Procs, Root, Starter, Status};
 
 /// The guard.
 pub const GUARD: Guard = Guard {
@@ -158,7 +158,8 @@ pub(crate) fn judge(event: &Event, session: &Session, c: &Ctx) -> Vec<Answer> {
         fire("reminded", &out, "finished-not-running");
     }
     if stop {
-        if let Some(refusal) = hold(&clone, c, &mut lines, &fire) {
+        let transcript = Path::new(field(&event.input, "transcript_path"));
+        if let Some(refusal) = hold(&clone, c, transcript, &mut lines, &fire) {
             return vec![Answer::Refuse(refusal)];
         }
     }
@@ -169,11 +170,82 @@ pub(crate) fn judge(event: &Event, session: &Session, c: &Ctx) -> Vec<Answer> {
     }
 }
 
-/// THE TURN MAY NOT CLOSE OVER A RUN THAT IS STILL GOING, unless the run will wake the session (feature 246); and a waiter on a dead
-/// producer is reported. The refusal's words, when there is one.
+/// The task id a run's output names: the harness's shell writes `<tmp>/<project>/<session>/tasks/<id>.output` (measured 2026-11-21:
+/// a builder's own Bash call's fd 1, `.../c6fd72d1-.../tasks/bnawljeqh.output`).
+fn task_id(output: &str) -> Option<&str> {
+    let path = Path::new(output);
+    (path.parent()?.file_name()? == "tasks")
+        .then(|| path.file_name()?.to_str()?.strip_suffix(".output"))
+        .flatten()
+}
+
+/// The agent whose call launched a background task, from the event log's line for its launch (451 T85): `event_log_hooks` writes a
+/// backgrounded call's `PostToolUse` with the task's id as `bg` and, for a subagent's call, the hook payload's own `agent_id` as
+/// `by` (none for the session's own call). The clone's logs are read newest first, a line at a time, and only a line naming the id
+/// is parsed: the agent's id, or None for the session's own call or a launch no log names.
+fn launched_by(logs: &Path, id: &str) -> Option<String> {
+    use std::io::BufRead as _;
+    let needle = format!("\"bg\":\"{id}\"");
+    let mut files: Vec<(std::time::SystemTime, PathBuf)> = std::fs::read_dir(logs)
+        .into_iter()
+        .flatten()
+        .filter_map(Result::ok)
+        .map(|e| e.path())
+        .filter(|p| p.extension().is_some_and(|x| x == "jsonl"))
+        .map(|p| {
+            (
+                p.metadata()
+                    .and_then(|m| m.modified())
+                    .unwrap_or(std::time::UNIX_EPOCH),
+                p,
+            )
+        })
+        .collect();
+    files.sort_unstable();
+    files.reverse();
+    let row = files.into_iter().find_map(|(_, file)| {
+        let f = std::fs::File::open(file).ok()?;
+        std::io::BufReader::new(f)
+            .lines()
+            .map_while(Result::ok)
+            .filter(|l| l.contains(&needle))
+            .map(|l| serde_json::from_str::<Value>(&l).unwrap_or(Value::Null))
+            .find(|row| row.get("ev").and_then(Value::as_str) == Some("PostToolUse"))
+    })?;
+    row.get("by").and_then(Value::as_str).map(str::to_owned)
+}
+
+/// WHO STARTED A RUN THE HARNESS HOLDS (451 T85), by its output: the session itself - or a call no launch line names, which an agent
+/// mid-call holds (a foreground call; or a background one whose `PostToolUse` has not come, 4 s after its run started on 2026-11-20
+/// 23:22:49) - is the harness's to wake (feature 246); a builder still running by `set_down_hooks`' reading of the session's transcript
+/// (T65: launched or resumed, or interim with its own work going) is the builder's, whose own notice wakes the session; any other
+/// builder has stopped, or the transcript cannot say, and its run is judged as a detached one. `known` holds each builder's answer, so
+/// a transcript is read once a turn's end however many of a builder's runs are live.
+fn starter(
+    logs: &Path,
+    transcript: &Path,
+    output: &str,
+    known: &std::cell::RefCell<std::collections::HashMap<String, bool>>,
+) -> Starter {
+    let Some(agent) = task_id(output).and_then(|id| launched_by(logs, id)) else {
+        return Starter::Harness;
+    };
+    let running = *known.borrow_mut().entry(agent.clone()).or_insert_with(|| {
+        crate::guards::set_down_hooks::still_running(transcript, &agent).unwrap_or(false)
+    });
+    if running {
+        Starter::Builder(agent)
+    } else {
+        Starter::Stopped
+    }
+}
+
+/// THE TURN MAY NOT CLOSE OVER A RUN THAT IS STILL GOING, unless the run will wake the session (feature 246) or a builder still
+/// running started it (451 T85); and a waiter on a dead producer is reported. The refusal's words, when there is one.
 fn hold(
     clone: &Path,
     c: &Ctx,
+    transcript: &Path,
     lines: &mut Vec<String>,
     fire: &dyn Fn(&str, &str, &str),
 ) -> Option<String> {
@@ -193,7 +265,12 @@ fn hold(
         }
         return None;
     }
-    let roots = c.procs.judge_runs(clone);
+    let logs = crate::guards::event_log_hooks::log_path(clone, "_");
+    let logs = logs.parent().unwrap_or(clone);
+    let known = std::cell::RefCell::default();
+    let roots = c
+        .procs
+        .judge_runs_by(clone, &|out| starter(logs, transcript, out, &known));
     let unwatched: Vec<&Root> = roots
         .iter()
         .filter(|r| matches!(r.status, Status::Unwatched(_)))
@@ -223,6 +300,8 @@ fn woken(r: &Root, lines: &mut Vec<String>, fire: &dyn Fn(&str, &str, &str)) {
     let (pid, target) = (r.pid, &r.target);
     let (line, rule) = if let Status::Watched(waiter, file) = &r.status {
         (format!("finished-run: `make {target}` (pid {pid}) is still going; a waiter (pid {waiter}) is watching {file} and will wake this session. Nothing more to arm."), "waiter-armed")
+    } else if let Status::Builder(agent, out) = &r.status {
+        (format!("finished-run: `make {target}` (pid {pid}) is still going; its builder {agent} is still running, which the run will wake, and the builder's own notice will wake this session (its output: {out}). Nothing more to arm."), "builder-running")
     } else {
         (format!("finished-run: `make {target}` (pid {pid}) is still going; the harness will wake this session when it finishes (its output: {}). Nothing more to arm.", r.detail()), "tracked-run")
     };
