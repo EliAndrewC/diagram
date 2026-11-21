@@ -1,6 +1,6 @@
 //! Feature 451 T07 (FR-004, plan D6): an agent's cost and task in the log - `task` on its Agent dispatch line from the description, else
-//! the prompt's first line; `tok` (`in`, `cached`, `created`, `out`, each `message.id` once), `ctx` (its last call's context) and `task`
-//! (its meta file's description) on each `SubagentStop` line.
+//! the prompt's first line; `tok` (`in`, `cached`, `created`, `out`, each `message.id` once), `adv` (the same four of its advisor calls'
+//! own iterations, 451 T69), `ctx` (its last call's context) and `task` (its meta file's description) on each `SubagentStop` line.
 
 use std::path::Path;
 
@@ -21,6 +21,23 @@ fn reply(id: &str, input: u64, read: u64, write: u64, out: u64, text: &str) -> S
     let mut row: Value = serde_json::from_str(&call(id, input, read, write, out)).unwrap();
     row["message"]["content"] = json!([{"type": "text", "text": text}]);
     row.to_string()
+}
+
+/// Model call `id` carrying an advisor call, its usage as Claude Code wrote one (451 T69: `agent-a0234478442863bca.jsonl`'s
+/// `msg_011ChAbHEgmj2kXEyQ9QXkyb`, 2026-11-18): `iterations` the builder's own call, the advisor's (its `model` named), and the
+/// builder's own again, the top level the builder's two summed and the advisor's in neither.
+fn advised(id: &str) -> String {
+    json!({"type": "assistant", "message": {"id": id, "role": "assistant", "model": "claude-opus-5-5", "usage": {
+        "input_tokens": 4, "cache_creation_input_tokens": 10940, "cache_read_input_tokens": 50695, "output_tokens": 1852,
+        "server_tool_use": {"web_search_requests": 0, "web_fetch_requests": 0},
+        "iterations": [
+            {"input_tokens": 2, "output_tokens": 1611, "cache_read_input_tokens": 21143, "cache_creation_input_tokens": 8409,
+                "type": "message"},
+            {"input_tokens": 32395, "output_tokens": 7030, "cache_read_input_tokens": 0, "cache_creation_input_tokens": 0,
+                "type": "advisor_message", "model": "claude-fable-5-2"},
+            {"input_tokens": 2, "output_tokens": 241, "cache_read_input_tokens": 29552, "cache_creation_input_tokens": 2531,
+                "type": "message"}]}}})
+    .to_string()
 }
 
 fn write_transcript(d: &Path, aid: &str, rows: &[String]) -> String {
@@ -152,9 +169,53 @@ fn a_stop_carries_its_agents_tokens_context_and_task() {
     );
     assert_eq!(row["ctx"], json!(1602));
     assert_eq!(row["task"], json!("T202"));
+    // no advisor call: its figure is written, zero - counted, not unknown (451 T69)
+    assert_eq!(
+        row["adv"],
+        json!({"in": 0, "cached": 0, "created": 0, "out": 0})
+    );
     // no `agent_transcript_path`: the agent's own transcript beside the session's
     let row = last_line(&append(&stop(&cwd, &session, "ab1"), "T", &d, &none).unwrap());
     assert_eq!(row["tok"]["out"], json!(47));
+}
+
+/// An advisor call's own iteration is booked beside the builder's (451 T69): `tok` stays the top level, the builder's own two
+/// iterations of each call, and `adv` sums the `advisor_message` iterations, each `message.id` once - a streamed call's three rows,
+/// each carrying the same iterations, counted once - where the top level holds none of them. A row merely quoting the type (a reply's
+/// text) holds no advisor call, nor does a `user` row carrying a child's usage.
+#[test]
+fn an_advisor_calls_own_iteration_is_booked_beside_the_builders() {
+    let d = clone("cost-advisor");
+    let cwd = d.to_string_lossy().into_owned();
+    let session = session_files(
+        &d,
+        "adv1",
+        r#"{"agentType":"general-purpose","description":"T69: the advisor's tokens","toolUseId":"tu"}"#,
+    );
+    let rows = [
+        advised("m1"),
+        advised("m1"),
+        advised("m1"),
+        json!({"type": "user", "message": {"role": "user", "content": "x"}, "toolUseResult": {"usage": {"input_tokens": 9,
+            "iterations": [{"type": "advisor_message", "input_tokens": 99, "output_tokens": 99}]}}})
+        .to_string(),
+        reply("m2", 2, 1500, 100, 7, "the type advisor_message is no call"),
+        advised("m3"),
+    ];
+    let own = write_transcript(&d, "adv1", &rows);
+    let mut p = stop(&cwd, &session, "adv1");
+    p["agent_transcript_path"] = json!(own);
+    let row = last_line(&append(&p, "T", &d, &none).unwrap());
+    assert_eq!(
+        row["tok"],
+        json!({"in": 10, "cached": 102_890, "created": 21_980, "out": 3711})
+    );
+    assert_eq!(
+        row["adv"],
+        json!({"in": 64_790, "cached": 0, "created": 0, "out": 14_060})
+    );
+    // the context is the builder's own last iteration (T68's reader, unchanged)
+    assert_eq!(row["ctx"], json!(32_085));
 }
 
 /// A builder with no meta file still has its cost; a stop whose transcript is missing or holds no call writes neither field; a
@@ -177,7 +238,7 @@ fn a_stop_with_no_meta_or_no_transcript() {
     for aid in ["missing", "empty"] {
         let row = last_line(&append(&stop(&cwd, &session, aid), "T", &d, &none).unwrap());
         assert!(
-            row.get("tok").is_none() && row.get("ctx").is_none(),
+            row.get("tok").is_none() && row.get("ctx").is_none() && row.get("adv").is_none(),
             "{aid}: {row}"
         );
     }

@@ -1,0 +1,6 @@
+{
+  "utc": "2026-11-21T09:53:15Z",
+  "target": "plan-gate decide-defer 451-time-retro-and-efficiency T54",
+  "commit": "9f46fa5842",
+  "why": "the builder may not edit tasks.md, so the coordinator files and orders both items"
+}

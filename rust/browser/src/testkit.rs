@@ -3,14 +3,15 @@
 //! from its URL: `neterr` fails the navigation, `samedoc` has no loader, `noload` never loads, `busy` never goes idle, `nobody` has no
 //! body, `noglyph` has no glyph to measure, `throw` throws in the page, `big` measures large at once, `small` never grows; and (feature 449
 //! T150, the lit page) `notready` never readies its raster, `readythrow` throws asking, `zoomy` reaches vector mode at the second press
-//! of the zoom key, `stuck` never does, `novb` has no viewBox. Python
+//! of the zoom key, `stuck` never does, `novb` has no viewBox; and (451 T70) `lateready` readies its raster 50 ms after it is asked, past
+//! the 40 ms the test build once gave a real Chromium that missed it under load. Python
 //! starts isolated and without `site` (`-I -S`): 15 ms a start where a plain start took 30, and the tests start it often (feature 449
 //! T167, observed 2026-11-17).
 
 use std::path::{Path, PathBuf};
 
 const FAKE: &str = r#"#!/usr/bin/env -S python3 -I -S
-import base64, json, os, sys
+import base64, json, os, sys, time
 inp = os.fdopen(3, "rb", buffering=0)
 out = os.fdopen(4, "wb", buffering=0)
 url = ""
@@ -65,6 +66,8 @@ while True:
             e = p["expression"]
             if "rasterReady" in e and "notready" in url:
                 continue
+            if "rasterReady" in e and "lateready" in url:
+                time.sleep(0.05)
             if "rasterReady" in e and "readythrow" in url:
                 r = {"result": {}, "exceptionDetails": {"text": "Uncaught", "exception": {"description": "TypeError: no raster"}}}
             elif "rasterReady" in e:

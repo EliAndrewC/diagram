@@ -20,7 +20,10 @@
 //! inside the window - D6's sum, read after the fact - and only where there is none from its last stop's `tok`: the stop's sum was
 //! short of the transcript's rows timestamped at or before the stop on 16 of the 17 stops that carried one (by 1,005 output tokens of
 //! 6,329 on `a8348bf9fb2e13438`), and 17 of the window's 279 stops carried one, measured 2026-11-21 (`/tmp/t10/scripts/m2.py` over the
-//! 451 log and the transcripts, the window above).
+//! 451 log and the transcripts, the window above). An agent's advisor calls are counted apart, in their own columns (451 T69): a row
+//! carrying one sums the builder's own two iterations at its top level, and the advisor's own iteration, `advisor_message` in
+//! `usage.iterations`, is in no top level, so the window's agents' advisor tokens were in no column ([`Adv`]); a stop's `adv` stands
+//! for them where its transcript has no row, and a stop written before T69 carries none, its agent's advisor tokens uncounted.
 //!
 //! THE REWORK. A refused landing is a landing `end` line whose `landed` is false, never read from its code: a push that went out with a
 //! later raise, or exit 3 with its ticks standing, is a landing (D7); a landing of several tasks is one refusal, counted under each. A
@@ -45,7 +48,8 @@ use super::super::super::feature_report::tables::round_key;
 use super::super::task_at;
 use super::Agent;
 
-/// An agent's tokens (D6's `tok`): fresh input, cache read, cache written, and output.
+/// An agent's tokens (D6's `tok`): fresh input, cache read, cache written, and output - its own model calls', the top level of each
+/// call's usage - and apart from them its advisor calls' (451 T69).
 #[derive(Debug, Clone, Copy, Default, PartialEq)]
 pub struct Tok {
     /// Input not read from the cache.
@@ -56,29 +60,62 @@ pub struct Tok {
     pub created: f64,
     /// Output.
     pub out: f64,
+    /// Its advisor calls' own iterations, none where they were not counted: a stop written before T69 carries no `adv`.
+    pub adv: Option<Adv>,
+}
+
+/// An agent's advisor calls' tokens (451 T69): the `advisor_message` iterations of its rows' `usage.iterations`, which no top level
+/// holds - an advisor call's row sums the builder's own two iterations, before and after it, at its top level - every input token,
+/// cached or not, and output. The 2,722 advisor iterations of the session's subagent transcripts read none from the cache and wrote none
+/// to it, measured 2026-11-21 (`/tmp/t69/rows.py`), so the input is one figure.
+#[derive(Debug, Clone, Copy, Default, PartialEq)]
+pub struct Adv {
+    /// Every input token.
+    pub input: f64,
+    /// Output.
+    pub out: f64,
 }
 
 impl Tok {
-    /// A stop's `tok` (`in`, `cached`, `created`, `out`), none where it is no object.
+    /// A stop's `tok` (`in`, `cached`, `created`, `out`) and its `adv` (the same four, the advisor's, 451 T69), none where `tok` is no
+    /// object; its advisor tokens none where `adv` is none.
     #[must_use]
-    pub fn of(v: &Value) -> Option<Self> {
-        let n = |k: &str| v.get(k).and_then(Value::as_f64).unwrap_or(0.0);
+    pub fn of(v: &Value, adv: &Value) -> Option<Self> {
+        let n = |v: &Value, k: &str| v.get(k).and_then(Value::as_f64).unwrap_or(0.0);
         v.as_object().map(|_| Self {
-            fresh: n("in"),
-            cached: n("cached"),
-            created: n("created"),
-            out: n("out"),
+            fresh: n(v, "in"),
+            cached: n(v, "cached"),
+            created: n(v, "created"),
+            out: n(v, "out"),
+            adv: adv.as_object().map(|_| Adv {
+                input: n(adv, "in") + n(adv, "cached") + n(adv, "created"),
+                out: n(adv, "out"),
+            }),
         })
     }
 
-    /// A transcript row's `message.usage`.
+    /// A transcript row's `message.usage`: its top level, and its `advisor_message` iterations apart (451 T69).
     fn of_usage(u: &Value) -> Self {
-        let n = |k: &str| u.get(k).and_then(Value::as_f64).unwrap_or(0.0);
+        let n = |v: &Value, k: &str| v.get(k).and_then(Value::as_f64).unwrap_or(0.0);
+        let adv = u
+            .get("iterations")
+            .and_then(Value::as_array)
+            .into_iter()
+            .flatten()
+            .filter(|i| i.get("type").and_then(Value::as_str) == Some("advisor_message"))
+            .fold(Adv::default(), |a, i| Adv {
+                input: a.input
+                    + n(i, "input_tokens")
+                    + n(i, "cache_read_input_tokens")
+                    + n(i, "cache_creation_input_tokens"),
+                out: a.out + n(i, "output_tokens"),
+            });
         Self {
-            fresh: n("input_tokens"),
-            cached: n("cache_read_input_tokens"),
-            created: n("cache_creation_input_tokens"),
-            out: n("output_tokens"),
+            fresh: n(u, "input_tokens"),
+            cached: n(u, "cache_read_input_tokens"),
+            created: n(u, "cache_creation_input_tokens"),
+            out: n(u, "output_tokens"),
+            adv: Some(adv),
         }
     }
 
@@ -88,12 +125,21 @@ impl Tok {
         self.fresh + self.cached + self.created
     }
 
+    /// The two summed, their advisor tokens the sum of those counted.
     fn plus(self, o: Self) -> Self {
+        let adv = match (self.adv, o.adv) {
+            (Some(a), Some(b)) => Some(Adv {
+                input: a.input + b.input,
+                out: a.out + b.out,
+            }),
+            (a, b) => a.or(b),
+        };
         Self {
             fresh: self.fresh + o.fresh,
             cached: self.cached + o.cached,
             created: self.created + o.created,
             out: self.out + o.out,
+            adv,
         }
     }
 }
@@ -286,6 +332,20 @@ fn k(n: f64) -> String {
     fixed(n / 1000.0, 1)
 }
 
+/// (in, out) in thousands, "-" each where none was counted.
+fn pair(t: Option<(f64, f64)>) -> (String, String) {
+    t.map_or(("-".to_owned(), "-".to_owned()), |(i, o)| (k(i), k(o)))
+}
+
+/// A sum's figure, "0.0" where none was counted.
+fn zero(n: String) -> String {
+    if n == "-" {
+        "0.0".to_owned()
+    } else {
+        n
+    }
+}
+
 /// `n word`, plural but for one.
 fn count(n: usize, word: &str) -> String {
     format!("{n} {word}{}", if n == 1 { "" } else { "s" })
@@ -303,17 +363,18 @@ pub fn render(
     each: bool,
 ) -> String {
     let mut lines = vec![
-        "| task | agents | agent minutes | k tokens in | k tokens out | refused landings | plan re-rounds | by kind (count) |".to_owned(),
-        "|---|---|---|---|---|---|---|---|".to_owned(),
+        "| task | agents | agent minutes | k tokens in | k tokens out | k advisor in | k advisor out | refused landings | plan re-rounds | \
+         by kind (count) |"
+            .to_owned(),
+        "|---|---|---|---|---|---|---|---|---|---|".to_owned(),
     ];
+    // (in, out) of the rows' own calls, then of their advisor calls (451 T69), each "-" where none was counted
     let toks = |rs: &[&Row]| {
-        let got: Vec<Tok> = rs.iter().filter_map(|r| r.tok).collect();
-        if got.is_empty() {
-            ("-".to_owned(), "-".to_owned())
-        } else {
-            let t = got.into_iter().fold(Tok::default(), Tok::plus);
-            (k(t.input()), k(t.out))
-        }
+        let t = rs.iter().filter_map(|r| r.tok).reduce(Tok::plus);
+        (
+            pair(t.map(|t| (t.input(), t.out))),
+            pair(t.and_then(|t| t.adv).map(|a| (a.input, a.out))),
+        )
     };
     for task in order {
         let mine: Vec<&Row> = rows.iter().filter(|r| &r.task == *task).collect();
@@ -332,18 +393,18 @@ pub fn render(
             .map(|(n, c)| format!("{n} {c}"))
             .collect::<Vec<_>>()
             .join(", ");
-        let (tin, tout) = toks(&mine);
+        let ((tin, tout), (ain, aout)) = toks(&mine);
         lines.push(format!(
-            "| {task} | {} | {} | {tin} | {tout} | {landings} | {again} | {kinds} |",
+            "| {task} | {} | {} | {tin} | {tout} | {ain} | {aout} | {landings} | {again} | {kinds} |",
             mine.len(),
             fixed(mine.iter().fold(0.0, |a, r| a + r.secs) / 60.0, 0)
         ));
     }
     let all: Vec<&Row> = rows.iter().filter(|r| order.contains(&&r.task)).collect();
     let secs = all.iter().fold(0.0, |a, r| a + r.secs);
-    let (tin, tout) = toks(&all);
+    let ((tin, tout), (ain, aout)) = toks(&all);
     lines.push(format!(
-        "| all | {} | {} | {tin} | {tout} | {} | {} | |",
+        "| all | {} | {} | {tin} | {tout} | {ain} | {aout} | {} | {} | |",
         all.len(),
         fixed(secs / 60.0, 0),
         refused.len(),
@@ -353,19 +414,17 @@ pub fn render(
         lines.extend(
             [
                 "",
-                "| task | agent | kind | from (UTC) | minutes | k tokens in | k tokens out |",
-                "|---|---|---|---|---|---|---|",
+                "| task | agent | kind | from (UTC) | minutes | k tokens in | k tokens out | k advisor in | k advisor out |",
+                "|---|---|---|---|---|---|---|---|---|",
             ]
             .map(String::from),
         );
     }
     for task in order.iter().filter(|_| each) {
         for r in all.iter().filter(|r| &r.task == *task) {
-            let (tin, tout) = r.tok.map_or(("-".to_owned(), "-".to_owned()), |t| {
-                (k(t.input()), k(t.out))
-            });
+            let ((tin, tout), (ain, aout)) = toks(&[*r]);
             lines.push(format!(
-                "| {task} | {} | {} | {} | {} | {tin} | {tout} |",
+                "| {task} | {} | {} | {} | {} | {tin} | {tout} | {ain} | {aout} |",
                 r.aid,
                 r.kind,
                 hhmm(r.t0),
@@ -376,13 +435,16 @@ pub fn render(
     lines.push(String::new());
     lines.push(format!(
         "the critical path: {} min of wall clock; beside it, the agents' own minutes summed: {} min over {}, {}k tokens in and {}k out \
-         ({} with no count); rework: {}, {} (feature 451 T10, D7)",
+         ({} with no count), the advisor's own {}k in and {}k out beside them ({} with no count); rework: {}, {} (feature 451 T10, D7)",
         fixed(critical / 60.0, 0),
         fixed(secs / 60.0, 0),
         count(all.len(), "agent"),
-        if tin == "-" { "0.0".to_owned() } else { tin },
-        if tout == "-" { "0.0".to_owned() } else { tout },
+        zero(tin),
+        zero(tout),
         all.iter().filter(|r| r.tok.is_none()).count(),
+        zero(ain),
+        zero(aout),
+        all.iter().filter(|r| r.tok.and_then(|t| t.adv).is_none()).count(),
         count(refused.len(), "refused landing"),
         count(rerounds.len(), "plan re-round")
     ));

@@ -55,11 +55,31 @@ pub struct Lit {
     pub after: Vec<u8>,
 }
 
-/// The raster's wait (a minute) and the zoom key's settle (120 ms), as the Python's; the tests' fake browser answers at once.
+/// The raster's wait, a minute as the Python's (`timeout=60000`), IN EVERY BUILD (451 T70): the wait is the page's own answer, so a
+/// page that readies pays nothing for the ceiling. The test build's 40 ms failed the end-to-end test's real Chromium under load (1 of
+/// 40 runs in the event log, under `make closing-checks`; 1 of 10 with 44 busy loops on 22 cpus), a ready page's answer that came late.
+const READY_WAIT: Duration = Duration::from_secs(60);
+/// The zoom key's settle (120 ms), as the Python's; the tests' fake browser answers at once.
 #[cfg(not(test))]
-const WAITS: (Duration, Duration) = (Duration::from_secs(60), Duration::from_millis(120));
+const SETTLE: Duration = Duration::from_millis(120);
 #[cfg(test)]
-const WAITS: (Duration, Duration) = (Duration::from_millis(40), Duration::from_millis(1));
+const SETTLE: Duration = Duration::from_millis(1);
+
+#[cfg(not(test))]
+fn ready_wait() -> Duration {
+    READY_WAIT
+}
+#[cfg(test)]
+fn ready_wait() -> Duration {
+    READY_CEILING.get()
+}
+
+#[cfg(test)]
+thread_local! {
+    /// The test build's raster ceiling: the shipped minute, which the test of a page that never readies shortens on its own thread,
+    /// so that refusal comes in 40 ms (451 T70).
+    pub(crate) static READY_CEILING: std::cell::Cell<Duration> = const { std::cell::Cell::new(READY_WAIT) };
+}
 
 fn viewport() -> Value {
     json!({"x": 0, "y": 0, "width": WIDTH, "height": HEIGHT})
@@ -88,7 +108,7 @@ fn lit_on(
         &format!("file://{}", page_path.display()),
         Duration::from_secs(30),
     )?;
-    let (ready_wait, settle) = WAITS;
+    let ready_wait = ready_wait();
     b.evaluate_within(page, READY, &Value::Null, ready_wait)
         .map_err(|e| {
             if e.contains("no answer within") {
@@ -110,7 +130,7 @@ fn lit_on(
             }
             b.control_equal(page)?;
             pressed = true;
-            sleep(settle);
+            sleep(SETTLE);
         }
         // THE ZOOM'S HOVER LANDS BEFORE THE CLEAR (feature 449 T150): a zoom moves the map under the pointer, and the browser lights
         // what is now under it at the next frame it draws. With no frame drawn between the last press and the clear below, that hover

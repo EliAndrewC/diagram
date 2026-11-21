@@ -152,9 +152,10 @@ const REPLY_WAIT: Duration = Duration::from_millis(1000);
 const REPLY_POLL: Duration = Duration::from_millis(5);
 
 /// An agent's cost on its `SubagentStop` line (feature 451 T07, plan D6, research R2): `tok`, its transcript's `in`, `cached`, `created`
-/// and `out` tokens, each model call once - one call's streamed reply is several `assistant` rows of one `message.id`, the last holding
-/// the whole output, so the last row of an id stands for it (a sum over rows read the T202 builder's output 1,317,955 tokens against its
-/// 481,878, 723 rows of 305 ids, measured 2026-11-20 (a Python scan of its 50 MB transcript)); `ctx`, its last call's context. Both are
+/// and `out` tokens, each model call once, the top level of its usage - the builder's own iterations - and beside it `adv`, the same four
+/// of its advisor calls' own iterations, which no top level holds ([`advisor_of`], 451 T69), zero where it called none; one call's
+/// streamed reply is several `assistant` rows of one `message.id`, the last holding the whole output, so the last row of an id stands
+/// for it (a sum over rows read the T202 builder's output 1,317,955 tokens against its 481,878, 723 rows of 305 ids, measured 2026-11-20 (a Python scan of its 50 MB transcript)); `ctx`, its last call's context. Both are
 /// read by `context_cap_hooks`' row reader, the whole file for `tok` (a stop is cumulative: a resumed agent's file holds every leg, and
 /// the reader keeps the last line per `aid`), once the payload's `last_assistant_message` is on disk ([`REPLY_WAIT`], T59). The
 /// transcript is the payload's `agent_transcript_path`, else the one beside the session's; none readable, or no call in it, writes
@@ -207,25 +208,64 @@ pub(super) fn agent_cost_within(out: &mut Map<String, Value>, payload: &Value, w
     }
     // a last row with no newline counts, as a split of the file read it
     tally.row(&rest);
-    let calls = tally.calls;
-    let n = |f: fn(&Call) -> u64| calls.iter().map(f).sum::<u64>();
-    if n(|c| c.input + c.cached + c.created + c.out) == 0 {
+    if tally
+        .calls
+        .iter()
+        .all(|c| c.input + c.cached + c.created + c.out == 0)
+    {
         return;
     }
-    out.insert(
-        "tok".into(),
-        serde_json::json!({"in": n(|c| c.input), "cached": n(|c| c.cached), "created": n(|c| c.created), "out": n(|c| c.out)}),
-    );
+    out.insert("tok".into(), summed(&tally.calls));
+    out.insert("adv".into(), summed(&tally.adv));
     if let Some(ctx) = path.as_deref().and_then(context) {
         out.insert("ctx".into(), Value::from(ctx));
     }
 }
 
-/// What an agent's transcript rows have shown so far: each model call once, and the last `assistant` row since the last `user` row - the
-/// reply, once it is on disk.
+/// `calls`' `in`, `cached`, `created` and `out` tokens, each summed.
+fn summed(calls: &[Call]) -> Value {
+    let n = |f: fn(&Call) -> u64| calls.iter().map(f).sum::<u64>();
+    serde_json::json!({"in": n(|c| c.input), "cached": n(|c| c.cached), "created": n(|c| c.created), "out": n(|c| c.out)})
+}
+
+/// An `assistant` row's advisor calls (451 T69): its `usage.iterations` of type `advisor_message`, summed. On a row carrying an advisor
+/// call the iterations are the builder's own call, the advisor's (its `model` named) and the builder's own again, and the top level,
+/// [`call_of`]'s, sums the builder's two alone, so `tok` left out 82,254,728 input and 6,504,729 output tokens of the session's subagent
+/// transcripts (588 calls over 2,722 rows, every row of one call carrying the same iterations), measured 2026-11-21 (`/tmp/t69/rows.py`,
+/// the iterations summed one row per `message.id`). Only a row naming the type is parsed again, so a transcript with no advisor call is
+/// read as before.
+fn advisor_of(row: &[u8]) -> Call {
+    const NEEDLE: &[u8] = b"advisor_message";
+    let parsed = row
+        .windows(NEEDLE.len())
+        .any(|w| w == NEEDLE)
+        .then(|| serde_json::from_slice::<Value>(row).ok())
+        .flatten();
+    parsed
+        .as_ref()
+        .and_then(|v| v.pointer("/message/usage/iterations"))
+        .and_then(Value::as_array)
+        .into_iter()
+        .flatten()
+        .filter(|i| i.get("type").and_then(Value::as_str) == Some("advisor_message"))
+        .fold(Call::default(), |a, i| {
+            let n = |k: &str| i.get(k).and_then(Value::as_u64).unwrap_or(0);
+            Call {
+                input: a.input + n("input_tokens"),
+                cached: a.cached + n("cache_read_input_tokens"),
+                created: a.created + n("cache_creation_input_tokens"),
+                out: a.out + n("output_tokens"),
+                ..a
+            }
+        })
+}
+
+/// What an agent's transcript rows have shown so far: each model call once, its advisor calls' iterations beside it (`adv`, one a call,
+/// 451 T69), and the last `assistant` row since the last `user` row - the reply, once it is on disk.
 #[derive(Default)]
 struct Tally {
     calls: Vec<Call>,
+    adv: Vec<Call>,
     at: HashMap<String, usize>,
     last: Vec<u8>,
 }
@@ -236,12 +276,15 @@ impl Tally {
         const USER: &[u8] = br#""type":"user""#;
         if let Some(c) = call_of(row) {
             self.last = row.to_vec();
+            let adv = advisor_of(row);
             // a row naming no id is a call of its own
             if let Some(&i) = self.at.get(&c.id).filter(|_| !c.id.is_empty()) {
                 self.calls[i] = c;
+                self.adv[i] = adv;
             } else {
                 self.at.insert(c.id.clone(), self.calls.len());
                 self.calls.push(c);
+                self.adv.push(adv);
             }
         } else if row.windows(USER.len()).any(|w| w == USER) {
             self.last.clear();

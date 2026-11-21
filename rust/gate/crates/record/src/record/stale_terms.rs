@@ -2,7 +2,8 @@
 //!
 //! Later `spec-fidelity` rounds were about 61% of what spec review cost, and in features 251 and 252 most of what they found was text the session had left stale.
 //! For every line a change REPLACED, the SUBJECTS are the backticked terms the old and new line share, the OLD VALUES the words the old line carried and the new one
-//! does not; a CANDIDATE is any other line of the directory that names a subject and still carries an old value. A candidate is a line to look at, never a verdict.
+//! does not; a CANDIDATE is any other line of the directory that names a subject, in the sense the changed line did (`names`, 451 T54), and still carries an old
+//! value. A candidate is a line to look at, never a verdict.
 
 use std::collections::{BTreeMap, BTreeSet, HashMap, HashSet};
 use std::fmt::Write as _;
@@ -33,7 +34,6 @@ fn compiled(p: &str) -> Regex {
 
 static TOKEN: LazyLock<Regex> =
     LazyLock::new(|| compiled(r"[A-Za-z][A-Za-z-]{2,}|\d+(?:[.,]\d+)*%?"));
-static TICKED: LazyLock<Regex> = LazyLock::new(|| compiled(r"`([^`\n]{2,60})`"));
 static REQ: LazyLock<Regex> = LazyLock::new(|| compiled(r"^- \*\*(FR-\d{3}[a-z]?)\*\*"));
 static CRIT: LazyLock<Regex> =
     LazyLock::new(|| compiled(r"^- \*\*(SC-\d{3}[a-z]?)\*\*\s*\(([^)]*)\)"));
@@ -65,12 +65,50 @@ fn tokens(line: &str) -> BTreeSet<String> {
         .collect()
 }
 
+/// The code spans of `line`, its backticks paired in order. A regex scan for 2 to 60 characters between backticks paired the closing
+/// backtick of a span it could not keep (`t`) with the next span's opening one, making the prose between two spans a subject (451 T54).
+fn spans(line: &str) -> Vec<&str> {
+    let pieces: Vec<&str> = line.split('`').collect();
+    let closed = pieces.len().saturating_sub(1);
+    pieces.into_iter().take(closed).skip(1).step_by(2).collect()
+}
+
 fn subjects(line: &str) -> BTreeSet<String> {
-    TICKED
-        .captures_iter(line)
-        .map_while(Result::ok)
-        .map(|c| c[1].trim().to_owned())
+    spans(line)
+        .into_iter()
+        .filter(|s| (2..=60).contains(&s.chars().count()))
+        .map(str::trim)
+        .filter(|s| !s.is_empty())
+        .map(str::to_owned)
         .collect()
+}
+
+/// A subject that is one ordinary word - letters alone, capitalized at most at its start (`end`, `well`, `street`, `Done`) - which
+/// prose also writes in its ordinary sense. Any other term is a name: a phrase (`780 sq ft`, `make land`), a path, a number, an
+/// identifier (`back_lane`, `FreeGround`) or a capitalized label (`GUESS`).
+fn plain_word(subject: &str) -> bool {
+    let mut chars = subject.chars();
+    chars.next().is_some_and(char::is_alphabetic) && chars.all(char::is_lowercase)
+}
+
+/// Does `text` name `subject` in the sense the changed line did (451 T54)? A plain word only as that code span, since the word in
+/// prose is the ordinary word (the log's refusals on `end`, `well`, `street`, `edge`, `drawn`: 451's 66 candidates, 56 of them
+/// `end` read as "end" or inside Independent and `append_row`, measured 2026-11-21 from the commits at the snapshot and the refusal);
+/// any other term written out, bare or in a span, but never inside a longer word: neither of its ends, where that end is a word's
+/// character, runs on into one (`GUESS` not in GUESSES, `make land` not in `make landing`). The plain word's span is the literal
+/// `` `word` ``, not a span paired in order, since a line that opens inside a span wrapped from the line before pairs every backtick
+/// after it the wrong way (451's plan.md:107, which opens with the close of a span begun on line 106 and names "a last `end` line").
+fn names(text: &str, subject: &str) -> bool {
+    if plain_word(subject) {
+        return text.contains(&format!("`{subject}`"));
+    }
+    let word = |c: char| c.is_alphanumeric() || c == '_' || c == '-';
+    let (starts, ends) = (subject.starts_with(word), subject.ends_with(word));
+    text.match_indices(subject).any(|(i, _)| {
+        let prefixed = starts && text[..i].chars().next_back().is_some_and(word);
+        let suffixed = ends && text[i + subject.len()..].chars().next().is_some_and(word);
+        !prefixed && !suffixed
+    })
 }
 
 /// `(old line, new line)` for each line the change REPLACED; pure insertions and deletions pair with nothing.
@@ -165,7 +203,10 @@ pub fn stale_candidates(old: &Files, new: &Files) -> Vec<Candidate> {
                     if line == new_line || seen.contains(&(other.clone(), n)) {
                         continue;
                     }
-                    let hit = subj.iter().find(|s| line.contains(s.as_str()));
+                    let hit = subj.iter().find(|s| names(line, s));
+                    // A line this change rewrote from one that wrote the subject's word in ANY form was revisited on purpose: `names`
+                    // here adds 274's "Only three named kinds ... the split" rewritten as "four ... `split`" and no real catch, measured
+                    // 2026-11-21 over the 82 refusals of the guard log reconstructed from commits (451 T54).
                     if hit.is_some_and(|s| {
                         wrote[other].get(&n).is_some_and(|b| b.contains(s.as_str()))
                     }) {

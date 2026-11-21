@@ -101,7 +101,7 @@ fn the_tables_book_turns_windows_and_agents() {
     assert!(text.contains("| T02 | "), "{text}");
     assert!(text.contains("| all | "), "{text}");
     // by start, an agent naming no task goes to the mark (T01); the stop naming no start (`never`) is no agent
-    let want = "| T01 | 2 | 124 | - | - | 0 | 0 | spec-fidelity 1, ? 1 |";
+    let want = "| T01 | 2 | 124 | - | - | - | - | 0 | 0 | spec-fidelity 1, ? 1 |";
     assert!(text.contains(want), "{text}");
     assert_eq!(t.rules.items().len(), 3);
     let none = tables(&e, &starts, None, "", &Booking::default()).unwrap();

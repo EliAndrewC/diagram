@@ -1,5 +1,7 @@
 //! The lit page (feature 449 T150), on the tests' Chromium: the steps run, the zoom key pressed until vector mode, each refusal.
 
+use std::time::Duration;
+
 use l7r_shared::tempdir::TempDir;
 use serde_json::json;
 
@@ -40,8 +42,24 @@ fn a_page_is_lit_and_photographed_before_and_after() {
     );
 }
 
+/// A raster that readies late is waited for (451 T70): the wait is the page's own answer, its ceiling the shipped minute, so a
+/// loaded host's slow answer passes - the real Chromium missed a 40 ms test-build ceiling once in 40 runs under `make closing-checks`.
+#[test]
+fn a_page_slow_to_ready_is_waited_for() {
+    let dir = TempDir::new("browser-lit-late");
+    let fake = fake_chrome(dir.path());
+    let mut b = Browser::open(&var_for(&fake), options()).unwrap();
+    let got = lit(&mut b, &dir.path().join("lateready.html"), "well", false).unwrap();
+    assert_eq!(
+        (got.mode, super::READY_CEILING.get()),
+        (json!("vector"), Duration::from_secs(60))
+    );
+}
+
 #[test]
 fn a_page_that_never_readies_or_throws_is_refused() {
+    // the one test that waits out the ceiling: shortened on this thread, the shipped minute everywhere else (451 T70)
+    super::READY_CEILING.set(Duration::from_millis(40));
     let dir = TempDir::new("browser-lit-fail");
     let fake = fake_chrome(dir.path());
     let mut b = Browser::open(&var_for(&fake), options()).unwrap();

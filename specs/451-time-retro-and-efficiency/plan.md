@@ -709,31 +709,152 @@ The T02 class, by kind (the grep's hits, each read):
 
 
 <!-- plan-archive: T53 to T26 moved to plan-done.md, 2026-11-21 (feature 375 FR-044) -->
-### T54 (<why: the finding or measurement that files it>)
+### T54 (the stale-terms search refused the FR-013 amendment's spec review with 66 candidates on the backticked `end` read as an ordinary word, escaped with `STALE_TERMS_OK`, measured 2026-11-21 (the guard log's `blocked/stale-terms` row of 2026-11-21T02:55:57Z and the refusal's text in the session transcript))
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: measured first, from the guard log and the refusals' own text; then the subject read in the sense the change moved it in,
+  in `rust/gate/crates/record/src/record/stale_terms.rs` (not held; the call site in `review_round_hooks.rs` is unchanged, and no
+  stale-terms list exists to edit - the subjects are read from each change).
+  - THE LOG: 87 `blocked/stale-terms` and 135 `rewrote/mode-3-preamble-stale-ok` rows of the review-round guard, 2026-09-20 to
+    2026-11-21, measured 2026-11-21 (`~/.claude/guard-log` read, `/tmp/t54/follow.py`). After a refusal the feature's next row in that session was an escape 78 times (2 of them a `spec-round-cap`
+    refusal, which comes after the token), a clean dispatch 8 times and a second refusal once, measured 2026-11-21 (the rows of
+    `~/.claude/guard-log` read in order, `/tmp/t54/follow.py`). The refusal's text survives in the transcripts for the 36 from
+    2026-10-17 on (`/tmp/t54/extract2.py`). The rest were reconstructed from the commits before the round's snapshot and before the
+    refusal: `l7r-gate record stale-dirs` over a `git archive` of each, 82 of the 87 reconstructable (`/tmp/t54/rustrecon.py`). That
+    is an approximation, since uncommitted work at either time is missing: 451's 66 reconstructs as 67, measured 2026-11-21 (the same
+    command over 76635031f1 and 62a9b98d44).
+  - WRONG FIRES, a plain word in its ordinary sense, measured 2026-11-21 (the refusals' text and the reconstructions,
+    `/tmp/t54/measure_b.py` and `/tmp/t54/recon-summary.txt`):
+    - 451's `end`: 56 of the 67. Of those, 24 are inside another word (Independent, `append_row`), 15 are the bare word ("a
+      sentence's end", "The end is filed") and 17 are the span `end` beside a re-wrapped old value (these three figures are
+      `/tmp/t54/replica.py`'s, the Python replica over the same two commits, not the binary's).
+    - 328's `well`: 92 candidates, of which 63 are inside a word, 19 bare and 3 the span.
+    - 291's `street` and `edge`: 11 candidates, all bare, then 19, one of them the span.
+    - 284's `drawn`: 3 bare, beside `12` and `24` found inside longer numbers.
+    - 266's `kind`, `text` and `angle`: 12 of 21.
+    - 444's `meta`, 415's `full`, 438's `Done` and 261's `rag`, each named as an ordinary word in its escape.
+  - RIGHT FIRES, all kept, measured 2026-11-21 (the transcripts' edits, and the reconstructions before and after the next commit):
+    - 427's `request.md`: working-notes.md's hold line, rewritten before the next dispatch. Kept by rule (a path is a name, read
+      bare or in a span), not shown by the replay: its two reconstructions find 0 candidates and none, measured 2026-11-21
+      (`/tmp/t54/rust-before.json`).
+    - 261's `m:mizuguchi-r17-copse` and its `BELT_DEPTH_FT` 105.
+    - 267's `inventory.md` 51, 276's `FreeGround`, 278's `hamletgen/homesteads/boundary.py` and 374's `request.md`.
+    - On BARE text, 283's `780 sq ft` (the sheet's old size) and 285's `GUESS` ("The word GUESS" rewritten as "The label GUESS").
+    Each was gone at the next dispatch. One more was inside 451's own 66: `contracts/refusals.md:12` defined a landing as "D5's
+    `end` line of code 0", the definition plan.md replaced with `landed` true. The escape passed it; the session has since restated
+    it (Found and left).
+  - THE FIX: `names(text, subject)`, asked for a candidate's hit.
+    - A subject that is one plain word, letters alone and capitalized at most at its start (`plain_word`), is named only as that
+      code span.
+    - Any other term (a phrase, a path, a number, an identifier, a capitalized label) is named bare or in a span. Neither of its ends
+      may run on into a longer word, where that end is a word's character (a letter, a digit, `_` or `-`).
+    - A code span is read with its backticks paired in order (`spans`). The regex scan paired the closing backtick of a span too
+      short to keep (`t`) with the next opening one, which made the prose between two spans a subject. An empty span is no subject.
+    - A plain word's span is read as the literal `` `word` ``, not a span paired in order: a line that opens inside a span wrapped
+      from the line before pairs every backtick after it the wrong way, so 451's plan.md:107 ("done" closing line 106's span, then
+      "a last `end` line") named nothing under the paired reading (Red first, the fourth case).
+    - 442's rewritten-from check keeps its plain containment: a line this change rewrote from one that wrote the subject's word in
+      any form was revisited on purpose. Reading the old block by `names` too was tried: over the replay below it added one
+      candidate, 274's "Only three named kinds ... naming the split" rewritten as "Only four named kinds are exempt (... `split`
+      ...)", which its escape says states the new rule, and no real catch, measured 2026-11-21 (the replay with each variant).
+  - NOT CHANGED, the value side: the old values are still the words the old LINE had and the new line lacks. So a word re-wrapped
+    onto the next line of the rewritten passage stays an old value (451's `tasks`, `names` and `plan`). Reading the values from the
+    whole replaced block was priced: in 451 it leaves 6 of 67 and drops `contracts/refusals.md:12`, whose "code 0" survives in the new
+    block as one case of three, so it would lose a real catch. Not done, measured 2026-11-21 (`/tmp/t54/replica.py`'s block values
+    over the same two commits).
+- **Red first**: four cases.
+  - `a_plain_word_subject_is_named_only_as_its_code_span_and_the_real_catch_stands`: 451's lines verbatim (plan.md's two rewritten
+    lines, four of plan-done.md's, `contracts/refusals.md:12`).
+  - `a_phrase_or_a_capitalized_name_is_named_bare_but_not_inside_a_longer_word`: 283's and 285's lines, pinned as still refused,
+    and `GUESS` not found in GUESSES or XGUESS.
+  - `a_line_rewritten_from_one_writing_the_word_in_any_form_was_revisited_on_purpose`: 274's lines, pinning the containment kept
+    (green before the change; the stricter variant named 274's line in the replay).
+  - `a_plain_words_span_is_read_on_a_line_that_opens_inside_a_wrapped_span`: 451's plan.md:107 verbatim, which opens inside a span
+    wrapped from line 106; its `end` is pinned as named.
+  - before: the first two failed, the 451 case naming 5 lines where 1 is right and `GUESS` found inside GUESSES, measured
+    2026-11-21 (`make rust-test CRATE=rust/gate/crates/record`, `/tmp/t54/red.log`: 86 passed and 3 failed, the third the
+    stricter variant's case, since replaced).
+  - before, the fourth: with the span-paired reading put back in `names`, 89 passed and 1 failed, the wrapped-span case finding
+    nothing, measured 2026-11-21 (`scripts/gates/l7r-gate.sh rust test --crate rust/gate/crates/record`, `/tmp/t54/red2.log`).
+  - after: 90 passed, 0 failed, every earlier case unedited; format, lint, test and cover clean on the crate, measured 2026-11-21
+    (`scripts/gates/l7r-gate.sh rust format|lint|test|cover --crate rust/gate/crates/record`, `/tmp/t54/crate-checks6.log`, on the
+    final code), and `make closing-checks` was green (static 10 s, hooks-test 23 s and quick 1 s, 24 s wall), measured 2026-11-21
+    (`/tmp/t54/closing3.log`, on the final code: the task's third `make static`, taken on `STATIC_OK`, "code changed after the task's
+    two green closing runs").
+- **The log replayed**: the 82 reconstructed refusals were run through the binary before and after the change. 60 of them found a
+  candidate (the rest are reconstructions that miss the uncommitted work).
+  - Before the change: 497 candidates, and 60 refusals.
+  - After it: 299 candidates, and 57 refusals. The three avoided are 284's `drawn`, 291's `street` and `edge`, and 383's
+    coincidence of words. 328 goes from 92 to 3, 291's second refusal from 19 to 1, 266 from 21 to 10, 444 from 19 to 4, 262 from 9
+    to 2, 261's second from 3 to 2 (plan.md:473's `rag`, a wrong fire, dropped) and 451 from 67 to 28.
+  - The literal reading of a plain word's span added 3 over the paired one (296 then): 451's plan.md:107, and two of 328's tasks.md
+    lines of the shape the paired reading kept there (the old key, whose own span closes on "the required item is `well`"); no
+    refusal came or went with them.
+  - Every real catch above is still named, `contracts/refusals.md:12` first among 451's 28; 427's is kept by rule, as above.
+  - Measured 2026-11-21 (`/tmp/t54/rustrecon.py before`, `after2` and `after3`, the last on the final code: `l7r-gate record
+    stale-dirs` over the same archives, `/tmp/t54/rust-before.json`, `rust-after2.json` and `rust-after3.json`).
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| the stale-terms subject read in its sense | n/a - no map | n/a | none | n/a |
 
 ### T54 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
-8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+1. **The goal, in the world.** No map changes. A later spec-fidelity round is refused only for a line that names the changed term
+   in the sense the change moved it in and still carries its old value. A plain word in prose (`end` as "end", inside Independent,
+   `well` inside "as well") names nothing, and every catch the log shows still refuses.
+2. **The constraints.** T54's line: measured first (the recent refusals' candidates, how many named text the change made untrue);
+   the subject read from what the change moved, not a bare common word; red first on this case. The launcher's file list:
+   `stale_terms.rs` and its tests, the `docs/guards.md` row and this section. `review_round_hooks.rs`'s call site is unchanged, and
+   no stale-terms list exists, so none was edited. Feature 253's search and 442's rewritten-from rule are kept, and so is FR-013 (a
+   `[perf]` task). T69's and T70's files are untouched and nothing is committed.
+3. **Where each comes from.** O: the guard log's rows and the refusals' text in the transcripts (Approach, THE LOG); O: the
+   reconstructions from commits; O: the red-first run and the replay; the task as filed (T54's line).
+4. **Do they describe the world here?** Every figure is from this host's guard log, the transcripts that survive and this clone's
+   history, measured 2026-11-21 (the Approach's reads). The red case is 451's own lines, and the pinned catches are 283's and 285's,
+   measured 2026-11-21 (their lines read from the reconstructions at the snapshot and the refusal).
+5. **The order.** Independent of the open tasks: T69's `event_log_hooks/fields.rs` and the measure crate, and T70's `rust/browser`,
+   share no file with it.
+6. **The exits.** Green: the cases green with every earlier one unedited; `rust format|lint|test|cover --crate
+   rust/gate/crates/record`; the review-round suite (its case 10, `gizmo`, still refused); `make closing-checks`; the replay. Red:
+   what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** Two.
+   - 451's case does not go to zero: 28 of its 67 remain, the span `end` and the other three subjects (`make land`,
+     `DEFER_FORM_OK`, `make plan-delta`). Most of them sit beside a word re-wrapped onto the next line (the value side, left: see
+     Approach and Found and left).
+   - A real catch, `contracts/refusals.md:12`, sat inside the 66 that the session escaped as one class.
+8. **The budget.** One landing. The search's work is unchanged in kind: one subject test for each watched line of each changed pair,
+   still a substring test for a plain word (its backticked form) and a bounded scan for any other term, where it was a substring
+   test of the bare term; the subjects are read by a split on backticks where it was a regex scan. No time figure was taken.
+9. **Done, measured.**
+   - The red cases are green: 90 passed, 0 failed, measured 2026-11-21 (`scripts/gates/l7r-gate.sh rust test --crate
+     rust/gate/crates/record`, `/tmp/t54/crate-checks6.log`, on the final code).
+   - The review-round suite: 84 passed, 0 failed, measured 2026-11-21 (`bash tests/hooks/test-review-round-hooks.sh`,
+     `/tmp/t54/hooks-final.log`, on the final code).
+   - The replay: 497 candidates fall to 299 and 60 refusals to 57, every real catch still named, measured 2026-11-21 (`/tmp/t54/rustrecon.py`,
+     The log replayed).
+10. **Before moving a constant.** No constant moves. The span bounds (2 to 60 characters) stay. Which characters continue a word is
+    a CONVENTION, labeled at `names`: letters, digits, `_` and `-`. A hyphen continues an identifier (`make land-batch`, `FR-001a`); a
+    `.` or a `/` does not (a sentence's end, a longer path). A plain word is likewise a CONVENTION, labeled at `plain_word`: letters
+    alone, capitalized at most at its start. So `Done` is plain and `GUESS` and `FreeGround` are names.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** A session dispatching a later spec-fidelity round sees fewer candidates on correct text, and fewer refusals:
+    over the replay, 198 of the 497 candidates go and 3 of the 60 refusals, measured 2026-11-21 (The log replayed). Each avoided
+    refusal is an escape and a redispatch not spent. Nothing on a map.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?**
+- `specs/451-time-retro-and-efficiency/contracts/refusals.md:12` stated FR-007's landing as "D5's `end` line of code 0 naming it",
+  where plan.md's one definition reads D5's `end` line whose `landed` is true (code 0, or 3 with its ticks standing, or a raise after
+  the push), and the 451 refusal named it among its 66. A claim the code does not match (constitution XIV): the guard counts a landing
+  by `landed` true, measured 2026-11-21 (`rust/guard/src/guards/static_runs_hooks.rs:247` read). Fixed here (restated by the
+  session): the contract's line now reads D5's `end` line whose `landed` is true.
+- The value side refuses on correct work: a word re-wrapped onto the next line of a rewritten passage stays an old value, and that is
+  most of the 28 left in 451's case (`tasks`, `names`, `plan`). Reading the values from the whole replaced block was priced and drops
+  the real catch above (Approach, NOT CHANGED). Not fixed here: no measured rule yet keeps a catch of that shape, and the rule is
+  measured first. Filed as T73; lands before T22.
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** yes. This is a `[perf]` task (451 FR-013): it makes the builders' loop faster by refusing fewer later
+spec-fidelity rounds on correct text, each of which cost an escape and a redispatch. It is not an engine-speed task, so the checklist
+does not apply.
 
 
 <!-- plan-archive: T55 to T55 moved to plan-done.md, 2026-11-21 (feature 375 FR-044) -->
@@ -1026,58 +1147,164 @@ again after a green coverage pass answered for them); not engine speed, so no ch
 
 <!-- plan-archive: T68 to T12 moved to plan-done.md, 2026-11-21 (feature 375 FR-044) -->
 <!-- plan-archive: T68 to T68 moved to plan-done.md, 2026-11-21 (feature 375 FR-044) -->
-### T69 (<why: the finding or measurement that files it>)
+### T69 (the finding as filed, restated by its measurement: a row carrying an advisor call holds `usage.iterations` of the builder's own call, the advisor's and the builder's own again, its top level the builder's two summed; the event log's `tok` and T10's transcript reader read the top level, so the advisor's own tokens - 82,254,728 input and 6,504,729 output over the session's subagent transcripts, 23,629,763 and 2,273,188 of them in the 223 agents of 451's window - were in no figure, measured 2026-11-21 (`/tmp/t69/rows.py` and `/tmp/t69/cross.py`, the `advisor_message` iterations summed one row per `message.id`))
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: The `SubagentStop` writer (`rust/guard/shared/src/guards/event_log_hooks/fields.rs`) writes beside `tok` a sibling
+  `adv` field, the same four keys (`in`, `cached`, `created`, `out`) summed over the agent's `advisor_message` iterations, each
+  `message.id` once as `tok` counts it (`advisor_of`, a second parse of a row only where it names the type; `Tally` keeps one `adv`
+  entry a call beside `calls`, replaced with it). It is written wherever `tok` is, zero where the agent called no advisor, so a stop
+  before T69, which carries none, reads as uncounted, not zero. T10's reader (`rust/gate/crates/measure/src/measure/where_time/columns/spent.rs`)
+  gives `Tok` an `adv: Option<Adv>`: `of_usage` sums a transcript row's `advisor_message` iterations, `Tok::of` reads a stop's `adv`
+  (`flight.rs`, one argument), and `render` shows `k advisor in` and `k advisor out` beside `k tokens in` and `out` in the task table
+  and the agent table, and the advisor's figure beside the agents' in the summary line - which `make feature-report` shows through
+  `where_time::columns_text`, one renderer. `tok`, `ctx`, `context.rs`, T59's wait and T68's reading are unchanged. A sibling field
+  rather than a part of `tok`: `tok` stays the builder's own calls as D6 wrote it, so no reader of it changes meaning (its three exact
+  assertions in `tests/cost.rs` stand); the cost is the second read in `flight.rs`. How it was measured: item 4.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| the advisor's iterations booked apart, in the writer and the reader | n/a - no map | n/a | none | n/a |
 
 ### T69 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** No map changes. `make where-time` and `make feature-report` show what an agent's advisor calls read
+   and wrote beside its own model calls, so the cost of a builder that calls the advisor is no longer short by them.
+2. **The constraints.** T69's line: both places, a separate figure, red first on an advisor row. FR-004 (an agent's cost on its stop
+   line, D6), FR-005 (what was spent beside the critical path, D7), FR-013 (performance work). The builder's edit list: `fields.rs`
+   and its tests, the measure crate's `where_time` and `feature_report` and their tests, this section; `context.rs` (T68), T59's wait,
+   T54's `stale_terms.rs` and T70's `rust/browser` untouched.
+3. **Where each comes from.** O: the row's shape and the session's advisor rows (item 4); O: the red-first and green runs and the
+   before and after `make where-time` (item 9); G: FR-013 (the GM 2026-11-20, request.md: "can we in general priotitize performance
+   improvements going forward?"); the task as filed (T69's line, from T68's found-and-left).
+4. **Do they describe the world here?** Measured, not assumed:
+   - The row's shape: `agent-a0234478442863bca.jsonl`'s `msg_011ChAbHEgmj2kXEyQ9QXkyb` holds iterations `message` (2 input, 21,143
+     cache read, 8,409 cache written, 1,611 output), `advisor_message` (32,395 input, 7,030 output, `model` `claude-fable-5-2`) and
+     `message` (2, 29,552, 2,531, 241), its top level 4 / 50,695 / 10,940 / 1,852 - the two `message` iterations summed, the advisor's
+     in neither, measured 2026-11-21 (a Python read of that row). The tests' advisor rows are that row's usage.
+   - Over the session's subagent transcripts 588 calls carry an advisor iteration, on 2,722 rows, and every row of one call carries
+     the same one (the first row's equal to the last's on all 588), so the writer (the last row of an id) and the reader (the first)
+     read one figure, measured 2026-11-21 (`/tmp/t69/rows.py`).
+   - None of the 2,722 advisor iterations read from the cache or wrote to it, so the reader's `Adv` keeps its input as one figure,
+     measured 2026-11-21 (a Python tally of their cache fields).
+   - The session's advisor total is now 82,254,728 input and 6,504,729 output tokens (T68's 81,317,939 and 6,412,906 at its time,
+     the session since grown), measured 2026-11-21 (`/tmp/t69/rows.py`).
+   - The writer's added work: 14.35 MB (6.9%) of the transcripts' 206.7 MB of `assistant` usage rows, which `call_of` parses, name
+     `advisor_message` and are parsed again, measured 2026-11-21 (a Python pass over the session's subagent transcripts, their bytes
+     summed by row). They are 2,758 of 53,934 such rows, 36 of them naming it in text alone (an advisor iteration of zero), measured
+     2026-11-21 (the same pass, its rows counted). The transcripts hold 816.8 MB, the largest 50.3 MB, measured 2026-11-21 (their
+     sizes, the same pass).
+   - Before: `make where-time F=451 SINCE=2026-11-20T04:33:00Z UNTIL=2026-11-21T09:25:22Z` read 223 agents, 1,313,884.9k tokens in
+     and 6,627.3k out, 0 with no count, and no advisor figure, measured 2026-11-21 (`/tmp/t69/wt-before.log`).
+   - An independent tally of those 223 agents' transcripts, rows inside the window, each `message.id` once: the builder's own
+     1,313,884,859 in and 6,627,318 out - the command's figure exactly - and the advisor's 23,629,763 in and 2,273,188 out, measured
+     2026-11-21 (`/tmp/t69/cross.py` over the before run's agent table).
+5. **The order.** After T68 (whose builder found it) and T59 (whose wait is in `fields.rs`, left as it is); beside T54 and T70
+   (other files); before T22, the close.
+6. **The exits.** Green: the two red-first tests green, the crate-scoped checks on `rust/guard/shared` and the measure crate clean,
+   the after run's advisor figure equal to the independent tally and its builder figures equal to the before run's, and
+   `make closing-checks` green.
+   Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None: one row shape, measured on every advisor row of the session (item 4).
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** Red first: `an_advisor_calls_own_iteration_is_booked_beside_the_builders` (`event_log_hooks/tests/cost.rs`)
+   failed `left: Null`, `right: {"in": 64790, "cached": 0, "created": 0, "out": 14060}` on `adv` - its `tok` assertion, the top level,
+   already passing - and `a_stop_carries_its_agents_tokens_context_and_task` failed `left: Null` on its zero `adv`, 319 passed;
+   `an_advisor_calls_tokens_are_booked_beside_the_builders_own` (`where_time/columns/spent_tests.rs`) failed on the absent
+   `k advisor in` header, its builder columns already the expected 62.6 / 2.0, 5.0 / 1.5 and 67.6 / 3.5, 201 passed; measured
+   2026-11-21 (`make rust-test CRATE=rust/guard/shared` and `CRATE=rust/gate/crates/measure`, `/tmp/t69/logs/red-shared.log` and
+   `red-measure.log`). After the fix: `rust/guard/shared` 321 tests, the measure crate 202 and `rust/guard` 416 pass, and format, lint
+   and cover are clean on `rust/guard/shared` and the measure crate (its format after `make format FILE=` of `spent_tests.rs`, four
+   `has(` calls rewrapped), measured 2026-11-21 (the crate-scoped checks, `/tmp/t69/checks.sh`, `/tmp/t69/logs/*.log`). After, over
+   the before run's window: 223 agents, 1,313,884.9k tokens in and 6,627.3k out, 0 with no count - the before run's figures unchanged
+   - and the advisor's own 23,629.8k in and 2,273.2k out beside them, 0 with no count, equal to the independent tally (23,629,763 and
+   2,273,188), measured 2026-11-21 (`make where-time F=451 SINCE=2026-11-20T04:33:00Z UNTIL=2026-11-21T09:25:22Z`,
+   `/tmp/t69/wt-after.log`, and `/tmp/t69/cross.py` over its agent table); `make feature-report F=451` over the same window shows the
+   same table and line (`/tmp/t69/fr-after.log`, no `WRITE=1`); and to the run's own time, about 09:38Z, the advisor's 23,835.9k in
+   and 2,295.7k out beside the agents' 1,337,683.3k and 6,749.9k, measured 2026-11-21 (`make where-time` with `UNTIL` the time of the
+   run, `/tmp/t69/wt-after-now.log`). `make closing-checks` ran red on one step alone, `make static`'s format of
+   `rust/gate/crates/record` (`stale_terms/tests.rs`, T54's builder's uncommitted file in the same clone, outside this task's files),
+   its `hooks-test` and `quick` green, measured 2026-11-21 (`/tmp/t69/logs/closing.log`). Another builder's `make closing-checks` ran
+   beside it in the same clone from 09:38:06Z, this one from 09:38:33Z waiting on its run lock, the two writing one
+   `.git/closing-checks/`, so its `static.log` holds both runs' lines - the first's lint, format, cover and dead clean on 34 crates,
+   then this run's lint clean and the record crate's format red, the record file changed between the two format steps - measured
+   2026-11-21 (that log's lock-wait lines, `ps` and the exit file's time). On the final tree format and the tests are green on `rust/guard/shared` and the measure crate, their last green results
+   standing for its keys, measured 2026-11-21 (the crate-scoped checks, `/tmp/t69/logs/final.log`).
+10. **Before moving a constant.** n/a: no constant moves.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** No map changes. What changes is a feature report's cost: the 223 agents of 451's window read and wrote
+    23,629,763 and 2,273,188 tokens through the advisor that no figure showed, measured 2026-11-21 (item 4) - a wrong outcome, a
+    builder's cost reported short, so the code is fixed, not the claim.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?**
+- Two `make closing-checks` runs in one clone share `.git/closing-checks/`: each deletes the other's `.exit` files at its start and
+  truncates its logs, so a run can read the other's verdict as its own (observed 2026-11-21, method: this task's run of 09:38:33Z and
+  another builder's of 09:38:06Z, whose `quick` verdict came from this run's file). Not fixed here: the closing step is T55's, outside
+  this task's files. Filed as T72; lands before T22.
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** Yes - a `[perf]` task (451 FR-013): it measures the builders' loop, the advisor's tokens counted in a builder's
+cost, so a builder that leans on the advisor is priced as it runs. Not an engine-speed task. Its own cost: the stop's writer parses
+6.9% of the bytes it parsed before a second time, measured 2026-11-21 (item 4's Python pass over the session's subagent transcripts).
 
 
-### T70 (<why: the finding or measurement that files it>)
+### T70 (rust/browser's end-to-end test, the one on the real Chromium, failed good work under load: `page.wait_for_function: Timeout 40ms exceeded.` in `make closing-checks`' cover run at 2026-11-21T08:46:27Z; the crate's cover run alone was clean 96 s after, measured 2026-11-21 (the event log's Phase lines))
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: the 40 ms was the test build's ceiling on the lit page's raster wait (`rust/browser/src/lit.rs`, `WAITS`), measured
+  2026-11-21 (a read of `lit.rs`), which is already the page's own signal: a `Runtime.evaluate` awaiting
+  `window.l7rMap.rasterReady()`, polled on each animation frame. The end-to-end test's page readies at once, so the 40 ms covered only
+  the answer's way back from a real Chromium just after its load, which came late under load, measured 2026-11-21 (the timer of item 9).
+  The ceiling is now the shipped minute (`READY_WAIT`, the Python's `timeout=60000`) in every build; the test build reads it through a
+  thread-local (`READY_CEILING`, the crate's `crop::WAIT_DIVISOR` precedent) which only
+  `a_page_that_never_readies_or_throws_is_refused`, the one test that waits a ceiling out, shortens to 40 ms on its own thread (a
+  CONVENTION: the old test ceiling, kept so that refusal stays fast). The zoom key's settle keeps its test-build 1 ms (a sleep, not a
+  wait), measured 2026-11-21 (a read of `lit.rs`). The fake browser (`testkit.rs`) gains `lateready`, a raster answered 50 ms after
+  it is asked (a CONVENTION: past the old 40 ms ceiling, short enough for FR-008), and `a_page_slow_to_ready_is_waited_for` pins it.
+  Red first: with the old `lit.rs`, the new test alone failed, `"page.wait_for_function: Timeout 40ms exceeded."`, 30 passed and 1
+  failed, measured 2026-11-21 (`make rust-test CRATE=rust/browser FRESH=1`, log `/tmp/t70/red-first.log`).
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| the lit page's raster ceiling, the shipped minute in the test build | n/a - no map | n/a | none | n/a |
 
 ### T70 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** The browser crate's tests pass on a loaded host when the code is right, and still fail when a page
+   never readies: a slow answer is not a defect, a missing one is.
+2. **The constraints.** 449 FR-008: a test under a tenth of a second on an idle host, except the crate's one end-to-end test
+   (`crop::tests::the_real_chromium_renders_and_crops_a_local_page`, the one that failed, which is exempt; the new fake test is not).
+   451 FR-013, a `[perf]` task. Only `rust/browser` changes; T54's builder (`rust/gate/crates/record`) and T69's (`rust/guard/shared`
+   `event_log_hooks`, the `measure` crate) are left alone.
+3. **Where each comes from.** O: the event log's Phase lines and the load runs below. R: the Python's `page.wait_for_function(...,
+   timeout=60000)`, which `lit.rs` ports (feature 449 T150). G: none needed; the ceiling the shipped code already uses.
+4. **Do they describe the world here?** Yes. Of the 40 browser runs in the event log (Phase, step `test` or `cover-run`, crate
+   `rust/browser`, 2026-11-20T12:01Z to 2026-11-21T09:18Z), 1 was red, measured 2026-11-21 (a script over `.git/l7r-events/*.jsonl`,
+   `/tmp/t70/count.py`): 1 of the 8 under `make closing-checks`, 0 of the other 32 (8 `test`, 24 `cover-run`). The Phase lines record no
+   load; 9 other crates' cover runs overlapped the red one, measured 2026-11-21 (the same lines' `t0`/`t1` intervals,
+   `/tmp/t70/overlap.py`). Reproduced on the old binary: with 44 busy loops on 22 cpus the end-to-end test failed 1 of 10 runs with
+   the same message, idle 0 of 5, measured 2026-11-21 (`/tmp/t70/load.sh`, the test run alone by its binary).
+5. **The order.** After T68, whose closing run found it; independent of T54 and T69, whose crates it does not touch.
+6. **The exits.** Green: the late page passes, the never-readying page still fails, and the end-to-end test passes every run under the
+   load that reproduced it. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None. The other short test-build waits the end-to-end test meets fail nothing when they run out: the
+   browser's 300 ms close wait kills the process (`cdp.rs` `close`), and the render's 2 s idle wait returns a `bool` the render does not
+   act on (`serve.rs` `render`), measured 2026-11-21 (a read of both functions).
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** The new test green and the never-readying page still refused (`make rust-test CRATE=rust/browser`: 31
+   passed), and the end-to-end test green in 30 of 30 runs with 44 busy loops on 22 cpus (load average 10.6 rising to 58.3) and 10 of
+   10 idle, measured 2026-11-21 (`/tmp/t70/load.sh` on the fixed test binary, the test run alone). The raster wait's answer took a
+   median 4.8 ms and at most 9.6 ms idle, a median 20.2 ms and at most 121.3 ms loaded, 6 of the 30 loaded answers past the old 40 ms,
+   measured 2026-11-21 (a temporary timer around the wait in `lit_on`, removed before the closing run); the minute's ceiling is about
+   500 times the slowest loaded answer. The new fake test ran in 0.082 s, under 449 FR-008's tenth of a second on a host that was not even idle
+   (load average 48.7 at the start), measured 2026-11-21 (`make test-times CRATE=rust/browser`, best of three); the end-to-end test
+   took 0.957 s, the one test over the bar, declared end-to-end and exempt, measured 2026-11-21 (the same run).
+10. **Before moving a constant.** n/a: the test build's ceiling moves to the shipped one, which no research claim states.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** A defect: the closing checks went red on correct code (a wrong outcome, constitution XIV), and a builder who
+    reads that red re-runs or chases a fault that is not there.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?** none.
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** yes - a `[perf]` task (451 FR-013): the builders' loop loses no closing run to a false red. Not an
+engine-speed task.
 
 
 ### T71 (<why: the finding or measurement that files it>)
@@ -1088,6 +1315,60 @@ again after a green coverage pass answered for them); not engine speed, so no ch
 |---|---|---|---|---|
 
 ### T71 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+
+### T72 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T72 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+
+### T73 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T73 Approach (checklist part A)
 
 1. **The goal, in the world.** <the place as it should be>
 2. **The constraints.** <the FRs, decisions and pages it holds to>

@@ -37,6 +37,23 @@ fn usage(t: &str, id: &str, (fresh, cached, created, out): (u64, u64, u64, u64))
         + "\n"
 }
 
+/// An assistant row carrying an advisor call, its usage as Claude Code wrote one (451 T69: `agent-a0234478442863bca.jsonl`'s
+/// `msg_011ChAbHEgmj2kXEyQ9QXkyb`, 2026-11-18): `iterations` the builder's own call, the advisor's (its `model` named), the builder's
+/// own again; the top level the builder's two summed, the advisor's in neither.
+fn advised(t: &str, id: &str) -> String {
+    json!({"type": "assistant", "timestamp": at(t), "message": {"id": id, "model": "claude-opus-5-5", "usage": {
+        "input_tokens": 4, "cache_creation_input_tokens": 10940, "cache_read_input_tokens": 50695, "output_tokens": 1852,
+        "iterations": [
+            {"input_tokens": 2, "output_tokens": 1611, "cache_read_input_tokens": 21143, "cache_creation_input_tokens": 8409,
+                "type": "message"},
+            {"input_tokens": 32395, "output_tokens": 7030, "cache_read_input_tokens": 0, "cache_creation_input_tokens": 0,
+                "type": "advisor_message", "model": "claude-fable-5-2"},
+            {"input_tokens": 2, "output_tokens": 241, "cache_read_input_tokens": 29552, "cache_creation_input_tokens": 2531,
+                "type": "message"}]}}})
+    .to_string()
+        + "\n"
+}
+
 /// Feature 901's log (`own`), feature 900's (`other`) and the session's transcripts (`files`, under `home/-proj`), read with no SINCE to
 /// 08:30, booked by start (`named`, as the command books) or by the mark, and rendered for `order`.
 fn report(
@@ -195,22 +212,26 @@ fn two_agents_over_one_wait_are_booked_once_and_spent_under_their_tasks() {
     // each agent under the task its launch names, its tokens from its transcript, else its stop's `tok`, else none counted
     has(
         &text,
-        "| T05 | 1 | 20 | 3.5 | 0.5 | 1 | 0 | general-purpose 1 |",
+        "| T05 | 1 | 20 | 3.5 | 0.5 | 0.0 | 0.0 | 1 | 0 | general-purpose 1 |",
     );
     has(
         &text,
-        "| T06 | 2 | 13 | 5.0 | 1.5 | 1 | 1 | spec-fidelity 2 |",
+        "| T06 | 2 | 13 | 5.0 | 1.5 | - | - | 1 | 1 | spec-fidelity 2 |",
     );
-    has(&text, "| all | 3 | 33 | 8.5 | 2.0 | 1 | 1 | |");
+    has(&text, "| all | 3 | 33 | 8.5 | 2.0 | 0.0 | 0.0 | 1 | 1 | |");
     has(
         &text,
-        "| T05 | a1 | general-purpose | 08:00 | 20 | 3.5 | 0.5 |",
+        "| T05 | a1 | general-purpose | 08:00 | 20 | 3.5 | 0.5 | 0.0 | 0.0 |",
     );
-    has(&text, "| T06 | a3 | spec-fidelity | 08:22 | 3 | - | - |");
+    has(
+        &text,
+        "| T06 | a3 | spec-fidelity | 08:22 | 3 | - | - | - | - |",
+    );
     has(
         &text,
         "the critical path: 26 min of wall clock; beside it, the agents' own minutes summed: 33 min over 3 agents, 8.5k tokens in and \
-         2.0k out (1 with no count); rework: 1 refused landing, 1 plan re-round",
+         2.0k out (1 with no count), the advisor's own 0.0k in and 0.0k out beside them (2 with no count); rework: 1 refused landing, 1 \
+         plan re-round",
     );
 }
 
@@ -227,10 +248,10 @@ fn by_the_mark_an_agent_goes_to_the_task_active_at_its_launch() {
     );
     has(
         &text,
-        "| T05 | 3 | 33 | 8.5 | 2.0 | 1 | 1 | spec-fidelity 2, general-purpose 1 |",
+        "| T05 | 3 | 33 | 8.5 | 2.0 | 0.0 | 0.0 | 1 | 1 | spec-fidelity 2, general-purpose 1 |",
     );
     // a task with a refused landing and no agent has its row; no agent counted, the sum reads zero
-    has(&text, "| T06 | 0 | 0 | - | - | 1 | 0 |  |");
+    has(&text, "| T06 | 0 | 0 | - | - | - | - | 1 | 0 |  |");
 }
 
 #[test]
@@ -302,7 +323,7 @@ fn an_agents_minutes_are_its_spans_inside_the_window_counted_once() {
     );
     has(
         &text,
-        "| T05 | 3 | 11 | - | - | 0 | 0 | general-purpose 3 |",
+        "| T05 | 3 | 11 | - | - | - | - | 0 | 0 | general-purpose 3 |",
     );
     has(&text, "| T05 | a4 | general-purpose | 08:00 | 5 | - | - |");
     has(&text, "| T05 | a6 | general-purpose | 08:06 | 4 | - | - |");
@@ -381,10 +402,13 @@ fn a_plan_re_round_is_a_later_round_of_one_review_on_one_subject() {
     );
     has(
         &text,
-        "| T07 | 6 | 3 | - | - | 0 | 1 | spec-fidelity 4, quote-check 2 |",
+        "| T07 | 6 | 3 | - | - | - | - | 0 | 1 | spec-fidelity 4, quote-check 2 |",
     );
-    has(&text, "| T05 | 1 | 0 | - | - | 0 | 1 | spec-fidelity 1 |");
-    has(&text, "| all | 7 | 3 | - | - | 0 | 2 | |");
+    has(
+        &text,
+        "| T05 | 1 | 0 | - | - | - | - | 0 | 1 | spec-fidelity 1 |",
+    );
+    has(&text, "| all | 7 | 3 | - | - | - | - | 0 | 2 | |");
     // the rounds table over the window's lines: the plan's two rounds past its first, and the quote-check's one
     let events: Vec<_> = own
         .iter()
@@ -449,10 +473,13 @@ fn an_agent_goes_to_the_task_its_stop_names_before_the_mark_its_start_carries() 
         (true, ""),
         &["T05", "T07"],
     );
-    has(&text, "| T07 | 1 | 5 | - | - | 0 | 0 | spec-fidelity 1 |");
     has(
         &text,
-        "| T05 | 1 | 25 | - | - | 0 | 0 | general-purpose 1 |",
+        "| T07 | 1 | 5 | - | - | - | - | 0 | 0 | spec-fidelity 1 |",
+    );
+    has(
+        &text,
+        "| T05 | 1 | 25 | - | - | - | - | 0 | 0 | general-purpose 1 |",
     );
 }
 
@@ -493,6 +520,87 @@ fn a_re_round_inside_the_window_counts_a_first_round_before_since() {
     );
     has(&text, "rework: 0 refused landings, 2 plan re-rounds");
     // each booked to the task its line names, a first round before SINCE or not
-    has(&text, "| T07 | 0 | 0 | - | - | 0 | 2 |  |");
-    has(&text, "| all | 0 | 0 | - | - | 0 | 2 | |");
+    has(&text, "| T07 | 0 | 0 | - | - | - | - | 0 | 2 |  |");
+    has(&text, "| all | 0 | 0 | - | - | - | - | 0 | 2 | |");
+}
+
+/// An advisor call's own tokens beside the builder's (451 T69): an agent's `k tokens in` and `out` stay its own model calls' top level,
+/// and its advisor calls' `advisor_message` iterations, which no top level holds, are their own columns - from its transcript, each
+/// message id once (b1: m1's two rows counted once, m3 after the window not counted), else from its last stop's `adv` (b2, no
+/// transcript); a stop written before T69 carries no `adv`, its agent's advisor tokens uncounted (b3), not zero.
+#[test]
+fn an_advisor_calls_tokens_are_booked_beside_the_builders_own() {
+    let own = [
+        line("08:00:00", "UserPromptSubmit", &json!({"gm": true})),
+        line(
+            "08:00:05",
+            "SubagentStart",
+            &json!({"aid": "b1", "agent": "general-purpose", "task": "T05"}),
+        ),
+        line(
+            "08:00:06",
+            "SubagentStart",
+            &json!({"aid": "b2", "agent": "general-purpose", "task": "T06"}),
+        ),
+        line(
+            "08:00:07",
+            "SubagentStart",
+            &json!({"aid": "b3", "agent": "spec-fidelity", "task": "T06"}),
+        ),
+        line(
+            "08:10:00",
+            "SubagentStop",
+            &json!({"aid": "b2", "task": "T06", "tok": {"in": 0, "cached": 4000, "created": 1000, "out": 1500},
+                "adv": {"in": 2000, "cached": 0, "created": 0, "out": 500}}),
+        ),
+        line(
+            "08:12:00",
+            "SubagentStop",
+            &json!({"aid": "b3", "task": "T06", "tok": {"in": 1, "cached": 1, "created": 1, "out": 1}}),
+        ),
+        line(
+            "08:20:00",
+            "SubagentStop",
+            &json!({"aid": "b1", "task": "T05"}),
+        ),
+        line("08:21:00", "Stop", &json!({})),
+    ];
+    let b1 = advised("08:01:00", "m1")
+        + &advised("08:01:00", "m1")
+        + &usage("08:02:00", "m2", (5, 1000, 0, 100))
+        + &advised("08:40:00", "m3");
+    let text = report(
+        "measure-spent-advisor",
+        &own,
+        &[],
+        &[("s/subagents/agent-b1.jsonl", b1)],
+        true,
+        &["T05", "T06"],
+    );
+    has(
+        &text,
+        "| task | agents | agent minutes | k tokens in | k tokens out | k advisor in | k advisor out | refused landings | plan re-rounds | \
+         by kind (count) |",
+    );
+    has(
+        &text,
+        "| T05 | 1 | 20 | 62.6 | 2.0 | 32.4 | 7.0 | 0 | 0 | general-purpose 1 |",
+    );
+    has(&text, "| T06 | 2 | 22 | 5.0 | 1.5 | 2.0 | 0.5 | 0 | 0 | ");
+    has(
+        &text,
+        "| all | 3 | 42 | 67.6 | 3.5 | 34.4 | 7.5 | 0 | 0 | |",
+    );
+    has(
+        &text,
+        "| T05 | b1 | general-purpose | 08:00 | 20 | 62.6 | 2.0 | 32.4 | 7.0 |",
+    );
+    has(
+        &text,
+        "| T06 | b3 | spec-fidelity | 08:00 | 12 | 0.0 | 0.0 | - | - |",
+    );
+    has(
+        &text,
+        "67.6k tokens in and 3.5k out (0 with no count), the advisor's own 34.4k in and 7.5k out beside them (1 with no count); rework:",
+    );
 }

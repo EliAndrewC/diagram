@@ -290,7 +290,7 @@
    "declared": "spec-fidelity"
   },
   "### T54 Approach (checklist part A)": {
-   "sha256": "cfd1c978724fa989d0fe5a9f2a2a15dac04d2b8f8fad480672555e4631ea4930",
+   "sha256": "bd1c7aaf62902fd5059bb28c94fc581aed977bbd778483fc5318d9bbaedf2228",
    "verdict": "CLEAR",
    "reviewed": "2026-11-21",
    "declared": "spec-fidelity"
@@ -495,6 +495,36 @@
   },
   "### T61 (the finding as filed, restated by its measurement: `writer-alive.sh`, the proof of life the no-poll rewrite adds to a file wait, read a file nothing held open and nothing wrote for 45 s (its `STALE` knob) as a dead run, so a run appending to its summary only between steps was called gone while it ran - T55's builder's `until grep -q \"^total\" /tmp/t55/seq.times` ended at 55 s, exit 3, and T58's on `/tmp/t58/checks2.txt`, measured 2026-11-21 (the two waits' task outputs, `bd0e5tuie` and `bbuzlgz5p`, read for the helper's line), and of the 11 firings whose wait's output was still on disk, 8 were followed by a write to the file, measured 2026-11-21 (the session's `tasks/*.output` grepped for the helper's \"gone\" line, each watched file's mtime against its wait's end))": {
    "sha256": "7e265ee4bb297f0bebbabc77bb53b49dc356102c75257c24a952d763e2d80452",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity"
+  },
+  "### T70 (rust/browser's end-to-end test, the one on the real Chromium, failed good work under load: `page.wait_for_function: Timeout 40ms exceeded.` in `make closing-checks`' cover run at 2026-11-21T08:46:27Z; the crate's cover run alone was clean 96 s after, measured 2026-11-21 (the event log's Phase lines))": {
+   "sha256": "f28c23c6a726e8f5da1efede02f87543e6abef0c196d51aeb12e007d496d6368",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity"
+  },
+  "### T70 Approach (checklist part A)": {
+   "sha256": "1e654eaf692fefd22b83f8f1599143b9a7ed3baaba7a1ab9266e0fda5a2b1d7e",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity"
+  },
+  "### T69 (the finding as filed, restated by its measurement: a row carrying an advisor call holds `usage.iterations` of the builder's own call, the advisor's and the builder's own again, its top level the builder's two summed; the event log's `tok` and T10's transcript reader read the top level, so the advisor's own tokens - 82,254,728 input and 6,504,729 output over the session's subagent transcripts, 23,629,763 and 2,273,188 of them in the 223 agents of 451's window - were in no figure, measured 2026-11-21 (`/tmp/t69/rows.py` and `/tmp/t69/cross.py`, the `advisor_message` iterations summed one row per `message.id`))": {
+   "sha256": "5852b41d8c560bdb22149ffa7a0278659d7067f829988ed04c79a107dfd5cc04",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity"
+  },
+  "### T69 Approach (checklist part A)": {
+   "sha256": "2d4bcb97036266e5cb5f7cdde8f71f2427a2623733a0762898f4b5b054779956",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity"
+  },
+  "### T54 (the stale-terms search refused the FR-013 amendment's spec review with 66 candidates on the backticked `end` read as an ordinary word, escaped with `STALE_TERMS_OK`, measured 2026-11-21 (the guard log's `blocked/stale-terms` row of 2026-11-21T02:55:57Z and the refusal's text in the session transcript))": {
+   "sha256": "8a0b73fc6daaca194cf92d9138a9e7a153ab25bf27c1dd99ea1d3afc7b733572",
    "verdict": "CLEAR",
    "reviewed": "2026-11-21",
    "declared": "spec-fidelity"
@@ -7881,6 +7911,192 @@
      "why": "FR-013 counts work that makes the builders' loop faster as performance work, and the GM's 2026-11-20 words ask for performance work first."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-21",
+   "blocks": [
+    "### T70 (rust/browser's end-to-end test, the one on the real Chromium, failed good work under load: `page.wait_for_function: Timeout 40ms exceeded.` in `make closing-checks`' cover run at 2026-11-21T08:46:27Z; the crate's cover run alone was clean 96 s after, measured 2026-11-21 (the event log's Phase lines))",
+    "### T70 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T70-1 ceiling",
+     "summary": "The lit page's raster-wait ceiling moves from the test build's 40 ms to the shipped minute (READY_WAIT, the Python's timeout=60000) in every build.",
+     "class": "within",
+     "why": "Fixes a defect (the closing checks refusing correct code under load, a wrong outcome per constitution XIV) the GM asked to have filed as a performance task (2026-11-21: 'yes please file that as a performance task'); the shipped behavior is unchanged and a never-readying page is still refused."
+    },
+    {
+     "id": "T70-2 READY_CEILING thread-local",
+     "summary": "The test build reads the ceiling through a thread-local that only a_page_that_never_readies_or_throws_is_refused shortens to 40 ms.",
+     "class": "within",
+     "why": "Keeps the refusal test fast under 449 FR-008 while the refusal itself stays tested; narrows nothing asked."
+    },
+    {
+     "id": "T70-3 zoom settle",
+     "summary": "The zoom key's 1 ms test-build settle is left as it is.",
+     "class": "within",
+     "why": "A sleep, not a wait that can run out and fail; no wrong outcome, so nothing owed."
+    },
+    {
+     "id": "T70-4 lateready fake and test",
+     "summary": "testkit.rs gains lateready (raster answered at 50 ms) and a_page_slow_to_ready_is_waited_for pins the fix, red first on the old lit.rs.",
+     "class": "within",
+     "why": "A test whose only effect is to enforce the fix; measured at 0.082 s, inside 449 FR-008."
+    },
+    {
+     "id": "T70-5 other short waits left",
+     "summary": "The 300 ms close wait (cdp.rs close) and the 2 s idle wait (serve.rs render) are left unchanged.",
+     "class": "within",
+     "why": "Read and found to fail nothing when they run out (process killed / bool not acted on); a difference that produces no wrong outcome is not a defect, so leaving it is within, not a narrowing."
+    },
+    {
+     "id": "T70-6 end-to-end exemption",
+     "summary": "The real-Chromium end-to-end test (0.957 s) is held exempt from the tenth-of-a-second bar.",
+     "class": "within",
+     "why": "449 FR-008's own text excepts the one end-to-end test against the real command; the new fake test is held to the bar."
+    },
+    {
+     "id": "T70-7 scope and order",
+     "summary": "Only rust/browser changes; T54's and T69's crates are left alone; ordered after T68, independent of T54/T69; one landing.",
+     "class": "within",
+     "why": "Scoping to the crate that holds the defect; nothing the request or spec asks is dropped."
+    },
+    {
+     "id": "T70-8 perf classification",
+     "summary": "Tagged [perf] under 451 FR-013: the builders' loop loses no closing run to a false red.",
+     "class": "within",
+     "why": "The GM asked on 2026-11-21 that the closing-checks work be filed as a performance task, and FR-013 counts work that makes the builders' loop faster."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-21",
+   "blocks": [
+    "### T69 (the finding as filed, restated by its measurement: a row carrying an advisor call holds `usage.iterations` of the builder's own call, the advisor's and the builder's own again, its top level the builder's two summed; the event log's `tok` and T10's transcript reader read the top level, so the advisor's own tokens - 82,254,728 input and 6,504,729 output over the session's subagent transcripts, 23,629,763 and 2,273,188 of them in the 223 agents of 451's window - were in no figure, measured 2026-11-21 (`/tmp/t69/rows.py` and `/tmp/t69/cross.py`, the `advisor_message` iterations summed one row per `message.id`))",
+    "### T69 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T69-1 sibling adv field",
+     "summary": "The advisor's own iterations are booked in a sibling `adv` field on the SubagentStop line (same four keys), not folded into `tok`; tok stays the builder's own calls as D6 wrote it.",
+     "class": "within",
+     "why": "FR-004 asks for an agent's token cost on its stop line; with adv beside tok the stop line now carries all of it, the advisor's share included, so the separate field adds to the cost rather than narrowing it. The task line asks for 'a separate figure'. Keeping tok's meaning leaves D6 and its readers as they are."
+    },
+    {
+     "id": "T69-2 zero vs absent",
+     "summary": "adv is written wherever tok is, zero where no advisor was called, so a stop from before T69 (no adv) reads as uncounted, not zero.",
+     "class": "within",
+     "why": "A representation choice that keeps old stops from reading as a false zero. It narrows nothing that was asked."
+    },
+    {
+     "id": "T69-3 reader shows advisor in/out",
+     "summary": "where-time's Tok gains adv: Option<Adv>; the task table, agent table and summary line show 'k advisor in' / 'k advisor out' beside the builder's tokens; feature-report gets the same through the shared columns_text renderer; Adv keeps input as one figure.",
+     "class": "within",
+     "why": "FR-005/D7 has where-time and feature-report read FR-004's lines through one function, and this does that. Folding cache into input rests on a measurement (none of the 2,722 advisor iterations read from or wrote to the cache, measured 2026-11-21), and the writer still records all four keys, so nothing is lost."
+    },
+    {
+     "id": "T69-4 first row vs last row",
+     "summary": "The writer reads an id's last row and the reader its first, accepted because every row of an advisor call carries the same advisor iteration.",
+     "class": "within",
+     "why": "Implementation detail backed by a measurement (588 calls, first equal to last on all, measured 2026-11-21). It narrows nothing."
+    },
+    {
+     "id": "T69-5 unchanged parts",
+     "summary": "tok, ctx, context.rs (T68), T59's wait and T68's reading are left unchanged.",
+     "class": "within",
+     "why": "The task asks only that the advisor's iterations be booked beside the builder's own. Leaving the other readers alone is the task's scope, not a cut to it."
+    },
+    {
+     "id": "T69-6 perf classification",
+     "summary": "Filed and ordered as a [perf] task under FR-013's measurement clause.",
+     "class": "within",
+     "why": "FR-013 and the GM 2026-11-20 ('this kind of measurement task to be counted as a performance task') count work on the event log's data and where-time/feature-report's readers as performance work. That is exactly this task."
+    },
+    {
+     "id": "T69-7 fix code not claim",
+     "summary": "Item 12 treats the missing advisor tokens as a defect (a builder's cost reported short by 23.6M input / 2.3M output tokens over 451's window) and fixes the code.",
+     "class": "within",
+     "why": "A cost figure that leaves out tokens actually spent is a wrong outcome under XIV's definition of a defect, not a mere difference from what was expected, so fixing the code is correct."
+    },
+    {
+     "id": "T69-8 closing-checks overlap filed as T72",
+     "summary": "The found defect (two closing-checks runs in one clone share .git/closing-checks/ and read each other's verdicts) is not fixed here; it is filed as T72 [perf], lands before T22.",
+     "class": "within",
+     "why": "It is a defect in T55's closing step, outside this task's files and outside what T69 was asked to do. It is filed with its id, the reason it is not fixed here and its order (before T22, the close), as FR-009 requires, so it is fixed inside this feature before its close. No defect is carried past the step, and nothing T69 was asked for is narrowed."
+    },
+    {
+     "id": "T69-9 closing-checks red outside task files",
+     "summary": "The task's own closing-checks run went red only on make static's format of T54's uncommitted stale_terms/tests.rs (another builder's file in the same clone); the task records it, and on the final tree format and tests are green on its own crates.",
+     "class": "within",
+     "why": "This records evidence about the task's own exit, and narrows nothing in the GM's request or the spec. The red comes from another task's uncommitted file plus the T72 overlap, and the landing gate still runs over the whole tree."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-21",
+   "blocks": [
+    "### T54 (the stale-terms search refused the FR-013 amendment's spec review with 66 candidates on the backticked `end` read as an ordinary word, escaped with `STALE_TERMS_OK`, measured 2026-11-21 (the guard log's `blocked/stale-terms` row of 2026-11-21T02:55:57Z and the refusal's text in the session transcript))",
+    "### T54 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T54-fix-plain-word",
+     "summary": "A one-word plain subject (letters only, capitalized at most at its start) is named only as its code span",
+     "class": "within",
+     "why": "This is how T54's filed line is carried out (the subject read in the sense the change moved it in, not as a bare common word), and it is a [perf] task under FR-013 (it makes the builders' loop faster). The red-first case uses 451's own lines and the replay shows every real catch kept."
+    },
+    {
+     "id": "T54-fix-other-terms",
+     "summary": "Any other term (phrase, path, number, identifier, capitalized label) is named bare or in a span, but never inside a longer word",
+     "class": "within",
+     "why": "The fix keeps the two bare-text catches the log shows (283's `780 sq ft`, 285's `GUESS`). It is the measured reason spans alone cannot be the rule, and it is pinned red-first. The check keeps every catch the log shows, so nothing it was asked to catch is narrowed."
+    },
+    {
+     "id": "T54-fix-span-pairing",
+     "summary": "Code spans are paired in order by a split on backticks; an empty span is no subject",
+     "class": "within",
+     "why": "This fixes a mis-pairing defect in how subjects are read, which is part of the same fix."
+    },
+    {
+     "id": "T54-fix-literal-span",
+     "summary": "A plain word's span is matched as the literal backticked word, not by in-order pairing, so a line that opens inside a wrapped span still matches",
+     "class": "within",
+     "why": "It keeps a real naming (451 plan.md:107) that the paired reading would lose. That keeps catches rather than narrowing them, and it is pinned red-first (case four)."
+    },
+    {
+     "id": "T54-keep-442-containment",
+     "summary": "442's rewritten-from check keeps its plain containment; reading the old block by names was tried and not taken",
+     "class": "within",
+     "why": "This leaves an existing rule as it is. The variant that was tried added one wrong fire (274) and no real catch, so keeping the rule leaves no defect. Feature 253's search and 442's rule are kept, as the task's constraints say."
+    },
+    {
+     "id": "T54-value-side-left-T73",
+     "summary": "The value side is unchanged: a word re-wrapped onto the next line stays an old value (most of 451's remaining 28). It is filed as T73 and lands before T22",
+     "class": "within",
+     "why": "It is outside T54's filed scope (the subject read). Nothing in request.md or the spec asks for it in this task. The one fix that was priced (block values) would drop a real catch (contracts/refusals.md:12), which would make the check pass bad work. The deferral carries FR-009's three parts: why it is not fixed here (no measured rule yet keeps a catch of that shape), the filed id (T73) and the order (lands before T22). It is a defect, but it is filed and ordered inside this feature rather than carried past a step, and the GM's request says nothing that requires every defect in this check to land in one task."
+    },
+    {
+     "id": "T54-contract-restated",
+     "summary": "contracts/refusals.md:12's landing definition ('end line of code 0') is restated to match plan.md and the code (landed true)",
+     "class": "within",
+     "why": "Under constitution XIV, a claim the code does not match, where the behavior is right, is fixed by restating the claim. It matches D5 and FR-007 as the plan defines them, and the guard's reading was measured (static_runs_hooks.rs:247)."
+    },
+    {
+     "id": "T54-conventions",
+     "summary": "Which characters continue a word (letters, digits, _, -) and what a plain word is are labeled CONVENTIONs; the span bounds (2 to 60) are unchanged",
+     "class": "within",
+     "why": "Implementation conventions, labeled, inside the fix. No constant moves."
+    },
+    {
+     "id": "T54-exits-and-files",
+     "summary": "Exits: crate checks, the review-round suite (case 10 `gizmo` still refused), closing-checks and the replay. A claim that it cannot be done goes to make arbiter-ask. The file list is limited to stale_terms.rs, its tests, the docs/guards.md row and this section",
+     "class": "within",
+     "why": "These enforce the fix and keep its reach to the check it changes. They add no unrequested behavior."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -11497,6 +11713,186 @@
      "summary": "T61 is a [perf] task under 451 FR-013: it makes the builders' loop faster (no early false gone, no re-wait).",
      "class": "within",
      "why": "FR-013 counts work that makes the builders' loop faster as performance work, and the GM's 2026-11-20 words ask for performance work first."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T70": {
+   "section_sha256": "11f2a86d9b2d151778634f1b5eb9db14408eaafe8b9db0ee5fb552af3a6972c0",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T70-1 ceiling",
+     "summary": "The lit page's raster-wait ceiling moves from the test build's 40 ms to the shipped minute (READY_WAIT, the Python's timeout=60000) in every build.",
+     "class": "within",
+     "why": "Fixes a defect (the closing checks refusing correct code under load, a wrong outcome per constitution XIV) the GM asked to have filed as a performance task (2026-11-21: 'yes please file that as a performance task'); the shipped behavior is unchanged and a never-readying page is still refused."
+    },
+    {
+     "id": "T70-2 READY_CEILING thread-local",
+     "summary": "The test build reads the ceiling through a thread-local that only a_page_that_never_readies_or_throws_is_refused shortens to 40 ms.",
+     "class": "within",
+     "why": "Keeps the refusal test fast under 449 FR-008 while the refusal itself stays tested; narrows nothing asked."
+    },
+    {
+     "id": "T70-3 zoom settle",
+     "summary": "The zoom key's 1 ms test-build settle is left as it is.",
+     "class": "within",
+     "why": "A sleep, not a wait that can run out and fail; no wrong outcome, so nothing owed."
+    },
+    {
+     "id": "T70-4 lateready fake and test",
+     "summary": "testkit.rs gains lateready (raster answered at 50 ms) and a_page_slow_to_ready_is_waited_for pins the fix, red first on the old lit.rs.",
+     "class": "within",
+     "why": "A test whose only effect is to enforce the fix; measured at 0.082 s, inside 449 FR-008."
+    },
+    {
+     "id": "T70-5 other short waits left",
+     "summary": "The 300 ms close wait (cdp.rs close) and the 2 s idle wait (serve.rs render) are left unchanged.",
+     "class": "within",
+     "why": "Read and found to fail nothing when they run out (process killed / bool not acted on); a difference that produces no wrong outcome is not a defect, so leaving it is within, not a narrowing."
+    },
+    {
+     "id": "T70-6 end-to-end exemption",
+     "summary": "The real-Chromium end-to-end test (0.957 s) is held exempt from the tenth-of-a-second bar.",
+     "class": "within",
+     "why": "449 FR-008's own text excepts the one end-to-end test against the real command; the new fake test is held to the bar."
+    },
+    {
+     "id": "T70-7 scope and order",
+     "summary": "Only rust/browser changes; T54's and T69's crates are left alone; ordered after T68, independent of T54/T69; one landing.",
+     "class": "within",
+     "why": "Scoping to the crate that holds the defect; nothing the request or spec asks is dropped."
+    },
+    {
+     "id": "T70-8 perf classification",
+     "summary": "Tagged [perf] under 451 FR-013: the builders' loop loses no closing run to a false red.",
+     "class": "within",
+     "why": "The GM asked on 2026-11-21 that the closing-checks work be filed as a performance task, and FR-013 counts work that makes the builders' loop faster."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T69": {
+   "section_sha256": "52293704385aea8be791743fe57d76c7bd0778231ff396cce308fe5f9ea0cc7d",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T69-1 sibling adv field",
+     "summary": "The advisor's own iterations are booked in a sibling `adv` field on the SubagentStop line (same four keys), not folded into `tok`; tok stays the builder's own calls as D6 wrote it.",
+     "class": "within",
+     "why": "FR-004 asks for an agent's token cost on its stop line; with adv beside tok the stop line now carries all of it, the advisor's share included, so the separate field adds to the cost rather than narrowing it. The task line asks for 'a separate figure'. Keeping tok's meaning leaves D6 and its readers as they are."
+    },
+    {
+     "id": "T69-2 zero vs absent",
+     "summary": "adv is written wherever tok is, zero where no advisor was called, so a stop from before T69 (no adv) reads as uncounted, not zero.",
+     "class": "within",
+     "why": "A representation choice that keeps old stops from reading as a false zero. It narrows nothing that was asked."
+    },
+    {
+     "id": "T69-3 reader shows advisor in/out",
+     "summary": "where-time's Tok gains adv: Option<Adv>; the task table, agent table and summary line show 'k advisor in' / 'k advisor out' beside the builder's tokens; feature-report gets the same through the shared columns_text renderer; Adv keeps input as one figure.",
+     "class": "within",
+     "why": "FR-005/D7 has where-time and feature-report read FR-004's lines through one function, and this does that. Folding cache into input rests on a measurement (none of the 2,722 advisor iterations read from or wrote to the cache, measured 2026-11-21), and the writer still records all four keys, so nothing is lost."
+    },
+    {
+     "id": "T69-4 first row vs last row",
+     "summary": "The writer reads an id's last row and the reader its first, accepted because every row of an advisor call carries the same advisor iteration.",
+     "class": "within",
+     "why": "Implementation detail backed by a measurement (588 calls, first equal to last on all, measured 2026-11-21). It narrows nothing."
+    },
+    {
+     "id": "T69-5 unchanged parts",
+     "summary": "tok, ctx, context.rs (T68), T59's wait and T68's reading are left unchanged.",
+     "class": "within",
+     "why": "The task asks only that the advisor's iterations be booked beside the builder's own. Leaving the other readers alone is the task's scope, not a cut to it."
+    },
+    {
+     "id": "T69-6 perf classification",
+     "summary": "Filed and ordered as a [perf] task under FR-013's measurement clause.",
+     "class": "within",
+     "why": "FR-013 and the GM 2026-11-20 ('this kind of measurement task to be counted as a performance task') count work on the event log's data and where-time/feature-report's readers as performance work. That is exactly this task."
+    },
+    {
+     "id": "T69-7 fix code not claim",
+     "summary": "Item 12 treats the missing advisor tokens as a defect (a builder's cost reported short by 23.6M input / 2.3M output tokens over 451's window) and fixes the code.",
+     "class": "within",
+     "why": "A cost figure that leaves out tokens actually spent is a wrong outcome under XIV's definition of a defect, not a mere difference from what was expected, so fixing the code is correct."
+    },
+    {
+     "id": "T69-8 closing-checks overlap filed as T72",
+     "summary": "The found defect (two closing-checks runs in one clone share .git/closing-checks/ and read each other's verdicts) is not fixed here; it is filed as T72 [perf], lands before T22.",
+     "class": "within",
+     "why": "It is a defect in T55's closing step, outside this task's files and outside what T69 was asked to do. It is filed with its id, the reason it is not fixed here and its order (before T22, the close), as FR-009 requires, so it is fixed inside this feature before its close. No defect is carried past the step, and nothing T69 was asked for is narrowed."
+    },
+    {
+     "id": "T69-9 closing-checks red outside task files",
+     "summary": "The task's own closing-checks run went red only on make static's format of T54's uncommitted stale_terms/tests.rs (another builder's file in the same clone); the task records it, and on the final tree format and tests are green on its own crates.",
+     "class": "within",
+     "why": "This records evidence about the task's own exit, and narrows nothing in the GM's request or the spec. The red comes from another task's uncommitted file plus the T72 overlap, and the landing gate still runs over the whole tree."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T54": {
+   "section_sha256": "bda4101b38dccfb2fa074e7a65833c8f427d50dc5d048df41198a72542d89c43",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T54-fix-plain-word",
+     "summary": "A one-word plain subject (letters only, capitalized at most at its start) is named only as its code span",
+     "class": "within",
+     "why": "This is how T54's filed line is carried out (the subject read in the sense the change moved it in, not as a bare common word), and it is a [perf] task under FR-013 (it makes the builders' loop faster). The red-first case uses 451's own lines and the replay shows every real catch kept."
+    },
+    {
+     "id": "T54-fix-other-terms",
+     "summary": "Any other term (phrase, path, number, identifier, capitalized label) is named bare or in a span, but never inside a longer word",
+     "class": "within",
+     "why": "The fix keeps the two bare-text catches the log shows (283's `780 sq ft`, 285's `GUESS`). It is the measured reason spans alone cannot be the rule, and it is pinned red-first. The check keeps every catch the log shows, so nothing it was asked to catch is narrowed."
+    },
+    {
+     "id": "T54-fix-span-pairing",
+     "summary": "Code spans are paired in order by a split on backticks; an empty span is no subject",
+     "class": "within",
+     "why": "This fixes a mis-pairing defect in how subjects are read, which is part of the same fix."
+    },
+    {
+     "id": "T54-fix-literal-span",
+     "summary": "A plain word's span is matched as the literal backticked word, not by in-order pairing, so a line that opens inside a wrapped span still matches",
+     "class": "within",
+     "why": "It keeps a real naming (451 plan.md:107) that the paired reading would lose. That keeps catches rather than narrowing them, and it is pinned red-first (case four)."
+    },
+    {
+     "id": "T54-keep-442-containment",
+     "summary": "442's rewritten-from check keeps its plain containment; reading the old block by names was tried and not taken",
+     "class": "within",
+     "why": "This leaves an existing rule as it is. The variant that was tried added one wrong fire (274) and no real catch, so keeping the rule leaves no defect. Feature 253's search and 442's rule are kept, as the task's constraints say."
+    },
+    {
+     "id": "T54-value-side-left-T73",
+     "summary": "The value side is unchanged: a word re-wrapped onto the next line stays an old value (most of 451's remaining 28). It is filed as T73 and lands before T22",
+     "class": "within",
+     "why": "It is outside T54's filed scope (the subject read). Nothing in request.md or the spec asks for it in this task. The one fix that was priced (block values) would drop a real catch (contracts/refusals.md:12), which would make the check pass bad work. The deferral carries FR-009's three parts: why it is not fixed here (no measured rule yet keeps a catch of that shape), the filed id (T73) and the order (lands before T22). It is a defect, but it is filed and ordered inside this feature rather than carried past a step, and the GM's request says nothing that requires every defect in this check to land in one task."
+    },
+    {
+     "id": "T54-contract-restated",
+     "summary": "contracts/refusals.md:12's landing definition ('end line of code 0') is restated to match plan.md and the code (landed true)",
+     "class": "within",
+     "why": "Under constitution XIV, a claim the code does not match, where the behavior is right, is fixed by restating the claim. It matches D5 and FR-007 as the plan defines them, and the guard's reading was measured (static_runs_hooks.rs:247)."
+    },
+    {
+     "id": "T54-conventions",
+     "summary": "Which characters continue a word (letters, digits, _, -) and what a plain word is are labeled CONVENTIONs; the span bounds (2 to 60) are unchanged",
+     "class": "within",
+     "why": "Implementation conventions, labeled, inside the fix. No constant moves."
+    },
+    {
+     "id": "T54-exits-and-files",
+     "summary": "Exits: crate checks, the review-round suite (case 10 `gizmo` still refused), closing-checks and the replay. A claim that it cannot be done goes to make arbiter-ask. The file list is limited to stale_terms.rs, its tests, the docs/guards.md row and this section",
+     "class": "within",
+     "why": "These enforce the fix and keep its reach to the check it changes. They add no unrequested behavior."
     }
    ],
    "verdict": "CLEAR"

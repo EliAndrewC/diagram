@@ -382,7 +382,7 @@ fn the_report_shows_where_times_columns_for_the_feature() {
     let shown = shown.join("\n");
     assert!(report.stdout.contains(&shown), "{shown}\n{}", report.stdout);
     for want in [
-        "| all | 3 | 20 | 1.0 | 0.5 | 1 | 1 | |",
+        "| all | 3 | 20 | 1.0 | 0.5 | - | - | 1 | 1 | |",
         "rework: 1 refused landing, 1 plan re-round",
         "| spec-fidelity | plan-901-s-T01 | 2 |",
     ] {

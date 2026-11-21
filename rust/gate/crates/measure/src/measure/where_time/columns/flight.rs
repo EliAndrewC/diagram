@@ -63,7 +63,7 @@ pub struct Agent {
     /// Each span, a start to the first stop after it, else to the window's end; cut to the window and merged by `spent::clip` where the
     /// command reads the agents' minutes.
     pub spans: Vec<(f64, f64)>,
-    /// Its last stop's `tok` (D6: a stop is cumulative), if any stop carried one.
+    /// Its last stop's `tok` (D6: a stop is cumulative), with that stop's `adv` (451 T69), if any stop carried one.
     pub tok: Option<super::spent::Tok>,
 }
 
@@ -136,7 +136,7 @@ pub fn flight(runs: &Runs, agents: &[Event], stream: &[Event], end: f64) -> Resu
                     tasks.entry(aid.clone()).or_insert(task);
                 }
                 if let Some(tok) = (!start)
-                    .then(|| super::spent::Tok::of(get(e, "tok")))
+                    .then(|| super::spent::Tok::of(get(e, "tok"), get(e, "adv")))
                     .flatten()
                 {
                     toks.insert(aid, tok);
