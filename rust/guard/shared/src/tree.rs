@@ -11,7 +11,7 @@ use std::path::{Component, Path, PathBuf};
 use fancy_regex::{Captures, Regex};
 
 use super::regex::Lazy;
-use super::shape::strip_heredocs;
+use super::shape::{quoted_spans, strip_heredocs};
 
 mod bind;
 mod git;
@@ -64,10 +64,6 @@ static MKTEMP: Lazy = Lazy::new(
 static DIR_BASE: Lazy = Lazy::new(
     |t| t.contains("dirname") || t.contains("basename"),
     || re(r#"^["']?(?:\$\(|`)\s*((?:dirname|basename)\s[^()`\n]*?)\s*(?:\)|`)"#),
-);
-static QUOTED: Lazy = Lazy::new(
-    |t| t.contains(['"', '\'']),
-    || re(r#"(?s)(["'])((?:\\.|(?!\1).)*)\1"#),
 );
 static REDIRECT: Lazy = Lazy::new(
     |t| t.contains('>'),
@@ -148,24 +144,29 @@ fn relpath(path: &str, start: &str) -> String {
 
 /// A quoted string kept as its body where it is one plain word (a path), else blanked to an empty pair (`_quotes_to_paths`); a
 /// program `python3 -c` runs is carried out beside the text, the word `__py_c_<n>__` standing in its place, so `writes_in` can
-/// judge whether it only reads without the program's own `;`, `(` and `|` splitting the walk (451 T31).
+/// judge whether it only reads without the program's own `;`, `(` and `|` splitting the walk (451 T31). The strings are shape's
+/// `quoted_spans` (451 T112), where the pattern `(?s)(["'])((?:\\.|(?!\1).)*)\1` tried 2^n readings of the n escapes after a quote
+/// nothing closes: `<a write>; echo it's` and forty escapes, the write each guard reads, held the house style guard, main-tree,
+/// gm-tree, make-only, readme, gate-write and the event log's end past 10 s (measured 2026-11-21, the T112 plan section); a test
+/// holds the two equal on every text of up to 6 pieces (`tests/quotes.rs`).
 fn quotes_to_paths(cmd: &str, mut programs: Vec<Program>) -> (String, Vec<Program>) {
-    let text = QUOTED
-        .replace_all(cmd, |c: &Captures| {
-            let body = c.get(2).map_or("", |m| m.as_str());
-            let quote = c.get(1).map_or("", |m| m.as_str());
-            let at = c.get(0).map_or(0, |m| m.start());
-            if PYTHON_C_BEFORE.is_match(&cmd[..at]) {
-                programs.push((quote.chars().next().unwrap_or('"'), body.to_owned()));
-                format!("__py_c_{}__", programs.len() - 1)
-            } else if !body.is_empty() && plain_quote_body(body) {
-                // an empty quote stays a word (451 T79: `cd ""` stays where it is, bash's `null directory`, never `cd` home)
-                body.to_owned()
-            } else {
-                quote.repeat(2)
-            }
-        })
-        .into_owned();
+    let (mut text, mut from) = (String::with_capacity(cmd.len()), 0);
+    for (open, close) in quoted_spans(cmd) {
+        let (quote, body) = (&cmd[open..=open], &cmd[open + 1..close]);
+        text.push_str(&cmd[from..open]);
+        if PYTHON_C_BEFORE.is_match(&cmd[..open]) {
+            programs.push((quote.chars().next().unwrap_or('"'), body.to_owned()));
+            let _ = write!(text, "__py_c_{}__", programs.len() - 1);
+        } else if !body.is_empty() && plain_quote_body(body) {
+            // an empty quote stays a word (451 T79: `cd ""` stays where it is, bash's `null directory`, never `cd` home)
+            text.push_str(body);
+        } else {
+            text.push_str(quote);
+            text.push_str(quote);
+        }
+        from = close + 1;
+    }
+    text.push_str(&cmd[from..]);
     (text, programs)
 }
 

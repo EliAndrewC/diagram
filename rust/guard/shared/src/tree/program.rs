@@ -17,12 +17,14 @@
 //! `TRIPLE` and `JOINED`, and a literal naming a file the scans' patterns and one more of its own on every call: 13.1 ms the first
 //! read of a program naming no file against 0.11 ms a second, and 7.1 ms every read of one naming 20 files, each pattern 0.26 to
 //! 6.1 ms to build first in a process (`JOINED` the most, `TAIL_BEFORE` 3.8 ms), measured 2026-11-21 (`/tmp/t96/ms`: the medians of
-//! 31 fresh processes' wall time, a load near 30).
+//! 31 fresh processes' wall time, a load near 30). The triple-quoted text `TRIPLE` matched is since read by shape's
+//! `triple_quoted_spans`, which builds no pattern (451 T112).
 
 use fancy_regex::Regex;
 
 use super::normpath;
 use crate::regex::Lazy;
+use crate::shape::triple_quoted_spans;
 
 fn re(pattern: &str) -> Regex {
     crate::regex::build(pattern).unwrap_or_else(|e| unreachable!("{pattern}: {e}"))
@@ -58,11 +60,6 @@ static JOINED: Lazy = Lazy::new(joined_could, || {
         r#"(?:\bjoin\(\s*(['"])([^'"\s\\]+)\1\s*,|(['"])([^'"\s\\]+)\3\s*\)?\s*/)\s*(['"])([^'"\s\\]+)\5"#,
     )
 });
-/// A triple-quoted string of a program.
-static TRIPLE: Lazy = Lazy::new(
-    |t| t.contains(r#"""""#) || t.contains("'''"),
-    || re(r#"(?s)"""(?:\\.|(?!""").)*"""|'''(?:\\.|(?!''').)*'''"#),
-);
 
 /// Whether `JOINED` could match `text`: a `join(` whose first argument is a literal before a `,`, or a `/` with a literal ending
 /// before it (past a `)`) and one starting after it. A bare quote was not enough: `'/'.join(`, `split('/')` and a Rust `.join("x")`
@@ -112,9 +109,19 @@ fn resolve(lit: &str, base: &str) -> String {
 }
 
 /// The program with its triple-quoted strings blanked: text a program carries (a suite's body being written, a docstring) names
-/// files it does not open - the refusal corpus's 2026-09-05 row writes a suite whose text names a Makefile.
+/// files it does not open - the refusal corpus's 2026-09-05 row writes a suite whose text names a Makefile. The strings are shape's
+/// `triple_quoted_spans` (451 T112), where the pattern `(?s)"""(?:\\.|(?!""").)*"""|'''(?:\\.|(?!''').)*'''` tried 2^n readings of
+/// the n escapes after a triple quote nothing closes: a heredoc's program holding one and forty escapes held make-only, readme,
+/// gate-write and the event log's end past 10 s (measured 2026-11-21, the T112 plan section); a test holds the two equal on every
+/// text of up to 5 pieces (`tests.rs`).
 fn without_text(body: &str) -> String {
-    TRIPLE.replace_all(body, "\"\"").into_owned()
+    let (mut text, mut from) = (String::with_capacity(body.len()), 0);
+    for (open, close) in triple_quoted_spans(body) {
+        text.push_str(&body[from..open]);
+        text.push_str("\"\"");
+        from = close + 1;
+    }
+    text + &body[from..]
 }
 
 /// Whether every use of the literal `lit` in `body` is a read: opened to read, read through `Path`, an element of a subprocess's

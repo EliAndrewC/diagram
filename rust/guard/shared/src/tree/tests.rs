@@ -937,3 +937,30 @@ mod words;
 mod binds;
 
 mod builds;
+
+/// A hang pin's deadline (451 T103's form, T112): the test `name` (its path in this crate) run again as a child with `var` set, which
+/// does the work and prints its answer; whether it passed within `secs`, and what it printed. A search that never ends is killed at
+/// the deadline and fails its test, rather than holding the run.
+pub(super) fn answers_in_time(name: &str, var: &str, secs: u64) -> (bool, String) {
+    use std::time::{Duration, Instant};
+    let mut child = std::process::Command::new(std::env::current_exe().unwrap())
+        .args(["--exact", name, "--nocapture"])
+        .env(var, "1")
+        .stdout(std::process::Stdio::piped())
+        .spawn()
+        .unwrap();
+    let deadline = Instant::now() + Duration::from_secs(secs);
+    let done = loop {
+        let status = child.try_wait().unwrap();
+        if status.is_some() || Instant::now() > deadline {
+            break status;
+        }
+        std::thread::sleep(Duration::from_millis(20));
+    };
+    let _ = child.kill();
+    let out = child.wait_with_output().unwrap();
+    let said = String::from_utf8_lossy(&out.stdout).into_owned();
+    (done.is_some_and(|s| s.success()), said)
+}
+
+mod quotes;

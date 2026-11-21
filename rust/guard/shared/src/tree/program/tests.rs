@@ -4,7 +4,7 @@
 use std::path::Path;
 use std::process::Command;
 
-use super::{all_program_names, program_names};
+use super::{all_program_names, program_names, without_text};
 
 /// The variable naming the program a child run reads (`tree/tests/builds.rs`' form, 451 T97).
 const CHILD: &str = "L7R_PROGRAM_BUILDS_OF";
@@ -12,7 +12,7 @@ const CHILD: &str = "L7R_PROGRAM_BUILDS_OF";
 /// Each program and the reader's patterns it builds, read as the event log reads it - every name, in the crate's directory, each an
 /// existing file: none for a program whose literals name no file or name one only assigned (its literals read by plain code), a `/`
 /// or a `join(` beside quotes that join no two literals among them; else only the patterns its uses reach - `open(`'s two, `Path(`'s
-/// two, a joined pair's, triple-quoted text's.
+/// two, a joined pair's (triple-quoted text read by shape's scan, which builds none, 451 T112).
 const BUILDS: [(&str, usize); 9] = [
     ("print(1)", 0),
     ("import json\nprint(json.dumps({'k': 1}))", 0),
@@ -28,7 +28,7 @@ const BUILDS: [(&str, usize); 9] = [
     ("open('Cargo.toml', 'w').write(s)", 2),
     ("Path('Cargo.toml').write_text(s)", 2),
     ("(Path('src') / 'lib.rs').write_text(s)", 1),
-    ("s = \"\"\"x\"\"\"\nopen('Cargo.toml', 'w').write(s)", 3),
+    ("s = \"\"\"x\"\"\"\nopen('Cargo.toml', 'w').write(s)", 2),
 ];
 
 /// A hook event is a process of its own and a pattern is built on its first use in it, so a program builds only the patterns its own
@@ -179,11 +179,10 @@ const SHAPES: [&str; 10] = [
 fn each_gate_passes_wherever_its_pattern_matches() {
     use super::{
         ARGV_BEFORE, JOINED, OPEN_AFTER, OPEN_BEFORE, PATH_AFTER, PATH_BEFORE, SPEC_BEFORE,
-        TAIL_BEFORE, TRIPLE, VALUE_BEFORE,
+        TAIL_BEFORE, VALUE_BEFORE,
     };
     let gated = [
         (&JOINED, "join('a',"),
-        (&TRIPLE, "'''"),
         (&OPEN_BEFORE, "open("),
         (&OPEN_AFTER, ")"),
         (&PATH_BEFORE, "Path("),
@@ -248,5 +247,58 @@ fn the_literals_are_what_the_literal_pattern_found() {
         ] {
             assert_eq!(read(&body), found(&body), "U+{:04X}", u32::from(c));
         }
+    }
+}
+
+/// The variable that makes a child run read the program (451 T112).
+const TRIPLE_CHILD: &str = "L7R_PROGRAM_TRIPLE_IN_TIME";
+
+/// A program writing a file, then a triple quote nothing later closes and forty escapes: 2^40 tries for `TRIPLE`'s backtracking
+/// search, which held make-only, readme, gate-write (while a `make done` ran) and the event log's end past 10 s on the program run
+/// from a heredoc (measured 2026-11-21, the T112 plan section). A lone quote after the escapes closes the single-quoted reading.
+fn unclosed_triple() -> String {
+    format!(
+        "open('f.txt', 'w').write('x')\ns = '''it {} '",
+        "\\n".repeat(40)
+    )
+}
+
+#[test]
+fn a_triple_quote_nothing_closes_is_read_in_time() {
+    if std::env::var_os(TRIPLE_CHILD).is_some() {
+        let names = all_program_names(&unclosed_triple(), Some("/w"), true, false, &|_| true);
+        println!("T112 named {names:?}");
+        return;
+    }
+    let name = "tree::program::tests::a_triple_quote_nothing_closes_is_read_in_time";
+    let (passed, said) = crate::tree::tests::answers_in_time(name, TRIPLE_CHILD, 10);
+    assert!(passed, "the program was not read in 10 s: {said}");
+    let named = said.contains(r#"T112 named ["/w/f.txt""#);
+    assert!(named, "{said}");
+}
+
+/// The program's triple-quoted text blanked as `TRIPLE` (`(?s)"""(?:\\.|(?!""").)*"""|'''(?:\\.|(?!''').)*'''`, built here) blanked
+/// it, on every text of up to 5 pieces over a triple of each quote, each quote alone, a backslash, a letter, a newline and a
+/// character of two bytes, and on the empty text.
+#[test]
+fn triple_quoted_text_is_blanked_as_the_pattern_blanked_it() {
+    let pattern = r#"(?s)"""(?:\\.|(?!""").)*"""|'''(?:\\.|(?!''').)*'''"#;
+    let pattern = crate::regex::build(pattern).unwrap();
+    let pieces = ["\"\"\"", "'''", "\"", "'", "\\", "a", "\n", "é"];
+    let mut texts = vec![String::new()];
+    let mut longest = vec![String::new()];
+    for _ in 0..5 {
+        longest = longest
+            .iter()
+            .flat_map(|t| pieces.map(|p| format!("{t}{p}")))
+            .collect();
+        texts.extend(longest.iter().cloned());
+    }
+    for text in &texts {
+        let (scan, old) = (
+            without_text(text),
+            pattern.replace_all(text, "\"\"").into_owned(),
+        );
+        assert_eq!(scan, old, "{text:?}");
     }
 }
