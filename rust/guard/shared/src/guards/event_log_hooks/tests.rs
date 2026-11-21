@@ -735,3 +735,82 @@ fn a_line_is_filed_where_append_writes_it_and_every_target_is_named() {
     let both = json!({"tool_name": "Bash", "tool_input": {"command": "make rust-test CRATE=x && make static"}});
     assert_eq!(line(&both, "T")["makes"], json!(["rust-test", "static"]));
 }
+
+/// A CALL FROM THE MIRROR IS FILED IN THE SESSION'S CLONE (451 T74): a builder whose shell was reset to the mirror wrote its lines to
+/// the mirror's `.git/l7r-events/` - 364 lines of 451's log, none in the clone's (observed 2026-11-21) - so `make where-time` in the clone
+/// missed them. The session's clone (its claim map, as `context_cap_hooks`' `seat` reads it, 451 T60) is the tree, `append` and
+/// `filed_at` alike; a session resolving no clone, or a claim naming a directory that is no work tree, keeps the cwd's tree, and a call
+/// outside any tree still writes nothing. The session's NAME is never read (`tree_of`: the transcript read on every call): a session with
+/// no claim map whose `/rename` and sessions json both name the clone keeps the cwd's tree. The session's `HOME` is the fixture's.
+#[test]
+fn a_call_from_the_mirror_is_filed_in_the_sessions_clone() {
+    let mirror = clone("t74-mirror");
+    let backlog = mirror.join(".clones/backlog");
+    std::fs::create_dir_all(backlog.join(".git")).unwrap();
+    std::fs::create_dir_all(backlog.join(".specify")).unwrap();
+    std::fs::create_dir_all(backlog.join("specs/451-x")).unwrap();
+    std::fs::write(
+        backlog.join(".specify/feature.json"),
+        r#"{"feature_directory": "specs/451-x"}"#,
+    )
+    .unwrap();
+    let map = mirror.join(".clones/.session-clones");
+    std::fs::create_dir_all(&map).unwrap();
+    std::fs::write(map.join("s74"), format!("{}\n", backlog.display())).unwrap();
+    std::fs::create_dir_all(mirror.join(".clones/gone")).unwrap();
+    std::fs::write(
+        map.join("s-gone"),
+        mirror.join(".clones/gone").to_string_lossy().as_bytes(),
+    )
+    .unwrap();
+    let home = mirror.join("home");
+    let env = |k: &str| (k == "HOME").then(|| home.to_string_lossy().into_owned());
+    let call = |sid: &str, cwd: &Path| {
+        json!({"hook_event_name": "PreToolUse", "session_id": sid, "cwd": cwd.to_string_lossy(),
+               "tool_name": "Read", "tool_input": {"file_path": "x"}})
+    };
+    let real = |p: &Path| std::fs::canonicalize(p).unwrap();
+    let theirs = real(&backlog).join(".git/l7r-events/451-x.jsonl");
+    let written = append(&call("s74", &mirror), "T", Path::new("/"), &env).unwrap();
+    assert_eq!(written, theirs);
+    assert!(!mirror.join(".git/l7r-events").exists());
+    let (root, feature, log, _) = filed_at(&call("s74", &mirror), Path::new("/"), &env).unwrap();
+    assert_eq!(
+        (root, feature.as_str(), log),
+        (real(&backlog), "451-x", theirs.clone())
+    );
+    // from the clone itself, the same log
+    assert_eq!(
+        append(&call("s74", &backlog), "T", Path::new("/"), &env).unwrap(),
+        theirs
+    );
+    // no session, a session no claim map or name resolves, a claim naming no work tree: the cwd's tree, today's answer
+    let ours = real(&mirror).join(".git/l7r-events/999-a.jsonl");
+    let each: Vec<_> = ["", "s-none", "s-gone"]
+        .map(|sid| append(&call(sid, &mirror), "T", Path::new("/"), &env))
+        .into();
+    assert_eq!(each, vec![Some(ours.clone()); 3]);
+    let named = home.join(".claude/sessions");
+    std::fs::create_dir_all(&named).unwrap();
+    std::fs::write(
+        named.join("n.json"),
+        r#"{"sessionId": "s-named", "name": "backlog"}"#,
+    )
+    .unwrap();
+    let transcript = mirror.join("s-named.jsonl");
+    std::fs::write(
+        &transcript,
+        "{\"type\": \"custom-title\", \"customTitle\": \"backlog\"}\n",
+    )
+    .unwrap();
+    let mut by_name = call("s-named", &mirror);
+    by_name["transcript_path"] = json!(transcript.to_string_lossy());
+    // the fixture's name does name the clone, and the line keeps the cwd's tree
+    assert_eq!(
+        crate::session::Session::with_env(&by_name, env).canonical(),
+        Some(real(&mirror).join(".clones/backlog"))
+    );
+    assert_eq!(append(&by_name, "T", Path::new("/"), &env), Some(ours));
+    assert!(append(&call("s74", Path::new("/")), "T", Path::new("/"), &env).is_none());
+    assert!(filed_at(&call("s74", Path::new("/")), Path::new("/"), &env).is_none());
+}

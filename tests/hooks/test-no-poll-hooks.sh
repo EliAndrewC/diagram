@@ -396,6 +396,13 @@ bash "$WA_DIR/steps.sh" </dev/null >/dev/null 2>&1 & WA_RUN=$!
 wa_settle "$WA_RUN" steps.sh
 alive "a live script whose text writes it: alive" alive "$WA_DIR/fresh.log"
 kill "$WA_RUN" 2>/dev/null; wait "$WA_RUN" 2>/dev/null
+# 451 T71: A COMMAND THAT OPENS WITH ITS ASSIGNMENT. The harness runs a command as `eval '<command>'`, so in `B=<dir>; ... | tee -a
+# $B/phases.log` the assignment follows a quote: T151 part B's call, moved to the background by the harness at 180 s, read gone while
+# it ran (2026-11-18, `bcmk2v816`, exit 3, 207 s quiet), since the walk read no `B` and its target held a `$`.
+bash -c "source /dev/null && eval 'B=$WA_DIR; sleep 30; echo \"pointers rc=0\" | tee -a \$B/fresh.log'" </dev/null >/dev/null 2>&1 & WA_RUN=$!
+wa_settle "$WA_RUN" fresh.log
+alive "a live call whose command opens with its assignment and tees into it: alive" alive "$WA_DIR/fresh.log"
+pkill -P "$WA_RUN" 2>/dev/null; kill "$WA_RUN" 2>/dev/null; wait "$WA_RUN" 2>/dev/null
 bash -c "until grep -q NEVER-T61 '$WA_DIR/fresh.log'; do sleep 3; done" </dev/null >/dev/null 2>&1 & WA_W1=$!
 bash -c "while ! grep -q NEVER-T61 '$WA_DIR/fresh.log'; do sleep 3; done" </dev/null >/dev/null 2>&1 & WA_W2=$!
 wa_settle "$WA_W1" NEVER-T61; wa_settle "$WA_W2" NEVER-T61
@@ -415,6 +422,14 @@ wa_settle "$WA_R1" quiet.log; wa_settle "$WA_R2" quiet.log
 for i in $(seq 100); do fuser -s "$WA_DIR/quiet.log" 2>/dev/null && break; sleep 0.05; done  # the tail has opened it
 alive "a Monitor's tail -f and a file-test wait on a quiet file, and no run: still gone" dead "$WA_DIR/quiet.log"
 pkill -P "$WA_R1" 2>/dev/null; kill "$WA_R1" "$WA_R2" 2>/dev/null; wait "$WA_R1" "$WA_R2" 2>/dev/null
+# 451 T71: a waiter and a reader whose command opens with its assignment (T178's own wait, `S=<dir>; until grep -q ... $S/phases.log`)
+# read that assignment too, and still write nothing
+bash -c "source /dev/null && eval 'S=$WA_DIR; until grep -q NEVER-T71 \$S/quiet.log; do sleep 3; done; tail -1 \$S/quiet.log'" </dev/null >/dev/null 2>&1 & WA_R3=$!
+bash -c "source /dev/null && eval 'S=$WA_DIR; tail -f \$S/quiet.log | grep --line-buffered NEVER-T71'" </dev/null >/dev/null 2>&1 & WA_R4=$!
+wa_settle "$WA_R3" quiet.log; wa_settle "$WA_R4" quiet.log
+for i in $(seq 100); do fuser -s "$WA_DIR/quiet.log" 2>/dev/null && break; sleep 0.05; done  # the tail has opened it
+alive "a waiter and a reader opening with their assignment, and no run: still gone" dead "$WA_DIR/quiet.log"
+pkill -P "$WA_R3" 2>/dev/null; pkill -P "$WA_R4" 2>/dev/null; kill "$WA_R3" "$WA_R4" 2>/dev/null; wait "$WA_R3" "$WA_R4" 2>/dev/null
 # the helper asks its own tree's wrapper by a clean path (451 T61): called as `lib/../l7r-guard.sh`, the wrapper took `..` for its
 # tree's name, built into ~/.cache once and never rebuilt, and every answer came from that stale binary - the two alive cases above
 # passed on it while the walk's source had changed

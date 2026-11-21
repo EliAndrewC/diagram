@@ -15,8 +15,13 @@ static LOOP: LazyLock<Regex> = LazyLock::new(|| {
     crate::shared::regex::build(r"(?m:^)(?>.*?\b(until|while)\b).*\bgrep\b")
         .unwrap_or_else(|e| unreachable!("{e}"))
 });
+/// A simple assignment, after the text's start, a blank, `;&|(` - or a quote (451 T71): the harness runs every command as
+/// `eval '<command>'`, so the assignment a command opens with (`B=<dir>; ... | tee -a $B/phases.log`) follows a quote, and unread
+/// it left `$B` in the target, which then named nothing: T151 part B's call, moved to the background by the harness at 180 s, read
+/// as no run while it ran (2026-11-18, its agent's wait `bcmk2v816` gone at 207 s quiet; 11 of the 101 traced waits with a background
+/// writer had that writer's write behind such an assignment, measured 2026-11-21).
 static ASSIGN: LazyLock<Regex> = LazyLock::new(|| {
-    crate::shared::regex::build(r#"(?:^|[\s;&|(])([A-Za-z_]\w*)=("[^"]*"|'[^']*'|[^\s;&|)]*)"#)
+    crate::shared::regex::build(r#"(?:^|[\s;&|('"])([A-Za-z_]\w*)=("[^"]*"|'[^']*'|[^\s;&|)]*)"#)
         .unwrap_or_else(|e| unreachable!("{e}"))
 });
 static VAR: LazyLock<Regex> = LazyLock::new(|| {

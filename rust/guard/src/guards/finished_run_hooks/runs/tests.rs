@@ -364,6 +364,59 @@ fn a_quiet_file_is_run_by_the_script_that_writes_it() {
     );
 }
 
+/// A COMMAND THAT OPENS WITH ITS ASSIGNMENT (451 T71): the harness runs a command as `eval '<command>'`, so an assignment that opens
+/// it follows a quote, not a blank. T151 part B's foreground call as recorded on 2026-11-18 (`B=<dir>; ... | tee -a $B/phases.log`),
+/// which the harness moved to the background at 180 s, was a live run of `phases.log` while its agent's wait on that file read it
+/// gone (`bcmk2v816`, exit 3, 207 s quiet): `$B` was never read, so the target held a `$` and named nothing. Its write, and a file
+/// it names, are read through that assignment; a waiter and the Monitor tool's reader opening the same way still write nothing.
+#[test]
+fn a_command_that_opens_with_its_assignment_writes_through_it() {
+    let w = world("opens");
+    let dir = w.root.join("t151/b");
+    std::fs::create_dir_all(&dir).unwrap();
+    let log = dir.join("phases.log");
+    std::fs::write(&log, "hooks rc=0\n").unwrap();
+    let d = dir.display().to_string();
+    let harness = |cmd: &str| {
+        format!(
+            "source /s/snapshot.sh 2>/dev/null || true && shopt -u extglob 2>/dev/null || true && eval '{cmd}' < /dev/null && pwd \
+             -P >| /tmp/claude-1-cwd"
+        )
+    };
+    let recorded = format!(
+        "B={d}; cd {c} && make quick > $B/final-quick.log 2>&1; echo \"quick rc=$? $(date -Is)\" | tee -a $B/phases.log; tail -5 \
+         $B/final-quick.log; scripts/gates/l7r-gate.sh check research-pointers --selftest > $B/final-pointers.log 2>&1 && \
+         scripts/gates/l7r-gate.sh check research-pointers >> $B/final-pointers.log 2>&1; echo \"pointers rc=$? $(date -Is)\" | tee \
+         -a $B/phases.log; tail -3 $B/final-pointers.log",
+        c = w.clone.display()
+    );
+    assert!(written(&harness(&recorded), &w.clone).contains(&realpath(&log)));
+    assert!(files_named(
+        &harness(&format!("S={d}; tail -1 $S/phases.log")),
+        Path::new("/")
+    )
+    .contains(&realpath(&log)));
+    let wait = harness(&format!(
+        "B={d}; until grep -q \"pointers rc=\" $B/phases.log; do sleep 5; done; tail -3 $B/phases.log > $B/seen.txt"
+    ));
+    w.add(60, "bash", 1, &w.root, &["/bin/bash", "-c", &wait], None);
+    let monitor = harness(&format!(
+        "S={d}; tail -f $S/phases.log | grep --line-buffered rc="
+    ));
+    w.add(61, "bash", 1, &w.root, &["/bin/bash", "-c", &monitor], None);
+    assert_eq!(w.procs().runner_of(&log), None); // a waiter and a reader are no run
+    w.add(
+        62,
+        "bash",
+        1,
+        &w.clone,
+        &["/bin/bash", "-c", &harness(&recorded)],
+        None,
+    );
+    w.add(63, "make", 62, &w.clone, &["make", "quick"], None);
+    assert_eq!(w.procs().runner_of(&log).as_deref(), Some("62 writes it"));
+}
+
 /// `f`'s answer, or a failure once it runs past 20 s (feature 449 T185: a quadratic search, or a scan over an error it repeats, must
 /// fail the test rather than hang it).
 fn within<T: Send + 'static>(f: impl FnOnce() -> T + Send + 'static) -> T {

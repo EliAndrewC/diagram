@@ -1,0 +1,6 @@
+{
+  "utc": "2026-11-21T12:13:31Z",
+  "target": "plan-gate decide-defer 451-time-retro-and-efficiency T74",
+  "commit": "758310b6e0",
+  "why": "T74's brief limits its files, so the coordinator files the old _unassigned lines' task"
+}

@@ -362,3 +362,62 @@ fn a_plain_words_span_is_read_on_a_line_that_opens_inside_a_wrapped_span() {
         ("w.md", "end")
     );
 }
+
+/// 451 T73: after T54, 28 of 451's 67 candidates still refused. Twelve were a word re-wrapped onto the next line - `tasks`, `names`,
+/// `plan` - which the line-by-line reading took for an old value. Two were real stale uses: the contract's "D5's `end` line of code
+/// 0" and plan.md:329's "a landing `end` with code 1 ... count as rework", each later restated, and each caught by `code`, a word
+/// the rewritten passage still writes but in a rewritten clause. So reading the values from the whole passage loses them; a word
+/// kept in place with both its neighbors does not. The passages and lines are 451's own, verbatim (the reconstructions at
+/// 2026-11-20T12:37 and 2026-11-21T02:55 of the guard log's refusal).
+const REWORK_OLD: &str = "task; the REWORK counts refused landings (D5's `end` lines with a non-zero code) and plan re-rounds (a task's `spec-fidelity` and\n";
+const REWORK_NEW: &str = "task; the REWORK counts refused landings (D5's `end` lines whose `landed` is false: a push that went out with a later raise, or\nexit 3 with its ticks standing, is a landing whatever its code) and plan re-rounds (a task's `spec-fidelity` and\n";
+const DEFINED_OLD: &str = "- **A landing** (one definition, D11's too) is a `make land` of the task that SUCCEEDED: D5's `end` line of code 0 whose `tasks` names\n  it. The `end` line names its own tasks, so no span is matched: a `run_in_background` landing's call returns at once and its `end`\n";
+const DEFINED_NEW: &str = "- **A landing** (one definition, D11's too) is a `make land` of the task that SUCCEEDED: D5's `end` line whose `landed` is true (its\n  push went out - code 0, or 3 with its ticks standing, or a raise after the push; T06) and whose `tasks` names it. The\n  `end` line names its own tasks, so no span is matched: a `run_in_background` landing's call returns at once and its `end`\n";
+const BETWEEN: &str = "`spec-fidelity-verify` dispatches after its first).\n";
+const PLAN_TAIL: &str = "  booked to the runs its `Stop` line names `inflight`, else to the launch whose span holds it. Red first: a background `make land`, its\n  landing `end` with code 1 and a second `spec-fidelity` dispatch count as rework.\n";
+
+#[test]
+fn a_word_re_wrapped_onto_the_next_line_is_no_old_value_and_the_real_catches_stand() {
+    let unchanged = [
+        ("contracts/refusals.md", CONTRACT),
+        ("tasks.md", "- T12 before T13 (one guard). T13 and T14 after T03 (the line's `task`) and T06 (the landing's `end` line naming its tasks, D5), T14\n"),
+        ("plan-done.md", "    T18's) and `landed`. THE PUSH IS THE LANDING (the plan review's T06-stop-after-push): the `end` is written the moment the push\n"),
+        ("quickstart.md", "- `make land F=<n> T=\"T1,T2\" NOTE=...`: both tasks land.\n"),
+    ];
+    let with = |plan: String| {
+        let mut all = files(&unchanged);
+        all.insert("plan.md".to_owned(), plan);
+        all
+    };
+    let found = stale_candidates(
+        &with(format!("{REWORK_OLD}{BETWEEN}{DEFINED_OLD}{PLAN_TAIL}")),
+        &with(format!("{REWORK_NEW}{BETWEEN}{DEFINED_NEW}{PLAN_TAIL}")),
+    );
+    let mut named: Vec<(&str, usize, &str, &[String])> = found
+        .iter()
+        .map(|c| {
+            (
+                c.file.as_str(),
+                c.line,
+                c.subject.as_str(),
+                c.old_values.as_slice(),
+            )
+        })
+        .collect();
+    named.sort_unstable();
+    let code = words(&["code"]);
+    assert_eq!(
+        named,
+        [
+            ("contracts/refusals.md", 1, "end", code.as_slice()),
+            ("plan.md", 8, "end", code.as_slice()),
+        ]
+    );
+    let rewrapped = "the `tier` stays on Sonnet and\nOpus is named here\n";
+    let refilled = "the `tier` stays on\nSonnet and Opus is named here\n";
+    assert!(stale_candidates(
+        &files(&[("s.md", rewrapped), ("p.md", "keep `tier` on Sonnet\n")]),
+        &files(&[("s.md", refilled), ("p.md", "keep `tier` on Sonnet\n")]),
+    )
+    .is_empty());
+}

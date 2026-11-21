@@ -2,7 +2,8 @@
 //!
 //! Later `spec-fidelity` rounds were about 61% of what spec review cost, and in features 251 and 252 most of what they found was text the session had left stale.
 //! For every line a change REPLACED, the SUBJECTS are the backticked terms the old and new line share, the OLD VALUES the words the old line carried and the new one
-//! does not; a CANDIDATE is any other line of the directory that names a subject, in the sense the changed line did (`names`, 451 T54), and still carries an old
+//! does not, of those the change touched: not a word the rewritten passage kept in place with both its neighbors, as a word re-wrapped onto the next line is
+//! (`touched`, 451 T73); a CANDIDATE is any other line of the directory that names a subject, in the sense the changed line did (`names`, 451 T54), and still carries an old
 //! value. A candidate is a line to look at, never a verdict.
 
 use std::collections::{BTreeMap, BTreeSet, HashMap, HashSet};
@@ -111,8 +112,9 @@ fn names(text: &str, subject: &str) -> bool {
     })
 }
 
-/// `(old line, new line)` for each line the change REPLACED; pure insertions and deletions pair with nothing.
-fn changed_pairs(old: &str, new: &str) -> Vec<(String, String)> {
+/// `(old line, new line, the old line's words the change touched)` for each line the change REPLACED; pure insertions and deletions
+/// pair with nothing.
+fn changed_pairs(old: &str, new: &str) -> Vec<(String, String, String)> {
     let (a, b) = (py_lines(old), py_lines(new));
     let mut out = Vec::new();
     for (tag, i1, i2, j1, j2) in opcodes(&a, &b) {
@@ -121,10 +123,56 @@ fn changed_pairs(old: &str, new: &str) -> Vec<(String, String)> {
                 a[i1..i2]
                     .iter()
                     .zip(&b[j1..j2])
-                    .map(|(x, y)| ((*x).to_owned(), (*y).to_owned())),
+                    .zip(touched(&a[i1..i2], &b[j1..j2]))
+                    .map(|((x, y), t)| ((*x).to_owned(), (*y).to_owned(), t)),
             );
         }
     }
+    out
+}
+
+/// For each line of a replaced passage, the words of it the change TOUCHED (451 T73): the passage read word by word, old against new,
+/// every word but one kept in place with both its neighbors. A word re-wrapped onto the next line keeps them, so it is no old value
+/// (451's `tasks`, `names` and `plan`: 12 of the 28 candidates T54 left, measured 2026-11-21 over the reconstructions at its
+/// snapshot and refusal); a word the rewrite kept in a rewritten clause does not, so the contract's "D5's `end` line of code 0" and
+/// plan.md:329's "`end` with code 1 ... count as rework", both since restated, are still caught by `code`, which the new passage writes
+/// too ("code 0, or 3 ...", "whatever its code"), where the values read from the whole passage lost them. Which neighbors count is
+/// a CONVENTION: a word is a run of non-space characters, its neighbors the next word either side, and the passage's two ends count as
+/// kept, since the lines beyond them are unchanged.
+///
+/// ACCEPTED, with its cost: over the guard log's 82 reconstructed refusals this drops 54 of 299 candidates and 4 of 57 refusals, and
+/// with them two lines a session revised that the line-by-line reading had caught by coincidence: 261's copse row (spec.md:273) and
+/// 316's label list (plan.md:65, edited 15 s after its refusal, so maybe already in hand). Each was stale by an omission, the new
+/// passage's words inserted before a sentence it kept whole, and carried no word the change touched. Priced: the values read from the
+/// whole passage (451 at 6, losing the contract's catch) and a line carrying two or more re-wrapped words kept (16 of the 54 back, 15
+/// of them wrong fires, 261's the one right one), measured 2026-11-21. Chosen by 451 T73's builder, for the launcher's ruling.
+fn touched(old: &[&str], new: &[&str]) -> Vec<String> {
+    let (a, b) = (passage_words(old), passage_words(new));
+    let (at, bt): (Vec<&str>, Vec<&str>) = (
+        a.iter().map(|w| w.1).collect(),
+        b.iter().map(|w| w.1).collect(),
+    );
+    let mut kept = vec![false; a.len()];
+    for (tag, i1, i2, _, _) in opcodes(&at, &bt) {
+        if tag == Tag::Equal && i2 > i1 + 1 {
+            kept[i1 + 1..i2 - 1].fill(true);
+        }
+    }
+    let mut out = vec![String::new(); old.len()];
+    for ((line, word), _) in a.iter().zip(&kept).filter(|(w, k)| !**k && w.0 < old.len()) {
+        out[*line].push_str(word);
+        out[*line].push(' ');
+    }
+    out
+}
+
+/// `(line index, word)` of a passage between two empty ends, which stand for the unchanged lines around it (`usize::MAX` their index).
+fn passage_words<'a>(block: &[&'a str]) -> Vec<(usize, &'a str)> {
+    let mut out = vec![(usize::MAX, "")];
+    for (i, line) in block.iter().enumerate() {
+        out.extend(line.split_whitespace().map(|w| (i, w)));
+    }
+    out.push((usize::MAX, ""));
     out
 }
 
@@ -183,12 +231,12 @@ pub fn stale_candidates(old: &Files, new: &Files) -> Vec<Candidate> {
         let Some(before) = old.get(name).filter(|_| !skipped(name)) else {
             continue;
         };
-        for (old_line, new_line) in changed_pairs(before, new_text) {
+        for (old_line, new_line, changed) in changed_pairs(before, new_text) {
             let subj: BTreeSet<String> = subjects(&old_line)
                 .intersection(&subjects(&new_line))
                 .cloned()
                 .collect();
-            let mut gone: BTreeSet<String> = tokens(&old_line)
+            let mut gone: BTreeSet<String> = tokens(&changed)
                 .difference(&tokens(&new_line))
                 .cloned()
                 .collect();

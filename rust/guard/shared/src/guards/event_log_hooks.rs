@@ -7,7 +7,7 @@
 //! WHY (the GM, 2026-10-10): *"maybe the actual solution here is that we have hooks built into our tooling which will save off
 //! timestamps that allow us to mechanically and trivially calculate these numbers"*. THE LINE (feature 375 plan D7): one JSON line a
 //! `PreToolUse`, `PostToolUse`, `SubagentStart`, `SubagentStop`, `UserPromptSubmit` and Stop payload, to `<git common dir>/l7r-events/<feature
-//! dir>.jsonl` (`_unassigned.jsonl` with no feature). Fields: `t` (UTC), `sid`, `ev`, and where they apply `tool`, `id` (`tool_use_id`),
+//! dir>.jsonl` (`_unassigned.jsonl` with no feature) of the session's clone, else of the tree the call's cwd stands in (451 T74, `tree_of`). Fields: `t` (UTC), `sid`, `ev`, and where they apply `tool`, `id` (`tool_use_id`),
 //! `cat` (`category`; a Bash call's by the category table, `BUCKETS`, feature 451 D2), `make` (a Bash call's first make target), `makes` (every target, where it runs more than one - 451 T14) and `task`
 //! (the task a tick, task-start, decide or land names, else the dispatch's brief's, else its feature's start in force - 451 D2), `fallback`
 //! (the line's feature was only the session's or feature.json's, nothing on the line naming one - 451 T26, `filed.rs`, which also says
@@ -654,15 +654,47 @@ fn cwd_of(payload: &Value, here: &Path) -> PathBuf {
         .map_or_else(|| here.to_path_buf(), PathBuf::from)
 }
 
+/// The tree a payload's line is filed in (451 T74): the SESSION'S CLONE - `shared::session`'s resolve, as `context_cap_hooks`' `seat`
+/// reads a builder's handoff (451 T60) - where it is a work tree, else the tree the call's cwd stands in; None outside any tree, as
+/// before: the cwd still gates, so a call from `/` or `/tmp` writes nothing. WHY: builders whose shells were reset to the mirror filed
+/// their lines under the MIRROR's `.git/l7r-events/` - 364 lines of 451's log, 361 a builder's and 3 the main session's, none of them in
+/// the clone's, so `make where-time F=451` in the clone booked none of them (observed 2026-11-21, method: a Python count of the mirror's
+/// log by session and key, matched to the clone's by `t`, `ev`, agent and tool).
+///
+/// THE CLAIM MAP ALONE (a deliberate deviation from `seat`, which also reads the session's name): the session's transcript and sessions
+/// directory are blanked, so its name - the transcript's last `/rename`, else the sessions json - is never read. WHY: this runs on every
+/// hook event, and the name step reads the whole transcript: 142.7 ms a call for a session with no claim map and a 122 MB transcript,
+/// against 1.8 ms before (medians of 15, a build reading the name); the claim map alone, 1.7 ms against 1.7 ms, and a claimed session's
+/// call from the mirror 2.6 ms against 1.9 ms (medians of 31) - measured 2026-11-21, the guard's binary `--only event-log-hooks`
+/// before and after, `L7R_EVENTS_DIR` a scratch directory. What it costs: a session with no
+/// claim map but a name naming a clone keeps the cwd's tree, today's answer - 17 of the mirror's 5,296 `_unassigned` lines and 0 of
+/// the clone's 82,580 hook lines since 2026-11-14 came from a session with no claim map (measured 2026-11-21, a Python count against
+/// `.clones/.session-clones/`), since `clone_sync_hooks` writes the map as a session works in its clone.
+fn tree_of(payload: &Value, here: &Path, env: &dyn Fn(&str) -> Option<String>) -> Option<PathBuf> {
+    let cwd = cwd_of(payload, here);
+    let tree = clone_root(&cwd)?;
+    let mut session = Session::with_env(payload, env);
+    session.cwd = cwd.to_string_lossy().into_owned();
+    session.transcript = String::new();
+    session.sessions_dir = PathBuf::new();
+    Some(
+        session
+            .clone_dir()
+            .filter(|c| c.join(".git").exists())
+            .map(Path::to_path_buf)
+            .map_or(tree, |c| std::fs::canonicalize(&c).unwrap_or(c)),
+    )
+}
+
 /// Where a payload's line is filed - its clone, its feature, that feature's log and its task - as [`append`] files it, nothing written (feature 451
 /// T14: `static_runs_hooks` counts a task's runs in the log its call's own line goes to, under the task that line carries, so the main
-/// session and its builders share one count). None outside any clone.
+/// session and its builders share one count) - in the session's clone, as `append` writes it ([`tree_of`], 451 T74). None outside any clone.
 pub fn filed_at(
     payload: &Value,
     here: &Path,
     env: &dyn Fn(&str) -> Option<String>,
 ) -> Option<(PathBuf, String, PathBuf, Option<String>)> {
-    let root = clone_root(&cwd_of(payload, here))?;
+    let root = tree_of(payload, here, env)?;
     let row = line(payload, "");
     let to = filed::filed(
         payload,
@@ -677,8 +709,8 @@ pub fn filed_at(
 }
 
 /// Append the payload's line to its feature's log - the feature of the task it carries, feature.json's only where nothing else says
-/// (451 T26, [`filed`]); None outside any clone (`append`). A file missing or unreadable is no task, never an error: the hook never
-/// refuses.
+/// (451 T26, [`filed`]), in the log of the session's clone (451 T74, [`tree_of`]); None outside any clone (`append`). A file missing or
+/// unreadable is no task, never an error: the hook never refuses.
 pub fn append(
     payload: &Value,
     t: &str,
@@ -690,7 +722,7 @@ pub fn append(
     if text_of(payload.get("hook_event_name")).is_empty() {
         return None;
     }
-    let root = clone_root(&cwd_of(payload, here))?;
+    let root = tree_of(payload, here, env)?;
     let mut row = line(payload, t);
     let carried = row.get("task").and_then(Value::as_str).map(str::to_owned);
     let to = filed::filed(payload, carried.as_deref(), None, &root, t, env);
@@ -911,6 +943,7 @@ pub fn record_in(payload: &Value, env: &dyn Fn(&str) -> Option<String>) {
     }
 }
 
+// the process's shared session is not asked: its resolve reads the session's name, the whole transcript, on every call (`tree_of`, 451 T74)
 fn decide(event: &Event, _session: &Session) -> Vec<Answer> {
     record(&event.input);
     Vec::new()

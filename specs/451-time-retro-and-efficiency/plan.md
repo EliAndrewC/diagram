@@ -852,88 +852,430 @@ again after a green coverage pass answered for them); not engine speed, so no ch
 <!-- plan-archive: T60 to T60 moved to plan-done.md, 2026-11-21 (feature 375 FR-044) -->
 <!-- plan-archive: T67 to T58 moved to plan-done.md, 2026-11-21 (feature 375 FR-044) -->
 <!-- plan-archive: T67 to T67 moved to plan-done.md, 2026-11-21 (feature 375 FR-044) -->
-### T71 (<why: the finding or measurement that files it>)
+### T71 (the finding as filed, restated by its measurement: the 2 `phases.log` waits T61 left as "an agent's own separate calls, no process between them" each had a live producer, measured 2026-11-21 (each wait's launching transcript read for the Bash calls that write the file, with each call's `backgroundTaskId` and `timedOutAfterMs`): T178's a script run in the background, which T61's walk already reads alive, and T151 part B's the agent's own foreground call that the harness moved to the background at 180 s, which the walk read gone because the call OPENS with its assignment (`B=<dir>, ... | tee -a $B/phases.log`) after the quote of the harness's `eval '...'`, measured 2026-11-21 (the two producers replayed as stand-ins on the real `/proc`, `/tmp/t71/replay.sh` and `/tmp/t71/probe.sh`))
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: neither of the two shapes the brief offered (the wait reading the waiter's own transcript as the writer; the no-poll
+  guard refusing a wait on the session's own next write) is built, because the measurement found no wait of that kind and the
+  first would hide a dead run: of the 114 traced rewrites whose file has a writer, 0 watched a file only the agent's own foreground
+  calls write and 15 had a background writer BESIDE the agent's own appends (T178's among them), where "your session writes it"
+  would answer alive over a killed run. The defect behind the one false "gone" left is in the walk: `ASSIGN`
+  (`finished_run_hooks/runs.rs`), which `expanded` reads a command's simple assignments by, took an assignment only after the
+  text's start or a blank or `;&|(`, and the harness runs every command as `eval '<command>'`, so the assignment a command opens
+  with follows a quote - `$B` stayed unexpanded, `written` dropped the target as holding a `$`, and the live call read as no run.
+  `ASSIGN`'s leading class takes a quote too (`'` or `"`). `expanded` serves `files_named` as well (feature 295's live runs and
+  their output files), which now reads the same assignment.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| an assignment that opens the harness's `eval '...'` is read | n/a - no map | n/a | none | n/a |
 
 ### T71 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** No map changes. A backgrounded wait on a file that a live call appends to through a variable the call
+   assigns first - the shape every agent's scratch log takes (`S=<scratch>; ... >> $S/phases.log`) - runs until its line comes,
+   including a foreground call the harness moved to the background; a waiter and a reader opening the same way are still no run, so
+   a dead run's wait still ends with exit 3 and the "gone" line.
+2. **The constraints.** T71's line (measure first how many rewritten waits watch a file only an agent's own calls write; then the
+   check asks what stands for that agent's life, red first on a phases log quiet between an agent's calls); the brief's two options
+   and its rule to choose the simpler that is right; FR-013; the feature 227 ruling the helper serves (the GM 2026-09-12: a wait on
+   output that does not check its producer is alive gets the second proof of life from the hook); never a process pattern (the
+   2026-07-25 `pgrep -f "make done"` defect); T61's walk and its reader rule (naming the file is no proof). The brief's files:
+   `writer-alive.sh`, `finished_run_hooks`, `no_poll_hooks`, their tests and suites, the `docs/guards.md` rows, this section; T74's
+   `shared` `event_log_hooks` and T73's `rust/gate/crates/record` untouched.
+3. **Where each comes from.** G: the GM 2026-09-12 (the helper's header); O: the session's transcripts and task outputs (item 4);
+   O: T61's replayed rewrites (`/tmp/t61/watched.json`, from the guard log's `proof-of-life` rows); O: the red and green runs
+   (item 9); the task as filed (T71's line; T61's found-and-left).
+4. **Do they describe the world here?** Measured 2026-11-21 (each of the 2 `phases.log` waits' launching transcript read for every
+   Bash call naming the file, and the wait's task output): T178's wait (`be0ovktos`, `until grep -q "before h175 end"
+   $S/phases.log`, gone at 167 s quiet) waited on a line `before.sh` wrote - a script the agent ran by path in the background 9
+   minutes before (`b0cyou1k5`), its text `echo "before $h end ..." >> $S/phases.log`, the line written about a minute after the
+   wait ended. Measured 2026-11-21 (the same reading of T151 part B's agent's transcript, with each call's result): its wait
+   (`bcmk2v816`, `until grep -q "pointers rc=" .../phases.log`, gone at 207 s quiet) waited on a line its own foreground call of
+   11:47:30Z wrote (its `echo "pointers rc=$?" | tee -a $B/phases.log`, after a `make quick`), which the harness moved to the background
+   after 180 s (`brqu4wm0y`, its result's `timedOutAfterMs` 180000, `subagentCapApplied`), alive at 11:51:01Z (its agent's own `ps`,
+   3 min 30 s old). So neither waited on its own next write. Measured 2026-11-21 (`/tmp/t71/replay.sh`, T61's stand-in rows on the real `/proc`): T178
+   read alive under T61's walk (`alive <pid> runs .../before.sh which writes it`), T151 gone (the verb printed nothing), each gone
+   with only a Monitor-shaped reader. Measured 2026-11-21 (`/tmp/t71/probe.sh`, 5 stand-ins in the harness's wrapper on T151's
+   file): T151's recorded command, `B=<dir>; echo x | tee -a $B/phases.log` and `B=<dir>; echo x >> $B/phases.log` read gone; the
+   same after `true; ` and a literal path read alive - the assignment opening the `eval` is what the walk missed. Measured
+   2026-11-21 (`/tmp/t71/measure.py`: each of T61's 368 rewrites matched to the Bash call that launched it in its session's
+   transcripts, every call of that transcript writing the watched file classed - a background launch, its command or the script it
+   runs writing the file; a foreground call the harness moved to the background; a plain foreground call): 190 untraceable (the
+   transcript swept, or no call with the rewrite's command), 1 with no path; of the 177 traced, 15 a task output, 48 no writer seen
+   (a make target's own log, a page session's run, a script swept since), 114 with a writer - 94 a background launch, 12 one beside
+   the agent's own foreground appends, 3 a moved call and a launch beside its own appends, 2 a moved call, 1 a moved call and a
+   launch, and 2 classed as the agent's own calls alone, both `p19/fresh-cohort.log` of 2026-10-25, whose producer on reading was
+   `bash probe19-fresh.sh`, launched in the background, its text written by a foreground heredoc and swept since. So 0 of 114,
+   measured 2026-11-21 (that classing, the 2 read by hand).
+   Measured 2026-11-21 (the same waits, the last background writer launched before each, its command wrapped as the harness wraps
+   it and read by HEAD's `ASSIGN` and the fix's): of 101 (the 114 less 13 whose only background writer was launched after the
+   wait, or none was), 11 had their write behind an opening assignment (9 launched, 2 moved), T151's among them; 90 read already.
+5. **The order.** After T61, whose found-and-left filed it; beside T73 and T74, whose files it leaves; before T22.
+6. **The exits.** Green: the runs tests' new case, the no-poll suite's 6b with its two new cases, the finished-run suite, the guard
+   crate's tests and crate-scoped lint, format, cover and dead, `make closing-checks`, and the two replays (T151 and T178 alive,
+   each gone under a reader alone). Red: what failed recorded and the task set down, a claim that it cannot be done ruled through
+   `make arbiter-ask`.
+7. **The search smell.** None: the walk is T61's, by pid; one character class changes.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** Red first, measured 2026-11-21 on HEAD's walk with the new tests: (`make rust-test CRATE=rust/guard`) 422
+   passed, 1 failed - `a_command_that_opens_with_its_assignment_writes_through_it`, at its first assertion, `written` over T151's
+   recorded command in the harness's wrapper naming no `phases.log`; (`tests/hooks/test-no-poll-hooks.sh`) 143 passed, 1 failed -
+   "a live call whose command opens with its assignment and tees into it: alive", rc=1, the "gone" answer - while its dead-side pin,
+   "a waiter and a reader opening with their assignment, and no run: still gone", passed. Green, measured 2026-11-21 on the final
+   files: (`make rust-test CRATE=rust/guard`) 423 passed, 0 failed; the first run of the two suites beside it read the wrapper's
+   binary while it was rebuilt (built 07:10:37, the no-poll suite done 07:10:38: the same alive case red, and 5 of the finished-run
+   suite's Stop cases red), and run again on the built binary: (the no-poll suite) 144 passed, 0 failed; (`tests/hooks/
+   test-finished-run-hooks.sh`) 68 passed, 0 failed, as T61 left it. The replays, measured 2026-11-21 on the built binary:
+   (`/tmp/t71/probe.sh`) all 5 stand-ins alive, `<pid> writes it`; (`/tmp/t71/replay.sh`) T151 alive (`alive <pid> writes it`)
+   and T178 alive (`alive <pid> runs .../before.sh which writes it`), each gone with only a Monitor-shaped reader. The crate-scoped
+   checks, measured 2026-11-21 (`l7r-gate.sh rust lint`, `format --check`, `cover`, `dead` `--crate rust/guard`): each clean, the
+   first cover run having named the new test's assertion message (a line only a failure reaches, folded onto its assertion).
+   Measured 2026-11-21 (`make closing-checks`, on the final files): GREEN, all three - static 111 s (format, lint, cover and dead
+   clean on 34 crates), hooks-test 73 s (55 guard suites green, 3 unchanged), quick 2 s; its first run was red on the new test's formatting alone (`make format FILE=`).
+10. **Before moving a constant.** No constant moved (the 45 s belt, the helper's `STALE` knob, and `SCRIPT_BYTES`, a GUESS and a knob, stand).
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** What a session sees differently: a wait on a scratch log its live call appends to through the variable the
+    call opens with - a foreground call the harness moved to the background, or a background launch - no longer ends early with exit
+    3 and "the run that was producing it is gone" (T151 part B's at 207 s quiet, measured 2026-11-21 (its task output, `bcmk2v816`)),
+    and a wait whose run is gone still ends at the belt. No map, no research claim. T61's item 4 classed the 2 `phases.log` waits
+    as the agent's own calls with no process between them: restated here, as measured, by its producers (item 4); `plan-done.md`
+    keeps T61's words.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?**
+- Fixed here, the class of a live call whose write reaches the file through the assignment it opens with: observed 2026-11-21,
+  method: every traced rewrite's last background writer before its wait, wrapped as the harness wraps it and read by HEAD's
+  `ASSIGN` and the fix's (item 4: 11 of 101); a quote is the one character the harness puts before a command's first word.
+- Not built, and not a defect: a wait on a file only the waiting session's own later calls write. Measured 0 of 114 (item 4); such a
+  wait, backgrounded, deadlocks nothing (it ends when the session writes the line) and costs one exit-3 notice; the two answers
+  priced - the waiter's transcript read as the writer (a wrong answer in the 15 waits with a background writer beside the agent's
+  own appends: alive over a killed run) and a refusal at the wait's start (nothing measured to refuse, and at the start a producer
+  may not have begun) - were not built; chosen by the builder on the measurement.
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** Yes, a `[perf]` task (451 FR-013): it makes the builders' loop faster - a wait over a live call no longer ends
+early, so the builder does not re-wait or stop a run it was told was gone. Not an engine-speed task, so no
+docs/performance-checklist.md answers.
 
 
 <!-- plan-archive: T72 to T69 moved to plan-done.md, 2026-11-21 (feature 375 FR-044) -->
 <!-- plan-archive: T72 to T72 moved to plan-done.md, 2026-11-21 (feature 375 FR-044) -->
-### T73 (<why: the finding or measurement that files it>)
+### T73 (after T54's fix 28 of 451's 67 reconstructed candidates still refused - the task line's 27 is one short - most a word re-wrapped onto the next line, read as an old value because the old values are read line by line, measured 2026-11-21 (`/tmp/t73/rustrecon.py before`, T54's replay on the code before this change, `/tmp/t73/rust-before.json`, equal row for row to T54's `rust-after3.json`))
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: measured first, then the old values read from the rewritten passage word by word, in
+  `rust/gate/crates/record/src/record/stale_terms.rs` (not held): `touched` and `passage_words`, `changed_pairs` handing each pair
+  its touched words, the old values the touched words' tokens the new line lacks. The call site, the subjects (T54's `names`) and
+  442's rewritten-from rule are unchanged.
+  - THE 28, measured 2026-11-21 (a Python replica of the binary, `/tmp/t73/rep.py`, over 451's reconstructions at
+    2026-11-20T12:37 and 2026-11-21T02:55, 28 lines as the binary; `/tmp/t73/split.py`, each line read):
+    - 12 a word re-wrapped onto the next line, `tasks`, `names` or `plan`, which the rewritten passage keeps in place with both its
+      neighbors (plan.md's landing definition, 2 lines rewritten as 3, and its REWORK line, 1 as 2): tasks.md:23, quickstart.md:32,
+      plan.md:298, plan-done.md:466, 467, 473, 495, 612, 704, 743, 997 and tasks-done.md:53, measured 2026-11-21 (`split.py`, each
+      value found in place in the new passage).
+    - 10 on `code` or `0`, a word the new passage still writes but in a rewritten clause ("line of code 0" as "line whose `landed`
+      is true (... code 0, or 3 ...)", "a non-zero code" as "whatever its code"). Two are real stale uses, each since restated:
+      contracts/refusals.md:12 ("D5's `end` line of code 0 naming it") and plan.md:329 ("a landing `end` with code 1 ... count as
+      rework", now plan-done.md:2421's "whose `landed` is false counts as a refused landing whatever its code"). Eight are wrong
+      fires: six describe the `end` line's code as T06 has it (plan-done.md:469, 472, 492, 493, plan.md:107 and tasks-done.md:21),
+      and two carry the word in another sense (plan-done.md:1866, T38's "0 after"; tasks-done.md:98, T33's line), measured 2026-11-21 (each line read in the new tree, and plan.md:329 against plan-done.md:2421).
+    - 6 on a word the change did remove ("through `$(LOGESCAPE)` (a held Makefile line)" as "the same way"), each in another
+      sense: contracts/refusals.md:15, plan-done.md:651, 880, 885, 947 and tasks-done.md:49, measured 2026-11-21 (`split.py` and
+      each line read).
+  - THE PREMISE, restated: the replay's trees are the commits before each refusal, so contracts/refusals.md:12 still stands in them
+    in its old wording; "restated now" holds of the live tree alone. Read from the whole passage, the values leave 451 at 6 and drop
+    both real catches, so that variant stays out (T73's line: only where it keeps refusals.md:12's kind of catch), measured
+    2026-11-21 (the replica's `block` mode over the same two trees).
+  - THE RULE: a word of the old line is an old value only where the change TOUCHED it. The replaced passage is read word by word,
+    old against new, with the same difflib opcodes; a word kept in an equal run with both its neighbors is untouched, and the
+    passage's two ends count as kept. So a re-wrapped word is no value, and `code` after "of" or "non-zero" stays one.
+  - THE REPLAY on the final code: 82 reconstructed refusals. Before: 299 candidates and 57 refusals. After: 245 and 53. 451 goes
+    from 28 to 16, the 12 re-wraps; 432 from 22 to 11, 415 from 9 to 2, 266 from 10 to 6, 288 from 6 to 2. Four refusals go: three
+    on correct text, 256's (`entry-drift` with "recorded"), 285's of 18:43 (`research/` with "guess" and "label") and 374's
+    (`request.md` with "328"), and one right one, 261's of 04:13, whose one candidate was the copse row below; 316's still refuses
+    (10 to 9). Measured 2026-11-21 (`/tmp/t73/rustrecon.py before`, `after` and `final`: `l7r-gate record
+    stale-dirs` over T54's archives, `/tmp/t73/rust-before.json`, `rust-after.json` and `rust-final.json`, the last after the last
+    source edit, a doc comment, and equal to `after` row for row).
+  - THE DROPS AUDITED: each of the 54 dropped candidates (the replica's, as many as the binary drops) was checked against the first
+    commit after its refusal that touched its file. 39 stood verbatim, 12 lines (in 5 files) had no later commit and 3 lines were edited,
+    measured 2026-11-21 (`/tmp/t73/audit.py`, `audit.json`). Of the 3:
+    - 261's spec.md:273 (`m:mizuguchi-r17-copse` with band, convention, depth, drawing, map), revised to add the new reach "0-60 ft
+      leeward of it and never windward": a right fire on T54's list.
+    - 316's plan.md:65 (`CONVENTION` with "none"), revised to add UNRESEARCHED and CANON. The commit came 15 s after the refusal
+      (commit 04:52:10Z, refusal 04:51:55Z, the escape 04:52:18Z), so it may already have been in hand, measured 2026-11-21 (the
+      guard log's rows for that refusal and `git log` of the file).
+    - 388's gm-review.jsonl:7, edited by 432 T06 eight days later: unrelated.
+    - 261's and 316's lines were stale by an omission. At word level their passage was an insertion before a sentence kept whole
+      (`/tmp/t73/why.py`: no touched value), and neither line carried a word the change touched. This is the cost, ACCEPTED below.
+  - T54's other right fires are still named on the final code: 261's `BELT_DEPTH_FT` (07:04), 267's `inventory.md`, 276's
+    `FreeGround`, 278's `boundary.py`, 283's `780 sq ft`, 285's `GUESS` (18:49), and 451's refusals.md:12 and plan.md:329, measured
+    2026-11-21 (each searched for in the rendered replay before and after). 374's `request.md` was no right fire: its line,
+    spec.md:63, stood unedited at the next dispatch (T54's own reconstruction there, `-fix-2026-10-10T20:56`), and its value "328" is
+    a re-wrapped word.
+  - ACCEPTED, with its cost: the two catches above go, and with 261's one right refusal of 04:13, for 52 wrong fires and 3 refusals
+    on correct text. Priced, measured 2026-11-21 (the replica and `audit.json`):
+    - the values from the whole passage: 451 at 6, both of its real catches lost;
+    - a line carrying two or more re-wrapped words kept as a candidate: 16 of the 54 back, 15 of them wrong fires, 261's the one right
+      one (316's not), and 285's refusal of 18:43 back beside 261's; a threshold drawn from one case.
+    Chosen: the touched rule, by this builder, for the launcher's ruling. The cost is recorded at `touched` and in the
+    `docs/guards.md` row.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| the old values read from the rewritten passage word by word | n/a - no map | n/a | none | n/a |
 
 ### T73 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
-8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+1. **The goal, in the world.** No map changes. A later spec-fidelity round is refused for a line that still carries a word the change
+   touched, not one the passage only re-wrapped. 451's 12 re-wrap candidates go, and its two real catches stand.
+2. **The constraints.** T73's line: measured first, which candidates are a re-wrap and which a real stale use; the values read from
+   the rewritten passage only where that keeps refusals.md:12's kind of catch; red first on a re-wrapped line. The launcher's list:
+   `stale_terms.rs` and its tests, the `docs/guards.md` row and this section. T74's `event_log_hooks` and T71's `writer-alive.sh` and
+   `finished_run_hooks` are untouched, and nothing is committed. T54's `names`, 442's rewritten-from rule and FR-013 (a `[perf]`
+   task) are kept.
+3. **Where each comes from.** O: the reconstructions and the replica's split (Approach, THE 28); O: the guard log's rows of feature 316's refusal; O: the
+   red and green runs; O: the replay and the drops' audit; the task as filed (T73's line, from T54's found-and-left).
+4. **Do they describe the world here?** Every figure comes from this host's guard log and from T54's reconstructions of this
+   clone's commits. The replica is checked against the binary: it finds 451's 28 and the same 54 drops (299 - 245), measured
+   2026-11-21 (`/tmp/t73/rep.py`, `audit.py`).
+5. **The order.** After T54, whose code it changes. Beside T74 and T71, which work in other files. Before T22, the close.
+6. **The exits.** Green: the red case green with every earlier case unedited; `rust format|lint|test|cover --crate
+   rust/gate/crates/record`; the review-round suite; `make closing-checks`; the replay with T54's right fires checked. Red: what
+   failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** Two.
+   - The keep-list does not hold whole: 261's copse row goes, and 316's label list may, each stale by an omission and caught by
+     coincidence (Approach, THE DROPS AUDITED). It is accepted, not hidden.
+   - Of 451's 16 left, 14 are wrong fires: 8 on `code` in its consistent sense and 6 on a removed common word read in another sense
+     (`line`, `through`, `makefile`, `held`). The value side reads words, not senses, so these are left as the search's reach.
+8. **The budget.** One landing. The work added is one word-level difflib pass over each replaced passage (its words, both sides),
+   where there was none; the candidate scan is unchanged. No time figure was taken.
+9. **Done, measured.**
+   - Red first: `a_word_re_wrapped_onto_the_next_line_is_no_old_value_and_the_real_catches_stand` (451's passages and lines verbatim,
+     and a passage only re-wrapped) failed with 6 lines named where 2 are right, 90 passed and 1 failed, measured 2026-11-21 (`make
+     rust-test CRATE=rust/gate/crates/record`, `/tmp/t73/red.log`).
+   - After: 91 passed and 0 failed, every earlier case unedited, measured 2026-11-21 (`scripts/gates/l7r-gate.sh rust test --crate
+     rust/gate/crates/record`, `/tmp/t73/crate2-test.log`); format, lint, test and cover clean on the crate, measured 2026-11-21 on
+     the final code (`scripts/gates/l7r-gate.sh rust format|lint|test|cover --crate rust/gate/crates/record`, `/tmp/t73/crate3-*.log`,
+     the test reusing that passed binary after the last edit, a doc comment). The review-round suite: 84 passed and 0 failed, measured 2026-11-21 on the final code (`bash
+     tests/hooks/test-review-round-hooks.sh`, `/tmp/t73/hooks2.log`). `make closing-checks` was red in T71's files alone: static green (209 s), quick green (2 s), and
+     hooks-test red on one case of `no-poll-hooks.sh`, "two waiters on one quiet file and no run: still gone" (143 passed, 1
+     failed), a case of T71's in-flight `writer-alive.sh` and `finished_run_hooks` work in this clone, which T73 does not touch, so
+     left to T71, measured 2026-11-21 on the final code (`/tmp/t73/closing.log` and the run's `hooks-test.log`).
+   - The replay: 299 candidates fall to 245 and 57 refusals to 53 (Approach, THE REPLAY).
+10. **Before moving a constant.** No constant moves. The neighbor rule is a CONVENTION, labeled at `touched`: a word is a run of
+    non-space characters, its neighbors are the next word either side, and the passage's two ends count as kept, since the lines
+    beyond them are unchanged.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** A session dispatching a later spec-fidelity round sees fewer candidates on correct text, and fewer refusals:
+    over the replay, 54 of the 299 candidates go and 3 of the 57 refusals on correct text, 451's 12 re-wraps among them. Two lines
+    stale by an omission, which the old reading caught by coincidence, are no longer named, and one right refusal goes with them
+    (261's of 04:13). Nothing on a map.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?**
+- The touched rule no longer names 261's spec.md:273 or 316's plan.md:65. Each was stale by an omission, and each carried no old
+  value: the passage inserted words before a sentence it kept whole. Not a defect of this rule: the search is for an old value, and
+  an omission is what no search for a value sees (`docs/guards.md`'s row: "later rounds mostly find sentences made false and
+  omissions"). The cost is accepted and recorded with the alternatives priced (Approach, ACCEPTED), for the launcher's ruling.
+- T54's section (plan-done.md, RIGHT FIRES) counts 374's `request.md` as a right fire. Its line stood unedited at the next dispatch,
+  and its value is a re-wrapped word. Not a defect: no wrong outcome, since it is a figure in the record that no check reads. It is
+  left to restate in T54's section, which is outside this builder's list.
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** yes. This is a `[perf]` task (451 FR-013): it makes the builders' loop faster by refusing fewer later
+spec-fidelity rounds on correct text, each of which cost an escape and a redispatch. It is not an engine-speed task, so the checklist
+does not apply.
 
 
-### T74 (<why: the finding or measurement that files it>)
+### T74 (the event log filed a call under its cwd's tree: the mirror's `.git/l7r-events/451-time-retro-and-efficiency.jsonl` held 364 lines, all session `c6fd72d1-...`'s (whose claim map names this clone), 361 a builder's (`by` or `aid`) and 3 the main session's, tasks T13 176, T55 158, T10 28, T21 1 and none 1, from 2026-11-20T16:02:50Z to 2026-11-21T04:56:07Z, 0 of them in the clone's 451 log, measured 2026-11-21 (a Python count of both logs by session, key and exact line))
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: `rust/guard/shared/src/guards/event_log_hooks.rs`'s `tree_of` gives `append` and `filed_at` the tree a line is filed in:
+  - the session's clone, `shared::session`'s resolve as T60's `seat` reads it, where it is a work tree (a `.git` stands in it),
+    canonicalized; else the tree the call's cwd stands in, today's answer. The cwd still gates: a call outside any tree writes
+    nothing, and the session is read only once the cwd stands in one.
+  - THE CLAIM MAP ALONE, a deliberate deviation from `seat`, labeled in the code: the session's transcript and sessions directory
+    are blanked before the resolve, so its name (the transcript's last `/rename`, else the sessions json) is never read. WHY: the hook
+    runs on every event, and the name step reads the whole transcript.
+    - The method of each timing below: the guard's binary `--only event-log-hooks`, the mirror's HEAD build against this clone's,
+      `L7R_EVENTS_DIR` a scratch directory; the final build's medians of 31 (`/tmp/t74/timing3.log`, load average 32 at its end), the
+      full resolve's first build's medians of 15 (`/tmp/t74/timing.log`).
+    - A claimed session's call from the mirror: 1.9 ms before, 2.6 ms after, measured 2026-11-21 (the timing, final build).
+    - A claimed session's call from the clone: 2.4 ms before, 2.5 ms after, measured 2026-11-21 (the timing, final build).
+    - A session with no claim map and a 122 MB transcript: 1.7 ms before, 1.7 ms after, measured 2026-11-21 (the timing, final
+      build); 142.7 ms against 1.8 ms with the full resolve, the cost the deviation removes, measured 2026-11-21 (the timing, first
+      build).
+    - What it costs: a session with no claim map whose name names a clone keeps the cwd's tree. Such sessions wrote 17 of the
+      mirror's 5,296 `_unassigned` lines and 0 of the clone's 82,580 hook lines since 2026-11-14, measured 2026-11-21 (a Python count
+      against `.clones/.session-clones/`).
+    - Who chose: the builder, on that measurement. The alternative priced was the full resolve, at 142.7 ms a call for such a session,
+      measured 2026-11-21 (the timing).
+  - The guard's shared `Session` is not asked in `decide`: its resolve reads the name. `static_runs_hooks` (its count) and its
+    `order.rs` (the closing step's order, through `order_answer`) read the log only through `filed_at`, so both follow unedited.
+    `context_cap_hooks` passes `filed_at` a payload already moved to `seat`'s tree, the same answer. Their suites are green
+    (Red first).
+  - The module doc and the `docs/guards.md` row say where the log is.
+- **Red first** (`event_log_hooks::tests::a_call_from_the_mirror_is_filed_in_the_sessions_clone`). The scratch world is a mirror with
+  `.clones/backlog` and a claim map naming it, and the call's cwd is the mirror. The test asserts `append` writes, and `filed_at`
+  names, the clone's `451-x.jsonl`, and that the mirror's `.git/l7r-events` stays absent. A call from the clone gets the same log.
+  No session, a session nothing resolves, and a claim naming no work tree each keep the cwd's tree. A session whose `/rename` and
+  sessions json both name the clone, with no claim map, keeps the cwd's tree. A call from `/` writes nothing. `HOME` is the
+  fixture's.
+  - before: 321 passed and the new case failed, `append` returning the mirror's `.git/l7r-events/999-a.jsonl` where the clone's
+    `.clones/backlog/.git/l7r-events/451-x.jsonl` was asserted, measured 2026-11-21 (`make rust-test CRATE=rust/guard/shared`,
+    `/tmp/t74/red-kept.log`).
+  - after: 322 passed, 0 failed, measured 2026-11-21 (the same command, `/tmp/t74/test2-shared.log`). `rust/gate/crates/measure`
+    passed 202 of 202, measured 2026-11-21 (`make rust-test CRATE=rust/gate/crates/measure`). For `rust/guard`, every case of
+    `static_runs_hooks`, its `order.rs` and `context_cap_hooks` passed, measured 2026-11-21 (`make rust-test CRATE=rust/guard`,
+    `/tmp/t74/test-rust_guard.log`, on this task's final source: 422 passed, 1 failed, the failure T71's concurrent new case in
+    `finished_run_hooks`, none of this task's).
+- **The merge**: a one-off script, `.git/l7r-handoffs/T74-scripts/merge.py`, run with `--dry`, then for real, then `--verify`. The
+  refile was not extended because its `--dir` is both source and target, and a second source would owe the crate 100% coverage.
+  - The script keeps the target's own order and puts each source line not already in it (an exact match) before the first target
+    line with a later `t`, the source taken in `t` order. It is idempotent.
+  - It backs up both logs under `T74-scripts/backup/`, outside any `l7r-events` directory, and rewrites through
+    `<log>.t74merge`, carrying over bytes live hooks append before and after the rename.
+  - The mirror's 451 log:
+    - the dry run: 364 to add, 0 already present, measured 2026-11-21 (`merge.py --dry`).
+    - the run: the clone's log 30,781 to 31,145 lines, 0 bytes carried over, measured 2026-11-21 (`merge.py`,
+      `/tmp/t74/merge.log`).
+    - `--verify`: 31,153 lines (8 more from live hooks since), 0 of the backed-up log's or the source's lines missing, measured
+      2026-11-21.
+    - a second dry run: 0 to add.
+    - out-of-order adjacent pairs: 94 before and 94 after (the log's own), 0 merged lines out of place, measured 2026-11-21 (a
+      Python check of each `t` against its neighbors).
+  - The mirror's `_unassigned.jsonl`, which the brief did not name: the refile's rules run against this clone over the mirror's logs
+    (`l7r-gate measure event-log refile --root <clone> --dir /diagram/.git/l7r-events --dry-run`) move 0 lines out of its 451 log
+    and 15 out of `_unassigned`, 2 of them to 451, measured 2026-11-21.
+    - The 2 are T13's two SubagentStarts of 2026-11-20T16:02:50Z and 16:16:11Z (agents `a1fe4798a4e8a2e15` and
+      `a0c5056ab6da2dbf2`), found by that refile run on a scratch copy.
+    - They were merged by the same script (31,252 to 31,254, 0 missing, measured 2026-11-21, `/tmp/t74/merge-unassigned.log`).
+      Both agents now have a start for each stop in the log (9 and 9, 1 and 1).
+- **The removal**: the mirror's 451 log, `cmp`-identical to the merged copy, moved with
+  `MAIN_TREE_OK="451 T74 moves the mirror's merged 451 event log out of its untracked .git, as its brief asks" mv -v` to
+  `T74-scripts/backup/source.removed.jsonl` (`cmp`-identical after the move). Afterwards the mirror's `.git/l7r-events/` holds only
+  its `_unassigned.jsonl`, measured 2026-11-21 (`ls`, `/tmp/t74/rm.log`).
+  - Until T74 lands and the mirror syncs, the hooks run the mirror's guard, so a call from /diagram can still write there. The merge
+    is idempotent: once T74 lands, the same command picks up any new lines.
+- **`make where-time F=451 SINCE=2026-11-20T04:33:00Z UNTIL=2026-11-21T12:05:00Z`**, before and after both merges, measured
+  2026-11-21 (`/tmp/t74/where-before.log`, `where-after2.log`):
+  - T13: 17 to 35 min, its "other subagent" 4 to 21 min, its agents 3 to 4, their minutes 14 to 32, measured 2026-11-21 (the two
+    where-time runs).
+  - T55's builder `abe836de838b025ad`: 475 to 46 agent-minutes, measured 2026-11-21 (the two where-time runs). Its `SubagentStop`
+    was among the mirror's lines, so it had been booked open to the window's end.
+  - All agents' minutes summed: 2,863 over 241 agents to 2,451 over 242, measured 2026-11-21 (the two where-time runs).
+  - Plan re-rounds: 29 to 30, measured 2026-11-21 (the two where-time runs).
+  - Bash calls: 9,178 to 9,308, 812 to 823 in the background, 161 to 169 refused before running, measured 2026-11-21 (the two
+    where-time runs).
+  - The critical path: 1,892 min, unchanged, measured 2026-11-21 (the two where-time runs).
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| the event log's tree read from the session's claim map | n/a - no map | n/a | none | n/a |
 
 ### T74 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
-8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+1. **The goal, in the world.** No map changes. Every line a session's call writes goes to the event log of the clone the session works
+   in, whatever directory its shell stands in, so `make where-time` in the clone books all of it, and nothing a session writes lands in
+   the mirror's `.git`.
+2. **The constraints.** T74's line covers four things:
+   - the log resolved from the session's clone, as T60 does, falling back to the cwd's tree, red first on a call from /diagram;
+   - `static_runs_hooks` and `order.rs` following through `filed_at`;
+   - the mirror's lines of 451's log merged in time order, dry run first, with backups, then removed once the merge is checked;
+   - files: `event_log_hooks` and its tests, the `docs/guards.md` row, this section. T71's and T73's files are untouched, and
+     nothing is committed.
+   - D8 and D9 hold: the hook still never refuses or prints.
+3. **Where each comes from.** O: the two logs' counts (the heading); O: the timings and the claim-map count (Approach); O: the red and
+   green runs (Red first); O: the merge's runs and the where-time runs (The merge, where-time); the task as filed (T74's line) and
+   T60's Found and left, which filed it.
+4. **Do they describe the world here?** Every figure is from this clone's and the mirror's logs, the session's claim map and the
+   guard's binary, measured 2026-11-21 (the Approach). The red case reproduces the live shape, a call from the mirror by a session
+   whose claim map names the clone, in a scratch world.
+5. **The order.** After T60 (whose resolve it shares) and T26/T53/T56 (the filing chain it leaves unchanged); beside T71 and T73,
+   whose files it leaves; before T22.
+6. **The exits.** Green: the red case green with every earlier case unedited, `make rust-test` on `rust/guard/shared`, `rust/guard`
+   and `rust/gate/crates/measure`, lint, format and cover on `rust/guard/shared`, `make closing-checks`, the merge's `--verify` with 0
+   missing, and the mirror's 451 log gone. Red: what failed recorded and the task set down, a claim that it cannot be done ruled
+   through `make arbiter-ask`.
+7. **The search smell.** One. The brief's "as T60 does" read literally is the full resolve, which costs 142.7 ms a call for a session
+   with no claim map, measured 2026-11-21 (the timing, Approach), so the claim map alone is read, as labeled.
+8. **The budget.** One landing. The added work a hook line, once the cwd stands in a tree: one `canonicalize` of the cwd and its walk
+   to `.git` (`Session::main`), one stat and one read of the claim map (about 40 bytes), one stat of the clone's `.git` and one
+   `canonicalize`, measured 2026-11-21 (the code read). The timing is in the Approach, 1.9 to 2.6 ms for a claimed session's call
+   from the mirror, measured 2026-11-21 (the timing).
+9. **Done, measured.**
+   - the red case green, 322 passed, measured 2026-11-21 (`make rust-test CRATE=rust/guard/shared`).
+   - the clone's 451 log holding the 366 lines with 0 missing, and the mirror's 451 log gone, measured 2026-11-21 (`merge.py
+     --verify`, `ls`).
+10. **Before moving a constant.** No constant moves.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** A reader of `make where-time F=451` sees the mirror's 366 lines booked, T13 at 35 min where it read 17 and
+    T55's builder at 46 agent-minutes where it read 475, measured 2026-11-21 (the two where-time runs). A builder's later lines from /diagram land in the
+    clone's log. Nothing on a map.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?**
+- Fixed here, the class of the mirror's lines of this session that the clone's rules file to 451, observed 2026-11-21, method: the
+  refile's rules run against this clone over every log in the mirror's `.git/l7r-events/` (dry), then on a scratch copy of
+  `_unassigned.jsonl`. There were 364 in its 451 log and 2 in its `_unassigned`, all merged.
+- The mirror's `_unassigned.jsonl` (5,296 lines from 20 sessions, 2026-10-10 to 2026-11-21) also holds 13 lines that the refile's
+  rules file elsewhere, measured 2026-11-21 (the same scratch refile run). Of those, 12 are from session `d2dc8c63-...`, whose
+  claim map names this clone: 1 to 405, 10 to 430 (2026-10-26) and 1 to 449 (2026-11-12), measured 2026-11-21 (the same run). The
+  last is from `f16cf709-...` (diagram-memories), to 430, measured 2026-11-21 (the same run). Visible effect: `make where-time` for
+  405, 430 and 449 in their clones misses those lines. Not fixed here: T74's brief names this feature's lines in the mirror and the
+  event log's files. Filed as T76; lands before T22.
+- Until T74 lands and the mirror syncs, the hooks run the mirror's guard, so a call from /diagram can write this feature's log lines into the mirror again - a builder's stop among them, booked open as before. Not fixed here: the gap closes only when the landing does, so the re-merge runs after it. Filed as T76; lands before T22.
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** Yes, a `[perf]` task (451 FR-013): it makes the builders' loop faster to measure, since `make where-time` books
+the builders' time where it reads it, as T56 did. Not an engine-speed task, so no docs/performance-checklist.md answers.
 
 
 <!-- plan-archive: T75 to T67 moved to plan-done.md, 2026-11-21 (feature 375 FR-044) -->
 <!-- plan-archive: T75 to T75 moved to plan-done.md, 2026-11-21 (feature 375 FR-044) -->
+
+### T76 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T76 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+
+### T77 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T77 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
