@@ -42,10 +42,6 @@ landing on its own, each small; T22 last.
 
 ### The readers (FR-005)
 
-- [ ] T11 [perf] `make feature-report` reads the same columns through `where_time/columns.rs`, in `rust/gate/crates/measure/src/measure/feature_report.rs` and `feature_report/tables.rs` (D7; FR-005); and the plan re-rounds column counts what it is named - a later round of one review on one subject, as the feature report's rounds table does (23 in T10's window) - not every review dispatched under a task (68, about 3x; T10's plan review, 2026-11-21), red first
-      research: rendering
-      verify: red first - T08's fixture through `feature-report` gives `where-time`'s sums; `make feature-report F=451` shows the columns; `make rust-test CRATE=rust/gate/crates/measure`; `make quick`
-
 ### The refusals (FR-006 to FR-009, FR-011), each red first (FR-012)
 
 ### The hook-suite split (FR-010)
@@ -78,10 +74,6 @@ landing on its own, each small; T22 last.
 - [ ] T63 [perf] The make-only guard refuses a read-only Python heredoc over the event log as a guard-file write (found by T58's builder, 2026-11-21: a script that only opened files for reading, run under the escape) - measured first which of the guard's refusals in its log were of read-only scripts, then a heredoc that opens no file for writing (no open(..., 'w'/'a'), no write_text, no shutil, no os.replace) passes, red first on the refused script's shape
       research: rendering
 - [ ] T64 [perf] T55's order notice counts a code edit already landed (found 2026-11-21: the main session told at every make decide that its Makefile edit of 2026-11-20T15:48:51Z has no closing-checks after it, that edit landed hours before) - the notice reads the caller's last code edit since the task's last landing (static_runs_hooks' own landed rule), red first on an edit before a landing
-      research: rendering
-- [ ] T65 [perf] The set-down guard counts a resumed agent as finished (found 2026-11-21: T58's builder resumed by SendMessage, running, and the Stop hook refused the turn as 'nothing is running') - set_down_hooks::running reads a launch and a notification as sets, and a SendMessage resume (its result's resumedAgentId) is no launch; the transcript read in order, an agent's last launch or resume after its last notification running, red first on a resume after a notice; lands after T58 (set_down_hooks moves into its new crate)
-      research: rendering
-- [ ] T66 [perf] Nothing pins T58's rebuild count (found by T58, 2026-11-21: a hook edit rebuilds the guard alone because no crate but the guard's own tests depends on l7r_guard; a crate that adds l7r_guard back fails nothing) - a check in make static refuses a dependency on l7r_guard from any crate but the binaries that ship it, naming l7r_shared, red first on a gate crate's Cargo.toml naming it
       research: rendering
 - [ ] T67 The README guard refuses a cp of a hook's source to /tmp (found by T58's builder, 2026-11-21: cp rust/guard/src/guards/readme_hooks.rs /tmp/... refused as a README write) - the guard reads the destination's name, not the source's, red first on that cp
       research: rendering
