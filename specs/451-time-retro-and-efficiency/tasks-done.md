@@ -30,6 +30,9 @@
       research: rendering
       held: Makefile
       verify: DONE. landed in batch T08+T36: where-time's columns; the archived deferrals read
+- [x] T09 [perf] `make where-time`'s background-run column: a launch paired with its end - the log's `BgEnd`, else the subagent transcript's `queued_command` row holding its `<tool-use-id>`, else open to the window's end - and a between-turns wait booked to the runs its `Stop` line names `inflight`, in `rust/gate/crates/measure/src/measure/where_time/columns.rs` (D3, D7; FR-002, FR-005, SC-001); its waits start from the Stop line that opened them, and those lines can sit in another feature's log (T08's finding, folded into T10) - T09 reads the session's turn lines across every feature's log, or lands after T10 does (T08's plan review, 2026-11-21)
+      research: rendering
+      verify: DONE. landed in batch T09+T53: each wait booked to its run; event-log lines filed by their call
 - [x] T12 [perf] The context cap: a new guard `context_cap_hooks` refusing a builder's tool call past `CONTEXT_CAP_TOKENS` (GUESS, 300k) but the Write of its handoff file, naming the file and the next step; its first step one real subagent PreToolUse payload captured and pinned as the fixture (D8, D9; FR-006, FR-012, SC-003, SC-005)
       research: rendering
       held: rust/guard/src/guards/context_cap_hooks.rs (new), rust/guard/src/guards.rs, rust/guard/src/lib.rs, Makefile (`make context-ok`)
@@ -144,3 +147,6 @@
 - [x] T47 [perf] The pages crate's coverage misses runner/watch.rs line 271 in one make static run (found by T44's builder, 2026-11-20): the line went unreached once, and a rerun reused the last green result, so whether a test reaches it only sometimes (a timing-dependent path, T35's class) or a change left it uncovered is unknown - measured first (the crate's cover run FRESH several times, under load), the line's test made to reach it every time, red first
       research: rendering
       verify: DONE. landed in batch T45+T47: a directory-name flip; the watch test's paths
+- [x] T53 [perf] Three T26 leftovers (found by 451 T36): make events-refile DRY=1 still moves 19 lines, 17 from the 449 log and 2 from the 385 log, measured 2026-11-20 (make events-refile DRY=1 in this clone); the 17 were written 09:36Z to 13:21Z, after the T26 writer landed, 15 of them SubagentStart lines whose brief names 451, while the one builder checked, T05's (a9442ba44c1f1f44e), had its tool lines reach the 451 log, measured 2026-11-20 (the 449 log joined by hand to the subagents meta files; that one builder's id looked up in the 451 log) - so the writer may file a SubagentStart line by feature.json: measured first (whether the meta file is readable when SubagentStart fires), a wrong filing fixed red first on that shape, then make events-refile run once more; and the indexes name the files T26 and T04 added - rust/guard/CLAUDE.md (the event_log_hooks row: filed.rs, fields.rs) and rust/gate/CLAUDE.md (the measure row: event_log/refile.rs, make events-refile); lands before T22
+      research: rendering
+      verify: DONE. landed in batch T09+T53: each wait booked to its run; event-log lines filed by their call

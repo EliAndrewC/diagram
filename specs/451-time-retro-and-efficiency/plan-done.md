@@ -2360,3 +2360,56 @@ static`. Not filed with `PERF=1`: no engine stage's counted operations or time.
 
 <!-- plan-archive: T34 to T14 moved to plan-done.md, 2026-11-20 (feature 375 FR-044) -->
 <!-- plan-archive: T34 to T34 moved to plan-done.md, 2026-11-20 (feature 375 FR-044) -->
+<!-- plan-archive: archived 2026-11-21 -->
+### T53 (T26's writer still filed lines by feature.json after it landed: 19 lines in 449's log and 2 in 385's to move, measured 2026-11-21 (`make events-refile DRY=1`), and 23 left in 385's log that no rule places, measured 2026-11-21 (the same dry run's last line))
+
+- **Approach**: four shapes, each read from the lines themselves, the writer fixed for each, red first:
+  - A FIRST `SubagentStart` (15 of the 449 log's 19): the hook fires before the agent's meta file is written, so T26's brief read found none and the line took feature.json's feature, marked `fallback`.
+    - every one of the 15 is an agent's first start and every one is marked `fallback`, measured 2026-11-21 (the 449 log's `SubagentStart` lines joined by `aid` to the subagents' meta files).
+    - a running agent's meta file was born 24 ms and 29 ms after its start's line, measured 2026-11-21 (`stat %w` of two running agents' meta files against their `SubagentStart` `t`).
+    - the fix, new `rust/guard/src/guards/event_log_hooks/dispatches.rs`: the writer keeps each Agent call's two halves on a per-session side file, `<events dir>-dispatches/<sid>.jsonl`, outside the directory every reader lists. A start with no meta file is filed by the call whose launch returned its agent, else by the session's unreturned calls of its type (or the review-round twin, `spec-fidelity` routed to `spec-fidelity-verify`) in the `WINDOW_S` before it (300 s, a GUESS knob, item 10), taken only where every candidate's brief names the same feature (and the same task for the task). A disagreement stays feature.json's, marked.
+    - the rule replayed over the clone's 4,527 first starts, each against every Agent `PreToolUse` of its session: 0 to a wrong feature and 0 disagreeing at windows of 2, 5, 30 and 300 s, measured 2026-11-21 (the logs' Agent `PreToolUse`/`PostToolUse` lines and first starts, the meta files' `toolUseId` the truth).
+    - the same over the 156 first starts marked `fallback`: all 156 resolved right, measured 2026-11-21 (the same replay).
+    - starts with no candidate: 910 at 2 s, 284 at 300 s, measured 2026-11-21 (the same replay).
+    - a FIFO pairing was priced and dropped: 11 same-type start-order inversions, measured 2026-11-21 (the first starts joined to their calls through the meta files' `toolUseId`, pairs started out of their calls' order).
+  - A builder's `F=` with no `T=` of its own (2 of the 449 log's 19): a 451 T36 builder's `make task-add F=449` took 449 from the `F=` and T36 from 451's brief. Now the brief wins unless the command carries its own `T=` (a `tick`, `task-start`, `decide` or `land`), which is the re-file's BY BRIEF rule, so the writer and the re-file agree. This is a decision against T26's stated order (`F=` first), taken because the time served the brief's task and because `rust/gate/crates/measure` is T09's.
+  - An `F=` or `T=` inside a heredoc (2 of the 449 log's 19, the 385 log's 2): a 451 T15 builder's test file quoted `make decide F=449 T=T121`, measured 2026-11-21 (the moved lines' commands read from the subagents' transcripts); a 451 T28 builder's heredoc of test code before its `make rust-test` quoted, in order, `make task-start F=385 T=T03`, `make task-start F=385 T=T02`, `make gm-reviewed F=386` and `make task-start F=386 T=T04` (no `F=` outside the heredoc), so the call's two lines took the first, 385, with T28 from the brief, measured 2026-11-21 (agent ac1aa778c0f1068d8's 2026-11-20T13:17:00Z command read from its transcript, its two lines from 385's log). `filed.rs` and `fields.rs` now read `F=` and `T=` from `shared::shape::strip_heredocs` of the command, never from `strip_quotes` (a quoted `F="451"` stays the command's own; pinned).
+  - A task-only brief filed by a weeks-old start (the 23 lines left): `T47 plan review`, from a 451 T47 builder in a clone that never started 451's T47, was filed by 385's T47 start of 2026-10-18, three spec-fidelity rounds, 23 lines, in 385's log on 2026-11-21, measured 2026-11-21 (the dry run's lines left, joined to their meta files and `task-starts.jsonl`). `started` now ignores a start more than `STALE_START_S` (72 h, a GUESS knob, item 10) before the line, so such a line falls to feature.json's feature, marked.
+  - Red first, `rust/guard/src/guards/event_log_hooks/tests/misfiled.rs`, one case per shape:
+    - before: 697 passed and the 4 new cases failed, each on its live shape: the start `("449-b", "T236", true)`, the task-add `("449-b", "T26", false)`, the heredoc `("451-a", "T26", false)`, the stale start `("450-c", "T47", false)`, measured 2026-11-21 (`make rust-test CRATE=rust/guard`).
+    - after: 702 passed, 0 failed (the start case split in two for clippy's function length, plus the side file's own edge case), measured 2026-11-21 (`make rust-test CRATE=rust/guard`).
+    - lint, format and cover clean on `rust/guard`, every new line covered, measured 2026-11-21 (`l7r-gate.sh rust lint|format|cover --crate rust/guard`).
+  - Replayed through the clone's hook shim (`tests/hooks/event-log-hooks.sh`, `L7R_EVENTS_DIR` on scratch, feature.json naming 451): a `449 T242` dispatch's start with no meta file filed in 449's log under T242, not marked; a 451 T36 builder's `make task-add F=449` in 451's under T36; a main-session heredoc quoting `F=385` in 451's, marked `fallback`, observed 2026-11-21, method: four payloads piped to the shim, the scratch logs read.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+| the line's feature at a first start, a brief over a bare `F=`, no word read from a heredoc, no stale start | n/a - no map | n/a | none | n/a |
+
+### T53 Approach (checklist part A)
+
+1. **The goal, in the world.** No map changes. Every event-log line, a subagent's first start included, is in the log of the feature whose task it served, so `make where-time` and `make feature-report` book each feature's own time, and `make events-refile DRY=1` finds nothing new to move.
+2. **The constraints.** T53's line: measure first whether the meta file is readable when `SubagentStart` fires, then fix a wrong filing red first on that shape, then run `make events-refile` once more, and name T26's and T04's files in the two indexes. T26's chain stays otherwise as filed: no `tasks.md` read on a hook; the hook never refuses, never prints, and stays cheap. `rust/gate/crates/measure` is T09's and is not touched, so the writer converges on the re-file's rule.
+3. **Where each comes from.** O: the dry run's 21 moves and 23 left; O: the meta files' birth times; O: the subagents' transcripts and meta files; O: the replay over 4,527 first starts (the Approach's figures).
+4. **Do they describe the world here?** Every figure is from this clone's logs, its subagents' meta files and its `task-starts.jsonl` (the Approach).
+5. **The order.** After T26 and T36; before T22.
+6. **The exits.** Green: the red cases, `make rust-test CRATE=rust/guard`, lint, format and cover on `rust/guard`, `make quick`, `make static`, `make hooks-test`. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** One. The brief's feature at a first start is not on disk when the hook runs, so it is read from the call that dispatched it; pairing by order alone was wrong on 11 same-type inversions, measured 2026-11-21 (the `toolUseId` join, the Approach), so the rule takes only an agreed answer.
+8. **The budget.** One landing. The hook's new cost is one appended line per Agent call half, 95 bytes with a short call id and brief, measured 2026-11-21 (the scratch side file of the shim replay), so some 150 with a real id and brief, and at a first start with no meta file one read of at most 64 KiB (`TAIL`, a GUESS knob beside it).
+9. **Done, measured.**
+   - the red cases green, 702 passed, measured 2026-11-21 (`make rust-test CRATE=rust/guard`).
+   - the re-file's dry run after the fix still moves 21 lines (19 from 449's log, 2 from 385's, all by brief) and leaves 23, measured 2026-11-21 (`make events-refile DRY=1`). That is expected: the live hooks run the mirror's guard binary until T53 lands, and the lines are already written.
+   - owed at the landing, at the coordinator's timing (T09 reads these logs): one real `make events-refile`, then a dry run showing 0 to move but the 23 lines left in 385's log, measured 2026-11-21 (`make events-refile DRY=1`, its last line); those move under T56, once the re-file shares the writer's stale-start rule (Found and left).
+10. **Before moving a constant.** Two new knobs, each labeled GUESS beside it:
+    - `WINDOW_S` (`dispatches.rs`), 300 s, GUESS: 0 wrong and 0 disagreeing at every window from 2 s to 300 s over 4,527 first starts, measured 2026-11-21 (the replay above); the wider window leaves 284 starts with no candidate against 910 at 2 s, measured 2026-11-21 (the same replay), so 300 s stays.
+    - `STALE_START_S` (`filed.rs`), 72 h, GUESS: of 571 task-only briefs, the start their log's feature made of that task was p50 0.3 h and p90 1.8 h old, the longest plausible one 34.1 h (444's T16), then 313, 618 and 799 h, measured 2026-11-21 (each such subagent's first line against `task-starts.jsonl`).
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** A reader of `make where-time F=451` or `F=449` sees each builder's and review's start booked to its own feature and task, not to whichever feature feature.json named. Nothing on a map.
+
+**Found and left?**
+- The 23 lines in 385's log (451 T47's three spec-fidelity rounds), measured 2026-11-21 (`make events-refile DRY=1`): no re-file rule places them. The writer no longer files such lines (the stale-start case), but the 23 already written stay. Not fixed here: the re-file, in `rust/gate/crates/measure` that T09 is editing, still reads the old start rule, so no run of it moves them. Filed as T56; lands before T22.
+- Older task-only briefs filed by starts past 72 h: 444's T42 (313 h) and 417's T46 (618 h), measured 2026-11-21 (item 10's count). Not a defect: whether these closed features' lines are wrong is unshown, and the re-file does not reach them.
+- A nested subagent whose brief names only a task (a builder's own spec-fidelity) is now filed under feature.json's feature, marked `fallback`, where its dispatcher's brief names the feature. Not a defect: readers keep a marked line apart, so nothing is booked wrong.
+
+**Performance work?** yes. This is a `[perf]` task (451 FR-013: it makes the builders' loop faster by booking each feature's time where `where-time` reads it). It is not an engine-speed task, so the checklist does not apply.
+
+
