@@ -7001,3 +7001,268 @@ or missing a file, the builders' loop; not engine speed, so no performance check
 
 <!-- plan-archive: T97 to T93 moved to plan-done.md, 2026-11-21 (feature 375 FR-044) -->
 <!-- plan-archive: T97 to T97 moved to plan-done.md, 2026-11-21 (feature 375 FR-044) -->
+<!-- plan-archive: archived 2026-11-21 -->
+### T111 (the stall-watchdog suite's case 4 slept a fixed 1 s and then asked whether a loop started by hand had exited on the lock: red at T92's landing, "expected no, got yes" at a load near 28 beside three builders, green on 2 of 2 reruns in the same worktree, observed 2026-11-21 (T92's landing log, as T111's line records it))
+
+- **Approach**: every fixed sleep in `tests/hooks/test-stall-watchdog-hooks.sh` before a check that needs something to have happened
+  becomes a wait for that event to a deadline, in the form of case 3's runner wait (`for _ in $(seq N); do <event> && break; sleep 0.1;
+  done`), and the check after it is unchanged, so a loop that never exits still fails it:
+  - THE EXIT, measured 2026-11-21 (`/tmp/t111-measure/measure.sh`: a `flock` holding a scratch `$STALL_STATE_DIR/lock`, the hook's `run`
+    started as the case starts it and polled with `kill -0` every 10 ms, `L7R_GUARD_FRESH` set as `make hooks-test` sets it, with and
+    without the read recorder's `LD_PRELOAD` as `hookrun.sh` sets it): at a load of 7 to 9, median 0.027 s and max 0.130 s (n=30, no
+    recorder), median 0.106 s and max 0.247 s (n=30, the recorder). Beside this task's own `make closing-checks`, a load of 14 to 17 and a
+    run queue up to 57, measured 2026-11-21 (the same script, the recorder, `/tmp/t111-measure/beside-closing-summary.txt`): median
+    0.049 s, p99 0.253 s, max 0.279 s (n=200). Beside 24 CPU spinners, a load of 22 to 27 and a run queue of 47 to 59, measured 2026-11-21
+    (the same script, `/tmp/t111-measure/loaded-summary.txt`): median 0.200 s and max 0.394 s (n=40, the recorder), median 0.179 s and max
+    0.265 s (n=20, no recorder). No sample reached the 1 s the landing's run passed, measured 2026-11-21 (the three runs above), so the
+    measurement did not reproduce the failure. A spinner is CPU load alone, where the landing's builders were cargo builds,
+    links and their IO, so the tail the landing met is not measured here, and the deadline is not derived from these figures.
+  - THE FIX, case 4: the first prompt's loop waited for until its pid file names a live process (the loop writes it once it holds the
+    lock, so the hand-started loop meets a held lock); the hand-started loop (`R2`, now in `PIDS` so a red run's cleanup ends it) waited
+    for until `kill -0` fails; the killed loop until its `/proc` entry goes (the prompt's own test of a dead loop; `kill -0` stays true
+    for a zombie); the revived loop until the pid file names a live process other than the killed one (the file outlives the killed
+    loop). Each deadline is 300 tries of 0.1 s, a GUESS only a red run pays. The second prompt's sleep of 1 s is dropped, not replaced,
+    observed 2026-11-21, method: reading the hook's `run` and `judge` (a second loop would meet the held lock and exit without writing
+    the pid, so no sleep could change that check's verdict). The lock
+    check's words lose "at once", which a deadline wait no longer measures: "exits on the lock, where one that took it would loop".
+  - THE FIX, case 3: the Python runner's old form (`page_session_runner.py --work` as the arguments of a `bash -c`) waited for until its
+    own argv is in `/proc/<pid>/cmdline`, where it slept a fixed 0.5 s, observed 2026-11-21, method: reading case 3 (before its exec the
+    process is a copy of the suite, and the check after it, that the old form exempts nothing, passed on that copy whatever the hook
+    makes of the old form).
+- **Red first**, measured 2026-11-21 (`/tmp/t111-red/run.sh <form> <mode>`: a copy of the suite, HEAD's for the old form and the
+  clone's for the new, only its `HERE` pinned to the clone's `tests/hooks` and its `HOOK` overridable, `L7R_GUARD_FRESH` set, each run's
+  log `/tmp/t111-red/<form>-<mode>.log`, the lines `/tmp/t111-red/summary.txt`, at a load of 11 to 15):
+  - unslowed, measured 2026-11-21 (`run.sh <form> base`): old 29 passed and 0 failed in 9.5 s, new 29 passed and 0 failed in 2.4 s.
+  - `slowrun`, the hook a wrapper (`/tmp/t111-red/slow-hook.sh`) that sleeps 2 s before a `run`, measured 2026-11-21 (`run.sh <form>
+    slowrun`): old 28 passed and 1 failed, "a second loop started by hand exits at once on the lock (expected no, got yes)", the
+    landing's failure, and new 29 passed and 0 failed.
+  - `slowstart`, a `setsid` first on `PATH` (`/tmp/t111-red/bin/setsid`) that starts the prompt's loop 2 s late and returns at once as
+    `setsid -f` does, measured 2026-11-21 (`run.sh <form> slowstart`): old 27 passed and 2 failed, "the first prompt starts the loop
+    (expected yes, got no)" and "a second prompt starts no other (expected , got <pid>)", and new 29 passed and 0 failed, the revived
+    loop's start slowed the same way and waited for.
+  - `slowrevive`, the same late start only where a loop has run before (`/tmp/t111-red/bin2/setsid`), so the revive alone is slowed,
+    measured 2026-11-21 (`run.sh <form> slowrevive`, `/tmp/t111-red/summary2.txt`, at a load of 31 to 36): old 28 passed and 1 failed,
+    "a dead loop is revived by the next prompt (expected yes, got no)", new 29 passed and 0 failed, and the new form green on each slowed
+    mode twice more at that load, 6 of 6 runs.
+  - `hang`, the wrapper's `run` a real loop on a lock of its own as a loop would run that the lock failed to hold, measured 2026-11-21
+    (`run.sh <form> hang`): old 28 passed and 1 failed, and new 28 passed and 1 failed at its deadline, "a second loop started by hand
+    exits on the lock, where one that took it would loop (expected no, got yes)", in 39.9 s.
+- **The sweep**, observed 2026-11-21, method: every line holding the word `sleep` in the 63 `tests/hooks/test-*.sh` outside
+  `test-no-poll-hooks.sh`'s command strings (87 lines in 12 suites, `grep -nw sleep`, comment lines dropped), each read with what follows
+  it and classified by whether the check after it needs something to have happened (a slow host fails it) or asserts that nothing did
+  (a slow host passes it vacuously):
+  - in this suite, fixed here, observed 2026-11-21, method: the sweep's read: line 104 (0.5 s, the old-form process's argv, vacuous, now
+    waited for), 121 (1 s, the loop's pid file), 124 (1 s, nothing it could change, dropped), 126 (1 s, the hand-started loop's exit), 128
+    (1 s, the killed loop's `/proc` entry) and 129 (1 s, the revived loop's pid).
+  - elsewhere, a slow host fails good work (filed as T115), observed 2026-11-21, method: the sweep's read: `test-clone-sync-hooks.sh` 186
+    and 273 (0.3 s for `exec -a make sleep 120`'s argv and cwd, which the hook's live-make test reads), 287 and `test-land-tooling.sh` 184
+    (0.3 s for the argv of an `exec -a make` `bash -c`, the pid then named in `gate.lock`), `test-idle-tests-hooks.sh` 76 (0.6 s for the
+    disarmed timer's exit and its arming file's removal), 83 (0.5 s for the arming file's removal, the timer's last step after its record)
+    and 202 (1.0 s for a gone session's timer to exit after its 0.3 s wait), `test-closing-checks.sh` 101 (0.3 s before `pgrep` finds no
+    check alive, where `stop` signals each tree and exits 130 without waiting for it), and `test-finished-run-hooks.sh`'s `settle`, a
+    deadline wait that returns 0 at its deadline, 1 s by default and 2 s at 40, so the check after it runs unready past the old sleep's
+    bound.
+  - their two shapes, measured 2026-11-21 (`/tmp/t111-measure/shapes.sh` beside T111's closing checks, at a load of 16 to 17, n=200): an
+    `exec -a make` start until its argv reads `make`, median 0.008 s and max 0.071 s, and a killed background child until `kill -0` fails,
+    median 0.012 s and max 0.059 s.
+  - elsewhere, vacuous under load (listed, not filed), observed 2026-11-21, method: the sweep's read: `test-idle-tests-hooks.sh` 73 (0.3 s,
+    then the timer alive, true from its fork), 182 (0.3 s after all three records, before reading the run log their runs finished
+    writing), 191 (0.8 s, then no run while a make runs) and 217 (3 s, then no end line ever), and `test-closing-checks.sh` 112 and 115
+    (0.2 s each, ordering two runs whose checks each read their own run's output).
+  - before a deadline wait, so costing nothing but their time, observed 2026-11-21, method: the sweep's read: `test-idle-tests-hooks.sh` 96
+    (before a 90 s wait), 210 (after the start line, before the prompt, inside the slow runner's 3 s) and 211 (before an 8 s wait).
+  - deadline waits already, observed 2026-11-21, method: the sweep's read: `test-closing-checks.sh` 25, 67 and 98, `test-gate-write-hooks.sh`
+    39 and 72, `test-sync-with-main.sh` 72, 373, 380 and 482 (and the fake renders' 361 and 472), `test-land-tooling.sh` 140,
+    `test-idle-tests-hooks.sh` 45 to 54 and 143, `test-engine-freeze-hooks.sh` 94 (5 s), `test-l7r-gate.2.sh` 35 (5 s) and this suite's 111
+    (300 s).
+  - a sleep that is the work, not a wait (a stand-in process, a lock holder, a fixture's body, an mtime step): `test-closing-checks.sh` 27,
+    `test-finished-run-hooks.sh`' Makefiles and waiters (77 to 113, 134 to 252), `test-gate-write-hooks.sh` 20, 57, 68 and 85,
+    `test-idle-tests-hooks.sh` 32, 57, 134 and 207, `test-l7r-guard.sh` 33, 46 and 164, `test-parts.1.sh` 37, `test-sync-with-main.sh` 383
+    and 590, `test-clone-sync-hooks.sh` 68 and 70, `test-engine-freeze-hooks.sh` 95 and 101, and this suite's stand-ins.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+| each fixed sleep of the stall-watchdog suite before a check that needs an event becomes a wait for it to a deadline; the one that could change nothing dropped | n/a - no map | n/a | none | n/a |
+
+### T111 Approach (checklist part A)
+
+1. **The goal, in the world.** No map changes. `make hooks-test`'s stall-watchdog suite passes on good work under load and still fails a
+   loop that never exits on the lock, a loop that never starts, and a dead loop that is never revived.
+2. **The constraints.** T111's line; FR-012 (red first); constitution XIII (no known regression: the suite's 29 checks the same) and XIV
+   (a check that fails good work is a defect, fixed here); the launcher's ground rules: `tests/hooks/test-stall-watchdog-hooks.sh` and
+   this section alone, nothing of T96's (`shared::tree`, `event_log_hooks`, `scripts/land-alone.sh`) or T113's (`make_only_hooks.rs`,
+   `no_poll_hooks/pace.rs`, `readme_hooks.rs`), no knob in the Rust hook, nothing committed.
+3. **Where each comes from.** O: T92's landing as T111's line records it; O: this task's exit timings, red-first runs and sweep (item 4).
+4. **Do they describe the world here?** Measured 2026-11-21, each by its method in the Approach: the exit timed at three loads (n=30, 30,
+   200, 40 and 20), none past 0.394 s and none reproducing the landing's 1 s; the old form red and the new green on a slowed `run`, a
+   slowed loop start and a slowed revive (`/tmp/t111-red/summary.txt`, `summary2.txt`), and the new form red on a loop that never exits (`/tmp/t111-red/summary.txt`); the sweep's 87 lines classified.
+5. **The order.** Beside T96 and T113, touching none of their files; before T115, which takes the same form to the other suites.
+6. **The exits.** Green: the red-first runs above and this task's own `make closing-checks T=T111 F=451`. Red: what failed recorded and
+   the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None: every `sleep` in the hook suites was read (the sweep's method), not a sample.
+8. **The budget.** One landing. A green run waits only for its events: the suite took 2.4 s against 9.5 s before, measured 2026-11-21
+   (`/tmp/t111-red/summary.txt`, the unslowed runs, load 14 to 15).
+9. **Done, measured.** Red first: old 28 passed and 1 failed, new 29 and 0, on the slowed `run`; old 27 and 2, new 29 and 0, on the slowed
+   start; old 28 and 1, new 29 and 0, on the slowed revive; the new form 6 of 6 green on the three slowed modes again at a load of 31 to 36;
+   new 28 and 1 at its deadline on a loop that never exits (measured 2026-11-21, `/tmp/t111-red/run.sh`). This task's own closing
+   run 1 (`20261121T214350Z-1968433`, measured 2026-11-21, `make closing-checks T=T111 F=451`): `make hooks-test` GREEN (144 s, this
+   suite 4.9 s) and `make quick` GREEN; `make static` RED on one crate alone, `rust/guard/shared`'s coverage run, 3 of 380 tests failing,
+   each in `guards::event_log_hooks::tests::renumbered` - another builder's uncommitted work (`event_log_hooks/tests.rs` and the untracked
+   `tests/renumbered.rs`, last written at 21:45:40Z and 21:48:49Z, after the run started at 21:43:50Z, so in no split it made), which no T111 file reaches:
+   T111 changes a shell suite and this section, no Rust; T113's format and lint red reported apart.
+10. **Before moving a constant.** No research constant, observed 2026-11-21, method: the sweep's read: the sleeps of 1 s were waits,
+    replaced by waits for their events, and the deadline of 300 tries of 0.1 s is a GUESS only a red run pays, labeled at the case.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** A defect, fixed here: a landing's `make hooks-test` red on good work under load; no map moves, no research claim
+    reads this suite.
+
+**Found and left?**
+- Eight fixed sleeps in four other hook suites, and `test-finished-run-hooks.sh`'s `settle`, wait 0.3 to 1.0 s (settle: 1 or 2 s, then
+  running its check anyway) for an event the next check needs, so a slow host fails good work there as it did here, observed 2026-11-21,
+  method: the sweep above. Not fixed here: the launcher gave T111 this suite alone, and each suite owes its own red first. Filed as T115;
+  lands before T22.
+
+**Performance work?** no - a test's correctness under load, the suite's own time falling from 9.5 s to 2.4 s as a side effect, measured
+2026-11-21 (`/tmp/t111-red/summary.txt`, the unslowed runs, item 8).
+
+
+### T57 (the finding as filed, restated by its measurement: `make static` builds and runs no plain test binary - the plain `build` and `test` time is `make rust-test`'s, the builders' loop, measured 2026-11-21 over the event log's Phase lines since 2026-11-20T12:35Z; what is built twice is a crate's tests in `make rust-test` and again in the coverage run, which answers for the plain run only where T111's `unit_tests_only` says the coverage run ran every test `cargo test` runs)
+
+- **Approach**: the coverage run's word for a crate's plain tests (T111: a green coverage pass keeps the crate's `test` result, so a
+  later `make rust-test` stands on it and builds and runs nothing) reaches every crate whose whole `cargo test` the coverage run
+  (`--lib`) runs. `unit_tests_only` (`rust/gate/crates/rustc/src/rustc/kept.rs`) refused any crate with a binary and any doc fence;
+  it now refuses a binary only where it holds a test, a `cfg(test)` or a `mod x;` (`BIN_TEST` over `src/main.rs`, `src/bin/` and each
+  `[[bin]]`'s path), and a fence only where it is not a `text` block (`TEXT_BLOCK`). Eleven crates join the keep - the guard,
+  `rust/gate`, `pool`, `cohort`, `measure`, `pages`, `reviews`, `rust/mode_a`, `rust/phases`, the browser and the embedder; `checks`
+  (a `cfg(not(coverage))` test) and `rustc` (its tests' `cfg(coverage)` text) stay out, observed 2026-11-21, method: the new and the
+  old predicate run over every crate's manifest and sources. `make static` itself is unchanged (it ran no plain test to drop), and
+  `make rust-test`'s runs are unchanged but for its doctest reading (`has_doctests`, `side.rs`), which takes the `text` blocks out as
+  `unit_tests_only` does (one reading, `holds_doctest`), so the five crates whose only blocks are `text` ones - `cohort`, `measure`,
+  `pages`, `reviews` and `rust/mode_a` - run no `cargo test --doc`, a pass that ran no test, observed 2026-11-21, method: the old
+  and the new reading run over every crate's sources. Nothing reads the plain run's output but the readers that book `build` as
+  compile.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+| the coverage pass's word for a crate's plain tests | n/a - no map | n/a | none | n/a |
+
+### T57 Approach (checklist part A)
+
+1. **The goal, in the world.** No map changes. A crate's tests are built and run once for one state of its inputs wherever one run
+   answers for both: after a green coverage pass (`make static`, `make closing-checks`, `make land`'s gate), `make rust-test` on a
+   crate whose whole `cargo test` that pass ran stands on it.
+2. **The constraints.** T57's line: measured first what the plain run catches that the covered run does not; static's plain build and
+   test dropped where the covered run answers; `make rust-test`'s fast uninstrumented loop unchanged; red first on a failing test
+   caught by the covered run alone. T111's premise (every test target in `--lib`, no code reading `cfg(coverage)`). FR-013. T58 owns
+   `rust/guard`'s layout and the gate crates' `Cargo.toml` in this clone; neither is touched.
+3. **Where each comes from.** O: the event log's Phase lines and Edit and Write lines since 2026-11-20T12:35Z (item 4); O: `cargo
+   tree -e features`; O: the crates' targets, sources and fences read; O: the red-first run and the guard's run (item 9); G: FR-013
+   (the GM 2026-11-20, request.md: "can we in general priotitize performance improvements going forward?"); the task as filed
+   (T57's line).
+4. **Do they describe the world here?** Measured, not assumed:
+   - `make static` runs `rust lint`, `format --check`, `cover` and `dead` and no `rust test`; its Phase lines are `cover-build` 31.4
+     min, `lint` 26.4, `cover-run` 20.8 and `format` 0.3, and no `build` or `test` line, measured 2026-11-21 (the Phase lines of every
+     clone's event logs since 2026-11-20T12:35Z, by their `make`).
+   - The plain `build` 83.7 min (733 lines) and `test` 44.1 min (687) are all `rust-test`'s, `make rust-test` or `l7r-gate.sh rust test`
+     with no make above, measured 2026-11-21 (the same lines).
+   - `land`'s plain 5.2 and 1.2 min are `counters-inert`'s `--all-features` run of `pool`, `rust/mode_a` and `rust/phases`, a cfg the
+     coverage run (default features) does not answer, measured 2026-11-21 (the same lines).
+   - The line's cover-build 73 and cover-run 44 min sum each step over every target (`rust-cover`, `static`, `land`,
+     `closing-checks`), measured 2026-11-21 (the same lines).
+   - The guard's share of the plain time is 53.6 min of build and 36.9 of test, T111 keeping no guard result since its `src/main.rs`
+     refused it, measured 2026-11-21 (the same lines, by crate).
+   - What `cargo test` runs that the coverage run does not, each read from the crates' manifests, targets, sources and doc fences:
+     - binaries: eight crates have one (`src/main.rs`, `src/bin/hamlet.rs`), none holding a test, a `cfg(test)` or a `mod x;`, their
+       test-cfg compile the lint's (`clippy --all-targets`), measured 2026-11-21 (each binary's source read).
+     - doctests: none - 10 fenced blocks in 10 files, every one `text`, and no indented block, measured 2026-11-21 (every
+       `//[/!]` line opening a fence listed, and the indented form searched).
+     - integration tests, examples and benches: none, measured 2026-11-21 (each crate's `tests/`, `examples/`, `benches/` and
+       manifest read).
+     - `cfg(coverage)`: one test, `checks`' `every_pointer_in_the_repository_resolves_to_a_fragment` (`cfg(not(coverage))`), whose job
+       the gate's preflight `check research-pointers` and the push's `research-pointers` row also do, so `checks` stays out of the
+       keep, measured 2026-11-21 (the sources searched for the cfg).
+     - features: a family's coverage build is one cargo call, which unifies features across its crates - `l7r_gate_owed` resolves with
+       `testkit` for `claims` built beside `arbiter`, with none alone, measured 2026-11-21 (`cargo tree -e features -p ...`); the plain
+       build is a crate's own (found and left, below).
+     - time bounds: 4 tests assert one, floors or a 5 s ceiling, stricter under instrumentation and never looser, measured
+       2026-11-21 (every `elapsed()` in an assertion read).
+     - environment: both runs inherit the session's environment, run from the crate's directory and give its tests their own
+       `TMPDIR` (`leak_checked`), measured 2026-11-21 (`run_in`, `cover.rs`'s `run_one` and `side.rs` read).
+   - What the plain run caught: nothing the covered run misses. 15 plain test reds came after a green coverage run of that crate
+     with no Edit or Write in the clone between, and each was read in the session's transcript at its time: 14 followed a shell edit
+     of the crate's own sources, a builder's red-first test or deliberate break by `python3`, `sed -i` or `cat >>` (`land`, `plan`
+     twice, `task`, `owed` five times, `pages` twice, `measure` twice and this task's `rustc`), its key moving so the plain run was
+     owed either way; the 15th, the guard's, was a `FRESH=1` run with the feature's variables exported (T32's sweep for tests reading
+     the session's environment, 17 failing), measured 2026-11-21 (each red's command and failures
+     read from session `c6fd72d1`'s transcripts). No key carries the environment, the plain run's own neither, so that exposure is
+     T93's, not new with T57, and T32 fixed the tests it found, observed 2026-11-21, method: `verdict_key_with` (kept.rs) read - its key is the command, the compiler and the input files - and T32's box read ticked.
+   - What the keep can save: on the eleven crates it adds, 112 plain `build` and `test` lines, 13.7 min of the plain 127.8, came after a
+     green coverage run with no edit between, measured 2026-11-21 (the same lines; an upper bound, as an edit made by the shell, or of
+     the tree a crate's tests read, is not seen there). The guard's own repeated loop is most of the rest (T58's ground).
+5. **The order.** After T55 (the closing step this task closes with); beside T58 (a different crate); before T22, the close.
+6. **The exits.** Green: the red-first test green, `make rust-test`, lint, format, cover and dead on `rust/gate/crates/rustc`, `make
+   quick`, `make closing-checks`.
+   Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** One: the task line's premise (a plain run inside `make static`) did not hold; the Phase lines' `make` field
+   was read per target before any code, and the finding restated above rather than a plain run invented to drop.
+8. **The budget.** One landing.
+9. **Done, measured.**
+   - Red first: `a_failing_test_is_caught_by_the_covered_run_alone_and_a_green_one_answers_for_the_plain_run` (the fake cargo: a crate
+     whose binary holds no test, its covered test failing) and the new cases of `a_crate_whose_unit_tests_are_its_whole_cargo_test`
+     failed on the unfixed code, 2 failed and 77 passed - the covered run's failure named the crate, the plain run after it still owed,
+     and after a green pass the plain run did not stand - measured 2026-11-21 (`make rust-test CRATE=rust/gate/crates/rustc`); 79 passed
+     after, measured 2026-11-21 (the same).
+   - The doc pass, red first: the `text` cases of `a_crate_whose_unit_tests_are_its_whole_cargo_test`, now asking `has_doctests` the
+     same as `unit_tests_only`, and a `text`-only library beside a fenced one in
+     `a_crate_with_a_doctest_runs_cargo_s_doc_pass_with_its_features` (one `test --doc` call, not two) failed on the unfixed reading,
+     2 failed and 77 passed, measured 2026-11-21 (`make rust-test CRATE=rust/gate/crates/rustc`, `/tmp/t57/doc-red.log`); 79 passed
+     after, with the crate's format, lint, cover and dead clean, measured 2026-11-21 (the same, and each check on the crate).
+   - The doc pass's cost, each crate's `test` Phase span under `make rust-test CRATE=<crate> FRESH=1`, two runs before and two after,
+     at load average 19 before and 20 to 23 after on 22 cores, measured 2026-11-21 (the event log's Phase lines, `uptime` after each
+     set):
+     - `measure` 2.8 and 3.3 s, then 0.8 and 0.8 s, measured 2026-11-21 (the same).
+     - `rust/mode_a` 14.2 and 12.4 s, then 7.9 and 7.2 s, measured 2026-11-21 (the same).
+     - `cohort` 2.1 and 0.5 s, then 0.5 and 0.5 s, measured 2026-11-21 (the same).
+     - `pages` 0.2 and 0.2 s, then 0.3 and 0.4 s, measured 2026-11-21 (the same).
+     - `reviews` 1.6 and 1.5 s, then 3.4 and 3.5 s, measured 2026-11-21 (the same).
+   - The change takes a cargo call away and adds none, so the rises are the host's load, and about 2 s a run is saved on `measure`
+     and 5 s on `rust/mode_a`, observed 2026-11-21, method: the spans above, and the fake cargo's calls in the red-first test.
+   - The guard on the real tree, its key moved by a scratch file under `scripts/` its tests read: `rust cover --crate rust/guard` 11.1
+     s, then `make rust-test CRATE=rust/guard` 0.18 s ("test unchanged on rust/guard - its last green result stands"), where the plain
+     run that coverage pass now answers took 6.0 s (711 tests, its binary already built), measured 2026-11-21 (each timed by `date`
+     around it, the file removed after).
+   - `make static`, warm, before the change: 7.27 s, `checks`' and `task`'s coverage owed and 130 results kept, measured 2026-11-21
+     (`make static`, timed by `date` around it).
+   - `make static`, warm, after: 27.2 s for the same work - `checks`' and `task`'s coverage owed, 130 results kept - its coverage tests
+     4.7 s and 5.7 s against 0.6 s and 0.8 s before, on a machine at load average 29.6 on 22 cores, measured 2026-11-21 (`make static`
+     under `STATIC_OK`, timed by `date` around it, `uptime` after). The change moves nothing `make static` runs, so its time is not the
+     task's measure: the saving is the `make rust-test` after it, measured above. In `make closing-checks` it took 45 s beside
+     `hooks-test` and `quick`, three crates' coverage owed (the gate's binary rebuilt over the `rustc` edit), measured 2026-11-21
+     (`make closing-checks`' table).
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** No reader of a map sees anything differently; the change is when a builder's `make rust-test` reruns a
+    crate's tests, and every test it no longer reruns ran green in the coverage pass over the same inputs.
+
+**Found and left?**
+- The coverage build of a family unifies its crates' features, so a crate's covered tests may run with a dependency's `testkit` its
+  own build lacks (`owed` for `claims`, `land`, `trials` and `rust/gate` beside `arbiter`, `bundle` or `record`), and T111's keep
+  stands on that run - observed 2026-11-21, method: every `cfg(feature)` gate of the gate crates read (one switches behavior,
+  `owed`'s `entry_lines` seam; the rest add items, which a crate naming them without the feature fails to compile in its own lint)
+  and `cargo tree -e features` for one pair. Not a defect: a difference with no wrong outcome shown - a crate's lint runs on its own
+  features, and the gate (`make done`, the push) already rests on the coverage run alone for these crates' tests.
+- The clone-claim backstop refused this builder's first Edit of the clean clone (T62 measured it: the first edit of a clean clone, the main session's included, not every Edit and Write) in its own dispatcher's clone (a `kind: bg` job, which
+  `forked_from` does not know), so the edits went through exact-replacement scripts. Not fixed here: the fix is in
+  `rust/guard`'s `clone_sync_hooks`, where T58 is working in this clone, and a guard edit rebuilds the gate crates T58 is counting.
+  Filed as T62; lands before T22.
+
+**Performance work?** yes (a `[perf]` task, 451 FR-013: it makes the builders' loop faster - a crate's plain tests not built and run
+again after a green coverage pass answered for them); not engine speed, so no checklist answers.
+
+
+<!-- plan-archive: T58 to T58 moved to plan-done.md, 2026-11-21 (feature 375 FR-044) -->
+<!-- plan-archive: T59 to T59 moved to plan-done.md, 2026-11-21 (feature 375 FR-044) -->
+<!-- plan-archive: T60 to T59 moved to plan-done.md, 2026-11-21 (feature 375 FR-044) -->
+<!-- plan-archive: T60 to T60 moved to plan-done.md, 2026-11-21 (feature 375 FR-044) -->
+<!-- plan-archive: T67 to T58 moved to plan-done.md, 2026-11-21 (feature 375 FR-044) -->
+<!-- plan-archive: T67 to T67 moved to plan-done.md, 2026-11-21 (feature 375 FR-044) -->
