@@ -38,9 +38,9 @@
    "declared": "spec-fidelity"
   },
   "## Decisions": {
-   "sha256": "0c6714ab51d84a135f5bf30e3a945063199749bf2f956a1f71d8a2b43ab2835b",
+   "sha256": "6408eb8f34fa46a9070c550c86dcf90ddd50a5ba8cc8b9b40c888ae913b73923",
    "verdict": "CLEAR",
-   "reviewed": "2026-11-20",
+   "reviewed": "2026-11-21",
    "declared": "spec-fidelity"
   },
   "## Task sections": {
@@ -349,14 +349,8 @@
    "reviewed": "2026-11-21",
    "declared": "spec-fidelity"
   },
-  "### T58 (<why: the finding or measurement that files it>)": {
-   "sha256": "ed3233f8f9f8c34ae1ecb41df89b01e6dfbb592ad3be9c4636d6e6c8d8f62c25",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-21",
-   "declared": "spec-fidelity"
-  },
   "### T58 Approach (checklist part A)": {
-   "sha256": "358c456e607ebc2cf43f607c53864b3da9b8b471dcc18ee3ba02142c216ac6d1",
+   "sha256": "f6ff392c5ee3fe4e66a2e8224b2238e96929a378bd33d9406d8461722fa708d7",
    "verdict": "CLEAR",
    "reviewed": "2026-11-21",
    "declared": "spec-fidelity"
@@ -447,6 +441,18 @@
   },
   "### T65 Approach (checklist part A)": {
    "sha256": "59fa4b41c58886872c35453d0d78b689c5e46e066ab61ab476dd5826fdb60aaf",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity"
+  },
+  "### T67 (<why: the finding or measurement that files it>)": {
+   "sha256": "e0625e761c1d87b8e864d8e1be2a223c27337d20ac8db5549831f4cecddbbdc1",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity"
+  },
+  "### T67 Approach (checklist part A)": {
+   "sha256": "123a9959c7eee34b047cbb964364b5d2a8c789acf22dd20724a4e58dc48d3ffe",
    "verdict": "CLEAR",
    "reviewed": "2026-11-21",
    "declared": "spec-fidelity"
@@ -7424,6 +7430,43 @@
      "summary": "an agent is booked to its first stop's task (the agent's meta file, D6), else its first start's, because before 451 T53's landing a start line carried the clone's active task (57 of 164 agents with both; 0 of 22 since), red first",
      "class": "within",
      "why": "D7 puts each agent's span and tokens 'under its task', and D6 takes the stop line's task from the agent's meta file. Booking 57 agents to the clone's active mark was a wrong outcome: T15's plan reviews read under T18 (measured 2026-11-21 with method). The fix-as-we-go ruling (2026-11-18) says a step fixes the defects it finds. The fix only changes which recorded field the requested column reads, choosing the one D6 already names. It is red first and changes nothing for agents started after T53."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-21",
+   "blocks": [
+    "## Decisions",
+    "### T58 Approach (checklist part A)",
+    "### T67 (<why: the finding or measurement that files it>)",
+    "### T67 Approach (checklist part A)",
+    "(removed) ### T58 (<why: the finding or measurement that files it>)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D7 (restated)",
+     "summary": "Rework's plan re-rounds are counted as a later round of one review on one subject, keyed by agent and manifest subject as the rounds table keys it, replacing 'a task's spec-fidelity and spec-fidelity-verify dispatches after its first'.",
+     "class": "within",
+     "why": "FR-005 asks the readers to count the rework, plan re-rounds among it, and the approved improvement 4 is 'Fewer plan re-rounds'. A re-round is a repeat of one review on one subject; the earlier wording counted a task's first review of each separate subject (spec, each block bundle) as a re-round, over-counting 68 to 23 per T10's review. The restatement brings the count to the plain meaning of the GM-approved term and drops nothing the request asked for."
+    },
+    {
+     "id": "T58 found-and-left: rebuild-count pin",
+     "summary": "No check pins that a hook edit rebuilds the guard alone; deferred, 'Not fixed here: a pin is a check of its own in make static, outside the split. Filed as T66; lands before T22.'",
+     "class": "within",
+     "why": "T58's own line asks for red first on the rebuild count, which item 9 carries (32 crates before, 1 after, measured). A missing regression pin is no wrong outcome today; it is deferred to a filed open task of this same feature ordered before the close T22, in FR-009's form (why, filed id, order), so the feature still delivers it and nothing asked is dropped."
+    },
+    {
+     "id": "T58 item 9: FR-008 named as feature 449's",
+     "summary": "The tenth-of-a-second test bar is cited as feature 449's FR-008, not 451's (451's FR-008 is the background-run guard).",
+     "class": "within",
+     "why": "A citation correction; it decides nothing and the figure (0.08-0.09 s, dated, method given) stands under the bar it names."
+    },
+    {
+     "id": "T67 template and the removed T58 template",
+     "summary": "A newly filed task's unfilled section template is added; T58's unfilled template heading, superseded by its filled Approach, is removed.",
+     "class": "within",
+     "why": "Placeholders only; neither decides anything the spec left open, and the removal deletes no content of T58's approach or rulings."
     }
    ]
   }
