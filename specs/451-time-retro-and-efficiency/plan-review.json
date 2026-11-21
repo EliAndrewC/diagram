@@ -600,6 +600,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-21",
    "declared": "spec-fidelity"
+  },
+  "### T113 (T108's Found and left: the quoted-string pattern T103 and T108 gave shape's scan stood also at `make_only_hooks.rs:125`'s `MASK_QUOTE`, `no_poll_hooks/pace.rs:36`'s `SHELL_STRING` and `readme_hooks.rs:51`'s triple-quoted `TRIPLE`; measured 2026-11-21 (`/tmp/t108/probe`, the pattern alone under `timeout 10`, `/tmp/t108/probe-outside.txt`): each gave no answer in 10 s on a quote nothing closes before forty escapes)": {
+   "sha256": "1ff53eb98def2dade0e674c438f2edf72e52025a46e39e118282c96e9872462a",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity"
+  },
+  "### T113 Approach (checklist part A)": {
+   "sha256": "420f58bedd48b2aeebadcc6272bc7347250046d4a82c4f80516013300dc9ffc6",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -10429,6 +10441,192 @@
      "why": "It orders the task. It narrows nothing."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-21",
+   "blocks": [
+    "### T113 (T108's Found and left: the quoted-string pattern T103 and T108 gave shape's scan stood also at `make_only_hooks.rs:125`'s `MASK_QUOTE`, `no_poll_hooks/pace.rs:36`'s `SHELL_STRING` and `readme_hooks.rs:51`'s triple-quoted `TRIPLE`; measured 2026-11-21 (`/tmp/t108/probe`, the pattern alone under `timeout 10`, `/tmp/t108/probe-outside.txt`): each gave no answer in 10 s on a quote nothing closes before forty escapes)",
+    "### T113 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T113-perf-class",
+     "summary": "T113 is run as a [perf] task under FR-013 (the builders' loop: a Bash call's hooks that hung now answer)",
+     "class": "within",
+     "why": "FR-013 counts a task that makes the builders' loop faster as performance work; a guard that held a Bash call past 10 s and now answers in about 0.1 s is exactly that, and the GM asked (2026-11-20) that performance work go first."
+    },
+    {
+     "id": "T113-scope-three",
+     "summary": "Fix the three copies the task's line names (make_only_hooks MASK_QUOTE, no_poll_hooks/pace SHELL_STRING, readme_hooks TRIPLE), and nothing else",
+     "class": "within",
+     "why": "The task as filed (T108's Found and left) names these three; the hang is a wrong outcome (a tool that hangs), a defect under constitution XIV, and it is fixed here rather than carried."
+    },
+    {
+     "id": "T113-fix-linear-scans",
+     "summary": "Replace each backtracking pattern with a linear scan (mask_quotes over shape's quoted_spans with the -c lookbehind; pace::shell_strings with SHELL_AT plus quoted_spans; readme_hooks::triples by T103's closer-of-three rule), deleting the three patterns, shape.rs untouched",
+     "class": "within",
+     "why": "How the hang is removed is design, not fidelity; it removes the exponential work rather than moving it, and reuses the scan T103/T108 already landed."
+    },
+    {
+     "id": "T113-keep-readings",
+     "summary": "Each scan keeps the reading of the pattern it replaced, shown by differential tests against the old pattern on every short text and by a 9,646-command replay with 0 changed verdicts",
+     "class": "within",
+     "why": "This is the builder's way of showing the ported checks still do their job (constitution XIII, no known regression), not a standard imposed on differing outputs; it blocks nothing, narrows nothing, and the plan names no defect it preserves. Choosing to keep behavior here is allowed; it is not required by the exactness standard the GM struck."
+    },
+    {
+     "id": "T113-pins",
+     "summary": "One hang pin per guard through its own entry, run as a child under T103's 10 s deadline (a GUESS), red first then green",
+     "class": "within",
+     "why": "Enforcement of the fix (FR-012's red-first rule, the hang staying answered); a test that fails only when the requested thing is absent serves the request."
+    },
+    {
+     "id": "T113-leave-T96-copies",
+     "summary": "The same pattern in T96's tree.rs QUOTED and tree/program.rs TRIPLE is left to T112 (already filed by T108, lands before T22), because T96's builder holds live uncommitted work in those files",
+     "class": "within",
+     "why": "Not part of T113's line; the defect is not dropped but stays filed in this same feature as T112 with its reason, task id and order, as FR-009 requires, and it lands before T22, the next step; T113 narrows nothing it was asked to do."
+    },
+    {
+     "id": "T113-census",
+     "summary": "Every copy of the class is taken as the hits of two text searches over rust/ (grep -rnF '(?:\\\\.|(?!' and grep -rnE over '(?:\\\\.|'), every hit read",
+     "class": "within",
+     "why": "T113's line names the three sites and the plan fixes all three; FR-009's line saying how every instance was found is present, dated and with its method; no known copy is left unfiled (T112 carries T96's two). Its reach is rust/ only, by the pattern's text: a backtracking form written otherwise (a capturing group, other branch order) would not be hit; the bundle cannot show whether any exists, and none is known."
+    },
+    {
+     "id": "T113-interp-not-the-class",
+     "summary": "make_only_hooks/interp.rs:27 and :33's (?:\\\\.|[^\"\\\\])* are judged not of the class and left",
+     "class": "within",
+     "why": "Their two branches are disjoint (one needs a backslash, the other refuses one), so they cannot backtrack exponentially; no defect is left."
+    },
+    {
+     "id": "T113-ground-rules",
+     "summary": "Touch nothing of T96's or T108's files, commit nothing; exits: green on pins, differentials, replay, lint, cover and closing-checks; red set down and a cannot-be-done claim ruled through make arbiter-ask",
+     "class": "within",
+     "why": "Process rules from the launcher and project, not a change to what was asked."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-21",
+   "blocks": [
+    "### T113 (T108's Found and left: the quoted-string pattern T103 and T108 gave shape's scan stood also at `make_only_hooks.rs:125`'s `MASK_QUOTE`, `no_poll_hooks/pace.rs:36`'s `SHELL_STRING` and `readme_hooks.rs:51`'s triple-quoted `TRIPLE`; measured 2026-11-21 (`/tmp/t108/probe`, the pattern alone under `timeout 10`, `/tmp/t108/probe-outside.txt`): each gave no answer in 10 s on a quote nothing closes before forty escapes)",
+    "### T113 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D1-linear-scans",
+     "summary": "MASK_QUOTE, SHELL_STRING and TRIPLE are replaced by linear scans (mask_quotes over shape's quoted_spans with the lookbehind kept, shell_strings keeping the SHELL_AT head, readme's own triples scan); shape.rs untouched; the three patterns deleted",
+     "class": "within",
+     "why": "The task line (T108's Found and left) names exactly these three sites and the exponential hang; replacing the backtracking read with a pass of the text is the fix the task asks for, and a hang in a Bash call's hooks is builders'-loop performance work under FR-013."
+    },
+    {
+     "id": "D2-held-to-pattern",
+     "summary": "Each scan is held to the pattern it replaced by exhaustive differentials (177,156 / 111,111 / 299,593 texts) and by a 9,646-command replay showing every guard verdict the same",
+     "class": "within",
+     "why": "This is not the exactness standard the GM struck: these are guards, and a ported check is shown to work by the sheets it passed still passing and its refusals still firing. It verifies that the fix changes nothing but the hang, and nothing in the section refuses a differing-but-working result. The text counts check out as sums of powers (11 pieces up to 5, 10 up to 5, 8 up to 6)."
+    },
+    {
+     "id": "D3-hang-pins",
+     "summary": "One red-first pin per guard through its own entry, run as a child under T103's 10 s deadline (a GUESS), plus the differentials; red 432/3, green 438/0",
+     "class": "within",
+     "why": "FR-012's red-first form. The tests only enforce the requested fix, and the 10 s deadline is labeled a GUESS and kept from T103 rather than moved."
+    },
+    {
+     "id": "D4-T112-left",
+     "summary": "The same pattern's two copies in T96's files (tree.rs QUOTED, tree/program.rs TRIPLE) are left to T112, which lands before T22, because T96's builder holds live uncommitted work in those files",
+     "class": "within",
+     "why": "T113's heading scopes it to the three named sites, and T112 was already filed by T108 for the other two, so the plan does not narrow T113. FR-009's form is met: it says why the defect is not fixed here (another builder's live uncommitted work in the same files), gives the filed id (T112) and its order ('lands before T22'), and states how every instance of the class was found (greps over rust/, observed 2026-11-21). The bundle cannot show what T22 is or whether it is the next step, so that is not asserted here."
+    },
+    {
+     "id": "D5-disjoint-branches-left",
+     "summary": "interp.rs:27/:33's (?:\\\\.|[^\"\\\\])* and planhold.rs, guard_file_hooks.rs and tunables.rs's (?:[^\"\\\\...]|\\\\.) are judged not to backtrack this way and are left",
+     "class": "within",
+     "why": "Their two branches never read the same character, so they have no exponential ambiguity and no defect, and leaving a pattern that works is not a narrowing."
+    },
+    {
+     "id": "D6-census-reach",
+     "summary": "The census of the class searches rust/ by several textual forms, every hit read",
+     "class": "within",
+     "why": "The search space is stated (commands and directory), which meets the enumeration rule. It does not search any kept Python copy, which fix-as-we-go also reaches, but T113's sites are Rust guards and the bundle cannot show whether a Python copy exists. Worth a sentence, not a ruling."
+    },
+    {
+     "id": "D7-checks-on-own-files",
+     "summary": "The lint and closing checks are judged on T113's seven files alone; T96's uncommitted event_log_hooks lint red and T106's format red on rust/guard/shared are reported apart",
+     "class": "within",
+     "why": "Those reds belong to other open tasks' files, which this task is told not to touch. Every check is still run on T113's own change, so nothing it was asked to do is narrowed."
+    },
+    {
+     "id": "D8-perf-booking",
+     "summary": "T113 is booked as a [perf] task under FR-013 (the builders' loop: a Bash call's hooks that hung now answer in about 0.1 s)",
+     "class": "within",
+     "why": "FR-013 counts work that makes the builders' loop faster as performance work, and a hook that hangs for 10 s or more in place of answering is exactly that."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-21",
+   "blocks": [
+    "### T113 (T108's Found and left: the quoted-string pattern T103 and T108 gave shape's scan stood also at `make_only_hooks.rs:125`'s `MASK_QUOTE`, `no_poll_hooks/pace.rs:36`'s `SHELL_STRING` and `readme_hooks.rs:51`'s triple-quoted `TRIPLE`; measured 2026-11-21 (`/tmp/t108/probe`, the pattern alone under `timeout 10`, `/tmp/t108/probe-outside.txt`): each gave no answer in 10 s on a quote nothing closes before forty escapes)",
+    "### T113 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T113-scope",
+     "summary": "Fix the three copies T108's Found and left named (make_only_hooks MASK_QUOTE, no_poll_hooks::pace SHELL_STRING, readme_hooks TRIPLE), the task as filed",
+     "class": "within",
+     "why": "Exactly the task line's scope; a guard hang stalls the builders' loop, which FR-013 counts as performance work (request: 'prioritize those remaining improvement fixes', 'priotitize performance improvements going forward')."
+    },
+    {
+     "id": "T113-linear-scans",
+     "summary": "Replace each backtracking pattern by a linear scan (mask_quotes over shape's quoted_spans with the lookbehind kept; shell_strings keeping SHELL_AT's non-backtracking head; triple_quoted_spans in shared::shape), the three patterns deleted, quoted_spans untouched",
+     "class": "within",
+     "why": "The mechanism of the fix; removes the exponential search rather than bounding it, so the defect is fixed, not deferred."
+    },
+    {
+     "id": "T113-shape-public",
+     "summary": "triple_quoted_spans made public in shared::shape, beside quoted_spans, for readme and for T112's tree::program",
+     "class": "within",
+     "why": "Placement of the fix's own code so the sibling copy's task can call it; adds no behavior the request or spec did not ask for."
+    },
+    {
+     "id": "T113-held-to-pattern",
+     "summary": "Each scan held by differential tests and the 9,646-row replay to the answers of the pattern it replaced",
+     "class": "within",
+     "why": "The author's own choice to keep every other answer as before; it is verification of the requested fix, not an exactness standard imposed on the work, and no reviewer asks for it."
+    },
+    {
+     "id": "T113-pins",
+     "summary": "One red-first hang pin per guard through its own entry plus shape's own pin, under T103's 10 s deadline (a GUESS)",
+     "class": "within",
+     "why": "FR-012's red-first test: enforcement of the fix, which serves the request."
+    },
+    {
+     "id": "T113-left-to-T112",
+     "summary": "The same core's two copies in shared::tree (tree.rs:70 QUOTED, tree/program.rs:64 TRIPLE) not fixed here, left to T112 (filed by T108, lands before T22, its builder already working in both files)",
+     "class": "within",
+     "why": "Those copies were never T113's: T108 filed them as T112, an open task actively in progress on those files; T113 touching them would collide with another task's uncommitted work. The Found and left gives the why, the filed id and the order FR-009 asks for, and the class search's method."
+    },
+    {
+     "id": "T113-not-the-class",
+     "summary": "interp.rs:27/:33, planhold.rs:28/:30, guard_file_hooks.rs:56 and tunables.rs:39 left as they are",
+     "class": "within",
+     "why": "Each read and shown to have branches that never read the same character, so they do not backtrack this way: not a defect, nothing left unfixed."
+    },
+    {
+     "id": "T113-closing-escape",
+     "summary": "Closing run 3 taken with STATIC_OK for run 2's red, which was T112's mid-edit tree.rs, a file judged no task's",
+     "class": "within",
+     "why": "A recorded escape of the guard's own designed form (FR-007/FR-012), for a red outside this task's files, followed by a green run; it narrows nothing the request asked for."
+    },
+    {
+     "id": "T113-perf-checklist-brief",
+     "summary": "Classed [perf] under FR-013 as builders'-loop work, performance checklist answered in brief since no engine speed is involved",
+     "class": "within",
+     "why": "FR-013 names 'the builders' loop' among performance work; the checklist's questions are each answered with a measurement."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -16231,6 +16429,68 @@
      "summary": "After T26, T53, T74 and T96, and lands before T22.",
      "class": "within",
      "why": "It orders the task. It narrows nothing."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T113": {
+   "section_sha256": "eb6b7eb3d3749d7368a6622f84dca6c116b6871de02a3e8c012f89d98aba8a2d",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T113-scope",
+     "summary": "Fix the three copies T108's Found and left named (make_only_hooks MASK_QUOTE, no_poll_hooks::pace SHELL_STRING, readme_hooks TRIPLE), the task as filed",
+     "class": "within",
+     "why": "Exactly the task line's scope; a guard hang stalls the builders' loop, which FR-013 counts as performance work (request: 'prioritize those remaining improvement fixes', 'priotitize performance improvements going forward')."
+    },
+    {
+     "id": "T113-linear-scans",
+     "summary": "Replace each backtracking pattern by a linear scan (mask_quotes over shape's quoted_spans with the lookbehind kept; shell_strings keeping SHELL_AT's non-backtracking head; triple_quoted_spans in shared::shape), the three patterns deleted, quoted_spans untouched",
+     "class": "within",
+     "why": "The mechanism of the fix; removes the exponential search rather than bounding it, so the defect is fixed, not deferred."
+    },
+    {
+     "id": "T113-shape-public",
+     "summary": "triple_quoted_spans made public in shared::shape, beside quoted_spans, for readme and for T112's tree::program",
+     "class": "within",
+     "why": "Placement of the fix's own code so the sibling copy's task can call it; adds no behavior the request or spec did not ask for."
+    },
+    {
+     "id": "T113-held-to-pattern",
+     "summary": "Each scan held by differential tests and the 9,646-row replay to the answers of the pattern it replaced",
+     "class": "within",
+     "why": "The author's own choice to keep every other answer as before; it is verification of the requested fix, not an exactness standard imposed on the work, and no reviewer asks for it."
+    },
+    {
+     "id": "T113-pins",
+     "summary": "One red-first hang pin per guard through its own entry plus shape's own pin, under T103's 10 s deadline (a GUESS)",
+     "class": "within",
+     "why": "FR-012's red-first test: enforcement of the fix, which serves the request."
+    },
+    {
+     "id": "T113-left-to-T112",
+     "summary": "The same core's two copies in shared::tree (tree.rs:70 QUOTED, tree/program.rs:64 TRIPLE) not fixed here, left to T112 (filed by T108, lands before T22, its builder already working in both files)",
+     "class": "within",
+     "why": "Those copies were never T113's: T108 filed them as T112, an open task actively in progress on those files; T113 touching them would collide with another task's uncommitted work. The Found and left gives the why, the filed id and the order FR-009 asks for, and the class search's method."
+    },
+    {
+     "id": "T113-not-the-class",
+     "summary": "interp.rs:27/:33, planhold.rs:28/:30, guard_file_hooks.rs:56 and tunables.rs:39 left as they are",
+     "class": "within",
+     "why": "Each read and shown to have branches that never read the same character, so they do not backtrack this way: not a defect, nothing left unfixed."
+    },
+    {
+     "id": "T113-closing-escape",
+     "summary": "Closing run 3 taken with STATIC_OK for run 2's red, which was T112's mid-edit tree.rs, a file judged no task's",
+     "class": "within",
+     "why": "A recorded escape of the guard's own designed form (FR-007/FR-012), for a red outside this task's files, followed by a green run; it narrows nothing the request asked for."
+    },
+    {
+     "id": "T113-perf-checklist-brief",
+     "summary": "Classed [perf] under FR-013 as builders'-loop work, performance checklist answered in brief since no engine speed is involved",
+     "class": "within",
+     "why": "FR-013 names 'the builders' loop' among performance work; the checklist's questions are each answered with a measurement."
     }
    ],
    "verdict": "CLEAR"
