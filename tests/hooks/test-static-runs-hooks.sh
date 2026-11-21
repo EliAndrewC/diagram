@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 # Tests for static-runs-hooks (feature 451 T14, FR-007, plan D11): a task's third `make static` since its last landing that went out,
-# or since its first start, is refused naming the crate-scoped checks; STATIC_OK="<reason>" escapes, recorded.
+# or since its first start, is refused naming the crate-scoped checks; STATIC_OK="<reason>" escapes, recorded. `make closing-checks`
+# is one run of it; a decide before the closing checks is told the closing step's order, and a foreground closing check is refused,
+# FOREGROUND_OK="<reason>" escaping it, recorded (feature 451 T55).
 # Run: tests/hooks/test-static-runs-hooks.sh   (exit 0 = all green)
 #
 # Every case drives the REAL guard (through the shim, `l7r-guard --only static-runs-hooks PreToolUse`) with a REAL payload against a
@@ -29,7 +31,11 @@ ran() {  # ran <id> <time> [task]: a make static call that ran
 landing() {  # landing <time> <landed> <code> <tasks json>: make land's end line
   printf '{"ev":"Phase","src":"land","step":"end","t":"%s","code":%s,"make":"land","tasks":%s,"landed":%s}\n' "$1" "$3" "$4" "$2" >> "$LOG"
 }
-run() {  # run <command>: OUT and RC
+run() {  # run <command>: OUT and RC, the call backgrounded as a closing check must be (T55)
+  OUT=$(jq -nc '{"hook_event_name":"PreToolUse","session_id":"t","tool_name":"Bash","tool_use_id":"toolu_now","cwd":$ARGS.positional[1],"tool_input":{"command":$ARGS.positional[0],"run_in_background":true}}' --args -- "$1" "$C" \
+        | "$HOOK" pretool 2>&1); RC=$?
+}
+runfg() {  # runfg <command>: the same call in the foreground
   OUT=$(jq -nc '{"hook_event_name":"PreToolUse","session_id":"t","tool_name":"Bash","tool_use_id":"toolu_now","cwd":$ARGS.positional[1],"tool_input":{"command":$ARGS.positional[0]}}' --args -- "$1" "$C" \
         | "$HOOK" pretool 2>&1); RC=$?
 }
@@ -98,6 +104,52 @@ starts; fresh; ran a 2026-11-20T10:01:00.000Z; ran b 2026-11-20T10:02:00.000Z
 rm -f "$C/.git/task-starts.jsonl"
 run "make static"
 [ "$RC" -eq 0 ] && ok "a call whose line carries no task passes" || no "a call with no task refused" "(rc=$RC)"
+
+echo "7. make closing-checks is one run of make static (feature 451 T55)"
+starts T06@2026-11-20T10:00:00Z; fresh
+ran a 2026-11-20T10:01:00.000Z
+printf '{"t":"2026-11-20T10:02:00.000Z","ev":"PreToolUse","tool":"Bash","id":"c","make":"closing-checks","task":"T06"}\n{"t":"2026-11-20T10:02:00.000Z","ev":"PostToolUse","tool":"Bash","id":"c","make":"closing-checks","task":"T06","bg":"b1"}\n' >> "$LOG"
+run "make static"
+[ "$RC" -eq 2 ] && ok "a static run and a closing-checks run, then a third: refused" || no "a closing-checks run was not counted" "(rc=$RC)"
+run "make closing-checks"
+[ "$RC" -eq 2 ] && printf '%s' "$OUT" | grep -q 'make closing-checks' && ok "a third run as closing-checks: refused, naming it" || no "a closing-checks call past the knob passed" "(rc=$RC)"
+
+echo "8. the closing step's order at make decide: a notice, never a refusal"
+fresh
+printf '{"t":"2026-11-20T10:01:00.000Z","ev":"PostToolUse","tool":"Edit","id":"e","sid":"t","path":"%s/rust/guard/src/x.rs"}\n' "$C" >> "$LOG"
+run "make decide F=451 T=T06"
+[ "$RC" -eq 0 ] && printf '%s' "$OUT" | grep -q 'additionalContext' && printf '%s' "$OUT" | grep -q 'make closing-checks' && ok "a decide after a code edit, no closing-checks since: told the order" || no "no order notice" "(rc=$RC: $OUT)"
+printf '{"t":"2026-11-20T10:02:00.000Z","ev":"PreToolUse","tool":"Bash","id":"c2","sid":"t","make":"closing-checks"}\n{"t":"2026-11-20T10:02:00.000Z","ev":"PostToolUse","tool":"Bash","id":"c2","sid":"t","make":"closing-checks","bg":"b2"}\n' >> "$LOG"
+run "make decide F=451 T=T06"
+[ "$RC" -eq 0 ] && [ -z "$OUT" ] && ok "...silent once closing-checks has started since" || no "a notice after closing-checks started" "(rc=$RC: $OUT)"
+
+echo "9. a foreground closing check is refused, naming the background; FOREGROUND_OK escapes it (feature 451 T55)"
+starts T06@2026-11-20T10:00:00Z; fresh
+for cmd in "make static" "make hooks-test" "make closing-checks"; do
+  before=$(grep -l 'closing-check-foreground' "$GUARD_LOG_DIR"/* 2>/dev/null | wc -l)
+  runfg "$cmd"
+  [ "$RC" -eq 2 ] && printf '%s' "$OUT" | grep -q 'run_in_background: true' && printf '%s' "$OUT" | grep -q 'FOREGROUND_OK="<reason>"' \
+    && ok "a foreground '$cmd': refused, naming run_in_background and the escape" || no "a foreground '$cmd' passed" "(rc=$RC: $OUT)"
+  [ "$(grep -l 'closing-check-foreground' "$GUARD_LOG_DIR"/* 2>/dev/null | wc -l)" -gt "$before" ] && grep -l 'closing-check-foreground' "$GUARD_LOG_DIR"/* | xargs grep -lq '"blocked"' \
+    && ok "...and recorded blocked" || no "the refusal left no blocked record"
+  run "$cmd"
+  [ "$RC" -eq 0 ] && [ -z "$OUT" ] && ok "...backgrounded, it passes silently" || no "a backgrounded '$cmd' was stopped" "(rc=$RC: $OUT)"
+done
+runfg 'FOREGROUND_OK="the next edit needs it" make static'
+[ "$RC" -eq 0 ] && grep -lq 'the next edit needs it' "$GUARD_LOG_DIR"/* && ok "FOREGROUND_OK with a reason passes, recorded" || no "the escape was refused or unrecorded" "(rc=$RC: $OUT)"
+runfg "make hooks-test FOREGROUND_OK"
+[ "$RC" -eq 2 ] && printf '%s' "$OUT" | grep -q 'FOREGROUND_OK with no reason' && ok "a bare FOREGROUND_OK is refused" || no "a bare escape passed" "(rc=$RC)"
+for cmd in "make closing-checks && make decide F=451 T=T06" "make decide F=451 T=T06 && make static"; do
+  runfg "$cmd"
+  [ "$RC" -eq 2 ] && printf '%s' "$OUT" | grep -q 'run_in_background: true' && ok "a foreground '$cmd': refused, the decide in the chain no cover" \
+    || no "a foreground closing check chained with a decide passed" "(rc=$RC: $OUT)"
+done
+runfg 'STATIC_OK="the closing run of the task" make closing-checks'
+[ "$RC" -eq 2 ] && printf '%s' "$OUT" | grep -q 'run_in_background: true' && ok "STATIC_OK does not stand the foreground rule aside" || no "STATIC_OK escaped the foreground rule" "(rc=$RC)"
+for cmd in "echo 'make static'" "make quick"; do
+  runfg "$cmd"; [ "$RC" -eq 0 ] || no "a foreground '$cmd' refused" "(rc=$RC)"
+done
+ok "a mention or another target passes in the foreground"
 
 echo
 echo "static-runs-hooks: $PASS passed, $FAIL failed"

@@ -86,13 +86,13 @@
    "declared": "spec-fidelity"
   },
   "### T10 (FR-005: the wall clock on the critical path apart from the agent-minutes, the agents' tokens, the rework)": {
-   "sha256": "23cab13d08077a0cb1b024cf71433c0f145eb37dae83768aa8bca8486f9c9f38",
+   "sha256": "c8c2b3c304e29616feaeccced43b40f38d514193dbd01f7b0cd3007d2aa45ba8",
    "verdict": "CLEAR",
-   "reviewed": "2026-11-20",
+   "reviewed": "2026-11-21",
    "declared": "spec-fidelity"
   },
   "### T10 Approach (checklist part A)": {
-   "sha256": "02af2eb7c4878c9d46d305b3f9e9547d2130130ccc8c6385e99feb96de54c9bc",
+   "sha256": "d1ed25f42e6e3bc5f75a89efaed4170714bc33795cdda789c442a01bbec43c3e",
    "verdict": "CLEAR",
    "reviewed": "2026-11-21",
    "declared": "spec-fidelity"
@@ -303,6 +303,18 @@
   },
   "### T53 (T26's writer still filed lines by feature.json after it landed: 19 lines in 449's log and 2 in 385's to move, measured 2026-11-21 (`make events-refile DRY=1`), and 23 left in 385's log that no rule places, measured 2026-11-21 (the same dry run's last line))": {
    "sha256": "c6d39a547d4f0602873653cb8614ff4c190a9b587746fc8c9867632f3b9eb1f6",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity"
+  },
+  "### T55 (a builder's closing checks ran one after another and blocked its writing: measured 2026-11-21 over 39 builders' transcripts, after the last code edit 63 min of checks in the foreground and 101 min idle on its own background runs, beside 158 min of model time writing the plan section, decide and the report, which need no check's result)": {
+   "sha256": "d4bbcdd70e30e3ee7b6bf3c2bf9a07b631eeb680f8ba1df9488454542791ffcb",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity"
+  },
+  "### T55 Approach (checklist part A)": {
+   "sha256": "e0c9dd63715bae3d9cd3d65d9d5e9898c07b967234375782a01a8fcf9b657746",
    "verdict": "CLEAR",
    "reviewed": "2026-11-21",
    "declared": "spec-fidelity"
@@ -6624,6 +6636,160 @@
      "why": "Last round's NOT LEGITIMATE item fixed in T09 as the cure prescribed: the session's time on another feature's turns is booked apart rather than to 451's runs or none, red first. Nothing is left, so no ruling is owed."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-21",
+   "blocks": [
+    "### T10 (FR-005: the wall clock on the critical path apart from the agent-minutes, the agents' tokens, the rework)",
+    "### T10 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T10-tokens-transcript-first",
+     "summary": "Each agent's tokens are read from its agent-<aid>.jsonl usage rows inside the window, each message.id once, and the last SubagentStop tok is used only where no transcript row counts (a declared departure from D6's 'the reader keeps the last per aid').",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Following the letter would defeat the request's purpose, which is an agent's token cost. By the block's own dated figures the stop's tok is short of the transcript rows on 16 of the 17 stops that carry one, and only 17 of 279 stops carry one, so reading it would report wrong costs. The stop line is still read as the fallback, so the request's 'read those new lines' and its cheap-history purpose survive for agents whose transcripts are gone. The writer defect is filed as T59 with why, id and order. Not settled from the bundle: whether the 262 stops with no tok at all are the same writer defect (T59 should cover an absent tok as well as a short one)."
+    },
+    {
+     "id": "T10-agent-to-task",
+     "summary": "Each agent is kept once with its kind and its task (first start's task from the launch brief per D6, else its first stop's) and booked by start to the task its lines name, or by tick to the mark at its first start. The old walk, which read only the 451 log and booked by the mark, is deleted.",
+     "class": "within",
+     "why": "D7 says 'each agent's span and tokens under its task', and D6 says where an agent's task comes from. It is read from every feature's log through T09's single build of the spans, as the dispatch states."
+    },
+    {
+     "id": "T10-window-clip",
+     "summary": "Agent spans are cut to SINCE/UNTIL, overlapping spans are merged (a double start with no stop between counts once), an agent with nothing left is dropped, and token rows are limited to the window. The clip applies to the flight's agents only, so the time table is untouched.",
+     "class": "within",
+     "why": "D7 reports the window's wall clock with the agent-minutes beside it, so the agent-minutes are the window's. The dispatch names the clip and the single count of a double start, and the time table is measured unchanged line for line."
+    },
+    {
+     "id": "T10-refused-landing",
+     "summary": "A refused landing is a landing end line whose landed is false, never read from its exit code. A landing of several tasks is one refusal, counted under each task.",
+     "class": "within",
+     "why": "This is D7's and D5's definition word for word: 'landed is false', and 'exit 3 with its ticks standing is a landing whatever its code'."
+    },
+    {
+     "id": "T10-plan-re-round",
+     "summary": "A plan re-round is any spec-fidelity or spec-fidelity-verify agent of a task after its first, each agent counted once (a resume is not a new round), with an agent naming no task counted as no task's re-round. The count therefore includes every spec-fidelity review dispatched under the task, not just its plan's rounds: 68 in the window, about 3x the feature report's 23 rounds past the first.",
+     "class": "within",
+     "why": "This is D7's parenthetical word for word: 'a task's spec-fidelity and spec-fidelity-verify dispatches after its first'. The request asks for no re-round count of its own, so the block narrows no clause. The block measures and discloses the 3x against the feature report's rounds-per-subject table, which is a different quantity. Whether D7's label 'plan re-rounds' overstates its own definition is a question about the spec, not this block."
+    },
+    {
+     "id": "T10-report-shape",
+     "summary": "After the time table, where-time prints a by-task table (agents, agent minutes, k tokens in, k tokens out, refused landings, plan re-rounds, kinds) with an all row, a row per agent under its task, and a line setting the agents' summed minutes beside the critical path's wall clock. feature-report is wired by T11.",
+     "class": "within",
+     "why": "FR-005 and D7 ask for the critical path's wall clock apart from the summed agent-minutes, each agent's span and tokens under its task, and the rework counts. This is that output."
+    },
+    {
+     "id": "T10-t09-restated",
+     "summary": "The critical path, the turn ends and the between-turn model minutes are T09's and are restated, not rebuilt. The 2.5 min left unreconciled is not traced further.",
+     "class": "within",
+     "why": "The dispatch says T09's work is restated. The time table is measured unchanged, and an untraced 2.5 min (under 1%) is a difference, not a wrong outcome."
+    },
+    {
+     "id": "T10-t59-deferral",
+     "summary": "The SubagentStop writer's short tok is not fixed in T10. It is filed as T59, to land before T22, because the writer is the guard's file, outside T10.",
+     "class": "within",
+     "why": "T10 is FR-005's reader. The writer defect is FR-004's and is fixed in this feature by T59, which carries FR-009's why, id and order. The reader routes around it meanwhile, so no wrong number reaches the report."
+    },
+    {
+     "id": "T10-negzero-fix",
+     "summary": "The -0 minutes printed for a task row with no agent is fixed by folding the sums from 0.0, with a red-first pin.",
+     "class": "within",
+     "why": "A defect found and fixed in the task."
+    },
+    {
+     "id": "T10-untasked-agents",
+     "summary": "The 12 agents (94 min) that name no task stay under no task.",
+     "class": "within",
+     "why": "FR-004 gives an agent a task 'where its dispatch names one', so an agent whose dispatch names none has none to be booked under."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-21",
+   "blocks": [
+    "### T55 (a builder's closing checks ran one after another and blocked its writing: measured 2026-11-21 over 39 builders' transcripts, after the last code edit 63 min of checks in the foreground and 101 min idle on its own background runs, beside 158 min of model time writing the plan section, decide and the report, which need no check's result)",
+    "### T55 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T55-target",
+     "summary": "make closing-checks starts make static, make hooks-test and make quick at once, one combined verdict, per-check logs, exit 1 if any red, TERM/INT stops all three; FRESH/REASON/HOOKS_ALL passed through",
+     "class": "within",
+     "why": "The performance task the GM asked to be filed on 2026-11-21 ('yes please file that as a performance task'), [perf] under FR-013."
+    },
+    {
+     "id": "T55-tail-25",
+     "summary": "the last 25 lines of each red check's log are printed (a GUESS)",
+     "class": "within",
+     "why": "An output detail of the requested target, labeled a GUESS."
+    },
+    {
+     "id": "T55-static-count",
+     "summary": "static_runs_hooks counts a make closing-checks as one make static run; STATIC_RUNS_A_TASK stays 2",
+     "class": "within",
+     "why": "Stops the new target being used to get round FR-007/D11's count. It enforces what was already asked and narrows nothing."
+    },
+    {
+     "id": "T55-bucket",
+     "summary": "the event log books make closing-checks to tests (BUCKETS)",
+     "class": "within",
+     "why": "FR-001's one shared table, extended to the new target."
+    },
+    {
+     "id": "T55-claude-md",
+     "summary": "the root CLAUDE.md's verification list states the order in one line",
+     "class": "within",
+     "why": "Documentation of the order. The refusal is the enforcement and this line carries none."
+    },
+    {
+     "id": "T55-decide-notice",
+     "summary": "the order at make decide (a decide after the caller's last code edit with no closing-checks started after it) is a NOTICE, not a refusal",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Unchanged since the last round, which ruled it LEGITIMATE. A refusal at decide time cannot tell the closing tail from a decide in mid-build, because that depends on code edits that have not happened yet. The replay has 30 of 75 firings wrong (40%). Refusing anyway would force a closing-checks run on unfinished code, and that run counts toward FR-007's STATIC_RUNS_A_TASK=2, which defeats the performance purpose."
+    },
+    {
+     "id": "T55-foreground-refusal",
+     "summary": "a foreground make static, make hooks-test or make closing-checks (chained, piped, under timeout, the main session's) is REFUSED, red first, naming run_in_background and make closing-checks, recorded blocked; escaped by FOREGROUND_OK=\"<reason>\" (recorded escaped, a bare token refused); STATIC_OK does not stand it aside; judged on every command of a chain before the decide notice; both refusals heard at once",
+     "class": "within",
+     "why": "This is the fix the last round asked for. The rule is now real enforcement in D12's form, carries FR-012's red-first test (708 passed, 3 failed on a stub; the suite's case 9 at 26 passed, 8 failed; then green at 711 and 34/34), and has a recorded escape for the cases where it is wrong. For static and hooks-test, the separate replay the last round asked for was done and stated in words: 55 foreground calls (27+28), 5 on correct work (4+1), 50 right (34 after the last edit + 16 mid-build; 19+9+6 and 11+5). That is 9%, set against the decide rule's 40%, and no FR-007 collision, because a backgrounded run is the same one static run. The arithmetic checks. A refusal implements the requested order. It is not a narrowing of it. Refusing make closing-checks rests on the earlier ruling, which is acceptable because the log has no foreground call of it to replay."
+    },
+    {
+     "id": "T55-quick-not-refused",
+     "summary": "a foreground make quick, the third closing check, is not refused (implicit: the refusal names static, hooks-test and closing-checks only)",
+     "class": "within",
+     "why": "The block does not label this, but it is a decision. The finding's cost is the slow checks run in the foreground one after another, and quick takes 1 to 5 s (item 9's timings). By item 4's own counts, the 51 foreground closing-check calls after the last edit (35.0 min) less the replay's 34 static/hooks-test calls (31.2 min) leave about 17 calls and about 4 min for quick. Inside closing-checks, quick already runs beside the others. Not refusing it does not gut the purpose. The decide notice still tells the order, and the slow checks are enforced by refusal."
+    },
+    {
+     "id": "T55-closing-checks-unreplayed",
+     "summary": "the refusal of a foreground make closing-checks is not replayed (no PreToolUse line names it) and rests on the plan review's ruling",
+     "class": "within",
+     "why": "Nothing could be measured because the target did not exist in the log. The refusal is the stricter side of the request, and T22 reads its blocked and escaped rows."
+    },
+    {
+     "id": "T55-bash-write-miss",
+     "summary": "a code edit made by a Bash write (sed -i, heredoc) is not seen by the decide notice: it can miss, never wrongly fire",
+     "class": "within",
+     "why": "A stated limit of a notice that has already been ruled legitimate. It refuses nothing, and the foreground refusal does not depend on it."
+    },
+    {
+     "id": "T55-after-measure-T22",
+     "summary": "the closing tail's idle minutes on later tasks' transcripts, the notice's noticed rows, and the refusal's blocked and escaped rows are read on T22's measured day; the mechanism's own before/after (104 s in sequence vs 52 s at once) is measured now",
+     "class": "within",
+     "why": "The effect in the world can only be read from transcripts of tasks that do not exist yet. The mechanism's own before/after is measured in the block, and T22 is the close's measured day that FR-013 names. The line now covers the refusal's blocked and escaped rows as well. The same caveat applies as last round: T22's own text is not in this bundle, so the session has to confirm that T22 takes these rows."
+    },
+    {
+     "id": "T55-item4-recount",
+     "summary": "item 4's recount: 93 calls by 38 builders after their last code edit, 51 foreground (35.0 min), 39 background, 3 refused by other guards; 28 builders decided after their last edit, 21 before any check; the earlier 92/56/33 reading explained",
+     "class": "within",
+     "why": "A restated measurement, not a decision about scope. 51+39+3=93. The difference from the first reading is put down to the pre-T04 bg rule and to the log having grown."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -9361,6 +9527,156 @@
      "summary": "One appended side-file line per Agent call half (about 150 bytes) and at most one 64 KiB tail read (TAIL, GUESS) at a meta-less first start; the hook never refuses or prints.",
      "class": "within",
      "why": "Design cost, not fidelity; keeps T26's constraints."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T10": {
+   "section_sha256": "da8d2c86d83321d577b4602dc4d8910d56e83ae542f6c1afa1c7eb07581ab86c",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T10-tokens-transcript-first",
+     "summary": "Each agent's tokens are read from its agent-<aid>.jsonl usage rows inside the window, each message.id once, and the last SubagentStop tok is used only where no transcript row counts (a declared departure from D6's 'the reader keeps the last per aid').",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Following the letter would defeat the request's purpose, which is an agent's token cost. By the block's own dated figures the stop's tok is short of the transcript rows on 16 of the 17 stops that carry one, and only 17 of 279 stops carry one, so reading it would report wrong costs. The stop line is still read as the fallback, so the request's 'read those new lines' and its cheap-history purpose survive for agents whose transcripts are gone. The writer defect is filed as T59 with why, id and order. Not settled from the bundle: whether the 262 stops with no tok at all are the same writer defect (T59 should cover an absent tok as well as a short one)."
+    },
+    {
+     "id": "T10-agent-to-task",
+     "summary": "Each agent is kept once with its kind and its task (first start's task from the launch brief per D6, else its first stop's) and booked by start to the task its lines name, or by tick to the mark at its first start. The old walk, which read only the 451 log and booked by the mark, is deleted.",
+     "class": "within",
+     "why": "D7 says 'each agent's span and tokens under its task', and D6 says where an agent's task comes from. It is read from every feature's log through T09's single build of the spans, as the dispatch states."
+    },
+    {
+     "id": "T10-window-clip",
+     "summary": "Agent spans are cut to SINCE/UNTIL, overlapping spans are merged (a double start with no stop between counts once), an agent with nothing left is dropped, and token rows are limited to the window. The clip applies to the flight's agents only, so the time table is untouched.",
+     "class": "within",
+     "why": "D7 reports the window's wall clock with the agent-minutes beside it, so the agent-minutes are the window's. The dispatch names the clip and the single count of a double start, and the time table is measured unchanged line for line."
+    },
+    {
+     "id": "T10-refused-landing",
+     "summary": "A refused landing is a landing end line whose landed is false, never read from its exit code. A landing of several tasks is one refusal, counted under each task.",
+     "class": "within",
+     "why": "This is D7's and D5's definition word for word: 'landed is false', and 'exit 3 with its ticks standing is a landing whatever its code'."
+    },
+    {
+     "id": "T10-plan-re-round",
+     "summary": "A plan re-round is any spec-fidelity or spec-fidelity-verify agent of a task after its first, each agent counted once (a resume is not a new round), with an agent naming no task counted as no task's re-round. The count therefore includes every spec-fidelity review dispatched under the task, not just its plan's rounds: 68 in the window, about 3x the feature report's 23 rounds past the first.",
+     "class": "within",
+     "why": "This is D7's parenthetical word for word: 'a task's spec-fidelity and spec-fidelity-verify dispatches after its first'. The request asks for no re-round count of its own, so the block narrows no clause. The block measures and discloses the 3x against the feature report's rounds-per-subject table, which is a different quantity. Whether D7's label 'plan re-rounds' overstates its own definition is a question about the spec, not this block."
+    },
+    {
+     "id": "T10-report-shape",
+     "summary": "After the time table, where-time prints a by-task table (agents, agent minutes, k tokens in, k tokens out, refused landings, plan re-rounds, kinds) with an all row, a row per agent under its task, and a line setting the agents' summed minutes beside the critical path's wall clock. feature-report is wired by T11.",
+     "class": "within",
+     "why": "FR-005 and D7 ask for the critical path's wall clock apart from the summed agent-minutes, each agent's span and tokens under its task, and the rework counts. This is that output."
+    },
+    {
+     "id": "T10-t09-restated",
+     "summary": "The critical path, the turn ends and the between-turn model minutes are T09's and are restated, not rebuilt. The 2.5 min left unreconciled is not traced further.",
+     "class": "within",
+     "why": "The dispatch says T09's work is restated. The time table is measured unchanged, and an untraced 2.5 min (under 1%) is a difference, not a wrong outcome."
+    },
+    {
+     "id": "T10-t59-deferral",
+     "summary": "The SubagentStop writer's short tok is not fixed in T10. It is filed as T59, to land before T22, because the writer is the guard's file, outside T10.",
+     "class": "within",
+     "why": "T10 is FR-005's reader. The writer defect is FR-004's and is fixed in this feature by T59, which carries FR-009's why, id and order. The reader routes around it meanwhile, so no wrong number reaches the report."
+    },
+    {
+     "id": "T10-negzero-fix",
+     "summary": "The -0 minutes printed for a task row with no agent is fixed by folding the sums from 0.0, with a red-first pin.",
+     "class": "within",
+     "why": "A defect found and fixed in the task."
+    },
+    {
+     "id": "T10-untasked-agents",
+     "summary": "The 12 agents (94 min) that name no task stay under no task.",
+     "class": "within",
+     "why": "FR-004 gives an agent a task 'where its dispatch names one', so an agent whose dispatch names none has none to be booked under."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T55": {
+   "section_sha256": "ca628a628dd66bbf01e9e6e616015b7bf87bc1215cb991a1ae645692f3eb8f48",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T55-target",
+     "summary": "make closing-checks starts make static, make hooks-test and make quick at once, one combined verdict, per-check logs, exit 1 if any red, TERM/INT stops all three; FRESH/REASON/HOOKS_ALL passed through",
+     "class": "within",
+     "why": "The performance task the GM asked to be filed on 2026-11-21 ('yes please file that as a performance task'), [perf] under FR-013."
+    },
+    {
+     "id": "T55-tail-25",
+     "summary": "the last 25 lines of each red check's log are printed (a GUESS)",
+     "class": "within",
+     "why": "An output detail of the requested target, labeled a GUESS."
+    },
+    {
+     "id": "T55-static-count",
+     "summary": "static_runs_hooks counts a make closing-checks as one make static run; STATIC_RUNS_A_TASK stays 2",
+     "class": "within",
+     "why": "Stops the new target being used to get round FR-007/D11's count. It enforces what was already asked and narrows nothing."
+    },
+    {
+     "id": "T55-bucket",
+     "summary": "the event log books make closing-checks to tests (BUCKETS)",
+     "class": "within",
+     "why": "FR-001's one shared table, extended to the new target."
+    },
+    {
+     "id": "T55-claude-md",
+     "summary": "the root CLAUDE.md's verification list states the order in one line",
+     "class": "within",
+     "why": "Documentation of the order. The refusal is the enforcement and this line carries none."
+    },
+    {
+     "id": "T55-decide-notice",
+     "summary": "the order at make decide (a decide after the caller's last code edit with no closing-checks started after it) is a NOTICE, not a refusal",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Unchanged since the last round, which ruled it LEGITIMATE. A refusal at decide time cannot tell the closing tail from a decide in mid-build, because that depends on code edits that have not happened yet. The replay has 30 of 75 firings wrong (40%). Refusing anyway would force a closing-checks run on unfinished code, and that run counts toward FR-007's STATIC_RUNS_A_TASK=2, which defeats the performance purpose."
+    },
+    {
+     "id": "T55-foreground-refusal",
+     "summary": "a foreground make static, make hooks-test or make closing-checks (chained, piped, under timeout, the main session's) is REFUSED, red first, naming run_in_background and make closing-checks, recorded blocked; escaped by FOREGROUND_OK=\"<reason>\" (recorded escaped, a bare token refused); STATIC_OK does not stand it aside; judged on every command of a chain before the decide notice; both refusals heard at once",
+     "class": "within",
+     "why": "This is the fix the last round asked for. The rule is now real enforcement in D12's form, carries FR-012's red-first test (708 passed, 3 failed on a stub; the suite's case 9 at 26 passed, 8 failed; then green at 711 and 34/34), and has a recorded escape for the cases where it is wrong. For static and hooks-test, the separate replay the last round asked for was done and stated in words: 55 foreground calls (27+28), 5 on correct work (4+1), 50 right (34 after the last edit + 16 mid-build; 19+9+6 and 11+5). That is 9%, set against the decide rule's 40%, and no FR-007 collision, because a backgrounded run is the same one static run. The arithmetic checks. A refusal implements the requested order. It is not a narrowing of it. Refusing make closing-checks rests on the earlier ruling, which is acceptable because the log has no foreground call of it to replay."
+    },
+    {
+     "id": "T55-quick-not-refused",
+     "summary": "a foreground make quick, the third closing check, is not refused (implicit: the refusal names static, hooks-test and closing-checks only)",
+     "class": "within",
+     "why": "The block does not label this, but it is a decision. The finding's cost is the slow checks run in the foreground one after another, and quick takes 1 to 5 s (item 9's timings). By item 4's own counts, the 51 foreground closing-check calls after the last edit (35.0 min) less the replay's 34 static/hooks-test calls (31.2 min) leave about 17 calls and about 4 min for quick. Inside closing-checks, quick already runs beside the others. Not refusing it does not gut the purpose. The decide notice still tells the order, and the slow checks are enforced by refusal."
+    },
+    {
+     "id": "T55-closing-checks-unreplayed",
+     "summary": "the refusal of a foreground make closing-checks is not replayed (no PreToolUse line names it) and rests on the plan review's ruling",
+     "class": "within",
+     "why": "Nothing could be measured because the target did not exist in the log. The refusal is the stricter side of the request, and T22 reads its blocked and escaped rows."
+    },
+    {
+     "id": "T55-bash-write-miss",
+     "summary": "a code edit made by a Bash write (sed -i, heredoc) is not seen by the decide notice: it can miss, never wrongly fire",
+     "class": "within",
+     "why": "A stated limit of a notice that has already been ruled legitimate. It refuses nothing, and the foreground refusal does not depend on it."
+    },
+    {
+     "id": "T55-after-measure-T22",
+     "summary": "the closing tail's idle minutes on later tasks' transcripts, the notice's noticed rows, and the refusal's blocked and escaped rows are read on T22's measured day; the mechanism's own before/after (104 s in sequence vs 52 s at once) is measured now",
+     "class": "within",
+     "why": "The effect in the world can only be read from transcripts of tasks that do not exist yet. The mechanism's own before/after is measured in the block, and T22 is the close's measured day that FR-013 names. The line now covers the refusal's blocked and escaped rows as well. The same caveat applies as last round: T22's own text is not in this bundle, so the session has to confirm that T22 takes these rows."
+    },
+    {
+     "id": "T55-item4-recount",
+     "summary": "item 4's recount: 93 calls by 38 builders after their last code edit, 51 foreground (35.0 min), 39 background, 3 refused by other guards; 28 builders decided after their last edit, 21 before any check; the earlier 92/56/33 reading explained",
+     "class": "within",
+     "why": "A restated measurement, not a decision about scope. 51+39+3=93. The difference from the first reading is put down to the pre-T04 bg rule and to the log having grown."
     }
    ],
    "verdict": "CLEAR"

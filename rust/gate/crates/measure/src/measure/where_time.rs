@@ -7,8 +7,8 @@
 //! (feature 385 T90, D111). A notification that wakes the session fires the prompt hooks, so a woken turn's work is booked to its task.
 //!
 //! THE TABLES. Each gap between a session's events goes to the task its tool call NAMES, else the last named, else the one the clone's
-//! last `make task-start` made active (T89, D110), in `feature-report`'s categories grouped into buckets; the agents table counts each
-//! subagent and its minutes by the task active at its launch. `--by-tick` books each tick-to-tick window instead (T115, D132).
+//! last `make task-start` made active (T89, D110), in `feature-report`'s categories grouped into buckets; the agents table (`columns::spent`,
+//! feature 451 T10) books each agent's minutes and tokens to the task its lines name, beside the rework. `--by-tick` books each tick-to-tick window instead (T115, D132).
 
 use std::collections::HashMap;
 use std::fmt::Write as _;
@@ -242,14 +242,14 @@ pub fn transcript_inputs(
     Ok(out)
 }
 
-/// Minutes by task and bucket, agents by task and kind, agent seconds by task and kind.
+/// Minutes by task and bucket, and what was spent beside them: the agents and the rework.
 pub struct Tables {
     /// Seconds by task and bucket, tasks in the order first booked.
     pub time: Vec<(String, Tally<String>)>,
-    /// Agents by task and kind.
-    pub agents: Vec<(String, Tally<String>)>,
-    /// Agent seconds by task and kind.
-    pub secs: Vec<(String, Tally<String>)>,
+    /// Each agent under its task, with its minutes and tokens (T10, `columns::spent`).
+    pub spent: Vec<columns::spent::Row>,
+    /// The tasks of each refused landing (T10).
+    pub refused: Vec<Vec<String>>,
     /// Which rule booked each gap's seconds: `named`, `carried`, `the mark`.
     pub rules: Tally<String>,
     /// The seconds of the waits between turns on work by what held them (T09): `shell`, `agent`, `monitor`, or `none`.
@@ -294,8 +294,14 @@ pub fn tables(
 ) -> Result<Tables, Raised> {
     let mut t = Tables {
         time: Vec::new(),
-        agents: Vec::new(),
-        secs: Vec::new(),
+        // by start (`inputs` given) an agent goes to the task its lines name, as a gap to the one its call names; by tick, to the mark
+        spent: columns::spent::rows(
+            &booking.flight.agents,
+            &booking.tokens,
+            starts,
+            inputs.is_some(),
+        ),
+        refused: booking.refused.clone(),
         rules: Tally::default(),
         waits: Tally::default(),
     };
@@ -393,7 +399,6 @@ pub fn tables(
             add(&mut t.time, &task, bucket(&cat), gap - compile - gate);
         }
     }
-    agents(&sorted, starts, &mut t)?;
     Ok(t)
 }
 
@@ -424,30 +429,6 @@ fn wait(t: &mut Tables, task: &str, booked: Vec<(String, &'static str, f64)>) {
     }
 }
 
-/// Each subagent counted, with its minutes, by the task active at its launch.
-fn agents(sorted: &[&Event], starts: &[(f64, String)], t: &mut Tables) -> Result<(), Raised> {
-    let mut open: HashMap<String, (f64, String, String)> = HashMap::new();
-    for e in sorted.iter().copied() {
-        if is(e, "ev", "SubagentStart") {
-            let at = t_of(e)?;
-            open.insert(
-                s(e, "aid"),
-                (
-                    at,
-                    super::events::or_text(get(e, "agent"), "?"),
-                    task_at(starts, at),
-                ),
-            );
-        } else if is(e, "ev", "SubagentStop") {
-            if let Some((t0, kind, task)) = open.remove(&s(e, "aid")) {
-                add(&mut t.agents, &task, &kind, 1.0);
-                add(&mut t.secs, &task, &kind, t_of(e)? - t0);
-            }
-        }
-    }
-    Ok(())
-}
-
 /// What a call's gap is booked by beyond its line (feature 451 T08): the compile and landing-gate spans of each call ([`columns::splits_by_id`]) and the
 /// Makefile's default goal. A subagent's call (`by`) inside the main session's turn is booked as what the session was doing - the call it
 /// was waiting on, or the model - so a builder's line no longer cuts the session's `make static` in two; between turns it keeps the wait.
@@ -459,6 +440,10 @@ pub struct Booking {
     pub goal: String,
     /// The window's background runs and agents, which a wait between turns is booked to (T09).
     pub flight: columns::Flight,
+    /// agent id -> its tokens, from its transcript (T10).
+    pub tokens: HashMap<String, columns::spent::Tok>,
+    /// The tasks of each refused landing (T10).
+    pub refused: Vec<Vec<String>>,
 }
 
 /// A `PreToolUse` line's category: a Bash call with a `make` by the guard's table (`other` the line's `other tool`), else its `cat`.
@@ -478,12 +463,16 @@ fn total(t: &Tally<String>) -> f64 {
     t.items().iter().fold(0.0, |a, (_, v)| a + v)
 }
 
-/// The two tables as Markdown (`render`).
+/// The tables as Markdown (`render`): the critical path by task, then what was spent beside it (`columns::spent::render`).
 #[must_use]
 pub fn render(t: &Tables, order: &[String]) -> String {
     let order: Vec<&String> = order
         .iter()
-        .filter(|k| row(&t.time, k).is_some() || row(&t.agents, k).is_some())
+        .filter(|k| {
+            row(&t.time, k).is_some()
+                || t.spent.iter().any(|r| &r.task == *k)
+                || t.refused.iter().any(|ts| ts.contains(k))
+        })
         .collect();
     let mut lines = vec![
         format!("| task | total | {} |", COLUMNS.join(" | ")),
@@ -512,31 +501,13 @@ pub fn render(t: &Tables, order: &[String]) -> String {
         fixed(total(&tot) / 60.0, 0),
         cells(&tot)
     ));
-    lines.extend(
-        [
-            "",
-            "| task | agents | agent minutes | by kind (count) |",
-            "|---|---|---|---|",
-        ]
-        .map(String::from),
-    );
-    for k in &order {
-        let Some(a) = row(&t.agents, k).filter(|a| !a.is_empty()) else {
-            continue;
-        };
-        let secs = row(&t.secs, k).map_or(0.0, total);
-        let kinds = a
-            .most_common()
-            .iter()
-            .map(|(n, c)| format!("{n} {c}"))
-            .collect::<Vec<_>>()
-            .join(", ");
-        lines.push(format!(
-            "| {k} | {} | {} | {kinds} |",
-            total(a),
-            fixed(secs / 60.0, 0)
-        ));
-    }
+    lines.push(String::new());
+    lines.push(columns::spent::render(
+        &t.spent,
+        &t.refused,
+        &order,
+        total(&tot),
+    ));
     lines.join("\n")
 }
 
@@ -711,24 +682,35 @@ fn booked(
     let makefile = std::fs::read_to_string(root.join("Makefile")).unwrap_or_default();
     let goal = columns::default_goal(&makefile);
     let queued = columns::enqueued(&sids, projects);
-    let (stops, sub_queued) = columns::read_subagents(&sids, projects);
+    // an agent's tokens inside the window; a `since` the reader cannot read (a date alone) cuts nothing below
+    let lo = if since.is_empty() {
+        f64::MIN
+    } else {
+        ts(since).unwrap_or(f64::MIN)
+    };
+    let subs = columns::read_subagents(&sids, projects, (lo, end));
     let window = columns::Window {
         end,
         enqueued: &queued,
-        stopped: &stops,
-        queued: &sub_queued,
+        stopped: &subs.stopped,
+        queued: &subs.queued,
         goal: &goal,
     };
     let runs = columns::runs(&loaded.stream, &loaded.aside, starts, &window)?;
+    let mut flight = columns::flight(
+        &runs,
+        &lines_of(root, clones, &sids, &AGENT_LINES),
+        &loaded.stream,
+        end,
+    )?;
+    // the agents' minutes are their spans inside the window, each second once: the logs are read whole (T10, `spent::clip`)
+    columns::spent::clip(&mut flight.agents, (lo, end));
     let booking = Booking {
         splits: columns::splits_by_id(&runs),
         goal: goal.clone(),
-        flight: columns::flight(
-            &runs,
-            &lines_of(root, clones, &sids, &AGENT_LINES),
-            &loaded.stream,
-            end,
-        )?,
+        flight,
+        tokens: subs.tokens,
+        refused: columns::spent::refused(&loaded.aside, until),
     };
     Ok((events, sids, runs, booking))
 }
@@ -807,7 +789,12 @@ fn run(
     // string hash's; here it is the order first booked
     let first = |k: &str| starts.iter().find(|(_, t)| t == k).map_or(0.0, |(s, _)| *s);
     let mut order: Vec<String> = t.time.iter().map(|(k, _)| k.clone()).collect();
-    for (k, _) in &t.agents {
+    for k in t
+        .spent
+        .iter()
+        .map(|r| &r.task)
+        .chain(t.refused.iter().flatten())
+    {
         if !order.contains(k) {
             order.push(k.clone());
         }

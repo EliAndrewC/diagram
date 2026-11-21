@@ -17,7 +17,7 @@ FREE_TEXT = UNITS WITH KEYS KEY CLASS KIND SUBJECT REASON GROWTH_REASON SPREAD N
 	CHECK_ORDER_OK URLS MATCH NONE SHARD EXTRA IMAGES DIRS LAND SUITES PERF_LATER_OK DEFER_FORM_OK QUICK_OK
 $(foreach v,$(FREE_TEXT),$(if $(filter command line environment,$(origin $(v))),$(eval override $(v) := $$(value $(v)))$(eval export $(v))))
 
-.PHONY: modal-bundle modal-prepass done docs static format guard _reference bypass-audit quick page-check tick claim speckit-todo audit guard-edit context-ok guard-log scratch-sweep hooks-test citations fragment-move \
+.PHONY: closing-checks modal-bundle modal-prepass done docs static format guard _reference bypass-audit quick page-check tick claim speckit-todo audit guard-edit context-ok guard-log scratch-sweep hooks-test citations fragment-move \
 	 switches _switch \
 	 map cohort cohort-landing hamlet placement-stages pool-index pool-index-if-stale compound render-sync idle-tests \
 	 pack-audit help \
@@ -320,7 +320,7 @@ fragment-move:  ## [docs] rename or renumber a question - every file of its stem
 hooks-test:     ## [tests] run every tests/hooks/test-*-hooks.sh, and prove each guard still has a companion
 	@root=$$(git rev-parse --show-toplevel); gitdir=$$(git rev-parse --path-format=absolute --git-common-dir); fail=""; n=0; skipped=0; \
 	work=$$(mktemp -d); trap 'rm -rf "$$work"' EXIT; \
-	roster=$$(for h in $$root/scripts/hooks/*-hooks.sh $$root/scripts/gates/review-gate.sh $$root/scripts/gates/entry-gate.sh $$root/scripts/gates/claims-gate.sh $$root/scripts/gates/cohort-gate.sh $$root/scripts/gates/plan-gate.sh $$root/scripts/gates/l7r-gate.sh $$root/scripts/sync-with-main.sh $$root/scripts/land-tooling.sh $$root/scripts/hooks/l7r-guard.sh $$root/tests/hooks/parts.sh $$(find $$root/tests/hooks -maxdepth 1 -lname guard-shim.sh | sort); do basename $$h; done | sort -u); \
+	roster=$$(for h in $$root/scripts/hooks/*-hooks.sh $$root/scripts/gates/review-gate.sh $$root/scripts/gates/entry-gate.sh $$root/scripts/gates/claims-gate.sh $$root/scripts/gates/cohort-gate.sh $$root/scripts/gates/plan-gate.sh $$root/scripts/gates/closing-checks.sh $$root/scripts/gates/l7r-gate.sh $$root/scripts/sync-with-main.sh $$root/scripts/land-tooling.sh $$root/scripts/hooks/l7r-guard.sh $$root/tests/hooks/parts.sh $$(find $$root/tests/hooks -maxdepth 1 -lname guard-shim.sh | sort); do basename $$h; done | sort -u); \
 	traced=" $$(if [ -z "$(HOOKS_ALL)" ]; then "$$root/scripts/hooks/l7r-guard.sh" trace fresh "$$gitdir" "$$root" $$roster 2>/dev/null; fi | tr '\n' ' ') "; \
 	export HOOKS_SHIM="$$("$$root/scripts/hooks/l7r-guard.sh" trace shim "$$gitdir" 2>/dev/null)" HOOKS_ROOT="$$root"; \
 	: "THE LAUNCHERS' BINARIES BUILT AND CHECKED ONCE A RUN (feature 449 T205): each call of l7r-gate.sh or l7r-guard.sh walked its Rust sources to see whether to build, about 1,400 and 2,000 paths, and under the read recorder each path was a line of the suite's log - sync-with-main's run wrote 1,260,877 lines; with the fresh binaries named here a call skips the walk and hookrun.sh records the sources once a suite (an empty name, where a build failed, leaves every call to walk as before)"; \
@@ -330,7 +330,7 @@ hooks-test:     ## [tests] run every tests/hooks/test-*-hooks.sh, and prove each
 	keys=$$("$$root/scripts/hooks/l7r-guard.sh" deps --keys $$roster $$shards); \
 	owned=$$(for b in $$roster; do t=test-$${b%.py}; case $$t in *.sh) ;; *) t=$$t.sh ;; esac; printf '%s ' "$$t"; done); \
 	pairs=$$("$$root/tests/hooks/hookrun.sh" --jobs "$$root/tests/hooks" $$owned); \
-	for h in $$root/scripts/hooks/*-hooks.sh $$root/scripts/gates/review-gate.sh $$root/scripts/gates/entry-gate.sh $$root/scripts/gates/claims-gate.sh $$root/scripts/gates/cohort-gate.sh $$root/scripts/gates/plan-gate.sh $$root/scripts/gates/l7r-gate.sh $$root/scripts/sync-with-main.sh $$root/scripts/land-tooling.sh $$root/scripts/hooks/l7r-guard.sh $$root/tests/hooks/parts.sh $$(find $$root/tests/hooks -maxdepth 1 -lname guard-shim.sh | sort); do \
+	for h in $$root/scripts/hooks/*-hooks.sh $$root/scripts/gates/review-gate.sh $$root/scripts/gates/entry-gate.sh $$root/scripts/gates/claims-gate.sh $$root/scripts/gates/cohort-gate.sh $$root/scripts/gates/plan-gate.sh $$root/scripts/gates/closing-checks.sh $$root/scripts/gates/l7r-gate.sh $$root/scripts/sync-with-main.sh $$root/scripts/land-tooling.sh $$root/scripts/hooks/l7r-guard.sh $$root/tests/hooks/parts.sh $$(find $$root/tests/hooks -maxdepth 1 -lname guard-shim.sh | sort); do \
 	  b=$$(basename $$h); case $$b in test-*) continue ;; esac; case " $$seen " in *" $$b "*) continue ;; esac; seen="$$seen $$b"; \
 	  t=test-$${b%.py}; case $$t in *.sh) ;; *) t=$$t.sh ;; esac; \
 	  jobs=$$(printf '%s\n' "$$pairs" | awk -v t="$$t" '$$1 == t { $$1 = ""; print substr($$0, 2) }'); \
@@ -979,6 +979,12 @@ quick:           ## [tests] tier 2: lint and the fast tree checks (no Python tes
 	@if "$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" check needs partial-citations; then "$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" check partial-citations .; fi
 	@printf '\n\033[1mquick: clean\033[0m - `make done` before pushing.\n'
 	@$(STATE) green-local quick
+
+# THE CLOSING CHECKS AT ONCE (feature 451 T55): a builder's three closing checks ran one after another while it wrote its plan section,
+# decide and report, none of which needs their result; started in the background the moment the code is done, they run side by side.
+# One run of `make static` for static-runs-hooks; FRESH=1 REASON= and HOOKS_ALL=1 reach the checks as on their own targets.
+closing-checks:  ## [tests] make static, make hooks-test and make quick at once, one combined result (each verdict and log; red if any is): start it with run_in_background once the code is done, then write the plan section and run make decide while it runs (451 T55)   [FRESH=1 REASON="..."] [HOOKS_ALL=1]
+	@"$$(git rev-parse --show-toplevel)/scripts/gates/closing-checks.sh"
 
 bypass-audit:    ## [project] every escape token taken, with the reason its user gave   (the FULL prompt reads this)
 	@why="$$REF_WHY"; \

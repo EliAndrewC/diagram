@@ -60,8 +60,18 @@ fn end(t: &str, tasks: &[&str], landed: bool, code: i32) -> Value {
     json!({"ev": "Phase", "src": "land", "step": "end", "t": t, "code": code, "make": "land", "task": tasks[0], "tasks": tasks, "landed": landed})
 }
 
+/// A call's hook input, backgrounded as a closing check must be (T55); [`foreground`] the same call without it.
 fn input(d: &Path, cmd: &str) -> Value {
-    json!({"hook_event_name": "PreToolUse", "tool_name": "Bash", "tool_use_id": "toolu_now", "cwd": d.to_string_lossy(), "tool_input": {"command": cmd}})
+    json!({"hook_event_name": "PreToolUse", "tool_name": "Bash", "tool_use_id": "toolu_now", "cwd": d.to_string_lossy(), "tool_input": {"command": cmd, "run_in_background": true}})
+}
+
+fn foreground(d: &Path, cmd: &str) -> Value {
+    let mut v = input(d, cmd);
+    v["tool_input"]
+        .as_object_mut()
+        .unwrap()
+        .remove("run_in_background");
+    v
 }
 
 fn none(_: &str) -> Option<String> {
@@ -400,8 +410,10 @@ fn through_the_chain_the_calls_own_line_is_no_run_and_the_named_checks_pass() {
         assert!(matches!(answers, [Answer::Refuse(_)]));
         format!("{answers:?}")
     };
+    // a passed call, backgrounded, says nothing
+    let passed = |answers: &[Answer]| answers.is_empty();
     // one run, and the call's own line, which the event log has just written
-    assert!(call(&d, "make static", "toolu_x").is_empty());
+    assert!(passed(&call(&d, "make static", "toolu_x")));
     let own =
         std::fs::read_to_string(d.join(".git/l7r-events").join(format!("{F}.jsonl"))).unwrap();
     assert!(own.contains("toolu_x"));
@@ -409,16 +421,15 @@ fn through_the_chain_the_calls_own_line_is_no_run_and_the_named_checks_pass() {
     assert!(
         refused_with(&call(&d, "make static", "toolu_y")).contains("has run `make static` 2 times")
     );
-    assert!(call(
+    assert!(passed(&call(
         &d,
         "STATIC_OK=\"the gate needs it now\" make static",
         "toolu_z"
-    )
-    .is_empty());
+    )));
     assert!(refused_with(&call(&d, "make static STATIC_OK", "toolu_w"))
         .contains("STATIC_OK with no reason"));
     let bare = clone("chain-notask", &[], &[]);
-    assert!(call(&bare, "make static", "toolu_v").is_empty());
+    assert!(passed(&call(&bare, "make static", "toolu_v")));
     // the hook's own entry, the process's environment read: a clone with no task start passes whatever the session exports
     let mut e = Event {
         name: "PreToolUse".to_owned(),
@@ -444,4 +455,130 @@ fn through_the_chain_the_calls_own_line_is_no_run_and_the_named_checks_pass() {
         let reply = run(&mut e, &bash);
         assert_eq!(reply.code, 0, "{cmd}: {}", reply.stderr);
     }
+}
+
+/// A run of `make closing-checks` (feature 451 T55) by `task` at `t` that ran: it runs `make static`, so it is a run of it.
+fn closing(id: &str, t: &str, task: &str) -> [Value; 2] {
+    [
+        json!({"t": t, "ev": "PreToolUse", "tool": "Bash", "id": id, "make": "closing-checks", "task": task}),
+        json!({"t": t, "ev": "PostToolUse", "tool": "Bash", "id": id, "make": "closing-checks", "task": task, "bg": "b1"}),
+    ]
+}
+
+#[test]
+fn a_closing_checks_run_is_a_static_run_and_a_call_of_it_is_counted() {
+    let lines = [
+        closing("a", "2026-11-20T10:01:00.000Z", "T06"),
+        ran("b", "2026-11-20T10:02:00.000Z", "T06"),
+    ]
+    .concat();
+    let d = clone("closing", &[("T06", "2026-11-20T10:00:00Z")], &lines);
+    assert_eq!(said(&d, "make static"), Some(refused()));
+    assert_eq!(said(&d, "make closing-checks"), Some(refused()));
+    assert_eq!(
+        said(&d, "make rust-test CRATE=rust/guard && make closing-checks"),
+        Some(refused())
+    );
+    let one = clone(
+        "closing-one",
+        &[("T06", "2026-11-20T10:00:00Z")],
+        &closing("a", "2026-11-20T10:01:00.000Z", "T06"),
+    );
+    assert_eq!(said(&one, "make closing-checks"), None);
+    assert_eq!(said(&one, "echo make closing-checks"), None);
+    assert!(refusal(F, "T06", 2, &[]).contains("make closing-checks"));
+}
+
+#[test]
+fn through_the_guard_a_decide_before_the_closing_checks_is_told_the_order_and_recorded() {
+    crate::shared::log::quiet();
+    let d = clone("order", &[("T06", "2026-11-20T10:00:00Z")], &[]);
+    let path = d.join("rust/guard/src/x.rs").to_string_lossy().into_owned();
+    write_log(
+        &d,
+        &[
+            json!({"t": "2026-11-20T10:01:00.000Z", "ev": "PostToolUse", "tool": "Edit", "id": "e1", "by": "a1", "path": path}),
+        ],
+    );
+    let mut e = Event {
+        name: "PreToolUse".to_owned(),
+        input: input(&d, "make decide F=451 T=T06"),
+    };
+    e.input["agent_id"] = json!("a1");
+    let got = answer(&e, &Session::from_input(&e.input), Path::new("/"), &none);
+    let told = matches!(got.as_slice(), [Answer::Notice(n)] if n.contains("rust/guard/src/x.rs"));
+    assert!(told);
+    // outside a clone, nothing to read: nothing said
+    let mut out = Event {
+        name: "PreToolUse".to_owned(),
+        input: input(Path::new("/"), "make decide F=451 T=T06"),
+    };
+    out.input["agent_id"] = json!("a1");
+    assert!(answer(
+        &out,
+        &Session::from_input(&out.input),
+        Path::new("/"),
+        &none
+    )
+    .is_empty());
+}
+
+/// THE TWO RULES TOGETHER (T55): a foreground closing check is refused whatever the count, and past the count both refusals are said at
+/// once; each rule is escaped only by its own token.
+#[test]
+fn through_the_guard_a_foreground_closing_check_is_refused_beside_the_count() {
+    crate::shared::log::quiet();
+    let at = |v: Value| {
+        let e = Event {
+            name: "PreToolUse".to_owned(),
+            input: v,
+        };
+        answer(&e, &Session::from_input(&e.input), Path::new("/"), &none)
+    };
+    // each refusal's text, in its printed form
+    let refusals = |answers: &[Answer]| -> Vec<String> {
+        answers
+            .iter()
+            .filter(|a| matches!(a, Answer::Refuse(_)))
+            .map(|a| format!("{a:?}"))
+            .collect()
+    };
+    let one = clone(
+        "fg-one",
+        &[("T06", "2026-11-20T10:00:00Z")],
+        &ran("a", "2026-11-20T10:01:00.000Z", "T06"),
+    );
+    // under the count: the foreground refusal alone, the background call silent
+    let got = refusals(&at(foreground(&one, "make static")));
+    assert!(
+        matches!(got.as_slice(), [t] if t.contains("run_in_background: true") && t.contains("FOREGROUND_OK"))
+    );
+    assert!(at(input(&one, "make static")).is_empty());
+    assert!(at(foreground(
+        &one,
+        "FOREGROUND_OK=\"the next edit needs it\" make static"
+    ))
+    .is_empty());
+    let bare = refusals(&at(foreground(&one, "make hooks-test FOREGROUND_OK")));
+    assert!(matches!(bare.as_slice(), [t] if t.contains("FOREGROUND_OK with no reason")));
+    // past the count: both refusals at once
+    let past = clone("fg-past", &[("T06", "2026-11-20T10:00:00Z")], &two_runs());
+    let both = refusals(&at(foreground(&past, "make closing-checks")));
+    assert_eq!(both.len(), 2);
+    assert!(
+        both[0].contains("has run `make static` 2 times")
+            && both[1].contains("run_in_background: true")
+    );
+    // the count's escape stands the count aside, not the foreground rule
+    let counted = refusals(&at(foreground(
+        &past,
+        "STATIC_OK=\"the closing run of the task\" make closing-checks",
+    )));
+    assert!(matches!(counted.as_slice(), [t] if t.contains("run_in_background: true")));
+    // the foreground rule's escape stands only it aside
+    let fg_ok = refusals(&at(foreground(
+        &past,
+        "FOREGROUND_OK=\"the next edit needs it\" make static",
+    )));
+    assert!(matches!(fg_ok.as_slice(), [t] if t.contains("has run `make static` 2 times")));
 }

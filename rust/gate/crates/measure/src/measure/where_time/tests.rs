@@ -77,7 +77,18 @@ fn the_tables_book_turns_windows_and_agents() {
     ]);
     let starts = [(0.0, "T01".to_owned())];
     let inputs = HashMap::from([("b1".to_owned(), "\"make done T=T02\"".to_owned())]);
-    let t = tables(&e, &starts, Some(&inputs), "901", &Booking::default()).unwrap();
+    // the agents are the window's flight's (feature 451 T10): every line here is the feature's own
+    let booking = Booking {
+        flight: columns::flight(
+            &columns::Runs::default(),
+            &e,
+            &e,
+            ts(&at("12:00:01")).unwrap(),
+        )
+        .unwrap(),
+        ..Booking::default()
+    };
+    let t = tables(&e, &starts, Some(&inputs), "901", &booking).unwrap();
     let text = render(
         &t,
         &[
@@ -89,7 +100,9 @@ fn the_tables_book_turns_windows_and_agents() {
     );
     assert!(text.contains("| T02 | "), "{text}");
     assert!(text.contains("| all | "), "{text}");
-    assert!(text.contains("spec-fidelity 1, ? 1"), "{text}");
+    // by start, an agent naming no task goes to the mark (T01); the stop naming no start (`never`) is no agent
+    let want = "| T01 | 2 | 124 | - | - | 0 | 0 | spec-fidelity 1, ? 1 |";
+    assert!(text.contains(want), "{text}");
     assert_eq!(t.rules.items().len(), 3);
     let none = tables(&e, &starts, None, "", &Booking::default()).unwrap();
     assert_eq!(none.rules.items().len(), 1);
@@ -413,7 +426,7 @@ fn the_seventeenth_was_the_gm_away() {
         format!("{:.2}", c.get(&GM_AWAY.to_owned()) / 60.0),
         "336.06"
     );
-    assert!(t.agents.is_empty());
+    assert!(t.spent.is_empty());
 }
 
 /// Feature 451 T04 (FR-002, plan D3, D4): the two line kinds the readers did not read - a background run's `BgEnd` and a make run's

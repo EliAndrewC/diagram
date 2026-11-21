@@ -134,6 +134,9 @@ full").
 
 - Everything runs through `make`: `make quick` while iterating, `make done` once at the end, backgrounded, never polled.
 - `make done` reports every failure together: fix them all, re-run once.
+- **A task's closing step, in order** (451 T55): the code done, `make closing-checks` (static, hooks-test and quick at once) with
+  `run_in_background`; the plan section and `make decide` written while it runs; `make quick` again if the section moved after it
+  started. `make decide` is told this order and a foreground closing check refused (`static_runs_hooks/order.rs`, `FOREGROUND_OK=`).
 - **Speed work may ALWAYS change maps** (the GM, 2026-10-18: *"anytime we are trying to make things faster, it's always okay
   for maps to change, so long as the changes don't violate our research findings"*): hold it to the rules and the research
   claims rather than to identical output.

@@ -36,6 +36,8 @@ use crate::shared::make::invoked;
 use crate::shared::session::Session;
 use crate::shared::state::field;
 
+mod order;
+
 /// The guard.
 pub const GUARD: Guard = Guard {
     name: "static-runs-hooks",
@@ -84,6 +86,64 @@ fn answer(
     let log = |kind: &str, detail: &str, rule: &str| {
         fire("static-runs", kind, detail, rule, &event.input, session);
     };
+    // both rules' answers together: a call that breaks both hears both at once
+    let mut out = refusals(said, &log);
+    out.extend(order_answer(&event.input, here, env, &log));
+    out
+}
+
+/// The closing step's order (T55, `order.rs`): a decide told it, a foreground closing check refused, each firing recorded.
+fn order_answer(
+    input: &Value,
+    here: &Path,
+    env: &dyn Fn(&str) -> Option<String>,
+    log: &dyn Fn(&str, &str, &str),
+) -> Option<Answer> {
+    let filed = std::cell::OnceCell::new();
+    let at = || filed.get_or_init(|| filed_at(input, here, env)).clone();
+    let read = || {
+        at().and_then(|(_, _, log, _)| read_jsonl(&log).ok())
+            .unwrap_or_default()
+    };
+    let root = || {
+        at().map(|(root, ..)| root.to_string_lossy().into_owned())
+            .unwrap_or_default()
+    };
+    match order::told(input, &root, &read)? {
+        order::Told::Decide(text) => {
+            log(
+                "noticed",
+                "decide-before-closing-checks",
+                "decide-before-closing-checks",
+            );
+            Some(Answer::Notice(text))
+        }
+        order::Told::Foreground(text) => {
+            log(
+                "blocked",
+                "a closing check in the foreground",
+                "closing-check-foreground",
+            );
+            Some(Answer::Refuse(text))
+        }
+        order::Told::Escaped(why) => {
+            log("escaped", &why, "foreground-ok");
+            None
+        }
+        order::Told::NoReason(text) => {
+            let rule = format!("{}-no-reason", order::TOKEN);
+            log(
+                "blocked",
+                &format!("{} with no reason", order::TOKEN),
+                &rule,
+            );
+            Some(Answer::Refuse(text))
+        }
+    }
+}
+
+/// A verdict's answers, each firing recorded.
+fn refusals(said: Option<Said>, log: &dyn Fn(&str, &str, &str)) -> Vec<Answer> {
     match said {
         None => Vec::new(),
         Some(Said::NoTask) => {
@@ -122,8 +182,10 @@ fn judge(
     crates: &dyn Fn(&Path) -> Vec<String>,
 ) -> Option<Said> {
     let cmd = input.get("tool_input").map_or("", |t| field(t, "command"));
-    // NO `static`, NO READ: every other Bash call ends here
-    if !cmd.contains("static") || !invoked(cmd).iter().any(|t| t == "static") {
+    // NO `static` (nor `closing-checks`, which runs it - T55), NO READ: every other Bash call ends here
+    if !(cmd.contains("static") || cmd.contains("closing-checks"))
+        || !invoked(cmd).iter().any(|t| is_run(t))
+    {
         return None;
     }
     let (root, feature, log, task) = filed_at(input, here, env)?;
@@ -153,6 +215,12 @@ fn judge(
             crates: crates(&root),
         },
     })
+}
+
+/// A target that is a run of `make static`: itself, or `make closing-checks`, which runs it beside `make hooks-test` and `make quick`
+/// (feature 451 T55) - one run of it, as its one call is one line of the log.
+fn is_run(target: &str) -> bool {
+    target == "static" || target == "closing-checks"
 }
 
 fn text<'a>(line: &'a Value, k: &str) -> &'a str {
@@ -203,10 +271,10 @@ fn runs(lines: &[Value], starts: &str, feature: &str, task: &str, own: &str) -> 
             let t = stamp(text(l, "t"));
             text(l, "ev") == "PreToolUse"
                 && text(l, "task") == task
-                && (text(l, "make") == "static"
+                && (is_run(text(l, "make"))
                     || l.get("makes")
                         .and_then(Value::as_array)
-                        .is_some_and(|ms| ms.iter().any(|m| m == "static")))
+                        .is_some_and(|ms| ms.iter().any(|m| m.as_str().is_some_and(is_run))))
                 && id != own
                 && ran.contains(id)
                 && since
@@ -266,7 +334,8 @@ fn refusal(feature: &str, task: &str, runs: usize, crates: &[String]) -> String 
         "\n\u{1b}[1mBLOCKED: {task} of {feature} has run `make static` {runs} times since its last landing (feature 451 FR-007).\u{1b}[0m\n\n\
 `make static` is the check before a landing, not the edit loop: it runs every crate's checks. While iterating, run the\n\
 checks of the crates this task changes:\n\n{checks}\n\
-then `make static` once, before `make land` - a landing of {task} that goes out starts the count again; a later\n\
+then `make static` once, before `make land` (or `make closing-checks` in the background: it runs make static, make hooks-test\n\
+and make quick at once, and is one run of `make static`) - a landing of {task} that goes out starts the count again; a later\n\
 `make task-start` does not.\n\n\
 Escape: {TOKEN}=\"<reason>\" in the command, recorded in the guard log.\n"
     )

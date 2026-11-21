@@ -77,6 +77,10 @@
       "kind": "check",
       "what": "l7r-gate record check record|glossary|<name> --inputs ... -- <command> (memo_check.py, ported by feature 449 T148) - a refusing check; each run recorded passed or refused"
     },
+    "closing-checks": {
+      "kind": "check",
+      "what": "scripts/gates/closing-checks.sh - make static, make hooks-test and make quick at once, one combined result (451 T55)"
+    },
     "one-gate": {
       "kind": "check",
       "what": "scripts/gates/one-gate.sh - refuses a second make done in the same tree"

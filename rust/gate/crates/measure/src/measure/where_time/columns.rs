@@ -199,7 +199,18 @@ pub fn enqueued(sids: &[String], projects: &Path) -> HashMap<String, f64> {
 /// `KillShell` is the tool's earlier name.
 #[must_use]
 pub fn stopped(sids: &[String], projects: &Path) -> HashMap<String, String> {
-    read_subagents(sids, projects).0
+    read_subagents(sids, projects, (f64::MIN, f64::MAX)).stopped
+}
+
+/// What [`read_subagents`] reads of the transcripts.
+#[derive(Debug, Default)]
+pub struct Subagents {
+    /// [`stopped`]'s map.
+    pub stopped: HashMap<String, String>,
+    /// tool-use id -> when a subagent's background run's notice was queued.
+    pub queued: HashMap<String, f64>,
+    /// agent id -> its tokens inside the window (T10, `spent::tokens`).
+    pub tokens: HashMap<String, spent::Tok>,
 }
 
 /// [`stopped`]'s map, and tool-use id -> when a SUBAGENT's background run's notice was queued (feature 451 T09, plan D3): the
@@ -207,13 +218,12 @@ pub fn stopped(sids: &[String], projects: &Path) -> HashMap<String, String> {
 /// A subagent has no prompt line and its session's transcript no enqueue row for it, so without this a builder's background run was
 /// open to the window's end. The attachment's time is the run's end: it fell within 30 ms of the run's output file's last write on
 /// each of eight runs, measured 2026-11-21 (the session's subagent transcripts against `/tmp/claude-1000/.../tasks/*.output` mtimes).
-/// One pass reads both, since the subagent transcripts are the most of what the command reads (1,311 for the main session).
+/// One pass reads both, since the subagent transcripts are the most of what the command reads (1,311 for the main session), and with
+/// them each agent's tokens inside `window` ([`spent::tokens`], T10).
 #[must_use]
-pub fn read_subagents(
-    sids: &[String],
-    projects: &Path,
-) -> (HashMap<String, String>, HashMap<String, f64>) {
+pub fn read_subagents(sids: &[String], projects: &Path, window: (f64, f64)) -> Subagents {
     let (mut out, mut queued) = (HashMap::new(), HashMap::new());
+    let mut tokens = spent::Tokens::default();
     for sid in sids {
         for project in names(projects) {
             let dir = projects.join(&project);
@@ -224,6 +234,7 @@ pub fn read_subagents(
                 let Ok(text) = std::fs::read_to_string(&path) else {
                     continue;
                 };
+                tokens.read(&path, &text, window);
                 for line in text.lines().filter(|l| {
                     l.contains("\"TaskStop\"")
                         || l.contains("\"KillShell\"")
@@ -258,7 +269,11 @@ pub fn read_subagents(
             }
         }
     }
-    (out, queued)
+    Subagents {
+        stopped: out,
+        queued,
+        tokens: tokens.sums(),
+    }
 }
 
 /// One Bash run.
@@ -615,10 +630,14 @@ pub fn render(runs: &Runs, order: &[String]) -> String {
 }
 
 mod flight;
-pub use flight::{flight, Flight};
+pub mod spent;
+pub use flight::{flight, Agent, Flight};
 
 #[cfg(test)]
 mod tests;
 
 #[cfg(test)]
 mod waits_tests;
+
+#[cfg(test)]
+mod spent_tests;

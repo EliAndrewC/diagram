@@ -341,9 +341,79 @@ the three - `entry-gate.sh` by its two cases, the other two by their case groups
 
 ### T10 (FR-005: the wall clock on the critical path apart from the agent-minutes, the agents' tokens, the rework)
 
-- **Approach**: D7's critical path, agents and rework in `where_time/columns.rs` (not held). Red first: a fixture with two agents
-  overlapping a main-session wait books the wait once on the critical path and both agents' spans and tokens under their tasks; a
-  landing `end` with code 1 and a second `spec-fidelity` dispatch count as rework.
+- **Approach**: D7's agents and rework in `where_time/columns/spent.rs` (not held), beside the critical path T08 and T09 built. Red
+  first: a fixture with two agents overlapping a main-session wait books the wait once on the critical path and both agents' spans and
+  tokens under their tasks; a landing `end` whose `landed` is false counts as a refused landing whatever its code (one exiting 3 with
+  `landed` true does not), and a task's second `spec-fidelity` agent as a plan re-round.
+- **What T09 had already done**, restated, not rebuilt: the critical path itself - the window's wall clock partitioned by what the main
+  session was doing or waiting on, each wait booked once to the run that held it (T09's `Flight::book`), the turn ends read from every
+  feature's log (`events::turn_lines`, `with_turns`). Its time table is unchanged by T10, line for line, measured 2026-11-21 (`diff` of the
+  command's first 54 lines before and after, `/tmp/t10/wt-before.log`, `wt-after3.log`). The between-turn model minutes T10's line names
+  were reconciled by T09: model fell 253 min against the 235.4 T08 found between turns by the transcript, 15.1 of the 17.6 over being time
+  inside 449's own turns now booked `another feature`, the remaining 2.5 min (under 1% of the 342) not traced, measured 2026-11-21 (T09's
+  Python pass over both logs, its plan section above); T10 traced it no further.
+- **Built** (2026-11-21), in `rust/gate/crates/measure`:
+  - THE AGENTS are the flight's (`columns::Flight::agents`, `columns::Agent`): T09's one build of every agent span, from every log and
+    filtered to the feature's own agents, now also keeps each agent once with its kind, its task (its first start's `task`, the launch's
+    brief by D6, else its first stop's) and its last stop's `tok`. `where_time::tables` books each agent (`columns::spent::rows`) to the
+    task its lines name when booking by start, as a gap goes to the task its call names, and to the mark at its first start by tick. The
+    old walk (`where_time::agents`, deleted) read only the 451 log's lines and booked by the mark: 12 agents and 86 min under no task, T18's
+    14 beside a time row of 0 minutes, measured 2026-11-21 (the command before this task, `/tmp/t10/wt-before.log`).
+  - THE TOKENS (`columns::spent::Tokens`, read in `read_subagents`' one pass over the subagent transcripts, which now returns
+    `columns::Subagents`): each agent's `agent-<aid>.jsonl` usage rows inside the window (`SINCE=` to `UNTIL=`), each `message.id` once -
+    D6's sum, read after the fact - and the last stop's `tok` only where no transcript row counts. A departure from D6's letter, which
+    has the reader keep the stop's `tok`: that sum was short of the agent's transcript rows timestamped at or before the stop on 16 of
+    the 17 stops that carried one (1,005 of 6,329 output tokens on `a8348bf9fb2e13438`), and only 17 of the 279 stops carried one, in the
+    window to UNTIL 2026-11-21T04:10:44Z, measured 2026-11-21 (`/tmp/t10/scripts/m2.py` over the 451 log and the transcripts).
+  - THE REWORK (`columns::spent::refused`, `render`): a refused landing is a landing `end` line (D5) whose `landed` is false, never read
+    from its code; a landing of several tasks is one refusal, counted under each. A plan re-round is a task's `spec-fidelity` or
+    `spec-fidelity-verify` agent after its first (D7), each agent once - a resume is no new round - and an agent naming no task is no
+    task's re-round. A task's count holds every `spec-fidelity` agent dispatched under it - its block-bundle reviews and other
+    reviews launched under the task among them, not its plan's rounds alone - so it runs about 3x the feature report's rounds table
+    (68 per task in the window against the table's 23 rounds past the first over its 20 subjects at two rounds or more), measured
+    2026-11-21 (the command after, `/tmp/t10/wt-after3.log`; `make feature-report F=451 UNTIL=2026-11-21T04:10:44Z`,
+    `/tmp/t10/fr-after3.log`).
+  - THE REPORT (`columns::spent::render`, called by `where_time::render`): after the time table, a table by task - agents, agent
+    minutes, k tokens in (fresh, cache read and cache written), k tokens out, refused landings, plan re-rounds, kinds - with its `all`
+    row; a row per agent under its task (id, kind, first start, minutes, tokens); and the line setting the agents' summed minutes
+    beside the critical path's wall clock.
+  - A pinned fixture moved as intended: `where_time::tests::the_tables_book_turns_windows_and_agents` now builds its flight from its own
+    lines and reads `| T01 | 2 | 124 | - | - | 0 | 0 | spec-fidelity 1, ? 1 |` where it read the kinds alone, measured 2026-11-21 (the
+    test's fixture through the reader).
+- **Red first**: `columns::spent_tests` before the change, observed 2026-11-21, method: `make rust-test CRATE=rust/gate/crates/measure`
+  (`/tmp/t10/red0-kept.log`): the old walk booked the fixture's agents `| T05 | 2 | 30 | spec-fidelity 1, general-purpose 1 |` by the
+  mark - the plan review whose start sat only in feature 900's log missing, no tokens, no refused landing or re-round, no summed line -
+  against the three agents and 33 min under T05 and T06 with their tokens and rework; the critical path's 26 min, the wait over both
+  agents booked once, already held (T09's), observed 2026-11-21, method: the same log.
+- **Red first, the window** (`spent_tests::an_agents_minutes_are_its_spans_inside_the_window_counted_once`), observed 2026-11-21,
+  method: `make rust-test CRATE=rust/gate/crates/measure` before the clip (`/tmp/t10/red-window-minutes.log`, 194 passed, this one
+  failed): the agent spans were read from every log whole and never cut to SINCE, and an agent started twice with no stop between was
+  summed twice, so T05 read `| 3 | 24 |` - a4 15 min from its 07:50 start before the 08:00 SINCE, a6 7 min over its two starts to one
+  stop - against `| 3 | 11 |` (a4 5, a6 4, a5 2). The red log pins the SINCE cut and the double start; the UNTIL side (a5 stopped at
+  08:40, cut at the 08:30 UNTIL, and a7 started at 08:35, dropped) was added with the fix, its drop path the cover's. The fix:
+  `columns::spent::clip` cuts each agent's spans to the window, merges the overlapping ones and drops an agent with none left, called in
+  `where_time::booked` on the flight's agents alone, so the waits' fliers and the time table are untouched. (`/tmp/t10/red-window.log`,
+  the earlier run, failed to compile - `report_since` unwritten - and is no red evidence.)
+- **Measured** (`make where-time F=451 SINCE=2026-11-20T04:33:00Z UNTIL=2026-11-21T04:10:44Z`, the binary at HEAD 76c4498f96 before,
+  with this task after; the last row to UNTIL=2026-11-21T04:43:22Z, the time of the run):
+
+| beside the critical path | critical path (wall clock) | agents | agent minutes summed | k tokens in | k tokens out | no token count | refused landings | plan re-rounds |
+|---|---|---|---|---|---|---|---|---|
+| before, measured 2026-11-21 (the command before this task, its agents table summed: the 451 log alone, by the mark) | 1,417 | 160 | 1,323 | none | none | - | none | none |
+| after, measured 2026-11-21 (the command after it, `/tmp/t10/wt-after3.log`) | 1,417 | 174 | 1,647 | 950,887 | 4,764 | 0 | 4 | 68 |
+| after, to 04:43:22Z, measured 2026-11-21 (`/tmp/t10/wt-now.log`) | 1,450 | 175 | 1,712 | 992,843 | 4,933 | 0 | 4 | 68 |
+
+  The four refused landings: T06 (13:00Z), T34 (19:42Z), T41 with T43 (21:21Z), T07 with T33 (02:25Z), each `landed` false and code 1,
+  measured 2026-11-21 (the 451 log's `end` lines). The agents ran 1,647 min beside the 1,417 of wall clock, measured 2026-11-21 (the
+  command after); 12 of them (94 min) named no task, measured 2026-11-21 (the command after). Before the window's clip the same command
+  read 1,665 min: the clip moved one agent, `af458134477327297`, started at 04:15Z, 18 min before SINCE, from 26 min to 9, and no
+  other agent's row moved, measured 2026-11-21 (the agent rows of
+  `/tmp/t10/wt-after2.log` and `wt-after3.log` compared). The time table is unchanged by T10, line for line, measured 2026-11-21 (`diff`
+  of the first 54 lines of `/tmp/t10/wt-before.log` and `wt-after3.log`). `make feature-report F=451 UNTIL=2026-11-21T04:10:44Z` is
+  unchanged but for its own build time and its task count (45 of 60 ticked where it read 45 of 58, two tasks filed between the runs),
+  as T11 wires it, measured 2026-11-21 (`diff` of `/tmp/t10/fr-before.log` and `fr-after3.log`).
+  The command took 2.02-2.15 s wall with its binary built, every subagent transcript's usage rows now parsed in the pass that already
+  read them, against T09's 1.58-1.90 s, measured 2026-11-21 (`/usr/bin/time` over the command, three runs, `/tmp/t10/wt-time3.log`).
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
@@ -364,7 +434,15 @@ the three - `entry-gate.sh` by its two cases, the other two by their case groups
 11. **Before fitting things into room.** n/a.
 12. **Before any fix.** n/a.
 
-**Found and left?** none
+**Found and left?**
+- The `SubagentStop` line's `tok` (D6's writer, `rust/guard/src/guards/event_log_hooks/fields.rs`) is short of the sum of its agent's
+  transcript rows timestamped at or before the stop on 16 of the 17 stops that carried one in the window (SINCE 2026-11-20T04:33:00Z to
+  UNTIL 2026-11-21T04:10:44Z), measured 2026-11-21 (`/tmp/t10/scripts/m2.py`); the reader takes the transcript's sum first
+  and a stop's `tok` only for an agent with no transcript row in the window. Not fixed here: the writer is the guard's, outside T10's files. Filed as T59; lands before T22.
+- The empty sum of seconds printed `-0` minutes for a task row with a refused landing and no agent (`Iterator::sum` of no `f64` is
+  `-0.0`): fixed here, the sums folded from `0.0`, pinned by `spent_tests::by_the_mark_an_agent_goes_to_the_task_active_at_its_launch`
+  (red before the fold: `| T06 | 0 | -0 | - | - | 1 | 0 |  |`, `/tmp/t10/red-negzero.log`), observed 2026-11-21, method: the command
+  after (`/tmp/t10/wt-after.log`, T41's row) and `make rust-test CRATE=rust/gate/crates/measure`.
 
 **Performance work?** yes - a `[perf]` task under FR-013's measurement clause (the GM 2026-11-20): it measures where the time goes; no engine timing, so no checklist
 
@@ -871,31 +949,139 @@ The T02 class, by kind (the grep's hits, each read):
 **Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
 
 
-### T55 (<why: the finding or measurement that files it>)
+### T55 (a builder's closing checks ran one after another and blocked its writing: measured 2026-11-21 over 39 builders' transcripts, after the last code edit 63 min of checks in the foreground and 101 min idle on its own background runs, beside 158 min of model time writing the plan section, decide and the report, which need no check's result)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: `make closing-checks` (`scripts/gates/closing-checks.sh`, the Makefile's `[tests]` row) starts `make static`, `make
+  hooks-test` and `make quick` at once, each into `<git dir>/closing-checks/<check>.log`, and prints one result: each check's verdict,
+  seconds and log, the last 25 lines of each red one (25: a GUESS, enough to show a failure's reason), exit 1 if any is red; a TERM or INT stops all three and their children. FRESH=1
+  REASON= and HOOKS_ALL=1 reach the checks through make's command-line variables. `static_runs_hooks` counts a `make closing-checks`
+  as one run of `make static` (its prefilter, its trigger and its count - `is_run`), its refusal naming it; the event log books it to
+  `tests` (`BUCKETS`). The order: `static_runs_hooks/order.rs` adds a NOTICE and a REFUSAL - a `make decide` whose caller's last code
+  edit (an Edit, Write or NotebookEdit outside `specs/`, `.git/` and Markdown, by the caller: the builder by `agent_id`, the main
+  session by `session_id`) has no `make closing-checks` started after it is told the order (additionalContext, recorded `noticed` in
+  the guard log); a foreground `make static`, `make hooks-test` or `make closing-checks` is refused, naming `run_in_background` and
+  `make closing-checks`, recorded `blocked`, and escaped by `FOREGROUND_OK="<reason>"`, recorded `escaped` - its own token: `STATIC_OK`,
+  the count's escape, does not stand it aside, so a builder past its count gets no foreground run with it. A call that breaks both
+  rules hears both refusals at once. The refusal is judged before the decide notice, on every command of the chain: a foreground
+  `make closing-checks && make decide` (either order) is refused, the decide no cover (red first 2026-11-21: `make rust-test
+  CRATE=rust/guard` 710 passed, 1 failed; the suite 34 passed, 2 failed; green 711 and 36). The root CLAUDE.md's verification list states the order in one line. Red first: SEE item 9.
+- **At `make decide`, a notice, not a refusal - the decision and its cost.** Replayed over 451's log (measured 2026-11-21, the decide rule replayed by hand: each agent's `make decide` PreToolUse line against that agent's last Edit or Write of a code file before it and its last closing-check start before it), a refusal at `make decide` would have fired on 75
+  of its 170 calls: 45 after the caller's last code edit (the order the finding prices) and 30 with code edited after them - a decide
+  in mid-build, where a refusal would force a check run on unfinished code or an escape, 40% of its firings wrong, and 60 came before any
+  code edit and 35 after a check had started, neither firing (measured 2026-11-21, the decide rule replayed by hand: each agent's `make decide` PreToolUse line against that agent's last Edit or Write of a code file before it and its last closing-check start before it over
+  `.git/l7r-events/451-time-retro-and-efficiency.jsonl`, a closing check that ran standing in for `closing-checks`). A guard that
+  fires on correct work 40% of the time (the replay above, measured 2026-11-21) teaches a session to bypass it (the root CLAUDE.md's "What is enforced"), so the guard tells
+  the order at the moment it is broken and refuses nothing. Its cost: 101 ms a `make decide` call reading 451's 5.1 MB log, 2 ms a
+  call it does not read for (measured 2026-11-21, the fresh `l7r-guard.good --only static-runs-hooks PreToolUse`, ten calls each,
+  under a running `make static`) - about 17 s over 451's 170 decides. Each firing is in the guard log as `noticed`, so T22's measured
+  day reads how often it fired and whether the order followed. A Bash write (`sed -i`, a heredoc) leaves no Edit line, so it is no
+  code edit to the notice: it can miss, never wrongly fire.
+- **At a foreground closing check, a refusal - the decision and its cost.** T55's plan review (2026-11-21) ruled a notice there not
+  legitimate: the decide rule's replay above measured that rule alone, and a refusal of a foreground run changes only how it is
+  launched - D12's form. So the foreground rule was replayed on its own over `.git/l7r-events/451-time-retro-and-efficiency.jsonl`
+  (the FOREGROUND REPLAY, measured 2026-11-21, by hand, the log to its last line at 05:09Z): each `make static` or `make hooks-test`
+  PreToolUse line (its `make` or its `makes`) whose call ran and was launched in the foreground, against what its caller (the `by`
+  agent, else the main session) did after the call ended, up to the caller's next Edit or Write of a code file or its end. Launched in
+  the foreground: a PostToolUse with no `bg`, or, before 451 T04 added that field (its first line 2026-11-20T11:46Z), a PostToolUse a
+  second or more after the start - the backgrounded ones took 4 to 112 ms and every other call 2.0 s or more, none between (measured 2026-11-21, the foreground replay) - and
+  the two `bg` lines that came 180 s after their start count as foreground, launched without `run_in_background` and moved to the
+  background while the call waited (measured 2026-11-21, the foreground replay). A firing is ON CORRECT WORK where the call was the main session's, was chained with a landing
+  (`land`, `land-tooling`, `done`), or its result was needed at once: code was edited after it, and up to that edit its caller ran only
+  the same check again, a crate-scoped check (`rust-test`, `rust-cover`, `rust-format`, `rust-lint`) or a fixer (`format`,
+  `guard-edit`), nothing that could have run beside it. A firing is RIGHT where, before the caller's next code edit or its end, the
+  caller did work that needs no check result - an edit outside code (the plan section, a handoff), `make decide`, `make plan-verdict`
+  or `make plan-delta` - or started another of the closing checks, which `make closing-checks` would have run beside it; a call after
+  the caller's last code edit is the order the finding prices. The replay found 55 foreground calls, 27 static and 28 hooks-test, 51.6
+  min (measured 2026-11-21, the foreground replay), none the main session's and none chained with a landing. 5 of them, 5.5 min, 4 static and 1 hooks-test, had the result
+  needed at once (measured 2026-11-21, the foreground replay) - the refusal's cost, one relaunch or one escape each. 50, 46.2 min, were right (measured 2026-11-21, the foreground replay): 34 after the caller's last
+  code edit, 31.2 min, of which 19 were followed by writing, 9 by another closing check and 6 by nothing but the builder's report (measured 2026-11-21, the foreground replay),
+  and 16 mid-build, 15.0 min, 11 followed by writing and 5 by another closing check (measured 2026-11-21, the foreground replay). Recorded beside them, neither a wrong outcome:
+  10 of the 55 took under 10 s (measured 2026-11-21, the foreground replay) - a run whose crates' results were all kept, which the guard cannot know before it runs, where a
+  relaunch costs about what it saves - and the 6 followed only by the report, which states the verdict. That is 5 of 55 firings on
+  correct work, 9% (measured 2026-11-21, the foreground replay), against the decide rule's 40% (measured 2026-11-21, the decide replay above), and no FR-007 collision (a
+  backgrounded run is the same one run of static), so the refusal stands and `FOREGROUND_OK` is for those 5. `make closing-checks` has
+  no foreground call in the log (no PreToolUse line names it), so its refusal was not replayed: it rests on the review's ruling - it is
+  the closing run by name.
+- **Safe side by side, measured.** `make done` already runs `make static` beside the tests at rust-only. The three share no scratch path: hooks-test's
+  work directory is its own `mktemp -d`, and its suites' cargo is a fake with targets of their own (`L7R_GATE_TARGET="$TMP/..."`, read
+  2026-11-21, `grep` of `tests/hooks/` for cargo and `l7r-rust`), so hooks-test runs no rust check in the clone's target directory and
+  T23's run lock, which counts every check under one outermost `make` as one run, has nothing of its to keep apart from static's. Of
+  the shared files, only quick writes `.git/verification-state.json` (static and hooks-test write none); ruff runs twice (static over
+  `.`, quick over `l7r/`), each green beside the other; the launchers' builds of the tool binaries are cargo's, under cargo's own lock.
+  Run twice at once on this clone (the two `make closing-checks` runs below), no log held a lock wait (`waits`, `Blocking waiting`, `file lock`: 0 lines in each of the
+  three logs of each run), hooks-test's 58 suites were green beside static each time, and quick was green - measured 2026-11-21 (the logs under
+  `.git/closing-checks/`). Nothing collided, so nothing was serialized.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| the closing checks | n/a - no map | n/a | none | n/a |
 
 ### T55 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** No map changes; a builder's closing checks run at once, in the background, while it writes its plan
+   section, decides and reports, and are told so at the moment it would do otherwise.
+2. **The constraints.** FR-013 (performance first: a `[perf]` task), FR-007 and D11 (the static-runs count, which closing-checks joins
+   as one run), FR-012 (red first), T23's run lock (one run, the outermost `make`, at a time in a target directory), T15's D12 (a make
+   run is launched with `run_in_background`, never detached; its refusal, naming `run_in_background`, with an escape of a reason,
+   recorded, is the foreground rule's form), constitution XVIII (a mention is not an invocation).
+3. **Where each comes from.** G: the GM 2026-11-21, request.md: "yes please file that as a performance task", and the GM's ask that
+   enforcement be real, not instructions; O: the finding over 39 builders' transcripts (T55's line); O: the two replays of 451's log
+   above (the decide rule, the foreground rule).
+4. **Do they describe the world here?** The finding's split, re-read on 451's own log (measured 2026-11-21, each builder's closing-check calls after its last Edit or Write of a code file, read by hand over `.git/l7r-events/451-time-retro-and-efficiency.jsonl` to its last line at 05:09Z, by the `by` agent id, foreground and background told as the foreground replay tells them): 38 builders ran a closing check (`make
+   static`, `make hooks-test` or `make quick`) after their last code edit, 93 such calls, 51 launched in the foreground (35.0 min,
+   measured 2026-11-21, the same reading), 39 in the background, and 3 that ran nothing - each a PreToolUse line with no PostToolUse, a
+   call another guard refused (no-poll's busy-wait loop, discard's dirty-tree restore, record-edit's freeze of a plan under check: the
+   guard log's entries at those seconds, observed 2026-11-21, method: the guard log's files named for each line's second). 28 of the
+   builders ran `make decide` after their last code edit, 21 of those before starting any check (measured 2026-11-21, the same
+   reading). An earlier reading the same day gave 92 calls by 37 builders, 56 foreground and 33 background (measured 2026-11-21, T55's
+   first builder, by hand over the same log): it counted every call before 451 T04's `bg` field as foreground, which overstated the
+   foreground, and the log has grown since. 449's log has no `bg` field before 451 T04 (measured 2026-11-21 (its lines read
+   for the field)), so it was not read for the split.
+5. **The order.** After T09 (the Phase and BgEnd lines it reads, landed), T14 (the count it joins) and T23 (the run lock). Leaves
+   `rust/gate/crates/measure` to T10.
+6. **The exits.** Green: the guard tests (the five of the first round, the three of the foreground refusal) and the two suites green,
+   the guard crate's crate-scoped checks clean, and `make closing-checks` itself GREEN on this clone: static, hooks-test (every suite,
+   HOOKS_ALL=1) and quick, 52 s wall - measured 2026-11-21 (its own table) - and GREEN again after the foreground refusal (item 9). Red: what failed recorded and the task set down, a claim that it cannot be done ruled through
+   `make arbiter-ask`.
+7. **The search smell.** None.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** Red first, each measured 2026-11-21: the five new guard tests (four of `order/tests.rs`, the closing-checks count in
+   `tests.rs`) failed on a stub `order.rs` and the old count (`make rust-test CRATE=rust/guard`, one logged run: 703 passed, 5
+   failed); with the closing-checks count deleted (`is_run` back to `static` alone), its test red (708 passed, 1 failed), green
+   restored. The script's suite (`tests/hooks/test-closing-checks.sh`, on the hooks-test roster beside the gate scripts) with the
+   three launched one after another (a `wait` after each launch): "the three ran at once" red, 17 of 18. Green: the guard crate's
+   test, lint, format, cover and dead checks clean (`make rust-test CRATE=rust/guard`, `l7r-gate.sh rust lint|format --check|cover|dead
+   --crate rust/guard`); `tests/hooks/test-static-runs-hooks.sh` 21 of 21 (cases 7 and 8 new: a closing-checks run counted, a third
+   call of it refused naming it; the decide notice and its silence once closing-checks has started); `test-closing-checks.sh` 20 of
+   20 (side by side, each verdict and log, the red one's tail, the combined exit, the usage record, a TERM stopping all three).
+   The foreground refusal, red first, measured 2026-11-21: three new guard tests - in `order/tests.rs`, a foreground static,
+   hooks-test or closing-checks (chained, piped, under `timeout`, the main session's) refused naming `run_in_background: true`, `make
+   closing-checks` and `FOREGROUND_OK="<reason>"`, the same call backgrounded silent, a mention or another target passing, and
+   `STATIC_OK` not standing it aside; the escape by a reason (a prefix or a trailing comment), the bare token refused, a quoted or
+   searched mention escaping nothing; in `tests.rs`, through the guard, the refusal alone under the count, both refusals at once past
+   it, each escape standing aside only its own rule - failed on a stub `order.rs` that still answered the old notice (`make rust-test
+   CRATE=rust/guard`, one logged run: 708 passed, 3 failed), and the suite's new case 9 (a foreground static, hooks-test and
+   closing-checks each refused with exit 2 and recorded `blocked`, each passing silently backgrounded; the escape with a reason
+   passing, recorded; a bare one refused; `STATIC_OK` not escaping it) failed 8 of its checks (26 passed, 8 failed). Green: 711
+   passed; the suite 34 of 34 (its every other call, and `tests.rs`'s, now backgrounded as a closing check must be, the foreground
+   form a helper of its own); lint, format, cover and dead clean on rust/guard. The closing run after the refusal (`make closing-checks`, backgrounded, measured 2026-11-21, its own table): GREEN, 198 s wall - static 198 s (every crate's checks, the guard crate and T10's `rust/gate/crates/measure` run fresh), hooks-test 62 s (56 suites green, 2 unchanged), quick 5 s.
+   Before and after, measured 2026-11-21 on this clone (one background shell timing the three one after another and
+   then `make closing-checks`, each with HOOKS_ALL=1 so every hooks suite ran in both, static reusing every crate's kept result but the
+   one T10's builder was editing, `rust/gate/crates/measure`, run fresh in both): one after another 104 s (static 54, hooks-test 48,
+   quick 2; the sequential static stopped early, red at T10's crate's cover, so the 104 s understates the sequence, measured 2026-11-21, the same timing run), and at once 52 s
+   wall (static 52, run to its end, hooks-test 52, quick 1, measured 2026-11-21, the same timing run) - half the wall, hooks-test 4 s slower beside static. A first pair (measured 2026-11-21, the same timing run first),
+   not like for like (the sequential run rebuilt the launchers' binaries after the guard edit, and the neighbor's crate was red at a
+   different step in each), read 213 s against 169 s. Started in the background, those 52 s run under the builder's writing, which
+   took it 158 min over the 39 transcripts (the finding, measured 2026-11-21 over 39 builders' transcripts), so the closing tail's wait falls to whatever of the checks outlasts the writing. The closing tail's idle minutes on the next tasks' transcripts, how often the notice fired and was followed (the
+   guard log's `noticed` rows), and how often the foreground refusal fired and was escaped (its `blocked` and `escaped` rows), are read
+   on T22's measured day, which reads every task after T02-T21 land.
+10. **Before moving a constant.** n/a - `STATIC_RUNS_A_TASK` stays 2; a closing-checks run is one of the two.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** n/a - no defect: the checks were right, only their order cost time.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?** none
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** yes - a `[perf]` task (FR-013): it makes the builders' loop faster; no engine timing, so no checklist
 
 
 ### T56 (<why: the finding or measurement that files it>)
@@ -960,6 +1146,87 @@ The T02 class, by kind (the grep's hits, each read):
 |---|---|---|---|---|
 
 ### T58 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+
+### T59 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T59 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+
+### T60 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T60 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+
+### T61 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T61 Approach (checklist part A)
 
 1. **The goal, in the world.** <the place as it should be>
 2. **The constraints.** <the FRs, decisions and pages it holds to>

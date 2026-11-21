@@ -230,6 +230,7 @@ pub const BUCKETS: [(&str, &[&str]); 7] = [
             "quick",
             "test-file",
             "static",
+            "closing-checks",
             "format",
             "rust-test",
             "hooks-test",

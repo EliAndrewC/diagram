@@ -41,6 +41,24 @@ struct Flier {
 pub struct Flight {
     fliers: Vec<Flier>,
     by_id: HashMap<String, Vec<usize>>,
+    /// The feature's agents, each once, in the order of their first start: what was spent beside the critical path (T10, `spent`).
+    pub agents: Vec<Agent>,
+}
+
+/// One agent of the window, every span of it (a resumed agent starts again under its id), read once with the waits' spans (T10, D7).
+#[derive(Debug, Clone, Default, PartialEq)]
+pub struct Agent {
+    /// Its id.
+    pub aid: String,
+    /// Its kind, from the first start that names one, else `?`.
+    pub kind: String,
+    /// The task its lines name - the first start's `task` (the launch's brief, D6), else the first stop's - or "".
+    pub task: String,
+    /// Each span, a start to the first stop after it, else to the window's end; cut to the window and merged by `spent::clip` where the
+    /// command reads the agents' minutes.
+    pub spans: Vec<(f64, f64)>,
+    /// Its last stop's `tok` (D6: a stop is cumulative), if any stop carried one.
+    pub tok: Option<super::spent::Tok>,
 }
 
 /// The rank of an agent; a Bash run of a named column ranks by its place in [`PRECEDENCE`], before it.
@@ -97,14 +115,30 @@ pub fn flight(runs: &Runs, agents: &[Event], stream: &[Event], end: f64) -> Resu
         }
     }
     lines.sort_by(|a, b| a.0.total_cmp(&b.0));
-    // aid -> its kind, from the first start that names one: a resumed agent's start may name none
-    let mut kinds: HashMap<String, String> = HashMap::new();
-    for (_, e) in &lines {
-        let kind = or_s(e, "agent");
-        if is(e, "ev", "SubagentStart") && !kind.is_empty() {
-            kinds.entry(or_s(e, "aid")).or_insert(kind);
+    // aid -> its kind, from the first start that names one: a resumed agent's start may name none; its task, a start's before a stop's;
+    // its last stop's tokens
+    let (mut kinds, mut tasks) = (HashMap::new(), HashMap::new());
+    let mut toks: HashMap<String, super::spent::Tok> = HashMap::new();
+    for start in [true, false] {
+        for (_, e) in &lines {
+            let (aid, kind, task) = (or_s(e, "aid"), or_s(e, "agent"), or_s(e, "task"));
+            if is(e, "ev", "SubagentStart") == start {
+                if start && !kind.is_empty() {
+                    kinds.entry(aid.clone()).or_insert(kind);
+                }
+                if !task.is_empty() {
+                    tasks.entry(aid.clone()).or_insert(task);
+                }
+                if let Some(tok) = (!start)
+                    .then(|| super::spent::Tok::of(get(e, "tok")))
+                    .flatten()
+                {
+                    toks.insert(aid, tok);
+                }
+            }
         }
     }
+    let mut at: HashMap<String, usize> = HashMap::new();
     for (i, (t0, e)) in lines.iter().enumerate() {
         if !is(e, "ev", "SubagentStart") {
             continue;
@@ -114,11 +148,23 @@ pub fn flight(runs: &Runs, agents: &[Event], stream: &[Event], end: f64) -> Resu
             .iter()
             .find(|(_, x)| is(x, "ev", "SubagentStop") && or_s(x, "aid") == aid);
         let kind = kinds.get(&aid).map_or("?", String::as_str);
+        let t1 = stop.map_or(end, |(t, _)| *t);
+        let i = *at.entry(aid.clone()).or_insert_with(|| {
+            f.agents.push(Agent {
+                aid: aid.clone(),
+                kind: kind.to_owned(),
+                task: tasks.get(&aid).cloned().unwrap_or_default(),
+                tok: toks.get(&aid).copied(),
+                ..Agent::default()
+            });
+            f.agents.len() - 1
+        });
+        f.agents[i].spans.push((*t0, t1));
         f.by_id.entry(aid.clone()).or_default().push(f.fliers.len());
         f.fliers.push(Flier {
             sid: or_s(e, "sid"),
             t0: *t0,
-            t1: stop.map_or(end, |(t, _)| *t),
+            t1,
             rank: AGENT,
             bucket: super::super::bucket(&format!("waiting: {kind}")).to_owned(),
             kind: "agent",
