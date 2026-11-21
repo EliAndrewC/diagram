@@ -248,6 +248,45 @@ check "a scratch file stored after an assignment"   ok      "S=/tmp/a; cat >> \$
 (root / 'scripts' / 'x-hooks.sh').write_text('echo guard')
 EOF"
 
+# feature 451 T63 - T58's heredoc of 2026-11-21T05:51:53Z, verbatim, run in the repository root as it was: it only reads, but its git log
+# named its window by f-string options (f'--since={prev["t0"]}'), which py_c held unknowable, so a program naming guard directories
+# read as a guard write; the same script with a writing option (--output=) stays refused
+T63_ROOT=${HERE%/tests/hooks}
+T63_READ=$(cat <<'T63EOF'
+python3 -I - <<'EOF'
+import json,glob,subprocess,re,collections
+from datetime import datetime
+seen=set(); wide=[]
+for f in glob.glob('.git/l7r-events/*.jsonl'):
+    for line in open(f,errors='replace'):
+        if '"cover-build"' not in line: continue
+        e=json.loads(line)
+        if len(e.get('crates',[]))<24 or e['t0'] in seen: continue
+        seen.add(e['t0']); wide.append(e)
+wide.sort(key=lambda e:e['t0'])
+gm=('rust/guard/src/guards/event_log_hooks','rust/guard/src/guards/house_style_hooks','rust/guard/src/guards/feature_approval_hooks','rust/guard/src/guards/set_down_hooks','rust/guard/src/guards/conflict_marker_hooks','rust/guard/src/suite_tools/pylex','rust/guard/src/protocol')
+def istest(r): return bool(re.search(r'(^|/)tests(\.rs|/)',r))
+prev=None; tally=collections.Counter(); secs=collections.Counter()
+for w in wide:
+    d=round((datetime.fromisoformat(w['t1'].replace('Z','+00:00'))-datetime.fromisoformat(w['t0'].replace('Z','+00:00'))).total_seconds())
+    if prev is None: prev=w; continue
+    out=subprocess.run(['git','-C','/diagram/.clones/diagram-backlog','log','--format=@','--name-only',f'--since={prev["t0"]}',f'--until={w["t0"]}','--','rust/'],capture_output=True,text=True).stdout
+    files=set(l for l in out.split('\n') if l.startswith('rust/'))
+    gl=[f for f in files if f.startswith('rust/guard/') and not istest(f) and (f.startswith('rust/guard/src/shared') or f.startswith(gm))]
+    gh=[f for f in files if f.startswith('rust/guard/src/') and not istest(f) and f not in gl]
+    gt=[f for f in files if f.startswith('rust/guard/') and istest(f)]
+    ga=[f for f in files if f.startswith('rust/gate/')]
+    k=('guard-lib ' if gl else '')+('guard-hook ' if gh else '')+('guard-test ' if gt and not gl and not gh else '')+('gate ' if ga else '')
+    k=k.strip() or 'nothing in rust/'
+    tally[k]+=1; secs[k]+=d
+    prev=w
+for k in tally: print(k, tally[k], 'builds', secs[k], 's')
+EOF
+T63EOF
+)
+check "451 T63: T58's read-only heredoc over the event logs" ok "cd $T63_ROOT && $T63_READ"
+check "...and the same with a writing git option"         blocked "cd $T63_ROOT && ${T63_READ//--since=/--output=}"
+
 echo
 echo "3. THE REFUSAL IS USEFUL (FR-006) - it must name the target, not just say no"
 names_a_target "a blocked cohort names a target"  "python3 -m l7r.diagram.tools.cohort_audit"

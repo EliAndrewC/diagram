@@ -14,6 +14,37 @@ print(c.most_common(12))
 print([f for f in ex if pathlib.Path(f).suffix==""][:12])
 "#;
 
+/// T58's heredoc of 2026-11-21T05:51:53Z, verbatim: a read of the event logs whose `git log` names its window by two f-string
+/// options (451 T63: the one read-only program among the 250 make-only refusals the guard log replayed, measured 2026-11-21).
+const T58_0551: &str = r#"import json,glob,subprocess,re,collections
+from datetime import datetime
+seen=set(); wide=[]
+for f in glob.glob('.git/l7r-events/*.jsonl'):
+    for line in open(f,errors='replace'):
+        if '"cover-build"' not in line: continue
+        e=json.loads(line)
+        if len(e.get('crates',[]))<24 or e['t0'] in seen: continue
+        seen.add(e['t0']); wide.append(e)
+wide.sort(key=lambda e:e['t0'])
+gm=('rust/guard/src/guards/event_log_hooks','rust/guard/src/guards/house_style_hooks','rust/guard/src/guards/feature_approval_hooks','rust/guard/src/guards/set_down_hooks','rust/guard/src/guards/conflict_marker_hooks','rust/guard/src/suite_tools/pylex','rust/guard/src/protocol')
+def istest(r): return bool(re.search(r'(^|/)tests(\.rs|/)',r))
+prev=None; tally=collections.Counter(); secs=collections.Counter()
+for w in wide:
+    d=round((datetime.fromisoformat(w['t1'].replace('Z','+00:00'))-datetime.fromisoformat(w['t0'].replace('Z','+00:00'))).total_seconds())
+    if prev is None: prev=w; continue
+    out=subprocess.run(['git','-C','/diagram/.clones/diagram-backlog','log','--format=@','--name-only',f'--since={prev["t0"]}',f'--until={w["t0"]}','--','rust/'],capture_output=True,text=True).stdout
+    files=set(l for l in out.split('\n') if l.startswith('rust/'))
+    gl=[f for f in files if f.startswith('rust/guard/') and not istest(f) and (f.startswith('rust/guard/src/shared') or f.startswith(gm))]
+    gh=[f for f in files if f.startswith('rust/guard/src/') and not istest(f) and f not in gl]
+    gt=[f for f in files if f.startswith('rust/guard/') and istest(f)]
+    ga=[f for f in files if f.startswith('rust/gate/')]
+    k=('guard-lib ' if gl else '')+('guard-hook ' if gh else '')+('guard-test ' if gt and not gl and not gh else '')+('gate ' if ga else '')
+    k=k.strip() or 'nothing in rust/'
+    tally[k]+=1; secs[k]+=d
+    prev=w
+for k in tally: print(k, tally[k], 'builds', secs[k], 's')
+"#;
+
 #[test]
 fn a_program_that_only_reads_is_a_read() {
     for (body, q) in [
@@ -239,6 +270,26 @@ fn a_subprocess_call_that_can_write_stays_a_write() {
         "import subprocess; subprocess.run(['grep', '---cfg', 'p', 'f'])",
         "import subprocess; subprocess.run(['git', 'show', f'{flag}'])",
         "import subprocess; subprocess.run(['git', 'show', f'--{o}'])",
+        // 451 T63: an f-string option is its name with a placeholder value only where the name is literal and the value calls
+        // nothing, so a writing option's name, a call, an escape, a short option or a name the value can reach stays a write
+        "import subprocess; subprocess.run(['git', 'log', f'--output={p}'])",
+        "import subprocess; subprocess.run(['git', 'log', f'--out={p}'])",
+        "import subprocess; subprocess.run(['git', 'show', F'--ext-diff={x}'])",
+        "import subprocess; subprocess.run(['grep', f'--filter={x}', 'p'])",
+        "import subprocess; subprocess.run(['grep', f'---c={x}', 'p'])",
+        "import subprocess; subprocess.run(['git', 'log', f'--since={f()}'])",
+        "import subprocess; subprocess.run(['git', 'log', f'--since={d[g()]}'])",
+        "import subprocess; subprocess.run(['git', 'log', f'--since={x}\\n'])",
+        "import subprocess; subprocess.run(['git', 'log', f'--since=$X{x}'])",
+        "import subprocess; subprocess.run(['git', 'log', f'--{o}={x}'])",
+        "import subprocess; subprocess.run(['git', 'log', f'--since{x}'])",
+        "import subprocess; subprocess.run(['git', 'log', f'--since {x}'])",
+        "import subprocess; subprocess.run(['git', 'log', f'-{x}'])",
+        "import subprocess; subprocess.run(['git', 'log', f'-S={x}'])",
+        "import subprocess; subprocess.run(['git', f'--git-dir={d}', 'log'])",
+        "import subprocess; subprocess.run([f'--since={x}', 'log'])",
+        "import subprocess; subprocess.run(['git', 'push', f'--since={x}'])",
+        "import subprocess; subprocess.run(['git', 'log', f'--since={open(\"Makefile\", \"w\")}'])",
         "import subprocess; subprocess.run(['git', '-c', 'core.pager=rm', 'log'])",
         "import subprocess; subprocess.run(['git', '-C'])",
         "import subprocess; subprocess.run(['git', '-C', *d, 'log'])",
@@ -264,6 +315,25 @@ fn a_subprocess_call_that_can_write_stays_a_write() {
         .filter(|body| reads(body, '\'', Some("/nonexistent-t44")))
         .collect();
     assert!(misread.is_empty(), "judged reads: {misread:#?}");
+}
+
+/// 451 T63: an f-string option whose name is literal and whose value calls nothing is judged as that option with a placeholder
+/// value - T58's heredoc of 05:51:53Z, refused as a guard write for its `f'--since={prev["t0"]}'`, and the shapes beside it.
+#[test]
+fn an_f_string_option_whose_value_calls_nothing_is_that_option() {
+    // T58 05:51:53Z's heredoc reads
+    assert!(reads(T58_0551, '\'', Some("/nonexistent-t63")));
+    let cmd = format!("python3 -I - <<'EOF'\n{T58_0551}EOF");
+    let w = crate::tree::walk_judged(&cmd, Some("/nonexistent-t63"), "/nonexistent-t63", "/h");
+    assert!(w.targets.is_empty(), "T58 05:51:53Z judged a write");
+    for body in [
+        "import subprocess; subprocess.run(['git', 'log', f'--since={prev[\"t0\"]}', f\"--until={w['t0']}\"])",
+        "import subprocess; subprocess.run(['git', 'log', F'--format={fmt}', rf'--author={a}', '--', 'rust/'])",
+        "import subprocess; subprocess.run(['git', 'log', f'--since=2026-11-21'])",
+        "import subprocess; subprocess.run(['grep', f'--max-count={n}', 'p', 'f'])",
+    ] {
+        assert!(reads(body, '\'', Some("/nonexistent-t63")), "{body}");
+    }
 }
 
 /// 451 T44: window#307 whole, through the walk: neither heredoc is a write where the shell stands.

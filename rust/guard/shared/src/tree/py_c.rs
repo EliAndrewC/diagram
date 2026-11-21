@@ -16,6 +16,10 @@
 //! `subprocess.run(["git","-C",root,"ls-files"])`, a read refused or rewritten before). A shell string, `shell=True`, a
 //! non-literal argv or element (git's `-C` directory alone may be any expression), a writing git subcommand, `make`, an unknown
 //! command or an alias of the module stays a write.
+//!
+//! 451 T63: an f-string argv element that is a long option with its name literal and a value that calls nothing is that option
+//! with the value `_` (`FIXED_OPTION`): T58's read of the event logs, `f'--since={prev["t0"]}'` in a `git log` argv, was the one
+//! read-only program among the 250 make-only refusals the guard log replayed (measured 2026-11-21).
 
 use std::path::Path;
 use std::sync::LazyLock;
@@ -73,6 +77,14 @@ static SUBPROCESS_CONST: LazyLock<Regex> =
 /// One argv element that is a string literal holding no quote of its own delimiter (`'a' if c else 'b'` is no literal).
 static ARGV_LITERAL: LazyLock<Regex> =
     LazyLock::new(|| re(r#"(?s)^([rRbBuUfF]{0,2})(?:"([^"]*)"|'([^']*)')$"#));
+/// 451 T63: an f-string's text that is a long option with its name literal - `--`, a letter, letters, digits and `-`, then `=` -
+/// and a value holding no call's bracket, `\`, `$` or line break, so no call can stand in its fields (`f'--since={prev["t0"]}'`,
+/// T58's read of the event logs, refused as a guard write on 2026-11-21T05:51:53Z). `writes_flag` judges an option by its name
+/// alone, and `--name=_` can never be `-C`, a subcommand or a command, so the element is judged as a literal `--name=v` was; a
+/// writing option (`f'--output={p}'`) stays a write by its name, and a short option, a name a field can reach and every other
+/// f-string opening with `-` or `{` stay unknowable.
+static FIXED_OPTION: LazyLock<Regex> =
+    LazyLock::new(|| re(r"^(--[A-Za-z][A-Za-z0-9-]*=)[^()\\$\n]*$"));
 /// `replace(` writes only as `os.replace` or a `Path`'s (`str.replace`, the common read, cannot reach either without these names).
 static REPLACE: LazyLock<Regex> = LazyLock::new(|| re(r"replace\("));
 static PATHS: LazyLock<Regex> = LazyLock::new(|| re(r"\bos\b|Path|pathlib"));
@@ -201,11 +213,18 @@ fn list_items(arg: &str) -> Option<Vec<String>> {
 }
 
 /// One argv element's text where it is a literal whose value the reader knows: no `$` the shell may expand, and an f-string
-/// only where its value cannot open as an option (`f"HEAD:{p}"` is one; `f"{flag}"` and `f"--{o}"` are not).
+/// only where its value cannot open as an option (`f"HEAD:{p}"` is one; `f"{flag}"` and `f"--{o}"` are not) - or, where it is a
+/// long option whose name is literal and whose value calls nothing (`FIXED_OPTION`), that option with the value `_` (451 T63).
 fn argv_literal(arg: &str) -> Option<String> {
     let c = ARGV_LITERAL.captures(arg).ok().flatten()?;
     let f = c.get(1).is_some_and(|p| p.as_str().contains(['f', 'F']));
     let text = c.get(2).or_else(|| c.get(3)).map_or("", |m| m.as_str());
+    let option = f
+        .then(|| FIXED_OPTION.captures(text).ok().flatten())
+        .flatten();
+    if let Some(o) = option {
+        return Some(format!("{}_", o.get(1).map_or("", |m| m.as_str())));
+    }
     let opaque = text.contains('$') || (f && (text.starts_with('{') || text.starts_with('-')));
     (!opaque).then(|| text.to_owned())
 }

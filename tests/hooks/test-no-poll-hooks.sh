@@ -379,6 +379,51 @@ alive "a file that does not exist yet: the producer is starting" alive "$WA_DIR/
 alive "a file just written: alive on the staleness belt" alive "$WA_DIR/fresh.log"
 touch -d "2 hours ago" "$WA_DIR/fresh.log"
 alive "...unheld and long unwritten: the producer is gone" dead "$WA_DIR/fresh.log"
+# 451 T61: A QUIET LOG OVER A LIVE RUN. A run that appends a line between its steps (`for c in a b; do make $c > $c.log; echo
+# "$c rc=$?" >> sum.txt; done`) holds the summary open only for each echo, so between steps nothing holds it and it ages past the
+# belt: the helper called it gone (2026-11-21, T55's builder: `until grep -q ^total seq.times` ended at 55 s, exit 3, while the run
+# ran; 8 of the 11 firings found on disk were the same false "gone"). The run's own process WRITES the file, on its command line or
+# in the script it runs; a waiter or a reader naming it is no proof of anything.
+# a forked child carries this suite's command line until it execs: each is read once its own line names what it must
+wa_settle() { local i; for i in $(seq 100); do grep -q "$2" "/proc/$1/cmdline" 2>/dev/null && return 0; sleep 0.05; done; }
+bash -c "sleep 30; echo x >> '$WA_DIR/fresh.log'" </dev/null >/dev/null 2>&1 & WA_RUN=$!
+wa_settle "$WA_RUN" fresh.log
+alive "a live run that writes it, quiet between its steps: alive" alive "$WA_DIR/fresh.log"
+kill "$WA_RUN" 2>/dev/null; wait "$WA_RUN" 2>/dev/null
+touch -d "2 hours ago" "$WA_DIR/fresh.log"
+printf 'sleep 30\necho step >> %s/fresh.log\n' "$WA_DIR" > "$WA_DIR/steps.sh"
+bash "$WA_DIR/steps.sh" </dev/null >/dev/null 2>&1 & WA_RUN=$!
+wa_settle "$WA_RUN" steps.sh
+alive "a live script whose text writes it: alive" alive "$WA_DIR/fresh.log"
+kill "$WA_RUN" 2>/dev/null; wait "$WA_RUN" 2>/dev/null
+bash -c "until grep -q NEVER-T61 '$WA_DIR/fresh.log'; do sleep 3; done" </dev/null >/dev/null 2>&1 & WA_W1=$!
+bash -c "while ! grep -q NEVER-T61 '$WA_DIR/fresh.log'; do sleep 3; done" </dev/null >/dev/null 2>&1 & WA_W2=$!
+wa_settle "$WA_W1" NEVER-T61; wa_settle "$WA_W2" NEVER-T61
+alive "two waiters on one quiet file and no run: still gone" dead "$WA_DIR/fresh.log"
+kill "$WA_W1" "$WA_W2" 2>/dev/null; wait "$WA_W1" "$WA_W2" 2>/dev/null
+# 451 T61: A READER IS NO RUN EITHER. The Monitor tool's `tail -f f | grep` holds the file open READ-ONLY, which `fuser` counted as a
+# writer (measured 2026-11-21: `fuser -s f` exited 0 over `tail -f f | grep X`, the file two hours unwritten), and a file-test wait
+# (`until [ -s f ]`) greps nothing, so no waiter test sets it aside - while the shell around each names the file. Only a descriptor
+# open for WRITING, or a live process whose text writes the file, is life; each reader held a dead run's wait to its ceiling.
+: > "$WA_DIR/quiet.log"; touch -d "2 hours ago" "$WA_DIR/quiet.log"
+( exec 8<"$WA_DIR/quiet.log"; "$HERE/../../scripts/hooks/lib/writer-alive.sh" "$WA_DIR/quiet.log" >/dev/null 2>&1 ) && \
+  { echo "  FAIL    a descriptor held only for reading: gone (read alive)"; FAIL=$((FAIL+1)); } || \
+  { echo "  ok      a descriptor held only for reading: gone"; PASS=$((PASS+1)); }
+bash -c "tail -f '$WA_DIR/quiet.log' | grep --line-buffered NEVER-T61" </dev/null >/dev/null 2>&1 & WA_R1=$!
+bash -c "until [ -s '$WA_DIR/quiet.log' ]; do sleep 3; done" </dev/null >/dev/null 2>&1 & WA_R2=$!
+wa_settle "$WA_R1" quiet.log; wa_settle "$WA_R2" quiet.log
+for i in $(seq 100); do fuser -s "$WA_DIR/quiet.log" 2>/dev/null && break; sleep 0.05; done  # the tail has opened it
+alive "a Monitor's tail -f and a file-test wait on a quiet file, and no run: still gone" dead "$WA_DIR/quiet.log"
+pkill -P "$WA_R1" 2>/dev/null; kill "$WA_R1" "$WA_R2" 2>/dev/null; wait "$WA_R1" "$WA_R2" 2>/dev/null
+# the helper asks its own tree's wrapper by a clean path (451 T61): called as `lib/../l7r-guard.sh`, the wrapper took `..` for its
+# tree's name, built into ~/.cache once and never rebuilt, and every answer came from that stale binary - the two alive cases above
+# passed on it while the walk's source had changed
+WA_CALL=$(bash -x "$HERE/../../scripts/hooks/lib/writer-alive.sh" "$WA_DIR/quiet.log" 2>&1 >/dev/null | grep -- '--finished-run alive' | head -1)
+case "$WA_CALL" in
+  *l7r-guard.sh*) case "$WA_CALL" in */../*|*/./*) echo "  FAIL    the helper asks the wrapper by a clean path (got: $WA_CALL)"; FAIL=$((FAIL+1)) ;;
+                    *) echo "  ok      the helper asks the wrapper by a clean path"; PASS=$((PASS+1)) ;; esac ;;
+  *) echo "  FAIL    the helper asks the wrapper on a quiet unheld file (no call traced)"; FAIL=$((FAIL+1)) ;;
+esac
 # a process holding it open says ALIVE even when the file has not been written for ages - this is the branch
 # that answers for every detached run in this repository, since `cmd > log` holds that descriptor throughout
 ( exec 9>>"$WA_DIR/fresh.log"; "$HERE/../../scripts/hooks/lib/writer-alive.sh" "$WA_DIR/fresh.log" >/dev/null 2>&1 ) && \

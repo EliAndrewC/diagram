@@ -22,7 +22,7 @@ set -uo pipefail
 EVENT=${1:-}
 # the paths by expansion, not by `$(cd ...)`: each subshell was a fork on every call, 7.7 ms of the wrapper's 8.6 (100 calls, 2026-11-07)
 HERE=${BASH_SOURCE[0]%/*}
-case "$HERE" in /*) ;; *) HERE="$(cd "$HERE" && pwd)" ;; esac  # settings call it by its absolute path; a relative call resolves
+case "$HERE" in */..*|[!/]*) HERE="$(cd "$HERE" && pwd)" ;; esac  # settings call it by its absolute path; a relative call, or one through `..` (451 T61: writer-alive.sh reached it as lib/../, read `..` as the tree and ran a stale build), resolves
 TREE=${HERE%/scripts/hooks}
 TARGET=${L7R_GUARD_TARGET:-$HOME/.cache/l7r-cargo-target/${TREE##*/}}
 GOOD="$TARGET/l7r-guard.good"

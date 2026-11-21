@@ -228,6 +228,39 @@ fn a_builder_past_the_cap_is_refused_but_for_its_handoff() {
     ));
 }
 
+/// A row carrying an advisor call: the top level sums the builder's own two iterations, `before` and `after` the call; the
+/// advisor's own iteration is in neither (451 T68, measured 2026-11-21 on 581 such rows).
+fn advisor_call(before: u64, after: u64) -> Value {
+    let own = |n: u64| json!({"type": "message", "input_tokens": 2, "cache_read_input_tokens": n - 1002, "cache_creation_input_tokens": 1000, "output_tokens": 50});
+    json!({"type": "assistant", "message": {"id": "msg_a", "usage": {
+        "input_tokens": 4, "cache_read_input_tokens": before + after - 2004, "cache_creation_input_tokens": 2000, "output_tokens": 100,
+        "iterations": [own(before),
+            {"type": "advisor_message", "input_tokens": 140_114, "cache_read_input_tokens": 0, "cache_creation_input_tokens": 0,
+             "output_tokens": 10_489, "model": "claude-fable-5-2"},
+            own(after)]}}})
+}
+
+/// RED FIRST (451 T68): the cap's first refusal of the window, a builder at 149,686 and 151,198 either side of its advisor call,
+/// read 300,884 and was refused; it passes on its own context. One past the cap on its own last iteration is still refused at it.
+#[test]
+fn a_builder_just_past_an_advisor_call_is_judged_on_its_own_context() {
+    let f = Fixture::new(
+        "advisor",
+        &[call(148_153), advisor_call(149_686, 151_198)],
+        None,
+    );
+    assert_eq!(verdict(&f.bash("builder", "make quick")), None);
+    f.transcript(AID, &[advisor_call(290_000, 310_000)]);
+    assert_eq!(
+        verdict(&f.bash("builder", "make quick")),
+        Some(Said::Refused {
+            agent: AID.to_owned(),
+            tokens: 310_000,
+            handoff: f.handoffs().join(format!("{AID}.md"))
+        })
+    );
+}
+
 #[test]
 fn the_handoff_is_named_for_the_task_the_calls_line_carries() {
     let f = Fixture::new("task", &[call(400_000)], Some("T12"));

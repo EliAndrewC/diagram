@@ -1,5 +1,6 @@
-//! A transcript's context, its last model call's usage, read from its tail (feature 451 T12's reader, moved here by 451 T58 so the
-//! event log, which the gate's crates read, builds without the context-cap guard).
+//! A transcript's context, its last model call's usage - the caller's own last iteration of it, an advisor call's iteration and the
+//! one before it left out (451 T68) - read from its tail (feature 451 T12's reader, moved here by 451 T58 so the event log, which the
+//! gate's crates read, builds without the context-cap guard).
 
 use std::fs::File;
 use std::io::{Read as _, Seek as _, SeekFrom};
@@ -26,7 +27,7 @@ pub fn own_transcript(session_transcript: &str, agent: &str) -> Option<PathBuf> 
     )
 }
 
-/// The context of a transcript's last model call: its last `assistant` row's `usage`, read backwards in [`CHUNK`]s at most
+/// The context of a transcript's last model call: its last `assistant` row's [`usage_of`], read backwards in [`CHUNK`]s at most
 /// [`TAIL_BYTES`] deep; None where none is found.
 #[must_use]
 pub fn context(path: &Path) -> Option<u64> {
@@ -61,16 +62,53 @@ pub fn context(path: &Path) -> Option<u64> {
     }
 }
 
-/// The context one transcript row reports: an `assistant` row's `message.usage` summed, None for any other row or a sum of zero.
+/// The context one transcript row reports: an `assistant` row's input, cache read and cache creation, None for any other row or a
+/// sum of zero. They are read from the row's last own iteration (`usage.iterations`' last of type `message`), else its top level:
+/// on a row carrying an advisor call the top level is the builder's own two iterations, before and after the call, summed - twice
+/// its context - and the advisor's iteration is in neither, so the top level refused 33 of the cap's 34 refusals since T12 at a
+/// context of 151k to 290k (451 T68, measured 2026-11-21 on the 581 advisor rows of the session's subagent transcripts and the guard
+/// log's past-cap rows). The call's cost, [`call_of`], stays the top level's: both own iterations are billed.
 #[must_use]
 pub fn usage_of(line: &[u8]) -> Option<u64> {
-    let c = call_of(line)?;
-    let sum = c.input + c.cached + c.created;
+    let usage = message_of(line)?.get_mut("usage")?.take();
+    let prompt = |u: &Value| -> u64 {
+        [
+            "input_tokens",
+            "cache_read_input_tokens",
+            "cache_creation_input_tokens",
+        ]
+        .iter()
+        .map(|k| u.get(k).and_then(Value::as_u64).unwrap_or(0))
+        .sum()
+    };
+    let own = usage
+        .get("iterations")
+        .and_then(Value::as_array)
+        .and_then(|its| {
+            its.iter()
+                .rfind(|i| i.get("type").and_then(Value::as_str) == Some("message"))
+        })
+        .map(prompt)
+        .filter(|&n| n > 0);
+    let sum = own.unwrap_or_else(|| prompt(&usage));
     (sum > 0).then_some(sum)
 }
 
-/// One model call's usage as an `assistant` transcript row reports it - the one row reader [`context`] and the event log's `tok`
-/// (feature 451 T07, plan D6) share.
+/// An `assistant` row's `message`, None for any other row or a row naming no `usage`.
+fn message_of(line: &[u8]) -> Option<Value> {
+    const NEEDLE: &[u8] = b"\"usage\"";
+    if !line.windows(NEEDLE.len()).any(|w| w == NEEDLE) {
+        return None;
+    }
+    let mut row: Value = serde_json::from_slice(line).ok()?;
+    if row.get("type").and_then(Value::as_str) != Some("assistant") {
+        return None;
+    }
+    Some(row.get_mut("message")?.take())
+}
+
+/// One model call's usage as an `assistant` transcript row reports it at its top level - the event log's `tok` (feature 451 T07,
+/// plan D6), a call's cost; the row's parse is the one [`usage_of`], which [`context`] reads, shares (451 T68).
 #[derive(Debug, Default, Clone, PartialEq, Eq)]
 pub struct Call {
     /// The row's `message.id`: one call's streamed reply is several rows of one id ("" where the row names none).
@@ -83,15 +121,7 @@ pub struct Call {
 
 /// An `assistant` row's `message.usage`, None for any other row: a `user` row holding an Agent call's result carries that child's usage.
 pub fn call_of(line: &[u8]) -> Option<Call> {
-    const NEEDLE: &[u8] = b"\"usage\"";
-    if !line.windows(NEEDLE.len()).any(|w| w == NEEDLE) {
-        return None;
-    }
-    let row: Value = serde_json::from_slice(line).ok()?;
-    if row.get("type").and_then(Value::as_str) != Some("assistant") {
-        return None;
-    }
-    let message = row.get("message")?;
+    let message = message_of(line)?;
     let usage = message.get("usage")?;
     let n = |k: &str| usage.get(k).and_then(Value::as_u64).unwrap_or(0);
     Some(Call {

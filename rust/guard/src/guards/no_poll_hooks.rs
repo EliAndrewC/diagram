@@ -813,7 +813,7 @@ const BACKGROUNDED: &str = "This file-watching wait was BACKGROUNDED for you (ru
 the whole turn at model-turn cost. Its output - including whatever follows the loop - arrives as a completion notification, so spend \
 the turn on the next thing.";
 const PROOF: &str = "A PROOF-OF-LIFE check was added to the loop: `writer-alive.sh <the file you are watching>`, which asks the kernel \
-whether anything still holds that file open and when it was last written. Without it the wait outlives its producer - a detached run \
+whether anything still holds that file open, when it was last written, and whether a live run names it (451 T61). Without it the wait outlives its producer - a detached run \
 that is killed (this container OOM-kills them) stops writing, the pattern never appears, and the loop runs until somebody notices. \
 When the loop ends, read what the log DOES have: if the helper printed a line, the run is gone and the log is truncated, not finished.";
 const CEILING: &str = "A CEILING was added to the loop: past 90 minutes it prints WAIT TIMED OUT and exits 4, so a wait whose line \

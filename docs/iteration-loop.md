@@ -377,8 +377,9 @@ check to what is being waited for."* So:
 
 - the no-poll guard (`rust/guard/src/guards/no_poll_hooks.rs`) ADDS the clause to every permitted file-watching wait that lacks one - `writer-alive.sh <the
   file the loop watches>`, `||`-negated for an `until` loop and ANDed for a `while` one - in the same rewrite that
-  backgrounds a foreground wait. The helper asks the kernel's open-file table (`fuser`) and the file's mtime, never a
-  process pattern: a literal `pgrep -f` pattern matches the searching shell, which is the 2026-07-25 fault above.
+  backgrounds a foreground wait. The helper asks the kernel's open-file table for a descriptor opened for WRITING (`/proc/<pid>/fdinfo`'s mode, 451 T61:
+  `fuser` counted a `tail -f` reader as a holder), then `l7r-guard --finished-run alive`, which finds a live process whose text writes
+  the file, and the file's mtime - never a process pattern: a literal `pgrep -f` pattern matches the searching shell, which is the 2026-07-25 fault above.
 - The same guard stopped REFUSING the correct shape. A liveness clause was not one of the three permitted file forms,
   so a wait that asked both questions was blocked as a busy-wait; so was a wait whose log was named by a bare
   variable (`$G`). Both were measured the day the fix was written, on the session's own commands. A guard that

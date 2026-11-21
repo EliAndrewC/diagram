@@ -59,6 +59,51 @@ fn the_context_is_the_last_assistant_rows_usage() {
     assert_eq!(usage_of(b"{\"type\": \"assistant\"}"), None);
 }
 
+/// A real advisor-carrying row's usage (a builder's of 2026-11-20, `agent-a8dade2aa6a99c5dd.jsonl` row 132, its counts alone): the
+/// top level sums the builder's own two `message` iterations, 149,686 before the advisor call and 151,198 after it, to 300,884;
+/// the `advisor_message` iteration's 140,114 is in neither (451 T68, measured 2026-11-21 on all 581 such rows of the session).
+fn advisor_row() -> serde_json::Value {
+    json!({"type": "assistant", "message": {"id": "msg_a", "usage": {
+        "input_tokens": 4, "cache_creation_input_tokens": 3045, "cache_read_input_tokens": 297_835, "output_tokens": 982,
+        "server_tool_use": {"web_search_requests": 0, "web_fetch_requests": 0},
+        "iterations": [
+            {"input_tokens": 2, "output_tokens": 226, "cache_read_input_tokens": 148_151, "cache_creation_input_tokens": 1533,
+             "type": "message"},
+            {"input_tokens": 140_114, "output_tokens": 10489, "cache_read_input_tokens": 0, "cache_creation_input_tokens": 0,
+             "type": "advisor_message", "model": "claude-fable-5-2"},
+            {"input_tokens": 2, "output_tokens": 756, "cache_read_input_tokens": 149_684, "cache_creation_input_tokens": 1512,
+             "type": "message"}]}}})
+}
+
+/// RED FIRST (451 T68): a row carrying an advisor call is read as the builder's own last iteration, 151,198, not the top level's
+/// 300,884 that refused 33 of the cap's 34 refusals since T12; a row with no `iterations`, none of type `message`, or a last own
+/// iteration of zero is read at its top level; the call's cost (`call_of`, the event log's `tok`) stays the top level's.
+#[test]
+fn an_advisor_rows_context_is_the_builders_own_last_iteration() {
+    let adv = advisor_row().to_string();
+    assert_eq!(usage_of(adv.as_bytes()), Some(151_198));
+    let d = TempDir::new("context-advisor");
+    let own = d.path().join("t.jsonl");
+    std::fs::write(&own, format!("{}\n{adv}\n", call(140_000))).unwrap();
+    assert_eq!(context(&own), Some(151_198));
+    // two own iterations and no advisor: the last
+    let two = json!({"type": "assistant", "message": {"usage": {"input_tokens": 9, "iterations": [
+        {"type": "message", "input_tokens": 3}, {"type": "message", "input_tokens": 6}]}}});
+    assert_eq!(usage_of(two.to_string().as_bytes()), Some(6));
+    // no own iteration, an own iteration of zero, an `iterations` that is no list: the top level
+    for its in [
+        json!([{"type": "advisor_message", "input_tokens": 7}]),
+        json!([{"type": "message", "input_tokens": 0}]),
+        json!("x"),
+    ] {
+        let row = json!({"type": "assistant", "message": {"usage": {"input_tokens": 5, "iterations": its}}});
+        assert_eq!(usage_of(row.to_string().as_bytes()), Some(5));
+    }
+    // the cost is the top level's, both own iterations billed
+    let c = call_of(adv.as_bytes()).unwrap();
+    assert_eq!(c.input + c.cached + c.created, 300_884);
+}
+
 #[test]
 fn a_call_is_its_ids_and_its_four_counts() {
     assert_eq!(

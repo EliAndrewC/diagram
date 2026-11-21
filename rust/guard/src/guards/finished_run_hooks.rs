@@ -248,7 +248,7 @@ fn refusal(unwatched: &[&Root]) -> String {
     text + "Then REPORT WHAT IT SAID. (A run started with run_in_background needs NO loop.) Ending the turn on purpose: end it again."
 }
 
-/// `--finished-run check <clone>`, `seen <clone>`, `live <clone>`, `judge <clone>`, `stale [clone]`.
+/// `--finished-run check <clone>`, `seen <clone>`, `live <clone>`, `judge <clone>`, `stale [clone]`, `alive <file>`.
 #[must_use]
 pub fn cli(args: &[String]) -> Reply {
     with(args, &Ctx::real())
@@ -271,9 +271,18 @@ pub(crate) fn with(args: &[String], c: &Ctx) -> Reply {
         ("live", false) => say(c.procs.live_runs(clone).iter().map(|(p, t)| format!("{p} {t}")).collect()),
         ("judge", false) => say(c.procs.judge_runs(clone).iter().map(Root::line).collect()),
         ("stale", _) => say(c.procs.stale_waiters(&c.tree, (!arg.is_empty()).then_some(clone))),
+        // `writer-alive.sh`'s last question before "gone" (451 T61): `alive <pid> <how>` where a run names the file, exit 1 where none does
+        ("alive", false) => c.procs.runner_of(clone).map_or_else(
+            || Reply {
+                stdout: String::new(),
+                stderr: String::new(),
+                code: 1,
+            },
+            |r| say(vec![format!("alive {r}")]),
+        ),
         _ => Reply {
             stdout: String::new(),
-            stderr: "usage: l7r-guard --finished-run check <clone>|seen <clone>|live <clone>|judge <clone>|stale [clone]\n".to_owned(),
+            stderr: "usage: l7r-guard --finished-run check <clone>|seen <clone>|live <clone>|judge <clone>|stale [clone]|alive <file>\n".to_owned(),
             code: 2,
         },
     }

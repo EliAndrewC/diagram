@@ -286,5 +286,21 @@ fn the_command_line_answers_each_mode() {
     assert_eq!(with(&args(&["stale"]), &ctx).code, 0);
     assert_eq!(with(&args(&["stale", &c]), &ctx).code, 0);
     assert_eq!(with(&args(&["live"]), &ctx).code, 2);
+    let l = log.to_string_lossy().into_owned();
+    assert_eq!(with(&args(&["alive", &l]), &ctx).code, 1);
+    w.add(
+        101,
+        "bash",
+        1,
+        &w.clone,
+        &["bash", "-c", &format!("sleep 9; echo x >> {l}")],
+        None,
+    );
+    let alive = with(&args(&["alive", &l]), &ctx);
+    assert_eq!(
+        (alive.stdout.as_str(), alive.code),
+        ("alive 101 writes it\n", 0)
+    );
+    assert_eq!(with(&args(&["alive"]), &ctx).code, 2);
     assert_eq!(cli(&args(&[])).code, 2);
 }

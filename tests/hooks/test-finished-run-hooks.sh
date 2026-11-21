@@ -247,12 +247,17 @@ LIVEH=$T/livelog-harness.txt; : > "$LIVEH"
 ( cd "$CLONE" && setsid nohup bash -c "source $SNAP && eval 'exec 9>>$LIVEH; until grep -q $NEVER $LIVEH || ! $(dirname "$HOOK")/../../scripts/hooks/lib/writer-alive.sh $LIVEH; do sleep 3; done'" </dev/null >/dev/null 2>&1 & )
 DEADH=$T/deadlog-harness.txt; echo stub > "$DEADH"; touch -d "2 hours ago" "$DEADH"
 ( cd "$CLONE" && setsid nohup bash -c "source $SNAP && eval 'until grep -q $NEVER $DEADH; do sleep 3; done'" </dev/null >/dev/null 2>&1 & )
-settle 'pgrep -f "grep -q $NEVER $DEADH;" >/dev/null && pgrep -f "grep -q $NEVER $LIVEH" >/dev/null' 40
+# 451 T61: writer-alive.sh now asks whether a live run names the file - and a second waiter on the same dead log names it too, so
+# the walk that sets waiters aside is what keeps both reported (a waiter counted as the run would keep each alive for the other)
+( cd "$CLONE" && setsid nohup bash -c "source $SNAP && eval 'while ! grep -q $NEVER $DEADH; do sleep 3; done'" </dev/null >/dev/null 2>&1 & )
+settle 'pgrep -f "grep -q $NEVER $DEADH;" >/dev/null && pgrep -f "while ! grep -q $NEVER $DEADH;" >/dev/null && pgrep -f "grep -q $NEVER $LIVEH" >/dev/null' 40
 STALE_NOW=$("$HOOK" stale "$CLONE")
 check "a harness-shaped waiter on a live log is NOT reported for its snapshot" no "$(has "$STALE_NOW" "$SNAP")"
 check "...nor for the proof-of-life helper" no "$(has "$STALE_NOW" "writer-alive.sh")"
 check "...nor at all" no "$(has "$STALE_NOW" "$LIVEH")"
 check "a harness-shaped waiter on a DEAD log is reported, naming the log" yes "$(has "$STALE_NOW" "$DEADH")"
+check "...and the second waiter on it too: neither is the other's run (451 T61)" yes \
+  "$([ "$(printf '%s\n' "$STALE_NOW" | grep -c -- "$DEADH")" -eq 2 ] && echo yes || echo no)"
 # GUARD_EDIT_OK: scoped to the fixture clone - unscoped, this cleanup killed EVERY dead-producer waiter on the machine,
 # other sessions' included (found 2026-09-26, when the unscoped census here reported a real session's loop).
 for p in $("$HOOK" stale "$CLONE" | cut -d' ' -f1); do kill -TERM "$p" 2>/dev/null; done

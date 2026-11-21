@@ -4,7 +4,7 @@ use std::os::unix::fs::PermissionsExt;
 use std::path::Path;
 
 use super::super::tests::world;
-use super::{files_named, owner, realpath, Root, Status};
+use super::{files_named, owner, realpath, written, Root, Status};
 
 #[test]
 fn a_path_is_resolved_whether_or_not_it_exists() {
@@ -37,6 +37,31 @@ fn a_command_line_names_only_files_through_its_variables() {
     assert!(quoted.contains(&dir.join("q.log")));
     let relative = files_named("cat v/r.log", &w.root);
     assert!(relative.contains(&realpath(&w.root.join("v/r.log"))));
+}
+
+/// What a text WRITES (451 T61): each redirection's and each `tee`'s target, through the text's own variables and the harness's
+/// quoting, a relative one against the base; a descriptor's copy, a process substitution, a target left holding a `$` and a file only
+/// read name nothing.
+#[test]
+fn a_text_writes_only_what_it_redirects_or_tees_into() {
+    let base = Path::new("/w");
+    let got = written(
+        "S=/w/t; echo a >> $S/a.txt; b 2>&1 >/w/b.log; c &>'/w/c.log'; d | tee -a --output-error=warn /w/d.log; e >| e.log; \
+         f 2>>\"$S/f.log\"; eval 'g >> '\"'\"'/w/g.log'\"'\"''; h > $UNSET/h; i >&2; grep x /w/r.log < /w/in.log; j > >(k)",
+        base,
+    );
+    let want: Vec<&str> = vec![
+        "/w/t/a.txt",
+        "/w/b.log",
+        "/w/c.log",
+        "/w/d.log",
+        "/w/e.log",
+        "/w/t/f.log",
+        "/w/g.log",
+    ];
+    let want: std::collections::BTreeSet<_> =
+        want.into_iter().map(|w| realpath(Path::new(w))).collect();
+    assert_eq!(got, want);
 }
 
 #[test]
@@ -182,6 +207,161 @@ fn only_a_live_file_of_this_clone_makes_a_waiter_stale() {
     assert_eq!(w.procs().stale_waiters(&tree, None).len(), 2);
     std::fs::write(tree.join("scripts/hooks/lib/writer-alive.sh"), "exit 0\n").unwrap();
     assert!(w.procs().stale_waiters(&tree, None).is_empty());
+}
+
+/// A QUIET FILE OVER A LIVE RUN (451 T61): T55's run as recorded on 2026-11-21 - a loop of makes appending a line to its summary
+/// between them - is the run of that summary, since its text WRITES it; the waiters, the waiter's `grep`, the readers - the Monitor
+/// tool's `tail -f | grep` and a file-test wait, each inside the harness's wrapper that names the file - and the asker's own ancestry
+/// name it too and are none of its run, and a stand-in table whose parents loop ends its walk.
+#[test]
+fn a_quiet_file_is_run_by_the_live_process_that_writes_it() {
+    let w = world("runner");
+    let dir = w.root.join("t55");
+    std::fs::create_dir_all(&dir).unwrap();
+    let sum = dir.join("seq.times");
+    std::fs::write(&sum, "static rc=2 70s\n").unwrap();
+    let (s, d) = (sum.display().to_string(), dir.display().to_string());
+    let p = w.procs();
+    assert_eq!(p.runner_of(&sum), None);
+    let wait = format!(
+        "source /s/snapshot.sh && eval 'until grep -q \"^total\" {s}; do sleep 2; done; cat {s}'"
+    );
+    w.add(
+        10,
+        "bash",
+        1,
+        &w.root,
+        &["/bin/bash", "-c", "-l", &wait],
+        None,
+    );
+    w.add(11, "grep", 10, &w.root, &["grep", "-q", "^total", &s], None);
+    w.add(
+        12,
+        "bash",
+        1,
+        &w.root,
+        &[
+            "bash",
+            "-c",
+            &format!("while ! grep -q x {s}; do sleep 3; done"),
+        ],
+        None,
+    );
+    w.add(13, "tail", 1, &w.root, &["tail", "-f", &s], None);
+    w.add(
+        20,
+        "bash",
+        1,
+        &w.root,
+        &["bash", "-c", &format!("ask {s}")],
+        None,
+    );
+    w.add(
+        99_999,
+        "l7r-guard",
+        20,
+        &w.root,
+        &["l7r-guard", "--finished-run", "alive", &s],
+        None,
+    );
+    w.add(30, "bash", 31, &w.root, &["bash"], None);
+    w.add(31, "bash", 30, &w.root, &["bash"], None);
+    let harness = |cmd: &str| {
+        format!("source /s/snapshot.sh 2>/dev/null || true && eval '{cmd}' < /dev/null && pwd -P >| /tmp/claude-1-cwd")
+    };
+    let monitor = harness(&format!("tail -f {s} | grep --line-buffered total"));
+    w.add(32, "bash", 1, &w.root, &["/bin/bash", "-c", &monitor], None);
+    w.add(33, "tail", 32, &w.root, &["tail", "-f", &s], None);
+    w.add(
+        34,
+        "grep",
+        32,
+        &w.root,
+        &["grep", "--line-buffered", "total"],
+        None,
+    );
+    let test = harness(&format!(
+        "until [ -s {s} ]; do sleep 3; done; cat {s} > {d}/copy.txt 2>&1"
+    ));
+    w.add(35, "bash", 1, &w.root, &["/bin/bash", "-c", &test], None);
+    assert_eq!(p.runner_of(&sum), None, "a reader is no run of the file");
+    let run = format!(
+        "source /s/snapshot.sh && eval 'cd {c} && t0=$(date +%s); for c in static hooks-test quick; do s=$(date +%s); make \
+         --no-print-directory $c HOOKS_ALL=1 > {d}/seq-$c.log 2>&1; echo \"$c rc=$? $(( $(date +%s) - s ))s\" >> {s}; done; echo \
+         \"total $(( $(date +%s) - t0 ))s\" >> {s}; cat {s}'",
+        c = w.clone.display()
+    );
+    w.add(
+        40,
+        "bash",
+        1,
+        &w.clone,
+        &["/bin/bash", "-c", "-l", &run],
+        None,
+    );
+    w.add(41, "make", 40, &w.clone, &["make", "hooks-test"], None);
+    assert_eq!(p.runner_of(&sum).as_deref(), Some("40 writes it"));
+}
+
+/// A run started from a script writes its file in the script's text (451 T61: T38's `lintcover.sh` and T45's `series.sh`, each run
+/// by path, named the summary they appended to only inside): a relative script is read against the run's cwd; a waiter's script, a
+/// script that only reads the file, a file past `SCRIPT_BYTES`, a binary, and a run's log that a reader follows (its echoed recipe
+/// writes the file, but a `tail` runs no script) are read as no run of it.
+#[test]
+fn a_quiet_file_is_run_by_the_script_that_writes_it() {
+    let w = world("script");
+    let dir = w.root.join("t38");
+    std::fs::create_dir_all(&dir).unwrap();
+    let tsv = dir.join("lintcover.tsv");
+    std::fs::write(&tsv, "lint\trust/guard\t0\n").unwrap();
+    let t = tsv.display();
+    std::fs::write(
+        dir.join("wait.sh"),
+        format!("until grep -q DONE {t}; do sleep 5; done\n"),
+    )
+    .unwrap();
+    std::fs::write(
+        dir.join("big.txt"),
+        format!("{t}\n{}", "x".repeat(256 * 1024)),
+    )
+    .unwrap();
+    std::fs::write(dir.join("bin"), [0xff, 0xfe, 0x00]).unwrap();
+    std::fs::write(
+        dir.join("read.sh"),
+        format!("until [ -s {t} ]; do sleep 5; done; cat {t}\n"),
+    )
+    .unwrap();
+    std::fs::write(
+        dir.join("make.log"),
+        format!("l7r-gate.sh rust lint > lint.log; echo lint >> {t}\n"),
+    )
+    .unwrap();
+    w.add(
+        50,
+        "bash",
+        1,
+        &dir,
+        &["bash", "wait.sh", "big.txt", "bin", ""],
+        None,
+    );
+    w.add(52, "bash", 1, &dir, &["bash", "read.sh"], None);
+    w.add(53, "tail", 1, &dir, &["tail", "-f", "make.log"], None);
+    assert_eq!(w.procs().runner_of(&tsv), None);
+    let sh = dir.join("lintcover.sh");
+    let text = format!(
+        "#!/bin/bash\nfor k in lint cover; do\n  l7r-gate.sh rust $k > {d}/$k.log 2>&1\n  printf '%s\\t%s\\n' \"$k\" \"$?\" >> {t}\ndone\necho DONE\n",
+        d = dir.display()
+    );
+    std::fs::write(&sh, text).unwrap();
+    std::fs::set_permissions(&sh, std::fs::Permissions::from_mode(0o755)).unwrap();
+    w.add(51, "bash", 1, &dir, &["/bin/bash", "./lintcover.sh"], None);
+    assert_eq!(
+        w.procs().runner_of(&tsv),
+        Some(format!(
+            "51 runs {} which writes it",
+            realpath(&sh).display()
+        ))
+    );
 }
 
 /// `f`'s answer, or a failure once it runs past 20 s (feature 449 T185: a quadratic search, or a scan over an error it repeats, must
