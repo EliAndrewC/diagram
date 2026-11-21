@@ -6300,3 +6300,141 @@ performance checklist's answers are given in brief:
 landing beside running tasks, and no batch waiting on a shared plan.md); not engine speed, so the performance checklist does not apply.
 
 
+<!-- plan-archive: archived 2026-11-21 -->
+### T99 (the idle-tests suite's case 5 check "the run started a FULL wait after the jump" failed good work: red in T88's closing run `20261121T180015Z-555985` (33 of 34, at a load of 16.5 beside a make done; `/tmp/t88/closing-1.log` is the same run), green on the rerun unchanged; measured 2026-11-21 over this clone's 24 closing-check runs (12:46Z on), the suite ran in at least 15 (its name on the log's timing line or a failure; the rest skipped on an unchanged key) and that was case 5's one red; reproduced the same day, 8 of 8 copies red with the suite's own `date` started 0.5 s late and 1 of 8 at 0.2 s, measured 2026-11-21 (`slowrun.sh` over HEAD))
+
+- **Approach**: case 5 of `tests/hooks/test-idle-tests-hooks.sh` pins the full wait by the guard's own events, not by slack. The old
+  check took its time AFTER the last jump's `sleep 0.15` and a fork of `date`, and asked 0.35 s of the 0.6 s wait (the old check's
+  slack and the case's IDLE_WAIT_S, each a GUESS) to remain past it, so the test shell's own lag ate the margin. Now four things, all
+  in the suite:
+  - THE WINDOW BY A CONDITION: case 5's clock seam HOLDS the timer. A read by the `--idle-tests timer` process, once its value is
+    taken, writes `t` and waits while a gate file stands; the case waits for that `t` ("the timer took its first reading and is held
+    there"), writes the first jump, and drops the gate. The first jump therefore lands inside the wait whatever the shell's lag
+    (feature 169's eight jumps were a bet on that window). The guard's `ask` has no time limit, so a held read is never cut off.
+  - THE JUMPS PACED BY THE TIMER'S TICKS: the seam logs each of the timer's reads as `t <value> <time>`, two a tick (`alive` and
+    `now`, confirmed on a real log: 6 reads at each jump's value, 29 at the last, measured 2026-11-21 (a probe copy's seam log)). Each next jump waits for four reads after the last,
+    so at least one tick is counted between two jumps whatever the load. The pacing ends once the run has started.
+  - EACH JUMP BY ITS OWN STAMP: each of the eight jumps is timestamped BEFORE it is written (bash's `$EPOCHREALTIME`, no fork).
+  - THE FULL WAIT BY THE GUARD'S EVENTS: jump k moves the clock B x 2^(k-1) s (B = 300), and no ticker runs. So each "suspend detected
+    (wall jumped N s past the ticks)" line the timer already writes to `.git/idle-tests.log` spans exactly N + 1 s of jumps, and its
+    highest bit names the latest jump the timer saw, measured 2026-11-21 (`wait_ms` read, and the decode check green on every line of
+    every batch). Two checks then pin the full wait after that jump:
+    - In real seconds: the run starts at least IDLE_WAIT_S (0.6 s, the case's setting, a GUESS) after the jump's stamp. That is twelve `IDLE_TICK` sleeps, a floor
+      that load lengthens and never shortens.
+    - In the timer's own ticks: it reads its clock at least 2 x IDLE_WAIT_S / IDLE_TICK = 24 times between its first sight of the
+      jump and the run's start. A timer that never restarts runs short of that whatever the load.
+
+    A decode check holds the reading itself (every line on the B grid, the jumps contiguous within and between lines, as many
+    lines as the record's `suspends`), so a misread fails as a misread.
+
+  The guard is untouched: its restart line and its clock reads were the events, and no timestamp had to be exposed. The suite goes
+  from 34 checks to 37 (the held reading, the decode and the ticks). Case 7's upper bound is raised from 8 s to 90 s (a GUESS, Found
+  and left).
+  Measured 2026-11-21 under `/tmp/claude-1000/t99/`:
+  - **The tools.** `many.sh` runs n copies at once beside optional CPU burners. `slowrun.sh` delays the suite shell's own `date` or
+    `sleep` through a PATH shim (the run stand-in's `date` untouched). A probe copy of the suite prints case 5's margins, and
+    `final.sh` runs the final batches.
+  - **HEAD under CPU load: 0 of 96 copies red on case 5.** 16 ran at a load of 15.7, 16 beside 22 burners at 26.2, and 64 beside 22
+    burners at 79.7. CPU load slows the timer more than the shell: the old margin grew from 0.608 s alone to 0.924 s at the least
+    beside the burners, measured 2026-11-21 (the probe copy's printed margins under `many.sh`). So load alone does not reproduce the
+    failure.
+  - **HEAD with the shell lagging (the red first): 8 of 8 red** with `date` 0.5 s late, and 1 of 8 at 0.2 s, measured 2026-11-21
+    (`slowrun.sh` over HEAD).
+  - **The final case, the sound guard: green in every batch.** Each figure is the seconds after the last jump seen, against the
+    IDLE_WAIT_S floor, and the timer's reads after it, against the 24 owed.
+    - 8 copies at once: 8 of 8, 0.845-0.885 s, 27 reads each, every jump seen, measured 2026-11-21 (`final.sh`).
+    - 32 copies beside 22 burners (a load of 52.6): 32 of 32, 4.646-5.352 s, 26-27 reads, measured 2026-11-21 (`final.sh`).
+    - `sleep` 1.0 s late: 8 of 8, 0.895-0.916 s, 27 reads each, measured 2026-11-21 (`final.sh` under `slowrun.sh`). Jump 1 was the
+      last seen, because the lagged pacing let the wait end before jump 2, which is the stall path.
+    - `date` 1.0 s late: 8 of 8, 0.911-0.923 s, 27 reads each, every jump seen, measured 2026-11-21 (`final.sh` under `slowrun.sh`).
+      HEAD under the same shim at 0.5 s was red 8 of 8, measured 2026-11-21 (`slowrun.sh` over HEAD).
+  - **The final case, the broken guard: red in every batch.** The test is a throwaway clone (`/tmp/claude-1000/t99/t99-broken-guard`,
+    with its own cargo target) where `awake = 0;` is commented out of `wait_ms`, so a jump is counted but the wait does not restart.
+    - 8 copies at once: 8 of 8 red on both checks, 0.212-0.364 s and 5-7 reads, measured 2026-11-21 (`final.sh` in that clone).
+    - 16 copies beside 22 burners (a load of 35.5): 16 of 16 red on the ticks, at 5-10 reads, while its seconds (0.736-1.400 s)
+      passed the floor, measured 2026-11-21 (`final.sh` in that clone). Real time alone would have let it through.
+    - `sleep` 0.5 s late: 8 of 8 red on both checks, 0.346-0.361 s and 11 reads, measured 2026-11-21 (`final.sh` in that clone
+      under `slowrun.sh`).
+  - **Three earlier cuts, all superseded.**
+    - Stamps by `date`: with `date` 1.0 s late, the whole wait ended before the first jump, 8 of 8 "the suspend was counted (0)",
+      measured 2026-11-21 (`slowrun.sh`).
+    - `$EPOCHREALTIME` without the gate: with `sleep` 1.0 s late, 5 of 8 saw no jump, measured 2026-11-21 (`slowrun.sh`). The first
+      jump landed before the timer's first reading, and the next came after its wait.
+    - The gate with jumps paced by `sleep 0.15` and the seconds check alone. It was green under the lags (the old figure red 8 of 8
+      in each), but the broken guard passed 8 of 8 copies run at once just after the burners: its ticks ran slower than the jumps, so
+      it had counted almost nothing by the last one.
+  - **The gated cut beside 22 burners (64 copies, a load of 133.7):** 0 case-5 reds and 0 case-7 reds; one case-6 red (Found and left).
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+| case 5's full wait pinned by the timer's own restart lines and clock reads; case 7's bound sized for a loaded host | n/a - no map | n/a | none | n/a |
+
+<!-- plan-archive: archived 2026-11-21 -->
+### T99 Approach (checklist part A)
+
+1. **The goal, in the world.** No map changes. `make hooks-test` and `make closing-checks` on a busy host stop failing case 5 while
+   the idle timer is sound, and the regression the case exists for still fails it: a clock jump past the suspend threshold that is
+   counted but does not restart the full wait (red 2026-11-21, item 9), or one never detected ("the suspend was counted").
+2. **The constraints.** T99's line (made to hold under load, its comment's rule: wait on a condition, not a clock; red first by a
+   loaded run; lands before T22); the brief (the test file alone, the guard only to expose a timestamp, T97's
+   `rust/guard/shared/src/tree*` and T101's land crate and `scripts/land-alone.sh` untouched); feature 169's reason for eight jumps
+   (a single jump can land before the timer's baseline reading); the guard's D2 and D3 (a wait of AWAKE time; a wall jump past the
+   ticks restarts it, `wait_ms`).
+3. **Where each comes from.** G: feature 427 T03's ruling (the GM 2026-10-26, kept in `l7r/diagram/CLAUDE.md`): timings are
+   recorded and never a gate on anything, and the old check was a timing used as a gate. R: none (tooling). O: the measurements in
+   the Approach, 2026-11-21.
+4. **Do they describe the world here?** Measured, not assumed. The failing run's log held one case-5 red in 15 or more closing
+   runs, measured 2026-11-21 (this clone's closing-check logs read). The lag reproduced it, HEAD red 8 of 8 with the shell's `date`
+   0.5 s late, measured 2026-11-21 (`slowrun.sh` over HEAD). What the timer writes was read from the guard's code (`wait_ms` prints
+   each restart with its drift in whole seconds, and `arm` sends the timer's stdout to `.git/idle-tests.log`) and confirmed on the
+   artifact, every decoded line on the B grid in every run and 0 decode reds, measured 2026-11-21 (the suite's decode check over
+   every batch of `final.sh` and `many.sh`).
+5. **The order.** After T88 (which found it); before T22 (T99's line). Independent of T97 and T101: no shared file.
+6. **The exits.** Green: the case green under the lag shims and beside the burners, red with the restart broken, and the closing
+   checks green. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None: one file, read by range.
+8. **The budget.** One landing.
+9. **Done, measured.** The Approach's figures (2026-11-21):
+   - HEAD was red 8 of 8 under a 0.5 s shell lag, measured 2026-11-21 (`slowrun.sh` over HEAD).
+   - The final case was green in every batch: at once, beside 22 burners, and under both lags. Each copy read its clock at least 26
+     times after the last jump it saw (24 owed), measured 2026-11-21 (`final.sh`).
+   - It was red in every batch with the restart broken: 5 to 10 reads, measured 2026-11-21 (`final.sh` in the broken clone). Beside
+     the burners that came on the ticks alone.
+   - `make closing-checks T=T99 F=451` was GREEN on all three, static, hooks-test and quick, and its hooks-test timing line names
+     `idle-tests-hooks.sh` as run, so the green covers the changed suite and is no skip on an unchanged key, measured 2026-11-21
+     (run `20261121T193733Z-3071376`, `/tmp/claude-1000/t99/closing.log` and the run's `hooks-test.log`). It judged 8 of the clone's
+     30 uncommitted files as T99's and reported the other 22 apart, as T82's, T95's, T97's, T100's and T101's.
+10. **Before moving a constant.** The old check's 0.35 s slack (a GUESS) is retired for IDLE_WAIT_S itself, the hard floor. The jump
+    size moves from 500 s (a GUESS) to B x 2^(k-1) s with B = 300 s, a GUESS held by arithmetic: each jump past IDLE_SUSPEND_S
+    (100 s, the suite's setting, a GUESS), the eight together 76,500 s inside IDLE_GIVE_UP_S (100,000 s of the fake clock from
+    `armed_at`, the suite's setting, a GUESS). Case 7's 8 s becomes 90 s (a GUESS), an upper bound on a condition wait that a green
+    run never pays, the bound case 4b's "changed content rolls again" already holds. No research claim moves.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** No map changes; the defect is a red gate on good work (a closing run lost, a rerun owed).
+
+   Coverage, honestly: the old check also implied that the run began after ALL the jumps; the new one pins a full wait after the
+   last jump the timer logged, which is the property case 5 exists for. A timer that restarted only on its first jump would leave the
+   later jumps unlogged and pass, and the case does not claim to catch it. A non-restarting timer can
+   pass only if no tick is counted between its first and last jump. The jumps paced on its reads rule that out: before the pacing,
+   such a timer passed 8 of 8 beside the burners, and since, it is red in every batch. Case 4 still waits under the ticker, so a
+   clock that moves while the timer waits is still proved not to be a suspend.
+
+**Found and left?**
+- Case 7's "runs once the make is gone" was red in 3 of the 64 HEAD copies beside 22 burners at a load of 79.7, an 8 s upper bound
+  on a condition wait, the same shape case 4b's comment already raised to 90 s, measured 2026-11-21 (`many.sh`). Fixed here: 90 s
+  (a GUESS), so a green run pays nothing, and 0 case-7 reds in the 64 copies of the gated cut beside 22 burners at a load of 133.7,
+  measured 2026-11-21 (`many.sh`).
+- Case 6's "the losers deferred (0)" was red in 1 of those 64 copies (load 133.7): three sessions armed at once are meant to contend
+  for the lock, and under that load their waits ended far enough apart that none had to defer, so the case's premise was not
+  exercised. Not fixed here: it is outside T99's case 5, and its fix is a design choice (contention made by a condition, as case
+  5's gate does) rather than a bound. Filed as T104; lands before T22.
+- The brief named T76's closing run (`/tmp/t76/closing2.log`, 3 of 34) as an earlier red of this case; its three were case 4b ("second
+  record (the skip)", "no second run on unchanged content", "the skip surfaces"), not case 5. Not reproduced: 0 case-4b reds in the
+  472 copies this task ran (HEAD and every cut, loaded, lagged and plain), measured 2026-11-21 (a grep of their logs for the three
+  names). Its skip
+  check's bound is already 30 s (a GUESS, feature 449 T065's), so slack is an unlikely cause. Not fixed here: it was never
+  reproduced, so there is no diagnosis to fix from, and it is outside T99's case 5. Filed as T104; lands before T22.
+
+**Performance work?** No.
+
+
