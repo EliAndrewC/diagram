@@ -174,6 +174,9 @@
 - [x] T59 [perf] The guard's SubagentStop tok field is short (found by T10, 2026-11-21: short on 16 of the 17 stops that carry one, against the transcript's last messages) - the writer (rust/guard/src/guards/event_log_hooks/fields.rs) reads the tokens before the transcript's last messages are written; measured first which messages it misses, then the field matches the transcript's sum, red first; T10's reader already takes the transcript's sum first, so no report reads it wrong meanwhile; and a stop with no tok at all whose transcript has rows (262 of 279 stops carry none, T10's plan review, 2026-11-21) is measured too - absent since the field began is the same defect, before it is history
       research: rendering
       verify: DONE. landed in batch T56+T59+T64: the refile's shared rule; the stop tokens; the order notice after a landing
+- [x] T60 The context cap names a builder's handoff under the call's working directory, so a builder whose shell was reset to /diagram writes it in the mirror's .git (found 2026-11-21: T10's handoff at /diagram/.git/l7r-handoffs/, the mirror being no workspace) - context_cap_hooks resolves the handoff directory from the session's clone (shared::session, as clone_sync_hooks routes an edit) rather than the cwd, red first on a call from /diagram
+      research: rendering
+      verify: DONE. landed in batch T60+T67+T72+T75: handoffs in the clone; README targets; closing-checks runs apart
 - [x] T61 [perf] The wait's proof-of-life check ends a live wait as gone (found by T55's builder, 2026-11-21: a wait on a log appended only between checks ended at 55 s with exit 3, saying the run was gone, while it ran) - measured first which of the waits the hook rewrites read a file that is quiet between checks, then the check asks the run's own process (the /proc walk finished_run_hooks uses) rather than the file's growth, red first on a quiet log over a live run
       research: rendering
       verify: DONE. landed in batch T61+T63+T68: a wait's proof of life is a writer; f-string options; the context cap's own context
@@ -192,6 +195,9 @@
 - [x] T66 [perf] Nothing pins T58's rebuild count (found by T58, 2026-11-21: a hook edit rebuilds the guard alone because no crate but the guard's own tests depends on l7r_guard; a crate that adds l7r_guard back fails nothing) - a check in make static refuses a dependency on l7r_guard from any crate but the binaries that ship it, naming l7r_shared, red first on a gate crate's Cargo.toml naming it
       research: rendering
       verify: DONE. landed in batch T11+T65+T66: feature-report's columns; resumed agents run; the guard-deps pin
+- [x] T67 The README guard refuses a cp of a hook's source to /tmp (found by T58's builder, 2026-11-21: cp rust/guard/src/guards/readme_hooks.rs /tmp/... refused as a README write) - the guard reads the destination's name, not the source's, red first on that cp
+      research: rendering
+      verify: DONE. landed in batch T60+T67+T72+T75: handoffs in the clone; README targets; closing-checks runs apart
 - [x] T68 [perf] The context cap read an advisor-carrying row's usage as the builder's context (restated by T68's measurement, 2026-11-21: an advisor call's usage.iterations is [message, advisor_message, message] and the top level sums the builder's own two iterations, about twice its context, the advisor's own in neither; 33 of the cap's 34 refusals since T12 read such a row, each under the cap on the builder's last iteration) - the cap reads the builder's own last message iteration, red first
       research: rendering
       verify: DONE. landed in batch T61+T63+T68: a wait's proof of life is a writer; f-string options; the context cap's own context
@@ -201,3 +207,9 @@
 - [x] T70 [perf] rust/browser's real-Chromium test fails good work under load (found by T68's closing run, 2026-11-21: a 40 ms wait timed out while make closing-checks ran static, hooks-test and quick at once; the crate's cover run alone was clean after) - measured first how often it has gone red in the event log's Phase lines and what the wait waits on, then it waits on the page's own signal with a ceiling sized for a loaded host, red first on a stalled fake page
       research: rendering
       verify: DONE. landed in batch T54+T69+T70: stale terms in their stale sense; the advisor's tokens; the browser's wait
+- [x] T72 [perf] Two make closing-checks runs in one clone share .git/closing-checks/ and read each other's verdicts (found by T69's builder, 2026-11-21: a run started 09:38:06Z and another 09:38:33Z; each deletes the other's .exit files at start and truncates its logs, so the first read the second's quick verdict as its own and static.log holds both runs' lines) - each run writes under its own directory (a run id), the combined result read from its own files alone, red first on two overlapping runs whose verdicts differ
+      research: rendering
+      verify: DONE. landed in batch T60+T67+T72+T75: handoffs in the clone; README targets; closing-checks runs apart
+- [x] T75 The README guard refuses a README path held as the text of a one-line Python string (found by T67's plan review, 2026-11-21: write_text('(tmp / "README.md").write_text(1)') refused though the README is only the string's contents) - the guard's Python reading tells a string literal's contents from code (it already blanks triple-quoted text), red first on that shape, a real write_text of a README in the tree still refused
+      research: rendering
+      verify: DONE. landed in batch T60+T67+T72+T75: handoffs in the clone; README targets; closing-checks runs apart
