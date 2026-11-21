@@ -549,7 +549,7 @@ fn a_free_builder_slot_names_the_next_independent_open_task() {
     let free = text.contains("a builder slot is free - 2 of 3 builders running (385 T02, 385 T03)");
     assert!(free, "{text}");
     assert!(text.contains("(T06 the gamma tool"), "{text}");
-    assert!(text.contains("PERF_LATER_OK=\"385 T04, the open performance work, is started, waits on an open task or touches a running task's files\" make task-start F=385 T=T06"), "{text}");
+    assert!(text.contains("PERF_LATER_OK=\"385 T04, the open performance work, is started or touches a running task's files\" make task-start F=385 T=T06"), "{text}");
     assert!(text.contains("make set-down F=385 WHY="), "{text}");
     // a performance task free to start is named first, with no escape
     std::fs::write(
@@ -665,4 +665,140 @@ fn a_free_slot_s_unreadable_reads_are_errors() {
     assert!(verdict(&c, &at).is_err());
     std::fs::set_permissions(&own, std::fs::Permissions::from_mode(0o644)).unwrap();
     crate::env::unset("L7R_EVENTS_DIR");
+}
+
+/// 451 T102: a land `end` line of the feature's event log, as `make land` writes one (its `tasks`, or `task` alone).
+fn landed(tasks: &str, t1: &str, ok: bool) -> String {
+    format!(
+        r#"{{"ev":"Phase","src":"land","step":"end","t1":"{t1}","code":0,"make":"land",{tasks},"landed":{ok}}}"#
+    )
+}
+
+/// 451 T102: A WAIT THE HOOK READS. A task line's `(waits: <when>)` right after its tags holds it from the free-slot reading until its
+/// wait is met - a full day after the latest landing of the tasks it names (T11 landed twice, T12's line names it by `task` alone, T13
+/// landed before the log carried end lines, a refused landing counts for nothing), or a landing - and so do `after T<n>` an open task
+/// and an open task's line saying it `lands before` it; a clause the line only quotes in its prose is no wait.
+#[test]
+fn a_free_slot_skips_a_task_whose_wait_is_not_met() {
+    let (_dir, c, tr) = world("roll-waits", "no");
+    let events = c.join("events");
+    std::fs::create_dir_all(&events).unwrap();
+    crate::env::set("L7R_EVENTS_DIR", &events);
+    crate::env::unset("L7R_BUILDERS");
+    crate::env::set("L7R_WAITS_NOW", "2026-11-21T20:00:00Z");
+    std::fs::write(
+        events.join("385-x.jsonl"),
+        [
+            landed(r#""tasks":["T11"]"#, "2026-11-20T10:00:00Z", true),
+            landed(r#""task":"T12""#, "2026-11-21T08:00:27.560Z", true),
+            landed(r#""tasks":["T11","T12"]"#, "2026-11-21T19:00:00Z", false),
+            landed(r#""tasks":["T13"]"#, "not a time", true),
+            r#"{"src":"land","step":"end" not json"#.to_owned(),
+        ]
+        .join("\n"),
+    )
+    .unwrap();
+    let tasks = |seventh: &str| {
+        format!("- [x] T01 done\n- [ ] T02 the next thing\n- [ ] T03 later\n- [ ] T04 [perf] (waits: a full day after T11-T13 land) the measured day\n- [ ] T05 [perf] (waits: T03 lands) the third's follow-up\n- [ ] T06 [perf] (waits: T07 lands) the seventh's follow-up\n- [{seventh}] T07 the landing T06 waits on, which lands before T08\n- [ ] T08 [perf] held by the seventh's line\n- [ ] T09 a line that quotes a (waits: 2999-01-01) clause in its prose\n- [x] T11 eleven\n- [x] T12 twelve\n- [x] T13 thirteen\n")
+    };
+    std::fs::write(c.join("specs/385-x/tasks.md"), tasks(" ")).unwrap();
+    agent(&tr, "a1", 1, "385 T02: the next thing");
+    // every performance task waits, so the first other task is named, with no escape: no open performance task can start
+    let text = said(&c, &tr).unwrap();
+    let seventh = text.contains(
+        "(T07 the landing T06 waits on, which lands before T08): make task-start F=385 T=T07,",
+    );
+    assert!(seventh, "{text}");
+    assert!(!text.contains("PERF_LATER_OK"), "{text}");
+    let start = |task: &str| {
+        let starts = std::fs::read_to_string(c.join(".git/task-starts.jsonl")).unwrap();
+        let row =
+            format!(r#"{{"feature": "385-x", "task": "{task}", "utc": "2026-11-21T19:00:00Z"}}"#);
+        std::fs::write(c.join(".git/task-starts.jsonl"), format!("{starts}{row}\n")).unwrap();
+    };
+    // a clause quoted in the prose is no wait
+    start("T07");
+    let ninth = said(&c, &tr)
+        .unwrap()
+        .contains("make task-start F=385 T=T09,");
+    assert!(ninth);
+    // the seventh landed: its follow-up and the task its line held are free, performance work first
+    std::fs::write(c.join("specs/385-x/tasks.md"), tasks("x")).unwrap();
+    let sixth = said(&c, &tr)
+        .unwrap()
+        .contains("make task-start F=385 T=T06,");
+    assert!(sixth);
+    start("T06");
+    start("T08");
+    // a full day after the latest landing of T11-T13 (T12's, 08:00:27.560Z): not met 0.56 s short of it, met at it
+    crate::env::set("L7R_WAITS_NOW", "2026-11-22T08:00:27Z");
+    let short = said(&c, &tr)
+        .unwrap()
+        .contains("make task-start F=385 T=T09,");
+    assert!(short);
+    crate::env::set("L7R_WAITS_NOW", "2026-11-22T08:00:27.560Z");
+    let met = said(&c, &tr)
+        .unwrap()
+        .contains("make task-start F=385 T=T04,");
+    assert!(met);
+    crate::env::unset("L7R_WAITS_NOW");
+    crate::env::unset("L7R_EVENTS_DIR");
+}
+
+/// 451 T102: ONE RULE, task-start's too. `make task-start`'s performance-first picker ([`next_performance`]) skips a performance task
+/// that waits - on a landing (one task, or a range with one open) or on an open task (`after T<n>`) - so the start of other work needs
+/// no `PERF_LATER_OK` for it. A bare date is no wait (T102's plan review, D7e: the clock against a typed date would be an escape with
+/// no reason recorded), and nor is a clause that does not parse, failing toward a start the session sees named.
+#[test]
+fn task_start_s_performance_picker_skips_a_waiting_task() {
+    let (_dir, c, _tr) = world("perf-waits", "no");
+    let git = c.join(".git");
+    crate::env::set("L7R_EVENTS_DIR", c.join("events"));
+    crate::env::unset("L7R_WAITS_NOW");
+    let write = |tasks: &str| std::fs::write(c.join("specs/385-x/tasks.md"), tasks).unwrap();
+    let picked = || next_performance(&c, &git, "385-x").unwrap().map(|t| t.id);
+    let tasks = |second: &str| {
+        format!("- [{second}] T02 the next thing\n- [ ] T04 [perf] (waits: T02 lands) the second's follow-up\n- [ ] T05 [P] [perf] (waits: T01-T03 land) a range with one open\n- [ ] T06 [perf] a faster gate after T02\n- [ ] T08 [perf] a faster check\n")
+    };
+    write(&tasks(" "));
+    assert_eq!(picked().as_deref(), Some("T08"));
+    // the second landed: the first task that waited on it is named
+    write(&tasks("x"));
+    assert_eq!(picked().as_deref(), Some("T04"));
+    write("- [ ] T02 the next thing\n- [ ] T05 [perf] (waits: 2999-01-01) a bare date\n");
+    assert_eq!(picked().as_deref(), Some("T05"));
+    write("- [ ] T02 the next thing\n- [ ] T05 [perf] (waits: when the GM says) an unread wait\n");
+    assert_eq!(picked().as_deref(), Some("T05"));
+    // a task ticked with no land line (before the log carried them, 451 T02-T05) landed long ago; no log at all reads as none
+    write(
+        "- [x] T01 done\n- [ ] T04 [perf] (waits: a full day after T01 lands) the measured day\n",
+    );
+    assert_eq!(picked().as_deref(), Some("T04"));
+    // a full-day wait reads the log, and a log that is not text is an error
+    std::fs::create_dir_all(c.join("events")).unwrap();
+    std::fs::write(c.join("events/385-x.jsonl"), b"\xff\xfe\n").unwrap();
+    assert!(next_performance(&c, &git, "385-x").is_err());
+    crate::env::unset("L7R_EVENTS_DIR");
+}
+
+/// 451 T102: with nothing running, the set-down refusal names the first task that can start - and says none can where every one waits.
+#[test]
+fn nothing_running_names_the_first_task_that_can_start() {
+    let (_dir, c, tr) = world("waits-none", "no");
+    crate::env::unset("L7R_WAITS_NOW");
+    std::fs::write(
+        c.join("specs/385-x/tasks.md"),
+        "- [ ] T02 (waits: T03 lands) the third's follow-up\n- [ ] T03 later\n",
+    )
+    .unwrap();
+    let text = said(&c, &tr).unwrap();
+    assert!(text.contains("start the next (T03 later)"), "{text}");
+    std::fs::write(
+        c.join("specs/385-x/tasks.md"),
+        "- [ ] T02 (waits: T03 lands) the third's follow-up\n- [ ] T03 (waits: T02 lands) the second's follow-up\n",
+    )
+    .unwrap();
+    let text = said(&c, &tr).unwrap();
+    let none = text.contains("2 open task(s) and nothing is running - start the next (none can start yet: each waits on a day or a landing, 451 T102)");
+    assert!(none, "{text}");
 }

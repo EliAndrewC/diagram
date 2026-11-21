@@ -265,6 +265,139 @@ const GENERIC: &[&str] = &[
     "CLAUDE.md",
 ];
 
+/// A WAIT THE HOOK READS (451 T102): a task line's `(waits: <when>)`, right after its id's bracketed tags as FR-013's `[perf]` is, so a
+/// line that only quotes the clause in its prose (T102's own) waits on nothing. `<when>` is a landing, `T88 lands` (no task it names
+/// still open), or a day after one, `a full day after T02-T21 land` (24 hours past the latest landing of the tasks it names, a
+/// CONVENTION: the plain reading of T22's "first full day of work after T02-T21 land"). Anything else in the parentheses is no wait:
+/// it fails toward a start the session sees named, never a task hidden for good. A bare date is deliberately not a form (T102's plan
+/// review, D7e): the clock against a typed date, with no landing behind it, would take a performance task out of FR-013's refusal
+/// with no reason recorded.
+static WAITS: LazyLock<Regex> = LazyLock::new(|| re(r"^(?:\[[^\]\n]*\] +)*\(waits: ([^)\n]+)\)"));
+/// A `<when>` that is a landing: one task (`T88`) or a range of them (`T02-T21`, every task numbered in it), a day after it or not.
+static LANDS: LazyLock<Regex> =
+    LazyLock::new(|| re(r"^(a full day after )?T(\d{1,9})([a-z]?)(?:-T(\d{1,9}))? lands?$"));
+/// An open task's line saying it lands before another (`lands before T22`): that other waits on its landing.
+static BEFORE: LazyLock<Regex> = LazyLock::new(|| re(r"\blands before (T\d+[a-z]?)\b"));
+/// A task's number and letter (`T11a`).
+static ID: LazyLock<Regex> = LazyLock::new(|| re(r"^T(\d{1,9})([a-z]?)$"));
+/// A full day in microseconds.
+const DAY_MICROS: i64 = 86_400 * 1_000_000;
+
+/// Each feature's landings, read once a Stop (451 T102): the feature, then each task's latest landing in microseconds past the epoch.
+type Lands = HashMap<String, HashMap<String, i64>>;
+
+/// An ISO time in microseconds past the epoch, UTC: a time without a zone read as UTC (a land line's `t1` carries its `Z`).
+fn instant(text: &str) -> Option<i64> {
+    crate::iso::moment(text).map(|(at, zone)| at - zone.unwrap_or(0))
+}
+
+/// Now, in microseconds past the epoch: `L7R_WAITS_NOW` (an ISO time, the tests' seam, as `L7R_PERMIT_NOW` is the permit's), else the
+/// clock.
+fn now() -> i64 {
+    crate::env::opt("L7R_WAITS_NOW")
+        .and_then(|n| instant(&n))
+        .unwrap_or_else(|| {
+            std::time::SystemTime::now()
+                .duration_since(std::time::UNIX_EPOCH)
+                .map_or(0, |d| i64::try_from(d.as_micros()).unwrap_or(i64::MAX))
+        })
+}
+
+/// Each task's latest landing in a feature's event log (451 T102): each land `end` line that landed (`landed` true, as T06 writes one),
+/// at its `t1`, for every task in its `tasks` (a batch lands several), else its `task`. A task ticked before the log carried these
+/// lines (451 T02-T05) has none, and reads as landed long ago.
+fn landings(root: &Path, feature: &str) -> Result<HashMap<String, i64>, String> {
+    let log = super::event_log_hooks::log_path(root, feature);
+    let mut out = HashMap::new();
+    if !log.is_file() {
+        return Ok(out);
+    }
+    let text = read(&log)?;
+    for row in text
+        .lines()
+        .filter(|l| l.contains(r#""src":"land""#) && l.contains(r#""step":"end""#))
+        .filter_map(|l| serde_json::from_str::<Value>(l).ok())
+        .filter(|r| r.get("landed").and_then(Value::as_bool) == Some(true))
+    {
+        let Some(at) = instant(field(&row, "t1")) else {
+            continue;
+        };
+        let tasks: Vec<&str> = row.get("tasks").and_then(Value::as_array).map_or_else(
+            || vec![field(&row, "task")],
+            |list| list.iter().filter_map(Value::as_str).collect(),
+        );
+        for task in tasks {
+            let last = out.entry(task.to_owned()).or_insert(at);
+            *last = (*last).max(at);
+        }
+    }
+    Ok(out)
+}
+
+/// Can a task not start yet (451 T102)? Its `(waits: ...)` clause is unmet ([`WAITS`]), it comes `after T<n>` an open task (451 T88's
+/// rule), or an open task's line says it `lands before` it. The one reading the free slot, the nothing-running refusal and `make
+/// task-start`'s performance-first picker ([`next_performance`]) share - FR-013's "a performance task waiting on another task's
+/// landing", read rather than escaped. `boxes` are the feature's open boxes; the log is read only for a day after a landing.
+fn waits(
+    root: &Path,
+    feature: &str,
+    boxes: &[(String, String)],
+    (id, title): (&str, &str),
+    lands: &mut Lands,
+) -> Result<bool, String> {
+    let open = |t: &str| boxes.iter().any(|(o, _)| o == t);
+    let after = AFTER
+        .captures_iter(title)
+        .map_while(Result::ok)
+        .any(|c| open(&c[1]));
+    let before = boxes.iter().any(|(o, t)| {
+        o != id
+            && BEFORE
+                .captures_iter(t)
+                .map_while(Result::ok)
+                .any(|c| &c[1] == id)
+    });
+    if after || before {
+        return Ok(true);
+    }
+    let Some(when) = WAITS
+        .captures(title)
+        .ok()
+        .flatten()
+        .map(|c| c[1].trim().to_owned())
+    else {
+        return Ok(false);
+    };
+    let Some(c) = LANDS.captures(&when).ok().flatten() else {
+        return Ok(false);
+    };
+    let num = |s: &str| s.parse::<u64>().unwrap_or_default();
+    let (lo, letter, hi) = (num(&c[2]), &c[3], c.get(4).map(|m| num(m.as_str())));
+    // one task by its id, a range by every number in it, whatever its letter
+    let named = |t: &str| {
+        ID.captures(t).ok().flatten().is_some_and(|i| {
+            let n = num(&i[1]);
+            hi.map_or(n == lo && &i[2] == letter, |hi| (lo..=hi).contains(&n))
+        })
+    };
+    if boxes.iter().any(|(o, _)| named(o)) {
+        return Ok(true);
+    }
+    if c.get(1).is_none() {
+        return Ok(false);
+    }
+    if !lands.contains_key(feature) {
+        lands.insert(feature.to_owned(), landings(root, feature)?);
+    }
+    let last = lands[feature]
+        .iter()
+        .filter(|(t, _)| named(t))
+        .map(|(_, at)| *at)
+        .max();
+    let now = now();
+    Ok(last.is_some_and(|at| now < at + DAY_MICROS))
+}
+
 /// The (feature number, task) a running agent builds, read from its meta file; None for any agent but a builder.
 fn brief(dir: &Path, id: &str) -> Option<(String, String)> {
     let meta: Value = serde_json::from_str(
@@ -373,13 +506,14 @@ fn touches(name: &str, file: &str) -> bool {
 /// rest - each pass of `prefer` first, then of each other active feature by its last task-start (the order [`next_performance`]
 /// reads), in tasks.md's order - a task never
 /// started in this clone (one started is running, waiting to land, or set down: resumed or landed, never started again), whose line
-/// names no file a running task's edits name ([`busy_files`]; a line naming nothing touches nothing it can tell) and comes after no open
-/// task (`after T<n>`).
+/// names no file a running task's edits name ([`busy_files`]; a line naming nothing touches nothing it can tell) and that does not wait
+/// ([`waits`]: its clause, `after T<n>` an open task, or an open task landing before it; 451 T102).
 fn next_independent(
     root: &Path,
     git_dir: &Path,
     prefer: &str,
     busy: &HashSet<String>,
+    lands: &mut Lands,
 ) -> Result<Option<OpenTask>, String> {
     let downs = rows(&git_dir.join("set-downs.jsonl"))?;
     let starts = rows(&git_dir.join("task-starts.jsonl"))?;
@@ -390,45 +524,43 @@ fn next_independent(
     let mut rest = None;
     for (feature, since) in order {
         let boxes = active(root, &downs, &feature, &since, feature == prefer)?;
-        let open: HashSet<&str> = boxes.iter().map(|(id, _)| id.as_str()).collect();
         let plan_path = root.join("specs").join(&feature).join("plan.md");
         let plan = if plan_path.is_file() {
             read(&plan_path)?
         } else {
             String::new()
         };
-        let free = |(id, title): &&(String, String)| {
-            !starts
+        let mut free = Vec::new();
+        for (id, title) in &boxes {
+            let started = starts
                 .iter()
-                .any(|r| field(r, "feature") == feature && field(r, "task") == id)
-                && !AFTER
-                    .captures_iter(title)
-                    .map_while(Result::ok)
-                    .any(|c| open.contains(&c[1]))
-                && !names(title)
-                    .iter()
-                    .any(|n| busy.iter().any(|f| touches(n, f)))
-        };
-        let task = |(id, title): &(String, String)| OpenTask {
+                .any(|r| field(r, "feature") == feature && field(r, "task") == id);
+            let overlaps = names(title)
+                .iter()
+                .any(|n| busy.iter().any(|f| touches(n, f)));
+            // the wait last: a day after a landing reads the feature's log
+            if started || overlaps || waits(root, &feature, &boxes, (id, title), lands)? {
+                continue;
+            }
+            free.push((id, title));
+        }
+        let task = |(id, title): &(&String, &String)| OpenTask {
             feature: feature.clone(),
-            id: id.clone(),
-            title: title.clone(),
+            id: (*id).clone(),
+            title: (*title).clone(),
         };
-        if let Some(perf) = boxes
-            .iter()
-            .filter(free)
-            .find(|(id, t)| performance(id, t, &plan))
-        {
+        if let Some(perf) = free.iter().find(|(id, t)| performance(id, t, &plan)) {
             return Ok(Some(task(perf)));
         }
-        rest = rest.or_else(|| boxes.iter().find(free).map(task));
+        rest = rest.or_else(|| free.first().map(task));
     }
     Ok(rest)
 }
 
 /// A free builder slot's refusal (451 T88), or None: fewer than [`BUILDERS`] (`L7R_BUILDERS`) builders running and an independent open
-/// task to start ([`next_independent`]). A task that is not performance work, where an open one waits, gets `task-start`'s escape in
-/// its command, since that start refuses it otherwise (FR-013): every open performance task is started, waits on an open task or touches a running task's files.
+/// task to start ([`next_independent`]). A task that is not performance work, where an open one could start ([`next_performance`], which
+/// skips one that waits, 451 T102), gets `task-start`'s escape in its command, since that start refuses it otherwise (FR-013): every
+/// open performance task that does not wait is started or touches a running task's files.
 fn free_slot(
     root: &Path,
     git_dir: &Path,
@@ -443,7 +575,8 @@ fn free_slot(
         return Ok(None);
     }
     let busy = busy_files(root, &running)?;
-    let Some(next) = next_independent(root, git_dir, feature, &busy)? else {
+    let mut lands = Lands::new();
+    let Some(next) = next_independent(root, git_dir, feature, &busy, &mut lands)? else {
         return Ok(None);
     };
     let number = next
@@ -454,9 +587,12 @@ fn free_slot(
         .to_owned();
     let plan = std::fs::read_to_string(root.join("specs").join(&next.feature).join("plan.md"))
         .unwrap_or_default();
-    let later = match next_performance(root, git_dir, &next.feature).ok().flatten() {
+    let later = match next_performance_in(root, git_dir, &next.feature, &mut lands)
+        .ok()
+        .flatten()
+    {
         Some(p) if !performance(&next.id, &next.title, &plan) => format!(
-            "PERF_LATER_OK=\"{} {}, the open performance work, is started, waits on an open task or touches a running task's files\" ",
+            "PERF_LATER_OK=\"{} {}, the open performance work, is started or touches a running task's files\" ",
             number_of(&p.feature),
             p.id
         ),
@@ -515,13 +651,14 @@ static PERF_TAG: LazyLock<Regex> = LazyLock::new(|| re(r"^(?:\[[^\]\n]*\] +)*\[p
 /// the task crate's test pins the two together). `title` is the line after the id, `plan` the feature's plan.md.
 #[must_use]
 pub fn performance(id: &str, title: &str, plan: &str) -> bool {
+    // the heading as text first (451 T102): a pattern built and run over the whole plan for every box cost the Stop hook 0.1 s of CPU
+    // once its picker walked past a waiting T22, measured 2026-11-21 (a fixture copy of 451, the plan emptied: 0.01 s)
+    let heading = format!("### {id} Performance checklist");
     PERF_TAG.is_match(title).unwrap_or(false)
-        || re(&format!(
-            r"(?m)^### {} Performance checklist\b",
-            fancy_regex::escape(id)
-        ))
-        .is_match(plan)
-        .unwrap_or(false)
+        || (plan.contains(&heading)
+            && re(&format!(r"(?m)^{}\b", fancy_regex::escape(&heading)))
+                .is_match(plan)
+                .unwrap_or(false))
 }
 
 fn read(path: &Path) -> Result<String, String> {
@@ -570,14 +707,25 @@ fn started(git_dir: &Path) -> Result<Vec<(String, String)>, String> {
 /// one the turn worked), then of each other ACTIVE feature by its last task-start, the latest first; within a feature, the first in its
 /// tasks.md. Active is [`active`]'s test over the clone's own start and set-down logs, so a feature never started in this clone is not
 /// active unless it is `prefer` (its task being started makes it so). The one picker the Stop hook's "start the next" and `make
-/// task-start`'s refusal share, so the hook never names a task the start refuses.
+/// task-start`'s refusal share, so the hook never names a task the start refuses. A task that waits ([`waits`], 451 T102) is skipped,
+/// so other work starts with no `PERF_LATER_OK` for it.
 ///
 /// # Errors
-/// A start or set-down log, a tasks.md or a plan.md that cannot be read.
+/// A start or set-down log, a tasks.md, a plan.md or an event log a wait reads that cannot be read.
 pub fn next_performance(
     root: &Path,
     git_dir: &Path,
     prefer: &str,
+) -> Result<Option<OpenTask>, String> {
+    next_performance_in(root, git_dir, prefer, &mut Lands::new())
+}
+
+/// [`next_performance`] with the landings already read this Stop.
+fn next_performance_in(
+    root: &Path,
+    git_dir: &Path,
+    prefer: &str,
+    lands: &mut Lands,
 ) -> Result<Option<OpenTask>, String> {
     let downs = rows(&git_dir.join("set-downs.jsonl"))?;
     let mut order = started(git_dir)?;
@@ -596,8 +744,15 @@ pub fn next_performance(
         } else {
             String::new()
         };
-        if let Some((id, title)) = boxes.into_iter().find(|(id, t)| performance(id, t, &plan)) {
-            return Ok(Some(OpenTask { feature, id, title }));
+        for (id, title) in &boxes {
+            if performance(id, title, &plan) && !waits(root, &feature, &boxes, (id, title), lands)?
+            {
+                return Ok(Some(OpenTask {
+                    feature,
+                    id: id.clone(),
+                    title: title.clone(),
+                }));
+            }
         }
     }
     Ok(None)
@@ -629,9 +784,9 @@ pub(crate) fn verdict(root: &Path, transcript: &str) -> Result<Option<String>, S
     let (feature, since) = (field(last, "feature"), field(last, "utc"));
     let downs = rows(&git_dir.join("set-downs.jsonl"))?;
     let boxes = active(root, &downs, feature, since, false)?;
-    let Some((tid, title)) = boxes.first() else {
+    if boxes.is_empty() {
         return Ok(None);
-    };
+    }
     // the transcript last: the costly read (206 MB on 2026-10-26), where the status line is one small file
     let path = Path::new(transcript);
     if path.is_file() && !running(path).map_err(|e| e.to_string())?.is_empty() {
@@ -641,7 +796,11 @@ pub(crate) fn verdict(root: &Path, transcript: &str) -> Result<Option<String>, S
     let number = |f: &str| f.split('-').next().unwrap_or(f).to_owned();
     // PERFORMANCE WORK FIRST (feature 451 FR-013): the next named is an open performance task where an active feature holds one; a
     // reader's error names the feature's first box, as before, rather than let the refusal go
-    let next = match next_performance(root, &git_dir, feature).ok().flatten() {
+    let mut lands = Lands::new();
+    let next = match next_performance_in(root, &git_dir, feature, &mut lands)
+        .ok()
+        .flatten()
+    {
         Some(p) => {
             let of = if p.feature == feature {
                 String::new()
@@ -656,7 +815,14 @@ pub(crate) fn verdict(root: &Path, transcript: &str) -> Result<Option<String>, S
                 p.id
             )
         }
-        None => format!("{tid} {}", title.chars().take(80).collect::<String>()),
+        // the first task that can start (451 T102), a wait's read error counted as none
+        None => boxes
+            .iter()
+            .find(|(id, t)| !waits(root, feature, &boxes, (id, t), &mut lands).unwrap_or(false))
+            .map_or_else(
+                || "none can start yet: each waits on a day or a landing, 451 T102".to_owned(),
+                |(id, t)| format!("{id} {}", t.chars().take(80).collect::<String>()),
+            ),
     };
     Ok(Some(format!(
         "BLOCKED: feature {feature} has {} open task(s) and nothing is running - start the next ({next}), or set it down: make set-down F={} WHY=\"<why it stops here>\" (feature 385 T70)",
