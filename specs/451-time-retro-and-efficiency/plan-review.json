@@ -296,10 +296,10 @@
    "declared": "round-arbiter"
   },
   "### T82 Approach (checklist part A)": {
-   "sha256": "94905d5bea440b0fb4a9a426405736286bd35225e1ba816419eb12d22d8f3668",
+   "sha256": "f4c53f29edea42862e32560272a748aaee3b0a38983cae52bdeb7679ec33dfaa",
    "verdict": "CLEAR",
    "reviewed": "2026-11-21",
-   "declared": "round-arbiter"
+   "declared": "spec-fidelity"
   },
   "### T83 (<why: the finding or measurement that files it>)": {
    "sha256": "5e5ea38b150b3ecceffc22ab437737801c697c4a2b214047efa4932fd87752ea",
@@ -452,7 +452,7 @@
    "declared": "spec-fidelity"
   },
   "### T95 Approach (checklist part A)": {
-   "sha256": "71d093218dc60bf00f90081098a5854e14553e6bce593ae7dc3e036dc51d7a5b",
+   "sha256": "3fe3f0c885984762e98c75a11edc1f2b82e696419f6d84cd849ce97143b5c48d",
    "verdict": "CLEAR",
    "reviewed": "2026-11-21",
    "declared": "spec-fidelity"
@@ -471,6 +471,42 @@
   },
   "### T88 (builders ran three at once only 26% of the night's 580 minutes, a mean of 1.65, measured 2026-11-21 (each agent's span, T88's line): a landing refused any uncommitted file, so tasks landed in batches, and the Stop hook was silent whenever anything ran, so a freed builder slot sat empty)": {
    "sha256": "e7e64a4d673b579ac8af2ea2e3da3260e286835dd9808214f784f84f24b48b2d",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity"
+  },
+  "### T95 (the closing checks' BLOCKED tag missed a coverage red: `blocked()` read only `-->` and `Diff in` lines, not cover's lines no test reaches, found by T86's builder, 2026-11-21; T81's second closing run red on cover alone, 3 files of T88's, measured 2026-11-21 (its kept run directory, item 4))": {
+   "sha256": "63b077c690c9fb43e0ad09ea23f1988e19f0a54c2aef7c2d36dd4a9d526cfe4c",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity"
+  },
+  "### T82 (the plan bundle's requirement reader read only `- **FR-NNN**`, so a block citing a requirement a spec writes as a bold paragraph with no list dash got a NOT FOUND line though its text exists - filed by T48, 2026-11-21; measured 2026-11-21: 2 real citations of one by another feature's number across every plan, 449's plan-done.md line 967 (\"FR-007 of feature 239\", 449 open) and 383's plan.md line 503 (\"256's FR-004\", 383 closed), each bundled NOT FOUND on the plan crate unedited)": {
+   "sha256": "7fc674963675fb44ceaa1b5c009128d5231af0663d5c47562acbe45bd3da4226",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity"
+  },
+  "### T97 (T93's Found and left: the walk's first use in a hook process cost 3.2-8.6 ms against 9-57 us a walk after, 3.89 ms of each Bash end's 7.30 ms in the event log, measured 2026-11-21 (T93's item 4: `/tmp/t93/cost.py`, and its scratch binary's `-first` mode, 5 commands twice each in fresh processes); main-tree's walk paid the same on every Bash start)": {
+   "sha256": "fabbaafb0d49f1e34aa8f0774880b33bbba2f3c28acb0c62b69049750b519ba5",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity"
+  },
+  "### T97 Approach (checklist part A)": {
+   "sha256": "6af7af9f6a0be5309ade0ba5d6330c7c3e029d1bcc4f1ee04d7fd800a8b81016",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity"
+  },
+  "### T101 (a ready task was refused \"held by\" the task started after it: T81, T88 and T93, each CLEAR and closing-checked, refused \"held by T97\" at 18:32:27Z, T97 started 61 s before, and landed only after the mark was moved by hand, measured 2026-11-21 (the 451 event log's land `end` lines, the clone's `task-starts.jsonl`); and T95, CLEAR, could not land alone because plan.md also held T82's and T97's unreviewed sections)": {
+   "sha256": "417815bb0d1abbc4f3a0ff3d42598be8e129a6a6ee8efa89af452f0b22da7c13",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity"
+  },
+  "### T101 Approach (checklist part A)": {
+   "sha256": "d11622769c168be700439480bc765f90070f3311d4589b35a042a7c887d231ff",
    "verdict": "CLEAR",
    "reviewed": "2026-11-21",
    "declared": "spec-fidelity"
@@ -9366,6 +9402,257 @@
      "why": "A defect, but T88 is not the one carrying it forward. It is filed with its reason, its id and its order, which is what FR-009 asks of a deferral. FIX AS WE GO's rule about steps applies to 449's port, and this defect is still put ahead of T22. The GM did not ask T88 to fix this suite."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-21",
+   "blocks": [
+    "### T95 (the closing checks' BLOCKED tag missed a coverage red: `blocked()` read only `-->` and `Diff in` lines, not cover's lines no test reaches, found by T86's builder, 2026-11-21; T81's second closing run red on cover alone, 3 files of T88's, measured 2026-11-21 (its kept run directory, item 4))",
+    "### T95 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T95-D1",
+     "summary": "blocked() reads cover's '<path> - lines no test reaches: <lines>' lines (path stripped to the clone's, first line a real one) beside the '-->' and 'Diff in' paths; a coverage red whose every named file is another task's is tagged BLOCKED naming each file and task.",
+     "class": "within",
+     "why": "This is the defect T95's line names (a coverage red on another's files went untagged) fixed as found, in the closing checks the GM had filed as a performance task (2026-11-21). It adds no behavior beyond making T86's tag read the coverage output it missed."
+    },
+    {
+     "id": "T95-D2",
+     "summary": "A BLOCKED red stays counted red; 'red' and the exit are untouched.",
+     "class": "within",
+     "why": "Keeps T86's rule as it was. The tag only informs the builder and blocks or passes nothing new."
+    },
+    {
+     "id": "T95-D3",
+     "summary": "The tag's wording says which lines it read: errors only keep T86's words, uncovered lines only say 'yours are covered ... re-run once their tests reach them', both say 'nothing of yours failed there'.",
+     "class": "within",
+     "why": "Message wording that comes with D1. It neither narrows nor adds scope."
+    },
+    {
+     "id": "T95-D4",
+     "summary": "A failed coverage run's marker '<crate> - lines no test reaches: 0' is not read as a path.",
+     "class": "within",
+     "why": "The marker names a crate, not a file. Reading it as a path would wrongly untag a run whose cover build broke on another task's file (the 12:47Z run, measured). Leaving it out keeps D1 correct, and the run is still tagged from its '-->' errors (red-first case: BLOCKED)."
+    },
+    {
+     "id": "T95-D5",
+     "summary": "An APART crate's block (its 'rust-checks: APART' header up to the next 'rust-checks:' line) is not read, so another task's APART lines no longer tag a caller's own red BLOCKED. The caller's own uncovered line beside another's error is also no longer tagged.",
+     "class": "within",
+     "why": "Two wrong-tag defects in the same function, found while building it and fixed here. The project's fix-as-we-go rule covers this, and it is not unrequested scope. Each is pinned by a red-first suite case."
+    },
+    {
+     "id": "T95-D6",
+     "summary": "T81's run (the run cited in T95's line) stays untagged after the fix. Two of its three uncovered files were named by no task's event line before the run, so T86's rule counts them as the caller's. Naming them is left to the split's tasks T93 (Bash writes) and T96 (a Python program's writes).",
+     "class": "within",
+     "why": "The defect T95's line names (blocked() not reading cover's lines) is fully fixed, and the replay shows the fixed function tags T84's 17:10Z coverage-only red, which HEAD did not. T81's run stays untagged because of a different, already-filed defect: which files the split attributes to which task. Under T86's rule an unattributed file is the caller's, so the result is a missing tag, never a wrong one. Neither the GM's request nor the spec asks T95 to change attribution, so nothing is narrowed. The plan states T81's run is not tagged and does not overclaim it."
+    },
+    {
+     "id": "T95-D7",
+     "summary": "Red-first suite cases (46 passed, 3 failed against the unfixed function; 49 of 49 fixed) and the task's own closing run as the exits. Other tasks' files (T93, T88, T97, T82) are not touched.",
+     "class": "within",
+     "why": "Verification of what the task fixes, plus scope discipline. Both are within."
+    },
+    {
+     "id": "T95-D8",
+     "summary": "T95 is not classed as performance work (no [perf]).",
+     "class": "within",
+     "why": "The task changes what a tag reads, not how long a run takes. Under FR-013 the class only sets scheduling order. It does not narrow what the GM asked for or what the spec requires."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-21",
+   "blocks": [
+    "### T82 (the plan bundle's requirement reader read only `- **FR-NNN**`, so a block citing a requirement a spec writes as a bold paragraph with no list dash got a NOT FOUND line though its text exists - filed by T48, 2026-11-21; measured 2026-11-21: 2 real citations of one by another feature's number across every plan, 449's plan-done.md line 967 (\"FR-007 of feature 239\", 449 open) and 383's plan.md line 503 (\"256's FR-004\", 383 closed), each bundled NOT FOUND on the plan crate unedited)",
+    "### T82 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T82-A1",
+     "summary": "requirements gains a third pass (ANY_ITEM) reading a dashless bold FR/SC id, carried from its start to the next requirement of any form or the next heading",
+     "class": "within",
+     "why": "This is T82's own line: the reader answered NOT FOUND for requirement text that exists, a tool answering wrongly (a defect under XIV). Measured on the real 449 and 383 bundles; red-first tests named."
+    },
+    {
+     "id": "T82-A2",
+     "summary": "the same pass also reads an indented sub-item with its own id (184's and 295's FR-005a..d), carried as a list item; labeled deliberate addition",
+     "class": "within",
+     "why": "It widens the fix and does not narrow it. The task's own bundle showed the same wrong outcome (NOT FOUND for existing text) in the same reader, and fixing known defects in the task is the GM's standing rule (fix as we go). The differential shows 0 of 4,751 existing reads changing, so nothing asked for is given up."
+    },
+    {
+     "id": "T82-A3",
+     "summary": "an id a list item or heading already gives keeps that text; a dashless restatement of it is commentary and is not read over it",
+     "class": "within",
+     "why": "This keeps every existing correct read unchanged (the brief's constraint) and does not cut anything T82 asked for. The dashless ids T82 targets (287 in 21 specs) have no other form."
+    },
+    {
+     "id": "T82-A4",
+     "summary": "spec_amendments keeps ITEM rather than sharing the new pattern",
+     "class": "within",
+     "why": "Measured: no spec writes a dashless id under an Amendment heading, so no wrong outcome exists there today. T82's line and brief name the requirement reader alone. A difference with no defect is not one that needs fixing."
+    },
+    {
+     "id": "T82-A5",
+     "summary": "indented bold ids with no dash (192's, 198's) and a bare id opening a line are not read as requirement definitions",
+     "class": "within",
+     "why": "Measured as commentary on ids defined elsewhere, so not reading them leaves no requirement NOT FOUND. Nothing T82 asks for is excluded."
+    },
+    {
+     "id": "T82-A6",
+     "summary": "exits and done: plan crate tests, lint, format, 100% cover, before/after bundles differing in the NOT FOUND line alone, closing-checks green; order before T22",
+     "class": "within",
+     "why": "This is enforcement and verification of the requested fix and of T48's ordering. It adds no behavior beyond the fix."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-21",
+   "blocks": [
+    "### T97 (T93's Found and left: the walk's first use in a hook process cost 3.2-8.6 ms against 9-57 us a walk after, 3.89 ms of each Bash end's 7.30 ms in the event log, measured 2026-11-21 (T93's item 4: `/tmp/t93/cost.py`, and its scratch binary's `-first` mode, 5 commands twice each in fresh processes); main-tree's walk paid the same on every Bash start)",
+    "### T97 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T97-gate",
+     "summary": "Every walk static (40 in tree.rs, tree/bind.rs, tree/python.rs, tree/py_c.rs) becomes shared::regex::Lazy: built on first use as before, searched only where a necessary literal of the pattern stands in the text, else no match and nothing built.",
+     "class": "within",
+     "why": "This is the [perf] task T97's line files under FR-013 (the builders' loop, every Bash call's hooks), and the GM asked that performance work go first (request.md 2026-11-20). The plan states each gate is a literal every match holds; its replay of 9,646 commands shows the guards' verdicts unchanged, so the hooks still do their job. It removes work and narrows nothing that was asked."
+    },
+    {
+     "id": "T97-gate-errors",
+     "summary": "is_match/captures read a search error as no match, as every call site already did; captures_iter/find_iter keep yielding Result items so each of their 12 call sites keeps .map_while(Result::ok).",
+     "class": "within",
+     "why": "This keeps the existing handling and the checks crate's regex_scans rule. It is an implementation detail inside the task and narrows nothing."
+    },
+    {
+     "id": "T97-pass-all",
+     "summary": "Five patterns that need no literal (CHMOD_MODE, py_c's WRITES, READ_MODE, ANY_MODE, EXPANDS) get a gate that passes every text.",
+     "class": "within",
+     "why": "These are unchanged behavior where no gate is sound. Nothing is narrowed."
+    },
+    {
+     "id": "T97-plain-quote-body",
+     "summary": "PLAIN_QUOTE_BODY is replaced by plain code (plain_quote_body), with char::is_whitespace standing for \\s, pinned by a differential test over every character to U+3100 plus U+180E, U+200B, U+FEFF.",
+     "class": "within",
+     "why": "It does the same job faster, and the differential test enforces that the answers agree. That serves the performance request."
+    },
+    {
+     "id": "T97-replace-literal",
+     "summary": "py_c's REPLACE (the literal replace\\() becomes contains(\"replace(\").",
+     "class": "within",
+     "why": "A literal pattern is turned into a literal search with the same meaning, faster. Within the perf task."
+    },
+    {
+     "id": "T97-not-taken-assign",
+     "summary": "A hand-written scan for ASSIGN's shape is not taken. About 12.4% of commands (an estimate, measured 2026-11-21) still build ASSIGN when they hold an = that is not an assignment.",
+     "class": "within",
+     "why": "Judged against request.md, FR-013 and this section's own statement of T97's line, since the line itself is not in the bundle. None of them sets a target for this task. Leaving a further speedup untaken is a design choice, not a defect (constitution XIV: only slower, every answer right). The task's purpose is still met: from a median of 12 builds a command to 2."
+    },
+    {
+     "id": "T97-pin",
+     "summary": "A child-process pin test prints the patterns its process built (regex::BUILT, a list kept in test builds alone): simple commands build none, and a redirect builds exactly REDIRECT.",
+     "class": "within",
+     "why": "This is a test that fails only when the requested speedup is absent. Under FR-012 it is enforcement of the request, not unrequested scope."
+    },
+    {
+     "id": "T97-nopoll-race",
+     "summary": "Fix a race in tests/hooks/test-no-poll-hooks.sh, outside T97's files, that turned its closing run 2 red. The case now ages the quiet file again first.",
+     "class": "within",
+     "why": "A flaky test that refuses good work is a defect under XIV. Fix-as-we-go asks known defects to be fixed as found, and this widens no requested behavior."
+    },
+    {
+     "id": "T97-closing-not-repeated",
+     "summary": "The closing checks are not run a fourth time. Run 3's static was red at its format step on T100's in-flight file before reaching any T97 crate; T97's crates are shown green by crate-scoped test, lint and cover after the last edit.",
+     "class": "within",
+     "why": "No requirement in spec-index or request.md asks a task for a green closing run. FR-007 and improvement 2 point the other way: they cap make static at two, with crate-scoped checks while iterating and make static once at the end, which the landing's gate supplies. Run 3 was already a recorded STATIC_OK escape. This does depart from the plan's own exit in item 6 (a green make closing-checks), and the caller should square that line with item 9. It is not a narrowing of what the GM asked."
+    },
+    {
+     "id": "T97-shape-strips-left",
+     "summary": "shape's strip_heredocs and strip_quotes stay ungated: they are outside T97's files and are proposed as a separate [perf] task, not fixed here.",
+     "class": "within",
+     "why": "FR-009 bites only on a deferred DEFECT. This is not one: every answer is right and only slower (XIV, the GM 2026-11-19 definition), so leaving it unchanged stays within scope. Aside: no task id is filed for it yet, and under FR-013's ordering the caller may wish to file it."
+    },
+    {
+     "id": "T97-whole-event-estimate",
+     "summary": "The saving over the dispatcher's whole event (about 2.7 ms at a Bash start) is left an estimate. A replay through every guard would write real guard state in a shared clone.",
+     "class": "within",
+     "why": "It is labeled an estimate and its arithmetic reconciles (3.23 - 0.21 - 0.30). It decides no scope: the per-guard saving is measured, and the estimate only reports what the task gains."
+    },
+    {
+     "id": "T97-perf-class",
+     "summary": "T97 is classed as performance work ([perf], FR-013: the builders' loop).",
+     "class": "within",
+     "why": "It speeds every Bash call's hooks, which is within FR-013's 'the builders' loop'."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-21",
+   "blocks": [
+    "### T101 (a ready task was refused \"held by\" the task started after it: T81, T88 and T93, each CLEAR and closing-checked, refused \"held by T97\" at 18:32:27Z, T97 started 61 s before, and landed only after the mark was moved by hand, measured 2026-11-21 (the 451 event log's land `end` lines, the clone's `task-starts.jsonl`); and T95, CLEAR, could not land alone because plan.md also held T82's and T97's unreviewed sections)",
+    "### T101 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T101-mark-one-object",
+     "summary": "The active-task mark stays one object (the last task started); only the hold changes; task-start's append and the event log's filing are untouched.",
+     "class": "within",
+     "why": "Leaves every other reader of the mark (measured search) as it is; the change is confined to the refusal the task was filed against."
+    },
+    {
+     "id": "T101-1-hold-yields-to-ready",
+     "summary": "Where the mark's open task holds, a landing lands beside it when each of its tasks is started in the clone, its section passes `plan decided`, and no file of its delta (sectioned files and review ledger aside) carries an edit or shell write filed under another OPEN task since the file last landed; each failing reason is named with the hold.",
+     "class": "within",
+     "why": "This is the fix the filed task asks for (a ready, CLEAR, closing-checked task refused 'held by' a task started after it). 405 D4's purpose - no push of the worked task's half-done work - is kept as the files-its-own test, so the rule's purpose is not gutted; the mark's task is now protected the way every other started task beside it already was (D4: no other open box holds)."
+    },
+    {
+     "id": "T101-1-ready-exported",
+     "summary": "A ready ruling exports L7R_LAND_READY; holding_with holds nothing for the ticks it names, so the push and the CI merge read the landing's own ruling; where the first pass did not rule, the push's step asks again (export_ready); the ruling never reads which task the mark names.",
+     "class": "within",
+     "why": "Measured that a first-pass-only fix lands nothing (the push re-asks the hold); carrying one ruling to all three askers is what makes the fix reach its stated case."
+    },
+    {
+     "id": "T101-scope-shared-speckit",
+     "summary": "The hold's one condition is edited in shared::speckit (holding_with) under make guard-edit, a labeled deviation from the launcher's file list; T97's shared/src/tree* and T82's files untouched.",
+     "class": "within",
+     "why": "The launcher's file list is not the GM's words; the edit sits where the rule actually lives (one rule, three callers) and touches no other open task's files. Implementation placement is not a fidelity question."
+    },
+    {
+     "id": "T101-priced-not-taken",
+     "summary": "Padding L7R_LAND_TICKS with the mark's task, and a new `l7r-gate land --held` verb, priced and not taken.",
+     "class": "within",
+     "why": "Design alternatives declined for stated correctness reasons (a padded TICKS would name a task the landing does not tick); nothing asked is dropped."
+    },
+    {
+     "id": "T101-2-sections-committed-apart",
+     "summary": "land-alone step 2, under its lock taken first, commits plan.md, tasks.md and plan-review.json built from HEAD with only the landing tasks' pieces replaced (temporary index, commit-tree, compare-and-swap update-ref), working files untouched; step 3's own-files refusal passes over the sectioned files.",
+     "class": "within",
+     "why": "Implements the task's second half (T95, CLEAR, could not land alone because plan.md also held T82's and T97's unreviewed sections); dry run on the real T95 case measured the commit carrying only T95's pieces."
+    },
+    {
+     "id": "T101-2-in-the-script",
+     "summary": "The staging lives in scripts/land-alone.sh's Python (PYLIB), not the land crate, so one program holds the pieces' rule for staging and take-back.",
+     "class": "within",
+     "why": "Placement choice; no part of the request reaches it."
+    },
+    {
+     "id": "T101-2-take-back-piece-merge",
+     "summary": "Where git merge-file conflicts on a sectioned file at take-back (measured shape: a tick's archive meeting another task's edit of the next heading), the file is merged piece by piece; a piece both sides changed differently still conflicts and nothing moves, as before.",
+     "class": "within",
+     "why": "Needed for (2) to work on the shape measured; keeps the existing stop on a true conflict."
+    },
+    {
+     "id": "T101-costs-python-write-and-7-day",
+     "summary": "The files-own test does not see a file written by a Python program (the event log names no file for it; T96, open) and takes an edit older than 7 days as landed (land-alone's existing LANDED_SINCE bound).",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Adjudicated each part. Python writes: the file name is absent from the log until T96 lands, so the test cannot see it; the gap already governs every started task other than the mark's under 405 D4 and land-alone's existing own-files refusal, so T101 adds no new class of exposure, and the fix is an already-filed open task (T96). 7-day bound: it is land-alone's own existing bound, reused rather than introduced. Neither removes anything the GM asked for in 451, and neither guts D4's purpose for the work the log does attribute."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -14381,6 +14668,249 @@
      "summary": "test-idle-tests-hooks.sh's wall-clock case refused good work under load (red at load 16.5, green on rerun); filed as T99, lands before T22, as another guard's suite outside T88's files.",
      "class": "within",
      "why": "A defect, but T88 is not the one carrying it forward. It is filed with its reason, its id and its order, which is what FR-009 asks of a deferral. FIX AS WE GO's rule about steps applies to 449's port, and this defect is still put ahead of T22. The GM did not ask T88 to fix this suite."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T95": {
+   "section_sha256": "a01de36a6561571829ac0ad2c4ac010d98e2f9758b073662a2ee3a9af987670c",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T95-D1",
+     "summary": "blocked() reads cover's '<path> - lines no test reaches: <lines>' lines (path stripped to the clone's, first line a real one) beside the '-->' and 'Diff in' paths; a coverage red whose every named file is another task's is tagged BLOCKED naming each file and task.",
+     "class": "within",
+     "why": "This is the defect T95's line names (a coverage red on another's files went untagged) fixed as found, in the closing checks the GM had filed as a performance task (2026-11-21). It adds no behavior beyond making T86's tag read the coverage output it missed."
+    },
+    {
+     "id": "T95-D2",
+     "summary": "A BLOCKED red stays counted red; 'red' and the exit are untouched.",
+     "class": "within",
+     "why": "Keeps T86's rule as it was. The tag only informs the builder and blocks or passes nothing new."
+    },
+    {
+     "id": "T95-D3",
+     "summary": "The tag's wording says which lines it read: errors only keep T86's words, uncovered lines only say 'yours are covered ... re-run once their tests reach them', both say 'nothing of yours failed there'.",
+     "class": "within",
+     "why": "Message wording that comes with D1. It neither narrows nor adds scope."
+    },
+    {
+     "id": "T95-D4",
+     "summary": "A failed coverage run's marker '<crate> - lines no test reaches: 0' is not read as a path.",
+     "class": "within",
+     "why": "The marker names a crate, not a file. Reading it as a path would wrongly untag a run whose cover build broke on another task's file (the 12:47Z run, measured). Leaving it out keeps D1 correct, and the run is still tagged from its '-->' errors (red-first case: BLOCKED)."
+    },
+    {
+     "id": "T95-D5",
+     "summary": "An APART crate's block (its 'rust-checks: APART' header up to the next 'rust-checks:' line) is not read, so another task's APART lines no longer tag a caller's own red BLOCKED. The caller's own uncovered line beside another's error is also no longer tagged.",
+     "class": "within",
+     "why": "Two wrong-tag defects in the same function, found while building it and fixed here. The project's fix-as-we-go rule covers this, and it is not unrequested scope. Each is pinned by a red-first suite case."
+    },
+    {
+     "id": "T95-D6",
+     "summary": "T81's run (the run cited in T95's line) stays untagged after the fix. Two of its three uncovered files were named by no task's event line before the run, so T86's rule counts them as the caller's. Naming them is left to the split's tasks T93 (Bash writes) and T96 (a Python program's writes).",
+     "class": "within",
+     "why": "The defect T95's line names (blocked() not reading cover's lines) is fully fixed, and the replay shows the fixed function tags T84's 17:10Z coverage-only red, which HEAD did not. T81's run stays untagged because of a different, already-filed defect: which files the split attributes to which task. Under T86's rule an unattributed file is the caller's, so the result is a missing tag, never a wrong one. Neither the GM's request nor the spec asks T95 to change attribution, so nothing is narrowed. The plan states T81's run is not tagged and does not overclaim it."
+    },
+    {
+     "id": "T95-D7",
+     "summary": "Red-first suite cases (46 passed, 3 failed against the unfixed function; 49 of 49 fixed) and the task's own closing run as the exits. Other tasks' files (T93, T88, T97, T82) are not touched.",
+     "class": "within",
+     "why": "Verification of what the task fixes, plus scope discipline. Both are within."
+    },
+    {
+     "id": "T95-D8",
+     "summary": "T95 is not classed as performance work (no [perf]).",
+     "class": "within",
+     "why": "The task changes what a tag reads, not how long a run takes. Under FR-013 the class only sets scheduling order. It does not narrow what the GM asked for or what the spec requires."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T82": {
+   "section_sha256": "ae96869134323f30112cf1ab06a136ecb4d1a78da907ecb5e9ad889cbdba5f56",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T82-A1",
+     "summary": "requirements gains a third pass (ANY_ITEM) reading a dashless bold FR/SC id, carried from its start to the next requirement of any form or the next heading",
+     "class": "within",
+     "why": "This is T82's own line: the reader answered NOT FOUND for requirement text that exists, a tool answering wrongly (a defect under XIV). Measured on the real 449 and 383 bundles; red-first tests named."
+    },
+    {
+     "id": "T82-A2",
+     "summary": "the same pass also reads an indented sub-item with its own id (184's and 295's FR-005a..d), carried as a list item; labeled deliberate addition",
+     "class": "within",
+     "why": "It widens the fix and does not narrow it. The task's own bundle showed the same wrong outcome (NOT FOUND for existing text) in the same reader, and fixing known defects in the task is the GM's standing rule (fix as we go). The differential shows 0 of 4,751 existing reads changing, so nothing asked for is given up."
+    },
+    {
+     "id": "T82-A3",
+     "summary": "an id a list item or heading already gives keeps that text; a dashless restatement of it is commentary and is not read over it",
+     "class": "within",
+     "why": "This keeps every existing correct read unchanged (the brief's constraint) and does not cut anything T82 asked for. The dashless ids T82 targets (287 in 21 specs) have no other form."
+    },
+    {
+     "id": "T82-A4",
+     "summary": "spec_amendments keeps ITEM rather than sharing the new pattern",
+     "class": "within",
+     "why": "Measured: no spec writes a dashless id under an Amendment heading, so no wrong outcome exists there today. T82's line and brief name the requirement reader alone. A difference with no defect is not one that needs fixing."
+    },
+    {
+     "id": "T82-A5",
+     "summary": "indented bold ids with no dash (192's, 198's) and a bare id opening a line are not read as requirement definitions",
+     "class": "within",
+     "why": "Measured as commentary on ids defined elsewhere, so not reading them leaves no requirement NOT FOUND. Nothing T82 asks for is excluded."
+    },
+    {
+     "id": "T82-A6",
+     "summary": "exits and done: plan crate tests, lint, format, 100% cover, before/after bundles differing in the NOT FOUND line alone, closing-checks green; order before T22",
+     "class": "within",
+     "why": "This is enforcement and verification of the requested fix and of T48's ordering. It adds no behavior beyond the fix."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T97": {
+   "section_sha256": "b0a38aaf0a735cdbed6dacd74851dbb0970f0eba9e810be0b5351c10e90ac346",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T97-gate",
+     "summary": "Every walk static (40 in tree.rs, tree/bind.rs, tree/python.rs, tree/py_c.rs) becomes shared::regex::Lazy: built on first use as before, searched only where a necessary literal of the pattern stands in the text, else no match and nothing built.",
+     "class": "within",
+     "why": "This is the [perf] task T97's line files under FR-013 (the builders' loop, every Bash call's hooks), and the GM asked that performance work go first (request.md 2026-11-20). The plan states each gate is a literal every match holds; its replay of 9,646 commands shows the guards' verdicts unchanged, so the hooks still do their job. It removes work and narrows nothing that was asked."
+    },
+    {
+     "id": "T97-gate-errors",
+     "summary": "is_match/captures read a search error as no match, as every call site already did; captures_iter/find_iter keep yielding Result items so each of their 12 call sites keeps .map_while(Result::ok).",
+     "class": "within",
+     "why": "This keeps the existing handling and the checks crate's regex_scans rule. It is an implementation detail inside the task and narrows nothing."
+    },
+    {
+     "id": "T97-pass-all",
+     "summary": "Five patterns that need no literal (CHMOD_MODE, py_c's WRITES, READ_MODE, ANY_MODE, EXPANDS) get a gate that passes every text.",
+     "class": "within",
+     "why": "These are unchanged behavior where no gate is sound. Nothing is narrowed."
+    },
+    {
+     "id": "T97-plain-quote-body",
+     "summary": "PLAIN_QUOTE_BODY is replaced by plain code (plain_quote_body), with char::is_whitespace standing for \\s, pinned by a differential test over every character to U+3100 plus U+180E, U+200B, U+FEFF.",
+     "class": "within",
+     "why": "It does the same job faster, and the differential test enforces that the answers agree. That serves the performance request."
+    },
+    {
+     "id": "T97-replace-literal",
+     "summary": "py_c's REPLACE (the literal replace\\() becomes contains(\"replace(\").",
+     "class": "within",
+     "why": "A literal pattern is turned into a literal search with the same meaning, faster. Within the perf task."
+    },
+    {
+     "id": "T97-not-taken-assign",
+     "summary": "A hand-written scan for ASSIGN's shape is not taken. About 12.4% of commands (an estimate, measured 2026-11-21) still build ASSIGN when they hold an = that is not an assignment.",
+     "class": "within",
+     "why": "Judged against request.md, FR-013 and this section's own statement of T97's line, since the line itself is not in the bundle. None of them sets a target for this task. Leaving a further speedup untaken is a design choice, not a defect (constitution XIV: only slower, every answer right). The task's purpose is still met: from a median of 12 builds a command to 2."
+    },
+    {
+     "id": "T97-pin",
+     "summary": "A child-process pin test prints the patterns its process built (regex::BUILT, a list kept in test builds alone): simple commands build none, and a redirect builds exactly REDIRECT.",
+     "class": "within",
+     "why": "This is a test that fails only when the requested speedup is absent. Under FR-012 it is enforcement of the request, not unrequested scope."
+    },
+    {
+     "id": "T97-nopoll-race",
+     "summary": "Fix a race in tests/hooks/test-no-poll-hooks.sh, outside T97's files, that turned its closing run 2 red. The case now ages the quiet file again first.",
+     "class": "within",
+     "why": "A flaky test that refuses good work is a defect under XIV. Fix-as-we-go asks known defects to be fixed as found, and this widens no requested behavior."
+    },
+    {
+     "id": "T97-closing-not-repeated",
+     "summary": "The closing checks are not run a fourth time. Run 3's static was red at its format step on T100's in-flight file before reaching any T97 crate; T97's crates are shown green by crate-scoped test, lint and cover after the last edit.",
+     "class": "within",
+     "why": "No requirement in spec-index or request.md asks a task for a green closing run. FR-007 and improvement 2 point the other way: they cap make static at two, with crate-scoped checks while iterating and make static once at the end, which the landing's gate supplies. Run 3 was already a recorded STATIC_OK escape. This does depart from the plan's own exit in item 6 (a green make closing-checks), and the caller should square that line with item 9. It is not a narrowing of what the GM asked."
+    },
+    {
+     "id": "T97-shape-strips-left",
+     "summary": "shape's strip_heredocs and strip_quotes stay ungated: they are outside T97's files and are proposed as a separate [perf] task, not fixed here.",
+     "class": "within",
+     "why": "FR-009 bites only on a deferred DEFECT. This is not one: every answer is right and only slower (XIV, the GM 2026-11-19 definition), so leaving it unchanged stays within scope. Aside: no task id is filed for it yet, and under FR-013's ordering the caller may wish to file it."
+    },
+    {
+     "id": "T97-whole-event-estimate",
+     "summary": "The saving over the dispatcher's whole event (about 2.7 ms at a Bash start) is left an estimate. A replay through every guard would write real guard state in a shared clone.",
+     "class": "within",
+     "why": "It is labeled an estimate and its arithmetic reconciles (3.23 - 0.21 - 0.30). It decides no scope: the per-guard saving is measured, and the estimate only reports what the task gains."
+    },
+    {
+     "id": "T97-perf-class",
+     "summary": "T97 is classed as performance work ([perf], FR-013: the builders' loop).",
+     "class": "within",
+     "why": "It speeds every Bash call's hooks, which is within FR-013's 'the builders' loop'."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T101": {
+   "section_sha256": "97ae5e27c10beefbaa7a3347c5fb0062879ec83b317cadc8f7f161ed8f8c48a7",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T101-mark-one-object",
+     "summary": "The active-task mark stays one object (the last task started); only the hold changes; task-start's append and the event log's filing are untouched.",
+     "class": "within",
+     "why": "Leaves every other reader of the mark (measured search) as it is; the change is confined to the refusal the task was filed against."
+    },
+    {
+     "id": "T101-1-hold-yields-to-ready",
+     "summary": "Where the mark's open task holds, a landing lands beside it when each of its tasks is started in the clone, its section passes `plan decided`, and no file of its delta (sectioned files and review ledger aside) carries an edit or shell write filed under another OPEN task since the file last landed; each failing reason is named with the hold.",
+     "class": "within",
+     "why": "This is the fix the filed task asks for (a ready, CLEAR, closing-checked task refused 'held by' a task started after it). 405 D4's purpose - no push of the worked task's half-done work - is kept as the files-its-own test, so the rule's purpose is not gutted; the mark's task is now protected the way every other started task beside it already was (D4: no other open box holds)."
+    },
+    {
+     "id": "T101-1-ready-exported",
+     "summary": "A ready ruling exports L7R_LAND_READY; holding_with holds nothing for the ticks it names, so the push and the CI merge read the landing's own ruling; where the first pass did not rule, the push's step asks again (export_ready); the ruling never reads which task the mark names.",
+     "class": "within",
+     "why": "Measured that a first-pass-only fix lands nothing (the push re-asks the hold); carrying one ruling to all three askers is what makes the fix reach its stated case."
+    },
+    {
+     "id": "T101-scope-shared-speckit",
+     "summary": "The hold's one condition is edited in shared::speckit (holding_with) under make guard-edit, a labeled deviation from the launcher's file list; T97's shared/src/tree* and T82's files untouched.",
+     "class": "within",
+     "why": "The launcher's file list is not the GM's words; the edit sits where the rule actually lives (one rule, three callers) and touches no other open task's files. Implementation placement is not a fidelity question."
+    },
+    {
+     "id": "T101-priced-not-taken",
+     "summary": "Padding L7R_LAND_TICKS with the mark's task, and a new `l7r-gate land --held` verb, priced and not taken.",
+     "class": "within",
+     "why": "Design alternatives declined for stated correctness reasons (a padded TICKS would name a task the landing does not tick); nothing asked is dropped."
+    },
+    {
+     "id": "T101-2-sections-committed-apart",
+     "summary": "land-alone step 2, under its lock taken first, commits plan.md, tasks.md and plan-review.json built from HEAD with only the landing tasks' pieces replaced (temporary index, commit-tree, compare-and-swap update-ref), working files untouched; step 3's own-files refusal passes over the sectioned files.",
+     "class": "within",
+     "why": "Implements the task's second half (T95, CLEAR, could not land alone because plan.md also held T82's and T97's unreviewed sections); dry run on the real T95 case measured the commit carrying only T95's pieces."
+    },
+    {
+     "id": "T101-2-in-the-script",
+     "summary": "The staging lives in scripts/land-alone.sh's Python (PYLIB), not the land crate, so one program holds the pieces' rule for staging and take-back.",
+     "class": "within",
+     "why": "Placement choice; no part of the request reaches it."
+    },
+    {
+     "id": "T101-2-take-back-piece-merge",
+     "summary": "Where git merge-file conflicts on a sectioned file at take-back (measured shape: a tick's archive meeting another task's edit of the next heading), the file is merged piece by piece; a piece both sides changed differently still conflicts and nothing moves, as before.",
+     "class": "within",
+     "why": "Needed for (2) to work on the shape measured; keeps the existing stop on a true conflict."
+    },
+    {
+     "id": "T101-costs-python-write-and-7-day",
+     "summary": "The files-own test does not see a file written by a Python program (the event log names no file for it; T96, open) and takes an edit older than 7 days as landed (land-alone's existing LANDED_SINCE bound).",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Adjudicated each part. Python writes: the file name is absent from the log until T96 lands, so the test cannot see it; the gap already governs every started task other than the mark's under 405 D4 and land-alone's existing own-files refusal, so T101 adds no new class of exposure, and the fix is an already-filed open task (T96). 7-day bound: it is land-alone's own existing bound, reused rather than introduced. Neither removes anything the GM asked for in 451, and neither guts D4's purpose for the work the log does attribute."
     }
    ],
    "verdict": "CLEAR"
