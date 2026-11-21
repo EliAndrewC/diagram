@@ -301,9 +301,13 @@ fn within<T: Send + 'static>(f: impl FnOnce() -> T + Send + 'static) -> T {
             Err(e) => assert_eq!(e, Timeout, "the search panicked"),
         }
         // A thread that sent its answer and ended since has no file: 0, and the next receive takes the answer.
-        let ns: u64 = std::fs::read_to_string(&stat)
-            .ok()
-            .and_then(|s| s.split_whitespace().next()?.parse().ok())
+        // no closure here: one that runs only while the file stands is a line no test reaches when the thread has ended
+        let stat_text = std::fs::read_to_string(&stat).unwrap_or_default();
+        let ns: u64 = stat_text
+            .split_whitespace()
+            .next()
+            .unwrap_or("0")
+            .parse()
             .unwrap_or(0);
         assert!(ns < CPU_BOUND_NS, "ran past its CPU bound: {ns} ns");
     }
@@ -372,11 +376,8 @@ fn the_mask_blanks_the_quoted_strings_the_pattern_found() {
         for m in pattern.find_iter(&text).map_while(Result::ok) {
             bytes[m.start() + 1..m.end() - 1].fill(b' ');
         }
-        assert_eq!(
-            super::masked(&text),
-            String::from_utf8_lossy(&bytes),
-            "{text:?}"
-        );
+        let (got, want) = (super::masked(&text), String::from_utf8_lossy(&bytes));
+        assert_eq!(got, want, "{text:?}");
     }
 }
 

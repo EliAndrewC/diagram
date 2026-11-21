@@ -321,10 +321,8 @@ fn a_loop_whose_quote_nothing_closes_is_read_in_time() {
     let _ = child.kill();
     let out = child.wait_with_output().unwrap();
     let said = String::from_utf8_lossy(&out.stdout);
-    assert!(
-        done.is_some_and(|s| s.success()),
-        "the loop was not read in 10 s: {said}"
-    );
+    let read = done.is_some_and(|s| s.success());
+    assert!(read, "the loop was not read in 10 s: {said}");
     // the quote closes nothing, so it neutralizes nothing: the grep of a file is still the permitted watch
     assert!(said.contains("T108 read true"), "{said}");
 }
@@ -351,10 +349,7 @@ fn a_condition_is_neutralized_as_the_pattern_neutralized_it() {
                 .replace_all(&whole[1..whole.len() - 1], "")
                 .into_owned()
         });
-        assert_eq!(
-            super::cond_grammar(text).as_deref(),
-            Some(&*want),
-            "{text:?}"
-        );
+        let got = super::cond_grammar(text);
+        assert_eq!(got.as_deref(), Some(&*want), "{text:?}");
     }
 }
