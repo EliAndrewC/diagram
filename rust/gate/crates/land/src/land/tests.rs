@@ -297,6 +297,12 @@ fn copy_tree(from: &Path, to: &Path) {
     }
 }
 
+/// `hay` holds `needle`, else the test fails saying what it held. One line, so the message a pass never prints is no line of its own
+/// for the cover to miss (an `assert!` rustfmt splits leaves it on one, 451 T101).
+pub(super) fn has(hay: &str, needle: &str) {
+    assert!(hay.contains(needle), "{needle:?} is not in:\n{hay}");
+}
+
 /// A clone of a bare origin holding `specs/449-x/tasks.md`, the stub tools, the landing with its output captured: a copy of
 /// [`template`], its remote named.
 pub(super) fn fx(tag: &str) -> Fx {

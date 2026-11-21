@@ -406,6 +406,9 @@ pkill -P "$WA_RUN" 2>/dev/null; kill "$WA_RUN" 2>/dev/null; wait "$WA_RUN" 2>/de
 bash -c "until grep -q NEVER-T61 '$WA_DIR/fresh.log'; do sleep 3; done" </dev/null >/dev/null 2>&1 & WA_W1=$!
 bash -c "while ! grep -q NEVER-T61 '$WA_DIR/fresh.log'; do sleep 3; done" </dev/null >/dev/null 2>&1 & WA_W2=$!
 wa_settle "$WA_W1" NEVER-T61; wa_settle "$WA_W2" NEVER-T61
+# Quiet again: the call above, its `sleep` killed before its shell, can run its `tee` first, which wrote fresh.log in 7 of 20 trials
+# (451 T97, measured 2026-11-21, /tmp/t97/race.sh) and turned this case alive on the staleness belt, reproducibly at one and two parts.
+touch -d "2 hours ago" "$WA_DIR/fresh.log"
 alive "two waiters on one quiet file and no run: still gone" dead "$WA_DIR/fresh.log"
 kill "$WA_W1" "$WA_W2" 2>/dev/null; wait "$WA_W1" "$WA_W2" 2>/dev/null
 # 451 T61: A READER IS NO RUN EITHER. The Monitor tool's `tail -f f | grep` holds the file open READ-ONLY, which `fuser` counted as a

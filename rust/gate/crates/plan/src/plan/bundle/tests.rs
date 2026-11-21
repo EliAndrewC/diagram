@@ -136,6 +136,62 @@ fn a_requirement_written_as_a_heading_is_cited_whole() {
     assert_eq!(got.len(), 3);
 }
 
+/// A requirement written with no list dash (`**FR-007** ...`, `**FR-004 - title.** ...`: 24 specs of features 129 to 271 write some
+/// so, measured 2026-11-21) is carried with its text, to the next requirement or heading (451 T82: it was NOT FOUND, 449's
+/// "FR-007 of feature 239" among them). A dashed item or a heading of the same id still wins: 170's `### FR-006` restated in bold
+/// under it, and 177's dashed FR-006a beside a later bold "FR-006a, PROVEN" commentary. An indented sub-item with its own id (184's and
+/// 295's FR-005a to FR-005d) is read too, found by this task's own bundle naming them NOT FOUND.
+#[test]
+fn a_requirement_with_no_list_dash_is_cited_with_its_text() {
+    let spec = "## Requirements\n\n**FR-001** The bench MUST refuse a guard,\nnaming FR-002.\n\nIts own paragraph.\n\n**FR-002 - what a failed proof does.** The field.\n**FR-009a** lettered.\n\n**SC-003a** (`done`) the median.\n\n- **FR-010** dashed beside them.\n\n**FR-010, PROVEN rather than assured** commentary.\n\n- **FR-012** parent.\n  - **FR-012a** its sub-item.\n    continued.\n\nA paragraph of the section.\n\n### FR-006 - a guard file's reason\n\n**FR-006 - restated in bold.** under it.\n\n### FR-007 - next\n\nx\n\n## After\n\n**FR-011** last.\n";
+    let got = requirements(spec);
+    assert_eq!(
+        got["FR-001"],
+        "**FR-001** The bench MUST refuse a guard,\nnaming FR-002.\n\nIts own paragraph.\n"
+    );
+    assert_eq!(
+        got["FR-002"],
+        "**FR-002 - what a failed proof does.** The field.\n"
+    );
+    assert_eq!(got["FR-009a"], "**FR-009a** lettered.\n");
+    assert_eq!(got["SC-003a"], "**SC-003a** (`done`) the median.\n");
+    assert_eq!(got["FR-010"], "- **FR-010** dashed beside them.\n");
+    // an indented sub-item with its own id (184's FR-005a, 295's FR-005a) is carried as a list item, its parent keeping it too
+    assert_eq!(
+        got["FR-012"],
+        "- **FR-012** parent.\n  - **FR-012a** its sub-item.\n    continued.\n"
+    );
+    assert_eq!(
+        got["FR-012a"],
+        "  - **FR-012a** its sub-item.\n    continued.\n"
+    );
+    assert_eq!(
+        got["FR-006"],
+        "### FR-006 - a guard file's reason\n\n**FR-006 - restated in bold.** under it.\n"
+    );
+    assert_eq!(got["FR-011"], "**FR-011** last.\n");
+    assert_eq!(got.len(), 10);
+}
+
+/// Another feature's dashless requirement arrives under its feature's line, never as NOT FOUND (451 T82: 449's plan-done.md line 967,
+/// "FR-007 of feature 239", and 383's plan.md line 503, "256's FR-004", each got a NOT FOUND line on the plan crate unedited, measured
+/// 2026-11-21).
+#[test]
+fn another_feature_s_dashless_requirement_is_carried_from_it() {
+    let (root, dir) = feature();
+    let other = root.join("specs/239-x");
+    std::fs::create_dir_all(&other).unwrap();
+    std::fs::write(other.join("spec.md"), "## Requirements\n\n**FR-006** Before.\n\n**FR-007** The bench MUST refuse a guard whose decision it cannot import.\n\n**FR-008** After.\n").unwrap();
+    let out = scratch("out");
+    let body = "## T15 - x\n\n`bench` TAKES ANY GUARD: FR-007 of feature 239 refused a guard; 239's FR-004 is not there.\n";
+    let m = build(&dir, &out, "T15", &under(&[("## T15 - x", body)]), &[], "h").unwrap();
+    let cited = read(m.parent().unwrap(), "spec-cited.md");
+    assert!(cited.contains("<!-- feature 239 -->\n**FR-007** The bench MUST refuse a guard whose decision it cannot import.\n"));
+    assert!(!cited.contains("FR-007**: NOT FOUND") && !cited.contains("**FR-008** After."));
+    assert!(cited
+        .contains("<!-- feature 239 -->\n- **FR-004**: NOT FOUND - specs/239-x holds no FR-004"));
+}
+
 #[test]
 fn a_list_of_this_feature_s_ids_is_not_read_as_another_feature_s() {
     let body = "## D1 - the rule (FR-001, FR-002)\n\nfeature 383 FR-043 is another feature's; feature 407 FR-007 is ours.\n";

@@ -254,6 +254,12 @@ expect_out "holds: T01 open"
 expect_out "make land F=140 T=T01"
 case "$OUT" in *"conflict-markers:"*) no_ "the holding rule ran after l7r-gate push-checks (405 T34: cheap questions first)" ;; *) yes_ ;; esac
 OUT=$(L7R_LAND_TICKS="T01" CI_ROUTE=DIRECT CI_MERGE="false" syncmain "$D" push); check "STAYS QUIET: make land names the task it ticks -> lands" 0 $?
+# feature 451 T101: a landing of another task than the active one is held, unless make land ruled it ready beside it (started, its
+# plan section CLEAR, its files its own) and said so in L7R_LAND_READY - the push asks the hold again, so it reads that ruling
+( cd "$D/main/.clones/c" && echo m6b > note.md && echo "another task's report line" >> specs/140-x/report.md && git add -A && git commit -qm "another task's landing" )
+OUT=$(L7R_LAND_TICKS="T99" CI_ROUTE=DIRECT CI_MERGE="false" syncmain "$D" push); check "IT FIRES: a landing of another task than the active one -> refused" 1 $?
+expect_out "holds: T01 open"
+OUT=$(L7R_LAND_TICKS="T99" L7R_LAND_READY="T99" CI_ROUTE=DIRECT CI_MERGE="false" syncmain "$D" push); check "STAYS QUIET: make land ruled its task ready beside the active one (451 T101) -> lands" 0 $?
 ( cd "$D/main/.clones/c" && printf -- '- [x] T01 done\n- [ ] T02 being worked [lands-open]\n' > specs/140-x/tasks.md && echo m7 > note.md && git add -A && git commit -qm "a mark on the active task" ); start "$D" T02
 OUT=$(CI_ROUTE=DIRECT CI_MERGE="false" syncmain "$D" push); check "IT FIRES: a [lands-open] mark is text - the active task still holds" 1 $?
 ( cd "$D/main/.clones/c" && printf -- '- [x] T01 done\n- [x] T02 done\n- [ ] GM review (make gm-reviewed F=140) [lands-open]\n' > specs/140-x/tasks.md && echo m8 > note.md && git add -A && git commit -qm "the GM's box" )

@@ -8,11 +8,9 @@
 //! where the shell was last known (spec 204's D6). A single quote and a `\$` keep a `$` literal, as bash does.
 
 use std::collections::{HashMap, HashSet};
-use std::sync::LazyLock;
-
-use fancy_regex::Regex;
 
 use super::{expand, re, strip_quote_chars, Env, ASSIGN};
+use crate::regex::Lazy;
 use crate::shape::shlex;
 
 /// The most bindings the walk reads one command in: past it, the names that would multiply them further are unknown (a loop's
@@ -62,23 +60,38 @@ const BASH_SETS: [&str; 18] = [
     "SECONDS",
 ];
 
+// Each pattern built only for a text that could match it (`Lazy`, 451 T97): its gate the literals one of which every match holds.
 /// A `NAME+=`, which appends to a value: unknown.
-static APPEND: LazyLock<Regex> = LazyLock::new(|| re(r"(?:^|[^\w$])([A-Za-z_]\w*)\+="));
+static APPEND: Lazy = Lazy::new(
+    |t| t.contains("+="),
+    || re(r"(?:^|[^\w$])([A-Za-z_]\w*)\+="),
+);
 /// The next assignment of a chain after an assignment (`A=1 B=2`): `ASSIGN` reads only the first, so the rest are unknown. A
 /// `NAME=` after a command's first word is its argument, never the shell's (`make plan-verdict F=413`, bx#31033's, measured
 /// 2026-11-21: read as an assignment, it made the scratch `$F` before it unknown).
-static CHAIN: LazyLock<Regex> =
-    LazyLock::new(|| re(r#"^[ \t]+([A-Za-z_]\w*)=(?:"[^"\n]*"|'[^'\n]*'|[^\s;&|)]*)"#));
+static CHAIN: Lazy = Lazy::new(
+    |t| t.starts_with([' ', '\t']) && t.contains('='),
+    || re(r#"^[ \t]+([A-Za-z_]\w*)=(?:"[^"\n]*"|'[^'\n]*'|[^\s;&|)]*)"#),
+);
 /// The words after `read`, `mapfile`, `readarray` and `getopts`, each name among them bound from input.
-static READS: LazyLock<Regex> =
-    LazyLock::new(|| re(r"(?:^|[^\w-])(?:read|mapfile|readarray|getopts)\s([^;&|\n)]*)"));
-static PRINTF_V: LazyLock<Regex> = LazyLock::new(|| re(r"\bprintf\s+-v\s+([A-Za-z_]\w*)"));
+static READS: Lazy = Lazy::new(
+    |t| t.contains("read") || t.contains("mapfile") || t.contains("getopts"),
+    || re(r"(?:^|[^\w-])(?:read|mapfile|readarray|getopts)\s([^;&|\n)]*)"),
+);
+static PRINTF_V: Lazy = Lazy::new(
+    |t| t.contains("printf"),
+    || re(r"\bprintf\s+-v\s+([A-Za-z_]\w*)"),
+);
 /// A `for` or `select` header: its name, and its word list where it has one (none iterates `"$@"`).
-static LOOP: LazyLock<Regex> =
-    LazyLock::new(|| re(r"\b(?:for|select)\s+([A-Za-z_]\w*)(?:\s+in\b([^;\n]*))?"));
+static LOOP: Lazy = Lazy::new(
+    |t| t.contains("for") || t.contains("select"),
+    || re(r"\b(?:for|select)\s+([A-Za-z_]\w*)(?:\s+in\b([^;\n]*))?"),
+);
 /// A file sourced or a string evaluated: any name may be set there.
-static SOURCED: LazyLock<Regex> =
-    LazyLock::new(|| re(r"(?:^|[;&|\n({]|\b(?:do|then|else))\s*(?:source|\.|eval)\s"));
+static SOURCED: Lazy = Lazy::new(
+    |t| t.contains('.') || t.contains("source") || t.contains("eval"),
+    || re(r"(?:^|[;&|\n({]|\b(?:do|then|else))\s*(?:source|\.|eval)\s"),
+);
 
 /// How a read name is bound.
 #[derive(Debug, Clone)]
@@ -174,7 +187,7 @@ fn loop_values(list: &str) -> Option<Vec<String>> {
 
 /// How each name `text` reads is bound.
 fn bindings(text: &str, read: &[Read]) -> HashMap<String, Bound> {
-    let names = |p: &Regex| -> Vec<(String, usize)> {
+    let names = |p: &Lazy| -> Vec<(String, usize)> {
         p.captures_iter(text)
             .map_while(Result::ok)
             .filter_map(|c| c.get(1).map(|m| (m.as_str().to_owned(), m.start())))
@@ -188,7 +201,7 @@ fn bindings(text: &str, read: &[Read]) -> HashMap<String, Bound> {
         .collect();
     for c in ASSIGN.captures_iter(text).map_while(Result::ok) {
         let mut at = c.get(0).map_or(text.len(), |m| m.end());
-        while let Some(m) = CHAIN.captures(&text[at..]).ok().flatten() {
+        while let Some(m) = CHAIN.captures(&text[at..]) {
             unknown.extend(m.get(1).map(|n| n.as_str().to_owned()));
             at += m.get(0).map_or(text.len() - at, |m| m.end());
         }
@@ -208,7 +221,7 @@ fn bindings(text: &str, read: &[Read]) -> HashMap<String, Bound> {
             unknown.insert(name);
         }
     }
-    let sourced = SOURCED.is_match(text).unwrap_or(false);
+    let sourced = SOURCED.is_match(text);
     let mut out = HashMap::new();
     for r in read {
         let n = r.name.as_str();

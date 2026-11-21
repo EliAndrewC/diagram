@@ -22,23 +22,32 @@
 //! read-only program among the 250 make-only refusals the guard log replayed (measured 2026-11-21).
 
 use std::path::Path;
-use std::sync::LazyLock;
 
 use fancy_regex::Regex;
+
+use crate::regex::Lazy;
 
 fn re(pattern: &str) -> Regex {
     crate::regex::build(pattern).unwrap_or_else(|e| unreachable!("a guard's own pattern: {e}"))
 }
 
+// Each pattern built only for a text that could match it (`Lazy`, 451 T97): its gate the literals one of which every match holds,
+// none (`|_| true`) where a match needs none.
 /// A call or module that can write, read as a substring so a near miss is a write (`.copy()`, `list.remove` - the closed side).
-static WRITES: LazyLock<Regex> = LazyLock::new(|| {
-    re(
-        r"write|\.touch\(|mkdir|makedirs|unlink|remove|rmdir|rmtree|rename|shutil|subprocess|system\(|popen|spawn|exec|\beval\(|__import__|importlib|runpy|\.dump\(|\bsave\w*\(|\bto_[a-z]+\(|tofile|chmod|chown|symlink|link_to|hardlink|\blink\(|truncate|os\.open|fdopen|sqlite3|dbm|shelve|tarfile|zipfile|tempfile|copy|move|sys\.path|setattr|getattr\(|vars\(|globals\(|__builtins__|__dict__|\bcompile\(|urlretrieve|FileIO|GzipFile|fileinput|utime|mknod|mkfifo|ctypes",
-    )
-});
+static WRITES: Lazy = Lazy::new(
+    |_| true,
+    || {
+        re(
+            r"write|\.touch\(|mkdir|makedirs|unlink|remove|rmdir|rmtree|rename|shutil|subprocess|system\(|popen|spawn|exec|\beval\(|__import__|importlib|runpy|\.dump\(|\bsave\w*\(|\bto_[a-z]+\(|tofile|chmod|chown|symlink|link_to|hardlink|\blink\(|truncate|os\.open|fdopen|sqlite3|dbm|shelve|tarfile|zipfile|tempfile|copy|move|sys\.path|setattr|getattr\(|vars\(|globals\(|__builtins__|__dict__|\bcompile\(|urlretrieve|FileIO|GzipFile|fileinput|utime|mknod|mkfifo|ctypes",
+        )
+    },
+);
 /// `re.compile(` builds a pattern, never code, so it is read past before the writers are sought; the builtin `compile` and any
 /// other name's `.compile(` stay a write (451 T42: window#307's heredoc, a read, judged a write on its `re.compile`).
-static RE_COMPILE: LazyLock<Regex> = LazyLock::new(|| re(r"(?<![\w.])re\.compile\("));
+static RE_COMPILE: Lazy = Lazy::new(
+    |t| t.contains("re.compile("),
+    || re(r"(?<![\w.])re\.compile\("),
+);
 /// 451 T44: the git subcommands a subprocess argv may name and stay a read: those the corpora run so (`ls-files` window#307,
 /// `show` window#112, `rev-parse` parse#173 and refusals#27, `log` parse#229) and the plumbing T44's line names (`cat-file`,
 /// `ls-tree`). `status` and `diff` are left out: each rewrote `.git/index` after a tracked file was touched, where these six
@@ -70,40 +79,60 @@ const SUBPROCESS_KWARGS: [&str; 12] = [
     "stderr",
     "stdin",
 ];
-static SUBPROCESS_CALL: LazyLock<Regex> =
-    LazyLock::new(|| re(r"(?<![\w.])subprocess\.(?:run|check_output|check_call|call)\("));
-static SUBPROCESS_CONST: LazyLock<Regex> =
-    LazyLock::new(|| re(r"(?<![\w.])subprocess\.(?:PIPE|DEVNULL|STDOUT)\b"));
+static SUBPROCESS_CALL: Lazy = Lazy::new(
+    |t| t.contains("subprocess."),
+    || re(r"(?<![\w.])subprocess\.(?:run|check_output|check_call|call)\("),
+);
+static SUBPROCESS_CONST: Lazy = Lazy::new(
+    |t| t.contains("subprocess."),
+    || re(r"(?<![\w.])subprocess\.(?:PIPE|DEVNULL|STDOUT)\b"),
+);
 /// One argv element that is a string literal holding no quote of its own delimiter (`'a' if c else 'b'` is no literal).
-static ARGV_LITERAL: LazyLock<Regex> =
-    LazyLock::new(|| re(r#"(?s)^([rRbBuUfF]{0,2})(?:"([^"]*)"|'([^']*)')$"#));
+static ARGV_LITERAL: Lazy = Lazy::new(
+    |t| t.contains(['"', '\'']),
+    || re(r#"(?s)^([rRbBuUfF]{0,2})(?:"([^"]*)"|'([^']*)')$"#),
+);
 /// 451 T63: an f-string's text that is a long option with its name literal - `--`, a letter, letters, digits and `-`, then `=` -
 /// and a value holding no call's bracket, `\`, `$` or line break, so no call can stand in its fields (`f'--since={prev["t0"]}'`,
 /// T58's read of the event logs, refused as a guard write on 2026-11-21T05:51:53Z). `writes_flag` judges an option by its name
 /// alone, and `--name=_` can never be `-C`, a subcommand or a command, so the element is judged as a literal `--name=v` was; a
 /// writing option (`f'--output={p}'`) stays a write by its name, and a short option, a name a field can reach and every other
 /// f-string opening with `-` or `{` stay unknowable.
-static FIXED_OPTION: LazyLock<Regex> =
-    LazyLock::new(|| re(r"^(--[A-Za-z][A-Za-z0-9-]*=)[^()\\$\n]*$"));
-/// `replace(` writes only as `os.replace` or a `Path`'s (`str.replace`, the common read, cannot reach either without these names).
-static REPLACE: LazyLock<Regex> = LazyLock::new(|| re(r"replace\("));
-static PATHS: LazyLock<Regex> = LazyLock::new(|| re(r"\bos\b|Path|pathlib"));
-static OPEN: LazyLock<Regex> = LazyLock::new(|| re(r"\bopen\("));
-static KWARG_OK: LazyLock<Regex> =
-    LazyLock::new(|| re(r"^(?:encoding|errors|newline|buffering)\s*=[^=]"));
-static MODE_KW: LazyLock<Regex> = LazyLock::new(|| re(r"^mode\s*="));
-static KWARG: LazyLock<Regex> = LazyLock::new(|| re(r"^\w+\s*=[^=]"));
-static LITERAL: LazyLock<Regex> = LazyLock::new(|| re(r#"(?s)^(?i:[rbfu]{0,2})(["'])(.*)\1$"#));
-static READ_MODE: LazyLock<Regex> = LazyLock::new(|| re(r"^[rbtU]*$"));
-static ANY_MODE: LazyLock<Regex> = LazyLock::new(|| re(r"^[rbtUwax+]*$"));
+static FIXED_OPTION: Lazy = Lazy::new(
+    |t| t.starts_with("--"),
+    || re(r"^(--[A-Za-z][A-Za-z0-9-]*=)[^()\\$\n]*$"),
+);
+static PATHS: Lazy = Lazy::new(
+    |t| t.contains("os") || t.contains("Path") || t.contains("pathlib"),
+    || re(r"\bos\b|Path|pathlib"),
+);
+static OPEN: Lazy = Lazy::new(|t| t.contains("open("), || re(r"\bopen\("));
+static KWARG_OK: Lazy = Lazy::new(
+    |t| t.contains('='),
+    || re(r"^(?:encoding|errors|newline|buffering)\s*=[^=]"),
+);
+static MODE_KW: Lazy = Lazy::new(|t| t.starts_with("mode"), || re(r"^mode\s*="));
+static KWARG: Lazy = Lazy::new(|t| t.contains('='), || re(r"^\w+\s*=[^=]"));
+static LITERAL: Lazy = Lazy::new(
+    |t| t.contains(['"', '\'']),
+    || re(r#"(?s)^(?i:[rbfu]{0,2})(["'])(.*)\1$"#),
+);
+static READ_MODE: Lazy = Lazy::new(|_| true, || re(r"^[rbtU]*$"));
+static ANY_MODE: Lazy = Lazy::new(|_| true, || re(r"^[rbtUwax+]*$"));
 /// An import where a statement can start: a line, after `;`, or after a compound statement's `:` (`try: import l7r`).
-static IMPORT: LazyLock<Regex> = LazyLock::new(|| re(r"(?m)(?:^|[;:])\s*import\s+([^;\n#]+)"));
-static FROM: LazyLock<Regex> = LazyLock::new(|| re(r"(?m)(?:^|[;:])\s*from\s+(\S+)\s+import\b"));
+static IMPORT: Lazy = Lazy::new(
+    |t| t.contains("import"),
+    || re(r"(?m)(?:^|[;:])\s*import\s+([^;\n#]+)"),
+);
+static FROM: Lazy = Lazy::new(
+    |t| t.contains("from"),
+    || re(r"(?m)(?:^|[;:])\s*from\s+(\S+)\s+import\b"),
+);
 /// What follows an unescaped `$` that the shell expands inside double quotes: a name, a brace, a digit or a special parameter.
-static EXPANDS: LazyLock<Regex> = LazyLock::new(|| re(r"^[A-Za-z_{0-9@*#?!$-]"));
+static EXPANDS: Lazy = Lazy::new(|_| true, || re(r"^[A-Za-z_{0-9@*#?!$-]"));
 
-fn found(p: &Regex, text: &str) -> bool {
-    p.is_match(text).unwrap_or(false)
+fn found(p: &Lazy, text: &str) -> bool {
+    p.is_match(text)
 }
 
 /// The program Python receives - a double-quoted body with the shell's `\"`, `\\`, `\$` and `` \` `` undone, an unquoted
@@ -216,12 +245,10 @@ fn list_items(arg: &str) -> Option<Vec<String>> {
 /// only where its value cannot open as an option (`f"HEAD:{p}"` is one; `f"{flag}"` and `f"--{o}"` are not) - or, where it is a
 /// long option whose name is literal and whose value calls nothing (`FIXED_OPTION`), that option with the value `_` (451 T63).
 fn argv_literal(arg: &str) -> Option<String> {
-    let c = ARGV_LITERAL.captures(arg).ok().flatten()?;
+    let c = ARGV_LITERAL.captures(arg)?;
     let f = c.get(1).is_some_and(|p| p.as_str().contains(['f', 'F']));
     let text = c.get(2).or_else(|| c.get(3)).map_or("", |m| m.as_str());
-    let option = f
-        .then(|| FIXED_OPTION.captures(text).ok().flatten())
-        .flatten();
+    let option = f.then(|| FIXED_OPTION.captures(text)).flatten();
     if let Some(o) = option {
         return Some(format!("{}_", o.get(1).map_or("", |m| m.as_str())));
     }
@@ -337,8 +364,6 @@ fn subprocess_masked(program: &str) -> String {
 fn literal(arg: &str) -> Option<String> {
     LITERAL
         .captures(arg)
-        .ok()
-        .flatten()
         .and_then(|c| c.get(2).map(|m| m.as_str().to_owned()))
 }
 
@@ -414,10 +439,12 @@ pub(super) fn reads(body: &str, quote: char, dir: Option<&str>) -> bool {
     if outside_literals(&program, &at) {
         return false; // the shell puts text into the program's code before Python sees it
     }
+    // `replace(` writes only as `os.replace` or a `Path`'s (`str.replace`, the common read, cannot reach either without these
+    // names); a literal, read without a pattern (451 T97)
     if found(
         &WRITES,
         &subprocess_masked(&RE_COMPILE.replace_all(&program, "re.pattern(")),
-    ) || (found(&REPLACE, &program) && found(&PATHS, &program))
+    ) || (program.contains("replace(") && found(&PATHS, &program))
     {
         return false;
     }

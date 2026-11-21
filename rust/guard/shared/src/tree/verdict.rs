@@ -6,7 +6,7 @@ use std::path::Path;
 use fancy_regex::Captures;
 use serde_json::{json, Value};
 
-use super::{found, join, re, relpath, walk_judged, Target, Walk, FUNCTION_DEF};
+use super::{join, re, relpath, walk_judged, Target, Walk, FUNCTION_DEF};
 
 /// Every command-position `cd <main>[/sub]` of the original text made `cd <clone>[/sub]` (`_rewrite_cds`).
 fn rewrite_cds(cmd: &str, main: &str, clone: &str) -> String {
@@ -123,7 +123,7 @@ pub fn judge(
     if !Path::new(clone).join(".git").exists() {
         return out("refuse", "clone-missing", cause);
     }
-    if found(&FUNCTION_DEF, cmd) {
+    if FUNCTION_DEF.is_match(cmd) {
         return out("refuse", "shape", cause);
     }
     let mut new = rewrite_cds(cmd, main, clone);

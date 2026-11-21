@@ -66,6 +66,12 @@ const OWN_NAMES: [&str; 19] = [
     "feature",
 ];
 static ITEM: LazyLock<Regex> = LazyLock::new(|| re(r"(?m)^- \*\*((?:FR|SC)-\d{3}[a-z]?)\b"));
+/// A requirement in any form the specs write it: the list item `ITEM` reads, a bold paragraph with no list dash, `**FR-007** ...` or
+/// `**FR-004 - title.** ...`, which 24 specs of features 129 to 271 write some in and 21 write some id in alone, or an indented
+/// sub-item with its own id, `  - **FR-005a**`, 184's and 295's (451 T82, measured 2026-11-21 over every `specs/*/spec.md`);
+/// `spec_amendments` keeps `ITEM`, no spec writing a dashless id under an amendment heading.
+static ANY_ITEM: LazyLock<Regex> =
+    LazyLock::new(|| re(r"(?m)^(?:[ \t]*- )?\*\*((?:FR|SC)-\d{3}[a-z]?)\b"));
 static RANGE: LazyLock<Regex> =
     LazyLock::new(|| re(r"\b(FR|SC)-(\d{3})\s*(?:-|to|through)\s*(?:(?:FR|SC)-)?(\d{3})\b"));
 static DRANGE: LazyLock<Regex> = LazyLock::new(|| re(r"\bD(\d+)\s*(?:-|to|through)\s*D(\d+)\b"));
@@ -131,7 +137,8 @@ fn item_end(window: &str) -> usize {
 
 /// `{id: its text}`, each carried whole (feature 451 T37: a cut at the first blank line stopped D15 at its colon and D16 at "Two things
 /// make the comparison real:", and a reviewer judged each without its bullets). Each match runs to the next match or the next heading;
-/// one written as a list item (`- **FR-NNN**`, `- **D7**`) stops sooner, at a blank line its own indented lines do not follow.
+/// one written as a list item (`- **FR-NNN**`, `- **D7**`, an indented `  - **FR-005a**`) stops sooner, at a blank line its own
+/// indented lines do not follow.
 fn paragraphs(text: &str, pattern: &Regex) -> Map<String, Value> {
     let starts: Vec<(usize, String)> = pattern
         .captures_iter(text)
@@ -148,7 +155,10 @@ fn paragraphs(text: &str, pattern: &Regex) -> Map<String, Value> {
             .ok()
             .flatten()
             .map_or(next, |h| line_end + h.start());
-        if text[*at..].starts_with("- ") {
+        if text[*at..]
+            .trim_start_matches([' ', '\t'])
+            .starts_with("- ")
+        {
             end = at + item_end(&text[*at..end]);
         }
         out.entry(id.clone())
@@ -157,7 +167,11 @@ fn paragraphs(text: &str, pattern: &Regex) -> Map<String, Value> {
     out
 }
 
-/// `{FR or SC id: its text}`: a `- **FR-NNN**` item as `paragraphs` carries it, a `### FR-NNN` heading to the next heading.
+/// `{FR or SC id: its text}`: a `- **FR-NNN**` item as `paragraphs` carries it, a `### FR-NNN` heading to the next heading, and a
+/// `**FR-NNN**` paragraph with no list dash to the next requirement of any form or the next heading, as a dashless decision runs, and
+/// an indented sub-item as a list item (451 T82: each was NOT FOUND, 449's "FR-007 of feature 239" among them). An id the first two
+/// forms give keeps their text, a dashless line restating it being commentary: 170's `### FR-006` restated in bold under it, 177's
+/// "FR-006a, PROVEN" after its item.
 fn requirements(spec: &str) -> Map<String, Value> {
     let mut out = paragraphs(spec, &ITEM);
     for c in HEAD_ITEM.captures_iter(spec).map_while(Result::ok) {
@@ -170,6 +184,9 @@ fn requirements(spec: &str) -> Map<String, Value> {
             .map_or(spec.len(), |n| whole.1 + n.start());
         out.entry(c[1].to_owned())
             .or_insert_with(|| Value::from(format!("{}\n", spec[whole.0..end].trim_end())));
+    }
+    for (id, text) in paragraphs(spec, &ANY_ITEM) {
+        out.entry(id).or_insert(text);
     }
     out
 }

@@ -7,10 +7,10 @@
 use std::collections::HashMap;
 use std::fmt::Write as _;
 use std::path::{Component, Path, PathBuf};
-use std::sync::LazyLock;
 
 use fancy_regex::{Captures, Regex};
 
+use super::regex::Lazy;
 use super::shape::strip_heredocs;
 
 mod bind;
@@ -38,37 +38,54 @@ const WRAPPERS: [&str; 9] = [
     "sudo", "nohup", "setsid", "env", "command", "exec", "time", "nice", "builtin",
 ];
 
+// Each pattern of the walk is built only for a text that could match it (`Lazy`, 451 T97): its gate a literal every match holds.
 /// An assignment at a command's start - a loop's, an `if`'s and a function's body's too (451 T79's second round: `do
 /// D=/tmp/k-$q; mkdir -p $D` was read as nothing known), `export`, `local`, `declare`, `typeset` and `readonly` alike.
-static ASSIGN: LazyLock<Regex> = LazyLock::new(|| {
-    re(
-        r#"(?:^|[;&|\n(]|(?<!\$)\{|\b(?:do|then|else)\s)\s*(?:(?:export|local|declare|typeset|readonly)\s+(?:-\w+\s+)*)?([A-Za-z_]\w*)=(?:"([^"\n]*)"|'([^'\n]*)'|([^\s;&|)]*))"#,
-    )
-});
-static VAR: LazyLock<Regex> = LazyLock::new(|| re(r"\$\{(\w+)\}|\$(\w+)"));
+static ASSIGN: Lazy = Lazy::new(
+    |t| t.contains('='),
+    || {
+        re(
+            r#"(?:^|[;&|\n(]|(?<!\$)\{|\b(?:do|then|else)\s)\s*(?:(?:export|local|declare|typeset|readonly)\s+(?:-\w+\s+)*)?([A-Za-z_]\w*)=(?:"([^"\n]*)"|'([^'\n]*)'|([^\s;&|)]*))"#,
+        )
+    },
+);
+static VAR: Lazy = Lazy::new(|t| t.contains('$'), || re(r"\$\{(\w+)\}|\$(\w+)"));
 /// A `\` and the newline after it, which bash drops so the line goes on, past an even run of `\` before it - an escaped backslash,
 /// after which the newline ends the command (451 T79: the walk read `cp /tmp/a \` and the mirror's `b` on the next line as two
 /// commands, the write of `b` unseen, observed 2026-11-21).
-static CONTINUED: LazyLock<Regex> = LazyLock::new(|| re(r"(?<!\\)((?:\\\\)*)\\\n"));
+static CONTINUED: Lazy = Lazy::new(|t| t.contains("\\\n"), || re(r"(?<!\\)((?:\\\\)*)\\\n"));
 /// An assignment's value that is a `$(mktemp ...)` (or backquoted), its arguments the capture (451 T79).
-static MKTEMP: LazyLock<Regex> =
-    LazyLock::new(|| re(r#"^["']?(?:\$\(|`)\s*mktemp\b([^()`\n]*?)\s*(?:\)|`)"#));
+static MKTEMP: Lazy = Lazy::new(
+    |t| t.contains("mktemp"),
+    || re(r#"^["']?(?:\$\(|`)\s*mktemp\b([^()`\n]*?)\s*(?:\)|`)"#),
+);
 /// An assignment's value that is a `$(dirname ...)` or `$(basename ...)`, its text the capture (451 T79's second round).
-static DIR_BASE: LazyLock<Regex> =
-    LazyLock::new(|| re(r#"^["']?(?:\$\(|`)\s*((?:dirname|basename)\s[^()`\n]*?)\s*(?:\)|`)"#));
-static QUOTED: LazyLock<Regex> = LazyLock::new(|| re(r#"(?s)(["'])((?:\\.|(?!\1).)*)\1"#));
-static PLAIN_QUOTE_BODY: LazyLock<Regex> = LazyLock::new(|| re(r"^[^\s;|&()<>`\n]*$"));
-static REDIRECT: LazyLock<Regex> = LazyLock::new(|| re(r"(?<![<>])\d?>{1,2}\|?\s*([^\s;&|()<>]+)"));
-static FUNCTION_DEF: LazyLock<Regex> = LazyLock::new(|| re(r"^\s*[\w-]+\s*\(\s*\)"));
-static DUP_FD: LazyLock<Regex> = LazyLock::new(|| re(r"\d*>&[0-9-]"));
-static DEV_NULL: LazyLock<Regex> = LazyLock::new(|| re(r"\d*>\s*/dev/null"));
-static ASSIGNMENT_WORD: LazyLock<Regex> = LazyLock::new(|| re(r"^[A-Za-z_]\w*="));
-/// A chmod mode: octal, or symbolic clauses (`u+x`, `go-w,a+r`, `-x`).
-static CHMOD_MODE: LazyLock<Regex> = LazyLock::new(|| {
-    re(r"^(?:[0-7]{1,4}|[ugoa]*[-+=][rwxXstugo]*(?:,[ugoa]*[-+=][rwxXstugo]*)*)$")
-});
-fn found(p: &Regex, text: &str) -> bool {
-    p.is_match(text).unwrap_or(false)
+static DIR_BASE: Lazy = Lazy::new(
+    |t| t.contains("dirname") || t.contains("basename"),
+    || re(r#"^["']?(?:\$\(|`)\s*((?:dirname|basename)\s[^()`\n]*?)\s*(?:\)|`)"#),
+);
+static QUOTED: Lazy = Lazy::new(
+    |t| t.contains(['"', '\'']),
+    || re(r#"(?s)(["'])((?:\\.|(?!\1).)*)\1"#),
+);
+static REDIRECT: Lazy = Lazy::new(
+    |t| t.contains('>'),
+    || re(r"(?<![<>])\d?>{1,2}\|?\s*([^\s;&|()<>]+)"),
+);
+static FUNCTION_DEF: Lazy = Lazy::new(|t| t.contains('('), || re(r"^\s*[\w-]+\s*\(\s*\)"));
+static DUP_FD: Lazy = Lazy::new(|t| t.contains(">&"), || re(r"\d*>&[0-9-]"));
+static DEV_NULL: Lazy = Lazy::new(|t| t.contains("/dev/null"), || re(r"\d*>\s*/dev/null"));
+static ASSIGNMENT_WORD: Lazy = Lazy::new(|t| t.contains('='), || re(r"^[A-Za-z_]\w*="));
+/// A chmod mode: octal, or symbolic clauses (`u+x`, `go-w,a+r`, `-x`); no gate, a chmod's words alone reach it.
+static CHMOD_MODE: Lazy = Lazy::new(
+    |_| true,
+    || re(r"^(?:[0-7]{1,4}|[ugoa]*[-+=][rwxXstugo]*(?:,[ugoa]*[-+=][rwxXstugo]*)*)$"),
+);
+/// A quoted body that is one plain word - no whitespace and none of `;|&()<>` or a backquote - read without the pattern it was
+/// (`PLAIN_QUOTE_BODY`, 451 T97): its `\s` is Unicode's `White_Space`, as `char::is_whitespace` is (`tests/builds.rs` holds the two
+/// equal on every character to U+3100 and U+FEFF).
+fn plain_quote_body(body: &str) -> bool {
+    !body.contains(|c: char| c.is_whitespace() || ";|&()<>`".contains(c))
 }
 
 /// Python's `posixpath.normpath`.
@@ -137,10 +154,10 @@ fn quotes_to_paths(cmd: &str, mut programs: Vec<Program>) -> (String, Vec<Progra
             let body = c.get(2).map_or("", |m| m.as_str());
             let quote = c.get(1).map_or("", |m| m.as_str());
             let at = c.get(0).map_or(0, |m| m.start());
-            if found(&PYTHON_C_BEFORE, &cmd[..at]) {
+            if PYTHON_C_BEFORE.is_match(&cmd[..at]) {
                 programs.push((quote.chars().next().unwrap_or('"'), body.to_owned()));
                 format!("__py_c_{}__", programs.len() - 1)
-            } else if !body.is_empty() && found(&PLAIN_QUOTE_BODY, body) {
+            } else if !body.is_empty() && plain_quote_body(body) {
                 // an empty quote stays a word (451 T79: `cd ""` stays where it is, bash's `null directory`, never `cd` home)
                 body.to_owned()
             } else {
@@ -326,7 +343,12 @@ fn env_from(cmd: &str, start: Option<&str>, home: &str) -> Env {
     if let Some(c) = start {
         env.insert("PWD".to_owned(), c.to_owned());
     }
-    let text = joined(&strip_heredocs(cmd));
+    // shape's heredoc pattern built only where a heredoc could open: every match of it holds `<<` (451 T97)
+    let text = joined(&if cmd.contains("<<") {
+        strip_heredocs(cmd)
+    } else {
+        cmd.to_owned()
+    });
     for c in ASSIGN.captures_iter(&text).map_while(Result::ok) {
         let Some(named) = c.get(1) else { continue };
         let value = (2..=4)
@@ -337,14 +359,10 @@ fn env_from(cmd: &str, start: Option<&str>, home: &str) -> Env {
         // T50's tx#63, was read toward the mirror, observed 2026-11-21)
         let made = MKTEMP
             .captures(&text[named.end() + 1..])
-            .ok()
-            .flatten()
             .and_then(|k| mktemp_place(k.get(1).map_or("", |m| m.as_str()), &env, home))
             .or_else(|| {
                 DIR_BASE
                     .captures(&text[named.end() + 1..])
-                    .ok()
-                    .flatten()
                     .and_then(|k| bind::dir_base(k.get(1).map_or("", |m| m.as_str()), &env, home))
             });
         let expanded = made.unwrap_or_else(|| expand(&value, &env, home).unwrap_or(value));
@@ -533,7 +551,7 @@ fn words(seg: &str) -> Vec<&str> {
     let mut toks: Vec<&str> = seg.split_whitespace().collect();
     while let Some(t) = toks.first() {
         // a loop's, an `if`'s or a `while`'s keyword leads its body's command (`bind::KEYWORDS`)
-        if WRAPPERS.contains(t) || found(&ASSIGNMENT_WORD, t) || bind::KEYWORDS.contains(t) {
+        if WRAPPERS.contains(t) || ASSIGNMENT_WORD.is_match(t) || bind::KEYWORDS.contains(t) {
             toks.remove(0);
         } else if *t == "timeout" && toks.len() > 1 {
             toks.drain(..2);
@@ -580,9 +598,10 @@ fn tool_paths<'a>(tool: &str, toks: &[&'a str]) -> Vec<&'a str> {
     // `-` (`chmod -x F`), which no option of chmod's spells
     let mut args = args;
     if matches!(tool, "chmod" | "chown") && !args.iter().any(|t| t.starts_with("--reference")) {
-        if let Some(k) = args.iter().position(|t| {
-            !t.starts_with('-') || (tool == "chmod" && CHMOD_MODE.is_match(t).unwrap_or(false))
-        }) {
+        if let Some(k) = args
+            .iter()
+            .position(|t| !t.starts_with('-') || (tool == "chmod" && CHMOD_MODE.is_match(t)))
+        {
             args.remove(k);
         }
     }
@@ -649,7 +668,7 @@ fn writes_in(
             found_writes.extend(git::git_write(&toks, env, home, eff));
         } else if base == "make" {
             found_writes.push((eff.map(str::to_owned), "shell", Known::Shell));
-        } else if let Some(at) = python_c(&toks).filter(|_| found(&PYTHON, base)) {
+        } else if let Some(at) = python_c(&toks).filter(|_| PYTHON.is_match(base)) {
             // 451 T31: a program that only reads stays in the walk MARKED "read" - no guard's verdict counts it a write, and the
             // guards that read a walk's targets for where a command lands (house style, gm-tree) see what they saw before
             // (`walk` makes it D5's write again beside a stdin program it cannot read, 451 T42)
@@ -890,7 +909,7 @@ fn walk_text(
         let mut program = python_c(&toks)
             .filter(|_| {
                 toks.first()
-                    .is_some_and(|h| found(&PYTHON, h.rsplit('/').next().unwrap_or(h)))
+                    .is_some_and(|h| PYTHON.is_match(h.rsplit('/').next().unwrap_or(h)))
             })
             .and_then(|at| program_of(toks.get(at + 1), &programs))
             .map(|(_, body)| body.clone());

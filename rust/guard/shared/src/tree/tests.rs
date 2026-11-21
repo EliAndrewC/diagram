@@ -935,3 +935,5 @@ fn a_path_is_resolved_whether_or_not_it_exists() {
 mod words;
 
 mod binds;
+
+mod builds;

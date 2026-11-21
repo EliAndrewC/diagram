@@ -11,12 +11,17 @@
 # reuses the clone's kept results (the keys are the files' contents: a fresh worktree's `make static` 114 s with them, 2,321 s without),
 # its own target directory (~/.cache/l7r-cargo-target/<clone>-land) built once and kept, and its disk.
 #
-# Steps, each refusing with what to do: (1) the landing tasks' own files still uncommitted - an edit line filed under the task names them
-# - refused, named; files no task's edit names stay in the clone, listed, not landed; (2) one landing alone at a time (a lock); (3) the
-# worktree created, or reset to the clone's HEAD (it is the tool's: nobody's work lives there); (4) the clone's kept check results and
-# suite results seeded where newer (`cp -u`); (5) the landing in the worktree (`L7R_LAND_ALONE=1`: its tree is the landing, its `end` line
-# its own); (6) the clone takes the landed tip: HEAD moved, each changed file the clone holds no work in written
-# from the tip, each one it does merged three ways with its uncommitted edit kept on top; a conflict moves nothing and says so.
+# Steps, each refusing with what to do: (1) one landing alone at a time (a lock); (2) THE TASK'S OWN SECTIONS COMMITTED APART (451 T101):
+# the feature's plan.md, tasks.md and plan-review.json hold every open task's section, line and verdict, so the clone's HEAD takes a
+# commit of each built from HEAD's file with only the landing tasks' own pieces replaced (and those of a task their section files) - the
+# clone's other uncommitted text stays in its files, and the landing's commit holds none of it (T95, CLEAR, could not land alone on
+# 2026-11-21: plan.md also held T82's and T97's unreviewed sections); (3) the landing tasks' own other files still uncommitted - an edit
+# line filed under the task names them - refused, named; files no task's edit names stay in the clone, listed, not landed; (4) the
+# worktree created, or reset to the clone's HEAD (it is the tool's: nobody's work lives there); (5) the clone's kept check results and
+# suite results seeded where newer (`cp -u`); (6) the landing in the worktree (`L7R_LAND_ALONE=1`: its tree is the landing, its `end` line
+# its own); (7) the clone takes the landed tip: HEAD moved, each changed file the clone holds no work in written from the tip, each one it
+# does merged three ways with its uncommitted edit kept on top - a sectioned file whose text merge conflicts merged piece by piece (the
+# tick's archive of one section beside another task's edit of the next conflicts in text alone); a conflict moves nothing and says so.
 # Exit: the landing's own code (0 landed, 3 landed with other sessions' edits merged, 2 refused), 6 refused before it ran (the clone's
 # landing writes that one's `end` line and exits 2), 4 landed but the clone could not take the tip (it says how to).
 set -u
@@ -31,57 +36,306 @@ die() { printf 'land-alone: refused - nothing landed: %s\n' "$*" >&2; exit 6; }
 t0=${EPOCHREALTIME/,/.}
 lap() { local t=${EPOCHREALTIME/,/.}; awk -v a="$t0" -v b="$t" 'BEGIN { printf "%.1f", b - a }'; t0=$t; }
 
-# (1) the landing tasks' own files: those an edit line filed under one of them names, newer than the file's last commit
-split=$(python3 -I - "$ROOT" "${L7R_EVENTS_DIR:-$COMMON/l7r-events}" "$F" "$T" <<'PY'
-import datetime, glob, json, os, subprocess, sys, time
-root, events, feature, tasks = sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4].replace(',', ' ').split()
-git = lambda *a: subprocess.run(['git', '-C', root, *a], capture_output=True, text=True, check=True).stdout
-dirty, recs, i = set(), git('status', '--porcelain=v1', '-z', '-uall').split('\0'), 0
-while i < len(recs):
-    r, i = recs[i], i + 1
-    if len(r) > 3:
-        dirty.add(r[3:])
-        i += r[0] in 'RC'
-since, last, at = time.time() - 7 * 86400, {}, 0
-for l in git('log', '--since=7.days', '--format=@%ct', '--name-only').splitlines():
-    if l.startswith('@'):
-        at = int(l[1:])
-    elif l:
-        last.setdefault(l, at)
-pre, own, named = root.rstrip('/') + '/', set(), set()
-for p in sorted(glob.glob(os.path.join(events, '*.jsonl'))):
-    stem = os.path.basename(p)[:-6]
-    for l in open(p, errors='replace'):
-        if '"PostToolUse"' not in l or '"cat":"edit"' not in l:
+# The script's Python, one program: `py <mode> <args>` - `stage` (step 2), `split` (step 3), `take` (step 7).
+read -r -d '' PYLIB <<'PY'
+import datetime, glob, json, os, re, subprocess, sys, time
+SECTIONED = ('plan.md', 'tasks.md', 'plan-review.json')
+HEADING = re.compile(r'#{2,4}\s')
+OWN = re.compile(r'#{2,4}\s+(T\d+[a-z]?)\b')
+TASK = re.compile(r'(\s*)- \[[ xX]\] (T\d+[a-z]?)\b')
+FILED = re.compile(r'Filed as (T\d+[a-z]?)\b')
+
+def git(root, *a, inp=None, ok=(0,), env=None):
+    r = subprocess.run(['git', '-C', root, *a], capture_output=True, input=inp, env=env)
+    if r.returncode not in ok:
+        sys.exit(f"land-alone: git {' '.join(a)}: {r.stderr.decode(errors='replace').strip()}")
+    return r
+
+def dirty_of(root):
+    recs, out, i = git(root, 'status', '--porcelain=v1', '-z', '-uall').stdout.decode().split('\0'), set(), 0
+    while i < len(recs):
+        r, i = recs[i], i + 1
+        if len(r) > 3:
+            out.add(r[3:])
+            i += r[0] in 'RC'
+    return out
+
+def units(name, text):
+    # [(key, text)]: plan.md cut at each heading - one opening with a task id is that task's (`task:T<n>`, plan_text.rs's rule) - and
+    # tasks.md at each task line with the lines indented under it; any other piece keyed by its heading or line, counted where repeated
+    out, seen, lines = [], {}, text.splitlines(keepends=True)
+    def add(key, body):
+        if not key.startswith('task:'):
+            seen[key] = seen.get(key, 0) + 1
+            key = f'{key}#{seen[key]}'
+        out.append((key, body))
+    if name == 'plan.md':
+        key, body = 'preamble', []
+        for l in lines:
+            if HEADING.match(l):
+                add(key, ''.join(body))
+                m = OWN.match(l)
+                key, body = ('task:' + m.group(1)) if m else l.strip(), []
+            body.append(l)
+        add(key, ''.join(body))
+        return out
+    i = 0
+    while i < len(lines):
+        m, j = TASK.match(lines[i]), i + 1
+        while m and j < len(lines) and lines[j].strip() and lines[j].startswith((m.group(1) + ' ', m.group(1) + '\t')):
+            j += 1
+        add('task:' + m.group(2) if m else lines[i], ''.join(lines[i:j]))
+        i = j
+    return out
+
+def join(us):
+    last = len(us) - 1
+    return ''.join(b if not b or b.endswith('\n') or k == last else b + '\n' for k, (_, b) in enumerate(us))
+
+def grouped(us):
+    out = {}
+    for k, b in us:
+        out[k] = join([('', out[k]), ('', b)]) if k in out else b
+    return list(out.items())
+
+def anchor(out, ours, key):
+    # where `key` goes in `out`: after the piece `ours` puts nearest before it
+    first = next((i for i, (k, _) in enumerate(ours) if k == key), 0)
+    for k, _ in reversed(ours[:first]):
+        if not k.rsplit('#', 1)[0].strip():  # a blank line, repeated everywhere, places nothing
             continue
-        try:
-            d = json.loads(l)
-        except ValueError:
+        at = [i for i, (o, _) in enumerate(out) if o == k]
+        if at:
+            return at[-1] + 1
+    return 0
+
+def splice(name, head, work, keys):
+    # HEAD's file with only `keys`' pieces taken from the working file
+    out, w = units(name, head), units(name, work)
+    for key in keys:
+        mine = [u for u in w if u[0] == key]
+        at = next((i for i, (k, _) in enumerate(out) if k == key), None)
+        out = [u for u in out if u[0] != key]
+        at = anchor(out, w, key) if at is None else at
+        out[at:at] = mine
+    return join(out)
+
+def owner(key):
+    m = OWN.match(key)
+    return m.group(1) if m else None
+
+def dump(v):
+    return json.dumps(v, indent=1, ensure_ascii=False) + '\n'
+
+def stage_review(head, work, tasks):
+    # plan-review.json: HEAD's verdicts with the tasks' own entries - `tasks[T]`, its blocks' and its block reviews - taken from work
+    h, w = (json.loads(x) if x.strip() else {} for x in (head, work))
+    mine = {'blocks': lambda k: owner(k) in tasks, 'tasks': lambda k: k in tasks}
+    out = dict(h)
+    if 'feature' in w:
+        out.setdefault('feature', w['feature'])
+    for part, own in mine.items():
+        hp, wp = h.get(part, {}), w.get(part, {})
+        new = {k: (wp[k] if own(k) else v) for k, v in hp.items() if not own(k) or k in wp}
+        new.update((k, v) for k, v in wp.items() if own(k) and k not in hp)
+        if new or part in h:
+            out[part] = new
+    reviews = list(h.get('block_reviews', []))
+    reviews += [r for r in w.get('block_reviews', []) if r not in reviews and r.get('blocks') and all(owner(k) in tasks for k in r['blocks'])]
+    if reviews or 'block_reviews' in h:
+        out['block_reviews'] = reviews
+    return head if out == h else dump(out)
+
+def merge_pieces(name, base, ours, theirs):
+    # a three-way merge piece by piece: each piece the clone changed put on the tip's, unless the tip changed it otherwise (None)
+    if name == 'plan-review.json':
+        return merge_review(*(json.loads(x) if x.strip() else {} for x in (base, ours, theirs)))
+    b, o, t = (dict(grouped(units(name, x))) for x in (base, ours, theirs))
+    out, olist = list(t.items()), list(o.items())
+    for k, v in olist:
+        if b.get(k) == v:
             continue
-        rel = d.get('path', '')[len(pre):] if d.get('path', '').startswith(pre) else ''
-        if d.get('fallback') or not d.get('task') or rel not in dirty:
+        if t.get(k) not in (b.get(k), v):
+            return None
+        at = [i for i, (key, _) in enumerate(out) if key == k]
+        if at:
+            out[at[0]] = (k, v)
+        else:
+            out.insert(anchor(out, olist, k), (k, v))
+    for k in b:
+        if k not in o and k in t:
+            if t[k] != b[k]:
+                return None
+            out = [u for u in out if u[0] != k]
+    return join(out)
+
+def merge_review(b, o, t):
+    out = dict(t)
+    for k in dict.fromkeys([*b, *o]):
+        if k == 'block_reviews':
+            out[k] = list(t.get(k, [])) + [r for r in o.get(k, []) if r not in b.get(k, []) and r not in t.get(k, [])]
+        elif k in ('blocks', 'tasks'):
+            bp, op, tp = b.get(k, {}), o.get(k, {}), dict(t.get(k, {}))
+            for kk in dict.fromkeys([*bp, *op]):
+                if op.get(kk) == bp.get(kk):
+                    continue
+                if tp.get(kk) not in (bp.get(kk), op.get(kk)):
+                    return None
+                if kk in op:
+                    tp[kk] = op[kk]
+                else:
+                    tp.pop(kk, None)
+            out[k] = tp
+        elif o.get(k) != b.get(k):
+            if t.get(k) not in (b.get(k), o.get(k)):
+                return None
+            out[k] = o[k]
+    return dump(out)
+
+def stage(root, feature, tasks):
+    # step 2: the clone's HEAD takes the landing tasks' own pieces of the sectioned files, its working files untouched
+    rel, head = f'specs/{feature}', git(root, 'rev-parse', 'HEAD').stdout.decode().strip()
+    show = lambda p: git(root, 'show', f'HEAD:{p}', ok=(0, 128)).stdout.decode()
+    read = lambda p: open(os.path.join(root, p), encoding='utf-8').read() if os.path.isfile(os.path.join(root, p)) else None
+    plan = read(f'{rel}/plan.md') or ''
+    own = [u for u in units('plan.md', plan) if u[0] in {'task:' + t for t in tasks}]
+    tasks = list(dict.fromkeys([*tasks, *(f for _, b in own for f in FILED.findall(b))]))
+    staged = {}
+    for f in SECTIONED:
+        p, work = f'{rel}/{f}', read(f'{rel}/{f}')
+        old = show(p)
+        if work is None or work == old:
             continue
-        if datetime.datetime.fromisoformat(d['t'].replace('Z', '+00:00')).timestamp() < last.get(rel, since):
-            continue
-        named.add(rel)
-        if d['task'] in tasks and (stem == feature or stem.startswith(feature + '-')):
-            own.add(rel)
-for r in sorted(own):
-    print('own\t' + r)
-for r in sorted(dirty - named):
-    print('unnamed\t' + r)
+        new = stage_review(old, work, tasks) if f.endswith('.json') else splice(f, old, work, ['task:' + t for t in tasks])
+        if new != old:
+            staged[p] = new
+    if not staged:
+        return
+    env = dict(os.environ, GIT_INDEX_FILE=os.path.join(git(root, 'rev-parse', '--absolute-git-dir').stdout.decode().strip(), 'land-staged.index'))
+    git(root, 'read-tree', head, env=env)
+    for p, text in staged.items():
+        blob = git(root, 'hash-object', '-w', '--stdin', inp=text.encode()).stdout.decode().strip()
+        git(root, 'update-index', '--add', '--cacheinfo', f'100644,{blob},{p}', env=env)
+    tree = git(root, 'write-tree', env=env).stdout.decode().strip()
+    os.remove(env['GIT_INDEX_FILE'])
+    msg = f"{feature} {' '.join(tasks)}: their own plan sections, tasks.md lines and verdicts, apart from the other open tasks' (land-alone, 451 T101)"
+    new = git(root, 'commit-tree', tree, '-p', head, '-m', msg).stdout.decode().strip()
+    # compare and swap: a landing that moved HEAD meanwhile leaves this one refused, the working files as they were
+    git(root, 'update-ref', '-m', 'land-alone: the task\'s own sections', 'HEAD', new, head)
+    git(root, 'reset', '-q', '--', *staged)
+    print('staged\t' + ' '.join(staged))
+
+def split(root, events, feature, tasks):
+    # step 3: the landing tasks' own files - those an edit line filed under one of them names, newer than the file's last commit
+    dirty = dirty_of(root)
+    since, last, at = time.time() - 7 * 86400, {}, 0
+    for l in git(root, 'log', '--since=7.days', '--format=@%ct', '--name-only').stdout.decode().splitlines():
+        if l.startswith('@'):
+            at = int(l[1:])
+        elif l:
+            last.setdefault(l, at)
+    pre, own, named = root.rstrip('/') + '/', set(), set()
+    sectioned = {f'specs/{feature}/{f}' for f in SECTIONED}
+    for p in sorted(glob.glob(os.path.join(events, '*.jsonl'))):
+        stem = os.path.basename(p)[:-6]
+        for l in open(p, errors='replace'):
+            if '"PostToolUse"' not in l or '"cat":"edit"' not in l:
+                continue
+            try:
+                d = json.loads(l)
+            except ValueError:
+                continue
+            rel = d.get('path', '')[len(pre):] if d.get('path', '').startswith(pre) else ''
+            if d.get('fallback') or not d.get('task') or rel not in dirty:
+                continue
+            if datetime.datetime.fromisoformat(d['t'].replace('Z', '+00:00')).timestamp() < last.get(rel, since):
+                continue
+            named.add(rel)
+            # the sectioned files are staged by section (step 2): what is left uncommitted in them is other tasks'
+            if d['task'] in tasks and (stem == feature or stem.startswith(feature + '-')) and rel not in sectioned:
+                own.add(rel)
+    for r in sorted(own):
+        print('own\t' + r)
+    for r in sorted(dirty - named):
+        print('unnamed\t' + r)
+
+def take(root, tip, feature):
+    # step 7: the tip, or - the clone committed since the landing began - a merge of the two, made without touching the tree
+    old = git(root, 'rev-parse', 'HEAD').stdout.decode().strip()
+    if git(root, 'merge-base', '--is-ancestor', old, tip, ok=(0, 1)).returncode == 0:
+        new = tip
+    else:
+        r = git(root, 'merge-tree', '--write-tree', old, tip, ok=(0, 1))
+        if r.returncode:
+            sys.exit('land-alone: the clone\'s commits since the landing began conflict with the landed tip')
+        tree = r.stdout.decode().split('\n')[0]
+        new = git(root, 'commit-tree', tree, '-p', old, '-p', tip, '-m', f'Merge the landed {tip[:10]} into the clone (land-alone, 451 T88)').stdout.decode().strip()
+    changed = [p for p in git(root, 'diff', '--no-renames', '--name-only', '-z', old, new).stdout.decode().split('\0') if p]
+    dirty = dirty_of(root)
+    show = lambda c, p: git(root, 'show', f'{c}:{p}', ok=(0, 128)).stdout
+    here = lambda p: open(os.path.join(root, p), 'rb').read() if os.path.isfile(os.path.join(root, p)) else b''
+    sectioned = {f'specs/{feature}/{f}': f for f in SECTIONED}
+    def merged(p, ours):
+        sides = (ours, show(old, p), show(new, p))
+        tmp = [os.path.join(root, '.git', f'land-alone-{k}') for k in ('ours', 'base', 'theirs')]
+        for t, b in zip(tmp, sides):
+            open(t, 'wb').write(b)
+        r = subprocess.run(['git', 'merge-file', '-p', *tmp], capture_output=True)
+        for t in tmp:
+            os.remove(t)
+        if r.returncode == 0:
+            return r.stdout
+        out = merge_pieces(sectioned[p], sides[1].decode(), sides[0].decode(), sides[2].decode()) if p in sectioned else None
+        if out is None:
+            sys.exit(f'land-alone: {p} - the landing\'s change and the clone\'s uncommitted edit conflict')
+        return out.encode()
+    # every merge first, so a conflict moves nothing
+    held = {p: (here(p), merged(p, here(p))) for p in changed if p in dirty}
+    git(root, 'update-ref', '-m', f'land-alone: take {new[:10]}', 'HEAD', new, old)
+    if changed:
+        git(root, 'reset', '-q', '--', *changed)
+    gone = [p for p in changed if p not in held and git(root, 'cat-file', '-e', f'{new}:{p}', ok=(0, 1, 128)).returncode]
+    for p in gone:
+        if os.path.lexists(os.path.join(root, p)):
+            os.remove(os.path.join(root, p))
+    put = [p for p in changed if p not in held and p not in gone]
+    if put:
+        git(root, 'checkout-index', '-f', '--', *put)
+    for p, (ours, out) in held.items():
+        if here(p) != ours:  # a builder wrote it since it was read: merged again from what it holds now
+            out = merged(p, here(p))
+        os.makedirs(os.path.dirname(os.path.join(root, p)) or root, exist_ok=True)
+        t = os.path.join(root, p + '.land-alone')
+        open(t, 'wb').write(out)
+        os.replace(t, os.path.join(root, p))
+    print(f'land-alone: {len(changed)} file(s) moved to {new[:10]}, {len(held)} of them merged with the clone\'s uncommitted edits')
+
+mode, args = sys.argv[1], sys.argv[2:]
+if mode == 'stage':
+    stage(args[0], args[1], args[2].replace(',', ' ').split())
+elif mode == 'split':
+    split(args[0], args[1], args[2], args[3].replace(',', ' ').split())
+else:
+    take(*args)
 PY
-) || die "the event log could not be read (above)"
+py() { python3 -I -c "$PYLIB" "$@"; }
+
+# (1) one landing alone at a time
+exec 9>"$COMMON/land-alone.lock"
+flock -n 9 || die "another landing alone holds $COMMON/land-alone.lock - land this after it"
+
+# (2) the landing tasks' own sections of plan.md, tasks.md and plan-review.json committed apart from the other open tasks'
+staged=$(py stage "$ROOT" "$F" "$T") || die "the task's own sections could not be committed apart (above)"
+[ -z "$staged" ] || say "committed $T's own sections apart from the other open tasks' ($(printf '%s\n' "$staged" | sed -n 's/^staged\t//p')) ($(lap) s)"
+
+# (3) the landing tasks' own other files: those an edit line filed under one of them names, newer than the file's last commit
+split=$(py split "$ROOT" "${L7R_EVENTS_DIR:-$COMMON/l7r-events}" "$F" "$T") || die "the event log could not be read (above)"
 own=$(printf '%s\n' "$split" | sed -n 's/^own\t//p')
 [ -z "$own" ] || die "$T's own edits are uncommitted - commit them, then land again: git -C $ROOT commit -m \"<what>\" -- $(printf '%s ' $own)"
 unnamed=$(printf '%s\n' "$split" | sed -n 's/^unnamed\t//p')
 [ -z "$unnamed" ] || say "left uncommitted in the clone, not landed (no task's edit names them; a shell write is named by none): $(printf '%s ' $unnamed | cut -c1-600)"
 
-# (2) one landing alone at a time
-exec 9>"$COMMON/land-alone.lock"
-flock -n 9 || die "another landing alone holds $COMMON/land-alone.lock - land this after it"
-
-# (3) the worktree at the clone's HEAD
+# (4) the worktree at the clone's HEAD
 head=$(git -C "$ROOT" rev-parse HEAD) || exit 2
 if [ -e "$WT/.git" ]; then
   git -C "$WT" reset -q --hard && git -C "$WT" clean -fdq && git -C "$WT" checkout -q --detach "$head" \
@@ -91,7 +345,7 @@ else
 fi
 say "worktree $WT at ${head:0:10} ($(lap) s)"
 
-# (4) the clone's kept results, where newer: a crate's or suite's result is keyed by its inputs' contents, so the clone's builders'
+# (5) the clone's kept results, where newer: a crate's or suite's result is keyed by its inputs' contents, so the clone's builders'
 # closing checks on the task's own files serve the landing (measured 2026-11-21: every crate's lint, test, format and dead reused)
 gd=$(git -C "$WT" rev-parse --absolute-git-dir) || exit 2
 for d in rust-checks hooks-test; do
@@ -100,74 +354,16 @@ done
 [ -f "$COMMON/approach-owed.json" ] && cp -a "$COMMON/approach-owed.json" "$gd/"
 say "kept results seeded ($(lap) s)"
 
-# (5) the landing, whole, in the worktree
+# (6) the landing, whole, in the worktree
 ( cd "$WT" && L7R_LAND_ALONE=1 SYNC_BACKUP=off $MAKE --no-print-directory land F="$F" T="$T" NOTE="${LAND_NOTE:-}" \
     BOXES="${LAND_BOXES:-}" COVER_OK="${COVER_OK:-}" )
 rc=$?
 say "the landing in the worktree exited $rc ($(lap) s)"
 [ "$rc" = 0 ] || [ "$rc" = 3 ] || exit "$rc"
 
-# (6) the clone takes the landed tip
+# (7) the clone takes the landed tip
 tip=$(git -C "$WT" rev-parse HEAD) || exit 4
-if python3 -I - "$ROOT" "$tip" <<'PY'
-import os, subprocess, sys
-root, tip = sys.argv[1:3]
-def git(*a, inp=None, ok=(0,)):
-    r = subprocess.run(['git', '-C', root, *a], capture_output=True, input=inp)
-    if r.returncode not in ok:
-        sys.exit(f"land-alone: git {' '.join(a)}: {r.stderr.decode(errors='replace').strip()}")
-    return r
-old = git('rev-parse', 'HEAD').stdout.decode().strip()
-# the tip, or - the clone committed since the landing began - a merge of the two, made without touching the tree
-if git('merge-base', '--is-ancestor', old, tip, ok=(0, 1)).returncode == 0:
-    new = tip
-else:
-    r = git('merge-tree', '--write-tree', old, tip, ok=(0, 1))
-    if r.returncode:
-        sys.exit('land-alone: the clone\'s commits since the landing began conflict with the landed tip')
-    tree = r.stdout.decode().split('\n')[0]
-    new = git('commit-tree', tree, '-p', old, '-p', tip, '-m', f'Merge the landed {tip[:10]} into the clone (land-alone, 451 T88)').stdout.decode().strip()
-changed = [p for p in git('diff', '--no-renames', '--name-only', '-z', old, new).stdout.decode().split('\0') if p]
-recs, dirty, i = git('status', '--porcelain=v1', '-z', '-uall').stdout.decode().split('\0'), set(), 0
-while i < len(recs):
-    r, i = recs[i], i + 1
-    if len(r) > 3:
-        dirty.add(r[3:])
-        i += r[0] in 'RC'
-show = lambda c, p: git('show', f'{c}:{p}', ok=(0, 128)).stdout
-here = lambda p: open(os.path.join(root, p), 'rb').read() if os.path.isfile(os.path.join(root, p)) else b''
-def merged(p, ours):
-    tmp = [os.path.join(root, '.git', f'land-alone-{k}') for k in ('ours', 'base', 'theirs')]
-    for t, b in zip(tmp, (ours, show(old, p), show(new, p))):
-        open(t, 'wb').write(b)
-    r = subprocess.run(['git', 'merge-file', '-p', *tmp], capture_output=True)
-    for t in tmp:
-        os.remove(t)
-    if r.returncode:
-        sys.exit(f'land-alone: {p} - the landing\'s change and the clone\'s uncommitted edit conflict')
-    return r.stdout
-# every merge first, so a conflict moves nothing
-held = {p: (here(p), merged(p, here(p))) for p in changed if p in dirty}
-git('update-ref', '-m', f'land-alone: take {new[:10]}', 'HEAD', new, old)
-if changed:
-    git('reset', '-q', '--', *changed)
-gone = [p for p in changed if p not in held and git('cat-file', '-e', f'{new}:{p}', ok=(0, 1, 128)).returncode]
-for p in gone:
-    if os.path.lexists(os.path.join(root, p)):
-        os.remove(os.path.join(root, p))
-put = [p for p in changed if p not in held and p not in gone]
-if put:
-    git('checkout-index', '-f', '--', *put)
-for p, (ours, out) in held.items():
-    if here(p) != ours:  # a builder wrote it since it was read: merged again from what it holds now
-        out = merged(p, here(p))
-    os.makedirs(os.path.dirname(os.path.join(root, p)) or root, exist_ok=True)
-    t = os.path.join(root, p + '.land-alone')
-    open(t, 'wb').write(out)
-    os.replace(t, os.path.join(root, p))
-print(f'land-alone: {len(changed)} file(s) moved to {new[:10]}, {len(held)} of them merged with the clone\'s uncommitted edits')
-PY
-then
+if py take "$ROOT" "$tip" "$F"; then
   say "the clone took ${tip:0:10}, its uncommitted work kept ($(lap) s)"
   exit "$rc"
 fi

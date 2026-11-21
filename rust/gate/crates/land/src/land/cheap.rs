@@ -233,12 +233,8 @@ impl Land {
             stops.push("review passes with no ledger row - make ledger-owed WRITE=\"<where you recorded what you did>\"".to_owned());
         }
         let ticks = tasks.join(" ");
-        let held = said(
-            self.inproc
-                .holding(&d.to_string_lossy(), &ticks, &self.root),
-        )
-        .1;
-        let held = strip(&held);
+        // the mark's task holds, unless each task landed is ready beside it (451 T101, `ready.rs`)
+        let held = self.hold(d, tasks)?;
         if !held.is_empty() {
             stops.push(format!("held by {held}"));
         }

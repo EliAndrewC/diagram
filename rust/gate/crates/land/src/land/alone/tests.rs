@@ -8,7 +8,7 @@ use std::time::SystemTime;
 use l7r_gate_core::ci::fixtures::put;
 use serde_json::Value;
 
-use super::super::tests::{fx, Fx, NOTE};
+use super::super::tests::{fx, has, Fx, NOTE};
 use super::{INNER, REFUSED_FIRST, SCRIPT};
 
 /// The landing's `end` lines in the tree's event logs.
@@ -231,21 +231,27 @@ fn the_script_refuses_its_own_uncommitted_files_and_moves_nothing_on_a_conflict(
     assert!(said.contains("-- src/t1c.rs"), "{said}");
     assert!(!dir.join("stub.log").exists());
     std::fs::remove_file(c.join("src/t1c.rs")).unwrap();
-    // the tick's line and the clone's edit of it conflict: landed, the clone left as it was
+    // the landing's change and the clone's uncommitted edit of one file conflict: landed, the clone left as it was (T1's own section
+    // edited in the clone is no conflict since 451 T101: it is committed apart before the landing, `two_tasks_sections_...` below)
     let before = sh(&c, "git rev-parse HEAD");
-    let edit = PLAN_TEXT.replace("### T1 the section the tick moves", "### T1 another edit");
-    put(&c, "specs/451-x/plan.md", &edit);
-    let (rc, said) = alone(&dir, &c, &[]);
+    put(&c, "src/a.rs", "fn a() { 2 }\n");
+    let (rc, said) = alone(
+        &dir,
+        &c,
+        &[("STUB_MID", "printf 'fn a() { 1 }\\n' > src/a.rs")],
+    );
     assert_eq!(rc, 4, "{said}");
-    assert!(said.contains("conflict"), "{said}");
+    has(
+        &said,
+        "src/a.rs - the landing's change and the clone's uncommitted edit conflict",
+    );
     assert_eq!(sh(&c, "git rev-parse HEAD"), before);
     assert_eq!(
-        std::fs::read_to_string(c.join("specs/451-x/plan.md")).unwrap(),
-        edit
+        std::fs::read_to_string(c.join("src/a.rs")).unwrap(),
+        "fn a() { 2 }\n"
     );
     // a commit in the clone while the landing ran: the clone takes a merge of the two
-    put(&c, "specs/451-x/plan.md", PLAN_TEXT);
-    sh(&c, "git checkout -q -- specs/451-x/plan.md");
+    sh(&c, "git checkout -q -- src/a.rs");
     put(&dir, "t2.rs", "fn t2() {}\n");
     let mid = format!("cp {0}/t2.rs {1}/src/t2.rs && git -C {1} add src/t2.rs && git -C {1} -c user.name=t -c user.email=t@t commit -qm 'T2 work'", dir.display(), c.display());
     sh(&c, "git reset -q --hard HEAD && git -C ../origin.git update-ref refs/heads/main $(git rev-parse HEAD~0)");
@@ -260,4 +266,87 @@ fn the_script_refuses_its_own_uncommitted_files_and_moves_nothing_on_a_conflict(
     assert!(std::fs::read_to_string(c.join("specs/451-x/plan.md"))
         .unwrap()
         .starts_with("### T1 ticked\n"));
+}
+
+/// 451 T101: two tasks' sections in one plan.md (and their lines in tasks.md, their verdicts in plan-review.json), one landing. The
+/// clone's HEAD takes T1's own pieces alone before the landing, so the landed commit holds none of T2's or T3's; the tick archives T1's
+/// section beside T2's edited heading - a conflict in text alone - and the clone takes the tip piece by piece, T2's and T3's text kept.
+#[test]
+fn two_tasks_sections_in_one_plan_land_only_the_landing_task_s() {
+    let (dir, c) = world("alone-sections");
+    let review = |tasks: &[&str]| {
+        let mut v = serde_json::json!({"feature": "451-x", "blocks": {"preamble": {"verdict": "CLEAR"}}, "block_reviews": [], "tasks": {}});
+        for t in tasks {
+            let heading = format!("### {t} the real why");
+            v["blocks"][&heading] = serde_json::json!({"verdict": "CLEAR"});
+            v["block_reviews"]
+                .as_array_mut()
+                .unwrap()
+                .push(serde_json::json!({"blocks": [heading]}));
+            v["tasks"][*t] = serde_json::json!({"verdict": "CLEAR"});
+        }
+        serde_json::to_string_pretty(&v).unwrap().replace("  ", " ") + "\n"
+    };
+    put(&c, "specs/451-x/plan-review.json", &review(&[]));
+    sh(&c, "git add -A && git commit -qm 'the review record' && git push -q origin HEAD:main 2>/dev/null");
+    // T1's section and line, T2's section (the heading beside T1's), T3's new line, and both verdicts, all uncommitted
+    let plan =
+        "### T1 the real why\n\nT1's real words.\n\n### T2 the real why\n\nT2's half-done words.\n";
+    put(&c, "specs/451-x/plan.md", plan);
+    put(
+        &c,
+        "specs/451-x/tasks.md",
+        "- [ ] T1 one, reworded\n- [ ] T2 two\n- [ ] T3 three\n",
+    );
+    put(&c, "specs/451-x/plan-review.json", &review(&["T1", "T2"]));
+    put(&c, "src/other.rs", "T2's half-done file\n");
+    for (task, rel) in [
+        ("T1", "specs/451-x/plan.md"),
+        ("T2", "specs/451-x/plan.md"),
+        ("T2", "src/other.rs"),
+        ("T1", "specs/451-x/plan-review.json"),
+    ] {
+        edited(&dir, &c, task, rel);
+    }
+    // the tick as the real one leaves it: T1's section archived to one generated line, its tasks.md line moved to tasks-done.md
+    put(&dir, "archive.sh", "python3 -I -c \"import re; p='specs/451-x/plan.md'; s=open(p).read(); open(p, 'w').write(re.sub(r'(?ms)^### T1 .*?(?=^### )', '<!-- archived T1 -->\\n', s))\"\nsed -i '/^- \\[ \\] T1 /d' specs/451-x/tasks.md\nprintf -- '- [x] T1 one, reworded\\n' > specs/451-x/tasks-done.md\ngit add -A\n");
+    let archive = format!("bash {}", dir.join("archive.sh").display());
+    let (rc, said) = alone(&dir, &c, &[("STUB_MID", &archive)]);
+    assert_eq!(rc, 0, "{said}");
+    has(
+        &said,
+        "committed T1's own sections apart from the other open tasks'",
+    );
+    // the landed commit's parent is T1's alone: T2's words, T3's line and T2's verdict are in no commit
+    let staged = |rel: &str| {
+        sh(
+            &dir,
+            &format!("git -C origin.git show main~1:specs/451-x/{rel}"),
+        )
+    };
+    assert_eq!(staged("plan.md"), "### T1 the real why\n\nT1's real words.\n\n### T2 another builder's section\n\nT2's words.");
+    assert_eq!(staged("tasks.md"), "- [ ] T1 one, reworded\n- [ ] T2 two");
+    assert_eq!(staged("plan-review.json") + "\n", review(&["T1"]));
+    let landed = sh(&dir, "git -C origin.git log --format=%s main~1 -1");
+    let subject = "451-x T1: their own plan sections";
+    assert!(landed.starts_with(subject), "{landed}");
+    // the clone: at the tip, its other tasks' text kept on it piece by piece
+    assert_eq!(
+        sh(&c, "git rev-parse HEAD"),
+        sh(&dir, "git -C origin.git rev-parse main")
+    );
+    let read = |rel: &str| std::fs::read_to_string(c.join(rel)).unwrap();
+    assert_eq!(
+        read("specs/451-x/plan.md"),
+        "<!-- archived T1 -->\n### T2 the real why\n\nT2's half-done words.\n"
+    );
+    assert_eq!(
+        read("specs/451-x/tasks.md"),
+        "- [ ] T2 two\n- [ ] T3 three\n"
+    );
+    assert_eq!(read("specs/451-x/plan-review.json"), review(&["T1", "T2"]));
+    assert_eq!(
+        sh(&c, "git status --porcelain -uall"),
+        "M specs/451-x/plan-review.json\n M specs/451-x/plan.md\n M specs/451-x/tasks.md\n?? src/other.rs"
+    );
 }

@@ -285,6 +285,13 @@ fn only_the_active_task_holds_and_a_landing_that_ticks_it_does_not() {
     crate::env::set("L7R_LAND_TICKS", "T7700 T7702");
     assert!(holding(&d).unwrap().is_empty());
     crate::env::unset("L7R_LAND_TICKS");
+    // 451 T101: a landing of another task is held by the mark's, unless the landing ruled every task it ticks ready beside it
+    assert_eq!(holding_with(&d, "T7703").unwrap().len(), 1);
+    crate::env::set("L7R_LAND_READY", "T7703");
+    assert!(holding_with(&d, "T7703").unwrap().is_empty());
+    assert_eq!(holding_with(&d, "T7703 T7704").unwrap().len(), 1);
+    assert_eq!(holding_with(&d, "").unwrap().len(), 1);
+    crate::env::unset("L7R_LAND_READY");
     let e = at.join("specs/000-y");
     put(&e, "tasks.md", "- [ ] T7705 x\n");
     put(

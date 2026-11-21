@@ -165,15 +165,27 @@ for p in "${pids[@]}"; do wait "$p"; done
 
 # another task's files whose path is, or ends in, each path on stdin (a cargo error names a path from the workspace's directory)
 theirs() { awk -F'\t' 'NR == FNR { p[$1] = $2; next } { for (k in p) if (k == $0 || substr(k, length(k) - length($0)) == "/" $0) { print k "\t" p[k]; next } print "-\t" $0 }' "$dir/others" -; }
-# a counted red whose every error line names another task's file: nothing of the caller's was judged there (451 T86)
+# a counted red whose every error line names another task's file: nothing of the caller's was judged there (451 T86). Cover's lines no
+# test reaches name files too, read as the errors' are (451 T95: T81's second closing run, 2026-11-21, red on cover alone, its lines in
+# T88's files). Only the counted crates' lines are read: an APART crate's block, from its header to the next rust-checks line, is
+# another task's red, not this one's. A failed coverage run's marker (`<crate> - lines no test reaches: 0`) names a crate, not a file,
+# and is not read: its cause is the tail printed before it, as a 2026-11-21 12:47Z run's mode_a, its build broken on another task's
+# tree.rs, kept BLOCKED
 blocked() {
-  local named hit
-  named=$(grep -oE '(-->|Diff in) [^ :]+' "$dir/$1.log" | awk '{print $NF}' | sed "s#^$(git rev-parse --show-toplevel)/##" | sort -u)
+  local named hit what why
+  named=$(awk '/^rust-checks: APART / { apart = 1; next } /^rust-checks: / { apart = 0 } apart { next }
+    match($0, /(-->|Diff in) [^ :]+/) { s = substr($0, RSTART, RLENGTH); sub(/^(-->|Diff in) /, "", s); print "e\t" s; next }
+    /^[^ ]+ - lines no test reaches: [1-9]/ { print "c\t" $1 }' "$dir/$1.log" | sed "s#\t$(git rev-parse --show-toplevel)/#\t#" | sort -u)
   [ -n "$named" ] || return 0
-  hit=$(printf '%s\n' "$named" | theirs)
+  hit=$(printf '%s\n' "$named" | cut -f2 | sort -u | theirs)
   printf '%s\n' "$hit" | grep -q '^-' && return 0
-  printf '\n\033[1m  BLOCKED\033[0m: every error %s printed is in another task'"'"'s files - %s; nothing of yours was judged there, so it stays red: re-run once they compile\n' \
-    "$1" "$(printf '%s\n' "$hit" | awk -F'\t' '{print $1 " (" $2 ")"}' | sort -u | paste -sd, - | sed 's/,/, /g')"
+  case $(printf '%s\n' "$named" | cut -f1 | sort -u | paste -sd' ' -) in
+    e) what="every error $1 printed"; why="nothing of yours was judged there, so it stays red: re-run once they compile" ;;
+    c) what="every line no test reaches that $1 printed"; why="yours are covered, so it stays red: re-run once their tests reach them" ;;
+    *) what="every error and line no test reaches that $1 printed"; why="nothing of yours failed there, so it stays red: re-run once they compile and their tests reach them" ;;
+  esac
+  printf '\n\033[1m  BLOCKED\033[0m: %s is in another task'"'"'s files - %s; %s\n' \
+    "$what" "$(printf '%s\n' "$hit" | awk -F'\t' '{print $1 " (" $2 ")"}' | sort -u | paste -sd, - | sed 's/,/, /g')" "$why"
 }
 # the crates the rust checks reported APART: red on another task's files alone, not counted (451 T86, rustc.rs)
 apart() {

@@ -32,7 +32,20 @@ rc=$(cat "$d/$t.rc" 2>/dev/null || echo 0)
 [ "$rc" = 0 ] || echo "the failure of $t"
 # the rust checks' caller rule as rustc.rs answers it (451 T86, pinned in the rustc crate's tests): static.red names the half-done file;
 # a crate red on it is APART, exit 0, when L7R_RUST_CALLER's listing does not hold it; static.blocked makes the caller's crate red with
-# its one error in that file, as a crate that builds on a broken one is
+# its one error in that file, as a crate that builds on a broken one is. static.cover is a counted cover red (451 T95), a line
+# "<path> [<lines>]" each as rustc.rs's cover_ran prints it, the path absolute; "<crate> 0" is a failed coverage run's marker, which names
+# its crate, not a file. static.apart is an APART crate's red on that file: its `-->` line and its line no test reaches
+top=$(git rev-parse --show-toplevel 2>/dev/null)
+if [ "$t" = static ] && [ -e "$d/static.apart" ]; then
+  f=$(cat "$d/static.apart")
+  printf "rust-checks: APART cover red on %s - another task's: its cover key reads none of this task's files\n   --> %s:3:1\n%s/%s - lines no test reaches: 4\n" \
+    "${f%/src/*}" "${f#rust/}" "$top" "$f"
+fi
+if [ "$t" = static ] && [ -e "$d/static.cover" ]; then
+  printf 'rust-checks: cover FAILED on %s\n' "$(head -1 "$d/static.cover" | cut -d' ' -f1 | sed 's#/src/.*##')"
+  while read -r f n; do printf '%s/%s - lines no test reaches: %s\n' "$top" "$f" "${n:-3, 7}"; done < "$d/static.cover"
+  rc=1
+fi
 if [ "$t" = static ] && [ -e "$d/static.red" ]; then
   red=$(cat "$d/static.red"); crate=${red%/src/*}
   if [ -e "$d/static.blocked" ]; then
@@ -184,6 +197,26 @@ grep -qx rust/other/src/extra.rs "$d6/caller-files" && ! grep -qx rust/mine/src/
 echo rust/other/src/lib.rs > "$T/c6/static.red"; touch "$T/c6/static.blocked"; c6 env CLOSING_TASK=T86
 [ "$RC" -eq 1 ] && printf '%s' "$OUT" | grep -q "BLOCKED.*every error static printed is in another task's files - rust/other/src/lib.rs (T84@451-x)" \
   && ok "a red of the caller's whose every error is in another task's file: BLOCKED, still red" || no "the blocked red (exit $RC)" "$OUT"
+# a coverage red (451 T95): cover's lines no test reaches name files too, read as the errors' are; T81's second closing run, 2026-11-21,
+# was red on cover alone, its lines in T88's files, and went untagged
+c6cover() { rm -f "$T/c6/static.red" "$T/c6/static.blocked" "$T/c6/static.cover" "$T/c6/static.apart"; for a in "$@"; do eval "$a"; done; c6 env CLOSING_TASK=T86; }
+c6cover 'printf "rust/other/src/lib.rs\nrust/other/src/extra.rs 12\n" > "$T/c6/static.cover"'
+d6=$(run_dir <(printf '%s' "$OUT"))
+[ "$RC" -eq 1 ] && printf '%s' "$OUT" | grep -Eq '^  static +RED' && grep -q "$C/rust/other/src/lib.rs - lines no test reaches: 3, 7" "$d6/static.log" \
+  && ok "a coverage red on another task's files alone is still counted red" || no "the coverage red's verdict (exit $RC)" "$OUT"
+printf '%s' "$OUT" | grep -q "BLOCKED.*every line no test reaches that static printed is in another task's files - rust/other/src/extra.rs (T86@449-y), rust/other/src/lib.rs (T84@451-x); yours are covered" \
+  && ok "two tasks' work, the other's lines uncovered and the caller's covered: BLOCKED, naming each file and task" \
+  || no "the coverage red on another's files went untagged" "$OUT"
+c6cover 'printf "rust/other/src/lib.rs\nrust/mine/src/lib.rs\n" > "$T/c6/static.cover"' 'echo rust/other/src/lib.rs > "$T/c6/static.red"' 'touch "$T/c6/static.blocked"'
+[ "$RC" -eq 1 ] && ! printf '%s' "$OUT" | grep -q BLOCKED \
+  && ok "the caller's own line no test reaches, beside another task's error: not BLOCKED, red" || no "a caller's uncovered line tagged BLOCKED (exit $RC)" "$OUT"
+c6cover 'echo "rust/mine 0" > "$T/c6/static.cover"' 'echo rust/other/src/lib.rs > "$T/c6/static.red"' 'touch "$T/c6/static.blocked"'
+[ "$RC" -eq 1 ] && printf '%s' "$OUT" | grep -q "BLOCKED.*every error static printed is in another task's files - rust/other/src/lib.rs (T84@451-x)" \
+  && ok "a failed coverage run's marker names a crate, not a file: its build broken on another's file stays BLOCKED" || no "the failed run's marker (exit $RC)" "$OUT"
+c6cover 'echo "rust/mine 0" > "$T/c6/static.cover"' 'echo rust/other/src/lib.rs > "$T/c6/static.apart"'
+[ "$RC" -eq 1 ] && ! printf '%s' "$OUT" | grep -q BLOCKED \
+  && ok "an APART crate's lines are not the counted red's: a caller's red naming no file beside them is not BLOCKED" || no "an APART crate's lines tagged the caller's red (exit $RC)" "$OUT"
+rm -f "$T/c6/static.cover" "$T/c6/static.apart"; echo rust/other/src/lib.rs > "$T/c6/static.red"
 rm -f "$T/c6/static.blocked"; c6 env -u CLOSING_TASK
 [ "$RC" -eq 1 ] && printf '%s' "$OUT" | grep -q 'no T= - every crate and file in the clone is judged as yours' && printf '%s' "$OUT" | grep -Eq '^  static +RED' \
   && ok "no T=: the whole clone judged as before, the T= form named" || no "no T= (exit $RC)" "$OUT"

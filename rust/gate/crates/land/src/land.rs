@@ -32,6 +32,7 @@ mod inproc;
 mod long_runs;
 mod memory;
 mod phase;
+mod ready;
 mod stop;
 
 use l7r_shared::env::Rooted;
@@ -130,6 +131,8 @@ pub struct Land {
     /// When the landing's arguments were read (the `end` line's `t0`), and whether its `end` is written - at the push, or at its exit.
     began: std::cell::Cell<Option<std::time::SystemTime>>,
     ended: std::cell::Cell<bool>,
+    /// The first pass ruled the landing's tasks ready beside the mark's task (451 T101, [`ready`]): the push is told so.
+    ready: std::cell::Cell<bool>,
 }
 
 impl Land {
@@ -168,6 +171,7 @@ impl Land {
             pushed: std::cell::Cell::new(false),
             began: std::cell::Cell::new(None),
             ended: std::cell::Cell::new(false),
+            ready: std::cell::Cell::new(false),
         }
     }
 
@@ -392,6 +396,8 @@ impl Land {
         // whole gate, then refused as 445's (2026-10-28)
         self.export("L7R_LAND_TICKS", &tasks.join(" "));
         self.export("SPECIFY_FEATURE", &name_of(d));
+        // ...AND THE RULING THAT THEY LAND BESIDE ANOTHER STARTED TASK (451 T101): the push and the CI merge ask the mark's hold again
+        self.export_ready(d, tasks)?;
         let mut failed = Vec::new();
         for task in tasks {
             let rc = self.tick(d, task, &format!("{how}: {note}"))?;

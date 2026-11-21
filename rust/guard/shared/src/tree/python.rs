@@ -3,32 +3,42 @@
 //! segment runs from its stdin - its own heredoc or `< file`, or what a `cat` it is piped from prints - each judged by `py_c`.
 
 use std::path::Path;
-use std::sync::LazyLock;
 
-use fancy_regex::{Captures, Regex};
+use fancy_regex::Captures;
 
-use super::{found, py_c, re, resolve, words, Env};
+use super::{py_c, re, resolve, words, Env};
+use crate::regex::Lazy;
 
+// Each pattern built only for a text that could match it (`Lazy`, 451 T97): its gate a literal every match holds.
 /// The interpreter's name, a minor version included (`python3.12`; 451 T31 - before it, only `python`, `python3`).
-pub(super) static PYTHON: LazyLock<Regex> = LazyLock::new(|| re(r"^python(?:3(?:\.\d+)?)?$"));
+pub(super) static PYTHON: Lazy = Lazy::new(
+    |t| t.starts_with("python"),
+    || re(r"^python(?:3(?:\.\d+)?)?$"),
+);
 /// Python's flags that take no argument, any of which may stand before `-c` or cluster with it (`-I -c`, `-Ic`; 451 T31).
 const PY_FLAGS: &str = "bBdEhiIOPqRsSuvVx";
 /// The text before a quote that `python3 -c` runs, in the shape `writes_in` reads as one: the interpreter, then `-c` (451 T31).
-pub(super) static PYTHON_C_BEFORE: LazyLock<Regex> = LazyLock::new(|| {
-    re(&format!(
-        r"(?:^|[\s;&|(])(?:[^\s;&|()]*/)?python(?:3(?:\.\d+)?)?(?:[ \t]+(?:-[{PY_FLAGS}]*[WX][ \t]*[^\s;&|()'\x22]+|-[{PY_FLAGS}]+))*[ \t]+-[{PY_FLAGS}]*c[ \t]+$"
-    ))
-});
+pub(super) static PYTHON_C_BEFORE: Lazy = Lazy::new(
+    |t| t.contains("python"),
+    || {
+        re(&format!(
+            r"(?:^|[\s;&|(])(?:[^\s;&|()]*/)?python(?:3(?:\.\d+)?)?(?:[ \t]+(?:-[{PY_FLAGS}]*[WX][ \t]*[^\s;&|()'\x22]+|-[{PY_FLAGS}]+))*[ \t]+-[{PY_FLAGS}]*c[ \t]+$"
+        ))
+    },
+);
 /// The word a `python3 -c` program is carried as through the walk: its index among the walk's programs (451 T31).
-static PROGRAM: LazyLock<Regex> = LazyLock::new(|| re(r"^__py_c_(\d+)__$"));
+static PROGRAM: Lazy = Lazy::new(|t| t.starts_with("__py_c_"), || re(r"^__py_c_(\d+)__$"));
 /// A heredoc, `shape::strip_heredocs`'s pattern with the opener's quote and the body captured, so a body standing at the same
 /// span is carried out as a program (451 T42): 1 the quote before the delimiter, 2 the delimiter, 3 the opener's words after
 /// it, 4 the body.
-static HEREDOC: LazyLock<Regex> =
-    LazyLock::new(|| re(r#"(?sm)<<-?[ \t]*(['"\\]?)(\w+)['"]?([^\n]*)\n(.*?)^[ \t]*\2\b"#));
+static HEREDOC: Lazy = Lazy::new(
+    |t| t.contains("<<"),
+    || re(r#"(?sm)<<-?[ \t]*(['"\\]?)(\w+)['"]?([^\n]*)\n(.*?)^[ \t]*\2\b"#),
+);
 /// The word a heredoc's body is carried as (`<<__py_h_<n>__`, its index among the walk's programs), and its `<<BODY` as a
 /// target's segment shows it, as before (451 T42).
-pub(super) static HEREDOC_WORD: LazyLock<Regex> = LazyLock::new(|| re(r"<<__py_h_(\d+)__"));
+pub(super) static HEREDOC_WORD: Lazy =
+    Lazy::new(|t| t.contains("<<__py_h_"), || re(r"<<__py_h_(\d+)__"));
 
 /// A program the walk may judge - a `python3 -c` program or a heredoc's body: its quote (`'h'` an unquoted heredoc's, whose body
 /// the shell expands; `'\''` a quoted one's) and its body as the command line holds it.
@@ -93,7 +103,7 @@ fn python_stdin(toks: &[&str]) -> bool {
 
 /// The program the word after `python3 -c` carries (451 T31; T33 hands its body to the guards on the walk's target).
 pub(super) fn program_of<'a>(word: Option<&&str>, programs: &'a [Program]) -> Option<&'a Program> {
-    word.and_then(|w| PROGRAM.captures(w).ok().flatten())
+    word.and_then(|w| PROGRAM.captures(w))
         .and_then(|c| c.get(1)?.as_str().parse::<usize>().ok())
         .and_then(|n| programs.get(n))
 }
@@ -126,9 +136,7 @@ fn file_program(token: Option<&&str>, env: &Env, home: &str, eff: Option<&str>) 
 /// The program a heredoc word (`<<__py_h_<n>__`) carries.
 fn heredoc_program(token: &str, programs: &[Program]) -> Option<Stdin> {
     let n = HEREDOC_WORD
-        .captures(token)
-        .ok()
-        .flatten()?
+        .captures(token)?
         .get(1)?
         .as_str()
         .parse::<usize>()
@@ -150,7 +158,7 @@ pub(super) fn stdin_program(
 ) -> Stdin {
     let is_python = toks
         .first()
-        .is_some_and(|h| found(&PYTHON, h.rsplit('/').next().unwrap_or(h)));
+        .is_some_and(|h| PYTHON.is_match(h.rsplit('/').next().unwrap_or(h)));
     if !is_python || !python_stdin(toks) {
         return Stdin::None;
     }

@@ -15,7 +15,11 @@
 //! WHAT HOLDS A LANDING (feature 405 T32, D4; the GM, 2026-10-20: "I do not want each landing to owe a lands open line"). A feature in
 //! progress holds a landing only through the task being worked - the clone's active task (`make task-start`, `.git/active-task`) - while
 //! that task is open and the landing does not tick it (`L7R_LAND_TICKS`, the ids `make land` sets). A task nobody has started holds
-//! nothing, nor does the GM-review box.
+//! nothing, nor does the GM-review box. NOR DOES IT HOLD A LANDING THAT RULED ITS OWN TASKS READY (feature 451 T101): with builders
+//! rolling (T88) the mark names whichever task started last, so a finished task was refused "held by" a task started after it - T81,
+//! T88 and T93, each CLEAR, at 18:32:27Z on 2026-11-21, the mark moved by hand to land them and back after. `make land` rules each of
+//! its tasks started, its plan section CLEAR and its delta's files its own (`rust/gate/crates/land/src/land/ready.rs`) and names
+//! those it ruled in `L7R_LAND_READY`; the push and the CI merge ask this hold again under that export, so it is asked here, once.
 //!
 //! WHY HERE, IN THE GUARD (feature 449 T118): `set_down_hooks` asks whether a status line closes a feature and `feature_approval_hooks`
 //! reads the same status line and boxes at a past revision, and the guard cannot build on the gate's crates; the gate's CI merge
@@ -504,7 +508,7 @@ pub fn gm_rows(d: &Path) -> Result<usize, String> {
 }
 
 /// The open box that holds the landing: the clone's active task of this feature, open and not ticked by the landing
-/// (`L7R_LAND_TICKS`); every other open box holds nothing (feature 405 D4).
+/// (`L7R_LAND_TICKS`) nor ruled ready beside it (`L7R_LAND_READY`, 451 T101); every other open box holds nothing (feature 405 D4).
 ///
 /// # Errors
 /// A file that cannot be read, or an active-task mark that is not an object.
@@ -526,6 +530,13 @@ pub fn holding_with(d: &Path, ticks: &str) -> Result<Vec<String>, String> {
         String::new()
     };
     if task.is_empty() || split(ticks).contains(&task.as_str()) {
+        return Ok(Vec::new());
+    }
+    // ...or the landing ruled every task it ticks ready beside the mark's (451 T101): its own rule, made in `l7r-gate land`
+    let ready = crate::env::var("L7R_LAND_READY");
+    let ready = split(&ready);
+    let ticked = split(ticks);
+    if !ticked.is_empty() && ticked.iter().all(|t| ready.contains(t)) {
         return Ok(Vec::new());
     }
     let name = py_name(d);
