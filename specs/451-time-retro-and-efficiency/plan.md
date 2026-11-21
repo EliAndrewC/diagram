@@ -259,43 +259,7 @@ the three - `entry-gate.sh` by its two cases, the other two by their case groups
 <!-- plan-archive: T04 to T04 moved to plan-done.md, 2026-11-20 (feature 375 FR-044) -->
 <!-- plan-archive: T05 to T05 moved to plan-done.md, 2026-11-20 (feature 375 FR-044) -->
 <!-- plan-archive: T06 to T06 moved to plan-done.md, 2026-11-20 (feature 375 FR-044) -->
-### T07 (FR-004: no agent's token cost is logged, nor the task it served - research R2)
-
-- **Approach**: D6 in the writer. Held: `rust/guard/src/guards/event_log_hooks.rs` (`make guard-edit` first). Already on the log before
-  T07 (T26's `filed.rs`): an Agent dispatch's `task` from its `description`, and a stop's `task` from its meta file's `description`
-  (pinned by `a_line_with_no_t_carries_the_agents_task_else_the_clones`). Built here: `filed::filed` takes an Agent call's task from its
-  prompt's FIRST line where its description names none (the task only - the feature stays the description's, a prompt's line being
-  free text); `fields::agent_cost` writes `tok` (`in`, `cached`, `created`, `out`) and `ctx` on each `SubagentStop`, from the payload's
-  `agent_transcript_path` (else the transcript beside the session's), the whole file read row by row through `context_cap_hooks`'
-  row reader (`call_of`, split out of its `usage_of`; `context` and `own_transcript` made crate-visible, no copy), the last row of each
-  `message.id` standing for its call. No transcript, or no call in it, writes neither field. Red first (`tests/cost.rs`): one call
-  split across three rows whose last carries the whole output, counted once; a user row with usage and a non-JSON row no call; a
-  synthetic zero row neither tokens nor context; a builder with no meta file still costed, no `task`; a dispatch "T08: ..." gives
-  `T08`, a description naming none gives the prompt's first line's `T07`, never a later line's.
-
-| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
-|---|---|---|---|---|
-| the agent's cost and task | n/a - no map | n/a | none | n/a |
-
-### T07 Approach (checklist part A)
-
-1. **The goal, in the world.** No map changes; each agent's tokens are in the log under its task.
-2. **The constraints.** FR-004; D6; the hook never refuses.
-3. **Where each comes from.** G: the approved "records it at each agent's stop"; O: research R2 (the stop payload, the dedup, the meta file).
-4. **Do they describe the world here?** Yes: the T202 builder's 50 MB transcript is 723 assistant rows of 305 `message.id`s, each id's rows carrying one usage, measured 2026-11-20 (a Python scan of `agent-a791a87c02448854e.jsonl`); a sum over rows would read its output 1,317,955 tokens against 481,878, measured 2026-11-20 (the same scan).
-5. **The order.** After T04; before T10.
-6. **The exits.** Green: the fixture cases. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** None.
-8. **The budget.** One landing.
-9. **Done, measured.** The fixture cases green (689 guard tests); the T202 builder's stop replayed through the built `l7r-guard --only event-log-hooks SubagentStop` writes `"task":"T202","tok":{"in":648,"cached":156727175,"created":899518,"out":481878},"ctx":899522`, R2's Python sum to the token, measured 2026-11-20 (the replay into a scratch `L7R_EVENTS_DIR`); the read costs that stop 0.27-0.35 s against 0.04 s with no transcript, measured 2026-11-20 (`/usr/bin/time`, four runs), once per agent stop.
-10. **Before moving a constant.** n/a.
-11. **Before fitting things into room.** n/a.
-12. **Before any fix.** n/a.
-
-**Found and left?** none
-
-**Performance work?** no
-
+<!-- plan-archive: T07 to T07 moved to plan-done.md, 2026-11-21 (feature 375 FR-044) -->
 ### T08 (FR-005: `make where-time` booked most of the window as "waiting on work" and every gate and test column zero - the spec's Why)
 
 - **Approach**: D7's columns in `rust/gate/crates/measure` (`where_time.rs` and a new `where_time/columns.rs`, not held): D2's booking

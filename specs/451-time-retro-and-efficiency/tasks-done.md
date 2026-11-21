@@ -22,6 +22,10 @@
       research: rendering
       held: rust/guard/src/guards/event_log_hooks.rs (and event_log_hooks/filed.rs)
       verify: DONE. landed: the landing's phase lines
+- [x] T07 An agent's cost and task: `task` on the Agent dispatch line from its description, and `tok` (in, cached, created, out, each `message.id` once), `ctx` and `task` (from the meta file) on each SubagentStop line, in `rust/guard/src/guards/event_log_hooks.rs` (D6; FR-004)
+      research: rendering
+      held: rust/guard/src/guards/event_log_hooks.rs (and event_log_hooks/fields.rs)
+      verify: DONE. landed in batch T07+T33: each agent's cost logged; four guard holes closed
 - [x] T12 [perf] The context cap: a new guard `context_cap_hooks` refusing a builder's tool call past `CONTEXT_CAP_TOKENS` (GUESS, 300k) but the Write of its handoff file, naming the file and the next step; its first step one real subagent PreToolUse payload captured and pinned as the fixture (D8, D9; FR-006, FR-012, SC-003, SC-005)
       research: rendering
       held: rust/guard/src/guards/context_cap_hooks.rs (new), rust/guard/src/guards.rs, rust/guard/src/lib.rs, Makefile (`make context-ok`)
@@ -91,6 +95,9 @@
 - [x] T32 [perf] Guard tests read the real environment (found by T14, 2026-11-20): with L7R_FEATURE_DIRECTORY exported (page sessions export it) 17-20 tests of checks_hooks, check_bundle_hooks, pair_hooks, review_round_hooks, shared::checks::arbiter and no_poll_hooks fail - T24's defect in the guard's own tests; each test given its own environment (no process-env mutation), asserting the one outcome it means, red first with the variable exported, and every other variable the guard reads swept the same way
       research: rendering
       verify: DONE. landed in batch T20+T32: the shard form; the guard's tests read their own environment
+- [x] T33 guard_file_hooks refuses sed -i on a guard source but lets a Python heredoc write it (found by T14, 2026-11-20): a held file written through python3 -c, a heredoc-fed interpreter or tee is a write like sed -i - refused without a live make guard-edit permit, red first on each form, through T15's shared readers; and the make-only guard refuses a bare `rustfmt` (a format outside make, T34's found-and-left) and its block message names `make format FILE=` / `CRATE=` rather than bare `make format` (T34's plan review, 2026-11-20), red first; and gate_write_hooks lets a shell write change the tree under a running gate - on 2026-11-20 a builder's `git apply` and `cp` of guard files during T34's make land put unfinished code under its gate, which failed static's cover (the landing refused, re-run after the work was set aside) - a write by `git apply`, `cp`, `mv`, `tee` or a redirect into the tree refused while the tree's gate runs, red first; and shared::tree's git_write judges a shell `git diff --output=<file>` (and git's other writing options) in the mirror a read, where it writes a file (T44's builder, 2026-11-20), red first
+      research: rendering
+      verify: DONE. landed in batch T07+T33: each agent's cost logged; four guard holes closed
 - [x] T34 [perf] No make target formats one file (found by T14, 2026-11-20): make format reformats every crate, so a builder beside another's in-progress files formats with bare rustfmt outside make - make format FILE=<path> (or CRATE=) formats only what it names, red first
       research: rendering
       verify: DONE. landed: make format FILE= and CRATE=
