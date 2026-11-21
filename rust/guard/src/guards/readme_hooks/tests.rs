@@ -505,3 +505,43 @@ fn the_refusal_and_the_escape() {
     };
     assert!(decide(&none, &Session::from_input(&none.input)).is_empty());
 }
+
+/// 451 T113: a Python program's triple-quoted text nothing closes, forty escapes after its opening - `TRIPLE`, which
+/// `program_writes` dropped the text with, took a backslash with the character after it or alone, so its backtracking search tried
+/// 2^40 readings, and the guard gave no answer in 10 s (measured 2026-11-21, `/tmp/t113/probe-before.txt`); a lone quote closes the
+/// single-quoted reading. Judged in a child under a deadline.
+#[test]
+fn a_triple_quote_nothing_closes_is_judged_in_time() {
+    const CHILD: &str = "L7R_README_TRIPLE_IN_TIME";
+    let cmd = format!(
+        "python3 - <<'EOF'\nopen('README.md', 'w').write('x')\ns = '''it {} '\nEOF",
+        "\\n".repeat(40)
+    );
+    if std::env::var_os(CHILD).is_some() {
+        println!("T113 answered {:?}", bash(&cmd));
+        return;
+    }
+    let (passed, said) = crate::guards::passes_in_time(
+        "guards::readme_hooks::tests::a_triple_quote_nothing_closes_is_judged_in_time",
+        CHILD,
+        10,
+    );
+    assert!(passed, "the guard did not answer in 10 s: {said}");
+    let hit = said.contains("T113 answered Some(\"/repo/.clones/c/README.md\")");
+    assert!(hit, "{said}");
+}
+
+/// 451 T113: the program's text without its triple-quoted strings is what the pattern it replaced (`TRIPLE`, built here) left with
+/// `replace_all`, on every text of up to 5 pieces of a double quote, three, a single quote, three, a backslash, a letter, a newline
+/// and a character of two bytes (37,449 texts); the spans themselves are held to the pattern in `shared::shape`'s tests.
+#[test]
+fn the_text_without_its_triples_is_the_patterns() {
+    let pattern =
+        crate::shared::regex::build(r#"(?s)"""(?:\\.|(?!""").)*"""|'''(?:\\.|(?!''').)*'''"#)
+            .unwrap();
+    let pieces = ["\"", "\"\"\"", "'", "'''", "\\", "a", "\n", "é"];
+    for text in crate::guards::texts_of(&pieces, 5) {
+        let without = super::without_triples(&text);
+        assert_eq!(without, pattern.replace_all(&text, "\"\""), "{text:?}");
+    }
+}

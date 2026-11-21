@@ -11,7 +11,7 @@ use super::{re, Ctx};
 use crate::protocol::Answer;
 use crate::shared::escape::{escape_or_refuse, Escape};
 use crate::shared::log::fire;
-use crate::shared::shape::{strip_heredocs, strip_quotes};
+use crate::shared::shape::{quoted_spans, strip_heredocs, strip_quotes};
 use crate::shared::state::field;
 
 // A `sleep` at a command position and its words, redirections left out: numbers (`8m`, `60.5`, `1m 30s`) or a variable (`$N`,
@@ -30,11 +30,10 @@ static NUMBER_SET: LazyLock<Regex> = LazyLock::new(|| {
 static QUOTED_VAR: LazyLock<Regex> = LazyLock::new(|| re(r#""(\$\{?[A-Za-z_][A-Za-z0-9_]*\}?)""#));
 // A loop's keyword at a command position, and the `do` and `done` words that close it (`shared::wait`'s `LOOP_KW` and `DO_DONE`).
 static LOOP_AT: LazyLock<Regex> = LazyLock::new(|| re(r"(?:^|[;&|\s(])(?:while|until|for)\s"));
-// A string a shell runs from its `-c` (`SHELL_C`'s shell and flags), its quote and its text.
-static SHELL_STRING: LazyLock<Regex> = LazyLock::new(|| {
-    re(
-        r#"(?:^|[\s/;&|(])(?:ba|da|z|k)?sh\s+(?:-[A-Za-z-]*\s+)*-[A-Za-z]*c\s+(["'])((?:\\.|(?!\1).)*)\1"#,
-    )
+// A shell and its flags before the string it runs from its `-c` (`SHELL_C`'s shell and flags), through the string's opening quote;
+// the string is read by `shell_strings`.
+static SHELL_AT: LazyLock<Regex> = LazyLock::new(|| {
+    re(r#"(?:^|[\s/;&|(])(?:ba|da|z|k)?sh\s+(?:-[A-Za-z-]*\s+)*-[A-Za-z]*c\s+["']"#)
 });
 static DO_DONE: LazyLock<Regex> = LazyLock::new(|| re(r"(?:^|[;\n&])\s*(do|done)(?=[\s;&|)]|$)"));
 
@@ -128,17 +127,36 @@ pub(super) fn longest_wait_sleep(cx: &Ctx) -> Option<f64> {
     let body = strip_heredocs(&cx.cmd);
     let set = numbers_set(&body);
     let body = QUOTED_VAR.replace_all(&body, "$1");
-    let inner: Vec<f64> = SHELL_STRING
-        .captures_iter(&body)
-        .map_while(Result::ok)
-        .filter_map(|c| {
-            longest_loop_sleep(&strip_quotes(c.get(2).map_or("", |m| m.as_str())), &set)
-        })
+    let inner: Vec<f64> = shell_strings(&body)
+        .into_iter()
+        .filter_map(|(at, end)| longest_loop_sleep(&strip_quotes(&body[at + 1..end]), &set))
         .collect();
     longest_loop_sleep(&strip_quotes(&body), &set)
         .into_iter()
         .chain(inner)
         .reduce(f64::max)
+}
+
+/// Each string a shell runs from its `-c` in `body`, its opening and its closing quote's byte, in order - as the pattern it replaced,
+/// `SHELL_STRING` (`SHELL_AT` then `((?:\\.|(?!\1).)*)\1`, the quote's own kind), found them: the string is shape's `quoted_spans`
+/// first span of the line from its opening quote, where that span opens there (the pattern's `.` never crossed a newline), and where
+/// none does the search goes on from the character after the match's start. Read by the scan (451 T113): the pattern took a
+/// backslash with the character after it or alone, so its backtracking search tried 2^n readings of the n backslashes after a quote
+/// nothing on its line closes, and the guard gave no answer in 10 s on forty (measured 2026-11-21, the T113 plan section). A test
+/// holds the two equal on every text of up to 5 pieces (`tests.rs`).
+pub(super) fn shell_strings(body: &str) -> Vec<(usize, usize)> {
+    let (mut found, mut from) = (Vec::new(), 0);
+    while let Ok(Some(m)) = SHELL_AT.find_from_pos(body, from) {
+        let at = m.end() - 1;
+        let line = body[at..].find('\n').map_or(body.len(), |n| at + n);
+        if let Some(&(0, end)) = quoted_spans(&body[at..line]).first() {
+            found.push((at, at + end));
+            from = at + end + 1;
+        } else {
+            from = m.start() + body[m.start()..].chars().next().map_or(1, char::len_utf8);
+        }
+    }
+    found
 }
 
 /// The longest `sleep` inside a loop of `scan`, a sanitized command - in its head or its body, a nested loop's counted - or None.

@@ -19,7 +19,7 @@ use crate::protocol::{Answer, Event, Guard};
 use crate::shared::escape::{escape_or_refuse, Escape};
 use crate::shared::log;
 use crate::shared::session::Session;
-use crate::shared::shape::shlex;
+use crate::shared::shape::{shlex, triple_quoted_spans};
 use crate::shared::state::field;
 use crate::shared::tree::{classify, normpath, walk_judged, Target};
 
@@ -46,9 +46,6 @@ static UNRESOLVED: LazyLock<Regex> = LazyLock::new(|| {
 /// A Python program's README literal written in place (`Path('README.md').write_text`), the old guard's rule.
 static PY_WRITE: LazyLock<Regex> =
     LazyLock::new(|| re(r#"(?i)README(?:\.[A-Za-z0-9]+)?['"]\s*\)?\s*\)?\s*\.write_text"#));
-/// A Python program's triple-quoted text, its own words rather than its code (make-only's `TRIPLE`).
-static TRIPLE: LazyLock<Regex> =
-    LazyLock::new(|| re(r#"(?s)"""(?:\\.|(?!""").)*"""|'''(?:\\.|(?!''').)*'''"#));
 /// A Python line that writes a file: a write, an open (its read-only opens exempt by the literal reader), a move or a removal.
 static PY_WRITES: LazyLock<Regex> = LazyLock::new(|| {
     re(
@@ -470,7 +467,7 @@ fn program_writes(body: &str, here: Option<&str>, tree: &dyn Fn(&str) -> bool) -
     // only the lines that write: a literal a line compares, passes on or reads is no destination (a fixture's
     // `put(d, "questions/README.txt", t)` beside the `open(..., 'w')` it calls, 2026-11-21); a string's text, triple-quoted or
     // holding a quoted string of its own, is none either
-    let text = without_held(&TRIPLE.replace_all(body, "\"\""));
+    let text = without_held(&without_triples(body));
     let writing: String = text
         .lines()
         .filter(|l| PY_WRITES.is_match(l).unwrap_or(false))
@@ -491,6 +488,21 @@ fn program_writes(body: &str, here: Option<&str>, tree: &dyn Fn(&str) -> bool) -
         .ok()
         .flatten()
         .map(|m| m.as_str().to_owned())
+}
+
+/// `body` with each of its triple-quoted strings, a Python program's own words rather than its code, put down as `""` - as the
+/// pattern it replaced, `TRIPLE` (`(?s)"""(?:\\.|(?!""").)*"""|'''(?:\\.|(?!''').)*'''`, make-only's), put them down with
+/// `replace_all`. The strings are shape's `triple_quoted_spans` (451 T113): the pattern's backtracking search held the guard past
+/// 10 s on an opening nothing closes before forty escapes (measured 2026-11-21, the T113 plan section). A test holds the two equal
+/// on every text of up to 5 pieces (`tests.rs`).
+fn without_triples(body: &str) -> String {
+    let (mut out, mut from) = (String::new(), 0);
+    for (at, end) in triple_quoted_spans(body) {
+        out.push_str(&body[from..at]);
+        out.push_str("\"\"");
+        from = end + 1;
+    }
+    out + &body[from..]
 }
 
 fn shown(event: &Event) -> String {

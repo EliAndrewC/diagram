@@ -29,6 +29,48 @@ pub(crate) fn write_executable(path: &std::path::Path, text: &str) {
     std::fs::remove_file(&draft).unwrap();
 }
 
+/// A hang pin's deadline (451 T103's form, T113): the test `name` (its path in this crate) run again as a child with `var` set, which
+/// does the work and prints its answer; whether it passed within `secs`, and what it printed. A search that never ends is killed at
+/// the deadline and fails its test, rather than holding the run.
+#[cfg(test)]
+pub(crate) fn passes_in_time(name: &str, var: &str, secs: u64) -> (bool, String) {
+    use std::time::{Duration, Instant};
+    let mut child = std::process::Command::new(std::env::current_exe().unwrap())
+        .args(["--exact", name, "--nocapture"])
+        .env(var, "1")
+        .stdout(std::process::Stdio::piped())
+        .spawn()
+        .unwrap();
+    let deadline = Instant::now() + Duration::from_secs(secs);
+    let done = loop {
+        let status = child.try_wait().unwrap();
+        if status.is_some() || Instant::now() > deadline {
+            break status;
+        }
+        std::thread::sleep(Duration::from_millis(20));
+    };
+    let _ = child.kill();
+    let out = child.wait_with_output().unwrap();
+    let said = String::from_utf8_lossy(&out.stdout).into_owned();
+    (done.is_some_and(|s| s.success()), said)
+}
+
+/// Every text of up to `most` of `pieces`, the empty text first: a differential test's inputs, a scan held to the pattern it replaced
+/// on each (451 T103's form, T113).
+#[cfg(test)]
+pub(crate) fn texts_of(pieces: &[&str], most: usize) -> Vec<String> {
+    let mut texts = vec![String::new()];
+    let mut longest = vec![String::new()];
+    for _ in 0..most {
+        longest = longest
+            .iter()
+            .flat_map(|t| pieces.iter().map(move |p| format!("{t}{p}")))
+            .collect();
+        texts.extend(longest.iter().cloned());
+    }
+    texts
+}
+
 pub mod builder_stop_hooks;
 #[cfg(test)]
 mod case_tables;

@@ -695,3 +695,48 @@ fn a_bare_rustfmt_is_refused_naming_the_scoped_format() {
         assert!(!refused(&got, "make format (rustfmt)"), "{rule}: {got:?}");
     }
 }
+
+/// 451 T113: a quote nothing closes before forty escapes, after an engine entry point - `MASK_QUOTE`, the pattern `masked` blanked
+/// quoted strings with, took a backslash with the character after it or alone, so its backtracking search tried 2^40 readings, and
+/// the guard gave no answer in 10 s (measured 2026-11-21, `/tmp/t113/probe-before.txt`). Judged in a child under a deadline.
+#[test]
+fn an_unclosed_quote_after_an_entry_point_is_judged_in_time() {
+    const CHILD: &str = "L7R_MAKE_ONLY_QUOTE_IN_TIME";
+    let cmd = format!(
+        "python3 -m l7r.diagram.tools.x; echo it's {}",
+        "\\n".repeat(40)
+    );
+    if std::env::var_os(CHILD).is_some() {
+        let d = world("in-time");
+        println!("T113 answered {:?}", run(&cmd, &d, "sh"));
+        return;
+    }
+    let (passed, said) = crate::guards::passes_in_time(
+        "guards::make_only_hooks::tests::an_unclosed_quote_after_an_entry_point_is_judged_in_time",
+        CHILD,
+        10,
+    );
+    assert!(passed, "the guard did not answer in 10 s: {said}");
+    let refused = said.contains("no make target wraps `l7r.diagram.tools.x`");
+    assert!(refused, "{said}");
+}
+
+/// 451 T113: the scan finds the strings the pattern it replaced (`MASK_QUOTE`, built here) found, on every text of up to 5 pieces of a
+/// double and a single quote, a backslash, a letter, `-c `, `-c` and a tab, a dash, a `c`, a space, a newline and a character of two
+/// bytes (177,156 texts).
+#[test]
+fn the_mask_finds_the_quoted_strings_the_pattern_found() {
+    let pattern =
+        crate::shared::regex::build(r#"(?s)(?<!-c )(?<!-c\t)(["'])(?:\\.|(?!\1).)*\1"#).unwrap();
+    let pieces = [
+        "\"", "'", "\\", "a", "-c ", "-c\t", "-", "c", " ", "\n", "é",
+    ];
+    for text in crate::guards::texts_of(&pieces, 5) {
+        let found: Vec<(usize, usize)> = pattern
+            .find_iter(&text)
+            .map_while(Result::ok)
+            .map(|m| (m.start(), m.end() - 1))
+            .collect();
+        assert_eq!(super::mask_quotes(&text), found, "{text:?}");
+    }
+}

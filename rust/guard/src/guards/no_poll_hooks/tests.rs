@@ -784,3 +784,63 @@ fn a_thin_slow_poll_ok_is_refused_for_its_reason() {
         .collect();
     assert_eq!(let_through, Vec::<&str>::new());
 }
+
+/// 451 T113: a string a shell runs from its `-c` that nothing closes on its line, forty escapes in it, beside a main-session wait
+/// `POLL_OK` lets through - `SHELL_STRING`, which `slow_poll` read the string with, took a backslash with the character after it or
+/// alone, so its backtracking search tried 2^40 readings, and the guard gave no answer in 10 s (measured 2026-11-21,
+/// `/tmp/t113/probe-before.txt`). Judged in a child under a deadline, the string unclosed and closed on the next line.
+#[test]
+fn a_shell_string_nothing_closes_on_its_line_is_judged_in_time() {
+    const CHILD: &str = "L7R_NO_POLL_SHELL_STRING_IN_TIME";
+    let esc = "\\n".repeat(40);
+    let cmds = [
+        format!("while :; do sleep 600; done; bash -c 'it {esc}  # POLL_OK: the probe of 451 T113"),
+        format!(
+            "while :; do sleep 600; done; bash -c 'it {esc}\n'  # POLL_OK: the probe of 451 T113"
+        ),
+    ];
+    if std::env::var_os(CHILD).is_some() {
+        for cmd in &cmds {
+            println!("T113 slow {}", slow_refusal(&run(cmd)));
+        }
+        return;
+    }
+    let (passed, said) = crate::guards::passes_in_time(
+        "guards::no_poll_hooks::tests::a_shell_string_nothing_closes_on_its_line_is_judged_in_time",
+        CHILD,
+        10,
+    );
+    assert!(passed, "the guard did not answer in 10 s: {said}");
+    assert_eq!(said.matches("T113 slow true").count(), 2, "{said}");
+}
+
+/// 451 T113: the scan finds the strings the pattern it replaced (`SHELL_STRING`, built here) found, its opening and its closing quote,
+/// on every text of up to 5 pieces of `sh -c `, the same after a no-break space (a start of two bytes), ` -c `, a double and a single
+/// quote, a backslash, a letter, a newline, a character of two bytes and a `;` (111,111 texts).
+#[test]
+fn the_shell_strings_are_the_ones_the_pattern_found() {
+    let pattern = crate::shared::regex::build(
+        r#"(?:^|[\s/;&|(])(?:ba|da|z|k)?sh\s+(?:-[A-Za-z-]*\s+)*-[A-Za-z]*c\s+(["'])((?:\\.|(?!\1).)*)\1"#,
+    )
+    .unwrap();
+    let pieces = [
+        "sh -c ",
+        "\u{a0}sh -c ",
+        " -c ",
+        "\"",
+        "'",
+        "\\",
+        "a",
+        "\n",
+        "é",
+        ";",
+    ];
+    for text in crate::guards::texts_of(&pieces, 5) {
+        let found: Vec<(usize, usize)> = pattern
+            .captures_iter(&text)
+            .map_while(Result::ok)
+            .filter_map(|c| Some((c.get(1)?.start(), c.get(0)?.end() - 1)))
+            .collect();
+        assert_eq!(super::pace::shell_strings(&text), found, "{text:?}");
+    }
+}

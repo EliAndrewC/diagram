@@ -139,6 +139,41 @@ pub fn quoted_spans(text: &str) -> Vec<(usize, usize)> {
     spans
 }
 
+/// Every triple-quoted string of `text` - a Python program's own words rather than its code - in order, as the pattern
+/// `(?s)"""(?:\\.|(?!""").)*"""|'''(?:\\.|(?!''').)*'''` found them: each its opening's first byte and its closing's last. Read in one
+/// pass (451 T113): the pattern took a backslash with the character after it, or the backslash alone, so its backtracking search
+/// tried 2^n readings of the n backslashes after an opening nothing closes - `readme-hooks` gave no answer in 10 s on forty (measured
+/// 2026-11-21, the T113 plan section). Its first reading, the one the search returns, is `quoted_spans`' rule for a closer of three:
+/// a backslash takes the character after it only where a triple of its kind still starts after the pair, a backslash alone else,
+/// and the string closes at the first triple of its kind it meets; an opening no later triple closes opens nothing, the search going
+/// on from its next character. A test holds the two equal on every text of up to 6 pieces (`tests/triples.rs`). Public for
+/// `readme_hooks` and `tree::program`, whose copies of the pattern hung the same way (451 T113, T112).
+#[must_use]
+pub fn triple_quoted_spans(text: &str) -> Vec<(usize, usize)> {
+    let b = text.as_bytes();
+    let (double, single) = (text.rfind("\"\"\""), text.rfind("'''"));
+    let (mut spans, mut at) = (Vec::new(), 0);
+    while at < b.len() {
+        let q = b[at];
+        let closer = match q {
+            b'"' => double,
+            b'\'' => single,
+            _ => None,
+        };
+        let Some(last) = closer.filter(|&l| l >= at + 3 && b[at..].starts_with(&[q; 3])) else {
+            at += 1;
+            continue;
+        };
+        let mut p = at + 3;
+        while !b[p..].starts_with(&[q; 3]) {
+            p += if b[p] == b'\\' && p + 2 <= last { 2 } else { 1 };
+        }
+        spans.push((at, p + 2));
+        at = p + 3;
+    }
+    spans
+}
+
 /// `text` with each match replaced by a space, and each match's group `group`.
 fn cut(pattern: &Lazy, text: &str, group: usize) -> (String, Vec<String>) {
     let (mut out, mut from, mut groups) = (String::new(), 0, Vec::new());
@@ -237,6 +272,7 @@ pub fn shlex(piece: &str) -> Option<Vec<String>> {
 mod tests {
     mod builds;
     mod quotes;
+    mod triples;
 
     use super::{executing_backticks, shlex, strip_heredocs, strip_quotes};
 

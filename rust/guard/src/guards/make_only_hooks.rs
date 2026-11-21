@@ -18,7 +18,7 @@ use crate::shared::escape::{escape_or_refuse, used, Escape};
 use crate::shared::log;
 use crate::shared::make::{POS, PY};
 use crate::shared::session::Session;
-use crate::shared::shape::{strip_heredocs, strip_quotes};
+use crate::shared::shape::{quoted_spans, strip_heredocs, strip_quotes};
 use crate::shared::state::field;
 use crate::shared::tool::ask_within;
 use crate::shared::tree::{walk_judged, Walk};
@@ -120,10 +120,6 @@ lazy!(
 );
 lazy!(REDIR, r"^(?:\d?>>?&?\S+|\d?<\S+)$");
 lazy!(MASK_HEREDOC, r#"(?s)<<-?\s*['"]?(\w+)['"]?\n.*?\n\s*\1\b"#);
-lazy!(
-    MASK_QUOTE,
-    r#"(?s)(?<!-c )(?<!-c\t)(["'])(?:\\.|(?!\1).)*\1"#
-);
 lazy!(
     ENTRY_RUN,
     r"(?:\S*/)?python3?\s+(?:-\S+\s+)*-m\s+l7r\.diagram\.([\w.]+)"
@@ -362,14 +358,47 @@ fn guard_write(cmd: &str, here: &str, depth: usize) -> bool {
 
 /// `cmd` with heredoc bodies and quoted strings replaced by spaces of the same length, so a match in it sits at the same offset in the raw text.
 fn masked(cmd: &str) -> String {
-    let blank = |pattern: &Regex, text: &str| {
+    let blank = |text: &str, spans: Vec<(usize, usize)>| {
         let mut bytes = text.as_bytes().to_vec();
-        for m in pattern.find_iter(text).map_while(Result::ok) {
-            bytes[m.start()..m.end()].fill(b' ');
+        for (at, end) in spans {
+            bytes[at..end].fill(b' ');
         }
         String::from_utf8_lossy(&bytes).into_owned()
     };
-    blank(&MASK_QUOTE, &blank(&MASK_HEREDOC, cmd))
+    let heredocs = MASK_HEREDOC
+        .find_iter(cmd)
+        .map_while(Result::ok)
+        .map(|m| (m.start(), m.end()))
+        .collect();
+    let text = blank(cmd, heredocs);
+    let quotes = mask_quotes(&text)
+        .into_iter()
+        .map(|(at, end)| (at, end + 1))
+        .collect();
+    blank(&text, quotes)
+}
+
+/// The quoted strings `masked` blanks, each its opening and its closing quote's byte: shape's `quoted_spans`, but a quote just after
+/// `-c ` or `-c\t` opens none, the reading going on from the character after it - as the pattern it replaced, `MASK_QUOTE`
+/// (`(?s)(?<!-c )(?<!-c\t)(["'])(?:\\.|(?!\1).)*\1`), found them. Read by the scan (451 T113): the pattern took a backslash with the
+/// character after it or alone, so its backtracking search tried 2^n readings of the n backslashes after a quote nothing closes, and
+/// the guard gave no answer in 10 s on forty (measured 2026-11-21, the T113 plan section). A pass of the text, and one more from each
+/// quote a `-c` passes over; a test holds the two equal on every text of up to 5 pieces (`tests.rs`).
+fn mask_quotes(text: &str) -> Vec<(usize, usize)> {
+    let after_dash_c =
+        |at: usize| at >= 3 && matches!(&text.as_bytes()[at - 3..at], b"-c " | b"-c\t");
+    let (mut spans, mut from) = (Vec::new(), 0);
+    'read: loop {
+        for (at, end) in quoted_spans(&text[from..]) {
+            let (at, end) = (from + at, from + end);
+            if after_dash_c(at) {
+                from = at + 1;
+                continue 'read;
+            }
+            spans.push((at, end));
+        }
+        return spans;
+    }
 }
 
 /// The text after the invocation split at its first unquoted separator: (segment, rest).
