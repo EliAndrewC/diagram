@@ -129,7 +129,8 @@ fn a_python_read_standing_in_the_mirror_is_not_a_write_and_a_python_write_still_
         "python3 -c 'print(1)' | tee out.txt",
         "python3 -c 'import l7r'",
         "python3 -c 'from . import x'",
-        "cd $UNSET && python3 -c 'import json'",
+        // a `cd` the walk cannot read (451 T79: `cd $UNSET`, empty, goes home, as bash does)
+        "cd $(somewhere) && python3 -c 'import json'",
         "python3 -c print",
         // window#61's shape: the heredoc writes, refused by its own body since T42 (the `-c` read beside it is no write)
         "python3 - <<'PY'\nimport pathlib\np = pathlib.Path('hm.py'); p.write_text('x')\nPY\npython3 -c 'print(1)'",

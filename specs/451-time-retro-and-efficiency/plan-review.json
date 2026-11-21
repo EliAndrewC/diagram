@@ -139,17 +139,11 @@
    "reviewed": "2026-11-21",
    "declared": "spec-fidelity"
   },
-  "### T48 (<why: the finding or measurement that files it>)": {
-   "sha256": "6379478259667dd6106b61f5e9a1e1f55204eb710fc7eace6b24440528d74c42",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-20",
-   "declared": "spec-fidelity"
-  },
   "### T48 Approach (checklist part A)": {
-   "sha256": "8ab3980f20df0569d3b256095cb5ddd7015c6199711d72641b1609d4a30c9074",
+   "sha256": "ea075e52ce73b58e495b7d93d8f35de4f207198079efc7357bc149b52c41cc23",
    "verdict": "CLEAR",
    "reviewed": "2026-11-21",
-   "declared": "round-arbiter"
+   "declared": "spec-fidelity"
   },
   "### T49 (<why: the finding or measurement that files it>)": {
    "sha256": "01677a85d9445a1f8375005f586f704bc656f61419ee149c3de3b73c6c58185e",
@@ -162,18 +156,6 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-21",
    "declared": "round-arbiter"
-  },
-  "### T50 (<why: the finding or measurement that files it>)": {
-   "sha256": "41b4fcc8f051aee4f3c376d9672148738776429ace180da235c5b7ac55e9d395",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-21",
-   "declared": "round-arbiter"
-  },
-  "### T50 Approach (checklist part A)": {
-   "sha256": "6fe4bc67cad4ebed9b12a165565ac1def5e141a6341bcc68271de16004066cf0",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-21",
-   "declared": "spec-fidelity"
   },
   "### T51 (<why: the finding or measurement that files it>)": {
    "sha256": "97932b9ded5a65f7188296f60d3722ba67e1e4c29274bd86951aee31d8cedaac",
@@ -217,98 +199,8 @@
    "reviewed": "2026-11-21",
    "declared": "spec-fidelity"
   },
-  "### T56 Approach (checklist part A)": {
-   "sha256": "1ad4cf4734994d2a3058d10372f5cda4c99e7644734be150b0c8c07662e605a5",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-21",
-   "declared": "spec-fidelity"
-  },
-  "### T60 Approach (checklist part A)": {
-   "sha256": "98b891c5672ab5cfd57fa2db2f4b8d20c1653a8de91add1791b0011bfcd25e3c",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-21",
-   "declared": "spec-fidelity"
-  },
-  "### T67 Approach (checklist part A)": {
-   "sha256": "9be37cbc06046df77f22acb5190f79cb04923978f5bf5b373e6e833669b964dd",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-21",
-   "declared": "round-arbiter"
-  },
-  "### T56 (T53's writer gives a start over 72 h old no feature, but `make events-refile` read its own copy of the start rule: 0 lines moved and 23 left in 385's log, measured 2026-11-21 (`make events-refile DRY=1` before the change, its last line))": {
-   "sha256": "d81af4d463082232927159943609dc787cf2137647f82d424991111a0b275311",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-21",
-   "declared": "round-arbiter"
-  },
-  "### T72 (two `make closing-checks` runs in one clone shared `.git/closing-checks/` and read each other's verdicts: T69's builder's run of 09:38:33Z beside another's of 09:38:06Z, the first reading the second's `quick` verdict and its `static.log` holding both runs' lines, observed 2026-11-21 (T69's section in plan-done.md, Found and left); reproduced against the unfixed script, run A's red `quick` read GREEN and run B's green `hooks-test` read RED, measured 2026-11-21 (`tests/hooks/test-closing-checks.sh`, `/tmp/t72/red.log`))": {
-   "sha256": "848decf1b0cc333af95de8ef713cf9504e01c7b8f559058707a9e72898aefabf",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-21",
-   "declared": "spec-fidelity"
-  },
-  "### T72 Approach (checklist part A)": {
-   "sha256": "b709177f8792178408589594d855d5381830bd12c5b4b943d4b34cbc4f2e238c",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-21",
-   "declared": "spec-fidelity"
-  },
-  "### T60 (the context cap named a builder's handoff under its call's cwd: 2 handoffs, T10's `T10-aa6406892e465f0a5.md` and T55's `T55-abe836de838b025ad.md`, in the mirror's `/diagram/.git/l7r-handoffs/`, against 56 entries in the clone's (55 handoffs and the `T59-scripts` directory), measured 2026-11-21 (`ls` of both))": {
-   "sha256": "54d505dfa2e92583666985441df772b3a261535c8bd0f92f080b90352a936ca6",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-21",
-   "declared": "spec-fidelity"
-  },
-  "### T75 (the README guard refused a README path held as the text of a one-line Python string, found by T67's first plan review, 2026-11-21)": {
-   "sha256": "5913f4c22d1b98f8c132d645d6285fb01b98a24228986889cb580dfe38ffa3e4",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-21",
-   "declared": "spec-fidelity"
-  },
-  "### T75 Approach (checklist part A)": {
-   "sha256": "49862838a166005f31c89b3b5357b417c8a12db6032db78689d8c413b2bb7705",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-21",
-   "declared": "spec-fidelity"
-  },
-  "### T67 (T58's builder's `cd /tmp/t58/wt && cp rust/guard/src/guards/readme_hooks.rs /tmp/t58/readme.keep && ...` refused as a README write, 2026-11-21T06:30Z; replayed verbatim through the guard, what matched was the DESTINATION, `/tmp/t58/readme.keep` - a README by the guard's name rule, `README` with any extension - outside the tree, not the source's name, measured 2026-11-21, method: the guard log's entry, the command recovered from the builder's transcript and replayed through `tests/hooks/readme-hooks.sh`)": {
-   "sha256": "b2af3b49c26a7617ce0f31baec14cb0777db3ebd754d28bc2b2e7eb07d6c2ebc",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-21",
-   "declared": "round-arbiter"
-  },
-  "### T71 (<why: the finding or measurement that files it>)": {
-   "sha256": "a3e1a3e93ec3b5c5016b485b9c506d465f8675b889134edf66406cdbef50b3ca",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-21",
-   "declared": "round-arbiter"
-  },
   "### T71 Approach (checklist part A)": {
    "sha256": "77d504856d0b2b90292106442cb3e12eab94a3e0b8fa130c519ec69394c166ea",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-21",
-   "declared": "spec-fidelity"
-  },
-  "### T73 (<why: the finding or measurement that files it>)": {
-   "sha256": "bee8bc96f8f5c5d5b9bb359edc8ad92d280192af42250137b057d041907d40b9",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-21",
-   "declared": "round-arbiter"
-  },
-  "### T73 Approach (checklist part A)": {
-   "sha256": "e4be6ef9ed3e7dd33207ed12001597e4bb3162aee3193630c570e8a30254f6d8",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-21",
-   "declared": "spec-fidelity"
-  },
-  "### T74 (<why: the finding or measurement that files it>)": {
-   "sha256": "2339b700ff043f7fdedae329207ce405643d62797a118188202aef1e1cd7b4ef",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-21",
-   "declared": "round-arbiter"
-  },
-  "### T74 Approach (checklist part A)": {
-   "sha256": "95fc70913cb233b147cb840d0874aeb905378067ffe377904a051eddf0f14876",
    "verdict": "CLEAR",
    "reviewed": "2026-11-21",
    "declared": "spec-fidelity"
@@ -319,23 +211,11 @@
    "reviewed": "2026-11-21",
    "declared": "spec-fidelity"
   },
-  "### T73 (after T54's fix 28 of 451's 67 reconstructed candidates still refused - the task line's 27 is one short - most a word re-wrapped onto the next line, read as an old value because the old values are read line by line, measured 2026-11-21 (`/tmp/t73/rustrecon.py before`, T54's replay on the code before this change, `/tmp/t73/rust-before.json`, equal row for row to T54's `rust-after3.json`))": {
-   "sha256": "ce67ce0c47f3a7e0367717b2feecbe16e0814209580ceb6946afda3da8fbc032",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-21",
-   "declared": "spec-fidelity"
-  },
-  "### T74 (the event log filed a call under its cwd's tree: the mirror's `.git/l7r-events/451-time-retro-and-efficiency.jsonl` held 364 lines, all session `c6fd72d1-...`'s (whose claim map names this clone), 361 a builder's (`by` or `aid`) and 3 the main session's, tasks T13 176, T55 158, T10 28, T21 1 and none 1, from 2026-11-20T16:02:50Z to 2026-11-21T04:56:07Z, 0 of them in the clone's 451 log, measured 2026-11-21 (a Python count of both logs by session, key and exact line))": {
-   "sha256": "b28685189ca0f2afa3a8f3813be2ab92678a0d3ac54de6cad43c4258676d9b0a",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-21",
-   "declared": "spec-fidelity"
-  },
   "### T76 (the mirror's `.git/l7r-events/_unassigned.jsonl`, written from /diagram before T74 filed a call under its session's clone, held 15 lines the refile's rules place: 1 to 405, 11 to 430 and 1 to 449, none of them in this clone's logs, and 2 to 451 that T74's merge had already put in the clone's 451 log in their re-filed form, measured 2026-11-21 (the refile run without `--from` on a scratch copy, `/tmp/t76/scratch-refile.log`, and an exact-line count of each moved line in each clone's log); and, once T74 landed, no 451 log in the mirror to re-merge, measured 2026-11-21 (`ls` of the mirror's `.git/l7r-events/`))": {
-   "sha256": "2eb4bb03201769ebe37cdea63acd767530fc290a3086ebd9896361cb132abb39",
+   "sha256": "dc0a39c766a6c63cc489cbe0774d3713550b7d2f90b0117a63378a7310e95d89",
    "verdict": "CLEAR",
    "reviewed": "2026-11-21",
-   "declared": "spec-fidelity"
+   "declared": "round-arbiter"
   },
   "### T76 Approach (checklist part A)": {
    "sha256": "5be81b498823f10bafe1d81a8013861c7801a790a4641e3252acfe6002094b7b",
@@ -344,10 +224,10 @@
    "declared": "spec-fidelity"
   },
   "### T77 (the plan hold refused an Edit of the heading after a held section, found by T73's builder on 2026-11-21: `edit_hits` in `rust/guard/shared/src/checks/planhold.rs` read `a <= start + t.len()`; the guard log holds 3 refusals of that shape, measured 2026-11-21, method below)": {
-   "sha256": "bd77d9a2f0e5e6ffd270abd97d97b6ab6a3ab46dfd01db044f4d85797ec05f5d",
+   "sha256": "110906582e93af02d4048632e0da7fecb9dbcd459903f950dd41d308b931d519",
    "verdict": "CLEAR",
    "reviewed": "2026-11-21",
-   "declared": "spec-fidelity"
+   "declared": "round-arbiter"
   },
   "### T77 Approach (checklist part A)": {
    "sha256": "6c0d3c1ddaf1dc51a34ba96112fcef4a81db8f891b15d0bc6b5c8e3354203a7c",
@@ -355,11 +235,179 @@
    "reviewed": "2026-11-21",
    "declared": "spec-fidelity"
   },
-  "### T50 (twelve git subcommands outside `GIT_WRITES` read as no write - `worktree`, `clone`, `init`, `switch`, `bisect`, `sparse-checkout`, `submodule`, `config`, `fetch`, `notes`, `update-ref`, `symbolic-ref` - found by T33, observed 2026-11-20, method: T33's part 4; T33's addition that read them was dropped, a review finding four misreadings)": {
-   "sha256": "7034b6c098307c41eca2fa7b280c10f681a2e965f1cd71a45472dec0799f84f3",
+  "### T48 (the bundle read ids inside a clause naming another feature by its number as the reviewed feature's, filed by the round arbiter on `ask:451-T46-fourth-round` (accept, 2026-11-20) to be measured first; measured 2026-11-21: 4 of the 5 real such clauses across every plan handed the reviewer the reviewed feature's same-named id, unmarked, method below)": {
+   "sha256": "45058eaaf52aa657c4bf0eb8dc2dbc04c2d43e13703d6acb515437f95e3ee074",
    "verdict": "CLEAR",
    "reviewed": "2026-11-21",
    "declared": "spec-fidelity"
+  },
+  "### T78 (the plan hold refused a shell write that shares only template text with the held section, found by T77 on 2026-11-21: 7 of the 18 replayed task-held Bash refusals matched only text every section shares, each a live hold and a foreground call; and its write-back ran on `PostToolUse` alone, so a command that changed held text and then exited non-zero was written back by nothing)": {
+   "sha256": "8601b83b00fc896cadebc52c181547a035cd8dc1b83c26c1b3a8fbfe46bb4bd5",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity"
+  },
+  "### T78 Approach (checklist part A)": {
+   "sha256": "3c0f72a304deb13f186dbb7fbf00cdbb23acc384b29bafb67b83b539c9d6bbcc",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity"
+  },
+  "### T79 (shared::tree's walk split a `\\`-continued line, a `${VAR}`'s braces and a `$(...)` inside a word into segments of their own, and read a `$(mktemp)` directory toward the mirror, found by T50 on 2026-11-21; and it settled a place it could not resolve two ways - a cp's toward where the shell was last known, one of T50's git forms not placed at all (T50's D-d and D-e) - found by T50's plan review, 2026-11-21)": {
+   "sha256": "851852af2a9afd3d97a198028bf6e3e17f66143b42291160ac61d7cddf769b89",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-21",
+   "declared": "round-arbiter"
+  },
+  "### T79 Approach (checklist part A)": {
+   "sha256": "695fff9c9b611234a1f6f0d970cf6631d3af50fcdd8bb20d450fa148210bb248",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-21",
+   "declared": "round-arbiter"
+  },
+  "### T80 (<why: the finding or measurement that files it>)": {
+   "sha256": "80a7ad083aaf81686b6e5b6438235bb1e2b0aea58fe800a31ffa8b64e33617c6",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-21",
+   "declared": "round-arbiter"
+  },
+  "### T80 Approach (checklist part A)": {
+   "sha256": "a7f8f7c96549456ba364cd8b577de7d4e279f99396cba8a842aeeb5d4eb9658b",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-21",
+   "declared": "round-arbiter"
+  },
+  "### T81 (<why: the finding or measurement that files it>)": {
+   "sha256": "a1021d8d177a2d6fbb2662d68b4e87dfb2c36bff8e842bc23bf2bba1b32ba2b4",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-21",
+   "declared": "round-arbiter"
+  },
+  "### T81 Approach (checklist part A)": {
+   "sha256": "ec3a1121dc197e0d14e2afe1e1cb0eb07756abcd4c70d7c2b4425979f09791e1",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-21",
+   "declared": "round-arbiter"
+  },
+  "### T82 (<why: the finding or measurement that files it>)": {
+   "sha256": "289700f215510cea7796f9589c98d95335d00f7eb02912b590cccc7081f2bd31",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-21",
+   "declared": "round-arbiter"
+  },
+  "### T82 Approach (checklist part A)": {
+   "sha256": "94905d5bea440b0fb4a9a426405736286bd35225e1ba816419eb12d22d8f3668",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-21",
+   "declared": "round-arbiter"
+  },
+  "### T83 (<why: the finding or measurement that files it>)": {
+   "sha256": "5e5ea38b150b3ecceffc22ab437737801c697c4a2b214047efa4932fd87752ea",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-21",
+   "declared": "round-arbiter"
+  },
+  "### T83 Approach (checklist part A)": {
+   "sha256": "bbc7eb91a5934240d6ba0244977148ef18947fb22ddd77c630facd2a53ee7336",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-21",
+   "declared": "round-arbiter"
+  },
+  "### T84 (<why: the finding or measurement that files it>)": {
+   "sha256": "4b37f97e9a5b28c11e6a3df3360d1275fffda555233aea480f7eede0dc6d2da3",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-21",
+   "declared": "round-arbiter"
+  },
+  "### T84 Approach (checklist part A)": {
+   "sha256": "2e14f4381209be39c1dc576d1bcd6e6ee84e915bb3574f8db4bdf246f1cc7c2a",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-21",
+   "declared": "round-arbiter"
+  },
+  "### T85 (<why: the finding or measurement that files it>)": {
+   "sha256": "c7f853f11d9f08e9752ec4b0d48cdc0b6e83b9361ee9e433d33880caf9ef9ecf",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-21",
+   "declared": "round-arbiter"
+  },
+  "### T85 Approach (checklist part A)": {
+   "sha256": "c3162ceee20f0e591b1b0bad20a59b066392a121f6bcdd627fe9bc5a58d676e0",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-21",
+   "declared": "round-arbiter"
+  },
+  "### T86 (<why: the finding or measurement that files it>)": {
+   "sha256": "75269bfec00092a62854f27465d4a6eb9b26e10bae57e0c85ad6ac86de557616",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-21",
+   "declared": "round-arbiter"
+  },
+  "### T86 Approach (checklist part A)": {
+   "sha256": "ae8e6a950477fc6308e3b64d17661a8fb57c6b0b4b43fd4250e7664ad3f5174c",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-21",
+   "declared": "round-arbiter"
+  },
+  "### T87 (<why: the finding or measurement that files it>)": {
+   "sha256": "81d65efea81f391c474b3352eea61adc789c0fdab1062a28618605deea11a8b7",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-21",
+   "declared": "round-arbiter"
+  },
+  "### T87 Approach (checklist part A)": {
+   "sha256": "9690a1d6abcbad68a7d2d8d4d6cd4cdb17be1a73ac680a68f326f3029ccd540c",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-21",
+   "declared": "round-arbiter"
+  },
+  "### T88 (<why: the finding or measurement that files it>)": {
+   "sha256": "57645c4e80d644c5deaf15787c36f8c7bf0e079be2e7c1396a3f0f83c876e707",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-21",
+   "declared": "round-arbiter"
+  },
+  "### T88 Approach (checklist part A)": {
+   "sha256": "e084c52b3c8f1ddfc197a4e18a5d2c3e8fc30e488d153a4bcbe2dbf795e21529",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-21",
+   "declared": "round-arbiter"
+  },
+  "### T89 (<why: the finding or measurement that files it>)": {
+   "sha256": "da40ae34ba421a1066ff7780d781e556c8ee35029a0f0faeed027fdada539860",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-21",
+   "declared": "round-arbiter"
+  },
+  "### T89 Approach (checklist part A)": {
+   "sha256": "313509b73f5784b6ce9637ac801d90125ff325954e25ddbb91e2cd081b578844",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-21",
+   "declared": "round-arbiter"
+  },
+  "### T90 (<why: the finding or measurement that files it>)": {
+   "sha256": "fabae7ab5cae61d7235cdc67b4983d5ed907440669991cfcdbffbda49c4158cc",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-21",
+   "declared": "round-arbiter"
+  },
+  "### T90 Approach (checklist part A)": {
+   "sha256": "42636ff8d67392d0a504cff52ce6ebfb393ce0b0dcf326b7bcc9fa43c738f4ea",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-21",
+   "declared": "round-arbiter"
+  },
+  "### T91 (<why: the finding or measurement that files it>)": {
+   "sha256": "8cb1d90a4c3864a74e895d6b518cd81db010dc2871a52edb0100aed0eba88fdf",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-21",
+   "declared": "round-arbiter"
+  },
+  "### T91 Approach (checklist part A)": {
+   "sha256": "0612fc2500bedd884ddb5e0325315d4649c39b5a6b9f73de9d0dfe23f9171cbc",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-21",
+   "declared": "round-arbiter"
   }
  },
  "block_reviews": [
@@ -8610,6 +8658,155 @@
      "why": "A guard-reading fix; it neither improves performance nor measures it, so FR-013's ordering does not apply to it."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-21",
+   "blocks": [
+    "### T48 (the bundle read ids inside a clause naming another feature by its number as the reviewed feature's, filed by the round arbiter on `ask:451-T46-fourth-round` (accept, 2026-11-20) to be measured first; measured 2026-11-21: 4 of the 5 real such clauses across every plan handed the reviewer the reviewed feature's same-named id, unmarked, method below)",
+    "### T48 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T48-fix",
+     "summary": "Fix the clause reading rather than only file it: measured first over 327 plan.md and plan-done.md files, 5 real clauses naming another feature, 4 of them handing the reviewer the reviewed feature's same-named text unmarked; named() now reads such ids as N's, carried from N or named NOT FOUND, red test first.",
+     "class": "within",
+     "why": "The arbiter's ruling on ask:451-T46-fourth-round says: file the residue, measure first how often such a clause names another feature across specs/*/plan.md and plan-done.md, and fix it only if a real one hands a reviewer the wrong text. The plan measured first, found 4 real wrong-text cases, and fixed the reading as the ruling describes."
+    },
+    {
+     "id": "T48-forms",
+     "summary": "The clause forms read: 'in N's', 'of feature N', and 'from N'.",
+     "class": "within",
+     "why": "The ruling's two forms are examples of 'a clause naming feature N'. 'from N' names a feature by its number in the same way. The plan measured that none of the 8 clauses reads a count as a feature number."
+    },
+    {
+     "id": "T48-unnumbered-run",
+     "summary": "QUALIFIED gets a third branch: a run of ids that no number names, followed by such a clause, belongs entirely to the clause's feature. ANOTHER captures the clause's number, so the part of a numbered run cut off at such a clause belongs to that feature.",
+     "class": "within",
+     "why": "This is how the ruling's residue ('<ids> in N's') gets read as N's. The plan measured every such run among the 8 as holding one id, and a misread costs a line marked with the clause's feature or a NOT FOUND line, never this feature's text unmarked."
+    },
+    {
+     "id": "T48-own-and-other-sources",
+     "summary": "A clause naming the reviewed feature reads as before. A clause naming a source by another name ('in house style's') leaves its ids bare.",
+     "class": "within",
+     "why": "The ruling covers clauses naming a feature by number. For the reviewed feature's own number, the ruling says reading as N's carries the same text, and the plan reports that as unchanged. The other-name branch was measured: 2 real cases, both naming the feature's own work, so no wrong outcome. That is a difference, not a defect."
+    },
+    {
+     "id": "T48-left-T82",
+     "summary": "Requirement-reader gap left and filed as T82 (lands before T22): a bold FR or SC id written without a list dash is not read, so a NOT FOUND line appears where the text exists (449's T050 against 239). It affects 24 specs, features 129 to 271.",
+     "class": "within",
+     "why": "This is a wrong outcome, but in a different reader (requirements) from the clause reading the ruling asked to be fixed, and it predates T48. A citation by number alone gets the same line. The ruling's row does not reach it, so leaving it does not narrow what was asked. The deferral says why it is not fixed here, names T82, and gives its order, as FR-009 requires. The case that exposed it is in plan-done.md, which no review reads."
+    },
+    {
+     "id": "T48-left-443",
+     "summary": "443's plan.md line 25, which cites an id its named feature (435) does not hold, is left as written and is now named NOT FOUND.",
+     "class": "within",
+     "why": "A correct NOT FOUND line is not a wrong outcome, and 443's plan is outside the brief."
+    },
+    {
+     "id": "T48-exit-measurement",
+     "summary": "Closing checks were measured in a detached worktree of HEAD with only T48's three files, because the clone was red from another builder's half-edited T79 file. Static, quick, and the plan crate's lint, format and cover were green. hooks-test's residual 2 suites were each green alone.",
+     "class": "within",
+     "why": "This is the plan's own exit procedure, not a narrowing of the GM's request or the spec. The request and the ruling set no exit for T48, and the landing's gate still decides."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-21",
+   "blocks": [
+    "### T78 (the plan hold refused a shell write that shares only template text with the held section, found by T77 on 2026-11-21: 7 of the 18 replayed task-held Bash refusals matched only text every section shares, each a live hold and a foreground call; and its write-back ran on `PostToolUse` alone, so a command that changed held text and then exited non-zero was written back by nothing)",
+    "### T78 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "the measurement first",
+     "summary": "Before either fix, measure what hook a failing Bash call and a call moved to the background fire (PostToolUseFailure alone; one PostToolUse at the move, nothing at the end, 39 moves).",
+     "class": "within",
+     "why": "The section says T77's brief asked for it; it only settles what the write-back can stand behind and changes no behavior."
+    },
+    {
+     "id": "the write-back on failure",
+     "summary": "checks_hooks runs the held-text write-back on PostToolUseFailure as well as PostToolUse for Bash/Write/Edit; a failed Agent or TaskStop returns before being booked as a launch.",
+     "class": "within",
+     "why": "Fixes a known defect (a command that changed held text and exited non-zero was written back by nothing). The early return for a failed Agent/TaskStop stops the change from creating a new defect (a hold left running for half an hour with no agent to release it). Red first per FR-012; no settings change, since the dispatcher is already registered."
+    },
+    {
+     "id": "the narrowing to held-only text",
+     "summary": "For a live hold and a foreground call, bash_hits counts a held heading, line or quoted string only where the rest of the plan does not also hold it; a pending or dead hold, a background call and a split-heading task are still refused on shared text.",
+     "class": "within",
+     "why": "The hold refused correct work (7 of 18 replayed refusals were writes to other sections that shared only template text), and a check that refuses good work is a defect that fix-as-we-go says to fix. The narrowing applies only where the write-back stands behind the call. It keeps the stricter refusal exactly where T78's own line says to (pending hold, background call), and it adds the split-heading case because that write-back cannot restore. The replay keeps the 8 held-text refusals and passes the 7 shared-text ones, as the brief requires."
+    },
+    {
+     "id": "accepted gap (i): the moved foreground call",
+     "summary": "A live hold's foreground call that outlives its move to the background and then writes held text through shared text alone now passes the pre-call refusal, and nothing writes it back.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Judged on its own. The hold exists so that no verdict is recorded for plan text other than the text reviewed. That purpose is still enforced mechanically: make plan-verdict refuses a verdict whose section digest moved. So the gap's outcome is a re-run review (about 1-4 minutes), not a wrong verdict, and the hold is not gutted. For the measured case (subagents' calls) the write-back cannot follow the call: the harness gives a moved subagent call no end event (39 of 39 measured, no BgEnd), so there is nothing to restore at. That is a limit the guard cannot get around, not an inconvenience. Measured at 0 of 39 moved calls writing plan.md. The only full cover would be to keep refusing shared text for every foreground call, which restores the defect being fixed."
+    },
+    {
+     "id": "accepted gap (ii): the detached writer",
+     "summary": "A foreground command that detaches its writer (&, nohup, setsid, disown) and writes held text after the shell returns, quoting only shared text, now passes with no write-back.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Judged on its own. A detached process's write after the shell returns cannot be seen by a hook that runs at that return, so the write-back could never cover it. Before T78 it was refused only by accident, when its command happened to quote shared template text; one quoting nothing held already passed. The final outcome is still guarded by plan-verdict's digest refusal, at the cost of a re-review, not a wrong verdict. Alternative (c), refusing the narrowing when the command detaches, is a cheaper partial cover that was turned down on a design ground (a second detach reader). That ground alone would not justify an exception, but no exception is needed here: the case that remains open is not a wrong outcome. It is a bounded rework cost, caught by a real mechanical refusal."
+    },
+    {
+     "id": "split-heading write-back deferred to T80",
+     "summary": "The write-back of a task whose headings stand apart in the plan restores nothing yet reports that it did (51 of 898 sections, none in 451); filed as T80, to land before T22, rather than fixed here.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This is a defect that was there before T78 and was found during it. T78 does not make it worse: it keeps those tasks refused on shared text, and plan-verdict refuses any affected verdict. The deferral carries what FR-009 requires: why (the fix needs each span of ordered_sections, outside T78's files), a filed id (T80) and an order (lands before T22). It is fixed inside this feature in a stated order, not carried into later work."
+    },
+    {
+     "id": "closing checks owed",
+     "summary": "Done records make closing-checks red on T79's uncommitted tree* files and make hooks-test still owed; both crates were measured clean on HEAD plus T78's five files alone in a detached worktree.",
+     "class": "within",
+     "why": "Records an exit criterion still owed, not waived. The Exits line still requires closing-checks green, so nothing the spec asked for is narrowed."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-21",
+   "blocks": [
+    "### T76 (the mirror's `.git/l7r-events/_unassigned.jsonl`, written from /diagram before T74 filed a call under its session's clone, held 15 lines the refile's rules place: 1 to 405, 11 to 430 and 1 to 449, none of them in this clone's logs, and 2 to 451 that T74's merge had already put in the clone's 451 log in their re-filed form, measured 2026-11-21 (the refile run without `--from` on a scratch copy, `/tmp/t76/scratch-refile.log`, and an exact-line count of each moved line in each clone's log); and, once T74 landed, no 451 log in the mirror to re-merge, measured 2026-11-21 (`ls` of the mirror's `.git/l7r-events/`))",
+    "### T77 (the plan hold refused an Edit of the heading after a held section, found by T73's builder on 2026-11-21: `edit_hits` in `rust/guard/shared/src/checks/planhold.rs` read `a <= start + t.len()`; the guard log holds 3 refusals of that shape, measured 2026-11-21, method below)",
+    "### T79 (shared::tree's walk split a `\\`-continued line, a `${VAR}`'s braces and a `$(...)` inside a word into segments of their own, and read a `$(mktemp)` directory toward the mirror, found by T50 on 2026-11-21; and it settled a place it could not resolve two ways - a cp's toward where the shell was last known, one of T50's git forms not placed at all (T50's D-d and D-e) - found by T50's plan review, 2026-11-21)",
+    "### T79 Approach (checklist part A)",
+    "### T80 (<why: the finding or measurement that files it>)",
+    "### T80 Approach (checklist part A)",
+    "### T81 (<why: the finding or measurement that files it>)",
+    "### T81 Approach (checklist part A)",
+    "### T82 (<why: the finding or measurement that files it>)",
+    "### T82 Approach (checklist part A)",
+    "### T83 (<why: the finding or measurement that files it>)",
+    "### T83 Approach (checklist part A)",
+    "### T84 (<why: the finding or measurement that files it>)",
+    "### T84 Approach (checklist part A)",
+    "### T85 (<why: the finding or measurement that files it>)",
+    "### T85 Approach (checklist part A)",
+    "### T86 (<why: the finding or measurement that files it>)",
+    "### T86 Approach (checklist part A)",
+    "### T87 (<why: the finding or measurement that files it>)",
+    "### T87 Approach (checklist part A)",
+    "### T88 (<why: the finding or measurement that files it>)",
+    "### T88 Approach (checklist part A)",
+    "### T89 (<why: the finding or measurement that files it>)",
+    "### T89 Approach (checklist part A)",
+    "### T90 (<why: the finding or measurement that files it>)",
+    "### T90 Approach (checklist part A)",
+    "### T91 (<why: the finding or measurement that files it>)",
+    "### T91 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "declared": "round-arbiter",
+   "decisions": [
+    {
+     "id": "ask:451-T79-third-plan-round",
+     "class": "within",
+     "summary": "the round arbiter accepted the plan as it stands"
+    }
+   ]
   }
  ],
  "tasks": {
@@ -13026,6 +13223,216 @@
     }
    ],
    "verdict": "CLEAR"
+  },
+  "T48": {
+   "section_sha256": "5dceeac2030f15e9d19403cb23240c8474f45fd3da2700ceac117b45bc691bf0",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T48-fix",
+     "summary": "Fix the clause reading rather than only file it: measured first over 327 plan.md and plan-done.md files, 5 real clauses naming another feature, 4 of them handing the reviewer the reviewed feature's same-named text unmarked; named() now reads such ids as N's, carried from N or named NOT FOUND, red test first.",
+     "class": "within",
+     "why": "The arbiter's ruling on ask:451-T46-fourth-round says: file the residue, measure first how often such a clause names another feature across specs/*/plan.md and plan-done.md, and fix it only if a real one hands a reviewer the wrong text. The plan measured first, found 4 real wrong-text cases, and fixed the reading as the ruling describes."
+    },
+    {
+     "id": "T48-forms",
+     "summary": "The clause forms read: 'in N's', 'of feature N', and 'from N'.",
+     "class": "within",
+     "why": "The ruling's two forms are examples of 'a clause naming feature N'. 'from N' names a feature by its number in the same way. The plan measured that none of the 8 clauses reads a count as a feature number."
+    },
+    {
+     "id": "T48-unnumbered-run",
+     "summary": "QUALIFIED gets a third branch: a run of ids that no number names, followed by such a clause, belongs entirely to the clause's feature. ANOTHER captures the clause's number, so the part of a numbered run cut off at such a clause belongs to that feature.",
+     "class": "within",
+     "why": "This is how the ruling's residue ('<ids> in N's') gets read as N's. The plan measured every such run among the 8 as holding one id, and a misread costs a line marked with the clause's feature or a NOT FOUND line, never this feature's text unmarked."
+    },
+    {
+     "id": "T48-own-and-other-sources",
+     "summary": "A clause naming the reviewed feature reads as before. A clause naming a source by another name ('in house style's') leaves its ids bare.",
+     "class": "within",
+     "why": "The ruling covers clauses naming a feature by number. For the reviewed feature's own number, the ruling says reading as N's carries the same text, and the plan reports that as unchanged. The other-name branch was measured: 2 real cases, both naming the feature's own work, so no wrong outcome. That is a difference, not a defect."
+    },
+    {
+     "id": "T48-left-T82",
+     "summary": "Requirement-reader gap left and filed as T82 (lands before T22): a bold FR or SC id written without a list dash is not read, so a NOT FOUND line appears where the text exists (449's T050 against 239). It affects 24 specs, features 129 to 271.",
+     "class": "within",
+     "why": "This is a wrong outcome, but in a different reader (requirements) from the clause reading the ruling asked to be fixed, and it predates T48. A citation by number alone gets the same line. The ruling's row does not reach it, so leaving it does not narrow what was asked. The deferral says why it is not fixed here, names T82, and gives its order, as FR-009 requires. The case that exposed it is in plan-done.md, which no review reads."
+    },
+    {
+     "id": "T48-left-443",
+     "summary": "443's plan.md line 25, which cites an id its named feature (435) does not hold, is left as written and is now named NOT FOUND.",
+     "class": "within",
+     "why": "A correct NOT FOUND line is not a wrong outcome, and 443's plan is outside the brief."
+    },
+    {
+     "id": "T48-exit-measurement",
+     "summary": "Closing checks were measured in a detached worktree of HEAD with only T48's three files, because the clone was red from another builder's half-edited T79 file. Static, quick, and the plan crate's lint, format and cover were green. hooks-test's residual 2 suites were each green alone.",
+     "class": "within",
+     "why": "This is the plan's own exit procedure, not a narrowing of the GM's request or the spec. The request and the ruling set no exit for T48, and the landing's gate still decides."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T78": {
+   "section_sha256": "2ec4b6f516614287d18cea95da1173c287b1388e38e77a4afedd612cfa946d82",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "the measurement first",
+     "summary": "Before either fix, measure what hook a failing Bash call and a call moved to the background fire (PostToolUseFailure alone; one PostToolUse at the move, nothing at the end, 39 moves).",
+     "class": "within",
+     "why": "The section says T77's brief asked for it; it only settles what the write-back can stand behind and changes no behavior."
+    },
+    {
+     "id": "the write-back on failure",
+     "summary": "checks_hooks runs the held-text write-back on PostToolUseFailure as well as PostToolUse for Bash/Write/Edit; a failed Agent or TaskStop returns before being booked as a launch.",
+     "class": "within",
+     "why": "Fixes a known defect (a command that changed held text and exited non-zero was written back by nothing). The early return for a failed Agent/TaskStop stops the change from creating a new defect (a hold left running for half an hour with no agent to release it). Red first per FR-012; no settings change, since the dispatcher is already registered."
+    },
+    {
+     "id": "the narrowing to held-only text",
+     "summary": "For a live hold and a foreground call, bash_hits counts a held heading, line or quoted string only where the rest of the plan does not also hold it; a pending or dead hold, a background call and a split-heading task are still refused on shared text.",
+     "class": "within",
+     "why": "The hold refused correct work (7 of 18 replayed refusals were writes to other sections that shared only template text), and a check that refuses good work is a defect that fix-as-we-go says to fix. The narrowing applies only where the write-back stands behind the call. It keeps the stricter refusal exactly where T78's own line says to (pending hold, background call), and it adds the split-heading case because that write-back cannot restore. The replay keeps the 8 held-text refusals and passes the 7 shared-text ones, as the brief requires."
+    },
+    {
+     "id": "accepted gap (i): the moved foreground call",
+     "summary": "A live hold's foreground call that outlives its move to the background and then writes held text through shared text alone now passes the pre-call refusal, and nothing writes it back.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Judged on its own. The hold exists so that no verdict is recorded for plan text other than the text reviewed. That purpose is still enforced mechanically: make plan-verdict refuses a verdict whose section digest moved. So the gap's outcome is a re-run review (about 1-4 minutes), not a wrong verdict, and the hold is not gutted. For the measured case (subagents' calls) the write-back cannot follow the call: the harness gives a moved subagent call no end event (39 of 39 measured, no BgEnd), so there is nothing to restore at. That is a limit the guard cannot get around, not an inconvenience. Measured at 0 of 39 moved calls writing plan.md. The only full cover would be to keep refusing shared text for every foreground call, which restores the defect being fixed."
+    },
+    {
+     "id": "accepted gap (ii): the detached writer",
+     "summary": "A foreground command that detaches its writer (&, nohup, setsid, disown) and writes held text after the shell returns, quoting only shared text, now passes with no write-back.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Judged on its own. A detached process's write after the shell returns cannot be seen by a hook that runs at that return, so the write-back could never cover it. Before T78 it was refused only by accident, when its command happened to quote shared template text; one quoting nothing held already passed. The final outcome is still guarded by plan-verdict's digest refusal, at the cost of a re-review, not a wrong verdict. Alternative (c), refusing the narrowing when the command detaches, is a cheaper partial cover that was turned down on a design ground (a second detach reader). That ground alone would not justify an exception, but no exception is needed here: the case that remains open is not a wrong outcome. It is a bounded rework cost, caught by a real mechanical refusal."
+    },
+    {
+     "id": "split-heading write-back deferred to T80",
+     "summary": "The write-back of a task whose headings stand apart in the plan restores nothing yet reports that it did (51 of 898 sections, none in 451); filed as T80, to land before T22, rather than fixed here.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This is a defect that was there before T78 and was found during it. T78 does not make it worse: it keeps those tasks refused on shared text, and plan-verdict refuses any affected verdict. The deferral carries what FR-009 requires: why (the fix needs each span of ordered_sections, outside T78's files), a filed id (T80) and an order (lands before T22). It is fixed inside this feature in a stated order, not carried into later work."
+    },
+    {
+     "id": "closing checks owed",
+     "summary": "Done records make closing-checks red on T79's uncommitted tree* files and make hooks-test still owed; both crates were measured clean on HEAD plus T78's five files alone in a detached worktree.",
+     "class": "within",
+     "why": "Records an exit criterion still owed, not waived. The Exits line still requires closing-checks green, so nothing the spec asked for is narrowed."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T79": {
+   "section_sha256": "fc08297757d7f34dff8edb642cfd6f97ddc7e2e62a3b0caef4213c7c55e86a87",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "word-readings",
+     "summary": "The walk reads each word whole: a backslash-continued line is one command, ${...} is one word, a $(...) inside a word is walked as a substitution, and a $(mktemp ...) is the place mktemp makes (by uutils' forms).",
+     "class": "within",
+     "why": "This is T79's own line: the defects it names, fixed. Unchanged from the last round."
+    },
+    {
+     "id": "brace-pwd-and-keyword-bodies",
+     "summary": "A brace expansion stays in its word. $(pwd) or `pwd` is the shell's place. A loop's, if's or function's body is read past its keyword. A target's segment starts at its command (bind::from_command, shown). gate-write's head_of reads past timeout N.",
+     "class": "within",
+     "why": "Each is a found defect fixed in the task (fix as we go), and each puts a verdict where bash puts the write. Re-probed through bin-r4 in this reviewer's run: for-loop, if and function bodies writing the mirror are now refused (HEAD passed the first two)."
+    },
+    {
+     "id": "resolve-then-D6",
+     "summary": "The arm for an unresolved place is replaced. The walk first resolves what the command's text resolves (literal loop values, an unassigned name as empty or the guard's environment, ${N:?}/${N:-W}/${N%lit}, dirname/basename of a known X, $PWD after each cd, bodies of loops, ifs and functions). What stays unknown (read/mapfile/printf -v/+=, a loop over a substitution, $RANDOM, past source/eval, a substitution's value) keeps spec 204's D6.",
+     "class": "within",
+     "why": "This is the cure the last round asked for. Re-run in this reviewer's run through /tmp/t79/bin-r4 standing in the mirror, sid t and nobody: all five probes are refused or rewritten. So are last round's other forms that passed: cp /tmp/a $(git rev-parse --show-toplevel)/f, echo x > $(echo /diagram)/f, touch $(basename /tmp/q/x), cd $(somewhere) && git commit. For what stays unknown, D6 is spec 204's conservative direction. The 29 bx rows pass, 29 of 29 for each sid (r4.b29.{t,nobody}.tsv, re-counted). The one form still passed, cp /tmp/a \"$(git rev-parse --show-toplevel)/f\", is a quoted word holding a shell character, which is T83's class (ruled below). The other three passes are no write at all, as bash runs them: echo x > $UNSET/f, sed -i s/a/b/ $F and cp /tmp/a $DEST."
+    },
+    {
+     "id": "unassigned-name-empty",
+     "summary": "A name nobody assigns takes its value in the guard's environment, else empty. So $UNSET/f is /f, and CLAUDE_PROJECT_DIR is read as the project's directory although the Bash tool's shell leaves it unset.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This is where bash puts the write, as ruled last round. The premise is measured: the names only the Bash tool's shell sets (CLAUDE_JOB_DIR, CLAUDE_CODE_EXECPATH, CLAUDE_CODE_PLUGIN_DIRS, the messaging socket, GIT_EDITOR, and others) are none of them a place in the mirror. That was re-read in this reviewer's shell. The recorded env-shell.txt holds names only, and a grep of it for /diagram is empty. The CLAUDE_PROJECT_DIR misreading errs in the refusing direction, and the command it refuses writes /f, which is not good work. Not a defect."
+    },
+    {
+     "id": "cd-unset-goes-home",
+     "summary": "cd $UNSET is read as bash's cd with no word, that is $HOME, so cd $UNSET && git commit standing in the mirror is now allowed. Spec 204 FR-002 listed an unassigned variable as unresolvable, and its acceptance line names this exact command as not allowed silently.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This narrows spec 204 FR-002's letter, though constraint 2 calls FR-002 kept. D6's stated purpose is that the precision fix cannot become a bypass into main, and it does not here. In this reviewer's shell, bash -c 'cd /tmp; cd $UNSET && pwd' printed /home/agent, so the commit lands in $HOME, not in the mirror. The probe through bin-r4 is allowed, and HEAD refused it. The same yardstick passed $UNSET/f -> /f. The true unknown (cd $(somewhere)) stays refused and pinned. The block's cost paragraph discloses the change."
+    },
+    {
+     "id": "git-no-path-pins",
+     "summary": "git clone $R and git worktree add --detach $W, with R and W unset, are no write. git -C /x/$U commit is not in the mirror. Their unresolved pins move to $(cat url), $(cat w) and git -C <mirror>/$U.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Each pin moves to what bash and git do: a usage error with no tree made, or a place outside the mirror. The unresolved forms stay pinned under D6. Ruled the same way last round."
+    },
+    {
+     "id": "pins-in-other-suites",
+     "summary": "Pins move in gm_tree_hooks, main_tree_hooks, readme_hooks (with its shell twins) and gate_write_hooks, plus main-tree fixture row 59 (rewrote -> allowed). Each keeps its old meaning through a form that stays unknown (read NAME, cd $(somewhere)).",
+     "class": "within",
+     "why": "A verdict changing as a bug is fixed is expected (fix as we go). Each moved pin either keeps its fail-closed meaning through a truly unknown form or moves to where bash writes."
+    },
+    {
+     "id": "twice-assigned-each-value",
+     "summary": "A name assigned more than once is judged at each of its values. D=/diagram/x; D=/tmp/y; touch $D/f standing in the mirror, a scratch write that HEAD passed, is now refused. The block lists this under 'its measured cost in full', not under Found and left.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "It closes a real false allow (F=/diagram/a; echo x > $F; F=/tmp/b) and judges if/else branches both ways, which is good. But the refusal it leaves is a wrong outcome, a check refusing good work (constitution XIV v2.36.0). It contradicts the block's own goal 1, 'no scratch write refused because a variable stands in its name'. It is newly introduced: HEAD allowed it and bin-r4 refuses it (p1.r4.tsv row 22, re-run). It is not impossible to avoid, because the command's text shows a straight-line reassignment with no branch between. Last round held that 'none in the corpus' counts how often a wrong verdict happens, not whether it is wrong, and the same standard applies here. The refusing direction makes it cheaper, but not exempt from FR-009. The cure needs no code: carry it as a Found and left item with why it is not fixed here, a filed task id and its order (FR-009). Fixing it in T79 is the other cure."
+    },
+    {
+     "id": "binding-cap-64",
+     "summary": "The walk binds a many-valued name up to 64 values. Past that, it falls back. The block does not say to what, and the cost paragraph does not list it.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "Measured in this reviewer's run through bin-r4 and bin-head, standing in the mirror, sid nobody, main-tree alone and all guards. A loop over 65 or 70 literal scratch values (for f in /tmp/q/1 ... /tmp/q/70; do touch $f; done) is refused by bin-r4 and allowed by HEAD. 63 values pass. So past the cap the name falls to D6. That keeps the mirror safe (a mirror value in position 1 or 70 is refused, as is a nested '.' value), but it refuses scratch work HEAD passed. The block calls its cost paragraph 'its measured cost in full', and it does not list this. The 'what stays unknown' list does not name the cap either. Bounding the work is a fair design, but the wrong outcome it leaves must be stated and either fixed (judge a single name's values linearly, for example) or carried as a Found and left item with why, a filed id and its order (FR-009). The block must also name the cap's fallback."
+    },
+    {
+     "id": "defer-T83",
+     "summary": "A quoted word holding a space or a shell character is blanked, so the destination is misread. cp /tmp/a \"/diagram/x y\" passes, and so does cp /tmp/a \"$(git rev-parse --show-toplevel)/f\" (re-probed). Left as T83, to land before T22.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This is a pre-existing defect. The why is concrete: the blanking keeps commit messages, sed scripts and programs from being read as paths by every guard, so a fix needs its own corpus replay. It is filed with an id and an order (FR-009)."
+    },
+    {
+     "id": "defer-T87",
+     "summary": "make-only refuses a guard file's name (Makefile, dev/work-budget.json, a guard's source) written into a $(mktemp -d) place or a scratch copy in a loop's body (12 replay moves). Left as T87, to land before T22.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "HEAD refuses the same write to a literal scratch path. The rule is the guard-file list's, read by layer 3 and make-only alike, outside the walk. It carries why, a filed id and an order."
+    },
+    {
+     "id": "defer-T89",
+     "summary": "A python3 -c program that writes a place it computes from sys.argv is judged where the shell stands. Now that loop bodies are seen, three corpus scratch writes are newly refused (bx#54240, bx#58694, ux#2209). Left as T89, to land before T22.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "HEAD refuses the same program outside a loop. These three refusals come from fixing a false allow (unseen loop bodies), and keeping that false allow would be the worse defect. The rule is py_c's, outside the walk, and needs its own replay. It carries why, a filed id and an order."
+    },
+    {
+     "id": "defer-T90",
+     "summary": "gate-write reads a target's command from a segment cut at 120 characters. A make behind long VAR=value prefixes, in a loop's body, is newly refused (ux#1371). Left as T90, to land before T22.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "HEAD refuses the same line outside a loop. The why is concrete: readme_hooks' kept-segment rule reads the cut, so the fix is a field of its own on the target. It carries why, a filed id and an order."
+    },
+    {
+     "id": "readme-mktemp-duplicate",
+     "summary": "readme_hooks.rs substitutes $(mktemp) itself, as the walk now does. Not filed.",
+     "class": "within",
+     "why": "The two agree, so there is no wrong outcome. A difference that works is not a defect."
+    },
+    {
+     "id": "house-style-replay-artifact",
+     "summary": "house-style's /tmp/ 'outside' prefix makes three replay moves an artifact of a mirror under /tmp. On their real paths, a direct run shows both binaries correcting them.",
+     "class": "within",
+     "why": "A limit of the measurement, named so the moves are read correctly. Not a defect of the guard."
+    }
+   ],
+   "verdict": "BLOCKED"
   }
  }
 }

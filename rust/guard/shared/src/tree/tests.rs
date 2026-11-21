@@ -207,9 +207,11 @@ fn the_walk_reads_each_tool_and_its_paths() {
         walk("touch ~/f", None, &m, h).targets[0].path.as_deref(),
         Some("/home/u/f")
     );
+    // a name no one assigns is empty, as bash reads it, so `$UNSET/f` is `/f` (451 T79's second round; what stays unknown keeps
+    // spec 204's D6, in `tests/binds.rs`)
     assert_eq!(
         walk("touch $UNSET/f", Some(&m), &m, h).targets[0].class,
-        "main"
+        "elsewhere"
     );
     assert_eq!(walk("touch /a/$UNSET", None, &m, h).targets[0].how, "named");
     assert_eq!(
@@ -353,6 +355,26 @@ fn each_verdict_and_its_words() {
 }
 
 #[test]
+fn a_git_c_place_the_walk_cannot_resolve_is_judged_by_what_it_knows() {
+    // 451 T79's one rule: a `-C` whose start is in the mirror is the mirror, named; one whose start is outside the mirror's tree
+    // is no write there
+    let (_dir, m, c) = mirror("c-unresolved");
+    let unnamed = judge(
+        &input(&format!("git -C {m}/$U commit"), &m),
+        &m,
+        Some(&c),
+        "/h",
+        true,
+    );
+    assert_eq!((unnamed.verdict, unnamed.reason), ("refuse", "named-main"));
+    let scratch = judge(&input("git -C /x/$U commit", &m), &m, Some(&c), "/h", true);
+    assert_eq!(
+        (scratch.verdict, scratch.reason),
+        ("allow", "no-write-in-main")
+    );
+}
+
+#[test]
 fn a_rewrite_moves_the_write_and_is_re_judged() {
     let (_dir, m, c) = mirror("rewrite");
     let h = "/h";
@@ -415,8 +437,6 @@ fn a_rewrite_moves_the_write_and_is_re_judged() {
         true,
     );
     assert!(via.reason == "shape" && explain(&via, &m).contains("cds into"));
-    let unnamed = judge(&input("git -C /x/$U commit", &m), &m, Some(&c), h, true);
-    assert_eq!((unnamed.verdict, unnamed.reason), ("refuse", "named-main"));
     let none = super::Verdict {
         clone: None,
         ..named.clone()
@@ -639,8 +659,10 @@ fn a_git_subcommand_writes_where_a_tree_changes_and_not_for_git_alone() {
     assert_eq!(at("git clone -q https://h/o/r.git"), here("/r"));
     assert_eq!(at("git clone -q --bare /src/y"), here("/y.git"));
     assert_eq!(at("git clone --mirror h:o/r.git"), here("/r.git"));
-    // a name the walk cannot read: the clone lands where git runs
-    assert_eq!(at("git clone $R"), here(""));
+    // a name the walk cannot read: the clone lands where git runs (451 T79's second round: `$R` unassigned is empty, a `git clone`
+    // with no repository, which git refuses, so a substitution stands for the name it cannot read)
+    assert_eq!(at("git clone $(cat url)"), here(""));
+    assert!(at("git clone $R").is_empty());
     assert_eq!(at("git init -q /tmp/i"), named("/tmp/i"));
     assert_eq!(at("git init -q -b main --template /t d"), here("/d"));
     assert_eq!(at("git init -q --bare /tmp/b.git"), named("/tmp/b.git"));
@@ -692,7 +714,7 @@ fn a_git_subcommand_that_writes_only_git_or_nothing_is_no_write() {
         "git worktree unlock /tmp/w",
         "git worktree repair",
         "git worktree add",
-        "git worktree add -q /tmp/${X}/w",
+        "git clone",
         "git init",
         "git init -q",
         "git init -q .",
@@ -799,27 +821,34 @@ fn a_clone_lands_where_its_operands_say() {
         )),
         vec![(Some(format!("{sp}/clonetest")), "elsewhere")]
     );
-    // the walk's segments split `${PAT}` at its braces, so the clone's operands are cut: not placed, never where the shell stands
-    assert!(clones(&format!(
-        "SP={sp}; {pat}; rm -rf $SP/clonetest; time git clone -q --filter=blob:none \"https://x-access-token:${{PAT}}@github.com/o/diagram\" $SP/clonetest 2>&1 | tail -3"
-    ))
-    .is_empty());
-    assert!(clones(&format!(
-        "SP={sp} && {pat} && git clone -q --filter=blob:none --no-checkout \"https://x:${{PAT}}@github.com/o/diagram\" $SP/repro2 && git -C $SP/repro2 checkout -q \"$SHA\" -- a"
-    ))
-    .is_empty());
-    assert!(walked("git clone -q \\\n  https://h/o/r.git /tmp/c").is_empty());
-    assert!(walked("git clone -q /src/y \\\n  /tmp/c").is_empty());
-    assert!(walked("git init -q \\\n  /tmp/i").is_empty());
-    // a place the walk cannot resolve is not read toward the mirror (D6) for these forms, which HEAD read as no write: T50's
-    // replay moved tx#63, a scratch clone standing in the mirror, allowed -> refused that way (measured 2026-11-21)
-    for open in [
-        "T=$(mktemp -d); git clone -q . $T/clone",
-        "git worktree add --detach $W",
-        "cd $X && git switch other",
-        "cd $X && git init -q --bare",
+    // `${PAT}` is one word with the URL it stands in (451 T79; T50 read it cut at its braces, not placed): the clone lands where
+    // its second operand says (the `\`-continued forms T50 read cut are T79's, in `tests/words.rs`)
+    assert_eq!(
+        clones(&format!(
+            "SP={sp}; {pat}; rm -rf $SP/clonetest; time git clone -q --filter=blob:none \"https://x-access-token:${{PAT}}@github.com/o/diagram\" $SP/clonetest 2>&1 | tail -3"
+        )),
+        vec![(Some(format!("{sp}/clonetest")), "elsewhere")]
+    );
+    assert_eq!(
+        clones(&format!(
+            "SP={sp} && {pat} && git clone -q --filter=blob:none --no-checkout \"https://x:${{PAT}}@github.com/o/diagram\" $SP/repro2 && git -C $SP/repro2 checkout -q \"$SHA\" -- a"
+        )),
+        vec![(Some(format!("{sp}/repro2")), "elsewhere")]
+    );
+    // a place of these forms the walk cannot resolve is settled by the walk's one rule, as every tool's is (451 T79,
+    // `tests/words.rs`; T50 left it unplaced, since D6 read tx#63's scratch clone toward the mirror - its `$(mktemp -d)` is
+    // scratch since T79): a tree word nothing is known of, and one where the shell stands after a `cd` the walk cannot read,
+    // land where the shell was last known (spec 204's D6; 451 T79's second round, its plan review: T79's first round read the
+    // first as not the mirror's); `git worktree add --detach $W`, `$W` unassigned, names no tree, which git refuses
+    assert!(walked("git worktree add --detach $W").is_empty());
+    for (unknown, class) in [
+        ("git worktree add --detach $(cat w)", "main"),
+        ("cd $(somewhere) && git switch other", "main"),
+        ("cd $(somewhere) && git init -q --bare", "main"),
     ] {
-        assert!(walked(open).is_empty(), "{open}");
+        let t = walked(unknown);
+        let got: Vec<_> = t.iter().map(|t| (t.path.as_deref(), t.class)).collect();
+        assert_eq!(got, [(None, class)], "{unknown}");
     }
     let into = walked(&format!("git clone -q {m} .clones/x"));
     assert_eq!(
@@ -902,3 +931,7 @@ fn a_path_is_resolved_whether_or_not_it_exists() {
     assert_eq!(realpath(&d.join("a/../b/./c")), real.join("b/c"));
     assert_eq!(realpath(&real), real);
 }
+
+mod words;
+
+mod binds;

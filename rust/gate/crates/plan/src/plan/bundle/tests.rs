@@ -788,3 +788,49 @@ fn a_number_then_a_task_s_possessive_names_that_feature_s_id() {
             && cited.contains("- **D8**: NOT FOUND")
     );
 }
+
+/// Ids inside a clause naming another feature by its number ("FR-010 of feature 134", "spec D1 of feature 207", "FR-025 of 132") are
+/// that feature's: carried from it or named NOT FOUND, never this feature's same-named id (451 T48, measured 2026-11-21 over every
+/// plan: 4 of the 5 real clauses carried the reviewed feature's own text unmarked, 319's FR-010 among them).
+#[test]
+fn ids_in_a_clause_naming_another_feature_are_that_feature_s() {
+    let (root, dir) = feature();
+    let other = root.join("specs/134-x");
+    std::fs::create_dir_all(&other).unwrap();
+    std::fs::write(other.join("spec.md"), "- **FR-001**: THEIRS.\n").unwrap();
+    std::fs::write(
+        other.join("plan.md"),
+        "**D1 - their baseline.** The last full run.\n",
+    )
+    .unwrap();
+    let out = scratch("out");
+    let cited_of = |task: &str, body: &str| {
+        let m = build(&dir, &out, task, &under(&[(task, body)]), &[], "h").unwrap();
+        read(m.parent().unwrap(), "spec-cited.md")
+    };
+    // the shapes of 319, 415 and 133: a bare id, then the clause
+    let bare = cited_of("T11", "A second serialization (FR-001 of feature 134); the baseline (spec D1 of feature 134); FR-002 of 132.\n");
+    assert!(bare.contains("<!-- feature 134 -->\n- **FR-001**: THEIRS."));
+    assert!(bare.contains("<!-- feature 134 -->\n**D1 - their baseline.**"));
+    assert!(bare.contains(
+        "<!-- feature 132 -->\n- **FR-002**: NOT FOUND - feature 132 has no directory under specs/"
+    ));
+    assert!(
+        !bare.contains("The sty.") && !bare.contains("D1 - shared.") && !bare.contains("its lane")
+    );
+    // a number's run cut at a clause naming another feature: the part after the cut is the clause's
+    let cut = cited_of("T12", "449 T233's FR-003, and D3 in 134's sections.\n");
+    assert!(cut.contains("<!-- feature 449 -->\n- **FR-003**: NOT FOUND"));
+    assert!(cut.contains("<!-- feature 134 -->\n- **D3**: NOT FOUND - specs/134-x holds no D3"));
+    assert!(!cut.contains("Something else") && !cut.contains("the well."));
+    // this feature's run cut so: its own ids carried, the clause's taken from the clause's feature
+    let own = cited_of("T13", "999's FR-001, FR-003, and D1 in 134's sections.\n");
+    assert!(own.contains("The sty.") && own.contains("Something else"));
+    assert!(
+        own.contains("<!-- feature 134 -->\n**D1 - their baseline.**")
+            && !own.contains("D1 - shared.")
+    );
+    // a clause naming this feature is its own: carried, unmarked
+    let mine = cited_of("T14", "D3 and FR-002 of feature 999.\n");
+    assert!(mine.contains("D3 - the well.") && mine.contains("its lane") && !mine.contains("<!--"));
+}

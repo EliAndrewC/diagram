@@ -386,6 +386,76 @@ fn an_edit_is_held_only_where_it_overlaps_the_section() {
     assert_eq!(misjudged, Vec::<&(&str, bool)>::new());
 }
 
+/// A shell write is refused on text standing only in the held section where the write-back would catch the rest - a live hold and a
+/// foreground call - and on any held text otherwise (451 T78, found by T77 on 2026-11-21: 7 of 18 replayed refusals matched only
+/// text every section shares, each a live hold and a foreground call, so a write to another section was refused).
+#[test]
+fn a_shell_write_on_shared_text_is_refused_only_where_nothing_writes_it_back() {
+    let root = clone_at("shared");
+    std::fs::create_dir_all(root.join("specs/900-a")).unwrap();
+    let budget = "8. **The budget.** One landing.";
+    std::fs::write(
+        root.join("specs/900-a/plan.md"),
+        format!("# plan\n\n## T01 the bath\n\nheld body of the section stands here\n\n{budget}\n\n## T02 other\n\nother text\n\n{budget}\n"),
+    )
+    .unwrap();
+    let shared = format!("printf '%s\\n' '{budget}' | tee -a specs/900-a/plan.md");
+    let unique = "tee specs/900-a/plan.md # held body of the section stands here";
+    let heading = "sed -i 's/## T01 the bath/x/' specs/900-a/plan.md";
+    let pending = json!({"feature": "900-a", "task": "T01", "t": 990.0, "state": "pending"});
+    let dead = running("T01", &[], -1000.0);
+    // (hold, command, run_in_background, refused)
+    let cases = [
+        (running("T01", &[], 900.0), shared.as_str(), false, false),
+        (
+            running("", &["## T01 the bath"], 900.0),
+            shared.as_str(),
+            false,
+            false,
+        ),
+        (running("T01", &[], 900.0), shared.as_str(), true, true),
+        (pending.clone(), shared.as_str(), false, true),
+        (dead, shared.as_str(), false, true),
+        (running("T01", &[], 900.0), unique, false, true),
+        (
+            running("", &["## T01 the bath"], 900.0),
+            unique,
+            false,
+            true,
+        ),
+        (running("T01", &[], 900.0), heading, false, true),
+        (pending, unique, true, true),
+    ];
+    // the cases misjudged, by their place in `cases`
+    let misjudged: Vec<usize> = (0..cases.len())
+        .filter(|&i| {
+            let (h, cmd, bg, refused) = &cases[i];
+            let state = json!({"plan_holds": {"h": h}});
+            let ti = json!({"command": cmd, "run_in_background": bg});
+            refusal(&state, Some(&root), "Bash", &ti, 1000.0, false).is_empty() == *refused
+        })
+        .collect();
+    assert_eq!(misjudged, Vec::<usize>::new());
+    // a task's own headings apart in the plan: its joined section stands nowhere whole, so nothing is read as outside it - refused
+    std::fs::write(
+        root.join("specs/900-a/plan.md"),
+        format!("# plan\n\n## T01 the bath\n\nheld body\n\n{budget}\n\n## T02 other\n\n{budget}\n\n## T01 notes\n\nmore\n"),
+    )
+    .unwrap();
+    let state = json!({"plan_holds": {"h": running("T01", &[], 900.0)}});
+    assert!(!refusal(
+        &state,
+        Some(&root),
+        "Bash",
+        &json!({"command": shared}),
+        1000.0,
+        false
+    )
+    .is_empty());
+    std::fs::remove_file(root.join("specs/900-a/plan.md")).unwrap();
+    assert!(super::outside(&root.join("specs/900-a/plan.md"), &[]).is_none());
+}
+
 /// `f`'s answer, or a failure once it runs past 20 s (feature 449 T185: a quadratic search, or a scan over an error it repeats, must
 /// fail the test rather than hang it).
 fn within<T: Send + 'static>(f: impl FnOnce() -> T + Send + 'static) -> T {

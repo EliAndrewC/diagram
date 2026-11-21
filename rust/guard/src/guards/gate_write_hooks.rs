@@ -296,11 +296,21 @@ fn gate_refusal(event: &Event, c: &Ctx) -> Option<String> {
     shell_write(event, cmd, c)
 }
 
-/// The command and, for git, its subcommand, of a walk target's segment: past `VAR=value` and the wrappers the walk reads past.
+/// The command and, for git, its subcommand, of a walk target's segment: past `VAR=value` and the wrappers the walk reads past,
+/// `timeout` with its duration among them (451 T79: `timeout 60 make task-add` was refused as a shell write of `.`, 2026-11-21).
 fn head_of(segment: &str) -> (&str, &str) {
-    let mut words = segment.split_whitespace().skip_while(|w| {
-        w.contains('=') || matches!(*w, "sudo" | "env" | "command" | "exec" | "nohup" | "time")
-    });
+    let mut words = segment.split_whitespace().peekable();
+    while let Some(w) = words.next_if(|w| {
+        w.contains('=')
+            || matches!(
+                *w,
+                "sudo" | "env" | "command" | "exec" | "nohup" | "time" | "timeout"
+            )
+    }) {
+        if w == "timeout" {
+            words.next();
+        }
+    }
     let head = words.next().unwrap_or("");
     let head = head.rsplit('/').next().unwrap_or(head);
     if head != "git" {

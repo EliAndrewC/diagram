@@ -5,6 +5,7 @@
 //! comments, kept in git history.
 
 use std::collections::HashMap;
+use std::fmt::Write as _;
 use std::path::{Component, Path, PathBuf};
 use std::sync::LazyLock;
 
@@ -12,6 +13,7 @@ use fancy_regex::{Captures, Regex};
 
 use super::shape::strip_heredocs;
 
+mod bind;
 mod git;
 mod py_c;
 mod python;
@@ -36,12 +38,24 @@ const WRAPPERS: [&str; 9] = [
     "sudo", "nohup", "setsid", "env", "command", "exec", "time", "nice", "builtin",
 ];
 
+/// An assignment at a command's start - a loop's, an `if`'s and a function's body's too (451 T79's second round: `do
+/// D=/tmp/k-$q; mkdir -p $D` was read as nothing known), `export`, `local`, `declare`, `typeset` and `readonly` alike.
 static ASSIGN: LazyLock<Regex> = LazyLock::new(|| {
     re(
-        r#"(?:^|[;&|\n(]|&&|\|\|)\s*(?:export\s+)?([A-Za-z_]\w*)=(?:"([^"\n]*)"|'([^'\n]*)'|([^\s;&|)]*))"#,
+        r#"(?:^|[;&|\n(]|(?<!\$)\{|\b(?:do|then|else)\s)\s*(?:(?:export|local|declare|typeset|readonly)\s+(?:-\w+\s+)*)?([A-Za-z_]\w*)=(?:"([^"\n]*)"|'([^'\n]*)'|([^\s;&|)]*))"#,
     )
 });
 static VAR: LazyLock<Regex> = LazyLock::new(|| re(r"\$\{(\w+)\}|\$(\w+)"));
+/// A `\` and the newline after it, which bash drops so the line goes on, past an even run of `\` before it - an escaped backslash,
+/// after which the newline ends the command (451 T79: the walk read `cp /tmp/a \` and the mirror's `b` on the next line as two
+/// commands, the write of `b` unseen, observed 2026-11-21).
+static CONTINUED: LazyLock<Regex> = LazyLock::new(|| re(r"(?<!\\)((?:\\\\)*)\\\n"));
+/// An assignment's value that is a `$(mktemp ...)` (or backquoted), its arguments the capture (451 T79).
+static MKTEMP: LazyLock<Regex> =
+    LazyLock::new(|| re(r#"^["']?(?:\$\(|`)\s*mktemp\b([^()`\n]*?)\s*(?:\)|`)"#));
+/// An assignment's value that is a `$(dirname ...)` or `$(basename ...)`, its text the capture (451 T79's second round).
+static DIR_BASE: LazyLock<Regex> =
+    LazyLock::new(|| re(r#"^["']?(?:\$\(|`)\s*((?:dirname|basename)\s[^()`\n]*?)\s*(?:\)|`)"#));
 static QUOTED: LazyLock<Regex> = LazyLock::new(|| re(r#"(?s)(["'])((?:\\.|(?!\1).)*)\1"#));
 static PLAIN_QUOTE_BODY: LazyLock<Regex> = LazyLock::new(|| re(r"^[^\s;|&()<>`\n]*$"));
 static REDIRECT: LazyLock<Regex> = LazyLock::new(|| re(r"(?<![<>])\d?>{1,2}\|?\s*([^\s;&|()<>]+)"));
@@ -126,7 +140,8 @@ fn quotes_to_paths(cmd: &str, mut programs: Vec<Program>) -> (String, Vec<Progra
             if found(&PYTHON_C_BEFORE, &cmd[..at]) {
                 programs.push((quote.chars().next().unwrap_or('"'), body.to_owned()));
                 format!("__py_c_{}__", programs.len() - 1)
-            } else if found(&PLAIN_QUOTE_BODY, body) {
+            } else if !body.is_empty() && found(&PLAIN_QUOTE_BODY, body) {
+                // an empty quote stays a word (451 T79: `cd ""` stays where it is, bash's `null directory`, never `cd` home)
                 body.to_owned()
             } else {
                 quote.repeat(2)
@@ -136,18 +151,79 @@ fn quotes_to_paths(cmd: &str, mut programs: Vec<Program>) -> (String, Vec<Progra
     (text, programs)
 }
 
-fn sanitize(cmd: &str) -> (String, Vec<Program>) {
-    let mut programs = Vec::new();
-    let carried = carry_heredocs(cmd, &mut programs);
-    let (text, programs) = quotes_to_paths(&carried, programs);
+/// A command whose heredoc bodies are carried out (`carry_heredocs`) as the walk splits it.
+fn sanitize(carried: &str, programs: Vec<Program>) -> (String, Vec<Program>) {
+    let (text, programs) = quotes_to_paths(carried, programs);
+    // after the heredoc bodies and the quoted strings are out of the text, so a `\` at the end of a body's line is the body's
+    let text = joined(&text);
     let text = DUP_FD.replace_all(&text, " ");
     (DEV_NULL.replace_all(&text, " ").into_owned(), programs)
 }
 
+/// The text with each `\`-continued line joined to the next, as bash reads it (451 T79).
+fn joined(text: &str) -> String {
+    CONTINUED.replace_all(text, "${1}").into_owned()
+}
+
 type Env = HashMap<String, String>;
+
+/// Where `mktemp` with these arguments makes its file or directory (451 T79): the temp directory - `$TMPDIR`, the command's own or
+/// the process's, else `/tmp` - with no template, `-p DIR` or `--tmpdir=DIR` in its place (`-t` preferring `$TMPDIR` to `-p`), a
+/// template with neither the path it names; None where that is relative - it lands where the shell stands as mktemp runs, which an
+/// assignment's reading does not know. Measured 2026-11-21 (coreutils `mktemp -u` on each form, `TMPDIR` set and unset): no
+/// template made `$TMPDIR/tmp.XXXXXXXXXX` (`/tmp/...` unset), `-p D` with or without one `D/...`, `-t` and `--tmpdir` with one
+/// `$TMPDIR/...` (`-t -p D` too), a bare relative template a name in the cwd.
+fn mktemp_place(args: &str, env: &Env, home: &str) -> Option<String> {
+    let mut words = args.split_whitespace().map(strip_quote_chars);
+    let (mut dir, mut tmpdir, mut t_flag, mut template) = (None, false, false, None);
+    while let Some(w) = words.next() {
+        if let Some(d) = w.strip_prefix("--tmpdir=") {
+            (dir, tmpdir) = (Some(d), true);
+        } else if w == "--tmpdir" {
+            tmpdir = true;
+        } else if w.starts_with("--") {
+        } else if let Some(cluster) = w.strip_prefix('-').filter(|c| !c.is_empty()) {
+            t_flag |= cluster.contains('t');
+            if let Some(k) = cluster.find('p') {
+                let glued = &cluster[k + 1..];
+                dir = if glued.is_empty() {
+                    words.next()
+                } else {
+                    Some(glued)
+                };
+                tmpdir = true;
+            }
+        } else {
+            template = Some(w);
+        }
+    }
+    let temp = env
+        .get("TMPDIR")
+        .cloned()
+        .or_else(|| crate::env::opt("TMPDIR"))
+        .filter(|d| !d.is_empty());
+    let dir = dir.map(str::to_owned);
+    let base = if t_flag { temp.or(dir) } else { dir.or(temp) };
+    let place = match template {
+        Some(t) if !tmpdir && !t_flag => t.to_owned(),
+        t => join(
+            &base.unwrap_or_else(|| "/tmp".to_owned()),
+            t.unwrap_or("tmp.XXXXXXXXXX"),
+        ),
+    };
+    expand(&place, env, home)
+        .filter(|p| p.starts_with('/'))
+        .map(|p| normpath(&p))
+}
 
 /// A token with its variables and `~` substituted, or None where something in it cannot be (`_expand`).
 fn expand(token: &str, env: &Env, home: &str) -> Option<String> {
+    let token = substituted(token, env, home);
+    (!token.contains('$') && !token.contains('`')).then_some(token)
+}
+
+/// A token with every variable the command sets, and `~`, substituted; the rest left as written.
+fn substituted(token: &str, env: &Env, home: &str) -> String {
     let mut token = token
         .strip_prefix('~')
         .map_or_else(|| token.to_owned(), |rest| format!("{home}{rest}"));
@@ -164,26 +240,134 @@ fn expand(token: &str, env: &Env, home: &str) -> Option<String> {
             })
             .into_owned();
     }
-    (!token.contains('$') && !token.contains('`')).then_some(token)
+    token
+}
+
+/// What the walk knows of a place it cannot resolve (451 T79), for `settled`; a resolved place carries `Shell`, never read.
+#[derive(Debug, Clone, PartialEq, Eq)]
+enum Known {
+    /// Its word is whole and relative: only where the shell stands is unknown (after a `cd` the walk cannot read).
+    Shell,
+    /// The start of it, absolute, up to the first part the walk cannot read: `$R/out.$n` with `R=/tmp/r` is `/tmp/r/out.`.
+    Under(String),
+    /// Nothing: its word begins with what the walk cannot read (`$X/b`, a loop's variable, `$(dirname $F)`).
+    Nothing,
+}
+
+/// What the walk knows of a write word it cannot resolve (451 T79): its part before the first variable the command does not set,
+/// a relative one resolved where the shell stands.
+fn known_place(token: &str, env: &Env, home: &str, eff: Option<&str>) -> Known {
+    let word = substituted(strip_quote_chars(token), env, home);
+    let Some(cut) = word.find(['$', '`']) else {
+        return Known::Shell;
+    };
+    let literal = &word[..cut];
+    if literal.is_empty() {
+        return Known::Nothing;
+    }
+    let (dir, partial) = literal.rsplit_once('/').map_or((".", literal), |(d, p)| {
+        (if d.is_empty() { "/" } else { d }, p)
+    });
+    match resolve(dir, env, home, eff) {
+        Some(d) if d == "/" => Known::Under(format!("/{partial}")),
+        Some(d) => Known::Under(format!("{d}/{partial}")),
+        None => Known::Shell,
+    }
+}
+
+/// Where a place the walk knows only the start of lies: the mirror or a clone where it starts in one, elsewhere where it starts
+/// outside the mirror's tree, and None where the mirror could lie under it (`/$X/b`) - nothing known of it after all.
+fn class_under(start: &str, main: &str) -> Option<&'static str> {
+    if start.starts_with(&format!("{main}/.clones/")) {
+        Some("clone")
+    } else if start.starts_with(&format!("{main}/")) {
+        Some("main")
+    } else if main.starts_with(start) {
+        None
+    } else {
+        Some("elsewhere")
+    }
+}
+
+/// THE ONE RULE for a place the walk cannot resolve, the same for every tool - a redirect's, a `cp`'s and a git form's alike (451
+/// T79; before, a `cp`'s went where the shell was last known whatever the walk knew of it, and one of T50's twelve git forms was
+/// not placed at all): what the walk knows of it decides. A place it knows the start of lies where that start does; what it knows
+/// nothing of - a word led by a substitution it cannot run, a name read from input, a start the mirror lies under (`/$X`) - lands
+/// where the shell was last KNOWN to be (spec 204's D6, so the precision cannot become a bypass: `cd $(somewhere) && git commit`,
+/// and `R=$(git rev-parse --show-toplevel); echo x > $R/f`, its plan review's probe of 2026-11-21). T79's first round read a word
+/// nothing is known of as not the mirror's, which let five of its review's probes write the mirror standing in it; the scratch
+/// writes it rescued are resolved from the text instead (`bind`: a loop's values, a name no one assigns empty, `$(dirname X)`).
+fn settled(path: Option<&str>, known: &Known, hint: &'static str, main: &str) -> &'static str {
+    let last_known = if hint == "main" { "main" } else { "elsewhere" };
+    match (classify(path, main), known) {
+        ("unknown", Known::Under(start)) => class_under(start, main).unwrap_or(last_known),
+        ("unknown", _) => last_known,
+        (class, _) => class,
+    }
+}
+
+/// Where a `cd` leaves the shell, for the hint (451 T79's one rule for the shell's own place): where it resolves, under the start
+/// the walk knows, or None - nothing known of it - which leaves the hint where the shell was last known (spec 204's D6).
+fn cd_class(eff: Option<&str>, known: Option<Known>, main: &str) -> Option<&'static str> {
+    match (eff, known) {
+        (Some(_), _) => Some(classify(eff, main)),
+        (None, Some(Known::Under(start))) => class_under(&start, main),
+        _ => None,
+    }
 }
 
 /// `NAME=value` assignments at command positions, resolved through each other in order (`_env_from`).
 fn env_from(cmd: &str, start: Option<&str>, home: &str) -> Env {
-    let mut env = Env::from([("HOME".to_owned(), home.to_owned())]);
+    // `OLDPWD` is unset in the Bash tool's shell until a `cd` sets it, which the walk does (read 2026-11-21)
+    let mut env = Env::from([
+        ("HOME".to_owned(), home.to_owned()),
+        ("OLDPWD".to_owned(), String::new()),
+    ]);
     if let Some(c) = start {
         env.insert("PWD".to_owned(), c.to_owned());
     }
-    let text = strip_heredocs(cmd);
+    let text = joined(&strip_heredocs(cmd));
     for c in ASSIGN.captures_iter(&text).map_while(Result::ok) {
-        let name = c.get(1).map_or("", |m| m.as_str()).to_owned();
+        let Some(named) = c.get(1) else { continue };
         let value = (2..=4)
             .find_map(|i| c.get(i))
             .map_or("", |m| m.as_str())
             .to_owned();
-        let expanded = expand(&value, &env, home).unwrap_or(value);
-        env.insert(name, expanded);
+        // a `$(mktemp ...)` is the place mktemp makes (451 T79: `T=$(mktemp -d); git clone -q . $T/clone` standing in the mirror,
+        // T50's tx#63, was read toward the mirror, observed 2026-11-21)
+        let made = MKTEMP
+            .captures(&text[named.end() + 1..])
+            .ok()
+            .flatten()
+            .and_then(|k| mktemp_place(k.get(1).map_or("", |m| m.as_str()), &env, home))
+            .or_else(|| {
+                DIR_BASE
+                    .captures(&text[named.end() + 1..])
+                    .ok()
+                    .flatten()
+                    .and_then(|k| bind::dir_base(k.get(1).map_or("", |m| m.as_str()), &env, home))
+            });
+        let expanded = made.unwrap_or_else(|| expand(&value, &env, home).unwrap_or(value));
+        env.insert(named.as_str().to_owned(), expanded);
     }
     env
+}
+
+/// Each `$(mktemp ...)` that stands inside a word, its place under the name of the `$__sub_<n>__` that stands for it (451 T79).
+fn mktemp_words(env: &mut Env, subs: &[String], home: &str) {
+    for (n, sub) in subs.iter().enumerate() {
+        let args = sub
+            .trim_start()
+            .strip_prefix("mktemp")
+            .filter(|a| a.is_empty() || a.starts_with(char::is_whitespace));
+        let place = args.map_or_else(
+            || bind::dir_base(sub, env, home),
+            |a| mktemp_place(a, env, home),
+        );
+        if let Some(place) = place {
+            env.insert(format!("__sub_{n}__"), place);
+        }
+    }
 }
 
 fn strip_quote_chars(token: &str) -> &str {
@@ -222,12 +406,64 @@ enum Piece {
     Seg(String, bool),
     Push,
     Pop,
+    /// A `$(...)` inside a word, walked before its word's command as a subshell, its segments feeding no pipe outside it (451 T79).
+    SubPush,
+    SubPop,
 }
 
-fn segments(text: &str) -> Vec<Piece> {
+/// The index of the bracket that closes the one at `open` (`(` or `{`), its nesting counted; the text's length where none does.
+/// Whether a substitution's text is `pwd`: where the shell stands (451 T79).
+fn is_pwd(inner: &str) -> bool {
+    matches!(inner.trim(), "pwd" | "pwd -P" | "pwd -L")
+}
+
+/// The length of a `` `pwd` `` that `rest` opens with and its word goes on past only into a path (`/`), else None (451 T79).
+fn tick_pwd(rest: &[char]) -> Option<usize> {
+    let close = rest.iter().skip(1).position(|c| *c == '`')? + 1;
+    let inner: String = rest[1..close].iter().collect();
+    (is_pwd(&inner) && word_goes_on_as_path(rest, close + 1)).then_some(close + 1)
+}
+
+/// Whether the word ends at `at` or goes on into a path: `$(pwd)/f` and `$(pwd)` name the shell's place, `$(pwd)x` does not.
+fn word_goes_on_as_path(chars: &[char], at: usize) -> bool {
+    chars
+        .get(at)
+        .is_none_or(|c| *c == '/' || c.is_whitespace() || "\"';|&)".contains(*c))
+}
+
+/// Whether a `{` or `}` is a brace group's - a word of its own, a `{` followed by a blank - and not a brace expansion inside a word
+/// (`/tmp/{a,b}`), whose split cut a copy's destination off its command (451 T79: `cp /tmp/{a,b} /diagram/x` from `/tmp` passed).
+fn brace_group(chars: &[char], i: usize, buf: &str) -> bool {
+    let own_word = buf.trim().is_empty() || buf.ends_with(char::is_whitespace);
+    own_word
+        && chars
+            .get(i + 1)
+            .is_none_or(|c| c.is_whitespace() || (chars[i] == '}' && ";|&)".contains(*c)))
+}
+
+fn closing(chars: &[char], open: usize) -> usize {
+    let (o, c) = (chars[open], if chars[open] == '(' { ')' } else { '}' });
+    let mut depth = 0;
+    for (k, &ch) in chars.iter().enumerate().skip(open) {
+        depth += i32::from(ch == o) - i32::from(ch == c);
+        if depth == 0 {
+            return k;
+        }
+    }
+    chars.len()
+}
+
+/// The command split at its separators. A word stays whole (451 T79, found by T50 2026-11-21): a `${...}` and a brace expansion
+/// keep their braces, which a brace group's `{` and `}` do not, and a `$(...)` inside a word is walked as a subshell before the word's command - its text
+/// the n-th of `subs`, `$__sub_<n>__` standing in its place, a word the walk cannot resolve (a `$(mktemp ...)` aside, which
+/// `mktemp_words` places; a `$(pwd)` or `` `pwd` `` is `.`, where the shell stands) - where before both split the word, its pieces
+/// read as commands of their own (and `` `pwd`/f `` read as a word nothing is known of, 451 T79's probe of 2026-11-21).
+fn segments(text: &str, subs: &mut Vec<String>) -> Vec<Piece> {
     let chars: Vec<char> = text.chars().collect();
     let (mut out, mut buf, mut i, mut piped) = (Vec::new(), String::new(), 0, false);
-    let flush = |buf: &mut String, out: &mut Vec<Piece>, piped: bool| {
+    let mut pending = Vec::new();
+    let flush = |buf: &mut String, out: &mut Vec<Piece>, pending: &mut Vec<Piece>, piped: bool| {
+        out.append(pending);
         let seg = buf.trim().to_owned();
         buf.clear();
         if !seg.is_empty() {
@@ -238,42 +474,57 @@ fn segments(text: &str) -> Vec<Piece> {
         let ch = chars[i];
         let next = chars.get(i + 1).copied();
         if (ch == '&' && next == Some('&')) || (ch == '|' && next == Some('|')) {
-            flush(&mut buf, &mut out, piped);
+            flush(&mut buf, &mut out, &mut pending, piped);
             piped = false;
             i += 2;
         } else if ch == '$' && next == Some('(') {
-            flush(&mut buf, &mut out, piped);
-            out.push(Piece::Push);
-            piped = false;
-            i += 2;
+            let end = closing(&chars, i + 1);
+            let inner: String = chars[i + 2..end].iter().collect();
+            pending.push(Piece::SubPush);
+            pending.extend(segments(&inner, subs));
+            pending.push(Piece::SubPop);
+            if is_pwd(&inner) && word_goes_on_as_path(&chars, end + 1) {
+                buf.push('.');
+            } else {
+                let _ = write!(buf, "$__sub_{}__", subs.len());
+            }
+            subs.push(inner);
+            i = end + 1;
+        } else if let Some(len) = (ch == '`').then(|| tick_pwd(&chars[i..])).flatten() {
+            buf.push('.');
+            i += len;
+        } else if ch == '$' && next == Some('{') {
+            let end = closing(&chars, i + 1).min(chars.len() - 1);
+            buf.extend(&chars[i..=end]);
+            i = end + 1;
         } else if (ch == '|' || ch == '&') && buf.ends_with('>') {
             buf.push(ch); // `>|` and `>&` belong to the redirection, not a separator (feature 429)
             i += 1;
         } else if matches!(ch, ';' | '|' | '&' | '\n') {
             // a pipe at a line's end still feeds the next line's segment
             if !(ch == '\n' && buf.trim().is_empty()) {
-                flush(&mut buf, &mut out, piped);
+                flush(&mut buf, &mut out, &mut pending, piped);
                 piped = ch == '|';
             }
             i += 1;
         } else if ch == '(' {
-            flush(&mut buf, &mut out, piped);
+            flush(&mut buf, &mut out, &mut pending, piped);
             out.push(Piece::Push);
             i += 1;
         } else if ch == ')' {
-            flush(&mut buf, &mut out, piped);
+            flush(&mut buf, &mut out, &mut pending, piped);
             out.push(Piece::Pop);
             piped = false;
             i += 1;
-        } else if ch == '{' || ch == '}' {
-            flush(&mut buf, &mut out, piped);
+        } else if (ch == '{' || ch == '}') && brace_group(&chars, i, &buf) {
+            flush(&mut buf, &mut out, &mut pending, piped);
             i += 1;
         } else {
             buf.push(ch);
             i += 1;
         }
     }
-    flush(&mut buf, &mut out, piped);
+    flush(&mut buf, &mut out, &mut pending, piped);
     out
 }
 
@@ -281,7 +532,8 @@ fn segments(text: &str) -> Vec<Piece> {
 fn words(seg: &str) -> Vec<&str> {
     let mut toks: Vec<&str> = seg.split_whitespace().collect();
     while let Some(t) = toks.first() {
-        if WRAPPERS.contains(t) || found(&ASSIGNMENT_WORD, t) {
+        // a loop's, an `if`'s or a `while`'s keyword leads its body's command (`bind::KEYWORDS`)
+        if WRAPPERS.contains(t) || found(&ASSIGNMENT_WORD, t) || bind::KEYWORDS.contains(t) {
             toks.remove(0);
         } else if *t == "timeout" && toks.len() > 1 {
             toks.drain(..2);
@@ -292,8 +544,9 @@ fn words(seg: &str) -> Vec<&str> {
     toks
 }
 
-/// A write's target and whether the command named it (`named`) or it lands where the shell stands (`shell`).
-type Write = (Option<String>, &'static str);
+/// A write's target, whether the command named it (`named`) or it lands where the shell stands (`shell`), and for a target the
+/// walk cannot resolve what it knows of it (451 T79's `Known`).
+type Write = (Option<String>, &'static str, Known);
 
 /// The paths a file tool writes (`_tool_paths`): `sed`'s files past its script, the last argument of a copy, else every argument.
 fn tool_paths<'a>(tool: &str, toks: &[&'a str]) -> Vec<&'a str> {
@@ -354,16 +607,18 @@ fn tool_paths<'a>(tool: &str, toks: &[&'a str]) -> Vec<&'a str> {
 fn path_write(p: &str, env: &Env, home: &str, eff: Option<&str>) -> Write {
     let bare = strip_quote_chars(p);
     match expand(bare, env, home) {
-        Some(e) if e.starts_with('/') => (Some(normpath(&e)), "named"),
+        Some(e) if e.starts_with('/') => (Some(normpath(&e)), "named", Known::Shell),
+        // a word whose known part is absolute names its place, a variable the command sets included (451 T79: `$R/out.$n`)
         None => (
             None,
-            if bare.starts_with('/') {
+            if substituted(bare, env, home).starts_with('/') {
                 "named"
             } else {
                 "shell"
             },
+            known_place(bare, env, home, eff),
         ),
-        Some(_) => (resolve(bare, env, home, eff), "shell"),
+        Some(_) => (resolve(bare, env, home, eff), "shell", Known::Shell),
     }
 }
 
@@ -393,7 +648,7 @@ fn writes_in(
         if *head == "git" {
             found_writes.extend(git::git_write(&toks, env, home, eff));
         } else if base == "make" {
-            found_writes.push((eff.map(str::to_owned), "shell"));
+            found_writes.push((eff.map(str::to_owned), "shell", Known::Shell));
         } else if let Some(at) = python_c(&toks).filter(|_| found(&PYTHON, base)) {
             // 451 T31: a program that only reads stays in the walk MARKED "read" - no guard's verdict counts it a write, and the
             // guards that read a walk's targets for where a command lands (house style, gm-tree) see what they saw before
@@ -403,7 +658,7 @@ fn writes_in(
             } else {
                 "shell"
             };
-            found_writes.push((eff.map(str::to_owned), how));
+            found_writes.push((eff.map(str::to_owned), how, Known::Shell));
         } else if (base == "sed"
             && toks[1..]
                 .iter()
@@ -481,43 +736,153 @@ pub fn walk_judged(cmd: &str, start: Option<&str>, main: &str, home: &str) -> Wa
     walk_in(cmd, start, main, home, true)
 }
 
+/// The walk of each binding of the command's variables (`bind::bound_texts`), their writes together: a command judged by every
+/// value its names take, a write landing in several places in each (451 T79's second round).
 fn walk_in(cmd: &str, start: Option<&str>, main: &str, home: &str, stdin_writes: bool) -> Walk {
-    let env = env_from(cmd, start, home);
-    let (text, programs) = sanitize(cmd);
+    let mut programs = Vec::new();
+    let carried = carry_heredocs(cmd, &mut programs);
+    let mut texts = bind::bound_texts(&carried).into_iter().peekable();
+    // a target shows its segment as the command holds it, which guards find in the command (`readme_hooks`), not as bound
+    let shown = if texts.peek().is_some_and(|t| *t != carried) {
+        let (text, _) = sanitize(&carried, programs.clone());
+        seg_texts(&segments(&text, &mut Vec::new()))
+    } else {
+        Vec::new()
+    };
+    let first = texts.next().unwrap_or_default();
+    let walk_of = |text: &str| {
+        walk_text(
+            text,
+            programs.clone(),
+            &shown,
+            start,
+            main,
+            home,
+            stdin_writes,
+        )
+    };
+    let mut walk = walk_of(&first);
+    for text in texts {
+        let more = walk_of(&text);
+        for t in more.targets {
+            if !walk
+                .targets
+                .iter()
+                .any(|w| (&w.path, w.class, w.how) == (&t.path, t.class, t.how))
+            {
+                walk.targets.push(t);
+            }
+        }
+        walk.cd_into_main |= more.cd_into_main;
+        if walk.final_dir != more.final_dir {
+            walk.final_dir = None;
+        }
+    }
+    walk
+}
+
+/// Where a `cd` moved the shell, for `$PWD` and `$OLDPWD` (451 T79's second round: `cd /tmp && echo x > $OLDPWD/f` writes where the
+/// shell stood); a place the walk cannot resolve is unknown.
+fn moved(env: &mut Env, pwd: Option<String>, oldpwd: Option<String>) {
+    for (name, place) in [("PWD", pwd), ("OLDPWD", oldpwd)] {
+        env.insert(
+            name.to_owned(),
+            place.unwrap_or_else(|| bind::UNREAD.to_owned()),
+        );
+    }
+}
+
+fn seg_texts(pieces: &[Piece]) -> Vec<String> {
+    pieces
+        .iter()
+        .filter_map(|p| match p {
+            Piece::Seg(s, _) => Some(s.clone()),
+            _ => None,
+        })
+        .collect()
+}
+
+/// Where a `cd` or `pushd` moves the shell, `$PWD` and `$OLDPWD` with it, and the class the hint takes where the walk knows it.
+fn cd_to(
+    toks: &[&str],
+    env: &mut Env,
+    home: &str,
+    eff: Option<String>,
+    main: &str,
+) -> (Option<String>, Option<&'static str>) {
+    let known = toks
+        .get(1)
+        .filter(|t| !matches!(**t, "--" | "-"))
+        .map(|t| known_place(t, env, home, eff.as_deref()));
+    let to = match toks.get(1) {
+        None | Some(&"--") => Some(home.to_owned()),
+        Some(&"-") => None,
+        Some(t) => resolve(t, env, home, eff.as_deref()),
+    };
+    moved(env, to.clone(), eff);
+    let class = cd_class(to.as_deref(), known, main);
+    (to, class)
+}
+
+fn walk_text(
+    carried: &str,
+    programs: Vec<Program>,
+    shown: &[String],
+    start: Option<&str>,
+    main: &str,
+    home: &str,
+    stdin_writes: bool,
+) -> Walk {
+    let mut env = env_from(carried, start, home);
+    let (text, programs) = sanitize(carried, programs);
+    let mut subs = Vec::new();
+    let pieces = segments(&text, &mut subs);
+    let bound_segs = seg_texts(&pieces);
+    let mut shown = Some(shown)
+        .filter(|s| s.len() == bound_segs.len())
+        .unwrap_or(&bound_segs)
+        .iter();
+    mktemp_words(&mut env, &subs, home);
     let mut eff: Option<String> = start.map(str::to_owned);
     let mut hint = classify(eff.as_deref(), main); // where the shell was last KNOWN to be (spec D6)
     let (mut stack, mut targets, mut cd_into_main) = (Vec::new(), Vec::new(), false);
     let (mut prev, mut unread) = (None::<String>, false);
-    for piece in segments(&text) {
+    for piece in pieces {
         let (seg, piped) = match piece {
-            Piece::Push => {
-                stack.push((eff.clone(), hint));
+            // a substitution's segments are no upstream of its word's command: the segment before it is (451 T79)
+            Piece::Push | Piece::SubPush => {
+                let feeds = matches!(piece, Piece::SubPush).then(|| prev.clone());
+                let dirs = (env.get("PWD").cloned(), env.get("OLDPWD").cloned());
+                stack.push((eff.clone(), hint, feeds, dirs));
                 continue;
             }
-            Piece::Pop => {
-                if let Some((e, h)) = stack.pop() {
+            Piece::Pop | Piece::SubPop => {
+                if let Some((e, h, feeds, (pwd, oldpwd))) = stack.pop() {
                     (eff, hint) = (e, h);
+                    moved(&mut env, pwd, oldpwd);
+                    if let Some(p) = feeds {
+                        prev = p;
+                    }
                 }
                 continue;
             }
             Piece::Seg(s, piped) => (s, piped),
         };
         let upstream = prev.replace(seg.clone()).filter(|_| piped);
+        let showing = shown.next().unwrap_or(&seg).clone();
         let toks = words(&seg);
+        bind::read_where_it_stands(&seg, &mut env, home);
         if matches!(toks.first(), Some(&"cd" | &"pushd")) {
-            eff = match toks.get(1) {
-                None | Some(&"--") => Some(home.to_owned()),
-                Some(&"-") => None,
-                Some(t) => resolve(t, &env, home, eff.as_deref()),
-            };
-            if eff.is_some() {
-                hint = classify(eff.as_deref(), main);
+            let class;
+            (eff, class) = cd_to(&toks, &mut env, home, eff.take(), main);
+            if let Some(class) = class {
+                hint = class;
                 cd_into_main |= hint == "main";
             }
             continue;
         }
         if toks.first() == Some(&"popd") {
-            eff = None;
+            moved(&mut env, None, eff.take());
             continue;
         }
         let mut writes = writes_in(&seg, &programs, &env, home, eff.as_deref());
@@ -543,22 +908,19 @@ fn walk_in(cmd: &str, start: Option<&str>, main: &str, home: &str, stdin_writes:
         ) {
             Stdin::Unread => unread = true,
             Stdin::Program(q, body) if stdin_writes && !py_c::reads(&body, q, eff.as_deref()) => {
-                writes.insert(0, (eff.clone(), "shell"));
+                writes.insert(0, (eff.clone(), "shell", Known::Shell));
                 program = Some(body);
             }
             Stdin::None | Stdin::Program(..) => {}
         }
-        for (k, (path, how)) in writes.into_iter().enumerate() {
-            let mut class = classify(path.as_deref(), main);
-            if class == "unknown" {
-                class = if hint == "main" { "main" } else { "elsewhere" }; // D6: unknown resolves toward main
-            }
+        for (k, (path, how, known)) in writes.into_iter().enumerate() {
+            let class = settled(path.as_deref(), &known, hint, main);
             targets.push(Target {
                 path,
                 class,
                 how,
                 segment: HEREDOC_WORD
-                    .replace_all(&seg, "<<BODY")
+                    .replace_all(bind::from_command(&showing), "<<BODY")
                     .chars()
                     .take(120)
                     .collect(),

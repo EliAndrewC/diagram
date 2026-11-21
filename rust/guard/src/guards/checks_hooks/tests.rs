@@ -63,3 +63,56 @@ fn a_write_back_is_refused_on_the_post_call() {
         .unwrap()
         .contains("before"));
 }
+
+/// A call that changes held text and then fails is written back too (451 T78): a Bash command that exits non-zero fires
+/// `PostToolUseFailure`, not `PostToolUse` (measured 2026-11-21), and the guard took only the second, so the hook's own event filter
+/// is what this drives. A failed Agent or `TaskStop` call launched and stopped nothing: its hold keeps its state.
+#[test]
+fn a_failed_call_is_written_back_and_a_failed_launch_keeps_its_hold() {
+    let root = clone_at("failure");
+    let state_file = root.join(".git/checks-open.json");
+    std::fs::create_dir_all(root.join("specs/900-a")).unwrap();
+    std::fs::write(root.join("specs/900-a/plan.md"), "# p\n\n## T01 x\n\nnow\n").unwrap();
+    std::fs::write(
+        &state_file,
+        json!({"feature": "999-x", "plan_holds": {"h": {"feature": "900-a", "task": "T01", "t": 1.0, "state": "pending"}, "r": {"feature": "900-a", "task": "T01", "t": 1.0, "state": "running", "aid": "ag"}}, "plan_snaps": {"e": {"r": ["## T01 x\n\nbefore\n"]}}}).to_string(),
+    )
+    .unwrap();
+    let fail = |tool: &str, extra: serde_json::Value| {
+        let mut input = json!({"cwd": root, "tool_name": tool});
+        for (k, v) in extra.as_object().unwrap() {
+            input[k] = v.clone();
+        }
+        crate::protocol::run(
+            &mut Event {
+                name: "PostToolUseFailure".to_owned(),
+                input,
+            },
+            &[GUARD],
+        )
+    };
+    let reply = fail(
+        "Bash",
+        json!({"tool_use_id": "e", "tool_input": {"command": "x"}}),
+    );
+    assert!(reply.code == 2 && reply.stderr.contains("written back"));
+    assert!(std::fs::read_to_string(root.join("specs/900-a/plan.md"))
+        .unwrap()
+        .contains("before"));
+    assert_eq!(
+        fail("Agent", json!({"tool_use_id": "h", "tool_input": {}})).code,
+        0
+    );
+    assert_eq!(
+        fail(
+            "TaskStop",
+            json!({"tool_use_id": "s", "tool_input": {"task_id": "ag"}})
+        )
+        .code,
+        0
+    );
+    let holds: serde_json::Value =
+        serde_json::from_str(&std::fs::read_to_string(&state_file).unwrap()).unwrap();
+    assert_eq!(holds["plan_holds"]["h"]["state"], "pending");
+    assert_eq!(holds["plan_holds"]["r"]["aid"], "ag");
+}

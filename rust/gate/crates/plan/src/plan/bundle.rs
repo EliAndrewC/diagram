@@ -25,10 +25,12 @@ static IDS: LazyLock<Regex> = LazyLock::new(|| re(r"\b((?:FR|SC)-\d{3}[a-z]?|D\d
 const ID: &str = r"(?:(?:FR|SC)-\d{3}[a-z]?|D\d+[a-z]?)";
 const RUN_ON: &str = r"(?:(?:,\s*|,?\s+(?:and|or)\s+)(?:(?:FR|SC)-\d{3}[a-z]?|D\d+[a-z]?)\b)*";
 /// Another feature's requirements or decisions, named with its number (feature 385 T66, T71, T123; the `spec` form, the run-on list
-/// and a task's possessive after the number, "444 T20's FR-043", 451 T46).
+/// and a task's possessive after the number, "444 T20's FR-043", 451 T46): the number group 1, its run group 2. Or, group 3, a run no
+/// number names, followed by a clause naming a feature by its number ("FR-010 of feature 134", "D1 and D3 in 999's sections"), all of
+/// it that feature's (451 T48: 4 of the 5 real clauses over every plan carried the reviewed feature's same-named id, measured 2026-11-21).
 static QUALIFIED: LazyLock<Regex> = LazyLock::new(|| {
     re(&format!(
-        r"(?<![-\w])(?:[Ff]eature\s+)?(\d{{3}})(?:'s|,)?\s+(?:amendment\s+\d+,?\s+)?(?:T\d+[a-z]?'s\s+)?\(?(?:(?:plan|spec)\s+)?({ID}\b{RUN_ON})"
+        r"(?<![-\w])(?:[Ff]eature\s+)?(\d{{3}})(?:'s|,)?\s+(?:amendment\s+\d+,?\s+)?(?:T\d+[a-z]?'s\s+)?\(?(?:(?:plan|spec)\s+)?({ID}\b{RUN_ON})|(?<![-\w])({ID}\b{RUN_ON})(?=\s+(?:in|of|from)\s+(?:[Ff]eature\s+)?\d{{3}}\b)"
     ))
 });
 /// An id named with a possessive that is no feature number ("house style's D11", "the spec's FR-002"; 451 T46): the name before `'s`
@@ -396,7 +398,8 @@ fn ascii_json(text: &str) -> String {
         .collect()
 }
 
-/// What one block names: its ids named as another feature's `(feature, id)`, as another source's `(its name, id)`, the ids it names as
+/// What one block names: its ids named as another feature's `(feature, id)` (by its number before them or in a clause after them, 451
+/// T48), as another source's `(its name, id)`, the ids it names as
 /// this feature's in so many words, and its text with every other feature's and source's ids taken out (its ranges written out).
 struct Named {
     others: Vec<(String, String)>,
@@ -413,10 +416,36 @@ fn ids_in(text: &str) -> Vec<String> {
 }
 
 /// A clause after a run of ids that names another source ("in 451's sections", "of feature 999"): the run's last part is its, not the
-/// number's (451 T46 round 2: "449 T233's FR-023 and FR-024, and D5 and D11 in 451's sections" carried 449's D5).
+/// number's (451 T46 round 2: "449 T233's FR-023 and FR-024, and D5 and D11 in 451's sections" carried 449's D5); a clause naming a
+/// feature by its number, group 1, makes that part that feature's (451 T48), one naming a source by another name leaves it bare.
 static ANOTHER: LazyLock<Regex> = LazyLock::new(|| {
-    re(r"^\s+(?:in|of|from)\s+(?:(?:[Ff]eature\s+)?\d{3}\b|(?:the\s+)?[A-Za-z][\w.-]*'s)")
+    re(r"^\s+(?:in|of|from)\s+(?:(?:[Ff]eature\s+)?(\d{3})\b|(?:the\s+)?[A-Za-z][\w.-]*'s)")
 });
+
+/// The feature a clause after a run of ids names by its number ("of feature 134", "in 451's sections"; 451 T48), if it names one.
+fn clause_feature(after: &str) -> Option<&str> {
+    ANOTHER
+        .captures(after)
+        .ok()
+        .flatten()
+        .and_then(|c| c.get(1))
+        .map(|m| m.as_str())
+}
+
+impl Named {
+    /// The ids in `text` read as feature `no`'s: this feature's kept in the text, to be carried; another's taken out of it.
+    fn claim(&mut self, no: &str, own_no: &str, text: &str) -> String {
+        let ids = ids_in(text);
+        if no == own_no {
+            self.own.extend(ids);
+            text.to_owned()
+        } else {
+            self.others
+                .extend(ids.into_iter().map(|i| (no.to_owned(), i)));
+            String::new()
+        }
+    }
+}
 
 /// (the part of a run of ids its number names, the rest, left to be read as written): the whole run, unless the text after it opens a
 /// clause naming another source - then the run stops at its last comma, or before its last id when it has no comma.
@@ -443,16 +472,15 @@ fn named(body: &str, own_no: &str) -> Named {
     };
     let expanded = expand_ranges(body);
     let numbered = QUALIFIED.replace_all(&expanded, |c: &Captures<'_>| {
-        let (run, left) = own_run(&c[2], &expanded[c.get(0).map_or(0, |g| g.end())..]);
-        let ids = ids_in(run);
-        if c[1] == *own_no {
-            n.own.extend(ids);
-            c[2].to_owned()
-        } else {
-            n.others
-                .extend(ids.into_iter().map(|i| (c[1].to_owned(), i)));
-            left.to_owned()
+        let after = &expanded[c.get(0).map_or(0, |g| g.end())..];
+        let clause = clause_feature(after);
+        if let Some(run) = c.get(3) {
+            return n.claim(clause.unwrap_or(own_no), own_no, run.as_str());
         }
+        // the number's part of the run is its; the part a clause naming a feature takes, that feature's (451 T48)
+        let (run, left) = own_run(&c[2], after);
+        let left = clause.map_or_else(|| left.to_owned(), |no| n.claim(no, own_no, left));
+        n.claim(&c[1], own_no, run) + &left
     });
     n.bare = NAMED
         .replace_all(&numbered, |c: &Captures<'_>| {
@@ -483,7 +511,8 @@ fn named(body: &str, own_no: &str) -> Named {
 }
 
 /// The text of each requirement and decision the blocks cite, and the ids cited bare (another feature's are taken from that feature).
-/// An id named with another feature's number or name is never carried from this one; a bare mention of an id the blocks also name as
+/// An id named with another feature's number or name, or in a clause naming another feature ("FR-010 of feature 134", 451 T48), is
+/// never carried from this one; a bare mention of an id the blocks also name as
 /// another's carries this feature's text under a line saying it may mean either (451 T46: T42's bare "D5's form" was feature 204's,
 /// 417 T37's bare "FR-013 (speed first)" beside "(385 FR-013)" its own), so nothing is withheld and nothing arrives unmarked.
 fn cited_text(

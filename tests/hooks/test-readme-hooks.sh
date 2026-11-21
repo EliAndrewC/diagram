@@ -103,7 +103,9 @@ check "a heredoc onto ../parked/README.md"        blocked "$(bash_at "$(printf "
 check "cp onto one in a clone, absolute"          blocked "$(bash_at "cp /tmp/x.md $C/docs/README.md" /tmp)"
 check "cp onto one after a cd into the tree"      blocked "$(bash_at "cd $C && cp /tmp/x.md docs/README.md" /tmp)"
 check "a python program writing one"              blocked "$(bash_at "python3 -c \"import pathlib; pathlib.Path('docs/README.md').write_text('x')\"" "$C")"
-check "a README past a variable never set"        blocked "$(bash_at 'echo x > $NEVER_SET_T67/README.md' "$C")"
+# a name read from input stays unknown; a name no one assigns is empty, as bash reads it, so its README is `/README.md` (451 T79)
+check "a README past a variable read from input"  blocked "$(bash_at 'read NEVER_SET_T67; echo x > $NEVER_SET_T67/README.md' "$C")"
+check "... and past one never set, the root's"    ok "$(bash_at 'echo x > $NEVER_SET_T67/README.md' "$C")"
 check "rm of one (a README is the GM's to write)" blocked "$(bash_at 'rm docs/README.md' "$C")"
 check "a git command's redirect onto one"         blocked "$(bash_at 'git show HEAD:a.md > docs/README.md' "$C")"
 check "a shell's -c program writing one"          blocked "$(bash_at "bash -c 'echo x > docs/README.md'" "$C")"
@@ -157,7 +159,8 @@ in_p "... and the write after the program"                     blocked "$(bash_a
 in_p "a README in a worktree whose place is a variable"        blocked "$(bash_at "d=/tmp/t58 && git worktree add \$d/wt && echo x > \$d/wt/README.md" "$P/main/.clones/c")"
 in_p "... the logged cp beside it"                             ok "$(bash_at "d=/tmp/t58 && git worktree add \$d/wt && cp rust/guard/src/guards/readme_hooks.rs \$d/readme.keep" "$P/main/.clones/c")"
 in_p "a clone of a variable's source with no directory"        blocked "$(bash_at "S=$P/main && git clone \$S && echo x > main/README.md" /tmp)"
-in_p "a place the walk cannot resolve fails closed"            blocked "$(bash_at "git worktree add \$NEVER_SET_T67/wt && echo x > /tmp/y/README.md" "$P/main/.clones/c")"
+# a name read from input, since a name no one assigns is empty, as bash reads it (451 T79)
+in_p "a place the walk cannot resolve fails closed"            blocked "$(bash_at "read NEVER_SET_T67; git worktree add \$NEVER_SET_T67/wt && echo x > /tmp/y/README.md" "$P/main/.clones/c")"
 # a commit message naming the clone step is no clone: T67's own cp after it still passes
 in_p "a commit message naming clone, then the logged cp"       ok "$(bash_at "git commit -qm 'the clone step' && cp rust/guard/src/guards/readme_hooks.rs /tmp/t58/readme.keep" "$P/main/.clones/c")"
 # the corpus's shape (2026-11, twice): a scratch clone of a bare repository of its own, in a mktemp directory

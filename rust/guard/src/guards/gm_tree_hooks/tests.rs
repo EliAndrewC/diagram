@@ -75,7 +75,15 @@ fn a_bash_write_lands_by_invocation_never_by_mention() {
         &json!({"command": "echo x > $UNSET/gm-assistant"}),
         G,
     );
-    assert_eq!(offending(&var, G, "/h"), Some(G.to_owned()));
+    // a name no one assigns is empty, so the write is `/gm-assistant`, not the tree's (451 T79, the walk's for every guard that
+    // reads it); a write where the shell stands after a `cd` the walk cannot read is the tree, standing in it (spec 204's D6)
+    assert_eq!(offending(&var, G, "/h"), None);
+    let lost = event(
+        "Bash",
+        &json!({"command": "cd $(somewhere) && echo x > f"}),
+        G,
+    );
+    assert_eq!(offending(&lost, G, "/h"), Some(G.to_owned()));
     let unresolved = event(
         "Bash",
         &json!({"command": "python3 -c 'open(\"x\", \"w\")' # gm-assistant"}),

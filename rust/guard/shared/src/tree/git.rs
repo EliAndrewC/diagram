@@ -2,7 +2,7 @@
 //! writing `branch` where git runs, a read-only subcommand's output file (451 T33), and the tree the twelve subcommands outside
 //! `GIT_WRITES` change (451 T50), each read from its own `-h` and measured.
 
-use super::{path_write, resolve, strip_quote_chars, Env, Write};
+use super::{known_place, path_write, resolve, strip_quote_chars, Env, Known, Write};
 
 const GIT_WRITES: [&str; 17] = [
     "commit",
@@ -118,32 +118,30 @@ pub(super) fn git_write(toks: &[&str], env: &Env, home: &str, eff: Option<&str>)
         Some(c) if strip_quote_chars(c).starts_with('/') => (resolve(c, env, home, eff), "named"),
         Some(c) => (resolve(c, env, home, eff), "shell"),
     };
+    // a `-C` the walk cannot resolve is under what it knows of it (451 T79's one rule, `settled`)
+    let at_known = c_path.map_or(Known::Shell, |c| known_place(c, env, home, eff));
     // a stash's `list` and `show` only read (451 T33: its gate's shell-write check refused `git stash list` as a write of `.`)
     let stash_reads = sub == "stash" && matches!(toks.get(i + 1).copied(), Some("list" | "show"));
     if (GIT_WRITES.contains(&sub) && !stash_reads)
         || (sub == "branch" && branch_writes(&toks[i + 1..]))
     {
-        return vec![(at, at_how)];
+        return vec![(at, at_how, at_known)];
     }
     // 451 T33: a read-only subcommand's writing option lands where it names, relative to where git runs; 451 T50: so does a
     // tree one of the twelve below writes
     let args = &toks[i + 1..];
     let place = |word: Option<&str>| match word {
-        None => (at.clone(), at_how),
+        None => (at.clone(), at_how, at_known.clone()),
         Some(file) => {
-            let (path, how) = path_write(file, env, home, at.as_deref());
-            (path, if how == "shell" { at_how } else { how })
+            let (path, how, known) = path_write(file, env, home, at.as_deref());
+            (path, if how == "shell" { at_how } else { how }, known)
         }
     };
+    // 451 T79: a place of these forms the walk cannot resolve is settled by the walk's one rule, as every tool's is - T50 left it
+    // unplaced (its D-d), since D6 read tx#63, `T=$(mktemp -d); ...; git clone -q . $T/clone` standing in the mirror, toward the
+    // mirror (measured 2026-11-21); its `$(mktemp -d)` is scratch since T79, and the rule reads what the walk knows of a place
     if let Some(words) = git_tree(sub, args) {
-        // 451 T50: a place the walk cannot resolve is not read toward the mirror (D6) for these forms, which HEAD read as no
-        // write - its replay moved tx#63, `T=$(mktemp -d); ...; git clone -q . $T/clone` standing in the mirror, a scratch clone,
-        // allowed -> refused that way (measured 2026-11-21); it fails open, as the gate's unresolvable path does
-        return words
-            .iter()
-            .map(|w| place(w.as_deref()))
-            .filter(|(path, _)| path.is_some())
-            .collect();
+        return words.iter().map(|w| place(w.as_deref())).collect();
     }
     git_output(sub, args).map(place).into_iter().collect()
 }
@@ -226,15 +224,12 @@ const GIT_VALUED: [(&str, &[&str]); 6] = [
 ];
 
 /// A git subcommand's operands past its options (`valued`'s take the next word, unless written `--name=value`; all past `--`),
-/// the names of the options given, and whether the walk cut them: a `\` ends the line, or a word ends in the `$` of a `${` the
-/// segments split at (main-tree#10's `"https://x-access-token:${PAT}@github.com/..."`, 451 T50's replay) - the operands go on in
-/// pieces the walk reads as commands of their own, so the word and those after it are not read.
-fn operands<'a>(args: &[&'a str], valued: &[&str]) -> (Vec<&'a str>, Vec<&'a str>, bool) {
+/// and the names of the options given. 451 T50 stopped at a word the walk cut - a `\` ending the line, or a `${` its segments
+/// split at - and read the clone or init there as no write; since 451 T79 the walk keeps both whole, so every word is read.
+fn operands<'a>(args: &[&'a str], valued: &[&str]) -> (Vec<&'a str>, Vec<&'a str>) {
     let (mut ops, mut flags, mut dashed, mut it) = (Vec::new(), Vec::new(), false, args.iter());
     while let Some(&a) = it.next() {
-        if a == "\\" || a.ends_with('$') {
-            return (ops, flags, true);
-        } else if dashed || a == "-" || !a.starts_with('-') {
+        if dashed || a == "-" || !a.starts_with('-') {
             ops.push(a);
         } else if a == "--" {
             dashed = true;
@@ -246,7 +241,7 @@ fn operands<'a>(args: &[&'a str], valued: &[&str]) -> (Vec<&'a str>, Vec<&'a str
             flags.push(name);
         }
     }
-    (ops, flags, false)
+    (ops, flags)
 }
 
 /// The directory `clone` makes where no operand names one, as git names it (`git_url_basename`): the repository's last path part,
@@ -302,7 +297,7 @@ fn git_tree(sub: &str, args: &[&str]) -> Option<Vec<Option<String>>> {
         .map_or(&[][..], |(_, v)| *v);
     // `bisect start`'s revisions stand before its `--`, its pathspecs after
     let before = args.split(|a| *a == "--").next().unwrap_or(args);
-    let (ops, flags, cut) = operands(if sub == "bisect" { before } else { args }, valued);
+    let (ops, flags) = operands(if sub == "bisect" { before } else { args }, valued);
     let has = |f: &str| flags.contains(&f);
     let word = |w: &str| Some(w.to_owned());
     let here = vec![None];
@@ -311,11 +306,11 @@ fn git_tree(sub: &str, args: &[&str]) -> Option<Vec<Option<String>>> {
         ("worktree", Some("move")) => ops.iter().skip(1).take(2).map(|p| word(p)).collect(),
         ("clone", _) => match ops[..] {
             [_, dir, ..] => vec![word(dir)],
-            [repo] if !cut => vec![clone_name(repo, has("--bare") || has("--mirror"))],
+            [repo] => vec![clone_name(repo, has("--bare") || has("--mirror"))],
             _ => Vec::new(),
         },
         ("init", Some(dir)) if !matches!(dir, "." | "./") => vec![word(dir)],
-        ("init", _) if has("--bare") && !cut => here,
+        ("init", _) if has("--bare") => here,
         ("switch", first) if first.is_some() || has("--orphan") => here,
         ("bisect", Some("start")) if has("--no-checkout") || ops.len() < 3 => Vec::new(),
         ("bisect", Some(a)) if !matches!(a, "log" | "view" | "visualize" | "terms" | "help") => {

@@ -257,6 +257,11 @@ fn a_running_gate_refuses_a_shell_write_into_the_tree() {
             "l7r/x/a.py",
         ),
         ("sed -i s/a/b/ l7r/x/a.py".to_owned(), "l7r/x/a.py"),
+        // a loop's body writes as its command does (451 T79)
+        (
+            "for f in l7r/x/a.py; do sed -i s/a/b/ $f; done".to_owned(),
+            "l7r/x/a.py",
+        ),
         (format!("cp /tmp/x {top}/l7r/x/a.py"), "l7r/x/a.py"),
         // a Python program that writes, judged by the files it names
         (
@@ -277,6 +282,11 @@ fn a_running_gate_refuses_a_shell_write_into_the_tree() {
         "cp l7r/x/a.py /tmp/b".to_owned(),
         "python3 -c \"print(open('l7r/x/a.py').read())\"".to_owned(),
         "make verify-wait".to_owned(),
+        // a make or a touch led by a keyword or `timeout N` is still the make or the touch (451 T79's third round: 38 of the ux
+        // replay's commands, and `timeout 60 make task-add` at HEAD, were refused as a shell write of `.`, measured 2026-11-21)
+        "for F in a.md; do make append FILE=$F LINE=b; done".to_owned(),
+        "if true; then touch l7r/x/a.py; fi".to_owned(),
+        "timeout 60 make append LINE=x".to_owned(),
         "git status --porcelain".to_owned(),
         "git log --oneline | head -3".to_owned(),
         "git push".to_owned(),

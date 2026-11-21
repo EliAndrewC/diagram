@@ -292,20 +292,37 @@ fn edit_hits(plan: &Path, texts: &[String], old: &str) -> bool {
     }) || texts.iter().any(|t| !old.is_empty() && t.contains(old))
 }
 
-fn bash_hits(cmd: &str, feature: &str, texts: &[String]) -> bool {
+/// The plan with each held text cut out, a NUL in its place so the text on either side never joins into a match; or None where a
+/// held text does not stand in the plan whole (a task's own headings apart, joined by `task_sections`), so nothing is read as outside.
+fn outside(plan: &Path, texts: &[String]) -> Option<String> {
+    let mut body = std::fs::read_to_string(plan).ok()?;
+    for t in texts {
+        if !body.contains(t.as_str()) {
+            return None;
+        }
+        body = body.replacen(t.as_str(), "\0", 1);
+    }
+    Some(body)
+}
+
+/// Whether a shell command writes the plan through held text: a held heading, a held line of 16 or more characters, or a quoted
+/// string held text contains; with `rest` (the plan outside the held text), only one that `rest` does not hold too (451 T78).
+fn bash_hits(cmd: &str, feature: &str, texts: &[String], rest: Option<&str>) -> bool {
     if !(cmd.contains("plan.md") && cmd.contains(feature) && WRITE.is_match(cmd).unwrap_or(false)) {
         return false;
     }
+    let held_only = |s: &str| rest.is_none_or(|r| !r.contains(s));
     let lines: BTreeSet<&str> = texts
         .iter()
         .flat_map(|t| t.lines())
         .map(str::trim)
-        .filter(|l| l.len() >= 16)
+        .filter(|l| l.len() >= 16 && held_only(l))
         .collect();
     let heads: BTreeSet<&str> = texts
         .iter()
         .filter(|t| !t.trim().is_empty())
         .map(|t| t.lines().next().unwrap_or("").trim())
+        .filter(|h| held_only(h))
         .collect();
     let quoted: Vec<String> = QUOTED
         .captures_iter(cmd)
@@ -316,7 +333,9 @@ fn bash_hits(cmd: &str, feature: &str, texts: &[String]) -> bool {
         .collect();
     heads.iter().any(|h| cmd.contains(h))
         || lines.iter().any(|l| cmd.contains(l))
-        || quoted.iter().any(|q| texts.iter().any(|t| t.contains(q)))
+        || quoted
+            .iter()
+            .any(|q| held_only(q) && texts.iter().any(|t| t.contains(q)))
 }
 
 /// Why this write is refused while a plan review holds what it would change, or "".
@@ -353,7 +372,22 @@ pub fn refusal(
                 edit_hits(&plan, &texts, text(ti, "old_string"))
             }
         } else if tool == "Bash" {
-            bash_hits(text(ti, "command"), text(&h, "feature"), &texts)
+            // a live hold's foreground call is written back when it ends (`snapshot` keeps live holds alone; `restore` runs on its
+            // PostToolUse or PostToolUseFailure), so for it only text standing in the held section alone names a write there: text
+            // every section shares named a write to ANOTHER section, 7 of the 18 replayed refusals (451 T78). A pending or dead hold
+            // and a background call have no write-back behind them, and shared text still refuses them. A foreground call moved to
+            // the background at its timeout gets its one PostToolUse at the move (measured 2026-11-21), so what it writes after
+            // the move is written back by nothing, nor what a writer it detaches writes after the shell returns: accepted (451 T78's
+            // plan section, priced there), the cost a verdict `make plan-verdict` refuses as changed while reviewed, the review run again
+            let rest = (live(&h, now) && !crate::wait::background(ti))
+                .then(|| outside(&plan, &texts))
+                .flatten();
+            bash_hits(
+                text(ti, "command"),
+                text(&h, "feature"),
+                &texts,
+                rest.as_deref(),
+            )
         } else {
             false
         };

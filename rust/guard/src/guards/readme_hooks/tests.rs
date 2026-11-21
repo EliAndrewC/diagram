@@ -119,15 +119,18 @@ fn the_destination_in_the_tree_is_judged_never_a_name_the_command_holds() {
     assert!(at("cp /tmp/x.md README.md", "/repo").is_some());
     // an event with no cwd stands in the tree
     assert!(at("cp a.md dev/README.md", "").is_some());
-    // what the walk cannot resolve fails closed: a variable never set, a program standing where nothing is known
+    // what the walk cannot resolve fails closed: a name read from input, a program standing where nothing is known; a variable
+    // never set is empty, as bash reads it (451 T79), so its README is `/README.md`, not the tree's
     assert_eq!(
-        bash("echo x > $NEVER_SET_T67/README.md").as_deref(),
+        bash("read NEVER_SET_T67; echo x > $NEVER_SET_T67/README.md").as_deref(),
         Some("> $NEVER_SET_T67/README.md")
     );
-    assert!(bash("cd $NEVER_SET_T67 && cat > README.md").is_some());
-    assert!(
-        bash("cd $NEVER_SET_T67 && python3 -c \"open('README.md', 'w').write('x')\"").is_some()
-    );
+    assert_eq!(bash("echo x > $NEVER_SET_T67/README.md"), None);
+    assert!(bash("read NEVER_SET_T67; cd $NEVER_SET_T67 && cat > README.md").is_some());
+    assert!(bash(
+        "read NEVER_SET_T67; cd $NEVER_SET_T67 && python3 -c \"open('README.md', 'w').write('x')\""
+    )
+    .is_some());
     // ...but a README the unresolved copy only reads is not its destination
     assert_eq!(bash("cp docs/README.md $NEVER_SET/x.md"), None);
     assert_eq!(bash("d=$(mktemp -d) && cp docs/README.md $d/x.md"), None);
@@ -360,7 +363,7 @@ fn a_work_tree_the_command_makes_is_judged_by_what_it_copies() {
         "/tmp"
     ));
     assert!(at(
-        "git clone $NEVER_SET_T67 /tmp/q/u && echo x > /tmp/q/u/README.md",
+        "read NEVER_SET_T67; git clone $NEVER_SET_T67 /tmp/q/u && echo x > /tmp/q/u/README.md",
         "/tmp"
     ));
     // not this project's: a worktree of a scratch repository, a clone of another URL, a scratch clone of a bare repository of its own
@@ -408,7 +411,7 @@ fn a_work_tree_the_command_makes_is_judged_by_what_it_copies() {
 #[test]
 fn a_work_tree_the_command_makes_holds_the_readmes_under_its_place() {
     let long = format!(
-        "git worktree add $NEVER_SET_T67/{} && echo x > /tmp/q/README.md",
+        "read NEVER_SET_T67; git worktree add $NEVER_SET_T67/{} && echo x > /tmp/q/README.md",
         "d".repeat(120)
     );
     let cases: [(&str, &str, Option<&str>); 27] = [
@@ -432,7 +435,7 @@ fn a_work_tree_the_command_makes_holds_the_readmes_under_its_place() {
         // the corpus's scratch clone of a bare repository of its own, beside a worktree of the tree: its README is the scratch's
         ("git worktree add /tmp/t58/wt && d=$(mktemp -d -p /tmp/q) && cd $d && git init -q --bare remote.git && git clone -q remote.git seed; cd seed; echo seed > README", CLONE, None),
         // failing closed: a place the walk cannot resolve, a worktree with no place, and one past the walk's segment
-        ("git worktree add $NEVER_SET_T67/wt && echo x > /tmp/q/README.md", CLONE, Some("/tmp/q/README.md")),
+        ("read NEVER_SET_T67; git worktree add $NEVER_SET_T67/wt && echo x > /tmp/q/README.md", CLONE, Some("/tmp/q/README.md")),
         ("git worktree add && echo x > /tmp/q/README.md", CLONE, Some("/tmp/q/README.md")),
         (&long, CLONE, Some("/tmp/q/README.md")),
         // a clone that is no copy holds nothing, beside one that is

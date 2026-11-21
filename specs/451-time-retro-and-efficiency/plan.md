@@ -573,31 +573,38 @@ The T02 class, by kind (the grep's hits, each read):
 <!-- plan-archive: T45 to T45 moved to plan-done.md, 2026-11-21 (feature 375 FR-044) -->
 <!-- plan-archive: T47 to T44 moved to plan-done.md, 2026-11-21 (feature 375 FR-044) -->
 <!-- plan-archive: T47 to T47 moved to plan-done.md, 2026-11-21 (feature 375 FR-044) -->
-### T48 (<why: the finding or measurement that files it>)
+### T48 (the bundle read ids inside a clause naming another feature by its number as the reviewed feature's, filed by the round arbiter on `ask:451-T46-fourth-round` (accept, 2026-11-20) to be measured first; measured 2026-11-21: 4 of the 5 real such clauses across every plan handed the reviewer the reviewed feature's same-named id, unmarked, method below)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: `named` in `rust/gate/crates/plan/src/plan/bundle.rs` reads a run of ids followed by a clause naming a feature by its number (`in N's`, `of feature N`, `from N`) as N's. `QUALIFIED` gains a third branch, a run no number names with that clause after it, all of it the clause's feature's, where a numbered run is cut: no number claims its head, every such run among the 8 measured holds one id, and a misread costs a line marked with the clause's feature or a NOT FOUND line, never this feature's text unmarked; `ANOTHER` captures the clause's number, so the part of a numbered run that `own_run` cuts off at such a clause is that feature's too, where it fell to the bare reading; `Named::claim` keeps this feature's ids in the text, to be carried, and takes another's out, so `foreign` carries it from that feature or names it NOT FOUND. A clause naming the reviewed feature reads as before, and so does one naming a source by another name ("in house style's"), its part left bare.
+  - the measurement, measured 2026-11-21 (`/tmp/t48-scripts/measure.py`: `named` emulated regex for regex over every `specs/*/plan.md` and `plan-done.md`, 327 files, 282 and 45): 8 such clauses, 2 naming the reviewed feature (451's own, in T46's section) and 6 another. Of the 6, 1 is a quoted test string in T46's section, naming a feature with no directory, and 5 are real: 319 plan.md line 213, 443 plan.md line 25, 415 plan-done.md line 91, 449 plan-done.md line 967 and 133 plan.md line 15. Each names its id once in its block, only in the clause; none of the 8 reads a count as a feature number.
+  - the bundles, measured 2026-11-21 (each block put as a task section of a scratch copy of its feature, `/tmp/t48-tree`, with the named features' directories beside it, and built by `scripts/gates/l7r-gate.sh plan decide <F> T900`; before `/tmp/t48-scripts/bundles-before/`, after `/tmp/t48-scripts/bundles-after/`): on HEAD 4 of the 5 real ones (319, 443, 415, 449) carried the reviewed feature's own same-named requirement or decision as the cited one, with no "may mean either" line, each a different rule from the named feature's (319's carried its pilot-order rule where 134's is "the SVG and PNG are unchanged"), and 133's carried nothing. With the fix, 319's, 415's and 133's carry the named feature's text (134's, 207's and 132's), and 443's and 449's name it NOT FOUND (435 holds no such id; 239 writes its requirements unlisted, Found and left). T46's quoted string now names its two decisions NOT FOUND where it carried 451's, and T46's "in 451's sections" carries the same two decisions, byte for byte. The only other lines that moved are two ids already named with 132's number, NOT FOUND in the before-bundles because the scratch tree held no 132 when they were built, and, in `spec-index.md` of 319, 443 and 449, the reviewed feature's own id, back in the index now that no block cites it.
+  - red first, the test before the code: `ids_in_a_clause_naming_another_feature_are_that_feature_s` (`bundle/tests.rs`: the 319, 415 and 133 shapes, a numbered run cut at another feature's clause, this feature's run cut so, and a clause naming this feature) failed on HEAD, 157 passed and 1 failed, measured 2026-11-21 (`make rust-test CRATE=rust/gate/crates/plan`, `/tmp/t48-scripts/red.log`); green, 158 of 158, measured 2026-11-21 (`/tmp/t48-scripts/green.log`). T46's own test passes unchanged: its fixture feature is 999, the reviewed one, so its clauses name the reviewed feature.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| `named`'s clause reading | n/a - no map | n/a | none | n/a |
 
 ### T48 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** No map changes. A plan reviewer handed a block that names another feature's requirement or decision in a clause after it reads that feature's text, or a NOT FOUND line saying so, never the reviewed feature's same-named one.
+2. **The constraints.** T48's line (measured first across every plan and `plan-done.md`; fixed only if a real clause hands a reviewer the wrong text, red first; read as N's, carried or named NOT FOUND); the round arbiter's ruling `ask:451-T46-fourth-round`; T46's reading, untouched but for a clause naming a feature by its number; constitution XIV; 100% line coverage of the plan crate by its own tests; only `bundle.rs`, its tests and this section edited (the brief).
+3. **Where each comes from.** O: the measurement of 2026-11-21 (the Approach); G: none - the ruling and the brief are the coordinator's.
+4. **Do they describe the world here?** Yes: the real bundles of the 5 real clauses, built by HEAD's binary, carried the wrong text in 4 (measured 2026-11-21, the Approach).
+5. **The order.** None needed: T78's and T79's files are untouched.
+6. **The exits.** Green: the plan crate's tests, lint, format and cover clean, and `make closing-checks` green. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** none - `named` is the one reader of whose ids a block names (`cited_text`'s and the amendment reading's in `build`). The clause's other branch, a source named by another name, measured 2026-11-21 (the same corpus and script): 2 real (273 plan.md line 58, 414 plan-done.md line 102), each naming the feature's own work, so no wrong outcome.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** 158 of 158 in the plan crate (measured 2026-11-21, `/tmp/t48-scripts/green.log`); the after-bundles as the Approach says (measured 2026-11-21). `make closing-checks` in this clone red on `static` and `hooks-test` alone by another builder's half-edited `rust/guard/shared/src/tree.rs` (E0061 and E0057, T79's), `quick` green (measured 2026-11-21, `/tmp/t48-scripts/closing.log`), so measured again on HEAD `fbbe56cc97` with this task's three files alone, in a detached worktree (`/tmp/t48/t48wt`): `static` green (2,321 s), `quick` green, and the plan crate's lint, format and cover clean (measured 2026-11-21, `/tmp/t48/wt-closing.log`, `/tmp/t48/wt-lint.log`, `wt-format.log`, `wt-cover.log`). Its `hooks-test` was red on 45 suites, every one because the fresh worktree's guard binary was built during the run, then on 2 when run again (`/tmp/t48/wt-hooks2.log`), and each of those 2 green alone: `no-poll-hooks.sh` 144 of 144, its 3 liveness cases red only under the full fan-out's load, and `test-l7r-gate.3.sh` once given the mirror's model cache, which a worktree outside the clones has none of (measured 2026-11-21, `/tmp/t48/wt-nopoll.log`, `/tmp/t48/wt-gate3.log`).
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** A reviewer of 319's Constitution Check block or 443's Performance bookends block (and, while they were live, 415's T04 and 449's T050 sections) read the reviewed feature's own requirement or decision as the one cited - the T42 failure; after it, the named feature's text or a NOT FOUND line.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?**
+- The clause reading - fixed here, observed 2026-11-21, method: every clause of the form across every `plan.md` and `plan-done.md` (the Approach's measurement).
+- A requirement a spec writes as an unlisted bold id (a bold id at a line's start with no list dash) is not read by the bundle's requirement reader (`requirements`), so a block citing one gets a NOT FOUND line where the text exists: 449's T050 clause against 239, observed 2026-11-21; 24 specs write some requirement that way, all of features 129 to 271, measured 2026-11-21 (`grep -lE '^\*\*(FR|SC)-[0-9]{3}' specs/*/spec.md`). A NOT FOUND line where the text exists tells a reviewer the requirement is missing, a wrong outcome. It predates T48 - a citation by the feature's number alone gets the same line. Not fixed here: the requirement reader is a separate reader from the clause reading T48 changed, and whether a live plan cites such a requirement is measured first. Filed as T82; lands before T22.
+- 443's plan.md line 25 cites an id its named feature does not hold - now named NOT FOUND, which is no wrong outcome; left as written, 443's plan being outside the brief.
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** no.
 
 
 ### T49 (<why: the finding or measurement that files it>)
@@ -1083,14 +1090,112 @@ the lines where it reads them, as T74 did. Not an engine-speed task, so no docs/
 **Performance work?** no.
 
 
-### T78 (<why: the finding or measurement that files it>)
+### T78 (the plan hold refused a shell write that shares only template text with the held section, found by T77 on 2026-11-21: 7 of the 18 replayed task-held Bash refusals matched only text every section shares, each a live hold and a foreground call; and its write-back ran on `PostToolUse` alone, so a command that changed held text and then exited non-zero was written back by nothing)
+
+- **Approach**: two changes, in order, each red first, after the measurement T77's section asked for.
+  - the measurement, 2026-11-21: a Bash command that exits non-zero fires `PostToolUseFailure` and no `PostToolUse` (this builder's `exit 3`, toolu_01VpHJEF57LMjfwfA9pCRy6y: one PreToolUse and one PostToolUseFailure line in the 451 event log). A foreground call the harness moves to the background gets its one `PostToolUse` AT THE MOVE and nothing at its end: this builder's 205 s foreground call (timeout 300 s) moved at 180 s, its `PostToolUse` at 13:22:19.664Z with `ms` 180052 and `bg` beu5tx5ri, its end at 13:22:44.6Z with no line, measured 2026-11-21 (the 451 event log), and the 38 other moves of 170 s or more in the clones' event logs one PreToolUse and one PostToolUse each, no `PostToolUseFailure`, no `BgEnd`, measured 2026-11-21 (`/tmp/t78/moved.py`). A call is moved at its own timeout too (this builder's 120 s scan, observed 2026-11-21). All 39 were subagents' calls; a main-session move is unmeasured (none in the logs). So the write-back stands behind a foreground call for what it changed by its end or its move, never after the move.
+  - the write-back on failure: `checks_hooks` takes `PostToolUseFailure` beside `PostToolUse` and `SubagentStop`; a Bash, Write or Edit call runs `after` on either, and a failed Agent or TaskStop call returns before `launched` - booked as a launch, a failed Agent call set its pending hold `running` with no agent to return it, a hold for half an hour. `.claude/settings.json` already registers `PostToolUseFailure` for the dispatcher (read 2026-11-21): no settings change.
+    - red first: `a_failed_call_is_written_back_and_a_failed_launch_keeps_its_hold`, driven through `protocol::run` so the guard's own event filter decides, 423 passed and 1 failed on HEAD, the write-back's assertion (measured 2026-11-21, `make rust-test CRATE=rust/guard`, `/tmp/t78/red1.log`); with the event added alone, red again on the failed Agent call's hold read `running` (`/tmp/t78/red1b.log`); green: 424 of 424 (measured 2026-11-21, `make rust-test CRATE=rust/guard`, `/tmp/t78/green1.log`). Through the binary, a `PostToolUseFailure` of a call that changed held text, piped to `l7r-guard --only checks-hooks PostToolUseFailure` on a scratch clone: the mirror's binary exits 0 and leaves it changed, this task's exits 2 and writes it back, measured 2026-11-21 (`/tmp/t78/failure-replay.py`, `/tmp/t78/failure-replay.log`). Unmeasured: whether the harness shows a `PostToolUseFailure` hook's exit-2 text to the caller - the write-back does not rest on it.
+  - the narrowing: in `planhold.rs` `refusal`, for a LIVE hold (`live`, `snapshot`'s own filter) and a call without `run_in_background` (`crate::wait::background`), `bash_hits` counts a held heading, line or quoted string only where the plan outside the held text (`outside`: each held text cut out, a NUL in its place) does not hold it too; a pending or dead hold and a background call are refused on shared text as before, and so is a task whose own headings stand apart in the plan (its joined section stands nowhere whole, so `outside` is None and nothing is read as outside it).
+    - red first: `a_shell_write_on_shared_text_is_refused_only_where_nothing_writes_it_back` (nine cases on a fixture whose two sections share `8. **The budget.** One landing.`: live and foreground on the shared line pass, for a task hold and a block hold; a background call, a pending hold and a dead hold on it, a held-only line live and foreground for both holds, the held heading, and a pending background call are refused; then a split section refused on the shared line) misjudged 2 of 9 on HEAD - the two live foreground writes on the shared line refused - 330 passed, 2 failed, the other `house_style_hooks`' 20 s bound under load (measured 2026-11-21, `make rust-test CRATE=rust/guard/shared`, `/tmp/t78/red2.log`); green: the test passes, 331 of 332, the one failure `house_style_hooks`' `a_spelling_past_a_million_steps_is_corrected` past its 20 s bound at a load average of 82 (run alone from the same binary it failed at the bound too, the process ending at 20.08 s, and nothing T78 changed runs in it), measured 2026-11-21 (`make rust-test CRATE=rust/guard/shared`, `/tmp/t78/green3.log`; `uptime`).
+  - the replay (`/tmp/t78/replay.py`: each of T77's task-held Bash refusals from `~/.claude/guard-log`, its plan at the last commit before it, a scratch clone holding it under a live hold, the call's own `run_in_background` read from its transcript, piped to a built `l7r-guard --only record-edit-hooks PreToolUse`, at a 34 MB peak): through the mirror's binary of HEAD's code as control, 15 of the 15 placeable refused, measured 2026-11-21 (`/tmp/t78/replay-head.log`), and T221's and T33's passed because their held text was not yet committed (T77's 3 unplaceable with T98's of 08:12:02Z; the 2 block holds not replayed); through this task's binary (this clone's build of 2026-11-21 08:46, `/tmp/t78/l7r-guard.t78`, which carries T79's uncommitted `tree*` edits too), the 8 with held-only text stay refused (T98 of 07:50:18Z, T104 of 08:20:18Z, 08:20:50Z and 08:50:31Z, T11's 2, T01, T025) and the 7 on shared text alone pass (T104 of 08:25:08Z, T27, T063, T44's 2, T67, T73), the same 8 and 7 T77's reading named, with T221's and T33's passing as on HEAD, measured 2026-11-21 (`/tmp/t78/replay-t78.log` beside `/tmp/t78/replay-head.log`, a 35 MB peak).
+  - accepted, the moved call and the detached writer (who chose: this builder, under T78's brief; the GM may overrule): a live hold's foreground call that outlives its move and then writes held text through shared text alone now passes the pre-call refusal, and nothing writes it back; so does a foreground command that detaches its writer (a lone `&`, `nohup`, `setsid`, `disown`), its `PostToolUse` at the shell's return and its write after - `no_poll_hooks` refuses a detached job for make and cargo alone (451 T15, read 2026-11-21). Its cost, the same for both: `make plan-verdict` refuses the verdict (`record.rs`: a task's `section_sha256`, a block review's `plan_sha256` and each block's digest, read 2026-11-21) and the review runs again, about 1-4 minutes, observed 2026-11-21, method: `HOLD_MAX_S`'s comment in `planhold.rs`, the evening's 42 reviews. Measured 2026-11-21: 0 of the 39 moved calls' commands named `plan.md` with a write shape (`/tmp/t78/moved.py`, each command read from its transcript). Priced and not taken: (a) keeping a moved call's snapshot and checking it at later calls - it needs the move's `backgroundTaskId` in `restore`, which `handle.rs` does not pass, outside the brief, and a subagent's moved call has no end event to check at; (b) no narrowing where the command also runs a make target - it covers make alone, not every long step, for a case measured at 0 of 39; (c) no narrowing where the command detaches - `no_poll_hooks`' reader of a detach is the guard crate's, not the shared crate's `planhold.rs`, and a second reader of it is the search smell item 7 names.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+| the write-back on `PostToolUseFailure` | n/a - no map | n/a | none | n/a |
+| the narrowing to held-only text | n/a - no map | n/a | none | n/a |
+
+### T78 Approach (checklist part A)
+
+1. **The goal, in the world.** No map changes. While a plan review runs, a builder's foreground shell write to another section of the plan goes through even when its command quotes a template line the held section also holds; a write that changes held text through such a line is written back when the call ends, whether it exits zero or not; a pending hold or a background call is still refused on any held text.
+2. **The constraints.** T78's line (the write-back on `PostToolUseFailure` first, then the narrowing for a live hold and a foreground call, a pending hold or a background call still refused on shared text, each red first); its brief (the moved call's question measured first; the replay keeps the 8 and passes the 7; only `checks_hooks`, `planhold.rs`, their tests, the record-edit suite, the `docs/guards.md` rows and this section edited; the settings checked); feature 385 T85's hold; FR-012 (a refusal fixed red first).
+3. **Where each comes from.** O: T77's replay of 2026-11-21 and this task's measurements of 2026-11-21 (the Approach); G: none - the brief is the caller's.
+4. **Do they describe the world here?** Yes: the two failure shapes reproduce on HEAD (`/tmp/t78/red1.log`, `/tmp/t78/red2.log`), and the HEAD binary refuses all 15 placeable refusals of the log (`/tmp/t78/replay-head.log`), measured 2026-11-21.
+5. **The order.** The write-back first, then the narrowing that rests on it; T79's `tree*` files and T48's `rust/gate/crates/plan` are untouched.
+6. **The exits.** Green: both crates' tests, lint, format and cover clean, the replay's 8 refused and 7 passed, and `make closing-checks` green. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** none - the one reader of a shell write to a held plan is `bash_hits`, the one write-back `restore`: `grep -rln "plan_snaps\|bash_hits" rust/ scripts/` (2026-11-21) names `planhold.rs`, `checks_hooks.rs` and four test files alone.
+8. **The budget.** One landing.
+9. **Done, measured.** 424 of 424 in `rust/guard` (`/tmp/t78/green1.log`) and 331 of 332 in `rust/guard/shared`, the one failure a 20 s bound under a load average of 82 (`/tmp/t78/green3.log`), measured 2026-11-21 (`make rust-test`); the replay's 8 refused and 7 passed (`/tmp/t78/replay-t78.log`, measured 2026-11-21); the shared crate's lint and format checks red only on T79's half-edited `tree.rs` and `tree/tests/words.rs` (a clippy `format_push_string` at `tree.rs:351`, rewraps), this task's four files clean under `make format FILE=` (measured 2026-11-21, `scripts/gates/l7r-gate.sh rust lint` and `rust format --check`, `--crate rust/guard/shared`, `/tmp/t78/lint-rust_guard_shared.log`, `/tmp/t78/fmt-rust_guard_shared.log`); so both crates were measured on HEAD `fbbe56cc97` with this task's five files alone in a detached worktree: `rust/guard` 424 of 424, lint, format and cover clean, `rust/guard/shared` 328 of 328 on the first run, lint, format and cover clean once the test's failure list no longer stood on lines of its own (the second run's tests 327 of 328, the one failure the same 20 s bound at a load average of 52), measured 2026-11-21 (`scripts/gates/l7r-gate.sh rust test`, `lint`, `format --check`, `cover`, each `--crate`, `/tmp/t78/wt-checks.log`, `/tmp/t78/wt2-checks.log`); `make closing-checks` red 3 of 3 on T79's `tree*` not compiling, measured 2026-11-21 (`.git/closing-checks/20261121T135041Z-681465/`), so `make hooks-test` with this change is owed.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** A builder's correct write to its own section was refused (7 of the log's 18, each a lost call); a command that changed held text and failed left it changed, a verdict voided unseen until `make plan-verdict` refused it; and a failed Agent dispatch would have held a section for half an hour once the guard took failures.
+
+**Found and left?**
+- A shell write to another section refused on shared template text, a live hold and a foreground call - fixed here, observed 2026-11-21, method: every task-held Bash refusal of the guard log replayed through the guard binary (`/tmp/t78/replay.py`); `bash_hits` is the one reader.
+- A foreground call that changed held text and exited non-zero was never written back - fixed here, observed 2026-11-21, method: the 451 event log's line for a failing call (`PostToolUseFailure` alone) and `checks_hooks`' `events`; `restore` is the one write-back.
+- The write-back of a task whose own headings stand apart in the plan restores nothing and still says "the held text is written back": `write_back` replaces the joined section, which stands nowhere whole (read from the code 2026-11-21, not run; 51 of the 898 task sections in `specs/*/plan*.md`, none in 451's `plan.md`, measured 2026-11-21, `/tmp/t78/split.py`); the change stays, and `make plan-verdict` refuses the verdict. Not fixed here: the fix wants each span of `plan_text`'s `ordered_sections`, outside T78's files. Filed as T80; lands before T22.
+
+**Performance work?** no.
+
+
+### T79 (shared::tree's walk split a `\`-continued line, a `${VAR}`'s braces and a `$(...)` inside a word into segments of their own, and read a `$(mktemp)` directory toward the mirror, found by T50 on 2026-11-21; and it settled a place it could not resolve two ways - a cp's toward where the shell was last known, one of T50's git forms not placed at all (T50's D-d and D-e) - found by T50's plan review, 2026-11-21)
+
+- **Approach**: the walk reads each word whole, then one rule settles every place it still cannot resolve; measured first on four corpora, each change red first.
+  - the corpora, measured 2026-11-21: fx (T33's 1,134 fixture rows), tx (T50's 995 git commands), ux (2,311 transcript commands holding a `\`-newline, a `${` or a `mktemp`, `/tmp/t79/ux-all.jsonl`) and bx (59,116 transcript commands standing in the mirror or naming it, from 6,114 diagram transcripts, `/tmp/t79/bx-all.jsonl`, extracted by `/tmp/t79/scripts/extract_all.py`); replayed one row at a time through a built guard in a fresh scratch mirror by `/tmp/t79/scripts2/stream.py`, one driver streaming its corpus with at most 6 guard processes (byte-identical to T50's `replay.sh` on `head.fx.nobody.main-tree-hooks` and `head.fx.gate.gate-write-hooks`, a 26 MB peak on bx, measured 2026-11-21 (`cmp`, `/usr/bin/time -v`)).
+  - the walk (`tree.rs`): a `\`-continued line is one command (`joined`, in `sanitize` once heredocs and quotes are out, and in `env_from`); a `${...}` is one word (`closing`); a `$(...)` inside a word is walked as a substitution before its word's command, the word holding `$__sub_<n>__` - found here, the same split: it let spec 204's own D6 case `cd $(somewhere) && git commit` through at HEAD; a `$(pwd)` or `` `pwd` `` is `.`, where the shell stands; a brace expansion (`/tmp/{a,b}`) stays in its word, only a brace group's own `{` and `}` splitting - found here, the same split: `cp /tmp/{a,b} /diagram/x` from `/tmp` passed at HEAD, its destination cut off (the probe `/tmp/t79/probes-br.jsonl`, measured 2026-11-21); a `$(mktemp ...)` is the place mktemp makes (`mktemp_place`: no template `$TMPDIR` or `/tmp`, `-p D` and `--tmpdir=D` D, `-t` preferring `$TMPDIR`, a relative template unresolved, measured 2026-11-21 (uutils coreutils 0.8.0 `mktemp -u` on each form, `TMPDIR` set and unset)).
+  - the one rule (`settled` with `known_place`, and `tree/bind.rs`'s `bound_texts`), the same for a redirect, a file tool and a git form: the walk first RESOLVES what the command's own text resolves and walks each binding of its many-valued names (up to 64), their writes together - each of a `for`/`select` loop's literal values; each value of a name assigned more than once with different values (an assignment that reads its own name, `S=$S/sub` or a prefix `S=$S cmd`, follows the one before); a loop's variable also assigned, its loop's values and its literal assigned ones; a name no one assigns, its value in the guard's environment, else empty, as bash reads it; `${N:?}`, `${N:-W}` and `${N%SUFFIX}` (N's directory); `$(dirname X)` and `$(basename X)` of a known X; a name assigned from `$PWD`, where the shell stands at the assignment. A place whose start the walk then knows lies where that start does (the mirror, a clone or elsewhere; `/$X`, a start the mirror lies under, is nothing known). What stays unknown - a name `read`, `mapfile`, `readarray`, `getopts`, `printf -v` or `+=` sets, a chain assignment after the first, a loop over a substitution or with no `in`, a loop's variable assigned a value the walk cannot read, bash's own names (`$RANDOM`), any name once `source`, `.` or `eval` appears, a substitution's value - keeps spec 204's D6: it lands where the shell was last known, so standing in the mirror it is the mirror's. A target's segment is shown from its command, as the command holds it (`bind::from_command`, `shown`). `git.rs`'s cut reading (T50's D-e) and its filter that left an unresolved git place unplaced (D-d) are gone.
+  - the arm for what stays unknown, chosen by measurement and by the plan review (BLOCKED 2026-11-21, `/tmp/sfr-t79/verdict-T79.json`): the first round read a write word nothing is known of as not the mirror's (re), which passed the review's five probes (`/tmp/t79b/p0.r.tsv`), each a write of the mirror standing in it (`echo x > $n.txt`, `for i in 1 2; do echo x > $i.txt; done`, `for f in a.txt b.txt; do echo x > $f; done`, `F=$(ls | head -1); sed -i s/a/b/ $F`, `R=$(git rev-parse --show-toplevel); echo x > $R/f`); D6 for every such word (rd) kept 13 of the corpus's scratch writes refused, measured 2026-11-21 (`/tmp/t79/rp2/rd.b29.{t,nobody}.tsv`). Resolving first and then D6 passes all of the 29 bx rows those variants split on (26 HEAD refusals and 3 HEAD passes, the 3 `mkdir -p $(dirname $F)` on a scratch path, bx#31033, #33626, #55610) through main-tree with sid t and nobody, each by resolution, and refuses the five probes, measured 2026-11-21 (`/tmp/t79/rp2/r4.b29.{t,nobody}.tsv`, `/tmp/t79b/p1.r4.tsv`, through `/tmp/t79/bin-r4`).
+    - its measured cost in full - every place it reads otherwise than HEAD where the write is not the mirror's - measured 2026-11-21 (the probes `/tmp/t79b/p1.jsonl` through the HEAD and final binaries, `/tmp/t79b/p1.{head,r4}.tsv`; bash 5.3.9; the replay below): a name assigned twice is judged at each value, so `D=/diagram/x; D=/tmp/y; touch $D/f` standing in the mirror is refused though bash writes scratch - the price of judging a branch's `if ...; then D=a; else D=b; fi` both ways, where HEAD's last value passed `F=/diagram/a; echo x > $F; F=/tmp/b`, a write of the mirror, and no corpus command moves by it; `cd $UNSET` goes home, as bash's `cd` with no word does, so `cd $UNSET && touch f` standing in the mirror writes `$HOME/f`, no longer D6's mirror write; `git clone $R` and `git worktree add --detach $W` with R and W unset are no write (bash 5.3.9: git's "You must specify a repository to clone", and `worktree add`'s usage, rc 129, no tree made), and `touch $UNSET/f` is `/f`; a variable only the Bash tool's shell profile sets is read as empty, since the guard reads its own environment - today `~/.bashrc` exports `BASH_ENV` alone, the newest `~/.claude/shell-snapshots` file `PATH` alone and `/etc/sandbox-persistent.sh` nothing, none a write's place, measured 2026-11-21 (grep of `~/.bashrc`, the newest `~/.claude/shell-snapshots` file and `/etc/sandbox-persistent.sh`); `CLAUDE_PROJECT_DIR` is set in the hook's environment (the hook's own command line reads it) and unset in the Bash tool's shell, measured 2026-11-21 (`env`, `/tmp/t79b/env-shell.txt`), so `echo x > $CLAUDE_PROJECT_DIR/f` is judged at the project's directory though bash writes `/f`, an error in the conservative direction; a `python3 -c` program writing a place it computes from `sys.argv` in a loop's body, now seen, is judged where the shell stands, as HEAD judges the same program outside a loop (bx#54240, bx#58694, ux#2209, each writing scratch; the Python rule's, below); and a guard file's name written into a scratch copy in a loop's body is refused by make-only as HEAD refuses the literal `cp <guard file> /tmp/t42/src-t42/<guard file>` (`/tmp/t79b/judge/pmo-head.tsv`; T87's class).
+    - red first: `rust/guard/shared/src/tree/tests/words.rs`'s six tests (a continued line, a braced variable, a substitution in a word, a mktemp place, a brace expansion, and `an_unresolved_place_is_settled_one_way_for_every_tool`, the one rule) on HEAD's `tree.rs` and `git.rs`: 325 passed and 9 failed - the six, the one rule's on its first case (`R=/s/r; for pm in 4 8; do sed s/a/b/ $R/M > $R/M.P$pm; done` read `(None, "main", "shell")` for `(None, "elsewhere", "named")`), and three `tests.rs` pins of the rule (measured 2026-11-21, `make rust-test CRATE=rust/guard/shared` in a detached worktree at HEAD with this task's tests, `/tmp/t79/red3.log`; the first four were red first alone on 2026-11-21, 327 passed and 4 failed, `/tmp/t79/red1.log`); `tree/tests/binds.rs`'s first four tests on the first round's walk, 336 passed and 4 failed (`/tmp/t79b/red.log`), and its four third-round tests each red alone before its fix (`/tmp/t79b/red-kw.log`, `red-pwd.log`, `red-self.log`, and `red-loopset.log` with the old rule put back), and gate-write's `timeout` case (`/tmp/t79b/red-gw.log`, 423 passed and 1 failed); green: 345 of 345 in `rust/guard/shared` (words.rs's seven - the six and `an_unbalanced_parenthesis_ends_the_walk_cleanly`, a coverage test - and binds.rs's nine) and 424 of 424 in `rust/guard` (measured 2026-11-21, `scripts/gates/l7r-gate.sh rust test --crate` in this clone, `/tmp/t79b/t17.shared.log`, `/tmp/t79b/t17.guard.log`).
+    - the pins the rule moves, each with why: `tree/tests.rs` - `touch $UNSET/f` standing in the mirror (HEAD's pin from 449 T010) is `/f`, elsewhere, since an unassigned name is empty; `git clone $R` is no write (git refuses a clone with no repository), the unresolved clone now `git clone $(cat url)`; `git worktree add --detach $W` is no write (no path, git's usage), the unresolved one `$(cat w)`, D6; `git -C /x/$U commit` is no write in the mirror (`/x/`), `git -C <mirror>/$U commit` refused in its place; `words.rs`'s one-rule test reads `$RANDOM` for the unknown and resolves its loop; and three suites outside the brief's file list, each because a pin wrote an unassigned name as its unknown: `gm_tree_hooks/tests.rs` (`echo x > $UNSET/gm-assistant` is `/gm-assistant`, no write of the tree; D6 pinned by `cd $(somewhere) && echo x > f` standing in it), `main_tree_hooks/tests.rs` (`cd $UNSET && python3 -c ...` becomes `cd $(somewhere) && ...`, since `cd $UNSET` goes home) and `readme_hooks/tests.rs` (`$NEVER_SET_T67` read first by `read NEVER_SET_T67;`, so it stays unknown and its six fail-closed pins keep their meaning, and `echo x > $NEVER_SET_T67/README.md` is no README of the tree), with `tests/hooks/test-readme-hooks.sh`'s two cases, their shell twins; and `gate_write_hooks/tests.rs`, the third round's (a loop's `sed -i` into the tree refused; a loop's `make`, a `then touch` and `timeout 60 make` passed, as their bare forms are); `tests/hooks/test-main-tree-hooks.sh` pins the five probes (section 2), and its fixture's row 59 moves rewrote -> allowed (a scratch write its loop's values resolve) while row 33 stays rewrote (its S a substitution's value, D6), split 164/9.
+  - the replay, the final binary against HEAD's (`/tmp/t79/bin-r4`, built 2026-11-21 from this clone's files on HEAD fbbe56cc97 in `/tmp/t79/wt` by `/tmp/t79b/scripts/sync3.sh` and `/tmp/t79/scripts/build.sh`): fx, tx and ux through each guard that reads the walk and all of them, sid t and nobody, and the gate replay (42 files, HEAD's from T50's `replay.sh`), and bx through main-tree, make-only, gm-tree, readme and house-style, sid nobody, measured 2026-11-21 (`/tmp/t79/scripts2/runall2.sh /tmp/t79/bin-r4 r4`, 8 min 29 s, a 34 MB peak, `/tmp/t79b/runall-r4.log`; compared by `/tmp/t79/scripts2/moves.py head r4`, `/tmp/t79b/moves-head-r4.txt`; each refusal's reason read by `/tmp/t79b/judge/why.py`): 87 commands move, each judged by what it really writes.
+    - to allowed, 63: through main-tree 45, every one a scratch or clone write HEAD refused or rewrote - a `$(mktemp -d)` place (tx#877, tx#879, ux#1580, ux#1582, ux#1661, ux#857, ux#863), a known scratch start with a loop's or a substitution's name in it (main-tree#59, ux#675, ux#677, ux#1039, ux#2139, ux#2167, ux#2267), a clone's file named through `$C` (window#277), and bx's 30 (26 of the 29 the variants split on, the other 3 passes at HEAD, and 4 `$(mktemp -d)` places); through gate-write 14 (tx#21, #299, #566, #567, #734, #787, ux#692, #900, #902, #904, #906, #1040, #1056, #2082), each a `timeout N make <target>` HEAD refused as a shell write of `.` and passes as its bare `make <target>` does (`timeout 60 make tick` stays refused by the make rule, `/tmp/t79b/judge/pgw3-*.tsv`); through house-style 4 - window#298, a write into a `$(mktemp -d)` copy HEAD corrected as the project's, and bx#4624, bx#4696 and window#241, the replay world's artifact (its mirror lies under `/tmp`, which house-style's `outside` reads as outside; on their real paths both binaries correct them, a direct run); gm-tree's and readme's bx passes moved none.
+    - to refused, 24 (ux#2209 rewritten to the clone with sid t): through gate-write 9 - ux#206 (a `cat >` into the clone's spec from a loop's body), ux#714, #740, #742, #746, #750, #758 and #752 (a `sed -i` into the clone, its word split by a `\`-continued line or a `${...}` at HEAD, or its `f` both assigned and a loop's variable), each a real write of the tree its stand-in gate runs in, and ux#1371, a false refusal: `for i in 1 2 3; do L7R_FEATURE_DIRECTORY=... L7R_PAGE_SESSION=... L7R_CONTINUE=... make rust-test ...; done`, whose `make` lies past the segment's 120-character cut, so gate-write reads no command - HEAD refuses the same line outside a loop (`/tmp/t79b/judge/pgw5-head.tsv`; below); through make-only 12 - tx#953, ux#1106, #1107, #1201, #1202, #1205, #1206, #1207, #2204, bx#34981, #35626 and #35638, a guard file's name (`Makefile`, `dev/work-budget.json`, a guard's source) written into a `$(mktemp -d)` place or a scratch copy from a loop's body, refused as HEAD refuses the same write to a literal scratch path (`/tmp/t79/probes-mk.jsonl`, `/tmp/t79b/judge/pmo-head.tsv`; T87's class); and through main-tree 3 - bx#54240, bx#58694 and ux#2209, a `python3 -c` program writing scratch through `sys.argv` in a loop's body, refused as HEAD refuses it outside a loop (the Python rule's, below).
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+| the walk reads each word whole | n/a - no map | n/a | none | n/a |
+| the one rule for an unresolved place | n/a - no map | n/a | none | n/a |
+
+### T79 Approach (checklist part A)
+
+1. **The goal, in the world.** No map changes. main-tree, make-only, gm-tree, readme and house-style see a command's writes where bash puts them: a `\`-continued line, a `${VAR}` and a `$(...)` inside a word read as one word, a brace expansion as one word, a `$(mktemp)` place as scratch, `$(pwd)` as the shell's place; and a place the walk still cannot resolve is judged one way whatever tool writes it - no scratch write refused because a variable stands in its name, and no write of the mirror let through because the walk lost track of where the shell stands.
+2. **The constraints.** T79's line (the three word readings and the mktemp place; measured first on a corpus, red first; one rule for every tool); spec 204's D6 and FR-002 (a `cd` the walk cannot read leaves the shell treated as still in the mirror, "the conservative direction, so the fix cannot turn a refusal into a false allow"), kept for the shell's own place; T50's D-d and D-e, superseded by the rule; the brief's bounds (`tree.rs` under 1,000 lines - 975, `tree/bind.rs` 441 beside it, measured 2026-11-21 (`wc -l`); T78's `checks_hooks` and `planhold.rs` and T48's `rust/gate/crates/plan` untouched; the replay streamed, one driver).
+3. **Where each comes from.** O: this task's corpora and replays of 2026-11-21 (the Approach); G: none - the brief is the caller's; the D6 direction is spec 204's.
+4. **Do they describe the world here?** Yes: T50's four forms reproduce on HEAD (`/tmp/t79/probe2.txt`), the six tests of `words.rs` fail on HEAD's walk (`/tmp/t79/red3.log`), `binds.rs`'s first four fail on the first round's walk (`/tmp/t79b/red.log`) and each of its four third-round tests fails alone before its fix (`/tmp/t79b/red-{kw,pwd,self,loopset}.log`; the loop-and-assigned one with its old rule put back, 344 passed and 1 failed), the probes reproduce through the HEAD binary (`/tmp/t79b/p1.head.tsv`), and the HEAD binary refuses the 30 scratch writes the replay moves (`/tmp/t79/rp2/head.bx.nobody.main-tree-hooks.tsv`), measured 2026-11-21.
+5. **The order.** The walk's readings first (each red first), then the rule on top of them, since a word read whole is what the rule's "start the walk knows" reads; T78's and T48's files untouched.
+6. **The exits.** Green: both crates' tests, lint, format and cover clean, every replay move judged by what the command really wrote, and `make closing-checks` green. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** none - the one reader of where a command's writes land is `shared::tree`'s walk (`walk`, `writes_in`, `git_write`); `grep -rln "known_dir\|known_place\|settled(" rust/guard` (2026-11-21) names `tree.rs` and `tree/git.rs`, and one test whose name ends in `stays_settled(` (feature_approval's, unrelated); the bindings are `tree/bind.rs`'s alone, called from `walk_in`.
+8. **The budget.** One landing.
+9. **Done, measured.** 345 of 345 in `rust/guard/shared` and 424 of 424 in `rust/guard`, each crate's lint, format check and cover clean, measured 2026-11-21 (`scripts/gates/l7r-gate.sh rust test|lint|format --check|cover --crate`, in this clone, `/tmp/t79b/t17.*.log`, `lint6.*.log`, `fmt12.*.log`, `cover6.log`, `cover-guard.log`); `tests/hooks/test-main-tree-hooks.sh` 104 of 104 (`/tmp/t79b/mt3.log`); every replay move judged (the Approach); `make closing-checks` in this clone, started 2026-11-21 (`/tmp/t79b/closing.log`), its result in the handoff.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** A builder's scratch write with a variable in its path, standing in the mirror, was refused (30 of bx's 59,116 commands, each a lost call); `cp /tmp/a ${D}/b` and a `\`-continued `cp` into the mirror passed from `/tmp`; `cd $(somewhere) && git commit` standing in the mirror passed; `cp /tmp/{a,b} /diagram/x` passed from `/tmp`; and `` `pwd`/f `` would have passed a write of the mirror under the rule without the `pwd` reading. The review's five probes (`echo x > $n.txt`, two loops over literal values, `F=$(ls | head -1)`, `R=$(git rev-parse ...)`), each a write of the mirror standing in it, passed under the first round's arm (`/tmp/t79b/p0.r.tsv`); a loop's or an `if`'s body was unseen at HEAD (`for f in a; do cp /tmp/a /diagram/x; done` passed from `/tmp`); and the second round's binding refused a builder's `S=$S/sub` scratch write and gate-write refused a `make` in a loop's body, measured 2026-11-21 (`/tmp/t79b/p1.{head,r2,r4}.tsv`, `/tmp/t79b/judge/pgw-*.tsv`).
+
+**Found and left?**
+- A name assigned twice in straight-line code is judged at each value, so `D=/diagram/x; D=/tmp/y; touch $D/f` standing in the mirror is refused though bash writes scratch, a scratch write HEAD allowed - refusing good work, observed 2026-11-21, method: the probe `/tmp/t79b/p1.jsonl` row 22 through `/tmp/t79/bin-r4` (T79's second plan review, `/tmp/sfr-t79/verdict-T79-r2.json`). Not fixed here: the straight-line reading wants the walk to tell a branch from a sequence, a reading of its own beside the bind rule. Filed as T91; lands before T22.
+- The bind rule tries at most 64 sets of values (`tree/bind.rs`'s cap, a CONVENTION knob); past it a name falls back to D6, so standing in the mirror a loop over 65 or more literal scratch values is refused though HEAD allowed it (63 values pass), observed 2026-11-21, method: the plan review's probe `/tmp/sfr-t79b/cap.jsonl` through `/tmp/t79/bin-r4`; a mirror value at either end of such a loop is still refused. Not fixed here: judging past the cap value by value is the same reading T91 builds. Filed as T91; lands before T22.
+- A `\`-continued line, a `${VAR}` and a `$(...)` inside a word split into commands of their own - fixed here, observed 2026-11-21, method: T50's four probes and the ux corpus (every transcript command holding a `\`-newline, a `${` or a `mktemp`) replayed through the guard; `segments` and `joined` are the walk's one split.
+- A `$(...)` inside a word let spec 204's D6 case through - fixed here, observed 2026-11-21, method: the probe `cd $(somewhere) && git commit` standing in the mirror through HEAD's binary (`/tmp/t79/probe2.txt`).
+- A place the walk cannot resolve settled two ways (a cp's by D6, a git form's not placed) - fixed here, observed 2026-11-21, method: `grep -rn` of every reader of an unresolved target in `tree.rs` and `tree/git.rs` (`settled` is now the one).
+- A quoted word holding a space or a shell character is blanked, and a file tool's destination is then read from the word before it: through HEAD's main-tree, and this task's, `cp /tmp/a "/diagram/x y"`, `echo x > "/diagram/a b"` and `mv /tmp/a "/diagram/(x)"` pass while `cp /tmp/a /diagram/x` is refused; 233 of bx's commands end a cp, mv, tee or redirect on such a word, 11 naming `/diagram`, measured 2026-11-21 (`/tmp/t79/probes-q.jsonl` through `/tmp/t79/bin-head`; a pattern count over bx). Not fixed here: the blanking is what keeps a commit message, a sed script and a quoted program from being read as paths by every guard that reads the walk, so its fix wants its own corpus replay. Filed as T83; lands before T22.
+- make-only's guard file list holds a file by its name in any tree, so a builder's scratch fixture writing a `Makefile` or a `dev/work-budget.json` is refused as a guard file written from the shell - at HEAD for a literal scratch path, and with this task's mktemp place for a `$(mktemp -d)` one too (tx#953, ux#2204, ux#1106, ux#1107, bx#34981), observed 2026-11-21 (the probe and the replay). Not fixed here: whether a copy outside the project's trees is held is the guard file list's rule, read by layer 3 and make-only alike, outside the walk. Filed as T87; lands before T22.
+- `readme_hooks.rs` substitutes a `$(mktemp ...)` itself before it reads the walk, which the walk now does: no wrong outcome (the two agree), not a defect, not filed.
+- A brace expansion split its word, as a brace group's braces do, so `cp /tmp/{a,b} /diagram/x` and `mv /tmp/x{1,2} /diagram/d/` from `/tmp` passed - fixed here, observed 2026-11-21, method: the probe through HEAD's binary and a count of bx's writes through a brace expansion (18 commands, 13 relative or naming `/diagram`); `segments` is the one split.
+- A loop's, an `if`'s or a `while`'s body was read with its keyword as its command, so its writes were unseen (`for f in a; do cp /tmp/a /diagram/x; done` and `if true; then touch /diagram/y; fi` passed from `/tmp` at HEAD) - fixed here (`words()` reads past `bind::KEYWORDS`), observed 2026-11-21, method: the probes through the HEAD binary (`/tmp/t79b/p1.head.tsv`, rows 5-7).
+- A target's segment kept that keyword at its head, so gate-write's `head_of` read `do` or `if` as the command and refused a `make` or a `touch` it leaves alone as a shell write of `.` - 38 of the ux replay's commands under a stand-in gate - fixed here (`bind::from_command`: a target's segment starts at its command, for every guard that reads its head), observed 2026-11-21, method: the r2 replay's gate-write reasons (`/tmp/t79b/judge/gw-r2.tsv`) and the probes `/tmp/t79b/judge/probe-gw.jsonl`.
+- gate-write's `head_of` did not read past `timeout N`, so `timeout 60 make task-add` under a running gate was refused as a shell write of `.`, at HEAD too - fixed here, observed 2026-11-21, method: the same probes (`pgw-head.tsv` row 2).
+- A name assigned from `$PWD` after a `cd` took the command's starting place (`cd <clone> && WT=$PWD; touch $WT/f` standing in the mirror was refused at HEAD) - fixed here (`bind::read_where_it_stands`), observed 2026-11-21, method: bx#51888 in the r2 replay and the probe (`/tmp/t79b/p1.head.tsv` row 16).
+- A name reassigned twice took its last value for every use (`F=/diagram/a; echo x > $F; F=/tmp/b` passed at HEAD) - fixed here by the every-value binding, observed 2026-11-21, method: the probe (`/tmp/t79b/p0.head.tsv` row 8); and the binding then read a reassignment from the name's own value (`S=/tmp/q; S=$S/sub; touch $S/f`, refused by the second round's binary, window#302's `S=$S python3 $S/walk.py` corrected by house-style as the project's) - fixed here (`reads_itself`: such an assignment follows the one before), observed 2026-11-21, method: the probes (`/tmp/t79b/p1.r2.tsv` rows 11-15).
+- A loop's variable also assigned was read as unknown, so ux#752's `f=research/...; sed -i ... $f` beside a `for f in ...` wrote a gated tree unseen - fixed here (its literal assigned values beside its loop's), observed 2026-11-21, method: the r replay against r2 (`/tmp/t79b/moves-r-r2.txt`).
+- `cd ""` was read as a `cd` home; bash refuses a null directory and stays - fixed here (an empty quote stays a word, so D6), observed 2026-11-21, method: bash 5.3.9 on `cd ""` ("null directory", rc 1, the shell stays).
+- A target's segment was shown as bound (`$f` replaced by a loop's value), which readme_hooks, finding the segment in the command, could not find - fixed here (`shown`: the segment as the command holds it), observed 2026-11-21, method: `readme_hooks`'s tests.
+- A `python3 -c` program that writes a place it computes from `sys.argv` is judged where the shell stands (`cd <mirror>/research/questions; python3 -c "...open(sys.argv[2],'w')..." a /tmp/q/a.txt` is refused at HEAD and here), so the three corpus commands that run one in a loop's body, now seen, are refused (bx#54240, bx#58694, ux#2209, each writing scratch). Not fixed here: the program's place is the Python rule's (`py_c`), outside the walk, and its fix wants its own replay. Filed as T89; lands before T22.
+- gate-write reads a target's command from its segment, which the walk cuts at 120 characters, so a `make` behind more than 120 characters of `VAR=value` prefixes is read as no command and refused as a shell write of `.` under a running gate (`L7R_FEATURE_DIRECTORY=... L7R_PAGE_SESSION=... L7R_CONTINUE=... make rust-test ...`, at HEAD and here; ux#1371, its loop's body now seen), observed 2026-11-21, method: the probe `/tmp/t79b/judge/probe-gw5.jsonl` through both binaries. Not fixed here: the cut is what readme_hooks's kept-segment rule reads, so the head wants its own field on the target rather than a longer cut. Filed as T90; lands before T22.
+- house-style's `outside` is a `/tmp/` prefix, so in the replay world (a mirror under `/tmp/t79`) every resolved place is outside and its replay moves measure only resolved against unresolved: bx#4624, bx#4696 and window#241, rewritten at HEAD and passed by the replay, are rewritten by both binaries on their real paths (a direct run, 2026-11-21). Not a defect of the guard: a limit of the replay, named here so its moves are read as such.
+
+**Performance work?** no.
+
+
+### T80 (<why: the finding or measurement that files it>)
 
 - **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
 
-### T78 Approach (checklist part A)
+### T80 Approach (checklist part A)
 
 1. **The goal, in the world.** <the place as it should be>
 2. **The constraints.** <the FRs, decisions and pages it holds to>
@@ -1110,14 +1215,311 @@ the lines where it reads them, as T74 did. Not an engine-speed task, so no docs/
 **Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
 
 
-### T79 (<why: the finding or measurement that files it>)
+### T81 (<why: the finding or measurement that files it>)
 
 - **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
 
-### T79 Approach (checklist part A)
+### T81 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+
+### T82 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T82 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+
+### T83 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T83 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+
+### T84 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T84 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+
+### T85 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T85 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+
+### T86 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T86 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+
+### T87 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T87 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+
+### T88 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T88 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+
+### T89 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T89 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+
+### T90 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T90 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+
+### T91 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T91 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+
+### T92 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T92 Approach (checklist part A)
 
 1. **The goal, in the world.** <the place as it should be>
 2. **The constraints.** <the FRs, decisions and pages it holds to>

@@ -111,6 +111,14 @@ check "an escape with NO reason -> refused (feature 170)" 2 "$RC"
 SID=nobody
 run "$MAIN" "git commit -am x";                      check "standing in the mirror, a session whose clone cannot be resolved -> refused" 2 "$RC"
 says "  ...saying so" "cannot be resolved"
+# 451 T79's plan review: five writes of the mirror its first round let through - a variable no one assigns, a loop's literal
+# values, a substitution the walk cannot run (spec 204 D6's bypass moved to a write word) - refused standing in it with no
+# clone, and moved to the clone with one
+for probe in 'echo x > $n.txt' 'for i in 1 2; do echo x > $i.txt; done' 'for f in a.txt b.txt; do echo x > $f; done' \
+  'F=$(ls | head -1); sed -i s/a/b/ $F' 'R=$(git rev-parse --show-toplevel); echo x > $R/f'; do
+  SID=nobody; run "$MAIN" "$probe"; check "T79's probe standing in the mirror, no clone: $probe -> refused" 2 "$RC"
+  SID=t; run "$MAIN" "$probe"; rewritten "  ...and with a clone, moved to it" "$WORKER"
+done
 SID=ghost
 run "$MAIN" "git commit -am x";                      check "a claimed clone that does not exist -> refused" 2 "$RC"
 says "  ...with the command that creates it" "git clone $MAIN $MAIN/.clones/ghost"
