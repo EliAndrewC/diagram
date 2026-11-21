@@ -9,6 +9,9 @@
 # CI_MERGE are the script's test seams - the real route decision calls `make ci-status ROUTE=1`,
 # which needs the whole skill and is tested in tests/ci/; here the seam supplies the answer.
 set -uo pipefail
+# the suite's own runs start clean: a landing worktree's make land (451 T88's land-alone) exports SYNC_BACKUP=off and
+# L7R_LAND_ALONE=1, which every scratch run here would otherwise inherit (cases 10-11 then saw no backup)
+unset SYNC_BACKUP L7R_LAND_ALONE
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 SYNC="$HERE/../../scripts/sync-with-main.sh"
 PASS=0; FAIL=0

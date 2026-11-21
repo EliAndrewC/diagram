@@ -5,6 +5,9 @@
 # Real git repos: an origin, a clone under .clones/ holding engine work AND a guard fix, and another session moving main
 # meanwhile. The checks and the push are replaced through the script's own seams (a push is `git push`, as sync-with-main's).
 set -uo pipefail
+# the suite's own runs start clean: a landing worktree's make land (451 T88's land-alone) exports SYNC_BACKUP=off and
+# L7R_LAND_ALONE=1, which every scratch run here would otherwise inherit (cases 10-11 then saw no backup)
+unset SYNC_BACKUP L7R_LAND_ALONE
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 LAND="$HERE/../../scripts/land-tooling.sh"
 PASS=0; FAIL=0
