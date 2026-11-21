@@ -101,33 +101,77 @@ hook prompt "$CA"
 rm -f "$TMP/ticking"; wait $TK 2>/dev/null
 
 # --- 5. a suspend restarts the full wait: the clock jumps past the threshold mid-wait
+# A SINGLE JUMP IS A BET ON A WINDOW; SEVERAL CANNOT MISS (feature 169). A jump is seen only if it lands between `wait_ms`'s
+# baseline reading (`last = now()`) and its next one, and a fixed pre-jump sleep cannot promise that: the first fix for this
+# flake raised the sleep from 0.6 s to 1.5 s and it still went red at the gate on 2026-08-30 while passing 30/30 standalone. The
+# lost-update race between a ticker and the jump was measured and ruled out first (0 of 40). Eight jumps over ~1 s, so at least
+# one lands inside the window; each extra one only restarts the wait. Even eight missed it once the shell lagged as long as the
+# wait (with the suite's `sleep` 1.0 s late, 5 of 8 "the suspend was counted (0)", 2026-11-21): the first jump landed before the
+# timer's first reading and the next came after its wait (and a wait for that reading, polled, saw it a lagged poll late). So the
+# case's clock HOLDS the timer: a read by the `--idle-tests timer` process, once its value is taken, writes `t` and waits while a
+# gate file stands. The timer is then frozen inside its baseline reading with no awake time counted, the first jump is written,
+# and the gate goes: whatever the shell's lag, the first jump lands inside the wait (the guard's `ask` waits on the clock with no
+# limit, so a held read is never cut off into a reading of 0).
+# THE FULL WAIT IS PINNED BY THE GUARD'S OWN EVENT, NOT BY SLACK (feature 451 T99). The check took its time AFTER the last jump's
+# `sleep 0.15` and a fork of `date`, and asked 0.35 s of the 0.6 s wait to remain past it, so the test shell's own lag ate the
+# margin: red at a load of 16.5 beside a make done (2026-11-21, green on the rerun unchanged), and 8 of 8 red with the suite's
+# own `date` started 0.5 s late (1 of 8 at 0.2 s). Now each jump's time is taken BEFORE it is written, so the timer cannot have
+# seen it earlier; jump k moves the clock B * 2^(k-1) s and no ticker runs, so the timer's log line "wall jumped N s" spans
+# exactly N + 1 s, and that span's highest bit names the latest jump the timer saw. The run must start a full IDLE_WAIT_S after
+# that jump's time - twelve sleeps of IDLE_TICK, which load can lengthen and never shorten - and after twelve of the timer's own
+# ticks counted from its first sight of it (its clock reads, below), since seconds alone let a timer that never restarts pass
+# once its ticks ran slower than real time. A shell that stalls long enough for
+# the wait to end between two jumps is no failure: the jumps after it were never seen, and the bound is on the last one that was.
+# Case 4 waits under the ticker, so a clock that moves while the timer waits is still proved not to be a suspend.
 export IDLE_WAIT_S=0.6; : > "$RUNLOG"; rm -f "$CA"/dev/idle-log/*.json
-touch "$TMP/ticking"; ticker & TK=$!
-# GUARD_EDIT_OK: feature 169 - THE SUSPEND CASE WAITED ON A CLOCK INSTEAD OF ON A CONDITION, and
-# went red at the gate on 2026-08-30 while passing 30/30 standalone. `wait_awake` takes its clock
-# baseline (`last=$(now)`) and only then sleeps on its first tick, so a jump that lands before that
-# baseline is invisible and no suspend is counted. A fixed pre-jump sleep is a bet on how fast the
-# timer starts, and under `make hooks-test`'s load - which is the ONLY time this matters - it is a bet
-# that loses: the previous fix for this same flake just raised the sleep from 0.6 s to 1.5 s.
-# Waiting for the timer to have a SLEEPING CHILD proves the baseline was taken, because the child
-# cannot exist until `wait_awake` has reached its first `sleep`.
+B=300  # every jump past IDLE_SUSPEND_S (100), the eight together (B * 255 = 76,500) inside IDLE_GIVE_UP_S (100,000) of armed_at
+READS="$TMP/clock.reads"; GATE="$TMP/clock.gate"; CLOCK5="$TMP/clock5.sh"; : > "$READS"; touch "$GATE"; c0=$(cat "$CLOCKF")
+# the timer's reads logged as `t <value> <time>`: two a tick (`alive` and `now`), so they count its awake time in its own units
+cat > "$CLOCK5" <<EOF5
+#!/bin/sh
+v=\$(cat "$CLOCKF"); echo "\$v"
+case "\$(tr '\\0' ' ' < /proc/\$PPID/cmdline 2>/dev/null)" in *" --idle-tests timer "*)
+  echo "t \$v \$(date +%s.%N)" >> "$READS"; while [ -f "$GATE" ]; do sleep 0.01; done ;; esac
+EOF5
+chmod +x "$CLOCK5"; export IDLE_CLOCK="$CLOCK5"
 hook stop "$CA"
-# A SINGLE JUMP IS A BET ON A WINDOW; SEVERAL CANNOT MISS. The suspend is only seen if the jump lands
-# between `wait_awake`'s baseline (`last=$(now)`) and its next reading, and a fixed pre-jump sleep
-# cannot guarantee that - which is why the first fix for this flake merely raised the sleep from
-# 0.6 s to 1.5 s, and why it still went red at the gate on 2026-08-30 while passing standalone. The
-# lost-update race between the ticker and the jump was measured and ruled out first (0 of 40).
-# Jumping repeatedly over ~1 s means at least one lands inside the window; each extra one only
-# restarts the wait, which the record check below already tolerates.
-for _ in 1 2 3 4 5 6 7 8; do tick_clock 500; sleep 0.15; done   # 500 s jumps = suspends
-t_jump=$(date +%s.%N)
+check "the timer took its first reading and is held there" 'wait_grep "^t " "$READS" 10'
+# THE JUMPS PACED BY THE TIMER'S TICKS, NOT BY `sleep`: each next jump waits for four of the timer's reads after the last, so at
+# least one tick is counted between two jumps whatever the load. A timer that counts them without restarting then runs short of
+# a full wait after its last jump; paced by a 0.15 s sleep, beside 22 burners the ticks came slower than the jumps and such a timer
+# passed 8 of 8 (2026-11-21). The pacing ends once the run has started: the wait is over and no jump after it is seen.
+paced() { local i=0; while [ $i -lt 100 ]; do [ "$(grep -c "^t " "$READS")" -ge "$1" ] && return 0; grep -q "^start" "$RUNLOG" && return 1; sleep 0.1; i=$((i+1)); done; return 1; }
+t_before=()
+# bash's own clock, no fork: a `date` before each jump spread the jumps by its lag, and with the suite's dates 1.0 s late, before
+# the gate, the whole wait ended before any jump (8 of 8 "the suspend was counted (0)", 2026-11-21); a locale may write a comma
+for k in 1 2 3 4 5 6 7 8; do
+  t_before[k]=${EPOCHREALTIME/,/.}; tick_clock $(( B << (k - 1) )); rm -f "$GATE"
+  [ $k -lt 8 ] && { paced $(( $(grep -c "^t " "$READS") + 4 )) || break; }
+done
 check "record after the restart" 'wait_for "$CA/dev/idle-log/*-sess-a.json" 10'
 rec=$(ls "$CA"/dev/idle-log/*-sess-a.json | head -1)
 sus=$(jq -r .suspends "$rec")
 t_start=$(grep "^start" "$RUNLOG" | head -1 | awk '{print $2}')
+# each restart line's span as the jumps it covers, lowest bit to highest: a span off the B grid, or a gap inside one or between
+# two, is a misread, and the decode says "bad" rather than name a jump; it prints the verdict, the lines read, the latest jump seen
+read -r dec lines seen < <(grep -o "wall jumped [0-9]*s" "$CA/.git/idle-tests.log" | awk -v B=$B '
+  { s = $3 + 1; if (s % B) { bad = 1; next }
+    q = s / B; lo = 0
+    for (k = 1; q > 0; k++) { if (q % 2) { if (lo && k != hi + 1) bad = 1; if (!lo) lo = k; hi = k }; q = int(q / 2) }
+    if (n && lo != last + 1) bad = 1
+    last = hi; n++ }
+  END { print (bad || !n ? "bad" : "ok"), n + 0, last + 0 }')
 check "the suspend was counted ($sus)" '[ "$sus" -ge 1 ]'
-check "the run started a FULL wait after the jump" 'awk "BEGIN { exit !($t_start - $t_jump >= 0.35) }"'
-rm -f "$TMP/ticking"; wait $TK 2>/dev/null
+check "the timer's restart lines decode to the jumps ($dec, $lines lines, $sus counted)" '[ "$dec" = ok ] && [ "$lines" = "$sus" ]'
+waited=$(awk -v s="$t_start" -v j="${t_before[seen]:-}" 'BEGIN { if (s == "" || j == "") print "none"; else printf "%.6f", s - j }')
+check "the run started a FULL wait after the last jump the timer saw (jump $seen, ${waited}s)" 'awk -v w="$waited" -v need="$IDLE_WAIT_S" "BEGIN { exit !(w != \"none\" && w + 0 >= need + 0) }"'
+# the same restart in the guard's own units: its reads after its first sight of that jump and before the run started; a full wait
+# owes two a tick for IDLE_WAIT_S / IDLE_TICK ticks, and the reads after the wait (one `alive` after the lock, the run's start)
+# only add to them
+owed=$(awk -v w="$IDLE_WAIT_S" -v t="$IDLE_TICK" 'BEGIN { printf "%d", 2 * w / t + 0.5 }')
+ticks=$(awk -v c=$(( c0 + B * ((1 << seen) - 1) )) -v s="$t_start" '$1 == "t" && $2 >= c { if (hit) { if (s != "" && $3 < s) n++ } else hit = 1 } END { print n + 0 }' "$READS")
+check "the timer counted a FULL wait of ticks after that jump ($ticks reads, $owed owed)" '[ "$seen" -ge 1 ] && [ "$ticks" -ge "$owed" ]'
+export IDLE_CLOCK="$CLOCK"
 
 # --- 6. one runner at a time: three sessions armed together never overlap, losers defer and still run
 export IDLE_WAIT_S=0.2 IDLE_DEFER_S=0.2; : > "$RUNLOG"
@@ -147,7 +191,9 @@ export IDLE_WAIT_S=0.2 IDLE_DEFER_S=0.2 IDLE_BUSY_CMD="$TMP/busy.sh"; printf '#!
 hook stop "$CA"; sleep 0.8
 check "no run while a make runs" '[ ! -s "$RUNLOG" ]'
 rm -f "$TMP/busyflag"
-check "runs once the make is gone" 'wait_for "$CA/dev/idle-log/*.json" 8'
+# an upper bound, so a green run pays nothing for it: 8 s was red in 3 of 64 copies run at once beside 22 CPU burners (a load of
+# 79.7, feature 451 T99, 2026-11-21), and 4b's background roll already owns 90 s for the same load
+check "runs once the make is gone" 'wait_for "$CA/dev/idle-log/*.json" 90'
 rm -f "$TMP/ticking"; wait $TK 2>/dev/null; export IDLE_BUSY_CMD="false"
 
 # --- 8. the session is gone: the timer exits without running
