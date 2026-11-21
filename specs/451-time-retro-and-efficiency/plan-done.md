@@ -3009,3 +3009,456 @@ static`. Not filed with `PERF=1`: no engine stage's counted operations or time.
 engine speed, so no `docs/performance-checklist.md` answers.
 
 
+<!-- plan-archive: archived 2026-11-21 -->
+### T58 (the finding as filed, restated by its measurement: every gate crate, `rust/gate`, `rust/mode_a`, the browser and the embedder named `l7r_guard`, so touching one hook compiled 32 crates where its own tests' edit compiled 1, measured 2026-11-21 (`/tmp/t58/scripts/measure.sh`: the file touched, then a warm `cargo test --offline --workspace --exclude l7r_phases --no-run` in a private target, the detached worktree at 3a60ac40e1); hook edits are 246 of the 520 non-test guard edits since 2026-11-01, so the split was built)
+
+- **Approach**: what the gate crates read of the guard moves into its own crate, `l7r_shared` at `rust/guard/shared` (under the
+  guard, so `family()` keeps one family and `kept.rs`'s nearest-directory owner gives it its own files): `src/shared/*` (its root
+  `shared.rs` now `shared/src/lib.rs`), `protocol`, the five guards the gate crates call (`event_log`, `house_style`,
+  `feature_approval`, `set_down`, `conflict_marker`, with `house_style_words.tsv`) and `suite_tools::pylex`, moved whole; the three
+  pieces of staying hooks they called (`discard_hooks`' `shlex` to `shape.rs`, `finished_run_hooks`' `realpath` to `tree.rs`,
+  `context_cap_hooks`' transcript reader to a new `context.rs` with its own tests) cut out beside them. The guard keeps every old path by
+  re-export (`pub use l7r_shared as shared`, `protocol`, the five modules, `pylex`, `shlex`, `realpath`), so the guard's files keep their `use`
+  lines but for the moved ones and the three that lost a piece (`discard_hooks`, `finished_run_hooks/runs.rs`, `context_cap_hooks`); the dependents' `l7r_guard::shared::` and `l7r_guard::guards::` paths and manifests name
+  `l7r_shared`, and none names `l7r_guard`. The guard's tests reach `shared`'s test seams (the thread's environment map, `quiet`,
+  `testkit`) through a `test-env` feature its dev-dependency alone turns on. The guard-file patterns (`guard_file_hooks`,
+  `make_only_hooks`' `GUARD_FILE` and `SOURCE_NAMES`) hold `rust/guard/shared/src/` and its manifest; `hookbench`'s baseline finds a
+  moved guard's source at a ref after the split; the path strings of the checks crate, the cohort push and the docs follow the move.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+| the guard's shared readers split into `l7r_shared` | n/a - no map | n/a | none | n/a |
+
+### T58 Approach (checklist part A)
+
+1. **The goal, in the world.** No map changes. A builder who edits a hook rebuilds the guard alone: no gate crate, `rust/gate`,
+   `rust/mode_a`, browser or embedder is compiled again, so `make rust-test` and the gate family's coverage build owe nothing after it.
+2. **The constraints.** T58's line: measured first how many guard edits touch the shared code against a single hook; split only if
+   hooks dominate; the gate crates build on the shared crate; red first on the rebuild count of a hook edit. FR-013. No shipped binary
+   reads the tests' environment. Every old path the guard's own files name keeps working. T57 had `rust/gate/crates/rustc`'s
+   `kept.rs` and T62 `clone_sync_hooks` open in the clone, so the change was built in a detached worktree at 3a60ac40e1 and applied
+   when the session said, after both landed.
+3. **Where each comes from.** O: the event logs of every clone and the mirror (item 4); O: `git log` of `rust/guard`; O: the
+   dependents' sources and `cargo tree`; O: the rebuild runs (item 4) and the red-first runs (item 9); G: FR-013 (the GM 2026-11-20,
+   request.md: "can we in general priotitize performance improvements going forward?"); the task as filed (T58's line).
+4. **Do they describe the world here?** Measured, not assumed:
+   - What the dependents use: 31 crates name `l7r_guard` (rust/gate, its 27 crates, `rust/mode_a`; the browser and embedder as a
+     dev-dependency), with about 1,560 `l7r_guard::shared::` paths; of the guards, `event_log_hooks` 25 uses, `house_style_hooks` 8,
+     `feature_approval_hooks` 2, `set_down_hooks` 2, `conflict_marker_hooks` 1, and `suite_tools::pylex` 1 (the registry crate's
+     tests), measured 2026-11-21 (the dependents' paths grepped, `cargo tree -i l7r_guard --depth 1`).
+   - How guard edits split: 754 Edit and Write calls under `rust/guard/` since 2026-11-01, deduplicated by call and path: 246 a hook,
+     169 `src/shared`, 105 a gate-used guard or `pylex`, none `src/protocol`, 231 a test file, 3 `CLAUDE.md` - hooks 246 of 520 non-test
+     edits (47%), measured 2026-11-21 06:14Z (`/tmp/t58/scripts/edits.py` over every clone's and the mirror's event log, the worktree's
+     own paths left out).
+   - How guard commits split: 147 since 2026-11-01 touch `rust/guard`: 56 a hook alone, 34 the shared set alone, 44 both, 12 tests
+     only, 1 other, measured 2026-11-21 (`/tmp/t58/scripts/commits.py`, `git log --name-only` to 3a60ac40e1; the shared set as
+     `l7r_shared` took it, `src/protocol` in it - its 3 commits since 2026-11-01 move one commit from hook-alone to both).
+   - What the rebuilds were:
+     - 160 real guard builds (Phase `build` lines naming `rust/guard` alone, over 2 s), median 17.5 s, measured 2026-11-21 (the
+       event logs' Phase lines).
+     - Put down to the edits in their clone since the build before: 40 a hook only, 45 the shared set, 30 tests only, 45 no edit seen
+       (a sync) - hooks 40 of the 85 a source edit caused, measured 2026-11-21 (the event logs' Phase and Edit lines).
+     - The wide gate-family coverage builds (24 crates or more): 25 runs, 1,220 s in all, which the commit windows could not attribute
+       to an edit, measured 2026-11-21 (`/tmp/t58/scripts/wide.py`).
+   - Before, the worktree at 3a60ac40e1 before the split:
+     - Touching `rust/guard/src/guards/readme_hooks.rs`: 32 crates compiled (the guard, the 27 gate crates, `rust/gate`,
+       `rust/mode_a`, browser, embedder), 12.0, 11.6, 20.4 and 50.8 s on a loaded machine, measured 2026-11-21 (`measure.sh`).
+     - Touching its `tests.rs`: 1 crate, 2.5 s, measured 2026-11-21 (`measure.sh`).
+     - Nothing touched: 0.2 s, measured 2026-11-21 (`measure.sh`).
+   - After, the same method on the split tree (the detached worktree at 3a60ac40e1 with the split); the times are load-bound, the
+     crate counts are the measure:
+     - Touching `readme_hooks.rs`: 1 crate (`l7r_guard`) in each of 3 runs, 1.2, 1.1 and 1.2 s at load average 2.5-2.8, measured
+       2026-11-21 (`measure.sh`, `/proc/loadavg` after each).
+     - Touching its `tests.rs`: 1 crate, 1.1 s, measured 2026-11-21 (`measure.sh`).
+     - Touching `rust/guard/shared/src/py_text.rs`: 33 crates (the 32 and `l7r_shared`) in each of 3 runs, 11.0, 14.2 and 28.3 s at
+       load 6.0-21.3 (other builders running), measured 2026-11-21 (`measure.sh`, `/proc/loadavg` after each).
+     - Nothing touched: 0.1 s, measured 2026-11-21 (`measure.sh`).
+     - One real code edit of a guard file (`suite_tools/bench.rs`): 1 crate in 5.8 s, measured 2026-11-21 (`measure.sh`).
+   - No shipped binary reads the tests' environment: the guard is built `cargo build --profile tool -p l7r_guard`
+     (`scripts/hooks/l7r-guard.sh`) and every gate binary `cargo build --profile tool -p <crate>` (`scripts/gates/l7r-gate.sh`),
+     builds that resolve no dev-dependency, and `hookbench`'s baseline `cargo build --release -p l7r_guard`; the `tool` profile's
+     `l7r_shared` fingerprint, after the gate built `l7r-gate` and `l7r-rust`, has features `[]`, measured 2026-11-21 (the scripts'
+     cargo lines read; `tool/.fingerprint/l7r_shared-*/lib-l7r_shared.json` in the worktree's private target).
+   - `rust/Cargo.lock` is untracked and no cargo call of the gate, the guard script or the Makefile passes `--locked` or `--frozen`,
+     so the new member enters each tree's lock on its first build, measured 2026-11-21 (the calls grepped).
+   - The edges after: `cargo tree -i l7r_guard --workspace` names no dependent; `l7r_shared` has 32 (the 31 and the guard), measured
+     2026-11-21 (`cargo tree --offline -i <crate> --workspace --depth 1 -e normal,dev`, the detached worktree).
+   - What `make rust-test` owes after a hook edit (`make rust-test` in the detached worktree, `L7R_GATE_TARGET` its private target,
+     each edit reverted after):
+     - One line of code in `batching_hooks.rs`'s `decide` (`std::hint::black_box(58_u8);`) ran `rust/guard` (410 tests) and
+       `rust/gate/crates/checks` (140, as at HEAD: it declares `reads = ["."]`, so any edit in the tree owes its run), the other 32
+       crates' results standing, 9.3 s at load 12.7, measured 2026-11-21 (`make rust-test`).
+     - A dead `const` alone ran `checks` only, the guard's test binary unchanged (449 T93's second key), measured 2026-11-21 (`make
+       rust-test`).
+     - With nothing touched after the full run, all 34 stood, 5.1 s, measured 2026-11-21 (`make rust-test`).
+5. **The order.** After T55 (the closing step); built beside T57 and T62 in a detached worktree at 3a60ac40e1, applied to the clone
+   after both landed (c156ccc564) with `git apply --3way` - one conflict, `rust/guard/CLAUDE.md`'s index rows, resolved with T62's
+   `clone_sync_hooks` words kept in the split's rows; `kept.rs` line 12 merged clean to `use l7r_shared::sha256;`; before T22, the
+   close.
+6. **The exits.** Green: the after count (a hook edit compiles the guard alone), `make rust-test`, lint, format, cover and dead on
+   `rust/guard` and `rust/guard/shared`, then in the clone `make quick` and `make closing-checks`.
+   Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None: the split's premise (what the dependents use is not the hooks) was measured from their paths before
+   anything moved, and the three tangles (`shlex`, `realpath`, the transcript reader) found by the first build, not guessed.
+8. **The budget.** One landing.
+9. **Done, measured.**
+   - Red first, the rebuild count: the before run above is the red - touching one hook compiled 32 crates - and the after run is
+     the green, 1 crate, measured 2026-11-21 (`measure.sh`, item 4).
+   - Red first, the guard-file cases: with HEAD's patterns put back in the split tree (`guard_file_hooks`' regex, `make_only_hooks`'
+     `GUARD_FILE` and its 3 `SOURCE_NAMES`), `the_guards_own_sources_are_held_and_granted_but_not_their_tests` and
+     `the_guards_own_sources_are_guard_writes_from_the_shell_but_their_tests_are_not` failed, 2 failed (`cd rust/guard/shared/src &&
+     tee tree.rs` read `ok` where `guard-write` is owed), and passed with the new ones, 2 passed, measured 2026-11-21
+     (`/tmp/t58/scripts/redfirst.sh`: `cargo test -p l7r_guard --lib` on the two names, the files restored after).
+   - Red first, `hookbench`: with HEAD's `bench.rs`, `a_rust_baseline_is_built_at_the_ref_and_a_ref_with_no_guard_says_why` failed at
+     its new `y-hooks` case (a guard under `rust/guard/shared/src/guards/`), 1 failed, and passed with the fix, 0.08-0.09 s in three
+     runs, under feature 449's FR-008 tenth of a second, measured 2026-11-21 (`/tmp/t58/scripts/redbench.sh`; `cargo test --exact` three times,
+     each a fresh `TMPDIR`).
+   - The crate checks in the worktree: lint, format, cover (every line of `l7r_shared` reached by its own tests) and dead clean on
+     `rust/guard/shared` and `rust/guard`, and `make rust-test` green on 34 crates, measured 2026-11-21 (`l7r-gate.sh rust <check>
+     --crate`, `make rust-test`, the detached worktree). Their first pass found 7 `must_use_candidate`s and one `missing_panics_doc` on
+     items the split made pub, rustfmt's order of the moved files' `use` lines, and 48 lines of `l7r_shared` that only the guard's
+     tests had reached, observed 2026-11-21, method: the first lint and cover runs' findings read (`shlex`, `realpath`, `filed_at`, `makes`, `quote_state`, `loop_period`, `blocked`'s `items`, `env::opt`'s
+     `HOME`, `Session::resolve`): `shlex`'s test moved with it, and the rest are 6 tests of `l7r_shared`'s own and one assertion.
+   - In the clone, the patch applied onto c156ccc564 (T57 and T62 landed): `make rust-test` green on 34 crates (the guard 410 tests,
+     `l7r_shared` 311), lint, format, cover and dead clean on `rust/guard/shared` and `rust/guard`, and `make quick` clean, measured
+     2026-11-21 (each run once in the clone).
+   - `make closing-checks` (under `STATIC_OK`): the first run's `static` red on format in 24 dependents, whose `l7r_shared::` paths
+     are shorter than the `l7r_guard::shared::` they replaced, so rustfmt joins their lines - the worktree's format check had run on
+     the guard and `l7r_shared` alone - fixed by `make format` (54 files, formatting only); the second run green, `static` 601 s
+     (lint, format, cover and dead clean on 34 crates), `hooks-test` 64 s, `quick` 11 s, measured 2026-11-21 (`make closing-checks`'
+     table, the clone).
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** No reader of a map sees anything differently; the change is which crates a guard edit rebuilds, and the
+    guards, checks and gate commands read the same code under a new crate name.
+
+**Found and left?**
+- `hookbench`'s baseline looked for a guard's source at `rust/guard/src/guards/<module>.rs` alone, so at any ref after the split
+  `make hookbench event-log --against <ref>` (or house-style, feature-approval, set-down, conflict-marker) would say the guard "did
+  not exist at that ref". Fixed here: it looks in `rust/guard/shared/src/guards/` too, pinned by a `y-hooks` case in
+  `a_rust_baseline_is_built_at_the_ref_and_a_ref_with_no_guard_says_why`.
+- Two hook-library comments (`scripts/hooks/lib/guardlog.sh`, `failed-open-log.sh`) named `shared/session.rs`, a path the split
+  left behind. Fixed here: `shared/src/session.rs`. No doc names `shared/src.rs`, measured 2026-11-21 (`git grep` over the tree).
+- The make-only guard refused a read-only Python heredoc over the event log as a guard-file write (this task's first builder,
+  2026-11-21; it passed under the escape). Not fixed here: it is make-only's reading of a heredoc, not the split, and owes its own
+  measurement of the refusals and its red first. Filed as T63; lands before T22.
+- Nothing pins the rebuild count: a crate that adds `l7r_guard` back as a dependency fails no check, and a hook edit would rebuild
+  the 32 crates again (measured 2026-11-21, this section's before run: one hook touched, 32 crates rebuilt). Not fixed here: a pin is a check of its own in `make static`, outside the split. Filed as T66; lands before T22.
+- `test-env` reaches a dependent only in one cargo call that builds the guard's tests beside it; there a gate binary reads the test
+  thread's map (2 call sites, `measure`'s event-log CLIs, observed 2026-11-21, method: the dependents' `l7r_shared::env::opt` calls
+  grepped). No lane makes that call - `make rust-test` builds a crate a call, the
+  coverage build a family a call (the guard and `l7r_shared` one family), and every shipped binary is built `--profile tool -p` -
+  and this task's `--workspace --no-run` measurement ran nothing. Under the crate-a-call builds `l7r_shared` compiles twice, with
+  `test-env` for the guard's tests and without for the rest, a cost on an `l7r_shared` edit alone, observed 2026-11-21 (the debug
+  fingerprints: one `l7r_shared` with features `[]`, the guard's with `["test-env"]`). Not a defect: no wrong outcome in any lane.
+
+**Performance work?** yes (a `[perf]` task, 451 FR-013: it makes the builders' loop faster - a hook edit, about half of the guard's
+source edits, rebuilds the guard alone where it rebuilt every crate that named it); not engine speed, so no checklist answers.
+
+### T65 (the finding as filed, restated by its measurement: `set_down_hooks::running` read a transcript's launched and notified ids as two sets, so a SendMessage resume - its result's `"resumedAgentId":"<id>"`, 153 such records in the session `c6fd72d1-...jsonl` - was no launch and a resumed agent read as finished once it had notified, and an interim notice (`<summary>Agent "..." is waiting on its own background work</summary>`, its note "the same task-id notifies again if it does; the result below may be interim") ended its agent, which was waiting on its own work: resumes read, but an interim notice taken for final, "nothing is running" was read at 38 of that session's 1,864 turn ends while such an agent was alive, measured 2026-11-21 (a replay of the transcript and its agents' own transcripts, `/tmp/claude-T65/stops.py`, the truth approximate: an agent alive when its own transcript wrote again later without a parent resume first))
+
+- **Approach**: `running` reads the transcript once, in order, a line at a time as before (`read_in_order`): each line's events sorted by
+  their place in it (a launch, a resume, a stop; each notice read by its own `<summary>`, from its id to the next notice or its
+  `</task-notification>`), an id's last word kept - launched or resumed, or interim - and an id a final notice or a stop ended dropped. A
+  resume is `LAUNCHED`'s third key, `resumedAgentId`, unescaped in the tool's own record alone. An interim notice ends nothing; an agent
+  whose last word is one runs while its own transcript (`<session>/subagents/agent-<id>.jsonl`, read by the same reader with its own id
+  left out) holds its own work running, an interim sub-agent that does (a known-set so a cycle ends), or a wake - an end of its own work
+  after its last turn's end, the `"stop_reason":"end_turn"` record holding its text block (its thinking's record carries `end_turn`
+  too, written first). That second read is made only when the parent's read leaves nothing plainly running.
+  No transcript of its own, not running, as before. A request blob's line (`{"type":"api-request-blob"`) is not read: it re-emits the
+  history, so its copy of an old notice would end an agent resumed since. A background Bash run's launch and notice read as before.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+| the ordered reader, the resume key, the interim rule, the blob skip, and their tests | n/a - no map | n/a | none | n/a |
+
+### T65 Approach (checklist part A)
+
+1. **The goal, in the world.** No map changes. A session's turn ends without "nothing is running" while a builder it resumed with
+   SendMessage, or one that stopped waiting on its own background work, still runs; and the guard still refuses once that agent has
+   truly finished - an agent that went quiet on an interim notice does not keep it silent for the rest of the session.
+2. **The constraints.** T65's line: the transcript read in order, an agent's last launch or resume after its last notification running,
+   red first on a resume after a notice; lands after T58 (`set_down_hooks` in `rust/guard/shared`). The dispatch: an interim notice is not
+   final, its wording found in a real transcript, read line at a time; a background Bash run's launch and notice kept as they are. FR-013.
+   New Rust code owes 100% line coverage from its own tests. T66's check and T11's worktree left alone.
+3. **Where each comes from.** G: FR-013 (the GM 2026-11-20, request.md: "can we in general priotitize performance improvements going
+   forward?"). The task as filed (T65's line) and the dispatch's observation (2026-11-21: the Stop hook refused turns, reading nothing
+   as running, while builders ran). O: the transcript's shapes and the replays (item 4); O: the red-first and acceptance runs (item 9).
+4. **Do they describe the world here?** Measured, not assumed:
+   - The resume's shape: `"toolUseResult":{"success":true,"message":"Resuming agent ad097ee","resumedAgentId":"ad097ee84a3bb3447",...}`,
+     153 records in `c6fd72d1-...jsonl` (118,498,886 bytes, 50,891 lines); a resumed agent's next notice carries the same task-id
+     (ad097ee84a3bb3447: launch line 1,084, notice 1,105, resume 1,109, notice 1,115, resume 1,119, notice 1,125), measured 2026-11-21
+     (`/usr/bin/grep -c` and `-o` on the transcript).
+   - The interim notice's wording, in 676 records, measured 2026-11-21 (`grep -c`, `grep -o`): `<summary>Agent \"<description>\" is waiting on its own background work</summary>`
+     and `<note>This agent stopped with background work of its own still running. It may resume on its own when that work completes or
+     reports, and the same task-id notifies again if it does; the result below may be interim.</note>`.
+   - **Why not the literal rule.** 58 agents got an interim notice; 50 later got a final one and 8 never notified again (their own
+     transcripts last written 2026-11-16 to 2026-11-21, each ending on an `end_turn` with nothing of its own running; the first, at line
+     2,132, has no transcript of its own), measured 2026-11-21 (`/tmp/claude-T65/interim.py`, the agents' files' `stat`). Read literally - an
+     interim notice never ending anything - those 8 run for good and the guard is silent from line 2,132 of 50,891 on, measured
+     2026-11-21 (`/tmp/claude-T65/sim.py`, the ids each reading leaves running at the transcript's end).
+   - The interim agent's own transcript tells the two apart: at 211 of the 234 interim notices whose agent has a transcript of its own
+     it held the agent's own work running at the notice's time; the other 23 are notices of the 7 such agents that never notified again
+     and of 2 explained (one resumed by the parent after, one whose final notice was already queued), measured 2026-11-21 (`/tmp/claude-T65/atT.py`, each agent's transcript cut
+     at the notice's timestamp).
+   - Over the session's 1,864 turn ends, against the approximate truth: the old reading with resumes but interim as final 38 wrong
+     (says idle); interim never final 32 wrong (says running); interim read through the agent's own work 10 wrong (says idle); that and
+     its wake since its last turn's end 1 wrong (says idle) and none says running, measured 2026-11-21 (`/tmp/claude-T65/stops.py`).
+   - That one: agent a4e93c6a's final message's thinking block, a record of its own, carried `"stop_reason":"end_turn"` at
+     21:27:45 and its text block came 19 s later, so a turn's end read from any `end_turn` record took the agent for idle while it
+     wrote its answer, measured 2026-11-21 (`agent-a4e93c6a157b06302.jsonl`, its records 1,216-1,227 listed). A turn's end read from
+     the record holding its text block: all 1,868 turn ends agree with the approximate truth, none wrong, measured 2026-11-21
+     (`/tmp/claude-T65/stops2.py`, the transcript grown by 4 turn ends since the first replay).
+   - Request blobs: 6,001 lines and 22,482,386 bytes of the transcript (19%), the history re-emitted from line 2,879 on, notices of
+     line 1,105 replayed at 3,094, measured 2026-11-21 (`grep | wc -lc`, `grep -n`); no task-id of 6,636 in the 12 transcripts of `-diagram` is named in a blob alone, so skipping them
+     loses no notice, measured 2026-11-21 (`/tmp/claude-T65/blob.py`, `grep | wc -lc`).
+   - The shell suite (`tests/hooks/test-set-down-hooks.sh`) writes each launch before its notice, so the ordered reading keeps its
+     verdicts, measured 2026-11-21 (its fixtures grepped).
+5. **The order.** After T58 (the crate it edits); beside T66 and T11, touching neither's files.
+6. **The exits.** Green: the red tests green, the crate's suite, lint, format, coverage and dead-code green, the built reader over the
+   real transcript naming none of the agents that never notified again (item 4), and `make closing-checks` green. Red: what failed recorded and
+   the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None: one reader, its record shapes read from a real transcript and each pinned by a test.
+8. **The budget.** One landing.
+9. **Done, measured.**
+   - Red first: the five tests added to `set_down_hooks/tests.rs` before any fix (the resume and a blob's replay, the interim
+     notice with its agent's own work and wake, no transcript of its own, a line's notices in order, the interim sub-agent and its cycle):
+     4 failed and the no-file one passed, pinning the reading it keeps, measured 2026-11-21 (`make rust-test CRATE=rust/guard/shared`,
+     312 passed and 4 failed, `/tmp/t65/red-first.log`). The thinking record's assertion came with the turn-end fix (item 4) and was not
+     run red.
+   - Green: 316 passed, 0 failed, measured 2026-11-21 (`make rust-test CRATE=rust/guard/shared`, `/tmp/t65/green.log`; again
+     with the turn-end fix and the temporary test below, 317 passed, `/tmp/t65/accept-run.log`).
+   - The built reader over the real transcript: the session's transcript at 07:49 UTC: the old reader and `running` name the same one
+     plainly running id; of the 10 ids whose last word is an interim notice, the 8 that never notified again read not running and the
+     2 read awake are live builders - T65's own and T11's, their own transcripts written that minute - which the old reader named
+     neither of, measured 2026-11-21 (a temporary test calling `running`, `read_in_order` and `awake` on the real file, removed before the
+     closing checks, `/tmp/t65/accept.out`). Its time: the old reader 240-322 ms over three rounds, `running` 237-289 ms (a blob's
+     line not scanned: 6,001 lines, 22,482,386 bytes), the interim agents' own transcripts 45-70 ms more, read only when nothing plainly
+     runs, measured 2026-11-21 (`Instant` around each in that test, `/tmp/t65/accept.out`).
+   - The crate's own checks on `rust/guard/shared`: lint and dead clean; format clean and cover clean after an `assert!`'s
+     message left on a line of its own was moved to a comment (llvm-cov named it unreached), measured 2026-11-21 (`l7r-gate.sh rust
+     lint|dead|format --check|cover --crate rust/guard/shared`, `/tmp/t65/crate-*.log`, `/tmp/t65/crate2-*.log`). `make closing-checks`
+     (make static, hooks-test and quick), measured 2026-11-21 (`/tmp/t65/closing.log`).
+10. **Before moving a constant.** n/a: no constant moved.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** What a builder's dispatcher sees differently: a turn ending while a resumed or interim-waiting builder runs is no
+    longer refused as "nothing is running" (38 of 1,864 turn ends of the session, measured 2026-11-21 (item 4's replay)), and an agent
+    that went quiet on an interim notice no longer leaves the guard silent (the literal rule's 32, from line 2,132 on, measured 2026-11-21
+    (item 4's replay)).
+
+**Found and left?** none
+
+**Performance work?** yes - a `[perf]` task (451 FR-013): it keeps the builders' loop running unrefused; not engine speed, so no
+`docs/performance-checklist.md` answers. The turn-end read: 240-322 ms before, 237-289 ms after, and 45-70 ms more only where nothing but interim agents remains,
+measured 2026-11-21 (item 9's timed test).
+
+<!-- plan-archive: T66 to T58 moved to plan-done.md, 2026-11-21 (feature 375 FR-044) -->
+<!-- plan-archive: archived 2026-11-21 -->
+### T59 (the finding as filed, restated by its measurement: a `SubagentStop` line's `tok` leaves out the agent's reply, its last model call, on 62 of the 85 stops that carry one, because the reply's row is not yet on disk when the hook reads, and the stops with no `tok` are the 10,370 written before the field began and 4 with no transcript anywhere, measured 2026-11-21 (`/tmp/t59/compare.py` and `gap.py`: each stop of every clone's and the mirror's event log against its agent's transcript))
+
+- **Approach**: `fields::agent_cost` reads the agent's transcript as it grows, and while the payload's `last_assistant_message` is
+  not the text of the last `assistant` row since the last `user` row it looks again every 5 ms (the knob `REPLY_POLL`), reading only
+  the bytes appended since, for at most 1 s (the knob `REPLY_WAIT`), past which it writes what is on disk, as before. `ctx` is read
+  after the wait, so it is no longer one call stale. A payload with no reply text, or no readable transcript, waits for nothing.
+  Claude Code writes a transcript's rows on a timer, and the reply lands while the hook still runs: 7 of 12 replies were off disk at
+  the hook's start in a live probe, each landing 5.8-89.2 ms in, measured 2026-11-21 (a `claude -p` session's `SubagentStop` hook
+  polling the file, item 4), and the bound is ten times the probe's latest (the knob `REPLY_WAIT`).
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+| the `SubagentStop` `tok` waits for the agent's reply to reach the transcript | n/a - no map | n/a | none | n/a |
+
+### T59 Approach (checklist part A)
+
+1. **The goal, in the world.** No map changes. Each `SubagentStop` line's `tok` is its agent's transcript sum (each `message.id` once)
+   as of the stop, its reply included, and `ctx` is the reply's context. A stop with no readable transcript still writes neither field,
+   and the hook never refuses.
+2. **The constraints.** T59's line: measure first which messages the writer misses, and why most stops carry no `tok`, then match the
+   transcript's sum where it can be read, red first, and if the reply is genuinely not on disk at the stop, say so with the measurement
+   and restate the claim. D6: `tok` summed over `agent_transcript_path` with each `message.id` once, the reader keeping the last line
+   per `aid`. FR-004 and FR-013. The wait stays far under the `SubagentStop` hook entry's 60 s timeout (`.claude/settings.json`,
+   observed 2026-11-21, method: the entry read). Only `fields.rs` and its tests change: T56's `refile.rs` and T64's `order.rs` are
+   open in the clone and left alone.
+3. **Where each comes from.**
+   - O: the event logs against the transcripts, and the live probe (item 4).
+   - R: research R2, which says the `SubagentStop` payload carries `agent_transcript_path` and `last_assistant_message`
+     (`research.md`); the probe confirmed both.
+   - G: FR-013 (the GM 2026-11-20, request.md: "can we in general priotitize performance improvements going forward?").
+   - The task as filed (T59's line).
+4. **Do they describe the world here?**
+   - **Why most stops carry no `tok`: its start date**.
+     - 10,370 `SubagentStop` lines across every clone's and the mirror's logs predate the field's first line
+       (2026-11-21T02:46:46.825Z, T07's aea9e74ea4 committed at 02:25Z), 260 of 347 in the clone's 451 log, measured 2026-11-21 (a
+       Python tally of every `.git/l7r-events/*.jsonl`).
+     - After the first line, 85 of 89 stops carry `tok`, and the other 4 have `agent_type` "", no `agent-<aid>.jsonl` anywhere under
+       the session's directory and no Agent call naming them, so there is nothing to read, measured 2026-11-21 (the same tally,
+       `find ~/.claude/projects -name '*<aid>*'` and `grep -rl` over the session's directory).
+     - No stop since the field began lacks `tok` while its transcript has rows, measured 2026-11-21 (the same tally).
+   - **Which messages the writer misses: the reply**.
+     - Of the 83 stops with `tok` in the clone's 451 log, 60 leave out exactly the last model call before the stop (every row of it,
+       the logged sum equal to the sum of the calls before it), a call stamped 15-52 ms before the stop, measured 2026-11-21
+       (`/tmp/t59/compare.py`, `timing.py`, `gap.py`: prefix sums of each transcript's calls against each logged `tok`).
+     - The other 23 count every call before the stop, whose last row came 15-443 ms earlier, and the mirror's 2 stops are both short
+       (22 and 26 ms), measured 2026-11-21 (`gap.py`).
+     - The call left out is the reply: in 58 of the 60 the last call counted ended in a `tool_use` block, and in all 23 whole stops it
+       ended in `text`, measured 2026-11-21 (`/tmp/t59/kind.py`: each call's content blocks).
+     - `ctx` is the last counted call's context in all 83, so it is one call stale on the same 60: two readers of one file missed the
+       same row, so the row was not on disk when the hook read and it was not the sum that missed it, measured 2026-11-21
+       (`timing.py`).
+     - How short, at the line a reader keeps (the last per `aid`): 42 of 47 agents, 55,684 of 1,636,568 output tokens (3.4%),
+       4,764,887 of 304,863,526 cache reads (1.6%) and 112,051 of 5,571,736 cache writes (2.0%), and for 12 of the 13 4-call
+       `spec-fidelity` agents 11-29% of the output and 30-47% of the cache reads, measured 2026-11-21 (`/tmp/t59/short.py`, each
+       transcript's sum up to its stop's time).
+     - Comparing against each transcript as it is now overstates the defect (78 of 83), because a resumed agent's later legs ran
+       after its earlier stops, measured 2026-11-21 (`compare.py`).
+   - **Whether the reply can be read at the stop: yes, while the hook runs**.
+     - The probe, a `claude -p` session (Claude Code 2.1.330, haiku) that launched 12 subagents, each making one Bash call and then a
+       one-line reply, under a `SubagentStop` hook polling the transcript every 5 ms for 2 s: 7 of 12 replies were off disk at the
+       hook's start and each landed while the hook still ran, 5.8-89.2 ms in, in one write, and the other 5 were on disk already,
+       measured 2026-11-21 (`/tmp/t59/scripts/stop_probe.py`, its log `/tmp/t59/probe-log.jsonl`).
+     - In all 12 the payload's `last_assistant_message` equaled the reply's one `text` block, and the payload named
+       `agent_transcript_path`, measured 2026-11-21 (the same probe log).
+     - So the reply is not on disk at the instant `SubagentStop` fires, but it is within the hook's run: the field can match, and the
+       claim needs no restating.
+   - **The wait's rule against the record**: wait unless the last `assistant` row since the last `user` row has a `text` block that
+     the reply ends with, and replayed on the 83 stops' rows as they stood at each stop (the reply taken from the transcript's own text
+     block) it waits on all 60 short stops and on none of the 23 whole ones, measured 2026-11-21 (`/tmp/t59/rule.py`).
+5. **The order.** After T58, which moved the writer to `rust/guard/shared`, and after T07, the field. Built beside T56 (`refile.rs`)
+   and T64 (`order.rs`) in the clone without touching their files. T10's reader already takes the transcript's sum first, so no
+   report waits on this.
+6. **The exits.** Green: the red test passes on the new writer, `make rust-test`, lint, format and cover pass on `rust/guard/shared`,
+   then `make closing-checks`. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through
+   `make arbiter-ask`.
+7. **The search smell.** None: one function's reads, its cause measured before any change.
+8. **The budget.** One landing.
+9. **Done, measured.**
+   - **Red first**: `a_stop_waits_for_its_agents_reply_to_reach_the_transcript` appends the reply 60 ms into the stop (the probe's
+     middle), and on the old writer it failed with `tok` `{"in": 3, "cached": 1000, "created": 200, "out": 10}`, the first call alone,
+     against `{"in": 5, "cached": 2500, "created": 300, "out": 17}`, the production shape, 316 passed and 1 failed, measured
+     2026-11-21 (`make rust-test CRATE=rust/guard/shared`, its log kept at `.git/l7r-handoffs/T59-red.log`).
+   - **Green**: that test passes, and so does `a_stop_waits_only_for_a_reply_not_yet_on_disk`, whose four cases are a reply on disk
+     and one ending a longer message, both returned without waiting under a 30 s bound, and a reply before the last `user` row and one
+     that never lands, both waited for the 40 ms bound and then written with what is on disk, 318 passed, measured 2026-11-21
+     (`make rust-test CRATE=rust/guard/shared`).
+   - **The crate checks** on `rust/guard/shared`: lint clean, cover clean (every line of `l7r_shared` reached by its own tests,
+     the new wait's included), and format clean after `make format FILE=` rewrapped one tuple of the new test, measured 2026-11-21
+     (`l7r-gate.sh rust lint|cover|format --check --crate rust/guard/shared`).
+   - **After the landing**: once the mirror's guard is rebuilt, the next stops' `tok` should equal their transcripts' sums up to each
+     stop except where a reply lands more than 1 s late (the knob `REPLY_WAIT`), checked by `/tmp/t59/compare.py` and `gap.py`
+     (copies of every T59 script and the probe's log in the clone's `.git/l7r-handoffs/T59-scripts/`).
+10. **Before moving a constant.** n/a: `REPLY_WAIT` and `REPLY_POLL` are new, each with its measurement beside it, and no research
+   claim names them.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** No map changes, and `where-time` and `feature-report` give the same answers, since T10's reader takes the
+   transcript's sum first. What changes is the log's own record: each agent's `tok` was short by its reply and `ctx` one call stale
+   (42 of 47 agents, 3.4% of all output tokens and up to 29% of a small check's, measured 2026-11-21 (item 4's `short.py`)). Those are
+   wrong numbers in a record that readers fall back on, so it is a defect, fixed, not a claim to restate (constitution XIV).
+
+**Found and left?** None.
+
+**Performance work?** Yes (a `[perf]` task, 451 FR-013): it makes the builders' loop's measure of each agent's cost right. Its cost
+is a wait on a stop whose reply is not yet on disk, 5.8-89.2 ms in the probe on about 60 of every 83 stops, measured 2026-11-21
+(item 4's probe and `gap.py`), and 1 s at most (the knob `REPLY_WAIT`). Not engine speed, so no checklist answers.
+
+
+<!-- plan-archive: archived 2026-11-21 -->
+### T64 (T55's order notice counted a code edit already landed: the main session was told at its `make decide` calls that its Makefile edit of 2026-11-20T15:48:51Z, filed under T12, had no closing-checks after it, though T12 landed at 15:55:22Z; replayed over 451's log, 22 of the rule's 127 firings at 211 decides were on an edit its task had landed, all the main session's, measured 2026-11-21 (`/tmp/claude-T64/replay.py`, the decide rule replayed over `.git/l7r-events/451-time-retro-and-efficiency.jsonl` to its last line at 2026-11-21T08:09:00Z))
+
+- **Approach**: `order.rs`'s `decide` reads the caller's last code edit NOT LANDED: `landings(lines)` maps each task to its last
+  landing that went out, by its line's place in the log - `static_runs_hooks`' landed rule, a `Phase` `end` line whose `landed` is
+  true and whose `tasks` names the task, whatever its exit code - and an edit whose own `task` has such a landing after it is
+  skipped, the notice reading back to the caller's last edit not landed (or saying nothing). Landing lines are not filtered by
+  caller: `make land` runs in the main session, so its line lands a builder's edits of its tasks. An edit with no `task` no
+  landing names, so it counts as before. The notice's text says "your last code edit not landed". KEYED ON THE EDIT'S TASK, NOT THE
+  DECIDE'S: the main session's decides were filed under the task being decided, not yet landed (T08, T09, T55, T57, T58, T11), so
+  the decide's own task's last landing drops none of the 22, measured 2026-11-21 (`/tmp/claude-T64/replay.py`: the rule fires on
+  127 of 211 decides as built, 127 keyed on the decide's task's last landing, 105 keyed on the edit's task). A third reading,
+  the decide's task's last landing else its first `task-start`, fires on 103, measured 2026-11-21 (the same replay), but it clears
+  edits by a start, not a landing, and drops 2 right firings: builder a37963's decides at 19:25:45Z and 19:25:50Z of 2026-11-20 on
+  its Makefile edit under T34 at 19:23:59Z, made before T34's first start at 19:37:16Z and landed at 19:44:52Z (measured
+  2026-11-21, the same replay and `.git/task-starts.jsonl`). Under the fix the main session's 3 firings left in the replay are at
+  most 4 min after their edit and before its landing (13:40:49Z on the T18 edit of 13:37:42Z, and 15:49:03Z and 15:52:51Z on the T12
+  edit of 15:48:51Z, 2026-11-20), the order the notice prices, measured 2026-11-21 (the same replay). These are the rule replayed
+  over the whole log; the notice itself ran only from T55's landing at 2026-11-21T05:33:54Z, its firings the guard log's `noticed`
+  rows.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+| the landed edit skipped at the decide notice, and its tests | n/a - no map | n/a | none | n/a |
+
+<!-- plan-archive: archived 2026-11-21 -->
+### T64 Approach (checklist part A)
+
+1. **The goal, in the world.** No map changes. A `make decide` is told the closing step's order only for a code edit of the
+   caller's that no landing of its task has followed and no `make closing-checks` has started after: the main session is no longer
+   told of a Makefile edit that landed hours before, and a builder's unlanded edit is still told as T55 built it.
+2. **The constraints.** T64's line: the caller's last code edit since its task's last landing, `static_runs_hooks`' own landed rule,
+   red first on an edit before a landing. T55's rules otherwise kept: the caller by `agent_id`, else the main session by
+   `session_id`; a start a `closing-checks` line that ran; a notice, never a refusal. FR-012 (red first), FR-013 (a `[perf]` task: the
+   builders' and the main session's loop). New Rust code owes 100% line coverage from its own tests. The dispatch: only `order.rs`,
+   its tests, the static-runs suite and this section edited; T56's `rust/gate/crates/measure` and T59's `fields.rs` left alone.
+3. **Where each comes from.** G: FR-013 (the GM 2026-11-20, request.md: "can we in general priotitize performance improvements going
+   forward?"). The task as filed (T64's line, found 2026-11-21). R: `static_runs_hooks.rs`'s module doc and `runs`, the landed rule
+   (feature 451 T06's `end` line, T14's count). O: the replay and the probe (item 4); O: the red and green runs (item 9).
+4. **Do they describe the world here?** Measured, not assumed:
+   - The finding's edit: `{"t":"2026-11-20T15:48:51.173Z",...,"tool":"Edit",...,"path":".../Makefile",...,"task":"T12","fallback":true}`,
+     the main session's (no `by`), and its landing, the `end` line of 2026-11-20T15:55:22.200Z, `landed` true, `tasks` `["T12","T17"]`,
+     measured 2026-11-21 (`grep` of 451's log); 21 landings went out in 451's log, every one the main session's line (no `by`),
+     measured 2026-11-21 (the log's `"step":"end"` `"landed":true` lines listed).
+   - The keys compared over 451's log to 2026-11-21T08:09:00Z, 211 decides: 127 firings as built, 127 keyed on the decide's task,
+     103 on the decide's task's landing else its first start, 105 on the edit's task (the fix), measured 2026-11-21
+     (`/tmp/claude-T64/replay.py`); why the edit's task, the Approach above.
+   - A taskless edit: 127 of the log's 1,079 Edit, Write and NotebookEdit lines carry no `task`, all of 2026-11-20 between 04h and
+     06h (126 builders', 1 the main session's), measured 2026-11-21 (the log's edit lines counted by `task`, caller and hour): before
+     lines carried a task, none since, so the fix leaves them counting rather than borrowing the decide's task.
+   - The probe: the built guard (`tests/hooks/static-runs-hooks.sh pretool`, `GUARD_LOG_DIR` a scratch directory so no `noticed` row
+     reaches the real guard log) on the main session's `make decide F=451 T=T64` against the clone's real log said nothing, exit 0,
+     where T55's rule named the T12 Makefile edit, measured 2026-11-21 (the probe, its output empty).
+5. **The order.** After T55 (the notice it fixes) and T58 (the crate split); beside T56 and T59, touching neither's files; before T22,
+   whose after-measurement reads the notice's `noticed` rows.
+6. **The exits.** Green: the red tests green, the crate's tests, lint, format and coverage green, the probe silent on the real log,
+   and `make closing-checks` green. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through
+   `make arbiter-ask`.
+7. **The search smell.** None: one predicate, the landed rule `runs` already reads, built once per decide and pinned by a test each
+   way.
+8. **The budget.** One landing.
+9. **Done, measured.**
+   - Red first: two tests added to `order/tests.rs` before any fix (`an_edit_before_a_landing_of_its_task_is_landed_and_never_told`:
+     the finding's T12 edit and landing, a landing of another task, a refused one, one with no `landed`, a `start` line, an edit after
+     the landing, an earlier unlanded edit read back to; `a_builders_edit_is_landed_by_the_main_sessions_landing_of_its_task`, and a
+     taskless edit still told) and a twin to the suite's section 8 (a refused landing still told, one that went out silent): `make
+     rust-test CRATE=rust/guard` 410 passed, 2 failed (the two new), and `tests/hooks/test-static-runs-hooks.sh` 37 passed, 1 failed
+     ("a notice for an edit already landed"), measured 2026-11-21 (the runs' logs, `/tmp/claude-T64/red-*.log`).
+   - Green: `make rust-test CRATE=rust/guard` 412 passed, 0 failed; the suite 38 passed, 0 failed, measured 2026-11-21
+     (`/tmp/claude-T64/green-*.log`). Crate-scoped on rust/guard (`scripts/gates/l7r-gate.sh rust format --check`, `lint`, `cover
+     --crate rust/guard`): coverage green on the first run; format and lint red on it (rustfmt's layout of the new tests and of
+     `landings`, and two doc lines missing backticks around `static_runs_hooks`), fixed by `make format FILE=` and the backticks,
+     measured 2026-11-21 (`/tmp/claude-T64/crate-checks.log`). Re-run after the fixes, the same four and `make rust-test
+     CRATE=rust/guard`: format and lint clean (their green results on these inputs reused), coverage clean on a fresh run (its tests
+     14.5 s), the tests clean, measured 2026-11-21 (`/tmp/claude-T64/crate-checks2.log`).
+   - `make closing-checks` after the fix, 104 s wall: hooks-test green (55 guard suites green, 3 unchanged since green), quick green,
+     static red on one crate not this task's - `rust/gate/crates/measure`'s test
+     `a_task_whose_only_start_is_stale_falls_to_the_feature_of_the_last_start`, 200 passed, 1 failed, in T56's builder's uncommitted
+     `refile/tests.rs`, left alone - with lint clean and format clean on 34 crates and the guard's coverage green, measured 2026-11-21
+     (the logs under `.git/closing-checks/`). Static stops at its first red step, so its steps after `rust cover` did not run: `rust
+     dead`, spec-lint, the conflict check, guard-deps, `make-docs --check` and the layout-carry selftest (the Makefile's `static`
+     recipe read 2026-11-21) - so item 6's green exit is not met by this run, and a re-run waits on T56's test (a second static run of
+     T64's count spent on a result another builder's uncommitted file decides).
+   - Its cost: a `make decide` through the suite's shim on 451's 25,127-line log, ten calls, 162 to 227 ms, median 188 ms, against
+     23 to 51 ms, median 30 ms, for a call it reads nothing for, both under a running `make closing-checks`, measured 2026-11-21 (the
+     probe timed by `date +%s%N`); the fix adds one pass over lines already read and a map of the landed tasks, 44 in 451's log, measured 2026-11-21 (the log's
+     landed `end` lines' `tasks` counted).
+10. **Before moving a constant.** n/a - no constant moves.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** No map changes. What changes: the main session stops being told of an edit landed long ago at every
+   `make decide` (22 of 127 replayed firings, measured 2026-11-21, `/tmp/claude-T64/replay.py`), a notice that taught it to ignore the
+   order; a defect by its wrong outcome (constitution XIV), not a difference.
+
+**Found and left?** none.
+
+**Performance work?** yes (a `[perf]` task, 451 FR-013): the order notice makes the builders' closing step faster, and a notice
+that fires on landed work teaches the session to read past it; not an engine-speed task, so no docs/performance-checklist.md
+answers.
+
+
+<!-- plan-archive: T65 to T65 moved to plan-done.md, 2026-11-21 (feature 375 FR-044) -->
