@@ -118,9 +118,9 @@ keeps the last per `aid`.
 D6, and `UNTIL=` (the Makefile passes `--until`); the CRITICAL PATH is the window's wall clock partitioned by what the main session was
 doing or waiting on (a wait booked by D3 to its run), and beside it the summed agent-minutes, each agent's span and tokens under its
 task; the REWORK counts refused landings (D5's `end` lines whose `landed` is false: a push that went out with a later raise, or
-exit 3 with its ticks standing, is a landing whatever its code) and plan re-rounds (a task's `spec-fidelity` and
-`spec-fidelity-verify` dispatches after its first). `feature-report` reads the same columns through the same functions (one place:
-`where_time.rs`'s new `columns` module), keeping its existing `UNTIL=`.
+exit 3 with its ticks standing, is a landing whatever its code) and plan re-rounds (a later round of one review on one subject, keyed by
+agent and manifest subject as the rounds table keys it; T10's plan review, 2026-11-21). `feature-report` reads the same columns
+through the same functions (one place: `where_time.rs`'s new `columns` module), keeping its existing `UNTIL=`.
 
 **D8 - Who is a builder** (FR-006; R3). A payload with `agent_id` whose `agent_type` names no `.claude/agents/<agent_type>.md` in the
 clone. Measured, this catches every builder that passed the cap and, among defined agents, one call; it also catches a general-purpose
@@ -266,6 +266,91 @@ the three - `entry-gate.sh` by its two cases, the other two by their case groups
 
 - **Approach**: `feature_report.rs` and `feature_report/tables.rs` (not held) read T08 and T10's `columns` in process, its `UNTIL=`
   kept. Red first: the same fixture through `feature-report` gives the same sums as through `where-time`.
+- **The re-rounds, restated** (T10's plan review, 2026-11-21, on T11's line): D7's first wording, "a task's `spec-fidelity` and `spec-fidelity-verify`
+  dispatches after its first", counted every review launched under a task, its block-bundle reviews among them - 68 in T10's window
+  against the feature report's rounds table's 23 rounds past the first over its 20 subjects. A plan re-round is what the column is
+  named: a later round of one review on one subject, read by the rounds table's own key (`feature_report::tables::round_key`: an Agent
+  call's `PreToolUse` naming a MANIFEST, its agent and the subject the manifest names), a `spec-fidelity` dispatch inside the window
+  whose key a dispatch before it in the feature's log holds, inside the window or before SINCE, booked to the task its line names (D6),
+  else the mark. A second round run inside the window is rework done inside it, its first round before SINCE or not (T11's plan review,
+  2026-11-21), so the re-rounds read the feature's log from its first line, a dispatch inside the window as `load_all` cuts one (its
+  time's text at or after SINCE). The rounds table stays counted inside the window, and says so under its heading (`feature_report.rs`):
+  reading it the same way would read the log before SINCE a second time for the report and change what its rows and its "two or more"
+  mean, where one sentence stops the two disagreeing silently - the simpler of the two, and right. T10's SINCE cuts no subject (the 451
+  log's first `spec-fidelity` dispatch is at 2026-11-20T04:42:00Z), so its window reads 23 before and after; a SINCE of
+  2026-11-20T23:05:00Z, between T44's second plan round and its third, read 6 before and 7 after, measured 2026-11-21 (`make where-time
+  F=451 SINCE=2026-11-20T23:05:00Z UNTIL=2026-11-21T04:10:44Z`, `/tmp/t11fix`); red first,
+  `spent_tests::a_re_round_inside_the_window_counts_a_first_round_before_since` read 0 plan re-rounds against 2 before the fix
+  (`/tmp/t11fix/red-spent.log`, 198 passed, 1 failed), 200 passed after. The second read costs where-time at T10's bounds 2.48 s to
+  2.60 s over three runs against 2.25 s in one run before, at a load average of 13 to 14, measured 2026-11-21 (`/usr/bin/time` around the
+  command); two runs at 7.90 s and 13.00 s, taken while another session's `make closing-checks` held the machine, are set aside,
+  measured 2026-11-21 (the same timing, `/tmp/t11fix/wt-t10-after1.log`, `wt-t10-after2.log`). The feature report pays it every time, since it passes its first event as
+  SINCE where none is given. A `spec-fidelity-verify` round is the review hook's routing of a later `spec-fidelity` dispatch, logged under the name
+  dispatched: the 451 log holds none among its 108 `spec-fidelity` dispatches, measured 2026-11-21 (its Agent `PreToolUse` lines counted
+  by `agent`). Of the window's 23, 22 lines name their task and one, the 04:45Z round of `plan-449-rust-codebase-T233`, names none and
+  goes to the mark (`-`), measured 2026-11-21 (a Python pass over the 451 log's Agent lines to 2026-11-21T04:10:44Z); the `all` row counts
+  every re-round, so none is dropped.
+- **Built** (2026-11-21), in `rust/gate/crates/measure`:
+  - ONE READER: `where_time::columns_text` is the text `make where-time` prints by start - the critical path by task, the agents and the
+    rework beside it, what booked the gaps, the waits by what held them, the runs table - with each agent's row only where asked;
+    `where_time::run` prints it, and `feature_report::report` shows it, each agent's row left to `make where-time`, in a section after the
+    session's time, "The critical path and what was spent beside it". No reading is copied: the report passes its window and the command
+    reads it as `make where-time` does. The window passed is the report's own, its first event to its last where no SINCE or UNTIL is
+    given: with them empty, where-time read the sessions' turn lines in every feature's log since they began, and the report showed
+    6,900 min of critical path against the window's 1,417, measured 2026-11-21 (`make feature-report F=451 UNTIL=2026-11-21T04:10:44Z`
+    before that fix, `/tmp/t11/logs`).
+  - THE RE-ROUNDS: `columns::spent::rerounds` (the window's re-round dispatches, against the feature's log from its first line, which
+    `where_time::booked` reads a second time where SINCE is given), `spent::booked` (each one's task, by the rule an agent's
+    is booked by, `spent::task_of`), `Tables::rerounds`; `spent::render` counts a task's re-rounds from them and its `all` row is their
+    count, the rounds table's own sum where SINCE cuts no subject's rounds. `feature_report::tables::dispatches` keys its rounds by
+    `round_key`.
+  - FOUND AND FIXED, an agent's task (`columns::flight`): T10 booked an agent to its first start's `task`, taken for the launch's brief,
+    but a start written before 451 T53's `dispatches.rs` landed (19de0f1d0c, 2026-11-21T04:04:23Z) carried the clone's mark; the stop's
+    is the agent's meta file (D6). Of the 165 agents the 451 log dispatched to
+    2026-11-21T04:10:44Z, 57 started under another task than their dispatch's `task` and their stop's, against one whose stop disagreed
+    with its dispatch, measured 2026-11-21 (a Python pass over the log's Agent `PreToolUse` and `PostToolUse` lines and each agent's first
+    start and stop). An agent now goes to its first stop's task, else its first start's: 64 of the window's 174 agents, 625 of their
+    minutes, moved task - T18 read 14 agents and 119 min, 5 and 15 after, and T15's plan reviews, which sat under T18, read under T15
+    (3 agents, 63 min) - measured 2026-11-21 (the agent rows of the command before and after, `/tmp/t11/logs/wt-before-t10.log`,
+    `wt-after-t10.log`). The mismatch ends at T53's landing: every agent whose first start and first stop name different tasks started
+    before it, 57 of the 164 with both, the last at 04:01:30Z, and none of the 22 started after it that had stopped by 07:23Z (24
+    started), measured 2026-11-21 (a
+    Python pass over the log's first `SubagentStart` and `SubagentStop` per agent, `/tmp/t11/logs/mismatch.log`). The stop before the
+    start stays right for the lines written before it, and changes nothing after.
+  - Pinned fixtures moved as intended: T10's window (`spent_tests::window`) gives its two T06 plan reviews the one MANIFEST, so its one
+    re-round stands as a round on one subject; `where_time::tests::a_background_end_and_a_phase_line_leave_the_tables_as_they_were` held
+    the report unchanged by a `Phase` and a `BgEnd` line until T11, and now holds its changed lines to where-time's, the runs table's
+    `T01` and `all` rows.
+- **Red first**, observed 2026-11-21, method: `make rust-test CRATE=rust/gate/crates/measure` with the tests as they stand and the five
+  source files' hunks reverse-applied (`feature_report.rs`, `feature_report/tables.rs`, `where_time.rs`, `columns/flight.rs`,
+  `columns/spent.rs`), then re-applied, the tree the patch again by `cmp` (`/tmp/t11/logs/red-again.log`, 194 passed, 4 failed on their
+  assertions; the earlier `red-first.log` and `red-stop.log` ran before the tests' last edits):
+  `spent_tests::a_plan_re_round_is_a_later_round_of_one_review_on_one_subject` read T07 `| 0 | 3 |` against 1 - every `spec-fidelity`
+  agent after its task's first: the plan reviewed twice, a block bundle once, one with no manifest - the third round, its line naming no
+  task, 0 under T05 against 1, and the `all` row 3 re-rounds against 2; `feature_report::tests::the_report_shows_where_times_columns_for_the_feature`
+  found none of where-time's lines in the report;
+  `spent_tests::an_agent_goes_to_the_task_its_stop_names_before_the_mark_its_start_carries` read the plan review started under the mark
+  T05 and stopped under T07 under T05, `| T05 | 2 | 30 |`; `where_time::tests::a_background_end_and_a_phase_line_leave_the_tables_as_they_were`
+  found no report line changed against where-time's runs table's `T01` and `all` rows.
+- **Measured** (the binary at c156ccc564 before, with this task after; observed 2026-11-21, method: the commands below in the worktree,
+  `/tmp/t11/logs`):
+
+| beside the critical path | critical path (wall clock) | agents | agent minutes summed | k tokens in | k tokens out | refused landings | plan re-rounds | rounds table, past the first |
+|---|---|---|---|---|---|---|---|---|
+| where-time to 04:10:44Z, before (`wt-before-t10.log`) | 1,417 | 174 | 1,647 | 950,887 | 4,764 | 4 | 68 | 23 |
+| where-time to 04:10:44Z, after (`wt-after-t10.log`) | 1,417 | 174 | 1,647 | 950,887 | 4,764 | 4 | 23 | 23 |
+| feature-report to 04:10:44Z, after (`fr-after-t10.log`) | 1,417 | 174 | 1,647 | 950,701 | 4,764 | 4 | 23 | 23 |
+| where-time to 06:42:32Z, before (`wt-before.log`) | 1,569 | 191 | 2,011 | 1,123,498 | 5,575 | 4 | 72 | 25 |
+| where-time to 06:42:32Z, after (`wt-after.log`) | 1,569 | 191 | 2,011 | 1,123,498 | 5,575 | 4 | 25 | 25 |
+| feature-report to 06:42:32Z, after (`fr-after.log`) | 1,569 | 191 | 2,010 | 1,123,311 | 5,575 | 4 | 25 | 25 |
+
+  The where-time commands ran `SINCE=2026-11-20T04:33:00Z`, the reports `UNTIL=` alone; before this task the report had no such section.
+  The report's window opens at its first event, seconds after 04:33:00Z: the 186k tokens in it reads under where-time's to 04:10:44Z,
+  and the one agent-minute to 06:42:32Z, measured 2026-11-21 (the table above). Where-time's time table is unchanged line for line but
+  the agents table's `-` row, which gains the 449 plan's re-round, measured 2026-11-21 (`diff` of the first 58 lines of
+  `wt-before-t10.log` and `wt-after-t10.log`). The report took 5.3 s and 5.9 s to build by its own line, against 5.1 s and 5.4 s before,
+  with another builder's cargo running beside it, measured 2026-11-21 (the report's last line, `fr-before-t10.log`, `fr-before.log`,
+  `fr-after-t10.log`, `fr-after.log`).
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
@@ -1208,58 +1293,179 @@ source edits, rebuilds the guard alone where it rebuilt every crate that named i
 **Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
 
 
-### T65 (<why: the finding or measurement that files it>)
+### T65 (the finding as filed, restated by its measurement: `set_down_hooks::running` read a transcript's launched and notified ids as two sets, so a SendMessage resume - its result's `"resumedAgentId":"<id>"`, 153 such records in the session `c6fd72d1-...jsonl` - was no launch and a resumed agent read as finished once it had notified, and an interim notice (`<summary>Agent "..." is waiting on its own background work</summary>`, its note "the same task-id notifies again if it does; the result below may be interim") ended its agent, which was waiting on its own work: resumes read, but an interim notice taken for final, "nothing is running" was read at 38 of that session's 1,864 turn ends while such an agent was alive, measured 2026-11-21 (a replay of the transcript and its agents' own transcripts, `/tmp/claude-T65/stops.py`, the truth approximate: an agent alive when its own transcript wrote again later without a parent resume first))
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: `running` reads the transcript once, in order, a line at a time as before (`read_in_order`): each line's events sorted by
+  their place in it (a launch, a resume, a stop; each notice read by its own `<summary>`, from its id to the next notice or its
+  `</task-notification>`), an id's last word kept - launched or resumed, or interim - and an id a final notice or a stop ended dropped. A
+  resume is `LAUNCHED`'s third key, `resumedAgentId`, unescaped in the tool's own record alone. An interim notice ends nothing; an agent
+  whose last word is one runs while its own transcript (`<session>/subagents/agent-<id>.jsonl`, read by the same reader with its own id
+  left out) holds its own work running, an interim sub-agent that does (a known-set so a cycle ends), or a wake - an end of its own work
+  after its last turn's end, the `"stop_reason":"end_turn"` record holding its text block (its thinking's record carries `end_turn`
+  too, written first). That second read is made only when the parent's read leaves nothing plainly running.
+  No transcript of its own, not running, as before. A request blob's line (`{"type":"api-request-blob"`) is not read: it re-emits the
+  history, so its copy of an old notice would end an agent resumed since. A background Bash run's launch and notice read as before.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| the ordered reader, the resume key, the interim rule, the blob skip, and their tests | n/a - no map | n/a | none | n/a |
 
 ### T65 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** No map changes. A session's turn ends without "nothing is running" while a builder it resumed with
+   SendMessage, or one that stopped waiting on its own background work, still runs; and the guard still refuses once that agent has
+   truly finished - an agent that went quiet on an interim notice does not keep it silent for the rest of the session.
+2. **The constraints.** T65's line: the transcript read in order, an agent's last launch or resume after its last notification running,
+   red first on a resume after a notice; lands after T58 (`set_down_hooks` in `rust/guard/shared`). The dispatch: an interim notice is not
+   final, its wording found in a real transcript, read line at a time; a background Bash run's launch and notice kept as they are. FR-013.
+   New Rust code owes 100% line coverage from its own tests. T66's check and T11's worktree left alone.
+3. **Where each comes from.** G: FR-013 (the GM 2026-11-20, request.md: "can we in general priotitize performance improvements going
+   forward?"). The task as filed (T65's line) and the dispatch's observation (2026-11-21: the Stop hook refused turns, reading nothing
+   as running, while builders ran). O: the transcript's shapes and the replays (item 4); O: the red-first and acceptance runs (item 9).
+4. **Do they describe the world here?** Measured, not assumed:
+   - The resume's shape: `"toolUseResult":{"success":true,"message":"Resuming agent ad097ee","resumedAgentId":"ad097ee84a3bb3447",...}`,
+     153 records in `c6fd72d1-...jsonl` (118,498,886 bytes, 50,891 lines); a resumed agent's next notice carries the same task-id
+     (ad097ee84a3bb3447: launch line 1,084, notice 1,105, resume 1,109, notice 1,115, resume 1,119, notice 1,125), measured 2026-11-21
+     (`/usr/bin/grep -c` and `-o` on the transcript).
+   - The interim notice's wording, in 676 records, measured 2026-11-21 (`grep -c`, `grep -o`): `<summary>Agent \"<description>\" is waiting on its own background work</summary>`
+     and `<note>This agent stopped with background work of its own still running. It may resume on its own when that work completes or
+     reports, and the same task-id notifies again if it does; the result below may be interim.</note>`.
+   - **Why not the literal rule.** 58 agents got an interim notice; 50 later got a final one and 8 never notified again (their own
+     transcripts last written 2026-11-16 to 2026-11-21, each ending on an `end_turn` with nothing of its own running; the first, at line
+     2,132, has no transcript of its own), measured 2026-11-21 (`/tmp/claude-T65/interim.py`, the agents' files' `stat`). Read literally - an
+     interim notice never ending anything - those 8 run for good and the guard is silent from line 2,132 of 50,891 on, measured
+     2026-11-21 (`/tmp/claude-T65/sim.py`, the ids each reading leaves running at the transcript's end).
+   - The interim agent's own transcript tells the two apart: at 211 of the 234 interim notices whose agent has a transcript of its own
+     it held the agent's own work running at the notice's time; the other 23 are notices of the 7 such agents that never notified again
+     and of 2 explained (one resumed by the parent after, one whose final notice was already queued), measured 2026-11-21 (`/tmp/claude-T65/atT.py`, each agent's transcript cut
+     at the notice's timestamp).
+   - Over the session's 1,864 turn ends, against the approximate truth: the old reading with resumes but interim as final 38 wrong
+     (says idle); interim never final 32 wrong (says running); interim read through the agent's own work 10 wrong (says idle); that and
+     its wake since its last turn's end 1 wrong (says idle) and none says running, measured 2026-11-21 (`/tmp/claude-T65/stops.py`).
+   - That one: agent a4e93c6a's final message's thinking block, a record of its own, carried `"stop_reason":"end_turn"` at
+     21:27:45 and its text block came 19 s later, so a turn's end read from any `end_turn` record took the agent for idle while it
+     wrote its answer, measured 2026-11-21 (`agent-a4e93c6a157b06302.jsonl`, its records 1,216-1,227 listed). A turn's end read from
+     the record holding its text block: all 1,868 turn ends agree with the approximate truth, none wrong, measured 2026-11-21
+     (`/tmp/claude-T65/stops2.py`, the transcript grown by 4 turn ends since the first replay).
+   - Request blobs: 6,001 lines and 22,482,386 bytes of the transcript (19%), the history re-emitted from line 2,879 on, notices of
+     line 1,105 replayed at 3,094, measured 2026-11-21 (`grep | wc -lc`, `grep -n`); no task-id of 6,636 in the 12 transcripts of `-diagram` is named in a blob alone, so skipping them
+     loses no notice, measured 2026-11-21 (`/tmp/claude-T65/blob.py`, `grep | wc -lc`).
+   - The shell suite (`tests/hooks/test-set-down-hooks.sh`) writes each launch before its notice, so the ordered reading keeps its
+     verdicts, measured 2026-11-21 (its fixtures grepped).
+5. **The order.** After T58 (the crate it edits); beside T66 and T11, touching neither's files.
+6. **The exits.** Green: the red tests green, the crate's suite, lint, format, coverage and dead-code green, the built reader over the
+   real transcript naming none of the agents that never notified again (item 4), and `make closing-checks` green. Red: what failed recorded and
+   the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None: one reader, its record shapes read from a real transcript and each pinned by a test.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.**
+   - Red first: the five tests added to `set_down_hooks/tests.rs` before any fix (the resume and a blob's replay, the interim
+     notice with its agent's own work and wake, no transcript of its own, a line's notices in order, the interim sub-agent and its cycle):
+     4 failed and the no-file one passed, pinning the reading it keeps, measured 2026-11-21 (`make rust-test CRATE=rust/guard/shared`,
+     312 passed and 4 failed, `/tmp/t65/red-first.log`). The thinking record's assertion came with the turn-end fix (item 4) and was not
+     run red.
+   - Green: 316 passed, 0 failed, measured 2026-11-21 (`make rust-test CRATE=rust/guard/shared`, `/tmp/t65/green.log`; again
+     with the turn-end fix and the temporary test below, 317 passed, `/tmp/t65/accept-run.log`).
+   - The built reader over the real transcript: the session's transcript at 07:49 UTC: the old reader and `running` name the same one
+     plainly running id; of the 10 ids whose last word is an interim notice, the 8 that never notified again read not running and the
+     2 read awake are live builders - T65's own and T11's, their own transcripts written that minute - which the old reader named
+     neither of, measured 2026-11-21 (a temporary test calling `running`, `read_in_order` and `awake` on the real file, removed before the
+     closing checks, `/tmp/t65/accept.out`). Its time: the old reader 240-322 ms over three rounds, `running` 237-289 ms (a blob's
+     line not scanned: 6,001 lines, 22,482,386 bytes), the interim agents' own transcripts 45-70 ms more, read only when nothing plainly
+     runs, measured 2026-11-21 (`Instant` around each in that test, `/tmp/t65/accept.out`).
+   - The crate's own checks on `rust/guard/shared`: lint and dead clean; format clean and cover clean after an `assert!`'s
+     message left on a line of its own was moved to a comment (llvm-cov named it unreached), measured 2026-11-21 (`l7r-gate.sh rust
+     lint|dead|format --check|cover --crate rust/guard/shared`, `/tmp/t65/crate-*.log`, `/tmp/t65/crate2-*.log`). `make closing-checks`
+     (make static, hooks-test and quick) green, 395 s, 73 s and 1 s, measured 2026-11-21 (`/tmp/t65/closing.log`).
+10. **Before moving a constant.** n/a: no constant moved.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** What a builder's dispatcher sees differently: a turn ending while a resumed or interim-waiting builder runs is no
+    longer refused as "nothing is running" (38 of 1,864 turn ends of the session, measured 2026-11-21 (item 4's replay)), and an agent
+    that went quiet on an interim notice no longer leaves the guard silent (the literal rule's 32, from line 2,132 on, measured 2026-11-21
+    (item 4's replay)).
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?** none
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** yes - a `[perf]` task (451 FR-013): it keeps the builders' loop running unrefused; not engine speed, so no
+`docs/performance-checklist.md` answers. The turn-end read: 240-322 ms before, 237-289 ms after, and 45-70 ms more only where nothing but interim agents remains,
+measured 2026-11-21 (item 9's timed test).
 
+### T66 (the finding as filed, restated by its measurement: after T58 no manifest under `rust/` names `l7r_guard` but the guard's own, so a hook edit rebuilds 1 crate where it rebuilt 32 (measured 2026-11-21 by T58, `measure.sh`), and nothing refused a crate that named it again - `make static` read no manifest's dependencies, measured 2026-11-21 (its recipe read; the checks crate's and the rustc crate's sources grepped for a dependency rule: no check refuses a dependency - `rustc.rs`'s `features()`, `kept.rs` and `fmtfile.rs` read manifests, for features, `[package.metadata.l7r]` reads and a package's edition))
 
-### T66 (<why: the finding or measurement that files it>)
-
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: a new text check, `l7r-gate check guard-deps` (`rust/gate/crates/checks/src/checks/guard_deps.rs`), run by `make static`
+  after the conflict check with `--root` the tree. It walks every `Cargo.toml` under `rust/` (a `target` or hidden directory and a symbolic
+  link not walked; walked rather than listed by git because the workspace's `gate/crates/*` builds an untracked crate too) and reads each
+  line by its section, a hand reader as `rustc.rs`'s `features()` is (the checks crate has no TOML crate): a key naming the guard in any
+  dependency table (`[dependencies]`, `[dev-dependencies]`, `[build-dependencies]`, a target's, the workspace's; `-` and `_` read alike, extra
+  safety only, since cargo refuses `l7r-guard` as the key for the package `l7r_guard` ("perhaps you meant: l7r_guard", measured
+  2026-11-21 in the probe below), a dotted or quoted key, a dot inside a quoted `cfg` kept), a `[*dependencies.l7r_guard]` table, or a rename through `package`, a comment
+  cut at the first `#` outside a string. Each is refused as `<manifest>:<line>`, naming `l7r_shared = { path = "<its path from that
+  crate>" }` to take instead and that a piece only the guard holds moves into `rust/guard/shared`. The guard's own manifest is the one
+  exempt. A dependency by path alone under another name is not read: cargo refuses a path dependency whose key is not the package's name
+  but through `package`, which is read (measured 2026-11-21: a two-crate workspace, `/tmp/t66/probe`, `cargo tree --offline -p b`, refused
+  `hooks = { path = ... }` for the package `l7r_guard`, "no matching package named `hooks`"). Direct dependencies are enough: a transitive one needs some manifest under `rust/` to name it.
+  Each run is recorded as `check-guard-deps`, its entry in `scripts/tool-registry.json` (`check tool-signals`, a step of `make hooks-test`,
+  refuses a recorded tool the registry lacks).
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| the check, its `make static` line and its tests | n/a - no map | n/a | none | n/a |
 
 ### T66 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** No map changes. A crate that names `l7r_guard` again is refused at the builder's first `make static`, the
+   refusal naming `l7r_shared` and its path, so T58's rebuild count (a hook edit rebuilds the guard alone) cannot regress silently.
+2. **The constraints.** T66's line: a check in `make static`; refuses a dependency on `l7r_guard` from any crate but the binaries that ship
+   it; names `l7r_shared`; red first on a gate crate's `Cargo.toml` naming it. FR-013. New Rust code owes 100% line coverage from its own
+   tests. T65's builder (`rust/guard/shared/src/guards/set_down_hooks*`) and T11's worktree left alone.
+3. **Where each comes from.** G: FR-013 (the GM 2026-11-20, request.md: "can we in general priotitize performance improvements going
+   forward?"); the task as filed (T66's line); O: T58's measurement of the 32 and the 1 (T58's section); O: the manifests and `cargo tree`
+   (item 4); O: the red-first runs (item 9).
+4. **Do they describe the world here?** Measured, not assumed:
+   - Which crates depend on `l7r_guard` today: none. `cargo tree --offline -i l7r_guard --workspace -e normal,dev,build --depth 1` prints
+     the guard alone, and of the manifests under `rust/` only `rust/guard/Cargo.toml` names it (its `[package]` and `[lib]` names; the
+     others' mentions are `l7r-guard` in comments), measured 2026-11-21 (`cargo tree` and `grep -rn l7r_guard --include=Cargo.toml rust/`
+     in the clone). No manifest under `tests/` or `scripts/` names it, measured 2026-11-21 (`grep -rn "l7r_guard *="`).
+   - What ships or tests the guard binary: `scripts/hooks/l7r-guard.sh` and `hookbench`'s baseline build it with `-p l7r_guard`, no
+     dependency (T58's item 4), so no crate but the guard's own owes the exemption, measured 2026-11-21 (`cargo tree` above).
+   - Its dependents moved to `l7r_shared`: 32 crates name it, measured 2026-11-21 (`cargo tree --offline -i l7r_shared --workspace -e
+     normal,dev,build --depth 1 --prefix none`, unique names but its own).
+   - Its cost in `make static`: 35 manifests read in 0.01, 0.02 and 0.02 s a run, a warm gate call (`check stale-dirs --selftest`) 0.03 s,
+     load average 1.7-6.1, measured 2026-11-21 (`/usr/bin/time` around `l7r-gate.sh check guard-deps --root <clone>`, three runs each).
+   - A manifest edit under `rust/` routes GATED (`tree`'s `delta.rs` holds `Cargo.toml` and `Cargo.lock` under `rust/` as engine code), so a
+     push that adds the dependency alone meets `make done`'s `make static`, measured 2026-11-21 (`delta.rs` read).
+5. **The order.** After T58 (the split it pins); beside T65 and T11, touching neither's files.
+6. **The exits.** Green: the fixture gate crate refused naming `l7r_shared`, the real tree passed, the crate's tests green and
+   `make closing-checks` green. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through
+   `make arbiter-ask`.
+7. **The search smell.** None: one check, its forms enumerated from Cargo's manifest format and each pinned by a test.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.**
+   - Red first: the test `a_crate_naming_the_guard_is_refused_naming_l7r_shared_and_the_real_tree_passes` (`checks/tests.rs`, through
+     `cli`) failed on the tree without the check, code 2 (the usage line) where 1 was asked, measured 2026-11-21 (`make rust-test
+     CRATE=rust/gate/crates/checks`, 140 passed and 1 failed, `/tmp/t66/red-first.log`).
+   - Green: 146 passed, the six new tests among them (each form refused, each non-dependency passed, a header and a comment, the shared
+     path, the walk, and through `cli` the fixture and the real tree), measured 2026-11-21 (`make rust-test CRATE=rust/gate/crates/checks`, `/tmp/t66/green.log`).
+   - The built binary: a copy of the tree's 35 manifests with `l7r_guard = { path = "../../../guard" }` added to
+     `rust/gate/crates/plan/Cargo.toml` refused at `:13`, exit 1, naming `l7r_shared = { path = "../../../guard/shared" }`; the real tree
+     passed, exit 0, measured 2026-11-21 (`l7r-gate.sh check guard-deps --root`, `/tmp/t66/binary.log`).
+   - `make closing-checks` (make static with the new line, hooks-test, quick): its first run RED, exit 2, in 100 s, measured 2026-11-21
+     (`/tmp/t66/closing.log`), static and quick green, static's new line printing "no crate under rust/ depends on l7r_guard but the
+     guard itself (35 manifests read)", hooks-test red at `check tool-signals`, `scripts/tool-registry.json` lacking `check-guard-deps`,
+     fixed by its entry. Its re-run RED, exit 2, in 213 s, measured 2026-11-21 (`/tmp/t66/closing2.log`), hooks-test and quick green,
+     static red at `rust lint` with every error in T65's in-flight `rust/guard/shared/src/guards/set_down_hooks.rs` (an unused import and
+     three unused items, T65's to fix and left alone here), so static stopped before its guard-deps line, which run alone passed, exit 0,
+     35 manifests read, measured 2026-11-21 (`/tmp/t66/guard-deps-alone.log`). Owed: one green `make closing-checks` once T65's file lints
+     clean.
+10. **Before moving a constant.** n/a: no constant moved.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** Not a fix: a pin. What it changes for a builder: a crate naming `l7r_guard` is refused at `make static` where it
+    rebuilt 32 crates on every hook edit (measured 2026-11-21 by T58, `measure.sh`) and failed nothing.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?** none
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** yes - a `[perf]` task (451 FR-013): it keeps the builders' loop at T58's one-crate rebuild after a hook edit; not
+engine speed, so no `docs/performance-checklist.md` answers.
 
 
 ### T67 (<why: the finding or measurement that files it>)

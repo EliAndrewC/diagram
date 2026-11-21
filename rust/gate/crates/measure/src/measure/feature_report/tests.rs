@@ -326,3 +326,94 @@ fn the_command_line_prints_writes_and_refuses() {
     assert_eq!(failed.code, 1);
     assert!(failed.stdout.starts_with("# Feature report - 904-file.md"));
 }
+
+/// [`tree`] with T01's plan reviewed twice on one MANIFEST, at 08:20:05 and 08:27:00, a build's `Phase` line and a refused landing.
+fn rounds_tree(tag: &str) -> TempDir {
+    let d = tree(tag);
+    let log = d.join(".git/l7r-events/901-s.jsonl");
+    let mut text = std::fs::read_to_string(&log).unwrap();
+    let plan = "/tmp/l7r-plan-delta/plan-901-s-T01/MANIFEST.md";
+    for line in [
+        json!({"t": at("08:03:30"), "sid": "s", "ev": "Phase", "src": "rust", "step": "build", "make": "map", "crates": ["rust/guard"], "t0": at("08:03:01"), "t1": at("08:03:30"), "code": 0}),
+        json!({"t": at("08:20:00"), "sid": "s", "ev": "UserPromptSubmit", "gm": true}),
+        json!({"t": at("08:20:05"), "sid": "s", "ev": "PreToolUse", "tool": "Agent", "id": "p1", "cat": "spec review", "agent": "spec-fidelity", "task": "T01", "manifest": plan}),
+        json!({"t": at("08:20:06"), "sid": "s", "ev": "SubagentStart", "aid": "pa1", "agent": "spec-fidelity", "task": "T01"}),
+        json!({"t": at("08:20:07"), "sid": "s", "ev": "PostToolUse", "tool": "Agent", "id": "p1", "aid": "pa1"}),
+        json!({"t": at("08:26:06"), "sid": "s", "ev": "SubagentStop", "aid": "pa1", "agent": "spec-fidelity", "tok": {"in": 1000, "cached": 0, "created": 0, "out": 500}}),
+        json!({"t": at("08:27:00"), "sid": "s", "ev": "PreToolUse", "tool": "Agent", "id": "p2", "cat": "spec review", "agent": "spec-fidelity", "task": "T01", "manifest": plan}),
+        json!({"t": at("08:27:01"), "sid": "s", "ev": "SubagentStart", "aid": "pa2", "agent": "spec-fidelity", "task": "T01"}),
+        json!({"t": at("08:27:02"), "sid": "s", "ev": "PostToolUse", "tool": "Agent", "id": "p2", "aid": "pa2"}),
+        json!({"t": at("08:31:01"), "sid": "s", "ev": "SubagentStop", "aid": "pa2", "agent": "spec-fidelity"}),
+        json!({"ev": "Phase", "src": "land", "sid": "s", "step": "end", "make": "land", "t": at("08:32:00"), "t0": at("08:31:30"), "t1": at("08:32:00"), "code": 1, "task": "T01", "tasks": ["T01"], "landed": false}),
+        json!({"t": at("08:33:00"), "sid": "s", "ev": "Stop"}),
+    ] {
+        text.push_str(&line.to_string());
+        text.push('\n');
+    }
+    std::fs::write(&log, text).unwrap();
+    d
+}
+
+/// Feature 451 T11 (FR-005, plan D7): the report reads `make where-time`'s columns through `where_time`, one reader and no copy - over
+/// one feature's log, its critical path by task beside the agents' summed minutes, its rework and its runs table are where-time's own
+/// lines, every one but the row per agent, which `make where-time` keeps; the plan re-rounds are the rounds table's rounds past the
+/// first, SINCE cutting none.
+#[test]
+fn the_report_shows_where_times_columns_for_the_feature() {
+    let d = rounds_tree("measure-report-columns");
+    let e = env(&d);
+    let root = d.display().to_string();
+    let none = Path::new("/nonexistent");
+    let projects = d.join("home/.claude/projects");
+    let where_time =
+        super::super::where_time::cli(&args(&["901", "--root", &root]), &projects, none);
+    let report = cli(&args(&["--root", &root, "901"]), &e, none);
+    assert_eq!((where_time.code, report.code), (0, 0));
+    // where-time's text but its rows per agent, the block from its header to the blank line after it
+    let mut shown = Vec::new();
+    let mut agents = false;
+    for l in where_time.stdout.lines() {
+        if l.starts_with("| task | agent | kind |") || agents {
+            agents = !l.is_empty();
+            continue;
+        }
+        shown.push(l);
+    }
+    let shown = shown.join("\n");
+    assert!(report.stdout.contains(&shown), "{shown}\n{}", report.stdout);
+    for want in [
+        "| all | 3 | 20 | 1.0 | 0.5 | 1 | 1 | |",
+        "rework: 1 refused landing, 1 plan re-round",
+        "| spec-fidelity | plan-901-s-T01 | 2 |",
+    ] {
+        assert!(report.stdout.contains(want), "{want}\n{}", report.stdout);
+    }
+}
+
+/// T11's plan review (2026-11-21): where SINCE falls between a subject's rounds, the plan re-rounds count the round inside the window, its
+/// first before SINCE, and the rounds table, counted inside the window, holds no row for it - and says so, so the two never silently
+/// disagree.
+#[test]
+fn the_rounds_table_is_labeled_as_counted_inside_the_window() {
+    let d = rounds_tree("measure-report-rounds-since");
+    let e = env(&d);
+    let root = d.display().to_string();
+    let since = at("08:25:00");
+    let report = cli(
+        &args(&["--root", &root, "--since", &since, "901"]),
+        &e,
+        Path::new("/nonexistent"),
+    );
+    assert_eq!(report.code, 0, "{}", report.stdout);
+    for want in [
+        "rework: 1 refused landing, 1 plan re-round",
+        "Counted inside the window: a subject's rounds before SINCE are not",
+    ] {
+        assert!(report.stdout.contains(want), "{want}\n{}", report.stdout);
+    }
+    assert!(
+        !report.stdout.contains("| spec-fidelity | plan-901-s-T01 |"),
+        "{}",
+        report.stdout
+    );
+}

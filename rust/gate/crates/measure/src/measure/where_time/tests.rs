@@ -430,7 +430,8 @@ fn the_seventeenth_was_the_gm_away() {
 }
 
 /// Feature 451 T04 (FR-002, plan D3, D4): the two line kinds the readers did not read - a background run's `BgEnd` and a make run's
-/// `Phase` - leave `make feature-report` as it was until T11 reads them; `make where-time` reads them since T08, its runs table alone moved. Read as events, a `Phase` line
+/// `Phase` - move `make where-time`'s runs table alone, which it reads since T08, and `make feature-report` reads them through it since T11
+/// (one reader: the report's lines move as where-time's do, and no other report line moves). Read as events, a `Phase` line
 /// inside a Bash call splits the call's gap and books its rest to whatever the gap after a `Phase` is, a `BgEnd` splits a wait between
 /// turns, and a `Phase` line with no session forms a session of its own (the T207 failure).
 #[test]
@@ -467,13 +468,20 @@ fn a_background_end_and_a_phase_line_leave_the_tables_as_they_were() {
     }
     std::fs::write(&log, text).unwrap();
     let after = tables();
-    assert_eq!(after.1, before.1);
     let changed: Vec<(&str, &str)> = before
         .0
         .lines()
         .zip(after.0.lines())
         .filter(|(b, a)| b != a)
         .collect();
+    let report: Vec<(&str, &str)> = before
+        .1
+        .iter()
+        .zip(&after.1)
+        .filter(|(b, a)| b != a)
+        .map(|(b, a)| (b.as_str(), a.as_str()))
+        .collect();
+    assert_eq!(report, changed);
     // T08 reads the build phase inside b1: 29 of its 60 s are compile (the runs table; the wall-clock table's minutes round alike)
     let row = |x: &str| {
         format!("| {x} | 1 | 1.0 | 0.5 | 0.5 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 |")

@@ -16,6 +16,10 @@
 //! to the next `PreToolUse` or Stop is THINKING, or WRITING THE SPEC when the call it leads to edits the feature's spec; from a Stop to what
 //! wakes the session is WAITING. A gap past an hour is the session left idle, counted apart.
 //!
+//! THE CRITICAL PATH AND WHAT WAS SPENT BESIDE IT (feature 451 T11, D7; FR-005) are `make where-time`'s columns for the feature, read
+//! through `where_time::columns_text` - one reader, no copy: the wall clock by task and column, the agents' summed minutes and tokens
+//! beside it, the rework (refused landings, plan re-rounds) and the runs table; each agent's own row stays `make where-time`'s.
+//!
 //! ```text
 //! l7r-gate measure feature-report <NNN> [--transcript FILE ...] [--since ISO] [--until ISO] [--write] [--root DIR]
 //! ```
@@ -214,6 +218,22 @@ pub fn report(ask: &Ask) -> Result<(String, PathBuf), Stop> {
         runs.len(),
         hm(runs.iter().map(|(a, b, _, _)| b - a).sum())
     ));
+    // the report's own window, its first event to its last where no SINCE or UNTIL is given: with none, where-time books the sessions'
+    // turns in every feature's log since they began, 6,900 min of critical path against the window's 1,417 (T11, measured 2026-11-21)
+    out.extend([
+        String::new(),
+        "## The critical path and what was spent beside it (`make where-time`'s columns, feature 451 T11)".to_owned(),
+        String::new(),
+        super::where_time::columns_text(
+            root,
+            &name,
+            (since, until),
+            (&projects, ask.clones),
+            false,
+        )?
+        .trim_end()
+        .to_owned(),
+    ]);
     let detail = tool_detail(&mine)?;
     if !detail.is_empty() {
         out.extend(
@@ -259,6 +279,10 @@ pub fn report(ask: &Ask) -> Result<(String, PathBuf), Stop> {
         [
             "",
             "## Rounds per checked thing (two or more)",
+            "",
+            "Counted inside the window: a subject's rounds before SINCE are not, so its rounds past the first are those within the window, \
+             and where SINCE falls between its rounds this table reads fewer than the plan re-rounds above, which count a later round \
+             whose first fell before SINCE (feature 451 T11).",
             "",
             "| check | subject | rounds |",
             "|---|---|---|",

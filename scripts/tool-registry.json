@@ -41,6 +41,10 @@
       "kind": "check",
       "what": "rust/gate/crates/checks/src/checks/stale_dirs.rs - a refusing check; each run recorded passed or refused"
     },
+    "check-guard-deps": {
+      "kind": "check",
+      "what": "rust/gate/crates/checks/src/checks/guard_deps.rs (`l7r-gate check guard-deps`, a step of make static, 451 T66) - a refusing check: a Cargo.toml under rust/ naming l7r_guard as a dependency; each run recorded passed or refused"
+    },
     "clone-sync-merge": {
       "kind": "step",
       "what": "clone-sync-hooks.sh - a clean clone behind main merged with it at a prompt"

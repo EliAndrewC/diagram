@@ -98,9 +98,9 @@
    "declared": "spec-fidelity"
   },
   "### T11 (FR-005: `make feature-report` reads the same columns)": {
-   "sha256": "f2606bdb332c7ef3ded48c44d04feca7b76d3bcdd5314681234fdc1508d53f57",
+   "sha256": "3d86da9ea7fc5bf43ac8bd93eef524b56b9d01b145a2d550e8afc9831edc4a4b",
    "verdict": "CLEAR",
-   "reviewed": "2026-11-20",
+   "reviewed": "2026-11-21",
    "declared": "spec-fidelity"
   },
   "### T11 Approach (checklist part A)": {
@@ -423,6 +423,30 @@
   },
   "### T58 (the finding as filed, restated by its measurement: every gate crate, `rust/gate`, `rust/mode_a`, the browser and the embedder named `l7r_guard`, so touching one hook compiled 32 crates where its own tests' edit compiled 1, measured 2026-11-21 (`/tmp/t58/scripts/measure.sh`: the file touched, then a warm `cargo test --offline --workspace --exclude l7r_phases --no-run` in a private target, the detached worktree at 3a60ac40e1); hook edits are 246 of the 520 non-test guard edits since 2026-11-01, so the split was built)": {
    "sha256": "0f6cd69b1f3fba05e1de2acd3d2c32f3c24b830a37d53bf6e295feaaefafada7",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity"
+  },
+  "### T66 (the finding as filed, restated by its measurement: after T58 no manifest under `rust/` names `l7r_guard` but the guard's own, so a hook edit rebuilds 1 crate where it rebuilt 32 (measured 2026-11-21 by T58, `measure.sh`), and nothing refused a crate that named it again - `make static` read no manifest's dependencies, measured 2026-11-21 (its recipe read; the checks crate's and the rustc crate's sources grepped for a dependency rule: no check refuses a dependency - `rustc.rs`'s `features()`, `kept.rs` and `fmtfile.rs` read manifests, for features, `[package.metadata.l7r]` reads and a package's edition))": {
+   "sha256": "c76189b1d2a15d933c5340ddf370d1893d5d377d18e4715e0bbec4d3309f4263",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity"
+  },
+  "### T66 Approach (checklist part A)": {
+   "sha256": "1a3dc81f135d530e558847a8dc7b3e8f6c9ac3053f2a3e5997cba0a595d7f8fa",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity"
+  },
+  "### T65 (the finding as filed, restated by its measurement: `set_down_hooks::running` read a transcript's launched and notified ids as two sets, so a SendMessage resume - its result's `\"resumedAgentId\":\"<id>\"`, 153 such records in the session `c6fd72d1-...jsonl` - was no launch and a resumed agent read as finished once it had notified, and an interim notice (`<summary>Agent \"...\" is waiting on its own background work</summary>`, its note \"the same task-id notifies again if it does; the result below may be interim\") ended its agent, which was waiting on its own work: resumes read, but an interim notice taken for final, \"nothing is running\" was read at 38 of that session's 1,864 turn ends while such an agent was alive, measured 2026-11-21 (a replay of the transcript and its agents' own transcripts, `/tmp/claude-T65/stops.py`, the truth approximate: an agent alive when its own transcript wrote again later without a parent resume first))": {
+   "sha256": "e3ab44a50301834c0ea16166638ca7966c215c635e02a424c54565e3d82a42e2",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity"
+  },
+  "### T65 Approach (checklist part A)": {
+   "sha256": "59fa4b41c58886872c35453d0d78b689c5e46e066ab61ab476dd5826fdb60aaf",
    "verdict": "CLEAR",
    "reviewed": "2026-11-21",
    "declared": "spec-fidelity"
@@ -7227,6 +7251,181 @@
      "why": "Nothing that was asked is changed. The rustfmt joins come from the shorter paths."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-21",
+   "blocks": [
+    "### T66 (the finding as filed, restated by its measurement: after T58 no manifest under `rust/` names `l7r_guard` but the guard's own, so a hook edit rebuilds 1 crate where it rebuilt 32 (measured 2026-11-21 by T58, `measure.sh`), and nothing refused a crate that named it again - `make static` read no manifest's dependencies, measured 2026-11-21 (its recipe read; the checks crate's and the rustc crate's sources grepped for a dependency rule: no check refuses a dependency - `rustc.rs`'s `features()`, `kept.rs` and `fmtfile.rs` read manifests, for features, `[package.metadata.l7r]` reads and a package's edition))",
+    "### T66 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T66-check",
+     "summary": "A new text check, l7r-gate check guard-deps, run by make static after the conflict check, refusing a manifest that names l7r_guard and naming l7r_shared with its path and rust/guard/shared for guard-only pieces.",
+     "class": "within",
+     "why": "It is the task as filed (a check in make static, refusing a dependency on l7r_guard, naming l7r_shared). It is a guard whose only reach is the regression it pins, T58's one-crate rebuild, and it is performance work under FR-013."
+    },
+    {
+     "id": "T66-walk-rust",
+     "summary": "Walk every Cargo.toml under rust/ on disk (target and hidden directories and symlinks not walked), not git-listed, because the workspace's gate/crates/* glob builds untracked crates too.",
+     "class": "within",
+     "why": "The filed scope is manifests under rust/, which holds the workspace whose rebuild count T58 measured. Walking the disk rather than git's list widens the reach to untracked crates the glob builds, so nothing is narrowed. Item 4 records a grep showing no manifest under tests/ or scripts/ names the guard."
+    },
+    {
+     "id": "T66-exempt",
+     "summary": "Only the guard's own manifest is exempt.",
+     "class": "within",
+     "why": "The task line exempts the binaries that ship the guard. Item 4 records that l7r-guard.sh and hookbench build it with -p l7r_guard and no dependency, and cargo tree -i shows no dependent, so the guard's own manifest is the whole of that exemption. The exemption is exactly as large as the filed one, no larger."
+    },
+    {
+     "id": "T66-forms",
+     "summary": "Forms read: a key in any dependency table (normal, dev, build, target, workspace; - and _ alike; dotted or quoted keys), a [*dependencies.l7r_guard] table, a rename through package, and comments cut at #. A path-only dependency under another key is not read, because cargo refuses one (measured probe); the check looks at direct dependencies only.",
+     "class": "within",
+     "why": "The forms come from Cargo's manifest format. The one form left out cannot build: the probe records cargo refusing it ('no matching package named hooks'), so leaving it out is not a carve-out. Any transitive dependency needs some manifest under rust/ to name the guard directly, and the check refuses that manifest, so checking direct dependencies alone loses nothing of the purpose."
+    },
+    {
+     "id": "T66-registry",
+     "summary": "Record each run as check-guard-deps and add its entry to scripts/tool-registry.json, because check tool-signals went red without it.",
+     "class": "within",
+     "why": "This is the project's existing rule for a recorded tool, and the entry is needed for the requested check to pass hooks-test. It enforces the request and adds no behavior."
+    },
+    {
+     "id": "T66-closing-owed",
+     "summary": "The second make closing-checks run went red only at rust lint, on T65's in-flight set_down_hooks.rs. T65's file is left alone, guard-deps run alone passed, and one green make closing-checks is recorded as owed once T65's file lints clean.",
+     "class": "within",
+     "why": "This is sequencing, not scope: the green exit is still required and is recorded as owed, not waived, and the failing file belongs to another task in flight. No requirement of the request or of FR-013 is dropped."
+    },
+    {
+     "id": "T66-perf-class",
+     "summary": "Classed [perf] under FR-013, and not engine speed, so no performance-checklist answers.",
+     "class": "within",
+     "why": "FR-013 covers work that makes the builders' loop faster. A pin that keeps T58's hook-edit rebuild at 1 crate against 32 protects exactly that, and the GM asked for performance work in general to come first."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-21",
+   "blocks": [
+    "### T65 (the finding as filed, restated by its measurement: `set_down_hooks::running` read a transcript's launched and notified ids as two sets, so a SendMessage resume - its result's `\"resumedAgentId\":\"<id>\"`, 153 such records in the session `c6fd72d1-...jsonl` - was no launch and a resumed agent read as finished once it had notified, and an interim notice (`<summary>Agent \"...\" is waiting on its own background work</summary>`, its note \"the same task-id notifies again if it does; the result below may be interim\") ended its agent, which was waiting on its own work: resumes read, but an interim notice taken for final, \"nothing is running\" was read at 38 of that session's 1,864 turn ends while such an agent was alive, measured 2026-11-21 (a replay of the transcript and its agents' own transcripts, `/tmp/claude-T65/stops.py`, the truth approximate: an agent alive when its own transcript wrote again later without a parent resume first))",
+    "### T65 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T65-ordered-reader",
+     "summary": "running reads the transcript once, in order, line at a time; each line's events sorted by place; an id's last word kept (launched/resumed/interim), a final notice or stop drops it",
+     "class": "within",
+     "why": "T65's line as filed: the transcript read in order, an agent's last launch or resume after its last notification running. This is that rule, implemented."
+    },
+    {
+     "id": "T65-resume-key",
+     "summary": "a SendMessage resume is read from resumedAgentId in the tool's own record, as LAUNCHED's third key",
+     "class": "within",
+     "why": "T65's line: a resume after a notice reads as running; the key's shape is measured from a real transcript (153 records)."
+    },
+    {
+     "id": "T65-interim-via-own-transcript",
+     "summary": "an interim notice ends nothing by itself; an agent whose last word is interim runs while its own transcript holds its own work running, an interim sub-agent (cycle-guarded), or a wake since its last turn's end - not the literal 'interim never final'",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Narrows the dispatch's 'an interim notice is not final' read literally (neither request.md nor the spec says interim is never final). The literal reading defeats the purpose of the Stop hook's test FR-013 relies on (set_down_hooks.rs): 8 agents never notified again, so the guard would be silent from line 2,132 of 50,891 for the rest of the session, 32 wrong turn ends (measured 2026-11-21, sim.py/stops.py). The adopted reading still treats an interim notice as non-final - running-ness is decided by the agent's own work - and its replay agrees with the approximate truth at all 1,868 turn ends. The plan states the departure openly under 'Why not the literal rule'."
+    },
+    {
+     "id": "T65-turn-end-text-block",
+     "summary": "a turn's end is read from the end_turn record holding the text block, not any end_turn record (the thinking record carries end_turn first)",
+     "class": "within",
+     "why": "Makes the interim reading correct on a measured case (a4e93c6a, 19 s gap); no scope beyond the task's reader."
+    },
+    {
+     "id": "T65-second-read-lazy",
+     "summary": "the interim agents' own transcripts are read only when the parent's read leaves nothing plainly running",
+     "class": "within",
+     "why": "The guard's question is whether anything runs; skipping the second read when something plainly runs changes no verdict and costs 45-70 ms less (measured). Within the performance-first rule FR-013."
+    },
+    {
+     "id": "T65-no-own-transcript",
+     "summary": "an interim agent with no transcript of its own reads not running, as before",
+     "class": "within",
+     "why": "Keeps existing behavior on a case measured to be correct (the first of the 8 never-notified agents, line 2,132, has no transcript and never ran again); not a defect left."
+    },
+    {
+     "id": "T65-blob-skip",
+     "summary": "api-request-blob lines are not read, since they re-emit old notices that would end a resumed agent",
+     "class": "within",
+     "why": "Required for the ordered reading to be correct; measured that no task-id appears only in a blob across 12 transcripts, so no notice is lost."
+    },
+    {
+     "id": "T65-bash-runs-unchanged",
+     "summary": "a background Bash run's launch and notice read as before; T66 and T11 left alone",
+     "class": "within",
+     "why": "The dispatch's constraint and the task's scope; no request clause is dropped."
+    },
+    {
+     "id": "T65-red-first-and-acceptance",
+     "summary": "five tests red first (4 failed, the no-file case passed, pinning kept behavior); the thinking-record assertion added with the turn-end fix and not run red; a temporary real-transcript acceptance test removed before the closing checks",
+     "class": "within",
+     "why": "T65's line asks red first on a resume after a notice, which was run red. FR-012's red-first rule covers the refusals of FR-006-FR-009, FR-011 and FR-013, and a Stop-hook reading fix is not one of those refusals, so the one assertion not run red narrows nothing that was asked."
+    },
+    {
+     "id": "T65-perf-class",
+     "summary": "T65 classed as performance work ([perf], FR-013): keeps the builders' loop running unrefused; no performance-checklist answers since not engine speed",
+     "class": "within",
+     "why": "FR-013 counts work that makes the builders' loop faster as performance work; a Stop hook that wrongly refuses turns while builders run slows that loop."
+    },
+    {
+     "id": "T65-found-and-left-none",
+     "summary": "nothing found and left",
+     "class": "within",
+     "why": "The final replay leaves no wrong turn end against the approximate truth; no defect is deferred."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-21",
+   "blocks": [
+    "### T11 (FR-005: `make feature-report` reads the same columns)",
+    "### T11 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T11-one-reader",
+     "summary": "feature-report shows where-time's columns through one reader (where_time::columns_text), in process, its UNTIL= kept, in a section after the session's time; each agent's own row left to make where-time",
+     "class": "within",
+     "why": "FR-005 and D7 ask that feature-report read the same columns through the same functions in one place and keep its UNTIL=. One shared reader is exactly that. The report carries every column FR-005 names: the critical path apart from the summed agent-minutes, the tokens, and the rework. Each agent's span and tokens under its task are still read by the same function and shown by make where-time, so no reading is lost or forked."
+    },
+    {
+     "id": "T11-report-window",
+     "summary": "the window feature-report passes is its own, first event to last when no SINCE/UNTIL is given",
+     "class": "within",
+     "why": "This fixes a wrong outcome found in building. With both empty, the report counted every feature's turn lines: 6,900 min of critical path against the window's 1,417 (labeled 2026-11-21). A report of this feature's time that counts other features' time is a defect, and the fix serves FR-005. The small token and agent-minute gap against where-time is the same reader over a window that opens seconds later. That is a difference, not a defect, and no exactness standard applies."
+    },
+    {
+     "id": "T11-D7-restated-rerounds-key",
+     "summary": "plan re-rounds are a later round of one review on one subject, keyed by agent and MANIFEST subject (feature_report::tables::round_key), booked to the task its line names else the mark, the all row counting every one; spec-fidelity-verify not keyed separately because the hook logs a routed later round under spec-fidelity",
+     "class": "within",
+     "why": "The approved improvement 4 ('Fewer plan re-rounds') and FR-005 ('count the rework (... plan re-rounds)') mean a review sent back for another round. The first wording counted first-round reviews of different block bundles: 68 against 23 (the Measured table, labeled). That overstated the column it named and was a defect. The restated key measures what was asked and drops no re-round. An untasked one goes to the mark row and the all row counts all of them. A routed verify round is logged under spec-fidelity (none of the 451 log's 108 under the twin's name, measured 2026-11-21). A hand-dispatched verify is a spec round with no MANIFEST, so it is not a plan re-round."
+    },
+    {
+     "id": "T11-rerounds-across-since",
+     "summary": "a spec-fidelity dispatch inside the window is a re-round when any earlier dispatch in the feature's log holds its key, inside the window or before SINCE; the log before SINCE is read a second time where SINCE is given",
+     "class": "within",
+     "why": "This is the correction the last verdict asked for, in its own words. A second round run inside the window is counted as that window's rework, whether its first round fell before SINCE or not. It is red first: a_re_round_inside_the_window_counts_a_first_round_before_since read 0 against 2 before the fix. It is measured on a SINCE that cuts a subject: 6 -> 7 between T44's second and third rounds, labeled 2026-11-21, with command. T10's bounds are unchanged at 23 because that SINCE cuts nothing. It narrows nothing. The second read's cost (about 0.25 to 0.35 s, labeled with load) is a cost, not a fidelity finding."
+    },
+    {
+     "id": "T11-rounds-table-labeled",
+     "summary": "feature-report's existing rounds table stays counted inside the window and says so under its heading, rather than being re-read across SINCE like the re-rounds column",
+     "class": "within",
+     "why": "The rounds table is feature-report's existing table, and the request and spec ask nothing of it. FR-005's rework count is the plan re-rounds column, which now counts correctly across SINCE. The last verdict named labeling the table as one of the two acceptable remedies, and the label does what that remedy was for. The table and the column count two stated things, so they no longer disagree silently, and a reader is never told a wrong number. Where SINCE cuts no subject they agree (23 = 23 and 25 = 25, the Measured table). The report passes its own first event as SINCE where none is given, so for the default report the two read the same. Leaving an unrequested existing table as it is, with an honest heading, is a difference, not a defect (XIV v2.36.0). So it is within and needs no ruling."
+    },
+    {
+     "id": "T11-beyond-brief-agent-task-from-stop",
+     "summary": "an agent is booked to its first stop's task (the agent's meta file, D6), else its first start's, because before 451 T53's landing a start line carried the clone's active task (57 of 164 agents with both; 0 of 22 since), red first",
+     "class": "within",
+     "why": "D7 puts each agent's span and tokens 'under its task', and D6 takes the stop line's task from the agent's meta file. Booking 57 agents to the clone's active mark was a wrong outcome: T15's plan reviews read under T18 (measured 2026-11-21 with method). The fix-as-we-go ruling (2026-11-18) says a step fixes the defects it finds. The fix only changes which recorded field the requested column reads, choosing the one D6 already names. It is red first and changes nothing for agents started after T53."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -10316,6 +10515,175 @@
      "summary": "Integration and formatting only.",
      "class": "within",
      "why": "Nothing that was asked is changed. The rustfmt joins come from the shorter paths."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T11": {
+   "section_sha256": "a46712270278f879d2560b962cbb2acbb451a03978e78df579e442e3c2098cd8",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T11-one-reader",
+     "summary": "feature-report shows where-time's columns through one reader (where_time::columns_text), in process, its UNTIL= kept, in a section after the session's time; each agent's own row left to make where-time",
+     "class": "within",
+     "why": "FR-005 and D7 ask that feature-report read the same columns through the same functions in one place and keep its UNTIL=. One shared reader is exactly that. The report carries every column FR-005 names: the critical path apart from the summed agent-minutes, the tokens, and the rework. Each agent's span and tokens under its task are still read by the same function and shown by make where-time, so no reading is lost or forked."
+    },
+    {
+     "id": "T11-report-window",
+     "summary": "the window feature-report passes is its own, first event to last when no SINCE/UNTIL is given",
+     "class": "within",
+     "why": "This fixes a wrong outcome found in building. With both empty, the report counted every feature's turn lines: 6,900 min of critical path against the window's 1,417 (labeled 2026-11-21). A report of this feature's time that counts other features' time is a defect, and the fix serves FR-005. The small token and agent-minute gap against where-time is the same reader over a window that opens seconds later. That is a difference, not a defect, and no exactness standard applies."
+    },
+    {
+     "id": "T11-D7-restated-rerounds-key",
+     "summary": "plan re-rounds are a later round of one review on one subject, keyed by agent and MANIFEST subject (feature_report::tables::round_key), booked to the task its line names else the mark, the all row counting every one; spec-fidelity-verify not keyed separately because the hook logs a routed later round under spec-fidelity",
+     "class": "within",
+     "why": "The approved improvement 4 ('Fewer plan re-rounds') and FR-005 ('count the rework (... plan re-rounds)') mean a review sent back for another round. The first wording counted first-round reviews of different block bundles: 68 against 23 (the Measured table, labeled). That overstated the column it named and was a defect. The restated key measures what was asked and drops no re-round. An untasked one goes to the mark row and the all row counts all of them. A routed verify round is logged under spec-fidelity (none of the 451 log's 108 under the twin's name, measured 2026-11-21). A hand-dispatched verify is a spec round with no MANIFEST, so it is not a plan re-round."
+    },
+    {
+     "id": "T11-rerounds-across-since",
+     "summary": "a spec-fidelity dispatch inside the window is a re-round when any earlier dispatch in the feature's log holds its key, inside the window or before SINCE; the log before SINCE is read a second time where SINCE is given",
+     "class": "within",
+     "why": "This is the correction the last verdict asked for, in its own words. A second round run inside the window is counted as that window's rework, whether its first round fell before SINCE or not. It is red first: a_re_round_inside_the_window_counts_a_first_round_before_since read 0 against 2 before the fix. It is measured on a SINCE that cuts a subject: 6 -> 7 between T44's second and third rounds, labeled 2026-11-21, with command. T10's bounds are unchanged at 23 because that SINCE cuts nothing. It narrows nothing. The second read's cost (about 0.25 to 0.35 s, labeled with load) is a cost, not a fidelity finding."
+    },
+    {
+     "id": "T11-rounds-table-labeled",
+     "summary": "feature-report's existing rounds table stays counted inside the window and says so under its heading, rather than being re-read across SINCE like the re-rounds column",
+     "class": "within",
+     "why": "The rounds table is feature-report's existing table, and the request and spec ask nothing of it. FR-005's rework count is the plan re-rounds column, which now counts correctly across SINCE. The last verdict named labeling the table as one of the two acceptable remedies, and the label does what that remedy was for. The table and the column count two stated things, so they no longer disagree silently, and a reader is never told a wrong number. Where SINCE cuts no subject they agree (23 = 23 and 25 = 25, the Measured table). The report passes its own first event as SINCE where none is given, so for the default report the two read the same. Leaving an unrequested existing table as it is, with an honest heading, is a difference, not a defect (XIV v2.36.0). So it is within and needs no ruling."
+    },
+    {
+     "id": "T11-beyond-brief-agent-task-from-stop",
+     "summary": "an agent is booked to its first stop's task (the agent's meta file, D6), else its first start's, because before 451 T53's landing a start line carried the clone's active task (57 of 164 agents with both; 0 of 22 since), red first",
+     "class": "within",
+     "why": "D7 puts each agent's span and tokens 'under its task', and D6 takes the stop line's task from the agent's meta file. Booking 57 agents to the clone's active mark was a wrong outcome: T15's plan reviews read under T18 (measured 2026-11-21 with method). The fix-as-we-go ruling (2026-11-18) says a step fixes the defects it finds. The fix only changes which recorded field the requested column reads, choosing the one D6 already names. It is red first and changes nothing for agents started after T53."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T66": {
+   "section_sha256": "1dd4e0ba1c31ae69a7b1a9e3fab18cedf87b2328ef0ec18c3c0876d77ebcf55d",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T66-check",
+     "summary": "A new text check, l7r-gate check guard-deps, run by make static after the conflict check, refusing a manifest that names l7r_guard and naming l7r_shared with its path and rust/guard/shared for guard-only pieces.",
+     "class": "within",
+     "why": "It is the task as filed (a check in make static, refusing a dependency on l7r_guard, naming l7r_shared). It is a guard whose only reach is the regression it pins, T58's one-crate rebuild, and it is performance work under FR-013."
+    },
+    {
+     "id": "T66-walk-rust",
+     "summary": "Walk every Cargo.toml under rust/ on disk (target and hidden directories and symlinks not walked), not git-listed, because the workspace's gate/crates/* glob builds untracked crates too.",
+     "class": "within",
+     "why": "The filed scope is manifests under rust/, which holds the workspace whose rebuild count T58 measured. Walking the disk rather than git's list widens the reach to untracked crates the glob builds, so nothing is narrowed. Item 4 records a grep showing no manifest under tests/ or scripts/ names the guard."
+    },
+    {
+     "id": "T66-exempt",
+     "summary": "Only the guard's own manifest is exempt.",
+     "class": "within",
+     "why": "The task line exempts the binaries that ship the guard. Item 4 records that l7r-guard.sh and hookbench build it with -p l7r_guard and no dependency, and cargo tree -i shows no dependent, so the guard's own manifest is the whole of that exemption. The exemption is exactly as large as the filed one, no larger."
+    },
+    {
+     "id": "T66-forms",
+     "summary": "Forms read: a key in any dependency table (normal, dev, build, target, workspace; - and _ alike; dotted or quoted keys), a [*dependencies.l7r_guard] table, a rename through package, and comments cut at #. A path-only dependency under another key is not read, because cargo refuses one (measured probe); the check looks at direct dependencies only.",
+     "class": "within",
+     "why": "The forms come from Cargo's manifest format. The one form left out cannot build: the probe records cargo refusing it ('no matching package named hooks'), so leaving it out is not a carve-out. Any transitive dependency needs some manifest under rust/ to name the guard directly, and the check refuses that manifest, so checking direct dependencies alone loses nothing of the purpose."
+    },
+    {
+     "id": "T66-registry",
+     "summary": "Record each run as check-guard-deps and add its entry to scripts/tool-registry.json, because check tool-signals went red without it.",
+     "class": "within",
+     "why": "This is the project's existing rule for a recorded tool, and the entry is needed for the requested check to pass hooks-test. It enforces the request and adds no behavior."
+    },
+    {
+     "id": "T66-closing-owed",
+     "summary": "The second make closing-checks run went red only at rust lint, on T65's in-flight set_down_hooks.rs. T65's file is left alone, guard-deps run alone passed, and one green make closing-checks is recorded as owed once T65's file lints clean.",
+     "class": "within",
+     "why": "This is sequencing, not scope: the green exit is still required and is recorded as owed, not waived, and the failing file belongs to another task in flight. No requirement of the request or of FR-013 is dropped."
+    },
+    {
+     "id": "T66-perf-class",
+     "summary": "Classed [perf] under FR-013, and not engine speed, so no performance-checklist answers.",
+     "class": "within",
+     "why": "FR-013 covers work that makes the builders' loop faster. A pin that keeps T58's hook-edit rebuild at 1 crate against 32 protects exactly that, and the GM asked for performance work in general to come first."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T65": {
+   "section_sha256": "c5d7c3eef30c212ef0a8ee7f2dbb4e264d1d3a816e6222bf655df7f11d71beef",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T65-ordered-reader",
+     "summary": "running reads the transcript once, in order, line at a time; each line's events sorted by place; an id's last word kept (launched/resumed/interim), a final notice or stop drops it",
+     "class": "within",
+     "why": "T65's line as filed: the transcript read in order, an agent's last launch or resume after its last notification running. This is that rule, implemented."
+    },
+    {
+     "id": "T65-resume-key",
+     "summary": "a SendMessage resume is read from resumedAgentId in the tool's own record, as LAUNCHED's third key",
+     "class": "within",
+     "why": "T65's line: a resume after a notice reads as running; the key's shape is measured from a real transcript (153 records)."
+    },
+    {
+     "id": "T65-interim-via-own-transcript",
+     "summary": "an interim notice ends nothing by itself; an agent whose last word is interim runs while its own transcript holds its own work running, an interim sub-agent (cycle-guarded), or a wake since its last turn's end - not the literal 'interim never final'",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Narrows the dispatch's 'an interim notice is not final' read literally (neither request.md nor the spec says interim is never final). The literal reading defeats the purpose of the Stop hook's test FR-013 relies on (set_down_hooks.rs): 8 agents never notified again, so the guard would be silent from line 2,132 of 50,891 for the rest of the session, 32 wrong turn ends (measured 2026-11-21, sim.py/stops.py). The adopted reading still treats an interim notice as non-final - running-ness is decided by the agent's own work - and its replay agrees with the approximate truth at all 1,868 turn ends. The plan states the departure openly under 'Why not the literal rule'."
+    },
+    {
+     "id": "T65-turn-end-text-block",
+     "summary": "a turn's end is read from the end_turn record holding the text block, not any end_turn record (the thinking record carries end_turn first)",
+     "class": "within",
+     "why": "Makes the interim reading correct on a measured case (a4e93c6a, 19 s gap); no scope beyond the task's reader."
+    },
+    {
+     "id": "T65-second-read-lazy",
+     "summary": "the interim agents' own transcripts are read only when the parent's read leaves nothing plainly running",
+     "class": "within",
+     "why": "The guard's question is whether anything runs; skipping the second read when something plainly runs changes no verdict and costs 45-70 ms less (measured). Within the performance-first rule FR-013."
+    },
+    {
+     "id": "T65-no-own-transcript",
+     "summary": "an interim agent with no transcript of its own reads not running, as before",
+     "class": "within",
+     "why": "Keeps existing behavior on a case measured to be correct (the first of the 8 never-notified agents, line 2,132, has no transcript and never ran again); not a defect left."
+    },
+    {
+     "id": "T65-blob-skip",
+     "summary": "api-request-blob lines are not read, since they re-emit old notices that would end a resumed agent",
+     "class": "within",
+     "why": "Required for the ordered reading to be correct; measured that no task-id appears only in a blob across 12 transcripts, so no notice is lost."
+    },
+    {
+     "id": "T65-bash-runs-unchanged",
+     "summary": "a background Bash run's launch and notice read as before; T66 and T11 left alone",
+     "class": "within",
+     "why": "The dispatch's constraint and the task's scope; no request clause is dropped."
+    },
+    {
+     "id": "T65-red-first-and-acceptance",
+     "summary": "five tests red first (4 failed, the no-file case passed, pinning kept behavior); the thinking-record assertion added with the turn-end fix and not run red; a temporary real-transcript acceptance test removed before the closing checks",
+     "class": "within",
+     "why": "T65's line asks red first on a resume after a notice, which was run red. FR-012's red-first rule covers the refusals of FR-006-FR-009, FR-011 and FR-013, and a Stop-hook reading fix is not one of those refusals, so the one assertion not run red narrows nothing that was asked."
+    },
+    {
+     "id": "T65-perf-class",
+     "summary": "T65 classed as performance work ([perf], FR-013): keeps the builders' loop running unrefused; no performance-checklist answers since not engine speed",
+     "class": "within",
+     "why": "FR-013 counts work that makes the builders' loop faster as performance work; a Stop hook that wrongly refuses turns while builders run slows that loop."
+    },
+    {
+     "id": "T65-found-and-left-none",
+     "summary": "nothing found and left",
+     "class": "within",
+     "why": "The final replay leaves no wrong turn end against the approximate truth; no defect is deferred."
     }
    ],
    "verdict": "CLEAR"

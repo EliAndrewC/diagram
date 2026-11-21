@@ -124,3 +124,50 @@ fn a_refused_check_is_recorded_refused_and_a_failed_self_test_refuses() {
         "ok"
     );
 }
+
+/// T58's rebuild count pinned (feature 451 T66): a gate crate whose manifest names `l7r_guard` is refused, the refusal naming
+/// `l7r_shared` and its path from that crate, and the real tree, where no crate but the guard names it, passes.
+#[test]
+fn a_crate_naming_the_guard_is_refused_naming_l7r_shared_and_the_real_tree_passes() {
+    let dir = repo("guard-deps");
+    let tree = super::scratch("guard-deps-tree");
+    put(
+        &tree,
+        "rust/guard/Cargo.toml",
+        "[package]\nname = \"l7r_guard\"\n\n[lib]\nname = \"l7r_guard\"\n",
+    );
+    put(
+        &tree,
+        "rust/guard/shared/Cargo.toml",
+        "[package]\nname = \"l7r_shared\"\n",
+    );
+    put(
+        &tree,
+        "rust/gate/crates/fixture/Cargo.toml",
+        "[package]\nname = \"l7r_gate_fixture\"\n\n[dependencies]\nl7r_guard = { path = \"../../../guard\" }\n",
+    );
+    let at = tree.display().to_string();
+    let refused = cli(&owned(&["guard-deps", "--root", &at]), &dir);
+    assert_eq!(refused.code, 1, "{}", refused.stderr);
+    assert!(
+        refused
+            .stderr
+            .contains("rust/gate/crates/fixture/Cargo.toml:5")
+            && refused
+                .stderr
+                .contains("l7r_shared = { path = \"../../../guard/shared\" }"),
+        "{}",
+        refused.stderr
+    );
+    let real = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("../../../..");
+    let passed = cli(
+        &owned(&["guard-deps", "--root", &real.display().to_string()]),
+        &dir,
+    );
+    assert_eq!(passed.code, 0, "{}", passed.stderr);
+    let usage = std::fs::read_to_string(dir.join(".git/tool-usage.jsonl")).unwrap();
+    assert!(
+        usage.contains("\"tool\": \"check-guard-deps\"")
+            && usage.contains("\"outcome\": \"refused\"")
+    );
+}

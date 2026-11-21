@@ -1055,7 +1055,9 @@ static format test: | guard
 
 # THE CLAIMS FORM BEFORE THE LANDING (feature 449 T169): `claims coverage --rust` names a walked crate's unit with no `Research:` claim,
 # which T168 met only at `make claims-owed`, before lint; it reads the Rust alone, 0.05 s over every walked crate (measured 2026-11-17).
-static:         ## [static] the static checks: ruff's outright errors, file-scale, the Rust crates' checks (was `lint`), each crate's kept green result reused while its inputs stand (449 T93)   [FRESH=1 REASON="..."]
+# NO CRATE BUILDS ON THE GUARD (feature 451 T66): `check guard-deps` refuses a manifest under rust/ naming `l7r_guard`, but the guard's,
+# so a hook edit keeps rebuilding the guard alone (T58: 1 crate where the dependents made it 32); it names `l7r_shared` instead.
+static:        ## [static] the static checks: ruff's outright errors, file-scale, the Rust crates' checks (was `lint`), each crate's kept green result reused while its inputs stand (449 T93)   [FRESH=1 REASON="..."]
 	$(FRESH_ESCAPE)
 	python3 -m ruff check .
 	"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" check file-scale --selftest
@@ -1069,6 +1071,7 @@ static:         ## [static] the static checks: ruff's outright errors, file-scal
 	"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" check spec-lint --delta .
 	"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" check conflict --selftest
 	"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" check conflict --tracked .
+	"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" check guard-deps --root "$$(git rev-parse --show-toplevel)"
 	"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" make-docs . --check
 	bash scripts/reviews/layout_carry.sh --selftest
 

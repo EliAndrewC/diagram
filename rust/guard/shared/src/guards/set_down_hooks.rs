@@ -4,7 +4,7 @@
 //! on a question is no way out (the plan review, 2026-10-19). A read error lets the turn end, recorded: a Stop guard that fails closed can hold a
 //! session.
 
-use std::collections::HashSet;
+use std::collections::{HashMap, HashSet};
 use std::fs::File;
 use std::io::{BufRead, BufReader};
 use std::path::{Path, PathBuf};
@@ -33,10 +33,11 @@ fn re(pattern: &str) -> Regex {
 
 static OPEN: LazyLock<Regex> = LazyLock::new(|| re(r"(?m)^- \[ \] (T\d+[a-z]?) (.*)$"));
 // A launch is the tool's own record, never its text (2026-10-28): the notice's words reach the transcript quoted, and each quote read as a launch
-// kept the guard silent. A workflow's launch is its own shape (2026-11-01).
+// kept the guard silent. A workflow's launch is its own shape (2026-11-01). A SendMessage resume is a launch (451 T65: a resumed builder
+// read as finished, its turn refused as "nothing is running"): its result's `resumedAgentId`, unescaped in the tool's own record alone.
 static LAUNCHED: LazyLock<Regex> = LazyLock::new(|| {
     re(
-        r#"(?:"(?:backgroundTaskId|agentId)"|"status":\s*"async_launched",\s*"taskId"):\s*"([A-Za-z0-9]+)""#,
+        r#"(?:"(?:backgroundTaskId|agentId|resumedAgentId)"|"status":\s*"async_launched",\s*"taskId"):\s*"([A-Za-z0-9]+)""#,
     )
 });
 static NOTIFIED: LazyLock<Regex> = LazyLock::new(|| re(r"<task-id>([A-Za-z0-9]+)</task-id>"));
@@ -44,6 +45,17 @@ static NOTIFIED: LazyLock<Regex> = LazyLock::new(|| re(r"<task-id>([A-Za-z0-9]+)
 static STOPPED: LazyLock<Regex> = LazyLock::new(|| {
     re(r#""name":\s*"TaskStop",\s*"input":\s*\{[^}]*?"(?:task_id|shell_id)":\s*"([A-Za-z0-9]+)""#)
 });
+// A turn's end in an agent's own transcript (451 T65): the record's own key, unescaped, on its text block's record - each block of a
+// message is a record of its own, its thinking's carrying `end_turn` too, written first (an agent's at 21:27:45 and its text 19 s later,
+// measured 2026-11-21 in `agent-a4e93c6a157b06302.jsonl`).
+static TURN_END: LazyLock<Regex> = LazyLock::new(|| re(r#""stop_reason":\s*"end_turn""#));
+static TEXT_BLOCK: LazyLock<Regex> = LazyLock::new(|| re(r#""type":\s*"text""#));
+/// An interim notice's summary ends so (451 T65; read 2026-11-21 from a session's transcript, its note "the same task-id notifies again
+/// if it does; the result below may be interim"): the agent stopped with background work of its own running, so the notice ends nothing.
+const INTERIM: &str = "is waiting on its own background work";
+/// A request blob re-emits the history sent to the model (451 T65), so its copy of an old notice would end an agent resumed since; no
+/// task-id of 6,636 in 12 transcripts is named in a blob alone (measured 2026-11-21), so a blob's line is not read.
+const BLOB: &[u8] = br#"{"type":"api-request-blob""#;
 
 fn rows(path: &Path) -> Result<Vec<Value>, String> {
     if !path.is_file() {
@@ -56,29 +68,145 @@ fn rows(path: &Path) -> Result<Vec<Value>, String> {
         .collect())
 }
 
-fn ids(pattern: &Regex, line: &str, into: &mut HashSet<String>) {
+/// What a record says of an id.
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+enum Said {
+    /// Launched or resumed.
+    Launched,
+    /// An interim notice: the agent waits on its own background work.
+    Interim,
+    /// A final notice, or a stop.
+    Ended,
+}
+
+fn put<'a>(pattern: &Regex, said: Said, line: &'a str, into: &mut Vec<(usize, Said, &'a str)>) {
     into.extend(
         pattern
             .captures_iter(line)
             .map_while(Result::ok)
-            .filter_map(|m| Some(m.get(1)?.as_str().to_owned())),
+            .filter_map(|m| m.get(1))
+            .map(|g| (g.start(), said, g.as_str())),
     );
 }
 
-/// The ids launched in the background that no notification has reported on, a line at a time: a transcript reached 206 MB on 2026-10-26, and read
-/// whole this guard grew past 1.2 GB at each turn's end.
-fn running(path: &Path) -> std::io::Result<HashSet<String>> {
+/// Whether a notice's own text - from its id to the next notice or its close - holds an interim summary.
+fn interim(body: &str) -> bool {
+    body.split_once("<summary>")
+        .and_then(|(_, rest)| rest.split_once("</summary>"))
+        .is_some_and(|(summary, _)| summary.ends_with(INTERIM))
+}
+
+/// A line's events in their order: a record can hold several notices, an interim one and its final one together.
+fn events(line: &str) -> Vec<(usize, Said, &str)> {
+    let mut out = Vec::new();
+    put(&LAUNCHED, Said::Launched, line, &mut out);
+    put(&STOPPED, Said::Ended, line, &mut out);
+    let notices: Vec<_> = NOTIFIED
+        .captures_iter(line)
+        .map_while(Result::ok)
+        .filter_map(|m| Some((m.get(0)?.start(), m.get(1)?)))
+        .collect();
+    for (k, (_, id)) in notices.iter().enumerate() {
+        let to = notices.get(k + 1).map_or(line.len(), |next| next.0);
+        let body = &line[id.end()..to];
+        let body = body
+            .split_once("</task-notification>")
+            .map_or(body, |(own, _)| own);
+        let said = if interim(body) {
+            Said::Interim
+        } else {
+            Said::Ended
+        };
+        out.push((id.start(), said, id.as_str()));
+    }
+    out.sort_by_key(|e| e.0);
+    out
+}
+
+/// A transcript read in order (451 T65): each id's last word, launched (or resumed) or interim, an id a final notice or a stop ended
+/// dropped. `me` is the agent whose own transcript it is, its every line naming it; `woken`, whether an end of its own work came after
+/// its last turn's end (read for an agent's own transcript alone).
+#[derive(Default)]
+struct Read {
+    ids: HashMap<String, Said>,
+    woken: bool,
+}
+
+fn read_in_order(path: &Path, me: &str) -> std::io::Result<Read> {
     let mut reader = BufReader::new(File::open(path)?);
-    let (mut launched, mut notified) = (HashSet::new(), HashSet::new());
+    let mut read = Read::default();
     let mut raw = Vec::new();
     while reader.read_until(b'\n', &mut raw)? > 0 {
-        let line = String::from_utf8_lossy(&raw);
-        ids(&LAUNCHED, &line, &mut launched);
-        ids(&NOTIFIED, &line, &mut notified);
-        ids(&STOPPED, &line, &mut notified);
+        if !raw.starts_with(BLOB) {
+            let line = String::from_utf8_lossy(&raw);
+            if !me.is_empty()
+                && TURN_END.is_match(&line).unwrap_or(false)
+                && TEXT_BLOCK.is_match(&line).unwrap_or(false)
+            {
+                read.woken = false;
+            }
+            for (_, said, id) in events(&line) {
+                if id == me {
+                    continue;
+                }
+                if said == Said::Ended {
+                    read.ids.remove(id);
+                    read.woken = true;
+                } else {
+                    read.ids.insert(id.to_owned(), said);
+                }
+            }
+        }
         raw.clear();
     }
-    Ok(launched.difference(&notified).cloned().collect())
+    Ok(read)
+}
+
+/// Whether an agent whose last word is an interim notice still runs (451 T65): its own transcript (`<dir>/agent-<id>.jsonl`, the
+/// session's `subagents` directory) holds work of its own running - or an interim sub-agent that does - or it was woken since its last
+/// turn's end. No transcript, not running, as before T65. `known` holds each agent's answer, one on the way reading as not running, so a
+/// cycle ends.
+fn awake(dir: &Path, id: &str, known: &mut HashMap<String, bool>) -> std::io::Result<bool> {
+    if let Some(&is) = known.get(id) {
+        return Ok(is);
+    }
+    known.insert(id.to_owned(), false);
+    let file = dir.join(format!("agent-{id}.jsonl"));
+    if !file.is_file() {
+        return Ok(false);
+    }
+    let read = read_in_order(&file, id)?;
+    let mut is = read.woken || read.ids.values().any(|s| *s == Said::Launched);
+    for (sub, _) in read.ids.iter().filter(|(_, s)| **s == Said::Interim) {
+        is = is || awake(dir, sub, known)?;
+    }
+    known.insert(id.to_owned(), is);
+    Ok(is)
+}
+
+/// The ids still running, a line at a time: a transcript reached 206 MB on 2026-10-26, and read whole this guard grew past 1.2 GB at each
+/// turn's end. Read in order (451 T65): an id launched or resumed after its last final notice runs; one whose last word is an interim
+/// notice runs while its own transcript says so ([`awake`]), read only when nothing else plainly runs. Taken literally, an interim
+/// notice never ending anything kept 8 of a session's 58 interim agents running for good - they never notified again - and the guard
+/// silent from its line 2,132 of 50,891 on (measured 2026-11-21, a replay of `c6fd72d1-...jsonl`).
+fn running(path: &Path) -> std::io::Result<HashSet<String>> {
+    let read = read_in_order(path, "")?;
+    let (live, waiting): (Vec<_>, Vec<_>) = read
+        .ids
+        .into_iter()
+        .partition(|(_, said)| *said == Said::Launched);
+    if !live.is_empty() {
+        return Ok(live.into_iter().map(|(id, _)| id).collect());
+    }
+    let dir = path.with_extension("").join("subagents");
+    let mut known = HashMap::new();
+    let mut out = HashSet::new();
+    for (id, _) in waiting {
+        if awake(&dir, &id, &mut known)? {
+            out.insert(id);
+        }
+    }
+    Ok(out)
 }
 
 /// The feature's open boxes, the GM's review box left out.

@@ -246,12 +246,20 @@ pub fn dispatches(events: &[Event]) -> Result<Dispatches, Raised> {
     for e in events {
         if need(e, "ev")? == "PreToolUse" && is(e, "tool", "Agent") {
             by_type.add(&s(e, "agent"), 1.0);
-            if on(e, "manifest") {
-                rounds.add(&(s(e, "agent"), subject(&s(e, "manifest"))), 1.0);
+            if let Some(key) = round_key(e) {
+                rounds.add(&key, 1.0);
             }
         }
     }
     Ok((by_type, rounds))
+}
+
+/// The rounds table's key of a dispatch - an Agent call's `PreToolUse` naming a MANIFEST: its agent and the subject the manifest names;
+/// none for any other line. `make where-time`'s plan re-rounds are read by the same key (feature 451 T11: one reader).
+#[must_use]
+pub fn round_key(e: &Event) -> Option<(String, String)> {
+    (is(e, "ev", "PreToolUse") && is(e, "tool", "Agent") && on(e, "manifest"))
+        .then(|| (s(e, "agent"), subject(&s(e, "manifest"))))
 }
 
 /// One row per started task: start to tick (or to the last event, while open), its decision points, the time to the last and after it,

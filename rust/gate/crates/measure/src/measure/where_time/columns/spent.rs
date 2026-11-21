@@ -24,15 +24,24 @@
 //!
 //! THE REWORK. A refused landing is a landing `end` line whose `landed` is false, never read from its code: a push that went out with a
 //! later raise, or exit 3 with its ticks standing, is a landing (D7); a landing of several tasks is one refusal, counted under each. A
-//! plan re-round is a task's `spec-fidelity` or `spec-fidelity-verify` agent after its first (D7), each agent once, a resume no new
-//! round; agents naming no task are no task's re-round.
+//! plan re-round is a later round of one review on one subject ([`rerounds`], feature 451 T11): a `spec-fidelity` dispatch inside the
+//! window whose key in the feature report's rounds table (`feature_report::tables::round_key`: its agent and the subject its MANIFEST
+//! names) a dispatch before it in the feature's log holds, inside the window or before SINCE - a second round run inside the window is
+//! rework done inside it, its first round before SINCE or not (T11's plan review, 2026-11-21) - booked to the task its line names, else
+//! the mark. T10 counted a task's every `spec-fidelity` agent
+//! after its first - its block-bundle reviews and any other review launched under it - 68 in its window against the table's 23 rounds
+//! past the first, about 3x (T10's plan review, 2026-11-21); by the table's key the window reads 23, measured 2026-11-21 (`make where-time
+//! F=451 SINCE=2026-11-20T04:33:00Z UNTIL=2026-11-21T04:10:44Z`, T11's plan section). A `spec-fidelity-verify` round is the review hook's
+//! routing of a later `spec-fidelity` dispatch, logged under the name dispatched: the 451 log holds no `spec-fidelity-verify` dispatch
+//! among its 108 `spec-fidelity` ones, measured 2026-11-21 (its `PreToolUse` Agent lines counted by `agent`).
 
 use std::collections::HashMap;
 use std::path::Path;
 
 use serde_json::Value;
 
-use super::super::super::events::{fixed, get, hhmm, is, or_s, ts, Event};
+use super::super::super::events::{fixed, get, hhmm, is, or_s, t_of, ts, Event, Raised};
+use super::super::super::feature_report::tables::round_key;
 use super::super::task_at;
 use super::Agent;
 
@@ -185,11 +194,7 @@ pub fn rows(
         .map(|a| {
             let t0 = a.spans.first().map_or(0.0, |s| s.0);
             Row {
-                task: if named && !a.task.is_empty() {
-                    a.task.clone()
-                } else {
-                    task_at(starts, t0)
-                },
+                task: task_of(&a.task, t0, starts, named),
                 aid: a.aid.clone(),
                 kind: a.kind.clone(),
                 t0,
@@ -197,6 +202,51 @@ pub fn rows(
                 tok: tokens.get(&a.aid).copied().or(a.tok),
             }
         })
+        .collect()
+}
+
+/// The task a line is booked to: the one it names where `named` (the command's booking by start), else the mark at `t0`.
+fn task_of(task: &str, t0: f64, starts: &[(f64, String)], named: bool) -> String {
+    if named && !task.is_empty() {
+        task.to_owned()
+    } else {
+        task_at(starts, t0)
+    }
+}
+
+/// Each plan re-round inside the window, `since` to `until`: a `spec-fidelity` dispatch whose rounds-table key ([`round_key`]) a dispatch
+/// before it in `log` holds - the feature's log from its first line, so a round before SINCE is an earlier round (T11's plan review,
+/// 2026-11-21) - its time and the task its line names ("" none), in time order. A dispatch is inside the window as `load_all` cuts one:
+/// its time's text at or after `since`, at or before `until`.
+///
+/// # Errors
+///
+/// A dispatch's time the reader cannot read.
+pub fn rerounds(log: &[Event], (since, until): (&str, &str)) -> Result<Vec<(f64, String)>, Raised> {
+    let mut found = Vec::new();
+    for e in log {
+        let Some(key) = round_key(e).filter(|(agent, _)| agent.starts_with("spec-fidelity")) else {
+            continue;
+        };
+        let t = or_s(e, "t");
+        if until.is_empty() || t.as_str() <= until {
+            found.push((t_of(e)?, t.as_str() >= since, key, or_s(e, "task")));
+        }
+    }
+    found.sort_by(|a, b| a.0.total_cmp(&b.0));
+    let mut seen = std::collections::HashSet::new();
+    Ok(found
+        .into_iter()
+        .filter_map(|(t, inside, key, task)| (!seen.insert(key) && inside).then_some((t, task)))
+        .collect())
+}
+
+/// The task each re-round of `found` ([`rerounds`]) is booked to, as an agent is ([`rows`]).
+#[must_use]
+pub fn booked(found: &[(f64, String)], starts: &[(f64, String)], named: bool) -> Vec<String> {
+    found
+        .iter()
+        .map(|(t, task)| task_of(task, *t, starts, named))
         .collect()
 }
 
@@ -241,10 +291,17 @@ fn count(n: usize, word: &str) -> String {
     format!("{n} {word}{}", if n == 1 { "" } else { "s" })
 }
 
-/// The tasks' agents and rework (one row a task of `order`, then `all`), each agent under its task, and the line setting their sum beside
-/// the critical path's `critical` seconds.
+/// The tasks' agents and rework - the refused landings and the plan re-rounds, each re-round's task - (one row a task of `order`, then
+/// `all`), each agent under its task where `each` (`make feature-report` leaves that list to `make where-time`, T11), and the line
+/// setting their sum beside the critical path's `critical` seconds.
 #[must_use]
-pub fn render(rows: &[Row], refused: &[Vec<String>], order: &[&String], critical: f64) -> String {
+pub fn render(
+    rows: &[Row],
+    (refused, rerounds): (&[Vec<String>], &[String]),
+    order: &[&String],
+    critical: f64,
+    each: bool,
+) -> String {
     let mut lines = vec![
         "| task | agents | agent minutes | k tokens in | k tokens out | refused landings | plan re-rounds | by kind (count) |".to_owned(),
         "|---|---|---|---|---|---|---|---|".to_owned(),
@@ -258,23 +315,13 @@ pub fn render(rows: &[Row], refused: &[Vec<String>], order: &[&String], critical
             (k(t.input()), k(t.out))
         }
     };
-    let mut rerounds = 0;
     for task in order {
         let mine: Vec<&Row> = rows.iter().filter(|r| &r.task == *task).collect();
         let landings = refused.iter().filter(|ts| ts.contains(task)).count();
-        if mine.is_empty() && landings == 0 {
+        let again = rerounds.iter().filter(|t| t == task).count();
+        if mine.is_empty() && landings == 0 && again == 0 {
             continue;
         }
-        let reviews = mine
-            .iter()
-            .filter(|r| r.kind.starts_with("spec-fidelity"))
-            .count();
-        let again = if task.as_str() == "-" {
-            0
-        } else {
-            reviews.saturating_sub(1)
-        };
-        rerounds += again;
         let mut kinds = super::super::super::events::Tally::default();
         for r in &mine {
             kinds.add(&r.kind, 1.0);
@@ -296,20 +343,23 @@ pub fn render(rows: &[Row], refused: &[Vec<String>], order: &[&String], critical
     let secs = all.iter().fold(0.0, |a, r| a + r.secs);
     let (tin, tout) = toks(&all);
     lines.push(format!(
-        "| all | {} | {} | {tin} | {tout} | {} | {rerounds} | |",
+        "| all | {} | {} | {tin} | {tout} | {} | {} | |",
         all.len(),
         fixed(secs / 60.0, 0),
-        refused.len()
+        refused.len(),
+        rerounds.len()
     ));
-    lines.extend(
-        [
-            "",
-            "| task | agent | kind | from (UTC) | minutes | k tokens in | k tokens out |",
-            "|---|---|---|---|---|---|---|",
-        ]
-        .map(String::from),
-    );
-    for task in order {
+    if each {
+        lines.extend(
+            [
+                "",
+                "| task | agent | kind | from (UTC) | minutes | k tokens in | k tokens out |",
+                "|---|---|---|---|---|---|---|",
+            ]
+            .map(String::from),
+        );
+    }
+    for task in order.iter().filter(|_| each) {
         for r in all.iter().filter(|r| &r.task == *task) {
             let (tin, tout) = r.tok.map_or(("-".to_owned(), "-".to_owned()), |t| {
                 (k(t.input()), k(t.out))
@@ -334,7 +384,7 @@ pub fn render(rows: &[Row], refused: &[Vec<String>], order: &[&String], critical
         if tout == "-" { "0.0".to_owned() } else { tout },
         all.iter().filter(|r| r.tok.is_none()).count(),
         count(refused.len(), "refused landing"),
-        count(rerounds, "plan re-round")
+        count(rerounds.len(), "plan re-round")
     ));
     lines.join("\n")
 }

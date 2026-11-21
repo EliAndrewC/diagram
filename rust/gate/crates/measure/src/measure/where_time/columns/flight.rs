@@ -52,7 +52,13 @@ pub struct Agent {
     pub aid: String,
     /// Its kind, from the first start that names one, else `?`.
     pub kind: String,
-    /// The task its lines name - the first start's `task` (the launch's brief, D6), else the first stop's - or "".
+    /// The task its lines name - the first stop's `task` (the agent's meta file, its launch's brief: D6), else the first start's - or "".
+    /// A start written before 451 T53's `dispatches.rs` landed (19de0f1d0c, 2026-11-21T04:04:23Z) carried the clone's mark, not the
+    /// brief: of the 165 agents the 451 log dispatched to 2026-11-21T04:10:44Z, 57 started under another task than their dispatch's `task`
+    /// and their stop's, and read by the start they sat under it (T15's plan reviews under T18). Every agent whose start and stop disagree
+    /// started before that landing, the last at 04:01:30Z, and none of the 22 started after it that had stopped by 07:23Z, measured
+    /// 2026-11-21 (feature 451 T11, a Python pass over the log's Agent calls, their agents' first start and stop). The stop first stays
+    /// right for those lines.
     pub task: String,
     /// Each span, a start to the first stop after it, else to the window's end; cut to the window and merged by `spent::clip` where the
     /// command reads the agents' minutes.
@@ -115,11 +121,11 @@ pub fn flight(runs: &Runs, agents: &[Event], stream: &[Event], end: f64) -> Resu
         }
     }
     lines.sort_by(|a, b| a.0.total_cmp(&b.0));
-    // aid -> its kind, from the first start that names one: a resumed agent's start may name none; its task, a start's before a stop's;
-    // its last stop's tokens
+    // aid -> its kind, from the first start that names one: a resumed agent's start may name none; its task, a stop's before a start's
+    // (`Agent::task`); its last stop's tokens
     let (mut kinds, mut tasks) = (HashMap::new(), HashMap::new());
     let mut toks: HashMap<String, super::spent::Tok> = HashMap::new();
-    for start in [true, false] {
+    for start in [false, true] {
         for (_, e) in &lines {
             let (aid, kind, task) = (or_s(e, "aid"), or_s(e, "agent"), or_s(e, "task"));
             if is(e, "ev", "SubagentStart") == start {

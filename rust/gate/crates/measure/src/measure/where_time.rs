@@ -9,6 +9,9 @@
 //! THE TABLES. Each gap between a session's events goes to the task its tool call NAMES, else the last named, else the one the clone's
 //! last `make task-start` made active (T89, D110), in `feature-report`'s categories grouped into buckets; the agents table (`columns::spent`,
 //! feature 451 T10) books each agent's minutes and tokens to the task its lines name, beside the rework. `--by-tick` books each tick-to-tick window instead (T115, D132).
+//!
+//! ONE READER (feature 451 T11, D7): `make feature-report` shows these columns for its feature through [`columns_text`], the same text
+//! but the row per agent, never a copy of the reading.
 
 use std::collections::HashMap;
 use std::fmt::Write as _;
@@ -250,6 +253,8 @@ pub struct Tables {
     pub spent: Vec<columns::spent::Row>,
     /// The tasks of each refused landing (T10).
     pub refused: Vec<Vec<String>>,
+    /// The task of each plan re-round (T11, `columns::spent::rerounds`).
+    pub rerounds: Vec<String>,
     /// Which rule booked each gap's seconds: `named`, `carried`, `the mark`.
     pub rules: Tally<String>,
     /// The seconds of the waits between turns on work by what held them (T09): `shell`, `agent`, `monitor`, or `none`.
@@ -302,6 +307,7 @@ pub fn tables(
             inputs.is_some(),
         ),
         refused: booking.refused.clone(),
+        rerounds: columns::spent::booked(&booking.rerounds, starts, inputs.is_some()),
         rules: Tally::default(),
         waits: Tally::default(),
     };
@@ -444,6 +450,8 @@ pub struct Booking {
     pub tokens: HashMap<String, columns::spent::Tok>,
     /// The tasks of each refused landing (T10).
     pub refused: Vec<Vec<String>>,
+    /// Each plan re-round's time and the task its line names (T11).
+    pub rerounds: Vec<(f64, String)>,
 }
 
 /// A `PreToolUse` line's category: a Bash call with a `make` by the guard's table (`other` the line's `other tool`), else its `cat`.
@@ -466,12 +474,18 @@ fn total(t: &Tally<String>) -> f64 {
 /// The tables as Markdown (`render`): the critical path by task, then what was spent beside it (`columns::spent::render`).
 #[must_use]
 pub fn render(t: &Tables, order: &[String]) -> String {
+    render_each(t, order, true)
+}
+
+/// [`render`], each agent's row only where `each`.
+fn render_each(t: &Tables, order: &[String], each: bool) -> String {
     let order: Vec<&String> = order
         .iter()
         .filter(|k| {
             row(&t.time, k).is_some()
                 || t.spent.iter().any(|r| &r.task == *k)
                 || t.refused.iter().any(|ts| ts.contains(k))
+                || t.rerounds.contains(k)
         })
         .collect();
     let mut lines = vec![
@@ -504,9 +518,10 @@ pub fn render(t: &Tables, order: &[String]) -> String {
     lines.push(String::new());
     lines.push(columns::spent::render(
         &t.spent,
-        &t.refused,
+        (&t.refused, &t.rerounds),
         &order,
         total(&tot),
+        each,
     ));
     lines.join("\n")
 }
@@ -655,7 +670,8 @@ fn booked(
     projects: &Path,
     clones: &Path,
 ) -> Result<Booked, Raised> {
-    let loaded = load_all(&event_logs(root, name, clones), &[], since, "")?;
+    let logs = event_logs(root, name, clones);
+    let loaded = load_all(&logs, &[], since, "")?;
     let mut sids: Vec<String> = loaded
         .stream
         .iter()
@@ -705,12 +721,21 @@ fn booked(
     )?;
     // the agents' minutes are their spans inside the window, each second once: the logs are read whole (T10, `spent::clip`)
     columns::spent::clip(&mut flight.agents, (lo, end));
+    // the re-rounds read the feature's log from its first line, a round before SINCE a later one's earlier round (T11's plan review,
+    // 2026-11-21); with no SINCE the window's lines are the log's
+    let whole = if since.is_empty() {
+        None
+    } else {
+        Some(load_all(&logs, &[], "", until)?)
+    };
+    let rounds_log = whole.as_ref().map_or(&loaded.stream, |w| &w.stream);
     let booking = Booking {
         splits: columns::splits_by_id(&runs),
         goal: goal.clone(),
         flight,
         tokens: subs.tokens,
         refused: columns::spent::refused(&loaded.aside, until),
+        rerounds: columns::spent::rerounds(rounds_log, (since, until))?,
     };
     Ok((events, sids, runs, booking))
 }
@@ -734,12 +759,11 @@ fn run(
     let name = d
         .file_name()
         .map_or_else(String::new, |n| n.to_string_lossy().into_owned());
-    let starts = starts(&root, &name, since)?;
-    let (events, sids, runs, booking) =
-        booked(&root, &name, (since, until), &starts, projects, clones)?;
-    let feature_no = name.split('-').next().unwrap_or_default();
-
     if by_tick {
+        let starts = starts(&root, &name, since)?;
+        let (events, _, _, booking) =
+            booked(&root, &name, (since, until), &starts, projects, clones)?;
+        let feature_no = name.split('-').next().unwrap_or_default();
         // ...EACH TASK'S TICK WINDOW (feature 385 T115, D132): what the GM's speed question was answered with by hand
         // ...a tick the tick archived in the same write is in tasks-done.md's history (feature 449 T142)
         let rel = format!("specs/{name}/tasks.md");
@@ -783,6 +807,33 @@ fn run(
         }
         return Ok(Ok(text));
     }
+    Ok(Ok(columns_text(
+        &root,
+        &name,
+        (since, until),
+        (projects, clones),
+        true,
+    )?))
+}
+
+/// The text `make where-time` prints for feature `name` (its spec directory's name) over `since` to `until`, by start: the critical path
+/// by task, the agents and the rework beside it - each agent's row only where `each` - what booked the gaps, the waits by what held them,
+/// and the runs table. `make feature-report` reads it here, `each` off (feature 451 T11, D7: one reader, no copy).
+///
+/// # Errors
+///
+/// What the reading raised: a line's time it cannot read, git's failure.
+pub fn columns_text(
+    root: &Path,
+    name: &str,
+    (since, until): (&str, &str),
+    (projects, clones): (&Path, &Path),
+    each: bool,
+) -> Result<String, Raised> {
+    let starts = starts(root, name, since)?;
+    let (events, sids, runs, booking) =
+        booked(root, name, (since, until), &starts, projects, clones)?;
+    let feature_no = name.split('-').next().unwrap_or_default();
     let inputs = transcript_inputs(&sids, projects)?;
     let t = tables(&events, &starts, Some(&inputs), feature_no, &booking)?;
     // the tasks in the order of their first start, a task never started first: the Python sorted a set, so among those its order was its
@@ -794,6 +845,7 @@ fn run(
         .iter()
         .map(|r| &r.task)
         .chain(t.refused.iter().flatten())
+        .chain(&t.rerounds)
     {
         if !order.contains(k) {
             order.push(k.clone());
@@ -808,16 +860,16 @@ fn run(
         .collect::<Vec<_>>()
         .join(", ");
     let w = |k: &str| fixed(t.waits.get(&k.to_owned()) / 60.0, 0);
-    Ok(Ok(format!(
+    Ok(format!(
         "{}\n\nbooked by: {rules} (feature 385 T89: the task a call names, else the last named, else the mark)\n\nthe waits between turns on \
          work, by what held them: a background shell {} min, an agent {} min, a monitor alone {} min, none {} min (feature 451 T09)\n\n{}",
-        render(&t, &order),
+        render_each(&t, &order, each),
         w("shell"),
         w("agent"),
         w("monitor"),
         w("none"),
         columns::render(&runs, &order)
-    )))
+    ))
 }
 
 pub mod columns;

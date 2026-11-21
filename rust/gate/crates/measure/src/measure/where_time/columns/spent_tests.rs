@@ -10,6 +10,9 @@ use serde_json::{json, Value};
 use super::super::super::feature_report::tests::put;
 use super::super::{booked, render, tables};
 
+/// T06's plan review bundle, which a2 and a3 were dispatched on.
+const PLAN: &str = "/tmp/l7r-plan-delta/plan-901-s-T06/MANIFEST.md";
+
 fn at(hms: &str) -> String {
     format!("2026-11-01T{hms}Z")
 }
@@ -85,7 +88,8 @@ fn report_since(
 }
 
 /// The window: a builder (a1, task T05, 20 min) and a plan review (a2, task T06, 10 min) launched in one turn and overlapping its wait;
-/// a second plan review of T06 (a3) whose start sits only in feature 900's log; a landing of T05 and T06 refused (`landed` false), and
+/// a second plan review of T06's plan (a3), its dispatch naming the same MANIFEST (T11: a re-round is a later round on one subject), whose
+/// start sits only in feature 900's log; a landing of T05 and T06 refused (`landed` false), and
 /// one that exited 3 with its ticks standing (`landed` true), which is no rework.
 fn window() -> (Vec<Value>, Vec<Value>, Vec<(&'static str, String)>) {
     let own = vec![
@@ -108,7 +112,7 @@ fn window() -> (Vec<Value>, Vec<Value>, Vec<(&'static str, String)>) {
         line(
             "08:00:10",
             "PreToolUse",
-            &json!({"tool": "Agent", "id": "toolu_2", "agent": "spec-fidelity", "task": "T06"}),
+            &json!({"tool": "Agent", "id": "toolu_2", "agent": "spec-fidelity", "task": "T06", "manifest": PLAN}),
         ),
         line(
             "08:00:11",
@@ -138,6 +142,11 @@ fn window() -> (Vec<Value>, Vec<Value>, Vec<(&'static str, String)>) {
             "tok": {"in": 1, "cached": 1, "created": 1, "out": 1}}),
         ),
         line("08:20:10", "UserPromptSubmit", &json!({"gm": false})),
+        line(
+            "08:20:30",
+            "PreToolUse",
+            &json!({"tool": "Agent", "id": "toolu_3", "agent": "spec-fidelity", "task": "T06", "manifest": PLAN}),
+        ),
         json!({"ev": "Phase", "src": "land", "sid": "s", "step": "end", "make": "land", "t": at("08:20:40"), "t0": at("08:20:20"),
                "t1": at("08:20:40"), "code": 1, "task": "T05", "tasks": ["T05", "T06"], "landed": false}),
         json!({"ev": "Phase", "src": "land", "sid": "s", "step": "end", "make": "land", "t": at("08:20:55"), "t0": at("08:20:45"),
@@ -300,4 +309,190 @@ fn an_agents_minutes_are_its_spans_inside_the_window_counted_once() {
     has(&text, "| T05 | a5 | general-purpose | 08:28 | 2 | - | - |");
     // a7, started after the window, has no row
     assert_eq!(text.matches("| a7 |").count(), 0);
+}
+
+/// A plan re-round is a later round of one review on one subject (T11; T10's plan review, 2026-11-21): the rounds table's key, a
+/// `spec-fidelity` dispatch's agent and the subject its MANIFEST names (`feature_report::tables::round_key`), booked to the task its line
+/// names, else the mark. Of T07's four `spec-fidelity` dispatches - its plan reviewed twice, a block bundle reviewed once, one with no
+/// manifest - one is a re-round, never every agent after the first; a quote-check's second round on its subject is no plan's re-round;
+/// the plan's third round, its line naming no task, goes to the mark, T05. The `all` row is the rounds table's own sum.
+#[test]
+fn a_plan_re_round_is_a_later_round_of_one_review_on_one_subject() {
+    let plan = "/tmp/l7r-plan-delta/plan-901-s-T07/MANIFEST.md";
+    let mut own = vec![line("08:00:00", "UserPromptSubmit", &json!({"gm": true}))];
+    for (i, (agent, manifest, task)) in [
+        ("spec-fidelity", plan, "T07"),
+        (
+            "spec-fidelity",
+            "/tmp/l7r-check/T07-blocks/MANIFEST.md",
+            "T07",
+        ),
+        ("spec-fidelity", plan, "T07"),
+        ("spec-fidelity", "", "T07"),
+        (
+            "quote-check",
+            "/tmp/l7r-check/0105-quote-check/MANIFEST.md",
+            "T07",
+        ),
+        (
+            "quote-check",
+            "/tmp/l7r-check/0105-quote-check/MANIFEST.md",
+            "T07",
+        ),
+        ("spec-fidelity", plan, ""),
+    ]
+    .into_iter()
+    .enumerate()
+    {
+        let (id, aid) = (format!("d{i}"), format!("b{i}"));
+        let mut pre =
+            json!({"tool": "Agent", "id": id, "agent": agent, "task": task, "manifest": manifest});
+        let pre = pre.as_object_mut().unwrap();
+        pre.retain(|_, v| v.as_str() != Some(""));
+        own.extend([
+            line(
+                &format!("08:0{i}:00"),
+                "PreToolUse",
+                &Value::Object(pre.clone()),
+            ),
+            line(
+                &format!("08:0{i}:01"),
+                "SubagentStart",
+                &json!({"aid": aid, "agent": agent, "task": task}),
+            ),
+            line(
+                &format!("08:0{i}:02"),
+                "PostToolUse",
+                &json!({"tool": "Agent", "id": id, "aid": aid}),
+            ),
+            line(&format!("08:0{i}:30"), "SubagentStop", &json!({"aid": aid})),
+        ]);
+    }
+    own.push(line("08:09:00", "Stop", &json!({})));
+    // a round past the window's end (08:30) is not the window's
+    let late = json!({"tool": "Agent", "id": "d9", "agent": "spec-fidelity", "task": "T07", "manifest": plan});
+    own.push(line("08:40:00", "PreToolUse", &late));
+    let text = report_since(
+        "measure-spent-rerounds",
+        (&own, &[]),
+        &[],
+        (true, ""),
+        &["T05", "T07"],
+    );
+    has(
+        &text,
+        "| T07 | 6 | 3 | - | - | 0 | 1 | spec-fidelity 4, quote-check 2 |",
+    );
+    has(&text, "| T05 | 1 | 0 | - | - | 0 | 1 | spec-fidelity 1 |");
+    has(&text, "| all | 7 | 3 | - | - | 0 | 2 | |");
+    // the rounds table over the window's lines: the plan's two rounds past its first, and the quote-check's one
+    let events: Vec<_> = own
+        .iter()
+        .filter(|v| v["t"].as_str().unwrap() <= at("08:30:00").as_str())
+        .map(|v| v.as_object().unwrap().clone())
+        .collect();
+    let (_, rounds) = super::super::super::feature_report::tables::dispatches(&events).unwrap();
+    let past_first = |check: &str| {
+        rounds
+            .items()
+            .iter()
+            .filter(|((c, _), _)| c == check)
+            .fold(0.0, |a, (_, n)| a + n - 1.0)
+    };
+    assert_eq!(
+        (past_first("spec-fidelity"), past_first("quote-check")),
+        (2.0, 1.0)
+    );
+    has(&text, "rework: 0 refused landings, 2 plan re-rounds");
+}
+
+/// An agent goes to the task its stop names - the agent's meta file, its launch's brief (D6) - before the one its start carries, which the
+/// hook filed by the clone's mark until 451 T53's `dispatches.rs` landed (2026-11-21T04:04:23Z): of the 165 agents the 451 log dispatched
+/// to 2026-11-21T04:10:44Z, 57 started under another task than their dispatch and their stop named (T15's plan reviews started under T18,
+/// T46's under T44), every one before that landing, and none of the 22 started after it that had stopped by 07:23Z, measured 2026-11-21
+/// (T11's plan section). An agent with no stop yet keeps its start's.
+#[test]
+fn an_agent_goes_to_the_task_its_stop_names_before_the_mark_its_start_carries() {
+    let own = [
+        line("08:00:00", "UserPromptSubmit", &json!({"gm": true})),
+        line(
+            "08:00:05",
+            "PreToolUse",
+            &json!({"tool": "Agent", "id": "d1", "agent": "spec-fidelity", "task": "T07"}),
+        ),
+        line(
+            "08:00:06",
+            "SubagentStart",
+            &json!({"aid": "c1", "agent": "spec-fidelity", "task": "T05"}),
+        ),
+        line(
+            "08:00:07",
+            "PostToolUse",
+            &json!({"tool": "Agent", "id": "d1", "aid": "c1"}),
+        ),
+        line(
+            "08:05:00",
+            "SubagentStart",
+            &json!({"aid": "c2", "agent": "general-purpose", "task": "T05"}),
+        ),
+        line(
+            "08:05:06",
+            "SubagentStop",
+            &json!({"aid": "c1", "task": "T07"}),
+        ),
+        line("08:06:00", "Stop", &json!({})),
+    ];
+    let text = report_since(
+        "measure-spent-stop-task",
+        (&own, &[]),
+        &[],
+        (true, ""),
+        &["T05", "T07"],
+    );
+    has(&text, "| T07 | 1 | 5 | - | - | 0 | 0 | spec-fidelity 1 |");
+    has(
+        &text,
+        "| T05 | 1 | 25 | - | - | 0 | 0 | general-purpose 1 |",
+    );
+}
+
+/// A re-round inside the window is one whose key ANY earlier dispatch of the feature's log holds, inside the window or before SINCE (T11's
+/// plan review, 2026-11-21: "a second round run inside the window is rework done inside the window"). SINCE is 08:00: plan A's first
+/// round fell at 07:50 and its second at 08:05, one re-round; plan B's two rounds both fell before SINCE, none of the window's; plan C's
+/// first round is the window's own, none; plan D's first round fell at 07:53 and its second at 08:00:00, SINCE itself, inside the window
+/// by `load_all`'s cut (`t < since` is outside), one re-round.
+#[test]
+fn a_re_round_inside_the_window_counts_a_first_round_before_since() {
+    let plan = |p: &str| format!("/tmp/l7r-plan-delta/plan-901-s-{p}/MANIFEST.md");
+    let mut own = vec![line("07:49:00", "UserPromptSubmit", &json!({"gm": true}))];
+    for (i, (t, p)) in [
+        ("07:50:00", "A"),
+        ("07:51:00", "B"),
+        ("07:52:00", "B"),
+        ("07:53:00", "D"),
+        ("08:00:00", "D"),
+        ("08:00:00", "C"),
+        ("08:05:00", "A"),
+    ]
+    .into_iter()
+    .enumerate()
+    {
+        own.push(line(
+            t,
+            "PreToolUse",
+            &json!({"tool": "Agent", "id": format!("r{i}"), "agent": "spec-fidelity", "task": "T07", "manifest": plan(p)}),
+        ));
+    }
+    own.push(line("08:10:00", "Stop", &json!({})));
+    let text = report_since(
+        "measure-spent-rerounds-since",
+        (&own, &[]),
+        &[],
+        (true, &at("08:00:00")),
+        &["T05", "T07"],
+    );
+    has(&text, "rework: 0 refused landings, 2 plan re-rounds");
+    // each booked to the task its line names, a first round before SINCE or not
+    has(&text, "| T07 | 0 | 0 | - | - | 0 | 2 |  |");
+    has(&text, "| all | 0 | 0 | - | - | 0 | 2 | |");
 }

@@ -89,6 +89,152 @@ fn work_still_running_lets_the_turn_end_until_it_reports_back() {
     assert!(said(&c, &tr).is_some());
 }
 
+// 451 T65: the shapes as Claude Code writes them, read 2026-11-21 from a session's transcript (`c6fd72d1-...jsonl`, grep -o): a notice
+// JSON-escaped in a user line, an interim one saying the agent "is waiting on its own background work"; a SendMessage resume's
+// `resumedAgentId` in its `toolUseResult`, unescaped there and escaped in the text the model reads.
+const WAITING: &str = r#"Agent \"build it\" is waiting on its own background work"#;
+const FINISHED: &str = r#"Agent \"build it\" finished"#;
+
+fn notice(id: &str, summary: &str) -> String {
+    let note = if summary == WAITING {
+        r"\n<note>This agent stopped with background work of its own still running. It may resume on its own when that work completes or reports, and the same task-id notifies again if it does; the result below may be interim.</note>"
+    } else {
+        ""
+    };
+    format!(
+        r#"{{"type":"user","message":{{"role":"user","content":"<task-notification>\n<task-id>{id}</task-id>\n<output-file>/tmp/x/{id}.output</output-file>\n<status>completed</status>\n<summary>{summary}</summary>{note}\n<result>done</result>\n</task-notification>"}}}}"#
+    )
+}
+
+fn resume(id: &str) -> String {
+    format!(
+        r#"{{"type":"user","message":{{"role":"user","content":[{{"type":"tool_result","content":[{{"type":"text","text":"{{\"success\":true,\"message\":\"Resuming agent {id}\",\"resumedAgentId\":\"{id}\"}}"}}]}}]}},"toolUseResult":{{"success":true,"message":"Resuming agent {id}","resumedAgentId":"{id}","revivedAgentId":"{id}"}}}}"#
+    )
+}
+
+fn end_turn(id: &str) -> String {
+    format!(
+        r#"{{"isSidechain":true,"agentId":"{id}","message":{{"role":"assistant","content":[{{"type":"text","text":"done"}}],"stop_reason":"end_turn"}}}}"#
+    )
+}
+
+/// A line of agent `id`'s own transcript, `<transcript stem>/subagents/agent-<id>.jsonl` as Claude Code keeps it.
+fn own(tr: &Path, id: &str, line: &str) {
+    let dir = tr.with_extension("").join("subagents");
+    std::fs::create_dir_all(&dir).unwrap();
+    let file = dir.join(format!("agent-{id}.jsonl"));
+    if !file.is_file() {
+        std::fs::write(&file, "").unwrap();
+    }
+    append(&file, line);
+}
+
+#[test]
+fn a_resumed_agent_runs_until_its_next_final_notice_and_a_replay_ends_nothing() {
+    let (_dir, c, tr) = world("resume", "no");
+    append(&tr, r#"{"toolUseResult": {"agentId": "a1"}}"#);
+    append(&tr, &notice("a1", FINISHED));
+    assert!(said(&c, &tr).is_some());
+    append(&tr, &resume("a1"));
+    assert_eq!(said(&c, &tr), None, "a SendMessage resume is a launch");
+    // a request blob re-emits the history: its copy of the old notice is no notice (no task-id of 6,636 in 12 transcripts is
+    // named in a blob alone, measured 2026-11-21)
+    append(
+        &tr,
+        &notice("a1", FINISHED).replacen(r#"{"type":"user""#, r#"{"type":"api-request-blob""#, 1),
+    );
+    assert_eq!(said(&c, &tr), None, "a blob's replay ends nothing");
+    append(&tr, &notice("a1", FINISHED));
+    assert!(said(&c, &tr).is_some());
+}
+
+#[test]
+fn an_interim_notice_ends_nothing_while_the_agent_s_own_work_runs_or_has_woken_it() {
+    let (_dir, c, tr) = world("interim", "no");
+    append(&tr, r#"{"toolUseResult": {"agentId": "a2"}}"#);
+    own(
+        &tr,
+        "a2",
+        r#"{"isSidechain":true,"agentId":"a2","toolUseResult":{"backgroundTaskId":"b7"}}"#,
+    );
+    own(&tr, "a2", &end_turn("a2"));
+    append(&tr, &notice("a2", WAITING));
+    assert_eq!(said(&c, &tr), None, "its own background work runs");
+    own(
+        &tr,
+        "a2",
+        &notice(
+            "b7",
+            r#"Background command \"make done\" completed (exit code 0)"#,
+        ),
+    );
+    // woken by its work's notice, it is mid-turn
+    assert_eq!(said(&c, &tr), None);
+    // its final message's thinking, a record of its own written before the text, carries `end_turn` too
+    own(
+        &tr,
+        "a2",
+        r#"{"isSidechain":true,"agentId":"a2","message":{"role":"assistant","content":[{"type":"thinking","thinking":""}],"stop_reason":"end_turn"}}"#,
+    );
+    assert_eq!(said(&c, &tr), None, "still writing its answer");
+    own(&tr, "a2", &end_turn("a2"));
+    // its work ended and its turn ended with nothing since: it will not notify again (8 of 58 such agents never did, 2026-11-21)
+    assert!(said(&c, &tr).is_some(), "stale");
+    own(
+        &tr,
+        "a2",
+        r#"{"isSidechain":true,"agentId":"a2","toolUseResult":{"backgroundTaskId":"b8"}}"#,
+    );
+    assert_eq!(said(&c, &tr), None);
+    append(&tr, &notice("a2", FINISHED));
+    // a final notice after an interim one ends it
+    assert!(said(&c, &tr).is_some());
+}
+
+#[test]
+fn an_interim_agent_with_no_transcript_of_its_own_is_not_running() {
+    let (_dir, c, tr) = world("nofile", "no");
+    append(&tr, r#"{"toolUseResult": {"agentId": "a3"}}"#);
+    append(&tr, &notice("a3", WAITING));
+    assert!(said(&c, &tr).is_some());
+}
+
+#[test]
+fn a_line_s_notices_are_read_in_their_order_each_by_its_own_summary() {
+    let (_dir, c, tr) = world("order", "no");
+    append(&tr, r#"{"toolUseResult": {"agentId": "a4"}}"#);
+    own(&tr, "a4", r#"{"toolUseResult":{"backgroundTaskId":"b9"}}"#);
+    let interim = notice("a4", WAITING);
+    let last = notice("a4", FINISHED);
+    // one record holding an interim notice and the final one after it, as a delivered batch does (line 42866 of the session above)
+    append(&tr, &format!("{interim} {last}"));
+    assert!(said(&c, &tr).is_some());
+    append(&tr, &format!("{last} {interim}"));
+    assert_eq!(said(&c, &tr), None);
+    // a summary past the notice's close is not its summary
+    append(
+        &tr,
+        &format!("<task-notification><task-id>a4</task-id></task-notification> <summary>{WAITING}</summary>"),
+    );
+    assert!(said(&c, &tr).is_some());
+}
+
+#[test]
+fn an_interim_sub_agent_is_read_through_its_own_transcript_and_a_cycle_ends() {
+    let (_dir, c, tr) = world("nested", "no");
+    append(&tr, r#"{"toolUseResult": {"agentId": "a5"}}"#);
+    append(&tr, &notice("a5", WAITING));
+    own(&tr, "a5", r#"{"toolUseResult":{"agentId":"a6"}}"#);
+    own(&tr, "a5", &notice("a6", WAITING));
+    own(&tr, "a5", &end_turn("a5"));
+    own(&tr, "a6", &notice("a5", WAITING));
+    own(&tr, "a6", &end_turn("a6"));
+    // nothing of either runs, and the cycle ends
+    assert!(said(&c, &tr).is_some());
+    own(&tr, "a6", r#"{"toolUseResult":{"backgroundTaskId":"b10"}}"#);
+    assert_eq!(said(&c, &tr), None, "the sub-agent's own work runs");
+}
+
 #[test]
 fn a_set_down_since_the_start_or_a_closing_status_lets_it_end() {
     let (_dir, c, tr) = world("down", "no");
