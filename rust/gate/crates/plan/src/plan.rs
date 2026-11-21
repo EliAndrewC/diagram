@@ -13,6 +13,7 @@ mod engine_edit;
 mod history;
 mod lint;
 mod record;
+pub use record::Accepted;
 mod sections;
 mod status;
 mod task;
@@ -462,7 +463,7 @@ fn answer(
         ("arbiter-accept", 3) => match dir_of(&words[1], root, "arbiter-accept") {
             Err(r) => r,
             Ok(dir) => match record::arbiter_accept(&dir, &words[2], None) {
-                Ok(named) => said(format!("arbiter-accept: {} block(s) of {}'s plan recorded CLEAR on {}\n", named.len(), dir.file_name().unwrap_or_default().to_string_lossy(), words[2])),
+                Ok(named) => said(format!("arbiter-accept: {} block(s) of {}'s plan recorded CLEAR on {}\n", named.blocks.len(), dir.file_name().unwrap_or_default().to_string_lossy(), words[2])),
                 Err(stop) => stop_reply("arbiter-accept", stop),
             },
         },
@@ -535,7 +536,7 @@ pub fn approach_ruled(root: &Path, trigger: &str) -> Option<String> {
 
 /// The accept as the plan's verdict: the blocks recorded CLEAR (`plan_door.arbiter_accept`), for `l7r-gate arbiter`, which has just written the ruling it reads.
 #[must_use]
-pub fn arbiter_accept_listed(dir: &Path, trigger: &str) -> Vec<String> {
+pub fn arbiter_accept_listed(dir: &Path, trigger: &str) -> Accepted {
     record::arbiter_accept(dir, trigger, None).unwrap_or_default()
 }
 

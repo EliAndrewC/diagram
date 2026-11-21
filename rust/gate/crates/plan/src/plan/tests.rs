@@ -719,7 +719,7 @@ fn what_the_other_tools_ask_of_the_plan_answers_nothing_on_an_empty_tree() {
     assert_eq!(super::active_feature(&root), None);
     assert_eq!(super::resolve_feature("999", &root), None);
     assert_eq!(super::approach_ruled(&root, "t"), None);
-    assert!(super::arbiter_accept_listed(&root, "t").is_empty());
+    assert!(super::arbiter_accept_listed(&root, "t").blocks.is_empty());
 }
 
 /// RED FIRST (feature 451 T84): A TICK ANSWERS FOR ITS OWN TASK, THE TASKS TICKED BEFORE IT AND THE BLOCKS OUTSIDE EVERY TASK'S SECTION -
