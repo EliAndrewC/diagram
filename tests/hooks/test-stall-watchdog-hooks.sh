@@ -100,8 +100,10 @@ mkdir -p "$T/lone/.git/page-sessions"
 RL="$T/lone/.git/page-sessions/run-abc.log"
 printf 'started orphan x.md\nfailed orphan rc=1 - waiting 15 min (reset in 40), then resuming it (limit)\n' > "$RL"
 check "a retry line with NO live runner exempts nothing" yes "$(has "$("$HOOK" once)" 'stalled name-orphan')"
-bash -c 'sleep 600; :' page_session_runner.py --work "$RL" </dev/null >/dev/null 2>&1 & PIDS+=("$!")
-sleep 0.5
+bash -c 'sleep 600; :' page_session_runner.py --work "$RL" </dev/null >/dev/null 2>&1 & OLD=$!; PIDS+=("$OLD")
+# its own argv waited for, not a fixed 0.5 s (451 T111): before its exec the process is a copy of this suite, and the check below,
+# that it exempts nothing, passes on that copy whatever the hook makes of the old form
+for _ in $(seq 300); do tr '\0' ' ' < "/proc/$OLD/cmdline" 2>/dev/null | grep -q 'page_session_runner.py --work' && break; sleep 0.1; done
 check "...nor does a process in the Python runner's old form (feature 449 T137)" yes "$(has "$("$HOOK" once)" 'stalled name-orphan')"
 # the runner itself, as `page-session.sh` starts it (the gate binary's `page-session --work`, feature 449 T137), held on a `then:` step
 # that sleeps, so its argv is the queue's own
@@ -118,18 +120,29 @@ check "...nor does another session's queue in the same clone" yes "$(has "$("$HO
 
 echo "--- 4. the loop: one instance, revived by any prompt ---"
 export STALL_PERIOD=3600
-printf '{}' | "$HOOK" prompt; sleep 1
-P1=$(cat "$T/state/pid" 2>/dev/null)
+# EACH WAIT IS FOR ITS EVENT, TO A DEADLINE, NEVER A FIXED SLEEP (451 T111): a fixed 1 s before the lock check went red at T92's landing
+# ("expected no, got yes", a load near 28 beside three builders) and green on both reruns. The deadline, 300 tries of 0.1 s, is a GUESS
+# only a red run pays: the hand-started loop's exit measured a median of 0.03 s idle and at most 0.39 s beside 24 CPU spinners.
+# loop_pid [not]: the pid the loop wrote, once its process is live and is not [not] (the file outlives a killed loop)
+loop_pid() { local p; p=$(cat "$T/state/pid" 2>/dev/null); [ -n "$p" ] && [ "$p" != "${1:-}" ] && [ -d "/proc/$p" ] && echo "$p"; }
+P1=""; P3=""
+printf '{}' | "$HOOK" prompt
+# the loop writes its pid once it holds the lock, so the hand-started loop below meets a lock that is held
+for _ in $(seq 300); do P1=$(loop_pid) && break; sleep 0.1; done
 check "the first prompt starts the loop" yes "$([ -n "$P1" ] && kill -0 "$P1" 2>/dev/null && echo yes || echo no)"
-printf '{}' | "$HOOK" prompt; sleep 1
+# no wait here: a second loop would meet the held lock and exit without writing the pid, so no sleep could change this verdict
+printf '{}' | "$HOOK" prompt
 check "a second prompt starts no other" "$P1" "$(cat "$T/state/pid")"
-"$HOOK" run </dev/null >/dev/null 2>&1 & R2=$!; sleep 1
-check "a second loop started by hand exits at once on the lock" no "$(kill -0 "$R2" 2>/dev/null && echo yes || echo no)"
-pkill -P "$P1" 2>/dev/null; kill "$P1" 2>/dev/null; sleep 1
-printf '{}' | "$HOOK" prompt; sleep 1
-P3=$(cat "$T/state/pid")
-check "a dead loop is revived by the next prompt" yes "$([ "$P3" != "$P1" ] && kill -0 "$P3" 2>/dev/null && echo yes || echo no)"
-pkill -P "$P3" 2>/dev/null; kill "$P3" 2>/dev/null
+"$HOOK" run </dev/null >/dev/null 2>&1 & R2=$!; PIDS+=("$R2")
+for _ in $(seq 300); do kill -0 "$R2" 2>/dev/null || break; sleep 0.1; done
+check "a second loop started by hand exits on the lock, where one that took it would loop" no "$(kill -0 "$R2" 2>/dev/null && echo yes || echo no)"
+# the prompt revives a loop whose /proc entry is gone (the hook's own test), so that is what is waited for
+pkill -P "$P1" 2>/dev/null; kill "$P1" 2>/dev/null
+for _ in $(seq 300); do [ -n "$P1" ] && [ -d "/proc/$P1" ] || break; sleep 0.1; done
+printf '{}' | "$HOOK" prompt
+for _ in $(seq 300); do P3=$(loop_pid "$P1") && break; sleep 0.1; done
+check "a dead loop is revived by the next prompt" yes "$([ -n "$P3" ] && [ "$P3" != "$P1" ] && kill -0 "$P3" 2>/dev/null && echo yes || echo no)"
+[ -n "$P3" ] && { pkill -P "$P3" 2>/dev/null; kill "$P3" 2>/dev/null; }
 
 echo
 echo "test-stall-watchdog-hooks: passed $PASS, failed $FAIL"
