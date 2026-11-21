@@ -588,6 +588,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-21",
    "declared": "spec-fidelity"
+  },
+  "### T106 (a builder the coordinator re-numbered mid-task kept its brief's task on every event-log line: T101's builder, briefed `451 T100` and told \"Your task is T101, not T100\" by a SendMessage 20 s into its run, filed all 229 of its own lines (227 tool lines, its start and its stop) under T100, its Write and Edit lines of `speckit.rs`, `ready.rs` and `land-alone.sh` among them, so land-alone's list at T82-T101's landing named none of them and its closing checks would have set them apart as T100's, a wrong green - measured 2026-11-21 (a streamed Python read of the 451 log's lines by `by`, against the session transcript's SendMessage calls))": {
+   "sha256": "0f370c2bdf21d411f44788d312d9aab07d3927c57a11ea310b5c390e709aa05e",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity"
+  },
+  "### T106 Approach (checklist part A)": {
+   "sha256": "13914cab4af47b4b47bdf7f08fd894e317c9dec152e5e5e44c6c718e7f41012a",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -10347,6 +10359,76 @@
      "why": "This records the exit evidence and does not narrow the request. The timestamps show the files were written after the run started, and T111 changes no Rust. Whether the landing accepts that is for the land machinery, not a fidelity finding."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-21",
+   "blocks": [
+    "### T106 (a builder the coordinator re-numbered mid-task kept its brief's task on every event-log line: T101's builder, briefed `451 T100` and told \"Your task is T101, not T100\" by a SendMessage 20 s into its run, filed all 229 of its own lines (227 tool lines, its start and its stop) under T100, its Write and Edit lines of `speckit.rs`, `ready.rs` and `land-alone.sh` among them, so land-alone's list at T82-T101's landing named none of them and its closing checks would have set them apart as T100's, a wrong green - measured 2026-11-21 (a streamed Python read of the 451 log's lines by `by`, against the session transcript's SendMessage calls))",
+    "### T106 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T106-forward-only",
+     "summary": "A correction is kept per agent and applied to that agent's later lines; lines filed before it stay as filed, with no general rewrite of the live log.",
+     "class": "within",
+     "why": "The spec has no requirement on re-numbered builders; the task exists to stop a re-numbered builder's files being set apart under the old number. In the measured case all three writes came after the SendMessage and the 8 earlier lines wrote nothing, so the forward rule fixes the whole observed wrong outcome. No defect is left: those earlier lines were also re-filed by hand (Found and left). A builder writing before it is corrected was not observed among the 136."
+    },
+    {
+     "id": "T106-signal-order",
+     "summary": "Signals are the coordinator's delivered SendMessage matching `T<new>, not T<old>` first, then the builder's own closing-checks/decide/task-start T= naming a task outside its brief and current filing; a two-task brief's second task moves nothing.",
+     "class": "within",
+     "why": "This is how the fix detects the re-number. The replay measured both directions: the SendMessage is needed to catch writes before the closing step, and the brief rule stops the T28+T29 wrong move. The request is not narrowed."
+    },
+    {
+     "id": "T106-CORRECTION-knob",
+     "summary": "The correction's wording pattern is a GUESS knob fitted on the one observed case, and the negatives are the night's own non-correction messages.",
+     "class": "within",
+     "why": "It is an implementation parameter, labeled GUESS as the project requires. A correction worded another way falls through to the builder's own closing step."
+    },
+    {
+     "id": "T106-store",
+     "summary": "The correction is stored as one file per agent under <events dir>-dispatches/<sid>.tasks/<aid>, not as a row in the dispatches side file, because the side file's TAIL would drop a long builder's correction.",
+     "class": "within",
+     "why": "Where the correction is stored is an implementation choice. It narrows nothing that was asked."
+    },
+    {
+     "id": "T106-chain",
+     "summary": "The corrected task is placed in the filing chain after a command's own T= and an Agent call's own words and before the brief, and corrects the task only, not the feature, so events-refile's BY BRIEF rule leaves corrected lines alone.",
+     "class": "within",
+     "why": "It keeps T26's and T53's chain for every agent that no correction names. It is an implementation decision."
+    },
+    {
+     "id": "T106-files",
+     "summary": "Fixed at the writer (filed.rs, dispatches.rs) with land-alone.sh and closing-checks.sh untouched, because they are T96's files, and event_log_hooks.rs untouched.",
+     "class": "within",
+     "why": "Both splits read each line's raw task, so fixing the writer corrects what both readers see. The end-to-end replay through both real splits measured all three files judged as T101's."
+    },
+    {
+     "id": "T106-hand-refile",
+     "summary": "The 229 lines already misfiled under T100 are rewritten to T101 in place, one byte at an offset, and the coordinator's dispatch line keeps T100.",
+     "class": "within",
+     "why": "It fixes the defect's existing consequence in the per-task breakdown (where-time F=451), which the request's per-task time breakdown needs. The read-back is recorded with its method."
+    },
+    {
+     "id": "T106-handoff-name",
+     "summary": "context_cap_hooks' handoff file takes the corrected task number, because it reads filed_at's task from the same chain.",
+     "class": "within",
+     "why": "It fixes, in this task, a known defect of the same cause (fix as we go)."
+    },
+    {
+     "id": "T106-perf-class",
+     "summary": "Tagged [perf] under FR-013, as work on the event log's data that where-time and the closing checks read.",
+     "class": "within",
+     "why": "FR-013 counts work on the event log's data and where-time's readers as performance work for ordering (the GM 2026-11-20). Correct per-task attribution of event-log lines is that data."
+    },
+    {
+     "id": "T106-order",
+     "summary": "After T26, T53, T74 and T96, and lands before T22.",
+     "class": "within",
+     "why": "It orders the task. It narrows nothing."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -16081,6 +16163,74 @@
      "summary": "The closing run's make static red (3 tests in guards::event_log_hooks::tests::renumbered in rust/guard/shared) is put down to another builder's uncommitted work that T111 does not touch.",
      "class": "within",
      "why": "This records the exit evidence and does not narrow the request. The timestamps show the files were written after the run started, and T111 changes no Rust. Whether the landing accepts that is for the land machinery, not a fidelity finding."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T106": {
+   "section_sha256": "95bc62a80a7396b66e447ca56d1dc403fc6d5ee7a6ec02fd925ae85362c7407d",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T106-forward-only",
+     "summary": "A correction is kept per agent and applied to that agent's later lines; lines filed before it stay as filed, with no general rewrite of the live log.",
+     "class": "within",
+     "why": "The spec has no requirement on re-numbered builders; the task exists to stop a re-numbered builder's files being set apart under the old number. In the measured case all three writes came after the SendMessage and the 8 earlier lines wrote nothing, so the forward rule fixes the whole observed wrong outcome. No defect is left: those earlier lines were also re-filed by hand (Found and left). A builder writing before it is corrected was not observed among the 136."
+    },
+    {
+     "id": "T106-signal-order",
+     "summary": "Signals are the coordinator's delivered SendMessage matching `T<new>, not T<old>` first, then the builder's own closing-checks/decide/task-start T= naming a task outside its brief and current filing; a two-task brief's second task moves nothing.",
+     "class": "within",
+     "why": "This is how the fix detects the re-number. The replay measured both directions: the SendMessage is needed to catch writes before the closing step, and the brief rule stops the T28+T29 wrong move. The request is not narrowed."
+    },
+    {
+     "id": "T106-CORRECTION-knob",
+     "summary": "The correction's wording pattern is a GUESS knob fitted on the one observed case, and the negatives are the night's own non-correction messages.",
+     "class": "within",
+     "why": "It is an implementation parameter, labeled GUESS as the project requires. A correction worded another way falls through to the builder's own closing step."
+    },
+    {
+     "id": "T106-store",
+     "summary": "The correction is stored as one file per agent under <events dir>-dispatches/<sid>.tasks/<aid>, not as a row in the dispatches side file, because the side file's TAIL would drop a long builder's correction.",
+     "class": "within",
+     "why": "Where the correction is stored is an implementation choice. It narrows nothing that was asked."
+    },
+    {
+     "id": "T106-chain",
+     "summary": "The corrected task is placed in the filing chain after a command's own T= and an Agent call's own words and before the brief, and corrects the task only, not the feature, so events-refile's BY BRIEF rule leaves corrected lines alone.",
+     "class": "within",
+     "why": "It keeps T26's and T53's chain for every agent that no correction names. It is an implementation decision."
+    },
+    {
+     "id": "T106-files",
+     "summary": "Fixed at the writer (filed.rs, dispatches.rs) with land-alone.sh and closing-checks.sh untouched, because they are T96's files, and event_log_hooks.rs untouched.",
+     "class": "within",
+     "why": "Both splits read each line's raw task, so fixing the writer corrects what both readers see. The end-to-end replay through both real splits measured all three files judged as T101's."
+    },
+    {
+     "id": "T106-hand-refile",
+     "summary": "The 229 lines already misfiled under T100 are rewritten to T101 in place, one byte at an offset, and the coordinator's dispatch line keeps T100.",
+     "class": "within",
+     "why": "It fixes the defect's existing consequence in the per-task breakdown (where-time F=451), which the request's per-task time breakdown needs. The read-back is recorded with its method."
+    },
+    {
+     "id": "T106-handoff-name",
+     "summary": "context_cap_hooks' handoff file takes the corrected task number, because it reads filed_at's task from the same chain.",
+     "class": "within",
+     "why": "It fixes, in this task, a known defect of the same cause (fix as we go)."
+    },
+    {
+     "id": "T106-perf-class",
+     "summary": "Tagged [perf] under FR-013, as work on the event log's data that where-time and the closing checks read.",
+     "class": "within",
+     "why": "FR-013 counts work on the event log's data and where-time's readers as performance work for ordering (the GM 2026-11-20). Correct per-task attribution of event-log lines is that data."
+    },
+    {
+     "id": "T106-order",
+     "summary": "After T26, T53, T74 and T96, and lands before T22.",
+     "class": "within",
+     "why": "It orders the task. It narrows nothing."
     }
    ],
    "verdict": "CLEAR"

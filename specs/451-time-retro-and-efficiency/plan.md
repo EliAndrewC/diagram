@@ -1180,34 +1180,121 @@ engine speed, so no checklist.
 
 <!-- plan-archive: T108 to T103 moved to plan-done.md, 2026-11-21 (feature 375 FR-044) -->
 <!-- plan-archive: T108 to T108 moved to plan-done.md, 2026-11-21 (feature 375 FR-044) -->
-### T106 (<why: the finding or measurement that files it>)
+### T106 (a builder the coordinator re-numbered mid-task kept its brief's task on every event-log line: T101's builder, briefed `451 T100` and told "Your task is T101, not T100" by a SendMessage 20 s into its run, filed all 229 of its own lines (227 tool lines, its start and its stop) under T100, its Write and Edit lines of `speckit.rs`, `ready.rs` and `land-alone.sh` among them, so land-alone's list at T82-T101's landing named none of them and its closing checks would have set them apart as T100's, a wrong green - measured 2026-11-21 (a streamed Python read of the 451 log's lines by `by`, against the session transcript's SendMessage calls))
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: the correction is kept per agent and read on each of its later lines; its earlier lines stay as filed:
+  - THE MEASUREMENT, the night's 136 builders (session `c6fd72d1`, each subagent whose meta file's `description` names `451 T<n>`),
+    measured 2026-11-21 (three streamed Python reads of the session transcript, the subagents' transcripts and meta files, and the 451
+    log, under 15 MB each; `/tmp/t106/census.py`, `measure3.py`, `sends.py`):
+    - re-numbered: 1 of 136 - `a30ac631e43ef6d1c`, T100 to T101; its own calls, heredocs stripped, name a task its brief does not in
+      that one builder alone, and no builder's `decide`, `task-start`, `tick` or `land` line in the log carries one;
+    - the 230 lines naming it (its 229 and the coordinator's dispatch): all T100; 8 before the SendMessage (18:48:55Z) - the
+      dispatch, its start and 3 Bash calls, none a write; its Edit of `speckit.rs` at 19:04:02Z, Write of
+      `ready.rs` at 19:05:37Z and of `land-alone.sh` at 19:09:50Z all after it, measured 2026-11-21 (the 451 log's lines by `by`);
+    - the signals, earliest first: the coordinator's SendMessage (summary "Your task is T101, not T100"), before every write; its
+      `make guard-edit WHY="451 T101 - ..."` at 19:03:56Z (guard sources only, not a candidate); its handoff `T101-builder.md` at
+      19:01:01Z, a Bash heredoc with no agent id in its name; its one own call naming T101, `(make closing-checks T=T101 F=451 ...)`
+      at 19:16:58Z, after every write of the three files; no `decide` or `task-start` of its own; its context-cap handoff
+      `T100-a30ac631e43ef6d1c.md` at 19:18:56Z, named by `context_cap_hooks` from `filed_at`'s task, so an output of this same chain,
+      not a signal;
+    - the own calls across builders: `decide` 98 of 136, `closing-checks` 22, `task-start` 0; 1,113 of the 1,695 Write and Edit lines
+      of the 101 builders with both came before the builder's first such call, and 3 builders' first call preceded every write;
+    - the messages: 117 SendMessage calls, 108 to an agent whose brief names a task, 40 of those naming another task, 1 a correction;
+      `T<n>, not T<m>` matched 2 - the correction's summary, and "filed as T43, not T42" to T40's builder, `T42` not its task;
+    - the rule replayed over the night's 31,888 builder lines, its own steps read from the builders' transcripts: 221 of
+      `a30ac631e43ef6d1c`'s lines move to T101 (40 of them writes); and, before the brief rule below, 64 lines of
+      `ac1aa778c0f1068d8`, briefed `451 T28+T29`, would have moved to T29 after its `make decide T=T29`, 6 of them writes
+      (`tests.rs`, `plan.md`) that T28's closing checks would then set apart, the same wrong green the other way,
+      measured 2026-11-21 (`/tmp/t106/replay.py`).
+  - THE CHOICE, from it: the SendMessage FIRST and the builder's own closing step second - the reverse of the task line's order - since
+    an own call alone at write time leaves every one of the three files T100's (all three before 19:16:58Z), and re-filing the
+    earlier lines is out of reach: both splits are inline Python reading each line's raw `task` (`scripts/land-alone.sh`, T96's,
+    and `scripts/gates/closing-checks.sh`), `make events-refile` is the measure crate's, and a hook rewriting the log under live
+    appends - 11.5 MB, measured 2026-11-21 (`ls -l`) - would lose lines (a task id's length can change, `T99` to `T100`, so no
+    general rewrite is in place). Earlier lines stay as the writer filed them: T101's 8 lines before the send wrote nothing,
+    measured 2026-11-21 (the 451 log's lines by `by`), so neither split had anything of them to read (its lines already
+    written were re-filed once, by hand: Found and left).
+  - THE CORRECTION (`event_log_hooks/filed.rs`, `renumbered`): the main session's delivered SendMessage (its `PostToolUse`) to an
+    agent id whose summary or message reads `T<new>, not T<old>`, `T<old>` the task the agent is filed under now (its correction,
+    else its meta file's brief's `T<n>`) - the GUESS-knob pattern `CORRECTION`, fitted on the one case; or the builder's own `make
+    closing-checks`, `make decide` or `make task-start` `T=` naming a task neither its brief names nor it is filed under now
+    (`own_step`, heredocs stripped) - so a two-task brief's second task is the builder's own and moves nothing.
+  - THE STORE (`event_log_hooks/dispatches.rs`): `record`, which `append` already calls on every payload, writes the new task to
+    `<events dir>-dispatches/<sid>.tasks/<aid>`, one file an agent, overwritten by the next; `corrected` reads it (a missing-file
+    open in the common case). Not a row of the dispatches side file: the tail a start reads of it (`TAIL`, T53's knob) would
+    drop a long builder's correction.
+  - THE CHAIN (`filed`): a command's own `T=` (a tick's, a task-start's, a decide's, a land's, and now a closing-checks' on its own
+    line); else an Agent call's own words (its description's `T<n>`, its prompt's first line's); else the agent's correction; else the
+    brief's `T<n>`; else the prompt's first line's; else the task-start in force. The task only: the feature stays the brief's, so
+    `make events-refile`'s BY BRIEF rule, which moves a line only across features, leaves a corrected line where it is.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| a re-numbered builder's later lines under the corrected task | n/a - no map | n/a | none | n/a |
 
 ### T106 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
-8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+1. **The goal, in the world.** No map changes. Once the coordinator re-numbers a builder, or the builder's own closing step names
+   another task, every later line of that builder carries the new task, so land-alone's list and the closing checks' split read its
+   files as the new task's and `make where-time` books its time there.
+2. **The constraints.** T106's line; FR-012 (red first); T26's and T53's chain kept for every agent no correction names; the files
+   T106's brief allows - `filed.rs`, `dispatches.rs` and their tests (`tests/renumbered.rs`, `mod renumbered;` in `tests.rs`),
+   `docs/guards.md`'s event-log row (the correction's form, which the coordinator writes), this section; none of T96's (`fields.rs`, `tests/writes.rs`, `shared::tree::program`, `tree.rs`, `interp.rs`, `land-alone.sh`, the land
+   crate's alone tests), T113's or T111's; `event_log_hooks.rs` untouched (`record`, already called on every payload, carries the
+   write); nothing committed or pushed.
+3. **Where each comes from.** O: the census, the timeline and the message counts (Approach, each measured 2026-11-21 by the reads
+   named there); R: T106's line and its brief; the `CORRECTION` pattern a GUESS knob (one case fitted).
+4. **Do they describe the world here?** The pin replays T101's real sequence through `append`: its brief `451 T100: land any ready
+   task, its own section alone`, an orientation Read (T100), the coordinator's SendMessage with its real summary and message, then
+   the `PostToolUse` Edit and Write ends of the three files, each asserted on what both splits key on (`ev` PostToolUse, `cat` edit,
+   `path`, `task` T101, no `fallback`, 451's log); the negatives are the night's own messages ("filed as T43, not T42" to T40's
+   builder, "Fold both deferrals into T06" to T06's), measured 2026-11-21 (the session transcript's SendMessage inputs). End to
+   end, the same sequence piped through the guard binary (`--only event-log-hooks`) into a scratch repository whose three files are
+   uncommitted, then both real splits run on its log - the closing checks' Python block and land-alone's `split`, each cut from its
+   script: the old binary set all 3 files apart as `T100@451-a` (an `other T100` row in land-alone's), the new judged all 3 as T101's
+   (`own` each in land-alone's), the orientation Read still T100,
+   measured 2026-11-21 (a replay through both binaries, `/tmp/t106/e2e/run.sh`).
+5. **The order.** After T26, T53, T74 and T96 (the chain, the side file, the clone, the event log's `writes` and land-alone's
+   list, none of whose files it touches); lands before T22.
+6. **The exits.** Green: the red-first pair and this task's closing checks (`make closing-checks T=T106 F=451`). Red: what failed
+   recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None: one more link read where the chain already reads a line's brief.
+8. **The budget.** One landing. The hook's added work: on a subagent's line one open of its task file, missing in the common case;
+   on a main-session `SendMessage` end and a builder's own closing-step call, one meta-file read and at most one small write. Its
+   cost was not resolved above the noise: in the quietest of three interleaved rounds the old binary and the new took 3.82 and
+   3.93 ms for a builder's Read, 14.43 and 13.97 ms for its `make closing-checks`, 2.27 and 2.37 ms for a `SendMessage` end,
+   while the same call spread 3.8-16.0 ms across rounds under the other builders' load - medians of 41 each, measured 2026-11-21
+   (`/tmp/t106/time/time.py`, the guard binary `--only event-log-hooks`, `L7R_EVENTS_DIR` a scratch directory,
+   `/tmp/t106/time/timing-2.txt`).
+9. **Done, measured.** The red-first pair: 377 passed and 4 failed on the unchanged writer (`/tmp/t106/red-2.log`; the fifth new
+   test, the negatives, passes on both), then 381 passed (`/tmp/t106/green-1.log`), measured 2026-11-21. The closing checks: run 1
+   RED on static alone, clippy's `doc_markdown` and `similar_names` in this task's three files (hooks-test and quick GREEN,
+   `/tmp/t106/closing-1.log`); run 2 RED on static's rustfmt alone, lint clean on 34 crates (hooks-test GREEN in 55 s, quick GREEN
+   in 6 s, `/tmp/t106/closing-2.log`), measured 2026-11-21. With a third `make static` refused (T14), the crate-scoped checks once
+   after rustfmt and the brief rule: format, lint, 383 tests and coverage clean on `rust/guard/shared`, and `rust/guard`'s tests
+   green on the same build, measured 2026-11-21 (`/tmp/t106/scoped-2.log`, `/tmp/t106/guard-crate-2.log`; an earlier scoped run,
+   `scoped-1.log`, failed only on another builder's `mod triples;` whose file it had not yet written). End to end, both splits
+   on the replay (item 4).
+10. **Before moving a constant.** n/a - no constant moves; `CORRECTION` is new, a GUESS knob labeled at its definition, its open
+    side a correction worded otherwise, which the builder's own closing step then files from that call on.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** A reader of the landing sees a re-numbered builder's files in its own task's commit list and its own closing
+    checks, not set apart as the old number's (T101's three files, a wrong green before); no map changes.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?**
+- The 229 lines `a30ac631e43ef6d1c` had already filed under T100 (its 227 tool lines, its start and its stop, 18:48:35Z-19:19:12Z)
+  booked T101's half hour to T100 in `make where-time F=451` - fixed here: each line's `"task":"T100"` rewritten to `"T101"` in place,
+  one byte at its offset, so no line moved and the hooks' live appends were untouched (`/tmp/t106/patch.py`, its offsets kept in
+  `/tmp/t106/patch-offsets.json`), observed 2026-11-21, method: every line of the 451 log whose `by` is that agent, or a start or stop
+  whose `aid` is, read back after the write (0 mismatches); the coordinator's own dispatch line of it keeps its brief's T100.
+- `context_cap_hooks` named the corrected builder's handoff `T100-a30ac631e43ef6d1c.md` (19:18:56Z) from `filed_at`'s task, which is
+  this chain's, so a corrected builder's handoff now takes its new number - fixed here, observed 2026-11-21 (the 451 log's Write lines
+  of `a30ac631e43ef6d1c` and `context_cap_hooks.rs`'s handoff path read).
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** yes - a `[perf]` task (451 FR-013): the builders' loop, a re-numbered builder's closing checks and landing judging
+its own files; not engine speed, so no performance-checklist answers.
 
 
-<!-- plan-archive: T57 to T111 moved to plan-done.md, 2026-11-21 (feature 375 FR-044) -->
 ### T112 (<why: the finding or measurement that files it>)
 
 - **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
