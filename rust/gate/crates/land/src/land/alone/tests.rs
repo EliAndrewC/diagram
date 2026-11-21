@@ -350,3 +350,95 @@ fn two_tasks_sections_in_one_plan_land_only_the_landing_task_s() {
         "M specs/451-x/plan-review.json\n M specs/451-x/plan.md\n M specs/451-x/tasks.md\n?? src/other.rs"
     );
 }
+
+/// A Bash call's end line of the event log: `task`'s builder's command wrote `rels` of the clone (`writes`, 451 T93), at `t`.
+fn bashed(dir: &Path, c: &Path, task: &str, ev: &str, t: &str, rels: &[&str]) {
+    let writes: Vec<String> = rels
+        .iter()
+        .map(|r| format!("{}/{r}", c.display()))
+        .collect();
+    let line = serde_json::json!({"t": t, "ev": ev, "tool": "Bash", "id": "u", "cat": "other tool", "writes": writes, "task": task});
+    let log = dir.join("events/451-x.jsonl");
+    let old = std::fs::read_to_string(&log).unwrap_or_default();
+    std::fs::write(log, format!("{old}{line}\n")).unwrap();
+}
+
+/// 451 T96: the 'commit these' list reads the attribution the closing checks read - a Bash call's end naming a file in its `writes`, its
+/// `PostToolUse` or its `PostToolUseFailure`, an exact path - so T1's shell-written and Python-written files are named with its edits,
+/// never T2's, nor a directory's files, nor a file a line older than T1's own last landing names (T82-T101's landing, 2026-11-21: the
+/// list named 18 files, its Python-written `bundle.rs` among those it left out).
+#[test]
+fn the_script_names_its_tasks_shell_written_files() {
+    let (dir, c) = world("alone-bashed");
+    let then = l7r_shared::guards::event_log_hooks::now_stamp(
+        SystemTime::now() - std::time::Duration::from_secs(3600),
+    );
+    sh(
+        &c,
+        "git commit -q --allow-empty -m '451-x: T1 ticked (make land)'",
+    );
+    for rel in [
+        "src/t1py.rs",
+        "src/t1sed.rs",
+        "src/t2py.rs",
+        "src/loose.rs",
+        "src/old.rs",
+        "src/t1e.rs",
+    ] {
+        put(&c, rel, "uncommitted\n");
+    }
+    edited(&dir, &c, "T1", "src/t1e.rs");
+    bashed(
+        &dir,
+        &c,
+        "T1",
+        "PostToolUse",
+        "2099-01-01T00:00:00Z",
+        &["src/t1py.rs"],
+    );
+    bashed(
+        &dir,
+        &c,
+        "T1",
+        "PostToolUseFailure",
+        "2099-01-01T00:00:00Z",
+        &["src/t1sed.rs"],
+    );
+    bashed(
+        &dir,
+        &c,
+        "T1",
+        "PreToolUse",
+        "2099-01-01T00:00:00Z",
+        &["src/loose.rs"],
+    );
+    bashed(
+        &dir,
+        &c,
+        "T1",
+        "PostToolUse",
+        "2099-01-01T00:00:00Z",
+        &["src"],
+    );
+    bashed(
+        &dir,
+        &c,
+        "T2",
+        "PostToolUse",
+        "2099-01-01T00:00:00Z",
+        &["src/t2py.rs"],
+    );
+    bashed(&dir, &c, "T1", "PostToolUse", &then, &["src/old.rs"]);
+    let (rc, said) = alone(&dir, &c, &[]);
+    assert_eq!(rc, REFUSED_FIRST, "{said}");
+    has(&said, "-- src/t1e.rs src/t1py.rs src/t1sed.rs \n");
+    // T1's own committed: T2's file is listed by its task, the files no line names apart (a start's, a directory's, a landed line's)
+    sh(
+        &c,
+        "git add src/t1e.rs src/t1py.rs src/t1sed.rs && git commit -qm 'T1 more'",
+    );
+    let (rc, said) = alone(&dir, &c, &[("STUB_RC", "1")]);
+    assert_eq!(rc, 1, "{said}");
+    has(&said, "another task's, not landed (a line filed under a wrong task number shows here): T2: src/t2py.rs; \n");
+    has(&said, "named by none): src/loose.rs src/old.rs \n");
+}

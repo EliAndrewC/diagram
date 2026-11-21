@@ -157,6 +157,15 @@ pub(super) fn run_fields(out: &mut Map<String, Value>, ev: &str, payload: &Value
 /// backgrounded call's end comes at its launch, before its command has run: its writes are named all the same (the walk reads the
 /// command, not the disk), and a directory it has yet to make is named as a path, which names no file a reader can match.
 ///
+/// A PYTHON PROGRAM (451 T96): the walk places a heredoc's or a `-c` program's write where the shell stands, a directory, so its files
+/// were named nowhere - T84's `p='...plan/status.rs'; s=open(p).read() ... open(p,'w').write(s)` programs among them. After that
+/// target come the files its literals name (`shared::tree::program`, make-only's reader of a guard file a program writes), resolved
+/// where it runs, each an existing regular file at the call's end, with the reader's two fail-open choices, gate-write's: a literal
+/// only read (`open(L)`, `Path(L).read_text()`) names nothing, and neither does one joined onto a base the program computes. WHY THE
+/// OPEN SIDE: a name too many sets the caller's own file apart in the closing checks (a wrong green) and lists a file a program only
+/// read for a landing to commit; a name too few costs a saving. WHY A FILE ON DISK: a literal naming none (`'w'`, `'utf-8'`, a word
+/// of the text it edits) is no write a reader can match; a backgrounded program's file not yet written is missed, a saving lost.
+///
 /// WHY: T86's closing checks set aside the dirty files another task's lines name, and a Bash line named none - the Edit and Write
 /// lines named 127 of the 796 files 2026-11-21's landings changed, measured 2026-11-21 (T86's `/tmp/t86/recall.py`). Its reader is
 /// `scripts/gates/closing-checks.sh`, an exact path match, never a prefix: a `make` at the clone's root would claim the whole clone.
@@ -184,14 +193,22 @@ fn bash_writes(out: &mut Map<String, Value>, payload: &Value) {
         &home,
     );
     let mut paths: Vec<String> = Vec::new();
-    for path in walk
-        .targets
-        .into_iter()
-        .filter(|t| t.how != "read")
-        .filter_map(|t| t.path)
-    {
-        if path.starts_with('/') && !paths.contains(&path) && !Path::new(&path).is_dir() {
-            paths.push(path);
+    for t in walk.targets.into_iter().filter(|t| t.how != "read") {
+        // a Python program's own files after where it stands (451 T96): its literals, resolved where it runs, each a file on disk
+        let named = t
+            .program
+            .as_deref()
+            .zip(t.path.as_deref().filter(|d| d.starts_with('/')))
+            .map(|(body, dir)| {
+                crate::tree::program::all_program_names(body, Some(dir), true, true, &|p| {
+                    Path::new(p).is_file()
+                })
+            })
+            .unwrap_or_default();
+        for path in t.path.into_iter().chain(named) {
+            if path.starts_with('/') && !paths.contains(&path) && !Path::new(&path).is_dir() {
+                paths.push(path);
+            }
         }
     }
     if !paths.is_empty() {

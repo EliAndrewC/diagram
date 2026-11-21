@@ -15,6 +15,7 @@ use super::shape::strip_heredocs;
 
 mod bind;
 mod git;
+pub mod program;
 mod py_c;
 mod python;
 mod verdict;

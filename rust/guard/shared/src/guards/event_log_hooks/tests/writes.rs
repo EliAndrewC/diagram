@@ -81,6 +81,47 @@ fn a_target_the_walk_cannot_place_names_nothing() {
     );
 }
 
+/// 451 T96: a Python program run from a heredoc or `-c` names the files its literals write, resolved where it runs - T84's
+/// `p='...status.rs'; s=open(p).read() ... open(p,'w').write(s)`, a `cd` before a `-c` `write_text`, a `Path('a') / 'b'` join - each
+/// an existing file at the call's end; not a literal it only reads (`open('read.rs').read()`), one naming no file (`'w'`, `'utf-8'`)
+/// or a directory, one joined onto a base the program computes (`Path(sys.argv[1]) / 'plan.rs'`), nor any literal of a program
+/// `py_c` judges a read. The walk's own writes keep their place: a redirect's file before the program's.
+#[test]
+fn a_python_programs_literal_writes_are_named() {
+    let d = clone("writes-python");
+    let c = std::fs::canonicalize(&*d).unwrap();
+    let c = c.to_string_lossy();
+    std::fs::create_dir_all(d.join("sub")).unwrap();
+    for f in ["plan.rs", "read.rs", "sub/status.rs"] {
+        std::fs::write(d.join(f), "x").unwrap();
+    }
+    let heredoc = "python3 -I - <<'EOF'\np='plan.rs'; s=open(p, encoding='utf-8').read()\nopen(p,'w').write(s.replace('a','b'))\nEOF";
+    assert_eq!(
+        writes("PostToolUse", &c, heredoc),
+        json!([format!("{c}/plan.rs")])
+    );
+    let dash_c =
+        r#"cd sub && python3 -c "from pathlib import Path; Path('status.rs').write_text('x')""#;
+    assert_eq!(
+        writes("PostToolUse", &c, dash_c),
+        json!([format!("{c}/sub/status.rs")])
+    );
+    let joined = "python3 - <<'EOF'\nfrom pathlib import Path\n(Path('sub') / 'status.rs').write_text('y')\nEOF";
+    assert_eq!(
+        writes("PostToolUse", &c, joined),
+        json!([format!("{c}/sub/status.rs")])
+    );
+    let read_one = "echo x > out.txt; python3 - <<'EOF'\ns = open('read.rs').read()\nopen('plan.rs', 'w').write(s)\nopen('sub', 'a')\nEOF";
+    assert_eq!(
+        writes("PostToolUse", &c, read_one),
+        json!([format!("{c}/out.txt"), format!("{c}/plan.rs")])
+    );
+    let computed = "python3 - x <<'EOF'\nimport sys\nfrom pathlib import Path\n(Path(sys.argv[1]) / 'plan.rs').write_text('z')\nEOF";
+    assert_eq!(writes("PostToolUse", &c, computed), Value::Null);
+    let reads = r#"python3 -c "print(open('plan.rs').read())""#;
+    assert_eq!(writes("PostToolUse", &c, reads), Value::Null);
+}
+
 /// The line `append` writes to the log carries the field.
 #[test]
 fn the_logged_line_carries_the_writes() {

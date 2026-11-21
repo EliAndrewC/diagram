@@ -15,8 +15,9 @@
 # the feature's plan.md, tasks.md and plan-review.json hold every open task's section, line and verdict, so the clone's HEAD takes a
 # commit of each built from HEAD's file with only the landing tasks' own pieces replaced (and those of a task their section files) - the
 # clone's other uncommitted text stays in its files, and the landing's commit holds none of it (T95, CLEAR, could not land alone on
-# 2026-11-21: plan.md also held T82's and T97's unreviewed sections); (3) the landing tasks' own other files still uncommitted - an edit
-# line filed under the task names them - refused, named; files no task's edit names stay in the clone, listed, not landed; (4) the
+# 2026-11-21: plan.md also held T82's and T97's unreviewed sections); (3) the landing tasks' own other files still uncommitted - a line
+# filed under the task names them, an edit's path or a Bash call's `writes` (451 T96: the closing checks' attribution) - refused, named;
+# files no task's line names, and another task's by its task, stay in the clone, listed, not landed; (4) the
 # worktree created, or reset to the clone's HEAD (it is the tool's: nobody's work lives there); (5) the clone's kept check results and
 # suite results seeded where newer (`cp -u`); (6) the landing in the worktree (`L7R_LAND_ALONE=1`: its tree is the landing, its `end` line
 # its own); (7) the clone takes the landed tip: HEAD moved, each changed file the clone holds no work in written from the tip, each one it
@@ -226,38 +227,62 @@ def stage(root, feature, tasks):
     print('staged\t' + ' '.join(staged))
 
 def split(root, events, feature, tasks):
-    # step 3: the landing tasks' own files - those an edit line filed under one of them names, newer than the file's last commit
+    # step 3: the landing tasks' own files - those a line filed under one of them names, by the closing checks' attribution
+    # (`scripts/gates/closing-checks.sh`, 451 T86, T93; read here since 451 T96): an edit tool's end its path, a Bash call's end
+    # (`PostToolUse` or `PostToolUseFailure`) a file of its `writes` - the exact path, never a directory's files; not a fallback line; not
+    # one older than the file's last commit or than its own task's last landing (`<feature>: T.. ticked (make land)`)
     dirty = dirty_of(root)
-    since, last, at = time.time() - 7 * 86400, {}, 0
-    for l in git(root, 'log', '--since=7.days', '--format=@%ct', '--name-only').stdout.decode().splitlines():
+    since, last, landed, at = time.time() - 7 * 86400, {}, {}, 0
+    for l in git(root, 'log', '--since=7.days', '--format=@%ct %s', '--name-only').stdout.decode().splitlines():
         if l.startswith('@'):
-            at = int(l[1:])
+            at, _, subject = l[1:].partition(' ')
+            at = int(at)
+            m = re.match(r'(\S+): ((?:T\d+ )+)ticked \(make land\)', subject)
+            for t in (m.group(2).split() if m else []):
+                landed.setdefault((m.group(1), t), at)
         elif l:
             last.setdefault(l, at)
-    pre, own, named = root.rstrip('/') + '/', set(), set()
+    pre, own, named, others = root.rstrip('/') + '/', set(), set(), {}
     sectioned = {f'specs/{feature}/{f}' for f in SECTIONED}
     for p in sorted(glob.glob(os.path.join(events, '*.jsonl'))):
         stem = os.path.basename(p)[:-6]
         for l in open(p, errors='replace'):
-            if '"PostToolUse"' not in l or '"cat":"edit"' not in l:
+            edit = '"PostToolUse"' in l and '"cat":"edit"' in l
+            if not edit and '"writes":' not in l:
                 continue
             try:
                 d = json.loads(l)
             except ValueError:
                 continue
-            rel = d.get('path', '')[len(pre):] if d.get('path', '').startswith(pre) else ''
-            if d.get('fallback') or not d.get('task') or rel not in dirty:
+            if d.get('fallback') or not d.get('task') or not str(d.get('ev', '')).startswith('PostToolUse'):
                 continue
-            if datetime.datetime.fromisoformat(d['t'].replace('Z', '+00:00')).timestamp() < last.get(rel, since):
+            writes = d.get('writes') if isinstance(d.get('writes'), list) else []
+            rels = {w[len(pre):] for w in ([d.get('path', '')] if edit else []) + writes if isinstance(w, str) and w.startswith(pre)} & dirty
+            at = datetime.datetime.fromisoformat(d['t'].replace('Z', '+00:00')).timestamp() if rels else 0
+            if at < landed.get((stem, d['task']), 0):
                 continue
-            named.add(rel)
-            # the sectioned files are staged by section (step 2): what is left uncommitted in them is other tasks'
-            if d['task'] in tasks and (stem == feature or stem.startswith(feature + '-')) and rel not in sectioned:
-                own.add(rel)
+            mine = d['task'] in tasks and (stem == feature or stem.startswith(feature + '-'))
+            for rel in rels:
+                if at < last.get(rel, since):
+                    continue
+                named.add(rel)
+                # the sectioned files are staged by section (step 2): what is left uncommitted in them is other tasks'
+                if mine and rel not in sectioned:
+                    own.add(rel)
+                elif not mine and rel not in sectioned:
+                    others.setdefault(rel, set()).add(d['task'])
     for r in sorted(own):
         print('own\t' + r)
     for r in sorted(dirty - named):
         print('unnamed\t' + r)
+    # another task's, listed by task, so a line filed under a wrong number is seen (451 T96: T101's builder, briefed as T100, wrote
+    # ready.rs, speckit.rs and land-alone.sh under T100, and T82-T101's list named none of them)
+    by = {}
+    for r in sorted(set(others) - own):
+        for t in sorted(others[r]):
+            by.setdefault(t, []).append(r)
+    for t, rs in sorted(by.items()):
+        print('other\t' + t + ': ' + ' '.join(rs))
 
 def take(root, tip, feature):
     # step 7: the tip, or - the clone committed since the landing began - a merge of the two, made without touching the tree
@@ -328,12 +353,15 @@ flock -n 9 || die "another landing alone holds $COMMON/land-alone.lock - land th
 staged=$(py stage "$ROOT" "$F" "$T") || die "the task's own sections could not be committed apart (above)"
 [ -z "$staged" ] || say "committed $T's own sections apart from the other open tasks' ($(printf '%s\n' "$staged" | sed -n 's/^staged\t//p')) ($(lap) s)"
 
-# (3) the landing tasks' own other files: those an edit line filed under one of them names, newer than the file's last commit
+# (3) the landing tasks' own other files: those a line filed under one of them names (an edit's path, a Bash call's `writes`), newer than
+# the file's last commit and than its task's last landing
 split=$(py split "$ROOT" "${L7R_EVENTS_DIR:-$COMMON/l7r-events}" "$F" "$T") || die "the event log could not be read (above)"
 own=$(printf '%s\n' "$split" | sed -n 's/^own\t//p')
 [ -z "$own" ] || die "$T's own edits are uncommitted - commit them, then land again: git -C $ROOT commit -m \"<what>\" -- $(printf '%s ' $own)"
 unnamed=$(printf '%s\n' "$split" | sed -n 's/^unnamed\t//p')
-[ -z "$unnamed" ] || say "left uncommitted in the clone, not landed (no task's edit names them; a shell write is named by none): $(printf '%s ' $unnamed | cut -c1-600)"
+[ -z "$unnamed" ] || say "left uncommitted in the clone, not landed (no task's line names them: a write the walk cannot see - a make target's, a generator's - is named by none): $(printf '%s ' $unnamed | cut -c1-600)"
+other=$(printf '%s\n' "$split" | sed -n 's/^other\t//p')
+[ -z "$other" ] || say "left uncommitted in the clone, another task's, not landed (a line filed under a wrong task number shows here): $(printf '%s; ' "${other//$'\n'/; }" | cut -c1-600)"
 
 # (4) the worktree at the clone's HEAD
 head=$(git -C "$ROOT" rev-parse HEAD) || exit 2
