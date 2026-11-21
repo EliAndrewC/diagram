@@ -1232,6 +1232,116 @@ docs/performance-checklist.md answers.
 
 <!-- plan-archive: T101 to T97 moved to plan-done.md, 2026-11-21 (feature 375 FR-044) -->
 <!-- plan-archive: T101 to T101 moved to plan-done.md, 2026-11-21 (feature 375 FR-044) -->
+### T102 (the Stop hook's free-slot refusal named T22, which waits on a measured day, in each of its 4 refusals of 2026-11-21 18:48-19:39Z, each with 2 builders running, measured 2026-11-21 (the session transcript's refusal texts, deduplicated by time); T98, measured only after a night of rolling dispatch, the next it would name)
+
+- **Approach**: a task line carries its wait, and the one reading of "can this task start now" skips a task whose wait is not met:
+  - THE CLAUSE (`rust/guard/shared/src/guards/set_down_hooks.rs`, `WAITS`, `waits`): `(waits: <when>)` right after the id's
+    bracketed tags, where FR-013's `[perf]` is read (`PERF_TAG`), so a line that only quotes the clause in its prose - T102's own,
+    "a 'waits:' clause" - waits on nothing. `<when>` is:
+    - a landing: `T88 lands` or `T02-T21 land` (a range is every task numbered in it), met when none of them is open;
+    - a day after one: `a full day after T02-T21 land`, met 24 hours past the latest landing of the tasks it names, read from the
+      feature's event log - each land `end` line with `landed` true, at its `t1`, for each of its `tasks` (a batch lands several),
+      else its `task`; a task ticked before the log carried those lines (451 T02-T05) landed long ago. The 24 hours is a CONVENTION,
+      chosen by T102's builder as the plain reading and the algorithmically easier route (the record is silent): T22's "first full day
+      of work after T02-T21 land" is the 24 hours after the last of them. Priced and not taken: the end of the next whole UTC day,
+      which waits up to 24 hours longer for nothing T22's or T98's measurement needs.
+    - anything else in the parentheses: no wait. It fails toward a start the session sees named, never a task hidden from the hook
+      for good (a CONVENTION, as T88's line naming nothing fails toward a start).
+    - a bare date: deliberately not a form, on T102's plan review (D7e, 2026-11-21: NOT LEGITIMATE): the clock against a typed
+      date, with no landing behind it, would take a performance task out of FR-013's refusal with no reason recorded, and no line
+      needs one (T22's and T98's days are each a full day after a landing). The brief's date form was built first and dropped on
+      that ruling.
+  - ONE READING, THREE READERS: `waits` is the clause, `after T<n>` an open task (T88's rule, moved in from `next_independent`), and
+    an open task's line saying it `lands before` it (found here: 4 open lines say "lands before T22" - T52, T96, T98, T99 - measured
+    2026-11-21, a grep of tasks.md; without it T22 would be named at its day while they are open, the same defect a day later). It
+    is applied in `next_independent` (the free slot), in `next_performance` (`make task-start`'s FR-013 picker and the Stop hook's
+    "performance work first") and in the nothing-running refusal's fallback (it named the feature's first box, T22 again). So
+    FR-013's escape "a performance task waiting on another task's landing" is read rather than escaped: one rule, not two, and
+    `task_start.rs` is unchanged (it calls `next_performance`). The free slot's `PERF_LATER_OK` reason now reads "is started or
+    touches a running task's files": a waiting task is no longer named there.
+  - THE TWO LINES SET:
+    - T22 `(waits: a full day after T02-T21 land)`: the last of T02-T21 to land was T11, at 2026-11-21T08:00:27.560Z, measured
+      2026-11-21 (the 451 event log's land `end` lines, `landed` true; T02-T05 have none, their ticks the commits of 2026-11-20
+      01:47-02:57 EST by `git log`, before T06's end line), so T22 waits until 2026-11-22T08:00:27.560Z, and while T52, T96, T98 and
+      T99 are open.
+    - T98 `(waits: a full day after T88 lands)`: T88 landed at 2026-11-21T18:40:27.980Z, measured 2026-11-21 (the same lines), so T98
+      waits until 2026-11-22T18:40:27.980Z - a full day, which holds a night of rolling dispatch (T88's before window was a night
+      of 07:50-17:30Z), a CONVENTION chosen by T102's builder.
+  - THE CLOCK: `L7R_WAITS_NOW` (an ISO time), the tests' seam, as `L7R_PERMIT_NOW` is the permit's; else the system clock.
+- **Red first**, measured 2026-11-21: the three new tests on the unchanged hook - 357 passed, 3 failed (`make rust-test
+  CRATE=rust/guard/shared`, `/tmp/t102/red.log`): the free slot named T04, a task waiting on a full day; the picker named T04 before
+  its day; the nothing-running refusal named T02, waiting on 2999-01-01. With the change: 360 passed (`/tmp/t102/green-1.log`).
+  After the plan review dropped the date form, those cases wait on landings instead (each first assertion still names a task the
+  unchanged hook named first; not rerun red), and a bare date is pinned as no wait (`/tmp/t102/green-3.log`).
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+| the free slot, the nothing-running refusal and task-start's picker skip a task whose `(waits: ...)`, `after T<n>` or another's `lands before` is unmet | n/a - no map | n/a | none | n/a |
+
+### T102 Approach (checklist part A)
+
+1. **The goal, in the world.** No map changes. A freed builder slot is never filled with a task that cannot start yet - T22 before
+   its measured day, T98 before its night - so the session no longer skips the hook's named task by hand; and `make task-start`
+   refuses other work only for performance work that can start.
+2. **The constraints.** T102's line; FR-013 (performance work first, its escape for a performance task waiting on another's
+   landing); FR-012 (red first); T88's free slot and its order; `task_start.rs` unchanged (outside the files: the shared picker
+   carries the rule); T101's condition in `speckit.rs` kept (the clause is parsed in `set_down_hooks.rs`, not there); the launcher's
+   files only (`set_down_hooks` and its tests, `docs/guards.md`, T22's and T98's lines, this section); nothing committed or pushed.
+3. **Where each comes from.** O: the 4 refusals naming T22 (the session transcript), T11's and T88's landings (the event log's land
+   `end` lines), the 4 "lands before T22" lines (tasks.md), each measured 2026-11-21; R: T102's line as filed and its brief; the
+   24 hours a CONVENTION (Approach).
+4. **Do they describe the world here?** The landings are this clone's own log, measured 2026-11-21 (a Python read of
+   `.git/l7r-events/451-time-retro-and-efficiency.jsonl`, `landed` true lines by `tasks`). The clause read on the real T22 and T98
+   lines, measured 2026-11-21 (this task's guard binary, the nothing-running Stop on a fixture of those lines beside a plain T200
+   and a copy of 451's event log, `L7R_WAITS_NOW` set, `/tmp/t102/real-lines.txt`): T22 alone is skipped at 2026-11-22T08:00:27Z and
+   named at 08:00:27.560Z; beside T98 it stays skipped at its day, since T98's line says it lands ahead of T22; T98 alone is skipped
+   at 2026-11-22T18:40:27Z and named at 18:40:27.980Z.
+5. **The order.** After T88 (the free slot it changes); beside T101 (the land crate, `land-alone.sh`, the root CLAUDE.md) and T99
+   (`test-idle-tests-hooks.sh`), touching none of their files.
+6. **The exits.** Green: the red-first pair and this task's closing checks (`make closing-checks T=T102 F=451`). Red: what failed
+   recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None: one rule, read where the three readers already read a task's line.
+8. **The budget.** One landing. The Stop hook's added read: the feature's event log, only for a full-day wait whose tasks have all
+   landed, once a Stop (`Lands`, read per feature); in 451 today only T98's (T22 is held by the "lands before T22" lines with no
+   read), 10.4 MB, measured 2026-11-21 (`ls -l`). Its CPU, the nothing-running Stop on a fixture copy of 451 (its tasks.md, plan.md
+   and event log): 0.00-0.02 s user+sys for the old binary and the new, 6 runs each, measured 2026-11-21 (`/usr/bin/time`,
+   `/tmp/t102/timing-fx-cpu-2.txt`), once `performance()`'s text check was in (Found and left).
+9. **Done, measured.** The red-first pair: 357 passed and 3 failed on the unchanged hook, then 360 passed (`/tmp/t102/red.log`,
+   `/tmp/t102/green-1.log`), and 361 after `performance()`'s text check (another builder's new test among them; lint and cover clean
+   on `rust/guard/shared`, `/tmp/t102/pre2.rc`), measured 2026-11-21. On the real clone, the Stop guard replayed with nothing
+   running (an empty transcript, the guard log sent to `/tmp/t102/guardlog`): the live binary named "T22 [perf] (waits: a full day
+   after T02-T21 land) ... make task-start F=451 T=T22", this task's named T96, the next performance task that can start, measured
+   2026-11-21 (`/tmp/t102/replay0-before.err`, `replay0-after.err`). The free-slot replay was not discriminating: T22's line names
+   `docs/guards.md`, which this task's edits make busy, so both binaries named T96 (`/tmp/t102/replay9-*.err`, `L7R_BUILDERS=9`).
+   The closing checks, measured 2026-11-21: the first `make closing-checks T=T102 F=451` RED, 1 of 3 (`/tmp/t102/closing-1.log`,
+   `.git/closing-checks/20261121T195632Z-3426745/`) - static on T103's `rust/guard/shared/src/shape/tests/builds.rs` format alone
+   (its BLOCKED tag: nothing of T102's judged there), hooks-test GREEN (57 suites), quick clean.
+10. **Before moving a constant.** n/a - `DAY_MICROS` is a full day by definition; the 24 hours and T22's and T98's days are the
+    CONVENTIONS of the Approach, each labeled.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** A session sees the free slot name a task that can start, or none, where it named T22 in each of its 4
+    refusals of 2026-11-21.
+
+**Found and left?**
+- The nothing-running refusal named the feature's first box, T22, whatever its wait: fixed here (it names the first task that can
+  start, or says none can).
+- An open task's line saying it lands ahead of T22 held nothing, so T22 would be named at its day while T52, T96, T98 and T99, the
+  four such lines, are open: fixed here (`waits` reads it), observed 2026-11-21, method: a grep of 451's tasks.md for "before T" and
+  a number (4 open lines, each naming T22, and 3 lines naming T13, T16 and T21, tasks already landed).
+- `performance()` built a pattern and ran it over the whole plan.md for every box it was asked of, so once the picker walked past a
+  waiting T22 the nothing-running Stop cost 0.09-0.16 s of CPU where it had cost under 0.01 s, and 0.01-0.02 s with the plan emptied,
+  measured 2026-11-21 (`/usr/bin/time` user+sys, 6 runs each of the old and new binary on a fixture copy of 451's tasks.md, plan.md
+  and event log, `/tmp/t102/timing-fx-cpu.txt`): fixed here (the heading looked for as text first, the pattern run only where it is
+  there).
+- SC-006's count of starts made while an open performance task waits would read such a start as an unescaped one, since a wait
+  leaves no escape row: not a defect here - no reader of 451's SC-006 exists, observed 2026-11-21, method: a grep of `rust/` for
+  `SC-006` (one hit, feature 240's settlement review); whoever builds it reads the waits clause beside the escape log, as T102's
+  plan review notes.
+
+**Performance work?** yes - a `[perf]` task (451 FR-013): the builders' loop (rolling dispatch names only work that can start); not
+engine speed, so no checklist.
+
+
 ### T104 (<why: the finding or measurement that files it>)
 
 - **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.

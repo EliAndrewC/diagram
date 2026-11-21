@@ -522,6 +522,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-21",
    "declared": "spec-fidelity"
+  },
+  "### T102 (the Stop hook's free-slot refusal named T22, which waits on a measured day, in each of its 4 refusals of 2026-11-21 18:48-19:39Z, each with 2 builders running, measured 2026-11-21 (the session transcript's refusal texts, deduplicated by time); T98, measured only after a night of rolling dispatch, the next it would name)": {
+   "sha256": "2486fad997eb687a7452f765a9d542b307729e1e24f80e8acfc884093007d7f1",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity"
+  },
+  "### T102 Approach (checklist part A)": {
+   "sha256": "d0f1cfeb89fc337b90a04372b34bf0c58cec2d879b0225d13d1f1639131ca482",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -9819,6 +9831,117 @@
      "why": "This is the conservative direction under FR-013/SC-006: the label can only put T99 behind performance tasks, never ahead of them. It narrows no priority the GM set."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-21",
+   "blocks": [
+    "### T102 (the Stop hook's free-slot refusal named T22, which waits on a measured day, in each of its 4 refusals of 2026-11-21 18:48-19:39Z, each with 2 builders running, measured 2026-11-21 (the session transcript's refusal texts, deduplicated by time); T98, measured only after a night of rolling dispatch, the next it would name)",
+    "### T102 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D1-positional-clause",
+     "summary": "(waits: <when>) is read only right after the id's bracketed tags, where [perf] is read, so prose quoting the clause waits on nothing",
+     "class": "within",
+     "why": "Parsing detail of how a task line states its wait. It narrows nothing asked and stops stray prose from holding a task."
+    },
+    {
+     "id": "D2-reaches-FR013-picker",
+     "summary": "One wait reading applied in next_independent (free slot), next_performance (task-start's FR-013 picker and the Stop hook's performance-first) and the nothing-running fallback; a waiting performance task no longer triggers FR-013's refusal, its case 'read rather than escaped'",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This narrows the accepted FR-013. That spec gives a performance task waiting on another's landing an escape of a recorded reason (FR-012, counted by SC-006), and the plan drops it from the refusal instead. The ruling is against the request ('prioritize performance improvements going forward'; measurement tasks 'counted as a performance task for the purpose of scheduling and coming first'). A performance task that cannot start yet cannot go first, and refusing other work for it idles builders, which defeats the purpose of making everything faster. FR-013's own wording names this exact case as a permitted exception. The reason is still recorded, in git, on the waiting task's committed line, not in the escape log. A startable performance task is refused exactly as before, so the enforcement stays real. Each form is ruled separately in D2a-D2d."
+    },
+    {
+     "id": "D2a-waits-landing",
+     "summary": "Form 'T88 lands' / 'T02-T21 land': met when none of the named tasks is open",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This is FR-013's named escape case word for word: a performance task waiting on another task's landing. It releases itself when the landing happens, and it is stated on the committed task line."
+    },
+    {
+     "id": "D2b-after-Tn",
+     "summary": "T88's 'after T<n>' rule moved from the free slot into the shared reading, so it now also reaches the FR-013 picker and the nothing-running fallback",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Same class as D2a: the task cannot start until T<n> is no longer open. Its reach grew to the picker, but its meaning did not change, and it releases itself when T<n> closes."
+    },
+    {
+     "id": "D2c-lands-before",
+     "summary": "Another open line's 'lands before T<n>' holds T<n> (4 open lines in 451 say 'lands before T22')",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This is still 'waiting on another task's landing': another task has committed to land first, and 'lands before ...' is the ordering phrase this feature's own FR-009 requires. It is read from prose on a different line, unlike the positional clause, so a passing mention could hold a performance task. It fails toward hiding rather than starting, against the block's stated direction. But the hold ends when that line closes, so it never hides a task for good. Not a defect now: in 451 all 4 measured lines name T22 on purpose."
+    },
+    {
+     "id": "D2d-full-day-after",
+     "summary": "Form 'a full day after T.. land(s)': met 24 h past the latest logged landing (land end lines, landed true); T22 a full day after T02-T21 (until 2026-11-22T08:00:27.560Z), T98 a full day after T88 (until 2026-11-22T18:40:27.980Z)",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "After the landing this is a clock, so it gets D7e's test. Unlike the bare date it is anchored to a logged landing, it has one fixed duration, and it is written on the committed line. A full day's measurement cannot be taken before that day has elapsed (SC-005: 'the first full day after landing'), so the rule is physically impossible to apply sooner, not merely awkward. The GM asked for measurement tasks to count as performance work, and a measurement task taken early measures nothing. T98's stated need is 'a night of rolling dispatch'. The night window cited was 07:50-17:30Z, and the next one after T88's 18:40Z landing is 2026-11-22 07:50-17:30Z. The 24 h hold ends at 18:40Z, about 1h10m after that window closes. So the convention holds T98 only a little longer than its need, and less than the rejected end-of-UTC-day form (00:00Z on 11-23) would. Not a defect."
+    },
+    {
+     "id": "D3-other-text-no-wait",
+     "summary": "Anything else in the parentheses is no wait (fails toward a start the session sees named)",
+     "class": "within",
+     "why": "Unreadable text leaves the task inside FR-013's refusal, so this fails toward enforcement, not away from it."
+    },
+    {
+     "id": "D4-bare-date-dropped",
+     "summary": "A bare date is not a form; pinned as no wait",
+     "class": "within",
+     "why": "This complies with the earlier plan-review ruling D7e (NOT LEGITIMATE), which this block records. With no form of wait unanchored to a landing, FR-013 is left whole."
+    },
+    {
+     "id": "D5-pre-log-landed",
+     "summary": "Tasks ticked before the log carried land end lines (451 T02-T05) count as landed long ago",
+     "class": "within",
+     "why": "Reads history the log cannot hold. Ticked tasks did land. The latest landing that matters, T11, is logged."
+    },
+    {
+     "id": "D6-lines-set",
+     "summary": "T22 and T98 lines carry their waits clauses",
+     "class": "within",
+     "why": "This is the data the mechanism exists for. Both waits are anchored to logged landings, measured 2026-11-21."
+    },
+    {
+     "id": "D7-task-start-unchanged",
+     "summary": "task_start.rs unchanged; it calls the shared next_performance",
+     "class": "within",
+     "why": "Implementation placement. The behavior change is ruled under D2."
+    },
+    {
+     "id": "D8-perf-later-ok-wording",
+     "summary": "The free slot's PERF_LATER_OK reason now reads 'is started or touches a running task's files'",
+     "class": "within",
+     "why": "The message is reworded to match the narrower set of tasks it now covers. Nothing asked is narrowed."
+    },
+    {
+     "id": "D9-clock-seam",
+     "summary": "L7R_WAITS_NOW as the tests' clock seam, else the system clock",
+     "class": "within",
+     "why": "Test seam following the L7R_PERMIT_NOW precedent. It acts only on a full-day wait already written on a committed line."
+    },
+    {
+     "id": "D10-performance-text-check",
+     "summary": "performance() looks for the heading as text before running its pattern over plan.md",
+     "class": "within",
+     "why": "A CPU fix to a cost this change exposed (0.09-0.16 s back to 0.00-0.02 s, measured 2026-11-21). Within the performance work asked for."
+    },
+    {
+     "id": "D11-sc006-left",
+     "summary": "SC-006's count reads off the escape log; a start made while a performance task waits leaves no escape row; left because no SC-006 reader exists",
+     "class": "within",
+     "why": "The same narrowing as D2, seen from the spec's side. It is judged fresh, not on the block's appeal to 'T102's plan review notes', which nothing in this bundle backs. Under the defect test only a wrong outcome now is a defect. The block's grep (2026-11-21) finds no reader of 451's SC-006, so nothing misreads today and nothing defective is left. Record for whoever builds that reader or amends the spec: FR-013 and SC-006 still say 'recorded escape', but a waiting task's reason is now on its own line and in the land log, not in the escape log."
+    },
+    {
+     "id": "D12-red-not-rerun",
+     "summary": "After the date form was dropped, the three tests were rewritten to wait on landings and not rerun red",
+     "class": "within",
+     "why": "FR-012's red-first is owed for a refusal that fires, and T102 adds no new refusal: it makes existing ones skip a task that cannot start. The original tests were red on the unchanged hook (357/3, measured 2026-11-21). That the rewritten tests would still be red is argued, not measured: the unchanged hook does not read the clause at all, so its output cannot depend on what the clause says."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -15157,6 +15280,115 @@
      "summary": "The plan labels T99 as not performance work.",
      "class": "within",
      "why": "This is the conservative direction under FR-013/SC-006: the label can only put T99 behind performance tasks, never ahead of them. It narrows no priority the GM set."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T102": {
+   "section_sha256": "c28a652f70195821f2e65628b402c328e3adf340cb5df54e9fc119131943e25b",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D1-positional-clause",
+     "summary": "(waits: <when>) is read only right after the id's bracketed tags, where [perf] is read, so prose quoting the clause waits on nothing",
+     "class": "within",
+     "why": "Parsing detail of how a task line states its wait. It narrows nothing asked and stops stray prose from holding a task."
+    },
+    {
+     "id": "D2-reaches-FR013-picker",
+     "summary": "One wait reading applied in next_independent (free slot), next_performance (task-start's FR-013 picker and the Stop hook's performance-first) and the nothing-running fallback; a waiting performance task no longer triggers FR-013's refusal, its case 'read rather than escaped'",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This narrows the accepted FR-013. That spec gives a performance task waiting on another's landing an escape of a recorded reason (FR-012, counted by SC-006), and the plan drops it from the refusal instead. The ruling is against the request ('prioritize performance improvements going forward'; measurement tasks 'counted as a performance task for the purpose of scheduling and coming first'). A performance task that cannot start yet cannot go first, and refusing other work for it idles builders, which defeats the purpose of making everything faster. FR-013's own wording names this exact case as a permitted exception. The reason is still recorded, in git, on the waiting task's committed line, not in the escape log. A startable performance task is refused exactly as before, so the enforcement stays real. Each form is ruled separately in D2a-D2d."
+    },
+    {
+     "id": "D2a-waits-landing",
+     "summary": "Form 'T88 lands' / 'T02-T21 land': met when none of the named tasks is open",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This is FR-013's named escape case word for word: a performance task waiting on another task's landing. It releases itself when the landing happens, and it is stated on the committed task line."
+    },
+    {
+     "id": "D2b-after-Tn",
+     "summary": "T88's 'after T<n>' rule moved from the free slot into the shared reading, so it now also reaches the FR-013 picker and the nothing-running fallback",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Same class as D2a: the task cannot start until T<n> is no longer open. Its reach grew to the picker, but its meaning did not change, and it releases itself when T<n> closes."
+    },
+    {
+     "id": "D2c-lands-before",
+     "summary": "Another open line's 'lands before T<n>' holds T<n> (4 open lines in 451 say 'lands before T22')",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This is still 'waiting on another task's landing': another task has committed to land first, and 'lands before ...' is the ordering phrase this feature's own FR-009 requires. It is read from prose on a different line, unlike the positional clause, so a passing mention could hold a performance task. It fails toward hiding rather than starting, against the block's stated direction. But the hold ends when that line closes, so it never hides a task for good. Not a defect now: in 451 all 4 measured lines name T22 on purpose."
+    },
+    {
+     "id": "D2d-full-day-after",
+     "summary": "Form 'a full day after T.. land(s)': met 24 h past the latest logged landing (land end lines, landed true); T22 a full day after T02-T21 (until 2026-11-22T08:00:27.560Z), T98 a full day after T88 (until 2026-11-22T18:40:27.980Z)",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "After the landing this is a clock, so it gets D7e's test. Unlike the bare date it is anchored to a logged landing, it has one fixed duration, and it is written on the committed line. A full day's measurement cannot be taken before that day has elapsed (SC-005: 'the first full day after landing'), so the rule is physically impossible to apply sooner, not merely awkward. The GM asked for measurement tasks to count as performance work, and a measurement task taken early measures nothing. T98's stated need is 'a night of rolling dispatch'. The night window cited was 07:50-17:30Z, and the next one after T88's 18:40Z landing is 2026-11-22 07:50-17:30Z. The 24 h hold ends at 18:40Z, about 1h10m after that window closes. So the convention holds T98 only a little longer than its need, and less than the rejected end-of-UTC-day form (00:00Z on 11-23) would. Not a defect."
+    },
+    {
+     "id": "D3-other-text-no-wait",
+     "summary": "Anything else in the parentheses is no wait (fails toward a start the session sees named)",
+     "class": "within",
+     "why": "Unreadable text leaves the task inside FR-013's refusal, so this fails toward enforcement, not away from it."
+    },
+    {
+     "id": "D4-bare-date-dropped",
+     "summary": "A bare date is not a form; pinned as no wait",
+     "class": "within",
+     "why": "This complies with the earlier plan-review ruling D7e (NOT LEGITIMATE), which this block records. With no form of wait unanchored to a landing, FR-013 is left whole."
+    },
+    {
+     "id": "D5-pre-log-landed",
+     "summary": "Tasks ticked before the log carried land end lines (451 T02-T05) count as landed long ago",
+     "class": "within",
+     "why": "Reads history the log cannot hold. Ticked tasks did land. The latest landing that matters, T11, is logged."
+    },
+    {
+     "id": "D6-lines-set",
+     "summary": "T22 and T98 lines carry their waits clauses",
+     "class": "within",
+     "why": "This is the data the mechanism exists for. Both waits are anchored to logged landings, measured 2026-11-21."
+    },
+    {
+     "id": "D7-task-start-unchanged",
+     "summary": "task_start.rs unchanged; it calls the shared next_performance",
+     "class": "within",
+     "why": "Implementation placement. The behavior change is ruled under D2."
+    },
+    {
+     "id": "D8-perf-later-ok-wording",
+     "summary": "The free slot's PERF_LATER_OK reason now reads 'is started or touches a running task's files'",
+     "class": "within",
+     "why": "The message is reworded to match the narrower set of tasks it now covers. Nothing asked is narrowed."
+    },
+    {
+     "id": "D9-clock-seam",
+     "summary": "L7R_WAITS_NOW as the tests' clock seam, else the system clock",
+     "class": "within",
+     "why": "Test seam following the L7R_PERMIT_NOW precedent. It acts only on a full-day wait already written on a committed line."
+    },
+    {
+     "id": "D10-performance-text-check",
+     "summary": "performance() looks for the heading as text before running its pattern over plan.md",
+     "class": "within",
+     "why": "A CPU fix to a cost this change exposed (0.09-0.16 s back to 0.00-0.02 s, measured 2026-11-21). Within the performance work asked for."
+    },
+    {
+     "id": "D11-sc006-left",
+     "summary": "SC-006's count reads off the escape log; a start made while a performance task waits leaves no escape row; left because no SC-006 reader exists",
+     "class": "within",
+     "why": "The same narrowing as D2, seen from the spec's side. It is judged fresh, not on the block's appeal to 'T102's plan review notes', which nothing in this bundle backs. Under the defect test only a wrong outcome now is a defect. The block's grep (2026-11-21) finds no reader of 451's SC-006, so nothing misreads today and nothing defective is left. Record for whoever builds that reader or amends the spec: FR-013 and SC-006 still say 'recorded escape', but a waiting task's reason is now on its own line and in the land log, not in the escape log."
+    },
+    {
+     "id": "D12-red-not-rerun",
+     "summary": "After the date form was dropped, the three tests were rewritten to wait on landings and not rerun red",
+     "class": "within",
+     "why": "FR-012's red-first is owed for a refusal that fires, and T102 adds no new refusal: it makes existing ones skip a task that cannot start. The original tests were red on the unchanged hook (357/3, measured 2026-11-21). That the rewritten tests would still be red is argued, not measured: the unchanged hook does not read the clause at all, so its output cannot depend on what the clause says."
     }
    ],
    "verdict": "CLEAR"
