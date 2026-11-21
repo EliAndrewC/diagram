@@ -612,6 +612,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-21",
    "declared": "spec-fidelity"
+  },
+  "### T112 (T108's Found and left: the quoted-string pattern T103 and T108 gave shape's scan stood also in two of T96's files, `tree.rs:70`'s `QUOTED` and the triple-quoted `TRIPLE` of `tree/program.rs:63`; measured 2026-11-21 (`/tmp/t108/probe`, the pattern alone under `timeout 10`, `/tmp/t108/probe-outside.txt`): each gave no answer in 10 s on a quote nothing closes before forty escapes, and the house style guard none through `tree::walk` on `echo <a listed word> > f.md; echo it's` and forty escapes (`hs_plain`))": {
+   "sha256": "88fe508fe81db87a17bbfd760ef8e56783b3774aff4933337701f3ba65bd4518",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity"
+  },
+  "### T112 Approach (checklist part A)": {
+   "sha256": "29409feadac88a5cda3f1fcccf34afcb813aabcc6f658c879bd86a14616b75fd",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -10627,6 +10639,110 @@
      "why": "FR-013 names 'the builders' loop' among performance work; the checklist's questions are each answered with a measurement."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-21",
+   "blocks": [
+    "### T112 (T108's Found and left: the quoted-string pattern T103 and T108 gave shape's scan stood also in two of T96's files, `tree.rs:70`'s `QUOTED` and the triple-quoted `TRIPLE` of `tree/program.rs:63`; measured 2026-11-21 (`/tmp/t108/probe`, the pattern alone under `timeout 10`, `/tmp/t108/probe-outside.txt`): each gave no answer in 10 s on a quote nothing closes before forty escapes, and the house style guard none through `tree::walk` on `echo <a listed word> > f.md; echo it's` and forty escapes (`hs_plain`))",
+    "### T112 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T112-fix-quoted",
+     "summary": "tree::quotes_to_paths builds its text from shape::quoted_spans with the same three replacements (-c program carried out, plain word kept, else empty pair); the QUOTED pattern deleted",
+     "class": "within",
+     "why": "Fixes the measured exponential hang T108's Found and left filed as T112, keeping each answer; a defect fixed in the task (fix as we go), narrowing nothing in the request or FR-013."
+    },
+    {
+     "id": "T112-fix-triple",
+     "summary": "program::without_text blanks each shape::triple_quoted_spans span (T113's, called not rewritten) to an empty pair; TRIPLE deleted with its row of each_gate_passes_wherever_its_pattern_matches; the builds test counts 2 patterns, not 3",
+     "class": "within",
+     "why": "The second copy of the same defect, fixed in the same task; dropping the test row for a pattern that no longer exists, and recounting the builds, removes no check of a thing that still exists."
+    },
+    {
+     "id": "T112-pins",
+     "summary": "Two red-first hang pins in T103's child-process form with a 10 s deadline (GUESS), plus two exhaustive small-text differentials (137,257 and 37,449 texts) holding each scan to the pattern it replaced",
+     "class": "within",
+     "why": "Tests whose only effect is to prove the hang gone and the readers still working (FR-012's red first); the differentials are verification that the fix computes what the callers already rely on, not a bitwise standard imposed on a port or a refusal of a fix, and they serve the task's own goal."
+    },
+    {
+     "id": "T112-replay",
+     "summary": "Every-verdict-the-same replay of T93's 9,646 commands through each caller and twelve guard replies, run from a scratch repository so gate-write answers",
+     "class": "within",
+     "why": "Verification that everything works after the change (constitution XIII); it blocks nothing on its own and adds no behavior."
+    },
+    {
+     "id": "T112-scope",
+     "summary": "Edits confined to tree.rs, tree/program.rs and their tests; shape.rs and T113's and T106's files not touched; nothing committed by the builder",
+     "class": "within",
+     "why": "Bounds the task to the two copies filed; leaves no part of the filed defect undone, since every copy of the class is named and fixed by T112 or T113."
+    },
+    {
+     "id": "T112-order",
+     "summary": "Lands after T96 and T113 (it calls T113's triple_quoted_spans), beside T113 touching none of its files",
+     "class": "within",
+     "why": "Sequencing forced by a real dependency; no requirement narrowed."
+    },
+    {
+     "id": "T112-found-and-left-none",
+     "summary": "No further copy of the class left: grep over rust/ for the pattern's text, every hit read; make_only_hooks/interp.rs:27 and :33's (?:\\\\.|[^\"\\\\])* left as not of the class",
+     "class": "within",
+     "why": "Leaving interp.rs's patterns is not deferring a defect: their two branches are disjoint (one begins with a backslash, the other excludes it), so they cannot backtrack exponentially; the search method is stated as an observation (FR-009's class-of-defect line)."
+    },
+    {
+     "id": "T112-perf-class",
+     "summary": "Treated as [perf] performance work under FR-013 (the builders' loop: a Bash call's hooks no longer hang)",
+     "class": "within",
+     "why": "FR-013 names work that makes the builders' loop faster; a hook that held a Bash call until timeout and now answers in about 0.1 s is that, and the classification only orders the task earlier, as the GM asked."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-21",
+   "blocks": [
+    "### T112 (T108's Found and left: the quoted-string pattern T103 and T108 gave shape's scan stood also in two of T96's files, `tree.rs:70`'s `QUOTED` and the triple-quoted `TRIPLE` of `tree/program.rs:63`; measured 2026-11-21 (`/tmp/t108/probe`, the pattern alone under `timeout 10`, `/tmp/t108/probe-outside.txt`): each gave no answer in 10 s on a quote nothing closes before forty escapes, and the house style guard none through `tree::walk` on `echo <a listed word> > f.md; echo it's` and forty escapes (`hs_plain`))",
+    "### T112 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T112-fix",
+     "summary": "Replace tree.rs's QUOTED and tree/program.rs's TRIPLE regexes with shape::quoted_spans and T113's shape::triple_quoted_spans (called, not rewritten); delete both patterns and the TRIPLE row of each_gate_passes_wherever_its_pattern_matches; nothing else of either file changed but comments.",
+     "class": "within",
+     "why": "Fixes a measured defect (guards and the event log hang on an unclosed quote before many escapes, probe-before.txt) as a builders'-loop perf task under FR-013, and constitution XIV says to fix a known defect in the step. It narrows nothing in the request or spec."
+    },
+    {
+     "id": "T112-perf-class",
+     "summary": "T112 is classed [perf] (builders' loop: a Bash call's hooks), so the performance checklist is answered in brief.",
+     "class": "within",
+     "why": "FR-013 counts work that makes the builders' loop faster as performance work. A hook that hangs a Bash call is that loop."
+    },
+    {
+     "id": "T112-pins-red-first",
+     "summary": "Two hang pins in T103's child-process form with T103's 10 s deadline (GUESS) kept as it stands, plus the builds row's count moving from 3 to 2, shown red against the unfixed code and green after.",
+     "class": "within",
+     "why": "Tests that fail only while the hang exists. They enforce the requested fix, and FR-012's red-first form fits them."
+    },
+    {
+     "id": "T112-differentials-replay",
+     "summary": "Differentials over exhaustive small texts hold each new scan's reading to the regex it replaced, and a 9,646-command replay shows every guard verdict unchanged.",
+     "class": "within",
+     "why": "The plan chose to keep the old readings and checks that it did. These are evidence that everything still works (XIII), not a standard imposed on the work, and they narrow nothing. A future difference in these readings would not by itself be a defect."
+    },
+    {
+     "id": "T112-scope-files",
+     "summary": "Edits limited to tree.rs, tree/program.rs and their tests. shape.rs and T113's and T106's files untouched. Lands after T113.",
+     "class": "within",
+     "why": "Ordering and file ownership between parallel tasks. Nothing requested is dropped."
+    },
+    {
+     "id": "T112-found-and-left-none",
+     "summary": "Found and left: none. A grep census of the class over rust/ found that only make_only_hooks/interp.rs:27 and :33's (?:\\\\.|[^\"\\\\])* remain, and they are left because their branches are disjoint and do not backtrack.",
+     "class": "within",
+     "why": "The census names its search space (both grep commands, every hit read), as FR-009 asks. The two patterns it leaves are argued not to be a defect, since they give no wrong outcome, so leaving them narrows nothing."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -16491,6 +16607,50 @@
      "summary": "Classed [perf] under FR-013 as builders'-loop work, performance checklist answered in brief since no engine speed is involved",
      "class": "within",
      "why": "FR-013 names 'the builders' loop' among performance work; the checklist's questions are each answered with a measurement."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T112": {
+   "section_sha256": "c18f95bed0e97ea8ad33962a36f63f29b7ca4814c3b1ea8ab1d12806061aa59e",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T112-fix",
+     "summary": "Replace tree.rs's QUOTED and tree/program.rs's TRIPLE regexes with shape::quoted_spans and T113's shape::triple_quoted_spans (called, not rewritten); delete both patterns and the TRIPLE row of each_gate_passes_wherever_its_pattern_matches; nothing else of either file changed but comments.",
+     "class": "within",
+     "why": "Fixes a measured defect (guards and the event log hang on an unclosed quote before many escapes, probe-before.txt) as a builders'-loop perf task under FR-013, and constitution XIV says to fix a known defect in the step. It narrows nothing in the request or spec."
+    },
+    {
+     "id": "T112-perf-class",
+     "summary": "T112 is classed [perf] (builders' loop: a Bash call's hooks), so the performance checklist is answered in brief.",
+     "class": "within",
+     "why": "FR-013 counts work that makes the builders' loop faster as performance work. A hook that hangs a Bash call is that loop."
+    },
+    {
+     "id": "T112-pins-red-first",
+     "summary": "Two hang pins in T103's child-process form with T103's 10 s deadline (GUESS) kept as it stands, plus the builds row's count moving from 3 to 2, shown red against the unfixed code and green after.",
+     "class": "within",
+     "why": "Tests that fail only while the hang exists. They enforce the requested fix, and FR-012's red-first form fits them."
+    },
+    {
+     "id": "T112-differentials-replay",
+     "summary": "Differentials over exhaustive small texts hold each new scan's reading to the regex it replaced, and a 9,646-command replay shows every guard verdict unchanged.",
+     "class": "within",
+     "why": "The plan chose to keep the old readings and checks that it did. These are evidence that everything still works (XIII), not a standard imposed on the work, and they narrow nothing. A future difference in these readings would not by itself be a defect."
+    },
+    {
+     "id": "T112-scope-files",
+     "summary": "Edits limited to tree.rs, tree/program.rs and their tests. shape.rs and T113's and T106's files untouched. Lands after T113.",
+     "class": "within",
+     "why": "Ordering and file ownership between parallel tasks. Nothing requested is dropped."
+    },
+    {
+     "id": "T112-found-and-left-none",
+     "summary": "Found and left: none. A grep census of the class over rust/ found that only make_only_hooks/interp.rs:27 and :33's (?:\\\\.|[^\"\\\\])* remain, and they are left because their branches are disjoint and do not backtrack.",
+     "class": "within",
+     "why": "The census names its search space (both grep commands, every hit read), as FR-009 asks. The two patterns it leaves are argued not to be a defect, since they give no wrong outcome, so leaving them narrows nothing."
     }
    ],
    "verdict": "CLEAR"
