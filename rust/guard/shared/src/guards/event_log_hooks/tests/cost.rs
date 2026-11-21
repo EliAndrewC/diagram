@@ -16,6 +16,13 @@ fn call(id: &str, input: u64, read: u64, write: u64, out: u64) -> String {
     .to_string()
 }
 
+/// The agent's reply: model call `id`'s last row, its content one `text` block.
+fn reply(id: &str, input: u64, read: u64, write: u64, out: u64, text: &str) -> String {
+    let mut row: Value = serde_json::from_str(&call(id, input, read, write, out)).unwrap();
+    row["message"]["content"] = json!([{"type": "text", "text": text}]);
+    row.to_string()
+}
+
 fn write_transcript(d: &Path, aid: &str, rows: &[String]) -> String {
     let p = d.join(format!("projects/s1/subagents/agent-{aid}.jsonl"));
     std::fs::create_dir_all(p.parent().unwrap()).unwrap();
@@ -23,9 +30,93 @@ fn write_transcript(d: &Path, aid: &str, rows: &[String]) -> String {
     p.to_string_lossy().into_owned()
 }
 
+/// A stop naming no reply (`last_assistant_message`), so it waits for none: the reply's own tests name one.
 fn stop(cwd: &str, session: &str, aid: &str) -> Value {
     json!({"hook_event_name": "SubagentStop", "cwd": cwd, "transcript_path": session, "agent_id": aid,
-        "agent_type": "general-purpose", "last_assistant_message": "done"})
+        "agent_type": "general-purpose"})
+}
+
+/// A stop waits for its agent's reply to reach the transcript (451 T59): Claude Code writes a transcript's rows on a timer, so the
+/// reply's row is often not yet on disk when `SubagentStop` fires, and lands while the hook runs. Here it lands 60 ms in, the probe's
+/// middle (5.8-89.2 ms).
+#[test]
+fn a_stop_waits_for_its_agents_reply_to_reach_the_transcript() {
+    use std::io::Write as _;
+    let d = clone("cost-reply");
+    let cwd = d.to_string_lossy().into_owned();
+    let session = session_files(
+        &d,
+        "late",
+        r#"{"agentType":"general-purpose","description":"T59: the reply","toolUseId":"tu"}"#,
+    );
+    let own = write_transcript(&d, "late", &[call("m1", 3, 1000, 200, 10)]);
+    let mut p = stop(&cwd, &session, "late");
+    p["agent_transcript_path"] = json!(own);
+    p["last_assistant_message"] = json!("DONE-1");
+    let writer = std::thread::spawn(move || {
+        std::thread::sleep(std::time::Duration::from_millis(60));
+        let mut f = std::fs::OpenOptions::new().append(true).open(&own).unwrap();
+        writeln!(f, "{}", reply("m2", 2, 1500, 100, 7, "DONE-1")).unwrap();
+    });
+    let row = last_line(&append(&p, "T", &d, &none).unwrap());
+    writer.join().unwrap();
+    assert_eq!(
+        row["tok"],
+        json!({"in": 5, "cached": 2500, "created": 300, "out": 17})
+    );
+    assert_eq!(row["ctx"], json!(1602));
+}
+
+/// The wait's edges (451 T59): a reply already on disk is not waited for, nor one that ends a longer last message (several blocks'
+/// text joined); a reply before the last `user` row answers an earlier prompt, so it is waited for, and a reply that never lands is
+/// waited for no longer than the bound, writing what is on disk. A tool's result longer than the reader's chunk is one row.
+#[test]
+fn a_stop_waits_only_for_a_reply_not_yet_on_disk() {
+    use super::super::fields::agent_cost_within;
+    use std::time::{Duration, Instant};
+    let d = clone("cost-wait");
+    let user = json!({"type": "user", "message": {"role": "user", "content": "again"}}).to_string();
+    let result =
+        json!({"type": "user", "message": {"role": "user", "content": "x".repeat(200_000)}})
+            .to_string();
+    let cost = |aid: &str, rows: &[String], said: &str, wait: Duration| {
+        let own = write_transcript(&d, aid, rows);
+        let p = json!({"agent_transcript_path": own, "last_assistant_message": said});
+        let mut out = serde_json::Map::new();
+        let start = Instant::now();
+        agent_cost_within(&mut out, &p, wait);
+        (out["tok"]["out"].clone(), start.elapsed())
+    };
+    let long = Duration::from_secs(30);
+    let (out, took) = cost(
+        "ondisk",
+        &[
+            call("m1", 1, 2, 3, 4),
+            result,
+            reply("m2", 1, 2, 3, 5, "CLEAR"),
+        ],
+        " CLEAR\n",
+        long,
+    );
+    assert_eq!((out, took < long / 3), (json!(9), true));
+    let (out, took) = cost(
+        "joined",
+        &[reply("m1", 1, 2, 3, 4, "part two")],
+        "part one\n\npart two",
+        long,
+    );
+    assert_eq!((out, took < long / 3), (json!(4), true));
+    let short = Duration::from_millis(40);
+    for (aid, rows) in [
+        (
+            "earlier",
+            vec![reply("m1", 1, 2, 3, 4, "CLEAR"), user.clone()],
+        ),
+        ("never", vec![call("m1", 1, 2, 3, 4)]),
+    ] {
+        let (out, took) = cost(aid, &rows, "CLEAR", short);
+        assert_eq!((out, took >= short), (json!(4), true), "{aid}");
+    }
 }
 
 /// A stop's `tok`, `ctx` and `task`: one model call split across three rows (a streamed reply, its last row the whole output) is

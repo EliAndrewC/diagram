@@ -8,7 +8,15 @@
 //!   `additionalContext` line, recorded `noticed` in the guard log). The caller is the builder by its `agent_id` (the log's `by`), else
 //!   the main session by its `session_id` with no `by`: a builder sharing the clone is another caller, so a neighbor's edits never fire
 //!   it. A start is a `PreToolUse` line naming `closing-checks` that ran (a `PostToolUse` carries its `id`: a backgrounded call's comes
-//!   at once, with `bg`).
+//!   at once, with `bg`). A LANDED edit is no code edit here (T64): one a landing of its own task went out after - a landing's `end`
+//!   line later in the log whose `landed` is true and whose `tasks` names the edit line's `task`, `static_runs_hooks`' landed rule
+//!   ([`landings`]) - so the notice reads back past it to the caller's last edit not landed. A landing line is the main session's,
+//!   so it lands a builder's edits of its tasks too; an edit with no `task` (the log's first hours, 2026-11-20) no landing names.
+//!   WHY THE EDIT'S TASK, NOT THE DECIDE'S: the main session was told at every `make decide` of its Makefile edit of
+//!   2026-11-20T15:48:51Z, filed under T12, which landed at 15:55:22Z; its decides were filed under the task it was deciding, not
+//!   yet landed. Replayed over 451's log to 2026-11-21T08:09Z (211 decides; measured 2026-11-21, `/tmp/claude-T64/replay.py`), the
+//!   rule fires on 127, keyed on the decide's task still 127, keyed on the edit's task 105: the 22 it drops are all the main session's
+//!   on edits landed, and the main session's 3 left are within 4 min of their edit, before its landing.
 //! - a foreground `make static`, `make hooks-test` or `make closing-checks` (no `run_in_background`) is REFUSED, naming
 //!   `run_in_background` and `make closing-checks`, recorded `blocked`; [`TOKEN`] with a reason escapes, recorded. It reads no log.
 //!   It is judged FIRST, on every command of the chain: a `make decide` chained with a foreground closing check, either order, is
@@ -28,6 +36,8 @@
 //! once - mid-build, the check followed only by itself again, a crate-scoped check or a fixer, then a code edit, nothing to run beside
 //! it. Those 5 are the refusal's cost and the escape's case; the other 50 were followed by work that needs no check result (T55's plan
 //! section). `make closing-checks` has no foreground call in the log: its refusal rests on the review's ruling.
+
+use std::collections::HashMap;
 
 use serde_json::Value;
 
@@ -116,11 +126,13 @@ fn decide(input: &Value, root: &str, lines: &[Value]) -> Option<Told> {
             text(l, "by") == by
         }
     };
-    let (at, edit) = lines.iter().enumerate().rev().find(|(_, l)| {
+    let landed = landings(lines);
+    let (at, edit) = lines.iter().enumerate().rev().find(|(at, l)| {
         text(l, "ev") == "PostToolUse"
             && ["Edit", "Write", "NotebookEdit"].contains(&text(l, "tool"))
             && mine(l)
             && code_path(text(l, "path"), root)
+            && landed.get(text(l, "task")).is_none_or(|went| went < at)
     })?;
     let after = &lines[at + 1..];
     let started = after.iter().any(|l| {
@@ -135,13 +147,35 @@ fn decide(input: &Value, root: &str, lines: &[Value]) -> Option<Told> {
         let path = text(edit, "path");
         let rel = path.strip_prefix(root).unwrap_or(path).trim_start_matches('/');
         Told::Decide(format!(
-            "T55 order (feature 451): your last code edit ({rel}, {}) has no `make closing-checks` started after it. Neither needs the \
+            "T55 order (feature 451): your last code edit not landed ({rel}, {}) has no `make closing-checks` started after it. Neither needs the \
              other's result: start `make closing-checks` now with run_in_background: true (it runs make static, make hooks-test and make \
              quick at once), and write the plan section and run `make decide` while it runs. When it ends, if you edited the section after \
              it started, `make quick` (seconds) covers the section.",
             text(edit, "t")
         ))
     })
+}
+
+/// Each task's last landing that went out, by its line's place in the log: `static_runs_hooks`' landed rule (`runs`) - a `Phase` `end`
+/// line whose `landed` is true and whose `tasks` names the task, whatever its exit code; a refused landing is none.
+fn landings(lines: &[Value]) -> HashMap<&str, usize> {
+    let mut last = HashMap::new();
+    for (at, l) in lines.iter().enumerate() {
+        if text(l, "ev") == "Phase"
+            && text(l, "step") == "end"
+            && l.get("landed") == Some(&Value::Bool(true))
+        {
+            let tasks = l
+                .get("tasks")
+                .and_then(Value::as_array)
+                .into_iter()
+                .flatten();
+            for task in tasks.filter_map(Value::as_str) {
+                last.insert(task, at);
+            }
+        }
+    }
+    last
 }
 
 fn foreground(target: &str) -> String {

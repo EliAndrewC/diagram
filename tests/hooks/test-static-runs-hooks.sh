@@ -122,6 +122,14 @@ run "make decide F=451 T=T06"
 printf '{"t":"2026-11-20T10:02:00.000Z","ev":"PreToolUse","tool":"Bash","id":"c2","sid":"t","make":"closing-checks"}\n{"t":"2026-11-20T10:02:00.000Z","ev":"PostToolUse","tool":"Bash","id":"c2","sid":"t","make":"closing-checks","bg":"b2"}\n' >> "$LOG"
 run "make decide F=451 T=T06"
 [ "$RC" -eq 0 ] && [ -z "$OUT" ] && ok "...silent once closing-checks has started since" || no "a notice after closing-checks started" "(rc=$RC: $OUT)"
+fresh  # feature 451 T64: a code edit its task's landing went out after is landed, never told again
+printf '{"t":"2026-11-20T15:48:51.173Z","ev":"PostToolUse","tool":"Edit","id":"e","sid":"t","path":"%s/Makefile","task":"T12"}\n' "$C" >> "$LOG"
+landing 2026-11-20T15:55:22.200Z false 0 '["T12"]'
+run "make decide F=451 T=T06"
+[ "$RC" -eq 0 ] && printf '%s' "$OUT" | grep -q 'additionalContext' && ok "a code edit whose landing was refused: still told" || no "a refused landing landed the edit" "(rc=$RC: $OUT)"
+landing 2026-11-20T15:55:23.200Z true 0 '["T12","T17"]'
+run "make decide F=451 T=T06"
+[ "$RC" -eq 0 ] && [ -z "$OUT" ] && ok "...silent once its task's landing went out after it" || no "a notice for an edit already landed" "(rc=$RC: $OUT)"
 
 echo "9. a foreground closing check is refused, naming the background; FOREGROUND_OK escapes it (feature 451 T55)"
 starts T06@2026-11-20T10:00:00Z; fresh

@@ -344,7 +344,7 @@
    "declared": "spec-fidelity"
   },
   "### T56 Approach (checklist part A)": {
-   "sha256": "5f9f8298779ff9ffdab0866bed59e48780f2f188d40979dc56915f9b73373892",
+   "sha256": "1ad4cf4734994d2a3058d10372f5cda4c99e7644734be150b0c8c07662e605a5",
    "verdict": "CLEAR",
    "reviewed": "2026-11-21",
    "declared": "spec-fidelity"
@@ -362,7 +362,7 @@
    "declared": "spec-fidelity"
   },
   "### T59 Approach (checklist part A)": {
-   "sha256": "465696025ab44aa3a540c6714a7a68368a5f1a086c2f0f3d570497fc828f3d27",
+   "sha256": "233c0807e03724a0b828bc3832f25789f454ba6bf9fd039f0dddf4dc71f0ef97",
    "verdict": "CLEAR",
    "reviewed": "2026-11-21",
    "declared": "spec-fidelity"
@@ -410,7 +410,7 @@
    "declared": "spec-fidelity"
   },
   "### T64 Approach (checklist part A)": {
-   "sha256": "665ae887894207f1225e4dac99bbaf929d377d10f72be86720f8cf1ad6b8c9ee",
+   "sha256": "2457b04a5b47467d31c95beca2085303acf1c18e459b4aadcdb87fb72bca79cb",
    "verdict": "CLEAR",
    "reviewed": "2026-11-21",
    "declared": "spec-fidelity"
@@ -453,6 +453,24 @@
   },
   "### T67 Approach (checklist part A)": {
    "sha256": "123a9959c7eee34b047cbb964364b5d2a8c789acf22dd20724a4e58dc48d3ffe",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity"
+  },
+  "### T56 (T53's writer gives a start over 72 h old no feature, but `make events-refile` read its own copy of the start rule: 0 lines moved and 23 left in 385's log, measured 2026-11-21 (`make events-refile DRY=1` before the change, its last line))": {
+   "sha256": "49e262460de06bf84edfb255d7d4882d476814ebafe63e3aba0cb2ed57997d66",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity"
+  },
+  "### T59 (the finding as filed, restated by its measurement: a `SubagentStop` line's `tok` leaves out the agent's reply, its last model call, on 62 of the 85 stops that carry one, because the reply's row is not yet on disk when the hook reads, and the stops with no `tok` are the 10,370 written before the field began and 4 with no transcript anywhere, measured 2026-11-21 (`/tmp/t59/compare.py` and `gap.py`: each stop of every clone's and the mirror's event log against its agent's transcript))": {
+   "sha256": "b15f99115a6fe52c81a815a3aa7e209ae8d3f172b955f059febfc89b19fcede6",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity"
+  },
+  "### T64 (T55's order notice counted a code edit already landed: the main session was told at its `make decide` calls that its Makefile edit of 2026-11-20T15:48:51Z, filed under T12, had no closing-checks after it, though T12 landed at 15:55:22Z; replayed over 451's log, 22 of the rule's 127 firings at 211 decides were on an edit its task had landed, all the main session's, measured 2026-11-21 (`/tmp/claude-T64/replay.py`, the decide rule replayed over `.git/l7r-events/451-time-retro-and-efficiency.jsonl` to its last line at 2026-11-21T08:09:00Z))": {
+   "sha256": "769e32841bd6bf436b88f694c6f0f19d694c2e7577ab289e47707d7c4d3e8997",
    "verdict": "CLEAR",
    "reviewed": "2026-11-21",
    "declared": "spec-fidelity"
@@ -7469,6 +7487,180 @@
      "why": "Placeholders only; neither decides anything the spec left open, and the removal deletes no content of T58's approach or rulings."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-21",
+   "blocks": [
+    "### T56 (T53's writer gives a start over 72 h old no feature, but `make events-refile` read its own copy of the start rule: 0 lines moved and 23 left in 385's log, measured 2026-11-21 (`make events-refile DRY=1` before the change, its last line))",
+    "### T56 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T56-one-reader",
+     "summary": "The re-file deletes its own parse of task-starts.jsonl, its in_force and its started, and calls the writer's (filed.rs starts/in_force/started/Start, made public). The writer's behavior is unchanged.",
+     "class": "within",
+     "why": "The re-file and the writer filing a line by one rule is what makes make where-time book each line to the feature it served (FR-005, the tooling request: make the retrospective cheap to put together going forward). The 23 lines in 385's log, a feature with no T47, are a wrong outcome: 451's reading leaves out three of T47's reviews. So this is a defect fix, not a difference."
+    },
+    {
+     "id": "T56-time-bound",
+     "summary": "The re-file hands the writer's functions only the starts made by the line's time (with START_SLACK), and the line's t as now, so a start's age is measured as it was when the line was written.",
+     "class": "within",
+     "why": "It applies the writer's rule as the writer applied it when it wrote the line, which is how the two are made to agree. It narrows nothing that was asked."
+    },
+    {
+     "id": "T56-fallback",
+     "summary": "Shares the writer's next link too. Where no start in force names the task, the line goes to feature.json as it stood at the line's time, read as the feature of the clone's last start by then. It moves only where that feature has the task, and is marked \"fallback\": true as the writer marks it. This is a labeled CONVENTION, because feature.json keeps no history.",
+     "class": "within",
+     "why": "It was measured that sharing the stale-start rule alone moves none of the 23, so this is what the task's goal takes, not a carve-out from it. The convention's limit, that a make claim between two starts is not seen, comes from having no history to read, not from a choice to cover less. It is bounded by the has-the-task test. For the 23 the result is backed by an independent source, the dispatchers' descriptions. No requirement is narrowed."
+    },
+    {
+     "id": "T56-brief-not-rule",
+     "summary": "The dispatcher's brief is not made the re-file's rule, because the writer has no such step.",
+     "class": "within",
+     "why": "Keeping one rule for writer and re-file is the section's stated goal, and a rule only the re-file had would bring back the disagreement this task removes. It is a design choice inside what was asked."
+    },
+    {
+     "id": "T56-count-line",
+     "summary": "The run's summary counts fallback moves apart and prints that count only when it is nonzero.",
+     "class": "within",
+     "why": "A reporting detail of the re-file's own output. It serves reading what moved and why, and takes nothing from any FR."
+    },
+    {
+     "id": "T56-pub-use",
+     "summary": "One edit past the file list: event_log_hooks.rs's pub use widened to the four names, run through make guard-edit.",
+     "class": "within",
+     "why": "Only makes the shared rule visible, with no change in behavior. It is declared and went through the guard."
+    },
+    {
+     "id": "T56-found-and-left-fallback-mark",
+     "summary": "No reader reads the fallback mark, though T53's section says readers keep a marked line apart (grep, measured 2026-11-21). Left, raised with the coordinator.",
+     "class": "within",
+     "why": "No FR asks for a fallback mark or for readers to keep one apart. That line is T53's claim, so leaving it narrows no requirement or request clause. By the defect standard (constitution XIV v2.36.0) no wrong outcome is shown: the 23 are booked to the right task, and a wrong booking elsewhere is unshown. A claim the code does not match, where the behavior is fine, is fixed by restating the claim, and that is T53's text, not T56's files. Aside for the coordinator: T53's sentence wants restating, or a reader built if a mis-booking is ever shown."
+    },
+    {
+     "id": "T56-perf-class",
+     "summary": "T56 is classed as [perf] performance work under FR-013.",
+     "class": "within",
+     "why": "FR-013 and the GM's 2026-11-20 words count measurement work, the event log's data and make where-time's readers, as performance work for ordering. Filing each line in the right feature's log is that data's correctness."
+    },
+    {
+     "id": "T56-exits-order",
+     "summary": "Exits: the red case green with the earlier test unedited, crate checks, closing-checks, the dry run before and after. Red: recorded, set down, a can't-be-done claim taken to arbiter-ask. Order: after T53 and T58, before T22.",
+     "class": "within",
+     "why": "Process and ordering inside the feature's own scheme. No requirement is narrowed."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-21",
+   "blocks": [
+    "### T59 (the finding as filed, restated by its measurement: a `SubagentStop` line's `tok` leaves out the agent's reply, its last model call, on 62 of the 85 stops that carry one, because the reply's row is not yet on disk when the hook reads, and the stops with no `tok` are the 10,370 written before the field began and 4 with no transcript anywhere, measured 2026-11-21 (`/tmp/t59/compare.py` and `gap.py`: each stop of every clone's and the mirror's event log against its agent's transcript))",
+    "### T59 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T59-wait",
+     "summary": "fields::agent_cost re-reads the growing transcript every 5 ms (REPLY_POLL) while the payload's last_assistant_message is not yet the last assistant row's text since the last user row, so tok counts the reply",
+     "class": "within",
+     "why": "Makes the stop line carry the agent's token cost as D6 defines it (the transcript's sum, each message.id once) - FR-004 and the 2026-11-19 approval's idea 4. The cause is measured (60 of 83 stops short by exactly the reply; the probe shows the reply lands 5.8-89.2 ms into the hook), and fixing the writer instead of restating the claim follows from the measurement that the reply is readable during the hook."
+    },
+    {
+     "id": "T59-bound",
+     "summary": "The wait is bounded at 1 s (REPLY_WAIT, ten times the probe's latest landing); past it the writer records what is on disk, as before",
+     "class": "within",
+     "why": "A Stop-hook writer that never refuses has to terminate; the bound covers every reply observed by a factor of ten, so FR-004's cost is recorded in every observed case, and the residue (a reply later than 1 s) is a design tolerance, not a case the plan excludes from what was asked. It also keeps the per-stop cost small, consistent with FR-013's priority on the builders' loop speed."
+    },
+    {
+     "id": "T59-ctx",
+     "summary": "ctx is read after the wait, so it is the reply's context rather than one call stale",
+     "class": "within",
+     "why": "D6 says ctx is the agent's last call's context; the stale ctx on the same 60 stops is the same defect, fixed together."
+    },
+    {
+     "id": "T59-no-transcript",
+     "summary": "A payload with no reply text or no readable transcript waits for nothing; a stop with no readable transcript still writes neither tok nor ctx, and the hook never refuses",
+     "class": "within",
+     "why": "Unchanged behavior, and the 4 such stops measured have no transcript anywhere, so there is nothing to sum; FR-004 is not narrowed by declining to invent a figure that cannot be read."
+    },
+    {
+     "id": "T59-history",
+     "summary": "The 10,370 stop lines written before the field existed are explained (they predate T07) and are not backfilled",
+     "class": "within",
+     "why": "T59's own question was why most stops lack tok; the measured answer is their date. FR-004 is about the stop line the writer records, and SC-002 asks for reproducibility for work done after the feature lands, so no backfill was requested."
+    },
+    {
+     "id": "T59-scope",
+     "summary": "Only fields.rs and its tests change; T56's refile.rs and T64's order.rs are left alone; where-time and feature-report readers unchanged because T10 already takes the transcript's sum first",
+     "class": "within",
+     "why": "Sequencing and file ownership, not a reduction of any requirement; the readers already satisfy FR-005 for cost, and the log's own record is the part fixed."
+    },
+    {
+     "id": "T59-exits",
+     "summary": "Red-first test, crate-scoped rust-test/lint/cover/format on rust/guard/shared, then make closing-checks; after landing, compare.py/gap.py check the next stops",
+     "class": "within",
+     "why": "Verification of FR-004 as asked, using the crate-scoped loop the GM approved (improvement 2); enforcement of the requested behavior, not added scope."
+    },
+    {
+     "id": "T59-perf",
+     "summary": "Filed and scheduled as a [perf] task",
+     "class": "within",
+     "why": "FR-013 counts work on the event log's data as performance work for ordering (the GM 2026-11-20: 'this kind of measurement task to be counted as a performance task')."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-21",
+   "blocks": [
+    "### T64 (T55's order notice counted a code edit already landed: the main session was told at its `make decide` calls that its Makefile edit of 2026-11-20T15:48:51Z, filed under T12, had no closing-checks after it, though T12 landed at 15:55:22Z; replayed over 451's log, 22 of the rule's 127 firings at 211 decides were on an edit its task had landed, all the main session's, measured 2026-11-21 (`/tmp/claude-T64/replay.py`, the decide rule replayed over `.git/l7r-events/451-time-retro-and-efficiency.jsonl` to its last line at 2026-11-21T08:09:00Z))",
+    "### T64 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T64-key",
+     "summary": "The order notice skips an edit once its own task has a landing after it in the log (keyed on the edit's task), not keyed on the decide's task and not on the decide's task's landing-else-first-start",
+     "class": "within",
+     "why": "A fix to a wrong outcome (constitution XIV): the main session was told about a Makefile edit that had landed hours before, which teaches it to ignore the notice. The block measured that keying on the decide's task drops none of the 22 wrong firings (127 -> 127), so it would not fix the defect. The start-based reading also drops 2 right firings (a builder's unlanded edit made before its task's first start). Keying on the edit's task removes exactly the 22, all on landed edits, and keeps every unlanded builder edit, which is the notice's job under FR-013's builders' loop. This is the fix that does what it says it is for; it narrows nothing the GM asked."
+    },
+    {
+     "id": "T64-landed-rule",
+     "summary": "'Landed' reuses static_runs_hooks' rule: a Phase end line with landed true whose tasks names the task, whatever its exit code",
+     "class": "within",
+     "why": "Reuses one existing definition rather than a second one; it decides how the fix is built, not what was asked."
+    },
+    {
+     "id": "T64-any-caller",
+     "summary": "Landing lines are not filtered by caller, so the main session's make land lands a builder's edits of its tasks",
+     "class": "within",
+     "why": "Measured: all 21 landings in 451's log are the main session's lines, so filtering by caller would leave every builder edit unlanded forever and keep the defect for builders. Needed for the fix to work."
+    },
+    {
+     "id": "T64-taskless",
+     "summary": "An edit with no task is never skipped and counts as before",
+     "class": "within",
+     "why": "Keeps T55's behavior where no landing can name the edit; measured 127 such lines, all from 2026-11-20 04h-06h before edits carried a task, so nothing current is affected. Borrowing the decide's task would guess; leaving them as they were narrows nothing."
+    },
+    {
+     "id": "T64-text",
+     "summary": "The notice's wording becomes 'your last code edit not landed'",
+     "class": "within",
+     "why": "Says what the fixed rule now reads; wording only."
+    },
+    {
+     "id": "T64-kept",
+     "summary": "T55's other rules kept: caller by agent_id else session_id, start = a closing-checks line that ran, a notice never a refusal; only order.rs, its tests, the static-runs suite and the section edited",
+     "class": "within",
+     "why": "Leaves the rest of the notice as it was built; nothing the GM asked is narrowed."
+    },
+    {
+     "id": "T64-static-red",
+     "summary": "make closing-checks' static step was red on T56's builder's uncommitted measure test; left to that builder, and item 6's green exit stated as not yet met, with a re-run waiting on T56",
+     "class": "within",
+     "why": "Not a defect this task found in its own scope or carries forward: it is another task's work in progress, and the plan says plainly that its own exit is not met yet instead of claiming green. How execution proceeds, not a narrowing of the request."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -10727,6 +10919,174 @@
      "summary": "nothing found and left",
      "class": "within",
      "why": "The final replay leaves no wrong turn end against the approximate truth; no defect is deferred."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T56": {
+   "section_sha256": "b4c3bb993f68fdfd515352e0baa380eb267b37d9bdd0e520ce43a396ae081d24",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T56-one-reader",
+     "summary": "The re-file deletes its own parse of task-starts.jsonl, its in_force and its started, and calls the writer's (filed.rs starts/in_force/started/Start, made public). The writer's behavior is unchanged.",
+     "class": "within",
+     "why": "The re-file and the writer filing a line by one rule is what makes make where-time book each line to the feature it served (FR-005, the tooling request: make the retrospective cheap to put together going forward). The 23 lines in 385's log, a feature with no T47, are a wrong outcome: 451's reading leaves out three of T47's reviews. So this is a defect fix, not a difference."
+    },
+    {
+     "id": "T56-time-bound",
+     "summary": "The re-file hands the writer's functions only the starts made by the line's time (with START_SLACK), and the line's t as now, so a start's age is measured as it was when the line was written.",
+     "class": "within",
+     "why": "It applies the writer's rule as the writer applied it when it wrote the line, which is how the two are made to agree. It narrows nothing that was asked."
+    },
+    {
+     "id": "T56-fallback",
+     "summary": "Shares the writer's next link too. Where no start in force names the task, the line goes to feature.json as it stood at the line's time, read as the feature of the clone's last start by then. It moves only where that feature has the task, and is marked \"fallback\": true as the writer marks it. This is a labeled CONVENTION, because feature.json keeps no history.",
+     "class": "within",
+     "why": "It was measured that sharing the stale-start rule alone moves none of the 23, so this is what the task's goal takes, not a carve-out from it. The convention's limit, that a make claim between two starts is not seen, comes from having no history to read, not from a choice to cover less. It is bounded by the has-the-task test. For the 23 the result is backed by an independent source, the dispatchers' descriptions. No requirement is narrowed."
+    },
+    {
+     "id": "T56-brief-not-rule",
+     "summary": "The dispatcher's brief is not made the re-file's rule, because the writer has no such step.",
+     "class": "within",
+     "why": "Keeping one rule for writer and re-file is the section's stated goal, and a rule only the re-file had would bring back the disagreement this task removes. It is a design choice inside what was asked."
+    },
+    {
+     "id": "T56-count-line",
+     "summary": "The run's summary counts fallback moves apart and prints that count only when it is nonzero.",
+     "class": "within",
+     "why": "A reporting detail of the re-file's own output. It serves reading what moved and why, and takes nothing from any FR."
+    },
+    {
+     "id": "T56-pub-use",
+     "summary": "One edit past the file list: event_log_hooks.rs's pub use widened to the four names, run through make guard-edit.",
+     "class": "within",
+     "why": "Only makes the shared rule visible, with no change in behavior. It is declared and went through the guard."
+    },
+    {
+     "id": "T56-found-and-left-fallback-mark",
+     "summary": "No reader reads the fallback mark, though T53's section says readers keep a marked line apart (grep, measured 2026-11-21). Left, raised with the coordinator.",
+     "class": "within",
+     "why": "No FR asks for a fallback mark or for readers to keep one apart. That line is T53's claim, so leaving it narrows no requirement or request clause. By the defect standard (constitution XIV v2.36.0) no wrong outcome is shown: the 23 are booked to the right task, and a wrong booking elsewhere is unshown. A claim the code does not match, where the behavior is fine, is fixed by restating the claim, and that is T53's text, not T56's files. Aside for the coordinator: T53's sentence wants restating, or a reader built if a mis-booking is ever shown."
+    },
+    {
+     "id": "T56-perf-class",
+     "summary": "T56 is classed as [perf] performance work under FR-013.",
+     "class": "within",
+     "why": "FR-013 and the GM's 2026-11-20 words count measurement work, the event log's data and make where-time's readers, as performance work for ordering. Filing each line in the right feature's log is that data's correctness."
+    },
+    {
+     "id": "T56-exits-order",
+     "summary": "Exits: the red case green with the earlier test unedited, crate checks, closing-checks, the dry run before and after. Red: recorded, set down, a can't-be-done claim taken to arbiter-ask. Order: after T53 and T58, before T22.",
+     "class": "within",
+     "why": "Process and ordering inside the feature's own scheme. No requirement is narrowed."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T59": {
+   "section_sha256": "533c5c9cb114a432463ad35da4b516fe51269816f227ad801042f0f10b0d30c9",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T59-wait",
+     "summary": "fields::agent_cost re-reads the growing transcript every 5 ms (REPLY_POLL) while the payload's last_assistant_message is not yet the last assistant row's text since the last user row, so tok counts the reply",
+     "class": "within",
+     "why": "Makes the stop line carry the agent's token cost as D6 defines it (the transcript's sum, each message.id once) - FR-004 and the 2026-11-19 approval's idea 4. The cause is measured (60 of 83 stops short by exactly the reply; the probe shows the reply lands 5.8-89.2 ms into the hook), and fixing the writer instead of restating the claim follows from the measurement that the reply is readable during the hook."
+    },
+    {
+     "id": "T59-bound",
+     "summary": "The wait is bounded at 1 s (REPLY_WAIT, ten times the probe's latest landing); past it the writer records what is on disk, as before",
+     "class": "within",
+     "why": "A Stop-hook writer that never refuses has to terminate; the bound covers every reply observed by a factor of ten, so FR-004's cost is recorded in every observed case, and the residue (a reply later than 1 s) is a design tolerance, not a case the plan excludes from what was asked. It also keeps the per-stop cost small, consistent with FR-013's priority on the builders' loop speed."
+    },
+    {
+     "id": "T59-ctx",
+     "summary": "ctx is read after the wait, so it is the reply's context rather than one call stale",
+     "class": "within",
+     "why": "D6 says ctx is the agent's last call's context; the stale ctx on the same 60 stops is the same defect, fixed together."
+    },
+    {
+     "id": "T59-no-transcript",
+     "summary": "A payload with no reply text or no readable transcript waits for nothing; a stop with no readable transcript still writes neither tok nor ctx, and the hook never refuses",
+     "class": "within",
+     "why": "Unchanged behavior, and the 4 such stops measured have no transcript anywhere, so there is nothing to sum; FR-004 is not narrowed by declining to invent a figure that cannot be read."
+    },
+    {
+     "id": "T59-history",
+     "summary": "The 10,370 stop lines written before the field existed are explained (they predate T07) and are not backfilled",
+     "class": "within",
+     "why": "T59's own question was why most stops lack tok; the measured answer is their date. FR-004 is about the stop line the writer records, and SC-002 asks for reproducibility for work done after the feature lands, so no backfill was requested."
+    },
+    {
+     "id": "T59-scope",
+     "summary": "Only fields.rs and its tests change; T56's refile.rs and T64's order.rs are left alone; where-time and feature-report readers unchanged because T10 already takes the transcript's sum first",
+     "class": "within",
+     "why": "Sequencing and file ownership, not a reduction of any requirement; the readers already satisfy FR-005 for cost, and the log's own record is the part fixed."
+    },
+    {
+     "id": "T59-exits",
+     "summary": "Red-first test, crate-scoped rust-test/lint/cover/format on rust/guard/shared, then make closing-checks; after landing, compare.py/gap.py check the next stops",
+     "class": "within",
+     "why": "Verification of FR-004 as asked, using the crate-scoped loop the GM approved (improvement 2); enforcement of the requested behavior, not added scope."
+    },
+    {
+     "id": "T59-perf",
+     "summary": "Filed and scheduled as a [perf] task",
+     "class": "within",
+     "why": "FR-013 counts work on the event log's data as performance work for ordering (the GM 2026-11-20: 'this kind of measurement task to be counted as a performance task')."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T64": {
+   "section_sha256": "89513f564558ba5fa112b8cb3d736c346ef6bc31fd54f93054e8b418167b4f80",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T64-key",
+     "summary": "The order notice skips an edit once its own task has a landing after it in the log (keyed on the edit's task), not keyed on the decide's task and not on the decide's task's landing-else-first-start",
+     "class": "within",
+     "why": "A fix to a wrong outcome (constitution XIV): the main session was told about a Makefile edit that had landed hours before, which teaches it to ignore the notice. The block measured that keying on the decide's task drops none of the 22 wrong firings (127 -> 127), so it would not fix the defect. The start-based reading also drops 2 right firings (a builder's unlanded edit made before its task's first start). Keying on the edit's task removes exactly the 22, all on landed edits, and keeps every unlanded builder edit, which is the notice's job under FR-013's builders' loop. This is the fix that does what it says it is for; it narrows nothing the GM asked."
+    },
+    {
+     "id": "T64-landed-rule",
+     "summary": "'Landed' reuses static_runs_hooks' rule: a Phase end line with landed true whose tasks names the task, whatever its exit code",
+     "class": "within",
+     "why": "Reuses one existing definition rather than a second one; it decides how the fix is built, not what was asked."
+    },
+    {
+     "id": "T64-any-caller",
+     "summary": "Landing lines are not filtered by caller, so the main session's make land lands a builder's edits of its tasks",
+     "class": "within",
+     "why": "Measured: all 21 landings in 451's log are the main session's lines, so filtering by caller would leave every builder edit unlanded forever and keep the defect for builders. Needed for the fix to work."
+    },
+    {
+     "id": "T64-taskless",
+     "summary": "An edit with no task is never skipped and counts as before",
+     "class": "within",
+     "why": "Keeps T55's behavior where no landing can name the edit; measured 127 such lines, all from 2026-11-20 04h-06h before edits carried a task, so nothing current is affected. Borrowing the decide's task would guess; leaving them as they were narrows nothing."
+    },
+    {
+     "id": "T64-text",
+     "summary": "The notice's wording becomes 'your last code edit not landed'",
+     "class": "within",
+     "why": "Says what the fixed rule now reads; wording only."
+    },
+    {
+     "id": "T64-kept",
+     "summary": "T55's other rules kept: caller by agent_id else session_id, start = a closing-checks line that ran, a notice never a refusal; only order.rs, its tests, the static-runs suite and the section edited",
+     "class": "within",
+     "why": "Leaves the rest of the notice as it was built; nothing the GM asked is narrowed."
+    },
+    {
+     "id": "T64-static-red",
+     "summary": "make closing-checks' static step was red on T56's builder's uncommitted measure test; left to that builder, and item 6's green exit stated as not yet met, with a re-run waiting on T56",
+     "class": "within",
+     "why": "Not a defect this task found in its own scope or carries forward: it is another task's work in progress, and the plan says plainly that its own exit is not met yet instead of claiming green. How execution proceeds, not a narrowing of the request."
     }
    ],
    "verdict": "CLEAR"

@@ -10,8 +10,15 @@
 //!   one of the new feature's; else that feature's task-start in force at the line's time; else none.
 //! - BY TASK ID: a line whose `task` is no task of its log's feature (`tasks.md` and `tasks-done.md`) moves to the feature whose
 //!   task-start of that id was in force at the line's time (else the latest that started it), when that feature has the id. The ids
-//!   collide across features (`T03` is a task of 16 features), so the clone's own starts say which one this line meant; a line no start
-//!   names is left and counted.
+//!   collide across features (`T03` is a task of 16 features), so the clone's own starts say which one this line meant. The rule is the
+//!   writer's own `started`, called with the starts made by the line's time (451 T56: one reader, not a copy), so a start more than
+//!   72 h before the line names none (451 T53's `STALE_START_S`).
+//! - BY THE FALLBACK (451 T56): where no start names the task, the writer's next link - feature.json at the line's time, which
+//!   `make task-start` rewrites to the feature it starts, so the feature of the clone's last start by then - when that feature has the
+//!   id, the line marked `"fallback": true` as the writer marks it. WHY: 451 T47's three spec-fidelity rounds, briefed `T47 plan review`,
+//!   sat in 385's log by 385's T47 start of 2026-10-18, 23 lines that the stale rule alone leaves where they are (observed 2026-11-21,
+//!   method: `make events-refile DRY=1`, its lines left joined to their meta files and `task-starts.jsonl`). A line nothing places is
+//!   left and counted.
 //!
 //! Idempotent: a moved line is filed where both rules leave it, and a line already in its target is not appended twice. The target is
 //! appended to (`O_APPEND`, as the hooks write - both readers sort by `t`, and `reversal` reads a log as a set); the source is rewritten
@@ -26,7 +33,7 @@ use std::path::{Path, PathBuf};
 use fancy_regex::Regex;
 use serde_json::{Map, Value};
 
-use l7r_shared::guards::event_log_hooks::brief_feature;
+use l7r_shared::guards::event_log_hooks::{self as writer, brief_feature, Start};
 
 use super::reply;
 use crate::measure::events::ts;
@@ -89,7 +96,8 @@ struct Facts {
     projects: PathBuf,
     specs: Vec<String>,
     ids: HashMap<String, Vec<String>>,
-    starts: Vec<(f64, String, String)>,
+    /// the writer's reading of `task-starts.jsonl` (`event_log_hooks::starts`)
+    starts: Vec<Start>,
     /// a session's briefs: by agent id and by the dispatch's tool-use id
     briefs: HashMap<String, HashMap<String, String>>,
     task_box: Regex,
@@ -102,24 +110,12 @@ impl Facts {
             .into_iter()
             .filter(|n| root.join("specs").join(n).is_dir())
             .collect();
-        let starts = std::fs::read_to_string(
-            l7r_shared::guards::event_log_hooks::common_git_dir(root).join("task-starts.jsonl"),
-        )
-        .unwrap_or_default()
-        .lines()
-        .filter_map(|l| serde_json::from_str::<Value>(l.trim()).ok())
-        .filter_map(|e| {
-            let at = ts(e.get("utc")?.as_str()?).ok()?;
-            Some((at, text(&e, "feature"), text(&e, "task")))
-        })
-        .filter(|(_, f, t)| !f.is_empty() && !t.is_empty())
-        .collect();
         Self {
             root: root.to_path_buf(),
             projects: projects.to_path_buf(),
             specs,
             ids: HashMap::new(),
-            starts,
+            starts: writer::starts(root),
             briefs: HashMap::new(),
             task_box: re(r"^- \[[ xX]\] (T\d+[a-z]?)\b"),
             task_named: re(r"\b(T\d+[a-z]?)\b"),
@@ -151,35 +147,32 @@ impl Facts {
         self.ids[feature].iter().any(|t| t == task)
     }
 
-    /// The starts at or before `at` (with the slack).
-    fn before(&self, at: f64) -> impl Iterator<Item = &(f64, String, String)> {
+    /// The starts at or before `at` (with the slack), in file order: what the writer had read at the line's time. A start whose time
+    /// does not parse has no place in time, so none.
+    fn before(&self, at: f64) -> Vec<Start> {
         self.starts
             .iter()
-            .filter(move |(s, _, _)| *s <= at + START_SLACK)
+            .filter(|(_, _, s)| s.is_some_and(|s| s <= at + START_SLACK))
+            .cloned()
+            .collect()
     }
 
-    /// The task in force for `feature` at `at`.
+    /// The task in force for `feature` at `at` (the writer's `in_force`).
     fn in_force(&self, feature: &str, at: f64) -> Option<String> {
-        self.before(at)
-            .filter(|(_, f, _)| f == feature)
-            .last()
-            .map(|(_, _, t)| t.clone())
+        writer::in_force(&self.before(at), feature)
     }
 
-    /// The feature whose start of `task` was in force at `at`, else the latest that started it by then.
+    /// The feature whose start of `task` was in force at `at`, else the latest that started it by then, a start more than 72 h
+    /// before `at` naming none (the writer's `started`, 451 T56).
     fn started(&self, task: &str, at: f64) -> Option<String> {
-        let mut last: HashMap<&str, &str> = HashMap::new();
-        for (_, f, t) in self.before(at) {
-            last.insert(f, t);
-        }
-        let named: Vec<&(f64, String, String)> =
-            self.before(at).filter(|(_, _, t)| t == task).collect();
-        named
-            .iter()
-            .rev()
-            .find(|(_, f, _)| last.get(f.as_str()) == Some(&task))
-            .or_else(|| named.last())
-            .map(|(_, f, _)| f.clone())
+        writer::started(&self.before(at), task, Some(at))
+    }
+
+    /// The writer's fallback at `at`: feature.json then, which `make task-start` rewrites to the feature it starts, so the feature of
+    /// the clone's last start by then (451 T56). CONVENTION, a reading, not a record: feature.json keeps no history, and a feature
+    /// created between two starts (`make claim`) is not seen; the move it makes is held to a feature that has the line's task.
+    fn fallback(&self, at: f64) -> Option<String> {
+        self.before(at).pop().map(|(f, _, _)| f)
     }
 
     /// The brief of the dispatch a line belongs to, "" where none is on disk.
@@ -266,6 +259,7 @@ fn text_m(e: &Map<String, Value>, k: &str) -> String {
 enum Rule {
     Brief,
     TaskId,
+    Fallback,
 }
 
 /// Where one line of `feature`'s log belongs: None to stay, else the feature, the rule and the line as written there.
@@ -280,7 +274,7 @@ fn verdict(facts: &mut Facts, feature: &str, raw: &str) -> Option<(String, Rule,
         && facts.has(feature, &task);
     let brief = facts.brief(&e);
     let briefed = brief_feature(&brief, &|n| facts.named(n), &|f| {
-        facts.starts.iter().any(|(_, s, _)| s == f)
+        facts.starts.iter().any(|(s, _, _)| s == f)
     });
     if let Some(to) = briefed.filter(|g| g != feature && !carried) {
         // a `T=` the line carries is its own task, kept where the new feature has it; then the brief's
@@ -301,18 +295,26 @@ fn verdict(facts: &mut Facts, feature: &str, raw: &str) -> Option<(String, Rule,
     if task.is_empty() || facts.has(feature, &task) {
         return None;
     }
-    let to = facts.started(&task, at)?;
+    let (to, rule) = match facts.started(&task, at) {
+        Some(to) => (to, Rule::TaskId),
+        None => (facts.fallback(at)?, Rule::Fallback),
+    };
     if to == feature || !facts.has(&to, &task) {
         return None;
     }
-    Some((to, Rule::TaskId, raw.to_owned()))
+    if let Rule::Fallback = rule {
+        e.insert("fallback".into(), Value::Bool(true));
+        return Some((to, rule, Value::Object(e).to_string()));
+    }
+    Some((to, rule, raw.to_owned()))
 }
 
 /// Counts of one run.
 #[derive(Default)]
 struct Tally {
     read: usize,
-    moved: BTreeMap<(String, String), (usize, usize)>,
+    /// by source and target: the lines moved by brief, by task id, by the fallback
+    moved: BTreeMap<(String, String), [usize; 3]>,
     left: usize,
 }
 
@@ -336,10 +338,7 @@ fn refile_log(
                 .moved
                 .entry((feature.to_owned(), to.clone()))
                 .or_default();
-            match rule {
-                Rule::Brief => c.0 += 1,
-                Rule::TaskId => c.1 += 1,
-            }
+            c[rule as usize] += 1;
             out.entry(to).or_default().push(written);
         } else {
             let task = serde_json::from_str::<Value>(line)
@@ -422,12 +421,18 @@ pub fn cli_in(args: &[String], env: &Reader) -> Reply {
         g.dir.display()
     );
     let mut all = 0;
-    for ((from, to), (brief, id)) in &tally.moved {
-        all += brief + id;
+    for ((from, to), [brief, id, fallback]) in &tally.moved {
+        all += brief + id + fallback;
+        // the fallback's count only where it moved a line, so a run with none reads as it did before 451 T56
+        let fell = if *fallback > 0 {
+            format!(", {fallback} by the fallback")
+        } else {
+            String::new()
+        };
         let _ = writeln!(
             out,
-            "refile: {from} -> {to}: {} lines ({brief} by brief, {id} by task id)",
-            brief + id
+            "refile: {from} -> {to}: {} lines ({brief} by brief, {id} by task id{fell})",
+            brief + id + fallback
         );
     }
     let _ = writeln!(
@@ -441,7 +446,7 @@ pub fn cli_in(args: &[String], env: &Reader) -> Reply {
     );
     let _ = writeln!(
         out,
-        "refile: {} lines left whose task is no task of their log's feature and no start names",
+        "refile: {} lines left whose task is no task of their log's feature and no rule places",
         tally.left
     );
     reply(out, String::new(), 0)

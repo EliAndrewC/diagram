@@ -2,10 +2,14 @@
 //! the 1,000-line file cap), and a background run's (451 T04, FR-002, plan D3, research R2) - `bg` on a backgrounded call's
 //! `PostToolUse`, `inflight` on every `Stop` and `SubagentStop`, and what a completion notice gives its `BgEnd` line.
 
+use std::collections::HashMap;
 use std::sync::LazyLock;
+use std::time::{Duration, Instant};
 
 use fancy_regex::Regex;
 use serde_json::{Map, Value};
+
+use crate::context::{call_of, Call};
 
 use super::{
     digest, first_group, heading_only, make_target, or_empty, re, text_of, truthy, EDIT_TOOLS,
@@ -137,16 +141,32 @@ pub(super) fn run_fields(out: &mut Map<String, Value>, ev: &str, payload: &Value
     }
 }
 
+/// How long a stop waits for its agent's reply to reach the transcript (feature 451 T59): Claude Code writes a transcript's rows on a
+/// timer, so at `SubagentStop` the reply's row is often not yet on disk - 60 of the 83 stops that carried a `tok` left out exactly that
+/// call (its every row; `ctx` one call stale beside it), the reply stamped 15-52 ms before the stop, measured 2026-11-21 (each stop of the
+/// clone's 451 log against its agent's transcript) - and it lands while the hook still runs: 7 of 12 stops off disk at the hook's start,
+/// each landing 5.8-89.2 ms in, the other 5 on disk already, measured 2026-11-21 (a `claude -p` session's `SubagentStop` hook polling the
+/// file every 5 ms). Ten times the probe's latest; past it, what is on disk is written, as before.
+const REPLY_WAIT: Duration = Duration::from_millis(1000);
+/// How often the wait looks again: each look reads only the bytes appended since the last.
+const REPLY_POLL: Duration = Duration::from_millis(5);
+
 /// An agent's cost on its `SubagentStop` line (feature 451 T07, plan D6, research R2): `tok`, its transcript's `in`, `cached`, `created`
 /// and `out` tokens, each model call once - one call's streamed reply is several `assistant` rows of one `message.id`, the last holding
 /// the whole output, so the last row of an id stands for it (a sum over rows read the T202 builder's output 1,317,955 tokens against its
 /// 481,878, 723 rows of 305 ids, measured 2026-11-20 (a Python scan of its 50 MB transcript)); `ctx`, its last call's context. Both are
 /// read by `context_cap_hooks`' row reader, the whole file for `tok` (a stop is cumulative: a resumed agent's file holds every leg, and
-/// the reader keeps the last line per `aid`). The transcript is the payload's `agent_transcript_path`, else the one beside the session's;
-/// none readable, or no call in it, writes neither field: the hook never refuses.
+/// the reader keeps the last line per `aid`), once the payload's `last_assistant_message` is on disk ([`REPLY_WAIT`], T59). The
+/// transcript is the payload's `agent_transcript_path`, else the one beside the session's; none readable, or no call in it, writes
+/// neither field: the hook never refuses.
 pub(super) fn agent_cost(out: &mut Map<String, Value>, payload: &Value) {
-    use crate::context::{call_of, context, own_transcript, Call};
-    use std::io::BufRead as _;
+    agent_cost_within(out, payload, REPLY_WAIT);
+}
+
+/// [`agent_cost`], waiting at most `wait` for the reply.
+pub(super) fn agent_cost_within(out: &mut Map<String, Value>, payload: &Value, wait: Duration) {
+    use crate::context::{context, own_transcript};
+    use std::io::Read as _;
     let own = text_of(payload.get("agent_transcript_path"));
     let path = if own.is_empty() {
         own_transcript(
@@ -156,24 +176,38 @@ pub(super) fn agent_cost(out: &mut Map<String, Value>, payload: &Value) {
     } else {
         Some(own.into())
     };
-    let Some(file) = path.as_ref().and_then(|p| std::fs::File::open(p).ok()) else {
+    let Some(mut file) = path.as_ref().and_then(|p| std::fs::File::open(p).ok()) else {
         return;
     };
-    let mut calls: Vec<Call> = Vec::new();
-    let mut at: std::collections::HashMap<String, usize> = std::collections::HashMap::new();
-    for row in std::io::BufReader::new(file)
-        .split(b'\n')
-        .map_while(Result::ok)
-    {
-        let Some(c) = call_of(&row) else { continue };
-        // a row naming no id is a call of its own
-        if let Some(&i) = at.get(&c.id).filter(|_| !c.id.is_empty()) {
-            calls[i] = c;
-        } else {
-            at.insert(c.id.clone(), calls.len());
-            calls.push(c);
+    let said = text_of(payload.get("last_assistant_message"));
+    let said = said.trim();
+    let start = Instant::now();
+    let mut tally = Tally::default();
+    // the bytes read past the last whole row
+    let mut rest: Vec<u8> = Vec::new();
+    let mut chunk = vec![0; 1 << 16];
+    loop {
+        // what was appended since the last look, a chunk at a time: a 50 MB transcript is streamed, never held whole
+        while let Ok(n @ 1..) = file.read(&mut chunk) {
+            rest.extend_from_slice(&chunk[..n]);
+            // the last newline is looked for in the new bytes alone, so a row longer than a chunk is not scanned again each chunk
+            let Some(i) = chunk[..n].iter().rposition(|&b| b == b'\n') else {
+                continue;
+            };
+            let whole = rest.len() - n + i + 1;
+            for row in rest[..whole].split(|&b| b == b'\n') {
+                tally.row(row);
+            }
+            rest.drain(..whole);
         }
+        if said.is_empty() || tally.replied(said) || start.elapsed() >= wait {
+            break;
+        }
+        std::thread::sleep(REPLY_POLL);
     }
+    // a last row with no newline counts, as a split of the file read it
+    tally.row(&rest);
+    let calls = tally.calls;
     let n = |f: fn(&Call) -> u64| calls.iter().map(f).sum::<u64>();
     if n(|c| c.input + c.cached + c.created + c.out) == 0 {
         return;
@@ -184,6 +218,51 @@ pub(super) fn agent_cost(out: &mut Map<String, Value>, payload: &Value) {
     );
     if let Some(ctx) = path.as_deref().and_then(context) {
         out.insert("ctx".into(), Value::from(ctx));
+    }
+}
+
+/// What an agent's transcript rows have shown so far: each model call once, and the last `assistant` row since the last `user` row - the
+/// reply, once it is on disk.
+#[derive(Default)]
+struct Tally {
+    calls: Vec<Call>,
+    at: HashMap<String, usize>,
+    last: Vec<u8>,
+}
+
+impl Tally {
+    fn row(&mut self, row: &[u8]) {
+        // a `user` row (a prompt, a tool's result) as Claude Code writes it: what came before it answers no later prompt
+        const USER: &[u8] = br#""type":"user""#;
+        if let Some(c) = call_of(row) {
+            self.last = row.to_vec();
+            // a row naming no id is a call of its own
+            if let Some(&i) = self.at.get(&c.id).filter(|_| !c.id.is_empty()) {
+                self.calls[i] = c;
+            } else {
+                self.at.insert(c.id.clone(), self.calls.len());
+                self.calls.push(c);
+            }
+        } else if row.windows(USER.len()).any(|w| w == USER) {
+            self.last.clear();
+        }
+    }
+
+    /// Whether the last row is the reply: a `text` block the agent's last message ends with (a reply of several blocks is their text
+    /// joined; the probe's 12 were one block each, equal).
+    fn replied(&self, said: &str) -> bool {
+        let Ok(row) = serde_json::from_slice::<Value>(&self.last) else {
+            return false;
+        };
+        row.pointer("/message/content")
+            .and_then(Value::as_array)
+            .is_some_and(|blocks| {
+                blocks.iter().any(|b| {
+                    let text = text_of(b.get("text"));
+                    let text = text.trim();
+                    !text.is_empty() && said.ends_with(text)
+                })
+            })
     }
 }
 

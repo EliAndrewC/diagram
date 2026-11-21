@@ -737,31 +737,97 @@ The T02 class, by kind (the grep's hits, each read):
 
 
 <!-- plan-archive: T55 to T55 moved to plan-done.md, 2026-11-21 (feature 375 FR-044) -->
-### T56 (<why: the finding or measurement that files it>)
+### T56 (T53's writer gives a start over 72 h old no feature, but `make events-refile` read its own copy of the start rule: 0 lines moved and 23 left in 385's log, measured 2026-11-21 (`make events-refile DRY=1` before the change, its last line))
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: the re-file (`rust/gate/crates/measure/src/measure/event_log/refile.rs`) asks the writer's rule instead of its copy:
+  - ONE READER: `filed.rs`'s `starts` (the one reading of `task-starts.jsonl`), `in_force` and `started` (the `STALE_START_S` rule,
+    72 h, a GUESS knob, 451 T53's item 10) and their `Start` are public, re-exported beside `brief_feature`; the re-file's own parse of the starts, its `in_force` and
+    its `started` are deleted. Its time bound stays: it hands the writer's functions only the starts made by the line's time (with
+    `START_SLACK`), and the line's `t` as `now`, so a start's age is measured as the writer measured it when it wrote the line. The
+    hook's behavior is unchanged (no line of the writer's chain moved, only visibility).
+  - THE FALLBACK, the writer's next link: sharing `started` alone moves none of the 23 - it answers no feature, where the old copy
+    answered 385, the log's own, so the line stayed either way, measured 2026-11-21 (`verdict` traced over the 23 lines, 385's
+    `tasks.md` with no T47 box and the clone's one T47 start, 385's of 2026-10-18T17:01:28Z, read). Where no start names the
+    task the writer files the line under feature.json, marked `"fallback": true`; the re-file now does the same with feature.json at
+    the line's time, read as the feature of the clone's last start by then (`make task-start` rewrites feature.json), moved only where
+    that feature has the task, the line marked as the writer marks it. For the 23 that is 451, whose T45 started at
+    2026-11-20T23:36:12Z, the clone's last start before the lines (23:56:18Z to 00:16:22Z) and none between, measured 2026-11-21
+    (`task-starts.jsonl` read); 451 has T47 (`tasks-done.md`). The lines' dispatchers agree independently: `ad13155b5a57c77e0`
+    "451 T47: the pages coverage flake" and `a100d23716c85dabc` "451 T47 (fresh): the last steps", the parents of the three
+    spec-fidelity rounds "T47 plan review", "T47 plan section re-review" and "... re-review 3", measured 2026-11-21 (their meta files'
+    `description` and `parentAgentId`). The dispatcher's brief was not made the rule: the writer has no such step, so the two would
+    disagree on new lines.
+  - The run's line counts the fallback apart: `(0 by brief, 0 by task id, 23 by the fallback)`, the fallback's count printed only where
+    it moved a line, so a run with none reads as before.
+  - One edit past the task's file list: `event_log_hooks.rs`'s `pub use filed::brief_feature;` widened to the four names, `filed`
+    being a private module (`make guard-edit` run on both files).
+- **Red first** (`refile::tests::a_task_whose_only_start_is_stale_falls_to_the_feature_of_the_last_start`, the live shape in a small
+  world - the log's feature without the task, its only start weeks old, another feature with the task and the last start, the briefs
+  naming a task only - and one case per new branch: a fresh start still wins, no start before the line, the fallback's feature without
+  the task, the fallback the log's own feature):
+  - before: 200 passed and the new case failed, the old copy reading `385-c -> 449-b: 1 lines (0 by brief, 1 by task id)`, `1 lines
+    moved`, `5 lines left`, measured 2026-11-21 (`make rust-test CRATE=rust/gate/crates/measure`, `/tmp/t56/red.log`).
+  - after: 201 passed, 0 failed, the earlier `each_misfiled_line_moves_to_the_feature_of_its_task_once` unedited and green, measured
+    2026-11-21 (the same command, `/tmp/t56/green.log`).
+- **The runs** on this clone's logs (the logs of `385-approach-checklist` and `451-time-retro-and-efficiency` copied to
+  `/tmp/t56/logs-before/` first):
+  - the dry run after the change: 239,030 lines read in 28 logs, `385-approach-checklist -> 451-time-retro-and-efficiency: 23 lines
+    (0 by brief, 0 by task id, 23 by the fallback)`, 0 lines left, measured 2026-11-21 (`make events-refile DRY=1`,
+    `/tmp/t56/dry1.log`).
+  - the real run: the same 23 moved, 0 left, measured 2026-11-21 (`make events-refile`, `/tmp/t56/real.log`).
+  - the dry run after it: 0 lines moved, 0 left, measured 2026-11-21 (`make events-refile DRY=1`, `/tmp/t56/dry2.log`).
+  - 385's log holds 0 lines whose task is `T47` (20,415 lines before the real run, 20,392 after) and 451's the 23, each marked
+    `"fallback": true`, measured 2026-11-21 (`wc -l` and `grep -c` over the logs and their copies).
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| the re-file asks the writer's start rule, then the writer's fallback at the line's time | n/a - no map | n/a | none | n/a |
 
 ### T56 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
-8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+1. **The goal, in the world.** No map changes. Every event-log line sits in the log of the feature whose task it served, so `make
+   where-time F=451` books 451 T47's three plan reviews to 451, and `make events-refile DRY=1` finds nothing to move and nothing left;
+   the re-file and the writer file a line alike because they read one rule.
+2. **The constraints.** T56's line: the refile shares the writer's rule (one reader, not a copy), a dry run shows the 23 moving, red
+   first; then the real refile run once. The launcher's file list: `refile.rs` and its tests, `filed.rs` only to make the rule public,
+   this section (one more line, item 1's `pub use`, Approach). T59's `fields.rs` and T64's `order.rs` untouched; nothing committed.
+   T53's writer behavior unchanged.
+3. **Where each comes from.** O: the dry runs before and after (the Approach); O: the lines left, their meta files and
+   `task-starts.jsonl` (the Approach); O: the red-first run (Red first); the task as filed (T56's line) and T53's section (its item 9
+   and Found and left, which filed T56).
+4. **Do they describe the world here?** Every figure is from this clone's logs, its subagents' meta files and its `task-starts.jsonl`,
+   measured 2026-11-21 (the Approach's reads and runs); the red case reproduces the live shape in a scratch world.
+5. **The order.** After T53 (whose rule it shares) and T58 (which moved `filed.rs` to `rust/guard/shared`); before T22.
+6. **The exits.** Green: the red case green with the earlier re-file test unedited, `make rust-test CRATE=rust/gate/crates/measure`,
+   lint, format and cover on `rust/gate/crates/measure` and `rust/guard/shared`, `make closing-checks`, the dry run showing the 23 and
+   the dry run after the real run showing 0. Red: what failed recorded and the task set down, a claim that it cannot be done ruled
+   through `make arbiter-ask`.
+7. **The search smell.** One. The task expected the shared stale-start rule alone to move the 23; traced, it leaves them (it answers no
+   feature where the copy answered the log's own), so the writer's next link, the fallback, was shared too, read at the line's time
+   rather than from today's feature.json (Approach).
+8. **The budget.** One landing. The re-file's added work is a copy of the starts made by a line's time, taken only on a line whose task
+   is no task of its log's feature or a BY BRIEF move: 23 lines of 239,030 on this clone, measured 2026-11-21 (the dry run's counts).
+9. **Done, measured.**
+   - the red case green, 201 passed, measured 2026-11-21 (`make rust-test CRATE=rust/gate/crates/measure`).
+   - the dry run moves the 23 to 451 and leaves 0, the real run moves them, and the dry run after it moves 0 and leaves 0, measured
+     2026-11-21 (`make events-refile [DRY=1]`, The runs).
+10. **Before moving a constant.** No constant moves. `STALE_START_S` (72 h, a GUESS knob) is the writer's, now read by the re-file
+    through `started`; `START_SLACK` (60 s, a GUESS knob beside it) now also bounds the fallback's last start, the same bound the
+    re-file's other start readings take. The fallback's reading of feature.json at a line's time is a CONVENTION, labeled in the code:
+    feature.json keeps no history, a feature created between two starts (`make claim`) is not seen, and a move is held to a feature
+    that has the line's task.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** A reader of `make where-time F=451` or `F=385` sees 451 T47's three spec-fidelity rounds booked to 451, not to
+    385, which has no T47. Nothing on a map.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?**
+- The `fallback` mark has no reader: T53's section says "readers keep a marked line apart", and no reader in `rust/gate/crates` or
+  the shared event-log reader (`event_log_hooks/read.rs`) reads the mark, measured 2026-11-21 (`grep -rn fallback` over both).
+  Not a defect here: for the 23 the mark's task, T47, is the 451 T47 their dispatchers served (Approach), so they are booked right; whether
+  a fallback line elsewhere is booked to a wrong task is unshown, and the readers are not T56's files. Raised with the coordinator.
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** yes. This is a `[perf]` task (451 FR-013: it makes the builders' loop faster by booking each feature's time
+where `where-time` reads it). It is not an engine-speed task, so the checklist does not apply.
 
 
 ### T57 (the finding as filed, restated by its measurement: `make static` builds and runs no plain test binary - the plain `build` and `test` time is `make rust-test`'s, the builders' loop, measured 2026-11-21 over the event log's Phase lines since 2026-11-20T12:35Z; what is built twice is a crate's tests in `make rust-test` and again in the coverage run, which answers for the plain run only where T111's `unit_tests_only` says the coverage run ran every test `cargo test` runs)
@@ -1043,31 +1109,111 @@ again after a green coverage pass answered for them); not engine speed, so no ch
 **Performance work?** yes (a `[perf]` task, 451 FR-013: it makes the builders' loop faster - a hook edit, about half of the guard's
 source edits, rebuilds the guard alone where it rebuilt every crate that named it); not engine speed, so no checklist answers.
 
-### T59 (<why: the finding or measurement that files it>)
+### T59 (the finding as filed, restated by its measurement: a `SubagentStop` line's `tok` leaves out the agent's reply, its last model call, on 62 of the 85 stops that carry one, because the reply's row is not yet on disk when the hook reads, and the stops with no `tok` are the 10,370 written before the field began and 4 with no transcript anywhere, measured 2026-11-21 (`/tmp/t59/compare.py` and `gap.py`: each stop of every clone's and the mirror's event log against its agent's transcript))
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: `fields::agent_cost` reads the agent's transcript as it grows, and while the payload's `last_assistant_message` is
+  not the text of the last `assistant` row since the last `user` row it looks again every 5 ms (the knob `REPLY_POLL`), reading only
+  the bytes appended since, for at most 1 s (the knob `REPLY_WAIT`), past which it writes what is on disk, as before. `ctx` is read
+  after the wait, so it is no longer one call stale. A payload with no reply text, or no readable transcript, waits for nothing.
+  Claude Code writes a transcript's rows on a timer, and the reply lands while the hook still runs: 7 of 12 replies were off disk at
+  the hook's start in a live probe, each landing 5.8-89.2 ms in, measured 2026-11-21 (a `claude -p` session's `SubagentStop` hook
+  polling the file, item 4), and the bound is ten times the probe's latest (the knob `REPLY_WAIT`).
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| the `SubagentStop` `tok` waits for the agent's reply to reach the transcript | n/a - no map | n/a | none | n/a |
 
 ### T59 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** No map changes. Each `SubagentStop` line's `tok` is its agent's transcript sum (each `message.id` once)
+   as of the stop, its reply included, and `ctx` is the reply's context. A stop with no readable transcript still writes neither field,
+   and the hook never refuses.
+2. **The constraints.** T59's line: measure first which messages the writer misses, and why most stops carry no `tok`, then match the
+   transcript's sum where it can be read, red first, and if the reply is genuinely not on disk at the stop, say so with the measurement
+   and restate the claim. D6: `tok` summed over `agent_transcript_path` with each `message.id` once, the reader keeping the last line
+   per `aid`. FR-004 and FR-013. The wait stays far under the `SubagentStop` hook entry's 60 s timeout (`.claude/settings.json`,
+   observed 2026-11-21, method: the entry read). Only `fields.rs` and its tests change: T56's `refile.rs` and T64's `order.rs` are
+   open in the clone and left alone.
+3. **Where each comes from.**
+   - O: the event logs against the transcripts, and the live probe (item 4).
+   - R: research R2, which says the `SubagentStop` payload carries `agent_transcript_path` and `last_assistant_message`
+     (`research.md`); the probe confirmed both.
+   - G: FR-013 (the GM 2026-11-20, request.md: "can we in general priotitize performance improvements going forward?").
+   - The task as filed (T59's line).
+4. **Do they describe the world here?**
+   - **Why most stops carry no `tok`: its start date**.
+     - 10,370 `SubagentStop` lines across every clone's and the mirror's logs predate the field's first line
+       (2026-11-21T02:46:46.825Z, T07's aea9e74ea4 committed at 02:25Z), 260 of 347 in the clone's 451 log, measured 2026-11-21 (a
+       Python tally of every `.git/l7r-events/*.jsonl`).
+     - After the first line, 85 of 89 stops carry `tok`, and the other 4 have `agent_type` "", no `agent-<aid>.jsonl` anywhere under
+       the session's directory and no Agent call naming them, so there is nothing to read, measured 2026-11-21 (the same tally,
+       `find ~/.claude/projects -name '*<aid>*'` and `grep -rl` over the session's directory).
+     - No stop since the field began lacks `tok` while its transcript has rows, measured 2026-11-21 (the same tally).
+   - **Which messages the writer misses: the reply**.
+     - Of the 83 stops with `tok` in the clone's 451 log, 60 leave out exactly the last model call before the stop (every row of it,
+       the logged sum equal to the sum of the calls before it), a call stamped 15-52 ms before the stop, measured 2026-11-21
+       (`/tmp/t59/compare.py`, `timing.py`, `gap.py`: prefix sums of each transcript's calls against each logged `tok`).
+     - The other 23 count every call before the stop, whose last row came 15-443 ms earlier, and the mirror's 2 stops are both short
+       (22 and 26 ms), measured 2026-11-21 (`gap.py`).
+     - The call left out is the reply: in 58 of the 60 the last call counted ended in a `tool_use` block, and in all 23 whole stops it
+       ended in `text`, measured 2026-11-21 (`/tmp/t59/kind.py`: each call's content blocks).
+     - `ctx` is the last counted call's context in all 83, so it is one call stale on the same 60: two readers of one file missed the
+       same row, so the row was not on disk when the hook read and it was not the sum that missed it, measured 2026-11-21
+       (`timing.py`).
+     - How short, at the line a reader keeps (the last per `aid`): 42 of 47 agents, 55,684 of 1,636,568 output tokens (3.4%),
+       4,764,887 of 304,863,526 cache reads (1.6%) and 112,051 of 5,571,736 cache writes (2.0%), and for 12 of the 13 4-call
+       `spec-fidelity` agents 11-29% of the output and 30-47% of the cache reads, measured 2026-11-21 (`/tmp/t59/short.py`, each
+       transcript's sum up to its stop's time).
+     - Comparing against each transcript as it is now overstates the defect (78 of 83), because a resumed agent's later legs ran
+       after its earlier stops, measured 2026-11-21 (`compare.py`).
+   - **Whether the reply can be read at the stop: yes, while the hook runs**.
+     - The probe, a `claude -p` session (Claude Code 2.1.330, haiku) that launched 12 subagents, each making one Bash call and then a
+       one-line reply, under a `SubagentStop` hook polling the transcript every 5 ms for 2 s: 7 of 12 replies were off disk at the
+       hook's start and each landed while the hook still ran, 5.8-89.2 ms in, in one write, and the other 5 were on disk already,
+       measured 2026-11-21 (`/tmp/t59/scripts/stop_probe.py`, its log `/tmp/t59/probe-log.jsonl`).
+     - In all 12 the payload's `last_assistant_message` equaled the reply's one `text` block, and the payload named
+       `agent_transcript_path`, measured 2026-11-21 (the same probe log).
+     - So the reply is not on disk at the instant `SubagentStop` fires, but it is within the hook's run: the field can match, and the
+       claim needs no restating.
+   - **The wait's rule against the record**: wait unless the last `assistant` row since the last `user` row has a `text` block that
+     the reply ends with, and replayed on the 83 stops' rows as they stood at each stop (the reply taken from the transcript's own text
+     block) it waits on all 60 short stops and on none of the 23 whole ones, measured 2026-11-21 (`/tmp/t59/rule.py`).
+5. **The order.** After T58, which moved the writer to `rust/guard/shared`, and after T07, the field. Built beside T56 (`refile.rs`)
+   and T64 (`order.rs`) in the clone without touching their files. T10's reader already takes the transcript's sum first, so no
+   report waits on this.
+6. **The exits.** Green: the red test passes on the new writer, `make rust-test`, lint, format and cover pass on `rust/guard/shared`,
+   then `make closing-checks`. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through
+   `make arbiter-ask`.
+7. **The search smell.** None: one function's reads, its cause measured before any change.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.**
+   - **Red first**: `a_stop_waits_for_its_agents_reply_to_reach_the_transcript` appends the reply 60 ms into the stop (the probe's
+     middle), and on the old writer it failed with `tok` `{"in": 3, "cached": 1000, "created": 200, "out": 10}`, the first call alone,
+     against `{"in": 5, "cached": 2500, "created": 300, "out": 17}`, the production shape, 316 passed and 1 failed, measured
+     2026-11-21 (`make rust-test CRATE=rust/guard/shared`, its log kept at `.git/l7r-handoffs/T59-red.log`).
+   - **Green**: that test passes, and so does `a_stop_waits_only_for_a_reply_not_yet_on_disk`, whose four cases are a reply on disk
+     and one ending a longer message, both returned without waiting under a 30 s bound, and a reply before the last `user` row and one
+     that never lands, both waited for the 40 ms bound and then written with what is on disk, 318 passed, measured 2026-11-21
+     (`make rust-test CRATE=rust/guard/shared`).
+   - **The crate checks** on `rust/guard/shared`: lint clean, cover clean (every line of `l7r_shared` reached by its own tests,
+     the new wait's included), and format clean after `make format FILE=` rewrapped one tuple of the new test, measured 2026-11-21
+     (`l7r-gate.sh rust lint|cover|format --check --crate rust/guard/shared`).
+   - **After the landing**: once the mirror's guard is rebuilt, the next stops' `tok` should equal their transcripts' sums up to each
+     stop except where a reply lands more than 1 s late (the knob `REPLY_WAIT`), checked by `/tmp/t59/compare.py` and `gap.py`
+     (copies of every T59 script and the probe's log in the clone's `.git/l7r-handoffs/T59-scripts/`).
+10. **Before moving a constant.** n/a: `REPLY_WAIT` and `REPLY_POLL` are new, each with its measurement beside it, and no research
+   claim names them.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** No map changes, and `where-time` and `feature-report` give the same answers, since T10's reader takes the
+   transcript's sum first. What changes is the log's own record: each agent's `tok` was short by its reply and `ctx` one call stale
+   (42 of 47 agents, 3.4% of all output tokens and up to 29% of a small check's, measured 2026-11-21 (item 4's `short.py`)). Those are
+   wrong numbers in a record that readers fall back on, so it is a defect, fixed, not a claim to restate (constitution XIV).
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?** None.
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** Yes (a `[perf]` task, 451 FR-013): it makes the builders' loop's measure of each agent's cost right. Its cost
+is a wait on a stop whose reply is not yet on disk, 5.8-89.2 ms in the probe on about 60 of every 83 stops, measured 2026-11-21
+(item 4's probe and `gap.py`), and 1 s at most (the knob `REPLY_WAIT`). Not engine speed, so no checklist answers.
 
 
 ### T60 (<why: the finding or measurement that files it>)
@@ -1152,31 +1298,102 @@ source edits, rebuilds the guard alone where it rebuilt every crate that named i
 **Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
 
 
-### T64 (<why: the finding or measurement that files it>)
+### T64 (T55's order notice counted a code edit already landed: the main session was told at its `make decide` calls that its Makefile edit of 2026-11-20T15:48:51Z, filed under T12, had no closing-checks after it, though T12 landed at 15:55:22Z; replayed over 451's log, 22 of the rule's 127 firings at 211 decides were on an edit its task had landed, all the main session's, measured 2026-11-21 (`/tmp/claude-T64/replay.py`, the decide rule replayed over `.git/l7r-events/451-time-retro-and-efficiency.jsonl` to its last line at 2026-11-21T08:09:00Z))
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: `order.rs`'s `decide` reads the caller's last code edit NOT LANDED: `landings(lines)` maps each task to its last
+  landing that went out, by its line's place in the log - `static_runs_hooks`' landed rule, a `Phase` `end` line whose `landed` is
+  true and whose `tasks` names the task, whatever its exit code - and an edit whose own `task` has such a landing after it is
+  skipped, the notice reading back to the caller's last edit not landed (or saying nothing). Landing lines are not filtered by
+  caller: `make land` runs in the main session, so its line lands a builder's edits of its tasks. An edit with no `task` no
+  landing names, so it counts as before. The notice's text says "your last code edit not landed". KEYED ON THE EDIT'S TASK, NOT THE
+  DECIDE'S: the main session's decides were filed under the task being decided, not yet landed (T08, T09, T55, T57, T58, T11), so
+  the decide's own task's last landing drops none of the 22, measured 2026-11-21 (`/tmp/claude-T64/replay.py`: the rule fires on
+  127 of 211 decides as built, 127 keyed on the decide's task's last landing, 105 keyed on the edit's task). A third reading,
+  the decide's task's last landing else its first `task-start`, fires on 103, measured 2026-11-21 (the same replay), but it clears
+  edits by a start, not a landing, and drops 2 right firings: builder a37963's decides at 19:25:45Z and 19:25:50Z of 2026-11-20 on
+  its Makefile edit under T34 at 19:23:59Z, made before T34's first start at 19:37:16Z and landed at 19:44:52Z (measured
+  2026-11-21, the same replay and `.git/task-starts.jsonl`). Under the fix the main session's 3 firings left in the replay are at
+  most 4 min after their edit and before its landing (13:40:49Z on the T18 edit of 13:37:42Z, and 15:49:03Z and 15:52:51Z on the T12
+  edit of 15:48:51Z, 2026-11-20), the order the notice prices, measured 2026-11-21 (the same replay). These are the rule replayed
+  over the whole log; the notice itself ran only from T55's landing at 2026-11-21T05:33:54Z, its firings the guard log's `noticed`
+  rows.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| the landed edit skipped at the decide notice, and its tests | n/a - no map | n/a | none | n/a |
 
 ### T64 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** No map changes. A `make decide` is told the closing step's order only for a code edit of the
+   caller's that no landing of its task has followed and no `make closing-checks` has started after: the main session is no longer
+   told of a Makefile edit that landed hours before, and a builder's unlanded edit is still told as T55 built it.
+2. **The constraints.** T64's line: the caller's last code edit since its task's last landing, `static_runs_hooks`' own landed rule,
+   red first on an edit before a landing. T55's rules otherwise kept: the caller by `agent_id`, else the main session by
+   `session_id`; a start a `closing-checks` line that ran; a notice, never a refusal. FR-012 (red first), FR-013 (a `[perf]` task: the
+   builders' and the main session's loop). New Rust code owes 100% line coverage from its own tests. The dispatch: only `order.rs`,
+   its tests, the static-runs suite and this section edited; T56's `rust/gate/crates/measure` and T59's `fields.rs` left alone.
+3. **Where each comes from.** G: FR-013 (the GM 2026-11-20, request.md: "can we in general priotitize performance improvements going
+   forward?"). The task as filed (T64's line, found 2026-11-21). R: `static_runs_hooks.rs`'s module doc and `runs`, the landed rule
+   (feature 451 T06's `end` line, T14's count). O: the replay and the probe (item 4); O: the red and green runs (item 9).
+4. **Do they describe the world here?** Measured, not assumed:
+   - The finding's edit: `{"t":"2026-11-20T15:48:51.173Z",...,"tool":"Edit",...,"path":".../Makefile",...,"task":"T12","fallback":true}`,
+     the main session's (no `by`), and its landing, the `end` line of 2026-11-20T15:55:22.200Z, `landed` true, `tasks` `["T12","T17"]`,
+     measured 2026-11-21 (`grep` of 451's log); 21 landings went out in 451's log, every one the main session's line (no `by`),
+     measured 2026-11-21 (the log's `"step":"end"` `"landed":true` lines listed).
+   - The keys compared over 451's log to 2026-11-21T08:09:00Z, 211 decides: 127 firings as built, 127 keyed on the decide's task,
+     103 on the decide's task's landing else its first start, 105 on the edit's task (the fix), measured 2026-11-21
+     (`/tmp/claude-T64/replay.py`); why the edit's task, the Approach above.
+   - A taskless edit: 127 of the log's 1,079 Edit, Write and NotebookEdit lines carry no `task`, all of 2026-11-20 between 04h and
+     06h (126 builders', 1 the main session's), measured 2026-11-21 (the log's edit lines counted by `task`, caller and hour): before
+     lines carried a task, none since, so the fix leaves them counting rather than borrowing the decide's task.
+   - The probe: the built guard (`tests/hooks/static-runs-hooks.sh pretool`, `GUARD_LOG_DIR` a scratch directory so no `noticed` row
+     reaches the real guard log) on the main session's `make decide F=451 T=T64` against the clone's real log said nothing, exit 0,
+     where T55's rule named the T12 Makefile edit, measured 2026-11-21 (the probe, its output empty).
+5. **The order.** After T55 (the notice it fixes) and T58 (the crate split); beside T56 and T59, touching neither's files; before T22,
+   whose after-measurement reads the notice's `noticed` rows.
+6. **The exits.** Green: the red tests green, the crate's tests, lint, format and coverage green, the probe silent on the real log,
+   and `make closing-checks` green. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through
+   `make arbiter-ask`.
+7. **The search smell.** None: one predicate, the landed rule `runs` already reads, built once per decide and pinned by a test each
+   way.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.**
+   - Red first: two tests added to `order/tests.rs` before any fix (`an_edit_before_a_landing_of_its_task_is_landed_and_never_told`:
+     the finding's T12 edit and landing, a landing of another task, a refused one, one with no `landed`, a `start` line, an edit after
+     the landing, an earlier unlanded edit read back to; `a_builders_edit_is_landed_by_the_main_sessions_landing_of_its_task`, and a
+     taskless edit still told) and a twin to the suite's section 8 (a refused landing still told, one that went out silent): `make
+     rust-test CRATE=rust/guard` 410 passed, 2 failed (the two new), and `tests/hooks/test-static-runs-hooks.sh` 37 passed, 1 failed
+     ("a notice for an edit already landed"), measured 2026-11-21 (the runs' logs, `/tmp/claude-T64/red-*.log`).
+   - Green: `make rust-test CRATE=rust/guard` 412 passed, 0 failed; the suite 38 passed, 0 failed, measured 2026-11-21
+     (`/tmp/claude-T64/green-*.log`). Crate-scoped on rust/guard (`scripts/gates/l7r-gate.sh rust format --check`, `lint`, `cover
+     --crate rust/guard`): coverage green on the first run; format and lint red on it (rustfmt's layout of the new tests and of
+     `landings`, and two doc lines missing backticks around `static_runs_hooks`), fixed by `make format FILE=` and the backticks,
+     measured 2026-11-21 (`/tmp/claude-T64/crate-checks.log`). Re-run after the fixes, the same four and `make rust-test
+     CRATE=rust/guard`: format and lint clean (their green results on these inputs reused), coverage clean on a fresh run (its tests
+     14.5 s), the tests clean, measured 2026-11-21 (`/tmp/claude-T64/crate-checks2.log`).
+   - `make closing-checks` after the fix, 104 s wall: hooks-test green (55 guard suites green, 3 unchanged since green), quick green,
+     static red on one crate not this task's - `rust/gate/crates/measure`'s test
+     `a_task_whose_only_start_is_stale_falls_to_the_feature_of_the_last_start`, 200 passed, 1 failed, in T56's builder's uncommitted
+     `refile/tests.rs`, left alone - with lint clean and format clean on 34 crates and the guard's coverage green, measured 2026-11-21
+     (the logs under `.git/closing-checks/`). Static stops at its first red step, so its steps after `rust cover` did not run: `rust
+     dead`, spec-lint, the conflict check, guard-deps, `make-docs --check` and the layout-carry selftest (the Makefile's `static`
+     recipe read 2026-11-21) - so item 6's green exit is not met by this run, and a re-run waits on T56's test (a second static run of
+     T64's count spent on a result another builder's uncommitted file decides).
+   - Its cost: a `make decide` through the suite's shim on 451's 25,127-line log, ten calls, 162 to 227 ms, median 188 ms, against
+     23 to 51 ms, median 30 ms, for a call it reads nothing for, both under a running `make closing-checks`, measured 2026-11-21 (the
+     probe timed by `date +%s%N`); the fix adds one pass over lines already read and a map of the landed tasks, 44 in 451's log, measured 2026-11-21 (the log's
+     landed `end` lines' `tasks` counted).
+10. **Before moving a constant.** n/a - no constant moves.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** No map changes. What changes: the main session stops being told of an edit landed long ago at every
+   `make decide` (22 of 127 replayed firings, measured 2026-11-21, `/tmp/claude-T64/replay.py`), a notice that taught it to ignore the
+   order; a defect by its wrong outcome (constitution XIV), not a difference.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?** none.
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** yes (a `[perf]` task, 451 FR-013): the order notice makes the builders' closing step faster, and a notice
+that fires on landed work teaches the session to read past it; not an engine-speed task, so no docs/performance-checklist.md
+answers.
 
 
 ### T65 (the finding as filed, restated by its measurement: `set_down_hooks::running` read a transcript's launched and notified ids as two sets, so a SendMessage resume - its result's `"resumedAgentId":"<id>"`, 153 such records in the session `c6fd72d1-...jsonl` - was no launch and a resumed agent read as finished once it had notified, and an interim notice (`<summary>Agent "..." is waiting on its own background work</summary>`, its note "the same task-id notifies again if it does; the result below may be interim") ended its agent, which was waiting on its own work: resumes read, but an interim notice taken for final, "nothing is running" was read at 38 of that session's 1,864 turn ends while such an agent was alive, measured 2026-11-21 (a replay of the transcript and its agents' own transcripts, `/tmp/claude-T65/stops.py`, the truth approximate: an agent alive when its own transcript wrote again later without a parent resume first))
@@ -1285,6 +1502,33 @@ measured 2026-11-21 (item 9's timed test).
 |---|---|---|---|---|
 
 ### T67 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+
+### T68 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T68 Approach (checklist part A)
 
 1. **The goal, in the world.** <the place as it should be>
 2. **The constraints.** <the FRs, decisions and pages it holds to>

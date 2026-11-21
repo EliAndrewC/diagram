@@ -128,6 +128,86 @@ fn a_closing_checks_run_started_since_the_last_code_edit_silences_it() {
     assert!(decide_said(&lines, "a1").is_none());
 }
 
+/// A code edit filed under `task`, by the builder `by` (none: the main session).
+fn edit_of(t: &str, by: &str, path: &str, task: &str) -> Value {
+    let mut e = edit(t, by, path);
+    e["task"] = json!(task);
+    if let Some(o) = e.as_object_mut().filter(|_| by.is_empty()) {
+        o.remove("by");
+    }
+    e
+}
+
+/// `make land`'s end line: the main session's, with no `by`.
+fn landing(t: &str, landed: bool, tasks: &[&str]) -> Value {
+    json!({"ev": "Phase", "src": "land", "step": "end", "t": t, "code": 0, "make": "land", "tasks": tasks, "landed": landed})
+}
+
+#[test]
+fn an_edit_before_a_landing_of_its_task_is_landed_and_never_told() {
+    // the finding (T64): the main session's Makefile edit filed under T12, T12 landed after it, told at every later decide
+    let mut lines = vec![
+        edit_of("2026-11-20T15:48:51.173Z", "", "/c/Makefile", "T12"),
+        landing("2026-11-20T15:55:22.200Z", true, &["T12", "T17"]),
+    ];
+    assert!(decide_said(&lines, "").is_none());
+    // a landing that went out for another task, or one refused, lands nothing of T12's
+    for other in [
+        landing("2026-11-20T15:55:22.200Z", true, &["T17"]),
+        landing("2026-11-20T15:55:22.200Z", false, &["T12"]),
+        json!({"ev": "Phase", "step": "end", "t": "2026-11-20T15:55:22.200Z", "tasks": ["T12"]}),
+        json!({"ev": "Phase", "step": "start", "t": "2026-11-20T15:55:22.200Z", "tasks": ["T12"], "landed": true}),
+    ] {
+        let refused = vec![lines[0].clone(), other];
+        assert!(matches!(decide_said(&refused, ""), Some(Told::Decide(_))));
+    }
+    // a code edit after the landing is unchecked again, and named
+    lines.push(edit_of(
+        "2026-11-21T07:00:00.000Z",
+        "",
+        "/c/rust/guard/src/y.rs",
+        "T12",
+    ));
+    assert!(said_text(decide_said(&lines, "")).contains("rust/guard/src/y.rs"));
+    // the notice reads back past a landed edit to the caller's last one unlanded: an earlier edit of a task not yet landed
+    let back = vec![
+        edit_of(
+            "2026-11-20T15:00:00.000Z",
+            "",
+            "/c/rust/guard/src/z.rs",
+            "T13",
+        ),
+        edit_of("2026-11-20T15:48:51.173Z", "", "/c/Makefile", "T12"),
+        landing("2026-11-20T15:55:22.200Z", true, &["T12"]),
+    ];
+    let text = said_text(decide_said(&back, ""));
+    assert!(text.contains("rust/guard/src/z.rs"), "{text}");
+}
+
+#[test]
+fn a_builders_edit_is_landed_by_the_main_sessions_landing_of_its_task() {
+    // every landing line is the main session's (`make land` runs there): a builder's edit of the task is landed by it too
+    let lines = vec![
+        edit_of(
+            "2026-11-21T10:00:00.000Z",
+            "a1",
+            "/c/rust/guard/src/x.rs",
+            "T64",
+        ),
+        landing("2026-11-21T10:30:00.000Z", true, &["T63", "T64"]),
+    ];
+    assert!(decide_said(&lines, "a1").is_none());
+    // an edit with no task: no landing names it, so it is still told (the log's first day, before lines carried a task)
+    let taskless = vec![
+        edit("2026-11-21T10:00:00.000Z", "a1", "/c/rust/guard/src/x.rs"),
+        landing("2026-11-21T10:30:00.000Z", true, &["T64"]),
+    ];
+    assert!(matches!(
+        decide_said(&taskless, "a1"),
+        Some(Told::Decide(_))
+    ));
+}
+
 #[test]
 fn a_plan_or_document_edit_is_not_code_and_no_edit_says_nothing() {
     assert!(decide_said(&[], "a1").is_none());

@@ -77,3 +77,5 @@ landing on its own, each small; T22 last.
       research: rendering
 - [ ] T67 The README guard refuses a cp of a hook's source to /tmp (found by T58's builder, 2026-11-21: cp rust/guard/src/guards/readme_hooks.rs /tmp/... refused as a README write) - the guard reads the destination's name, not the source's, red first on that cp
       research: rendering
+- [ ] T68 [perf] The context cap reads an advisor call's usage as the builder's context (found by T64's builder, 2026-11-21: a transcript row carrying an advisor call holds the advisor's iteration in message.usage, so l7r_shared context::usage_of read 297,622 on a context of about 148k) - measured first how many builder refusals since T12 followed an advisor row, then the cap reads the builder's own iteration alone, red first on an advisor row's shape
+      research: rendering

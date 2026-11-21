@@ -921,7 +921,7 @@ mod fields;
 mod filed;
 pub mod read;
 
-pub use filed::brief_feature;
+pub use filed::{brief_feature, in_force, started, starts, Start};
 
 #[cfg(test)]
 mod tests;

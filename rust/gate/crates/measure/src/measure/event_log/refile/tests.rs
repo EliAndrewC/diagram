@@ -225,6 +225,95 @@ fn each_misfiled_line_moves_to_the_feature_of_its_task_once() {
     );
 }
 
+/// 451 T56's live shape: a 451 T47 builder's spec-fidelity rounds, briefed `T47 plan review`, filed in 385's log by 385's T47 start of
+/// 2026-10-18 - 385 has no T47, 451 has (archived), and 451's T45 was the clone's last start before them (feature.json then).
+fn stale_world(d: &Path) {
+    put(&d.join("specs/385-c/tasks.md"), "- [ ] T03 old\n");
+    put(&d.join("specs/449-b/tasks.md"), "- [ ] T236 y\n");
+    put(&d.join("specs/451-a/tasks.md"), "- [ ] T56 y\n");
+    put(&d.join("specs/451-a/tasks-done.md"), "- [x] T47 flake\n");
+    put(
+        &d.join(".git/task-starts.jsonl"),
+        concat!(
+            "{\"feature\": \"385-c\", \"task\": \"T47\", \"utc\": \"2026-10-18T17:01:28Z\"}\n",
+            "{\"feature\": \"449-b\", \"task\": \"T236\", \"utc\": \"2026-11-20T10:00:00Z\"}\n",
+            "{\"feature\": \"451-a\", \"task\": \"T45\", \"utc\": \"2026-11-20T23:36:12Z\"}\n",
+            "{\"feature\": \"385-c\", \"task\": \"T03\", \"utc\": \"2026-11-21T01:00:00Z\"}\n",
+        ),
+    );
+    let sub = d.join("projects/p/s1/subagents");
+    put(
+        &sub.join("agent-abld.meta.json"),
+        r#"{"description":"451 T47: the pages coverage flake","toolUseId":"tubld"}"#,
+    );
+    put(
+        &sub.join("agent-asf.meta.json"),
+        r#"{"description":"T47 plan review","toolUseId":"tusf","parentAgentId":"abld"}"#,
+    );
+}
+
+const LOG385: &str = concat!(
+    // the builder's dispatch of its review (its brief by the call's tool-use id) and the review's own line: no fresh start names T47,
+    // so the writer's fallback, the clone's last start before the line (451-a's T45: feature.json then), which has T47
+    "{\"t\":\"2026-11-20T23:56:18.017Z\",\"sid\":\"s1\",\"ev\":\"PreToolUse\",\"tool\":\"Agent\",\"id\":\"tusf\",\"by\":\"abld\",\"task\":\"T47\"}\n",
+    "{\"t\":\"2026-11-20T23:56:24.813Z\",\"sid\":\"s1\",\"ev\":\"PreToolUse\",\"tool\":\"Bash\",\"id\":\"f2\",\"by\":\"asf\",\"task\":\"T47\"}\n",
+    // a fresh start still wins: 449-b's T236 of 10:00
+    "{\"t\":\"2026-11-20T11:00:00Z\",\"sid\":\"m\",\"ev\":\"Stop\",\"id\":\"i3\",\"task\":\"T236\"}\n",
+    // kept: no start at all before the line; the fallback (449-b) without the task; the fallback the log's own feature
+    "{\"t\":\"2026-10-01T00:00:00Z\",\"sid\":\"m\",\"ev\":\"Stop\",\"id\":\"k10\",\"task\":\"T47\"}\n",
+    "{\"t\":\"2026-11-20T11:00:00Z\",\"sid\":\"m\",\"ev\":\"Stop\",\"id\":\"k11\",\"task\":\"T47\"}\n",
+    "{\"t\":\"2026-11-21T01:05:00Z\",\"sid\":\"m\",\"ev\":\"Stop\",\"id\":\"k12\",\"task\":\"T47\"}\n",
+);
+
+#[test]
+fn a_task_whose_only_start_is_stale_falls_to_the_feature_of_the_last_start() {
+    let d = crate::checks::scratch("measure-refile-stale");
+    stale_world(&d);
+    let ev = d.join("events");
+    put(&ev.join("385-c.jsonl"), LOG385);
+    let root = d.display().to_string();
+    let dir = ev.display().to_string();
+    let projects = d.join("projects").display().to_string();
+    let run = |extra: &[&str]| {
+        let mut a = vec!["--root", &root, "--dir", &dir, "--projects", &projects];
+        a.extend_from_slice(extra);
+        cli(&args(&a))
+    };
+    let dry = run(&["--dry-run"]);
+    assert_eq!(dry.code, 0, "{}", dry.stderr);
+    for want in [
+        "refile: 385-c -> 451-a: 2 lines (0 by brief, 0 by task id, 2 by the fallback)\n",
+        "refile: 385-c -> 449-b: 1 lines (0 by brief, 1 by task id)\n",
+        "refile: 3 lines moved (dry run: nothing written)\n",
+        "refile: 3 lines left whose task",
+    ] {
+        assert!(dry.stdout.contains(want), "{want:?} in {}", dry.stdout);
+    }
+    let r = run(&[]);
+    assert_eq!(r.code, 0, "{}", r.stderr);
+    assert_eq!(
+        ids(&ev.join("385-c.jsonl")),
+        ["k10:T47", "k11:T47", "k12:T47"]
+    );
+    assert_eq!(ids(&ev.join("449-b.jsonl")), ["i3:T236"]);
+    let moved = lines(&ev.join("451-a.jsonl"));
+    assert_eq!(
+        moved
+            .iter()
+            .map(|e| format!("{}:{}:{}", e["id"], e["task"], e["fallback"]))
+            .collect::<Vec<_>>(),
+        ["\"tusf\":\"T47\":true", "\"f2\":\"T47\":true"]
+    );
+    // the task-id move is no fallback; a second run moves nothing
+    assert!(lines(&ev.join("449-b.jsonl"))[0].get("fallback").is_none());
+    let again = run(&[]);
+    assert!(
+        again.stdout.contains("refile: 0 lines moved\n"),
+        "{}",
+        again.stdout
+    );
+}
+
 #[test]
 fn the_command_line_and_its_failures() {
     assert_eq!(cli(&args(&[])).code, 2);

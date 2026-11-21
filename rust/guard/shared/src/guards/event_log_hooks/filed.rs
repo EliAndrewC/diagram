@@ -164,10 +164,12 @@ fn prompt_head(payload: &Value) -> &str {
 }
 
 /// One task start: its feature, its task, its epoch seconds where its `utc` parses.
-type Start = (String, String, Option<f64>);
+pub type Start = (String, String, Option<f64>);
 
-/// The clone's task starts in file order; a line that does not parse is skipped, a missing file is none.
-fn starts(root: &Path) -> Vec<Start> {
+/// The clone's task starts in file order; a line that does not parse is skipped, a missing file is none. The one reader of
+/// `task-starts.jsonl` the writer and `make events-refile` share (451 T56), with [`in_force`] and [`started`].
+#[must_use]
+pub fn starts(root: &Path) -> Vec<Start> {
     std::fs::read_to_string(common_git_dir(root).join("task-starts.jsonl"))
         .unwrap_or_default()
         .lines()
@@ -181,7 +183,8 @@ fn starts(root: &Path) -> Vec<Start> {
 }
 
 /// The task in force for `feature`: its last start.
-fn in_force(starts: &[Start], feature: &str) -> Option<String> {
+#[must_use]
+pub fn in_force(starts: &[Start], feature: &str) -> Option<String> {
     starts
         .iter()
         .rev()
@@ -190,8 +193,10 @@ fn in_force(starts: &[Start], feature: &str) -> Option<String> {
 }
 
 /// The feature a task belongs to by the starts: the latest feature whose task in force it is, else the latest that started it at all -
-/// a start more than [`STALE_START_S`] before `now` counting for neither (a start or a `now` with no time is never stale).
-fn started(starts: &[Start], task: &str, now: Option<f64>) -> Option<String> {
+/// a start more than [`STALE_START_S`] before `now` counting for neither (a start or a `now` with no time is never stale). The re-file
+/// asks it with the starts made by a line's time and that time as `now`, so the two file a line alike (451 T56).
+#[must_use]
+pub fn started(starts: &[Start], task: &str, now: Option<f64>) -> Option<String> {
     let mut last: HashMap<&str, &str> = HashMap::new();
     for (f, t, _) in starts {
         last.insert(f, t);
