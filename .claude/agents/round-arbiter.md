@@ -71,7 +71,9 @@ previously coming to me"*), so two more kinds of trigger reach you:
   don't stop at session boundaries; automatic context compaction shulod let you keep going"): compaction carries the work, so rule
   that the session goes on with the open task, never a set-down for it.
   A question that ends "(REVIEW=spec: ...)" or "(REVIEW=plan: ...)" asks about that review: your `accept` or `process-fault`
-  stands as its verdict on the spec or plan as it reads now, as on a review's round (feature 409).
+  stands as its verdict on the spec or plan as it reads now, as on a review's round (feature 409). A plan question whose subject
+  names a task (`ask:451-T79-third-plan-round`, a round's `#T79`) is that task's: your accept records its section's blocks and its
+  task verdict, and every other changed block stays owed its own review (feature 451 T92).
 - a CALL-COUNT INCREASE (`ask:<NNN>-calls-<commit>`, from `make arbiter-ask` as the push's refusal names it; feature 427 T03):
   a feature's `-end` snapshot makes more Python calls than its `-start` - over 5% in a stage on a seed, or 2% in the total - or
   the pair could not be compared (taken on different interpreter or library versions, or a `-start` with no counts). The

@@ -680,17 +680,7 @@ fn ruled_cli(root: &Rooted, trigger: &str, file: &str, who: &str) -> Reply {
     let t = text(&row, "trigger");
     let mut out = format!("arbiter-ruled: {t} - {} (binding; recorded in arbiter.jsonl; a for_gm question goes to escalation-check: make gm-review)\n", text(&row, "ruling"));
     let owed = crate::plan::approach_ruled(root, t);
-    let plan_review = t.starts_with("round:spec-fidelity|plan:") || text(&row, "review") == "plan";
-    if plan_review && matches!(text(&row, "ruling"), "accept" | "process-fault") {
-        if let Some(d) = core::feature_dir_in(root, t, root.reader()) {
-            let named = crate::plan::arbiter_accept_listed(&d, t);
-            let _ = writeln!(
-                out,
-                "arbiter-ruled: {} plan block(s) recorded CLEAR - the accept is the plan's verdict",
-                named.len()
-            );
-        }
-    }
+    out.push_str(&plan_accept(root, &row));
     let claims_review = text(&row, "review");
     if let Some(keys) = claims_review
         .strip_prefix("claims:")
@@ -700,6 +690,43 @@ fn ruled_cli(root: &Rooted, trigger: &str, file: &str, who: &str) -> Reply {
     }
     out.push_str(&owed_line(owed));
     ok(out)
+}
+
+/// A plan review's accept or process-fault applied as its verdict (feature 385 T16, feature 409), a line, or nothing: the blocks and the
+/// tasks its question names (feature 451 T92), each block's heading listed - a bare count hid 28 blocks recorded CLEAR for one task's
+/// question (`ask:451-T79-third-plan-round`, measured 2026-11-21).
+fn plan_accept(root: &Rooted, row: &Value) -> String {
+    let t = text(row, "trigger");
+    let plan_review = t.starts_with("round:spec-fidelity|plan:") || text(row, "review") == "plan";
+    if !plan_review || !matches!(text(row, "ruling"), "accept" | "process-fault") {
+        return String::new();
+    }
+    core::feature_dir_in(root, t, root.reader()).map_or_else(String::new, |d| {
+        accepted_line(&crate::plan::arbiter_accept_listed(&d, t))
+    })
+}
+
+/// What [`plan_accept`] says the accept recorded: its scope, each heading, the task verdict.
+fn accepted_line(got: &crate::plan::Accepted) -> String {
+    let heads: Vec<String> = got
+        .blocks
+        .iter()
+        .map(|k| k.chars().take(60).collect())
+        .collect();
+    let listed = if heads.is_empty() {
+        String::new()
+    } else {
+        format!(": {}", heads.join("; "))
+    };
+    let n = got.blocks.len();
+    if got.whole {
+        return format!("arbiter-ruled: {n} plan block(s) recorded CLEAR, the question the whole plan's{listed} - the accept is the plan's verdict\n");
+    }
+    if got.tasks.is_empty() {
+        return "arbiter-ruled: 0 plan block(s) recorded CLEAR - the task the question names has no section in plan.md (archived to plan-done.md, or not this feature's), so nothing is the accept's to record\n".to_owned();
+    }
+    let tasks = got.tasks.join(" and ");
+    format!("arbiter-ruled: {n} plan block(s) of {tasks}'s section recorded CLEAR{listed}; and {tasks}'s task verdict CLEAR, declared round-arbiter - the accept is {tasks}'s plan-review verdict, the one the tick, the push and `plan decided` read\n")
 }
 
 /// What a ruling owes the active task's part B, a line, or nothing (`if owed: print(owed)`).
@@ -733,6 +760,8 @@ fn ruled_batch_cli(root: &Rooted, file: &str, who: &str) -> Reply {
     for row in &rows {
         let t = text(row, "trigger");
         let _ = writeln!(out, "arbiter-ruled: {t} - {}", text(row, "ruling"));
+        // a batch's plan-review accept is that review's verdict as a single ruling's is (feature 451 T92: it was recorded, never applied)
+        out.push_str(&plan_accept(root, row));
         out.push_str(&owed_line(crate::plan::approach_ruled(root, t)));
     }
     let _ = writeln!(out, "arbiter-ruled: the batch's {} triggers recorded (binding; each in arbiter.jsonl; a for_gm question goes to escalation-check: make gm-review)", rows.len());

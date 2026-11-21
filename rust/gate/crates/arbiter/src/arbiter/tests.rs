@@ -740,4 +740,5 @@ fn a_fix_that_cannot_be_settled_says_why() {
     assert!(qnit.stderr.contains("q:0105 must hold NEW"));
 }
 
+mod plan_accept;
 mod verbs;

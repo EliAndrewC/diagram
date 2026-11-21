@@ -438,7 +438,7 @@ fn the_arbiter_s_accept_is_the_plan_s_verdict() {
     )
     .unwrap();
     let named = arbiter_accept(&dir, trigger, Some("2026-01-01")).unwrap();
-    assert_eq!(named, ["## A", "preamble"]);
+    assert_eq!(named.blocks, ["## A", "preamble"]);
     let review = read(&dir);
     assert_eq!(review["blocks"]["## A"]["declared"], "round-arbiter");
     assert_eq!(review["block_reviews"][0]["decisions"][0]["id"], trigger);
@@ -453,7 +453,10 @@ fn the_arbiter_s_accept_is_the_plan_s_verdict() {
     )
     .unwrap();
     std::fs::write(dir.join("plan.md"), "# p\n").unwrap();
-    assert_eq!(arbiter_accept(&dir, asked, None).unwrap(), ["preamble"]);
+    assert_eq!(
+        arbiter_accept(&dir, asked, None).unwrap().blocks,
+        ["preamble"]
+    );
     assert!(read(&dir)["blocks"].get("## A").is_none());
 }
 
@@ -465,3 +468,5 @@ fn a_record_from_before_block_verdicts_is_slimmed_its_verdicts_kept() {
     assert_eq!(slim["blocks"]["preamble"]["reviewed"], "2026-01-01");
     assert_eq!(slim_record(&json!({"blocks": {}})), json!({"blocks": {}}));
 }
+
+mod accept;

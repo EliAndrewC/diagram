@@ -10,7 +10,9 @@ use serde_json::{json, Map, Value};
 
 use super::approach::{checklist, owe};
 use super::history::{keep, History};
-use super::sections::{block_digest, blocks, digest, re, task_sections, typo_only};
+use super::sections::{
+    block_digest, blocks, digest, heading_text, leading_task, re, task_sections, typo_only, TASK_ID,
+};
 use super::status::{block_status, reviewed_blocks, text_of, RECORD, REMOVED};
 use super::{pretty, today};
 
@@ -424,13 +426,136 @@ pub(super) fn record_blocks(
     Ok(got)
 }
 
-/// Past the plan-round cap (feature 385 T16), the round arbiter's accept on the plan round stands as the plan's verdict: every block
-/// owed or BLOCKED is recorded CLEAR at its digest now. Only a ruling the feature's `arbiter.jsonl` records counts.
+/// What an accept recorded (feature 451 T92): the blocks recorded CLEAR, the tasks whose verdict it now is, and whether its question was
+/// the whole plan.
+#[derive(Debug, Default, PartialEq, Eq)]
+pub struct Accepted {
+    pub blocks: Vec<String>,
+    pub tasks: Vec<String>,
+    pub whole: bool,
+}
+
+/// The tasks a plan round's question names (feature 451 T92), read from its trigger alone and never from its prose (T33's ask names T49
+/// to T51, filed, not asked about): a round trigger's `#<task>`, the task whose rounds the review-round guard counts
+/// (`review_round_hooks`), or the task ids of an ask's subject (`ask:451-T79-third-plan-round`, `ask:427-plan-T07-T11`).
+fn named_tasks(trigger: &str) -> Vec<String> {
+    let words = trigger
+        .strip_prefix("round:spec-fidelity|plan:")
+        .map_or_else(
+            || trigger.strip_prefix("ask:").unwrap_or(trigger),
+            |unit| {
+                unit.split_once('#')
+                    .map_or("", |(_, t)| t.split('@').next().unwrap_or(""))
+            },
+        );
+    let mut named: Vec<String> = Vec::new();
+    for id in TASK_ID.find_iter(words).map_while(Result::ok) {
+        if !named.iter().any(|t| t == id.as_str()) {
+            named.push(id.as_str().to_owned());
+        }
+    }
+    named
+}
+
+/// The offsets of `task`'s section in `plan`, as `task_sections` joins it: each heading whose title opens with the id, to the next heading
+/// at its level or above; or, with none, the first heading that names it.
+fn section_spans(plan: &str, task: &str) -> Vec<(usize, usize)> {
+    let heads: Vec<(usize, usize, String)> = l7r_shared::plan_text::HEAD
+        .captures_iter(plan)
+        .map_while(Result::ok)
+        .map(|c| {
+            let at = c.get(0).map_or(0, |g| g.start());
+            let level = c.get(1).map_or(0, |g| g.as_str().len());
+            (at, level, c.get(2).map_or("", |g| g.as_str()).to_owned())
+        })
+        .collect();
+    let span = |i: usize| {
+        let (at, level, _) = &heads[i];
+        let end = heads[i + 1..]
+            .iter()
+            .find(|(_, lv, _)| lv <= level)
+            .map_or(plan.len(), |(a, ..)| *a);
+        (*at, end)
+    };
+    let own: Vec<(usize, usize)> = (0..heads.len())
+        .filter(|i| leading_task(heads[*i].2.trim()) == Some(task))
+        .map(span)
+        .collect();
+    if !own.is_empty() {
+        return own;
+    }
+    (0..heads.len())
+        .find(|i| {
+            TASK_ID
+                .find_iter(&heads[*i].2)
+                .map_while(Result::ok)
+                .any(|m| m.as_str() == task)
+        })
+        .map(span)
+        .into_iter()
+        .collect()
+}
+
+/// (the named tasks with a section in plan.md, whether the question is the whole plan's), or None where it names only archived sections.
+fn accept_scope(spec_dir: &Path, trigger: &str, text: &str) -> Option<(Vec<String>, bool)> {
+    let done = std::fs::read_to_string(spec_dir.join("plan-done.md")).unwrap_or_default();
+    let named = named_tasks(trigger);
+    let sections = task_sections(text);
+    let tasks: Vec<String> = named
+        .iter()
+        .filter(|t| sections.contains_key(*t))
+        .cloned()
+        .collect();
+    let whole = named.is_empty()
+        || (tasks.is_empty() && named.iter().all(|t| !task_sections(&done).contains_key(t)));
+    (whole || !tasks.is_empty()).then_some((tasks, whole))
+}
+
+/// Each accepted task's verdict CLEAR at its section's digest, the reviewer's entry kept beside it as `accepted_over`.
+fn write_task_verdicts(
+    map: &mut Map<String, Value>,
+    tasks: &[String],
+    text: &str,
+    decision: &Value,
+    day: &str,
+) {
+    let sections = task_sections(text);
+    let verdicts = map
+        .entry("tasks")
+        .or_insert(json!({}))
+        .as_object_mut()
+        .unwrap_or_else(|| unreachable!("tasks is an object"));
+    for t in tasks {
+        let mut entry = json!({"section_sha256": digest(sections[t].as_bytes()), "reviewed": day, "declared": "round-arbiter", "decisions": [decision], "verdict": "CLEAR"});
+        // the reviewer's own entry kept beside the accept (an accept over an accept carries the reviewer's forward)
+        let over = verdicts.get(t).cloned().and_then(|p| {
+            if text_of(&p, "declared") == Some("round-arbiter") {
+                p.get("accepted_over").cloned()
+            } else {
+                Some(p)
+            }
+        });
+        if let Some(over) = over {
+            entry["accepted_over"] = over;
+        }
+        verdicts.insert(t.clone(), entry);
+    }
+}
+
+/// Past the plan-round cap (feature 385 T16), the round arbiter's accept on the plan round stands as the plan's verdict, recorded CLEAR
+/// at each block's digest now - but only for the blocks its question names (feature 451 T92): a question that names tasks (its trigger,
+/// [`named_tasks`]) clears the owed or BLOCKED blocks inside those tasks' sections and records each task's verdict CLEAR, declared
+/// `round-arbiter`, at its section's digest - the verdict the tick, the push, `plan decided` and the builder-stop guard read - the
+/// reviewer's entry kept beside it as `accepted_over`. A question naming no task, or only tasks with no section anywhere (judged by the
+/// plan-stage review, as `plan decided` reads them), is the whole plan's: every owed or BLOCKED block. One naming only archived sections
+/// (`plan-done.md`) records nothing. WHY: measured 2026-11-21 (plan-review.json's history), `ask:451-T79-third-plan-round` recorded 28
+/// blocks CLEAR for a question about T79's section alone - 24 untouched templates, T76's and T77's changed blocks - and left T79's task
+/// verdict BLOCKED; T33's, T46's and T67's accepts likewise. Only a ruling the feature's `arbiter.jsonl` records counts.
 pub(super) fn arbiter_accept(
     spec_dir: &Path,
     trigger: &str,
     when: Option<&str>,
-) -> Result<Vec<String>, Stop> {
+) -> Result<Accepted, Stop> {
     let lines = std::fs::read_to_string(spec_dir.join("arbiter.jsonl")).unwrap_or_default();
     let rows: Vec<Value> = lines
         .lines()
@@ -455,16 +580,22 @@ pub(super) fn arbiter_accept(
     }
     let plan = spec_dir.join("plan.md");
     let text = std::fs::read_to_string(&plan).unwrap_or_default();
+    let Some((tasks, whole)) = accept_scope(spec_dir, trigger, &text) else {
+        return Ok(Accepted::default());
+    };
+    let spans: Vec<(usize, usize)> = tasks.iter().flat_map(|t| section_spans(&text, t)).collect();
+    let asked =
+        |at: usize, len: usize| whole || spans.iter().any(|(lo, hi)| *lo <= at && at + len <= *hi);
     let mut out = starting_record(spec_dir);
     let (owed_keys, blocked) = block_status(&out, &text, &BTreeSet::new(), None, "");
-    let named: Vec<(String, String)> = blocks(&text)
+    let cleared: Vec<(String, String)> = blocks(&text)
         .into_iter()
-        .filter(|(k, ..)| owed_keys.contains(k) || blocked.contains(k))
+        .filter(|(k, b, at)| (owed_keys.contains(k) || blocked.contains(k)) && asked(*at, b.len()))
         .map(|(k, b, _)| (k, b))
         .collect();
     keep(
         &plan,
-        &named
+        &cleared
             .iter()
             .map(|(_, b)| (block_digest(b), b.clone()))
             .collect::<Vec<_>>(),
@@ -478,22 +609,42 @@ pub(super) fn arbiter_accept(
         .or_insert(json!({}))
         .as_object_mut()
         .unwrap_or_else(|| unreachable!("blocks is an object"));
-    for (key, body) in &named {
+    for (key, body) in &cleared {
         per_block.insert(key.clone(), json!({"sha256": block_digest(body), "verdict": "CLEAR", "reviewed": day, "declared": "round-arbiter"}));
     }
+    // a block the plan no longer has goes with the question that names its task, or with the whole plan's
     for key in owed_keys.iter().filter_map(|k| k.strip_prefix(REMOVED)) {
-        per_block.shift_remove(key);
+        if whole || leading_task(&heading_text(key)).is_some_and(|t| tasks.iter().any(|x| x == t)) {
+            per_block.shift_remove(key);
+        }
     }
-    let mut sorted: Vec<String> = named.into_iter().map(|(k, _)| k).collect();
+    let mut sorted: Vec<String> = cleared.into_iter().map(|(k, _)| k).collect();
     sorted.sort();
-    let row = json!({"reviewed": day, "blocks": sorted, "verdict": "CLEAR", "declared": "round-arbiter", "decisions": [{"id": trigger, "class": "within", "summary": "the round arbiter accepted the plan as it stands"}]});
+    let summary = if whole {
+        "the round arbiter accepted the plan as it stands".to_owned()
+    } else {
+        format!(
+            "the round arbiter accepted {}'s section as it stands",
+            tasks.join(" and ")
+        )
+    };
+    let decision = json!({"id": trigger, "class": "within", "summary": summary});
+    let mut row = json!({"reviewed": day, "blocks": sorted, "verdict": "CLEAR", "declared": "round-arbiter", "decisions": [decision]});
+    if !whole {
+        row["tasks"] = json!(tasks);
+    }
     map.entry("block_reviews")
         .or_insert(json!([]))
         .as_array_mut()
         .unwrap_or_else(|| unreachable!("a list"))
         .push(row);
+    write_task_verdicts(map, &tasks, &text, &decision, &day);
     let _ = std::fs::write(spec_dir.join(RECORD), pretty(&out));
-    Ok(sorted)
+    Ok(Accepted {
+        blocks: sorted,
+        tasks,
+        whole,
+    })
 }
 
 #[cfg(test)]
