@@ -55,6 +55,8 @@ MVP: T001-T005 and the first guard, `pair-hooks` (T006): the dispatcher in every
       research: rendering
 - [ ] T241 A claims bundle leaves out a page its claims cite (found by impl-drift on T239, 2026-11-20): off_the_dike's claims cite research/questions/0027-polder-dikes-what-they-were-made-of-how-big-and-what-grew-on-them.drawing.html, but the bundle held only 0019 and 0081, so the dike figures were judged without the page they cite and a later edit of 0027 cannot re-check them by block - a check passing unchecked; every page a bundled claim cites is in its bundle (or the bundle refuses, naming the page), red first; lands before T158
       research: rendering
+- [ ] T243 A pool-sheet stage of Mode A has no change, raise or accept path (found by 449 T201, re-read by 451 T36): budget_change/sheets.rs builds only the first budget and the comparison, read 2026-11-20 (its header), so a placer or compound sheet held past twice its budget after a SOUND re-derivation refuses every engine push with no raise or accept route, against 444 FR-022 (work the derivation missed raises it on a SOUND re-derivation) - make budget-change takes a pool-sheet stage for change, raise and accept as it takes a hamlet stage, red first on a pool-sheet raise, which HEAD refuses as not built; lands before T158
+      research: rendering
 - [ ] GM review (make gm-reviewed F=449) [lands-open]
       research: rendering
       verify: the GM reviewed every row (make gm-review lists them)

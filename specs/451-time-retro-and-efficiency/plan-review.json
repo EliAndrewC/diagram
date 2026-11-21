@@ -62,15 +62,15 @@
    "declared": "spec-fidelity"
   },
   "### T08 (FR-005: `make where-time` booked most of the window as \"waiting on work\" and every gate and test column zero - the spec's Why)": {
-   "sha256": "915d384a15bceae97ac831272e7771af9664401a6b42ab869ba80890964088c6",
+   "sha256": "6b31b20dc9a42dc925ee0f471beabee7c5347ab18d06547c81893fcccf7b2be9",
    "verdict": "CLEAR",
-   "reviewed": "2026-11-20",
+   "reviewed": "2026-11-21",
    "declared": "spec-fidelity"
   },
   "### T08 Approach (checklist part A)": {
-   "sha256": "bbc1a94e07e816a3d4f59bfe4fb07cbe18af0067d05fd552307bbb57143ea8d7",
+   "sha256": "1c97c3cde0c42008c5f517f123c35f6d8267237192daaeb88258e47fc35395d0",
    "verdict": "CLEAR",
-   "reviewed": "2026-11-20",
+   "reviewed": "2026-11-21",
    "declared": "spec-fidelity"
   },
   "### T09 (FR-002, FR-005: a wait cannot be booked to the run behind it - the spec's User Story 1 scenario 2, research R2)": {
@@ -80,9 +80,9 @@
    "declared": "spec-fidelity"
   },
   "### T09 Approach (checklist part A)": {
-   "sha256": "85143aabf60da632fbed717d5f2467a762d32c9637c69789eb8921844854d181",
+   "sha256": "293cacf820c5587d9aeb39528662412184369129433258ae5be17df927d96efb",
    "verdict": "CLEAR",
-   "reviewed": "2026-11-20",
+   "reviewed": "2026-11-21",
    "declared": "spec-fidelity"
   },
   "### T10 (FR-005: the wall clock on the critical path apart from the agent-minutes, the agents' tokens, the rework)": {
@@ -92,9 +92,9 @@
    "declared": "spec-fidelity"
   },
   "### T10 Approach (checklist part A)": {
-   "sha256": "9bb98bd94a58d4141929947e56de69c53f3af5d16c188f15af967b5b0c15f1d9",
+   "sha256": "02af2eb7c4878c9d46d305b3f9e9547d2130130ccc8c6385e99feb96de54c9bc",
    "verdict": "CLEAR",
-   "reviewed": "2026-11-20",
+   "reviewed": "2026-11-21",
    "declared": "spec-fidelity"
   },
   "### T11 (FR-005: `make feature-report` reads the same columns)": {
@@ -104,9 +104,9 @@
    "declared": "spec-fidelity"
   },
   "### T11 Approach (checklist part A)": {
-   "sha256": "9de76246c5af73e79aa68ce4d8ac79423c09b49fc9b63973b260e68131abbe85",
+   "sha256": "c5f50b9e6e756dadbc04a3c388a0d37f8aa8e55bcde62cf347a7fc12f5302fc5",
    "verdict": "CLEAR",
-   "reviewed": "2026-11-20",
+   "reviewed": "2026-11-21",
    "declared": "spec-fidelity"
   },
   "### T15 (FR-008: T225's `make static` with a plain `&` sat untracked - the spec's User Story 4, research R4)": {
@@ -140,9 +140,9 @@
    "declared": "spec-fidelity"
   },
   "### T22 Approach (checklist part A)": {
-   "sha256": "46abed269fe4cdfd368dc99a46f561477ac934f9fa97acb4c27444c8f644a488",
+   "sha256": "c83610922af15378b293188f7bc651abd83b244e3d2604bd51cb27e646f9d4c4",
    "verdict": "CLEAR",
-   "reviewed": "2026-11-20",
+   "reviewed": "2026-11-21",
    "declared": "spec-fidelity"
   },
   "## Project Structure": {
@@ -194,22 +194,16 @@
    "declared": "spec-fidelity"
   },
   "### T33 Approach (checklist part A)": {
-   "sha256": "83e12b7204b361430a2129271f32cc9a046f6d7adab2c7ee3e07be4ee1ca2491",
+   "sha256": "3c35a134af59efbd98e01ead38db2e06c1645e9e86f9c3ff4f0fffc5f2539b4c",
    "verdict": "CLEAR",
    "reviewed": "2026-11-21",
-   "declared": "round-arbiter"
-  },
-  "### T36 (<why: the finding or measurement that files it>)": {
-   "sha256": "dc847b818b674c921f73c225ed0aaff49dc81e77696f7385e745860981bc66f4",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-20",
    "declared": "spec-fidelity"
   },
   "### T36 Approach (checklist part A)": {
-   "sha256": "b1d9afb7a68ed775020344f143f9e6cae63bd273e65e3077a234a530e50f023e",
+   "sha256": "47336feb03bfa0de749a55df0a9eba44a59a9c083907619c2a9093a5fa148145",
    "verdict": "CLEAR",
-   "reviewed": "2026-11-20",
-   "declared": "round-arbiter"
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity"
   },
   "### T48 (<why: the finding or measurement that files it>)": {
    "sha256": "6379478259667dd6106b61f5e9a1e1f55204eb710fc7eace6b24440528d74c42",
@@ -224,10 +218,10 @@
    "declared": "round-arbiter"
   },
   "### T33 (four writes the guards read as none: T14's `cd rust/guard/src/guards && python3 - <<'EOF' ... open(p,'w')` rewrote a guard source the make-only guard refuses to `sed -i`, observed 2026-11-20, method: the T14 builder's transcript agent-a4a91e2ca23b89b21 at 14:32:16Z, found by `/tmp/t33/find_t14.py`; a builder's `git apply` and `cp` under T34's running `make land` failed static's cover, observed 2026-11-20, method: T34's refused landing; a bare `rustfmt` passed make-only, observed 2026-11-20, method: T34's found-and-left; `git diff --output=<file>` read as a read, observed 2026-11-20, method: T44's builder's report)": {
-   "sha256": "3db459cb18a8cd54cf1e9af3fbf58ad1b1d765d58c6857b581da82732770815b",
+   "sha256": "b2b221d9c4d809a7c6c443170d29691f76735311ad9cba7803bf478b7debd946",
    "verdict": "CLEAR",
    "reviewed": "2026-11-21",
-   "declared": "round-arbiter"
+   "declared": "spec-fidelity"
   },
   "### T49 (<why: the finding or measurement that files it>)": {
    "sha256": "01677a85d9445a1f8375005f586f704bc656f61419ee149c3de3b73c6c58185e",
@@ -264,6 +258,48 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-21",
    "declared": "round-arbiter"
+  },
+  "### T36 (T17's replay, 2026-11-20: thirteen archived sections of plan-done.md deferred work with no filed task or order - 449 T156, T200, T201, T208, T218, T219, T221, T224, T239 and 451 T02, T03, T16, T26)": {
+   "sha256": "91c5b14d7591b0924c647ee1acfc5675860ea9049c19190737152560b4d8bdf9",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity"
+  },
+  "### T52 (<why: the finding or measurement that files it>)": {
+   "sha256": "df95be3814ff1741275ac56ee0167c93ff13734eac1bc7502b146bd95a712d32",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity"
+  },
+  "### T52 Approach (checklist part A)": {
+   "sha256": "445154db240b8dd725bd158515e01f839059b5b6398bd6b683341e6d1aa0790d",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity"
+  },
+  "### T53 (<why: the finding or measurement that files it>)": {
+   "sha256": "33315efa2c60777687c319edf1916ac583be702df80d91d9b278c1e83cb5465e",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity"
+  },
+  "### T53 Approach (checklist part A)": {
+   "sha256": "83ce4b1987edafbd1f1e92841286b8e7dc4b501a44a758de6032b73ffd9534ec",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity"
+  },
+  "### T54 (<why: the finding or measurement that files it>)": {
+   "sha256": "1e990f5d2d7a9a9f2d0ccb302cce94eed4fce1fbae42dcec7cf2af52e58e9540",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity"
+  },
+  "### T54 Approach (checklist part A)": {
+   "sha256": "cfd1c978724fa989d0fe5a9f2a2a15dac04d2b8f8fad480672555e4631ea4930",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -6098,6 +6134,356 @@
      "summary": "the round arbiter accepted the plan as it stands"
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-21",
+   "blocks": [
+    "### T36 (T17's replay, 2026-11-20: thirteen archived sections of plan-done.md deferred work with no filed task or order - 449 T156, T200, T201, T208, T218, T219, T221, T224, T239 and 451 T02, T03, T16, T26)",
+    "### T36 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T36-approach",
+     "summary": "Each of the thirteen archived deferrals is read by hand once and given one of four verdicts (carried, fixed, still open and filed by make task-add, not a defect); history is not re-judged, so a ticked carrier counts as its tick says",
+     "class": "within",
+     "why": "This applies D15/FR-009 (a deferral carries a filed task and an order) back to sections archived before the form was enforced. The four verdicts cover every outcome, and 'not a defect' follows the constitution XIV standard the GM set on 2026-11-19. Taking a ticked carrier as its tick says matches the replay's purpose: it asks whether each deferral has a home, not whether earlier work was correct."
+    },
+    {
+     "id": "T36-carried-and-fixed-rows",
+     "summary": "449 T156, T200, T201(a), T208(a), T218, T219, T221(a), T224, T239(1)(2)(3); 451 T03 (fixed and carried parts), T16, T26(e) are recorded as carried by a named open or ticked task, or fixed by a named commit",
+     "class": "within",
+     "why": "Each row names its carrier or commit and the reading behind it, which gives every one of these deferrals the name and order D15 asks for. Nothing is left unaddressed."
+    },
+    {
+     "id": "T36-not-a-defect-rows",
+     "summary": "449 T208(b) (reviewer's notes, prose slip in a SOUND derivation), 449 T221(b) (old Python cache entries nothing reads, disk only), 451 T03's two never-matching data-model rows, 451 T26(b) (history between closed features' reports) and (c) (another builder's uncommitted work) are judged not defects and not filed",
+     "class": "within",
+     "why": "Each row states why there is no wrong outcome: no total moved beyond a few operations and budgets held; nothing reads the old entries; a row that never matches books nothing wrong; closed history; not a defect of the tree. Under constitution XIV (GM 2026-11-19), a difference with no wrong outcome is not a defect, and leaving it stays within what was asked and needs no ruling."
+    },
+    {
+     "id": "T36-still-open-filings",
+     "summary": "Three still-open deferrals are filed now: 449 T243 (pool-sheet stage change/raise/accept path, header re-read at HEAD), 451 T52 (the 8 command-text readers keeping their own make-call reading, measure-first) and 451 T53 (events-refile owed again, indexes not naming filed.rs/refile.rs); the two 451 filings land before T22",
+     "class": "within",
+     "why": "Filing with a task id is the remedy D15 prescribes for a deferral. T52 is measure-first because no wrong verdict on a real command has been shown yet, which fits the defect standard. The 451 T02 class census gives its search space (a grep of rust/, scripts/ and the Makefile, each hit read and sorted), as D15's class rule asks. Aside, not a narrowing: the block states no lands-before order for 449 T243. That is outside this feature's T22 close, and 449's own task order would carry it."
+    },
+    {
+     "id": "T36-found-and-left-none",
+     "summary": "T36's own Found and left is 'none', because the three still-open deferrals are filed in the table",
+     "class": "within",
+     "why": "T36 defers nothing of its own. Its whole job is to resolve the earlier sections' deferrals, and each one gets a verdict and a name, so 'none' is accurate."
+    },
+    {
+     "id": "T36-scope-budget",
+     "summary": "No map change; one landing, specs only; ordered after T17 and before T22",
+     "class": "within",
+     "why": "The replay is a specs-only follow-up to T17's enforcement and does not reach maps or code. The ordering keeps the 451 filings ahead of the feature's close."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-21",
+   "blocks": [
+    "### T36 (T17's replay, 2026-11-20: thirteen archived sections of plan-done.md deferred work with no filed task or order - 449 T156, T200, T201, T208, T218, T219, T221, T224, T239 and 451 T02, T03, T16, T26)",
+    "### T36 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T36-method",
+     "summary": "Each archived deferral is read by hand once and gets one verdict (carried / fixed / still open, filed / not a defect); ticked tasks' history is not re-judged",
+     "class": "within",
+     "why": "This applies D15 (a deferral needs a filed task and an order) and constitution XIV (only a wrong outcome is a defect) to the deferrals T17's replay found. It does not narrow either one: every deferral gets a named carrier, a commit, a filed task or a stated reason it has no wrong outcome."
+    },
+    {
+     "id": "449-T201a",
+     "summary": "make work-budget reading only the roll's stages is ruled not a defect, because make work-budget-review (T224) re-counts every Mode A sheet stage (placer, compound, pipeline) and holds it to twice its budget",
+     "class": "within",
+     "why": "The deferral describes how the work is split between tools, not a wrong outcome. The row says, with the files and the dev/work-budget.json keys read at HEAD as its measurement, that every Mode A stage is counted and held by another target. A stage would have to go unchecked for a check to be passing bad work, and none does. Under XIV v2.36.0 leaving this as it is stays within what was asked and needs no ruling."
+    },
+    {
+     "id": "449-T201b",
+     "summary": "a pool-sheet stage has no change, raise or accept path; filed as 449 T243",
+     "class": "within",
+     "why": "Filed as an open task with its evidence (the header of sheets.rs read at HEAD). The work is not left undone."
+    },
+    {
+     "id": "449-T208b",
+     "summary": "the reviewer's notes (an unstated radius, a 'ten zones' slip, the fire gap) are ruled not a defect",
+     "class": "within",
+     "why": "No total moved by more than a few operations, T152 held both sheets within twice their budget, and the slip is in the prose of a SOUND derivation. No map, check or research finding is wrong, so under XIV this is a difference, not a defect."
+    },
+    {
+     "id": "449-T221b",
+     "summary": "the Python cache's old entries under .gencache/<map>/ are ruled not a defect (disk only)",
+     "class": "within",
+     "why": "Nothing reads them: the Rust cache's DIR is .gencache/rust. Disk used in one clone is not a wrong map, a wrong check or a crashing tool."
+    },
+    {
+     "id": "449-carried-rows",
+     "summary": "449 T156, T200, T218, T219, T221a, T224, T239(1)(3) are carried by named tasks, each ticked at a cited commit or open (T240); T239(2) was fixed by T238",
+     "class": "within",
+     "why": "Each deferral names the task or commit that covers it. Nothing is dropped."
+    },
+    {
+     "id": "451-T02-T52",
+     "summary": "the shared make-call reading class is censused (13 modules through shared::make; 10 own readers, up from 8 now that measure_hooks' has() and gate_write_hooks' head_of are found) and filed as 451 T52, measure first, landing before T22",
+     "class": "within",
+     "why": "The census states its search space as D15 and the enumeration rule require: greps of rust/, scripts/ and the Makefile, rechecked with git grep at HEAD and a grep for \"make literals, each hit read. The fix is filed with an order rather than left. Measuring first follows XIV: whether any of the 10 gives a real command a wrong verdict has not been shown yet."
+    },
+    {
+     "id": "451-T02-set-apart",
+     "summary": "process-table argv readers, cheap contains(\"make\") prefilters, batching_hooks' NOT_RECON, log-field readers and research prose are set apart from the T02 class",
+     "class": "within",
+     "why": "The class is reading which make targets a command text runs. Process-table readers read a live process's argv, where a wrapper is its own process. Prefilters only skip work. batching_hooks only tests whether make is present, can never refuse wrongly, and was read at cited lines. Log-field readers read an already-parsed field. Each is set apart for a stated, checked reason. That is defining the class, not carving a case out of it."
+    },
+    {
+     "id": "451-T03",
+     "summary": "T03's deferrals: three fixed at commits; the lines filed by feature.json carried by T26, with the remainder in T53; booking by make carried by T08 (open); the live line fixed (66 make static lines carry cat tests); the two unmatched data-model rows ruled not a defect",
+     "class": "within",
+     "why": "Every item has a carrier, a commit or a filed task. A row that never matches books nothing wrong, so it has no wrong outcome under XIV."
+    },
+    {
+     "id": "451-T16",
+     "summary": "POLL_CHECK_S going into D14's knob table is carried by T22 (open)",
+     "class": "within",
+     "why": "D14's knob table is T22's line. It is carried, not dropped."
+    },
+    {
+     "id": "451-T26",
+     "summary": "(a) events-refile still owed and (d) the indexes missing filed.rs and refile.rs, both filed as T53 (narrowed to the one builder checked); (b) two re-file judgment calls on closed features and (c) another builder's uncommitted work stopping make static ruled not a defect; (e) fixed by T07",
+     "class": "within",
+     "why": "The open items are filed with a measured remainder (19 lines, from make events-refile DRY=1). (b) is history between the reports of closed features, with the copy from before the re-file kept. (c) is not a defect of the tree. Neither (b) nor (c) is a wrong outcome of the tooling."
+    },
+    {
+     "id": "T36-found-and-left",
+     "summary": "Found and left: none, since the three still-open deferrals are filed (449 T243, 451 T52, T53) and the two 451 filings land before T22",
+     "class": "within",
+     "why": "Filing the deferrals is this task's own work, and each one carries a task id and an order, so nothing found is left unfiled."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-21",
+   "blocks": [
+    "### T08 (FR-005: `make where-time` booked most of the window as \"waiting on work\" and every gate and test column zero - the spec's Why)",
+    "### T08 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "compile-split-any-run",
+     "summary": "Compile (the union of build and cover-build phases) is split out of ANY run a phase ties to, not only a tests run (data-model's wording); the critical path splits a main-session call's gap the same way.",
+     "class": "within",
+     "why": "D4's own text books compile 'inside the Bash call or background span that holds them', not inside a tests run; the GM asked 'how much time are we spending on recompiling things', and a landing's or gate's compile is recompiling. Widening the split books more of what was asked; it removes nothing."
+    },
+    {
+     "id": "phase-tie-by-task",
+     "summary": "A phase ties to the run of its session whose span holds it and whose target is its make OR whose task is its task, ranked target, then task, then latest start; unmatched phases counted in the footnote, never dropped; a phase starting after the window is none of it.",
+     "class": "within",
+     "why": "D4 ties by session, clone and target; adding task as a second key moved 567 untied compile phases (60.9 min) to 170 (12.1 min), measured, so it brings more of the GM's compile time under its task (the per-task breakdown he asked for). It narrows nothing. Note for the caller: the block's restatement omits D4's clone key; since builders share the main session's id (D4), dropping clone could tie a phase to a same-task or same-target run in another clone. Not ruled on - the block is silent, not explicit - but confirm the code still keys on clone."
+    },
+    {
+     "id": "bg-end-enqueue-first",
+     "summary": "A background run ends at the main transcript's queue-operation enqueue row naming its tool-use-id, before its BgEnd line's t.",
+     "class": "within",
+     "why": "D3 itself says a BgEnd's t is when the notice reached the session, not when the run ended (the notice waits while the session is mid-turn); the enqueue row is the nearer reading of the run's own end. More accurate booking of what was asked; nothing dropped - BgEnd remains the fallback."
+    },
+    {
+     "id": "bg-end-taskstop",
+     "summary": "A background run with no enqueue row or BgEnd ends at the TaskStop call that stopped it (read from the session's and its subagents' transcripts), else open to the window's end.",
+     "class": "within",
+     "why": "A stopped run has ended; booking it open to the window's end was a wrong outcome (ten runs, 6,070 of 6,792 machine minutes booked 'other', measured). D3's 'open to the window's end' is the fallback for a launch with no end anywhere, and a TaskStop is an end. Adds an end source; narrows nothing the GM asked."
+    },
+    {
+     "id": "builder-call-as-session-state",
+     "summary": "A subagent's call inside the main session's turn is booked on the critical path as what the session was doing (the call it waits on, or the model); between turns it keeps the wait open. The session's own line moves state before a zero gap is skipped, and SubagentStart/SubagentStop keep it.",
+     "class": "within",
+     "why": "D7 defines the critical path as the wall clock partitioned by what the MAIN SESSION was doing or waiting on; a builder's line cutting the session's make static in two misbooked the session's own state. This implements D7 literally; builder runs are still booked in the runs table (machine minutes)."
+    },
+    {
+     "id": "landing-precedence",
+     "summary": "A call running several targets is booked by the first of them in PRECEDENCE (land, gate, tests, review, docs, spec-kit step, other) in both tables; a phase ties to a run that runs its make at all; a landing's gate and cohort phases are split out as gate, less the compile inside them.",
+     "class": "within",
+     "why": "FR-001/D2 book a call by its target and are silent on a line with several; the day's 19 landings were launched 'make claims-owed ...; make ledger-owed; make land' and booked review by their first target, which misses the land and gate columns FR-005 asks for (land 4.2, gate 0.0 against 27.4 min of their own gate phases, measured). The block's own cross-check (land 5.3 + gate 14.4 + compile 13.0 = 32.7 min against the end phases' 32.4) shows precedence absorbs almost no non-land time. Cohort booked as gate follows D5 (cohort-landing is the landing's gate stage)."
+    },
+    {
+     "id": "two-tables",
+     "summary": "where-time shows a critical-path (wall clock) table and a runs table of every session's and agent's Bash calls in overlapping machine minutes, never summed into the wall clock.",
+     "class": "within",
+     "why": "D7 asks for the critical path 'and beside it the summed agent-minutes'; FR-005 'the wall clock on the critical path apart from the summed agent-minutes'. The runs table is that."
+    },
+    {
+     "id": "until-clip",
+     "summary": "UNTIL= passes --until (held Makefile edited); logs read to their end so a run still going at UNTIL is clipped there, not dropped.",
+     "class": "within",
+     "why": "FR-005 and D7 ask for UNTIL=; clipping rather than dropping keeps the run's in-window time booked."
+    },
+    {
+     "id": "untied-phases-left",
+     "summary": "159 compile and landing-gate phases (9.5 min) tie to no run; left, counted and shown in the runs table's footnote, ruled 'not a defect'.",
+     "class": "within",
+     "why": "The time is shown, not lost: the GM's 'how much time recompiling' is answered with the footnote. No reader is told a wrong number; per WHAT A DEFECT IS, a gap counted and displayed is not a wrong outcome."
+    },
+    {
+     "id": "feature-report-to-T11",
+     "summary": "feature-report is held unchanged here; its reading of the columns is T11's.",
+     "class": "within",
+     "why": "A task split inside the feature, not a removal: FR-005/D7 still require feature-report to read the same columns through the same functions, and the block assigns it to T11 rather than dropping it. Not verifiable from the bundle that T11's line carries it; the caller should confirm."
+    },
+    {
+     "id": "defer-subagent-queued-command-T09",
+     "summary": "A subagent's background run whose notice reached only its own transcript (the queued_command attachment) ends here at BgEnd, TaskStop or the window's end; reading queued_command is deferred to T09, lands before T10.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "D3 says 'The readers (T08) ... read the subagent transcript's queued_command attachment', so this narrows T08 against D3's own wording. It is legitimate as a task-ordering narrowing only: the requirement stays in the feature (FR-002/D3), the block gives the why (D3's end-of-run work is T09's), the filed task and the order ('lands before T10') as FR-009 requires, and T09 is the very next task on the same reader. The GM's request sets no task order that this breaks, and the defect is not carried past the reader work. Not verifiable from the bundle that T09's section names it; the caller should confirm before ticking T09."
+    },
+    {
+     "id": "defer-wait-booking-T09-T10",
+     "summary": "The critical path still books 866 of 1,354 min 'waiting on work'; booking a wait to the runs in flight (D3, the FR-005/D7 'background run' column) is deferred to T09 and the critical path apart from the agents to T10; filed as T09, lands before T10.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This is the spec's headline wrong (SC-001: under a tenth unexplained; today 64%), so it is a narrowing of T08 and not a 'within'. It is legitimate on the same footing as the queued_command deferral: FR-002 and D3 assign wait-to-run booking a mechanism of its own (inflight on the Stop, else the holding launch), the block names the owner (T09, then T10 for D7's agent split) and the order, and the requirement and its success criterion are untouched. It also covers the 'background run' column FR-005 lists, which neither table carries yet. The deferral is legitimate only if T09 lands before any non-reader work; a spec where SC-001 is not met at the close would be a defect, not this."
+    },
+    {
+     "id": "defer-between-turn-model-T10",
+     "summary": "The critical path's model column (342 min) holds about 235.4 min between turns, because a turn's Stop line often lands in 449's log and the 451 walk never sees the turn end; reading a session's turn lines from every feature's log is folded into T10 (D5, D6), lands before T11. Two smaller wrongs the same check found (a builder's stop inside make static; the zero-gap skip) are fixed here.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "A known wrong outcome left standing (model minutes booked that are really the session waiting), so a narrowing. Legitimate because the fix needs a decision that belongs to the critical-path design T10 owns (how a turn spent on another feature is booked against this feature's wall clock - D7's critical path apart from the agents), the block states why, the task and the order (before T11) as FR-009 requires, the smaller wrongs reachable inside T08 were fixed here, and the requirement stays in the feature. Not verifiable from the bundle that T10's task line carries it (the caller says it does). Ordering seam for the caller: T09's wait booking keys on the Stop that opened a wait, and those are the very Stop lines this item says land in 449's log; T09 should read them across logs or know T10 will, else T09's numbers are built on the same missing lines."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-21",
+   "blocks": [
+    "### T08 (FR-005: `make where-time` booked most of the window as \"waiting on work\" and every gate and test column zero - the spec's Why)",
+    "### T08 Approach (checklist part A)",
+    "### T09 Approach (checklist part A)",
+    "### T10 Approach (checklist part A)",
+    "### T11 Approach (checklist part A)",
+    "### T22 Approach (checklist part A)",
+    "### T33 (four writes the guards read as none: T14's `cd rust/guard/src/guards && python3 - <<'EOF' ... open(p,'w')` rewrote a guard source the make-only guard refuses to `sed -i`, observed 2026-11-20, method: the T14 builder's transcript agent-a4a91e2ca23b89b21 at 14:32:16Z, found by `/tmp/t33/find_t14.py`; a builder's `git apply` and `cp` under T34's running `make land` failed static's cover, observed 2026-11-20, method: T34's refused landing; a bare `rustfmt` passed make-only, observed 2026-11-20, method: T34's found-and-left; `git diff --output=<file>` read as a read, observed 2026-11-20, method: T44's builder's report)",
+    "### T33 Approach (checklist part A)",
+    "### T52 (<why: the finding or measurement that files it>)",
+    "### T52 Approach (checklist part A)",
+    "### T53 (<why: the finding or measurement that files it>)",
+    "### T53 Approach (checklist part A)",
+    "### T54 (<why: the finding or measurement that files it>)",
+    "### T54 Approach (checklist part A)",
+    "(removed) ### T36 (<why: the finding or measurement that files it>)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T08-two-tables",
+     "summary": "where-time shows the wall-clock critical path and beside it a runs table of every session's and agent's Bash calls in overlapping machine minutes, never summed into the wall clock",
+     "class": "within",
+     "why": "D7/FR-005: the critical path apart from the summed agent-minutes; the GM asked how much time goes to tooling, tests and compiling, which ran in builders between turns"
+    },
+    {
+     "id": "T08-bg-end-sources",
+     "summary": "a background run ends at the main transcript's enqueue row, else its BgEnd, else the TaskStop that stopped it (an addition the plan did not name), else open to the window's end",
+     "class": "within",
+     "why": "Widens D3's end sources so stopped runs are not booked open (6,070 of 6,792 machine minutes, measured); keeps the spec's edge case (no end is open, not zero); drops nothing asked"
+    },
+    {
+     "id": "T08-compile-from-any-run",
+     "summary": "compile is the union of build/cover-build phases split out of any run, the rest staying the run's own bucket, not 'tests'",
+     "class": "within",
+     "why": "D4's 'the Bash call or background span that holds them'; a landing's or gate's compile is compile, as FR-005's compile column asks; booking a landing's remainder as tests would answer wrongly"
+    },
+    {
+     "id": "T08-phase-ties-by-task",
+     "summary": "a phase ties to a holding run of its session by target OR task (a labeled deviation from D4), ranked target, task, latest start; untied phases counted in a footnote",
+     "class": "within",
+     "why": "Ties more phases than D4 (567 untied -> 170, measured), so compile is booked more fully; FR-005 not narrowed; nothing dropped"
+    },
+    {
+     "id": "T08-subagent-in-turn",
+     "summary": "a subagent's line inside the main session's turn is booked as what the session was doing; between turns the wait stays open",
+     "class": "within",
+     "why": "Critical-path correctness under D7; fixes a wrong booking found by T08's own check"
+    },
+    {
+     "id": "T08-landing-precedence",
+     "summary": "a call running several targets is booked by the first in PRECEDENCE (land first), and a landing's gate/cohort phases are split out as gate less their compile",
+     "class": "within",
+     "why": "FR-005's land and gate columns; without it the 19 landings read as review (measured); checked against their end phases"
+    },
+    {
+     "id": "T08-zero-gap-state",
+     "summary": "the session's own line moves state on before a zero gap is skipped; SubagentStart/Stop keep it",
+     "class": "within",
+     "why": "A fixed wrong booking (model vs other subagent), inside D7"
+    },
+    {
+     "id": "T08-until",
+     "summary": "UNTIL= wired through the Makefile's --until; logs read to their end and runs clipped at UNTIL",
+     "class": "within",
+     "why": "FR-005 and D7 'where-time takes UNTIL='; fixed here before the tick"
+    },
+    {
+     "id": "T08-default-goal",
+     "summary": "a goal-less make is booked by the Makefile's .DEFAULT_GOAL or first rule's target",
+     "class": "within",
+     "why": "Books each make target by FR-001's table, as D2 asks"
+    },
+    {
+     "id": "T08-no-background-run-column",
+     "summary": "T08's built tables carry no 'background run' column (FR-005, D7); background time appears only as the runs table's in-the-background total",
+     "class": "within",
+     "why": "A wait booked to the background run in flight is FR-002's and D3's, the work T09's section carries (FR-002, FR-005, D3, D7); the column is owed by T09, not dropped from what was asked"
+    },
+    {
+     "id": "T08-FL-subagent-bg-end-to-T09",
+     "summary": "a subagent's background run whose notice is only in its own transcript is ended by BgEnd/TaskStop/window end here; the queued_command reading deferred to T09, lands before T10",
+     "class": "within",
+     "why": "D3's subagent end is FR-002's wait-to-run booking, which T09's section carries (FR-002, D3, R2's subagent transcripts); work moved between two open tasks of the feature, nothing dropped from what was asked; deferral formed (why, filed id, order)"
+    },
+    {
+     "id": "T08-FL-waiting-on-work-to-T09",
+     "summary": "the critical path still books 866 of 1,354 min waiting on work; deferred to T09 (wait booked to run) and T10 (critical path apart from agents), lands before T10",
+     "class": "within",
+     "why": "SC-001's bar is met by FR-002 and the critical path's tasks, measured at T22; T08 is the columns task; sequencing inside the plan, not a narrowing"
+    },
+    {
+     "id": "T08-FL-untied-phases-not-a-defect",
+     "summary": "159 compile and landing-gate phases (9.5 min) tie to no run and are counted in the footnote, judged not a defect",
+     "class": "within",
+     "why": "D4 books a phase inside the run that holds it; the untied remainder is shown, not dropped or misreported, so no wrong outcome (constitution XIV's defect definition); SC-002's tolerance is measured at T22"
+    },
+    {
+     "id": "T08-FL-model-column-to-T10",
+     "summary": "the critical path's model column books between-turn time (235.4 min) because a turn's Stop can land in another feature's log; folded into T10, lands before T11",
+     "class": "within",
+     "why": "A known wrong booking deferred with its why, filed task and order to T10, the task that owns the critical path apart from the agents (D5, D6, D7); nothing asked is narrowed, and it is fixed before the readers' last task (T11) and the close (T22); T10's section, still 'Found and left? none', owes that work when it is decided"
+    },
+    {
+     "id": "T08-T11-T22-perf",
+     "summary": "T08, T09, T10, T11 and T22 answer Performance work? yes, under FR-013's measurement clause, with no engine-speed checklist",
+     "class": "within",
+     "why": "The GM 2026-11-20: 'this kind of measurement task to be counted as a performance task for the purpose of scheduling and coming first'; FR-013 names where-time's and feature-report's readers and the close's measured day; the checklist is for engine-speed tasks only. T22's order 'Last' stands with FR-013's escape (a performance task waiting on another task's landing)"
+    },
+    {
+     "id": "T33-path-as-words",
+     "summary": "T33's quoted page path in window#172 restated as words ('the urban-features record page')",
+     "class": "within",
+     "why": "Wording only so the research-pointer check does not read it as a pointer; the decision, its measurement and its deferral (T49) are unchanged from the CLEAR text"
+    },
+    {
+     "id": "T52-T54-templates",
+     "summary": "new empty section templates for T52, T53 and T54",
+     "class": "within",
+     "why": "Placeholders that decide nothing"
+    },
+    {
+     "id": "T36-removed",
+     "summary": "an unfilled template section for T36 removed",
+     "class": "within",
+     "why": "Its earlier text was a placeholder with no decision; removing it decides nothing and drops no requirement"
+    }
+   ]
   }
  ],
  "tasks": {
@@ -8539,6 +8925,175 @@
     }
    ],
    "verdict": "BLOCKED"
+  },
+  "T36": {
+   "section_sha256": "3678090da2bba03f01a953e42e50ebdd2323bf3a75801d63a43bc7841eb7562a",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T36-method",
+     "summary": "Each archived deferral is read by hand once and gets one verdict (carried / fixed / still open, filed / not a defect); ticked tasks' history is not re-judged",
+     "class": "within",
+     "why": "This applies D15 (a deferral needs a filed task and an order) and constitution XIV (only a wrong outcome is a defect) to the deferrals T17's replay found. It does not narrow either one: every deferral gets a named carrier, a commit, a filed task or a stated reason it has no wrong outcome."
+    },
+    {
+     "id": "449-T201a",
+     "summary": "make work-budget reading only the roll's stages is ruled not a defect, because make work-budget-review (T224) re-counts every Mode A sheet stage (placer, compound, pipeline) and holds it to twice its budget",
+     "class": "within",
+     "why": "The deferral describes how the work is split between tools, not a wrong outcome. The row says, with the files and the dev/work-budget.json keys read at HEAD as its measurement, that every Mode A stage is counted and held by another target. A stage would have to go unchecked for a check to be passing bad work, and none does. Under XIV v2.36.0 leaving this as it is stays within what was asked and needs no ruling."
+    },
+    {
+     "id": "449-T201b",
+     "summary": "a pool-sheet stage has no change, raise or accept path; filed as 449 T243",
+     "class": "within",
+     "why": "Filed as an open task with its evidence (the header of sheets.rs read at HEAD). The work is not left undone."
+    },
+    {
+     "id": "449-T208b",
+     "summary": "the reviewer's notes (an unstated radius, a 'ten zones' slip, the fire gap) are ruled not a defect",
+     "class": "within",
+     "why": "No total moved by more than a few operations, T152 held both sheets within twice their budget, and the slip is in the prose of a SOUND derivation. No map, check or research finding is wrong, so under XIV this is a difference, not a defect."
+    },
+    {
+     "id": "449-T221b",
+     "summary": "the Python cache's old entries under .gencache/<map>/ are ruled not a defect (disk only)",
+     "class": "within",
+     "why": "Nothing reads them: the Rust cache's DIR is .gencache/rust. Disk used in one clone is not a wrong map, a wrong check or a crashing tool."
+    },
+    {
+     "id": "449-carried-rows",
+     "summary": "449 T156, T200, T218, T219, T221a, T224, T239(1)(3) are carried by named tasks, each ticked at a cited commit or open (T240); T239(2) was fixed by T238",
+     "class": "within",
+     "why": "Each deferral names the task or commit that covers it. Nothing is dropped."
+    },
+    {
+     "id": "451-T02-T52",
+     "summary": "the shared make-call reading class is censused (13 modules through shared::make; 10 own readers, up from 8 now that measure_hooks' has() and gate_write_hooks' head_of are found) and filed as 451 T52, measure first, landing before T22",
+     "class": "within",
+     "why": "The census states its search space as D15 and the enumeration rule require: greps of rust/, scripts/ and the Makefile, rechecked with git grep at HEAD and a grep for \"make literals, each hit read. The fix is filed with an order rather than left. Measuring first follows XIV: whether any of the 10 gives a real command a wrong verdict has not been shown yet."
+    },
+    {
+     "id": "451-T02-set-apart",
+     "summary": "process-table argv readers, cheap contains(\"make\") prefilters, batching_hooks' NOT_RECON, log-field readers and research prose are set apart from the T02 class",
+     "class": "within",
+     "why": "The class is reading which make targets a command text runs. Process-table readers read a live process's argv, where a wrapper is its own process. Prefilters only skip work. batching_hooks only tests whether make is present, can never refuse wrongly, and was read at cited lines. Log-field readers read an already-parsed field. Each is set apart for a stated, checked reason. That is defining the class, not carving a case out of it."
+    },
+    {
+     "id": "451-T03",
+     "summary": "T03's deferrals: three fixed at commits; the lines filed by feature.json carried by T26, with the remainder in T53; booking by make carried by T08 (open); the live line fixed (66 make static lines carry cat tests); the two unmatched data-model rows ruled not a defect",
+     "class": "within",
+     "why": "Every item has a carrier, a commit or a filed task. A row that never matches books nothing wrong, so it has no wrong outcome under XIV."
+    },
+    {
+     "id": "451-T16",
+     "summary": "POLL_CHECK_S going into D14's knob table is carried by T22 (open)",
+     "class": "within",
+     "why": "D14's knob table is T22's line. It is carried, not dropped."
+    },
+    {
+     "id": "451-T26",
+     "summary": "(a) events-refile still owed and (d) the indexes missing filed.rs and refile.rs, both filed as T53 (narrowed to the one builder checked); (b) two re-file judgment calls on closed features and (c) another builder's uncommitted work stopping make static ruled not a defect; (e) fixed by T07",
+     "class": "within",
+     "why": "The open items are filed with a measured remainder (19 lines, from make events-refile DRY=1). (b) is history between the reports of closed features, with the copy from before the re-file kept. (c) is not a defect of the tree. Neither (b) nor (c) is a wrong outcome of the tooling."
+    },
+    {
+     "id": "T36-found-and-left",
+     "summary": "Found and left: none, since the three still-open deferrals are filed (449 T243, 451 T52, T53) and the two 451 filings land before T22",
+     "class": "within",
+     "why": "Filing the deferrals is this task's own work, and each one carries a task id and an order, so nothing found is left unfiled."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T08": {
+   "section_sha256": "56688ab49b070ed42e758f9d37e8ba6956a06d4a7fc805f3be7397b0c15e5953",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "compile-split-any-run",
+     "summary": "Compile (the union of build and cover-build phases) is split out of ANY run a phase ties to, not only a tests run (data-model's wording); the critical path splits a main-session call's gap the same way.",
+     "class": "within",
+     "why": "D4's own text books compile 'inside the Bash call or background span that holds them', not inside a tests run; the GM asked 'how much time are we spending on recompiling things', and a landing's or gate's compile is recompiling. Widening the split books more of what was asked; it removes nothing."
+    },
+    {
+     "id": "phase-tie-by-task",
+     "summary": "A phase ties to the run of its session whose span holds it and whose target is its make OR whose task is its task, ranked target, then task, then latest start; unmatched phases counted in the footnote, never dropped; a phase starting after the window is none of it.",
+     "class": "within",
+     "why": "D4 ties by session, clone and target; adding task as a second key moved 567 untied compile phases (60.9 min) to 170 (12.1 min), measured, so it brings more of the GM's compile time under its task (the per-task breakdown he asked for). It narrows nothing. Note for the caller: the block's restatement omits D4's clone key; since builders share the main session's id (D4), dropping clone could tie a phase to a same-task or same-target run in another clone. Not ruled on - the block is silent, not explicit - but confirm the code still keys on clone."
+    },
+    {
+     "id": "bg-end-enqueue-first",
+     "summary": "A background run ends at the main transcript's queue-operation enqueue row naming its tool-use-id, before its BgEnd line's t.",
+     "class": "within",
+     "why": "D3 itself says a BgEnd's t is when the notice reached the session, not when the run ended (the notice waits while the session is mid-turn); the enqueue row is the nearer reading of the run's own end. More accurate booking of what was asked; nothing dropped - BgEnd remains the fallback."
+    },
+    {
+     "id": "bg-end-taskstop",
+     "summary": "A background run with no enqueue row or BgEnd ends at the TaskStop call that stopped it (read from the session's and its subagents' transcripts), else open to the window's end.",
+     "class": "within",
+     "why": "A stopped run has ended; booking it open to the window's end was a wrong outcome (ten runs, 6,070 of 6,792 machine minutes booked 'other', measured). D3's 'open to the window's end' is the fallback for a launch with no end anywhere, and a TaskStop is an end. Adds an end source; narrows nothing the GM asked."
+    },
+    {
+     "id": "builder-call-as-session-state",
+     "summary": "A subagent's call inside the main session's turn is booked on the critical path as what the session was doing (the call it waits on, or the model); between turns it keeps the wait open. The session's own line moves state before a zero gap is skipped, and SubagentStart/SubagentStop keep it.",
+     "class": "within",
+     "why": "D7 defines the critical path as the wall clock partitioned by what the MAIN SESSION was doing or waiting on; a builder's line cutting the session's make static in two misbooked the session's own state. This implements D7 literally; builder runs are still booked in the runs table (machine minutes)."
+    },
+    {
+     "id": "landing-precedence",
+     "summary": "A call running several targets is booked by the first of them in PRECEDENCE (land, gate, tests, review, docs, spec-kit step, other) in both tables; a phase ties to a run that runs its make at all; a landing's gate and cohort phases are split out as gate, less the compile inside them.",
+     "class": "within",
+     "why": "FR-001/D2 book a call by its target and are silent on a line with several; the day's 19 landings were launched 'make claims-owed ...; make ledger-owed; make land' and booked review by their first target, which misses the land and gate columns FR-005 asks for (land 4.2, gate 0.0 against 27.4 min of their own gate phases, measured). The block's own cross-check (land 5.3 + gate 14.4 + compile 13.0 = 32.7 min against the end phases' 32.4) shows precedence absorbs almost no non-land time. Cohort booked as gate follows D5 (cohort-landing is the landing's gate stage)."
+    },
+    {
+     "id": "two-tables",
+     "summary": "where-time shows a critical-path (wall clock) table and a runs table of every session's and agent's Bash calls in overlapping machine minutes, never summed into the wall clock.",
+     "class": "within",
+     "why": "D7 asks for the critical path 'and beside it the summed agent-minutes'; FR-005 'the wall clock on the critical path apart from the summed agent-minutes'. The runs table is that."
+    },
+    {
+     "id": "until-clip",
+     "summary": "UNTIL= passes --until (held Makefile edited); logs read to their end so a run still going at UNTIL is clipped there, not dropped.",
+     "class": "within",
+     "why": "FR-005 and D7 ask for UNTIL=; clipping rather than dropping keeps the run's in-window time booked."
+    },
+    {
+     "id": "untied-phases-left",
+     "summary": "159 compile and landing-gate phases (9.5 min) tie to no run; left, counted and shown in the runs table's footnote, ruled 'not a defect'.",
+     "class": "within",
+     "why": "The time is shown, not lost: the GM's 'how much time recompiling' is answered with the footnote. No reader is told a wrong number; per WHAT A DEFECT IS, a gap counted and displayed is not a wrong outcome."
+    },
+    {
+     "id": "feature-report-to-T11",
+     "summary": "feature-report is held unchanged here; its reading of the columns is T11's.",
+     "class": "within",
+     "why": "A task split inside the feature, not a removal: FR-005/D7 still require feature-report to read the same columns through the same functions, and the block assigns it to T11 rather than dropping it. Not verifiable from the bundle that T11's line carries it; the caller should confirm."
+    },
+    {
+     "id": "defer-subagent-queued-command-T09",
+     "summary": "A subagent's background run whose notice reached only its own transcript (the queued_command attachment) ends here at BgEnd, TaskStop or the window's end; reading queued_command is deferred to T09, lands before T10.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "D3 says 'The readers (T08) ... read the subagent transcript's queued_command attachment', so this narrows T08 against D3's own wording. It is legitimate as a task-ordering narrowing only: the requirement stays in the feature (FR-002/D3), the block gives the why (D3's end-of-run work is T09's), the filed task and the order ('lands before T10') as FR-009 requires, and T09 is the very next task on the same reader. The GM's request sets no task order that this breaks, and the defect is not carried past the reader work. Not verifiable from the bundle that T09's section names it; the caller should confirm before ticking T09."
+    },
+    {
+     "id": "defer-wait-booking-T09-T10",
+     "summary": "The critical path still books 866 of 1,354 min 'waiting on work'; booking a wait to the runs in flight (D3, the FR-005/D7 'background run' column) is deferred to T09 and the critical path apart from the agents to T10; filed as T09, lands before T10.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This is the spec's headline wrong (SC-001: under a tenth unexplained; today 64%), so it is a narrowing of T08 and not a 'within'. It is legitimate on the same footing as the queued_command deferral: FR-002 and D3 assign wait-to-run booking a mechanism of its own (inflight on the Stop, else the holding launch), the block names the owner (T09, then T10 for D7's agent split) and the order, and the requirement and its success criterion are untouched. It also covers the 'background run' column FR-005 lists, which neither table carries yet. The deferral is legitimate only if T09 lands before any non-reader work; a spec where SC-001 is not met at the close would be a defect, not this."
+    },
+    {
+     "id": "defer-between-turn-model-T10",
+     "summary": "The critical path's model column (342 min) holds about 235.4 min between turns, because a turn's Stop line often lands in 449's log and the 451 walk never sees the turn end; reading a session's turn lines from every feature's log is folded into T10 (D5, D6), lands before T11. Two smaller wrongs the same check found (a builder's stop inside make static; the zero-gap skip) are fixed here.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "A known wrong outcome left standing (model minutes booked that are really the session waiting), so a narrowing. Legitimate because the fix needs a decision that belongs to the critical-path design T10 owns (how a turn spent on another feature is booked against this feature's wall clock - D7's critical path apart from the agents), the block states why, the task and the order (before T11) as FR-009 requires, the smaller wrongs reachable inside T08 were fixed here, and the requirement stays in the feature. Not verifiable from the bundle that T10's task line carries it (the caller says it does). Ordering seam for the caller: T09's wait booking keys on the Stop that opened a wait, and those are the very Stop lines this item says land in 449's log; T09 should read them across logs or know T10 will, else T09's numbers are built on the same missing lines."
+    }
+   ],
+   "verdict": "CLEAR"
   }
  }
 }

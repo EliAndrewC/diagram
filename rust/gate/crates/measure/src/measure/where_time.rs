@@ -1,4 +1,4 @@
-//! `make where-time F=<feature> [SINCE=<ISO>] [BY=tick]` - where a feature's time went, by task (feature 385 T77, plan D96; ported from
+//! `make where-time F=<feature> [SINCE=<ISO>] [UNTIL=<ISO>] [BY=tick]` - where a feature's time went, by task (feature 385 T77, plan D96; ported from
 //! `scripts/measure/where_time.py` by feature 449 T119, `ask:449-T83-scope`, no door).
 //!
 //! WHY. The GM's step-back of 2026-10-18 asked for each task's time by piece; the scratch script that answered it booked T05 224 minutes,
@@ -22,8 +22,8 @@ use l7r_guard::shared::pyjson::dumps;
 use serde_json::Value;
 
 use super::events::{
-    cmp_f, event_logs, fixed, get, git, hhmm, is, load_events, need, py_str, s, spec_dir, t_of, ts,
-    Event, Raised, Tally, IDLE_CAP_S,
+    cmp_f, event_logs, fixed, get, git, hhmm, is, load_all, need, on, py_str, s, spec_dir, t_of,
+    ts, Event, Raised, Tally, IDLE_CAP_S,
 };
 use super::feature_report::tables::tool_cat;
 use super::reply;
@@ -33,10 +33,16 @@ use crate::Reply;
 const WAIT_WORK: &str = "waiting on work";
 const WAIT_GM: &str = "the GM";
 const GM_AWAY: &str = "the GM away";
-// `tests` is the event-log writer's bucket for every test target since feature 451 T03 (the guard's `event_log_hooks::BUCKETS`, D2); `quick
-// test` and `test file` stay for past logs. Booking a line by its `make` field through that table is T08's.
-const BUCKET: [(&str, &str); 21] = [
-    ("tests", "gate/tests"),
+// The guard's table's buckets (`event_log_hooks::BUCKETS`, feature 451 D2) are columns of their own since T08: a Bash call with a `make`
+// is booked by it through that table (`columns::line_bucket`), so a past log's frozen `cat` re-books; `quick test`, `test file` and `gate`
+// are a past log's cats of a line with no `make`. `compile` is the phases a call holds (D4), split out of its gap.
+const BUCKET: [(&str, &str); 26] = [
+    ("tests", "tests"),
+    ("compile", "compile"),
+    ("land", "land"),
+    ("review", "review"),
+    ("docs", "docs"),
+    ("spec-kit step", "spec-kit step"),
     ("thinking", "model"),
     ("writing the spec", "model"),
     ("waiting: spec-fidelity", "plan review"),
@@ -48,9 +54,9 @@ const BUCKET: [(&str, &str); 21] = [
     ("waiting: glyph-check", "glyph check"),
     ("waiting: round-arbiter", "arbiter"),
     ("dispatching: round arbiter", "arbiter"),
-    ("gate", "gate/tests"),
-    ("quick test", "gate/tests"),
-    ("test file", "gate/tests"),
+    ("gate", "gate"),
+    ("quick test", "tests"),
+    ("test file", "tests"),
     ("waiting: a background run", "background run"),
     ("waiting: the GM", "the GM"),
     ("idle (over an hour)", "idle"),
@@ -69,10 +75,16 @@ const RECORD: [&str; 9] = [
     "entry-drift",
     "research-pass",
 ];
-const COLUMNS: [&str; 14] = [
+const COLUMNS: [&str; 20] = [
     "model",
+    "tests",
+    "compile",
+    "gate",
+    "land",
+    "review",
+    "docs",
+    "spec-kit step",
     "tools",
-    "gate/tests",
     "background run",
     "plan review",
     "claims check",
@@ -270,6 +282,7 @@ pub fn tables(
     starts: &[(f64, String)],
     inputs: Option<&HashMap<String, String>>,
     feature_no: &str,
+    booking: &Booking,
 ) -> Result<Tables, Raised> {
     let mut t = Tables {
         time: Vec::new(),
@@ -293,29 +306,43 @@ pub fn tables(
     for k in &order {
         let evs = &groups[k];
         let (mut between, mut window, mut last) = (false, "", String::new());
+        // the main session's call or state a subagent's line falls inside (`booking`'s doc)
+        let mut held: (String, Option<&columns::Split>) = ("thinking".to_owned(), None);
         for i in 0..evs.len().saturating_sub(1) {
             let (a, b) = (evs[i], evs[i + 1]);
             let ev = need(a, "ev")?;
+            // a subagent's own call, or a subagent's start or stop: the session goes on with what it was doing (T08's model check)
+            let theirs =
+                (on(a, "tool") && on(a, "by")) || ev == "SubagentStart" || ev == "SubagentStop";
             if ev == "Stop" && !between {
                 window = window_class(evs, i)?;
             }
             between = (between || ev == "Stop") && ev != "UserPromptSubmit";
+            if !theirs {
+                // the session's own line moves its state on even across a zero gap: a background agent's `PostToolUse` and its
+                // `SubagentStart` share a millisecond, and skipping first left the launch's category held for the thinking after it
+                held = if ev == "PreToolUse" {
+                    (pre_cat(a, &booking.goal), booking.splits.get(&s(a, "id")))
+                } else {
+                    ("thinking".to_owned(), None)
+                };
+            }
             let t0 = t_of(a)?;
             let gap = t_of(b)? - t0;
             if gap <= 0.0 {
                 continue;
             }
             let run = in_span(t0, &fg);
+            let mut spans = None;
             let cat = if between {
                 window.to_owned()
             } else if gap > IDLE_CAP_S {
                 "idle (over an hour)".to_owned()
             } else if !run.is_empty() {
                 format!("waiting: {run}")
-            } else if ev == "PreToolUse" {
-                tool_cat(a)
             } else {
-                "thinking".to_owned()
+                spans = held.1;
+                held.0.clone()
             };
             let named = match inputs {
                 Some(inputs) if ev == "PreToolUse" => {
@@ -339,11 +366,29 @@ pub fn tables(
             } else {
                 last.clone()
             };
-            add(&mut t.time, &task, bucket(&cat), gap);
+            let (compile, gate) = spans.map_or((0.0, 0.0), |c| {
+                (
+                    columns::overlap(&c.compile, t0, t0 + gap),
+                    columns::overlap(&c.gate, t0, t0 + gap),
+                )
+            });
+            if compile > 0.0 {
+                add(&mut t.time, &task, "compile", compile);
+            }
+            if gate > 0.0 {
+                add(&mut t.time, &task, "gate", gate);
+            }
+            add(&mut t.time, &task, bucket(&cat), gap - compile - gate);
         }
     }
+    agents(&sorted, starts, &mut t)?;
+    Ok(t)
+}
+
+/// Each subagent counted, with its minutes, by the task active at its launch.
+fn agents(sorted: &[&Event], starts: &[(f64, String)], t: &mut Tables) -> Result<(), Raised> {
     let mut open: HashMap<String, (f64, String, String)> = HashMap::new();
-    for e in sorted {
+    for e in sorted.iter().copied() {
         if is(e, "ev", "SubagentStart") {
             let at = t_of(e)?;
             open.insert(
@@ -361,7 +406,30 @@ pub fn tables(
             }
         }
     }
-    Ok(t)
+    Ok(())
+}
+
+/// What a call's gap is booked by beyond its line (feature 451 T08): the compile and landing-gate spans of each call ([`columns::splits_by_id`]) and the
+/// Makefile's default goal. A subagent's call (`by`) inside the main session's turn is booked as what the session was doing - the call it
+/// was waiting on, or the model - so a builder's line no longer cuts the session's `make static` in two; between turns it keeps the wait.
+#[derive(Default)]
+pub struct Booking {
+    /// tool-use id -> its run's compile and landing-gate spans.
+    pub splits: HashMap<String, columns::Split>,
+    /// The Makefile's default goal.
+    pub goal: String,
+}
+
+/// A `PreToolUse` line's category: a Bash call with a `make` by the guard's table (`other` the line's `other tool`), else its `cat`.
+fn pre_cat(e: &Event, goal: &str) -> String {
+    if is(e, "tool", "Bash") && super::events::on(e, "make") {
+        match columns::line_bucket(e, goal) {
+            "other" => "other tool".to_owned(),
+            b => b.to_owned(),
+        }
+    } else {
+        tool_cat(e)
+    }
 }
 
 /// `sum(values)` from Python's `0`, never Rust's `-0.0`.
@@ -527,6 +595,7 @@ fn starts(root: &Path, name: &str, since: &str) -> Result<Vec<(f64, String)>, Ra
 pub fn cli(args: &[String], projects: &Path, clones: &Path) -> Reply {
     let specs = [
         Spec::value("--since"),
+        Spec::value("--until"),
         Spec::value("--root"),
         Spec::flag("--by-tick"),
     ];
@@ -538,6 +607,7 @@ pub fn cli(args: &[String], projects: &Path, clones: &Path) -> Reply {
     match run(
         &p.positional[0],
         p.text("--since", ""),
+        p.text("--until", ""),
         p.text("--root", "."),
         p.on("--by-tick"),
         projects,
@@ -556,15 +626,65 @@ pub fn cli(args: &[String], projects: &Path, clones: &Path) -> Reply {
 fn usage(why: &str) -> Reply {
     reply(
         String::new(),
-        format!("usage: l7r-gate measure where-time [--since SINCE] [--root ROOT] [--by-tick] feature\nl7r-gate measure where-time: error: {why}\n"),
+        format!("usage: l7r-gate measure where-time [--since SINCE] [--until UNTIL] [--root ROOT] [--by-tick] feature\nl7r-gate measure where-time: error: {why}\n"),
         2,
     )
+}
+
+/// The window's events (cut at UNTIL), its sessions, its runs and what the tables book a call's gap by (feature 451 T08). The logs are read
+/// to their end, so a run still going at UNTIL is found and clipped there, not dropped.
+type Booked = (Vec<Event>, Vec<String>, columns::Runs, Booking);
+
+fn booked(
+    root: &Path,
+    name: &str,
+    (since, until): (&str, &str),
+    starts: &[(f64, String)],
+    projects: &Path,
+    clones: &Path,
+) -> Result<Booked, Raised> {
+    let loaded = load_all(&event_logs(root, name, clones), &[], since, "")?;
+    let events: Vec<Event> = loaded
+        .stream
+        .iter()
+        .filter(|e| until.is_empty() || s(e, "t").as_str() <= until)
+        .cloned()
+        .collect();
+    let mut sids: Vec<String> = events.iter().map(|e| s(e, "sid")).collect();
+    sids.sort();
+    sids.dedup();
+    let end = if until.is_empty() {
+        let mut last = 0.0_f64;
+        for e in loaded.stream.iter().chain(&loaded.aside) {
+            last = last.max(t_of(e)?);
+        }
+        last
+    } else {
+        ts(until)?
+    };
+    let makefile = std::fs::read_to_string(root.join("Makefile")).unwrap_or_default();
+    let goal = columns::default_goal(&makefile);
+    let queued = columns::enqueued(&sids, projects);
+    let stops = columns::stopped(&sids, projects);
+    let window = columns::Window {
+        end,
+        enqueued: &queued,
+        stopped: &stops,
+        goal: &goal,
+    };
+    let runs = columns::runs(&loaded.stream, &loaded.aside, starts, &window)?;
+    let booking = Booking {
+        splits: columns::splits_by_id(&runs),
+        goal: goal.clone(),
+    };
+    Ok((events, sids, runs, booking))
 }
 
 /// `main` after its arguments: the tables' text, or the missing directory's message (exit 2).
 fn run(
     feature: &str,
     since: &str,
+    until: &str,
     root_arg: &str,
     by_tick: bool,
     projects: &Path,
@@ -580,8 +700,10 @@ fn run(
         .file_name()
         .map_or_else(String::new, |n| n.to_string_lossy().into_owned());
     let starts = starts(&root, &name, since)?;
-    let events = load_events(&event_logs(&root, &name, clones), &[], since, "")?;
+    let (events, sids, runs, booking) =
+        booked(&root, &name, (since, until), &starts, projects, clones)?;
     let feature_no = name.split('-').next().unwrap_or_default();
+
     if by_tick {
         // ...EACH TASK'S TICK WINDOW (feature 385 T115, D132): what the GM's speed question was answered with by hand
         // ...a tick the tick archived in the same write is in tasks-done.md's history (feature 449 T142)
@@ -611,7 +733,7 @@ fn run(
         };
         let wins = tick_windows(&parse_ticks(&log_p)?, t0);
         let marks: Vec<(f64, String)> = wins.iter().map(|(s, _, k)| (*s, k.clone())).collect();
-        let t = tables(&events, &marks, None, feature_no)?;
+        let t = tables(&events, &marks, None, feature_no, &booking)?;
         let labels: Vec<String> = wins.iter().map(|(_, _, k)| k.clone()).collect();
         let mut text = render(&t, &labels);
         text += "\n\n| window | from (UTC) | to (UTC) | wall minutes |\n|---|---|---|---|\n";
@@ -626,11 +748,8 @@ fn run(
         }
         return Ok(Ok(text));
     }
-    let mut sids: Vec<String> = events.iter().map(|e| s(e, "sid")).collect();
-    sids.sort();
-    sids.dedup();
     let inputs = transcript_inputs(&sids, projects)?;
-    let t = tables(&events, &starts, Some(&inputs), feature_no)?;
+    let t = tables(&events, &starts, Some(&inputs), feature_no, &booking)?;
     // the tasks in the order of their first start, a task never started first: the Python sorted a set, so among those its order was its
     // string hash's; here it is the order first booked
     let first = |k: &str| starts.iter().find(|(_, t)| t == k).map_or(0.0, |(s, _)| *s);
@@ -649,10 +768,13 @@ fn run(
         .collect::<Vec<_>>()
         .join(", ");
     Ok(Ok(format!(
-        "{}\n\nbooked by: {rules} (feature 385 T89: the task a call names, else the last named, else the mark)\n",
-        render(&t, &order)
+        "{}\n\nbooked by: {rules} (feature 385 T89: the task a call names, else the last named, else the mark)\n\n{}",
+        render(&t, &order),
+        columns::render(&runs, &order)
     )))
 }
+
+pub mod columns;
 
 #[cfg(test)]
 mod tests;

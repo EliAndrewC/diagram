@@ -1,0 +1,585 @@
+//! `make where-time`'s columns (feature 451 T08, plan D2, D4, D7; FR-005): every Bash run of a window booked by its `make` target
+//! through the guard's one category table, its compile split from the `Phase` lines it holds, its end read where the session learned it.
+//!
+//! WHY. The tables booked a tool call by the `cat` the event log froze when it was written, so a past log could never be re-booked, and
+//! 846 of a day's 1,323 minutes went to "waiting on work" with every test column near zero: the tests ran in the builders, between the
+//! main session's turns (measured 2026-11-21, method: `make where-time F=451 SINCE=2026-11-20T04:33:00Z` before this task). So THE RUNS
+//! TABLE books each Bash call of every session and agent - foreground from its `PreToolUse` to its `PostToolUse`, background from its
+//! launch to its end - under the task its line names, by [`line_bucket`]. Runs overlap (several builders at once), so its minutes are
+//! machine minutes beside the wall clock, never part of it: the critical path (the main session's own, `where_time::tables`) is apart.
+//!
+//! A BACKGROUND RUN ENDS at the main transcript's `queue-operation` `enqueue` row naming its `<tool-use-id>` - when its notice was queued,
+//! seconds after the run ended - never at the `BgEnd` line's `t`, which is when the notice reached the session, minutes late while the
+//! session is mid-turn: one enqueued 11:44:08, delivered 11:47:41 (T04's plan review, 2026-11-20). No enqueue row: the `BgEnd`'s `t`; no
+//! `BgEnd`: the `TaskStop` call that stopped it ([`stopped`]); none of these: open to the window's end (data-model's edge case: never zero). A subagent's background run ends at its transcript's
+//! `queued_command` attachment, T09's.
+//!
+//! COMPILE (D4) is the union of the `build` and `cover-build` phase spans a run holds; the rest of the run stays its own bucket. D4 says
+//! "inside the Bash call or background span that holds them", data-model's row "inside a tests run": a `make land` or `make done`
+//! compiles too, and its compile is compile, so every run splits (a deliberate reading of the two, the land and gate columns keeping
+//! the rest of their runs). A phase is tied to the run of its session whose span holds it and whose target is the phase's `make` - or,
+//! a deviation from D4, whose task is the phase's `task`: a phase's `make` names the outermost make it saw, and of the window's 984
+//! compile phases 567 (60.9 min) matched no holding run's target, 170 once the task also ties (measured 2026-11-21, method:
+//! `/tmp/t08/loose.py` and `loose2.py` over the 451 log since 2026-11-20T04:33Z, each phase against the Bash spans of its session).
+//! Among several, the one of its target, then of its task, then the one started last (D4: a builder waiting on the run lock holds a
+//! span another builder's phases fall inside). A phase tied to none is counted, never dropped.
+//!
+//! A LANDING is booked land however it is launched: a call running several targets (its line's `makes`) is booked by the first of them in
+//! [`PRECEDENCE`], and a phase ties to a run that runs its `make` at all - the day's 19 landings were launched `make claims-owed ...; make
+//! ledger-owed; make land`, so by their first target they were review, and the runs table showed land 4.2 min and gate 0.0 against 27.4
+//! min of their own `gate` phases (T08's final check, 2026-11-21). A landing's `gate` and `cohort` phases (`src: land`; never its `end`,
+//! the whole landing) are split out as gate, less the compile inside them, the way compile is.
+
+use std::collections::HashMap;
+use std::fmt::Write as _;
+use std::path::Path;
+use std::sync::LazyLock;
+
+use fancy_regex::Regex;
+use l7r_guard::guards::event_log_hooks::bucket_of;
+use l7r_guard::shared::make::DEFAULT_GOAL;
+use serde_json::Value;
+
+use super::super::events::{
+    cmp_f, fixed, get, is, names, on, or_s, re, t_of, ts, Event, Raised, Tally,
+};
+use super::task_at;
+
+/// The runs table's buckets, in the guard's table's order, compile after tests.
+pub const RUN_COLUMNS: [&str; 8] = [
+    "tests",
+    "compile",
+    "gate",
+    "land",
+    "review",
+    "docs",
+    "spec-kit step",
+    "other",
+];
+/// The runs table's column of the background minutes, already in their buckets.
+pub const BACKGROUND: &str = "in the background";
+
+static TOOL_USE: LazyLock<Regex> =
+    LazyLock::new(|| re(r"<tool-use-id>(toolu_[A-Za-z0-9_-]+)</tool-use-id>"));
+
+/// A line's frozen `cat` read as a table bucket, for a line with no `make`: a past log's `quick test` and `test file` are tests.
+#[must_use]
+pub fn cat_bucket(cat: &str) -> &'static str {
+    match cat {
+        "tests" | "quick test" | "test file" => "tests",
+        "gate" => "gate",
+        "land" => "land",
+        "review" => "review",
+        "docs" => "docs",
+        "spec-kit step" => "spec-kit step",
+        _ => "other",
+    }
+}
+
+/// A line's make target, a goal-less make (`shared::make::invoked`'s `.DEFAULT_GOAL`, since T15) read as the Makefile's default goal.
+#[must_use]
+pub fn target<'a>(make: &'a str, goal: &'a str) -> &'a str {
+    if make == DEFAULT_GOAL && !goal.is_empty() {
+        goal
+    } else {
+        make
+    }
+}
+
+/// Which bucket a call running several targets is booked by, first first: a landing launched `make claims-owed ...; make ledger-owed; make
+/// land` is a landing, and a `make decide ... && make quick` is its tests.
+pub const PRECEDENCE: [&str; 7] = [
+    "land",
+    "gate",
+    "tests",
+    "review",
+    "docs",
+    "spec-kit step",
+    "other",
+];
+
+/// A line's make targets: its `makes` (every target, since T14) when it runs several, else its `make`; each [`target`]ed.
+fn targets_of(e: &Event, goal: &str) -> Vec<String> {
+    let all: Vec<String> = match get(e, "makes") {
+        Value::Array(list) => list
+            .iter()
+            .filter_map(Value::as_str)
+            .map(str::to_owned)
+            .collect(),
+        _ => vec![or_s(e, "make")],
+    };
+    all.iter()
+        .filter(|m| !m.is_empty())
+        .map(|m| target(m, goal).to_owned())
+        .collect()
+}
+
+/// The bucket of a tool line (D2): its make targets through the guard's table, the first in [`PRECEDENCE`], so a past log re-books and a
+/// landing launched behind a review target is a landing (the T08 final check: the day's 19 landings, so launched, were booked review);
+/// else its frozen `cat`.
+#[must_use]
+pub fn line_bucket(e: &Event, goal: &str) -> &'static str {
+    let buckets: Vec<&str> = targets_of(e, goal).iter().map(|m| bucket_of(m)).collect();
+    if buckets.is_empty() {
+        return cat_bucket(&or_s(e, "cat"));
+    }
+    PRECEDENCE
+        .iter()
+        .find(|b| buckets.contains(b))
+        .copied()
+        .unwrap_or("other")
+}
+
+/// The Makefile's default goal as GNU make finds it: a `.DEFAULT_GOAL` it sets, else the first target of its first rule that does not
+/// start with a dot. A recipe or continuation line (leading whitespace), a comment, an assignment and a line naming a variable are no rule.
+#[must_use]
+pub fn default_goal(makefile: &str) -> String {
+    let mut first = String::new();
+    for line in makefile.lines() {
+        if let Some(rest) = line.strip_prefix(".DEFAULT_GOAL") {
+            let value = rest.trim_start().trim_start_matches([':', '?', '=']).trim();
+            if !value.is_empty() {
+                return value.to_owned();
+            }
+        }
+        if !first.is_empty() || line.starts_with(char::is_whitespace) || line.starts_with('#') {
+            continue;
+        }
+        let Some((head, tail)) = line.split_once(':') else {
+            continue;
+        };
+        if head.contains(['=', '$']) || tail.starts_with('=') {
+            continue;
+        }
+        if let Some(t) = head.split_whitespace().find(|t| !t.starts_with('.')) {
+            t.clone_into(&mut first);
+        }
+    }
+    first
+}
+
+/// tool-use id -> when the main transcript queued its run's notice: each session's `<projects>/*/<sid>.jsonl` `queue-operation` `enqueue`
+/// rows naming a `<tool-use-id>`, the first kept. A row that is no JSON, or names no time, is skipped: a transcript the session is still
+/// writing can end on half a row.
+#[must_use]
+pub fn enqueued(sids: &[String], projects: &Path) -> HashMap<String, f64> {
+    let mut out = HashMap::new();
+    for sid in sids {
+        for project in names(projects) {
+            let path = projects.join(project).join(format!("{sid}.jsonl"));
+            let Ok(text) = std::fs::read_to_string(&path) else {
+                continue;
+            };
+            for line in text.lines().filter(|l| l.contains("\"enqueue\"")) {
+                let Ok(Value::Object(row)) = serde_json::from_str::<Value>(line) else {
+                    continue;
+                };
+                let (Some(content), Some(at)) = (
+                    get(&row, "content").as_str(),
+                    get(&row, "timestamp").as_str().and_then(|t| ts(t).ok()),
+                ) else {
+                    continue;
+                };
+                if !is(&row, "type", "queue-operation") {
+                    continue;
+                }
+                if let Ok(Some(c)) = TOOL_USE.captures(content) {
+                    out.entry(c[1].to_owned()).or_insert(at);
+                }
+            }
+        }
+    }
+    out
+}
+
+/// `TaskStop` call id -> the background task it stopped, from each session's transcript and its subagents'
+/// (`<projects>/*/<sid>.jsonl`, `<projects>/*/<sid>/subagents/*.jsonl`): a stopped run sends no notice, so without it a run a builder
+/// stopped was booked open to the window's end - ten such on 2026-11-20 booked 6,070 machine minutes "other" (measured 2026-11-21,
+/// method: this reader over `make where-time F=451 SINCE=2026-11-20T04:33:00Z`, each open run's bg id found in a `TaskStop` input).
+/// `KillShell` is the tool's earlier name.
+#[must_use]
+pub fn stopped(sids: &[String], projects: &Path) -> HashMap<String, String> {
+    let mut out = HashMap::new();
+    for sid in sids {
+        for project in names(projects) {
+            let dir = projects.join(&project);
+            let subs = dir.join(sid).join("subagents");
+            let mut files = vec![dir.join(format!("{sid}.jsonl"))];
+            files.extend(names(&subs).into_iter().map(|n| subs.join(n)));
+            for path in files {
+                let Ok(text) = std::fs::read_to_string(&path) else {
+                    continue;
+                };
+                for line in text
+                    .lines()
+                    .filter(|l| l.contains("\"TaskStop\"") || l.contains("\"KillShell\""))
+                {
+                    let Ok(row) = serde_json::from_str::<Value>(line) else {
+                        continue;
+                    };
+                    let blocks = row.pointer("/message/content").and_then(Value::as_array);
+                    for b in blocks.into_iter().flatten() {
+                        let input =
+                            |k: &str| b.pointer(&format!("/input/{k}")).and_then(Value::as_str);
+                        if let (Some(id), Some(task)) = (
+                            b.get("id").and_then(Value::as_str),
+                            input("task_id").or_else(|| input("shell_id")),
+                        ) {
+                            out.insert(id.to_owned(), task.to_owned());
+                        }
+                    }
+                }
+            }
+        }
+    }
+    out
+}
+
+/// One Bash run.
+#[derive(Debug, Clone, PartialEq)]
+pub struct Run {
+    /// Its tool-use id.
+    pub id: String,
+    /// Its start: the `PreToolUse` line's time.
+    pub t0: f64,
+    /// Its end: its `PostToolUse`, or a background run's enqueue row, `BgEnd`, or the window's end.
+    pub t1: f64,
+    /// Its session.
+    pub sid: String,
+    /// Its make targets, every one it runs ([`targets_of`]), the default goal for a goal-less make.
+    pub makes: Vec<String>,
+    /// Its bucket ([`line_bucket`]).
+    pub bucket: &'static str,
+    /// The task its line names, else the mark at its start.
+    pub task: String,
+    /// Whether it ran in the background.
+    pub bg: bool,
+    /// Whether no end was found: booked open to the window's end.
+    pub open: bool,
+    /// The union of the compile phases it holds, clipped to its span, disjoint and in order.
+    pub compile: Vec<(f64, f64)>,
+    /// The union of the landing's `gate` and `cohort` phases it holds, less its compile: disjoint from `compile` and in order.
+    pub gate: Vec<(f64, f64)>,
+}
+
+impl Run {
+    /// Its seconds compiling.
+    #[must_use]
+    pub fn compile_s(&self) -> f64 {
+        overlap(&self.compile, self.t0, self.t1)
+    }
+
+    /// Its seconds in a landing's gate, its compile apart.
+    #[must_use]
+    pub fn gate_s(&self) -> f64 {
+        overlap(&self.gate, self.t0, self.t1)
+    }
+}
+
+/// A call's spans split out of its gap: compile, and a landing's gate less its compile.
+#[derive(Debug, Default, Clone, PartialEq)]
+pub struct Split {
+    /// [`Run::compile`].
+    pub compile: Vec<(f64, f64)>,
+    /// [`Run::gate`].
+    pub gate: Vec<(f64, f64)>,
+}
+
+/// The window's runs and what could not be tied to one.
+#[derive(Debug, Default)]
+pub struct Runs {
+    /// Every run, in start order.
+    pub runs: Vec<Run>,
+    /// `PreToolUse` Bash lines with no `PostToolUse`: refused by a guard before they ran, so no run.
+    pub refused: usize,
+    /// Compile phases tied to no run, and their seconds.
+    pub loose: (usize, f64),
+}
+
+/// What the runs are cut and ended by.
+pub struct Window<'a> {
+    /// The window's end (UTC seconds): `UNTIL=`, else the last line's time.
+    pub end: f64,
+    /// [`enqueued`]'s map.
+    pub enqueued: &'a HashMap<String, f64>,
+    /// [`stopped`]'s map.
+    pub stopped: &'a HashMap<String, String>,
+    /// The Makefile's [`default_goal`].
+    pub goal: &'a str,
+}
+
+/// The summed length of `spans` (disjoint) inside `[lo, hi]`.
+#[must_use]
+pub fn overlap(spans: &[(f64, f64)], lo: f64, hi: f64) -> f64 {
+    spans
+        .iter()
+        .fold(0.0, |n, (a, b)| n + (b.min(hi) - a.max(lo)).max(0.0))
+}
+
+fn union(mut spans: Vec<(f64, f64)>) -> Vec<(f64, f64)> {
+    spans.sort_by(|a, b| cmp_f(a.0, b.0));
+    let mut out: Vec<(f64, f64)> = Vec::new();
+    for (a, b) in spans {
+        match out.last_mut() {
+            Some(last) if a <= last.1 => last.1 = last.1.max(b),
+            _ => out.push((a, b)),
+        }
+    }
+    out
+}
+
+/// Every Bash run of `stream` (each session's and agent's) started by the window's end, its end found and clipped there, and the
+/// compile phases of `aside` (`load_all`'s set-aside lines) tied to it.
+///
+/// # Errors
+///
+/// A line's time, or a `Phase` line's `t0`/`t1`, the reader cannot read.
+pub fn runs(
+    stream: &[Event],
+    aside: &[Event],
+    starts: &[(f64, String)],
+    w: &Window,
+) -> Result<Runs, Raised> {
+    let mut ends: HashMap<String, (f64, bool)> = HashMap::new();
+    for e in stream {
+        if (is(e, "ev", "PostToolUse") || is(e, "ev", "PostToolUseFailure"))
+            && is(e, "tool", "Bash")
+        {
+            ends.entry(or_s(e, "id")).or_insert((t_of(e)?, on(e, "bg")));
+        }
+    }
+    let mut bg_ends: HashMap<String, f64> = HashMap::new();
+    for e in aside.iter().filter(|e| is(e, "ev", "BgEnd")) {
+        bg_ends.entry(or_s(e, "id")).or_insert(t_of(e)?);
+    }
+    // background task id -> when a `TaskStop` call stopped it
+    let mut stops: HashMap<&str, f64> = HashMap::new();
+    for e in stream.iter().filter(|e| is(e, "ev", "PreToolUse")) {
+        if let Some(task) = w.stopped.get(&or_s(e, "id")) {
+            stops.entry(task.as_str()).or_insert(t_of(e)?);
+        }
+    }
+    let mut bg_of: HashMap<String, String> = HashMap::new();
+    for e in stream.iter().filter(|e| on(e, "bg")) {
+        bg_of.insert(or_s(e, "id"), or_s(e, "bg"));
+    }
+    let mut out = Runs::default();
+    for e in stream {
+        if !(is(e, "ev", "PreToolUse") && is(e, "tool", "Bash")) {
+            continue;
+        }
+        let (id, t0) = (or_s(e, "id"), t_of(e)?);
+        if t0 > w.end {
+            continue;
+        }
+        let Some(&(post, bg)) = ends.get(&id) else {
+            out.refused += 1;
+            continue;
+        };
+        let found = if bg {
+            w.enqueued
+                .get(&id)
+                .or_else(|| bg_ends.get(&id))
+                .or_else(|| bg_of.get(&id).and_then(|b| stops.get(b.as_str())))
+                .copied()
+        } else {
+            Some(post)
+        };
+        let task = or_s(e, "task");
+        out.runs.push(Run {
+            t0,
+            t1: found.unwrap_or(w.end).min(w.end).max(t0),
+            sid: or_s(e, "sid"),
+            makes: targets_of(e, w.goal),
+            bucket: line_bucket(e, w.goal),
+            task: if task.is_empty() {
+                task_at(starts, t0)
+            } else {
+                task
+            },
+            bg,
+            open: found.is_none(),
+            compile: Vec::new(),
+            gate: Vec::new(),
+            id,
+        });
+    }
+    tie(&mut out, aside, w.end)?;
+    Ok(out)
+}
+
+/// Each compile phase, and each landing's `gate` and `cohort` phase, of `aside` tied to its run (the module's doc), the loose counted.
+fn tie(out: &mut Runs, aside: &[Event], end: f64) -> Result<(), Raised> {
+    let mut held: Vec<Vec<(f64, f64)>> = vec![Vec::new(); out.runs.len()];
+    let mut gated: Vec<Vec<(f64, f64)>> = vec![Vec::new(); out.runs.len()];
+    for p in aside.iter().filter(|p| is(p, "ev", "Phase")) {
+        let compile = is(p, "step", "build") || is(p, "step", "cover-build");
+        // a landing's gate (`make done`) and cohort (`make cohort-landing`), side by side (405 T48); never its `end`, the whole landing
+        let gate = is(p, "src", "land") && (is(p, "step", "gate") || is(p, "step", "cohort"));
+        if !(compile || gate) {
+            continue;
+        }
+        let span = |k: &str| match get(p, k) {
+            Value::String(t) => ts(t),
+            _ => Err(format!("TypeError: a Phase line's {k} is no text")),
+        };
+        let (a, b) = (span("t0")?, span("t1")?);
+        if a >= end {
+            // after the window: the logs are read to their end, its runs cut at the window's
+            continue;
+        }
+        let (make, task) = (or_s(p, "make"), or_s(p, "task"));
+        let (same_make, same_task) = (
+            |r: &Run| make.is_empty() || r.makes.contains(&make),
+            |r: &Run| !task.is_empty() && r.task == task,
+        );
+        let fits = |r: &&Run| {
+            r.sid == or_s(p, "sid") && (same_make(r) || same_task(r)) && r.t0 <= a && b <= r.t1
+        };
+        let best = out
+            .runs
+            .iter()
+            .enumerate()
+            .filter(|(_, r)| fits(r))
+            .max_by(|(_, x), (_, y)| {
+                (same_make(x), same_task(x))
+                    .cmp(&(same_make(y), same_task(y)))
+                    .then(cmp_f(x.t0, y.t0))
+            })
+            .map(|(i, _)| i);
+        if let Some(i) = best {
+            if compile {
+                held[i].push((a, b));
+            } else {
+                gated[i].push((a, b));
+            }
+        } else {
+            out.loose.0 += 1;
+            out.loose.1 += b - a;
+        }
+    }
+    for ((r, spans), gate) in out.runs.iter_mut().zip(held).zip(gated) {
+        r.compile = union(spans);
+        r.gate = minus(&union(gate), &r.compile);
+    }
+    Ok(())
+}
+
+/// `spans` less `cut`, both disjoint and in order.
+fn minus(spans: &[(f64, f64)], cut: &[(f64, f64)]) -> Vec<(f64, f64)> {
+    let mut out = Vec::new();
+    for &(mut a, b) in spans {
+        for &(c, d) in cut {
+            if d <= a || c >= b {
+                continue;
+            }
+            if c > a {
+                out.push((a, c));
+            }
+            a = d;
+        }
+        if a < b {
+            out.push((a, b));
+        }
+    }
+    out
+}
+
+/// Seconds by task and [`RUN_COLUMNS`] (and [`BACKGROUND`], `runs` the count), tasks in the order first booked.
+#[must_use]
+pub fn by_task(runs: &Runs) -> Vec<(String, Tally<String>)> {
+    let mut rows: Vec<(String, Tally<String>)> = Vec::new();
+    for r in &runs.runs {
+        let i = rows
+            .iter()
+            .position(|(k, _)| *k == r.task)
+            .unwrap_or_else(|| {
+                rows.push((r.task.clone(), Tally::default()));
+                rows.len() - 1
+            });
+        let (row, c, g) = (&mut rows[i].1, r.compile_s(), r.gate_s());
+        row.add(&"runs".to_owned(), 1.0);
+        row.add(&"compile".to_owned(), c);
+        row.add(&"gate".to_owned(), g);
+        row.add(&r.bucket.to_owned(), r.t1 - r.t0 - c - g);
+        if r.bg {
+            row.add(&BACKGROUND.to_owned(), r.t1 - r.t0);
+        }
+    }
+    rows
+}
+
+/// tool-use id -> its run's [`Split`]: what the critical path splits a call's gap by.
+#[must_use]
+pub fn splits_by_id(runs: &Runs) -> HashMap<String, Split> {
+    runs.runs
+        .iter()
+        .filter(|r| !(r.compile.is_empty() && r.gate.is_empty()))
+        .map(|r| {
+            (
+                r.id.clone(),
+                Split {
+                    compile: r.compile.clone(),
+                    gate: r.gate.clone(),
+                },
+            )
+        })
+        .collect()
+}
+
+/// The runs table as Markdown, its rows in `order` and then any task `order` lacks, with its footnote.
+#[must_use]
+pub fn render(runs: &Runs, order: &[String]) -> String {
+    let rows = by_task(runs);
+    let mut ordered: Vec<&(String, Tally<String>)> = order
+        .iter()
+        .filter_map(|k| rows.iter().find(|(r, _)| r == k))
+        .collect();
+    ordered.extend(rows.iter().filter(|(k, _)| !order.contains(k)));
+    let cols: Vec<&str> = RUN_COLUMNS.iter().copied().chain([BACKGROUND]).collect();
+    let mut text = format!(
+        "| task | runs | minutes | {} |\n|---|---|---|{}\n",
+        cols.join(" | "),
+        "---|".repeat(cols.len())
+    );
+    let mut all: Tally<String> = Tally::default();
+    let mut line = |k: &str, t: &Tally<String>| {
+        let minutes = RUN_COLUMNS
+            .iter()
+            .fold(0.0, |n, c| n + t.get(&(*c).to_owned()));
+        let cells: Vec<String> = cols
+            .iter()
+            .map(|c| fixed(t.get(&(*c).to_owned()) / 60.0, 1))
+            .collect();
+        let _ = writeln!(
+            text,
+            "| {k} | {} | {} | {} |",
+            t.get(&"runs".to_owned()),
+            fixed(minutes / 60.0, 1),
+            cells.join(" | ")
+        );
+    };
+    for (k, t) in ordered {
+        for (c, v) in t.items() {
+            all.add(c, *v);
+        }
+        line(k, t);
+    }
+    line("all", &all);
+    let bg = runs.runs.iter().filter(|r| r.bg).count();
+    let open = runs.runs.iter().filter(|r| r.open).count();
+    let _ = write!(
+        text,
+        "\nruns: {} Bash calls of every session and agent ({bg} in the background, {open} open at the window's end), booked by their `make` \
+         target through the guard's table (feature 451 T08); machine minutes, which overlap, never the wall clock; {} refused before \
+         running; compile and landing-gate phases tied to no run: {} ({} min)\n",
+        runs.runs.len(),
+        runs.refused,
+        runs.loose.0,
+        fixed(runs.loose.1 / 60.0, 1)
+    );
+    text
+}
+
+#[cfg(test)]
+mod tests;

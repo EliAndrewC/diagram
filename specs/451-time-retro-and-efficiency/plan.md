@@ -267,6 +267,78 @@ the three - `entry-gate.sh` by its two cases, the other two by their case groups
   FILE=Makefile` first). Red first: User Story 1's acceptance scenarios 1 and 3 as fixtures - `make static`, `make rust-test` and `make
   hooks-test` under tests; a `make static` whose cover-build phase is two thirds of its span split into compile and tests - and a past
   log re-booked by its `make` field.
+- **Built** (2026-11-21). TWO TABLES, because the work ran in the builders between the main session's turns, so a wall-clock partition
+  alone books it "waiting on work": the critical path (the existing per-task table, the main session's own gaps) and THE RUNS TABLE
+  (`columns::render`): every Bash call of every session and agent, foreground from its `PreToolUse` to its `PostToolUse` or
+  `PostToolUseFailure`, background from its launch to its end, under the task its own line names (else the mark), in machine minutes
+  that overlap and are never summed into the wall clock. Both book a call by `columns::line_bucket` - its `make` through the guard's
+  `bucket_of` (so a past log's frozen `cat` re-books), a goal-less make's `.DEFAULT_GOAL` read as the Makefile's default goal
+  (`columns::default_goal`: a `.DEFAULT_GOAL` it sets, else its first rule's first undotted target, `work-budget` here), a line with no
+  `make` by its frozen `cat` (`quick test` and `test file` are tests). The wall-clock table's `gate/tests` column becomes `tests`,
+  `compile`, `gate`, `land`, `review`, `docs` and `spec-kit step`.
+  - A background run ends at the main transcript's `queue-operation` `enqueue` row naming its `<tool-use-id>` (`columns::enqueued`),
+    else its `BgEnd`'s `t`, else the `TaskStop` call that stopped it (`columns::stopped`, the call's input read from the session's and
+    its subagents' transcripts, its time the call's own line), else open to the window's end. The `TaskStop` end is an addition the
+    plan did not name: without it ten runs builders had stopped were booked open, 6,070 machine minutes "other" of the window's 6,792,
+    measured 2026-11-21 (this reader over `--since 2026-11-20T04:33:00Z`, each open run's bg id found in a `TaskStop` input).
+  - Compile (D4) is the union of the `build` and `cover-build` phases a run holds, split out of ANY run, the rest staying the run's
+    bucket - a reading of D4's "the Bash call or background span that holds them" over data-model's "inside a tests run", since a
+    landing's or a gate's compile is compile. The critical path splits a main-session call's gap the same way. A phase ties to the run of
+    its session whose span holds it and whose target is its `make` OR whose task is its `task` - the task a deviation from D4: 567 of
+    the window's 984 compile phases (60.9 min) matched no holding run's target, 170 (12.1 min) once the task also ties, measured
+    2026-11-21 (`/tmp/t08/loose.py`, `loose2.py` and the reader's footnote over the 451 log since 04:33Z) - ranked by target, then
+    task, then the latest start. A phase tied to none is counted in the footnote, never dropped; one starting after the window is no
+    phase of it.
+  - A subagent's call (`by`) inside the main session's turn is booked as what the session was doing - the call it waits on, or the
+    model - so a builder's line no longer cuts the session's `make static` in two (`Booking`); between turns it keeps the wait open.
+  - A LANDING is booked land however it is launched: a call running several targets (its line's `makes`, T14's) is booked by the
+    first of them in `columns::PRECEDENCE` - land, gate, tests, review, docs, spec-kit step, other - in both tables, and a phase ties
+    to a run that runs its `make` at all. A landing's `gate` and `cohort` phases (`src: land`; never its `end`, the whole landing) are
+    split out as gate, less the compile inside them, as compile is, in the runs table and on the critical path (`columns::Split`). The
+    day's 19 landings were launched `make claims-owed ...; make ledger-owed; make land`, so by their first target they were review: the
+    runs table showed land 4.2 and gate 0.0 min against 27.4 min of their own gate phases, measured 2026-11-21 (the 451 log's `src:
+    land` Phase lines since 04:33Z summed, `/tmp/t08/scripts/landsum.py`).
+  - The session's own line moves the session's state on before a zero gap is skipped, and a subagent's `SubagentStart` or
+    `SubagentStop` keeps it: a background agent's `PostToolUse` and `SubagentStart` share a millisecond, so the skip had left the
+    launch's `other subagent` held for the thinking after it, and a builder's stop inside the session's own `make static` had booked
+    the rest of the call model (both found by T08's model check, below).
+  - `UNTIL=`: `--until` on the command line. The logs are read to their end so a run still going at `UNTIL` is clipped there, not
+    dropped; the tables' events are cut at it.
+  - T08's notes: the `make land` after a multi-line `python3 -c` string (bnikhrir8's launch, its command taken from the session
+    transcript) reads `land` through `shared::make::invoked` and `make_target` - T15's reader fixed it, so no red was owed, pinned by
+    `columns::tests::the_python_c_launch_reads_make_land`; the goal-less make as above.
+- **Red first**: `where_time::tests::the_columns_book_make_runs_compile_and_until` before the change: refused `--until` (exit 2),
+  then, `--until` alone wired, booked the fixture's `make static` as `tools` 3 and `gate/tests` 0 with no compile column and no runs
+  table (`/tmp/t08/red1.log`, `red2.log`). The landing: `columns::tests::a_landing_is_booked_land_and_its_gate_split_out` (the real
+  launch shape, its `makes` `["claims-owed","ledger-owed","land"]` and a task the landing's phases do not share) booked it `review`, and
+  `where_time::tests::a_landing_call_books_land_and_splits_its_gate` booked a foreground landing's whole 600 s review, none of it land,
+  gate or compile, observed 2026-11-21, method: `make rust-test CRATE=rust/gate/crates/measure` before the change (`/tmp/t08/red3.log`,
+  `red4.log`). `where_time::tests::a_builders_stop_inside_a_call_keeps_the_call` booked a
+  builder's stop inside a `make static` 60 s tests and 270 s model against 300 and 30, then, the stop fixed and its
+  zero-gap case added, a background agent's launch 601 s `other subagent` against 600 s model, observed 2026-11-21, method: the same
+  command before each fix (`red5.log`, `red6.log`). The aside test now holds `make feature-report` unchanged (T11's) and pins where-time's one
+  move, the runs table's 29 s of compile, measured 2026-11-21 (the test's fixture through the reader).
+- **Measured** (the command `make where-time F=451 SINCE=2026-11-20T04:33:00Z UNTIL=2026-11-21T03:07:24Z`, through the
+  recipe's `UNTIL=`), measured 2026-11-21 (the command; its `all` rows):
+
+| table | total min | model | tests | compile | gate | land | review | docs | spec-kit step | other / tools | waiting on work | the GM | idle |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| critical path (wall clock) | 1,354 | 342 | 0 | 0 | 0 | 0 | 1 | 3 | 4 | 5 | 866 | 6 | 126 |
+| runs (5,544 calls, machine min, 998.3 of it in the background, measured 2026-11-21 (the command)) | 1,345.7 | - | 312.3 | 132.9 | 14.4 | 5.3 | 11.5 | 2.8 | 4.6 | 861.9 | - | - | - |
+
+  The landings' share checks against their phase lines: gate 14.4 min is the 19 landings' gate and cohort phases (27.4 min) less the
+  13.0 min of compile inside them, and land 5.3 + gate 14.4 + that compile is 32.7 min against their `end` phases' 32.4, measured
+  2026-11-21 (`/tmp/t08/scripts/landsum.py` over the same window, and the command); compile and gate phases tied to no run 159 (9.5
+  min), from 170 once a phase ties by every target a run runs, measured 2026-11-21 (the command's footnote). Of the other, 709 min are
+  background runs no `make` names - the main session's poll-waits on its builders and the builders' measurement scripts - measured
+  2026-11-21 over the earlier window to 02:51:03Z (`/tmp/t08/bgprobe.py`, each run's command from the transcripts). The command's own
+  time, now that `stopped()` reads every subagent transcript, is 1.16-1.24 s wall with the binary already built and 7.25 s on a first run
+  that rebuilt it, measured 2026-11-21 (`/usr/bin/time` over the command above, five runs).
+- **The hand count** of 16:00-17:00Z by another method (each foreground call's `PostToolUse` `ms`, each background one
+  launch-to-enqueue, the table read from the guard's source; `/tmp/t08/hand.py`), each figure against the reader's over that hour:
+  all runs 4,785 s (79.8 min) against 80.6 min, measured 2026-11-21 (`hand.py` and the command); tests with compile 1,832 s (30.5
+  min) against 31.8 min, measured 2026-11-21 (the same); other 46.9 against 47.3 min, measured 2026-11-21 (the same); the hour's
+  compile phases summed 9.9 min against the reader's 7.8 tied plus 2.1 loose, measured 2026-11-21 (the same).
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
@@ -282,14 +354,19 @@ the three - `entry-gate.sh` by its two cases, the other two by their case groups
 6. **The exits.** Green: the fixture sums. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
 7. **The search smell.** None.
 8. **The budget.** One landing.
-9. **Done, measured.** The fixture green; `make where-time F=451 SINCE=<this task's start> UNTIL=<now>` books this task's own runs under their columns.
+9. **Done, measured.** The fixture green; `make where-time F=451 SINCE=<this task's start> UNTIL=<now>` books this task's own runs under their columns: T08's row of the runs table, 148 calls, 7.0 min - tests 1.6, compile 4.2, spec-kit 0.5, other 0.6 - measured 2026-11-21 (the **Measured** command, its T08 row).
 10. **Before moving a constant.** n/a.
 11. **Before fitting things into room.** n/a.
 12. **Before any fix.** The readers book by the frozen `cat`, so a past log can never be re-booked - a tool answering wrongly; fixed by booking by `make`.
 
-**Found and left?** none
+**Found and left?**
+- The `where-time` recipe's `--until` (held: the root `Makefile`): fixed here - before the task's tick, the session wired `$(if $(UNTIL),--until "$(UNTIL)",)`, and the **Measured** run went through it.
+- A subagent's background run whose notice reached only its own transcript (the `queued_command` attachment) ends here at its `BgEnd`, `TaskStop` or the window's end. Not fixed here: it is T09's (D3, its plan section names it). Filed as T09; lands before T10.
+- The critical path still books 866 of 1,354 minutes "waiting on work", measured 2026-11-21 (the command above). Not fixed here: booking a wait to the runs in flight is T09's and the critical path apart from the agents T10's. Filed as T09; lands before T10.
+- 159 compile and landing-gate phases (9.5 min) tie to no run, measured 2026-11-21 (the command above): not a defect, each counted and shown in the runs table's footnote, no wrong outcome.
+- The critical path's model column (342 min) is mostly between turns: the main session coordinates 449 and 451, and each hook line goes to the log of the feature active when it fired, so a turn's `Stop` often lands in 449's log and the 451 walk never sees the turn end - the 07:59:21Z `Stop` is in `449-rust-codebase.jsonl` alone, so 07:59:14-08:28:46 (29.5 min, the transcript silent from its `turn_duration` row to the 08:28:46 task notification) is booked model, observed 2026-11-21, method: the 451 and 449 logs and the session's transcript read over 07:58-08:29Z. Of the 479 minutes the 451 log holds the session in a turn, 349.7 lie between the transcript's `turn_duration` rows and the next prompt or notification, measured 2026-11-21 (`/tmp/t08/scripts/turns.py` over the same window and the session's transcript). Of the 355 of those minutes not booked idle, 235.4 are booked model, measured 2026-11-21 (`/tmp/t08/scripts/turns.py`, the between-turn stretches against the critical path's model column). The column rose 274 -> 342 with the `by` booking because the builder lines inside those stretches had been booked by their own categories, a different wrong, observed 2026-11-21, method: the longest stretches of `/tmp/t08/scripts/stretch.py` read against the transcript. Two smaller wrongs the check found are fixed here (the **Built** bullet on the session's state): 1.7 min of a builder's stop inside the session's `make static` (`/tmp/t08/scripts/modelcheck.py`), and the zero-gap skip, which the first fix uncovered moving 41 min to `other subagent` and `plan review`, measured 2026-11-21 (the command, before and after). Not fixed here: reading a session's turn lines from every feature's log decides how a turn spent on another feature is booked, which is the critical path apart from the agents - T10's (D5, D6). Folded into T10; lands before T11.
 
-**Performance work?** no
+**Performance work?** yes - a `[perf]` task under FR-013's measurement clause (the GM 2026-11-20): it measures where the time goes; no engine timing, so no checklist
 
 ### T09 (FR-002, FR-005: a wait cannot be booked to the run behind it - the spec's User Story 1 scenario 2, research R2)
 
@@ -320,7 +397,7 @@ the three - `entry-gate.sh` by its two cases, the other two by their case groups
 
 **Found and left?** none
 
-**Performance work?** no
+**Performance work?** yes - a `[perf]` task under FR-013's measurement clause (the GM 2026-11-20): it measures where the time goes; no engine timing, so no checklist
 
 ### T10 (FR-005: the wall clock on the critical path apart from the agent-minutes, the agents' tokens, the rework)
 
@@ -349,7 +426,7 @@ the three - `entry-gate.sh` by its two cases, the other two by their case groups
 
 **Found and left?** none
 
-**Performance work?** no
+**Performance work?** yes - a `[perf]` task under FR-013's measurement clause (the GM 2026-11-20): it measures where the time goes; no engine timing, so no checklist
 
 ### T11 (FR-005: `make feature-report` reads the same columns)
 
@@ -377,7 +454,7 @@ the three - `entry-gate.sh` by its two cases, the other two by their case groups
 
 **Found and left?** none
 
-**Performance work?** no
+**Performance work?** yes - a `[perf]` task under FR-013's measurement clause (the GM 2026-11-20): it measures where the time goes; no engine timing, so no checklist
 
 <!-- plan-archive: T12 to T12 moved to plan-done.md, 2026-11-20 (feature 375 FR-044) -->
 <!-- plan-archive: T13 to T13 moved to plan-done.md, 2026-11-20 (feature 375 FR-044) -->
@@ -486,7 +563,7 @@ the three - `entry-gate.sh` by its two cases, the other two by their case groups
 
 **Found and left?** none
 
-**Performance work?** no
+**Performance work?** yes - a `[perf]` task under FR-013's measurement clause (the GM 2026-11-20): it measures where the time goes; no engine timing, so no checklist
 
 ## Project Structure
 
@@ -694,31 +771,53 @@ reverted. Not filed with `PERF=1`: no engine stage's counted operations or time.
 
 <!-- plan-archive: T34 to T14 moved to plan-done.md, 2026-11-20 (feature 375 FR-044) -->
 <!-- plan-archive: T34 to T34 moved to plan-done.md, 2026-11-20 (feature 375 FR-044) -->
-### T36 (<why: the finding or measurement that files it>)
+### T36 (T17's replay, 2026-11-20: thirteen archived sections of plan-done.md deferred work with no filed task or order - 449 T156, T200, T201, T208, T218, T219, T221, T224, T239 and 451 T02, T03, T16, T26)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: each section's deferral read by hand (its `**Found and left?**`, and for 451 T02, whose answer was `none`, the class its fix named) and given one verdict per deferred defect: **carried** (an open or ticked task covers it), **fixed** (a later commit), **still open** (filed now, `make task-add`), or **not a defect** (no visible effect and no research finding broken, so not filed - constitution XIV). History is not re-judged: a ticked task's work is taken as its tick says. Three tasks filed: 449 T243, 451 T52, 451 T53.
+
+| section | deferral | verdict | task or commit |
+|---|---|---|---|
+| 449 T156 | the sheet driver and the pool walk's rebuild (the pool index listed 6 of the pool's maps) | carried | T157 through T220 (the walk, `pool/index.html` listing every map; ticked 06b493d8d7) and T221 (one sheet driver; ticked 6fa4bd0fc7) |
+| 449 T200 | the derivation template refused a Mode A derivation's form | carried | T201 (ticked 9e98737b4d) |
+| 449 T201 | (a) `make work-budget` did not read the Mode A counts; (b) a pool-sheet stage had no change, raise or accept path | (a) not a defect; (b) still open | (a) `make work-budget` still reads only the roll's `stages` (`trials/src/measure/work_budget.rs`, `budgets["stages"]` alone; `budget_change/sheets.rs`'s header: it reads the table "as the roll's alone"), by design the hamlet's record at 10/20/40/80 households - and the Mode A counts are read and held by `make work-budget-review` (T224, 68b8772bb7: `work_budget_review.rs` re-counts each pool-sheet stage through `SHEET_COUNTERS` and holds it on each sheet to twice its budget), whose counters cover all three `sheet_stages` keys (`placer`, `compound`, `pipeline`), measured 2026-11-20 (`work_budget.rs` and `work_budget_review.rs` read at HEAD, `dev/work-budget.json`'s `sheet_stages` keys listed), and `make budget-sheets` compares given counts per sheet - no Mode A stage goes uncounted or unheld, so no wrong outcome; (b) filed as 449 T243 - `budget_change/sheets.rs`'s header still says change, raise and acceptance are not built, read 2026-11-20 |
+| 449 T208 | (a) the county program read off the drawn sheet; (b) the reviewer's notes (an unstated radius, a "ten zones" slip, the fire gap at its band's low end) | (a) carried; (b) not a defect | (a) T152 (76221da67f, reads the program itself); (b) no total moved by more than a few operations (T208's reading) and T152's `make budget-sheets PHASE=compound` held both sheets within twice; the slip stays in the SOUND derivation's prose (`derivations/T208-compound.md` line 212), no wrong outcome |
+| 449 T218 | `.PHONY` names with no rule passing by running nothing, a dead cache-audit guard, a notes-only edit skipping the sweep | carried | T223 (0559cff934; ticked 9a01e65877) |
+| 449 T219 | the Mode A page writer reporting only files found; a read first recorded on a miss hashed after the engine read it | carried | T221 (both on its line; ticked 6fa4bd0fc7) |
+| 449 T221 | (a) checks reading what no longer exists (the measure probe's pool changes, preflight's roll census, land's census filter) and render-sync's stop on a failing map; (b) the Python cache's old entries under `.gencache/<map>/` | (a) carried; (b) not a defect | (a) T222 (all four on its line; ticked c531976060); (b) nothing reads them - the Rust cache's directory is `.gencache/rust` (`rust/gate/crates/pool/src/cache.rs`'s `DIR`); the mirror's `.gencache` holds only `rust/`, 16M, and this clone's 6.2G, measured 2026-11-20 (`ls` and `du -sh` of both) - disk only |
+| 449 T224 | `waterward.polder` counting about a twentieth of its accepted figure; the pipeline stage's counters | carried | T226 (f82828450e; ticked ecd61b81ef) and T220 (its counters added to the counted set; ticked 06b493d8d7) |
+| 449 T239 | (1) `polder_checks` tests only the seat's middle, so it cannot catch ground over the dike; (2) a malformed `placement-changed` line owing a `glyph-check--` unit; (3) nothing ties the seat to 0019's landward shore | (1) carried; (2) fixed; (3) carried | (1) and (3) 449 T240 (open; both on its line, (3) read on the page and measured first); `polder_checks` unchanged at HEAD, read 2026-11-20 (`rust/phases/src/driver/check.rs`); (2) T238, e89fa942bc (`declared.rs`'s `nothing_named` refuses it) |
+| 451 T02 | the class: one reading of which make targets a command runs, shared by the log and every guard - no instance count | still open | 13 guard modules read command text through `shared::make` and 10 command-text readers keep their own reading of a make call, measured 2026-11-20 (a grep of `rust/`, `scripts/` and the Makefile, each hit read and sorted; `git grep -l shared::make HEAD -- rust/`; a grep of `rust/` at HEAD for `"make` literals outside tests); filed as 451 T52 (below) |
+| 451 T03 | the bundle's cover by environment; lines filed by `feature.json`; an Agent line with no `T=`; the live-line check owed; `T="T1,T2"`; booking by `make`; `data-model.md`'s `push-checks` and `make-docs` rows | carried, fixed or not a defect | T24 (781f577faf), T07 (aea9e74ea4) and T18 (781f577faf) fixed; the lines filed by `feature.json` carried by T26 (0f7583f1b5), remainder T53; booking by `make` carried by T08 (open); the live line fixed - the 451 log's `make static` lines carry `cat` `tests`, 66 of them, measured 2026-11-20 (the 451 log's Bash lines counted by `cat` and `make`); the two rows not a defect (a row that never matches books nothing wrong) |
+| 451 T16 | `POLL_CHECK_S` into D14's knob table | carried | T22 (open; its line: `docs/guards.md`'s knob table complete, D14) |
+| 451 T26 | (a) `make events-refile` owed once more; (b) two re-file judgment calls (427's and 405's briefs); (c) `make static` stopped on `rust/phases`; (d) the indexes not naming `filed.rs`, `refile.rs`; (e) T07 owing the prompt's first line | (a), (d) still open; (b), (c) not a defect; (e) fixed | (a) and (d) filed as 451 T53: 19 lines still to move, 17 of them written after T26's writer landed, measured 2026-11-20 (`make events-refile DRY=1`, the 449 log joined by hand to the subagents' meta files); (b) history, a booking between closed features' reports, the pre-re-file copy kept; (c) another builder's uncommitted work, no defect of the tree; (e) T07, aea9e74ea4 |
+
+The T02 class, by kind (the grep's hits, each read):
+- **Command text read for a make call, through `shared::make`** (`invoked`, `targets`, `POS`): 13 modules, measured 2026-11-20 (the grep, each hit read) - `event_log_hooks` and its `fields.rs`, `make_only_hooks`, `no_poll_hooks`, `gate_write_hooks`, `gate_hooks`, `pair_hooks`, `static_runs_hooks`, `budget_change_hooks`, `blocked_fetch_hooks`, `clone_sync_hooks`, `record_edit_gate`, `shared/checks/handle.rs`; handled.
+- **Command text read for a make call, its own reading**: 10, measured 2026-11-20 (the grep, each hit read; a grep of `rust/` at HEAD for `"make` literals outside tests, each hit read) - `shared/checks/rounds.rs`'s `APPLY`, `ledger_hooks`'s `appended`, `claims_file_hooks`'s `VERB`, `make_only_hooks`'s `LANDING` and `LABEL_TARGET`, `measure/stepback_bundle/words.rs`'s `MAKES`, `measure_hooks`' `has("make done")` (a substring of the quote- and heredoc-stripped command; each counts a mention - `echo make append` - as a call), `phase_source_hooks/search.rs` (`make phase-read` at the head past its own wrapper list, no `timeout` or `flock`), `shared/tree.rs` (a segment headed by `make` past its own wrappers and `timeout N`, no `flock` or subshell) and `gate_write_hooks`' `head_of` (line 364: a walked segment headed by `make` left to the `shared::make` check above it, past its own wrapper list - `sudo`, `env`, `command`, `exec`, `nohup`, `time` - no `timeout` or `flock`, so a wrapped make's segment is judged as a shell write); not handled - whether any gives a real command a wrong verdict is unmeasured, so T52 is measure-first.
+- **Set apart**: the process-table readers (a live process's argv - the watchdog, the running-gate probe, the finished-run check, `tree`'s lock, `land`'s and `rustc`'s phase locks, `ci`'s `via_make`, `idle_tests`' `pgrep`), where a wrapper is a process of its own - `land/phase.rs`'s `goal_of` and `rustc/phase.rs`'s `run_target` read that argv through `shared::make::invoked`, the gate's only users of it, measured 2026-11-20 (`git grep -l shared::make HEAD -- rust/`: those two beside the 13 guard modules and two test files); the cheap prefilters (`contains("make")`), supersets that only skip work; `batching_hooks`' `NOT_RECON` `"make "`, no prefilter but the verdict itself (a Bash call holding it is no bare read), set apart because every make call holds it, wrapped or not, and a mention only leaves one read uncounted, so it can fail open but never refuse wrongly, read 2026-11-20 (`batching_hooks.rs` lines 26 and 145); the log-field readers (`where_time/columns.rs`, in the T08 builder's uncommitted tree, reads the log's `make` field and only `shared::make::DEFAULT_GOAL`); the research prepass's prose. T02's constraint named `measure` and `shell-check` among `shared::make`'s readers: at HEAD neither is - `measure_hooks` keeps its own reading (above) and `shell_check_hooks` reads no make call, measured 2026-11-20 (a grep of both for `make` outside tests). None in `scripts/` or the Makefile, which run make but read no command for one.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| the thirteen read | n/a - no map | n/a | none | n/a |
 
 ### T36 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
-8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+1. **The goal, in the world.** No map changes; every deferral the replay found has a verdict and a name - a carrier, a commit, a filed task, or the reason it is no defect.
+2. **The constraints.** T36's line (history not re-judged; read by hand once); 451 D15 (a class fix carries how every instance was found); constitution XIV (a difference with no wrong outcome is not filed).
+3. **Where each comes from.** O: T17's replay of plan-done.md, observed 2026-11-20; O: the readings in the table.
+4. **Do they describe the world here?** Yes: each carrier's line read for the deferral's words, each fix's commit found by `git log`, and each still-open one re-read at HEAD (`sheets.rs`, the event logs, the `CLAUDE.md` rows), measured 2026-11-20 (the readings in the table).
+5. **The order.** After T17; before T22 (the close), which the two 451 filings land before.
+6. **The exits.** Green: the table complete, the filings in `tasks.md`, `make decide` and `make quick` clean. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** The T02 count's grep covered `rust/`, `scripts/` and the Makefile, the class's every home, rechecked by `git grep -l shared::make HEAD -- rust/` and a grep of `rust/` at HEAD for `"make` literals outside tests, which moved the own-reading count from 8 to 10 (`measure_hooks`, `gate_write_hooks`' `head_of`), measured 2026-11-20 (both greps, each hit read).
+8. **The budget.** One landing, specs only.
+9. **Done, measured.** 13 sections, 13 verdict rows, 3 tasks filed, measured 2026-11-20 (the table above and `git -C` diff of the tasks files).
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** No fix here; each filing names its wrong outcome or is measure-first where none is shown yet (T52, T53), and the not-a-defect rows say why.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?** none - the three still-open deferrals are filed in the table (449 T243; 451 T52 and T53).
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** no.
 
 
 <!-- plan-archive: T37 to T18 moved to plan-done.md, 2026-11-20 (feature 375 FR-044) -->
@@ -822,6 +921,87 @@ reverted. Not filed with `PERF=1`: no engine stage's counted operations or time.
 |---|---|---|---|---|
 
 ### T51 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+
+### T52 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T52 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+
+### T53 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T53 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+
+### T54 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T54 Approach (checklist part A)
 
 1. **The goal, in the world.** <the place as it should be>
 2. **The constraints.** <the FRs, decisions and pages it holds to>

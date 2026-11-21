@@ -174,7 +174,10 @@ another feature, or failing any other quick check, is withdrawn and refused.
   failure the new line introduces, withdraws the line and refuses, naming the failure.
 - **FR-013**: Performance work goes first, in every feature (the GM 2026-11-20, request.md: "can we in general priotitize performance
   improvements going forward?"). A task is performance work when it is filed with `PERF=1` or tagged `[perf]` on its line (a task
-  that makes the engine, the checks, the gate, the landings or the builders' loop faster). `make task-start` refuses a task that is
+  that makes the engine, the checks, the gate, the landings or the builders' loop faster). Work that measures where the time goes - the event log's data,
+  `make where-time`'s and `make feature-report`'s readers, and the close's measured day - counts as performance work for this ordering
+  too, though it speeds nothing itself (the GM 2026-11-20, request.md: "this kind of measurement task to be counted as a performance
+  task for the purpose of scheduling and coming first"). `make task-start` refuses a task that is
   not performance work while an open performance task exists in any active feature - one with an open box, not closed by its spec's
   Status line and not set down since its last task-start (the Stop hook's own test, `set_down_hooks.rs`) - naming that task and the
   command to start it,
@@ -223,3 +226,4 @@ another feature, or failing any other quick check, is withdrawn and refused.
 - 2026-11-19, round 3 (spec-fidelity-verify, MODE 3): FAITHFUL - round 2's four items resolved, nothing new made false or unrequested.
 - 2026-11-20, round 1 of the amendment pass (spec-fidelity-verify, MODE 3): CHANGES REQUIRED, 1 item - FR-013's "any active feature" undefined, so the refusal's reach is not set (now: defined as the Stop hook's open, not closed, not set-down test, and SC-006 the same).
 - 2026-11-20, round 2 of the amendment pass (spec-fidelity-verify, MODE 3): FAITHFUL - the round's item resolved (the active-feature test checked against `set_down_hooks.rs`'s `verdict()`), nothing new made false or unrequested.
+- 2026-11-20, round 2 of the measurement-clause pass (spec-fidelity-verify, MODE 3): FAITHFUL - FR-013's measurement sentence and the `[perf]` tags on T08-T11, T22 and T53 read the GM's "this kind of measurement task" as he said it; the measure-first correctness tasks (T48, T50-T52) rightly left out.
