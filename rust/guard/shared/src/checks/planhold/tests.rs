@@ -152,15 +152,37 @@ fn a_held_block_is_written_back() {
         std::fs::read_to_string(root.join("specs/900-a/plan.md")).unwrap(),
         PLAN
     );
+    // a held block's heading renamed (451 T80): HEAD paired the blocks left by order and wrote T01's old text over T02's block
+    let mut renamed =
+        json!({"plan_holds": {"h": running("", &["## T01 the bath", "## T02 other"], 900.0)}});
+    snapshot(&mut renamed, Some(&root), "c", 1000.0);
+    let tub = PLAN.replace("## T01 the bath", "## T01 the tub");
+    std::fs::write(
+        root.join("specs/900-a/plan.md"),
+        tub.replace("other text", "Y text"),
+    )
+    .unwrap();
+    let msg = restore(&mut renamed, Some(&root), "c");
+    let renamed_plan = std::fs::read_to_string(root.join("specs/900-a/plan.md")).unwrap();
+    assert_eq!(renamed_plan, tub, "{msg}");
+    let named = msg.contains(
+        "written back: `## T02 other`; NOT written back: `## T01 the bath` (gone from the plan)",
+    );
+    assert!(named, "{msg}");
+    std::fs::write(root.join("specs/900-a/plan.md"), PLAN).unwrap();
     let mut missing_plan = json!({"plan_holds": {"h": {"feature": "no", "task": "T01", "t": 1.0, "state": "running"}}, "plan_snaps": {"c": {"h": ["old"]}}});
     assert_eq!(restore(&mut missing_plan, Some(&root), "c"), "");
     let mut gone_task =
         json!({"plan_holds": {"h": running("T09", &[], 1.0)}, "plan_snaps": {"c": {"h": ["old"]}}});
     let msg = restore(&mut gone_task, Some(&root), "c");
-    assert!(msg.contains("T09's section"));
+    let gone = msg.contains("T09's section")
+        && msg.contains("NOTHING of it is written back: `old` (gone from the section)");
+    assert!(gone, "{msg}");
     let mut empty_before =
         json!({"plan_holds": {"h": running("T01", &[], 1.0)}, "plan_snaps": {"c": {"h": []}}});
-    assert!(restore(&mut empty_before, Some(&root), "c").contains("T01's section"));
+    let msg = restore(&mut empty_before, Some(&root), "c");
+    let added = msg.contains("T01's section") && msg.contains("NOTHING of it is written back: `## T01 the bath` (new to the section since the call began)");
+    assert!(added, "{msg}");
     assert_eq!(
         std::fs::read_to_string(root.join("specs/900-a/plan.md")).unwrap(),
         PLAN
@@ -477,4 +499,100 @@ fn a_write_past_a_million_steps_is_seen() {
         within(move || super::WRITE.is_match(&command).ok()),
         Some(true)
     );
+}
+
+/// T01's section stands in two places: its own heading and Approach together, its part B past T02 (451 T80).
+const SPLIT: &str = "# plan\n\n## T01 the bath\n\nheld body of the section stands here\n\n### T01 Approach\n\nthe approach held too\n\n## T02 other\n\nother text\n\n## T01 part B\n\nthe far part of the held section\n";
+
+/// The plan after `edit` of SPLIT under a live T01 hold, and the write-back's answer.
+fn split_after(
+    name: &str,
+    edit: impl Fn(&str) -> String,
+    before: Option<Value>,
+) -> (String, String) {
+    let root = clone_at(name);
+    std::fs::create_dir_all(root.join("specs/900-a")).unwrap();
+    let plan = root.join("specs/900-a/plan.md");
+    std::fs::write(&plan, SPLIT).unwrap();
+    let mut state = json!({"plan_holds": {"h": running("T01", &[], 900.0)}});
+    snapshot(&mut state, Some(&root), "c", 1000.0);
+    if let Some(b) = before {
+        state["plan_snaps"]["c"]["h"] = b;
+    }
+    std::fs::write(&plan, edit(SPLIT)).unwrap();
+    let msg = restore(&mut state, Some(&root), "c");
+    (std::fs::read_to_string(&plan).unwrap(), msg)
+}
+
+/// A task whose own headings stand apart is written back in each place it stands, and the answer says what it restored (451 T80:
+/// HEAD replaced the joined section, which stands nowhere, so it restored nothing and still said "the held text is written back").
+#[test]
+fn a_split_section_is_written_back_in_each_place() {
+    let far = |p: &str| p.replace("the far part", "CHANGED far part");
+    let near = |p: &str| p.replace("the approach held", "CHANGED approach");
+    let both = |p: &str| far(&near(p));
+    for (name, edit) in [
+        ("split-far", &far as &dyn Fn(&str) -> String),
+        ("split-near", &near),
+        ("split-both", &both),
+    ] {
+        let (plan, msg) = split_after(name, edit, None);
+        assert_eq!(plan, SPLIT, "{name}: {msg}");
+        let says = msg.contains("the held text is written back") && msg.contains("T01's section");
+        assert!(says, "{name}: {msg}");
+    }
+    let (plan, msg) = split_after(
+        "split-name",
+        |p| p.replace("## T01 part B", "## T01 part C"),
+        None,
+    );
+    assert_eq!(plan, SPLIT, "{msg}");
+    let (plan, msg) = split_after(
+        "split-gone-near",
+        |p| p.replace("### T01 Approach\n\n", ""),
+        None,
+    );
+    assert_eq!(plan, SPLIT, "{msg}");
+    let named = msg.contains("in `## T01 the bath`") && msg.contains("1 of its 2 places");
+    assert!(named, "{msg}");
+}
+
+/// The first held heading gone leaves the text under it outside the section, and the next heading heads the place: writing the old
+/// text over that place would stand the held body twice, so nothing is written back and the answer says so (451 T80).
+#[test]
+fn a_first_heading_gone_is_not_written_twice() {
+    let cut = |p: &str| p.replace("## T01 the bath\n\n", "");
+    let (plan, msg) = split_after("split-gone-first", cut, None);
+    let kept = cut(SPLIT);
+    assert_eq!(plan, kept, "{msg}");
+    let nothing =
+        msg.contains("NOTHING of it is written back: `## T01 the bath` (gone from the section)");
+    assert!(nothing, "{msg}");
+}
+
+/// A held heading gone from the plan restores the places still standing and names the one it could not, and a write that restores
+/// nothing says so: no text is dropped or duplicated (451 T80).
+#[test]
+fn a_place_no_write_back_can_find_is_named() {
+    let cut = |p: &str| {
+        p.replace("## T01 part B\n\n", "")
+            .replace("held body", "CHANGED body")
+    };
+    let (plan, msg) = split_after("split-gone-far", cut, None);
+    let kept = cut(SPLIT).replace("CHANGED body", "held body");
+    assert_eq!(plan, kept, "{msg}");
+    let partial = msg.contains("written back: `## T01 the bath`")
+        && msg.contains("NOT written back: `## T01 part B` (gone from the section)");
+    assert!(partial, "{msg}");
+    let legacy = Some(json!([crate::plan_text::task_sections(SPLIT)["T01"]]));
+    let (plan, msg) = split_after(
+        "split-legacy",
+        |p| p.replace("the far part", "CHANGED far part"),
+        legacy,
+    );
+    let unchanged = SPLIT.replace("the far part", "CHANGED far part");
+    assert_eq!(plan, unchanged, "{msg}");
+    let nothing = msg.contains("NOTHING of it is written back")
+        && !msg.contains("the held text is written back");
+    assert!(nothing, "{msg}");
 }

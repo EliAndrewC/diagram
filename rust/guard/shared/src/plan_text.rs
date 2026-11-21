@@ -24,6 +24,34 @@ pub fn task_sections(plan: &str) -> BTreeMap<String, String> {
 /// The sections in the order a reader meets their ids: those a heading only mentions, then each task's own (`archive` moves them so).
 #[must_use]
 pub fn ordered_sections(plan: &str) -> Vec<(String, String)> {
+    section_spans(plan)
+        .into_iter()
+        .map(|(t, spans)| (t, spans.iter().map(|(a, b)| &plan[*a..*b]).collect()))
+        .collect()
+}
+
+/// The places a task's section stands in `plan`, as byte spans in document order: its spans with adjacent ones joined, so one place
+/// for a section that stands whole and one a run for a section whose own headings stand apart (451 T80: the plan hold's write-back
+/// restores each place; the joined section stands nowhere in the plan).
+#[must_use]
+pub fn section_places(plan: &str, task: &str) -> Vec<(usize, usize)> {
+    let spans = section_spans(plan)
+        .into_iter()
+        .find(|(t, _)| t == task)
+        .map(|(_, s)| s)
+        .unwrap_or_default();
+    let mut places: Vec<(usize, usize)> = Vec::new();
+    for (a, b) in spans {
+        match places.last_mut() {
+            Some(last) if last.1 == a => last.1 = b,
+            _ => places.push((a, b)),
+        }
+    }
+    places
+}
+
+/// [`ordered_sections`] as byte spans: a mentioned task's one heading, or each of a task's own headings not inside another.
+fn section_spans(plan: &str) -> Vec<(String, Vec<(usize, usize)>)> {
     let heads: Vec<(usize, usize, &str)> = HEAD
         .captures_iter(plan)
         .map_while(Result::ok)
@@ -37,7 +65,7 @@ pub fn ordered_sections(plan: &str) -> Vec<(String, String)> {
         })
         .collect();
     let mut own: Vec<(String, Vec<(usize, usize)>)> = Vec::new();
-    let mut mentioned: Vec<(String, String)> = Vec::new();
+    let mut mentioned: Vec<(String, Vec<(usize, usize)>)> = Vec::new();
     for (i, (at, level, title)) in heads.iter().enumerate() {
         let ids: Vec<&str> = TASK_ID
             .find_iter(title)
@@ -60,15 +88,14 @@ pub fn ordered_sections(plan: &str) -> Vec<(String, String)> {
                     spans.push((*at, end));
                 }
             } else if !mentioned.iter().any(|(k, _)| k == t) {
-                mentioned.push((t.to_owned(), plan[*at..end].to_owned()));
+                mentioned.push((t.to_owned(), vec![(*at, end)]));
             }
         }
     }
     for (t, spans) in own {
-        let joined: String = spans.iter().map(|(a, b)| &plan[*a..*b]).collect();
         match mentioned.iter_mut().find(|(k, _)| *k == t) {
-            Some(slot) => slot.1 = joined,
-            None => mentioned.push((t, joined)),
+            Some(slot) => slot.1 = spans,
+            None => mentioned.push((t, spans)),
         }
     }
     mentioned
@@ -113,7 +140,7 @@ pub fn blocks(plan: &str) -> Vec<(String, String, usize)> {
 
 #[cfg(test)]
 mod tests {
-    use super::{blocks, leading_task, ordered_sections, task_sections};
+    use super::{blocks, leading_task, ordered_sections, section_places, task_sections};
 
     #[test]
     fn a_plan_reads_as_its_sections_and_blocks() {
@@ -132,5 +159,30 @@ mod tests {
         let keys: Vec<&str> = b.iter().map(|x| x.0.as_str()).collect();
         assert!(keys.contains(&"## T03") && keys.contains(&"## T03#2"));
         assert_eq!(blocks("no heads")[0].1, "no heads");
+    }
+
+    /// A task's section as the places it stands (451 T80): one place where its headings stand together, one a run where they stand
+    /// apart, the mentioning heading for a task with no own heading, none for a task the plan does not name.
+    #[test]
+    fn a_section_reads_as_the_places_it_stands() {
+        let plan = "# plan\n\n## T01 the bath\n\nbody\n\n### T01 Approach\n\nmore\n\n## About T02\n\nx\n\n## T03 the well\n\ny\n\n## T01 part B\n\nz\n";
+        let at = |s: &str| plan.find(s).unwrap();
+        let split = section_places(plan, "T01");
+        let want = vec![
+            (at("## T01 the bath"), at("## About")),
+            (at("## T01 part B"), plan.len()),
+        ];
+        assert_eq!(split, want);
+        let joined: String = split.iter().map(|(a, b)| &plan[*a..*b]).collect();
+        let section = task_sections(plan)["T01"].clone();
+        assert_eq!(joined, section);
+        let whole = section_places(plan, "T03");
+        let one = vec![(at("## T03"), at("## T01 part B"))];
+        assert_eq!(whole, one);
+        let mention = section_places(plan, "T02");
+        let heading = vec![(at("## About T02"), at("## T03"))];
+        assert_eq!(mention, heading);
+        let none = section_places(plan, "T09");
+        assert!(none.is_empty());
     }
 }

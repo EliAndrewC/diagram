@@ -8,7 +8,7 @@ use fancy_regex::Regex;
 use serde_json::{json, Map, Value};
 
 use super::{map_mut, resolved, text};
-use crate::plan_text::{blocks, task_sections};
+use crate::plan_text::blocks;
 
 /// A plan review returns in about 1-4 minutes (the evening's 42); past half an hour its hold is dead.
 const HOLD_MAX_S: f64 = 1800.0;
@@ -114,30 +114,15 @@ fn dead(h: &Value, now: f64) -> bool {
     (text(h, "state") == "pending" && now - t_of(h) > PENDING_S) || now - t_of(h) > HOLD_MAX_S
 }
 
+/// What a write is judged against: each held block, or a held task's section joined as `task_sections` reads it - the places it
+/// stands put together, which for a task whose own headings stand apart stands nowhere in the plan (451 T80 changed the write-back
+/// alone; the refusal reading each place is T120).
 fn held(root: &Path, h: &Value) -> Vec<String> {
-    let plan = root.join("specs").join(text(h, "feature")).join("plan.md");
-    let Ok(body) = std::fs::read_to_string(plan) else {
-        return Vec::new();
-    };
-    let task = text(h, "task");
-    if !task.is_empty() {
-        return task_sections(&body)
-            .get(task)
-            .filter(|s| !s.is_empty())
-            .cloned()
-            .into_iter()
-            .collect();
+    let places = held_places(root, h);
+    if text(h, "task").is_empty() || places.len() < 2 {
+        return places;
     }
-    let want: Vec<&str> = h
-        .get("blocks")
-        .and_then(Value::as_array)
-        .map(|a| a.iter().filter_map(Value::as_str).collect())
-        .unwrap_or_default();
-    blocks(&body)
-        .into_iter()
-        .filter(|(k, ..)| want.contains(&k.as_str()))
-        .map(|(_, b, _)| b)
-        .collect()
+    vec![places.concat()]
 }
 
 /// A hold whose review was launched and has not died (`hm_planhold.live`).
@@ -165,11 +150,43 @@ pub fn snapshot(state: &mut Value, root: Option<&Path>, tid: &str, now: f64) {
         .into_iter()
         .flatten()
         .filter(|(_, h)| live(h, now))
-        .map(|(id, h)| (id.clone(), json!(held(root, h))))
+        .map(|(id, h)| (id.clone(), json!(held_places(root, h))))
         .collect();
     if !snaps.is_empty() {
         map_mut(state, "plan_snaps").insert(tid.to_owned(), Value::Object(snaps));
     }
+}
+
+/// The places a hold's text stands in `body`, as byte spans in document order: each place a held task's section stands
+/// (`plan_text::section_places`, its own headings' spans with adjacent ones joined), or each held block.
+fn places(body: &str, h: &Value) -> Vec<(usize, usize)> {
+    let task = text(h, "task");
+    if !task.is_empty() {
+        return crate::plan_text::section_places(body, task);
+    }
+    let want: Vec<&str> = h
+        .get("blocks")
+        .and_then(Value::as_array)
+        .map(|a| a.iter().filter_map(Value::as_str).collect())
+        .unwrap_or_default();
+    blocks(body)
+        .into_iter()
+        .filter(|(k, ..)| want.contains(&k.as_str()))
+        .map(|(_, b, at)| (at, at + b.len()))
+        .collect()
+}
+
+/// What the write-back keeps of a hold: one text a place it stands (451 T80; [`held`], the section joined, is what a write is judged
+/// against, and stands nowhere in the plan for a task whose own headings stand apart).
+fn held_places(root: &Path, h: &Value) -> Vec<String> {
+    let plan = root.join("specs").join(text(h, "feature")).join("plan.md");
+    let Ok(body) = std::fs::read_to_string(plan) else {
+        return Vec::new();
+    };
+    places(&body, h)
+        .into_iter()
+        .map(|(a, b)| body[a..b].to_owned())
+        .collect()
 }
 
 fn set_of(snaps: &Value) -> BTreeSet<String> {
@@ -194,42 +211,129 @@ fn describe(h: &Value) -> String {
     }
 }
 
-/// `blocks` in the plan with the held ones of this hold, in document order (`hm_planhold.restore`'s `now_blocks`).
-fn current_blocks(body: &str, want: &[&str]) -> Vec<(String, String)> {
-    let mut seen = BTreeSet::new();
-    blocks(body)
-        .into_iter()
-        .filter(|(k, ..)| want.contains(&k.as_str()) && seen.insert(k.clone()))
-        .map(|(k, b, _)| (k, b))
+/// A place's heading line, shown at most 60 characters.
+fn head_of(place: &str) -> String {
+    place
+        .lines()
+        .next()
+        .unwrap_or("")
+        .trim()
+        .chars()
+        .take(60)
         .collect()
 }
 
-fn write_back(root: &Path, h: &Value, before: &[String]) -> Option<String> {
-    let plan = root.join("specs").join(text(h, "feature")).join("plan.md");
-    let mut body = std::fs::read_to_string(&plan).ok()?;
-    let task = text(h, "task");
-    if task.is_empty() {
-        let want: Vec<&str> = h
-            .get("blocks")
-            .and_then(Value::as_array)
-            .map(|a| a.iter().filter_map(Value::as_str).collect())
-            .unwrap_or_default();
-        for ((_, now_body), old) in current_blocks(&body, &want).iter().zip(before) {
-            if now_body != old {
-                body = body.replacen(now_body, old, 1);
-            }
-        }
-    } else if let (Some(sec), Some(first)) = (
-        task_sections(&body).remove(task).filter(|s| !s.is_empty()),
-        before.first(),
-    ) {
-        body = body.replacen(&sec, first, 1);
+/// Where each place held when the call began stands now: the same place by order where the plan holds as many, else the place its
+/// heading heads - never one whose old text holds a place's heading past its own first line, since writing it back would stand text
+/// twice: a held heading gone leaves the text under it in another place or outside the section (HEAD wrote the joined text over the
+/// one place left and stood the far part twice, and with the first heading gone wrote its text over the place the next heading
+/// heads, measured 2026-11-21 by `a_place_no_write_back_can_find_is_named` and `a_first_heading_gone_is_not_written_twice`), and a
+/// snapshot taken before 451 T80 holds a split section joined.
+fn paired(body: &str, now: &[(usize, usize)], before: &[String]) -> Vec<Option<usize>> {
+    let heads: Vec<&str> = now
+        .iter()
+        .map(|(a, b)| body[*a..*b].lines().next().unwrap_or(""))
+        .collect();
+    let twice = |old: &str, at: usize| {
+        let first = old.lines().next().unwrap_or("");
+        (0..now.len()).any(|i| {
+            !heads[i].is_empty()
+                && (i != at || heads[i] != first)
+                && old.contains(&format!("\n{}", heads[i]))
+        })
+    };
+    if now.len() == before.len() {
+        return before
+            .iter()
+            .enumerate()
+            .map(|(i, old)| (!twice(old, i)).then_some(i))
+            .collect();
     }
-    std::fs::write(&plan, body).ok()?;
+    let mut taken = vec![false; now.len()];
+    let mut out = Vec::with_capacity(before.len());
+    for old in before {
+        let first = old.lines().next().unwrap_or("");
+        let at = (0..now.len()).find(|i| !taken[*i] && heads[*i] == first);
+        let at = at.filter(|at| !twice(old, *at));
+        if let Some(i) = at {
+            taken[i] = true;
+        }
+        out.push(at);
+    }
+    out
+}
+
+/// Writes back each held place a call changed, and says which it wrote back; one it could not find, or a place new since the call
+/// began, it names, and a call that restored nothing says so (451 T80: the joined section was replaced, and stands nowhere whole for a
+/// task whose own headings stand apart, so nothing was restored and "the held text is written back" said all the same).
+fn write_back(root: &Path, h: &Value, before: &[String]) -> Option<String> {
+    let feature = text(h, "feature");
+    let plan = root.join("specs").join(feature).join("plan.md");
+    let body = std::fs::read_to_string(&plan).ok()?;
+    let now = places(&body, h);
+    let pairs = paired(&body, &now, before);
+    let mut changed: Vec<(usize, usize, &str)> = Vec::new();
+    let mut restored = Vec::new();
+    let mut missed = Vec::new();
+    let whole = if text(h, "task").is_empty() {
+        "the plan"
+    } else {
+        "the section"
+    };
+    for (old, at) in before.iter().zip(&pairs) {
+        match at {
+            Some(i) if body[now[*i].0..now[*i].1] != **old => {
+                changed.push((now[*i].0, now[*i].1, old));
+                restored.push(format!("`{}`", head_of(old)));
+            }
+            Some(_) => {}
+            None => missed.push(format!("`{}` (gone from {whole})", head_of(old))),
+        }
+    }
+    for (i, (a, b)) in now.iter().enumerate() {
+        if !pairs.contains(&Some(i)) {
+            missed.push(format!(
+                "`{}` (new to {whole} since the call began)",
+                head_of(&body[*a..*b])
+            ));
+        }
+    }
+    if !changed.is_empty() {
+        let mut fixed = body.clone();
+        changed.sort_by_key(|c| std::cmp::Reverse(c.0));
+        for (a, b, old) in &changed {
+            fixed.replace_range(*a..*b, old);
+        }
+        std::fs::write(&plan, fixed).ok()?;
+    }
+    let by_hand = format!(
+        "put it back by hand (`git -C {} diff -- specs/{feature}/plan.md` shows the change) or `make plan-verdict` refuses the review's verdict as changed (451 T80)",
+        root.display()
+    );
+    let what = if !missed.is_empty() && restored.is_empty() {
+        format!(
+            "NOTHING of it is written back: {}; {by_hand}",
+            missed.join(", ")
+        )
+    } else if !missed.is_empty() {
+        format!(
+            "written back: {}; NOT written back: {}; {by_hand}",
+            restored.join(", "),
+            missed.join(", ")
+        )
+    } else if text(h, "task").is_empty() || now.len() < 2 {
+        "the held text is written back".to_owned()
+    } else {
+        format!(
+            "the held text is written back in {} ({} of its {} places changed)",
+            restored.join(", "),
+            restored.len(),
+            now.len()
+        )
+    };
     Some(format!(
-        "that call changed {} of specs/{}/plan.md while its plan review runs (agent {}) - the held text is written back; wait for the review to return (feature 385 T85, hour 30's fix)",
+        "that call changed {} of specs/{feature}/plan.md while its plan review runs (agent {}) - {what}; wait for the review to return (feature 385 T85, hour 30's fix)",
         describe(h),
-        text(h, "feature"),
         text(h, "aid")
     ))
 }
@@ -265,7 +369,9 @@ pub fn restore(state: &mut Value, root: Option<&Path>, tid: &str) -> String {
                     .collect()
             })
             .unwrap_or_default();
-        if held(root, h) == before {
+        // a snapshot taken before 451 T80 holds a split section joined: the same text in fewer places is no change
+        let now = held_places(root, h);
+        if now == before || (now.len() != before.len() && now.concat() == before.concat()) {
             continue;
         }
         if let Some(msg) = write_back(root, h, &before) {
