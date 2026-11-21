@@ -142,3 +142,7 @@ The GM's rule for the rewrite, 2026-10-30, recorded in feature 444's request.md 
 ## 2026-11-19, efficiency: the hook suites and the claims re-checks (T205, T206), and the idle time (T207)
 
 The GM, on T205 and T206: "Yes those two efficiency improvements both seem worth doing sooner rather than later." On the time report's idle hours: "And that's sooooo much idle time!  Is that time where nothing was happening?!"
+
+## 2026-11-21, stop before the parked hamlet stages (T244)
+
+The GM: "When you get to the point where you have ported everything else and then we're ready to go back to homesteads, then don't actually proceed. Why don't you go ahead and stop, and then we can talk more after everything else is done before you get started on that."

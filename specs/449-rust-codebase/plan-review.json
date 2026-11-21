@@ -97,16 +97,10 @@
    "reviewed": "2026-11-08",
    "declared": "spec-fidelity"
   },
-  "### T122 (the idle-tests suite's waits in fractions of a second, the GM's pre-approval of 2026-11-12)": {
-   "sha256": "8a3121b42a7812b3b054301f241c79f1596a5ec5e1bcbe996a55120bcd6e6c99",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-12",
-   "declared": "spec-fidelity"
-  },
   "### T122 Approach (checklist part A)": {
-   "sha256": "10a7aef8594db1b70266f8b97323ce8f3507486e3068181f8e3d8fe5abe2c744",
+   "sha256": "9befd39f5e6e747742bc4f0145de189cb8f43a170d7dd546b8c2ac11d9647b91",
    "verdict": "CLEAR",
-   "reviewed": "2026-11-17",
+   "reviewed": "2026-11-21",
    "declared": "spec-fidelity"
   },
   "### T135 (the authoring tools no task held, `ask:449-phase3-remainder`)": {
@@ -117,12 +111,6 @@
   },
   "### T135 Approach (checklist part A)": {
    "sha256": "116af50c935e45c9738f4145d93aa8f22864b274bf778fb230e9baf38b98ee80",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-14",
-   "declared": "round-arbiter"
-  },
-  "### T138 (<why: the finding or measurement that files it>)": {
-   "sha256": "557d015f05fb5263becaf4a857bd9174e95c4d2133140d54ba8ed7262eab4630",
    "verdict": "CLEAR",
    "reviewed": "2026-11-14",
    "declared": "round-arbiter"
@@ -145,23 +133,11 @@
    "reviewed": "2026-11-16",
    "declared": "spec-fidelity"
   },
-  "### T147 (<why: the finding or measurement that files it>)": {
-   "sha256": "22916a683fc17fa130c05935fcd2bb05dd5a30a2a0acc59c7d39626857591ee7",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-16",
-   "declared": "round-arbiter"
-  },
   "### T147 Approach (checklist part A)": {
    "sha256": "cc58ec730668d4f1be8118a78c67d25ad93b34cfe6f315a80af07a40b06a0171",
    "verdict": "CLEAR",
    "reviewed": "2026-11-16",
    "declared": "spec-fidelity"
-  },
-  "### T148 (<why: the finding or measurement that files it>)": {
-   "sha256": "a97fdbc9d7ab975dfdfee9a64dced6cbed1ff89c12dc73c646cdb133b7dbc569",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-16",
-   "declared": "round-arbiter"
   },
   "### T148 Approach (checklist part A)": {
    "sha256": "70b00620291b29947e943fb0cb27c9dd1f1c8ca1f43af8a496bc430678d64d17",
@@ -169,23 +145,11 @@
    "reviewed": "2026-11-17",
    "declared": "spec-fidelity"
   },
-  "### T149 (<why: the finding or measurement that files it>)": {
-   "sha256": "c697d8f6b56ed91ec293960ca0d6743234fb0319cec1ba5d7436cfc7b46f880d",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-16",
-   "declared": "round-arbiter"
-  },
   "### T149 Approach (checklist part A)": {
    "sha256": "e8b622773cf5d5de9e26c09e857c5ad761aecc7176b08745d76c66a15535f865",
    "verdict": "CLEAR",
    "reviewed": "2026-11-17",
    "declared": "spec-fidelity"
-  },
-  "### T150 (<why: the finding or measurement that files it>)": {
-   "sha256": "eb5f23d52992a47eb1f466ff61c9340833bd98a14a9ed460ce0ede4b53b40c62",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-16",
-   "declared": "round-arbiter"
   },
   "### T150 Approach (checklist part A)": {
    "sha256": "39eddff6a7dead74c0c4aff3543ed02ad4a2268b1dd6258357c80386921c7e4a",
@@ -193,23 +157,11 @@
    "reviewed": "2026-11-18",
    "declared": "spec-fidelity"
   },
-  "### T151 (<why: the finding or measurement that files it>)": {
-   "sha256": "4ce71f90185f4fa753c100fdbe35fd95d5f21431a6b41d54bfa5afd93f4f2c76",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-16",
-   "declared": "round-arbiter"
-  },
   "### T151 Approach (checklist part A)": {
    "sha256": "c05bfb137073c94565a65004a00161bb875836bbc67012cf945e3793cff90b15",
    "verdict": "CLEAR",
    "reviewed": "2026-11-18",
    "declared": "spec-fidelity"
-  },
-  "### T152 (<why: the finding or measurement that files it>)": {
-   "sha256": "c0af6ae7e3eb1a9b4c5d4c19cd52f8f7c8b45884de95ac28c57db38fee5369c6",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-16",
-   "declared": "round-arbiter"
   },
   "### T152 Approach (checklist part A)": {
    "sha256": "4afa533a155b65f9c74271494dd01a376ee0d183241d2bd47c0e3773bc2fd9e2",
@@ -253,23 +205,11 @@
    "reviewed": "2026-11-16",
    "declared": "round-arbiter"
   },
-  "### T156 (<why: the finding or measurement that files it>)": {
-   "sha256": "69b6a3404f5ed8be8fa85309455cbc430f654367a9eb1fdfe40090061e0a4761",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-16",
-   "declared": "round-arbiter"
-  },
   "### T156 Approach (checklist part A)": {
    "sha256": "612de322e46c3d6d3135e481df942bb27d654ad7ce8546b54cf656427669ed5f",
    "verdict": "CLEAR",
    "reviewed": "2026-11-19",
    "declared": "spec-fidelity"
-  },
-  "### T157 (<why: the finding or measurement that files it>)": {
-   "sha256": "4e3adf3aa84c166f7e886c5f21346e9b96eed0ae56ae5cf235e0c2b97d49a00f",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-16",
-   "declared": "round-arbiter"
   },
   "### T157 Approach (checklist part A)": {
    "sha256": "232d3b375044e3744fdcc32809ef4d5f9d57dfb34618beef9d51d2d0088060da",
@@ -301,23 +241,11 @@
    "reviewed": "2026-11-16",
    "declared": "round-arbiter"
   },
-  "### T160 (<why: the finding or measurement that files it>)": {
-   "sha256": "a4dfceef13394457701bcea4aa122664c18196f196724cf58b099ed425c7374b",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-16",
-   "declared": "round-arbiter"
-  },
   "### T160 Approach (checklist part A)": {
    "sha256": "4c29c2b772696e94a1ccf70f9d8b2ff51b73ec9f5072050412e30943449be744",
    "verdict": "CLEAR",
    "reviewed": "2026-11-17",
    "declared": "spec-fidelity"
-  },
-  "### T161 (<why: the finding or measurement that files it>)": {
-   "sha256": "9349d6caead39b02fea65662ab19a2bd17b8c4cab178c9a570dff45a018254bd",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-16",
-   "declared": "round-arbiter"
   },
   "### T161 Approach (checklist part A)": {
    "sha256": "bdc0ecbf1e4c1f96bd7b492d54a9767ab581cbd3f7bedc744d682a5c4d2cd29c",
@@ -326,9 +254,9 @@
    "declared": "spec-fidelity"
   },
   "### T161 (the GM's second approved proposal, the differentials rerunning only what a fix touched, enforced by tooling; request.md 2026-11-16, the GM 2026-11-11)": {
-   "sha256": "9e21d63223a37c241c4df9cf9c0f0862f1f1af3c75250de6c36253e600aa4ddc",
+   "sha256": "d5acef3b2e8b577818c34fd8726d67c4a26d2239b0f58ee2e8b15cb583be7382",
    "verdict": "CLEAR",
-   "reviewed": "2026-11-16",
+   "reviewed": "2026-11-21",
    "declared": "spec-fidelity"
   },
   "### T147 (phase 4's S3b, the uncited cluster, `ask:449-phase4-slices`)": {
@@ -338,9 +266,9 @@
    "declared": "spec-fidelity"
   },
   "### T162 (a guard defect T147's port agent met: its own clone refused by the session that launched it)": {
-   "sha256": "209bcb64a006165350410bde14acb332d758c9683cb0de3d1950e9b21b1447fa",
+   "sha256": "877078b435703778994a273423c5c59ce8a7f1b2f1c4ac29f35ccf3974b21f5f",
    "verdict": "CLEAR",
-   "reviewed": "2026-11-16",
+   "reviewed": "2026-11-21",
    "declared": "spec-fidelity"
   },
   "### T162 Approach (checklist part A)": {
@@ -356,9 +284,9 @@
    "declared": "spec-fidelity"
   },
   "### T148 (phase 4's S5, the record's site, `ask:449-phase4-slices`)": {
-   "sha256": "bbcd9a5d71443015d59d4f8eddf91c158ee8f480eebb1b0d293ed4a342c8ae79",
+   "sha256": "f4b728b9d6662b0467ccdec8f8deb619fad83c918aa03ebe5fec86488253a8df",
    "verdict": "CLEAR",
-   "reviewed": "2026-11-17",
+   "reviewed": "2026-11-21",
    "declared": "spec-fidelity"
   },
   "### T163 (a defect T148 found in the record check, fixed in its own commit as constitution XIV asks)": {
@@ -422,9 +350,9 @@
    "declared": "spec-fidelity"
   },
   "### T167 (FR-008's remaining debt after T160, and the ruling on the tests that read the live tree)": {
-   "sha256": "6c67f80e11d136aceeb3d23aed3a0616df7a6569b6659764104c9e8d4ec8f94f",
+   "sha256": "ee7899e5ae89de85b5a270ad4b4d1221e6d9f35c52467b8eaaa021d9f3bd42d5",
    "verdict": "CLEAR",
-   "reviewed": "2026-11-17",
+   "reviewed": "2026-11-21",
    "declared": "spec-fidelity"
   },
   "### T167 Approach (checklist part A)": {
@@ -512,9 +440,9 @@
    "declared": "spec-fidelity"
   },
   "### T175 (the engine's piece 4, the audit's rest, step 1's close; the GM 2026-11-17, request.md: \"proceed with the next 2 engine pieces and then we'll measure how well those went\")": {
-   "sha256": "b112977b3a549d98d9517c25c329d0b2fa66c2e74e96264900e23f0404e88fbe",
+   "sha256": "d62db34eca371e70287261f2df80525da8ef5371dede070c395bd84b348c5382",
    "verdict": "CLEAR",
-   "reviewed": "2026-11-18",
+   "reviewed": "2026-11-21",
    "declared": "spec-fidelity"
   },
   "### T175 Approach (checklist part A)": {
@@ -566,15 +494,15 @@
    "declared": "spec-fidelity"
   },
   "### T180 (the GM 2026-11-18, request.md: no exactness standard for a port)": {
-   "sha256": "289f9bf1a006fc9b7340ae5cfadb8ed5cd1904ca4810fe901425c05dbfa95f87",
+   "sha256": "55ac27f87c9dea6bcb1b16c582024f7a7b2b09c13bc0f569429ffb35b99b6f45",
    "verdict": "CLEAR",
-   "reviewed": "2026-11-18",
+   "reviewed": "2026-11-21",
    "declared": "spec-fidelity"
   },
   "### T180 Approach (checklist part A)": {
-   "sha256": "9c4a0424b68319b925440923c2afeb783a33c8449a5d4cd99df73dc19e0f75ba",
+   "sha256": "c444db9657d8942952dc7321dd4a3fdcd7ec898cfb87003d5ea33598e6a6c1d8",
    "verdict": "CLEAR",
-   "reviewed": "2026-11-18",
+   "reviewed": "2026-11-21",
    "declared": "spec-fidelity"
   },
   "### T181 (the GM 2026-11-18, request.md: \"surely you mean the audit checks must pass\", and fixing as we go)": {
@@ -728,9 +656,9 @@
    "declared": "spec-fidelity"
   },
   "### T194 (step 3a's last reader and leader gaps, T193's leftover findings and its impl-drift's 2 DRIFTED, 1 MISLABELED and 3 outside the change; the GM 2026-11-18, request.md: \"in general we should fix all known bugs in each step before moving on to porting the next step\")": {
-   "sha256": "1c7d6296ccb51aef37ba12cbccf090fd73c475d11ddd6a73dd6d5e10876792ed",
+   "sha256": "d691e9ea8285b80545684b4d292fcbc6828de517a368513cdff1852df3a4f107",
    "verdict": "CLEAR",
-   "reviewed": "2026-11-19",
+   "reviewed": "2026-11-21",
    "declared": "spec-fidelity"
   },
   "### T194 Approach (checklist part A)": {
@@ -1283,6 +1211,114 @@
    "sha256": "97097594e0efae2cbb1d206c68a0a25ac13d5686a0ec0c63d9b3d7be2d05cd85",
    "verdict": "CLEAR",
    "reviewed": "2026-11-20",
+   "declared": "spec-fidelity"
+  },
+  "### T197 (<why: the finding or measurement that files it>)": {
+   "sha256": "cd5abe7fcf70a49a3db52be2423fbbf1a203c74b5c25875006b29386d996bd8f",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity"
+  },
+  "### T197 Approach (checklist part A)": {
+   "sha256": "cdfe1e08fff05785843dff19848d285e9dfc80c60ebf05091899fa271a26d013",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity"
+  },
+  "### T203 (<why: the finding or measurement that files it>)": {
+   "sha256": "8686494f34b025ef009d768b064ec916964a964eda7a73af6e93ca0584953b37",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity"
+  },
+  "### T203 Approach (checklist part A)": {
+   "sha256": "8d9346d6354fbf8af9e6e7aae67849f75872295e923a41ea3f2d5632b31ce1dd",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity"
+  },
+  "### T216 (<why: the finding or measurement that files it>)": {
+   "sha256": "05eab3256f45e9249f925606f8d8500b4677c690d0a26b3ad3c01c16437e65c9",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity"
+  },
+  "### T216 Approach (checklist part A)": {
+   "sha256": "e2d995157b9b027ec9f6037674930118aa45ceb5940da41c7b2cf57aad893239",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity"
+  },
+  "### T228 (<why: the finding or measurement that files it>)": {
+   "sha256": "03b88caa55f7e7f25b5774d2fbab3602ae2bf93ac336f6ff8d8c0f47f66be510",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity"
+  },
+  "### T228 Approach (checklist part A)": {
+   "sha256": "7f6d08e36d5390ea257dc067e92a211d2fb8a5eed5d0f4b705963dd8afd005c0",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity"
+  },
+  "### T235 (<why: the finding or measurement that files it>)": {
+   "sha256": "dfc93ed83a4ea175610d6aeb43d348f4b051c4f4ac1ed79c6a716ef0c77adcdc",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity"
+  },
+  "### T235 Approach (checklist part A)": {
+   "sha256": "59ab94647ae567cc08571022249b154fa88967fc18814bd355d824482670bae5",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity"
+  },
+  "### T240 (<why: the finding or measurement that files it>)": {
+   "sha256": "c5c8c6d2088579f77f7fe65005dd1e30ac4519bcd8252a278c0cc6b8b43ece7d",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity"
+  },
+  "### T240 Approach (checklist part A)": {
+   "sha256": "99b4bd9b4cb4f455f4ef31d23adeafdeb2095bc1129338f84f5b04c93dc8e6fe",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity"
+  },
+  "### T241 (<why: the finding or measurement that files it>)": {
+   "sha256": "3204718fc8887679cd1727e8a7c72781a3f3a6c3833250340d3061fa5ca43b62",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity"
+  },
+  "### T241 Approach (checklist part A)": {
+   "sha256": "5a38bf6b790e74033ecec2ca3ac0962e4e42514d830b0df7c227f7c3792d344e",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity"
+  },
+  "### T243 (<why: the finding or measurement that files it>)": {
+   "sha256": "352488f9cae327d810016c61ae9c26dd818aa56192812dc805a4af66fdfa819d",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity"
+  },
+  "### T243 Approach (checklist part A)": {
+   "sha256": "0afb668e18216c65748ab6f442d223a5ab835d5dea3815df21936a8bebaaa2fd",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity"
+  },
+  "### T244 (<why: the finding or measurement that files it>)": {
+   "sha256": "db5e59c5dc123a14019d2eff4e92709af1a3e84535f3878ccc18c82e7e2725e4",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity"
+  },
+  "### T244 Approach (checklist part A)": {
+   "sha256": "6b8846f26a80cf1bd59e1ef19a18e15d814bc4901694c426048ee3f40a769535",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-21",
    "declared": "spec-fidelity"
   }
  },
@@ -16756,6 +16792,557 @@
      "summary": "Before T158, after T238 and T241; red-first tests, the changed crates' rust-test, quick, static and hooks-test green; one gated landing.",
      "class": "within",
      "why": "Sequencing and verification of the fix only; it narrows nothing."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-21",
+   "blocks": [
+    "### T122 Approach (checklist part A)",
+    "### T148 (phase 4's S5, the record's site, `ask:449-phase4-slices`)",
+    "### T161 (the GM's second approved proposal, the differentials rerunning only what a fix touched, enforced by tooling; request.md 2026-11-16, the GM 2026-11-11)",
+    "### T162 (a guard defect T147's port agent met: its own clone refused by the session that launched it)",
+    "### T167 (FR-008's remaining debt after T160, and the ruling on the tests that read the live tree)",
+    "### T175 (the engine's piece 4, the audit's rest, step 1's close; the GM 2026-11-17, request.md: \"proceed with the next 2 engine pieces and then we'll measure how well those went\")",
+    "### T180 (the GM 2026-11-18, request.md: no exactness standard for a port)",
+    "### T180 Approach (checklist part A)",
+    "### T194 (step 3a's last reader and leader gaps, T193's leftover findings and its impl-drift's 2 DRIFTED, 1 MISLABELED and 3 outside the change; the GM 2026-11-18, request.md: \"in general we should fix all known bugs in each step before moving on to porting the next step\")",
+    "### T197 (<why: the finding or measurement that files it>)",
+    "### T197 Approach (checklist part A)",
+    "### T203 (<why: the finding or measurement that files it>)",
+    "### T203 Approach (checklist part A)",
+    "### T216 (<why: the finding or measurement that files it>)",
+    "### T216 Approach (checklist part A)",
+    "### T228 (<why: the finding or measurement that files it>)",
+    "### T228 Approach (checklist part A)",
+    "### T235 (<why: the finding or measurement that files it>)",
+    "### T235 Approach (checklist part A)",
+    "### T240 (<why: the finding or measurement that files it>)",
+    "### T240 Approach (checklist part A)",
+    "### T241 (<why: the finding or measurement that files it>)",
+    "### T241 Approach (checklist part A)",
+    "### T243 (<why: the finding or measurement that files it>)",
+    "### T243 Approach (checklist part A)",
+    "### T244 (<why: the finding or measurement that files it>)",
+    "### T244 Approach (checklist part A)",
+    "(removed) ### T122 (the idle-tests suite's waits in fractions of a second, the GM's pre-approval of 2026-11-12)",
+    "(removed) ### T138 (<why: the finding or measurement that files it>)",
+    "(removed) ### T147 (<why: the finding or measurement that files it>)",
+    "(removed) ### T148 (<why: the finding or measurement that files it>)",
+    "(removed) ### T149 (<why: the finding or measurement that files it>)",
+    "(removed) ### T150 (<why: the finding or measurement that files it>)",
+    "(removed) ### T151 (<why: the finding or measurement that files it>)",
+    "(removed) ### T152 (<why: the finding or measurement that files it>)",
+    "(removed) ### T156 (<why: the finding or measurement that files it>)",
+    "(removed) ### T157 (<why: the finding or measurement that files it>)",
+    "(removed) ### T160 (<why: the finding or measurement that files it>)",
+    "(removed) ### T161 (<why: the finding or measurement that files it>)"
+   ],
+   "verdict": "BLOCKED",
+   "decisions": [
+    {
+     "id": "T122-approach",
+     "summary": "The checklist part A loses six stray performance-checklist lines left over from the removed not-landed T122 record; goal, exits and the full-run saving unchanged.",
+     "class": "within",
+     "why": "Removes misplaced text only; the GM's 2026-11-12 condition (a measured saving of the full run) is still the stated goal. Note: item 3 still cites 'the runs above', which the removal took with it."
+    },
+    {
+     "id": "T122-removed",
+     "summary": "The hand-deleted 'Not landed' T122 record (the suite-only saving the plan review BLOCKED) is removed.",
+     "class": "within",
+     "why": "Removing a record of an attempt that did not land narrows nothing the GM asked; T122's live approach still holds his condition of a measured full-run saving."
+    },
+    {
+     "id": "T138..T161-removed-templates",
+     "summary": "Eleven empty filed templates (T138, T147-T152, T156, T157, T160, T161) removed, their tasks' filled sections standing or archived.",
+     "class": "within",
+     "why": "An empty template decides nothing; its removal decides nothing."
+    },
+    {
+     "id": "T148-callers",
+     "summary": "make record/glossary/footnote-census/source-tags-contract wired to the Rust record verbs, the push's rows in process, the four retired rows leaving _invocation.py.",
+     "class": "within",
+     "why": "FR-001/FR-005 phase-4 S5 port, ask:449-phase4-slices."
+    },
+    {
+     "id": "T148-memo-check",
+     "summary": "memo_check's general form ported with its presets; its key is the program id plus --code files, so a kept Python pass is missed once.",
+     "class": "within",
+     "why": "A port's key may differ (FR-002: outputs may differ so long as everything works); one extra rerun is not a wrong outcome."
+    },
+    {
+     "id": "T148-record-key",
+     "summary": "The record check keeps the Python's dateless key; the kept-pass-outlives-pending-window behavior is fixed in its own commit after the cut, filed as T163.",
+     "class": "within",
+     "why": "The behavior is filed for a fix (T163, constitution XIV), not left; FR-002 lets a check improved on purpose change, and nothing here forbids it. The clause recounting the earlier plan review's reading is a record of that round."
+    },
+    {
+     "id": "T148-url-host",
+     "summary": "The guard's url_host ports urlsplit's host reading; unicode-normalization pinned; cold build 23.4 to 27.0 s, under the limit.",
+     "class": "within",
+     "why": "Port of what live URLs reach; a measurement, not a byte standard."
+    },
+    {
+     "id": "T148-claims",
+     "summary": "site_pages.py::frame's NONE claim dropped and two deleted units removed from claims-deferred.",
+     "class": "within",
+     "why": "Exactly what ask:449-T148-claims rules."
+    },
+    {
+     "id": "T148-library-speed",
+     "summary": "S1's library made faster with no output changed.",
+     "class": "within",
+     "why": "Performance work inside the port, GM 2026-11-11 and 11-16."
+    },
+    {
+     "id": "T148-differential",
+     "summary": "71-case runner differential, one differing (.stamp re-keyed on the binary, Q8); normalizations listed; the push rows' usage-line order explained as HEAD's own thread race.",
+     "class": "within",
+     "why": "Byte-equality here is a dated measurement offered as evidence that the tool still does its job, not a standard the port is held to; the changed sentence only explains an observed difference."
+    },
+    {
+     "id": "T161-runner",
+     "summary": "One shared differential runner l7r-gate diff-run, per-side keys, incremental rerun by default, --verify for reported figures, --twice for noise.",
+     "class": "within",
+     "why": "The GM's approved second proposal (2026-11-16) and his 2026-11-11 enforce-by-tooling words."
+    },
+    {
+     "id": "T161-lint",
+     "summary": "make decide's lint refuses a differential case-count sentence citing no runner VERIFY report (diff-run-verify), in any feature's plan; --all needs a REASON.",
+     "class": "within",
+     "why": "Enforcement of the approved rule that reported figures come from the runner's verify run; the GM's 2026-11-11 words ask tooling to keep every future session from drifting, so the reach across plans serves the request."
+    },
+    {
+     "id": "T161-out-of-scope",
+     "summary": "A world's network/server/remote setup stays the harness's setup script.",
+     "class": "within",
+     "why": "Leaves existing setup where it is; narrows nothing asked."
+    },
+    {
+     "id": "T162-fork-dispatcher",
+     "summary": "With no L7R_DISPATCHER the clone-sync guard takes the session a --fork-session job was forked from as its dispatcher; an unforked resume and every other claimant still refused; citation corrected FR-005 to FR-001.",
+     "class": "within",
+     "why": "A guard defect that refused correct work, fixed where found (constitution XIV); the exemption is the one a page session already has."
+    },
+    {
+     "id": "T167-realtree",
+     "summary": "Eleven live-tree tests declared each tool's one end-to-end test with one marker.",
+     "class": "within",
+     "why": "Exactly ask:449-T167-realtree and FR-008's own exception."
+    },
+    {
+     "id": "T167-r6-corpus",
+     "summary": "the_r6_corpus_replayed treated as ordinary and brought under the bar (389 to 66 ms).",
+     "class": "within",
+     "why": "ask:449-T167-realtree (4)."
+    },
+    {
+     "id": "T167-count",
+     "summary": "Recount: three ordinary tests at or over 100 ms, two brought under; author's untouched each_refusal_writes_nothing at 99 and 102 ms left as load noise; 23 documents tests timed with CARGO_MANIFEST_DIR set.",
+     "class": "within",
+     "why": "A test at the line within a shared host's noise is not shown over FR-008's bar, and a timing is a signal, never a gate (the GM's performance rule); not a wrong outcome."
+    },
+    {
+     "id": "T167-methods",
+     "summary": "Shared fixtures, fewer git/process calls, splits keeping names, injected clocks; production values still asserted; three new tests over the real recording commands; production speedups with the same outputs; a scratch-sweep race fixed.",
+     "class": "within",
+     "why": "FR-008's means, every assertion kept; the race a defect fixed (XIV)."
+    },
+    {
+     "id": "T167-no-gate",
+     "summary": "No check built refusing a new test over the bar.",
+     "class": "within",
+     "why": "The GM's performance rule makes time a goal, never a gate; FR-008 does not ask for a refusing check."
+    },
+    {
+     "id": "T175-port",
+     "summary": "The rest of pack_audit ported into rust/mode_a/src/audit/ and make pack-audit wired; other modules kept under lockstep.",
+     "class": "within",
+     "why": "The GM's 2026-11-17 'next 2 engine pieces'; ask:449-engine-order conditions 2, 3, 5."
+    },
+    {
+     "id": "T175-lockstep",
+     "summary": "The end-to-end lockstep compares every check's records and findings, floats bit for bit, on pool sheets and fixtures; each check fires on its red fixture and each pool sheet passes; a mutation of each group turns it red (sun.py's second mutation cited).",
+     "class": "within",
+     "why": "For a port of a check, its verdicts on its red fixtures and passed sheets agreeing is FR-002's second owed thing ('still does its job'); the bit-for-bit assertion is a dated measurement under T180's restated condition 3 (relaxed when a harmless difference fails it), not a requirement held against later work."
+    },
+    {
+     "id": "T175-geometry",
+     "summary": "sun.py's shapely calls reproduced; the bed's area via geo pinned, its 1.99e-4 px2 difference asserted under the 25.3 px2 margin; citation now phases.log line 14.",
+     "class": "within",
+     "why": "Holds the check doing its job (no verdict can turn), the GM's 'everything works', not bytes."
+    },
+    {
+     "id": "T175-claims",
+     "summary": "Claims on kept .py units stay keyed; Rust copies carry their claims; 434 new claims owed.",
+     "class": "within",
+     "why": "ask:449-phase4-slices Q10."
+    },
+    {
+     "id": "T175-differential",
+     "summary": "207-case verify run, none differing; traceback and uncaught decode messages normalized; the usage line naming python3 -m kept.",
+     "class": "within",
+     "why": "A signal read as evidence (FR-002), normalizations under ask:449-usage-text."
+    },
+    {
+     "id": "T175-page",
+     "summary": "Step 1's page: the six pool sheets byte-identical before and after.",
+     "class": "within",
+     "why": "Condition 5's page; byte-identity reported as an observation for a step that draws nothing, not demanded."
+    },
+    {
+     "id": "T175-reproduced",
+     "summary": "registry.ft unported, three unreachable branches, an error quoting a trailing line break, county-* red fixtures carrying no tier: reproduced, not fixed, each refusing nothing.",
+     "class": "within",
+     "why": "None is a wrong outcome (constitution XIV v2.36.0): dead code, a message's trailing break and a fixture's missing tier refuse nothing and pass nothing bad; leaving a difference that is not a defect stays within."
+    },
+    {
+     "id": "T175-measure",
+     "summary": "Tokens, minutes and test and verify times by phase.",
+     "class": "within",
+     "why": "The GM's 'then we'll measure how well those went'."
+    },
+    {
+     "id": "T180-scope",
+     "summary": "Living guidance amended to 'everything works': constitution, templates, FR-002, engine-plan.md, the CLAUDE.md files, docs and the review agents' files.",
+     "class": "within",
+     "why": "The GM's 2026-11-18 'amend our project guidelines and speckit constitution and whatever else'."
+    },
+    {
+     "id": "T180-kept-reproducibility",
+     "summary": "Reproducibility, integrity hashes and verbatim quotation kept; past specs and dated records left as written.",
+     "class": "within",
+     "why": "Not exactness standards for a port (FR-002 names the same three)."
+    },
+    {
+     "id": "T180-kept-exact-verdicts",
+     "summary": "'Kept exact, as the GM's everything works is judged by it: the audit checks' verdicts', and the Approach's 'the audit checks' verdicts the one measure kept exact and a check that refused correct work still fixed'.",
+     "class": "narrowing",
+     "why": "The GM answered this wording directly (2026-11-18, request.md, on T180's wording): 'When you say \"the audit checks pass/fail must match exactly\", then surely you mean \"the audit checks must pass\" right?!', and asked that 'anything like that as an exactness standard' be removed. Amended FR-002 now owes two things, 'neither an exactness standard': a drawn output passes its checks, and a ported check still does its job (red fixtures fail, passed sheets pass), with a check fixed OR IMPROVED ON PURPOSE changing as fixed. Read literally, 'verdicts kept exact' forbids what both allow: a check improved on purpose to refuse more, and a verdict that turns because a bug was fixed ('fix as we go', the GM 2026-11-18). The Approach's exception names only 'refused correct work'. It is not physically required, not implied by the GM's words (he rejected it), and keeping it defeats his stated purpose. The finished-records bullet cannot exempt it: it is in the block under review, which says the rule 'is applied from here on'. Fix: restate both sentences to FR-002's two owed things, as above, with a check fixed or improved changing as fixed.",
+     "ruling": "NOT LEGITIMATE"
+    },
+    {
+     "id": "T180-applied-forward",
+     "summary": "Applied from here on: finished plan sections stay as records; rust/mode_a lockstep tests stay until a harmless difference fails one, then changed to hold verdicts and claims; the checks line now records make static red only on T151's work in progress and green at the landing, with the sweep's grep files.",
+     "class": "within",
+     "why": "Records left as written are allowed by the GM's words; relaxing a lockstep test when a harmless difference fails it is the GM's rule. The checks line is a record."
+    },
+    {
+     "id": "T180-approach",
+     "summary": "Checklist A: goal 'no reviewer, guide or rule holds a port to its bytes'; done when the grep shows only quotes, measurements and the kept reproducibility lines; citation now names sweep-grep.txt.",
+     "class": "within",
+     "why": "The GM's request, as worded."
+    },
+    {
+     "id": "T194-reader",
+     "summary": "A leader ends on the ink as SVG draws it: subpaths, Z, inherited fill, Bezier and arc flattening, joins and miter limits, dashes drawn, a zero-length stroke as SVG 2, nearest_ink alone, in both copies.",
+     "class": "within",
+     "why": "Step 3a's known defects fixed before the next step, the GM 2026-11-18."
+    },
+    {
+     "id": "T194-claims-record",
+     "summary": "Claims cite 0330; 0242's leader topic split to 0330 word for word.",
+     "class": "within",
+     "why": "Research record kept in step with the code."
+    },
+    {
+     "id": "T194-held-reach",
+     "summary": "held.json retaken; the pool's 5 seats and 8 leaders moved, each traced to its change; sheets regenerated, audits pass.",
+     "class": "within",
+     "why": "Maps may change if checks pass and research holds (FR-002)."
+    },
+    {
+     "id": "T194-found-and-left",
+     "summary": "Three findings drafted as tasks before step 3b (a filled path's hole, a dashed or unfilled closed outline, the audit's arc walk); the make decide spin dropped from the list as fixed in this task.",
+     "class": "within",
+     "why": "Filed to land before step 3b, as 'fix all known bugs in each step before moving on' asks; the removed line was stale, the spin being fixed in the same section."
+    },
+    {
+     "id": "T194-tooling",
+     "summary": "make decide and task-add's endless fancy_regex retry fixed, each with a red test.",
+     "class": "within",
+     "why": "A tool that hung, fixed where found (XIV)."
+    },
+    {
+     "id": "templates",
+     "summary": "T197, T203, T216, T228, T235, T240, T241, T243, T244: filed, unfilled templates (T243 and T244 on the newer found-and-left form).",
+     "class": "within",
+     "why": "An unfilled template makes no decision. The 2026-11-21 ruling the dispatch says T244 carries is in neither T244 block nor request.md, and is not reviewed here."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-21",
+   "blocks": [
+    "### T122 Approach (checklist part A)",
+    "### T148 (phase 4's S5, the record's site, `ask:449-phase4-slices`)",
+    "### T161 (the GM's second approved proposal, the differentials rerunning only what a fix touched, enforced by tooling; request.md 2026-11-16, the GM 2026-11-11)",
+    "### T162 (a guard defect T147's port agent met: its own clone refused by the session that launched it)",
+    "### T167 (FR-008's remaining debt after T160, and the ruling on the tests that read the live tree)",
+    "### T175 (the engine's piece 4, the audit's rest, step 1's close; the GM 2026-11-17, request.md: \"proceed with the next 2 engine pieces and then we'll measure how well those went\")",
+    "### T180 (the GM 2026-11-18, request.md: no exactness standard for a port)",
+    "### T180 Approach (checklist part A)",
+    "### T194 (step 3a's last reader and leader gaps, T193's leftover findings and its impl-drift's 2 DRIFTED, 1 MISLABELED and 3 outside the change; the GM 2026-11-18, request.md: \"in general we should fix all known bugs in each step before moving on to porting the next step\")",
+    "### T197 (<why: the finding or measurement that files it>)",
+    "### T197 Approach (checklist part A)",
+    "### T203 (<why: the finding or measurement that files it>)",
+    "### T203 Approach (checklist part A)",
+    "### T216 (<why: the finding or measurement that files it>)",
+    "### T216 Approach (checklist part A)",
+    "### T228 (<why: the finding or measurement that files it>)",
+    "### T228 Approach (checklist part A)",
+    "### T235 (<why: the finding or measurement that files it>)",
+    "### T235 Approach (checklist part A)",
+    "### T240 (<why: the finding or measurement that files it>)",
+    "### T240 Approach (checklist part A)",
+    "### T241 (<why: the finding or measurement that files it>)",
+    "### T241 Approach (checklist part A)",
+    "### T243 (<why: the finding or measurement that files it>)",
+    "### T243 Approach (checklist part A)",
+    "### T244 (<why: the finding or measurement that files it>)",
+    "### T244 Approach (checklist part A)",
+    "(removed) ### T122 (the idle-tests suite's waits in fractions of a second, the GM's pre-approval of 2026-11-12)",
+    "(removed) ### T138 (<why: the finding or measurement that files it>)",
+    "(removed) ### T147 (<why: the finding or measurement that files it>)",
+    "(removed) ### T148 (<why: the finding or measurement that files it>)",
+    "(removed) ### T149 (<why: the finding or measurement that files it>)",
+    "(removed) ### T150 (<why: the finding or measurement that files it>)",
+    "(removed) ### T151 (<why: the finding or measurement that files it>)",
+    "(removed) ### T152 (<why: the finding or measurement that files it>)",
+    "(removed) ### T156 (<why: the finding or measurement that files it>)",
+    "(removed) ### T157 (<why: the finding or measurement that files it>)",
+    "(removed) ### T160 (<why: the finding or measurement that files it>)",
+    "(removed) ### T161 (<why: the finding or measurement that files it>)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T122-approach",
+     "summary": "The checklist part A loses six stray performance-checklist lines left over from the removed not-landed T122 record; goal, exits and the full-run saving unchanged.",
+     "class": "within",
+     "why": "Removes misplaced text only; the GM's 2026-11-12 condition (a measured saving of the full run) is still the stated goal, and item 3's source now names T122's removed record in git history rather than 'the runs above', which no longer stand above it."
+    },
+    {
+     "id": "T122-removed",
+     "summary": "The hand-deleted 'Not landed' T122 record (the suite-only saving the plan review BLOCKED) is removed.",
+     "class": "within",
+     "why": "Removing a record of an attempt that did not land narrows nothing the GM asked; T122's live approach still holds his condition of a measured full-run saving."
+    },
+    {
+     "id": "T138..T161-removed-templates",
+     "summary": "Eleven empty filed templates (T138, T147-T152, T156, T157, T160, T161) removed, their tasks' filled sections standing or archived.",
+     "class": "within",
+     "why": "An empty template decides nothing; its removal decides nothing."
+    },
+    {
+     "id": "T148-callers",
+     "summary": "make record/glossary/footnote-census/source-tags-contract wired to the Rust record verbs, the push's rows in process, the four retired rows leaving _invocation.py.",
+     "class": "within",
+     "why": "FR-001/FR-005 phase-4 S5 port, ask:449-phase4-slices."
+    },
+    {
+     "id": "T148-memo-check",
+     "summary": "memo_check's general form ported with its presets; its key is the program id plus --code files, so a kept Python pass is missed once.",
+     "class": "within",
+     "why": "A port's key may differ (FR-002: outputs may differ so long as everything works); one extra rerun is not a wrong outcome."
+    },
+    {
+     "id": "T148-record-key",
+     "summary": "The record check keeps the Python's dateless key; the kept-pass-outlives-pending-window behavior is fixed in its own commit after the cut, filed as T163.",
+     "class": "within",
+     "why": "The behavior is filed for a fix (T163, constitution XIV), not left; FR-002 lets a check improved on purpose change, and nothing here forbids it. The clause recounting the earlier plan review's reading is a record of that round."
+    },
+    {
+     "id": "T148-url-host",
+     "summary": "The guard's url_host ports urlsplit's host reading; unicode-normalization pinned; cold build 23.4 to 27.0 s, under the limit.",
+     "class": "within",
+     "why": "Port of what live URLs reach; a measurement, not a byte standard."
+    },
+    {
+     "id": "T148-claims",
+     "summary": "site_pages.py::frame's NONE claim dropped and two deleted units removed from claims-deferred.",
+     "class": "within",
+     "why": "Exactly what ask:449-T148-claims rules."
+    },
+    {
+     "id": "T148-library-speed",
+     "summary": "S1's library made faster with no output changed.",
+     "class": "within",
+     "why": "Performance work inside the port, GM 2026-11-11 and 11-16."
+    },
+    {
+     "id": "T148-differential",
+     "summary": "71-case runner differential, one differing (.stamp re-keyed on the binary, Q8); normalizations listed; the push rows' usage-line order explained as HEAD's own thread race.",
+     "class": "within",
+     "why": "Byte-equality here is a dated measurement offered as evidence that the tool still does its job, not a standard the port is held to; the changed sentence only explains an observed difference."
+    },
+    {
+     "id": "T161-runner",
+     "summary": "One shared differential runner l7r-gate diff-run, per-side keys, incremental rerun by default, --verify for reported figures, --twice for noise.",
+     "class": "within",
+     "why": "The GM's approved second proposal (2026-11-16) and his 2026-11-11 enforce-by-tooling words."
+    },
+    {
+     "id": "T161-lint",
+     "summary": "make decide's lint refuses a differential case-count sentence citing no runner VERIFY report (diff-run-verify), in any feature's plan; --all needs a REASON.",
+     "class": "within",
+     "why": "Enforcement of the approved rule that reported figures come from the runner's verify run; the GM's 2026-11-11 words ask tooling to keep every future session from drifting, so the reach across plans serves the request."
+    },
+    {
+     "id": "T161-out-of-scope",
+     "summary": "A world's network/server/remote setup stays the harness's setup script.",
+     "class": "within",
+     "why": "Leaves existing setup where it is; narrows nothing asked."
+    },
+    {
+     "id": "T162-fork-dispatcher",
+     "summary": "With no L7R_DISPATCHER the clone-sync guard takes the session a --fork-session job was forked from as its dispatcher; an unforked resume and every other claimant still refused; citation corrected FR-005 to FR-001.",
+     "class": "within",
+     "why": "A guard defect that refused correct work, fixed where found (constitution XIV); the exemption is the one a page session already has."
+    },
+    {
+     "id": "T167-realtree",
+     "summary": "Eleven live-tree tests declared each tool's one end-to-end test with one marker.",
+     "class": "within",
+     "why": "Exactly ask:449-T167-realtree and FR-008's own exception."
+    },
+    {
+     "id": "T167-r6-corpus",
+     "summary": "the_r6_corpus_replayed treated as ordinary and brought under the bar (389 to 66 ms).",
+     "class": "within",
+     "why": "ask:449-T167-realtree (4)."
+    },
+    {
+     "id": "T167-count",
+     "summary": "Recount: three ordinary tests at or over 100 ms, two brought under; author's untouched each_refusal_writes_nothing at 99 and 102 ms left as load noise; 23 documents tests timed with CARGO_MANIFEST_DIR set.",
+     "class": "within",
+     "why": "A test at the line within a shared host's noise is not shown over FR-008's bar, and a timing is a signal, never a gate (the GM's performance rule); not a wrong outcome."
+    },
+    {
+     "id": "T167-methods",
+     "summary": "Shared fixtures, fewer git/process calls, splits keeping names, injected clocks; production values still asserted; three new tests over the real recording commands; production speedups with the same outputs; a scratch-sweep race fixed.",
+     "class": "within",
+     "why": "FR-008's means, every assertion kept; the race a defect fixed (XIV)."
+    },
+    {
+     "id": "T167-no-gate",
+     "summary": "No check built refusing a new test over the bar.",
+     "class": "within",
+     "why": "The GM's performance rule makes time a goal, never a gate; FR-008 does not ask for a refusing check."
+    },
+    {
+     "id": "T175-port",
+     "summary": "The rest of pack_audit ported into rust/mode_a/src/audit/ and make pack-audit wired; other modules kept under lockstep.",
+     "class": "within",
+     "why": "The GM's 2026-11-17 'next 2 engine pieces'; ask:449-engine-order conditions 2, 3, 5."
+    },
+    {
+     "id": "T175-lockstep",
+     "summary": "The end-to-end lockstep compares every check's records and findings, floats bit for bit, on pool sheets and fixtures; each check fires on its red fixture and each pool sheet passes; a mutation of each group turns it red (sun.py's second mutation cited).",
+     "class": "within",
+     "why": "For a port of a check, its verdicts on its red fixtures and passed sheets agreeing is FR-002's second owed thing ('still does its job'); the bit-for-bit assertion is a dated measurement under T180's restated condition 3 (relaxed when a harmless difference fails it), not a requirement held against later work."
+    },
+    {
+     "id": "T175-geometry",
+     "summary": "sun.py's shapely calls reproduced; the bed's area via geo pinned, its 1.99e-4 px2 difference asserted under the 25.3 px2 margin; citation now phases.log line 14.",
+     "class": "within",
+     "why": "Holds the check doing its job (no verdict can turn), the GM's 'everything works', not bytes."
+    },
+    {
+     "id": "T175-claims",
+     "summary": "Claims on kept .py units stay keyed; Rust copies carry their claims; 434 new claims owed.",
+     "class": "within",
+     "why": "ask:449-phase4-slices Q10."
+    },
+    {
+     "id": "T175-differential",
+     "summary": "207-case verify run, none differing; traceback and uncaught decode messages normalized; the usage line naming python3 -m kept.",
+     "class": "within",
+     "why": "A signal read as evidence (FR-002), normalizations under ask:449-usage-text."
+    },
+    {
+     "id": "T175-page",
+     "summary": "Step 1's page: the six pool sheets byte-identical before and after.",
+     "class": "within",
+     "why": "Condition 5's page; byte-identity reported as an observation for a step that draws nothing, not demanded."
+    },
+    {
+     "id": "T175-reproduced",
+     "summary": "registry.ft unported, three unreachable branches, an error quoting a trailing line break, county-* red fixtures carrying no tier: reproduced, not fixed, each refusing nothing.",
+     "class": "within",
+     "why": "None is a wrong outcome (constitution XIV v2.36.0): dead code, a message's trailing break and a fixture's missing tier refuse nothing and pass nothing bad; leaving a difference that is not a defect stays within."
+    },
+    {
+     "id": "T175-measure",
+     "summary": "Tokens, minutes and test and verify times by phase.",
+     "class": "within",
+     "why": "The GM's 'then we'll measure how well those went'."
+    },
+    {
+     "id": "T180-scope",
+     "summary": "Living guidance amended to 'everything works': constitution, templates, FR-002, engine-plan.md, the CLAUDE.md files, docs and the review agents' files.",
+     "class": "within",
+     "why": "The GM's 2026-11-18 'amend our project guidelines and speckit constitution and whatever else'."
+    },
+    {
+     "id": "T180-kept-reproducibility",
+     "summary": "Reproducibility, integrity hashes and verbatim quotation kept; past specs and dated records left as written.",
+     "class": "within",
+     "why": "Not exactness standards for a port (FR-002 names the same three)."
+    },
+    {
+     "id": "T180-held-not-exact",
+     "summary": "Approach and Decisions restated: an output may differ so long as everything works; as FR-002 states it, neither an exactness standard - a drawn output passes its checks and holds its research claims, a ported check still does its job (red fixtures fail, what it passed passes), and a check fixed or improved on purpose changes as fixed; the GM's 2026-11-18 words cited.",
+     "class": "within",
+     "why": "This is FR-002's amended text and the GM's own correction ('surely you mean \"the audit checks must pass\" right?!'), and it allows the fix-as-we-go verdict changes he asked for ('it needs to be okay to have checks pass as we make those fixes'). The earlier 'kept exact' verdicts and the refused-correct-work-only exception are gone from both sentences."
+    },
+    {
+     "id": "T180-applied-forward",
+     "summary": "Applied from here on: finished plan sections stay as records; rust/mode_a lockstep tests stay until a harmless difference fails one, then changed to hold verdicts and claims; the checks line now records make static red only on T151's work in progress and green at the landing, with the sweep's grep files.",
+     "class": "within",
+     "why": "Records left as written are allowed by the GM's words; relaxing a lockstep test when a harmless difference fails it is the GM's rule. The checks line is a record."
+    },
+    {
+     "id": "T180-approach",
+     "summary": "Checklist A: goal 'no reviewer, guide or rule holds a port to its bytes'; done when the grep shows only quotes, measurements and the kept reproducibility lines; citation now names sweep-grep.txt.",
+     "class": "within",
+     "why": "The GM's request, as worded."
+    },
+    {
+     "id": "T194-reader",
+     "summary": "A leader ends on the ink as SVG draws it: subpaths, Z, inherited fill, Bezier and arc flattening, joins and miter limits, dashes drawn, a zero-length stroke as SVG 2, nearest_ink alone, in both copies.",
+     "class": "within",
+     "why": "Step 3a's known defects fixed before the next step, the GM 2026-11-18."
+    },
+    {
+     "id": "T194-claims-record",
+     "summary": "Claims cite 0330; 0242's leader topic split to 0330 word for word.",
+     "class": "within",
+     "why": "Research record kept in step with the code."
+    },
+    {
+     "id": "T194-held-reach",
+     "summary": "held.json retaken; the pool's 5 seats and 8 leaders moved, each traced to its change; sheets regenerated, audits pass.",
+     "class": "within",
+     "why": "Maps may change if checks pass and research holds (FR-002)."
+    },
+    {
+     "id": "T194-found-and-left",
+     "summary": "Three findings drafted as tasks before step 3b (a filled path's hole, a dashed or unfilled closed outline, the audit's arc walk); the make decide spin dropped from the list as fixed in this task.",
+     "class": "within",
+     "why": "Filed to land before step 3b, as 'fix all known bugs in each step before moving on' asks; the removed line was stale, the spin being fixed in the same section."
+    },
+    {
+     "id": "T194-tooling",
+     "summary": "make decide and task-add's endless fancy_regex retry fixed, each with a red test.",
+     "class": "within",
+     "why": "A tool that hung, fixed where found (XIV)."
+    },
+    {
+     "id": "templates",
+     "summary": "T197, T203, T216, T228, T235, T240, T241, T243, T244: filed, unfilled templates (T243 and T244 on the newer found-and-left form).",
+     "class": "within",
+     "why": "An unfilled template makes no decision. The GM's 2026-11-21 ruling (stop before the parked hamlet stages) is now in request.md; T244's blocks remain the unfilled template and so decide nothing that could narrow it."
     }
    ]
   }
