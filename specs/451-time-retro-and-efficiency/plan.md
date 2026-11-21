@@ -1344,14 +1344,169 @@ engine speed, so no checklist.
 **Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
 
 
-### T108 (<why: the finding or measurement that files it>)
+### T108 (T103's Found and left: the quoted-string pattern T103 gave shape a scan for, `(["'])(?:\\.|(?!\1).)*\1`, stood also at `wait.rs:53` and `house_style_hooks.rs:85`; measured 2026-11-21 (`/tmp/t108/probe`, a case a process under `timeout 10`, `/tmp/t108/probe-before.txt`): each gave no answer in 10 s on a quote nothing closes before forty escapes)
+
+- **Approach**: both copies, and a third the same file held, read a quoted string by shape's `quoted_spans`, made public for them:
+  - THE HANG, measured 2026-11-21 (`/tmp/t108/probe` over a snapshot of the clone's HEAD `cfa3973817`'s `rust/guard/shared`,
+    taken 21:00:10Z, each case a process of its own under `timeout 10`, `/tmp/t108/probe-before.txt`): wait's `file_watching_loop`,
+    `proof_of_life` and `file_watching_wait` (backgrounded) on a loop whose condition holds a quote nothing closes before forty
+    escapes (`until grep -q it's \n...\n /tmp/a.log; do`) gave no answer in 10 s, each - `cond_grammar` neutralizes the
+    condition's quotes with the pattern; the house style guard, the dispatcher's whole run of it (`protocol::run`, a Bash start),
+    gave none on a heredoc it does not blank (`cat <<\EOF > f.md`, a listed word and the same unclosed quote in its body:
+    `HEREDOC_BODY` does not read a `\EOF`, while `tree::walk` carries the body out and answered on the command in 0.12 s, measured
+    2026-11-21 (the same probe, `tree_bsdoc` and `hs_bsdoc`)) - its
+    separators' mask searched the command with the pattern; and the same file's held shape of a Python `re` call
+    (`house_style_hooks.rs:79`, `re\.(...)\(\s*[rbuf]{0,2}` and the pattern's quoted-string tail) gave none alone on `re.compile('`
+    and forty escapes, nor the guard on that call in the heredoc's body. Row 3,148 itself hangs neither copy: no loop head holds it (measured 2026-11-21, a
+    search of the row's text for `while` and `until`, none), and the house style guard blanks its `<<'EOF'` body first; every row of T93's corpus answered through both before the fix (the
+    replay below).
+  - THE FIX: `shape::quoted_spans` made `pub` (and `#[must_use]`), nothing else of `shape.rs` changed. `wait::cond_grammar` builds
+    its neutral condition from the spans - the text between them as it stands, each string's body with `QUOTE_PUNCT` dropped and its
+    quotes dropped, as the pattern's replacement wrote - and `wait`'s `QUOTED` is deleted. `house_style_hooks::masked` fills each
+    span's inside, and `QUOTED_SPAN` is deleted. The `re` call's shape leaves `HELD_SHAPES` for `RE_CALL`, the call through its
+    argument's opening quote, and `re_call_patterns`: the argument is `quoted_spans`' first span of the text from that quote, where
+    it opens there; a call held from its `re.` through the closing quote, the search going on past it, or, where nothing closes the
+    argument, from the character after the call's `r` - as the shape's search went on (its prefix reaches one quote a start, so a
+    start that fails had no other reading).
+  - THE PINS: wait's in T103's form (`wait/tests.rs`: the test runs itself again as a child, a 10 s deadline, a GUESS the fixed read
+    answers far inside); house style's two under the module's own bound, `within` (T81: 30 s of the search thread's own CPU, a
+    CONVENTION, so a loaded host cannot fail good work) - the heredoc with the unclosed quote through `plan`, the separators' mask,
+    and with `re.compile(` before it, the held shape. Three differential tests hold each reading to the pattern it replaced, built
+    in the test: `cond_grammar` on every text to 6 characters over `"`, `'`, `\`, `a`, `|` and `é` (55,987 texts), `masked` on every
+    text to 6 over `"`, `'`, `\`, `a`, a newline and `é` (55,987), and `re_call_patterns` on every text of up to 5 pieces of
+    `re.compile(`, `re.subn( `, `r`, `'`, `"`, `\`, `a`, a newline and `é` (66,430), as T103 held the scan to `QUOTED` on 335,923.
+- **Red first**, measured 2026-11-21 (`make rust-test CRATE=rust/guard/shared`): the three hang pins against the unfixed code, 370
+  passed, 3 failed (`/tmp/t108/red-rust.log`: "the loop was not read in 10 s", and each house style pin "ran past its CPU bound:
+  30024045677 ns" and 30025359060 ns); `wait` and `masked` fixed, 371 passed, 2 failed (`/tmp/t108/red2-rust.log`: the `re` call's
+  pin still past its CPU bound, and T96's `tree::program::tests::each_gate_passes_wherever_its_pattern_matches`); all three fixed and
+  the three differentials added, 375 passed, 1 failed, T96's test alone (measured 2026-11-21 (`/tmp/t108/green-rust.log`), finished in 7.43 s against
+  31.52 s red); the crate's lint clean (`l7r-gate.sh rust lint --crate rust/guard/shared`, exit 0, `/tmp/t108/lint.log`) and its coverage
+  "lines no test reaches: 0" (`l7r-gate.sh rust cover`, `/tmp/t108/cover.log`, red only on T96's test).
+- **Every verdict the same**, measured 2026-11-21 (`/tmp/t108/replay-src/main.rs`, one process a side streaming T93's 9,646 commands
+  a line at a time, over the snapshot's `shared/` and over the snapshot with T108's three source files alone, `/tmp/t108/scripts/replay.sh`
+  restarting past any row that gave no answer in 30 s): each row's twelve answers of `wait`'s public surface (`background`,
+  `file_watching_wait` foreground and backgrounded, `file_watching_loop`, `proof_of_life`, `add_ceiling`, `bracket_pattern`,
+  `scope_make_waits`, `self_matching`, `sleep_in_loop`, `poll_reason`, `periodic`) and the house style guard's reply (exit code,
+  stdout, stderr) through `protocol::run` at a Bash start, on the command and on the command with a line after it writing a listed
+  word: 0 of 9,646 lines changed (`cmp`, identical), 0 rows held on either side, 90.0 s before and 57.0 s after under a load average
+  of 30 to 45 (`/tmp/t108/replay-before.jsonl`, `-after.jsonl`, `.summary`). The reach, measured 2026-11-21 (`/tmp/t108/scripts/reach.py`,
+  `/tmp/t108/reach.txt`): 280 of the rows hold a loop condition with a quote and no `$(` or backtick, which `cond_grammar`'s read
+  neutralizes; the house style guard answered other than silently on 1 row as run (the corpus's commands ran corrected) and on 8,468
+  with the written word (6,271 of them holding a quote), each reaching its correction of a Bash command and so the mask and the held
+  shapes. After the fix every probe of THE HANG answered in 0.11 s, the guard correcting the word in each heredoc (measured
+  2026-11-21, `/tmp/t108/probe-after.txt`).
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+| each copy of the quoted-string pattern in `wait` and `house_style_hooks` read by shape's scan; a quote nothing closes answered | n/a - no map | n/a | none | n/a |
+
+### T108 Approach (checklist part A)
+
+1. **The goal, in the world.** No map changes. A Bash call whose loop condition holds a quote nothing closes before many escapes,
+   or whose heredoc the house style guard does not blank holds one, is answered by `no_poll_hooks` and the house style guard
+   rather than held; every other answer as before.
+2. **The constraints.** T108's line; FR-013 (a `[perf]` task: the builders' loop); FR-012 (red first); constitution XIII (no known
+   regression: every verdict the same, the replay) and XIV (the hang a defect, fixed here); the launcher's files (`wait.rs`,
+   `house_style_hooks.rs`, their tests, `shape.rs` only to make the scan public, this section), nothing of T96's (`shared::tree`'s
+   program module, `event_log_hooks`) or T92's (the arbiter and plan crates); nothing committed.
+3. **Where each comes from.** O: T103's Found and left (T103's section); O: this task's probes, pins and replay (item 4); the task as
+   filed (T108's line).
+4. **Do they describe the world here?** Measured 2026-11-21, each by its method, both sides built from one snapshot of the clone's
+   HEAD `cfa3973817`'s `rust/guard/shared` (`/tmp/t108/before`), the after side the snapshot plus T108's three source files alone
+   (`/tmp/t108/after`, `diff -rq` naming those three and no other, measured 2026-11-21, `rustfmt` rewrapping two of them after, its
+   whitespace alone): THE HANG's probes, measured 2026-11-21 (`/tmp/t108/probe`, `timeout 10` a case), before (`/tmp/t108/probe-before.txt`, every case past 10 s
+   but the walk of the `\EOF` heredoc, 0.12 s) and after (`/tmp/t108/probe-after.txt`, every case of THE HANG 0.11 s, the plain command's walk still past 10 s, T112's); the replay's 0 of 9,646
+   changed with 0 hangs on either side, and its reach (280 loop conditions with a quote; 8,468 house style corrections with the written
+   word); the pins red then green (the Approach's Red first).
+5. **The order.** After T103 (its scan); beside T96 and T92, touching none of their files; before T112, which takes the two copies in
+   T96's files after T96 lands, and T113, which takes the other three and waits on no task.
+6. **The exits.** Green: the pins red first and green, the three differentials, the replay's 0 changed outputs, the crate's lint and
+   cover, and this task's own `make closing-checks T=T108 F=451`. Red: what failed recorded and the task set down, a claim that it
+   cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None: every copy of the pattern in `rust/` was found by a search of its text (Found and left), each probed
+   alone and through its caller (item 4).
+8. **The budget.** One landing. The scan is one pass of a text and two `rposition`s where the pattern's search was exponential in the
+   escapes after an unclosed quote; the `re` call's prefix pattern one search a call, and a scan of the text after its quote.
+9. **Done, measured.** Red first: 370 passed, 3 failed on the three hang pins; 371 passed, 2 failed with two copies fixed (the `re`
+   call's pin and T96's test); 375 passed, 1 failed fixed, T96's `tree::program` test alone, which fails on the clone's uncommitted T96
+   files and none of T108's (measured 2026-11-21, `make rust-test CRATE=rust/guard/shared`). Every verdict the same: 0 of 9,646 replay
+   lines changed, 0 rows held either side (measured 2026-11-21, `/tmp/t108/scripts/replay.sh`, `cmp`). This task's own closing runs:
+   run 1 (`20261121T211557Z-1265326`): RED, exit 2, only `make static`'s format check (`rustfmt` on `wait/tests.rs`), `make
+   hooks-test` and `make quick` green; run 2 (`20261121T211909Z-1376252`), `wait/tests.rs` formatted: RED, exit 2, only the format
+   check again (`house_style_hooks.rs` and its tests), hooks-test and quick green. Every T108 file then formatted (`make format
+   FILE=`) and a third `make static` refused before a landing (451 FR-007's guard), so the crate's own checks stand for it: its format check clean, measured 2026-11-21
+   (`l7r-gate.sh rust format --check --crate rust/guard/shared`, exit 0, `/tmp/t108/format-check.log`),
+   its lint, tests and cover clean before the rewrap (the Red first above), `rustfmt` changing whitespace alone.
+10. **Before moving a constant.** No constant: each reading kept by the scan, held to its pattern by the differentials; the two
+    deadlines reused as they stand (T103's 10 s, a GUESS; T81's 30 s of CPU, a CONVENTION).
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** A defect, fixed here: a reader sees a Bash call's hooks answer where they hung - `no_poll_hooks`' file watch
+    and the house style guard's correction; no map moves.
+
+**Found and left?**
+- The same quoted-string core stands in two of T96's files, each of which gave no answer in 10 s on a quote nothing closes before
+  forty escapes, the pattern alone under `timeout 10`, measured 2026-11-21 (`/tmp/t108/probe`, `/tmp/t108/probe-outside.txt`):
+  `tree.rs:70`'s `QUOTED` and the triple-quoted `TRIPLE` of `tree/program.rs:63`; and `tree::walk`, which the house style guard's
+  `lands_outside` calls on a Bash command holding a listed word, gave none on `echo <a listed word> > f.md; echo it's` and forty
+  escapes, so a plain command of that shape held that guard past 10 s after T108's fix as before, measured 2026-11-21
+  (`/tmp/t108/probe-before.txt` and `/tmp/t108/probe-after.txt`, `hs_plain` and `tree_plain`). Not fixed here: both files hold T96's
+  live uncommitted work while its builder works in them. Filed as T112; lands before T22.
+- The same core stands in three guards no open task works in, each of which gave no answer in 10 s on its shape, the pattern alone,
+  measured 2026-11-21 (the same probe): `make_only_hooks.rs:125`'s `MASK_QUOTE`, `no_poll_hooks/pace.rs:36`'s `SHELL_STRING` (after
+  `sh -c `) and the triple-quoted `TRIPLE` of `readme_hooks.rs:51`. Not fixed here: the launcher gave T108 `wait`, `house_style_hooks`
+  and `shape` alone, so it lands beside T96 and T92 touching none of theirs, and each of these owes its own replay through its guard.
+  Filed as T113, which waits on no other task; lands before T22. Every copy of the class observed 2026-11-21, method: `grep -rnF '(?:\\.|(?!\1).)*'` and `grep -rnE '\(\?:\\\\\.\|'` over `rust/`, every hit read: the five
+  above, the three T108 fixed, shape's comments and test, and `make_only_hooks/interp.rs:27` and `:33`'s `(?:\\.|[^"\\])*`, whose two
+  branches never read the same character and so do not backtrack this way.
+
+**Performance work?** yes - a `[perf]` task (451 FR-013): the builders' loop, a Bash call's hooks; not engine speed, so the
+performance checklist's answers are given in brief:
+1. **Where does the time go?** In a backtracking search of a quoted string: 2^n tries for the n escapes after a quote nothing closes
+   (THE HANG).
+2. **Removes work, or only moves it?** Removes it: a pass of the text in place of an exponential search.
+3. **What it was expected to save, and why.** Estimated before (the task's line, from T103's): a hang answered. Measured after
+   2026-11-21 (`/tmp/t108/probe-after.txt`): every probe that gave no answer in 10 s answered in 0.11 s, the process's start among it.
+4. **How does the work grow?** Linearly in the text, where the pattern grew exponentially in its escapes.
+5. **Before and after, and under what conditions.** Each probe a process, under `timeout 10`, before and after; the replay's two
+   sides under a load average of 30 to 45 (item 4).
+6. **Did any map move?** No: a hook's answer; no research claim reads these patterns.
+
+
+### T112 (<why: the finding or measurement that files it>)
 
 - **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
 
-### T108 Approach (checklist part A)
+### T112 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+
+### T113 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T113 Approach (checklist part A)
 
 1. **The goal, in the world.** <the place as it should be>
 2. **The constraints.** <the FRs, decisions and pages it holds to>

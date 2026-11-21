@@ -552,6 +552,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-21",
    "declared": "spec-fidelity"
+  },
+  "### T108 (T103's Found and left: the quoted-string pattern T103 gave shape a scan for, `([\"'])(?:\\\\.|(?!\\1).)*\\1`, stood also at `wait.rs:53` and `house_style_hooks.rs:85`; measured 2026-11-21 (`/tmp/t108/probe`, a case a process under `timeout 10`, `/tmp/t108/probe-before.txt`): each gave no answer in 10 s on a quote nothing closes before forty escapes)": {
+   "sha256": "1c946ce8e7677a24554e9b0e5012f3bb9e6ffce97729e4acffd48c43f5f7cc9c",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity"
+  },
+  "### T108 Approach (checklist part A)": {
+   "sha256": "25171dd9bb107f4c234de044906ac5d98dcd014d07d96f03a9ab9e3c6a243ed8",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -10082,6 +10094,118 @@
      "why": "Fix as we go: a known defect in the review gate is fixed before the next step. Sitting beside T96 and T103 is file-disjoint scheduling and defers nothing."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-21",
+   "blocks": [
+    "### T108 (T103's Found and left: the quoted-string pattern T103 gave shape a scan for, `([\"'])(?:\\\\.|(?!\\1).)*\\1`, stood also at `wait.rs:53` and `house_style_hooks.rs:85`; measured 2026-11-21 (`/tmp/t108/probe`, a case a process under `timeout 10`, `/tmp/t108/probe-before.txt`): each gave no answer in 10 s on a quote nothing closes before forty escapes)",
+    "### T108 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "perf-tag",
+     "summary": "T108 is a [perf] task under FR-013: the builders' loop, a Bash call's hooks hanging on an unclosed quote",
+     "class": "within",
+     "why": "FR-013 counts a task that makes the builders' loop faster as performance work; a hook that hangs the loop until a timeout is exactly that. The request's 2026-11-20 'prioritize performance improvements' is served, not narrowed."
+    },
+    {
+     "id": "fix-by-scan",
+     "summary": "the quoted-string pattern in wait::cond_grammar and house_style_hooks::masked replaced by shape::quoted_spans (made pub, #[must_use]); QUOTED and QUOTED_SPAN deleted",
+     "class": "within",
+     "why": "This is the task as filed (T103's Found and left: wait.rs:53 and house_style_hooks.rs:85). It removes a hang, which is a defect under XIV (a tool that hangs). Nothing the GM asked for is cut back."
+    },
+    {
+     "id": "third-copy-re-call",
+     "summary": "the same file's held Python re-call shape (house_style_hooks.rs:79) also moved to the scan (RE_CALL plus re_call_patterns), with the shape's resume-after-r reading kept where nothing closes the argument",
+     "class": "within",
+     "why": "This widens the fix to a third instance of the same defect in a file the task already changes, and its probe shows that instance hung too. It widens the task, so it is not a narrowing, and it fixes a known defect in the task as the approved 'briefs that default to fixing in the task' (improvement 4) asks."
+    },
+    {
+     "id": "pins-and-deadlines",
+     "summary": "the hang pins reuse T103's 10 s child deadline (a GUESS) and T81's 30 s CPU bound (a CONVENTION); they were red first, then green",
+     "class": "within",
+     "why": "FR-012's red-first form applied to the fix. No new knob is introduced and none is moved. Labels as recorded: 370/3, 371/2, 375/1 measured 2026-11-21 by make rust-test."
+    },
+    {
+     "id": "differentials-and-replay",
+     "summary": "three differential tests hold each new reading to the pattern it replaced on exhaustive short texts (55,987 / 55,987 / 66,430, which are the exact counts of strings up to 6 over 6 symbols and up to 5 of 9 pieces); the 9,646-command replay of every wait and house style verdict, 0 changed, is listed as a Green exit",
+     "class": "within",
+     "why": "This narrows nothing that was asked. The replay is the owed showing that a changed check still does its job (the commands it passed still pass, the ones it corrected are still corrected), not an exactness standard over a drawn output. The differentials pin which spans count as quoted, which is behavior, on inputs where the old pattern was correct. Read it as evidence that everything works: a later intended change to these readings that alters a differential is a signal to read, never a stop by itself (the GM 2026-11-18). Today's measured result is 0 changed, so the exit criterion blocks nothing."
+    },
+    {
+     "id": "found-left-T96-copies",
+     "summary": "the copies at tree.rs:70 (QUOTED) and tree/program.rs:63 (TRIPLE), and with them the house style guard's remaining hang on a PLAIN command through tree::walk (hs_plain / tree_plain past 10 s after the fix), are left for T112, which lands before T22 after T96 lands",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This leaves a known hang, including one in the very guard T108 fixes, so it is a narrowing and was weighed under the presumption against it. It is legitimate because the files are another live builder's uncommitted work (T96), and editing them now would conflict with that builder's work. That is a real impossibility, not an awkwardness. The section's goal (item 1) states honestly that the guard answers in the heredoc case, not the plain one, so nothing claims a fix it does not make. FR-009's form is met: the reason (T96's builder in them), the filed id (T112) and the order (lands before T22). The class was found by stated greps over rust/ with every hit read, which also accounts for the two interp.rs patterns that do not backtrack. Nothing in the GM's request puts these in T108, and the defect is not carried forward unscheduled."
+    },
+    {
+     "id": "found-left-other-copies",
+     "summary": "the copies at make_only_hooks.rs:125 (MASK_QUOTE), no_poll_hooks/pace.rs:36 (SHELL_STRING) and readme_hooks.rs:51 (TRIPLE), which are not T96's files, are also left for T112",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Adjudicated apart from the T96 copies because their stated reason is weaker: only 'outside T108's files'. The general rule is not physically impossible here, so impossibility is not what carries it. What carries it is the GM's own approved mechanism. Improvement 4 ('briefs that default to fixing in the task') became FR-009, which accepts a deferral that states why, its task id and its order, and this one states all three. The deferral is ordered immediately (T112 lands before T22) and as performance work it is started first under FR-013. Gathering the five copies into one task does not gut the purpose of either the request's default-to-fix or the fix-as-we-go rule, because the defect is fixed in the next landing in this feature, not carried past a step. Neither T108's task line nor anything the GM wrote names these three guards (make_only, pace, readme), so leaving them is not contrary to an instruction."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-21",
+   "blocks": [
+    "### T108 (T103's Found and left: the quoted-string pattern T103 gave shape a scan for, `([\"'])(?:\\\\.|(?!\\1).)*\\1`, stood also at `wait.rs:53` and `house_style_hooks.rs:85`; measured 2026-11-21 (`/tmp/t108/probe`, a case a process under `timeout 10`, `/tmp/t108/probe-before.txt`): each gave no answer in 10 s on a quote nothing closes before forty escapes)",
+    "### T108 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T108-fix",
+     "summary": "Replace the three copies of the backtracking quoted-string pattern in wait.rs and house_style_hooks.rs (cond_grammar's QUOTED, masked's QUOTED_SPAN, the held re-call shape) with shape::quoted_spans, made pub and must_use, nothing else of shape.rs changed",
+     "class": "within",
+     "why": "T108 is a [perf] task under FR-013 (a hook hang stalls the builders' loop), filed from T103's Found and left, so it falls under the GM's 2026-11-20 ask to prioritize performance work. The fix removes an exponential search, which is what the task is for. It narrows nothing that was asked."
+    },
+    {
+     "id": "T108-re-call-reading",
+     "summary": "RE_CALL plus re_call_patterns reproduce the held shape's reading, including its continuation from the character after the call's r when nothing closes the argument",
+     "class": "within",
+     "why": "An implementation choice that keeps the guard doing its job on the same calls. It neither narrows nor adds to the request."
+    },
+    {
+     "id": "T108-pins",
+     "summary": "Three hang pins, red first: wait's in T103's child-process form with a 10 s deadline (GUESS), and house style's two under the module's 30 s CPU bound (T81, CONVENTION). Both deadlines reused as they stand",
+     "class": "within",
+     "why": "FR-012's red-first form. These are tests that fail only if the hang the task fixes comes back, so they enforce the task rather than add scope."
+    },
+    {
+     "id": "T108-differentials-and-replay",
+     "summary": "Three exhaustive differential tests (55,987 / 55,987 / 66,430 texts, counts that follow from the alphabets and lengths) hold each new reading to the pattern it replaced, and a replay of T93's 9,646 commands shows 0 changed verdicts",
+     "class": "within",
+     "why": "This is evidence that the guards still do their job (the sheets a check passed still pass), which the GM's 2026-11-18 rule says is owed for a changed check. It is not offered as a requirement that bytes must match: the plan treats no difference as a stop and asks for no ruling on one. It is verification of the requested fix, not new scope."
+    },
+    {
+     "id": "T108-file-scope",
+     "summary": "Touch only wait.rs, house_style_hooks.rs, their tests and shape.rs, and nothing of T96's (shared::tree, event_log_hooks) or T92's (the arbiter and plan crates)",
+     "class": "within",
+     "why": "Coordination between concurrent tasks. Every copy left out is filed below with an order, so nothing the request or spec requires is dropped."
+    },
+    {
+     "id": "T108-left-T112",
+     "summary": "The same pattern in T96's tree.rs:70 QUOTED and tree/program.rs:63 TRIPLE, and tree::walk's hang on a plain command (house style still holds past 10 s on that shape after T108), left to T112, which lands before T22",
+     "class": "within",
+     "why": "A found-and-left item in FR-009's form: the reason (T96's builder has live uncommitted work in both files), the filed task id and its order ('lands before T22'). The defect is filed as performance work, so FR-013 schedules it first, and it is not carried past a next step. The Approach's goal states the remaining plain-command hang honestly instead of claiming it fixed. The spec requires no fix in this task, so nothing is narrowed."
+    },
+    {
+     "id": "T108-left-T113",
+     "summary": "The same pattern in make_only_hooks.rs:125, no_poll_hooks/pace.rs:36 and readme_hooks.rs:51 left to T113, which waits on no task and lands before T22. The class census is stated with its method (two greps over rust/, every hit read)",
+     "class": "within",
+     "why": "Again in FR-009's form: reason, id and order, plus the 'how every instance was found' line FR-009 asks for when a fix names a class. Splitting the work into a separately filed perf task, which FR-013 puts first, ordered before the next step, does not narrow what the GM asked or what the spec requires."
+    },
+    {
+     "id": "T108-closing-substitute",
+     "summary": "After two closing runs went RED only on make static's format check, a third make static was refused by FR-007's guard, so the crate-scoped format check (exit 0) stands for it, with lint, tests and cover clean before a whitespace-only rustfmt rewrap",
+     "class": "within",
+     "why": "FR-007 refuses a third make static and names the crate-scoped checks as the compliant command. The GM approved exactly that (improvement 2: crate-scoped checks while iterating). The landing's own gate still runs in full, so following the spec's own guard narrows nothing."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -15647,6 +15771,62 @@
      "summary": "Order: before T22, as its line says; beside T96 and T103, whose files it leaves.",
      "class": "within",
      "why": "Fix as we go: a known defect in the review gate is fixed before the next step. Sitting beside T96 and T103 is file-disjoint scheduling and defers nothing."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T108": {
+   "section_sha256": "ebe853af9e1feb146ff82572278c1b71009ee1c3bb0b50e6bdab8d33131541a2",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T108-fix",
+     "summary": "Replace the three copies of the backtracking quoted-string pattern in wait.rs and house_style_hooks.rs (cond_grammar's QUOTED, masked's QUOTED_SPAN, the held re-call shape) with shape::quoted_spans, made pub and must_use, nothing else of shape.rs changed",
+     "class": "within",
+     "why": "T108 is a [perf] task under FR-013 (a hook hang stalls the builders' loop), filed from T103's Found and left, so it falls under the GM's 2026-11-20 ask to prioritize performance work. The fix removes an exponential search, which is what the task is for. It narrows nothing that was asked."
+    },
+    {
+     "id": "T108-re-call-reading",
+     "summary": "RE_CALL plus re_call_patterns reproduce the held shape's reading, including its continuation from the character after the call's r when nothing closes the argument",
+     "class": "within",
+     "why": "An implementation choice that keeps the guard doing its job on the same calls. It neither narrows nor adds to the request."
+    },
+    {
+     "id": "T108-pins",
+     "summary": "Three hang pins, red first: wait's in T103's child-process form with a 10 s deadline (GUESS), and house style's two under the module's 30 s CPU bound (T81, CONVENTION). Both deadlines reused as they stand",
+     "class": "within",
+     "why": "FR-012's red-first form. These are tests that fail only if the hang the task fixes comes back, so they enforce the task rather than add scope."
+    },
+    {
+     "id": "T108-differentials-and-replay",
+     "summary": "Three exhaustive differential tests (55,987 / 55,987 / 66,430 texts, counts that follow from the alphabets and lengths) hold each new reading to the pattern it replaced, and a replay of T93's 9,646 commands shows 0 changed verdicts",
+     "class": "within",
+     "why": "This is evidence that the guards still do their job (the sheets a check passed still pass), which the GM's 2026-11-18 rule says is owed for a changed check. It is not offered as a requirement that bytes must match: the plan treats no difference as a stop and asks for no ruling on one. It is verification of the requested fix, not new scope."
+    },
+    {
+     "id": "T108-file-scope",
+     "summary": "Touch only wait.rs, house_style_hooks.rs, their tests and shape.rs, and nothing of T96's (shared::tree, event_log_hooks) or T92's (the arbiter and plan crates)",
+     "class": "within",
+     "why": "Coordination between concurrent tasks. Every copy left out is filed below with an order, so nothing the request or spec requires is dropped."
+    },
+    {
+     "id": "T108-left-T112",
+     "summary": "The same pattern in T96's tree.rs:70 QUOTED and tree/program.rs:63 TRIPLE, and tree::walk's hang on a plain command (house style still holds past 10 s on that shape after T108), left to T112, which lands before T22",
+     "class": "within",
+     "why": "A found-and-left item in FR-009's form: the reason (T96's builder has live uncommitted work in both files), the filed task id and its order ('lands before T22'). The defect is filed as performance work, so FR-013 schedules it first, and it is not carried past a next step. The Approach's goal states the remaining plain-command hang honestly instead of claiming it fixed. The spec requires no fix in this task, so nothing is narrowed."
+    },
+    {
+     "id": "T108-left-T113",
+     "summary": "The same pattern in make_only_hooks.rs:125, no_poll_hooks/pace.rs:36 and readme_hooks.rs:51 left to T113, which waits on no task and lands before T22. The class census is stated with its method (two greps over rust/, every hit read)",
+     "class": "within",
+     "why": "Again in FR-009's form: reason, id and order, plus the 'how every instance was found' line FR-009 asks for when a fix names a class. Splitting the work into a separately filed perf task, which FR-013 puts first, ordered before the next step, does not narrow what the GM asked or what the spec requires."
+    },
+    {
+     "id": "T108-closing-substitute",
+     "summary": "After two closing runs went RED only on make static's format check, a third make static was refused by FR-007's guard, so the crate-scoped format check (exit 0) stands for it, with lint, tests and cover clean before a whitespace-only rustfmt rewrap",
+     "class": "within",
+     "why": "FR-007 refuses a third make static and names the crate-scoped checks as the compliant command. The GM approved exactly that (improvement 2: crate-scoped checks while iterating). The landing's own gate still runs in full, so following the spec's own guard narrows nothing."
     }
    ],
    "verdict": "CLEAR"
