@@ -41,7 +41,7 @@ use l7r_guard::shared::make::DEFAULT_GOAL;
 use serde_json::Value;
 
 use super::super::events::{
-    cmp_f, fixed, get, is, names, on, or_s, re, t_of, ts, Event, Raised, Tally,
+    cmp_f, fixed, get, is, names, or_s, re, t_of, ts, Event, Raised, Tally,
 };
 use super::task_at;
 
@@ -199,7 +199,21 @@ pub fn enqueued(sids: &[String], projects: &Path) -> HashMap<String, f64> {
 /// `KillShell` is the tool's earlier name.
 #[must_use]
 pub fn stopped(sids: &[String], projects: &Path) -> HashMap<String, String> {
-    let mut out = HashMap::new();
+    read_subagents(sids, projects).0
+}
+
+/// [`stopped`]'s map, and tool-use id -> when a SUBAGENT's background run's notice was queued (feature 451 T09, plan D3): the
+/// `queued_command` attachment of its transcript (`<projects>/*/<sid>/subagents/*.jsonl`) naming its `<tool-use-id>`, the first kept.
+/// A subagent has no prompt line and its session's transcript no enqueue row for it, so without this a builder's background run was
+/// open to the window's end. The attachment's time is the run's end: it fell within 30 ms of the run's output file's last write on
+/// each of eight runs, measured 2026-11-21 (the session's subagent transcripts against `/tmp/claude-1000/.../tasks/*.output` mtimes).
+/// One pass reads both, since the subagent transcripts are the most of what the command reads (1,311 for the main session).
+#[must_use]
+pub fn read_subagents(
+    sids: &[String],
+    projects: &Path,
+) -> (HashMap<String, String>, HashMap<String, f64>) {
+    let (mut out, mut queued) = (HashMap::new(), HashMap::new());
     for sid in sids {
         for project in names(projects) {
             let dir = projects.join(&project);
@@ -210,13 +224,25 @@ pub fn stopped(sids: &[String], projects: &Path) -> HashMap<String, String> {
                 let Ok(text) = std::fs::read_to_string(&path) else {
                     continue;
                 };
-                for line in text
-                    .lines()
-                    .filter(|l| l.contains("\"TaskStop\"") || l.contains("\"KillShell\""))
-                {
+                for line in text.lines().filter(|l| {
+                    l.contains("\"TaskStop\"")
+                        || l.contains("\"KillShell\"")
+                        || l.contains("\"queued_command\"")
+                }) {
                     let Ok(row) = serde_json::from_str::<Value>(line) else {
                         continue;
                     };
+                    let note = |k: &str| {
+                        row.pointer(&format!("/attachment/{k}"))
+                            .and_then(Value::as_str)
+                    };
+                    if let (Some("queued_command"), Some(prompt), Some(Ok(at))) =
+                        (note("type"), note("prompt"), note("timestamp").map(ts))
+                    {
+                        if let Ok(Some(c)) = TOOL_USE.captures(prompt) {
+                            queued.entry(c[1].to_owned()).or_insert(at);
+                        }
+                    }
                     let blocks = row.pointer("/message/content").and_then(Value::as_array);
                     for b in blocks.into_iter().flatten() {
                         let input =
@@ -232,7 +258,7 @@ pub fn stopped(sids: &[String], projects: &Path) -> HashMap<String, String> {
             }
         }
     }
-    out
+    (out, queued)
 }
 
 /// One Bash run.
@@ -246,6 +272,10 @@ pub struct Run {
     pub t1: f64,
     /// Its session.
     pub sid: String,
+    /// The subagent whose call it is, empty for the session's own.
+    pub by: String,
+    /// Its background task id, empty for a foreground run.
+    pub bg_id: String,
     /// Its make targets, every one it runs ([`targets_of`]), the default goal for a goal-less make.
     pub makes: Vec<String>,
     /// Its bucket ([`line_bucket`]).
@@ -304,6 +334,8 @@ pub struct Window<'a> {
     pub enqueued: &'a HashMap<String, f64>,
     /// [`stopped`]'s map.
     pub stopped: &'a HashMap<String, String>,
+    /// [`read_subagents`]' queued map: a subagent's background run's end.
+    pub queued: &'a HashMap<String, f64>,
     /// The Makefile's [`default_goal`].
     pub goal: &'a str,
 }
@@ -340,12 +372,13 @@ pub fn runs(
     starts: &[(f64, String)],
     w: &Window,
 ) -> Result<Runs, Raised> {
-    let mut ends: HashMap<String, (f64, bool)> = HashMap::new();
+    let mut ends: HashMap<String, (f64, String)> = HashMap::new();
     for e in stream {
         if (is(e, "ev", "PostToolUse") || is(e, "ev", "PostToolUseFailure"))
             && is(e, "tool", "Bash")
         {
-            ends.entry(or_s(e, "id")).or_insert((t_of(e)?, on(e, "bg")));
+            ends.entry(or_s(e, "id"))
+                .or_insert((t_of(e)?, or_s(e, "bg")));
         }
     }
     let mut bg_ends: HashMap<String, f64> = HashMap::new();
@@ -359,10 +392,6 @@ pub fn runs(
             stops.entry(task.as_str()).or_insert(t_of(e)?);
         }
     }
-    let mut bg_of: HashMap<String, String> = HashMap::new();
-    for e in stream.iter().filter(|e| on(e, "bg")) {
-        bg_of.insert(or_s(e, "id"), or_s(e, "bg"));
-    }
     let mut out = Runs::default();
     for e in stream {
         if !(is(e, "ev", "PreToolUse") && is(e, "tool", "Bash")) {
@@ -372,24 +401,28 @@ pub fn runs(
         if t0 > w.end {
             continue;
         }
-        let Some(&(post, bg)) = ends.get(&id) else {
+        let Some((post, bg_id)) = ends.get(&id) else {
             out.refused += 1;
             continue;
         };
+        let bg = !bg_id.is_empty();
         let found = if bg {
             w.enqueued
                 .get(&id)
                 .or_else(|| bg_ends.get(&id))
-                .or_else(|| bg_of.get(&id).and_then(|b| stops.get(b.as_str())))
+                .or_else(|| w.queued.get(&id))
+                .or_else(|| stops.get(bg_id.as_str()))
                 .copied()
         } else {
-            Some(post)
+            Some(*post)
         };
         let task = or_s(e, "task");
         out.runs.push(Run {
             t0,
             t1: found.unwrap_or(w.end).min(w.end).max(t0),
             sid: or_s(e, "sid"),
+            by: or_s(e, "by"),
+            bg_id: bg_id.clone(),
             makes: targets_of(e, w.goal),
             bucket: line_bucket(e, w.goal),
             task: if task.is_empty() {
@@ -581,5 +614,11 @@ pub fn render(runs: &Runs, order: &[String]) -> String {
     text
 }
 
+mod flight;
+pub use flight::{flight, Flight};
+
 #[cfg(test)]
 mod tests;
+
+#[cfg(test)]
+mod waits_tests;

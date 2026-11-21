@@ -669,6 +669,7 @@ pub(crate) fn filed_at(
         row.get("task").and_then(Value::as_str),
         None,
         &root,
+        &now_stamp(SystemTime::now()),
         env,
     );
     let log = log_path_in(&root, &to.feature, env);
@@ -692,10 +693,12 @@ pub(crate) fn append(
     let root = clone_root(&cwd_of(payload, here))?;
     let mut row = line(payload, t);
     let carried = row.get("task").and_then(Value::as_str).map(str::to_owned);
-    let to = filed::filed(payload, carried.as_deref(), None, &root, env);
+    let to = filed::filed(payload, carried.as_deref(), None, &root, t, env);
     let path = log_path_in(&root, &to.feature, env);
     let base = path.parent().map_or_else(PathBuf::new, Path::to_path_buf);
     std::fs::create_dir_all(&base).ok()?;
+    // an Agent call's halves kept for its agent's first start, filed before its meta file exists (451 T53, `dispatches.rs`)
+    dispatches::record(&base, payload, t);
     if let Some(task) = to.task {
         row.insert("task".into(), Value::from(task));
     }
@@ -882,7 +885,7 @@ pub(crate) fn append_row_in(
         row.insert("sid".into(), Value::from(sid));
     }
     let carried = row.get("task").and_then(Value::as_str).map(str::to_owned);
-    let to = filed::filed(&Value::Null, carried.as_deref(), feature, root, env);
+    let to = filed::filed(&Value::Null, carried.as_deref(), feature, root, t, env);
     if let Some(task) = to.task {
         row.insert("task".into(), Value::from(task));
     }
@@ -913,6 +916,7 @@ fn decide(event: &Event, _session: &Session) -> Vec<Answer> {
     Vec::new()
 }
 
+mod dispatches;
 mod fields;
 mod filed;
 pub mod read;

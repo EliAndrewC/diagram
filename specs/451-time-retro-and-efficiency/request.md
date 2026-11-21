@@ -44,3 +44,7 @@ he approved):
 ## The GM, 2026-11-20, on measurement work (after the 14-hour report, with T08 - make where-time's columns - building)
 
 "I would also like for this kind of measurement task to be counted as a performance task for the purpose of scheduling and coming first.  Because it's so closely related to performance that it should be counted as such even if the task itself doesn't improve performance."
+
+## The GM, 2026-11-21, on the closing checks (after the split of test time into iterating and closing checks)
+
+"yes please file that as a performance task, thanks"

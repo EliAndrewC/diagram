@@ -74,13 +74,13 @@
    "declared": "spec-fidelity"
   },
   "### T09 (FR-002, FR-005: a wait cannot be booked to the run behind it - the spec's User Story 1 scenario 2, research R2)": {
-   "sha256": "820950d51028244c5a1a6b94163e39244011b83c4cc7a8de52249d80f9b1cab1",
+   "sha256": "4a5e39399da9c3144ce288a95f05f5e1f0cede9cf759c5bcd7ab87ebbe40a5c9",
    "verdict": "CLEAR",
-   "reviewed": "2026-11-20",
+   "reviewed": "2026-11-21",
    "declared": "spec-fidelity"
   },
   "### T09 Approach (checklist part A)": {
-   "sha256": "293cacf820c5587d9aeb39528662412184369129433258ae5be17df927d96efb",
+   "sha256": "409e27dc50a41799134dbdafa64b29860eee9cdfc7efbc670fc890dde578fb71",
    "verdict": "CLEAR",
    "reviewed": "2026-11-21",
    "declared": "spec-fidelity"
@@ -284,7 +284,7 @@
    "declared": "spec-fidelity"
   },
   "### T53 Approach (checklist part A)": {
-   "sha256": "83ce4b1987edafbd1f1e92841286b8e7dc4b501a44a758de6032b73ffd9534ec",
+   "sha256": "b672dbef88f10d8aaf9e8cdca83382c741298a515ebc241a1c8f8a8a288355e7",
    "verdict": "CLEAR",
    "reviewed": "2026-11-21",
    "declared": "spec-fidelity"
@@ -297,6 +297,12 @@
   },
   "### T54 Approach (checklist part A)": {
    "sha256": "cfd1c978724fa989d0fe5a9f2a2a15dac04d2b8f8fad480672555e4631ea4930",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity"
+  },
+  "### T53 (T26's writer still filed lines by feature.json after it landed: 19 lines in 449's log and 2 in 385's to move, measured 2026-11-21 (`make events-refile DRY=1`), and 23 left in 385's log that no rule places, measured 2026-11-21 (the same dry run's last line))": {
+   "sha256": "c6d39a547d4f0602873653cb8614ff4c190a9b587746fc8c9867632f3b9eb1f6",
    "verdict": "CLEAR",
    "reviewed": "2026-11-21",
    "declared": "spec-fidelity"
@@ -6484,6 +6490,140 @@
      "why": "Its earlier text was a placeholder with no decision; removing it decides nothing and drops no requirement"
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-21",
+   "blocks": [
+    "### T53 (T26's writer still filed lines by feature.json after it landed: 19 lines in 449's log and 2 in 385's to move, measured 2026-11-21 (`make events-refile DRY=1`), and 23 left in 385's log that no rule places, measured 2026-11-21 (the same dry run's last line))",
+    "### T53 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T53-1 first-start by dispatch",
+     "summary": "A first SubagentStart with no meta file is filed by the Agent call that dispatched it (per-session side file <events dir>-dispatches/<sid>.jsonl), else by the session's unreturned calls of its type within WINDOW_S (300 s, GUESS), only where every candidate's brief agrees; a disagreement stays feature.json's, marked.",
+     "class": "within",
+     "why": "Booking each agent's time to the feature and task it served is the per-task breakdown the GM asked for (2026-11-19) and measurement work FR-013 counts as performance work; an agreed-only rule leaves the undecidable case marked rather than wrong. FIFO dropped on measured inversions is design, not scope."
+    },
+    {
+     "id": "T53-2 brief over bare F=",
+     "summary": "A command's F= with no T= of its own no longer overrides the brief's task; the brief wins unless the command carries its own T=, matching the re-file's BY BRIEF rule; a decision against T26's stated order.",
+     "class": "within",
+     "why": "T26's order was a plan decision, not the GM's words; reversing it so a builder's time is booked to the task its brief served implements the request's per-task breakdown more faithfully. Nothing asked is dropped."
+    },
+    {
+     "id": "T53-3 heredoc stripping",
+     "summary": "filed.rs and fields.rs read F= and T= from strip_heredocs of the command, never from text quoted inside a heredoc; a quoted F=\"451\" stays the command's own.",
+     "class": "within",
+     "why": "Fixes a measured wrong filing (lines booked to 385 from quoted test code); serves the per-task breakdown."
+    },
+    {
+     "id": "T53-4 stale start STALE_START_S",
+     "summary": "A task-only brief is not matched to a task start more than 72 h (GUESS) before the line; such a line falls to feature.json's feature, marked fallback.",
+     "class": "within",
+     "why": "Fixes the measured 23-line misfiling into 385's log; a marked fallback is kept apart by readers, so the outcome moves from wrong to unattributed. Knob labeled GUESS with its distribution measured."
+    },
+    {
+     "id": "T53-5 measure crate untouched",
+     "summary": "rust/gate/crates/measure (T09's) is not edited; the writer converges on the re-file's rule instead.",
+     "class": "within",
+     "why": "Coordination between two tasks of the same feature; no part of the request is narrowed by it."
+    },
+    {
+     "id": "T53-6 the 23 written lines deferred to T56",
+     "summary": "The 23 lines already written into 385's log are not moved here; filed as T56 (the re-file sharing the writer's stale-start rule), lands before T22, because the re-file lives in the crate T09 is editing.",
+     "class": "within",
+     "why": "The defect is not dropped from the feature: it is filed with an id, a reason and an order (FR-009's three parts), and the writer's fix that stops new such lines lands here. Sequencing a fix within the same feature to a filed task is not a narrowing of what the GM asked. Note: T56 must actually move them, since they are misbooked time."
+    },
+    {
+     "id": "T53-7 older past-72h briefs in closed features",
+     "summary": "444's T42 (313 h) and 417's T46 (618 h) task-only lines left as they are; not shown to be wrong; the re-file does not reach those closed features.",
+     "class": "within",
+     "why": "Not a shown wrong outcome in closed features, and the request's reproducibility target (SC-002) is for work after landing; leaving an unshown difference is within per the 2026-11-19 defect rule."
+    },
+    {
+     "id": "T53-8 nested task-only brief now fallback",
+     "summary": "A nested subagent whose brief names only a task and whose clone holds no fresh start of it is filed under feature.json's feature marked fallback, rather than by a stale start.",
+     "class": "within",
+     "why": "Moves such lines from booked-wrong to marked-and-kept-apart; nothing is booked wrong, and the common case (a fresh start, p90 1.8 h) still resolves to its task. An unattributed gap is not a wrong outcome under the defect rule."
+    },
+    {
+     "id": "T53-9 done measures and landing owe",
+     "summary": "Red-first tests per shape, 702 passing; the dry run still moves 21 until the landing's live binary updates; one real events-refile owed at landing at the coordinator's timing, then a dry run showing 0 to move but the 23.",
+     "class": "within",
+     "why": "Verification of the requested data's correctness; enforcement of what was asked."
+    },
+    {
+     "id": "T53-10 hook cost budget",
+     "summary": "One appended side-file line per Agent call half (about 150 bytes) and at most one 64 KiB tail read (TAIL, GUESS) at a meta-less first start; the hook never refuses or prints.",
+     "class": "within",
+     "why": "Design cost, not fidelity; keeps T26's constraints."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-21",
+   "blocks": [
+    "### T09 (FR-002, FR-005: a wait cannot be booked to the run behind it - the spec's User Story 1 scenario 2, research R2)",
+    "### T09 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T09-reader-pairing",
+     "summary": "A launch paired with its BgEnd, else the subagent transcript's queued_command row holding its tool-use-id, else open to the window's end; a wait booked to the runs its Stop names inflight, else to the launch whose span holds it (a Stop written before the field: the session's own runs/agents whose span holds the gap).",
+     "class": "within",
+     "why": "D3's reader half as written."
+    },
+    {
+     "id": "T09-turn-reader-every-log",
+     "summary": "Stop and UserPromptSubmit lines of the window's sessions read from every feature's log, kept once; a foreign Stop/prompt taken as 451's only when a line of the session's own lies between it and its paired line, else marked events::FOREIGN.",
+     "class": "within",
+     "why": "FR-002/D3 book a between-turns wait from the Stop that opened it; a misfiled Stop is otherwise invisible. Taking a foreign turn only when it holds 451's own lines keeps 449's turns out of 451's model. How the requested booking happens, not added scope."
+    },
+    {
+     "id": "T09-another-feature-column",
+     "summary": "A left-out foreign turn books from its prompt to the session's next line of 451's own to a new column 'another feature' (247 min in T08's window), the waits between 449's turns among it, moving no state of 451's walk.",
+     "class": "within",
+     "why": "D7 partitions the critical path by what the main session was DOING or waiting on; while it worked 449's turns it was doing another feature, so that time is not 451's model, idle or waits, and showing it as its own column keeps it visible rather than hiding it - 'where our time went on that task' answered without crediting 451 with 449's work. This is the cure of last round's NOT LEGITIMATE item, applied window-wide: the column also takes minutes that had sat in model, in 'none', and with a 451 agent in flight (the agent share fell 945 -> 864, none 147 -> 3); that is consistent, since the session in those minutes was on 449's turns, not waiting on 451's agent. A column beyond FR-005's list is within, as T08's plan review/other subagent/idle columns are: D7's partition needs a bucket for it."
+    },
+    {
+     "id": "T09-agent-lines-every-log",
+     "summary": "SubagentStart/SubagentStop lines read from every log as the turn lines are; an agent counts for the feature only where a line of its own log names it.",
+     "class": "within",
+     "why": "D3 books a wait to the agents inflight names and an agent's span needs its start and stop lines (9 of 115 had their start only in 449's log, measured); the own-log filter keeps 449's agents off 451's waits. Inside D3."
+    },
+    {
+     "id": "T09-several-in-flight-rank",
+     "summary": "With several runs in flight each second goes to one run by rank (named Bash column in PRECEDENCE order, agent, unnamed Bash 'background run', monitor; latest started breaks a tie); a Bash second splits into compile/gate as a call's does; an agent's second to its foreground-wait column; a second no run holds stays waiting on work; waits printed by holder.",
+     "class": "within",
+     "why": "D7's partition books each second once; D3 is silent on the split, so the order is design inside what was asked. The by-holder footnote serves the unexplained-waiting measure."
+    },
+    {
+     "id": "T09-fixture-moved",
+     "summary": "the_columns_book_make_runs_compile_and_until's no-inflight wait now books 5 min land and 7 min none instead of 12 min waiting on work.",
+     "class": "within",
+     "why": "The intended effect of FR-002 on a pinned fixture."
+    },
+    {
+     "id": "T09-perf-tag",
+     "summary": "Tagged [perf] under FR-013's measurement clause; the command 1.16-1.24 s -> 1.58-1.90 s wall, measured.",
+     "class": "within",
+     "why": "FR-013 counts where-time's readers as performance work for ordering. The slower command is a measured cost, not a wrong outcome."
+    },
+    {
+     "id": "T09-left-T10-model-minutes",
+     "summary": "The between-turn model minutes T10's line names are fixed here (model 342 -> 89); T10 keeps agent-minutes, tokens and rework, reading turn ends through events::turn_lines. The 253-vs-235.4 gap reconciled: 15.1 of the 18 min inside 449's own turns now booked another feature, 2.9 stated unreconciled, method given.",
+     "class": "within",
+     "why": "Pulling work forward into the walk that books both is inside FR-005; the reconciliation asked for last round is now in the block, and a stated 2.9 min residue is not a defect left. Text to correct (not a narrowing): this bullet still says the 253 moved 'to the waits', but by the section's own tables waits rose only ~866 -> ~994 and the rest went to 'another feature'; and the Measured footnote's 992 min of waits disagrees with its own parts (120+864+9+3 = 996) and with the wait columns (994, 996 with review) by more than rounding."
+    },
+    {
+     "id": "T09-left-idle-126-to-0",
+     "summary": "Idle 126 -> 0: the two stretches over an hour (08:32-09:35Z, 10:42-11:46Z) the session spent on 449's turns now book 'another feature' (123 min) and model (4 min), measured per stretch, with a red test (a_stop_in_another_features_log_opens_the_wait, red2/red3).",
+     "class": "within",
+     "why": "Last round's NOT LEGITIMATE item fixed in T09 as the cure prescribed: the session's time on another feature's turns is booked apart rather than to 451's runs or none, red first. Nothing is left, so no ruling is owed."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -9091,6 +9231,136 @@
      "class": "narrowing",
      "ruling": "LEGITIMATE",
      "why": "A known wrong outcome left standing (model minutes booked that are really the session waiting), so a narrowing. Legitimate because the fix needs a decision that belongs to the critical-path design T10 owns (how a turn spent on another feature is booked against this feature's wall clock - D7's critical path apart from the agents), the block states why, the task and the order (before T11) as FR-009 requires, the smaller wrongs reachable inside T08 were fixed here, and the requirement stays in the feature. Not verifiable from the bundle that T10's task line carries it (the caller says it does). Ordering seam for the caller: T09's wait booking keys on the Stop that opened a wait, and those are the very Stop lines this item says land in 449's log; T09 should read them across logs or know T10 will, else T09's numbers are built on the same missing lines."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T09": {
+   "section_sha256": "668f82c693bdd777046251c07f39dd1ccc364bbcdc232958651bc5686e5aea59",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T09-reader-pairing",
+     "summary": "A launch paired with its BgEnd, else the subagent transcript's queued_command row holding its tool-use-id, else open to the window's end; a wait booked to the runs its Stop names inflight, else to the launch whose span holds it (a Stop written before the field: the session's own runs/agents whose span holds the gap).",
+     "class": "within",
+     "why": "D3's reader half as written."
+    },
+    {
+     "id": "T09-turn-reader-every-log",
+     "summary": "Stop and UserPromptSubmit lines of the window's sessions read from every feature's log, kept once; a foreign Stop/prompt taken as 451's only when a line of the session's own lies between it and its paired line, else marked events::FOREIGN.",
+     "class": "within",
+     "why": "FR-002/D3 book a between-turns wait from the Stop that opened it; a misfiled Stop is otherwise invisible. Taking a foreign turn only when it holds 451's own lines keeps 449's turns out of 451's model. How the requested booking happens, not added scope."
+    },
+    {
+     "id": "T09-another-feature-column",
+     "summary": "A left-out foreign turn books from its prompt to the session's next line of 451's own to a new column 'another feature' (247 min in T08's window), the waits between 449's turns among it, moving no state of 451's walk.",
+     "class": "within",
+     "why": "D7 partitions the critical path by what the main session was DOING or waiting on; while it worked 449's turns it was doing another feature, so that time is not 451's model, idle or waits, and showing it as its own column keeps it visible rather than hiding it - 'where our time went on that task' answered without crediting 451 with 449's work. This is the cure of last round's NOT LEGITIMATE item, applied window-wide: the column also takes minutes that had sat in model, in 'none', and with a 451 agent in flight (the agent share fell 945 -> 864, none 147 -> 3); that is consistent, since the session in those minutes was on 449's turns, not waiting on 451's agent. A column beyond FR-005's list is within, as T08's plan review/other subagent/idle columns are: D7's partition needs a bucket for it."
+    },
+    {
+     "id": "T09-agent-lines-every-log",
+     "summary": "SubagentStart/SubagentStop lines read from every log as the turn lines are; an agent counts for the feature only where a line of its own log names it.",
+     "class": "within",
+     "why": "D3 books a wait to the agents inflight names and an agent's span needs its start and stop lines (9 of 115 had their start only in 449's log, measured); the own-log filter keeps 449's agents off 451's waits. Inside D3."
+    },
+    {
+     "id": "T09-several-in-flight-rank",
+     "summary": "With several runs in flight each second goes to one run by rank (named Bash column in PRECEDENCE order, agent, unnamed Bash 'background run', monitor; latest started breaks a tie); a Bash second splits into compile/gate as a call's does; an agent's second to its foreground-wait column; a second no run holds stays waiting on work; waits printed by holder.",
+     "class": "within",
+     "why": "D7's partition books each second once; D3 is silent on the split, so the order is design inside what was asked. The by-holder footnote serves the unexplained-waiting measure."
+    },
+    {
+     "id": "T09-fixture-moved",
+     "summary": "the_columns_book_make_runs_compile_and_until's no-inflight wait now books 5 min land and 7 min none instead of 12 min waiting on work.",
+     "class": "within",
+     "why": "The intended effect of FR-002 on a pinned fixture."
+    },
+    {
+     "id": "T09-perf-tag",
+     "summary": "Tagged [perf] under FR-013's measurement clause; the command 1.16-1.24 s -> 1.58-1.90 s wall, measured.",
+     "class": "within",
+     "why": "FR-013 counts where-time's readers as performance work for ordering. The slower command is a measured cost, not a wrong outcome."
+    },
+    {
+     "id": "T09-left-T10-model-minutes",
+     "summary": "The between-turn model minutes T10's line names are fixed here (model 342 -> 89); T10 keeps agent-minutes, tokens and rework, reading turn ends through events::turn_lines. The 253-vs-235.4 gap reconciled: 15.1 of the 18 min inside 449's own turns now booked another feature, 2.9 stated unreconciled, method given.",
+     "class": "within",
+     "why": "Pulling work forward into the walk that books both is inside FR-005; the reconciliation asked for last round is now in the block, and a stated 2.9 min residue is not a defect left. Text to correct (not a narrowing): this bullet still says the 253 moved 'to the waits', but by the section's own tables waits rose only ~866 -> ~994 and the rest went to 'another feature'; and the Measured footnote's 992 min of waits disagrees with its own parts (120+864+9+3 = 996) and with the wait columns (994, 996 with review) by more than rounding."
+    },
+    {
+     "id": "T09-left-idle-126-to-0",
+     "summary": "Idle 126 -> 0: the two stretches over an hour (08:32-09:35Z, 10:42-11:46Z) the session spent on 449's turns now book 'another feature' (123 min) and model (4 min), measured per stretch, with a red test (a_stop_in_another_features_log_opens_the_wait, red2/red3).",
+     "class": "within",
+     "why": "Last round's NOT LEGITIMATE item fixed in T09 as the cure prescribed: the session's time on another feature's turns is booked apart rather than to 451's runs or none, red first. Nothing is left, so no ruling is owed."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T53": {
+   "section_sha256": "03f374fb227c4d91e8ab3bbe34dc1b02ae2acefa4661dacfbbb9c3cac0929e6c",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T53-1 first-start by dispatch",
+     "summary": "A first SubagentStart with no meta file is filed by the Agent call that dispatched it (per-session side file <events dir>-dispatches/<sid>.jsonl), else by the session's unreturned calls of its type within WINDOW_S (300 s, GUESS), only where every candidate's brief agrees; a disagreement stays feature.json's, marked.",
+     "class": "within",
+     "why": "Booking each agent's time to the feature and task it served is the per-task breakdown the GM asked for (2026-11-19) and measurement work FR-013 counts as performance work; an agreed-only rule leaves the undecidable case marked rather than wrong. FIFO dropped on measured inversions is design, not scope."
+    },
+    {
+     "id": "T53-2 brief over bare F=",
+     "summary": "A command's F= with no T= of its own no longer overrides the brief's task; the brief wins unless the command carries its own T=, matching the re-file's BY BRIEF rule; a decision against T26's stated order.",
+     "class": "within",
+     "why": "T26's order was a plan decision, not the GM's words; reversing it so a builder's time is booked to the task its brief served implements the request's per-task breakdown more faithfully. Nothing asked is dropped."
+    },
+    {
+     "id": "T53-3 heredoc stripping",
+     "summary": "filed.rs and fields.rs read F= and T= from strip_heredocs of the command, never from text quoted inside a heredoc; a quoted F=\"451\" stays the command's own.",
+     "class": "within",
+     "why": "Fixes a measured wrong filing (lines booked to 385 from quoted test code); serves the per-task breakdown."
+    },
+    {
+     "id": "T53-4 stale start STALE_START_S",
+     "summary": "A task-only brief is not matched to a task start more than 72 h (GUESS) before the line; such a line falls to feature.json's feature, marked fallback.",
+     "class": "within",
+     "why": "Fixes the measured 23-line misfiling into 385's log; a marked fallback is kept apart by readers, so the outcome moves from wrong to unattributed. Knob labeled GUESS with its distribution measured."
+    },
+    {
+     "id": "T53-5 measure crate untouched",
+     "summary": "rust/gate/crates/measure (T09's) is not edited; the writer converges on the re-file's rule instead.",
+     "class": "within",
+     "why": "Coordination between two tasks of the same feature; no part of the request is narrowed by it."
+    },
+    {
+     "id": "T53-6 the 23 written lines deferred to T56",
+     "summary": "The 23 lines already written into 385's log are not moved here; filed as T56 (the re-file sharing the writer's stale-start rule), lands before T22, because the re-file lives in the crate T09 is editing.",
+     "class": "within",
+     "why": "The defect is not dropped from the feature: it is filed with an id, a reason and an order (FR-009's three parts), and the writer's fix that stops new such lines lands here. Sequencing a fix within the same feature to a filed task is not a narrowing of what the GM asked. Note: T56 must actually move them, since they are misbooked time."
+    },
+    {
+     "id": "T53-7 older past-72h briefs in closed features",
+     "summary": "444's T42 (313 h) and 417's T46 (618 h) task-only lines left as they are; not shown to be wrong; the re-file does not reach those closed features.",
+     "class": "within",
+     "why": "Not a shown wrong outcome in closed features, and the request's reproducibility target (SC-002) is for work after landing; leaving an unshown difference is within per the 2026-11-19 defect rule."
+    },
+    {
+     "id": "T53-8 nested task-only brief now fallback",
+     "summary": "A nested subagent whose brief names only a task and whose clone holds no fresh start of it is filed under feature.json's feature marked fallback, rather than by a stale start.",
+     "class": "within",
+     "why": "Moves such lines from booked-wrong to marked-and-kept-apart; nothing is booked wrong, and the common case (a fresh start, p90 1.8 h) still resolves to its task. An unattributed gap is not a wrong outcome under the defect rule."
+    },
+    {
+     "id": "T53-9 done measures and landing owe",
+     "summary": "Red-first tests per shape, 702 passing; the dry run still moves 21 until the landing's live binary updates; one real events-refile owed at landing at the coordinator's timing, then a dry run showing 0 to move but the 23.",
+     "class": "within",
+     "why": "Verification of the requested data's correctness; enforcement of what was asked."
+    },
+    {
+     "id": "T53-10 hook cost budget",
+     "summary": "One appended side-file line per Agent call half (about 150 bytes) and at most one 64 KiB tail read (TAIL, GUESS) at a meta-less first start; the hook never refuses or prints.",
+     "class": "within",
+     "why": "Design cost, not fidelity; keeps T26's constraints."
     }
    ],
    "verdict": "CLEAR"

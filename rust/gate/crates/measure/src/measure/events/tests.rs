@@ -288,3 +288,39 @@ fn the_new_line_kinds_are_set_aside_from_the_stream() {
     assert_eq!(evs(&got.aside), ["Phase", "Phase", "BgEnd"]);
     assert_eq!(s(&got.aside[0], "step"), "build");
 }
+
+/// T09's turn reader: every feature's log, each read once though two clones name one repository; a half line, another session's line, a
+/// tool line and a line outside the window left out; and `with_turns` keeps a line it already has once.
+#[test]
+fn the_turn_lines_come_from_every_features_log() {
+    let d = repo("measure-events-turns");
+    let clones = d.join("clones");
+    std::fs::create_dir_all(&clones).unwrap();
+    std::os::unix::fs::symlink(&*d, clones.join("same")).unwrap();
+    let logs = d.join(".git/l7r-events");
+    std::fs::create_dir_all(&logs).unwrap();
+    let line = |t: &str, sid: &str, ev: &str| json!({"t": t, "sid": sid, "ev": ev}).to_string();
+    let text = [
+        line("2026-11-01T08:00:00Z", "s", "Stop"),
+        line("2026-11-01T08:00:01Z", "t", "Stop"),
+        line("2026-11-01T08:00:02Z", "s", "SubagentStop"),
+        line("2026-11-01T07:00:00Z", "s", "UserPromptSubmit"),
+        line("2026-11-01T09:00:00Z", "s", "UserPromptSubmit"),
+        "{\"ev\": \"Stop\", half a line".to_owned(),
+    ]
+    .join("\n");
+    std::fs::write(logs.join("900-o.jsonl"), text).unwrap();
+    let got = turn_lines(
+        &d,
+        &clones,
+        &["s".to_owned()],
+        ("2026-11-01T07:30:00Z", "2026-11-01T08:30:00Z"),
+    );
+    assert_eq!(got.len(), 1);
+    let all = turn_lines(&d, &clones, &["s".to_owned()], ("", ""));
+    assert_eq!(all.len(), 3);
+    let stream = vec![ev(
+        &json!({"t": "2026-11-01T08:00:00.5Z", "sid": "s", "ev": "Stop"}),
+    )];
+    assert_eq!(with_turns(&stream, got).len(), 1);
+}

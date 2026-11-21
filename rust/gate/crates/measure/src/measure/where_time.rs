@@ -22,8 +22,8 @@ use l7r_guard::shared::pyjson::dumps;
 use serde_json::Value;
 
 use super::events::{
-    cmp_f, event_logs, fixed, get, git, hhmm, is, load_all, need, on, py_str, s, spec_dir, t_of,
-    ts, Event, Raised, Tally, IDLE_CAP_S,
+    cmp_f, event_logs, fixed, get, git, hhmm, is, lines_of, load_all, need, on, py_str, s,
+    spec_dir, t_of, ts, turn_lines, with_turns, Event, Raised, Tally, FOREIGN, IDLE_CAP_S,
 };
 use super::feature_report::tables::tool_cat;
 use super::reply;
@@ -31,12 +31,16 @@ use super::task_phases::{foreground_spans, in_span};
 use crate::Reply;
 
 const WAIT_WORK: &str = "waiting on work";
+/// An agent's span's lines, which a wait between turns is booked by (T09: read from every feature's log, `columns::flight`'s doc).
+const AGENT_LINES: [&str; 2] = ["SubagentStart", "SubagentStop"];
 const WAIT_GM: &str = "the GM";
 const GM_AWAY: &str = "the GM away";
 // The guard's table's buckets (`event_log_hooks::BUCKETS`, feature 451 D2) are columns of their own since T08: a Bash call with a `make`
 // is booked by it through that table (`columns::line_bucket`), so a past log's frozen `cat` re-books; `quick test`, `test file` and `gate`
 // are a past log's cats of a line with no `make`. `compile` is the phases a call holds (D4), split out of its gap.
-const BUCKET: [(&str, &str); 26] = [
+/// The column of the time the session spent in another feature's turn between this one's (T09's plan review, 2026-11-21).
+const ANOTHER: &str = "another feature";
+const BUCKET: [(&str, &str); 27] = [
     ("tests", "tests"),
     ("compile", "compile"),
     ("land", "land"),
@@ -60,6 +64,7 @@ const BUCKET: [(&str, &str); 26] = [
     ("waiting: a background run", "background run"),
     ("waiting: the GM", "the GM"),
     ("idle (over an hour)", "idle"),
+    (ANOTHER, ANOTHER),
     (WAIT_WORK, WAIT_WORK),
     (WAIT_GM, WAIT_GM),
     (GM_AWAY, GM_AWAY),
@@ -75,7 +80,7 @@ const RECORD: [&str; 9] = [
     "entry-drift",
     "research-pass",
 ];
-const COLUMNS: [&str; 20] = [
+const COLUMNS: [&str; 21] = [
     "model",
     "tests",
     "compile",
@@ -96,6 +101,7 @@ const COLUMNS: [&str; 20] = [
     WAIT_GM,
     GM_AWAY,
     "idle",
+    ANOTHER,
 ];
 
 /// The bucket a category goes to (`bucket`).
@@ -128,7 +134,7 @@ pub fn task_at(starts: &[(f64, String)], t: f64) -> String {
 
 /// The class of the between-turns window that opens at the `Stop` `evs[i]` (D111), by the prompt that ends it (`window_class`).
 fn window_class(evs: &[&Event], i: usize) -> Result<&'static str, Raised> {
-    for e in &evs[i + 1..] {
+    for e in evs[i + 1..].iter().filter(|e| !on(e, FOREIGN)) {
         if need(e, "ev")? == "UserPromptSubmit" {
             if !e.get("gm").is_none_or(super::events::truthy) {
                 return Ok(WAIT_WORK);
@@ -246,6 +252,8 @@ pub struct Tables {
     pub secs: Vec<(String, Tally<String>)>,
     /// Which rule booked each gap's seconds: `named`, `carried`, `the mark`.
     pub rules: Tally<String>,
+    /// The seconds of the waits between turns on work by what held them (T09): `shell`, `agent`, `monitor`, or `none`.
+    pub waits: Tally<String>,
 }
 
 fn add(rows: &mut Vec<(String, Tally<String>)>, task: &str, key: &str, by: f64) {
@@ -289,6 +297,7 @@ pub fn tables(
         agents: Vec::new(),
         secs: Vec::new(),
         rules: Tally::default(),
+        waits: Tally::default(),
     };
     let sorted = by_time(events)?;
     let mut order: Vec<String> = Vec::new();
@@ -305,20 +314,32 @@ pub fn tables(
     let inputs = inputs.filter(|i| !i.is_empty());
     for k in &order {
         let evs = &groups[k];
-        let (mut between, mut window, mut last) = (false, "", String::new());
+        // `opener`: the `Stop` that opened the wait between turns, whose `inflight` runs the wait is booked to (T09)
+        // `away`: inside another feature's turn
+        let (mut between, mut window, mut last, mut opener, mut away) =
+            (false, "", String::new(), None::<&Event>, false);
         // the main session's call or state a subagent's line falls inside (`booking`'s doc)
         let mut held: (String, Option<&columns::Split>) = ("thinking".to_owned(), None);
         for i in 0..evs.len().saturating_sub(1) {
             let (a, b) = (evs[i], evs[i + 1]);
             let ev = need(a, "ev")?;
             // a subagent's own call, or a subagent's start or stop: the session goes on with what it was doing (T08's model check)
-            let theirs =
-                (on(a, "tool") && on(a, "by")) || ev == "SubagentStart" || ev == "SubagentStop";
-            if ev == "Stop" && !between {
-                window = window_class(evs, i)?;
+            // a line of another feature's turn (`with_turns`) moves no state of this one's: it only opens or closes that turn (T09)
+            let foreign = on(a, FOREIGN);
+            let theirs = (on(a, "tool") && on(a, "by"))
+                || ev == "SubagentStart"
+                || ev == "SubagentStop"
+                || foreign;
+            if foreign {
+                // away from its prompt to the session's next line of this feature's: the waits between that feature's turns are its own
+                away = away || ev == "UserPromptSubmit";
+            } else if ev == "Stop" && !between {
+                (window, opener) = (window_class(evs, i)?, Some(a));
             }
-            between = (between || ev == "Stop") && ev != "UserPromptSubmit";
+            between = foreign && between
+                || !foreign && (between || ev == "Stop") && ev != "UserPromptSubmit";
             if !theirs {
+                away = false;
                 // the session's own line moves its state on even across a zero gap: a background agent's `PostToolUse` and its
                 // `SubagentStart` share a millisecond, and skipping first left the launch's category held for the thinking after it
                 held = if ev == "PreToolUse" {
@@ -334,7 +355,9 @@ pub fn tables(
             }
             let run = in_span(t0, &fg);
             let mut spans = None;
-            let cat = if between {
+            let cat = if away {
+                ANOTHER.to_owned()
+            } else if between {
                 window.to_owned()
             } else if gap > IDLE_CAP_S {
                 "idle (over an hour)".to_owned()
@@ -350,39 +373,55 @@ pub fn tables(
                 }
                 _ => String::new(),
             };
-            if !named.is_empty() {
-                last.clone_from(&named);
-            }
-            let rule = if !named.is_empty() {
-                "named"
-            } else if !last.is_empty() {
-                "carried"
-            } else {
-                "the mark"
-            };
+            let (rule, task) = carry(&named, &mut last, starts, t0);
             t.rules.add(&rule.to_owned(), gap);
-            let task = if last.is_empty() {
-                task_at(starts, t0)
-            } else {
-                last.clone()
-            };
             let (compile, gate) = spans.map_or((0.0, 0.0), |c| {
                 (
                     columns::overlap(&c.compile, t0, t0 + gap),
                     columns::overlap(&c.gate, t0, t0 + gap),
                 )
             });
-            if compile > 0.0 {
-                add(&mut t.time, &task, "compile", compile);
+            for (col, x) in [("compile", compile), ("gate", gate)] {
+                if x > 0.0 {
+                    add(&mut t.time, &task, col, x);
+                }
             }
-            if gate > 0.0 {
-                add(&mut t.time, &task, "gate", gate);
+            if between && window == WAIT_WORK && !away {
+                wait(&mut t, &task, booking.flight.book(k, opener, t0, t0 + gap));
+                continue;
             }
             add(&mut t.time, &task, bucket(&cat), gap - compile - gate);
         }
     }
     agents(&sorted, starts, &mut t)?;
     Ok(t)
+}
+
+/// The rule a gap's task is found by and the task: the one its call names, else the last named, else the mark at `t0` (T89, D110).
+fn carry(
+    named: &str,
+    last: &mut String,
+    starts: &[(f64, String)],
+    t0: f64,
+) -> (&'static str, String) {
+    if !named.is_empty() {
+        named.clone_into(last);
+        return ("named", last.clone());
+    }
+    if last.is_empty() {
+        ("the mark", task_at(starts, t0))
+    } else {
+        ("carried", last.clone())
+    }
+}
+
+/// A wait on work booked, each second to the run in flight that held it (T09, D3; `columns::flight`'s doc), and counted by what held it.
+fn wait(t: &mut Tables, task: &str, booked: Vec<(String, &'static str, f64)>) {
+    for (col, held, secs) in booked {
+        add(&mut t.time, task, &col, secs);
+        let held = if held.is_empty() { "none" } else { held };
+        t.waits.add(&held.to_owned(), secs);
+    }
 }
 
 /// Each subagent counted, with its minutes, by the task active at its launch.
@@ -418,6 +457,8 @@ pub struct Booking {
     pub splits: HashMap<String, columns::Split>,
     /// The Makefile's default goal.
     pub goal: String,
+    /// The window's background runs and agents, which a wait between turns is booked to (T09).
+    pub flight: columns::Flight,
 }
 
 /// A `PreToolUse` line's category: a Bash call with a `make` by the guard's table (`other` the line's `other tool`), else its `cat`.
@@ -644,15 +685,20 @@ fn booked(
     clones: &Path,
 ) -> Result<Booked, Raised> {
     let loaded = load_all(&event_logs(root, name, clones), &[], since, "")?;
-    let events: Vec<Event> = loaded
+    let mut sids: Vec<String> = loaded
         .stream
         .iter()
         .filter(|e| until.is_empty() || s(e, "t").as_str() <= until)
-        .cloned()
+        .map(|e| s(e, "sid"))
         .collect();
-    let mut sids: Vec<String> = events.iter().map(|e| s(e, "sid")).collect();
     sids.sort();
     sids.dedup();
+    // the sessions' turn lines from every feature's log, since they are filed in whichever was active (T09, `turn_lines`' doc)
+    let turns = turn_lines(root, clones, &sids, (since, until));
+    let events: Vec<Event> = with_turns(&loaded.stream, turns)
+        .into_iter()
+        .filter(|e| until.is_empty() || s(e, "t").as_str() <= until)
+        .collect();
     let end = if until.is_empty() {
         let mut last = 0.0_f64;
         for e in loaded.stream.iter().chain(&loaded.aside) {
@@ -665,17 +711,24 @@ fn booked(
     let makefile = std::fs::read_to_string(root.join("Makefile")).unwrap_or_default();
     let goal = columns::default_goal(&makefile);
     let queued = columns::enqueued(&sids, projects);
-    let stops = columns::stopped(&sids, projects);
+    let (stops, sub_queued) = columns::read_subagents(&sids, projects);
     let window = columns::Window {
         end,
         enqueued: &queued,
         stopped: &stops,
+        queued: &sub_queued,
         goal: &goal,
     };
     let runs = columns::runs(&loaded.stream, &loaded.aside, starts, &window)?;
     let booking = Booking {
         splits: columns::splits_by_id(&runs),
         goal: goal.clone(),
+        flight: columns::flight(
+            &runs,
+            &lines_of(root, clones, &sids, &AGENT_LINES),
+            &loaded.stream,
+            end,
+        )?,
     };
     Ok((events, sids, runs, booking))
 }
@@ -767,9 +820,15 @@ fn run(
         .map(|(r, v)| format!("{r} {} min", fixed(v / 60.0, 0)))
         .collect::<Vec<_>>()
         .join(", ");
+    let w = |k: &str| fixed(t.waits.get(&k.to_owned()) / 60.0, 0);
     Ok(Ok(format!(
-        "{}\n\nbooked by: {rules} (feature 385 T89: the task a call names, else the last named, else the mark)\n\n{}",
+        "{}\n\nbooked by: {rules} (feature 385 T89: the task a call names, else the last named, else the mark)\n\nthe waits between turns on \
+         work, by what held them: a background shell {} min, an agent {} min, a monitor alone {} min, none {} min (feature 451 T09)\n\n{}",
         render(&t, &order),
+        w("shell"),
+        w("agent"),
+        w("monitor"),
+        w("none"),
         columns::render(&runs, &order)
     )))
 }

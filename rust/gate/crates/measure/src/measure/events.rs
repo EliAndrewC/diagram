@@ -396,6 +396,131 @@ pub fn event_logs(root: &Path, name: &str, clones: &Path) -> Vec<PathBuf> {
     seen
 }
 
+/// The two turn lines: a turn opens at its prompt and closes at its `Stop`.
+pub const TURN: [&str; 2] = ["Stop", "UserPromptSubmit"];
+
+/// The turn lines ([`TURN`]) of the sessions `sids` in EVERY feature's log, this clone's and each clone's, inside [since, until]
+/// (feature 451 T09, plan D3; T10's reader too). WHY: a session's turn lines are filed in the log of whichever feature was active when
+/// they were written, its tool lines by the `F=` or task they name - so 451's walk missed the `Stop` lines its main session wrote into
+/// 449's log, booking the time between those turns as model and never opening the wait a background run held (T08's finding: 276 of
+/// the session's 800 turn lines since 2026-11-20T04:33Z were in 449's log, measured 2026-11-21 (a grep of each feature's log)). A line
+/// that is no JSON object is skipped: a log being written can end on half a line.
+#[must_use]
+pub fn turn_lines(
+    root: &Path,
+    clones: &Path,
+    sids: &[String],
+    (since, until): (&str, &str),
+) -> Vec<Event> {
+    let mut out = lines_of(root, clones, sids, &TURN);
+    out.retain(|e| {
+        let t = or_s(e, "t");
+        (since.is_empty() || t.as_str() >= since) && (until.is_empty() || t.as_str() <= until)
+    });
+    out
+}
+
+/// The lines of the kinds `kinds` of the sessions `sids` in every feature's log, each log read once ([`turn_lines`]' reader; T09 reads
+/// the agents' `SubagentStart` and `SubagentStop` lines with it, filed by the active feature as the turn lines are).
+#[must_use]
+pub fn lines_of(root: &Path, clones: &Path, sids: &[String], kinds: &[&str]) -> Vec<Event> {
+    let quoted: Vec<String> = kinds.iter().map(|k| format!("\"{k}\"")).collect();
+    let mut bases = vec![root.to_path_buf()];
+    bases.extend(names(clones).into_iter().map(|n| clones.join(n)));
+    let mut seen: std::collections::HashSet<PathBuf> = std::collections::HashSet::new();
+    let mut out = Vec::new();
+    for base in bases.iter().filter(|b| b.join(".git").exists()) {
+        let dir = common_git_dir(base).join("l7r-events");
+        for name in names(&dir) {
+            let p = dir.join(name);
+            // a log two clones share (one repository) read once; a name that no longer resolves reads as nothing below
+            if !seen.insert(std::fs::canonicalize(&p).unwrap_or_default()) {
+                continue;
+            }
+            let text = std::fs::read_to_string(&p).unwrap_or_default();
+            for l in text
+                .lines()
+                .filter(|l| quoted.iter().any(|q| l.contains(q.as_str())))
+            {
+                let Ok(Value::Object(e)) = serde_json::from_str::<Value>(l) else {
+                    continue;
+                };
+                if kinds.iter().any(|k| is(&e, "ev", k)) && sids.contains(&or_s(&e, "sid")) {
+                    out.push(e);
+                }
+            }
+        }
+    }
+    out
+}
+
+/// `stream` with the turn lines of `turns` it lacks (feature 451 T09), in time order: a line already in it (its session, kind and
+/// second) kept once, and a turn of ANOTHER feature's marked [`FOREIGN`] - a `Stop` is taken only when a line of the session's own (no turn line,
+/// no subagent's) lies between it and the prompt before it, a prompt only when one lies between it and the `Stop` after it, since a turn
+/// whose prompt and stop both sit in another feature's log, none of this feature's lines between, was the session working on that
+/// feature: taken unmarked, its span would be booked this feature's model.
+#[must_use]
+pub fn with_turns(stream: &[Event], turns: Vec<Event>) -> Vec<Event> {
+    let key = |e: &Event| {
+        (
+            or_s(e, "sid"),
+            or_s(e, "ev"),
+            head(&or_s(e, "t"), 19).to_owned(),
+        )
+    };
+    let have: std::collections::HashSet<_> = stream.iter().map(key).collect();
+    let mut all: Vec<(Event, bool)> = stream.iter().map(|e| (e.clone(), true)).collect();
+    all.extend(
+        turns
+            .into_iter()
+            .filter(|e| !have.contains(&key(e)))
+            .map(|e| (e, false)),
+    );
+    all.sort_by(|a, b| t_text(&a.0).cmp(t_text(&b.0)));
+    // the session's own work: a line of this feature's that is no turn line and no subagent's
+    let work = |(e, own): &(Event, bool)| {
+        *own && !TURN.iter().any(|k| is(e, "ev", k))
+            && !on(e, "by")
+            && !is(e, "ev", "SubagentStart")
+            && !is(e, "ev", "SubagentStop")
+    };
+    let mut keep = vec![true; all.len()];
+    for (i, (e, own)) in all.iter().enumerate() {
+        if *own {
+            continue;
+        }
+        let sid = or_s(e, "sid");
+        let mine = |(x, _): &&(Event, bool)| or_s(x, "sid") == sid;
+        keep[i] = if is(e, "ev", "Stop") {
+            all[..i]
+                .iter()
+                .rev()
+                .filter(mine)
+                .take_while(|x| !is(&x.0, "ev", "UserPromptSubmit"))
+                .any(work)
+        } else {
+            all[i + 1..]
+                .iter()
+                .filter(mine)
+                .take_while(|x| !is(&x.0, "ev", "Stop"))
+                .any(work)
+        };
+    }
+    all.into_iter()
+        .zip(keep)
+        .map(|((mut e, _), k)| {
+            if !k {
+                e.insert(FOREIGN.to_owned(), Value::Bool(true));
+            }
+            e
+        })
+        .collect()
+}
+
+/// The field [`with_turns`] marks a line of another feature's turn with: the walk books that turn's span `another feature` (T09's plan
+/// review, 2026-11-21 - left out, the session's two hours on 449's turns between 451's were booked 451's waits).
+pub const FOREIGN: &str = "another feature";
+
 /// An event's identity across its sources: by the call's id where it has one, its agent's id otherwise, else its session, kind and second.
 #[derive(Hash, PartialEq, Eq)]
 enum Key {

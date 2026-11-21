@@ -5,8 +5,10 @@
 //! `task-starts.jsonl`), and `make where-time` read both features wrong.
 //!
 //! THE CHAIN (first that says wins, each read cheap - no `tasks.md` is read on a hook):
-//! - the FEATURE: a make command's `F=`; else the dispatch's brief - the Agent call's own `description`, or a subagent's meta file's -
-//!   the feature it names ([`brief_feature`]); else the feature whose task-start in force names the line's task; else the
+//! - the FEATURE: a make command's `F=` (read outside its heredocs, 451 T53) where the command carries its own `T=` or no brief names a
+//!   feature; else the dispatch's brief - the Agent call's own `description`, or a subagent's meta file's, or for a first start, whose meta
+//!   file is not written yet, its dispatch's (`dispatches.rs`, 451 T53) - the feature it names ([`brief_feature`]); else the feature whose
+//!   task-start names the line's task, a start older than [`STALE_START_S`] naming none (451 T53); else the
 //!   FALLBACK, `feature_of` (the session's environment, then feature.json), and the line is marked `"fallback": true` unless the session's environment declared that feature;
 //! - the TASK: a `tick`, `task-start`, `decide` or `land` command's `T=` (`line`); else the `T<n>` the brief names; else, for an Agent call, its prompt's first line's (451 T07); else the task-start
 //!   in force for the line's feature (D2's last entry, now of the line's own feature, not of feature.json's).
@@ -25,7 +27,19 @@ use std::sync::LazyLock;
 use fancy_regex::Regex;
 use serde_json::Value;
 
-use super::{common_git_dir, feature_of, first_group, make_target, re, text_of, TASK_NAMED};
+use super::{
+    common_git_dir, dispatches, feature_of, first_group, log_path_in, make_target, re, text_of,
+    TASK_NAMED,
+};
+use crate::shared::shape::strip_heredocs;
+
+/// How old a task start may be and still name a brief's bare task's feature (451 T53). WHY: `T47 plan review`, from a 451 T47 builder
+/// in a clone that never started 451's T47, was filed by 385's T47 start of 2026-10-18 - 23 lines, three spec-fidelity rounds, in
+/// 385's log on 2026-11-21 (observed 2026-11-21, method: `make events-refile DRY=1`'s lines left, joined to their meta files). GUESS knob:
+/// 72 h. Of 571 task-only briefs in the clone's logs, the start their log's feature made of that task was p50 0.3 h, p90 1.8 h old,
+/// 14 past 24 h, the longest of them 34.1 h (444's T16), and then 313, 618 and 799 h (7 agents), measured 2026-11-21 (each such
+/// subagent's first line against the clone's `task-starts.jsonl`); the bound keeps the 34 h one and drops the three weeks-old ones.
+pub(super) const STALE_START_S: f64 = 72.0 * 3600.0;
 
 pattern!(FEATURE_ARG, r#"(?:^|\s)F=["']?([A-Za-z0-9][\w.-]*)"#);
 // a brief's feature: the number before its task (`451 T26: ...`, `spec-fidelity on 451 T03's section`) ...
@@ -98,26 +112,42 @@ impl Specs<'_> {
     }
 }
 
-/// The dispatch's brief: an Agent call's own `description`; else, for a subagent's line, its meta file's `description`
-/// (`<transcript_path without .jsonl>/subagents/agent-<agent_id>.meta.json`, research R2; one read a line). "" where none is readable.
-fn brief(payload: &Value) -> String {
+/// The dispatch's briefs: an Agent call's own `description`; else, for a subagent's line, its meta file's `description`
+/// (`<transcript_path without .jsonl>/subagents/agent-<agent_id>.meta.json`, research R2; one read a line); else, for a first start,
+/// whose meta file is not written yet, the dispatches it may have come from (`dispatches.rs`, 451 T53). None where nothing is readable;
+/// several only for a start, which the caller takes where they agree.
+fn briefs(payload: &Value, events: &Path, now: &str) -> Vec<String> {
     if text_of(payload.get("tool_name")) == "Agent" {
         let own = text_of(payload.get("tool_input").and_then(|t| t.get("description")));
         if !own.is_empty() {
-            return own;
+            return vec![own];
         }
     }
     let aid = text_of(payload.get("agent_id"));
     let transcript = text_of(payload.get("transcript_path"));
     if aid.is_empty() || transcript.is_empty() {
-        return String::new();
+        return Vec::new();
     }
     let session = transcript.strip_suffix(".jsonl").unwrap_or(&transcript);
-    std::fs::read_to_string(Path::new(session).join(format!("subagents/agent-{aid}.meta.json")))
-        .ok()
-        .and_then(|t| serde_json::from_str::<Value>(&t).ok())
-        .map(|m| text_of(m.get("description")))
-        .unwrap_or_default()
+    if let Some(own) =
+        std::fs::read_to_string(Path::new(session).join(format!("subagents/agent-{aid}.meta.json")))
+            .ok()
+            .and_then(|t| serde_json::from_str::<Value>(&t).ok())
+            .map(|m| text_of(m.get("description")))
+    {
+        return vec![own];
+    }
+    if text_of(payload.get("hook_event_name")) == "SubagentStart" {
+        return dispatches::briefs_at_start(events, payload, now);
+    }
+    Vec::new()
+}
+
+/// The one value every brief gives, None for none or a disagreement.
+fn agreed(each: impl Iterator<Item = Option<String>>) -> Option<String> {
+    let mut each = each.peekable();
+    let first = each.peek()?.clone();
+    each.all(|v| v == first).then_some(first).flatten()
 }
 
 /// An Agent call's prompt's first line, "" for any other call (a later line quotes other tasks).
@@ -133,38 +163,54 @@ fn prompt_head(payload: &Value) -> &str {
         .unwrap_or_default()
 }
 
-/// The clone's task starts, (feature, task) in file order; a line that does not parse is skipped, a missing file is none.
-fn starts(root: &Path) -> Vec<(String, String)> {
+/// One task start: its feature, its task, its epoch seconds where its `utc` parses.
+type Start = (String, String, Option<f64>);
+
+/// The clone's task starts in file order; a line that does not parse is skipped, a missing file is none.
+fn starts(root: &Path) -> Vec<Start> {
     std::fs::read_to_string(common_git_dir(root).join("task-starts.jsonl"))
         .unwrap_or_default()
         .lines()
         .filter_map(|l| serde_json::from_str::<Value>(l.trim()).ok())
-        .map(|e| (text_of(e.get("feature")), text_of(e.get("task"))))
-        .filter(|(f, t)| !f.is_empty() && !t.is_empty())
+        .map(|e| {
+            let at = crate::shared::iso::parse(&text_of(e.get("utc")));
+            (text_of(e.get("feature")), text_of(e.get("task")), at)
+        })
+        .filter(|(f, t, _)| !f.is_empty() && !t.is_empty())
         .collect()
 }
 
 /// The task in force for `feature`: its last start.
-fn in_force(starts: &[(String, String)], feature: &str) -> Option<String> {
+fn in_force(starts: &[Start], feature: &str) -> Option<String> {
     starts
         .iter()
         .rev()
-        .find(|(f, _)| f == feature)
-        .map(|(_, t)| t.clone())
+        .find(|(f, _, _)| f == feature)
+        .map(|(_, t, _)| t.clone())
 }
 
-/// The feature a task belongs to by the starts: the latest feature whose task in force it is, else the latest that started it at all.
-fn started(starts: &[(String, String)], task: &str) -> Option<String> {
+/// The feature a task belongs to by the starts: the latest feature whose task in force it is, else the latest that started it at all -
+/// a start more than [`STALE_START_S`] before `now` counting for neither (a start or a `now` with no time is never stale).
+fn started(starts: &[Start], task: &str, now: Option<f64>) -> Option<String> {
     let mut last: HashMap<&str, &str> = HashMap::new();
-    for (f, t) in starts {
+    for (f, t, _) in starts {
         last.insert(f, t);
     }
+    let fresh = |at: &Option<f64>| match (at, now) {
+        (Some(at), Some(now)) => now - at <= STALE_START_S,
+        _ => true,
+    };
     starts
         .iter()
         .rev()
-        .find(|(f, t)| t == task && last.get(f.as_str()) == Some(&task))
-        .or_else(|| starts.iter().rev().find(|(_, t)| t == task))
-        .map(|(f, _)| f.clone())
+        .find(|(f, t, at)| t == task && fresh(at) && last.get(f.as_str()) == Some(&task))
+        .or_else(|| {
+            starts
+                .iter()
+                .rev()
+                .find(|(_, t, at)| t == task && fresh(at))
+        })
+        .map(|(f, _, _)| f.clone())
 }
 
 /// Does the hook's environment name the session's feature (`feature_of`'s first two sources)?
@@ -176,21 +222,27 @@ fn declared(root: &Path, env: &dyn Fn(&str) -> Option<String>) -> bool {
         || (!named.is_empty() && root.join("specs").join(named).is_dir())
 }
 
-/// Where the payload's line is filed; `carried` is the task its own command names (`T=`), `named` the feature a gate tool names for its
-/// own line (451 T06: a landing's `F=`), read first, as a make command's `F=` is.
+/// Where the payload's line is filed at `now` (the line's `t`); `carried` is the task its own command names (`T=`), `named` the feature
+/// a gate tool names for its own line (451 T06: a landing's `F=`), read first, as a make command's `F=` is.
 pub(super) fn filed(
     payload: &Value,
     carried: Option<&str>,
     named: Option<&str>,
     root: &Path,
+    now: &str,
     env: &dyn Fn(&str) -> Option<String>,
 ) -> Filed {
     let specs = Specs {
         root,
         names: OnceCell::new(),
     };
+    // a heredoc's body is text written to a file, never the command's own words: `F=` quoted in a test file filed a 451 builder's
+    // `make rust-test` in 385's and 449's logs (451 T53; observed 2026-11-21, method: the dry run's moved lines' commands read from the
+    // subagents' transcripts)
     let command = if text_of(payload.get("tool_name")) == "Bash" {
-        text_of(payload.get("tool_input").and_then(|t| t.get("command")))
+        strip_heredocs(&text_of(
+            payload.get("tool_input").and_then(|t| t.get("command")),
+        ))
     } else {
         String::new()
     };
@@ -205,22 +257,32 @@ pub(super) fn filed(
                 first_group(&FEATURE_ARG, &command).and_then(|w| specs.named(&w))
             }
         });
-    let brief = brief(payload);
+    let events = log_path_in(root, "", env);
+    let briefs = briefs(payload, events.parent().unwrap_or(root), now);
     let starts = starts(root);
-    let briefed = || {
-        brief_feature(&brief, &|n| specs.named(n), &|f| {
-            starts.iter().any(|(s, _)| s == f)
+    let briefed = agreed(briefs.iter().map(|b| {
+        brief_feature(b, &|n| specs.named(n), &|f| {
+            starts.iter().any(|(s, _, _)| s == f)
         })
-    };
+    }));
     // an Agent call whose description names no task: its prompt's first line's (451 T07, plan D6) - the task only, the feature
     // still the description's, since a prompt's line is free text a bare number in it could misfile
     let task = carried
         .map(str::to_owned)
-        .or_else(|| first_group(&TASK_NAMED, &brief))
+        .or_else(|| agreed(briefs.iter().map(|b| first_group(&TASK_NAMED, b))))
         .or_else(|| first_group(&TASK_NAMED, prompt_head(payload)));
-    let feature = said
-        .or_else(briefed)
-        .or_else(|| task.as_deref().and_then(|t| started(&starts, t)));
+    // a builder's `make task-add F=449` is the builder's own time: its `F=` names where the call writes, not whose task it serves, and
+    // filed by it the line took 449 from the `F=` and T36 from 451's brief (451 T53). The brief wins unless the command carries its own
+    // `T=` - the re-file's rule (`make events-refile`, BY BRIEF), so the writer and the re-file agree
+    let feature = if carried.is_some() {
+        said.or(briefed)
+    } else {
+        briefed.or(said)
+    }
+    .or_else(|| {
+        task.as_deref()
+            .and_then(|t| started(&starts, t, crate::shared::iso::parse(now)))
+    });
     let (feature, fallback) = match feature {
         Some(f) => (f, false),
         // a session that declares its feature (a page session's `L7R_FEATURE_DIRECTORY`, a `SPECIFY_FEATURE` naming a feature) is

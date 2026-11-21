@@ -268,6 +268,46 @@ the three - `entry-gate.sh` by its two cases, the other two by their case groups
   booked to the runs its `Stop` line names `inflight`, else to the launch whose span holds it. Red first: a background `make land`, its
   `BgEnd` and the wait it caused booked to land; a subagent's run ended by its transcript's attachment; a run with no end booked open
   from its start, never zero.
+- **Built** (2026-11-21), in `rust/gate/crates/measure`:
+  - THE TURN READER, shared (`events::turn_lines`, `events::with_turns`; T10 folds the between-turn model minutes onto it): the
+    `Stop` and `UserPromptSubmit` lines of the window's sessions from EVERY feature's log, this clone's and each clone's, merged into the
+    walk, a line already there kept once. A turn of another feature's is left out: a foreign `Stop` is taken only when a line of the
+    session's own (no turn line, no subagent's) lies between it and the prompt before it, a foreign prompt only when one lies between it
+    and the `Stop` after it - taken unmarked, a 449 turn would be booked 451's model. Such a line is marked (`events::FOREIGN`), and the
+    walk books from its prompt to the session's next line of 451's own to a new column, `another feature` - the waits between 449's
+    turns among it - moving no state of 451's walk (T09's plan review, 2026-11-21: left out, the session's two hours on 449's turns were
+    booked 451's waits, the idle column 126 to 0). Of the 276 turn lines of 451's sessions in 449's log, 73 are taken and 203 left out as 449's own turns, measured 2026-11-21 (`/tmp/t09/scripts/foreign.py`, the rule in Python over both logs since 04:33Z).
+  - A SUBAGENT'S BACKGROUND RUN ENDS at its transcript's `queued_command` attachment naming its `<tool-use-id>` (`columns::read_subagents`,
+    one pass with `stopped`'s over the subagent transcripts), after the enqueue row and the `BgEnd` and before a `TaskStop`. The
+    attachment's time is the run's end: within 30 ms of the run's output file's last write on each of eight runs, measured 2026-11-21 (the session's subagent transcripts against the `tasks/*.output` mtimes).
+  - THE WAIT (`columns::flight`, `Flight::book`, called by `where_time::tables` on each gap of a between-turns window classed waiting on
+    work): the runs the opening `Stop` names `inflight` - a shell by its background task id, an agent by its id, each of its spans from a
+    `SubagentStart` to the first `SubagentStop` after it (else open to the window's end), a monitor over the whole wait - else, a `Stop` written before the field, the
+    session's own background runs and agents whose span holds the gap. SEVERAL IN FLIGHT, a rule D3 does not give (the wall clock
+    books each second once): each second goes to one run by rank, the latest started breaking a tie - a Bash run of a named column in
+    `columns::PRECEDENCE`'s order, then an agent, then a Bash run no column names (`background run`), then a monitor, named on nearly
+    every `Stop`. A Bash run's second splits into compile and a landing's gate as a call's does; an agent's goes to the column a
+    foreground wait on it has (`waiting: <kind>`: a builder is `other subagent`, `spec-fidelity` plan review). A second no run holds stays
+    waiting on work. The command prints the waits by what held them (shell, agent, monitor alone, none).
+  - THE AGENTS' LINES are misfiled as the turn lines are, so `columns::flight` reads them from every log too (`events::lines_of`, the
+    turn reader's): of the main session's since 04:33Z, 75 starts and 61 stops sat in 449's log, 9 of the 115 agents a `Stop` named in flight had their start only there, and 31 agents started more than once (resumed), measured 2026-11-21 (`/tmp/t09/scripts/agents.py` over both logs).
+    An agent is the feature's only where a line of its own log names it (its launch's `aid`, its calls' `by`): read from every log, 449's
+    agents were booked to 451's waits over two hours (08:32-09:35Z, 10:42-11:46Z), observed 2026-11-21, method: `/tmp/t09/scripts/idle.py` and `held.py`.
+  - A pinned fixture moved as intended: `where_time::tests::the_columns_book_make_runs_compile_and_until`'s wait from a `Stop` with no
+  `inflight` now books 5 min to the landing in flight and 7 min to none where it was 12 min waiting on work, measured 2026-11-21 (the test's fixture through the reader).
+- **Red first**: `columns::waits_tests` before the change, each case observed 2026-11-21, method: `make rust-test CRATE=rust/gate/crates/measure` before the change (`/tmp/t09/red0.log`, `red1.log`) -
+  the wait over a background `make land` booked 575 s waiting on work against 330 s land, 180 s gate, 60 s compile and 5 s waiting, measured 2026-11-21 (`red0.log`),
+  the wait over a builder 1,192 s waiting on work against 1,191 s other subagent, measured 2026-11-21 (`red0.log`),
+  a turn whose `Stop` sat only in feature 900's log 718 s model against 143 s, measured 2026-11-21 (`red0.log`),
+  and the builder's background `make quick` open to the window's end against its `queued_command` row (`red1.log`).
+- **Measured** (`make where-time F=451 SINCE=2026-11-20T04:33:00Z UNTIL=2026-11-21T03:07:24Z`, T08's window, against T08's table; docs 3, spec-kit step 4, tools 5 unchanged, claims check 0 to 1):
+
+| critical path (wall clock) | total | model | tests | compile | gate | land | review | background run | plan review | arbiter | other subagent | waiting on work | the GM | idle | another feature |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| T08, measured 2026-11-21 (the command before this task) | 1,354 | 342 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 866 | 6 | 126 | - |
+| T09, measured 2026-11-21 (the command after it) | 1,354 | 89 | 29 | 26 | 14 | 4 | 2 | 55 | 101 | 6 | 756 | 3 | 9 | 0 | 247 |
+
+  Another feature's turns took 247 min, and the waits between 451's turns on work 996 min (the sum of the four parts the command prints), all but 3 of them booked to a run: a background shell 120, an agent 864, a monitor alone 9, none 3, measured 2026-11-21 (the command's footnote). The two stretches over an hour that were idle split 123 min another feature and 4 min model, measured 2026-11-21 (the command over each stretch, `SINCE=`/`UNTIL=` 08:32:29-09:35:12Z and 10:42:37-11:46:12Z). Model fell 253 min (342 to 89) against the 235.4 T08's line names between turns by the transcript: 15.1 of the 18 min was time inside 449's own turns that the 451 walk had booked model and now books another feature - in-turn by the transcript, so not among T08's 235.4 - the rest unreconciled, measured 2026-11-21 (a Python pass over both logs: the 84 449 turns holding no 451 line, 24.9 min, against the old walk's in-turn gaps under an hour). The command took 1.58-1.90 s wall with its binary built, every log now read twice more (the turn and agent lines) and another builder's cargo run beside it, against T08's 1.16-1.24 s, measured 2026-11-21 (`/usr/bin/time` over the command, three runs).
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
@@ -288,7 +328,14 @@ the three - `entry-gate.sh` by its two cases, the other two by their case groups
 11. **Before fitting things into room.** n/a.
 12. **Before any fix.** n/a.
 
-**Found and left?** none
+**Found and left?**
+- The between-turn model minutes T10's line names: fixed here, since one walk books both - the turn lines merged for the waits moved
+  253 of the window's 342 model minutes out of the model column, to the waits and to the another-feature column (the 15.1 minutes inside 449's own turns among the latter), measured 2026-11-21 (the command's two tables, before and after); T10 keeps its
+  agent-minutes, tokens and rework, and reads the turn ends through `events::turn_lines`.
+- The idle column fell from 126 to 0, its two gaps over an hour (08:32-09:35Z, 10:42-11:46Z) the session working 449's short turns
+  between 451's, booked 451's waits: fixed here - another feature's turns book `another feature` (above), observed 2026-11-21,
+  method: `/tmp/t09/scripts/idle.py` over both logs, and the red `columns::waits_tests::a_stop_in_another_features_log_opens_the_wait`
+  (`/tmp/t09/red2.log`: the foreign turn's 600 s booked the GM, and `red3.log`, the turn booked: the 600 s after its stop still the GM, measured 2026-11-21 (`make rust-test CRATE=rust/gate/crates/measure` before each change)).
 
 **Performance work?** yes - a `[perf]` task under FR-013's measurement clause (the GM 2026-11-20): it measures where the time goes; no engine timing, so no checklist
 
@@ -796,14 +843,66 @@ The T02 class, by kind (the grep's hits, each read):
 **Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
 
 
-### T53 (<why: the finding or measurement that files it>)
+### T53 (T26's writer still filed lines by feature.json after it landed: 19 lines in 449's log and 2 in 385's to move, measured 2026-11-21 (`make events-refile DRY=1`), and 23 left in 385's log that no rule places, measured 2026-11-21 (the same dry run's last line))
+
+- **Approach**: four shapes, each read from the lines themselves, the writer fixed for each, red first:
+  - A FIRST `SubagentStart` (15 of the 449 log's 19): the hook fires before the agent's meta file is written, so T26's brief read found none and the line took feature.json's feature, marked `fallback`.
+    - every one of the 15 is an agent's first start and every one is marked `fallback`, measured 2026-11-21 (the 449 log's `SubagentStart` lines joined by `aid` to the subagents' meta files).
+    - a running agent's meta file was born 24 ms and 29 ms after its start's line, measured 2026-11-21 (`stat %w` of two running agents' meta files against their `SubagentStart` `t`).
+    - the fix, new `rust/guard/src/guards/event_log_hooks/dispatches.rs`: the writer keeps each Agent call's two halves on a per-session side file, `<events dir>-dispatches/<sid>.jsonl`, outside the directory every reader lists. A start with no meta file is filed by the call whose launch returned its agent, else by the session's unreturned calls of its type (or the review-round twin, `spec-fidelity` routed to `spec-fidelity-verify`) in the `WINDOW_S` before it (300 s, a GUESS knob, item 10), taken only where every candidate's brief names the same feature (and the same task for the task). A disagreement stays feature.json's, marked.
+    - the rule replayed over the clone's 4,527 first starts, each against every Agent `PreToolUse` of its session: 0 to a wrong feature and 0 disagreeing at windows of 2, 5, 30 and 300 s, measured 2026-11-21 (the logs' Agent `PreToolUse`/`PostToolUse` lines and first starts, the meta files' `toolUseId` the truth).
+    - the same over the 156 first starts marked `fallback`: all 156 resolved right, measured 2026-11-21 (the same replay).
+    - starts with no candidate: 910 at 2 s, 284 at 300 s, measured 2026-11-21 (the same replay).
+    - a FIFO pairing was priced and dropped: 11 same-type start-order inversions, measured 2026-11-21 (the first starts joined to their calls through the meta files' `toolUseId`, pairs started out of their calls' order).
+  - A builder's `F=` with no `T=` of its own (2 of the 449 log's 19): a 451 T36 builder's `make task-add F=449` took 449 from the `F=` and T36 from 451's brief. Now the brief wins unless the command carries its own `T=` (a `tick`, `task-start`, `decide` or `land`), which is the re-file's BY BRIEF rule, so the writer and the re-file agree. This is a decision against T26's stated order (`F=` first), taken because the time served the brief's task and because `rust/gate/crates/measure` is T09's.
+  - An `F=` or `T=` inside a heredoc (2 of the 449 log's 19, the 385 log's 2): a 451 T15 builder's test file quoted `make decide F=449 T=T121`, measured 2026-11-21 (the moved lines' commands read from the subagents' transcripts); a 451 T28 builder's heredoc of test code before its `make rust-test` quoted, in order, `make task-start F=385 T=T03`, `make task-start F=385 T=T02`, `make gm-reviewed F=386` and `make task-start F=386 T=T04` (no `F=` outside the heredoc), so the call's two lines took the first, 385, with T28 from the brief, measured 2026-11-21 (agent ac1aa778c0f1068d8's 2026-11-20T13:17:00Z command read from its transcript, its two lines from 385's log). `filed.rs` and `fields.rs` now read `F=` and `T=` from `shared::shape::strip_heredocs` of the command, never from `strip_quotes` (a quoted `F="451"` stays the command's own; pinned).
+  - A task-only brief filed by a weeks-old start (the 23 lines left): `T47 plan review`, from a 451 T47 builder in a clone that never started 451's T47, was filed by 385's T47 start of 2026-10-18, three spec-fidelity rounds, 23 lines, in 385's log on 2026-11-21, measured 2026-11-21 (the dry run's lines left, joined to their meta files and `task-starts.jsonl`). `started` now ignores a start more than `STALE_START_S` (72 h, a GUESS knob, item 10) before the line, so such a line falls to feature.json's feature, marked.
+  - Red first, `rust/guard/src/guards/event_log_hooks/tests/misfiled.rs`, one case per shape:
+    - before: 697 passed and the 4 new cases failed, each on its live shape: the start `("449-b", "T236", true)`, the task-add `("449-b", "T26", false)`, the heredoc `("451-a", "T26", false)`, the stale start `("450-c", "T47", false)`, measured 2026-11-21 (`make rust-test CRATE=rust/guard`).
+    - after: 702 passed, 0 failed (the start case split in two for clippy's function length, plus the side file's own edge case), measured 2026-11-21 (`make rust-test CRATE=rust/guard`).
+    - lint, format and cover clean on `rust/guard`, every new line covered, measured 2026-11-21 (`l7r-gate.sh rust lint|format|cover --crate rust/guard`).
+  - Replayed through the clone's hook shim (`tests/hooks/event-log-hooks.sh`, `L7R_EVENTS_DIR` on scratch, feature.json naming 451): a `449 T242` dispatch's start with no meta file filed in 449's log under T242, not marked; a 451 T36 builder's `make task-add F=449` in 451's under T36; a main-session heredoc quoting `F=385` in 451's, marked `fallback`, observed 2026-11-21, method: four payloads piped to the shim, the scratch logs read.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+| the line's feature at a first start, a brief over a bare `F=`, no word read from a heredoc, no stale start | n/a - no map | n/a | none | n/a |
+
+### T53 Approach (checklist part A)
+
+1. **The goal, in the world.** No map changes. Every event-log line, a subagent's first start included, is in the log of the feature whose task it served, so `make where-time` and `make feature-report` book each feature's own time, and `make events-refile DRY=1` finds nothing new to move.
+2. **The constraints.** T53's line: measure first whether the meta file is readable when `SubagentStart` fires, then fix a wrong filing red first on that shape, then run `make events-refile` once more, and name T26's and T04's files in the two indexes. T26's chain stays otherwise as filed: no `tasks.md` read on a hook; the hook never refuses, never prints, and stays cheap. `rust/gate/crates/measure` is T09's and is not touched, so the writer converges on the re-file's rule.
+3. **Where each comes from.** O: the dry run's 21 moves and 23 left; O: the meta files' birth times; O: the subagents' transcripts and meta files; O: the replay over 4,527 first starts (the Approach's figures).
+4. **Do they describe the world here?** Every figure is from this clone's logs, its subagents' meta files and its `task-starts.jsonl` (the Approach).
+5. **The order.** After T26 and T36; before T22.
+6. **The exits.** Green: the red cases, `make rust-test CRATE=rust/guard`, lint, format and cover on `rust/guard`, `make quick`, `make static`, `make hooks-test`. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** One. The brief's feature at a first start is not on disk when the hook runs, so it is read from the call that dispatched it; pairing by order alone was wrong on 11 same-type inversions, measured 2026-11-21 (the `toolUseId` join, the Approach), so the rule takes only an agreed answer.
+8. **The budget.** One landing. The hook's new cost is one appended line per Agent call half, 95 bytes with a short call id and brief, measured 2026-11-21 (the scratch side file of the shim replay), so some 150 with a real id and brief, and at a first start with no meta file one read of at most 64 KiB (`TAIL`, a GUESS knob beside it).
+9. **Done, measured.**
+   - the red cases green, 702 passed, measured 2026-11-21 (`make rust-test CRATE=rust/guard`).
+   - the re-file's dry run after the fix still moves 21 lines (19 from 449's log, 2 from 385's, all by brief) and leaves 23, measured 2026-11-21 (`make events-refile DRY=1`). That is expected: the live hooks run the mirror's guard binary until T53 lands, and the lines are already written.
+   - owed at the landing, at the coordinator's timing (T09 reads these logs): one real `make events-refile`, then a dry run showing 0 to move but the 23 lines left in 385's log, measured 2026-11-21 (`make events-refile DRY=1`, its last line); those move under T56, once the re-file shares the writer's stale-start rule (Found and left).
+10. **Before moving a constant.** Two new knobs, each labeled GUESS beside it:
+    - `WINDOW_S` (`dispatches.rs`), 300 s, GUESS: 0 wrong and 0 disagreeing at every window from 2 s to 300 s over 4,527 first starts, measured 2026-11-21 (the replay above); the wider window leaves 284 starts with no candidate against 910 at 2 s, measured 2026-11-21 (the same replay), so 300 s stays.
+    - `STALE_START_S` (`filed.rs`), 72 h, GUESS: of 571 task-only briefs, the start their log's feature made of that task was p50 0.3 h and p90 1.8 h old, the longest plausible one 34.1 h (444's T16), then 313, 618 and 799 h, measured 2026-11-21 (each such subagent's first line against `task-starts.jsonl`).
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** A reader of `make where-time F=451` or `F=449` sees each builder's and review's start booked to its own feature and task, not to whichever feature feature.json named. Nothing on a map.
+
+**Found and left?**
+- The 23 lines in 385's log (451 T47's three spec-fidelity rounds), measured 2026-11-21 (`make events-refile DRY=1`): no re-file rule places them. The writer no longer files such lines (the stale-start case), but the 23 already written stay. Not fixed here: the re-file, in `rust/gate/crates/measure` that T09 is editing, still reads the old start rule, so no run of it moves them. Filed as T56; lands before T22.
+- Older task-only briefs filed by starts past 72 h: 444's T42 (313 h) and 417's T46 (618 h), measured 2026-11-21 (item 10's count). Not a defect: whether these closed features' lines are wrong is unshown, and the re-file does not reach them.
+- A nested subagent whose brief names only a task (a builder's own spec-fidelity) is now filed under feature.json's feature, marked `fallback`, where its dispatcher's brief names the feature. Not a defect: readers keep a marked line apart, so nothing is booked wrong.
+
+**Performance work?** yes. This is a `[perf]` task (451 FR-013: it makes the builders' loop faster by booking each feature's time where `where-time` reads it). It is not an engine-speed task, so the checklist does not apply.
+
+
+### T54 (<why: the finding or measurement that files it>)
 
 - **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
 
-### T53 Approach (checklist part A)
+### T54 Approach (checklist part A)
 
 1. **The goal, in the world.** <the place as it should be>
 2. **The constraints.** <the FRs, decisions and pages it holds to>
@@ -823,14 +922,95 @@ The T02 class, by kind (the grep's hits, each read):
 **Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
 
 
-### T54 (<why: the finding or measurement that files it>)
+### T55 (<why: the finding or measurement that files it>)
 
 - **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
 
-### T54 Approach (checklist part A)
+### T55 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+
+### T56 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T56 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+
+### T57 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T57 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+
+### T58 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T58 Approach (checklist part A)
 
 1. **The goal, in the world.** <the place as it should be>
 2. **The constraints.** <the FRs, decisions and pages it holds to>

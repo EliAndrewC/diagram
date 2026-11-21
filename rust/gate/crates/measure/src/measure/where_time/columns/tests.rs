@@ -147,6 +147,7 @@ fn a_phase_goes_to_its_tasks_run_then_the_latest() {
     let no_stops = HashMap::new();
     let w = Window {
         stopped: &no_stops,
+        queued: &HashMap::new(),
         end: ts(&at("09:00:00")).unwrap(),
         enqueued: &none,
         goal: "",
@@ -256,6 +257,7 @@ fn a_landing_is_booked_land_and_its_gate_split_out() {
     let (none, no_stops) = (HashMap::new(), HashMap::new());
     let w = Window {
         stopped: &no_stops,
+        queued: &HashMap::new(),
         end: ts(&at("09:00:00")).unwrap(),
         enqueued: &none,
         goal: "done",

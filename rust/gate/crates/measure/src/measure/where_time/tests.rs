@@ -603,7 +603,10 @@ fn the_columns_book_make_runs_compile_and_until() {
     let out = &r.stdout;
     for want in [
         "| task | total | model | tests | compile | gate | land | review | docs | spec-kit step | tools | background run |",
-        "| T05 | 20 | 1 | 2 | 4 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 12 | 0 | 0 | 0 |",
+        // the wait from the 08:06:40 `Stop` (no `inflight`: before the field) booked to the session's own runs in flight (T09): the
+        // landing to its `BgEnd` at 08:12, outranking the `rust-test` beside it, the rest to the last line (08:19) held by none
+        "| T05 | 20 | 1 | 2 | 4 | 0 | 5 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 7 | 0 | 0 | 0 |",
+        "a background shell 5 min, an agent 0 min, a monitor alone 0 min, none 7 min (feature 451 T09)",
         "| task | runs | minutes | tests | compile | gate | land | review | docs | spec-kit step | other | in the background |",
         "| T05 | 3 | 14.5 | 4.8 | 4.0 | 0.0 | 5.7 | 0.0 | 0.0 | 0.0 | 0.0 | 8.5 |",
         "| T06 | 7 | 16.5 | 15.0 | 1.0 | 0.2 | 0.0 | 0.3 | 0.0 | 0.0 | 0.0 | 13.5 |",
@@ -640,6 +643,7 @@ fn a_landing_call_books_land_and_splits_its_gate() {
     let (none, no_stops) = (HashMap::new(), HashMap::new());
     let window = columns::Window {
         stopped: &no_stops,
+        queued: &HashMap::new(),
         end: ts(&at("09:00:00")).unwrap(),
         enqueued: &none,
         goal: "",
@@ -648,6 +652,7 @@ fn a_landing_call_books_land_and_splits_its_gate() {
     let booking = Booking {
         splits: columns::splits_by_id(&ran),
         goal: String::new(),
+        ..Booking::default()
     };
     let tabs = tables(&lines, &[], None, "451", &booking).unwrap();
     let c = row(&tabs.time, "-").unwrap();

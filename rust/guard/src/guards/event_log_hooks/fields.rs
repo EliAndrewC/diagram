@@ -41,7 +41,10 @@ pub(super) fn tool_fields(
         }
         if !target.is_empty() {
             if ["tick", "task-start", "decide", "land"].contains(&target.as_str()) {
-                if let Some(task) = first_group(&TASK, &command) {
+                // a `T=` inside a heredoc's body is text written to a file, not this call's (451 T53)
+                if let Some(task) =
+                    first_group(&TASK, &crate::shared::shape::strip_heredocs(&command))
+                {
                     out.insert("make".into(), Value::from(target.clone()));
                     out.insert("task".into(), Value::from(task));
                     return;
