@@ -313,35 +313,17 @@
    "reviewed": "2026-11-21",
    "declared": "round-arbiter"
   },
-  "### T84 (<why: the finding or measurement that files it>)": {
-   "sha256": "4b37f97e9a5b28c11e6a3df3360d1275fffda555233aea480f7eede0dc6d2da3",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-21",
-   "declared": "round-arbiter"
-  },
   "### T84 Approach (checklist part A)": {
    "sha256": "ea6a6f5da153576e15a4907fdda1bc65a66986243b01b640bce1633871f5d739",
    "verdict": "CLEAR",
    "reviewed": "2026-11-21",
    "declared": "spec-fidelity"
   },
-  "### T85 (<why: the finding or measurement that files it>)": {
-   "sha256": "c7f853f11d9f08e9752ec4b0d48cdc0b6e83b9361ee9e433d33880caf9ef9ecf",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-21",
-   "declared": "round-arbiter"
-  },
   "### T85 Approach (checklist part A)": {
    "sha256": "349ddd2c28994fa97a028ab65a060da5df6e8491fbef82cb815caa5d35f136c4",
    "verdict": "CLEAR",
    "reviewed": "2026-11-21",
    "declared": "spec-fidelity"
-  },
-  "### T86 (<why: the finding or measurement that files it>)": {
-   "sha256": "75269bfec00092a62854f27465d4a6eb9b26e10bae57e0c85ad6ac86de557616",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-21",
-   "declared": "round-arbiter"
   },
   "### T86 Approach (checklist part A)": {
    "sha256": "955e0727c44617fe4d08fc3a4bb56e42933620674d824f127ec032ddca8e76d4",
@@ -423,6 +405,54 @@
   },
   "### T84 (the finding as filed, measured 2026-11-21 over the night's 29 tasks: 43 builders, about 16 builder reports asking the session to file a task, and every MODE 4 plan review left to it; four causes, each measured in item 4: two concurrent `make task-add` runs could lose both filings, nothing held a builder's stop, only the briefs kept a builder from its own review, and the tick's and the push's plan gate judged the whole feature, so every landing took `PLAN_REVIEW_OK`)": {
    "sha256": "d59818a1d51b3a37e94bb40c74b67c78e1a6ee624a225b9315d307115030d9b1",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity"
+  },
+  "### T92 (<why: the finding or measurement that files it>)": {
+   "sha256": "27d67030b38868184fd8dc5499964ba02124b7c63e5190517e388ee6b495751e",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity"
+  },
+  "### T92 Approach (checklist part A)": {
+   "sha256": "133f20b68a5e931e0d1712e0bd701150e8b5f5e4b70d6f183f2953a76e3b8da7",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity"
+  },
+  "### T93 (<why: the finding or measurement that files it>)": {
+   "sha256": "70510f9e8f6c8309551e0daa10deb4a081cf7ffbeeedbbaa77e38cbc3834b7ab",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity"
+  },
+  "### T93 Approach (checklist part A)": {
+   "sha256": "dbfc55e8377747e605a5fd1a6a3dad063f9ac0aeb608e8c955cd57552c7474bf",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity"
+  },
+  "### T94 (the land crate's tests read the session's `PLAN_REVIEW_OK` and write the real guard log, measured 2026-11-21 by T84 (the guard log's `plan-gate` rows naming the land tests' fixture feature `449-x`: 20-odd `plan-review-stale 449-x` blocks and `plan-review-ok 449-x: 451 T41 and T43 reviewed CLEAR ...`, the session's own escape text, taken by a fixture's tick during a landing's `make done`))": {
+   "sha256": "92b236a2498657aa866abfc6f28b8c1cd6754d436376f2043df90d1b1735d907",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity"
+  },
+  "### T94 Approach (checklist part A)": {
+   "sha256": "b4000aa2eb40597b3a6fb3129a63ee4bbc3517f83c55e50cd15e13e7e22d009b",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity"
+  },
+  "### T95 (<why: the finding or measurement that files it>)": {
+   "sha256": "2a42b059d5fb1226ab70ab321b0fab9e98ce423f7064b9cc3d7deabad06f3c98",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity"
+  },
+  "### T95 Approach (checklist part A)": {
+   "sha256": "71d093218dc60bf00f90081098a5854e14553e6bce593ae7dc3e036dc51d7a5b",
    "verdict": "CLEAR",
    "reviewed": "2026-11-21",
    "declared": "spec-fidelity"
@@ -9033,6 +9063,43 @@
      "summary": "task_add/quick.rs's lines() drops any quick recipe line opening printf; today no check opens so.",
      "class": "within",
      "why": "Measured against the Makefile: no check is skipped, so nothing goes wrong. Under constitution XIV this is a difference, not a defect, and needs no ruling."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-21",
+   "blocks": [
+    "### T92 (<why: the finding or measurement that files it>)",
+    "### T92 Approach (checklist part A)",
+    "### T93 (<why: the finding or measurement that files it>)",
+    "### T93 Approach (checklist part A)",
+    "### T94 (the land crate's tests read the session's `PLAN_REVIEW_OK` and write the real guard log, measured 2026-11-21 by T84 (the guard log's `plan-gate` rows naming the land tests' fixture feature `449-x`: 20-odd `plan-review-stale 449-x` blocks and `plan-review-ok 449-x: 451 T41 and T43 reviewed CLEAR ...`, the session's own escape text, taken by a fixture's tick during a landing's `make done`))",
+    "### T94 Approach (checklist part A)",
+    "### T95 (<why: the finding or measurement that files it>)",
+    "### T95 Approach (checklist part A)",
+    "(removed) ### T84 (<why: the finding or measurement that files it>)",
+    "(removed) ### T85 (<why: the finding or measurement that files it>)",
+    "(removed) ### T86 (<why: the finding or measurement that files it>)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T94 filing",
+     "summary": "Files a task for a defect T84's builder measured: the land crate's tests read the session's PLAN_REVIEW_OK from the environment and write the real guard log (plan-gate rows naming fixture feature 449-x, the session's escape text taken by a fixture's tick).",
+     "class": "within",
+     "why": "A wrong outcome in this feature's own tooling (tests leak the real environment and pollute the real guard log that FR-012's recorded escapes and FR-005/SC-006's readers depend on); filing it to be fixed is fix-as-we-go, not new scope. The section is otherwise an unfilled template and decides no approach, so nothing is narrowed."
+    },
+    {
+     "id": "T92, T93, T95 sections",
+     "summary": "Unfilled task-section templates: placeholder heading, approach, checklist and found-and-left text only.",
+     "class": "within",
+     "why": "They make no decision; the template restates FR-009/D15's deferral form and FR-013's performance tagging, which the spec already settles. Their content is owed at make decide, when each is filled."
+    },
+    {
+     "id": "T84, T85, T86 removed",
+     "summary": "Three unfilled template blocks (each CLEAR when last judged) removed from plan.md.",
+     "class": "within",
+     "why": "The earlier text was a bare template that decided nothing, so removing it drops no decision and narrows nothing the request or spec asked for."
     }
    ]
   }
