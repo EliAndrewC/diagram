@@ -1342,6 +1342,134 @@ docs/performance-checklist.md answers.
 engine speed, so no checklist.
 
 
+### T103 (T97's Found and left: shape's `strip_heredocs` and `strip_quotes` searched ungated, so the guards that strip a command built shape's patterns on every Bash call; measured 2026-11-21 (`/tmp/t103/scripts/run.py`, T93's 9,646 commands each a hook process of its own through an instrumented `l7r-guard`): every Bash start built 5 of shape's 6 patterns at the median (p90 5), every Bash end 1)
+
+- **Approach**: shape reads a command's payload without building a pattern the command's text could not match:
+  - WHO STRIPS, measured 2026-11-21 (`/tmp/t103/scripts/per_guard.sh`, each of the 48 guards alone, `--only <guard> PreToolUse`, over
+    T97's 600-command sample, seed 93, through the probe binary - a copy of the snapshot whose `regex::build` logs each build, shape's
+    tagged apart from `wait.rs`' and `house_style_hooks`' patterns of the same text - each command its own process in a scratch
+    world, `/tmp/t103/per-guard-before-summary.txt`): `no_poll_hooks` and `make_only_hooks` built `HEREDOC` and `QUOTED` on 100% of
+    commands and `INTERPRETER_C` on 70.3%, `measure_hooks` the same three on 98.8% and 69.5%, `shell_check_hooks` `HEREDOC`,
+    `QUOTED_HEREDOC` and `UNQUOTED_HEREDOC` on 96.2% (through `executing_backticks`), `event_log_hooks` `HEREDOC` on 100% (`filed.rs`)
+    and `QUOTED` on 26.5%, `pair_hooks` and `blocked_fetch_hooks` 26.5% (`make::invoked`, which a `make` in the command reaches),
+    `main_tree_hooks` 16.8% (`env_from`, gated on `<<` by T97), and seven others under 10%. One event is one process, so a pattern
+    is built once an event, by the first guard to reach it: `HEREDOC` and `QUOTED` by `measure_hooks`, third in the order, or by
+    `pair_hooks`, first, where the command names `make` - the task's line's `no_poll_hooks` after both - and the two heredoc patterns of
+    `executing_backticks` by `shell_check_hooks`, last (observed 2026-11-21, the build order in each Bash start's log).
+  - THE CAUSE, measured 2026-11-21 (the same probe, the whole event - `l7r-guard PreToolUse` and `PostToolUse`, every guard - over all
+    9,646 commands, `/tmp/t103/reach2-summary.txt`): a Bash start built `HEREDOC` and `QUOTED` for 100% of commands,
+    `QUOTED_HEREDOC` and `UNQUOTED_HEREDOC` for 94.7%, `INTERPRETER_C` for 67.6% - 5 a start at the median, p90 5, every start
+    building at least 2 - and a Bash end `HEREDOC` for 100%, `QUOTED` 24.5%, `INTERPRETER_C` 18.2%. Of the corpus's commands 16.0% hold
+    `<<`, 75.7% a quote and 7.3% a backtick (measured 2026-11-21, a count over `/tmp/t93/replay-cmd.jsonl`).
+  - THE GATE (T97's `shared::regex::Lazy`, unchanged): `HEREDOC`, `QUOTED_HEREDOC` and `UNQUOTED_HEREDOC` searched only where the
+    text holds `<<`, `BACKTICK_SPAN` only where it holds a backtick, and `INTERPRETER_C` only where the text less its trailing blanks
+    is shorter and ends in `c` - every match of it ends `c[ \t]+$`, `$` the text's end with no `m` flag. `cut` takes a `Lazy`, every
+    scan keeping `.map_while(Result::ok)`.
+  - `QUOTED` NOW A SCAN (`quoted_spans`): the replay below hung on the pattern (Found and left), so a quoted string is read in one pass
+    as the pattern's first reading reads it - a backslash takes the character after it where a quote of its kind still stands after
+    the pair, else it stands alone; the first quote of its kind met closes; a quote nothing after it closes opens nothing - and
+    `strip_quotes` writes from the spans as its replacement wrote. A test holds the scan's spans equal to the pattern's `find_iter`
+    on every text to 7 characters over `"`, `'`, `\`, `a`, a newline and `é` (335,923 texts, the empty one among them), as T97 held
+    `plain_quote_body` to its pattern; a quoted string no longer builds a pattern at all.
+  - NOT TAKEN: `tree.rs:348`'s own `<<` gate before `strip_heredocs`, redundant now and outside T103's files, left as it stands.
+  - THE PINS (`shape/tests/builds.rs`, `shape/tests/quotes.rs`, in `tree/tests/builds.rs`' form: the test runs itself again as a child
+    process per command and prints `regex::BUILT`): stripped as `no_poll_hooks` strips (`strip_quotes(&strip_heredocs(cmd))`) and as
+    `shell_check_hooks` reads backticks, `ls -la docs`, `wc -l < f && sort -u f > g`, ``echo `date` | tr a-z A-Z`` and `grep -n 'a b'
+    f` build none, `python3 -c 'print(1)'` only `INTERPRETER_C`, `cat <<'EOF' > f` with its body `HEREDOC` and `QUOTED_HEREDOC`; and a
+    quote no later quote closes before forty escapes is stripped by a child under a 10 s deadline (a GUESS: no correct strip nears it,
+    the fixed one stripping all 10,758 texts in 0.09 s, measured 2026-11-21 (`/usr/bin/time`, `/tmp/t103/replay-raw.time`)).
+- **Red first**, measured 2026-11-21 (`make rust-test CRATE=rust/guard/shared`): the build pin against the snapshot's shape, 360
+  passed, 1 failed (`/tmp/t103/red-rust.log`: `ls -la docs` built `HEREDOC`, `QUOTED`, `QUOTED_HEREDOC`, `UNQUOTED_HEREDOC`); the
+  gates, 361 passed (`/tmp/t103/green-rust.log`); the deadline pin against the gated pattern, 361 passed, 1 failed
+  (measured 2026-11-21 (`/tmp/t103/red2-rust.log`): "the strip did not answer in 10 s"); the scan, 363 passed (`/tmp/t103/green2-rust.log`, the
+  differential test among them), the crate's lint and cover clean (`l7r-gate.sh rust lint|cover --crate rust/guard/shared`,
+  `/tmp/t103/lint2.log`, `/tmp/t103/cover2.log`).
+- **Every verdict the same**, measured 2026-11-21:
+  - the strips in ONE process, measured 2026-11-21 (`/tmp/t103/replay-before` over the snapshot's `shared/`, `/tmp/t103/replay-after` over the fixed, the
+    9,646 commands and the Makefile's 1,112 lines, each text's `strip_heredocs`, `strip_quotes(strip_heredocs)` and
+    `executing_backticks` outside and inside a double quote printed): 0 of 10,758 lines changed (`cmp`, identical), 0.69 s before,
+    0.30 s after (`/usr/bin/time`). `strip_quotes` over each raw text, its heredoc unstripped as `wait::periodic` strips a
+    background command, on the fixed build alone: every one of the 10,758 answered, in 0.09 s (measured 2026-11-21 (`/usr/bin/time`,
+    `/tmp/t103/replay-raw-after.jsonl`)) - the
+    snapshot's did not answer on row 3,148 (Found and left);
+  - the guards through the real binaries (`/tmp/t103/scripts/replay_guards.sh`: the snapshot's `l7r-guard` and the fixed one, built as
+    `l7r-guard.sh` builds them, `--profile tool`, each command its own process in a scratch world, each call's HOME, TMPDIR and every
+    guard's state, log and events directory fresh - no line reached the clone's event log, `/tmp/claude-batching` or
+    `/tmp/l7r-guard-default`, observed 2026-11-21 after a 50-command run, method: `find -newer` a stamp and a grep for the replay's
+    session ids): 0 of 9,646 outputs changed (exit code, stdout and stderr, each run's scratch path read as one) at a Bash start and at a Bash end through every guard, the snapshot's binary against itself 0 too, and 0 of 9,646 through each of the 15 guards that built a shape pattern alone, at a start (`/tmp/t103/replay-guards.log`); `event_log_hooks`' own lines, read back from each call's events directory, 0 of 9,646 changed at a start and at an end with each line's clock dropped, 1,441 of the end's naming a make (`/tmp/t103/events-compare.log`); and `no_poll_hooks` alone with every call run in the background, so `wait::periodic` strips each: 0 of the 9,644 both answered changed, and the 2 the snapshot's gave no answer in 30 s, killed (rows 3,148 and 7,510), the fixed one answered (measured 2026-11-21 (`/tmp/t103/scripts/run.py --bg`, `/tmp/t103/rp/no-poll-bg-*.jsonl`)).
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+| each strip pattern built only for a text that could match it, a quoted string read by a scan; a plain or quoted command builds none of shape's | n/a - no map | n/a | none | n/a |
+
+### T103 Approach (checklist part A)
+
+1. **The goal, in the world.** No map changes. Every Bash call's hooks answer as before, sooner: a command with no `<<` and no quote
+   after a `-c` builds none of shape's patterns at its start or end, and a background command holding a quote nothing closes is
+   answered rather than held.
+2. **The constraints.** T103's line; FR-013 (a `[perf]` task: the builders' loop); FR-012 (red first); constitution XIII (no known
+   regression: every verdict the same, the replays) and XIV (the gates not a defect: only slower; the hang a defect, fixed here);
+   T74's (the hooks run on every event and never refuse for this); the launcher's files (`shape.rs` and `shape/`, this section),
+   nothing of T99's (`tests/hooks/test-idle-tests-hooks.sh`) or T102's (`set_down_hooks`, the speckit reader); nothing committed.
+3. **Where each comes from.** O: T97's Found and left (T97's section); O: this task's probes, costs, replays and timings (item 4); the
+   task as filed (T103's line).
+4. **Do they describe the world here?** Measured 2026-11-21, each by its method, both binaries built from one snapshot of `rust/` and
+   `.cargo` frozen at 19:45:57Z on `e2606d52ab` (`/tmp/t103/snap`), the after one the snapshot plus the shape files alone:
+   - THE REACH, measured 2026-11-21 (THE CAUSE's method, the whole event over the 9,646 commands, `/tmp/t103/reach3-summary.txt`): a Bash start built 0 of shape's patterns at the median, p90 2, max 4, 7,505 commands (77.8%) none - `HEREDOC` and `QUOTED_HEREDOC` 16.0% (the commands holding `<<`), `UNQUOTED_HEREDOC` 0.3%, `INTERPRETER_C` 7.5%, `QUOTED` none, a scan now - against 5 at the median, p90 5, before, and a Bash end 0 at the median, p90 1, 8,011 (83.1%) none - `HEREDOC` 16.0%, `INTERPRETER_C` 1.6% - against 1 before; every exit code the same both times (238 refusals of 9,646 at a start).
+   - THE BUILD COST, measured 2026-11-21 (`/tmp/t103/cost`, T97's harness copied, `shared::regex::build`'s builder on `fancy_regex`
+     0.14.0, the median of 31 builds in one process, 3 runs under a load average of 31, and each pattern built first in a fresh process 3 times): `HEREDOC` 1.58 ms, `QUOTED_HEREDOC` 4.16 ms, `UNQUOTED_HEREDOC` 2.32 ms, `BACKTICK_SPAN` 0.39 ms, `QUOTED` 0.82 ms, `INTERPRETER_C` 0.36 ms (the medians of the three runs' medians), 2.9-5.4 ms the first heredoc pattern in a fresh process, and T97's harness read `HEREDOC` at 0.30 ms under a load of about 11 (`/tmp/t97/steady.txt`), so these are the load's as much as the patterns' (two reruns at 21: `HEREDOC` 1.10 and 1.60 ms, `QUOTED_HEREDOC` 4.10 and 9.36 ms). At these costs the reach logs owe a start's builds 9.23 ms at the median (mean 8.77) before and 0 (mean 0.95) after, an end's 1.58 ms (mean 1.85) and 0 (mean 0.26) (measured 2026-11-21 (`/tmp/t103/scripts/estimate.py`, `/tmp/t103/estimate.txt`)).
+   - THE EVENT, a Bash start and end through the real binaries, measured 2026-11-21 (`/tmp/t103/scripts/time_event.py`: T97's method,
+     the same 600 commands, seed 93, each payload to `l7r-guard PreToolUse` or `PostToolUse` - every guard, the dispatcher's whole event, not one guard
+     alone - before and after alternated, 3 runs each, a command's time its median, in the scratch world, nothing else of T103's
+     running): a Bash start 47.89 ms before, 43.17 ms after (medians, means 113.44 and 100.41 ms), saved 4.11 ms at the median (p10 -4.25, p90 39.63, mean 13.03), under a load average of 30.9 falling to 17.4, and a Bash end 10.09 ms before, 8.70 ms after (means 22.48 and 20.30), saved 0.97 ms at the median (p10 -1.23, p90 6.29, mean 2.19), under 17.4 rising to 24.3 (`/tmp/t103/time-event.log`) - about 9% of a start and 10% of an end at the median, the task's line's estimate an eighth; a p10 below zero is the load's spread.
+5. **The order.** After T97 (the `Lazy` gate it reuses); beside T99 and T102, touching none of their files.
+6. **The exits.** Green: the pins red first and green, the replays' 0 changed outputs, the crate's lint and cover, and this task's own
+   `make closing-checks T=T103 F=451`. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through
+   `make arbiter-ask`.
+7. **The search smell.** None: each pattern's reach was measured over the night's 9,646 commands before and after (item 4).
+8. **The budget.** One landing. A gate costs a `contains` (or a trim) of the text before its pattern; the scan two `rposition`s and
+   one pass a text.
+9. **Done, measured.** Red first: 360 passed, 1 failed on the builds, 361 passed, 1 failed on the deadline; 363 passed fixed. Every
+   verdict the same: 0 of 10,758 strips changed, 0 of 9,646 hook outputs changed through every guard at a start and an end and through each of the 15 guards alone, 0 of 9,646 event lines, and 0 of 9,644 through `no_poll_hooks` run in the background, its 2 hangs answered. The whole Bash start 47.89 to 43.17 ms at the median and a Bash end 10.09 to 8.70 ms, every guard, under a load of 17 to 31 (measured 2026-11-21 (`/tmp/t103/scripts/time_event.py`, item 4)). This task's own closing runs:
+   run 1 (`20261121T203828Z-409584`, 9 of the clone's 23 uncommitted files judged T103's): RED, exit 2, only in another task's file -
+   `make static`'s lint stopped on 4 clippy errors (`case_sensitive_file_extension_comparisons`) in T96's
+   `tree/program/tests.rs`, BLOCKED as T96's; `make hooks-test` and `make quick` green. The crate's lint, cover and tests ran clean
+   after the last edit of T103's files (`/tmp/t103/lint2.log`, `cover2.log`, `green2-rust.log`).
+10. **Before moving a constant.** No constant: every pattern kept is unchanged, each gate a literal its own pattern holds; `QUOTED`'s
+    reading kept by the scan, held to it by the differential test.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** The gates: not a defect (constitution XIV), every answer right, only slower. The scan: a defect, fixed here
+    (Found and left) - a reader sees a background call's hooks answer where they hung; no map moves.
+
+**Found and left?**
+- `QUOTED`'s backtracking search hung, fixed here (`shape.rs`, the scan): the pattern took a backslash with the character after it
+  or alone, so a quote no later quote of its kind closes, followed by n backslashes, cost it 2^n tries (measured 2026-11-21, Python's
+  `re` on the same pattern over row 3,148's text cut after the quote: 6 backslashes 0 s, 12 backslashes 4 ms). Corpus row 3,148
+  (`toolu_01YNt9pWDQtbKKoxhijWZnCX`, a `cat >> ... <<'EOF'` whose body holds `T58's` and 33 backslashes after it), fed with
+  `run_in_background` to `l7r-guard --only no-poll-hooks PreToolUse` on the snapshot's binary, gave no answer in 20 s and was killed
+  (measured 2026-11-21, `timeout 20`, exit 124, `/tmp/t103/bg-3148.json`): `no_poll_hooks` asks `wait::periodic` of a background
+  command, which strips the command's quotes with its heredoc unstripped. Of the 9,646 commands, 2 hold an unclosed quote before 20
+  or more backslashes, raw (measured 2026-11-21, `/tmp/t103` a Python count by the scan's rule). The no-poll guard over the corpus
+  run in the background, before and after: 0 of the 9,644 both answered changed, and the 2 commands the snapshot's binary held past 30 s, killed (rows 3,148 and 7,510), answered by the fixed one (measured 2026-11-21, `run.py --bg`, `/tmp/t103/rp/no-poll-bg-before.jsonl` and `-after.jsonl`).
+- Not fixed here: outside T103's files, and neither copy measured to hang. The same pattern text stands in `wait.rs:53` (`QUOTED`)
+  and `house_style_hooks.rs:85` (`QUOTED_SPAN`), and could hang the same way where either searches a text holding a quote nothing
+  closes before many backslashes (observed 2026-11-21, method: a `grep -F` of the pattern's text over `rust/guard`). Filed as T108;
+  lands before T22.
+
+**Performance work?** yes - a `[perf]` task (451 FR-013): the builders' loop, every Bash call's hooks; not engine speed, so the
+performance checklist's answers are given in brief:
+1. **Where does the time go?** In a hook process's first strips: shape's pattern builds, 5 a Bash start, before any guard's own work
+   (item 4's reach and costs).
+2. **Removes work, or only moves it?** Removes it: a cheap screen (a literal's `contains`) before an expensive build and search, and
+   a scan for a pattern that needed none.
+3. **What it was expected to save, and why.** Estimated before building (the task's line): about an eighth of a Bash start. Measured after 2026-11-21 (item 4's `estimate.py` and `time_event.py`): the reach logs at the harness's costs, 8.77 to 0.95 ms a start and 1.85 to 0.26 ms an end (means), the events themselves 4.11 and 0.97 ms saved at the median.
+4. **How does the work grow?** With the command, not a settlement: the gated patterns only for a text holding their literal, the scan
+   linear in the text where the pattern was exponential in its backslashes.
+5. **Before and after, and under what conditions.** Builds reached (exact) and the event's time (alternated, median of 3, the load
+   beside it): item 4.
+6. **Did any map move?** No: a hook's speed; no research claim reads shape's patterns.
+
+
 ### T104 (<why: the finding or measurement that files it>)
 
 - **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
@@ -1368,4 +1496,30 @@ engine speed, so no checklist.
 
 **Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
 
+
+### T108 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T108 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
 

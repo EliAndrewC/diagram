@@ -534,6 +534,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-21",
    "declared": "spec-fidelity"
+  },
+  "### T103 (T97's Found and left: shape's `strip_heredocs` and `strip_quotes` searched ungated, so the guards that strip a command built shape's patterns on every Bash call; measured 2026-11-21 (`/tmp/t103/scripts/run.py`, T93's 9,646 commands each a hook process of its own through an instrumented `l7r-guard`): every Bash start built 5 of shape's 6 patterns at the median (p90 5), every Bash end 1)": {
+   "sha256": "bb9947be124372f212474205d691032296298feee06d5296151244b4b32e04d3",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity"
+  },
+  "### T103 Approach (checklist part A)": {
+   "sha256": "56642bc8a4fd934a299eb34f92fe1b6098ae9b2bd43af568c753184209415a24",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -9942,6 +9954,52 @@
      "why": "FR-012's red-first is owed for a refusal that fires, and T102 adds no new refusal: it makes existing ones skip a task that cannot start. The original tests were red on the unchanged hook (357/3, measured 2026-11-21). That the rewritten tests would still be red is argued, not measured: the unchanged hook does not read the clause at all, so its output cannot depend on what the clause says."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-21",
+   "blocks": [
+    "### T103 (T97's Found and left: shape's `strip_heredocs` and `strip_quotes` searched ungated, so the guards that strip a command built shape's patterns on every Bash call; measured 2026-11-21 (`/tmp/t103/scripts/run.py`, T93's 9,646 commands each a hook process of its own through an instrumented `l7r-guard`): every Bash start built 5 of shape's 6 patterns at the median (p90 5), every Bash end 1)",
+    "### T103 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T103-gate",
+     "summary": "Each of shape's strip patterns (HEREDOC, QUOTED_HEREDOC, UNQUOTED_HEREDOC on '<<', BACKTICK_SPAN on a backtick, INTERPRETER_C on a trimmed text ending in 'c') is searched only where its text holds the literal any match needs, reusing T97's shared::regex::Lazy; cut takes a Lazy.",
+     "class": "within",
+     "why": "This is what T103's line asks for (each strip gated on the literal a match needs, as T97 gated the walk's patterns, measured first). It is a [perf] task under FR-013, and the spec's 2026-11-20 request puts performance work first. No answer changes, only the builds."
+    },
+    {
+     "id": "T103-quoted-scan",
+     "summary": "QUOTED is replaced by a linear scan (quoted_spans) that reads quoted strings the way the pattern did, with strip_quotes writing from the spans, because the backtracking pattern hung on an unclosed quote followed by many backslashes (corpus rows 3,148 and 7,510 under no_poll_hooks in the background).",
+     "class": "within",
+     "why": "A guard that hangs is a defect under constitution XIV's definition (a tool that hangs), and T103 found it in its own file. The fix-as-we-go rule has a known defect fixed before moving on. A pattern replaced by a scan builds no pattern at all, which also serves the line's purpose of no pattern build where none is needed. The differential test (scan equals find_iter on all texts up to 7 characters) is the plan's own evidence that the scan does the pattern's job. No reviewer imposed it as an exactness standard, and it enforces the requested behavior rather than adding scope."
+    },
+    {
+     "id": "T103-not-taken-tree-gate",
+     "summary": "tree.rs:348's own '<<' gate before strip_heredocs, now redundant, is left as it stands (outside T103's files).",
+     "class": "within",
+     "why": "A redundant check that still answers correctly is a difference, not a defect (constitution XIV v2.36.0), so leaving it narrows nothing that was asked."
+    },
+    {
+     "id": "T103-left-T108",
+     "summary": "The same QUOTED pattern text at wait.rs:53 and house_style_hooks.rs:85 is not fixed here: it is outside T103's files and neither copy was measured to hang. It is filed as T108 [perf], which measures first whether each copy hangs on row 3,148's shape and then gives each T103's scan as one shared function. T108 lands before T22.",
+     "class": "within",
+     "why": "T103's line covers shared::shape's strips, not the other modules' copies, so deferring them does not narrow what T103 was asked to do. The deferral is in FR-009's form: why it is not fixed here, the filed task id (T108, confirmed on tasks.md line 92) and its order ('lands before T22'). No hang is measured in either copy, so no known defect is carried past this step, and T108 is filed to measure it first rather than assume it."
+    },
+    {
+     "id": "T103-pins",
+     "summary": "Build-count pins (shape/tests/builds.rs, quotes.rs, run as child processes printing regex::BUILT) on plain, redirected, backtick, quoted, -c and heredoc commands, plus a 10 s deadline pin on an unclosed quote before forty escapes, each red first against the snapshot.",
+     "class": "within",
+     "why": "FR-012 red first, and the line asks for a build-count test red first. These tests only fail when the requested gating, or the hang fix, is missing: they enforce the request and add nothing to its scope."
+    },
+    {
+     "id": "T103-scope-files",
+     "summary": "Touches only shape.rs and shape/. Nothing of T99's or T102's files. T96's clippy errors in tree/program/tests.rs, which turned closing-checks run 1 RED, are left as T96's.",
+     "class": "within",
+     "why": "Keeping to the task's own files narrows nothing asked of T103. The red lint belongs to another task's file and is recorded as BLOCKED on T96, not waved off as T103's."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -15389,6 +15447,50 @@
      "summary": "After the date form was dropped, the three tests were rewritten to wait on landings and not rerun red",
      "class": "within",
      "why": "FR-012's red-first is owed for a refusal that fires, and T102 adds no new refusal: it makes existing ones skip a task that cannot start. The original tests were red on the unchanged hook (357/3, measured 2026-11-21). That the rewritten tests would still be red is argued, not measured: the unchanged hook does not read the clause at all, so its output cannot depend on what the clause says."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T103": {
+   "section_sha256": "03bb0f565ad10451441973c48d23a0c5b0c68f11180a156b6f3104f11102bb30",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T103-gate",
+     "summary": "Each of shape's strip patterns (HEREDOC, QUOTED_HEREDOC, UNQUOTED_HEREDOC on '<<', BACKTICK_SPAN on a backtick, INTERPRETER_C on a trimmed text ending in 'c') is searched only where its text holds the literal any match needs, reusing T97's shared::regex::Lazy; cut takes a Lazy.",
+     "class": "within",
+     "why": "This is what T103's line asks for (each strip gated on the literal a match needs, as T97 gated the walk's patterns, measured first). It is a [perf] task under FR-013, and the spec's 2026-11-20 request puts performance work first. No answer changes, only the builds."
+    },
+    {
+     "id": "T103-quoted-scan",
+     "summary": "QUOTED is replaced by a linear scan (quoted_spans) that reads quoted strings the way the pattern did, with strip_quotes writing from the spans, because the backtracking pattern hung on an unclosed quote followed by many backslashes (corpus rows 3,148 and 7,510 under no_poll_hooks in the background).",
+     "class": "within",
+     "why": "A guard that hangs is a defect under constitution XIV's definition (a tool that hangs), and T103 found it in its own file. The fix-as-we-go rule has a known defect fixed before moving on. A pattern replaced by a scan builds no pattern at all, which also serves the line's purpose of no pattern build where none is needed. The differential test (scan equals find_iter on all texts up to 7 characters) is the plan's own evidence that the scan does the pattern's job. No reviewer imposed it as an exactness standard, and it enforces the requested behavior rather than adding scope."
+    },
+    {
+     "id": "T103-not-taken-tree-gate",
+     "summary": "tree.rs:348's own '<<' gate before strip_heredocs, now redundant, is left as it stands (outside T103's files).",
+     "class": "within",
+     "why": "A redundant check that still answers correctly is a difference, not a defect (constitution XIV v2.36.0), so leaving it narrows nothing that was asked."
+    },
+    {
+     "id": "T103-left-T108",
+     "summary": "The same QUOTED pattern text at wait.rs:53 and house_style_hooks.rs:85 is not fixed here: it is outside T103's files and neither copy was measured to hang. It is filed as T108 [perf], which measures first whether each copy hangs on row 3,148's shape and then gives each T103's scan as one shared function. T108 lands before T22.",
+     "class": "within",
+     "why": "T103's line covers shared::shape's strips, not the other modules' copies, so deferring them does not narrow what T103 was asked to do. The deferral is in FR-009's form: why it is not fixed here, the filed task id (T108, confirmed on tasks.md line 92) and its order ('lands before T22'). No hang is measured in either copy, so no known defect is carried past this step, and T108 is filed to measure it first rather than assume it."
+    },
+    {
+     "id": "T103-pins",
+     "summary": "Build-count pins (shape/tests/builds.rs, quotes.rs, run as child processes printing regex::BUILT) on plain, redirected, backtick, quoted, -c and heredoc commands, plus a 10 s deadline pin on an unclosed quote before forty escapes, each red first against the snapshot.",
+     "class": "within",
+     "why": "FR-012 red first, and the line asks for a build-count test red first. These tests only fail when the requested gating, or the hang fix, is missing: they enforce the request and add nothing to its scope."
+    },
+    {
+     "id": "T103-scope-files",
+     "summary": "Touches only shape.rs and shape/. Nothing of T99's or T102's files. T96's clippy errors in tree/program/tests.rs, which turned closing-checks run 1 RED, are left as T96's.",
+     "class": "within",
+     "why": "Keeping to the task's own files narrows nothing asked of T103. The red lint belongs to another task's file and is recorded as BLOCKED on T96, not waved off as T103's."
     }
    ],
    "verdict": "CLEAR"
