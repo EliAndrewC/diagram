@@ -16,6 +16,14 @@
 //! - 0 to a wrong feature and 0 disagreeing at windows of 2, 5, 30 and 300 s, measured 2026-11-21 (the replay over the logs);
 //! - all 156 starts marked `fallback` resolved right, measured 2026-11-21 (the replay over the logs);
 //! - no candidate for 910 starts at 2 s and 284 at 300 s, measured 2026-11-21 (the replay over the logs).
+//!
+//! THE CORRECTIONS (feature 451 T106): a builder the coordinator re-numbers mid-task kept its brief's task on every line - T101's,
+//! briefed `451 T100` and told "Your task is T101, not T100" 20 s into its run, filed all 230 of its lines under T100, its Write and
+//! Edit lines of `speckit.rs`, `ready.rs` and `land-alone.sh` among them, so land-alone's list and the closing checks' split read them
+//! as T100's (observed 2026-11-21, method: the 451 log's lines by `by` against the session transcript's `SendMessage` calls). So the side
+//! directory also keeps, per agent, the task its later lines are filed under, at `<events dir>-dispatches/<sid>.tasks/<aid>` (one
+//! task, the last said; a file a line, read by a missing-file open in the common case), written by [`record`] from what
+//! `filed::renumbered` reads - the coordinator's correction, or the builder's own closing step - and read by `filed` ([`corrected`]).
 
 use std::io::{Read as _, Seek as _, SeekFrom, Write as _};
 use std::path::{Path, PathBuf};
@@ -31,9 +39,14 @@ pub(super) const WINDOW_S: f64 = 300.0;
 /// The side file's tail read at a start: 64 KiB, some 300 calls at ~200 bytes a call, against a window that held at most a few.
 const TAIL: u64 = 64 * 1024;
 
+/// Whether `name` is a plain file name: not empty, no separator, not hidden (a session or agent id).
+pub(super) fn plain(name: &str) -> bool {
+    !name.is_empty() && !name.contains(['/', '\\']) && !name.starts_with('.')
+}
+
 /// The session's side file beside `events`; none without a session id or one that is not a plain name.
 fn path(events: &Path, sid: &str) -> Option<PathBuf> {
-    if sid.is_empty() || sid.contains(['/', '\\']) || sid.starts_with('.') {
+    if !plain(sid) {
         return None;
     }
     let name = events.file_name()?.to_string_lossy().into_owned();
@@ -44,7 +57,8 @@ fn path(events: &Path, sid: &str) -> Option<PathBuf> {
     )
 }
 
-/// Keep an Agent call's half on the session's side file; anything else, or any write that fails, is nothing (the hook never refuses).
+/// Keep an Agent call's half on the session's side file, and an agent's correction in its task file (451 T106); anything else, or any
+/// write that fails, is nothing (the hook never refuses).
 pub(super) fn record(events: &Path, payload: &Value, t: &str) {
     if let Some((file, row)) = row(events, payload, t) {
         let _ = file.parent().map(std::fs::create_dir_all);
@@ -54,6 +68,30 @@ pub(super) fn record(events: &Path, payload: &Value, t: &str) {
             .open(&file)
             .and_then(|mut f| f.write_all(format!("{row}\n").as_bytes()));
     }
+    let sid = text_of(payload.get("session_id"));
+    if let Some((file, task)) = super::filed::renumbered(payload, events)
+        .and_then(|(aid, task)| Some((task_file(events, &sid, &aid)?, task)))
+    {
+        let _ = file.parent().map(std::fs::create_dir_all);
+        let _ = std::fs::write(&file, format!("{task}\n"));
+    }
+}
+
+/// The file holding the task agent `aid`'s later lines are filed under (451 T106); none for a session or agent id that is not a plain
+/// name.
+fn task_file(events: &Path, sid: &str, aid: &str) -> Option<PathBuf> {
+    if !plain(aid) {
+        return None;
+    }
+    Some(path(events, sid)?.with_extension("tasks").join(aid))
+}
+
+/// The task agent `aid`'s later lines are filed under, as the coordinator or its own closing step last said (451 T106); None where
+/// nothing said, or the file holds no task.
+pub(super) fn corrected(events: &Path, sid: &str, aid: &str) -> Option<String> {
+    let text = std::fs::read_to_string(task_file(events, sid, aid)?).ok()?;
+    let task = text.trim();
+    super::filed::is_task(task).then(|| task.to_owned())
 }
 
 /// The side file and the row an Agent call's half keeps there: its `PreToolUse` the call, its `PostToolUse` the agent its launch

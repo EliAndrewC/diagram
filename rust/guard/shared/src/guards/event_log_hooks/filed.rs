@@ -10,8 +10,23 @@
 //!   file is not written yet, its dispatch's (`dispatches.rs`, 451 T53) - the feature it names ([`brief_feature`]); else the feature whose
 //!   task-start names the line's task, a start older than [`STALE_START_S`] naming none (451 T53); else the
 //!   FALLBACK, `feature_of` (the session's environment, then feature.json), and the line is marked `"fallback": true` unless the session's environment declared that feature;
-//! - the TASK: a `tick`, `task-start`, `decide` or `land` command's `T=` (`line`); else the `T<n>` the brief names; else, for an Agent call, its prompt's first line's (451 T07); else the task-start
-//!   in force for the line's feature (D2's last entry, now of the line's own feature, not of feature.json's).
+//! - the TASK: a `tick`, `task-start`, `decide` or `land` command's `T=` (`line`), or a `closing-checks` one's (451 T106); else, for an
+//!   Agent call, the `T<n>` its own description names; else the agent's CORRECTION (451 T106, [`renumbered`]); else the `T<n>` the
+//!   brief names; else, for an Agent call, its prompt's first line's (451 T07); else the task-start in force for the line's feature (D2's
+//!   last entry, now of the line's own feature, not of feature.json's).
+//!
+//! THE CORRECTION (451 T106): a builder the coordinator re-numbers keeps the task the correction names on every later line, its feature
+//! still the brief's. What says it, earliest first - the night's 136 builders, measured 2026-11-21 (a Python read of the session
+//! transcript, its subagents' transcripts and meta files, and the 451 log):
+//! - the coordinator's `SendMessage` to the agent: T101's, "Your task is T101, not T100", came 20 s into its run, before every one of its
+//!   writes (8 of its 230 lines, all reads, before it); a message NAMING another task is no correction - 40 of 108 messages to a briefed
+//!   agent named one and one was - so only `T<new>, not T<old>` counts, `T<old>` the task the agent is filed under now ([`CORRECTION`]);
+//! - the builder's own `make closing-checks`, `make decide` or `make task-start` `T=`: 1,113 of 1,695 Write and Edit lines came before
+//!   a builder's first such call, and no builder ran `task-start`, so it files the lines after it - the backstop where a correction is
+//!   worded otherwise.
+//!
+//! Earlier lines stay as filed: T101's 8 were reads, which neither land-alone's list nor the closing checks' split reads. Its handoff
+//! file's name is no signal: `context_cap_hooks` names it from [`filed_at`](super::filed_at)'s task, the brief's until now.
 //!
 //! A fallback line's task is a guess when two features are worked at once (the coordinator's own calls), so it says so: a reader of the
 //! task field (T07, T08, T14) can keep that time apart rather than book it to the task feature.json happened to name. The session's
@@ -29,7 +44,7 @@ use serde_json::Value;
 
 use super::{
     common_git_dir, dispatches, feature_of, first_group, log_path_in, make_target, re, text_of,
-    TASK_NAMED,
+    TASK, TASK_NAMED,
 };
 use crate::shape::strip_heredocs;
 
@@ -46,6 +61,15 @@ pattern!(FEATURE_ARG, r#"(?:^|\s)F=["']?([A-Za-z0-9][\w.-]*)"#);
 pattern!(FEATURE_BEFORE_TASK, r"\b(\d+)\s+T\d+[a-z]?\b");
 // ... else a number standing alone - never one inside a hyphenated word (`FR-008`, `qingshigao-122`, `375-a1`)
 pattern!(BARE_NUMBER, r"(?<![\w-])(\d+)(?![\w-])");
+// a coordinator's correction (451 T106): `T101, not T100` - GUESS knob, one case fitted: the night's one correction read "Your task is
+// T101, not T100" (its summary; the message said "is T101 in tasks.md, not T100"), and of its 117 SendMessages the one other `T<n>, not
+// T<m>`, "filed as T43, not T42" to T40's builder, named no task of its own, measured 2026-11-21 (the session transcript's SendMessage
+// inputs). Its open side: a correction worded otherwise is filed by the builder's own closing step, from that call on
+pattern!(CORRECTION, r"\b(T\d+[a-z]?),?\s+\(?not\s+(T\d+[a-z]?)\b");
+
+/// The closing-step targets whose `T=` names the task a builder works on (451 T106): `make closing-checks`, `make decide`, `make
+/// task-start`.
+const OWN_STEPS: [&str; 3] = ["closing-checks", "decide", "task-start"];
 
 /// The feature a dispatch's brief names (451 T26): the number before a task id, naming one feature directory; else a number standing
 /// alone that names one feature directory this clone has started a task of. WHY the second is held to started features: a brief's
@@ -124,23 +148,100 @@ fn briefs(payload: &Value, events: &Path, now: &str) -> Vec<String> {
         }
     }
     let aid = text_of(payload.get("agent_id"));
-    let transcript = text_of(payload.get("transcript_path"));
-    if aid.is_empty() || transcript.is_empty() {
+    if aid.is_empty() || text_of(payload.get("transcript_path")).is_empty() {
         return Vec::new();
     }
-    let session = transcript.strip_suffix(".jsonl").unwrap_or(&transcript);
-    if let Some(own) =
-        std::fs::read_to_string(Path::new(session).join(format!("subagents/agent-{aid}.meta.json")))
-            .ok()
-            .and_then(|t| serde_json::from_str::<Value>(&t).ok())
-            .map(|m| text_of(m.get("description")))
-    {
+    if let Some(own) = meta_brief(payload, &aid) {
         return vec![own];
     }
     if text_of(payload.get("hook_event_name")) == "SubagentStart" {
         return dispatches::briefs_at_start(events, payload, now);
     }
     Vec::new()
+}
+
+/// Agent `aid`'s meta file's `description`, in the session the payload's `transcript_path` names (research R2); None where none is
+/// readable.
+fn meta_brief(payload: &Value, aid: &str) -> Option<String> {
+    let transcript = Some(text_of(payload.get("transcript_path"))).filter(|t| !t.is_empty())?;
+    let session = transcript.strip_suffix(".jsonl").unwrap_or(&transcript);
+    std::fs::read_to_string(Path::new(session).join(format!("subagents/agent-{aid}.meta.json")))
+        .ok()
+        .and_then(|t| serde_json::from_str::<Value>(&t).ok())
+        .map(|m| text_of(m.get("description")))
+}
+
+/// Whether `word` is a task id: `T`, digits, at most one lowercase letter (`T07`, `T7a`).
+pub(super) fn is_task(word: &str) -> bool {
+    let Some(rest) = word.strip_prefix('T') else {
+        return false;
+    };
+    let digits = rest.trim_end_matches(|c: char| c.is_ascii_lowercase());
+    rest.len() - digits.len() <= 1
+        && !digits.is_empty()
+        && digits.bytes().all(|b| b.is_ascii_digit())
+}
+
+/// The task a command's own closing step names: the `T=` of a command that runs [`OWN_STEPS`]' target, read outside its heredocs (451
+/// T106); None for any other command.
+fn own_step(command: &str) -> Option<String> {
+    let steps = crate::make::invoked(command);
+    if !steps.iter().any(|t| OWN_STEPS.contains(&t.as_str())) {
+        return None;
+    }
+    first_group(&TASK, &strip_heredocs(command))
+}
+
+/// The task agent `aid`'s lines are filed under now, this line's own word aside: its correction, else its meta file's brief's `T<n>`.
+fn current(events: &Path, payload: &Value, sid: &str, aid: &str) -> Option<String> {
+    dispatches::corrected(events, sid, aid)
+        .or_else(|| meta_brief(payload, aid).and_then(|b| first_group(&TASK_NAMED, &b)))
+}
+
+/// The agent a payload re-numbers and its new task, which `dispatches::record` keeps for the agent's later lines (451 T106): the main
+/// session's delivered `SendMessage` to an agent whose summary or message reads `T<new>, not T<old>`, `T<old>` the agent's task now
+/// ([`CORRECTION`]); or a builder's own [`OWN_STEPS`] call naming a task neither its brief names nor it is filed under now. None for
+/// any other payload.
+pub(super) fn renumbered(payload: &Value, events: &Path) -> Option<(String, String)> {
+    let field = |k: &str| text_of(payload.get(k));
+    let input = |k: &str| text_of(payload.get("tool_input").and_then(|i| i.get(k)));
+    let (sid, by) = (field("session_id"), field("agent_id"));
+    let (aid, task) = match (
+        field("tool_name").as_str(),
+        field("hook_event_name").as_str(),
+    ) {
+        ("SendMessage", "PostToolUse") if by.is_empty() => {
+            let to = input("to");
+            if !dispatches::plain(&to) {
+                return None;
+            }
+            let filed_as = current(events, payload, &sid, &to)?;
+            let text = format!("{}\n{}", input("summary"), input("message"));
+            let renamed = CORRECTION
+                .captures_iter(&text)
+                .map_while(Result::ok)
+                .find(|c| c.get(2).is_some_and(|m| m.as_str() == filed_as))
+                .and_then(|c| c.get(1).map(|m| m.as_str().to_owned()))?;
+            (to, renamed)
+        }
+        ("Bash", "PreToolUse") if !by.is_empty() => {
+            let task = own_step(&input("command"))?;
+            // a task its brief names is the builder's own, no re-numbering: `451 T28+T29`'s `make decide T=T29` would have moved
+            // the 64 lines after it to T29, 6 of them writes T28's closing checks would then set apart, measured 2026-11-21 (the
+            // rule replayed over the night's 31,888 builder lines, its own steps read from their transcripts)
+            let brief = meta_brief(payload, &by).unwrap_or_default();
+            let briefed = TASK_NAMED
+                .captures_iter(&brief)
+                .map_while(Result::ok)
+                .any(|c| c.get(1).is_some_and(|m| m.as_str() == task));
+            if briefed || current(events, payload, &sid, &by).as_deref() == Some(task.as_str()) {
+                return None;
+            }
+            (by, task)
+        }
+        _ => return None,
+    };
+    Some((aid, task))
 }
 
 /// The one value every brief gives, None for none or a disagreement.
@@ -263,7 +364,8 @@ pub(super) fn filed(
             }
         });
     let events = log_path_in(root, "", env);
-    let briefs = briefs(payload, events.parent().unwrap_or(root), now);
+    let events = events.parent().unwrap_or(root);
+    let briefs = briefs(payload, events, now);
     let starts = starts(root);
     let briefed = agreed(briefs.iter().map(|b| {
         brief_feature(b, &|n| specs.named(n), &|f| {
@@ -272,10 +374,29 @@ pub(super) fn filed(
     }));
     // an Agent call whose description names no task: its prompt's first line's (451 T07, plan D6) - the task only, the feature
     // still the description's, since a prompt's line is free text a bare number in it could misfile
+    // a closing step's own `T=` is its line's, as a tick's is (451 T106); an Agent call's own words - its description, its prompt's first
+    // line - name the task it serves before the dispatching agent's correction does, and the correction comes before the agent's brief
+    let carried = carried.map(str::to_owned).or_else(|| own_step(&command));
+    let briefed_task = agreed(briefs.iter().map(|b| first_group(&TASK_NAMED, b)));
+    let own_brief = text_of(payload.get("tool_name")) == "Agent"
+        && !text_of(payload.get("tool_input").and_then(|t| t.get("description"))).is_empty();
+    let head = || first_group(&TASK_NAMED, prompt_head(payload));
     let task = carried
-        .map(str::to_owned)
-        .or_else(|| agreed(briefs.iter().map(|b| first_group(&TASK_NAMED, b))))
-        .or_else(|| first_group(&TASK_NAMED, prompt_head(payload)));
+        .clone()
+        .or_else(|| {
+            own_brief
+                .then(|| briefed_task.clone().or_else(head))
+                .flatten()
+        })
+        .or_else(|| {
+            dispatches::corrected(
+                events,
+                &text_of(payload.get("session_id")),
+                &text_of(payload.get("agent_id")),
+            )
+        })
+        .or(briefed_task)
+        .or_else(head);
     // a builder's `make task-add F=449` is the builder's own time: its `F=` names where the call writes, not whose task it serves, and
     // filed by it the line took 449 from the `F=` and T36 from 451's brief (451 T53). The brief wins unless the command carries its own
     // `T=` - the re-file's rule (`make events-refile`, BY BRIEF), so the writer and the re-file agree
