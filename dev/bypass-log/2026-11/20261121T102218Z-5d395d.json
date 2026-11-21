@@ -1,0 +1,6 @@
+{
+  "utc": "2026-11-21T10:22:18Z",
+  "target": "plan-gate decide-defer 451-time-retro-and-efficiency T60",
+  "commit": "e708edce3c",
+  "why": "the launcher's file list bars tasks.md and event_log_hooks; raised with the coordinator to file"
+}

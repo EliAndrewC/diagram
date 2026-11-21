@@ -12,13 +12,37 @@
 # counts every check under one outermost `make` as one run, has nothing of hooks-test's to keep apart; the launchers' builds of the
 # tool binaries are cargo's, under cargo's own lock.
 #
-# Each check's output goes to <git dir>/closing-checks/<check>.log; the table names each verdict, its seconds and its log, the tail of
-# each red one follows, and the exit is 1 if any is red. A TERM or INT stops all three. CLOSING_MAKE names the make (the suite's stub).
+# Each check's output goes to <git dir>/closing-checks/<run id>/<check>.log, the run id its start's UTC time and its pid; the table
+# names each verdict, its seconds and its log, the tail of each red one follows, and the exit is 1 if any is red. A TERM or INT stops
+# all three. CLOSING_MAKE names the make (the suite's stub); CLOSING_CHECKS_DIR the directory the runs' directories sit in.
+#
+# ONE DIRECTORY A RUN (451 T72): two runs in one clone (parallel builders) shared one directory, each deleting the other's exit files at
+# its start and truncating its logs, so a run read the other's verdict as its own - T69's builder's run of 09:38:33Z beside another's of
+# 09:38:06Z, 2026-11-21, the first reading the second's quick verdict and its static.log holding both runs' lines. A run now reads its
+# own directory alone. `latest` names the run started last (one rename, so a reader never finds it missing); beside a parallel builder
+# that may be another's run, so cite the path the table prints.
+#
+# THE PRUNE: a run's start removes every other run's directory, and the old layout's <check>.log and .exit files, not changed for
+# CLOSING_CHECKS_KEEP_MIN minutes (a GUESS knob, 360: 36 times the longest run in this clone's usage records, 601 s of 25 runs,
+# measured 2026-11-21 (`.git/tool-usage.jsonl`, each closing-checks start paired with its end), so no live run is pruned; at about five
+# runs an hour, measured the same way, some 30 directories kept). The directory `latest` names is never pruned.
 set -u
 mk=${CLOSING_MAKE:-make}
-dir=${CLOSING_CHECKS_DIR:-$(git rev-parse --absolute-git-dir)/closing-checks}
+base=${CLOSING_CHECKS_DIR:-$(git rev-parse --absolute-git-dir)/closing-checks}
+keep_min=${CLOSING_CHECKS_KEEP_MIN:-360}
 checks=(static hooks-test quick)
-mkdir -p "$dir" || exit 2
+mkdir -p "$base" || exit 2
+id=$(date -u +%Y%m%dT%H%M%SZ)-$$
+dir=$base/$id
+# a plain mkdir: a run id taken twice fails here, never shares a directory
+mkdir "$dir" || { printf "closing-checks: could not make this run's directory %s\n" "$dir" >&2; exit 2; }
+ln -sfn "$id" "$base/.latest.$$" && mv -Tf "$base/.latest.$$" "$base/latest"
+cur=$(readlink "$base/latest" 2>/dev/null)
+find "$base" -mindepth 1 -maxdepth 1 -mmin +"$keep_min" \( -type d -name '[0-9]*T[0-9]*Z-[0-9]*' -o -type f \( -name '*.log' -o -name '*.exit' \) \
+  -o -type l -name '.latest.*' \) -print0 2>/dev/null | while IFS= read -r -d '' p; do
+  case ${p##*/} in "$id" | "$cur") continue ;; esac
+  rm -rf -- "$p"
+done
 pids=()
 
 # every process under pid, deepest first, so a make's recipe shells and their cargo go with it
@@ -33,7 +57,6 @@ trap stop INT TERM
 
 t0=$(date +%s)
 for c in "${checks[@]}"; do
-  rm -f "$dir/$c.exit"
   ( s=$(date +%s); "$mk" --no-print-directory "$c" > "$dir/$c.log" 2>&1 < /dev/null; rc=$?
     printf '%s %s\n' "$rc" "$(( $(date +%s) - s ))" > "$dir/$c.exit" ) &
   pids+=($!)

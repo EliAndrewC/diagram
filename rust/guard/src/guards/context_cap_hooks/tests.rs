@@ -26,6 +26,11 @@ fn none(_: &str) -> Option<String> {
     None
 }
 
+/// No session clone: the call's cwd gives the tree.
+fn no_clone() -> Option<PathBuf> {
+    None
+}
+
 /// An assistant row of one model call whose context is `tokens`.
 fn call(tokens: u64) -> Value {
     json!({"type": "assistant", "message": {"id": "msg_x", "usage": {
@@ -99,7 +104,7 @@ impl Fixture {
 
 /// The verdict on `input` against the cap, the process's environment unread.
 fn verdict(input: &Value) -> Option<Said> {
-    judge(input, Path::new("/"), &none, CONTEXT_CAP_TOKENS)
+    judge(input, Path::new("/"), &none, CONTEXT_CAP_TOKENS, &no_clone)
 }
 
 /// THE PINNED PAYLOADS (D8's first step): a builder's call carries `agent_id` and `agent_type` `general-purpose`, a defined agent's
@@ -732,8 +737,109 @@ fn a_resume_escaped_then_permitted_lets_the_builders_next_call_through() {
             &f.bash("builder", "make quick"),
             Path::new("/"),
             &late,
-            CONTEXT_CAP_TOKENS
+            CONTEXT_CAP_TOKENS,
+            &no_clone
         ),
         Some(Said::Refused { .. })
     ));
+}
+
+// ---- 451 T60: the handoff under the session's clone, whatever the call's cwd ----
+
+impl Fixture {
+    /// A mirror beside the clone (`mirror/.git`), its claim map giving the pinned session the tree `claim`, or no entry.
+    fn mirror(&self, claim: Option<&Path>) -> PathBuf {
+        let m = self.dir.join("mirror");
+        let map = m.join(".clones/.session-clones");
+        std::fs::create_dir_all(m.join(".git")).unwrap();
+        std::fs::create_dir_all(&map).unwrap();
+        let sid = map.join(pinned("builder")["session_id"].as_str().unwrap());
+        match claim {
+            Some(c) => std::fs::write(&sid, c.display().to_string()).unwrap(),
+            None => std::fs::remove_file(&sid).unwrap_or_default(),
+        }
+        std::fs::canonicalize(m).unwrap()
+    }
+
+    /// The session of `input`, its seams this fixture's: the mirror its `CLONE_MAIN`, an empty sessions directory, no real `HOME`.
+    fn seated(&self, input: &Value) -> Session {
+        let seam = |p: PathBuf| Some(p.display().to_string());
+        Session::with_env(input, |k| match k {
+            "CLONE_MAIN" => seam(self.dir.join("mirror")),
+            "CLONE_SESSIONS_DIR" => seam(self.dir.join("no-sessions")),
+            // `HOME`, the one other key it asks
+            _ => seam(self.dir.to_path_buf()),
+        })
+    }
+}
+
+/// RED FIRST (451 T60): a builder whose shell was reset to the mirror is named its handoff under the SESSION's clone (the claim map,
+/// as `clone_sync_hooks` routes an edit), its Write there passes and one to the mirror's `.git/l7r-handoffs` is refused; a resume
+/// sent from the mirror names the clone's file, and `make context-ok`'s grant from the clone lets the call through. Where the session
+/// resolves no clone, or one that is no work tree, the call's cwd gives the tree, as before.
+#[test]
+fn a_call_from_the_mirror_names_the_handoff_in_the_sessions_clone() {
+    crate::shared::log::quiet();
+    let f = Fixture::new("mirror", &[call(310_000)], Some("T60"));
+    let mirror = f.mirror(Some(&f.clone()));
+    let from = |mut input: Value| {
+        input["cwd"] = json!(mirror);
+        input
+    };
+    let ask = |input: Value| {
+        let e = Event {
+            name: "PreToolUse".to_owned(),
+            input: from(input),
+        };
+        answer(&e, &f.seated(&e.input), Path::new("/"), &none)
+    };
+    let write = |file: &Path| {
+        f.input(
+            "builder",
+            "Write",
+            json!({"file_path": file, "content": "x"}),
+        )
+    };
+    let handoff = f.handoffs().join(format!("T60-{AID}.md"));
+    let stray = mirror
+        .join(".git/l7r-handoffs")
+        .join(format!("T60-{AID}.md"));
+    assert_eq!(
+        ask(f.bash("builder", "make quick")),
+        vec![Answer::Refuse(refusal(310_000, &handoff))]
+    );
+    assert!(ask(write(&handoff)).is_empty());
+    assert!(matches!(ask(write(&stray)).as_slice(), [Answer::Refuse(_)]));
+    // a resume sent from the mirror names the clone's file
+    f.meta(AID, "general-purpose", "451 T60: build it");
+    f.tasks("- [ ] T60 a\n");
+    let text = refused(&ask(f.send(AID, "go on")));
+    assert!(text.contains(&handoff.display().to_string()), "{text}");
+    // the session resolving no clone, or a directory that is no work tree: the cwd's tree, today's file
+    let mirrored = mirror.join(".git/l7r-handoffs").display().to_string();
+    for claim in [None, Some(f.dir.join("gone"))] {
+        f.mirror(claim.as_deref());
+        let text = refused(&ask(f.bash("builder", "make quick")));
+        assert!(text.contains(&mirrored), "{text}");
+    }
+    // `make context-ok`'s grant, keyed by the clone it runs in, lets the mirror's call through
+    f.mirror(Some(&f.clone()));
+    assert!(crate::shared::tool::ask(
+        Path::new("/"),
+        "git",
+        &["init", "-q", &f.clone().to_string_lossy()],
+        ""
+    )
+    .ok());
+    let key = permit_key(&f.clone(), AID);
+    assert_eq!(
+        cli(&[
+            "grant".to_owned(),
+            key,
+            "the builder writes its handoff".to_owned()
+        ])
+        .code,
+        0
+    );
+    assert!(ask(f.bash("builder", "make quick")).is_empty());
 }

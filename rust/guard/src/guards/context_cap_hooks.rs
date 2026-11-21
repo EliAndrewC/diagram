@@ -21,6 +21,9 @@
 //! log's chain reads moves between them, and no two builders share a file. The Read is let through so a handoff once written can be
 //! overwritten (the Write tool refuses a file it has not read). A Write there passed the live guard chain from a background builder
 //! (observed 2026-11-20, method: this task's builder writing `.git/l7r-handoffs/probe-<its id>.md` in its clone, then removing it).
+//! The git dir, the task's starts and the permit are the SESSION's clone's (`shared::session`'s resolve, as `clone_sync_hooks` routes
+//! an edit), the call's cwd's tree only where that resolves no work tree (451 T60): a builder whose shell was reset to the mirror wrote
+//! its handoff in the mirror's `.git` (2026-11-21, T10's and T55's).
 //!
 //! The escape (FR-012): `CONTEXT_OK="<reason>"` in a Bash command, recorded; or, for any tool, the session's per-agent permit
 //! `make context-ok AID= WHY=` (D9: the guard-edit permit's store, keyed `<clone>/context-cap:<agent id>`, an hour), each call it
@@ -143,7 +146,8 @@ fn answer(
     let log = |kind: &str, detail: &str, rule: &str| {
         fire("context-cap", kind, detail, rule, &event.input, session);
     };
-    match judge(&event.input, here, env, CONTEXT_CAP_TOKENS) {
+    let clone = || session.clone_dir().map(Path::to_path_buf);
+    match judge(&event.input, here, env, CONTEXT_CAP_TOKENS, &clone) {
         None => Vec::new(),
         Some(Said::Handoff(path)) => {
             log("passed", &path, "handoff");
@@ -205,20 +209,22 @@ fn answer(
 }
 
 /// The verdict on one hook input against the cap `cap`: None to pass it silently. A `SendMessage` is judged as a resume (D10) once its
-/// sender's own cap lets it through: a builder past its cap is refused its `SendMessage` as any other call.
+/// sender's own cap lets it through: a builder past its cap is refused its `SendMessage` as any other call. `clone` is the session's
+/// clone, asked only past the cap or on a resume of a builder (451 T60, [`seat`]).
 fn judge(
     input: &Value,
     here: &Path,
     env: &dyn Fn(&str) -> Option<String>,
     cap: u64,
+    clone: &dyn Fn() -> Option<PathBuf>,
 ) -> Option<Said> {
-    let own = own_cap(input, here, env, cap);
+    let own = own_cap(input, here, env, cap, clone);
     if field(input, "tool_name") != "SendMessage"
         || matches!(own, Some(Said::Refused { .. } | Said::NoReason(_)))
     {
         return own;
     }
-    resume(input, here, env, cap)
+    resume(input, here, env, cap, clone)
 }
 
 /// The verdict on a call against its own builder's cap (D8, D9).
@@ -227,6 +233,7 @@ fn own_cap(
     here: &Path,
     env: &dyn Fn(&str) -> Option<String>,
     cap: u64,
+    clone: &dyn Fn() -> Option<PathBuf>,
 ) -> Option<Said> {
     // THE MAIN SESSION, AND AN ID NO PATH CAN TAKE: every call of the main thread ends here, nothing read
     let agent = field(input, "agent_id");
@@ -252,7 +259,9 @@ fn own_cap(
     if tokens <= cap {
         return None;
     }
-    let (root, _, _, task) = filed_at(input, here, env)?;
+    // ITS HANDOFF, ITS TASK AND ITS PERMIT IN THE SESSION'S CLONE, whatever tree its shell stands in (451 T60, [`seat`])
+    let home = seat(clone(), &tree);
+    let (root, _, _, task) = filed_at(&with_cwd(input, &home), here, env)?;
     let dir = common_git_dir(&root).join(HANDOFFS);
     let handoff =
         dir.join(task.map_or_else(|| format!("{agent}.md"), |t| format!("{t}-{agent}.md")));
@@ -263,7 +272,7 @@ fn own_cap(
         return Some(Said::Handoff(field(ti, "file_path").to_owned()));
     }
     // D9'S PERMIT: `make context-ok AID= WHY=`, the session's grant for this one agent, an hour (the guard-edit permit's store)
-    let granted = permit_reason(&permit_key(&tree, agent), now(env));
+    let granted = permit_reason(&permit_key(&home, agent), now(env));
     if !granted.is_empty() {
         return Some(Said::Permitted(granted));
     }
@@ -288,6 +297,7 @@ fn resume(
     here: &Path,
     env: &dyn Fn(&str) -> Option<String>,
     cap: u64,
+    clone: &dyn Fn() -> Option<PathBuf>,
 ) -> Option<Said> {
     let ti = input.get("tool_input")?;
     let to = field(ti, "to");
@@ -317,8 +327,9 @@ fn resume(
         return None;
     }
     let past = context(&own).filter(|&n| n > cap);
+    let home = seat(clone(), &tree);
     // its feature and log, as the agent's own line is filed; never that line's task, whose last rung is the latest start (D10)
-    let probe = json!({"hook_event_name": "PreToolUse", "agent_id": to, "transcript_path": session, "cwd": tree});
+    let probe = json!({"hook_event_name": "PreToolUse", "agent_id": to, "transcript_path": session, "cwd": home});
     let (task, landed) = filed_at(&probe, here, env).map_or((None, false), |(root, f, log, _)| {
         task_landed(&root, &f, &log, &meta, to, &own)
     });
@@ -334,7 +345,7 @@ fn resume(
         Escape::None => Some(Said::Resume {
             agent: to.to_owned(),
             stale,
-            handoff: handoff_of(&tree, task.as_deref(), to),
+            handoff: handoff_of(&home, task.as_deref(), to),
         }),
     }
 }
@@ -480,6 +491,27 @@ fn tree_of(cwd: &Path) -> Option<PathBuf> {
     p.ancestors()
         .find(|d| d.join(".git").exists())
         .map(Path::to_path_buf)
+}
+
+/// The tree a builder's handoff, its task's starts and its permit are read in (451 T60): the session's clone (`shared::session`'s
+/// resolve - the claim map, else the session's name - as `clone_sync_hooks` routes an edit) where it is a work tree, else `tree`,
+/// the one the call's cwd stands in. WHY: a builder whose shell was reset to the mirror was named its handoff under the MIRROR's `.git`,
+/// and wrote it there (2026-11-21: T10's and T55's handoffs at /diagram/.git/l7r-handoffs/, the mirror being no workspace), its
+/// task looked up in the mirror's starts, not the clone's, and its `make context-ok` permit, keyed by the clone, unseen.
+fn seat(clone: Option<PathBuf>, tree: &Path) -> PathBuf {
+    clone.filter(|c| c.join(".git").exists()).map_or_else(
+        || tree.to_path_buf(),
+        |c| std::fs::canonicalize(&c).unwrap_or(c),
+    )
+}
+
+/// `input` with its `cwd` the tree `home`, so its line's feature, log and task are read where its handoff is written.
+fn with_cwd(input: &Value, home: &Path) -> Value {
+    let mut at = input.clone();
+    if let Some(o) = at.as_object_mut() {
+        o.insert("cwd".to_owned(), json!(home));
+    }
+    at
 }
 
 /// Whether `file` is this agent's handoff: in `dir`, its name ending `<agent>.md`.

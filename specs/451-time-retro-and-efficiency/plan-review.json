@@ -49,66 +49,6 @@
    "reviewed": "2026-11-20",
    "declared": "spec-fidelity"
   },
-  "### T07 (FR-004: no agent's token cost is logged, nor the task it served - research R2)": {
-   "sha256": "ea0ca734343d769cd324f55c33d47f2da76fc447971c4f67f070e9e052191884",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-21",
-   "declared": "spec-fidelity"
-  },
-  "### T07 Approach (checklist part A)": {
-   "sha256": "a8cd32299757bdbad0fcdb0d45b90a5a4175f95beda0ba83701921f1af80656a",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-21",
-   "declared": "spec-fidelity"
-  },
-  "### T08 (FR-005: `make where-time` booked most of the window as \"waiting on work\" and every gate and test column zero - the spec's Why)": {
-   "sha256": "6b31b20dc9a42dc925ee0f471beabee7c5347ab18d06547c81893fcccf7b2be9",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-21",
-   "declared": "spec-fidelity"
-  },
-  "### T08 Approach (checklist part A)": {
-   "sha256": "1c97c3cde0c42008c5f517f123c35f6d8267237192daaeb88258e47fc35395d0",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-21",
-   "declared": "spec-fidelity"
-  },
-  "### T09 (FR-002, FR-005: a wait cannot be booked to the run behind it - the spec's User Story 1 scenario 2, research R2)": {
-   "sha256": "0dd68a3fae8051768cf0af94082eb12f4455b515fb01e1c0ee6618695e5c49f3",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-21",
-   "declared": "spec-fidelity"
-  },
-  "### T09 Approach (checklist part A)": {
-   "sha256": "1e60e9513e53ba9bb0b46392293f9a192c05e9051c09e3788baabc9c1d262049",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-21",
-   "declared": "spec-fidelity"
-  },
-  "### T10 (FR-005: the wall clock on the critical path apart from the agent-minutes, the agents' tokens, the rework)": {
-   "sha256": "c8c2b3c304e29616feaeccced43b40f38d514193dbd01f7b0cd3007d2aa45ba8",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-21",
-   "declared": "spec-fidelity"
-  },
-  "### T10 Approach (checklist part A)": {
-   "sha256": "d1ed25f42e6e3bc5f75a89efaed4170714bc33795cdda789c442a01bbec43c3e",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-21",
-   "declared": "spec-fidelity"
-  },
-  "### T11 (FR-005: `make feature-report` reads the same columns)": {
-   "sha256": "3d86da9ea7fc5bf43ac8bd93eef524b56b9d01b145a2d550e8afc9831edc4a4b",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-21",
-   "declared": "spec-fidelity"
-  },
-  "### T11 Approach (checklist part A)": {
-   "sha256": "c5f50b9e6e756dadbc04a3c388a0d37f8aa8e55bcde62cf347a7fc12f5302fc5",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-21",
-   "declared": "spec-fidelity"
-  },
   "### T15 (FR-008: T225's `make static` with a plain `&` sat untracked - the spec's User Story 4, research R4)": {
    "sha256": "e789135ccfa45597df5301fb7396d3261eb98ae774998819f9ea21874f7d0228",
    "verdict": "CLEAR",
@@ -193,12 +133,6 @@
    "reviewed": "2026-11-20",
    "declared": "spec-fidelity"
   },
-  "### T33 Approach (checklist part A)": {
-   "sha256": "3c35a134af59efbd98e01ead38db2e06c1645e9e86f9c3ff4f0fffc5f2539b4c",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-21",
-   "declared": "spec-fidelity"
-  },
   "### T36 Approach (checklist part A)": {
    "sha256": "47336feb03bfa0de749a55df0a9eba44a59a9c083907619c2a9093a5fa148145",
    "verdict": "CLEAR",
@@ -216,12 +150,6 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-21",
    "declared": "round-arbiter"
-  },
-  "### T33 (four writes the guards read as none: T14's `cd rust/guard/src/guards && python3 - <<'EOF' ... open(p,'w')` rewrote a guard source the make-only guard refuses to `sed -i`, observed 2026-11-20, method: the T14 builder's transcript agent-a4a91e2ca23b89b21 at 14:32:16Z, found by `/tmp/t33/find_t14.py`; a builder's `git apply` and `cp` under T34's running `make land` failed static's cover, observed 2026-11-20, method: T34's refused landing; a bare `rustfmt` passed make-only, observed 2026-11-20, method: T34's found-and-left; `git diff --output=<file>` read as a read, observed 2026-11-20, method: T44's builder's report)": {
-   "sha256": "b2b221d9c4d809a7c6c443170d29691f76735311ad9cba7803bf478b7debd946",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-21",
-   "declared": "spec-fidelity"
   },
   "### T49 (<why: the finding or measurement that files it>)": {
    "sha256": "01677a85d9445a1f8375005f586f704bc656f61419ee149c3de3b73c6c58185e",
@@ -254,7 +182,7 @@
    "declared": "round-arbiter"
   },
   "### T51 Approach (checklist part A)": {
-   "sha256": "a6e38661be89d27c7370ae0ccb3080d3d688aa95d130c186418dc365a1b10440",
+   "sha256": "97f521383b47753279e38dc6401b850e2ae02327b1bb87e95646f41ff51a0c22",
    "verdict": "CLEAR",
    "reviewed": "2026-11-21",
    "declared": "round-arbiter"
@@ -277,42 +205,6 @@
    "reviewed": "2026-11-21",
    "declared": "spec-fidelity"
   },
-  "### T53 Approach (checklist part A)": {
-   "sha256": "b672dbef88f10d8aaf9e8cdca83382c741298a515ebc241a1c8f8a8a288355e7",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-21",
-   "declared": "spec-fidelity"
-  },
-  "### T54 (<why: the finding or measurement that files it>)": {
-   "sha256": "1e990f5d2d7a9a9f2d0ccb302cce94eed4fce1fbae42dcec7cf2af52e58e9540",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-21",
-   "declared": "spec-fidelity"
-  },
-  "### T54 Approach (checklist part A)": {
-   "sha256": "bd1c7aaf62902fd5059bb28c94fc581aed977bbd778483fc5318d9bbaedf2228",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-21",
-   "declared": "spec-fidelity"
-  },
-  "### T53 (T26's writer still filed lines by feature.json after it landed: 19 lines in 449's log and 2 in 385's to move, measured 2026-11-21 (`make events-refile DRY=1`), and 23 left in 385's log that no rule places, measured 2026-11-21 (the same dry run's last line))": {
-   "sha256": "c6d39a547d4f0602873653cb8614ff4c190a9b587746fc8c9867632f3b9eb1f6",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-21",
-   "declared": "spec-fidelity"
-  },
-  "### T55 (a builder's closing checks ran one after another and blocked its writing: measured 2026-11-21 over 39 builders' transcripts, after the last code edit 63 min of checks in the foreground and 101 min idle on its own background runs, beside 158 min of model time writing the plan section, decide and the report, which need no check's result)": {
-   "sha256": "d4bbcdd70e30e3ee7b6bf3c2bf9a07b631eeb680f8ba1df9488454542791ffcb",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-21",
-   "declared": "spec-fidelity"
-  },
-  "### T55 Approach (checklist part A)": {
-   "sha256": "e0c9dd63715bae3d9cd3d65d9d5e9898c07b967234375782a01a8fcf9b657746",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-21",
-   "declared": "spec-fidelity"
-  },
   "### T57 (the finding as filed, restated by its measurement: `make static` builds and runs no plain test binary - the plain `build` and `test` time is `make rust-test`'s, the builders' loop, measured 2026-11-21 over the event log's Phase lines since 2026-11-20T12:35Z; what is built twice is a crate's tests in `make rust-test` and again in the coverage run, which answers for the plain run only where T111's `unit_tests_only` says the coverage run ran every test `cargo test` runs)": {
    "sha256": "4204c596ab4982dcfdfbbe0f2627fbe805958931ead7a6c7e00821c8337e15e2",
    "verdict": "CLEAR",
@@ -325,209 +217,101 @@
    "reviewed": "2026-11-21",
    "declared": "spec-fidelity"
   },
-  "### T62 (the finding as filed, restated by its measurement: the backstop refuses the job session's FIRST edit of a CLEAN clone, its main thread's and its builders' alike - every builder is an in-process subagent of the job `c6fd72d1` and carries its session id, and a dirty clone is let through before the backstop runs - because the live interactive session `d2dc8c63` that parked the job claims the clone and `forked_from` knows no parent of a `claude bg-spare` job; measured 2026-11-21 (the guard log, the 451 event log, the session records and a replay of the mirror's binary))": {
-   "sha256": "ffd0b7f00ae16297e8f38fa4080a9a9544b25b3db843a9df5858b53d73d90ed2",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-21",
-   "declared": "spec-fidelity"
-  },
-  "### T62 Approach (checklist part A)": {
-   "sha256": "f4769ed338bcc37158d31f74e4503c6363be87062b4cc42a2d58a9ad6635ae6a",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-21",
-   "declared": "spec-fidelity"
-  },
-  "### T56 (<why: the finding or measurement that files it>)": {
-   "sha256": "80de25c9b9377b8ff707a6fd30563cae0c62838e071fde8c08ab9d210f1c5819",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-21",
-   "declared": "spec-fidelity"
-  },
   "### T56 Approach (checklist part A)": {
    "sha256": "1ad4cf4734994d2a3058d10372f5cda4c99e7644734be150b0c8c07662e605a5",
    "verdict": "CLEAR",
    "reviewed": "2026-11-21",
    "declared": "spec-fidelity"
   },
-  "### T58 Approach (checklist part A)": {
-   "sha256": "f6ff392c5ee3fe4e66a2e8224b2238e96929a378bd33d9406d8461722fa708d7",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-21",
-   "declared": "spec-fidelity"
-  },
-  "### T59 (<why: the finding or measurement that files it>)": {
-   "sha256": "d591e8427df3518576fd86b055e914395d9ce8e222b4e6cb67001cdbb001b84c",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-21",
-   "declared": "spec-fidelity"
-  },
-  "### T59 Approach (checklist part A)": {
-   "sha256": "233c0807e03724a0b828bc3832f25789f454ba6bf9fd039f0dddf4dc71f0ef97",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-21",
-   "declared": "spec-fidelity"
-  },
-  "### T60 (<why: the finding or measurement that files it>)": {
-   "sha256": "63d268457f6d61bc29b9873fcfe5a24570d6a9e60c8bdedced7894bedc596433",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-21",
-   "declared": "spec-fidelity"
-  },
   "### T60 Approach (checklist part A)": {
-   "sha256": "0db999cf099f3c981eefd2391d91bb1f7ef3be1694c3828b0df3b896031b3059",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-21",
-   "declared": "spec-fidelity"
-  },
-  "### T61 (<why: the finding or measurement that files it>)": {
-   "sha256": "8306b54f730ebada3142fc5825962cccf5592b804d122c1302fd90efdae60020",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-21",
-   "declared": "spec-fidelity"
-  },
-  "### T61 Approach (checklist part A)": {
-   "sha256": "cd6cd5404d2b2f744ce5994e9ab58baf7f42163b2eec2c416471799139daa4bb",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-21",
-   "declared": "spec-fidelity"
-  },
-  "### T63 (<why: the finding or measurement that files it>)": {
-   "sha256": "309d4f35a32638efcff9a0ebabb035007508decf8a88d710a05cf22488c47e9f",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-21",
-   "declared": "spec-fidelity"
-  },
-  "### T63 Approach (checklist part A)": {
-   "sha256": "34d686be116b67901bd10ea9ab45fc8773a5982bbd137720eb6785ee068f4000",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-21",
-   "declared": "spec-fidelity"
-  },
-  "### T64 (<why: the finding or measurement that files it>)": {
-   "sha256": "647c0a3a20f8a4852aeb9808878510082e021fbdab5702e7088d5ab12621b81c",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-21",
-   "declared": "spec-fidelity"
-  },
-  "### T64 Approach (checklist part A)": {
-   "sha256": "2457b04a5b47467d31c95beca2085303acf1c18e459b4aadcdb87fb72bca79cb",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-21",
-   "declared": "spec-fidelity"
-  },
-  "### T58 (the finding as filed, restated by its measurement: every gate crate, `rust/gate`, `rust/mode_a`, the browser and the embedder named `l7r_guard`, so touching one hook compiled 32 crates where its own tests' edit compiled 1, measured 2026-11-21 (`/tmp/t58/scripts/measure.sh`: the file touched, then a warm `cargo test --offline --workspace --exclude l7r_phases --no-run` in a private target, the detached worktree at 3a60ac40e1); hook edits are 246 of the 520 non-test guard edits since 2026-11-01, so the split was built)": {
-   "sha256": "0f6cd69b1f3fba05e1de2acd3d2c32f3c24b830a37d53bf6e295feaaefafada7",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-21",
-   "declared": "spec-fidelity"
-  },
-  "### T66 (the finding as filed, restated by its measurement: after T58 no manifest under `rust/` names `l7r_guard` but the guard's own, so a hook edit rebuilds 1 crate where it rebuilt 32 (measured 2026-11-21 by T58, `measure.sh`), and nothing refused a crate that named it again - `make static` read no manifest's dependencies, measured 2026-11-21 (its recipe read; the checks crate's and the rustc crate's sources grepped for a dependency rule: no check refuses a dependency - `rustc.rs`'s `features()`, `kept.rs` and `fmtfile.rs` read manifests, for features, `[package.metadata.l7r]` reads and a package's edition))": {
-   "sha256": "c76189b1d2a15d933c5340ddf370d1893d5d377d18e4715e0bbec4d3309f4263",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-21",
-   "declared": "spec-fidelity"
-  },
-  "### T66 Approach (checklist part A)": {
-   "sha256": "1a3dc81f135d530e558847a8dc7b3e8f6c9ac3053f2a3e5997cba0a595d7f8fa",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-21",
-   "declared": "spec-fidelity"
-  },
-  "### T65 (the finding as filed, restated by its measurement: `set_down_hooks::running` read a transcript's launched and notified ids as two sets, so a SendMessage resume - its result's `\"resumedAgentId\":\"<id>\"`, 153 such records in the session `c6fd72d1-...jsonl` - was no launch and a resumed agent read as finished once it had notified, and an interim notice (`<summary>Agent \"...\" is waiting on its own background work</summary>`, its note \"the same task-id notifies again if it does; the result below may be interim\") ended its agent, which was waiting on its own work: resumes read, but an interim notice taken for final, \"nothing is running\" was read at 38 of that session's 1,864 turn ends while such an agent was alive, measured 2026-11-21 (a replay of the transcript and its agents' own transcripts, `/tmp/claude-T65/stops.py`, the truth approximate: an agent alive when its own transcript wrote again later without a parent resume first))": {
-   "sha256": "e3ab44a50301834c0ea16166638ca7966c215c635e02a424c54565e3d82a42e2",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-21",
-   "declared": "spec-fidelity"
-  },
-  "### T65 Approach (checklist part A)": {
-   "sha256": "59fa4b41c58886872c35453d0d78b689c5e46e066ab61ab476dd5826fdb60aaf",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-21",
-   "declared": "spec-fidelity"
-  },
-  "### T67 (<why: the finding or measurement that files it>)": {
-   "sha256": "e0625e761c1d87b8e864d8e1be2a223c27337d20ac8db5549831f4cecddbbdc1",
+   "sha256": "98b891c5672ab5cfd57fa2db2f4b8d20c1653a8de91add1791b0011bfcd25e3c",
    "verdict": "CLEAR",
    "reviewed": "2026-11-21",
    "declared": "spec-fidelity"
   },
   "### T67 Approach (checklist part A)": {
-   "sha256": "123a9959c7eee34b047cbb964364b5d2a8c789acf22dd20724a4e58dc48d3ffe",
+   "sha256": "9be37cbc06046df77f22acb5190f79cb04923978f5bf5b373e6e833669b964dd",
    "verdict": "CLEAR",
    "reviewed": "2026-11-21",
-   "declared": "spec-fidelity"
+   "declared": "round-arbiter"
   },
   "### T56 (T53's writer gives a start over 72 h old no feature, but `make events-refile` read its own copy of the start rule: 0 lines moved and 23 left in 385's log, measured 2026-11-21 (`make events-refile DRY=1` before the change, its last line))": {
-   "sha256": "49e262460de06bf84edfb255d7d4882d476814ebafe63e3aba0cb2ed57997d66",
+   "sha256": "d81af4d463082232927159943609dc787cf2137647f82d424991111a0b275311",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-21",
+   "declared": "round-arbiter"
+  },
+  "### T72 (two `make closing-checks` runs in one clone shared `.git/closing-checks/` and read each other's verdicts: T69's builder's run of 09:38:33Z beside another's of 09:38:06Z, the first reading the second's `quick` verdict and its `static.log` holding both runs' lines, observed 2026-11-21 (T69's section in plan-done.md, Found and left); reproduced against the unfixed script, run A's red `quick` read GREEN and run B's green `hooks-test` read RED, measured 2026-11-21 (`tests/hooks/test-closing-checks.sh`, `/tmp/t72/red.log`))": {
+   "sha256": "848decf1b0cc333af95de8ef713cf9504e01c7b8f559058707a9e72898aefabf",
    "verdict": "CLEAR",
    "reviewed": "2026-11-21",
    "declared": "spec-fidelity"
   },
-  "### T59 (the finding as filed, restated by its measurement: a `SubagentStop` line's `tok` leaves out the agent's reply, its last model call, on 62 of the 85 stops that carry one, because the reply's row is not yet on disk when the hook reads, and the stops with no `tok` are the 10,370 written before the field began and 4 with no transcript anywhere, measured 2026-11-21 (`/tmp/t59/compare.py` and `gap.py`: each stop of every clone's and the mirror's event log against its agent's transcript))": {
-   "sha256": "b15f99115a6fe52c81a815a3aa7e209ae8d3f172b955f059febfc89b19fcede6",
+  "### T72 Approach (checklist part A)": {
+   "sha256": "b709177f8792178408589594d855d5381830bd12c5b4b943d4b34cbc4f2e238c",
    "verdict": "CLEAR",
    "reviewed": "2026-11-21",
    "declared": "spec-fidelity"
   },
-  "### T64 (T55's order notice counted a code edit already landed: the main session was told at its `make decide` calls that its Makefile edit of 2026-11-20T15:48:51Z, filed under T12, had no closing-checks after it, though T12 landed at 15:55:22Z; replayed over 451's log, 22 of the rule's 127 firings at 211 decides were on an edit its task had landed, all the main session's, measured 2026-11-21 (`/tmp/claude-T64/replay.py`, the decide rule replayed over `.git/l7r-events/451-time-retro-and-efficiency.jsonl` to its last line at 2026-11-21T08:09:00Z))": {
-   "sha256": "769e32841bd6bf436b88f694c6f0f19d694c2e7577ab289e47707d7c4d3e8997",
+  "### T60 (the context cap named a builder's handoff under its call's cwd: 2 handoffs, T10's `T10-aa6406892e465f0a5.md` and T55's `T55-abe836de838b025ad.md`, in the mirror's `/diagram/.git/l7r-handoffs/`, against 56 entries in the clone's (55 handoffs and the `T59-scripts` directory), measured 2026-11-21 (`ls` of both))": {
+   "sha256": "54d505dfa2e92583666985441df772b3a261535c8bd0f92f080b90352a936ca6",
    "verdict": "CLEAR",
    "reviewed": "2026-11-21",
    "declared": "spec-fidelity"
   },
-  "### T68 (the finding as filed, restated by its measurement: a row carrying an advisor call holds the builder's own two iterations, before and after the call, summed in its top-level `usage` - twice its context - and the advisor's own iteration in neither; the cap read that sum, and 33 of its 34 refusals since T12 read such a row, every one of the 33 under the cap on the builder's own last iteration, measured 2026-11-21 (the guard log's context-cap rows against the builders' transcripts))": {
-   "sha256": "e47b9d21259b198b5b881233916f80399eb4ab2eb163f673a6e9662b40696b21",
+  "### T75 (the README guard refused a README path held as the text of a one-line Python string, found by T67's first plan review, 2026-11-21)": {
+   "sha256": "5913f4c22d1b98f8c132d645d6285fb01b98a24228986889cb580dfe38ffa3e4",
    "verdict": "CLEAR",
    "reviewed": "2026-11-21",
    "declared": "spec-fidelity"
   },
-  "### T68 Approach (checklist part A)": {
-   "sha256": "b68679a9fec788dd72a665938977fbceaf7b03aac5532717b844e7aa72479cbb",
+  "### T75 Approach (checklist part A)": {
+   "sha256": "49862838a166005f31c89b3b5357b417c8a12db6032db78689d8c413b2bb7705",
    "verdict": "CLEAR",
    "reviewed": "2026-11-21",
    "declared": "spec-fidelity"
   },
-  "### T63 (the make-only guard refused T58's read-only heredoc over the event logs as a guard-file write; of the 250 make-only refusals still standing when the guard log was replayed, 4 were of programs that open nothing for writing and 1 of them, that heredoc, imports none of the tree's code, measured 2026-11-21 (the guard log replayed through `tests/hooks/make-only-hooks.sh` and each refused program re-judged with its body blanked))": {
-   "sha256": "df8e3cf619e56cc72716622c81a342db3f1025f2e160ca911bacf0bd88c5ce9b",
+  "### T67 (T58's builder's `cd /tmp/t58/wt && cp rust/guard/src/guards/readme_hooks.rs /tmp/t58/readme.keep && ...` refused as a README write, 2026-11-21T06:30Z; replayed verbatim through the guard, what matched was the DESTINATION, `/tmp/t58/readme.keep` - a README by the guard's name rule, `README` with any extension - outside the tree, not the source's name, measured 2026-11-21, method: the guard log's entry, the command recovered from the builder's transcript and replayed through `tests/hooks/readme-hooks.sh`)": {
+   "sha256": "b2af3b49c26a7617ce0f31baec14cb0777db3ebd754d28bc2b2e7eb07d6c2ebc",
    "verdict": "CLEAR",
    "reviewed": "2026-11-21",
-   "declared": "spec-fidelity"
+   "declared": "round-arbiter"
   },
-  "### T61 (the finding as filed, restated by its measurement: `writer-alive.sh`, the proof of life the no-poll rewrite adds to a file wait, read a file nothing held open and nothing wrote for 45 s (its `STALE` knob) as a dead run, so a run appending to its summary only between steps was called gone while it ran - T55's builder's `until grep -q \"^total\" /tmp/t55/seq.times` ended at 55 s, exit 3, and T58's on `/tmp/t58/checks2.txt`, measured 2026-11-21 (the two waits' task outputs, `bd0e5tuie` and `bbuzlgz5p`, read for the helper's line), and of the 11 firings whose wait's output was still on disk, 8 were followed by a write to the file, measured 2026-11-21 (the session's `tasks/*.output` grepped for the helper's \"gone\" line, each watched file's mtime against its wait's end))": {
-   "sha256": "7e265ee4bb297f0bebbabc77bb53b49dc356102c75257c24a952d763e2d80452",
+  "### T71 (<why: the finding or measurement that files it>)": {
+   "sha256": "a3e1a3e93ec3b5c5016b485b9c506d465f8675b889134edf66406cdbef50b3ca",
    "verdict": "CLEAR",
    "reviewed": "2026-11-21",
-   "declared": "spec-fidelity"
+   "declared": "round-arbiter"
   },
-  "### T70 (rust/browser's end-to-end test, the one on the real Chromium, failed good work under load: `page.wait_for_function: Timeout 40ms exceeded.` in `make closing-checks`' cover run at 2026-11-21T08:46:27Z; the crate's cover run alone was clean 96 s after, measured 2026-11-21 (the event log's Phase lines))": {
-   "sha256": "f28c23c6a726e8f5da1efede02f87543e6abef0c196d51aeb12e007d496d6368",
+  "### T71 Approach (checklist part A)": {
+   "sha256": "bc39b9fa025492ccc56808dfeadfd8c28623f041b88cf50ee9b0626b4fef594b",
    "verdict": "CLEAR",
    "reviewed": "2026-11-21",
-   "declared": "spec-fidelity"
+   "declared": "round-arbiter"
   },
-  "### T70 Approach (checklist part A)": {
-   "sha256": "1e654eaf692fefd22b83f8f1599143b9a7ed3baaba7a1ab9266e0fda5a2b1d7e",
+  "### T73 (<why: the finding or measurement that files it>)": {
+   "sha256": "bee8bc96f8f5c5d5b9bb359edc8ad92d280192af42250137b057d041907d40b9",
    "verdict": "CLEAR",
    "reviewed": "2026-11-21",
-   "declared": "spec-fidelity"
+   "declared": "round-arbiter"
   },
-  "### T69 (the finding as filed, restated by its measurement: a row carrying an advisor call holds `usage.iterations` of the builder's own call, the advisor's and the builder's own again, its top level the builder's two summed; the event log's `tok` and T10's transcript reader read the top level, so the advisor's own tokens - 82,254,728 input and 6,504,729 output over the session's subagent transcripts, 23,629,763 and 2,273,188 of them in the 223 agents of 451's window - were in no figure, measured 2026-11-21 (`/tmp/t69/rows.py` and `/tmp/t69/cross.py`, the `advisor_message` iterations summed one row per `message.id`))": {
-   "sha256": "5852b41d8c560bdb22149ffa7a0278659d7067f829988ed04c79a107dfd5cc04",
+  "### T73 Approach (checklist part A)": {
+   "sha256": "df71d091387b7996059f170c53e5f57af0d9ff45659f99cb27cca55e8ecd4dd0",
    "verdict": "CLEAR",
    "reviewed": "2026-11-21",
-   "declared": "spec-fidelity"
+   "declared": "round-arbiter"
   },
-  "### T69 Approach (checklist part A)": {
-   "sha256": "2d4bcb97036266e5cb5f7cdde8f71f2427a2623733a0762898f4b5b054779956",
+  "### T74 (<why: the finding or measurement that files it>)": {
+   "sha256": "2339b700ff043f7fdedae329207ce405643d62797a118188202aef1e1cd7b4ef",
    "verdict": "CLEAR",
    "reviewed": "2026-11-21",
-   "declared": "spec-fidelity"
+   "declared": "round-arbiter"
   },
-  "### T54 (the stale-terms search refused the FR-013 amendment's spec review with 66 candidates on the backticked `end` read as an ordinary word, escaped with `STALE_TERMS_OK`, measured 2026-11-21 (the guard log's `blocked/stale-terms` row of 2026-11-21T02:55:57Z and the refusal's text in the session transcript))": {
-   "sha256": "8a0b73fc6daaca194cf92d9138a9e7a153ab25bf27c1dd99ea1d3afc7b733572",
+  "### T74 Approach (checklist part A)": {
+   "sha256": "e16beac33c4b178be2c2b5e702b439a79f1563ab6c729cd5f4f1e18faa2e20c6",
    "verdict": "CLEAR",
    "reviewed": "2026-11-21",
-   "declared": "spec-fidelity"
+   "declared": "round-arbiter"
   }
  },
  "block_reviews": [
@@ -8097,6 +7881,174 @@
      "why": "These enforce the fix and keep its reach to the check it changes. They add no unrequested behavior."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-21",
+   "blocks": [
+    "### T72 (two `make closing-checks` runs in one clone shared `.git/closing-checks/` and read each other's verdicts: T69's builder's run of 09:38:33Z beside another's of 09:38:06Z, the first reading the second's `quick` verdict and its `static.log` holding both runs' lines, observed 2026-11-21 (T69's section in plan-done.md, Found and left); reproduced against the unfixed script, run A's red `quick` read GREEN and run B's green `hooks-test` read RED, measured 2026-11-21 (`tests/hooks/test-closing-checks.sh`, `/tmp/t72/red.log`))",
+    "### T72 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T72-run-dir",
+     "summary": "Each closing-checks run writes its three logs and .exit files under <git dir>/closing-checks/<UTC time>-<pid>/, made with a plain mkdir (a reused id fails rather than shares); the table, red tails and stop line read that directory alone; the start's rm -f of exit files dropped.",
+     "class": "within",
+     "why": "This is the fix the task was filed for (the GM 2026-11-21, 'yes please file that as a performance task'): two runs in one clone read each other's verdicts; one directory per run, read alone, makes each run's combined result its own. Dropping the rm -f is a consequence (a new directory has no stale files)."
+    },
+    {
+     "id": "T72-latest",
+     "summary": "A relative 'latest' symlink to the run started last, swapped in by ln -sfn to a temp name then mv -T, so it is never missing; the header says to cite the path the table prints since 'latest' may name a parallel run.",
+     "class": "within",
+     "why": "Keeps one stable place to find the last run's logs, which the old single-directory layout gave; it does not reintroduce sharing, since no verdict is read through it, and the header note keeps a builder citing its own run. Serves the request without narrowing it."
+    },
+    {
+     "id": "T72-prune",
+     "summary": "At a run's start, other runs' directories and the old layout's top-level <check>.log/.exit files untouched for CLOSING_CHECKS_KEEP_MIN (360 min, GUESS knob) are removed; own run and latest's target never removed; other names left. Age chosen over count or live-pid.",
+     "class": "within",
+     "why": "Housekeeping the per-run layout makes necessary (directories would otherwise pile up), set so no live run is pruned (360 min against a measured longest run of 601 s, labeled with method); holding the old files to the same keep avoids a false RED on a still-running old-script run. A new GUESS knob is labeled as such. Nothing the GM asked for is narrowed."
+    },
+    {
+     "id": "T72-old-readers",
+     "summary": "No code reads the old paths (grep -rn 'closing-checks' and 'closing-checks/' over the clone, .git and target excluded, measured 2026-11-21); only the script's header and printout are edited; builders' citations in plan-done.md are history and keep their words.",
+     "class": "within",
+     "why": "The enumeration states its search space, and the space is the string itself across every file type in the clone (Makefile, scripts, Rust, docs, .claude), not a language-filtered sample, so a reader holding the path as a string would have been found. Leaving historical citations is not a narrowing: they are records, not readers."
+    },
+    {
+     "id": "T72-atomic-install",
+     "summary": "The installed script written to a temp file and moved into place so a run already reading the old one keeps its copy.",
+     "class": "within",
+     "why": "An implementation safety detail of the same fix; decides nothing the request or spec constrains."
+    },
+    {
+     "id": "T72-red-first",
+     "summary": "tests/hooks/test-closing-checks.sh case 4 reproduces two overlapping runs whose verdicts differ, ordered by release files not sleeps (red against the unfixed script: A's red quick read GREEN, B's green hooks-test read RED); case 5 the prune; cases 1-2 read the run directory.",
+     "class": "within",
+     "why": "A test whose only effect is to make the requested fix happen and keep happening; it enforces the request and is not unrequested scope. Its red reproduces the observed wrong outcome exactly."
+    },
+    {
+     "id": "T72-static-red-left",
+     "summary": "The fixed script's own run in the clone had static RED on rust lint doc_markdown in T60's builder's uncommitted context_cap_hooks files; left to T60, 'Found and left: none'.",
+     "class": "within",
+     "why": "Those files are another task's in-progress work outside T72's file list, not a defect T72 found in shipped code; the closing-checks verdict itself was correct (it reported a real red). Nothing of what was asked is left unfixed."
+    },
+    {
+     "id": "T72-perf-tag",
+     "summary": "Filed as a [perf] task under FR-013: the builders' loop, a closing check read right the first time rather than re-run.",
+     "class": "within",
+     "why": "The GM's words verbatim: 'yes please file that as a performance task'. FR-013 counts work that speeds the builders' loop as performance work."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-21",
+   "blocks": [
+    "### T60 (the context cap named a builder's handoff under its call's cwd: 2 handoffs, T10's `T10-aa6406892e465f0a5.md` and T55's `T55-abe836de838b025ad.md`, in the mirror's `/diagram/.git/l7r-handoffs/`, against 56 entries in the clone's (55 handoffs and the `T59-scripts` directory), measured 2026-11-21 (`ls` of both))",
+    "### T60 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T60-seat",
+     "summary": "The handoff's tree is the session's clone (shared::session clone_dir: claim map, else session name) where it is a work tree, else the cwd's tree as today",
+     "class": "within",
+     "why": "FR-006/D9 put the handoff under the git common dir of the tree the session works in, and approved improvement 1 has the session find it in one place. Routing it by the same resolve clone_sync_hooks uses for edits carries out what was asked. Falling back to the cwd's tree only keeps today's answer where no clone resolves."
+    },
+    {
+     "id": "T60-seat-lazy",
+     "summary": "The seat is resolved only past the cap or on a resume of a builder (a closure into judge)",
+     "class": "within",
+     "why": "This keeps D8/D9 as specified: the main session and a defined agent are never read, and no other call does any new work."
+    },
+    {
+     "id": "T60-four-reads",
+     "summary": "The handoff directory, the task in its name (filed_at with cwd set to the seat), the context-ok permit key (<clone>/context-cap:<aid>) and a resume's handoff/probe (D10) all read the one tree the seat gives",
+     "class": "within",
+     "why": "D9's handoff path, its task-named file, its make context-ok permit and D10's resume are one mechanism. If the four read different trees, the refusal, the Write exemption and the permit would disagree. Keying the permit by the clone makes it match where make context-ok grants it."
+    },
+    {
+     "id": "T60-cwd-gate-outside-tree",
+     "summary": "A call whose cwd is outside any git tree still passes the cap, as today",
+     "class": "within",
+     "why": "This is existing behavior that T60 keeps, not a new carve-out. T60 was filed to fix where the handoff is named, not when the cap fires. The bundle records no wrong outcome from it: no builder past the cap is found passing this way."
+    },
+    {
+     "id": "T60-defined-agent-stat-cwd",
+     "summary": "D8's defined-agent stat (.claude/agents/<type>.md) still reads the cwd's tree, not the seat",
+     "class": "within",
+     "why": "This is existing behavior that T60 keeps. It lies outside the four reads the task was filed to move. The bundle records no wrong outcome: no agent is misclassed because the mirror's agents directory differs from the clone's. Under the defect rule, a difference that produces no wrong outcome is not one."
+    },
+    {
+     "id": "T60-red-first",
+     "summary": "A red-first case: from the mirror, the refusal names the clone's T60-<aid>.md, a Write there passes and one to the mirror is refused, a resume names the clone's file, the cwd fallbacks hold, and the clone-keyed grant lets the call through. Red recorded at 416+1 failing, green at 417",
+     "class": "within",
+     "why": "FR-012 requires a red-first test of the refusal, and this case covers the requested behavior and its permit. It only enforces what was asked."
+    },
+    {
+     "id": "T60-move",
+     "summary": "The two misrouted handoffs in the mirror's .git/l7r-handoffs (byte-identical to the clone's copies, per cmp) are moved with a recorded MAIN_TREE_OK mv, and the empty directory is removed",
+     "class": "within",
+     "why": "The task as filed asks for this cleanup. The handoffs end up in the one place the request wants them, and the mv is recorded."
+    },
+    {
+     "id": "T60-T74-deferral",
+     "summary": "The event log's cwd filing (364 lines of 451 in the mirror, unseen by where-time in the clone) is left to T74, which lands before T22",
+     "class": "within",
+     "why": "T60 was not asked to fix the event log. The defect stays owed inside feature 451 as a filed task with an order. The item carries FR-009's three parts: why it is not fixed here (event_log_hooks is a shared module outside T60's files), the filed id T74, and 'lands before T22'. It drops nothing the GM asked for."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-21",
+   "blocks": [
+    "### T75 (the README guard refused a README path held as the text of a one-line Python string, found by T67's first plan review, 2026-11-21)",
+    "### T75 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T75-close",
+     "summary": "T75 is closed as carried by T67's L1: T67's builder fixed the README guard's one-line-string refusal inside T67, and T75 changes nothing of its own.",
+     "class": "within",
+     "why": "The defect (a check refusing a correct Python program, a wrong outcome under constitution XIV) is fixed, not deferred or narrowed; the fix lives in the task whose code it touches, as T67's plan review allowed, with red-first evidence recorded (11 failed before, green after, 86 passed 0 failed at T67's close, dated and with method). Nothing the GM asked for is dropped: fix-as-we-go is satisfied and no known defect is carried forward."
+    },
+    {
+     "id": "T75-fix-shape",
+     "summary": "The guard's Python reading treats a one-line string that holds a quoted string as text, so a program holding another write_text call as text passes, while a string holding no quoted string (an f-string path, a real write) is still refused.",
+     "class": "within",
+     "why": "It removes a false refusal and keeps the guard's job (a real write of the GM's README still refused, step 12); a check fixed on purpose to stop refusing good work is the rule, not an exception. No reach beyond the defect is added."
+    },
+    {
+     "id": "T75-red-first",
+     "summary": "The refusal change is pinned red first in T67's readme suite case, per FR-012.",
+     "class": "within",
+     "why": "Enforcement of the guard rules FR-012 already carries; a test that only fails when the fixed behavior is absent serves the request."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-21",
+   "blocks": [
+    "### T51 Approach (checklist part A)",
+    "### T56 (T53's writer gives a start over 72 h old no feature, but `make events-refile` read its own copy of the start rule: 0 lines moved and 23 left in 385's log, measured 2026-11-21 (`make events-refile DRY=1` before the change, its last line))",
+    "### T67 (T58's builder's `cd /tmp/t58/wt && cp rust/guard/src/guards/readme_hooks.rs /tmp/t58/readme.keep && ...` refused as a README write, 2026-11-21T06:30Z; replayed verbatim through the guard, what matched was the DESTINATION, `/tmp/t58/readme.keep` - a README by the guard's name rule, `README` with any extension - outside the tree, not the source's name, measured 2026-11-21, method: the guard log's entry, the command recovered from the builder's transcript and replayed through `tests/hooks/readme-hooks.sh`)",
+    "### T67 Approach (checklist part A)",
+    "### T71 (<why: the finding or measurement that files it>)",
+    "### T71 Approach (checklist part A)",
+    "### T73 (<why: the finding or measurement that files it>)",
+    "### T73 Approach (checklist part A)",
+    "### T74 (<why: the finding or measurement that files it>)",
+    "### T74 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "declared": "round-arbiter",
+   "decisions": [
+    {
+     "id": "ask:451-T67-third-plan-round",
+     "class": "within",
+     "summary": "the round arbiter accepted the plan as it stands"
+    }
+   ]
   }
  ],
  "tasks": {
@@ -11893,6 +11845,234 @@
      "summary": "Exits: crate checks, the review-round suite (case 10 `gizmo` still refused), closing-checks and the replay. A claim that it cannot be done goes to make arbiter-ask. The file list is limited to stale_terms.rs, its tests, the docs/guards.md row and this section",
      "class": "within",
      "why": "These enforce the fix and keep its reach to the check it changes. They add no unrequested behavior."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T72": {
+   "section_sha256": "d939ae2ad9d7702a5d7ce9e1e4636eca193f3d7b31214dd9adb4e186cb39c619",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T72-run-dir",
+     "summary": "Each closing-checks run writes its three logs and .exit files under <git dir>/closing-checks/<UTC time>-<pid>/, made with a plain mkdir (a reused id fails rather than shares); the table, red tails and stop line read that directory alone; the start's rm -f of exit files dropped.",
+     "class": "within",
+     "why": "This is the fix the task was filed for (the GM 2026-11-21, 'yes please file that as a performance task'): two runs in one clone read each other's verdicts; one directory per run, read alone, makes each run's combined result its own. Dropping the rm -f is a consequence (a new directory has no stale files)."
+    },
+    {
+     "id": "T72-latest",
+     "summary": "A relative 'latest' symlink to the run started last, swapped in by ln -sfn to a temp name then mv -T, so it is never missing; the header says to cite the path the table prints since 'latest' may name a parallel run.",
+     "class": "within",
+     "why": "Keeps one stable place to find the last run's logs, which the old single-directory layout gave; it does not reintroduce sharing, since no verdict is read through it, and the header note keeps a builder citing its own run. Serves the request without narrowing it."
+    },
+    {
+     "id": "T72-prune",
+     "summary": "At a run's start, other runs' directories and the old layout's top-level <check>.log/.exit files untouched for CLOSING_CHECKS_KEEP_MIN (360 min, GUESS knob) are removed; own run and latest's target never removed; other names left. Age chosen over count or live-pid.",
+     "class": "within",
+     "why": "Housekeeping the per-run layout makes necessary (directories would otherwise pile up), set so no live run is pruned (360 min against a measured longest run of 601 s, labeled with method); holding the old files to the same keep avoids a false RED on a still-running old-script run. A new GUESS knob is labeled as such. Nothing the GM asked for is narrowed."
+    },
+    {
+     "id": "T72-old-readers",
+     "summary": "No code reads the old paths (grep -rn 'closing-checks' and 'closing-checks/' over the clone, .git and target excluded, measured 2026-11-21); only the script's header and printout are edited; builders' citations in plan-done.md are history and keep their words.",
+     "class": "within",
+     "why": "The enumeration states its search space, and the space is the string itself across every file type in the clone (Makefile, scripts, Rust, docs, .claude), not a language-filtered sample, so a reader holding the path as a string would have been found. Leaving historical citations is not a narrowing: they are records, not readers."
+    },
+    {
+     "id": "T72-atomic-install",
+     "summary": "The installed script written to a temp file and moved into place so a run already reading the old one keeps its copy.",
+     "class": "within",
+     "why": "An implementation safety detail of the same fix; decides nothing the request or spec constrains."
+    },
+    {
+     "id": "T72-red-first",
+     "summary": "tests/hooks/test-closing-checks.sh case 4 reproduces two overlapping runs whose verdicts differ, ordered by release files not sleeps (red against the unfixed script: A's red quick read GREEN, B's green hooks-test read RED); case 5 the prune; cases 1-2 read the run directory.",
+     "class": "within",
+     "why": "A test whose only effect is to make the requested fix happen and keep happening; it enforces the request and is not unrequested scope. Its red reproduces the observed wrong outcome exactly."
+    },
+    {
+     "id": "T72-static-red-left",
+     "summary": "The fixed script's own run in the clone had static RED on rust lint doc_markdown in T60's builder's uncommitted context_cap_hooks files; left to T60, 'Found and left: none'.",
+     "class": "within",
+     "why": "Those files are another task's in-progress work outside T72's file list, not a defect T72 found in shipped code; the closing-checks verdict itself was correct (it reported a real red). Nothing of what was asked is left unfixed."
+    },
+    {
+     "id": "T72-perf-tag",
+     "summary": "Filed as a [perf] task under FR-013: the builders' loop, a closing check read right the first time rather than re-run.",
+     "class": "within",
+     "why": "The GM's words verbatim: 'yes please file that as a performance task'. FR-013 counts work that speeds the builders' loop as performance work."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T60": {
+   "section_sha256": "a41ec994bf645108f4b13e847bd62740ce90763ba02e53e56e80512ff1feac81",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T60-seat",
+     "summary": "The handoff's tree is the session's clone (shared::session clone_dir: claim map, else session name) where it is a work tree, else the cwd's tree as today",
+     "class": "within",
+     "why": "FR-006/D9 put the handoff under the git common dir of the tree the session works in, and approved improvement 1 has the session find it in one place. Routing it by the same resolve clone_sync_hooks uses for edits carries out what was asked. Falling back to the cwd's tree only keeps today's answer where no clone resolves."
+    },
+    {
+     "id": "T60-seat-lazy",
+     "summary": "The seat is resolved only past the cap or on a resume of a builder (a closure into judge)",
+     "class": "within",
+     "why": "This keeps D8/D9 as specified: the main session and a defined agent are never read, and no other call does any new work."
+    },
+    {
+     "id": "T60-four-reads",
+     "summary": "The handoff directory, the task in its name (filed_at with cwd set to the seat), the context-ok permit key (<clone>/context-cap:<aid>) and a resume's handoff/probe (D10) all read the one tree the seat gives",
+     "class": "within",
+     "why": "D9's handoff path, its task-named file, its make context-ok permit and D10's resume are one mechanism. If the four read different trees, the refusal, the Write exemption and the permit would disagree. Keying the permit by the clone makes it match where make context-ok grants it."
+    },
+    {
+     "id": "T60-cwd-gate-outside-tree",
+     "summary": "A call whose cwd is outside any git tree still passes the cap, as today",
+     "class": "within",
+     "why": "This is existing behavior that T60 keeps, not a new carve-out. T60 was filed to fix where the handoff is named, not when the cap fires. The bundle records no wrong outcome from it: no builder past the cap is found passing this way."
+    },
+    {
+     "id": "T60-defined-agent-stat-cwd",
+     "summary": "D8's defined-agent stat (.claude/agents/<type>.md) still reads the cwd's tree, not the seat",
+     "class": "within",
+     "why": "This is existing behavior that T60 keeps. It lies outside the four reads the task was filed to move. The bundle records no wrong outcome: no agent is misclassed because the mirror's agents directory differs from the clone's. Under the defect rule, a difference that produces no wrong outcome is not one."
+    },
+    {
+     "id": "T60-red-first",
+     "summary": "A red-first case: from the mirror, the refusal names the clone's T60-<aid>.md, a Write there passes and one to the mirror is refused, a resume names the clone's file, the cwd fallbacks hold, and the clone-keyed grant lets the call through. Red recorded at 416+1 failing, green at 417",
+     "class": "within",
+     "why": "FR-012 requires a red-first test of the refusal, and this case covers the requested behavior and its permit. It only enforces what was asked."
+    },
+    {
+     "id": "T60-move",
+     "summary": "The two misrouted handoffs in the mirror's .git/l7r-handoffs (byte-identical to the clone's copies, per cmp) are moved with a recorded MAIN_TREE_OK mv, and the empty directory is removed",
+     "class": "within",
+     "why": "The task as filed asks for this cleanup. The handoffs end up in the one place the request wants them, and the mv is recorded."
+    },
+    {
+     "id": "T60-T74-deferral",
+     "summary": "The event log's cwd filing (364 lines of 451 in the mirror, unseen by where-time in the clone) is left to T74, which lands before T22",
+     "class": "within",
+     "why": "T60 was not asked to fix the event log. The defect stays owed inside feature 451 as a filed task with an order. The item carries FR-009's three parts: why it is not fixed here (event_log_hooks is a shared module outside T60's files), the filed id T74, and 'lands before T22'. It drops nothing the GM asked for."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T67": {
+   "section_sha256": "e000889eed060243da102ff9b5cec40ea5cd1ac71fad41dd7691d8ac9ee79f7d",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T67-D1 destination, not text",
+     "summary": "The guard judges the write targets shared::tree::walk_judged resolves (standing in the event's cwd) instead of a regex over the whole command; a copy's source, a sed script, a heredoc's text and a mktemp scratch cd pass.",
+     "class": "within",
+     "why": "Unchanged since round 1. It is T67's line (the guard reads the destination, red first on that cp) and the root CLAUDE.md guard rule (match invocations, not mentions)."
+    },
+    {
+     "id": "T67-D2 Python programs",
+     "summary": "Triple-quoted text blanked, only write-verb lines read, their literals resolved by interp::program_names; a README joined onto a computed base still refused (fail closed).",
+     "class": "within",
+     "why": "Unchanged since round 1: the same destination rule applied to one route a README is written by, failing closed where the base is computed."
+    },
+    {
+     "id": "T67-D3 unresolved targets fail closed",
+     "summary": "A target the walk cannot resolve is judged by the old destination-position rule on its quote-blanked segment.",
+     "class": "within",
+     "why": "Unchanged since round 1: it keeps the old guard's refusals where the new mechanism cannot see."
+    },
+    {
+     "id": "T67-D4 file tools",
+     "summary": "A file tool's path takes the same tree rule (in_tree now, copies included); a relative path counts as the tree's.",
+     "class": "within",
+     "why": "The log's 3 file-tool refusals were in clones and are kept; the copy rule now reaches file tools too (pinned in section 6)."
+    },
+    {
+     "id": "T67-(a) new refusals: rm, mv, touch, chmod of a README in the tree",
+     "summary": "Every argument of rm/mv/touch/chmod is a write, so these are refused in the tree where the old guard passed them.",
+     "class": "within",
+     "why": "Unchanged since round 1: a widening that enforces constitution XVII, so it carries no ruling."
+    },
+    {
+     "id": "T67-(b)1 a README outside the tree in a non-project /tmp file or scratch repo",
+     "summary": "A README-named path in a /tmp scratch file, a scratch git init or a clone of another repository passes.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Unchanged since round 1. The false refusal T67 fixes is this case (/tmp/t58/readme.keep), and the purpose, the GM's own README, is not touched by a scratch file that never reaches the project. It is now bounded by the copy rule, so only a repository that is not this project's passes."
+    },
+    {
+     "id": "T67-(b)2 READMEs in other repositories",
+     "summary": "READMEs in other repositories (~/this-laptop, /julie-medical) pass the diagram guard.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Unchanged since round 1: constitution XVII governs this project's READMEs, and none of the guard log's firings was in another repository."
+    },
+    {
+     "id": "T67-(b)3 a checkout of this project outside the mirror and the clones",
+     "summary": "in_tree now counts a COPY of this project anywhere as the tree, known by what the directory is: its common git dir is the mirror's or a clone's, or its origin is this repository (by path, file://, or the mirror's own origin by any scheme). Measured: 17 of 1,289 git work trees under /tmp are copies, and the suite's section 6 and two crate tests pin it. The work-tree-making breadth and the hop bound are judged as their own decisions below.",
+     "class": "within",
+     "why": "Round 1's NOT LEGITIMATE is resolved for a copy that is on disk. A README written in a builder's /tmp worktree or clone of this project is now refused, so constitution XVII's purpose holds for the agents most likely to break it. I re-read /tmp/t67/copies-guard2.txt (1,290 lines). It has 17 COPY lines, matching the block's list: 2 worktrees whose common git dir is the clone's, 13 clones by path, a file:// clone and a clone of that. It also has 138 passing lines whose printed origin is this repository, and all 138 have an empty common dir. Those are the unreadable stubs the block's item 7 explains: /tmp/t04/replay/clone and /tmp/t07-replay.ZmMH/c, the two that are not l7r- fixtures, each have an empty .git directory. So no repository git reads as this project's passes. The green logs are present (suite 75 passed, 0 failed; crate 421 passed)."
+    },
+    {
+     "id": "T67-(b)3a classify left unchanged; the wider check lives in readme_hooks' own in_tree",
+     "summary": "The brief said 'fix classify'. Instead shared::tree::classify stays as it is, and the README guard asks whether a path is a copy of this project in its own in_tree.",
+     "class": "within",
+     "why": "This deviation from the brief changes HOW the result is reached, not what was asked, so it carries no ruling. The brief is the session's words, not the GM's, and neither the request nor the accepted spec says where the check lives. The outcome round 1 required, a README in a copy of this project refused, holds and is pinned. Widening classify would have changed Target.class for every walk, so main_tree_hooks would move /tmp-copy writes that it calls the mirror's for no reason. That would be a wrong outcome in another guard, and keeping classify narrow avoids it."
+    },
+    {
+     "id": "T67-(b)3b the 2026-10-10 log entry re-classified",
+     "summary": "The 2026-10-10 command (rm -rf $d, mkdir, cd $d, git init, printf x > README, no remote added) is classified as not a copy of this project, so it passes under (b)1, its whole command pinned in section 6.",
+     "class": "within",
+     "why": "This applies the tree rule to the entry as round 1 asked. I read the whole 359-character command in the raw log (~/.claude/guard-log/20261010T193726533164100-438435.json). It has no remote, clone, fetch, worktree or origin, and its write targets are README and specs/399-live-test/spec.md in a directory it makes afresh and runs git init in. So it has its own common git dir and no origin, it is not this project's, and it passes under (b)1."
+    },
+    {
+     "id": "T67-(b)3c a command that makes a work tree of this project: every README it writes counts as the tree's",
+     "summary": "makes_ours: when a Bash command itself runs git worktree add of the tree or git clone of this repository, every README-named target that command writes is refused, wherever it lies. The block chose this breadth 'over reading which path lies in the new tree', and its own example is refused: `git worktree add /tmp/t58/wt && cp rust/guard/src/guards/readme_hooks.rs /tmp/t58/readme.keep`.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "This refuses T67's own case, a README-named scratch file outside the tree, whenever the same command also makes a work tree. Builders open their work that way (git worktree add /tmp/tNN/wt && ...). It is excepted from the block's goal A.1 (never refused for 'a /tmp scratch file') and from the brief's 'a path outside the tree passing', and the block's item 12 and 'Found and left? none' both say otherwise. The ground given is a choice, not impossibility: the walk already resolves where the new work tree goes, since it writes its probe touch there, so whether a target lies under that place is a path comparison on what the guard already holds. Nothing in the request implies it, and following the rule literally would not defeat its purpose, because a README under the new tree would still be refused. 'The old guard refused it too' and '0 corpus hits' did not save L1 in round 1 and do not save this. A check that refuses good work is a defect (XIV, 449 T196). Required, either of two: (a) judge whether each README-named target lies under the new work tree's resolved place, refusing one inside it and passing one outside it, failing closed where the place is unresolved, and pin in the suite and the crate, red first, that `git worktree add /tmp/t58/wt && cp rust/guard/src/guards/readme_hooks.rs /tmp/t58/readme.keep` passes while `git worktree add /tmp/t58/wt && echo x > /tmp/t58/wt/README.md` (and a cd-into-it relative write) is refused; or (b) record it under Found and left with its why, a filed task id and 'lands before ...' as FR-009 requires, and correct item 12."
+    },
+    {
+     "id": "T67-(b)3d origin chains followed three hops",
+     "summary": "A local repository whose origin is itself a copy is followed at most three hops; a copy of this project four or more clones removed from the mirror or a clone passes.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This hook runs on every Bash call that names a README, and item 8's budget gives its disk reads a fixed bound: at most one .git, one commondir and two config files a hop, with no process started. Following origins needs some limit, because local origins can chain without end. The measured world is well inside this one: the census's deepest copy is one hop (/tmp/t40/sh2, a clone of the file:// clone /tmp/t40/sh1), and no chain of two or more exists among 1,289 work trees. So the bound removes no protection the guard actually gives, and the rule's purpose, refusing a README in a builder's worktree or clone, holds in full. This is a stated, measured bound, not a case carved out against the rule."
+    },
+    {
+     "id": "T67-L1 a README write held as a one-line string's text",
+     "summary": "without_held: a one-line string holding a quoted string of its own is blanked as program text (lexed as Python: # comments, backslash escapes, an open string kept), so write_text('(tmp / \"README.md\").write_text(1)') passes, while a string holding none (f\"{d}/README.md\", \"it's/README.md\") is still read and refused, pinned. T75 is moot, and Found and left? says none.",
+     "class": "within",
+     "why": "Round 1's NOT LEGITIMATE is resolved by fixing it in T67, the first of the two options that verdict allowed. This is now the block's own goal, 'never for a name its command merely holds', applied, with red first (the one-line string refused before) and green after. Since the known defect is fixed, 'Found and left? none' is now accurate. The blanking only drops strings that themselves hold a quoted string, so a plain open('docs/README.md', 'w') still resolves and is refused."
+    }
+   ],
+   "verdict": "BLOCKED"
+  },
+  "T75": {
+   "section_sha256": "57b8cab6416a756a827679e085a3b448bd4a546ec2bf20fbb0675f325ebbced5",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T75-close",
+     "summary": "T75 is closed as carried by T67's L1: T67's builder fixed the README guard's one-line-string refusal inside T67, and T75 changes nothing of its own.",
+     "class": "within",
+     "why": "The defect (a check refusing a correct Python program, a wrong outcome under constitution XIV) is fixed, not deferred or narrowed; the fix lives in the task whose code it touches, as T67's plan review allowed, with red-first evidence recorded (11 failed before, green after, 86 passed 0 failed at T67's close, dated and with method). Nothing the GM asked for is dropped: fix-as-we-go is satisfied and no known defect is carried forward."
+    },
+    {
+     "id": "T75-fix-shape",
+     "summary": "The guard's Python reading treats a one-line string that holds a quoted string as text, so a program holding another write_text call as text passes, while a string holding no quoted string (an f-string path, a real write) is still refused.",
+     "class": "within",
+     "why": "It removes a false refusal and keeps the guard's job (a real write of the GM's README still refused, step 12); a check fixed on purpose to stop refusing good work is the rule, not an exception. No reach beyond the defect is added."
+    },
+    {
+     "id": "T75-red-first",
+     "summary": "The refusal change is pinned red first in T67's readme suite case, per FR-012.",
+     "class": "within",
+     "why": "Enforcement of the guard rules FR-012 already carries; a test that only fails when the fixed behavior is absent serves the request."
     }
    ],
    "verdict": "CLEAR"
