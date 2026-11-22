@@ -362,10 +362,10 @@
    "declared": "round-arbiter"
   },
   "### T89 Approach (checklist part A)": {
-   "sha256": "313509b73f5784b6ce9637ac801d90125ff325954e25ddbb91e2cd081b578844",
+   "sha256": "364578b592967c4675652a0956e19716291a3f9fa95c12b5689486d32ada23d8",
    "verdict": "CLEAR",
-   "reviewed": "2026-11-21",
-   "declared": "round-arbiter"
+   "reviewed": "2026-11-22",
+   "declared": "spec-fidelity"
   },
   "### T90 (<why: the finding or measurement that files it>)": {
    "sha256": "fabae7ab5cae61d7235cdc67b4983d5ed907440669991cfcdbffbda49c4158cc",
@@ -705,6 +705,12 @@
   },
   "### T129 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)": {
    "sha256": "dd5c1771fce477ba774c74b02f664e73488c30badf20474f1fb89999e5042f6d",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-22",
+   "declared": "spec-fidelity"
+  },
+  "### T89 (shared::tree judged a `python3 -c` program that writes a place it computes from `sys.argv` as writing where the shell stands, found by T79 on 2026-11-21: `cd <mirror>/research/questions; python3 -I -c \"import sys; open(sys.argv[2],'w').write('x')\" a /tmp/q/txt/a.txt` and its two loop forms were rewritten (sid t) or refused (sid nobody) through HEAD's main-tree while `cp` and `echo >` to the same scratch place passed, measured 2026-11-21 (`/tmp/t79b/judge/probe-mt.jsonl` #2-#8 through HEAD 2653b8931a's binary `/tmp/t89/bin-head`, `/tmp/t89/out/head.probe.{t,nobody}.mt.tsv`); of the corpus's 852 commands running a `-c` program that indexes `sys.argv`, 11 write through `open(sys.argv[N], <mode>)` and HEAD's main-tree refuses 4 of them, each writing scratch standing in the mirror (bx#29969, bx#54240, bx#58694, ux#2209), measured 2026-11-21 (item 4))": {
+   "sha256": "d2681577d2f0ae4c9b25d5931289d614a15159e3c2e1c850297b6762f6ea4de2",
    "verdict": "CLEAR",
    "reviewed": "2026-11-22",
    "declared": "spec-fidelity"
@@ -11894,6 +11900,119 @@
      "why": "The NOT TAKEN items are not defects under constitution XIV's definition, so FR-009's deferral rule and 'fix all known bugs' do not reach them."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-22",
+   "blocks": [
+    "### T89 (shared::tree judged a `python3 -c` program that writes a place it computes from `sys.argv` as writing where the shell stands, found by T79 on 2026-11-21: `cd <mirror>/research/questions; python3 -I -c \"import sys; open(sys.argv[2],'w').write('x')\" a /tmp/q/txt/a.txt` and its two loop forms were rewritten (sid t) or refused (sid nobody) through HEAD's main-tree while `cp` and `echo >` to the same scratch place passed, measured 2026-11-21 (`/tmp/t79b/judge/probe-mt.jsonl` #2-#8 through HEAD 2653b8931a's binary `/tmp/t89/bin-head`, `/tmp/t89/out/head.probe.{t,nobody}.mt.tsv`); of the corpus's 852 commands running a `-c` program that indexes `sys.argv`, 11 write through `open(sys.argv[N], <mode>)` and HEAD's main-tree refuses 4 of them, each writing scratch standing in the mirror (bx#29969, bx#54240, bx#58694, ux#2209), measured 2026-11-21 (item 4))",
+    "### T89 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T89-binding",
+     "summary": "py_c::argv_word places a -c program's sys.argv[N] at the command's N-th word after the program, as the walk places a word; argv[0], an index past the words, and any index at or past a word that may be other than one word (glob, brace, $@, substitution, unknown name, value with a blank or empty, partly quoted) give None and keep HEAD's reading; $__unread__ counts one word.",
+     "class": "within",
+     "why": "This is the fix T89 was filed for: main-tree judged a -c program writing through sys.argv as writing where the shell stands, which item 4 measured wrong both ways (scratch writes refused, mirror writes passed or moved into a clone). Falling back to HEAD's reading wherever the word count is uncertain leaves the existing feature 204 D5 rule in place rather than carving out anything."
+    },
+    {
+     "id": "T89-write-forms",
+     "summary": "py_c::argv_writes reads past only an open(sys.argv[N], ...) whose arguments are not all a read's, its chained .write/.writelines and json.dump(x, <that open>); the rest of the program must pass only_reads, every argv mention must be a plain sys.argv[N] read and sys the imported module; anything else keeps HEAD's reading.",
+     "class": "within",
+     "why": "The forms covered are the ones the corpus scan measured (11 open(sys.argv[N]) writers, none through Path or another file call). Every other form stays on the rule in force today (D5, a write where the shell stands), and no defect is measured in those forms, so nothing the task was filed for is left out."
+    },
+    {
+     "id": "T89-bound-name",
+     "summary": "py_c::argv_inlined reads a name bound once by NAME = sys.argv[N], whose every other mention is an open's path, as sys.argv[N]; any other mention or rebinding leaves the program as it is (HEAD's reading). It stands alone so the stdin route can call it.",
+     "class": "within",
+     "why": "The review ruled bx#58999's bound-name form part of T89's filed scope (a program that writes a place it computes from sys.argv), and the replay measured that this is the whole fix for it. Every other use keeps the current rule."
+    },
+    {
+     "id": "T89-tree-hunk",
+     "summary": "One hunk in writes_in's -c branch in tree.rs, outside the brief's file list, calls py_c::argv_places: a bound program is a read where it stands plus a write of each word at path_write's place; Known::Nothing keeps HEAD's reading (feature 204 D6).",
+     "class": "within",
+     "why": "The hunk is the only place the -c program's write is pushed, so the fix cannot work without it. It is named openly and stays clear of T129's and T118's hunks, and it keeps D6's unknown-resolves-toward-main reading. It changes where the work is done, not what is delivered."
+    },
+    {
+     "id": "T89-replay-scope",
+     "summary": "The review fix's (fix2) replay covers only the 1,838 corpus rows whose command names argv, through all 25 configurations, after the first fix's full 59,116-row replay.",
+     "class": "within",
+     "why": "This scopes verification, not behavior: argv_inlined only touches a -c program naming sys.argv[N], so rows that never name argv cannot move. The full replay of the first fix already covered the rest. Nothing the GM asked for is narrowed."
+    },
+    {
+     "id": "T89-stdin-deferred",
+     "summary": "Found and left: a stdin program writing through a name bound to sys.argv[N] (bx#52396, a scratch write main-tree refuses) keeps HEAD's reading here; it is filed as T137, which lands before T22.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This leaves a measured defect (a false refusal) unfixed, so it is a narrowing. T89 was filed for a python3 -c program, though, and the stdin program is judged in the walk's stdin arm, a different route outside this task's files. Nothing in the GM's request makes T89 own that route. The deferral meets what FR-009 requires: it says why the defect is not fixed in this task, gives the filed task id (T137) and its order (lands before T22). argv_inlined is built standalone so T137 can call it, which keeps the follow-up small. The defect is carried to a named, ordered task rather than dropped, and the review already ruled the deferral legitimate on 2026-11-21."
+    },
+    {
+     "id": "T89-not-performance",
+     "summary": "Performance work? no.",
+     "class": "within",
+     "why": "T89 corrects a guard's verdicts. It does not improve performance or measure time, so it falls outside the GM's 2026-11-20 performance and measurement classes (FR-013)."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-22",
+   "blocks": [
+    "### T89 (shared::tree judged a `python3 -c` program that writes a place it computes from `sys.argv` as writing where the shell stands, found by T79 on 2026-11-21: `cd <mirror>/research/questions; python3 -I -c \"import sys; open(sys.argv[2],'w').write('x')\" a /tmp/q/txt/a.txt` and its two loop forms were rewritten (sid t) or refused (sid nobody) through HEAD's main-tree while `cp` and `echo >` to the same scratch place passed, measured 2026-11-21 (`/tmp/t79b/judge/probe-mt.jsonl` #2-#8 through HEAD 2653b8931a's binary `/tmp/t89/bin-head`, `/tmp/t89/out/head.probe.{t,nobody}.mt.tsv`); of the corpus's 852 commands running a `-c` program that indexes `sys.argv`, 11 write through `open(sys.argv[N], <mode>)` and HEAD's main-tree refuses 4 of them, each writing scratch standing in the mirror (bx#29969, bx#54240, bx#58694, ux#2209), measured 2026-11-21 (item 4))",
+    "### T89 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "binding",
+     "summary": "A -c program's sys.argv[N] in a write is read as the command's N-th word after the program, placed as the walk places a word (py_c::argv_word); anything the binding cannot read keeps HEAD's reading (feature 204 D5).",
+     "class": "within",
+     "why": "This is T89 as filed (a -c program writing a place it computes from sys.argv judged as writing where the shell stands); the fallback to D5 keeps the accepted rule for every program it cannot read."
+    },
+    {
+     "id": "argv_writes",
+     "summary": "Writes through sys.argv[N] (open with a non-read mode, chained .write/.writelines, json.dump into that open) are read past and the rest must pass only_reads; argv must be plain sys.argv[N] reads and sys the imported module.",
+     "class": "within",
+     "why": "The mechanism of the fix; reads/only_reads unchanged in what they judge, and any other argv use falls back to HEAD's reading."
+    },
+    {
+     "id": "argv_inlined",
+     "summary": "A name bound once to sys.argv[N] and mentioned otherwise only as an open's path is read as sys.argv[N] (bx#58999); any other mention keeps HEAD's reading.",
+     "class": "within",
+     "why": "The review ruled bx#58999's -c form inside T89's own description (a program that writes a place it computes from sys.argv); it widens the fix toward the filed task, not away from it."
+    },
+    {
+     "id": "placement-tree-hunk",
+     "summary": "argv_places called from one hunk of writes_in's -c branch in tree.rs, outside the brief's file list: the bound program a READ where it stands plus a write of each word at path_write's place; a Known::Nothing place keeps HEAD's reading (feature 204 D6).",
+     "class": "within",
+     "why": "The -c write is pushed and path_write lives in tree.rs, so the fix cannot be placed elsewhere; the hunk is named and kept clear of T129's ASSIGN/sanitize hunks, and the unknown case keeps the accepted D6 rule."
+    },
+    {
+     "id": "may_split-option-A",
+     "summary": "A loop's or a read's value before the argv word (which bash may split; the walk holds quoted words without quotes and a loop value's blank as _) ends the count, so ux#2209 and bx#54240 (quoted \"$f\") and bx#58694 (bare $f, no blank in its matches) stay refused as at HEAD; the fuller fix is filed as T140, waits for T129, lands before T22.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "It narrows T89 (three of its corpus scratch writes stay refused). The measured alternative (fix2) passed real writes of the mirror through split loop values (/tmp/t89/b2 p3,p4), so the narrowing removes a verdict worse than HEAD's - applying the rule literally with the current walk would defeat the guard's own purpose. Telling \"$f\" from $f needs the walk to carry quote state (tree/bind.rs, another task's file); the defect left is HEAD's existing over-refusal, not a new one, and the deferral carries its reason, its filed id (T140) and its order (before T22), as FR-009 requires, so no known defect is carried past the next step."
+    },
+    {
+     "id": "stdin-deferral-T137",
+     "summary": "A stdin program writing through a name bound to sys.argv[N] (bx#52396) keeps HEAD's reading; filed as T137, lands before T22; argv_inlined stands alone so the stdin arm can call it.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "T89 is filed for a python3 -c program; the stdin route is a different arm of the walk outside this task's files, so the case is adjacent rather than T89's own. It is filed with its reason, id and order before T22 (FR-009), the shared function is built so the fix is a call, and the earlier review ruled the same deferral legitimate."
+    },
+    {
+     "id": "exits-budget-order",
+     "summary": "Green/red exits, one landing, ordering after T79/T83/T87, beside T129 and T118 (T129 first, alone), before T125 and the filed tasks.",
+     "class": "within",
+     "why": "Sequencing and exit conditions that decide nothing the request or the task leaves open."
+    },
+    {
+     "id": "not-performance",
+     "summary": "Performance work? no.",
+     "class": "within",
+     "why": "A guard-verdict correctness fix, neither a performance improvement nor a measurement task in FR-013's sense."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -18348,6 +18467,64 @@
      "summary": "Found and left: none; a speed task, not a defect, outputs unchanged on 62,428 rows.",
      "class": "within",
      "why": "The NOT TAKEN items are not defects under constitution XIV's definition, so FR-009's deferral rule and 'fix all known bugs' do not reach them."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T89": {
+   "section_sha256": "a7f4fdfe2fae91056bf0ef47c942ca50b66d9feda76d2ea93685e744cbd56b16",
+   "reviewed": "2026-11-22",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "binding",
+     "summary": "A -c program's sys.argv[N] in a write is read as the command's N-th word after the program, placed as the walk places a word (py_c::argv_word); anything the binding cannot read keeps HEAD's reading (feature 204 D5).",
+     "class": "within",
+     "why": "This is T89 as filed (a -c program writing a place it computes from sys.argv judged as writing where the shell stands); the fallback to D5 keeps the accepted rule for every program it cannot read."
+    },
+    {
+     "id": "argv_writes",
+     "summary": "Writes through sys.argv[N] (open with a non-read mode, chained .write/.writelines, json.dump into that open) are read past and the rest must pass only_reads; argv must be plain sys.argv[N] reads and sys the imported module.",
+     "class": "within",
+     "why": "The mechanism of the fix; reads/only_reads unchanged in what they judge, and any other argv use falls back to HEAD's reading."
+    },
+    {
+     "id": "argv_inlined",
+     "summary": "A name bound once to sys.argv[N] and mentioned otherwise only as an open's path is read as sys.argv[N] (bx#58999); any other mention keeps HEAD's reading.",
+     "class": "within",
+     "why": "The review ruled bx#58999's -c form inside T89's own description (a program that writes a place it computes from sys.argv); it widens the fix toward the filed task, not away from it."
+    },
+    {
+     "id": "placement-tree-hunk",
+     "summary": "argv_places called from one hunk of writes_in's -c branch in tree.rs, outside the brief's file list: the bound program a READ where it stands plus a write of each word at path_write's place; a Known::Nothing place keeps HEAD's reading (feature 204 D6).",
+     "class": "within",
+     "why": "The -c write is pushed and path_write lives in tree.rs, so the fix cannot be placed elsewhere; the hunk is named and kept clear of T129's ASSIGN/sanitize hunks, and the unknown case keeps the accepted D6 rule."
+    },
+    {
+     "id": "may_split-option-A",
+     "summary": "A loop's or a read's value before the argv word (which bash may split; the walk holds quoted words without quotes and a loop value's blank as _) ends the count, so ux#2209 and bx#54240 (quoted \"$f\") and bx#58694 (bare $f, no blank in its matches) stay refused as at HEAD; the fuller fix is filed as T140, waits for T129, lands before T22.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "It narrows T89 (three of its corpus scratch writes stay refused). The measured alternative (fix2) passed real writes of the mirror through split loop values (/tmp/t89/b2 p3,p4), so the narrowing removes a verdict worse than HEAD's - applying the rule literally with the current walk would defeat the guard's own purpose. Telling \"$f\" from $f needs the walk to carry quote state (tree/bind.rs, another task's file); the defect left is HEAD's existing over-refusal, not a new one, and the deferral carries its reason, its filed id (T140) and its order (before T22), as FR-009 requires, so no known defect is carried past the next step."
+    },
+    {
+     "id": "stdin-deferral-T137",
+     "summary": "A stdin program writing through a name bound to sys.argv[N] (bx#52396) keeps HEAD's reading; filed as T137, lands before T22; argv_inlined stands alone so the stdin arm can call it.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "T89 is filed for a python3 -c program; the stdin route is a different arm of the walk outside this task's files, so the case is adjacent rather than T89's own. It is filed with its reason, id and order before T22 (FR-009), the shared function is built so the fix is a call, and the earlier review ruled the same deferral legitimate."
+    },
+    {
+     "id": "exits-budget-order",
+     "summary": "Green/red exits, one landing, ordering after T79/T83/T87, beside T129 and T118 (T129 first, alone), before T125 and the filed tasks.",
+     "class": "within",
+     "why": "Sequencing and exit conditions that decide nothing the request or the task leaves open."
+    },
+    {
+     "id": "not-performance",
+     "summary": "Performance work? no.",
+     "class": "within",
+     "why": "A guard-verdict correctness fix, neither a performance improvement nor a measurement task in FR-013's sense."
     }
    ],
    "verdict": "CLEAR"

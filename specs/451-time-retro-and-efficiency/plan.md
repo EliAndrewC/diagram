@@ -785,32 +785,169 @@ docs/performance-checklist.md answers.
 <!-- plan-archive: T83 to T83 moved to plan-done.md, 2026-11-22 (feature 375 FR-044) -->
 <!-- plan-archive: T87 to T79 moved to plan-done.md, 2026-11-22 (feature 375 FR-044) -->
 <!-- plan-archive: T87 to T87 moved to plan-done.md, 2026-11-22 (feature 375 FR-044) -->
-### T89 (<why: the finding or measurement that files it>)
+### T89 (shared::tree judged a `python3 -c` program that writes a place it computes from `sys.argv` as writing where the shell stands, found by T79 on 2026-11-21: `cd <mirror>/research/questions; python3 -I -c "import sys; open(sys.argv[2],'w').write('x')" a /tmp/q/txt/a.txt` and its two loop forms were rewritten (sid t) or refused (sid nobody) through HEAD's main-tree while `cp` and `echo >` to the same scratch place passed, measured 2026-11-21 (`/tmp/t79b/judge/probe-mt.jsonl` #2-#8 through HEAD 2653b8931a's binary `/tmp/t89/bin-head`, `/tmp/t89/out/head.probe.{t,nobody}.mt.tsv`); of the corpus's 852 commands running a `-c` program that indexes `sys.argv`, 11 write through `open(sys.argv[N], <mode>)` and HEAD's main-tree refuses 4 of them, each writing scratch standing in the mirror (bx#29969, bx#54240, bx#58694, ux#2209), measured 2026-11-21 (item 4))
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: the program's `sys.argv[N]` in a write is the command's N-th word after the program, placed as the walk places a
+  word; everything the binding cannot read keeps HEAD's reading (feature 204's D5, a write where the shell stands).
+  - the binding, `py_c::argv_word(n, after, env, home)` - the one small function `tree::program`'s reader can call for T125: the
+    words after the program as the walk holds them (each name it binds already in the text, `bind`, or in `env`), a redirect and its
+    target no word, a name unset dropped from the text by `bind` as bash drops its unquoted expansion; `sys.argv[0]` (the `-c`) and
+    an index past the words are None, and so is any index at or past a word that may be other than one word (`one_word`: a glob,
+    a brace, `$@`, a substitution of either kind, a name the walk does not know, a value holding a blank or empty - a plain quoted
+    word reaches the walk without its quotes, so `"$X"` and `$X` cannot be told apart - and a held word quoted only in part);
+    a word bash may split (`may_split`, the session's ruling 2026-11-21, option A) - `$__unread__` (`bind`'s mark for a loop's value
+    cut at a glob, or a name read) or a `_` (`bind`'s mark for a loop value's blank, a typed `_` told from it by nothing) - is the
+    word where it is the one asked for (its first piece lies where its start does) and ends the count past it: an unquoted `$f`
+    over a glob matching `Seeing from Above.pdf` makes `sys.argv[2]` `from`, written where the shell stands (item 4), so every
+    index past such a word keeps HEAD's reading. The cost: a quoted `"$f"`, one word in bash, reaches the walk without its quotes
+    and keeps HEAD's reading too (ux#2209, bx#54240), and so does a bare `$f` whose glob matches no blank name (bx#58694); the
+    alternatives priced were the walk carrying the quote state (`tree/bind.rs`, T129's) and expanding the glob where the shell
+    stands, both filed as T140; the session chose A, no verdict worse than HEAD's.
+  - the write, `py_c::argv_writes`: the program Python receives (`received`, the shell's expansions undone; `reads` is that and
+    `only_reads`, unchanged in what it judges) with each write through `sys.argv[N]` read past (`argv_masked`) - an `open` of it whose
+    arguments are not all a read's (its name and path masked, its mode and keywords left for the writers to be sought in, so an
+    `opener=` that writes stays a write), its chained `.write(` or `.writelines(`, and a `json.dump(x, <that open>)` (bx#29969) - must
+    then pass `only_reads`; every `argv` the program names must be a `sys.argv[N]` read (none sliced, aliased, assigned, deleted
+    from or imported by name) and `sys` the module it imports (`import sys`, not rebound).
+  - a name bound to it, `py_c::argv_inlined` (the review's ruling, 2026-11-21: bx#58999's `p=sys.argv[1]; t=open(p).read(); ...;
+    open(p,'w').write(t)` is T89's "program that writes a place it computes from `sys.argv`"): a name bound by a statement of its
+    own, `NAME = sys.argv[N]`, whose every other mention is an `open`'s path (`open(NAME` then `,` or `)`), is read as `sys.argv[N]`
+    there before `argv_masked` reads the program; a name mentioned any other way - used, bound again by any Python form, opened by
+    another module, named in a literal - leaves the program as it is, so its write through the name keeps HEAD's reading. Every
+    rebinding form (an assignment, a loop, `as`, a parameter, `del`) is a mention that is no `open`'s path, so none can make the
+    name hold another value; it stands alone so the stdin route can call it (T137).
+  - the placement, `py_c::argv_places`, called from one hunk of `writes_in`'s `-c` branch in `tree.rs` - the one edit outside the
+    brief's file list, since the `-c` program's write is pushed there and `path_write` lives there (T129's builder's hunks in
+    `tree.rs` are ASSIGN's and `sanitize`'s, none near it): a bound program is a READ where it stands (the target that carries its
+    body, so make-only's and gate-write's program readers, which skip a read, see what a read program shows them) and a write of
+    each word, `path_write`'s place; a word whose place the walk knows nothing of (`Known::Nothing`) keeps HEAD's reading, which is
+    where spec 204's D6 would put it.
+  - measured first, red first, the replay and the costs: items 4 and 9.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| a program's `sys.argv[N]` write placed at its N-th word | n/a - no map | n/a | none | n/a |
 
 ### T89 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** No map changes. A `python3 -c` program that writes only through `sys.argv[N]`, or through a name
+   bound once to it and only opened (`p=sys.argv[1]; ...; open(p,'w')`), is judged where its N-th word lies: a scratch file passes, a mirror path is the mirror's (named, so refused, never moved), a relative word lands
+   where the shell stands (moved to the clone, as before). A program the binding cannot read - another write, `sys.argv` used any
+   other way, a word count it cannot know, a loop's or a read's value before the word, which bash may split - is judged as before.
+2. **The constraints.** Feature 204's D5 (an unreadable `-c` program is a write where the shell stands) and D6 (an unknown
+   lands where the shell was last known); T31's and T42's read judgment (`reads`, unchanged, still the stdin route's); T79's walk,
+   its `bind` and its one rule for an unresolved place (`path_write`, `known_place`, `settled`), read, not changed; T125 (the same
+   binding for `tree::program`, so `argv_word` stands alone); the brief's files (`py_c` and its tests; one `tree.rs` hunk outside
+   them, named in the Approach); T129's (`tree.rs` ASSIGN) and T118's (`tree/program.rs`, gate-write) files left alone;
+   constitution XIV.
+3. **Where each comes from.** O: T79's probes and the corpus through HEAD's binary and the fix's (item 4); O: the corpus scans
+   (`/tmp/t89/scripts/scan.py`, `scan2.py`, `argv_ids.py`); O: the red and green runs and the replay (item 9); G: the task as filed
+   (T79's found-and-left, its line in tasks.md); R: none - a guard's rule, no research question.
+4. **Do they describe the world here?** Yes. T79's probes through HEAD's main-tree: #2, #3 and #4 (a `-c` program writing
+   `/tmp/q/txt/...` through `sys.argv[2]`, alone and in two loops, standing in `<mirror>/research/questions`) rewrote with sid t
+   and were refused with sid nobody; #5-#8 (`cp` and `echo >` to the same places) passed, measured 2026-11-21
+   (`/tmp/t79b/judge/probe-mt.jsonl` through `/tmp/t89/bin-head`, built from HEAD 2653b8931a in `/tmp/t89/wt` by
+   `/tmp/t89/scripts/build.sh`; `/tmp/t89/scripts/stream.py`, T79's driver; `/tmp/t89/out/head.probe.{t,nobody}.mt.tsv`). Over the
+   corpus - fx (T33's fixtures), tx (T50's 995 git commands), ux (T79's 2,311) and bx (T79's 59,116), streamed one row at a time -
+   852 commands run a `-c` program that indexes `sys.argv`, and 11 write through `open(sys.argv[N], <write mode>)`: ux#505, ux#2209,
+   bx#29969, bx#30367, bx#30845, bx#30850, bx#30853, bx#33904, bx#33905, bx#54240, bx#58694; none writes through
+   `Path(sys.argv[N])` or a file call naming it, measured 2026-11-21 (`/tmp/t89/scripts/scan.py`, `/tmp/t89/out/scan.txt`). Through
+   HEAD's main-tree 4 of the 11 rewrote (sid t) or were refused (sid nobody) - bx#29969 (`json.dump(d,open(sys.argv[1],'w'))` into a
+   scratchpad ruling), bx#54240, bx#58694 and ux#2209 (a loop's `open(sys.argv[2],'w').write(t)` into a scratchpad `txt/`), each a
+   scratch write standing in the mirror - and the other 7 passed, standing in scratch or a clone (ux#505's program is a heredoc's
+   text, never run), measured 2026-11-21 (`/tmp/t89/out/head.{bx11,ux11}.{t,nobody}.mt.tsv`). 9 more bind a name to `sys.argv[N]`
+   and write through the name, and HEAD's main-tree refuses 2 of them, bx#52396 (a stdin program) and bx#58999 (a `-c` one), each
+   writing scratch, measured 2026-11-21 (`/tmp/t89/scripts/scan2.py`, `/tmp/t89/out/head.bound.nobody.mt.tsv`). Of the 9, 2 are
+   `-c` programs, bx#58999 and bx#44050 (`p=sys.argv[1]; d=json.load(open(p)); open(p,'w')...`, standing in a clone, so passed),
+   each naming `p` only as an `open`'s path; with `open(p` written `open(sys.argv[1]` by hand, bx#58999 passes through the first
+   fix's main-tree (sid t and nobody), so reading the name as `sys.argv[N]` is the whole fix, measured 2026-11-21
+   (`/tmp/t89/b2/m1.jsonl` through `/tmp/t89/bin-fix`, `/tmp/t89/b2/fix.m1.{t,nobody}.mt.tsv`). The review ruled the `-c` one
+   T89's (a program "that writes a place it computes from `sys.argv`"); the stdin one is filed (below). T89's own probes (`/tmp/t89/probes.jsonl`) through HEAD's main-tree:
+   `cd /tmp; python3 -c "...open(sys.argv[2],'w')..." a <mirror>/x` and `... $UNSET a-scratch-path <mirror>/x` (bash's `$UNSET` no
+   word, so argv[2] the mirror's) passed, each a write of the mirror, and `cd <mirror>; ... a <mirror>/x` was moved to the clone,
+   where its write still lands in the mirror, measured 2026-11-21 (`/tmp/t89/out/head.t89p.{t,nobody}.mt.tsv`). Bash splits a
+   bare loop value: in a scratch directory holding `Seeing from Above.pdf`, `for f in Seeing*; do python3 -I -c
+   "...open(sys.argv[2],'w')..." $f q/$f.txt; done` got `sys.argv[2]` `from` and wrote `from` where the shell stood, measured
+   2026-11-21 (`/tmp/t89/split`); through the second fix's main-tree that loop standing in the mirror's `gm-copies` (886 mirror names
+   hold whitespace), `for f in "a b"; ... $f /tmp/q/a` and `read f; ... $f /tmp/q/a` passed where HEAD refused them, each a write
+   of the mirror, measured 2026-11-21 (`/tmp/t89/b2/{p3,p4}.jsonl`, `/tmp/t89/b2/{head,fix2}.{p3,p4}.nobody.mt.tsv`); of the
+   corpus's loop rows, ux#2209 and bx#54240 quote `"$f"` and bx#58694 does not, its 81 matches in `research/questions` holding no
+   blank, measured 2026-11-21 (`/tmp/t79/{ux,bx}-all.jsonl`, `ls`).
+5. **The order.** After T79, T83 and T87 (in HEAD 2653b8931a, the replay's before); beside T129 and T118, whose files it leaves
+   (T129 lands first, alone, and this task's `writes_in` hunk after it); before T125, which calls `argv_word`, and before the
+   tasks filed below.
+6. **The exits.** Green: the red tests green, `rust/guard/shared` and `rust/guard` green, the replay moving only corrections.
+   Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None: the probes and the replay moved as the binding says.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** Red first: the two new `py_c` tests failed and the other 403 of `rust/guard/shared` passed, and after the
+   review the bound-name test failed and the other 406 passed, measured 2026-11-21 (`/tmp/t89/red.log`, `/tmp/t89/red2.log`).
+   Green on the second fix's files: `rust/guard/shared` 407/407 and `rust/guard` 444/444, and the crate-scoped lint, format and cover of
+   `rust/guard/shared` and lint of `rust/guard` clean, measured 2026-11-21 (`scripts/gates/l7r-gate.sh rust` in `/tmp/t89/wt`, HEAD
+   2653b8931a with the fix's three files, `/tmp/t89/green6.log`). The first fix's replay: HEAD's binary `/tmp/t89/bin-head` and the
+   fix's `/tmp/t89/bin-fix` (built the same way from wt), 25 verdict files each - fx, tx and ux through main-tree, gm-tree and
+   make-only with sid t and nobody and through gate-write under a stand-in running gate, bx (59,116 rows) through the three with sid
+   nobody and through gate-write - streamed one row at a time, measured 2026-11-21 (`/tmp/t89/scripts/stream.py`, `runall.sh`,
+   `runpart.sh`), HEAD's run 30 min 8 s at a 34.6 MB peak, measured 2026-11-21 (`/usr/bin/time -v`, `/tmp/t89/runall-head.log`).
+   Every file's row count matches HEAD's, and 4 commands moved, each a correction: ux#2209 through main-tree rewrote -> allowed (sid
+   t) and refused -> allowed (sid nobody), and bx#29969, bx#54240 and bx#58694 through main-tree refused -> allowed (sid nobody),
+   each a `-c` program writing a scratch place through `sys.argv` while standing in the mirror (item 4); nothing moved through
+   gm-tree, make-only or gate-write, in any corpus (bx's three 59,116 rows each), measured 2026-11-21 (a row-by-row compare of
+   `/tmp/t89/rp/{head,fix}.*.tsv`, as `/tmp/t89/scripts/moves.py head fix`). The review's fix (`argv_inlined`, binary
+   `/tmp/t89/bin-fix2`) reads only a `-c` program whose text names `sys.argv[N]`, so its replay is every row of the four corpora
+   whose command names `argv` at all, 1,838 (fx 37, tx 35, ux 129, bx 1,637), through the same 25 configurations by HEAD's, the
+   first fix's and fix2's binaries, 7,955 verdicts each, fix2's run 1 min 12 s at a 32.9 MB peak, measured 2026-11-21
+   (`/tmp/t89/b3/argv_any.py`, `/tmp/t89/b3/run.sh` under `/usr/bin/time -v`, `/tmp/t89/b3/run.log`). There HEAD -> fix moves
+   exactly the 4 above (every move of the whole replay lies in these rows), and fix -> fix2 moves only bx#58999 through main-tree,
+   refused -> allowed (sid nobody), its bound `p` writing a scratchpad file while standing in the mirror, a correction; bx#44050
+   (bound so, standing in a clone) held through every guard, gate-write among them, measured 2026-11-21 (a row-by-row compare of
+   `/tmp/t89/b3/{head,fix,fix2}.*.tsv`). T79's probes #2-#4 moved rewrote -> allowed (sid t) and refused -> allowed (sid nobody),
+   corrections, and #0, #1 and #5-#8 held, measured 2026-11-21 (`/tmp/t89/out/{head,fix}.probe.{t,nobody}.mt.tsv`). T89's probes
+   (`/tmp/t89/probes.jsonl`) through main-tree: #0 (`cd <mirror>; ... a <mirror>/x`) moved rewrote -> refused (sid t) and held
+   refused (sid nobody), a write of the mirror that moving to a clone does not move; #1 and #3 (`cd /tmp`, argv[2] `<mirror>/x`, #3
+   past an unset `$UNSET_T89` that makes no word) moved allowed -> refused, each a write of the mirror HEAD passed; #4 (a redirect
+   before the argv word) and #7 (`json.dump` into `/tmp/q/r.json`) moved rewrote -> allowed and refused -> allowed, scratch writes;
+   #2 (a relative word standing in the mirror), #5 (no argv[2]), #6 (`$(ls)` before it, a word count it cannot know) and #8-#9
+   (standing in a clone) held - all corrections, measured 2026-11-21 (`/tmp/t89/out/{head,fix}.t89p.{t,nobody}.mt.tsv`). Through
+   gate-write under a running gate in the mirror, #0-#3 moved allowed -> refused, each a write of the mirror the gate builds from, and
+   #4-#9 held allowed, measured 2026-11-21 (`/tmp/t89/out/{head,fix}.t89p.gate.gw.tsv`); through fix2 every one of them held as
+   through the first fix, measured 2026-11-21 (`/tmp/t89/b2/fix2.t89p.*.tsv`). The bound-name probes (`/tmp/t89/b2/p2.jsonl`):
+   `cd /tmp; python3 -c "import sys; p=sys.argv[2]; open(p,'w')..." a <mirror>/x` moved allowed -> refused through main-tree (sid t
+   and nobody) and gate-write, a write of the mirror HEAD and the first fix passed; the same program standing in the mirror with
+   argv[2] `/tmp/q/a.txt` moved rewrote -> allowed and refused -> allowed, a scratch write; `open(p,'w').write(p)` (the name used
+   otherwise) held rewrote and refused, HEAD's reading - each move a correction, measured 2026-11-21
+   (`/tmp/t89/b2/{head,fix,fix2}.p2.*.tsv`). The session's ruling (option A, `may_split`): red first, the binding test and the
+   HEAD's-reading test failed and the other 405 passed, measured 2026-11-21 (`/tmp/t89/red3.log`); green, `rust/guard/shared`
+   407/407 with its lint, format and cover clean and `rust/guard` 444/444 with its lint clean, measured 2026-11-21
+   (`/tmp/t89/green7.log`, `/tmp/t89/green8.log`, in wt). Its replay over the same 1,838 rows and 25 configurations
+   (`/tmp/t89/bin-fixA`), 2 min 18 s at a 33.1 MB peak, measured 2026-11-21 (`/tmp/t89/b3/run.sh` under `/usr/bin/time -v`,
+   `/tmp/t89/b3/runA.log`): HEAD -> fixA moves only bx#29969 and bx#58999 through main-tree, refused -> allowed (sid nobody),
+   corrections, and fix2 -> fixA moves ux#2209 (allowed -> refused, sid nobody; allowed -> rewrote, sid t), bx#54240 and bx#58694
+   (allowed -> refused, sid nobody) back to HEAD's verdict, the ruling's cost (T140), measured 2026-11-21 (a row-by-row compare of
+   `/tmp/t89/b3/{head,fix2,fixA}.*.tsv`). Its probes: T79's #2 (a bare `$f` over `0005*`) back to HEAD's rewrote and refused, and
+   #3 (`a`) and #4 (`for f in a b`, no blank) still allowed; T89's probes and the bound-name probes as through fix2; the three
+   splitting shapes refused as at HEAD, and `"$f"` over a glob refused as at HEAD, the cost - no verdict worse than HEAD's,
+   measured 2026-11-21 (`/tmp/t89/b2/fixA.{probe,t89p,p2,p3,p4}.*.tsv`).
+10. **Before moving a constant.** n/a - no constant; the binding's shapes are a guard's rule, each pinned by a test.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** A builder sees a scratch write from a `-c` program pass instead of being refused or moved (the four corpus
+   commands, bx#58999's bound name, T79's three probes; after the ruling bx#29969, bx#58999 and T79's #3 and #4), and a write of the mirror through `sys.argv` refused instead of passing or being moved into a
+   clone whose program still writes the mirror (T89's probes): main-tree's verdict was wrong both ways - a defect (constitution XIV).
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?**
+- A stdin program writing through a name bound to `sys.argv[N]` (`python3 -I - "$F" <<'EOF'` ... `p = sys.argv[1]; ...;
+  open(p,'w')`) keeps HEAD's reading, so main-tree refuses bx#52396, writing a scratchpad file, measured 2026-11-21 (item 4).
+  Not fixed here: T89 is filed for a `python3 -c` program, and a stdin program is judged in the walk's stdin arm, another route
+  outside this task's files (the review ruled the deferral legitimate, 2026-11-21); the `-c` form, bx#58999's, is fixed here
+  (`argv_inlined`), which the stdin arm can call. Filed as T137; lands before T22.
+- A loop's value before the argv word keeps HEAD's reading (`may_split`, option A), so main-tree refuses ux#2209's and bx#54240's
+  quoted `"$f"`, one word in bash, and bx#58694's bare `$f` over a glob matching no blank name, each a scratch write standing in the
+  mirror, as HEAD did, measured 2026-11-21 (item 9). Not fixed here: the walk holds a quoted word without its quotes and a loop
+  value's blank as `_` (`tree/bind.rs`, T129's file, being changed now), so only it can tell `"$f"` from `$f`, and a bare `$f`
+  passes only where its glob, expanded where the shell stands, matches no name with a blank - the session chose option A here and
+  filed the rest (2026-11-21). Filed as T140, which waits for T129; lands before T22.
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
-
+**Performance work?** no.
 
 ### T90 (<why: the finding or measurement that files it>)
 
@@ -1573,4 +1710,57 @@ its own files; not engine speed, so no performance-checklist answers.
 
 **Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
 
+
+### T137 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T137 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+
+### T140 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T140 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
 
