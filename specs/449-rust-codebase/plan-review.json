@@ -217,12 +217,6 @@
    "reviewed": "2026-11-20",
    "declared": "spec-fidelity"
   },
-  "### T158 (<why: the finding or measurement that files it>)": {
-   "sha256": "ed621ed581a98464317c0bda08519177dc237dc731c36b52fcb31400d147b158",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-16",
-   "declared": "round-arbiter"
-  },
   "### T158 Approach (checklist part A)": {
    "sha256": "d78f4d05c4269a9aecf12357ce60189ec26d57a171a9dd7ea3617aa79f5bd02a",
    "verdict": "CLEAR",
@@ -739,12 +733,6 @@
    "reviewed": "2026-11-19",
    "declared": "spec-fidelity"
   },
-  "### T198 (the GM, 2026-11-19: \"if the 3a step is horribly inefficient then we might need to rip it out and restart  tomake it not terrible\")": {
-   "sha256": "240bd132399f1bc7283965c0bb6452e34561885a1049ee56df852e8f316be4c9",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-19",
-   "declared": "spec-fidelity"
-  },
   "### T198 Approach (checklist part A)": {
    "sha256": "33e6dee6f1106fb6c245fa268303e6aead2f2fce4875a5ea1bad74832e07ef6f",
    "verdict": "CLEAR",
@@ -831,12 +819,6 @@
   },
   "### T206 Approach (checklist part A)": {
    "sha256": "81fd606f2998042e0c40f2c00278c767d86bda9380a5751a734bfcc367b5a60c",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-19",
-   "declared": "spec-fidelity"
-  },
-  "### T208 (T199: step 3b is rebuilt from a derivation, not ported - the GM, 2026-10-30 and 2026-11-19)": {
-   "sha256": "c7bff0780c5ff1e805f41693013cffe485f8b32ff05315e24b5aa20f869f86f6",
    "verdict": "CLEAR",
    "reviewed": "2026-11-19",
    "declared": "spec-fidelity"
@@ -1213,22 +1195,10 @@
    "reviewed": "2026-11-20",
    "declared": "spec-fidelity"
   },
-  "### T197 (<why: the finding or measurement that files it>)": {
-   "sha256": "cd5abe7fcf70a49a3db52be2423fbbf1a203c74b5c25875006b29386d996bd8f",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-21",
-   "declared": "spec-fidelity"
-  },
   "### T197 Approach (checklist part A)": {
    "sha256": "a27f745b9160ef4a7954b0959fabca5e9ae0b34610177fa6849b1eaeeb599928",
    "verdict": "CLEAR",
    "reviewed": "2026-11-22",
-   "declared": "spec-fidelity"
-  },
-  "### T203 (<why: the finding or measurement that files it>)": {
-   "sha256": "8686494f34b025ef009d768b064ec916964a964eda7a73af6e93ca0584953b37",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-21",
    "declared": "spec-fidelity"
   },
   "### T203 Approach (checklist part A)": {
@@ -1237,22 +1207,10 @@
    "reviewed": "2026-11-22",
    "declared": "spec-fidelity"
   },
-  "### T216 (<why: the finding or measurement that files it>)": {
-   "sha256": "05eab3256f45e9249f925606f8d8500b4677c690d0a26b3ad3c01c16437e65c9",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-21",
-   "declared": "spec-fidelity"
-  },
   "### T216 Approach (checklist part A)": {
    "sha256": "4bd74f04f9ead00cf76e94d82958973a46d71d7dc5ccde8a778ef53efa116fd1",
    "verdict": "CLEAR",
    "reviewed": "2026-11-22",
-   "declared": "spec-fidelity"
-  },
-  "### T228 (<why: the finding or measurement that files it>)": {
-   "sha256": "03b88caa55f7e7f25b5774d2fbab3602ae2bf93ac336f6ff8d8c0f47f66be510",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-21",
    "declared": "spec-fidelity"
   },
   "### T228 Approach (checklist part A)": {
@@ -1261,22 +1219,10 @@
    "reviewed": "2026-11-22",
    "declared": "spec-fidelity"
   },
-  "### T235 (<why: the finding or measurement that files it>)": {
-   "sha256": "dfc93ed83a4ea175610d6aeb43d348f4b051c4f4ac1ed79c6a716ef0c77adcdc",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-21",
-   "declared": "spec-fidelity"
-  },
   "### T235 Approach (checklist part A)": {
    "sha256": "1c5b6f22559b6105eec4a835190c31e1a7816ffaaee901da3c1d8ea4c1965c76",
    "verdict": "CLEAR",
    "reviewed": "2026-11-22",
-   "declared": "spec-fidelity"
-  },
-  "### T240 (<why: the finding or measurement that files it>)": {
-   "sha256": "c5c8c6d2088579f77f7fe65005dd1e30ac4519bcd8252a278c0cc6b8b43ece7d",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-21",
    "declared": "spec-fidelity"
   },
   "### T240 Approach (checklist part A)": {
@@ -1285,34 +1231,16 @@
    "reviewed": "2026-11-22",
    "declared": "spec-fidelity"
   },
-  "### T241 (<why: the finding or measurement that files it>)": {
-   "sha256": "3204718fc8887679cd1727e8a7c72781a3f3a6c3833250340d3061fa5ca43b62",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-21",
-   "declared": "spec-fidelity"
-  },
   "### T241 Approach (checklist part A)": {
    "sha256": "6680231ca05c9d9007fa39d0d13708c9c6af34571d54a5f5b00b0c86903ebb0c",
    "verdict": "CLEAR",
    "reviewed": "2026-11-22",
    "declared": "spec-fidelity"
   },
-  "### T243 (<why: the finding or measurement that files it>)": {
-   "sha256": "352488f9cae327d810016c61ae9c26dd818aa56192812dc805a4af66fdfa819d",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-21",
-   "declared": "spec-fidelity"
-  },
   "### T243 Approach (checklist part A)": {
    "sha256": "07e0bb92512937023edfa0f376716848c6ab8ffac006d7e4dbe1f450c3abce96",
    "verdict": "CLEAR",
    "reviewed": "2026-11-22",
-   "declared": "spec-fidelity"
-  },
-  "### T244 (<why: the finding or measurement that files it>)": {
-   "sha256": "db5e59c5dc123a14019d2eff4e92709af1a3e84535f3878ccc18c82e7e2725e4",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-21",
    "declared": "spec-fidelity"
   },
   "### T244 Approach (checklist part A)": {
@@ -1472,7 +1400,7 @@
    "declared": "spec-fidelity"
   },
   "### T247 Approach (checklist part A)": {
-   "sha256": "b92d017da189f0781f3791b9c0325769eccb5ef6409c170d58fa88377cfdd0b7",
+   "sha256": "37cf43dde66b056b1e8b1b24e246f9c8210fb2c3621531b70adfce897aac9270",
    "verdict": "CLEAR",
    "reviewed": "2026-11-22",
    "declared": "spec-fidelity"
@@ -1502,7 +1430,7 @@
    "declared": "spec-fidelity"
   },
   "### T264 (449 T249's `make claims-owed`, 2026-11-22: the claims-label lint flagged docs/building-programs.md's \"dwelling band 34-60 by 18-38 ft\" a bare GUESS whose account names 0221)": {
-   "sha256": "dfd591b782f7f00e02112c24d9b43134b375b6fb98b1bd8bf456eed2133481d2",
+   "sha256": "bb022e674a2d179ca8bbb04273484fb171342c7123d5c9cf34fe532c442f9bf7",
    "verdict": "CLEAR",
    "reviewed": "2026-11-22",
    "declared": "spec-fidelity"
@@ -1569,6 +1497,198 @@
   },
   "### T254, T255, T256, T257, T262, T266, T267, T270, T272 Approach (checklist part A)": {
    "sha256": "631252b35be199f21d454682e56aebed0a0dc87620e3fbe0b09a210e11fa8599",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-22",
+   "declared": "spec-fidelity"
+  },
+  "### T252 (<why: the finding or measurement that files it>)": {
+   "sha256": "6e50aa57504bf8a394ed841b73f0740f8b524dbf68bc0cf18ddecba1007f6cc4",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-22",
+   "declared": "spec-fidelity"
+  },
+  "### T252 Approach (checklist part A)": {
+   "sha256": "00fc8b4c9b4406b8f251932bb9c6c7c231e7e1f243a666a2428331981fdcffbb",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-22",
+   "declared": "spec-fidelity"
+  },
+  "### T259 (<why: the finding or measurement that files it>)": {
+   "sha256": "107dfb0918acc22f8ea2e251c143e4f08dd78ef46d2992cba2409afcbb3dca2b",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-22",
+   "declared": "spec-fidelity"
+  },
+  "### T259 Approach (checklist part A)": {
+   "sha256": "7909398c916ad43a15e2df631cbd556756a433e8850e58012275128ea20672b9",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-22",
+   "declared": "spec-fidelity"
+  },
+  "### T260 (<why: the finding or measurement that files it>)": {
+   "sha256": "c1e4b0b1f1e3a2b34e62e92787a0f735ace0a89769813f05e2745b631a4e084b",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-22",
+   "declared": "spec-fidelity"
+  },
+  "### T260 Approach (checklist part A)": {
+   "sha256": "430ff294f2e596a3a76559a2b2aae8e7e194bc3dea34292a45136f6c4515bfe0",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-22",
+   "declared": "spec-fidelity"
+  },
+  "### T275 (<why: the finding or measurement that files it>)": {
+   "sha256": "fd1a6e24a799e493443e1d88d9680bb92377de75bd7b11b8a3e844b1731e0dfd",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-22",
+   "declared": "spec-fidelity"
+  },
+  "### T275 Approach (checklist part A)": {
+   "sha256": "afc2b3cb6e6f8f156f9a715e4267d3a611fec742fb22b48ddc19fbc34d94722e",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-22",
+   "declared": "spec-fidelity"
+  },
+  "### T276 (<why: the finding or measurement that files it>)": {
+   "sha256": "f4dbfa4123c56ba0e85a4de7baee5ae75ba9760edc66b6b4ff4e6977269ba6c6",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-22",
+   "declared": "spec-fidelity"
+  },
+  "### T276 Approach (checklist part A)": {
+   "sha256": "5e09a0051fed2ba05d42c3ca16ee9daa99995eb0e728a3920cfc82b1d6b40ef8",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-22",
+   "declared": "spec-fidelity"
+  },
+  "### T277 (<why: the finding or measurement that files it>)": {
+   "sha256": "b2010ad7e223503a0c946b35c0b909444e1b09a8095ef68b0ad651400939cd42",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-22",
+   "declared": "spec-fidelity"
+  },
+  "### T277 Approach (checklist part A)": {
+   "sha256": "052ba7e0ddd5213f7296fa3049a01e77f6b9d766c56ecbc9e3977016df56016d",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-22",
+   "declared": "spec-fidelity"
+  },
+  "### T278 (<why: the finding or measurement that files it>)": {
+   "sha256": "4aa432d82d7035bbedb8aa4471972d8d733add6aa3ccb991adc7258f22d25069",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-22",
+   "declared": "spec-fidelity"
+  },
+  "### T278 Approach (checklist part A)": {
+   "sha256": "9acf55913541bd96727823e5528174f1d7d92050b6ad862716b4d37935b728f3",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-22",
+   "declared": "spec-fidelity"
+  },
+  "### T279 (<why: the finding or measurement that files it>)": {
+   "sha256": "6046bed4a56ac51f7f4345a73454d73a75a5bbe31b7f193b0f3b02a003db2f45",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-22",
+   "declared": "spec-fidelity"
+  },
+  "### T279 Approach (checklist part A)": {
+   "sha256": "83ef4ef9ad93299d7e107f293a9f2864236b6a930190a50a659361ce0a5c5e53",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-22",
+   "declared": "spec-fidelity"
+  },
+  "### T280 (<why: the finding or measurement that files it>)": {
+   "sha256": "b9faba65e8c265334ca09ce18a79908639e07ac7b9d140c94b0daf6120375f38",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-22",
+   "declared": "spec-fidelity"
+  },
+  "### T280 Approach (checklist part A)": {
+   "sha256": "677dda173ae0c3167ebb9a02991750acc85f7c218408c005000a31167c95ec38",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-22",
+   "declared": "spec-fidelity"
+  },
+  "### T281 (<why: the finding or measurement that files it>)": {
+   "sha256": "2cfaab8d00b8dbdae29f2fd7185deacdda93336dc3f5333d05f9930d9d04dd22",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-22",
+   "declared": "spec-fidelity"
+  },
+  "### T281 Approach (checklist part A)": {
+   "sha256": "6566b0cecbea99522b95bdae565a0f51f83a25ead1fbae174b4c423d4734676c",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-22",
+   "declared": "spec-fidelity"
+  },
+  "### T282 (<why: the finding or measurement that files it>)": {
+   "sha256": "a9bcfdc693e095693085bdc128fc093b714d9efa52624d601e4e73f6c530b3f4",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-22",
+   "declared": "spec-fidelity"
+  },
+  "### T282 Approach (checklist part A)": {
+   "sha256": "b7668c913696e4db82aa770d5e8016431ed57340c250f59d2ecae5748f2e93d3",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-22",
+   "declared": "spec-fidelity"
+  },
+  "### T283 (<why: the finding or measurement that files it>)": {
+   "sha256": "640eee4c880b0cfc7c8f8eb3187c6a9e6ccc0d1ea3f5c7e3473235ebb3ecaea2",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-22",
+   "declared": "spec-fidelity"
+  },
+  "### T283 Approach (checklist part A)": {
+   "sha256": "7cd1f3d210672d6f434f97ce9e35337ad8ccab8daae602426fb47d8200a1a297",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-22",
+   "declared": "spec-fidelity"
+  },
+  "### T284 (<why: the finding or measurement that files it>)": {
+   "sha256": "7fd1e15baedb6a28ec826e6a50ae1d33023c45429ebd5fc23e7ae451ab5bbce3",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-22",
+   "declared": "spec-fidelity"
+  },
+  "### T284 Approach (checklist part A)": {
+   "sha256": "9b9cb3b4ba6a5b04eaa9d921b4db3d94e9619e167bbb7eaa30c8238340709d0d",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-22",
+   "declared": "spec-fidelity"
+  },
+  "### T285 (<why: the finding or measurement that files it>)": {
+   "sha256": "fd540cc6743a574a6c9cd290f6ce6987761019062386e2e820146161d55a35c3",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-22",
+   "declared": "spec-fidelity"
+  },
+  "### T285 Approach (checklist part A)": {
+   "sha256": "7fc8af4764ae36b0db9f688d875187b15d4af25965236b1272d00fff523fc6e4",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-22",
+   "declared": "spec-fidelity"
+  },
+  "### T286 (<why: the finding or measurement that files it>)": {
+   "sha256": "30b511c7e7516f224d03d5b9fcf31cbe307ec86109a75d21a4b9870df71415c5",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-22",
+   "declared": "spec-fidelity"
+  },
+  "### T286 Approach (checklist part A)": {
+   "sha256": "3b756d45dc9623b1a4b82dd4c1b922e3fe41aa13aff9a3f287c352f1dc9fe19b",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-22",
+   "declared": "spec-fidelity"
+  },
+  "### T287 (<why: the finding or measurement that files it>)": {
+   "sha256": "1b982b029164cfb7d1ff29bffa40f00a0339600d50ba8b706f8c4d29ab248e67",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-22",
+   "declared": "spec-fidelity"
+  },
+  "### T287 Approach (checklist part A)": {
+   "sha256": "f6fbb5bb148713ef981f3c6c65ed49726c5424f0a9dd47fcb927beabf0d33d81",
    "verdict": "CLEAR",
    "reviewed": "2026-11-22",
    "declared": "spec-fidelity"
@@ -20730,6 +20850,90 @@
      "summary": "wood-kami-altar's tab called the wood color a map drawing convention, so no sentence takes it as the real finish; found.jsonl row closed",
      "class": "within",
      "why": "Fixed here, not deferred."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-22",
+   "blocks": [
+    "### T247 Approach (checklist part A)",
+    "### T252 (<why: the finding or measurement that files it>)",
+    "### T252 Approach (checklist part A)",
+    "### T259 (<why: the finding or measurement that files it>)",
+    "### T259 Approach (checklist part A)",
+    "### T260 (<why: the finding or measurement that files it>)",
+    "### T260 Approach (checklist part A)",
+    "### T264 (449 T249's `make claims-owed`, 2026-11-22: the claims-label lint flagged docs/building-programs.md's \"dwelling band 34-60 by 18-38 ft\" a bare GUESS whose account names 0221)",
+    "### T275 (<why: the finding or measurement that files it>)",
+    "### T275 Approach (checklist part A)",
+    "### T276 (<why: the finding or measurement that files it>)",
+    "### T276 Approach (checklist part A)",
+    "### T277 (<why: the finding or measurement that files it>)",
+    "### T277 Approach (checklist part A)",
+    "### T278 (<why: the finding or measurement that files it>)",
+    "### T278 Approach (checklist part A)",
+    "### T279 (<why: the finding or measurement that files it>)",
+    "### T279 Approach (checklist part A)",
+    "### T280 (<why: the finding or measurement that files it>)",
+    "### T280 Approach (checklist part A)",
+    "### T281 (<why: the finding or measurement that files it>)",
+    "### T281 Approach (checklist part A)",
+    "### T282 (<why: the finding or measurement that files it>)",
+    "### T282 Approach (checklist part A)",
+    "### T283 (<why: the finding or measurement that files it>)",
+    "### T283 Approach (checklist part A)",
+    "### T284 (<why: the finding or measurement that files it>)",
+    "### T284 Approach (checklist part A)",
+    "### T285 (<why: the finding or measurement that files it>)",
+    "### T285 Approach (checklist part A)",
+    "### T286 (<why: the finding or measurement that files it>)",
+    "### T286 Approach (checklist part A)",
+    "### T287 (<why: the finding or measurement that files it>)",
+    "### T287 Approach (checklist part A)",
+    "(removed) ### T158 (<why: the finding or measurement that files it>)",
+    "(removed) ### T197 (<why: the finding or measurement that files it>)",
+    "(removed) ### T198 (the GM, 2026-11-19: \"if the 3a step is horribly inefficient then we might need to rip it out and restart  tomake it not terrible\")",
+    "(removed) ### T203 (<why: the finding or measurement that files it>)",
+    "(removed) ### T208 (T199: step 3b is rebuilt from a derivation, not ported - the GM, 2026-10-30 and 2026-11-19)",
+    "(removed) ### T216 (<why: the finding or measurement that files it>)",
+    "(removed) ### T228 (<why: the finding or measurement that files it>)",
+    "(removed) ### T235 (<why: the finding or measurement that files it>)",
+    "(removed) ### T240 (<why: the finding or measurement that files it>)",
+    "(removed) ### T241 (<why: the finding or measurement that files it>)",
+    "(removed) ### T243 (<why: the finding or measurement that files it>)",
+    "(removed) ### T244 (<why: the finding or measurement that files it>)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T247-found-and-left-pointer",
+     "summary": "T247's third Found-and-left item restates which pointer in feature 451's plan.md T49 section is red (research/contents.json#trades-and-services's built page, not research/urban-features.html); the deferral, its filing as T249 and its order are unchanged",
+     "class": "within",
+     "why": "A correction of a description in a note; the task's goal, constraints, exits and done-measures (FR-001, SC-005, ask:449-T158-codeid, ask:449-T247-python-starts) are the text judged CLEAR before, word for word"
+    },
+    {
+     "id": "T264-from-form-quoted-whole",
+     "summary": "T264's Approach quotes the Research: line it replaces with 0221's file name in full rather than elided; the fix (restating the GUESS label in docs/building-programs.md, no code) is unchanged",
+     "class": "within",
+     "why": "Wording of the before-state only; the decision judged CLEAR before (a label restated, constitution XIV: a claim restated, not code changed) stands as it was"
+    },
+    {
+     "id": "removed-T198",
+     "summary": "T198's section (the 3a placer's derivation and counters, the GM's 2026-11-19 'rip it out and restart') removed from plan.md",
+     "class": "within",
+     "why": "A record of measurements and a derivation, deciding nothing still open; removing a section from the live plan neither narrows what the GM asked nor undoes the rebuild it led to, which is carried by its own phase tasks"
+    },
+    {
+     "id": "removed-T208",
+     "summary": "T208's section (step 3b's compound derivation and its budget) removed from plan.md",
+     "class": "within",
+     "why": "Same as T198: a finished derivation's record, no open decision; the rebuild from the derivation the GM asked for is not narrowed by its removal"
+    },
+    {
+     "id": "templates-filed-and-removed",
+     "summary": "T252, T259, T260 and T275-T287 are the unfilled make task-add template (both the task section and its checklist part A); T158, T197, T203, T216, T228, T235, T240, T241, T243 and T244 removed were the same unfilled template",
+     "class": "within",
+     "why": "Placeholder text only: a template filed or removed makes no decision"
     }
    ]
   }
