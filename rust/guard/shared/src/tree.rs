@@ -617,7 +617,13 @@ fn writes_in(
             } else {
                 "shell"
             };
+            // 451 T89: a program writing only through `sys.argv` reads where it stands and writes each word it names
+            let placed = (how == "shell")
+                .then(|| py_c::argv_places(&toks, at, programs, env, home, eff))
+                .flatten();
+            let how = if placed.is_some() { "read" } else { how };
             found_writes.push((eff.map(str::to_owned), how, Known::Shell));
+            found_writes.extend(placed.into_iter().flatten());
         } else if (base == "sed"
             && toks[1..]
                 .iter()

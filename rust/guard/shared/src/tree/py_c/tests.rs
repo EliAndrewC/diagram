@@ -353,3 +353,193 @@ fn window_307_runs_as_typed() {
     let w = crate::tree::walk_judged(&cmd, Some("/nonexistent-t44"), "/nonexistent-t44", "/h");
     assert!(w.targets.is_empty(), "window#307 judged a write"); // every segment a read: no target at all
 }
+
+/// The mirror the argv walks stand in (451 T89): a path no test makes, as `window_307_runs_as_typed`'s.
+const M: &str = "/nonexistent-t89";
+
+/// 451 T89: (path, class, how) of each write a walk standing in the mirror finds - its reads (`how` "read") left out, as every
+/// guard leaves them out.
+fn argv_written(cmd: &str) -> Vec<(Option<String>, &'static str, &'static str)> {
+    crate::tree::walk_judged(cmd, Some(M), M, "/h")
+        .targets
+        .into_iter()
+        .filter(|t| t.how != "read")
+        .map(|t| (t.path, t.class, t.how))
+        .collect()
+}
+
+fn placed(
+    path: Option<&str>,
+    class: &'static str,
+    how: &'static str,
+) -> Vec<(Option<String>, &'static str, &'static str)> {
+    vec![(path.map(str::to_owned), class, how)]
+}
+
+/// 451 T89, found by T79 (2026-11-21): a program that writes through `sys.argv[N]` writes the command's N-th word after the program,
+/// placed as the walk places a word - T79's probes (`/tmp/t79b/judge/probe-mt.jsonl` #2-#4) and bx#54240's, bx#58694's and
+/// bx#29969's shapes, each refused standing in the mirror at HEAD as a write where the shell stood.
+#[test]
+fn a_program_writes_the_word_its_argv_names() {
+    let q = format!("{M}/research/questions");
+    let p = "\"import sys; open(sys.argv[2],'w').write('x')\"";
+    let one = format!("cd {q}; python3 -I -c {p} a /tmp/q/a.txt");
+    let one_got = argv_written(&one);
+    let scratch = placed(Some("/tmp/q/a.txt"), "elsewhere", "named");
+    assert_eq!(one_got, scratch, "{one}");
+    let looped = format!("cd {q}; for f in 0005*; do python3 -I -c {p} a /tmp/q/txt/$f.txt; done"); // a glob's value as the word
+    let looped_got = argv_written(&looped);
+    assert_eq!(looped_got, placed(None, "elsewhere", "named"), "{looped}");
+    let pair = format!("cd {q}; for f in a b; do python3 -I -c {p} $f /tmp/q/txt/$f.txt; done");
+    let pair_got = argv_written(&pair);
+    let pair_want = vec![
+        (Some("/tmp/q/txt/a.txt".to_owned()), "elsewhere", "named"),
+        (Some("/tmp/q/txt/b.txt".to_owned()), "elsewhere", "named"),
+    ];
+    assert_eq!(pair_got, pair_want, "{pair}");
+    let held = format!("cd {q}; python3 -I -c {p} \"a b\" /tmp/q/a.txt"); // a quoted word with a blank is one word
+    let held_got = argv_written(&held);
+    assert_eq!(held_got, scratch, "{held}");
+    let dumped = "python3 -I -c \"import json,sys;d=json.load(open(sys.argv[1]));d.pop('k');json.dump(d,open(sys.argv[1],'w'))\" /tmp/q/r.json";
+    let dumped_got = argv_written(dumped);
+    let dumped_want = placed(Some("/tmp/q/r.json"), "elsewhere", "named");
+    assert_eq!(dumped_got, dumped_want, "{dumped}");
+}
+
+/// 451 T89, its review (2026-11-21): a name bound once to `sys.argv[N]`, its every other mention an `open` of it, is `sys.argv[N]`
+/// there - bx#58999's shape, refused standing in the mirror at HEAD as a write where the shell stood - and a mirror word bound so
+/// is the mirror's.
+#[test]
+fn a_name_bound_to_argv_writes_the_word_it_holds() {
+    let q = format!("{M}/research/questions");
+    let p = "\"import sys,json\np=sys.argv[1]; t=open(p).read()\nfor a,b in [('x','y')]: t=t.replace(a,b)\njson.loads(t); open(p,'w').write(t)\"";
+    let scratch = format!("cd {q}; python3 -I -c {p} /tmp/q/f.json");
+    let scratch_got = argv_written(&scratch);
+    let scratch_want = placed(Some("/tmp/q/f.json"), "elsewhere", "named");
+    assert_eq!(scratch_got, scratch_want, "{scratch}");
+    let mirror = format!("cd /tmp; python3 -I -c {p} {M}/x");
+    let mirror_got = argv_written(&mirror);
+    let mirror_want = placed(Some(&format!("{M}/x")), "main", "named");
+    assert_eq!(mirror_got, mirror_want, "{mirror}");
+}
+
+/// 451 T89: the word is placed as any other - a mirror path is the mirror's (named, so refused, never moved), a relative one lands
+/// where the shell stands; a redirect is no word of argv, and an unset name's unquoted expansion is none either, as in bash.
+#[test]
+fn an_argv_word_is_placed_as_the_walk_places_a_word() {
+    let p = "\"import sys; open(sys.argv[2],'w').write('x')\"";
+    let mirror = format!("cd /tmp; python3 -c {p} a {M}/x");
+    let mirror_got = argv_written(&mirror);
+    let mirror_x = placed(Some(&format!("{M}/x")), "main", "named");
+    assert_eq!(mirror_got, mirror_x, "{mirror}");
+    let relative = format!("cd {M}/q; python3 -c {p} a out.txt");
+    let relative_got = argv_written(&relative);
+    let relative_want = placed(Some(&format!("{M}/q/out.txt")), "main", "shell");
+    assert_eq!(relative_got, relative_want, "{relative}");
+    let unset = format!("cd /tmp; python3 -c {p} $UNSET_T89 /tmp/q/a {M}/x");
+    let unset_got = argv_written(&unset);
+    assert_eq!(unset_got, mirror_x, "{unset}");
+    let redirected = format!("cd {M}; python3 -c {p} a > /tmp/q/log /tmp/q/a.txt");
+    let redirected_got = argv_written(&redirected);
+    let redirected_want = vec![
+        (Some("/tmp/q/a.txt".to_owned()), "elsewhere", "named"),
+        (Some("/tmp/q/log".to_owned()), "elsewhere", "named"),
+    ];
+    assert_eq!(redirected_got, redirected_want, "{redirected}");
+}
+
+/// 451 T89: where the binding cannot say which word the program writes, or the walk cannot place it, the program keeps HEAD's
+/// reading, D5's write where the shell stands (here the mirror's `q`, so a guard moves or refuses it as before).
+#[test]
+fn an_argv_write_the_walk_cannot_bind_keeps_heads_reading() {
+    let p = "\"import sys; open(sys.argv[2],'w').write('x')\"";
+    let cases = [
+        format!("python3 -c {p} a"),                                    // an index past the words
+        format!("python3 -c {p} $(ls) /tmp/q/a"),                       // a word before it that may be many, or none
+        format!("python3 -c {p} *.txt /tmp/q/a"),                       // a glob
+        format!("python3 -c {p} \"$@\" /tmp/q/a"),                      // the shell's own arguments
+        format!("python3 -c {p} {{a,b}} /tmp/q/a"),                     // a brace expansion
+        format!("python3 -c {p} x\"a b\"$X /tmp/q/a"),                  // a word quoted in part
+        format!("X='a b'; python3 -c {p} $X /tmp/q/a"),                 // a value that splits, or not, as it is quoted
+        format!("E=; python3 -c {p} $E /tmp/q/a"),                      // a value that vanishes, or not
+        format!("read D; python3 -c {p} a $D/x"),                       // a word nothing is known of
+        format!("python3 -c {p} a $(cat w)"),                           // a word led by a substitution
+        format!("python3 -c {p} a > /tmp/q/a"),                         // the redirect is no word: an index past the words
+        format!("for f in Seeing*; do python3 -c {p} $f /tmp/q/$f.txt; done"), // a glob's value before it, bash's split shifting it
+        format!("for f in 0005*; do python3 -I -c {p} $f /tmp/q/txt/$f.txt; done"), // bx#58694's, though its matches hold no blank
+        format!("for f in 0053-*; do python3 -c {p} \"$f\" /tmp/q/txt/$f.txt; done"), // quoted, which the walk cannot see (T140)
+        format!("for f in \"a b\"; do python3 -c {p} $f /tmp/q/a; done"), // a loop's value with a blank, `bind`'s `a_b`
+        format!("read f; python3 -c {p} $f /tmp/q/a"),                  // a value read from input
+        "python3 -c \"import sys; open(sys.argv[0],'w').write('x')\" /tmp/q/a".to_owned(), // the `-c` itself
+        "python3 -c \"import sys; open(sys.argv[1],'w').write('x'); open('y','w')\" /tmp/q/a".to_owned(), // another write
+        "python3 -c \"import sys; f=open(sys.argv[1],'w'); f.write('x')\" /tmp/q/a".to_owned(), // a write through a name
+        "python3 -c \"import sys; p=sys.argv[1]; open(p,'w').write(p)\" /tmp/q/a".to_owned(), // a bound name used otherwise
+        "python3 -c \"import sys; p=sys.argv[1]; p=p+'x'; open(p,'w').write('x')\" /tmp/q/a".to_owned(), // bound again
+        "python3 -c \"import sys; p=sys.argv[1]+'x'; open(p,'w').write('x')\" /tmp/q/a".to_owned(), // bound to more than argv
+        "python3 -c \"import io,sys; p=sys.argv[1]; io.open(p,'w').write('x')\" /tmp/q/a".to_owned(), // another module's open
+        "python3 -c \"import sys; sys.argv[1]='/tmp/z'; open(sys.argv[1],'w').write('x')\" /tmp/q/a".to_owned(), // argv assigned
+        "python3 -c \"import sys; del sys.argv[1]; open(sys.argv[1],'w').write('x')\" /tmp/q/a /tmp/q/b".to_owned(), // deleted from
+        "python3 -c \"import sys; a=sys.argv; open(sys.argv[1],'w').write('x')\" /tmp/q/a".to_owned(), // aliased
+        "python3 -c \"from sys import argv; open(argv[1],'w').write('x')\" /tmp/q/a".to_owned(), // imported by name
+        "python3 -c \"import os as sys; open(sys.argv[1],'w').write('x')\" /tmp/q/a".to_owned(), // another module as `sys`
+        "python3 -c \"open(sys.argv[1],'w').write('x')\" /tmp/q/a".to_owned(), // `sys` never imported
+        "python3 -c \"import sys; open(sys.argv[1],'w',opener=lambda p,f: os.open('x',f)).write('x')\" /tmp/q/a".to_owned(), // its opener writes
+    ];
+    let head = placed(Some(&format!("{M}/q")), "main", "shell");
+    for case in cases {
+        let cmd = format!("cd {M}/q; {case}");
+        let got = argv_written(&cmd);
+        let shell: Vec<_> = got.into_iter().filter(|w| w.2 == "shell").collect();
+        assert_eq!(shell, head, "{cmd}");
+    }
+}
+
+/// 451 T89: the binding read alone - the `sys.argv[N]` a program writes, where it writes nowhere else, and the word each N holds
+/// (`tree::program`'s reader is to call `argv_word` too, T125).
+#[test]
+fn the_binding_reads_argv_as_python_and_bash_make_it() {
+    let env = super::Env::new();
+    let after = ["a", ">", "/tmp/log", "2>&1", "\"\"", "/tmp/q/b"];
+    let got: Vec<_> = (0..5)
+        .map(|n| super::argv_word(n, &after, &env, "/h"))
+        .collect();
+    let want = [None, Some("a"), Some("\"\""), Some("/tmp/q/b"), None];
+    assert_eq!(got, want);
+    // a word bash may split - a loop's or a read's value (`$__unread__`), `bind`'s `_` for a blank - is the word where it is the
+    // one asked for, its first piece where its start lies, and shifts every index past it, so none past it is known
+    let split = ["0005$__unread__", "sweet_potato", "$__unread__", "/tmp/q/b"];
+    let split_got: Vec<_> = (0..4)
+        .map(|k| super::argv_word(1, &split[k..], &env, "/h"))
+        .collect();
+    let split_want = [
+        Some("0005$__unread__"),
+        Some("sweet_potato"),
+        Some("$__unread__"),
+        Some("/tmp/q/b"),
+    ];
+    assert_eq!(split_got, split_want);
+    let past: Vec<_> = split[..3]
+        .iter()
+        .map(|w| super::argv_word(2, &[w, "/tmp/q/b"], &env, "/h"))
+        .collect();
+    assert_eq!(past, [None, None, None]);
+    let process = super::argv_word(2, &["<(x)", "/tmp/q/b"], &env, "/h");
+    assert_eq!(process, None); // a process substitution is a word, its path the shell's
+    let s = |p: &str| super::argv_writes(p, '\'', Some(M)); // run in a place no module of its imports lies in
+    for (program, want) in [
+        ("import sys; open(sys.argv[2],'w').write('x')", Some(vec![2])),
+        ("import sys; print(1, file=open(sys.argv[1], 'a'))", Some(vec![1])),
+        ("import json,sys; json.dump({}, open(sys.argv[1],'w'), indent=1)", Some(vec![1])),
+        ("import sys; open(sys.argv[3],'w').write(open(sys.argv[1]).read()); open(sys.argv[2], mode='w').writelines([])", Some(vec![2, 3])),
+        ("import sys; open(sys.argv[1],'w').write(str(open(sys.argv[2],'w')))", Some(vec![1, 2])),
+        ("import sys; open(sys.argv[1],'w').write(str(open(sys.argv[2],'w'))); open('y','w')", None),
+        ("import sys; print(open(sys.argv[1]).read())", None),
+        ("import sys,pickle; pickle.dump(1, open(sys.argv[1],'wb'))", None),
+        ("import sys; open(sys.argv[1],'w').write(x); os.remove('z')", None),
+        ("import sys; open(sys.argv[1] + '.bak','w').write('x')", None),
+        ("import sys; open(sys.argv[1],'w').write('x'); sys.argv[1:]", None),
+    ] {
+        let got = s(program);
+        assert_eq!(got, want, "{program}");
+    }
+}

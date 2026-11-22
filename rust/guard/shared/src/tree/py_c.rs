@@ -20,11 +20,19 @@
 //! 451 T63: an f-string argv element that is a long option with its name literal and a value that calls nothing is that option
 //! with the value `_` (`FIXED_OPTION`): T58's read of the event logs, `f'--since={prev["t0"]}'` in a `git log` argv, was the one
 //! read-only program among the 250 make-only refusals the guard log replayed (measured 2026-11-21).
+//!
+//! 451 T89: a program that writes only through `sys.argv[N]` writes the command's N-th word after the program (`argv_places`),
+//! where D5 had it write where the shell stands: `cd <mirror>/research/questions; python3 -c "...open(sys.argv[2],'w')..." a
+//! /tmp/q/a.txt` was refused through main-tree, and so were four corpus commands writing scratch so (bx#29969, bx#54240,
+//! bx#58694, ux#2209), measured 2026-11-21. `argv_word` is the binding alone, for the program reader (`tree::program`, T125).
+//! A name bound once to `sys.argv[N]` and only opened is that `sys.argv[N]` (`argv_inlined`, bx#58999, the review's ruling).
 
+use std::borrow::Cow;
 use std::path::Path;
 
 use fancy_regex::Regex;
 
+use super::{path_write, program_of, quoted, substituted, Env, Known, Program, Write};
 use crate::regex::Lazy;
 
 fn re(pattern: &str) -> Regex {
@@ -430,28 +438,37 @@ fn imports(program: &str) -> Option<Vec<String>> {
     )
 }
 
-/// Whether the program `body` (quoted with `quote` on the command line, `'h'` an unquoted heredoc's), run in `dir`, only reads.
-pub(super) fn reads(body: &str, quote: char, dir: Option<&str>) -> bool {
+/// The program Python receives from `body` (quoted with `quote` on the command line, `'h'` an unquoted heredoc's), or None where
+/// the shell puts code into it first.
+fn received(body: &str, quote: char) -> Option<String> {
     if quote != '\'' && (body.contains("$(") || body.contains('`')) {
-        return false; // the shell runs a command substitution before Python sees the program
+        return None; // the shell runs a command substitution before Python sees the program
     }
     let (program, at) = expansions(body, quote);
-    if outside_literals(&program, &at) {
-        return false; // the shell puts text into the program's code before Python sees it
-    }
+    // the shell puts text into the program's code before Python sees it
+    (!outside_literals(&program, &at)).then_some(program)
+}
+
+/// Whether the program `body` (quoted with `quote` on the command line, `'h'` an unquoted heredoc's), run in `dir`, only reads.
+pub(super) fn reads(body: &str, quote: char, dir: Option<&str>) -> bool {
+    received(body, quote).is_some_and(|program| only_reads(&program, dir))
+}
+
+/// Whether the program Python receives, run in `dir`, only reads.
+fn only_reads(program: &str, dir: Option<&str>) -> bool {
     // `replace(` writes only as `os.replace` or a `Path`'s (`str.replace`, the common read, cannot reach either without these
     // names); a literal, read without a pattern (451 T97)
     if found(
         &WRITES,
-        &subprocess_masked(&RE_COMPILE.replace_all(&program, "re.pattern(")),
-    ) || (program.contains("replace(") && found(&PATHS, &program))
+        &subprocess_masked(&RE_COMPILE.replace_all(program, "re.pattern(")),
+    ) || (program.contains("replace(") && found(&PATHS, program))
     {
         return false;
     }
-    if !opens_read(&program) {
+    if !opens_read(program) {
         return false;
     }
-    let Some(names) = imports(&program) else {
+    let Some(names) = imports(program) else {
         return false;
     };
     match dir {
@@ -461,6 +478,251 @@ pub(super) fn reads(body: &str, quote: char, dir: Option<&str>) -> bool {
             at.join(n).exists() || at.join(format!("{n}.py")).exists()
         }),
     }
+}
+
+// 451 T89's patterns, each built only for a text that could match it.
+/// An `open` whose path is `sys.argv[N]`, N the capture, its `(` the match's fifth character.
+static ARGV_OPEN: Lazy = Lazy::new(
+    |t| t.contains("argv"),
+    || re(r"(?<![\w.])open\(\s*sys\.argv\[(\d+)\]\s*(?=[,)])"),
+);
+/// A `.write(` or `.writelines(` chained on the call just closed, the method's name the capture.
+static CHAINED_WRITE: Lazy = Lazy::new(
+    |t| t.contains("write"),
+    || re(r"^\s*(\.\s*write(?:lines)?)\s*\("),
+);
+/// A `json.dump(` call, which writes its second argument.
+static JSON_DUMP: Lazy = Lazy::new(
+    |t| t.contains("json.dump("),
+    || re(r"(?<![\w.])json\.dump\("),
+);
+/// Each mention of `argv`, every one of which must be a `sys.argv[N]` read for the program to be bound.
+static ARGV_NAME: Lazy = Lazy::new(|t| t.contains("argv"), || re(r"\bargv\b"));
+/// `[N]`, then anything but an assignment to it (`=`, `+=` and the rest; `==` compares).
+static INDEX_READ: Lazy = Lazy::new(
+    |t| t.starts_with('['),
+    || re(r"^\[\d+\](?!\s*(?:[-+*/%&|^@]|//|\*\*|<<|>>)?=(?!=))"),
+);
+/// `NAME = sys.argv[N]`, a statement of its own (451 T89's review): the name and N the captures.
+static ARGV_BOUND: Lazy = Lazy::new(
+    |t| t.contains("argv"),
+    || re(r"(?m)(?:^|;)[ \t]*([A-Za-z_]\w*)[ \t]*=[ \t]*sys\.argv\[(\d+)\][ \t]*(?=$|;)"),
+);
+/// The text before a bound name that an `open` takes as its path: `open(`, not another module's or object's.
+static OPENS_NAME: Lazy = Lazy::new(|t| t.contains("open("), || re(r"(?<![\w.])open\(\s*$"));
+/// The text after it: the path's end, the mode or the call's close next.
+static NAME_ENDS: Lazy = Lazy::new(|_| true, || re(r"^\s*[,)]"));
+/// `import sys`, alone or in a list (`import re,sys,html`).
+static IMPORTS_SYS: Lazy = Lazy::new(
+    |t| t.contains("import"),
+    || re(r"\bimport\s+(?:[\w.]+(?:\s+as\s+\w+)?\s*,\s*)*sys\b"),
+);
+/// `sys` bound to something other than the module: `import os as sys`, `sys = ...`, a `def`, `class`, loop or lambda of it.
+static SYS_REBOUND: Lazy = Lazy::new(
+    |t| t.contains("sys"),
+    || {
+        re(
+            r"\bas\s+sys\b|(?<![\w.])sys\s*(?:[-+*/%&|^@:]|//|\*\*|<<|>>)?=(?!=)|\b(?:def|class|for|lambda|global|nonlocal)\s+sys\b",
+        )
+    },
+);
+/// A word of a command that is a redirect, its target the capture (empty where the target is the next word); a process
+/// substitution (`<(...)`) is no redirect but a word, a path the shell makes.
+static REDIRECT_WORD: Lazy = Lazy::new(
+    |t| t.contains(['<', '>']),
+    || re(r"^(?:\d+|&)?(?:<<<|<<-?|<>|<&|>&|>>|>\||<|>)(?!\()(.*)$"),
+);
+
+/// Whether every `argv` the program names is `sys.argv[N]` read - never sliced, aliased, assigned, deleted from or imported by
+/// name - with `sys` the module it imports, so `sys.argv[N]` is the command's word.
+fn argv_indexed(program: &str) -> bool {
+    found(&IMPORTS_SYS, program)
+        && !found(&SYS_REBOUND, program)
+        && ARGV_NAME.find_iter(program).map_while(Result::ok).all(|m| {
+            program[..m.start()]
+                .strip_suffix("sys.")
+                .is_some_and(|owner| {
+                    !owner.ends_with(|c: char| c.is_alphanumeric() || c == '_' || c == '.')
+                        && !owner.trim_end().ends_with("del")
+                })
+                && found(&INDEX_READ, &program[m.end()..])
+        })
+}
+
+/// 451 T89, its review (bx#58999's `p=sys.argv[1]; t=open(p).read(); ...; open(p,'w').write(t)`): the program with a name bound
+/// once to `sys.argv[N]` - `p = sys.argv[1]`, a statement of its own - read as `sys.argv[N]` where an `open` takes it as its path,
+/// where that is every other mention of the name, so nothing can bind it again (no assignment, loop, `as`, parameter or `del`
+/// of it is an `open`'s path); unchanged where a name is mentioned any other way, even in a literal. A stdin program's reader is
+/// to call it too (T137).
+pub(super) fn argv_inlined(program: &str) -> Cow<'_, str> {
+    let mut edits = Vec::new();
+    let bound = ARGV_BOUND.captures_iter(program).map_while(Result::ok);
+    for (name, n) in bound.filter_map(|c| Some((c.get(1)?, c.get(2)?))) {
+        let len = name.as_str().len();
+        let ident = |c: char| c.is_alphanumeric() || c == '_';
+        let mentions: Vec<usize> = program
+            .match_indices(name.as_str())
+            .map(|(at, _)| at)
+            .filter(|&at| at != name.start())
+            .filter(|&at| {
+                !program[..at].ends_with(|c: char| ident(c) || c == '.')
+                    && !program[at + len..].starts_with(ident)
+            })
+            .collect();
+        let opened = |at: &usize| {
+            found(&OPENS_NAME, &program[..*at]) && found(&NAME_ENDS, &program[*at + len..])
+        };
+        if !mentions.is_empty() && mentions.iter().all(opened) {
+            edits.extend(
+                mentions
+                    .into_iter()
+                    .map(|at| (at, at + len, format!("sys.argv[{}]", n.as_str()))),
+            );
+        }
+    }
+    if edits.is_empty() {
+        return Cow::Borrowed(program);
+    }
+    edits.sort_unstable_by_key(|e| e.0);
+    let mut inlined = program.to_owned();
+    for (start, end, with) in edits.into_iter().rev() {
+        inlined.replace_range(start..end, &with);
+    }
+    Cow::Owned(inlined)
+}
+
+/// The program with each write through `sys.argv[N]` read past - an `open` of it in a mode that writes, its chained `.write(`
+/// or `.writelines(`, and a `json.dump` into it - and each such N; None where `sys.argv` is read any other way. A name bound
+/// once to `sys.argv[N]` and only opened is that `sys.argv[N]` (`argv_inlined`).
+fn argv_masked(program: &str) -> Option<(String, Vec<usize>)> {
+    let inlined = argv_inlined(program);
+    let program = &*inlined;
+    if !argv_indexed(program) {
+        return None;
+    }
+    let (mut edits, mut ns) = (Vec::new(), Vec::new());
+    for c in ARGV_OPEN.captures_iter(program).map_while(Result::ok) {
+        let (whole, n) = (c.get(0)?, c.get(1)?);
+        let (args, end) = split_args(program, whole.start() + 5);
+        if args.iter().enumerate().all(|(k, a)| reads_arg(k, a, false)) {
+            continue; // a read, which `opens_read` judges
+        }
+        // the open's name and path go, its mode and keywords stay for the writers to be sought in (`opener=`)
+        edits.push((whole.start(), whole.end(), "_argv_("));
+        let chained = end.and_then(|e| CHAINED_WRITE.captures(&program[e + 1..]));
+        if let (Some(e), Some(m)) = (end, chained.as_ref().and_then(|c| c.get(1))) {
+            edits.push((e + 1 + m.start(), e + 1 + m.end(), ""));
+        }
+        ns.push(n.as_str().parse::<usize>().ok()?);
+    }
+    let mut masked = program.to_owned();
+    edits.sort_unstable_by_key(|e| e.0); // an open inside another's arguments is masked before the outer one's chained write
+    for (start, end, with) in edits.into_iter().rev() {
+        masked.replace_range(start..end, with);
+    }
+    let dumps: Vec<usize> = JSON_DUMP
+        .find_iter(&masked)
+        .map_while(Result::ok)
+        .filter(|m| {
+            call_args(&masked, m.end())
+                .get(1)
+                .is_some_and(|f| f.starts_with("_argv_("))
+        })
+        .map(|m| m.start())
+        .collect();
+    for start in dumps.into_iter().rev() {
+        masked.replace_range(start..start + "json.dump(".len(), "_argv_(");
+    }
+    ns.sort_unstable();
+    ns.dedup();
+    Some((masked, ns))
+}
+
+/// The N of each `sys.argv[N]` the program writes, where it writes nowhere else (`only_reads` holds with those writes read
+/// past, run in `dir`); None where it writes otherwise, writes none so, or writes `sys.argv[0]`, the `-c` itself.
+fn argv_writes(body: &str, quote: char, dir: Option<&str>) -> Option<Vec<usize>> {
+    let (masked, ns) = argv_masked(&received(body, quote)?)?;
+    (ns.first().is_some_and(|n| *n > 0) && only_reads(&masked, dir)).then_some(ns)
+}
+
+/// Whether a word of a command after a program is one word of the program's argv as bash makes it, `$__unread__` (`bind`'s
+/// mark for a loop's value cut at a glob, or a name read from input) counting one where it is the word asked for, its first piece
+/// lying where its start does (one bash may split ends the count past it, `may_split`). A plain quoted word reaches the walk without its quotes, so a value holding a blank or empty may be one word
+/// or none and more - not one; nor is a glob, a brace, `$@`, a substitution of either kind or a name the walk does not know. A held word (a quoted
+/// body with a blank or shell character) is one where it is quoted whole.
+fn one_word(word: &str, env: &Env, home: &str) -> bool {
+    let quote = |c: Option<char>| {
+        c.is_some_and(|c| c == quoted::stand_in('"') || c == quoted::stand_in('\''))
+    };
+    if matches!(word, "\"\"" | "''") {
+        return true; // an empty quote, one empty word
+    }
+    if matches!(quoted::unheld(word), Cow::Owned(_)) {
+        return quote(word.chars().next()) && quote(word.chars().last()) && !word.contains("$@");
+    }
+    let value = substituted(word, env, home);
+    let known = value.replace(super::bind::UNREAD, "");
+    !value.is_empty() && !known.contains(|c: char| c.is_whitespace() || "$`*?[{<>()".contains(c))
+}
+
+/// 451 T89, the binding: the word of the command a program's `sys.argv[n]` holds, `after` the command's words past the program
+/// (a `-c` program's word, or stdin's `-`) as the walk holds them, a name it binds in the text (`bind`) or in `env`. A redirect
+/// is no word of argv, and a name unset is dropped from the text by `bind`, as bash drops its unquoted expansion. None for 0 -
+/// the `-c` or `-` itself - for an index past the words, and where a word up to it may be other than one word (`one_word`).
+pub(super) fn argv_word<'a>(n: usize, after: &[&'a str], env: &Env, home: &str) -> Option<&'a str> {
+    let (mut words, mut k) = (after.iter(), 0);
+    while let Some(&w) = words.next() {
+        if let Some(c) = REDIRECT_WORD.captures(w) {
+            if c.get(1).is_some_and(|t| t.as_str().is_empty()) {
+                words.next(); // its target
+            }
+            continue;
+        }
+        if !one_word(w, env, home) {
+            return None;
+        }
+        k += 1;
+        if k == n {
+            return Some(w);
+        }
+        if may_split(w) {
+            return None; // every index past it shifts by what bash makes of it
+        }
+    }
+    None
+}
+
+/// 451 T89, the session's ruling (2026-11-21, option A): whether bash may split a word into more than one - a loop's value cut
+/// at a glob or a value read from input (`$__unread__`), or a loop's value with a blank or shell character, which `bind` writes
+/// `_` (a typed `_` cannot be told from it, so it counts too). `for f in <glob with a blank-named match>; do python3 -c
+/// "...open(sys.argv[2],'w')..." $f /tmp/q/$f.txt; done` writes the name's second piece where the shell stands (measured
+/// 2026-11-21, `/tmp/t89/split`), so such a word keeps HEAD's reading past it. A quoted `"$f"` is one word, but the walk holds
+/// it without its quotes; the walk carrying them is filed (T140).
+fn may_split(word: &str) -> bool {
+    word.contains(super::bind::UNREAD) || word.contains('_')
+}
+
+/// 451 T89: the writes of the `python3 -c` program at `toks[at + 1]` that writes only through `sys.argv` (`argv_writes`), each
+/// word placed as the walk places a word; None - HEAD's reading, D5's write where the shell stands - where it writes otherwise,
+/// a word cannot be bound (`argv_word`), or the walk knows nothing of where one lies (`Known::Nothing`, which spec 204's D6
+/// puts where the shell was last known, as HEAD's reading does).
+pub(super) fn argv_places(
+    toks: &[&str],
+    at: usize,
+    programs: &[Program],
+    env: &Env,
+    home: &str,
+    eff: Option<&str>,
+) -> Option<Vec<Write>> {
+    let (quote, body) = program_of(toks.get(at + 1), programs)?;
+    let after = toks.get(at + 2..).unwrap_or_default();
+    argv_writes(body, *quote, eff)?
+        .into_iter()
+        .map(|n| {
+            let w = path_write(argv_word(n, after, env, home)?, env, home, eff);
+            (w.0.is_some() || w.2 != Known::Nothing).then_some(w)
+        })
+        .collect()
 }
 
 #[cfg(test)]
