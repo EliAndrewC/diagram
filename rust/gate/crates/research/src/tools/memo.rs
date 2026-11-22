@@ -1,5 +1,5 @@
-//! `l7r-gate record check record|glossary` and `l7r-gate record check <name> --inputs <tree> ... [--code <file> ...] [--facts
-//! <module>:<attr>] -- <command ...>` (`scripts/gates/memo_check.py`, feature 383 plan D2; ported by feature 449 T148, phase 4's S5): run a
+//! `l7r-gate record check record|glossary` and `l7r-gate record check <name> --inputs <tree> ... [--code <file> ...] --
+//! <command ...>` (`scripts/gates/memo_check.py`, feature 383 plan D2; ported by feature 449 T148, phase 4's S5): run a
 //! check, or replay its last PASS while nothing it reads has changed. The GM, 2026-10-12: *"if we made use of a caching layer, then I feel
 //! like it would not take nearly five seconds"*. A pass is kept by the content of every file under the input trees (tracked by the
 //! index's blob id, changed or untracked by its bytes, the ignored left out), the code that checks, and the command; a FAILING run is
@@ -7,12 +7,11 @@
 //! `memo_check.py` wrote none then. `L7R_CACHE_OFF` set to anything but `0` runs the check and keeps nothing.
 //!
 //! The two presets are the Makefile's `CHECK=1` and the push's rows; each runs its check in this process (the record's build, the
-//! glossary's check) where the Python ran its module in its own. The general form runs its command: a `python3 -m <module>` command as
-//! the Python ran it in process (its output read as text as written, an uncaught exception ending the check with nothing on stdout and no
-//! row), any other as a child process (its output read as text with universal newlines, as `subprocess.run(text=True)` reads it). The
-//! Python's `--facts <module>:<attr>` imported the module before a `-m` run and handed it a per-file memo, which changed only its speed:
-//! the module is imported here too (one that does not import ends the check as it raised there; what its import prints is shown before
-//! the run's output and never kept), and nothing is installed.
+//! glossary's check) where the Python ran its module in its own. The general form runs its command as a child process (its output read
+//! as text with universal newlines, as `subprocess.run(text=True)` reads it). Its `python3 -m <module>` arm, the Python's own process
+//! reading the output as written, and `--facts <module>:<attr>`, a module imported before such a run, went with feature 449 T247
+//! (`ask:449-T247-python-starts`: no Rust starts Python; no recipe passed either, measured 2026-11-22, a grep of the Makefile, `scripts/`,
+//! `tests/` and `docs/`).
 //!
 //! The kept file is the Python's, `<git common dir>/l7r-cache/memo-<name>.json`, `{"key": ..., "out": ..., "err": ...}` written as
 //! `json.dump` writes it. Its key cannot be the Python's - that hashed the interpreter's version and the Python modules' semantic ids -
@@ -37,9 +36,7 @@ use crate::{re, Error};
 pub const USAGE_LOG_TOOL: &str = "memo_check";
 /// The Python's usage line, its program named as the port (`ask:449-T135-generator`: a message naming the generator the cut deletes names
 /// the port).
-pub const USAGE: &str = "usage: l7r-gate record check record|glossary, or <name> --inputs <tree> ... [--code <file> ...] [--facts <module>:<attr>] -- <command ...>\n";
-/// The kind of an error that ends a check as the Python's uncaught exception did: its words are the child's stderr, printed as they are.
-pub const RAISED: &str = "raised";
+pub const USAGE: &str = "usage: l7r-gate record check record|glossary, or <name> --inputs <tree> ... [--code <file> ...] -- <command ...>\n";
 /// The input trees both presets read (`PRESETS`, measured in specs/383 research R1).
 const PRESET_INPUTS: [&str; 2] = ["research", "l7r/diagram/interactive/assets"];
 
@@ -51,13 +48,12 @@ pub enum Call {
         name: String,
         inputs: Vec<String>,
         code: Vec<String>,
-        facts: Option<String>,
         command: Vec<String>,
     },
 }
 
-/// The arguments as `memo_check.parse` reads them: a preset's name alone, or a name, `--inputs` (one or more), `--code`, at most one
-/// `--facts`, `--` and a command; none for anything else.
+/// The arguments as `memo_check.parse` reads them: a preset's name alone, or a name, `--inputs` (one or more), `--code`, `--` and a
+/// command (`--facts` gone with feature 449 T247); none for anything else.
 #[must_use]
 pub fn parse(args: &[String]) -> Option<Call> {
     if let [name] = args {
@@ -69,24 +65,20 @@ pub fn parse(args: &[String]) -> Option<Call> {
     if args[0].starts_with("--") {
         return None;
     }
-    let (mut inputs, mut code, mut facts) = (Vec::new(), Vec::new(), Vec::new());
+    let (mut inputs, mut code) = (Vec::new(), Vec::new());
     let mut current: Option<&str> = None;
     for a in &args[1..cut] {
         match a.as_str() {
-            flag @ ("--inputs" | "--code" | "--facts") => current = Some(flag),
-            _ => match current? {
-                "--inputs" => inputs.push(a.clone()),
-                "--code" => code.push(a.clone()),
-                _ => facts.push(a.clone()),
-            },
+            flag @ ("--inputs" | "--code") => current = Some(flag),
+            _ if current? == "--inputs" => inputs.push(a.clone()),
+            _ => code.push(a.clone()),
         }
     }
     let command = args[cut + 1..].to_vec();
-    (!inputs.is_empty() && !command.is_empty() && facts.len() <= 1).then(|| Call::General {
+    (!inputs.is_empty() && !command.is_empty()).then(|| Call::General {
         name: args[0].clone(),
         inputs,
         code,
-        facts: facts.pop(),
         command,
     })
 }
@@ -321,58 +313,16 @@ impl Memo {
     }
 }
 
-/// The interpreter a `-m` command names as the Python's own (`[sys.executable, "-m"]`): the first `python3` on the `PATH`.
-fn python() -> String {
-    std::env::var_os("PATH")
-        .into_iter()
-        .flat_map(|p| std::env::split_paths(&p).collect::<Vec<_>>())
-        .map(|d| d.join("python3"))
-        .find(|p| p.is_file())
-        .map_or_else(String::new, |p| p.display().to_string())
-}
-
 /// `universal newlines`: `\r\n` and a lone `\r` read as `\n`.
 fn universal(text: &str) -> String {
     text.replace("\r\n", "\n").replace('\r', "\n")
 }
 
-/// Whether `argv` is a command the Python ran in its own process (`python3 -m <module> ...`, `[sys.executable, "-m"]`).
-fn in_process(argv: &[String]) -> bool {
-    argv.len() > 2 && argv[1] == "-m" && (argv[0] == "python3" || argv[0] == python())
-}
-
-/// The facts module (`<module>:<attr>`) a `-m` command's run was handed, imported as the Python imported it before the run: what its
-/// import printed, which the Python printed straight through and kept nothing of.
-///
-/// # Errors
-/// A module that does not import ends the check as it raised there (`RAISED`, its traceback).
-pub fn facts_import(root: &Path, facts: &str) -> crate::Result<(String, String)> {
-    let module = facts.split_once(':').map_or(facts, |(m, _)| m);
-    let probe = Command::new("python3")
-        .args([
-            "-c",
-            "import importlib, sys; importlib.import_module(sys.argv[1])",
-            module,
-        ])
-        .current_dir(root)
-        .output()
-        .ok();
-    let text = |b: &[u8]| String::from_utf8_lossy(b).into_owned();
-    match probe {
-        Some(p) if p.status.success() => Ok((text(&p.stdout), text(&p.stderr))),
-        other => Err(Error::new(
-            RAISED,
-            other.map(|p| text(&p.stderr)).unwrap_or_default(),
-        )),
-    }
-}
-
 /// The command run from `root`, as `memo_check.run` ran it.
 ///
 /// # Errors
-/// A command that cannot start, output that is not UTF-8 (the Python's `UnicodeDecodeError`), or a `-m` module that raised (`RAISED`).
+/// A command that cannot start, or output that is not UTF-8 (the Python's `UnicodeDecodeError`).
 pub fn command(root: &Path, argv: &[String]) -> Run {
-    let in_process = in_process(argv);
     let done = Command::new(&argv[0])
         .args(&argv[1..])
         .current_dir(root)
@@ -385,13 +335,6 @@ pub fn command(root: &Path, argv: &[String]) -> Run {
     let code = done.status.code().unwrap_or_else(|| {
         -std::os::unix::process::ExitStatusExt::signal(&done.status).unwrap_or(1)
     });
-    if in_process {
-        // `runpy` in the Python's own process: an exception it let through ended the check, its captured stdout lost
-        if code == 1 && err.contains("Traceback (most recent call last):") {
-            return Err(Error::new(RAISED, err));
-        }
-        return Ok(said(out, err, code));
-    }
     Ok(said(universal(&out), universal(&err), code))
 }
 
@@ -423,24 +366,12 @@ pub fn preset(name: &str, root: &Path, program: &str, today: &str) -> Run {
     Memo::new(root, name, &inputs, &code, &argv, off()).run(|| check(root))
 }
 
-/// The general form's run: the kept pass replayed, or the facts module imported (a `-m` command's) and the command run, its pass kept -
-/// what the import printed shown before the run's output and never kept, as the Python printed it straight through.
+/// The general form's run: the kept pass replayed, or the command run and its pass kept.
 ///
 /// # Errors
-/// [`facts_import`]'s and [`command`]'s.
-pub fn general(root: &Path, memo: &Memo, words: &[String], facts: Option<&str>) -> Run {
-    if let Some((out, err)) = memo.hit() {
-        return Ok(said(out, err, 0));
-    }
-    let (pre_out, pre_err) = match facts.filter(|_| in_process(words)) {
-        Some(f) => facts_import(root, f)?,
-        None => (String::new(), String::new()),
-    };
-    let ran = command(root, words)?;
-    if ran.code == 0 {
-        memo.keep(&ran.stdout, &ran.stderr);
-    }
-    Ok(said(pre_out + &ran.stdout, pre_err + &ran.stderr, ran.code))
+/// [`command`]'s.
+pub fn general(root: &Path, memo: &Memo, words: &[String]) -> Run {
+    memo.run(|| command(root, words))
 }
 
 /// `record check ...` over the repository `root`, `program` this program's id, `today` the UTC date: the call run and its run recorded
@@ -456,7 +387,6 @@ pub fn cli(args: &[String], root: &Path, program: &str, today: &str) -> Run {
             name,
             inputs,
             code,
-            facts,
             command: words,
         }) => {
             let files: Vec<PathBuf> = code.iter().map(|c| root.join(c)).collect();
@@ -468,7 +398,7 @@ pub fn cli(args: &[String], root: &Path, program: &str, today: &str) -> Run {
                 &words,
                 off(),
             );
-            general(root, &memo, &words, facts.as_deref())
+            general(root, &memo, &words)
         }
     };
     if let Ok(r) = &ran {

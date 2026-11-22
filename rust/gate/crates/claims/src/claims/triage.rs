@@ -1,11 +1,6 @@
 //! The claims TRIAGE (`scripts/record/claims_triage.py`, ported by feature 449 T82): one cheap agent over what changed, so a claim is
 //! re-judged only when a change bears on it - a cited page's new, changed or removed blocks, a procedure section's, a unit's diff.
 
-#![expect(
-    clippy::case_sensitive_file_extension_comparisons,
-    reason = "Python's `str.endswith`, which this port keeps, is case-sensitive"
-)]
-
 use std::collections::{BTreeMap, BTreeSet, HashMap, HashSet};
 use std::fmt::Write as _;
 use std::path::Path;
@@ -16,12 +11,12 @@ use l7r_shared::checks::pages::read_page;
 use l7r_shared::pyjson::{dumps, sorted};
 use serde_json::{json, Map, Value};
 
+use super::bundle::cited_pages;
 use super::index::{
-    field, findings_of, page_blocks, page_name, Cur, Index, PageMemo, Store, INDEX, QUESTIONS,
+    field, findings_of, page_blocks, Cur, Index, PageMemo, Store, INDEX, QUESTIONS,
 };
 use super::reply::bare;
-use super::scope::Reader;
-use super::units::{doc_units, from_json};
+use super::units::doc_units;
 use crate::record::bundle::py_str;
 use crate::record::repo::{fail, git, Fail};
 use crate::record::units::{digest, re};
@@ -136,27 +131,17 @@ pub fn removed_words(
     Ok(found)
 }
 
-/// The words of the blocks `digests` of the procedure section `title` of `path` that no longer stand, from its history (a claimed dictionary's from its module's, by the Python's reader).
+/// The words of the blocks `digests` of the procedure section `title` of `path` that no longer stand, from its history.
 pub fn section_words(
-    reader: &mut Reader,
     root: &Path,
     path: &str,
     title: &str,
     digests: &HashSet<String>,
-) -> Result<BTreeMap<String, String>, Fail> {
+) -> BTreeMap<String, String> {
     let mut found = BTreeMap::new();
     for sha in git(root, &["log", "--format=%H", "-60", "--", path]).split_whitespace() {
         let text = git(root, &["show", &format!("{sha}:{path}")]);
-        let units = if path.ends_with(".py") {
-            let got = reader.ask("claims_module_units", &json!([text, path]))?;
-            got.as_array()
-                .into_iter()
-                .flatten()
-                .map(|v| from_json(v).0)
-                .collect()
-        } else {
-            doc_units(&text, path, None)
-        };
+        let units = doc_units(&text, path, None);
         for unit in units.iter().filter(|u| u.qualname == title) {
             for b in &unit.blocks {
                 let d = digest(&[b]);
@@ -169,7 +154,7 @@ pub fn section_words(
             break;
         }
     }
-    Ok(found)
+    found
 }
 
 /// The newest commit of the claims index recording `key` checked at the code fingerprint `code`, or `origin/main`.
@@ -304,13 +289,12 @@ fn gather_code(
 
 fn gather_section(
     g: &mut Gathered,
-    reader: &mut Reader,
     cur: &Cur,
     index: &Index,
     store: &Store,
     key: &str,
     root: &Path,
-) -> Result<(), Fail> {
+) {
     let row = cur.get(key).unwrap_or_else(|| unreachable!());
     let unit = &row.unit;
     let section = index.get(key).and_then(|r| r.get("section"));
@@ -318,7 +302,7 @@ fn gather_section(
         || section.is_none_or(Value::is_null)
         || section.and_then(Value::as_str) == Some(&unit.core)
     {
-        return Ok(());
+        return;
     }
     let before: HashSet<String> = store
         .get(section.and_then(Value::as_str).unwrap_or_default())
@@ -339,7 +323,7 @@ fn gather_section(
     let words = if missing.is_empty() {
         BTreeMap::new()
     } else {
-        section_words(reader, root, &unit.path, &unit.qualname, &missing)?
+        section_words(root, &unit.path, &unit.qualname, &missing)
     };
     if words.len() < missing.len() {
         g.forced.insert(key.to_owned());
@@ -359,7 +343,6 @@ fn gather_section(
         }
     }
     got.2.push(key.to_owned());
-    Ok(())
 }
 
 fn gather_pages(
@@ -504,7 +487,6 @@ fn manifest(g: &Gathered, cur: &Cur, index: &Index) -> String {
 
 /// The triage bundle for `keys`: MANIFEST.md, and triage.json (each claim's fingerprints now, today's snapshots, the forced claims).
 pub fn triage_bundle(
-    reader: &mut Reader,
     cur: &Cur,
     index: &Index,
     store: &Store,
@@ -529,7 +511,7 @@ pub fn triage_bundle(
             g.forced.insert(key.clone());
         }
         gather_code(&mut g, cur, index, key, &root, &mut seen, &mut log);
-        gather_section(&mut g, reader, cur, index, store, key, &root)?;
+        gather_section(&mut g, cur, index, store, key, &root);
         gather_pages(&mut g, index, store, key, qdir, &mut memo)?;
     }
     let mut shown: HashSet<&String> = g.by_page.values().flatten().collect();
@@ -553,12 +535,9 @@ pub fn triage_bundle(
         let mut u = Map::new();
         u.insert("research".into(), json!(row.research));
         let mut pages = Map::new();
-        for ptr in &row.claim.pointers {
-            let name = page_name(ptr);
-            pages.insert(
-                name.to_owned(),
-                json!(page_blocks(name, qdir, &mut memo)?.0),
-            );
+        for name in cited_pages(&row.claim) {
+            let fp = json!(page_blocks(&name, qdir, &mut memo)?.0);
+            pages.insert(name, fp);
         }
         u.insert("pages".into(), Value::Object(pages));
         if row.unit.line_keyed() {
@@ -669,12 +648,9 @@ pub fn clear_page_moves(
     for k in keys {
         let row = cur.get(k).unwrap_or_else(|| unreachable!());
         let mut pages = Map::new();
-        for ptr in &row.claim.pointers {
-            let name = page_name(ptr);
-            pages.insert(
-                name.to_owned(),
-                json!(page_blocks(name, qdir, &mut memo)?.0),
-            );
+        for name in cited_pages(&row.claim) {
+            let fp = json!(page_blocks(&name, qdir, &mut memo)?.0);
+            pages.insert(name, fp);
         }
         let mut r = out
             .get(k)

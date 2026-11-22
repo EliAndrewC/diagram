@@ -97,7 +97,7 @@ approval before /speckit-tasks may run.
 
 - **VI. Verify Before Reporting Done**: The plan MUST list the verification
   steps each task will run before being marked complete - `make done` for
-  Python, the review checks a map's delta owes (`make verify` names them - feature 294's occasions),
+  code, the review checks a map's delta owes (`make verify` names them - feature 294's occasions),
   spot-check of delegated work. Every generator step is TWO steps (reference
   settlement, `make map MAP=<map>`, then pool - `make cohort`), both as tasks.
 
@@ -116,32 +116,34 @@ approval before /speckit-tasks may run.
   MUST NOT invent setting details that contradict GM source notes. New
   named figures MUST NOT collide with the campaign-names cache.
 
-- **X. Python Discipline (NON-NEGOTIABLE)**: If the feature ships Python
-  code, the plan MUST commit to: `ruff check` + `ruff format --check`
-  passing, the strict type check (pyrefly with the mypy-strict rule set, feature 142) passing on production modules, red-green TDD
+- **X. Code Discipline (NON-NEGOTIABLE)**: If the feature ships code, the
+  plan MUST commit to: the lint and the format check passing
+  (`make static`'s `rust lint` and `rust format --check` since feature 449
+  T158 deleted the Python with ruff; constitution v2.37.0), the strict type check passing on production modules (the Rust compiler; constitution v2.38.0), red-green TDD
   for new non-trivial behavior (test exists and fails before
   implementation lands), the coverage floor passing - **100% over the
-  WHOLE engine, no opt-in** (`coverage report --fail-under=100`; Principle
+  WHOLE engine, no opt-in** (`make static`'s `rust cover`, every crate; Principle
   X clause 5 as the GM globalized it on 2026-09-02: a new module owes 100%
   the day it lands, and the measured surface is derived rather than
   rostered) - but for the engine code the Rust port replaces, the files
   `dev/coverage-exempt.json` names, whose unrun lines are reported and not
   held (feature 448, the GM 2026-11-02: "We can relax that for the engine code at this pooint since that's going away, so long as we maintain it for our other Python code not currently slated to be removed (tools, automated checks for hand-drawn maps, etc)."), external boundaries
   tested via saved fixtures (not transport-layer mocks), pinned
-  dependencies via `requirements.in` → `requirements.txt` (or `uv.lock`),
-  no swallowed exceptions, no `print` in production paths, behavior-named
-  tests, parametrized variants, and ConfigObj / pydantic-settings for
-  configuration (no hardcoded magic). An overlap or proximity check the
+  dependencies (`rust/Cargo.toml`'s workspace, `rust/Cargo.lock` tracked),
+  no swallowed exceptions and no `print` in production paths (the Python's),
+  behavior-named tests, one test over variant inputs, and configuration over
+  hardcoding (no hardcoded magic). An overlap or proximity check the
   feature adds within a map - a candidate tested against features already
   on the map - is performed in its efficient form (clause 15, GM
   2026-09-08): the plan MUST say which index answers it (a grid, a ring
   index, an outline of the blocked ground, built once) and MUST NOT walk
   every item on the map per candidate. Functions stay at human scale
-  (clause 12): no function past 100 statements, ruff's count (`PLR0915`,
-  held by `check-function-cap.py` at the gate and the push) - a plan whose
-  implementation would grow one past it says how it is split into parts at
-  module or class level, or why the body must remain one (`# noqa: PLR0915
-  <why>` on its `def` line), measured in statements, never raw lines. Files
+  (clause 12): no function past 100 lines, clippy's `too_many_lines` (the
+  root `clippy.toml`, refused by `rust lint` at the gate and the push;
+  ruff's `PLR0915` statement count until T158) - a plan whose
+  implementation would grow one past it says how it is split, or why the
+  body must remain one (`#[expect(clippy::too_many_lines, reason = "<why>")]`
+  on the function), measured in lines. Files
   stay at human scale too (clause 13, test files included): a plan
   whose implementation
   would grow any source or test file past ~1,000 raw lines MUST say so and

@@ -20,7 +20,7 @@ fn clone_with(file: &str, text: &str) -> l7r_shared::tempdir::TempDir {
 fn ask(root: &Path, path: &Path, tool: &str, input: &serde_json::Value) -> i32 {
     let question =
         json!({"root": root, "path": path, "tool": tool, "tool_input": input}).to_string();
-    cli(&mut question.as_bytes(), "python3").code
+    cli(&mut question.as_bytes()).code
 }
 
 #[test]
@@ -69,102 +69,34 @@ fn an_edit_that_cannot_be_applied_or_a_file_that_cannot_be_read_waits() {
     );
 }
 
+/// A `.py` engine file's docstring edit waits since feature 449 T247: the semantic id that let it pass (the GM, 2026-10-27) was
+/// `codeid.py`'s, deleted with the last `.py` file (`ask:449-T158-codeid`); a Rust file's comment edit waited before and waits now.
 #[test]
-fn the_edit_applied_once_or_everywhere() {
-    let edited =
-        |tool, input| super::edited(b"a a", tool, &input).map(|b| String::from_utf8(b).unwrap());
-    assert_eq!(
-        edited("Edit", json!({"old_string": "a", "new_string": "b"})).as_deref(),
-        Some("b a")
-    );
-    assert_eq!(
-        edited(
-            "Edit",
-            json!({"old_string": "a", "new_string": "b", "replace_all": true})
-        )
-        .as_deref(),
-        Some("b b")
-    );
-    assert_eq!(
-        edited("Write", json!({"content": "c"})).as_deref(),
-        Some("c")
-    );
-}
-
-/// A clone holding an engine file with a docstring and the real `codeid.py`, which decides.
-fn with_codeid() -> l7r_shared::tempdir::TempDir {
+fn a_docstring_edit_waits_as_a_code_change_does() {
     let root = clone_with("l7r/diagram/a.py", "\"\"\"Doc.\"\"\"\nX = 1\n");
-    let real = Path::new(env!("CARGO_MANIFEST_DIR")).join("../../../../scripts");
-    std::fs::create_dir_all(root.join("scripts/gates")).unwrap();
-    std::fs::copy(
-        real.join("gates/codeid.py"),
-        root.join("scripts/gates/codeid.py"),
-    )
-    .unwrap();
-    root
-}
-
-#[test]
-fn only_a_docstring_changed_passes_and_a_code_change_waits() {
-    let root = with_codeid();
     let path = root.join("l7r/diagram/a.py");
-    assert_eq!(
-        ask(
-            &root,
-            &path,
-            "Edit",
-            &json!({"old_string": "Doc.", "new_string": "Words."})
-        ),
-        1
-    );
-}
-
-/// The code change of [`only_a_docstring_changed_passes_and_a_code_change_waits`], a test of its own (feature 449 T167: the real
-/// `codeid.py` asked twice in one test ran over FR-008's tenth of a second).
-#[test]
-fn a_code_change_waits() {
-    let root = with_codeid();
-    let path = root.join("l7r/diagram/a.py");
-    assert_eq!(
-        ask(
-            &root,
-            &path,
-            "Edit",
-            &json!({"old_string": "X = 1", "new_string": "X = 2"})
-        ),
-        0
-    );
-}
-
-#[test]
-fn an_area_hashed_by_its_bytes_always_waits_and_an_unreadable_id_waits() {
-    assert_eq!(
-        super::semantic(
-            b"x = 1
-",
-            Path::new("/no/such"),
-            "/no/such/python"
-        ),
-        None
-    );
-    let root = clone_with(
-        "l7r/diagram/interactive/classes/a.py",
-        "\"\"\"Doc.\"\"\"\nX = 1\n",
-    );
-    let path = root.join("l7r/diagram/interactive/classes/a.py");
-    assert!(crate::stamp::in_raw_area(
+    let docstring = ask(
         &root,
-        "l7r/diagram/interactive/classes/a.py"
-    ));
-    assert_eq!(
-        ask(
-            &root,
-            &path,
-            "Edit",
-            &json!({"old_string": "Doc.", "new_string": "Words."})
-        ),
-        0
+        &path,
+        "Edit",
+        &json!({"old_string": "Doc.", "new_string": "Words."}),
     );
+    assert_eq!(docstring, 0);
+    let code = ask(
+        &root,
+        &path,
+        "Edit",
+        &json!({"old_string": "X = 1", "new_string": "X = 2"}),
+    );
+    assert_eq!(code, 0);
+    let rust = clone_with("rust/phases/src/a.rs", "/// Doc.\npub fn f() {}\n");
+    let comment = ask(
+        &rust,
+        &rust.join("rust/phases/src/a.rs"),
+        "Edit",
+        &json!({"old_string": "Doc.", "new_string": "Words."}),
+    );
+    assert_eq!(comment, 0);
 }
 
 #[test]

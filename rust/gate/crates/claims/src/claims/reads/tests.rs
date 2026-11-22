@@ -128,9 +128,7 @@ fn recorded(root: &std::path::Path, reads: bool) -> serde_json::Value {
 }
 
 fn no_python(tag: &str) -> l7r_shared::tempdir::TempDir {
-    crate::claims::tests::fixture_with(tag, &|root| {
-        std::fs::remove_file(root.join("l7r/diagram/m.py")).unwrap();
-    })
+    crate::claims::tests::fixture(tag)
 }
 
 const READER: &str = "rust/phases/src/lib.rs::reach#reach";

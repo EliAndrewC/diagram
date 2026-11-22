@@ -182,10 +182,92 @@ fn reed_checks(r: &Rolled) -> Vec<String> {
         .collect()
 }
 
-/// A polder's own checks: its seat off its block, its waterside reeds off its ground, the block on the canvas.
+/// The segments of a polder's ring canal, the four ditches round the inside foot of its dike.
+///
+/// Research:
+///     the ring canal - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: a ring canal round the inside foot of the dike, on the field side - the head canal, the two flank canals and the drain at the tail, the four ditches the polder lays at the dike's foot
+const RING_CANAL: [&str; 4] = ["feeder", "w_toe", "e_toe", "drain"];
+
+/// How far apart a ring canal's course is sampled against the settlement's ground (ft).
+///
+/// Research:
+///     the canal's samples - NONE: a check's grain, under the ring canal's narrowest 1.5 ft lateral's reach into a ground it crosses
+const CANAL_STEP_FT: f64 = 2.0;
+
+/// The settlement's ground against the polder: whether it reaches over the dike's outer face (a corner of it inside the face, or
+/// a point of the face inside it, past the slack), and whether any of the ring canal's course lies on it.
+///
+/// Research:
+///     over the dike and the canal - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: the village on the dry ground just off the dike, and from outside in the wild water, the dike, the ring canal - so the ground is tested against the dike's outer face and the canal's course
+#[expect(
+    clippy::many_single_char_names,
+    reason = "the plane geometry's own names"
+)]
+fn ground_on_polder(ground: &[Pt], s: &crate::field::staged::PolderStage) -> (bool, bool) {
+    let outer = &s.dike.outer;
+    let dike = ground.iter().any(|p| depth_inside(*p, outer) > SLACK_FT)
+        || outer.iter().any(|p| depth_inside(*p, ground) > SLACK_FT);
+    let canal = s
+        .polder
+        .ditches
+        .iter()
+        .filter(|d| RING_CANAL.contains(&d.seg))
+        .flat_map(|d| d.pts.windows(2))
+        .any(|seg| {
+            let (a, b) = (seg[0], seg[1]);
+            let len = ((b.0 - a.0).powi(2) + (b.1 - a.1).powi(2)).sqrt();
+            #[expect(
+                clippy::cast_possible_truncation,
+                clippy::cast_sign_loss,
+                reason = "a canal reach's samples, a few thousand at most"
+            )]
+            let n = (len / CANAL_STEP_FT).ceil().max(1.0) as u32;
+            (0..=n).any(|k| {
+                let t = f64::from(k) / f64::from(n);
+                let p = (a.0 + (b.0 - a.0) * t, a.1 + (b.1 - a.1) * t);
+                depth_inside(p, ground) > SLACK_FT
+            })
+        });
+    (dike, canal)
+}
+
+/// Whether the settlement at `center` has no dry way out of the map once the waterside reeds are laid: the seat asked its way out
+/// before the strips, so it is asked again with them - each strip and the wild pond's fringe grown by the lane's width, the dike's
+/// outer face, and the polder's channels as the lines a track may not cross.
+///
+/// Research:
+///     a dry way out past the reeds - research/questions/0081-village-lanes.drawing.html: every way keeps off every marsh's reeds and a track crosses no water - the strips and the fringe grown by the lane's width as walls, the channels as lines
+///     the polder a wall - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html, research/questions/0081-village-lanes.drawing.html: the polder enclosed by its dike all the way round, and a lane stops at the flooded paddy and never crosses row crops, so no way out runs over the dike or through the fields - the dike's outer face a wall, as the seat's own walk takes its ring
+fn walled_by_reeds(r: &Rolled, s: &crate::field::staged::PolderStage, center: Pt) -> bool {
+    let mut counts = std::collections::HashMap::new();
+    let mut walls: Vec<crate::seat::Wall> = r
+        .waterward
+        .iter()
+        .flat_map(|w| w.strips.iter())
+        .chain(std::iter::once(&s.polder.fringe))
+        .filter(|w| w.len() >= 3)
+        .map(|w| (super::toe::grow(w, super::LANE_FT, &mut counts), 0.0))
+        .collect();
+    walls.push((s.dike.outer.clone(), 0.0));
+    let lines: Vec<(Pt, Pt)> = s
+        .polder
+        .ditches
+        .iter()
+        .map(|d| d.pts.as_slice())
+        .chain([s.polder.feeder.as_slice(), s.outfall.as_slice()])
+        .flat_map(|p| p.windows(2).map(|w| (w[0], w[1])))
+        .collect();
+    !crate::seat::exit::Exit::new(&walls, &lines, (r.plan.w, r.plan.h), &mut counts)
+        .has_exit(center, &mut counts)
+}
+
+/// A polder's own checks: its seat off its block, a dry way out of it past the waterside reeds, the settlement's ground off the dike
+/// and the ring canal, its waterside reeds off its ground, the block on the canvas.
 ///
 /// Research:
 ///     the polder's checks - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: the reeds outside the dike on the flanks that face the water, the settlement on the block's dry shore
+///     the way out past the waterside reeds - research/questions/0081-village-lanes.drawing.html: every way keeps off every marsh's reeds - the seat's way out asked again once the strips it came before are laid (`seat_walled_by_reeds`)
+///     the settlement's ground off the dike and the ring canal - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: the village drawn on the dry ground just off the dike, and from outside in the wild water, the dike, the ring canal, the field ditches and the paddies - so no part of the settlement's ground lies over the dike's outer face or the ring canal at its inside foot (`seat_on_dike`, `seat_on_canal`)
 fn polder_checks(r: &Rolled) -> Vec<String> {
     let mut out = Vec::new();
     let (w, h) = (r.plan.w, r.plan.h);
@@ -202,6 +284,19 @@ fn polder_checks(r: &Rolled) -> Vec<String> {
                 f.center.0, f.center.1
             )
         }));
+        out.extend(walled_by_reeds(r, s, f.center).then(|| {
+            "seat_walled_by_reeds: no dry way out of the settlement past the waterside reeds"
+                .to_owned()
+        }));
+        let (dike, canal) = ground_on_polder(&super::settlement_ground(f), s);
+        out.extend(dike.then(|| {
+            "seat_on_dike: the settlement's ground reaches over the dike's outer face".to_owned()
+        }));
+        out.extend(
+            canal.then(|| {
+                "seat_on_canal: the settlement's ground lies over the ring canal".to_owned()
+            }),
+        );
     }
     for (i, strip) in r.waterward.iter().flat_map(|w| w.strips.iter()).enumerate() {
         let on = depth_inside(mean(strip), block) > SLACK_FT;
@@ -220,7 +315,7 @@ fn polder_checks(r: &Rolled) -> Vec<String> {
 
 #[cfg(test)]
 mod tests {
-    use super::{check, depth_inside, mean};
+    use super::{check, depth_inside, mean, polder_checks};
     use crate::driver::{roll, spec::parse};
     use crate::field::dry::DryPlot;
 
@@ -321,5 +416,57 @@ mod tests {
         assert!(found.contains("inside the polder") && found.contains("reeds_on_field"));
         p.polder.as_mut().unwrap().polder.outline.push((-9.0, -9.0));
         assert!(check(&p).join("\n").contains("off_canvas: the polder"));
+    }
+
+    /// THE SETTLEMENT'S GROUND OFF THE DIKE AND THE RING CANAL, ITS WAY OUT PAST THE REEDS (449 T240): Kuwabata as rolled passes the
+    /// polder's checks; a reed strip planted round its settlement is named as walling it in; and T239's unfixed roll - the seat handed the plots' edge as its ring, so its ground ran in over the dike and the head canal - is
+    /// named on both. Red before T240: the polder's checks tested only the seat's middle against the plots' edge, and named
+    /// nothing on T239's unfixed roll.
+    #[test]
+    fn a_settlement_over_the_dike_and_the_ring_canal_is_named() {
+        let mut r = roll(&parse(r#"{"name": "Kuwabata", "seed": 21, "households": 16, "down_deg": 90, "field_archetype": "mulberry_dike_fishpond", "pond_layout": "mosaic", "dike_crop": "mulberry"}"#).unwrap()).unwrap();
+        let rolled = polder_checks(&r);
+        assert_eq!(rolled, Vec::<String>::new());
+        let unfixed = {
+            let s = r.polder.as_ref().unwrap();
+            let ground = crate::driver::Ground {
+                ring: &s.polder.outline,
+                lines: s
+                    .polder
+                    .ditches
+                    .iter()
+                    .map(|d| d.pts.as_slice())
+                    .chain([s.polder.feeder.as_slice(), s.outfall.as_slice()])
+                    .collect(),
+                brook: &[],
+                reeds: vec![s.polder.fringe.clone()],
+                pond: None,
+                back: None,
+            };
+            crate::driver::stage_seat(&r.plan, &ground).unwrap()
+        };
+        // a reed strip planted round the settlement walls its way out
+        let c = r.seated.as_ref().unwrap().frames[0].center;
+        let ring = vec![
+            (c.0 - 500.0, c.1 - 500.0),
+            (c.0 + 500.0, c.1 - 500.0),
+            (c.0 + 500.0, c.1 + 500.0),
+            (c.0 - 500.0, c.1 + 500.0),
+        ];
+        r.waterward.as_mut().unwrap().strips.push(ring);
+        let walled = polder_checks(&r);
+        let want_walled = vec![
+            "seat_walled_by_reeds: no dry way out of the settlement past the waterside reeds"
+                .to_owned(),
+        ];
+        assert_eq!(walled, want_walled);
+        r.waterward.as_mut().unwrap().strips.pop();
+        r.seated = Some(unfixed);
+        let found = polder_checks(&r);
+        let want = vec![
+            "seat_on_dike: the settlement's ground reaches over the dike's outer face".to_owned(),
+            "seat_on_canal: the settlement's ground lies over the ring canal".to_owned(),
+        ];
+        assert_eq!(found, want);
     }
 }

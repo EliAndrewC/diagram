@@ -166,6 +166,7 @@ fn fits(
 /// Research:
 ///     a pond at the field's foot - research/questions/0060-field-drains-akusuiro.drawing.html: "about two maps in three lay a pond at the field's foot"
 ///     a drain ending in a pond of its own - GUESS: research/questions/0060-field-drains-akusuiro.drawing.html: "A drain that ends in a pond of its own is our own guess"
+///     the pond's ring of reeds - research/questions/0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html: reeds stand at the water, the record's own finding for a reservoir's shore; the ring drawn round the pond's edge, `inp.reed_ft` out (its width `REED_FT`'s GUESS)
 pub fn lay(
     inp: &SinkIn,
     crop: &Crop,

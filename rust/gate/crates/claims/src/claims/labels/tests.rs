@@ -42,9 +42,7 @@ fn each_label_fault_is_flagged() {
 #[test]
 fn a_key_named_twice_is_read_once() {
     let root = fixture("claims-labels-twice");
-    let mut reader = crate::claims::scope::Reader::new(&root, &root);
-    let cur = crate::claims::index::current(&mut reader, &root, &root.join("research/questions"))
-        .unwrap();
+    let cur = crate::claims::index::current(&root, &root.join("research/questions")).unwrap();
     let key = "rust/phases/src/lib.rs::Thing.m#method guess".to_owned();
     assert_eq!(
         super::flags(

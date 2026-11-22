@@ -29,6 +29,23 @@ fn text_is_squeezed_as_the_python_squeezed_it() {
     assert_eq!(head("ab", 5), "ab");
 }
 
+/// 449 T197: a PDF line broken between a kana and a digit (okada-bitchu-2004's 「割合は\n18.23％」) kept its space, and a correct
+/// quotation failed; the gap closes between a CJK character and a digit either way, and stays between two digits or Latin words.
+#[test]
+fn a_line_break_between_a_cjk_character_and_a_digit_is_squeezed_out() {
+    assert_eq!(squeeze("割合は 18.23％"), "割合は18.23％");
+    assert_eq!(squeeze("18.23 ％で"), "18.23％で");
+    assert_eq!(squeeze("1 2 a 3"), "1 2 a 3");
+}
+
+/// 449 T257: a page's `m<sup>2</sup>` reads as `m2` in its visible text, where a quotation writes the superscript digit
+/// `m²` (shakkanho-jawiki's 「≒ 3.305785 m²」); a superscript digit folds to its digit on both sides, as NFKC folds it.
+#[test]
+fn a_superscript_digit_reads_as_the_digit_a_sup_tag_leaves() {
+    assert_eq!(squeeze("3.305785 m²"), "3.305785 m2");
+    assert_eq!(squeeze("10³ x¹ y⁴"), "103 x1 y4");
+}
+
 #[test]
 fn a_page_decodes_by_its_charset_then_the_suspects() {
     assert_eq!(

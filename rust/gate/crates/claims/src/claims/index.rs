@@ -13,8 +13,9 @@ use l7r_shared::pyjson::{dumps, sorted};
 use l7r_shared::sha256;
 use serde_json::{Map, Value};
 
+use super::bundle::cited_pages;
 use super::grammar::Claim;
-use super::scope::{all_units, Reader};
+use super::scope::all_units;
 use super::units::{lstripped, Unit};
 use crate::record::repo::{fail, Fail};
 use crate::record::units::{digest, re};
@@ -221,8 +222,8 @@ pub fn research_fp(
 }
 
 /// key -> Row for every claim of every unit in scope at `skill`, its questions under `qdir`.
-pub fn current(reader: &mut Reader, skill: &Path, qdir: &Path) -> Result<Cur, Fail> {
-    rows_of(all_units(reader, skill, false, true)?, qdir)
+pub fn current(skill: &Path, qdir: &Path) -> Result<Cur, Fail> {
+    rows_of(all_units(skill, true)?, qdir)
 }
 
 /// key -> Row for every claim of `pairs`, their research read under `qdir`.
@@ -237,7 +238,8 @@ pub fn rows_of(pairs: Vec<super::units::Pair>, qdir: &Path) -> Result<Cur, Fail>
                 unit: unit.clone(),
                 claim: claim.clone(),
                 code: unit.code(claim),
-                research: research_fp(&claim.pointers, qdir, &mut memo)?,
+                // every page the claim cites, its account's too, as its bundle reads them: an edit of one owes the claim (449 T249)
+                research: research_fp(&cited_pages(claim), qdir, &mut memo)?,
             });
         }
     }
@@ -484,16 +486,13 @@ pub fn research_why(
     let unsnapped = pages
         .values()
         .any(|d| d.as_str().is_none_or(|d| !store.contains_key(d)));
-    let unread = row
-        .claim
-        .pointers
-        .iter()
-        .any(|p| !pages.contains_key(page_name(p)));
+    let cited = cited_pages(&row.claim);
+    let unread = cited.iter().any(|p| !pages.contains_key(p.as_str()));
     if unsnapped || unread {
         return Ok("research changed".to_owned());
     }
     if let Some(rests) = was.get("rests").and_then(Value::as_array) {
-        let now = standing(&row.claim.pointers, qdir, memo)?;
+        let now = standing(&cited, qdir, memo)?;
         if !rests
             .iter()
             .all(|r| r.as_str().is_some_and(|r| now.contains(r)))

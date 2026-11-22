@@ -12,7 +12,7 @@ publish = false
 # What the tests read of the tree at run time (feature 449 T93): the registry's equality with the Python classes it mirrors, and every
 # kind's modal file present and parsed, are tests over the real tree.
 [package.metadata.l7r]
-reads = ["l7r/diagram/interactive/classes/", "l7r/diagram/interactive/compound_kinds/", "l7r/diagram/interactive/assets/"]
+reads = ["l7r/diagram/interactive/assets/"]
 
 [dependencies]
 fancy-regex = { workspace = true }

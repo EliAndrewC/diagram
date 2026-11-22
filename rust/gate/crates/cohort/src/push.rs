@@ -275,7 +275,8 @@ fn scripts_version(tree: &Path) -> String {
 
 /// THE RUST SELF-TESTS KEPT PER BINARY (feature 449 T109; the GM 2026-11-11): the six ran on every push whether or not the binary had
 /// changed, 0.28 s of a 3.7 s push at load 0.5 and about 0.4 s under the sync-with-main suite's load (2026-11-11). Each tests the binary
-/// on fixtures of its own, but gate-stamp's, which hashes `.py` files through the tree's `codeid.py`: so a Rust self-test is kept
+/// on fixtures of its own, but gate-stamp's, which hashed `.py` files through the tree's `codeid.py` until feature 449 T247 (the key
+/// on `scripts/` kept since: a wider key only runs a self-test more often): so a Rust self-test is kept
 /// against the version of `scripts/` and the binary as a file - its path, inode, size and time, which a rebuild writes anew. Hashing
 /// its 15.6 MB took 33 ms, a ninth of what keeping it saves; a binary whose file cannot be read keeps nothing.
 fn binary_id(path: &Path) -> Option<String> {

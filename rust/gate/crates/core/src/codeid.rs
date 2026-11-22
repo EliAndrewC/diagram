@@ -1,7 +1,7 @@
 //! A file's content id (feature 449 T062, from `scripts/gates/codeid.py` and `l7r-gate stamp`): what a gate actually exercised, so that a comment's edit keeps the engine key. A `.rs` file's id is its
-//! comment-free tokens; a `.py` file's is Python's own `ast.dump` of its docstring-free tree, which only Python can say, so `codeid.py` is asked once a run with every id the cache lacks (the round
-//! arbiter's `ask:449-T062-py-id`), and if it cannot answer the run fails rather than writing a substitute. Any other file's id is its blob id. The ids are kept by raw blob id in one file, shared with the
-//! Python callers until they are ported.
+//! comment-free tokens; any other file's is its blob id. A `.py` file's id was Python's own `ast.dump` of its docstring-blind tree, asked of `codeid.py` once a run (the round arbiter's
+//! `ask:449-T062-py-id`), until T247 deleted that script with the last `.py` file outside `specs/` (`ask:449-T158-codeid`): no tree the gate keys holds a `.py` file now, so its id is its bytes'.
+//! The `.rs` ids are kept by raw blob id in one file.
 
 use std::collections::BTreeMap;
 use std::path::{Path, PathBuf};
@@ -133,7 +133,7 @@ fn suffix(name: &str) -> &str {
     name.rsplit_once('.').map_or("", |(_, e)| e)
 }
 
-/// The ids kept beside a repository, by raw blob id, one format with the Python callers'.
+/// The ids kept beside a repository, by raw blob id (the file `codeid.py` shared until feature 449 T247).
 pub struct Cache {
     path: Option<PathBuf>,
     table: BTreeMap<String, String>,
@@ -229,68 +229,32 @@ fn said(what: &str) -> impl FnOnce(std::io::Error) -> String + '_ {
     move |e| format!("{what}: {e}")
 }
 
-/// The `codeid.py` to ask: the wrapper's own tree, since a fixture repository the binary runs in has none; without the wrapper, `root`'s.
+/// The gate's own tree: the wrapper's (`L7R_GATE_TREE`), since a fixture repository the binary runs in is not it; without the wrapper, `root`.
 #[must_use]
-pub fn script(root: &Path) -> PathBuf {
-    let tree = std::env::var_os("L7R_GATE_TREE").map(PathBuf::from);
-    tree.unwrap_or(root.to_path_buf())
-        .join("scripts/gates/codeid.py")
+pub fn gate_tree(root: &Path) -> PathBuf {
+    std::env::var_os("L7R_GATE_TREE").map_or_else(|| root.to_path_buf(), PathBuf::from)
 }
 
-/// `(path, data)` of each file; each one's id, in order.
-///
-/// # Errors
-///
-/// Why Python could not answer for a `.py` file; nothing is kept for it.
-pub fn content_ids(
-    files: &[(PathBuf, Vec<u8>)],
-    cache: &mut Cache,
-    python: &str,
-    codeid: &Path,
-) -> Result<Vec<String>, String> {
+/// `(path, data)` of each file; each one's id, in order: a `.rs` file's the sha256 of its comment-free tokens, kept by its blob id;
+/// any other file's, a `.py` file among them, its blob id (feature 449 T247: `codeid.py`'s docstring-blind `ast.dump` left with the
+/// last `.py` file outside `specs/`, so a `.py` id is no longer looked up, and an AST id another tree kept for its blob is never read).
+pub fn content_ids(files: &[(PathBuf, Vec<u8>)], cache: &mut Cache) -> Vec<String> {
     let mut out = Vec::with_capacity(files.len());
-    let mut asked: Vec<(usize, &Path, String)> = Vec::new();
-    for (at, (path, data)) in files.iter().enumerate() {
+    for (path, data) in files {
         let raw = git_blob_id(data);
-        let kind = suffix(&path.to_string_lossy()).to_owned();
-        if kind != "py" && kind != "rs" {
+        if suffix(&path.to_string_lossy()) != "rs" {
             out.push(raw);
         } else if let Some(id) = cache.table.get(&raw) {
             out.push(id.clone());
-        } else if kind == "rs" {
+        } else {
             let id = sha256::hex(&rust_tokens(data));
             cache.table.insert(raw, id.clone());
             cache.dirty = true;
             out.push(id);
-        } else {
-            out.push(String::new());
-            asked.push((at, path, raw));
-        }
-    }
-    if !asked.is_empty() {
-        let done = Command::new(python)
-            .arg(codeid)
-            .arg("--ids")
-            .args(asked.iter().map(|(_, p, _)| p))
-            .output()
-            .map_err(|e| format!("cannot start {python}: {e}"))?;
-        let text = String::from_utf8_lossy(&done.stdout).into_owned();
-        let ids: Vec<&str> = text.split_whitespace().collect();
-        if !done.status.success() || ids.len() != asked.len() {
-            return Err(format!(
-                "{} answered no ids for the .py files: {}",
-                codeid.display(),
-                String::from_utf8_lossy(&done.stderr).trim()
-            ));
-        }
-        for ((at, _, raw), id) in asked.into_iter().zip(ids) {
-            id.clone_into(&mut out[at]);
-            cache.table.insert(raw, id.to_owned());
-            cache.dirty = true;
         }
     }
     cache.save();
-    Ok(out)
+    out
 }
 
 #[cfg(test)]

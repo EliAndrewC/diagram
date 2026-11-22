@@ -1,6 +1,6 @@
 //! The compound generator's parts tests (feature 449 T152): each part's rule and each refusal on a small program - the bath, the wells and
-//! their rolls, the tubs, the privies, the board, the shrine's tree, the practice ground's gear, the roji, the garden's sun, the open
-//! ground's void and cart route, the size sweep, the knobs and the command.
+//! their rolls, the tubs, the privies, the board, the shrine's tree, the practice ground's gear, the roji, the garden's sun, the size
+//! sweep, the knobs and the command (the open ground's void and cart route are `gen_tests_ground.rs`'s).
 //!
 //! Research: the generator's parts tests - NONE: fixtures and assertions, deciding nothing about a building
 
@@ -512,89 +512,6 @@ fn a_kitchen_garden_wants_its_sun() {
         bed,
     );
     assert!(err(garden_sun(&p, &laid(&p), &Seated::default())).contains("six hours"));
-}
-
-#[test]
-fn the_open_ground_holds_no_unnamed_void_and_a_cart_reaches_the_granary_and_stables() {
-    // a court with nothing in its center: void; the same center named, or a compound too small to have a center past its perimeter
-    let big = r#"{"name": "t", "title": "T", "envelope": {"w": 200, "h": 200, "divider": 100}, "gates": [{"kind": "main gate", "wall": "S", "at": 100, "width": 6}]}"#;
-    let p = super::spec::read(big).unwrap();
-    assert!(err(super::ground::open_ground(&p, &laid(&p))).contains("unnamed open void"));
-    let p = prog("");
-    super::ground::open_ground(&p, &laid(&p)).unwrap();
-    let named = r#", "zones": [{"kind": "inner court", "x": 3, "y": 3, "w": 94, "h": 44}, {"kind": "outer court", "x": 30, "y": 53, "w": 40, "h": 30}]"#;
-    let gates = r#""gates": [{"kind": "main gate", "wall": "S", "at": 50, "width": 6}, {"kind": "side gate", "wall": "N", "at": 50, "width": 6}, {"kind": "side gate", "wall": "E", "at": 80, "width": 6}]"#;
-    let src = super::gen_tests::small(&format!(
-        r#"{named}, "buildings": [{}, {}]"#,
-        b("granary", "granary", "kura", (20.0, 10.0), "outer", "W", ""),
-        b(
-            "stables",
-            "stables",
-            "service",
-            (10.0, 10.0),
-            "outer",
-            "N",
-            r#", "inset": 0"#
-        )
-    ))
-    .replacen(
-        r#""gates": [{"kind": "main gate", "wall": "S", "at": 50, "width": 6}]"#,
-        gates,
-        1,
-    );
-    let p =
-        super::spec::read(&src.replace(r#""wall": "N", "inset": 0"#, r#""wall": "E""#)).unwrap();
-    super::ground::open_ground(&p, &laid(&p)).unwrap();
-    let walled = with(
-        &[
-            b(
-                "granary",
-                "granary",
-                "kura",
-                (20.0, 10.0),
-                "outer",
-                "W",
-                r#", "doors": [{"face": "N", "at": 0.5}]"#,
-            ),
-            b(
-                "ring",
-                "k",
-                "plain",
-                (40.0, 10.0),
-                "outer",
-                "divider",
-                r#", "near": 3"#,
-            ),
-            b(
-                "post",
-                "k",
-                "plain",
-                (6.0, 20.0),
-                "outer",
-                "W",
-                r#", "order": 2"#,
-            ),
-        ],
-        named,
-    );
-    let mut l = Layout::new(&walled);
-    l.seats = vec![
-        Some((3.0, 64.0, 23.0, 74.0)),
-        Some((3.0, 52.5, 43.0, 62.5)),
-        Some((23.0, 60.0, 29.0, 80.0)),
-    ];
-    l.doors = vec![super::layout::door_at(
-        0,
-        (3.0, 64.0, 23.0, 74.0),
-        super::spec::Face::N,
-        0.5,
-    )];
-    assert!(err(super::ground::open_ground(&walled, &l)).contains("no cart route"));
-    assert!(!super::ground::reaches(
-        &super::ground::sweep(&[], (0.0, 0.0, 10.0, 10.0)),
-        &[],
-        (1.0, 1.0)
-    ));
 }
 
 #[test]

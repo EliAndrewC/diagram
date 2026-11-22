@@ -255,3 +255,17 @@ fn the_hook_blocks_the_stop_through_the_gate_script() {
     };
     assert!((super::GUARD.decide)(&e, &Session::with_env(&e.input, |_| None)).is_empty());
 }
+
+/// 449 T268 (found, fixed here): a bundle's builder is held on its first member - its description naming the members before its colon,
+/// or naming none and its prompt's first line naming them - where the old `<feature> T<n>` brief let it stop unheld.
+#[test]
+fn a_bundle_s_builder_is_held_on_its_first_member() {
+    let w = World::new("bundle");
+    w.meta(1, "451 bundle T84, T85: two tooling follow-ups");
+    let said = w.judged(&w.input("done"), 1, NOT_DECIDED);
+    assert!(matches!(&said, Said::Held(..)), "{said:?}");
+    w.meta(1, "451 record bundle: two follow-ups");
+    put(&w.own, "{\"type\":\"user\",\"message\":{\"role\":\"user\",\"content\":\"Feature 451, a bundle of two: T84 and T85. Work only here.\"}}\n");
+    let said = w.judged(&w.input("done"), 1, NOT_DECIDED);
+    assert!(matches!(&said, Said::Held(..)), "{said:?}");
+}

@@ -394,7 +394,7 @@ pub fn tubs_owed(p: &Program, i: usize) -> usize {
 ///     tub against its wall - research/questions/0100-fire-and-the-fireproof-storehouses-dozo.drawing.html: tubs stand at the wooden buildings, at the entrance - each beside a door of its building
 ///     a short face's tub round the corner nearest its door - GUESS: no source could speak to it, a value of ours; a face that leaves no seat beside its door takes the tub round the nearer corner, still within the 10.5 ft
 ///     tub clear of the footprint - CANON: the GM's ruling of 2026-07-25, tightened 2026-07-26, no part of a tub glyph in a building's footprint
-///     a bath's tub judged by no door - research/questions/0100-fire-and-the-fireproof-storehouses-dozo.drawing.html: a bath is entered from the house, so its tub stands on its yard side; else at one of its ends (a GUESS)
+///     a bath's tub judged by no door - research/questions/0100-fire-and-the-fireproof-storehouses-dozo.drawing.html: a bath is entered from the house, so its tub stands on its yard side, the kitchen's court face; else at an end, tried in a fixed order by that face - the west end before the east where the yard side faces north or south, the north end before the south where it faces east or west (the ends and their order a GUESS)
 pub fn tubs(p: &Program, l: &mut Layout, out: &mut Seated) -> Result<(), Error> {
     for &i in &l.order.clone() {
         let doors: Vec<Door> = l.doors.iter().filter(|d| d.b == i).cloned().collect();

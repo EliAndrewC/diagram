@@ -133,28 +133,6 @@ pub fn read_universal(path: &Path) -> Result<Option<String>, Fail> {
     }
 }
 
-/// Runs a Python seam: `python3 -c code args...` fed `input`, its stdout on success and the stderr it wrote on failure.
-///
-/// # Errors
-///
-/// Where what it reads, writes or runs fails: the error says which and why.
-pub fn python(code: &str, args: &[&str], input: &str) -> Result<String, Fail> {
-    let done = piped(
-        Command::new("python3").arg("-c").arg(code).args(args),
-        input,
-    )
-    .map_err(fail)?;
-    let (out, err) = (
-        String::from_utf8_lossy(&done.stdout).into_owned(),
-        String::from_utf8_lossy(&done.stderr).into_owned(),
-    );
-    if done.status.success() {
-        Ok(out)
-    } else {
-        Err(err)
-    }
-}
-
 /// The tree the scripts live in: where the wrapper said, else the root.
 #[cfg(not(test))]
 pub fn tree_of(root: &Path) -> std::path::PathBuf {

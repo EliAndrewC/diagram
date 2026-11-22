@@ -88,6 +88,33 @@ dispatch impl-drift "Read $T/claims-x/MANIFEST.md."
 dispatch impl-drift "Read $T/q-0087/MANIFEST.md."
 [ "$(rc)" -eq 2 ] && ok "impl-drift on a bundle that does not owe it is refused" || no "impl-drift on a record bundle passed" "(rc=$(rc))"
 
+echo "5. decide first judges the check's own task, never the mark's (449 T258)"
+# a clone of two open tasks, through the clone's real gate (the wrapper sets L7R_GUARD_TREE to its own tree): T2's plan section carries
+# no verdict, T1 owes none (no section); the mark's form (no task) names the first open task, T2, as the real gate's did for every one
+# of T197 G1's checks
+C="$T/clone"; mkdir -p "$C/.specify" "$C/specs/449-x/briefs"; git init -q "$C"
+printf '{"feature_directory": "specs/449-x"}\n' > "$C/.specify/feature.json"
+printf -- '- [ ] T2 two\n- [ ] T1 one\n' > "$C/specs/449-x/tasks.md"
+printf '# plan\n\n## T2 two\n\n- a decision\n' > "$C/specs/449-x/plan.md"
+printf '# Brief - feature 449 task T2, group G1: check and apply\n' > "$C/specs/449-x/briefs/t2-checks.md"
+mkdir -p "$C/.git/page-sessions"; printf 'sid-2 %s\n' "$C/specs/449-x/briefs/t2-checks.md" > "$C/.git/page-sessions/index.txt"
+own() { # own <description> <prompt> -> rc in $T/rc, stderr in $T/err, from the clone
+  python3 -c 'import json,sys; print(json.dumps({"session_id":"t-check-bundle","cwd":sys.argv[3],"tool_name":"Agent","tool_input":{"subagent_type":"source-reader","prompt":sys.argv[2],"description":sys.argv[1]}}))' "$1" "$2" "$C" \
+    | ( cd "$C" && "$HOOK" pretool 2>"$T/err" ); echo $? > "$T/rc"
+}
+own "449 T1: source-reader on 0221" "Report per claim whether https://en.wikipedia.org/wiki/Edo says it."
+[ "$(rc)" -eq 0 ] && ok "a check naming a task that owes no decision passes while another open task is undecided" || no "it was judged on another task" "$(cat "$T/err")"
+own "449 T2: source-reader on 0221" "Report per claim whether https://en.wikipedia.org/wiki/Edo says it."
+[ "$(rc)" -eq 2 ] && grep -q '449-x T2: its plan section' "$T/err" && ok "...and one naming the undecided task is refused on that task's verdict" || no "the undecided task's check passed" "(rc=$(rc)) $(cat "$T/err")"
+own "source-reader on 0221" "449 T1's claims re-check: report per claim whether https://en.wikipedia.org/wiki/Edo says it."
+[ "$(rc)" -eq 0 ] && ok "a task its prompt's first line names is its own" || no "the prompt's task was not read" "$(cat "$T/err")"
+own "source-reader on 0221" "Report per claim whether https://en.wikipedia.org/wiki/Edo says it."
+[ "$(rc)" -eq 2 ] && grep -q 'names no task it serves' "$T/err" && grep -q '449-x T2' "$T/err" && ok "a check that names no task is held by the mark and told to name its task" || no "a check naming no task passed silently" "(rc=$(rc)) $(cat "$T/err")"
+export L7R_PAGE_SESSION=sid-2
+own "source-reader on 0221" "Report per claim whether https://en.wikipedia.org/wiki/Edo says it."
+[ "$(rc)" -eq 2 ] && grep -q '449-x T2' "$T/err" && ok "a page session's check is judged on its brief's task" || no "the brief's task was not read" "(rc=$(rc)) $(cat "$T/err")"
+unset L7R_PAGE_SESSION
+
 echo "4. the guard and the contracts agree"
 ROOT="$(cd "$HERE/../.." && pwd)"
 for a in quote-check record-format source-applicability source-reader entry-drift; do

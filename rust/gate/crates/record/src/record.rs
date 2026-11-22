@@ -187,6 +187,12 @@ fn is_task(task: &str) -> bool {
         .is_some_and(|n| !n.is_empty() && n.bytes().all(|b| b.is_ascii_digit()))
 }
 
+/// The no-defect settlement's form, which each of its refusals prints (449 T269).
+const NO_DEFECT_FORM: &str =
+    "WHY=\"not a defect (constitution XIV): <the checker> ruled <the ruling the finding states>\"";
+/// A finding's own words that rule it no defect (449 T269: row 140's "so this is no defect and needs no fix").
+const RULED: [&str; 3] = ["no defect", "not a defect", "needs no fix"];
+
 /// Close the numbered rows (1-based, file order): filed as `task`, or settled with `why`, refusing a row already closed.
 ///
 /// # Errors
@@ -211,11 +217,23 @@ pub fn close_rows(
     if !task.is_empty() && !is_task(task) {
         return Err(format!("--task names a task id - T61, or 385 T12 / 405 T17 (the GM's routing names those two features only) - not '{task}'"));
     }
-    // SETTLED ONLY WHERE IT NO LONGER HOLDS (the plan review of 405 D36): a finding that still holds is filed as a task (FR-002)
-    let measured =
-        why.to_lowercase().starts_with("no longer holds") && why.split_whitespace().count() >= 6;
-    if !why.is_empty() && !measured {
-        return Err("--why starts \"no longer holds\" and records what was measured against the current file (a finding that still holds is filed as a task)".to_owned());
+    // SETTLED ONLY WHERE IT NO LONGER HOLDS (the plan review of 405 D36): a finding that still holds is filed as a task (FR-002) - OR
+    // WHERE ITS CHECKER RULED IT NO DEFECT (449 T269, constitution XIV: a defect is a wrong outcome, not a difference): 449's row 140, an
+    // impl-drift finding whose own words rule its parcel "within about, so this is no defect", could be neither filed nor settled. The
+    // ruling is the checker's, never the closer's: only a row whose finding states it settles so (a reply quoted in the reason is the
+    // closer's words, the MODE 4 review of 449 T269, round 1). Measured
+    // 2026-11-22: 1 of the 1,266 open rows of every feature's found.jsonl carried such a ruling.
+    let lower = why.to_lowercase();
+    let long = why.split_whitespace().count() >= 6;
+    let measured = lower.starts_with("no longer holds") && long;
+    let no_defect = lower.starts_with("not a defect");
+    if !why.is_empty() && !measured && !no_defect {
+        return Err(format!("--why starts \"no longer holds\" and records what was measured against the current file (a finding that still holds is filed as a task), or {NO_DEFECT_FORM}"));
+    }
+    if no_defect && !(long && why.contains("XIV")) {
+        return Err(format!(
+            "--why \"not a defect\" names constitution XIV and the ruling: {NO_DEFECT_FORM}"
+        ));
     }
     for n in numbers {
         if !(1..=rows.len()).contains(n) {
@@ -226,6 +244,11 @@ pub fn close_rows(
                 "row {n} is already {}",
                 rows[n - 1]["status"].as_str().unwrap_or("")
             ));
+        }
+        let finding = rows[n - 1]["finding"].as_str().unwrap_or("").to_lowercase();
+        let ruled = RULED.iter().any(|r| finding.contains(r));
+        if no_defect && !ruled {
+            return Err(format!("row {n}'s finding carries no ruling of no defect (\"no defect\", \"not a defect\", \"needs no fix\"), so it is filed as a task (--task), or settled \"no longer holds\" where it no longer holds"));
         }
     }
     for n in numbers {

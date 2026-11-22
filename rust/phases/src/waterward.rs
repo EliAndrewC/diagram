@@ -64,8 +64,50 @@ fn nearest(p: Pt, (x0, y0, x1, y1): (f64, f64, f64, f64)) -> char {
         .0
 }
 
+/// The dike's corners each filed once to the side of the box it stands nearest (`nearest`), for every flank's face to ask: each
+/// corner's side, and the corners of each side in the ring's order, `W`, `E`, `N` and `S`.
+///
+/// Research:
+///     the corners filed - NONE: the filing `face` asks of each corner, held for all the flanks; which flank a corner faces is `face`'s claim
+#[derive(Debug)]
+pub struct Filed {
+    /// Each corner's side, in the ring's order.
+    side: Vec<char>,
+    /// The corners of each side, `W`, `E`, `N` and `S`, in the ring's order.
+    own: [Vec<usize>; 4],
+}
+
+/// The place of a side among [`Filed`]'s own lists.
+///
+/// Research:
+///     a side's list - NONE: bookkeeping, the four sides' lists in a fixed order
+fn slot(side: char) -> usize {
+    match side {
+        'W' => 0,
+        'E' => 1,
+        'N' => 2,
+        _ => 3,
+    }
+}
+
+/// The corners of `ring` filed to the sides of the box `bbox` round it, once for all the flanks (449 T250, audit-4 of
+/// `waterward.polder`: each flank's face had filed the whole ring again), a test a corner.
+///
+/// Research:
+///     the corners filed once - NONE: work, not the place - each corner's nearest side does not hang on the flank asked, so it is filed once; which flank a corner faces is `face`'s claim
+#[must_use]
+pub fn file(ring: &[Pt], bbox: (f64, f64, f64, f64), tests: &mut u64) -> Filed {
+    *tests += ring.len() as u64;
+    let side: Vec<char> = ring.iter().map(|&p| nearest(p, bbox)).collect();
+    let mut own: [Vec<usize>; 4] = Default::default();
+    for (i, &q) in side.iter().enumerate() {
+        own[slot(q)].push(i);
+    }
+    Filed { side, own }
+}
+
 /// The dike's outer face along one flank, as a polyline spanning `lo` to `hi` along the flank's axis: the outline `ring`'s corners
-/// that stand nearest the flank (of the box `bbox` round the ring) in order along the axis - the face itself, point for point -
+/// that stand nearest the flank (of the box `bbox` round the ring, as `filed` filed them) in order along the axis - the face itself, point for point -
 /// carried at each end one corner on round the dike's corner, then to the box's own corner and on along its side, so the strip
 /// meets the next flank's at the corner's diagonal without turning onto its next face; each depth rounded outward to a tenth of a
 /// foot.
@@ -76,6 +118,7 @@ fn nearest(p: Pt, (x0, y0, x1, y1): (f64, f64, f64, f64)) -> char {
 #[must_use]
 pub fn face(
     ring: &[Pt],
+    filed: &Filed,
     bbox: (f64, f64, f64, f64),
     flank: char,
     lo: f64,
@@ -100,11 +143,8 @@ pub fn face(
         (bbox.0, bbox.2)
     };
     let n = ring.len();
-    // each corner filed to its side, and the corners walked again for the flank's own; those put in order along the axis, a
-    // comparison each
-    *tests += 2 * n as u64;
-    let filed: Vec<bool> = ring.iter().map(|&p| nearest(p, bbox) == flank).collect();
-    let mut own: Vec<usize> = (0..n).filter(|&i| filed[i]).collect();
+    // the flank's own corners, filed once for all the flanks (`file`), put in order along the axis, a comparison each
+    let mut own = filed.own[slot(flank)].clone();
     own.sort_by(|&a, &b| {
         *tests += 1;
         along(ring[a]).total_cmp(&along(ring[b]))
@@ -120,7 +160,7 @@ pub fn face(
     // the corner on round the dike from an end of the face, strictly `before` or past it along the axis: a neighbor not the flank's own
     let past = |i: usize, before: bool| {
         [(i + n - 1) % n, (i + 1) % n].into_iter().find(|&j| {
-            !filed[j]
+            filed.side[j] != flank
                 && if before {
                     along(ring[j]) < along(ring[i])
                 } else {
@@ -550,6 +590,7 @@ pub fn fringe(
     crate::counts::tally(&mut counts, "test@fringe", pts.len() as u64);
     crate::counts::tally(&mut counts, "test@flanks", 3);
     let mut strips = Vec::new();
+    let filed = file(pts, (x0, y0, x1, y1), &mut tests);
     for &q in &fl {
         let (outer, lo, hi, ext) = match q {
             'W' => ((x0 - depth).max(-OFF_CANVAS), ylo, yhi, (y0, y1)),
@@ -557,7 +598,7 @@ pub fn fringe(
             'N' => ((y0 - depth).max(-OFF_CANVAS), xlo, xhi, (x0, x1)),
             _ => ((y1 + depth).min(canvas.1 + OFF_CANVAS), xlo, xhi, (x0, x1)),
         };
-        let f = face(pts, (x0, y0, x1, y1), q, lo, hi, &mut tests);
+        let f = face(pts, &filed, (x0, y0, x1, y1), q, lo, hi, &mut tests);
         pieces(
             &f,
             q,

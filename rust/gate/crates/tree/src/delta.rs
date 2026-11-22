@@ -6,7 +6,6 @@ use std::fmt::Write as _;
 use std::io::{Read, Write};
 use std::path::{Path, PathBuf};
 use std::process::{Command, Stdio};
-use std::sync::atomic::{AtomicUsize, Ordering};
 
 use l7r_shared::sha256;
 use serde_json::json;
@@ -38,16 +37,13 @@ pub(crate) const ENGINE_DIRS: [(&str, &[&str]); 4] = [
 /// The gate's own decider is tooling, not engine (feature 132 FR-025, the GM: "the engine itself isn't using it ... which makes it test code").
 const NOT_ENGINE_DIR: &str = "l7r/diagram/ci/";
 
-/// The files keyed on what runs rather than their bytes.
-const SEMANTIC: [&str; 2] = [".py", ".rs"];
-
+/// The files keyed on what runs rather than their bytes: a `.rs` file's comment-free tokens. A `.py` file was too (its docstring-blind
+/// AST) until feature 449 T247 deleted `codeid.py`, the last `.py` file outside `specs/`: one is its blob id now, as `content_ids` gives it,
+/// so an AST id the cache kept for its blob is never read.
 fn semantic(path: &str) -> bool {
-    SEMANTIC.iter().any(|s| path.ends_with(s))
-}
-
-/// A file Python runs, by its last extension.
-fn is_python(path: &str) -> bool {
-    Path::new(path).extension().is_some_and(|e| e == "py")
+    Path::new(path)
+        .extension()
+        .is_some_and(|e| e.eq_ignore_ascii_case("rs"))
 }
 
 /// Is this repository-relative path engine code, the kind that owes the gate?
@@ -146,90 +142,10 @@ fn cat_blobs(root: &Path, names: &[String]) -> Result<Vec<Option<Vec<u8>>>, Stri
     Ok(got)
 }
 
-/// Where `codeid.py` is read from a blob: a Python id is Python's to say and it reads a file, so a blob no working file holds is put in a scratch directory for the one call.
-struct Scratch(PathBuf);
-
-impl Scratch {
-    fn new() -> Result<Self, String> {
-        static SEQ: AtomicUsize = AtomicUsize::new(0);
-        let dir = std::env::temp_dir().join(format!(
-            "l7r-gate-blobs-{}-{}",
-            std::process::id(),
-            SEQ.fetch_add(1, Ordering::Relaxed)
-        ));
-        stated(std::fs::create_dir_all(&dir), "the scratch directory")?;
-        Ok(Self(dir))
-    }
-
-    fn holding(
-        &self,
-        at: usize,
-        repo_path: &str,
-        data: Vec<u8>,
-    ) -> Result<(PathBuf, Vec<u8>), String> {
-        let kind = if is_python(repo_path) { "py" } else { "rs" };
-        let path = self.0.join(format!("{at}.{kind}"));
-        if kind == "py" {
-            stated(std::fs::write(&path, &data), "a scratch file")?;
-        }
-        Ok((path, data))
-    }
-}
-
-impl Drop for Scratch {
-    fn drop(&mut self) {
-        let _ = std::fs::remove_dir_all(&self.0);
-    }
-}
-
 fn merge_base(root: &Path, base_ref: &str) -> Result<String, String> {
     Ok(git(root, &["merge-base", base_ref, "HEAD"])?
         .trim()
         .to_owned())
-}
-
-/// Of `candidates`, what changed in what a gate EXECUTES between `base` and HEAD: a comment-only, docstring-only or formatting edit answers no (GM 2026-08-28), and a non-`.py` file or one added or removed
-/// on either side stays changed, git having said it differs and there being no semantic form to compare.
-fn semantically_changed(
-    root: &Path,
-    base: &str,
-    candidates: &[&str],
-    python: &str,
-) -> Result<Vec<bool>, String> {
-    let code: Vec<&str> = candidates
-        .iter()
-        .copied()
-        .filter(|p| is_python(p))
-        .collect();
-    let names: Vec<String> = code
-        .iter()
-        .flat_map(|p| [format!("{base}:{p}"), format!("HEAD:{p}")])
-        .collect();
-    let mut blobs = cat_blobs(root, &names)?.into_iter();
-    let scratch = Scratch::new()?;
-    let mut files = Vec::new();
-    let mut both_sides = Vec::with_capacity(code.len());
-    for (at, path) in code.iter().enumerate() {
-        match (blobs.next().flatten(), blobs.next().flatten()) {
-            (Some(before), Some(after)) => {
-                files.push(scratch.holding(2 * at, path, before)?);
-                files.push(scratch.holding(2 * at + 1, path, after)?);
-                both_sides.push(true);
-            }
-            _ => both_sides.push(false),
-        }
-    }
-    let ids = codeid::content_ids(&files, &mut Cache::at(root), python, &codeid::script(root))?;
-    let mut pairs = ids.chunks_exact(2);
-    let mut sides = both_sides.into_iter();
-    Ok(candidates
-        .iter()
-        .map(|p| {
-            !is_python(p)
-                || !sides.next().unwrap_or(false)
-                || pairs.next().is_none_or(|pair| pair[0] != pair[1])
-        })
-        .collect())
 }
 
 /// What this clone's own commits changed, and which of it is engine code.
@@ -285,7 +201,7 @@ impl Delta {
 /// # Errors
 ///
 /// Where what it reads, writes or runs fails: the error says which and why.
-pub fn compute_delta(root: &Path, base_ref: &str, python: &str) -> Result<Delta, String> {
+pub fn compute_delta(root: &Path, base_ref: &str) -> Result<Delta, String> {
     let base = merge_base(root, base_ref)?;
     let listed = git(root, &["diff", "--name-only", &base, "HEAD"])?;
     let mut files: Vec<String> = listed
@@ -294,18 +210,9 @@ pub fn compute_delta(root: &Path, base_ref: &str, python: &str) -> Result<Delta,
         .map(str::to_owned)
         .collect();
     files.sort_unstable();
-    let candidates: Vec<&str> = files
-        .iter()
-        .map(String::as_str)
-        .filter(|f| is_engine(f))
-        .collect();
-    let moved = semantically_changed(root, &base, &candidates, python)?;
-    let engine = candidates
-        .into_iter()
-        .zip(moved)
-        .filter(|(_, m)| *m)
-        .map(|(f, _)| f.to_owned())
-        .collect();
+    // every engine path git says differs: a `.py` file's docstring-only edit was left out by its AST id until feature 449 T247, and no
+    // `.py` file is left to have one
+    let engine = files.iter().filter(|f| is_engine(f)).cloned().collect();
     Ok(Delta {
         base,
         files,
@@ -313,8 +220,8 @@ pub fn compute_delta(root: &Path, base_ref: &str, python: &str) -> Result<Delta,
     })
 }
 
-fn compute(root: &Path, base_ref: &str, python: &str) -> Result<String, String> {
-    let d = compute_delta(root, base_ref, python)?;
+fn compute(root: &Path, base_ref: &str) -> Result<String, String> {
+    let d = compute_delta(root, base_ref)?;
     Ok(format!(
         "{}\n",
         json!({"base": d.base, "files": d.files, "engine": d.engine})
@@ -325,7 +232,6 @@ fn compute(root: &Path, base_ref: &str, python: &str) -> Result<String, String> 
 fn key_from_ids(
     root: &Path,
     entries: &[(String, String)],
-    python: &str,
     fetch: impl FnOnce(&[usize]) -> Result<Vec<Vec<u8>>, String>,
 ) -> Result<String, String> {
     let mut cache = Cache::at(root);
@@ -333,13 +239,12 @@ fn key_from_ids(
         .filter(|&i| semantic(&entries[i].1) && cache.kept(&entries[i].0).is_none())
         .collect();
     let contents = fetch(&misses)?;
-    let scratch = Scratch::new()?;
     let files: Vec<(PathBuf, Vec<u8>)> = misses
         .iter()
         .zip(contents)
-        .map(|(&i, data)| scratch.holding(i, &entries[i].1, data))
-        .collect::<Result<_, _>>()?;
-    let ids = codeid::content_ids(&files, &mut cache, python, &codeid::script(root))?;
+        .map(|(&i, data)| (PathBuf::from(&entries[i].1), data))
+        .collect();
+    let ids = codeid::content_ids(&files, &mut cache);
     let mut found = misses.iter().copied().zip(ids);
     let mut next = found.next();
     let mut rows = Vec::with_capacity(entries.len());
@@ -365,7 +270,7 @@ fn key_from_ids(
 /// # Errors
 ///
 /// Where what it reads, writes or runs fails: the error says which and why.
-pub fn engine_key(root: &Path, tree: &str, python: &str) -> Result<String, String> {
+pub fn engine_key(root: &Path, tree: &str) -> Result<String, String> {
     let mut prefixes: Vec<&str> = ENGINE_DIRS.iter().map(|(p, _)| *p).collect();
     prefixes.sort_unstable();
     let mut args = vec!["ls-tree", "-r", tree, "--"];
@@ -379,7 +284,7 @@ pub fn engine_key(root: &Path, tree: &str, python: &str) -> Result<String, Strin
             is_engine(path).then(|| (sha.to_owned(), path.to_owned()))
         })
         .collect();
-    key_from_ids(root, &entries, python, |misses| {
+    key_from_ids(root, &entries, |misses| {
         let shas: Vec<String> = misses.iter().map(|&i| entries[i].0.clone()).collect();
         cat_blobs(root, &shas)?
             .into_iter()
@@ -394,8 +299,8 @@ pub fn engine_key(root: &Path, tree: &str, python: &str) -> Result<String, Strin
 /// # Errors
 ///
 /// Where what it reads, writes or runs fails: the error says which and why.
-pub fn engine_key_worktree(root: &Path, python: &str) -> Result<String, String> {
-    worktree_key(root, python, &[], &is_engine)
+pub fn engine_key_worktree(root: &Path) -> Result<String, String> {
+    worktree_key(root, &[], &is_engine)
 }
 
 /// `engine_key_worktree` over the working tree's files under `pathspecs` (all of it when none) that `keep` takes: the key of what one
@@ -407,7 +312,6 @@ pub fn engine_key_worktree(root: &Path, python: &str) -> Result<String, String> 
 /// Where what it reads, writes or runs fails: the error says which and why.
 pub fn worktree_key(
     root: &Path,
-    python: &str,
     pathspecs: &[&str],
     keep: &dyn Fn(&str) -> bool,
 ) -> Result<String, String> {
@@ -462,7 +366,7 @@ pub fn worktree_key(
         .iter()
         .map(|p| (ids[*p].clone(), (*p).to_owned()))
         .collect();
-    key_from_ids(root, &entries, python, |misses| {
+    key_from_ids(root, &entries, |misses| {
         misses
             .iter()
             .map(|&i| stated(std::fs::read(root.join(&entries[i].1)), &entries[i].1))
@@ -482,25 +386,24 @@ fn engine_paths(paths: &mut dyn Read) -> Result<String, String> {
 }
 
 /// `l7r-gate delta compute [base] | key [tree|worktree] | engine-paths` (the paths on stdin; the engine ones back).
-pub fn cli(args: &[String], root: &Path, python: &str, stdin: &mut dyn Read) -> crate::Reply {
+pub fn cli(args: &[String], root: &Path, stdin: &mut dyn Read) -> crate::Reply {
     let second = args.get(1).map(String::as_str);
-    let answer = match args.first().map(String::as_str) {
-        Some("compute") => compute(root, second.unwrap_or("origin/main"), python),
-        Some("key") if second == Some("worktree") => {
-            engine_key_worktree(root, python).map(|k| format!("{k}\n"))
-        }
-        Some("key") => engine_key(root, second.unwrap_or("HEAD"), python).map(|k| format!("{k}\n")),
-        Some("engine-paths") => engine_paths(stdin),
-        _ => {
-            return crate::Reply {
+    let answer =
+        match args.first().map(String::as_str) {
+            Some("compute") => compute(root, second.unwrap_or("origin/main")),
+            Some("key") if second == Some("worktree") => {
+                engine_key_worktree(root).map(|k| format!("{k}\n"))
+            }
+            Some("key") => engine_key(root, second.unwrap_or("HEAD")).map(|k| format!("{k}\n")),
+            Some("engine-paths") => engine_paths(stdin),
+            _ => return crate::Reply {
                 stdout: String::new(),
                 stderr:
                     "usage: l7r-gate delta compute [base] | key [tree|worktree] | engine-paths\n"
                         .to_owned(),
                 code: 2,
-            }
-        }
-    };
+            },
+        };
     match answer {
         Ok(stdout) => crate::Reply {
             stdout,

@@ -545,29 +545,32 @@ fn length(v: &Value) -> Result<i64, Error> {
     Ok(i64::try_from(n).unwrap_or(i64::MAX))
 }
 
-/// How many dwellings this map DRAWS that the tier is willing to count: a hamlet's and a village's `houses`, a town's and a city's non-farm
-/// dwellings in `buildings` (the GM, 2026-08-29: their farm fields "are deliberately not all rendered on the map").
+/// How many dwellings this map DRAWS that the tier is willing to count: its drawn farmhouses (`houses`) unless the tier excludes farms,
+/// and every dwelling in `buildings`. A hamlet and a village draw only farmhouses; a town counts its farmhouses beside its other
+/// dwellings; a city counts only its non-farm dwellings (the GM, 2026-08-29: its farm fields "are deliberately not all rendered on the
+/// map"; FIXED, feature 449 T271: a town was counted as a city is, its farmhouses left out).
 ///
 /// Research:
 ///     card plumbing - research/questions/0004-households-how-many-live-in-a-house-and-under-how-many-roofs-ie.drawing.html: which
 ///         building kinds count as homes (DWELLING_KINDS)
-///     town and city count no farmhouses - research/questions/0004-households-how-many-live-in-a-house-and-under-how-many-roofs-ie.drawing.html:
-///         a town or city counts only its non-farm dwellings
+///     a town counts its farmhouses, a city none - research/questions/0004-households-how-many-live-in-a-house-and-under-how-many-roofs-ie.drawing.html:
+///         a town counts its drawn farmhouses among its dwellings, a city counts no farmhouse at all
 ///
 /// # Errors
 /// A record that is no object, or a `houses` that has no length (the Python's `AttributeError` and `TypeError`).
 #[expect(
     clippy::doc_markdown,
-    reason = "the claim carried word for word from the Python, its `DWELLING_KINDS` unquoted there"
+    reason = "the claim names the `DWELLING_KINDS` constant unquoted, as the claims registry records it"
 )]
 pub fn dwellings_shown(manifest: &Value, kind: &Kind) -> Result<i64, Error> {
-    if !kind.excludes_farms {
-        return match manifest.get("houses").filter(|v| truthy(v)) {
-            None => Ok(0),
-            Some(v) => length(v),
-        };
-    }
-    let mut n = 0;
+    let mut n = if kind.excludes_farms {
+        0
+    } else {
+        match manifest.get("houses").filter(|v| truthy(v)) {
+            None => 0,
+            Some(v) => length(v)?,
+        }
+    };
     for b in items(manifest.get("buildings"))? {
         let Value::Object(b) = &b else {
             return Err(Error::new(

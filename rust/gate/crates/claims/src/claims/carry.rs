@@ -2,11 +2,6 @@
 //! claims_carry.py`, ported by feature 449 T82; feature 385 amendment 3, FR-013, plan D26-D29, and feature 445's switch): the record
 //! `specs/<feature>/claims-carried.jsonl`, the known drifts, and what the gate refuses and warns.
 
-#![expect(
-    clippy::case_sensitive_file_extension_comparisons,
-    reason = "Python's `str.endswith`, which this port keeps, is case-sensitive"
-)]
-
 use std::collections::{BTreeSet, HashMap, HashSet};
 use std::path::{Path, PathBuf};
 use std::sync::LazyLock;
@@ -18,7 +13,6 @@ use super::index::{
     field, is, live_rows, load_map, owed, relabel_answered, Cur, Index, INDEX, STORE,
 };
 use super::report::{base_tree, classify, load_deferred, open_findings, Base};
-use super::scope::Reader;
 use crate::record::repo::{fail, git, read_text, Fail};
 use crate::record::units::re;
 
@@ -53,8 +47,10 @@ fn git_lines(root: &Path, args: &[&str]) -> Vec<String> {
         .collect()
 }
 
-/// Does this tree's delta change engine code, as the gate's one list and the content id decide it?
-pub fn touches_engine(root: &Path) -> Result<bool, Fail> {
+/// Does this tree's delta change engine code, as the gate's one list decides it? Every engine path the delta names, untracked ones among
+/// them: a `.py` file whose docstring-blind content id held was left out, asked of `codeid.py`, until feature 449 T247 deleted it with the
+/// last `.py` file, so a `.py` file's change is engine code as any other's is.
+pub fn touches_engine(root: &Path) -> bool {
     let base = git_lines(root, &["merge-base", "origin/main", "HEAD"])
         .into_iter()
         .next()
@@ -64,47 +60,7 @@ pub fn touches_engine(root: &Path) -> Result<bool, Fail> {
         root,
         &["ls-files", "--others", "--exclude-standard"],
     ));
-    let scratch = super::temp_dir("ids");
-    let mut pairs: Vec<(PathBuf, Vec<u8>)> = Vec::new();
-    for f in paths.iter().filter(|p| crate::delta::is_engine(p)) {
-        if !f.ends_with(".py") {
-            return Ok(true);
-        }
-        let before = std::process::Command::new("git")
-            .arg("-C")
-            .arg(root)
-            .args(["show", &format!("{base}:{f}")])
-            .output()
-            .map_err(fail)?;
-        let now = root.join(f);
-        if !before.status.success() || !now.is_file() {
-            return Ok(true);
-        }
-        pairs.push((PathBuf::from(f), before.stdout));
-        pairs.push((PathBuf::from(f), std::fs::read(&now).map_err(fail)?));
-    }
-    if pairs.is_empty() {
-        return Ok(false);
-    }
-    let _ = std::fs::create_dir_all(&scratch);
-    let files: Vec<(PathBuf, Vec<u8>)> = pairs
-        .into_iter()
-        .enumerate()
-        .map(|(i, (_, data))| {
-            let p = scratch.join(format!("{i}.py"));
-            let _ = std::fs::write(&p, &data);
-            (p, data)
-        })
-        .collect();
-    let script = crate::codeid::script(root);
-    let ids = crate::codeid::content_ids(
-        &files,
-        &mut crate::codeid::Cache::at(root),
-        "python3",
-        &script,
-    );
-    let ids = ids?;
-    Ok(ids.chunks(2).any(|p| p[0] != p[1]))
+    paths.iter().any(|p| crate::delta::is_engine(p))
 }
 
 fn read_or_empty(path: &Path) -> Result<String, Fail> {
@@ -137,7 +93,7 @@ pub fn rows(d: &Path) -> Result<Vec<Value>, Fail> {
 
 /// The feature carried findings are filed into: the claims feature for a delta with no engine code, while it has an open task; the active one otherwise.
 pub fn target(root: &Path) -> Result<Option<PathBuf>, Fail> {
-    if !touches_engine(root)? {
+    if !touches_engine(root) {
         if let Some(claims) = crate::plan::resolve_feature(CLAIMS_FEATURE, root) {
             if !open_ids(&claims)?.is_empty() {
                 return Ok(Some(claims));
@@ -467,7 +423,7 @@ pub struct Reading {
 }
 
 /// (owed refusals, introduced, pre-existing, carried) at `root` against its merge base with origin/main.
-pub fn classified(reader: &mut Reader, root: &Path, at: &Reading) -> Result<Classified, Fail> {
+pub fn classified(root: &Path, at: &Reading) -> Result<Classified, Fail> {
     let store = load_map(&root.join(STORE))?;
     let due = owed(
         &at.cur,
@@ -498,7 +454,7 @@ pub fn classified(reader: &mut Reader, root: &Path, at: &Reading) -> Result<Clas
             Vec::new()
         } else {
             base_tree("git", root, &mb, &tmp)?;
-            super::scope::all_units(reader, &tmp, true, true)?
+            super::scope::all_units(&tmp, true)?
         };
         let cores: HashMap<String, String> = pairs
             .iter()
@@ -509,21 +465,8 @@ pub fn classified(reader: &mut Reader, root: &Path, at: &Reading) -> Result<Clas
             .flat_map(|(u, _)| u.claims.iter().map(|c| (u.key(c), c.normalized())))
             .collect();
         let uids: HashSet<String> = cores.keys().cloned().collect();
-        // a claim on a `.py` unit the tree no longer has, carried by no move and no port, is refused (feature 449 T166, Q10); whether
-        // its unit is gone is asked of every scope's units, read only when a unit of the base's index is missing from the claimed ones
-        let now = at.cur.uids();
-        let missing = base_index.keys().any(|k| {
-            let uid = k.rsplit_once('#').map_or(k.as_str(), |p| p.0);
-            uid.contains(".py::") && uids.contains(uid) && !now.contains(uid)
-        });
-        let every: HashSet<String> = if missing {
-            super::scope::all_units(reader, root, true, true)?
-                .iter()
-                .map(|(u, _)| u.uid())
-                .collect()
-        } else {
-            HashSet::new()
-        };
+        // a claim on a `.py` unit the tree no longer has, carried by no move and no port, was refused (feature 449 T166, Q10); since
+        // T158 no `.py` unit is read at the merge base either, so none is in `uids` and `unported` never asks whether one is gone
         let before = super::ports::Before {
             index: &base_index,
             uids: &uids,
@@ -531,9 +474,8 @@ pub fn classified(reader: &mut Reader, root: &Path, at: &Reading) -> Result<Clas
             owed: &owed_keys,
         };
         let map = super::ports::load(root)?;
-        let unported = super::ports::unported(&at.cur, &at.index, &before, &map, &mut |u| {
-            !every.contains(u)
-        });
+        let unported =
+            super::ports::unported(&at.cur, &at.index, &before, &map, &mut every_unit_gone);
         let mut answered = HashSet::new();
         for (k, v) in &at.index {
             if let Some(row) = at.cur.get(k) {
@@ -580,12 +522,8 @@ pub fn open_lines(root: &Path, at: &Reading) -> Result<Vec<(String, String)>, Fa
 }
 
 /// (refusals, warnings) for the push: owed units, introduced findings, carried ones not yet filed, unrecorded known drifts; at `clean` every open finding.
-pub fn gate(
-    reader: &mut Reader,
-    root: &Path,
-    at: &Reading,
-) -> Result<(Vec<String>, Vec<String>), Fail> {
-    let (refuse, intro, pre, carried) = classified(reader, root, at)?;
+pub fn gate(root: &Path, at: &Reading) -> Result<(Vec<String>, Vec<String>), Fail> {
+    let (refuse, intro, pre, carried) = classified(root, at)?;
     let known = known_drifts(&at.cur, &at.index, root)?;
     let (revealed, intro): (Vec<String>, Vec<String>) = intro
         .into_iter()
@@ -659,8 +597,8 @@ pub fn gate(
 /// `make claims-known`: each known drift the gate would refuse unrecorded, written as a row of its task's feature's `gm-review.jsonl` with the GM's box, by the
 /// GM-review queue's one writer in process (`gm_review::add_row`, feature 449 T91, `ask:449-T82-claims`; `bundle_door.py`'s `gm_review_add_row` verb before);
 /// the lines written.
-pub fn record_known(reader: &mut Reader, root: &Path, at: &Reading) -> Result<Vec<String>, Fail> {
-    let (refuse, _) = gate(reader, root, at)?;
+pub fn record_known(root: &Path, at: &Reading) -> Result<Vec<String>, Fail> {
+    let (refuse, _) = gate(root, at)?;
     let mut written = Vec::new();
     let found = refuse
         .iter()
@@ -684,5 +622,11 @@ pub fn record_known(reader: &mut Reader, root: &Path, at: &Reading) -> Result<Ve
 
 #[cfg(test)]
 mod more;
+/// Whether a unit the base held is gone from the tree: always, since T158 no `.py` unit is in the base's `uids`, so `unported`
+/// never asks (feature 449 T158).
+fn every_unit_gone(_: &str) -> bool {
+    true
+}
+
 #[cfg(test)]
 mod tests;

@@ -102,3 +102,20 @@ fn a_households_text_is_read_as_its_number() {
         )
     );
 }
+
+/// FIXED (feature 449 T271): a town's card left its drawn farmhouses out of its count as a city's does, against 0004's drawing page ("A
+/// town counts its drawn farmhouses among its dwellings"; "A city counts no farmhouse at all"). Read from the real `place.json`, a
+/// town counts its farmhouses and its other dwellings, a city only the other dwellings.
+#[test]
+fn a_town_counts_its_farmhouses_and_a_city_none() {
+    let tree = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("../..");
+    let all = super::kinds(&tree).unwrap();
+    let of = |scale: &str| all.iter().find(|(k, _)| k == scale).unwrap().1.clone();
+    let manifest = json!({"houses": [{}, {}], "buildings": [{"kind": "samurai"}, {"kind": "shop"}, {"kind": "laborer"}]});
+    let town = dwellings_shown(&manifest, &of("town")).unwrap();
+    let city = dwellings_shown(&manifest, &of("city")).unwrap();
+    let hamlet = dwellings_shown(&json!({"houses": [{}, {}, {}]}), &of("hamlet")).unwrap();
+    assert_eq!(town, 4);
+    assert_eq!(city, 2);
+    assert_eq!(hamlet, 3);
+}

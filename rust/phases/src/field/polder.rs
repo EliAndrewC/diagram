@@ -299,7 +299,7 @@ impl Warp {
 ///     the chessboard - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: a dike-pond's grid of ponds, the chessboard, attested beside the mosaic, its dikes the black lines and its ponds the squares - drawn straight, its modules never paired, the `pond_layout` knob's other form
 ///     the least polder - research/questions/0017-how-much-farmland-a-settlement-works-and-in-what-tracts.drawing.html: a field enclosed on the map is never drawn under about 8 acres - the block's modules hold at least that
 ///     two sluices - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: water crosses the dike only at gated sluices, an inlet at the head and an outfall at the tail - the inlet at the head corner beside the wild pond, the outfall at the tail corner the drain widens to (research/questions/0060-field-drains-akusuiro.drawing.html: a drain reaches its full width at the outfall)
-///     the feeder - GUESS: research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html silent on the feeder's course; straight from the wild pond to the inlet
+///     the feeder - GUESS: research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: no channel runs outside the dike (the ring canal's rule), and the wild pond feeds the polder at its head; the feeder is read as the wild water's own reach to the inlet sluice, not a channel outside the dike, and the page is silent on its course - straight from the wild pond to the inlet
 ///     the wild pond's place - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: the wild pond feeds the polder at its head, where its inlet is - up the fall from the inlet's corner, `POND_FT.2` out, in line with the inlet's flank (the page's "northwest" is its one pool polder's compass, the head read from the fall here, as every map's)
 ///     the pond's reeds - GUESS: research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html silent on reeds at the wild pond; a fringe round it (`FRINGE_FT`)
 ///     the grid's bearing - GUESS: research/questions/0022-parcels-and-bunds-inside-a-polder-aze.drawing.html silent on which way the grid lies to the fall; the walking-bund rows across the fall, the ditch-corridor columns along it, the water running down the columns
@@ -391,6 +391,8 @@ pub fn polder(
         inlet,
     ];
     let mut ditches = ditches(&put, &canal, size, (cols, module, col_gap), (rows, row_gap));
+    let joins = joins([inlet, outfall], &ditches);
+    ditches.extend(joins);
     if dikepond {
         ditches.extend(row_ditches(
             &put,
@@ -592,6 +594,36 @@ fn ditches(
         });
     }
     out
+}
+
+/// The two reaches that join each sluice to the ring canal's corner it opens on: the inlet's point to the head canal's start,
+/// the drain trunk's end to the outfall's point - each at its trunk's own width at that corner, so the water drawn through the
+/// sluice runs on into the ring without a break.
+///
+/// Research:
+///     the join drawn - GUESS: research/questions/0179-water-gates-and-sluices-shuimen.drawing.html: the board a few steps down the blocked channel from the junction - the junction the ring canal's corner, `RING_FT` in from the sluice's point (8.5 ft, measured on Kuwabata and five more rolls 2026-11-22, feature 449 T263), so the channel the board blocks runs on from it to that corner; the page is silent on the reach's course and width, and before 449 T263 nothing was drawn across it - a straight reach, as wide as the trunk it opens into
+///     the outfall's join - research/questions/0060-field-drains-akusuiro.drawing.html: the drain's own run onward bends out of the collector's exit, so the junction reads as a turn - the drain trunk carried on to the outfall's sluice at its full 5.5 ft, the width it reaches at the outfall
+fn joins(sluices: [Pt; 2], trunks: &[Ditch]) -> [Ditch; 2] {
+    // `ditches` lays the ring's four trunks first: the head canal from the inlet's corner, then the flanks, then the drain to the outfall's
+    let (head, drain) = (&trunks[0], &trunks[3]);
+    let (start, w0) = (head.pts[0], head.w);
+    let (end, w1) = (drain.pts[drain.pts.len() - 1], drain.w_tail);
+    [
+        Ditch {
+            role: "main",
+            seg: "inlet_join",
+            pts: vec![sluices[0], start],
+            w: w0,
+            w_tail: w0,
+        },
+        Ditch {
+            role: "drain",
+            seg: "outfall_join",
+            pts: vec![end, sluices[1]],
+            w: w1,
+            w_tail: w1,
+        },
+    ]
 }
 
 /// The dike-pond's ditches across the rows: in each column, a ditch down the middle of every row gap no parcel spans - where the

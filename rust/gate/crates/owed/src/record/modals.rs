@@ -15,11 +15,11 @@ use super::delta::Delta;
 use super::repo::{cat_blobs, git, git_show, read_text, read_universal, Fail};
 use super::units::{digest, re, Keyed};
 
-/// The Python packages the registry mirrors (`l7r_gate_registry::kinds`), named where a modal is not found; since feature 449 T149 no
-/// reader lexes them.
+/// Where the registry's kinds' modals are (`l7r_gate_registry::kinds`), named where a modal is not found; the Python packages named
+/// here before were deleted by feature 449 T158.
 pub const MODAL_DIRS: [&str; 2] = [
-    "l7r/diagram/interactive/classes",
-    "l7r/diagram/interactive/compound_kinds",
+    "l7r/diagram/interactive/assets/modals/hamlet",
+    "l7r/diagram/interactive/assets/modals/sheet",
 ];
 pub const MODALS: &str = "l7r/diagram/interactive/assets/modals";
 pub const FORM_CHECK: &str = "modal-form";

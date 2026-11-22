@@ -1,12 +1,12 @@
 //! The wording-only check (feature 449 T131, from `gates/wording.py`): a declared wording-only task refused when a commit since its start
-//! changed what runs, `.py` versions put to one `codeid.py --ids` (the fixture's stand-in reads a file's id from its text before a `#`).
+//! changed what runs (a `.py` file's comment among it since feature 449 T247 deleted `codeid.py`).
 
 use std::path::Path;
 
 use l7r_gate_core::ci::fixtures::{git, put};
 use serde_json::json;
 
-use super::{refusal, same_pairs, started};
+use super::{refusal, started};
 use crate::tests::{repo, root_of};
 
 const SECTION: &str = "## T01 x\n\n#### T01 Decisions\n\n**Wording only.** the words\n";
@@ -40,7 +40,7 @@ fn a_wording_only_task_is_refused_only_for_a_change_in_what_runs() {
     let dir = repo("wording");
     let root = root_of(&dir);
     let d = root.join("specs/9001-x");
-    let ask = |section: Option<&str>| refusal(&root, &root, &d, "T01", section).unwrap();
+    let ask = |section: Option<&str>| refusal(&root, &d, "T01", section).unwrap();
     assert_eq!(ask(None), "");
     assert_eq!(ask(Some("## T01 x\n")), "");
     assert!(ask(Some(SECTION)).contains("has no `make task-start`"));
@@ -70,12 +70,11 @@ fn started_before(tag: &str) -> (l7r_shared::tempdir::TempDir, std::path::PathBu
 }
 
 #[test]
-fn a_comment_the_feature_s_records_and_a_glossary_entry_change_nothing_that_runs() {
+fn the_feature_s_records_and_a_glossary_entry_change_nothing_that_runs() {
     let (_dir, root) = started_before("wording-calm");
     let d = root.join("specs/9001-x");
-    let ask = |section: Option<&str>| refusal(&root, &root, &d, "T01", section).unwrap();
-    // a comment, the feature's records and a glossary entry change nothing that runs
-    commit_at(&root, "scripts/a.py", "x = 1 # a comment\n");
+    let ask = |section: Option<&str>| refusal(&root, &d, "T01", section).unwrap();
+    // the feature's records and a glossary entry change nothing that runs
     commit_at(&root, "specs/9001-x/notes.md", "n\n");
     commit_at(
         &root,
@@ -85,11 +84,22 @@ fn a_comment_the_feature_s_records_and_a_glossary_entry_change_nothing_that_runs
     assert_eq!(ask(Some(SECTION)), "");
 }
 
+/// A `.py` file's comment is a change in what runs since feature 449 T247: the semantic id that left it out was `codeid.py`'s, deleted
+/// with the last `.py` file (`ask:449-T158-codeid`).
+#[test]
+fn a_python_comment_changes_what_runs() {
+    let (_dir, root) = started_before("wording-comment");
+    let d = root.join("specs/9001-x");
+    commit_at(&root, "scripts/a.py", "x = 1 # a comment\n");
+    let said = refusal(&root, &d, "T01", Some(SECTION)).unwrap();
+    assert!(said.contains("but scripts/a.py changed in what runs"));
+}
+
 #[test]
 fn code_a_new_file_and_anything_else_change_what_runs_until_a_later_start() {
     let (_dir, root) = started_before("wording-moved");
     let d = root.join("specs/9001-x");
-    let ask = |section: Option<&str>| refusal(&root, &root, &d, "T01", section).unwrap();
+    let ask = |section: Option<&str>| refusal(&root, &d, "T01", section).unwrap();
     // code does, and a new file, and anything else
     commit_at(&root, "docs/x.md", "d\n");
     commit_at(&root, "scripts/a.py", "x = 2\n");
@@ -109,16 +119,9 @@ fn what_python_raised_raises() {
     let root = root_of(&dir);
     let d = root.join("specs/9001-x");
     std::fs::write(root.join(".git/task-starts.jsonl"), "[1]\n").unwrap();
-    assert!(refusal(&root, &root, &d, "T01", Some(SECTION)).is_err());
+    assert!(refusal(&root, &d, "T01", Some(SECTION)).is_err());
     std::fs::write(root.join(".git/task-starts.jsonl"), [0xff]).unwrap();
-    assert!(refusal(&root, &root, &d, "T01", Some(SECTION)).is_err());
+    assert!(refusal(&root, &d, "T01", Some(SECTION)).is_err());
     // outside a repository there is no start log
     assert_eq!(started(&dir, "9001-x", "T01").unwrap(), json!(""));
-    // `codeid.py` missing or failing raises
-    start(&root, &json!("2029-12-31T00:00:00Z"));
-    commit_at(&root, "scripts/a.py", "x = 3\n");
-    assert!(refusal(&root, &dir, &d, "T01", Some(SECTION))
-        .unwrap_err()
-        .contains("could not say"));
-    assert_eq!(same_pairs(&dir, &[]).unwrap(), Vec::<bool>::new());
 }

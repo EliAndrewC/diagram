@@ -141,8 +141,14 @@ fn what_a_reservation_refuses() {
     .unwrap();
     assert!(refusal(reserve(&ask("registry", "there", &root, &none)))
         .contains(".clones/other - one home per registry key"));
-    std::fs::write(mirror.join(".specify/prefixes.jsonl"), "x\n{\"kind\": \"glossary\", \"key\": \"g\", \"prefix\": 500, \"clone\": \"/elsewhere\", \"utc\": \"t\"}\n").unwrap();
-    assert_eq!(refusal(reserve(&ask("glossary", "g", &root, &none))), "'g' is already being defined in /elsewhere (reserved 500, t) - one home per glossary key; pull that work in and edit it there");
+    let other = mirror.join(".clones/other").display().to_string();
+    std::fs::write(mirror.join(".specify/prefixes.jsonl"), format!("x\n{{\"kind\": \"glossary\", \"key\": \"g\", \"prefix\": 500, \"clone\": \"{other}\", \"utc\": \"t\"}}\n")).unwrap();
+    assert_eq!(refusal(reserve(&ask("glossary", "g", &root, &none))), format!("'g' is already being defined in {other} (reserved 500, t) - one home per glossary key; pull that work in and edit it there"));
+    // 449 T197: a row whose clone directory is gone holds nothing (a clone removed after its work landed or was dropped).
+    std::fs::write(mirror.join(".specify/prefixes.jsonl"), "{\"kind\": \"glossary\", \"key\": \"g2\", \"prefix\": 500, \"clone\": \"/no-such-clone-t197\", \"utc\": \"t\"}\n").unwrap();
+    assert!(
+        !matches!(reserve(&ask("glossary", "g2", &root, &none)), Err(Refused::Refusal(r)) if r.contains("already being defined"))
+    );
     std::fs::write(mirror.join(".specify/prefixes.jsonl"), "[1]\n").unwrap();
     assert!(matches!(
         reserve(&ask("glossary", "g", &root, &none)),
@@ -425,11 +431,11 @@ fn the_ledgers_odd_rows_and_a_tree_that_cannot_be_written() {
     let rows = [
         json!({"kind": "glossary"}),
         json!({"kind": "glossary", "prefix": 2.9}),
-        json!({"kind": "glossary", "key": "w", "clone": "/x"}),
+        json!({"kind": "glossary", "key": "w", "clone": "/"}),
     ];
     let text: String = rows.iter().map(|r| r.to_string() + "\n").collect();
     std::fs::write(mirror.join(".specify/prefixes.jsonl"), text).unwrap();
-    assert_eq!(refusal(reserve(&ask("glossary", "w", &root, &none))), "'w' is already being defined in /x (reserved None, None) - one home per glossary key; pull that work in and edit it there");
+    assert_eq!(refusal(reserve(&ask("glossary", "w", &root, &none))), "'w' is already being defined in / (reserved None, None) - one home per glossary key; pull that work in and edit it there");
     assert!(reserve(&ask("glossary", "fresh", &root, &none))
         .unwrap()
         .ends_with("0010-fresh.json"));

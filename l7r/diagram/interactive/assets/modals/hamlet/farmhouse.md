@@ -4,13 +4,13 @@ Where a household kept an ox or horse, across much of Japan it lived under the s
 floor; in parts of the north and east the stable was a wing of an L-shaped house.
 
 It was usually a long rectangle of timber posts under a thatched roof, hipped, gabled or a mix of the two. In the
-east the posts mostly showed in the walls; in the west they were mostly plastered in, over laths of bamboo; some
+east the posts mostly showed in the walls; in the west they were mostly plastered in; an earth wall was laid on a lattice of bamboo or wood; some
 poorer houses in the south were walled with slabs of bark. Under the same roof, beside the earth floor, rose the
-wood-floored living rooms, with a sunken hearth. The household came and went through a big sliding door about 6 ft
+raised-floored living rooms, with a sunken hearth. The household came and went through a big sliding door about 6 ft
 wide, or the low wicket set into it; the door was barred at night, at least at larger houses.
 
 A household averaged about five - often a couple, their married heir and the heir's children - and in one region
-shrank from about eight in the 1600s to about four by the 1800s. In much of the country the old couple, once they had handed the farm to their heir, moved out to a retirement house of their own on the house plot; in the northeast and along the Sea of Japan the generations stayed together under the farmhouse's roof. The commonest house had about 700 sq ft of floor,
+shrank from about eight in the 1600s to about four by the 1800s. Moving out was the main form of retirement, one form of it being the old couple going to a retirement house of their own, a separate building with its own entrance, most often on the house plot. The custom was strong from the Pacific coast to the Inland Sea, above all in Kyushu and Shikoku; in the northeast and along the Sea of Japan the generations more often stayed together under the farmhouse's roof. The commonest house had about 700 sq ft of floor,
 and many under 360; the better-off houses that survive cover 1,100 to 1,600 sq ft.
 
 Name: farmhouse

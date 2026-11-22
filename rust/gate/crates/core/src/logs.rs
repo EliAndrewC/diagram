@@ -269,40 +269,5 @@ pub fn json_field(args: &[String]) -> Reply {
     )
 }
 
-/// A `pyproject.toml`'s `[tool.ruff...]` sections as a `ruff.toml`, the `tool.ruff.` prefix dropped: `--config` reads that form.
-pub fn ruff_toml(pyproject: &str) -> String {
-    let mut out = String::new();
-    let mut keep = false;
-    for line in pyproject.lines() {
-        let trimmed = line.trim();
-        let section = trimmed
-            .starts_with('[')
-            .then(|| trimmed.trim_start_matches('[').trim_end_matches(']'));
-        if let Some(name) = section {
-            let exact = trimmed.ends_with(']')
-                && !trimmed.starts_with("[[")
-                && (name == "tool.ruff" || name.starts_with("tool.ruff."));
-            keep = exact;
-            if exact {
-                out += &name
-                    .strip_prefix("tool.ruff.")
-                    .map_or_else(String::new, |rest| format!("[{rest}]"));
-                out.push('\n');
-            }
-        } else if keep {
-            out += line;
-            out.push('\n');
-        }
-    }
-    out
-}
-
-/// `ruff-toml`: stdin to stdout.
-pub fn ruff_cli(input: &mut dyn std::io::Read) -> Reply {
-    let mut text = String::new();
-    let _ = input.read_to_string(&mut text);
-    reply(ruff_toml(&text), String::new(), 0)
-}
-
 #[cfg(test)]
 mod tests;

@@ -5,7 +5,7 @@ use std::path::Path;
 use l7r_gate_core::ci::fixtures::{git, put};
 
 use super::super::tests::{fx, tool, NOTE, TASKS};
-use super::{boxes_in, kept_lines, phase_of, stage_seam, task_block};
+use super::{boxes_in, kept_lines, phase_of, task_block};
 
 fn tasks(t: &[&str]) -> Vec<String> {
     t.iter().map(|s| (*s).to_owned()).collect()
@@ -337,11 +337,6 @@ fn a_rust_stage_lands_with_no_open_claim_in_its_own_code() {
         Ok(String::new())
     );
     fx.in_delta("rust/phases/src/seat.rs", "fn seat() {}\n");
-    put(
-        &fx.root,
-        "l7r/diagram/seam.py",
-        "def stage_seat(x):\n    pass\n",
-    );
     assert_eq!(
         fx.land.open_claims_refusal(&d, PHASE_TASKS, "T1"),
         Ok(String::new())
@@ -353,12 +348,11 @@ fn a_rust_stage_lands_with_no_open_claim_in_its_own_code() {
     let why = fx.land.open_claims_refusal(&d, PHASE_TASKS, "T1").unwrap();
     assert!(why.starts_with("T1 is a Rust stage's landing with 6 open claim finding(s)"));
     assert!(why.ends_with(" and 1 more"));
-    assert!(fx
-        .answers
-        .asked
-        .borrow()
+    let asked = fx.answers.asked.borrow();
+    let split_no_seam = asked
         .iter()
-        .any(|a| a.starts_with("split") && a.ends_with(" 1")));
+        .any(|a| a.starts_with("split") && a.ends_with(" 0"));
+    assert!(split_no_seam, "{asked:?}");
 }
 
 #[test]
@@ -373,18 +367,6 @@ fn the_text_helpers_read_as_the_python_did() {
     assert!(task_block(PHASE_TASKS, "T1").contains("phase: seat"));
     assert!(!task_block(PHASE_TASKS, "T1").contains("T2"));
     assert_eq!(boxes_in(TEMPLATE).len(), 2);
-    let fx = fx("cheap-seam");
-    put(&fx.root, "l7r/b/x.py", "def stage_seat(a):\n");
-    put(&fx.root, "l7r/a.py", "def stage_seat(a):\n");
-    put(&fx.root, "l7r/c.txt", "def stage_seat(a):\n");
-    put(&fx.root, "l7r/d.py", "def stage_other(a):\n");
-    let seam = stage_seam(&fx.root, "seat").unwrap();
-    assert_eq!(
-        seam,
-        vec![fx.root.join("l7r/a.py"), fx.root.join("l7r/b/x.py")]
-    );
-    std::fs::write(fx.root.join("l7r/e.py"), [0xff]).unwrap();
-    assert!(stage_seam(&fx.root, "seat").is_err());
 }
 
 #[test]

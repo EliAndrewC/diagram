@@ -1,0 +1,35 @@
+LEEWAY - 1.70x at 10 households and 1.72x at 20 (1.75x on the worst roll): all of the excess is in `test@face`. That is the per-flank face scan in `face()` plus the cut at the channel beds in `pieces()`/`difference()`, which the reeds-stop-at-the-bank rule owes. Every tally grows with the dike ring's point count, so growth stays within the budget's 0.48.
+
+**Bundle gaps.** The bundle has no derivation, and `chains.txt` has no section for waterward.polder ("the report has no section"). So I read the chain from the code and cannot say which factor the derivation under-priced. `budget.json` and `counts.json` hold only sizes 10 and 20, not 40 and 80, so I judged at the budget's own sizes. `budget.json` has no `first`, so the LEEWAY limit is twice the pinned figure: 4,620 at 10 and 6,412 at 20.
+
+**1. Against the budget.** Mean counts are 3,929 against 2,310 (1.70x) at 10 and 5,501 against 3,206 (1.72x) at 20. The worst roll is 5,620/3,206 (1.75x, seeds 25 and 39). The chain is `roll_polder` -> `stage_waterward` -> `fringe` -> `face` / `pieces` -> `difference` -> `crossings` / `clip`, and `fringe(` has no other caller. `test@face` alone, 3,569 and 5,051-5,085, is more than the whole budget. The rest, `read@dike`, `test@fringe`, `write@strip` and `test@flanks`, is about 370 at 10 and about 535 at 20. The excess divides into two parts:
+- **Face scan.** `face()` files the entire dike ring to its sides once per flank asked, at 2n each (n = 120 to 178 points).
+- **Bed cut.** `pieces()` clips each bed and runs `difference()` (Weiler-Atherton cutting, with `crossings` at 4 per edge). This is work the reeds-stop-at-the-bank rule owes (0074/0019).
+
+Note (no round owed, S10): the per-flank re-filing is a repeated scan. Filing each corner once for all flanks would save about n per extra flank, well under half the total. Keeping the sort is defensible, because on an oblique block a flank's own corners are not guaranteed to come in order along its axis.
+
+**2. Counter coverage (S5).** Every loop over a growing set has a counter where it runs:
+- the bounding-box pass (`test@fringe`);
+- filing and sorting in `face` (`2n`, plus one per comparison);
+- in `pieces`: turning the face, the strip's points and the boxes, one per point;
+- `clip`, `signed_area`/`inside` (n each), `crossings` (4n), the ring walk (`run+1`), and the sorts of crossings and spans.
+
+What is left uncounted is constant-bounded: the four corners of each bed, at most four bed sides walked round, and the `past` folds. The channels stay at 6 points at both sizes (`read@dike` minus `test@fringe`).
+
+Weight note: `crossings()` tallies 4 per edge but also runs `within(sides, a)` and `within(sides, b)` on every edge. Those are two more point-in-bed tests that go unweighted. Their loop has its counter, so this is not UNCOUNTED.
+
+**3. Repairs (S4).** There are no `placed@`, `dropped@` or `moved@` counters. Two places come close, and neither is a repair:
+- The final `ext` filter in `pieces()` throws away pieces lying wholly past the dike's extent. It does this before anything is written to `strips` or `write@strip`, so it is part of building the cut, not a strip laid and then dropped.
+- `from`/`to` are trimmed before the strip is built.
+- The strips are laid after the seat names the landward flank, which is the contract's order, not a re-seat.
+
+**4. Growth (S6).** The fitted exponent from 10 to 20 is ln(5501/3929)/ln 2 = 0.49, against the budget's 0.48. No exponent from 20 to 80 can be computed from this bundle. No loop over a growing set runs inside another: there is a constant number of beds (2 + 2 reaches), the sorts are n log n over a quarter of the ring, and the ring's points grow roughly as the dike's perimeter. That is sublinear in households.
+
+Files:
+- /tmp/l7r-check/work-budget-audit-waterward.polder/code/rust__phases__src__waterward.rs (`face` lines 77-142, `crossings` 237-281, `difference` 291-372, `pieces` 389-498, `fringe` 518-588)
+- /tmp/l7r-check/work-budget-audit-waterward.polder/code/rust__phases__src__driver__polder.rs (`stage_waterward` 348-361, `roll_polder` 421)
+- /tmp/l7r-check/work-budget-audit-waterward.polder/counts.json
+- /tmp/l7r-check/work-budget-audit-waterward.polder/budget.json
+- /tmp/l7r-check/work-budget-audit-waterward.polder/chains.txt
+
+(2026-11-22, MODE AUDIT of waterward.polder, feature 449 T235: on the budget lowered to 2,310 / 3,206 (verdict-6), the bundle built in a detached worktree at HEAD bdb111b827 with that budget re-pinned there, against the newest run 20261120T094844Z-rust-1167cb8e2.json, whose counts HEAD reproduces (3,929 / 5,501, hamlet --budget polder with the counters, measured 2026-11-22). The clone's uncommitted T240 bank bands are not in it.)

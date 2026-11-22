@@ -88,10 +88,10 @@ fn verdict_of(conditions: &[Condition]) -> String {
 }
 
 /// The whole picture: the text, and the verdict (`PUSH`, or `REFUSE(<the first failing condition>)`).
-fn picture(root: &Path, python: &str, specify: Option<&str>) -> Result<(String, String), String> {
-    let delta_now = delta::compute_delta(root, "origin/main", python)?;
+fn picture(root: &Path, specify: Option<&str>) -> Result<(String, String), String> {
+    let delta_now = delta::compute_delta(root, "origin/main")?;
     let st = state::read(root)?;
-    let now = state::current_hash(root, python)?;
+    let now = state::current_hash(root)?;
     let active = features::active_feature(root, specify);
     let feature = features::feature_status(root, active.as_deref());
     let mut text = format!(
@@ -110,7 +110,7 @@ fn picture(root: &Path, python: &str, specify: Option<&str>) -> Result<(String, 
             return Ok((text, "REFUSE(merge-conflict)".to_owned()));
         }
     };
-    let key = delta::engine_key(root, &tree, python)?;
+    let key = delta::engine_key(root, &tree)?;
     let conditions = [
         feature_complete(&feature),
         green_since_edit(st.as_ref(), &now),
@@ -146,23 +146,23 @@ fn reply(stdout: String, stderr: String, code: i32) -> crate::Reply {
 }
 
 /// `l7r-gate ci status [--route] | gated-check`.
-fn cli(args: &[String], root: &Path, python: &str, specify: Option<&str>) -> crate::Reply {
+fn cli(args: &[String], root: &Path, specify: Option<&str>) -> crate::Reply {
     let words: Vec<&str> = args.iter().map(String::as_str).collect();
     let answer = match words.as_slice() {
         ["status", "--route"] => {
             fetch(root);
-            delta::compute_delta(root, "origin/main", python)
+            delta::compute_delta(root, "origin/main")
                 .map(|d| reply(format!("{}\n", d.route()), String::new(), 0))
         }
         ["status"] => {
             fetch(root);
-            picture(root, python, specify).map(|(text, verdict)| {
+            picture(root, specify).map(|(text, verdict)| {
                 reply(format!("{text}verdict: {verdict}\n"), String::new(), 0)
             })
         }
         ["gated-check"] => {
             fetch(root);
-            picture(root, python, specify).map(|(text, verdict)| {
+            picture(root, specify).map(|(text, verdict)| {
                 reply(
                     format!("{text}verdict: {verdict}\n"),
                     String::new(),
@@ -186,21 +186,20 @@ fn guarded(
     args: &[String],
     root: &Path,
     procs: &dyn via_make::Procs,
-    python: &str,
     specify: Option<&str>,
 ) -> crate::Reply {
-    let tree = crate::codeid::script(root);
-    let repo = tree.ancestors().nth(3).unwrap_or(root);
+    let tree = crate::codeid::gate_tree(root);
+    let repo = tree.as_path();
     if let Some(text) = via_make::refusal(procs, repo, "l7r.diagram.ci", "ci-status") {
         return reply(String::new(), text, 2);
     }
-    cli(args, root, python, specify)
+    cli(args, root, specify)
 }
 
 #[must_use]
 pub fn entry(args: &[String], root: &Path) -> crate::Reply {
     let specify = std::env::var("SPECIFY_FEATURE").ok();
-    guarded(args, root, &via_make::Live, "python3", specify.as_deref())
+    guarded(args, root, &via_make::Live, specify.as_deref())
 }
 
 #[cfg(test)]

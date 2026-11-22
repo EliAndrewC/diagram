@@ -846,3 +846,112 @@ fn a_parked_stage_s_task_is_never_the_next_and_only_those_left_name_the_ruling()
     let text = said(&c, &tr).unwrap();
     assert!(text.contains("a builder slot is free"), "{text}");
 }
+
+/// 449 T268: a foreground Agent call's result, as Claude Code writes it (read 2026-11-22 from T197 G2's check session's transcript,
+/// `e4a31b0e-...jsonl`, grep -o): its `toolUseResult` opening `"status":"completed"`, the agent's `agentId` after its prompt.
+fn foreground(id: &str) -> String {
+    format!(
+        r#"{{"type":"user","message":{{"role":"user","content":[{{"tool_use_id":"toolu_1","type":"tool_result","content":[{{"type":"text","text":"done"}},{{"type":"text","text":"agentId: {id} (use SendMessage with to: '{id}' to continue this agent)"}}]}}]}},"toolUseResult":{{"status":"completed","prompt":"Check question 0221 from the bundle at /tmp/l7r-check/q/MANIFEST.md.","agentId":"{id}","content":[{{"type":"text","text":"done"}}],"totalDurationMs":1}}}}"#
+    )
+}
+
+/// 449 T268: A FOREGROUND RESULT IS AN END. The page session's foreground checks were read as launches no notice ever ended, so the turn
+/// was refused "a builder slot is free" while nothing ran; a background launch still runs until its notice.
+#[test]
+fn a_foreground_agent_s_result_is_its_end_and_a_background_launch_still_runs() {
+    let (_dir, c, tr) = world("foreground", "no");
+    append(&tr, &foreground("af1"));
+    append(&tr, &foreground("af2"));
+    let ended = said(&c, &tr);
+    assert!(ended.is_some(), "{ended:?}");
+    append(
+        &tr,
+        r#"{"type":"user","toolUseResult":{"isAsync":true,"status":"async_launched","agentId":"ab3","description":"a check","prompt":"p"}}"#,
+    );
+    assert_eq!(said(&c, &tr), None);
+    append(&tr, &notice("ab3", FINISHED));
+    let again = said(&c, &tr);
+    assert!(again.is_some(), "{again:?}");
+}
+
+/// 449 T268 (the session's note, 2026-11-22): A BUNDLE'S BUILDER COUNTS, ONCE. Its description names its tasks before its colon, or none
+/// (`<n> record bundle: ...`) and its prompt's first line names them; either is one builder, its tasks' edits busy. An agent whose brief
+/// names no task anywhere is no builder.
+#[test]
+fn a_bundle_s_builder_counts_once_for_all_its_tasks() {
+    let (_dir, c, tr) = world("roll-bundle", "no");
+    let events = c.join("events");
+    std::fs::create_dir_all(&events).unwrap();
+    crate::env::set("L7R_EVENTS_DIR", &events);
+    crate::env::unset("L7R_BUILDERS");
+    let edit = format!(
+        r#"{{"t":"2026-10-18T23:10:00Z","ev":"PostToolUse","tool":"Edit","cat":"edit","by":"b2","path":"{}/rust/x/alpha.rs","task":"T05"}}"#,
+        c.display()
+    );
+    std::fs::write(events.join("385-x.jsonl"), edit).unwrap();
+    std::fs::write(
+        c.join("specs/385-x/tasks.md"),
+        "- [ ] T02 two\n- [ ] T03 three\n- [ ] T04 four\n- [ ] T05 five\n- [ ] T06 a faster `rust/x/alpha.rs`\n- [ ] T07 seven\n",
+    )
+    .unwrap();
+    let starts = std::fs::read_to_string(c.join(".git/task-starts.jsonl")).unwrap();
+    let more = "{\"feature\": \"385-x\", \"task\": \"T04\", \"utc\": \"2026-10-18T23:00:00Z\"}\n{\"feature\": \"385-x\", \"task\": \"T05\", \"utc\": \"2026-10-18T23:00:00Z\"}\n";
+    std::fs::write(c.join(".git/task-starts.jsonl"), format!("{starts}{more}")).unwrap();
+    agent(&tr, "b1", 1, "385 bundle T02, T03: two tooling follow-ups");
+    agent(&tr, "b2", 1, "385 record bundle: two pop-up follow-ups");
+    own(
+        &tr,
+        "b2",
+        r#"{"type":"user","message":{"role":"user","content":[{"type":"text","text":"Feature 385, a bundle of two follow-ups, in the clone /x: T04 and T05. Work only from that clone.\nT09 is another builder's."}]}}"#,
+    );
+    agent(&tr, "b3", 1, "385 notes: nothing to build");
+    own(
+        &tr,
+        "b3",
+        r#"{"type":"user","message":{"role":"user","content":"Read the notes and report.\nT07 is named on a later line."}}"#,
+    );
+    agent(&tr, "b4", 1, "385 record bundle: no transcript of its own");
+    let text = said(&c, &tr).unwrap();
+    let counted = text.contains("2 of 3 builders running (385 T02+T03, 385 T04+T05)");
+    assert!(counted, "{text}");
+    let next = text.contains("make task-start F=385 T=T07,");
+    assert!(next, "{text}");
+    agent(&tr, "a3", 1, "385 T07: seven");
+    assert_eq!(said(&c, &tr), None);
+    crate::env::unset("L7R_EVENTS_DIR");
+}
+
+/// 449 T268 (the session's note, 2026-11-22): A TASK THE GM IS ASKED ABOUT WAITS. An open question of the GM-review queue naming the task
+/// in its text holds it from being named next, until his answer moves the row on; a cut question, or one whose source alone names a
+/// task, holds nothing.
+#[test]
+fn a_task_an_open_gm_question_names_is_never_the_next() {
+    let (_dir, c, tr) = world("gm-wait", "no");
+    std::fs::write(
+        c.join("specs/385-x/tasks.md"),
+        "- [ ] T04 on the GM's answer\n- [ ] T05 five\n- [ ] T06 six\n",
+    )
+    .unwrap();
+    let queue = |status: &str| {
+        [
+            json!({"kind": "question", "status": status, "question": "One command or two? A MINOR amendment either way (T04).", "source": "385 T05, escalation-check KEEP"}),
+            json!({"kind": "question", "status": "cut", "question": "Was T05 right?", "source": "x"}),
+            json!({"kind": "decision", "status": "kept", "question": "T05 again", "source": "x"}),
+        ]
+        .iter()
+        .map(ToString::to_string)
+        .collect::<Vec<_>>()
+        .join("\n")
+    };
+    std::fs::write(c.join("specs/385-x/gm-review.jsonl"), queue("kept")).unwrap();
+    let text = said(&c, &tr).unwrap();
+    let fifth = text.contains("start the next (T05 five)");
+    assert!(fifth, "{text}");
+    std::fs::write(c.join("specs/385-x/gm-review.jsonl"), queue("owed")).unwrap();
+    let still = said(&c, &tr).unwrap().contains("start the next (T05 five)");
+    assert!(still);
+    std::fs::write(c.join("specs/385-x/gm-review.jsonl"), queue("answered")).unwrap();
+    let text = said(&c, &tr).unwrap();
+    let fourth = text.contains("start the next (T04 on the GM's answer)");
+    assert!(fourth, "{text}");
+}

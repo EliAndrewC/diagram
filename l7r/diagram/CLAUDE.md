@@ -16,7 +16,7 @@ task is in.
 `l7r/` is a PEP 420 *namespace portion* shared with the L7R Toolkit webapp (`l7r.app`, `l7r.names` in
 `/host-l7r-repo/gm-assistant/webapp/l7r/`), so one interpreter imports both. **Never create `l7r/__init__.py`**: it
 makes `l7r` a regular package and the webapp's portion silently stops existing (`tests/test_namespace_portion.py`).
-**The repository root is the `sys.path` root**: `pool/`, `tests/`, the `Makefile` and `pyproject.toml` sit there, and a module
+**The repository root is the `sys.path` root**: `pool/`, `tests/`, and the `Makefile` sit there, and a module
 that computes the root from its own location counts its depth - a wrong depth is silent and lands one directory short of `pool/`.
 
 **The hamlet engine is Rust** (feature 444 amendment 11): the Python hamlet engine - `hamletgen/`, `settlement/`, `waterfields/`,
@@ -31,7 +31,6 @@ last efficient stage parked in `rust/parked/`), and the stage-by-stage reference
 | [`buildings/types.json`](buildings/types.json) | the Mode A building TYPES, declared once (feature 254; read by `rust/mode_a` and the pool walk, no Python left beside it since 449 T222) | you add or change a building type or its program |
 | `rust/mode_a/src/compound/` and each generated sheet's `<map>.compound.json` | the Mode A compound generator (feature 449 T152: rebuilt in Rust from `specs/449-rust-codebase/derivations/T208-compound.md`; the Python `compound*.py` and `well_gear.py` deleted): the program read from its spec, the perimeter-first seating, the parts, the open ground, the sheet written; `l7r-mode-a compound <spec>` | you change a compound plan's draft or its program |
 | `rust/mode_a/src/dwellings.rs` (the Python `dwellings.py` deleted with the page writer it served, feature 449 T150) | what counts as a DWELLING, in one leaf module with no imports of its own | a count of houses or households disagrees between two readers |
-| `switches.py` | the iteration switch (feature 132) in `dev/switches.json`: remote on or off ([`docs/switches.md`](../../docs/switches.md)) | a remote run refused, or you throw the switch |
 | [`tools/`](tools/CLAUDE.md) | read-only diagnostics and audits | a map came out wrong and you need to ask WHY, or a number needs measuring |
 | [`tests/`](../../tests/CLAUDE.md) | the guard suites and the fixtures the Rust tests read; no Python test is left (feature 449 T211, T213) | you need to find a fixture or a guard's suite |
 

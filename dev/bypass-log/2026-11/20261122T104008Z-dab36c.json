@@ -1,0 +1,6 @@
+{
+  "utc": "20261122T104008Z",
+  "guard": "pair-hooks",
+  "what": "review prerequisites",
+  "reason": "REVIEW_PREREQ_OK: the gate cannot go green now for reasons outside T265: make static is red only in another task's uncommitted file (T197's reserve/tests.rs), and hooks-test's entry-gate suite clones HEAD, where the new armory modal is not yet committed; make quick, the mode_a and registry crates and make map on this sheet are green; the 14 ft is the hall's growth measured from the sheet's rects (113 to 127 ft)"
+}

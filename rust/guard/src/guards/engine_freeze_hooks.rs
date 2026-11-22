@@ -9,7 +9,8 @@
 //! like a dead one, and `TaskStop` then ack is the route).
 //!
 //! Plan T018's decisions: (a) the reviews, the rolls and the words in-process; (b) `l7r-gate plan engine-edit` answers "is this an
-//! engine edit, and more than a docstring", asked only once something is live; (c) `REVIEW_AGENTS` read directly.
+//! engine edit" (and more than a docstring, until feature 449 T247 deleted `codeid.py`: a docstring or comment edit waits now), asked
+//! only once something is live; (c) `REVIEW_AGENTS` read directly.
 
 use std::path::{Path, PathBuf};
 use std::time::SystemTime;

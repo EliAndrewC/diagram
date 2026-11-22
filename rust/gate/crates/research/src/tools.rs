@@ -46,15 +46,7 @@ pub fn usage(verb: &str, complaint: &str) -> Reply {
 /// keeps them), which the library's messages carry where the Python's `KeyError` had a key, and lack where it had a sentence.
 #[must_use]
 pub fn reply(run: Run) -> Reply {
-    run.unwrap_or_else(|e| {
-        // a child Python's own traceback, as its process printed it (`memo::RAISED`)
-        let text = if e.kind == memo::RAISED {
-            e.message.clone()
-        } else {
-            format!("{}: {}\n", e.kind, py_str(&e))
-        };
-        said("", text, 1)
-    })
+    run.unwrap_or_else(|e| said("", format!("{}: {}\n", e.kind, py_str(&e)), 1))
 }
 
 /// `str(e)` of the exception the Python raised: a `KeyError` prints the `repr` of its argument, which a key's message already is.

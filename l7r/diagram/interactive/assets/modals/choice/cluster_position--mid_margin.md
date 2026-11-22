@@ -13,11 +13,10 @@ Guesses:
 - That a village may sit partway along the high edge, and how often each seat comes up: which stretch of an edge was driest
   depended on the valley, and no count of village seats was found.
 
-Depiction: The map seats the cluster along the upper edge of the fields but drawn off to one side of its middle, keeping it on
-the side away from where the water comes in, and off any drawn marsh.
+Depiction: The map seats the cluster along the upper edge of the fields and off any drawn marsh.
 
 Name: Where the houses sit: partway along the fields' upper edge
 Covers: `meta.cluster_position = mid_margin`
 Sources: shizen-teibo-jawiki, fengshui-zhwiki, sonraku-jawiki
 Entry: research/questions/0031-clustered-and-scattered-villages-shuson-sanson.html, research/questions/0029-farmhouses-minka.html
-Drawing: research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html, research/questions/0058-ground-too-wet-to-build-on.drawing.html
+Drawing: research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html, research/questions/0058-ground-too-wet-to-build-on.drawing.html, research/questions/0029-farmhouses-minka.drawing.html

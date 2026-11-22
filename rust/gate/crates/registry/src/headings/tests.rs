@@ -56,10 +56,10 @@ fn the_check_names_every_broken_entry_and_passes_a_silence() {
         &crate::testkit::modal("fallow", &silence),
     );
     let bad = broken(&root).unwrap();
-    // every kind of both registries but the one silence: 61 hamlet and 99 sheet kinds, the hamlet's by their bare key as before (feature 449 T164)
+    // every kind of both registries but the one silence: 61 hamlet and 100 sheet kinds, the hamlet's by their bare key as before (feature 449 T164)
     assert_eq!(
         (bad.len(), bad[0].as_str()),
-        (159, format!("alder: Entry names {gone}").as_str())
+        (160, format!("alder: Entry names {gone}").as_str())
     );
     let said = cli_(&args(&[&root.to_string_lossy()]), &root);
     assert_eq!(said.code, 1);
@@ -71,7 +71,7 @@ fn the_check_names_every_broken_entry_and_passes_a_silence() {
     ));
     let listed = silent_listing(&root).unwrap();
     // the hamlet's block as it was before T164, then the Mode A kinds' own (feature 449 T164)
-    assert_eq!(listed, format!("  fallow                 {silence}\n  1 of 61 entries name no section; the other 60 must RESOLVE, checked at the gate and the push.\n  0 of 99 Mode A entries name no section; the other 99 must RESOLVE, checked at the gate and the push.\n"));
+    assert_eq!(listed, format!("  fallow                 {silence}\n  1 of 61 entries name no section; the other 60 must RESOLVE, checked at the gate and the push.\n  0 of 100 Mode A entries name no section; the other 100 must RESOLVE, checked at the gate and the push.\n"));
     let good = engine("registry-good", &real_page());
     put(&good, &real_page(), "<h2>Q</h2>");
     assert_eq!(cli_(&args(&[&good.to_string_lossy()]), &good).code, 0);
@@ -141,7 +141,7 @@ fn a_sheet_kind_is_checked_and_named_apart_from_the_hamlet_kind_of_its_key() {
     );
     assert_eq!(cli_(&args(&[&root.to_string_lossy()]), &root).code, 0);
     assert!(silent_listing(&root).unwrap().starts_with(&format!(
-        "  0 of 61 entries name no section; the other 61 must RESOLVE, checked at the gate and the push.\n  sheet/well                    {silence}\n  1 of 99 Mode A entries "
+        "  0 of 61 entries name no section; the other 61 must RESOLVE, checked at the gate and the push.\n  sheet/well                    {silence}\n  1 of 100 Mode A entries "
     )));
     // a sheet kind's file missing fails the run, as a hamlet kind's does
     std::fs::remove_file(root.join(crate::about::modal_rel(

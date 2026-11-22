@@ -931,6 +931,7 @@ district shrine	gōsha
 district shrines	gōsha
 ditai	mamian
 dituan	dituan
+divided-residence retirement	divided-residence retirement
 division flume	division flume
 division flumes	division flume
 division point	bunsuiguchi
@@ -1055,6 +1056,7 @@ echigo province	Echigo
 echigoya	Echigoya
 echinochloa	Echinochloa crus-galli
 echinochloa crus-galli	Echinochloa crus-galli
+echizen	Echizen
 echizen-no-kami	no-kami
 edago	hongo
 edauchi	edauchi
@@ -1142,6 +1144,8 @@ exempt land	jochi
 exempt lands	jochi
 exempt-land	jochi
 exposure burial	exposure burial
+extended family household	extended family household
+extended family households	extended family household
 extension	extension advice
 extension advice	extension advice
 extension document	extension advice
@@ -1734,6 +1738,8 @@ headland	headland
 headlands	headland
 headman	headman
 headmen	headman
+headsman	headman
+headsmen	headman
 headworks	headworks
 heavenly kings	hall of the Heavenly Kings
 hectare	hectare
@@ -3250,8 +3256,6 @@ nrcs	NRCS
 nrcs-designed	NRCS
 nucleated	nucleated
 nucleation	nucleated
-nuclei	nucleated
-nucleus	nucleated
 nuisance trade	nuisance trade
 nuisance trades	nuisance trade
 nukimon	nukimon
@@ -4213,6 +4217,8 @@ silla	Silla
 sillok	sillok
 silver carp	silver carp
 siming	Siming
+simple family household	simple family household
+simple family households	simple family household
 simpson index	SI
 sinense	sinense
 single range	main range
@@ -4349,6 +4355,9 @@ still-room	still-room
 still-room maid	still-room
 still-room maids	still-room
 stilling pool	stilling pool
+stipple	stipple
+stippled	stipple
+stippling	stipple
 stoke mouth	stoke mouth
 stoke mouths	stoke mouth
 stone lantern	stone lantern
@@ -4971,6 +4980,8 @@ vestimentary	vestimentary
 vff	VFF
 vicinage	vicinage
 village district	village district
+village districts	village district
+village headsman	headman
 vinaya	Vinaya
 visiting grave	visiting grave
 visiting graves	visiting grave

@@ -4,14 +4,13 @@
 //! WHY (the GM 2026-10-19, amendment 10: "I would also like to implement all 3 of your suggestions" - the third, "skip the plan review for
 //! wording-only tasks that decide nothing new"). A task's Decisions block holding `**Wording only.** <what is reworded>` and no
 //! `**D<n> - ` line declares it (the plan gate's `wording_only`); `make tick` refuses it when a commit since its `make task-start` changed
-//! anything but the feature's records, a glossary entry, or a `.py` file outside what runs.
+//! anything but the feature's records or a glossary entry.
 //!
-//! "Changed in what runs" for a `.py` file is `codeid.py`'s `semantic_bytes`, which only `CPython`'s `ast` can say (feature 449 T062), so
-//! every pair of versions the check needs is put to ONE `codeid.py --ids` (equal ids, equal semantic bytes), where the Python loaded
-//! `codeid.py` once and asked it per pair.
+//! A `.py` file changed only outside what runs (its comments, docstrings and claims) passed too, its `semantic_bytes` asked of `codeid.py`
+//! (feature 449 T062), until feature 449 T247 deleted that script with the last `.py` file outside `specs/` (`ask:449-T158-codeid`): every
+//! file a commit changed is a change in what runs now, but those three kinds.
 
 use std::path::{Path, PathBuf};
-use std::process::Command;
 use std::sync::LazyLock;
 
 use fancy_regex::Regex;
@@ -24,8 +23,7 @@ use crate::{common_text, git, read_strict};
 
 const WORDING: &str = "**Wording only.**";
 
-/// What a wording-only task may change beside `.py` comments, docstrings and claims: its feature's records, the run records, and a
-/// glossary entry (a word's definition, which the page check reads).
+/// What a wording-only task may change: its feature's records, the run records, and a glossary entry (a word's definition, which the page check reads).
 static FREE: LazyLock<Regex> =
     LazyLock::new(|| re(r"^(specs/|dev/|l7r/diagram/interactive/assets/glossary/[^/]+\.json$)"));
 
@@ -61,50 +59,8 @@ fn text_of(out: &[u8]) -> String {
     String::from_utf8_lossy(out).into_owned()
 }
 
-/// One `codeid.py --ids` over each pair's two versions, written under a scratch directory with a `.py` name (the suffix is what
-/// `semantic_bytes` reads); for each pair, are they the same in what runs?
-fn same_pairs(tree: &Path, pairs: &[(Vec<u8>, Vec<u8>)]) -> Raise<Vec<bool>> {
-    if pairs.is_empty() {
-        return Ok(Vec::new());
-    }
-    let dir = l7r_shared::tempdir::TempDir::new("task-wording");
-    let mut names = Vec::with_capacity(pairs.len() * 2);
-    for (i, (a, b)) in pairs.iter().enumerate() {
-        for (side, data) in [("a", a), ("b", b)] {
-            let path = dir.path().join(format!("{i}-{side}.py"));
-            crate::write_file(&path, data)?;
-            names.push(path);
-        }
-    }
-    let script = tree.join("scripts/gates/codeid.py");
-    // a python3 that cannot start reads as one that answered nothing: either way the check cannot say
-    let done = Command::new("python3")
-        .arg(&script)
-        .arg("--ids")
-        .args(&names)
-        .output()
-        .ok();
-    let (ok, out, err) = done.map_or((false, Vec::new(), Vec::new()), |d| {
-        (d.status.success(), d.stdout, d.stderr)
-    });
-    let out = String::from_utf8_lossy(&out).into_owned();
-    let ids: Vec<&str> = out.split_whitespace().collect();
-    if !ok || ids.len() != names.len() {
-        return Err(format!(
-            "{} could not say: {}",
-            script.display(),
-            String::from_utf8_lossy(&err).trim()
-        ));
-    }
-    Ok(ids.chunks(2).map(|p| p[0] == p[1]).collect())
-}
-
 /// Every file a commit since `since` (merges skipped: main's work is not the task's) changed beyond wording (D138).
-#[expect(
-    clippy::case_sensitive_file_extension_comparisons,
-    reason = "Python's `endswith(\".py\")`, which is case-sensitive"
-)]
-fn changed_in_what_runs(root: &Path, tree: &Path, since: &str) -> Raise<Vec<String>> {
+fn changed_in_what_runs(root: &Path, since: &str) -> Vec<String> {
     let (_, revs) = git(
         root,
         &[
@@ -134,47 +90,24 @@ fn changed_in_what_runs(root: &Path, tree: &Path, since: &str) -> Raise<Vec<Stri
             splitlines(&names).into_iter().map(str::to_owned).collect(),
         ));
     }
-    // the pairs to ask, every `.py` both of whose versions git shows
-    let mut pairs: Vec<(Vec<u8>, Vec<u8>)> = Vec::new();
-    let mut at: Vec<(String, String)> = Vec::new();
-    for (c, files) in &changes {
-        for f in files
-            .iter()
-            .filter(|f| f.ends_with(".py") && !FREE.is_match(f).unwrap_or(false))
-        {
-            let (b_rc, before) = git(root, &["show", &format!("{c}^:{f}")]);
-            let (a_rc, after) = git(root, &["show", &format!("{c}:{f}")]);
-            if b_rc == Some(0) && a_rc == Some(0) {
-                pairs.push((before, after));
-                at.push((c.clone(), f.clone()));
-            }
-        }
-    }
-    let same = same_pairs(tree, &pairs)?;
     let mut out: Vec<String> = Vec::new();
-    for (c, files) in &changes {
+    for (_, files) in &changes {
         for f in files {
             if f.is_empty() || out.contains(f) || FREE.is_match(f).unwrap_or(false) {
-                continue;
-            }
-            let k = at.iter().position(|(ac, af)| ac == c && af == f);
-            if k.is_some_and(|k| same[k]) {
                 continue;
             }
             out.push(f.clone());
         }
     }
-    Ok(out)
+    out
 }
 
 /// Why a wording-only task may not tick: a commit since its start changed a file beyond wording; "" otherwise (D138).
 ///
 /// # Errors
-/// What the Python raised: an unreadable start log, a row that is not an object, `codeid.py` failing.
-/// `tree` is the gate's own, whose `scripts/gates/codeid.py` says what runs, as `wording.py` loaded the one beside it.
+/// What the Python raised: an unreadable start log, a row that is not an object.
 pub(crate) fn refusal(
     root: &Path,
-    tree: &Path,
     spec_dir: &Path,
     task: &str,
     section: Option<&str>,
@@ -196,7 +129,7 @@ pub(crate) fn refusal(
         return Ok(format!("{task}'s section says wording only, but it has no `make task-start` to read its commits from - start it, then tick"));
     }
     let since = l7r_shared::pyjson::py_str(&since);
-    let off = changed_in_what_runs(root, tree, &since)?;
+    let off = changed_in_what_runs(root, &since);
     Ok(off.first().map_or(String::new(), |f| {
         format!("{task}'s section says wording only, but {f} changed in what runs - write its decision (`**D<n> - `) in place of the `{WORDING}` line and `make decide`")
     }))

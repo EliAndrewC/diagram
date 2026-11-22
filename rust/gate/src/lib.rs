@@ -1,5 +1,6 @@
 //! The gate's own tools (feature 449 phase 2): one binary the Makefile's gate recipes call, each subcommand ported from the Python piece it replaces (T062-T069).
 
+use std::fmt::Write as _;
 use std::path::{Path, PathBuf};
 
 pub use l7r_gate_arbiter::{arbiter, checks_door};
@@ -9,7 +10,7 @@ pub use l7r_gate_ci::ci;
 pub use l7r_gate_claims::claims;
 pub use l7r_gate_cohort::{close_check, cohort, make_docs, push, speckit_todo};
 pub use l7r_gate_core::{codeid, difflib, logs, Reply};
-pub use l7r_gate_land::{land, replay_owing};
+pub use l7r_gate_land::land;
 pub use l7r_gate_measure::{measure, preflight};
 pub use l7r_gate_pages as pages;
 pub use l7r_gate_plan::plan;
@@ -19,33 +20,30 @@ pub use l7r_gate_reviews::reviews;
 pub use l7r_gate_rustc::rustc;
 pub use l7r_gate_tree::{delta, exempt, lock, stamp, state, top};
 
-/// `l7r-gate content-ids <path>...`: `<path> <id>` for each file (a tree's code ids, T062).
-fn content_ids(paths: &[String], root: &Path, python: &str) -> Reply {
-    let fail = |stderr: String, code: i32| Reply {
-        stdout: String::new(),
-        stderr,
-        code,
-    };
+/// `l7r-gate content-ids <path>...`: `<path> <id>` for each file (a tree's code ids, T062; in process since T247 deleted `codeid.py`).
+fn content_ids(paths: &[String], root: &Path) -> Reply {
     let mut files: Vec<(PathBuf, Vec<u8>)> = Vec::new();
     for path in paths {
         match std::fs::read(root.join(path)) {
             Ok(data) => files.push((PathBuf::from(path), data)),
-            Err(why) => return fail(format!("l7r-gate: cannot read {path}: {why}\n"), 1),
+            Err(why) => {
+                return Reply {
+                    stdout: String::new(),
+                    stderr: format!("l7r-gate: cannot read {path}: {why}\n"),
+                    code: 1,
+                }
+            }
         }
     }
-    let script = codeid::script(root);
-    match codeid::content_ids(&files, &mut codeid::Cache::at(root), python, &script) {
-        Ok(ids) => Reply {
-            stdout: paths
-                .iter()
-                .zip(ids)
-                .map(|(p, id)| format!("{p} {id}\n"))
-                .collect::<Vec<_>>()
-                .concat(),
-            stderr: String::new(),
-            code: 0,
-        },
-        Err(why) => fail(format!("l7r-gate: {why}\n"), 1),
+    let ids = codeid::content_ids(&files, &mut codeid::Cache::at(root));
+    let mut stdout = String::new();
+    for (p, id) in paths.iter().zip(ids) {
+        let _ = writeln!(stdout, "{p} {id}");
+    }
+    Reply {
+        stdout,
+        stderr: String::new(),
+        code: 0,
     }
 }
 
@@ -105,12 +103,11 @@ pub fn cli(args: &[String]) -> Reply {
         Some("stamp") => stamp::cli(
             &args[1..],
             stamp::toplevel().as_deref(),
-            "python3",
             &mut std::io::stdin(),
         ),
-        Some("delta") => delta::cli(&args[1..], Path::new("."), "python3", &mut std::io::stdin()),
+        Some("delta") => delta::cli(&args[1..], Path::new("."), &mut std::io::stdin()),
         Some("ci") => ci::gated::entry(&args[1..], &top()),
-        Some("cohort") => cohort::cli(&args[1..], &top(), "python3"),
+        Some("cohort") => cohort::cli(&args[1..], &top()),
         Some("measure") => measure::cli(&args[1..], &top()),
         Some("switches") => ci::switches::guarded(&args[1..], &top(), &ci::via_make::Live),
         Some("github-token") => ci::config::github_token(&top()),
@@ -125,16 +122,15 @@ pub fn cli(args: &[String]) -> Reply {
         ),
         Some("lock") => lock::cli(&args[1..], Path::new("/proc")),
         Some("own-make") => lock::own_make_cli(&args[1..], Path::new("/proc")),
-        Some("state") => state::cli(&args[1..], &top(), "python3"),
-        Some("coverage-exempt") => exempt::cli(&args[1..], &top(), "python3"),
-        Some("content-ids") => content_ids(&args[1..], Path::new("."), "python3"),
+        Some("state") => state::cli(&args[1..], &top()),
+        Some("coverage-exempt") => exempt::cli(&args[1..], &top()),
+        Some("content-ids") => content_ids(&args[1..], Path::new(".")),
         Some("log") => logs::log_cli(&args[1..], Path::new(".")),
         // the reason floor's form (`escape take`, an escape taken outside a hook, left with `reserve-prefix.py`'s reservation, T145)
         Some("escape") => logs::usage::escape_cli(&args[1..], &mut std::io::stdin()),
         Some("json-field") => logs::json_field(&args[1..]),
         // spec-kit's JSON reads, `common.sh`'s inline Python (feature 449 T143)
         Some("speckit") => author::speckit::cli(&args[1..]),
-        Some("ruff-toml") => logs::ruff_cli(&mut std::io::stdin()),
         Some("preflight") => preflight::cli(&args[1..]),
         Some("record") => record::cli(&args[1..]),
         Some("registry") => registry::cli::cli(&args[1..]),
@@ -154,7 +150,6 @@ pub fn cli(args: &[String]) -> Reply {
             )
         }
         Some("land") => land::cli(&args[1..], &std::env::current_dir().unwrap_or_default()),
-        Some("replay-owing") => replay_owing::cli(&args[1..]),
         Some("tunables") => claims::tunables_cli(&args[1..]),
         Some("work-budget-bundle") => measure::work_budget_bundle::cli(&args[1..], &top()),
         Some("budget-change") => measure::budget_change::cli(&args[1..], &top()),
@@ -322,28 +317,20 @@ mod tests {
     #[test]
     fn content_ids_answers_each_file_and_names_what_it_cannot_read() {
         let dir = l7r_shared::tempdir::TempDir::new("gate-cli");
-        std::fs::create_dir_all(dir.join("scripts/gates")).unwrap();
         std::fs::write(dir.join("a.txt"), "x\n").unwrap();
         std::fs::write(dir.join("b.py"), "y = 1\n").unwrap();
-        std::fs::write(
-            dir.join("scripts/gates/codeid.py"),
-            "import sys\nfor a in sys.argv[2:]: print('id')\n",
-        )
-        .unwrap();
         let names = |n: &[&str]| n.iter().map(|s| (*s).to_owned()).collect::<Vec<_>>();
-        let done = super::content_ids(&names(&["a.txt"]), &dir, "python3");
+        let done = super::content_ids(&names(&["a.txt"]), &dir);
         assert_eq!(
             done.stdout,
             "a.txt 587be6b4c3f93f93c489c0111bba5596147a26cb\n"
         );
-        assert!(super::content_ids(&names(&["no-such"]), &dir, "python3")
-            .stderr
-            .contains("cannot read no-such"));
-        assert!(
-            super::content_ids(&names(&["b.py"]), &dir, "/no/such/python")
-                .stderr
-                .contains("cannot start")
-        );
+        let unread = super::content_ids(&names(&["no-such"]), &dir).stderr;
+        assert!(unread.contains("cannot read no-such"));
+        // a `.py` file's id is its blob id, with no Python asked (feature 449 T247)
+        let python = super::content_ids(&names(&["b.py"]), &dir).stdout;
+        let blob = super::codeid::git_blob_id(b"y = 1\n");
+        assert_eq!(python, format!("b.py {blob}\n"));
         assert_eq!(cli(&names(&["content-ids"])).code, 0);
     }
     /// What the claims tools and the modal tools read, each judged by its push gate (moved from `push/tests.rs` by feature 449 T92:

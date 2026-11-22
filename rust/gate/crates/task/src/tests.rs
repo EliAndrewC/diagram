@@ -1,5 +1,5 @@
 //! What the task gate's tests share: a repository holding a feature whose every task answers its approach block, an `origin/main`,
-//! the guard census kept off the live log, and a stand-in `codeid.py`; and the crate's own helpers.
+//! the guard census kept off the live log; and the crate's own helpers.
 
 use std::fmt::Write as _;
 use std::path::{Path, PathBuf};
@@ -37,7 +37,7 @@ pub(crate) fn plan(tasks: &[&str]) -> String {
 }
 
 /// A repository at its first commit, `origin/main` a bare clone's, with `specs/9001-x` (spec, tasks, a plan answering every task),
-/// the approach checklist, `dev/` and a stand-in `scripts/gates/codeid.py` (each file's id its bytes' length and its first line).
+/// the approach checklist and `dev/`.
 pub(crate) fn repo(tag: &str) -> TempDir {
     quiet_census();
     let dir = scratch(&format!("task-{tag}"));
@@ -81,11 +81,6 @@ pub(crate) fn repo(tag: &str) -> TempDir {
     );
     put(&root, "dev/bypass-log/.keep", "");
     put(&root, "scripts/a.py", "x = 1\n");
-    put(
-        &root,
-        "scripts/gates/codeid.py",
-        "import sys\nfor n in sys.argv[2:]:\n    d = open(n, 'rb').read()\n    print(d.split(b'#')[0].strip().hex() or 'empty')\n",
-    );
     git(&root, &["add", "-A"]);
     git(&root, &["commit", "-qm", "base"]);
     git(&root, &["push", "-q", "origin", "main"]);

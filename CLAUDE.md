@@ -150,7 +150,7 @@ full").
   first budget needs its SOUND, a change the GM's words (`make budget-change`) - but a budget is an estimate (444 FR-022, the GM
   2026-11-03: "even twice as high"): a stage lands at up to 2x it on the audit's LEEWAY, work the derivation missed raises it on a
   SOUND re-derivation (`RAISE=1`; past 2x its first, two independent SOUNDs; past 10x, his words), and growth gets no leeway; an accepted stage is held at the push.
-- Python: `ruff check` for outright errors alone; the Python unit tests, their planner, the coverage floor over Python and the Python-only static checks were deleted (feature 449 FR-001b, the GM 2026-11-10: "Yes delete everything except that group, please."), the tests readable at the tag `python-tests-before-removal`. New Rust code owes 100% line coverage from its own tests.
+- Python: none is left - ruff, `pyproject.toml` and the lockfiles went with the last of it (feature 449 T158); the Python unit tests, their planner, the coverage floor over Python and the Python-only static checks were deleted (feature 449 FR-001b, the GM 2026-11-10: "Yes delete everything except that group, please."), the tests readable at the tag `python-tests-before-removal`. New Rust code owes 100% line coverage from its own tests.
 - Edit with `Edit`; a large file through its make target; batch the lookups you already know you need.
 - An overlap check builds an index once (`settlement/_geom/indexes.py`) and asks it per candidate; a plan that adds one says
   how it is indexed.
@@ -169,8 +169,8 @@ The full spec and every failure mode: `docs/session-clones.md`.
   every piece of work; the prompt hook runs it.
 - Stop-work procedure, every time you stop: commit in the clone, then `scripts/sync-with-main.sh
   done` from inside it. The route is chosen from the delta, never by you: no engine code -> DIRECT (a
-  locked fast-forward push); engine code (`l7r/**/*.py`, `l7r/diagram/buildings/types.json`, `rust/**/*.rs`, `pool/*.json|*.svg|*.notes.md` - a map's spec, a hand sheet and its notes; a comment-only or
-  formatting edit does not count) -> GATED on a green local `make done`. **`make land F= T=<task(s)> NOTE=` lands a task and ticks it**: every
+  locked fast-forward push); engine code (`l7r/**/*.py`, `l7r/diagram/buildings/types.json`, `rust/**/*.rs`, `pool/*.json|*.svg|*.notes.md` - a map's spec, a hand sheet and its notes; any edit
+  counts, a comment's too, since 449 T247) -> GATED on a green local `make done`. **`make land F= T=<task(s)> NOTE=` lands a task and ticks it**: every
   cheap refusal first and together, then `make done` and `make cohort-landing` only where needed (side by side, 405 T48) with the claims round beside them, the
   tick and ONE push carrying both (405 T50, T51).
   Only the task being worked (`make task-start`'s mark) holds a landing, and a started task whose plan section is CLEAR and whose files are its own lands while the mark names another (451 T101); a task nobody has started holds nothing. A feature's TOOLING

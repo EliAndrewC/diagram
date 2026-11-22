@@ -319,7 +319,7 @@ fn a_passed_rust_self_test_is_kept_until_the_binary_or_the_scripts_change() {
     std::fs::write(&binary, "two").unwrap();
     assert_eq!(push(&tools(&root, false)), 0);
     assert_eq!(runs(), 2, "the binary was rebuilt");
-    std::fs::write(root.join("scripts/codeid.py"), "# moved\n").unwrap();
+    std::fs::write(root.join("scripts/moved.sh"), "# moved\n").unwrap();
     git(&root, &["add", "scripts"]);
     assert_eq!(push(&tools(&root, false)), 0);
     assert_eq!(runs(), 3, "the scripts moved");

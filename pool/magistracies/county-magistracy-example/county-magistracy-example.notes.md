@@ -49,7 +49,7 @@ knobs re-rolled from the seed by the generator and held to the forms recorded he
   (Pass 5 wrote "~2,400 sq ft" for a house of 1,980 + 480 + 120 = 2,580 sq ft, ~72 tsubo; pass 4 drew ~4,700.) The
   residence kind entry's "about 180 to 200 ft" was corrected at its source (`interactive/compound_kinds/household.py`)
   and docs/buildings.md's scale doctrine no longer calls those wings validated. The mass the house gave up went to the
-  lodgings, stores and office (as drawn since feature 374 wave 128: the office hall 113 x 38, the tax archive 18 x 24 (its size research 0100's records-store ceiling since feature 372 wave 105, its proportions a GUESS), the granary 50 x 27 (0098's band), the barracks
+  lodgings, stores and office (as drawn since feature 374 wave 128: the office hall 113 x 38 (127 x 38 since feature 449 T265's armory bay), the tax archive 18 x 24 (its size research 0100's records-store ceiling since feature 372 wave 105, its proportions a GUESS), the granary 50 x 27 (0098's band), the barracks
   23 x 70 (23 deep since wave 134), the staff long-house 24 x 82, the servants' row 60 x 15, the stables 18 x 24, two storehouses 16 x 19 and
   12 x 18 (unequal, as the Yokota pair), the gatehouse 40 x 12 and the guest house 40 x 42 (42 since wave 134, every building a foot or two clear of the wall's face)), which holds coverage in the jin'ya band without shrinking the envelope; each of those
   sizes is a GUESS in its band.
@@ -102,7 +102,7 @@ knobs re-rolled from the seed by the generator and held to the forms recorded he
   reception and the guest house both, guests being received in the garden-facing rooms (research buildings 330).
   Pass 5's 188 ft garden ran on beside the servants' row with a bare strip; pass 6 cut it to the house's 68 ft and
   left ~62 x 66 ft of bare inner court east of it. Its size is a GUESS. The band of inner court north of
-  it, east of the house to the shrine's tree (the alley's east end), stays open ground.
+  it, east of the house to the shrine's tree (the alley's east end), was open ground until feature 449 T265 seated the granary in it (170 to 220 by 3 to 30 ft), and is again since T274 moved it to the office court.
 - **Compound shrine**: a modest shrine, 18 x 14 ft (a GUESS in the 40-1,150 sq ft band) - the hall-shrine ceiling of
   ~30 ft is Ochiba's particular, not the generic post's (docs/building-programs.md: "The shrine is universal
   equipment ... Scale and dedication are the per-manor particular"). It stands in the inner court's north-east corner
@@ -115,7 +115,7 @@ knobs re-rolled from the seed by the generator and held to the forms recorded he
   research 0099 drawing) - the roofed court keeps its white-gravel fill.
 - **Middle gate**: beside the office hall's east end, not behind it (docs/building-programs.md puts it customarily on the
   main axis behind the hall, the hall as the privacy baffle). Here the hall backs the divider at 1.5 ft with no alley
-  behind it, and its center stands west of the main axis (the hall spans ~33-146 ft of the ~270 ft compound, the staff long-house west of it and the tax archive east of it since feature 374 wave 125), so the placer opens the gate at
+  behind it, and its center stands west of the main axis (the hall spans 58.5-185.5 ft of the 270 ft compound, the tax archive and then the staff long-house west of it since feature 449 T274), so the placer opens the gate at
   the first stretch of divider no building backs (`compound_parts._middle_gate`); the hall still screens the house
   from the hearing court. A deliberate DEVIATION from the customary seat, recorded.
 - **Lesser gates**: the kitchen postern in the west wall (6 ft) and the outer court's service gate in the south wall
@@ -207,7 +207,7 @@ Coverage 35%, perimeter-hugging 78%, nothing overflows; every registered check p
   of a well); the garrison's at the barracks' south end by the cell (it stood inside the practice ground - no latrine
   stands on a spine court, nor in the divider's ink).
 - **Service gate** in the south wall by the cell with a **cart yard** before it (the bare SE ground named).
-- **Office hall**: the magistrate's dais, 30 x 10 ft centered on its south face over the hearing court; a door on its
+- **Office hall**: the magistrate's dais, 30 x 10 ft on its south face over the hearing court, 7 ft east of the hall's center since the armory bay lengthened its west end (feature 449 T265); a door on its
   east face, by the middle gate.
 - **Shrine** shrunk 36 x 30 -> 18 x 14 ft, a modest shrine (Knob settings).
 - **Residence** massed in two rows (Knob settings), 8 ft off the north wall; its name seated in its rear alley, naming
@@ -319,7 +319,7 @@ and held to the forms recorded (granary form earth-walled kura; main gate form o
 dwelling; vegetable garden site west of the residence). Where the composition moved, each a knob of the program: the office hall
 centered between the outer court's columns (65.5 to 178.5 ft), the hearing court centered under it (82 to 162 ft), the middle gate in
 the divider just east of the hall (180 to 190 ft with its posts; the DEVIATION recorded above, the first stretch beside the hall whose
-approach is clear on both sides), and the tax archive on the divider east of the middle gate (190 to 208 ft); the main gate's passage at 140 ft with the gatehouse west of it, the servants' row and the stables
+approach is clear on both sides), and the tax archive on the divider east of the middle gate (190 to 208 ft; west of the hall since feature 449 T265, superseded below); the main gate's passage at 140 ft with the gatehouse west of it, the servants' row and the stables
 west of that, the cell by the south service gate; the practice ground below the hall's band, beside the barracks; the house's search
 started 102 ft along the north wall (the program's start knob), so the kitchen ell, the rear yard and the vegetable garden stand west of
 it; the shrine in the north-east corner with its tree in the ground held south of it, the guest house below. Figures above this entry
@@ -335,6 +335,21 @@ out. The storehouses are 19 x 16 and 18 x 12 ft (they were 16 x 19 and 12 x 18),
 fire-water tub (its door faces the garden, which keeps its ground; docs/building-programs.md names no tub for a guest house). The
 water depth, each well's gear and roof rolled by the docs' formula, the wells numbered kitchen, garden, stables: water depth shallow;
 well gear 1 sweep, well roof 1 roof; well gear 2 pulley frame, well roof 2 open; well gear 3 sweep, well roof 3 open.
+
+2026-11-22 (feature 449 T265, 417 T33's two manor items): **the granary behind the offices** - research/questions/0123's Pingyao built
+"north of them the county granary", behind its offices, where this sheet had stood it in the office court beside the hall, its north face
+level with the hall's (217 to 267 by 92.5 to 119.5 ft). It now stands in the inner court on the north wall, east of the house and north
+of the office hall (170 to 220 by 3 to 30 ft), its search starting 170 ft along the wall so it stands clear of the garden; its door is on
+its east face, and a side gate of its own in the north wall beside it (at 232 ft, 6 ft wide) takes its carts straight to that door, so
+they never cross the household's garden - measured 2026-11-22: the walk runs between x 220 and 232 ft above y 30 ft, the garden from y 35.7 ft; the cart walk does not itself keep off the garden, the gate's place does (the rear wall, the start and the gate GUESSES; the generator walks each building's cart route
+in its own court, from that court's gates). No room had to grow: the north wall's stretch between the house and the shrine held it. The
+tax archive, freed of the granary's column, now stands on the divider west of the hall (48 to 66 ft), and the middle gate east of the
+hall (about 201 to 209 ft with its posts). **An armory at an ordinary seat** - Kaibara's ordinary gate range held a store of arms (0093; the sheet names no firearm, the setting's notes silent on them - the session's labeling ruling, 2026-11-22) and
+Pingyao, with no standing barracks, kept its armory in the great hall's west end bay (0123); this sheet's one-bay gate leaves no gate
+range, so the armory is the office hall's west end bay, 14 x 20 ft in its back row beside the clerks' room (its size a GUESS), the hall
+14 ft longer for it (127 x 38 ft, 72 to 199 ft) and its rooms moved east by the bay; the hearing court centered under the dais again
+(102.5 to 182.5 ft), the outer court's two named grounds beside it re-cut to meet it (27.5 to 102.5 and 182.5 to 205 ft). Garrison
+emphasis: a quiet county, a token watch - the barracks moved 33 ft north on the east wall into the granary's old seat, its privy with it, leaving about 31 x 31 ft bare in the south-east corner (filed, feature 449); no watchtower. Coverage 31%, every registered check passes (pack_audit).
 
 ## Review log
 
@@ -367,3 +382,23 @@ well gear 1 sweep, well roof 1 roof; well gear 2 pulley frame, well roof 2 open;
 - **2026-09-27 building-review round 7**: pass 7's five items confirmed; the rear alley closed at its west end (the
   house's privies ~400 ft from a service edge) and the vegetable ground's way misstated. Applied in pass 8 above.
 - **2026-10-11 feature 340**: the captions are seated by the hand-sheet placer's one view (its classification of the drawn sheet, each caption's declared subjects tried in order, its width measure), so the caption seats the dated lines above describe - the gatehouse's name in its box, the fire-water tubs' caption on the roomiest tub - are superseded; no building or point feature moved. building-review PASS.
+
+2026-11-22 (feature 449 T274, building-review 2026-11-22 E1, E2, Q1): **the granary out of the household's court**. T265's seat (the
+inner court's north wall, 170 to 220 by 3 to 30 ft, with a north cart gate at 232 ft) is withdrawn: 0123's Pingyao built office buildings
+behind its war, justice and works offices "and north of them the county granary", on the office side, and the office reached T265's seat
+on foot only through the garden. The generator now refuses a granary in the household's court. The granary stands again at the head of the
+office court's east column (217 to 267 by 92.5 to 119.5 ft), its north face on the divider, beside the office hall's east end,
+ its door on its west face, about 22 ft from the middle gate (its passage 189 to 195 ft, 187 to 197 ft with its posts); its carts come by the south service gate
+and the cart yard. That seat is a GUESS, recorded on 0123's drawing page (the plan's offices are rooms of one hall, so it has no side-wing offices for Pingyao's seat north of them to be drawn against). The hall drawn 27 ft forward of
+the divider with the granary behind it was measured first (room first): the envelope 227 ft deep, coverage fell to 27-29%, and at the 30%
+floor each foot of depth owes 81 sq ft of building - about 1,050 to 1,450 sq ft no program building pays; the clerks' rowhouse that would
+(0097: a jin'ya's clerks lived in rowhouses inside it) is ruled out by the commuting clerks CANON, and a jogged divider or a new office kind
+were priced and left (docs/building-programs.md records the acceptance). **E2**: the east column flows down from the granary, so the
+barracks fills the south-east corner again (125.5 to 195.5 ft), its privy at its north end; a generator test now holds every court corner
+touched by a building or a named ground. The office hall stands centered in its free ground (58.5 to 185.5 ft), the tax archive west of it
+(34.5 to 52.5 ft), and the hearing court with the outer court's two grounds beside it re-cut 14 ft west (88.5 to 168.5 ft) to stay under the
+dais (114 to 144 ft). **Q1**: the shrine's door no longer faces a cart apron (no granary or cart gate in the inner court); a research pass
+(2026-11-22) found no source putting a yashikigami before a work yard or a storehouse apron (NOT ATTESTED), the yard lying before the main
+house and the shrine in a back corner. Coverage 31%, every registered check passes (pack_audit). Figures above this entry that it supersedes:
+T265's granary seat, its north gate, its barracks move, the hall at 72 to 199 ft, the hearing court at 102.5 to 182.5 ft and the tax archive
+at 48 to 66 ft.

@@ -263,7 +263,7 @@ pub fn refusal(ask: &Ask, landed: bool, boxes: bool) -> Raise<(String, String)> 
         l7r_gate_reviews::reviews::closing::fix_hold(dir),
         l7r_gate_reviews::reviews::checkpoint::hold(root, None),
         l7r_gate_plan::plan::approach_refusal(dir, root, task).unwrap_or_default(),
-        wording::refusal(root, &ask.tree, dir, task, section.as_deref())?,
+        wording::refusal(root, dir, task, section.as_deref())?,
     ];
     whys.extend(asked.into_iter().filter(|w| !w.is_empty()));
     if whys.is_empty() && landed {

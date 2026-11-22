@@ -510,7 +510,6 @@ fn answer(
     words: &[String],
     root: &Path,
     out_root: &Path,
-    python: &str,
     stdin: &mut dyn Read,
     claims: &Claims,
     env: defer::Env<'_>,
@@ -520,7 +519,7 @@ fn answer(
     match (verb, n) {
         ("door", _) => door(&words[1..]),
         ("approach", _) => approach_verb(&words[1..], root),
-        ("engine-edit", 1) => engine_edit::cli(stdin, python),
+        ("engine-edit", 1) => engine_edit::cli(stdin),
         ("arbiter-accept", 3) => match dir_of(&words[1], root, "arbiter-accept") {
             Err(r) => r,
             Ok(dir) => match record::arbiter_accept(&dir, &words[2], None) {
@@ -608,7 +607,6 @@ pub fn cli(words: &[String], root: &Path, claims: &Claims) -> crate::Reply {
         words,
         root,
         Path::new(BUNDLES),
-        "python3",
         &mut std::io::stdin(),
         claims,
         &environment,

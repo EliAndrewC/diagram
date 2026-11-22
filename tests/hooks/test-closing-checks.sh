@@ -8,6 +8,9 @@
 # The make is a stub (CLOSING_MAKE): each target sleeps - or, where its fixture dir holds <target>.hold, waits for that dir's
 # release file - notes when it started and ended (tagged with its run's STUB_TAG), and exits as its fixture says.
 set -uo pipefail
+# THE CALLER'S OWN CLOSING RUN IS NOT THE FIXTURES' (found by 449 T243, 2026-11-22): `make closing-checks T= F=` runs make hooks-test
+# under CLOSING_TASK and CLOSING_FEATURE, and a fixture run inheriting them judged the wrong feature's task - 5 red in section 6
+unset CLOSING_TASK CLOSING_FEATURE
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 SCRIPT="$HERE/../../scripts/gates/closing-checks.sh"
 PASS=0; FAIL=0

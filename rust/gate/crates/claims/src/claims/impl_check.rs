@@ -30,8 +30,7 @@ use l7r_shared::speckit::splitlines;
 use serde_json::Value;
 
 use super::index::{current, load_map, owed, INDEX, QUESTIONS, STORE};
-use super::scope::Reader;
-use crate::record::repo::{tree_of, universal};
+use crate::record::repo::universal;
 use crate::reviews::gm_review::name;
 use crate::Reply;
 
@@ -208,9 +207,7 @@ fn shown(v: &Value) -> Result<String, String> {
 ///
 /// What the claims reading raised: an unreadable or broken index or store, a unit that cannot be read.
 pub fn citing(root: &Path) -> Result<Cites, String> {
-    let mut reader = Reader::new(&tree_of(root), root);
-    let cur = current(&mut reader, root, &root.join(QUESTIONS))?;
-    drop(reader);
+    let cur = current(root, &root.join(QUESTIONS))?;
     let index = load_map(&root.join(INDEX))?;
     let store = load_map(&root.join(STORE))?;
     let due = owed(&cur, &index, Some(&root.join(QUESTIONS)), Some(&store))?
@@ -219,8 +216,9 @@ pub fn citing(root: &Path) -> Result<Cites, String> {
         .collect();
     let mut by_q: BTreeMap<String, Vec<String>> = BTreeMap::new();
     for row in cur.iter() {
-        for p in &row.claim.pointers {
-            if let Ok(Some(c)) = CITED.captures(p) {
+        // every page the claim cites, its account's too (449 T249)
+        for name in super::bundle::cited_pages(&row.claim) {
+            if let Ok(Some(c)) = CITED.captures(&format!("{QUESTIONS}/{name}")) {
                 by_q.entry(c[1].to_owned())
                     .or_default()
                     .push(row.key.clone());

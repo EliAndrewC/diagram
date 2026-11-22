@@ -16,13 +16,13 @@ use l7r_shared::checks::pages::read_page;
 use l7r_shared::pyjson::{dumps, sorted};
 use serde_json::{json, Map, Value};
 
-use super::context::{Gather, Tables, CALLEES_MAX};
+use super::context::{Gather, Tables};
+use super::grammar::{Claim, POINTER};
 use super::index::{
     body_of, field, is, load_map, page_blocks, page_name, source_span, Cur, PageMemo, Row, INDEX,
     QUESTIONS,
 };
-use super::scope::Reader;
-use super::units::{items, splitlines, Unit};
+use super::units::{items, splitlines};
 use crate::record::repo::{fail, git, read_text, Fail};
 use crate::record::units::{digest, re};
 
@@ -90,35 +90,24 @@ pub fn mark_changed(src: &str, first: usize, changed: Option<&HashSet<usize>>) -
         .join("\n")
 }
 
-/// The source of `path::qualname`: a Rust item by the item scan, a `.py` unit by Python's syntax tree through the runner.
-pub fn context_source(reader: &mut Reader, root: &Path, reference: &str) -> Result<String, Fail> {
+/// The source of `path::qualname`, a Rust item by the item scan; any other reference is refused (a `.py` unit's source, read by
+/// Python's syntax tree through the runner, left with the engine's Python, feature 449 T158).
+pub fn context_source(root: &Path, reference: &str) -> Result<String, Fail> {
     let (path, qual) = reference.split_once("::").unwrap_or((reference, ""));
-    if path.ends_with(".rs") {
-        let text = read_text(&root.join(path))?;
-        return items(&text, 0, "", false)
-            .into_iter()
-            .find(|i| i.0 == qual)
-            .map(|i| i.5)
-            .ok_or_else(|| format!("ValueError: no `{qual}` in {path}"));
+    if !path.ends_with(".rs") {
+        return Err(format!("ValueError: `{reference}` is not a Rust item: a context reference names `<path>.rs::<item>`"));
     }
-    let got = reader.ask(
-        "claims_context_source",
-        &json!([root.to_string_lossy(), reference]),
-    )?;
-    Ok(got.as_str().unwrap_or_default().to_owned())
+    let text = read_text(&root.join(path))?;
+    items(&text, 0, "", false)
+        .into_iter()
+        .find(|i| i.0 == qual)
+        .map(|i| i.5)
+        .ok_or_else(|| format!("ValueError: no `{qual}` in {path}"))
 }
 
 fn dedupe(v: Vec<String>) -> Vec<String> {
     let mut seen = HashSet::new();
     v.into_iter().filter(|x| seen.insert(x.clone())).collect()
-}
-
-fn strings(v: &Value) -> Vec<String> {
-    v.as_array()
-        .into_iter()
-        .flatten()
-        .filter_map(|x| x.as_str().map(str::to_owned))
-        .collect()
 }
 
 /// Every name a CANNOT-TELL verdict's note of `rows` puts in backticks: what a re-bundle chases.
@@ -144,33 +133,7 @@ fn distance(rows: &[&Row]) -> bool {
         .any(|r| DISTANCE.is_match(&r.claim.label).unwrap_or(false))
 }
 
-/// A `.py` unit's context: its own module's functions it calls, every constant it reads, what a distance claim turns on, what a CANNOT-TELL asked.
-fn py_context(
-    reader: &mut Reader,
-    root: &Path,
-    unit: &Unit,
-    src: &str,
-    rows: &[&Row],
-    index: &Map<String, Value>,
-) -> Result<Vec<String>, Fail> {
-    let asked = asked(rows, index);
-    let r = root.to_string_lossy();
-    let mut out = strings(&reader.ask(
-        "claims_callees",
-        &json!([r, unit.path, unit.qualname, src, CALLEES_MAX]),
-    )?);
-    if distance(rows) {
-        let far = reader.ask("claims_direct", &json!([r, unit.path, unit.qualname, src]))?;
-        out.extend(strings(&far));
-    }
-    out.extend(strings(
-        &reader.ask("claims_chase", &json!([r, unit.path, asked]))?,
-    ));
-    Ok(out)
-}
-
 fn unit_part(
-    reader: &mut Reader,
     root: &Path,
     rows: &[&Row],
     index: &Map<String, Value>,
@@ -181,10 +144,8 @@ fn unit_part(
     let unit = &rows[0].unit;
     let lang = if unit.kind == "section" {
         "markdown"
-    } else if unit.path.ends_with(".rs") {
-        "rust"
     } else {
-        "python"
+        "rust"
     };
     parts.push(format!(
         "## UNIT {} ({}, {}:{})\n",
@@ -210,17 +171,13 @@ fn unit_part(
             ));
         }
     }
-    if !unit.names.is_empty() {
-        let names: Vec<String> = unit.names.iter().map(|n| format!("`{n}`")).collect();
-        parts.push(format!("- constants it reads: {}", names.join("; ")));
-    }
     let (first, src) =
         source_span(root, unit)?.ok_or_else(|| format!("FileNotFoundError: {}", unit.path))?;
     parts.push(format!(
         "\n```{lang}\n{}\n```\n",
         mark_changed(&src, first, marked.get(&unit.path))
     ));
-    if unit.path.ends_with(".rs") {
+    if unit.kind != "section" {
         // the Python's rules on a Rust item (feature 449 T165), where it carried its own file's constants alone (feature 444 T16)
         let mut more = std::mem::take(&mut gather.refs);
         more.extend(super::context::rust_context(
@@ -232,16 +189,11 @@ fn unit_part(
             &asked(rows, index),
         ));
         gather.refs = dedupe(more);
-    } else if unit.kind != "section" {
-        let mut more = std::mem::take(&mut gather.refs);
-        more.extend(py_context(reader, root, unit, &src, rows, index)?);
-        gather.refs = dedupe(more);
     }
     Ok(())
 }
 
 fn context_part(
-    reader: &mut Reader,
     root: &Path,
     context: &[String],
     index: &Map<String, Value>,
@@ -252,18 +204,9 @@ fn context_part(
     }
     parts.push("# Context (read it; it is not judged)\n\nCode the units above call or read, shown so a verdict can see it:\n".to_owned());
     for reference in context {
-        let lang = if reference
-            .split_once("::")
-            .map_or(reference.as_str(), |p| p.0)
-            .ends_with(".rs")
-        {
-            "rust"
-        } else {
-            "python"
-        };
         parts.push(format!(
-            "## CONTEXT {reference}\n\n```{lang}\n{}\n```\n",
-            context_source(reader, root, reference)?
+            "## CONTEXT {reference}\n\n```rust\n{}\n```\n",
+            context_source(root, reference)?
         ));
         let prefix = format!("{reference}#");
         let own: Vec<String> = index
@@ -343,9 +286,20 @@ fn questions_part(
     Ok((numbered, snapshots, memo))
 }
 
+/// Every question page a claim cites: its backing's pointers, then each page its line names besides (an account's `; research/...`, a
+/// `GUESS: research/...`), in order, once - feature 449 T241: `off_the_dike`'s claims cited 0027 in their accounts, and its bundle held
+/// only the backings' 0019 and 0081, so its dike figures were judged without the page they cite.
+pub(crate) fn cited_pages(c: &Claim) -> Vec<String> {
+    let named = POINTER.find_iter(&c.line).map_while(Result::ok);
+    let all = c.pointers.iter().map(|p| page_name(p).to_owned());
+    dedupe(
+        all.chain(named.map(|m| page_name(m.as_str()).to_owned()))
+            .collect(),
+    )
+}
+
 /// Writes the bundle for `keys` (rows of `cur`) under `out`; the MANIFEST's path.
 pub fn bundle(
-    reader: &mut Reader,
     root: &Path,
     cur: &Cur,
     keys: &[String],
@@ -375,17 +329,24 @@ pub fn bundle(
         tables: Tables::default(),
     };
     for (_, rows) in &by_uid {
-        unit_part(reader, root, rows, &index, &marked, &mut gather, &mut parts)?;
+        unit_part(root, rows, &index, &marked, &mut gather, &mut parts)?;
         for c in &rows[0].unit.claims {
-            for ptr in &c.pointers {
-                let name = page_name(ptr).to_owned();
-                if !cited.contains(&name) && qdir.join(&name).is_file() {
+            for name in cited_pages(c) {
+                if !qdir.join(&name).is_file() {
+                    return Err(format!(
+                        "ValueError: {}'s claim `{}` cites {QUESTIONS}/{name}, no question file under {} - fix the citation or restore the page",
+                        rows[0].uid(),
+                        c.label,
+                        qdir.display()
+                    ));
+                }
+                if !cited.contains(&name) {
                     cited.push(name);
                 }
             }
         }
     }
-    context_part(reader, root, &gather.refs, &index, &mut parts)?;
+    context_part(root, &gather.refs, &index, &mut parts)?;
     for p in pages {
         let p = page_name(p).to_owned();
         if !qdir.join(&p).is_file() {
@@ -405,12 +366,10 @@ pub fn bundle(
     for k in keys {
         let row = cur.get(k).unwrap_or_else(|| unreachable!());
         let mut pages = Map::new();
-        for ptr in &row.claim.pointers {
-            let name = page_name(ptr);
-            pages.insert(
-                name.to_owned(),
-                json!(page_blocks(name, &qdir, &mut memo)?.0),
-            );
+        // every page the claim cites, not its backing's alone: `claims-checked` drops a reply's rests on a page not here (449 T241)
+        for name in cited_pages(&row.claim) {
+            let fp = json!(page_blocks(&name, &qdir, &mut memo)?.0);
+            pages.insert(name, fp);
         }
         let mut u = json!({
             "code": row.code, "core": row.unit.core, "body": body_of(root, &row.unit)?, "claim": row.claim.normalized(),

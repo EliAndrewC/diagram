@@ -358,3 +358,33 @@ fn the_pipeline_is_held_per_tree_and_recounted_when_a_folder_gains_a_render() {
     // a render the tree's key does not see re-counts it
     assert_eq!(counted(&root), 2);
 }
+
+#[test]
+fn an_accepted_sheet_over_its_accepted_figure_is_refused() {
+    // 449 T243: a pool-sheet stage accepted (`make budget-accept COUNTS=`) is held on each sheet to its accepted figure, as a
+    // hamlet stage is at its sizes
+    let mut t = table();
+    t["sheet_stages"]["placer"]["status"] = json!("accepted");
+    t["sheet_stages"]["placer"]["accepted"] = json!({"hand": 90.0, "made": 50.0});
+    let root = world(
+        "wbr-sheet-accepted",
+        &t,
+        &comb(110),
+        &polder(),
+        &totals(91, 40, 40),
+    );
+    let got = route(&root, "GATED");
+    let held = got
+        .stderr
+        .contains("placer on hand: 91 counted operations, over its accepted 90");
+    assert_eq!(got.code, 1);
+    assert!(held, "{got:?}");
+    let within = world(
+        "wbr-sheet-accepted-within",
+        &t,
+        &comb(110),
+        &polder(),
+        &totals(90, 40, 40),
+    );
+    assert_eq!(route(&within, "GATED").code, 0);
+}

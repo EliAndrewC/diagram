@@ -40,7 +40,7 @@ SKILL_DIR="$REPO"
 env_key() {
     # the Chromium pin and its installer too (feature 449 T146), and the ONNX Runtime's (T138): a new pinned version provisions every
     # container again
-    cat "${BASH_SOURCE[0]}" "$SKILL_DIR/requirements.txt" "$SKILL_DIR/requirements-dev.txt" "$SKILL_DIR/scripts/container/chromium.pin" \
+    cat "${BASH_SOURCE[0]}" "$SKILL_DIR/scripts/container/chromium.pin" \
         "$SKILL_DIR/scripts/container/install-chromium.sh" "$SKILL_DIR/scripts/container/onnxruntime.pin" \
         "$SKILL_DIR/scripts/container/install-onnxruntime.sh" 2>/dev/null | sha256sum | cut -d' ' -f1
 }
@@ -101,13 +101,8 @@ check_all() {
     _t "headless Chromium (the browser crate)"   ". $REPO/scripts/container/chromium.pin && \"\${L7R_CHROMIUM_HOME:-\$HOME/.cache/l7r-chromium}/\$CHROMIUM_VERSION/chrome-headless-shell-linux64/chrome-headless-shell\" --version"
     # the embedder crate's ONNX Runtime (feature 449 T138), at the version scripts/container/onnxruntime.pin names
     _t "ONNX Runtime (the embedder crate)"       ". $REPO/scripts/container/onnxruntime.pin && V=\$ONNXRUNTIME_VERSION && [ -f \"\${L7R_ONNXRUNTIME_HOME:-\$HOME/.cache/l7r-onnxruntime}/\$V/onnxruntime-linux-x64-\$V/lib/libonnxruntime.so.\$V\" ]"
-    # the engine's runtime deps (feature 131: THIS repository's own lockfiles at the root, beside
-    # pyproject.toml - the webapp's cherrypy set stayed in gm-assistant with the webapp).
-    # shapely backs the /diagram seam-closing pass (waterfields/seams.py) - the one place the
-    # field engine needs real polygon booleans, so a missing wheel breaks map generation, not a test
-    _t "python: shapely (diagram field engine)"  "python3 -c 'import shapely'"
-    # dev deps - the quality gate itself (pytest and its plugins left with the Python tests, feature 449 T213)
-    _t "python: ruff pyrefly"                    "python3 -m ruff --version; pyrefly --version"
+    # no Python package is checked or installed: the last Python and its lint (ruff), lockfiles and pyproject.toml went with
+    # feature 449 T158
     # the claude() wrapper that appends this repo's standing authorizations to the system prompt.
     # ~/.bashrc is NOT on a bind mount (only the repo and ~/.claude survive a rebuild), so this has
     # to be re-established on every fresh container exactly like the apt and pip state.
@@ -137,16 +132,6 @@ else
     echo "    already present"
 fi
 
-echo "==> python packages (pip)"
-# --break-system-packages: this container's python is the system python and there is no venv by
-# design (the engine's tools and its gate share one interpreter). The lockfiles live beside the
-# project's pyproject.toml (feature 131): the first session in the split repository found this line
-# still reading webapp/requirements.txt from gm-assistant, which does not exist here, so a fresh
-# container could not be provisioned at all.
-SKILL="$REPO"
-pip install --quiet --break-system-packages \
-    -r "$SKILL/requirements.txt" \
-    -r "$SKILL/requirements-dev.txt"
 # The semantic index's model runtime (feature 447; Rust since feature 449 T138, `ask:449-phase4-slices` Q11): the ONNX Runtime the
 # embedder crate (`rust/embed/`) loads, Microsoft's release of the version fastembed ran on, pinned by scripts/container/onnxruntime.pin
 # and downloaded and checked by install-onnxruntime.sh. It replaced `requirements-semantic.txt`'s fastembed and Python runtime, which

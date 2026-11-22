@@ -40,6 +40,13 @@ static LAUNCHED: LazyLock<Regex> = LazyLock::new(|| {
         r#"(?:"(?:backgroundTaskId|agentId|resumedAgentId)"|"status":\s*"async_launched",\s*"taskId"):\s*"([A-Za-z0-9]+)""#,
     )
 });
+// A FOREGROUND AGENT'S RESULT IS ITS END (449 T268): a synchronous Agent call's `toolUseResult` opens `"status":"completed"` and carries
+// the finished agent's `agentId` after its prompt, and no notice ever follows it, so read as a launch it ran for good - the Stop hook of
+// T197 G2's check session read 28 ids running where 1 was (27 foreground results, 2 notices, measured 2026-11-22 over its transcript
+// `e4a31b0e-...jsonl`); over 12 of the clone's transcripts the result's status was `async_launched` 3,387 times and `completed` 89.
+// Each tool result's opening is matched, and an id inside one that opens `completed` is an end.
+static RESULT: LazyLock<Regex> =
+    LazyLock::new(|| re(r#""toolUseResult":\s*\{(\s*"status":\s*"completed")?"#));
 static NOTIFIED: LazyLock<Regex> = LazyLock::new(|| re(r"<task-id>([A-Za-z0-9]+)</task-id>"));
 // A task ended with TaskStop sends no notification, so its stop is its end (2026-10-28).
 static STOPPED: LazyLock<Regex> = LazyLock::new(|| {
@@ -100,6 +107,23 @@ fn interim(body: &str) -> bool {
 fn events(line: &str) -> Vec<(usize, Said, &str)> {
     let mut out = Vec::new();
     put(&LAUNCHED, Said::Launched, line, &mut out);
+    if !out.is_empty() {
+        let results: Vec<(usize, bool)> = RESULT
+            .captures_iter(line)
+            .map_while(Result::ok)
+            .filter_map(|c| Some((c.get(0)?.start(), c.get(1).is_some())))
+            .collect();
+        for event in &mut out {
+            let done = results
+                .iter()
+                .rev()
+                .find(|(at, _)| *at < event.0)
+                .is_some_and(|(_, done)| *done);
+            if done {
+                event.1 = Said::Ended;
+            }
+        }
+    }
     put(&STOPPED, Said::Ended, line, &mut out);
     let notices: Vec<_> = NOTIFIED
         .captures_iter(line)
@@ -244,9 +268,11 @@ fn subagents(path: &Path) -> PathBuf {
 /// 2026-11-21 from each agent's span).
 const BUILDERS: usize = 3;
 
-/// A builder's brief: the description `<feature number> T<n>...` of an agent the session dispatched (its meta's `spawnDepth` 1), as
-/// `builder_stop_hooks` (451 T84) reads one - its own reader is the guard crate's, which this crate cannot call.
-static BRIEF: LazyLock<Regex> = LazyLock::new(|| re(r"^\s*(\d{3})\s+(T\d+[a-z]?)\b"));
+/// A builder's brief: the description of an agent the session dispatched (its meta's `spawnDepth` 1) opening with its feature number
+/// ([`builder_brief`]; 449 T268 dropped the `T<n>` it had to follow, so a bundle's brief is one).
+static BRIEF: LazyLock<Regex> = LazyLock::new(|| re(r"^\s*(\d{3})\b"));
+/// A task id in a brief.
+static TASK_ID: LazyLock<Regex> = LazyLock::new(|| re(r"\b(T\d+[a-z]?)\b"));
 /// What a task's line names of the tree: a file (a path, or a name with its extension) or a guard module (`*_hooks`).
 static NAMES: LazyLock<Regex> = LazyLock::new(|| {
     re(r"[A-Za-z0-9_./-]*[A-Za-z0-9_]\.(?:rs|sh|py|md|json|toml)\b|\b[a-z][a-z0-9_]*_hooks\b")
@@ -357,7 +383,7 @@ fn waits(
                 .map_while(Result::ok)
                 .any(|c| &c[1] == id)
     });
-    if after || before {
+    if after || before || asks_the_gm(root, feature, id)? {
         return Ok(true);
     }
     let Some(when) = WAITS
@@ -398,41 +424,6 @@ fn waits(
     Ok(last.is_some_and(|at| now < at + DAY_MICROS))
 }
 
-/// The (feature number, task) a running agent builds, read from its meta file; None for any agent but a builder.
-fn brief(dir: &Path, id: &str) -> Option<(String, String)> {
-    let meta: Value = serde_json::from_str(
-        &std::fs::read_to_string(dir.join(format!("agent-{id}.meta.json"))).ok()?,
-    )
-    .ok()?;
-    if meta.get("spawnDepth").and_then(Value::as_u64) != Some(1) {
-        return None;
-    }
-    let c = BRIEF
-        .captures(meta.get("description")?.as_str()?)
-        .ok()
-        .flatten()?;
-    Some((c[1].to_owned(), c[2].to_owned()))
-}
-
-/// The builders still running, each by [`still_running`]'s rule over ONE reading of the transcript (a transcript reached 206 MB): its
-/// (feature number, task), sorted. [`running`] alone would not do - it leaves out an interim agent whenever another plainly runs.
-fn builders(path: &Path) -> std::io::Result<Vec<(String, String)>> {
-    let read = read_in_order(path, "")?;
-    let dir = subagents(path);
-    let mut known = HashMap::new();
-    let mut out = Vec::new();
-    for id in read.ids.keys() {
-        if let Some(task) = brief(&dir, id) {
-            if runs(&read, &dir, id, &mut known)? {
-                out.push(task);
-            }
-        }
-    }
-    out.sort();
-    out.dedup();
-    Ok(out)
-}
-
 /// The feature directory a number names, or None.
 fn feature_dir(root: &Path, number: &str) -> Option<String> {
     let mut names: Vec<String> = std::fs::read_dir(root.join("specs"))
@@ -448,10 +439,10 @@ fn feature_dir(root: &Path, number: &str) -> Option<String> {
 /// The files the running tasks' own edits name (451 T86's reading, the other way round): each `PostToolUse` Edit, Write or `NotebookEdit`
 /// line of the task's feature log, not a `fallback` one, filed under the task - relative to the root, those under `specs/` and `.git/`
 /// and the review ledger left out, since every task writes them.
-fn busy_files(root: &Path, running: &[(String, String)]) -> Result<HashSet<String>, String> {
+fn busy_files(root: &Path, running: &[Builder]) -> Result<HashSet<String>, String> {
     let pre = format!("{}/", root.to_string_lossy().trim_end_matches('/'));
     let mut out = HashSet::new();
-    for (number, task) in running {
+    for (number, tasks) in running {
         let Some(feature) = feature_dir(root, number) else {
             continue;
         };
@@ -469,7 +460,7 @@ fn busy_files(root: &Path, running: &[(String, String)]) -> Result<HashSet<Strin
             };
             let rel = field(&row, "path").strip_prefix(&pre).unwrap_or("");
             if row.get("fallback").and_then(Value::as_bool) == Some(true)
-                || field(&row, "task") != task
+                || !tasks.iter().any(|t| field(&row, "task") == t)
                 || rel.is_empty()
                 || rel.starts_with("specs/")
                 || rel.starts_with(".git/")
@@ -600,7 +591,10 @@ fn free_slot(
         ),
         _ => String::new(),
     };
-    let who: Vec<String> = running.iter().map(|(f, t)| format!("{f} {t}")).collect();
+    let who: Vec<String> = running
+        .iter()
+        .map(|(f, t)| format!("{f} {}", t.join("+")))
+        .collect();
     let short: String = next.title.chars().take(80).collect();
     Ok(Some(format!(
         "BLOCKED: a builder slot is free - {} of {knob} builders running ({}) - start the next independent open task, one touching none of their files ({} {short}): {later}make task-start F={number} T={}, then dispatch its builder (feature 451 T88, L7R_BUILDERS={knob}); or set the feature down: make set-down F={} WHY=\"<why it stops here>\"",
@@ -905,6 +899,10 @@ fn decide(event: &Event, session: &Session) -> Vec<Answer> {
     // `shared::env`: a test reads its own environment, never a session's export (feature 451 T32)
     judge(event, session, crate::env::opt("SET_DOWN_ROOT"))
 }
+
+mod builders;
+pub use builders::builder_brief;
+use builders::{asks_the_gm, builders, Builder};
 
 #[cfg(test)]
 mod tests;

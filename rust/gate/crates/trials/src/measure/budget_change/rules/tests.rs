@@ -590,7 +590,7 @@ fn a_raise_names_its_missed_work_and_its_second_sound() {
     assert!(raise("700", &[])
         .stderr
         .contains("names no work its first derivation missed"));
-    assert_eq!(run(&d, &args(&["set", "field", "2", "0.1", "specs/x/phases/web.derivation.md", "v", "--raise"], &ITEMS)).stderr, "budget-set: `field` is accepted - RAISE=1 raises a budgeted stage, before its acceptance (feature 444 FR-022)\n");
+    assert_eq!(run(&d, &args(&["set", "field", "2", "0.1", "specs/x/phases/web.derivation.md", "v", "--raise"], &ITEMS)).stderr, "budget-set: `field` is accepted - RAISE=1 raises a budgeted stage, before its acceptance (feature 444 FR-022); an accepted stage is raised on the round arbiter's continue or accept ruling naming it: ARBITER=<trigger> (449 T250)\n");
 }
 
 #[test]
@@ -651,6 +651,106 @@ fn a_change_takes_the_gms_words_and_repoints() {
     });
     // a stage with no exponent is Python's KeyError
     assert_eq!(run(&d, &["change", "web", "1", "--words", "a b c"]).code, 1,);
+}
+
+/// 449 T250 (the round arbiter's tooling fix on ask:449-T250-raise-accepted): an accepted stage is raised on RAISE=1 with ARBITER=
+/// naming a continue or accept ruling on that stage, its acceptance and audit dropped; the bare refusal stands without it, and a
+/// ruling on another stage opens nothing.
+#[test]
+fn an_arbiters_ruling_opens_an_accepted_stage_to_a_raise() {
+    let d = scratch("bc-raise-accepted");
+    tree(&d);
+    edit(&d, |t| {
+        let st = t["stages"]["field.polder"].as_object_mut().unwrap();
+        st.insert("status".to_owned(), json!("accepted"));
+        st.insert("accepted".to_owned(), json!({"10": 4.0, "20": 5.0}));
+        st.insert(
+            "audit".to_owned(),
+            json!("specs/x/phases/polder.audit-1.txt"),
+        );
+    });
+    put(
+        &d,
+        "specs/x/phases/polder.derivation.md",
+        b"a bounded n: households 10-20\n## Work the first derivation missed\n- the bank bands\n",
+    );
+    put(&d, "specs/y/arbiter.jsonl", b"{\"trigger\": \"ask:other\", \"ruling\": \"continue\", \"what\": \"raise web\"}\n{\"trigger\": \"ask:r\", \"ruling\": \"continue\", \"what\": \"Set field.polder's budget\"}\n{\"trigger\": \"ask:q\", \"ruling\": \"process fault\", \"what\": \"field.polder\"}\n");
+    let raise = |extra: &[&str]| {
+        let head = [
+            "set",
+            "field.polder",
+            "1",
+            "0.35",
+            "specs/x/phases/polder.derivation.md",
+            "specs/x/phases/seat.verdict-1.txt",
+            "--raise",
+            "--items-at-10",
+            "6",
+            "--items-at-20",
+            "8",
+        ];
+        run(&d, &args(&head, extra))
+    };
+    let bare = raise(&[]).stderr;
+    assert_eq!(bare, "budget-set: `field.polder` is accepted - RAISE=1 raises a budgeted stage, before its acceptance (feature 444 FR-022); an accepted stage is raised on the round arbiter's continue or accept ruling naming it: ARBITER=<trigger> (449 T250)\n");
+    let other = raise(&["--arbiter", "ask:other"]).stderr;
+    assert_eq!(other, "budget-set: the round arbiters' logs hold no continue or accept at ask:other naming `field.polder` - an accepted stage is raised only on a ruling on that stage (449 T250)\n");
+    let fault = raise(&["--arbiter", "ask:q"]).code;
+    assert_eq!(fault, 1);
+    let opened = raise(&["--arbiter", "ask:r"]);
+    assert_eq!(opened.code, 0, "{opened:?}");
+    let st = table(&d)["stages"]["field.polder"].clone();
+    let want = json!({"status": "budgeted", "per_thing": 1.0, "exponent": 0.35, "derivation": "specs/x/phases/polder.derivation.md", "verdict": "specs/x/phases/seat.verdict-1.txt", "items_at_10": 6, "items_at_20": 8, "sizes": [10, 20], "raised_on": "ask:r", "first": {"10": 5.0, "20": 5.0}});
+    assert_eq!(st, want);
+    let log = std::fs::read_to_string(d.join("dev/work-budget-changes.jsonl")).unwrap();
+    let last = log.lines().last().unwrap().to_owned();
+    assert!(last.ends_with("\"what\": \"raised\", \"phase\": \"field.polder\", \"from\": {\"10\": 5.0, \"20\": 5.0}, \"to\": {\"10\": 6.0, \"20\": 8.0}, \"verdict\": \"specs/x/phases/seat.verdict-1.txt\", \"missed\": [\"the bank bands\"], \"arbiter\": \"ask:r\"}"), "{last}");
+    // ONE RAISE A RULING (the MODE 4 review of 2026-11-22: "bound to this stage and these figures", "never a second raise on this
+    // ruling"): the stage accepted again, the same trigger opens nothing
+    edit(&d, |t| {
+        let st = t["stages"]["field.polder"].as_object_mut().unwrap();
+        st.insert("status".to_owned(), json!("accepted"));
+    });
+    let again = raise(&["--arbiter", "ask:r"]).stderr;
+    assert_eq!(again, "budget-set: `field.polder` was raised on ask:r already - a ruling opens one raise; another owes a new ask (449 T250)\n");
+}
+
+/// 449 T253: a form whose sizes start at 10 (`waterward.polder`) changes its items at 10 as at 20, and a change names only its
+/// stage's own sizes.
+#[test]
+fn a_forms_change_takes_its_items_at_10() {
+    let d = scratch("bc-change-form");
+    tree(&d);
+    let change = |phase: &str, extra: &[&str]| {
+        run(
+            &d,
+            &args(&["change", phase, "1", "--words", "the GM said so"], extra),
+        )
+    };
+    let raised = change(
+        "field.polder",
+        &[
+            "--exponent",
+            "0.35",
+            "--items-at-10",
+            "3549",
+            "--items-at-20",
+            "4525",
+        ],
+    );
+    assert_eq!(raised.code, 0, "{raised:?}");
+    let st = table(&d)["stages"]["field.polder"].clone();
+    let want = json!({"status": "budgeted", "per_thing": 1.0, "exponent": 0.35, "derivation": "specs/x/phases/polder.derivation.md", "verdict": "v", "items_at_10": 3549, "items_at_20": 4525, "sizes": [10, 20]});
+    assert_eq!(st, want);
+    let log = std::fs::read_to_string(d.join("dev/work-budget-changes.jsonl")).unwrap();
+    let last = log.lines().last().unwrap().to_owned();
+    assert!(last.ends_with("\"from\": {\"per_thing\": 1.0, \"exponent\": 0.0, \"items_at_10\": 5, \"items_at_20\": 5}, \"to\": {\"per_thing\": 1.0, \"exponent\": 0.35, \"items_at_10\": 3549, \"items_at_20\": 4525}, \"words\": \"the GM said so\"}"), "{last}");
+    let at_40 = change("field.polder", &["--items-at-40", "7"]).stderr;
+    assert_eq!(at_40, "budget-change: `field.polder` has no items at 40 households - its sizes are 10 and 20: ITEMS_AT_10= ITEMS_AT_20=\n");
+    let at_10 = change("web", &["--items-at-10", "7"]).stderr;
+    assert_eq!(at_10, "budget-change: `web` has no items at 10 households - its sizes are 20, 40 and 80: ITEMS_AT_20= ITEMS_AT_40= ITEMS_AT_80=\n");
+    let unchanged = table(&d)["stages"]["web"]["items_at_20"].clone();
+    assert_eq!(unchanged, json!(10));
 }
 
 #[test]

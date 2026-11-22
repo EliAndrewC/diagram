@@ -5,15 +5,13 @@
 use std::collections::BTreeSet;
 use std::fmt::Write as _;
 use std::path::Path;
-use std::process::Command;
 
 use serde_json::{json, Value};
 
-use crate::codeid::{self, parsed, stated};
+use crate::codeid::{parsed, stated};
 
 const RECORD: &str = "dev/coverage-exempt.json";
 const BUDGETS: &str = "dev/work-budget.json";
-const CURE: &str = "make coverage-exempt PRUNE=1";
 const RULING: &str = "the GM, 2026-11-02: \"We can relax that for the engine code at this pooint since that's going away, so long as we maintain it for our other Python code not currently slated to be removed (tools, automated checks for hand-drawn maps, etc).\"";
 
 fn stages_of(entry: &Value) -> Vec<&str> {
@@ -92,81 +90,6 @@ fn split(root: &Path) -> Result<Split, String> {
     Ok((live, stale))
 }
 
-/// 3, 4, 5, 9 -> "3-5, 9".
-fn ranges(lines: &[u64]) -> String {
-    let mut runs: Vec<(u64, u64)> = Vec::new();
-    for &n in lines {
-        match runs.last_mut() {
-            Some((_, end)) if n == *end + 1 => *end = n,
-            _ => runs.push((n, n)),
-        }
-    }
-    runs.iter()
-        .map(|(a, b)| {
-            if a == b {
-                a.to_string()
-            } else {
-                format!("{a}-{b}")
-            }
-        })
-        .collect::<Vec<_>>()
-        .join(", ")
-}
-
-/// Each live entry's unrun lines, from coverage.py, one process with every entry in it (`ask:449-T062-py-id`); asked only when a live entry exists, and a failure is the run's failure rather than an empty report.
-fn missing(root: &Path, live: &[Value], data: &str, python: &str) -> Result<Vec<Vec<u64>>, String> {
-    if live.is_empty() {
-        return Ok(Vec::new());
-    }
-    let script = codeid::script(root);
-    let paths = live.iter().map(|e| root.join(path_of(e)));
-    let done = stated(
-        Command::new(python)
-            .arg(&script)
-            .arg("--missing")
-            .arg(root.join(data))
-            .args(paths)
-            .output(),
-        python,
-    )?;
-    let text = String::from_utf8_lossy(&done.stdout).into_owned();
-    let lines: Vec<&str> = text.split('\n').take(live.len()).collect();
-    if !done.status.success() || lines.len() != live.len() {
-        return Err(format!(
-            "{} answered no unrun lines: {}",
-            script.display(),
-            String::from_utf8_lossy(&done.stderr).trim()
-        ));
-    }
-    Ok(lines
-        .iter()
-        .map(|l| l.split(',').filter_map(|n| n.parse().ok()).collect())
-        .collect())
-}
-
-fn report(root: &Path, data: &str, python: &str) -> Result<(String, i32), String> {
-    let (live, stale) = split(root)?;
-    let mut out = String::new();
-    let mut shown = 0;
-    for (entry, unrun) in live.iter().zip(missing(root, &live, data, python)?) {
-        if !unrun.is_empty() {
-            shown += 1;
-            let _ = writeln!(out, "coverage (information, feature 448 - slated for the Rust port): {} - unrun lines: {}", path_of(entry), ranges(&unrun));
-        }
-    }
-    if !live.is_empty() {
-        let _ = writeln!(out, "coverage: {} files slated for the Rust port are exempt from the floor ({shown} with unrun lines; {RECORD})", live.len());
-    }
-    for (entry, why) in &stale {
-        let _ = writeln!(
-            out,
-            "COVERAGE: {RECORD} names {}, which is stale - {why}. Drop it: {CURE}",
-            path_of(entry)
-        );
-    }
-    Ok((out, i32::from(!stale.is_empty())))
-}
-
 fn list(root: &Path, prune: bool) -> Result<String, String> {
     let mut out = String::new();
     if prune {
@@ -217,21 +140,58 @@ pub fn paths(root: &Path) -> Result<Vec<String>, String> {
     Ok(found)
 }
 
-/// `l7r-gate coverage-exempt omit | exempt | stale | report [DATA] | list [--prune]`.
-pub fn cli(args: &[String], root: &Path, python: &str) -> crate::Reply {
+/// `l7r-gate coverage-exempt omit | exempt | stale | list [--prune]` (`report [DATA]`, each entry's unrun lines from coverage.py, left
+/// with `codeid.py`, its one reader of them, feature 449 T247: no target or script asked it, and the record holds no entry).
+pub fn cli(args: &[String], root: &Path) -> crate::Reply {
     let words: Vec<&str> = args.iter().map(String::as_str).collect();
     let plain = |text: String| (text, 0);
     let answer: Result<(String, i32), String> = match words.as_slice() {
-        ["omit"] => paths(root).map(|p| plain(if p.is_empty() { "\n".to_owned() } else { format!("--omit={}\n", p.join(",")) })),
-        ["exempt"] => paths(root).map(|p| plain(p.iter().flat_map(|x| [x.as_str(), "
-"]).collect())),
-        ["stale"] => split(root).map(|(_, stale)| plain(stale.iter().flat_map(|(e, why)| [path_of(e), "	", why.as_str(), "
-"]).collect())),
-        ["report"] => report(root, ".coverage", python),
-        ["report", data] => report(root, data, python),
+        ["omit"] => paths(root).map(|p| {
+            plain(if p.is_empty() {
+                "\n".to_owned()
+            } else {
+                format!("--omit={}\n", p.join(","))
+            })
+        }),
+        ["exempt"] => paths(root).map(|p| {
+            plain(
+                p.iter()
+                    .flat_map(|x| {
+                        [
+                            x.as_str(),
+                            "
+",
+                        ]
+                    })
+                    .collect(),
+            )
+        }),
+        ["stale"] => split(root).map(|(_, stale)| {
+            plain(
+                stale
+                    .iter()
+                    .flat_map(|(e, why)| {
+                        [
+                            path_of(e),
+                            "	",
+                            why.as_str(),
+                            "
+",
+                        ]
+                    })
+                    .collect(),
+            )
+        }),
         ["list"] => list(root, false).map(plain),
         ["list", "--prune"] => list(root, true).map(plain),
-        _ => return crate::Reply { stdout: String::new(), stderr: "usage: l7r-gate coverage-exempt omit | exempt | stale | report [DATA] | list [--prune]\n".to_owned(), code: 2 },
+        _ => {
+            return crate::Reply {
+                stdout: String::new(),
+                stderr: "usage: l7r-gate coverage-exempt omit | exempt | stale | list [--prune]\n"
+                    .to_owned(),
+                code: 2,
+            }
+        }
     };
     match answer {
         Ok((stdout, code)) => crate::Reply {

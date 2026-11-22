@@ -1,7 +1,8 @@
 //! The counter-only clear (feature 446, FR-003, plan D3; `scripts/record/claims_counters.py`): at `claims-owed` and `claims-triage`, a
 //! claim owed a code triage only because its unit GAINED counter blocks since the version its check read is recorded cleared, with its
-//! new fingerprints, and bundled nowhere. A `.py` unit is asked of the Python (its counter block is `ast`'s `if __debug__: OPS[...] +=`);
-//! a `.rs` unit is read here (feature 449 T165, the GM 2026-11-17: the claims tools track the Rust engine before S7 ports it).
+//! new fingerprints, and bundled nowhere. A `.rs` unit is read here (feature 449 T165, the GM 2026-11-17: the claims tools track the Rust
+//! engine before S7 ports it); the `.py` unit's arm, asked of the Python (`ast`'s `if __debug__: OPS[...] +=`), left with the engine's
+//! Python (feature 449 T158).
 //!
 //! THE RUST RULE. Cleared only when the recorded `code` is the merge base's version of the unit (its core rebuilt from the base text) and
 //! the working unit is that version's tokens with counter statements only added - every counter statement of the base standing
@@ -14,18 +15,13 @@
 //! - `<...>.counts.add("<kind>@<function>", <value>);` (`Counts::add`).
 //!
 //! These calls run in every build (only their bodies compile out), so their arguments are held to what can only be read, as
-//! `codeid._counter_value` holds Python's: a key in the counters' `<kind>@<function>` form (feature 444 D9), and a value that is
+//! `codeid._counter_value` held Python's (until feature 449 T247 deleted `codeid.py`): a key in the counters' `<kind>@<function>` form (feature 444 D9), and a value that is
 //! numbers and places read, `.len()`, `as <integer type>`, `*`, `+` and parentheses - no other call, no indexing (it can panic), no `-`
 //! (an underflow panics in a debug build). A counter that needs a new local (`tests += 1`) or a new parameter is code, and owed as before.
 //! A Rust unit's core holds the value of each crate constant it reads (feature 449 T166, [`super::reads`]), so the base version's core is
 //! rebuilt from the base item's tokens and the constants THOSE tokens read, at their values now: it equals the recorded code only where
 //! no constant the unit read changed since its check, so a counter added beside a changed constant is never cleared, and a counter
 //! reading a constant the base did not (`BINS as u64`) still clears - the Python's rule.
-
-#![expect(
-    clippy::case_sensitive_file_extension_comparisons,
-    reason = "Python's `str.endswith`, which this port keeps, is case-sensitive"
-)]
 
 use std::collections::HashMap;
 use std::path::Path;
@@ -39,14 +35,12 @@ use super::grammar::Claim;
 use super::index::{
     body_of, live_rows, owed, save_index, Cur, Index, Store, CODE_TRIAGE, INDEX, QUESTIONS,
 };
-use super::scope::Reader;
 use super::units::{items, Unit};
 use crate::record::repo::{git_show, read_text, Fail};
 use crate::record::units::re;
 
 /// What a claim cleared by the counter-only rule records (feature 446, FR-003).
 const COUNTER_CLEARED: &str = "counter-only (feature 446)";
-const COUNTER_KINDS: [&str; 4] = ["function", "method", "class", "constant"];
 /// `#[cfg(feature = "counters")]`, as the lexer gives it.
 const GATE: [&str; 9] = [
     "#",
@@ -74,7 +68,6 @@ const INT_TYPES: [&str; 12] = [
 ///
 /// Where the runner, a read or the index's write fails: the error says which and why.
 pub fn counters_clear(
-    reader: &mut Reader,
     root: &Path,
     cur: &Cur,
     index: Index,
@@ -107,32 +100,16 @@ pub fn counters_clear(
     for k in keys.iter().filter(|k| index.contains_key(*k)) {
         let row = cur.get(k).unwrap_or_else(|| unreachable!());
         let unit = &row.unit;
-        if !COUNTER_KINDS.contains(&unit.kind.as_str()) || unit.line_keyed() {
-            continue;
-        }
-        let cleared = if unit.path.ends_with(".py") {
-            let got = reader.ask(
-                "claims_counter_only",
-                &json!([
-                    root.to_string_lossy(),
-                    base,
-                    index[k],
-                    super::units::to_json(unit),
-                    row.claim.line
-                ]),
-            )?;
-            got.as_bool() == Some(true)
-        } else {
-            // past the line-keyed sections, a unit not of a `.py` file is a Rust item's
-            let was = index[k].get("code").and_then(Value::as_str);
-            let mut reads = |body: &str| {
-                super::reads::values(&mut tables, root, &unit.path, &unit.qualname, body)
-            };
-            git_show(root, &base, &unit.path).is_some_and(|old| {
-                read_text(&root.join(&unit.path))
-                    .is_ok_and(|now| counter_only(&old, &now, unit, &row.claim, was, &mut reads))
-            })
-        };
+        // every unit here is a Rust item's, of a counter kind: `owed` names a line-keyed unit's change "code changed", never a
+        // code triage, and a Rust item is always a function, method, class or constant (a `.py` unit's arm left with the Python,
+        // feature 449 T158)
+        let was = index[k].get("code").and_then(Value::as_str);
+        let mut reads =
+            |body: &str| super::reads::values(&mut tables, root, &unit.path, &unit.qualname, body);
+        let cleared = git_show(root, &base, &unit.path).is_some_and(|old| {
+            read_text(&root.join(&unit.path))
+                .is_ok_and(|now| counter_only(&old, &now, unit, &row.claim, was, &mut reads))
+        });
         if cleared {
             done.push(k.clone());
         }

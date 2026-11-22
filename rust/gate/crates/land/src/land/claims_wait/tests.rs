@@ -1,6 +1,6 @@
 //! The claims wait: what waiting cannot cure, the carries filed while it waits, the gate's own lint committed, the wait's bound.
 
-use l7r_gate_core::ci::fixtures::{git, put};
+use l7r_gate_core::ci::fixtures::put;
 
 use super::super::tests::{fx, tool, Stepped};
 use super::{claims_cure, claims_route, claims_stop_line};
@@ -99,52 +99,4 @@ fn a_passing_gate_over_a_dirty_tree_waits_on_the_tree() {
     put(&fx.root, "loose.txt", "x");
     let why = fx.land.wait_for_claims(&ticks(), None).unwrap();
     assert_eq!(why, "uncommitted changes: ?? loose.txt");
-}
-
-#[test]
-fn the_gate_s_own_lint_is_committed_and_nothing_else() {
-    let fx = fx("wait-lint");
-    put(&fx.root, "scripts/a.py", "import b\nimport a\n");
-    put(&fx.root, "scripts/b.py", "x = 1\n");
-    put(&fx.root, "scripts/c.py", "y = 1\n");
-    git(&fx.root, &["add", "-A"]);
-    git(&fx.root, &["commit", "-qm", "py"]);
-    // the gate's ruff sorted a.py's imports; b.py was edited by hand; c.py cannot be read
-    put(&fx.root, "scripts/a.py", "import a\nimport b\n");
-    put(&fx.root, "scripts/b.py", "x = 2\n");
-    put(&fx.root, "scripts/c.py", "y = 2\n");
-    let check = "ruff check --fix --quiet --stdin-filename scripts/a.py -";
-    fx.answer(check, "out", "import a\nimport b\n");
-    let format_b = "ruff format --quiet --stdin-filename scripts/b.py -";
-    fx.answer(format_b, "rc", "2");
-    std::process::Command::new("chmod")
-        .args(["000"])
-        .arg(fx.root.join("scripts/c.py"))
-        .status()
-        .unwrap();
-    let mine = fx.land.commit_gate_formatting().unwrap();
-    std::process::Command::new("chmod")
-        .args(["644"])
-        .arg(fx.root.join("scripts/c.py"))
-        .status()
-        .unwrap();
-    assert_eq!(mine, vec!["scripts/a.py"]);
-    assert!(fx
-        .subjects()
-        .contains("the gate's own lint and format, committed"));
-    // ruff that says nothing is no answer
-    fx.answer(
-        "ruff check --fix --quiet --stdin-filename scripts/b.py -",
-        "out",
-        "",
-    );
-    fx.answer(
-        "ruff check --fix --quiet --stdin-filename scripts/b.py -",
-        "rc",
-        "0",
-    );
-    assert_eq!(fx.land.ruffed("scripts/b.py", "x = 1\n"), Ok(None));
-    let mut gone = fx;
-    gone.land.python = "/no/such/python".to_owned();
-    assert!(gone.land.ruffed("scripts/b.py", "x").is_err());
 }

@@ -1,4 +1,4 @@
-//! The bundles' shared helpers, and the scratch record every bundle test builds on: the record of `testkit`, a stub runner, a check state.
+//! The bundles' shared helpers, and the scratch record every bundle test builds on: the record of `testkit` and a check state.
 
 use std::path::Path;
 
@@ -9,26 +9,10 @@ use serde_json::json;
 use super::*;
 use crate::record::testkit::{put, record};
 
-/// The runner's stub: canned answers for every verb, a failure on asking.
-pub const RUNNER: &str = r#"import json, os, sys, pathlib
-for line in sys.stdin:
-    ask = json.loads(line)
-    v, a = ask["verb"], ask["args"]
-    if v == "claims_py_units":
-        def u(q, kind, claim):
-            return {"path": "l7r/m.py", "qualname": q, "kind": kind, "lineno": 1, "end_lineno": 1, "claims": [claim], "inherited": False, "core": "c", "errors": [], "names": [], "blocks": [], "module_errors": []}
-        print(json.dumps({"ok": [[u("Mod.ROUND_CAP", "constant", "cap - research/questions/0094-trade.html: ROUND_CAP is 12 ft"), u("other", "function", "o - GUESS: about 3 households"), u("Third", "class", "t - CONVENTION: nothing named")], []]}), flush=True)
-    elif v == "echo":
-        print(json.dumps({"ok": a}), flush=True)
-    else:
-        print(json.dumps({"error": f"Traceback (most recent call last):\nKeyError: '{v}'"}), flush=True)
-"#;
-
-/// The testkit's record with the stub runner, the style guide, the variant index, and the knob registry and choices table the modal
+/// The testkit's record with the style guide, the variant index, and the knob registry and choices table the modal
 /// bundles read in process (feature 449 T149, where the runner answered `knobs` and `knob_table`).
 pub fn scratch(tag: &str) -> l7r_shared::tempdir::TempDir {
     let root = record(tag);
-    put(&root, "scripts/bundle_door.py", RUNNER);
     put(&root, "research/STYLE.md", "# Style\n");
     put(
         &root,
@@ -220,4 +204,12 @@ fn a_scan_past_a_million_steps_reads_to_the_end() {
         )
     });
     assert_eq!(got, (vec!["7".to_owned()], 2));
+}
+
+#[cfg(test)]
+#[test]
+fn the_scratch_record_holds_the_style_guide() {
+    let root = scratch("core-scratch");
+    let style = root.join("research/STYLE.md").exists();
+    assert!(style);
 }

@@ -162,6 +162,32 @@ fn a_close_that_breaks_a_rule_is_refused_and_changes_nothing() {
     assert_eq!(r, rows());
 }
 
+/// 449 T269: A FINDING ITS CHECKER RULED NO DEFECT IS SETTLED SO (constitution XIV): row 140's shape - an impl-drift finding whose own
+/// words rule it within the research - closes as `not a defect` naming XIV; a row whose finding carries no such ruling closes so only
+/// with the checker's words quoted, never on the closer's word alone.
+#[test]
+fn a_finding_ruled_no_defect_is_settled_not_a_defect_naming_its_ruling() {
+    let ruled = "a merged pair runs across its 22 ft gap, giving a parcel 160 by 342 ft against 0022 \u{a7}72's \"about 160 by 320 ft\"; that is within \"about\", so this is no defect and needs no fix";
+    let mut r = vec![
+        json!({"check": "impl-drift", "file": "rust/phases/src/field/polder.rs", "block": "plots (merged dike-pond parcel)", "finding": ruled, "status": "open"}),
+        json!({"check": "quote-check", "finding": "the passage differs from the page"}),
+    ];
+    let why = "not a defect (constitution XIV): impl-drift ruled the 342 ft parcel within the page's \"about\"";
+    assert_eq!(close_rows(&mut r, &[1], "", why, "W"), Ok(1));
+    let settled = (r[0]["status"].clone(), r[0]["why"].clone());
+    assert_eq!(settled, (json!("settled"), json!(why)));
+    let mut wrong = |w: &str| close_rows(&mut r, &[2], "", w, "W").unwrap_err();
+    let unruled = wrong("not a defect (constitution XIV): we judge the passage close enough");
+    let no_ruling = unruled.contains("row 2's finding carries no ruling of no defect");
+    assert!(no_ruling, "{unruled}");
+    let no_xiv = wrong("not a defect: the checker said it was fine all along");
+    assert!(no_xiv.contains("names constitution XIV"), "{no_xiv}");
+    // A reason quoting a reply is the closer's words, never the finding's ruling (the MODE 4 review of 449 T269, round 1).
+    let quoted = wrong("not a defect (constitution XIV): its checker's reply, \"the wording differs but says the same\"");
+    let still = quoted.contains("row 2's finding carries no ruling of no defect");
+    assert!(still, "{quoted}");
+}
+
 fn feature(tag: &str) -> (l7r_shared::tempdir::TempDir, String) {
     let dir = crate::checks::scratch(tag);
     let body: Vec<String> = rows().iter().map(ToString::to_string).collect();

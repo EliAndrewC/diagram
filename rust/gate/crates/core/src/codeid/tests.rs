@@ -1,9 +1,9 @@
-//! The tokenizer's shapes and the cache's rules; every tracked file against the Python is `m:t062-content-ids`.
+//! The tokenizer's shapes and the cache's rules (a `.py` file's id its blob id since feature 449 T247).
 
 use std::path::{Path, PathBuf};
 use std::process::Command;
 
-use super::{content_ids, git_blob_id, rust_tokens, stated, Cache};
+use super::{content_ids, gate_tree, git_blob_id, rust_tokens, stated, Cache};
 
 fn tokens(src: &str) -> String {
     String::from_utf8(rust_tokens(src.as_bytes()))
@@ -58,93 +58,51 @@ fn repo(tag: &str) -> l7r_shared::tempdir::TempDir {
     dir
 }
 
-fn script(dir: &Path, body: &str) -> String {
-    let path = dir.join("fake-python");
-    std::fs::write(&path, format!("#!/bin/bash\n{body}\n")).unwrap();
-    Command::new("chmod").arg("+x").arg(&path).status().unwrap();
-    path.to_string_lossy().into_owned()
-}
-
 fn file(path: &str, data: &str) -> (PathBuf, Vec<u8>) {
     (PathBuf::from(path), data.as_bytes().to_vec())
 }
 
 #[test]
-fn a_rust_id_a_python_id_and_any_other_file() {
+fn a_rust_id_and_any_other_file_a_python_one_among_them() {
     let dir = repo("kinds");
-    let python = script(
-        &dir,
-        "shift; shift; for f in \"$@\"; do echo \"id-of-$f\"; done",
-    );
     let mut cache = Cache::at(&dir);
     let files = [
         file("a.rs", "fn f() {} // c"),
-        file("b.py", "x = 1"),
+        file("b.py", "\"\"\"Doc.\"\"\"\nx = 1"),
         file("c.json", "{}"),
-        file("d.py", "y = 2"),
     ];
-    let ids = content_ids(&files, &mut cache, &python, Path::new("codeid.py")).unwrap();
-    assert_eq!(ids[1], "id-of-b.py");
+    let ids = content_ids(&files, &mut cache);
+    let python_blob = git_blob_id(b"\"\"\"Doc.\"\"\"\nx = 1");
+    assert_eq!(ids[1], python_blob);
     assert_eq!(ids[2], git_blob_id(b"{}"));
-    assert_eq!(ids[3], "id-of-d.py");
-    let comment_free = content_ids(
-        &[file("a.rs", "fn f() {}")],
-        &mut Cache::at(&dir),
-        &python,
-        Path::new("c"),
-    )
-    .unwrap();
+    let comment_free = content_ids(&[file("a.rs", "fn f() {}")], &mut Cache::at(&dir));
     assert_eq!(ids[0], comment_free[0]);
 }
 
 #[test]
-fn a_kept_id_starts_nothing_and_survives_the_next_reader() {
-    let dir = repo("kept");
-    let count = dir.join("runs");
-    let python = script(
-        &dir,
-        &format!(
-            "echo x >> {}; shift; shift; for f in \"$@\"; do echo \"id-of-$f\"; done",
-            count.display()
-        ),
+fn a_python_blob_s_kept_id_is_not_read() {
+    let dir = repo("kept-py");
+    let path = dir.join(".git/semantic-id-cache-2.json");
+    let data = b"x = 1";
+    let raw = git_blob_id(data);
+    std::fs::write(&path, format!(r#"{{"{raw}": "an-ast-id"}}"#)).unwrap();
+    let ids = content_ids(
+        &[(PathBuf::from("b.py"), data.to_vec())],
+        &mut Cache::at(&dir),
     );
-    let files = [file("b.py", "x = 1")];
-    content_ids(&files, &mut Cache::at(&dir), &python, Path::new("c")).unwrap();
-    assert_eq!(
-        content_ids(&files, &mut Cache::at(&dir), &python, Path::new("c")).unwrap(),
-        ["id-of-b.py"]
-    );
-    assert_eq!(std::fs::read_to_string(&count).unwrap().lines().count(), 1);
+    assert_eq!(ids, [raw]);
 }
 
 #[test]
-fn python_that_cannot_answer_fails_the_run_and_keeps_nothing() {
-    let dir = repo("fails");
-    let files = [file("b.py", "x = 1")];
-    let refused = script(&dir, "echo no >&2; exit 1");
-    let why = content_ids(
-        &files,
-        &mut Cache::at(&dir),
-        &refused,
-        Path::new("codeid.py"),
-    )
-    .unwrap_err();
-    assert!(why.contains("no ids") && why.contains("no"));
-    let short = script(&dir, "exit 0");
-    assert!(content_ids(&files, &mut Cache::at(&dir), &short, Path::new("c")).is_err());
-    assert!(content_ids(
-        &files,
-        &mut Cache::at(&dir),
-        "/no/such/python",
-        Path::new("c")
-    )
-    .unwrap_err()
-    .contains("cannot start"));
-    let good = script(&dir, "echo right");
-    assert_eq!(
-        content_ids(&files, &mut Cache::at(&dir), &good, Path::new("c")).unwrap(),
-        ["right"]
-    );
+fn a_kept_rust_id_survives_the_next_reader() {
+    let dir = repo("kept");
+    let files = [file("a.rs", "fn f() {}")];
+    let first = content_ids(&files, &mut Cache::at(&dir));
+    let cache = Cache::at(&dir);
+    let raw = git_blob_id(b"fn f() {}");
+    let kept = cache.kept(&raw).map(str::to_owned);
+    assert_eq!(kept, Some(first[0].clone()));
+    assert_eq!(content_ids(&files, &mut Cache::at(&dir)), first);
 }
 
 #[test]
@@ -153,13 +111,7 @@ fn another_writers_entries_are_kept_and_a_broken_file_is_empty() {
     let path = dir.join(".git/semantic-id-cache-2.json");
     let mut cache = Cache::at(&dir);
     std::fs::write(&path, r#"{"theirs": "1"}"#).unwrap();
-    content_ids(
-        &[file("a.rs", "fn f() {}")],
-        &mut cache,
-        "python3",
-        Path::new("c"),
-    )
-    .unwrap();
+    content_ids(&[file("a.rs", "fn f() {}")], &mut cache);
     let kept: serde_json::Value =
         serde_json::from_str(&std::fs::read_to_string(&path).unwrap()).unwrap();
     assert_eq!(kept["theirs"], "1");
@@ -173,12 +125,8 @@ fn no_repository_is_an_empty_cache_nothing_is_written_to() {
     let dir = l7r_shared::tempdir::TempDir::new("gate-norepo");
     let mut cache = Cache::at(&dir);
     assert!(cache.path.is_none() || cache.table.is_empty());
-    assert_eq!(
-        content_ids(&[file("a.rs", "x")], &mut cache, "python3", Path::new("c"))
-            .unwrap()
-            .len(),
-        1
-    );
+    let ids = content_ids(&[file("a.rs", "x")], &mut cache);
+    assert_eq!(ids.len(), 1);
     let mut empty = Cache {
         path: Some(dir.join("no-such-dir/x.json")),
         table: std::collections::BTreeMap::new(),
@@ -186,6 +134,14 @@ fn no_repository_is_an_empty_cache_nothing_is_written_to() {
     };
     empty.save();
     assert!(!dir.join("no-such-dir").exists());
+}
+
+#[test]
+fn the_gate_tree_is_the_wrapper_s_or_the_root() {
+    let root = Path::new("/a/root");
+    let tree = gate_tree(root);
+    let expected = std::env::var_os("L7R_GATE_TREE").map_or(root.to_path_buf(), PathBuf::from);
+    assert_eq!(tree, expected);
 }
 
 #[test]

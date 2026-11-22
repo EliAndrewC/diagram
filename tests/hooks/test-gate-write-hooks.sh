@@ -57,29 +57,33 @@ check "an Edit outside this tree: let through" 0 "$(run "$R" "$(printf '{"tool_n
 pkill -f "sleep $NAP" 2>/dev/null
 
 echo "--- 3. a change the gate does not see (feature 405 T41, D15) ---"
-# a tree with the gate's own tools: a docstring or comment in an engine file, or a claims-round record, passes; code does not
+# a tree with the gate's own tools: a claims-round record passes; code does not, nor a `.rs` comment (never unseen), nor a `.py`
+# docstring since feature 449 T247 deleted `codeid.py`, which this section copied in (a `.py` file's id is its blob id now)
 S=$(mktemp -d); git -C "$S" init -q
-mkdir -p "$S/scripts/gates" "$S/l7r/diagram" "$S/dev"
+mkdir -p "$S/scripts/gates" "$S/l7r/diagram" "$S/rust/x" "$S/dev"
 # (`preflight.py` and `usage_log.py` were copied here too, and are gone: the preflight is the gate's since 449 T071, the usage log's
 # writer since 449 T129; the gate's wrapper below answers for both)
-cp "$HERE/../../scripts/gates/codeid.py" "$S/scripts/gates/"; printf '#!/usr/bin/env bash\nexec "%s" "$@"\n' "$(cd "$HERE/../.." && pwd)/scripts/gates/l7r-gate.sh" > "$S/scripts/gates/l7r-gate.sh"; chmod +x "$S/scripts/gates/l7r-gate.sh"
-printf 'def f(x):\n    """Research: a claim - NONE"""\n    return x + 1\n' > "$S/l7r/diagram/m.py"
+printf '#!/usr/bin/env bash\nexec "%s" "$@"\n' "$(cd "$HERE/../.." && pwd)/scripts/gates/l7r-gate.sh" > "$S/scripts/gates/l7r-gate.sh"; chmod +x "$S/scripts/gates/l7r-gate.sh"
+printf 'def f(x):\n    """Research: a claim - NONE"""\n    return x\n' > "$S/l7r/diagram/m.py"
+printf '// Research: a claim - NONE\nfn f(x: i32) -> i32 {\n    x + 1\n}\n' > "$S/rust/x/m.rs"
 printf '{}\n' > "$S/dev/claims-index.json"
 printf 'done:\n\t@sleep %s\n' "$NAP" > "$S/Makefile"
 git -C "$S" add -A; git -C "$S" -c user.email=t@t -c user.name=t commit -qm base
 "$S/scripts/gates/l7r-gate.sh" preflight --root "$S" --tree-snap "$S/.git/gate-tree.json"
 ( cd "$S" && setsid nohup make done </dev/null >/dev/null 2>&1 & )
 for _ in $(seq 1 50); do ( cd "$S" && "$HERE/../../scripts/gates/l7r-gate.sh" own-make done ) && break; sleep 0.1; done
-DOC=$(printf '{"tool_name":"Edit","tool_input":{"file_path":"%s/l7r/diagram/m.py","old_string":"a claim - NONE","new_string":"a claim reworded - NONE"}}' "$S")
-CODE=$(printf '{"tool_name":"Edit","tool_input":{"file_path":"%s/l7r/diagram/m.py","old_string":"x + 1","new_string":"x + 2"}}' "$S")
-check "an Edit of a claim docstring: let through" 0 "$(run "$S" "$DOC")"
+DOC=$(printf '{"tool_name":"Edit","tool_input":{"file_path":"%s/rust/x/m.rs","old_string":"a claim - NONE","new_string":"a claim reworded - NONE"}}' "$S")
+PYDOC=$(printf '{"tool_name":"Edit","tool_input":{"file_path":"%s/l7r/diagram/m.py","old_string":"a claim - NONE","new_string":"a claim reworded - NONE"}}' "$S")
+CODE=$(printf '{"tool_name":"Edit","tool_input":{"file_path":"%s/rust/x/m.rs","old_string":"x + 1","new_string":"x + 2"}}' "$S")
+check "an Edit of a claim comment in a .rs file: refused" 2 "$(run "$S" "$DOC")"
+check "an Edit of a .py docstring: refused, its id its bytes since 449 T247" 2 "$(run "$S" "$PYDOC")"
 check "an Edit of a code token: refused" 2 "$(run "$S" "$CODE")"
 check "a Write of a claims-round record: let through" 0 "$(run "$S" "$(printf '{"tool_name":"Write","tool_input":{"file_path":"%s/dev/claims-index.json","content":"{\\"k\\": 1}\\n"}}' "$S")")"
-sed -i 's/a claim - NONE/a claim reworded - NONE/' "$S/l7r/diagram/m.py"; printf '{"k": 1}\n' > "$S/dev/claims-index.json"
+printf '{"k": 1}\n' > "$S/dev/claims-index.json"
 check "a commit of only those: let through" 0 "$(run "$S" "$COMMIT")"
 git -C "$S" -c user.email=t@t -c user.name=t commit -qam claims
 check "...and the gate's tree check reads the run as unmoved" 0 "$("$S/scripts/gates/l7r-gate.sh" preflight --root "$S" --tree-check "$S/.git/gate-tree.json" >/dev/null; echo $?)"
-sed -i 's/x + 1/x + 2/' "$S/l7r/diagram/m.py"
+sed -i 's/x + 1/x + 2/' "$S/rust/x/m.rs"
 check "a commit holding code: refused" 2 "$(run "$S" "$COMMIT")"
 check "...and the tree check names it" 1 "$("$S/scripts/gates/l7r-gate.sh" preflight --root "$S" --tree-check "$S/.git/gate-tree.json" >/dev/null; echo $?)"
 pkill -f "sleep $NAP" 2>/dev/null

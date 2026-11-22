@@ -31,7 +31,7 @@ expect_out() { case "$OUT" in *"$1"*) : ;; *) echo "FAIL  output lacks '$1': $OU
 # ---- fixture ------------------------------------------------------------------------------------
 # THE TOPOLOGY IS BUILT ONCE AND COPIED PER CASE (feature 449 T106, measured 2026-11-11): building it - the scripts tree copied
 # into a seed, committed, pushed and cloned twice - cost 0.25 s a case against 0.03 s for a `cp -a` of the same four repositories,
-# and the first `stamp --write` in a fresh clone asks codeid.py for the id of every scripts/ file. So template_build makes it once,
+# and the first `stamp --write` in a fresh clone computed the id of every scripts/ file (by codeid.py until 449 T247; by its blob id since). So template_build makes it once,
 # before the parts, with the clone's id cache warmed (the semantic-id-cache a real clone holds after its first stamp, keyed by
 # blob, so a copied entry is exactly what a cold run computes) and the stamps that warming wrote removed; topology copies it
 # and re-points the two origins at the copy's own github.git (the template's path would make every sync-in re-point and say so).

@@ -8,6 +8,7 @@
 //! tree's top; the ones that read the working directory (261's `pool/hamlets`, 430's `dev/run-log/`) read `cwd`. Wherever the Python
 //! raised, the port fails with exit 1, its stdout up to that point kept, as the traceback left it.
 
+mod counts;
 mod hamlets;
 mod inventory;
 mod runs;
@@ -23,7 +24,7 @@ use crate::Reply;
 /// What one port printed and the exit it chose, or what it raised.
 type Ran = Result<i32, Raised>;
 
-const USAGE: &str = "usage: l7r-gate measure spec 238 inventory-shares [--record] | 239 change-size <from> <to> [--record] | 242 inventory-census [--record | --per-page] | 261 board-well|brook-turn|row-spread [--rev <sha>] <map>... | 261 fixtures-and-board | 430 full-reasons | 432 triage-price\n";
+const USAGE: &str = "usage: l7r-gate measure spec 238 inventory-shares [--record] | 239 change-size <from> <to> [--record] | 242 inventory-census [--record | --per-page] | 261 board-well|brook-turn|row-spread [--rev <sha>] <map>... | 261 fixtures-and-board | 374 open-rows | 430 full-reasons | 432 triage-price | 449 registered-guards\n";
 
 /// `l7r-gate measure spec <feature> <name> [args...]`.
 #[must_use]
@@ -41,8 +42,10 @@ pub fn cli(args: &[String], root: &Path, cwd: &Path) -> Reply {
         (Some("261"), Some("brook-turn")) => hamlets::brook_turn(rest, cwd, &mut out),
         (Some("261"), Some("fixtures-and-board")) => hamlets::fixtures_and_board(cwd, &mut out),
         (Some("261"), Some("row-spread")) => hamlets::row_spread(rest, cwd, &mut out),
+        (Some("374"), Some("open-rows")) => counts::open_rows(root, &mut out),
         (Some("430"), Some("full-reasons")) => runs::full_reasons(cwd, &mut out),
         (Some("432"), Some("triage-price")) => runs::triage_price(root, &mut out),
+        (Some("449"), Some("registered-guards")) => counts::registered_guards(root, &mut out),
         _ => return reply(String::new(), USAGE.to_owned(), 2),
     };
     match ran {

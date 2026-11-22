@@ -694,6 +694,178 @@
   "l7r/diagram/tools/pack_audit/tagged.py::path_walk": {
    "to": "rust/mode_a/src/tagged.rs::path_walk",
    "by": "449 T212"
+  },
+  "l7r/diagram/interactive/choices.py::TABLE": {
+   "to": "rust/gate/crates/registry/src/choices.rs::TABLE",
+   "by": "449 T158"
+  },
+  "l7r/diagram/interactive/choices.py::applies": {
+   "to": "rust/gate/crates/registry/src/choices.rs::applies",
+   "by": "449 T158"
+  },
+  "l7r/diagram/interactive/choices.py::made": {
+   "to": "rust/gate/crates/registry/src/choices.rs::made",
+   "by": "449 T158"
+  },
+  "l7r/diagram/interactive/choices.py::modal": {
+   "to": "rust/gate/crates/registry/src/choices.rs::modal",
+   "by": "449 T158"
+  },
+  "l7r/diagram/interactive/choices.py::modal_file": {
+   "to": "rust/gate/crates/registry/src/choices.rs::modal_file",
+   "by": "449 T158"
+  },
+  "l7r/diagram/interactive/choices.py::modal_key": {
+   "to": "rust/gate/crates/registry/src/choices.rs::modal_key",
+   "by": "449 T158"
+  },
+  "l7r/diagram/interactive/choices.py::not_choices": {
+   "to": "rust/gate/crates/registry/src/choices.rs::not_choices",
+   "by": "449 T158"
+  },
+  "l7r/diagram/interactive/choices.py::registry_for": {
+   "to": "rust/gate/crates/registry/src/choices.rs::registry_for",
+   "by": "449 T158"
+  },
+  "l7r/diagram/interactive/choices.py::table": {
+   "to": "rust/gate/crates/registry/src/choices.rs::table",
+   "by": "449 T158"
+  },
+  "l7r/diagram/interactive/choices.py::CHOICE_DIR": {
+   "to": "rust/gate/crates/registry/src/choices.rs::modal_file",
+   "by": "449 T158"
+  },
+  "l7r/diagram/interactive/classes/_base.py::FORMS": {
+   "to": "rust/gate/crates/registry/src/about.rs::about_feature",
+   "by": "449 T158"
+  },
+  "l7r/diagram/interactive/classes/_base.py::Kind.feature": {
+   "to": "rust/gate/crates/registry/src/about.rs::feature",
+   "by": "449 T158"
+  },
+  "l7r/diagram/interactive/classes/_base.py::MODALS_DIR": {
+   "to": "rust/gate/crates/registry/src/about.rs::MODALS",
+   "by": "449 T158"
+  },
+  "l7r/diagram/interactive/classes/_base.py::OLDER_MAPS": {
+   "to": "rust/gate/crates/registry/src/about.rs::OLDER_MAPS",
+   "by": "449 T158"
+  },
+  "l7r/diagram/interactive/classes/_base.py::_ABOUT_DATA_TAGS": {
+   "to": "rust/gate/crates/registry/src/about.rs::ABOUT_DATA_TAGS",
+   "by": "449 T158"
+  },
+  "l7r/diagram/interactive/classes/_base.py::_DATA_TAGS": {
+   "to": "rust/gate/crates/registry/src/about.rs::DATA_TAGS",
+   "by": "449 T158"
+  },
+  "l7r/diagram/interactive/classes/_base.py::_PARA": {
+   "to": "rust/gate/crates/registry/src/about.rs::about_paragraphs",
+   "by": "449 T158"
+  },
+  "l7r/diagram/interactive/classes/_base.py::_PARAGRAPHED": {
+   "to": "rust/gate/crates/registry/src/about.rs::paragraphed",
+   "by": "449 T158"
+  },
+  "l7r/diagram/interactive/classes/_base.py::_RETIRED": {
+   "to": "rust/gate/crates/registry/src/about.rs::RETIRED",
+   "by": "449 T158"
+  },
+  "l7r/diagram/interactive/classes/_base.py::_TAGS": {
+   "to": "rust/gate/crates/registry/src/about.rs::TAGS",
+   "by": "449 T158"
+  },
+  "l7r/diagram/interactive/classes/_base.py::_TAG_LINE": {
+   "to": "rust/gate/crates/registry/src/about.rs::TAG_LINE",
+   "by": "449 T158"
+  },
+  "l7r/diagram/interactive/classes/_base.py::_about_feature": {
+   "to": "rust/gate/crates/registry/src/about.rs::about_feature",
+   "by": "449 T158"
+  },
+  "l7r/diagram/interactive/classes/_base.py::_join": {
+   "to": "rust/gate/crates/registry/src/about.rs::join",
+   "by": "449 T158"
+  },
+  "l7r/diagram/interactive/classes/_base.py::about_paragraphs": {
+   "to": "rust/gate/crates/registry/src/about.rs::about_paragraphs",
+   "by": "449 T158"
+  },
+  "l7r/diagram/interactive/classes/_base.py::guess_bullets": {
+   "to": "rust/gate/crates/registry/src/about.rs::guess_bullets",
+   "by": "449 T158"
+  },
+  "l7r/diagram/interactive/classes/_base.py::modal_path": {
+   "to": "rust/gate/crates/registry/src/about.rs::modal_rel",
+   "by": "449 T158"
+  },
+  "l7r/diagram/interactive/classes/_base.py::modal_text": {
+   "to": "rust/gate/crates/registry/src/about.rs::modal_text",
+   "by": "449 T158"
+  },
+  "l7r/diagram/interactive/classes/_base.py::parse_explanation": {
+   "to": "rust/gate/crates/registry/src/about.rs::parse_explanation",
+   "by": "449 T158"
+  },
+  "l7r/diagram/interactive/conditions.py::AFTER_PATH": {
+   "to": "rust/gate/crates/registry/src/conditions.rs::AFTER_PATH",
+   "by": "449 T158"
+  },
+  "l7r/diagram/interactive/conditions.py::KNOBS_FILE": {
+   "to": "rust/gate/crates/registry/src/conditions.rs::KNOBS_FILE",
+   "by": "449 T158"
+  },
+  "l7r/diagram/interactive/conditions.py::LEAD": {
+   "to": "rust/gate/crates/registry/src/conditions.rs::LEAD",
+   "by": "449 T158"
+  },
+  "l7r/diagram/interactive/conditions.py::LOOSE": {
+   "to": "rust/gate/crates/registry/src/conditions.rs::LOOSE",
+   "by": "449 T158"
+  },
+  "l7r/diagram/interactive/conditions.py::check": {
+   "to": "rust/gate/crates/registry/src/conditions.rs::check",
+   "by": "449 T158"
+  },
+  "l7r/diagram/interactive/conditions.py::entry_conditions": {
+   "to": "rust/gate/crates/registry/src/conditions.rs::entry_conditions",
+   "by": "449 T158"
+  },
+  "l7r/diagram/interactive/conditions.py::holds": {
+   "to": "rust/gate/crates/registry/src/conditions.rs::holds",
+   "by": "449 T158"
+  },
+  "l7r/diagram/interactive/conditions.py::knob_table": {
+   "to": "rust/gate/crates/registry/src/conditions.rs::knob_table",
+   "by": "449 T158"
+  },
+  "l7r/diagram/interactive/conditions.py::knobs": {
+   "to": "rust/gate/crates/registry/src/conditions.rs::knobs",
+   "by": "449 T158"
+  },
+  "l7r/diagram/interactive/conditions.py::label": {
+   "to": "rust/gate/crates/registry/src/conditions.rs::label",
+   "by": "449 T158"
+  },
+  "l7r/diagram/interactive/conditions.py::shown": {
+   "to": "rust/gate/crates/registry/src/conditions.rs::shown",
+   "by": "449 T158"
+  },
+  "l7r/diagram/interactive/conditions.py::shown_entry": {
+   "to": "rust/gate/crates/registry/src/conditions.rs::shown_entry",
+   "by": "449 T158"
+  },
+  "l7r/diagram/interactive/conditions.py::split": {
+   "to": "rust/gate/crates/registry/src/conditions.rs::split",
+   "by": "449 T158"
+  },
+  "l7r/diagram/interactive/conditions.py::strip_entry": {
+   "to": "rust/gate/crates/registry/src/conditions.rs::strip_entry",
+   "by": "449 T158"
+  },
+  "l7r/diagram/interactive/sources.py::_loaded": {
+   "to": "rust/gate/crates/research/src/sources.rs::Reader",
+   "by": "449 T158"
   }
  }
 }

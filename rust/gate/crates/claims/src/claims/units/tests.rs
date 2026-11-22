@@ -7,7 +7,7 @@ use serde_json::json;
 
 use super::{
     all_rust_units, doc_units, from_json, items, rglob, rust_units, section_blocks, splitlines,
-    splitlines_keep, to_json,
+    splitlines_keep,
 };
 use crate::claims::tests::{fixture, BUILDINGS, LIB};
 use crate::record::testkit::put;
@@ -118,8 +118,9 @@ fn lines_split_as_python_splits_them() {
     assert_eq!(splitlines("no end"), vec!["no end"]);
 }
 
+/// The tests' way to write a deleted `.py` unit (the runner it crossed left with feature 449 T158).
 #[test]
-fn a_unit_crosses_the_runner_as_json() {
+fn a_unit_is_read_from_json() {
     let v = json!({"path": "l7r/a.py", "qualname": "T", "kind": "constant", "lineno": 3, "end_lineno": 5, "claims": ["t - NONE", "broken"],
                    "inherited": true, "core": "c", "errors": ["e"], "names": ["N=1"], "blocks": ["b"], "module_errors": ["m"]});
     let (u, errors) = from_json(&v);
@@ -128,8 +129,6 @@ fn a_unit_crosses_the_runner_as_json() {
         (1, 3, vec!["m".to_owned()])
     );
     assert!(u.line_keyed());
-    let back = to_json(&u);
-    assert_eq!(back["claims"], json!(["t - NONE"]));
     assert_eq!(from_json(&json!({})).0.qualname, "");
 }
 

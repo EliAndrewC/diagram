@@ -238,30 +238,28 @@ pub fn open_ground(p: &Program, l: &Layout) -> Result<(), Error> {
                 ));
             }
         }
-        if court == Court::Outer {
-            // the cart's ground: the buildings and the roofed hearing court alone, every other named ground passable
-            let roofed = p
-                .zones
-                .iter()
-                .filter(|z| z.kind == "hearing court")
-                .map(|z| z.bx);
-            let carts: Vec<Bx> = seats
-                .iter()
-                .copied()
-                .chain(roofed)
-                .filter(|b| overlaps(*b, cb))
-                .collect();
-            cart_route(p, l, &sweep(&carts, cb))?;
-        }
+        // the cart's ground: the buildings and the roofed hearing court alone, every other named ground passable
+        let roofed = p
+            .zones
+            .iter()
+            .filter(|z| z.kind == "hearing court")
+            .map(|z| z.bx);
+        let carts: Vec<Bx> = seats
+            .iter()
+            .copied()
+            .chain(roofed)
+            .filter(|b| overlaps(*b, cb))
+            .collect();
+        cart_route(p, l, court, &sweep(&carts, cb))?;
     }
     Ok(())
 }
 
 /// Research:
 ///     the granary's cart route - research/questions/0082-moving-goods-carts-packhorses-and-river-landings-kashi.drawing.html: the granary's door reached by cart from a gate
-///     the outer court's gates alone - GUESS: carts enter by the gates on the outer court's side of the divider, the granary and the stables standing in the office court on every plan (docs/building-programs.md: the stables, cell and granary in the office court); a granary in the inner court would be refused, which no program has
+///     the granary on the offices' side - research/questions/0123-the-magistrates-manor-in-a-town-where-it-stands-and-which-way-it-faces-jinya-and-yamen.html: Pingyao built its granary north of the official quarters behind the war, justice and works offices, on the office side and not in the residence's court, so a granary seated in the household's court is refused; each building's cart route is walked in its own court, from the gates on that court's side of the divider, never through the middle gate
 ///     the stables' cart route - GUESS: the stables' door reached by cart too (feature 417 T36 pass P4: no source could speak to it)
-fn cart_route(p: &Program, l: &Layout, g: &Ground) -> Result<(), Error> {
+fn cart_route(p: &Program, l: &Layout, court: Court, g: &Ground) -> Result<(), Error> {
     let inset = WALL_HALF + CLEAR;
     let gates: Vec<(f64, f64)> = p
         .gates
@@ -273,11 +271,30 @@ fn cart_route(p: &Program, l: &Layout, g: &Ground) -> Result<(), Error> {
                 Face::W => (inset, gt.at),
                 Face::E => (p.w - inset, gt.at),
             };
-            (pt.1 > p.divider).then_some(pt)
+            ((pt.1 > p.divider) == (court == Court::Outer)).then_some(pt)
         })
         .collect();
+    if court == Court::Inner {
+        if let Some(b) = p
+            .buildings
+            .iter()
+            .find(|b| b.kind == "granary" && b.court == court)
+        {
+            return Err(Error::new(
+                "ValueError",
+                format!(
+                    "the {} stands in the household's court - Pingyao built its granary north of the offices on the office side (0123); seat it in the office court, behind the office hall",
+                    b.name
+                ),
+            ));
+        }
+    }
     for kind in ["granary", "stables"] {
-        let Some(i) = p.buildings.iter().position(|b| b.kind == kind) else {
+        let Some(i) = p
+            .buildings
+            .iter()
+            .position(|b| b.kind == kind && b.court == court)
+        else {
             continue;
         };
         for d in l.doors.iter().filter(|d| d.b == i) {

@@ -62,11 +62,11 @@ LAND_TOOLING_DOCS_CHECK=true land Makefile; rc=$?
 ok "a current page lands beside the Makefile" '[ "$rc" -eq 0 ] && grep "docs/make-targets.html lands too" "$T/out" >/dev/null && [ "$(on_main docs/make-targets.html)" = "page v1" ]'
 setup
 
-echo "1c. the Python that lands is linted first, and a failure lands nothing, naming the fix (385 T52)"
+echo "1c. the lint step (the LAND_TOOLING_LINT seam since 449 T247 deleted its ruff) stops a failed landing first (385 T52)"
 setup
 printf 'x = 1\n' > "$C/scripts/c.py"; git -C "$C" add -A; git -C "$C" commit -qm "a script"
 LAND_TOOLING_LINT=false land scripts/c.py; rc=$?
-ok "a lint failure lands nothing and names ruff check" '[ "$rc" -ne 0 ] && grep "ruff check scripts/c.py" "$T/out" >/dev/null && [ -z "$(on_main scripts/c.py)" ]'
+ok "a lint failure lands nothing" '[ "$rc" -ne 0 ] && [ -z "$(on_main scripts/c.py)" ]'
 LAND_TOOLING_LINT=true land scripts/c.py; rc=$?
 ok "a clean file lands" '[ "$rc" -eq 0 ] && [ "$(on_main scripts/c.py)" = "x = 1" ]'
 ok "the lint step is timed in the log" 'grep "^land-tooling: step lint [0-9.]* s$" "$C/.git/land-tooling.log" >/dev/null'
@@ -77,19 +77,8 @@ ok "...and the run leaves its record, failed, for make tick (385 T79)" 'tail -1 
 LAND_TOOLING_LINT=true land scripts/e.py; rc=$?
 ok "...and a landed run records landed" '[ "$rc" -eq 0 ] && tail -1 "$C/.git/land-tooling.jsonl" | jq -e ".outcome == \"landed\"" >/dev/null'
 printf 'z = (\n' > "$C/scripts/f.py"; git -C "$C" add -A; git -C "$C" commit -qm "a script that does not parse"
-( cd "$C" && env -u LAND_TOOLING_LINT LAND_TOOLING_TOOLING="touch $T/t91-tests" "$LAND" scripts/f.py ) >"$T/out" 2>&1; rc=$?
-ok "the lint runs first, in the clone, before anything else (385 T91)" '[ "$rc" -ne 0 ] && grep -q "feature 385 T91" "$T/out" && [ ! -e "$T/t91-tests" ] && [ -z "$(on_main scripts/f.py)" ]'
-setup
-
-echo "1e. the landing's lint keeps the gate's scope: an excluded file is not refused (385 T55)"
-setup
-printf '[tool.ruff]\nextend-exclude = ["scripts"]\n' > "$T/seed/pyproject.toml"; git -C "$T/seed" add -A; git -C "$T/seed" commit -qm "the lint scope"; git -C "$T/seed" push -q "$T/o.git" main
-printf 'import sys\nsys.exit(0)\n' > "$C/scripts/d.py"; mkdir -p "$C/tests"; printf 'z = (\n' > "$C/tests/test_d.py"
-git -C "$C" add -A; git -C "$C" commit -qm "an excluded script and a test that does not parse"
-land scripts/d.py; rc=$?
-ok "an excluded script lands, as the gate never lints it" '[ "$rc" -eq 0 ] && [ -n "$(on_main scripts/d.py)" ]'
-LAND_TOOLING_TEST="true " land tests/test_d.py; rc=$?
-ok "an included file that fails is still refused" '[ "$rc" -ne 0 ] && grep "ruff check tests/test_d.py" "$T/out" >/dev/null'
+( cd "$C" && env -u LAND_TOOLING_LINT "$LAND" scripts/f.py ) >"$T/out" 2>&1; rc=$?
+ok "a .py file is not linted by default: no Python is started for a landing (449 T247, ask:449-T247-python-starts)" '[ "$rc" -eq 0 ] && [ -n "$(on_main scripts/f.py)" ]'
 setup
 
 echo "1d. owed ledger rows are refused before any check runs (385 T53)"

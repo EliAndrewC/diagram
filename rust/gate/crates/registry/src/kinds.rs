@@ -5,10 +5,9 @@
 //! of its key>.md` (feature 319 moved it out of the class docstrings), which [`crate::about`] reads.
 //!
 //! WHY A TABLE AND NOT THE PYTHON PARSED: `modals.rs` read the classes out of the `.py` sources with a Python lexer (feature 449 T87), a
-//! reading that ends when S11 deletes them; the table is what the Rust readers ask from S6 on. The Python classes stay the
-//! implementation for their Python importers (the page writer, the Mode A sheets, `buildings/types.py`, the pipeline) until S7, S11 and
-//! S12 wire this in, frozen under Q1: an edit of a family module makes the same change here in the same commit, and `kinds/tests.rs`
-//! holds this table equal to the Python's classes, name, key and order, on the real tree.
+//! reading that ends when S11 deletes them; the table is what the Rust readers ask from S6 on. The Python classes were deleted
+//! by feature 449 T158 once nothing imported them, and with them the test that held this table equal to them: the table is the one
+//! registry.
 //!
 //! TWO ORDERS, BOTH THE PYTHON'S: a registry lists its families in the order its `__init__.py` imports them (`_ORDER`, the spec's FR-007
 //! sequence for the hamlet vocabulary), [`HAMLET`] and [`SHEET`] below; the modal checks enumerate them as `modals.rs` globbed the
@@ -28,25 +27,22 @@ pub struct Family {
     pub kinds: &'static [Kind],
 }
 
-/// A registry: where its modal files are (`assets/modals/<dir>/`), the Python package it mirrors, and its families.
+/// A registry: where its modal files are (`assets/modals/<dir>/`) and its families.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub struct Registry {
     pub dir: &'static str,
-    pub package: &'static str,
     pub families: &'static [Family],
 }
 
 /// The hamlet vocabulary (`classes/`), whose modals are `assets/modals/hamlet/`.
 pub const HAMLET_REGISTRY: Registry = Registry {
     dir: "hamlet",
-    package: "l7r/diagram/interactive/classes",
     families: &HAMLET,
 };
 
 /// The Mode A kinds (`compound_kinds/`), a registry of their own because a compound's well is written about a compound (feature 262).
 pub const SHEET_REGISTRY: Registry = Registry {
     dir: "sheet",
-    package: "l7r/diagram/interactive/compound_kinds",
     families: &SHEET,
 };
 
@@ -515,6 +511,10 @@ pub const SHEET: [Family; 5] = [
                 key: "weighing floor",
             },
             // ---- the parts of the office (feature 264: a thing drawn inside a feature is its own kind) ----------------------
+            Kind {
+                class: "Armory",
+                key: "armory",
+            },
             Kind {
                 class: "DayOffice",
                 key: "day office",

@@ -50,7 +50,6 @@ echo "1. IT FIRES - every row of the threat model (FR-015)"
 check "tier 1: a cohort run bare"              blocked "python3 -m l7r.diagram.tools.cohort_audit --count 48"
 check "tier 1: the generator run bare"         blocked "python3 -m l7r.diagram.hamletgen --batch 24"
 check "tier 1: a pool sweep run bare"          blocked "python3 -m l7r.diagram.pipeline.regen pool/hamlets/inashiro/inashiro.gen.py"
-check "tier 1: an engine by script path"       blocked "python3 l7r/diagram/hamletgen/__main__.py --batch 24"
 check "tier 1: a bare cargo test (feature 444)" blocked "cargo test --manifest-path rust/phases/Cargo.toml"   # GUARD_EDIT_OK: feature 444 T17 - the bare-cargo rule's cases
 check "tier 1: a bare cargo clippy, by path"   blocked "~/.cargo/bin/cargo clippy --all-targets"
 check "make rust-test is the compliant form"   ok "make rust-test"
@@ -58,11 +57,12 @@ check "a word cargo in prose is a mention"     ok "git commit -m 'cargo test now
 check "tier 2: the documented override"        blocked "make done FULL=1 REF_WHY=pre-push verification"
 check "tier 2: the reference-gate override"    blocked "REF_OK=1 make maps"
 check "tier 2: the -k gate override"           blocked "GATE_OK=1 make done"
-# feature 385 T91 (plan D112): a landing of tooling is linted before it runs
+# feature 385 T91 (plan D112) linted a landing's `.py` files by `python3 -m ruff` before it ran; 449 T247 deleted that lint
+# (`ask:449-T247-python-starts`: no Rust starts Python, and no `.py` file is left to land), so a landing is never refused for one
 LT="$(mktemp -d)"; printf 'x  =  1\n' > "$LT/bad.py"; printf 'x = 1\n' > "$LT/good.py"
 lint_case() { printf '{"tool_name":"Bash","cwd":"%s","tool_input":{"command":"%s"}}' "$LT" "$2" | "$HOOK" pretool >/dev/null 2>"$HOOK_ERR"; [ "$?" "$1" 0 ]; }
-if lint_case -ne 'make land-tooling FILES=bad.py'; then echo "  ok      a landing whose file fails the lint is refused before it runs"; PASS=$((PASS+1)); else echo "  FAIL    landing lint (bad)"; FAIL=$((FAIL+1)); fi
-if lint_case -ne 'make arbiter-fix-done ID=x NOTE=y TEST=t LAND=bad.py'; then echo "  ok      ...and arbiter-fix-done LAND= too"; PASS=$((PASS+1)); else echo "  FAIL    landing lint (arbiter)"; FAIL=$((FAIL+1)); fi
+if lint_case -eq 'make land-tooling FILES=bad.py'; then echo "  ok      a landing naming an unformatted .py file is not linted (449 T247)"; PASS=$((PASS+1)); else echo "  FAIL    landing lint gone (bad)"; FAIL=$((FAIL+1)); fi
+if lint_case -eq 'make arbiter-fix-done ID=x NOTE=y TEST=t LAND=bad.py'; then echo "  ok      ...nor arbiter-fix-done LAND="; PASS=$((PASS+1)); else echo "  FAIL    landing lint gone (arbiter)"; FAIL=$((FAIL+1)); fi
 if lint_case -eq 'make land-tooling FILES=good.py'; then echo "  ok      ...a clean file passes"; PASS=$((PASS+1)); else echo "  FAIL    landing lint (good)"; FAIL=$((FAIL+1)); fi
 rm -rf "$LT"
 # feature 385 T61 (plan D80): make keeps the last of two assignments of one variable, silently

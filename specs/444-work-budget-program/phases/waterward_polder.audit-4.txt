@@ -1,0 +1,23 @@
+OVER - waterward.polder averages 4,677 operations at 10 households, 2.02 times the first budget of 2,310 there, so it is past the 4,620 limit where LEEWAY stops on a budget raised on one SOUND (`budget.json` holds `first` and no `second`).
+
+**1. Counters against the budget.**
+- **The figures:** at 10 the mean is 4,677 and all four rolls (4,648 to 4,690) are over 4,620. At 20 the mean is 6,084, 1.90 times `first` (3,206). Against the raised figure (3,549 and 4,525) the ratios are 1.32 and 1.35.
+- **Sizes used:** I applied the twice-`first` limit at 10 and 20, the sizes the budget pins, not 40 and 80.
+- **The overshoot is small but still fails:** it is about 57 operations, and S10's "more than half the total" threshold does not apply to the twice-the-budget band. `raised_on` cites `ask:449-T250-raise-accepted`, which the bundle does not include. I applied the rule in `budget.json` as written; if the GM's words there cover the cap, the parent can overrule.
+- **Where the work is:** `chains.txt` has no section for this stage and `counts.json` gives only kinds, so I traced the chain from the code.
+  - `test@face` is 3,036 of 4,687, about 65%. Its chain is `roll_polder > stage_waterward > waterward::fringe > face / pieces > difference > crossings`.
+  - `test@bank` is 1,104, about 24%. Its chain is `roll_polder > bank_bands > crossings`.
+- **The named excess is a repeated scan, waste rather than work the contract owes.** `fringe` calls `face` once per flank asked. Each call re-files every corner of the whole dike ring through `nearest`, charged `2 * n`, but which side a corner is nearest does not depend on the flank. With n = 120 at 10 (`test@fringe`) and 2 to 3 flanks, filing the corners once would save 120 to 240 operations. That alone is more than the 57 over the limit.
+
+**2. Inner loops without counters (S5).** Three loops in `rust__phases__src__driver__polder.rs` are not counted:
+- the per-ring box fold at the top of `bank_bands`, about 100 to 130 points a roll;
+- `ks.sort_unstable()` and `ks.dedup()` over a reach's samples in `bank_bands`;
+- `ts.sort_by` in that file's `crossings`.
+
+`waterward.rs` counts the same operations (`boxed` a test per corner, and each `sort_by` comparison), so by the stage's own convention these owe a tally. They are small, so they are a note here rather than the verdict, and counting them only pushes the total further past the limit. The loops in `waterward.rs` itself are all counted (`face`, `pieces`, `clip`, `crossings`, `difference`).
+
+**3. Placed and then repaired (S4).** None. The filter in `pieces` that drops pieces wholly past the dike's extent, and the short-run discard in `close`, run before anything is written out. They are part of building the shape, not a repair, and there are no `placed@`, `dropped@` or `moved@` counters.
+
+**4. Growth (S6).** The fitted exponent from 10 to 20 is log2(6,084 / 4,677) = 0.38, against the budget's 0.35 and well under 1.15. The dike ring grows with the perimeter (read@dike 126 to 184), and no loop over a growing set sits inside another one in this stage. The `plots.iter().any` inside the column-by-row loop in `field::polder::row_ditches` belongs to the field stage, not this one.
+
+Files: `/tmp/l7r-check/work-budget-audit-waterward.polder/budget.json`, `/tmp/l7r-check/work-budget-audit-waterward.polder/counts.json`, `/tmp/l7r-check/work-budget-audit-waterward.polder/code/rust__phases__src__waterward.rs`, `/tmp/l7r-check/work-budget-audit-waterward.polder/code/rust__phases__src__driver__polder.rs`

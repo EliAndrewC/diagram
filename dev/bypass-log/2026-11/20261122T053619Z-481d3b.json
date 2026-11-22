@@ -1,0 +1,6 @@
+{
+  "utc": "2026-11-22T05:36:19Z",
+  "target": "plan-gate decide-defer 449-rust-codebase T244",
+  "commit": "0280a9c81b",
+  "why": "filed in feature 451 as T142, which the deferral names; this feature's T245 was withdrawn into it"
+}

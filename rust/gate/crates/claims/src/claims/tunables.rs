@@ -1,6 +1,6 @@
 //! The numbers that are OURS (`scripts/record/tunables.py`, ported by feature 449 T82; feature 417 T28, D31): every claim whose value no
-//! source states, and with `--inline` every number inside the map code its unit's claims never state - the Rust stages read here, a
-//! `.py` file's numbers by Python's syntax tree through the runner (`ask:449-T82-claims`).
+//! source states, and with `--inline` every number inside the map code its unit's claims never state - the Rust read here (a `.py`
+//! file's numbers, read by Python's syntax tree through the runner, left with the engine's Python, feature 449 T158).
 
 use std::collections::HashMap;
 use std::fmt::Write as _;
@@ -8,10 +8,8 @@ use std::path::Path;
 use std::sync::LazyLock;
 
 use fancy_regex::Regex;
-use serde_json::json;
 
 use super::index::Cur;
-use super::scope::Reader;
 use super::units::{items, rel, rglob, walked};
 use crate::record::repo::{read_text, Fail};
 use crate::record::units::re;
@@ -19,12 +17,6 @@ use crate::record::units::re;
 /// The labels whose value is ours, searched and silent first.
 const OURS: [&str; 3] = ["GUESS", "UNRESEARCHED", "CONVENTION"];
 static FIGURE: LazyLock<Regex> = LazyLock::new(|| re(r"(?<![\w.])\d+(?:\.\d+)?(?![\w])"));
-/// The code that draws a map, and the audit that grades a Mode A sheet (D31 (d)).
-const MAP_CODE: [&str; 2] = [
-    "l7r/diagram/tools/pack_audit/",
-    // the Mode A engine: the compound generator, the caption placer, the audit (feature 449 T152 deleted their Python)
-    "rust/mode_a/src/",
-];
 /// Numbers too plain to be a decision.
 const TRIVIAL: [f64; 12] = [
     0.0, 1.0, 2.0, 3.0, 4.0, 10.0, 100.0, 90.0, 180.0, 360.0, 255.0, 0.5,
@@ -119,8 +111,9 @@ pub fn unstated_rust(
 /// One audit line: (file, line, function, value).
 pub type Found = (String, usize, String, f64);
 
-/// Every number `unstated` finds in the map code under `root` (and `path`): the `.py` files by the runner, the Rust here.
-pub fn inline(reader: &mut Reader, root: &Path, cur: &Cur, path: &str) -> Result<Vec<Found>, Fail> {
+/// Every number `unstated` finds in the map code under `root` (and `path`): the Rust (the `.py` files' arm, by the Python, left with
+/// the engine's Python, feature 449 T158).
+pub fn inline(root: &Path, cur: &Cur, path: &str) -> Result<Vec<Found>, Fail> {
     let mut text: HashMap<String, HashMap<String, String>> = HashMap::new();
     for row in cur.iter() {
         let unit = row.key.split_once('#').map_or(row.key.as_str(), |p| p.0);
@@ -135,30 +128,6 @@ pub fn inline(reader: &mut Reader, root: &Path, cur: &Cur, path: &str) -> Result
     }
     let empty = HashMap::new();
     let mut out = Vec::new();
-    for p in rglob(&root.join("l7r"), ".py") {
-        let r = rel(&p, root);
-        if !MAP_CODE.iter().any(|m| r.starts_with(m)) || !r.starts_with(path) {
-            continue;
-        }
-        let source = read_text(&p)?;
-        let got = reader.ask(
-            "tunables_unstated",
-            &json!([source, text.get(&r).unwrap_or(&empty)]),
-        );
-        let got = got?;
-        for t in got.as_array().into_iter().flatten() {
-            let line = t[1]
-                .as_u64()
-                .and_then(|n| usize::try_from(n).ok())
-                .unwrap_or(0);
-            out.push((
-                r.clone(),
-                line,
-                t[0].as_str().unwrap_or_default().to_owned(),
-                t[2].as_f64().unwrap_or(0.0),
-            ));
-        }
-    }
     // the Rust half audits every crate the claims walk reads (feature 449 T165), where it named `rust/phases/src/`: the engine's
     // slices port into new crates beside it, and a number one of them hard-codes is as much ours as one in `rust/phases`
     let base = root.join("rust");

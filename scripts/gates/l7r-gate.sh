@@ -152,5 +152,5 @@ fi
 # GUARD_EDIT_OK: feature 449 T205 - L7R_GATE_PRINT_FRESH=1: the binary, built above when stale, printed where it is now fresh
 # (exit 1 where it is not: a failed build, or STALE_OK's stale binary), for `make hooks-test` to export as L7R_GATE_FRESH
 if [ -n "${L7R_GATE_PRINT_FRESH:-}" ]; then stale && exit 1; printf '%s\n' "$BIN"; exit 0; fi
-export L7R_GATE_TREE="$TREE"  # where the binary finds codeid.py: a fixture repository it runs in has none
+export L7R_GATE_TREE="$TREE"  # the gate's own tree (closing list, review state), which a fixture repository it runs in lacks
 exec "$BIN" "$@"

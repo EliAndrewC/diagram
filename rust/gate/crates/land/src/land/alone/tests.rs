@@ -314,8 +314,9 @@ fn two_tasks_sections_in_one_plan_land_only_the_landing_task_s() {
     ] {
         edited(&dir, &c, task, rel);
     }
-    // the tick as the real one leaves it: T1's section archived to one generated line, its tasks.md line moved to tasks-done.md
-    put(&dir, "archive.sh", "python3 -I -c \"import re; p='specs/451-x/plan.md'; s=open(p).read(); open(p, 'w').write(re.sub(r'(?ms)^### T1 .*?(?=^### )', '<!-- archived T1 -->\\n', s))\"\nsed -i '/^- \\[ \\] T1 /d' specs/451-x/tasks.md\nprintf -- '- [x] T1 one, reworded\\n' > specs/451-x/tasks-done.md\ngit add -A\n");
+    // the tick as the real one leaves it: T1's section archived to one generated line, its tasks.md line moved to tasks-done.md (by
+    // `awk`, where a `python3 -c` cut it until 449 T273: no test starts Python, SC-005)
+    put(&dir, "archive.sh", "awk '/^### T1 /{print \"<!-- archived T1 -->\"; cut=1; next} /^### /{cut=0} !cut' specs/451-x/plan.md > plan.cut && mv plan.cut specs/451-x/plan.md\nsed -i '/^- \\[ \\] T1 /d' specs/451-x/tasks.md\nprintf -- '- [x] T1 one, reworded\\n' > specs/451-x/tasks-done.md\ngit add -A\n");
     let archive = format!("bash {}", dir.join("archive.sh").display());
     let (rc, said) = alone(&dir, &c, &[("STUB_MID", &archive)]);
     assert_eq!(rc, 0, "{said}");

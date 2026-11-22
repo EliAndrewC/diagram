@@ -52,7 +52,8 @@ const GROWTH_CAP: f64 = 1.15;
 const GROWTH_SLACK: f64 = 0.05;
 /// The sizes an accepted stage is held to (feature 443 T04; the push's ratchet).
 const HELD: [i64; 2] = [40, 80];
-/// The item counts `set` takes (10: a form at a bounded n, ask:444-polder-sizes) and `change` takes (20, 40, 80).
+/// The item counts `set` and `change` take (10: a form at a bounded n, ask:444-polder-sizes; `change` 10 since 449 T253), each held
+/// to its stage's own sizes.
 const ITEM_FLAGS: [&str; 4] = [
     "--items-at-10",
     "--items-at-20",
@@ -285,12 +286,12 @@ fn read_args(args: &[String], root: &Path) -> Result<Args, crate::Reply> {
                 Spec::value("--derivation"),
                 Spec::value("--verdict"),
             ];
-            s.extend(items(&ITEM_FLAGS[1..]));
+            s.extend(items(&ITEM_FLAGS));
             (s, 2)
         }
         "program" => (vec![Spec::value("--words")], 2),
         "sheets" => (vec![], 2),
-        "accept" => (vec![Spec::value("--arbiter")], 2),
+        "accept" => (vec![Spec::value("--arbiter"), Spec::value("--counts")], 2),
         other => return Err(usage(&format!("argument cmd: invalid choice: '{other}'"))),
     };
     let parsed = parse_with(&args[i + 1..], &specs, need).map_err(|why| usage(&why))?;
@@ -380,6 +381,9 @@ fn run(a: &Args) -> Result<R<(String, String)>, crate::Reply> {
                 Ok((why, done))
             })()
         }
+        "change" if sheets::is_sheet_stage(root, &a.pos[0]) => sheets::change_cli(a),
+        "accept" if sheets::is_sheet_stage(root, &a.pos[0]) => sheets::accept_cli(a),
+        "accept" if a.parsed.has("--counts") => Ok((format!("`{}` is no pool-sheet stage - COUNTS= is a pool-sheet stage's; a hamlet stage is accepted at the newest `make work-budget` run's counts", a.pos[0]), String::new())),
         "change" => {
             let to = float_arg(&a.pos[1])?;
             let exponent = if a.parsed.has("--exponent") {
@@ -387,7 +391,7 @@ fn run(a: &Args) -> Result<R<(String, String)>, crate::Reply> {
             } else {
                 None
             };
-            let items = items_of(a, &ITEM_SIZES)?;
+            let items = items_of(a, &[10, 20, 40, 80])?;
             let phase = &a.pos[0];
             rules::change_budget(
                 root,

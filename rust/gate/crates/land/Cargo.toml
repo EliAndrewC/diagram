@@ -1,4 +1,4 @@
-# The landing and the owing replay (feature 449 T121, T83's fifth slice, `ask:449-T83-scope`): `l7r-gate land`, `l7r-gate replay-owing`.
+# The landing (feature 449 T121, T83's fifth slice, `ask:449-T83-scope`): `l7r-gate land` (`l7r-gate replay-owing` deleted by 449 T247).
 [package]
 name = "l7r_gate_land"
 version = "0.1.0"
@@ -10,7 +10,6 @@ fancy-regex = { workspace = true }
 l7r_gate_claims = { path = "../claims" }
 l7r_gate_cohort = { path = "../cohort" }
 l7r_gate_core = { path = "../core" }
-l7r_gate_owed = { path = "../owed" }
 l7r_gate_reviews = { path = "../reviews" }
 l7r_gate_task = { path = "../task" }
 l7r_shared = { path = "../../../guard/shared" }

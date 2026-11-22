@@ -1,130 +1,112 @@
-# Derivation - waterward, the polder form, greenfield (feature 444 FR-015; a form at its bounded n, as the field's polder: the round arbiter's ruling on ask:444-polder-sizes)
+# Derivation - waterward, the polder form, greenfield (feature 444 FR-015; a form at its bounded n, as the field's polder: the round arbiter's ruling on ask:444-polder-sizes; re-derived by feature 449 T235; the bank bands added by feature 449 T250)
 
 The waterward stage's polder form - the reed fringe outside a polder's dike - written from its contract alone. The valley form's one test of the plan is `waterward_greenfield.derivation.md`'s.
 
+This round re-derives the stage as the Rust stage's contract states it (feature 444's `t42-brief.md`, stage 4c, `waterward`: its outputs the flanks and the strips; its drawing item 10, the marsh approximated as a polygon in a pale reed tint, "nothing in the six stages' logic depends on it"). The earlier rounds priced the drawing of each strip as reed marsh - its corners rounded and its edges waved, cut to the open ground outside the dike and the fields, the bare ground built from a keep-out grid, and the marsh recorded as no-build ground - which this stage no longer does. Each strip is laid as a plain polygon: a DELIBERATE DEVIATION from research question 0074's waved, never-ruled edge, a map drawing convention for the Rust driver (the brief's item 10), labeled here and flagged to the session as drawing work, not this stage's.
+
 ## Contract
 
-- Reads: the plan's settlement form and field archetype; on a polder, the dike's outline and its notches (the sluice cuts through its band), the band's widest, the fall and the side of the polder the seat chose; for drawing each strip, the polder's fields, the no-build ground standing, the dike's crest and every drawn watercourse (the streams, the channels and the drawn laterals), and the ways, the structures and the wells standing (none yet: the fringe is laid before the houses and the ways).
-- Writes: a polder's waterward fringe - a reed strip outside its dike on each flank that faces the water it was reclaimed from (0019: "every flank of a polder but the landward one" holds water back; the reed fringe along the low foot where the outfall drains and along the cross flanks off the shore, the wild pond at the head, drawn as the pond), laid before the houses so they treat it as wet ground; each strip drawn as reed marsh - its corners rounded and edges waved (0074), cut to the open ground outside the dike and the fields, the ground its reeds keep off taken out (the paddy's edge, the no-build ground, the crest of the dike, the drawn water) - and recorded as the marsh, its ring the ground the reeds are drawn on, no-build ground for every later placer; the flanks declared. On any other form, nothing.
-- Keeps: the strip at the dike's outer face, stepping in through a notch (0027: the band cut where a channel crosses); a strip held to the frame; the marsh's edge rounded and waved, never ruled (0074); no reed on the dike's crest or in the water, reeds to the water's edge and the paddy (0074, 0061); every marsh but a pond fringe no-build ground (0058).
-- Bounds: a bounded n: households 10-20 (0019's GUESS: the ten to twenty households a small polder holds; the plan refuses a polder past them). Measured 2026-11-04 on polder rolls, the reference spec with its field form a polder grid, seeds 4, 25, 39, 47 (`make stage-sizes STAGE=waterward SIZES=10,20` and `STAGE=homesteads` with that form): the dike's outline 124 and 182 points at 10 and 20 households, its crest 120 and 178, its notches 2; the dike's extent 885 by 871 ft and 1,184 by 1,354 (the mean, across and along the fall); the water-facing flanks 3 at both sizes (both cross flanks and the foot); the drawn watercourses 65 and 116 points (the channels' 6 and the drawn laterals' 59 and 110); the polder's fields one ring of 4 points; no way, structure or well standing; each strip's drawn ring 131 and 178 points (393 and 534 over the three strips, the marshes recorded after the stage).
+- Reads: the plan's settlement form and field archetype; on a polder, the dike's outer face (one ring), the two channels that cross the dike at its sluices - the feeder into the inlet and the outfall's drain out of the tail, each its course and its drawn width - the strip's depth, the canvas, the fall and the side the seat faces out of.
+- Writes: a polder's waterward fringe - a reed strip outside the dike on each flank that faces the water it was reclaimed from (0019: "every flank of a polder but the landward one" holds water back), each strip a plain filled polygon from the dike's outer face out to its depth or the frame, cut where a sluice's channel crosses it, in as many pieces as the channels leave; the denser band of reeds along each bank of the feeder and the outfall's drain where the bank runs through the reeds - the strips and the wild pond's fringe (0074: "a narrow band of denser reeds lines each bank" where a stream or ditch crosses the marsh) - each band a line of points `BANK_FT` (6 ft) wide; and the flanks declared. No rounding, waving, clip to open ground, keep-out grid or marsh record (the brief's item 10, above). On any other form, nothing.
+- Keeps: the strip at the dike's outer face; held to the frame (20 ft past the canvas at most); run 30 ft before the dike's start and 20 ft past its end along the flank (a GUESS); the strip cut along each channel reach's bed at its drawn width, so the reeds stop at the water's edge and never cover the water (0074; 0019: water crosses the dike only at gated sluices; 0027: the band cut where a channel crosses); a piece left wholly past the dike's own extent - the run past the corner the channel cuts off - dropped (a GUESS); a bank band only where its bank stands in a ring of reeds - a strip or the fringe - and off the wild pond's water (its rim grown by the band's width), sampled along the bank every 2 ft (a drawing's grain), a band a run of two samples or more (0074).
+- Bounds: a bounded n: households 10-20 (0019's GUESS: the ten to twenty households a small polder holds; the plan refuses a polder past them). Measured 2026-11-22 on the polder rolls the work budget counts - the reference spec with its field form a polder grid, seeds 4, 25, 39, 47, at 10 and 20 households - from each roll's drawn map (`make hamlet` on each spec, its dike band, its channels and its reed pieces read from the SVG, px = ft): the dike's outer face 120 and 178 points at 10 and 20 households at every seed; the feeder 3 points and the outfall's drain 3 (2 reaches each, 4 reaches, 6 points); the flanks asked 3, the flanks laid 2 at every seed (a cross flank and the foot; the seat stands on the third); the pieces drawn 4 at every seed - two strips and two slivers between the drain's bed and the dike - their points 82 at 10 (39 + 37 + 3 + 3) and 111 at 20 (60 + 45 + 3 + 3, or 46 + 59 + 3 + 3), so a strip's ring before its cuts about 38 points at 10 and 53 at 20 (the two strips' mean); the drain's two reaches reach both laid strips (the short diagonal at the dike's corner and the long run down the foot), the feeder's, at the head, neither. The bank bands, measured 2026-11-22 on the same eight rolls from each stage's outputs (a test reading the feeder's and the drain's courses and the rings of reeds - the four pieces and the fringe, 16 points - each bank's line offset by half the channel and the band and clipped to each ring's box; no count of the stage's operations read): each channel has 2 reaches and 2 banks, so 8 bank reaches, asked of 5 rings; the rings' points 98 at 10 and 127 at 20 (the pieces' 82 and 111, and the fringe's 16); 13 of the 40 reach-and-ring pairs meet, every seed and size, and the met rings' points summed over those pairs are 265 at 10 and 335 at 20 (331, 331, 331, 345); the bank lying in some ring's box about 604 ft at 10 and 606 at 20 (302 and 303 samples at 2 ft), and in the boxes summed over the rings it meets about 786 ft at 10 and 796 at 20 (393 and 398 samples); the bands drawn 4 at every seed (each bank of the drain in the foot's strip, each bank of the feeder in the fringe), their points 213 at 10 and 217 at 20 (the means of 216, 217, 211, 209 and 219, 211, 217, 219, read off the drawn reed-bank paths). The feeder runs 140 ft and the drain about 2,000 to 2,750 ft, on to the canvas edge, so most of each bank lies past every ring's box.
 
 ## The algorithm
 
     the plan's form read (1); not a polder: done
-    the dike's outline and notches read; each notch filed to the flank whose face it stands nearest (4 tests)
-    the flanks facing the water from the fall and the seat's side (3)
-    for each water-facing flank:
-      the face: the dike's points binned along the flank (32 bins), the outermost of each bin its face, stepped in through each
-        notch the bin's middle stands near; a run of bins at one face its ends only; the strip run from the face out to its depth
-        or the frame
-      the strip's outline rounded (a closing at the rounding radius, two buffers) and waved: samples along its ring at the wave's
-        step, each placed by a bisection of the ring, moved inward by four wave components along its normal, the waved ring cut
-        to the rounded one and simplified
-      cut to the open ground outside the dike and the fields
-      the no-build ground read for the pond's cut (the earlier strips' rings, no pond on a polder)
-      the drawn ground: the ring less every keep-out ring near it, each read for its box, the ones that reach it buffered and taken out
-      the keep-out grid filed: the fields, the no-build rings, the dike's crest as segments, every drawn watercourse's segments;
-        the ways and the urban halo read (none standing)
-      the bare ground: the grid's cells under the strip's box read, their items handed back, each item's shape built and buffered
-      the record written: the drawn ring at the record's grain, its box and its fields, its ring no-build
+    the flanks facing the water from the fall and the seat's side (3 asked)
+    the dike's outer face read in one pass: its box, and each point filed to the flank it faces and its place along it
+    the channels' courses read (their points)
+    for each flank laid:
+      the face: the outermost filed point at each place along the flank; the strip from the face out to its depth or the frame,
+        run past the dike's ends
+      each channel reach's box asked of the strip's box; for each reach that reaches it, its bed (a quadrilateral at the reach's
+        drawn width) taken out of the strip: each ring vertex's side of the bed's four sides, each ring edge against each side
+        for its crossings, each bed corner asked whether the ring holds it, then the ring walked once to cut its pieces
+      each piece's points asked of the dike's extent along the flank; a piece wholly past it dropped
+      the pieces written
+    the rings of reeds boxed: the pieces and the fringe (their boxes read with the pieces' writing)
+    for each bank of the two channels, for each reach:
+      the reach's offset line clipped to each ring's box (5 asked)
+      for each ring whose box it meets: the ring's edges walked once - the reach's start's side of the ring (even-odd) and the
+        reach's crossings of its edges, sorted
+      for each sample of the reach in some met box, in order along the reach: the pond's rim asked; each met ring asked whether
+        the sample is in it, by the start's side and the crossings passed so far (a cursor along the sorted crossings)
+      the runs of samples in the reeds, of two or more, written as bands; a sample in no box is out of the reeds, never asked
     the flanks declared
 
 ## The knobs the count reads
 
-- the strip's depth: 280 ft out from the dike's face (a GUESS: no page gives a reed fringe's breadth; it outlasts any crop this tier makes), run 30 ft before the dike's start and 20 ft past its end (a GUESS)
-- the face's bins: 32 along the flank (a GUESS, a search step)
-- the rounding radius: 60 ft, the first tried, halved down to 5 ft until the rounded strip keeps 85% of its area (a strip 280 ft deep keeps all but its corners at the first, so one try); each buffer's arcs 8 points a corner
-- the wave's step: 15 ft along the ring (a dozen samples to the shortest wave, 180 ft), four components (a lead, two slower and a short one), its ring simplified to 1 ft
-- the keep-out grid's cell: 128 ft
-- the bare ground's passes: each keep-out shape's vertices built, buffered and unioned a side, shrunk and grown (4)
+- the strip's depth: 280 ft out from the dike's face (a GUESS: no page gives a reed fringe's breadth)
+- the run past the dike's ends: 30 ft before its start and 20 ft past its end (a GUESS)
+- the frame: the strip held to 20 ft past the canvas
+- the channels' drawn widths: the feeder's 3 ft and the drain's 5.5 ft (the stage's inputs)
+- the bank band's width: 6 ft (`BANK_FT`, 0074's drawing CONVENTION); its samples every 2 ft along the bank (a drawing's grain)
 
 ## Indexes
 
-- the keep-out grid: cells of 128 ft, each keep-out filed in the cells its box covers; a strip's box, 921 by 280 ft on a cross flank at 10 and 935 by 280 on the foot (the dike's extent and the 50 ft its runs pass it), covers (921 / 128 + 1) x (280 / 128 + 1) = 26 and 27 cells, 26 on the mean; at 20, 1,404 by 280 and 1,234 by 280, 38 and 34 cells (37); densest case from a smallest side of 128 ft, a cell where the crest, a lateral's mouth and a notch meet
-
-No grid for the wave's samples: each is placed by a bisection of the ring's cumulative length, the rounded ring's 34 laid points and its four corners' arcs, about 7 steps.
+No grid: the strip is cut by at most the 4 reaches the two channels hold, each asked by its box first; the dike's points are filed once to the flank and the place along it they face, a bucketing, never searched again. The bank bands use no grid either: each bank reach is clipped to each of the 5 rings' boxes, and a ring whose box it meets is walked once for the reach's crossings, so a sample is asked of a ring by a cursor along its crossings, never by a walk of its edges.
 
 ## The count, factor by factor
 
 | factor | scope | value | reason | worst case |
 |---|---|---|---|---|
-| items | per item | 3 | the water-facing flanks, measured: both cross flanks and the foot | 3, the village on the head's side; 2 where it stands on a cross flank |
-| the face | per item | 188 at 10, 246 at 20 | the dike's 124 and 182 points binned (1 each), and each of the 32 bins asked of the 2 notches (64) | every notch on one flank |
-| the strip written | per item | 34 | its two outer corners and a face point for each of the 32 bins | a face that changes at every bin |
-| the rounding | per item | 544 | one try of two buffers, 8 arc points a corner over the strip's 34 points (2 x 8 x 34) | a narrow strip halved down to 5 ft, four tries |
-| the clip to open ground | per item | 259 at 10, 364 at 20 | the shaped ring (131, 178) tested against the dike's outline (124, 182) and the field's 4 | the strip beside the whole dike |
-| the drawn ground's own ring | per item | 135 at 10, 182 at 20 | the shaped ring read for its box (131, 178) and the field's 4 | as above |
-| the keep-out grid filed | per item | 254 at 10, 414 at 20 | the field's 4, the crest's 120 and 178 points boxed and filed as segments, and the drawn water's 65 and 116 points read and filed (2 each) | a crest the length of the canvas |
-| the keep-out grid's cells under the strip | per item | 26 at 10, 37 at 20 | the 128 ft cells under the strip's box (the Indexes) | as the Indexes |
-| the bare ground's items | per item | 64 at 10, 100 at 20 | the items those cells hand back: a third of the crest's segments (40, 59) - one flank about a quarter of the dike's perimeter and the cells round its corners - a third of the water's (22, 39) - the laterals' mouths at the dike, an upper figure - the field and about one earlier strip | the foot's strip, which touches both cross flanks' |
-| the bare ground's shapes | per item | 1,032 at 10, 1,512 at 20 | 4 passes over each vertex of those items: the crest's third (80, 118), the water's third (43, 78), the field's 4 and one earlier strip's ring (131, 178) | as above |
-| the record written | per item | 143 at 10, 190 at 20 | the drawn ring rounded and written (131, 178), its box (4) and its record's fields (8) | always its ring |
-| the ways and the halo | per item | 2 | the ways and the structures and wells read, none standing | a re-laid fringe after the houses, which the contract does not lay |
-| the wave's samples | over the run | 8,194 at 10, 11,033 at 20 | each strip's ring over the 15 ft step - 2,402, 2,402 and 2,430 ft at 10 (160, 160, 162), 3,368, 3,368 and 3,028 at 20 (224, 224, 201) - 482 and 649 samples, each its bisection (7), its four components, its normal and its move (8) and its share of the cut and the simplify (2): 17 | a strip run to the frame on every side |
-| the pond's cut | over the run | 393 at 10, 534 at 20 | the earlier strips' rings read for their boxes: none, one and two of them, three rings over the run | as measured |
-| the drawn ground's keep-out rings | over the run | 393 at 10, 534 at 20 | the same three rings read for their boxes | as measured |
-| the cuts buffered | over the run | 262 at 10, 356 at 20 | the two earlier rings that reach a later strip (the foot's corners against the cross flanks') buffered and taken out | every earlier ring reaching |
-| the earlier strips indexed | over the run | 393 at 10, 534 at 20 | the same three rings' points indexed in the grid | as measured |
-| the marsh's ring passes | over the run | 3,930 at 10, 5,340 at 20 | each strip's drawn ring (131, 178) rounded to the record's grain, copied to the wet ground, copied into its cover, scanned for the record's box (4), written to it and copied twice as no-build ground: 10 a point, three strips | always its ring |
-| the outline's box | over the run | 393 at 10, 534 at 20 | each strip's shaped ring read once for its box | always its ring |
-| the crest's scans | over the run | 1,800 at 10, 2,670 at 20 | the dike's crest (120, 178 points) read for its box against each strip's reach (4 scans) and copied (1): 5 a point, three strips | always the whole crest |
-| the keep-out rings indexed, beyond their points | over the run | 1,533 at 10, 2,083 at 20 | each ring filed in the grid - the earlier strips', three over the run - copied and its edges built (2 a point), each edge in the rows its height spans and the cells its box covers in the ring's own 64 ft index (an edge of the shaped ring about 18 ft at 10 and 20 ft at 20, 1.3 rows and 1.6 cells): 4.9 a point less the 1 already priced - 3 x 131 x 3.9, 3 x 178 x 3.9 | a ring whose edges run along the rows |
-| the grid's cells | over the run | 1,083 at 10, 1,875 at 20 | each item filed in every 128 ft cell its box covers, beyond the one priced: the crest's segments about 30 ft long (the dike's 3,512 and 5,076 ft perimeter over its points), 1.25 cells each (150, 223 a strip), the drawn water's segments as the grid takes them - the laterals split at their tapers, 98 and 197 points a strip - 1.25 each (123, 246), the field's ring over its box (62 and 119 cells) and an earlier strip's (26, 37); three strips | a crest segment across a cell corner |
-| the face's extra passes | over the run | 744 at 10, 1,092 at 20 | each flank's face reads the dike's points twice more, for their coordinate along the flank and its extremes (2 a point, three flanks) | always the whole dike |
-| the inputs read | once | 126 at 10, 184 at 20 | the dike's outline and its 2 notches | the typical dike |
-| the notches filed | once | 8 | each of the 2 notches against the 4 flanks | always 8 |
-| the form's test and the flanks | once | 1 | the plan's form read; the flanks from the fall and the seat in the same pass | always 1 |
-| slack | per item | 1 | every factor is a count of the stage's own inputs | not applicable |
+| items | per item | 2 | the flanks laid, measured: a cross flank and the foot | 2 at every measured seed; 3 where the seat stands on the head's side |
+| the reaches boxed | per item | 4 | the two channels' 4 reaches, each box asked of the strip's box once | always 4 |
+| the beds' differences | over the run | 2,008 at 10, 2,788 at 20 | 4 beds taken out - the drain's 2 reaches reach both laid strips, the feeder's, at the head, neither (measured) - each a difference of a strip's ring of m points (38, 53, the Bounds): each vertex against the bed's 4 sides (4m), each edge against its 4 sides for crossings (4m), each of its 4 corners asked of the ring (4m), the ring walked once with the bed's corners (m + 8): 4 x (12m + m + 8) | a channel crossing a third strip, 6 beds |
+| the pieces asked of the extent | over the run | 82 at 10, 111 at 20 | each piece's points (the Bounds) against the dike's extent along its flank, 1 a point | as measured |
+| the pieces written | over the run | 82 at 10, 111 at 20 | each piece's points written once (the Bounds) | as measured |
+| the dike's face read | once | 120 at 10, 178 at 20 | the outer face's points, each boxed and filed to its flank and place in one pass | always the whole ring |
+| the channels read | once | 6 | the feeder's and the drain's points | always 6 |
+| the form's test and the flanks | once | 4 | the plan's form read (1); the 3 flanks asked of the fall and the seat | always 4 |
+| the bank reaches boxed | once | 40 | the 8 bank reaches (2 channels x 2 reaches x 2 banks), each clipped to each of the 5 rings' boxes | always 40 |
+| the reaches crossed | over the run | 265 at 10, 335 at 20 | each of the 13 reach-and-ring pairs that meet walks the ring's edges once, for the start's side and the crossings (the Bounds: the met rings' points summed) | every reach meeting every ring: 8 x the rings' points, 784 and 1,016 |
+| the samples asked of the rings | over the run | 393 at 10, 398 at 20 | each sample of a reach in a met box asked of each ring its reach met, 1 a ring (the Bounds: the bank in the boxes summed, at 2 ft) | the bank's whole run in the boxes |
+| the pond's rim | over the run | 302 at 10, 303 at 20 | each sample in some box asked of the rim once (the Bounds) | as measured |
+| the crossings passed | over the run | 26 | the cursor's steps: a reach crosses a met ring's edge about twice, going in and out, 13 meets | a few a meet |
+| the bands written | over the run | 213 at 10, 217 at 20 | each band point written once (the Bounds, the drawn points) | as measured |
+| slack | per item | 1 | every factor is a count of the stage's own inputs and outputs | not applicable |
 
-- reason above the reference: a strip is one thing laid, about 920 ft by 280 at 10 and 1,300 at 20, and drawing it is its whole outline waved at a 15 ft step and its bare ground built from every keep-out near it - not a cost per house or per mark placed
+- reason above the reference: none owed - about 1,775 a strip at 10 and 2,260 at 20 with the bank bands, under the reference's 4,000 a thing
 
-So: items x (the face + 34 + 544 + the clip + the drawn ground's own ring + the grid filed + the bare ground's cells, items and shapes + the record + 2) x slack + each over-the-run and once term.
+So: items x the reaches boxed x slack + the beds' differences + the pieces asked and written + each once term + the bank bands' terms (the reaches boxed and crossed, the samples asked, the rim, the crossings passed, the bands written).
 
 ## Totals
 
-- at 10: 3 x (188 + 34 + 544 + 259 + 135 + 254 + 26 + 64 + 1032 + 143 + 2) x 1 + 8194 + 393 + 393 + 262 + 393 + 3930 + 393 + 1800 + 1533 + 1083 + 744 + 126 + 8 + 1 = 27296
-- at 20: 3 x (246 + 34 + 544 + 364 + 182 + 414 + 37 + 100 + 1512 + 190 + 2) x 1 + 11033 + 534 + 534 + 356 + 534 + 5340 + 534 + 2670 + 2083 + 1875 + 1092 + 184 + 8 + 1 = 37653
+- at 10: 2 x 4 x 1 + 2008 + 82 + 82 + 120 + 6 + 4 + 40 + 265 + 393 + 302 + 26 + 213 = 3549
+- at 20: 2 x 4 x 1 + 2788 + 111 + 111 + 178 + 6 + 4 + 40 + 335 + 398 + 303 + 26 + 217 = 4525
 
 ## Growth
 
-From 10 to 20 households the stage grows at an exponent of about 0.46 (27,296 to 37,653): the strips are three at both sizes, and each
-grows with the dike - its outline, its crest and its extent - and the drawn water beside it. No loop over a growing set runs inside
-another: the face bins the dike's points once a flank, the wave's samples each take a bisection, and the bare ground reads the grid's
-cells under one strip's box, never every keep-out.
+From 10 to 20 households the stage grows at an exponent of about 0.35 (3,549 to 4,525): the strips are two at both sizes, and each grows with the dike's face along its flank; the bank bands barely grow (1,239 to 1,319), their samples bounded by the reach of bank in the rings' boxes, not by the drain's run to the canvas edge, which grows with the canvas. No loop over a growing set runs inside another: the dike's points are filed once, and each strip is cut by a constant 4 reaches at most, never by a set that grows.
 
 ## Work the first derivation missed
 
-Feature 444 FR-022 rule 2: the form's first budget (17,813 / 24,059 at 10 / 20, SOUND twice blind, verdicts 3 and 4) priced each of
-the strip drawing's passes over a ring at 1 a point; the MODE AUDITs of 2026-11-04 (`phases/waterward.audit-2.txt`, `-3.txt`) found the
-passes the drawing makes, each work the contract owes - the strip drawn as marsh, recorded, its ring no-build ground (0058), its reeds
-kept off the crest (0074) and its bare ground built from the keep-outs near it:
-
-- the marsh's ring passes - the drawn ring rounded, copied, boxed, written and filed as no-build ground
-- the outline's box, read once
-- the crest's scans against each strip's reach
-- the keep-out rings indexed - their edges in their rows and cells, beyond the one a point priced
-- the grid's cells - every item in each cell its box covers, beyond the one an item priced
-- the face's extra passes over the dike's points
+- the bank bands (feature 449 T240, added to the stage after T235's re-derivation): the denser reeds along each bank of the feeder and the outfall's drain through the reeds, a rule of the contract's Writes (0074: "a narrow band of denser reeds lines each bank" where a stream or ditch crosses the marsh) - the bank reaches boxed (40), the reaches crossed (265, 335), the samples asked of the rings (393, 398), the pond's rim (302, 303), the crossings passed (26) and the bands written (213, 217): 1,239 at 10 and 1,319 at 20
 
 ## Earlier findings
 
-- verdict-1, finding 1: fixed - its SOUND judged this derivation priced at 20, 40 and 80, past the polder's bounded n; priced now at 10 and 20, its sizes, with its notes answered below
+- verdict-1, finding 1: fixed - priced at 10 and 20, the polder's sizes, as since round 2
 - verdict-2, finding 1: fixed - as verdict-1's
-- verdicts 1-2, notes: the water's third is an upper figure, its reason stated (the laterals' mouths at the dike); the wave's samples by bisection - kept, see below; the grid filed again for each strip - each strip's grid holds the earlier strips' rings, which change between strips, and the crest and water are filed with them (about 4%); the earlier rings' boxes read from their points (about 4%); the whole dike binned on each flank (under 2%); the rounding's arcs at every vertex (about 3%); the grid row at 40 no longer owed
-- waterward.audit-1, finding 1: fixed - the drawn ground, the pond's cut and the ground's readers counted and priced here; the stage measured on polder rolls, where it runs
-- waterward.audit-1, notes: a strip with no open ground is never recorded and then removed - it is not drawn, a refusal after the Rust laid it, priced as a strip drawn; the sty's seat on a dike-pond is the dike-pond form's, which the polder grid's rolls do not run
-- verdict-3, finding 1: fixed - its SOUND stood on each pass priced at 1 a point; the passes the audits found priced under `## Work the first derivation missed`
+- verdict-5, finding 1: fixed - its SOUND stood on the six rows of missed work, five of them passes of the marsh drawing, no work of this stage with the marsh term dropped, and the sixth, the face's extra passes over the dike, folded into the face's one pass (the dike's face read); the section is gone
+- verdicts 1-2, notes: the wave's samples, the keep-out grid, the rounding's arcs and the earlier rings' boxes are gone with the marsh drawing (above); the whole dike binned on each flank is now one pass for every flank
+- waterward.audit-1, finding 1: fixed - the stage measured on polder rolls, where it runs, as since; the drawn ground, the pond's cut and the ground's readers are no work of this stage now (the brief's item 10)
+- waterward.audit-1, notes: a strip with no ground left is dropped by the extent test, priced as a piece asked; the sty's seat is the dike-pond form's
+- verdict-3, finding 1: fixed - the passes priced at 1 a point were the marsh drawing's, which this stage no longer makes
 - verdict-4, finding 1: fixed - as verdict-3's
-- verdicts 3-4, notes: answered under the rows - the wave's samples by bisection (kept: the shaping's own interpolation), the grid filed again a strip (it holds the earlier strips' rings), the earlier rings' boxes read from their points (one pass each now), the whole dike a flank (under 2%)
-- waterward.audit-2, finding 1: fixed - the marsh's ring passes counted and priced; the outline's samples placed in one pass over the ring, its cumulative lengths taken once (the walk from the ring's start for each sample removed)
-- waterward.audit-3, finding 1: fixed - the ring index's passes counted, its box found in its edge loop; the marsh's and the pond cut's boxes in one pass; the face's extra passes tallied; each priced above
+- verdicts 3-4, notes: answered by the marsh term's removal; the face read once, not a flank
+- verdict-5, notes: the 64 ft ring index, the crest's box, the marsh's and the crest's boxes, the grid's cells and the outline's box were all the marsh drawing's and are gone; the face's coordinate and extremes are read once, in the face's one pass
+- waterward.audit-2, finding 1: fixed - the marsh's ring passes are no work of this stage now; the passes the cut makes over a strip's ring are priced in one bed's difference
+- waterward.audit-3, finding 1: fixed - as audit-2's
+- verdict-6, finding 1: disputed - verdict-6 was SOUND and gave no finding, only a note under its Q2: the bed's 13m + 8 could be 6m + 8 (the edge crossings read off the vertex signs, three of the four corners off the crossings' parity), about 46% of the total, under the half that owes a round (rubric S10); left priced at 13m + 8, a bound the stage keeps
+- the stage's waterward_polder audits (feature 449 T226, 2026-11-20, T235's filing): the budget priced the marsh drawing the Rust stage does not make, standing about 8 times over the stage's work; this re-derivation prices only the fringe the contract now writes - the strips laid from the face and cut at the channels' beds - so a regression of that size reads as one
 
 ## Cheaper algorithms considered
 
-- sweep: used - the face bins the dike's points once a flank; not used for the wave's samples - a walk along the ring would place each in about one step where the bisection takes 7 (about 3,000 at 20, 12%, under S10's half), and the ring's samples are placed by the shaping's own interpolation, which this stage does not write
-- grid or spatial index: used - the keep-out grid for the bare ground; the ring's cumulative length bisected for each wave sample, no grid
+- sweep: used - the dike's face is read in one pass for every flank, each point filed to its flank and place; no sweep over the cuts, which number at most 4
+- grid or spatial index: not used - the strip meets at most the 4 reaches of two channels, each asked by its box first; a grid over 4 items costs more than it saves
 - priority queue: not used - nothing is ranked
-- incremental update: not used - three strips, each drawn once
-- memoizing what a scan does not change: used - the grid filed once a strip from what stands; the keep-outs beyond a strip's box skipped by their boxes
-- pruning: a keep-out ring whose box misses the strip is read for its box and skipped, never buffered
+- incremental update: not used - two strips, each laid once and cut by at most two beds
+- memoizing what a scan does not change: used - the dike's box and its points' flanks found once and kept for every flank
+- pruning: a reach whose box misses the strip's box is skipped, never differenced; a bank sample in no ring's box is out of the reeds, never asked - the drain's bank runs about 2,000 ft or more to the canvas edge, of which about 600 ft lies in a box
+- the bank bands by sampling the whole bank: not used - every 2 ft sample of the drain's whole run, each asked of every ring's edges, is about 2,100 samples x 5 rings at 10, each a walk of its ring; the clip to the boxes and one crossing walk per met ring ask only the samples near the reeds

@@ -518,6 +518,103 @@ fn the_pool_sheets_compose_in_their_courts() {
     }
 }
 
+/// The county example keeps an armory at an ordinary seat and its granary on the offices' side (449 T265, 417 T33; T274): Kaibara's
+/// ordinary gate range held a gun store (0093) and Pingyao, with no standing barracks, kept its armory in the great hall's west end bay
+/// (0123), so the quiet county's office hall holds an armory; Pingyao built "north of them the county granary" (0123) on the office
+/// side, behind the war, justice and works offices, not in the residence's court (building-review 2026-11-22 E1), so the granary stands
+/// in the office court at the head of its column, its north face no further south than the office hall's (the two-court plan's nearest
+/// seat to Pingyao's, a DEVIATION), and a cart still reaches its door.
+#[test]
+fn the_county_example_keeps_an_armory_and_its_granary_on_the_offices_side() {
+    let tree = tree();
+    let spec = tree.join(
+        "pool/magistracies/county-magistracy-example/county-magistracy-example.compound.json",
+    );
+    let (p, bands) = super::cli::load(&tree, &spec.to_string_lossy()).unwrap();
+    let (l, _) = super::generate(&p, &bands).unwrap();
+    let at = |kind: &str| {
+        let i = p.buildings.iter().position(|b| b.kind == kind).unwrap();
+        l.seats[i].unwrap()
+    };
+    let hall = p
+        .buildings
+        .iter()
+        .find(|b| b.kind == "office hall")
+        .unwrap();
+    let armory = hall.rooms.iter().any(|r| r.kind == "armory");
+    let (granary, office) = (at("granary"), at("office hall"));
+    let behind = p.divider <= granary.1 && granary.1 <= office.1;
+    assert!(armory, "no armory in the office hall");
+    let why = format!(
+        "granary {granary:?}, office hall {office:?}, divider {}",
+        p.divider
+    );
+    assert!(behind, "{why}");
+}
+
+/// No court of a generated sheet leaves a corner bare (449 T274, building-review 2026-11-22 E2: the county example's barracks slid north
+/// and left a 31 x 31 ft corner of the office court holding nothing): each court's four corners, a perimeter band's square
+/// (`PERIMETER_FT`) inside its walls, each touch a building or a named ground.
+#[test]
+fn no_court_of_a_pool_sheet_leaves_a_corner_bare() {
+    let tree = tree();
+    for name in ["ochiba-roundtrip-test", "county-magistracy-example"] {
+        let spec = tree.join(format!("pool/magistracies/{name}/{name}.compound.json"));
+        let (p, bands) = super::cli::load(&tree, &spec.to_string_lossy()).unwrap();
+        let (l, _) = super::generate(&p, &bands).unwrap();
+        let bare = bare_corners(&p, &l.seats);
+        let none: Vec<super::spec::Bx> = Vec::new();
+        assert_eq!(bare, none, "{name}");
+    }
+    // T265's drawing: the barracks at the divider end of the east wall - the office court's south-east corner bare
+    let spec = tree.join(
+        "pool/magistracies/county-magistracy-example/county-magistracy-example.compound.json",
+    );
+    let (p, bands) = super::cli::load(&tree, &spec.to_string_lossy()).unwrap();
+    let (mut l, _) = super::generate(&p, &bands).unwrap();
+    let i = p
+        .buildings
+        .iter()
+        .position(|b| b.kind == "barracks")
+        .unwrap();
+    l.seats[i] = Some((244.0, 92.5, 267.0, 162.5));
+    let bare = bare_corners(&p, &l.seats);
+    let cb = super::ground::court_box(&p, super::spec::Court::Outer);
+    let band = super::ground::PERIMETER_FT;
+    let south_east = vec![(cb.2 - band, cb.3 - band, cb.2, cb.3)];
+    assert_eq!(bare, south_east);
+}
+
+/// Each court's corners, a perimeter band's square inside its walls, that touch no building and no named ground.
+fn bare_corners(
+    p: &super::spec::Program,
+    seats: &[Option<super::spec::Bx>],
+) -> Vec<super::spec::Bx> {
+    let band = super::ground::PERIMETER_FT;
+    let held: Vec<super::spec::Bx> = seats
+        .iter()
+        .flatten()
+        .copied()
+        .chain(p.zones.iter().map(|z| z.bx))
+        .collect();
+    let mut bare = Vec::new();
+    for court in [super::spec::Court::Inner, super::spec::Court::Outer] {
+        let cb = super::ground::court_box(p, court);
+        let corners = [
+            (cb.0, cb.1, cb.0 + band, cb.1 + band),
+            (cb.2 - band, cb.1, cb.2, cb.1 + band),
+            (cb.0, cb.3 - band, cb.0 + band, cb.3),
+            (cb.2 - band, cb.3 - band, cb.2, cb.3),
+        ];
+        bare.extend(
+            corners
+                .into_iter()
+                .filter(|c| !held.iter().any(|h| super::grid::overlaps(*h, *c))),
+        );
+    }
+    bare
+}
+
 /// The generator's counted work on each pool sheet within twice its budget (`dev/work-budget.json`'s `compound` stage, the derivation's
 /// Totals line on each sheet; 444 FR-022's leeway): the counting build alone. `L7R_COMPOUND_COUNTS_OUT=<file>` writes each sheet's counts
 /// there, the figures `make budget-sheets PHASE=compound COUNTS=...` reads.

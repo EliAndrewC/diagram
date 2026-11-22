@@ -47,7 +47,9 @@ fn a_raise_is_exit_one_with_what_it_printed_kept() {
         ("261", "fixtures-and-board"),
         ("261", "row-spread"),
         ("430", "full-reasons"),
+        ("374", "open-rows"),
         ("432", "triage-price"),
+        ("449", "registered-guards"),
     ];
     for (f, n) in every {
         let r = cli(&words(&[f, n]), &dir, &dir);

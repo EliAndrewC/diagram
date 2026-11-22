@@ -39,9 +39,17 @@ static JOINER: LazyLock<Regex> = LazyLock::new(|| {
 static SPACES: LazyLock<Regex> = LazyLock::new(|| re(&format!("[{SPACE_CLASS}]+")));
 const CJK: &str = r"\x{3000}-\x{303f}\x{3040}-\x{30ff}\x{3400}-\x{4dbf}\x{4e00}-\x{9fff}\x{f900}-\x{faff}\x{ff00}-\x{ffef}";
 /// A space between two CJK characters: a line break, never a word gap.
-static CJK_GAP: LazyLock<Regex> = LazyLock::new(|| re(&format!("(?<=[{CJK}]) (?=[{CJK}])")));
-/// The radicals a PDF's text layer may write for an ideograph, which NFKC folds back.
-static RADICAL: LazyLock<Regex> = LazyLock::new(|| re(r"[\x{2e80}-\x{2eff}\x{2f00}-\x{2fdf}]"));
+/// A space between two CJK characters, or between one and a digit (449 T197: a PDF line broken at 「割合は\n18.23」 kept its space).
+static CJK_GAP: LazyLock<Regex> = LazyLock::new(|| {
+    re(&format!(
+        "(?<=[{CJK}]) (?=[{CJK}0-9])|(?<=[0-9]) (?=[{CJK}])"
+    ))
+});
+/// The radicals a PDF's text layer may write for an ideograph, which NFKC folds back; and the superscript digits a
+/// quotation writes where a page's `<sup>` leaves the bare digit (449 T257: shakkanho-jawiki's `m<sup>2</sup>`).
+static RADICAL: LazyLock<Regex> = LazyLock::new(|| {
+    re(r"[\x{2e80}-\x{2eff}\x{2f00}-\x{2fdf}\x{b2}\x{b3}\x{b9}\x{2070}\x{2074}-\x{2079}]")
+});
 static COMMENT: LazyLock<Regex> = LazyLock::new(|| re(r"(?s)<!--.*?-->"));
 static TAG: LazyLock<Regex> = LazyLock::new(|| re(r"<[^>]+>"));
 static NOTE: LazyLock<Regex> = LazyLock::new(|| re(r#"(?s)<li id="(fn-\d+)">(.*?)</li>"#));
@@ -75,7 +83,7 @@ fn matches(pattern: &Regex, text: &str) -> bool {
     pattern.is_match(text).unwrap_or(false)
 }
 
-/// `squeeze`: whitespace collapsed, NFC (the radicals by NFKC), and a space between two CJK characters taken out.
+/// `squeeze`: whitespace collapsed, NFC (the radicals by NFKC), and a space between two CJK characters, or a CJK character and a digit, taken out.
 #[must_use]
 pub fn squeeze(text: &str) -> String {
     let folded = RADICAL.replace_all(text, |c: &fancy_regex::Captures| {

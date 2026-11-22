@@ -1795,7 +1795,10 @@
   "def": "The peasant head of a village and its district, answerable for its taxes and its order; their house is the largest on a village map.",
   "variants": [
    "headman",
-   "headmen"
+   "headmen",
+   "headsman",
+   "headsmen",
+   "village headsman"
   ]
  },
  "headworks": {
@@ -2919,9 +2922,7 @@
   "def": "Of a settlement: gathered into one compact cluster of houses and plots, as against farmsteads dispersed each among its own fields.",
   "variants": [
    "nucleated",
-   "nucleation",
-   "nucleus",
-   "nuclei"
+   "nucleation"
   ]
  },
  "numajiro": {
@@ -4038,7 +4039,8 @@
  "village district": {
   "def": "The administrative unit a village heads and several hamlets belong to, named for its village.",
   "variants": [
-   "village district"
+   "village district",
+   "village districts"
   ]
  },
  "wall circuit": {
@@ -8113,6 +8115,12 @@
    "seed",
    "seeds",
    "seed's"
+  ]
+ },
+ "Echizen": {
+  "def": "A province of Japan, now northern Fukui. The record draws on it for village registers of 1860-1875 on household size, an Edo-period farm calendar, a canal plain's water rules and its village smiths.",
+  "variants": [
+   "Echizen"
   ]
  },
  "Lingnan": {
@@ -19422,6 +19430,34 @@
    "worship porches",
    "kōhai",
    "kohai"
+  ]
+ },
+ "simple family household": {
+  "def": "A household of one family unit alone: a married couple, with or without their children, or a widowed parent with children.",
+  "variants": [
+   "simple family household",
+   "simple family households"
+  ]
+ },
+ "extended family household": {
+  "def": "A household of one family unit with other kin living with it, added upward, downward or sideways, but no second family unit.",
+  "variants": [
+   "extended family household",
+   "extended family households"
+  ]
+ },
+ "divided-residence retirement": {
+  "def": "A form of retirement (inkyo) in which the retiring couple parted: the father stayed in the main house and the mother went to live in a branch house, and their funerals and memorial rites were later held apart by the two houses.",
+  "variants": [
+   "divided-residence retirement"
+  ]
+ },
+ "stipple": {
+  "def": "A shading made of fine scattered dots. On our maps it fills a doma, so the eye reads the floor as bare earth.",
+  "variants": [
+   "stipple",
+   "stippled",
+   "stippling"
   ]
  }
 }

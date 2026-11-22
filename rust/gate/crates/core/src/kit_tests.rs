@@ -9,10 +9,9 @@ use crate::record::args::{parse_with, Spec};
 use crate::record::units::{Keyed, Record};
 
 #[test]
-fn the_fixtures_build_a_repository_a_python_stand_in_and_a_record_s_edits() {
+fn the_fixtures_build_a_repository_and_a_record_s_edits() {
     let dir = crate::ci::fixtures::repo("kit");
-    let python = crate::ci::fixtures::python(&dir);
-    assert!(Path::new(&python).is_file());
+    assert!(dir.join(".git").is_dir());
     let root = crate::record::testkit::record("kit-record");
     crate::record::testkit::edit_everything(&root);
     assert!(std::fs::read_to_string(
@@ -46,7 +45,6 @@ fn the_content_id_s_readers_say_what_failed() {
         .unwrap_err()
         .starts_with("a table: "));
     assert_eq!(crate::codeid::parsed("[1]", "a table").unwrap(), json!([1]));
-    assert!(crate::codeid::script(&dir).ends_with("scripts/gates/codeid.py"));
 }
 
 #[test]

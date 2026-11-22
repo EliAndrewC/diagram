@@ -1,9 +1,9 @@
 //! The stale-figure check on Rust (feature 449 T165): the figures of a value as Python writes them, a changed constant's pages named,
-//! and the check end to end on a scratch repository - a `.rs` constant changed names its page, a `.py` change still asks the Python.
+//! and the check end to end on a scratch repository - a `.rs` constant changed names its page, a `.py` change asks nothing (feature 449 T158).
 //! The question paths are built from their parts, so no fixture holds a research pointer of its own.
 
 use super::{figures, rust_stale, Page};
-use crate::claims::tests::{claims, fixture, py_units};
+use crate::claims::tests::{claims, fixture};
 use crate::record::testkit::{commit, git, put};
 
 const Q: &str = "research/questions/";
@@ -91,9 +91,8 @@ fn a_changed_constant_names_the_pages_still_stating_its_old_figure() {
 }
 
 #[test]
-fn the_check_runs_on_a_rust_change_and_still_asks_the_python() {
+fn the_check_runs_on_a_rust_change_and_reads_no_python() {
     let root = fixture("claims-stale-rs");
-    py_units(&root, &[], &[]);
     let ptr = format!("{Q}0003-inset.drawing.html");
     put(&root, &ptr, "<p>The inset is 23 ft.</p>\n");
     put(&root, "rust/engine/src/lib.rs", &source("23.0", &ptr));
@@ -101,7 +100,7 @@ fn the_check_runs_on_a_rust_change_and_still_asks_the_python() {
     commit(&root, "the inset");
     git(&root, &["update-ref", "refs/remotes/origin/main", "HEAD"]);
     // a crate new under `rust/` is walked; the gate's own crate is not; a file new since the base has no old figure; a page that is
-    // not UTF-8 is read as the Python reads it, `errors="replace"`; a `.py` change still asks the Python, its lines first
+    // not UTF-8 is read as the Python reads it, `errors="replace"`; a `.py` change is read no more
     put(&root, "rust/engine/src/lib.rs", &source("24.0", &ptr));
     put(&root, "rust/gate/src/inset.rs", &source("24.0", &ptr));
     put(&root, "rust/engine/src/new.rs", &source("25.0", &ptr));
@@ -119,7 +118,6 @@ fn the_check_runs_on_a_rust_change_and_still_asks_the_python() {
     assert_eq!(
         lines,
         vec![
-            "stale figure: the stub's".to_owned(),
             line("0003-inset.drawing.html", "rust/engine/src/lib.rs"),
             line("0004-link.drawing.html", "rust/engine/src/lib.rs"),
         ]

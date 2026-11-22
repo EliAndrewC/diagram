@@ -1,0 +1,6 @@
+{
+  "utc": "20261122T121021Z",
+  "guard": "pair-hooks",
+  "what": "review prerequisites",
+  "reason": "REVIEW_PREREQ_OK: the verify gate stops at preflight on other tasks' research pointers (449 T247, T249, T264, T271 and a 451 plan line), none of T274's; the sheet's own make map, pack-audit (coverage 31%, every check OK) and mode_a tests (315 passed) are green"
+}

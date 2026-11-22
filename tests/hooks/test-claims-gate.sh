@@ -19,23 +19,24 @@ g init -q -b main; g commit -q --allow-empty -m root
 ( cd "$T" && "$GATE" >/dev/null 2>&1 ); ok "$?" 0 "no engine, silent"
 
 S="$T"
-mkdir -p "$S/l7r/diagram/hamletgen" "$S/research/questions" "$S/buildings"
-printf 'from . import rows\n' > "$S/l7r/diagram/hamletgen/__init__.py"
-cat > "$S/l7r/diagram/hamletgen/rows.py" <<'PY'
-"""Research: plumbing - NONE"""
+# a Rust engine unit (feature 449 T158: the claims tools read no `.py` unit since the Python's deletion)
+mkdir -p "$S/rust/phases/src" "$S/research/questions" "$S/buildings"
+cat > "$S/rust/phases/src/lib.rs" <<'RS'
+//! Research:
+//!     plumbing - NONE
 
-
-def far_row(x):
-    """Research: dry share - research/questions/0033-row-villages-resson.html"""
-    return x * 2
-PY
+/// Research: dry share - research/questions/0033-row-villages-resson.html
+pub fn far_row(x: u32) -> u32 {
+    x * 2
+}
+RS
 printf '<h2 id="row-villages-resson">Row villages</h2>\n<p>Farms face the street.</p>\n' > "$S/research/questions/0033-row-villages-resson.html"
 printf '## Walls\n<!-- Research: walls - CONVENTION -->\n' > "$S/buildings.md"
 printf '### Country shrine (a village district'"'"'s shrine)\n<!-- Research: precinct - UNRESEARCHED -->\n' > "$S/buildings/programs.md"
 
 # owed: refused, naming the claim and the command
 out="$( cd "$T" && "$GATE" 2>&1 )"; ok "$?" 1 "owed claims refuse"
-case "$out" in *"owed (new): l7r/diagram/hamletgen/rows.py::far_row#dry share"*"make claims-bundle"*) ok y y "names the claim and the command" ;; *) ok n y "names the claim and the command" ;; esac
+case "$out" in *"owed (new): rust/phases/src/lib.rs::far_row#dry share"*"make claims-bundle"*) ok y y "names the claim and the command" ;; *) ok n y "names the claim and the command" ;; esac
 
 # the escape: no reason refused, a reason passes and is logged in the tree's bypass log
 ( cd "$T" && CLAIMS_OK=1 "$GATE" >/dev/null 2>&1 ); ok "$?" 1 "CLAIMS_OK without a reason"
@@ -56,7 +57,7 @@ g add -A; g commit -q -m base
 # a finding on unchanged code against an IN-STEP base (a re-judgment): a CARRY, refused until filed, the tip naming the command
 # (feature 385 FR-013, the GM 2026-10-17: "Yes, please lock in option three.") - with the claims switch at `clean` (feature 445)
 printf '{"claims": {"state": "clean"}}' > "$S/dev/switches.json"
-jq '.["l7r/diagram/hamletgen/rows.py::far_row#dry share"].verdict = "DRIFTED"' "$S/dev/claims-index.json" > "$S/dev/claims-index.json.new" && mv "$S/dev/claims-index.json.new" "$S/dev/claims-index.json"
+jq '.["rust/phases/src/lib.rs::far_row#dry share"].verdict = "DRIFTED"' "$S/dev/claims-index.json" > "$S/dev/claims-index.json.new" && mv "$S/dev/claims-index.json.new" "$S/dev/claims-index.json"
 out="$( cd "$T" && "$GATE" 2>&1 )"; ok "$?" 1 "an unfiled carry refuses"
 case "$out" in *"carry: DRIFTED"*) ok y y "says carry" ;; *) ok n y "says carry" ;; esac
 case "$out" in *'`make claims-carry F=<n>` files it as an open'*) ok y y "names make claims-carry" ;; *) ok n y "names make claims-carry" ;; esac

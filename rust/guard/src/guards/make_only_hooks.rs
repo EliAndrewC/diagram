@@ -7,7 +7,6 @@
 use std::collections::BTreeMap;
 use std::path::{Path, PathBuf};
 use std::sync::LazyLock;
-use std::time::Duration;
 
 use fancy_regex::Regex;
 use serde_json::{json, Value};
@@ -20,7 +19,6 @@ use crate::shared::make::{POS, PY};
 use crate::shared::session::Session;
 use crate::shared::shape::{quoted_spans, strip_heredocs, strip_quotes};
 use crate::shared::state::field;
-use crate::shared::tool::ask_within;
 use crate::shared::tree::{walk_judged, Target, Walk};
 
 pub(crate) mod interp;
@@ -33,8 +31,6 @@ pub const GUARD: Guard = Guard {
     decide,
 };
 
-/// CONVENTION: the landing lint's limit, as `hm_make.py` gave `ruff`.
-const LINT_LIMIT: Duration = Duration::from_secs(60);
 /// The guard files by name, for the patterns over a command's text; T229 added the guards' own sources (every file there but a test file).
 const GUARD_FILE: &str = r"[\w./-]*(?:Makefile|[\w-]*-hooks\.sh|settings\.json|tests/rolls\.py|dev/(?:switches|work-budget)\.json|rust/guard/(?:shared/)?src/(?!(?:[\w.-]+/)*tests(?:\.rs|/))[\w./-]+|rust/guard/(?:shared/)?Cargo\.toml|l7r-guard\.sh)";
 /// The names a command must hold before its writes are resolved: each guard file's last part, so a `cd` into its directory still
@@ -85,11 +81,6 @@ lazy!(
     format!(r"{POS}{PY}\s+(?:-\S+\s+)*-m\s+l7r\.diagram\.")
 );
 lazy!(
-    ENTRY_SCRIPT,
-    // the Python pipeline's script left the pattern with its file (feature 449 T221): `make map` runs the Rust driver
-    format!(r"{POS}{PY}\s+\S*l7r/diagram/hamletgen/__main__\.py")
-);
-lazy!(
     CARGO,
     format!(
         r"{POS}(?:\S*/)?cargo\s+(?:\+\S+\s+)?(?:build|test|run|clippy|check|fmt|llvm-cov|bench|nextest)\b"
@@ -115,10 +106,6 @@ lazy!(OVERRIDE, r"\b(?:REF_WHY|REF_OK|GATE_OK)=");
 lazy!(AT_MAKE, format!(r"{POS}make\b"));
 lazy!(AT_OVERRIDE, format!(r"{POS}(?:REF_WHY|REF_OK|GATE_OK)="));
 lazy!(SUITE, r"[\w./-]*tests/hooks/test-[\w-]*-hooks\.sh");
-lazy!(
-    LANDING,
-    r#"\bmake\s+(?:-\S+\s+)*(?:land-tooling\b[^\n;&|]*?\bFILES|arbiter-fix-done\b[^\n;&|]*?\bLAND)=("[^"]*"|'[^']*'|\S+)"#
-);
 lazy!(REDIR, r"^(?:\d?>>?&?\S+|\d?<\S+)$");
 lazy!(MASK_HEREDOC, r#"(?s)<<-?\s*['"]?(\w+)['"]?\n.*?\n\s*\1\b"#);
 lazy!(
@@ -413,7 +400,7 @@ pub(crate) fn classify_at(cmd: &str, here: &str) -> String {
     if cmd.contains("make") && names_a_file && hit(&FOREIGN, &clean) {
         return "foreign-makefile".to_owned();
     }
-    if cmd.contains("l7r") && (hit(&ENTRY_MODULE, &clean) || hit(&ENTRY_SCRIPT, &clean)) {
+    if cmd.contains("l7r") && hit(&ENTRY_MODULE, &clean) {
         return "engine-entry-point".to_owned();
     }
     if cmd.contains("cargo") && hit(&CARGO, &clean) {
@@ -778,35 +765,6 @@ pub(crate) fn wrapped(cmd: &str, makefile: &str) -> Result<String, String> {
     ))
 }
 
-/// The landing's own lint on the `.py` files it names, run before the command does: a refusal naming ruff's first lines, or "".
-pub(crate) fn landing_lint(cmd: &str, dir: &Path, python: &str) -> String {
-    let Some(named) = group(&LANDING, &strip_heredocs(cmd)) else {
-        return String::new();
-    };
-    let list = named.trim_matches(['"', '\'']).to_owned();
-    let files: Vec<&str> = list
-        .split_whitespace()
-        .filter(|f| Path::new(f).extension().is_some_and(|e| e == "py") && dir.join(f).is_file())
-        .collect();
-    if files.is_empty() {
-        return String::new();
-    }
-    for args in [vec!["check"], vec!["format", "--check"]] {
-        let mut all = vec!["-m", "ruff"];
-        all.extend(args);
-        all.push("--force-exclude");
-        all.extend(files.iter().copied());
-        let said = ask_within(dir, python, &all, LINT_LIMIT);
-        if said.code > 0 && !said.err.contains("No module named ruff") {
-            let joined = format!("{}{}", said.out, said.err);
-            let first: Vec<&str> = joined.trim().lines().take(8).collect();
-            let listed = files.join(" ");
-            return format!("the landing's lint fails on {listed}:\n{}\nRun python3 -m ruff format {listed}, fix what ruff listed, commit, then land (feature 385 T91)", first.join("\n"));
-        }
-    }
-    String::new()
-}
-
 fn block(reason: &str, instead: &str) -> String {
     format!("BLOCKED: {reason}\n\nRun this instead:  {instead}\n\nIf this fired on correct work, it is a bug in the hook: put GUARD_EDIT_OK and a reason in the command.")
 }
@@ -818,10 +776,9 @@ fn rewrite(input: &Value, command: &str, context: String) -> Vec<Answer> {
 }
 
 /// What this guard needs from outside the call.
-pub(crate) struct Ctx<'a> {
+pub(crate) struct Ctx {
     pub(crate) tree: PathBuf,
     pub(crate) here: PathBuf,
-    pub(crate) python: &'a str,
 }
 
 pub(crate) fn judge(event: &Event, session: &Session, ctx: &Ctx) -> Vec<Answer> {
@@ -841,21 +798,6 @@ pub(crate) fn judge(event: &Event, session: &Session, ctx: &Ctx) -> Vec<Answer> 
         fire("blocked", rule);
         vec![Answer::Refuse(block(reason, instead))]
     };
-    if verdict == "ok" && (cmd.contains("land-tooling") || cmd.contains("arbiter-fix-done")) {
-        let at = if given.is_empty() {
-            ctx.here.as_path()
-        } else {
-            Path::new(given)
-        };
-        let lint = landing_lint(cmd, at, ctx.python);
-        if !lint.is_empty() {
-            return refuse(
-                "landing-lint",
-                &lint,
-                "python3 -m ruff format <the files>, then the same landing",
-            );
-        }
-    }
     if let Some(name) = verdict.strip_prefix("make-dup-var:").map(str::to_owned) {
         return refuse(
             "make-dup-var",
@@ -902,15 +844,7 @@ pub(crate) fn judge(event: &Event, session: &Session, ctx: &Ctx) -> Vec<Answer> 
 fn decide(event: &Event, session: &Session) -> Vec<Answer> {
     let here = std::env::current_dir().unwrap_or_default();
     let tree = std::env::var("L7R_GUARD_TREE").map_or_else(|_| here.clone(), PathBuf::from);
-    judge(
-        event,
-        session,
-        &Ctx {
-            tree,
-            here,
-            python: "python3",
-        },
-    )
+    judge(event, session, &Ctx { tree, here })
 }
 
 #[cfg(test)]

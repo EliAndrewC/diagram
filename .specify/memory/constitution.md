@@ -1,7 +1,51 @@
 <!--
 SYNC IMPACT REPORT
 ==================
-Version change: 2.35.1 → 2.36.0
+Version change: 2.37.0 → 2.38.0
+
+Version 2.38.0 (amended 2026-11-22, feature 449 T251): THE PYTHON-ERA PASSAGES T228 LEFT, restated to today's checks or RETIRED in
+place, every GM quotation kept. Versioned - enforcement mechanisms changed in VI, X and the Development Workflow, each replacement on
+record in `dev/rust-tooling.md`'s port table (feature 443 FR-011), the design the GM approved 2026-10-28, "Thank you. I approve the
+design. Please proceed." (`specs/443-work-budget-tooling/request.md`):
+- Principle X keeps its subject (measured 2026-11-22: clauses 1, 2 and 12 bind the Rust since 2.37.0, clause 13's check reads `.rs`
+  and cites it, clause 5's floor is `rust cover`): its heading is "Code Discipline (NON-NEGOTIABLE)", its scope the Rust crates and the
+  Python left, a clause naming one language's construct binding that language (7 and 8 the Python's, not extended). Clause 3 is the
+  compiler; clause 5's gate `rust cover` over every crate, the exemption's reader `l7r-gate coverage-exempt`; clause 6 the Cargo
+  workspace, its lock now tracked (`.gitignore`'s `*.lock` had kept `rust/Cargo.lock` out; `!rust/Cargo.lock` added).
+- Principle VI's roll census (`tests/rolls.py`, feature 217) RETIRED in place, the GM's 216 and 217 words the aim; feature 444
+  FR-020's seeds (amendment 5, the GM 2026-10-31, and 2026-11-07) govern what `make done` rolls.
+- The Development Workflow's quick/gate forms: the two forms of one test (`tests/_scope.py`), the bad-map corpus and the test-roll
+  cache RETIRED; the tooling marker's hash restated to `make static`'s per-crate reuse (449 T93), the three trees to each crate's own
+  tests, the sweep to `rust/mode_a`'s and FR-020's.
+escalation-check CUT all six items as already decided (2026-11-22); no question for the GM.
+Upkeep, no version: VI's Python bullet (the gate stays `make done`), X clause 10 (`pytest.parametrize`), clause 13's
+`check-file-scale.py`, Technical Standards' `@pytest.mark.rolls_map`, Governance's compliance line ("for Python" -> "for code").
+Dependent: `.specify/templates/plan-template.md`'s VI and X entries (✅ updated). MINOR (a principle's requirement changes, no
+principle removed or lifted from NON-NEGOTIABLE; precedents 2.33.0, 2.34.0, 2.37.0).
+
+Version 2.37.0 (amended 2026-11-22, feature 449 T228): PASSAGES BUILT ON RETIRED TOOLS, restated to the checks that hold them
+today. Versioned - enforcement mechanisms changed in three principles (VI, X, XIX), each replacement already on record:
+- Principle VI's performance bookends (`make perf LABEL=<NNN>-start` / `-end`, `make perf-report`, `make perf SCALING=1`), which
+  snapshotted the Python engine and went with it (feature 444 T39), are the work budgets of feature 443: `make work-budget` and
+  `make budget-sheets` before and after, the push's `make work-budget-review`; the Python snapshot rules are labeled RETIRED in
+  place, the GM's words kept; the history rule inside that block stands.
+- Principle X clauses 1, 2 and 12 and the Technical Standards' tooling: ruff, `pyproject.toml`, the type checker, pytest and the
+  pip lockfiles went with the last engine Python (T158, T213); the lint is clippy (`rust lint`), the format rustfmt
+  (`rust format --check`), the function cap clippy's `too_many_lines` at 100 LINES (`clippy.toml`, feature 444 T17), the
+  exception `#[expect(..., reason = "...")]`. The Python "done" checklist is `make done`'s steps today.
+- Principle XIX's enforcement: `make dead-closure` (Python, deleted by T158) is the compiler's `dead_code` lint and `rust dead`.
+The replacements are the design the GM approved for feature 443, which names each check that ports one for one (the clippy
+function cap among them: "It counts lines where ruff counts statements"): 2026-10-28, "Thank you. I approve the design. Please
+proceed." (`specs/443-work-budget-tooling/request.md`). escalation-check CUT all four versioned items as already decided
+(2026-11-22).
+Upkeep, no version (the obligation stands, a name retired): `make roll-audit` at VI's coverage-roll sentence, `make perf-ab` at
+its time-as-evidence sentence, `pyproject` in the Development Workflow's tooling hash. NOT amended, put to the GM through
+escalation-check (KEEP, 2026-11-22): VI's one self-scoping command, `make maps` (1.12.0, 1.12.1), whose tool went with the Python
+engine - today's are two commands, `make map MAP=` and the pool sweep `make rust-test CRATE=rust/mode_a`, which the clause
+forbids. Left for 449 T251: VI's Python bullet and roll census, X clauses 3, 5, 6 and 10 and whether X keeps a subject, the
+quick/gate test forms, the compliance line. Dependent: `.specify/templates/plan-template.md`'s X entry (✅ updated: lint, format,
+function cap); its performance table was already the work budget's (✅). MINOR (a principle's requirement changes, precedents
+2.33.0, 2.34.0).
 
 Version 2.36.0 (amended 2026-11-19, feature 449 T196): A DEFECT IS A WRONG OUTCOME, NOT A DIFFERENCE. Principle XIV defines what
 it fixes, and XIII's "each step's known defects" means that: a map that reads wrong (to a reader at fit zoom or on the page), a
@@ -820,9 +864,11 @@ markers and MAY be updated freely.
 No agent or skill may report a task complete without verifying the actual
 artifacts. Specifically:
 
-- **Python**: the gate is `make done` at the repository root (lint,
-  format, the strict type check, the hook suites, pytest with the coverage floors -
-  nothing runs outside make, per feature 127). **100% line coverage on
+- **Code**: the gate is `make done` at the repository root (the hook
+  suites, `make static`'s lint, format, and each crate's tests under its
+  100% coverage floor - nothing runs outside make, per feature 127).
+  (v2.38.0, feature 449 T251, upkeep: the Python's type check and pytest
+  went with it, T158 and T213.) **100% line coverage on
   everything** - not a target and not opt-in (GM 2026-09-02). External boundaries are tested via saved fixtures, not via
   transport-layer mocks.
 - **THE GATE ROLLS ONLY WHAT THE FLOOR NEEDS** (v2.23.0, GM 2026-09-08, feature 216): *"the make done tests
@@ -831,8 +877,8 @@ artifacts. Specifically:
   rolls than are strictly necessary is in the AWS tests. or the CI tests if we want to speak of it
   generically. Currently, that is not a type of test that we actually run, but that is the correct place for
   that type of test if we ever decide to create it."* So a gate roll exists for engine lines nothing else
-  reaches - `make roll-audit` measures that per roll off the gate's own coverage baseline, and the roll
-  census (feature 213) enforces the roster it produces; a behavior asserted on a real map that no coverage
+  reaches - `make roll-audit` measured that per roll off the gate's own coverage baseline, and the roll
+  census (feature 213) enforced the roster it produced (both gone with the Python engine, feature 444 T39); a behavior asserted on a real map that no coverage
   line requires is a unit test of the placer that decides it, or a test in `tests/soak/`, the tier above
   the gate, which no ordinary run collects. The count on the day this was written: 37 rolls of 14 hamlets at
   the start of feature 213, 3 of 3 after 216, 2 of 2 after 217, NONE of its own after 219 (the five shipped maps are
@@ -844,7 +890,13 @@ artifacts. Specifically:
   roll can be removed with 100% kept. The roster (`tests/rolls.py`) is a guard file: a row is added with a stated
   reason in the diff and points at the research section recording the audit that justified it; the next gate
   runs FULL. A shipped map's roll (the pool sweep) is printed and never failed - the pool's membership is the
-  GM's exhibit decision.
+  GM's exhibit decision. RETIRED (v2.38.0, feature 449 T251): the census verdict and its roster went with
+  pytest (T213) and no check replaces them; the GM's two rulings above stand as the aim. Beside it stands
+  the later rule of feature 444 amendment 5 (FR-020, the GM 2026-10-31: *"Yes, I agree with your proposals
+  and refinements. Please write up that amendment and then implemente it."*; and 2026-11-07: *"We should
+  probably avoid fixed seeds because of overfitting"*): at the port switch's `rust-only`, `make done` runs
+  `make seeds`, the failing-seed list and fresh seeds of each field form. That later, specific approval
+  governs what `make done` rolls; the 216 rule governs every other roll a test would add.
 - **Maps**: a map's change is reviewed by the check its OCCASION owes
   (v2.28.0, feature 294: an element new to a map or re-drawn or re-placed
   -> `glyph-check`; a Mode B map new to the pool -> `settlement-review`; a
@@ -936,13 +988,24 @@ artifacts. Specifically:
   - A feature that adds a KNOB owes one artifact per knob VALUE, not one per
     artifact in the pool: three maps, not forty-eight.
 
-- **Generators: PERFORMANCE IS BOOKENDED, not remembered** (GM 2026-08-23).
-  A spec-kit feature that touches the diagram generators records a performance
-  snapshot BEFORE it changes anything and again BEFORE it ships:
+- **Generators: PERFORMANCE IS BOOKENDED, not remembered** (GM 2026-08-23;
+  restated v2.37.0, feature 449 T228). A spec-kit feature that touches the
+  diagram generators records the counted work of each stage it changes BEFORE
+  it changes anything and again BEFORE it ships - the plan template's
+  performance table:
 
-      make perf LABEL=<NNN>-start     # first thing, on unmodified code
-      make perf LABEL=<NNN>-end       # last thing, before the push
-      make perf-report AGAINST=<NNN>-start
+      make work-budget                 # a hamlet stage, at 10/20/40/80 households
+      make budget-sheets PHASE= COUNTS=   # a Mode A stage, per pool sheet
+
+  Each stage's counted operations are held against a budget derived on paper
+  (feature 443, `dev/work-budget.json`): a first budget needs the `work-budget`
+  agent's SOUND, a raise a SOUND re-derivation naming the work its first missed,
+  a change the GM's words (`make budget-change`; feature 444 FR-022). On a push
+  carrying engine code, `make work-budget-review` holds every accepted stage to
+  its accepted figure and twice its budget. The snapshots this clause first
+  required - `make perf LABEL=<NNN>-start` and `-end`, `make perf-report
+  AGAINST=<NNN>-start`, the scaling leg `make perf SCALING=1` - snapshotted the
+  Python engine and went with it (feature 444 T39), their names with 449 T223.
 
   **TIME IS THE GOAL; CALLS ARE THE MEASURE** (the GM 2026-10-27, feature 435: "timings are not a gate, but improving timings is the goal of any performance improvement ticket").
   A performance change aims at less time; the call count, deterministic where a
@@ -950,8 +1013,14 @@ artifacts. Specifically:
   change that only moves work (a helper inlined, functions merged, a builtin
   written out) lowers the count, not the time. Each performance task answers
   `docs/performance-checklist.md` (prompts, never a gate); time is read as
-  evidence (`make perf-ab`: alternated, best of N, the spread shown), and no
+  evidence (alternated, best of N, the spread shown - what `make perf-ab` did for the Python engine, gone with it,
+  feature 444 T39), and no
   timing gates anything.
+
+  RETIRED with the Python engine (feature 444 T39; v2.37.0, feature 449 T228):
+  the snapshot rules from here to the `dev/perf-log/` bullet governed the Python
+  bookends and are kept as the record of what the GM ruled and why. What stands
+  of them: counted work is the measure, and no timing gates anything.
 
   **WATCHED BY CALL COUNTS; TIMINGS RECORDED ONLY** (GM 2026-10-26, feature
   427 T03: *"keep recording the timings, but completely stop using timings as a
@@ -1008,7 +1077,7 @@ artifacts. Specifically:
     is finding out why, not adding to it.
   - Snapshots live one-file-per-run in `dev/perf-log/`, so
     concurrent clones never conflict. Never edit or delete one.
-  - **History is never rewritten: no squashing, no rebasing, no amending of
+  - **History is never rewritten** (this rule STANDS): **no squashing, no rebasing, no amending of
     shared commits, no force pushes** (GM 2026-08-25). Every landing is a real
     merge commit with its parents. Two reasons: the commit history is the
     project's record of decisions; and the verified-tree records, the review
@@ -1018,7 +1087,7 @@ artifacts. Specifically:
     `rust/guard/src/guards/repo_safety_hooks.rs` refuses `git rebase`, `pull --rebase`,
     `merge --squash` and `commit --amend` in a session.
 
-  - This does not replace `GEN_TIME_BUDGETS`, which is a per-gen ceiling. This is
+  - (RETIRED with the Python engine, feature 444 T39.) This does not replace `GEN_TIME_BUDGETS`, which is a per-gen ceiling. This is
     a trend, and it answers the other question: is it getting slower, and when.
 
   Feature 126 is why this exists: it moved a stage and took one seed from 65s to
@@ -1087,24 +1156,35 @@ figures invented during generation MUST NOT collide with names already
 in the campaign-names cache (see `/.claude/skills/name/campaign-names.txt`)
 or with established figures in the GM's notes.
 
-### X. Python Discipline (NON-NEGOTIABLE)
+### X. Code Discipline (NON-NEGOTIABLE)
 
-Python code in this project - the diagram engine and its generators, checks,
-pipeline and tools under `l7r/diagram/` - MUST meet
-the following standards. Failing
+Code in this project - the Rust crates under `rust/` (the engine's phases,
+the gate, the guards) and the Python left (`scripts/gates/codeid.py`, until
+449 T247 deletes it) - MUST meet the following standards; a clause that
+names one language's construct binds that language (clauses 7 and 8 the
+Python). (v2.38.0, feature 449 T251: "Python Discipline" until feature 449
+T158 deleted the last Python under `l7r/diagram/`; its checks had moved to
+the Rust one for one, feature 443's design.) Failing Failing
 any single rule is reason enough to refuse "done" status.
 
-1. **Lint passes**: `ruff check` MUST pass on all production paths. The
-   ruff configuration lives in a versioned `pyproject.toml`. Ruff is the
-   single canonical lint tool (replaces flake8 / isort / pyupgrade /
-   pylint); do not run alternatives alongside it.
+1. **Lint passes**: the lint MUST pass on all production paths, one
+   canonical lint tool with its configuration versioned; do not run
+   alternatives alongside it. Since feature 449 T158 deleted the last
+   Python under `l7r/diagram/` - and ruff and `pyproject.toml` with it -
+   that tool is clippy, `make static`'s `rust lint`, configured in
+   `rust/Cargo.toml`'s `[workspace.lints]` and `clippy.toml` (v2.37.0,
+   T228; ruff held it before).
 
-2. **Format is canonical**: `ruff format --check` MUST pass. Ruff format
-   is the single formatter (replaces black / autopep8); do not run
-   alternatives alongside it.
+2. **Format is canonical**: the format check MUST pass, one formatter,
+   no alternatives alongside it - rustfmt, `make static`'s
+   `rust format --check` (v2.37.0, T228; `ruff format --check` before).
 
-3. **Type checking is strict**: strict static typing on production modules (pyrefly with the mypy-strict rule set, feature 142; `mypy --strict` before it, GM 2026-08-28) - it MUST pass on production
-   modules. Public functions and methods carry full type annotations.
+3. **Type checking is strict**: strict static typing on production modules - it MUST pass on production
+   modules. Public functions and methods carry full type annotations. On the Rust it is the compiler,
+   which type-checks every crate `make static` builds and types every signature by the language
+   (v2.38.0, feature 449 T251; `dev/rust-tooling.md`'s types row: "dropped, replaced by the compiler").
+   The Python's was pyrefly with the mypy-strict rule set (feature 142; `mypy --strict` before it, GM
+   2026-08-28).
    The per-module ratchet that once relaxed the legacy engine modules is
    fully retired (all of `settlement/`, `check_village/`, `waterfields/`
    are strict); new code is strict from the start.
@@ -1127,14 +1207,14 @@ any single rule is reason enough to refuse "done" status.
    case. We now want that to be the case always. For tools, for our
    settlement generation, for the automated checks on our hand drawn
    diagrams, for everything."* The enforcement gate is
-   `coverage report --fail-under=100` in the skill Makefile, over the
-   whole engine. (`pytest-cov` is never given the flag and
-   `[tool.coverage.report]` deliberately omits `fail_under`, so the floor
-   runs LAST and a run's own failures are reported before the coverage
-   table; the GM's *"for example ... and such"* leaves the place open.)
+   `make static`'s `rust cover` (`cargo llvm-cov --fail-under-lines 100`,
+   each crate's lines by its own tests), over every crate (v2.38.0,
+   feature 449 T251; `dev/rust-tooling.md`'s coverage row, "one for one").
    It is enforced **in the standard manner** - a floor on the gate, the
-   measured surface DERIVED (`source = ["l7r"]`), no per-module ratchet
-   and no hand-maintained roster of what is measured.
+   measured surface DERIVED (every package `l7r-gate rust` finds under
+   `rust/`), no per-module ratchet and no hand-maintained roster of what
+   is measured. The Python's was `coverage report --fail-under=100` over
+   `source = ["l7r"]`, run after pytest-cov's table (T158, T213).
 
    **The failure this replaces was a MEASURED SURFACE that had to be
    opted into.** `[tool.coverage.run] source` used to name the measured
@@ -1148,7 +1228,9 @@ any single rule is reason enough to refuse "done" status.
    **The engine code the Rust port replaces is EXEMPT** (amended 2026-11-02,
    feature 448): "We can relax that for the engine code at this pooint since that's going away, so long as we maintain it for our other Python code not currently slated to be removed (tools, automated checks for hand-drawn maps, etc)." The exempt files are
    listed once, in `dev/coverage-exempt.json`, each with its reason, and
-   every floor reads that record (`l7r/diagram/ci/coverage_exempt.py`):
+   every floor reads that record (`l7r-gate coverage-exempt`,
+   `rust/gate/crates/tree/src/exempt.rs`; it holds no entry since the
+   Python engine went, measured 2026-11-22):
    their unrun lines are printed as information, an entry goes stale -
    and refuses until `make coverage-exempt PRUNE=1` - once its file is
    gone or its stage's Rust has landed, and a file the record does not
@@ -1162,9 +1244,15 @@ any single rule is reason enough to refuse "done" status.
    boundary genuinely cannot be reached, the exclusion is stated at the
    point of change and is not a licence to leave the module unmeasured.
 
-6. **Pinned dependencies**: `requirements.txt` is generated from
-   `requirements.in` via `uv pip compile` (or `pip-compile`). Installing
-   a package without updating the source-of-truth file is a violation.
+6. **Pinned dependencies**: the source of truth is `rust/Cargo.toml`'s
+   `[workspace.dependencies]`, a gate crate naming one only as
+   `{ workspace = true }` (feature 449 T92), and cargo resolves them into
+   `rust/Cargo.lock`. Using a crate no manifest declares is a violation
+   (cargo refuses it). The lock is tracked: `.gitignore`'s `*.lock` had
+   kept it out of git, so a fresh clone resolved every requirement afresh,
+   until `!rust/Cargo.lock` (v2.38.0, feature 449 T251, measured
+   2026-11-22). The Python's was `requirements.txt` generated from
+   `requirements.in`, gone with T158.
    `development-secrets.ini` and similar secret-bearing files MUST stay
    gitignored.
 
@@ -1180,9 +1268,10 @@ any single rule is reason enough to refuse "done" status.
    `test_picks_random_name_when_no_filters_given` over
    `test_pick_name_1`. The intent of the test should read off the name.
 
-10. **`pytest.parametrize` for variant inputs**: prefer a single
-    parametrized test over a family of near-identical tests. The
-    parameter list documents the variation surface explicitly.
+10. **One test for variant inputs**: prefer a single test over a
+    table of its variant inputs to a family of near-identical tests. The
+    table documents the variation surface explicitly. (v2.38.0, T251,
+    upkeep: the Python's form was `pytest.parametrize`.)
 
 11. **Configuration over hardcoding**: Magic strings and
     environment-dependent constants MUST NOT be hardcoded in production
@@ -1197,25 +1286,32 @@ any single rule is reason enough to refuse "done" status.
     definition explains why it must remain one body. Size is measured
     in LOGIC UNITS (statements/expressions), never raw lines: a call
     or string literal wrapped across lines counts once, so formatting
-    never forces a split. The 10-line-function dogma is explicitly
+    never forces a split (the Python's measure; the Rust cap below counts
+    lines). The 10-line-function dogma is explicitly
     REJECTED - over-fragmentation damages design more than length
     does, and a deep-but-cohesive engine function is legitimate at a
     scale a utility function never is. The failure mode is GROWTH: no
     single edit crosses the line, so the line must be checked rather
     than felt. HELD SINCE v2.29.0 (feature 370, the GM 2026-10-10: *"Please
-    go with 100"*): the measure is ruff's statement count (`PLR0915`), the
-    cap is 100 statements a function, and `scripts/gates/check-function-cap.py`
-    holds it over `l7r/`, `tests/`, `scripts/`, `pool/` and `tests/hooks/` -
-    first in `make static` and `make quick`, and before every push. Why 100
+    go with 100"*): the cap is 100 a function. On the Rust code (v2.37.0,
+    feature 449 T228; feature 444 T17 set it, `dev/rust-tooling.md`'s
+    function-cap rows) it is clippy's `too_many_lines` at 100 in the root
+    `clippy.toml`, denied in every crate, so `make static`'s `rust lint`
+    refuses a longer function. It counts LINES, not logic units: a call
+    rustfmt wraps counts each line. The justification is `#[expect(clippy::too_many_lines,
+    reason = "<why the body must remain one>")]`; an attribute without a
+    reason is refused (`allow_attributes_without_reason`). The Python's
+    measure - ruff's statement count (`PLR0915`), 100 statements, held by
+    `scripts/gates/check-function-cap.py` - went with the Python (T158). Why 100
     and not the default 50: in a survey of 1,209 public repositories that set
     the value (GitHub code search, 2026-10-10), 100 was the second most
     common value - 131 of 1,209 - and the most common one chosen over the
-    default (`specs/370-function-length-gate/research.md` R1). A nested
-    function's statements count in its parent, so a split is into parts at
-    module or class level. The justification annotation is
-    `# noqa: PLR0915 <why the body must remain one>` on the `def` line, three
-    words or more; a bare `# noqa` on a `def` line, a file-level suppression
-    and a config ignore of the rule are refused. Motivating case: `check_village.py`'s `gate()` reached 12,944
+    default (`specs/370-function-length-gate/research.md` R1). On the Python,
+    a nested function's statements counted in its parent, and the
+    justification was `# noqa: PLR0915 <why the body must remain one>` on
+    the `def` line, three words or more; a bare `# noqa` on a `def` line, a
+    file-level suppression and a config ignore of the rule were refused.
+    Motivating case: `check_village.py`'s `gate()` reached 12,944
     lines one check at a time, and the cost surfaced as an
     architecture problem - nothing inside it could be invoked
     separately - long before anyone would have chosen that shape.
@@ -1239,8 +1335,9 @@ any single rule is reason enough to refuse "done" status.
     the same GROWTH pattern as clause 12: no single edit crosses the
     line, so the line must be checked rather than felt - and since
     v2.14.0 (GM-directed, 2026-08-31, feature 173) it IS.
-    `scripts/gates/check-file-scale.py` runs in the diagram Makefile's `lint`
-    phase and in `sync-with-main.sh` at push time, so a Python file past
+    `l7r-gate check file-scale` (`rust/gate/crates/checks/src/checks/file_scale.rs`;
+    `scripts/gates/check-file-scale.py` before it, v2.38.0 upkeep) runs in
+    `make static` and `make quick` and in the push's checks, so a source file past
     1,000 RAW lines fails the gate and both routes to main. Unlike
     clause 12 this is therefore no longer an ask-the-question line: the
     question was not in fact being asked, and ten files had drifted past
@@ -2147,7 +2244,9 @@ R4.)
 repair pass, audit-only rule, rule coded twice, mid-map check and refusal where room is the remedy, each filed as an engine
 task.
 
-**Enforcement**: the Constitution Check gate in every plan; `make dead-closure` for what a deletion leaves behind. Not yet
+**Enforcement**: the Constitution Check gate in every plan; for what a deletion leaves behind, the compiler's `dead_code` lint,
+refused in `make static`'s `rust lint`, and `l7r-gate rust dead` for a `pub` item nothing calls (v2.37.0, feature 449 T228;
+`make dead-closure` read the Python and went with it, T158). Not yet
 held by a guard - a guard that told a repair from a placement by reading code would fire on correct work.
 
 ## Technical Standards
@@ -2158,23 +2257,20 @@ held by a guard - a guard that told a repair from a placement by reading code wo
 - `resvg` renders SVG to PNG (no fallback renderer), with the DejaVu
   faces installed - `scripts/container/setup-dev-env.sh` establishes both.
 
-**Python tooling (per Principle X)**
-- **Lint + format**: `ruff` (lint + formatter, single tool). Config lives
-  in `pyproject.toml`.
-- **Type checking**: strict static typing on production modules (pyrefly with the mypy-strict rule set, feature 142; `mypy --strict` before it), configured in
-  the same `pyproject.toml`; `l7r/` is a PEP 420 namespace portion and
-  never gains an `__init__.py`.
-- **Testing**: `pytest` + `pytest-cov` + `pytest-xdist`, always under a
-  make target (`make quick`, `make done`, `make done FULL=1`); the
-  coverage floor is set by the Makefile: **100%, on everything, no
-  ratchet and no opt-in list** (feature 174; the 94% `settlement/`
-  ratchet and the four-tree `--omit` both retired the day their own
-  condition was met).
-- **Dependency management**: source-of-truth in
-  `requirements.in` / `requirements-dev.in`, compiled
-  to the `.txt` lockfiles with `pip-compile`, pinned; a re-lock that bumps
-  ruff or the type checker is a reviewed change, since it can change what the gate says.
-- **Logging**: stdlib `logging` with `logging.getLogger(__name__)`.
+**Python tooling (per Principle X)** - none is left (v2.37.0, feature 449 T228): T158 deleted the last Python under
+`l7r/diagram/` and with it ruff (the lint and formatter), `pyproject.toml` (their configuration and the type checker's), the
+`requirements*.in` / `.txt` lockfiles and the type checker; pytest and its plugins went with T213. The one script left,
+`scripts/gates/codeid.py`, runs on the system Python until T247. `l7r/` is still a PEP 420 namespace portion and
+never gains an `__init__.py`.
+
+**Rust tooling** (the checks `make static` runs on every crate, each crate's last green result reused while its inputs stand)
+- **Lint**: `rust lint` - clippy, its `all` and `pedantic` groups denied in `rust/Cargo.toml`'s `[workspace.lints]`, the
+  function cap in `clippy.toml` (Principle X clause 12); an exception is `#[expect(<lint>, reason = "...")]`.
+- **Format**: `rust format` - rustfmt, the single formatter; `make format FILE=<path>` for one file.
+- **Testing**: each crate's own tests under a make target (`make rust-test`, `make rust-test CRATE=<dir>`, `make done`), and
+  `rust cover`: **100% of a crate's lines by its own tests**.
+- **Dependency management**: the `rust/Cargo.toml` workspace pins each outside crate, locked in `rust/Cargo.lock`; a gate crate
+  names one only as `{ workspace = true }`.
 
 **Test layout**
 - Tests live under `tests/`, mirroring the source
@@ -2189,8 +2285,8 @@ held by a guard - a guard that told a repair from a placement by reading code wo
   awaits the GM's ruling on the legacy tiers. Saved fixtures for external
   boundaries live in a `fixtures/` subdirectory next to the tests that
   consume them.
-- Test names describe behavior (not implementation); parametrize
-  variant inputs. A map-rolling test carries `@pytest.mark.rolls_map`.
+- Test names describe behavior (not implementation); one test covers
+  variant inputs (Principle X clause 10).
 
 **Repository layout conventions**
 - The project lives at the repository root (feature 329 moved it out of the old skill directory under
@@ -2238,18 +2334,18 @@ occasion owes (`scripts/reviews/review_owed.py`), one unit per agent, and the
 findings are acted on before the change ships.
 `scripts/gates/review-gate.sh` refuses the push otherwise.
 
-**Python "done" checklist (mandatory per Principle X)**
-A Python change is not complete until `make done` is green at
+**The "done" checklist (mandatory per Principle X)** (v2.37.0, feature 449 T228: the Python checks - ruff, its format check,
+the strict type check, pytest with its floors - went with the Python, T158 and T213)
+A code change is not complete until `make done` is green at
 the repository root - it runs, together and reporting every failure
 at once:
 
-1. `ruff check`
-2. `ruff format --check`
-3. the strict type check - pyrefly with the mypy-strict rule set (on production modules)
-4. `make hooks-test` (every guard's test companion, Principle XVIII)
-5. `pytest -n auto` with the Makefile's coverage floors
-   (`make done FULL=1` also re-gates every pool map and runs the
-   perf gate)
+1. `make hooks-test` (every guard's test companion, Principle XVIII)
+2. `make static`: the file-scale checks and every Rust crate's `rust lint`, `rust format --check`, `rust cover` (its tests,
+   100% of its lines by its own) and `rust dead`
+3. `make format`: rustfmt over the Rust phases' crates
+4. at the port switch's `rust-only`, `make seeds` (the known-failing seeds rolled again, and fresh ones); otherwise the
+   reference map (`make done FULL=1` also audits the bypass log)
 
 Nothing in this list is run bare - `rust/guard/src/guards/make_only_hooks.rs` refuses
 it. The TDD order - write failing test, watch it fail, implement,
@@ -2302,19 +2398,26 @@ same test may belong to both in two forms:
    the 1,000 px one, one cardinal per axis and then all four, one axis of a
    matrix and then the product. `tests/_scope.py` (`full_or`, `subset`,
    `EXHAUSTIVE`); the gate always sets `EXHAUSTIVE`. Moving the full form to
-   the gate is not dropping it.
+   the gate is not dropping it. RETIRED (v2.38.0, feature 449 T251): `make
+   quick` runs no test today and no crate's test has two forms; each
+   crate's tests run whole in `make static`.
 2. **A test that exercises the tooling BY RUNNING IT** - `make` in a fixture,
    git repositories in tmp, coverage subprocesses, the invocation guard's
    process tree - carries `tooling` and runs in quick only when the tooling
    changed since the last green gate (the gate records a hash over the build
-   file, pyproject, `scripts/`, the ci and pipeline packages, the switches,
-   the invocation guard and the suite's conftest). Real tooling tests, not
+   file, `scripts/` (and `pyproject.toml` until T158 deleted it), the ci and pipeline packages, the switches,
+   the invocation guard and the suite's conftest). Today (v2.38.0, feature
+   449 T251): `make static` reuses each crate's kept green result while its
+   inputs stand and re-tests a crate whose inputs moved (449 T93;
+   `dev/rust-tooling.md`'s change-selected-tests row); the marker and its
+   hash went with pytest. Real tooling tests, not
    mocks: *"paying the price of that type of test in order to ensure
    correctness is probably worthwhile, but only if we're running it in
    situations where it is actually called for."*
 3. **The bad-map corpus replays at the gate**, every fixture, every time -
    and not in quick: most of it dates from hand placement, and a saved bad
-   map proves a CHECK, not the map on the sheet.
+   map proves a CHECK, not the map on the sheet. RETIRED (v2.38.0, feature
+   449 T251): the corpus, `pool/regressions/`, is gone.
 4. **A proof of tooling** (a cache is faithful, a roster is complete, a
    whole-tree scan) is gate-only for the same reason.
 
@@ -2340,12 +2443,18 @@ test is run"*. So, refining the four consequences above:
    seed of a cohort, a determinism test that must roll twice for real, a
    fixture replayed only to carry coverage. The Makefile collects trees; a
    deselect list is forbidden (the one that existed went stale within a day
-   and ran the FULL-only cohort ratchet at every unlocked gate).
+   and ran the FULL-only cohort ratchet at every unlocked gate). Today
+   (v2.38.0, feature 449 T251) the trees are gone with pytest: a crate's
+   tests live in the crate, every package under `rust/` is found by walking
+   it, and the no-roster rule stands.
 6. **The gate stays EXHAUSTIVE for what it collects** - the full comb, all
    four cardinals, the whole corpus - but a SWEEP OF SEEDS is not an
    exhaustive form of a test, it is a different test, and it lives in
    `tests/full/`. At merge time one representative roll of each engine path
-   is enough; the sweep runs under `FULL=1` and on AWS.
+   is enough; the sweep runs under `FULL=1` and on AWS. Today (v2.38.0,
+   feature 449 T251): the pool sweep is `rust/mode_a`'s tests (`make
+   rust-test CRATE=rust/mode_a`, in `rust cover`), and the seeds `make done`
+   rolls are feature 444 FR-020's (Principle VI).
 7. **A rolled map nothing changed is served, not re-rolled.** A test's roll
    is keyed the way the pool cache keys a gen - the source of every function
    the roll executed, every file it read, every module's top level - and a
@@ -2353,7 +2462,10 @@ test is run"*. So, refining the four consequences above:
    assertion always runs; only the production is skipped. Any doubt rolls;
    the FULL run and `GATE_NO_CACHE=1` roll everything; a test that
    monkeypatches the engine never uses the cache, because a patch changes
-   the roll without moving any hashed source.
+   the roll without moving any hashed source. RETIRED (v2.38.0, feature 449
+   T251): the test-roll cache went with pytest; the pool's generation cache
+   (`rust/gate/crates/pool/src/cache.rs`) serves a shipped map whose key
+   stands.
 
 **A test's cost is a cost, and the phase sets the standard (GM 2026-08-26,
 feature 133 T19).** The GM: *"our project has gone through a phase in which
@@ -2370,7 +2482,9 @@ product, the tier's own maps instead of the whole pool. A sweep that is kept
 runs its documented subset by default and its full form under `EXHAUSTIVE=1`
 (`tests/_scope.py`); the docstring records the date the exhaustive form last
 ran green, so the subset is a recorded decision and the full check can be
-re-run whenever there is cause. Evidence, not habit, decides: the GM's
+re-run whenever there is cause. (v2.38.0, feature 449 T251: that mechanism
+went with pytest and no crate's test has a subset form today; the rule that
+a test earns its time stands.) Evidence, not habit, decides: the GM's
 judgment is that seed-dependent passes slipping through is *"not based on any
 real evidence in this case"*, and the balance is expected to swing back -
 *"we might reach a point ... where we find that maps with problems being
@@ -2439,7 +2553,7 @@ document wins; where this document is silent, defer to the project's
 - Every plan generated via `/speckit-plan` includes a Constitution Check
   gate that verifies the plan against each principle. Plans that fail
   the check MUST be revised before tasks are generated.
-- A green `make done` is the automatic compliance signal for Python;
+- A green `make done` is the automatic compliance signal for code;
   a shipped map carries its review record (`review-gate.sh`).
 - Generated content is checked against the pool conventions (Principle
   III) and the de-localization rule (Principle VII) before being added to
@@ -2451,4 +2565,4 @@ document wins; where this document is silent, defer to the project's
 guidance. This constitution is the higher-level authority; CLAUDE.md
 operationalizes it.
 
-**Version**: 2.36.0 | **Ratified**: 2026-05-27 | **Last Amended**: 2026-11-19
+**Version**: 2.38.0 | **Ratified**: 2026-05-27 | **Last Amended**: 2026-11-22

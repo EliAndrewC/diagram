@@ -128,13 +128,16 @@ fn no_inventory_names_nothing_and_the_command_line_says_how_to_add_a_row() {
 }
 
 /// FR-008's one end-to-end test (ask:449-T167-realtree): the check's detector over the live repository's tracked files, which must find
-/// a real reader of Python source (`scripts/gates/codeid.py`); its time grows with the tree, held by SC-003's suite total, not the bar.
+/// a real reader of source (`tests/hooks/test-make-only-hooks.sh`'s `*.rs` find, pinned since feature 449 T247 deleted
+/// `scripts/gates/codeid.py`, the reader pinned before); its time grows with the tree, held by SC-003's suite total, not the bar.
 #[test]
 fn the_detector_finds_a_real_reader_on_the_real_tree() {
     let real = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("../../../..");
     let listed = super::super::git_text(&real, &["ls-files"]);
     let files: Vec<&str> = listed.split_whitespace().collect();
-    assert!(super::readers(&real, &files)
+    let found = super::readers(&real, &files);
+    let pinned = found
         .iter()
-        .any(|f| f == "scripts/gates/codeid.py"));
+        .any(|f| f == "tests/hooks/test-make-only-hooks.sh");
+    assert!(pinned, "{found:?}");
 }

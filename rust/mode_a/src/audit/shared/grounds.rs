@@ -102,7 +102,7 @@ pub const ARCH_COUNTS: [usize; 3] = [1, 3, 7];
 /// The innermost arch off the hall's nearest face (ft).
 ///
 /// Research:
-///     the innermost arch off the hall - CONVENTION: the innermost arch stands 12 ft off the hall's nearest face, measured to the building's outline, a map drawing convention research/questions/0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.drawing.html records.
+///     the innermost arch off the hall - GUESS: research/questions/0220-shrine-gateways-and-the-approach-to-the-hall-torii-sando.drawing.html: no page gives the distance from a village shrine's innermost arch to its hall, so the page's 12 ft, the arches' own spacing, is a guess; measured to the nearest face of the building's outline.
 pub const INNERMOST_FT: f64 = 12.0;
 /// The innermost arch's play about its distance off the hall (ft).
 ///
@@ -559,7 +559,7 @@ fn indoor(cx: f64, cy: f64, found: &[Mark]) -> bool {
 ///     an open-air well's gear - research/questions/0196-communal-wells-ido.drawing.html: a well in the open takes a sweep or a pulley frame, both attested, never the beam pulley.
 ///     an indoor well's pulley - GUESS research/questions/0196-communal-wells-ido.drawing.html: a well indoors hangs its pulley from the beams, which the page records as a guess, no page naming an indoor well's gear.
 ///     an indoor well unroofed - research/questions/0196-communal-wells-ido.drawing.html: a well indoors takes no roof of its own, the house already roofing it.
-///     a well roof drawn on four posts - CONVENTION: a well's roof is an unfilled outline on four corner posts, so it reads as a roof over the well and not as the paved apron, the map drawing convention research/questions/0196-communal-wells-ido.drawing.html records.
+///     a well roof drawn on four posts - CONVENTION: research/questions/0196-communal-wells-ido.drawing.html draws a well's roof as a dashed outline on four corner posts, so it reads as a roof over the well and not as the paved apron, a map drawing convention; the audit checks for an unfilled outline on four posts and leaves the dash unchecked, since a solid unfilled outline still reads as the roof, not the apron.
 ///
 /// # Errors
 /// A `data-at` number `float()` refuses, or the sheet's marks refused.

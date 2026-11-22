@@ -3,7 +3,7 @@
 # the archive end to end, through the launcher - its own fixture, as every shard's is.
 set -uo pipefail
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-STAMP="$HERE/../../scripts/gates/l7r-gate.sh"  # the Rust gate; its ids of .py files come from codeid.py
+STAMP="$HERE/../../scripts/gates/l7r-gate.sh"  # the Rust gate (a .py file's id its blob id since 449 T247 deleted codeid.py)
 TMP=$(mktemp -d); trap 'rm -rf "$TMP"' EXIT
 FAILED=0
 check() { # label expected-rc actual-rc

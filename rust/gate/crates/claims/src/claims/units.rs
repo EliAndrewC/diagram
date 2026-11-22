@@ -1,6 +1,6 @@
 //! The units claims sit on (`l7r/diagram/tools/claims.py`'s `Unit`, `doc_units` and `section_blocks`, and `claims_rust.py` whole, ported
-//! by feature 449 T82): a Mode A procedure section, and a Rust item read from its doc comments. A `.py` unit comes from the Python's own
-//! reader through the runner ([`super::scope`]), its fingerprint being `CPython`'s `ast.dump` (`ask:449-T82-claims`).
+//! by feature 449 T82): a Mode A procedure section, and a Rust item read from its doc comments. A `.py` unit, read by the Python's own reader
+//! through the runner, left with the engine's Python (feature 449 T158).
 
 use std::path::Path;
 use std::sync::LazyLock;
@@ -8,6 +8,7 @@ use std::sync::LazyLock;
 use fancy_regex::Regex;
 use l7r_shared::py_text::{collapse, strip};
 use l7r_shared::sha256;
+#[cfg(test)]
 use serde_json::Value;
 
 use super::grammar::{claims_of, lstrip, parse_claim, Claim};
@@ -66,6 +67,7 @@ impl Unit {
     }
 }
 
+#[cfg(test)]
 fn strings(v: &Value, key: &str) -> Vec<String> {
     v.get(key)
         .and_then(Value::as_array)
@@ -77,6 +79,7 @@ fn strings(v: &Value, key: &str) -> Vec<String> {
         .unwrap_or_default()
 }
 
+#[cfg(test)]
 fn text(v: &Value, key: &str) -> String {
     v.get(key)
         .and_then(Value::as_str)
@@ -84,6 +87,7 @@ fn text(v: &Value, key: &str) -> String {
         .to_owned()
 }
 
+#[cfg(test)]
 fn number(v: &Value, key: &str) -> usize {
     v.get(key)
         .and_then(Value::as_u64)
@@ -91,7 +95,9 @@ fn number(v: &Value, key: &str) -> usize {
         .unwrap_or_default()
 }
 
-/// A unit as `tools/claims.unit_json` gives it, with its module's errors; its claim lines parsed again (each parsed once already).
+/// A unit from its JSON form (`tools/claims.unit_json`'s), with its module's errors, its claim lines parsed: the tests' way to write a
+/// unit the walk no longer reads, a deleted `.py` one.
+#[cfg(test)]
 pub fn from_json(v: &Value) -> Pair {
     let claims = strings(v, "claims")
         .iter()
@@ -114,15 +120,6 @@ pub fn from_json(v: &Value) -> Pair {
         },
         strings(v, "module_errors"),
     )
-}
-
-/// The unit as the runner's verbs take it back (`claims_counters.counter_only_json`).
-pub fn to_json(u: &Unit) -> Value {
-    serde_json::json!({
-        "path": u.path, "qualname": u.qualname, "kind": u.kind, "lineno": u.lineno, "end_lineno": u.end_lineno,
-        "claims": u.claims.iter().map(|c| c.line.clone()).collect::<Vec<_>>(), "inherited": u.inherited, "core": u.core,
-        "errors": u.errors, "names": u.names, "blocks": u.blocks,
-    })
 }
 
 /// The Mode A procedure documents (spec FR-003, plan D9): None takes every section; a list takes those top sections and every heading under them.

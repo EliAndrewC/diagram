@@ -146,3 +146,7 @@ The GM, on T205 and T206: "Yes those two efficiency improvements both seem worth
 ## 2026-11-21, stop before the parked hamlet stages (T244)
 
 The GM: "When you get to the point where you have ported everything else and then we're ready to go back to homesteads, then don't actually proceed. Why don't you go ahead and stop, and then we can talk more after everything else is done before you get started on that."
+
+## 2026-11-22, Constitution VI's one self-scoping command (T252, 449#7)
+
+The session recommended retiring the one-command clause, since the Mode A sweep costs about 15 s. The GM: "Don't you think it will take longer once we implement villages, towns, provincial cities, and capital cities?" The session agreed and proposed option A instead: build the one self-scoping command over the Rust sweeps, the clause kept, the new command's name put in as upkeep. The GM: "okay good, please proceed on that basis then"

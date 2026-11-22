@@ -526,37 +526,18 @@ pub fn save_deferred(root: &Path, deferred: &Value) -> Result<(), Fail> {
     std::fs::write(root.join(super::index::DEFERRED), text).map_err(fail)
 }
 
-/// `claims rekey`'s ports at `root`: [`carry`] over `index`, a row without its claim's text read from the merge base with origin/main
-/// (HEAD where there is none) - built once, and only for such a row - and the deferred list re-keyed and written where it moved.
+/// `claims rekey`'s ports at `root`: [`carry`] over `index`, and the deferred list re-keyed and written where it moved. A row without its
+/// claim's text took it from the merge base's `.py` units, which since feature 449 T158 are read no more: such a row has none.
 ///
 /// # Errors
 ///
-/// Where the map, the base or the deferred list cannot be read or written.
-pub fn rekey_ports(
-    reader: &mut super::scope::Reader,
-    root: &Path,
-    cur: &Cur,
-    index: &mut Index,
-) -> Result<Rekeyed, Fail> {
+/// Where the map or the deferred list cannot be read or written.
+pub fn rekey_ports(root: &Path, cur: &Cur, index: &mut Index) -> Result<Rekeyed, Fail> {
     let map = load(root)?;
     if map.ports.is_empty() && map.retired.is_empty() && map.rebuilt.is_empty() {
         return Ok(Rekeyed::default());
     }
-    // the merge base is read only for a row to carry that does not hold its claim's text
-    let uids = cur.uids();
-    let unheld = index.iter().any(|(k, v)| {
-        let uid = uid_of(k);
-        let in_cut = map.ports.keys().any(|u| file_part(u) == file_part(uid));
-        (map.ports.contains_key(uid) || in_cut)
-            && !uids.contains(uid)
-            && field(v, "claim").is_empty()
-    });
-    let texts = if unheld {
-        base_texts(reader, root)?
-    } else {
-        HashMap::new()
-    };
-    let done = carry(cur, index, &map, &mut |k: &str| texts.get(k).cloned());
+    let done = carry(cur, index, &map, &mut |_| None);
     let path = root.join(super::index::DEFERRED);
     if path.is_file() {
         let mut deferred = Value::Object(super::index::load_map(&path)?);
@@ -594,30 +575,6 @@ pub fn say(done: &Rekeyed, o: &mut super::commands::Out) -> i32 {
         o.say(&format!("claims-rekey: {why}"));
     }
     i32::from(!done.stuck.is_empty())
-}
-
-/// key -> its claim's normalized line for every claim at the merge base with origin/main, or HEAD.
-fn base_texts(
-    reader: &mut super::scope::Reader,
-    root: &Path,
-) -> Result<HashMap<String, String>, Fail> {
-    let git = |args: &[&str]| {
-        l7r_shared::py_text::strip(&crate::record::repo::git(root, args)).to_owned()
-    };
-    let mut base = git(&["merge-base", "HEAD", "origin/main"]);
-    if base.is_empty() {
-        base = git(&["rev-parse", "HEAD"]);
-    }
-    if base.is_empty() {
-        return Ok(HashMap::new());
-    }
-    let tmp = super::temp_dir("ports");
-    std::fs::create_dir_all(&tmp).map_err(fail)?;
-    super::report::base_tree("git", root, &base, &tmp)?;
-    Ok(super::scope::all_units(reader, &tmp, true, true)?
-        .iter()
-        .flat_map(|(u, _)| u.claims.iter().map(|c| (u.key(c), c.normalized())))
-        .collect())
 }
 
 /// What the push's claims gate reads of the merge base for [`unported`], and the claims the tree owes.

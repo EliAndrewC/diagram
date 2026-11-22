@@ -3,9 +3,9 @@
 //!
 //! On a push carrying engine code (the GATED routes), every ACCEPTED hamlet stage is held at 40 and 80 households (a form's own
 //! `sizes` where it has them, the polder's 10 and 20) to its accepted figure and to twice its budget (FR-022 rule 1: an accepted figure
-//! is at most twice the budget, and LEEWAY carries nothing past that); every pool-sheet stage of Mode A (`sheet_stages`, T201) - none
-//! accepted, as acceptance of a pool-sheet stage is not built (`budget_change/sheets.rs`) - is held on each sheet to twice its budget,
-//! the line its phase landed under (T202, T152). A stage the counting runs do not reach is printed as such, never passed in silence: a
+//! is at most twice the budget, and LEEWAY carries nothing past that); every pool-sheet stage of Mode A (`sheet_stages`, T201) is held
+//! on each sheet to twice its budget, the line its phase landed under (T202, T152), and an accepted one (`make budget-accept
+//! COUNTS=`, T243) to its accepted figure on each sheet too, as a hamlet stage is at its sizes. A stage the counting runs do not reach is printed as such, never passed in silence: a
 //! stage on `NOT_ON_REFERENCE` with its reason, a pool-sheet stage with no counter (`SHEET_COUNTERS`) as UNCOUNTED, and an accepted
 //! stage missing from a run that should hold it refuses. No round-arbiter accept clears a refusal; the GM's words do.
 //!
@@ -157,8 +157,8 @@ fn kept_or_run(
     asked: &str,
     count: impl FnOnce() -> Result<String, String>,
 ) -> Result<(String, bool), String> {
-    // a `.py` under the reads is read by no counting run, and keying it would start Python
-    let key = worktree_key(root, "python3", reads, &|p| {
+    // a `.py` under the reads is read by no counting run, so it stays out of the key (keying it started Python until feature 449 T247)
+    let key = worktree_key(root, reads, &|p| {
         Path::new(p).extension().is_none_or(|e| e != "py")
     })?;
     let dir = common_git_dir(root)
@@ -406,6 +406,17 @@ fn hold_sheets(sheets: &Value, counted: &str, held: &mut Held) {
             let twice = LEEWAY * budget;
             match totals.get(&(stage.as_str(), sheet.as_str())) {
                 Some(Some(ops)) => {
+                    let accepted = st
+                        .get("accepted")
+                        .and_then(|a| a.get(sheet))
+                        .and_then(Value::as_f64);
+                    if let Some(a) = accepted.filter(|a| *ops as f64 > *a) {
+                        held.refused.push(format!(
+                            "{stage} on {sheet}: {} counted operations, over its accepted {}",
+                            commas(*ops),
+                            whole(a)
+                        ));
+                    }
                     if *ops as f64 > twice {
                         held.refused.push(format!(
                             "{stage} on {sheet}: {} counted operations, past twice its budget ({})",

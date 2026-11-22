@@ -69,7 +69,7 @@ of the same shape:
 **Everything here owes 100%, the day it lands** (GM 2026-09-02, constitution Principle X clause 5: *"A new tool
 absolutely should silently owe one hundred percent coverage the day it lands ... For tools, for our settlement
 generation, for the automated checks on our hand drawn diagrams, for everything."*). The measured surface is DERIVED -
-`source = ["l7r"]` in `pyproject.toml` - so the way to not owe coverage on something is to not ship it. A boundary that
+every line of a Rust crate, by its own tests (`make rust-test`; the Python's `pyproject.toml` floor went with the last Python, feature 449 T158) - so the way to not owe coverage on something is to not ship it. A boundary that
 genuinely cannot be reached is argued at the point of change, like any other exclusion.
 
 For a tool whose work is a SUBPROCESS or a BROWSER: the pure half is tested directly and the driving half where it can

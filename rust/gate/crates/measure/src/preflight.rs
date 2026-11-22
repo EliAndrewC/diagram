@@ -5,7 +5,8 @@
 //! derived files regenerated, the record built and its pointers resolved, the quick tier run. And THE TREE HELD STILL: the gate hashes every tracked file
 //! that differs from HEAD when it starts and again before it reports green, and a difference fails it, naming the file.
 //!
-//! Whether two versions of a `.py` file differ only where the gate does not look is `codeid.py`'s, asked in one batch.
+//! Whether two versions of a `.py` file differed only where the gate does not look was `codeid.py`'s, asked in one batch, until feature 449
+//! T247 deleted it with the last `.py` file: a change is unseen now on its path and bytes alone.
 
 use std::collections::{BTreeMap, BTreeSet};
 use std::io::Write as _;
@@ -16,7 +17,6 @@ use std::time::Instant;
 use serde_json::Value;
 
 use crate::cohort::git as git_said;
-use crate::measure::text_err;
 use crate::Reply;
 
 const DERIVED: [&str; 3] = ["docs", "building-programs", "glossary"];
@@ -43,7 +43,6 @@ const USAGE_LOG_TOOL: &str = "preflight";
 /// What the phase starts.
 pub struct Tools {
     pub make: String,
-    pub python: String,
 }
 
 fn git(root: &Path, args: &[&str]) -> String {
@@ -144,111 +143,30 @@ fn active_records(root: &Path) -> BTreeSet<String> {
 /// One changed file: its path and the bytes before and after (none: absent).
 type Change = (String, Option<Vec<u8>>, Option<Vec<u8>>);
 
-/// Which of `changes` are in a byte-hashed area, asked of the stamp as one batch (FR-006).
-fn raw_areas(root: &Path, changes: &[&Change]) -> BTreeSet<String> {
-    let listed: String = changes.iter().flat_map(|c| [c.0.as_str(), "\n"]).collect();
-    crate::stamp::raw_matches(root, &mut listed.as_bytes())
-        .unwrap_or_default()
-        .lines()
-        .map(str::to_owned)
-        .collect()
-}
-
-/// `codeid.py`'s batch answer, the one Python library that reads a program: for each change, are its two versions the same but for what the gate does not see?
-fn same_python(root: &Path, tools: &Tools, changes: &[&Change]) -> BTreeSet<String> {
-    let dir = l7r_shared::tempdir::TempDir::new("preflight");
-    let mut words = vec!["--same-program".to_owned()];
-    for (i, (path, old, new)) in changes.iter().enumerate() {
-        let (a, b) = (dir.join(format!("{i}.old")), dir.join(format!("{i}.new")));
-        let _ = std::fs::write(&a, old.as_deref().unwrap_or_default());
-        let _ = std::fs::write(&b, new.as_deref().unwrap_or_default());
-        words.extend([
-            path.clone(),
-            a.display().to_string(),
-            b.display().to_string(),
-        ]);
-    }
-    let asked = python_tool(root, tools, "codeid.py", &words);
-    let _ = std::fs::remove_dir_all(&dir);
-    let same = asked.map_or_else(
-        |_| Vec::new(),
-        |out| out.lines().map(|l| l == "1").collect::<Vec<bool>>(),
-    );
-    changes
-        .iter()
-        .zip(same)
-        .filter(|(_, s)| *s)
-        .map(|(c, _)| c.0.clone())
-        .collect()
-}
-
-/// A Python tool of `scripts/gates/`, its stdout; an error when it failed.
-fn python_tool(
-    root: &Path,
-    tools: &Tools,
-    script: &str,
-    args: &[String],
-) -> Result<String, String> {
-    let done = Command::new(&tools.python)
-        .arg(root.join("scripts/gates").join(script))
-        .args(args)
-        .env("PYTHONDONTWRITEBYTECODE", "1")
-        .stdin(Stdio::null())
-        .output()
-        .map_err(text_err)?;
-    if done.status.success() {
-        Ok(String::from_utf8_lossy(&done.stdout).into_owned())
-    } else {
-        Err(String::from_utf8_lossy(&done.stderr).into_owned())
-    }
-}
-
-/// Is a change one the gate does not see, on its path and bytes alone? `None` when only its `.py` source can say.
-fn plainly_unseen(change: &Change, active: &BTreeSet<String>) -> Option<bool> {
+/// Is a change one the gate does not see, on its path and bytes alone? (A `.py` file outside the byte-hashed areas whose semantic id and
+/// statement lines were unchanged was one too, asked of `codeid.py`, until feature 449 T247 deleted it with the last `.py` file.)
+fn plainly_unseen(change: &Change, active: &BTreeSet<String>) -> bool {
     let (path, old, new) = change;
     if old == new || RECORDS.contains(&path.as_str()) || active.contains(path) {
-        return Some(true);
+        return true;
     }
-    if old.is_none() && path.starts_with(COHORT_LOG) && crate::checks::has_ext(path, "json") {
-        return Some(true);
-    }
-    if !crate::checks::has_ext(path, "py") || old.is_none() || new.is_none() {
-        return Some(false);
-    }
-    None
+    old.is_none() && path.starts_with(COHORT_LOG) && crate::checks::has_ext(path, "json")
 }
 
-/// The paths of `changes` the gate does not see (405 T41, D15): the same bytes; one of the claims round's records; or a `.py` file outside the byte-hashed
-/// areas whose semantic id and statement lines are unchanged. The Python is started at most once, and only when such a file changed.
+/// The paths of `changes` the gate does not see (405 T41, D15): the same bytes; one of the claims round's records.
 #[must_use]
-pub fn unseen(root: &Path, tools: &Tools, changes: &[Change]) -> BTreeSet<String> {
+pub fn unseen(root: &Path, changes: &[Change]) -> BTreeSet<String> {
     let active = active_records(root);
-    let mut out = BTreeSet::new();
-    let mut undecided = Vec::new();
-    for change in changes {
-        match plainly_unseen(change, &active) {
-            Some(true) => {
-                out.insert(change.0.clone());
-            }
-            Some(false) => {}
-            None => undecided.push(change),
-        }
-    }
-    if undecided.is_empty() {
-        return out;
-    }
-    let raw = raw_areas(root, &undecided);
-    undecided.retain(|c| !raw.contains(&c.0));
-    if !undecided.is_empty() {
-        out.extend(same_python(root, tools, &undecided));
-    }
-    out
+    changes
+        .iter()
+        .filter(|c| plainly_unseen(c, &active))
+        .map(|c| c.0.clone())
+        .collect()
 }
 
 /// `tree_moved`, less every change the gate does not see, across a HEAD move too. "HEAD" stays when its move cannot be read.
 pub fn seen_moves(
     root: &Path,
-    tools: &Tools,
     before: &BTreeMap<String, String>,
     after: &BTreeMap<String, String>,
 ) -> Vec<String> {
@@ -274,7 +192,7 @@ pub fn seen_moves(
         .iter()
         .map(|p| (p.clone(), version(before, &bh, p), version(after, &ah, p)))
         .collect();
-    let invisible = unseen(root, tools, &changes);
+    let invisible = unseen(root, &changes);
     paths
         .into_iter()
         .filter(|p| !invisible.contains(p))
@@ -353,7 +271,7 @@ fn snapshot(path: &str) -> Option<BTreeMap<String, String>> {
 }
 
 /// The gate-write guard's question for an Edit or a Write (405 T41, D15): 0 when writing the path to those bytes is unseen by the gate.
-fn would_write(root: &Path, tools: &Tools, a: &Asked) -> i32 {
+fn would_write(root: &Path, a: &Asked) -> i32 {
     let Some(snap) = snapshot(&a.tree_check) else {
         return 1;
     };
@@ -363,15 +281,15 @@ fn would_write(root: &Path, tools: &Tools, a: &Asked) -> i32 {
     let new = (!a.content.is_empty())
         .then(|| std::fs::read(&a.content).ok())
         .flatten();
-    i32::from(!unseen(root, tools, &[(rel.clone(), old, new)]).contains(&rel))
+    i32::from(!unseen(root, &[(rel.clone(), old, new)]).contains(&rel))
 }
 
 /// `--tree-check`: did the tree move while the gate ran?
-fn tree_check(root: &Path, tools: &Tools, a: &Asked, say: &mut dyn std::io::Write) -> i32 {
+fn tree_check(root: &Path, a: &Asked, say: &mut dyn std::io::Write) -> i32 {
     let Some(before) = snapshot(&a.tree_check) else {
         return 0;
     };
-    let moved = seen_moves(root, tools, &before, &tree(root));
+    let moved = seen_moves(root, &before, &tree(root));
     // NO ROLL CENSUS (feature 449 T222): a move the gate's own roll made was excused by the census `_census.py` wrote, read here. The
     // Python roll that wrote it is gone, and the Rust driver writes only gitignored renders (a hamlet's `.driver.svg` and `.driver.json`,
     // a sheet's picture and page), which this snapshot never holds; so every tracked move is the tree moving, with nothing to excuse.
@@ -509,12 +427,12 @@ fn phase(root: &Path, tools: &Tools, a: &Asked, say: &mut dyn std::io::Write) ->
 pub fn run(a: &Asked, tools: &Tools, say: &mut dyn std::io::Write) -> i32 {
     let root = std::fs::canonicalize(&a.root).unwrap_or_else(|_| PathBuf::from(&a.root));
     let code = if !a.would_write.is_empty() && !a.tree_check.is_empty() {
-        would_write(&root, tools, a)
+        would_write(&root, a)
     } else if !a.tree_snap.is_empty() {
         let text = serde_json::to_string(&tree(&root)).unwrap_or_default();
         i32::from(std::fs::write(&a.tree_snap, text).is_err())
     } else if !a.tree_check.is_empty() {
-        tree_check(&root, tools, a, say)
+        tree_check(&root, a, say)
     } else {
         phase(&root, tools, a, say)
     };
@@ -531,7 +449,6 @@ pub fn run(a: &Asked, tools: &Tools, say: &mut dyn std::io::Write) -> i32 {
 pub fn cli(args: &[String]) -> Reply {
     let tools = Tools {
         make: "make".to_owned(),
-        python: "python3".to_owned(),
     };
     let code = run(&parse(args), &tools, &mut std::io::stdout());
     Reply {

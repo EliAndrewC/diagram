@@ -341,13 +341,8 @@ fn utc_of(secs: u64) -> String {
 
 /// `l7r-gate switches ...`, refused outside this project's make.
 pub fn guarded(args: &[String], root: &Path, procs: &dyn super::via_make::Procs) -> crate::Reply {
-    let tree = crate::codeid::script(root);
-    if let Some(text) = super::via_make::refusal(
-        procs,
-        tree.ancestors().nth(3).unwrap_or(root),
-        "l7r.diagram.switches",
-        "switches",
-    ) {
+    let tree = crate::codeid::gate_tree(root);
+    if let Some(text) = super::via_make::refusal(procs, &tree, "l7r.diagram.switches", "switches") {
         return crate::Reply {
             stdout: String::new(),
             stderr: text,

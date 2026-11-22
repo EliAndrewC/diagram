@@ -27,10 +27,9 @@ fn commit(dir: &Path) {
     git(dir, &["commit", "-qm", "c"]);
 }
 
-/// A repository with the real `codeid.py`, one engine module and a branch `base` at its first commit.
+/// A repository with one engine module and a branch `base` at its first commit.
 fn repo(tag: &str) -> l7r_shared::tempdir::TempDir {
     let dir = l7r_shared::tempdir::TempDir::new(&format!("gate-delta-{tag}"));
-    std::fs::create_dir_all(dir.join("scripts/gates")).unwrap();
     // the repository `git init -b main` and the two settings make, written as git writes them, and `base` below as `git branch` writes
     // it: four processes saved a test (feature 449 T167, each test under FR-008's tenth of a second)
     put(&dir, ".git/HEAD", "ref: refs/heads/main\n");
@@ -39,13 +38,7 @@ fn repo(tag: &str) -> l7r_shared::tempdir::TempDir {
     for sub in ["objects", "refs/heads", "refs/tags"] {
         std::fs::create_dir_all(dir.join(".git").join(sub)).unwrap();
     }
-    let real = Path::new(env!("CARGO_MANIFEST_DIR")).join("../../../../scripts");
-    std::fs::copy(
-        real.join("gates/codeid.py"),
-        dir.join("scripts/gates/codeid.py"),
-    )
-    .unwrap();
-    put(&dir, "l7r/diagram/m.py", "def f():\n    return 1\n");
+    put(&dir, "rust/phases/m.rs", "fn f() -> u8 {\n    1\n}\n");
     put(&dir, "docs/a.md", "a\n");
     commit(&dir);
     let head = std::fs::read_to_string(dir.join(".git/refs/heads/main")).unwrap();
@@ -54,7 +47,7 @@ fn repo(tag: &str) -> l7r_shared::tempdir::TempDir {
 }
 
 fn delta(dir: &Path) -> serde_json::Value {
-    serde_json::from_str(&compute(dir, "base", "python3").unwrap()).unwrap()
+    serde_json::from_str(&compute(dir, "base").unwrap()).unwrap()
 }
 
 #[test]
@@ -92,7 +85,7 @@ fn every_path_kind_is_pinned() {
         "pool/hamlets/i/i.gen.py",
         "Makefile",
         "pyproject.toml",
-        "scripts/gates/codeid.py",
+        "scripts/gates/a.py",
         "l7r/diagram/interactive/assets/page.js",
         // what only the PAGE reads - its modal texts, its assets, the knobs - is the page's, not the route's (feature 188, the GM
         // 2026-09-05: "there's no actual reason to rerun all the tests for style sheet changes")
@@ -114,18 +107,16 @@ fn the_delta_is_our_commits_and_what_they_changed_in_what_runs() {
     put(&dir, "docs/a.md", "b\n");
     commit(&dir);
     assert_eq!(delta(&dir)["engine"], serde_json::json!([]));
-    put(
-        &dir,
-        "l7r/diagram/m.py",
-        "\"\"\"doc\"\"\"\n\n# comment\ndef f():\n    return 1\n",
-    );
+    // a `.py` file's docstring edit is engine since feature 449 T247: its id is its blob id, `codeid.py`'s AST id gone with it
+    put(&dir, "l7r/diagram/w.py", "\"\"\"doc\"\"\"\n");
+    commit(&dir);
+    put(&dir, "l7r/diagram/w.py", "\"\"\"words\"\"\"\n");
     commit(&dir);
     let wording = delta(&dir);
-    assert_eq!(
-        wording["files"],
-        serde_json::json!(["docs/a.md", "l7r/diagram/m.py"])
-    );
-    assert_eq!(wording["engine"], serde_json::json!([]),);
+    let files = serde_json::json!(["docs/a.md", "l7r/diagram/w.py"]);
+    assert_eq!(wording["files"], files);
+    let engine = serde_json::json!(["l7r/diagram/w.py"]);
+    assert_eq!(wording["engine"], engine);
 }
 
 /// The second half of the delta's test, on a repository of its own (feature 449 T167: the two halves read nothing of each other's, and
@@ -133,68 +124,57 @@ fn the_delta_is_our_commits_and_what_they_changed_in_what_runs() {
 #[test]
 fn the_delta_names_each_engine_path_that_changed_and_its_base() {
     let dir = repo("delta-engine");
-    put(&dir, "l7r/diagram/m.py", "def f():\n    return 2\n");
+    put(&dir, "rust/phases/m.rs", "fn f() -> u8 {\n    2\n}\n");
     put(&dir, "l7r/diagram/added.py", "x = 1\n");
     put(&dir, "pool/a.json", "{}\n");
     commit(&dir);
-    assert_eq!(
-        delta(&dir)["engine"],
-        serde_json::json!(["l7r/diagram/added.py", "l7r/diagram/m.py", "pool/a.json"])
-    );
+    let engine = serde_json::json!(["l7r/diagram/added.py", "pool/a.json", "rust/phases/m.rs"]);
+    assert_eq!(delta(&dir)["engine"], engine);
     assert_eq!(delta(&dir)["base"], git(&dir, &["rev-parse", "base"]));
 }
 
 #[test]
 fn the_key_moves_with_what_runs_and_the_worktree_key_equals_the_tree_key() {
     let dir = repo("key");
-    let head = engine_key(&dir, "HEAD", "python3").unwrap();
-    assert_eq!(engine_key_worktree(&dir, "python3").unwrap(), head);
+    let head = engine_key(&dir, "HEAD").unwrap();
+    assert_eq!(engine_key_worktree(&dir).unwrap(), head);
     put(&dir, "docs/a.md", "b\n");
     commit(&dir);
-    assert_eq!(engine_key(&dir, "HEAD", "python3").unwrap(), head,);
-}
-
-/// A stand-in for `python3 codeid.py --ids <file>...` that ids a file by its lines with `#` comments and blank lines dropped: the real
-/// `codeid.py` is 30 ms a start, and the key's tests that follow ask it twice or more, over FR-008's tenth of a second (feature 449 T167);
-/// the real one is asked above and in the delta's tests, and the stamp's self-test holds it to its own rules.
-fn ids(dir: &Path) -> String {
-    let path = dir.join("ids");
-    l7r_gate_core::write_executable(
-        &path,
-        "#!/bin/sh\nshift; shift; for f in \"$@\"; do sed 's/ *#.*//;/^$/d' \"$f\" | sha256sum | cut -c1-64; done\n",
-    );
-    path.to_string_lossy().into_owned()
+    assert_eq!(engine_key(&dir, "HEAD").unwrap(), head,);
 }
 
 /// The second part of the key's test, on a repository of its own (feature 449 T167: it reads nothing the first part wrote).
 #[test]
 fn a_comment_alone_keeps_the_worktree_key() {
     let dir = repo("key-comment");
-    let py = ids(&dir);
-    let head = engine_key(&dir, "HEAD", &py).unwrap();
+    let head = engine_key(&dir, "HEAD").unwrap();
     put(
         &dir,
-        "l7r/diagram/m.py",
-        "# a comment\ndef f():\n    return 1\n",
+        "rust/phases/m.rs",
+        "/// a comment\nfn f() -> u8 {\n    1 // and one more\n}\n",
     );
-    assert_eq!(engine_key_worktree(&dir, &py).unwrap(), head,);
+    assert_eq!(engine_key_worktree(&dir).unwrap(), head);
+    // a `.py` file's docstring is its bytes since feature 449 T247, so it moves the key
+    put(&dir, "l7r/diagram/w.py", "\"\"\"doc\"\"\"\n");
+    let with_py = engine_key_worktree(&dir).unwrap();
+    put(&dir, "l7r/diagram/w.py", "\"\"\"words\"\"\"\n");
+    assert_ne!(engine_key_worktree(&dir).unwrap(), with_py);
 }
 
 /// The last part of the key's test, on a repository of its own (feature 449 T167, as above).
 #[test]
 fn an_untracked_engine_file_moves_the_key_and_its_commit_keeps_it() {
     let dir = repo("key-moved");
-    let py = ids(&dir);
-    let head = engine_key(&dir, "HEAD", &py).unwrap();
+    let head = engine_key(&dir, "HEAD").unwrap();
     put(&dir, "rust/phases/a.rs", "fn f() {} // c\n");
     put(&dir, "pool/a.json", "{}\n");
-    let moved = engine_key_worktree(&dir, &py).unwrap();
+    let moved = engine_key_worktree(&dir).unwrap();
     assert_ne!(moved, head, "an untracked engine file counts");
     commit(&dir);
-    assert_eq!(engine_key(&dir, "HEAD", &py).unwrap(), moved);
-    assert_eq!(engine_key_worktree(&dir, &py).unwrap(), moved,);
-    assert_eq!(engine_key(&dir, "HEAD", &py).unwrap(), moved);
-    assert!(engine_key(&dir, "no-such-tree", &py).is_err());
+    assert_eq!(engine_key(&dir, "HEAD").unwrap(), moved);
+    assert_eq!(engine_key_worktree(&dir).unwrap(), moved,);
+    assert_eq!(engine_key(&dir, "HEAD").unwrap(), moved);
+    assert!(engine_key(&dir, "no-such-tree").is_err());
 }
 
 /// A tool's own key (feature 449 T224, the work-budget review's kept counts): it moves with a file under its paths, never with one
@@ -202,9 +182,8 @@ fn an_untracked_engine_file_moves_the_key_and_its_commit_keeps_it() {
 #[test]
 fn a_key_over_some_paths_moves_with_them_alone() {
     let dir = repo("key-some");
-    let py = ids(&dir);
     let key = |d: &Path| {
-        worktree_key(d, &py, &["rust/phases/", "pool/"], &|p| {
+        worktree_key(d, &["rust/phases/", "pool/"], &|p| {
             Path::new(p).extension().is_none_or(|e| e != "md")
         })
         .unwrap()
@@ -222,7 +201,7 @@ fn a_tree_with_no_engine_keys_on_nothing() {
     let dir = l7r_shared::tempdir::TempDir::new("gate-delta-empty");
     git(&dir, &["init", "-q"]);
     assert_eq!(
-        engine_key_worktree(&dir, "python3").unwrap(),
+        engine_key_worktree(&dir).unwrap(),
         l7r_shared::sha256::hex(b"")
     );
 }
@@ -250,7 +229,6 @@ fn the_command_line_answers_and_refuses() {
         cli(
             &args.iter().map(|s| (*s).to_owned()).collect::<Vec<_>>(),
             &dir,
-            "python3",
             &mut "l7r/a.py
 docs/b.md
 "

@@ -181,7 +181,7 @@ fn decide_first_and_the_dispatch_counter_run_first() {
     );
     let at = Some(root.as_path());
     let got = call(
-        &event("Agent", at, "record-format", "Read /x/MANIFEST.md"),
+        &event("Agent", at, "record-format", "9 T1: Read /x/MANIFEST.md"),
         &root,
         &root,
     );
@@ -191,7 +191,7 @@ fn decide_first_and_the_dispatch_counter_run_first() {
     );
     assert!(refused(
         &call(
-            &event("Agent", at, "record-format", "plain words"),
+            &event("Agent", at, "record-format", "9 T1 plain words"),
             &root,
             &root
         ),
@@ -210,7 +210,7 @@ fn decide_first_and_the_dispatch_counter_run_first() {
     assert!(escaped.is_empty());
     assert!(refused(
         &call(
-            &event("Agent", at, "record-format", "DECIDE_OK=\"x\" plain"),
+            &event("Agent", at, "record-format", "DECIDE_OK=\"x\" 9 T1 plain"),
             &root,
             &root
         ),
@@ -239,4 +239,42 @@ fn decide_first_and_the_dispatch_counter_run_first() {
     assert!(refused(&held, "cascade@1"));
     let v: Value = json!(null);
     assert!(v.is_null());
+}
+
+/// 449 T258: DECIDE FIRST JUDGES THE CHECK'S OWN TASK. Two open tasks, T1 decided and T2 not; the stub gate answers `plan decided` by
+/// its task, and its form with none (the mark's) names T2, as the real gate's did for each of T197 G1's checks.
+#[test]
+fn a_check_is_judged_on_its_own_task_never_the_mark_s() {
+    crate::shared::log::quiet();
+    let root = clone_at("decide-own");
+    gate(
+        &root,
+        r#"[ "$1" = plan ] || exit 0
+[ -z "$5" ] && { echo "999-x T2: decide first (the mark's)"; exit 1; }
+[ "$5" = T1 ] && exit 0
+echo "$4 $5: no current CLEAR verdict"; exit 1"#,
+    );
+    let at = Some(root.as_path());
+    let decided = call(
+        &event("Agent", at, "quote-check", "999 T1: Read /x/MANIFEST.md"),
+        &root,
+        &root,
+    );
+    assert!(decided.is_empty(), "{decided:?}");
+    let undecided = call(
+        &event("Agent", at, "quote-check", "999 T2: Read /x/MANIFEST.md"),
+        &root,
+        &root,
+    );
+    let held = refused(&undecided, "999 T2: no current CLEAR verdict");
+    assert!(held, "{undecided:?}");
+    let none = call(
+        &event("Agent", at, "quote-check", "Read /x/MANIFEST.md"),
+        &root,
+        &root,
+    );
+    let named = refused(&none, "names no task it serves");
+    assert!(named, "{none:?}");
+    let mark = refused(&none, "999-x T2: decide first (the mark's)");
+    assert!(mark, "{none:?}");
 }

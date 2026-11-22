@@ -1,12 +1,10 @@
-//! The check bundles (feature 449 T88, `ask:449-T88-bundles`, from `check_bundle.py`, `bundle_owed.py`, `modal_bundle.py` and `earlier_rounds.py`): the files one check agent reads, copied out of the repository with a MANIFEST naming each copy's origin (feature 250), refused for a check nothing owes (feature 311). `l7r-gate record check-bundle ...` and `record modal-bundle ...`; what they reach of Python still unported goes through one runner, `scripts/bundle_door.py` ([`door`]).
+//! The check bundles (feature 449 T88, `ask:449-T88-bundles`, from `check_bundle.py`, `bundle_owed.py`, `modal_bundle.py` and `earlier_rounds.py`): the files one check agent reads, copied out of the repository with a MANIFEST naming each copy's origin (feature 250), refused for a check nothing owes (feature 311). `l7r-gate record check-bundle ...` and `record modal-bundle ...`; they start no Python (the runner of `scripts/bundle_door.py`, `door`, left with its last verb, the claims tools' `.py` half, feature 449 T158).
 
 use std::fmt::Write as _;
 use std::path::{Component, Path, PathBuf};
 
 use crate::record::repo::{fail, Fail};
 use crate::Reply;
-
-pub mod door;
 
 /// Where a bundle goes by default: no `CLAUDE.md` sits above it.
 #[cfg(not(any(test, feature = "testkit")))]
@@ -30,20 +28,19 @@ pub fn default_root() -> PathBuf {
 }
 pub const MANIFEST: &str = "MANIFEST.md";
 
-/// What a run printed, and the runner it opened, carried to its reply.
+/// What a run printed, carried to its reply.
 pub struct Run {
     pub out: String,
     pub err: String,
-    pub door: door::Runner,
 }
 
 impl Run {
+    /// A run at `_root`, which since the runner left (feature 449 T158) names nothing it reads.
     #[must_use]
-    pub fn new(root: &Path) -> Self {
+    pub fn new(_root: &Path) -> Self {
         Self {
             out: String::new(),
             err: String::new(),
-            door: door::Runner::new(&crate::record::repo::tree_of(root)),
         }
     }
 

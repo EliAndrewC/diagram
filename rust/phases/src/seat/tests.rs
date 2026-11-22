@@ -294,3 +294,20 @@ fn a_walled_in_head_gives_way_to_the_next_margin() {
     // the west margin heads the ranking
     assert!(s.frames[0].out.0 < -0.5);
 }
+
+#[test]
+fn only_a_fall_toward_the_wind_backs_the_hill() {
+    // the land falling north-east, square across the north-west wind: the high side is the south-west
+    let s = 0.5f64.sqrt();
+    let mut i = inp();
+    i.fall = (s, -s);
+    // the north margin's seat on the toe, the west one's center in the reeds: no margin faces the wind
+    i.toe = square(2000.0, 2100.0, 4000.0, 2400.0);
+    i.reeds = vec![square(2000.0, 2600.0, 2400.0, 3400.0)];
+    // refused by name, never seated on the high south margin off the wind (0031: the rolled falls keep their back to it)
+    assert!(seat(&i).is_err());
+    // the same field falling north-west, into the wind: the high south-east margin is taken, off the wind
+    i.fall = (-s, -s);
+    let h = seat(&i).unwrap();
+    assert!(h.frames.iter().all(|f| f.offwind));
+}

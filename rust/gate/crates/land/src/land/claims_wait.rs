@@ -1,5 +1,5 @@
 //! The claims round the landing waits for after its gate (405 T50, D23), what waiting cannot cure (feature 426 D1, feature 440 T01), and
-//! the gate's own lint committed while it waits (the GM 2026-10-24).
+//! the gate's own lint, committed while it waited (the GM 2026-10-24), left with ruff (feature 449 T158; its step deleted by T247).
 
 use std::path::Path;
 
@@ -7,7 +7,7 @@ use l7r_shared::py_text::strip;
 use l7r_shared::speckit::splitlines;
 
 use super::cheap::kept_lines;
-use super::{head, py_read, tail, Land};
+use super::{head, tail, Land};
 
 /// How `claims_cure` opens each refusal that waiting cannot end - so the stop names it as such, not as the wait run out.
 const CURE_OPENINGS: [&str; 3] = [
@@ -123,7 +123,6 @@ impl Land {
                 }
             }
             self.commit_escape_records()?;
-            self.commit_gate_formatting()?;
             let dirty = self.dirty(&[])?;
             if rc == 0 && dirty.is_empty() {
                 return Ok(String::new());
@@ -150,85 +149,6 @@ impl Land {
             }
             self.clock.sleep(self.claims_poll);
         }
-    }
-
-    /// `text` as the gate's lint leaves it (`make done`: `ruff check --fix`, then `ruff format`), asked of the file's own path so its
-    /// configuration applies; None where ruff fails.
-    fn ruffed(&self, path: &str, text: &str) -> Result<Option<String>, String> {
-        let mut out = text.to_owned();
-        for cmd in [
-            &["check", "--fix", "--quiet"][..],
-            &["format", "--quiet"][..],
-        ] {
-            let mut args = vec![self.python.as_str(), "-m", "ruff"];
-            args.extend(cmd);
-            args.extend(["--stdin-filename", path, "-"]);
-            let mut child = self
-                .command(&args)
-                .stdin(std::process::Stdio::piped())
-                .stdout(std::process::Stdio::piped())
-                .stderr(std::process::Stdio::piped())
-                .spawn()
-                .map_err(|e| super::spawn_error(&self.python, &e))?;
-            let feed = out.clone();
-            let mut pipe = child.stdin.take();
-            let writer = std::thread::spawn(move || {
-                if let Some(p) = pipe.as_mut() {
-                    let _ = std::io::Write::write_all(p, feed.as_bytes());
-                }
-            });
-            let done = child.wait_with_output().map_err(super::io)?;
-            let _ = writer.join();
-            let code = super::code_of(done.status);
-            let said = super::decode(&done.stdout)?;
-            super::decode(&done.stderr)?;
-            if !(code == 0 || code == 1) || said.is_empty() {
-                return Ok(None);
-            }
-            out = said;
-        }
-        Ok(Some(out))
-    }
-
-    /// THE GATE'S OWN LINT IS COMMITTED, NEVER WAITED ON (the GM 2026-10-24, after T07's landing sat 20 min of the claims wait on a test
-    /// whose imports the gate's `ruff check --fix` had sorted - nothing would ever commit it). Each modified tracked `.py` file whose
-    /// working copy is exactly its HEAD copy run through the gate's ruff is committed; any other change is left for the wait to name.
-    /// The paths committed.
-    #[expect(
-        clippy::case_sensitive_file_extension_comparisons,
-        reason = "Python's `str.endswith`, case and all"
-    )]
-    pub(super) fn commit_gate_formatting(&self) -> Result<Vec<String>, String> {
-        let status = self.run(&["git", "status", "--porcelain"], &[])?.1;
-        let paths: Vec<String> = splitlines(&status)
-            .into_iter()
-            .filter(|l| l.starts_with(" M ") && l.ends_with(".py"))
-            .map(|l| l.chars().skip(3).collect())
-            .collect();
-        let mut mine = Vec::new();
-        for path in paths {
-            let (rc, was) = self.run(&["git", "show", &format!("HEAD:{path}")], &[])?;
-            let now = match std::fs::read(self.root.join(&path)) {
-                Ok(_) => py_read(&self.root.join(&path))?,
-                Err(_) => continue,
-            };
-            if rc == 0 && was != now && self.ruffed(&path, &was)?.as_deref() == Some(now.as_str()) {
-                mine.push(path);
-            }
-        }
-        if !mine.is_empty() {
-            let mut cmd = vec![
-                "git",
-                "commit",
-                "-q",
-                "-m",
-                "the gate's own lint and format, committed (make land)",
-                "--",
-            ];
-            cmd.extend(mine.iter().map(String::as_str));
-            self.run(&cmd, &[])?;
-        }
-        Ok(mine)
     }
 }
 

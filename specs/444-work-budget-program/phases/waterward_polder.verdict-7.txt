@@ -1,0 +1,46 @@
+SOUND - The polder fringe with its bank bands comes to 3,549 operations at 10 households and 4,525 at 20 (the top of its bounded n, standing for 40), well inside twice my estimate; every new row is read from the Bounds' measurements with slack 1, and the raise is 1.41x the first figure at 20 (1.54x at 10), under twice.
+
+**My first-principles estimate (S11), at 20 households.** The plan refuses a polder past 20, so 20 stands for 40.
+- **What it writes:** 4 strip pieces (111 points) and 4 bank bands (217 points), so 8 things. At the reference rate of 2,000-4,000 a thing, that is 16,000-32,000.
+- **Built from the contract:**
+  - Reading the face: 178.
+  - Cutting the strips: 4 beds against rings of about 53 points, about 6-13 checks a point, so 1,300-2,800.
+  - Extent test and writing the pieces: 222.
+  - Bank bands: 40 box tests, plus about 400 samples, each tested by a plain walk of its met ring (about 26 points) and the pond rim (16 points). That is about 17,000.
+- **Total:** about 20,000-25,000. The derivation's 4,525 is about a fifth of that. Its cursor along the sorted crossings is cheaper than the per-sample ring walk I assumed.
+
+**Q0, the total:** It is well under twice the estimate at both sizes. There is no map-wide raster or area term. The only terms charged once are the face (120/178), the channels (6), the form test (4) and the 40 bank-reach box tests, which are a constant 8 reaches x 5 rings.
+
+**Q1, derived:** Every new row comes from the Bounds:
+- 8 bank reaches (2 channels x 2 reaches x 2 banks) x 5 rings = 40.
+- 13 met pairs, whose rings' points sum to 265/335.
+- 393/398 samples: the 786/796 ft of bank inside the met boxes, at 2 ft.
+- The rim's 302/303 samples: the 604/606 ft of bank inside some box, at 2 ft.
+- 26 cursor steps: about 2 crossings (in and out) for each of the 13 meets.
+- 213/217 band points, read off the drawn paths.
+
+Slack is 1. The arithmetic checks: the bank terms are 1,239 and 1,319, the totals 3,549 and 4,525, and the exponent is ln(4,525/3,549)/ln 2 = 0.35 on a bounded n.
+
+**Missed work:** The bank bands are real work the contract owes. They are a rule of its Writes and Keeps (0074; added by T240 after T235's derivation), priced row by row. They do not re-price anything the earlier count estimated.
+
+**Q2, cheaper algorithm (S9):** The search touches only what can win. Each bank reach is clipped to the 5 rings' boxes first, and a sample in no box is never asked. That cuts the drain's 2,000 ft or more of bank to about 600 ft. Each met ring is walked once, and every sample after that is answered by the cursor, not by a walk of the ring's edges.
+- Note carried from verdict-6: the bed row's 13m + 8 could be 6m + 8. That saves 1,484 of 4,525 (33%), under half, so it owes no round, and the derivation keeps it on purpose.
+
+**Q3, padding:** None found.
+- Note: the pond rim is priced at 1 operation per sample. That fits the rubric's unit ("a point tested against a shape"). But if the Rust stage tests the rim edge by edge (16 points), the audit will see up to about 4,800 more, so this is where it should look.
+- Note: verdict-6's unpriced strip-laying step (about m a strip, about 106 at 20, 2%) is still unpriced.
+
+**Q4, units:** Every figure is used as its source states it:
+- Samples are feet / 2 (796/2 = 398, 606/2 = 303).
+- Met-ring points are summed over pairs, not over rings.
+- Band points are drawn points.
+- m is (60 + 45)/2 = 53 and (39 + 37)/2 = 38.
+
+**Earlier findings:**
+- Verdicts 1-5 are closed: their findings were about the marsh drawing this stage no longer makes.
+- Verdict-6 gave no finding, only the bed note, which the derivation answers as "disputed" and left priced. That is acceptable for a note.
+- The audit and T226 entries cite files this bundle does not hold, so I could not confirm them from it.
+
+Files: /tmp/l7r-check/work-budget-budget-waterward.polder/derivation.md, /tmp/l7r-check/work-budget-budget-waterward.polder/contract.md, /tmp/l7r-check/work-budget-budget-waterward.polder/rubric.md, /tmp/l7r-check/work-budget-budget-waterward.polder/waterward_polder.verdict-6.txt
+
+(2026-11-22, MODE BUDGET of waterward.polder, feature 449 T250: the re-derivation adding the bank bands under `## Work the first derivation missed`, one blind dispatch - a raise, under twice the first at both sizes.)

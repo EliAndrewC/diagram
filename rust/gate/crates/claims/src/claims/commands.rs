@@ -24,7 +24,7 @@ use super::report::{
     coverage, delta_form_problems, inherited_none, load_deferred, question_names, report,
     split_keys,
 };
-use super::scope::{all_units, Reader};
+use super::scope::all_units;
 use super::triage::{clear_page_moves, keep_texts, read_reply, record_triage, triage_bundle, vet};
 use super::units::{sha, Pair};
 use crate::record::args::Parsed;
@@ -120,15 +120,14 @@ fn backfill(cur: &Cur, index: &mut Index, qdir: &Path, store: &mut Store) -> Res
         };
         if was.contains_key("pages")
             || was.get("research").and_then(Value::as_str) != Some(&row.research)
-            || row.claim.pointers.is_empty()
+            || row.research.is_empty()
         {
             continue;
         }
         let mut pages = Map::new();
-        for ptr in &row.claim.pointers {
-            let name = super::index::page_name(ptr);
-            let (fp, blocks) = page_blocks(name, qdir, &mut memo)?;
-            pages.insert(name.to_owned(), json!(fp));
+        for name in super::bundle::cited_pages(&row.claim) {
+            let (fp, blocks) = page_blocks(&name, qdir, &mut memo)?;
+            pages.insert(name.clone(), json!(fp));
             store.insert(
                 fp.clone(),
                 json!(blocks.iter().map(|(d, _)| d.clone()).collect::<Vec<_>>()),
@@ -199,7 +198,6 @@ fn codes(pairs: &[Pair]) -> HashMap<String, (String, String)> {
 }
 
 fn owed_cmd(
-    reader: &mut Reader,
     root: &Path,
     pairs: &[Pair],
     cur: &Cur,
@@ -212,7 +210,7 @@ fn owed_cmd(
             "claims-form: {x} - the gate's test_claims_coverage fails on it"
         ));
     }
-    for x in super::stale::stale(reader, root)? {
+    for x in super::stale::stale(root)? {
         o.say(&x);
     }
     let qdir = root.join(QUESTIONS);
@@ -252,7 +250,6 @@ fn words(text: &str) -> usize {
 }
 
 fn bundle_cmd(
-    reader: &mut Reader,
     root: &Path,
     cur: &Cur,
     index: &Index,
@@ -344,7 +341,7 @@ fn bundle_cmd(
         .filter(|c| !c.is_empty())
         .map(str::to_owned)
         .collect();
-    let manifest = bundle(reader, root, cur, &keys, &out, &with, &pages)?;
+    let manifest = bundle(root, cur, &keys, &out, &with, &pages)?;
     o.say(&manifest.to_string_lossy());
     super::flight::mark(root, &out)?;
     if !not_owed.is_empty() {
@@ -476,7 +473,6 @@ fn small_triage(root: &Path, keys: &[String], out: &str, o: &mut Out) -> Result<
 }
 
 fn triage_cmd(
-    reader: &mut Reader,
     root: &Path,
     cur: &Cur,
     index: Index,
@@ -520,7 +516,7 @@ fn triage_cmd(
     } else {
         PathBuf::from(path_text(out))
     };
-    let manifest = triage_bundle(reader, cur, &index, store, &keys, &qdir, &tout)?;
+    let manifest = triage_bundle(cur, &index, store, &keys, &qdir, &tout)?;
     let data = Value::Object(load_map(&tout.join("triage.json"))?);
     let forced: Vec<String> = data["forced"]
         .as_array()
@@ -614,14 +610,7 @@ fn accept_line(key: &str, was: &Value, trigger: &str) -> String {
     format!("VERDICT {key} IN-STEP - accepted by the round arbiter ({trigger}), binding")
 }
 
-fn accept_cmd(
-    reader: &mut Reader,
-    root: &Path,
-    cur: &Cur,
-    index: &Index,
-    p: &Parsed,
-    o: &mut Out,
-) -> Result<i32, Fail> {
+fn accept_cmd(root: &Path, cur: &Cur, index: &Index, p: &Parsed, o: &mut Out) -> Result<i32, Fail> {
     let keys = split_keys(p.text("--keys", ""), ';', &|k| cur.contains(k));
     let missing: Vec<&str> = keys
         .iter()
@@ -640,8 +629,8 @@ fn accept_cmd(
         return Ok(2);
     }
     let tmp = super::temp_dir("accept");
-    let made = bundle(reader, root, cur, &keys, &tmp, &[], &[])
-        .and_then(|_| load_units(&tmp.join("units.json")));
+    let made =
+        bundle(root, cur, &keys, &tmp, &[], &[]).and_then(|_| load_units(&tmp.join("units.json")));
     drop(tmp);
     let units = made?;
     let trigger = p.text("--trigger", "");
@@ -679,7 +668,7 @@ fn accept_cmd(
     Ok(0)
 }
 
-fn carry_cmd(reader: &mut Reader, root: &Path, p: &Parsed, o: &mut Out) -> Result<i32, Fail> {
+fn carry_cmd(root: &Path, p: &Parsed, o: &mut Out) -> Result<i32, Fail> {
     let (keys_text, ruling) = (p.text("--keys", ""), p.text("--ruling", ""));
     let attempt = (|| -> Result<Result<String, String>, Fail> {
         if keys_text.is_empty() != ruling.is_empty() {
@@ -687,8 +676,8 @@ fn carry_cmd(reader: &mut Reader, root: &Path, p: &Parsed, o: &mut Out) -> Resul
         }
         let mut here = None;
         let keys: Vec<String> = if keys_text.is_empty() {
-            let at = reading(reader, root)?;
-            let (_, _, _, carried) = classified(reader, root, &at)?;
+            let at = reading(root)?;
+            let (_, _, _, carried) = classified(root, &at)?;
             let target = super::carry::target(root)?;
             let done = super::carry::filed(target.as_deref())?;
             here = Some(target);
@@ -731,21 +720,21 @@ fn carry_cmd(reader: &mut Reader, root: &Path, p: &Parsed, o: &mut Out) -> Resul
 }
 
 /// The rows now and the index, as the gate reads them.
-fn reading(reader: &mut Reader, root: &Path) -> Result<Reading, Fail> {
-    let pairs = all_units(reader, root, false, true)?;
+fn reading(root: &Path) -> Result<Reading, Fail> {
+    let pairs = all_units(root, true)?;
     Ok(Reading {
         cur: rows_of(pairs, &root.join(QUESTIONS))?,
         index: load_map(&root.join(INDEX))?,
     })
 }
 
-fn gate_cmd(reader: &mut Reader, root: &Path, o: &mut Out) -> Result<i32, Fail> {
-    let pairs = all_units(reader, root, false, true)?;
+fn gate_cmd(root: &Path, o: &mut Out) -> Result<i32, Fail> {
+    let pairs = all_units(root, true)?;
     let at = Reading {
         cur: rows_of(pairs.clone(), &root.join(QUESTIONS))?,
         index: load_map(&root.join(INDEX))?,
     };
-    let (mut refuse, warn) = carry_gate(reader, root, &at)?;
+    let (mut refuse, warn) = carry_gate(root, &at)?;
     refuse.extend(delta_form_problems(root, &pairs));
     for w in &warn {
         o.say(&format!("claims-gate: {w}"));
@@ -778,12 +767,12 @@ fn rust_form(root: &Path, o: &mut Out) -> Result<i32, Fail> {
     Ok(1)
 }
 
-fn coverage_cmd(reader: &mut Reader, root: &Path, p: &Parsed, o: &mut Out) -> Result<i32, Fail> {
+fn coverage_cmd(root: &Path, p: &Parsed, o: &mut Out) -> Result<i32, Fail> {
     if p.on("--rust") {
         return rust_form(root, o);
     }
     let path = p.text("--path", "");
-    let pairs = all_units(reader, root, false, true)?;
+    let pairs = all_units(root, true)?;
     let probs: Vec<String> = coverage(&pairs, &question_names(root))
         .into_iter()
         .filter(|x| x.split(' ').next().unwrap_or_default().contains(path))
@@ -810,13 +799,12 @@ fn coverage_cmd(reader: &mut Reader, root: &Path, p: &Parsed, o: &mut Out) -> Re
 
 /// One command at `root`; its exit status, what it printed in `o`.
 pub fn run(cmd: &str, p: &Parsed, root: &Path, o: &mut Out) -> Result<i32, Fail> {
-    let mut reader = Reader::new(&crate::record::repo::tree_of(root), root);
     match cmd {
-        "gate" => return gate_cmd(&mut reader, root, o),
-        "carry" => return carry_cmd(&mut reader, root, p, o),
+        "gate" => return gate_cmd(root, o),
+        "carry" => return carry_cmd(root, p, o),
         "known" => {
-            let at = reading(&mut reader, root)?;
-            let written = record_known(&mut reader, root, &at)?;
+            let at = reading(root)?;
+            let written = record_known(root, &at)?;
             if written.is_empty() {
                 o.say("claims-known: no known drift is unrecorded");
             }
@@ -825,18 +813,18 @@ pub fn run(cmd: &str, p: &Parsed, root: &Path, o: &mut Out) -> Result<i32, Fail>
             }
             return Ok(0);
         }
-        "coverage" => return coverage_cmd(&mut reader, root, p, o),
+        "coverage" => return coverage_cmd(root, p, o),
         _ => {}
     }
-    let pairs = all_units(&mut reader, root, false, true)?;
+    let pairs = all_units(root, true)?;
     let cur = rows_of(pairs.clone(), &root.join(QUESTIONS))?;
     let index = load_map(&root.join(INDEX))?;
-    let index = super::counters::counters_clear(&mut reader, root, &cur, index, cmd, o)?;
+    let index = super::counters::counters_clear(root, &cur, index, cmd, o)?;
     let (qdir, store) = (root.join(QUESTIONS), load_map(&root.join(STORE))?);
     match cmd {
         "refingerprint" => {
             let mut index = index;
-            let old = codes(&all_units(&mut reader, root, false, false)?);
+            let old = codes(&all_units(root, false)?);
             let keys = refingerprint(&mut index, &old, &codes(&pairs));
             // each carried row of a Rust unit records the constants its code reads, as a check would have (feature 449 T166)
             let reads: HashMap<String, &str> = pairs
@@ -860,7 +848,7 @@ pub fn run(cmd: &str, p: &Parsed, root: &Path, o: &mut Out) -> Result<i32, Fail>
             let mut index = index;
             let n = rekey(&cur, &mut index);
             // and across a port, by the port map (feature 449 T166, `ask:449-phase4-slices` Q10)
-            let ported = super::ports::rekey_ports(&mut reader, root, &cur, &mut index)?;
+            let ported = super::ports::rekey_ports(root, &cur, &mut index)?;
             if n > 0
                 || !ported.carried.is_empty()
                 || !ported.dropped.is_empty()
@@ -874,8 +862,8 @@ pub fn run(cmd: &str, p: &Parsed, root: &Path, o: &mut Out) -> Result<i32, Fail>
             ));
             Ok(super::ports::say(&ported, o))
         }
-        "accept" => accept_cmd(&mut reader, root, &cur, &index, p, o),
-        "owed" => owed_cmd(&mut reader, root, &pairs, &cur, &index, &store, o),
+        "accept" => accept_cmd(root, &cur, &index, p, o),
+        "owed" => owed_cmd(root, &pairs, &cur, &index, &store, o),
         "backfill-sections" | "backfill" => {
             let (mut index, mut store) = (index, store);
             let n = if cmd == "backfill" {
@@ -900,7 +888,7 @@ pub fn run(cmd: &str, p: &Parsed, root: &Path, o: &mut Out) -> Result<i32, Fail>
             o.say(&n.to_string());
             Ok(0)
         }
-        "triage" => triage_cmd(&mut reader, root, &cur, index, &store, p, o),
+        "triage" => triage_cmd(root, &cur, index, &store, p, o),
         "triaged" => triaged_cmd(root, &cur, &index, &store, p, o),
         "report" => {
             let deferred = load_deferred(&root.join(DEFERRED))?;
@@ -909,7 +897,7 @@ pub fn run(cmd: &str, p: &Parsed, root: &Path, o: &mut Out) -> Result<i32, Fail>
                 .push_str(&super::pager::page(&text, &super::pager::Screen::here()));
             Ok(0)
         }
-        "bundle" => bundle_cmd(&mut reader, root, &cur, &index, &store, p, o),
+        "bundle" => bundle_cmd(root, &cur, &index, &store, p, o),
         _ => record_cmd(root, &cur, &index, &store, p, o),
     }
 }

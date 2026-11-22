@@ -6,7 +6,7 @@
   "source": "pool/hamlets/inashiro/inashiro.json",
   "quantity": "bank-tree trunks inside any marsh",
   "verifies": "F1",
-  "command": "python3 <scratchpad>/measure_bank.py inashiro (point-in-polygon of each pond_bank_trees trunk against every marshes poly)",
+  "command": "<retired: 449 T248 (SC-005, FR-001 retire class): it ran measure_bank.py from a session scratchpad on inashiro (point-in-polygon of each pond_bank_trees trunk against every marshes poly), a script the repository never tracked, so it fails today - the value is history, not re-run>",
   "method": "the bank's ellipse is a no-build block the toe marsh subtracts (D61b)",
   "value": {
    "trunks": 30,

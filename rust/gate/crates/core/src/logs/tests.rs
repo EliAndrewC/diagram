@@ -4,7 +4,7 @@ use std::path::Path;
 
 use serde_json::{json, Value};
 
-use super::{json_field, log_cli, ruff_cli, ruff_toml, run_record, RunEnv};
+use super::{json_field, log_cli, run_record, RunEnv};
 
 fn words(list: &[&str]) -> Vec<String> {
     list.iter().map(|s| (*s).to_owned()).collect()
@@ -247,17 +247,6 @@ fn a_field_is_its_text_or_a_dash() {
     assert_eq!((got.code, got.stdout.as_str()), (0, "CLEAR - - 3\n"));
     assert_eq!(json_field(&words(&["/nonexistent/x", "a"])).code, 1);
     assert_eq!(json_field(&[]).code, 2);
-}
-
-#[test]
-fn only_the_ruff_sections_are_kept_their_prefix_dropped() {
-    let text = "[project]\nname = \"x\"\n\n[tool.ruff]\nline-length = 160\n[tool.ruff.lint]\nselect = [\n  \"E\",\n]\n[tool.ruffle]\nno = 1\n[[tool.ruff.other]]\nno = 2\n[tool.pytest]\nno = 3\n";
-    assert_eq!(
-        ruff_toml(text),
-        "\nline-length = 160\n[lint]\nselect = [\n  \"E\",\n]\n"
-    );
-    let got = ruff_cli(&mut "[tool.ruff]\na = 1\n".as_bytes());
-    assert_eq!(got.stdout, "\na = 1\n");
 }
 
 #[test]

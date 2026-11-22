@@ -1,126 +1,22 @@
-//! The tests' Chromium (feature 449 T146): a small Python program that speaks the protocol on fds 3 and 4 as Chromium does, answering
-//! each command the crate sends from a table, so every path of the crate runs without a browser or a network. What a page does is read
-//! from its URL: `neterr` fails the navigation, `samedoc` has no loader, `noload` never loads, `busy` never goes idle, `nobody` has no
-//! body, `noglyph` has no glyph to measure, `throw` throws in the page, `big` measures large at once, `small` never grows; and (feature 449
-//! T150, the lit page) `notready` never readies its raster, `readythrow` throws asking, `zoomy` reaches vector mode at the second press
-//! of the zoom key, `stuck` never does, `novb` has no viewBox; and (451 T70) `lateready` readies its raster 50 ms after it is asked, past
-//! the 40 ms the test build once gave a real Chromium that missed it under load. Python
-//! starts isolated and without `site` (`-I -S`): 15 ms a start where a plain start took 30, and the tests start it often (feature 449
-//! T167, observed 2026-11-17).
+//! The tests' Chromium (feature 449 T146; Rust since T273): this test binary started again as [`fake::ENTRY`], which speaks the
+//! protocol on fds 3 and 4 as Chromium does, answering each command the crate sends from a table, so every path of the crate runs
+//! without a browser, a network or a Python interpreter (SC-005). What a page does is read from its URL ([`fake`] lists the cases).
 
 use std::path::{Path, PathBuf};
 
-const FAKE: &str = r#"#!/usr/bin/env -S python3 -I -S
-import base64, json, os, sys, time
-inp = os.fdopen(3, "rb", buffering=0)
-out = os.fdopen(4, "wb", buffering=0)
-url = ""
-cookies = []
-measured = 0
-presses = 0
-def send(m):
-    out.write(json.dumps(m).encode() + b"\0")
-buf = b""
-while True:
-    chunk = inp.read(65536)
-    if not chunk:
-        break
-    buf += chunk
-    while b"\0" in buf:
-        raw, _, buf = buf.partition(b"\0")
-        m = json.loads(raw)
-        i, meth, p, s = m["id"], m["method"], m.get("params", {}), m.get("sessionId")
-        r = {}
-        if meth == "Browser.getVersion":
-            r = {"product": "FakeChrome/1", "userAgent": "FakeUA/1"}
-        elif meth == "Target.createBrowserContext":
-            r = {"browserContextId": "C1"}
-        elif meth == "Target.createTarget":
-            r = {"targetId": "T1"}
-        elif meth == "Target.attachToTarget":
-            r = {"sessionId": "S1"}
-        elif meth == "Page.getFrameTree":
-            r = {"frameTree": {"frame": {"id": "F1"}}}
-        elif meth == "Browser.getWindowForTarget":
-            r = {"windowId": 1}
-        elif meth == "Page.navigate":
-            url = p["url"]
-            if "neterr" in url:
-                r = {"frameId": "F1", "errorText": "net::ERR_ABORTED"}
-            elif "samedoc" in url:
-                r = {"frameId": "F1"}
-            else:
-                r = {"frameId": "F1", "loaderId": "L1"}
-            send({"id": i, "result": r, "sessionId": s})
-            send({"method": "Page.frameNavigated", "params": {}, "sessionId": s})
-            send({"no": "method"})
-            if "noload" not in url and "neterr" not in url and "samedoc" not in url:
-                send({"method": "Page.lifecycleEvent", "params": {"frameId": "F1", "loaderId": "L0", "name": "load"}, "sessionId": s})
-                send({"method": "Page.lifecycleEvent", "params": {"frameId": "F1", "loaderId": "L1", "name": "load"}, "sessionId": s})
-                if "busy" not in url:
-                    send({"method": "Page.lifecycleEvent", "params": {"frameId": "F1", "loaderId": "L1", "name": "networkIdle"}, "sessionId": s})
-            continue
-        elif meth == "Page.captureSnapshot":
-            r = {"data": "MHTML of " + url}
-        elif meth == "Runtime.evaluate":
-            e = p["expression"]
-            if "rasterReady" in e and "notready" in url:
-                continue
-            if "rasterReady" in e and "lateready" in url:
-                time.sleep(0.05)
-            if "rasterReady" in e and "readythrow" in url:
-                r = {"result": {}, "exceptionDetails": {"text": "Uncaught", "exception": {"description": "TypeError: no raster"}}}
-            elif "rasterReady" in e:
-                r = {"result": {"type": "boolean", "value": True}}
-            elif "l7rMap.mode()" in e:
-                vector = "stuck" not in url and ("zoomy" not in url or presses >= 2)
-                r = {"result": {"value": "vector" if vector else "raster"}}
-            elif "l7rMap.zoom()" in e:
-                r = {"result": {"value": 1.5}}
-            elif "getScreenCTM" in e:
-                r = {"result": {"value": [2, 0, 0, 2, 10.5, -4]}}
-            elif "getAttribute('viewBox')" in e:
-                r = {"result": {"value": None if "novb" in url else [0, 0, 10, 10]}}
-            elif "throw" in url and "document.body" in e:
-                r = {"result": {"type": "object"}, "exceptionDetails": {"text": "Uncaught", "exception": {"description": "Error: thrown"}}}
-            elif "throwplain" in e:
-                r = {"result": {}, "exceptionDetails": {"text": "Uncaught plain"}}
-            elif "throwbare" in e:
-                r = {"result": {}, "exceptionDetails": {}}
-            elif "document.body" in e:
-                r = {"result": {"type": "string", "value": None if "nobody" in url else "the text of " + url}}
-            elif "getBoundingClientRect().width > 0); const r" in e:
-                measured += 1
-                if "noglyph" in url:
-                    r = {"result": {"value": None}}
-                else:
-                    w = 300 if "big" in url else 50 if "small" in url else 50 * measured
-                    r = {"result": {"value": [10.5, 20, w, 40]}}
-            elif "out.add(g.dataset.k)" in e:
-                r = {"result": {"value": ["zeta", "alpha"]}}
-            else:
-                r = {"result": {"type": "undefined"}}
-        elif meth == "Input.dispatchKeyEvent" and p.get("key") == "=" and p["type"] == "rawKeyDown":
-            presses += 1
-        elif meth == "Page.captureScreenshot":
-            r = {"data": base64.b64encode(b"\x89PNG fake").decode()}
-        elif meth == "Storage.getCookies":
-            r = {"cookies": cookies}
-        elif meth == "Storage.setCookies":
-            for c in p["cookies"]:
-                cookies[:] = [x for x in cookies if (x["domain"], x["path"], x["name"]) != (c["domain"], c["path"], c["name"])]
-                if c.get("expires", -1) == -1 or c["expires"] > 1000:
-                    cookies.append(c)
-        elif meth == "Fail.me":
-            send({"id": i, "error": {"message": "no such method"}})
-            continue
-        elif meth == "Silent.me":
-            continue
-        elif meth == "Browser.close":
-            send({"id": i, "result": {}})
-            sys.exit(0)
-        send({"id": i, "result": r, **({"sessionId": s} if s else {})})
-"#;
+pub mod fake;
+
+/// The program the crate starts as its browser: a shell that runs this test binary again as the fake alone, the browser's arguments
+/// dropped (the fake reads none). `exec`, so a kill of the browser reaches the fake.
+fn fake_program() -> String {
+    let exe = std::env::current_exe().unwrap();
+    format!(
+        "#!/bin/sh\n{}=1 exec '{}' --exact {} --nocapture -q\n",
+        fake::MARKER,
+        exe.display(),
+        fake::ENTRY
+    )
+}
 
 /// The fake browser written into `dir`, executable; its path. The crop's waits on this test thread are then none: the fake draws
 /// nothing, so a wait for it to settle proves nothing (feature 449 T167).
@@ -128,7 +24,7 @@ while True:
 pub fn fake_chrome(dir: &Path) -> PathBuf {
     crate::crop::WAIT_DIVISOR.set(u64::MAX);
     let at = dir.join("fake-chrome");
-    executable(&at, FAKE);
+    executable(&at, &fake_program());
     at
 }
 

@@ -19,9 +19,9 @@
     "town": {
       "noun": "town",
       "what": "the seat of a county magistrate, and the lowest level of Rokugani society at which samurai live - the lowest, too, that has resident merchants, which is why the farmers of the surrounding districts come in for market day.",
-      "houses_noun": "non-farmhouse dwellings",
-      "excludes_farms": true,
-      "population_note": "A town runs to about 238 households and most of them farm - roughly two in three work the fields around the town and belong to it, the rest being of every other trade. Every dwelling of that rest is drawn, and is the number counted above; only a sample of the farmhouses is, which is why the figure is larger than anything on the sheet can add up to. The farmers of the surrounding village districts are a different matter - they come in for market day, and the census counts them under their own districts.",
+      "houses_noun": "dwellings",
+      "excludes_farms": false,
+      "population_note": "A town runs to about 238 households and most of them farm - roughly two in three work the fields around the town and belong to it, the rest being of every other trade. Every dwelling of that rest is drawn, but only a sample of the farmhouses is; both are counted above, which is why the figure is larger than anything on the sheet can add up to. The farmers of the surrounding village districts are a different matter - they come in for market day, and the census counts them under their own districts.",
       "default_population": 1200
     },
     "city": {

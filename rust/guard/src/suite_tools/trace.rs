@@ -210,18 +210,8 @@ fn trace_file(gitdir: &Path, guard: &str) -> PathBuf {
     gitdir.join(format!("hooks-test/{guard}.trace.json"))
 }
 
-fn python_version(python: &str) -> String {
-    let done = Command::new(python)
-        .args(["-c", "import sys; sys.stdout.write(sys.version)"])
-        .output();
-    done.map_or_else(
-        |_| String::new(),
-        |o| String::from_utf8_lossy(&o.stdout).into_owned(),
-    )
-}
-
 /// Keep a green suite's reads; nothing is kept where it cannot be traced, and the suite keeps the `deps` key.
-pub fn stamp(repo: &Path, gitdir: &Path, guard: &str, log: &Path, root: &Path, python: &str) {
+pub fn stamp(repo: &Path, gitdir: &Path, guard: &str, log: &Path, root: &Path) {
     let target = trace_file(gitdir, guard);
     let _ = std::fs::remove_file(&target);
     let Some((files, dirs)) = reads(log, root).filter(|(files, _)| !files.is_empty()) else {
@@ -239,7 +229,8 @@ pub fn stamp(repo: &Path, gitdir: &Path, guard: &str, log: &Path, root: &Path, p
         .iter()
         .map(|r| (r.clone(), Value::from(now.dir_state(r))))
         .collect();
-    let kept = json!({"py": python_version(python), "recorder": recorder_version(repo), "files": file_states, "dirs": dir_states});
+    let kept =
+        json!({"recorder": recorder_version(repo), "files": file_states, "dirs": dir_states});
     let _ = target.parent().map(std::fs::create_dir_all);
     let _ = std::fs::write(target, kept.to_string());
 }
@@ -253,13 +244,7 @@ fn unchanged(kept: &Value, key: &str, state: &dyn Fn(&str) -> String) -> bool {
 
 /// The guards whose kept reads are all unchanged.
 #[must_use]
-pub fn fresh(
-    repo: &Path,
-    gitdir: &Path,
-    root: &Path,
-    guards: &[String],
-    python: &str,
-) -> Vec<String> {
+pub fn fresh(repo: &Path, gitdir: &Path, root: &Path, guards: &[String]) -> Vec<String> {
     let parse = |g: &String| {
         let text = std::fs::read_to_string(trace_file(gitdir, g)).ok()?;
         Some((g.clone(), serde_json::from_str::<Value>(&text).ok()?))
@@ -268,14 +253,9 @@ pub fn fresh(
     if kept.is_empty() {
         return Vec::new();
     }
-    let (now, version, recorder) = (
-        Now::of(root),
-        python_version(python),
-        recorder_version(repo),
-    );
+    let (now, recorder) = (Now::of(root), recorder_version(repo));
     let same = |k: &Value| {
-        k["py"].as_str() == Some(version.as_str())
-            && k["recorder"].as_str() == Some(recorder.as_str())
+        k["recorder"].as_str() == Some(recorder.as_str())
             && unchanged(k, "files", &|r| now.file_state(r))
             && unchanged(k, "dirs", &|r| now.dir_state(r))
     };
@@ -288,10 +268,10 @@ pub fn fresh(
 /// `l7r-guard trace`: `shim <gitdir>`, `stamp <gitdir> <guard> <log> <root>`, `fresh <gitdir> <root> <guard>...`.
 #[must_use]
 pub fn cli(args: &[String]) -> Reply {
-    answer(&tool_root(), args, "gcc", "python3")
+    answer(&tool_root(), args, "gcc")
 }
 
-pub(crate) fn answer(repo: &Path, args: &[String], compiler: &str, python: &str) -> Reply {
+pub(crate) fn answer(repo: &Path, args: &[String], compiler: &str) -> Reply {
     let say = |stdout: String| Reply {
         stdout,
         stderr: String::new(),
@@ -301,10 +281,10 @@ pub(crate) fn answer(repo: &Path, args: &[String], compiler: &str, python: &str)
     match (args.first().map_or("", String::as_str), args.len()) {
         ("shim", 2..) => say(shim(repo, arg(1), compiler) + "\n"),
         ("stamp", 5) => {
-            stamp(repo, arg(1), &args[2], arg(3), arg(4), python);
+            stamp(repo, arg(1), &args[2], arg(3), arg(4));
             say(String::new())
         }
-        ("fresh", 3..) => say(fresh(repo, arg(1), arg(2), &args[3..], python).join("\n") + "\n"),
+        ("fresh", 3..) => say(fresh(repo, arg(1), arg(2), &args[3..]).join("\n") + "\n"),
         _ => Reply { stdout: String::new(), stderr: "usage: l7r-guard trace shim <gitdir> | stamp <gitdir> <guard> <log> <root> | fresh <gitdir> <root> <guard>...\n".to_owned(), code: 2 },
     }
 }

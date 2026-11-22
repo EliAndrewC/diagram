@@ -39,7 +39,7 @@ const OFFTAKE_DEG: f64 = 35.0;
 /// the skirt and the spacing of its stations (ft).
 ///
 /// Research:
-///     the brook's course - GUESS: research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html says a brook wanders and slews down its valley but gives no figures; these are the deleted `consts_water.py`'s, each its own GUESS there
+///     the brook's course - GUESS: research/questions/0054-which-way-water-flows-and-how-channels-bend-and-join.drawing.html silent on a brook's run, slew, skirt and wander (it covers a channel's bends, offtakes and junctions); these are the deleted `consts_water.py`'s, each its own GUESS there
 const BROOK_TAP_RUN: f64 = 70.0;
 /// Research:
 ///     the brook's course - GUESS: as `BROOK_TAP_RUN`'s, the slew a station
@@ -112,6 +112,7 @@ const LANE_FT: f64 = 8.0;
 ///
 /// Research:
 ///     the settlement's standoff - GUESS: research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html gives the order (the paddy, the houses, the dry fields) but no distance; 12 ft
+///     on a polder - GUESS research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: the village "a few steps off the dike", the page's own guess, with no distance; the same 12 ft off the seat's ring; the ring's side held straight at the outer face's widest, the houses stand further off the dike where the face pinches in (by up to the waves' spread, measured on Kuwabata and a grid polder 2026-11-22, feature 449 T240, its figures in the plan's T240 section)
 const STANDOFF_FT: f64 = 12.0;
 /// How far the settlement's ground reaches toward its belt (ft).
 ///
@@ -381,6 +382,8 @@ struct Ground<'a> {
     brook: &'a [(f64, f64)],
     reeds: Vec<Vec<(f64, f64)>>,
     pond: Option<((f64, f64), f64, f64)>,
+    /// The way the settlement's back must face where the site, not the wind, decides it (a polder's landward shore); none on a comb.
+    back: Option<(f64, f64)>,
 }
 
 /// A comb field's ground for the seat: its fan, its ditches and the drain's run, its brook, the tameike and its reeds.
@@ -396,6 +399,7 @@ fn comb_ground<'a>(f: &'a Field, sunk: Option<&'a Sunk>) -> Ground<'a> {
         brook: &f.brook.pts,
         reeds: sunk.map(|s| s.reeds.clone()).into_iter().collect(),
         pond: sunk.and_then(|s| s.pond),
+        back: None,
     }
 }
 
@@ -404,7 +408,7 @@ fn comb_ground<'a>(f: &'a Field, sunk: Option<&'a Sunk>) -> Ground<'a> {
 /// the tameike at its berth as the way out's walls, the ditches and the drain's run as its lines. It draws nothing.
 ///
 /// Research:
-///     the seat's back to the wind - research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html: the settlement laid out with its back to the wind
+///     the seat's back to the wind - research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html: the settlement laid out with its back to the wind - on a comb; a polder hands its landward shore as the way the back faces (`Ground::back`, the claim at `polder::landward`)
 ///     the way out's walls - research/questions/0081-village-lanes.drawing.html: a track keeps off wet ground and runs off the map - the wet toe and the reed fringe grown by the lane's width, the field, the pond at its berth; the drain's run and every watercourse lines it may not cross
 fn stage_seat(p: &Plan, g: &Ground) -> Result<Seated, Refused> {
     let rad = p.down_deg.to_radians();
@@ -437,7 +441,7 @@ fn stage_seat(p: &Plan, g: &Ground) -> Result<Seated, Refused> {
     let inp = SeatIn {
         canvas: (p.w, p.h),
         fall: (rad.cos(), rad.sin()),
-        wind: wind(&p.windward),
+        wind: g.back.unwrap_or_else(|| wind(&p.windward)),
         back_min_dot: plan::WIND_BACK_MIN_DOT,
         outline: g.ring.to_vec(),
         band: plan::band_extent(p.households, p.knob("cluster_shape")),

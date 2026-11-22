@@ -308,7 +308,7 @@ pub fn cli(words: &[&str], repo: &Repo<'_>) -> crate::Reply {
         .windows(2)
         .find(|w| w[0] == "--root")
         .map(|w| Path::new(w[1]));
-    let here = root.map(|r| Repo::new(r, repo.python));
+    let here = root.map(Repo::new);
     let repo = here.as_ref().unwrap_or(repo);
     if words.contains(&"--stamp") {
         let digest = stamp(repo);

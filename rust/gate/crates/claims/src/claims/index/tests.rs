@@ -310,3 +310,43 @@ fn a_key_with_no_unit_moves_nowhere_and_a_page_with_no_rests_is_triaged() {
     let due = owed(&cur, &obj(&json!({"nocolon": was})), Some(&q), Some(&store)).unwrap();
     assert_eq!(due[0].1, "triage");
 }
+
+/// 0027 as `off_the_dike`'s account cites it, a page its backing never names.
+const DIKES: &str = "research/questions/0027-polder-dikes.drawing.html";
+
+#[test]
+fn an_edit_of_a_page_a_claim_cites_only_in_its_account_owes_the_claim() {
+    // 449 T249: off_the_dike's claims cited 0027 in their accounts, backed by 0019 and 0081 alone; an edit of 0027 owed no claim
+    let page = |text: &str| format!("<h2 id=\"polder-dikes\">Polder dikes</h2>\n<p>{text}</p>\n");
+    let root = crate::claims::tests::fixture_with("claims-index-cited", &|r| {
+        put(r, DIKES, &page("The dike is 12 ft broad."));
+    });
+    let q = root.join("research/questions");
+    let mut u = unit(
+        "rust/phases/src/driver/polder.rs",
+        "off_the_dike",
+        "function",
+        (1, 1),
+        &[],
+    );
+    let line = format!("straight at the widest - research/questions/0001-gap.html: the village off its dike; {DIKES}: the face pushed out");
+    u.claims = vec![parse_claim(&line).unwrap()];
+    let cur = super::rows_of(vec![(u.clone(), Vec::new())], &q).unwrap();
+    let row = cur.iter().next().unwrap().clone();
+    let mut memo = PageMemo::default();
+    let gap = page_blocks("0001-gap.html", &q, &mut memo).unwrap().clone();
+    let dikes = page_blocks("0027-polder-dikes.drawing.html", &q, &mut memo)
+        .unwrap()
+        .clone();
+    let rest = format!("0027-polder-dikes.drawing.html:{}", dikes.1[0].0);
+    let was = json!({"code": row.code, "research": row.research, "pages": {"0001-gap.html": gap.0, "0027-polder-dikes.drawing.html": dikes.0}, "rests": [rest]});
+    let index = obj(&json!({row.key.clone(): was}));
+    let store = obj(&json!({gap.0.clone(): [], dikes.0.clone(): []}));
+    let before = owed(&cur, &index, Some(&q), Some(&store)).unwrap();
+    assert!(before.is_empty(), "{before:?}");
+    put(&root, DIKES, &page("The dike is 20 ft broad."));
+    let cur = super::rows_of(vec![(u, Vec::new())], &q).unwrap();
+    let due = owed(&cur, &index, Some(&q), Some(&store)).unwrap();
+    let why: Vec<&str> = due.iter().map(|(_, w)| w.as_str()).collect();
+    assert_eq!(why, ["rests changed"]);
+}

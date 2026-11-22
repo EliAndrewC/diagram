@@ -46,7 +46,23 @@ fn has_label(sentence: &str) -> bool {
 static COMMAND_SPAN: LazyLock<Regex> = LazyLock::new(|| re(r"/|::|=|\bmake "));
 static SPLIT4: LazyLock<Regex> = LazyLock::new(|| re(r"(?<=\.)\s+|\n(?=\S)"));
 static LEAD4: LazyLock<Regex> = LazyLock::new(|| re(r"^\s*4\."));
-static BARE_FIGURE: LazyLock<Regex> = LazyLock::new(|| re(r"(?<![\w-])\d[\d,.]*(?![\w-])"));
+/// A count spelled as a word is a figure too (feature 449 T203: T209's "moved five captions a few pixels" passed the lint unlabeled
+/// and drew a NOT-REVIEWABLE plan review); it is read where a counted noun follows it (`COUNT`), as a numeral is. "one" is left out:
+/// it names far more often than it counts ("one label", "one landing"). Item 4's any-number rule does not take the words: over every
+/// plan section they added 45 item-4 findings, nearly all naming ("the three checks", "the two places"), measured 2026-11-22 (T203's
+/// replay of the lint over specs/*/plan.md and plan-done.md).
+const NUMBER_WORDS: &str = r"(?i:two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|thirteen|fourteen|fifteen|sixteen|seventeen|eighteen|nineteen|twenty|thirty|forty|fifty|sixty|seventy|eighty|ninety|hundred|hundreds|thousand|thousands|dozen|dozens)";
+static BARE_FIGURE: LazyLock<Regex> = LazyLock::new(|| re(r"(?<![\w-])\d[\d,.]*[x×]?(?![\w-])"));
+/// A multiple is a figure with a unit, `x` (feature 449 T203): T202's heading said today's placer did "704x its SOUND derived budget"
+/// with no label and passed, since no rule read `704x` as a figure; "100x-4,400x" is two. Written close (`704x`): a spaced `2 x 3`
+/// is arithmetic or a size. A rule's multiple ("past 2x", "more than 2x", "the 2x rule") states a limit, not a measurement, and is
+/// no figure here (see [`MULTIPLE_RULE`]).
+static MULTIPLE: LazyLock<Regex> = LazyLock::new(|| re(r"(?<![\w.])\d[\d,]*(?:\.\d+)?[x×](?!\w)"));
+static MULTIPLE_RULE: LazyLock<Regex> = LazyLock::new(|| {
+    re(
+        r"(?i)\b(?:over|under|at most|at least|past|beyond|exceeds?|up to|within|than|to)\s+\d[\d,]*(?:\.\d+)?[x×](?!\w)|\d[\d,]*(?:\.\d+)?[x×]\s+(?:rule|leeway|cap|ceiling|limit|raise)\b",
+    )
+});
 static FENCE: LazyLock<Regex> = LazyLock::new(|| re(r"(?ms)^```.*?^```"));
 static SPLIT_UNIT: LazyLock<Regex> =
     LazyLock::new(|| re(r"(?<=[.;])\s+|\n\s*\n|\n(?=\s*(?:[-*] |\d+\. |#|\|))"));
@@ -290,7 +306,10 @@ fn unlabeled_unit_figure(section: &str) -> Vec<((usize, usize), String)> {
             || [one_shot_pattern(), &*DECISION_LABEL]
                 .iter()
                 .any(|p| p.is_match(sentence).unwrap_or(false));
-        if figure_pattern().is_match(&bare).unwrap_or(false) && !labeled {
+        let multiple = MULTIPLE
+            .is_match(&MULTIPLE_RULE.replace_all(&bare, " "))
+            .unwrap_or(false);
+        if (figure_pattern().is_match(&bare).unwrap_or(false) || multiple) && !labeled {
             out.push((text.span(sentence), shown(sentence)));
         }
     }
@@ -301,9 +320,9 @@ fn unlabeled_unit_figure(section: &str) -> Vec<((usize, usize), String)> {
 // back unreviewable on that one parenthesis, a round of about 15 minutes a script could have spent in a second. The nouns are what this
 // project's plans count by measuring; the plan's own parts ("14 decisions", "two tasks", "11 recipes") name, not measure, and stay out.
 static COUNT: LazyLock<Regex> = LazyLock::new(|| {
-    re(
-        r"(?<![\w.-])\d[\d,]*(?:\.\d+)?\s*(?:lines?|cases?|files?|pages?|calls?|callers?|crates?|suites?|tests?|rows?|keys?|entries|entry|findings?|differences?|mismatches?|runs?|sites?|commits?|bytes?|KB|KiB|tokens?|questions?|sources?|modules?|functions?|mutations?|outputs?|hits?|fragments?|footnotes?|URLs?|domains?|processes|process|invocations?)(?![\w-])",
-    )
+    re(&format!(
+        r"(?:(?<![\w.-])\d[\d,]*(?:\.\d+)?|(?<![\w-]){NUMBER_WORDS})\s*(?:captions?|lines?|cases?|files?|pages?|calls?|callers?|crates?|suites?|tests?|rows?|keys?|entries|entry|findings?|differences?|mismatches?|runs?|sites?|commits?|bytes?|KB|KiB|tokens?|questions?|sources?|modules?|functions?|mutations?|outputs?|hits?|fragments?|footnotes?|URLs?|domains?|processes|process|invocations?)(?![\w-])"
+    ))
 });
 // A count is split into sentences only, where a unit figure is split at ";" too: over the sixteen reviewed sections of 449 (T121-T145),
 // the ";" split flagged 8 counts their reviews had passed, the sentence split 3, each a count no label reached (feature 449 T159).
@@ -311,7 +330,9 @@ static SPLIT_SENTENCE: LazyLock<Regex> =
     LazyLock::new(|| re(r"(?<=\.)\s+|\n\s*\n|\n(?=\s*(?:[-*] |\d+\. |#|\|))"));
 // A rule's threshold ("no file over 1,000 lines") states a limit, not a measurement.
 static THRESHOLD: LazyLock<Regex> = LazyLock::new(|| {
-    re(r"(?i)\b(?:over|under|at most|at least|past|beyond|exceeds?|up to)\s+\d[\d,]*\s+[a-z]+")
+    re(&format!(
+        r"(?i)\b(?:over|under|at most|at least|past|beyond|exceeds?|up to)\s+(?:\d[\d,]*|{NUMBER_WORDS})\s+[a-z]+"
+    ))
 });
 
 /// Every sentence stating a count with no label (feature 449 T159).
@@ -501,9 +522,9 @@ fn told(kind: Kind) -> String {
     match kind {
         Kind::GmQuote => "the section quotes the GM with words request.md does not hold - add the GM's words to request.md verbatim, or correct the quote (feature 385 T84). The unit: a double-quoted span is read as the GM's when it follows \"the GM\" before that sentence ends - `.`, `!` or `?` then a space or a line break - or the paragraph does, at a blank line; a bullet list with no blank line between its items is one paragraph, so a bullet naming the GM with no full stop runs on into the next bullets' quotes: end that bullet with a full stop where the quote is not his".to_owned(),
         Kind::Item4 => "Approach item 4 states a figure whose sentence carries no `measured <YYYY-MM-DD> (<method>)` or `m:<key>` - label it where it stands (feature 385 T86). The unit: item 4 of every Approach block (part A or B) in the section, each from its `4. **` line to the next numbered bold item or heading, cut into sentences after each `.` and whitespace (a space or a line break) and at each line that starts in column one (an unindented wrapped line starts a new sentence); the label sits in the figure's own sentence, and only those two forms count here - `observed <YYYY-MM-DD>, method: ...` and a research label, which pass elsewhere in the section, do not pass in item 4".to_owned(),
-        Kind::UnitFigure => "a figure with a unit whose sentence carries no label - a measurement `measured <YYYY-MM-DD> (<method>)`, `observed <YYYY-MM-DD>, method: ...` or `m:<key>`; a decided size its research label (GUESS, CONVENTION, ...), its page or its knob - label it where it stands (feature 430 D5). The unit: the clause - a sentence is cut after each `.` or `;` and whitespace (a space or a line break), even inside a code span, at a blank line, and where a bullet, a numbered item, a heading or a table row starts (a fenced block is skipped), so a label at a sentence's end does not cover a figure in a clause before its `;`: label each clause, or join them with a comma".to_owned(),
+        Kind::UnitFigure => "a figure with a unit whose sentence carries no label (a multiple, `704x`, is one: feature 449 T203) - a measurement `measured <YYYY-MM-DD> (<method>)`, `observed <YYYY-MM-DD>, method: ...` or `m:<key>`; a decided size its research label (GUESS, CONVENTION, ...), its page or its knob - label it where it stands (feature 430 D5). The unit: the clause - a sentence is cut after each `.` or `;` and whitespace (a space or a line break), even inside a code span, at a blank line, and where a bullet, a numbered item, a heading or a table row starts (a fenced block is skipped), so a label at a sentence's end does not cover a figure in a clause before its `;`: label each clause, or join them with a comma".to_owned(),
         Kind::Differential => "a differential's case count that cites no verify report - run `make diff-run CASES=<cases file> VERIFY=1` (every case's new side rerun against the kept old sides) and cite the report it writes, `<cases>.diff-run/reports/diff-run-verify-<UTC>.json`, in the sentence beside its label, as in \"16 cases, 0 differing (measured 2026-11-16 (`make diff-run ... VERIFY=1`, `t161/cases.diff-run/reports/diff-run-verify-20261116T120000Z.json`))\"; a hand-written loop's or an incremental run's count does not stand (feature 449 T161). The unit: the sentence, cut after a `.` and whitespace (a space or a line break) outside a code span, at a blank line, and where a bullet, a numbered item, a heading or a table row starts".to_owned(),
-        Kind::Count => "a count whose sentence carries no label - `observed <YYYY-MM-DD>, method: ...`, `measured <YYYY-MM-DD> (<method>)` or `m:<key>`; re-read it from the run's own record after the last edit (T145's forwarders were 198 and 66 lines, reported 183 and 57) and label it where it stands (feature 449 T159). The unit: the sentence, cut after a `.` and whitespace (a space or a line break) outside a code span, at a blank line, and where a bullet, a numbered item, a heading or a table row starts - not at `;`, so one label anywhere in the sentence covers it".to_owned(),
+        Kind::Count => "a count whose sentence carries no label (a numeral or a word, `183 lines` or `five captions`: feature 449 T203) - `observed <YYYY-MM-DD>, method: ...`, `measured <YYYY-MM-DD> (<method>)` or `m:<key>`; re-read it from the run's own record after the last edit (T145's forwarders were 198 and 66 lines, reported 183 and 57) and label it where it stands (feature 449 T159). The unit: the sentence, cut after a `.` and whitespace (a space or a line break) outside a code span, at a blank line, and where a bullet, a numbered item, a heading or a table row starts - not at `;`, so one label anywhere in the sentence covers it".to_owned(),
         Kind::RedExit => format!("an approach block's item 6 routes no red result through `make arbiter-ask` - give it D35's red exit, as `make task-add`'s template words it (feature 430 D5): \"{RED_EXIT_HINT}\" The unit: item 6 of each `### Txx Approach` block, to the next numbered item or heading; the task of each block"),
         Kind::Deferral => "a found-and-left item defers a defect without its form - fix it in this task by default; an item fixed here says `fixed here`, one that is not a defect says `not a defect` (constitution XIV); a deferral states `Not fixed here: <why>`, `filed as T<n>` (a box of tasks.md, `make task-add`) and `lands before T<m>` (another open task), as \"Not fixed here: it is in the wells stage, outside this task's files. Filed as T32; lands before T22.\" (feature 451 T17, D15). The unit: each `- ` item of the `**Found and left?**` answer, to the next item or bold line; an answer with no list is one item. Taken for a reason: `make decide ... DEFER_FORM_OK=\"<reason>\"`, recorded".to_owned(),
         Kind::DeferralClosed => "a found-and-left deferral names a task that is not open - a ticked box or an entry of tasks-done.md defers to nothing: file it as an open task (`make task-add`) and order it before an open one (feature 451 T17, D15). Judged once, at `make decide`; `make plan-delta` asks only that the ids are filed. Taken for a reason: `make decide ... DEFER_FORM_OK=\"<reason>\"`, recorded".to_owned(),

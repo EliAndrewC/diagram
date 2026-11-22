@@ -426,7 +426,7 @@
   "unit": "rows",
   "observed": "2026-10-12",
   "source": "specs/328-match-the-research/ranking.json rebuilt by audit/merge.py after waves 119-121's three E0 rows were marked in audit/waves.json",
-  "command": "python3 -c \"import json; r=json.load(open('specs/328-match-the-research/ranking.json')); o=[x for x in r if not x.get('wave') and x.get('scope')!='deferred']; print(len(o), 'open,', sum(1 for x in o if x.get('tier')=='E3' and x.get('verdict')=='DRIFTED'), 'E3 DRIFTED')\"",
+  "command": "scripts/gates/l7r-gate.sh measure spec 374 open-rows",
   "method": "the count the plan review of 2026-10-11 used, re-run on the rebuilt ranking"
  },
  "batch3-perf-audit-legs": {
@@ -464,7 +464,7 @@
   "unit": "rows",
   "observed": "2026-10-12",
   "source": "specs/328-match-the-research/ranking.json rebuilt by audit/merge.py after waves 122-126's rows were marked in audit/waves.json; the eight rows batch 4's checks filed (found-wave126) entered at the top",
-  "command": "python3 -c \"import json; r=json.load(open('specs/328-match-the-research/ranking.json')); o=[x for x in r if not x.get('wave') and x.get('scope')!='deferred']; print(len(o), 'open,', sum(1 for x in o if x.get('tier')=='E3' and x.get('verdict')=='DRIFTED'), 'E3 DRIFTED')\"",
+  "command": "scripts/gates/l7r-gate.sh measure spec 374 open-rows",
   "method": "the count the plan review of 2026-10-11 used, re-run on the rebuilt ranking"
  },
  "b4-hay-e1": {

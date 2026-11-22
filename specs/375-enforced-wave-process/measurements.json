@@ -83,7 +83,7 @@
   "quantity": "SC-001: 372's waves 106, 108 and 111 replayed commit by commit through the old owing and the new - modal-depiction units and impl-drift claims each delta owes",
   "observed": "2026-10-10",
   "source": "the clone at T11; 372's commits (git log --grep 'wave 106' / 'Feature 372 wave 108' / 'Feature 372 wave 111', 24 commits); sparse detached worktrees",
-  "command": "make replay-owing REVS=\"$(git log --reverse --format=%h --grep='wave 106')\" OUT=/tmp/l7r-replay106 (then --grep='Feature 372 wave 108' and --grep='Feature 372 wave 111'); TRIAGE=1 over 39a28173c a2d0ba9f9 291c34c88 175cca78a 99a6090b0 d148acd6d 6d5951e5f",
+  "command": "<retired: 449 T247 (ask:449-T247-python-starts): it ran make replay-owing over 372's waves 106, 108 and 111, which started each past commit's own Python scripts - a Rust start of Python the round arbiter ruled deleted, with the target and its land module - so it fails today - the value is history, not re-run>",
   "method": "per commit: OLD = the commit's own scripts against its parent's claims index, NEW = this tree's scripts with that index migrated (claims-backfill-sections); each counts only what the delta newly owes (owed at the commit less owed at the parent). The seven triage bundles were judged by one ad-hoc opus agent, each MANIFEST independently, as make modal-triage's reply",
   "value": {
    "impl_drift": {

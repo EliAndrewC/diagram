@@ -5,8 +5,8 @@ use std::path::Path;
 use serde_json::{json, Value};
 
 use super::{
-    carry, claims_mode, file_into, key_of, new_box, open_ids, recorded_known, rows, spec_glob,
-    target, touches_engine,
+    carry, claims_mode, every_unit_gone, file_into, key_of, new_box, open_ids, recorded_known,
+    rows, spec_glob, target, touches_engine,
 };
 use crate::claims::tests::{claims, commit_as_origin, fixture};
 use crate::record::testkit::{git, put};
@@ -124,7 +124,7 @@ fn a_carry_is_filed_only_where_the_switch_and_the_delta_allow() {
         "dev/switches.json",
         "{\"claims\": {\"state\": \"clean\"}}",
     );
-    assert!(!touches_engine(&root).unwrap());
+    assert!(!touches_engine(&root));
     assert!(carry(&root, &target, "405", "", &["k".into()], "ask:none")
         .unwrap_err()
         .contains("RULING=ask:none is no trigger in 405-claims/arbiter.jsonl"));
@@ -171,7 +171,7 @@ fn a_carry_is_filed_only_where_the_switch_and_the_delta_allow() {
 fn a_delta_with_engine_code_files_into_the_active_feature() {
     let root = filing_clean("claims-carry-engine");
     put(&root, "rust/phases/src/new.rs", "pub fn x() {}\n");
-    assert!(touches_engine(&root).unwrap());
+    assert!(touches_engine(&root));
     assert!(carry(&root, &target, "405", "", &["k".into()], "")
         .unwrap_err()
         .contains("filed only into the active task's (406-other), not 405"));
@@ -182,22 +182,25 @@ fn a_delta_with_engine_code_files_into_the_active_feature() {
 }
 
 #[test]
-fn a_python_change_is_engine_code_only_where_its_code_id_moves() {
-    let root = filing_clean("claims-carry-python");
-    put(&root, "l7r/diagram/m.py", "GAP = 12  # a comment\n");
-    assert!(!touches_engine(&root).unwrap());
-    put(&root, "l7r/diagram/m.py", "GAP = 13\n");
+fn a_python_change_is_engine_code_as_any_engine_path_s_is() {
+    // a Python module in the merge base's first commit (the fixture holds none since feature 449 T158)
+    let root = crate::claims::tests::fixture_with("claims-carry-python", &|r| {
+        put(r, "l7r/diagram/m.py", "GAP = 12\n");
+    });
+    feature(&root);
+    commit_as_origin(&root, "features");
     put(
         &root,
-        "scripts/gates/codeid.py",
-        "import sys\nsys.exit(1)\n",
+        "dev/switches.json",
+        "{\"claims\": {\"state\": \"clean\"}}",
     );
-    assert!(touches_engine(&root).is_err());
-    put(&root, "scripts/gates/codeid.py", "import hashlib, sys\nfor p in sys.argv[2:]:\n    print(hashlib.sha256(open(p, 'rb').read()).hexdigest())\n");
-    assert!(touches_engine(&root).unwrap());
-    put(&root, "l7r/diagram/added.py", "x = 1\n");
+    assert!(!touches_engine(&root));
+    // a comment alone is engine code since feature 449 T247: the docstring-blind id left with `codeid.py`
+    put(&root, "l7r/diagram/m.py", "GAP = 12  # a comment\n");
+    assert!(touches_engine(&root));
     put(&root, "l7r/diagram/m.py", "GAP = 12\n");
-    assert!(touches_engine(&root).unwrap());
+    put(&root, "l7r/diagram/added.py", "x = 1\n");
+    assert!(touches_engine(&root));
     put(&root, ".specify/feature.json", "{}");
     std::fs::remove_file(root.join("l7r/diagram/added.py")).unwrap();
     put(&root, "rust/phases/src/new.rs", "pub fn x() {}\n");
@@ -220,7 +223,7 @@ const KNOWN_TASKS: &str = "# Tasks\n\n- [ ] T01 fix `reach` [lands-open]\n- [x] 
 
 /// Every claim recorded on `origin/main`, then `reach` named for the claims feature's T01 in a commit of its own.
 fn pushed(tag: &str) -> l7r_shared::tempdir::TempDir {
-    let root = crate::claims::tests::fixture_rust_only(tag);
+    let root = crate::claims::tests::fixture(tag);
     feature(&root);
     // the recording written as `record_all` writes it, pinned by `the_recorded_rust_units_are_what_record_all_writes`: a bundle and a
     // record through the Python half, half of each carry test's time against FR-008's tenth of a second (feature 449 T167)
@@ -465,4 +468,10 @@ fn a_ruling_s_carry_needs_its_keys_and_the_recorded_drifts_read_as_python_read_t
     assert!(recorded_known(&root)
         .unwrap_err()
         .starts_with("AttributeError"));
+}
+
+#[test]
+fn every_unit_the_base_held_is_gone() {
+    let gone = every_unit_gone("rust/phases/src/lib.rs::reach");
+    assert!(gone);
 }

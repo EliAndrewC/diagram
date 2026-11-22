@@ -2,7 +2,7 @@
 //! 449 T134 from `scripts/budget_change.py`): each returns "" when done, its refusal's words when not, and an error where the
 //! Python raised.
 
-use std::path::Path;
+use std::path::{Path, PathBuf};
 use std::sync::LazyLock;
 
 use fancy_regex::Regex;
@@ -14,7 +14,7 @@ use l7r_shared::pyjson::py_str;
 use super::super::work_budget_bundle::{loads, num};
 use super::{
     as_float, fixed, glob, load, log, py_int_of, py_re, read, save, sizes, verdict_of, GROWTH_CAP,
-    GROWTH_SLACK, HELD, ITEM_SIZES, LEEWAY, MISSED, R, RAISE_CAP, RUNS, SOUND, TABLE,
+    GROWTH_SLACK, HELD, ITEM_SIZES, MISSED, R, RUNS, SOUND, TABLE,
 };
 
 /// Request.md: "a sensible design needs a few thousand basic operations per house" (2,000-4,000, a GUESS).
@@ -113,6 +113,32 @@ fn grandparent(path: &Path) -> R<&Path> {
 /// its own name (`<stage>_greenfield`, feature 444 FR-015), so an accept naming that names the stage too.
 fn accepted_by(root: &Path, derivation: &str, phase: &str, trigger: &str) -> R<bool> {
     let path = grandparent(&root.join(derivation))?.join("arbiter.jsonl");
+    ruled_by(&[path], derivation, phase, trigger, &["accept"])
+}
+
+/// Does any feature's round-arbiter log (`specs/*/arbiter.jsonl`) hold a CONTINUE or ACCEPT at `trigger` naming `phase`, as
+/// `accepted_by` names it? That ruling opens an accepted stage to a raise (449 T250, the arbiter's tooling fix on
+/// ask:449-T250-raise-accepted: the stage's acceptance was taken on a tree without the work the raise prices).
+fn raise_opened_by(root: &Path, derivation: &str, phase: &str, trigger: &str) -> R<bool> {
+    let mut logs: Vec<PathBuf> = std::fs::read_dir(root.join("specs"))
+        .map(|dir| {
+            dir.filter_map(Result::ok)
+                .map(|e| e.path().join("arbiter.jsonl"))
+                .collect()
+        })
+        .unwrap_or_default();
+    logs.sort();
+    ruled_by(&logs, derivation, phase, trigger, &["continue", "accept"])
+}
+
+/// Does one of `logs` hold a ruling of `rulings` at `trigger` naming `phase` - in its trigger or its instruction?
+fn ruled_by(
+    logs: &[PathBuf],
+    derivation: &str,
+    phase: &str,
+    trigger: &str,
+    rulings: &[&str],
+) -> R<bool> {
     // a form (`field.polder`) answers to its own name (`polder`) too
     let mut own = vec![phase.to_owned()];
     own.extend(phase.split_once('.').map(|(_, form)| form.to_owned()));
@@ -129,23 +155,23 @@ fn accepted_by(root: &Path, derivation: &str, phase: &str, trigger: &str) -> R<b
         "(?<![a-z_])(?:{})(?![a-z_])",
         alternatives.join("|")
     ));
-    if !path.is_file() {
-        return Ok(false);
-    }
-    for line in l7r_shared::speckit::splitlines(&read(&path)?) {
-        let Ok(r) = loads(line) else {
-            continue;
-        };
-        let Value::Object(r) = r else {
-            return Err("AttributeError: an arbiter line is no mapping".to_owned());
-        };
-        let what = r.get("what").map_or_else(String::new, py_str);
-        if r.get("trigger").and_then(Value::as_str) == Some(trigger)
-            && r.get("ruling").and_then(Value::as_str) == Some("accept")
-            && (naming.is_match(trigger).unwrap_or(false)
-                || naming.is_match(&what).unwrap_or(false))
-        {
-            return Ok(true);
+    for path in logs.iter().filter(|p| p.is_file()) {
+        for line in l7r_shared::speckit::splitlines(&read(path)?) {
+            let Ok(r) = loads(line) else {
+                continue;
+            };
+            let Value::Object(r) = r else {
+                return Err("AttributeError: an arbiter line is no mapping".to_owned());
+            };
+            let what = r.get("what").map_or_else(String::new, py_str);
+            let ruling = r.get("ruling").and_then(Value::as_str).unwrap_or_default();
+            if r.get("trigger").and_then(Value::as_str) == Some(trigger)
+                && rulings.contains(&ruling)
+                && (naming.is_match(trigger).unwrap_or(false)
+                    || naming.is_match(&what).unwrap_or(false))
+            {
+                return Ok(true);
+            }
         }
     }
     Ok(false)
@@ -168,7 +194,7 @@ fn today_at_40(root: &Path, phase: &str) -> Option<f64> {
 }
 
 /// The items under the derivation's `MISSED` section - its `- ` lines up to the next heading - or none when it has none.
-fn missed_work(root: &Path, derivation: &str) -> R<Vec<String>> {
+pub(super) fn missed_work(root: &Path, derivation: &str) -> R<Vec<String>> {
     let text = match std::fs::read_to_string(root.join(derivation)) {
         Ok(t) => l7r_gate_core::record::repo::universal(&t),
         Err(e) if e.kind() == std::io::ErrorKind::InvalidData => {
@@ -290,49 +316,25 @@ fn raise_refusal(
     sz: &[i64],
     new: &dyn Fn(i64) -> f64,
 ) -> R<String> {
-    let phase = pin.phase;
     // ...AT THE DERIVATION'S TOP SIZE: 40 households, or a form's bounded n (`waterward.polder` at 10-20, feature 444 T29)
     let top = if sz.contains(&40) {
         40
     } else {
         sz[sz.len() - 1]
     };
-    let first = first_budget(st, top)?;
-    let at = new(top);
-    if at <= budget_at(st, top)? {
-        return Ok(format!("`{phase}`'s re-derived budget at {top}, {}, is no raise on {} - a lowering re-pins with LOWER=1", fixed(at, 0, true), fixed(budget_at(st, top)?, 0, true)));
+    let at = format!("at {top}");
+    if let Some(why) = no_raise(pin.phase, &at, new(top), budget_at(st, top)?) {
+        return Ok(why);
     }
-    if at > RAISE_CAP * first {
-        return Ok(format!(
-            "`{phase}`'s re-derived budget at {top}, {}, is past 10 times its first, {} - an order of magnitude needs the GM's words (feature 444 FR-022): make budget-change PHASE={phase} TO=<per thing> DERIVATION= VERDICT= WORDS=\"<the GM's words>\"",
-            fixed(at, 0, true),
-            fixed(first, 0, true)
-        ));
-    }
-    // PAST TWICE THE FIRST, THE RIGOROUS ANALYSIS (FR-022 rule 2; the GM: "I don't want us to just think it's reasonable to have
-    // things take an order of magnitude more operations than we estimated. Without extremely rigorous analysis"): a second
-    // MODE BUDGET dispatch of the same bundle, blind to the first, judges it SOUND too
-    let second = pin.second;
-    if at > LEEWAY * first
-        && (second.is_empty() || second == pin.verdict || verdict_of(&root.join(second))? != SOUND)
-    {
-        let read = if !second.is_empty() && second != pin.verdict {
-            let word = verdict_of(&root.join(second))?;
-            format!(
-                " ({second} reads {})",
-                if word.is_empty() { "nothing" } else { &word }
-            )
-        } else {
-            String::new()
-        };
-        return Ok(format!(
-            "`{phase}`'s re-derived budget at {top}, {}, is {} times its first, {} - past 2 times a raise needs a second SOUND, from an independent MODE BUDGET dispatch of the same bundle blind to the first: SECOND=<its verdict file>{read}",
-            fixed(at, 0, true),
-            fixed(at / first, 1, false),
-            fixed(first, 0, true)
-        ));
-    }
-    Ok(String::new())
+    past_first(
+        root,
+        pin.phase,
+        &at,
+        new(top),
+        first_budget(st, top)?,
+        (pin.verdict, pin.second),
+        "TO=<per thing>",
+    )
 }
 
 /// A first budget, from a SOUND verdict or the round arbiter's accept of the derivation (feature 444 FR-013, the GM 2026-10-28):
@@ -355,14 +357,27 @@ pub(super) fn set_budget(root: &Path, pin: &Pin) -> R<String> {
     if pin.raise && pin.lower {
         return Ok("RAISE=1 and LOWER=1 together - a re-pin is one or the other".to_owned());
     }
+    // AN ACCEPTED STAGE OPENED TO A RAISE (449 T250, the round arbiter's tooling fix on ask:449-T250-raise-accepted): RAISE=1 with
+    // ARBITER= naming a continue or accept ruling on this stage re-pins it, its acceptance and audit dropped as LOWER=1 drops them,
+    // its verdict still the raise's own SOUND; without that ruling an accepted stage's raise stays refused
+    let opened = pin.raise && !pin.arbiter.is_empty() && is(status(&st)?, "accepted");
+    // one raise a ruling (its words: "bound to this stage and these figures", "never a second raise on this ruling")
+    if opened && st.get("raised_on").and_then(Value::as_str) == Some(pin.arbiter) {
+        return Ok(format!("`{phase}` was raised on {} already - a ruling opens one raise; another owes a new ask (449 T250)", pin.arbiter));
+    }
+    if opened && !raise_opened_by(root, derivation, phase, pin.arbiter)? {
+        return Ok(format!(
+            "the round arbiters' logs hold no continue or accept at {} naming `{phase}` - an accepted stage is raised only on a ruling on that stage (449 T250)",
+            pin.arbiter
+        ));
+    }
     if pin.raise {
-        if !is(status(&st)?, "budgeted") {
-            return Ok(format!("`{phase}` is {} - RAISE=1 raises a budgeted stage, before its acceptance (feature 444 FR-022)", py_str(status(&st)?)));
+        let why = raise_ready(root, phase, status(&st)?, derivation, opened)?;
+        if !why.is_empty() && is(status(&st)?, "accepted") {
+            return Ok(format!("{why}; an accepted stage is raised on the round arbiter's continue or accept ruling naming it: ARBITER=<trigger> (449 T250)"));
         }
-        if missed_work(root, derivation)?.is_empty() {
-            return Ok(format!(
-                "{derivation} names no work its first derivation missed - a raise without the GM's words counts each item under `{MISSED}` (feature 444 FR-022); a figure that is only an estimate off is the leeway's, at acceptance"
-            ));
+        if !why.is_empty() {
+            return Ok(why);
         }
     }
     if !(is(status(&st)?, "unbudgeted") || pin.lower || pin.raise) {
@@ -379,7 +394,7 @@ pub(super) fn set_budget(root: &Path, pin: &Pin) -> R<String> {
     if !root.join(derivation).is_file() {
         return Ok(format!("no derivation at {derivation}"));
     }
-    let got = if pin.arbiter.is_empty() {
+    let got = if pin.arbiter.is_empty() || opened {
         verdict_of(&root.join(verdict))?
     } else {
         if !accepted_by(root, derivation, phase, pin.arbiter)? {
@@ -488,7 +503,7 @@ pub(super) fn set_budget(root: &Path, pin: &Pin) -> R<String> {
     entry.insert("derivation".to_owned(), json!(derivation));
     entry.insert(
         "verdict".to_owned(),
-        json!(if pin.arbiter.is_empty() {
+        json!(if pin.arbiter.is_empty() || opened {
             verdict
         } else {
             pin.arbiter
@@ -500,7 +515,10 @@ pub(super) fn set_budget(root: &Path, pin: &Pin) -> R<String> {
     if sz != ITEM_SIZES {
         entry.insert("sizes".to_owned(), json!(sz));
     }
-    if !pin.arbiter.is_empty() {
+    if opened {
+        entry.insert("raised_on".to_owned(), json!(pin.arbiter));
+    }
+    if !pin.arbiter.is_empty() && !opened {
         entry.insert("pinned_on".to_owned(), json!("accept"));
         // read once more after its `is_file()`, as the Python's `read_bytes()` did
         let bytes = std::fs::read(root.join(derivation)).unwrap_or_default();
@@ -543,7 +561,10 @@ pub(super) fn set_budget(root: &Path, pin: &Pin) -> R<String> {
         Value::Null
     };
     if pin.raise {
-        let row = json!({"what": "raised", "phase": phase, "from": from, "to": to, "verdict": verdict, "missed": missed_work(root, derivation)?});
+        let mut row = json!({"what": "raised", "phase": phase, "from": from, "to": to, "verdict": verdict, "missed": missed_work(root, derivation)?});
+        if opened {
+            row["arbiter"] = json!(pin.arbiter);
+        }
         log(root, row)?;
     }
     if pin.lower {
@@ -571,7 +592,7 @@ pub(super) fn change_budget(
     verdict: &str,
 ) -> R<String> {
     if strip(words).is_empty() {
-        return Ok("no WORDS - a budget changes only with the GM's own words".to_owned());
+        return Ok(NO_WORDS.to_owned());
     }
     let mut table = load(root)?;
     let mut st = match stage(&table, phase)? {
@@ -581,14 +602,20 @@ pub(super) fn change_budget(
     if is(status(&st)?, "unbudgeted") {
         return Ok(format!("`{phase}` has no budget yet - a first one is set from a SOUND verdict: make budget-set PHASE={phase} PER_THING= EXPONENT= DERIVATION= VERDICT="));
     }
-    if derivation.is_empty() != verdict.is_empty() {
-        return Ok("re-pointing a stage names both its DERIVATION= and its VERDICT=".to_owned());
+    let why = repoint_refusal(root, derivation, verdict)?;
+    if !why.is_empty() {
+        return Ok(why);
     }
-    if !derivation.is_empty() && !root.join(derivation).is_file() {
-        return Ok(format!("no derivation at {derivation}"));
-    }
-    if !verdict.is_empty() && verdict_of(&root.join(verdict))? != SOUND {
-        return Ok(format!("{verdict} is no SOUND verdict - a stage is re-pointed only at a derivation its verdict judged SOUND"));
+    // A CHANGE MOVES ITEMS AT ITS STAGE'S OWN SIZES (449 T253): a form at its bounded n (`waterward.polder`, 10 and 20) at those, a
+    // stage at 20, 40 and 80 - an item count at another size would sit in the table beside figures nothing reads
+    let own = form_sizes(phase, &st)?.unwrap_or_else(|| ITEM_SIZES.to_vec());
+    if let Some((h, _)) = items.iter().find(|(h, _)| !own.contains(h)) {
+        let flags: Vec<String> = own.iter().map(|s| format!("ITEMS_AT_{s}=")).collect();
+        return Ok(format!(
+            "`{phase}` has no items at {h} households - its sizes are {}: {}",
+            households_said(&own),
+            flags.join(" ")
+        ));
     }
     // ...and the item counts it moves, each named: a raise by items alone logged only the unchanged per-thing figure (444#3)
     // one count a size, in the sizes' order (`items_of`)
@@ -689,7 +716,7 @@ pub(super) fn accept_stage(
 
 /// `audit` as a path of the repository at `root`, relative to it - `.` and `..` resolved by their names, as the file need not
 /// exist yet - or none when it lies outside.
-fn in_repo(root: &Path, audit: &str) -> Option<String> {
+pub(super) fn in_repo(root: &Path, audit: &str) -> Option<String> {
     use std::path::Component;
     let lexical = |p: &Path| {
         let mut out = std::path::PathBuf::new();
@@ -714,7 +741,7 @@ fn in_repo(root: &Path, audit: &str) -> Option<String> {
 
 /// Why an audit outside the repository is refused, and where it belongs: beside the stage's derivation, under the name the
 /// existing audits take (`<phase, its dot an underscore>.audit-<n>.txt`, the next `n`).
-fn outside(root: &Path, audit: &str, phase: &str, derivation: &str) -> String {
+pub(super) fn outside(root: &Path, audit: &str, phase: &str, derivation: &str) -> String {
     let said = format!("{audit} is outside the repository - an audit verdict belongs beside the stage's derivation, as specs/444-work-budget-program/phases/waterward.audit-4.txt is");
     if derivation.is_empty() {
         return said;
@@ -740,11 +767,12 @@ fn outside(root: &Path, audit: &str, phase: &str, derivation: &str) -> String {
 
 /// Sizes as a sentence names them: `10 and 20`, `20, 40 and 80`.
 pub(super) fn households_said(sizes: &[i64]) -> String {
-    let all = sizes
-        .iter()
-        .map(i64::to_string)
-        .collect::<Vec<_>>()
-        .join(", ");
+    and_said(&sizes.iter().map(i64::to_string).collect::<Vec<_>>())
+}
+
+/// Names as a sentence lists them: `alpha-sheet and beta-sheet`, `a, b and c`.
+pub(super) fn and_said(parts: &[String]) -> String {
+    let all = parts.join(", ");
     all.rsplit_once(", ")
         .map_or_else(|| all.clone(), |(rest, last)| format!("{rest} and {last}"))
 }
@@ -753,6 +781,21 @@ pub(super) fn households_said(sizes: &[i64]) -> String {
 fn stamp_of(run: &Path) -> String {
     let name = run.file_name().unwrap_or_default().to_string_lossy();
     name.split('-').next().unwrap_or_default().to_owned()
+}
+
+/// A form's own sizes, its bounded n (`waterward.polder`'s 10 and 20, feature 444 T29), or none for a stage, which an accept holds
+/// at 40 and 80 and a change sizes at 20, 40 and 80.
+fn form_sizes(phase: &str, st: &Map<String, Value>) -> R<Option<Vec<i64>>> {
+    let form = phase.contains('.');
+    match st.get("sizes") {
+        Some(Value::Array(list)) if form && !list.is_empty() => {
+            Ok(Some(list.iter().map(py_int_of).collect::<R<_>>()?))
+        }
+        Some(other) if form && truthy(other) => {
+            Err("TypeError: a form's sizes are no list".to_owned())
+        }
+        _ => Ok(None),
+    }
 }
 
 /// Every check of an accept after its stage and its audit's place, and the write: the sizes accepted at, else why not.
@@ -769,28 +812,13 @@ fn accept_checked(
     arbiter: &str,
     derivation: &str,
 ) -> R<Result<Vec<i64>, String>> {
-    if arbiter.is_empty() {
-        let word = verdict_of(&root.join(audit))?;
-        if word != "WITHIN" && word != "LEEWAY" {
-            return Ok(Err(format!(
-                "{audit} reads {}, not WITHIN or LEEWAY - a phase is accepted on its MODE AUDIT's WITHIN, or LEEWAY at up to 2 times its budget (`make work-budget-bundle MODE=audit PHASE={phase}`)",
-                if word.is_empty() { "nothing" } else { &word }
-            )));
-        }
-    } else if !accepted_by(root, derivation, phase, arbiter)? {
-        return Ok(Err(format!("the round arbiter's log holds no accept at {arbiter} naming `{phase}` - a phase is accepted on its MODE AUDIT's WITHIN or that accept")));
+    let why = audit_refusal(root, phase, audit, arbiter, derivation)?;
+    if !why.is_empty() {
+        return Ok(Err(why));
     }
     // A FORM AT ITS BOUNDED N (`waterward.polder`, feature 444 T29) is accepted at its own sizes, a stage at the held 40 and 80
     let form = phase.contains('.');
-    let sizes: Vec<i64> = match st.get("sizes") {
-        Some(Value::Array(list)) if form && !list.is_empty() => {
-            list.iter().map(py_int_of).collect::<R<_>>()?
-        }
-        Some(other) if form && truthy(other) => {
-            return Err("TypeError: a form's sizes are no list".to_owned())
-        }
-        _ => HELD.to_vec(),
-    };
+    let sizes = form_sizes(phase, st)?.unwrap_or_else(|| HELD.to_vec());
     let said = households_said(&sizes);
     // the newest run, by its name's stamp, holds the counts: a form's under its own name (the Rust driver's `hamlet --budget
     // polder`), never its stage's, which rolls another form
@@ -828,40 +856,21 @@ fn accept_checked(
             }
             Some(_) => return Err("AttributeError: a roll is no mapping".to_owned()),
         };
-        let budget = budget_at(st, *h)?;
-        // FR-022 rule 1: past the budget only on the audit's LEEWAY (the agent named the excess and judged it), never past twice it;
-        // the arbiter's accept stands in for a WITHIN, never for a LEEWAY (FR-006: the arbiter accepts no phase over its budget)
-        if ops > LEEWAY * budget
-            || (ops > budget && (!arbiter.is_empty() || verdict_of(&root.join(audit))? != "LEEWAY"))
-        {
-            if budget == 0.0 {
-                return Err("ZeroDivisionError: float division by zero".to_owned());
-            }
-            let past = ops > LEEWAY * budget;
-            return Ok(Err(format!(
-                "`{phase}`: {} counted operations at {h} households, {} times its budget {}{} - rebuild it again, raise the budget on a SOUND re-derivation naming the work it missed (`make budget-set RAISE=1`, FR-022), or with the GM's words (`make budget-change`, FR-006)",
-                fixed(ops, 0, true),
-                fixed(ops / budget, 2, false),
-                fixed(budget, 0, true),
-                if past { ", past the leeway's 2 times" } else { " - over it, a phase is accepted on the MODE AUDIT's LEEWAY" }
-            )));
-        }
-        // FR-022 rule 2: raise and leeway together - within twice the FIRST budget on a raise judged by one SOUND, within ten
-        // times it on one judged by two independent ones; past that, the GM's words
-        let second = st.get("second").is_some_and(truthy);
-        let cap = if second { RAISE_CAP } else { LEEWAY };
-        if st.get("first").is_some_and(truthy) && ops > cap * first_budget(st, *h)? {
-            return Ok(Err(format!(
-                "`{phase}`: {} counted operations at {h} households, past {} times its first budget {}{}",
-                fixed(ops, 0, true),
-                if second { "10" } else { "2" },
-                fixed(first_budget(st, *h)?, 0, true),
-                if second {
-                    " - an order of magnitude needs the GM's words (`make budget-change`, FR-022)"
-                } else {
-                    " - past twice the first, its raise owes a second, independent SOUND (`make budget-set RAISE=1 SECOND=`) or the GM's words (FR-022)"
-                }
-            )));
+        let first = if st.get("first").is_some_and(truthy) {
+            Some(first_budget(st, *h)?)
+        } else {
+            None
+        };
+        let held = Held {
+            phase,
+            at: &format!("at {h} households"),
+            budget: budget_at(st, *h)?,
+            first,
+            second: st.get("second").is_some_and(truthy),
+        };
+        let why = over_refusal(root, &held, ops, audit, arbiter)?;
+        if !why.is_empty() {
+            return Ok(Err(why));
         }
         got.insert(h.to_string(), num(ops));
     }
@@ -928,6 +937,11 @@ pub(super) fn set_program(root: &Path, ops_at_40: i64, exponent: f64, words: &st
     log(root, row)?;
     Ok(String::new())
 }
+
+mod shared;
+pub(super) use shared::{
+    audit_refusal, no_raise, over_refusal, past_first, raise_ready, repoint_refusal, Held, NO_WORDS,
+};
 
 #[cfg(test)]
 mod tests;

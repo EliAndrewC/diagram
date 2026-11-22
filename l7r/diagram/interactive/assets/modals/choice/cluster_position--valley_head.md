@@ -13,8 +13,7 @@ Guesses:
 - That a village may sit at the head of its valley, tucked to one corner, and how often each seat comes up: which edge was
   driest depended on the valley, and no count of village seats was found.
 
-Depiction: The map seats the cluster along the upper edge of the fields, tucked toward one corner, keeps it clear of the
-water coming in, and keeps it off any drawn marsh.
+Depiction: The map seats the cluster along the upper edge of the fields and keeps it off any drawn marsh.
 
 Name: Where the houses sit: at the valley's head
 Covers: `meta.cluster_position = valley_head`

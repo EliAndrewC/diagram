@@ -220,6 +220,8 @@ fn held_elsewhere(kind: &str, key: &str, root: &Path, mirror: &Path) -> Result<S
         if mine
             && row.get("key").and_then(Value::as_str) == Some(key)
             && resolve(&cwd.join(&clone)) != me
+            // 449 T197: a clone directory gone holds nothing - its row stayed after the clone was removed, and refused the key forever.
+            && cwd.join(&clone).is_dir()
         {
             let f = |k: &str| row.get(k).map_or_else(|| "None".to_owned(), py_str);
             return Ok(format!(

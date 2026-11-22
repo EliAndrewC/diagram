@@ -66,6 +66,21 @@
         }
       },
       {
+        "id": "armory",
+        "kind": "armory",
+        "band_ft": {
+          "w": [
+            12,
+            24
+          ],
+          "h": [
+            12,
+            40
+          ]
+        },
+        "optional": true
+      },
+      {
         "id": "storehouse",
         "kind": "storehouse",
         "band_ft": {

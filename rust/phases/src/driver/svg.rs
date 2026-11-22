@@ -46,6 +46,13 @@ pub mod ink {
 ///     (feature 444 T42, the partial map's look: a flat tint read as meadow)
 const REED_TILE: &str = r##"<pattern id="reed-ticks" patternUnits="userSpaceOnUse" width="48" height="48"><rect width="48" height="48" fill="#C3D0A4"/><g stroke="#7FA040" stroke-width="1.6" stroke-linecap="round"><path d="M8 20 L7 11 M11 20 L12 12 M32 42 L31 33 M35 42 L36 34 M24 8 L23 1 M27 8 L28 2"/></g></pattern>"##;
 
+/// The denser reed tile of a bank band: the same reeds, their ticks four times as thick on the ground and a shade darker
+/// (`Svg::reed_bank`).
+///
+/// Research:
+///     the bank band's glyph - research/questions/0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html: a narrow band of denser, slightly darker reeds lines each bank - a map drawing CONVENTION: the plain reed tile (`REED_TILE`) sets 6 ticks on a 48 ft square over #C3D0A4, this one 6 ticks on a 24 ft square, four times as many to the foot, over the darker #AFC283, its ticks the darker #6A8C32 for the plain tile's #7FA040
+const REED_BANK_TILE: &str = r##"<pattern id="reed-bank" patternUnits="userSpaceOnUse" width="24" height="24"><rect width="24" height="24" fill="#AFC283"/><g stroke="#6A8C32" stroke-width="1.6" stroke-linecap="round"><path d="M4 10 L3.5 5 M6 10 L6.5 6 M16 21 L15.5 16 M18 21 L18.5 17 M12 4 L11.5 0 M14 4 L14.5 1"/></g></pattern>"##;
+
 /// The bund's stroke width (ft): the drawing floor of 1.5.
 ///
 /// Research:
@@ -196,6 +203,21 @@ impl Svg {
     ///     the reed glyph - CONVENTION: the deleted engine's reed tile, a repeated reed mark filling the cover
     pub fn reeds(&mut self, ring: &[Pt]) {
         self.polygon(ring, "url(#reed-ticks)", None);
+    }
+
+    /// A bank band of denser reeds: the line (two points or more, as `bank_bands` cuts them) stroked `w` wide with the denser reed
+    /// tile, butt-ended, framing nothing.
+    ///
+    /// Research:
+    ///     the band's glyph - research/questions/0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html: denser, slightly darker reeds along a bank, a CONVENTION (`REED_BANK_TILE`)
+    pub fn reed_bank(&mut self, pts: &[Pt], w: f64) {
+        self.inked();
+        let _ = writeln!(
+            self.body,
+            r#"<path d="{}" fill="none" stroke="url(#reed-bank)" stroke-width="{}" stroke-linecap="butt" stroke-linejoin="round"/>"#,
+            path(pts, false),
+            f(w)
+        );
     }
 
     /// A ground kept for what a later stage draws: its ring dashed, unfilled, and its name at its middle - the partial map's mark
@@ -355,7 +377,7 @@ impl Svg {
         let (x0, y0) = ((x0 - margin).max(0.0), (y0 - margin).max(0.0));
         let (x1, y1) = ((x1 + margin).min(w), (y1 + margin).min(h));
         format!(
-            "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"{} {} {} {}\" width=\"{}\" height=\"{}\">\n<defs>{REED_TILE}</defs>\n<rect x=\"0\" y=\"0\" width=\"{}\" height=\"{}\" fill=\"{}\"/>\n{}</svg>\n",
+            "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"{} {} {} {}\" width=\"{}\" height=\"{}\">\n<defs>{REED_TILE}{REED_BANK_TILE}</defs>\n<rect x=\"0\" y=\"0\" width=\"{}\" height=\"{}\" fill=\"{}\"/>\n{}</svg>\n",
             f(x0),
             f(y0),
             f(x1 - x0),

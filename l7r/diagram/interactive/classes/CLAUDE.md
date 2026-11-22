@@ -4,27 +4,26 @@
 been superseded by the fact that we now cross-reference our implementation with our research"*):
 `../assets/modals/hamlet/<slug of the key>.md` (a sheet's kinds: `../assets/modals/sheet/`; a title-card choice's:
 `../assets/modals/choice/`), in the About form (below). The class keeps `key` - what the engine stamps on the ink - and its
-`#` comments; `Kind.feature()` reads the file (`_base.modal_path`). A test holds that every kind has its file, no class
-carries modal text, and no file is an orphan (`rust/gate/crates/registry/src/kinds/tests.rs` since feature 449 T149; the Python
+`#` comments; `about::feature` reads the file (`about::modal_rel`). A test holds that every kind has its file and no file is an orphan (`rust/gate/crates/registry/src/kinds/tests.rs` since feature 449 T149; the Python
 `tests/interactive/test_about_form.py` that held it went with feature 449 T78). A modal-file edit owes
 `make page-check`, not the gate (the parent `interactive/CLAUDE.md` has the page check).
 
-**THE RUST REGISTRY MIRRORS THIS PACKAGE AND `../compound_kinds/`** (feature 449 T149, the round arbiter's `ask:449-phase4-slices` Q5):
-`rust/gate/crates/registry/src/kinds.rs` lists every family and kind (class name, key, order) and is what the modal checks, the
-entry-drift report, the entry-headings check and `make open-questions` read. The Python classes stay for the page writer and the Mode A
-sheets until S7-S11, frozen: a kind added, renamed or rekeyed here is made the same in `kinds.rs` in the same commit, and
-`kinds/tests.rs` refuses the two apart. `_base.py`'s parser, `../conditions.py` and `../choices.py` have their Rust in the same crate.
+**THE REGISTRY IS RUST** (feature 449 T149, the round arbiter's `ask:449-phase4-slices` Q5; the Python classes, `_base.py`,
+`../conditions.py` and `../choices.py` deleted by feature 449 T158): `rust/gate/crates/registry/src/kinds.rs` lists every family and
+kind (class name, key, order) and is what the modal checks, the entry-drift report, the entry-headings check and `make open-questions`
+read; `about.rs` holds `_base.py`'s parser, `conditions.rs` and `choices.rs` the rest. A kind is added, renamed or rekeyed there. The
+families below keep the Python module names the registry still uses (`Family::module`).
 
 | module | holds |
 |---|---|
-| `_base.py` | the machinery: `FeatureClass` (what the page reads), `slug`, the not-highlighted rulings, the `Kind` base class, `parse_explanation` (the modal text's parser), `install_siblings` |
+| `_base.py` (now `about.rs`) | the machinery: `FeatureClass` (what the page reads), `slug`, the not-highlighted rulings, the `Kind` base class, `parse_explanation` (the modal text's parser), `install_siblings` |
 | `homestead.py` | farmhouse, storage shed, byre, threshing yard, garden, privy, wood shed, manure heap, bath room, hen coop, household shrine, persimmon |
 | `greenery.py` | homestead bamboo, shared bamboo grove, windbreak, copse, woodland commons, scrub and rough grazing, marsh |
 | `fields.py` | paddy, wet paddy, bund, bund beans, millet, buckwheat, barley, soy, fallow |
 | `water_and_ways.py` | stream, irrigation ditch, drainage ditch, pond, field pond, field rock, field grave, village lane, footbridge, well, notice board |
 | `dikepond.py` | fish pond, mulberry dike, fruit dike, tea dike, pig sty, fry pond, manure pit, sluice gate, perimeter dike |
 | `siblings.py` | the pair texts ("how the farmhouse differs from the storage shed"), string constants because the page renders sibling LINKS, not these texts (spec 189 D4) |
-| `__init__.py` | imports the families in the spec's FR-007 order and builds `CLASSES`; re-exports the vocabulary |
+| (the order) | the families in the spec's FR-007 order, `kinds.rs`'s `HAMLET` |
 
 ## Writing an entry
 

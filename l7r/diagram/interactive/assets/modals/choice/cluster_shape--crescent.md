@@ -13,8 +13,7 @@ Guesses:
   an extension of the attested lump and line.
 - How often a cluster comes out a crescent: no count of village shapes was found, so the share is set for the maps.
 
-Depiction: The map seats the houses in a band that follows the dry edge of the fields round its bend. The title card calls a
-cluster a crescent only when the finished houses run about two to four times as far one way as the other.
+Depiction: The map seats the houses in a band that follows the dry edge of the fields round its bend.
 
 Name: The cluster's shape: a crescent
 Covers: `meta.cluster_shape = crescent`

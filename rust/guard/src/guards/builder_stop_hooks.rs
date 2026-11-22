@@ -5,7 +5,7 @@
 //!
 //! WHO IS HELD: a `SubagentStop` of a builder - `agent_id` present, its `agent_type` no `.claude/agents/<type>.md` of the clone, as
 //! `context_cap_hooks` reads one (D8) - dispatched by the session itself (its meta file's `spawnDepth` 1: a builder's own helper is not
-//! held), whose brief names a feature and a task (its meta `description` opening `<feature> T<n>`), that task started
+//! held), whose brief names a feature and a task (its meta `description` opening `<feature> T<n>`, or a bundle's, its first member - 449 T268), that task started
 //! (`<git common dir>/task-starts.jsonl`) and open in the feature's tasks.md. Every other stop passes before any file but the meta is read.
 //!
 //! WHAT HOLDS IT: the gate's own reading of the verdict store `make plan-verdict` writes, asked per task (`l7r-gate plan decided <root>
@@ -20,14 +20,13 @@
 //! gate that cannot answer within [`ASK_LIMIT`] passes, recorded.
 
 use std::path::{Path, PathBuf};
-use std::sync::LazyLock;
 use std::time::Duration;
 
-use fancy_regex::Regex;
 use serde_json::Value;
 
 use crate::guards::context_cap_hooks::CONTEXT_CAP_TOKENS;
 use crate::guards::event_log_hooks::common_git_dir;
+use crate::guards::set_down_hooks::builder_brief;
 use crate::protocol::{Answer, Event, Guard};
 use crate::shared::context::{context, own_transcript};
 use crate::shared::escape::{escape_or_refuse, Escape};
@@ -48,11 +47,6 @@ const TOKEN: &str = "STOP_OK";
 
 /// How long the gate is given to answer: GUESS, 40 s - under the hook's 60 s, above the gate wrapper's rebuild of a changed plan crate.
 pub const ASK_LIMIT: Duration = Duration::from_secs(40);
-
-/// A brief naming its feature and task: `451 T84: ...`, `451 T84 (fresh): ...`.
-static BRIEF: LazyLock<Regex> = LazyLock::new(|| {
-    crate::shared::regex::build(r"^\s*(\d{3})\s+(T\d+[a-z]?)\b").expect("a fixed pattern")
-});
 
 /// What the guard says of one stop.
 #[derive(Debug, PartialEq, Eq)]
@@ -187,17 +181,18 @@ pub(crate) fn judge(input: &Value, here: &Path, clone: Option<PathBuf>, ask: Ask
     }
 }
 
-/// (feature, task) the builder's brief names, read from its meta file - only a builder the session dispatched (`spawnDepth` 1).
+/// (feature, task) the builder's brief names, read from its meta file - only a builder the session dispatched (`spawnDepth` 1) - by the
+/// Stop hook's own reader (`set_down_hooks::builder_brief`, 449 T268): a bundle's builder is held on its first member, whose section
+/// is every member's (451 T141). WHY: this guard's `<feature> T<n>` brief matched no bundle description (`449 bundle T258, T268, T269:
+/// ...`, `449 record bundle: ...`, both live on 2026-11-22), so a bundle's builder stopped unheld (found by 449 T268, fixed here).
 fn brief_of(own: &Path) -> Option<(String, String)> {
-    let meta: Value =
-        serde_json::from_str(&std::fs::read_to_string(own.with_extension("meta.json")).ok()?)
-            .ok()?;
-    if meta.get("spawnDepth").and_then(Value::as_u64) != Some(1) {
-        return None;
-    }
-    let description = meta.get("description").and_then(Value::as_str)?;
-    let c = BRIEF.captures(description).ok().flatten()?;
-    Some((c[1].to_owned(), c[2].to_owned()))
+    let id = own
+        .file_stem()?
+        .to_string_lossy()
+        .strip_prefix("agent-")?
+        .to_owned();
+    let (feature, tasks) = builder_brief(own.parent()?, &id)?;
+    Some((feature, tasks.into_iter().next()?))
 }
 
 /// The one `specs/<feature>-*` directory with a tasks.md.

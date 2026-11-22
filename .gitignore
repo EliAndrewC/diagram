@@ -1,5 +1,7 @@
 __pycache__
 *.lock
+# the Rust workspace's lock is the pin of Principle X clause 6 (feature 449 T251): tracked, unlike the flock files above
+!rust/Cargo.lock
 .env
 .coverage
 # pytest-xdist writes one per worker: .coverage.<host>.<pid>.<rand>

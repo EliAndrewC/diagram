@@ -99,6 +99,17 @@ const HEDGE_W: f64 = 3.0;
 /// Research:
 ///     the strip's depth - GUESS: the page records no depth; the deleted waterward stage's 280 ft
 const STRIP_DEPTH: f64 = 280.0;
+/// The denser reed band's width on each bank of a channel through the reeds (ft).
+///
+/// Research:
+///     the bank band - research/questions/0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html: where a stream or ditch crosses the marsh the reeds run to the water and a narrow band of denser, slightly darker reeds lines each bank, so the water stays easy to follow - a map drawing CONVENTION; 6 ft, the deleted `BANK_FT` that page's feature 300 drew it at
+const BANK_FT: f64 = 6.0;
+/// How far apart a channel's banks are sampled for the reeds beside them (ft).
+///
+/// Research:
+///     the bank's samples - NONE: a drawing's grain, under the band's own width
+const BANK_STEP_FT: f64 = 2.0;
+
 /// The polder (stage 2 on a polder archetype): the block, its dike, outfall, resting plots and pocket pond, and on a dike-pond its
 /// conversion (`field::staged::polder_stage`), each knob it reads rolled as the deleted polder stage rolled it.
 ///
@@ -314,7 +325,7 @@ fn draw_polder(svg: &mut Svg, s: &PolderStage) {
 /// Research:
 ///     the sluices drawn - research/questions/0179-water-gates-and-sluices-shuimen.drawing.html: each a frame across the channel that crosses the dike at its point, at that channel's drawn width; none drawn where no channel is known, the gap named rather than guessed
 ///     on top - CONVENTION: the frame drawn above the water and the reeds, as the deleted `sluice_gate` drew it (its top layer)
-///     the board's place - GUESS: research/questions/0179-water-gates-and-sluices-shuimen.drawing.html sets the board a few steps down the channel from the junction so that it plainly crosses the channel it blocks, not the one it branches from; a polder's sluice point is where its one channel crosses the dike's inner face, no other channel meeting it there, so the board is drawn on the point itself
+///     the board's place - research/questions/0179-water-gates-and-sluices-shuimen.drawing.html: the board a few steps down the blocked channel from the junction, so that it plainly crosses the channel it blocks, not the one it branches from; a polder's sluice point stands 8.5 ft out from the ring canal's corner or its drain trunk's end (`RING_FT`, 6 ft each way, measured on Kuwabata 2026-11-22, feature 449 T249), joined to that junction by a drawn reach (`field::polder::joins`, 449 T263) and no other channel through it, so the board is drawn on the point, 8.5 ft down the blocked channel from the junction
 fn draw_sluices(svg: &mut Svg, s: &PolderStage, missing: &mut Vec<String>) {
     svg.kind("sluice gate");
     let channels = [
@@ -358,6 +369,224 @@ fn stage_waterward(p: &Plan, s: &PolderStage, seated: Option<&Seated>) -> Fringe
         (rad.cos(), rad.sin()),
         seated.and_then(|x| x.frames.first()).map(|f| f.out),
     )
+}
+
+/// The denser bands of reeds along the banks of the feeder and the outfall's drain where they run through the reeds - the
+/// waterside strips and the wild pond's fringe, never on the pond's water: each bank's line, `BANK_FT` wide, its middle half the
+/// band past the channel's edge, cut into the runs whose samples stand in the reeds. Each reach of a bank is clipped once to each
+/// ring's box, and where it meets the box it is crossed once against the ring's edges (`crossings`): a sample on the reach is in
+/// the ring by the start's side and the crossings before it, read off the sorted crossings in order. The outfall runs on to the
+/// canvas edge, most of it past every ring's box, and those samples are out of the reeds without a test.
+///
+/// Research:
+///     the band on each bank - research/questions/0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html: a narrow band of denser reeds lines each bank where a stream or ditch crosses the marsh (`BANK_FT`)
+///     only in the reeds - research/questions/0074-reed-beds-and-the-marshs-edge-yoshihara.drawing.html: the band lines the water through the marsh, so it runs only where the bank's ground is reeds, and stops at the wild pond's rim, the water itself
+///     the reach crossed once per ring - NONE: plane geometry, which decides nothing about the place
+#[expect(
+    clippy::many_single_char_names,
+    reason = "the plane geometry's own names"
+)]
+fn bank_bands(
+    s: &PolderStage,
+    strips: &[Vec<Pt>],
+    counts: &mut HashMap<String, u64>,
+) -> Vec<Vec<Pt>> {
+    let ((c, rx, ry), mut tests) = (s.polder.pond, 0_u64);
+    let rings: Vec<(&[Pt], [f64; 4])> = strips
+        .iter()
+        .chain(std::iter::once(&s.polder.fringe))
+        .filter(|r| r.len() >= 3)
+        .map(|r| {
+            let b = r
+                .iter()
+                .fold([f64::MAX, f64::MAX, f64::MIN, f64::MIN], |b, q| {
+                    [b[0].min(q.0), b[1].min(q.1), b[2].max(q.0), b[3].max(q.1)]
+                });
+            (r.as_slice(), b)
+        })
+        .collect();
+    // each ring boxed, a test a corner
+    tests += rings.iter().map(|(r, _)| r.len() as u64).sum::<u64>();
+    let mut bands = Vec::new();
+    for (course, w) in [
+        (s.polder.feeder.as_slice(), FEEDER_W),
+        (s.outfall.as_slice(), RUN_W),
+    ] {
+        for side in [1.0, -1.0] {
+            let off = side * (w + BANK_FT) / 2.0;
+            // the bank's samples, numbered along it across its reaches: a run breaks at a sample out of the reeds, and at a gap
+            // of samples no ring's box holds
+            let (mut run, mut last, mut base): (Vec<Pt>, Option<usize>, usize) =
+                (Vec::new(), None, 0);
+            for seg in course.windows(2) {
+                let (a, b) = (seg[0], seg[1]);
+                let d = unit(a, b);
+                let nrm = (-d.1 * off, d.0 * off);
+                #[expect(
+                    clippy::cast_possible_truncation,
+                    clippy::cast_sign_loss,
+                    reason = "a reach's samples, a few thousand at most"
+                )]
+                let n = (dist(a, b) / BANK_STEP_FT).ceil().max(1.0) as u32;
+                let (p, z) = ((a.0 + nrm.0, a.1 + nrm.1), (b.0 + nrm.0, b.1 + nrm.1));
+                // each ring the reach meets: its samples' span, the side the reach starts on, its crossings in order, read so far
+                let mut met: Vec<(u32, u32, bool, Vec<f64>, usize)> = Vec::new();
+                for (r, bx) in &rings {
+                    tests += 1;
+                    if let Some((t0, t1)) = clip(p, z, bx) {
+                        #[expect(
+                            clippy::cast_possible_truncation,
+                            clippy::cast_sign_loss,
+                            reason = "a sample's number on its reach, 0 to n"
+                        )]
+                        let (lo, hi) = (
+                            ((t0 * f64::from(n)).floor().max(1.0) as u32) - 1,
+                            ((t1 * f64::from(n)).ceil() as u32 + 1).min(n),
+                        );
+                        let (inside, ts) = crossings(p, z, r, &mut tests);
+                        met.push((lo, hi, inside, ts, 0));
+                    }
+                }
+                let spans = merged(met.iter().map(|m| (m.0, m.1)).collect(), &mut tests);
+                for k in spans.into_iter().flat_map(|(lo, hi)| lo..=hi) {
+                    let g = base + k as usize;
+                    if last.is_none_or(|l| g != l + 1) {
+                        close(&mut run, &mut bands);
+                    }
+                    last = Some(g);
+                    let t = f64::from(k) / f64::from(n);
+                    let q = (a.0 + (b.0 - a.0) * t + nrm.0, a.1 + (b.1 - a.1) * t + nrm.1);
+                    let (dx, dy) = ((q.0 - c.0) / (rx + BANK_FT), (q.1 - c.1) / (ry + BANK_FT));
+                    tests += 1;
+                    let mut reeds = false;
+                    for (lo, hi, inside, ts, read) in &mut met {
+                        tests += 1;
+                        while *read < ts.len() && ts[*read] < t {
+                            *read += 1;
+                            tests += 1;
+                        }
+                        reeds |= *lo <= k && k <= *hi && (*inside != (*read % 2 == 1));
+                    }
+                    if reeds && dx * dx + dy * dy >= 1.0 {
+                        run.push(q);
+                    } else {
+                        close(&mut run, &mut bands);
+                    }
+                }
+                base += n as usize + 1;
+            }
+            close(&mut run, &mut bands);
+        }
+    }
+    crate::counts::tally(counts, "test@bank", tests);
+    crate::counts::tally(
+        counts,
+        "write@bank",
+        bands.iter().map(Vec::len).sum::<usize>() as u64,
+    );
+    bands
+}
+
+/// The samples some met ring's span `spans` holds (each its first and last sample on the reach), as runs each once and in order:
+/// the spans put in order by their starts, a comparison each, and walked once, a test each, into runs where those that overlap or
+/// abut are merged.
+///
+/// Research:
+///     the spans merged - NONE: bookkeeping, the same samples the spans hold
+fn merged(mut spans: Vec<(u32, u32)>, tests: &mut u64) -> Vec<(u32, u32)> {
+    spans.sort_by(|x, y| {
+        *tests += 1;
+        x.0.cmp(&y.0)
+    });
+    let mut runs: Vec<(u32, u32)> = Vec::new();
+    for (lo, hi) in spans {
+        *tests += 1;
+        match runs.last_mut() {
+            Some(m) if lo <= m.1 + 1 => m.1 = m.1.max(hi),
+            _ => runs.push((lo, hi)),
+        }
+    }
+    runs
+}
+
+/// The reach from `p` to `z` against a ring, in one pass over the ring's edges: whether `p` lies inside it (even-odd, as
+/// `inside`), and the reach's parameters in 0..=1 where it crosses an edge, sorted.
+///
+/// Research:
+///     the crossings - NONE: plane geometry
+#[expect(
+    clippy::many_single_char_names,
+    reason = "the plane geometry's own names"
+)]
+fn crossings(p: Pt, z: Pt, ring: &[Pt], tests: &mut u64) -> (bool, Vec<f64>) {
+    let (dx, dy) = (z.0 - p.0, z.1 - p.1);
+    let (mut odd, mut ts) = (false, Vec::new());
+    let mut j = ring.len() - 1;
+    for i in 0..ring.len() {
+        *tests += 1;
+        let (u, v) = (ring[i], ring[j]);
+        if (u.1 > p.1) != (v.1 > p.1) && p.0 < (v.0 - u.0) * (p.1 - u.1) / (v.1 - u.1) + u.0 {
+            odd = !odd;
+        }
+        let (ex, ey) = (v.0 - u.0, v.1 - u.1);
+        let den = dx * ey - dy * ex;
+        if den.abs() > f64::EPSILON {
+            let (wx, wy) = (u.0 - p.0, u.1 - p.1);
+            let (t, e) = ((wx * ey - wy * ex) / den, (wx * dy - wy * dx) / den);
+            if (0.0..=1.0).contains(&t) && (0.0..1.0).contains(&e) {
+                ts.push(t);
+            }
+        }
+        j = i;
+    }
+    // the crossings put in order along the reach, a comparison each
+    ts.sort_by(|a, b| {
+        *tests += 1;
+        a.total_cmp(b)
+    });
+    (odd, ts)
+}
+
+/// A run of a bank's samples in the reeds ended: kept as a band where it holds two samples or more.
+///
+/// Research:
+///     a band of two samples or more - NONE: a line needs two points; the band's place is `bank_bands`' claims
+fn close(run: &mut Vec<Pt>, bands: &mut Vec<Vec<Pt>>) {
+    if run.len() >= 2 {
+        bands.push(std::mem::take(run));
+    } else {
+        run.clear();
+    }
+}
+
+/// The span of `t` in 0..=1 over which the reach from `p` to `z` lies in the box `[x0, y0, x1, y1]` (Liang-Barsky), or None
+/// where it misses the box.
+///
+/// Research:
+///     the clip - NONE: plane geometry
+fn clip(p: Pt, z: Pt, bx: &[f64; 4]) -> Option<(f64, f64)> {
+    let (dx, dy) = (z.0 - p.0, z.1 - p.1);
+    let (mut t0, mut t1) = (0.0_f64, 1.0_f64);
+    for (q, r) in [
+        (-dx, p.0 - bx[0]),
+        (dx, bx[2] - p.0),
+        (-dy, p.1 - bx[1]),
+        (dy, bx[3] - p.1),
+    ] {
+        if q.abs() < f64::EPSILON {
+            if r < 0.0 {
+                return None;
+            }
+        } else {
+            let t = r / q;
+            if q < 0.0 {
+                t0 = t0.max(t);
+            } else {
+                t1 = t1.min(t);
+            }
+        }
+    }
+    (t0 <= t1).then_some((t0, t1))
 }
 
 /// The ring the seat is handed on a polder: each side of the block's outline (the plots' edge, four sides) pushed straight out to
@@ -408,14 +637,45 @@ fn off_the_dike(outline: &[Pt], outer: &[Pt], counts: &mut HashMap<String, u64>)
         .collect()
 }
 
-/// The hamlet on a polder: the block, its seat and its waterside reeds, drawn. The seat is handed the polder's own ground: a ring
-/// off the dike's outer face as the ring it seats against (`off_the_dike`), the field ditches, the feeder and the outfall as the
-/// lines its way out may not cross, and the wild pond's reed fringe as wet ground; the waterside strips come after it, laid off
-/// the flanks it does not take.
+/// The polder's landward shore: of its two cross flanks (square to the fall), the one turned away from the wild pond at its head,
+/// as a unit vector out of the block - the one nearer the wind on a pond standing square on the head's middle.
 ///
 /// Research:
-///     the village off its polder's dike - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: the village drawn on the dry ground just off the dike, a few steps off it (the page's own GUESS), and hard against its own polder (its GUESS) - the seat handed a ring off the dike's outer face (`off_the_dike`), as a comb hands its fan, so the settlement's ground runs out from the dike's foot and never over the dike or the ring canal inside it, its houses `STANDOFF_FT` off that ring
-///     its wet ground - research/questions/0081-village-lanes.drawing.html: a track keeps off wet ground - the wild pond's reed fringe handed as the seat's reeds
+///     the village on the landward shore - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: the pool's polders drawn against the landward shore, the wild pond that feeds them at the head's corner to the northwest, the reeds on the low foot and on the west flank, the dry landward shore and the village to the east - every flank but the landward one holding water back; the head holds the wild pond and the foot the outfall's marsh, so the landward shore is a cross flank, and on the page's polders it is the one away from the pond. GUESS: that the cross flank away from the wild pond is the landward one on every polder is this project's reading of the two drawn
+///     the shore over the wind - GUESS: the record is silent on weighing the two - research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html lays a settlement's back to the wind and research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html its polder village on the landward dry ground, and neither weighs one against the other, and the polder's page is the site's own rule, so the shore is kept and the seat recorded off the wind where its back does not face it (the algorithmically easier route: the seat's back handed the shore's normal)
+///     the tie - GUESS: a pond square on the head's middle names neither flank; the one nearer the wind, so the back is turned toward it where it can be
+fn landward(p: &Plan, s: &PolderStage) -> Pt {
+    let rad = p.down_deg.to_radians();
+    let (fx, fy) = (rad.cos(), rad.sin());
+    let ring = &s.polder.outline;
+    #[expect(clippy::cast_precision_loss, reason = "a ring's few corners")]
+    let n = ring.len().max(1) as f64;
+    let mid = (
+        ring.iter().map(|q| q.0).sum::<f64>() / n,
+        ring.iter().map(|q| q.1).sum::<f64>() / n,
+    );
+    let pond = s.polder.pond.0;
+    let (cross, wind) = ((-fy, fx), super::wind(&p.windward));
+    let toward = (pond.0 - mid.0) * cross.0 + (pond.1 - mid.1) * cross.1;
+    let side = if toward.abs() > 1e-6 {
+        -toward.signum()
+    } else if cross.0 * wind.0 + cross.1 * wind.1 >= 0.0 {
+        1.0
+    } else {
+        -1.0
+    };
+    (cross.0 * side, cross.1 * side)
+}
+
+/// The hamlet on a polder: the block, its seat and its waterside reeds, drawn. The seat is handed the polder's own ground: a ring
+/// off the dike's outer face as the ring it seats against (`off_the_dike`), the field ditches, the feeder and the outfall as the
+/// lines its way out may not cross, the wild pond's reed fringe as wet ground, and its landward shore as the way its back faces
+/// (`landward`); the waterside strips come after it, laid off the flanks it does not take.
+///
+/// Research:
+///     the village off its polder's dike - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: the village drawn on the dry ground just off the dike, a few steps off it (the page's own GUESS), and hard against its own polder (its GUESS) - the seat handed a ring off the dike's outer face (`off_the_dike`), as a comb hands its fan, so the settlement's ground runs out from the dike's foot and never over the dike or the ring canal inside it (the cohort's `seat_on_dike` and `seat_on_canal`), its houses `STANDOFF_FT` off that ring; the page puts no number on "a few steps", so the 12 ft is a GUESS and a knob, and with the ring's side held straight at the face's widest the houses stand 12 to about 36 ft off the outer face (the face 2.7 to 24.3 ft inside the side along Kuwabata's band, 0 to 22.9 ft along a grid polder's falling obliquely; measured 2026-11-22, feature 449 T240)
+///     its wet ground - research/questions/0081-village-lanes.drawing.html: a track keeps off wet ground and every way off every marsh's reeds - the wild pond's reed fringe handed as the seat's reeds; the waterside strips are laid after the seat, on the flanks it does not take, so its way out is asked again past them by the cohort's check (`check::walled_by_reeds`), clear on Kuwabata and on a grid polder falling obliquely (measured 2026-11-22, feature 449 T240)
+///     its back to the landward shore - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: the village on the dry landward shore, every other flank holding water back - the seat's back handed the shore (`landward`), each seat then recorded against the map's own wind
 ///     its lines and no pond - GUESS: the field ditches, the feeder and the outfall handed as the lines `stage_seat` keeps its way out from crossing, as a comb's channels are; the wild pond not handed as a pond at its berth, the reed fringe round it standing for it
 ///     the strips after the seat - research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: every flank but the landward one holds water back - the seat's side names the landward flank, so the waterside strips are laid once it is known (`stage_waterward`)
 pub(super) fn roll_polder(p: Plan) -> Rolled {
@@ -436,17 +696,28 @@ pub(super) fn roll_polder(p: Plan) -> Rolled {
         brook: &[],
         reeds: vec![s.polder.fringe.clone()],
         pond: None,
+        back: Some(landward(&p, &s)),
     };
-    let mut seated = kept(stage_seat(&p, &ground), &mut refusals);
-    if let Some(x) = seated.as_mut() {
+    let wind = super::wind(&p.windward);
+    let seated = kept(stage_seat(&p, &ground), &mut refusals).map(|mut x| {
         crate::counts::merge(&mut x.counts, &ring_counts);
-    }
-    let ward = stage_waterward(&p, &s, seated.as_ref());
+        // each seat recorded against the map's own wind, its back turned to the shore
+        for f in &mut x.frames {
+            f.offwind = f.out.0 * wind.0 + f.out.1 * wind.1 < super::plan::WIND_BACK_MIN_DOT;
+        }
+        x
+    });
+    let mut ward = stage_waterward(&p, &s, seated.as_ref());
+    let bands = bank_bands(&s, &ward.strips, &mut ward.counts);
     let mut svg = Svg::default();
     draw_polder(&mut svg, &s);
     svg.kind("marsh");
     for strip in &ward.strips {
         svg.reeds(strip);
+    }
+    // the denser reeds on each bank of a channel through them, over the strips and the fringe
+    for band in &bands {
+        svg.reed_bank(band, BANK_FT);
     }
     // the sluices on top, above the water and the reeds, as the deleted `sluice_gate` drew them
     draw_sluices(&mut svg, &s, &mut refusals);
@@ -500,375 +771,4 @@ pub(super) fn roll_polder(p: Plan) -> Rolled {
 }
 
 #[cfg(test)]
-mod tests {
-    use super::{
-        draw_sluices, sluice_channel, sluice_frame, Svg, SLUICE_SPAN_FT, SLUICE_TIMBER_FT,
-    };
-    use crate::driver::{roll, spec::parse};
-    use crate::field::fan::Pt;
-    use crate::field::geom::{dist, inside, seg_dist};
-
-    fn dot(a: Pt, b: Pt) -> f64 {
-        a.0 * b.0 + a.1 * b.1
-    }
-
-    /// A ring's extent along `d` about `at`: its least and greatest projection.
-    fn extent(ring: &[Pt], at: Pt, d: Pt) -> (f64, f64) {
-        ring.iter()
-            .map(|p| dot((p.0 - at.0, p.1 - at.1), d))
-            .fold((f64::INFINITY, f64::NEG_INFINITY), |(lo, hi), x| {
-                (lo.min(x), hi.max(x))
-            })
-    }
-
-    /// The frame lies across its channel: its span `span`, the board running post to post across `dir` and thin along it, each
-    /// post at a span's end and wholly on its bank, the crossbeam across, the drum up the channel from the board.
-    fn assert_across(at: Pt, dir: Pt, w: f64, span: f64) {
-        let f = sluice_frame(at, dir, w);
-        let across = (-dir.1, dir.0);
-        let (post_a, _) = SLUICE_TIMBER_FT.1;
-        assert!((f.span - span).abs() < 1e-9);
-        let (lo, hi) = extent(&f.board, at, across);
-        assert!((hi - lo - (span - post_a)).abs() < 1e-9);
-        let (lo, hi) = extent(&f.board, at, dir);
-        assert!(hi - lo <= SLUICE_TIMBER_FT.0 + 1e-9);
-        let (l, r) = (
-            extent(&f.posts[0], at, across),
-            extent(&f.posts[1], at, across),
-        );
-        assert!((l.0 + span / 2.0).abs() < 1e-9 && (r.1 - span / 2.0).abs() < 1e-9);
-        assert!(-l.1 >= w / 2.0 - 1e-9 && r.0 >= w / 2.0 - 1e-9);
-        let beam = (f.beam[1].0 - f.beam[0].0, f.beam[1].1 - f.beam[0].1);
-        assert!(dot(beam, dir).abs() < 1e-9 && dot(beam, across) > 0.0);
-        assert!(extent(&f.drum, at, dir).1 < 0.0);
-    }
-
-    /// THE GATE SPANS ITS CHANNEL, ACROSS IT (449 T234): a field channel's sluice 20 ft post to post, a wider channel's bank to bank,
-    /// on a channel running obliquely.
-    #[test]
-    fn a_sluice_spans_its_channel_across_its_direction() {
-        let dir = (30f64.to_radians().cos(), 30f64.to_radians().sin());
-        assert!((16.0..=24.0).contains(&SLUICE_SPAN_FT));
-        assert_across((100.0, 50.0), dir, 5.5, SLUICE_SPAN_FT);
-        assert_across((100.0, 50.0), (0.0, 1.0), 3.0, SLUICE_SPAN_FT);
-        // Shiro Daika's 66 ft feeder: its posts on the banks
-        assert_across((0.0, 0.0), dir, 66.0, 66.0 + 2.0 * SLUICE_TIMBER_FT.1 .0);
-    }
-
-    #[test]
-    fn a_sluice_finds_the_channel_through_its_point() {
-        let feeder: [Pt; 3] = [(0.0, 0.0), (0.0, 0.0), (0.0, 40.0)];
-        let drain: [Pt; 2] = [(10.0, 10.0), (20.0, 20.0)];
-        let channels = [(&feeder[..], 3.0), (&drain[..], 5.5)];
-        assert_eq!(
-            sluice_channel((0.0, 40.0), &channels),
-            Some(((0.0, 1.0), 3.0))
-        );
-        let (d, w) = sluice_channel((15.0, 15.0), &channels).unwrap();
-        assert!((d.0 - d.1).abs() < 1e-12 && (w - 5.5).abs() < 1e-12);
-        assert_eq!(sluice_channel((5.0, 0.0), &channels), None);
-    }
-
-    /// THE OLD SQUARE IS GONE (449 T234): on a rolled polder falling obliquely and on Kuwabata, both sluices are drawn as frames
-    /// across their channels - the inlet across the feeder, the outfall across its drain's diagonal leg, two different
-    /// directions - each of five marks (board, beam, two posts, drum), and the deleted 8 ft square on the point is drawn nowhere.
-    #[test]
-    fn a_rolled_polder_draws_its_sluices_across_their_channels_not_as_the_old_square() {
-        for spec in [
-            r#"{"name": "R", "seed": 5, "households": 12, "down_deg": 30, "field_archetype": "polder_grid"}"#,
-            r#"{"name": "Kuwabata", "seed": 21, "households": 16, "down_deg": 90, "field_archetype": "mulberry_dike_fishpond", "pond_layout": "mosaic", "dike_crop": "mulberry"}"#,
-        ] {
-            let r = roll(&parse(spec).unwrap()).unwrap();
-            let s = r.polder.as_ref().unwrap();
-            let channels = [
-                (s.polder.feeder.as_slice(), super::FEEDER_W),
-                (s.outfall.as_slice(), super::RUN_W),
-            ];
-            let found: Vec<(Pt, f64)> = s
-                .polder
-                .sluices
-                .iter()
-                .filter_map(|&at| sluice_channel(at, &channels))
-                .collect();
-            assert_eq!(found.len(), 2);
-            assert!(dot(found[0].0, found[1].0).abs() < 0.9);
-            for (&at, &(d, w)) in s.polder.sluices.iter().zip(&found) {
-                assert_across(at, d, w, SLUICE_SPAN_FT);
-                let h = 4.0;
-                let mut old = Svg::default();
-                old.polygon(
-                    &[
-                        (at.0 - h, at.1 - h),
-                        (at.0 + h, at.1 - h),
-                        (at.0 + h, at.1 + h),
-                        (at.0 - h, at.1 + h),
-                    ],
-                    super::SLUICE.0,
-                    Some((super::SLUICE.1, 0.8)),
-                );
-                let doc = old.finish(1e4, 1e4, 0.0);
-                let square = doc.lines().find(|l| l.starts_with("<path")).unwrap();
-                assert!(!r.svg.contains(square));
-            }
-            assert_eq!(r.ink.get("sluice gate"), Some(&10));
-            assert!(!r.refusals.join("\n").contains("sluice"));
-        }
-    }
-
-    /// Whether segments `ab` and `cd` cross or touch.
-    fn crosses(a: Pt, b: Pt, c: Pt, d: Pt) -> bool {
-        let side = |p: Pt, q: Pt, r: Pt| (q.0 - p.0) * (r.1 - p.1) - (q.1 - p.1) * (r.0 - p.0);
-        let (d1, d2) = (side(c, d, a), side(c, d, b));
-        let (d3, d4) = (side(a, b, c), side(a, b, d));
-        d1 * d2 <= 0.0 && d3 * d4 <= 0.0
-    }
-
-    /// The least distance between segments `ab` and `cd`: nothing where they cross.
-    fn seg_seg(a: Pt, b: Pt, c: Pt, d: Pt) -> f64 {
-        let apart = [
-            seg_dist(a, c, d),
-            seg_dist(b, c, d),
-            seg_dist(c, a, b),
-            seg_dist(d, a, b),
-        ]
-        .into_iter()
-        .fold(f64::INFINITY, f64::min);
-        f64::from(u8::from(!crosses(a, b, c, d))) * apart
-    }
-
-    /// The segment `a` to `b` walked every foot, both ends included.
-    #[expect(
-        clippy::cast_possible_truncation,
-        clippy::cast_sign_loss,
-        reason = "a segment's length in whole feet, a small positive count"
-    )]
-    fn walk(a: Pt, b: Pt) -> impl Iterator<Item = Pt> {
-        let n = dist(a, b).ceil().max(1.0) as u32;
-        (0..=n).map(move |k| {
-            let t = f64::from(k) / f64::from(n);
-            (a.0 + (b.0 - a.0) * t, a.1 + (b.1 - a.1) * t)
-        })
-    }
-
-    /// Feet of a channel's course (each of its segments walked every foot) lying in a strip or within its half-width of one.
-    fn feet_under(strip: &[Pt], course: &[Pt], w: f64) -> usize {
-        let edges: Vec<(Pt, Pt)> = (0..strip.len())
-            .map(|i| (strip[i], strip[(i + 1) % strip.len()]))
-            .collect();
-        course
-            .windows(2)
-            .flat_map(|s| walk(s[0], s[1]))
-            .filter(|&p| {
-                inside(p, strip)
-                    || edges
-                        .iter()
-                        .any(|&(a, b)| seg_dist(p, a, b) < w / 2.0 - 1e-6)
-            })
-            .count()
-    }
-
-    /// THE REEDS STOP AT THE CUT (449 T236): on Kuwabata and a polder falling obliquely, no waterside strip crosses a sluice's
-    /// channel - the feeder into the inlet, the outfall's drain out of the tail - or comes within its half-width of one; no strip
-    /// lies on the dike: each strip's edges, walked every foot, stay off the band inside its outer face (half a foot of rounding
-    /// allowed); and on Kuwabata the foot's reeds reach the outfall's bank. Red before T236: Kuwabata's west strip had 57 ft of
-    /// the feeder and 45 ft of the outfall under its reeds and its foot strip 341 ft of the outfall, and its three strips 258, 258
-    /// and 259 ft of edge on the dike.
-    #[test]
-    fn the_waterside_strips_stop_at_the_sluices_channels_and_keep_off_the_dike() {
-        let (mut got, mut want) = (Vec::new(), Vec::new());
-        for spec in [
-            r#"{"name": "Kuwabata", "seed": 21, "households": 16, "down_deg": 90, "field_archetype": "mulberry_dike_fishpond", "pond_layout": "mosaic", "dike_crop": "mulberry"}"#,
-            r#"{"name": "R", "seed": 5, "households": 12, "down_deg": 30, "field_archetype": "polder_grid"}"#,
-        ] {
-            let r = roll(&parse(spec).unwrap()).unwrap();
-            let s = r.polder.as_ref().unwrap();
-            let ward = r.waterward.as_ref().unwrap();
-            assert!(!ward.strips.is_empty());
-            let name = &r.plan.name;
-            let channels = [
-                ("feeder", s.polder.feeder.as_slice(), super::FEEDER_W),
-                ("outfall", s.outfall.as_slice(), super::RUN_W),
-            ];
-            for (i, strip) in ward.strips.iter().enumerate() {
-                for &(channel, course, w) in &channels {
-                    let near = (0..strip.len())
-                        .flat_map(|j| {
-                            course.windows(2).map(move |c| {
-                                seg_seg(strip[j], strip[(j + 1) % strip.len()], c[0], c[1])
-                            })
-                        })
-                        .fold(f64::INFINITY, f64::min);
-                    let under = feet_under(strip, course, w);
-                    got.push(format!(
-                        "{name} strip {i} over the {channel}: {under} ft of its course under the reeds, within its half-width {}",
-                        near < w / 2.0 - 1e-6
-                    ));
-                    want.push(format!(
-                        "{name} strip {i} over the {channel}: 0 ft of its course under the reeds, within its half-width false"
-                    ));
-                }
-                let on_dike = (0..strip.len())
-                    .flat_map(|j| walk(strip[j], strip[(j + 1) % strip.len()]))
-                    .filter(|&p| {
-                        // both asked of every point, so the walk off the band is read whole
-                        let deep = (0..s.dike.outer.len()).all(|k| {
-                            seg_dist(
-                                p,
-                                s.dike.outer[k],
-                                s.dike.outer[(k + 1) % s.dike.outer.len()],
-                            ) > 0.5
-                        });
-                        inside(p, &s.dike.outer) && deep
-                    })
-                    .count();
-                got.push(format!(
-                    "{name} strip {i} on the dike: {on_dike} ft of its edge inside the outer face"
-                ));
-                want.push(format!(
-                    "{name} strip {i} on the dike: 0 ft of its edge inside the outer face"
-                ));
-            }
-            // on Kuwabata the foot's reeds run to the outfall's bank where it runs straight out down the fall, not short of it
-            if name == "Kuwabata" {
-                let run = (s.outfall[1], s.outfall[2]);
-                assert!(ward
-                    .strips
-                    .iter()
-                    .flatten()
-                    .any(|&p| (seg_dist(p, run.0, run.1) - super::RUN_W / 2.0).abs() < 1e-6));
-            }
-        }
-        assert_eq!(got, want);
-    }
-
-    /// The settlement's ground walked on a one-foot grid: the square feet of it inside the dike's outer face (deeper than half a
-    /// foot past it, the rounding allowed), and those within the head canal's half-width of its course.
-    #[expect(
-        clippy::cast_possible_truncation,
-        reason = "a grid's bounds in whole feet"
-    )]
-    fn ground_over(ground: &[Pt], s: &crate::field::staged::PolderStage) -> (usize, usize) {
-        let outer = &s.dike.outer;
-        let head = s.polder.ditches.iter().find(|d| d.seg == "feeder").unwrap();
-        let (lo, hi) = ground.iter().fold(
-            (
-                (f64::INFINITY, f64::INFINITY),
-                (f64::NEG_INFINITY, f64::NEG_INFINITY),
-            ),
-            |(lo, hi), p| {
-                (
-                    (lo.0.min(p.0), lo.1.min(p.1)),
-                    (hi.0.max(p.0), hi.1.max(p.1)),
-                )
-            },
-        );
-        let (mut dike, mut canal) = (0, 0);
-        for x in (lo.0.floor() as i64)..=(hi.0.ceil() as i64) {
-            for y in (lo.1.floor() as i64)..=(hi.1.ceil() as i64) {
-                #[expect(clippy::cast_precision_loss, reason = "whole feet on a map")]
-                let p = (x as f64 + 0.5, y as f64 + 0.5);
-                if !inside(p, ground) {
-                    continue;
-                }
-                let deep = (0..outer.len())
-                    .all(|k| seg_dist(p, outer[k], outer[(k + 1) % outer.len()]) > 0.5);
-                dike += usize::from(inside(p, outer) && deep);
-                canal += usize::from(
-                    head.pts
-                        .windows(2)
-                        .any(|c| seg_dist(p, c[0], c[1]) < head.w / 2.0),
-                );
-            }
-        }
-        (dike, canal)
-    }
-
-    /// The ring off the dike holds the whole outer face, each side touching it at its widest, on a block turned obliquely.
-    #[test]
-    fn the_ring_off_the_dike_holds_the_outer_face_and_touches_it() {
-        let (c, sn) = (30f64.to_radians().cos(), 30f64.to_radians().sin());
-        let at = |x: f64, y: f64| (100.0 + x * c - y * sn, 50.0 + x * sn + y * c);
-        let outline = [
-            at(0.0, 0.0),
-            at(0.0, 200.0),
-            at(300.0, 200.0),
-            at(300.0, 0.0),
-        ];
-        // a waving face, 20 to 40 ft out on each side
-        let outer: Vec<Pt> = (0..40)
-            .map(|k| {
-                let w = 30.0 + 10.0 * (f64::from(k) * 0.7).sin();
-                let t = f64::from(k % 10) / 10.0;
-                match k / 10 {
-                    0 => at(-w, 200.0 * t),
-                    1 => at(300.0 * t, 200.0 + w),
-                    2 => at(300.0 + w, 200.0 * (1.0 - t)),
-                    _ => at(300.0 * (1.0 - t), -w),
-                }
-            })
-            .collect();
-        let ring = super::off_the_dike(&outline, &outer, &mut std::collections::HashMap::new());
-        assert_eq!(ring.len(), 4);
-        // the same ring whichever way the block's corners turn
-        let mut back = outline;
-        back.reverse();
-        let mut turned = super::off_the_dike(&back, &outer, &mut std::collections::HashMap::new());
-        turned.reverse();
-        for (p, q) in ring.iter().zip(&turned) {
-            assert!(dist(*p, *q) < 1e-9, "{ring:?} against {turned:?}");
-        }
-        for &p in &outer {
-            let edge = (0..4)
-                .map(|i| seg_dist(p, ring[i], ring[(i + 1) % 4]))
-                .fold(f64::INFINITY, f64::min);
-            assert!(inside(p, &ring) || edge < 1e-9, "{p:?} outside {ring:?}");
-        }
-        for i in 0..4 {
-            let near = outer
-                .iter()
-                .map(|&p| seg_dist(p, ring[i], ring[(i + 1) % 4]))
-                .fold(f64::INFINITY, f64::min);
-            assert!(near < 1e-9, "side {i} stands {near} ft off the face");
-        }
-    }
-
-    /// THE SETTLEMENT STANDS OFF THE DIKE (449 T239): on Kuwabata and on a grid polder falling obliquely, no square foot of the
-    /// settlement's ground lies inside the dike's outer face - on the dike, the ring canal or the fields - nor within the head
-    /// canal's half-width of its course. Red before T239, the seat handed the plots' edge as its ring: Kuwabata's ground had
-    /// 27,322 ft2 inside the outer face and 2,784 ft2 on the head canal, the oblique polder's 26,583 and 3,168.
-    #[test]
-    fn the_settlement_stands_off_the_dike_and_the_head_canal() {
-        let (mut got, mut want) = (Vec::new(), Vec::new());
-        for spec in [
-            r#"{"name": "Kuwabata", "seed": 21, "households": 16, "down_deg": 90, "field_archetype": "mulberry_dike_fishpond", "pond_layout": "mosaic", "dike_crop": "mulberry"}"#,
-            r#"{"name": "R", "seed": 5, "households": 12, "down_deg": 30, "field_archetype": "polder_grid"}"#,
-        ] {
-            let r = roll(&parse(spec).unwrap()).unwrap();
-            let s = r.polder.as_ref().unwrap();
-            let frame = &r.seated.as_ref().expect("a seat").frames[0];
-            let (dike, head) = ground_over(&crate::driver::settlement_ground(frame), s);
-            got.push(format!(
-                "{}: {dike} ft2 inside the dike's outer face, {head} ft2 on the head canal",
-                r.plan.name
-            ));
-            want.push(format!(
-                "{}: 0 ft2 inside the dike's outer face, 0 ft2 on the head canal",
-                r.plan.name
-            ));
-        }
-        assert_eq!(got, want);
-    }
-
-    /// A sluice whose channel is not known is not drawn: the gap is named, not guessed.
-    #[test]
-    fn a_sluice_with_no_channel_is_named_not_drawn() {
-        let r = roll(&parse(r#"{"name": "R", "seed": 5, "households": 12, "down_deg": 30, "field_archetype": "polder_grid"}"#).unwrap()).unwrap();
-        let mut s = r.polder.unwrap();
-        s.polder.feeder.clear();
-        let (mut svg, mut missing) = (Svg::default(), Vec::new());
-        draw_sluices(&mut svg, &s, &mut missing);
-        assert_eq!(missing.len(), 1, "{missing:?}");
-        assert!(missing[0].contains("(sluice 0) not drawn: no channel"));
-        assert_eq!(svg.census().get("sluice gate"), Some(&5));
-    }
-}
+mod tests;

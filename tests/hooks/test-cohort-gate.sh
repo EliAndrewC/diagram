@@ -69,10 +69,13 @@ rec 20261003T000100Z "$base" 1 "5"; rec 20261003T000200Z "$head" 1 "5"
 out="$( cd "$T" && "$GATE" 2>&1 )"; ok "$?" 0 "a pre-existing failure passes"
 case "$out" in *"seed 5 PRE-EXISTING"*) ok y y "prints it pre-existing" ;; *) ok n y "prints it pre-existing" ;; esac
 
-# a commit of docs, a docstring and a comment under l7r/ is the same engine: the landing record still counts (the GM, 2026-10-18)
-printf 'docs\n' > "$T/l7r/diagram/CLAUDE.md"; printf '"""Rows."""\n# why\nX  =  2\n' > "$T/l7r/diagram/hamletgen/rows.py"
-g add -A; g commit -qm "docs and a docstring"
-( cd "$T" && "$GATE" >/dev/null 2>&1 ); ok "$?" 0 "a docs or docstring commit keeps the landing record"
+# a commit of docs under l7r/ is the same engine: the landing record still counts (the GM, 2026-10-18); a `.py` file's docstring and
+# comment did too, by codeid.py's AST id, until 449 T247 deleted it - a `.py` file's id is its blob id now
+printf 'docs\n' > "$T/l7r/diagram/CLAUDE.md"
+g add -A; g commit -qm "docs"
+( cd "$T" && "$GATE" >/dev/null 2>&1 ); ok "$?" 0 "a docs commit keeps the landing record"
+printf '"""Rows."""\n# why\nX = 2\n' > "$T/l7r/diagram/hamletgen/rows.py"; g commit -qam "a docstring"
+( cd "$T" && "$GATE" >/dev/null 2>&1 ); ok "$?" 1 "a .py docstring commit moves the landing record since 449 T247"
 printf 'X = 3\n' > "$T/l7r/diagram/hamletgen/rows.py"; g commit -qam "a code token"
 ( cd "$T" && "$GATE" >/dev/null 2>&1 ); ok "$?" 1 "a code token moved: the landing record no longer counts"
 

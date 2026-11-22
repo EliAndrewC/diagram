@@ -242,7 +242,7 @@ fn trigger_feature_dir(root: &Path, trigger: &str) -> Option<PathBuf> {
 /// The room table's questions, in this binary (feature 449 T068), run in the scripts' tree as the Python ran them.
 fn cohort(tree: &Path, args: &[&str]) -> Reply {
     let args: Vec<String> = args.iter().map(|a| (*a).to_owned()).collect();
-    crate::cohort::cli(&args, tree, "python3")
+    crate::cohort::cli(&args, tree)
 }
 
 /// What the plan review's rounds add, and the plan as the bundle's file.

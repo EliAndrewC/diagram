@@ -6,9 +6,7 @@ use std::path::Path;
 use serde_json::{json, Value};
 
 use super::{backfill_sections, path_text};
-use crate::claims::tests::{
-    claims, commit_as_origin, fixture, fixture_rust_only, py_units, record_all,
-};
+use crate::claims::tests::{claims, commit_as_origin, fixture, record_all};
 use crate::record::testkit::put;
 
 fn index(root: &Path) -> Value {
@@ -22,25 +20,13 @@ fn reply(root: &Path, text: &str) -> String {
     p.to_string_lossy().into_owned()
 }
 
-/// The fixture's Python half: a claimed table, a helper whose account departs, and an inherited plumbing unit.
+/// A second Rust file beside the fixture's: a claimed table, a helper whose account departs, an inherited plumbing unit, and a module
+/// doc (the `.py` half these stood in, feature 449 T158).
 fn owed_units(root: &Path) {
-    py_units(
+    put(
         root,
-        &[(
-            "TABLE",
-            "constant",
-            &["table - research/questions/0001-gap.html: 12 ft"],
-            false,
-        )],
-        &[
-            (
-                "helper",
-                "function",
-                &["help - GUESS: 3 households, stricter than the page"],
-                false,
-            ),
-            ("plumb", "function", &["plumbing - NONE"], true),
-        ],
+        "rust/phases/src/owed.rs",
+        "//! Research:\n//!     plumbing - NONE\n\n/// Research: table - research/questions/0001-gap.html: 12 ft\npub const TABLE: u32 = 12;\n\n/// Research: help - GUESS: 3 households, stricter than the page\npub fn assist() -> u32 {\n    TABLE\n}\n\npub fn plumb() {}\n",
     );
 }
 
@@ -51,10 +37,10 @@ fn what_is_owed_then_bundled_then_recorded() {
     let got = claims(&root, &["owed"]);
     assert_eq!(got.code, 0);
     for want in [
-        "claims-form: l7r/diagram/m.py module docstring: a module error - the gate's test_claims_coverage fails on it",
-        "claims-label: l7r/diagram/m.py::helper#help - its account says the code departs",
-        "new              l7r/diagram/m.py::TABLE#table",
-        "claims-owed: l7r/diagram/m.py::plumb is new and carries only its module's NONE",
+        "claims-form: docs/buildings.md:14 Deep: no claim - add a `<!-- Research: <label> - <backing> -->` comment - the gate's test_claims_coverage fails on it",
+        "claims-label: rust/phases/src/owed.rs::assist#help - its account says the code departs",
+        "new              rust/phases/src/owed.rs::TABLE#table",
+        "claims-owed: rust/phases/src/owed.rs::plumb is new and carries only its module's NONE",
         "owe impl-drift; bundle per file",
     ] {
         assert!(got.stdout.contains(want), "{want}\n{}", got.stdout);
@@ -88,9 +74,9 @@ fn what_is_owed_then_bundled_then_recorded() {
 }
 
 /// The test's second half (feature 449 T167: the two took over FR-008's tenth of a second together, and the second reads only the
-/// bundle of the Python units, which it makes on a fixture of its own): the Python units bundled, the reply recorded, reported.
+/// bundle of `owed.rs`'s units, which it makes on a fixture of its own): those units bundled, the reply recorded, reported.
 #[test]
-fn a_bundle_of_python_units_is_recorded_and_reported() {
+fn a_bundle_of_units_is_recorded_and_reported() {
     let root = fixture("claims-cmd-recorded");
     owed_units(&root);
     let out = root.join("b");
@@ -100,7 +86,7 @@ fn a_bundle_of_python_units_is_recorded_and_reported() {
         &[
             "bundle",
             "--units",
-            "l7r/diagram/m.py::TABLE#table,l7r/diagram/m.py::helper#help",
+            "rust/phases/src/owed.rs::TABLE#table,rust/phases/src/owed.rs::assist#help",
             "--out",
             &o,
         ],
@@ -108,8 +94,8 @@ fn a_bundle_of_python_units_is_recorded_and_reported() {
     assert_eq!(got.code, 0, "{}", got.stderr);
     let manifest = std::fs::read_to_string(out.join("MANIFEST.md")).unwrap();
     assert!(
-        manifest.contains("## CONTEXT l7r/diagram/m.py::helper")
-            && manifest.contains("```python\ndef GAP(): pass"),
+        manifest.contains("## UNIT rust/phases/src/owed.rs::assist")
+            && manifest.contains("```rust\n"),
     );
     record_and_report(&root, &out);
 }
@@ -121,13 +107,13 @@ fn record_and_report(root: &Path, out: &Path) {
     let units: Value =
         serde_json::from_str(&std::fs::read_to_string(out.join("units.json")).unwrap()).unwrap();
     assert_eq!(
-        units["l7r/diagram/m.py::TABLE#table"]["uid"],
-        "l7r/diagram/m.py::TABLE"
+        units["rust/phases/src/owed.rs::TABLE#table"]["uid"],
+        "rust/phases/src/owed.rs::TABLE"
     );
-    let r = reply(&root, "VERDICT `l7r/diagram/m.py::TABLE#table` DRIFTED - [outside the change] see research/questions/0001-...-gap.html; fix: code; effect: a finding contradicted [§1, §9]\nVERDICT l7r/diagram/m.py::helper#help - IN-STEP: fine [§]\nVERDICT nope#x IN-STEP - x\nVERDICT broken\nVERDICT l7r/diagram/m.py::helper#help IN-STEP - research/questions/0099-none.html\nUNCLAIMED l7r/diagram/m.py::TABLE - a decision\nUNCLAIMED no.py::x - refused\n");
+    let r = reply(&root, "VERDICT `rust/phases/src/owed.rs::TABLE#table` DRIFTED - [outside the change] see research/questions/0001-...-gap.html; fix: code; effect: a finding contradicted [§1, §9]\nVERDICT rust/phases/src/owed.rs::assist#help - IN-STEP: fine [§]\nVERDICT nope#x IN-STEP - x\nVERDICT broken\nVERDICT rust/phases/src/owed.rs::assist#help IN-STEP - research/questions/0099-none.html\nUNCLAIMED rust/phases/src/owed.rs::TABLE - a decision\nUNCLAIMED no.py::x - refused\n");
     let got = claims(&root, &["record", "--bundle", &o, "--reply", &r]);
     assert_eq!(got.code, 3, "{}", got.stderr);
-    assert!(got.stdout.contains("claims-checked: UNCLAIMED l7r/diagram/m.py::TABLE - a decision: write a claim for it, then check it"), "{}", got.stdout);
+    assert!(got.stdout.contains("claims-checked: UNCLAIMED rust/phases/src/owed.rs::TABLE - a decision: write a claim for it, then check it"), "{}", got.stdout);
     assert!(got
         .stdout
         .contains("claims-checked: refused: UNCLAIMED `no.py::x` is not a unit of this bundle"));
@@ -139,19 +125,25 @@ fn record_and_report(root: &Path, out: &Path) {
             && got.stderr.contains("no such question file")
     );
     let ix = index(&root);
-    assert_eq!(ix["l7r/diagram/m.py::TABLE#table"]["verdict"], "DRIFTED");
-    assert_eq!(ix["l7r/diagram/m.py::TABLE#table"]["outside"], true);
     assert_eq!(
-        ix["l7r/diagram/m.py::TABLE#a decision"]["verdict"],
+        ix["rust/phases/src/owed.rs::TABLE#table"]["verdict"],
+        "DRIFTED"
+    );
+    assert_eq!(ix["rust/phases/src/owed.rs::TABLE#table"]["outside"], true);
+    assert_eq!(
+        ix["rust/phases/src/owed.rs::TABLE#a decision"]["verdict"],
         "UNCLAIMED"
     );
     let got = claims(&root, &["report"]);
-    assert!(got
-        .stdout
-        .starts_with("claims: 9 in scope; IN-STEP 1, DRIFTED 1, UNCLAIMED 1; owed 7"),);
+    assert!(
+        got.stdout
+            .starts_with("claims: 9 in scope; IN-STEP 1, DRIFTED 1, UNCLAIMED 1; owed 7"),
+        "{}",
+        got.stdout
+    );
     std::fs::write(
         root.join("dev/claims-deferred.json"),
-        "{\"units\": [\"l7r/diagram/m.py::TABLE\"]}",
+        "{\"units\": [\"rust/phases/src/owed.rs::TABLE\"]}",
     )
     .unwrap();
     let got = claims(&root, &["report"]);
@@ -160,7 +152,7 @@ fn record_and_report(root: &Path, out: &Path) {
         .contains("(2 DEFERRED findings not listed: make claims-report ALL=1 lists them)"),);
     let got = claims(&root, &["report", "--all"]);
     assert!(got.stdout.contains(
-        "  DEFERRED       l7r/diagram/m.py::TABLE#table - see research/questions/0001-gap.html"
+        "  DEFERRED       rust/phases/src/owed.rs::TABLE#table - see research/questions/0001-gap.html"
     ),);
     let empty = reply(&root, "  \n");
     let got = claims(&root, &["record", "--bundle", &o, "--reply", &empty]);
@@ -176,8 +168,7 @@ fn record_and_report(root: &Path, out: &Path) {
 
 #[test]
 fn a_bundle_is_refused_on_what_it_cannot_name() {
-    // no Python unit, so no Python half to start; the second half below asks it (feature 449 T167)
-    let root = fixture_rust_only("claims-cmd-refuse");
+    let root = fixture("claims-cmd-refuse");
     let got = claims(&root, &["bundle", "--units", "nope#x"]);
     assert_eq!(
         (got.code, got.stderr.as_str()),
@@ -264,15 +255,10 @@ fn a_re_check_is_refused_on_a_page_or_a_context_it_cannot_name() {
         .contains("claims-bundle: re-check of 1 claim(s) not owed, because: a re check"));
 }
 
-/// The backfills' tree: the fixture with a Python constant, every claim recorded (feature 449 T167 split the test of the backfills, the
+/// The backfills' tree: the fixture, every claim recorded (feature 449 T167 split the test of the backfills, the
 /// rekey and the refingerprint, over FR-008's tenth of a second, into three, each on a tree of its own or none).
 fn backfilled(tag: &str) -> l7r_shared::tempdir::TempDir {
     let root = fixture(tag);
-    py_units(
-        &root,
-        &[("TABLE", "constant", &["table - NONE"], false)],
-        &[],
-    );
     record_all(&root);
     root
 }
@@ -316,10 +302,11 @@ fn a_moved_unit_is_rekeyed_and_a_star_change_refingerprinted() {
         "claims-rekey: 1 claim row(s) carried to the file their unit moved to\n"
     );
     assert!(index(&root)["rust/phases/src/moved.rs::helper#plumbing"].is_object());
+    // `reach` reads `GAP`: its row put back at the fingerprint before the constants' reads (feature 449 T166)
+    let reach = "rust/phases/src/lib.rs::reach#reach";
+    let before = super::codes(&crate::claims::scope::all_units(&root, false).unwrap());
     let mut ix = index(&root);
-    ix["l7r/diagram/m.py::TABLE#table"]["code"] = json!(crate::claims::units::sha(
-        "core-TABLE-nostar\x1ftable - NONE"
-    ));
+    ix[reach]["code"] = json!(before[reach].0);
     std::fs::write(root.join("dev/claims-index.json"), ix.to_string()).unwrap();
     let got = claims(&root, &["refingerprint"]);
     assert_eq!(got.stdout, "claims-refingerprint: 1 claim row(s) carried to the current fingerprint (a `.py` unit's star re-exports, 417 T54; a Rust unit's constant reads, 449 T166), their code otherwise unchanged\n");
@@ -327,7 +314,7 @@ fn a_moved_unit_is_rekeyed_and_a_star_change_refingerprinted() {
     let log = std::fs::read_to_string(root.join(crate::claims::reads::MIGRATIONS)).unwrap();
     let row: Value = serde_json::from_str(log.lines().next().unwrap()).unwrap();
     assert_eq!(row["rows"], 1);
-    assert_eq!(row["keys"][0], "l7r/diagram/m.py::TABLE#table");
+    assert_eq!(row["keys"][0], reach);
 }
 
 #[test]
@@ -367,10 +354,10 @@ fn the_triage_clears_what_a_page_move_alone_owes_and_bundles_the_rest() {
     assert_eq!(got.stdout, "0\n");
 }
 
-/// The triage's tree: every claim recorded on `origin/main`, Python-free (no Python unit), then two Rust claims' code and a procedure
+/// The triage's tree: every claim recorded on `origin/main`, then two Rust claims' code and a procedure
 /// section changed (feature 449 T167 split the triage's test, over FR-008's tenth of a second, into three on a tree each).
 fn recorded(tag: &str) -> l7r_shared::tempdir::TempDir {
-    let root = fixture_rust_only(tag);
+    let root = fixture(tag);
     record_all(&root);
     commit_as_origin(&root, "recorded");
     root

@@ -7,8 +7,8 @@ use std::path::Path;
 use std::process::Command;
 
 use super::{
-    cli, code_key, command, content_ids, general, imported_files, off, off_of, parse, preset, Call,
-    Memo, RAISED, USAGE,
+    cli, code_key, command, content_ids, imported_files, off, off_of, parse, preset, Call, Memo,
+    USAGE,
 };
 use crate::fixture::{put, tree};
 use l7r_gate_core::checks::scratch;
@@ -60,8 +60,7 @@ fn the_arguments_are_read_as_memo_check_read_them() {
         Some(Call::Preset("glossary".into()))
     );
     let general = parse(&args(&[
-        "n", "--inputs", "a", "b", "--code", "c.py", "--facts", "m:X", "--inputs", "d", "--", "x",
-        "--", "y",
+        "n", "--inputs", "a", "b", "--code", "c.py", "--inputs", "d", "--", "x", "--", "y",
     ]));
     assert_eq!(
         general,
@@ -69,7 +68,6 @@ fn the_arguments_are_read_as_memo_check_read_them() {
             name: "n".into(),
             inputs: args(&["a", "b", "d"]),
             code: args(&["c.py"]),
-            facts: Some("m:X".into()),
             command: args(&["x", "--", "y"])
         })
     );
@@ -82,7 +80,7 @@ fn the_arguments_are_read_as_memo_check_read_them() {
         &["n", "a", "--inputs", "b", "--", "x"],
         &["n", "--inputs", "--", "x"],
         &["n", "--inputs", "a", "--"],
-        &["n", "--inputs", "a", "--facts", "m:a", "m:b", "--", "x"],
+        &["n", "--facts", "m:a", "--inputs", "a", "--", "x"],
     ] {
         assert_eq!(parse(&args(bad)), None);
     }
@@ -223,23 +221,6 @@ fn a_command_runs_as_memo_check_ran_it() {
         command(&d, &args(&["/no/such/program"])).unwrap_err().kind,
         "FileNotFoundError"
     );
-    put(&d, "ok_mod.py", "print('a\\r')\n");
-    let r = command(&d, &args(&["python3", "-m", "ok_mod"])).unwrap();
-    assert_eq!((r.stdout.as_str(), r.code), ("a\r\n", 0));
-    // the interpreter by its path, as `sys.executable` names it: read as text as written too
-    let r = command(&d, &[super::python(), "-m".to_owned(), "ok_mod".to_owned()]).unwrap();
-    assert_eq!(r.stdout, "a\r\n");
-    put(&d, "bad_mod.py", "print('lost')\nraise KeyError('k')\n");
-    let e = command(&d, &args(&["python3", "-m", "bad_mod"])).unwrap_err();
-    assert!(e.kind == RAISED && e.message.ends_with("KeyError: 'k'\n"));
-    assert_eq!(crate::tools::reply(Err(e.clone())).stderr, e.message);
-    put(&d, "exit_mod.py", "import sys\nsys.exit(4)\n");
-    assert_eq!(
-        command(&d, &args(&["python3", "-m", "exit_mod"]))
-            .unwrap()
-            .code,
-        4
-    );
 }
 
 #[test]
@@ -292,41 +273,5 @@ fn every_call_is_recorded_and_the_record_pass_is_kept_one_day() {
             "memo_check passed",
             "memo_check refused"
         ]
-    );
-}
-
-#[test]
-fn a_facts_module_is_imported_before_the_run_and_its_output_not_kept() {
-    let d = repo();
-    put(&d, "loud.py", "print('imported')\n");
-    put(&d, "ok_mod.py", "print('ran')\n");
-    let argv = args(&["python3", "-m", "ok_mod"]);
-    let memo = Memo::new(&d, "n", &["x".to_owned()], "c", &argv, false);
-    let first = general(&d, &memo, &argv, Some("loud:MEMO")).unwrap();
-    assert_eq!(first.stdout, "imported\nran\n");
-    assert_eq!(
-        general(&d, &memo, &argv, Some("loud:MEMO")).unwrap().stdout,
-        "ran\n"
-    );
-    let e = general(
-        &d,
-        &Memo::new(&d, "m", &[], "c", &argv, true),
-        &argv,
-        Some("no_such_mod"),
-    )
-    .unwrap_err();
-    assert!(e.kind == RAISED && e.message.contains("ModuleNotFoundError"));
-    // a command Python ran as a child is handed no memo: the facts flag is read and nothing imported
-    let plain = args(&["sh", "-c", "echo plain"]);
-    assert_eq!(
-        general(
-            &d,
-            &Memo::new(&d, "p", &[], "c", &plain, true),
-            &plain,
-            Some("no_such_mod")
-        )
-        .unwrap()
-        .stdout,
-        "plain\n"
     );
 }

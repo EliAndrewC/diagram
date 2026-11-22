@@ -14,7 +14,6 @@ use std::process::{Command, Stdio};
 use std::sync::LazyLock;
 
 use fancy_regex::Regex;
-use l7r_shared::sha256;
 use serde_json::Value;
 
 use crate::delta;
@@ -34,21 +33,12 @@ const RUST_NOW: &str = "nothing writes a Rust stage gate record now; a Rust stag
 const COMMAND: &str = "make cohort-landing";
 /// The landing cohort's size, fixed and fresh alike: the 48 the GM's recommendation names.
 const SEEDS: usize = 48;
-/// The fresh blocks start here: above the fixed range, the pinned rows and every hand roll the log holds.
-const FRESH_BASE: u64 = 10_000;
-const FRESH_SPAN: u64 = 990_000;
 const REFUSING: [&str; 3] = [" NEWLY FAILING", " WORSENED", " NO BASELINE"];
 
-/// A scratch directory for one `ask_counters` call, removed when it is dropped (feature 449 T101). The process id alone is not
-/// enough: parallel tests share a process, and one call's cleanup deleted another's files, the cause of this crate's intermittent
-/// "codeid.py could not say" (2026-11-10); a `TempDir` is counted within the process too.
-fn counter_dir() -> l7r_shared::tempdir::TempDir {
-    l7r_shared::tempdir::TempDir::new("gate-counter")
-}
 /// The paths whose bytes unchanged mean the same engine at once.
 pub const ENGINE_PATHS: [&str; 2] = ["l7r", "pool"];
 
-/// The landing's own list of engine files (`codeid.ENGINE`, which stays in Python until phase 4), `delta::is_engine`'s paths: a live
+/// The landing's own list of engine files (`codeid.ENGINE`'s one copy, `codeid.py` deleted by feature 449 T247), `delta::is_engine`'s paths: a live
 /// pool `.svg` among them since 449 T218, so a hand-sheet edit `make land` lands is prepared for the GATED push its route now is, and a
 /// live pool `.notes.md` since 449 T223 (the pool sweep reads the notes: a hand sheet's typed counts, a hamlet's census block), and the
 /// building types' declaration since 449 T231 (every compound is drawn from it).
@@ -57,15 +47,12 @@ static ENGINE: LazyLock<Regex> = LazyLock::new(|| {
         .unwrap_or_else(|e| unreachable!("{e}"))
 });
 
-/// A path the landing counts as engine code (`codeid.ENGINE`): one regex for the counter-only test here and `l7r-gate land`'s engine
-/// delta (feature 449 T121), so the Rust land starts no `codeid.py` to read it, as `land.py` loaded that file by path for this alone.
+/// A path the landing counts as engine code: one regex for the counter-only test here and `l7r-gate land`'s engine delta (feature 449
+/// T121, where `land.py` loaded `codeid.py` by path for this alone).
 #[must_use]
 pub fn is_landing_engine(path: &str) -> bool {
     ENGINE.is_match(path).unwrap_or(false)
 }
-
-/// Two versions of each file whose counters decide a commit pair.
-type Versions = Vec<(Vec<u8>, Vec<u8>)>;
 
 /// A repository and what it has been asked already: `baselines` asks an engine key once per record, and each reference's commit, main's
 /// name and each pair's changed files are asked of git once a run (feature 449 T167: a `known` over three records started git 45 times, 13 of
@@ -73,13 +60,11 @@ type Versions = Vec<(Vec<u8>, Vec<u8>)>;
 /// repository and changes nothing in it, so nothing it asked can move under it.
 pub struct Repo<'a> {
     pub root: &'a Path,
-    pub python: &'a str,
     keys: RefCell<HashMap<String, String>>,
     commits: RefCell<HashMap<String, String>>,
     main: OnceCell<&'static str>,
     changed: RefCell<HashMap<(String, String), Option<String>>>,
     counters: RefCell<HashMap<(String, String), bool>>,
-    failure: RefCell<Option<String>>,
 }
 
 /// Each of `specs` (`<commit>:<path>`) as git holds it, from one `git cat-file --batch` where a `git show` each was two processes a file
@@ -131,23 +116,21 @@ fn is_pinned(seed: i64) -> bool {
 
 impl<'a> Repo<'a> {
     #[must_use]
-    pub fn new(root: &'a Path, python: &'a str) -> Self {
+    pub fn new(root: &'a Path) -> Self {
         Self {
             root,
-            python,
             keys: RefCell::new(HashMap::new()),
             commits: RefCell::new(HashMap::new()),
             main: OnceCell::new(),
             changed: RefCell::new(HashMap::new()),
             counters: RefCell::new(HashMap::new()),
-            failure: RefCell::new(None),
         }
     }
 
     /// The engine key of `reference`, or of the working tree for `None`; empty for a reference that does not resolve.
     pub fn engine_key(&self, reference: Option<&str>) -> String {
         let Some(reference) = reference else {
-            return delta::engine_key_worktree(self.root, self.python).unwrap_or_default();
+            return delta::engine_key_worktree(self.root).unwrap_or_default();
         };
         let sha = self.commit_of(reference);
         if sha.is_empty() {
@@ -156,7 +139,7 @@ impl<'a> Repo<'a> {
         if let Some(key) = self.keys.borrow().get(&sha) {
             return key.clone();
         }
-        let key = delta::engine_key(self.root, &sha, self.python).unwrap_or_default();
+        let key = delta::engine_key(self.root, &sha).unwrap_or_default();
         self.keys.borrow_mut().insert(sha, key.clone());
         key
     }
@@ -277,31 +260,6 @@ impl<'a> Repo<'a> {
         })
     }
 
-    /// Each pair's "the same but for counter blocks", from one run of `codeid.py`, which reads the AST until phase 4
-    /// (`round:spec-fidelity|plan:449-rust-codebase#T068@3`: at most one process a run, whatever the records). `None` when it could not answer.
-    fn ask_counters(&self, pairs: &[&(Vec<u8>, Vec<u8>)]) -> Option<Vec<bool>> {
-        let dir = counter_dir();
-        let mut files = Vec::new();
-        let mut written = std::fs::create_dir_all(&dir).is_ok();
-        for (n, (old, new)) in pairs.iter().enumerate() {
-            let (a, b) = (dir.join(format!("{n}a.py")), dir.join(format!("{n}b.py")));
-            written = written && std::fs::write(&a, old).is_ok() && std::fs::write(&b, new).is_ok();
-            files.extend([a, b]);
-        }
-        let done = Command::new(self.python)
-            .arg(crate::codeid::script(self.root))
-            .arg("--debug-free-equal")
-            .args(&files)
-            .output();
-        drop(dir);
-        let out = done.ok().filter(|o| written && o.status.success())?;
-        let answers: Vec<bool> = String::from_utf8_lossy(&out.stdout)
-            .split_whitespace()
-            .map(|w| w == "1")
-            .collect();
-        (answers.len() == pairs.len()).then_some(answers)
-    }
-
     /// The engine files `a` and `b` differ in, where each is a modification; `None` where one is not, where none differs, or where git
     /// cannot compare the two: not counter-only.
     fn counter_rows(&self, a: &str, b: &str) -> Option<Vec<String>> {
@@ -346,48 +304,13 @@ impl<'a> Repo<'a> {
             blobs(self.root, &specs)
         }
         .into_iter();
-        // the `.py` versions that decide each pair: none where every differing file's bytes are equal; not counter-only where a file
-        // that is not Python differs
-        let mut todo: Vec<((String, String), Versions)> = Vec::new();
+        // a pair is counter-only where every engine file it modifies is the same bytes on both sides: a `.py` file equal but for its
+        // `if __debug__:` counter blocks (feature 446) was too, asked of `codeid.py`, until feature 449 T247 deleted it with the last
+        // `.py` file, and every pair has main or HEAD on one side, where no `.py` file is left to be modified
         for (ask, paths) in open {
-            let mut pairs = Some(Vec::new());
-            for path in &paths {
-                let (old, new) = (
-                    read.next().unwrap_or_default(),
-                    read.next().unwrap_or_default(),
-                );
-                if old != new && !crate::checks::has_ext(path, "py") {
-                    pairs = None;
-                }
-                if let Some(p) = pairs.as_mut() {
-                    p.extend((old != new).then_some((old, new)));
-                }
-            }
-            match pairs {
-                None => {
-                    self.counters.borrow_mut().insert(ask, false);
-                }
-                Some(p) if p.is_empty() => {
-                    self.counters.borrow_mut().insert(ask, true);
-                }
-                Some(p) => todo.push((ask, p)),
-            }
-        }
-        if todo.is_empty() {
-            return;
-        }
-        let flat: Vec<&(Vec<u8>, Vec<u8>)> = todo.iter().flat_map(|(_, p)| p).collect();
-        let answers = self.ask_counters(&flat);
-        if answers.is_none() {
-            *self.failure.borrow_mut() = Some(
-                "codeid.py could not say whether the engine files differ only by counter blocks"
-                    .to_owned(),
-            );
-        }
-        let mut rest = answers.unwrap_or_default().into_iter();
-        for (ask, pairs) in todo {
-            let taken: Vec<bool> = pairs.iter().map(|_| rest.next().unwrap_or(false)).collect();
-            let same = taken.iter().all(|one| *one);
+            // every version read, so the next pair's start where this one's end
+            let sides: Vec<bool> = paths.iter().map(|_| read.next() == read.next()).collect();
+            let same = sides.iter().all(|one| *one);
             self.counters.borrow_mut().insert(ask, same);
         }
     }
@@ -425,11 +348,6 @@ impl<'a> Repo<'a> {
         let ask = (a.to_owned(), b.to_owned());
         self.prime(std::slice::from_ref(&ask));
         self.counters.borrow().get(&ask).copied().unwrap_or(false)
-    }
-
-    fn fresh_seed(&self, reference: Option<&str>) -> u64 {
-        let digest = sha256::hex(self.engine_key(reference).as_bytes());
-        FRESH_BASE + u64::from_str_radix(&digest[..12], 16).unwrap_or(0) % FRESH_SPAN
     }
 
     fn on_engine(&self, rec: &Value) -> bool {
@@ -685,21 +603,14 @@ fn gate_check(repo: &Repo<'_>) -> crate::Reply {
 }
 
 /// `l7r-gate cohort ...`.
-pub fn cli(args: &[String], root: &Path, python: &str) -> crate::Reply {
+pub fn cli(args: &[String], root: &Path) -> crate::Reply {
     let words: Vec<&str> = args.iter().map(String::as_str).collect();
-    let repo = Repo::new(root, python);
-    let reply_of = answer(&words, &repo, root);
-    match repo.failure.take() {
-        Some(why) => reply(String::new(), format!("cohort: {why}\n"), 2),
-        None => reply_of,
-    }
+    answer(&words, &Repo::new(root), root)
 }
 
 fn answer(words: &[&str], repo: &Repo<'_>, root: &Path) -> crate::Reply {
     match words {
         [] | ["check"] => gate_check(repo),
-        ["fresh-seed"] => reply(format!("{}\n", repo.fresh_seed(None)), String::new(), 0),
-        ["fresh-seed", reference] => reply(format!("{}\n", repo.fresh_seed(Some(reference))), String::new(), 0),
         ["engine-key", reference] => reply(format!("{}\n", repo.engine_key(Some(reference))), String::new(), 0),
         ["port"] => reply(format!("{}\n", port_mode(root)), String::new(), 0),
         ["counter-only"] => exit_of(counter_only_delta(repo)),
@@ -709,7 +620,7 @@ fn answer(words: &[&str], repo: &Repo<'_>, root: &Path) -> crate::Reply {
         ["seeds", rest @ ..] => seeds::cli(rest, root),
         ["room-table"] => room::render(root),
         ["names-fit", text] => exit_of(room::names_fit(text)),
-        _ => reply(String::new(), format!("cohort: unknown command {words:?} (fresh-seed | check | needs-baseline | counter-only | rust-owed | engine-key | port | known | seeds | room-table | names-fit)\n"), 2),
+        _ => reply(String::new(), format!("cohort: unknown command {words:?} (check | needs-baseline | counter-only | rust-owed | engine-key | port | known | seeds | room-table | names-fit)\n"), 2),
     }
 }
 

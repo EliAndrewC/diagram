@@ -1,0 +1,36 @@
+LEEWAY - 1.25x at 10 households (4,439 / 3,549) and 1.26x at 20 (5,701 / 4,525), under twice `first` (4,620 / 6,412). The excess sits in `test@face`: the fringe cuts each flank's strip at every channel bed, as its contract's rule says it must. That work is counted where it happens and grows with the dike's ring. It carries two repeated scans, about 290 operations, too small to be OVER.
+
+**Sizes.** `budget.json` pins 10 and 20 households and `counts.json` holds only those two, so I judged at those sizes, not 40 and 80. `chains.txt` has no section for this stage, so I built the chain from the code: `roll_polder -> stage_waterward -> fringe -> {file, face, pieces -> {clip, face_at, difference -> crossings}}` and `roll_polder -> bank_bands -> {clip, crossings}`.
+
+**1. Within budget?**
+- **Counts.** 4,439 at 10 and 5,701 at 20, against the raised 3,549 and 4,525. That is 1.92x and 1.78x of `first` (2,310 / 3,206). The budget was raised once with no `second`, so the cap is twice `first`. The worst roll at 10 (seed 25, 4,452) leaves 168 operations under it.
+- **Where the excess is.** The excess is 890 at 10 and 1,176 at 20. `test@face` is 2,676 of the 4,439 and most of the growth (2,676 to 3,742). `test@bank` hardly moves (1,226 to 1,323).
+- **Rebuilding `test@face` from the counters.** At 10 the ring has 120 corners (`test@fringe`), the channels have 6 points, so 4 beds (`read@dike` minus `test@fringe`), and two flanks are laid.
+  - `file`, the two sorts in `face` and its writes: about 430.
+  - `pieces` outside `difference` (turns, the fill, `face_at`, the 8 clips per bed, the box tests, spans): about 650.
+  - That leaves about 1,600 in `difference`, roughly 6n a call (sense n, Cyrus-Beck 4n, the walk n) on about 40-corner pieces, about 5-6 calls.
+- **Why it is reasonable.** The contract stops the reeds at each channel's bank, every reach's bed taken out along its own sides. That is per bed, per piece its box meets, and linear in the face's corners; the beds stay at 4 at both sizes.
+- **Growth.** The exponent from 10 to 20 is 0.36, against the budget's 0.35. The tracked difference is the dike ring growing from 120 to 178 corners (0.57), not anything superlinear.
+- **Notes, owing no round.** Two of these are repeated scans; together about 290 at 10, a third of the excess and under half the total.
+  - `difference` line 327 reads the ring's sense again for every bed and piece. The pieces keep the strip's sense, so one read per flank is enough (about 200).
+  - `pieces` lines 507-517 scan every piece again for its span along the axis, when `boxed` already stored that span in `parts` (about 90).
+  - Not a repeated scan, but a cheaper method: `crossings` clips all 4n edges for each bed, while the face is already ordered along the axis and could narrow that to the few edges the bed reaches.
+
+**2. Every inner loop counted (S5)?** No loop over a growing set is uncounted.
+- **Counted:** `file`, `face`'s sort and ends, `face_at`, `clip`, `crossings` (4 an edge), `difference`'s sense, inside test, sort and walk, `boxed`, the spans and their sort, and in `bank_bands` the box clip per ring, `crossings` per edge, the span sort and merge, each sample, and each `met` read.
+- **Light weights, notes only:**
+  - The two `within` calls per edge in `waterward.rs` `crossings` (lines 286) are up to 8 more tests an edge on top of the 4 charged.
+  - The bed box fold (line 489), the round of up to 4 bed corners (line 393), and the scans over the clipped run past the dike's end (lines 465-473) are uncounted. All are bounded by a constant.
+  - In the other direction, the `m == 0` branch (lines 339-341) charges 4n although `all` stops at the first corner outside.
+
+**3. Placed and repaired (S4)?** None found.
+- There are no `placed@`, `dropped@` or `moved@` counters.
+- The filter in `pieces` (lines 522-527) drops pieces wholly past the dike's extent before anything is written to `strips`. The run's ends are trimmed first (`from`/`to`, lines 454-475), so only slivers cut off by a slanting bed reach the filter. This is the last step of a geometric cut, not a placement undone.
+- `check::walled_by_reeds` is the cohort check, not a repair during the roll.
+
+**4. Linear growth (S6)?** Yes.
+- The exponent is 0.36 from 10 to 20; no 80-household figure exists.
+- The only nested loops are beds x pieces (both bounded: 4 beds, a few pieces) and, in `bank_bands`, samples x met rings (the rings are the 2-3 strips plus the fringe).
+- Every inner pass is linear in the ring or the samples.
+
+Files: `/tmp/l7r-check/work-budget-audit-waterward.polder/code/rust__phases__src__waterward.rs`, `/tmp/l7r-check/work-budget-audit-waterward.polder/code/rust__phases__src__driver__polder.rs`, `/tmp/l7r-check/work-budget-audit-waterward.polder/counts.json`, `/tmp/l7r-check/work-budget-audit-waterward.polder/budget.json`

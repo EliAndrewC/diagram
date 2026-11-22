@@ -5,9 +5,9 @@ version = "0.1.0"
 edition = "2021"
 publish = false
 
-# What the tests read of the tree at run time (feature 449 T93): the plan's tests read the approach checklist, the plan template and the scripts over the real tree (traced 2026-11-11 by the hook suites' read shim over a full test run, feature 449 T100; `.git` is git's own lookup, not the tree). A change there runs them again.
+# What the tests read of the tree at run time (feature 449 T93): the plan's tests read the approach checklist, the plan template over the real tree (traced 2026-11-11 by the hook suites' read shim over a full test run, feature 449 T100; `.git` is git's own lookup, not the tree). A change there runs them again. `scripts/` dropped by feature 449 T247: the engine-edit tests read the real `codeid.py`, deleted.
 [package.metadata.l7r]
-reads = ["docs/approach-checklist.md", ".specify/templates/", "scripts/"]
+reads = ["docs/approach-checklist.md", ".specify/templates/"]
 
 [dependencies]
 fancy-regex = { workspace = true }

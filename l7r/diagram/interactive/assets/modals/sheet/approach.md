@@ -17,6 +17,8 @@ roughly a tenth to half an acre. The approach of Nagao Shrine in Nara, a great s
 Guesses:
 - Its width on the plan, about 10 ft: no village shrine's approach was found measured, and the one width found is a great
   shrine's.
+- That no fence runs along the approach: one stone fence from before 1868 lined an ordinary shrine's approach, the only one
+  found, which is not enough to say how common such fences were.
 
 Depiction: The plan draws the approach as a band of bare ground from the outermost arch to the hall's step, on the
 line of the hall and its sanctuary; that it runs on that line is a drawing convention, and

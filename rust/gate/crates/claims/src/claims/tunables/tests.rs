@@ -1,11 +1,10 @@
-//! The numbers that are ours: the list, its counts, the inline audit over the Rust and (through the runner) the Python.
+//! The numbers that are ours: the list, its counts, the inline audit over the Rust (a `.py` file read no more, feature 449 T158).
 
 use std::collections::HashMap;
 
 use super::{fmt_g, render, render_inline, tunables, unstated_rust};
 use crate::claims::index::current;
-use crate::claims::scope::Reader;
-use crate::claims::tests::{fixture, py_units, LIB};
+use crate::claims::tests::{fixture, LIB};
 use crate::record::testkit::put;
 
 #[test]
@@ -30,40 +29,26 @@ fn a_number_is_written_as_python_writes_it() {
 #[test]
 fn the_list_and_the_inline_audit() {
     let root = fixture("claims-tunables");
-    py_units(
-        &root,
-        &[],
-        &[
-            (
-                "helper",
-                "function",
-                &["help - CONVENTION: 3 households"],
-                false,
-            ),
-            ("plain", "function", &["plain - UNRESEARCHED"], false),
-        ],
-    );
     put(&root, "l7r/diagram/tools/pack_audit/x.py", "4.5\n");
     put(&root, "l7r/diagram/other.py", "4.5\n");
     // a crate new under `rust/` is audited, a tooling crate is not (feature 449 T165)
     put(
         &root,
         "rust/mode_a/src/lib.rs",
-        "pub fn sheet() -> f64 {\n    77.5\n}\n",
+        "/// Research: help - CONVENTION: 3 households\npub fn sheet() -> f64 {\n    77.5\n}\n\n/// Research: plain - UNRESEARCHED\npub fn plain() {}\n",
     );
     put(
         &root,
         "rust/gate/src/odd.rs",
         "pub fn odd() -> f64 {\n    66.5\n}\n",
     );
-    let mut reader = Reader::new(&root, &root);
-    let cur = current(&mut reader, &root, &root.join("research/questions")).unwrap();
+    let cur = current(&root, &root.join("research/questions")).unwrap();
     let found = tunables(&cur, "", true);
     assert_eq!(
         found.iter().map(|f| f.1.as_str()).collect::<Vec<_>>(),
         vec![
             "rust/phases/src/lib.rs::Thing.m#method guess",
-            "l7r/diagram/m.py::helper#help"
+            "rust/mode_a/src/lib.rs::sheet#help"
         ]
     );
     assert_eq!(tunables(&cur, "", false).len(), 4);
@@ -72,21 +57,19 @@ fn the_list_and_the_inline_audit() {
     let text = render(&found, false);
     assert!(text.starts_with("tunables: GUESS 1, CONVENTION 1 - ") && text.contains("\n  GUESS        rust/phases/src/lib.rs::Thing.m#method guess - wider than the page, 40 ft"), "{text}");
     assert_eq!(render(&found, true).lines().count(), 1);
-    let inline = super::inline(&mut reader, &root, &cur, "").unwrap();
+    let inline = super::inline(&root, &cur, "").unwrap();
     let shown = render_inline(&inline, false);
     assert!(
-        shown.contains("  l7r/diagram/tools/pack_audit/x.py:3 fn 4.5")
-            && shown.contains("  l7r/diagram/tools/pack_audit/x.py:4 big 1.23457e+06")
-            && shown.contains("  rust/phases/src/lib.rs:14 reach 3.25")
+        shown.contains("  rust/phases/src/lib.rs:14 reach 3.25")
             && shown.contains("  rust/phases/src/lib.rs:23 m 42")
-            && shown.contains("  rust/mode_a/src/lib.rs:2 sheet 77.5")
+            && shown.contains("  rust/mode_a/src/lib.rs:3 sheet 77.5")
             && !shown.contains("66.5")
             && !shown.contains("8888")
-            && !shown.contains("other.py"),
+            && !shown.contains(".py"),
     );
     let counted = render_inline(&inline, true);
-    assert!(counted.contains("      2  l7r/diagram/tools/pack_audit/x.py\n"));
-    assert!(super::inline(&mut reader, &root, &cur, "rust/")
+    assert!(counted.contains("  rust/mode_a/src/lib.rs"), "{counted}");
+    assert!(super::inline(&root, &cur, "rust/")
         .unwrap()
         .iter()
         .all(|f| f.0.starts_with("rust/")));

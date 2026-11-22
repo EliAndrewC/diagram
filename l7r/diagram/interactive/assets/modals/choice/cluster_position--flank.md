@@ -13,11 +13,10 @@ Guesses:
 - That a village may sit on a side of its fields, and how often each seat comes up: which edge was driest depended on the
   valley, and no count of village seats was found.
 
-Depiction: The map seats the cluster along one side of the fields, across the slope from their fall, on the side away from
-where the water comes in, and off any drawn marsh.
+Depiction: The map seats the cluster along one side of the fields and off any drawn marsh.
 
 Name: Where the houses sit: on a flank of the fields
 Covers: `meta.cluster_position = flank`
 Sources: imazato-1999, unesco-xidi-hongcun, takizawa-sonshi-yashiki, sonraku-jawiki, shizen-teibo-jawiki
 Entry: research/questions/0035-villages-beside-their-stream-one-bank-or-both.html, research/questions/0034-landless-and-tenant-households-mizunomi-nago.html, research/questions/0031-clustered-and-scattered-villages-shuson-sanson.html
-Drawing: research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html, research/questions/0058-ground-too-wet-to-build-on.drawing.html
+Drawing: research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html, research/questions/0058-ground-too-wet-to-build-on.drawing.html, research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html

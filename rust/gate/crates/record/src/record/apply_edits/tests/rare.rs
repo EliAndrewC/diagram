@@ -159,13 +159,13 @@ fn a_store_that_cannot_be_written_and_a_ledger_held_or_unreadable() {
     std::fs::create_dir_all(root.join(".specify")).unwrap();
     std::fs::write(
         root.join(".specify/prefixes.jsonl"),
-        "{\"kind\": \"glossary\", \"key\": \"held\", \"prefix\": 5, \"clone\": \"/elsewhere\"}\n",
+        "{\"kind\": \"glossary\", \"key\": \"held\", \"prefix\": 5, \"clone\": \"/\"}\n",
     )
     .unwrap();
     assert!(
         run(&root, "record-format: 0094\nGLOSSARY held | | d\n", &[])
             .stdout
-            .contains("REFUSED - 'held' is already being defined in /elsewhere")
+            .contains("REFUSED - 'held' is already being defined in / (")
     );
     std::fs::write(root.join(".specify/prefixes.jsonl"), "[1]\n").unwrap();
     assert_eq!(

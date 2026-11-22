@@ -11,8 +11,7 @@ No count of how many villages took a long shape is recorded, nor how long such a
 Guesses:
 - How often a cluster comes out elongated: no count of village shapes was found, so the share is set for the maps.
 
-Depiction: The map seats the houses in a long, shallow band along the dry edge of the fields. The title card calls a cluster
-elongated only when the finished houses run at least about three times as far one way as the other. An elongated cluster is
+Depiction: The map seats the houses in a long, shallow band along the dry edge of the fields. An elongated cluster is
 still a clustered village, its houses reached by lanes, not a row village strung along one street.
 
 Name: The cluster's shape: elongated

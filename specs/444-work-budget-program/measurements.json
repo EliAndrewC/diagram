@@ -44,7 +44,7 @@
   "subject": "glyph-check--fish-pond--kuwabata",
   "answers": "12ba28d38ac4",
   "source": "pool/hamlets/kuwabata/kuwabata.json",
-  "command": "python3 skew.py pool/hamlets/kuwabata/kuwabata.json (each parcel's four extreme corners, the largest deviation from 90 deg)",
+  "command": "<retired: 449 T248 (SC-005, FR-001 retire class): it ran skew.py on pool/hamlets/kuwabata/kuwabata.json (each parcel's four extreme corners, the largest deviation from 90 deg), a script the repository never tracked, so it fails today - the value is history, not re-run>",
   "method": "the same measure on main's Kuwabata gives median 13.9, p90 23.8",
   "value": {
    "measured": "22 corner dev median 14.5 p90 20.1",
@@ -150,7 +150,7 @@
   "subject": "glyph-check--fish-pond--kuwabata",
   "answers": "325869aeb42e",
   "source": "pool/hamlets/kuwabata/kuwabata.json",
-  "command": "python3: area(bank)/area(parcel) over meta dikeponds",
+  "command": "<retired: 449 T248 (SC-005, FR-001 retire class): prose, a one-off run under Python (area(bank)/area(parcel) over meta dikeponds) that no command re-runs - the value is history, not re-run>",
   "method": "the shoelace area of each record's bank ring over its parcel, on the regenerated map (main's banks cover 1.000)",
   "value": {
    "ponds": 22,
@@ -182,7 +182,7 @@
   "subject": "glyph-check--fish-pond--kuwabata",
   "answers": "325869aeb42e",
   "source": "pool/hamlets/kuwabata/kuwabata.json",
-  "command": "python3: every top-level key of 98b7ed6f5~1:kuwabata.json against HEAD's, and every field of each dikeponds record",
+  "command": "<retired: 449 T248 (SC-005, FR-001 retire class): prose, a one-off run under Python (every top-level key of 98b7ed6f5~1:kuwabata.json against HEAD's, and every field of each dikeponds record) that no command re-runs - the value is history, not re-run>",
   "method": "a structural diff of the manifest (the round arbiter on ask:444-T16-review-round-3)",
   "value": {
    "top_level_changed": [
@@ -200,7 +200,7 @@
   "subject": "glyph-check--fish-pond--kuwabata",
   "answers": "ff4d795ed72b",
   "source": "pool/hamlets/kuwabata/kuwabata.json",
-  "command": "python3+shapely: the field_ditches and drawn_channels lines, and the drawn strokes buffered by half their width, intersected with each bank ring (bank less water)",
+  "command": "<retired: 449 T248 (SC-005, FR-001 retire class): prose, a one-off run under Python with shapely (the field_ditches and drawn_channels lines, and the drawn strokes buffered by half their width, intersected with each bank ring (bank less water)) that no command re-runs - the value is history, not re-run>",
   "method": "the round-three reviewer's measure, on the regenerated map",
   "value": {
    "centerline_ft_inside_banks": 0.0,

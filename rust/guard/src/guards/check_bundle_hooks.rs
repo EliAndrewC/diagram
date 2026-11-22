@@ -94,7 +94,13 @@ fn git_root(cwd: &str, here: &Path) -> String {
         .to_owned()
 }
 
-/// FR-003(a) DECIDE FIRST: a check waits for its task's decisions' verdict. The refusal's text and rule, or None; an escape is logged here.
+/// What a check that names no task is told (449 T258).
+const NO_TASK: &str = "it names no task it serves - name it in its description (`<feature> T<n>: ...`) or its prompt's first line";
+
+/// FR-003(a) DECIDE FIRST: a check waits for ITS OWN task's decisions' verdict (449 T258: the task its words, its builder or its page
+/// session's brief name, `own.rs`, asked `l7r-gate plan decided <root> <feature> <task>` - never the clone's one mark, which names
+/// whichever task started last; a check naming none is held by the mark and told to name it). The refusal's text and rule, or None;
+/// an escape is logged here.
 fn decide_first(
     event: &Event,
     session: &Session,
@@ -113,21 +119,31 @@ fn decide_first(
     if root.is_empty() {
         return None;
     }
-    let said = ask(
-        here,
-        &tree.join("scripts/gates/l7r-gate.sh").to_string_lossy(),
-        &["plan", "decided", &root],
-        "",
-    );
-    if said.code != 1 || said.out.trim().is_empty() {
-        return None;
-    }
+    let gate = tree.join("scripts/gates/l7r-gate.sh");
+    // The gate's refusal, where it refuses: code 1 with something said.
+    let refused = |args: &[&str]| {
+        let said = ask(here, &gate.to_string_lossy(), args, "");
+        (said.code == 1 && !said.out.trim().is_empty()).then(|| said.out.trim().to_owned())
+    };
+    // A check NOTHING names a task for is held by the clone's mark and told to name the task it serves: FR-003(a) passes nothing
+    // silently (the MODE 4 review of 449 T258, round 1).
+    let said = match own::own_task(&event.input, Path::new(&root)) {
+        Some(own) => own
+            .tasks
+            .iter()
+            .find_map(|task| refused(&["plan", "decided", &root, &own.feature, task]))?,
+        None => format!(
+            "{NO_TASK}; the clone's mark holds it: {}",
+            refused(&["plan", "decided", &root])?
+        ),
+    };
     let named = BUNDLE_NAMED
         .find(prompt)
         .ok()
         .flatten()
         .map_or("its prompt", |m| m.as_str());
-    let line = format!("{atype} on {named}: {}", said.out.trim());
+    let line =
+        format!("{atype} on {named}: decide first, then check (feature 375 FR-003a) - {said}");
     fire(
         event,
         "blocked",
@@ -347,6 +363,8 @@ fn decide(event: &Event, session: &Session) -> Vec<Answer> {
     let tree = std::env::var("L7R_GUARD_TREE").map_or_else(|_| here.clone(), PathBuf::from);
     judge(event, session, &here, &tree)
 }
+
+mod own;
 
 #[cfg(test)]
 mod tests;

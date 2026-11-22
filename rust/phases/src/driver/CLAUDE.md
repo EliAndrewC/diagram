@@ -10,10 +10,11 @@ by `l7r-gate measure work-budget`.
 |---|---|
 | `../driver.rs` | the comb's stages in order (water frame, field, sink, seat, dry hem), a stage's refusal kept in the record |
 | `polder.rs` | a polder archetype: the block, its seat and its waterside reeds, and their drawing |
+| `polder/tests.rs` | the polder's tests: the sluices, the strips off the cuts, the seat's ring, ground and landward shore, the bank bands |
 | `plan.rs` | the canvas, the fall and the water frame's 21 knobs, a dike-pond's forms - what `plan_site` resolved |
 | `spec.rs` | a spec's fields and its JSON reader |
 | `svg.rs` | the SVG writer: the palette, the crop, tapered ditches, furrowed dry plots, the dike's band; the ink census, each mark counted under the registry kind `Svg::kind` names (449 T230) |
 | `toe.rs` | the wet toe below the field and a ring grown by the lane's width, the seat's inputs |
 | `record.rs` | the JSON record, its `ink_classes` the census the review owed lookup reads as a hamlet's legend (449 T230) |
-| `check.rs` | the finished map's checks - dry plots off the paddy, the water and each other, the tameike off the paddy, the seat off the field, all on the canvas; `make cohort` fails a seed that breaks one |
+| `check.rs` | the finished map's checks - dry plots off the paddy, the water and each other, the tameike off the paddy, the seat off the field, a polder's settlement off its dike and ring canal with a dry way out past its reeds, all on the canvas; `make cohort` fails a seed that breaks one |
 | `tests.rs` | the rolls end to end: a comb and the polders, the record, every mark a registry kind |

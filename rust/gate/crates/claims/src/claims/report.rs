@@ -15,6 +15,7 @@ use std::sync::LazyLock;
 use fancy_regex::Regex;
 use serde_json::Value;
 
+use super::bundle::cited_pages;
 use super::grammar::GRAMMAR;
 use super::index::{
     field, is, live_rows, load_map, owed, research_fp, Cur, Index, Store, QUESTIONS,
@@ -63,9 +64,10 @@ pub fn coverage(units: &[Pair], questions: &HashSet<String>) -> Vec<String> {
             problems.push(format!("{place}: no claim - add {what}"));
         }
         for claim in &unit.claims {
-            for ptr in &claim.pointers {
-                if !questions.contains(super::index::page_name(ptr)) {
-                    problems.push(format!("{place}: `{ptr}` names no question file (find it with a glob on its heading id; `make fragment-move` renames)"));
+            // every page the claim cites, its account's too, as its bundle reads them (449 T249)
+            for name in cited_pages(claim) {
+                if !questions.contains(&name) {
+                    problems.push(format!("{place}: `{QUESTIONS}/{name}` names no question file (find it with a glob on its heading id; `make fragment-move` renames)"));
                 }
             }
         }
@@ -380,7 +382,7 @@ pub fn classify(cur: &Cur, index: &Index, base: &Base) -> Result<Judged, Fail> {
             continue;
         }
         let research_changed = match row {
-            Some(r) => research_fp(&r.claim.pointers, base.qdir, &mut memo)? != r.research,
+            Some(r) => research_fp(&cited_pages(&r.claim), base.qdir, &mut memo)? != r.research,
             None => false,
         };
         let same_core = base.cores.get(uid).is_some_and(|c| c == core);

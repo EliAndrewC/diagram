@@ -14,7 +14,7 @@ Guesses:
   driest depended on the valley, and no count of village seats was found.
 
 Depiction: The map seats the cluster along the upper edge of the fields, with its back to the rising ground,
-and keeps it off any drawn marsh.
+and keeps it off any drawn marsh. Every hamlet takes this seat, its land laid to fall away from the winter wind or square across it, so its houses keep their back to the wind; in reality it was one seat among several. Where a map sets its land to fall toward the wind, the houses still take the high edge, their back to the hill and off the wind.
 
 Name: Where the houses sit: on the high edge of the fields
 Covers: `meta.cluster_position = high_margin`

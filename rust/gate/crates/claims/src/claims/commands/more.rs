@@ -1,4 +1,4 @@
-//! The commands' other paths: the coverage, the accept, the counter-only clear, the stale figures, a bundle's own files missing, a
+//! The commands' other paths: the coverage, the accept, the counter-only clear with no merge base, a bundle's own files missing, a
 //! triage every claim of which is owed in full, the helpers with nothing to carry.
 
 use std::collections::HashMap;
@@ -8,10 +8,7 @@ use serde_json::{json, Map, Value};
 
 use super::{backfill, backfill_sections, refingerprint};
 use crate::claims::index::{Cur, Row};
-use crate::claims::tests::{
-    claims, commit_as_origin, counted_units, fixture, fixture_rust_only, record_all,
-    write_recorded, RECORDED_COUNTED,
-};
+use crate::claims::tests::{claims, commit_as_origin, fixture, record_all, write_recorded};
 use crate::record::testkit::{git, put};
 
 fn index(root: &Path) -> Value {
@@ -28,7 +25,7 @@ fn reply(root: &Path, text: &str) -> String {
 /// The fixture with its procedure's last section claimed, Python-free: the coverage's and the accept's tree (feature 449 T167 split the
 /// one test of both, over FR-008's tenth of a second, into three on a tree each; none reads what another wrote).
 fn covered(tag: &str) -> l7r_shared::tempdir::TempDir {
-    let root = fixture_rust_only(tag);
+    let root = fixture(tag);
     let buildings = std::fs::read_to_string(root.join("docs/buildings.md")).unwrap();
     std::fs::write(
         root.join("docs/buildings.md"),
@@ -183,53 +180,20 @@ fn a_recorded_tree_owes_nothing_and_an_unparsable_claim_is_no_unit() {
     ));
 }
 
-/// The counter-only tree: four Python units recorded on `origin/main`, two of them changed with only their counters moved or not,
-/// the engine changed (feature 449 T167 split the test reading it into two, each on a tree of its own, over FR-008's tenth of a second).
+/// A recorded tree on `origin/main` whose Rust engine then changed (the Python units the counter-only clear read, and its test, left
+/// with the engine's Python, feature 449 T158; the Rust clear is `counters`' test).
 fn countered(tag: &str) -> l7r_shared::tempdir::TempDir {
     let root = fixture(tag);
-    counted_units(&root);
-    // the recording written as `record_all` writes it, pinned by `the_recorded_state_is_what_record_all_writes`: a bundle and a record
-    // through the Python half, most of the test's time against FR-008's tenth of a second (feature 449 T167)
-    write_recorded(&root, RECORDED_COUNTED, "{}");
+    // the recording written as `record_all` writes it, pinned by `the_recorded_rust_units_are_what_record_all_writes` (feature 449 T167)
+    write_recorded(&root, "{}", "{}");
     commit_as_origin(&root, "recorded");
-    let mut ix = index(&root);
-    for (k, only) in [
-        ("l7r/diagram/m.py::helper#help", true),
-        ("l7r/diagram/m.py::other#other", false),
-    ] {
-        ix[k]["code"] = json!("old");
-        ix[k]["counter_only"] = json!(only);
-    }
-    // a module unit is never cleared by its counters (claims_counters.py's docstring): owed as before
-    for k in [
-        "l7r/diagram/m.py::Table#table",
-        "l7r/diagram/m.py::modl#modl",
-    ] {
-        ix[k]["code"] = json!("old");
-    }
-    std::fs::write(root.join("dev/claims-index.json"), ix.to_string()).unwrap();
     let lib = std::fs::read_to_string(root.join("rust/phases/src/lib.rs")).unwrap();
     std::fs::write(
         root.join("rust/phases/src/lib.rs"),
         lib.replace("let y = 3.25;", "let y = 3.5;"),
     )
     .unwrap();
-    put(&root, "l7r/diagram/m.py", "GAP = 13\n");
     root
-}
-
-#[test]
-fn a_counter_only_change_is_cleared_and_a_stale_figure_named() {
-    let root = countered("claims-more-counter");
-    let got = claims(&root, &["owed"]);
-    assert!(got.stdout.starts_with("claims-owed: 1 claim(s) cleared without a triage - their units only gained counter blocks (feature 446, FR-003)\n"));
-    assert!(got.stdout.contains("\nstale figure: the stub's\n"));
-    let ix = index(&root);
-    assert_eq!(
-        ix["l7r/diagram/m.py::helper#help"]["cleared"],
-        "counter-only (feature 446)"
-    );
-    assert!(ix["l7r/diagram/m.py::other#other"].get("cleared").is_none());
 }
 
 #[test]
@@ -293,8 +257,7 @@ fn a_bundle_missing_its_blocks_records_and_a_triage_reply_naming_nothing_owes_th
 
 #[test]
 fn a_triage_with_nothing_to_show_owes_every_claim_in_full() {
-    // no Python unit, so no Python half to start (feature 449 T167)
-    let root = fixture_rust_only("claims-more-forced");
+    let root = fixture("claims-more-forced");
     record_all(&root);
     let lib = std::fs::read_to_string(root.join("rust/phases/src/lib.rs")).unwrap();
     let lib = lib

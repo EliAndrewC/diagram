@@ -1,5 +1,5 @@
 About: A farm that plowed with a beast kept an ox, a water buffalo or a horse - in Japan horses in the east and cattle in the
-west, in China's rice country the ox and the water buffalo - and the beast lived with the household that kept it. Across most
+west, in China's rice country the ox and the water buffalo - and the beast lived with the household that kept it. Across much
 of Japan its stall was a corner of the farmhouse's earth floor, but elsewhere it stood in a stable of its own: the outer
 stable, a building apart from the house in the household's own plot. In some regions, southern Kanto among them, the inner
 stable was rare.
@@ -10,11 +10,11 @@ one at a corner along the road. How big an ordinary smallholder's stable was is 
 farmsteads registered as cultural properties.
 
 Not every household kept a beast: in one western province from the early 1700s only about half did, and fewer as time went
-on. In one village of 16 households counted in 1885, 8 kept a stable.
+on. In one village of 16 households, 8 kept a stable.
 
 Guesses:
 - How far the shed stands from the farmhouse, about 6 to 12 ft off its wall: no source gives it.
-- That a settlement keeps its beasts in a shed in the yard, indoors, or in shared sheds, about three, six and one time in ten: no source counts the forms.
+- That a settlement keeps its beasts in a shed in the yard, indoors, or in shared sheds, about three, six and one time in ten: no source counts the forms from one settlement to the next; a modern count found the beasts inside the house at about six old farmhouses in ten, and no shared shed was found.
 - That between 35 and 50 in every 100 households keep a beast: the top is the half one province's households kept in the early 1700s, the bottom the fewer that kept one later; how many fewer no source gives, and one village of 1824 had a stable at about two houses in three, above the range.
 
 Depiction: The map draws the stable as a small one-room shed of about 16 by 11 ft, open-fronted under a plank roof, standing

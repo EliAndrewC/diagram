@@ -1,0 +1,45 @@
+SOUND - The polder fringe's count, 2,310 at 10 households and 3,206 at 20 (the top of its bounded n), is within twice my first-principles estimate, every factor comes from the Bounds or the geometry with slack 1, and the tightenings I found come to about 46%, under S10's half.
+
+**First-principles estimate (S11), taken at 20 households.** The plan refuses a polder past 20, so 20 stands in for 40. From `contract.md` alone:
+- **What it writes:** 2 strips cut into 4 pieces, 111 points in all.
+- **Face read once:** 178.
+- **Channels read:** 6.
+- **Rings laid:** each strip's ring from the face, about m = 53 points, so 2 x 53 = 106.
+- **Beds cut:** 2 drain beds per strip, each a difference against a 4-sided bed at about 6m (4m side signs, one corner in the ring at m, the walk at m), so 4 x 318 = 1,272.
+- **Extent test and write:** 2 x 111 = 222.
+
+That totals about 1,780. The derivation's 3,206 is 1.8x that, inside twice. At 10 households the same steps give about 1,300, and 2,310 is 1.8x. By the reference rate (2 strips at a few thousand each, 4,000-8,000), it sits well under; the derivation's own figure is about 1,600 a strip.
+
+**Q0, the total:** Within twice the estimate at both sizes. There is no map-wide raster or area term. The only once terms are the face (120/178) and the channels (6), both inputs read once.
+
+**Q1, derived:**
+- Items: 2 flanks laid, measured at every seed.
+- Beds: 4, measured (the drain's 2 reaches meet both strips, the feeder's neither).
+- m: 38 and 53, the strips' mean points from the Bounds.
+- Pieces: 82 and 111 points, from the Bounds.
+- Slack: 1.
+- Arithmetic: 8 + 2,008 + 82 + 82 + 120 + 6 + 4 = 2,310 and 8 + 2,788 + 111 + 111 + 178 + 6 + 4 = 3,206; the exponent, ln(3,206/2,310)/ln 2 = 0.47, matches the derivation's 0.48.
+
+Every factor is the typical case, not a worst case.
+
+**Q2, cheaper algorithm:** No set that grows with the map is scored. Each reach is asked by its box first, and the cut faces a constant 4 reaches (S1, S3, S9 hold). Note, not a finding: the bed row's 13m + 8 has two savings.
+- The 4m edge-crossing tests follow from the 4m vertex-side signs already taken.
+- Three of the four corner-in-ring tests (3m) follow from crossing parity along the bed, as in the standard Greiner-Hormann method.
+
+That is 7m a bed, 28m over the 4 beds: 1,064 of 2,310 and 1,484 of 3,206, about 46%, under half. A per-edge box prune would not push it past half. The drain's long reach runs down the foot, with slivers between its bed and the dike, so its box covers most of that strip's ring.
+
+**Q3, padding:** None found beyond the Q2 note. Taking m from the pieces' points after the cuts overstates the ring before the cuts by a few corner points, which is negligible. Unpriced step (note): the pseudocode's "the strip from the face out to its depth or the frame" has no row of its own. It costs about m a strip, roughly 76 at 10 and 106 at 20 (3%). It is named here so a later audit reads it as known work, not waste.
+
+**Q4, units:** Every figure is read as its source states it:
+- Face points: 120 and 178, used as points.
+- Pieces' points: 82 and 111, used as points.
+- m: the two strips' mean, (39 + 37)/2 = 38 and (60 + 45)/2 = 52.5, rounded to 53.
+- Channels: 6 points over 4 reaches.
+
+The widths (3 and 5.5 ft) and the depth (280 ft) do not enter the count.
+
+**Earlier findings:** Verdicts 1-5 are closed. Their findings and notes were all prices for the marsh drawing (wave samples, keep-out grid, arcs, ring index, the boxes), which this contract no longer writes. That includes verdict 3's carried note on the earlier strips taken out twice, gone with the drawn ground, and verdict 5's missed-work rows, rightly dropped in a lowering. The audit-1 to audit-3 and T226 entries cite verdicts the bundle does not hold, so I cannot confirm them from it. Dropping a piece past the dike's extent is decided before the pieces are written, so it is not a placement repair (S4).
+
+Files: /tmp/l7r-check/work-budget-budget-waterward.polder/derivation.md, /tmp/l7r-check/work-budget-budget-waterward.polder/contract.md, /tmp/l7r-check/work-budget-budget-waterward.polder/rubric.md
+
+(2026-11-22, MODE BUDGET of waterward.polder, feature 449 T235: the re-derivation dropping the marsh term, one blind dispatch - a lowering.)

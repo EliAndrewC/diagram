@@ -114,14 +114,14 @@ fn second_red_gate(root: &Path, now: f64) -> Result<(), String> {
 /// # Errors
 ///
 /// Where what it reads, writes or runs fails: the error says which and why.
-pub fn current_hash(root: &Path, python: &str) -> Result<String, String> {
-    stamp::area_key_named(root, "diagram", python)
+pub fn current_hash(root: &Path) -> Result<String, String> {
+    stamp::area_key_named(root, "diagram")
 }
 
 /// # Errors
 ///
 /// Where what it reads, writes or runs fails: the error says which and why.
-pub fn write(root: &Path, event: &str, target: &str, python: &str) -> Result<State, String> {
+pub fn write(root: &Path, event: &str, target: &str) -> Result<State, String> {
     if event != GREEN && event != FAILED {
         return Err(format!(
             "unknown verification event '{event}' (want {GREEN} or {FAILED})"
@@ -135,8 +135,8 @@ pub fn write(root: &Path, event: &str, target: &str, python: &str) -> Result<Sta
         }
         stated(std::fs::write(&last, format!("{event}\n")), "last-gate")?;
     }
-    let hash = current_hash(root, python)?;
-    let engine_key = delta::engine_key_worktree(root, python)?;
+    let hash = current_hash(root)?;
+    let engine_key = delta::engine_key_worktree(root)?;
     // a green subset never forgets a green gate on the same content (GM 2026-08-26): the record is one slot
     if let Some(standing) = prior.as_ref().filter(|p| {
         event == GREEN
@@ -161,7 +161,7 @@ pub fn write(root: &Path, event: &str, target: &str, python: &str) -> Result<Sta
 }
 
 /// Whether a green `make done` already stands on exactly this content (feature 132 amendment, GM 2026-08-25), and why.
-fn already_verified(root: &Path, python: &str) -> Result<(bool, String), String> {
+fn already_verified(root: &Path) -> Result<(bool, String), String> {
     let Some(st) = read(root)? else {
         return Ok((false, "no local check recorded in this clone".to_owned()));
     };
@@ -175,27 +175,27 @@ fn already_verified(root: &Path, python: &str) -> Result<(bool, String), String>
             ),
         ));
     }
-    if st.hash != current_hash(root, python)? {
+    if st.hash != current_hash(root)? {
         return Ok((false, format!("`make done` was green at {at} ({sha}), but the engine code it tested (Python, Rust, the pool's sources) changed since - that run vouched for different code")));
     }
-    if st.engine_key.is_empty() || st.engine_key != delta::engine_key_worktree(root, python)? {
+    if st.engine_key.is_empty() || st.engine_key != delta::engine_key_worktree(root)? {
         return Ok((false, format!("`make done` was green at {at} ({sha}), but it recorded no engine key, or the engine content changed since - that run vouched for different content")));
     }
     Ok((true, format!("already verified: `make done` was green at {at} ({sha}) against exactly this engine content - nothing it exercises has changed (docs, the Makefile, config and scripts/ do not count)")))
 }
 
 /// `l7r-gate state write EVENT TARGET [reused] | read | dir | verified-done`.
-pub fn cli(args: &[String], root: &Path, python: &str) -> crate::Reply {
+pub fn cli(args: &[String], root: &Path) -> crate::Reply {
     let words: Vec<&str> = args.iter().map(String::as_str).collect();
     let verified = |(ok, why): (bool, String)| (format!("make done: {why}\n"), i32::from(!ok));
     let answer: Result<(String, i32), String> = match words.as_slice() {
-        ["write", event, target] => write(root, event, target, python).map(|s| {
+        ["write", event, target] => write(root, event, target).map(|s| {
             (
                 format!("verification-state: {} ({}) recorded\n", s.event, s.target),
                 0,
             )
         }),
-        ["write", event, target, "reused"] => write(root, event, target, python).map(|s| {
+        ["write", event, target, "reused"] => write(root, event, target).map(|s| {
             (
                 format!("verification-state: {} ({}) recorded\n", s.event, s.target),
                 0,
@@ -203,7 +203,7 @@ pub fn cli(args: &[String], root: &Path, python: &str) -> crate::Reply {
         }),
         ["read"] => read(root).map(|s| (format!("{}\n", s.map_or(Value::Null, |st| st.json())), 0)),
         ["dir"] => Ok((format!("{}\n", dir_of(root).display()), 0)),
-        ["verified-done"] => already_verified(root, python).map(verified),
+        ["verified-done"] => already_verified(root).map(verified),
         _ => return crate::Reply {
             stdout: String::new(),
             stderr:

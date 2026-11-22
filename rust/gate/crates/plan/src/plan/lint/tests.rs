@@ -536,3 +536,55 @@ fn a_blocks_deferral_is_excused_by_its_task() {
         .is_empty()
     );
 }
+
+/// A multiple is a figure with a unit, in a heading as in the Approach (feature 449 T203): T202's heading carried "704x its SOUND
+/// derived budget" and passed, the heading read and the multiple no figure to any rule.
+#[test]
+fn a_multiple_needs_a_label_in_a_heading_as_in_the_approach() {
+    let none = Path::new("/no/such");
+    let t202 = "### T202 (T198: today's placer 704x its SOUND derived budget)\n\n- **Approach**: rebuilt.\n";
+    let found = first(unlabeled_unit_figure(t202));
+    assert!(found.contains("704x"), "{found}");
+    let told = refusal(none, t202);
+    holds(&told, &["line 1: ### T202", "a figure with a unit"]);
+    let range = first(unlabeled_unit_figure(
+        "- **Approach**: 100x-4,400x over its budget.\n",
+    ));
+    assert!(range.contains("4,400x"), "{range}");
+    let item4 = first(unlabeled_figure(
+        "### T05 Approach\n\n4. **World.** It ran 704x its budget.\n",
+    ));
+    assert!(item4.contains("704x"), "{item4}");
+    for fine in [
+        "### T202 (T198: 704x its budget, measured 2026-11-19 (`make budget-sheets`))\n",
+        "### T05 (a stage lands at up to 2x its budget; past 2x, two SOUNDs)\n",
+        "### T05 (the 2x rule)\n",
+        "### T05 (a 3x3 grid, `0x1F`)\n",
+        "```\n# 704x in a fence\n```\n",
+    ] {
+        assert_eq!(first(unlabeled_unit_figure(fine)), "", "{fine}");
+    }
+}
+
+/// A count spelled as a word is a figure (feature 449 T203): T209's "moved five captions a few pixels" passed unlabeled.
+#[test]
+fn a_count_spelled_as_a_word_needs_a_label() {
+    let t209 = "- **Approach**: a way's caption now stands the usual gap off its stroke too, which moved five captions a few pixels.\n";
+    let found = first(unlabeled_count(t209));
+    assert!(found.contains("five captions"), "{found}");
+    // item 4's any-number rule names by the words more than it counts by them, so it leaves them to the counted nouns
+    let item4 = first(unlabeled_figure(
+        "### T05 Approach\n\n4. **World.** Yes: the three checks are the two places.\n",
+    ));
+    assert_eq!(item4, "");
+    let counted = first(unlabeled_count("4. **World.** Six files moved.\n"));
+    assert!(counted.contains("Six files"), "{counted}");
+    for fine in [
+        "It moved five captions (observed 2026-11-19, method: the picture diff).\n",
+        "At most ten keys a write.\n",
+        "The one caption moved.\n",
+        "Fivefold the captions.\n",
+    ] {
+        assert_eq!(first(unlabeled_count(fine)), "", "{fine}");
+    }
+}

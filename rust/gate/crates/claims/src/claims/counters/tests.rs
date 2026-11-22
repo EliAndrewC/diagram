@@ -1,10 +1,10 @@
 //! The counter-only clear on Rust (feature 449 T165): a unit that only gained counter statements is the base's version, anything else is
-//! code; and the clear end to end on a scratch repository - a Rust claim cleared, a `.py` one still asked of the Python.
+//! code; and the clear end to end on a scratch repository - a Rust claim cleared.
 
 use serde_json::{json, Value};
 
 use super::counter_only;
-use crate::claims::tests::{claims, fixture, fixture_with};
+use crate::claims::tests::{claims, fixture};
 use crate::claims::units::{all_rust_units, rust_units, Unit};
 use crate::record::testkit::{commit, git, put};
 
@@ -124,12 +124,10 @@ fn index(root: &std::path::Path) -> Value {
         .unwrap()
 }
 
-/// The Python half's own clear, and a module unit's, are `commands::more`'s test; here a Rust claim is cleared, on a tree with no `.py`
-/// file (no runner started). The rows are written as a check records them (their code the base's), so no bundle round is run.
+/// A Rust claim cleared (the `.py` unit's arm left with the engine's Python, feature 449 T158). The rows are written as a check records them (their code the base's), so no bundle round is run.
 #[test]
 fn the_clear_records_a_rust_claim() {
     let root = fixture("claims-counters-rs");
-    std::fs::remove_file(root.join("l7r/diagram/m.py")).unwrap();
     let path = "rust/phases/src/lib.rs";
     let lib = std::fs::read_to_string(root.join(path)).unwrap();
     let counted = lib.replace(
@@ -179,9 +177,7 @@ fn the_clear_records_a_rust_claim() {
 /// constants' values now, which the recorded code, taken at the old value, no longer matches - so the claim is owed, not cleared.
 #[test]
 fn a_counter_beside_a_changed_constant_is_not_cleared() {
-    let root = fixture_with("claims-counters-const", &|root| {
-        std::fs::remove_file(root.join("l7r/diagram/m.py")).unwrap();
-    });
+    let root = fixture("claims-counters-const");
     let path = "rust/phases/src/lib.rs";
     let lib = std::fs::read_to_string(root.join(path)).unwrap();
     let mut idx = serde_json::Map::new();

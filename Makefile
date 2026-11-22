@@ -44,11 +44,11 @@ budget-set:     ## [performance] a stage's FIRST work budget, only from a SOUND 
 budget-sheets:  ## [performance] a Mode A stage's counted operations against its per-sheet budget (dev/work-budget.json's sheet_stages, set by make budget-set on a pool-sheet derivation): each sheet's ratio, and those past twice it (feature 449 T201)   PHASE=<stage> COUNTS="<sheet>=<ops> <sheet>=<ops> ..."
 	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" budget-change sheets "$(PHASE)" "$(COUNTS)"
 
-budget-change:  ## [performance] change a budgeted stage's figure with the GM's own words, checked against the session by budget-change-hooks.sh and logged in dev/work-budget-changes.jsonl (feature 443)   PHASE=<stage> TO=<ops per thing> [EXPONENT=<e>] [DERIVATION=<file> VERDICT=<SOUND verdict>: re-point it, 444 FR-015] WORDS="<the GM's words>"
-	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" budget-change change "$(PHASE)" "$(TO)" $(if $(EXPONENT),--exponent "$(EXPONENT)",) $(if $(ITEMS_AT_20),--items-at-20 "$(ITEMS_AT_20)",) $(if $(ITEMS_AT_40),--items-at-40 "$(ITEMS_AT_40)",) $(if $(ITEMS_AT_80),--items-at-80 "$(ITEMS_AT_80)",) $(if $(DERIVATION),--derivation "$(DERIVATION)",) $(if $(VERDICT),--verdict "$(VERDICT)",) --words "$$WORDS"
+budget-change:  ## [performance] change a budgeted stage's figure with the GM's own words, checked against the session by budget-change-hooks.sh and logged in dev/work-budget-changes.jsonl (feature 443)   PHASE=<stage> TO=<ops per thing> [EXPONENT=<e>] [ITEMS_AT_<h>=<items>, at the stage's own sizes: 20 40 80, a form's 10 20 (449 T253)] [DERIVATION=<file> VERDICT=<SOUND verdict>: re-point it, 444 FR-015] WORDS="<the GM's words>" | a pool-sheet stage: TO="<sheet>=<ops> ..." and/or DERIVATION= VERDICT= (its Totals), WORDS= (449 T243)
+	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" budget-change change "$(PHASE)" "$$TO" $(if $(EXPONENT),--exponent "$(EXPONENT)",) $(if $(ITEMS_AT_10),--items-at-10 "$(ITEMS_AT_10)",) $(if $(ITEMS_AT_20),--items-at-20 "$(ITEMS_AT_20)",) $(if $(ITEMS_AT_40),--items-at-40 "$(ITEMS_AT_40)",) $(if $(ITEMS_AT_80),--items-at-80 "$(ITEMS_AT_80)",) $(if $(DERIVATION),--derivation "$(DERIVATION)",) $(if $(VERDICT),--verdict "$(VERDICT)",) --words "$$WORDS"
 
-budget-accept:  ## [performance] accept a rebuilt phase: its MODE AUDIT verdict WITHIN and its counted operations at its sizes (40 and 80 households; a form at its own) in the newest work-budget run at most its budget (LEEWAY: at most twice it, 444 FR-022), recorded as the figures the push's ratchet holds (feature 444 FR-005)   PHASE=<stage> AUDIT=<MODE AUDIT verdict file, in the repository beside the stage's derivation> [ARBITER=<the round arbiter's accept, when the audit's last round was not WITHIN>]
-	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" budget-change accept "$(PHASE)" "$(AUDIT)" $(if $(ARBITER),--arbiter "$(ARBITER)",)
+budget-accept:  ## [performance] accept a rebuilt phase: its MODE AUDIT verdict WITHIN and its counted operations at its sizes (40 and 80 households; a form at its own) in the newest work-budget run at most its budget (LEEWAY: at most twice it, 444 FR-022), recorded as the figures the push's ratchet holds (feature 444 FR-005)   PHASE=<stage> AUDIT=<MODE AUDIT verdict file, in the repository beside the stage's derivation> [ARBITER=<the round arbiter's accept, when the audit's last round was not WITHIN>] | a pool-sheet stage: COUNTS="<sheet>=<ops> ..." its count on every sheet, held to its budget there (449 T243)
+	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" budget-change accept "$(PHASE)" "$(AUDIT)" $(if $(ARBITER),--arbiter "$(ARBITER)",) $(if $(COUNTS),--counts "$$COUNTS",)
 
 budget-program: ## [performance] set the whole roll's work budget with the GM's own words, checked and logged as budget-change is (feature 443; 444 FR-002)   OPS_AT_40=<ops> EXPONENT=<e> WORDS="<the GM's words>"
 	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" budget-change program "$(OPS_AT_40)" "$(EXPONENT)" --words "$$WORDS"
@@ -591,12 +591,12 @@ phase-read:     ## [project] let ONE of a started phase task's held old-code fil
 	@if [ -z "$(FILE)" ] || [ -z "$$WHY" ]; then printf 'make phase-read: FILE=<path> and WHY="<reason>" are required\n' >&2; exit 2; fi
 	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" phase-read allow "$(FILE)" "$$WHY"
 
-task-start:     ## [project] name the task you are starting, so its checks wait for its decisions' verdict; a phase task's old code is held from reading until it is ticked (features 375, 444); refused while an open [perf] task waits in an active feature (451 FR-013), escape PERF_LATER_OK="<reason>", recorded by the tool   F=375 T=T13
+task-start:     ## [project] name the task you are starting, so its checks wait for its decisions' verdict; a phase task's old code is held from reading until it is ticked (features 375, 444); refused while an open [perf] task waits in an active feature (451 FR-013), escape PERF_LATER_OK="<reason>", recorded by the tool; T=a,b,c starts a bundle under its first task (451 T141)   F=375 T=T13 (or T=T13,T14,T15)
 	@if [ -z "$(F)" ] || [ -z "$(T)" ]; then printf 'make task-start: F=<feature> and T=<task id> are required\n' >&2; exit 2; fi
 	$(if $(HOLD_OK),$(LOGESCAPE) HOLD_OK "$$HOLD_OK",@:)
 	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" task-start "$(F)" "$(T)"
 
-decide:         ## [project] the spec-fidelity dispatch that rules on one task's plan section before its checks (feature 375); a found-and-left deferral without its reason, filed task and order, or naming no open task, refused, escape DEFER_FORM_OK="<reason>" (451 T17)   F=375 T=T13
+decide:         ## [project] the spec-fidelity dispatch that rules on one task's plan section before its checks (feature 375); a found-and-left deferral without its reason, filed task and order, or naming no open task, refused, escape DEFER_FORM_OK="<reason>" (451 T17); T=a,b,c decides a bundle's one section in one dispatch (451 T141)   F=375 T=T13 (or T=T13,T14,T15)
 	@if [ -z "$(F)" ] || [ -z "$(T)" ]; then printf 'make decide: F=<feature> and T=<task id> are required\n' >&2; exit 2; fi
 	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" plan decide "$(F)" "$(T)"
 
@@ -642,10 +642,6 @@ speckit-todo:   ## [project] list the spec-kit features not yet closed - filed, 
 ##  AFFECTS=tooling  only the features carrying that tag, same layout (several: AFFECTS="tooling, magistracy")
 ##  CHECK=1 exit 1, with the line to add, when an open feature's spec has no `**Affects**:` tag or an unknown one
 	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" speckit-todo --root "$$(git rev-parse --show-toplevel)" $(if $(ALL),--all,) $(if $(filter affects,$(BY)),--by-affects,) $(if $(AFFECTS),--affects "$(AFFECTS)",) $(if $(CHECK),--check,)
-
-replay-owing:   ## [project] replay recorded commits through the old owing and the new: modal-depiction units and impl-drift claims owed, per commit and in total (feature 375 SC-001)   REVS="<sha> ..." [OUT=<dir>]
-	@if [ -z "$(REVS)" ]; then printf 'make replay-owing: REVS="<commit> ..." is required\n' >&2; exit 2; fi
-	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" replay-owing $(REVS) $(if $(OUT),--out "$(OUT)",) $(if $(TRIAGE),--triage,)
 
 preflight:      ## [tests] the gate's first phase, in seconds: the derived files regenerated, the record and its pointers, make quick - and, here only (not in the gate, 405 T47), the changed engine lines a quick test runs (feature 375)
 	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" preflight --root "$$(git rev-parse --show-toplevel)"
@@ -955,9 +951,6 @@ review-verdict:  ## [project] a review check's LAST act - write the unit's verdi
 ##  FINDINGS=<file>    a JSON list of {"id", "severity", "what"}; ids default to F1, F2, ...
 	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" reviews prereq verdict --clone "$$(git rev-parse --show-toplevel)" --unit "$(or $(UNIT),$(MAP))" --verdict "$(VERDICT)" $(if $(FINDINGS),--findings-file "$(FINDINGS)",)
 
-dead-closure:   ## [diagnostics] what a deletion leaves dead and which deleted name a file still calls (frozen exhibits included), against BASE (feature 388)   [BASE=HEAD]
-	@python3 scripts/measure/dead_closure.py --base "$(or $(BASE),HEAD)"
-
 parts-sweep:     ## [tests] run each split guard suite at 1, 2, 3 and 8 parts and report any count whose result differs - after a suite's cases change; never in the gate   [SUITES="test-pair-hooks.sh ..."]
 	@set -f; bash tests/hooks/parts_sweep.sh $$SUITES
 
@@ -969,8 +962,7 @@ wave-report:     ## [project] a workflow wave's cost - each agent's first-reques
 
 # Timed with date +%s, not $$SECONDS: make's shell is sh, where SECONDS is unset.
 # The ratchet and the budget judge warm, selective runs only; raise the budget only with a measurement.
-quick:           ## [tests] tier 2: lint and the fast tree checks (no Python test remains since feature 449 T211; pytest is gone since T213)
-	@python3 -m ruff check l7r/
+quick:           ## [tests] tier 2: the fast tree checks (no Python test remains since feature 449 T211; pytest is gone since T213, ruff since T158)
 	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" check house-style-delta --selftest >/dev/null
 	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" check house-style-delta .
 	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" check question-size
@@ -985,7 +977,7 @@ quick:           ## [tests] tier 2: lint and the fast tree checks (no Python tes
 # One run of `make static` for static-runs-hooks; FRESH=1 REASON= and HOOKS_ALL=1 reach the checks as on their own targets.
 # THE CALLER'S TASK (451 T86): T= (F= when two features share a task number) judges the files and crates that task changed, another
 # task's red in the same clone reported apart and not counted (the script's header); with no T= the whole clone, as before.
-closing-checks:  ## [tests] make static, make hooks-test and make quick at once, one combined result (each verdict and log; red if any is): start it with run_in_background once the code is done, then write the plan section and run make decide while it runs (451 T55); T= judges that task's files and crates, another task's red reported apart, not counted (451 T86)   T=<task> [F=<feature>] [FRESH=1 REASON="..."] [HOOKS_ALL=1]
+closing-checks:  ## [tests] make static, make hooks-test and make quick at once, one combined result (each verdict and log; red if any is): start it with run_in_background once the code is done, then write the plan section and run make decide while it runs (451 T55); T= judges that task's files and crates, another task's red reported apart, not counted (451 T86); T=a,b,c judges a bundle's files as one task's (451 T141)   T=<task> [F=<feature>] [FRESH=1 REASON="..."] [HOOKS_ALL=1]
 	@CLOSING_TASK="$(T)" CLOSING_FEATURE="$(F)" "$$(git rev-parse --show-toplevel)/scripts/gates/closing-checks.sh"
 
 bypass-audit:    ## [project] every escape token taken, with the reason its user gave   (the FULL prompt reads this)
@@ -1059,9 +1051,8 @@ static format test: | guard
 # which T168 met only at `make claims-owed`, before lint; it reads the Rust alone, 0.05 s over every walked crate (measured 2026-11-17).
 # NO CRATE BUILDS ON THE GUARD (feature 451 T66): `check guard-deps` refuses a manifest under rust/ naming `l7r_guard`, but the guard's,
 # so a hook edit keeps rebuilding the guard alone (T58: 1 crate where the dependents made it 32); it names `l7r_shared` instead.
-static:        ## [static] the static checks: ruff's outright errors, file-scale, the Rust crates' checks (was `lint`), each crate's kept green result reused while its inputs stand (449 T93)   [FRESH=1 REASON="..."]
+static:        ## [static] the static checks: file-scale, the Rust crates' checks (was `lint`), each crate's kept green result reused while its inputs stand (449 T93)   [FRESH=1 REASON="..."]
 	$(FRESH_ESCAPE)
-	python3 -m ruff check .
 	"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" check file-scale --selftest
 	"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" check file-scale .
 	"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" claims --root "$$(git rev-parse --show-toplevel)" coverage --rust

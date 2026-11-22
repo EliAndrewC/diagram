@@ -1,10 +1,10 @@
 About: A farm that plowed with a beast kept an ox, a water buffalo or a horse - in Japan horses in the east and cattle in the
-west, in China's rice country the ox and the water buffalo - and the beast lived with the household that kept it. Across most
+west, in China's rice country the ox and the water buffalo - and the beast lived with the household that kept it. Across much
 of Japan its stall took a corner of the farmhouse's earth-floored work space: the inner stable, under the house's own roof.
 In the Okayama region the cattle sheds were mostly of this inner kind, and in one mountain district of Hyogo the stall
 was inside the house partly because there was too little flat land to spare for a separate shed.
 
-In northern Japan's L-shaped farmhouse, the magariya, the stable was a wing of the house itself, warmed by the air from the
+In northern Japan's L-shaped farmhouse, the magariya, the stable was a wing of the house itself, often warmed by the air from the
 kitchen hearth; it was common among the better-off households, a headman's among them. In one village of eastern Musashi
 in 1824, 50 of its 76 houses had a stable, most of them such a wing off the earth floor. In Shaanxi, in north China, a
 wealthy courtyard house often gave its east wing to a store, a kitchen or a stable.

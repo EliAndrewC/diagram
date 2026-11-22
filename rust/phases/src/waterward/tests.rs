@@ -3,7 +3,7 @@
 //! Research:
 //!     the fringe's tests - NONE: fixtures and assertions, deciding nothing about the place
 
-use super::{bed, clip, difference, face, face_at, flanks, fringe, nearest};
+use super::{bed, clip, difference, face, face_at, file, flanks, fringe, nearest};
 use crate::field::fan::Pt;
 
 /// A box's outline walked round, 21 corners a side (each side's last the next one's first, so 84 in all).
@@ -22,6 +22,18 @@ fn ring(x0: f64, y0: f64, x1: f64, y1: f64) -> Vec<(f64, f64)> {
 }
 
 const SQUARE: (f64, f64, f64, f64) = (1000.0, 1000.0, 2000.0, 2000.0);
+
+/// A flank's face of `dike`, its corners filed afresh (`file`), the filing's tests left uncounted.
+fn face_of(
+    dike: &[Pt],
+    bbox: (f64, f64, f64, f64),
+    flank: char,
+    (lo, hi): (f64, f64),
+    tests: &mut u64,
+) -> Vec<Pt> {
+    let filed = file(dike, bbox, &mut 0);
+    face(dike, &filed, bbox, flank, lo, hi, tests)
+}
 
 #[test]
 fn the_foot_and_the_cross_flanks_the_village_does_not_stand_on() {
@@ -48,18 +60,18 @@ fn the_strip_follows_the_dike_s_outer_face() {
     let dike = ring(1000.0, 1000.0, 2000.0, 2000.0);
     let mut t = 0;
     // the outermost face of the west side, a run at one face its ends only
-    let west = face(&dike, SQUARE, 'W', 970.0, 2020.0, &mut t);
+    let west = face_of(&dike, SQUARE, 'W', (970.0, 2020.0), &mut t);
     assert!(west.iter().all(|p| (p.0 - 1000.0).abs() < 1e-9) && west.len() < 32);
-    let north = face(&dike, SQUARE, 'N', 970.0, 2020.0, &mut t);
-    let south = face(&dike, SQUARE, 'S', 970.0, 2020.0, &mut t);
-    let east = face(&dike, SQUARE, 'E', 970.0, 2020.0, &mut t);
+    let north = face_of(&dike, SQUARE, 'N', (970.0, 2020.0), &mut t);
+    let south = face_of(&dike, SQUARE, 'S', (970.0, 2020.0), &mut t);
+    let east = face_of(&dike, SQUARE, 'E', (970.0, 2020.0), &mut t);
     assert!(
         north.iter().all(|p| (p.1 - 1000.0).abs() < 1e-9)
             && south.iter().all(|p| (p.1 - 2000.0).abs() < 1e-9)
             && east.iter().all(|p| (p.0 - 2000.0).abs() < 1e-9)
     );
     // a span past the ring takes the box's side in the bins the face does not reach
-    let wide = face(&dike, SQUARE, 'W', 0.0, 3000.0, &mut t);
+    let wide = face_of(&dike, SQUARE, 'W', (0.0, 3000.0), &mut t);
     assert!(wide.iter().all(|p| (p.0 - 1000.0).abs() < 1e-9));
 }
 
@@ -78,7 +90,7 @@ fn the_face_keeps_to_its_own_side_round_a_corner_and_never_runs_inside_the_ring(
     dike.push((1000.0, 1040.0));
     let bbox = (990.0, 1000.0, 2000.0, 2000.0);
     let mut t = 0;
-    let west = face(&dike, bbox, 'W', 970.0, 2020.0, &mut t);
+    let west = face_of(&dike, bbox, 'W', (970.0, 2020.0), &mut t);
     // never past the corner's own west face
     assert!(west.iter().all(|p| p.0 <= 1000.0), "{west:?}");
     // every point of the west face the strip reaches at or outside it
@@ -187,8 +199,8 @@ fn a_polder_s_strips_run_off_toward_the_frame_and_none_without_a_dike() {
     );
     #[cfg(feature = "counters")] // a count, kept by the counting build alone (FR-012)
     assert!(f.counts["write@strip"] > 0);
-    // EVERY LOOP COUNTED (feature 449 T226, rubric S5; 449 T236): the ring's 84 corners. Each face files every corner to its side
-    // and walks them again for its own (2 x 84), sorts its own along the axis, a comparison each, asks its two ends' neighbors (4)
+    // EVERY LOOP COUNTED (feature 449 T226, rubric S5; 449 T236): the ring's 84 corners. Every corner is filed to its side once for
+    // all the flanks (84, 449 T250); each face sorts its own along the axis, a comparison each, asks its two ends' neighbors (4)
     // and writes its own out (23) - the face's own tally; each strip turns its face to (along, depth) (n), filters its points into
     // the strip (n) and reads the face at its two ends by halving (the bits of n and one more, each), boxes the strip (its n + 2
     // corners: the face but its two ends, the face read at them, the two outer corners) and reads its one piece's span (n + 2), no
@@ -196,10 +208,12 @@ fn a_polder_s_strips_run_off_toward_the_frame_and_none_without_a_dike() {
     #[cfg(feature = "counters")]
     {
         let mut t = 0;
-        let w = face(&dike, SQUARE, 'W', 970.0, 2020.0, &mut t);
-        let s = face(&dike, SQUARE, 'S', 970.0, 2020.0, &mut t);
+        let filed = file(&dike, SQUARE, &mut t);
+        let w = face(&dike, &filed, SQUARE, 'W', 970.0, 2020.0, &mut t);
+        let s = face(&dike, &filed, SQUARE, 'S', 970.0, 2020.0, &mut t);
         // the 21 corners of a side and its two neighbors' ends on it, 23 own, sorted: more than 22 comparisons each
-        assert!(t > 2 * (2 * 84 + 4 + 23 + 22));
+        let least = 84 + 2 * (4 + 23 + 22);
+        assert!(t > least);
         let steps = |n: u64| u64::from(u64::BITS - n.leading_zeros()) + 1;
         let per = |n: u64| n + n + 2 * steps(n) + 2 * (n + 2);
         let want = t + per(w.len() as u64) + per(s.len() as u64);
@@ -224,6 +238,39 @@ fn a_polder_s_strips_run_off_toward_the_frame_and_none_without_a_dike() {
     assert!(fringe(&[], &[], 280.0, (3000.0, 3000.0), (0.0, 1.0), None)
         .strips
         .is_empty());
+}
+
+/// THE CORNERS FILED ONCE (449 T250, audit-4 of `waterward.polder`): a dike corner is filed to the side of the box it stands nearest
+/// once for all the flanks, so corners added on the head's side, a side no flank faces, cost the fringe one test each - not one a
+/// flank asked and one more for its own walk. Red before T250's fix: each flank's face filed and walked the whole ring again, four
+/// tests a corner over the west and south flanks.
+#[test]
+#[cfg(feature = "counters")]
+fn each_dike_corner_is_filed_once_for_all_the_flanks() {
+    // the 84-corner square, and the same square with its north side walked in 80 steps, not 20: 60 corners more, all filed north
+    let plain = ring(1000.0, 1000.0, 2000.0, 2000.0);
+    let mut dense: Vec<Pt> = (0..80)
+        .map(|k| (1000.0 + 12.5 * f64::from(k), 1000.0))
+        .collect();
+    dense.extend(plain.iter().skip(20).copied());
+    let face_tests = |dike: &[Pt]| {
+        let f = fringe(
+            dike,
+            &[],
+            280.0,
+            (3000.0, 3000.0),
+            (0.0, 1.0),
+            Some((1.0, 0.0)),
+        );
+        (f.counts["test@face"], f.strips)
+    };
+    let ((few, few_strips), (many, many_strips)) = (face_tests(&plain), face_tests(&dense));
+    let (added, grown, same) = (
+        dense.len() - plain.len(),
+        many - few,
+        few_strips == many_strips,
+    );
+    assert_eq!((added, grown, same), (60, 60, true));
 }
 
 /// How far out from the channel `a` to `b` (`w` feet wide) the reeds stand beside its banks, at depths `ys` into the foot's strip:

@@ -265,6 +265,8 @@ pub fn board_by_a_gate(board: FtBox, openings: &[(f64, f64)]) -> bool {
 #[cfg(test)]
 mod gen_tests;
 #[cfg(test)]
+mod gen_tests_ground;
+#[cfg(test)]
 mod gen_tests_parts;
 #[cfg(test)]
 mod gen_tests_seat;

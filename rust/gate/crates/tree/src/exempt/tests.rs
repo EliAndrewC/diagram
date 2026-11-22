@@ -1,9 +1,8 @@
 //! The record's rules; the entries a stage's landing makes stale, and the entry no stage can name.
 
 use std::path::Path;
-use std::process::Command;
 
-use super::{cli, load, missing, ranges, split};
+use super::{cli, load, split};
 
 fn scratch(tag: &str) -> l7r_shared::tempdir::TempDir {
     let dir = l7r_shared::tempdir::TempDir::new(&format!("gate-exempt-{tag}"));
@@ -31,18 +30,10 @@ fn accepted(dir: &Path, names: &str) {
     .unwrap();
 }
 
-fn stand_in(dir: &Path, body: &str) -> String {
-    let path = dir.join("stand-in");
-    std::fs::write(&path, format!("#!/bin/bash\n{body}\n")).unwrap();
-    Command::new("chmod").arg("+x").arg(&path).status().unwrap();
-    path.to_string_lossy().into_owned()
-}
-
-fn ask(dir: &Path, python: &str, args: &[&str]) -> crate::Reply {
+fn ask(dir: &Path, args: &[&str]) -> crate::Reply {
     cli(
         &args.iter().map(|s| (*s).to_owned()).collect::<Vec<_>>(),
         dir,
-        python,
     )
 }
 
@@ -66,9 +57,8 @@ fn three(tag: &str) -> l7r_shared::tempdir::TempDir {
 fn no_record_exempts_nothing() {
     let dir = scratch("none");
     std::fs::remove_dir(dir.join("dev")).unwrap();
-    assert_eq!(ask(&dir, "x", &["omit"]).stdout, "\n");
-    assert_eq!(ask(&dir, "x", &["exempt"]).stdout, "");
-    assert_eq!(ask(&dir, "x", &["report"]).stdout, "");
+    assert_eq!(ask(&dir, &["omit"]).stdout, "\n");
+    assert_eq!(ask(&dir, &["exempt"]).stdout, "");
     assert_eq!(load(&dir).unwrap()["entries"], serde_json::json!([]));
 }
 
@@ -78,7 +68,7 @@ fn an_entry_naming_no_stages_refuses_rather_than_reading_as_accepted() {
     file(&dir, "a.py");
     for bad in [r#"{"path": "a.py", "stages": []}"#, r#"{"path": "a.py"}"#] {
         record(&dir, bad);
-        let refused = ask(&dir, "x", &["omit"]);
+        let refused = ask(&dir, &["omit"]);
         assert_eq!(refused.code, 1);
         assert!(refused.stderr.contains("a.py names no stages"));
     }
@@ -86,7 +76,7 @@ fn an_entry_naming_no_stages_refuses_rather_than_reading_as_accepted() {
     assert!(load(&dir).is_err());
     record(&dir, LIVE);
     std::fs::write(dir.join("dev/work-budget.json"), "not json").unwrap();
-    assert_eq!(ask(&dir, "x", &["exempt"]).code, 1);
+    assert_eq!(ask(&dir, &["exempt"]).code, 1);
 }
 
 #[test]
@@ -109,20 +99,20 @@ fn an_entry_is_stale_when_its_file_is_gone_or_every_stage_it_serves_is_accepted(
             ("gone.py", "the file is gone")
         ]
     );
-    assert_eq!(ask(&dir, "x", &["omit"]).stdout, "--omit=a.py\n");
-    assert_eq!(ask(&dir, "x", &["exempt"]).stdout, "a.py\n");
-    assert_eq!(ask(&dir, "x", &["stale"]).stdout, "b.py\tevery stage it serves is accepted in Rust (sink); the thin door keeps the floor\ngone.py\tthe file is gone\n");
+    assert_eq!(ask(&dir, &["omit"]).stdout, "--omit=a.py\n");
+    assert_eq!(ask(&dir, &["exempt"]).stdout, "a.py\n");
+    assert_eq!(ask(&dir, &["stale"]).stdout, "b.py\tevery stage it serves is accepted in Rust (sink); the thin door keeps the floor\ngone.py\tthe file is gone\n");
 }
 
 #[test]
 fn the_list_names_each_and_a_prune_drops_the_stale_ones_and_keeps_the_rest() {
     let dir = three("list");
-    let listed = ask(&dir, "x", &["list"]).stdout;
+    let listed = ask(&dir, &["list"]).stdout;
     assert!(
         listed.starts_with("a.py  (seat, hem)\nSTALE b.py - ")
             && listed.ends_with("coverage-exempt: 1 exempt, 2 stale\n"),
     );
-    let pruned = ask(&dir, "x", &["list", "--prune"]).stdout;
+    let pruned = ask(&dir, &["list", "--prune"]).stdout;
     assert!(
         pruned.contains("coverage-exempt: dropped gone.py - the file is gone\n")
             && pruned.ends_with("coverage-exempt: 1 exempt, 0 stale\n")
@@ -133,35 +123,10 @@ fn the_list_names_each_and_a_prune_drops_the_stale_ones_and_keeps_the_rest() {
     );
 }
 
+/// `report` left with `codeid.py`'s coverage.py reader (feature 449 T247): it is refused as any unknown verb is.
 #[test]
-fn the_report_gives_unrun_lines_as_information_and_a_stale_entry_fails_it() {
-    let dir = three("report");
-    let py = stand_in(&dir, "echo 3,4,5,9");
-    let done = ask(&dir, &py, &["report", "elsewhere.cov"]);
-    assert_eq!(done.code, 1);
-    assert!(done.stdout.contains("a.py - unrun lines: 3-5, 9\ncoverage: 1 files slated for the Rust port are exempt from the floor (1 with unrun lines;"));
-    assert!(done.stdout.contains("COVERAGE: dev/coverage-exempt.json names gone.py, which is stale - the file is gone. Drop it: make coverage-exempt PRUNE=1\n"));
-    ask(&dir, "x", &["list", "--prune"]);
-    let clean = ask(&dir, &stand_in(&dir, "echo"), &["report"]);
-    assert_eq!(
-        (clean.code, clean.stdout.contains("(0 with unrun lines;")),
-        (0, true)
-    );
-}
-
-#[test]
-fn a_python_that_cannot_answer_fails_the_report_and_no_live_entry_asks_nothing() {
+fn the_report_is_gone_and_an_unknown_verb_is_refused() {
     let dir = three("py");
-    assert!(ask(&dir, "/no/such/python", &["report"])
-        .stderr
-        .contains("/no/such/python"));
-    let refused = stand_in(&dir, "echo boom >&2; exit 1");
-    assert!(ask(&dir, &refused, &["report"])
-        .stderr
-        .contains("answered no unrun lines: boom"));
-    assert!(missing(&dir, &[], ".coverage", "/no/such/python")
-        .unwrap()
-        .is_empty());
-    assert_eq!(ranges(&[1, 2, 7]), "1-2, 7");
-    assert_eq!(ask(&dir, "x", &["nonsense"]).code, 2);
+    assert_eq!(ask(&dir, &["report"]).code, 2);
+    assert_eq!(ask(&dir, &["nonsense"]).code, 2);
 }

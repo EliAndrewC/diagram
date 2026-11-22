@@ -1,5 +1,5 @@
 //! The triage bundle over each kind of change: a page's new, changed and removed blocks (from the kept snapshot, from the history, or
-//! lost), a section's, a claimed dictionary's, a unit's diff; its reply recorded; a reply's outside rows filed.
+//! lost), a section's, a unit's diff; its reply recorded; a reply's outside rows filed.
 
 use std::collections::{HashMap, HashSet};
 
@@ -7,36 +7,23 @@ use serde_json::{json, Map, Value};
 
 use super::{checked_at, keep_texts, kept_text, record_triage, removed_words, triage_bundle, vet};
 use crate::claims::index::{current, load_map};
-use crate::claims::scope::Reader;
-use crate::claims::tests::{
-    claimed_table, commit_as_origin, fixture, fixture_rust_only, fixture_with, record_all,
-    write_recorded, RECORDED_TABLE, RECORDED_TABLE_PAGES,
-};
+use crate::claims::tests::{commit_as_origin, fixture, record_all, write_recorded};
 use crate::record::testkit::{commit, git, put};
 
-fn units_doc(qual: &str, blocks: &[&str]) -> String {
-    json!([{"path": "l7r/diagram/m.py", "qualname": qual, "kind": "constant", "lineno": 1, "end_lineno": 1, "claims": [], "inherited": false,
-            "core": "c", "errors": [], "names": [], "blocks": blocks, "module_errors": []}])
-    .to_string()
-}
-
-/// The fixture recorded, then a claimed dictionary, a page, a section and three units changed, and the index and snapshots as a
+/// The fixture recorded, then a page, a section and three units changed, and the index and snapshots as a
 /// triage reads them: (root, index, store).
 fn changed_everything() -> (
     l7r_shared::tempdir::TempDir,
     Map<String, Value>,
     Map<String, Value>,
 ) {
-    // the claimed dictionary written into the fixture's own first commit, and the recorded index committed as `origin/main` with the
-    // loose ref copied: four git processes saved (feature 449 T167, FR-008's tenth of a second)
-    let root = fixture_with("claims-triage-bundle", &claimed_table);
+    // the recorded index committed as `origin/main` with the loose ref copied: git processes saved (feature 449 T167, FR-008's tenth
+    // of a second); the claimed dictionary, a `.py` unit, left with the engine's Python (feature 449 T158)
+    let root = fixture("claims-triage-bundle");
     // the recording written as `record_all` writes it, pinned by `the_recorded_state_is_what_record_all_writes`: a bundle and a record
-    // through the Python half, most of the test's time against FR-008's tenth of a second (feature 449 T167)
-    write_recorded(&root, RECORDED_TABLE, RECORDED_TABLE_PAGES);
+    // most of the test's time against FR-008's tenth of a second (feature 449 T167)
+    write_recorded(&root, "{}", "{}");
     commit_as_origin(&root, "recorded");
-    put(&root, "l7r/diagram/m.py", &units_doc("TABLE", &["'a': 1"]));
-    put(&root, "l7r/py-units.json", &json!([[], [{"path": "l7r/diagram/m.py", "qualname": "TABLE", "kind": "constant", "lineno": 1, "end_lineno": 1,
-        "claims": ["table - NONE"], "inherited": false, "core": "core-2", "errors": [], "names": [], "blocks": ["'a': 1", "'new': 3"], "module_errors": []}]]).to_string());
     put(&root, "research/questions/0001-gap.html", "<h2 id=\"gap\">The gap</h2>\n<p class=\"intro\">Why.</p>\n<p>The gap is 12 ft.</p>\n<p>A new block.</p>\n");
     let buildings = std::fs::read_to_string(root.join("docs/buildings.md")).unwrap();
     std::fs::write(
@@ -81,22 +68,19 @@ fn changed_everything() -> (
 #[test]
 fn each_kind_of_change_is_shown_and_its_reply_recorded() {
     let (root, ix, store) = changed_everything();
-    let mut reader = Reader::new(&root, &root);
-    let cur = current(&mut reader, &root, &root.join("research/questions")).unwrap();
+    let cur = current(&root, &root.join("research/questions")).unwrap();
     let keys: Vec<String> = [
         "rust/phases/src/lib.rs::GAP#gap",
         "rust/phases/src/lib.rs::reach#reach",
         "rust/phases/src/lib.rs::Thing.m#method guess",
         "rust/phases/src/lib.rs::helper#plumbing",
         "docs/buildings.md::Walls#walls",
-        "l7r/diagram/m.py::TABLE#table",
     ]
     .map(str::to_owned)
     .to_vec();
     let out = root.join("t");
     std::fs::create_dir_all(&out).unwrap();
     let manifest = triage_bundle(
-        &mut reader,
         &cur,
         &ix,
         &store,
@@ -109,8 +93,6 @@ fn each_kind_of_change_is_shown_and_its_reply_recorded() {
     for want in [
         "## docs/buildings.md::Walls (a procedure section; the claims' own lines did not change)\n\nNew or changed blocks:\n\n> Walls stand, rebuilt.\n",
         "Removed blocks (no longer in the section):\n\n> - a list item continued\n",
-        "## l7r/diagram/m.py::TABLE (a procedure section",
-        "> 'gone': 2\n",
         "## rust/phases/src/lib.rs::Thing.m (a unit of code; its diff against origin/main)\n\n```diff\n@@",
         "## research/questions/0001-gap.html\n\n(against the version these claims were last checked at,",
         "New or changed blocks:\n\n> A new block.\n",
@@ -249,7 +231,7 @@ fn recorded() -> (
 ) {
     // no Python unit, so no Python half to start, and `origin/main` written as the fixture writes it (feature 449 T167: these tests sat at
     // FR-008's tenth of a second)
-    let root = fixture_rust_only("claims-triage-only");
+    let root = fixture("claims-triage-only");
     record_all(&root);
     commit_as_origin(&root, "recorded");
     let mut ix = load_map(&root.join("dev/claims-index.json")).unwrap();
@@ -267,12 +249,10 @@ fn manifest_of(
     store: &Map<String, Value>,
     keys: &[&str],
 ) -> String {
-    let mut reader = Reader::new(root, root);
-    let cur = current(&mut reader, root, &root.join("research/questions")).unwrap();
+    let cur = current(root, &root.join("research/questions")).unwrap();
     let keys: Vec<String> = keys.iter().map(|k| (*k).to_owned()).collect();
     let out = root.join("t");
     let m = triage_bundle(
-        &mut reader,
         &cur,
         ix,
         store,

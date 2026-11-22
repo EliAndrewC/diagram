@@ -271,13 +271,10 @@ fn each_way_a_finding_is_read_against_the_base() {
 fn a_finding_on_unchanged_rust_code_is_pre_existing() {
     let root = fixture("claims-report-rust-base");
     // no `.py` file, so no runner starts (FR-008's tenth of a second)
-    std::fs::remove_file(root.join("l7r/diagram/m.py")).unwrap();
     put(&root, "dev/claims-index.json", "{}");
     commit(&root, "no rows");
     git(&root, &["update-ref", "refs/remotes/origin/main", "HEAD"]);
-    let mut reader = crate::claims::scope::Reader::new(&root, &root);
-    let cur = crate::claims::index::current(&mut reader, &root, &root.join("research/questions"))
-        .unwrap();
+    let cur = crate::claims::index::current(&root, &root.join("research/questions")).unwrap();
     let row = cur.get("rust/phases/src/lib.rs::GAP#gap").unwrap();
     let ix = json!({"rust/phases/src/lib.rs::GAP#gap": {"verdict": "DRIFTED", "code": row.code, "core": row.unit.core, "research": row.research, "note": "off"}});
     // what the gate classifies, asked in process (the gate's whole command line reads the carries and the switches besides)
@@ -285,7 +282,7 @@ fn a_finding_on_unchanged_rust_code_is_pre_existing() {
         cur,
         index: ix.as_object().unwrap().clone(),
     };
-    let (_, intro, pre, _) = crate::claims::carry::classified(&mut reader, &root, &at).unwrap();
+    let (_, intro, pre, _) = crate::claims::carry::classified(&root, &at).unwrap();
     assert!(intro.is_empty(), "{intro:?}");
     assert_eq!(
         pre,

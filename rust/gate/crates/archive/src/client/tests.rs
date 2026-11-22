@@ -1,42 +1,88 @@
-//! The browser as a program (feature 449 T146): a stand-in for `l7r-gate.sh browser serve` speaking its protocol.
+//! The browser as a program (feature 449 T146): a stand-in for `l7r-gate.sh browser serve` speaking its protocol - since T273 this
+//! test binary started again as [`the_stand_in_server`] alone, where a Python program stood (SC-005).
 
+use std::io::{BufRead, Write};
 use std::path::{Path, PathBuf};
 use std::time::{Duration, Instant};
 
 use l7r_shared::tempdir::TempDir;
+use serde_json::{json, Value};
 
 use super::{launcher, netloc, Polite, Process, HOST_GAP};
 use crate::fetch::Client;
 
-/// A `browser serve` that answers from the URL: `slow` 429 then 200, `boom` a failure, `fail` a render that will not, `junk` no JSON.
-const SERVE: &str = r##"#!/usr/bin/env python3
-import json, sys
-print(json.dumps({"ready": True}), flush=True)
-seen = {}
-for line in sys.stdin:
-    m = json.loads(line)
-    op, url = m.get("op"), m.get("url", "")
-    if op == "close":
-        break
-    if "junk" in url:
-        print("not json", flush=True)
-        continue
-    if "die" in url:
-        sys.exit(0)
-    if op == "get":
-        seen[url] = seen.get(url, 0) + 1
-        if "boom" in url:
-            print(json.dumps({"error": "APIRequestContext.get: boom\nCall log:\n - x"}), flush=True)
-            continue
-        status = 429 if "slow" in url and seen[url] == 1 else 200
-        open(m["out"], "wb").write(b"body of " + url.encode())
-        print(json.dumps({"status": status, "url": url + "#final", "content_type": "text/html"}), flush=True)
-    elif op == "render":
-        print(json.dumps({"error": "nope"} if "fail" in url else {"mhtml": "M " + url, "text": "T"}), flush=True)
-"##;
+/// Set in the started copy's environment: the copy is the stand-in.
+const MARKER: &str = "L7R_TEST_SERVE_STAND_IN";
+
+/// A `browser serve` that answers from the URL: `slow` 429 then 200, `boom` a failure, `fail` a render that will not, `junk` no JSON,
+/// `die` gone before it answers. Its answers go to fd 3, the launcher's stdout, so the test harness's own lines (on its stdout, which
+/// the launcher sends to `/dev/null`) never reach the client.
+#[test]
+fn the_stand_in_server() {
+    if std::env::var_os(MARKER).is_none() {
+        return;
+    }
+    let mut out = std::fs::OpenOptions::new()
+        .write(true)
+        .open("/dev/fd/3")
+        .unwrap();
+    let mut say = |line: &str| {
+        let _ = writeln!(out, "{line}");
+    };
+    say(&json!({"ready": true}).to_string());
+    let mut seen: std::collections::HashMap<String, u32> = std::collections::HashMap::new();
+    for line in std::io::stdin().lock().lines().map_while(Result::ok) {
+        let m: Value = serde_json::from_str(&line).unwrap();
+        let op = m["op"].as_str().unwrap_or_default();
+        let url = m["url"].as_str().unwrap_or_default();
+        if op == "close" {
+            break;
+        }
+        if url.contains("junk") {
+            say("not json");
+            continue;
+        }
+        if url.contains("die") {
+            std::process::exit(0);
+        }
+        if op == "get" {
+            let count = seen.entry(url.to_owned()).or_default();
+            *count += 1;
+            if url.contains("boom") {
+                say(&json!({"error": "APIRequestContext.get: boom\nCall log:\n - x"}).to_string());
+                continue;
+            }
+            let status = if url.contains("slow") && *count == 1 {
+                429
+            } else {
+                200
+            };
+            std::fs::write(
+                m["out"].as_str().unwrap_or_default(),
+                format!("body of {url}"),
+            )
+            .unwrap();
+            say(&json!({"status": status, "url": format!("{url}#final"), "content_type": "text/html"}).to_string());
+        } else {
+            // the client asks `get`, `render` and `close` alone, so what is not a `get` here is a render
+            let answer = if url.contains("fail") {
+                json!({"error": "nope"})
+            } else {
+                json!({"mhtml": format!("M {url}"), "text": "T"})
+            };
+            say(&answer.to_string());
+        }
+    }
+}
+
+/// The stand-in's launcher: a shell running this test binary again as [`the_stand_in_server`] alone, fd 3 its answers.
+fn stand_in() -> String {
+    let exe = std::env::current_exe().unwrap();
+    format!("#!/bin/sh\n{MARKER}=1 exec '{}' --exact client::tests::the_stand_in_server --nocapture -q 3>&1 >/dev/null\n", exe.display())
+}
 
 fn launcher_at(dir: &Path, body: &str) -> PathBuf {
-    let at = dir.join("serve.py");
+    let at = dir.join("serve");
     // by `install`, never this process: one it wrote itself can be "Text file busy" when run while another test thread's fork holds it
     // open (feature 449 T160)
     l7r_gate_core::write_executable(&at, body);
@@ -49,7 +95,7 @@ const GAP: Duration = Duration::from_millis(5);
 #[test]
 fn a_request_and_a_render_through_the_browser_retried_and_spaced() {
     let dir = TempDir::new("archive-client");
-    let mut p = Process::start_with(&launcher_at(dir.path(), SERVE)).unwrap();
+    let mut p = Process::start_with(&launcher_at(dir.path(), &stand_in())).unwrap();
     // no retry wait: the elapsed time below is the gap's alone, as 900 ms of the old run's second was beyond its 10 ms retry wait
     p.retry_wait = Duration::ZERO;
     p.polite.gap = GAP;
@@ -86,7 +132,7 @@ fn a_request_and_a_render_through_the_browser_retried_and_spaced() {
 #[test]
 fn a_browser_dropped_while_running_is_closed_then() {
     let dir = TempDir::new("archive-client-drop");
-    let running = Process::start_with(&launcher_at(dir.path(), SERVE)).unwrap();
+    let running = Process::start_with(&launcher_at(dir.path(), &stand_in())).unwrap();
     drop(running);
 }
 

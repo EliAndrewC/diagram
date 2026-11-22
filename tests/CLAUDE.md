@@ -5,7 +5,7 @@
 
 **No Python test is left here, and pytest is gone** (feature 449 FR-001b, the GM 2026-11-10: "Yes delete everything except that
 group, please."; T211 deleted the last test, the pool sweep, now `rust/mode_a/src/pool_sweep.rs`; T213 retired pytest, its
-configuration in `pyproject.toml`, its plugins in `requirements-dev.txt`, and the targets that ran it - `test`, `test-full`,
+configuration in `pyproject.toml`, its plugins in `requirements-dev.txt` (both files deleted by T158), and the targets that ran it - `test`, `test-full`,
 `test-file`, `durations`, `soak`). The tests are Rust: each crate's own, run by `make rust-test` (one crate: `CRATE=<dir>`) and by
 `make static`'s coverage, 100% of a crate's lines owed by its own tests. The pytest trees this file once indexed (`tests/gate/`,
 `tests/full/`, `tests/tooling/`, `tests/tier_*/`) and their rules are in git history (the tag `python-tests-before-removal`).
@@ -19,7 +19,7 @@ configuration in `pyproject.toml`, its plugins in `requirements-dev.txt`, and th
 
 ## Running it
 
-    make quick                                         # while iterating: ruff's outright errors, the fast tree checks
+    make quick                                         # while iterating: the fast tree checks
     make rust-test CRATE=rust/gate/crates/tree         # one crate's tests
     make hooks-test                                    # the guard suites
     make done                                          # the real gate: the static checks, the crates, the guard suites

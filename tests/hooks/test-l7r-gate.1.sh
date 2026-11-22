@@ -13,7 +13,7 @@ set -uo pipefail
 # would otherwise hand it to every stub, and the stale-unit case's "one retry, incremental" read the session's value
 unset CARGO_INCREMENTAL
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-STAMP="$HERE/../../scripts/gates/l7r-gate.sh"  # the Rust gate; its ids of .py files come from codeid.py
+STAMP="$HERE/../../scripts/gates/l7r-gate.sh"  # the Rust gate (a .py file's id its blob id since 449 T247 deleted codeid.py)
 TMP=$(mktemp -d); trap 'rm -rf "$TMP"' EXIT
 FAILED=0
 check() { # label expected-rc actual-rc
@@ -92,7 +92,8 @@ OUT=$(cd "$W" && "$STAMP" stamp --check origin/main 2>&1); check "asset edited a
 case $OUT in *"page: the last green gate ran against DIFFERENT code"*) : ;; *) echo "FAIL  stale page stamp must say the code differs: $OUT"; FAILED=1 ;; esac
 ( cd "$W" && "$STAMP" stamp --write page )
 
-# THE REGISTRY'S DOCSTRINGS ARE PAGE PROSE (feature 189): a docstring edit owes `page` and NOT `diagram`;
+# THE REGISTRY'S DOCSTRINGS ARE PAGE PROSE (feature 189): a docstring edit owes `page` - and `diagram` too since 449 T247, a `.py`
+# file's id its blob id (the registry's Python, the feature's subject, left with 449 T149 and T158);
 # a code edit in the same file owes both. The new file is stamped in both areas first, so only the EDIT is judged.
 mkdir -p "$W/l7r/diagram/interactive/classes"
 printf 'class Farmhouse:\n    """What: a house.\n\n    Why: people.\n\n    Note: read.\n    """\n\n    key = "farmhouse"\n' > "$W/l7r/diagram/interactive/classes/homestead.py"
@@ -102,8 +103,8 @@ printf 'class Farmhouse:\n    """What: a thatched house.\n\n    Why: people.\n\n
 git -C "$W" commit -qam prose
 OUT=$(cd "$W" && "$STAMP" stamp --check origin/main 2>&1); check "a DOCSTRING edit in the registry -> refused (page)" 1 $?
 case $OUT in *"page: the last green gate ran against DIFFERENT code"*) : ;; *) echo "FAIL  the docstring edit must stale the page stamp: $OUT"; FAILED=1 ;; esac
-case $OUT in *"diagram:"*) echo "FAIL  a docstring edit must NOT re-open the gate (diagram stays semantic): $OUT"; FAILED=1 ;; *) : ;; esac
-( cd "$W" && "$STAMP" stamp --write page )
+case $OUT in *"diagram: the last green gate ran against DIFFERENT code"*) : ;; *) echo "FAIL  a .py docstring edit re-opens the gate since 449 T247: $OUT"; FAILED=1 ;; esac
+( cd "$W" && "$STAMP" stamp --write diagram && "$STAMP" stamp --write page )
 OUT=$(cd "$W" && "$STAMP" stamp --check origin/main 2>&1); check "page-check re-stamped -> the prose edit lands" 0 $?
 printf 'class Farmhouse:\n    """What: a thatched house.\n\n    Why: people.\n\n    Note: read.\n    """\n\n    key = "farm house"\n' > "$W/l7r/diagram/interactive/classes/homestead.py"
 git -C "$W" commit -qam code
@@ -111,10 +112,14 @@ OUT=$(cd "$W" && "$STAMP" stamp --check origin/main 2>&1); check "a CODE edit in
 case $OUT in *"diagram: the last green gate ran against DIFFERENT code"*"page: the last green gate ran against DIFFERENT code"*) : ;; *) echo "FAIL  a code edit must owe BOTH stamps: $OUT"; FAILED=1 ;; esac
 ( cd "$W" && "$STAMP" stamp --write diagram && "$STAMP" stamp --write page )
 
-# a comment or docstring added AFTER the green run is not "different code" (GM 2026-08-26): the stamp
-# hashes the docstring-stripped AST of each .py, so only a token that runs re-opens the gate
-printf '"""why this is 2"""\n# see research/contents.json#water\nx = 2  # unchanged\n' > "$W/m.py"; git -C "$W" commit -qam why
-OUT=$(cd "$W" && "$STAMP" stamp --check origin/main 2>&1); check "comment/docstring edit after the stamp -> still allowed" 0 $?
+# a comment added AFTER the green run is not "different code" (GM 2026-08-26): the stamp hashes a .rs file's comment-free
+# tokens, so only a token that runs re-opens the gate; a .py file's docstring-stripped AST left with codeid.py (449 T247)
+mkdir -p "$W/rust/x"; printf 'fn f() -> i32 {\n    2\n}\n' > "$W/rust/x/m.rs"; git -C "$W" add -A; git -C "$W" commit -qm rs
+( cd "$W" && "$STAMP" stamp --write diagram )
+printf '// see research/contents.json#water\nfn f() -> i32 {\n    2 // unchanged\n}\n' > "$W/rust/x/m.rs"; git -C "$W" commit -qam why
+OUT=$(cd "$W" && "$STAMP" stamp --check origin/main 2>&1); check "a .rs comment edit after the stamp -> still allowed" 0 $?
+printf '"""why this is 2"""\nx = 2\n' > "$W/m.py"; git -C "$W" commit -qam why-py
+OUT=$(cd "$W" && "$STAMP" stamp --check origin/main 2>&1); check "a .py docstring edit after the stamp -> refused since 449 T247" 1 $?
 echo 'x = 3' > "$W/m.py"; git -C "$W" commit -qam engine3
 OUT=$(cd "$W" && "$STAMP" stamp --check origin/main 2>&1); check "code edit after the stamp -> refused" 1 $?
 ( cd "$W" && "$STAMP" stamp --write diagram )
@@ -128,7 +133,7 @@ echo 'x = 4' > "$W/m.py"
 ( cd "$W" && "$STAMP" stamp --fresh diagram ); check "--fresh diagram after an engine edit -> 1" 1 $?
 git -C "$W" commit -qam guard3
 
-# a .py under scripts/ is a hooks-area file too, at any depth (codeid.py lives there)
+# a .py under scripts/ is a hooks-area file too, at any depth (as codeid.py was, until 449 T247)
 echo 'y = 1' > "$W/scripts/hooks/lib/helper.py"; git -C "$W" add -A; git -C "$W" commit -qm helper
 OUT=$(cd "$W" && "$STAMP" stamp --check origin/main 2>&1); check "new scripts/*.py, stamp predates it -> refused" 1 $?
 

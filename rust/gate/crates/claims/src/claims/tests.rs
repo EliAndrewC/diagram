@@ -1,54 +1,9 @@
-//! The claims tools end to end on a scratch repository: each command through [`super::cli`], the Python half a stub runner answering
-//! from files the test writes (`py-units.json` beside the engine), as the real runner answers from the `.py` files.
+//! The claims tools end to end on a scratch repository: each command through [`super::cli`], over the Rust units and the procedure
+//! sections (the stub runner of the `.py` half left with the engine's Python, feature 449 T158).
 
 use std::path::{Path, PathBuf};
 
 use crate::record::testkit::{git, put};
-
-pub const RUNNER: &str = r#"import json, pathlib, sys
-for line in sys.stdin:
-    a = json.loads(line); v = a["verb"]; x = a.get("args", [])
-    try:
-        if v == "claims_py_units":
-            f = pathlib.Path(x[0], "l7r", "py-units.json")
-            ok = json.loads(f.read_text()) if f.is_file() else [[], []]
-            if x[2] is False:
-                for half in ok:
-                    for u in half:
-                        u["core"] = u["core"] + "-nostar"
-        elif v == "claims_module_units":
-            ok = json.loads(x[0]) if x[0].startswith("[") else []
-        elif v == "claims_context_source":
-            if x[1].endswith("NOPE"):
-                raise ValueError("no `NOPE`")
-            ok = "def " + x[1].split("::")[1] + "(): pass"
-        elif v == "claims_callees":
-            ok = ["l7r/diagram/m.py::helper", "l7r/diagram/m.py::GAP"]
-        elif v == "claims_direct":
-            ok = ["l7r/diagram/m.py::FAR"]
-        elif v == "claims_chase":
-            ok = [x[1] + "::" + n for n in x[2]]
-        elif v == "claims_counter_only":
-            ok = bool(x[2].get("counter_only"))
-        elif v == "claims_stale":
-            ok = ["stale figure: the stub's"]
-        elif v == "claims_scope_units":
-            ok = json.loads(x[0].split("\n")[0]) if x[0].startswith("{") else {}
-        elif v == "claims_read_units":
-            ok = ["l7r/diagram/m.py::read"]
-        elif v == "tunables_unstated":
-            ok = [["fn", 3, 4.5], ["big", 4, 1234567]] if "4.5" in x[0] else []
-        else:
-            raise KeyError(v)
-        print(json.dumps({"ok": ok}), flush=True)
-    except Exception as e:
-        print(json.dumps({"error": "Traceback (most recent call last):\n" + type(e).__name__ + ": " + str(e)}), flush=True)
-"#;
-
-/// The stand-in `codeid.py`: a file's id the hash of its text with each line's comment and the spaces before it cut, as `re.sub(rb' *#.*',
-/// b'', text)` cut them - without `re`, whose import was a third of the stand-in's 17 ms start (feature 449 T167, FR-008's tenth of a
-/// second).
-const CODEID: &str = "import hashlib, sys\nfor p in sys.argv[2:]:\n    d = b'\\n'.join(l.split(b'#', 1)[0].rstrip(b' ') if b'#' in l else l for l in open(p, 'rb').read().split(b'\\n'))\n    print(hashlib.sha256(d).hexdigest())\n";
 
 pub const LIB: &str = "//! The probe.
 //!
@@ -91,7 +46,7 @@ mod tests {
 pub const PAGE: &str = "<h2 id=\"gap\">The gap</h2>\n<p class=\"intro\">Why.</p>\n<p>The gap is 12 ft.</p>\n<p>A second block.</p>\n";
 pub const BUILDINGS: &str = "# Buildings\n\n## Walls\n<!-- Research: walls - CONVENTION -->\n<!-- Research: wall height - research/questions/0001-gap.html: 12 ft -->\n\nWalls stand.\n\n- a list item\n  continued\n| a | table |\n|---|---|\n\n### Deep\n\nNo claim here.\n\n##### Too deep\n";
 
-/// A repository with the probe's Rust, procedures, questions and Python half, committed and set as origin/main; its root.
+/// A repository with the probe's Rust, procedures and questions, committed and set as origin/main; its root.
 pub fn fixture(tag: &str) -> l7r_shared::tempdir::TempDir {
     fixture_with(tag, &|_| {})
 }
@@ -107,8 +62,6 @@ pub fn fixture_with(tag: &str, more: &dyn Fn(&Path)) -> l7r_shared::tempdir::Tem
     for dir in ["objects", "refs/heads", "refs/tags"] {
         std::fs::create_dir_all(root.join(".git").join(dir)).unwrap();
     }
-    put(&root, "scripts/bundle_door.py", RUNNER);
-    put(&root, "scripts/gates/codeid.py", CODEID);
     put(&root, "rust/phases/src/lib.rs", LIB);
     put(
         &root,
@@ -124,7 +77,6 @@ pub fn fixture_with(tag: &str, more: &dyn Fn(&Path)) -> l7r_shared::tempdir::Tem
         "research/questions/0002-other.drawing.html",
         "<h2 id=\"other\">Other</h2>\n<p>It is 40 ft, drawn.</p>\n",
     );
-    put(&root, "l7r/diagram/m.py", "GAP = 12\n");
     more(&root);
     git(&root, &["add", "-A"]);
     git(&root, &["commit", "-qm", "base"]);
@@ -134,14 +86,6 @@ pub fn fixture_with(tag: &str, more: &dyn Fn(&Path)) -> l7r_shared::tempdir::Tem
     root
 }
 
-/// [`fixture`] with no Python module under `l7r/diagram/`, so no command starts the Python half: for a test whose Python half answers
-/// nothing, its 16 ms start saved (feature 449 T167, FR-008's tenth of a second); the tests that read the Python half keep the module.
-pub fn fixture_rust_only(tag: &str) -> l7r_shared::tempdir::TempDir {
-    fixture_with(tag, &|root| {
-        std::fs::remove_file(root.join("l7r/diagram/m.py")).unwrap();
-    })
-}
-
 /// Every change of the tree committed, and that commit made `origin/main` as the fixture makes it: the loose ref copied, where
 /// `commit` and `git update-ref` took two processes more (feature 449 T167, as [`fixture_with`]).
 pub fn commit_as_origin(root: &Path, msg: &str) {
@@ -149,23 +93,6 @@ pub fn commit_as_origin(root: &Path, msg: &str) {
     git(root, &["commit", "-qm", msg, "--allow-empty"]);
     let head = std::fs::read_to_string(root.join(".git/refs/heads/main")).unwrap();
     put(root, ".git/refs/remotes/origin/main", &head);
-}
-
-/// The Python half's answer: units of `l7r/diagram/m.py`, each `(qualname, kind, claim lines, inherited)`.
-pub fn py_units(
-    root: &Path,
-    inside: &[(&str, &str, &[&str], bool)],
-    outside: &[(&str, &str, &[&str], bool)],
-) {
-    let unit = |(q, kind, claims, inherited): &(&str, &str, &[&str], bool)| {
-        serde_json::json!({"path": "l7r/diagram/m.py", "qualname": q, "kind": kind, "lineno": 1, "end_lineno": 1, "claims": claims,
-            "inherited": inherited, "core": format!("core-{q}"), "errors": [], "names": ["GAP=12"], "blocks": [], "module_errors": ["a module error"]})
-    };
-    let v = serde_json::json!([
-        inside.iter().map(unit).collect::<Vec<_>>(),
-        outside.iter().map(unit).collect::<Vec<_>>()
-    ]);
-    put(root, "l7r/py-units.json", &v.to_string());
 }
 
 /// `l7r-gate claims --root <root> args...`.
@@ -251,19 +178,20 @@ fn a_failure_is_the_traceback_with_its_exit() {
 #[test]
 fn the_arbiter_reads_the_rows_and_the_index() {
     let root = fixture("claims-rows");
-    py_units(
-        &root,
-        &[("helper", "function", &["help - GUESS: 3 households"], false)],
-        &[],
-    );
     put(
         &root,
         "dev/claims-index.json",
-        "{\"l7r/diagram/m.py::helper#help\": {\"verdict\": \"IN-STEP\"}}\n",
+        "{\"rust/phases/src/lib.rs::Thing.m#method guess\": {\"verdict\": \"IN-STEP\"}}\n",
     );
     let (rows, index) = super::rows_and_index(&root).unwrap();
-    assert_eq!(rows["l7r/diagram/m.py::helper#help"]["backing"], "GUESS");
-    assert_eq!(index["l7r/diagram/m.py::helper#help"]["verdict"], "IN-STEP");
+    assert_eq!(
+        rows["rust/phases/src/lib.rs::Thing.m#method guess"]["backing"],
+        "GUESS"
+    );
+    assert_eq!(
+        index["rust/phases/src/lib.rs::Thing.m#method guess"]["verdict"],
+        "IN-STEP"
+    );
     assert!(rows["rust/phases/src/lib.rs::GAP#gap"]["line"]
         .as_str()
         .unwrap()
@@ -290,42 +218,31 @@ fn the_inline_audit_runs_from_the_command_line() {
     assert!(got
         .stdout
         .starts_with("tunables --inline: 3 number(s) in 1 file(s)"));
+    // a `.py` file under the map code is read no more (feature 449 T158): no Python starts, and its numbers are not counted
     put(&root, "l7r/diagram/tools/pack_audit/x.py", "4.5\n");
-    put(&root, "scripts/bundle_door.py", "import sys\nsys.exit(1)\n");
-    assert_eq!(
-        super::tunables_cli(&["--root".to_owned(), r, "--inline".to_owned()]).code,
-        1
-    );
+    let got = super::tunables_cli(&["--root".to_owned(), r, "--inline".to_owned()]);
+    assert_eq!(got.code, 0);
+    assert!(!got.stdout.contains("x.py"));
 }
 
-/// What `land.py` and `replay_owing.py` asked through `claims-door` until feature 449 T121, asked in process since: the land's scope split
-/// and live marks, the replay's migration and what is owed (their tests moved here from the door's when feature 449 T132 deleted it).
+/// What `land.py` asked through `claims-door` until feature 449 T121, asked in process since: the land's scope split and live marks
+/// (their tests moved here from the door's when feature 449 T132 deleted it; the replay's migration and owing left with `make
+/// replay-owing`, feature 449 T247).
 #[test]
-fn the_land_and_the_replay_ask_in_process() {
+fn the_land_asks_in_process() {
     let root = fixture("claims-in-process");
-    py_units(
-        &root,
-        &[],
-        &[("helper", "function", &["help - GUESS: 3 households"], false)],
-    );
     assert_eq!(
         super::scope_split(
             &root,
-            "  DRIFTED        l7r/diagram/m.py::read#x - y\n",
-            &["l7r/diagram/m.py".to_owned()],
-            &["l7r/diagram/m.py".to_owned()]
+            "  DRIFTED        rust/phases/src/lib.rs::GAP#x - y\n",
+            &["rust/phases/src/lib.rs".to_owned()],
+            &[]
         )
         .unwrap()
         .0,
-        vec!["DRIFTED        l7r/diagram/m.py::read#x - y"]
+        vec!["DRIFTED        rust/phases/src/lib.rs::GAP#x - y"]
     );
     assert_eq!(super::flight_live(&root), Ok(Vec::new()));
-    let (mut index, mut store) = (serde_json::Map::new(), serde_json::Map::new());
-    assert_eq!(super::backfill_at(&root, &mut index, &mut store), Ok(0));
-    assert!(super::owed_at(&root, &index, &store)
-        .unwrap()
-        .iter()
-        .any(|(_, why)| why == "new"));
 }
 
 /// The fixture's six Rust and procedure units as [`record_all`] records them (their `date` the day's): written by hand, so a test whose
@@ -346,44 +263,6 @@ pub const RECORDED_PAGES: &str = r#"{"5a446aed967da80f": ["7d5a07ee41496c5d", "2
 /// The kept page blob [`record_all`] writes into the common git directory: the fixture's question page, committed with it.
 pub const RECORDED_BLOBS: &str =
     r#"{"d8de3199da52b188": "3b949ddad95e20557cee0f406ee7ff635fd4b75d"}"#;
-
-/// The `.py` units of the counter-only fixture as [`record_all`] records them.
-pub const RECORDED_COUNTED: &str = r#"{
-"l7r/diagram/m.py::Table#table": {"body": "e96d8f4fd032f055", "claim": "table - NONE", "code": "50586ae6d9c5d118", "core": "core-Table", "note": "fine", "pages": {}, "research": "", "verdict": "IN-STEP"},
-"l7r/diagram/m.py::helper#help": {"body": "e96d8f4fd032f055", "claim": "help - NONE", "code": "4f70c4705b3c917b", "core": "core-helper", "note": "fine", "pages": {}, "research": "", "verdict": "IN-STEP"},
-"l7r/diagram/m.py::modl#modl": {"body": "e96d8f4fd032f055", "claim": "modl - NONE", "code": "6d19a47dcd6308a5", "core": "core-modl", "note": "fine", "pages": {}, "research": "", "verdict": "IN-STEP"},
-"l7r/diagram/m.py::other#other": {"body": "e96d8f4fd032f055", "claim": "other - NONE", "code": "9a8f943e04158d92", "core": "core-other", "note": "fine", "pages": {}, "research": "", "verdict": "IN-STEP"}
-}"#;
-
-/// The claimed dictionary of the triage fixture as [`record_all`] records it, and its snapshot.
-pub const RECORDED_TABLE: &str = r#"{
-"l7r/diagram/m.py::TABLE#table": {"body": "34d7a27d1912a68e", "claim": "table - NONE", "code": "16998eb84d3840b7", "core": "core-1", "note": "fine", "pages": {}, "research": "", "section": "core-1", "verdict": "IN-STEP"}
-}"#;
-pub const RECORDED_TABLE_PAGES: &str = r#"{"core-1": ["968cd8edf2fc4a0d", "8ac8985e6424ff5d"]}"#;
-
-/// The Python half's units of the counter-only fixture: four of `l7r/diagram/m.py`, each claimed `- NONE`.
-pub fn counted_units(root: &Path) {
-    py_units(
-        root,
-        &[],
-        &[
-            ("helper", "function", &["help - NONE"], false),
-            ("other", "function", &["other - NONE"], false),
-            ("Table", "constant", &["table - NONE"], false),
-            ("modl", "module", &["modl - NONE"], false),
-        ],
-    );
-}
-
-/// The triage fixture's claimed dictionary, `TABLE` of two entries, and the Python half's unit of it.
-pub fn claimed_table(root: &Path) {
-    let table = serde_json::json!([{"path": "l7r/diagram/m.py", "qualname": "TABLE", "kind": "constant", "lineno": 1, "end_lineno": 1,
-        "claims": [], "inherited": false, "core": "c", "errors": [], "names": [], "blocks": ["'a': 1", "'gone': 2"], "module_errors": []}]);
-    put(root, "l7r/diagram/m.py", &table.to_string());
-    put(root, "l7r/py-units.json", &serde_json::json!([[], [{"path": "l7r/diagram/m.py", "qualname": "TABLE", "kind": "constant", "lineno": 1,
-        "end_lineno": 1, "claims": ["table - NONE"], "inherited": false, "core": "core-1", "errors": [], "names": [], "blocks": ["'a': 1",
-        "'gone': 2"], "module_errors": []}]]).to_string());
-}
 
 /// What [`record_all`] leaves, written by hand: [`RECORDED`] and `units`, each dated today as the record dates them, and the
 /// snapshots - [`RECORDED_PAGES`] and `pages` - and the kept blob.
@@ -425,33 +304,11 @@ fn recorded_files(root: &Path) -> Vec<serde_json::Value> {
     .collect()
 }
 
-/// [`write_recorded`] writes what a run of [`record_all`] writes, here on the counter-only fixture and below on the triage one: the hand-written state is pinned to the
-/// commands, so a change to what they record fails here rather than leaving the two tests on a stale state (feature 449 T167).
-#[test]
-fn the_recorded_state_is_what_record_all_writes() {
-    let counted = fixture("claims-recorded-counted");
-    counted_units(&counted);
-    record_all(&counted);
-    let by_hand = fixture("claims-recorded-counted-hand");
-    write_recorded(&by_hand, RECORDED_COUNTED, "{}");
-    assert_eq!(recorded_files(&counted), recorded_files(&by_hand));
-}
-
-/// [`the_recorded_state_is_what_record_all_writes`] on the triage fixture's claimed dictionary, a test of its own to keep each under
-/// FR-008's tenth of a second (feature 449 T167).
-#[test]
-fn the_recorded_table_is_what_record_all_writes() {
-    let table = fixture_with("claims-recorded-table", &claimed_table);
-    record_all(&table);
-    let by_hand = fixture("claims-recorded-table-hand");
-    write_recorded(&by_hand, RECORDED_TABLE, RECORDED_TABLE_PAGES);
-    assert_eq!(recorded_files(&table), recorded_files(&by_hand));
-}
-
-/// The same on the fixture with no Python module, the carry tests': [`RECORDED`] alone (feature 449 T167).
+/// [`write_recorded`] writes what a run of [`record_all`] writes: the hand-written state is pinned to the commands, so a change to what
+/// they record fails here rather than leaving the tests that start from it on a stale state (feature 449 T167).
 #[test]
 fn the_recorded_rust_units_are_what_record_all_writes() {
-    let rust = fixture_rust_only("claims-recorded-rust");
+    let rust = fixture("claims-recorded-rust");
     record_all(&rust);
     let by_hand = fixture("claims-recorded-rust-hand");
     write_recorded(&by_hand, "{}", "{}");

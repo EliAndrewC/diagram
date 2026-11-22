@@ -1,6 +1,6 @@
 //! The drawing pages still stating a changed constant's OLD figure (feature 385 T62, plan D81; `scripts/record/claims_stale.py`), which
-//! `make claims-owed` prints as a flag, never a refusal. A `.py` constant is read by the Python (its value is `ast`'s), asked only when
-//! the delta changed a `.py` file under `l7r/`; a `.rs` constant is read here (feature 449 T165, the GM 2026-11-17: the claims tools
+//! `make claims-owed` prints as a flag, never a refusal. A `.rs` constant is read here (the `.py` constants' arm, asked of the Python,
+//! left with the engine's Python, feature 449 T158) (feature 449 T165, the GM 2026-11-17: the claims tools
 //! track the Rust engine before S7 ports it), so a research number changed in `rust/phases` - or in a crate the engine's slices add -
 //! names the pages still stating its old figure at the edit, as T10's dike-pond inset would have been (`ask:t10-findings-at-landing`).
 //!
@@ -22,9 +22,7 @@ use std::sync::LazyLock;
 use fancy_regex::Regex;
 use l7r_shared::py_text::{collapse, strip};
 use l7r_shared::pyjson::py_float;
-use serde_json::json;
 
-use super::scope::Reader;
 use super::units::{items, walked};
 use crate::record::repo::{git_out, read_text, Fail};
 use crate::record::units::re;
@@ -40,31 +38,18 @@ pub(super) static WARM: [&LazyLock<Regex>; 3] = [&CITED, &SUFFIX, &INT_SUFFIX];
 /// One drawing page: its path from the root, its file name, its text.
 pub type Page = (String, String, String);
 
-/// One line per drawing page still stating a changed constant's old figure: the `.py` constants' (the Python's), then the `.rs` ones'.
+/// One line per drawing page still stating a changed `.rs` constant's old figure.
 ///
 /// # Errors
 ///
-/// Where the runner or a read fails: the error says which and why.
-pub fn stale(reader: &mut Reader, root: &Path) -> Result<Vec<String>, Fail> {
+/// Where a read fails: the error says which and why.
+pub fn stale(root: &Path) -> Result<Vec<String>, Fail> {
     let base = git_out(root, &["merge-base", "HEAD", "origin/main"]);
     let base = strip(&base);
     if base.is_empty() {
         return Ok(Vec::new());
     }
     let mut out = Vec::new();
-    let changed = git_out(root, &["diff", "--name-only", base, "--", "l7r"]);
-    if changed
-        .split_whitespace()
-        .any(|p| p.ends_with(".py") && root.join(p).is_file())
-    {
-        let got = reader.ask("claims_stale", &json!([root.to_string_lossy()]))?;
-        out.extend(
-            got.as_array()
-                .into_iter()
-                .flatten()
-                .map(|v| v.as_str().unwrap_or_default().to_owned()),
-        );
-    }
     let changed = git_out(root, &["diff", "--name-only", base, "--", "rust"]);
     let rs: Vec<&str> = changed
         .split_whitespace()

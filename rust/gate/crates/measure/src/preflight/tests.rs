@@ -1,6 +1,6 @@
-//! The cases of `test_preflight.py` the phase and the tree check answer, with a stand-in for `make` and for the Python door.
+//! The cases of `test_preflight.py` the phase and the tree check answer, with a stand-in for `make`.
 
-use std::collections::{BTreeMap, BTreeSet};
+use std::collections::BTreeMap;
 use std::path::Path;
 
 use super::{parse, run, seen_moves, stray_probes, tree, tree_moved, unseen, Asked, Tools};
@@ -32,24 +32,16 @@ fn repo(tag: &str) -> l7r_shared::tempdir::TempDir {
     root
 }
 
-/// Stand-ins for `make` (exit 0, or 3 for the target named in `fail`) and the door (answering `body`).
-fn tools(root: &Path, fail: &str, door: &str) -> Tools {
-    let (make, python) = (root.join("fake-make"), root.join("fake-python"));
+/// A stand-in for `make` (exit 0, or 3 for the target named in `fail`).
+fn tools(root: &Path, fail: &str) -> Tools {
+    let make = root.join("fake-make");
     crate::write_executable(&make, &format!("#!/bin/sh\necho \"$@\" >> {}/make-ran\n[ \"$2\" = \"{fail}\" ] && {{ echo make-out; echo make-err >&2; exit 3; }}\nexit 0\n", root.display()));
-    crate::write_executable(
-        &python,
-        &format!(
-            "#!/bin/sh\necho \"$@\" >> {}/door-ran\n{door}\n",
-            root.display()
-        ),
-    );
     crate::write_executable(
         &root.join("scripts/gates/l7r-gate.sh"),
         "#!/bin/sh\nexit 0\n",
     );
     Tools {
         make: make.display().to_string(),
-        python: python.display().to_string(),
     }
 }
 
@@ -120,7 +112,7 @@ fn flags_are_read() {
 #[test]
 fn a_tree_that_moves_while_the_gate_runs_is_named() {
     let root = repo("pf-moved");
-    let t = tools(&root, "", "exit 1");
+    let t = tools(&root, "");
     std::fs::write(root.join("notes.md"), "an edit before the gate\n").unwrap();
     let snap = snap_of(&root, &t);
     let kept: BTreeMap<String, String> =
@@ -153,10 +145,9 @@ fn a_tree_that_moves_while_the_gate_runs_is_named() {
 #[test]
 fn a_head_that_cannot_be_read_stays_and_the_map_arithmetic_holds() {
     let root = repo("pf-head");
-    let t = tools(&root, "", "exit 1");
     let side = |s: &str| BTreeMap::from([("HEAD".to_owned(), s.repeat(40))]);
-    assert_eq!(seen_moves(&root, &t, &side("0"), &side("1")), ["HEAD"]);
-    assert!(seen_moves(&root, &t, &side("0"), &side("0")).is_empty());
+    assert_eq!(seen_moves(&root, &side("0"), &side("1")), ["HEAD"]);
+    assert!(seen_moves(&root, &side("0"), &side("0")).is_empty());
     let a = BTreeMap::from([
         ("HEAD".to_owned(), "a".to_owned()),
         ("x".to_owned(), "1".to_owned()),
@@ -202,9 +193,7 @@ fn a_change_the_gate_does_not_see_does_not_move_the_tree() {
         "{\"feature_directory\": \"specs/405-x/\"}",
     )
     .unwrap();
-    let door = "cat > /dev/null; exit 1";
-    let t = tools(&root, "", door);
-    let is = |c: super::Change| unseen(&root, &t, std::slice::from_ref(&c)).contains(&c.0);
+    let is = |c: super::Change| unseen(&root, std::slice::from_ref(&c)).contains(&c.0);
     assert!(is(change("notes.md", Some(b"a"), Some(b"a"))));
     assert!(is(change(
         "dev/claims-index.json",
@@ -227,9 +216,12 @@ fn a_change_the_gate_does_not_see_does_not_move_the_tree() {
     assert!(!is(change("specs/405-x/plan.md", Some(b"a"), Some(b"b"))));
     assert!(!is(change("specs/406-y/tasks.md", Some(b"a"), Some(b"b"))));
     assert!(!is(change(A, Some(b"a"), None)));
-    assert!(!root.join("door-ran").exists());
-    assert!(!is(change(A, Some(b"a"), Some(b"b"))));
-    assert!(root.join("door-ran").exists());
+    // a `.py` file's edit is seen: `codeid.py`, which could say its semantic id held, left with it (feature 449 T247)
+    assert!(!is(change(
+        A,
+        Some(b"\"\"\"a\"\"\""),
+        Some(b"\"\"\"b\"\"\"")
+    )));
     std::fs::write(root.join(".specify/feature.json"), "not json").unwrap();
     assert!(!is(change(
         "specs/405-x/found.jsonl",
@@ -239,28 +231,9 @@ fn a_change_the_gate_does_not_see_does_not_move_the_tree() {
 }
 
 #[test]
-fn the_door_is_asked_once_for_every_python_file() {
-    let root = repo("pf-door");
-    let t = tools(&root, "", "cat > /dev/null; printf '1\\n0\\n'");
-    let batch = [
-        change("l7r/one.py", Some(b"a"), Some(b"b")),
-        change("l7r/two.py", Some(b"c"), Some(b"d")),
-    ];
-    let got = unseen(&root, &t, &batch);
-    assert_eq!(got, BTreeSet::from(["l7r/one.py".to_owned()]));
-    assert_eq!(
-        std::fs::read_to_string(root.join("door-ran"))
-            .unwrap()
-            .lines()
-            .count(),
-        1
-    );
-}
-
-#[test]
 fn the_guards_question_about_a_write_is_answered() {
     let root = repo("pf-would");
-    let t = tools(&root, "", "exit 1");
+    let t = tools(&root, "");
     let snap = snap_of(&root, &t);
     let content = root.join("c");
     std::fs::write(&content, "x = 1\ny = 2\n").unwrap();
@@ -313,7 +286,7 @@ fn the_guards_question_about_a_write_is_answered() {
 #[test]
 fn a_snapshot_that_cannot_be_written_fails() {
     let root = repo("pf-nosnap");
-    let t = tools(&root, "", "exit 1");
+    let t = tools(&root, "");
     assert_eq!(
         go(
             &Asked {
@@ -336,7 +309,7 @@ fn a_pool_map_written_while_the_gate_ran_is_a_tree_move() {
     std::fs::write(d.join("kuwa.json"), "{}\n").unwrap();
     git(&root, &["add", "-A"]);
     git(&root, &["commit", "-qm", "maps"]);
-    let t = tools(&root, "", "exit 1");
+    let t = tools(&root, "");
     let check = Asked {
         tree_check: snap_of(&root, &t),
         ..asked(&root)
@@ -360,7 +333,7 @@ fn a_probe_test_left_in_the_tree_stops_the_gate() {
     .unwrap();
     assert_eq!(stray_probes(&root), ["tests/tooling/test_zz_probe_a05.py"]);
     std::fs::create_dir_all(root.join("scripts/gates")).unwrap();
-    let t = tools(&root, "", "exit 1");
+    let t = tools(&root, "");
     let (code, out) = go(&asked(&root), &t);
     assert!(code == 1 && out.contains("test_zz_probe_a05.py"));
 }
@@ -368,7 +341,7 @@ fn a_probe_test_left_in_the_tree_stops_the_gate() {
 #[test]
 fn skip_quick_runs_no_quick_and_a_regenerated_file_is_named() {
     let root = repo("pf-skip");
-    let mut t = tools(&root, "", "exit 1");
+    let mut t = tools(&root, "");
     let make = root.join("fake-make2");
     crate::write_executable(&make, &format!("#!/bin/sh\n[ \"$2\" = docs ] && echo more >> {}/notes.md\n[ \"$2\" = quick ] && touch {}/quick-ran\nexit 0\n", root.display(), root.display()));
     t.make = make.display().to_string();
@@ -387,7 +360,7 @@ fn skip_quick_runs_no_quick_and_a_regenerated_file_is_named() {
 /// 130 ms against FR-008's tenth of a second).
 fn fails_and_says(target: &str, words: &str) {
     let root = repo(&format!("pf-fail-{target}"));
-    let t = tools(&root, target, "exit 1");
+    let t = tools(&root, target);
     let (code, out) = go(&Asked { ..asked(&root) }, &t);
     assert!(code == 1 && out.contains(words));
     if target != "quick" {
@@ -409,14 +382,14 @@ fn a_failing_quick_stops_the_phase_and_says_so() {
 #[test]
 fn an_unresolved_pointer_or_no_make_stops_the_phase() {
     let root = repo("pf-fail-pointers");
-    let t = tools(&root, "", "exit 1");
+    let t = tools(&root, "");
     crate::write_executable(
         &root.join("scripts/gates/l7r-gate.sh"),
         "#!/bin/sh\nexit 1\n",
     );
     let (code, out) = go(&Asked { ..asked(&root) }, &t);
     assert!(code == 1 && out.contains("a research pointer does not resolve"));
-    let mut gone = tools(&root, "", "exit 1");
+    let mut gone = tools(&root, "");
     gone.make = "/nonexistent/make".to_owned();
     assert_eq!(go(&Asked { ..asked(&root) }, &gone).0, 1);
 }
@@ -426,7 +399,7 @@ fn a_tree_outside_a_repository_says_nothing_and_an_unreadable_head_is_named() {
     let bare = crate::checks::scratch("pf-norepo");
     assert_eq!(tree(&bare)["HEAD"], "");
     let root = repo("pf-headname");
-    let t = tools(&root, "", "exit 1");
+    let t = tools(&root, "");
     let snap = root.join("h.json");
     std::fs::write(&snap, format!("{{\"HEAD\": \"{}\"}}", "0".repeat(40))).unwrap();
     let (code, out) = go(
@@ -442,7 +415,7 @@ fn a_tree_outside_a_repository_says_nothing_and_an_unreadable_head_is_named() {
 #[test]
 fn a_long_failure_shows_its_tail() {
     let root = repo("pf-long");
-    let mut t = tools(&root, "", "exit 1");
+    let mut t = tools(&root, "");
     let make = root.join("fake-make3");
     crate::write_executable(
         &make,
@@ -462,7 +435,6 @@ fn a_root_that_is_not_there_stops_the_phase() {
             root.to_path_buf()
         },
         "",
-        "exit 1",
     );
     assert_eq!(
         go(
@@ -497,7 +469,7 @@ fn the_command_line_runs_the_snapshot() {
 #[test]
 fn the_phase_runs_its_steps_and_ends_clean() {
     let root = repo("pf-steps");
-    let t = tools(&root, "", "exit 1");
+    let t = tools(&root, "");
     let (code, out) = go(&asked(&root), &t);
     assert!(code == 0 && out.contains("preflight: clean in"));
     let ran = std::fs::read_to_string(root.join("make-ran")).unwrap();

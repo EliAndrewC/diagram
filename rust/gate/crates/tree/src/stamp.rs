@@ -217,17 +217,8 @@ fn salt(area: &Area, root: &Path) -> String {
 }
 
 /// The content hash of `files`: each path with its semantic id, or the sha of its bytes in a raw area; a file gone is `<missing>`.
-///
-/// # Errors
-///
-/// Where what it reads, writes or runs fails: the error says which and why.
-pub fn hash_files(
-    files: &[PathBuf],
-    root: &Path,
-    raw: bool,
-    salt_text: &str,
-    python: &str,
-) -> Result<String, String> {
+#[must_use]
+pub fn hash_files(files: &[PathBuf], root: &Path, raw: bool, salt_text: &str) -> String {
     let readable: Vec<(PathBuf, Vec<u8>)> = files
         .iter()
         .filter(|p| p.is_file())
@@ -236,8 +227,7 @@ pub fn hash_files(
     let ids = if raw {
         readable.iter().map(|(_, d)| sha256::hex(d)).collect()
     } else {
-        let script = codeid::script(root);
-        codeid::content_ids(&readable, &mut Cache::at(root), python, &script)?
+        codeid::content_ids(&readable, &mut Cache::at(root))
     };
     let mut by_path = readable.iter().map(|(p, _)| p).zip(ids);
     let mut data = format!("{GATE_RECIPE}\0{salt_text}\0").into_bytes();
@@ -254,21 +244,20 @@ pub fn hash_files(
         }
         data.push(0);
     }
-    Ok(sha256::hex(&data))
+    sha256::hex(&data)
 }
 
 fn area_named(name: &str) -> Option<&'static Area> {
     AREAS.iter().find(|a| a.name == name)
 }
 
-fn area_key(root: &Path, area: &Area, python: &str) -> Result<String, String> {
-    hash_files(
+fn area_key(root: &Path, area: &Area) -> Result<String, String> {
+    Ok(hash_files(
         &area_files(root, area)?,
         root,
         area.raw,
         &salt(area, root),
-        python,
-    )
+    ))
 }
 
 /// An area's key by name, for the verification state.
@@ -276,22 +265,22 @@ fn area_key(root: &Path, area: &Area, python: &str) -> Result<String, String> {
 /// # Errors
 ///
 /// Where what it reads, writes or runs fails: the error says which and why.
-pub fn area_key_named(root: &Path, name: &str, python: &str) -> Result<String, String> {
-    area_key(root, area_named(name).ok_or("no such area")?, python)
+pub fn area_key_named(root: &Path, name: &str) -> Result<String, String> {
+    area_key(root, area_named(name).ok_or("no such area")?)
 }
 
 fn stamp_path(root: &Path, area: &Area) -> Option<PathBuf> {
     codeid::common_git_dir(root).map(|d| d.join(format!("gate-green-{}", area.name)))
 }
 
-fn write_stamp(root: &Path, area: &Area, python: &str) -> Result<(), String> {
-    let key = area_key(root, area, python)?;
+fn write_stamp(root: &Path, area: &Area) -> Result<(), String> {
+    let key = area_key(root, area)?;
     let path = stamp_path(root, area).ok_or("no git directory to record into")?;
     stated(std::fs::write(&path, key), &path.to_string_lossy())
 }
 
 /// Refuse an area whose gated code changed since `base` with no matching stamp; the lines to print.
-fn refusals(root: &Path, base: &str, python: &str) -> Result<Vec<String>, String> {
+fn refusals(root: &Path, base: &str) -> Result<Vec<String>, String> {
     let diff = git(root, &["diff", "--name-only", &format!("{base}...HEAD")])?;
     let text = String::from_utf8_lossy(&diff).into_owned();
     let mut bad = Vec::new();
@@ -316,7 +305,7 @@ fn refusals(root: &Path, base: &str, python: &str) -> Result<Vec<String>, String
             _ => "make done",
         };
         let kept = stamp_path(root, area).and_then(|p| std::fs::read_to_string(p).ok());
-        let want = area_key(root, area, python)?;
+        let want = area_key(root, area)?;
         match kept {
             None => bad.push(format!("{}: no green gate has been recorded at all ({gate} stamps it)", area.name)),
             Some(have) if have.trim() != want => bad.push(format!("{}: the last green gate ran against DIFFERENT code than you are pushing ({gate} again)", area.name)),
@@ -340,22 +329,25 @@ fn record(root: &Path, outcome: &str) {
 }
 
 /// Prove the hash still bites, since a checker never seen failing is not a checker; the failure, if it does not.
-fn selftest(root: &Path, python: &str) -> Result<(), String> {
+fn selftest(root: &Path) -> Result<(), String> {
     let dir = l7r_shared::tempdir::TempDir::new("gate-selftest");
-    selftest_in(&dir, root, python)
+    selftest_in(&dir, root, &SELFTEST)
 }
 
-/// (file, its new text or gone, what the hash must do against the last baseline, what it means if it does not).
-const SELFTEST: [(&str, Option<&str>, Rule, &str); 9] = [
-    ("a.py", Some("x = 1\n"), Rule::Baseline, ""),
-    ("b.py", Some("y = 2\n"), Rule::Baseline, ""),
-    ("a.py", Some("x = 2\n"), Rule::Moves, "a changed .py did NOT change the hash"),
-    ("a.py", None, Rule::Moves, "a deleted .py did NOT change the hash"),
-    ("a.py", Some("def f(x):\n    return x + 1\n"), Rule::Baseline, ""),
-    ("a.py", Some("\"\"\"module doc\"\"\"\n\n# a comment\n\ndef f(x):\n    \"\"\"f doc\"\"\"\n    return  x+1  # trailing\n"), Rule::Stays, "a comment/docstring/format-only edit CHANGED the hash"),
-    ("a.py", Some("def f(x):\n    return x + 2\n"), Rule::Moves, "a one-token code change did NOT change the hash"),
+/// One self-test row: (file, its new text or gone, what the hash must do against the last baseline, what it means if it does not).
+type Row = (&'static str, Option<&'static str>, Rule, &'static str);
+
+/// The rows the self-test runs. The semantic file is a `.rs` one since feature 449 T247 deleted `codeid.py`, whose `.py` rows (a docstring the edit kept) these were.
+const SELFTEST: [Row; 9] = [
+    ("a.rs", Some("const X: u8 = 1;\n"), Rule::Baseline, ""),
+    ("b.rs", Some("const Y: u8 = 2;\n"), Rule::Baseline, ""),
+    ("a.rs", Some("const X: u8 = 2;\n"), Rule::Moves, "a changed .rs did NOT change the hash"),
+    ("a.rs", None, Rule::Moves, "a deleted .rs did NOT change the hash"),
+    ("a.rs", Some("fn f(x: u8) -> u8 {\n    x + 1\n}\n"), Rule::Baseline, ""),
+    ("a.rs", Some("//! module doc\n\n// a comment\n\n/// f doc\nfn f(x: u8) -> u8 {\n    x+1 /* trailing */\n}\n"), Rule::Stays, "a comment/doc-comment/format-only edit CHANGED the hash"),
+    ("a.rs", Some("fn f(x: u8) -> u8 {\n    x + 2\n}\n"), Rule::Moves, "a one-token code change did NOT change the hash"),
     ("c.json", Some("{}\n"), Rule::Baseline, ""),
-    ("c.json", Some("{} \n"), Rule::Moves, "a non-.py file is hashed by its bytes and must move on any edit"),
+    ("c.json", Some("{} \n"), Rule::Moves, "a non-.rs file is hashed by its bytes and must move on any edit"),
 ];
 
 #[derive(PartialEq, Clone, Copy)]
@@ -365,17 +357,17 @@ enum Rule {
     Stays,
 }
 
-fn selftest_in(dir: &Path, root: &Path, python: &str) -> Result<(), String> {
+fn selftest_in(dir: &Path, root: &Path, rows: &[Row]) -> Result<(), String> {
     stated(std::fs::create_dir_all(dir), "the self-test's directory")?;
-    let files = [dir.join("a.py"), dir.join("b.py"), dir.join("c.json")];
+    let files = [dir.join("a.rs"), dir.join("b.rs"), dir.join("c.json")];
     let mut base = String::new();
-    for (name, text, rule, why) in SELFTEST {
+    for &(name, text, rule, why) in rows {
         let path = dir.join(name);
         match text {
             Some(text) => stated(std::fs::write(&path, text), name)?,
             None => stated(std::fs::remove_file(&path), name)?,
         }
-        let now = hash_files(&files, root, false, "", python)?;
+        let now = hash_files(&files, root, false, "");
         if rule == Rule::Baseline {
             base = now;
         } else if (now == base) == (rule == Rule::Moves) {
@@ -436,13 +428,8 @@ pub fn raw_matches(root: &Path, paths: &mut dyn Read) -> Result<String, String> 
 
 /// `l7r-gate stamp --write <area> | --fresh <area> | --check <base> | --selftest | --key <area> | --list <area> | --raw-match` (the paths on stdin): the first four answer and record as `gate-stamp.py` did, the other three are what a
 /// Python caller asks once a process until it is ported.
-pub fn cli(
-    args: &[String],
-    top: Option<&Path>,
-    python: &str,
-    stdin: &mut dyn Read,
-) -> crate::Reply {
-    let reply = answer(args, top, python, stdin);
+pub fn cli(args: &[String], top: Option<&Path>, stdin: &mut dyn Read) -> crate::Reply {
+    let reply = answer(args, top, stdin);
     if let (Some(root), Some("--write" | "--fresh" | "--check" | "--selftest")) =
         (top, args.first().map(String::as_str))
     {
@@ -451,7 +438,7 @@ pub fn cli(
     reply
 }
 
-fn answer(args: &[String], top: Option<&Path>, python: &str, stdin: &mut dyn Read) -> crate::Reply {
+fn answer(args: &[String], top: Option<&Path>, stdin: &mut dyn Read) -> crate::Reply {
     // not a git checkout: the guard is a no-op rather than an obstacle, and nothing can be fresh
     let Some(root) = top else {
         return crate::Reply {
@@ -467,19 +454,16 @@ fn answer(args: &[String], top: Option<&Path>, python: &str, stdin: &mut dyn Rea
     };
     let area = args.get(1).and_then(|n| area_named(n));
     match (args.first().map(String::as_str), area) {
-        (Some("--write"), Some(area)) => match write_stamp(root, area, python) {
+        (Some("--write"), Some(area)) => match write_stamp(root, area) {
             Ok(()) => say(String::new(), String::new(), 0),
             Err(why) => say(String::new(), format!("gate-stamp: {why}\n"), 1),
         },
         (Some("--fresh"), Some(area)) => {
             let kept = stamp_path(root, area).and_then(|p| std::fs::read_to_string(p).ok());
-            let same = kept.is_some_and(|k| area_key(root, area, python).is_ok_and(|want| k.trim() == want));
+            let same = kept.is_some_and(|k| area_key(root, area).is_ok_and(|want| k.trim() == want));
             say(String::new(), String::new(), i32::from(!same))
         }
-        (Some("--selftest"), _) => match selftest(root, python) {
-            Ok(()) => say(String::new(), String::new(), 0),
-            Err(why) => say(String::new(), format!("gate-stamp selftest: {why}\n"), 1),
-        },
+        (Some("--selftest"), _) => selftest_reply(selftest(root)),
         (Some("--list"), Some(area)) => match area_files(root, area) {
             Ok(files) => say(listing(&files, root), String::new(), 0),
             Err(why) => say(String::new(), format!("gate-stamp: {why}\n"), 1),
@@ -488,11 +472,11 @@ fn answer(args: &[String], top: Option<&Path>, python: &str, stdin: &mut dyn Rea
             Ok(found) => say(found, String::new(), 0),
             Err(why) => say(String::new(), format!("gate-stamp: {why}\n"), 1),
         },
-        (Some("--key"), Some(area)) => match area_key(root, area, python) {
+        (Some("--key"), Some(area)) => match area_key(root, area) {
             Ok(key) => say(format!("{key}\n"), String::new(), 0),
             Err(why) => say(String::new(), format!("gate-stamp: {why}\n"), 1),
         },
-        (Some("--check"), _) => match refusals(root, args.get(1).map_or("origin/main", String::as_str), python) {
+        (Some("--check"), _) => match refusals(root, args.get(1).map_or("origin/main", String::as_str)) {
             Err(why) => say(String::new(), format!("gate-stamp: {why}\n"), 1),
             Ok(bad) if bad.is_empty() => say(String::new(), String::new(), 0),
             Ok(bad) => {
@@ -501,6 +485,19 @@ fn answer(args: &[String], top: Option<&Path>, python: &str, stdin: &mut dyn Rea
             }
         },
         _ => say(String::new(), "usage: l7r-gate stamp --write <area> | --fresh <area> | --check <base> | --selftest | --key <area> | --list <area> | --raw-match\n".to_owned(), 2),
+    }
+}
+
+/// The self-test's verdict as the command's reply.
+fn selftest_reply(done: Result<(), String>) -> crate::Reply {
+    let (stderr, code) = done.map_or_else(
+        |why| (format!("gate-stamp selftest: {why}\n"), 1),
+        |()| (String::new(), 0),
+    );
+    crate::Reply {
+        stdout: String::new(),
+        stderr,
+        code,
     }
 }
 

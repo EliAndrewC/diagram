@@ -1,0 +1,29 @@
+# T274 handoff - session 1 (research and write)
+
+- SECTION=0123
+- T274.1 DONE - 0123's drawing page now states, labeled GUESS, that on the manor's own map the granary stands in the office (outer) court, never the household's court, at the inner end of one flanking strip with its back against the court divider and its door toward the office hall's end (the county example's 50 by 27 ft store against the east wall, beyond the hall's east end; the exact feet in an HTML comment); which flank is the map's choice. The Pingyao passage is quoted as the one placement read (north of the office buildings behind the war, justice and works offices - side wings our manor lacks, its outer court holding one office hall, pointing at 0090's drawing page), and the seat beside the hall is marked our own reading, with an absence note.
+- New bullet heading, verbatim: `On the manor's own map the granary stands in the office court, at the inner end of a flank, beside the office hall - a guess.`
+- It opens a new group after the town-map granary bullets, led by: "The manor's own map, not the town map, draws the granary the box is presumed to hold, and seats it in the office court."
+- New notes (drawing.notes.html): `pingyao-yamen-3` (CITATION, the Pingyao passage, original moved to the drawing originals as `pingyao-yamen-3#1`) and `how-our-maps-draw-the-magistrates-manor-on-a-town-map-4` (ABSENCE, searched 2026-11-22: 0090, 0093, 0123, 0163, and the archived text of pingyao-yamen, netease-pingyao-yamen, sina-neixiang-xianya, neixiang-xianya-zhwiki, neixiang-yamen-zhwiki, henan-neixiang and neixiang-yamen-baike-weixin grepped for 仓/廒 - only pingyao-yamen seats a granary).
+- Note key: the brief asked for the Pingyao citation under the next `how-our-maps-draw-...-<n>` key; per editing-the-record.md ("repeats of one work are `key`, `key-2`") the citation takes the work's key; a key shared by 0123's two pages is the same note on both (jinya-jawiki-2, -4 and others), and the findings page's `pingyao-yamen` quotes three passages, so this one-passage note is `pingyao-yamen-3` (the findings page has `pingyao-yamen` and `-2`), and the `-4` key carries the GUESS's absence note.
+- Line 4 `Evidence:` comment gains `guess (the granary's seat on the manor's own map)`.
+- `make record CHECK=1`, `make record`, `make glossary` clean; 0123 is not among the questions over 20,000 bytes.
+- `make quote-verbatim Q=0123` matched the new passage (VERBATIM 8 on the drawing page); baike.baidu.com refused the live fetch (403), as on the findings page; the passage was checked verbatim against the archived copy `/diagram/.specify/source-archive/42/429e9a2d5a67/20261002T124358Z/text.txt` (「在兵、刑、工房后修有公廨房，以北修县仓」). The quote-check should read that archive copy.
+- Not done here, per the brief: the record checks (quote-check on the two new notes, record-format on the visible change, source-reader on the new pingyao-yamen-3 note), claims, pop-ups.
+
+## Files
+- research/questions/0123-the-magistrates-manor-in-a-town-where-it-stands-and-which-way-it-faces-jinya-and-yamen.drawing.html
+- research/questions/0123-the-magistrates-manor-in-a-town-where-it-stands-and-which-way-it-faces-jinya-and-yamen.drawing.notes.html
+- research/questions/0123-the-magistrates-manor-in-a-town-where-it-stands-and-which-way-it-faces-jinya-and-yamen.drawing.originals.html
+- specs/449-rust-codebase/briefs/t274-handoff.md
+- research/source-attempts.jsonl (the attempt lines `make archive-find` and `make source-outcome` appended on 2026-11-22; other sessions' lines are in the same uncommitted file)
+- (the source-outcome `cited:pingyao-yamen` was recorded; the claim on 0123 was taken and released through `make research-claim`; its sheet is outside this clone)
+## T274 session 2: checks
+- CHECKED quote-check 0123.drawing (pingyao-yamen-3, how-our-maps-draw-the-magistrates-manor-on-a-town-map-4, unfootnoted) - round 1: 1 SUPPORTS, 1 absence, 1 CLAIM-FROM-UNREAD, 1 unfootnoted - applied its EDIT (the absence note's opening sentence on what the Pingyao page says cut) and by hand reworded the unfootnoted clause 'a seat given relative to offices in side wings / Our manor has no side wings' to rest on the quoted passage and 0090 ('buildings our manor lacks / neither those offices nor office buildings behind them'); round 2: clean; round 3 (after record-format's rewording): clean
+- CHECKED record-format 0123 - round 1: 17 of 17 words, 0 VOCABULARY/SESSION NOTE/HISTORY - nothing; round 2: 1 reader-clarity finding ('seat' meant both the compound and a building's placement) - applied its 3 EDITs ('placement')
+- CHECKED source-reader 0123.drawing#pingyao-yamen-3 - 1 READ (archived copy, line 113) - nothing
+- CHECKED modal-triage sheet/main-gate (modal-depiction, owed because 0123's drawing page moved) - cleared 3 times (one per page change), no TOUCHES - nothing; triaged from a bundle trimmed to that one pop-up so other builders' 34 triage units stay owed to them
+- CHANGED research/questions/0123-the-magistrates-manor-in-a-town-where-it-stands-and-which-way-it-faces-jinya-and-yamen.drawing.html
+- CHANGED research/questions/0123-the-magistrates-manor-in-a-town-where-it-stands-and-which-way-it-faces-jinya-and-yamen.drawing.notes.html
+- OPEN (OUTSIDE THE CHANGE, quote-check rounds 1-3) research/questions/0123-the-magistrates-manor-in-a-town-where-it-stands-and-which-way-it-faces-jinya-and-yamen.html: 'In the Chinese towns we found, the magistrate sat in the middle instead, and regulation fixed which way the office faced.' has no note mark; 'regulation fixed which way the office faced' owes a citation or an absence note
+- OPEN the re-owed Research: claims on 0123's drawing page are the orchestrator's (make claims-* not run here); make record CHECK=1, make record, make glossary clean; make record-owed names nothing of 0123; claim on 0123 released

@@ -31,8 +31,7 @@ const REGISTRY: &str = "research/sources/010-works-cited";
 /// The uncited sources' write-ups (feature 312 FR-012), bundled for `source-applicability` as a cited work's are.
 const UNCITED: &str = "research/sources/040-uncited-works";
 pub const VARIANTS: &str = "research/assets/glossary-variants.txt";
-const CLASSES: &str = "l7r/diagram/interactive/classes";
-const COMPOUND_KINDS: &str = "l7r/diagram/interactive/compound_kinds";
+const KINDS: &str = "rust/gate/crates/registry/src/kinds.rs";
 /// The style guide `record-style` judges against (feature 292), handed in the bundle.
 pub const STYLE: &str = "research/STYLE.md";
 /// A quote-check reads notes in BATCHES of at most this many bytes (feature 292: on 2026-09-29 the median notes file was 4,838 bytes, the 90th percentile 8,599).
@@ -492,7 +491,7 @@ pub fn entry_bundle(run: &mut Run, root: &Path, e: &Entry<'_>) -> Result<i32, Fa
         kind_docstring(root, e.kind)?
     };
     if !e.kind.is_empty() && found_kind.is_none() {
-        run.warn(&format!("check-bundle: no modal class {} under {CLASSES} or {COMPOUND_KINDS} - KIND is the modal's class name as written in its classes file, case and all (KIND=Stables, or household.Well when two modules share a name)", super::py_repr(e.kind)));
+        run.warn(&format!("check-bundle: no modal class {} in the registry ({KINDS}) - KIND is the modal's class name as the registry writes it, case and all (KIND=Stables, or household.Well when two modules share a name)", super::py_repr(e.kind)));
         return Ok(2);
     }
     fresh(&e.out)?;

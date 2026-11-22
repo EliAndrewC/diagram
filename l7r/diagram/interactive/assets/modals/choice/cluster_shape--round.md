@@ -13,8 +13,7 @@ No count of how many villages took each shape is recorded, nor any measure of a 
 Guesses:
 - How often a cluster comes out round: no count of village shapes was found, so the share is set for the maps.
 
-Depiction: The map seats the houses in a compact band along the dry edge of the fields. At hamlet size the field's edge and the lanes tend to stretch a cluster, so the title card calls a cluster
-round only when the finished houses span no more than about twice as far one way as the other.
+Depiction: The map seats the houses in a compact band along the dry edge of the fields.
 
 Name: The cluster's shape: round
 Covers: `meta.cluster_shape = round`

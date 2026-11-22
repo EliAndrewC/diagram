@@ -5,8 +5,8 @@ use std::path::{Path, PathBuf};
 use serde_json::json;
 
 use super::{
-    classify, decide, judge, landing_lint, lay, makefile_for, recipes, split_segment, words,
-    wrapped, wrapped_modules, Ctx, Token,
+    classify, decide, judge, lay, makefile_for, recipes, split_segment, words, wrapped,
+    wrapped_modules, Ctx, Token,
 };
 use crate::protocol::{Answer, Event};
 use crate::shared::session::Session;
@@ -24,10 +24,6 @@ fn each_verdict_has_its_shape() {
         ("make quick", "ok"),
         ("make -f /tmp/x y", "foreign-makefile"),
         ("python3 -m l7r.diagram.tools.x", "engine-entry-point"),
-        (
-            "python3 l7r/diagram/hamletgen/__main__.py a",
-            "engine-entry-point",
-        ),
         ("cargo test", "bare-cargo"),
         ("~/.cargo/bin/cargo clippy", "bare-cargo"),
         ("make done FULL=1 REF_WHY=x", "inline-override"),
@@ -194,43 +190,7 @@ fn world(tag: &str) -> crate::shared::tempdir::Held<PathBuf> {
     d.hold(held)
 }
 
-/// A stand-in for `python3 -m ruff`: `sh -m ruff ...` fails, so the tests put a script on the command by the python field.
-fn fake(d: &Path, body: &str) -> String {
-    let path = d.join("fake-python");
-    crate::guards::write_executable(&path, &format!("#!/bin/sh\n{body}\n"));
-    path.to_string_lossy().into_owned()
-}
-
-#[test]
-fn a_landing_is_linted_before_it_runs() {
-    let d = world("lint");
-    let bad = fake(&d, "echo a.py:1 bad; exit 1");
-    assert!(landing_lint("make land-tooling FILES=a.py", &d, &bad)
-        .contains("the landing's lint fails on a.py"));
-    assert!(
-        landing_lint("make arbiter-fix-done ID=x LAND=\"a.py\"", &d, &bad).contains("a.py:1 bad")
-    );
-    assert_eq!(
-        landing_lint("make land-tooling FILES=a.py", &d, &fake(&d, "exit 0")),
-        ""
-    );
-    assert_eq!(
-        landing_lint(
-            "make land-tooling FILES=a.py",
-            &d,
-            &fake(&d, "echo No module named ruff >&2; exit 1")
-        ),
-        ""
-    );
-    assert_eq!(
-        landing_lint("make land-tooling FILES=none.py", &d, &bad),
-        ""
-    );
-    assert_eq!(landing_lint("make land-tooling FILES=a.sh", &d, &bad), "");
-    assert_eq!(landing_lint("ls", &d, &bad), "");
-}
-
-fn run(cmd: &str, d: &Path, python: &str) -> Vec<Answer> {
+fn run(cmd: &str, d: &Path) -> Vec<Answer> {
     let e = Event {
         name: "PreToolUse".to_owned(),
         input: json!({"tool_name": "Bash", "cwd": d, "tool_input": {"command": cmd, "description": "kept"}}),
@@ -241,7 +201,6 @@ fn run(cmd: &str, d: &Path, python: &str) -> Vec<Answer> {
         &Ctx {
             tree: d.to_path_buf(),
             here: d.to_path_buf(),
-            python,
         },
     )
 }
@@ -263,18 +222,9 @@ fn each_refusal_names_what_to_run() {
         ("sed -i s/a/b/ Makefile", "a marker INSIDE the text written"),
         ("cd dev && cp /tmp/x switches.json", "make guard-edit FILE="),
     ] {
-        assert!(refused(&run(cmd, &d, "sh"), words), "{cmd}");
+        assert!(refused(&run(cmd, &d), words), "{cmd}");
     }
-    assert!(refused(
-        &run(
-            "make land-tooling FILES=a.py",
-            &d,
-            &fake(&d, "echo bad; exit 1")
-        ),
-        "the landing's lint fails"
-    ));
-    assert!(run("make land-tooling FILES=a.py", &d, &fake(&d, "exit 0")).is_empty());
-    assert!(run("ls", &d, "sh").is_empty());
+    assert!(run("ls", &d).is_empty());
 }
 
 /// A write is resolved from where the command starts: the event's `cwd`, else the guard's own directory (T227).
@@ -289,7 +239,6 @@ fn a_relative_write_is_resolved_from_where_the_command_starts() {
         let ctx = Ctx {
             tree: d.to_path_buf(),
             here: here.to_path_buf(),
-            python: "sh",
         };
         refused(
             &judge(&e, &Session::from_input(&e.input), &ctx),
@@ -305,19 +254,18 @@ fn a_relative_write_is_resolved_from_where_the_command_starts() {
 #[test]
 fn the_rewrites_and_the_escape() {
     let d = world("rewrite");
-    assert!(run("pytest tests/a/test_b.py -q", &d, "sh").is_empty());
-    let got = run("python3 -m l7r.diagram.ci status", &d, "sh");
+    assert!(run("pytest tests/a/test_b.py -q", &d).is_empty());
+    let got = run("python3 -m l7r.diagram.ci status", &d);
     assert!(
         matches!(&got[..], [Answer::Rewrite(v), Answer::Notice(n)] if v["command"] == "make ci-status" && n.contains("`python3 -m l7r.diagram.ci` was rewritten to `make ci-status`"))
     );
     assert!(run(
         "sed -i s/a/b/ Makefile # GUARD_EDIT_OK: it fired on correct work",
-        &d,
-        "sh"
+        &d
     )
     .is_empty());
     assert!(refused(
-        &run("sed -i s/a/b/ Makefile # GUARD_EDIT_OK", &d, "sh"),
+        &run("sed -i s/a/b/ Makefile # GUARD_EDIT_OK", &d),
         "with no reason"
     ));
     let e = Event {
@@ -344,20 +292,6 @@ fn the_makefile_is_the_trees_the_command_runs_in() {
     );
     assert_eq!(makefile_for("", &tree), "from the tree");
     assert_eq!(makefile_for("/", &tree), "from the tree");
-    let e = Event {
-        name: "PreToolUse".to_owned(),
-        input: json!({"tool_name": "Bash", "tool_input": {"command": "make land-tooling FILES=a.py"}}),
-    };
-    let got = judge(
-        &e,
-        &Session::from_input(&e.input),
-        &Ctx {
-            tree: d.clone(),
-            here: d.clone(),
-            python: &fake(&d, "echo bad; exit 1"),
-        },
-    );
-    assert!(refused(&got, "the landing's lint fails"));
 }
 
 #[test]
@@ -366,8 +300,7 @@ fn an_escape_is_recorded_with_its_reason() {
     let why = "it fired on correct work, unique to this firing record test";
     assert!(run(
         &format!("sed -i s/a/b/ Makefile # GUARD_EDIT_OK: {why}"),
-        &d,
-        "sh"
+        &d
     )
     .is_empty());
     let dir = std::env::var("GUARD_LOG_DIR").unwrap();
@@ -690,7 +623,7 @@ fn a_bare_rustfmt_is_refused_naming_the_scoped_format() {
         ("rustfmt a.rs", "bare-rustfmt"),
         ("cargo fmt", "bare-cargo"),
     ] {
-        let got = run(cmd, &d, "sh");
+        let got = run(cmd, &d);
         let named =
             refused(&got, "make format FILE=<path>") && refused(&got, "make format CRATE=<dir>");
         assert!(named, "{rule}: {got:?}");
@@ -710,7 +643,7 @@ fn an_unclosed_quote_after_an_entry_point_is_judged_in_time() {
     );
     if std::env::var_os(CHILD).is_some() {
         let d = world("in-time");
-        println!("T113 answered {:?}", run(&cmd, &d, "sh"));
+        println!("T113 answered {:?}", run(&cmd, &d));
         return;
     }
     let (passed, said) = crate::guards::passes_in_time(
