@@ -814,31 +814,44 @@ docs/performance-checklist.md answers.
 **Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
 
 
-### T91 (<why: the finding or measurement that files it>)
+### T91 (T79's bind rule refuses two kinds of scratch write HEAD allowed, found by T79's second plan review, 2026-11-21: a name assigned twice in straight-line code is judged at each value, and past the 64-binding cap a lone loop falls back to T79's unknown reading, the mirror)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: two changes in `rust/guard/shared/src/tree/bind.rs`, red first, on HEAD `30e95ca94b`.
+  - the shapes at HEAD: a name judged at each assigned value in tx 8 of 995 rows, ux 62 of 2,311, bx 281 of 59,116; past the 64 cap ux 8, bx 14, tx 0 - every one a product of several names (largest single loop 31 values, 21 distinct; products 70 to 680), no lone loop past 64, measured 2026-11-22 (an instrumented copy of the walk, `/tmp/t91/scripts/probe/main.rs`, one process a corpus, `/tmp/t91/out/probe.*.tsv`).
+  - (a) a straight reassignment reads its last value: `Bound::Straight`, a name assigned more than once in straight-line code, is one binding - each bare assignment renamed `__s<k>_NAME` and each read bound to the assignment last before it (by the assignment's end, so `D=$D/b` reads the one before), a read before any assignment the environment's value or empty. `straight()` takes it only where no function, `source`, `readonly`/`declare`/`typeset`/`local`/`unset` stands in the command, each read's assignment is bare and alone in its command, the stretch from it to the read holds no compound word, brace group, comment, backtick, `$(`, `${...}` beyond a name and op, or `)` underflow, and no read of the name assigns or takes a word on its value (`${D:=W}`, `${D:-W}`, `${D-W}`; the last two added on T91's first plan review, below); else `Bound::Assigned`, judged at each value as before (decision D-a). Only bare assignments are renamed: a first cut renamed an `a=` inside a `python3 -c "..."` (bx#50157), measured 2026-11-22 (T83's walker, `/tmp/t91/scripts/walkall.sh`).
+  - (b) a lone loop past the cap is judged value by value: `bound_texts` collects the many-valued names in read order; the one many-valued name of a command gets `MAX_VALUES = 128`, else `MAX_BINDINGS = 64` as before, so a product of names past 64 keeps T79's unknown reading, unchanged; loop values deduplicated by text; `bindings` skips a name already bound (decision D-b).
+  - where the final rule takes: Straight names bx 5 rows (5 names), tx 0, ux 0; still Assigned tx 8 rows (10 names), ux 62 (65), bx 276 (441); past the cap ux 8, bx 12 (deduplication took 2 bx rows under 64), measured 2026-11-22 (`/tmp/t91/target-probe2`, `/tmp/t91/out/probe4.*.tsv`).
+  - red first: HEAD's `bind.rs` with T91's tests and a stub `MAX_VALUES` (both changes off), `cargo test --lib tree::tests::` 52 passed, 2 failed - `a_straight_reassignment_reads_its_last_value` at its first case and `a_loop_past_the_cap_is_judged_value_by_value` at 65 values; `a_mirror_value_at_either_end_is_still_read` (30 cases, a mirror value first, last or between) passes at HEAD and pins that (a) keeps every refusal, measured 2026-11-22 (`/tmp/t91/red`, `/tmp/t91/out/red-T91.log`). T91's first plan review asked after `D=<mirror>/x; D=; touch ${D:-<mirror>/z}/f`: the fix read it `/f` elsewhere, where bash writes `<mirror>/z/f` and HEAD refused it (at `<mirror>/x/f`) - a regression of (a), fixed here: the case and `${D-W}`'s added to the either-end pin, red with the first fix (`a_mirror_value_at_either_end_is_still_read` at that case) and green with the op excluded, `cargo test --lib tree::tests::` 54 passed, measured 2026-11-22 (`/tmp/t91/fix`, `/tmp/t91/out/red2.log`, `/tmp/t91/out/green5.log`); the exclusion only moves a name back to HEAD's reading at each value. Green: `make rust-test CRATE=rust/guard/shared` 427 passed, 0 failed (the two million-step tests and `window_307_runs_as_typed`, red in the /tmp copy, green in the clone), measured 2026-11-22 (`/tmp/t91/out/rtest.log`).
+  - a moved pin: `a_name_assigned_from_pwd_is_where_the_shell_stands_then`'s `cd C && WT=$PWD; echo; WT=/tmp/q/wt; touch $WT/x.py` now reads `["elsewhere"]`, as bash writes it; its `;` variant keeps `["clone","elsewhere"]` (the `cd C &&` before the first assignment is not straight-line under (a)'s rule).
+  - the replay, HEAD against the fix (main-tree, gm-tree and make-only with session `nobody`, gate-write in gate mode, every row's verdict and message hash): fx 1,134, tx 995 and ux 2,311 rows each 0 changed on all four guards; bx 59,116 rows 0 changed on main-tree, gm-tree and make-only (gate-write over bx, the slowest, still running at this writing; its first 13,587 rows 0 changed), measured 2026-11-22 (`/tmp/t91/scripts/runall.sh head|fix`, `/tmp/t91/rp/{head,fix}.<c>.*.tsv`, `diff` of the sorted rows). T83's walker over q, tx and ux byte-identical; bx 3 rows differ: bx#21184 (`F=A; F=B; cat >> $F`: HEAD read both targets, the fix B alone, as bash) and bx#23083, #27145 (the same target set, duplicate targets fewer), measured 2026-11-22 (`/tmp/t91/scripts/walkall.sh`, `/tmp/t91/out/w.<c>.{head,fix}.jsonl`). The 22 over-cap rows at HEAD: main-tree, gm-tree and make-only allow all; gate-write refuses 7 (ux#508, #940, #941, bx#25781, #28198, #28365, #28370), unchanged from HEAD (each a product of names, which T91 leaves as it was).
+  - the cost: ux's `walk_judged`, inclusive, HEAD 26,849,671,432 instructions (T129's halved walk in the base), the fix 26,834,553,158 (0.06% fewer, no rise), 11.62 M a row at HEAD and 11.61 M with the fix over 2,311 rows, measured 2026-11-22 (`valgrind --tool=callgrind`, T83's release `time` binary over `/tmp/t79/ux-all.jsonl`, `/tmp/t91/out/cg.{head,fix}.ux.out`; the fix's binary was built with `MAX_VALUES = 256`, code identical on ux, no lone ux loop past 64). The ceiling: a lone loop of 64 values 10.8 ms, 65 values 11.2 ms (HEAD 0.9 ms, the unknown reading), 128 values 44.7 ms, 256 values 171 ms, past 128 one walk (T79's unknown reading), measured 2026-11-22 (T83's timer, release, load about 30, `/tmp/t91/out/time.capprobe.{head,fix}.tsv`).
+  - decisions: D-a - the straight-line rule is narrow on purpose: a name read after any branch, loop, substitution or function keeps HEAD's reading at each value, which over-refuses but never under-refuses (the either-end pin); widening it to `&&` and `$(` was priced from the probe (`probe2.*.tsv`: most Assigned names stand after one) and left, since an assignment after `&&` or `||` may not run, so its read may see the value before it. That reason covers the branch, loop, function and `source` forms alone; a backtick, `$(`, brace group, comment or `${X:-$(...)}` in the stretch between the last assignment and the read cannot change the name in bash but the rule's scanner (`flat`) treats each as opaque, so `D=<mirror>/x; D=/s/y; X=`date`; touch $D/f` is still refused though bash writes `/s/y/f` - a defect left and filed (Found and left, T145), measured 2026-11-22 (`/tmp/t91/q2`: such a form BEFORE the last assignment is read straight, inside the stretch it is not). D-b - `MAX_VALUES = 128` is a CONVENTION, a cost bound: 128 values cost 44.7 ms, 256 cost 171 ms (above); a product of names keeps `MAX_BINDINGS = 64` and T79's unknown reading, as T91's line names a lone loop alone; whether gate-write's 7 product refusals above are right is not judged here.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| a straight reassignment reads its last value | red at HEAD (`a_straight_reassignment_reads_its_last_value`) | n/a - no map | none | n/a |
+| a lone loop past 64 judged value by value | red at HEAD (`a_loop_past_the_cap_is_judged_value_by_value`, 65 values) | n/a - no map | none | n/a |
 
 ### T91 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** No map changes. A scratch write the shell makes through a name reassigned in straight-line code (`D=/diagram/x; D=/tmp/y; touch $D/f` standing in the mirror) or through one loop of 65 to 128 literal scratch values is allowed, as bash writes it; every write that names the mirror at any value is still refused.
+2. **The constraints.** T91's line (straight-line reassignment reads its last value; a loop past the cap judged value by value; red first on both; a mirror value at either end still refused); T79's bind rule and `docs/guards.md` row 63, restated; constitution XIII (no known regressions, the replay) and XIV.
+3. **Where each comes from.** O: T79's second plan review (2026-11-21) and this task's measurements of 2026-11-22 (the Approach); G: none.
+4. **Do they describe the world here?** Yes: the probe found 5 bx rows the straight rule takes and 8 ux, 12 bx rows past the cap, measured 2026-11-22 (`/tmp/t91/out/probe4.*.tsv`); none of them a lone loop past 64 in the corpora, so (b) is pinned by its test, not by a replayed row.
+5. **The order.** After T79 and T129 (the walk it reads); before T140 (waits on T91), T144 and T145 (left below).
+6. **The exits.** Green: the two tests red at HEAD and green with the fix, the either-end pin green on both, the four-guard replay with no verdict moved but corrections. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None: the probe read every row of tx, ux and bx once.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** `make rust-test CRATE=rust/guard/shared` green, the replay (above), and `make closing-checks T=T91 F=451`.
+10. **Before moving a constant.** `MAX_BINDINGS = 64` unchanged; `MAX_VALUES = 128` new, a CONVENTION (D-b), no research claim.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** A session's scratch write refused though bash writes scratch: each costs an escape or a rewrite (the visible effect); bx#21184's second target, read where bash never writes it.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?**
+- `D=; echo x > ${D:-/diagram/x}/f` run from /tmp is read as a write to `/f` (elsewhere) at HEAD and with the fix, but bash writes the mirror `/diagram/x/f`: `bind.rs`'s `replaced()` drops the `:-` default when the name is assigned, measured 2026-11-22 (T91's probe, HEAD and the fix). Not fixed here: an empty or unset value must take the default, which needs the walk's own expansion (`expand` in `tree.rs`) to judge the op, outside this task's bind rule, and it predates T91 (T79). The same drop reads `${D:+<mirror>/z}` as an unknown target elsewhere from /tmp at HEAD, where bash writes the mirror for a set `D`, measured 2026-11-22 (HEAD's walker, `/tmp/t91/q2/ph.jsonl`). Filed as T144; lands before T140.
+- `D=<mirror>/x; D=/s/y; X=`date`; touch $D/f` (or `X="$(date)"`, a brace group, a comment line, `${X:-$(pwd)}` in the stretch from the last assignment to the read), run standing in the mirror, is refused though bash writes `/s/y/f`: each costs the session an escape or a rewrite; the either-end pin holds these cases as refusals today, measured 2026-11-22 (`/tmp/t91/q2`, the pin). Not fixed here: `flat` would have to skip a substitution's body and a comment and scan a brace group for an assignment to the name, a parse the walk does not make in `bind.rs`; T91 keeps HEAD's reading at each value for them (D-a), so no refusal is lost. Filed as T145; lands before T140.
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** No.
 
 
 <!-- plan-archive: T92 to T84 moved to plan-done.md, 2026-11-21 (feature 375 FR-044) -->
@@ -1724,6 +1737,60 @@ its own files; not engine speed, so no performance-checklist answers.
 |---|---|---|---|---|
 
 ### T143 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+
+### T144 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T144 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+
+### T145 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T145 Approach (checklist part A)
 
 1. **The goal, in the world.** <the place as it should be>
 2. **The constraints.** <the FRs, decisions and pages it holds to>

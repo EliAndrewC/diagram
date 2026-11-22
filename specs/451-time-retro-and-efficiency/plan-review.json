@@ -386,10 +386,10 @@
    "declared": "round-arbiter"
   },
   "### T91 Approach (checklist part A)": {
-   "sha256": "0612fc2500bedd884ddb5e0325315d4649c39b5a6b9f73de9d0dfe23f9171cbc",
+   "sha256": "ba5bea93d7aaaee0ba3858f4137e13cf2983c09ccfb509369793cdd01bffdcae",
    "verdict": "CLEAR",
-   "reviewed": "2026-11-21",
-   "declared": "round-arbiter"
+   "reviewed": "2026-11-22",
+   "declared": "spec-fidelity"
   },
   "### T85 (the finding as filed, restated by its measurement: of the main session's 24 run-still-going refusals of 2026-11-21 00:00-08:00 UTC, 14 named a run a builder still running had started and 10 the session's own background call's run, which the harness tracks but the guard did not see, and none a run whose builder had stopped, measured 2026-11-21 (each guard-log row matched to the event log's Stop line, its in-flight shells' launch lines and each builder's last notice in the session's transcript, `/tmp/t85-measure/final.py`))": {
    "sha256": "bd32e4a1e054692783e12a024f59523add61d28b04aac62eb02cd463827f7b3e",
@@ -735,6 +735,12 @@
   },
   "### T115 Approach (checklist part A)": {
    "sha256": "447dafb0d8e6f3f1e99bbcdf40464915e26afd1c23ac925dc60a71eb7649c187",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-22",
+   "declared": "spec-fidelity"
+  },
+  "### T91 (T79's bind rule refuses two kinds of scratch write HEAD allowed, found by T79's second plan review, 2026-11-21: a name assigned twice in straight-line code is judged at each value, and past the 64-binding cap a lone loop falls back to T79's unknown reading, the mirror)": {
+   "sha256": "9f8a3b8f9059ee795e86eacac73584eb4f5829ef56ebf43ef4923b98a11dfa08",
    "verdict": "CLEAR",
    "reviewed": "2026-11-22",
    "declared": "spec-fidelity"
@@ -12310,6 +12316,85 @@
      "why": "These are found by the same labeled sweep and deferred with FR-009's three elements. They are bundled with the other test-log leaks under the GM's 2026-11-22 bundling approval, and ordered before T22, so they are not left without a home. I took T143 and its order on the block's word."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-22",
+   "blocks": [
+    "### T91 (T79's bind rule refuses two kinds of scratch write HEAD allowed, found by T79's second plan review, 2026-11-21: a name assigned twice in straight-line code is judged at each value, and past the 64-binding cap a lone loop falls back to T79's unknown reading, the mirror)",
+    "### T91 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "(a) Bound::Straight",
+     "summary": "A name assigned more than once in straight-line code is one binding: each bare assignment renamed, each read bound to the last assignment before it, a read before any assignment the environment's value or empty.",
+     "class": "within",
+     "why": "This is what T91's line asks for (a straight-line reassignment reads its last value). It is a fix of a check refusing good work, which constitution XIV and the fix-as-we-go rule ask to be fixed."
+    },
+    {
+     "id": "D-a (&&, ||, branch, loop, function, source)",
+     "summary": "A read whose last assignment follows && or ||, or that stands after a branch, a loop, a function or a source, keeps HEAD's reading at each value. Widening the rule to && was priced and not taken.",
+     "class": "within",
+     "why": "None of these is straight-line code, which is what T91's line names. An assignment after && or || may not run, so the read may see the earlier value, and judging each value is the correct answer there, not an over-refusal. No mirror refusal is lost. The moved pin's && form agrees: its last assignment follows a ;."
+    },
+    {
+     "id": "D-a (opaque forms in the stretch, filed as T145)",
+     "summary": "A backtick, $(, brace group, comment or ${X:-$(...)} between the last assignment and the read keeps HEAD's reading at each value, so a scratch write that bash makes is still refused there. Filed as T145, which lands before T140.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This narrows T91's line, because these commands are straight-line code and the leftover over-refusal is a defect (a check refusing good work). The plan's stated reason, that bind.rs's flat scanner would need to parse substitution bodies, comments and brace groups, is a cost and does not make it legitimate by itself. What does is this: the defect is not dropped but sequenced, filed as T145 to land before T140, the task that waits on T91. So no known defect is carried into the next step, which is what fix-as-we-go asks. The GM's own words of 2026-11-22 are that tasks keep being filed at the current rate and are bundled when fixed, so filing a sibling task departs from no instruction. The deferral also carries FR-009's why, id and order. T91's purpose is met: ordinary straight reassignments are read as bash reads them. The exception errs only toward HEAD's refusal, and the either-end pin holds it there."
+    },
+    {
+     "id": "(a) default/assign ops excluded",
+     "summary": "A name read through ${D:=W}, ${D:-W} or ${D-W} is not taken as Straight and falls back to HEAD's reading at each value (added on T91's first plan review).",
+     "class": "within",
+     "why": "This prevents a regression the first cut introduced: a mirror write read as elsewhere. Keeping a mirror value at either end refused is in T91's line, and the exclusion only returns a name to HEAD's reading."
+    },
+    {
+     "id": "(b) / D-b MAX_VALUES = 128",
+     "summary": "The single many-valued name of a command is judged value by value up to 128 values. Past 128 it falls back to T79's unknown reading.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "T91's line asks that a lone loop past the 64 cap be judged value by value, and the plan bounds that at 128. Some bound is physically required, because a guard that runs on every Bash call has to finish in bounded time: measured, 128 values cost 44.7 ms and 256 cost 171 ms (2026-11-22, T83's timer). The fallback is the conservative one (refuse, never under-refuse). The measured corpora hold no lone loop past 64 at all, so the bound defeats no case the purpose covers. The constant is labeled a CONVENTION."
+    },
+    {
+     "id": "D-b products of names",
+     "summary": "A command with several many-valued names keeps MAX_BINDINGS = 64 and T79's unknown reading, unchanged.",
+     "class": "within",
+     "why": "T91's line names a lone loop. Products of names are outside it, and the plan leaves them exactly as HEAD has them."
+    },
+    {
+     "id": "D-b gate-write's 7 product refusals not judged",
+     "summary": "Whether gate-write's 7 refusals of over-cap product rows are right is left unjudged.",
+     "class": "within",
+     "why": "These rows are outside T91's line and unchanged from HEAD. No defect is established, so nothing is being deferred."
+    },
+    {
+     "id": "(b) dedup and bindings skip",
+     "summary": "Loop values are deduplicated by text, and bindings skips a name already bound.",
+     "class": "within",
+     "why": "These are mechanics of (b), and they change no verdict in the replay."
+    },
+    {
+     "id": "moved pin (WT=$PWD case)",
+     "summary": "The && form of a_name_assigned_from_pwd_is_where_the_shell_stands_then now reads elsewhere, as bash writes it. Its ; variant keeps clone and elsewhere.",
+     "class": "within",
+     "why": "This is a correction that follows directly from (a): bash writes there."
+    },
+    {
+     "id": "Found and left: T144 (${D:-W} and ${D:+W} default dropped)",
+     "summary": "A defect that predates T91 (T79): replaced() drops the :- and :+ operand, so a mirror write can be read as elsewhere. Filed as T144, which lands before T140.",
+     "class": "narrowing",
+     "why": "This is a defect left, and the more serious kind: a check passing bad work, because a mirror write can be read as elsewhere. It is ruled LEGITIMATE on the same ground as T145. It is not dropped: it is filed as T144 to land before T140, the next task that depends on this one, so it is not carried into the next step, and FR-009's why, id and order are all present. It predates T91 (it is T79's). T91's fix reads it exactly as HEAD does, because the default and assign ops are excluded from Straight, so T91 neither causes it nor makes it worse. Fixing it needs tree.rs's expand, which lies outside T91's bind rule. That last point is the plan's stated reason, not the ground for this ruling.",
+     "ruling": "LEGITIMATE"
+    },
+    {
+     "id": "Performance work? No",
+     "summary": "The task is classed as not performance work.",
+     "class": "within",
+     "why": "This is a guard correctness fix. The cost measurement shows no rise (0.06% fewer instructions on ux)."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -19025,6 +19110,83 @@
      "class": "narrowing",
      "ruling": "LEGITIMATE",
      "why": "These are found by the same labeled sweep and deferred with FR-009's three elements. They are bundled with the other test-log leaks under the GM's 2026-11-22 bundling approval, and ordered before T22, so they are not left without a home. I took T143 and its order on the block's word."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T91": {
+   "section_sha256": "24d2625f3778e6a00aa2fa3359e19aa39f9fec262d6c79fb2da208dd04f58568",
+   "reviewed": "2026-11-22",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "(a) Bound::Straight",
+     "summary": "A name assigned more than once in straight-line code is one binding: each bare assignment renamed, each read bound to the last assignment before it, a read before any assignment the environment's value or empty.",
+     "class": "within",
+     "why": "This is what T91's line asks for (a straight-line reassignment reads its last value). It is a fix of a check refusing good work, which constitution XIV and the fix-as-we-go rule ask to be fixed."
+    },
+    {
+     "id": "D-a (&&, ||, branch, loop, function, source)",
+     "summary": "A read whose last assignment follows && or ||, or that stands after a branch, a loop, a function or a source, keeps HEAD's reading at each value. Widening the rule to && was priced and not taken.",
+     "class": "within",
+     "why": "None of these is straight-line code, which is what T91's line names. An assignment after && or || may not run, so the read may see the earlier value, and judging each value is the correct answer there, not an over-refusal. No mirror refusal is lost. The moved pin's && form agrees: its last assignment follows a ;."
+    },
+    {
+     "id": "D-a (opaque forms in the stretch, filed as T145)",
+     "summary": "A backtick, $(, brace group, comment or ${X:-$(...)} between the last assignment and the read keeps HEAD's reading at each value, so a scratch write that bash makes is still refused there. Filed as T145, which lands before T140.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This narrows T91's line, because these commands are straight-line code and the leftover over-refusal is a defect (a check refusing good work). The plan's stated reason, that bind.rs's flat scanner would need to parse substitution bodies, comments and brace groups, is a cost and does not make it legitimate by itself. What does is this: the defect is not dropped but sequenced, filed as T145 to land before T140, the task that waits on T91. So no known defect is carried into the next step, which is what fix-as-we-go asks. The GM's own words of 2026-11-22 are that tasks keep being filed at the current rate and are bundled when fixed, so filing a sibling task departs from no instruction. The deferral also carries FR-009's why, id and order. T91's purpose is met: ordinary straight reassignments are read as bash reads them. The exception errs only toward HEAD's refusal, and the either-end pin holds it there."
+    },
+    {
+     "id": "(a) default/assign ops excluded",
+     "summary": "A name read through ${D:=W}, ${D:-W} or ${D-W} is not taken as Straight and falls back to HEAD's reading at each value (added on T91's first plan review).",
+     "class": "within",
+     "why": "This prevents a regression the first cut introduced: a mirror write read as elsewhere. Keeping a mirror value at either end refused is in T91's line, and the exclusion only returns a name to HEAD's reading."
+    },
+    {
+     "id": "(b) / D-b MAX_VALUES = 128",
+     "summary": "The single many-valued name of a command is judged value by value up to 128 values. Past 128 it falls back to T79's unknown reading.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "T91's line asks that a lone loop past the 64 cap be judged value by value, and the plan bounds that at 128. Some bound is physically required, because a guard that runs on every Bash call has to finish in bounded time: measured, 128 values cost 44.7 ms and 256 cost 171 ms (2026-11-22, T83's timer). The fallback is the conservative one (refuse, never under-refuse). The measured corpora hold no lone loop past 64 at all, so the bound defeats no case the purpose covers. The constant is labeled a CONVENTION."
+    },
+    {
+     "id": "D-b products of names",
+     "summary": "A command with several many-valued names keeps MAX_BINDINGS = 64 and T79's unknown reading, unchanged.",
+     "class": "within",
+     "why": "T91's line names a lone loop. Products of names are outside it, and the plan leaves them exactly as HEAD has them."
+    },
+    {
+     "id": "D-b gate-write's 7 product refusals not judged",
+     "summary": "Whether gate-write's 7 refusals of over-cap product rows are right is left unjudged.",
+     "class": "within",
+     "why": "These rows are outside T91's line and unchanged from HEAD. No defect is established, so nothing is being deferred."
+    },
+    {
+     "id": "(b) dedup and bindings skip",
+     "summary": "Loop values are deduplicated by text, and bindings skips a name already bound.",
+     "class": "within",
+     "why": "These are mechanics of (b), and they change no verdict in the replay."
+    },
+    {
+     "id": "moved pin (WT=$PWD case)",
+     "summary": "The && form of a_name_assigned_from_pwd_is_where_the_shell_stands_then now reads elsewhere, as bash writes it. Its ; variant keeps clone and elsewhere.",
+     "class": "within",
+     "why": "This is a correction that follows directly from (a): bash writes there."
+    },
+    {
+     "id": "Found and left: T144 (${D:-W} and ${D:+W} default dropped)",
+     "summary": "A defect that predates T91 (T79): replaced() drops the :- and :+ operand, so a mirror write can be read as elsewhere. Filed as T144, which lands before T140.",
+     "class": "narrowing",
+     "why": "This is a defect left, and the more serious kind: a check passing bad work, because a mirror write can be read as elsewhere. It is ruled LEGITIMATE on the same ground as T145. It is not dropped: it is filed as T144 to land before T140, the next task that depends on this one, so it is not carried into the next step, and FR-009's why, id and order are all present. It predates T91 (it is T79's). T91's fix reads it exactly as HEAD does, because the default and assign ops are excluded from Straight, so T91 neither causes it nor makes it worse. Fixing it needs tree.rs's expand, which lies outside T91's bind rule. That last point is the plan's stated reason, not the ground for this ruling.",
+     "ruling": "LEGITIMATE"
+    },
+    {
+     "id": "Performance work? No",
+     "summary": "The task is classed as not performance work.",
+     "class": "within",
+     "why": "This is a guard correctness fix. The cost measurement shows no rise (0.06% fewer instructions on ux)."
     }
    ],
    "verdict": "CLEAR"
