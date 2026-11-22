@@ -470,7 +470,9 @@ say "worktree $WT at ${head:0:10} ($(lap) s)"
 # (5) the clone's kept results, where newer: a crate's or suite's result is keyed by its inputs' contents, so the clone's builders'
 # closing checks on the task's own files serve the landing (measured 2026-11-21: every crate's lint, test, format and dead reused)
 gd=$(git -C "$WT" rev-parse --absolute-git-dir) || exit 2
-for d in rust-checks hooks-test; do
+# review-verdicts too: the review gate reads them from the worktree's own git dir, and each is keyed by its engine key, so a verdict
+# the tree no longer matches is still refused (2026-11-22: 449's batch landing refused three reviews the clone held as unrecorded)
+for d in rust-checks hooks-test review-verdicts; do
   [ -d "$COMMON/$d" ] && mkdir -p "$gd/$d" && cp -a -u "$COMMON/$d/." "$gd/$d/"
 done
 [ -f "$COMMON/approach-owed.json" ] && cp -a "$COMMON/approach-owed.json" "$gd/"

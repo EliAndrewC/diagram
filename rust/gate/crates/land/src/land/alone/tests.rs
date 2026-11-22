@@ -123,6 +123,7 @@ fn world(tag: &str) -> (l7r_shared::tempdir::TempDir, std::path::PathBuf) {
     put(&c, "src/t1.rs", "fn t1() {}\n");
     sh(&c, "git add src/t1.rs && git commit -qm 'T1 work'");
     put(&c, ".git/rust-checks/lint-land", "a kept result\n");
+    put(&c, ".git/review-verdicts/building-review--x.json", "{}\n");
     put(
         &dir,
         "make",
@@ -212,6 +213,11 @@ fn the_script_lands_the_clone_s_head_alone_and_the_clone_takes_the_tip() {
     );
     let kept = sh(&dir, "git -C wt rev-parse --absolute-git-dir");
     assert!(Path::new(&kept).join("rust-checks/lint-land").is_file());
+    // the clone's review verdicts reach the worktree's review gate, which reads its own git dir (2026-11-22: a batch landing refused
+    // three reviews recorded in the clone as having no verdict record)
+    assert!(Path::new(&kept)
+        .join("review-verdicts/building-review--x.json")
+        .is_file());
     // the worktree kept, moved to the next landing's HEAD
     put(&c, "src/t1b.rs", "fn t1b() {}\n");
     sh(&c, "git add src/t1b.rs && git commit -qm 'T1 more'");
