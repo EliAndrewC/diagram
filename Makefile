@@ -591,12 +591,12 @@ phase-read:     ## [project] let ONE of a started phase task's held old-code fil
 	@if [ -z "$(FILE)" ] || [ -z "$$WHY" ]; then printf 'make phase-read: FILE=<path> and WHY="<reason>" are required\n' >&2; exit 2; fi
 	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" phase-read allow "$(FILE)" "$$WHY"
 
-task-start:     ## [project] name the task you are starting, so its checks wait for its decisions' verdict; a phase task's old code is held from reading until it is ticked (features 375, 444); refused while an open [perf] task waits in an active feature (451 FR-013), escape PERF_LATER_OK="<reason>", recorded by the tool   F=375 T=T13
+task-start:     ## [project] name the task you are starting, so its checks wait for its decisions' verdict; a phase task's old code is held from reading until it is ticked (features 375, 444); refused while an open [perf] task waits in an active feature (451 FR-013), escape PERF_LATER_OK="<reason>", recorded by the tool; T=a,b,c starts a bundle under its first task (451 T141)   F=375 T=T13 (or T=T13,T14,T15)
 	@if [ -z "$(F)" ] || [ -z "$(T)" ]; then printf 'make task-start: F=<feature> and T=<task id> are required\n' >&2; exit 2; fi
 	$(if $(HOLD_OK),$(LOGESCAPE) HOLD_OK "$$HOLD_OK",@:)
 	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" task-start "$(F)" "$(T)"
 
-decide:         ## [project] the spec-fidelity dispatch that rules on one task's plan section before its checks (feature 375); a found-and-left deferral without its reason, filed task and order, or naming no open task, refused, escape DEFER_FORM_OK="<reason>" (451 T17)   F=375 T=T13
+decide:         ## [project] the spec-fidelity dispatch that rules on one task's plan section before its checks (feature 375); a found-and-left deferral without its reason, filed task and order, or naming no open task, refused, escape DEFER_FORM_OK="<reason>" (451 T17); T=a,b,c decides a bundle's one section in one dispatch (451 T141)   F=375 T=T13 (or T=T13,T14,T15)
 	@if [ -z "$(F)" ] || [ -z "$(T)" ]; then printf 'make decide: F=<feature> and T=<task id> are required\n' >&2; exit 2; fi
 	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" plan decide "$(F)" "$(T)"
 
@@ -985,7 +985,7 @@ quick:           ## [tests] tier 2: lint and the fast tree checks (no Python tes
 # One run of `make static` for static-runs-hooks; FRESH=1 REASON= and HOOKS_ALL=1 reach the checks as on their own targets.
 # THE CALLER'S TASK (451 T86): T= (F= when two features share a task number) judges the files and crates that task changed, another
 # task's red in the same clone reported apart and not counted (the script's header); with no T= the whole clone, as before.
-closing-checks:  ## [tests] make static, make hooks-test and make quick at once, one combined result (each verdict and log; red if any is): start it with run_in_background once the code is done, then write the plan section and run make decide while it runs (451 T55); T= judges that task's files and crates, another task's red reported apart, not counted (451 T86)   T=<task> [F=<feature>] [FRESH=1 REASON="..."] [HOOKS_ALL=1]
+closing-checks:  ## [tests] make static, make hooks-test and make quick at once, one combined result (each verdict and log; red if any is): start it with run_in_background once the code is done, then write the plan section and run make decide while it runs (451 T55); T= judges that task's files and crates, another task's red reported apart, not counted (451 T86); T=a,b,c judges a bundle's files as one task's (451 T141)   T=<task> [F=<feature>] [FRESH=1 REASON="..."] [HOOKS_ALL=1]
 	@CLOSING_TASK="$(T)" CLOSING_FEATURE="$(F)" "$$(git rev-parse --show-toplevel)/scripts/gates/closing-checks.sh"
 
 bypass-audit:    ## [project] every escape token taken, with the reason its user gave   (the FULL prompt reads this)

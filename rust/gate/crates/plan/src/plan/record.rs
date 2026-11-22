@@ -152,9 +152,21 @@ pub(super) fn record_task(
         )));
     }
     let plan = std::fs::read_to_string(spec_dir.join("plan.md")).unwrap_or_default();
-    let Some(section) = task_sections(&plan).remove(task) else {
+    let sections = task_sections(&plan);
+    let Some(section) = sections.get(task).cloned() else {
         return refused(format!("plan.md has no section naming {task} - a task's decisions go under a heading that names it"));
     };
+    // ...AND A BUNDLE'S VERDICT IS EACH OF ITS TASKS' (451 T141): every task its heading lists whose section is this one, byte for byte
+    let title = section
+        .lines()
+        .next()
+        .unwrap_or_default()
+        .trim_start_matches('#')
+        .trim();
+    let shared: Vec<&str> = l7r_shared::plan_text::leading_tasks(title)
+        .into_iter()
+        .filter(|t| *t != task && sections.get(*t) == Some(&section))
+        .collect();
     let sha = text_of(review, "section_sha256")
         .filter(|s| !s.is_empty())
         .or(text_of(review, "plan_sha256"))
@@ -172,6 +184,9 @@ pub(super) fn record_task(
     out.as_object_mut().into_iter().for_each(|o| {
         let tasks = o.entry("tasks").or_insert(json!({}));
         tasks[task] = entry.clone();
+        for t in &shared {
+            tasks[*t] = entry.clone();
+        }
     });
     let _ = std::fs::write(spec_dir.join(RECORD), pretty(&out));
     // ...AND A CLEAR SECTION IS ITS BLOCKS' REVIEW TOO (the GM 2026-10-24): the reviewer read every block of the section

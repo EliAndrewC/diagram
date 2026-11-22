@@ -269,3 +269,89 @@ fn perf_1_s_checklist_and_another_active_feature_count_too() {
     std::fs::write(root.join(".git/set-downs.jsonl"), [0xff]).unwrap();
     assert_eq!(cli_with(&words(&["9001", "T01"]), &root, &env).code, 1);
 }
+
+#[test]
+fn a_parked_stage_s_task_is_refused_until_the_gm_s_words_resume_it() {
+    let dir = repo("start-parked");
+    let root = root_of(&dir);
+    let tree = root.to_string_lossy().into_owned();
+    let env = env_of(&[("L7R_GATE_TREE", &tree)]);
+    put(&root, "rust/parked/src/homesteads.rs", "");
+    put(
+        &root,
+        "specs/9001-x/tasks.md",
+        "- [ ] T30 phase: homesteads - every household seated\n- [ ] T31 [perf] the faster gate\n- [ ] T29 phase: seat - the seat\n",
+    );
+    // the stop comes first: no PERF_LATER_OK is asked of a parked stage's task
+    let refused = cli_with(&words(&["9001", "T30"]), &root, &env);
+    let err = refused.stderr.as_str();
+    assert_eq!(refused.code, 2, "{}", refused.stdout);
+    let ok1 = err.contains("make task-start of 9001-x T30 (homesteads)");
+    assert!(ok1, "{err}");
+    let ok2 = err.contains("Stop before homesteads, and talk first");
+    assert!(ok2, "{err}");
+    let ok3 = err.contains("GM_RESUMED=\"<the GM's words resuming it>\"");
+    assert!(ok3, "{err}");
+    assert!(!root.join(".git/active-task").exists());
+    // a stage that is not parked is no part of it
+    let seat = cli_with(&words(&["9001", "T29"]), &root, &env);
+    assert!(!seat.stderr.contains("parked"), "{}", seat.stderr);
+    // one word resumes nothing
+    let short = env_of(&[("L7R_GATE_TREE", &tree), ("GM_RESUMED", "yes")]);
+    let said = cli_with(&words(&["9001", "T30"]), &root, &short);
+    assert_eq!(said.code, 2);
+    let err = said.stderr.as_str();
+    assert!(err.contains("GM_RESUMED needs the GM's words"), "{err}");
+    let gm = format!(
+        "go ahead with homesteads now (a start-parked test, {:?})",
+        std::time::SystemTime::now()
+    );
+    let resumed = env_of(&[
+        ("L7R_GATE_TREE", &tree),
+        ("GM_RESUMED", &gm),
+        ("PERF_LATER_OK", "the GM resumed the stage"),
+    ]);
+    let said = cli_with(&words(&["9001", "T30"]), &root, &resumed);
+    assert_eq!(said.code, 0, "{}", said.stderr);
+    let row = std::fs::read_to_string(root.join(".git/parked-resumed.jsonl")).unwrap();
+    assert!(row.contains("\"stage\": \"homesteads\""), "{row}");
+    assert_eq!(census_with(&gm), 1);
+    // resumed, its next task starts with no words
+    let again = cli_with(
+        &words(&["9001", "T30"]),
+        &root,
+        &env_of(&[
+            ("L7R_GATE_TREE", &tree),
+            ("PERF_LATER_OK", "the GM resumed the stage"),
+        ]),
+    );
+    assert_eq!(again.code, 0, "{}", again.stderr);
+}
+
+#[test]
+fn a_resume_the_record_cannot_keep_is_raised_naming_the_record() {
+    let dir = repo("start-parked-unkept");
+    let root = root_of(&dir);
+    let tree = root.to_string_lossy().into_owned();
+    put(&root, "rust/parked/src/homesteads.rs", "");
+    put(
+        &root,
+        "specs/9001-x/tasks.md",
+        "- [ ] T30 phase: homesteads - every household seated\n",
+    );
+    // the record's path is a directory, so its append fails
+    std::fs::create_dir_all(root.join(".git/parked-resumed.jsonl")).unwrap();
+    let gm = format!(
+        "go ahead with homesteads now (an unkept-record test, {:?})",
+        std::time::SystemTime::now()
+    );
+    let env = env_of(&[
+        ("L7R_GATE_TREE", &tree),
+        ("GM_RESUMED", &gm),
+        ("PERF_LATER_OK", "the GM resumed the stage"),
+    ]);
+    let said = cli_with(&words(&["9001", "T30"]), &root, &env);
+    assert_ne!(said.code, 0, "{}", said.stdout);
+    let err = said.stderr.as_str();
+    assert!(err.contains("parked-resumed.jsonl"), "{err}");
+}

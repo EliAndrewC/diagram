@@ -199,10 +199,19 @@ fn decide(
         .as_ref()
         .and_then(|d| std::fs::read_to_string(d.join("plan.md")).ok())
         .unwrap_or_default();
-    let section = task_sections(&plan).remove(&words[2]);
+    // a bundle, `T=a,b,c` (451 T141): its first task's section, which every member must share
+    let members = bundle_members(&words[2]);
+    let lead = members.first().cloned().unwrap_or_default();
+    let mut sections = task_sections(&plan);
+    let missing = members.iter().find(|t| !sections.contains_key(*t)).cloned();
+    let section = sections.remove(&lead).filter(|_| missing.is_none());
     let (Some(dir), Some(section)) = (dir, section) else {
-        return fail(format!("{verb}: no plan section names {} in specs/{}* - put the task's decisions under a heading that names it\n", words[2], words[1]), 2);
+        let named = missing.unwrap_or_else(|| words[2].clone());
+        return fail(format!("{verb}: no plan section names {named} in specs/{}* - put the task's decisions under a heading that names it\n", words[1]), 2);
     };
+    if let Some(why) = bundle_refusal(&members, &section, &sections, &words[1]) {
+        return fail(format!("{verb}: refused - {why}\n"), 2);
+    }
     if verb == "section-sha" {
         return said(digest(section.as_bytes()) + "\n");
     }
@@ -221,28 +230,80 @@ fn decide(
     if taken.is_some() {
         found.retain(|f| !f.deferral());
     }
+    let checklist: Vec<String> = members
+        .iter()
+        .filter_map(|t| approach::refusal(&dir, &top, t))
+        .collect();
     let why = lint::decide_refusal(
         &plan,
         &section,
         &found,
-        approach::refusal(&dir, &top, &words[2]),
+        (!checklist.is_empty()).then(|| checklist.join("; ")),
     );
     if !why.is_empty() {
         return fail(format!("decide: refused - {why}\n"), 2);
     }
     // recorded once the section is decided, never on a refused run: plan-delta reads it as "decided under the escape" (D15)
     if let Some(reason) = &taken {
-        defer::record(&top, &dir, &words[2], reason);
+        for t in &members {
+            defer::record(&top, &dir, t, reason);
+        }
     }
+    let shown = members.join(", ");
     let prompt = if wording_only(&section) {
-        Ok(format!("decide: {}'s section is wording only - no plan review is owed and no bundle is built; `make tick` checks its commits against it", words[2]))
+        Ok(format!("decide: {shown}'s section is wording only - no plan review is owed and no bundle is built; `make tick` checks its commits against it"))
+    } else if members.len() > 1 {
+        bundle::task_prompt(&dir, out_root, &lead).map(|p| format!("{p} BUNDLE (451 T141): this one section is the plan of {shown}; judge every task in it - each of its items for each task where they differ, a finding naming the task it is about - and record its one verdict once, under {lead}: the record writes it under every task the section names."))
     } else {
-        bundle::task_prompt(&dir, out_root, &words[2])
+        bundle::task_prompt(&dir, out_root, &lead)
     };
     match prompt {
         Ok(text) => reply(text + "\n", triage_hint(&top, claims), 0),
         Err(why) => fail(why + "\n", 1),
     }
+}
+
+/// The tasks `T=` names, split at commas and spaces, each once (451 T141; `make land`'s form, 451 T18).
+fn bundle_members(words: &str) -> Vec<String> {
+    let mut out: Vec<String> = Vec::new();
+    for t in words.split([',', ' ', '\t']).filter(|t| !t.is_empty()) {
+        if !out.iter().any(|o| o == t) {
+            out.push(t.to_owned());
+        }
+    }
+    out
+}
+
+/// Why `members` cannot be decided as one bundle (451 T141), or None: a member whose section is not the first's - its own headings, the
+/// template `make task-add` wrote, standing apart - or a `T=` that is not the list its bundle heading names.
+fn bundle_refusal(
+    members: &[String],
+    section: &str,
+    sections: &std::collections::BTreeMap<String, String>,
+    feature: &str,
+) -> Option<String> {
+    if members.len() < 2 {
+        return None;
+    }
+    let shown = members.join(", ");
+    for t in &members[1..] {
+        if sections.get(t).map(String::as_str) != Some(section) {
+            return Some(format!("{t}'s section is not the bundle's: a bundle's tasks share one section - put every task's decisions under `### {shown} (bundle)` and `### {shown} Approach (checklist part A)`, and delete {t}'s own headings (`### {t} (...)`, `### {t} Approach`), the template `make task-add` wrote"));
+        }
+    }
+    let heading = section.lines().next().unwrap_or_default();
+    let title = heading.trim_start_matches('#').trim();
+    let listed = l7r_shared::plan_text::leading_tasks(title);
+    let same =
+        listed.len() == members.len() && listed.iter().all(|t| members.iter().any(|m| m == t));
+    if !same {
+        return Some(format!(
+            "the bundle's heading lists {}: make decide F={feature} T={}",
+            listed.join(", "),
+            listed.join(",")
+        ));
+    }
+    None
 }
 
 fn plan_delta(dir: &Path, out_root: &Path, claims: &Claims, env: defer::Env<'_>) -> crate::Reply {

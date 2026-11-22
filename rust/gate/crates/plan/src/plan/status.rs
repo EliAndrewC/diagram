@@ -11,8 +11,8 @@ use serde_json::{json, Map, Value};
 use super::history::History;
 use super::sections::{
     below_heading, block_digest, blocks, decides_nothing, digest, heading_text,
-    lands_open_appended, leading_task, quiet_out, repointed, stem, strip_archive, task_sections,
-    typo_only, wording_only, PART_B,
+    lands_open_appended, leading_task, leading_tasks, quiet_out, repointed, stem, strip_archive,
+    task_sections, typo_only, wording_only, PART_B,
 };
 
 pub(super) const RECORD: &str = "plan-review.json";
@@ -344,14 +344,17 @@ fn in_scope(
     keys.into_iter()
         .filter(|key| {
             if let Some(gone) = key.strip_prefix(REMOVED) {
-                return leading_task(&heading_text(gone))
-                    .is_none_or(|t| scope.contains(t) && !cleared(t));
+                let title = heading_text(gone);
+                let own = leading_tasks(&title);
+                return own.is_empty() || own.iter().any(|t| scope.contains(*t) && !cleared(t));
             }
+            // a block inside no task's section always; inside several (a bundle's, 451 T141) where `scope` holds any of them
             offsets.get(key).is_none_or(|at| {
-                spans
+                let mut owners = spans
                     .iter()
-                    .find(|(_, span)| inside(&[*span], *at))
-                    .is_none_or(|(t, _)| scope.contains(t))
+                    .filter(|(_, span)| inside(&[*span], *at))
+                    .peekable();
+                owners.peek().is_none() || owners.any(|(t, _)| scope.contains(t))
             })
         })
         .collect()

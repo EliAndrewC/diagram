@@ -415,7 +415,11 @@ pub(crate) fn plan_rounds(feature_dir: &Path, task: &str) -> u64 {
     else {
         return 0;
     };
-    let head = re(&format!(r"^#{{2,4}}\s+{}\b", fancy_regex::escape(task)));
+    // the task's own heading, or a bundle's heading listing it (451 T141): one review of the bundle is one round of each of its tasks
+    let head = re(&format!(
+        r"^#{{2,4}}\s+(?:T\d+[a-z]?,\s*)*{}\b",
+        fancy_regex::escape(task)
+    ));
     let reviews = doc
         .get("block_reviews")
         .and_then(Value::as_array)

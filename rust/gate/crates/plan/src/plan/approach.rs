@@ -24,7 +24,7 @@ static STAMP: LazyLock<Regex> =
     LazyLock::new(|| re(r"(\d{4})-(\d\d)-(\d\d)T(\d\d):(\d\d)(?::(\d\d))?Z"));
 static ITEM: LazyLock<Regex> = LazyLock::new(|| re(r"(?m)^(\d+)\.\s+\S"));
 static STAMPED_HEAD: LazyLock<Regex> =
-    LazyLock::new(|| re(r"(?im)^#{3,4}\s+T\d+\w*\s+(?:part B|Approach)\b.*$"));
+    LazyLock::new(|| re(r"(?im)^#{3,4}\s+T\d+\w*(?:,\s*T\d+\w*)*\s+(?:part B|Approach)\b.*$"));
 static NEXT_HEAD: LazyLock<Regex> = LazyLock::new(|| re(r"(?m)^#{2,4}\s"));
 /// A checklist item marked asked where written: owed only by a section that writes its line (feature 449 T196, item 12 - a new item
 /// must not refuse the sections written before it, 58 open on 2026-11-19).
@@ -130,7 +130,7 @@ fn left_empty(body: &str, asked: &[u32]) -> Vec<u32> {
 
 fn task_blocks(plan: &str, task: &str, part: &str) -> Vec<(String, String)> {
     let head = re(&format!(
-        r"(?im)^#{{3,4}}\s+{}\s+{}\b.*$",
+        r"(?im)^#{{3,4}}\s+(?:T\d+[a-z]?,\s*)*{}(?:,\s*T\d+[a-z]?)*\s+{}\b.*$",
         fancy_regex::escape(task),
         fancy_regex::escape(heads(part))
     ));

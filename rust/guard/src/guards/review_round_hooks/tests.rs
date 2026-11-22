@@ -445,6 +445,22 @@ fn a_tasks_plan_rounds_are_counted_back_to_its_clear() {
     assert_eq!(plan_rounds(&d.join("none"), "T14"), 0);
 }
 
+/// A bundle's rounds (451 T141): its one heading's reviews, counted once, whichever member the mark names.
+#[test]
+fn a_bundle_s_plan_rounds_are_counted_once_under_any_member() {
+    let d = world("plan-bundle");
+    let dir = d.join("specs/301-x");
+    let r = |v: &str, b: &str| json!({"verdict": v, "blocks": [b]});
+    let reviews = json!({"block_reviews": [r("BLOCKED", "### T05, T06, T07 (bundle)"), r("BLOCKED", "### T05, T06, T07 Approach (checklist part A)"), r("BLOCKED", "### T06 D")]});
+    std::fs::write(dir.join("plan-review.json"), reviews.to_string()).unwrap();
+    let lead = plan_rounds(&dir, "T05");
+    assert_eq!(lead, 2);
+    let member = plan_rounds(&dir, "T07");
+    assert_eq!(member, 2);
+    let own = plan_rounds(&dir, "T06");
+    assert_eq!(own, 3);
+}
+
 #[test]
 fn the_third_plan_round_goes_to_the_arbiter() {
     let d = world("plancap");

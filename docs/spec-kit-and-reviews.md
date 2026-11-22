@@ -182,6 +182,19 @@ full doctrine with the GM's rulings and the incidents behind them: `docs/spec-ki
 - Decide first, then check (feature 375): a task's decisions carry a verdict before its checks run - the plan-stage review,
   or `make decide F= T=` on a plan section naming the task (`make task-start` names the task). A tripwire is not the session's
   to judge: its refusal names `make arbiter-bundle`, and an advisor asked about a loop is handed that MANIFEST too.
+- **A bundle of small tasks pays the fixed cost once** (feature 451 T141; the GM 2026-11-22: *"let's do that then, and not bother
+  cutting back on new tasks filed. It sounds like we canfilenew tasksjust as fast as we are now if we bundle them together when fixing
+  them."*). Open tasks tiny enough to be worked at the same time go as one: `make task-start F= T=Ta,Tb,Tc` (commas or spaces) marks
+  the bundle - every member's refusal asked first, nothing written while one stands; a phase task is never a member - under its
+  first task, which the event log, the static-runs guard and the plan-round tripwire count it by, so its `make static` runs and its
+  review rounds count once. Its ONE plan section is `### Ta, Tb, Tc (bundle)` (the alone-off table) and `### Ta, Tb, Tc Approach
+  (checklist part A)` (the 12 items, each answered per task where they differ), with each member's own template headings, which
+  `make task-add` wrote, deleted - `make decide` refuses a member whose section stands apart, or a `T=` that is not the heading's
+  list. `make closing-checks T=Ta,Tb,Tc F=` judges the members' files together as one task's, another task's red still apart;
+  `make decide F= T=Ta,Tb,Tc` prints one MODE 4 dispatch judging every task in it; its one verdict, recorded under the first task,
+  is written under each member, so the tick, the push, `plan decided` and the builder-stop guard read it as each task's; `make land
+  F= T=Ta,Tb,Tc` lands and ticks them all. Median fixed cost a bundle shares, over 451's 107 landed tasks (measured 2026-11-22,
+  `make where-time` and `make feature-report`): 1 builder, 2 review rounds, about 10 min of closing-run time.
 - Run the chain end to end, unattended. The GM starts work and leaves: answer each stage's own
   questions, record each decision in the artifact where it arose, and stop only when a wrong guess
   would cost an hour-plus to unwind or the thing genuinely cannot be done. Persistence means

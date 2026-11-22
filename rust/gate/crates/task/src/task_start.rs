@@ -7,7 +7,6 @@
 //! [`phase_sources`]: crate::phase_sources
 
 use std::fmt::Write as _;
-use std::io::Write as _;
 use std::path::{Path, PathBuf};
 
 use l7r_shared::escape::enough;
@@ -15,8 +14,7 @@ use l7r_shared::guards::set_down_hooks::{next_performance, performance};
 use l7r_shared::log::Entry;
 use l7r_shared::plan_text::task_sections;
 use l7r_shared::py_text::strip;
-use l7r_shared::pyjson::dumps;
-use l7r_shared::speckit::{py_parent, py_path};
+use l7r_shared::speckit::py_path;
 use serde_json::{json, Value};
 
 use crate::tick::text::re;
@@ -45,9 +43,14 @@ fn task_block(tasks: &str, task: &str) -> String {
 /// One guard-log entry of the performance-first refusal, as `$(LOGESCAPE)` and the guards write theirs (`make guard-log
 /// GUARD=perf-first`, `make audit`); never fails.
 fn record(event: &str, detail: &str, rule: &str) {
+    record_as("perf-first", event, detail, rule);
+}
+
+/// One guard-log entry under `guard` (`perf-first`, or `parked-stage`, 449 T244); never fails.
+fn record_as(guard: &str, event: &str, detail: &str, rule: &str) {
     let detail: String = detail.chars().take(400).collect();
     let _ = l7r_shared::log::write(&Entry {
-        guard: "perf-first",
+        guard,
         event,
         detail: &detail,
         rule,
@@ -120,16 +123,59 @@ fn perf_first(
     )))
 }
 
+/// THE PARKED STAGES WAIT FOR THE GM (feature 449 T244; the GM 2026-11-21, `docs/gm-rulings.md`, "Stop before homesteads, and talk
+/// first"): a task whose line or block names a parked stage (`phase: homesteads`, [`l7r_shared::parked`]) that no row has resumed is
+/// refused, naming the ruling, before the performance-first check, so the session is told to stop rather than to escape `PERF_LATER_OK`.
+/// The escape, `GM_RESUMED="<the GM's words resuming it>"` (the guard's `phase_source_hooks` holds the words to a message the GM wrote
+/// this session), is recorded in the guard log and in `parked-resumed.jsonl`, after which the stage is held no longer.
+fn parked_stage(
+    root: &Path,
+    common: &Path,
+    name: &str,
+    task: &str,
+    block: &str,
+    gm_resumed: &str,
+) -> Raise<Option<String>> {
+    let Some(stage) = l7r_shared::parked::held_task(root, common, block) else {
+        return Ok(None);
+    };
+    let what = format!("make task-start of {name} {task} ({stage})");
+    let words = strip(gm_resumed);
+    if words.is_empty() {
+        record_as("parked-stage", "blocked", &what, "no-gm-resumed");
+        return Ok(Some(l7r_shared::parked::refusal(&what)));
+    }
+    if !enough(words) {
+        record_as(
+            "parked-stage",
+            "blocked",
+            &format!("{what}: {words}"),
+            "GM_RESUMED-no-words",
+        );
+        return Ok(Some("task-start: GM_RESUMED needs the GM's words resuming the stage, verbatim from his message - two words or more; a bare value resumes nothing\n".to_owned()));
+    }
+    record_as(
+        "parked-stage",
+        "escaped",
+        &format!("{what}: {words}"),
+        "gm-resumed",
+    );
+    let row = json!({"stage": stage, "feature": name, "task": task, "words": words, "utc": utc_text(now_secs())});
+    let resumed = common.join(l7r_shared::parked::RESUMED);
+    l7r_shared::parked::record(common, &row).map_err(|e| format!("{}: {e}", resumed.display()))?;
+    Ok(None)
+}
+
 /// The task started, its stdout so far kept when a later step raises.
 fn start(
     cwd: &Path,
     tree: &Path,
     feature: &str,
     task: &str,
-    holds: (&str, &str),
+    holds: (&str, &str, &str),
     out: &mut String,
 ) -> Raise<Option<String>> {
-    let (hold_ok, perf_later) = holds;
+    let (hold_ok, perf_later, gm_resumed) = holds;
     let root = crate::toplevel_or_dot(cwd);
     let Some(d) = l7r_gate_plan::plan::resolve_feature(feature, &root) else {
         return Ok(Some(format!(
@@ -154,58 +200,25 @@ fn start(
         .to_string_lossy()
         .into_owned();
     let common = PathBuf::from(common_text(cwd));
-    // the specs read where `resolve_feature` found this one, never the gate's own tree: a fixture clone holds its own
-    if let Some(why) = perf_first(&root, &common, &d, &name, task, perf_later)? {
-        return Ok(Some(why));
-    }
-    write(
-        &common.join("active-task"),
-        &format!(
-            "{}\n",
-            dumps(&json!({"feature": name, "task": task}), None, true)
-        ),
-    )?;
-    // ...AND THE FEATURE NAMED where `active_task` reads it (405 T106): a mark naming another feature than `.specify/feature.json` is
-    // ignored, so a session that started 405's task with 415 still named there had the cohort and `claims-carry` charge 405's work to 415
-    let top = py_parent(&py_parent(&d));
-    let specify = top.join(".specify");
-    if !specify.is_dir() {
-        std::fs::create_dir(&specify).map_err(|e| format!("{}: {e}", specify.display()))?;
-    }
-    write(
-        &specify.join("feature.json"),
-        &format!(
-            "{}\n",
-            dumps(
-                &json!({"feature_directory": format!("specs/{name}")}),
-                Some(2),
-                true
-            )
-        ),
-    )?;
-    // ...AND WHEN, for the report's per-task split (feature 385 T02, plan D10)
-    let starts = common.join("task-starts.jsonl");
-    let row = dumps(
-        &json!({"feature": name, "task": task, "utc": utc_text(now_secs())}),
-        None,
-        true,
-    );
-    std::fs::OpenOptions::new()
-        .append(true)
-        .create(true)
-        .open(&starts)
-        .and_then(|mut f| f.write_all(format!("{row}\n").as_bytes()))
-        .map_err(|e| format!("{}: {e}", starts.display()))?;
-    let _ = writeln!(out, "task-start: {name} {task} is the active task - its checks need its decisions ruled first (make decide)");
-    // ...AND A PHASE TASK'S OLD CODE HELD (feature 444, the GM 2026-10-30): its stage is rebuilt from its derivation, never read from
-    // today's Python; any other task clears the hold
     let tasks = d.join("tasks.md");
     let text = if tasks.is_file() {
         read_strict(&tasks)?
     } else {
         String::new()
     };
-    let line = crate::phase_sources::record(&top, &name, task, &task_block(&text, task))?;
+    let block = task_block(&text, task);
+    if let Some(why) = parked_stage(&root, &common, &name, task, &block, gm_resumed)? {
+        return Ok(Some(why));
+    }
+    // the specs read where `resolve_feature` found this one, never the gate's own tree: a fixture clone holds its own
+    if let Some(why) = perf_first(&root, &common, &d, &name, task, perf_later)? {
+        return Ok(Some(why));
+    }
+    let top = bundle::mark(&common, &d, &name, &[task])?;
+    let _ = writeln!(out, "task-start: {name} {task} is the active task - its checks need its decisions ruled first (make decide)");
+    // ...AND A PHASE TASK'S OLD CODE HELD (feature 444, the GM 2026-10-30): its stage is rebuilt from its derivation, never read from
+    // today's Python; any other task clears the hold
+    let line = crate::phase_sources::record(&top, &name, task, &block)?;
     if !line.is_empty() {
         let _ = writeln!(out, "{line}");
     }
@@ -226,20 +239,24 @@ pub(crate) fn cli_with(args: &[String], cwd: &Path, env: crate::tick::Env) -> Re
     let tree = env("L7R_GATE_TREE").map_or_else(|| crate::toplevel_or_dot(cwd), PathBuf::from);
     let hold_ok = env("HOLD_OK").unwrap_or_default();
     let perf_later = env("PERF_LATER_OK").unwrap_or_default();
+    let gm_resumed = env(l7r_shared::parked::ESCAPE).unwrap_or_default();
     let mut out = String::new();
-    match start(
-        cwd,
-        &tree,
-        &args[0],
-        &args[1],
-        (&hold_ok, &perf_later),
-        &mut out,
-    ) {
+    let holds = (hold_ok.as_str(), perf_later.as_str(), gm_resumed.as_str());
+    // a bundle, `T=a,b,c` (451 T141): its own start; one task's start as it always was
+    let tasks = bundle::members(&args[1]);
+    let started = if tasks.len() > 1 {
+        bundle::start(cwd, &tree, &args[0], &tasks, holds, &mut out)
+    } else {
+        start(cwd, &tree, &args[0], &args[1], holds, &mut out)
+    };
+    match started {
         Ok(None) => reply(out, String::new(), 0),
         Ok(Some(refused)) => reply(out, refused, 2),
         Err(why) => raised("task-start", out, "", &why),
     }
 }
+
+mod bundle;
 
 #[cfg(test)]
 mod tests;

@@ -7,7 +7,7 @@ use std::sync::LazyLock;
 use fancy_regex::Regex;
 use l7r_shared::plan_text::HEAD;
 pub(super) use l7r_shared::plan_text::{
-    blocks, leading_task, ordered_sections, task_sections, TASK_ID,
+    blocks, leading_task, leading_tasks, ordered_sections, task_sections, TASK_ID,
 };
 use l7r_shared::sha256;
 

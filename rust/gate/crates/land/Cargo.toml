@@ -19,10 +19,12 @@ serde_json = { workspace = true }
 
 [dev-dependencies]
 l7r_gate_core = { path = "../core", features = ["testkit"] }
+# the bundle's end-to-end test decides and records its section in process (451 T141)
+l7r_gate_plan = { path = "../plan" }
 
 [lints]
 workspace = true
 
-# the landing alone's tests run the script itself (451 T88)
+# the landing alone's tests run the script itself (451 T88), and the bundle's the closing checks (451 T141)
 [package.metadata.l7r]
-reads = ["scripts/land-alone.sh"]
+reads = ["scripts/land-alone.sh", "scripts/gates/closing-checks.sh"]

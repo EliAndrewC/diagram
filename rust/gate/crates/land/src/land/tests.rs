@@ -378,6 +378,8 @@ impl super::Clock for Stepped {
     }
 }
 
+mod bundle;
+
 /// The real clock the landing runs on, every fixture standing [`Stepped`] in its place (feature 449 T167).
 #[test]
 fn the_real_clock_reads_the_time_and_sleeps() {

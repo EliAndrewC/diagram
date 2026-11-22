@@ -76,9 +76,9 @@ fn section_spans(plan: &str) -> Vec<(String, Vec<(usize, usize)>)> {
             .iter()
             .find(|(_, lv, _)| lv <= level)
             .map_or(plan.len(), |(a, ..)| *a);
-        let lead = leading_task(title.trim());
+        let own_of = leading_tasks(title.trim());
         for t in ids {
-            if lead == Some(t) {
+            if own_of.contains(&t) {
                 let at_own = own.iter().position(|(k, _)| k == t).unwrap_or_else(|| {
                     own.push((t.to_owned(), Vec::new()));
                     own.len() - 1
@@ -112,6 +112,29 @@ pub fn leading_task(title: &str) -> Option<&str> {
         .map(|m| m.as_str())
 }
 
+/// A bundle's heading (451 T141): a list of task ids, then its marker - `(bundle)`, or the Approach, part B or performance checklist
+/// headings the section's template writes. A list followed by anything else (feature 405's `## T17, T16, T27 - ...`) is not one.
+static BUNDLE: LazyLock<Regex> = LazyLock::new(|| {
+    re(
+        r"^(T\d+[a-z]?(?:,\s*T\d+[a-z]?)+)\s+(?:\(bundle\)|Approach\b|part B\b|Performance checklist\b)",
+    )
+});
+
+/// The tasks whose own heading `title` is: a bundle's every listed id (451 T141), else the id it opens with, else none.
+#[must_use]
+pub fn leading_tasks(title: &str) -> Vec<&str> {
+    let listed = BUNDLE
+        .captures(title)
+        .ok()
+        .flatten()
+        .and_then(|c| c.get(1))
+        .map(|m| m.as_str());
+    match listed {
+        Some(list) => list.split(',').map(str::trim).collect(),
+        None => leading_task(title).into_iter().collect(),
+    }
+}
+
 /// (key, text, offset) of every block (D60, FR-043): each heading line to the next heading, and the text before the first as `preamble`.
 #[must_use]
 pub fn blocks(plan: &str) -> Vec<(String, String, usize)> {
@@ -140,7 +163,9 @@ pub fn blocks(plan: &str) -> Vec<(String, String, usize)> {
 
 #[cfg(test)]
 mod tests {
-    use super::{blocks, leading_task, ordered_sections, section_places, task_sections};
+    use super::{
+        blocks, leading_task, leading_tasks, ordered_sections, section_places, task_sections,
+    };
 
     #[test]
     fn a_plan_reads_as_its_sections_and_blocks() {
@@ -183,6 +208,30 @@ mod tests {
         let heading = vec![(at("## About T02"), at("## T03"))];
         assert_eq!(mention, heading);
         let none = section_places(plan, "T09");
+        assert!(none.is_empty());
+    }
+
+    /// A bundle's headings (451 T141): `### Ta, Tb, Tc (bundle)` and its Approach, owned by every task they list, so each reads the one
+    /// section byte for byte; a list heading without the marker (feature 405's `## T17, T16, T27 - ...`) stays its first task's own.
+    #[test]
+    fn a_bundle_heading_is_each_listed_task_s_own() {
+        let plan = "# plan\n\n### T05, T06, T07 (bundle)\n\nthe table\n\n### T05, T06, T07 Approach (checklist part A)\n\n1. x\n\n### T08 the next\n\ny\n";
+        let sections = task_sections(plan);
+        let want = plan[plan.find("### T05").unwrap()..plan.find("### T08").unwrap()].to_owned();
+        assert_eq!(sections["T05"], want);
+        assert_eq!(sections["T06"], want);
+        assert_eq!(sections["T07"], want);
+        let members = leading_tasks("T05, T06, T07 (bundle)");
+        assert_eq!(members, ["T05", "T06", "T07"]);
+        let approach = leading_tasks("T05, T06 Approach (checklist part A)");
+        assert_eq!(approach, ["T05", "T06"]);
+        let old = "# plan\n\n## T17, T16, T27 - three claims\n\nx\n\n## T16 its own\n\ny\n";
+        let old_sections = task_sections(old);
+        assert_eq!(old_sections["T16"], "## T16 its own\n\ny\n");
+        assert!(old_sections["T17"].starts_with("## T17, T16"));
+        let not = leading_tasks("T17, T16, T27 - three claims");
+        assert_eq!(not, ["T17"]);
+        let none = leading_tasks("the T5");
         assert!(none.is_empty());
     }
 }

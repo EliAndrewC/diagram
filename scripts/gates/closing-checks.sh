@@ -65,6 +65,8 @@ if [ -n "$task" ]; then
     "${CLOSING_FEATURE:-}" "$task" "$dir" > "$dir/split.txt" 2>&1 <<'PY'
 import datetime, glob, json, os, re, subprocess, sys, time
 root, events, starts, feature, task, out = sys.argv[1:7]
+# a bundle, T=a,b,c (451 T141): its tasks' files judged together, as one task's
+tasks = set(re.split(r'[,\s]+', task.strip())) - {''}
 git = lambda *a: subprocess.run(['git', '-C', root, *a], capture_output=True, text=True, check=True).stdout
 # the clone's uncommitted files: every task's work in flight (a builder never commits; its landing does)
 dirty, recs, i = set(), git('status', '--porcelain=v1', '-z', '-uall').split('\0'), 0
@@ -96,9 +98,9 @@ if not feature and os.path.exists(starts):
             d = json.loads(l)
         except ValueError:
             continue
-        if d.get('task') == task:
+        if d.get('task') in tasks:
             mine_f = d.get('feature')
-mine = lambda c: c[1] == task and mine_f in (None, c[0])
+mine = lambda c: c[1] in tasks and mine_f in (None, c[0])
 pre, claims = root.rstrip('/') + '/', {}
 for p in logs:
     for l in open(p, errors='replace'):

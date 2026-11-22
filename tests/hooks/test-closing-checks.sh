@@ -198,6 +198,13 @@ c6 env CLOSING_TASK=T86 CLOSING_FEATURE=449
 d6=$(run_dir <(printf '%s' "$OUT"))
 grep -qx rust/other/src/extra.rs "$d6/caller-files" && ! grep -qx rust/mine/src/lib.rs "$d6/caller-files" && [ "$RC" -eq 0 ] \
   && ok "F= names the feature: 449's T86 is another task than 451's" || no "F=449 (exit $RC)" "$(cat "$d6/caller-files" 2>&1; printf '%s' "$OUT")"
+# a bundle (451 T141): T=T86,T84 judges both tasks' files as one task's; 449's T86 still another's, its red apart
+echo rust/other/src/extra.rs > "$T/c6/static.red"; c6 env CLOSING_TASK=T86,T84 CLOSING_FEATURE=451
+d6=$(run_dir <(printf '%s' "$OUT"))
+grep -qx rust/other/src/lib.rs "$d6/caller-files" && grep -qx docs/sed.md "$d6/caller-files" && grep -qx rust/mine/src/lib.rs "$d6/caller-files" \
+  && [ "$(cut -f1 "$d6/others" 2>/dev/null | tr '\n' ' ')" = "rust/other/src/extra.rs " ] && [ "$RC" -eq 0 ] \
+  && printf '%s' "$OUT" | grep -q "judged as T86,T84's: 10 of the clone's 11 uncommitted files" \
+  && ok "a bundle's tasks' files judged as one task's, another feature's task still apart" || no "the bundle's split (exit $RC)" "$(cat "$d6/caller-files" "$d6/others" 2>&1; printf '%s' "$OUT")"
 echo rust/other/src/lib.rs > "$T/c6/static.red"; touch "$T/c6/static.blocked"; c6 env CLOSING_TASK=T86
 [ "$RC" -eq 1 ] && printf '%s' "$OUT" | grep -q "BLOCKED.*every error static printed is in another task's files - rust/other/src/lib.rs (T84@451-x)" \
   && ok "a red of the caller's whose every error is in another task's file: BLOCKED, still red" || no "the blocked red (exit $RC)" "$OUT"

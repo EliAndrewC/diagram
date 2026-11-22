@@ -82,7 +82,7 @@ fn state_path(root: &Path) -> PathBuf {
 }
 
 /// The task block's `phase:` stage ('' for none) and its `old-code:` paths or globs.
-fn phase_of(block: &str) -> (String, Vec<String>) {
+pub(crate) fn phase_of(block: &str) -> (String, Vec<String>) {
     let phase = PHASE
         .captures(block)
         .ok()
