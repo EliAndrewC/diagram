@@ -228,11 +228,26 @@ case_10() {  # 1 s measured alone 2026-10-12
 # logged a bypass and recorded nothing, so the stop branch fired half-open on a review that had run.
 rm -f "$CLONE/.git/pairing-state.json"
 ESCREV=$(stdin_for Agent '{"subagent_type":"settlement-review","prompt":"PAIR_OK: the gate is running beside this - review the map"}')
+# GUARD_EDIT_OK: 449 arbiter fix (round:building-review|building-review--county-magistracy-example@3) - a RED paired gate refuses the
+# dispatch whatever PAIR_OK and REVIEW_PREREQ_OK say: on 2026-11-22 two building-reviews dispatched with both ran 687 s and 558 s on a red
+# gate and the verdict tool recorded each NOT-REVIEWABLE. No gate is live and none is green here, so the real `reviews prereq
+# gate-state` reads red; a make `verify` held in the clone makes it read running, which PAIR_OK still lets a review run beside.
+rm -f "$CLONE/.git/stub-gate-green"   # its own precondition: a case dealt before this one may leave the gate green
+RED_ESC=$(stdin_for Agent '{"subagent_type":"settlement-review","prompt":"PAIR_OK REVIEW_PREREQ_OK=\"the earlier rounds were not reviewable\" review the map"}')
+refused_for "a review escaped with PAIR_OK and REVIEW_PREREQ_OK on a red paired gate is refused, naming the gate to fix first" "$RED_ESC" "make review-paired-gate"
+check "...under its own rule" 'grep -rq "review-gate-red" "$GUARD_LOG_ROOT"'
+RED_OK=$(stdin_for Agent '{"subagent_type":"settlement-review","prompt":"PAIR_OK GATE_RED_OK=\"a fixture read with no verdict wanted\" review the map"}')
+check "...and GATE_RED_OK with a reason lets it run" '[ "$(rc_pretool "$RED_OK")" -eq 0 ] && grep -rql "a fixture read with no verdict wanted" "$SKILL/dev/bypass-log"'
+rm -f "$CLONE/.git/pairing-state.json"
+printf 'verify:\n\tsleep 30\n' > "$TMP/hold.mk"
+( cd "$CLONE" && exec make -s -f"$TMP/hold.mk" verify ) >/dev/null 2>&1 & HOLD=$!
+for _ in $(seq 50); do [ "$(cd "$CLONE" && "$REAL_GATE" reviews prereq gate-state --clone "$CLONE")" = running ] && break; sleep 0.1; done
 check "a review escaped with a reason runs" '[ "$(rc_pretool "$ESCREV")" -eq 0 ]'
 # GUARD_EDIT_OK: feature 240 FR-002 - the dispatch records WHICH content it reviews, and the review counts
 # at its VERDICT. What 231 fixed stays fixed: once that review writes its verdict, the stop branch is quiet.
 check "...and records the content it reviews" 'grep -q "review_dispatch_key" "$CLONE/.git/pairing-state.json"'
 check "...and no longer counts itself done at dispatch" '! grep -q "\"review_key\"" "$CLONE/.git/pairing-state.json"'
+pkill -P "$HOLD" 2>/dev/null; kill "$HOLD" 2>/dev/null; wait "$HOLD" 2>/dev/null
 }
 
 

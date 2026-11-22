@@ -16,6 +16,8 @@ static DECIDE_OK: LazyLock<Regex> =
     LazyLock::new(|| crate::shared::regex::build(r#"\bDECIDE_OK="([^"]*)""#).unwrap());
 static GLYPH_DUE_OK: LazyLock<Regex> =
     LazyLock::new(|| crate::shared::regex::build(r#"GLYPH_DUE_OK="([^"]*)""#).unwrap());
+static GATE_RED_OK: LazyLock<Regex> =
+    LazyLock::new(|| crate::shared::regex::build(r#"GATE_RED_OK="([^"]*)""#).unwrap());
 static PREREQ_REASON: LazyLock<Regex> =
     LazyLock::new(|| crate::shared::regex::build(r#"REVIEW_PREREQ_OK="([^"]*)""#).unwrap());
 static BUNDLE: LazyLock<Regex> = LazyLock::new(|| {
@@ -128,6 +130,9 @@ pub(super) fn dispatch(cx: &Ctx, atype: &str) -> Vec<Answer> {
         .map(ToString::to_string)
         .unwrap_or_default();
     if prompt.contains("PAIR_OK") {
+        if let Some(refused) = gate_red(cx, atype, ptext) {
+            return vec![refused];
+        }
         cx.log("escaped", atype, "pair-ok-review");
         state::log_bypass(
             &cx.clone,
@@ -154,6 +159,41 @@ pub(super) fn dispatch(cx: &Ctx, atype: &str) -> Vec<Answer> {
     }
     cx.log("blocked", atype, "review-without-gate");
     vec![Answer::Refuse(text)]
+}
+
+/// A review beside a RED paired gate is thrown away (the 449 arbiter's fix on round:building-review|building-review--county-magistracy-example@3):
+/// `reviews prereq verdict` records any verdict NOT-REVIEWABLE while `gate-state` reads red, so `PAIR_OK` - one-sided beside a gate
+/// that is running - lets no review go on a red one, unless `GATE_RED_OK="<why>"`. On 2026-11-22 two building-reviews dispatched with
+/// `PAIR_OK` and `REVIEW_PREREQ_OK` ran 687 s and 558 s on a red gate and were both recorded NOT-REVIEWABLE.
+fn gate_red(cx: &Ctx, atype: &str, ptext: &str) -> Option<Answer> {
+    if ptext.contains("GATE_RED_OK=") {
+        let why = match reasoned(cx, atype, &GATE_RED_OK, "GATE_RED_OK", ptext, "gate-red") {
+            Ok(why) => why,
+            Err(refused) => return Some(refused),
+        };
+        cx.log("escaped", atype, "gate-red-ok");
+        state::log_bypass(
+            &cx.clone,
+            &format!("GATE_RED_OK: {why}"),
+            "review on a red paired gate",
+            SystemTime::now(),
+        );
+        return None;
+    }
+    let clone = cx.clone.to_string_lossy();
+    let state = reviews(cx, &["prereq", "gate-state", "--clone", &clone]).out;
+    if state.trim() != "red" {
+        return None;
+    }
+    cx.log("blocked", atype, "review-gate-red");
+    Some(Answer::Refuse(format!(
+        "\n\x1b[1mBLOCKED: this {atype}'s paired gate reads RED, so its verdict would be recorded NOT-REVIEWABLE.\x1b[0m\n\
+         `reviews prereq verdict` writes any verdict NOT-REVIEWABLE while the gate reads red, whatever PAIR_OK or REVIEW_PREREQ_OK\n\
+         say - two building-reviews (687 s and 558 s) were thrown away so on 2026-11-22. Fix the gate first:\n\n    \
+         make review-paired-gate   # green, running or red\n    \
+         make verify               # the gate; dispatch once it is green or running\n\n\
+         A read with no verdict wanted: GATE_RED_OK=\"<why>\" in the dispatch prompt.\n"
+    )))
 }
 
 /// DECIDE FIRST (feature 375): a check's dispatch waits for the plan's decisions to be ruled, unless `DECIDE_OK="<reason>"`.

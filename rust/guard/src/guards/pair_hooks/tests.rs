@@ -21,6 +21,7 @@ const TOOLS: [(&str, &str); 2] = [
          case $tool in\n\
          checkpoint) cat \"$3/.git/due\" 2>/dev/null; exit 0 ;;\n\
          prereq) if [ \"$1\" = content-key ]; then printf ck; exit 0; fi\n\
+           if [ \"$1\" = gate-state ]; then cat \"$3/.git/gate-state\" 2>/dev/null; exit 0; fi\n\
            if [ \"$1\" = named ]; then cat \"$3/.git/named\" 2>/dev/null; exit 0; fi\n\
            [ -f \"$3/.git/problems\" ] || exit 0; cat \"$3/.git/problems\"; echo; echo 'on stderr' >&2; exit 1 ;;\n\
          owed) c=$2\n\
@@ -350,6 +351,45 @@ fn pair_ok_lets_a_review_go_and_a_gate_with_no_key_is_not_green() {
     assert!(
         refusal(&unkeyed.judge()).contains("no green gate") && !unkeyed.has("pairing-state.json")
     );
+}
+
+/// The 449 arbiter fix (round:building-review|building-review--county-magistracy-example@3): `PAIR_OK` and `REVIEW_PREREQ_OK` let two
+/// building-reviews run on a RED paired gate on 2026-11-22, and the verdict tool recorded each NOT-REVIEWABLE (687 s and 558 s thrown
+/// away); a red gate refuses the dispatch whatever those say, a running one does not, and only `GATE_RED_OK="<why>"` escapes it.
+#[test]
+fn a_red_paired_gate_refuses_a_review_pair_ok_or_not() {
+    let both = r#"m1 PAIR_OK REVIEW_PREREQ_OK="the earlier rounds were not reviewable""#;
+    let red = Fixture::new("gate-red", "Agent", &review(both));
+    red.set("named", "m1\n").set("gate-state", "red\n");
+    let why = refusal(&red.judge());
+    let says = [
+        "paired gate reads RED",
+        "NOT-REVIEWABLE",
+        "make review-paired-gate",
+        "make verify",
+        "GATE_RED_OK",
+    ];
+    let missing: Vec<&str> = says.into_iter().filter(|s| !why.contains(s)).collect();
+    assert_eq!(missing, Vec::<&str>::new());
+    let running = Fixture::new("gate-running", "Agent", &review(both));
+    running.set("named", "m1\n").set("gate-state", "running\n");
+    assert!(running.judge().is_empty());
+    let ok = Fixture::new(
+        "gate-red-ok",
+        "Agent",
+        &review(&format!(
+            r#"{both} GATE_RED_OK="the verdict is not wanted, only the read""#
+        )),
+    );
+    ok.set("named", "m1\n").set("gate-state", "red\n");
+    assert!(ok.judge().is_empty());
+    let bare = Fixture::new(
+        "gate-red-bare",
+        "Agent",
+        &review(&format!(r#"{both} GATE_RED_OK="no""#)),
+    );
+    bare.set("named", "m1\n").set("gate-state", "red\n");
+    assert!(refusal(&bare.judge()).contains("GATE_RED_OK needs a REASON"));
 }
 
 #[test]
