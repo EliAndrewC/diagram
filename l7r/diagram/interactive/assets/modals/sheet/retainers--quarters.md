@@ -14,7 +14,7 @@ retainers on duty in Edo shared one, the two juniors cooking by turns.
 
 Guesses:
 - That a county office's whole staff lived on its grounds: an intendant's office is known to have kept its junior officials'
-  quarters and a storehouse keepers' rowhouse there, but no source counts its staff or says who else lived inside.
+  quarters and a storehouse keepers' rowhouse there, and an intendant governed with about ten retainers of the shogunate and a few local hires, but no source says who else lived inside.
 - That a few men share each dwelling, and so how many bays the rowhouse runs to: the one case found is three retainers to a
   dwelling.
 
@@ -24,5 +24,5 @@ own, and draws nothing in it as a bunk or a bunk room.
 Name: retainers' quarters
 Covers: the senior retainers' quarters, a family rowhouse for married retainers, and their labels
 Sources: jinya-kotobank, jinya-jawiki, hatchobori-jawiki, edo-hantei-jawiki, mitamura-nagaya-tcpip, hoppou-shibata-ashigaru, omori-daikansho-kunishitei, kaibara-jinya-tamba, shibata-ashigaru-nagaya, kanra-ashigaru-nagaya, sakai-hanshiro-bakumatsu, takayama-jinya-jawiki
-Entry: research/questions/0097-staff-rowhouses-and-barracks-nagaya.html
+Entry: research/questions/0097-staff-rowhouses-and-barracks-nagaya.html, research/questions/0090-magistrates-compounds-jinya-and-yamen.html
 Drawing: research/questions/0097-staff-rowhouses-and-barracks-nagaya.drawing.html

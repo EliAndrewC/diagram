@@ -119,3 +119,25 @@ fn a_town_counts_its_farmhouses_and_a_city_none() {
     assert_eq!(city, 2);
     assert_eq!(hamlet, 3);
 }
+
+#[test]
+fn a_regional_wind_is_the_northwest_or_one_of_its_two_sides() {
+    // 0072: every map takes the region's northwest wind unless it declares one, its belt on the north and west or one of the two
+    // (449 T301): a record pairing the regional wind with another quarter names no region's wind, so it prints no card
+    let card = |q: &str, src: &str| {
+        super::windbreak_default(
+            json!({"windward": q, "wind_source": src})
+                .as_object()
+                .unwrap(),
+        )
+    };
+    for q in ["NW", "N", "W"] {
+        let regional = card(q, "regional").contains("the winter wind across this region");
+        assert!(regional, "{q}");
+    }
+    for q in ["NE", "E", "SE", "S", "SW"] {
+        assert_eq!(card(q, "regional"), "", "{q}");
+        let declared = card(q, "declared").contains("departs from the region's northwesterly");
+        assert!(declared, "{q}");
+    }
+}

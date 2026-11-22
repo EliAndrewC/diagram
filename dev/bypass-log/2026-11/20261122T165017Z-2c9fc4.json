@@ -1,0 +1,6 @@
+{
+  "utc": "2026-11-22T16:50:17Z",
+  "target": "plan-gate decide-defer 449-rust-codebase T300",
+  "commit": "f9592b7dda",
+  "why": "T244 landed; the coordinating session's order anchor for every new box, T303 lands with the next 449 landing"
+}

@@ -7,7 +7,10 @@
 //!   marks, the whole function's; in the hamlet driver, whose writer is told the kind before the marks (`svg.kind("...")`), a changed
 //!   line redraws the kind named last at or above it, which cannot be told above the first naming or past one chosen at run time
 //!   (measured 2026-11-20 on T234's own change: read whole, `draw_polder`'s deleted square owed the comb's and the polder's whole
-//!   legends, 19 units, where read by line it owes the sluice gate alone); one that names no kind draws its caller's;
+//!   legends, 19 units, where read by line it owes the sluice gate alone); one that names no kind draws its caller's; a compound mark
+//!   changed on both sides owes the kinds its changed lines name by literal (a `data-kind="..."` or a caption's kind), and is read
+//!   whole only where they name none (`named_by_change`, the round arbiter's `ask:glyph-wave-449-T289`: T291's genkan porch, one
+//!   branch naming `genkan`, read whole owed 57 units);
 //! - a WRITER method (`impl Svg`), a helper function or a constant redraws what its uses redraw (a use is its name called or read in
 //!   another item); a writer method whose uses reach no element is the document every mark is written into, which cannot be told;
 //! - a ROLL (it makes the writer: `Svg::default()`, `Svg::new()`) is read line by line: a changed line that does not touch the
@@ -618,6 +621,61 @@ fn redraws(world: &mut World, i: usize, other: Option<&[String]>, added: bool) -
     (r, silent)
 }
 
+/// The kinds the lines `at` of `lines` name by literal - a `data-kind="..."`, or a caption's kind (`.caption("words", "kind", ...)`),
+/// a placeholder (`-`) never - and, where they name one, what the draw functions those lines call redraw.
+fn literal_kinds(world: &mut World, i: usize, lines: &[String], at: &[usize]) -> Reach {
+    static CAPTION: LazyLock<Regex> =
+        LazyLock::new(|| re(r#"\.caption\(\s*"[^"\\]*"\s*,\s*"([^"\\{]*)""#));
+    let (_, attr) = Marker::Attribute.patterns();
+    let mut r = Reach::default();
+    for &k in at {
+        for pattern in [attr, &*CAPTION] {
+            r.told.extend(
+                pattern
+                    .captures_iter(&lines[k])
+                    .map_while(Result::ok)
+                    .map(|c| c[1].to_owned())
+                    .filter(|k| !NOT_ELEMENTS.contains(&k.as_str())),
+            );
+        }
+    }
+    if r.told.is_empty() {
+        return r;
+    }
+    for &k in at {
+        for d in world.draws_called(&lines[k]) {
+            if d != i {
+                let got = world.reach(d);
+                r.add(&got);
+            }
+        }
+    }
+    r
+}
+
+/// A Mode A compound mark changed on both sides (449 T289's arbiter ruling, `ask:glyph-wave-449-T289`): it owes the kinds its
+/// changed lines name by literal, the added lines' first and the deleted lines' where the added name none, and `None` - read whole,
+/// its whole legend where it draws a kind chosen at run time - only where they name none. Measured on T291's genkan porch: one
+/// branch added to `buildings`' door loop, naming `genkan`, read whole owed 57 units (the call to `building`, a kind chosen at run
+/// time, made it the whole legend), where its changed lines owe the genkan alone. A deleted line's literal is set aside where the
+/// added lines name one: the kind it drew is now drawn by the added lines (here the plain door, its attributes unchanged, under the
+/// porch's `{kind}`) or not by this function at all, so nothing of it is redrawn here.
+fn named_by_change(now: &mut World, a: usize, was: &mut World, b: usize) -> Option<Reach> {
+    if !matches!(now.marker, Marker::Attribute)
+        || now.items[a].role != Role::Draw
+        || was.items[b].role != Role::Draw
+    {
+        return None;
+    }
+    let (n_lines, w_lines) = (now.items[a].lines.clone(), was.items[b].lines.clone());
+    let added = literal_kinds(now, a, &n_lines, &changed_lines(&w_lines, &n_lines, true));
+    if !added.told.is_empty() {
+        return Some(added);
+    }
+    let deleted = literal_kinds(was, b, &w_lines, &changed_lines(&w_lines, &n_lines, false));
+    (!deleted.told.is_empty()).then_some(deleted)
+}
+
 fn tokens(item: &Item) -> Vec<u8> {
     rust_tokens(item.lines.join("\n").as_bytes())
 }
@@ -722,12 +780,16 @@ fn engine_reach(
                 continue;
             }
         }
-        let mut r = Reach::default();
+        let by_change = n
+            .zip(w)
+            .and_then(|(at_now, at_was)| named_by_change(&mut now, at_now, &mut was, at_was));
+        let read_whole = by_change.is_none();
+        let mut r = by_change.unwrap_or_default();
         for (world, i, other, added) in [
             (&mut now, n, w_lines.as_deref(), true),
             (&mut was, w, n_lines.as_deref(), false),
         ] {
-            if let Some(i) = i {
+            if let Some(i) = i.filter(|_| read_whole) {
                 let (got, quiet) = redraws(world, i, other, added);
                 r.add(&got);
                 if quiet {

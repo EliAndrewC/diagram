@@ -661,6 +661,10 @@
          door is on the east face at the dais band, onto the open ground reached from the forecourt past the court's
          east side, toward the tally office. -->
     <rect x="674" y="544" width="6" height="24" fill="#4A3318" data-kind="door"/>
+  <!-- the hall's WEST door (feature 449 T299; building-review 2026-11-22 E2): in the front band, the mirror of the east business door,
+       so the armory's arms leave by the hall's west end onto the outer court's open ground west of it, not across the clerks' seats and
+       the dais. A GUESS: no source states an armory's or a hall end bay's doors (449 T289/T299 research pass, 2026-11-22: silent) -->
+  <rect x="340" y="544" width="6" height="24" fill="#4A3318" data-kind="door"/>
   </g>
 
   <!-- Hearing court: ROOFED, floored with river cobbles (feature 267 R22 - a magistracy's court was roofed; the

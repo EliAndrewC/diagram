@@ -97,6 +97,8 @@ aragaki	aragaki
 araiba	kawado
 araihari	araihari
 araizeki	araizeki
+archery strip	archery strip
+archery strips	archery strip
 areca	areca
 areca nut	areca
 areca palm	areca
@@ -1157,6 +1159,7 @@ extension manual	extension advice
 extensive agriculture	extensive agriculture
 extensive farming	extensive agriculture
 extramural	extramural
+ezo	Ezo
 fabric	building fabric
 fabric is later	building fabric
 fair market rent	fair market rent
@@ -1328,6 +1331,7 @@ forest litters	forest litter
 forest stand	forest stand
 forest village	forest village
 forest villages	forest village
+formal tile roof	hongawara
 formwork	formwork
 fortune	Fortune
 fortunes	Fortune
@@ -2160,6 +2164,7 @@ jetties	jetty
 jetty	jetty
 jiajing	Jiajing
 jiajing era	Jiajing
+jiandao	archery strip
 jiangnan	Lower Yangzi
 jiangren	Jiangren
 jiangsu	Kiangsu
@@ -2380,6 +2385,7 @@ katemeshi	katemeshi
 katsura	Katsura
 katsura imperial villa	Katsura
 katsura rikyu	Katsura
+katte	katte
 katteguchi	katteguchi
 kawachi	Kawachi
 kawachi province	Kawachi
@@ -2468,6 +2474,7 @@ knob	knob
 knobs	knob
 ko	kō
 ko-aza	koaza
+ko-sedo	katte
 ko-shoin	Ko-shoin
 koaza	koaza
 koban	koban
@@ -3976,6 +3983,7 @@ sedan chairs	sedan
 sedans	sedan
 sedge	sedge
 sedges	sedge
+sedo	sedo
 seed	seed
 seed cotton	seed cotton
 seed drill	seed drill
@@ -4227,6 +4235,7 @@ sinense	sinense
 single range	main range
 single straight range	main range
 single whip reform	Single Whip Reform
+single-piece s-curved tiles	pantile
 sishu	sishu
 site coefficient	site coefficient
 site coefficients	site coefficient

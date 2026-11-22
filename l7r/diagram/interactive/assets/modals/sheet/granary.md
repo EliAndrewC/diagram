@@ -1,21 +1,21 @@
-About: The granary was the storehouse where the tax paid in grain waited on its way out. A village's tax rice went first
+About: The granary was the storehouse where the tax paid in grain most likely waited on its way out. A village's tax rice went first
 to its own store, the gokura, and on to the lord's storehouses in the castle town or to a river landing to be shipped;
 an intendant's office kept a rice storehouse of its own. What waited in an office's store was probably rice in transit,
-with some held back as a local reserve. Nobody lived in it.
+with some held back as a local reserve. Its keepers lived apart from it: at Takayama they had a rowhouse of their own on the office grounds.
 
 It took one of two forms. The timber storehouse on posts, the takakura, kept its floor high to keep rats from the grain, with
 rat-guards, and let the air through against damp; such storehouses were still built on outlying islands and among the
-Ainu into modern times. The other was an earth-walled kura like Takayama's rice store, its walls sloping inward and set
-with gaps for ventilation, guarding its grain against fire, damp and theft.
+Ainu into modern times. The other was an earth-walled kura like the rice store at Takayama (the office that ran a whole province), its walls sloping inward and set
+with gaps for ventilation, guarding its grain against fire, damp and theft. Such a kura's walls were often a foot thick, and its outer doors might be faced in earth and plaster. How an office's granary was roofed is not recorded; a village tax-rice store that survives, at Yamaji, has a tiled roof.
 
 It held the paddy tax as brown rice in straw bales, while much of the dry-field tax was paid in coin. In Rokugan, rich in
 goods and poor in coin, more of that share arrives in kind, as bales of soybeans and barley beside the rice. A store
-shared by three villages had storehouses of about 440 to 740 sq ft each; Takayama's, at the office that ran a whole province,
-covers about 11,200 sq ft. The size of a county office's granary is not recorded.
+shared by three villages had storehouses of about 440 to 740 sq ft each; Takayama's
+covers about 11,200 sq ft. How large a county office's granary was, and how much it held, is not recorded.
 
 Guesses:
-- Its size on the plan, about 43 to 50 by 25 to 27 ft: no account gives the size of a county office's grain storehouse or
-  how many it kept, so it is set above the village stores and at about a tenth of Takayama's.
+- Its size on the plan, about 43 to 50 by 25 to 36 ft: no account gives the size of a county office's grain storehouse or
+  how many it kept, so it is set above the village stores and at about a tenth to a sixth of Takayama's.
 
 Depiction: The plan draws one of the two forms: the storehouse on posts, drawn slatted for its timber walls, with its posts
 as dark blocks at its edge, or the earth-walled kura, drawn plastered white with no posts, since how such a kura's floor was
@@ -27,5 +27,5 @@ has none. On a county office's plan it stands smaller than the residence, since 
 Name: granary
 Covers: the granary, on posts or earth-walled, and its label
 Sources: gokura-jawiki, tomiyama-1961-gokura, jinya-kotobank, takayukashiki-jawiki, takayama-onkura-heritage, dozo-jawiki, kuramai-jawiki, hatakata-men-jawiki, sagami-2012-gogurasho, takayama-jinya-gifu
-Entry: research/questions/0098-storehouses-for-the-tax-rice.html
-Drawing: research/questions/0098-storehouses-for-the-tax-rice.drawing.html, research/questions/0100-fire-and-the-fireproof-storehouses-dozo.drawing.html, research/questions/0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html
+Entry: research/questions/0098-storehouses-for-the-tax-rice.html, research/questions/0097-staff-rowhouses-and-barracks-nagaya.html, research/questions/0203-fire-watch-towers-and-firefighting-gear-hinomi-yagura.html, research/questions/0051-village-granaries-gogura.html
+Drawing: research/questions/0098-storehouses-for-the-tax-rice.drawing.html, research/questions/0100-fire-and-the-fireproof-storehouses-dozo.drawing.html, research/questions/0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html, research/questions/0123-the-magistrates-manor-in-a-town-where-it-stands-and-which-way-it-faces-jinya-and-yamen.drawing.html

@@ -477,8 +477,18 @@ fn report(path: &Path, tree: &Path) -> Result<String, l7r_gate_research::Error> 
         form.as_deref(),
         on_map.as_ref(),
         tree,
+        crate::audit::armory::stem(&shown),
     )
 }
+
+/// A fixture read: its text, its parse, its form, its map declaration and its sheet's name.
+type Read = (
+    String,
+    crate::parse::ParsedPlan,
+    Option<String>,
+    Option<crate::audit::onmap::OnMap>,
+    String,
+);
 
 /// Every pool sheet on disk, red fixture and check fixture REPORTED under its tier - written, or refused where its name says - and
 /// every registered check run alone on each check fixture under the shared layer and both tiers; a red fixture's report names its own
@@ -530,12 +540,7 @@ fn every_sheet_is_reported_and_every_check_runs_on_it() {
     assert_eq!(got, want);
     // every check alone on each check fixture the parse and the map declaration read, under each tier and none, a refusal an outcome too
     let types = crate::types::load_types(&tree).unwrap();
-    let read: Vec<(
-        String,
-        crate::parse::ParsedPlan,
-        Option<String>,
-        Option<crate::audit::onmap::OnMap>,
-    )> = fixtures
+    let read: Vec<Read> = fixtures
         .iter()
         .filter_map(|path| {
             let (text, shown) = (
@@ -549,13 +554,22 @@ fn every_sheet_is_reported_and_every_check_runs_on_it() {
                 plan,
                 crate::audit::report::read_form(&shown).unwrap(),
                 on_map,
+                crate::audit::armory::stem(&shown).to_owned(),
             ))
         })
         .collect();
     let mut ran = 0_usize;
-    for (text, plan, form, on_map) in &read {
+    for (text, plan, form, on_map, sheet) in &read {
         for btype in std::iter::once(None).chain(types.iter().map(Some)) {
-            let ctx = Context::new(plan, text, btype, form.as_deref(), on_map.as_ref(), &tree);
+            let ctx = Context::new(
+                plan,
+                text,
+                btype,
+                form.as_deref(),
+                on_map.as_ref(),
+                &tree,
+                sheet,
+            );
             ran += CHECKS
                 .iter()
                 .map(|ch| {
@@ -702,6 +716,7 @@ fn each_fixture_fires_the_checks_it_was_drawn_for() {
                 form.as_deref(),
                 on_map.as_ref(),
                 &tree,
+                crate::audit::armory::stem(&shown),
             );
             checks
                 .iter()

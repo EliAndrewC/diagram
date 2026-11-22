@@ -1274,5 +1274,38 @@
    "ubame_armory_ft": [13.3, 12],
    "roundtrip_armory_ft": [14, 20]
   }
+ },
+ "t289-bundle-rects": {
+  "quantity": "the bundle's new marks on each moved sheet, in px (3 px per ft): the county genkan and rear ground, the west doors, Ochiba's back yard, the round-trip's hall rooms and rear yard",
+  "observed": "2026-11-22",
+  "subject": "county-magistracy-example, hayakawa-magistracy, ochiba-magistracy, ochiba-roundtrip-test",
+  "source": "pool/magistracies/<sheet>/<sheet>.svg; each sheet's notes.md T291/T297/T299/T300 entries",
+  "command": "grep -o '<[^>]*data-kind=\"genkan\"[^>]*>' pool/magistracies/county-magistracy-example/county-magistracy-example.svg",
+  "method": "rect x, y, width, height read from the svg",
+  "value": {
+   "county_genkan_px": [565.4, 436.5, 36, 27],
+   "hayakawa_west_door_px": [340, 544, 6, 24],
+   "ochiba_west_door_px": [420, 536, 6, 24],
+   "ochiba_back_yard_px": [205, 212, 133, 94],
+   "county_rear_ground_ft": [162, 3, 84, 30],
+   "roundtrip_rear_yard_ft": [47, 3, 70, 16]
+  }
+ },
+ "t309-county-rects": {
+  "quantity": "the county example's T309 rects in px (3 px per ft): the barracks, the retainers' long-house and the granary, with the genkan for the 9 ft depth the occasion quotes",
+  "observed": "2026-11-22",
+  "subject": "county-magistracy-example",
+  "source": "pool/magistracies/county-magistracy-example/county-magistracy-example.svg; its notes.md T309 entry",
+  "command": "grep -oE '<rect[^>]*data-kind=\"(barracks|retainers. quarters|granary|genkan)\"[^>]*>' pool/magistracies/county-magistracy-example/county-magistracy-example.svg",
+  "method": "rect x, y, width, height read from the svg, divided by 3 for feet",
+  "value": {
+   "barracks_px": [756, 448.5, 66, 180],
+   "barracks_ft": [22, 60],
+   "long_house_px": [30, 322.5, 72, 150],
+   "long_house_ft": [24, 50],
+   "granary_px": [672, 322.5, 150, 108],
+   "granary_ft": [50, 36],
+   "genkan_ft": [12, 9]
+  }
  }
 }

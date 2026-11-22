@@ -49,20 +49,20 @@ knobs re-rolled from the seed by the generator and held to the forms recorded he
   (Pass 5 wrote "~2,400 sq ft" for a house of 1,980 + 480 + 120 = 2,580 sq ft, ~72 tsubo; pass 4 drew ~4,700.) The
   residence kind entry's "about 180 to 200 ft" was corrected at its source (`interactive/compound_kinds/household.py`)
   and docs/buildings.md's scale doctrine no longer calls those wings validated. The mass the house gave up went to the
-  lodgings, stores and office (as drawn since feature 374 wave 128: the office hall 113 x 38 (127 x 38 since feature 449 T265's armory bay), the tax archive 18 x 24 (its size research 0100's records-store ceiling since feature 372 wave 105, its proportions a GUESS), the granary 50 x 27 (0098's band), the barracks
-  23 x 70 (23 deep since wave 134), the staff long-house 24 x 82, the servants' row 60 x 15, the stables 18 x 24, two storehouses 16 x 19 and
+  lodgings, stores and office (as drawn since feature 374 wave 128: the office hall 113 x 38 (127 x 38 since feature 449 T265's armory bay), the tax archive 18 x 24 (its size research 0100's records-store ceiling since feature 372 wave 105, its proportions a GUESS), the granary 50 x 36 (the registry's band, inside 0098's drawing page's 43-50 by 25-36 ft; 27 deep until feature 449 T309), the barracks
+  22 x 60 (five dwellings of 12 ft since feature 449 T309; 23 x 70 before), the staff long-house 24 x 50 (the karo's bay and three dwellings of 12 ft since feature 449 T309; 24 x 82 before), the servants' row 60 x 15, the stables 18 x 24, two storehouses 16 x 19 and
   12 x 18 (unequal, as the Yokota pair), the gatehouse 40 x 12 and the guest house 40 x 42 (42 since wave 134, every building a foot or two clear of the wall's face)), which holds coverage in the jin'ya band without shrinking the envelope; each of those
   sizes is a GUESS in its band.
-- **R07 approach**: no genkan; the middle gate in the divider and a stepping-stone roji across the garden to a shoe
-  stone at the reception's veranda (the Koseki form, research 0104). The household's own doors: the kitchen's
+- **R07 approach**: a GENKAN on the office hall (feature 449 T291): the formal entrance form is a knob between 0104's two forms, rolled from the map's seed - exactly `random.Random(zlib.crc32(b"county-magistracy-example:formal entrance form")).choice(["a genkan on the office hall", "the roji, no genkan"])` = a genkan on the office hall - so the hall draws a porch of about 12 x 9 ft (0104's one shikidai measured) built out from its south face at its east end, east of the hearing court, onto the outer court the forecourt opens into; the guest's way runs on through the office (0104's drawing page), and the roji to the reception's shoe stone (the Koseki form, drawn until T291) is not drawn. The household's own doors: the kitchen's
   one outside door on its WEST face, onto the rear yard, which runs south into the kitchen yard (pass
   7: on its yard face it opened into a ~5 ft pocket between the bath, the well and the house), and the residence's
   inner entrance on its rear (north) face in the kitchen half, east of the family privy, onto the alley (feature 374 wave 113: the kitchen ell takes its west face)
   (research buildings 370). Note 300 says of the Koseki house that the everyday door is the kitchen entrance, while
   370 gives the family an inner entrance apart from it; the draft draws both doors.
 - **R18 granary**: 0098's form knob, rolled exactly `random.Random(zlib.crc32(b"county-magistracy-example:granary form")).choice(["raised
-  timber storehouse", "earth-walled kura"])` = earth-walled kura: on the ground, no posts (the dozo form), 50 x 27 ft in
-  0098's ~43-50 x 25-27 ft band (feature 374 wave 128; it was 60 x 30).
+  timber storehouse", "earth-walled kura"])` = earth-walled kura: on the ground, no posts (the dozo form), 50 x 36 ft in
+  0098's drawing page's ~43-50 x 25-36 ft county granary (its size a GUESS) and the registry's 30-60 by 14-36 ft band
+  (types.json) (feature 449 T309; 50 x 27 ft since feature 374 wave 128, and 60 x 30 before).
 - **R19 guardroom**: a freestanding gatehouse BESIDE the gate (Takayama's form), ~40 x 12 ft as 0093's drawing page draws a
   gatehouse of its own (its length a GUESS; 2 ken deep, measured), flush west of the gate's post - the gatekeepers' place
   follows from the one-bay gate, which has no range to hold a guardroom (feature 374 wave 128; it was 18 x 12 ft).
@@ -125,7 +125,7 @@ knobs re-rolled from the seed by the generator and held to the forms recorded he
 Guesses the draft carries beyond those: a **detached guest house** (R10, research buildings 330: guests were received
 in the main house; a guest house apart was not found). (The karo's house of its own, a GUESS through pass 5, is now
 a bay of the staff long-house - R11's attested form.) The kitchen postern's, the service gate's and the middle gate's 6 ft (narrower than the main
-gate), the door width (a map drawing convention, research 0117), the roji's stone spacing, the hearing
+gate), the door width (a map drawing convention, research 0117), the hearing
 court's 80 x 26 ft (32 until feature 374 batch 5, cut 6 ft to open the way west past the stable well), the garden's 124 x 46 ft, the collection hatches, the dais's 30 x 10 ft, the cart yard's 37 x 20 ft, the 5 ft privies and
 their 15 ft from any well are guesses too. The forecourt, the `outer court` ground beside the hearing court and the
 cart yard are drawn as bare ground with no edge: an outlined forecourt read as a fenced one, a GUESS the record does
@@ -306,8 +306,7 @@ Coverage 32%, perimeter-hugging 71%, nothing overflows; every registered check p
 - **The gatehouse's tub round the corner nearest its door**, on the north face: the 12 ft east face leaves no seat beside the door
   clear of the main gate's track (UNRESEARCHED).
 - **The bath's tub on its yard side**, judged by no door: the bath is entered from the house.
-- **The cell draws a door**, as every building with a tub does; the reception's shoe stone is declared `id="shoe-stone"`, its
-  guests' way in (no genkan).
+- **The cell draws a door**, as every building with a tub does; the guests' way in is the office hall's genkan (T291).
 
 Coverage 32%, perimeter-hugging 71%, nothing overflows; every registered check passes (pack_audit).
 
@@ -346,7 +345,7 @@ in its own court, from that court's gates). No room had to grow: the north wall'
 tax archive, freed of the granary's column, now stands on the divider west of the hall (48 to 66 ft), and the middle gate east of the
 hall (about 201 to 209 ft with its posts). **An armory at an ordinary seat** - Kaibara's ordinary gate range held a store of arms (0093; the sheet names no firearm, the setting's notes silent on them - the session's labeling ruling, 2026-11-22) and
 Pingyao, with no standing barracks, kept its armory in the great hall's west end bay (0123); this sheet's one-bay gate leaves no gate
-range, so the armory is the office hall's west end bay, 14 x 20 ft in its back row beside the clerks' room (its size a GUESS), the hall
+range, so the armory's site rolls between the office hall and a store of its own (feature 449 T303's armory_site check), exactly `random.Random(zlib.crc32(b"county-magistracy-example:armory site")).choice(["office hall", "a store of its own"])` = office hall: the hall's west end bay, 14 x 20 ft in its back row beside the clerks' room (its size a GUESS), the hall
 14 ft longer for it (127 x 38 ft, 72 to 199 ft) and its rooms moved east by the bay; the hearing court centered under the dais again
 (102.5 to 182.5 ft), the outer court's two named grounds beside it re-cut to meet it (27.5 to 102.5 and 182.5 to 205 ft). Garrison
 emphasis: a quiet county, a token watch - the barracks moved 33 ft north on the east wall into the granary's old seat, its privy with it, leaving about 31 x 31 ft bare in the south-east corner (filed, feature 449); no watchtower. Coverage 31%, every registered check passes (pack_audit).
@@ -403,15 +402,19 @@ house and the shrine in a back corner. Coverage 31%, every registered check pass
 T265's granary seat, its north gate, its barracks move, the hall at 72 to 199 ft, the hearing court at 102.5 to 182.5 ft and the tax archive
 at 48 to 66 ft.
 
+2026-11-22 (feature 449 T291, T300): the office hall's GENKAN (the formal entrance form's roll; R07 above), a porch of about 12 x 9 ft on its south face at its east end; the roji to the reception no longer drawn. The open band north of the garden, between the reception's end and the shrine, named a REAR GROUND (84 x 30 ft; building-review 2026-11-22, outside its change), Kanazawa's sedo behind the lot (0118, secondhand; what stood on it a GUESS).
 2026-11-22 (feature 449 T280, T288; building-review 2026-11-22 E1 on T274's sheet): **the karo's door fronts open court again**. T274's
 recentred hall had pushed the tax archive to 34.5 to 52.5 ft, 7.5 ft off the senior retainers' long-house face at 27 ft, so the karo's
 door and his neighbor's opened onto a dead-end lane against the archive's blank west wall. Room first: the office hall now starts at
 70.5 ft (70.5 to 197.5 ft; the spec's `near`), into the open ground that lay between the middle gate and the granary, the middle gate moving
 east with it; the archive, seated nearest the middle beside the hall, stands at 46.5 to 64.5 ft, 19.5 ft off the long-house. The hearing
-court, re-cut under the dais (100.5 to 180.5 ft), is now centered on the main gate (140 to 147 ft); the outer court's two grounds beside it
+court, re-cut under the dais (100.5 to 180.5 ft), is now centered on the dais, the main gate (140 to 147 ft) inside its middle; the outer court's two grounds beside it
 re-cut (27.5 to 100.5 and 180.5 to 205 ft). A generator test holds every long-house door to 12 ft of open ground before it (a GUESS: the
 gate approach's depth reused; a research pass, 2026-11-22, found no source stating a compound rowhouse's frontage, only that the rows on a
 compound's edge were entered from inside it). Priced and refused: the compound 14 ft wider (coverage at its 30% floor, and the archive
 seated east of the hall, 9 ft before the granary's west door). The middle gate's passage is now 201 to 207 ft (199 to 209 ft with its posts), 10 ft from the granary's west face.
 Supersedes the entry above's hall at 58.5 to 185.5 ft, archive at 34.5 to 52.5 ft, hearing court at 88.5 to 168.5 ft and middle gate at
 189 to 195 ft.
+
+- **2026-11-22 (feature 449 T309)**: the two staff long-houses recounted so both stand below the residence's house block (1,344 sq ft), as 0116's drawing page ranks them (the office hall, then the residence, then the staff's rowhouse - the one office measured, Takayama): the barracks five dwellings of 12 ft, three men a dwelling (0097's one case; Obata's 2-ken foot soldier's dwelling), 22 x 60 ft = 1,320 sq ft; the senior retainers' long-house the karo's 14 ft bay and three dwellings of 12 ft, 24 x 50 ft = 1,200 sq ft; their lengths are GUESSES, the residence the researched Yokota house (0091), so the guesses moved. The ground they gave back left the sheet under the jin'ya coverage band's 30% (0116), so the granary, which 0116 lets be the largest building, is drawn 50 x 36 ft (1,800 sq ft, in the registry's 30-60 by 14-36 ft band, types.json, and 0098's drawing page's 43-50 by 25-36 ft, a GUESS) - a longer residence was priced and refused (past the Yokota house's 49 tsubo), and a larger stable refused by the placer (no room left on the east wall for the barracks). The audit now holds both pairs (HIERARCHY: barracks and retainers' quarters under the residence) on every sheet. `make pack-audit`: every check OK, coverage 30%.
+- **2026-11-22 (feature 449 T303)**: the armory's site is now rolled rather than derived. The sheet draws no gate range, so the roll is between the office hall and a store of its own, exactly `random.Random(zlib.crc32(b"county-magistracy-example:armory site")).choice(["office hall", "a store of its own"])` = office hall. That is where the sheet already draws it (the hall's west end bay, since feature 449 T265), so nothing moved; T303's armory_site check holds the sheet to the roll.

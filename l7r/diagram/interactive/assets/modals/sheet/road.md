@@ -1,5 +1,5 @@
 About: The road at a magistrate's compound was the road or street the compound stood on, and its main gate opened onto
-it; lesser lanes led to the side gates. A Japanese seat was often built beside a village or town already there, probably
+it. A Japanese seat was often built beside a village or town already there, probably
 at its edge, while the Chinese county yamen stood inside its town, on the main street. Under the Qing a local government
 office faced south, by regulation; which way a Japanese seat's gate faced is not recorded.
 

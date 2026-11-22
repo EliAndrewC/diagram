@@ -408,7 +408,7 @@ fn comb_ground<'a>(f: &'a Field, sunk: Option<&'a Sunk>) -> Ground<'a> {
 /// the tameike at its berth as the way out's walls, the ditches and the drain's run as its lines. It draws nothing.
 ///
 /// Research:
-///     the seat's back to the wind - research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html: the settlement laid out with its back to the wind - on a comb, but where a declared fall runs into the wind (the seat backs the hill, the claim at `seat::seat`; its belt still windward, at `margins::ranked`); a polder hands its landward shore as the way the back faces (`Ground::back`, the claim at `polder::landward`)
+///     the seat's back to the wind - research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html: the settlement laid out with its back to the wind - on a comb, but where a declared fall runs into the wind (the seat backs the hill, the claim at `seat::seat`; its belt still windward, at `margins::ranked`); a polder hands its landward shore as the way the back faces (`Ground::back`, the claim at `polder::landward`), its belt's room still asked of the map's own wind (`SeatIn::belt_wind`, the claim at `polder::roll_polder`)
 ///     the way out's walls - research/questions/0081-village-lanes.drawing.html: a track keeps off wet ground and runs off the map - the wet toe and the reed fringe grown by the lane's width, the field, the pond at its berth; the drain's run and every watercourse lines it may not cross
 fn stage_seat(p: &Plan, g: &Ground) -> Result<Seated, Refused> {
     let rad = p.down_deg.to_radians();
@@ -442,6 +442,7 @@ fn stage_seat(p: &Plan, g: &Ground) -> Result<Seated, Refused> {
         canvas: (p.w, p.h),
         fall: (rad.cos(), rad.sin()),
         wind: g.back.unwrap_or_else(|| wind(&p.windward)),
+        belt_wind: g.back.map(|_| wind(&p.windward)),
         back_min_dot: plan::WIND_BACK_MIN_DOT,
         outline: g.ring.to_vec(),
         band: plan::band_extent(p.households, p.knob("cluster_shape")),
@@ -476,28 +477,41 @@ fn seat_refused(e: crate::seat::SeatRefused) -> Refused {
 type Segment = ((f64, f64), (f64, f64), f64);
 
 /// The ground the seat chose for the settlement and its belt: from the margin out past the band and the belt, the band's length
-/// along it - the ground the dry hem keeps off (the deleted `settlement_ground`). Where the seat stood the band the belt's depth
-/// off a windward field (`margins::ranked`), the same depth holds the belt first, then the houses, and nothing past their back.
+/// along it - the ground the dry hem keeps off (the deleted `settlement_ground`) - widened to the belt's own ground, the band swept
+/// up to `BELT_FAR_FT` along `wind` (the map's own) on the margin's dry side (`margins::belt_swept`), so a belt that wraps the band's
+/// windward end on an oblique wind is kept too. Where the seat stood the band the belt's depth off a windward field
+/// (`margins::ranked`), the same depth holds the belt first, then the houses, and nothing past their back.
 ///
 /// Research:
 ///     the settlement's ground - research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: the houses between the canal and the dry fields, so the hem keeps off the band where they stand
-///     the belt's ground kept - research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html: a clustered village shelters behind one belt at its windward edge, so its ground reaches past the band to the belt on the band's windward side - behind it where its back faces the wind, between it and the field where a declared fall into the wind backs it to the hill (GUESS, research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html)
-fn settlement_ground(s: &crate::seat::Frame) -> Vec<(f64, f64)> {
+///     the belt's ground kept - research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html: a clustered village shelters behind one belt along its windward edge, so its ground reaches past the band to the belt on the band's windward faces - behind it where its back faces the wind, round its windward end where the wind falls obliquely (Inashiro's and Mizuguchi's belts 52 and 54 percent outside the old strip, measured 2026-11-22, 449 T294), between it and the field where a declared fall into the wind backs it to the hill (GUESS, research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html), on the margin's dry side alone (GUESS, `margins::belt_swept`)
+///     the back strip a belt's depth whatever the wind - GUESS: the record is silent on the ground behind a village whose back is off the wind; the strip behind the band reaches `BELT_FAR_FT` on every seat, a polder's whose back is its landward shore too (Kuwabata's, back to the east under a northwest wind), so the dry hem stands a belt's depth behind the houses where no belt stands (the algorithmically easier route: one strip for every seat)
+fn settlement_ground(s: &crate::seat::Frame, wind: (f64, f64)) -> Vec<(f64, f64)> {
     let ((ax, ay), (ox, oy), (lx, ly)) = (s.anchor, s.out, s.along);
     let (lat, deep) = (s.band.0, STANDOFF_FT + 2.0 * s.band.1 + BELT_FAR_FT);
-    vec![
+    let mut pts = vec![
         (ax - lx * lat, ay - ly * lat),
         (ax + lx * lat, ay + ly * lat),
         (ax + lx * lat + ox * deep, ay + ly * lat + oy * deep),
         (ax - lx * lat + ox * deep, ay - ly * lat + oy * deep),
-    ]
+    ];
+    pts.extend(crate::seat::margins::belt_swept(
+        s.center,
+        s.along,
+        s.out,
+        (s.band.1, s.band.0),
+        wind,
+        BELT_FAR_FT,
+        s.anchor,
+    ));
+    crate::field::geom::hull(&pts)
 }
 
 /// The dry hem (stage 5): laid behind the settlement and along the canal elsewhere, keeping off the settlement's ground.
 ///
 /// Research:
 ///     the dry hem behind the settlement - research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: paddy, then the houses, then the dry fields behind them
-fn stage_hem(f: &Field, seated: &Seated) -> Option<crate::hem::Laid> {
+fn stage_hem(f: &Field, seated: &Seated, wind: (f64, f64)) -> Option<crate::hem::Laid> {
     let h = f.hem.as_ref()?;
     let water: Vec<Segment> = f
         .water
@@ -509,7 +523,7 @@ fn stage_hem(f: &Field, seated: &Seated) -> Option<crate::hem::Laid> {
     let keep: Vec<Vec<(f64, f64)>> = seated
         .frames
         .first()
-        .map(settlement_ground)
+        .map(|s| settlement_ground(s, wind))
         .into_iter()
         .collect();
     Some(crate::hem::lay(h, &f.fan.ring, &water, &keep))
@@ -583,7 +597,12 @@ fn draw_sink(svg: &mut Svg, s: &Sunk) {
 ///
 /// Research:
 ///     the hem drawn - CONVENTION: each dry plot in its crop's fill and furrows (`crop_ink`), the placeholder over them
-fn draw_hem(svg: &mut Svg, laid: Option<&crate::hem::Laid>, seated: Option<&Seated>) {
+fn draw_hem(
+    svg: &mut Svg,
+    laid: Option<&crate::hem::Laid>,
+    seated: Option<&Seated>,
+    wind: (f64, f64),
+) {
     for d in laid.iter().flat_map(|l| &l.plots) {
         let (fill, furrow) = crop_ink(d.crop);
         svg.kind(d.crop);
@@ -594,7 +613,11 @@ fn draw_hem(svg: &mut Svg, laid: Option<&crate::hem::Laid>, seated: Option<&Seat
     // for the stage that draws the houses, gone when it runs)
     if let Some(frame) = seated.and_then(|s| s.frames.first()) {
         svg.kind("-");
-        svg.reserved(&settlement_ground(frame), RESERVED_INK, "the settlement");
+        svg.reserved(
+            &settlement_ground(frame, wind),
+            RESERVED_INK,
+            "the settlement",
+        );
     }
 }
 
@@ -733,7 +756,7 @@ pub fn roll(spec: &spec::Spec) -> Result<Rolled, Refused> {
         .fields
         .first()
         .zip(seated.as_ref())
-        .and_then(|(f, s)| stage_hem(f, s));
+        .and_then(|(f, s)| stage_hem(f, s, wind(&p.windward)));
     let mut svg = Svg::default();
     // THE REEDS UNDER THE FIELD (feature 444 T42; the cohort's reeds_on_paddy check, 183 of 300 seeds): the reed ring runs its
     // 44 ft out from the shore into the paddy above the pond's berth, and the deleted `pond_reeds` cut it there against the drawn
@@ -746,7 +769,7 @@ pub fn roll(spec: &spec::Spec) -> Result<Rolled, Refused> {
         draw_field(&mut svg, f, b, &beans);
     }
     sunk.iter().for_each(|s| draw_sink(&mut svg, s));
-    draw_hem(&mut svg, laid.as_ref(), seated.as_ref());
+    draw_hem(&mut svg, laid.as_ref(), seated.as_ref(), wind(&p.windward));
     let by_stage: Vec<(&'static str, HashMap<String, u64>)> = [
         ("water_frame", p.counts.clone()),
         ("field", out.counts.clone()),

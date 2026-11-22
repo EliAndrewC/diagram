@@ -36,6 +36,9 @@ pub struct SeatIn {
     pub fall: Pt,
     /// The wind, a unit vector pointing to where it comes from.
     pub wind: Pt,
+    /// The map's own wind where the back is handed another way than `wind` (a polder's landward shore): the wind the belt's room is
+    /// asked of; none where the back is the wind's (449 T292).
+    pub belt_wind: Option<Pt>,
     /// The dot of a margin's back with the wind at or past which the back faces it (Python's `WIND_BACK_MIN_DOT`).
     pub back_min_dot: f64,
     /// The field's outline.

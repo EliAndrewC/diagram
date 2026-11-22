@@ -1,0 +1,6 @@
+{
+  "utc": "20261122T212001Z",
+  "guard": "pair-hooks",
+  "what": "review prerequisites",
+  "reason": "REVIEW_PREREQ_OK: the last rear-yard audit (fb17f9739a98, on county-magistracy-example) passed: RY-1 and RY-2 are confirmations, and RY-3 to RY-5 are suggestions for the band, which is still unrecorded in types.json; this round is a new occasion, the rear yard new to ochiba-roundtrip-test, and judges that against the same band"
+}

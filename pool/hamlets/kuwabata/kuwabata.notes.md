@@ -819,3 +819,14 @@ The storehouse annex is now dealt to the largest farmhouses by the main house's 
 What else the re-pack moved: the notice board stands 72 ft from main's seat, at (3444.1, 1679.4); two of the three shared wells moved with their houses, to (3545, 1656) and (3765, 1590); 12 lanes where main drew 15, the web settled in 6 rounds, and main's 66 ft skeleton stub is gone; the cluster now draws a crescent, 2.13 to one, where main's drew round at 1.88 (`declare_cluster_shape`), and 2 pond sties stand where main drew 1. The fixture counts are main's: bath rooms 2, wood sheds 6, privies 11, coops 11, manure heaps 5.
 
 The annex's size is a deliberate deviation (research 0040 and 430): the storehouses the record reads were about 15 by 18 ft, free-standing; the map draws them against the back wall, in the farm sheds' band.
+
+## 2026-11-22 (feature 449 T292): the belt on the windward side the polder leaves dry - the settlement's ground moved
+
+The Rust seat backs the village onto the polder's landward shore, east of the block (`polder::landward`, 0019), not onto
+the head as the Python seat of 2026-08-27 above did, so the polder lies to the village's west, the northwest wind across
+it. The belt's room is now asked of that wind, not of the shore's way, and kept on the margin's dry side
+(`margins::belt_swept`): the belt takes the band's north end, none between the houses and the dike (a GUESS: the record is
+silent on a belt between houses and a dike; the Nobi plain's ring-dike groves stand north to west of the homestead,
+research pass of 2026-11-22). Measured on this roll (2026-11-22, `kuwabata.driver.svg` against the mirror's): the dashed
+settlement ground now reaches 103 ft north of the band (y 2423.2 where it stopped at 2526.5), the seat, the strips and
+everything else unchanged.

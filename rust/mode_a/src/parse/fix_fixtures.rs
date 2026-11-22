@@ -142,6 +142,25 @@ pub(crate) const UNDIVIDED: &str = r##"<svg xmlns="http://www.w3.org/2000/svg" v
 </svg>
 "##;
 
+/// A storehouse and a tax archive out-sizing the barracks (impl-drift 2026-11-22 on HIERARCHY: "well below the staff rowhouse").
+pub(crate) const STORES_OVER_ROW: &str = r##"<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300">
+<rect id="precinct" x="20" y="20" width="360" height="260" fill="url(#court-earth)" data-kind="outer court"/>
+<g data-kind="residence"><rect x="200" y="40" width="160" height="120" fill="#C9A57A" stroke="#6B4F2A"/></g>
+<g data-kind="barracks"><rect x="40" y="200" width="60" height="30" fill="#C9A57A" stroke="#6B4F2A"/></g>
+<g data-kind="storehouse"><rect x="40" y="40" width="90" height="60" fill="#C9A57A" stroke="#6B4F2A"/></g>
+<g data-kind="tax archive"><rect x="40" y="110" width="80" height="50" fill="#C9A57A" stroke="#6B4F2A"/></g>
+</svg>
+"##;
+
+/// A barracks and a senior retainers' long-house out-sizing the residence (449 T309: 0116's office hall, residence, then the staff's rowhouse).
+pub(crate) const ROWS_OVER_HOUSE: &str = r##"<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300">
+<rect id="precinct" x="20" y="20" width="360" height="260" fill="url(#court-earth)" data-kind="outer court"/>
+<g data-kind="residence"><rect x="200" y="40" width="90" height="60" fill="#C9A57A" stroke="#6B4F2A"/></g>
+<g data-kind="barracks"><rect x="40" y="200" width="180" height="60" fill="#C9A57A" stroke="#6B4F2A"/></g>
+<g data-kind="retainers' quarters"><rect x="40" y="40" width="72" height="150" fill="#C9A57A" stroke="#6B4F2A"/></g>
+</svg>
+"##;
+
 /// The defect fixes' sheets by name, a name's prefix giving its tier as the red fixtures' do.
 pub(crate) fn sheets() -> Vec<(&'static str, &'static str)> {
     vec![
@@ -161,9 +180,11 @@ pub(crate) fn sheets() -> Vec<(&'static str, &'static str)> {
 #[cfg(test)]
 mod tests {
     use super::{ARCHES_ADRIFT, ARCHES_HELD, ARCHES_ORDER, BOARD, ROWS, SANCTUARY_FENCE};
-    use super::{BASIN, BATH_TUB, ONE_PRIVY, UNDIVIDED};
+    use super::{BASIN, BATH_TUB, ONE_PRIVY, ROWS_OVER_HOUSE, STORES_OVER_ROW, UNDIVIDED};
     use crate::audit::checks::{gap_tag, tubs_off_their_doors, Gap, DOOR_FLUSH_TOL_PX};
-    use crate::audit::program_rules::{lodging_entrances, privies_by_zone, PRIVY_MIN};
+    use crate::audit::program_rules::{
+        lodging_entrances, privies_by_zone, size_hierarchy, HIERARCHY, PRIVY_MIN,
+    };
     use crate::audit::roads::{gate_feeds_its_road, side_gates_met, ROAD_GATE_TOL_FT};
     use crate::audit::shared::{
         arch_on_approach, gate_widths, no_precinct_enclosure, well_clear_of_arch, EDGE_TOL_FT,
@@ -374,6 +395,40 @@ mod tests {
                 "the barracks at svg(60,200) is undivided - a barracks is divided into dwellings, each with a door of its own; only a servants' quarters is drawn as one common room behind one door",
                 "the retainers' quarters at svg(60,60) is undivided - a retainers' quarters is divided into dwellings, each with a door of its own; only a servants' quarters is drawn as one common room behind one door",
             ]
+        );
+    }
+
+    #[test]
+    fn the_small_stores_stand_below_the_rowhouse_on_a_hand_sheet() {
+        let found = size_hierarchy(&parse_svg(STORES_OVER_ROW).unwrap(), &HIERARCHY);
+        let under_row = |what: &str| {
+            found
+                .iter()
+                .any(|f| f.starts_with(what) && f.contains("not smaller than the barracks"))
+        };
+        assert_eq!(
+            (
+                under_row("the tax archive ("),
+                under_row("the storehouse (")
+            ),
+            (true, true)
+        );
+    }
+
+    #[test]
+    fn the_staff_rowhouses_stand_below_the_residence() {
+        let found = size_hierarchy(&parse_svg(ROWS_OVER_HOUSE).unwrap(), &HIERARCHY);
+        let under_house = |what: &str| {
+            found
+                .iter()
+                .any(|f| f.starts_with(what) && f.contains("not smaller than the residence"))
+        };
+        assert_eq!(
+            (
+                under_house("the barracks ("),
+                under_house("the retainers' quarters (")
+            ),
+            (true, true)
         );
     }
 }

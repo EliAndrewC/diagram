@@ -466,22 +466,27 @@ pub fn fire_water_distribution(svg: &Sheet, plan: &ParsedPlan) -> Result<Vec<Str
 
 /// (smaller, larger): the compound's size HIERARCHY, the building-review checklist's pairs - the house out-measures its kitchen, its
 /// document storehouse and storehouse, and its shrine (docs/building-programs.md's own reading; the tax archive pair READ from 0116, the
-/// rest GUESS); the stables and the cell under the barracks (GUESS); the sanctuary under the hall (docs/building-programs.md).
+/// rest GUESS); the barracks and the retainers' quarters, the staff's rowhouses, under the residence (0116, 449 T309); the document storehouse and storehouse under the barracks too (0116's order below the staff rowhouse, its "well below" margin unchecked, held on a hand
+/// sheet since impl-drift 2026-11-22 found only the generator holding it); the stables and the cell under the barracks (GUESS); the sanctuary under the hall (docs/building-programs.md).
 ///
 /// Research:
-///     the storehouses under the residence - research/questions/0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html: the tax archive and the other small storehouses stand well below the staff rowhouse, which stands below the residence, the order of the one office measured, at Takayama.
+///     the storehouses under the residence - research/questions/0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html: the tax archive and the other small storehouses stand below the staff rowhouse, which stands below the residence, the order of the one office measured, at Takayama; the staff's rowhouses - the barracks and the retainers' quarters - under the residence too, held since feature 449 T309. The pairs hold the order only: the page's "well below" (a small fraction) is a margin no pair checks yet, filed as 449 T321 (impl-drift 2026-11-22).
 ///     the kitchen and the shrine under the residence - GUESS research/questions/0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html: no kitchen or shrine hall out-sizes the residence, the largest domestic building; the page records the order among them as the project's reading, a guess.
 ///     the stables under the barracks - GUESS research/questions/0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html: the stable stays smaller than the barracks; the page records its place in the order as a guess.
 ///     the cell under the barracks - GUESS: a cell stays smaller than the barracks; no page ranks them, and the pages' sizes agree, a cell of about 12 by 10 ft, a guess on research/questions/0096-holding-cells-agariya-and-roya.drawing.html, against a long rowhouse 12 to 24 ft deep on research/questions/0097-staff-rowhouses-and-barracks-nagaya.drawing.html.
 ///     the sanctuary under the hall and dwelling - research/questions/0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.drawing.html: a sanctuary one to three bays of about 6 ft wide stays smaller than the one-roof hall and dwelling of 2,100 to 3,600 sq ft.
-pub const HIERARCHY: [(&str, &str); 7] = [
+pub const HIERARCHY: [(&str, &str); 11] = [
     ("kitchen", "residence"),
     ("tax archive", "residence"),
     ("storehouse", "residence"),
+    ("tax archive", "barracks"),
+    ("storehouse", "barracks"),
     ("compound shrine", "residence"),
     ("stables", "barracks"),
     ("cell", "barracks"),
     ("sanctuary", "hall and dwelling"),
+    ("barracks", "residence"),
+    ("retainers' quarters", "residence"),
 ];
 
 /// Each pair's footprints ([`footprint`], the largest structure tagged with the kind) rank as the list says; a pair is skipped where the

@@ -3,7 +3,7 @@ house, with a urinal and the privy under one roof. It stood outside because what
 and many stood south or southeast of the house, in the sun, where the contents rotted quickly; others stood under the
 eaves in front of the stable or out in the yard.
 
-What its walls and roof were made of is not recorded. The night soil was kept in a tank beside it or in a pit out by the
+What its walls and roof were made of, and whether its doorway closed, is not recorded. The night soil was kept in a tank beside it or in a pit out by the
 fields, and rotted in a jar buried in the ground or a plastered pit. At its
 simplest, at several farms of one northern village, the privy was only a tub sunk in a barn's floor with boards laid
 across it.
@@ -15,12 +15,12 @@ privy joined to the house was at first an official's: in six villages only the h
 one until 1771, and about one house in ten by 1824.
 
 Guesses:
-- How often each of the places a privy stood is drawn: no source says how often each was used.
-- Where in the yard an outhouse stood, and how far out from the house a privy in the front yard stood: no source says.
-- How far from its house a privy on the sunny side may stand: no source gives a distance, so it is kept near enough to read
-  as its own house's.
+- How often each of the places a privy stood is drawn: beyond one village where about three in four stood south or southeast
+  of the house, no source says how often each was used.
+- How far from its house a privy stands, on the sunny side or in the front yard: no source gives a distance, so it is kept
+  near enough to read as its own house's.
 
-Depiction: The map draws a privy on most farmsteads as a small roofed building at one of the sixteen privy sizes counted in
+Depiction: The map draws a privy on most farmsteads as a small roofed building the size of one of the sixteen privies in
 one village, with a dark circle at one end standing for its night soil, so it does not read as a wood shed; the real night soil was kept
 in a tank beside it or in a pit out by the fields. About three privies in four are sought first on the house's sunny side, as about three in four stood at one village's farmsteads,
 but the work yard takes much of that ground, so across the maps fewer than half end up there; most of the rest stand behind the house, because the work yard covers the ground in front of the house and under the stable's eaves, where real privies stood too.

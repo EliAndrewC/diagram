@@ -3,7 +3,7 @@ cost a great deal to dig; a whole village, or a group of households within one, 
 planned row colony on the Musashino plateau, the ground was poor in water and the water table deep, so the settlers first
 dug 11 wells and shared them, adding more later; one at Nakatome reaches about 82 ft (25 m) down.
 
-The wellside was where the neighbors met, to draw water, do the washing and talk. A well by the roadside had a name of its own, the wayside well (tsuji-ido). The shaft was about 3 ft
+The wellside seems to have been where the neighbors met, to draw water, do the washing and talk. A well by the roadside had a name of its own, the wayside well (tsuji-ido). The shaft was about 3 ft
 (1 m) across under a curb of wood or stone, the bucket raised on a sweep or, from deep water, on a rope over a pulley.
 
 In one water-short coastal village the wells were dug at about one to every five to ten houses, and round many of its
@@ -23,5 +23,5 @@ it; a real well's curb was a frame only a few feet across round a shaft about 3 
 Name: Wells shared along the way
 Covers: `meta.row_water = shared`
 Sources: kotobank-santome-shinden, ido-jawiki, kotobank-tsurube-ido, idobata-kaigi-jawiki, seiyo-karihama-ido, kotobank-tsujiido, saijo-mizu-rekishikan, kotobank-kurumaido, koshigaya-shishi-noumin-jukyo
-Entry: research/questions/0033-row-villages-resson.html, research/questions/0196-communal-wells-ido.html, research/questions/0028-the-farmstead-and-what-stood-on-it-yashiki.html
+Entry: research/questions/0196-communal-wells-ido.html, research/questions/0033-row-villages-resson.html, research/questions/0028-the-farmstead-and-what-stood-on-it-yashiki.html
 Drawing: research/questions/0033-row-villages-resson.drawing.html, research/questions/0196-communal-wells-ido.drawing.html, research/questions/0028-the-farmstead-and-what-stood-on-it-yashiki.drawing.html

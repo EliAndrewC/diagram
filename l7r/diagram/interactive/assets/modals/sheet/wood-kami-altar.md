@@ -1,5 +1,6 @@
 About: A small altar to the kami of the wood, kept in Ubame's Inari shrine. It is public - anyone may
-pray at it - but a private hand keeps it up, and no one from the Ministry of Rites stands behind it. It is kept small and tidy.
+pray at it - but a private hand keeps it up, and no one from the Ministry of Rites stands behind it. It is kept small and tidy. Why
+Ubame's Inari shrine keeps an altar to the wood's kami, whose hand keeps it up, and when it is tended or prayed at, is not recorded.
 A second kami could share a shrine's hall or be given a small shrine of its own on the same ground.
 
 What this altar looks like is not recorded. A hokora, a small hall that enshrined a kami but was not counted a shrine, had no torii, or only a very small one. Its nearest kin, a household's

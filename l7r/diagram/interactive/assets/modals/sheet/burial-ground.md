@@ -21,7 +21,7 @@ Guesses:
   shrine's slope.
 
 Depiction: Where a village's ground lies in the shrine's yard, the plan draws its graves in the yard around the hall and its
-arches, within a short walk of the hall, and never where an arch stands.
+arches, within a short walk of the hall, and never where an arch stands. It draws the graves as rows of low markers, a drawing convention; a real ground might be divided by household or by age, or kept to no rule.
 
 Name: burial ground
 Covers: the burial ground by the shrine, where the village has it there

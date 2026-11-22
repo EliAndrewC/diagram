@@ -1,0 +1,6 @@
+{
+  "utc": "20261122T220452Z",
+  "guard": "pair-hooks",
+  "what": "review prerequisites",
+  "reason": "REVIEW_PREREQ_OK: FR-003 only: the last county review's findings belong to the magistracy bundle (E1 is filed as T314, open), not to this occasion's change"
+}

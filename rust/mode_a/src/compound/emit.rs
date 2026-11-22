@@ -607,6 +607,7 @@ fn cell(s: &mut Svg, b: &Building, at: Bx) {
 ///
 /// Research:
 ///     the plan scale - research/questions/0090-magistrates-compounds-jinya-and-yamen.drawing.html: 3 px = 1 ft, set so drawn compounds fall between Joge and Takayama
+///     the genkan porch - CONVENTION: drawn as its building's own fill and stroke (1.2 px), captioned "genkan", under its door's glyph, which takes data-kind genkan; the porch's size and seat are layout's (`layout::GENKAN`)
 pub fn buildings(s: &mut Svg, p: &Program, l: &Layout) {
     for &i in &l.order {
         if let Some(at) = l.seats[i] {
@@ -614,9 +615,18 @@ pub fn buildings(s: &mut Svg, p: &Program, l: &Layout) {
         }
     }
     for d in &l.doors {
-        let id = s.id();
         let of = esc(&p.buildings[d.b].kind);
-        s.rect(d.bx, &format!(r##"fill="#4A3318" stroke="none" stroke-width="0" data-kind="door" data-part-of="{of}" data-id="{id}""##));
+        let kind = if let Some(porch) = d.porch {
+            let (fill, stroke) = paint(&p.buildings[d.b].role);
+            let id = s.id();
+            s.rect(porch, &format!(r#"fill="{fill}" stroke="{stroke}" stroke-width="1.2" data-kind="genkan" data-part-of="{of}" data-id="{id}""#));
+            s.caption("genkan", "genkan", SMALL, &[id]);
+            "genkan"
+        } else {
+            "door"
+        };
+        let id = s.id();
+        s.rect(d.bx, &format!(r##"fill="#4A3318" stroke="none" stroke-width="0" data-kind="{kind}" data-part-of="{of}" data-id="{id}""##));
     }
 }
 

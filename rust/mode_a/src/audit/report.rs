@@ -63,6 +63,7 @@ pub fn format_report(
     form: Option<&str>,
     on_map: Option<&OnMap>,
     tree: &Path,
+    sheet: &str,
 ) -> Result<String, Error> {
     let g = grids(plan, cell)?;
     let (mut inside, mut built, mut openc, mut empty) = (0_usize, 0_usize, 0_usize, 0_usize);
@@ -154,7 +155,7 @@ pub fn format_report(
             }),
     );
     lines.extend(gaps_tubs_and_gates(plan));
-    let ctx = Context::new(plan, text, btype, form, on_map, tree);
+    let ctx = Context::new(plan, text, btype, form, on_map, tree, sheet);
     lines.extend(check_lines(&ctx, tier)?);
     Ok(lines.join("\n"))
 }
@@ -337,6 +338,7 @@ fn sheet(path: &str, tree: &Path, out: &mut String) -> Result<(), Error> {
         form.as_deref(),
         on_map.as_ref(),
         tree,
+        super::armory::stem(path),
     )?;
     let _ = writeln!(out, "{report}\n");
     Ok(())

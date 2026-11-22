@@ -6,18 +6,15 @@ shrine seldom had one; an arch there was a mark of care, not a fixture. Two shri
 edge, which marked everything inside it, or a lesser shrine could have its own.
 
 A torii was a beam laid across two posts. What most were made of is not recorded, but an arch could be of stone: early dated ones at ordinary shrines are stone gates of the 1600s, one perhaps older. How
-far one stood before its hall is not recorded. The few measured are of stone: one at a country shrine, thought to date from the late Muromachi or early Edo period, stands about 9 ft high and 8 ft between its posts, and two city shrines' stand about 15 and 20 ft high.
+far one stood before its hall is not recorded. Among stone gates, one at a country shrine, thought to date from the late Muromachi or early Edo period, stands about 9 ft high and 8 ft between its posts, and two city shrines' stand about 15 and 20 ft high.
 
 An arch was a gift, from a shrine's parishioners together or from one donor. At the great Inari shrine of Fushimi, from the Edo period, worshippers gave arches in
 thanks for a prayer answered; each bears its giver's name, and they now number some
-10,000 along its mountain paths. An ordinary shrine's known arches before 1868 stood singly; the rows seen at such shrines today are not known from before then. In Rokugan an
+10,000 along its mountain paths. An ordinary shrine's known arches of the Edo period and earlier stood singly; the rows seen at such shrines today are not known from before then. In Rokugan an
 ordinary shrine's approach may run under one, three or seven arches, numbers that carry power in the setting, seven most of
 all.
 
 Guesses:
-- That a village shrine's approach runs under one, three or seven arches: no count of shrines' arches was found; a shrine, unlike
-  a small wayside shrine, had one, an ordinary shrine's known arches before 1868 stood singly, and the three and seven are the
-  setting's numbers.
 - How far a compound shrine's arch stands before its hall, about 5 ft where the plan is tight and up to 12 ft where there is
   room: no distance from any torii to its hall was found.
 - That a row of arches before a country shrine stands 12 ft apart, its innermost 12 ft off the hall: the one small rural row

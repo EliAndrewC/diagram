@@ -1,14 +1,13 @@
 About: The day office was the room of the office hall where the office's own officials did its daily business, drawing
 up its documents. At Takayama, the one intendant's office that survives, the officials sent by the shogunate worked in
-such a room, with the room of the officials hired from the district partitioned off beside it; documents for the
+such a room, with the room of the officials hired mostly from the district partitioned off beside it; documents for the
 shogunate were drawn up in a room kept for writing and bound in the room beside it. The working rooms and the
 examination room were most likely one block with the hall where cases were heard.
 
 The villages' suits and petitions were received at one of Takayama's two hearing courts; at the other, those who had
 committed crimes were examined and judged. Takayama also had an examination room (ginmisho), roofed like its court, though its
-torture is reported to have been done in the jail in the town. In Rokugan torture is rare, and the law forbids it as a
-way to win a confession, so a magistracy keeps no room built for interrogation, and questioning happens in the day
-office or the hearing court.
+torture is reported to have been done in the jail in the town. In Rokugan torturers are extremely rare, and the law forbids torture as a
+way to win a confession, though it allows it on someone already found guilty.
 
 Takayama's office hall was a single-story timber building roofed with wooden shingles, its floor about 8,100 sq ft for
 a whole province; a county magistrate's hall was most likely smaller. An intendant governed with about ten retainers and

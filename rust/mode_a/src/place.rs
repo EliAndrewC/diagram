@@ -49,6 +49,12 @@ pub const WINDBREAK: &str = "windbreak";
 /// The farmstead grove class (feature 291).
 pub const HOMESTEAD_GROVE: &str = "homestead grove";
 
+/// The quarters a regional wind's belt may name: the northwest, or one of its two sides.
+///
+/// Research:
+///     the regional quarters - research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html: every belt on the north and west of its houses, or on one of those two sides, unless the map declares a wind of its own
+pub const REGIONAL_QUARTERS: [&str; 3] = ["NW", "N", "W"];
+
 /// The quarter a belt stands toward, named by where the wind blows from - ONE direction, never the two sides of a hook (feature 261).
 ///
 /// Research: the wind's quarter named - NONE: a compass abbreviation spelled out
@@ -435,11 +441,13 @@ fn name_of(meta: &Map<String, Value>) -> String {
 }
 
 /// Which side THIS map's windbreak stands on, and why (feature 261): the regional northwest, or a local wind the map declares (the GM,
-/// 2026-09-26: "only when declared"); nothing where the map records no wind.
+/// 2026-09-26: "only when declared"); nothing where the map records no wind, or pairs the regional wind with a quarter other than
+/// the northwest or one of its two sides (449 T301: no writer pairs them, measured 2026-11-22 - the five pool hamlets' records all
+/// NW, no live writer of `wind_source` - so the pair is refused rather than printed as a region's wind from the southeast).
 ///
 /// Research:
 ///     windbreak toward the winter wind - research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.html, research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:
-///         the regional northwest unless a local wind is declared
+///         the regional northwest unless a local wind is declared, the belt on the north and west or one of the two - so a regional quarter is NW, N or W
 #[must_use]
 pub fn windbreak_default(meta: &Map<String, Value>) -> String {
     let quarter = meta
@@ -450,6 +458,7 @@ pub fn windbreak_default(meta: &Map<String, Value>) -> String {
         return String::new();
     };
     match meta.get("wind_source").and_then(Value::as_str) {
+        Some("regional") if !REGIONAL_QUARTERS.contains(&quarter.as_str()) => String::new(),
         Some("regional") => format!(
             "Here the belt stands toward the {wind} of the houses, the side the winter wind across this region blows from; {} has no local wind patterns that would call for a different orientation from the norm.",
             name_of(meta)

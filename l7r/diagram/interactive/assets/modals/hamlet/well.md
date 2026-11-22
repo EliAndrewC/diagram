@@ -20,7 +20,9 @@ Guesses:
 - That about three wells in four on shallow water take a sweep and three in four on deep water a pulley frame, and that a
   valley floor holds shallow water and an upland deep: the two gears and the depth that chose between them are known, the
   shares and the landforms are not.
-- That about one well in three has a roof: no count of roofs over ordinary wells was found, only a 1972 count in three Tohoku farm hamlets: about one well house to every five farms.
+- That about one well in three has a roof: no count of roofs over ordinary wells was found. The nearest, a 1972 count in
+  three Tohoku farm hamlets, found about one well house to every five farms; it counts farms, not wells, and is modern, so
+  the share is not reckoned from it.
 - The paved apron's width, about 4 ft round the curb: the paving is known, its width is not.
 - That a village's well may stand on a lane's verge: wayside wells are known only in general, not in villages.
 - [settlement_form=dispersed] That a scattered settlement's farms draw channels or wells of their own at even odds, and

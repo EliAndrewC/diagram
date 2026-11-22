@@ -24,6 +24,7 @@ use l7r_gate_research::Error;
 
 use crate::tagged::Mark;
 
+pub mod armory;
 pub mod checks;
 pub mod labels;
 pub mod mapmatch;

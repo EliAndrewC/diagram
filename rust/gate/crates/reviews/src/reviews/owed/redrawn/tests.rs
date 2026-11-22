@@ -521,8 +521,17 @@ fn the_compound_engines_marks_owe_their_kinds_on_the_compound() {
     assert_eq!(owed(&r), ["glyph-check--hall--c", "glyph-check--well--c"]);
     // a mark that calls another draws what that one draws too
     reset(&r);
-    edit(&r, "rust/mode_a/src/compound/emit.rs", "#B8B0A0", "#B8B0A1");
+    edit(
+        &r,
+        "rust/mode_a/src/compound/emit.rs",
+        "    well(s);\n",
+        "    well(s);\n    well(s);\n",
+    );
     assert_eq!(owed(&r), ["glyph-check--well--c"]);
+    // a changed line naming its kind owes that kind alone: here the gate, on no map
+    reset(&r);
+    edit(&r, "rust/mode_a/src/compound/emit.rs", "#B8B0A0", "#B8B0A1");
+    assert!(owed(&r).is_empty());
     // no size-audit: a redrawn glyph is judged, its size is not new
     reset(&r);
     edit(
@@ -530,6 +539,69 @@ fn the_compound_engines_marks_owe_their_kinds_on_the_compound() {
         "rust/mode_a/src/compound/emit.rs",
         "self.out.push_str(attrs);",
         "self.out.push_str(attrs.trim());",
+    );
+    assert_eq!(owed(&r), ["glyph-check--hall--c", "glyph-check--well--c"]);
+}
+
+/// RED FIRST (449 T289, the round arbiter's `ask:glyph-wave-449-T289`): T291's genkan porch - a branch added to `buildings`, whose
+/// call to `building` draws a kind chosen at run time - owed the compound's whole legend (57 units on county-magistracy-example); an
+/// edit adding a literal `data-kind` to a drawing function owes that kind alone, and the whole legend only where its changed lines name
+/// no kind.
+#[test]
+fn a_changed_line_naming_its_kind_owes_that_kind_alone() {
+    let r = world("literal");
+    let emit = "rust/mode_a/src/compound/emit.rs";
+    let runtime = r##"    s.rect(&format!(r#"fill="#E8D2A8" data-kind="{k}""#));"##;
+    edit(
+        &r,
+        emit,
+        runtime,
+        &format!(
+            "    if k == \"x\" {{\n        s.rect(r#\"data-kind=\"well\"\"#);\n    }}\n{runtime}"
+        ),
+    );
+    let units = all_owed(&r).1;
+    assert_eq!(
+        units.iter().map(Unit::slug).collect::<Vec<_>>(),
+        ["glyph-check--well--c"]
+    );
+    assert!(units[0].occasion.starts_with(
+        "'well' is redrawn: the Mode A compound engine's drawing code changed (rust/mode_a/src/compound/emit.rs building)"
+    ));
+    // a caption's kind is named as its mark's is
+    reset(&r);
+    edit(
+        &r,
+        emit,
+        runtime,
+        &format!("    s.caption(\"hall\", \"hall\", &[]);\n{runtime}"),
+    );
+    assert_eq!(owed(&r), ["glyph-check--hall--c"]);
+    // a line naming a kind that calls a mark owes that mark's kinds too
+    reset(&r);
+    edit(
+        &r,
+        emit,
+        "    well(s);\n",
+        "    well(s); s.rect(r#\"data-kind=\"hall\"\"#);\n",
+    );
+    assert_eq!(owed(&r), ["glyph-check--hall--c", "glyph-check--well--c"]);
+    // the added lines naming none, the deleted lines' kinds: a literal kind made a run-time one owes that kind, not the legend
+    reset(&r);
+    edit(
+        &r,
+        emit,
+        "data-kind=\"well\"\"##);",
+        "data-kind=\"{}\"\"##, \"well\");",
+    );
+    assert_eq!(owed(&r), ["glyph-check--well--c"]);
+    // a placeholder is no kind named: read whole, a run-time kind's whole legend
+    reset(&r);
+    edit(
+        &r,
+        emit,
+        runtime,
+        &format!("    s.rect(r#\"data-kind=\"-\"\"#);\n{runtime}"),
     );
     assert_eq!(owed(&r), ["glyph-check--hall--c", "glyph-check--well--c"]);
 }

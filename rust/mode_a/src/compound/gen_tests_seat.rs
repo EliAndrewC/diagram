@@ -741,3 +741,87 @@ fn an_unnamed_central_void_is_refused() {
     let p = read(&v.to_string()).unwrap();
     assert!(err(super::generate(&p, &[])).contains("unnamed open void"));
 }
+
+/// A formal entrance's porch stands out from any face by the one shikidai measured (0104: about 12 by 9 ft), its door on the porch's
+/// outer edge and its step before that (449 T291).
+#[test]
+fn a_genkan_is_built_out_from_its_face() {
+    let bx = (0.0, 0.0, 40.0, 20.0);
+    for (f, porch) in [
+        (Face::N, (14.0, -9.0, 26.0, 0.0)),
+        (Face::S, (14.0, 20.0, 26.0, 29.0)),
+        (Face::W, (-9.0, 4.0, 0.0, 16.0)),
+        (Face::E, (40.0, 4.0, 49.0, 16.0)),
+    ] {
+        let d = super::layout::genkan_at(0, bx, f, 0.5);
+        let plain = door_at(0, porch, f, 0.5);
+        let got = (d.porch, d.bx, d.step);
+        assert_eq!(got, (Some(porch), plain.bx, plain.step), "{f:?}");
+    }
+}
+
+/// The county example's formal entrance (449 T291): its formal entrance form's knob rolls a genkan on the office hall (0104's drawing
+/// page: where office and residence share a compound the genkan is drawn on the office), so the hall draws one porch, built out from its
+/// south face, clear of the hearing court and of every other building.
+#[test]
+fn the_county_examples_office_hall_has_its_genkan() {
+    let tree = tree();
+    let spec = tree.join(
+        "pool/magistracies/county-magistracy-example/county-magistracy-example.compound.json",
+    );
+    let (p, bands) = super::cli::load(&tree, &spec.to_string_lossy()).unwrap();
+    let (l, _) = super::generate(&p, &bands).unwrap();
+    let i = p
+        .buildings
+        .iter()
+        .position(|b| b.kind == "office hall")
+        .unwrap();
+    let porches: Vec<(Face, super::spec::Bx)> = l
+        .doors
+        .iter()
+        .filter(|d| d.b == i)
+        .filter_map(|d| d.porch.map(|b| (d.face, b)))
+        .collect();
+    let faces: Vec<Face> = porches.iter().map(|(f, _)| *f).collect();
+    assert_eq!(faces, vec![Face::S]);
+    let porch = porches[0].1;
+    let hall = l.seats[i].unwrap();
+    let built_out = (porch.1, porch.0 >= hall.0, porch.2 <= hall.2);
+    assert_eq!(built_out, (hall.3, true, true));
+    let court = p
+        .zones
+        .iter()
+        .find(|z| z.kind == "hearing court")
+        .unwrap()
+        .bx;
+    let on_court = super::grid::overlaps(porch, court);
+    assert!(!on_court, "the genkan stands on the hearing court");
+    let hit = (0..p.buildings.len())
+        .filter(|&j| j != i && l.seats[j].is_some_and(|a| super::grid::overlaps(a, porch)))
+        .count();
+    assert_eq!(hit, 0, "a building stands on the genkan");
+    let (text, _) = super::cli::compose(&p, &bands).unwrap();
+    let drawn = text.matches(r#"data-kind="genkan""#).count();
+    assert_eq!(drawn, 3, "the porch, its door and its caption");
+}
+
+#[test]
+fn the_county_example_without_its_genkan_lays_a_roji_to_the_shoe_stone() {
+    let tree = tree();
+    let spec = tree.join(
+        "pool/magistracies/county-magistracy-example/county-magistracy-example.compound.json",
+    );
+    let (mut p, bands) = super::cli::load(&tree, &spec.to_string_lossy()).unwrap();
+    for b in &mut p.buildings {
+        for d in &mut b.doors {
+            d.genkan = false;
+        }
+    }
+    p.parts.roji = true;
+    let (text, _) = super::cli::compose(&p, &bands).unwrap();
+    let stones = (
+        text.contains(r#"id="shoe-stone""#),
+        text.matches("<ellipse").count() > 0,
+    );
+    assert_eq!(stones, (true, true));
+}

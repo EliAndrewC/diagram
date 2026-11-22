@@ -14,11 +14,11 @@ Guesses:
 - Its thickness, about 2 ft: no wall between a compound's courts is measured.
 
 Depiction: Every plan draws two courts, the office in front and the residence behind, divided by this wall, which is drawn
-thinner than the compound's outer wall. For a Japanese compound that order is a deliberate simplification, since a
+thinner than the compound's outer wall, in the same dark, nearly black ink so it stands apart from the courts on either side; the dark is the drawing's, not the wall's color. For a Japanese compound that order is a deliberate simplification, since a
 residence might stand beside its office, as at Takayama.
 
 Name: court divider
 Covers: the internal wall's strokes
 Sources: yamen-enwiki, machi-bugyo-jawiki, neixiang-yamen-zhwiki, takayama-jinya-city
 Entry: research/questions/0090-magistrates-compounds-jinya-and-yamen.html
-Drawing: research/questions/0090-magistrates-compounds-jinya-and-yamen.drawing.html
+Drawing: research/questions/0090-magistrates-compounds-jinya-and-yamen.drawing.html, research/questions/0092-compound-walls-neribei-and-tsuijibei.drawing.html

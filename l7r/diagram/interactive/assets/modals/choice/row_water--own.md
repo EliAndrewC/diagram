@@ -1,5 +1,5 @@
 About: In a row with wells of its own, each farm dug a well on its own lot. Most wells were shared, because a well cost a
-great deal to dig and in many places the ground made water hard to reach; a household could more easily have its own where
+great deal to dig and in many places the ground made water hard to reach; a household could probably more easily have its own where
 the water lay close under the ground, as on the loam uplands of the Kanto, where shallow wells were made. Villages were often
 sited where water was easy to draw, along the spring line at a fan's foot and on natural levees, the very lines a row
 followed.
@@ -19,10 +19,10 @@ Guesses:
 
 Depiction: The map gives every farm of the row a well of its own, standing in the farm's grounds; the well is drawn as a
 marker larger than life, about 19 ft across, so a reader can find it; a real well's curb was a frame only a few feet
-across round a shaft about 3 ft wide.
+across round a shaft about 3 ft wide. Where the water lay shallowest and the bucket hung from a plain pole with no post, the map still draws a sweep on its post.
 
 Name: Each farm its own well
 Covers: `meta.row_water = own`
 Sources: ido-jawiki, idobata-kaigi-jawiki, senjochi-jawiki, saijo-mizu-rekishikan, kotobank-kurumaido, yokkaichi-hanetsurube, kotobank-santome-shinden, seiyo-karihama-ido, koshigaya-shishi-noumin-jukyo
-Entry: research/questions/0033-row-villages-resson.html, research/questions/0196-communal-wells-ido.html, research/questions/0028-the-farmstead-and-what-stood-on-it-yashiki.html
-Drawing: research/questions/0033-row-villages-resson.drawing.html, research/questions/0196-communal-wells-ido.drawing.html
+Entry: research/questions/0196-communal-wells-ido.html, research/questions/0033-row-villages-resson.html, research/questions/0028-the-farmstead-and-what-stood-on-it-yashiki.html
+Drawing: research/questions/0033-row-villages-resson.drawing.html, research/questions/0196-communal-wells-ido.drawing.html, research/questions/0028-the-farmstead-and-what-stood-on-it-yashiki.drawing.html

@@ -4,7 +4,7 @@ examination room, working office and great hall were rebuilt together in the Edo
 hearing court against it. The intendant's household lived in a residence of its own, beside the office on the lot to the west.
 
 An intendant governed with about ten retainers sent by the shogunate and a few clerks hired from the district; at
-Takayama they worked in a room partitioned from the officials', and an intendant's staff, retainers and clerks alike, lived in huts and rowhouses on the
+Takayama the clerks worked in a room partitioned from the officials', and an intendant's junior officials lived in huts and rowhouses on the
 grounds. In Rokugan a county magistrate's clerks are three or four scribes from the county town, who live there and come
 in each day.
 
@@ -14,17 +14,17 @@ refrained from using. Wooden halls burned - the Sado magistracy burned and was r
 never did.
 
 Takayama's office had a floor of about 8,100 sq ft, a quarter again the size of the intendant's residence, while a small
-branch office's central building was about 2,850 sq ft. How long and how deep any office hall ran is not recorded.
+branch office's central building was about 2,850 sq ft. How long and how deep an intendant's office hall ran is not recorded; the great hall of a Chinese county office, at Neixiang, is about 89 ft across and 41 ft deep.
 
 Guesses:
-- Its size on the plan, about 80 to 150 ft long and 20 to 45 ft deep: no account gives an office hall's length and depth,
+- Its size on the plan, about 80 to 150 ft long and 20 to 45 ft deep: no account gives an intendant's office hall's length and depth,
   so the floor is set below Takayama's and, in all but its smallest form, above the branch office's.
 - That the day office and the official study stood behind the dais: no account places those rooms behind the court; they
   are reckoned from what a working office had to hold.
 
 Depiction: The plan draws the office hall as one long building in the outer court, its front band the magistrate's dais
 over the roofed hearing court, and behind the dais the day office and the official study, with the clerks' room beside
-the day office, each its own feature. It is the largest of the halls, larger than the residence, as Takayama's office was. The plan puts the office in
+the day office, each its own feature. It is drawn larger than the residence, as Takayama's office was, except on a plan that draws a wealthier magistrate's house larger on purpose. The plan puts the office in
 front and the residence behind it, the Chinese county office's order, a simplification for the Japanese form: at Takayama
 the residence stood beside the office, on the lot to the west. Its buildings stand a little further apart than a real
 office's did, so each reads on its own. No clerks' housing is drawn at the office, since the clerks live in town.
@@ -32,5 +32,5 @@ office's did, so each reads on its own. No clerks' housing is drawn at the offic
 Name: office hall
 Covers: the office hall's block, its outline and its front band
 Sources: takayama-jinya-city, takayama-jinya-jawiki, mapple-takayama-jinya, jinya-kotobank, takayama-jinya-gifu, fuchu-joge-jinya, sado-bugyosho-fires, daikan-jawiki
-Entry: research/questions/0113-the-office-hall-and-its-clerks-goyakusho.html, research/questions/0099-the-hearing-court-shirasu.html, research/questions/0116-the-size-of-a-compound-and-the-rank-of-its-buildings.html, research/questions/0100-fire-and-the-fireproof-storehouses-dozo.html, research/questions/0090-magistrates-compounds-jinya-and-yamen.html
+Entry: research/questions/0113-the-office-hall-and-its-clerks-goyakusho.html, research/questions/0099-the-hearing-court-shirasu.html, research/questions/0116-the-size-of-a-compound-and-the-rank-of-its-buildings.html, research/questions/0100-fire-and-the-fireproof-storehouses-dozo.html, research/questions/0090-magistrates-compounds-jinya-and-yamen.html, research/questions/0123-the-magistrates-manor-in-a-town-where-it-stands-and-which-way-it-faces-jinya-and-yamen.html
 Drawing: research/questions/0113-the-office-hall-and-its-clerks-goyakusho.drawing.html, research/questions/0099-the-hearing-court-shirasu.drawing.html, research/questions/0090-magistrates-compounds-jinya-and-yamen.drawing.html, research/questions/0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html

@@ -24,8 +24,8 @@ Guesses:
 - That a ground apart lies downstream of the houses: that side is recorded only in villages as they stand today.
 
 Depiction: The map draws one burial ground for each village, at its real size: an irregular patch of earth set with rows of
-low grave markers and a taller memorial stone or two, with six stone jizo at its entrance, each drawn at least large enough to
-be seen, though a real one stood about 2 ft tall. It lies in the yard of the village's shrine or apart from it, just beyond the last of the houses on the higher
+low grave markers and a taller memorial stone or two - the rows a drawing convention for the graves, which a real ground might divide into plots by household or by age or keep to no rule - with six stone jizo at its entrance, each drawn at least large enough to
+be seen. It lies in the yard of the village's shrine or apart from it, just beyond the last of the houses on the higher
 ground to hand, never in water or a flooded field, and at no set distance, none being recorded from before modern times;
 which form a village takes differs from one village to the next. A hamlet draws none: its dead lie in the main village's
 ground.

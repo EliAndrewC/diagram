@@ -15,6 +15,7 @@
       "coverage_band",
       "perimeter_hugging",
       "two_court_zoning",
+      "armory_site",
       "one_compound_shrine",
       "shrine_tree",
       "stall_width",
@@ -70,13 +71,47 @@
         "kind": "armory",
         "band_ft": {
           "w": [
-            12,
-            24
+            11,
+            18
           ],
           "h": [
-            12,
-            40
+            11,
+            41
+          ],
+          "area": [
+            120,
+            740
           ]
+        },
+        "forms": {
+          "armory in the gate range": {
+            "w": [
+              11,
+              13
+            ],
+            "h": [
+              11,
+              25
+            ],
+            "area": [
+              120,
+              320
+            ]
+          },
+          "armory as a store of its own": {
+            "w": [
+              11,
+              18
+            ],
+            "h": [
+              11,
+              24
+            ],
+            "area": [
+              120,
+              430
+            ]
+          }
         }
       },
       {

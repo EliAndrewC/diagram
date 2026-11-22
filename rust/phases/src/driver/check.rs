@@ -159,7 +159,7 @@ fn reed_checks(r: &Rolled) -> Vec<String> {
         .seated
         .iter()
         .filter_map(|s| s.frames.first())
-        .map(super::settlement_ground)
+        .map(|f| super::settlement_ground(f, super::wind(&r.plan.windward)))
         .collect();
     let on_ground = r.dry.iter().enumerate().filter_map(|(i, d)| {
         d.poly
@@ -288,7 +288,10 @@ fn polder_checks(r: &Rolled) -> Vec<String> {
             "seat_walled_by_reeds: no dry way out of the settlement past the waterside reeds"
                 .to_owned()
         }));
-        let (dike, canal) = ground_on_polder(&super::settlement_ground(f), s);
+        let (dike, canal) = ground_on_polder(
+            &super::settlement_ground(f, super::wind(&r.plan.windward)),
+            s,
+        );
         out.extend(dike.then(|| {
             "seat_on_dike: the settlement's ground reaches over the dike's outer face".to_owned()
         }));
@@ -318,6 +321,35 @@ mod tests {
     use super::{check, depth_inside, mean, polder_checks};
     use crate::driver::{roll, spec::parse};
     use crate::field::dry::DryPlot;
+
+    #[test]
+    fn a_dry_plot_on_the_belts_ground_at_the_bands_windward_end_is_named() {
+        // Inashiro's back faces the northwest wind 45 degrees off square (449 T294), so its belt wraps the band's windward end: a
+        // plot there, past the band's half-length, stands on the belt's ground and is named, as one behind the band's middle is
+        let mut r = roll(&parse(r#"{"name": "Inashiro", "seed": 4, "households": 15, "down_deg": 90, "water_sink": "pond", "settlement_form": "nucleated"}"#).unwrap()).unwrap();
+        let f = r.seated.as_ref().unwrap().frames[0].clone();
+        let w = crate::driver::wind(&r.plan.windward);
+        let side = (w.0 * f.along.0 + w.1 * f.along.1).signum();
+        let at = (
+            f.center.0 + f.along.0 * f.band.0 * side + w.0 * 80.0,
+            f.center.1 + f.along.1 * f.band.0 * side + w.1 * 80.0,
+        );
+        let past = (at.0 - f.center.0) * f.along.0 + (at.1 - f.center.1) * f.along.1;
+        assert!(past.abs() > f.band.0 + 50.0, "{past}");
+        r.dry = vec![DryPlot {
+            poly: vec![
+                (at.0 - 4.0, at.1 - 4.0),
+                (at.0 + 4.0, at.1 - 4.0),
+                (at.0 + 4.0, at.1 + 4.0),
+                (at.0 - 4.0, at.1 + 4.0),
+            ],
+            crop: "soy",
+            theta: 0.0,
+            tract: 0,
+        }];
+        let found = check(&r).join("\n");
+        assert!(found.contains("dry_on_settlement: dry plot 0"), "{found}");
+    }
 
     #[test]
     fn a_planted_break_is_named() {
@@ -364,6 +396,7 @@ mod tests {
         let reed = r.sunk.as_ref().map(|s| mean(&s.reeds)).unwrap();
         let home = mean(&crate::driver::settlement_ground(
             &r.seated.as_ref().unwrap().frames[0],
+            crate::driver::wind(&r.plan.windward),
         ));
         r.dry.push(DryPlot {
             poly: square(home, 5.0),

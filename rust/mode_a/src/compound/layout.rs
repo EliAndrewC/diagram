@@ -54,6 +54,10 @@ pub const DOOR: (f64, f64) = (6.0, 4.0 / 3.0);
 ///
 /// Research: a door's step held clear - GUESS: 3 ft before a door's mouth kept clear of every part, so no tub or well stands in a doorway; a knob
 pub const DOOR_STEP: f64 = 3.0;
+/// A formal entrance's porch: its width along the face and its depth out from it (feet).
+///
+/// Research: the genkan's porch - research/questions/0104-the-formal-entrance-and-a-guests-arrival-genkan.html: about 12 by 9 ft, the one shikidai found measured (the Sayama jin'ya's council hall, 1775), its 2 ken one side and its 6 mats making the other about 9 ft (the page's reading and arithmetic); drawn along the face by 9 ft out, a GUESS: which side was width and which depth the page does not say
+pub const GENKAN: (f64, f64) = (12.0, 9.0);
 
 /// The ground a compound shrine holds past its far end along its wall for its tree: the tree's crown and its clearance off the hall
 /// (feet).
@@ -72,6 +76,8 @@ pub struct Door {
     pub bx: Bx,
     /// The step before it.
     pub step: Bx,
+    /// A formal entrance's porch, built out from the face, the door at its outer edge; None for a plain door.
+    pub porch: Option<Bx>,
 }
 
 impl Door {
@@ -545,8 +551,13 @@ impl Layout {
             let bx = self.seats[i].unwrap_or_default();
             for d in door_specs(b) {
                 count("seat@compound_door", 1);
-                let door = door_at(i, bx, d.face, d.at);
-                let hits = self.grid.query(door.step, "compound_door");
+                let door = if d.genkan {
+                    genkan_at(i, bx, d.face, d.at)
+                } else {
+                    door_at(i, bx, d.face, d.at)
+                };
+                let reach = door.porch.map_or(door.step, |p| union(p, door.step));
+                let hits = self.grid.query(reach, "compound_door");
                 count("rule_check@compound_door", 1);
                 let blocked = hits.iter().any(|&e| match self.grid.ents[e].what {
                     What::Building(k) => k != i,
@@ -558,6 +569,9 @@ impl Layout {
                         "the {}'s door on its {:?} face opens into another building or door - move the door or the building",
                         b.name, d.face
                     )));
+                }
+                if let Some(p) = door.porch {
+                    self.grid.file(p, What::Building(i));
                 }
                 self.grid.file(door.step, What::Door(i));
                 self.doors.push(door);
@@ -581,6 +595,10 @@ pub fn gate_approach(p: &Program, wall: Face, at: f64, width: f64) -> Bx {
         Face::W => (-WALL_HALF, a0, deep, a1),
         Face::E => (p.w - deep, a0, p.w + WALL_HALF, a1),
     }
+}
+
+fn union(a: Bx, b: Bx) -> Bx {
+    (a.0.min(b.0), a.1.min(b.1), a.2.max(b.2), a.3.max(b.3))
 }
 
 fn grown(b: Bx, g: f64) -> Bx {
@@ -625,7 +643,11 @@ pub fn door_specs(b: &Building) -> Vec<super::spec::DoorSpec> {
     let face = court_face(b);
     let len = if face.along_x() { b.w } else { b.h };
     if b.bays.is_empty() {
-        return vec![super::spec::DoorSpec { face, at: 0.5 }];
+        return vec![super::spec::DoorSpec {
+            face,
+            at: 0.5,
+            genkan: false,
+        }];
     }
     let mut edges = vec![0.0];
     edges.extend(b.bays.iter().copied());
@@ -635,6 +657,7 @@ pub fn door_specs(b: &Building) -> Vec<super::spec::DoorSpec> {
         .map(|w| super::spec::DoorSpec {
             face,
             at: f64::midpoint(w[0], w[1]) / len,
+            genkan: false,
         })
         .collect()
 }
@@ -676,5 +699,34 @@ pub fn door_at(b: usize, bx: Bx, face: Face, at: f64) -> Door {
         face,
         bx: block,
         step,
+        porch: None,
+    }
+}
+
+/// A formal entrance on `face` of `bx`, its middle at `at` along the face: a porch of [`GENKAN`] built out from the face, and the door
+/// on the porch's outer edge, its step before it.
+///
+/// Research:
+///     the genkan built out from the face - research/questions/0104-the-formal-entrance-and-a-guests-arrival-genkan.html: in a warrior's house the projecting board floor where a palanquin was set down was the genkan, and a guest of rank stepped from the palanquin straight into the building, so the porch stands out from the hall and opens onto open ground
+#[must_use]
+pub fn genkan_at(b: usize, bx: Bx, face: Face, at: f64) -> Door {
+    let (a0, a1) = if face.along_x() {
+        (bx.0, bx.2)
+    } else {
+        (bx.1, bx.3)
+    };
+    let (wide, deep) = GENKAN;
+    let c = (a0 + at * (a1 - a0)).clamp(a0 + wide / 2.0, (a1 - wide / 2.0).max(a0 + wide / 2.0));
+    let (p0, p1) = (c - wide / 2.0, c + wide / 2.0);
+    let porch = match face {
+        Face::N => (p0, bx.1 - deep, p1, bx.1),
+        Face::S => (p0, bx.3, p1, bx.3 + deep),
+        Face::W => (bx.0 - deep, p0, bx.0, p1),
+        Face::E => (bx.2, p0, bx.2 + deep, p1),
+    };
+    let door = door_at(b, porch, face, 0.5);
+    Door {
+        porch: Some(porch),
+        ..door
     }
 }

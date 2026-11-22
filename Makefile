@@ -149,7 +149,10 @@ _switch:
 	@git add dev/switches.json && git commit -q -m "chore: $$MSG - $$REASON" && printf '\ncommitted: %s - %s\n' "$$MSG" "$$REASON"
 
 # ---- expensive: they generate ----
-verify:         ## [tests] THE PAIRED RUN: start the gate and dispatch the settlement-review together (feature 151)
+# THE OWED LIST IS READ AGAIN AFTER THE REDRAW (449 T289, 2026-11-22): a compound not current has no legend now, so the list read before
+# `make map` redrew it held none of the units its new elements owe; the snapshot took that list and dropped the genkan's glyph-check
+# and size-audit and the round-trip's ten. Don't snapshot the first reading once a map was redrawn.
+verify:        ## [tests] THE PAIRED RUN: start the gate and dispatch the settlement-review together (feature 151)
 	@printf '\033[1mverify\033[0m: the gate and the independent review run TOGETHER - neither alone (GM 2026-08-29).\n'
 	@root=$$(git rev-parse --show-toplevel) && "$$root/scripts/gates/l7r-gate.sh" delta key worktree > "$$root/.git/pairing-key" || true
 	@root=$$(git rev-parse --show-toplevel) && printf 'engine key %s\n' "$$(cut -c1-12 "$$root/.git/pairing-key" 2>/dev/null)"
@@ -164,7 +167,8 @@ verify:         ## [tests] THE PAIRED RUN: start the gate and dispatch the settl
 	    mirror=""; case "$$root" in */.clones/*) mirror="$${root%%/.clones/*}";; esac; \
 	    for gen in $$("$$root/scripts/gates/l7r-gate.sh" reviews snapshot --root "$$root" --stale-renders $$maps); do \
 	      case "$$gen" in sheet:*) svg="$${gen#sheet:}"; printf 'verify: %s has no generator and no render - make sheet-render SHEET=%s OUT=%s, then make verify again\n' "$$svg" "$$svg" "$${svg%.svg}.png" >&2; exit 2;; esac; \
-	      printf 'verify: rendering %s (the generation cache does not serve it as it stands)\n' "$$gen"; $(MAKE) --no-print-directory map MAP="$$gen" >/dev/null || { printf 'verify: make map MAP=%s failed - run it by hand, then make verify again\n' "$$gen" >&2; exit 2; }; done; \
+	      printf 'verify: rendering %s (the generation cache does not serve it as it stands)\n' "$$gen"; $(MAKE) --no-print-directory map MAP="$$gen" >/dev/null || { printf 'verify: make map MAP=%s failed - run it by hand, then make verify again\n' "$$gen" >&2; exit 2; }; redrawn=1; done; \
+	    if [ -n "$$redrawn" ]; then maps=$$("$$root/scripts/gates/l7r-gate.sh" reviews owed --root "$$root" | tr '\n' ' ' | sed 's/ $$//'); why=$$("$$root/scripts/gates/l7r-gate.sh" reviews owed --root "$$root" --why); fi; \
 	    snap=$$("$$root/scripts/gates/l7r-gate.sh" reviews snapshot --root "$$root" $${mirror:+--mirror "$$mirror"} --key "$$(cat "$$root/.git/pairing-key" 2>/dev/null)" $$maps); \
 	    n=$$(printf '%s\n' $$maps | wc -l); \
 	    printf 'owed: %s\n%s\n' "$$why" "$$snap"; \

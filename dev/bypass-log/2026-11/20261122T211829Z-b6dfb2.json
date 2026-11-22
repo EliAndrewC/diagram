@@ -1,0 +1,6 @@
+{
+  "utc": "20261122T211829Z",
+  "guard": "pair-hooks",
+  "what": "review prerequisites",
+  "reason": "REVIEW_PREREQ_OK: the last round's open findings (c4410982d921: E1, E2, N1) are what T298 and T299 changed, and this round judges those fixes; its C1-C2 are confirmations with nothing to fix"
+}

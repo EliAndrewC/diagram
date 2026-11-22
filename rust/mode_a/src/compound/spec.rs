@@ -113,6 +113,8 @@ pub struct DoorSpec {
     pub face: Face,
     /// The fraction along the face.
     pub at: f64,
+    /// A formal entrance (genkan): the door opens through a porch built out from the face (the formal entrance form's knob).
+    pub genkan: bool,
 }
 
 /// A building of the program.
@@ -313,6 +315,7 @@ fn building(v: &Value) -> Result<Building, Error> {
             Ok(DoorSpec {
                 face: Face::read(&text(d, "face")?)?,
                 at: num(d, "at")?,
+                genkan: d.get("genkan").and_then(Value::as_bool).unwrap_or(false),
             })
         })
         .collect::<Result<Vec<_>, Error>>()?;

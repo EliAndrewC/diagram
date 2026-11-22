@@ -22,8 +22,8 @@ Guesses:
 
 Depiction: The map draws the belt as darker conifer crowns set in rows along the windward side, the rows bending with the
 belt, with smaller broadleaf crowns among them and a little bamboo between the crowns, shown by paired strokes since a real
-culm is too slim to see. Only the crowns are drawn, at their real size; the bamboo and shrubs beneath them are hidden, as
-from above. No tree of the belt stands where its afternoon shade would fall on a yard or a kitchen garden. The map's edge is set just beyond the belt's inner side, with the margin every other feature keeps, so its front row shows whole and the rest of its depth runs on past the edge, as its ends do where they reach it: the belt goes on beyond what is drawn, as a road or a wood does.
+culm is too slim to see. Only the crowns are drawn, at their real size, and none is drawn wholly under another's, though a real wood had smaller trees beneath its canopy; the bamboo and shrubs beneath them are hidden, as
+from above. Neighboring crowns are drawn touching at their edges so the belt reads as closed, though in some forests full-grown crowns kept a gap rather than interlacing. No tree of the belt stands where its afternoon shade would fall on a yard or a kitchen garden. The map's edge is set just beyond the belt's inner side, with the margin every other feature keeps, so its front row shows whole and the rest of its depth runs on past the edge, as its ends do where they reach it: the belt goes on beyond what is drawn, as a road or a wood does. Along the side it holds, its planting is drawn unbroken, since a gap funnels the wind, and taken up again on both sides of a lane that crosses it, though no old record says how a lane passed through a belt.
 
 Name: Windbreak trees led by conifers
 Covers: `meta.windbreak_belt = conifer_led`

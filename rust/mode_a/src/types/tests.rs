@@ -389,3 +389,40 @@ fn a_kind_item_is_classified_by_its_kind_s_guesses() {
     assert!(classification(&item("well"), &mut broken).is_err());
     assert!(classification(&item("well"), &mut broken).is_err());
 }
+
+/// The armory's band is held to its two forms (449 T290; size-audit 2026-11-22 S3, S4): a hall end bay up to 18 x 41 ft and 740 sq ft by
+/// default, a gate-range room up to 13 x 25 ft and 320 sq ft under the sheet's `**Form**: armory in the gate range`, so the old band's
+/// 24 x 40 ft (about 6.7x Kaibara's eight-mat room) is refused under both, and every drawn armory still holds.
+#[test]
+fn the_armory_band_holds_its_two_forms() {
+    let mag = by_tier("magistracies", &real()).unwrap().unwrap();
+    let armory = mag.required.iter().find(|i| i.id == "armory").unwrap();
+    let hall = armory.band_for(None).unwrap();
+    let range = armory.band_for(Some("armory in the gate range")).unwrap();
+    let wide = (hall.holds(24.0, 40.0), range.holds(24.0, 40.0));
+    assert_eq!(wide, (false, false));
+    let drawn = (
+        hall.holds(14.0, 20.0),
+        hall.holds(14.0, 16.7),
+        range.holds(13.3, 12.0),
+    );
+    assert_eq!(drawn, (true, true, true));
+    let hall_room_in_a_range = range.holds(14.0, 20.0);
+    assert!(!hall_room_in_a_range);
+}
+
+/// A store of its own reads its own band (449 T303), about Nirayama's weapons store of 5.4 x 3.7 m (~17.7 x 12.1 ft, ~215 sq ft; 0123):
+/// 11-18 x 11-24 ft and 120-430 sq ft under `**Form**: armory as a store of its own`, so Nirayama's holds and a hall bay run the hall's
+/// whole depth (14 x 41 ft, which the default band takes) does not.
+#[test]
+fn a_store_of_its_own_reads_a_band_about_nirayamas() {
+    let mag = by_tier("magistracies", &real()).unwrap().unwrap();
+    let armory = mag.required.iter().find(|i| i.id == "armory").unwrap();
+    let store = armory
+        .band_for(Some("armory as a store of its own"))
+        .unwrap();
+    assert!(store.holds(17.7, 12.1), "Nirayama's store");
+    assert!(!store.holds(14.0, 41.0), "a hall bay at full depth");
+    assert!(armory.band_for(None).unwrap().holds(14.0, 41.0));
+    assert!(!store.holds(18.0, 24.0), "past twice Nirayama's floor");
+}

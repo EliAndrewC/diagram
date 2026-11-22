@@ -6,8 +6,8 @@
   "research": [
     "the house at the record's size - research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html: the residence 56 x 24 ft with its veranda, the kitchen 20 x 18 and the bath 10 x 8, about 50 tsubo, the 150-koku district magistrate's house the plan is measured against",
     "its rooms in the palace order's lesser form - GUESS: the reception room at the east end the full depth, the master's rooms beside it on the garden row, the family's beyond, the inner rooms and the maids' room behind (research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html); the room sizes the kinds' guesses",
-    "the lodgings' dwellings - research/questions/0097-staff-rowhouses-and-barracks-nagaya.drawing.html, research/questions/0106-the-chief-retainers-house-karo-yashiki.drawing.html: the barracks in four dwellings of about 17.5 ft, the senior retainers' long-house in the karo's bay of 14 ft and four dwellings of about 17 ft, the servants' row in four of 15 ft, a door to each",
-    "the sizes in their bands - GUESS: the office hall 127 x 38 (113 ft before its armory bay, feature 449 T265), the armory 14 x 20 (its band 12-24 x 12-40 ft from size-audit 2026-11-22: one or two of Kaibara's eight-mat gate-range rooms, and a county hall's end bay at full depth, an estimate), the tax archive 18 x 24, the granary 50 x 27, the barracks 23 x 70, the long-house 24 x 82, the servants' row 60 x 15, the stables 18 x 24, the storehouses 19 x 16 and 18 x 12 (each wide enough to hold its two-line name), the gatehouse 40 x 12, the guest house 40 x 42, the shrine 18 x 14 and the cell 12 x 10, each inside its band of the type's declaration (l7r/diagram/buildings/types.json)",
+    "the lodgings' dwellings - research/questions/0097-staff-rowhouses-and-barracks-nagaya.drawing.html, research/questions/0106-the-chief-retainers-house-karo-yashiki.drawing.html: the barracks in five dwellings of 12 ft (2 ken, Obata's foot soldier's dwelling; three men a dwelling, 0097's one case, for its about fifteen men), the senior retainers' long-house in the karo's bay of 14 ft and three dwellings of 12 ft - both kept below the residence, 0116's order (research/questions/0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html; feature 449 T309), the servants' row in four of 15 ft, a door to each",
+    "the sizes in their bands - GUESS: the office hall 127 x 38 (113 ft before its armory bay, feature 449 T265), the armory 14 x 20 (its hall form's band 11-18 x 11-41 ft and 120-740 sq ft from size-audit 2026-11-22: a county hall's end bay at full depth, an estimate; the gate-range form's 11-13 x 11-25 ft for one or two of Kaibara's eight-mat rooms, feature 449 T290), the tax archive 18 x 24, the granary 50 x 36 (27 deep until feature 449 T309, which deepened it to hold the jin'ya coverage band's 30% once the two staff long-houses were recounted below the residence; 0116 lets a grain storehouse be the largest building, 0098's band 30-60 by 14-36 ft), the barracks 22 x 60, the long-house 24 x 50 (both since feature 449 T309), the servants' row 60 x 15, the stables 18 x 24, the storehouses 19 x 16 and 18 x 12 (each wide enough to hold its two-line name), the gatehouse 40 x 12, the guest house 40 x 42, the shrine 18 x 14 and the cell 12 x 10, each inside its band of the type's declaration (l7r/diagram/buildings/types.json)",
     "the west storehouse larger than the record's - DEVIATION research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.html: the common household storehouse about 12 x 18 ft and the Yokota house's unequal pair about 9 x 12 and 18 x 15 ft; storehouse (W) is drawn 19 x 16 ft, a departure past the common size toward Yokota's larger store, so that it holds its two-line name, and storehouse (E) 18 x 12 ft at the common size",
     "the start along the north wall - GUESS: the house's search starts 102 ft along the north wall, so the kitchen ell, the rear yard and the vegetable garden stand west of it and the garden before it, the program's start knob (the derivation's slack: no rule fixes the start end)",
     "the granary on the offices' side - research/questions/0123-the-magistrates-manor-in-a-town-where-it-stands-and-which-way-it-faces-jinya-and-yamen.html: Pingyao built office buildings behind its war, justice and works offices \"and north of them the county granary\", on the office side, not in the residence's court (building-review 2026-11-22 E1); the granary in the office court, never the household's (feature 449 T274; T265's seat in the inner court and its north cart gate withdrawn)",
@@ -15,6 +15,10 @@
     "the barracks below the granary - GUESS: the east column flows down from the granary, so the barracks fills the office court's south-east corner (building-review 2026-11-22 E2: T265 slid it north and left a bare 31 x 31 ft corner), its privy at its north end; (feature 449 T274)",
     "the office hall 12 ft east of center - GUESS: the hall starts at 70.5 ft (70.5 to 197.5 ft), into the open ground that lay between the middle gate and the granary (the gate moving east with it), so the tax archive west of it stands 19.5 ft off the senior retainers' long-house and the karo's door and his neighbor's front open court (building-review 2026-11-22 E1; the frontage a GUESS: 12 ft, the gate approach's depth reused, no page stating a rowhouse's frontage, 449 T280's research pass); the hearing court, with the outer court's two grounds beside it, re-cut under the dais, now centered on the main gate (feature 449 T280, T288); a compound 14 ft wider was priced and refused: coverage at its 30% floor and the archive seated 9 ft before the granary's door",
     "the armory in the office hall's west end bay - research/questions/0123-the-magistrates-manor-in-a-town-where-it-stands-and-which-way-it-faces-jinya-and-yamen.html: Pingyao, with no standing barracks, kept its armory in the great hall's west end bay; the one-bay gate rolled here leaves no gate range for Kaibara's store of arms (0093; no firearm named, the setting silent on them, the session's ruling 2026-11-22), so the hall's bay, 14 x 20 ft in its back row (its size a GUESS, inside one or two of Kaibara's three eight-mat gate-range rooms of about 12 ft square, the sources silent on which the gun store took, 0097; the back row a GUESS: no source gives the depth of Pingyao's armory, the whole end bay front to back the more natural reading of its bay, so the hall's west door opens onto its front), the hall 14 ft longer for it (feature 449 T265)"
+,
+    "the formal entrance a genkan on the office hall - research/questions/0104-the-formal-entrance-and-a-guests-arrival-genkan.drawing.html: a plan's formal entrance takes one of two forms, a knob choosing between them, and where office and residence share a compound the genkan is drawn on the office; the knob rolled a genkan (feature 449 T291), so the hall draws a porch of about 12 x 9 ft (0104's one shikidai measured) built out from its south face at its east end, east of the hearing court, onto the outer court the forecourt opens into, and the guest's way runs on through the office (no roji to the reception)"
+,
+    "the rear ground north of the garden - GUESS: the open band between the reception's end and the shrine (about 84 x 30 ft) named a rear ground (building-review 2026-11-22, outside its change; feature 449 T300), as Kanazawa classed a samurai house's grounds by kind, the sedo spreading behind the lot apart from the viewing garden (research/questions/0118-samurai-house-lots-and-houses-by-rank-bukeyashiki.html, a secondhand summary); what stood on it is not recorded"
   ],
   "envelope": {"w": 270, "h": 200, "divider": 90},
   "gates": [
@@ -28,6 +32,7 @@
     {"kind": "vegetable garden", "caption": "vegetable garden", "x": 14, "y": 40, "w": 36, "h": 30},
     {"kind": "inner court", "caption": "service yard", "x": 54, "y": 25, "w": 26, "h": 62},
     {"kind": "rear yard", "caption": "rear yard", "x": 52, "y": 3, "w": 30, "h": 22},
+    {"kind": "rear yard", "caption": "rear ground", "x": 162, "y": 3, "w": 84, "h": 30},
     {"kind": "hearing court", "caption": "hearing court", "x": 100.5, "y": 131, "w": 80, "h": 26, "floor": "white gravel"},
     {"kind": "outer court", "caption": "outer court", "x": 180.5, "y": 131, "w": 24.5, "h": 35},
     {"kind": "outer court", "caption": "outer court", "x": 27.5, "y": 131, "w": 73, "h": 39},
@@ -53,7 +58,7 @@
     {"name": "shrine", "kind": "compound shrine", "role": "shrine", "w": 18, "h": 14, "court": "inner", "wall": "E", "order": 6},
     {"name": "guest house", "kind": "guest quarters", "role": "lord", "w": 40, "h": 42, "court": "inner", "wall": "E", "order": 5},
     {"name": "office hall", "kind": "office hall", "role": "lord", "w": 127, "h": 38, "court": "outer", "wall": "divider", "order": 10, "near": 70.5,
-     "doors": [{"face": "E", "at": 0.8}, {"face": "W", "at": 0.8}],
+     "doors": [{"face": "E", "at": 0.8}, {"face": "W", "at": 0.8}, {"face": "S", "at": 0.921, "genkan": true}],
      "rooms": [
        {"kind": "armory", "caption": "armory", "x": 0, "y": 0, "w": 14, "h": 20},
        {"kind": "clerks' room", "caption": "clerks' room", "x": 14, "y": 0, "w": 30, "h": 20},
@@ -64,11 +69,11 @@
        {"kind": "clerks' seats", "caption": "clerk", "x": 87.5, "y": 33, "w": 8, "h": 5, "style": "seat"}
      ]},
     {"name": "tax archive", "kind": "tax archive", "role": "kura", "w": 18, "h": 24, "court": "outer", "wall": "divider", "order": 6},
-    {"name": "senior retainers' quarters", "kind": "retainers' quarters", "role": "service", "w": 24, "h": 82, "court": "outer", "wall": "W", "order": 6,
-     "bays": [14, 31, 48, 65],
+    {"name": "senior retainers' quarters", "kind": "retainers' quarters", "role": "service", "w": 24, "h": 50, "court": "outer", "wall": "W", "order": 6,
+     "bays": [14, 26, 38],
      "rooms": [{"kind": "karo's house", "caption": "karo's quarters", "x": 0, "y": 0, "w": 24, "h": 14}]},
-    {"name": "granary", "kind": "granary", "role": "kura", "w": 50, "h": 27, "court": "outer", "wall": "E", "order": 7},
-    {"name": "barracks", "kind": "barracks", "role": "service", "w": 23, "h": 70, "court": "outer", "wall": "E", "order": 5, "bays": [17.5, 35, 52.5]},
+    {"name": "granary", "kind": "granary", "role": "kura", "w": 50, "h": 36, "court": "outer", "wall": "E", "order": 7},
+    {"name": "barracks", "kind": "barracks", "role": "service", "w": 22, "h": 60, "court": "outer", "wall": "E", "order": 5, "bays": [12, 24, 36, 48]},
     {"name": "gatehouse", "kind": "gatehouse", "role": "dark", "w": 40, "h": 12, "court": "outer", "wall": "S", "order": 8, "beside": "main gate"},
     {"name": "servants' row", "kind": "servants' quarters", "role": "service", "w": 60, "h": 15, "court": "outer", "wall": "S", "order": 7, "bays": [15, 30, 45]},
     {"name": "stables", "kind": "stables", "role": "service", "w": 18, "h": 24, "court": "outer", "wall": "S", "order": 6, "interior": "stables"},
@@ -80,13 +85,14 @@
     "privies": ["servants' row", "stables", "barracks"],
     "rack_by": "barracks",
     "posts": 2,
-    "roji": true,
+    "roji": false,
     "board": true
   },
   "knobs": [
     {"key": "granary form", "options": ["raised timber storehouse", "earth-walled kura"], "value": "earth-walled kura"},
     {"key": "main gate form", "options": ["one-bay gate", "gate range"], "value": "one-bay gate"},
     {"key": "servants' quarters form", "options": ["common room under one door", "a door to each dwelling"], "value": "a door to each dwelling"},
-    {"key": "vegetable garden site", "options": ["west of the residence", "on a parcel of its own"], "value": "west of the residence"}
+    {"key": "vegetable garden site", "options": ["west of the residence", "on a parcel of its own"], "value": "west of the residence"},
+    {"key": "formal entrance form", "options": ["a genkan on the office hall", "the roji, no genkan"], "value": "a genkan on the office hall"}
   ]
 }

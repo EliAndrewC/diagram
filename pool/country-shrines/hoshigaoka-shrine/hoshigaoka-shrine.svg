@@ -309,8 +309,10 @@
     <text font-size="6" font-style="italic" fill="#5C4830" data-cont="1">room</text>
   </g>
   <!-- the dwelling's entry: a 4 ft earthen-floored vestibule inside the south door, beside the writing room (wave 123: the
-       east gable is the hall's now, so the dwelling's own door opens on the forecourt beside the hall's step) -->
-  <g data-kind="genkan" data-part-of="hall and dwelling">
+       east gable is the hall's now, so the dwelling's own door opens on the forecourt beside the hall's step). Tagged
+       the monk's rooms, the dwelling it enters, not genkan (449 T287): an Edo genkan was a formal entrance with a
+       shikidai (research/questions/0104-the-formal-entrance-and-a-guests-arrival-genkan.html), not a monk's plain vestibule -->
+  <g data-kind="the monk's rooms" data-part-of="hall and dwelling">
     <rect x="452" y="513" width="12" height="35" fill="url(#doma-earth)"/>
     <rect x="452" y="544" width="12" height="4" fill="#4A3318" data-kind="door"/>
   </g>

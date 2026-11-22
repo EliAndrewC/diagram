@@ -1,7 +1,6 @@
-About: An altar in a shrine's hall was the place of one of the kami the shrine served. A Japanese shrine ordinarily kept several
-kami, one of them the main one and the rest secondary. Keeping two or more in one hall had a name of its own, aidono, and the
-secondary kami were in many cases honored below the main one. In Rokugan the kami an altar serves are the setting's own, such
-as Inari, the Fortune of rice and of foxes.
+About: An altar in a shrine's hall was the place of one of the kami the shrine served. A Japanese shrine often kept several
+kami, one of them the main one and the rest secondary. Two or more could be kept in one hall, and the
+secondary kami were in many cases honored below the main one. In Rokugan the kami an altar serves are the setting's own.
 
 Some halls gave each kami a bay of its own: a hall built as two bays joined into one, with two doors, or two or more small
 halls joined under a single roof. A household's altar shelf set its talismans side by side in rank, the highest in the middle,

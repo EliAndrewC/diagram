@@ -119,7 +119,7 @@
   ]
  },
  "Hyōjōsho": {
-  "def": "The shogunate's supreme judicial council, which sat outside Edo castle.",
+  "def": "A council hall. Above all, the shogunate's supreme judicial council, which sat outside Edo castle; a domain's seat could also have a council hall of the same name, as the Sayama domain built at its jin'ya in 1775.",
   "variants": [
    "Hyōjōsho",
    "Hyojosho"
@@ -6519,7 +6519,8 @@
   "def": "A roof tile curved in an S across its width, so that each tile's edge overlaps the next. It is the English name for the Japanese sangawara, the ordinary tile of late Edo roofs.",
   "variants": [
    "pantile",
-   "pantiles"
+   "pantiles",
+   "single-piece S-curved tiles"
   ]
  },
  "staking frame": {
@@ -7889,7 +7890,8 @@
   "def": "The heavy full tile roof of flat pan tiles and round cover tiles laid in alternate rows, the older and costlier of the two Japanese tile roofs.",
   "variants": [
    "hongawara",
-   "hongawara tile"
+   "hongawara tile",
+   "formal tile roof"
   ]
  },
  "karishiki": {
@@ -19471,6 +19473,33 @@
   "variants": [
    "abolition of the domains",
    "abolition of domains"
+  ]
+ },
+ "katte": {
+  "def": "At Kanazawa, the ground before a samurai house's kitchen, also called the ko-sedo or little back yard: one of the four kinds of ground a house's lot was classed in.",
+  "variants": [
+   "katte",
+   "ko-sedo"
+  ]
+ },
+ "sedo": {
+  "def": "At Kanazawa, the ground spreading behind a samurai house's lot, where fruit trees and vegetables were grown.",
+  "variants": [
+   "sedo"
+  ]
+ },
+ "archery strip": {
+  "def": "In a Chinese county office, the jiandao: a ground for practice archery the office kept inside its walls, at Jiexiu with an archery hall built for it.",
+  "variants": [
+   "archery strip",
+   "archery strips",
+   "jiandao"
+  ]
+ },
+ "Ezo": {
+  "def": "The old Japanese name for the northern lands beyond Honshu, chiefly the island now called Hokkaido. Late in the Edo period the shogunate decided to have six northern domains clear and guard it as a defense for the north.",
+  "variants": [
+   "Ezo"
   ]
  }
 }

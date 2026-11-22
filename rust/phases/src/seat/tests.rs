@@ -28,6 +28,7 @@ fn inp() -> SeatIn {
         canvas: (6000.0, 6000.0),
         fall: (0.0, 1.0),
         wind: (-s, -s),
+        belt_wind: None,
         back_min_dot: std::f64::consts::FRAC_1_SQRT_2,
         outline: field.clone(),
         band: (150.0, 300.0),
@@ -217,7 +218,8 @@ fn the_indexes_answer_as_the_whole_ring_does() {
             (0.0, -1.0),
             (50.0, 50.0),
             wind,
-            (1000.0, 1000.0)
+            (1000.0, 1000.0),
+            (100.0, 102.0)
         ) > 0.99
     );
     assert!(
@@ -227,7 +229,8 @@ fn the_indexes_answer_as_the_whole_ring_does() {
             (0.0, -1.0),
             (50.0, 50.0),
             wind,
-            (1000.0, 1000.0)
+            (1000.0, 1000.0),
+            (500.0, 662.0)
         ) < 1e-9
     );
     let mut t = 0;
@@ -242,6 +245,61 @@ fn the_indexes_answer_as_the_whole_ring_does() {
     assert_eq!(c.iter().filter(|k| k.2 == 0).count(), 1);
     assert_eq!(c.iter().filter(|k| k.2 == 1).count(), 2);
     assert!(c.iter().all(|k| k.0 .1 < 10.0));
+}
+
+#[test]
+fn an_oblique_winds_belt_room_follows_the_bands_windward_fringe() {
+    // the field below the margin to windward, the wind 30 degrees off square to it (449 T293): the belt is planted along the band's
+    // windward faces (its near face and its windward end), so its room is asked there, never of a rectangle off the band's
+    // windward-most corner, which would lie past the margin, here off the canvas's top edge where the fringe's belt stands on it
+    let wind = (0.5, -(0.75f64.sqrt()));
+    let off = belt_off(
+        (500.0, 300.0),
+        (1.0, 0.0),
+        (0.0, 1.0),
+        (100.0, 300.0),
+        wind,
+        (1000.0, 1000.0),
+        (500.0, 42.0),
+    );
+    assert!(off < 1e-9, "{off}");
+    // the swept ground keeps BELT_ACROSS of the band's width across the wind, and reaches no nearer the margin than the fringe's
+    // carry: the near face at y 200, carried at most 146 ft along a wind 30 degrees off square, stops at y 73.6
+    let g = super::margins::belt_swept(
+        (500.0, 300.0),
+        (1.0, 0.0),
+        (0.0, 1.0),
+        (100.0, 300.0),
+        wind,
+        BELT_BAND.1,
+        (500.0, 42.0),
+    );
+    let low = g.iter().map(|p| p.1).fold(f64::MAX, f64::min);
+    let want = 200.0 - 146.0 * 0.75f64.sqrt();
+    assert!((low - want).abs() < 1e-6, "{low}");
+    // a polder's seat 12 ft off its margin, the wind straight off the field (449 T292): the belt's ground is kept on the dry side,
+    // so none stands between the houses and the margin, and no room is asked
+    let g = super::margins::belt_swept(
+        (500.0, 300.0),
+        (1.0, 0.0),
+        (0.0, 1.0),
+        (100.0, 300.0),
+        (0.0, -1.0),
+        BELT_BAND.1,
+        (500.0, 188.0),
+    );
+    assert!(g.iter().all(|p| p.1 >= 188.0 - 1e-6), "{g:?}");
+    assert!(
+        belt_off(
+            (500.0, 300.0),
+            (1.0, 0.0),
+            (0.0, 1.0),
+            (100.0, 300.0),
+            (0.0, -1.0),
+            (1000.0, 1000.0),
+            (500.0, 188.0)
+        ) < 1e-9
+    );
 }
 
 #[test]
@@ -272,7 +330,11 @@ fn a_flank_turns_its_back_and_a_notch_or_a_cramped_belt_is_refused() {
     assert!(s.frames.iter().all(|f| (f.anchor.1 - 2800.0).abs() > 1.0));
     let mut i = inp();
     i.canvas = (3900.0, 6000.0);
-    i.outline = square(500.0, 2500.0, 1500.0, 3500.0);
+    // the band 200 ft long either side, the field 380 ft off the west edge: the west margin's band stands 218 ft in, its belt swept
+    // up to 146 ft west of its west face, past the edge (449 T293: the belt's room asked of the band's windward faces, so the field
+    // stands nearer the edge than the rectangle off the band's corner needed)
+    i.band = (150.0, 200.0);
+    i.outline = square(380.0, 2500.0, 1380.0, 3500.0);
     i.walls = vec![(i.outline.clone(), 0.0)];
     // the west margin's belt runs off the canvas: refused, the north one seats
     let s = seat(&i).unwrap();

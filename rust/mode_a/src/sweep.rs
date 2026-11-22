@@ -89,6 +89,7 @@ pub fn with_context<T>(
         form.as_deref(),
         on_map.as_ref(),
         tree,
+        crate::audit::armory::stem(&shown),
     );
     f(&ctx)
 }

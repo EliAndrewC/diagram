@@ -51,7 +51,7 @@ fn a_resting_field_drains_off_the_map() {
     let off = (f.center.0 - f.anchor.0) * f.out.0 + (f.center.1 - f.anchor.1) * f.out.1;
     let owed = crate::seat::margins::STANDOFF + crate::seat::margins::BELT_BAND.1 + f.band.1;
     assert!((off - owed).abs() < 1e-6, "{f:?}");
-    let ground = super::settlement_ground(f);
+    let ground = super::settlement_ground(f, super::wind(&r.plan.windward));
     let deep = ground
         .iter()
         .map(|p| (p.0 - f.anchor.0) * f.out.0 + (p.1 - f.anchor.1) * f.out.1)

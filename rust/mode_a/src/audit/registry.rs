@@ -23,8 +23,9 @@ use crate::parse::ParsedPlan;
 use crate::py::fixed;
 use crate::types::{load_types, BuildingType, Kinds};
 
-/// What a check is handed: the parsed sheet, its source, its declared type, its notes' form and map declaration, and the tree its
-/// declaration, its kinds' registry and a declared manifest are read from (the Python's package root).
+/// What a check is handed: the parsed sheet, its source, its declared type, its notes' form and map declaration, the tree its
+/// declaration, its kinds' registry and a declared manifest are read from (the Python's package root), and the sheet's name, the seed a
+/// rolled site is keyed by (`armory_site`, 449 T303).
 pub struct Context<'a> {
     pub plan: &'a ParsedPlan,
     pub svg: Sheet<'a>,
@@ -32,6 +33,7 @@ pub struct Context<'a> {
     pub form: Option<&'a str>,
     pub on_map: Option<&'a OnMap>,
     pub tree: &'a Path,
+    pub sheet: &'a str,
 }
 
 impl<'a> Context<'a> {
@@ -43,6 +45,7 @@ impl<'a> Context<'a> {
         form: Option<&'a str>,
         on_map: Option<&'a OnMap>,
         tree: &'a Path,
+        sheet: &'a str,
     ) -> Self {
         Self {
             plan,
@@ -51,6 +54,7 @@ impl<'a> Context<'a> {
             form,
             on_map,
             tree,
+            sheet,
         }
     }
 }
@@ -336,7 +340,7 @@ pub(crate) const MORE_FIXTURES: &[(&str, &str)] = &[
 ];
 
 /// Every registered check, in the order the report prints them.
-pub const CHECKS: [Check; 43] = [
+pub const CHECKS: [Check; 44] = [
     // --- the shared layer: pure geometry, every sheet ---
     Check {
         name: "structures_overlap",
@@ -608,6 +612,14 @@ pub const CHECKS: [Check; 43] = [
         shared: false,
         fixture: "ochiba-zoning-red.svg",
         fix: "put the hearing court on the gate's side of the divider and the residence behind it",
+        skipped: never,
+    },
+    Check {
+        name: "armory_site",
+        run: |ctx| Ok(super::armory::armory_site(ctx.plan, ctx.sheet, ctx.form)),
+        shared: false,
+        fixture: "hayakawa-armory-misplaced-red.svg",
+        fix: "draw the armory where `<sheet>:armory site` rolls it among the sites the sheet offers - a room of the gate range, the office hall's west end bay, or a store of its own in the outer court - and declare its form (`**Form**: armory in the gate range` or `armory as a store of its own`; none for the hall's bay)",
         skipped: never,
     },
     Check {

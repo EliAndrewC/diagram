@@ -14,7 +14,7 @@ use std::collections::HashMap;
 use super::index::{area, clipped, Cells, Strips, CELL};
 use super::{tally, Frame, SeatIn};
 use crate::field::fan::Pt;
-use crate::field::geom::{seg_dist, unit};
+use crate::field::geom::{hull, seg_dist, unit};
 
 /// How far past the 45-degree bar a margin's back is turned off a flank (radians): a hair, so the turned back passes the bar
 /// without resting on it.
@@ -167,39 +167,86 @@ pub fn candidates(
     out
 }
 
-/// The share of the belt's band behind a seat at `center` that falls off the canvas.
+/// The belt's ground behind a band reaching `far` ft upwind of its windward fringe: the band (`center`, `along`, `out`, its
+/// half-depth and half-length `band`) and its copy carried `far` along the wind, their convex hull, cut to `BELT_ACROSS` of the
+/// band's width across the wind about its middle, and never past `margin` (a point on the field's margin, `out` its dry side) - the
+/// band swept upwind, so the ground follows the windward faces the belt is planted along, its near face and, on an oblique wind,
+/// its windward end, on the dry side alone.
 ///
 /// Research:
-///     belt room on the canvas - CONVENTION: scored, refused past `BELT_ROOM_MAX_OFF`; the band a rectangle upwind of the fringe, clipped to the canvas
+///     the belt along the windward fringe - research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html: each cluster carries its own band along its windward edge, the band hugging the cluster - so the belt's ground is the band's windward faces carried upwind (the deleted belt placer's fringe profile, 449 T293), never a rectangle off the band's windward-most corner, which on a wind 20 to 45 degrees off square lay up to 0.61 to 0.95 of the band's half-length nearer the margin than the fringe's belt (measured 2026-11-22, a probe of the seat's frames on the pool and Sawada's declared fall swept 180 to 270 degrees: the rectangle 34 and 73 percent on the paddy at 230 and 240, the fringe's belt 12.6 and 17 ft off the margin)
+///     its across-wind share - GUESS: no source could speak to it, a value of ours (`BELT_ACROSS`)
+///     on the dry side of the margin - GUESS research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: a polder's village keeps its belt on the windward side its polder leaves dry, none between the houses and the dike - the record silent on a belt between houses and a dike or a field to windward (the research pass of 2026-11-22, 449 T292), so the belt's ground is kept on the band's side of the line through the margin's midpoint square to the band's back - the margin's own dry side on a tier-0 seat, turned with the band on a tier-1 seat, where it acts only through `belt_off`'s share under a separate belt wind (the algorithmically easier route); on a comb whose band stands off a windward field (`ranked`'s lead) the fringe's belt stands past the standoff, so the cut takes nothing there
 #[must_use]
-pub fn belt_off(center: Pt, along: Pt, out: Pt, band: Pt, wind: Pt, canvas: Pt) -> f64 {
+pub fn belt_swept(
+    center: Pt,
+    along: Pt,
+    out: Pt,
+    band: Pt,
+    wind: Pt,
+    far: f64,
+    margin: Pt,
+) -> Vec<Pt> {
     let (dep, lat) = band;
     let w = unit((0.0, 0.0), wind);
     let p = (-w.1, w.0);
-    let reach =
-        (w.0 * along.0 + w.1 * along.1).abs() * lat + (w.0 * out.0 + w.1 * out.1).abs() * dep;
-    let span = BELT_ACROSS
-        * ((p.0 * along.0 + p.1 * along.1).abs() * lat + (p.0 * out.0 + p.1 * out.1).abs() * dep);
-    let at = |d: f64, t: f64| {
+    let corners = [(-1.0, -1.0), (1.0, -1.0), (1.0, 1.0), (-1.0, 1.0)].map(|(a, b): (f64, f64)| {
         (
-            center.0 + w.0 * (reach + d) + p.0 * span * t,
-            center.1 + w.1 * (reach + d) + p.1 * span * t,
+            center.0 + along.0 * lat * a + out.0 * dep * b,
+            center.1 + along.1 * lat * a + out.1 * dep * b,
+        )
+    });
+    let pts: Vec<Pt> = corners
+        .iter()
+        .flat_map(|&c| [c, (c.0 + w.0 * far, c.1 + w.1 * far)])
+        .collect();
+    let half = BELT_ACROSS
+        * ((p.0 * along.0 + p.1 * along.1).abs() * lat + (p.0 * out.0 + p.1 * out.1).abs() * dep);
+    let long = far + 2.0 * (lat + dep) + 1.0;
+    let at = |v: f64, u: f64| (center.0 + p.0 * v + w.0 * u, center.1 + p.1 * v + w.1 * u);
+    let slab = [
+        at(-half, -long),
+        at(half, -long),
+        at(half, long),
+        at(-half, long),
+    ];
+    let reach = long + (center.0 - margin.0).hypot(center.1 - margin.1);
+    let side = |v: f64, u: f64| {
+        (
+            margin.0 + along.0 * v + out.0 * u,
+            margin.1 + along.1 * v + out.1 * u,
         )
     };
-    let rect = [
-        at(BELT_BAND.0, -1.0),
-        at(BELT_BAND.1, -1.0),
-        at(BELT_BAND.1, 1.0),
-        at(BELT_BAND.0, 1.0),
+    let dry = [
+        side(-reach, 0.0),
+        side(reach, 0.0),
+        side(reach, reach),
+        side(-reach, reach),
     ];
-    let whole = area(&rect).max(1e-9);
+    clipped(&clipped(&hull(&pts), &slab), &dry)
+}
+
+/// The share of the belt's ground behind a seat at `center` that falls off the canvas: the band swept from `BELT_BAND.0` to
+/// `BELT_BAND.1` upwind of its windward fringe on the dry side of `margin` (`belt_swept`); none where the band sweeps no ground.
+///
+/// Research:
+///     belt room on the canvas - CONVENTION: scored, refused past `BELT_ROOM_MAX_OFF`; the belt's ground between the band's fringe carried 36 and 146 ft upwind, clipped to the canvas
+#[must_use]
+pub fn belt_off(center: Pt, along: Pt, out: Pt, band: Pt, wind: Pt, canvas: Pt, margin: Pt) -> f64 {
     let frame = [
         (0.0, 0.0),
         (canvas.0, 0.0),
         (canvas.0, canvas.1),
         (0.0, canvas.1),
     ];
-    (1.0 - area(&clipped(&rect, &frame)) / whole).max(0.0)
+    let off = |r: &[Pt]| area(r) - area(&clipped(r, &frame));
+    let near = belt_swept(center, along, out, band, wind, BELT_BAND.0, margin);
+    let whole = belt_swept(center, along, out, band, wind, BELT_BAND.1, margin);
+    let room = area(&whole) - area(&near);
+    if room <= 1e-9 {
+        return 0.0;
+    }
+    ((off(&whole) - off(&near)) / room).clamp(0.0, 1.0)
 }
 
 /// The brook's course in its order along the fall, asked for its nearest segment by bisection where the course falls the whole
@@ -398,8 +445,9 @@ pub fn ranked(
     let (mut refusal, mut scoring) = (0, 0);
     let mut kept: Vec<(f64, f64, u8, Frame)> = Vec::new();
     let mut stopped = [0u64; 6];
-    // the wind the belt stands against: the map's own, where the seat is ranked against another (the hill's, `seat`)
-    let wind = belt_wind.unwrap_or(inp.wind);
+    // the wind the belt stands against: the map's own, where the seat is ranked against another (the hill's, `seat`; a polder's
+    // landward shore, `SeatIn::belt_wind`)
+    let wind = belt_wind.or(inp.belt_wind).unwrap_or(inp.wind);
     for (mid, n, tier) in cands {
         let along = (-n.1, n.0);
         // THE BELT'S ROOM ON A WINDWARD FIELD (449 T277): the band stood the belt's far edge further out, where the field below
@@ -429,7 +477,7 @@ pub fn ranked(
             continue;
         }
         refusal += 8;
-        let off = belt_off(center, along, n, inp.band, wind, inp.canvas);
+        let off = belt_off(center, along, n, inp.band, wind, inp.canvas, mid);
         if off > BELT_ROOM_MAX_OFF {
             stopped[1] += 1;
             continue;

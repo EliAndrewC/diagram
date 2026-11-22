@@ -333,6 +333,30 @@ fn the_ring_off_the_dike_holds_the_outer_face_and_touches_it() {
     }
 }
 
+/// A POLDER SEAT'S BELT STANDS TO WINDWARD ON ITS DRY SIDE (449 T292): Kuwabata backs onto its landward shore (east) with the
+/// polder to the west, under the northwest wind, so its belt takes the windward side the polder leaves dry, the band's north end -
+/// the settlement's ground reaches past the band's half-length there, never toward the dike. Red before T292: the ground ran the
+/// band's half-length either way, the belt's room asked of the shore's way.
+#[test]
+fn a_polder_seats_belt_stands_to_windward_on_its_dry_side() {
+    let r = roll(&parse(r#"{"name": "Kuwabata", "seed": 21, "households": 16, "down_deg": 90, "field_archetype": "mulberry_dike_fishpond", "pond_layout": "mosaic", "dike_crop": "mulberry"}"#).unwrap()).unwrap();
+    let f = &r.seated.as_ref().expect("a seat").frames[0];
+    let w = crate::driver::wind(&r.plan.windward);
+    let side = (w.0 * f.along.0 + w.1 * f.along.1).signum();
+    let ground = crate::driver::settlement_ground(f, w);
+    let past = ground
+        .iter()
+        .map(|p| ((p.0 - f.anchor.0) * f.along.0 + (p.1 - f.anchor.1) * f.along.1) * side)
+        .fold(f64::MIN, f64::max);
+    let half = f.band.0;
+    assert!(past > half + 50.0, "{past} against the half-length {half}");
+    let toward = ground
+        .iter()
+        .map(|p| (p.0 - f.anchor.0) * f.out.0 + (p.1 - f.anchor.1) * f.out.1)
+        .fold(f64::MAX, f64::min);
+    assert!(toward > -1e-6, "{toward}");
+}
+
 /// THE SETTLEMENT STANDS OFF THE DIKE (449 T239): on Kuwabata and on a grid polder falling obliquely, no square foot of the
 /// settlement's ground lies inside the dike's outer face - on the dike, the ring canal or the fields - nor within the head
 /// canal's half-width of its course. Red before T239, the seat handed the plots' edge as its ring: Kuwabata's ground had
@@ -347,7 +371,10 @@ fn the_settlement_stands_off_the_dike_and_the_head_canal() {
         let r = roll(&parse(spec).unwrap()).unwrap();
         let s = r.polder.as_ref().unwrap();
         let frame = &r.seated.as_ref().expect("a seat").frames[0];
-        let (dike, head) = ground_over(&crate::driver::settlement_ground(frame), s);
+        let (dike, head) = ground_over(
+            &crate::driver::settlement_ground(frame, crate::driver::wind(&r.plan.windward)),
+            s,
+        );
         got.push(format!(
             "{}: {dike} ft2 inside the dike's outer face, {head} ft2 on the head canal",
             r.plan.name
