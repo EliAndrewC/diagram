@@ -690,6 +690,24 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-22",
    "declared": "spec-fidelity"
+  },
+  "### T129 (shared::tree's ASSIGN pattern keeps its `(?<!\\$)\\{` lookbehind, so each of its scans runs on fancy-regex's backtracking machine at every position, found by T83 2026-11-21: over T79's ux corpus the walk is 59.31 G instructions with T83, env_from's ASSIGN scan 16.41 G of it (66,294 calls) and read_where_it_stands' 3.75 G (121,284 calls), 34% together, measured 2026-11-21 (callgrind, `/tmp/t83/out/cg.inl.ux.out`, env_from kept out of line in a throwaway copy))": {
+   "sha256": "102041040dbb38290e01aa5ecd9cb19d51bd3515d0dea01b51a55e6191dc644d",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-22",
+   "declared": "spec-fidelity"
+  },
+  "### T129 Approach (checklist part A)": {
+   "sha256": "f8adb92b589abf5dc7b860b6bdc1ff012189fb310f09047b19fcb148595e51b7",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-22",
+   "declared": "spec-fidelity"
+  },
+  "### T129 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)": {
+   "sha256": "dd5c1771fce477ba774c74b02f664e73488c30badf20474f1fb89999e5042f6d",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-22",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -11811,6 +11829,71 @@
      "why": "A guard defect fix, not a performance improvement or a measurement task under the GM's 2026-11-20 rulings; the label decides scheduling only and narrows nothing T87 delivers."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-22",
+   "blocks": [
+    "### T129 (shared::tree's ASSIGN pattern keeps its `(?<!\\$)\\{` lookbehind, so each of its scans runs on fancy-regex's backtracking machine at every position, found by T83 2026-11-21: over T79's ux corpus the walk is 59.31 G instructions with T83, env_from's ASSIGN scan 16.41 G of it (66,294 calls) and read_where_it_stands' 3.75 G (121,284 calls), 34% together, measured 2026-11-21 (callgrind, `/tmp/t83/out/cg.inl.ux.out`, env_from kept out of line in a throwaway copy))",
+    "### T129 Approach (checklist part A)",
+    "### T129 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D1 five patterns",
+     "summary": "The task's own words name ASSIGN's lookbehind; the section moves five of the walk's patterns (ASSIGN, CONTINUED, SOURCED, PRINTF_V, MKTEMP) into the regex crate, each one-character look read by hand.",
+     "class": "within",
+     "why": "Widens, never narrows: each is the same kind of guard-walk speed work FR-013 and the GM's 2026-11-20 'prioritize performance improvements going forward' put first; nothing the request or spec asks is dropped."
+    },
+    {
+     "id": "D2 premise restated",
+     "summary": "Dropping (?<!\\$) alone would move nothing, because fancy-regex 0.14 treats \\b as hard too; both looks are read by hand.",
+     "class": "within",
+     "why": "A correction of the task's premise from a read of fancy-regex's source, shown by the one-step pin; it serves the task's goal (the walk off the backtracking machine) rather than changing it."
+    },
+    {
+     "id": "D3 bindings one scan",
+     "summary": "bindings scanned ASSIGN twice and now once, through assignments.",
+     "class": "within",
+     "why": "Removes repeated work in the same walk; the outputs are pinned by the differentials and the corpus cmp."
+    },
+    {
+     "id": "D4 WORD gate",
+     "summary": "Each pattern keeps its T97 gate; the new ^\\w$ WORD pattern is built only when a character past ASCII stands before a look.",
+     "class": "within",
+     "why": "Keeps the existing build gates; a design detail the spec does not settle and the request does not reach."
+    },
+    {
+     "id": "D5 not taken",
+     "summary": "LOOP's in\\b (inside an optional group), HEREDOC and strip_heredocs (backreferences) stay on fancy-regex; py_c::reads' 11.74 G is left to T89, whose builder works in that module.",
+     "class": "within",
+     "why": "None of these is in the task's words, and none is a defect (a slower scan is not a wrong outcome); two cannot be held by the automaton without changing what they read, and the third is another open task's module. Nothing asked is narrowed."
+    },
+    {
+     "id": "D6 megabyte reading",
+     "summary": "One reading changes past the corpora: a text near a megabyte that fancy-regex's machine errored on (ending the scan via map_while) now has its later matches read.",
+     "class": "within",
+     "why": "A differing output where everything still works is the rule, not an exception (constitution XIII, GM 2026-11-18); it reads more of the command, which is the guard's job, and needs no ruling."
+    },
+    {
+     "id": "D7 pins and exits",
+     "summary": "Differentials of each scan against the fancy pattern over exhaustive small alphabets, a one-step backtracking pin, mutation checks, and a green exit of byte-identical walks over the probes and three corpora plus the ux walk under 56.63 G.",
+     "class": "within",
+     "why": "Checks that fail only when the hand-read looks misread what the patterns read, i.e. enforcement of the task's stated goal ('each reading the same words as before'), not new behavior. The equality is a means of showing the walk still works, not a struck exactness standard: the section itself accepts the one difference it knows of (D6). Measured, not assumed: the four corpus walks cmp equal (q 6, bx 59,116, ux 2,311, tx 995 rows), re-checked by this review 2026-11-21 (cmp of /tmp/t129/out/*.head.jsonl against *.fix4.jsonl)."
+    },
+    {
+     "id": "D8 order",
+     "summary": "After T83 (landed), before T132, T133, T134; tree.rs lands with T89, never ahead, because T89's py_c::argv_places hunk in tree.rs needs T89's uncommitted py_c.rs.",
+     "class": "within",
+     "why": "FR-013's perf-first ordering is kept, and the coupling to T89 (also open work) is a mechanical landing constraint, not a deferral of anything asked."
+    },
+    {
+     "id": "D9 found and left none",
+     "summary": "Found and left: none; a speed task, not a defect, outputs unchanged on 62,428 rows.",
+     "class": "within",
+     "why": "The NOT TAKEN items are not defects under constitution XIV's definition, so FR-009's deferral rule and 'fix all known bugs' do not reach them."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -18203,6 +18286,68 @@
      "summary": "The third closing-checks run escaped FR-007's third-make-static refusal because the first two stopped before static's later stages.",
      "class": "within",
      "why": "FR-012 provides a recorded escape with a reason; the stated reason (earlier runs did not reach static's later stages) is the case the escape exists for."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T129": {
+   "section_sha256": "e56b001f7d1d54f300f12a4f100d71c609d00ba9afd22416ae2535cb663586d1",
+   "reviewed": "2026-11-22",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D1 five patterns",
+     "summary": "The task's own words name ASSIGN's lookbehind; the section moves five of the walk's patterns (ASSIGN, CONTINUED, SOURCED, PRINTF_V, MKTEMP) into the regex crate, each one-character look read by hand.",
+     "class": "within",
+     "why": "Widens, never narrows: each is the same kind of guard-walk speed work FR-013 and the GM's 2026-11-20 'prioritize performance improvements going forward' put first; nothing the request or spec asks is dropped."
+    },
+    {
+     "id": "D2 premise restated",
+     "summary": "Dropping (?<!\\$) alone would move nothing, because fancy-regex 0.14 treats \\b as hard too; both looks are read by hand.",
+     "class": "within",
+     "why": "A correction of the task's premise from a read of fancy-regex's source, shown by the one-step pin; it serves the task's goal (the walk off the backtracking machine) rather than changing it."
+    },
+    {
+     "id": "D3 bindings one scan",
+     "summary": "bindings scanned ASSIGN twice and now once, through assignments.",
+     "class": "within",
+     "why": "Removes repeated work in the same walk; the outputs are pinned by the differentials and the corpus cmp."
+    },
+    {
+     "id": "D4 WORD gate",
+     "summary": "Each pattern keeps its T97 gate; the new ^\\w$ WORD pattern is built only when a character past ASCII stands before a look.",
+     "class": "within",
+     "why": "Keeps the existing build gates; a design detail the spec does not settle and the request does not reach."
+    },
+    {
+     "id": "D5 not taken",
+     "summary": "LOOP's in\\b (inside an optional group), HEREDOC and strip_heredocs (backreferences) stay on fancy-regex; py_c::reads' 11.74 G is left to T89, whose builder works in that module.",
+     "class": "within",
+     "why": "None of these is in the task's words, and none is a defect (a slower scan is not a wrong outcome); two cannot be held by the automaton without changing what they read, and the third is another open task's module. Nothing asked is narrowed."
+    },
+    {
+     "id": "D6 megabyte reading",
+     "summary": "One reading changes past the corpora: a text near a megabyte that fancy-regex's machine errored on (ending the scan via map_while) now has its later matches read.",
+     "class": "within",
+     "why": "A differing output where everything still works is the rule, not an exception (constitution XIII, GM 2026-11-18); it reads more of the command, which is the guard's job, and needs no ruling."
+    },
+    {
+     "id": "D7 pins and exits",
+     "summary": "Differentials of each scan against the fancy pattern over exhaustive small alphabets, a one-step backtracking pin, mutation checks, and a green exit of byte-identical walks over the probes and three corpora plus the ux walk under 56.63 G.",
+     "class": "within",
+     "why": "Checks that fail only when the hand-read looks misread what the patterns read, i.e. enforcement of the task's stated goal ('each reading the same words as before'), not new behavior. The equality is a means of showing the walk still works, not a struck exactness standard: the section itself accepts the one difference it knows of (D6). Measured, not assumed: the four corpus walks cmp equal (q 6, bx 59,116, ux 2,311, tx 995 rows), re-checked by this review 2026-11-21 (cmp of /tmp/t129/out/*.head.jsonl against *.fix4.jsonl)."
+    },
+    {
+     "id": "D8 order",
+     "summary": "After T83 (landed), before T132, T133, T134; tree.rs lands with T89, never ahead, because T89's py_c::argv_places hunk in tree.rs needs T89's uncommitted py_c.rs.",
+     "class": "within",
+     "why": "FR-013's perf-first ordering is kept, and the coupling to T89 (also open work) is a mechanical landing constraint, not a deferral of anything asked."
+    },
+    {
+     "id": "D9 found and left none",
+     "summary": "Found and left: none; a speed task, not a defect, outputs unchanged on 62,428 rows.",
+     "class": "within",
+     "why": "The NOT TAKEN items are not defects under constitution XIV's definition, so FR-009's deferral rule and 'fix all known bugs' do not reach them."
     }
    ],
    "verdict": "CLEAR"
