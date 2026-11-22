@@ -2132,3 +2132,17 @@ Nine record and pop-up follow-ups that T197's checks found (2026-11-22), worked 
 
 **Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
 
+
+### T158, T197, T203, T216, T228, T235, T240, T241, T243, T244, T246, T247, T248, T249, T250, T251, T253, T254, T255, T256, T257, T258, T261, T262, T263, T264, T265, T266, T267, T268, T269, T270, T271, T272, T273, T274 part B (2026-11-22T13:33Z)
+
+One answer for every task the red-gate@2026-11-22T13:29:06Z tripwire charged (the round arbiter ruled accept, 2026-11-22): the two red gates were one hooks-test failure settled before the second run, then a format slip in a test this session added to the plan crate, nothing in any of these tasks' own work.
+
+1. **What exactly is refusing?** `make done`'s static phase, `rust-checks: format FAILED on rust/gate/crates/plan`: one test, `a_bundle_approach_block_covers_every_task_its_heading_lists` in `rust/gate/crates/plan/src/plan/lint/tests.rs`, written past rustfmt's width, observed 2026-11-22 (the verify gate's log). The earlier red, hooks-test at 900bf1ad55, did not recur.
+2. **A3 again, for that rule.** O: rustfmt's own check, the gate's; nothing of the research or the GM's words.
+3. **A4 again.** Yes: the line was over width; the gate's format step rewrote it (46af955365).
+4. **Is the next fix moving something placed earlier to suit something placed later?** No: a formatting rewrite of one test.
+5. **Tuning or changing?** Neither: no tuning; one rewrite.
+6. **The one-sentence test.** "A test was reformatted to rustfmt's width" - no question to answer first.
+7. **The next step is a measurement.** `make static`, then `make verify` on the rewritten tree: the format check green.
+8. **Before offering routes.** No routes: nothing to choose.
+9. **After a ruling.** The ruling (accept) names the next step, `make done` under `make verify` again, and that is the step taken.
