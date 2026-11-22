@@ -276,7 +276,10 @@ fn a_landing_is_booked_land_and_its_gate_split_out() {
         .map(|c| t.get(&(*c).to_owned()))
         .collect();
     assert_eq!(got, [240.0, 300.0, 60.0, 0.0]);
-    assert_eq!(splits_by_id(&r)["toolu_l"].gate, l.gate);
+    assert_eq!(
+        splits_by_id(&r)["toolu_l"].spans("gate"),
+        l.split.spans("gate")
+    );
 }
 
 #[test]
@@ -286,4 +289,148 @@ fn a_span_less_its_cuts() {
         minus(&[(1.5, 6.0), (10.0, 12.0)], &cut),
         [(1.5, 2.0), (3.0, 5.0), (10.0, 12.0)]
     );
+}
+
+/// Feature 451 T153: each phase's minutes go to its category - a `make done` run's compile, its hook suites (run side by side, their union
+/// once), its seeds (map generation) and its counters (tests), carved first first so no second is booked twice, the rest of the run its
+/// own bucket; a `make map`'s steps map generation; a page session, held by no run, booked under its task; a container step (`static`) none.
+#[test]
+fn each_phase_is_booked_to_its_category() {
+    let call = |id: &str, ev_: &str, t: &str, make: &str| {
+        ev(
+            &json!({"t": at(t), "sid": "s", "ev": ev_, "tool": "Bash", "id": id, "make": make, "task": "T9"}),
+        )
+    };
+    let stream = [
+        call("toolu_d", "PreToolUse", "08:00:00", "done"),
+        call("toolu_d", "PostToolUse", "08:20:00", "done"),
+        call("toolu_m", "PreToolUse", "09:00:00", "map"),
+        call("toolu_m", "PostToolUse", "09:01:00", "map"),
+    ];
+    let phase = |src: &str, step: &str, make: &str, t0: &str, t1: &str| {
+        ev(
+            &json!({"ev": "Phase", "src": src, "sid": "s", "step": step, "make": make, "task": "T9", "t0": at(t0), "t1": at(t1)}),
+        )
+    };
+    let aside = [
+        phase("gate", "static", "done", "08:00:00", "08:05:00"),
+        phase("rust", "build", "done", "08:01:00", "08:03:00"),
+        phase("hooks", "suite", "done", "08:05:00", "08:08:00"),
+        phase("hooks", "suite", "done", "08:06:00", "08:09:00"),
+        // a suite that compiled: its compile is compile
+        phase("rust", "build", "done", "08:08:30", "08:09:00"),
+        phase("gate", "seeds", "done", "08:10:00", "08:12:00"),
+        phase("gate", "counters-inert", "done", "08:12:00", "08:13:00"),
+        phase("rust", "test", "done", "08:12:00", "08:12:30"),
+        phase("map", "generate", "map", "09:00:10", "09:00:40"),
+        phase("map", "cached", "map", "09:00:40", "09:00:41"),
+        phase("page-session", "write", "", "10:00:00", "10:30:00"),
+        phase("page-session", "check", "", "10:30:00", "10:40:00"),
+    ];
+    let (none, no_stops) = (HashMap::new(), HashMap::new());
+    let w = Window {
+        stopped: &no_stops,
+        queued: &HashMap::new(),
+        end: ts(&at("11:00:00")).unwrap(),
+        enqueued: &none,
+        goal: "done",
+    };
+    let r = runs(&stream, &aside, &[], &w).unwrap();
+    let d = &r.runs[0];
+    let carved: Vec<(&str, f64)> = d.split.booked(d.t0, d.t1);
+    let want = [
+        ("compile", 150.0),
+        ("hook suites", 210.0),
+        ("map generation", 120.0),
+        ("tests", 60.0),
+    ];
+    assert_eq!(carved, want);
+    let rows = by_task(&r);
+    let t = &rows[0].1;
+    let cols = [
+        "gate",
+        "compile",
+        "hook suites",
+        "map generation",
+        "tests",
+        "docs",
+        "review",
+    ];
+    let got: Vec<f64> = cols.iter().map(|c| t.get(&(*c).to_owned())).collect();
+    // done's 1,200 s: 540 split out, 660 its own bucket (gate); the map run's 60 s: 31 map generation, 29 tests (its bucket)
+    assert_eq!(got, [660.0, 150.0, 210.0, 151.0, 89.0, 1800.0, 600.0]);
+    assert_eq!((r.loose, r.detached.len()), ((0, 0.0), 2));
+    let text = render(&r, &[]);
+    let header = text.contains("| tests | compile | hook suites | map generation | gate |");
+    assert!(header, "{text}");
+}
+
+/// Feature 451 T153: a page session's line that names no task is booked under the task started before it, a task no run of the
+/// window holds getting its own row.
+#[test]
+fn a_task_less_page_session_is_booked_under_the_task_then_active() {
+    let line = json!({"ev": "Phase", "src": "page-session", "sid": "s", "step": "write", "t0": at("10:00:00"), "t1": at("10:20:00")});
+    let (none, no_stops) = (HashMap::new(), HashMap::new());
+    let w = Window {
+        stopped: &no_stops,
+        queued: &HashMap::new(),
+        end: ts(&at("11:00:00")).unwrap(),
+        enqueued: &none,
+        goal: "done",
+    };
+    let starts = [(ts(&at("09:00:00")).unwrap(), "T7".to_owned())];
+    let r = runs(&[], &[ev(&line)], &starts, &w).unwrap();
+    let rows = by_task(&r);
+    let got: Vec<(&str, f64)> = rows
+        .iter()
+        .map(|(k, t)| (k.as_str(), t.get(&"docs".to_owned())))
+        .collect();
+    assert_eq!(got, [("T7", 1200.0)]);
+}
+
+#[test]
+fn a_phase_s_category_by_its_tool_and_step() {
+    let of = |src: &str, step: &str| category(&ev(&json!({"src": src, "step": step})));
+    let got: Vec<Option<&str>> = [
+        ("rust", "build"),
+        ("rust", "cover-build"),
+        ("rust", "cover-run"),
+        ("rust", "lint"),
+        ("hooks", "suite"),
+        ("map", "page"),
+        ("cohort", "cohort"),
+        ("gate", "reference"),
+        ("gate", "preflight"),
+        ("quick", "quick"),
+        ("preflight", "preflight"),
+        ("land", "cohort"),
+        ("land", "end"),
+        ("record", "site"),
+        ("page-session", "check"),
+        ("gate", "hooks-test"),
+    ]
+    .iter()
+    .map(|(a, b)| of(a, b))
+    .collect();
+    let want = [
+        Some("compile"),
+        Some("compile"),
+        Some("tests"),
+        None,
+        Some("hook suites"),
+        Some("map generation"),
+        Some("map generation"),
+        Some("map generation"),
+        Some("tests"),
+        Some("tests"),
+        Some("tests"),
+        Some("gate"),
+        None,
+        Some("docs"),
+        Some("review"),
+        None,
+    ];
+    assert_eq!(got, want);
+    let empty = Split::default();
+    assert!(empty.spans("compile").is_empty());
 }

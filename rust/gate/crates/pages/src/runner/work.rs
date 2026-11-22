@@ -12,6 +12,7 @@ use std::fs::File;
 use std::io::Write as _;
 use std::path::{Path, PathBuf};
 
+use l7r_shared::guards::event_log_hooks::{append_row_with, phase_row};
 use serde_json::Value;
 
 use super::retry::{failed, first_line, resume_command, wait_for, RETRIES};
@@ -300,6 +301,37 @@ fn run_session(
     Ok(rc)
 }
 
+/// A page session's `Phase` line (feature 451 T153; the GM 2026-11-22: "we want everything measured so we know where our time goes"):
+/// each session run to its end - its retries and resumes inside it - is one line through the one writer (`phase_row`), `src:
+/// page-session`, `step` its kind (`write`, a brief that writes, else `check`), `name` its session id; filed by the runner's own
+/// environment (`run.environ`, never the process's), and its make target the detached runner's outermost make (none: the runner is
+/// started detached, so a reader books it by its task, not a holding Bash run).
+fn phase_line(run: &Run, item: &Value, began: std::time::SystemTime, rc: i32) {
+    let step = if super::retry::truthy(item.get("write")) {
+        "write"
+    } else {
+        "check"
+    };
+    let make = l7r_shared::make::outermost_goal(&run.proc, std::process::id()).unwrap_or_default();
+    let root = Path::new(&run.ctx.root);
+    let mut row = phase_row(
+        "page-session",
+        step,
+        (began, std::time::SystemTime::now()),
+        rc,
+        &make,
+        root,
+    );
+    row.insert("name".into(), Value::from(field(item, "sid")));
+    let env = |k: &str| {
+        run.environ
+            .iter()
+            .find(|(n, _)| n == k)
+            .map(|(_, v)| v.clone())
+    };
+    let _ = append_row_with(root, None, row, &env);
+}
+
 /// The detached loop over `queue`, its lines in `run_log`, `ALL DONE` last.
 ///
 /// # Errors
@@ -368,7 +400,9 @@ pub fn work(run: &Run, queue: Vec<Value>, run_log: &str) -> Result<(), String> {
             .write_all(format!("{sid} {brief}\n").as_bytes())
             .map_err(|e| format!("{index}: {e}"))?;
         say(&mut log, &format!("started {sid} {}", basename(brief)))?;
+        let began = std::time::SystemTime::now();
         let rc = run_session(run, &item, &env, &mut log)?;
+        phase_line(run, &item, began, rc);
         say(&mut log, &format!("ended {sid} rc={rc}"))?;
         ledger_rows(run, &item);
         let cont = py_join(field(&item, "log"), "continue.md");

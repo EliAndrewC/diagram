@@ -8,7 +8,7 @@
 use std::path::Path;
 use std::time::SystemTime;
 
-use l7r_shared::guards::event_log_hooks::{append_row_with, now_stamp};
+use l7r_shared::guards::event_log_hooks::{append_row_with, phase_row};
 use serde_json::json;
 
 use super::{shown, World};
@@ -47,16 +47,15 @@ pub(super) fn wrote<P: AsRef<Path>>(
     began: SystemTime,
     code: i32,
 ) {
-    let t1 = now_stamp(SystemTime::now());
     let crates: Vec<String> = manifests.iter().map(|m| shown(world, m.as_ref())).collect();
-    let row = json!({
-        "ev": "Phase", "src": "rust", "step": step, "crates": crates, "t0": now_stamp(began), "t1": t1, "t": t1,
-        "code": code, "make": world.make, "clone": world.root.display().to_string(),
-    });
-    let _ = append_row_with(
+    let mut row = phase_row(
+        "rust",
+        step,
+        (began, SystemTime::now()),
+        code,
+        &world.make,
         &world.root,
-        None,
-        row.as_object().cloned().unwrap_or_default(),
-        world.root.reader(),
     );
+    row.insert("crates".into(), json!(crates));
+    let _ = append_row_with(&world.root, None, row, world.root.reader());
 }

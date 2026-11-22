@@ -107,10 +107,7 @@ pub fn flight(runs: &Runs, agents: &[Event], stream: &[Event], end: f64) -> Resu
             rank: named.unwrap_or(OTHER),
             bucket: named.map_or("background run", |_| r.bucket).to_owned(),
             kind: "shell",
-            split: Split {
-                compile: r.compile.clone(),
-                gate: r.gate.clone(),
-            },
+            split: r.split.clone(),
         });
     }
     let mut seen = std::collections::HashSet::new();
@@ -240,14 +237,12 @@ impl Flight {
                 out.push((UNBOOKED.to_owned(), "", y - x));
                 continue;
             };
-            let compile = super::overlap(&c.split.compile, x, y);
-            let gate = super::overlap(&c.split.gate, x, y);
-            for (col, s) in [("compile", compile), ("gate", gate)] {
-                if s > 0.0 {
-                    out.push((col.to_owned(), c.kind, s));
-                }
+            let mut split = 0.0;
+            for (col, s) in c.split.booked(x, y) {
+                out.push((col.to_owned(), c.kind, s));
+                split += s;
             }
-            out.push((c.bucket.clone(), c.kind, y - x - compile - gate));
+            out.push((c.bucket.clone(), c.kind, y - x - split));
         }
         out
     }

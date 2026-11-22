@@ -17,7 +17,7 @@ FREE_TEXT = UNITS WITH KEYS KEY CLASS KIND SUBJECT REASON GROWTH_REASON SPREAD N
 	CHECK_ORDER_OK URLS MATCH NONE SHARD EXTRA IMAGES DIRS LAND SUITES PERF_LATER_OK DEFER_FORM_OK QUICK_OK
 $(foreach v,$(FREE_TEXT),$(if $(filter command line environment,$(origin $(v))),$(eval override $(v) := $$(value $(v)))$(eval export $(v))))
 
-.PHONY: closing-checks modal-bundle modal-prepass done docs static format guard _reference bypass-audit quick page-check tick claim speckit-todo audit guard-edit context-ok guard-log scratch-sweep hooks-test citations fragment-move \
+.PHONY: closing-checks modal-bundle modal-prepass done docs static format guard _reference _quick bypass-audit quick page-check tick claim speckit-todo audit guard-edit context-ok guard-log scratch-sweep hooks-test citations fragment-move \
 	 switches _switch \
 	 map maps cohort cohort-landing hamlet placement-stages pool-index pool-index-if-stale compound render-sync idle-tests \
 	 pack-audit help \
@@ -75,7 +75,7 @@ done:            ## [tests] tier 3, the whole gate: lint, the static checks, the
 	$(if $(ARBITER_OK),$(LOGESCAPE) ARBITER_OK "$$ARBITER_OK",@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" arbiter gate-held || exit 1)
 	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" lock acquire "$$(git rev-parse --absolute-git-dir)" "$$PPID"
 	$(if $(PREFLIGHT_OK),$(LOGESCAPE) PREFLIGHT_OK "$$PREFLIGHT_OK",@:)
-	@$(if $(PREFLIGHT_OK),:,if [ -z "$(FULL)" ] && "$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" state verified-done >/dev/null 2>&1; then :; else tp=$$(date +%s); "$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" preflight --root "$$(git rev-parse --show-toplevel)" --no-coverage || { touch "$$(git rev-parse --absolute-git-dir)/gate-preflight-red"; printf '\n\033[1mGATE FAILED: preflight\033[0m (fix it and re-run; nothing expensive has run)\n'; exit 1; }; $(RUNSTATS) phase-pre "$$(git rev-parse --absolute-git-dir)" preflight $$(( $$(date +%s) - tp )) 2>/dev/null || true; fi)
+	@$(if $(PREFLIGHT_OK),:,if [ -z "$(FULL)" ] && "$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" state verified-done >/dev/null 2>&1; then :; else tp=$$(date +%s); "$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" preflight --root "$$(git rev-parse --show-toplevel)" --no-coverage || { touch "$$(git rev-parse --absolute-git-dir)/gate-preflight-red"; printf '\n\033[1mGATE FAILED: preflight\033[0m (fix it and re-run; nothing expensive has run)\n'; exit 1; }; $(RUNSTATS) phase-pre "$$(git rev-parse --absolute-git-dir)" preflight $$(( $$(date +%s) - tp )) "$(CURDIR)" 2>/dev/null || true; fi)
 	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" preflight --root "$$(git rev-parse --show-toplevel)" --tree-snap "$$(git rev-parse --absolute-git-dir)/gate-tree.json"
 	@if [ -z "$(FULL)" ] && "$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" state verified-done; then \
 	  root=$$(git rev-parse --show-toplevel 2>/dev/null) && [ -n "$$root" ] && "$$root/scripts/gates/l7r-gate.sh" stamp --write diagram || true; \
@@ -91,19 +91,19 @@ done:            ## [tests] tier 3, the whole gate: lint, the static checks, the
 	statics() { for phase in static format $(if $(filter rust-only,$(PORT)),seeds,); do \
 	  printf '\n\033[1m== %s ==\033[0m\n' "$$phase"; ts=$$(date +%s); \
 	  $(MAKE) --no-print-directory $$phase || { fail="$$fail $$phase"; $(RUNSTATS) fail "$$G" $$phase 2>/dev/null; }; \
-	  $(RUNSTATS) phase "$$G" $$phase $$(( $$(date +%s) - ts )) 2>/dev/null || true; \
+	  $(RUNSTATS) phase "$$G" $$phase $$(( $$(date +%s) - ts )) "$(CURDIR)" 2>/dev/null || true; \
 	done; }; \
 	: "THE STATIC CHECKS BESIDE THE TESTS AT rust-only (feature 444 T36; the GM 2026-11-07: \"Can static checks run in parallel with everything else?\"): they ran first so a red one stopped the gate before the reference map was rolled, and at rust-only no map is rolled - so they run in the background, their output kept and shown after the tests, both groups' failures reported together"; \
 	par=$(if $(filter rust-only,$(PORT)),yes,); \
 	if [ -n "$$par" ]; then ( statics; printf '%s' "$$fail" > "$$G/static-fail" ) > "$$G/static.log" 2>&1 & spid=$$!; else statics; fi; \
 	if [ -z "$$par" ] && [ -n "$$fail" ]; then RUN_STATS="$$($(RUNSTATS) end "$$G" 2>/dev/null)" $(LOGRUN) $(DONE_NAME) "$(if $(FULL),full,reference)" "$$(( $$(date +%s) - $$T0 ))" "failed:$$fail"; $(COMMIT_RUN_RECORD) red; $(STATE) failed-gate $(DONE_NAME); printf '\n\033[1mGATE FAILED:%s\033[0m (the static checks run FIRST now, so the map roll has not happened - fix these and re-run)\n' "$$fail"; exit 1; fi; \
-	tr=$$(date +%s); $(if $(filter rust-only,$(PORT)),printf '\nreference step SKIPPED - the port switch stands at rust-only (feature 444 FR-023): make done rolls no map\n';,$(if $(REF_OK),$(LOGESCAPE) REF_OK "$$REF_WHY"; $(LOGBYPASS) permitted "REF_OK - reference step skipped: $$REF_WHY"; printf '\nreference step SKIPPED (REF_OK, logged to dev/bypass-log/ and the firing log)\n';,$(MAKE) --no-print-directory _reference || { $(RUNSTATS) fail "$$G" reference 2>/dev/null; RUN_STATS="$$($(RUNSTATS) end "$$G" 2>/dev/null)" $(LOGRUN) $(DONE_NAME) "$(if $(FULL),full,reference)" "$$(( $$(date +%s) - $$T0 ))" "failed: reference"; $(COMMIT_RUN_RECORD) red; $(STATE) failed-gate $(DONE_NAME); exit 1; };)) $(RUNSTATS) phase "$$G" reference $$(( $$(date +%s) - tr )) 2>/dev/null || true; \
+	tr=$$(date +%s); $(if $(filter rust-only,$(PORT)),printf '\nreference step SKIPPED - the port switch stands at rust-only (feature 444 FR-023): make done rolls no map\n';,$(if $(REF_OK),$(LOGESCAPE) REF_OK "$$REF_WHY"; $(LOGBYPASS) permitted "REF_OK - reference step skipped: $$REF_WHY"; printf '\nreference step SKIPPED (REF_OK, logged to dev/bypass-log/ and the firing log)\n';,$(MAKE) --no-print-directory _reference || { $(RUNSTATS) fail "$$G" reference 2>/dev/null; RUN_STATS="$$($(RUNSTATS) end "$$G" 2>/dev/null)" $(LOGRUN) $(DONE_NAME) "$(if $(FULL),full,reference)" "$$(( $$(date +%s) - $$T0 ))" "failed: reference"; $(COMMIT_RUN_RECORD) red; $(STATE) failed-gate $(DONE_NAME); exit 1; };)) $(RUNSTATS) phase "$$G" reference $$(( $$(date +%s) - tr )) "$(CURDIR)" 2>/dev/null || true; \
 	for phase in hooks-test counters-inert; do \
 	  printf '\n\033[1m== %s ==\033[0m\n' "$$phase"; \
 	  if [ "$$phase" = hooks-test ] && root=$$(git rev-parse --show-toplevel 2>/dev/null) && "$$root/scripts/gates/l7r-gate.sh" stamp --fresh hooks; then \
 	    printf 'hooks-test: already green against exactly these guard scripts - skipped (gate-stamp --fresh hooks; 84 s measured 2026-08-26)\n'; continue; fi; \
 	  ts=$$(date +%s); $(MAKE) --no-print-directory $$phase FROM_DONE=1 || { fail="$$fail $$phase"; $(RUNSTATS) fail "$$G" $$phase 2>/dev/null; }; \
-	  $(RUNSTATS) phase "$$G" $$phase $$(( $$(date +%s) - ts )) 2>/dev/null || true; \
+	  $(RUNSTATS) phase "$$G" $$phase $$(( $$(date +%s) - ts )) "$(CURDIR)" 2>/dev/null || true; \
 	done; \
 	if [ -n "$$par" ]; then wait $$spid; cat "$$G/static.log"; fail="$$(cat "$$G/static-fail" 2>/dev/null)$$fail"; rm -f "$$G/static.log" "$$G/static-fail"; fi; \
 	if [ -n "$$fail" ]; then RUN_STATS="$$($(RUNSTATS) end "$$G" 2>/dev/null)" $(LOGRUN) $(DONE_NAME) "$(if $(FULL),full,reference)" "$$(( $$(date +%s) - $$T0 ))" "failed:$$fail"; $(COMMIT_RUN_RECORD) red; $(STATE) failed-gate $(DONE_NAME); printf '\n\033[1mGATE FAILED:%s\033[0m (every phase ran - fix them together, then re-run once)\n' "$$fail"; exit 1; fi; \
@@ -217,7 +217,7 @@ cohort-seeds:   ## [maps] which seeds found which failure, the fewest first seed
 	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" cohort seeds
 
 cohort:         ## [maps] roll N cohort seeds through the Rust driver, one line a seed, each refusal or broken rule named, the time taken (feature 444 T42)   [N=48] [SEED=1] [FIELD=polder_grid|mulberry_dike_fishpond]
-	@$(HAMLET_RUN) --cohort $(or $(SEED),1) $(or $(N),48) $(FIELD)
+	@$(call TIMED,cohort,cohort,$(HAMLET_RUN) --cohort $(or $(SEED),1) $(or $(N),48) $(FIELD))
 
 # THE LANDING COHORT HAS NO ROLLER WHILE THE PORT SWITCH STANDS AT rust-only (feature 449 T223): its recipe rolled the Python cohort and
 # wrote the dev/cohort-log/ record `l7r-gate cohort check` reads, and went with the Python driver (feature 444 T39), leaving a .PHONY name
@@ -309,7 +309,7 @@ citations:      ## [docs] the same as `make record` (feature 301: the record's s
 	@$(MAKE) --no-print-directory record $(if $(CHECK),CHECK=1,)
 
 record:         ## [docs] build the record's site, research/site/, from its questions (features 258, 301, 303) - a page per question, a page per section of each half and per tag, the whole record on one page   CHECK=1: build in memory and exit 1 on any refusal, writing nothing
-	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" record $(if $(CHECK),check record,site)
+	@$(call TIMED,record,$(if $(CHECK),check,site),"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" record $(if $(CHECK),check record,site))
 	$(if $(CHECK),,@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" record sources mark-filled)
 
 money-conversions: ## [docs] copy gm-assistant's money conversion table into research/assets/money-conversions.json, which the record's build converts each marked amount of money from (feature 413)   CHECK=1: write nothing, exit 1 while the copy is stale
@@ -372,6 +372,9 @@ hooks-test:     ## [tests] run every tests/hooks/test-*-hooks.sh, and prove each
 	  [ "$$pm" -gt 8 ] && pm=8; [ "$$pm" -lt 1 ] && pm=1; export PARTS_MAX=$$pm; \
 	  xargs -P $(HOOKS_JOBS) -L1 -a "$$work/todo" "$$root/tests/hooks/hookrun.sh" "$$work" "$$gitdir" || true; \
 	  if [ -s "$$work/close" ]; then while read -r b sha js; do "$$root/tests/hooks/hookrun.sh" --close "$$work" "$$gitdir" "$$b" "$$sha" $$js; done < "$$work/close"; fi; \
+	  : "EACH SUITE'S PHASE LINE, ONE CALL FOR ALL (feature 451 T153; the GM 2026-11-22: \"make the hook suites measure their time so they won't be missing\"): hookrun.sh leaves each job's span, and the one Phase writer writes them all in one process (one a suite cost 6.9 s for 57, 2026-11-20)"; \
+	  spans=$$(for f in "$$work"/*.span; do [ -f "$$f" ] || continue; read -r a b c < "$$f"; printf 'suite:%s:%s:%s:%s ' "$$a" "$$b" "$$c" "$$(basename "$$f" .span)"; done); \
+	  [ -z "$$spans" ] || "$$root/scripts/gates/l7r-gate.sh" measure event-log phase --root "$$root" --src hooks $$spans >/dev/null 2>&1 || true; \
 	  for rc in "$$work"/*.rc; do \
 	    [ -f "$$rc" ] || continue; \
 	    b=$$(basename "$$rc" .rc); \
@@ -456,6 +459,9 @@ gated-check:    ## [project] {internal} a gated push may land: its conditions, r
 LOGRUN = "$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" log run
 
 RUNSTATS = "$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" measure runstats
+# A STEP TIMED INTO ITS PHASE LINE (feature 451 T153; the GM 2026-11-22: "we want everything measured so we know where our time goes"):
+# $(call TIMED,<src>,<step>,<command>) runs the command, then hands its span and exit to the one Phase writer, and exits as it did
+TIMED = t0=$$(date +%s.%N); $(3); rc=$$?; "$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" measure event-log phase --root "$$(git rev-parse --show-toplevel)" --src $(1) "$(2):$$t0:$$(date +%s.%N):$$rc" >/dev/null 2>&1; exit $$rc
 COMMIT_RUN_RECORD = bash "$$(git rev-parse --show-toplevel)/scripts/gates/commit-run-record.sh"
 
 LOGBYPASS = "$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" log bypass '$(MAKECMDGOALS)$(if $(FULL), FULL,)'
@@ -653,7 +659,7 @@ speckit-todo:   ## [project] list the spec-kit features not yet closed - filed, 
 	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" speckit-todo --root "$$(git rev-parse --show-toplevel)" $(if $(ALL),--all,) $(if $(filter affects,$(BY)),--by-affects,) $(if $(AFFECTS),--affects "$(AFFECTS)",) $(if $(CHECK),--check,)
 
 preflight:      ## [tests] the gate's first phase, in seconds: the derived files regenerated, the record and its pointers, make quick - and, here only (not in the gate, 405 T47), the changed engine lines a quick test runs (feature 375)
-	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" preflight --root "$$(git rev-parse --show-toplevel)"
+	@$(call TIMED,preflight,preflight,"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" preflight --root "$$(git rev-parse --show-toplevel)")
 
 gm-review:      ## [project] what waits on the GM: the questions escalation-check KEPT (his decisions, the one source - feature 432), the questions OWED escalation-check (the session's), rows waiting on other work, and per feature the TO REVIEW rows (he may overturn) - feature 375   [F=<NNN> that feature's rows] [EXPLAIN=1 what needs the GM, or with F= each row in full] [ROW=<n>]
 	@cd "$$(git rev-parse --show-toplevel)" && scripts/gates/l7r-gate.sh gm-review $(if $(EXPLAIN),explain $(F) $(ROW),list $(F))
@@ -972,6 +978,10 @@ wave-report:     ## [project] a workflow wave's cost - each agent's first-reques
 # Timed with date +%s, not $$SECONDS: make's shell is sh, where SECONDS is unset.
 # The ratchet and the budget judge warm, selective runs only; raise the budget only with a measurement.
 quick:           ## [tests] tier 2: the fast tree checks (no Python test remains since feature 449 T211; pytest is gone since T213, ruff since T158)
+	@$(call TIMED,quick,quick,$(MAKE) --no-print-directory _quick)
+
+# make quick's checks, timed whole by `quick` into its Phase line (feature 451 T153)
+_quick:
 	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" check house-style-delta --selftest >/dev/null
 	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" check house-style-delta .
 	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" check question-size

@@ -11,6 +11,8 @@ use std::time::{SystemTime, UNIX_EPOCH};
 
 use serde_json::{json, Map, Value};
 
+use l7r_shared::guards::event_log_hooks::{append_row_with, phase_row};
+
 use super::reply;
 
 const START: &str = "gate-stats-start.json";
@@ -21,12 +23,14 @@ const PHASES_PRE: &str = "gate-phases-pre";
 const RESULT: &str = "gate-baseline/result.json";
 /// A run record keeps the first 20 failed test ids: enough to read a gate by, small in the log.
 const FAILED_NAMES_KEPT: usize = 20;
-const USAGE: &str = "    runstats start <dir>          snapshot the host at the gate's start; clear the failure marks\n    runstats fail <dir> <phase>   mark a phase that failed, at the moment it finished\n    runstats end <dir>            print the run-log fields as JSON (empty object on no start)\n    runstats phase <dir> <name> <seconds>      a phase of THIS gate run and how long it took (feature 415, FR-005)\n    runstats phase-pre <dir> <name> <seconds>  the same, for a phase run before `start` (the preflight); `start` keeps it\n";
+const USAGE: &str = "    runstats start <dir>          snapshot the host at the gate's start; clear the failure marks\n    runstats fail <dir> <phase>   mark a phase that failed, at the moment it finished\n    runstats end <dir>            print the run-log fields as JSON (empty object on no start)\n    runstats phase <dir> <name> <seconds> [<root>]      a phase of THIS gate run and how long it took (feature 415, FR-005); with <root>, its Phase line too (451 T153)\n    runstats phase-pre <dir> <name> <seconds>  the same, for a phase run before `start` (the preflight); `start` keeps it\n";
 
 /// Where the host's figures are read from, so a test can give it another host.
 struct Host {
     proc: PathBuf,
     sys: PathBuf,
+    /// The environment the Phase line is filed by (451 T153): the process's, a test's own.
+    env: fn(&str) -> Option<String>,
 }
 
 fn read(path: &Path) -> Option<String> {
@@ -418,10 +422,13 @@ fn run(args: &[String], h: &Host) -> crate::Reply {
             &Path::new(dir).join(FAILURES),
             &format!("{:.3} phase:{phase}\n", now()),
         ),
-        [kind @ ("phase" | "phase-pre"), dir, name, seconds, ..] => {
+        [kind @ ("phase" | "phase-pre"), dir, name, seconds, rest @ ..] => {
             let Ok(s) = seconds.parse::<f64>() else {
                 return reply(String::new(), String::new(), 1);
             };
+            if let [root, ..] = rest {
+                phase_line(Path::new(dir), Path::new(root), name, s, h);
+            }
             let mut line = String::new();
             let _ = writeln!(line, "{name} {}", general(s));
             append(
@@ -437,6 +444,25 @@ fn run(args: &[String], h: &Host) -> crate::Reply {
     reply(String::new(), String::new(), 0)
 }
 
+/// THE GATE'S PHASES AS PHASE LINES (feature 451 T153; the GM 2026-11-22: "we want everything measured so we know where our time goes"):
+/// `make done` already timed each phase here - static, format, seeds, the reference, hooks-test, counters-inert and the preflight - into
+/// the run log alone, so its seeds and counters were invisible to `make where-time`. Given the tree (`<root>`, the recipe's `$(CURDIR)`),
+/// each also writes its `Phase` line (`src: gate`, `step` the phase), in process: no process beside the one the recipe already starts.
+/// Its span is `seconds` back from now, the recipe's whole seconds (`date +%s`); its code 1 where this run marked the phase failed.
+fn phase_line(dir: &Path, root: &Path, name: &str, seconds: f64, h: &Host) {
+    let now = SystemTime::now();
+    let began = now
+        .checked_sub(std::time::Duration::from_secs_f64(seconds.max(0.0)))
+        .unwrap_or(now);
+    let failed = read(&dir.join(FAILURES))
+        .unwrap_or_default()
+        .lines()
+        .any(|l| l.ends_with(&format!(" phase:{name}")));
+    let make = l7r_shared::make::outermost_goal(&h.proc, std::process::id()).unwrap_or_default();
+    let row = phase_row("gate", name, (began, now), i32::from(failed), &make, root);
+    let _ = append_row_with(root, None, row, &h.env);
+}
+
 /// `l7r-gate measure runstats ...`.
 #[must_use]
 pub fn cli(args: &[String]) -> crate::Reply {
@@ -445,6 +471,7 @@ pub fn cli(args: &[String]) -> crate::Reply {
         &Host {
             proc: PathBuf::from("/proc"),
             sys: PathBuf::from("/sys"),
+            env: l7r_shared::env::opt,
         },
     )
 }

@@ -25,6 +25,8 @@ check "a gone runner's directory changed within three hours stays" '[ -d "$H/tmp
 check "a live runner's directory stays" '[ -d "$H/tmp/l7r-hooks-suite-x-p$$.abc" ]'
 check "a directory of the form before T101 stays" '[ -d "$H/tmp/l7r-hooks-suite-x.abc" ]'
 check "the run removes its own" '[ "$(ls -A "$H/tmp" | wc -l)" -eq 3 ] && [ "$(cat "$H/w/ok.rc")" = ok ]'
+# feature 451 T153: each suite leaves its span and exit, `<t0> <t1> <rc>`, for make hooks-test's one Phase-writer call
+check "a suite leaves its span for the Phase line" 'read -r a b c < "$H/w/ok.span" && [ "$c" = 0 ] && awk -v a="$a" -v b="$b" "BEGIN { exit !(b >= a && a > 1e9) }"'
 TMPDIR="$H/tmp2" bash "$H/hookrun.sh" "$H/w" "$H/g" slow slow.sh sha &
 pid=$!
 for _ in $(seq 100); do [ -n "$(ls -A "$H/tmp2")" ] && break; timeout 0.05 tail -f /dev/null; done

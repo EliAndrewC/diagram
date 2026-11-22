@@ -176,6 +176,33 @@ fn a_queue_continues_retries_plans_and_stops_on_a_refusal() {
         std::fs::read_to_string(Path::new(&w.root).join(".git/page-sessions/index.txt")).unwrap();
     assert_eq!(index.lines().count(), 3);
     assert!(index.lines().next().unwrap().ends_with(&format!(" {a}")));
+    // feature 451 T153: each session run to its end is one Phase line, its kind its step, its id its name
+    let events = std::fs::read_dir(Path::new(&w.root).join(".git/l7r-events")).unwrap();
+    let mut phases: Vec<(String, String, i64)> = Vec::new();
+    for f in events.flatten() {
+        for l in std::fs::read_to_string(f.path()).unwrap().lines() {
+            let v: Value = serde_json::from_str(l).unwrap();
+            if v["ev"] == "Phase" {
+                phases.push((
+                    v["src"].as_str().unwrap().to_owned(),
+                    v["step"].as_str().unwrap().to_owned(),
+                    v["code"].as_i64().unwrap(),
+                ));
+            }
+        }
+    }
+    let want = [
+        ("page-session", "write", 0),
+        ("page-session", "write", 0),
+        ("page-session", "check", 0),
+    ]
+    .map(|(a, b, c)| (a.to_owned(), b.to_owned(), c));
+    assert_eq!(phases, want);
+    let named = index
+        .lines()
+        .map(|l| l.split(' ').next().unwrap().to_owned())
+        .collect::<Vec<_>>();
+    assert_eq!(named.len(), 3);
 }
 
 #[test]

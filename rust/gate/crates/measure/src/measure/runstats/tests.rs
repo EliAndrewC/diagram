@@ -59,7 +59,11 @@ fn host(
             &format!("{package_ms}\n"),
         );
     }
-    Host { proc, sys }
+    Host {
+        proc,
+        sys,
+        env: no_env,
+    }
 }
 
 fn scratch(tag: &str) -> l7r_shared::tempdir::TempDir {
@@ -86,6 +90,7 @@ fn the_snapshot_reads_every_figure_and_a_bare_host_gives_none() {
         &Host {
             proc: none.join("p"),
             sys: none.join("s"),
+            env: no_env,
         },
         1.0,
     );
@@ -139,6 +144,7 @@ fn a_figure_missing_at_either_end_is_left_out() {
     let bare = Host {
         proc: dir.join("no"),
         sys: dir.join("no"),
+        env: no_env,
     };
     start(&dir, &bare);
     assert_eq!(end(&dir, &bare), json!({}));
@@ -158,6 +164,7 @@ fn test_marks_give_first_and_last_and_the_test_phase_end_is_dropped() {
     let bare = Host {
         proc: dir.join("no"),
         sys: dir.join("no"),
+        env: no_env,
     };
     started_at(&dir, 100.0);
     marks(
@@ -186,6 +193,7 @@ fn a_test_id_is_kept_by_name_and_a_coverage_floor_names_its_modules() {
     let bare = Host {
         proc: dir.join("no"),
         sys: dir.join("no"),
+        env: no_env,
     };
     started_at(&dir, 100.0);
     let ids: Vec<String> = (0..25)
@@ -217,6 +225,7 @@ fn the_commands_run_each_refuse_a_bad_one_and_start_clears_the_last_run() {
     let bare = Host {
         proc: dir.join("no"),
         sys: dir.join("no"),
+        env: no_env,
     };
     std::fs::write(dir.join(FAILURES), "old\n").unwrap();
     assert_eq!(ask(&["phase-pre", &d, "preflight", "7"], &bare).code, 0);
@@ -255,6 +264,7 @@ fn this_run_s_plan_is_read_and_a_stale_or_broken_one_is_not() {
     let bare = Host {
         proc: dir.join("no"),
         sys: dir.join("no"),
+        env: no_env,
     };
     started_at(&dir, 1.0);
     put(
@@ -286,4 +296,52 @@ fn numbers_print_as_python_printed_them() {
     assert_eq!(general(1_234_567.0), "1.23457e+06");
     assert_eq!(general(0.00001), "1e-05");
     assert!((tenth(1.25) - 1.2).abs() < 1e-9);
+}
+
+/// No environment: a test's Phase line goes to its scratch clone's log, never a session's exported `L7R_EVENTS_DIR` (451 T38).
+fn no_env(_: &str) -> Option<String> {
+    None
+}
+
+/// Feature 451 T153: a gate phase named with its tree writes its `Phase` line - `src: gate`, the phase its step, its span its seconds back
+/// from now, code 1 where the run marked it failed; without the tree, none (the form before T153).
+#[test]
+fn a_gate_phase_with_its_tree_writes_its_phase_line() {
+    let dir = scratch("phase-line");
+    let dot_git = dir.join(".git");
+    std::fs::create_dir_all(&dot_git).unwrap();
+    let (g, root) = (dot_git.display().to_string(), dir.display().to_string());
+    let bare = Host {
+        proc: dir.join("no"),
+        sys: dir.join("no"),
+        env: no_env,
+    };
+    assert_eq!(ask(&["start", &g], &bare).code, 0);
+    assert_eq!(ask(&["fail", &g, "seeds"], &bare).code, 0);
+    assert_eq!(ask(&["phase", &g, "seeds", "4", &root], &bare).code, 0);
+    let pre = ask(&["phase-pre", &g, "preflight", "2", &root], &bare).code;
+    assert_eq!(pre, 0);
+    assert_eq!(ask(&["phase", &g, "static", "3"], &bare).code, 0);
+    let text = std::fs::read_to_string(dot_git.join("l7r-events/_unassigned.jsonl")).unwrap();
+    let rows: Vec<Value> = text
+        .lines()
+        .map(|l| serde_json::from_str(l).unwrap())
+        .collect();
+    let got: Vec<(&str, &str, i64)> = rows
+        .iter()
+        .map(|r| {
+            (
+                r["src"].as_str().unwrap(),
+                r["step"].as_str().unwrap(),
+                r["code"].as_i64().unwrap(),
+            )
+        })
+        .collect();
+    assert_eq!(got, [("gate", "seeds", 1), ("gate", "preflight", 0)]);
+    let (t0, t1) = (
+        rows[0]["t0"].as_str().unwrap(),
+        rows[0]["t1"].as_str().unwrap(),
+    );
+    let secs = l7r_shared::iso::parse(t1).unwrap() - l7r_shared::iso::parse(t0).unwrap();
+    assert!((secs - 4.0).abs() < 0.01, "{secs}");
 }

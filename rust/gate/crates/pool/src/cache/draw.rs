@@ -10,6 +10,7 @@
 //! Research: plumbing - NONE: the cache's bookkeeping, deciding nothing about a map
 
 use std::path::{Path, PathBuf};
+use std::time::SystemTime;
 
 use serde_json::Value;
 
@@ -81,8 +82,12 @@ impl Run<'_> {
             Ok(id) => id,
             Err(why) => return Ok(outcome(Verdict::Failed(why), String::new())),
         };
+        let began = SystemTime::now();
         match self.check(m, &id)? {
-            None => Ok(outcome(Verdict::Cached, String::new())),
+            None => {
+                self.phase(m, "cached", (began, SystemTime::now()), 0);
+                Ok(outcome(Verdict::Cached, String::new()))
+            }
             Some(why) => {
                 let (verdict, said) = self.draw(m, e, &id, why)?;
                 Ok(outcome(verdict, said))
@@ -220,7 +225,11 @@ impl Run<'_> {
         let t0 = stat::fs_clock(&staging.join(START)).map_err(&io)?;
         let binary = self.paths.get(&e).cloned().unwrap_or_default();
         self.count("engine_run", 1);
+        let started = SystemTime::now();
         let ran = engine::run(&self.root, &binary, &args)?;
+        for (step, a, b) in super::phases::drawn(m, staging, (started, SystemTime::now())) {
+            self.phase(m, step, (a, b), ran.code);
+        }
         let said = ran.stderr.clone();
         let reply: Value = serde_json::from_str(&ran.stdout).unwrap_or(Value::Null);
         let refused = match e {

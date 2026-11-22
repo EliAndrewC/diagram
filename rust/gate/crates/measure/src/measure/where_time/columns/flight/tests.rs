@@ -23,8 +23,7 @@ fn run(id: &str, bg: &str, by: &str, bucket: &'static str, (t0, t1): (f64, f64))
         task: "-".to_owned(),
         bg: !bg.is_empty(),
         open: false,
-        compile: Vec::new(),
-        gate: Vec::new(),
+        split: Split::default(),
     }
 }
 
@@ -104,8 +103,10 @@ fn each_second_goes_to_the_run_of_highest_rank() {
 fn a_stop_naming_none_books_the_sessions_own_runs() {
     let mut f = the_flight();
     f.fliers[2].split = Split {
-        compile: vec![(41.0, 43.0)],
-        gate: vec![(50.0, 51.0)],
+        parts: vec![
+            ("compile", vec![(41.0, 43.0)]),
+            ("gate", vec![(50.0, 51.0)]),
+        ],
     };
     let got = f.book("s", None, 40.0, 60.0);
     assert_eq!(

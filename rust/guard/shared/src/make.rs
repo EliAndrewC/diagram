@@ -218,5 +218,52 @@ pub fn combine(cmd: &str) -> Option<String> {
     (!out.is_empty() && out != cmd && has(&left, "done") && !has(&left, "quick")).then_some(out)
 }
 
+/// The run a process is part of (feature 451 T153, moved here from the landing's `phase.rs`, T06, so every Phase line's writer reads it
+/// one way): the outermost `make` above `pid` under `proc_root` (`/proc`), its first goal; None where no `make` is above it or its
+/// command line names no goal. A word holding a space (`NOTE=two words`) is an assignment, as the event log's writer reads a command
+/// (D1); a goal-less make (`invoked`'s `.DEFAULT_GOAL`, 451 T15) names none.
+#[must_use]
+pub fn outermost_goal(proc_root: &std::path::Path, pid: u32) -> Option<String> {
+    let mut outer = None;
+    let mut at = pid;
+    while let Ok(stat) = std::fs::read_to_string(proc_root.join(at.to_string()).join("stat")) {
+        let comm = std::fs::read_to_string(proc_root.join(at.to_string()).join("comm"))
+            .unwrap_or_default();
+        if ["make", "gmake"].contains(&comm.trim()) {
+            outer = Some(at);
+        }
+        // the fields after the command's `)`: the state, then the parent
+        at = stat
+            .rfind(')')
+            .and_then(|i| stat[i + 1..].split_whitespace().nth(1)?.parse().ok())
+            .unwrap_or(0);
+        if at <= 1 {
+            break;
+        }
+    }
+    let cmdline = |p: u32| std::fs::read(proc_root.join(p.to_string()).join("cmdline"));
+    outer.and_then(|p| goal_of(&cmdline(p).unwrap_or_default()))
+}
+
+/// A make's first goal from its NUL-separated command line ([`outermost_goal`]).
+fn goal_of(cmdline: &[u8]) -> Option<String> {
+    let words: Vec<String> = cmdline
+        .split(|b| *b == 0)
+        .filter(|w| !w.is_empty())
+        .map(|w| String::from_utf8_lossy(w).into_owned())
+        .map(|w| {
+            if w.contains(char::is_whitespace) {
+                "QUOTED=1".to_owned()
+            } else {
+                w
+            }
+        })
+        .collect();
+    invoked(&words.join(" "))
+        .into_iter()
+        .next()
+        .filter(|t| t != DEFAULT_GOAL)
+}
+
 #[cfg(test)]
 mod tests;

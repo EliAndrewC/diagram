@@ -120,3 +120,33 @@ fn t02_every_form_yields_its_targets_through_every_reader() {
         assert_eq!(make_target(cmd), first, "{cmd}");
     }
 }
+
+/// A fake `/proc`: each process's `stat` (its parent the fourth field), `comm` and NUL-joined `cmdline`.
+fn proc(dir: &std::path::Path, pid: u32, parent: u32, comm: &str, cmdline: &[&str]) {
+    let at = dir.join(pid.to_string());
+    std::fs::create_dir_all(&at).unwrap();
+    let stat = format!("{pid} ({comm}) S {parent} 1 1 0\n");
+    std::fs::write(at.join("stat"), stat).unwrap();
+    std::fs::write(at.join("comm"), format!("{comm}\n")).unwrap();
+    std::fs::write(at.join("cmdline"), cmdline.join("\0") + "\0").unwrap();
+}
+
+/// Feature 451 T153: the run a Phase line names is the outermost make's first goal, read here for every writer.
+#[test]
+fn the_run_is_the_outermost_make_s_first_goal() {
+    let d = crate::tempdir::TempDir::new("make-proc");
+    let p = d.path();
+    proc(p, 40, 1, "bash", &["bash"]);
+    let outer_make = ["make", "land-batch", "F=451", "NOTE=two words", "T=T1"];
+    proc(p, 30, 40, "make", &outer_make);
+    proc(p, 20, 30, "make", &["make", "-C", "x", "inner"]);
+    proc(p, 10, 20, "l7r-gate", &["l7r-gate", "land"]);
+    let outer = super::outermost_goal(p, 10);
+    assert_eq!(outer.as_deref(), Some("land-batch"));
+    // a goal-less make, no make at all, no such process
+    proc(p, 31, 40, "make", &["make", "F=451"]);
+    proc(p, 11, 31, "l7r-gate", &["l7r-gate", "land"]);
+    proc(p, 12, 40, "l7r-gate", &["l7r-gate", "land"]);
+    let none = [11, 12, 99].map(|pid| super::outermost_goal(p, pid));
+    assert_eq!(none, [None, None, None]);
+}

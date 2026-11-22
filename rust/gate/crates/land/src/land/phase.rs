@@ -25,7 +25,7 @@ use std::path::Path;
 use std::time::SystemTime;
 
 use l7r_shared::env::Rooted;
-use l7r_shared::guards::event_log_hooks::{append_row_with, now_stamp};
+use l7r_shared::guards::event_log_hooks::{append_row_with, phase_row};
 use serde_json::{json, Value};
 
 use super::Land;
@@ -111,7 +111,7 @@ fn code_of(done: &Result<i32, String>) -> i32 {
     done.as_ref().map_or(1, |c| *c)
 }
 
-/// One line of the landing's.
+/// One line of the landing's, in the one form (`phase_row`, 451 T153).
 fn row(
     root: &Path,
     step: &str,
@@ -120,69 +120,20 @@ fn row(
     make: &str,
     tasks: &[String],
 ) -> serde_json::Map<String, Value> {
-    let t1 = now_stamp(SystemTime::now());
-    let mut row = json!({
-        "ev": "Phase", "src": "land", "step": step, "t0": now_stamp(began), "t1": t1, "t": t1, "code": code, "make": make,
-        "clone": root.display().to_string(),
-    });
+    let mut row = phase_row("land", step, (began, SystemTime::now()), code, make, root);
     if let Some(first) = tasks.first() {
-        row["task"] = Value::from(first.as_str());
+        row.insert("task".into(), Value::from(first.as_str()));
     }
     if step == "end" {
-        row["tasks"] = json!(tasks);
+        row.insert("tasks".into(), json!(tasks));
     }
-    row.as_object().cloned().unwrap_or_default()
+    row
 }
 
-/// The landing's make target (plan D4's `make`, as T05's checks name theirs): the outermost `make` above `pid` under `proc_root`, its
-/// first goal; `land` where no `make` is above it or its command line names no goal.
+/// The landing's make target (plan D4's `make`, as T05's checks name theirs): `shared::make::outermost_goal` (moved there by 451 T153,
+/// every Phase writer's one reading); `land` where no `make` is above it or its command line names no goal.
 pub(super) fn run_target(proc_root: &Path, pid: u32) -> String {
-    let mut outer = None;
-    let mut at = pid;
-    while let Ok(stat) = std::fs::read_to_string(proc_root.join(at.to_string()).join("stat")) {
-        let comm = std::fs::read_to_string(proc_root.join(at.to_string()).join("comm"))
-            .unwrap_or_default();
-        if ["make", "gmake"].contains(&comm.trim()) {
-            outer = Some(at);
-        }
-        // the fields after the command's `)`: the state, then the parent
-        at = stat
-            .rfind(')')
-            .and_then(|i| stat[i + 1..].split_whitespace().nth(1)?.parse().ok())
-            .unwrap_or(0);
-        if at <= 1 {
-            break;
-        }
-    }
-    outer
-        .and_then(|p| {
-            goal_of(
-                &std::fs::read(proc_root.join(p.to_string()).join("cmdline")).unwrap_or_default(),
-            )
-        })
-        .unwrap_or_else(|| LAND.to_owned())
-}
-
-/// A make's first goal from its NUL-separated command line, read as the event log's writer reads a command (D1, `invoked`): a word
-/// holding a space (`NOTE=two words`) is an assignment, as T05's `run_target` reads it. A goal-less make (`invoked`'s
-/// `.DEFAULT_GOAL`, feature 451 T15) names no goal here, so the run's target is read from the process above it.
-fn goal_of(cmdline: &[u8]) -> Option<String> {
-    let words: Vec<String> = cmdline
-        .split(|b| *b == 0)
-        .filter(|w| !w.is_empty())
-        .map(|w| String::from_utf8_lossy(w).into_owned())
-        .map(|w| {
-            if w.contains(char::is_whitespace) {
-                "QUOTED=1".to_owned()
-            } else {
-                w
-            }
-        })
-        .collect();
-    l7r_shared::make::invoked(&words.join(" "))
-        .into_iter()
-        .next()
-        .filter(|t| t != l7r_shared::make::DEFAULT_GOAL)
+    l7r_shared::make::outermost_goal(proc_root, pid).unwrap_or_else(|| LAND.to_owned())
 }
 
 #[cfg(test)]

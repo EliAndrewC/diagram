@@ -45,10 +45,12 @@ use super::super::events::{
 };
 use super::task_at;
 
-/// The runs table's buckets, in the guard's table's order, compile after tests.
-pub const RUN_COLUMNS: [&str; 8] = [
+/// The runs table's buckets, in the guard's table's order, compile after tests, the hook suites and map generation after it (451 T153).
+pub const RUN_COLUMNS: [&str; 10] = [
     "tests",
     "compile",
+    "hook suites",
+    "map generation",
     "gate",
     "land",
     "review",
@@ -301,33 +303,111 @@ pub struct Run {
     pub bg: bool,
     /// Whether no end was found: booked open to the window's end.
     pub open: bool,
-    /// The union of the compile phases it holds, clipped to its span, disjoint and in order.
-    pub compile: Vec<(f64, f64)>,
-    /// The union of the landing's `gate` and `cohort` phases it holds, less its compile: disjoint from `compile` and in order.
-    pub gate: Vec<(f64, f64)>,
+    /// The phases it holds, by category ([`Split`]).
+    pub split: Split,
 }
 
 impl Run {
     /// Its seconds compiling.
     #[must_use]
     pub fn compile_s(&self) -> f64 {
-        overlap(&self.compile, self.t0, self.t1)
+        overlap(self.split.spans("compile"), self.t0, self.t1)
     }
 
     /// Its seconds in a landing's gate, its compile apart.
     #[must_use]
     pub fn gate_s(&self) -> f64 {
-        overlap(&self.gate, self.t0, self.t1)
+        overlap(self.split.spans("gate"), self.t0, self.t1)
     }
 }
 
-/// A call's spans split out of its gap: compile, and a landing's gate less its compile.
+/// THE CATEGORIES A PHASE IS BOOKED TO (feature 451 T153; the GM 2026-11-22: "we want everything measured so we know where our time goes,
+/// especially for compiling, running tests, and generating maps"), first first: a second two phases hold goes to the first - compile
+/// before all (D4: a hook suite or a map run that compiles is compiling), the hook suites and map generation before the tests that hold
+/// them (`make done`'s hooks-test), and a landing's gate last, less all of them (T08's rule).
+pub const PHASE_COLUMNS: [&str; 7] = [
+    "compile",
+    "hook suites",
+    "map generation",
+    "tests",
+    "gate",
+    "docs",
+    "review",
+];
+
+/// A `Phase` line's category, or None for a step that holds others and is booked by its run (a landing's `end`, `make done`'s
+/// `static` or `hooks-test`, a lint): the checks' `build` and `cover-build` compile (D4) and their `test` and `cover-run` tests; a
+/// hook suite (`src: hooks`); a map's `generate`, `render`, `page` and `cached` (`src: map`), a cohort, the gate's seeds and its
+/// reference map (each rolls maps); `make quick`, `make preflight` and the gate's `counters-inert` and preflight tests; a landing's
+/// `gate` and `cohort` gate; `make record` docs; a page session's write docs and its check review.
+#[must_use]
+pub fn category(p: &Event) -> Option<&'static str> {
+    let (src, step) = (or_s(p, "src"), or_s(p, "step"));
+    Some(match (src.as_str(), step.as_str()) {
+        (_, "build" | "cover-build") => "compile",
+        ("rust", "test" | "cover-run")
+        | ("quick" | "preflight", _)
+        | ("gate", "counters-inert" | "preflight") => "tests",
+        ("hooks", _) => "hook suites",
+        ("map" | "cohort", _) | ("gate", "seeds" | "reference") => "map generation",
+        ("land", "gate" | "cohort") => "gate",
+        ("record", _) | ("page-session", "write") => "docs",
+        ("page-session", _) => "review",
+        _ => return None,
+    })
+}
+
+/// (category, its spans) - one call's phases of one category, the form [`Split`] holds and is built from.
+pub type Parts = Vec<(&'static str, Vec<(f64, f64)>)>;
+
+/// A call's spans split out of its gap, by category: each category's spans in [`PHASE_COLUMNS`]' order, disjoint from every earlier
+/// one's and in order.
 #[derive(Debug, Default, Clone, PartialEq)]
 pub struct Split {
-    /// [`Run::compile`].
-    pub compile: Vec<(f64, f64)>,
-    /// [`Run::gate`].
-    pub gate: Vec<(f64, f64)>,
+    /// (category, its spans), first first.
+    pub parts: Parts,
+}
+
+impl Split {
+    /// Each category's phases, each made disjoint from those of every category before it.
+    #[must_use]
+    pub fn of(held: &[(&'static str, Vec<(f64, f64)>)]) -> Self {
+        let mut taken: Vec<(f64, f64)> = Vec::new();
+        let mut parts = Vec::new();
+        for col in PHASE_COLUMNS {
+            let spans: Vec<(f64, f64)> = held
+                .iter()
+                .filter(|(c, _)| *c == col)
+                .flat_map(|(_, s)| s.iter().copied())
+                .collect();
+            let own = minus(&union(spans), &taken);
+            if own.is_empty() {
+                continue;
+            }
+            taken = union(taken.into_iter().chain(own.iter().copied()).collect());
+            parts.push((col, own));
+        }
+        Self { parts }
+    }
+
+    /// One category's spans, none where it holds none.
+    #[must_use]
+    pub fn spans(&self, col: &str) -> &[(f64, f64)] {
+        self.parts
+            .iter()
+            .find(|(c, _)| *c == col)
+            .map_or(&[], |(_, s)| s.as_slice())
+    }
+
+    /// Each category's seconds inside `[lo, hi]`, a category with none left out.
+    #[must_use]
+    pub fn booked(&self, lo: f64, hi: f64) -> Vec<(&'static str, f64)> {
+        self.parts
+            .iter()
+            .map(|(c, s)| (*c, overlap(s, lo, hi)))
+            .filter(|(_, x)| *x > 0.0)
+            .collect()
+    }
 }
 
 /// The window's runs and what could not be tied to one.
@@ -337,8 +417,11 @@ pub struct Runs {
     pub runs: Vec<Run>,
     /// `PreToolUse` Bash lines with no `PostToolUse`: refused by a guard before they ran, so no run.
     pub refused: usize,
-    /// Compile phases tied to no run, and their seconds.
+    /// Phases tied to no run, and their seconds.
     pub loose: (usize, f64),
+    /// The page sessions' phases (task, category, seconds): a detached runner's, held by no Bash run by construction, so booked under
+    /// their task directly (451 T153), never counted loose.
+    pub detached: Vec<(String, &'static str, f64)>,
 }
 
 /// What the runs are cut and ended by.
@@ -447,26 +530,21 @@ pub fn runs(
             },
             bg,
             open: found.is_none(),
-            compile: Vec::new(),
-            gate: Vec::new(),
+            split: Split::default(),
             id,
         });
     }
-    tie(&mut out, aside, w.end)?;
+    tie(&mut out, aside, starts, w.end)?;
     Ok(out)
 }
 
-/// Each compile phase, and each landing's `gate` and `cohort` phase, of `aside` tied to its run (the module's doc), the loose counted.
-fn tie(out: &mut Runs, aside: &[Event], end: f64) -> Result<(), Raised> {
-    let mut held: Vec<Vec<(f64, f64)>> = vec![Vec::new(); out.runs.len()];
-    let mut gated: Vec<Vec<(f64, f64)>> = vec![Vec::new(); out.runs.len()];
+/// Each phase of `aside` with a [`category`] tied to its run (the module's doc), the loose counted; a page session's booked by its task.
+fn tie(out: &mut Runs, aside: &[Event], starts: &[(f64, String)], end: f64) -> Result<(), Raised> {
+    let mut held: Vec<Parts> = vec![Vec::new(); out.runs.len()];
     for p in aside.iter().filter(|p| is(p, "ev", "Phase")) {
-        let compile = is(p, "step", "build") || is(p, "step", "cover-build");
-        // a landing's gate (`make done`) and cohort (`make cohort-landing`), side by side (405 T48); never its `end`, the whole landing
-        let gate = is(p, "src", "land") && (is(p, "step", "gate") || is(p, "step", "cohort"));
-        if !(compile || gate) {
+        let Some(col) = category(p) else {
             continue;
-        }
+        };
         let span = |k: &str| match get(p, k) {
             Value::String(t) => ts(t),
             _ => Err(format!("TypeError: a Phase line's {k} is no text")),
@@ -477,6 +555,15 @@ fn tie(out: &mut Runs, aside: &[Event], end: f64) -> Result<(), Raised> {
             continue;
         }
         let (make, task) = (or_s(p, "make"), or_s(p, "task"));
+        if is(p, "src", "page-session") {
+            let task = if task.is_empty() {
+                task_at(starts, a)
+            } else {
+                task
+            };
+            out.detached.push((task, col, b.min(end) - a));
+            continue;
+        }
         let (same_make, same_task) = (
             |r: &Run| make.is_empty() || r.makes.contains(&make),
             |r: &Run| !task.is_empty() && r.task == task,
@@ -496,19 +583,14 @@ fn tie(out: &mut Runs, aside: &[Event], end: f64) -> Result<(), Raised> {
             })
             .map(|(i, _)| i);
         if let Some(i) = best {
-            if compile {
-                held[i].push((a, b));
-            } else {
-                gated[i].push((a, b));
-            }
+            held[i].push((col, vec![(a, b)]));
         } else {
             out.loose.0 += 1;
             out.loose.1 += b - a;
         }
     }
-    for ((r, spans), gate) in out.runs.iter_mut().zip(held).zip(gated) {
-        r.compile = union(spans);
-        r.gate = minus(&union(gate), &r.compile);
+    for (r, spans) in out.runs.iter_mut().zip(held) {
+        r.split = Split::of(&spans);
     }
     Ok(())
 }
@@ -545,14 +627,24 @@ pub fn by_task(runs: &Runs) -> Vec<(String, Tally<String>)> {
                 rows.push((r.task.clone(), Tally::default()));
                 rows.len() - 1
             });
-        let (row, c, g) = (&mut rows[i].1, r.compile_s(), r.gate_s());
+        let row = &mut rows[i].1;
         row.add(&"runs".to_owned(), 1.0);
-        row.add(&"compile".to_owned(), c);
-        row.add(&"gate".to_owned(), g);
-        row.add(&r.bucket.to_owned(), r.t1 - r.t0 - c - g);
+        let mut split = 0.0;
+        for (col, x) in r.split.booked(r.t0, r.t1) {
+            row.add(&col.to_owned(), x);
+            split += x;
+        }
+        row.add(&r.bucket.to_owned(), r.t1 - r.t0 - split);
         if r.bg {
             row.add(&BACKGROUND.to_owned(), r.t1 - r.t0);
         }
+    }
+    for (task, col, secs) in &runs.detached {
+        let i = rows.iter().position(|(k, _)| k == task).unwrap_or_else(|| {
+            rows.push((task.clone(), Tally::default()));
+            rows.len() - 1
+        });
+        rows[i].1.add(&(*col).to_owned(), *secs);
     }
     rows
 }
@@ -562,16 +654,8 @@ pub fn by_task(runs: &Runs) -> Vec<(String, Tally<String>)> {
 pub fn splits_by_id(runs: &Runs) -> HashMap<String, Split> {
     runs.runs
         .iter()
-        .filter(|r| !(r.compile.is_empty() && r.gate.is_empty()))
-        .map(|r| {
-            (
-                r.id.clone(),
-                Split {
-                    compile: r.compile.clone(),
-                    gate: r.gate.clone(),
-                },
-            )
-        })
+        .filter(|r| !r.split.parts.is_empty())
+        .map(|r| (r.id.clone(), r.split.clone()))
         .collect()
 }
 
@@ -620,7 +704,7 @@ pub fn render(runs: &Runs, order: &[String]) -> String {
         text,
         "\nruns: {} Bash calls of every session and agent ({bg} in the background, {open} open at the window's end), booked by their `make` \
          target through the guard's table (feature 451 T08); machine minutes, which overlap, never the wall clock; {} refused before \
-         running; compile and landing-gate phases tied to no run: {} ({} min)\n",
+         running; phases tied to no run: {} ({} min)\n",
         runs.runs.len(),
         runs.refused,
         runs.loose.0,

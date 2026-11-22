@@ -43,9 +43,14 @@ const GM_AWAY: &str = "the GM away";
 // are a past log's cats of a line with no `make`. `compile` is the phases a call holds (D4), split out of its gap.
 /// The column of the time the session spent in another feature's turn between this one's (T09's plan review, 2026-11-21).
 const ANOTHER: &str = "another feature";
-const BUCKET: [(&str, &str); 27] = [
+const BUCKET: [(&str, &str); 31] = [
     ("tests", "tests"),
     ("compile", "compile"),
+    // a phase's category (451 T153, `columns::PHASE_COLUMNS`), split out of a call's gap as compile is
+    ("hook suites", "hook suites"),
+    ("map generation", "map generation"),
+    ("docs", "docs"),
+    ("review", "review"),
     ("land", "land"),
     ("review", "review"),
     ("docs", "docs"),
@@ -83,10 +88,12 @@ const RECORD: [&str; 9] = [
     "entry-drift",
     "research-pass",
 ];
-const COLUMNS: [&str; 21] = [
+const COLUMNS: [&str; 23] = [
     "model",
     "tests",
     "compile",
+    "hook suites",
+    "map generation",
     "gate",
     "land",
     "review",
@@ -387,22 +394,17 @@ pub fn tables(
             };
             let (rule, task) = carry(&named, &mut last, starts, t0);
             t.rules.add(&rule.to_owned(), gap);
-            let (compile, gate) = spans.map_or((0.0, 0.0), |c| {
-                (
-                    columns::overlap(&c.compile, t0, t0 + gap),
-                    columns::overlap(&c.gate, t0, t0 + gap),
-                )
-            });
-            for (col, x) in [("compile", compile), ("gate", gate)] {
-                if x > 0.0 {
-                    add(&mut t.time, &task, col, x);
-                }
+            let booked = spans.map_or_else(Vec::new, |c| c.booked(t0, t0 + gap));
+            let mut split = 0.0;
+            for (col, x) in booked {
+                add(&mut t.time, &task, col, x);
+                split += x;
             }
             if between && window == WAIT_WORK && !away {
                 wait(&mut t, &task, booking.flight.book(k, opener, t0, t0 + gap));
                 continue;
             }
-            add(&mut t.time, &task, bucket(&cat), gap - compile - gate);
+            add(&mut t.time, &task, bucket(&cat), gap - split);
         }
     }
     Ok(t)

@@ -43,6 +43,7 @@ pub mod engine;
 pub mod entry;
 pub mod fonts;
 mod hold;
+pub mod phases;
 pub mod stat;
 pub mod table;
 
@@ -82,11 +83,25 @@ pub struct Outcome {
 
 /// How a run is set: whether the picture is skipped (`DIAGRAM_SKIP_RENDER=1`), the font roots ([`fonts::system_roots`] in a run), and
 /// how long a run waits for another's lock, in seconds (an hour in a run).
-#[derive(Clone, Debug, Default)]
+#[derive(Clone, Debug)]
 pub struct Options {
     pub skip_render: bool,
     pub font_roots: Vec<PathBuf>,
     pub lock_wait: f64,
+    /// The environment each map's Phase lines are filed by (feature 451 T153, [`phases`]): the process's, a test's own.
+    pub env: fn(&str) -> Option<String>,
+}
+
+/// No render switch, no fonts, no wait, no environment: a test's starting point.
+impl Default for Options {
+    fn default() -> Self {
+        Self {
+            skip_render: false,
+            font_roots: Vec::new(),
+            lock_wait: 0.0,
+            env: |_| None,
+        }
+    }
 }
 
 impl Options {
@@ -97,6 +112,7 @@ impl Options {
             skip_render: matches!(std::env::var("DIAGRAM_SKIP_RENDER").as_deref(), Ok("1")),
             lock_wait: 3600.0,
             font_roots: fonts::system_roots(),
+            env: l7r_shared::env::opt,
         }
     }
 }
@@ -155,6 +171,8 @@ fn digest(path: &Path) -> (String, u64) {
 
 /// One run over a set of maps: its table, lock and clock, the engines' ids, and what it removed and owes to publish.
 struct Run<'a> {
+    /// The run's make target, which each map's Phase lines name ([`phases`]).
+    make: String,
     root: PathBuf,
     dir: PathBuf,
     table: Table,
@@ -287,6 +305,8 @@ pub fn run(
         }
     };
     let mut r = Run {
+        make: l7r_shared::make::outermost_goal(Path::new("/proc"), std::process::id())
+            .unwrap_or_default(),
         root,
         dir: dir.clone(),
         table,

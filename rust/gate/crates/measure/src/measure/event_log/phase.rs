@@ -1,0 +1,84 @@
+//! `l7r-gate measure event-log phase`: the shell's door to the ONE Phase writer (feature 451 T153; the GM 2026-11-22: "we want everything
+//! measured so we know where our time goes, especially for compiling, running tests, and generating maps"). Only the checks' wrapper
+//! (T05) and `make land` (T06) wrote `Phase` lines, so a hook suite, `make record`, `make quick`, `make preflight` and `make cohort`
+//! were invisible to `make where-time`. A recipe or `hookrun.sh` times its own step and hands the spans here, one call for many (a
+//! `hooks-test` run's 57 suites are one process after the fan-out, not 57: one call a suite cost 6.9 s on a loaded host, measured
+//! 2026-11-20 for `hookrun.sh --jobs`), each written through `phase_row` and `append_row_with`.
+//!
+//! ```text
+//! l7r-gate measure event-log phase --root <tree> --src <tool> [--make <target>] [--feature <F>] <step>:<t0>:<t1>:<code>[:<name>]...
+//! ```
+//!
+//! `t0` and `t1` are UTC seconds since the epoch (`date +%s.%N`, bash's `$EPOCHREALTIME`); `--make` defaults to the outermost make above
+//! this process (`shared::make::outermost_goal`), as the landing's lines read theirs.
+
+use std::path::Path;
+use std::time::{Duration, SystemTime, UNIX_EPOCH};
+
+use l7r_shared::env::Reader;
+use l7r_shared::guards::event_log_hooks::{append_row_with, phase_row};
+use serde_json::Value;
+
+use super::super::reply;
+use crate::Reply;
+
+/// The usage.
+pub const USAGE: &str = "usage: l7r-gate measure event-log phase --root <tree> --src <tool> [--make <target>] [--feature <F>] <step>:<t0>:<t1>:<code>[:<name>]...\n";
+
+/// One span's `<step>:<t0>:<t1>:<code>[:<name>]`, the name the rest after the fourth colon.
+fn span(word: &str) -> Option<(String, SystemTime, SystemTime, i32, String)> {
+    let mut parts = word.splitn(5, ':');
+    let step = parts.next().filter(|s| !s.is_empty())?.to_owned();
+    let at = |t: Option<&str>| {
+        let s: f64 = t?.parse().ok()?;
+        (s.is_finite() && s >= 0.0).then(|| UNIX_EPOCH + Duration::from_secs_f64(s))
+    };
+    let (t0, t1) = (at(parts.next())?, at(parts.next())?);
+    let code = parts.next()?.parse().ok()?;
+    Some((step, t0, t1, code, parts.next().unwrap_or("").to_owned()))
+}
+
+/// The command: each span a line, exit 0; a span it cannot read, or no `--root` or `--src`, the usage and exit 2, nothing written.
+pub fn cli(args: &[String], env: &Reader) -> Reply {
+    let (mut root, mut src, mut make, mut feature, mut spans) =
+        (None, None, None, None, Vec::new());
+    let mut it = args.iter();
+    while let Some(a) = it.next() {
+        let slot = match a.as_str() {
+            "--root" => &mut root,
+            "--src" => &mut src,
+            "--make" => &mut make,
+            "--feature" => &mut feature,
+            word => {
+                let Some(s) = span(word) else {
+                    return reply(
+                        String::new(),
+                        format!("phase: cannot read {word:?}\n{USAGE}"),
+                        2,
+                    );
+                };
+                spans.push(s);
+                continue;
+            }
+        };
+        *slot = it.next().cloned();
+    }
+    let (Some(root), Some(src)) = (root, src) else {
+        return reply(String::new(), USAGE.to_owned(), 2);
+    };
+    let make = make.unwrap_or_else(|| {
+        l7r_shared::make::outermost_goal(Path::new("/proc"), std::process::id()).unwrap_or_default()
+    });
+    let root = Path::new(&root);
+    for (step, t0, t1, code, name) in spans {
+        let mut row = phase_row(&src, &step, (t0, t1), code, &make, root);
+        if !name.is_empty() {
+            row.insert("name".into(), Value::from(name));
+        }
+        let _ = append_row_with(root, feature.as_deref(), row, env);
+    }
+    reply(String::new(), String::new(), 0)
+}
+
+#[cfg(test)]
+mod tests;

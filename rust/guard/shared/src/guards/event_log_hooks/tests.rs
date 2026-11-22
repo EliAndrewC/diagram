@@ -816,3 +816,16 @@ fn a_call_from_the_mirror_is_filed_in_the_sessions_clone() {
     assert!(append(&call("s74", Path::new("/")), "T", Path::new("/"), &env).is_none());
     assert!(filed_at(&call("s74", Path::new("/")), Path::new("/"), &env).is_none());
 }
+
+/// Feature 451 T153: every Phase line is one form - the checks' (T05) and the landing's (T06) keys, `t` its end.
+#[test]
+fn a_phase_line_is_one_form() {
+    let span = (
+        UNIX_EPOCH + Duration::from_millis(1_500),
+        UNIX_EPOCH + Duration::from_millis(4_000),
+    );
+    let row = super::phase_row("hooks", "suite", span, 1, "done", Path::new("/c"));
+    let got = Value::Object(row);
+    let want = json!({"ev": "Phase", "src": "hooks", "step": "suite", "t0": "1970-01-01T00:00:01.500Z", "t1": "1970-01-01T00:00:04.000Z", "t": "1970-01-01T00:00:04.000Z", "code": 1, "make": "done", "clone": "/c"});
+    assert_eq!(got, want);
+}

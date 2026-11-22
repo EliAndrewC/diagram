@@ -112,6 +112,7 @@ impl Fixture {
             // is open, and the child holds that open file until it execs, so a run taking the lock again in that window was refused at a
             // 0 s wait - twice in the loaded counting build, never alone; the held-lock test asks for 0 s itself
             lock_wait: 10.0,
+            env: |_| None,
         }
     }
 

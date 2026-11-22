@@ -1128,6 +1128,24 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-22",
    "declared": "spec-fidelity"
+  },
+  "### T153 (only the checks' wrapper and make land wrote Phase lines, so the hook suites, make map, record, quick, preflight, the gate's seeds and counters, make cohort and the page sessions were invisible to make where-time)": {
+   "sha256": "c412e2d11c1288d0f29a13f65843ceaf9f4fd4d444188c2a38bdaaf6c2f5f8f5",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-22",
+   "declared": "spec-fidelity"
+  },
+  "### T153 Approach (checklist part A)": {
+   "sha256": "c3dd6cc7a29c07d239110a4719c7b537e07cb826bccdea83162417a690568702",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-22",
+   "declared": "spec-fidelity"
+  },
+  "### T153 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)": {
+   "sha256": "8f010bf4d0427f70f68e16c89a97550b6987cfb6999fee3c22e6f83ab4bedbce",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-22",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -13578,6 +13596,168 @@
      "why": "No current block of the bundle carries T141 (no template, no filled section, no bundle heading listing it; grep of blocks.md and the MANIFEST keys), so no surviving plan text replaces the CLEAR design with a narrower one. A removal that writes no new text decides nothing and narrows nothing in the GM's 2026-11-22 bundling request: it is either FR-044's archival of a finished task, which owes no review, or it leaves an open task that cannot be ticked without a section carrying a recorded verdict."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-22",
+   "blocks": [
+    "### T153 (only the checks' wrapper and make land wrote Phase lines, so the hook suites, make map, record, quick, preflight, the gate's seeds and counters, make cohort and the page sessions were invisible to make where-time)",
+    "### T153 Approach (checklist part A)",
+    "### T153 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "one-form",
+     "summary": "One Phase-line form (phase_row in event_log_hooks.rs) that both existing writers (rustc, land) now build and every new writer appends with append_row_with, the hooks' writer; the run's make target read one way via shared::make::outermost_goal",
+     "class": "within",
+     "why": "FR-003 and D4 name the hooks' line writer as the one writer; unifying the two hand-built forms serves that and adds no behavior the GM did not ask for."
+    },
+    {
+     "id": "writers-in-process-or-door",
+     "summary": "A step is measured in process where a Rust tool already runs it, otherwise through one shell door (l7r-gate measure event-log phase)",
+     "class": "within",
+     "why": "A mechanism choice for writing every phase's line; it measures the same steps either way and leaves none out."
+    },
+    {
+     "id": "hook-suites",
+     "summary": "hookrun.sh leaves each job's span and make hooks-test hands them to the door in one call, so closing-checks and make done write theirs too",
+     "class": "within",
+     "why": "Exactly the GM's 2026-11-22 ask: 'make the hook suites measure their time so they won't be missing'."
+    },
+    {
+     "id": "make-map-mtime-cut",
+     "summary": "make map writes a cached line on a hit, and on a draw generate/render/page cut at each staged artifact's mtime rather than engines reporting their own timings",
+     "class": "within",
+     "why": "The GM asked that generating maps be measured; the draw is measured whole, start to end, so map-generation time is captured. The generate/render/page sub-split is detail the request did not ask for, so reading it off mtimes narrows nothing requested and needs no ruling."
+    },
+    {
+     "id": "gate-phases",
+     "summary": "measure runstats phase|phase-pre, already called per gate phase by make done, writes the Phase line in process (seeds, counters-inert, preflight, static, format, reference, hooks-test)",
+     "class": "within",
+     "why": "Serves 'everything measured', in particular tests and map generation (seeds, reference) inside the gate; no process added."
+    },
+    {
+     "id": "recipes-timed",
+     "summary": "make record, quick, preflight, cohort timed whole by a TIMED Makefile macro (quick's checks moved to _quick)",
+     "class": "within",
+     "why": "Each was named as invisible and the GM asked for everything measured; the _quick move is the means of timing quick whole."
+    },
+    {
+     "id": "page-sessions",
+     "summary": "Page sessions write write/check Phase lines from the runner, booked under their task directly since no Bash run holds them",
+     "class": "within",
+     "why": "'Everything measured'; booking a detached session under its task rather than leaving it loose keeps its time where it went."
+    },
+    {
+     "id": "reader-categories",
+     "summary": "where_time/columns.rs books each line to compile, hook suites, map generation, tests, gate, docs or review; containers (landing end, static, hooks-test, a lint) to none so nothing counts twice; Split carves in a fixed order so parallel suites count once; hook suites and map generation columns added to both tables and feature-report",
+     "class": "within",
+     "why": "FR-005 reads the phase lines into columns; the GM named compiling, tests and generating maps and asked that hook suites not be missing, so the two added columns serve the request directly, and the no-double-count rule keeps the figures true."
+    },
+    {
+     "id": "lint-format-uncategorized",
+     "summary": "lint (clippy) and format (rustfmt) phases are booked to no category; their seconds stay in the holding run's bucket as before; a lint's own build line, where kept, is still compile",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This departs from the accepted spec's D4, which read literally books every non-build phase, lint and format included, as tests. Applying D4 literally would defeat the request's own purpose. The GM wants to 'know where our time goes, especially for compiling, running tests', and booking clippy's type-check and compile work plus rustfmt as tests would inflate the test figure and shrink the compile figure, the two numbers he named. Nothing goes unmeasured: the lines are written, and the seconds stay booked to the holding run's bucket, so 'everything measured' still holds. The two items are judged separately. Clippy is compile and lint in one process with no seam, so neither single label is true of it. rustfmt is neither compile nor tests. Both hold."
+    },
+    {
+     "id": "sessionless-test-loose",
+     "summary": "A session-less test phase is now counted as loose time where it was ignored before",
+     "class": "within",
+     "why": "A reader change that stops dropping measured time, which serves 'everything measured so we know where our time goes'."
+    },
+    {
+     "id": "performance-work",
+     "summary": "T153 counted as performance work for scheduling",
+     "class": "within",
+     "why": "The GM 2026-11-20, request.md, quoted verbatim and accurately: a measurement task 'counted as a performance task for the purpose of scheduling and coming first'."
+    },
+    {
+     "id": "mode-a-redraw",
+     "summary": "The pool crate's build id moves, so each Mode A map is drawn again once to the same rules; no engine edited",
+     "class": "within",
+     "why": "A stated consequence of editing the pool crate, not a scope decision. Maps are redrawn under unchanged rules, and no exactness standard applies."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-22",
+   "blocks": [
+    "### T153 (only the checks' wrapper and make land wrote Phase lines, so the hook suites, make map, record, quick, preflight, the gate's seeds and counters, make cohort and the page sessions were invisible to make where-time)",
+    "### T153 Approach (checklist part A)",
+    "### T153 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "one-form",
+     "summary": "One Phase line form (phase_row in event_log_hooks.rs) built in one place, every writer appending through append_row_with, the hooks' writer; the make target read one way via shared::make::outermost_goal",
+     "class": "within",
+     "why": "FR-003/D4 name the hooks' line writer as the one writer; a shared form is how every step the GM named gets measured the same way."
+    },
+    {
+     "id": "writers-in-process-or-door",
+     "summary": "A step's line is written in process where a Rust tool already runs it, otherwise through one shell door (l7r-gate measure event-log phase)",
+     "class": "within",
+     "why": "A mechanism choice for 'we want everything measured'; it drops no step."
+    },
+    {
+     "id": "hook-suites",
+     "summary": "hookrun.sh leaves each job's span and make hooks-test hands them to the door in one call, so closing-checks and make done write theirs too",
+     "class": "within",
+     "why": "Directly the GM's 2026-11-22 words: 'make the hook suites measure their time so they won't be missing'."
+    },
+    {
+     "id": "map-phases-at-mtimes",
+     "summary": "make map's generate/render/page cut at each staged artifact's mtime, a CACHED hit its own line, rather than the engines timing themselves",
+     "class": "within",
+     "why": "Map generation is measured, as the GM asked ('especially ... generating maps'), with its steps split; how the cut is taken is method, not scope. The plan labels the reading and the reason (engine self-timing would move every map's engine id)."
+    },
+    {
+     "id": "gate-phases",
+     "summary": "measure runstats phase|phase-pre, already called per gate phase by make done, writes the Phase line in process",
+     "class": "within",
+     "why": "Measures the gate's seeds, counters, preflight, reference etc., which the task names as invisible; no process added."
+    },
+    {
+     "id": "recipes-timed",
+     "summary": "make record, quick, preflight, cohort timed whole by the Makefile's TIMED macro (quick's checks moved to _quick)",
+     "class": "within",
+     "why": "Brings these targets into the phase record; 'everything measured'."
+    },
+    {
+     "id": "page-sessions",
+     "summary": "Page sessions write write/check lines from the runner, booked under their task directly since no Bash run holds them",
+     "class": "within",
+     "why": "Detached work that was invisible is now measured and attributed rather than left loose."
+    },
+    {
+     "id": "reader-categories-and-columns",
+     "summary": "where_time/columns.rs books each phase to compile, hook suites, map generation, tests, gate, docs or review; containers book none; Split carves categories in a fixed order so parallel suites count once; both tables gain hook suites and map generation columns; a session-less test phase is now counted loose",
+     "class": "within",
+     "why": "The GM asked to know where time goes, 'especially for compiling, running tests, and generating maps'; the new columns and no-double-count carving serve exactly that."
+    },
+    {
+     "id": "lint-format-no-category",
+     "summary": "lint (clippy) and format (rustfmt) phases booked to no phase category; their seconds stay in the holding run's own bucket as before; a lint's own build line still booked to compile",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Narrows the split the readers give, not the measurement: the lines are written and the seconds remain counted in the run's FR-001 bucket, so nothing is invisible. Splitting clippy into compile vs tests is not possible without a seam inside one process, and rustfmt is neither, so booking either to compile or tests would misstate the very categories the GM wants to read; the literal alternative defeats the request's purpose (accurate knowledge of where time goes)."
+    },
+    {
+     "id": "verification-scope",
+     "summary": "Lines verified by real runs in the clone for map, cohort, record, quick, page session and hook suites; make preflight and make done's gate phases shown by unit tests (runstats/tests.rs) alone until a make done runs",
+     "class": "within",
+     "why": "The writers for those steps are implemented as asked; this is how their working is shown, not a reduction of what is measured, and the plan states it plainly rather than claiming a run."
+    },
+    {
+     "id": "overhead-and-pool-rebuild",
+     "summary": "Measurement overhead kept negligible (one door call per hooks-test, none added for gate phases, one in-process append per map step); the pool crate edit moves Mode A maps' build id so each is redrawn once to the same rules",
+     "class": "within",
+     "why": "Consequences of measuring map steps, stated and measured; no map behavior changed."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -20765,6 +20945,81 @@
      "summary": "T151 is declared not performance work for FR-013's scheduling.",
      "class": "within",
      "why": "The task repairs the review ledger's tracing of check-wave passes to their session so landings stop being refused; it neither improves a measured time nor is the time-measurement work the GM asked on 2026-11-20 to count as performance. The declaration takes nothing from FR-013."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T153": {
+   "section_sha256": "be372711fa07aa1f9db21ef1698766ad1e40aedab48de3861504ef498b76ab7c",
+   "reviewed": "2026-11-22",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "one-form",
+     "summary": "One Phase line form (phase_row in event_log_hooks.rs) built in one place, every writer appending through append_row_with, the hooks' writer; the make target read one way via shared::make::outermost_goal",
+     "class": "within",
+     "why": "FR-003/D4 name the hooks' line writer as the one writer; a shared form is how every step the GM named gets measured the same way."
+    },
+    {
+     "id": "writers-in-process-or-door",
+     "summary": "A step's line is written in process where a Rust tool already runs it, otherwise through one shell door (l7r-gate measure event-log phase)",
+     "class": "within",
+     "why": "A mechanism choice for 'we want everything measured'; it drops no step."
+    },
+    {
+     "id": "hook-suites",
+     "summary": "hookrun.sh leaves each job's span and make hooks-test hands them to the door in one call, so closing-checks and make done write theirs too",
+     "class": "within",
+     "why": "Directly the GM's 2026-11-22 words: 'make the hook suites measure their time so they won't be missing'."
+    },
+    {
+     "id": "map-phases-at-mtimes",
+     "summary": "make map's generate/render/page cut at each staged artifact's mtime, a CACHED hit its own line, rather than the engines timing themselves",
+     "class": "within",
+     "why": "Map generation is measured, as the GM asked ('especially ... generating maps'), with its steps split; how the cut is taken is method, not scope. The plan labels the reading and the reason (engine self-timing would move every map's engine id)."
+    },
+    {
+     "id": "gate-phases",
+     "summary": "measure runstats phase|phase-pre, already called per gate phase by make done, writes the Phase line in process",
+     "class": "within",
+     "why": "Measures the gate's seeds, counters, preflight, reference etc., which the task names as invisible; no process added."
+    },
+    {
+     "id": "recipes-timed",
+     "summary": "make record, quick, preflight, cohort timed whole by the Makefile's TIMED macro (quick's checks moved to _quick)",
+     "class": "within",
+     "why": "Brings these targets into the phase record; 'everything measured'."
+    },
+    {
+     "id": "page-sessions",
+     "summary": "Page sessions write write/check lines from the runner, booked under their task directly since no Bash run holds them",
+     "class": "within",
+     "why": "Detached work that was invisible is now measured and attributed rather than left loose."
+    },
+    {
+     "id": "reader-categories-and-columns",
+     "summary": "where_time/columns.rs books each phase to compile, hook suites, map generation, tests, gate, docs or review; containers book none; Split carves categories in a fixed order so parallel suites count once; both tables gain hook suites and map generation columns; a session-less test phase is now counted loose",
+     "class": "within",
+     "why": "The GM asked to know where time goes, 'especially for compiling, running tests, and generating maps'; the new columns and no-double-count carving serve exactly that."
+    },
+    {
+     "id": "lint-format-no-category",
+     "summary": "lint (clippy) and format (rustfmt) phases booked to no phase category; their seconds stay in the holding run's own bucket as before; a lint's own build line still booked to compile",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Narrows the split the readers give, not the measurement: the lines are written and the seconds remain counted in the run's FR-001 bucket, so nothing is invisible. Splitting clippy into compile vs tests is not possible without a seam inside one process, and rustfmt is neither, so booking either to compile or tests would misstate the very categories the GM wants to read; the literal alternative defeats the request's purpose (accurate knowledge of where time goes)."
+    },
+    {
+     "id": "verification-scope",
+     "summary": "Lines verified by real runs in the clone for map, cohort, record, quick, page session and hook suites; make preflight and make done's gate phases shown by unit tests (runstats/tests.rs) alone until a make done runs",
+     "class": "within",
+     "why": "The writers for those steps are implemented as asked; this is how their working is shown, not a reduction of what is measured, and the plan states it plainly rather than claiming a run."
+    },
+    {
+     "id": "overhead-and-pool-rebuild",
+     "summary": "Measurement overhead kept negligible (one door call per hooks-test, none added for gate phases, one in-process append per map step); the pool crate edit moves Mode A maps' build id so each is redrawn once to the same rules",
+     "class": "within",
+     "why": "Consequences of measuring map steps, stated and measured; no map behavior changed."
     }
    ],
    "verdict": "CLEAR"

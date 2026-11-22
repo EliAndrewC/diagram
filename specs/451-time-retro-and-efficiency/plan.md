@@ -2303,42 +2303,89 @@ its own files; not engine speed, so no performance-checklist answers.
 **Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
 
 
-### T153 (<why: the finding or measurement that files it>)
+### T153 (only the checks' wrapper and make land wrote Phase lines, so the hook suites, make map, record, quick, preflight, the gate's seeds and counters, make cohort and the page sessions were invisible to make where-time)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: one writer, every phase through it, the readers booking each phase to its category:
+  - BEFORE, measured 2026-11-22 16:32Z (a Python count of every `.git/l7r-events/*.jsonl` of the clone, `ev` Phase by `src`): `rust`
+    14,554, `land` 417, nothing else (the `map`, `record`, `quick` and `page-session` lines it also found were this task's working tree,
+    run by the clone's other sessions minutes before the count).
+  - THE ONE FORM (`rust/guard/shared/src/guards/event_log_hooks.rs`, `phase_row`): `ev`, `src`, `step`, `t0`, `t1`, `t`, `code`,
+    `make`, `clone`, the keys T05 and T06 built by hand; both now build it there (`rustc/phase.rs`, `land/phase.rs`), and every new
+    writer appends it with `append_row_with`, the hooks' writer. The run's make target is `shared::make::outermost_goal`, the landing's
+    `/proc` walk moved there so every writer reads it one way (its test moved with it).
+  - THE WRITERS (decision: in process where a Rust tool already runs the step, a recipe's span through the shell's one door
+    `l7r-gate measure event-log phase` otherwise):
+    - hook suites (`src: hooks`, `step: suite`, `name` the job): `tests/hooks/hookrun.sh` leaves each job's `<t0> <t1> <rc>`, and
+      `make hooks-test` hands them all to the door in ONE call after the fan-out - so the suites inside `closing-checks` and `make done`
+      write theirs too, both running `make hooks-test`;
+    - `make map` (`src: map`): `rust/gate/crates/pool/src/cache/phases.rs` - a CACHED hit its own `cached` line; a drawn map's
+      `generate`, `render` and `page` cut at each staged artifact's mtime (svg, png, html), a deliberate reading labeled at the point
+      of change: an edit of the engines to report their own timings moves every map's engine id for a measurement;
+    - the gate's phases (`src: gate`, the phase its step - `seeds`, `counters-inert`, `preflight`, `static`, `format`, `reference`,
+      `hooks-test`): `measure runstats phase|phase-pre`, which `make done` already called per phase, write the line in process given the
+      tree (`$(CURDIR)`), no process added;
+    - `make record`, `make quick`, `make preflight`, `make cohort` (`src` the target): the Makefile's `TIMED` macro (quick's checks moved
+      to `_quick`, timed whole);
+    - page sessions (`src: page-session`, `step: write|check`, `name` the session id): `pages/src/runner/work.rs`, filed by the
+      runner's own environment.
+  - THE READERS (`where_time/columns.rs`): `category` books each line - compile (`build`, `cover-build`), hook suites, map generation
+    (a map's steps, a cohort, the gate's seeds and reference), tests (the checks' `test` and `cover-run`, quick, preflight, counters),
+    gate (a landing's), docs (record, a page session's write) and review (its check); a container (a landing's `end`, `static`,
+    `hooks-test`, a lint) none. `lint` and `format` (the checks' `rust` lines, the gate's `format`) are booked to no category,
+    a decision: a lint's clippy is compile and check in one process with no seam a line can mark, and rustfmt is neither, so booking
+    either to compile or tests would misstate one of them; their seconds stay in the holding run's own bucket, as before T153 (a
+    lint's own `build` line, where kept.rs builds first, is still booked to compile). `Split` is a run's phases by category, carved first first (`PHASE_COLUMNS`: compile, hook suites, map
+    generation, tests, gate, docs, review) so parallel suites count once and no second twice; the runs table, the critical path and the
+    flight book through it, and both tables gain `hook suites` and `map generation` columns (`feature-report` reads the same columns
+    through `where_time::columns_text`). A page session, detached, is held by no Bash run: booked under its task directly, never loose.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| the one form | `event_log_hooks/tests.rs` `a_phase_line_is_one_form`; `make/tests.rs` `the_run_is_the_outermost_make_s_first_goal` | n/a: tooling | none | - |
+| the door | `event_log/phase/tests.rs` (each span its line, a bad span refused whole) | n/a | none | - |
+| hook suites | `tests/hooks/test-parts.2.sh` "a suite leaves its span" - red on HEAD's `hookrun.sh` (23 passed, 1 failed), green now (24), measured 2026-11-22 | n/a | none | - |
+| make map | `cache/phases/tests.rs` (a compound, a hamlet and a hand sheet drawn write their steps, a hit its `cached`; the cut at mtimes) | n/a | none: no engine edited | - |
+| gate phases | `runstats/tests.rs` `a_gate_phase_with_its_tree_writes_its_phase_line` | n/a | none | - |
+| page sessions | `runner/work/tests.rs` (the queue's three sessions: write, write, check) | n/a | none | - |
+| the readers | `columns/tests.rs` `each_phase_is_booked_to_its_category`, `a_phase_s_category_by_its_tool_and_step`; `where_time/tests.rs` headers | n/a | none | - |
 
 ### T153 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** Every step the GM named writes its Phase line, and where-time books its minutes to compile, tests, hook suites or map generation.
+2. **The constraints.** FR-003 (one writer, the hooks'), D4 (compile split out of the run that holds it), T08 (a landing's gate less its compile), T38 (a test's line never reaches a session's log).
+3. **Where each comes from.** G: the GM 2026-11-22, request.md "on measuring every phase"; O: the before count above.
+4. **Do they describe the world here?** Yes: the after lines below were written by real runs in this clone.
+5. **The order.** Writer, door, hook suites, map, gate, recipes, page sessions, readers.
+6. **The exits.** Green: each target's line written by a real run, the crates' tests and closing-checks green. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** none.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** AFTER, measured 2026-11-22 (the clone's logs read after the runs, 16:33Z): `make map` of county-magistracy-example wrote `generate` 14 ms, `render` 160 ms, `page` 253 ms, of inashiro (CACHED) `cached`, `make cohort N=2` its `cohort` line, `make record` `check` and `site`, `make quick` `quick`, a page session `write` 4.5 min (the clone's other sessions), and the hook suites' lines came from this task's closing-checks.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** No map changes: the writers measure, never draw. A reader sees new columns, and a session-less `test` phase is now counted loose where it was ignored.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?** none.
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**How the unmeasured steps were found.** observed 2026-11-22, method: `git grep '"Phase"' HEAD -- rust scripts tests Makefile`
+found two writers, `land/phase.rs` and `rustc/phase.rs`, every other hit a reader; the BEFORE count of every event log (above)
+confirmed only those two `src`s were ever written; and the steps item 9 names were then run in this clone after the change (and the hook
+suites in this task's closing-checks) and their lines read back from the log. Not run here: `make preflight`, and `make done`, the only
+run of the gate's phases (`seeds`, `counters-inert`, `preflight`, `format`, `reference`); the gate's lines are shown by
+`runstats/tests.rs` alone until a `make done` runs.
+
+**Performance work?** yes - a measurement task, counted as performance work (the GM 2026-11-20, request.md "on measurement work":
+*"I would also like for this kind of measurement task to be counted as a performance task for the purpose of scheduling and coming first."*);
+it measures the builders' loop (FR-003), making nothing faster itself; its own overhead below.
 
 ### T153 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)
 
-1. **Where does the time go?** <the stage and the loop: its counted operations, `make work-budget` (a hamlet stage) or `make budget-sheets` (a Mode A stage)>
-2. **Removes work, or only moves it?** <fewer candidates, a screen, a kept result, an index, an early stop, a better algorithm,
-   a loop into C - or an inlining, a merge, a builtin written out: never the goal, only where the time evidence shows a gain>
-3. **What do you expect it to save, and why?** <a share of the stage's profiled time>
-4. **How does the work grow with the settlement?** <the growth exponent between sizes, and whether this bends it>
-5. **What did the before and after show, and under what conditions?** <the counted operations before and after, and any wall
-   time with the host's load - evidence, not a pass>
-6. **Did any map move, and does it still keep the research?** <`make maps-moved`, the cohort>
+1. **Where does the time go?** In each line's write: `append_row_with`'s filing (the task-start chain) and the append.
+2. **Removes work, or only moves it?** Adds work, kept negligible: no process a hook suite (one door call a `hooks-test` run), none for the gate's phases (the runstats call already made), one in-process append a map step.
+3. **What do you expect it to save, and why?** Nothing; the cost is the question.
+4. **How does the work grow with the settlement?** One line a map step, a suite, a session: linear in the steps, never in a map's size.
+5. **What did the before and after show, and under what conditions?** Measured 2026-11-22 (the door over a scratch `L7R_EVENTS_DIR`, the launcher's fresh binary, median of 7, load 16.4 on 22 cores): 1 span 38.5 ms, 57 spans 154 ms, 570 spans 436 ms - about 2 ms a line at 57 and 0.7 ms at 570, so a full `hooks-test` run (61 jobs, 74.4 s, measured 2026-11-22 16:34Z in this task's closing-checks: the run directory's
+`caller-files` mtime to its `hooks-test.exit` mtime, the jobs counted from `hooks-test.log`'s `ran` line) pays about 0.16 s, 0.2%, and a map step pays one in-process line (about 2 ms, the same measurement) on a draw of hundreds of ms (measured 2026-11-22, the county-magistracy-example lines above), a CACHED map one line.
+6. **Did any map move, and does it still keep the research?** No engine was edited; the pool crate is the Mode A engine's dependency, so its build id moves and each Mode A map is drawn again once, to the same rules.
 
 
 ### T154 (<why: the finding or measurement that files it>)

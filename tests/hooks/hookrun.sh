@@ -119,7 +119,11 @@ if [ -n "$left" ]; then
   rc=1
 fi
 # feature 383 amendment 3 (plan D27): each suite's seconds beside it, so hooks-test can say which suites ran and what each cost
-awk -v a="$t0" -v b="${EPOCHREALTIME/,/.}" 'BEGIN { printf "%.1f", b - a }' > "$WORK/$ID.s"
+t1=${EPOCHREALTIME/,/.}
+awk -v a="$t0" -v b="$t1" 'BEGIN { printf "%.1f", b - a }' > "$WORK/$ID.s"
+# feature 451 T153: the suite's span and exit beside it, `<t0> <t1> <rc>`, which `make hooks-test` hands to the one Phase writer in ONE
+# call after the fan-out (`l7r-gate measure event-log phase`), so each suite's minutes reach `make where-time` as hook suites
+printf '%s %s %s\n' "$t0" "$t1" "$rc" > "$WORK/$ID.span"
 # feature 449 T125: kept beside the suite's stamp, pass or fail, so the next run starts the longest suites first
 mkdir -p "$GITDIR/hooks-test" && cp "$WORK/$ID.s" "$GITDIR/hooks-test/$ID.s"
 # GUARD_EDIT_OK: feature 449 T205 - THE LAUNCHERS' SOURCES, EXPANDED ONCE: a launcher given the run's fresh binary

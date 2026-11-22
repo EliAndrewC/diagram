@@ -901,6 +901,37 @@ pub fn append_row_with(
     append_row_in(root, feature, row, &now_stamp(SystemTime::now()), env)
 }
 
+/// One `Phase` line (feature 451 T153: the ONE form every phase writes, the checks' T05 and the landing's T06 built it by hand): `src` the
+/// tool, `step` its step, `span` its start and end, `code` its exit, `make` the run's make target (`shared::make::outermost_goal`), and
+/// `clone` the tree it ran in - `t` its end, as the readers order it. A writer adds its own fields (a check's `crates`, a landing's
+/// `task`, a suite's or a map's `name`) and appends it with [`append_row_with`].
+#[must_use]
+pub fn phase_row(
+    src: &str,
+    step: &str,
+    span: (SystemTime, SystemTime),
+    code: i32,
+    make: &str,
+    clone: &Path,
+) -> Map<String, Value> {
+    let t1 = now_stamp(span.1);
+    let mut row = Map::new();
+    for (k, v) in [
+        ("ev", Value::from("Phase")),
+        ("src", Value::from(src)),
+        ("step", Value::from(step)),
+        ("t0", Value::from(now_stamp(span.0))),
+        ("t1", Value::from(t1.clone())),
+        ("t", Value::from(t1)),
+        ("code", Value::from(code)),
+        ("make", Value::from(make)),
+        ("clone", Value::from(clone.display().to_string())),
+    ] {
+        row.insert(k.into(), v);
+    }
+    row
+}
+
 pub(crate) fn append_row_in(
     root: &Path,
     feature: Option<&str>,

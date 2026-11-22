@@ -484,16 +484,25 @@ fn a_background_end_and_a_phase_line_leave_the_tables_as_they_were() {
     assert_eq!(report, changed);
     // T08 reads the build phase inside b1: 29 of its 60 s are compile (the runs table; the wall-clock table's minutes round alike)
     let row = |x: &str| {
-        format!("| {x} | 1 | 1.0 | 0.5 | 0.5 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 |")
+        format!(
+            "| {x} | 1 | 1.0 | 0.5 | 0.5 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 |"
+        )
     };
     let was = |x: &str| {
-        format!("| {x} | 1 | 1.0 | 1.0 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 |")
+        format!(
+            "| {x} | 1 | 1.0 | 1.0 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 |"
+        )
+    };
+    // the session-less `test` phase is booked to a category since T153, so, held by no run, it is counted loose
+    let foot = |n: &str| {
+        format!("runs: 1 Bash calls of every session and agent (0 in the background, 0 open at the window's end), booked by their `make` target through the guard's table (feature 451 T08); machine minutes, which overlap, never the wall clock; 0 refused before running; phases tied to no run: {n} min)")
     };
     assert_eq!(
         changed,
         [
             (was("T01").as_str(), row("T01").as_str()),
-            (was("all").as_str(), row("all").as_str())
+            (was("all").as_str(), row("all").as_str()),
+            (foot("0 (0.0").as_str(), foot("1 (1.0").as_str())
         ]
     );
 }
@@ -623,17 +632,17 @@ fn the_columns_book_make_runs_compile_and_until() {
     assert_eq!(r.code, 0, "{}", r.stderr);
     let out = &r.stdout;
     for want in [
-        "| task | total | model | tests | compile | gate | land | review | docs | spec-kit step | tools | background run |",
+        "| task | total | model | tests | compile | hook suites | map generation | gate | land | review | docs | spec-kit step | tools | background run |",
         // the wait from the 08:06:40 `Stop` (no `inflight`: before the field) booked to the session's own runs in flight (T09): the
         // landing to its `BgEnd` at 08:12, outranking the `rust-test` beside it, the rest to the last line (08:19) held by none
-        "| T05 | 20 | 1 | 2 | 4 | 0 | 5 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 7 | 0 | 0 | 0 |",
+        "| T05 | 20 | 1 | 2 | 4 | 0 | 0 | 0 | 5 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 7 | 0 | 0 | 0 |",
         "a background shell 5 min, an agent 0 min, a monitor alone 0 min, none 7 min (feature 451 T09)",
-        "| task | runs | minutes | tests | compile | gate | land | review | docs | spec-kit step | other | in the background |",
-        "| T05 | 3 | 14.5 | 4.8 | 4.0 | 0.0 | 5.7 | 0.0 | 0.0 | 0.0 | 0.0 | 8.5 |",
-        "| T06 | 7 | 16.5 | 15.0 | 1.0 | 0.2 | 0.0 | 0.3 | 0.0 | 0.0 | 0.0 | 13.5 |",
-        "| all | 10 | 31.0 | 19.8 | 5.0 | 0.2 | 5.7 | 0.3 | 0.0 | 0.0 | 0.0 | 22.0 |",
+        "| task | runs | minutes | tests | compile | hook suites | map generation | gate | land | review | docs | spec-kit step | other | in the background |",
+        "| T05 | 3 | 14.5 | 4.8 | 4.0 | 0.0 | 0.0 | 0.0 | 5.7 | 0.0 | 0.0 | 0.0 | 0.0 | 8.5 |",
+        "| T06 | 7 | 16.5 | 15.0 | 1.0 | 0.0 | 0.0 | 0.2 | 0.0 | 0.3 | 0.0 | 0.0 | 0.0 | 13.5 |",
+        "| all | 10 | 31.0 | 19.8 | 5.0 | 0.0 | 0.0 | 0.2 | 5.7 | 0.3 | 0.0 | 0.0 | 0.0 | 22.0 |",
         "runs: 10 Bash calls of every session and agent (4 in the background, 1 open at the window's end)",
-        "; 1 refused before running; compile and landing-gate phases tied to no run: 1 (1.0 min)",
+        "; 1 refused before running; phases tied to no run: 1 (1.0 min)",
     ] {
         assert!(out.contains(want), "{want}\n{out}");
     }
