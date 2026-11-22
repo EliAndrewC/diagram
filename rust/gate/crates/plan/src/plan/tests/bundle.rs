@@ -45,6 +45,18 @@ fn decide_on_a_bundle_prints_one_dispatch_judging_every_task() {
 }
 
 #[test]
+fn an_empty_task_word_names_itself_in_the_no_section_refusal() {
+    // no member is missing, yet no section is the lead's: the refusal names the word as given
+    let (root, _dir) = bundle_feature(BUNDLE);
+    let refused = run(&root, &["section-sha", "375", ""]);
+    assert_eq!(refused.code, 2, "{}", refused.stderr);
+    let named = refused
+        .stderr
+        .contains("no plan section names  in specs/375*");
+    assert!(named, "{}", refused.stderr);
+}
+
+#[test]
 fn decide_refuses_a_bundle_whose_members_do_not_share_its_section() {
     let apart = BUNDLE.replace(
         "### T08 the next",
