@@ -146,6 +146,8 @@ MVP: T001-T005 and the first guard, `pair-hooks` (T006): the dispatcher in every
       research: rendering
 - [ ] T326 lands before T158: ochiba-roundtrip-test's three outside rows (building-review 2026-11-22, engine key 8198de677351, O1-O3; carried by the round arbiter's ask:449-land4-buildreviews): O1 the clerks' room drawn as its own 28 x 18 ft building on the outer court's west wall, where docs/building-programs.md makes it a room of the hall and Ochiba's hand sheet seats it in the hall's back row; O2 the office hall has no rear door toward the household gate, which the hand sheet has (feature 267 pass 2; 0104: the visitors' way runs on through the office to the house); O3 the inner court's walls have no postern, so the night-soil collector reaches the house's two privies only through the main gate, forecourt, nakamon and service yard - a research pass on the collector's way first; research: rendering
       research: rendering
+- [ ] T327 lands before T158: sheet/road's Depiction says the road is drawn as a band of bare ground, but the crop draws it in alternating light and dark tan bands across its width and no drawing page records what the banding stands for (modal-depiction 2026-11-22, OUTSIDE THE CHANGE, needs research): a research pass on what the bands depict, then the tab or the drawing page restated; research: rendering
+      research: rendering
 - [ ] GM review (make gm-reviewed F=449) [lands-open]
       research: rendering
       verify: the GM reviewed every row (make gm-review lists them)

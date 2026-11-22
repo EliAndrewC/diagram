@@ -1,7 +1,7 @@
 About: A torii was the open gateway that marked where a shrine's sacred ground began; the ground inside it was revered as the
 kami's. A shrine's approach passed under one or more on its way to the hall, the first standing where the approach entered the
 shrine's grounds; several were counted from the outermost in, the first, second and third.
-A small shrine below a shrine's rank had none or a very small one, and a household's
+A small hall that enshrined a kami but was not counted a shrine had none or a very small one, and a household's
 shrine seldom had one; an arch there was a mark of care, not a fixture. Two shrines on one ground could share the arch at its
 edge, which marked everything inside it, or a lesser shrine could have its own.
 

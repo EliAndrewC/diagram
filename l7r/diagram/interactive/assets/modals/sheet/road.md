@@ -10,18 +10,18 @@ wagons and carts travel the roads between towns, so the road at a compound's gat
 
 The highways were set in 1605 to about 30 ft (9 m), narrowed to about 13 to 23 ft in the mountains and 12 ft at passes
 such as Hakone; most of the Five Highways ran about 18 to 24 ft. Through Hiroshima's castle town the highway was about
-15 ft. How wide the road was just before an official's gate, or a lane to a side gate, is not recorded.
+15 ft, and through a post town, where the highway was the town's street, about 12 to 24 ft. How wide the road was just before an official's gate, or a lane to a side gate, is not recorded.
 
 Guesses:
 - A lane to a side or cart gate about 6 ft wide where carts use it: no lane to an official's gate was found measured; the farm roads of a paddy replanned in 1869 were about 6 ft, a field road is traditionally given as 3 ft, and the Edo hand cart's bed
   was about 8 by 2.5 ft, so six feet leaves room for the wheels.
 
-Depiction: The plan draws the road as a band of bare ground running from the sheet's edge to the main gate, and narrower
+Depiction: The plan draws the road the compound stands on as a band of bare ground coming in from the sheet's edge, its main gate opening onto it, and narrower
 lanes to the lesser gates. A highway is drawn in the same earth tone as a lesser road: its dressing of sand and gravel was
 earth-colored at a plan's scale.
 
 Name: road
 Covers: the approach road or town street, the lanes to the lesser doors, and a road across a border
 Sources: jinya-jawiki, sina-neixiang-xianya, neixiang-xianya-zhwiki, nikko-suginamiki-jawiki, mlit-kinsei-michi-gokaido, toyama-1988-road-undevelopment, l7r-wagons, ctie-michi-nazenaze, gokaido-jawiki, hiroshima-saigoku-kaido, kotobank-daihachiguruma
-Entry: research/questions/0088-highways-and-what-lines-them-kaido.html, research/questions/0123-the-magistrates-manor-in-a-town-where-it-stands-and-which-way-it-faces-jinya-and-yamen.html, research/questions/0081-village-lanes.html, research/questions/0082-moving-goods-carts-packhorses-and-river-landings-kashi.html
-Drawing: research/questions/0088-highways-and-what-lines-them-kaido.drawing.html, research/questions/0081-village-lanes.drawing.html, research/questions/0082-moving-goods-carts-packhorses-and-river-landings-kashi.drawing.html
+Entry: research/questions/0088-highways-and-what-lines-them-kaido.html, research/questions/0123-the-magistrates-manor-in-a-town-where-it-stands-and-which-way-it-faces-jinya-and-yamen.html, research/questions/0081-village-lanes.html, research/questions/0082-moving-goods-carts-packhorses-and-river-landings-kashi.html, research/questions/0136-town-streets-side-lanes-and-back-alleys-roji.html
+Drawing: research/questions/0088-highways-and-what-lines-them-kaido.drawing.html, research/questions/0081-village-lanes.drawing.html, research/questions/0082-moving-goods-carts-packhorses-and-river-landings-kashi.drawing.html, research/questions/0136-town-streets-side-lanes-and-back-alleys-roji.drawing.html

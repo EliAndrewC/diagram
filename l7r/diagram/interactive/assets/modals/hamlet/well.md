@@ -15,7 +15,7 @@ common ones was paved with stones. One well could serve several hundred: in late
 650 inhabitants.
 
 Guesses:
-- That the curb the marker stands for was about 4 ft square: no premodern curb was found measured, so the figure is fitted
+- That the curb the marker stands for was about 4 ft square: no premodern curb was found measured, only one undated curb about 46 in (118 cm) square in a modern book, so the figure is fitted
   round a premodern shaft about 3 ft across.
 - That about three wells in four on shallow water take a sweep and three in four on deep water a pulley frame, and that a
   valley floor holds shallow water and an upland deep: the two gears and the depth that chose between them are known, the
