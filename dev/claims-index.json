@@ -22512,14 +22512,14 @@
  "rust/mode_a/src/lib.rs::USAGE#the Mode A engine's command": {
   "body": "c4a5002aca6a0bd2",
   "claim": "the Mode A engine's command - NONE: dispatch to its tools, deciding nothing about a building",
-  "code": "04f5dacb9a243be2",
-  "core": "58d6dacf19ae653f",
+  "code": "16824b602dd65d72",
+  "core": "24a48d49d6a743aa",
   "date": "2026-11-17",
   "note": "usage text",
   "pages": {},
   "research": "",
   "rests": [],
-  "triaged": "2026-11-19",
+  "triaged": "2026-11-22",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/lib.rs::cli#the Mode A engine's command": {
@@ -22538,15 +22538,15 @@
  "rust/mode_a/src/lib.rs::cli_in#the Mode A engine's command": {
   "body": "2192672b113b567f",
   "claim": "the Mode A engine's command - NONE: dispatch to its tools, deciding nothing about a building",
-  "code": "834d55b692d39519",
-  "core": "db6ed9621979df96",
+  "code": "34c77b75c260da7f",
+  "core": "258efe4b0966e0d7",
   "date": "2026-11-19",
   "note": "the new `caption-counts` arm only picks between loading a compound program and reading a sheet, then passes it to the counting report; it decides nothing about a building",
   "pages": {},
-  "reads": "a7ff36bb6a2d5fba",
+  "reads": "3ada51898a9c2342",
   "research": "",
   "rests": [],
-  "triaged": "2026-11-21",
+  "triaged": "2026-11-22",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/lib.rs::door#the Mode A engine's command": {
@@ -27484,15 +27484,14 @@
  "rust/mode_a/src/pool_sweep.rs::pool#the Mode A pool sweep": {
   "body": "727dbd6943ce395e",
   "claim": "the Mode A pool sweep - NONE: the pool's sheets put through the registered checks, deciding nothing about a building",
-  "code": "0ca7119d5f7c8be9",
-  "core": "ca414fad543b803c",
+  "code": "8c56aa57dc64352b",
+  "core": "ec0a3a274c5440b0",
   "date": "2026-11-19",
   "note": "lists and loads the sheets (I/O), composing the declared generated ones",
   "pages": {},
-  "reads": "10bf7225477586b9",
   "research": "",
   "rests": [],
-  "triaged": "2026-11-19",
+  "triaged": "2026-11-22",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/pool_sweep.rs::red_fixtures#the Mode A pool sweep": {
