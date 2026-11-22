@@ -1,0 +1,40 @@
+{
+  "utc": "2026-11-22T13:36:01Z",
+  "target": "done",
+  "scope": "reference",
+  "seconds": 103,
+  "result": "failed: tree moved",
+  "commit": "965bbbd277",
+  "host": {
+    "load": [
+      2.26,
+      25.03
+    ],
+    "mem_avail_mb": [
+      8486,
+      8987
+    ],
+    "cpu_temp_c": [
+      87.0,
+      92.0
+    ],
+    "stall_s": {
+      "cpu": 18.7,
+      "io": 3.3,
+      "io_full": 1.0,
+      "memory": 1.0
+    },
+    "throttle_ms": {
+      "core": 3136,
+      "package": 1354
+    }
+  },
+  "phases": {
+    "preflight": 8.0,
+    "reference": 0.0,
+    "counters-inert": 1.0,
+    "static": 97.0,
+    "format": 0.0,
+    "seeds": 6.0
+  }
+}
