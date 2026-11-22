@@ -144,6 +144,8 @@ MVP: T001-T005 and the first guard, `pair-hooks` (T006): the dispatcher in every
       research: rendering
 - [ ] T325 lands before T158: two office-hall pop-ups' leftovers (T302 bundle, modal-form 2026-11-22): sheet/clerks--room's Guesses tab says 'about 40 by 17 ft' while Hayakawa draws the clerks' room about 24 x 17 ft - state the size per sheet or as a range; and sheet/official-study's form NOTEs (split its long paragraph; drop the 'by contrast' framing); its modal checks run
       research: rendering
+- [ ] T326 lands before T158: ochiba-roundtrip-test's three outside rows (building-review 2026-11-22, engine key 8198de677351, O1-O3; carried by the round arbiter's ask:449-land4-buildreviews): O1 the clerks' room drawn as its own 28 x 18 ft building on the outer court's west wall, where docs/building-programs.md makes it a room of the hall and Ochiba's hand sheet seats it in the hall's back row; O2 the office hall has no rear door toward the household gate, which the hand sheet has (feature 267 pass 2; 0104: the visitors' way runs on through the office to the house); O3 the inner court's walls have no postern, so the night-soil collector reaches the house's two privies only through the main gate, forecourt, nakamon and service yard - a research pass on the collector's way first; research: rendering
+      research: rendering
 - [ ] GM review (make gm-reviewed F=449) [lands-open]
       research: rendering
       verify: the GM reviewed every row (make gm-review lists them)
