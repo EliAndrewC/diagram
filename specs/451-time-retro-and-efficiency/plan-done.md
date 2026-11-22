@@ -7939,3 +7939,107 @@ performance checklist's answers are given in brief:
 **Performance work?** no.
 
 
+<!-- plan-archive: archived 2026-11-22 -->
+### T105 (land-alone's take-back gave up three times on 2026-11-21, each a hand merge: at the T82-T101 landing the session's `make ledger-owed` and the landing wrote rows for the same four passes and the clone could not take the tip - dev/review-ledger.md 'conflicts' - and plan.md and tasks.md then needed a hand three-way merge; at T113's landing the tick archived T113's section beside the clone's new sections and git's line merge called the adjacent hunks one conflict - measured 2026-11-21 (each shape replayed through the script's own step 7, below))
+
+- **Approach**: measured first, then the take's merge fixed in `scripts/land-alone.sh` and the hand write of the landing's rows
+  refused, red first on all three shapes.
+  - THE REPLAY, measured 2026-11-21 (`/tmp/t105/replay.py`: a scratch repository, each file's base committed as HEAD, the tip's
+    committed on it, the clone's side uncommitted in the tree, then the script's own step 7, `py take`, from HEAD's script
+    `/tmp/t105/land-alone.before.sh`). Shape 1, the T82-T101 ledger (base `e93d8cda07`, the clone's rows as it committed them in
+    `0206de2996`, the tip `9858c972d7`): the same four passes in the same order on both sides, their `applied or filed as` cells
+    different (the session's `WRITE="451 T82, T95, T97, T101 (each CLEAR by its own builder)"`, the landing's `the plan-verdict
+    record (make plan-verdict)`), so `git merge-file` conflicts and the ledger was no sectioned file: exit 1, nothing moved. The
+    hand merge `e2606d52ab` kept both sets, 7,772 lines against the base's 7,764, measured 2026-11-21 (`wc -l` of the three
+    sides): 8 rows for 4 passes. Byte-identical additions already merge, measured 2026-11-21 (`git merge-file` on that base, exit
+    0), so the shape's "same way" is the same passes. Shape 2, plan.md and tasks.md after that landing (base `e93d8cda07`, tip
+    `9858c972d7`; the clone's uncommitted copy was not kept, so its side is built: the base with the sections before and after each
+    archived one edited - T80, T83, T94, T96, T98, T100 - and a new T102, `/tmp/t105/mk_s2_ours.py`): plan.md exit 1, the pieces
+    merge giving up on T80, T94, T96 and T100 (`/tmp/t105/why.py`), each the section before an archived one, the tick's archive marks
+    read as the tail of its text; tasks.md merges by piece. With the ledger beside them, as the landing had it, the take stopped at
+    dev/review-ledger.md, the first file in its order, and never tried plan.md, measured 2026-11-21 (`replay.py`). Shape 3, T113's
+    landing (the session's sides, `t113-take/`): plan.md exit 1 on T112's section, the tick's two T113 marks at the end of T112's
+    text, which the clone had rewritten (2,024 bytes at base, 2,206 at the tip, 13,104 in the clone), measured 2026-11-21
+    (`why.py`); tasks.md and plan-review.json merge already.
+  - THE MERGE: every file through git's line merge first; a sectioned file whose line merge conflicts - plan.md, tasks.md,
+    plan-review.json and now dev/review-ledger.md - merged piece by piece; any other file's hunks both sides only added to taken
+    whole where one side's added lines hold the other's in order (`merge3`: `git merge-file --diff3`, the conflict mark 31
+    characters long). In plan.md an archive mark (`<!-- plan-archive: `, `plan/sections.rs`'s mark) is a piece of its own, never
+    the tail of the section before it, and a clone's new piece goes after the tip's new pieces beside its anchor, so the marks stand
+    where the archived section was. The ledger is cut at each line, a measured row keyed by its pass - its check, wall and tokens
+    cells, the key `settle::unanswered` answers a pass by - and where both sides answer one pass the tip's row is kept, the clone's
+    dropped. A piece both sides changed is merged by line before it conflicts; a piece the tip archived that the clone changed still
+    conflicts. Every file is merged before any exit, every conflict named at once, a sectioned file's by its piece (`T2's section,
+    changed otherwise on both sides`), and a conflict moves nothing.
+  - THE REFUSAL, of the hand write: `make ledger-owed WRITE=` passes `--by-hand`, and that write refuses a recorded plan review's row
+    as the landing's own (`rows::recorded_plan_review`, the test `--write-plan-reviews` writes by), naming the count, writing the rest.
+    Every push route writes those rows itself: `make land`'s first pass (`land/cheap.rs`, `write_ledger`), `scripts/land-tooling.sh`
+    and `sync-with-main.sh`'s push, measured 2026-11-21 (`grep` of every `ledger-owed` caller). Narrower than the landing's two sets,
+    by decision: the landing also writes each pass traced to its feature (`--write specs/<F>/`), which the other two routes do not,
+    so a hand write of those stays allowed, and a row of one written on both sides is the merge's (the tip's kept). The landing and
+    the page-session runner pass no `--by-hand`.
+  - AFTER, measured 2026-11-21 (`replay.py`, the fixed script; `/tmp/t105/props.py`): shape 1 exit 0, the ledger the tip's - the
+    landing's four rows, the clone's four dropped as the same passes; shape 2 exit 0, plan.md's 103 of 103 clone pieces as the clone
+    wrote them, T82, T95, T97 and T101 gone, the tip's 75 marks all kept in order, tasks.md 67 of 67; shapes 1 and 2 together exit 0,
+    3 files merged; shape 3 exit 0, 118 of 118 clone pieces kept, T113 gone, the tip's 78 marks kept in order, the clone's own
+    `T57 to T111` mark kept, equal to the hand resolution but for one blank line it put after the marks, where the tick puts none;
+    tasks.md equal to it. The take's whole replay of shape 3, 0.22 s before and after, measured 2026-11-21 (`/usr/bin/time`).
+  - STEP 2 UNMOVED but for marks, measured 2026-11-21 (`/tmp/t105/stagecmp.py`: `splice` before and after for each task of both
+    clone sides): 26 of 28 plan.md tasks and 21 of 21 tasks.md (shape 2), 28 of 30 and 22 of 22 (shape 3) staged the same; the 4
+    moved stage the task's own text and no longer the mark after it - a blank line beside T101's mark, and the clone's own `T57 to
+    T111` mark HEAD lacked - each a correction, step 2 meaning the task's own pieces alone.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+<!-- plan-archive: archived 2026-11-22 -->
+### T105 Approach (checklist part A)
+
+1. **The goal, in the world.** No map changes. A task landing alone ends with the clone at the landed tip, its uncommitted work
+   kept, when the landing wrote ledger rows the session also wrote or archived a section beside another task's edit; only the same
+   piece changed otherwise on both sides stops it, named; and a session's hand write leaves the landing's own rows to the landing.
+2. **The constraints.** T105's line (identical additions merged, the sectioned merge on every file it reports, red first on both
+   shapes and on T113's pair, the hand rows refused as the landing's own); FR-012 (red first); constitution XIII (the existing
+   landing-alone tests green, step 2 unmoved but for the task's own text) and XIV.
+3. **Where each comes from.** O: the T82-T101 landing's sides and its hand merge `e2606d52ab`; O: T113's sides
+   (`t113-take/`, the session's scratch copies); O: the replays (the Approach). No G or R: tooling.
+4. **Do they describe the world here?** Measured 2026-11-21 (`replay.py`): shapes 1 and 3 from the real sides, shape 2 from the
+   real base and tip with a built clone side (its uncommitted copy not kept), each red through the unfixed script's own step 7.
+5. **The order.** After T88 and T101 (the take and its sectioned merge); apart from T83's `shared::tree` and T87's guards, no file
+   shared; it lands alone.
+6. **The exits.** Green: the three take tests and the hand-write test red first and green, the crates' other tests green, the
+   closing checks green but for another task's red reported apart. Red: what failed recorded and the task set down, a claim that it
+   cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None: each shape replayed before code was written. The merge of the clone's own commits since the landing
+   began (`merge-tree`) is not one of the three: at T82-T101 the clone committed its rows at 14:41, after the take's exit-4 advice
+   ("once it is committed, git merge"), measured 2026-11-21 (`git log` of `0206de2996` and the tick `9858c972d7`, 14:40).
+8. **The budget.** One landing. The take runs `git merge-file` once a held file, as before; the pieces only on its conflict; the
+   shape-3 replay 0.22 s either side, measured 2026-11-21 (`/usr/bin/time`).
+9. **Done, measured.** Red first, measured 2026-11-21 (`make rust-test CRATE=rust/gate/crates/land` against the unfixed script,
+   `/tmp/t105/red-land.log`): 87 passed, 3 failed - the take tests, exit 4 on the ledger and on T113's plan.md, and the conflict
+   named without its section, only the first file. The hand write, measured 2026-11-21 (`make rust-test
+   CRATE=rust/gate/crates/reviews` on HEAD's two files, `/tmp/t105/red-reviews.log`): 165 passed, 1 failed, red as an unknown flag
+   (the defect is the write itself, which the test's second half, the write without `--by-hand`, shows writing the row). Fixed,
+   measured 2026-11-21 (`make rust-test` and `l7r-gate.sh rust lint`, `format --check` and `cover` on each crate,
+   `/tmp/t105/it-*.log`): land 90 passed, 0 failed, reviews 166 passed, 0 failed, lint, format and cover clean on both; the
+   closing checks, measured 2026-11-21 (`make closing-checks T=T105 F=451`, `/tmp/t105/closing3.log`): GREEN, static 185 s, hooks-test 146 s, quick 2 s; two earlier runs red on
+   this task's own `format_push_string` lints, each fixed.
+10. **Before moving a constant.** No research constant. The conflict mark's length, 31, is a CONVENTION of the parse (git's 7 is a
+    Markdown line's reach), labeled at its point of use.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** A defect, fixed here: a builder saw its clone left behind the landed tip, its plan.md, tasks.md and ledger
+    to merge by hand, three times in a day; now the clone takes the tip with its work kept.
+
+**Found and left?**
+- THE DUPLICATE ROWS: main's dev/review-ledger.md held 8 rows for the 4 T82-T101 plan reviews (the hand merge `e2606d52ab`),
+  measured 2026-11-21 (`wc -l` of the merge's three sides, the Approach), so `make review-census` counted spec-fidelity's
+  `judgment` class 4 high. Fixed here: the clone's 4 rows (the session's `applied or filed as 451 T82, T95, T97, T101 (each CLEAR
+  by its own builder)` cell) removed and the tip's 4 kept, as T105's ledger rule takes them, each of the 4 answered by another row
+  of the same pass (its check, wall and tokens cells), measured 2026-11-21 (a Python read of the ledger); `make review-census`'s
+  spec-fidelity `judgment` 1,526 before and 1,522 after, its `runs` 1,576 both, measured 2026-11-21 (`make review-census`,
+  `/tmp/t105/census-before.txt`, `census-after.txt`); and no T82-T101 pass owed after, measured 2026-11-21 (`make ledger-owed`: the
+  2 plan reviews it names are today's, 194 s and 202 s).
+
+**Performance work?** No: a correctness fix of the landing's take; its cost measured (item 8).
+
+
