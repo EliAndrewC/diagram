@@ -51,7 +51,7 @@ fn a_landing_of_t1_leaves_t2_s_open_plan_review_and_writes_its_own() {
     let owed_t1 = before.stderr.contains("feature 449-x, task T1");
     let owed_t2 = before.stderr.contains("task T2") || before.stderr.contains("task T9");
     assert_eq!((before.code, owed_t1, owed_t2), (1, true, false));
-    assert!(before.stdout.contains("2 open task(s) left to their own landings, which write their rows (451 T147): 449-x T2, 451-y T9"));
+    assert!(before.stdout.contains("2 open task(s) left to their own landings and sessions (451 T147, T157), which write their rows: 449-x T2, 451-y T9"));
     // the landing's own write (a 449 landing's, as `write_ledger` runs it), then its check: nothing refused, T1's row written
     let wrote = cli(
         &args(&[&L[..], &["--write", "specs/449-x/ (make land)"]].concat()),
@@ -140,7 +140,7 @@ fn an_open_task_s_plan_review_alone_refuses_nothing_and_says_so() {
     let got = cli(&args(&[&L[..], &["--refuse"]].concat()), &env);
     assert_eq!((got.code, got.stderr.as_str()), (0, ""));
     let said = got.stdout.contains(
-        "1 open task(s) left to their own landings, which write their rows (451 T147): 449-x T2",
+        "1 open task(s) left to their own landings and sessions (451 T147, T157), which write their rows: 449-x T2",
     );
     assert!(said);
     // the same pass the landing of T2 itself lands refuses
@@ -155,4 +155,141 @@ fn an_open_task_s_plan_review_alone_refuses_nothing_and_says_so() {
         &env,
     );
     assert_eq!(own.code, 1);
+}
+
+/// 451 T157's world: feature 449-x with T1-T4 started (T3 ticked) and T5 never started, a page session `ps` whose brief is T2's, and a
+/// builder `b1` of the bundle T2, T4; each pass's transcript under `<session>/subagents/`, its meta beside it where `meta` gives one.
+fn record_world(
+    tag: &str,
+    log: &[String],
+    metas: &[(&str, &str, serde_json::Value)],
+) -> (
+    l7r_shared::tempdir::Held<std::path::PathBuf>,
+    super::super::Env,
+) {
+    let (d, env) = world(tag, log);
+    put(
+        &env.cwd,
+        "specs/449-x/tasks.md",
+        "- [ ] T1 one\n- [ ] T2 two\n- [x] T3 three\n- [ ] T4 four\n- [ ] T5 five\n",
+    );
+    put(
+        &env.cwd,
+        "specs/449-x/briefs/t2-checks.md",
+        "# Brief - feature 449 bundle T2 (0229), session 2: check and apply\n",
+    );
+    let starts = ["T1", "T2", "T3", "T4"]
+        .map(|t| {
+            json!({"feature": "449-x", "task": t, "utc": "2026-11-22T16:16:21Z"}).to_string() + "\n"
+        })
+        .concat();
+    put(&env.cwd, ".git/task-starts.jsonl", &starts);
+    let brief = env.cwd.join("specs/449-x/briefs/t2-checks.md");
+    // a brief whose first line names no task is read by its file name
+    put(
+        &env.cwd,
+        "specs/449-x/briefs/t4-write.md",
+        "# Brief - the shrine pages\n",
+    );
+    put(
+        &env.cwd,
+        ".git/page-sessions/index.txt",
+        &format!(
+            "old /nowhere/specs/1-y/briefs/t9-checks.md\nps {}\nps2 {}\n",
+            brief.display(),
+            env.cwd.join("specs/449-x/briefs/t4-write.md").display()
+        ),
+    );
+    let projects = d.join("home/.claude/projects/p");
+    for (session, agent, meta) in metas {
+        let sub = projects.join(session).join("subagents");
+        put(
+            &sub,
+            &format!("agent-{agent}.jsonl"),
+            &transcript(&json!("Run the check"), "CLEAR"),
+        );
+        if !meta.is_null() {
+            put(&sub, &format!("agent-{agent}.meta.json"), &meta.to_string());
+        }
+    }
+    (d, env)
+}
+
+#[test]
+fn another_started_task_s_record_passes_are_its_own_and_the_landing_s_own_still_refuse() {
+    let log = [
+        pass("quote-check", "q1", "pass-q1 Run quote-check on the bundle /tmp/l7r-check/q-0229-quote-check-t2/MANIFEST.md (question 0229)", &json!({})),
+        pass("record-format", "q2", "pass-q2 Run record-format on the bundle /tmp/l7r-check/q-0229-record-format/MANIFEST.md", &json!({})),
+        pass("source-reader", "q3", "pass-q3 Run source-reader on the bundle", &json!({})),
+        pass("modal-form", "q4", "pass-q4 Judge the four pop-ups", &json!({})),
+        pass("impl-drift", "q5", "pass-q5 Judge the claims", &json!({})),
+        pass("quote-check", "q6", "pass-q6 449 T5 quote-check", &json!({})),
+        pass("record-format", "q7", "pass-q7 Run record-format", &json!({})),
+        pass("impl-drift", "q8", "pass-q8 T1 claims re-check", &json!({})),
+        pass("building-review", "q9", "pass-q9 449 T2 building-review", &json!({})),
+        pass("source-reader", "q10", "pass-q10 Run source-reader", &json!({})),
+    ];
+    let metas = [
+        ("main", "q1", json!(null)),
+        (
+            "ps",
+            "q2",
+            json!({"description": "record-format 0229", "spawnDepth": 1}),
+        ),
+        (
+            "main",
+            "q3",
+            json!({"description": "449 T3: source-reader x", "spawnDepth": 1}),
+        ),
+        (
+            "main",
+            "b1",
+            json!({"description": "449 bundle T2, T4: the record bundle", "spawnDepth": 1}),
+        ),
+        (
+            "main",
+            "q4",
+            json!({"description": "Modal-form on four pop-ups", "spawnDepth": 2, "parentAgentId": "b1"}),
+        ),
+        (
+            "main",
+            "q5",
+            json!({"description": "449 T1: impl-drift on the claims", "spawnDepth": 1}),
+        ),
+        (
+            "main",
+            "q7",
+            json!({"description": "record-format 0217", "spawnDepth": 1}),
+        ),
+        ("main", "q9", json!(null)),
+        (
+            "ps2",
+            "q10",
+            json!({"description": "source-reader kuri", "spawnDepth": 1}),
+        ),
+    ];
+    let (_d, env) = record_world("left-record", &log, &metas);
+    let landing = [
+        &L[..],
+        &["--refuse", "--landing", "449-x", "--tasks", "T1 T9"],
+    ]
+    .concat();
+    let got = cli(&args(&landing), &env);
+    // T2's bundle-named, page-session and builder passes and its own-words one are T2's; T3 ticked, T5 never started, a pass naming
+    // nothing, and the landing's own T1 (by its description, and bare) still refuse
+    let owed = ["q1", "q2", "q3", "q4", "q5", "q6", "q7", "q8", "q9", "q10"]
+        .map(|q| got.stderr.contains(&format!("pass-{q} ")));
+    let want = [
+        false, false, true, false, true, true, true, true, false, false,
+    ];
+    assert_eq!((got.code, owed), (1, want));
+    let said = got.stdout.contains("the passes of 2 open task(s) left to their own landings and sessions (451 T147, T157), which write their rows: 449-x T2, 449-x T4");
+    assert!(said, "{}", got.stdout);
+    // the landing of T2 itself owes them all
+    let own = cli(
+        &args(&[&L[..], &["--refuse", "--landing", "449-x", "--tasks", "T2"]].concat()),
+        &env,
+    );
+    let mine = ["q1", "q2", "q4", "q9"].map(|q| own.stderr.contains(&format!("pass-{q} ")));
+    assert_eq!((own.code, mine), (1, [true; 4]));
 }

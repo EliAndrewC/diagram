@@ -92,4 +92,56 @@ mod tests {
         assert_eq!(Real.in_flight(&dir), Ok(Vec::new()));
         let _ = Real.scope_split(&dir, "", &[], &[]);
     }
+
+    /// 451 T157: the first pass's own ask (`cheap.rs`'s `--refuse --landing --tasks`), through the real ledger, lands past a record
+    /// pass of another started task (449-x T2, named by its bundle) and still refuses one naming the landing's own T1.
+    #[test]
+    fn the_first_pass_leaves_another_started_task_s_record_pass_and_refuses_its_own() {
+        let dir = repo("inproc-t157");
+        let root = dir.to_path_buf();
+        put(&dir, "dev/review-ledger.md", "| a |\n");
+        put(&dir, "specs/449-x/tasks.md", "- [ ] T1 one\n- [ ] T2 two\n");
+        let starts = ["T1", "T2"].map(|t| format!("{{\"feature\": \"449-x\", \"task\": \"{t}\", \"utc\": \"2026-11-22T16:16:21Z\"}}\n"));
+        put(&dir, ".git/task-starts.jsonl", &starts.concat());
+        let line = |agent: &str, subject: &str| {
+            format!("{{\"date\": \"2026-11-22\", \"check\": \"quote-check\", \"subject\": \"{subject}\", \"agent\": \"{agent}\", \"segment\": 0, \"wall\": \"5 s\", \"tokens\": \"1k in (0k cached) / 0.5k out\"}}\n")
+        };
+        let other = line(
+            "o1",
+            "Run quote-check on the bundle /tmp/l7r-check/q-0229-quote-check-t2/MANIFEST.md",
+        );
+        put(&dir, "passes.jsonl", &other);
+        let (log, ledger) = (root.join("passes.jsonl"), root.join("dev/review-ledger.md"));
+        let (log, ledger, none) = (
+            log.to_string_lossy(),
+            ledger.to_string_lossy(),
+            root.join("no-transcripts"),
+        );
+        let none = none.to_string_lossy();
+        let ask = |tasks: &str| {
+            let words = [
+                "--log",
+                &log,
+                "--transcripts",
+                &none,
+                "--ledger",
+                &ledger,
+                "--refuse",
+                "--landing",
+                "449-x",
+                "--tasks",
+                tasks,
+            ];
+            Real.ledger(&words.map(str::to_owned), &root)
+        };
+        let left = ask("T1");
+        let (code, owed) = (left.code, left.stderr.contains("| ? |"));
+        assert_eq!((code, owed), (0, false));
+        assert!(left.stdout.contains("449-x T2"), "{}", left.stdout);
+        let own = line("m1", "449 T1 quote-check of the landing's own page");
+        put(&dir, "passes.jsonl", &[other, own].concat());
+        let refused = ask("T1");
+        let (code, owed) = (refused.code, refused.stderr.contains("449 T1 quote-check"));
+        assert_eq!((code, owed), (1, true));
+    }
 }

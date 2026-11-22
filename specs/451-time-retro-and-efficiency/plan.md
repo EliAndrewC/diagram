@@ -2491,29 +2491,62 @@ it measures the builders' loop (FR-003), making nothing faster itself; its own o
 **Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
 
 
-### T157 (<why: the finding or measurement that files it>)
+### T157 (a landing refused on other started tasks' record and pop-up check passes, which `make ledger-owed WRITE=` cannot write as the landing session's and `LEDGER_ROWS_OK` does not reach in the first pass)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: measured first, then T147's rule (`reviews`' `ledger_passes/left.rs`, the one owed set the first pass, the push's
+  row and `make land-tooling` all read) widened from plan reviews to every pass, read by a new `left/whose.rs`:
+  - BEFORE, measured 2026-11-22 (this clone, `l7r-gate reviews ledger-owed --refuse --landing 451-... --tasks "T153 T157"`, the
+    command `cheap.rs` asks): 17 passes refused - 3 of T153's own plan reviews and 14
+    quote-check, record-format, translation-check, source-reader and modal-research passes, none this landing's. The day's 26 owed record
+    and pop-up passes, each agent's `meta.json` and session directory read: 25 named by their page session's brief
+    (`page-sessions/index.txt`: `t283-checks.md`, `t275-checks.md`, `t197-g1-checks.md`, `t254-g2-checks.md`, `t274-checks.md`), one
+    (modal-research) by its builder's description (`449 T260, T282-T287: the shrine and record bundle`). The prompts' BODIES named other
+    tasks besides (a modal-form pass T284, T260, T289 and T300; building-review passes the landed T276), so a body is never read.
+  - WHOSE A PASS IS (`whose.rs`), the first source that names a task, in the order 449 T258's `check_bundle_hooks/own.rs` reads a live
+    dispatch: its OWN WORDS - the logged subject (a task id, the feature the number before it; or a check bundle's `-t<n>` suffix,
+    `q-0229-quote-check-t283`), else its meta file's `description`; its BUILDER - the meta's `parentAgentId` read by
+    `set_down_hooks::builder_brief`, a bundle's every member; its PAGE SESSION - the transcript's session directory in
+    `page-sessions/index.txt`, the brief's `specs/<feature>/` and its first line's task, else its file name's (`t4-write.md`). A task
+    named bare takes the feature that started it (`event_log_hooks::started`); a number names its unique `specs/<n>-*`.
+  - THE RULE: a non-plan-review pass is left - named on stdout, refusing nothing - only where that task is STARTED
+    (`task-starts.jsonl`), ticked in neither `tasks.md` nor `tasks-done.md`, and no task it names is one this landing lands; a pass
+    naming nothing, a task never started, a ticked task's, and the landing's own (by any source, bare or with its feature) still
+    refuse with `make ledger-owed WRITE=` named. Plan reviews keep T147's rule unchanged. Started is required (not merely open) because
+    an open task nobody started has no landing or session coming; ticked is excluded because `task-starts.jsonl` keeps every landed
+    task's start (740 rows, measured 2026-11-22).
+  - `own.rs` NOT REUSED AS CODE (a decision, labeled): it reads a hook's payload and `L7R_PAGE_SESSION` and lives in `l7r_guard`, which
+    no gate crate may name (`check guard-deps`); `whose.rs` reads the same sources after the fact from what `l7r_shared` exports
+    (`builder_brief`, `starts`, `started`, `common_git_dir`), its regexes copied from `own.rs`'s. No guard source is edited.
+  - ONE LISTING: the transcripts are listed once for the whole refusal (`settle::Transcripts`, made `pub(super)` and shared), and only
+    for passes whose subject names no task.
+  - THE NOTE: `note()` now says "the passes of N open task(s) left to their own landings and sessions (451 T147, T157), which write
+    their rows" - a record pass's row is written by the session that ran it, not by a landing; T147's pins follow the new words.
+  - AFTER, measured 2026-11-22 (the same command, the new binary): 3 passes refused, all T153's own plan reviews (written by this
+    landing's own write); 4 tasks named as left (449 T260, T282, T283, T289). A 449 landing of T252 asked the same way: its passes left
+    to 449 T260, T283, T289, T282 and 451 T153.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| the reading | `reviews`' `ledger_passes/left/tests.rs` `another_started_task_s_record_passes_are_its_own_and_the_landing_s_own_still_refuse` (a bundle suffix, a page session's brief by first line and by file name, a builder's bundle and own words left; a ticked task, an unstarted one, a pass naming nothing, the landing's own by description and bare still refused; the landing of T2 owes them all) - red with `clues.left_to` stubbed to keep every pass (1 failed, measured 2026-11-22) | n/a - no engine code | none | n/a |
+| the first pass | `land`'s `inproc.rs` `the_first_pass_leaves_another_started_task_s_record_pass_and_refuses_its_own` (`cheap.rs`'s own `--refuse --landing --tasks` through the real in-process ledger) - red with the same stub (1 failed, measured 2026-11-22) | n/a | none | n/a |
 
 ### T157 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** No map changes. A landing refuses for the passes it owes - its own tasks' and every pass no other started task will answer - and lands past another started task's record and pop-up checks, which that task's session or landing writes.
+2. **The constraints.** T157's line; 451 T147 (the plan-review rule kept, the shared owed set); 449 T258 (`own.rs`'s order of sources); 451 T66 (`check guard-deps`: no gate crate names `l7r_guard`); FR-012 (red first).
+3. **Where each comes from.** G: none beyond the task line. O: the before and after measurements above, each dated with its method. R: none - tooling, no research question.
+4. **Do they describe the world here?** Yes: the 26 owed record and pop-up passes' sources were read from this clone's own pass log, meta files and page-session index, measured 2026-11-22 (each owed pass's agent id looked up under `~/.claude/projects/*/*/subagents/`, its `meta.json` and its session in `page-sessions/index.txt` printed).
+5. **The order.** Measured first; the two pins written and shown red; `whose.rs`; both crates' tests, cover, lint and format.
+6. **The exits.** Green: both pins pass and both crates' tests, cover, lint and format are clean. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None: every refusal on owed rows reads `left::split` (found by T147's grep, `ledger-owed` in `scripts/` and `rust/gate/crates/`), so the one change reaches all three.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** `make closing-checks T=T157 F=451` green; the after-measurement above.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** A defect: a CLEAR, committed landing refused on passes its own work could not answer (449 T252 on 21, observed 2026-11-22; this landing of 451 T153 and T157 on 14, measured above).
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?**
+- A pass that names nothing (an impl-drift `DECIDE_OK` dispatch, a check-wave unit, a pass whose session is no page session and whose builder's description names no task) still refuses every landing until the session that ran it writes and commits its row (`make ledger-owed WRITE=`): working as designed - no landing can know whose it is - so not a defect, and not filed.
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** no.
 

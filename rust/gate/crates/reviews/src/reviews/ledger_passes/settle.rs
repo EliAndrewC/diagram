@@ -66,13 +66,18 @@ fn same_stat(stat: &[Value], kept: Option<&Value>) -> bool {
 
 /// The newest transcript of each agent, from ONE listing of every subagent transcript made on the first lookup (a glob per pass was most
 /// of this check's time): a later transcript replaces an earlier only when strictly newer, as `_Transcripts` kept the first of a tie.
-struct Transcripts<'a> {
+pub(super) struct Transcripts<'a> {
     root: &'a Path,
     index: Option<BTreeMap<String, (f64, PathBuf)>>,
 }
 
-impl Transcripts<'_> {
-    fn find(&mut self, agent: &str) -> Option<PathBuf> {
+impl<'a> Transcripts<'a> {
+    /// The transcripts under `root`, listed on the first lookup; `left`'s reading of whose a pass is (451 T157) shares the one listing.
+    pub(super) const fn new(root: &'a Path) -> Self {
+        Self { root, index: None }
+    }
+
+    pub(super) fn find(&mut self, agent: &str) -> Option<PathBuf> {
         let root = self.root;
         let index = self.index.get_or_insert_with(|| {
             let mut found: BTreeMap<String, (f64, PathBuf)> = BTreeMap::new();
@@ -145,7 +150,7 @@ pub fn settled(
     kept_file: Option<&Path>,
 ) -> Result<Vec<Pass>, String> {
     let mut kept = read_kept(kept_file);
-    let (mut index, mut added, mut out) = (Transcripts { root, index: None }, false, Vec::new());
+    let (mut index, mut added, mut out) = (Transcripts::new(root), false, Vec::new());
     for p in passes {
         let key = format!(
             "{}#{}#{}#{}",

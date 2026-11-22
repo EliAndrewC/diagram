@@ -1146,6 +1146,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-22",
    "declared": "spec-fidelity"
+  },
+  "### T157 (a landing refused on other started tasks' record and pop-up check passes, which `make ledger-owed WRITE=` cannot write as the landing session's and `LEDGER_ROWS_OK` does not reach in the first pass)": {
+   "sha256": "13c0c6a3c1e3575df22636589550443a21afaf4cc5e4d5bf94571bdbcce9a12b",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-22",
+   "declared": "spec-fidelity"
+  },
+  "### T157 Approach (checklist part A)": {
+   "sha256": "318daa69bcbf2bdafed8349325f9d31dab5cc24805705a8bb4200263c30b26fe",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-22",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -13758,6 +13770,100 @@
      "why": "Consequences of measuring map steps, stated and measured; no map behavior changed."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-22",
+   "blocks": [
+    "### T157 (a landing refused on other started tasks' record and pop-up check passes, which `make ledger-owed WRITE=` cannot write as the landing session's and `LEDGER_ROWS_OK` does not reach in the first pass)",
+    "### T157 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "widen-left-to-every-pass",
+     "summary": "T147's left rule widened from plan reviews to every non-plan-review pass, read by a new left/whose.rs, through the one owed set the first pass, the push's row and make land-tooling all read",
+     "class": "within",
+     "why": "The task line names a landing refused on other started tasks' record and pop-up check passes. Widening to every non-plan-review pass does not drop a row: each left pass is still owed by its own task's landing or session, and the refusal stays on everything not attributable to another started, unticked task. No GM clause or FR touches the ledger refusal, so this narrows nothing asked."
+    },
+    {
+     "id": "whose-source-order",
+     "summary": "Whose a pass is: first source naming a task, in own.rs's order - own words (logged subject, check-bundle -t<n> suffix, meta description), then builder (parentAgentId's brief), then page session (index.txt brief's feature and first-line task, else file name); prompt bodies never read",
+     "class": "within",
+     "why": "A design of the attribution the task needs, grounded in a dated measurement (25 of 26 named by page session, 1 by builder) and in the measured fact that prompt bodies name unrelated tasks. Implements the task; narrows nothing."
+    },
+    {
+     "id": "bare-task-and-number-resolution",
+     "summary": "A bare task id takes the feature that started it (event_log_hooks::started); a number names its unique specs/<n>-*",
+     "class": "within",
+     "why": "Resolution detail needed to attribute a pass; carries no carve-out from the task line."
+    },
+    {
+     "id": "started-not-merely-open",
+     "summary": "A pass is left only where its task is STARTED (task-starts.jsonl), not merely open",
+     "class": "within",
+     "why": "The task line itself says 'other started tasks''. An open task nobody started has no landing or session coming to write the row, so leaving its pass would lose the row."
+    },
+    {
+     "id": "ticked-task-still-refuses",
+     "summary": "A pass of a ticked task (in tasks.md or tasks-done.md) still refuses, though task-starts.jsonl records it as started",
+     "class": "within",
+     "why": "The task line's 'started tasks' are tasks whose own landings and sessions will write their rows; a ticked task's landing has already happened, so leaving its pass would leave the row unwritten forever, defeating the ledger. task-starts.jsonl keeps every landed task's start (740 rows), so 'started' alone would leave almost everything. No known instance is left: the after-measurement refuses 3 passes, all the landing's own. A hypothetical refusal is not a known defect left."
+    },
+    {
+     "id": "never-started-task-still-refuses",
+     "summary": "A pass naming a task never started still refuses",
+     "class": "within",
+     "why": "Outside the task line (not a started task), no landing or session is coming to write it, and the after-measurement shows no such pass in today's owed set: no known defect left."
+    },
+    {
+     "id": "nameless-pass-still-refuses",
+     "summary": "A pass whose every source names no task still refuses every landing until its session writes its row (found and left, judged working as designed, not filed)",
+     "class": "within",
+     "why": "Not a pass of another started task, so outside the task line; no landing can know whose it is, and leaving it would let an unattributable pass escape the ledger. None of the 26 measured owed passes named nothing (all were attributed), and the after-measurement's 3 refusals are the landing's own, so no known instance is left unfixed."
+    },
+    {
+     "id": "landings-own-still-refuse",
+     "summary": "The landing's own passes, by any source, bare or with its feature, still refuse with make ledger-owed WRITE= named",
+     "class": "within",
+     "why": "The task line is about OTHER tasks' passes; the landing's own are writable by WRITE= as the landing session's, so refusing them is the existing behavior the task leaves intact."
+    },
+    {
+     "id": "plan-reviews-keep-t147",
+     "summary": "Plan-review passes keep T147's rule unchanged",
+     "class": "within",
+     "why": "The task line names record and pop-up check passes; plan reviews are T147's already-settled case."
+    },
+    {
+     "id": "own-rs-not-reused-as-code",
+     "summary": "449 T258's own.rs is not reused as code (it lives in l7r_guard, which no gate crate may name per check guard-deps); whose.rs reads the same sources after the fact from l7r_shared, regexes copied; no guard source edited",
+     "class": "within",
+     "why": "Implementation choice forced by the T66 crate rule; same sources and order, no change to what the task delivers."
+    },
+    {
+     "id": "one-transcript-listing",
+     "summary": "Transcripts listed once per refusal (settle::Transcripts made pub(super) and shared), only for passes whose subject names no task",
+     "class": "within",
+     "why": "Cost choice inside the task; attribution unchanged."
+    },
+    {
+     "id": "note-wording",
+     "summary": "note() reworded to 'the passes of N open task(s) left to their own landings and sessions (451 T147, T157), which write their rows'; T147's pins follow",
+     "class": "within",
+     "why": "Message follows the widened rule; narrows nothing."
+    },
+    {
+     "id": "ledger-rows-ok-reach-unchanged",
+     "summary": "The heading's note that LEDGER_ROWS_OK does not reach the first pass is not addressed; the escape's reach stays as it is (unlabeled by the author)",
+     "class": "within",
+     "why": "The task line's subject is the landing refused on other tasks' passes; the escape's reach is given as why that refusal had no way out. Once the first pass refuses only passes the running session can write (WRITE=), the way out exists, and the after-measurement shows the observed refusal cleared. No request clause or FR asks for the escape to reach the first pass, and no remaining refusal without a remedy is known."
+    },
+    {
+     "id": "red-first-pins",
+     "summary": "Two pins (left/tests.rs reading test, land inproc.rs first-pass test), each shown red with clues.left_to stubbed",
+     "class": "within",
+     "why": "Enforcement of the task's own behavior (FR-012's red-first practice); serves the task, not unrequested scope."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -21020,6 +21126,98 @@
      "summary": "Measurement overhead kept negligible (one door call per hooks-test, none added for gate phases, one in-process append per map step); the pool crate edit moves Mode A maps' build id so each is redrawn once to the same rules",
      "class": "within",
      "why": "Consequences of measuring map steps, stated and measured; no map behavior changed."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T157": {
+   "section_sha256": "2f5c33e85aacb3bce830b5b93725f1bdecb36a09fe645a0fdf487576e0887f45",
+   "reviewed": "2026-11-22",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "widen-left-to-every-pass",
+     "summary": "T147's left rule widened from plan reviews to every non-plan-review pass, read by a new left/whose.rs, through the one owed set the first pass, the push's row and make land-tooling all read",
+     "class": "within",
+     "why": "The task line names a landing refused on other started tasks' record and pop-up check passes. Widening to every non-plan-review pass does not drop a row: each left pass is still owed by its own task's landing or session, and the refusal stays on everything not attributable to another started, unticked task. No GM clause or FR touches the ledger refusal, so this narrows nothing asked."
+    },
+    {
+     "id": "whose-source-order",
+     "summary": "Whose a pass is: first source naming a task, in own.rs's order - own words (logged subject, check-bundle -t<n> suffix, meta description), then builder (parentAgentId's brief), then page session (index.txt brief's feature and first-line task, else file name); prompt bodies never read",
+     "class": "within",
+     "why": "A design of the attribution the task needs, grounded in a dated measurement (25 of 26 named by page session, 1 by builder) and in the measured fact that prompt bodies name unrelated tasks. Implements the task; narrows nothing."
+    },
+    {
+     "id": "bare-task-and-number-resolution",
+     "summary": "A bare task id takes the feature that started it (event_log_hooks::started); a number names its unique specs/<n>-*",
+     "class": "within",
+     "why": "Resolution detail needed to attribute a pass; carries no carve-out from the task line."
+    },
+    {
+     "id": "started-not-merely-open",
+     "summary": "A pass is left only where its task is STARTED (task-starts.jsonl), not merely open",
+     "class": "within",
+     "why": "The task line itself says 'other started tasks''. An open task nobody started has no landing or session coming to write the row, so leaving its pass would lose the row."
+    },
+    {
+     "id": "ticked-task-still-refuses",
+     "summary": "A pass of a ticked task (in tasks.md or tasks-done.md) still refuses, though task-starts.jsonl records it as started",
+     "class": "within",
+     "why": "The task line's 'started tasks' are tasks whose own landings and sessions will write their rows; a ticked task's landing has already happened, so leaving its pass would leave the row unwritten forever, defeating the ledger. task-starts.jsonl keeps every landed task's start (740 rows), so 'started' alone would leave almost everything. No known instance is left: the after-measurement refuses 3 passes, all the landing's own. A hypothetical refusal is not a known defect left."
+    },
+    {
+     "id": "never-started-task-still-refuses",
+     "summary": "A pass naming a task never started still refuses",
+     "class": "within",
+     "why": "Outside the task line (not a started task), no landing or session is coming to write it, and the after-measurement shows no such pass in today's owed set: no known defect left."
+    },
+    {
+     "id": "nameless-pass-still-refuses",
+     "summary": "A pass whose every source names no task still refuses every landing until its session writes its row (found and left, judged working as designed, not filed)",
+     "class": "within",
+     "why": "Not a pass of another started task, so outside the task line; no landing can know whose it is, and leaving it would let an unattributable pass escape the ledger. None of the 26 measured owed passes named nothing (all were attributed), and the after-measurement's 3 refusals are the landing's own, so no known instance is left unfixed."
+    },
+    {
+     "id": "landings-own-still-refuse",
+     "summary": "The landing's own passes, by any source, bare or with its feature, still refuse with make ledger-owed WRITE= named",
+     "class": "within",
+     "why": "The task line is about OTHER tasks' passes; the landing's own are writable by WRITE= as the landing session's, so refusing them is the existing behavior the task leaves intact."
+    },
+    {
+     "id": "plan-reviews-keep-t147",
+     "summary": "Plan-review passes keep T147's rule unchanged",
+     "class": "within",
+     "why": "The task line names record and pop-up check passes; plan reviews are T147's already-settled case."
+    },
+    {
+     "id": "own-rs-not-reused-as-code",
+     "summary": "449 T258's own.rs is not reused as code (it lives in l7r_guard, which no gate crate may name per check guard-deps); whose.rs reads the same sources after the fact from l7r_shared, regexes copied; no guard source edited",
+     "class": "within",
+     "why": "Implementation choice forced by the T66 crate rule; same sources and order, no change to what the task delivers."
+    },
+    {
+     "id": "one-transcript-listing",
+     "summary": "Transcripts listed once per refusal (settle::Transcripts made pub(super) and shared), only for passes whose subject names no task",
+     "class": "within",
+     "why": "Cost choice inside the task; attribution unchanged."
+    },
+    {
+     "id": "note-wording",
+     "summary": "note() reworded to 'the passes of N open task(s) left to their own landings and sessions (451 T147, T157), which write their rows'; T147's pins follow",
+     "class": "within",
+     "why": "Message follows the widened rule; narrows nothing."
+    },
+    {
+     "id": "ledger-rows-ok-reach-unchanged",
+     "summary": "The heading's note that LEDGER_ROWS_OK does not reach the first pass is not addressed; the escape's reach stays as it is (unlabeled by the author)",
+     "class": "within",
+     "why": "The task line's subject is the landing refused on other tasks' passes; the escape's reach is given as why that refusal had no way out. Once the first pass refuses only passes the running session can write (WRITE=), the way out exists, and the after-measurement shows the observed refusal cleared. No request clause or FR asks for the escape to reach the first pass, and no remaining refusal without a remedy is known."
+    },
+    {
+     "id": "red-first-pins",
+     "summary": "Two pins (left/tests.rs reading test, land inproc.rs first-pass test), each shown red with clues.left_to stubbed",
+     "class": "within",
+     "why": "Enforcement of the task's own behavior (FR-012's red-first practice); serves the task, not unrequested scope."
     }
    ],
    "verdict": "CLEAR"

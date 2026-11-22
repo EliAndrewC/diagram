@@ -335,7 +335,7 @@ fn run(o: &Opts, env: &Env) -> Result<Reply, String> {
             feature: o.landing,
             tasks: o.tasks.split_whitespace().collect(),
         };
-        let (kept, whose) = left::split(&owed, &repo, &landing);
+        let (kept, whose) = left::split(&owed, &repo, &transcripts, &landing);
         (kept, left::note(&whose))
     } else {
         (owed, String::new())

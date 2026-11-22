@@ -12,6 +12,9 @@
 //! subject names no task (a block review), whose task is ticked or whose feature has no specs directory here, and every other pass,
 //! still refuses: no landing is left to write it. The landing's two writes are unchanged - a feature's landing still writes every pass
 //! traced to it, another open task's among them.
+//!
+//! Since 451 T157 (`whose.rs`) a pass of any other check is left the same way where its own words, its builder or its page session's
+//! brief name another STARTED task, open, that the landing does not land: that task's landing or session writes its row.
 
 use std::path::Path;
 use std::sync::LazyLock;
@@ -19,6 +22,8 @@ use std::sync::LazyLock;
 use fancy_regex::Regex;
 
 use super::{text, Pass};
+
+mod whose;
 
 fn re(pattern: &str) -> Regex {
     l7r_shared::regex::build(pattern).unwrap_or_else(|e| unreachable!("{e}"))
@@ -52,32 +57,41 @@ fn ticked_in(text: &str, task: &str) -> bool {
     })
 }
 
+/// Is `task` ticked in `feature`'s `tasks.md` or `tasks-done.md`?
+fn ticked(repo: &Path, feature: &str, task: &str) -> bool {
+    let dir = repo.join("specs").join(feature);
+    let read = |name: &str| std::fs::read_to_string(dir.join(name)).unwrap_or_default();
+    ticked_in(&read("tasks.md"), task) || ticked_in(&read("tasks-done.md"), task)
+}
+
 /// The open task whose landing writes this pass's row: a MODE 4 pass naming its feature and task, that feature's specs here, the task
-/// ticked in neither of its files and not one this landing lands.
-fn left_to(p: &Pass, repo: &Path, landing: &Landing) -> Option<String> {
+/// ticked in neither of its files and not one this landing lands; any other pass, the started task `whose.rs` reads it as serving.
+fn left_to(p: &Pass, repo: &Path, clues: &mut whose::Clues, landing: &Landing) -> Option<String> {
     let subject = text(p, "subject");
     if !subject.starts_with(PLAN_REVIEW) {
-        return None;
+        return clues.left_to(p, landing);
     }
     let (feature, task) = (group(&FEATURE, subject)?, group(&TASK, subject)?);
-    let dir = repo.join("specs").join(&feature);
-    if !dir.is_dir() {
-        return None;
-    }
-    let read = |name: &str| std::fs::read_to_string(dir.join(name)).unwrap_or_default();
-    if ticked_in(&read("tasks.md"), &task) || ticked_in(&read("tasks-done.md"), &task) {
+    if !repo.join("specs").join(&feature).is_dir() || ticked(repo, &feature, &task) {
         return None;
     }
     let landed = landing.feature == feature && landing.tasks.contains(&task.as_str());
     (!landed).then(|| format!("{feature} {task}"))
 }
 
-/// The owed passes a refusal counts, and the open tasks (`<feature> <task>`, once each, in order) whose landings write the rest.
+/// The owed passes a refusal counts, and the open tasks (`<feature> <task>`, once each, in order) whose landings or sessions write the
+/// rest; `transcripts` is where the passes' transcripts and meta files are found.
 #[must_use]
-pub fn split(owed: &[Pass], repo: &Path, landing: &Landing) -> (Vec<Pass>, Vec<String>) {
+pub fn split(
+    owed: &[Pass],
+    repo: &Path,
+    transcripts: &Path,
+    landing: &Landing,
+) -> (Vec<Pass>, Vec<String>) {
     let (mut kept, mut left) = (Vec::new(), Vec::new());
+    let mut clues = whose::Clues::new(repo, transcripts);
     for p in owed {
-        match left_to(p, repo, landing) {
+        match left_to(p, repo, &mut clues, landing) {
             Some(whose) if !left.contains(&whose) => left.push(whose),
             Some(_) => {}
             None => kept.push(p.clone()),
@@ -92,7 +106,7 @@ pub fn note(left: &[String]) -> String {
     if left.is_empty() {
         return String::new();
     }
-    format!("ledger-owed: the plan review passes of {} open task(s) left to their own landings, which write their rows (451 T147): {}\n", left.len(), left.join(", "))
+    format!("ledger-owed: the passes of {} open task(s) left to their own landings and sessions (451 T147, T157), which write their rows: {}\n", left.len(), left.join(", "))
 }
 
 #[cfg(test)]
