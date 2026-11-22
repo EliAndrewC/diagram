@@ -7,6 +7,7 @@ nothing behind it in physical reality, so each is `research: rendering`.
 
 ## Occasions
 
+- none: T252 - make maps adds read-only judges (the Mode A pool sweep's judge moved out of test-only code, a hamlet spec check) and the command over them; no map's drawing, placement, glyph or research page changes.
 - none: phase 1 moves the guards that run on Claude Code's tool calls; no map feature, glyph, placement rule or research page changes.
 - glyph-redrawn: sluice gate on kuwabata - T234: the polder's sluice redrawn from an 8 ft square on its point to the frame across its channel 0179's drawing page draws (board, two posts, crossbeam, windlass drum, 20 ft post to post); set aside at rust-only (444 FR-023)
 - placement-changed: marsh on kuwabata - T236: the waterside reed strip laid from the dike's outer face itself and stopped at the banks of the feeder and the outfall where they cross the dike at the sluices, no longer over the dike's corners or across the channel mouths; set aside at rust-only (444 FR-023)
