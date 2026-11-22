@@ -58,3 +58,7 @@ he approved):
 ## The GM, 2026-11-22, on measuring every phase (T153-T156)
 
 The GM: "okay, we should also make the hook suites measure their time so they won't be missing; we want everything measured so we know where our time goes, especially for compiling, running tests, and generating maps"
+
+## The GM, 2026-11-22, on the disk and build caches (T155, T158)
+
+The GM: "Okay, that sounds good. So I guess proceed with whatever it is that is going to make sure that we clean up after ourselves in terms of the file system to not have 30 gigs of stuff suddenly get eaten without us realizing it. But your points about reusing the same build cache and whatnot are well taken. Like, it does seem like you have correctly understood my intention."
