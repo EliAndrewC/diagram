@@ -5,26 +5,34 @@
 //! comments, kept in git history.
 
 use std::collections::HashMap;
-use std::fmt::Write as _;
 use std::path::{Component, Path, PathBuf};
 
 use fancy_regex::{Captures, Regex};
 
 use super::regex::Lazy;
-use super::shape::{quoted_spans, strip_heredocs};
+use super::shape::strip_heredocs;
 
 mod bind;
 mod git;
 pub mod program;
 mod py_c;
 mod python;
+mod quoted;
+mod split;
 mod verdict;
 
 use python::{
     carry_heredocs, program_of, program_reads, python_c, stdin_program, Program, Stdin,
-    HEREDOC_WORD, PYTHON, PYTHON_C_BEFORE,
+    HEREDOC_WORD, PYTHON,
 };
+use quoted::{blanked, quotes_to_paths, strip_quote_chars, unheld};
+use split::{segments, Piece};
 pub use verdict::{context_line, explain, judge, Verdict};
+#[cfg(test)]
+use {
+    python::PYTHON_C_BEFORE,
+    quoted::{held, pairs_within, plain_quote_body},
+};
 
 fn re(pattern: &str) -> Regex {
     crate::regex::build(pattern).unwrap_or_else(|e| unreachable!("a guard's own pattern: {e}"))
@@ -65,10 +73,33 @@ static DIR_BASE: Lazy = Lazy::new(
     |t| t.contains("dirname") || t.contains("basename"),
     || re(r#"^["']?(?:\$\(|`)\s*((?:dirname|basename)\s[^()`\n]*?)\s*(?:\)|`)"#),
 );
+/// A redirect's target, the capture: `(?<![<>])\d?>{1,2}\|?\s*([^\s;&|()<>]+)` with its lookbehind read by `redirects`, so the
+/// pattern runs in the regex crate's automaton, not fancy-regex's backtracking machine (451 T83: 0.50 G instructions fewer over
+/// T79's ux corpus, the walk's 59.81 G to 59.31 G, the scan itself 0.12 G in 41,052 calls, measured 2026-11-21 under callgrind).
 static REDIRECT: Lazy = Lazy::new(
     |t| t.contains('>'),
-    || re(r"(?<![<>])\d?>{1,2}\|?\s*([^\s;&|()<>]+)"),
+    || re(r"\d?>{1,2}\|?\s*([^\s;&|()<>]+)"),
 );
+
+/// Each redirect target of a segment, as `(?<![<>])` and `REDIRECT` read them together: the leftmost match from where the last
+/// ended whose start no `<` or `>` precedes, a match a `<` or `>` precedes tried again a character on.
+fn redirects(seg: &str) -> Vec<&str> {
+    let mut found = Vec::new();
+    let Some(r) = REDIRECT.on(seg) else {
+        return found;
+    };
+    let mut at = 0;
+    while let Some(c) = r.captures_from_pos(seg, at).ok().flatten() {
+        let whole = c.get(0).map_or(seg.len()..seg.len(), |m| m.range());
+        if seg[..whole.start].ends_with(['<', '>']) {
+            at = whole.start + seg[whole.start..].chars().next().map_or(1, char::len_utf8);
+            continue;
+        }
+        found.push(c.get(1).map_or("", |g| g.as_str()));
+        at = whole.end;
+    }
+    found
+}
 static FUNCTION_DEF: Lazy = Lazy::new(|t| t.contains('('), || re(r"^\s*[\w-]+\s*\(\s*\)"));
 static DUP_FD: Lazy = Lazy::new(|t| t.contains(">&"), || re(r"\d*>&[0-9-]"));
 static DEV_NULL: Lazy = Lazy::new(|t| t.contains("/dev/null"), || re(r"\d*>\s*/dev/null"));
@@ -78,13 +109,6 @@ static CHMOD_MODE: Lazy = Lazy::new(
     |_| true,
     || re(r"^(?:[0-7]{1,4}|[ugoa]*[-+=][rwxXstugo]*(?:,[ugoa]*[-+=][rwxXstugo]*)*)$"),
 );
-/// A quoted body that is one plain word - no whitespace and none of `;|&()<>` or a backquote - read without the pattern it was
-/// (`PLAIN_QUOTE_BODY`, 451 T97): its `\s` is Unicode's `White_Space`, as `char::is_whitespace` is (`tests/builds.rs` holds the two
-/// equal on every character to U+3100 and U+FEFF).
-fn plain_quote_body(body: &str) -> bool {
-    !body.contains(|c: char| c.is_whitespace() || ";|&()<>`".contains(c))
-}
-
 /// Python's `posixpath.normpath`.
 #[must_use]
 pub fn normpath(path: &str) -> String {
@@ -140,34 +164,6 @@ fn relpath(path: &str, start: &str) -> String {
     } else {
         parts.join("/")
     }
-}
-
-/// A quoted string kept as its body where it is one plain word (a path), else blanked to an empty pair (`_quotes_to_paths`); a
-/// program `python3 -c` runs is carried out beside the text, the word `__py_c_<n>__` standing in its place, so `writes_in` can
-/// judge whether it only reads without the program's own `;`, `(` and `|` splitting the walk (451 T31). The strings are shape's
-/// `quoted_spans` (451 T112), where the pattern `(?s)(["'])((?:\\.|(?!\1).)*)\1` tried 2^n readings of the n escapes after a quote
-/// nothing closes: `<a write>; echo it's` and forty escapes, the write each guard reads, held the house style guard, main-tree,
-/// gm-tree, make-only, readme, gate-write and the event log's end past 10 s (measured 2026-11-21, the T112 plan section); a test
-/// holds the two equal on every text of up to 6 pieces (`tests/quotes.rs`).
-fn quotes_to_paths(cmd: &str, mut programs: Vec<Program>) -> (String, Vec<Program>) {
-    let (mut text, mut from) = (String::with_capacity(cmd.len()), 0);
-    for (open, close) in quoted_spans(cmd) {
-        let (quote, body) = (&cmd[open..=open], &cmd[open + 1..close]);
-        text.push_str(&cmd[from..open]);
-        if PYTHON_C_BEFORE.is_match(&cmd[..open]) {
-            programs.push((quote.chars().next().unwrap_or('"'), body.to_owned()));
-            let _ = write!(text, "__py_c_{}__", programs.len() - 1);
-        } else if !body.is_empty() && plain_quote_body(body) {
-            // an empty quote stays a word (451 T79: `cd ""` stays where it is, bash's `null directory`, never `cd` home)
-            text.push_str(body);
-        } else {
-            text.push_str(quote);
-            text.push_str(quote);
-        }
-        from = close + 1;
-    }
-    text.push_str(&cmd[from..]);
-    (text, programs)
 }
 
 /// A command whose heredoc bodies are carried out (`carry_heredocs`) as the walk splits it.
@@ -243,6 +239,8 @@ fn expand(token: &str, env: &Env, home: &str) -> Option<String> {
 
 /// A token with every variable the command sets, and `~`, substituted; the rest left as written.
 fn substituted(token: &str, env: &Env, home: &str) -> String {
+    let word = unheld(token);
+    let token: &str = &word;
     let mut token = token
         .strip_prefix('~')
         .map_or_else(|| token.to_owned(), |rest| format!("{home}{rest}"));
@@ -390,10 +388,6 @@ fn mktemp_words(env: &mut Env, subs: &[String], home: &str) {
     }
 }
 
-fn strip_quote_chars(token: &str) -> &str {
-    token.trim_matches(|c| c == '"' || c == '\'')
-}
-
 /// A path token as an absolute, normalized path, or None where it cannot be known (`_resolve`).
 fn resolve(token: &str, env: &Env, home: &str, effective: Option<&str>) -> Option<String> {
     let expanded = expand(strip_quote_chars(token), env, home).filter(|e| !e.is_empty())?;
@@ -417,135 +411,6 @@ pub fn classify(path: Option<&str>, main: &str) -> &'static str {
     } else {
         "elsewhere"
     }
-}
-
-/// One piece of a command split at its separators: a segment, or a subshell's opening or closing (`_segments`).
-#[derive(Debug, PartialEq, Eq)]
-enum Piece {
-    /// A segment, and whether a pipe feeds it the stdout of the segment before (451 T42: `cat <<'PY' | python3`).
-    Seg(String, bool),
-    Push,
-    Pop,
-    /// A `$(...)` inside a word, walked before its word's command as a subshell, its segments feeding no pipe outside it (451 T79).
-    SubPush,
-    SubPop,
-}
-
-/// The index of the bracket that closes the one at `open` (`(` or `{`), its nesting counted; the text's length where none does.
-/// Whether a substitution's text is `pwd`: where the shell stands (451 T79).
-fn is_pwd(inner: &str) -> bool {
-    matches!(inner.trim(), "pwd" | "pwd -P" | "pwd -L")
-}
-
-/// The length of a `` `pwd` `` that `rest` opens with and its word goes on past only into a path (`/`), else None (451 T79).
-fn tick_pwd(rest: &[char]) -> Option<usize> {
-    let close = rest.iter().skip(1).position(|c| *c == '`')? + 1;
-    let inner: String = rest[1..close].iter().collect();
-    (is_pwd(&inner) && word_goes_on_as_path(rest, close + 1)).then_some(close + 1)
-}
-
-/// Whether the word ends at `at` or goes on into a path: `$(pwd)/f` and `$(pwd)` name the shell's place, `$(pwd)x` does not.
-fn word_goes_on_as_path(chars: &[char], at: usize) -> bool {
-    chars
-        .get(at)
-        .is_none_or(|c| *c == '/' || c.is_whitespace() || "\"';|&)".contains(*c))
-}
-
-/// Whether a `{` or `}` is a brace group's - a word of its own, a `{` followed by a blank - and not a brace expansion inside a word
-/// (`/tmp/{a,b}`), whose split cut a copy's destination off its command (451 T79: `cp /tmp/{a,b} /diagram/x` from `/tmp` passed).
-fn brace_group(chars: &[char], i: usize, buf: &str) -> bool {
-    let own_word = buf.trim().is_empty() || buf.ends_with(char::is_whitespace);
-    own_word
-        && chars
-            .get(i + 1)
-            .is_none_or(|c| c.is_whitespace() || (chars[i] == '}' && ";|&)".contains(*c)))
-}
-
-fn closing(chars: &[char], open: usize) -> usize {
-    let (o, c) = (chars[open], if chars[open] == '(' { ')' } else { '}' });
-    let mut depth = 0;
-    for (k, &ch) in chars.iter().enumerate().skip(open) {
-        depth += i32::from(ch == o) - i32::from(ch == c);
-        if depth == 0 {
-            return k;
-        }
-    }
-    chars.len()
-}
-
-/// The command split at its separators. A word stays whole (451 T79, found by T50 2026-11-21): a `${...}` and a brace expansion
-/// keep their braces, which a brace group's `{` and `}` do not, and a `$(...)` inside a word is walked as a subshell before the word's command - its text
-/// the n-th of `subs`, `$__sub_<n>__` standing in its place, a word the walk cannot resolve (a `$(mktemp ...)` aside, which
-/// `mktemp_words` places; a `$(pwd)` or `` `pwd` `` is `.`, where the shell stands) - where before both split the word, its pieces
-/// read as commands of their own (and `` `pwd`/f `` read as a word nothing is known of, 451 T79's probe of 2026-11-21).
-fn segments(text: &str, subs: &mut Vec<String>) -> Vec<Piece> {
-    let chars: Vec<char> = text.chars().collect();
-    let (mut out, mut buf, mut i, mut piped) = (Vec::new(), String::new(), 0, false);
-    let mut pending = Vec::new();
-    let flush = |buf: &mut String, out: &mut Vec<Piece>, pending: &mut Vec<Piece>, piped: bool| {
-        out.append(pending);
-        let seg = buf.trim().to_owned();
-        buf.clear();
-        if !seg.is_empty() {
-            out.push(Piece::Seg(seg, piped));
-        }
-    };
-    while i < chars.len() {
-        let ch = chars[i];
-        let next = chars.get(i + 1).copied();
-        if (ch == '&' && next == Some('&')) || (ch == '|' && next == Some('|')) {
-            flush(&mut buf, &mut out, &mut pending, piped);
-            piped = false;
-            i += 2;
-        } else if ch == '$' && next == Some('(') {
-            let end = closing(&chars, i + 1);
-            let inner: String = chars[i + 2..end].iter().collect();
-            pending.push(Piece::SubPush);
-            pending.extend(segments(&inner, subs));
-            pending.push(Piece::SubPop);
-            if is_pwd(&inner) && word_goes_on_as_path(&chars, end + 1) {
-                buf.push('.');
-            } else {
-                let _ = write!(buf, "$__sub_{}__", subs.len());
-            }
-            subs.push(inner);
-            i = end + 1;
-        } else if let Some(len) = (ch == '`').then(|| tick_pwd(&chars[i..])).flatten() {
-            buf.push('.');
-            i += len;
-        } else if ch == '$' && next == Some('{') {
-            let end = closing(&chars, i + 1).min(chars.len() - 1);
-            buf.extend(&chars[i..=end]);
-            i = end + 1;
-        } else if (ch == '|' || ch == '&') && buf.ends_with('>') {
-            buf.push(ch); // `>|` and `>&` belong to the redirection, not a separator (feature 429)
-            i += 1;
-        } else if matches!(ch, ';' | '|' | '&' | '\n') {
-            // a pipe at a line's end still feeds the next line's segment
-            if !(ch == '\n' && buf.trim().is_empty()) {
-                flush(&mut buf, &mut out, &mut pending, piped);
-                piped = ch == '|';
-            }
-            i += 1;
-        } else if ch == '(' {
-            flush(&mut buf, &mut out, &mut pending, piped);
-            out.push(Piece::Push);
-            i += 1;
-        } else if ch == ')' {
-            flush(&mut buf, &mut out, &mut pending, piped);
-            out.push(Piece::Pop);
-            piped = false;
-            i += 1;
-        } else if (ch == '{' || ch == '}') && brace_group(&chars, i, &buf) {
-            flush(&mut buf, &mut out, &mut pending, piped);
-            i += 1;
-        } else {
-            buf.push(ch);
-            i += 1;
-        }
-    }
-    flush(&mut buf, &mut out, &mut pending, piped);
-    out
 }
 
 /// The segment's words with leading wrappers and `VAR=value` prefixes removed (`_words`).
@@ -579,8 +444,9 @@ fn tool_paths<'a>(tool: &str, toks: &[&'a str]) -> Vec<&'a str> {
     if tool == "sed" {
         let (mut keep, mut skip_next) = (Vec::new(), false);
         let mut script_seen = args.contains(&"-e") || args.contains(&"--expression");
-        // a quoted script that held a space or a shell character reaches here blanked to '': it is still the script (or the
-        // argument of -e), never a path - dropped before this loop, it made the file the script (T227)
+        // a quoted script that held a space or a shell character reaches here as one held word (451 T83; blanked to '' where its
+        // parentheses do not pair): it is still the script (or the argument of -e), never a path - dropped before this loop, it
+        // made the file the script (T227)
         for t in args {
             if skip_next {
                 skip_next = false;
@@ -607,14 +473,17 @@ fn tool_paths<'a>(tool: &str, toks: &[&'a str]) -> Vec<&'a str> {
             args.remove(k);
         }
     }
-    // `truncate -s 0 F` and `-r REF F` empty or resize F: the size and the reference file are its options' values, not files written (T227)
+    // `truncate -s 0 F` and `-r REF F` empty or resize F: the size and the reference file are its options' values, not files written (T227);
+    // so are `touch -d DATE`, `-t STAMP` and `-r REF` (451 T83: `touch -d "2 hours ago" $D/f.log`, its date held as one word, was a
+    // write of `2 hours ago` where the shell stood)
     let mut value_next = false;
     let args: Vec<&str> = args
         .into_iter()
         .filter(|t| {
             let value = std::mem::replace(
                 &mut value_next,
-                tool == "truncate" && matches!(*t, "-s" | "-r"),
+                (tool == "truncate" && matches!(*t, "-s" | "-r"))
+                    || (tool == "touch" && matches!(*t, "-d" | "-t" | "-r")),
             );
             !value && !t.starts_with('-') && !blank(t)
         })
@@ -710,13 +579,8 @@ fn writes_in(
             );
         }
     }
-    for c in REDIRECT.captures_iter(seg).map_while(Result::ok) {
-        found_writes.push(path_write(
-            c.get(1).map_or("", |m| m.as_str()),
-            env,
-            home,
-            eff,
-        ));
+    for target in redirects(seg) {
+        found_writes.push(path_write(target, env, home, eff));
     }
     found_writes
 }
@@ -941,7 +805,7 @@ fn walk_text(
                 class,
                 how,
                 segment: HEREDOC_WORD
-                    .replace_all(bind::from_command(&showing), "<<BODY")
+                    .replace_all(bind::from_command(&blanked(&showing)), "<<BODY")
                     .chars()
                     .take(120)
                     .collect(),

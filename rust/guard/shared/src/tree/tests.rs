@@ -202,7 +202,8 @@ fn the_walk_reads_each_tool_and_its_paths() {
             .len(),
         1
     );
-    assert_eq!(walk("touch \"/tmp/q\" 'a b'", None, &m, h).targets.len(), 1);
+    // 451 T83: `'a b'` is the one word its quotes make, a file touch makes where the shell stands - blanked, it was no write
+    assert_eq!(walk("touch \"/tmp/q\" 'a b'", None, &m, h).targets.len(), 2);
     assert_eq!(
         walk("touch ~/f", None, &m, h).targets[0].path.as_deref(),
         Some("/home/u/f")

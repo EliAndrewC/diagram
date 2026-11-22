@@ -346,3 +346,29 @@ fn an_unbalanced_parenthesis_ends_the_walk_cleanly() {
         Some("/s/x")
     );
 }
+
+/// 451 T83: a segment's redirect targets read by the pattern in the regex crate and its lookbehind by hand (`redirects`) are the
+/// targets the one fancy pattern read, on every text of up to 5 pieces - a `<` or `>` before a match, a digit, `>>`, `>|`, a
+/// blank, a separator and a character of two bytes.
+#[test]
+fn the_redirect_scan_reads_each_target_as_the_pattern_read_it() {
+    let pattern = crate::regex::build(r"(?<![<>])\d?>{1,2}\|?\s*([^\s;&|()<>]+)").unwrap();
+    let pieces = ["<", ">", "2", "|", " ", "f", ";", "é", "("];
+    let (mut texts, mut longest) = (vec![String::new()], vec![String::new()]);
+    for _ in 0..5 {
+        longest = longest
+            .iter()
+            .flat_map(|t| pieces.map(|p| format!("{t}{p}")))
+            .collect();
+        texts.extend(longest.iter().cloned());
+    }
+    for text in &texts {
+        let old: Vec<&str> = pattern
+            .captures_iter(text)
+            .map_while(Result::ok)
+            .map(|c| c.get(1).map_or("", |m| m.as_str()))
+            .collect();
+        let scan = super::super::redirects(text);
+        assert_eq!(scan, old, "{text:?}");
+    }
+}
