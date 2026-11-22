@@ -102,6 +102,28 @@ fn truthy(v: &Value) -> bool {
     }
 }
 
+/// THE STOP BEFORE THE PARKED STAGES (feature 449 T244; the GM 2026-11-21, `docs/gm-rulings.md`, "Stop before homesteads, and talk
+/// first"): whether the feature's open boxes, the GM's review left out, are all tasks of a parked stage no row has resumed
+/// ([`l7r_shared::parked::held_task`]) - the stop the GM asked for, which no arbiter ruling or usage cap holds back. A feature with no
+/// open box, or one that cannot be read, is not that stop.
+fn parked_stop(root: &Path, feature: &str) -> bool {
+    let Ok(text) = std::fs::read_to_string(root.join("specs").join(feature).join("tasks.md"))
+    else {
+        return false;
+    };
+    let common = PathBuf::from(common_text(root));
+    let open: Vec<&str> = text
+        .lines()
+        .filter_map(|l| l.strip_prefix("- [ ] "))
+        .filter(|t| !t.starts_with("GM review"))
+        .map(|t| t.split_once(' ').map_or("", |(_, title)| title))
+        .collect();
+    !open.is_empty()
+        && open
+            .iter()
+            .all(|t| l7r_shared::parked::held_task(root, &common, t).is_some())
+}
+
 /// Why the feature may not be set down yet - an open task owes a part B the round arbiter has not ruled on since - or none.
 fn unruled(root: &Path, feature: &str) -> Result<Option<String>, String> {
     let gd = git_dir(root);
@@ -335,7 +357,8 @@ fn cli_with(args: &[String], cwd: &Path, env: Env) -> Reply {
         );
     }
     let hit = &hits[0];
-    if strip(&env("SET_DOWN_OK").unwrap_or_default()).is_empty() {
+    let parked = parked_stop(&root, hit);
+    if !parked && strip(&env("SET_DOWN_OK").unwrap_or_default()).is_empty() {
         let why_not = match unruled(&root, hit) {
             Ok(None) => under_cap(&root, hit, env),
             other => other,
@@ -351,7 +374,11 @@ fn cli_with(args: &[String], cwd: &Path, env: Env) -> Reply {
         .ok_or(std::io::Error::other(
             "subprocess.CalledProcessError: git rev-parse --git-common-dir failed",
         ));
-    let row = json!({"feature": hit, "why": why, "utc": utc_text(now_secs())});
+    let mut row = json!({"feature": hit, "why": why, "utc": utc_text(now_secs())});
+    if parked {
+        row["ruling"] =
+            json!("the GM 2026-11-21, Stop before homesteads, and talk first (449 T244)");
+    }
     let written = common
         .and_then(|c| {
             std::fs::OpenOptions::new()
@@ -368,7 +395,15 @@ fn cli_with(args: &[String], cwd: &Path, env: Env) -> Reply {
     let cleared = clear_mark(Path::new(&common_text(cwd)), hit).map_or_else(String::new, |t| {
         format!("; its started-task mark ({t}) cleared")
     });
-    reply(format!("set-down: {hit} set down ({why}){cleared}; a turn may end with its tasks open until the next make task-start\n"), String::new(), 0)
+    let stop = if parked {
+        format!(
+            "; every open task is a parked hamlet stage, the stop the GM asked for (feature 449 T244) - talk with him before any starts.\n{}",
+            l7r_shared::parked::RULING
+        )
+    } else {
+        String::new()
+    };
+    reply(format!("set-down: {hit} set down ({why}){cleared}; a turn may end with its tasks open until the next make task-start{stop}\n"), String::new(), 0)
 }
 
 /// THE STARTED-TASK MARK GOES WITH ITS FEATURE (feature 451 T29, found landing T06, 2026-11-20): `.git/active-task` names the task the

@@ -108,6 +108,16 @@ rm -f "$R/.git/phase-sources.json"
 call Bash '{"command":"cat l7r/diagram/hamletgen/water/fields.py"}'
 [ "$(rc)" -eq 0 ] && ok "no hold, no refusal" || no "refused" "(rc=$(rc))"
 
+echo "2. a parked stage waits for the GM (449 T244): its move into the phases and its lib.rs line refused, with no hold"
+mkdir -p "$R/rust/parked/src" "$R/rust/phases/src"; : > "$R/rust/parked/src/homesteads.rs"; echo "mod seat;" > "$R/rust/phases/src/lib.rs"
+call Bash '{"command":"git mv rust/parked/src/homesteads.rs rust/phases/src/"}'
+[ "$(rc)" -eq 2 ] && ok "git mv of a parked stage into rust/phases/src" || no "allowed" "(rc=$(rc))"
+grep -q 'Stop before homesteads, and talk first' "$T/err" && grep -q 'GM_RESUMED=' "$T/err" && ok "...naming the ruling and the escape" || no "no ruling or escape in the message"
+call Edit "{\"file_path\":\"$R/rust/phases/src/lib.rs\",\"old_string\":\"mod seat;\",\"new_string\":\"mod homesteads;\\nmod seat;\"}"
+[ "$(rc)" -eq 2 ] && ok "an Edit declaring it in lib.rs" || no "allowed" "(rc=$(rc))"
+call Bash '{"command":"grep -n homesteads rust/parked/src/homesteads.rs"}'
+[ "$(rc)" -eq 0 ] && ok "a read of the parked stage is no move" || no "refused" "(rc=$(rc))"
+
 echo
 echo "test-phase-source-hooks: passed $PASS, failed $FAIL"
 [ "$FAIL" -eq 0 ]

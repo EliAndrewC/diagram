@@ -565,3 +565,223 @@ fn a_reader_fed_by_any_producer_or_a_glob_is_a_read() {
         assert!(got.is_empty(), "{cmd}: {got:?}");
     }
 }
+
+/// A checkout holding the parked crate (`homesteads`, `track`), the phases' `lib.rs`, and a transcript where the GM resumed one.
+fn parked_world(tag: &str) -> crate::shared::tempdir::Held<(String, String)> {
+    crate::shared::log::quiet();
+    let d = crate::shared::tempdir::TempDir::new(&format!("guard-parked-{tag}"));
+    let at = d.canonicalize().unwrap().to_string_lossy().into_owned();
+    std::fs::create_dir_all(format!("{at}/rust/parked/src")).unwrap();
+    std::fs::create_dir_all(format!("{at}/rust/phases/src")).unwrap();
+    assert!(ask(std::path::Path::new("/"), "git", &["init", "-q", &at], "").ok());
+    for f in ["homesteads.rs", "track.rs"] {
+        std::fs::write(format!("{at}/rust/parked/src/{f}"), "").unwrap();
+    }
+    std::fs::write(format!("{at}/rust/phases/src/lib.rs"), "mod seat;\n").unwrap();
+    let tr = format!("{at}/tr.jsonl");
+    let said =
+        json!({"type": "user", "message": {"content": "ok, go ahead with the homesteads now"}});
+    std::fs::write(&tr, format!("{said}\n")).unwrap();
+    d.hold((at, tr))
+}
+
+fn parked_run(tool: &str, input: &Value, at: &str, tr: &str) -> Vec<Answer> {
+    let e = Event {
+        name: "PreToolUse".to_owned(),
+        input: json!({"tool_name": tool, "cwd": at, "transcript_path": tr, "tool_input": input}),
+    };
+    judge(
+        &e,
+        &Session::from_input(&e.input),
+        at,
+        "/nowhere/phase-sources.json",
+        "2026-11-22T00:00:00Z",
+    )
+}
+
+#[test]
+fn a_parked_stage_moved_into_the_phases_is_refused_naming_the_ruling() {
+    let w = parked_world("move");
+    let (at, tr) = (&w.0, &w.1);
+    let ruling = "Stop before homesteads, and talk first";
+    let git_mv = parked_run(
+        "Bash",
+        &json!({"command": "git mv rust/parked/src/homesteads.rs rust/phases/src/"}),
+        at,
+        tr,
+    );
+    assert!(refused(
+        &git_mv,
+        "a write moving `homesteads` into rust/phases/src/"
+    ));
+    assert!(refused(&git_mv, ruling));
+    assert!(refused(
+        &git_mv,
+        "GM_RESUMED=\"<the GM's words resuming it>\""
+    ));
+    let write = parked_run(
+        "Write",
+        &json!({"file_path": format!("{at}/rust/phases/src/track.rs"), "content": "x"}),
+        at,
+        tr,
+    );
+    assert!(refused(&write, "a write moving `track`"));
+    let edit = parked_run(
+        "Edit",
+        &json!({"file_path": format!("{at}/rust/phases/src/track/law.rs"), "old_string": "", "new_string": "x"}),
+        at,
+        tr,
+    );
+    assert!(refused(&edit, "a write moving `track`"));
+    // a mention, a read, a stage not parked: nothing
+    let mention = parked_run(
+        "Bash",
+        &json!({"command": "echo git mv rust/parked/src/homesteads.rs rust/phases/src/"}),
+        at,
+        tr,
+    );
+    assert!(mention.is_empty());
+    let read = parked_run(
+        "Read",
+        &json!({"file_path": format!("{at}/rust/parked/src/homesteads.rs")}),
+        at,
+        tr,
+    );
+    assert!(read.is_empty());
+    let seat = parked_run(
+        "Write",
+        &json!({"file_path": format!("{at}/rust/phases/src/seat.rs"), "content": "x"}),
+        at,
+        tr,
+    );
+    assert!(seat.is_empty());
+    let other = parked_run(
+        "NotebookEdit",
+        &json!({"file_path": format!("{at}/rust/phases/src/track.rs")}),
+        at,
+        tr,
+    );
+    assert!(other.is_empty());
+}
+
+#[test]
+fn a_parked_stage_declared_in_the_phases_lib_rs_is_refused() {
+    let w = parked_world("declare");
+    let (at, tr) = (&w.0, &w.1);
+    let lib = format!("{at}/rust/phases/src/lib.rs");
+    let edit = parked_run(
+        "Edit",
+        &json!({"file_path": lib, "old_string": "mod seat;", "new_string": "mod homesteads;\nmod seat;"}),
+        at,
+        tr,
+    );
+    assert!(refused(
+        &edit,
+        "a write declaring `homesteads` in rust/phases/src/lib.rs"
+    ));
+    let write = parked_run(
+        "Write",
+        &json!({"file_path": lib, "content": "mod seat;\npub mod track;\n"}),
+        at,
+        tr,
+    );
+    assert!(refused(&write, "a write declaring `track`"));
+    let edits = json!([{"old_string": "a", "new_string": "b"}, {"old_string": "mod seat;", "new_string": "mod seat;\nmod track;"}]);
+    let multi = parked_run(
+        "MultiEdit",
+        &json!({"file_path": lib, "edits": edits}),
+        at,
+        tr,
+    );
+    assert!(refused(&multi, "a write declaring `track`"));
+    let shell = parked_run(
+        "Bash",
+        &json!({"command": format!("echo 'mod track;' >> {lib}")}),
+        at,
+        tr,
+    );
+    assert!(refused(&shell, "a write declaring `track`"));
+    let untouched = parked_run(
+        "Edit",
+        &json!({"file_path": lib, "old_string": "mod seat;", "new_string": "mod seat; // the seat"}),
+        at,
+        tr,
+    );
+    assert!(untouched.is_empty());
+    let no_input = judge(
+        &Event {
+            name: "PreToolUse".to_owned(),
+            input: json!({"tool_name": "Edit"}),
+        },
+        &Session::from_input(&json!({})),
+        at,
+        "/nowhere",
+        "2026",
+    );
+    assert!(no_input.is_empty());
+}
+
+#[test]
+fn the_gm_s_words_resume_a_stage_and_are_recorded() {
+    let w = parked_world("resume");
+    let (at, tr) = (&w.0, &w.1);
+    let mv = "git mv rust/parked/src/homesteads.rs rust/phases/src/";
+    // words the GM never wrote, or too few: refused
+    let invented = parked_run(
+        "Bash",
+        &json!({"command": format!("GM_RESUMED=\"carry on with the stage\" {mv}")}),
+        at,
+        tr,
+    );
+    assert!(refused(
+        &invented,
+        "in no message the GM wrote in this session"
+    ));
+    let short = parked_run(
+        "Bash",
+        &json!({"command": format!("GM_RESUMED=yes {mv}")}),
+        at,
+        tr,
+    );
+    assert!(refused(&short, "under three words"));
+    let start = parked_run(
+        "Bash",
+        &json!({"command": "GM_RESUMED=\"carry on with the stage\" make task-start F=444 T=T30"}),
+        at,
+        tr,
+    );
+    assert!(refused(&start, "in no message the GM wrote"));
+    // his words: the move passes, recorded, and the stage's lib.rs line then passes with no words
+    let start_ok = parked_run(
+        "Bash",
+        &json!({"command": "GM_RESUMED=\"go ahead with the homesteads\" make task-start F=444 T=T30"}),
+        at,
+        tr,
+    );
+    assert!(start_ok.is_empty());
+    let moved = parked_run(
+        "Bash",
+        &json!({"command": format!("GM_RESUMED=\"go ahead with the homesteads\" {mv}")}),
+        at,
+        tr,
+    );
+    assert!(moved.is_empty());
+    let row = std::fs::read_to_string(format!("{at}/.git/parked-resumed.jsonl")).unwrap();
+    assert!(row.contains("\"stage\": \"homesteads\""), "{row}");
+    let lib = format!("{at}/rust/phases/src/lib.rs");
+    let declared = parked_run(
+        "Edit",
+        &json!({"file_path": lib, "old_string": "mod seat;", "new_string": "mod homesteads;\nmod seat;"}),
+        at,
+        tr,
+    );
+    assert!(declared.is_empty());
+    // another stage stays held
+    let track = parked_run(
+        "Edit",
+        &json!({"file_path": lib, "old_string": "mod seat;", "new_string": "mod seat;\nmod track;"}),
+        at,
+        tr,
+    );
+    assert!(refused(&track, "`track`"));
+}

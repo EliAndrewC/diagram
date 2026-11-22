@@ -16,10 +16,13 @@ use std::time::{SystemTime, UNIX_EPOCH};
 use fancy_regex::Regex;
 use serde_json::Value;
 
+use crate::guards::feature_approval_hooks::problem;
 use crate::guards::finished_run_hooks::runs::realpath;
 use crate::protocol::{Answer, Event, Guard};
 use crate::shared::escape::{escape_or_refuse, Escape};
 use crate::shared::log::{self, civil};
+use crate::shared::make::targets;
+use crate::shared::parked;
 use crate::shared::session::Session;
 use crate::shared::state::field;
 use crate::shared::tool::ask;
@@ -28,7 +31,7 @@ use crate::shared::tool::ask;
 pub const GUARD: Guard = Guard {
     name: "phase-source-hooks",
     events: &["PreToolUse"],
-    matcher: "Bash|Read|Grep|Glob",
+    matcher: "Bash|Read|Grep|Glob|Write|Edit|MultiEdit",
     decide,
 };
 
@@ -215,6 +218,135 @@ fn decide(event: &Event, session: &Session) -> Vec<Answer> {
     judge(event, session, &here.to_string_lossy(), &glob, &stamp())
 }
 
+/// What a call writes that resumes a parked stage ([`parked::shell_hits`], [`parked::write_hits`]): a Bash command from `base`, a
+/// Write's content against the file it replaces, an Edit's or a `MultiEdit`'s new text against its old.
+fn parked_hits(event: &Event, base: &str) -> Vec<parked::Hit> {
+    let Some(input) = event.input.get("tool_input") else {
+        return Vec::new();
+    };
+    let path = field(input, "file_path");
+    match event.tool() {
+        "Bash" => {
+            let home = crate::shared::env::opt("HOME").unwrap_or_default();
+            parked::shell_hits(field(input, "command"), base, &home)
+        }
+        "Write" => {
+            let old = std::fs::read_to_string(path).unwrap_or_default();
+            parked::write_hits(path, field(input, "content"), &old)
+        }
+        "Edit" => parked::write_hits(path, field(input, "new_string"), field(input, "old_string")),
+        "MultiEdit" => {
+            let edits = input
+                .get("edits")
+                .and_then(Value::as_array)
+                .cloned()
+                .unwrap_or_default();
+            let joined = |key: &str| {
+                edits
+                    .iter()
+                    .map(|e| field(e, key))
+                    .collect::<Vec<_>>()
+                    .join("\n")
+            };
+            parked::write_hits(path, &joined("new_string"), &joined("old_string"))
+        }
+        _ => Vec::new(),
+    }
+}
+
+/// THE PARKED STAGES WAIT FOR THE GM (feature 449 T244; the GM 2026-11-21, `docs/gm-rulings.md`, "Stop before homesteads, and talk
+/// first"): a write moving a parked stage into `rust/phases/src/` or declaring it in its `lib.rs` is refused, naming the ruling, unless
+/// `parked-resumed.jsonl` names the stage (a `make task-start` resumed it) or the command carries `GM_RESUMED="<the GM's words>"`. Those
+/// words, on a move or on a `make task-start`, must stand in a message the GM wrote this session (three words or more, the approval
+/// line's test): a session cannot resume a stage on words of its own. A move resumed so is recorded in the guard log and in
+/// `parked-resumed.jsonl`. None lets the call go on to the read hold.
+fn parked_verdict(event: &Event, session: &Session, base: &str) -> Option<Vec<Answer>> {
+    let cmd = event
+        .input
+        .get("tool_input")
+        .map_or("", |t| field(t, "command"));
+    let given = (event.tool() == "Bash")
+        .then(|| parked::words(cmd))
+        .flatten();
+    let starting = given.is_some() && targets(cmd).iter().any(|t| t == "task-start");
+    let hits: Vec<parked::Hit> = parked_hits(event, base)
+        .into_iter()
+        .filter(|h| !parked::resumed(&parked::common_of(Path::new(&h.root)), &h.stage))
+        .collect();
+    if hits.is_empty() && !starting {
+        return None;
+    }
+    let shown: String = cmd.chars().take(200).collect();
+    let stages: Vec<&str> = hits.iter().map(|h| h.stage.as_str()).collect();
+    if let Some(words) = given {
+        let bad = problem(
+            &format!("**Approved**: the GM, 2000-01-01, \"{words}\""),
+            session.gm_messages(),
+        );
+        if bad.is_empty() {
+            log::fire(
+                "parked-stage",
+                "escaped",
+                &format!("{}: {words}", stages.join(", ")),
+                "gm-resumed",
+                &event.input,
+                session,
+            );
+            for hit in &hits {
+                let row = serde_json::json!({"stage": hit.stage, "words": words, "utc": stamp(), "by": "a move"});
+                let _ = parked::record(&parked::common_of(Path::new(&hit.root)), &row);
+            }
+            return None;
+        }
+        log::fire(
+            "parked-stage",
+            "blocked",
+            &shown,
+            &format!("GM_RESUMED-{bad}"),
+            &event.input,
+            session,
+        );
+        let why = if bad == "short" {
+            "GM_RESUMED is under three words - a bare \"yes\" resumes nothing"
+        } else {
+            "GM_RESUMED's words are in no message the GM wrote in this session"
+        };
+        return Some(vec![Answer::Refuse(format!(
+            "BLOCKED: {why}. A parked stage is resumed only with the GM's own words, quoted verbatim (feature 449 T244).\n\n{}\n",
+            parked::RULING
+        ))]);
+    }
+    let what = hits
+        .iter()
+        .map(|h| {
+            if h.declares {
+                format!("a write declaring `{}` in rust/phases/src/lib.rs", h.stage)
+            } else {
+                format!("a write moving `{}` into rust/phases/src/", h.stage)
+            }
+        })
+        .collect::<Vec<_>>()
+        .join("; ");
+    let path = event
+        .input
+        .get("tool_input")
+        .map_or("", |t| field(t, "file_path"));
+    let detail = if shown.is_empty() {
+        path.to_owned()
+    } else {
+        shown
+    };
+    log::fire(
+        "parked-stage",
+        "blocked",
+        &detail,
+        &stages.join(","),
+        &event.input,
+        session,
+    );
+    Some(vec![Answer::Refuse(parked::refusal(&what))])
+}
+
 pub(crate) fn judge(
     event: &Event,
     session: &Session,
@@ -222,12 +354,18 @@ pub(crate) fn judge(
     glob: &str,
     now: &str,
 ) -> Vec<Answer> {
-    if !any_match(glob) {
-        return Vec::new();
-    }
     let base = Some(field(&event.input, "cwd"))
         .filter(|c| !c.is_empty())
         .unwrap_or(here);
+    if let Some(answers) = parked_verdict(event, session, base) {
+        return answers;
+    }
+    if !matches!(event.tool(), "Bash" | "Read" | "Grep" | "Glob") {
+        return Vec::new();
+    }
+    if !any_match(glob) {
+        return Vec::new();
+    }
     let Some((hit, state, top)) = verdict(event, base, now) else {
         return Vec::new();
     };

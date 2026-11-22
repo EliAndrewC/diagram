@@ -120,5 +120,15 @@ printf '{"seven_day": 76, "seven_day_resets_at": 1, "account": {"uuid": "u-1"}}'
 rm -f "$T/cap/latest-s-1.json"
 ( cd "$C" && SET_DOWN_WHY="no reading here" "$SETDOWN" set-down 385 >/dev/null 2>&1 ) && ok "no reading: set down" || no "no reading"
 
+echo "9. only parked stages left (449 T244): the stop names the GM's ruling, never a stage to start, and make set-down takes it under the cap"
+P="$T/parked"; mkdir -p "$P/specs/444-x" "$P/rust/parked/src"; git -C "$P" init -q; : > "$P/rust/parked/src/homesteads.rs"
+printf -- '- [x] T29 phase: seat - done\n- [ ] T30 phase: homesteads - every household\n- [ ] GM review (make gm-reviewed F=444)\n' > "$P/specs/444-x/tasks.md"
+printf '{"feature": "444-x", "task": "T29", "utc": "2026-11-21T10:00:00Z"}\n' > "$P/.git/task-starts.jsonl"
+: > "$T/tr9.jsonl"
+rc=$(printf '{"cwd": "%s", "transcript_path": "%s"}' "$P" "$T/tr9.jsonl" | SET_DOWN_ROOT="$P" "$HOOK" stop 2>"$T/err"; echo $?)
+[ "$rc" = 2 ] && grep -q "Stop before homesteads, and talk first" "$T/err" && ! grep -q "task-start F=444 T=T30" "$T/err" && ok "the ruling named, no stage task to start" || no "parked stop" "rc=$rc $(cat "$T/err")"
+printf '{"seven_day": 50}' > "$T/cap/latest-s-9.json"
+out=$(cd "$P" && CLAUDE_CODE_SESSION_ID=s-9 SET_DOWN_WHY="the parked stages wait for the GM" "$SETDOWN" set-down 444 2>&1) && echo "$out" | grep -q "the stop the GM asked for" && ok "set down under the cap, naming the ruling" || no "parked set-down" "$out"
+
 echo "set-down-hooks: $PASS passed, $FAIL failed"
 [ "$FAIL" -eq 0 ]

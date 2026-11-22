@@ -539,7 +539,9 @@ fn next_independent(
                 .iter()
                 .any(|n| busy.iter().any(|f| touches(n, f)));
             // the wait last: a day after a landing reads the feature's log
-            if started || overlaps || waits(root, &feature, &boxes, (id, title), lands)? {
+            // a parked stage's task waits for the GM (449 T244): never a slot's next
+            let held = crate::parked::held_task(root, git_dir, title).is_some();
+            if started || held || overlaps || waits(root, &feature, &boxes, (id, title), lands)? {
                 continue;
             }
             free.push((id, title));
@@ -745,7 +747,9 @@ fn next_performance_in(
             String::new()
         };
         for (id, title) in &boxes {
-            if performance(id, title, &plan) && !waits(root, &feature, &boxes, (id, title), lands)?
+            if performance(id, title, &plan)
+                && crate::parked::held_task(root, git_dir, title).is_none()
+                && !waits(root, &feature, &boxes, (id, title), lands)?
             {
                 return Ok(Some(OpenTask {
                     feature,
@@ -794,6 +798,18 @@ pub(crate) fn verdict(root: &Path, transcript: &str) -> Result<Option<String>, S
         return free_slot(root, &git_dir, feature, path);
     }
     let number = |f: &str| f.split('-').next().unwrap_or(f).to_owned();
+    // ONLY PARKED STAGES LEFT (449 T244): the stop the GM asked for, which `make set-down` takes; never one of them named as the next
+    if boxes
+        .iter()
+        .all(|(_, t)| crate::parked::held_task(root, &git_dir, t).is_some())
+    {
+        return Ok(Some(format!(
+            "BLOCKED: feature {feature} has {} open task(s), every one a parked hamlet stage the GM stops before (feature 449 T244) - do not start one; stop and set it down, which this ruling lets through: make set-down F={} WHY=\"the parked stages wait for the GM, 2026-11-21\"\n\n{}",
+            boxes.len(),
+            number(feature),
+            crate::parked::RULING
+        )));
+    }
     // PERFORMANCE WORK FIRST (feature 451 FR-013): the next named is an open performance task where an active feature holds one; a
     // reader's error names the feature's first box, as before, rather than let the refusal go
     let mut lands = Lands::new();
@@ -815,9 +831,10 @@ pub(crate) fn verdict(root: &Path, transcript: &str) -> Result<Option<String>, S
                 p.id
             )
         }
-        // the first task that can start (451 T102), a wait's read error counted as none
+        // the first task that can start (451 T102), a wait's read error counted as none, a parked stage's never (449 T244)
         None => boxes
             .iter()
+            .filter(|(_, t)| crate::parked::held_task(root, &git_dir, t).is_none())
             .find(|(id, t)| !waits(root, feature, &boxes, (id, t), &mut lands).unwrap_or(false))
             .map_or_else(
                 || "none can start yet: each waits on a day or a landing, 451 T102".to_owned(),

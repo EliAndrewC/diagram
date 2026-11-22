@@ -802,3 +802,47 @@ fn nothing_running_names_the_first_task_that_can_start() {
     let none = text.contains("2 open task(s) and nothing is running - start the next (none can start yet: each waits on a day or a landing, 451 T102)");
     assert!(none, "{text}");
 }
+
+/// 449 T244: a parked stage's task is never named as the next, nor a free slot's; with only those open, the refusal names the GM's
+/// ruling and the set-down that takes it - until a row resumes the stage.
+#[test]
+fn a_parked_stage_s_task_is_never_the_next_and_only_those_left_name_the_ruling() {
+    let (_dir, c, tr) = world("parked", "no");
+    std::fs::create_dir_all(c.join("rust/parked/src")).unwrap();
+    std::fs::write(c.join("rust/parked/src/homesteads.rs"), "").unwrap();
+    let tasks = |rest: &str| {
+        format!("- [ ] T02 phase: homesteads - every household\n- [ ] T03 [perf] phase: homesteads - faster{rest}\n- [ ] GM review (make gm-reviewed F=385)\n")
+    };
+    std::fs::write(
+        c.join("specs/385-x/tasks.md"),
+        tasks("\n- [ ] T04 the port switch"),
+    )
+    .unwrap();
+    let text = said(&c, &tr).unwrap();
+    let ok1 = text.contains("start the next (T04 the port switch)");
+    assert!(ok1, "{text}");
+    std::fs::write(c.join("specs/385-x/tasks.md"), tasks("")).unwrap();
+    let text = said(&c, &tr).unwrap();
+    let ok2 = text.contains("every one a parked hamlet stage the GM stops before");
+    assert!(ok2, "{text}");
+    let ok3 = text.contains("Stop before homesteads, and talk first");
+    assert!(ok3, "{text}");
+    assert!(text.contains("make set-down F=385 WHY="), "{text}");
+    // a free slot: no parked stage's task to start, so the turn ends
+    std::fs::write(
+        c.join(".git/task-starts.jsonl"),
+        "{\"feature\": \"385-x\", \"task\": \"T09\", \"utc\": \"2026-10-18T23:00:00Z\"}\n",
+    )
+    .unwrap();
+    agent(&tr, "a1", 1, "385 T09: something else");
+    crate::env::unset("L7R_BUILDERS");
+    assert_eq!(said(&c, &tr), None);
+    // resumed: the stage's task is work again
+    std::fs::write(
+        c.join(".git/parked-resumed.jsonl"),
+        "{\"stage\": \"homesteads\"}\n",
+    )
+    .unwrap();
+    let text = said(&c, &tr).unwrap();
+    assert!(text.contains("a builder slot is free"), "{text}");
+}

@@ -362,3 +362,54 @@ fn a_set_down_clears_its_feature_s_started_task_mark_and_a_later_start_sets_it_a
         "{\"feature\": \"9001-x\", \"task\": \"T01\"}\n"
     );
 }
+
+/// The stop before the parked stages (feature 449 T244): under the cap, with no ruling, a feature whose open tasks are all a parked
+/// stage's is set down, naming the GM's ruling; one other open task, or the stage resumed, and the cap holds it again.
+#[test]
+fn only_parked_stages_left_the_stop_is_taken_under_the_cap_naming_the_ruling() {
+    let (_dir, root, cap) = capped("set-down-parked");
+    let cap_s = cap.to_string_lossy().into_owned();
+    let session = [
+        ("CLAUDE_CODE_SESSION_ID", "s/1"),
+        ("USAGE_CAP_DIR", cap_s.as_str()),
+    ];
+    std::fs::write(cap.join("budget-s_1.json"), "{\"cap\": 80.0}").unwrap();
+    std::fs::write(cap.join("latest-s_1.json"), "{\"seven_day\": 69}").unwrap();
+    put(&root, "rust/parked/src/homesteads.rs", "");
+    put(&root, "rust/parked/src/track.rs", "");
+    let tasks = "- [x] T29 phase: seat - done\n- [ ] T30 phase: homesteads - every household\n- [ ] T32 phase: track - the road\n- [ ] GM review (make gm-reviewed F=9001)\n";
+    put(&root, "specs/9001-x/tasks.md", tasks);
+    let taken = down(&root, &session);
+    assert_eq!(taken.code, 0, "{}", taken.stderr);
+    let ok1 = taken
+        .stdout
+        .contains("every open task is a parked hamlet stage");
+    assert!(ok1, "{}", taken.stdout);
+    let ok2 = taken
+        .stdout
+        .contains("Stop before homesteads, and talk first");
+    assert!(ok2, "{}", taken.stdout);
+    let rows = std::fs::read_to_string(root.join(".git/set-downs.jsonl")).unwrap();
+    assert!(rows.contains("\"ruling\""), "{rows}");
+    // another open task: the cap holds the set-down as before
+    put(
+        &root,
+        "specs/9001-x/tasks.md",
+        &format!("{tasks}- [ ] T34 the port switch\n"),
+    );
+    let held = down(&root, &session);
+    assert_eq!(held.code, 2, "{}", held.stdout);
+    // a resumed stage is work again
+    put(&root, "specs/9001-x/tasks.md", tasks);
+    std::fs::write(
+        root.join(".git/parked-resumed.jsonl"),
+        "{\"stage\": \"track\"}\n",
+    )
+    .unwrap();
+    let resumed = down(&root, &session);
+    assert_eq!(resumed.code, 2, "{}", resumed.stdout);
+    // no open box at all is not the stop
+    put(&root, "specs/9001-x/tasks.md", "- [x] T30 done\n");
+    let none = down(&root, &session);
+    assert_eq!(none.code, 2, "{}", none.stdout);
+}
