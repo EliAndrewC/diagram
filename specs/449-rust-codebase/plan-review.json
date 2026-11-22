@@ -1316,9 +1316,15 @@
    "declared": "spec-fidelity"
   },
   "### T244 Approach (checklist part A)": {
-   "sha256": "6b8846f26a80cf1bd59e1ef19a18e15d814bc4901694c426048ee3f40a769535",
+   "sha256": "f6fbcd42a880f84ae0e241e744d26d82e4df1bf2546b515147f2761b87250783",
    "verdict": "CLEAR",
-   "reviewed": "2026-11-21",
+   "reviewed": "2026-11-22",
+   "declared": "spec-fidelity"
+  },
+  "### T244 (the GM 2026-11-21, docs/gm-rulings.md, its section Stop before homesteads, and talk first: \"When you get to the point where you have ported everything else and then we're ready to go back to homesteads, then don't actually proceed. Why don't you go ahead and stop, and then we can talk more after everything else is done before you get started on that.\")": {
+   "sha256": "8d5d83cff80e0f43a9e62d039227a263972e993206e069195622a0f05e6bf39d",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-22",
    "declared": "spec-fidelity"
   }
  },
@@ -17345,6 +17351,205 @@
      "why": "An unfilled template makes no decision. The GM's 2026-11-21 ruling (stop before the parked hamlet stages) is now in request.md; T244's blocks remain the unfilled template and so decide nothing that could narrow it."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-22",
+   "blocks": [
+    "### T244 (the GM 2026-11-21, docs/gm-rulings.md, its section Stop before homesteads, and talk first: \"When you get to the point where you have ported everything else and then we're ready to go back to homesteads, then don't actually proceed. Why don't you go ahead and stop, and then we can talk more after everything else is done before you get started on that.\")",
+    "### T244 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T244-doors",
+     "summary": "One shared reader (rust/guard/shared/src/parked.rs) and four doors over it: (a) the phase-source guard refuses a Write/Edit/MultiEdit or shell move of a parked stage into rust/phases/src, or a new `mod <stage>` in lib.rs; (b) make task-start refuses a parked stage's task before the performance-first check; (c) GM_RESUMED with the GM's own words of this session is the only escape, recorded; (d) the set-down pickers skip held tasks and, with only those left, the Stop names the ruling and make set-down, taken with no arbiter ruling and under the usage cap.",
+     "class": "within",
+     "why": "Each door enforces the GM's 2026-11-21 words 'don't actually proceed ... go ahead and stop, and then we can talk': (a) and (b) are the two ways a session proceeds into homesteads, (c) makes the resume the GM's ('we can talk more ... before you get started') and not the session's, and (d) removes the measured push (the Stop guard naming T30 homesteads, the set-down refused under the cap) that would otherwise stop the session from stopping. Delete the requested stop and nothing is left for these to check: enforcement, not unrequested scope."
+    },
+    {
+     "id": "T244-which-stages",
+     "summary": "Held stages are the parked ones read from rust/parked/src (homesteads, track, appurtenances, law, ways); 444's T27 (seat) and T29 (waterward), already stages in rust/phases/src/lib.rs and not parked, are not held.",
+     "class": "within",
+     "why": "The GM's words are 'ready to go back to homesteads ... before you get started on that': homesteads and the stages parked with it are the work he wants to talk about before it starts; a session skipping homesteads to start track or ways would defeat the same purpose. Seat and waterward are not parked and are part of 'everything else' the GM expects ported before the stop, so not holding them carries the request rather than narrowing it."
+    },
+    {
+     "id": "T244-hold-now",
+     "summary": "The hold is in force from landing, not only once everything else is ported; read from the tree, so a stage moved back out of parked is held no longer.",
+     "class": "within",
+     "why": "Holding the parked stages before the rest is ported blocks nothing the GM asked to proceed, and guarantees the stop is in place 'when you get to the point'; the resume is the GM's words, as asked."
+    },
+    {
+     "id": "T244-order",
+     "summary": "Lands after 451 T88 and T102 (the pickers it joins) and before any 444 stage task past waterward starts.",
+     "class": "within",
+     "why": "Sequencing so the stop exists before the parked work could begin; decides nothing the request constrains otherwise."
+    },
+    {
+     "id": "T244-found-and-left",
+     "summary": "The tool profile's incremental build failing to link l7r-rust/l7r-gate (observed 2026-11-22, five runs' logs; CARGO_INCREMENTAL=0 builds) is not fixed in T244 but filed as T245, landing before T158.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "It is a defect (a make target that cannot build valid code), so FIX AS WE GO applies - but that rule binds each port step's known defects to be fixed before the next step's port begins, and T244 is a guard task, not a port step; the defect is in the shared target directory's incremental build, not in this task's code, is recorded with its evidence and filed as its own task with a landing order. It is not carried into a next step unfixed, so the standing request is not defeated. The bundle does not let me confirm that T158 is at or before the next port step; that ordering is what keeps this legitimate."
+    },
+    {
+     "id": "T244-not-perf",
+     "summary": "T244 is classed as not performance work.",
+     "class": "within",
+     "why": "It makes nothing faster and measures no time; 451 FR-013's definition does not reach it."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-22",
+   "blocks": [
+    "### T244 (the GM 2026-11-21, docs/gm-rulings.md, its section Stop before homesteads, and talk first: \"When you get to the point where you have ported everything else and then we're ready to go back to homesteads, then don't actually proceed. Why don't you go ahead and stop, and then we can talk more after everything else is done before you get started on that.\")",
+    "### T244 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T244-approach-doors",
+     "summary": "One shared parked-stage reader and four doors: the phase-source guard refuses a Write/Edit/MultiEdit or shell move of a parked stage into rust/phases/src (or a new `mod <stage>` in lib.rs); task-start refuses a parked stage's task before the performance-first check; set-down's pickers skip a parked task and, with only those left, the Stop names the ruling and set-down is taken under the usage cap with no arbiter ruling.",
+     "class": "within",
+     "why": "The GM asked the session to stop before homesteads and talk first. Each door either refuses starting the parked work (the stop) or lets the session actually stop instead of being pushed into homesteads by the Stop guard or refused its set-down by the cap (measured 2026-11-22 on a fixture: the Stop and free slot named T30 homesteads, set-down refused at the cap). A guard whose only reach is the exact thing the GM asked to have happen is enforcement of the request, not unrequested scope."
+    },
+    {
+     "id": "T244-escape-gm-words",
+     "summary": "The only escape is GM_RESUMED=\"<the GM's words>\", held by the guard to a message the GM wrote this session (the approval-line test), recorded in the guard log and parked-resumed.jsonl; a heredoc body or quoted argument naming it is no escape.",
+     "class": "within",
+     "why": "The GM's words are 'we can talk more after everything else is done before you get started on that': resuming belongs to the GM. Binding the escape to the GM's own words, so a session cannot resume on its own judgment, is the request itself."
+    },
+    {
+     "id": "T244-which-stages",
+     "summary": "The held stages are the parked ones read from rust/parked/src (homesteads, track, appurtenances, law, ways); 444's seat (T27) and waterward (T29), already stages in rust/phases, stay open; a stage moved back is held no longer.",
+     "class": "within",
+     "why": "'Go back to homesteads' names the parked hamlet work, and 'when you have ported everything else' leaves seat and waterward, already in rust/phases and not parked, inside the everything-else the session may finish first. The parked stages that come with homesteads cannot be started without first going back to that parked work, so holding them is the stop as asked, not added scope; nothing the GM asked the session to do is withheld."
+    },
+    {
+     "id": "T244-hold-now",
+     "summary": "The hold is in force from landing, not only once everything else is ported; order: after 451 T88/T102, before any 444 stage past waterward starts.",
+     "class": "within",
+     "why": "Holding the parked stages now blocks no other work (seat, waterward and every other port stay startable), and the request's point - do not start homesteads before talking - is reached only if the hold exists before the session gets there."
+    },
+    {
+     "id": "T244-verification",
+     "summary": "Pins in phase_source_hooks, task_start and set_down tests and hook suites; a replay of 9,646 recorded Bash calls showing 0 changed verdicts (measured 2026-11-22).",
+     "class": "within",
+     "why": "Tests that fail only when the requested stop is absent, and a replay showing the guard refuses nothing else, enforce the request (GM 2026-09-20)."
+    },
+    {
+     "id": "T244-link-failure-left",
+     "summary": "The incremental-build link failure (rust-lld undefined hidden symbols in l7r-rust and l7r-gate, cured by CARGO_INCREMENTAL=0) is not fixed in T244 and is filed as 451 T142.",
+     "class": "within",
+     "why": "It is a real defect (a make target that cannot build valid code), but T244 is a guard task, not a port step, and the defect is in the shared build tooling, not in this task's code; it is filed as a task, not dropped. Saying which task carries it narrows nothing the GM asked of T244. The fix-as-we-go rule ('fix all known bugs in each step before moving on to porting the next step') still binds the next port step to it, and that is decided in that step's plan, not this one."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-22",
+   "blocks": [
+    "### T244 (the GM 2026-11-21, docs/gm-rulings.md, its section Stop before homesteads, and talk first: \"When you get to the point where you have ported everything else and then we're ready to go back to homesteads, then don't actually proceed. Why don't you go ahead and stop, and then we can talk more after everything else is done before you get started on that.\")",
+    "### T244 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T244-approach-doors",
+     "summary": "One shared parked-stage reader and four doors: the phase-source guard refuses a Write/Edit/MultiEdit or shell move of a parked stage into rust/phases/src (or a new `mod <stage>` in lib.rs); task-start refuses a parked stage's task before the performance-first check; set-down's pickers skip a parked task and, with only those left, the Stop names the ruling and set-down is taken under the usage cap with no arbiter ruling.",
+     "class": "within",
+     "why": "The GM asked the session to stop before homesteads and talk first. Each door either refuses starting the parked work (the stop) or lets the session actually stop instead of being pushed into homesteads by the Stop guard or refused its set-down by the cap (measured 2026-11-22 on a fixture: the Stop and free slot named T30 homesteads, set-down refused at the cap). A guard whose only reach is the exact thing the GM asked to have happen is enforcement of the request, not unrequested scope."
+    },
+    {
+     "id": "T244-escape-gm-words",
+     "summary": "The only escape is GM_RESUMED=\"<the GM's words>\", held by the guard to a message the GM wrote this session (the approval-line test), recorded in the guard log and parked-resumed.jsonl; a heredoc body or quoted argument naming it is no escape.",
+     "class": "within",
+     "why": "The GM's words are 'we can talk more after everything else is done before you get started on that': resuming belongs to the GM. Binding the escape to the GM's own words, so a session cannot resume on its own judgment, is the request itself."
+    },
+    {
+     "id": "T244-seat-waterward-open",
+     "summary": "444's seat (T27) and waterward (T29), already stages in rust/phases/src and not parked, stay open and startable.",
+     "class": "within",
+     "why": "'When you have ported everything else' leaves the non-parked stages inside the everything-else the session may finish first; holding only parked stages read from the tree withholds none of it."
+    },
+    {
+     "id": "T244-later-parked-stages-held",
+     "summary": "Beside homesteads, the other parked stages read from rust/parked/src (track, appurtenances, law, ways) are held too, each released by its own GM_RESUMED.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The GM named only homesteads, so holding four more stages narrows what the session may do before talking. It is implied by the GM's own words: 'go back to homesteads' names the return to the parked hamlet work, and the plan's order line ('before any 444 stage task past waterward starts') and its fixture (T30 homesteads the first of T30-T33 named) put homesteads at the head of that work, with the other four after it. Steps are ported in order, and fix-as-we-go means no step starts before the one before it is finished. So none of the four is work the session could reach before going back to homesteads, and holding them withholds nothing the GM asked to be ported first. Releasing them stage by stage costs the GM a GM_RESUMED per stage after the talk. That is a cost, not a departure, since every one is still the GM's own words."
+    },
+    {
+     "id": "T244-hold-now",
+     "summary": "The hold is in force from landing, not only once everything else is ported; order: after 451 T88/T102, before any 444 stage past waterward starts.",
+     "class": "within",
+     "why": "Holding the parked stages now blocks no other work (seat, waterward and every other port stay startable), and the request's point - do not start homesteads before talking - is reached only if the hold exists before the session gets there."
+    },
+    {
+     "id": "T244-verification",
+     "summary": "Pins in phase_source_hooks, task_start and set_down tests and hook suites; a replay of 9,646 recorded Bash calls showing 0 changed verdicts (measured 2026-11-22).",
+     "class": "within",
+     "why": "Tests that fail only when the requested stop is absent, and a replay showing the guard refuses nothing else, enforce the request (GM 2026-09-20)."
+    },
+    {
+     "id": "T244-link-failure-left",
+     "summary": "The incremental-build link failure (rust-lld undefined hidden symbols in l7r-rust and l7r-gate, cured by CARGO_INCREMENTAL=0) is not fixed in T244 and is filed as 451 T142.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "It is a defect (a make target that cannot build valid code), and T244 leaves it unfixed. The GM's own rule sets the deadline at the step: 'fix all known bugs in each step before moving on to porting the next step'. It does not say in the task that found the bug. T244 is a guard task that starts no port step, and the defect is in the shared incremental build, not in this task's code; it is filed as a task, not dropped. This plan carries it into no next step. Whether 451 T142 has landed is owed by the plan of the next port step, which is where the GM's rule bites; this ruling does not discharge that."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-22",
+   "blocks": [
+    "### T244 (the GM 2026-11-21, docs/gm-rulings.md, its section Stop before homesteads, and talk first: \"When you get to the point where you have ported everything else and then we're ready to go back to homesteads, then don't actually proceed. Why don't you go ahead and stop, and then we can talk more after everything else is done before you get started on that.\")",
+    "### T244 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T244-a-source-guard",
+     "summary": "A parked arm in phase_source_hooks (matcher widened to Write|Edit|MultiEdit, run before the read hold's early returns) refuses a Write/Edit/MultiEdit or a shell write (mv, cp, rsync, redirect, sed -i, git mv's destination) landing a parked stage in rust/phases/src/<stage>, or a new `mod <stage>` in rust/phases/src/lib.rs, unless the stage is resumed.",
+     "class": "within",
+     "why": "Enforces 'then don't actually proceed ... before you get started on that': the guard's only reach is the parked stages' source and their lib.rs declaration, so with the requested stop deleted it has nothing left to check. Enforcement of the request, not unrequested scope."
+    },
+    {
+     "id": "T244-b-task-start",
+     "summary": "make task-start refuses a parked stage's task (parked_stage) before the performance-first check and before any file is written, telling the session to stop rather than to use PERF_LATER_OK.",
+     "class": "within",
+     "why": "The same stop at the task's start door; ordering it before FR-013's check only makes the refusal say 'stop' instead of offering an unrelated escape. It does not change FR-013 for any non-parked task."
+    },
+    {
+     "id": "T244-c-gm-resumed",
+     "summary": "The one escape is GM_RESUMED=\"<the GM's words>\", recorded (guard log parked-stage, parked-resumed.jsonl), and held on a move or a task-start to words of a message the GM wrote this session; a heredoc or quoted argument naming it is no escape.",
+     "class": "within",
+     "why": "The GM said 'we can talk more ... before you get started on that': resumption belongs to the GM after the talk. Requiring his own words and refusing a session's own is exactly that; it widens nothing."
+    },
+    {
+     "id": "T244-d-set-down",
+     "summary": "The set-down pickers and fallback skip a held stage's task; with only those open the Stop refusal names the ruling and make set-down, and set_down's parked_stop takes that set-down with no arbiter ruling and under the usage cap, its row carrying the ruling.",
+     "class": "within",
+     "why": "'Why don't you go ahead and stop' - measured 2026-11-22 the Stop guard and free slot pushed the session into T30 homesteads and the cap refused make set-down. Letting the stop happen is the request itself; the bypass of the arbiter ruling and the cap is confined to the case where only parked stages remain, so it reaches nothing the GM did not ask for."
+    },
+    {
+     "id": "T244-held-set",
+     "summary": "Held stages are the parked ones read from rust/parked/src (homesteads, track, appurtenances, law, ways), not every 444 phase: task; T27 (seat) and T29 (waterward), already in rust/phases/src/lib.rs, stay open and unheld; one predicate read from the tree so a stage moved back is no longer held.",
+     "class": "within",
+     "why": "'ported everything else and then we're ready to go back to homesteads' - seat and waterward are part of 'everything else' and must proceed; homesteads opens the parked set, and the stages parked with it come after it, so stopping before homesteads stops them too. Holding track/appurtenances/law/ways is implied by the GM's words, not added; it neither narrows nor broadens the stop."
+    },
+    {
+     "id": "T244-order-and-verification",
+     "summary": "Order after 451 T88/T102 and before any 444 stage past waterward; verification by the pins in the table and a replay of 9,646 recorded Bash calls (0 hits, 0 changed verdicts, measured 2026-11-22).",
+     "class": "within",
+     "why": "Ordering so the hold exists before the stop point is reached serves the request; the pins and replay only fail if the requested hold is absent or over-reaches, so they are enforcement and verification of what was asked."
+    },
+    {
+     "id": "T244-found-and-left",
+     "summary": "The incremental build linking broken l7r-rust / l7r-gate binaries (observed 2026-11-22, five make runs' logs; CARGO_INCREMENTAL=0 builds) is not fixed in T244; filed as T246, fixed by 451 T142, landing before T158.",
+     "class": "within",
+     "why": "A real defect (a make target that cannot build valid code), but not one T244's request or the accepted spec puts in this task's scope; T244 is not a port step, and the fix-as-we-go rule is that a step's known defects are fixed before the next step's port begins, which filing T246 with an ordering before further work serves rather than narrows. Caveat, unverifiable from this bundle: whether T158 is in fact the next port step the defect must precede."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -29879,6 +30084,56 @@
      "summary": "Before T158, after T238 and T241; red-first tests, the changed crates' rust-test, quick, static and hooks-test green; one gated landing.",
      "class": "within",
      "why": "Sequencing and verification of the fix only; it narrows nothing."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T244": {
+   "section_sha256": "1d7d6f6c2d95e4eb9c1e9d7e585803e015e34b6884045d7ebba42faa6a54a094",
+   "reviewed": "2026-11-22",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T244-a-source-guard",
+     "summary": "A parked arm in phase_source_hooks (matcher widened to Write|Edit|MultiEdit, run before the read hold's early returns) refuses a Write/Edit/MultiEdit or a shell write (mv, cp, rsync, redirect, sed -i, git mv's destination) landing a parked stage in rust/phases/src/<stage>, or a new `mod <stage>` in rust/phases/src/lib.rs, unless the stage is resumed.",
+     "class": "within",
+     "why": "Enforces 'then don't actually proceed ... before you get started on that': the guard's only reach is the parked stages' source and their lib.rs declaration, so with the requested stop deleted it has nothing left to check. Enforcement of the request, not unrequested scope."
+    },
+    {
+     "id": "T244-b-task-start",
+     "summary": "make task-start refuses a parked stage's task (parked_stage) before the performance-first check and before any file is written, telling the session to stop rather than to use PERF_LATER_OK.",
+     "class": "within",
+     "why": "The same stop at the task's start door; ordering it before FR-013's check only makes the refusal say 'stop' instead of offering an unrelated escape. It does not change FR-013 for any non-parked task."
+    },
+    {
+     "id": "T244-c-gm-resumed",
+     "summary": "The one escape is GM_RESUMED=\"<the GM's words>\", recorded (guard log parked-stage, parked-resumed.jsonl), and held on a move or a task-start to words of a message the GM wrote this session; a heredoc or quoted argument naming it is no escape.",
+     "class": "within",
+     "why": "The GM said 'we can talk more ... before you get started on that': resumption belongs to the GM after the talk. Requiring his own words and refusing a session's own is exactly that; it widens nothing."
+    },
+    {
+     "id": "T244-d-set-down",
+     "summary": "The set-down pickers and fallback skip a held stage's task; with only those open the Stop refusal names the ruling and make set-down, and set_down's parked_stop takes that set-down with no arbiter ruling and under the usage cap, its row carrying the ruling.",
+     "class": "within",
+     "why": "'Why don't you go ahead and stop' - measured 2026-11-22 the Stop guard and free slot pushed the session into T30 homesteads and the cap refused make set-down. Letting the stop happen is the request itself; the bypass of the arbiter ruling and the cap is confined to the case where only parked stages remain, so it reaches nothing the GM did not ask for."
+    },
+    {
+     "id": "T244-held-set",
+     "summary": "Held stages are the parked ones read from rust/parked/src (homesteads, track, appurtenances, law, ways), not every 444 phase: task; T27 (seat) and T29 (waterward), already in rust/phases/src/lib.rs, stay open and unheld; one predicate read from the tree so a stage moved back is no longer held.",
+     "class": "within",
+     "why": "'ported everything else and then we're ready to go back to homesteads' - seat and waterward are part of 'everything else' and must proceed; homesteads opens the parked set, and the stages parked with it come after it, so stopping before homesteads stops them too. Holding track/appurtenances/law/ways is implied by the GM's words, not added; it neither narrows nor broadens the stop."
+    },
+    {
+     "id": "T244-order-and-verification",
+     "summary": "Order after 451 T88/T102 and before any 444 stage past waterward; verification by the pins in the table and a replay of 9,646 recorded Bash calls (0 hits, 0 changed verdicts, measured 2026-11-22).",
+     "class": "within",
+     "why": "Ordering so the hold exists before the stop point is reached serves the request; the pins and replay only fail if the requested hold is absent or over-reaches, so they are enforcement and verification of what was asked."
+    },
+    {
+     "id": "T244-found-and-left",
+     "summary": "The incremental build linking broken l7r-rust / l7r-gate binaries (observed 2026-11-22, five make runs' logs; CARGO_INCREMENTAL=0 builds) is not fixed in T244; filed as T246, fixed by 451 T142, landing before T158.",
+     "class": "within",
+     "why": "A real defect (a make target that cannot build valid code), but not one T244's request or the accepted spec puts in this task's scope; T244 is not a port step, and the fix-as-we-go rule is that a step's known defects are fixed before the next step's port begins, which filing T246 with an ordering before further work serves rather than narrows. Caveat, unverifiable from this bundle: whether T158 is in fact the next port step the defect must precede."
     }
    ],
    "verdict": "CLEAR"

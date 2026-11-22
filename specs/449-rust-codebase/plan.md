@@ -878,29 +878,36 @@ tests/hooks/                 # the suites, the verdict replay through phase 1
 **Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
 
 
-### T244 (<why: the finding or measurement that files it>)
+### T244 (the GM 2026-11-21, docs/gm-rulings.md, its section Stop before homesteads, and talk first: "When you get to the point where you have ported everything else and then we're ready to go back to homesteads, then don't actually proceed. Why don't you go ahead and stop, and then we can talk more after everything else is done before you get started on that.")
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: one shared reader, `rust/guard/shared/src/parked.rs` (the stages `rust/parked/src/` holds, read from the tree: homesteads, track, appurtenances, law, ways; a task's stage, its box line opening `phase: <stage>` or a `phase:` line of its block; the resumed record `<git common dir>/parked-resumed.jsonl`; the write and shell predicates; the ruling and the refusal), and four doors over it. (a) The source move and the `lib.rs` line: `rust/guard/src/guards/phase_source_hooks.rs`, its matcher widened to `Write|Edit|MultiEdit`, a parked arm run before the read hold's early returns - a Write, Edit or MultiEdit landing in `rust/phases/src/<stage>(.rs|/...)`, or putting a `mod <stage>` into `rust/phases/src/lib.rs` that the replaced text lacked, and a shell write the tree walk finds there (`mv`, `cp`, `rsync`, a redirect, `sed -i`; a `git mv`'s destination read from its last word, since the walk lands it where git runs), refused unless the stage is resumed. (b) The task-start: `rust/gate/crates/task/src/task_start.rs`'s `parked_stage`, before the performance-first check and before any file is written, so the session is told to stop, never to escape `PERF_LATER_OK`. (c) `GM_RESUMED="<the GM's words>"` is the escape: the gate checks its form (two words, recorded in the guard log as `parked-stage`, the stage then written to `parked-resumed.jsonl`), and the guard holds its words on a shell call - a move, or a `make task-start` - to a message the GM wrote this session (the approval line's test, `feature_approval_hooks::problem`, as `budget_change_hooks` holds `WORDS=`), so a session cannot resume a stage on words of its own; a heredoc body or a quoted argument naming `GM_RESUMED=` is no escape. (d) The set-down: `set_down_hooks`' two pickers and its fallback skip a held stage's task; with only those open, the Stop refusal names the ruling and `make set-down`, and `set_down.rs`'s `parked_stop` takes that set-down with no arbiter ruling and under the usage cap, its row carrying `ruling` and its reply naming it.
+- **Which stage tasks are held**: the parked ones, not every 444 `phase:` task. 444's T27 (seat) and T29 (waterward) are stages already in `rust/phases/src/lib.rs`, open but not parked; the GM's words are "go back to homesteads", and `rust/parked/CLAUDE.md` names homesteads, track and appurtenances (with law and ways) as the parked ones. One predicate (`parked::held_task`), read from the tree, so a stage moved back is held no longer.
+- **Measured before**, measured 2026-11-22 (a fixture clone `/tmp/t244-measure/c` holding 444's real `spec.md`, `plan.md` and its tasks.md with only T30-T33 and the GM review open, the Stop replayed through `tests/hooks/set-down-hooks.sh`, the set-down through `scripts/gates/l7r-gate.sh set-down 444` under the session's real cap reading): with nothing running the guard named `T30 phase: homesteads ... - performance work first, FR-013: make task-start F=444 T=T30`, with one agent running the free slot named `make task-start F=444 T=T30, then dispatch its builder`, and `make set-down` was refused with `the weekly cap is 100% and the 7-day figure is 64%`, measured 2026-11-22 (the same fixture). With T27 and T29 open too, both named T27 (seat), measured 2026-11-22 (the same fixture, its tasks.md with T27 and T29 open).
+- **The replay** measured 2026-11-22 (`/tmp/t244-replay`, a scratch crate on this clone's `l7r_shared`, one process, 8.5 MB peak, 3.4 s): `parked::shell_hits` over the 9,646 Bash calls of T93's `/tmp/t93/replay-cmd.jsonl` (Bash calls only; the corpus holds no Write or Edit) - 0 hits, so 0 changed verdicts; one row names `GM_RESUMED=` (this task's own `make task-add TITLE="..."`), a quoted argument, which `parked::words` reads as no escape after the fix the replay found (it was a hit of `words` before; the guard's verdict on it was unchanged either way, since the row invokes `task-add`, not `task-start`, and moves nothing).
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| the guard's parked arm | three tests in `phase_source_hooks/tests.rs` (a refused move: `git mv`, Write, Edit; a refused `lib.rs` declaration: Edit, Write, MultiEdit, a shell append; the GM's words resuming and recorded, invented or short words refused) and suite 2 of `test-phase-source-hooks.sh` | n/a: no engine code | none | `GM_RESUMED` |
+| task-start | `a_parked_stage_s_task_is_refused_until_the_gm_s_words_resume_it` | n/a | none | `GM_RESUMED` |
+| set-down | `only_parked_stages_left_the_stop_is_taken_under_the_cap_naming_the_ruling`, `a_parked_stage_s_task_is_never_the_next_and_only_those_left_name_the_ruling`, suite 9 of `test-set-down-hooks.sh` | n/a | none | `SET_DOWN_OK` |
 
 ### T244 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** Once everything else is ported, the session stops before any parked hamlet stage and the GM talks with it first; no door lets a session resume one on its own judgment.
+2. **The constraints.** The GM's ruling (docs/gm-rulings.md, 2026-11-21); `rust/parked/CLAUDE.md`; the guard rules of the root CLAUDE.md (match invocations, not mentions; the refusal prints the compliant command; every escape recorded); 451 FR-013 (performance first), whose pickers this joins.
+3. **Where each comes from.** G: the GM's words above. O: the measurement before and the replay (above).
+4. **Do they describe the world here?** Yes: measured 2026-11-22 (the fixture above) that the Stop guard and the free slot named T30 homesteads and the set-down was refused under the cap - the push into the parked stage the ruling stops.
+5. **The order.** After 451 T88 and T102 (the pickers it joins); before any 444 stage task past waterward starts.
+6. **The exits.** Green: the pins in the table pass, the replay shows 0 changed verdicts, `make closing-checks T=T244` green. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** The pins green; the replay's 0 hits over 9,646 calls, measured 2026-11-22 (`/tmp/t244-replay` over `/tmp/t93/replay-cmd.jsonl`).
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** Nothing on a map; a session would otherwise be pushed into homesteads by the Stop guard and refused its stop by the usage cap, against the GM's ruling.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?**
+- The tool profile's incremental build linked broken binaries: `make rust-test` failed to link `l7r-rust` (`rust-lld: error: undefined hidden symbol: core::ptr::drop_in_place<serde_json::Value>`) after this task's `l7r_shared` edit, and `make decide`, `make closing-checks` and the review's `make plan-verdict` failed to link `l7r-gate` (an undefined hidden symbol in `libl7r_gate_task`'s `try_fold`) after its task-crate edit - a make target that cannot build valid code, observed 2026-11-22, method: five make runs' logs (`/tmp/t244-red-*.log`, `/tmp/t244-decide.log`, the closing check's `quick.log`, the review's report); clearing the crates' `tool/incremental/` dirs did not cure it, `CARGO_INCREMENTAL=0` built both. Not fixed here: its cause is in the incremental build of the target directory several builders share at once, not in this task's code, and finding it is build-tooling work. Its fix is 451 T142; filed as T246; lands before T158.
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** No.
 
