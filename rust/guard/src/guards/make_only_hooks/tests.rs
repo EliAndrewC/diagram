@@ -189,6 +189,8 @@ fn world(tag: &str) -> crate::shared::tempdir::Held<PathBuf> {
     std::fs::write(d.join("a.py"), "x").unwrap();
     std::fs::write(d.join("Makefile"), MAKEFILE).unwrap();
     let held = d.canonicalize().unwrap();
+    // the world stands for a project tree (451 T87: under the temp directory a guard file's name is scratch, held only in one)
+    crate::shared::env::set("CLONE_MAIN", &held);
     d.hold(held)
 }
 
@@ -739,4 +741,83 @@ fn the_mask_finds_the_quoted_strings_the_pattern_found() {
             .collect();
         assert_eq!(super::mask_quotes(&text), found, "{text:?}");
     }
+}
+
+/// 451 T87 (found by T79): a guard file's name written in scratch is no guard write - a literal `/tmp` place, a `$(mktemp -d)` one
+/// (tx#953, ux#2204's shape), a copy of `dev/work-budget.json` into a `$(mktemp -d ...)` preview (ux#1106's), a scratch copy of a guard
+/// source, quoted or not, and a Python program's write standing in scratch (the guard log's 2026-11-20 t232 row); the same write in a
+/// project tree, one whose prefix nothing places (`$CLAUDE_PROJECT_DIR`, read as unassigned), and a scratch write beside a write the
+/// walk cannot place or cannot see (an `xargs`'s) keep HEAD's reading.
+#[test]
+fn a_guard_files_name_written_in_scratch_is_no_guard_write() {
+    for cmd in [
+        "printf x > /tmp/q/Makefile",
+        "T=$(mktemp -d); git init -q $T; printf 'all:\\n' > $T/Makefile",
+        "S=$(mktemp -d /tmp/t226/preview.XXXX); mkdir -p $S/dev; cp dev/work-budget.json $S/dev/work-budget.json",
+        "cd /tmp/q && sed -i s/a/b/ Makefile",
+        "cp /tmp/x /tmp/t42/src/rust/guard/src/guards/a.rs",
+        "printf 'all:\\n' > /tmp/q/Makefile",
+        "sed -i 's/a/b/' /tmp/q/Makefile",
+        "echo \"x\" > /tmp/q/Makefile 2>&1",
+        "if true; then printf 'x' > /tmp/q/Makefile 2>/dev/null; fi",
+        "echo x &>/tmp/q/Makefile",
+        "cd /tmp/q && sed -i '491s|a = 0;|b|' rust/guard/src/guards/a_hooks.rs && sed -n 489,493p rust/guard/src/guards/a_hooks.rs",
+        "cd /tmp/q && python3 -c \"import json;d=json.load(open('dev/switches.json'));json.dump(d,open('dev/switches.json','w'))\"",
+    ] {
+        let got = v(cmd);
+        assert_eq!(got, "ok", "{cmd}");
+    }
+    for cmd in [
+        "printf x > /diagram/.clones/s/Makefile",
+        "echo x > $CLAUDE_PROJECT_DIR/Makefile",
+        "F=$(ls); sed -i s/a/b/ $F/Makefile",
+        "printf x > /tmp/q/Makefile; F=$(ls); sed -i s/a/b/ $F/Makefile",
+        "cp Makefile /tmp/q/Makefile; ls | xargs sed -i s/a/b/ Makefile",
+        "cp Makefile /tmp/q/Makefile; ls | xargs sed -i 's/a/b/' Makefile",
+        "sed -i 's/a/b/' /tmp/q/Makefile; F=$(ls); sed -i 's/a/b/' $F/Makefile",
+        "sed -i s/a/b/ /tmp/q/Makefile; cd $X && sed -i s/a/b/ Makefile",
+        "cd /tmp/q && python3 -c \"open('Makefile','w')\"; ls | xargs python3 -c \"open('Makefile','w')\"",
+        "python3 -c \"open('Makefile','w').write('x')\"",
+        "cd /tmp/q && python3 -c \"import os; os.chdir('/diagram/.clones/s'); open('Makefile','w')\"",
+        "cd /tmp/q && python3 - <<'EOF'\nimport os; os.chdir('/diagram/.clones/s'); open('Makefile','w')\nEOF",
+        "cd /tmp/q && CDPATH=/diagram/.clones cd s && printf x > Makefile",
+        "cd /tmp/q && CDPATH=/diagram/.clones cd s && cp /tmp/x Makefile",
+        "cd /tmp/q && CDPATH=/diagram/.clones cd s && python3 -c \"open('Makefile','w')\"",
+    ] {
+        let got = v(cmd);
+        assert_eq!(got, "guard-write", "{cmd}");
+    }
+}
+
+/// 451 T87 (review round 2): a write into a git worktree in scratch of a project repository is a guard write, its commits reaching
+/// that repository - the worktree on disk, its `.git` pointer read, and one the command itself makes, which no pointer shows yet, so
+/// a command naming a `worktree add` keeps HEAD's reading by name. Scratch beside it stays scratch.
+#[test]
+fn a_write_into_a_project_repositorys_worktree_in_scratch_is_a_guard_write() {
+    let d = world("worktree");
+    let place = crate::shared::tempdir::TempDir::new("guard-makeonly-worktree-place");
+    let s = place.canonicalize().unwrap();
+    crate::shared::env::set("TMPDIR", std::env::temp_dir());
+    std::fs::create_dir_all(d.join(".git/worktrees/w")).unwrap();
+    std::fs::write(d.join(".git/worktrees/w/commondir"), "../..").unwrap();
+    std::fs::create_dir_all(s.join("wt")).unwrap();
+    std::fs::write(
+        s.join("wt/.git"),
+        format!("gitdir: {}/.git/worktrees/w\n", d.display()),
+    )
+    .unwrap();
+    let w = s.join("wt").display().to_string();
+    for cmd in [
+        format!("printf x > {w}/Makefile"),
+        format!("cp /tmp/x {w}/rust/guard/src/guards/a.rs"),
+        format!("cd {w} && sed -i s/a/b/ Makefile"),
+        format!("cd {w} && python3 -c \"open('Makefile','w')\""),
+        "git -C /diagram/.clones/s worktree add --detach /tmp/q HEAD && printf x > /tmp/q/Makefile"
+            .to_owned(),
+    ] {
+        let got = v(&cmd);
+        assert_eq!(got, "guard-write", "{cmd}");
+    }
+    let beside = v(&format!("printf x > {}/Makefile", s.display()));
+    assert_eq!(beside, "ok");
 }

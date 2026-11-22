@@ -2,7 +2,7 @@
 //! `GUARD_EDIT_OK` and a reason, or follows `make guard-edit` within the hour; the root Makefile takes only the second. A recipe comment that would RUN is refused on any Makefile, with no escape: it is a shell
 //! fact, not a policy. A Read of a guard file says all this free, before an edit is written.
 
-use std::path::Path;
+use std::path::{Path, PathBuf};
 use std::sync::LazyLock;
 use std::time::{SystemTime, UNIX_EPOCH};
 
@@ -226,8 +226,14 @@ pub(crate) fn recipe_hazards(text: &str) -> Vec<String> {
     out
 }
 
-/// Whether the file is one this guard holds - THE guard file list, which `make_only_hooks` reads for a write from the shell too (T227).
+/// Whether the file is one this guard holds - THE guard file list, which `make_only_hooks` reads for a write from the shell too (T227):
+/// a guard file by its name, but not in scratch (451 T87).
 pub(crate) fn held(file: &str) -> bool {
+    named(file) && !scratch(file)
+}
+
+/// A guard file by its name alone, wherever it stands - the whole of `held` before 451 T87.
+pub(crate) fn named(file: &str) -> bool {
     let guarded = file.ends_with("/Makefile")
         || hit(&HOOK_SCRIPT, file)
         || file.ends_with("/.claude/settings.json")
@@ -235,6 +241,63 @@ pub(crate) fn held(file: &str) -> bool {
         || file.ends_with("/dev/switches.json")
         || file.ends_with("/dev/work-budget.json");
     (guarded && !hit(&HELD_SUITE, file)) || guard_source(file)
+}
+
+/// The project's trees (451 T87): the mirror with its clones and the l7r mount; `CLONE_MAIN`, the mirror's seam, adds a test's world.
+const TREES: [&str; 2] = ["/diagram", "/host-l7r-repo"];
+
+/// Whether a path is scratch, so a guard file's name there is a fixture and no guard file (451 T87, found by T79): its real path - its
+/// existing part's links resolved (`tree::realpath`), so a scratch link into a clone is the clone's - lies under the temp directory,
+/// `/tmp` or `$TMPDIR` (where `$(mktemp -d)` makes one; a `$TMPDIR` of `/`, the home directory or a place holding it is no scratch of
+/// its own), and in no project tree. Every other place keeps the reading by name: `/Makefile`, where the walk puts `$UNSET/Makefile`
+/// and `$CLAUDE_PROJECT_DIR/Makefile`, a path the shell computes and the walk cannot place; `~/.claude/settings.json`, which registers
+/// the GM's own hooks. Measured 2026-11-21 (the guard log, 96,279 firings): of make-only's 745 guard-write refusals, 110 held a
+/// guard file's name under `/tmp` alone; of guard-file's 180, 11 named one under `/tmp` and 2 `~/.claude/settings.json`. A git
+/// worktree in scratch of a project repository is a project tree (`project_worktree`): 43 of those 110 wrote into one.
+fn scratch(file: &str) -> bool {
+    use crate::shared::tree::realpath;
+    if !file.starts_with('/') {
+        return false;
+    }
+    let real = realpath(Path::new(file));
+    let home = crate::shared::env::var("HOME");
+    let temp = crate::shared::env::opt("TMPDIR")
+        .filter(|t| t.starts_with('/'))
+        .map(|t| realpath(Path::new(&t)))
+        .filter(|t| t.as_path() != Path::new("/") && !Path::new(&home).starts_with(t));
+    let mut roots = std::iter::once(realpath(Path::new("/tmp"))).chain(temp);
+    let trees: Vec<PathBuf> = TREES
+        .iter()
+        .map(|t| (*t).to_owned())
+        .chain(crate::shared::env::opt("CLONE_MAIN").filter(|t| t.starts_with('/')))
+        .map(|t| realpath(Path::new(&t)))
+        .collect();
+    roots.find(|r| real.starts_with(r)).is_some_and(|root| {
+        !trees.iter().any(|t| real.starts_with(t)) && !project_worktree(&real, &root, &trees)
+    })
+}
+
+/// Whether a scratch path lies in a git worktree of a project repository (451 T87, review round 2: `/tmp/t50/wt`, a worktree of a
+/// clone): its commits reach that repository, so it is a project tree. The nearest `.git` at or under the scratch root is read once,
+/// a directory being a repository of scratch's own, and a file's `gitdir:` (relative to its own directory) leads to the common git
+/// dir, its `commondir` (relative to it) or, where none is read, the gitdir itself, so a pointer into a project is held where it points.
+fn project_worktree(real: &Path, root: &Path, trees: &[PathBuf]) -> bool {
+    let Some(dot) = real
+        .ancestors()
+        .take_while(|a| a.starts_with(root))
+        .map(|a| a.join(".git"))
+        .find(|g| g.exists())
+    else {
+        return false;
+    };
+    let Ok(text) = std::fs::read_to_string(&dot) else {
+        return false;
+    };
+    let gitdir = dot.with_file_name(text.trim().trim_start_matches("gitdir:").trim());
+    let common = std::fs::read_to_string(gitdir.join("commondir"))
+        .map_or_else(|_| gitdir.clone(), |c| gitdir.join(c.trim()));
+    let common = crate::shared::tree::realpath(&common);
+    trees.iter().any(|t| common.starts_with(t))
 }
 
 /// The time a permit is granted and judged at: `L7R_PERMIT_NOW`, read through `shared::env` (a test's own environment, never a

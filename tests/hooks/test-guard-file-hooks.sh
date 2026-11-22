@@ -146,6 +146,8 @@ else echo "  FAIL    a guard file's Read recorded $n entries, not 1"; FAIL=$((FA
 echo
 echo "8. A GUARD FILE'S REASON OUTSIDE THE FILE: make guard-edit's permit (feature 170 amendment 1)"
 FIX=$(mktemp -d); git -C "$FIX" init -q; mkdir -p "$FIX/scripts/hooks"; : >"$FIX/Makefile"; : >"$FIX/scripts/hooks/x-hooks.sh"
+# the fixture stands for a project tree: under the temp directory a guard file's name is scratch, held only in one (451 T87)
+export CLONE_MAIN="$FIX"
 ev2() { jq -nc '{"session_id":"g","tool_name":"Edit","tool_input":{"file_path":$ARGS.positional[0],"old_string":$ARGS.positional[1],"new_string":$ARGS.positional[2]}}' --args -- "$1" "$2" "$3"; }
 case8() { # label, expected, file, old_string, new_string [, clock]
   local rc; rc=$(ev2 "$3" "$4" "$5" | L7R_PERMIT_NOW="${6:-}" "$HOOK" pretool >/dev/null 2>"$HOOK_ERR"; echo $?)
@@ -174,7 +176,25 @@ case8 "an edit keeping a marker it replaces is not refused for it" ok "$FIX/Make
 case8 "another guard file still takes the in-file marker" ok "$FIX/scripts/hooks/x-hooks.sh" "a" "# GUARD_EDIT_OK: a reason given in the file" "$T0"
 ctx=$(ev "$FIX/Makefile" "" "Read" | "$HOOK" pretool 2>/dev/null)
 printf '%s' "$ctx" | grep -q "make guard-edit FILE=Makefile" && { echo "  ok      the root Makefile's Read names make guard-edit"; PASS=$((PASS+1)); } || { echo "  FAIL    the root Makefile's Read context: $ctx"; FAIL=$((FAIL+1)); }
-rm -rf "$FIX"
+
+echo
+echo "9. A GUARD FILE'S NAME IN SCRATCH IS NO GUARD FILE (451 T87): under /tmp or \$TMPDIR, outside every project tree"
+SCR=$(mktemp -d); mkdir -p "$SCR/dev" "$SCR/rust/guard/src/guards"; ln -s "$FIX" "$SCR/link"
+check ok "$SCR/Makefile"
+check ok "$SCR/dev/work-budget.json" "x" "Write"
+check ok "$SCR/rust/guard/src/guards/a_hooks.rs"
+check blocked "$SCR/link/Makefile"
+check blocked "/Makefile"
+# ...but a git worktree there of a project repository is a project tree, its commits reaching the repository (review round 2)
+git -C "$FIX" -c user.name=t -c user.email=t@t commit -q --allow-empty -m x
+git -C "$FIX" worktree add -q --detach "$SCR/wt" 2>/dev/null
+check blocked "$SCR/wt/Makefile"
+check blocked "$SCR/wt/scripts/hooks/x-hooks.sh"
+git -C "$SCR" init -q; git -C "$SCR" -c user.name=t -c user.email=t@t commit -q --allow-empty -m x
+git -C "$SCR" worktree add -q --detach "$SCR/own" 2>/dev/null
+check ok "$SCR/own/Makefile"
+rm -rf "$FIX" "$SCR"
+unset CLONE_MAIN
 
 echo "passed $PASS, failed $FAIL"
 [ "$FAIL" -eq 0 ]

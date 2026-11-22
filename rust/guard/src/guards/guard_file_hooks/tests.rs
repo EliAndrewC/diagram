@@ -27,6 +27,8 @@ fn world(tag: &str) -> crate::shared::tempdir::Held<PathBuf> {
     )
     .ok());
     std::fs::write(d.join("Makefile"), "all:\n").unwrap();
+    // the world stands for a project tree (451 T87: under the temp directory a guard file's name is scratch, held only in one)
+    crate::shared::env::set("CLONE_MAIN", &d);
     keep.hold(d)
 }
 
@@ -295,4 +297,100 @@ fn the_guards_own_sources_are_held_and_granted_but_not_their_tests() {
         assert!(!super::grantable(loose), "{loose} is not granted");
         assert_eq!(read_context(loose), None);
     }
+}
+
+/// 451 T87 (found by T79): a guard file's name in scratch - under `/tmp` or `$TMPDIR`, where `$(mktemp -d)` places a directory - is no
+/// guard file, so its edit passes; the same name in a project tree, through a scratch link into one, or in a place nothing marks as
+/// scratch (`/Makefile`, the walk's `$UNSET/Makefile`; `~/.claude/settings.json`, which holds the GM's own hooks) is held, as at HEAD.
+#[test]
+fn a_guard_file_name_in_scratch_is_not_held_but_one_in_a_project_tree_is() {
+    let d = world("scratch");
+    let place = crate::shared::tempdir::TempDir::new("guard-gf-scratch-place");
+    let s = place.canonicalize().unwrap();
+    crate::shared::env::set("TMPDIR", std::env::temp_dir());
+    std::os::unix::fs::symlink(&*d, s.join("link")).unwrap();
+    let freed = [
+        p(&s, "Makefile"),
+        p(&s, "dev/work-budget.json"),
+        p(&s, "rust/guard/src/guards/a.rs"),
+        "/tmp/tmp.XXXXXXXXXX/dev/work-budget.json".to_owned(),
+    ];
+    let got: Vec<bool> = freed.iter().map(|f| super::held(f)).collect();
+    assert_eq!(got, [false; 4], "{freed:?}");
+    let home = crate::shared::env::var("HOME");
+    let kept = [
+        p(&d, "Makefile"),
+        p(&s, "link/Makefile"),
+        "/Makefile".to_owned(),
+        "/dev/work-budget.json".to_owned(),
+        format!("{home}/.claude/settings.json"),
+        "/r/scripts/hooks/a-hooks.sh".to_owned(),
+    ];
+    let got: Vec<bool> = kept.iter().map(|f| super::held(f)).collect();
+    assert_eq!(got, [true; 6], "{kept:?}");
+    let passed = edit(&p(&s, "Makefile"), "x");
+    assert!(passed.is_empty(), "{passed:?}");
+    let refused_here = refused(&edit(&p(&s, "link/Makefile"), "x"), "is a GUARD");
+    assert!(refused_here);
+}
+
+/// 451 T87: `$TMPDIR` is scratch where it names a place of its own - not `/`, the home directory or a place holding it - and a
+/// project tree under it stays one.
+#[test]
+fn tmpdir_is_scratch_only_where_it_is_a_place_of_its_own() {
+    let d = world("tmpdir");
+    crate::shared::env::set("TMPDIR", "/var/t87-scratch");
+    let away = super::held("/var/t87-scratch/tmp.XXXXXXXXXX/Makefile");
+    assert!(!away);
+    let home = crate::shared::env::var("HOME");
+    for wide in ["/".to_owned(), home.clone(), "/home".to_owned()] {
+        crate::shared::env::set("TMPDIR", &wide);
+        let kept = super::held(&format!("{home}/x/Makefile"));
+        assert!(kept, "TMPDIR={wide}");
+    }
+    crate::shared::env::set("TMPDIR", &*d);
+    let inside = super::held(&p(&d, "tmp.XXXXXXXXXX/Makefile"));
+    assert!(inside);
+    let relative = super::held("x/Makefile");
+    assert!(relative);
+}
+
+/// 451 T87 (review round 2): a git worktree in scratch whose common git dir is a project repository's is a project tree - its commits
+/// reach that repository - so a guard file's name in it is held: the pointer git writes, a relative one read from its own directory,
+/// and one whose `commondir` cannot be read, held where it points. A worktree of scratch's own repository, and that repository, stay
+/// scratch.
+#[test]
+fn a_worktree_in_scratch_of_a_project_repository_is_held() {
+    let d = world("worktree");
+    let place = crate::shared::tempdir::TempDir::new("guard-gf-worktree-place");
+    let s = place.canonicalize().unwrap();
+    crate::shared::env::set("TMPDIR", std::env::temp_dir());
+    let name = d.file_name().unwrap().to_string_lossy().into_owned();
+    for (common, pointed) in [
+        (d.join(".git/worktrees/w"), "../.."),
+        (s.join("repo/.git/worktrees/x"), "../.."),
+    ] {
+        std::fs::create_dir_all(&common).unwrap();
+        std::fs::write(common.join("commondir"), pointed).unwrap();
+    }
+    let pointers = [
+        ("wt", p(&d, ".git/worktrees/w")),
+        ("rel", format!("../../{name}/.git/worktrees/w")),
+        ("dangling", p(&d, ".git/worktrees/gone")),
+        ("own", p(&s, "repo/.git/worktrees/x")),
+    ];
+    for (dir, gitdir) in &pointers {
+        std::fs::create_dir_all(s.join(dir)).unwrap();
+        std::fs::write(s.join(dir).join(".git"), format!("gitdir: {gitdir}\n")).unwrap();
+    }
+    let files = [
+        "wt/Makefile",
+        "wt/rust/guard/src/guards/a.rs",
+        "rel/Makefile",
+        "dangling/Makefile",
+        "own/Makefile",
+        "repo/Makefile",
+    ];
+    let got: Vec<bool> = files.iter().map(|f| super::held(&p(&s, f))).collect();
+    assert_eq!(got, [true, true, true, true, false, false], "{files:?}");
 }

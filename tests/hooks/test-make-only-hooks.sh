@@ -187,6 +187,27 @@ check "a cd, then a heredoc into the switches"   blocked "cd dev && cat > switch
 EOF"
 check "perl -pi over the Makefile"               blocked "perl -pi -e 's/a/b/' Makefile"
 check "sed -E -i over settings.json"             blocked "sed -E -i 's/a/b/' .claude/settings.json"
+# 451 T87: a guard file's name written in scratch is no guard write; where the walk cannot place a write, HEAD's reading stands
+check "a scratch Makefile written"                ok      "printf x > /tmp/q/Makefile"
+check "a \$(mktemp -d) place's Makefile"          ok      'T=$(mktemp -d); printf x > $T/Makefile'
+check "the budget copied into a mktemp preview"   ok      'S=$(mktemp -d /tmp/t226/preview.XXXX); mkdir -p $S/dev; cp dev/work-budget.json $S/dev/work-budget.json'
+check "...a write beside it the walk cannot place" blocked 'printf x > /tmp/q/Makefile; F=$(ls); sed -i s/a/b/ $F/Makefile'
+check "...a prefix nothing places"                blocked 'echo x > $CLAUDE_PROJECT_DIR/Makefile'
+check "...a write beside it the walk cannot see"  blocked 'cp Makefile /tmp/q/Makefile; ls | xargs sed -i s/a/b/ Makefile'
+check "a quoted scratch write"                    ok      "printf 'all:\\n' > /tmp/q/Makefile"
+check "a quoted sed -i in scratch"                ok      "sed -i 's/a/b/' /tmp/q/Makefile"
+check "a Python write standing in scratch"        ok      "cd /tmp/q && python3 -c \"import json;d=json.load(open('dev/switches.json'));json.dump(d,open('dev/switches.json','w'))\""
+check "...quoted, beside a write it cannot see"   blocked "cp Makefile /tmp/q/Makefile; ls | xargs sed -i 's/a/b/' Makefile"
+check "...quoted, beside one it cannot place"     blocked "sed -i 's/a/b/' /tmp/q/Makefile; F=\$(ls); sed -i 's/a/b/' \$F/Makefile"
+check "...a cd a CDPATH carries out of scratch"   blocked "cd /tmp/q && CDPATH=/diagram/.clones cd s && printf x > Makefile"
+check "...a program that leaves scratch"          blocked "cd /tmp/q && python3 -c \"import os; os.chdir('/diagram/.clones/s'); open('Makefile','w')\""
+# ...and a git worktree there of a project repository is a project tree, its commits reaching the repository (review round 2)
+WTP=$(mktemp -d); git -C "$WTP" init -q; git -C "$WTP" -c user.name=t -c user.email=t@t commit -q --allow-empty -m x
+git -C "$WTP" worktree add -q --detach "$WTP-wt" 2>/dev/null; WAS_CM=${CLONE_MAIN-}; export CLONE_MAIN="$WTP"
+check "...a worktree of a project repository"     blocked "printf x > $WTP-wt/Makefile"
+check "...a Python write standing in one"         blocked "cd $WTP-wt && python3 -c \"open('Makefile','w')\""
+check "...a worktree the command makes"           blocked "git -C $WTP worktree add --detach /tmp/q HEAD && printf x > /tmp/q/Makefile"
+if [ -n "$WAS_CM" ]; then export CLONE_MAIN="$WAS_CM"; else unset CLONE_MAIN; fi; rm -rf "$WTP" "$WTP-wt"
 check "a cd into the suites is still a suite"    ok      "cd tests/hooks && cat > test-a-hooks.sh <<'EOF'
 x
 EOF"

@@ -12,7 +12,7 @@ use std::time::Duration;
 use fancy_regex::Regex;
 use serde_json::{json, Value};
 
-use crate::guards::guard_file_hooks::held;
+use crate::guards::guard_file_hooks::{held, named};
 use crate::protocol::{Answer, Event, Guard};
 use crate::shared::escape::{escape_or_refuse, used, Escape};
 use crate::shared::log;
@@ -21,7 +21,7 @@ use crate::shared::session::Session;
 use crate::shared::shape::{quoted_spans, strip_heredocs, strip_quotes};
 use crate::shared::state::field;
 use crate::shared::tool::ask_within;
-use crate::shared::tree::{walk_judged, Walk};
+use crate::shared::tree::{walk_judged, Target, Walk};
 
 pub(crate) mod interp;
 
@@ -48,7 +48,8 @@ const GUARD_NAMES: [&str; 6] = [
     "work-budget.json",
 ];
 /// What else makes a command worth walking (T229): the guards' own sources, whose names are a directory and a script, not a suffix. They
-/// never "clear" a write the way `GUARD_NAMES` do - a `.rs` named in scratch overrules no pattern.
+/// never "clear" a write by its name the way `GUARD_NAMES` do - a `.rs` overrules a pattern only where the walk placed it in scratch,
+/// for its own statement (451 T87).
 const SOURCE_NAMES: [&str; 4] = ["guard/src", "shared/src", "Cargo.toml", "l7r-guard.sh"];
 /// The tools that change a file's mode, times or directory but never its text: a guard file `chmod +x`ed is not rewritten.
 const NOT_TEXT: [&str; 5] = ["chmod", "chown", "touch", "mkdir", "rmdir"];
@@ -244,10 +245,11 @@ pub(crate) fn classify(cmd: &str) -> String {
 
 /// What the shell walk makes of a command's writes - a redirect, `sed -i`, `perl -i`, `tee`, `cp`, `mv`, `install`, through its own
 /// `cd`s - judged by THE guard file list (`guard_file_hooks::held`): (a write lands on a guard file, a write named like one lands
-/// on a file that is not one). The walk reads a command at its head, so the patterns over the text still judge what it cannot see
-/// (`find -exec sed -i`); the second answer is what lets it overrule them - a `settings.json` in a scratch directory, a suite
-/// written after a `cd` into `tests/hooks` (T227).
-fn walked_write(cmd: &str, here: &str) -> (bool, bool) {
+/// on a file that is not one, the programs whose guard files' names all land in scratch). The walk reads a command at its head, so the
+/// patterns over the text still judge what it cannot see (`find -exec sed -i`); the second answer is what lets it overrule them - a
+/// `settings.json` in a scratch directory, a suite written after a `cd` into `tests/hooks` (T227), a guard file's name written in
+/// scratch (451 T87) - and the third what the Python patterns no longer read.
+fn walked_write(cmd: &str, here: &str) -> (bool, bool, Vec<String>) {
     let home = std::env::var("HOME").unwrap_or_default();
     // the judged walk (451 T33): a Python program run from stdin that writes is a write where the shell stands, as a `-c` one is
     let Walk { targets, .. } = walk_judged(cmd, Some(here), "", &home);
@@ -261,17 +263,138 @@ fn walked_write(cmd: &str, here: &str) -> (bool, bool) {
             .filter_map(|t| t.path.as_deref().map(|p| (p, t)))
     };
     // a program `py_c` judged a read writes nothing, where it stands too (451 T33: a `-c` read in a guard directory was refused);
-    // a writer is judged by where it stands and by the files its body names
+    // a writer is judged by where it stands and by the files its body names; a `CDPATH`, which the walk does not read, can carry a
+    // `cd` out of scratch into a tree, and a `worktree add` makes a project's worktree in scratch before any pointer shows it, so a
+    // command naming either keeps HEAD's reading by name (451 T87: `CDPATH=/diagram/.clones cd s`, `git -C <clone> worktree add`)
+    let words: Vec<&str> = cmd.split_whitespace().collect();
+    let kept = cmd.contains("CDPATH") || words.windows(2).any(|w| w == ["worktree", "add"]);
     let on_guard = targets.iter().filter(|t| t.how != "read").any(|t| {
         t.path
             .as_deref()
-            .is_some_and(|p| held(p) && text_tool(&t.segment))
-            || t.program
-                .as_deref()
-                .is_some_and(|b| interp::program_names_guard(b, t.path.as_deref(), true))
+            .is_some_and(|p| (held(p) || (kept && named(p))) && text_tool(&t.segment))
+            || t.program.as_deref().is_some_and(|b| {
+                interp::program_names_guard(b, t.path.as_deref(), true)
+                    || (kept && interp::program_names_named(b, t.path.as_deref()))
+            })
     });
-    let cleared = paths().any(|(p, _)| !held(p) && GUARD_NAMES.iter().any(|n| p.ends_with(n)));
-    (on_guard, cleared)
+    // a guard file's name in scratch (451 T87) overrules them hit by hit, each only where its own statement is a write the walk
+    // placed there, so a write beside it the walk cannot place or cannot see keeps HEAD's reading (`cp Makefile /tmp/q/Makefile;
+    // ls | xargs sed -i s/a/b/ Makefile`, `printf x > /tmp/q/Makefile; F=$(ls); sed -i s/a/b/ $F/Makefile`)
+    let by_name = paths().any(|(p, _)| !named(p) && GUARD_NAMES.iter().any(|n| p.ends_with(n)));
+    let c = replace_suites(&strip_quotes(&strip_heredocs(cmd)));
+    let programs = targets
+        .iter()
+        .filter_map(|t| {
+            t.program
+                .as_deref()
+                .filter(|b| !kept && interp::program_names_scratch(b, t.path.as_deref()))
+        })
+        .map(str::to_owned)
+        .collect();
+    (
+        on_guard,
+        by_name || (!kept && scratch_hits_placed(&c, &targets)),
+        programs,
+    )
+}
+
+/// Whether each hit of the text patterns in `c` (the command, its quotes and heredoc bodies blanked) is a write the walk placed in
+/// scratch (451 T87): the hit's statement, its stretch of `c` between two separators, pairs with a segment of the walk whose writes
+/// all landed on no guard file, one of them a guard file's name, and with no segment that is not so. A segment pairs with a statement
+/// whose words, quotes dropped, it holds in order under the same head, so however the walk renders a quoted word (kept, `''`) they
+/// pair; a hit the walk did not see (an `xargs`'s, a `find -exec`'s) or could not place (`$F/Makefile`) pairs with none freed.
+fn scratch_hits_placed(c: &str, targets: &[Target]) -> bool {
+    let mut segments: Vec<(&str, bool, bool)> = Vec::new();
+    for t in targets.iter().filter(|t| t.how != "read") {
+        let p = t.path.as_deref();
+        let (free, name) = (p.is_some_and(|p| !held(p)), p.is_some_and(named));
+        match segments.iter_mut().find(|s| s.0 == t.segment) {
+            Some(s) => (s.1, s.2) = (s.1 && free, s.2 || name),
+            None => segments.push((&t.segment, free, name)),
+        }
+    }
+    let segments: Vec<(Vec<String>, bool)> = segments
+        .into_iter()
+        .map(|(s, free, name)| (pair_words(&replace_suites(s)), free && name))
+        .collect();
+    SHELL_WRITES
+        .iter()
+        .flat_map(|p| {
+            p.find_iter(c)
+                .map_while(Result::ok)
+                .map(|m| (m.start(), m.end()))
+        })
+        .all(|(at, end)| {
+            let (from, to) = statement(c, at);
+            let said = pair_words(&c[from..to]);
+            let pairs = |freed: bool| segments.iter().any(|(w, f)| *f == freed && holds(w, &said));
+            end <= to + 1 && pairs(true) && !pairs(false)
+        })
+}
+
+/// The stretch of `c` holding byte `at`, between two separators - `;`, a newline, `|`, `(`, `)`, a backquote, an `&` that is no
+/// redirect's target (`2>&1`; an `&>` is a separator, as the walk reads it) - as byte offsets.
+fn statement(c: &str, at: usize) -> (usize, usize) {
+    let b = c.as_bytes();
+    let sep = |i: usize| match b[i] {
+        b';' | b'\n' | b'|' | b'(' | b')' | b'`' => true,
+        b'&' => !(i > 0 && matches!(b[i - 1], b'>' | b'<')),
+        _ => false,
+    };
+    let from = (0..at).rev().find(|&i| sep(i)).map_or(0, |i| i + 1);
+    let to = (at..b.len()).find(|&i| sep(i)).unwrap_or(b.len());
+    (from, to)
+}
+
+/// The shell's reserved words a statement may open with, which the walk's segment, starting at its command, does not hold.
+const RESERVED: [&str; 10] = [
+    "then", "do", "else", "elif", "if", "while", "until", "!", "{", "}",
+];
+
+/// A statement's or a segment's words for pairing the two: each `<` and `>` a word of its own, quotes dropped, a word that was only
+/// quotes gone, a leading reserved word skipped, and a redirect to `/dev/null` or onto a descriptor (`2>&1`, `>&2`) gone with its
+/// descriptor, as the walk's segment drops them.
+fn pair_words(text: &str) -> Vec<String> {
+    let spaced = text.replace('>', " > ").replace('<', " < ");
+    let out: Vec<String> = spaced
+        .split_whitespace()
+        .map(|w| w.replace(['\'', '"'], ""))
+        .filter(|w| !w.is_empty())
+        .collect();
+    let lead = out
+        .iter()
+        .take_while(|w| RESERVED.contains(&w.as_str()))
+        .count();
+    let mut kept: Vec<String> = Vec::new();
+    let mut i = lead;
+    while i < out.len() {
+        let ops = out[i..]
+            .iter()
+            .take_while(|w| *w == ">" || *w == "<")
+            .count();
+        let dropped = out
+            .get(i + ops)
+            .is_some_and(|t| t == "/dev/null" || t.starts_with('&'));
+        if ops > 0 && dropped {
+            if kept
+                .last()
+                .is_some_and(|w| w.chars().all(|c| c.is_ascii_digit()))
+            {
+                kept.pop();
+            }
+            i += ops + 1;
+        } else {
+            kept.push(out[i].clone());
+            i += 1;
+        }
+    }
+    kept
+}
+
+/// Whether a segment's words hold a statement's, in order, under the same head.
+fn holds(segment: &[String], said: &[String]) -> bool {
+    let mut rest = segment.iter();
+    segment.first() == said.first() && said.iter().all(|w| rest.any(|s| s == w))
 }
 
 /// The verdict: `ok`, the rule broken, or `make-dup-var:<name>`; `here` is where the command starts.
@@ -339,8 +462,16 @@ fn guard_write(cmd: &str, here: &str, depth: usize) -> bool {
         replace_suites(&strip_quotes(&strip_heredocs(cmd))),
         replace_suites(&without_stored_text(cmd)),
     );
-    let (on_guard, cleared) = walked_write(cmd, here);
+    let (on_guard, cleared, programs) = walked_write(cmd, here);
     let shell = on_guard || (!cleared && SHELL_WRITES.iter().any(|p| hit(p, &c)));
+    // a program the walk placed in scratch (451 T87), held once in the text, is no Python write of a guard file: the patterns read the rest
+    let raw = programs.iter().fold(raw, |text, body| {
+        if text.matches(body.as_str()).count() == 1 {
+            text.replacen(body.as_str(), &" ".repeat(body.len()), 1)
+        } else {
+            text
+        }
+    });
     let deeper = || {
         depth < interp::DEPTH
             && (interp::bodies(cmd).iter().any(|(shell, body)| {

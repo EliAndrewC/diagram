@@ -14,7 +14,7 @@ use std::sync::LazyLock;
 
 use fancy_regex::{Captures, Regex};
 
-use crate::guards::guard_file_hooks::held;
+use crate::guards::guard_file_hooks::{held, named};
 pub(crate) use crate::shared::tree::program::program_names;
 
 fn re(pattern: &str) -> Regex {
@@ -56,7 +56,32 @@ fn guard_path(p: &str) -> bool {
 /// Whether a program's string literals name a guard file it could write, run in `dir` (`/` when unknown); `reads` exempts the
 /// literals a Python program only reads.
 pub(super) fn program_names_guard(body: &str, dir: Option<&str>, reads: bool) -> bool {
+    let dir = dir.filter(|_| !moves(body));
     program_names(body, dir, reads, false, &guard_path).is_some()
+}
+
+/// Whether a program changes its own directory (`os.chdir`, `os.fchdir`, `contextlib.chdir`), so where it stands says nothing of where
+/// its relative literals land: it is read from `/`, as one whose place is unknown, and never freed as scratch (451 T87: `cd /tmp/q &&
+/// python3 -c "import os; os.chdir('/diagram/.clones/s'); open('Makefile','w')"` passed the first scratch rule).
+fn moves(body: &str) -> bool {
+    body.contains("chdir")
+}
+
+/// Whether a program run in `dir` names a guard file it could write by its name, and none that is held - each such name lands in
+/// scratch (451 T87), so the Python patterns over its body overrule nothing the walk judged.
+pub(super) fn program_names_scratch(body: &str, dir: Option<&str>) -> bool {
+    !moves(body) && program_names_named(body, dir) && !program_names_guard(body, dir, true)
+}
+
+/// Whether a program run in `dir` names a guard file it could write by its name alone, wherever it lands - HEAD's reading before 451
+/// T87, which a command naming a `CDPATH` or a `worktree add` keeps.
+pub(super) fn program_names_named(body: &str, dir: Option<&str>) -> bool {
+    let by_name = |p: &str| {
+        let dir = !p.rsplit('/').next().unwrap_or(p).contains('.');
+        named(p) || (dir && named(&format!("{p}/_")))
+    };
+    let dir = dir.filter(|_| !moves(body));
+    program_names(body, dir, true, false, &by_name).is_some()
 }
 
 /// The interpreter a heredoc feeds: the command before its `<<` on the opener's line, else one the opener pipes it to.
