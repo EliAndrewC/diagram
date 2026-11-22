@@ -105,7 +105,14 @@ fn the_floor_catches_the_known_dry_runs_in_the_recorded_history() {
     let repo = repository();
     let mut rows = Vec::new();
     walk(&repo.join("dev/run-log"), &mut rows);
-    rows.retain(|d| d["target"] == "done" && d["result"] == "green" && d["utc"].is_string());
+    // an incremental run is held only to ABSOLUTE_MIN, as `check` holds it: a gate whose every check reuses its kept result runs in
+    // seconds (2026-11-22T13:36:46, 9 s at 22e9da99db, the tree unchanged since the run before it), and is no dry run
+    rows.retain(|d| {
+        d["target"] == "done"
+            && d["result"] == "green"
+            && d["utc"].is_string()
+            && d["mode"] != "incremental"
+    });
     assert!(rows.len() > 100);
     let seconds = |d: &serde_json::Value| d["seconds"].as_f64().unwrap_or(0.0);
     let mut by_day: std::collections::HashMap<String, Vec<f64>> = std::collections::HashMap::new();
