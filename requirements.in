@@ -1,4 +1,0 @@
-# Runtime deps of the diagram engine (feature 131: this repository's own lockfile, no longer
-# gm-assistant's webapp/requirements.in). Re-lock: pip-compile --output-file=requirements.txt requirements.in
-shapely      # waterfields/seams.py - the one place the field engine needs real polygon booleans
-scipy        # hamletgen/homesteads/region.py free_components - a C labeling of the free ground (feature 427 T04, R5)

@@ -100,7 +100,38 @@ elif stale; then
   # parsing, regexes, logs, house style) into nearly every command, so its verdicts and records could come from code older than the code
   # they judge. The commands that render no verdict and write no record a gate trusts (`rust format` writing, a bare `speckit-todo`
   # listing, `coord lines`) were 6% of the week's 12,700 make targets (`.git/tool-usage.jsonl`, 2026-11-13 to 20), too few for the risk.
-  err=$(mktemp); ( cd "$TREE" && RUSTUP_HOME="${RUSTUP_HOME:-$real/.rustup}" CARGO_HOME="${CARGO_HOME:-$real/.cargo}" CARGO_TARGET_DIR="$TARGET" "$cargo" build --profile tool --quiet --manifest-path "$TREE/rust/Cargo.toml" "${PKG[@]}" ) 2> "$err"; rc=$?
+  build() { ( cd "$TREE" && RUSTUP_HOME="${RUSTUP_HOME:-$real/.rustup}" CARGO_HOME="${CARGO_HOME:-$real/.cargo}" CARGO_TARGET_DIR="$TARGET" "$cargo" build --profile tool --quiet --manifest-path "$TREE/rust/Cargo.toml" "${PKG[@]}" ) 2> "$err"; }
+  err=$(mktemp); build; rc=$?
+  # A STALE INCREMENTAL UNIT (feature 451 T142): the tool profile is incremental release (T95), and rustc 1.87 can reuse one codegen unit's
+  # post-ThinLTO object while the unit that defines a symbol it imports is rebuilt under a new `.llvm.<hash>` name: the crate's rlib then
+  # holds an undefined hidden symbol no member defines, its fingerprint is fresh, and every incremental link fails on it until a source
+  # of that crate moves (measured 2026-11-22: l7r_gate_task's unit ads6op1mfn3gc3gvm7k1udw55, its object dated 11-21 12:01, reused into
+  # the rebuilds of 23:53, 00:14 and 00:15, about eight failed gate commands; l7r_shared's units failed l7r-rust twice the same night).
+  # A CARGO_INCREMENTAL=0 build is a separate artifact set (its own profile hash), so it linked once and left the bad rlib for the next
+  # incremental build - "it came back". The fix drops exactly what the linker names - the session holding that unit and that crate's
+  # fingerprint (cargo's own `.cargo-lock` held, so no build is mid-flight in them) - and rebuilds once incrementally: that crate is
+  # compiled from nothing, 4.8 s in a scratch copy of this cache. A link error naming no unit retries once with CARGO_INCREMENTAL=0.
+  if [ "$rc" -ne 0 ] && grep -q 'undefined hidden symbol' "$err"; then
+    grep 'rust-lld: error' "$err" | sed 's/^ *= note: //' | head -5 >&2  # not the link line: thousands of words
+    dropped=() units=()
+    for u in $(grep -o '[A-Za-z0-9_]*-[0-9a-f]\{16\}\.[a-z0-9]\{1,\}\.rcgu\.o' "$err" | sort -u); do
+      crate=${u%%-*} rest=${u#*-}; meta=${rest%%.*} cgu=${rest#*.}; cgu=${cgu%.rcgu.o}
+      units+=("$crate's unit $cgu")
+      for o in "$TARGET"/tool/incremental/"$crate"-*/s-*/"$cgu".o; do [ -e "$o" ] && dropped+=("${o%/*/*}"); done
+      [ -d "$TARGET/tool/.fingerprint/$crate-$meta" ] && dropped+=("$TARGET/tool/.fingerprint/$crate-$meta")
+    done
+    if [ "${#units[@]}" -gt 0 ]; then
+      mapfile -t dropped < <(printf '%s\n' "${dropped[@]}" | awk 'NF && !seen[$0]++')
+      [ "${#dropped[@]}" -gt 0 ] && flock "$TARGET/tool/.cargo-lock" rm -rf "${dropped[@]}"
+      what=$(printf '%s\n' "${dropped[@]}" | sed "s|^$TARGET/||" | awk 'NF' | paste -sd'\t' - | sed 's/\t/ and /g')
+      echo "l7r-gate: the link failed on stale incremental state (rust-lld: undefined hidden symbol, referenced from $(IFS=,; echo "${units[*]}" | sed 's/,/, /g')): dropped ${what:-nothing (no session holds that unit)}, rebuilding once (feature 451 T142)" >&2
+      build; rc=$?
+    else
+      echo "l7r-gate: the link failed on stale incremental state (rust-lld: undefined hidden symbol) but names no unit to drop, rebuilding once with CARGO_INCREMENTAL=0 (feature 451 T142)" >&2
+      CARGO_INCREMENTAL=0 build; rc=$?
+    fi
+    if [ "$rc" -eq 0 ]; then echo "l7r-gate: rebuilt and linked" >&2; else echo "l7r-gate: the rebuild after dropping the stale state failed too:" >&2; fi
+  fi
   cat "$err" >&2
   if [ "$rc" -ne 0 ]; then
     # cargo's `  --> guard/src/x.rs:36:18`: relative to the workspace, rust/; an absolute path (a registry crate's) is kept as it is

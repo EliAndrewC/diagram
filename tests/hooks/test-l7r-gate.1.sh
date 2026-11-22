@@ -198,6 +198,58 @@ case $OUT in *"l7r-gate: yours? fix what cargo names above. Not yours? another b
 OUT=$(L7R_GATE_TARGET="$NT" L7R_GATE_CARGO="$TMP/cargo-broken" L7R_GATE_PRINT_FRESH=1 "$STAMP" 2>&1); check "a neighbor's uncompiling file: print-fresh names no binary" 1 $?
 OUT=$(L7R_GATE_TARGET="$NT" L7R_GATE_CARGO="$TMP/cargo" "$STAMP" a b 2>&1); check "a failure with no file named: refused" 1 $?
 case $OUT in *"l7r-gate: the build failed - fix what cargo names above"*) : ;; *) echo "FAIL  a build that names no file keeps its line: $OUT"; FAILED=1 ;; esac
+rm -f "$TMP/broken.calls"
+printf '#!/usr/bin/env bash\necho "inc=${CARGO_INCREMENTAL:-}" >> "%s/broken.calls"\nexec "%s/cargo-broken" "$@"\n' "$TMP" "$TMP" > "$TMP/cargo-broken-count"; chmod +x "$TMP/cargo-broken-count"
+OUT=$(L7R_GATE_TARGET="$NT" L7R_GATE_CARGO="$TMP/cargo-broken-count" "$STAMP" a b 2>&1); check "a compile error: refused" 1 $?
+[ "$(wc -l < "$TMP/broken.calls")" = 1 ]; check "a compile error: built once, no stale-state retry" 0 $?
+
+# ---- a stale incremental unit (feature 451 T142): rust-lld's `undefined hidden symbol` from one crate's reused codegen unit failed the tool's
+# link at every incremental build (2026-11-22, l7r_gate_task's unit ads6op1mfn3gc3gvm7k1udw55, an object dated 11-21 12:01 reused into the
+# rebuilds of 23:53, 00:14 and 00:15). The launcher drops that crate's incremental session and fingerprint - the ones the linker names, no
+# other - rebuilds once incrementally, and says so; a second failure is refused; a link error that names no unit retries non-incrementally.
+ST="$TMP/stale-target"; mkdir -p "$ST/tool/incremental/l7r_gate_task-0y4ovoj4hibk7/s-hoe0p69tod-0jsk9kw-4f39" \
+  "$ST/tool/incremental/l7r_gate_task-2g61if4ng5haz/s-hobf59uo49-1lkybly-03og" "$ST/tool/.fingerprint/l7r_gate_task-faf2a19073b9305a" \
+  "$ST/tool/.fingerprint/l7r_gate_task-295557feace9901b" "$ST/tool/incremental/l7r_shared-1abc/s-x-y"
+touch "$ST/tool/incremental/l7r_gate_task-0y4ovoj4hibk7/s-hoe0p69tod-0jsk9kw-4f39/ads6op1mfn3gc3gvm7k1udw55.o" \
+  "$ST/tool/incremental/l7r_gate_task-0y4ovoj4hibk7/s-hoe0p69tod-0jsk9kw.lock" \
+  "$ST/tool/incremental/l7r_gate_task-2g61if4ng5haz/s-hobf59uo49-1lkybly-03og/other.o" "$ST/tool/incremental/l7r_shared-1abc/s-x-y/ads6op1mfn3gc3gvm7k1udw55.o"
+cat > "$TMP/cargo-stale" <<'EOF'
+#!/usr/bin/env bash
+# the first call fails as rustc's stale unit does; every later call builds (or, with STALE_TWICE, fails the same way again)
+n=$(( $(cat "$STALE_CALLS" 2>/dev/null | wc -l) + 1 )); echo "call=$n inc=${CARGO_INCREMENTAL:-} $*" >> "$STALE_CALLS"
+if [ "$n" = 1 ] || [ -n "${STALE_TWICE:-}" ]; then
+  printf 'error: linking with `cc` failed: exit status: 1\n  = note: "cc" "-m64" "<a thousand words of link line>"\n' >&2
+  if [ -n "${STALE_NO_UNIT:-}" ]; then printf '  = note: rust-lld: error: undefined hidden symbol: anon.0482a95c.1.llvm.177\n' >&2; else
+  printf '  = note: rust-lld: error: undefined hidden symbol: anon.0482a95c9a0d52167fa52cfa0685df68.1.llvm.17705557342783902695\n' >&2
+  printf '          >>> referenced by ads6op1mfn3gc3gvm7k1udw55\n          >>>               l7r_gate_task-faf2a19073b9305a.ads6op1mfn3gc3gvm7k1udw55.rcgu.o:(try_fold) in archive /x/libl7r_gate_task-faf2a19073b9305a.rlib\n' >&2
+  printf '          >>> referenced by ads6op1mfn3gc3gvm7k1udw55\n          >>>               l7r_gate_task-faf2a19073b9305a.ads6op1mfn3gc3gvm7k1udw55.rcgu.o:(try_fold) in archive /x/libl7r_gate_task-faf2a19073b9305a.rlib\n' >&2; fi
+  printf 'error: could not compile `l7r_gate` (bin "l7r-gate") due to 1 previous error\n' >&2; exit 101
+fi
+printf '#!/usr/bin/env bash\necho "stub $*"\n' > "$CARGO_TARGET_DIR/tool/l7r-gate"; chmod +x "$CARGO_TARGET_DIR/tool/l7r-gate"
+EOF
+chmod +x "$TMP/cargo-stale"; export STALE_CALLS="$TMP/stale.calls"
+OUT=$(L7R_GATE_TARGET="$ST" L7R_GATE_CARGO="$TMP/cargo-stale" "$STAMP" a b 2>&1); check "a stale unit: dropped, rebuilt, and the command runs" 0 $?
+case $OUT in *"stub a b"*) : ;; *) echo "FAIL  the rebuilt binary ran: $OUT"; FAILED=1 ;; esac
+[ "$(wc -l < "$STALE_CALLS")" = 2 ] && grep -q '^call=2 inc= ' "$STALE_CALLS"; check "a stale unit: one retry, incremental" 0 $?
+[ ! -e "$ST/tool/incremental/l7r_gate_task-0y4ovoj4hibk7" ] && [ ! -e "$ST/tool/.fingerprint/l7r_gate_task-faf2a19073b9305a" ]
+check "a stale unit: the session holding the unit and its crate's fingerprint dropped" 0 $?
+[ -e "$ST/tool/incremental/l7r_gate_task-2g61if4ng5haz/s-hobf59uo49-1lkybly-03og/other.o" ] && [ -d "$ST/tool/.fingerprint/l7r_gate_task-295557feace9901b" ] \
+  && [ -e "$ST/tool/incremental/l7r_shared-1abc/s-x-y/ads6op1mfn3gc3gvm7k1udw55.o" ]
+check "a stale unit: the crate's other sessions, its other fingerprints and another crate's unit of that name kept" 0 $?
+case $OUT in *"l7r-gate: the link failed on stale incremental state (rust-lld: undefined hidden symbol, referenced from l7r_gate_task's unit ads6op1mfn3gc3gvm7k1udw55): dropped tool/incremental/l7r_gate_task-0y4ovoj4hibk7 and tool/.fingerprint/l7r_gate_task-faf2a19073b9305a, rebuilding once (feature 451 T142)"*) : ;;
+  *) echo "FAIL  the retry says what it dropped: $OUT"; FAILED=1 ;; esac
+case $OUT in *"thousand words"*) echo "FAIL  a retried link's command line is not dumped: $OUT"; FAILED=1 ;; esac
+case $OUT in *"rebuilt and linked"*) : ;; *) echo "FAIL  the retry says it linked: $OUT"; FAILED=1 ;; esac
+rm -f "$STALE_CALLS" "$ST/tool/l7r-gate"; mkdir -p "$ST/tool/incremental/l7r_gate_task-0y4ovoj4hibk7/s-a-b"; touch "$ST/tool/incremental/l7r_gate_task-0y4ovoj4hibk7/s-a-b/ads6op1mfn3gc3gvm7k1udw55.o"
+OUT=$(STALE_TWICE=1 L7R_GATE_TARGET="$ST" L7R_GATE_CARGO="$TMP/cargo-stale" "$STAMP" a b 2>&1); check "a stale unit that survives the retry: refused" 1 $?
+[ "$(wc -l < "$STALE_CALLS")" = 2 ]; check "a stale unit that survives the retry: one retry, no loop" 0 $?
+case $OUT in *"stub "*) echo "FAIL  nothing runs on a failed retry: $OUT"; FAILED=1 ;; esac
+case $OUT in *"l7r-gate: the rebuild after dropping the stale state failed too"*) : ;; *) echo "FAIL  the second failure says so: $OUT"; FAILED=1 ;; esac
+rm -f "$STALE_CALLS"
+OUT=$(STALE_NO_UNIT=1 L7R_GATE_TARGET="$ST" L7R_GATE_CARGO="$TMP/cargo-stale" "$STAMP" a b 2>&1); check "a link error naming no unit: rebuilt non-incrementally" 0 $?
+grep -q '^call=2 inc=0 ' "$STALE_CALLS"; check "a link error naming no unit: the retry is CARGO_INCREMENTAL=0" 0 $?
+case $OUT in *"names no unit to drop, rebuilding once with CARGO_INCREMENTAL=0"*) : ;; *) echo "FAIL  the non-incremental retry says so: $OUT"; FAILED=1 ;; esac
+unset STALE_CALLS
 
 # ---- the Mode A engine through the launcher (feature 449 T168): `l7r-gate.sh mode-a` builds and runs `l7r-mode-a`, its own program, and
 # `make building-programs CHECK=1`'s form of it finds the real page current ------------------------------------------------------------
