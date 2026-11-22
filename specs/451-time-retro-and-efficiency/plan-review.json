@@ -666,6 +666,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-22",
    "declared": "spec-fidelity"
+  },
+  "### T105 (land-alone's take-back gave up three times on 2026-11-21, each a hand merge: at the T82-T101 landing the session's `make ledger-owed` and the landing wrote rows for the same four passes and the clone could not take the tip - dev/review-ledger.md 'conflicts' - and plan.md and tasks.md then needed a hand three-way merge; at T113's landing the tick archived T113's section beside the clone's new sections and git's line merge called the adjacent hunks one conflict - measured 2026-11-21 (each shape replayed through the script's own step 7, below))": {
+   "sha256": "d8bed83d65bee8abdef9358e5dee86c51a5025ebc3aaa357be952e192150b069",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-22",
+   "declared": "spec-fidelity"
+  },
+  "### T105 Approach (checklist part A)": {
+   "sha256": "ad096359719cafe178c8e2cfd64fc689fdcb5874dde14058bf49b9795c603ca9",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-22",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -11268,6 +11280,83 @@
      "why": "A guard defect fix, not a performance or measurement task under FR-013; the classification narrows no requirement, and the fix goes ahead as known-defect work."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-22",
+   "blocks": [
+    "### T105 (land-alone's take-back gave up three times on 2026-11-21, each a hand merge: at the T82-T101 landing the session's `make ledger-owed` and the landing wrote rows for the same four passes and the clone could not take the tip - dev/review-ledger.md 'conflicts' - and plan.md and tasks.md then needed a hand three-way merge; at T113's landing the tick archived T113's section beside the clone's new sections and git's line merge called the adjacent hunks one conflict - measured 2026-11-21 (each shape replayed through the script's own step 7, below))",
+    "### T105 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T105-merge-order",
+     "summary": "Every held file through git's line merge first; a sectioned file (plan.md, tasks.md, plan-review.json, and now dev/review-ledger.md) merged piece by piece only when its line merge conflicts.",
+     "class": "within",
+     "why": "Carries the task line's 'the sectioned merge on every file it reports' and adds the ledger, the file shape 1 stopped on; it is the mechanism the task exists to fix, and leaves already-merging files on the path they take now."
+    },
+    {
+     "id": "T105-additions-superset",
+     "summary": "Any other file's hunks where both sides only added are taken whole when one side's added lines contain the other's in order (merge3 via git merge-file --diff3).",
+     "class": "within",
+     "why": "Widens 'identical additions merged' to a strict superset of additions, which loses nothing either side wrote; broader than the line, not narrower, and only changes a case that conflicts today."
+    },
+    {
+     "id": "T105-archive-mark-piece",
+     "summary": "In plan.md an archive mark is a piece of its own, not the tail of the section before it, and a clone's new piece goes after the tip's new pieces beside its anchor, so the marks stay where the archived section was.",
+     "class": "within",
+     "why": "Directly fixes the measured cause of shapes 2 and 3 (the tick's marks read as the tail of the preceding section); the replays show every clone piece kept and every tip mark kept in order."
+    },
+    {
+     "id": "T105-ledger-tip-wins",
+     "summary": "The ledger is cut at each line and a measured row keyed by its pass (check, wall, tokens); where both sides answer one pass the tip's row is kept and the clone's dropped.",
+     "class": "within",
+     "why": "The landing's rows are the record the push writes; keeping both was the duplicate-row defect (8 rows for 4 passes) the section also repairs. Dropping the clone's duplicate loses no pass, only a second copy of one."
+    },
+    {
+     "id": "T105-conflicts-still-stop",
+     "summary": "A piece both sides changed is line-merged first; a piece the tip archived that the clone changed still conflicts; every file merged before any exit, all conflicts named at once by piece, and a conflict moves nothing.",
+     "class": "within",
+     "why": "Keeps the take safe on the one shape where a choice would lose work, and improves the message (all conflicts, named by section) rather than narrowing anything."
+    },
+    {
+     "id": "T105-hand-write-refusal-scope",
+     "summary": "make ledger-owed WRITE= passes --by-hand and refuses only a recorded plan review's row as the landing's own, naming the count and writing the rest; a hand write of a pass traced to its feature (--write specs/<F>/) stays allowed, and a collision of such a row is left to the merge (tip kept).",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Narrows the task line's 'the hand rows refused as the landing's own' from both of the landing's sets to one. Refusing the per-feature traced set would be wrong on the measured facts: only make land writes those rows, while land-tooling.sh and sync-with-main.sh's push do not (grep of every ledger-owed caller, 2026-11-21), so on those routes the hand write is the only writer and refusing it would leave the passes unrecorded - defeating the purpose (a ledger with each pass once). The purpose of the refusal (no duplicate rows for the same pass) is still met for that set by the ledger merge's tip-wins rule, so nothing the refusal is for is given up. The rows that every push route writes itself (recorded plan reviews) are the ones refused."
+    },
+    {
+     "id": "T105-step2-marks",
+     "summary": "Step 2's splice moves for 4 of the replayed tasks: it now stages the task's own text and no longer an adjacent mark or blank line.",
+     "class": "within",
+     "why": "A difference from the previous staging that the section measures and explains as step 2 meaning the task's own pieces; constitution XIII asks that everything works, not that staging be unchanged, and the existing landing-alone tests are required green."
+    },
+    {
+     "id": "T105-merge-tree-left",
+     "summary": "The merge of the clone's own commits since the landing began (merge-tree) is not treated as one of the shapes.",
+     "class": "within",
+     "why": "Not a defect left: the measured T82-T101 timeline shows the clone committed after the take's exit-4 advice, which already gives the route (git merge once committed). The task line names three shapes and all three are carried."
+    },
+    {
+     "id": "T105-duplicate-rows-fixed",
+     "summary": "Main's ledger's 8 rows for the 4 T82-T101 plan reviews reduced to the tip's 4, review-census's spec-fidelity judgment 1,526 to 1,522, runs unchanged.",
+     "class": "within",
+     "why": "A known defect the task's own failure produced, fixed in this step as fix-as-we-go requires, by the same rule the new merge applies."
+    },
+    {
+     "id": "T105-not-performance",
+     "summary": "The section classes T105 as not performance work (a correctness fix of the landing's take).",
+     "class": "within",
+     "why": "It is neither a performance improvement nor a measurement of time in the sense of the GM's 2026-11-20 order; classing it so keeps FR-013's scheduling honest rather than narrowing it."
+    },
+    {
+     "id": "T105-mark-length",
+     "summary": "The conflict mark is 31 characters long, labeled a CONVENTION of the parse.",
+     "class": "within",
+     "why": "An implementation convention inside the fix, labeled at its point of use; no requirement speaks to it."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -17396,6 +17485,81 @@
      "summary": "Performance work? no",
      "class": "within",
      "why": "A guard defect fix, not a performance or measurement task under FR-013; the classification narrows no requirement, and the fix goes ahead as known-defect work."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T105": {
+   "section_sha256": "27123866b6a5ba0372d896503e613335d00934e65c38b57740f64a4cfd0ddc3f",
+   "reviewed": "2026-11-22",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T105-merge-order",
+     "summary": "Every held file through git's line merge first; a sectioned file (plan.md, tasks.md, plan-review.json, and now dev/review-ledger.md) merged piece by piece only when its line merge conflicts.",
+     "class": "within",
+     "why": "Carries the task line's 'the sectioned merge on every file it reports' and adds the ledger, the file shape 1 stopped on; it is the mechanism the task exists to fix, and leaves already-merging files on the path they take now."
+    },
+    {
+     "id": "T105-additions-superset",
+     "summary": "Any other file's hunks where both sides only added are taken whole when one side's added lines contain the other's in order (merge3 via git merge-file --diff3).",
+     "class": "within",
+     "why": "Widens 'identical additions merged' to a strict superset of additions, which loses nothing either side wrote; broader than the line, not narrower, and only changes a case that conflicts today."
+    },
+    {
+     "id": "T105-archive-mark-piece",
+     "summary": "In plan.md an archive mark is a piece of its own, not the tail of the section before it, and a clone's new piece goes after the tip's new pieces beside its anchor, so the marks stay where the archived section was.",
+     "class": "within",
+     "why": "Directly fixes the measured cause of shapes 2 and 3 (the tick's marks read as the tail of the preceding section); the replays show every clone piece kept and every tip mark kept in order."
+    },
+    {
+     "id": "T105-ledger-tip-wins",
+     "summary": "The ledger is cut at each line and a measured row keyed by its pass (check, wall, tokens); where both sides answer one pass the tip's row is kept and the clone's dropped.",
+     "class": "within",
+     "why": "The landing's rows are the record the push writes; keeping both was the duplicate-row defect (8 rows for 4 passes) the section also repairs. Dropping the clone's duplicate loses no pass, only a second copy of one."
+    },
+    {
+     "id": "T105-conflicts-still-stop",
+     "summary": "A piece both sides changed is line-merged first; a piece the tip archived that the clone changed still conflicts; every file merged before any exit, all conflicts named at once by piece, and a conflict moves nothing.",
+     "class": "within",
+     "why": "Keeps the take safe on the one shape where a choice would lose work, and improves the message (all conflicts, named by section) rather than narrowing anything."
+    },
+    {
+     "id": "T105-hand-write-refusal-scope",
+     "summary": "make ledger-owed WRITE= passes --by-hand and refuses only a recorded plan review's row as the landing's own, naming the count and writing the rest; a hand write of a pass traced to its feature (--write specs/<F>/) stays allowed, and a collision of such a row is left to the merge (tip kept).",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Narrows the task line's 'the hand rows refused as the landing's own' from both of the landing's sets to one. Refusing the per-feature traced set would be wrong on the measured facts: only make land writes those rows, while land-tooling.sh and sync-with-main.sh's push do not (grep of every ledger-owed caller, 2026-11-21), so on those routes the hand write is the only writer and refusing it would leave the passes unrecorded - defeating the purpose (a ledger with each pass once). The purpose of the refusal (no duplicate rows for the same pass) is still met for that set by the ledger merge's tip-wins rule, so nothing the refusal is for is given up. The rows that every push route writes itself (recorded plan reviews) are the ones refused."
+    },
+    {
+     "id": "T105-step2-marks",
+     "summary": "Step 2's splice moves for 4 of the replayed tasks: it now stages the task's own text and no longer an adjacent mark or blank line.",
+     "class": "within",
+     "why": "A difference from the previous staging that the section measures and explains as step 2 meaning the task's own pieces; constitution XIII asks that everything works, not that staging be unchanged, and the existing landing-alone tests are required green."
+    },
+    {
+     "id": "T105-merge-tree-left",
+     "summary": "The merge of the clone's own commits since the landing began (merge-tree) is not treated as one of the shapes.",
+     "class": "within",
+     "why": "Not a defect left: the measured T82-T101 timeline shows the clone committed after the take's exit-4 advice, which already gives the route (git merge once committed). The task line names three shapes and all three are carried."
+    },
+    {
+     "id": "T105-duplicate-rows-fixed",
+     "summary": "Main's ledger's 8 rows for the 4 T82-T101 plan reviews reduced to the tip's 4, review-census's spec-fidelity judgment 1,526 to 1,522, runs unchanged.",
+     "class": "within",
+     "why": "A known defect the task's own failure produced, fixed in this step as fix-as-we-go requires, by the same rule the new merge applies."
+    },
+    {
+     "id": "T105-not-performance",
+     "summary": "The section classes T105 as not performance work (a correctness fix of the landing's take).",
+     "class": "within",
+     "why": "It is neither a performance improvement nor a measurement of time in the sense of the GM's 2026-11-20 order; classing it so keeps FR-013's scheduling honest rather than narrowing it."
+    },
+    {
+     "id": "T105-mark-length",
+     "summary": "The conflict mark is 31 characters long, labeled a CONVENTION of the parse.",
+     "class": "within",
+     "why": "An implementation convention inside the fix, labeled at its point of use; no requirement speaks to it."
     }
    ],
    "verdict": "CLEAR"
