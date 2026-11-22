@@ -115,7 +115,7 @@ knobs re-rolled from the seed by the generator and held to the forms recorded he
   research 0099 drawing) - the roofed court keeps its white-gravel fill.
 - **Middle gate**: beside the office hall's east end, not behind it (docs/building-programs.md puts it customarily on the
   main axis behind the hall, the hall as the privacy baffle). Here the hall backs the divider at 1.5 ft with no alley
-  behind it, and its center stands west of the main axis (the hall spans 58.5-185.5 ft of the 270 ft compound, the tax archive and then the staff long-house west of it since feature 449 T274), so the placer opens the gate at
+  behind it, and its center stands west of the main axis (the hall spans 70.5-197.5 ft of the 270 ft compound, the tax archive and then the staff long-house west of it since feature 449 T274, the hall 12 ft east since T280), so the placer opens the gate at
   the first stretch of divider no building backs (`compound_parts._middle_gate`); the hall still screens the house
   from the hearing court. A deliberate DEVIATION from the customary seat, recorded.
 - **Lesser gates**: the kitchen postern in the west wall (6 ft) and the outer court's service gate in the south wall
@@ -402,3 +402,16 @@ dais (114 to 144 ft). **Q1**: the shrine's door no longer faces a cart apron (no
 house and the shrine in a back corner. Coverage 31%, every registered check passes (pack_audit). Figures above this entry that it supersedes:
 T265's granary seat, its north gate, its barracks move, the hall at 72 to 199 ft, the hearing court at 102.5 to 182.5 ft and the tax archive
 at 48 to 66 ft.
+
+2026-11-22 (feature 449 T280, T288; building-review 2026-11-22 E1 on T274's sheet): **the karo's door fronts open court again**. T274's
+recentred hall had pushed the tax archive to 34.5 to 52.5 ft, 7.5 ft off the senior retainers' long-house face at 27 ft, so the karo's
+door and his neighbor's opened onto a dead-end lane against the archive's blank west wall. Room first: the office hall now starts at
+70.5 ft (70.5 to 197.5 ft; the spec's `near`), into the open ground that lay between the middle gate and the granary, the middle gate moving
+east with it; the archive, seated nearest the middle beside the hall, stands at 46.5 to 64.5 ft, 19.5 ft off the long-house. The hearing
+court, re-cut under the dais (100.5 to 180.5 ft), is now centered on the main gate (140 to 147 ft); the outer court's two grounds beside it
+re-cut (27.5 to 100.5 and 180.5 to 205 ft). A generator test holds every long-house door to 12 ft of open ground before it (a GUESS: the
+gate approach's depth reused; a research pass, 2026-11-22, found no source stating a compound rowhouse's frontage, only that the rows on a
+compound's edge were entered from inside it). Priced and refused: the compound 14 ft wider (coverage at its 30% floor, and the archive
+seated east of the hall, 9 ft before the granary's west door). The middle gate's passage is now 201 to 207 ft (199 to 209 ft with its posts), 10 ft from the granary's west face.
+Supersedes the entry above's hall at 58.5 to 185.5 ft, archive at 34.5 to 52.5 ft, hearing court at 88.5 to 168.5 ft and middle gate at
+189 to 195 ft.

@@ -1,0 +1,7 @@
+{
+  "utc": "2026-11-22T16:03:42Z",
+  "target": "review-accept",
+  "commit": "30492b3d64",
+  "outcome": "permitted",
+  "why": "review-accept size-audit--armory S1: a confirmation, the drawn size passes against its anchor"
+}

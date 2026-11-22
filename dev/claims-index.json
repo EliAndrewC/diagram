@@ -1318,7 +1318,8 @@
   },
   "research": "ff31f769308cb020",
   "rests": [],
-  "section": "83d564d05a862941",
+  "section": "b6cbe943570e4456",
+  "triaged": "2026-11-22",
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Magistrate's manor (county magistracy)#a roof over about one well in three": {
@@ -1333,7 +1334,8 @@
   },
   "research": "f166979de9325ea9",
   "rests": [],
-  "section": "83d564d05a862941",
+  "section": "b6cbe943570e4456",
+  "triaged": "2026-11-22",
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Magistrate's manor (county magistracy)#alley behind the office hall": {
@@ -1346,7 +1348,8 @@
   "pages": {},
   "research": "",
   "rests": [],
-  "section": "83d564d05a862941",
+  "section": "b6cbe943570e4456",
+  "triaged": "2026-11-22",
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Magistrate's manor (county magistracy)#an indoor well hangs its pulley from the beams": {
@@ -1361,7 +1364,8 @@
   },
   "research": "f166979de9325ea9",
   "rests": [],
-  "section": "83d564d05a862941",
+  "section": "b6cbe943570e4456",
+  "triaged": "2026-11-22",
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Magistrate's manor (county magistracy)#border court as a garden": {
@@ -1374,7 +1378,8 @@
   "pages": {},
   "research": "",
   "rests": [],
-  "section": "83d564d05a862941",
+  "section": "b6cbe943570e4456",
+  "triaged": "2026-11-22",
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Magistrate's manor (county magistracy)#cart route to granary and stables": {
@@ -1389,7 +1394,8 @@
   },
   "research": "e8329e50c8452924",
   "rests": [],
-  "section": "83d564d05a862941",
+  "section": "b6cbe943570e4456",
+  "triaged": "2026-11-22",
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Magistrate's manor (county magistracy)#clerk positions flanking the dais": {
@@ -1404,7 +1410,8 @@
   },
   "research": "2ce708ebe5a0a04a",
   "rests": [],
-  "section": "83d564d05a862941",
+  "section": "b6cbe943570e4456",
+  "triaged": "2026-11-22",
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Magistrate's manor (county magistracy)#commuting clerks": {
@@ -1419,7 +1426,8 @@
   },
   "research": "b41a6bcda29db296",
   "rests": [],
-  "section": "83d564d05a862941",
+  "section": "b6cbe943570e4456",
+  "triaged": "2026-11-22",
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Magistrate's manor (county magistracy)#dais band on the office hall's south face": {
@@ -1430,11 +1438,12 @@
   "date": "2026-11-22",
   "note": "impl-drift t274e, 2026-11-22",
   "pages": {
-   "0123-the-magistrates-manor-in-a-town-where-it-stands-and-which-way-it-faces-jinya-and-yamen.html": "5c8c4bbf6dabd3aa"
+   "0123-the-magistrates-manor-in-a-town-where-it-stands-and-which-way-it-faces-jinya-and-yamen.html": "3a9b1709912a6067"
   },
-  "research": "5e40ab1489268d04",
+  "research": "d4d1cab5dfd35b8f",
   "rests": [],
-  "section": "83d564d05a862941",
+  "section": "b6cbe943570e4456",
+  "triaged": "2026-11-22",
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Magistrate's manor (county magistracy)#divider gate": {
@@ -1445,11 +1454,12 @@
   "date": "2026-11-22",
   "note": "impl-drift t274e, 2026-11-22",
   "pages": {
-   "0090-magistrates-compounds-jinya-and-yamen.drawing.html": "e77de71a959ea730"
+   "0090-magistrates-compounds-jinya-and-yamen.drawing.html": "e8883025d8e61f8b"
   },
-  "research": "14af46724f504a44",
+  "research": "573d4732556cab1b",
   "rests": [],
-  "section": "83d564d05a862941",
+  "section": "b6cbe943570e4456",
+  "triaged": "2026-11-22",
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Magistrate's manor (county magistracy)#divider gate on the axis": {
@@ -1460,11 +1470,12 @@
   "date": "2026-11-22",
   "note": "impl-drift t274e, 2026-11-22",
   "pages": {
-   "0090-magistrates-compounds-jinya-and-yamen.drawing.html": "e77de71a959ea730"
+   "0090-magistrates-compounds-jinya-and-yamen.drawing.html": "e8883025d8e61f8b"
   },
-  "research": "14af46724f504a44",
+  "research": "573d4732556cab1b",
   "rests": [],
-  "section": "83d564d05a862941",
+  "section": "b6cbe943570e4456",
+  "triaged": "2026-11-22",
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Magistrate's manor (county magistracy)#divider gate width": {
@@ -1477,7 +1488,8 @@
   "pages": {},
   "research": "",
   "rests": [],
-  "section": "83d564d05a862941",
+  "section": "b6cbe943570e4456",
+  "triaged": "2026-11-22",
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Magistrate's manor (county magistracy)#envelope moved in for a record-sized house": {
@@ -1488,11 +1500,12 @@
   "date": "2026-11-22",
   "note": "impl-drift t274e, 2026-11-22",
   "pages": {
-   "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html": "c70862e04bd35e73"
+   "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html": "72e197e35d8155a0"
   },
-  "research": "20dff3d4f5e8a9c2",
+  "research": "f8776f6c8599ca62",
   "rests": [],
-  "section": "83d564d05a862941",
+  "section": "b6cbe943570e4456",
+  "triaged": "2026-11-22",
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Magistrate's manor (county magistracy)#fire-water tubs": {
@@ -1507,7 +1520,8 @@
   },
   "research": "9fd73eb86394c59a",
   "rests": [],
-  "section": "83d564d05a862941",
+  "section": "b6cbe943570e4456",
+  "triaged": "2026-11-22",
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Magistrate's manor (county magistracy)#formal visitors and the privacy baffle": {
@@ -1522,7 +1536,8 @@
   },
   "research": "b624358b4afec396",
   "rests": [],
-  "section": "83d564d05a862941",
+  "section": "b6cbe943570e4456",
+  "triaged": "2026-11-22",
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Magistrate's manor (county magistracy)#garden and stables wells": {
@@ -1535,27 +1550,29 @@
   "pages": {},
   "research": "",
   "rests": [],
-  "section": "83d564d05a862941",
+  "section": "b6cbe943570e4456",
+  "triaged": "2026-11-22",
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Magistrate's manor (county magistracy)#garrison emphasis knob": {
-  "body": "bf871c8195f51f1a",
+  "body": "d27de9007c9dfb14",
   "claim": "garrison emphasis knob - the-main-gate-and-its-gatekeepers-nagaya-mon: the Kaibara jin'ya's ordinary gate range held a store of arms (the record names it a gun store; the map and its pop-ups label it a store of arms and name no firearm - the session's ruling of 2026-11-22 on how the store is labeled (feature 449 T265), not a recorded deviation: the GM's setting notes say nothing of firearms, so it takes the easier route where they are silent and contradicts no note); and the-magistrates-manor-in-a-town-where-it-stands-and-which-way-it-faces-jinya-and-yamen: Pingyao, with no standing barracks, kept its armory in the great hall's west end bay - every seat draws an armory, in the gate range where the main gate is drawn as one, or in the office hall's west end bay, the two attested sites a knob rolled from the map's seed where a gate range stands, the hall's bay where a one-bay gate leaves it the only one (the program's audit holds the armory optional until the four sheets drawn before it - Hayakawa, Ochiba, Ubame and the Ochiba round trip, none with an armory, measured 2026-11-22 - draw one, filed as feature 449 T276); bandit country adds ashigaru (a larger barracks) and a watchtower, both GUESSES, the record silent (feature 417 T33)",
   "code": "58aa80a3e441fac4",
-  "core": "83d564d05a862941",
+  "core": "b6cbe943570e4456",
   "date": "2026-11-22",
-  "note": "known (449 T276): the procedure says every seat keeps an armory but the program table holds the armory optional; fix: code; effect: sheets draw no armory where the record has one",
+  "note": "the two attested sites are Kaibara's gate range and Pingyao's west end bay of the hall, kept even with no standing barracks; the claim rolls between them from the seed where a gate range stands; \"store of arms\" is a broader name for the gun store and contradicts nothing; the audit gap is filed (449 T276)",
   "pages": {
-   "0093-the-main-gate-and-its-gatekeepers-nagaya-mon.html": "4613630d4a4ed584",
-   "0123-the-magistrates-manor-in-a-town-where-it-stands-and-which-way-it-faces-jinya-and-yamen.html": "5c8c4bbf6dabd3aa"
+   "0093-the-main-gate-and-its-gatekeepers-nagaya-mon.html": "8e6499c7e119fc5b",
+   "0123-the-magistrates-manor-in-a-town-where-it-stands-and-which-way-it-faces-jinya-and-yamen.html": "3a9b1709912a6067"
   },
-  "research": "fefb87f2d259ee18",
+  "research": "36334bdb6054c1ed",
   "rests": [
-   "0093-the-main-gate-and-its-gatekeepers-nagaya-mon.html:1ea447d061b586d2",
-   "0123-the-magistrates-manor-in-a-town-where-it-stands-and-which-way-it-faces-jinya-and-yamen.html:dbcbd67c752aa3e4"
+   "0093-the-main-gate-and-its-gatekeepers-nagaya-mon.html:5888554a14ace3f9",
+   "0093-the-main-gate-and-its-gatekeepers-nagaya-mon.html:8209023b544dfc3b",
+   "0123-the-magistrates-manor-in-a-town-where-it-stands-and-which-way-it-faces-jinya-and-yamen.html:a99ddcd2ed3cb0ad"
   ],
-  "section": "83d564d05a862941",
-  "verdict": "DRIFTED"
+  "section": "b6cbe943570e4456",
+  "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Magistrate's manor (county magistracy)#granary on the offices' side": {
   "body": "bf871c8195f51f1a",
@@ -1565,11 +1582,12 @@
   "date": "2026-11-22",
   "note": "impl-drift t274e, 2026-11-22",
   "pages": {
-   "0123-the-magistrates-manor-in-a-town-where-it-stands-and-which-way-it-faces-jinya-and-yamen.html": "5c8c4bbf6dabd3aa"
+   "0123-the-magistrates-manor-in-a-town-where-it-stands-and-which-way-it-faces-jinya-and-yamen.html": "3a9b1709912a6067"
   },
-  "research": "5e40ab1489268d04",
+  "research": "d4d1cab5dfd35b8f",
   "rests": [],
-  "section": "83d564d05a862941",
+  "section": "b6cbe943570e4456",
+  "triaged": "2026-11-22",
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Magistrate's manor (county magistracy)#granary weight knob": {
@@ -1584,7 +1602,8 @@
   },
   "research": "f1206af177a61c95",
   "rests": [],
-  "section": "83d564d05a862941",
+  "section": "b6cbe943570e4456",
+  "triaged": "2026-11-22",
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Magistrate's manor (county magistracy)#guest doors feed courts": {
@@ -1601,7 +1620,8 @@
   },
   "research": "9dddd61e2551b190",
   "rests": [],
-  "section": "83d564d05a862941",
+  "section": "b6cbe943570e4456",
+  "triaged": "2026-11-22",
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Magistrate's manor (county magistracy)#inner-court postern": {
@@ -1616,25 +1636,28 @@
   },
   "research": "ad0c946c19e2af00",
   "rests": [],
-  "section": "83d564d05a862941",
+  "section": "b6cbe943570e4456",
+  "triaged": "2026-11-22",
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Magistrate's manor (county magistracy)#justice-front furniture knob": {
   "body": "bf871c8195f51f1a",
   "claim": "justice-front furniture knob - the-main-gate-and-its-gatekeepers-nagaya-mon: both county yamen we read of kept a drum at the main gate, for the people to beat with a grievance (the Ming order of 1368) - the knob may leave the drum out and offers a petition window or a bell, which no page attests, a departure the code keeps until feature 417 T33; petition window, grievance drum or bell",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "b8406493605e921a",
   "core": "83d564d05a862941",
   "date": "2026-11-22",
   "note": "known (417 T33): the knob may leave out the drum and offers a window or bell no page attests; fix: code; effect: a sheet may draw no drum",
   "outside": true,
   "pages": {
-   "0093-the-main-gate-and-its-gatekeepers-nagaya-mon.html": "4613630d4a4ed584"
+   "0093-the-main-gate-and-its-gatekeepers-nagaya-mon.html": "8e6499c7e119fc5b"
   },
-  "research": "204dd8abf686d43e",
+  "research": "235f322995c7efa7",
   "rests": [
    "0093-the-main-gate-and-its-gatekeepers-nagaya-mon.html:b680d0c8517aa6d7"
   ],
-  "section": "83d564d05a862941",
+  "section": "b6cbe943570e4456",
+  "triaged": "2026-11-22",
   "verdict": "DRIFTED"
  },
  "docs/building-programs.md::Magistrate's manor (county magistracy)#latrines by zone": {
@@ -1649,7 +1672,8 @@
   },
   "research": "ad0c946c19e2af00",
   "rests": [],
-  "section": "83d564d05a862941",
+  "section": "b6cbe943570e4456",
+  "triaged": "2026-11-22",
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Magistrate's manor (county magistracy)#manor kitchen garden by the sun": {
@@ -1665,7 +1689,8 @@
   },
   "research": "9d4ec9a570c81514",
   "rests": [],
-  "section": "83d564d05a862941",
+  "section": "b6cbe943570e4456",
+  "triaged": "2026-11-22",
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Magistrate's manor (county magistracy)#mostly open compound": {
@@ -1676,11 +1701,12 @@
   "date": "2026-11-22",
   "note": "impl-drift t274e, 2026-11-22",
   "pages": {
-   "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html": "c70862e04bd35e73"
+   "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html": "72e197e35d8155a0"
   },
-  "research": "20dff3d4f5e8a9c2",
+  "research": "f8776f6c8599ca62",
   "rests": [],
-  "section": "83d564d05a862941",
+  "section": "b6cbe943570e4456",
+  "triaged": "2026-11-22",
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Magistrate's manor (county magistracy)#notice board at the gate": {
@@ -1695,7 +1721,8 @@
   },
   "research": "5b977d097fda2bb4",
   "rests": [],
-  "section": "83d564d05a862941",
+  "section": "b6cbe943570e4456",
+  "triaged": "2026-11-22",
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Magistrate's manor (county magistracy)#office hall dais band": {
@@ -1710,20 +1737,20 @@
   },
   "research": "2ce708ebe5a0a04a",
   "rests": [],
-  "section": "83d564d05a862941",
+  "section": "b6cbe943570e4456",
+  "triaged": "2026-11-22",
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Magistrate's manor (county magistracy)#office hall rooms": {
-  "body": "bf871c8195f51f1a",
+  "body": "d27de9007c9dfb14",
   "claim": "office hall rooms - GUESS: day office and study behind the dais band",
   "code": "b5f17f1482470951",
-  "core": "83d564d05a862941",
+  "core": "b6cbe943570e4456",
   "date": "2026-11-22",
-  "note": "impl-drift t274e, 2026-11-22",
+  "note": "the guess is the one 0113's drawing page records; it could name that page",
   "pages": {},
   "research": "",
-  "rests": [],
-  "section": "83d564d05a862941",
+  "section": "b6cbe943570e4456",
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Magistrate's manor (county magistracy)#outer service gate": {
@@ -1738,7 +1765,8 @@
   },
   "research": "ad0c946c19e2af00",
   "rests": [],
-  "section": "83d564d05a862941",
+  "section": "b6cbe943570e4456",
+  "triaged": "2026-11-22",
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Magistrate's manor (county magistracy)#outer service gate for muck and prisoners": {
@@ -1755,22 +1783,25 @@
   "rests": [
    "0096-holding-cells-agariya-and-roya.html:e4a42ce7451d31ca"
   ],
-  "section": "83d564d05a862941",
+  "section": "b6cbe943570e4456",
+  "triaged": "2026-11-22",
   "verdict": "DRIFTED"
  },
  "docs/building-programs.md::Magistrate's manor (county magistracy)#posting wealth knob": {
-  "body": "bf871c8195f51f1a",
+  "body": "d27de9007c9dfb14",
   "claim": "posting wealth knob - GUESS magistrates-compounds-jinya-and-yamen.drawing: that offices ran short of money is attested, but how a poor one looked is a guess (patched walls, weathered timber, a hall too small)",
   "code": "aea6c1694f11a522",
-  "core": "83d564d05a862941",
+  "core": "b6cbe943570e4456",
   "date": "2026-11-22",
-  "note": "impl-drift t274e, 2026-11-22",
+  "note": "matches the guess on 0090's drawing page: offices ran short of money, but how a poor one looked is not described",
   "pages": {
-   "0090-magistrates-compounds-jinya-and-yamen.drawing.html": "e77de71a959ea730"
+   "0090-magistrates-compounds-jinya-and-yamen.drawing.html": "e8883025d8e61f8b"
   },
-  "research": "14af46724f504a44",
-  "rests": [],
-  "section": "83d564d05a862941",
+  "research": "573d4732556cab1b",
+  "rests": [
+   "0090-magistrates-compounds-jinya-and-yamen.drawing.html:28f3b3b08cf308d9"
+  ],
+  "section": "b6cbe943570e4456",
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Magistrate's manor (county magistracy)#posting wealth's rich end": {
@@ -1783,7 +1814,8 @@
   "pages": {},
   "research": "",
   "rests": [],
-  "section": "83d564d05a862941",
+  "section": "b6cbe943570e4456",
+  "triaged": "2026-11-22",
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Magistrate's manor (county magistracy)#practice ground": {
@@ -1798,7 +1830,8 @@
   },
   "research": "8b27404bc31588ce",
   "rests": [],
-  "section": "83d564d05a862941",
+  "section": "b6cbe943570e4456",
+  "triaged": "2026-11-22",
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Magistrate's manor (county magistracy)#practice ground placement and gear": {
@@ -1813,7 +1846,8 @@
   },
   "research": "8b27404bc31588ce",
   "rests": [],
-  "section": "83d564d05a862941",
+  "section": "b6cbe943570e4456",
+  "triaged": "2026-11-22",
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Magistrate's manor (county magistracy)#rear service strip": {
@@ -1829,7 +1863,8 @@
   },
   "research": "0b5d4e35e21d7914",
   "rests": [],
-  "section": "83d564d05a862941",
+  "section": "b6cbe943570e4456",
+  "triaged": "2026-11-22",
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Magistrate's manor (county magistracy)#residence entrances": {
@@ -1844,7 +1879,8 @@
   },
   "research": "8310727e0f879d15",
   "rests": [],
-  "section": "83d564d05a862941",
+  "section": "b6cbe943570e4456",
+  "triaged": "2026-11-22",
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Magistrate's manor (county magistracy)#residence size": {
@@ -1860,7 +1896,8 @@
   },
   "research": "20c51e92259fac53",
   "rests": [],
-  "section": "83d564d05a862941",
+  "section": "b6cbe943570e4456",
+  "triaged": "2026-11-22",
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Magistrate's manor (county magistracy)#resident particulars knob": {
@@ -1875,7 +1912,8 @@
   },
   "research": "8b27404bc31588ce",
   "rests": [],
-  "section": "83d564d05a862941",
+  "section": "b6cbe943570e4456",
+  "triaged": "2026-11-22",
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Magistrate's manor (county magistracy)#resident particulars other than the dojo": {
@@ -1888,7 +1926,8 @@
   "pages": {},
   "research": "",
   "rests": [],
-  "section": "83d564d05a862941",
+  "section": "b6cbe943570e4456",
+  "triaged": "2026-11-22",
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Magistrate's manor (county magistracy)#road checkpoint tier": {
@@ -1903,7 +1942,8 @@
   },
   "research": "a919328ce0555375",
   "rests": [],
-  "section": "83d564d05a862941",
+  "section": "b6cbe943570e4456",
+  "triaged": "2026-11-22",
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Magistrate's manor (county magistracy)#sand hearing court": {
@@ -1918,7 +1958,8 @@
   },
   "research": "2ce708ebe5a0a04a",
   "rests": [],
-  "section": "83d564d05a862941",
+  "section": "b6cbe943570e4456",
+  "triaged": "2026-11-22",
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Magistrate's manor (county magistracy)#service buildings in the outer court": {
@@ -1934,7 +1975,8 @@
   },
   "research": "aae5710e504ffd07",
   "rests": [],
-  "section": "83d564d05a862941",
+  "section": "b6cbe943570e4456",
+  "triaged": "2026-11-22",
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Magistrate's manor (county magistracy)#shrine smaller than the residence": {
@@ -1945,11 +1987,12 @@
   "date": "2026-11-22",
   "note": "impl-drift t274e, 2026-11-22",
   "pages": {
-   "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html": "c70862e04bd35e73"
+   "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html": "72e197e35d8155a0"
   },
-  "research": "20dff3d4f5e8a9c2",
+  "research": "f8776f6c8599ca62",
   "rests": [],
-  "section": "83d564d05a862941",
+  "section": "b6cbe943570e4456",
+  "triaged": "2026-11-22",
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Magistrate's manor (county magistracy)#staff housing knob": {
@@ -1960,11 +2003,12 @@
   "date": "2026-11-22",
   "note": "impl-drift t274e, 2026-11-22",
   "pages": {
-   "0097-staff-rowhouses-and-barracks-nagaya.html": "62a5ddbd963f7fc7"
+   "0097-staff-rowhouses-and-barracks-nagaya.html": "6e2f76ad2bc17900"
   },
-  "research": "801e4aceed47cf8c",
+  "research": "721d0a3dd4392ecf",
   "rests": [],
-  "section": "83d564d05a862941",
+  "section": "b6cbe943570e4456",
+  "triaged": "2026-11-22",
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Magistrate's manor (county magistracy)#staffing anchors": {
@@ -1977,7 +2021,8 @@
   "pages": {},
   "research": "",
   "rests": [],
-  "section": "83d564d05a862941",
+  "section": "b6cbe943570e4456",
+  "triaged": "2026-11-22",
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Magistrate's manor (county magistracy)#tenure character knob": {
@@ -1990,20 +2035,39 @@
   "pages": {},
   "research": "",
   "rests": [],
-  "section": "83d564d05a862941",
+  "section": "b6cbe943570e4456",
+  "triaged": "2026-11-22",
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Magistrate's manor (county magistracy)#the armory's share of the office hall": {
-  "body": "bf871c8195f51f1a",
-  "claim": "the armory's share of the office hall - GUESS: the west end bay drawn 14 ft along the hall and the rear row's 20 ft deep, beside the clerks' room; no page measures Pingyao's bays",
-  "code": "4942d1da47e88844",
-  "core": "83d564d05a862941",
+  "body": "d27de9007c9dfb14",
+  "claim": "the armory's share of the office hall - GUESS: the west end bay drawn 14 ft along the hall and in its rear row, beside the clerks' room; no page measures Pingyao's bays or says how deep its armory ran (the whole end bay front to back the more natural reading of a bay, unconfirmed; 449 T275's research pass), so the hall's west door opens onto its front",
+  "code": "1907ffd822fe589a",
+  "core": "b6cbe943570e4456",
   "date": "2026-11-22",
-  "note": "impl-drift t274e, 2026-11-22",
+  "note": "the page records \"No source gives how deep the armory ran\", and no page measures Pingyao's bays; the rear row and the 14 ft are a guess the record does not answer",
   "pages": {},
   "research": "",
-  "rests": [],
-  "section": "83d564d05a862941",
+  "section": "b6cbe943570e4456",
+  "verdict": "IN-STEP"
+ },
+ "docs/building-programs.md::Magistrate's manor (county magistracy)#the armory's size band": {
+  "body": "60d94b34b6812d44",
+  "claim": "the armory's size band - GUESS: 12-24 by 12-40 ft, its floor Kaibara's one eight-mat room of about 12 ft square (the-main-gate-and-its-gatekeepers-nagaya-mon), its 24 ft room for two such rooms side by side, the sources silent on whether the gun store took one or two, and its 40 ft room for an end bay run the hall's whole depth, which no page measures; a knob's range, never a target",
+  "code": "261583d36b82f14d",
+  "core": "b6cbe943570e4456",
+  "date": "2026-11-22",
+  "note": "the 12 ft floor matches Kaibara's eight-mat rooms; the page is silent on whether the gun store took one room or two, so the 24 ft width and the 40 ft end-bay length are honest guesses; the table's 14 by 20 ft falls inside the band",
+  "pages": {
+   "0093-the-main-gate-and-its-gatekeepers-nagaya-mon.html": "8e6499c7e119fc5b"
+  },
+  "research": "235f322995c7efa7",
+  "rests": [
+   "0093-the-main-gate-and-its-gatekeepers-nagaya-mon.html:049fe2faa8c36407",
+   "0093-the-main-gate-and-its-gatekeepers-nagaya-mon.html:5888554a14ace3f9",
+   "0093-the-main-gate-and-its-gatekeepers-nagaya-mon.html:8209023b544dfc3b"
+  ],
+  "section": "b6cbe943570e4456",
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Magistrate's manor (county magistracy)#the granary at the head of an office-court column": {
@@ -2021,7 +2085,8 @@
    "0123-the-magistrates-manor-in-a-town-where-it-stands-and-which-way-it-faces-jinya-and-yamen.drawing.html:60b831c18bb05408",
    "0123-the-magistrates-manor-in-a-town-where-it-stands-and-which-way-it-faces-jinya-and-yamen.drawing.html:fc0781e5698aa2d7"
   ],
-  "section": "83d564d05a862941",
+  "section": "b6cbe943570e4456",
+  "triaged": "2026-11-22",
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Magistrate's manor (county magistracy)#the granary's cart gate": {
@@ -2036,7 +2101,8 @@
   },
   "research": "e8329e50c8452924",
   "rests": [],
-  "section": "83d564d05a862941",
+  "section": "b6cbe943570e4456",
+  "triaged": "2026-11-22",
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Magistrate's manor (county magistracy)#tier knob": {
@@ -2052,7 +2118,8 @@
   },
   "research": "66eba31c9c4f213a",
   "rests": [],
-  "section": "83d564d05a862941",
+  "section": "b6cbe943570e4456",
+  "triaged": "2026-11-22",
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Magistrate's manor (county magistracy)#two-court zoning": {
@@ -2063,11 +2130,12 @@
   "date": "2026-11-22",
   "note": "impl-drift t274e, 2026-11-22",
   "pages": {
-   "0090-magistrates-compounds-jinya-and-yamen.drawing.html": "e77de71a959ea730"
+   "0090-magistrates-compounds-jinya-and-yamen.drawing.html": "e8883025d8e61f8b"
   },
-  "research": "14af46724f504a44",
+  "research": "573d4732556cab1b",
   "rests": [],
-  "section": "83d564d05a862941",
+  "section": "b6cbe943570e4456",
+  "triaged": "2026-11-22",
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Magistrate's manor (county magistracy)#universal shrine": {
@@ -2083,7 +2151,8 @@
   },
   "research": "757a8ea819830433",
   "rests": [],
-  "section": "83d564d05a862941",
+  "section": "b6cbe943570e4456",
+  "triaged": "2026-11-22",
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Magistrate's manor (county magistracy)#upland granary contents": {
@@ -2098,7 +2167,8 @@
   },
   "research": "f1206af177a61c95",
   "rests": [],
-  "section": "83d564d05a862941",
+  "section": "b6cbe943570e4456",
+  "triaged": "2026-11-22",
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Magistrate's manor (county magistracy)#wall display": {
@@ -2111,7 +2181,8 @@
   "pages": {},
   "research": "",
   "rests": [],
-  "section": "83d564d05a862941",
+  "section": "b6cbe943570e4456",
+  "triaged": "2026-11-22",
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Magistrate's manor (county magistracy)#walled enclosure": {
@@ -2122,12 +2193,13 @@
   "date": "2026-11-22",
   "note": "impl-drift t274e, 2026-11-22",
   "pages": {
-   "0090-magistrates-compounds-jinya-and-yamen.drawing.html": "e77de71a959ea730",
+   "0090-magistrates-compounds-jinya-and-yamen.drawing.html": "e8883025d8e61f8b",
    "0093-the-main-gate-and-its-gatekeepers-nagaya-mon.drawing.html": "a8c7eafbeafe0423"
   },
-  "research": "c323820874e60063",
+  "research": "dd50201878f29d62",
   "rests": [],
-  "section": "83d564d05a862941",
+  "section": "b6cbe943570e4456",
+  "triaged": "2026-11-22",
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Magistrate's manor (county magistracy)#well curb size about 4 ft": {
@@ -2142,7 +2214,8 @@
   },
   "research": "f166979de9325ea9",
   "rests": [],
-  "section": "83d564d05a862941",
+  "section": "b6cbe943570e4456",
+  "triaged": "2026-11-22",
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Magistrate's manor (county magistracy)#well depth by the ground": {
@@ -2157,7 +2230,8 @@
   },
   "research": "f166979de9325ea9",
   "rests": [],
-  "section": "83d564d05a862941",
+  "section": "b6cbe943570e4456",
+  "triaged": "2026-11-22",
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Magistrate's manor (county magistracy)#well gear about three in four by the water's depth": {
@@ -2172,7 +2246,8 @@
   },
   "research": "f166979de9325ea9",
   "rests": [],
-  "section": "83d564d05a862941",
+  "section": "b6cbe943570e4456",
+  "triaged": "2026-11-22",
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Magistrate's manor (county magistracy)#wells by use": {
@@ -2187,7 +2262,8 @@
   },
   "research": "05a5d9db2a9784b9",
   "rests": [],
-  "section": "83d564d05a862941",
+  "section": "b6cbe943570e4456",
+  "triaged": "2026-11-22",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Adding a building type#type workflow": {
@@ -2466,14 +2542,15 @@
  "docs/buildings.md::Checklist for a new diagram#gate hierarchy": {
   "body": "8b9f2e558eda6cf1",
   "claim": "gate hierarchy - the-main-gate-and-its-gatekeepers-nagaya-mon: the Joge drawing of 1869 labels a main gate and a small gate side by side; the lesser gate's width is a GUESS",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "8fdb9d8a2e07b53c",
   "core": "47a44f581d23ce32",
   "date": "2026-10-25",
   "note": "the Joge plan labels a main gate and a small gate together; the lesser gate's width is a GUESS",
   "pages": {
-   "0093-the-main-gate-and-its-gatekeepers-nagaya-mon.html": "4613630d4a4ed584"
+   "0093-the-main-gate-and-its-gatekeepers-nagaya-mon.html": "8e6499c7e119fc5b"
   },
-  "research": "204dd8abf686d43e",
+  "research": "235f322995c7efa7",
   "rests": [
    "0093-the-main-gate-and-its-gatekeepers-nagaya-mon.html:04ac23f9653e01fb",
    "0093-the-main-gate-and-its-gatekeepers-nagaya-mon.html:65f0493063abc217",
@@ -2481,7 +2558,7 @@
    "0093-the-main-gate-and-its-gatekeepers-nagaya-mon.html:74c4edddb44a6e24"
   ],
   "section": "02e1964ba0da4714",
-  "triaged": "2026-11-19",
+  "triaged": "2026-11-22",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Checklist for a new diagram#guest and service doors": {
@@ -2531,14 +2608,15 @@
  "docs/buildings.md::Checklist for a new diagram#packing coverage": {
   "body": "694385b64d0a6f22",
   "claim": "packing coverage - the-size-of-a-compound-and-the-rank-of-its-buildings.drawing: ~30-42%, fire gaps ~6-8 ft, kura ~6-10 ft, apron ~15-20 ft",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "91c6394bf8852df9",
   "core": "9912a0803f6f6bde",
   "date": "2026-10-26",
   "note": "30-42% (Takayama's measured 31% is the floor, the top a guess), fire gaps 6-8 ft, kura 6-10 ft, apron 15-20 ft, and the walls never moved in as a default",
   "pages": {
-   "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html": "c70862e04bd35e73"
+   "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html": "72e197e35d8155a0"
   },
-  "research": "20dff3d4f5e8a9c2",
+  "research": "f8776f6c8599ca62",
   "rests": [
    "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html:5b274ef99f301ef1",
    "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html:a911be254a00f660",
@@ -2547,7 +2625,7 @@
    "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html:fa6b53e2166eb519"
   ],
   "section": "02e1964ba0da4714",
-  "triaged": "2026-11-19",
+  "triaged": "2026-11-22",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Checklist for a new diagram#practice ground beside the watch, no dojo": {
@@ -2612,14 +2690,15 @@
  "docs/buildings.md::Checklist for a new diagram#size hierarchy": {
   "body": "66e7ab30b94bf5fa",
   "claim": "size hierarchy - the-size-of-a-compound-and-the-rank-of-its-buildings.drawing: office hall, residence, rowhouse; the residence the largest domestic building, kitchen, bath and shrine hall below it; stable below the barracks; small storehouses well below the rowhouse; the grain storehouse by the rice held",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "ce725751b74531d4",
   "core": "eed35bbb1585b9c2",
   "date": "2026-10-26",
   "note": "the checklist's order is the page's order, with the GUESS ranks as recorded",
   "pages": {
-   "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html": "c70862e04bd35e73"
+   "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html": "72e197e35d8155a0"
   },
-  "research": "20dff3d4f5e8a9c2",
+  "research": "f8776f6c8599ca62",
   "rests": [
    "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html:1cb5624cb2336cca",
    "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html:50460e872bf52ef6",
@@ -2628,7 +2707,7 @@
    "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html:f6266a6b5f45273e"
   ],
   "section": "02e1964ba0da4714",
-  "triaged": "2026-11-19",
+  "triaged": "2026-11-22",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Checklist for a new diagram#structures clear of wall ink": {
@@ -2651,94 +2730,99 @@
  "docs/buildings.md::Composition: perimeter buildings + a named court-spine#buildings ring the edges": {
   "body": "1201833b791b7add",
   "claim": "buildings ring the edges - the-size-of-a-compound-and-the-rank-of-its-buildings.drawing: court centers held open, ~60% open",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "5ba41a19efe6418e",
   "core": "e1adeef6a0a192c6",
   "date": "2026-11-19",
   "note": "a third built, so about 60% open",
   "pages": {
-   "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html": "c70862e04bd35e73"
+   "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html": "72e197e35d8155a0"
   },
-  "research": "20dff3d4f5e8a9c2",
+  "research": "f8776f6c8599ca62",
   "rests": [
    "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html:5b274ef99f301ef1",
    "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html:e672b523bf8222b2",
    "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html:f6879c35848621fc"
   ],
   "section": "8310ec17a8ca66b7",
-  "triaged": "2026-11-19",
+  "triaged": "2026-11-22",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Composition: perimeter buildings + a named court-spine#coverage band": {
   "body": "1201833b791b7add",
   "claim": "coverage band - the-size-of-a-compound-and-the-rank-of-its-buildings.drawing: ~30-42%",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "77902585aaa81504",
   "core": "e1adeef6a0a192c6",
   "date": "2026-11-19",
   "note": "30-42%",
   "pages": {
-   "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html": "c70862e04bd35e73"
+   "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html": "72e197e35d8155a0"
   },
-  "research": "20dff3d4f5e8a9c2",
+  "research": "f8776f6c8599ca62",
   "rests": [
    "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html:5b274ef99f301ef1",
    "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html:7275c3eabc9e3eda"
   ],
   "section": "8310ec17a8ca66b7",
-  "triaged": "2026-11-19",
+  "triaged": "2026-11-22",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Composition: perimeter buildings + a named court-spine#few large masses": {
   "body": "1201833b791b7add",
   "claim": "few large masses - the-size-of-a-compound-and-the-rank-of-its-buildings.drawing: rooms gathered into a few connected buildings",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "60b3bc6ced3af089",
   "core": "e1adeef6a0a192c6",
   "date": "2026-11-19",
   "note": "",
   "pages": {
-   "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html": "c70862e04bd35e73"
+   "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html": "72e197e35d8155a0"
   },
-  "research": "20dff3d4f5e8a9c2",
+  "research": "f8776f6c8599ca62",
   "rests": [
    "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html:f2129fd621e95512"
   ],
   "section": "8310ec17a8ca66b7",
-  "triaged": "2026-11-19",
+  "triaged": "2026-11-22",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Composition: perimeter buildings + a named court-spine#named court spine": {
   "body": "1201833b791b7add",
   "claim": "named court spine - the-size-of-a-compound-and-the-rank-of-its-buildings.drawing: forecourt, hearing court (oshirasu), garden and the ground between the courts stay open",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "cfa9b210762b1952",
   "core": "e1adeef6a0a192c6",
   "date": "2026-11-19",
   "note": "",
   "pages": {
-   "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html": "c70862e04bd35e73"
+   "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html": "72e197e35d8155a0"
   },
-  "research": "20dff3d4f5e8a9c2",
+  "research": "f8776f6c8599ca62",
   "rests": [
    "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html:f6879c35848621fc"
   ],
   "section": "8310ec17a8ca66b7",
-  "triaged": "2026-11-19",
+  "triaged": "2026-11-22",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Composition: perimeter buildings + a named court-spine#office front, residence rear": {
   "body": "1201833b791b7add",
   "claim": "office front, residence rear - DEVIATION magistrates-compounds-jinya-and-yamen.drawing: outer office court, inner residence court behind a divider - the yamen's order, kept for every plan as a deliberate simplification (at Takayama the residence stood beside the office)",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "38e79f2688a28d13",
   "core": "e1adeef6a0a192c6",
   "date": "2026-11-19",
   "note": "the drawing page records the simplification and Takayama's residence beside the office",
   "pages": {
-   "0090-magistrates-compounds-jinya-and-yamen.drawing.html": "e77de71a959ea730"
+   "0090-magistrates-compounds-jinya-and-yamen.drawing.html": "e8883025d8e61f8b"
   },
-  "research": "14af46724f504a44",
+  "research": "573d4732556cab1b",
   "rests": [
    "0090-magistrates-compounds-jinya-and-yamen.drawing.html:049a643bfa279d82"
   ],
   "section": "8310ec17a8ca66b7",
-  "triaged": "2026-11-19",
+  "triaged": "2026-11-22",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Composition: perimeter buildings + a named court-spine#perimeter-first placement order": {
@@ -3677,7 +3761,8 @@
   },
   "research": "2a6aa575cd1e6d92",
   "rests": [],
-  "section": "8452a2cf5def13d3",
+  "section": "780720c5fe6baca1",
+  "triaged": "2026-11-22",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Outer court (administrative / public)#barracks": {
@@ -3689,11 +3774,12 @@
   "note": "impl-drift t274e, 2026-11-22",
   "pages": {
    "0097-staff-rowhouses-and-barracks-nagaya.drawing.html": "746ec66395f459f8",
-   "0097-staff-rowhouses-and-barracks-nagaya.html": "62a5ddbd963f7fc7"
+   "0097-staff-rowhouses-and-barracks-nagaya.html": "6e2f76ad2bc17900"
   },
-  "research": "1006d05e22648a28",
+  "research": "cb0fb06acf494958",
   "rests": [],
-  "section": "8452a2cf5def13d3",
+  "section": "780720c5fe6baca1",
+  "triaged": "2026-11-22",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Outer court (administrative / public)#barracks watch of ~10-20 men": {
@@ -3708,7 +3794,8 @@
   },
   "research": "ff6f552939c9b1ab",
   "rests": [],
-  "section": "8452a2cf5def13d3",
+  "section": "780720c5fe6baca1",
+  "triaged": "2026-11-22",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Outer court (administrative / public)#cart yard as a charcoal fire gap": {
@@ -3719,12 +3806,13 @@
   "date": "2026-11-22",
   "note": "impl-drift t274e, 2026-11-22",
   "pages": {
-   "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html": "c70862e04bd35e73",
+   "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html": "72e197e35d8155a0",
    "0197-charcoal-yards-and-charcoal-stores.drawing.html": "fba749a9a3f24a9c"
   },
-  "research": "35fb2af591e637ba",
+  "research": "d767fe08c55d451a",
   "rests": [],
-  "section": "8452a2cf5def13d3",
+  "section": "780720c5fe6baca1",
+  "triaged": "2026-11-22",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Outer court (administrative / public)#cell": {
@@ -3739,7 +3827,8 @@
   },
   "research": "cf5cb4cb4db4d9b8",
   "rests": [],
-  "section": "8452a2cf5def13d3",
+  "section": "780720c5fe6baca1",
+  "triaged": "2026-11-22",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Outer court (administrative / public)#cell kept well under the barracks": {
@@ -3754,7 +3843,8 @@
   },
   "research": "cf5cb4cb4db4d9b8",
   "rests": [],
-  "section": "8452a2cf5def13d3",
+  "section": "780720c5fe6baca1",
+  "triaged": "2026-11-22",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Outer court (administrative / public)#charcoal bales": {
@@ -3769,7 +3859,8 @@
   },
   "research": "7e00071421669e15",
   "rests": [],
-  "section": "8452a2cf5def13d3",
+  "section": "780720c5fe6baca1",
+  "triaged": "2026-11-22",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Outer court (administrative / public)#charcoal weighing floor": {
@@ -3784,7 +3875,8 @@
   },
   "research": "7a250f14854ed763",
   "rests": [],
-  "section": "8452a2cf5def13d3",
+  "section": "780720c5fe6baca1",
+  "triaged": "2026-11-22",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Outer court (administrative / public)#clerk positions at the dais": {
@@ -3799,7 +3891,8 @@
   },
   "research": "2ce708ebe5a0a04a",
   "rests": [],
-  "section": "8452a2cf5def13d3",
+  "section": "780720c5fe6baca1",
+  "triaged": "2026-11-22",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Outer court (administrative / public)#forecourt": {
@@ -3815,7 +3908,8 @@
   },
   "research": "43647f1a2e3ea2a1",
   "rests": [],
-  "section": "8452a2cf5def13d3",
+  "section": "780720c5fe6baca1",
+  "triaged": "2026-11-22",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Outer court (administrative / public)#granary forms": {
@@ -3830,7 +3924,8 @@
   },
   "research": "f2e5561095446765",
   "rests": [],
-  "section": "8452a2cf5def13d3",
+  "section": "780720c5fe6baca1",
+  "triaged": "2026-11-22",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Outer court (administrative / public)#granary kept under a residence block": {
@@ -3842,11 +3937,12 @@
   "note": "impl-drift t274e, 2026-11-22",
   "pages": {
    "0098-storehouses-for-the-tax-rice.drawing.html": "1466a760af61120d",
-   "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html": "c70862e04bd35e73"
+   "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html": "72e197e35d8155a0"
   },
-  "research": "f8bb114406eb044d",
+  "research": "ee0bd3a31fe40a27",
   "rests": [],
-  "section": "8452a2cf5def13d3",
+  "section": "780720c5fe6baca1",
+  "triaged": "2026-11-22",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Outer court (administrative / public)#granary label": {
@@ -3861,7 +3957,8 @@
   },
   "research": "f2e5561095446765",
   "rests": [],
-  "section": "8452a2cf5def13d3",
+  "section": "780720c5fe6baca1",
+  "triaged": "2026-11-22",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Outer court (administrative / public)#granary size": {
@@ -3876,7 +3973,8 @@
   },
   "research": "f1206af177a61c95",
   "rests": [],
-  "section": "8452a2cf5def13d3",
+  "section": "780720c5fe6baca1",
+  "triaged": "2026-11-22",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Outer court (administrative / public)#hearing cart slot": {
@@ -3889,7 +3987,8 @@
   "pages": {},
   "research": "",
   "rests": [],
-  "section": "8452a2cf5def13d3",
+  "section": "780720c5fe6baca1",
+  "triaged": "2026-11-22",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Outer court (administrative / public)#hearing court": {
@@ -3904,7 +4003,8 @@
   },
   "research": "5d21a3098fbb528c",
   "rests": [],
-  "section": "8452a2cf5def13d3",
+  "section": "780720c5fe6baca1",
+  "triaged": "2026-11-22",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Outer court (administrative / public)#hearing court posts": {
@@ -3919,7 +4019,8 @@
   },
   "research": "2ce708ebe5a0a04a",
   "rests": [],
-  "section": "8452a2cf5def13d3",
+  "section": "780720c5fe6baca1",
+  "triaged": "2026-11-22",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Outer court (administrative / public)#hearing mat size": {
@@ -3934,7 +4035,8 @@
   },
   "research": "2ce708ebe5a0a04a",
   "rests": [],
-  "section": "8452a2cf5def13d3",
+  "section": "780720c5fe6baca1",
+  "triaged": "2026-11-22",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Outer court (administrative / public)#hearing mats": {
@@ -3949,7 +4051,8 @@
   },
   "research": "5d21a3098fbb528c",
   "rests": [],
-  "section": "8452a2cf5def13d3",
+  "section": "780720c5fe6baca1",
+  "triaged": "2026-11-22",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Outer court (administrative / public)#kura granary door on the apron": {
@@ -3962,22 +4065,28 @@
   "pages": {},
   "research": "",
   "rests": [],
-  "section": "8452a2cf5def13d3",
+  "section": "780720c5fe6baca1",
+  "triaged": "2026-11-22",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Outer court (administrative / public)#office hall": {
-  "body": "e34b6d6d44ed63e6",
-  "claim": "office hall - the-office-hall-and-its-clerks-goyakusho.drawing: ~120 x 28 ft block (Ochiba's; Hayakawa 113 x 28, Ubame 110 x 28), inside the 80-150 by 20-45 ft band whose proportions are a GUESS; backing the divider, day office and study behind, dais band in front, courtroom a room of it",
-  "code": "0765f2a0a9c15d6e",
-  "core": "8452a2cf5def13d3",
+  "body": "7b4ab7db2bca4661",
+  "claim": "office hall - the-office-hall-and-its-clerks-goyakusho.drawing: ~120 x 28 ft block (Ochiba's; Hayakawa 113 x 28, Ubame 110 x 28; the generated county example 127 x 38, 113 before its armory bay), inside the 80-150 by 20-45 ft band whose proportions are a GUESS; backing the divider, day office and study behind, dais band in front, courtroom a room of it",
+  "code": "4ebdc151dd435e40",
+  "core": "780720c5fe6baca1",
   "date": "2026-11-22",
-  "note": "impl-drift t274e, 2026-11-22",
+  "note": "127 x 38 ft (113 + 14 ft armory bay), 120/113/110 x 28 ft, all inside the 80-150 by 20-45 ft band with its floor area; the rooms behind the dais are the guess the page records",
   "pages": {
    "0113-the-office-hall-and-its-clerks-goyakusho.drawing.html": "44879b9fd51f7154"
   },
   "research": "b41a6bcda29db296",
-  "rests": [],
-  "section": "8452a2cf5def13d3",
+  "rests": [
+   "0113-the-office-hall-and-its-clerks-goyakusho.drawing.html:976444e94e95943d",
+   "0113-the-office-hall-and-its-clerks-goyakusho.drawing.html:bedd579ac94bfd98",
+   "0113-the-office-hall-and-its-clerks-goyakusho.drawing.html:ca6e750720f63140",
+   "0113-the-office-hall-and-its-clerks-goyakusho.drawing.html:dd1082c27eb94aa1"
+  ],
+  "section": "780720c5fe6baca1",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Outer court (administrative / public)#one storehouse at the office": {
@@ -3992,7 +4101,8 @@
   },
   "research": "f1206af177a61c95",
   "rests": [],
-  "section": "8452a2cf5def13d3",
+  "section": "780720c5fe6baca1",
+  "triaged": "2026-11-22",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Outer court (administrative / public)#practice ground": {
@@ -4007,7 +4117,8 @@
   },
   "research": "8b27404bc31588ce",
   "rests": [],
-  "section": "8452a2cf5def13d3",
+  "section": "780720c5fe6baca1",
+  "triaged": "2026-11-22",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Outer court (administrative / public)#practice ground area": {
@@ -4022,7 +4133,8 @@
   },
   "research": "8b27404bc31588ce",
   "rests": [],
-  "section": "8452a2cf5def13d3",
+  "section": "780720c5fe6baca1",
+  "triaged": "2026-11-22",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Outer court (administrative / public)#practice ground placement": {
@@ -4037,7 +4149,8 @@
   },
   "research": "8b27404bc31588ce",
   "rests": [],
-  "section": "8452a2cf5def13d3",
+  "section": "780720c5fe6baca1",
+  "triaged": "2026-11-22",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Outer court (administrative / public)#practice ground shared with cart staging or muster": {
@@ -4050,7 +4163,8 @@
   "pages": {},
   "research": "",
   "rests": [],
-  "section": "8452a2cf5def13d3",
+  "section": "780720c5fe6baca1",
+  "triaged": "2026-11-22",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Outer court (administrative / public)#practice ground striking posts": {
@@ -4065,7 +4179,8 @@
   },
   "research": "8b27404bc31588ce",
   "rests": [],
-  "section": "8452a2cf5def13d3",
+  "section": "780720c5fe6baca1",
+  "triaged": "2026-11-22",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Outer court (administrative / public)#practice ground weapon rack": {
@@ -4080,7 +4195,8 @@
   },
   "research": "8b27404bc31588ce",
   "rests": [],
-  "section": "8452a2cf5def13d3",
+  "section": "780720c5fe6baca1",
+  "triaged": "2026-11-22",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Outer court (administrative / public)#stable below barracks": {
@@ -4091,11 +4207,12 @@
   "date": "2026-11-22",
   "note": "impl-drift t274e, 2026-11-22",
   "pages": {
-   "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html": "c70862e04bd35e73"
+   "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html": "72e197e35d8155a0"
   },
-  "research": "20dff3d4f5e8a9c2",
+  "research": "f8776f6c8599ca62",
   "rests": [],
-  "section": "8452a2cf5def13d3",
+  "section": "780720c5fe6baca1",
+  "triaged": "2026-11-22",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Outer court (administrative / public)#stable passage and grooms' quarters": {
@@ -4110,7 +4227,8 @@
   },
   "research": "96ea0c83b210c787",
   "rests": [],
-  "section": "8452a2cf5def13d3",
+  "section": "780720c5fe6baca1",
+  "triaged": "2026-11-22",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Outer court (administrative / public)#stable stall width": {
@@ -4125,7 +4243,8 @@
   },
   "research": "96ea0c83b210c787",
   "rests": [],
-  "section": "8452a2cf5def13d3",
+  "section": "780720c5fe6baca1",
+  "triaged": "2026-11-22",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Outer court (administrative / public)#stables": {
@@ -4141,7 +4260,8 @@
   },
   "research": "c31147aaa37b5dd2",
   "rests": [],
-  "section": "8452a2cf5def13d3",
+  "section": "780720c5fe6baca1",
+  "triaged": "2026-11-22",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Outer court (administrative / public)#tax archive drawn with white-plaster fill, heavy stroke and dark door mark": {
@@ -4154,7 +4274,8 @@
   "pages": {},
   "research": "",
   "rests": [],
-  "section": "8452a2cf5def13d3",
+  "section": "780720c5fe6baca1",
+  "triaged": "2026-11-22",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Outer court (administrative / public)#tax archive size": {
@@ -4169,16 +4290,18 @@
   },
   "research": "9fd73eb86394c59a",
   "rests": [],
-  "section": "8452a2cf5def13d3",
+  "section": "780720c5fe6baca1",
+  "triaged": "2026-11-22",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Outer court (administrative / public)#tax archive strongroom role": {
-  "body": "e34b6d6d44ed63e6",
+  "body": "7b4ab7db2bca4661",
   "claim": "tax archive strongroom role - fire-and-the-fireproof-storehouses-dozo: the Takayama book storehouse held records only, and 0123 has Pingyao keep its money, grain tax and arms inside the great hall, its granary behind the offices - one kura is drawn for ledgers, coin and valuables, a departure the code keeps until feature 417 T33; ledgers plus coin and in-kind valuables in one kura",
   "code": "72fb98f908a010a0",
-  "core": "8452a2cf5def13d3",
+  "core": "780720c5fe6baca1",
   "date": "2026-11-22",
-  "note": "known (417 T33): one kura for ledgers, coin and valuables; fix: code; effect: a strongroom role the record gives another building",
+  "note": "known (417 T33): one kura is drawn for ledgers, coin and in-kind valuables, where Takayama's book storehouse held documents and Pingyao kept money and grain in the hall's east end bay; fix: code; effect: the tax archive reads as the county's strongroom, which neither office attests",
+  "outside": true,
   "pages": {
    "0100-fire-and-the-fireproof-storehouses-dozo.html": "3c749344c62e4cb3"
   },
@@ -4187,31 +4310,50 @@
    "0100-fire-and-the-fireproof-storehouses-dozo.html:148c018abc71e930",
    "0100-fire-and-the-fireproof-storehouses-dozo.html:959f22cb760b8b81"
   ],
-  "section": "8452a2cf5def13d3",
+  "section": "780720c5fe6baca1",
   "verdict": "DRIFTED"
  },
  "docs/buildings.md::Outer court (administrative / public)#the granary behind the offices": {
-  "body": "e34b6d6d44ed63e6",
+  "body": "7b4ab7db2bca4661",
   "claim": "the granary behind the offices - the-magistrates-manor-in-a-town-where-it-stands-and-which-way-it-faces-jinya-and-yamen: Pingyao's granary north of the office buildings behind its war, justice and works offices, on the office side and not in the residence's court",
   "code": "a00ec5e10ea9adb8",
-  "core": "8452a2cf5def13d3",
+  "core": "780720c5fe6baca1",
   "date": "2026-11-22",
-  "note": "impl-drift t274e, 2026-11-22",
+  "note": "Pingyao's \"north of them the county granary\" is on the office side; the granary is drawn in the office court",
   "pages": {
-   "0123-the-magistrates-manor-in-a-town-where-it-stands-and-which-way-it-faces-jinya-and-yamen.html": "5c8c4bbf6dabd3aa"
+   "0123-the-magistrates-manor-in-a-town-where-it-stands-and-which-way-it-faces-jinya-and-yamen.html": "3a9b1709912a6067"
   },
-  "research": "5e40ab1489268d04",
-  "rests": [],
-  "section": "8452a2cf5def13d3",
+  "research": "d4d1cab5dfd35b8f",
+  "rests": [
+   "0123-the-magistrates-manor-in-a-town-where-it-stands-and-which-way-it-faces-jinya-and-yamen.html:a99ddcd2ed3cb0ad"
+  ],
+  "section": "780720c5fe6baca1",
   "verdict": "IN-STEP"
  },
+ "docs/buildings.md::Outer court (administrative / public)#the granary below a barracks": {
+  "body": "3f32001a2d67d319",
+  "claim": "the granary below a barracks - DEVIATION the-magistrates-manor-in-a-town-where-it-stands-and-which-way-it-faces-jinya-and-yamen.drawing: departs from the page's seat (the inner end of a flanking strip, its back against the wall between the two courts): where a barracks takes the head of the office court's flank column, the granary stands below it in the same column, still on the office side and outside the household's court (Ochiba's round trip, a room-first choice its notes record: no room on its wall for the barracks with the orders swapped, a /tmp trial 2026-11-22); the page to record this seat by 449 T295",
+  "code": "fb64b12d397a97a3",
+  "core": "780720c5fe6baca1",
+  "date": "2026-11-22",
+  "note": "known (449 T295): the drawing page does not record this seat yet. §267 seats the granary \"at the inner end of a flank ... its back against the wall between the two courts\". The procedure (the Granary bullet, Ochiba's round trip) instead puts it below a barracks that takes the column's head, as the claim says. A DEVIATION is IN-STEP only when the cited page records it, and this one waits on the page edit filed as T295. The claim describes the departure correctly and the code should stay as it is. fix: claim (keep the wording until T295 records the seat on 0123's drawing page; then it is IN-STEP); effect: none - the granary still stands on the office side and outside the household's court, which is what §258 (Pingyao's granary behind the offices) and §267 (\"never in the household's inner court\") require, and §267's own seat is a guess, not a finding",
+  "pages": {
+   "0123-the-magistrates-manor-in-a-town-where-it-stands-and-which-way-it-faces-jinya-and-yamen.drawing.html": "8ea3611bfc28550c"
+  },
+  "research": "563136b6e4e115c3",
+  "rests": [
+   "0123-the-magistrates-manor-in-a-town-where-it-stands-and-which-way-it-faces-jinya-and-yamen.drawing.html:fc0781e5698aa2d7"
+  ],
+  "section": "780720c5fe6baca1",
+  "verdict": "DRIFTED"
+ },
  "docs/buildings.md::Outer court (administrative / public)#the granary's seat in the office court": {
-  "body": "e34b6d6d44ed63e6",
+  "body": "dfef7948f9f451c6",
   "claim": "the granary's seat in the office court - GUESS the-magistrates-manor-in-a-town-where-it-stands-and-which-way-it-faces-jinya-and-yamen.drawing: at a magistracy it stands at the head of one of the office court's flank columns, its north face on the divider, beside the office hall's end, the plan having no side-wing offices for Pingyao's seat north of them to be drawn against (the room priced: docs/building-programs.md, the granary at the head of an office-court column); refused in the household's inner court (feature 449 T274)",
   "code": "ec4ea04bfc222862",
-  "core": "8452a2cf5def13d3",
+  "core": "780720c5fe6baca1",
   "date": "2026-11-22",
-  "note": "the seat and the no-side-wing-offices reason are in §156; the inner court refused",
+  "note": "the procedure seats the granary at the head of a flank column, against the divider, beside the office hall's end, and refuses it in the household's court, as §267 says; Pingyao's placement against offices our manor lacks is noted as §267 does; the barracks case at Ochiba is a separate claim, judged above",
   "pages": {
    "0123-the-magistrates-manor-in-a-town-where-it-stands-and-which-way-it-faces-jinya-and-yamen.drawing.html": "8ea3611bfc28550c"
   },
@@ -4220,7 +4362,7 @@
    "0123-the-magistrates-manor-in-a-town-where-it-stands-and-which-way-it-faces-jinya-and-yamen.drawing.html:60b831c18bb05408",
    "0123-the-magistrates-manor-in-a-town-where-it-stands-and-which-way-it-faces-jinya-and-yamen.drawing.html:fc0781e5698aa2d7"
   ],
-  "section": "8452a2cf5def13d3",
+  "section": "780720c5fe6baca1",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Outer court (administrative / public)#the kura granary's vents not drawn": {
@@ -4233,7 +4375,8 @@
   "pages": {},
   "research": "",
   "rests": [],
-  "section": "8452a2cf5def13d3",
+  "section": "780720c5fe6baca1",
+  "triaged": "2026-11-22",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Period defaults: Edo for the civil, Sengoku for the military#L5R divergences kept": {
@@ -4728,43 +4871,40 @@
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Scale#main gate passage width": {
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "b068ed1e684f469d",
   "core": "d28e8161b6f37cbb",
   "date": "2026-10-12",
   "note": "nagaya-mon ~12 ft passage, yakuimon frontage as registered",
   "pages": {
-   "0093-the-main-gate-and-its-gatekeepers-nagaya-mon.html": "4613630d4a4ed584"
+   "0093-the-main-gate-and-its-gatekeepers-nagaya-mon.html": "8e6499c7e119fc5b"
   },
-  "research": "204dd8abf686d43e",
+  "research": "235f322995c7efa7",
   "rests": [
    "0093-the-main-gate-and-its-gatekeepers-nagaya-mon.html:04ac23f9653e01fb",
    "0093-the-main-gate-and-its-gatekeepers-nagaya-mon.html:6ef47a197b18e3dd"
   ],
   "section": "576af448bf1e8cac",
-  "triaged": "2026-11-19",
+  "triaged": "2026-11-22",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Scale#plan scale": {
-  "body": "f19e5f136e885844",
+  "body": "790b96362bb8bc8d",
   "claim": "plan scale - magistrates-compounds-jinya-and-yamen.drawing: 3 px = 1 ft, set so drawn compounds fall between Joge and Takayama",
-  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "93bbf1d4f75fa52d",
-  "core": "778b3b986322b456",
-  "date": "2026-10-26",
-  "note": "3 px = 1 ft, chosen so the drawn compounds fall between the Joge branch post and the Takayama intendant's office, as the page states",
+  "core": "576af448bf1e8cac",
+  "date": "2026-11-22",
+  "note": "3 px = 1 ft, set so drawn compounds fall between Joge and Takayama",
   "pages": {
-   "0090-magistrates-compounds-jinya-and-yamen.drawing.html": "e77de71a959ea730"
+   "0090-magistrates-compounds-jinya-and-yamen.drawing.html": "e8883025d8e61f8b"
   },
-  "research": "14af46724f504a44",
+  "research": "573d4732556cab1b",
   "rests": [
-   "0090-magistrates-compounds-jinya-and-yamen.drawing.html:aa6db6345dde31d6",
-   "0090-magistrates-compounds-jinya-and-yamen.drawing.html:ae03b2d56e73425e",
+   "0090-magistrates-compounds-jinya-and-yamen.drawing.html:b7aa78898c6ee5bb",
    "0090-magistrates-compounds-jinya-and-yamen.drawing.html:b92fdf4980d4aceb",
-   "0090-magistrates-compounds-jinya-and-yamen.drawing.html:c19494ded892d93e",
-   "0090-magistrates-compounds-jinya-and-yamen.drawing.html:c1eb54b975cd5790"
+   "0090-magistrates-compounds-jinya-and-yamen.drawing.html:c859cd34a60be9c0"
   ],
   "section": "576af448bf1e8cac",
-  "triaged": "2026-11-19",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Scale#residence size": {
@@ -4857,10 +4997,10 @@
   "date": "2026-11-22",
   "note": "the gate faces what it fronts, and south where nothing else decides; a sheet fronts nothing; Joge's gate stood at its east wall",
   "pages": {
-   "0093-the-main-gate-and-its-gatekeepers-nagaya-mon.html": "4613630d4a4ed584",
+   "0093-the-main-gate-and-its-gatekeepers-nagaya-mon.html": "8e6499c7e119fc5b",
    "0123-the-magistrates-manor-in-a-town-where-it-stands-and-which-way-it-faces-jinya-and-yamen.drawing.html": "8ea3611bfc28550c"
   },
-  "research": "e9f38bdc9fd5735a",
+  "research": "3b95fc37cb47fdb9",
   "rests": [
    "0093-the-main-gate-and-its-gatekeepers-nagaya-mon.html:74c4edddb44a6e24",
    "0123-the-magistrates-manor-in-a-town-where-it-stands-and-which-way-it-faces-jinya-and-yamen.drawing.html:214fecd4c06bf067",
@@ -4917,15 +5057,16 @@
  "docs/buildings.md::Walls and gates#divider wall between the courts": {
   "body": "76fa7e4c858ee295",
   "claim": "divider wall between the courts - magistrates-compounds-jinya-and-yamen.drawing: two courts, the office in front and the residence behind, with a gate between them dividing the office from the home (the wall itself at compound-walls-neribei-and-tsuijibei.drawing)",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "5c42ace4f9676ac8",
   "core": "63fe868d083d9bc2",
   "date": "2026-11-22",
   "note": "two courts, office in front and residence behind, with a gate between them dividing office from home; the wall drawn as 0092's drawing page draws walls",
   "pages": {
-   "0090-magistrates-compounds-jinya-and-yamen.drawing.html": "e77de71a959ea730",
+   "0090-magistrates-compounds-jinya-and-yamen.drawing.html": "e8883025d8e61f8b",
    "0092-compound-walls-neribei-and-tsuijibei.drawing.html": "aec0fef5c25a07e2"
   },
-  "research": "18f2f2581e703258",
+  "research": "7f27f5e46f727214",
   "rests": [
    "0090-magistrates-compounds-jinya-and-yamen.drawing.html:049a643bfa279d82",
    "0090-magistrates-compounds-jinya-and-yamen.drawing.html:45ffe904afced68b",
@@ -4934,18 +5075,20 @@
    "0092-compound-walls-neribei-and-tsuijibei.drawing.html:bbba3419b31507b3"
   ],
   "section": "63fe868d083d9bc2",
+  "triaged": "2026-11-22",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Walls and gates#gatehouse": {
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "ff9ac130c5b65109",
   "core": "260aa1c5e1ce4172",
   "date": "2026-10-10",
   "note": "the gatehouse or the guardroom in the gate range is rolled per plan; 2 ken deep; the 40 ft is a recorded GUESS",
   "pages": {
    "0093-the-main-gate-and-its-gatekeepers-nagaya-mon.drawing.html": "a8c7eafbeafe0423",
-   "0093-the-main-gate-and-its-gatekeepers-nagaya-mon.html": "4613630d4a4ed584"
+   "0093-the-main-gate-and-its-gatekeepers-nagaya-mon.html": "8e6499c7e119fc5b"
   },
-  "research": "044f6a5105e83536",
+  "research": "9c52114c6a5ebfbe",
   "rests": [
    "0093-the-main-gate-and-its-gatekeepers-nagaya-mon.drawing.html:45d250045a3b5164",
    "0093-the-main-gate-and-its-gatekeepers-nagaya-mon.drawing.html:77efbd366737e4bc",
@@ -4957,25 +5100,26 @@
    "0093-the-main-gate-and-its-gatekeepers-nagaya-mon.html:cd57d3fd287dbd8e"
   ],
   "section": "63fe868d083d9bc2",
-  "triaged": "2026-11-19",
+  "triaged": "2026-11-22",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Walls and gates#main gate forms": {
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "e6727a10c7982086",
   "core": "3c216ad7c4b56d44",
   "date": "2026-10-12",
   "note": "both attested forms, rolled per plan",
   "pages": {
-   "0093-the-main-gate-and-its-gatekeepers-nagaya-mon.html": "4613630d4a4ed584"
+   "0093-the-main-gate-and-its-gatekeepers-nagaya-mon.html": "8e6499c7e119fc5b"
   },
-  "research": "204dd8abf686d43e",
+  "research": "235f322995c7efa7",
   "rests": [
    "0093-the-main-gate-and-its-gatekeepers-nagaya-mon.html:04ac23f9653e01fb",
    "0093-the-main-gate-and-its-gatekeepers-nagaya-mon.html:65f0493063abc217",
    "0093-the-main-gate-and-its-gatekeepers-nagaya-mon.html:6ef47a197b18e3dd"
   ],
   "section": "63fe868d083d9bc2",
-  "triaged": "2026-11-19",
+  "triaged": "2026-11-22",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Walls and gates#main gate on the south wall": {
@@ -4987,10 +5131,10 @@
   "date": "2026-11-22",
   "note": "the yakuimon or nagaya-mon set in the south wall, as 0123's south default for a compound that fronts nothing; Joge's east gate noted",
   "pages": {
-   "0093-the-main-gate-and-its-gatekeepers-nagaya-mon.html": "4613630d4a4ed584",
+   "0093-the-main-gate-and-its-gatekeepers-nagaya-mon.html": "8e6499c7e119fc5b",
    "0123-the-magistrates-manor-in-a-town-where-it-stands-and-which-way-it-faces-jinya-and-yamen.drawing.html": "8ea3611bfc28550c"
   },
-  "research": "e9f38bdc9fd5735a",
+  "research": "3b95fc37cb47fdb9",
   "rests": [
    "0093-the-main-gate-and-its-gatekeepers-nagaya-mon.html:74c4edddb44a6e24",
    "0123-the-magistrates-manor-in-a-town-where-it-stands-and-which-way-it-faces-jinya-and-yamen.drawing.html:214fecd4c06bf067",
@@ -5550,21 +5694,23 @@
  "rust/mode_a/src/audit/checks.rs::floating_doors#a door flush to its wall": {
   "body": "914bf91b537e4ab0",
   "claim": "a door flush to its wall - CONVENTION: a door glyph sits flush to the wall it opens through and never floats just inside the building, the map drawing convention doorways-and-doors-to.drawing records and magistrates-compounds-jinya-and-yamen.drawing checks; the two pixel reaches carry claims of their own.",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "572a3e077888bee4",
   "core": "82c90d4ac4354319",
   "date": "2026-11-22",
   "note": "it flags a door that sits wholly inside a building but more than DOOR_FLUSH_TOL_PX and no more than DOOR_NEAR_PX inside its nearest wall, which is the \"never floating just inside it\" drawing convention both pages record",
   "pages": {
-   "0090-magistrates-compounds-jinya-and-yamen.drawing.html": "e77de71a959ea730",
+   "0090-magistrates-compounds-jinya-and-yamen.drawing.html": "e8883025d8e61f8b",
    "0117-doorways-and-doors-to.drawing.html": "bc909b837c49efa6"
   },
   "reads": "6f5366daedfa8a86",
-  "research": "2058d17491ec3705",
+  "research": "679a482fcad7a051",
   "rests": [
    "0090-magistrates-compounds-jinya-and-yamen.drawing.html:09b1c54f165baacf",
    "0117-doorways-and-doors-to.drawing.html:3cbff3e9dce4a3e9",
    "0117-doorways-and-doors-to.drawing.html:83f2a66640fa734f"
   ],
+  "triaged": "2026-11-22",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/audit/checks.rs::fold#the audit's checks": {
@@ -5705,17 +5851,19 @@
  "rust/mode_a/src/audit/checks.rs::occluded_foreground#the foreground drawn last": {
   "body": "bffb8a8edd645a6f",
   "claim": "the foreground drawn last - CONVENTION: tubs, wells and every sub-building rect are drawn above the fills, so a later shape covering one is a defect, the draw order magistrates-compounds-jinya-and-yamen.drawing records for labels and small glyphs; the covered area carries a claim of its own.",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "4272f04a6c8eec7f",
   "core": "64c7748d0c536d19",
   "date": "2026-11-22",
   "note": "it flags a tub, well or sub-building rect that a later fill or glyph covers, which is the draw-last order the compound page records for labels and small glyphs. The claim itself says it extends that order to sub-building rects",
   "pages": {
-   "0090-magistrates-compounds-jinya-and-yamen.drawing.html": "e77de71a959ea730"
+   "0090-magistrates-compounds-jinya-and-yamen.drawing.html": "e8883025d8e61f8b"
   },
-  "research": "14af46724f504a44",
+  "research": "573d4732556cab1b",
   "rests": [
    "0090-magistrates-compounds-jinya-and-yamen.drawing.html:ca0a00867b8d4fab"
   ],
+  "triaged": "2026-11-22",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/audit/checks.rs::overlap_px#the audit's checks": {
@@ -6000,50 +6148,55 @@
  "rust/mode_a/src/audit/checks/walls.rs::gap_tag#its figures guessed on 0116": {
   "body": "41da8c2c38bd9786",
   "claim": "its figures guessed on 0116 - GUESS the-size-of-a-compound-and-the-rank-of-its-buildings.drawing: 8 (wooden gap over 8 ft is loose)",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "47472cfffeb9b81f",
   "core": "e09e9ad8d13d15a9",
   "date": "2026-11-17",
   "note": "8 ft is the top of the page's guessed \"about 6-8 ft\"",
   "pages": {
-   "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html": "c70862e04bd35e73"
+   "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html": "72e197e35d8155a0"
   },
-  "research": "20dff3d4f5e8a9c2",
+  "research": "f8776f6c8599ca62",
   "rests": [
    "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html:fa6b53e2166eb519"
   ],
-  "triaged": "2026-11-18",
+  "triaged": "2026-11-22",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/audit/checks/walls.rs::gap_tag#its fire-gap floor": {
   "body": "f8637d710b977105",
   "claim": "its fire-gap floor - GUESS the-size-of-a-compound-and-the-rank-of-its-buildings.drawing: 6 (a kura fire-gap under 6 ft is too tight, the bottom of the page's 6-10 ft)",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "2b845771053df80a",
   "core": "e09e9ad8d13d15a9",
   "date": "2026-11-18",
   "note": "6 ft, the bottom of the page's guessed 6-10 ft kura gap",
   "pages": {
-   "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html": "c70862e04bd35e73"
+   "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html": "72e197e35d8155a0"
   },
-  "research": "20dff3d4f5e8a9c2",
+  "research": "f8776f6c8599ca62",
   "rests": [
    "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html:db5208a7bd0dcf9d"
   ],
+  "triaged": "2026-11-22",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/audit/checks/walls.rs::gap_tag#its loose gap": {
   "body": "f8637d710b977105",
   "claim": "its loose gap - GUESS the-size-of-a-compound-and-the-rank-of-its-buildings.drawing: 10 (a kura fire-gap over 10 ft is loose)",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "d872443220bb9568",
   "core": "e09e9ad8d13d15a9",
   "date": "2026-11-18",
   "note": "10 ft, the top of the page's guessed 6-10 ft",
   "pages": {
-   "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html": "c70862e04bd35e73"
+   "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html": "72e197e35d8155a0"
   },
-  "research": "20dff3d4f5e8a9c2",
+  "research": "f8776f6c8599ca62",
   "rests": [
    "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html:db5208a7bd0dcf9d"
   ],
+  "triaged": "2026-11-22",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/audit/checks/walls.rs::passage_blockers#the wall's checks": {
@@ -7397,17 +7550,19 @@
  "rust/mode_a/src/audit/program_rules.rs::HIERARCHY#the kitchen and the shrine under the residence": {
   "body": "93aacc1b7208d23b",
   "claim": "the kitchen and the shrine under the residence - GUESS the-size-of-a-compound-and-the-rank-of-its-buildings.drawing: no kitchen or shrine hall out-sizes the residence, the largest domestic building; the page records the order among them as the project's reading, a guess.",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "d0facf83d638cf9b",
   "core": "414644f9dfc8f793",
   "date": "2026-11-17",
   "note": "recorded as a guess",
   "pages": {
-   "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html": "c70862e04bd35e73"
+   "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html": "72e197e35d8155a0"
   },
-  "research": "20dff3d4f5e8a9c2",
+  "research": "f8776f6c8599ca62",
   "rests": [
    "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html:8e60bf46e6b04c4a"
   ],
+  "triaged": "2026-11-22",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/audit/program_rules.rs::HIERARCHY#the sanctuary under the hall and dwelling": {
@@ -7432,35 +7587,39 @@
  "rust/mode_a/src/audit/program_rules.rs::HIERARCHY#the stables under the barracks": {
   "body": "93aacc1b7208d23b",
   "claim": "the stables under the barracks - GUESS the-size-of-a-compound-and-the-rank-of-its-buildings.drawing: the stable stays smaller than the barracks; the page records its place in the order as a guess.",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "7fc3751dd5a5fa89",
   "core": "414644f9dfc8f793",
   "date": "2026-11-17",
   "note": "recorded as a guess",
   "pages": {
-   "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html": "c70862e04bd35e73"
+   "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html": "72e197e35d8155a0"
   },
-  "research": "20dff3d4f5e8a9c2",
+  "research": "f8776f6c8599ca62",
   "rests": [
    "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html:1cb5624cb2336cca"
   ],
+  "triaged": "2026-11-22",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/audit/program_rules.rs::HIERARCHY#the storehouses under the residence": {
   "body": "93aacc1b7208d23b",
   "claim": "the storehouses under the residence - the-size-of-a-compound-and-the-rank-of-its-buildings.drawing: the tax archive and the other small storehouses stand well below the staff rowhouse, which stands below the residence, the order of the one office measured, at Takayama.",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "571ec7506644fdb2",
   "core": "414644f9dfc8f793",
   "date": "2026-11-17",
   "note": "in step with its page",
   "pages": {
-   "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html": "c70862e04bd35e73"
+   "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html": "72e197e35d8155a0"
   },
-  "research": "20dff3d4f5e8a9c2",
+  "research": "f8776f6c8599ca62",
   "rests": [
    "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html:50460e872bf52ef6",
    "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html:cb8826a5e182c9e9",
    "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html:f6266a6b5f45273e"
   ],
+  "triaged": "2026-11-22",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/audit/program_rules.rs::JOIN_PX#block join distance": {
@@ -8737,17 +8896,19 @@
  "rust/mode_a/src/audit/shared.rs::COVERAGE_CEILING#building coverage ceiling": {
   "body": "259264756090c462",
   "claim": "building coverage ceiling - GUESS the-size-of-a-compound-and-the-rank-of-its-buildings.drawing: the top of the 30-42% coverage range, 42%, is the project's estimate from plans, which the page records as a guess.",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "445f7beac7a3427c",
   "core": "811bd58bc5b0b819",
   "date": "2026-11-17",
   "note": "42% is the page's recorded GUESS top",
   "pages": {
-   "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html": "c70862e04bd35e73"
+   "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html": "72e197e35d8155a0"
   },
-  "research": "20dff3d4f5e8a9c2",
+  "research": "f8776f6c8599ca62",
   "rests": [
    "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html:5b274ef99f301ef1"
   ],
+  "triaged": "2026-11-22",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/audit/shared.rs::COVERAGE_FIX#the shared checks": {
@@ -8764,18 +8925,20 @@
  "rust/mode_a/src/audit/shared.rs::COVERAGE_FLOOR#building coverage floor": {
   "body": "2c027c2545cf8959",
   "claim": "building coverage floor - the-size-of-a-compound-and-the-rank-of-its-buildings.drawing: a compound's buildings cover about 30-42% of its walled ground; the bottom, 30%, is near Takayama's ~31% of floor against site.",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "fd5984be0f190a87",
   "core": "2e6c4f49880e94b3",
   "date": "2026-11-17",
   "note": "30% is the page's bottom, near Takayama's ~31%",
   "pages": {
-   "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html": "c70862e04bd35e73"
+   "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html": "72e197e35d8155a0"
   },
-  "research": "20dff3d4f5e8a9c2",
+  "research": "f8776f6c8599ca62",
   "rests": [
    "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html:5b274ef99f301ef1",
    "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html:7275c3eabc9e3eda"
   ],
+  "triaged": "2026-11-22",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/audit/shared.rs::COVERAGE_TOL#coverage tolerance": {
@@ -9062,22 +9225,21 @@
  "rust/mode_a/src/audit/shared.rs::two_court_zoning#the hearing court on the gate's side": {
   "body": "d9ecc88482137ca5",
   "claim": "the hearing court on the gate's side - magistrates-compounds-jinya-and-yamen.drawing: the hearing court lies before the office hall in the outer court, so on the main gate's side of the divider; a vertical divider is not judged.",
-  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "8a5a050d6e05350a",
   "core": "fa037185e79fcd0b",
-  "date": "2026-11-18",
-  "note": "matches the Python rule",
+  "date": "2026-11-22",
+  "note": "the check puts the court's center on the main gate's side of the mean horizontal divider; the page has the office and the court before it in front and the house behind",
   "pages": {
-   "0090-magistrates-compounds-jinya-and-yamen.drawing.html": "e77de71a959ea730"
+   "0090-magistrates-compounds-jinya-and-yamen.drawing.html": "e8883025d8e61f8b"
   },
   "reads": "ad0eec1def848918",
-  "research": "14af46724f504a44",
+  "research": "573d4732556cab1b",
   "rests": [
    "0090-magistrates-compounds-jinya-and-yamen.drawing.html:049a643bfa279d82",
+   "0090-magistrates-compounds-jinya-and-yamen.drawing.html:679531b3552eb3f3",
    "0090-magistrates-compounds-jinya-and-yamen.drawing.html:b92fdf4980d4aceb",
-   "0090-magistrates-compounds-jinya-and-yamen.drawing.html:d7d8574b7344ee9d"
+   "0090-magistrates-compounds-jinya-and-yamen.drawing.html:ee1c7f022c77067e"
   ],
-  "triaged": "2026-11-19",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/audit/shared.rs::two_court_zoning#the middle gate's width in the message": {
@@ -9101,16 +9263,16 @@
   "date": "2026-11-17",
   "note": "two courts with a gate between them, a deliberate simplification",
   "pages": {
-   "0090-magistrates-compounds-jinya-and-yamen.drawing.html": "e77de71a959ea730"
+   "0090-magistrates-compounds-jinya-and-yamen.drawing.html": "e8883025d8e61f8b"
   },
   "reads": "ad0eec1def848918",
-  "research": "14af46724f504a44",
+  "research": "573d4732556cab1b",
   "rests": [
    "0090-magistrates-compounds-jinya-and-yamen.drawing.html:049a643bfa279d82",
    "0090-magistrates-compounds-jinya-and-yamen.drawing.html:45ffe904afced68b",
    "0090-magistrates-compounds-jinya-and-yamen.drawing.html:b92fdf4980d4aceb"
   ],
-  "triaged": "2026-11-19",
+  "triaged": "2026-11-22",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/audit/shared/grounds.rs::ARCH_COUNTS#the arch count": {
@@ -15413,32 +15575,34 @@
   "date": "2026-11-17",
   "note": "known (417 T33): the board is allowed 40.0 ft of an opening against the page's \"within about 15 ft of a gate in the wall\"",
   "pages": {
-   "0090-magistrates-compounds-jinya-and-yamen.drawing.html": "e77de71a959ea730"
+   "0090-magistrates-compounds-jinya-and-yamen.drawing.html": "e8883025d8e61f8b"
   },
-  "research": "14af46724f504a44",
+  "research": "573d4732556cab1b",
   "rests": [
    "0090-magistrates-compounds-jinya-and-yamen.drawing.html:e53d9fbf1c2a0525"
   ],
-  "triaged": "2026-11-19",
+  "triaged": "2026-11-22",
   "verdict": "DRIFTED"
  },
  "rust/mode_a/src/compound.rs::RANKS#size hierarchy": {
   "body": "e6719ea64fa723c2",
   "claim": "size hierarchy - the-size-of-a-compound-and-the-rank-of-its-buildings.drawing: the residence the largest domestic building and the small storehouses well below the rowhouse - the generator holds, beside the audit's seven pairs, three more as strictly smaller in area: the bath under the residence, a storehouse and the tax archive under the barracks; the office hall, residence and rowhouse order is held only as far as the audit's seven pairs hold it",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "91cbc756822a5917",
   "core": "cbdd60a46977ea5e",
   "date": "2026-11-19",
   "note": "the bath sits under the residence, as §6 says. The storehouse and the tax archive (the records store) are held under the barracks, which matches the page holding small stores below staff housing. The grain store is not in these pairs, so §5's large rice store stays possible. The office hall, residence and rowhouse order is left to the audit, as the claim now says",
   "pages": {
-   "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html": "c70862e04bd35e73"
+   "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html": "72e197e35d8155a0"
   },
-  "research": "20dff3d4f5e8a9c2",
+  "research": "f8776f6c8599ca62",
   "rests": [
    "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html:50460e872bf52ef6",
    "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html:8e60bf46e6b04c4a",
    "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html:cb8826a5e182c9e9",
    "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html:f6266a6b5f45273e"
   ],
+  "triaged": "2026-11-22",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/compound.rs::TUB_DOOR_MAX_FT#fire-water tub reach from a door": {
@@ -15576,21 +15740,23 @@
  "rust/mode_a/src/compound.rs::sheet#the drawing order": {
   "body": "b6b0e939644bf218",
   "claim": "the drawing order - CONVENTION: the grounds, the buildings, then the walls and gates over them (compound-walls-neribei-and-tsuijibei.drawing), then the small glyphs (magistrates-compounds-jinya-and-yamen.drawing: small glyphs drawn last), then the captions (labels-on-maps-cartographic-label-placement.drawing)",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "d2b5d086715ebc17",
   "core": "2ba880cb0c834006",
   "date": "2026-11-22",
   "note": "draws grounds, then buildings, then frame (walls and gates, painted over what lies beneath), then parts (glyphs and captions), last; this matches \"painted last\", \"small glyphs ... drawn last\" and \"Captions are placed last\"",
   "pages": {
-   "0090-magistrates-compounds-jinya-and-yamen.drawing.html": "e77de71a959ea730",
+   "0090-magistrates-compounds-jinya-and-yamen.drawing.html": "e8883025d8e61f8b",
    "0092-compound-walls-neribei-and-tsuijibei.drawing.html": "aec0fef5c25a07e2",
    "0242-labels-on-maps-cartographic-label-placement.drawing.html": "b37ee80314f9b54d"
   },
-  "research": "43a77d26264abf42",
+  "research": "8d6323394c3ac0b5",
   "rests": [
    "0090-magistrates-compounds-jinya-and-yamen.drawing.html:ca0a00867b8d4fab",
    "0092-compound-walls-neribei-and-tsuijibei.drawing.html:f335f68a1e164a0e",
    "0242-labels-on-maps-cartographic-label-placement.drawing.html:617590a40c176bed"
   ],
+  "triaged": "2026-11-22",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/compound.rs::tub_by_its_door#the compound engine's audit rules": {
@@ -15820,21 +15986,18 @@
  "rust/mode_a/src/compound/emit.rs::PX#the plan scale": {
   "body": "c2538826f33ef446",
   "claim": "the plan scale - magistrates-compounds-jinya-and-yamen.drawing: 3 px = 1 ft, set so drawn compounds fall between Joge and Takayama",
-  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "f6e3ba31e551e045",
   "core": "fdd875f772836837",
-  "date": "2026-11-19",
-  "note": "3 px per foot",
+  "date": "2026-11-22",
+  "note": "3.0 px per ft",
   "pages": {
-   "0090-magistrates-compounds-jinya-and-yamen.drawing.html": "e77de71a959ea730"
+   "0090-magistrates-compounds-jinya-and-yamen.drawing.html": "e8883025d8e61f8b"
   },
-  "research": "14af46724f504a44",
+  "research": "573d4732556cab1b",
   "rests": [
-   "0090-magistrates-compounds-jinya-and-yamen.drawing.html:aa6db6345dde31d6",
-   "0090-magistrates-compounds-jinya-and-yamen.drawing.html:b92fdf4980d4aceb",
-   "0090-magistrates-compounds-jinya-and-yamen.drawing.html:c19494ded892d93e"
+   "0090-magistrates-compounds-jinya-and-yamen.drawing.html:b7aa78898c6ee5bb",
+   "0090-magistrates-compounds-jinya-and-yamen.drawing.html:b92fdf4980d4aceb"
   ],
-  "triaged": "2026-11-19",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/compound/emit.rs::SMALL#label sizes": {
@@ -15921,20 +16084,18 @@
  "rust/mode_a/src/compound/emit.rs::Svg.line#the plan scale": {
   "body": "5125687f6180c6d1",
   "claim": "the plan scale - magistrates-compounds-jinya-and-yamen.drawing: 3 px = 1 ft, set so drawn compounds fall between Joge and Takayama",
-  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "a2ae0f59fb59db29",
   "core": "1378a5fd80eb101b",
-  "date": "2026-11-19",
-  "note": "feet mapped to the sheet through px at 3 px/ft",
+  "date": "2026-11-22",
+  "note": "feet to px through px()",
   "pages": {
-   "0090-magistrates-compounds-jinya-and-yamen.drawing.html": "e77de71a959ea730"
+   "0090-magistrates-compounds-jinya-and-yamen.drawing.html": "e8883025d8e61f8b"
   },
-  "research": "14af46724f504a44",
+  "research": "573d4732556cab1b",
   "rests": [
-   "0090-magistrates-compounds-jinya-and-yamen.drawing.html:aa6db6345dde31d6",
+   "0090-magistrates-compounds-jinya-and-yamen.drawing.html:b7aa78898c6ee5bb",
    "0090-magistrates-compounds-jinya-and-yamen.drawing.html:b92fdf4980d4aceb"
   ],
-  "triaged": "2026-11-19",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/compound/emit.rs::Svg.new#the sheet's plumbing": {
@@ -15964,21 +16125,19 @@
  "rust/mode_a/src/compound/emit.rs::Svg.rect#the plan scale": {
   "body": "d14a735f4e1e0495",
   "claim": "the plan scale - magistrates-compounds-jinya-and-yamen.drawing: 3 px = 1 ft, set so drawn compounds fall between Joge and Takayama",
-  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "bdef520a451b5bcd",
   "core": "3202f5cfd688dd78",
-  "date": "2026-11-19",
-  "note": "box in feet drawn at PX per foot",
+  "date": "2026-11-22",
+  "note": "feet to px through PX",
   "pages": {
-   "0090-magistrates-compounds-jinya-and-yamen.drawing.html": "e77de71a959ea730"
+   "0090-magistrates-compounds-jinya-and-yamen.drawing.html": "e8883025d8e61f8b"
   },
   "reads": "2fc31f0a78f51303",
-  "research": "14af46724f504a44",
+  "research": "573d4732556cab1b",
   "rests": [
-   "0090-magistrates-compounds-jinya-and-yamen.drawing.html:aa6db6345dde31d6",
+   "0090-magistrates-compounds-jinya-and-yamen.drawing.html:b7aa78898c6ee5bb",
    "0090-magistrates-compounds-jinya-and-yamen.drawing.html:b92fdf4980d4aceb"
   ],
-  "triaged": "2026-11-19",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/compound/emit.rs::building#dwelling walls across the long side": {
@@ -16003,21 +16162,19 @@
  "rust/mode_a/src/compound/emit.rs::building#the plan scale": {
   "body": "f065a575afa22277",
   "claim": "the plan scale - magistrates-compounds-jinya-and-yamen.drawing: 3 px = 1 ft, set so drawn compounds fall between Joge and Takayama",
-  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "fc1a3c823cabbce1",
   "core": "fb82bf59103b40cf",
-  "date": "2026-11-19",
-  "note": "draws the seated box at plan scale; the outline, rooms and labels are drawing conventions",
+  "date": "2026-11-22",
+  "note": "footprint drawn at the scale; the rest is how it is drawn",
   "pages": {
-   "0090-magistrates-compounds-jinya-and-yamen.drawing.html": "e77de71a959ea730"
+   "0090-magistrates-compounds-jinya-and-yamen.drawing.html": "e8883025d8e61f8b"
   },
   "reads": "1777bb55f7e3e04a",
-  "research": "14af46724f504a44",
+  "research": "573d4732556cab1b",
   "rests": [
-   "0090-magistrates-compounds-jinya-and-yamen.drawing.html:aa6db6345dde31d6",
+   "0090-magistrates-compounds-jinya-and-yamen.drawing.html:b7aa78898c6ee5bb",
    "0090-magistrates-compounds-jinya-and-yamen.drawing.html:b92fdf4980d4aceb"
   ],
-  "triaged": "2026-11-19",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/compound/emit.rs::buildings#the plan scale": {
@@ -16029,14 +16186,14 @@
   "date": "2026-11-19",
   "note": "draws buildings and doors where the layout placed them, at plan scale",
   "pages": {
-   "0090-magistrates-compounds-jinya-and-yamen.drawing.html": "e77de71a959ea730"
+   "0090-magistrates-compounds-jinya-and-yamen.drawing.html": "e8883025d8e61f8b"
   },
-  "research": "14af46724f504a44",
+  "research": "573d4732556cab1b",
   "rests": [
    "0090-magistrates-compounds-jinya-and-yamen.drawing.html:09b1c54f165baacf",
    "0090-magistrates-compounds-jinya-and-yamen.drawing.html:b92fdf4980d4aceb"
   ],
-  "triaged": "2026-11-19",
+  "triaged": "2026-11-22",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/compound/emit.rs::cell#cell's bars": {
@@ -16152,18 +16309,20 @@
  "rust/mode_a/src/compound/emit.rs::grounds#office front, residence rear": {
   "body": "c2ec75555af84f94",
   "claim": "office front, residence rear - DEVIATION magistrates-compounds-jinya-and-yamen.drawing: the inner court drawn north of the divider and the outer court south of it, the residence behind the office",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "9c185b8362409d44",
   "core": "1562021a24caea8b",
   "date": "2026-11-19",
   "note": "inner court north of the divider, outer south, recorded as the simplification",
   "pages": {
-   "0090-magistrates-compounds-jinya-and-yamen.drawing.html": "e77de71a959ea730"
+   "0090-magistrates-compounds-jinya-and-yamen.drawing.html": "e8883025d8e61f8b"
   },
   "reads": "bc75f40684efa70d",
-  "research": "14af46724f504a44",
+  "research": "573d4732556cab1b",
   "rests": [
    "0090-magistrates-compounds-jinya-and-yamen.drawing.html:049a643bfa279d82"
   ],
+  "triaged": "2026-11-22",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/compound/emit.rs::grounds#the plan scale": {
@@ -16171,15 +16330,16 @@
   "claim": "the plan scale - magistrates-compounds-jinya-and-yamen.drawing: 3 px = 1 ft, set so drawn compounds fall between Joge and Takayama",
   "code": "c0e8743723a5ea5c",
   "core": "1562021a24caea8b",
-  "date": "2026-11-19",
-  "note": "",
+  "date": "2026-11-22",
+  "note": "courts and zones drawn at the scale",
   "pages": {
-   "0090-magistrates-compounds-jinya-and-yamen.drawing.html": "e77de71a959ea730"
+   "0090-magistrates-compounds-jinya-and-yamen.drawing.html": "e8883025d8e61f8b"
   },
   "reads": "bc75f40684efa70d",
-  "research": "14af46724f504a44",
+  "research": "573d4732556cab1b",
   "rests": [
-   "0090-magistrates-compounds-jinya-and-yamen.drawing.html:aa6db6345dde31d6"
+   "0090-magistrates-compounds-jinya-and-yamen.drawing.html:b7aa78898c6ee5bb",
+   "0090-magistrates-compounds-jinya-and-yamen.drawing.html:b92fdf4980d4aceb"
   ],
   "verdict": "IN-STEP"
  },
@@ -16188,15 +16348,16 @@
   "claim": "the plan scale - magistrates-compounds-jinya-and-yamen.drawing: 3 px = 1 ft, set so drawn compounds fall between Joge and Takayama",
   "code": "96a9946082f9bd6f",
   "core": "74cf691631b94149",
-  "date": "2026-11-19",
-  "note": "",
+  "date": "2026-11-22",
+  "note": "the sheet's size from PX and the margins",
   "pages": {
-   "0090-magistrates-compounds-jinya-and-yamen.drawing.html": "e77de71a959ea730"
+   "0090-magistrates-compounds-jinya-and-yamen.drawing.html": "e8883025d8e61f8b"
   },
   "reads": "240943f9c3e3fcc1",
-  "research": "14af46724f504a44",
+  "research": "573d4732556cab1b",
   "rests": [
-   "0090-magistrates-compounds-jinya-and-yamen.drawing.html:aa6db6345dde31d6"
+   "0090-magistrates-compounds-jinya-and-yamen.drawing.html:b7aa78898c6ee5bb",
+   "0090-magistrates-compounds-jinya-and-yamen.drawing.html:b92fdf4980d4aceb"
   ],
   "verdict": "IN-STEP"
  },
@@ -16275,21 +16436,19 @@
  "rust/mode_a/src/compound/emit.rs::px#the plan scale": {
   "body": "0cdae89de5cad84b",
   "claim": "the plan scale - magistrates-compounds-jinya-and-yamen.drawing: 3 px = 1 ft, set so drawn compounds fall between Joge and Takayama",
-  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "cf750970268c9cf7",
   "core": "4995d0cf3b7db4d9",
-  "date": "2026-11-19",
-  "note": "ORIGIN + 3 px per foot",
+  "date": "2026-11-22",
+  "note": "origin plus PX times feet",
   "pages": {
-   "0090-magistrates-compounds-jinya-and-yamen.drawing.html": "e77de71a959ea730"
+   "0090-magistrates-compounds-jinya-and-yamen.drawing.html": "e8883025d8e61f8b"
   },
   "reads": "74d9ef27a7fb17b2",
-  "research": "14af46724f504a44",
+  "research": "573d4732556cab1b",
   "rests": [
-   "0090-magistrates-compounds-jinya-and-yamen.drawing.html:aa6db6345dde31d6",
+   "0090-magistrates-compounds-jinya-and-yamen.drawing.html:b7aa78898c6ee5bb",
    "0090-magistrates-compounds-jinya-and-yamen.drawing.html:b92fdf4980d4aceb"
   ],
-  "triaged": "2026-11-19",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/compound/emit.rs::room#the plan scale": {
@@ -16301,14 +16460,14 @@
   "date": "2026-11-19",
   "note": "rooms drawn at plan scale; the dais is one dark block, a convention",
   "pages": {
-   "0090-magistrates-compounds-jinya-and-yamen.drawing.html": "e77de71a959ea730"
+   "0090-magistrates-compounds-jinya-and-yamen.drawing.html": "e8883025d8e61f8b"
   },
   "reads": "92cccae7b2ca7134",
-  "research": "14af46724f504a44",
+  "research": "573d4732556cab1b",
   "rests": [
    "0090-magistrates-compounds-jinya-and-yamen.drawing.html:b92fdf4980d4aceb"
   ],
-  "triaged": "2026-11-19",
+  "triaged": "2026-11-22",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/compound/emit.rs::stables#stable stall width": {
@@ -16407,15 +16566,16 @@
   "claim": "the plan scale - magistrates-compounds-jinya-and-yamen.drawing: 3 px = 1 ft, set so drawn compounds fall between Joge and Takayama - the shrine tree's crown drawn at its seated radius in feet times 3 px",
   "code": "5298b1e43a0b2e0c",
   "core": "b3ff4939360e5c91",
-  "date": "2026-11-19",
-  "note": "",
+  "date": "2026-11-22",
+  "note": "the tree's crown radius is PX times r",
   "pages": {
-   "0090-magistrates-compounds-jinya-and-yamen.drawing.html": "e77de71a959ea730"
+   "0090-magistrates-compounds-jinya-and-yamen.drawing.html": "e8883025d8e61f8b"
   },
   "reads": "0450d302ed4c895a",
-  "research": "14af46724f504a44",
+  "research": "573d4732556cab1b",
   "rests": [
-   "0090-magistrates-compounds-jinya-and-yamen.drawing.html:aa6db6345dde31d6"
+   "0090-magistrates-compounds-jinya-and-yamen.drawing.html:b7aa78898c6ee5bb",
+   "0090-magistrates-compounds-jinya-and-yamen.drawing.html:b92fdf4980d4aceb"
   ],
   "verdict": "IN-STEP"
  },
@@ -17337,6 +17497,18 @@
   "rests": [],
   "verdict": "IN-STEP"
  },
+ "rust/mode_a/src/compound/gen_tests_seat.rs::a_doors_frontage_runs_depth_from_its_step_on_each_face#the generator's seating tests": {
+  "body": "2fb94cbc5e50ed00",
+  "claim": "the generator's seating tests - NONE: fixtures and assertions, deciding nothing about a building",
+  "code": "7c8581bb86797a46",
+  "core": "90662fca07c326e3",
+  "date": "2026-11-22",
+  "note": "test fixture box and assertion only; it decides nothing about a building",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
  "rust/mode_a/src/compound/gen_tests_seat.rs::a_gate_holds_its_passage_and_approach_on_any_wall#the generator's seating tests": {
   "body": "0c241de09f07ab1d",
   "claim": "the generator's seating tests - NONE: fixtures and assertions, deciding nothing about a building",
@@ -17434,6 +17606,18 @@
   "rests": [],
   "verdict": "IN-STEP"
  },
+ "rust/mode_a/src/compound/gen_tests_seat.rs::frontage#the generator's seating tests": {
+  "body": "e3816787dbcedcb1",
+  "claim": "the generator's seating tests - NONE: fixtures and assertions, deciding nothing about a building",
+  "code": "a1f8fdbdcf725885",
+  "core": "ab58e6bce794c128",
+  "date": "2026-11-22",
+  "note": "test helper that cuts a strip of the given depth off one face; geometry only, and the depth comes from the caller",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
  "rust/mode_a/src/compound/gen_tests_seat.rs::no_court_of_a_pool_sheet_leaves_a_corner_bare#the generator's seating tests": {
   "body": "7c20569bd21fe823",
   "claim": "the generator's seating tests - NONE: fixtures and assertions, deciding nothing about a building",
@@ -17480,6 +17664,19 @@
   "date": "2026-11-22",
   "note": "fixtures and assertions",
   "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/mode_a/src/compound/gen_tests_seat.rs::the_county_examples_long_house_doors_front_open_court#a dwelling door's frontage": {
+  "body": "3b3941895d0cd740",
+  "claim": "a dwelling door's frontage - GUESS: 12 ft, the gate approach's held depth reused (`layout::APPROACH`); no page states the ground before a compound rowhouse's doors (449 T280's research pass, 2026-11-22: the sources say only that the rows along a compound's edge were entered from inside it)",
+  "code": "4fc165e68f8cb08f",
+  "core": "e13a386329a29adb",
+  "date": "2026-11-22",
+  "note": "a GUESS: the code uses the 12 ft from `layout::APPROACH` as the frontage depth, as the claim says, and the bundle cites no question that answers it",
+  "pages": {},
+  "reads": "cdccdad94cf849de",
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
@@ -17714,62 +17911,69 @@
   "date": "2026-11-19",
   "note": "plumbing (free rectangles and which ones touch); decides nothing",
   "pages": {
-   "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html": "c70862e04bd35e73"
+   "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html": "72e197e35d8155a0"
   },
-  "research": "20dff3d4f5e8a9c2",
+  "research": "f8776f6c8599ca62",
   "rests": [],
+  "triaged": "2026-11-22",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/compound/ground.rs::LARGE_FT#no unnamed void": {
   "body": "38b0f685025b0be9",
   "claim": "no unnamed void - GUESS the-size-of-a-compound-and-the-rank-of-its-buildings.drawing: 20 ft, twice the 6-10 ft service alley the rear strip may narrow to (docs/buildings.md); a knob",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "ecf76bfeb7903a07",
   "core": "a803396ec967a860",
   "date": "2026-11-19",
   "note": "the page gives no figure for this, so GUESS is the right label. Counting only stretches at least 20 ft deep as possible void fits the 15-20 ft loading apron the page allows as open ground in use",
   "pages": {
-   "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html": "c70862e04bd35e73"
+   "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html": "72e197e35d8155a0"
   },
-  "research": "20dff3d4f5e8a9c2",
+  "research": "f8776f6c8599ca62",
   "rests": [
    "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html:a911be254a00f660"
   ],
+  "triaged": "2026-11-22",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/compound/ground.rs::PERIMETER_FT#perimeter gap against the central void": {
   "body": "d8caaddc7dd1e643",
   "claim": "perimeter gap against the central void - the-size-of-a-compound-and-the-rank-of-its-buildings.drawing: central open ground is a named court; a gap against a wall, between edge buildings, is the perimeter's slack to tighten (docs/buildings.md, Composition) - the band 25 ft, the audit's perimeter (a GUESS there)",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "dab45a68a9afd005",
   "core": "e6b8f66615efc25e",
   "date": "2026-11-19",
   "note": "a court's center is kept as named open ground, and loose ground is slack to close up; the 25 ft band is stated as a GUESS in the claim's own wording",
   "pages": {
-   "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html": "c70862e04bd35e73"
+   "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html": "72e197e35d8155a0"
   },
-  "research": "20dff3d4f5e8a9c2",
+  "research": "f8776f6c8599ca62",
   "rests": [
    "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html:a911be254a00f660",
    "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html:f2129fd621e95512",
    "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html:f6879c35848621fc"
   ],
+  "triaged": "2026-11-22",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/compound/ground.rs::VOID_SQFT#no unnamed void": {
   "body": "a6190586129ef9fc",
   "claim": "no unnamed void - the-size-of-a-compound-and-the-rank-of-its-buildings.drawing: court centers held open and named; a free region of 1,600 sq ft (a 40 ft court) on no named ground and touching no wall is the unnamed void, the size a GUESS",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "d02fa470afc211ac",
   "core": "543ab90e1459a107",
   "date": "2026-11-19",
   "note": "the open courts are features of the plan, and a stretch wider than its purpose is slack; the 1,600 sq ft size is stated as a GUESS",
   "pages": {
-   "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html": "c70862e04bd35e73"
+   "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html": "72e197e35d8155a0"
   },
-  "research": "20dff3d4f5e8a9c2",
+  "research": "f8776f6c8599ca62",
   "rests": [
    "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html:a911be254a00f660",
    "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html:f2129fd621e95512",
    "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html:f6879c35848621fc"
   ],
+  "triaged": "2026-11-22",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/compound/ground.rs::cart_route#the granary on the offices' side": {
@@ -17778,14 +17982,14 @@
   "code": "b08a9dde1e06207e",
   "core": "085a1ff254545fa7",
   "date": "2026-11-22",
-  "note": "the inner-court granary is refused, and each court's gates are split by the divider",
+  "note": "a granary in the inner court is refused, and each court's route is walked only from the gates on that court's side",
   "pages": {
-   "0123-the-magistrates-manor-in-a-town-where-it-stands-and-which-way-it-faces-jinya-and-yamen.html": "5c8c4bbf6dabd3aa"
+   "0123-the-magistrates-manor-in-a-town-where-it-stands-and-which-way-it-faces-jinya-and-yamen.html": "3a9b1709912a6067"
   },
   "reads": "1477b9203e7bad94",
-  "research": "5e40ab1489268d04",
+  "research": "d4d1cab5dfd35b8f",
   "rests": [
-   "0123-the-magistrates-manor-in-a-town-where-it-stands-and-which-way-it-faces-jinya-and-yamen.html:dbcbd67c752aa3e4"
+   "0123-the-magistrates-manor-in-a-town-where-it-stands-and-which-way-it-faces-jinya-and-yamen.html:a99ddcd2ed3cb0ad"
   ],
   "verdict": "IN-STEP"
  },
@@ -17823,18 +18027,20 @@
  "rust/mode_a/src/compound/ground.rs::components#the open ground": {
   "body": "14eca67bb344bec5",
   "claim": "the open ground - the-size-of-a-compound-and-the-rank-of-its-buildings.drawing: every rule claimed where it is asked",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "2392c66119d43f2a",
   "core": "bc2ba4553be2e8cf",
   "date": "2026-11-19",
   "note": "groups stretches that are at least LARGE_FT deep and share at least LARGE_FT of edge; the figure is covered by LARGE_FT's claim",
   "pages": {
-   "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html": "c70862e04bd35e73"
+   "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html": "72e197e35d8155a0"
   },
   "reads": "93fe4f41458f4e81",
-  "research": "20dff3d4f5e8a9c2",
+  "research": "f8776f6c8599ca62",
   "rests": [
    "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html:a911be254a00f660"
   ],
+  "triaged": "2026-11-22",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/compound/ground.rs::court_box#the open ground": {
@@ -17845,11 +18051,12 @@
   "date": "2026-11-19",
   "note": "the courts' bounds inside the wall and the divider; geometry only",
   "pages": {
-   "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html": "c70862e04bd35e73"
+   "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html": "72e197e35d8155a0"
   },
   "reads": "b89051fc1ea29f8d",
-  "research": "20dff3d4f5e8a9c2",
+  "research": "f8776f6c8599ca62",
   "rests": [],
+  "triaged": "2026-11-22",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/compound/ground.rs::holds#the open ground": {
@@ -17860,10 +18067,11 @@
   "date": "2026-11-19",
   "note": "a point-in-rectangle test with a float tolerance; plumbing",
   "pages": {
-   "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html": "c70862e04bd35e73"
+   "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html": "72e197e35d8155a0"
   },
-  "research": "20dff3d4f5e8a9c2",
+  "research": "f8776f6c8599ca62",
   "rests": [],
+  "triaged": "2026-11-22",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/compound/ground.rs::open_ground#carts over the open grounds": {
@@ -17882,15 +18090,16 @@
  "rust/mode_a/src/compound/ground.rs::open_ground#named court spine": {
   "body": "b8ab28ad9456f2ab",
   "claim": "named court spine - the-size-of-a-compound-and-the-rank-of-its-buildings.drawing: forecourt, hearing court (oshirasu), garden and the ground between the courts stay open and named",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "960564680d893404",
   "core": "1f9264e8a7ef8e2d",
   "date": "2026-11-19",
   "note": "",
   "pages": {
-   "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html": "c70862e04bd35e73"
+   "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html": "72e197e35d8155a0"
   },
   "reads": "0728d8e76a92dd1a",
-  "research": "20dff3d4f5e8a9c2",
+  "research": "f8776f6c8599ca62",
   "rests": [
    "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html:f6879c35848621fc"
   ],
@@ -17923,10 +18132,11 @@
   "date": "2026-11-19",
   "note": "a breadth-first search over the free-ground graph; plumbing",
   "pages": {
-   "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html": "c70862e04bd35e73"
+   "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html": "72e197e35d8155a0"
   },
-  "research": "20dff3d4f5e8a9c2",
+  "research": "f8776f6c8599ca62",
   "rests": [],
+  "triaged": "2026-11-22",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/compound/ground.rs::sweep#the open ground": {
@@ -17937,10 +18147,11 @@
   "date": "2026-11-19",
   "note": "splits the free ground into rectangles; free stretches are joined only where they share at least CART_FT of edge, covered by CART_FT's claim",
   "pages": {
-   "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html": "c70862e04bd35e73"
+   "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html": "72e197e35d8155a0"
   },
   "reads": "dc6afd829a392b6a",
-  "research": "20dff3d4f5e8a9c2",
+  "research": "f8776f6c8599ca62",
+  "triaged": "2026-11-22",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/compound/layout.rs::APPROACH#a gate's held approach": {
@@ -18045,19 +18256,21 @@
  "rust/mode_a/src/compound/layout.rs::FIRE_GAP#fire gap along a wall": {
   "body": "b0032b6a2314e9a7",
   "claim": "fire gap along a wall - GUESS the-size-of-a-compound-and-the-rank-of-its-buildings.drawing: 6 ft, the low end of the page's 6-8 ft between wooden buildings and 6-10 ft at a kura, both guesses there; a knob",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "4909f7a180e4f0ea",
   "core": "13e27b214892a554",
   "date": "2026-11-19",
   "note": "6 ft is the low end of the page's GUESSES: 6-8 ft between wooden buildings, 6-10 ft at a kura",
   "pages": {
-   "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html": "c70862e04bd35e73"
+   "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html": "72e197e35d8155a0"
   },
-  "research": "20dff3d4f5e8a9c2",
+  "research": "f8776f6c8599ca62",
   "rests": [
    "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html:4a3d47f7f2c8b423",
    "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html:db5208a7bd0dcf9d",
    "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html:fa6b53e2166eb519"
   ],
+  "triaged": "2026-11-22",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/compound/layout.rs::Layout#the seating's plumbing": {
@@ -18075,57 +18288,63 @@
  "rust/mode_a/src/compound/layout.rs::Layout.keep#the buildings seated": {
   "body": "1c768e7fd0033d35",
   "claim": "the buildings seated - the-size-of-a-compound-and-the-rank-of-its-buildings.drawing: each building held to its size band and kept in its court, its row grown by the fire gap",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "9597865ba2f6d9a3",
   "core": "e88230bf72352419",
   "date": "2026-11-19",
   "note": "size bands, court kept, row grown by the 6 ft gap",
   "pages": {
-   "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html": "c70862e04bd35e73"
+   "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html": "72e197e35d8155a0"
   },
   "reads": "1bbca0ec05be3a26",
-  "research": "20dff3d4f5e8a9c2",
+  "research": "f8776f6c8599ca62",
   "rests": [
    "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html:db5208a7bd0dcf9d",
    "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html:f04061862f18172a",
    "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html:fa6b53e2166eb519"
   ],
+  "triaged": "2026-11-22",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/compound/layout.rs::Layout.middle_gate#the middle gate beside the office hall": {
   "body": "4f7abf6b87ebd8c1",
   "claim": "the middle gate beside the office hall - DEVIATION magistrates-compounds-jinya-and-yamen.drawing: the docs seat the divider's gate behind the office hall (a GUESS: no page places a jin'ya's middle gate); the hall backs the divider with only the clear ground between, so the gate opens at the first stretch beside it whose approach is clear on both sides, the hall still the privacy baffle between the hearing court and the house",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "4fd1127b55af34c1",
   "core": "6e36e8fa84cb6d5e",
   "date": "2026-11-19",
   "note": "0090's drawing page now records this DEVIATION; the code takes the nearest stretch of the divider beside the hall whose approach is clear",
   "pages": {
-   "0090-magistrates-compounds-jinya-and-yamen.drawing.html": "e77de71a959ea730"
+   "0090-magistrates-compounds-jinya-and-yamen.drawing.html": "e8883025d8e61f8b"
   },
   "reads": "e2f0f577d76293aa",
-  "research": "14af46724f504a44",
+  "research": "573d4732556cab1b",
   "rests": [
    "0090-magistrates-compounds-jinya-and-yamen.drawing.html:049a643bfa279d82",
    "0090-magistrates-compounds-jinya-and-yamen.drawing.html:45ffe904afced68b",
    "0090-magistrates-compounds-jinya-and-yamen.drawing.html:5315739264a24517",
    "0090-magistrates-compounds-jinya-and-yamen.drawing.html:679531b3552eb3f3"
   ],
+  "triaged": "2026-11-22",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/compound/layout.rs::Layout.new#named court spine": {
   "body": "9386c78b069e9c8c",
   "claim": "named court spine - the-size-of-a-compound-and-the-rank-of-its-buildings.drawing: the spine's grounds filed before any building, so no building takes them",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "dd32bed82422f764",
   "core": "4d35d6079b0eab0e",
   "date": "2026-11-19",
   "note": "",
   "pages": {
-   "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html": "c70862e04bd35e73"
+   "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html": "72e197e35d8155a0"
   },
   "reads": "b89051fc1ea29f8d",
-  "research": "20dff3d4f5e8a9c2",
+  "research": "f8776f6c8599ca62",
   "rests": [
    "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html:f6879c35848621fc"
   ],
+  "triaged": "2026-11-22",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/compound/layout.rs::Layout.new#the walls' ground taken": {
@@ -18222,20 +18441,22 @@
  "rust/mode_a/src/compound/layout.rs::Layout.seat_one#gatehouse beside the gate": {
   "body": "ba9290d0f8aa567a",
   "claim": "gatehouse beside the gate - the-main-gate-and-its-gatekeepers-nagaya-mon: the gatekeepers in a gatehouse of their own beside a one-bay gate, seated nearest the main gate",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "6479674f5720472c",
   "core": "0e3523f77f30fd62",
   "date": "2026-11-19",
   "note": "",
   "pages": {
-   "0093-the-main-gate-and-its-gatekeepers-nagaya-mon.html": "4613630d4a4ed584"
+   "0093-the-main-gate-and-its-gatekeepers-nagaya-mon.html": "8e6499c7e119fc5b"
   },
   "reads": "cb31fdab198e24b3",
-  "research": "204dd8abf686d43e",
+  "research": "235f322995c7efa7",
   "rests": [
    "0093-the-main-gate-and-its-gatekeepers-nagaya-mon.html:2d7726f48cf3e499",
    "0093-the-main-gate-and-its-gatekeepers-nagaya-mon.html:73f43c24a22be5fc",
    "0093-the-main-gate-and-its-gatekeepers-nagaya-mon.html:cd57d3fd287dbd8e"
   ],
+  "triaged": "2026-11-22",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/compound/layout.rs::Layout.seat_one#packed from the wall's low end": {
@@ -18318,17 +18539,19 @@
  "rust/mode_a/src/compound/layout.rs::Layout.spine_apart#named court spine": {
   "body": "d1d5f9ebf9fb69df",
   "claim": "named court spine - the-size-of-a-compound-and-the-rank-of-its-buildings.drawing: forecourt, hearing court (oshirasu), garden and the ground between the courts stay open, each its own named ground",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "6f110201e6cdbb05",
   "core": "abe80406c203a541",
   "date": "2026-11-19",
   "note": "refuses any two named grounds that overlap, so each stays its own ground",
   "pages": {
-   "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html": "c70862e04bd35e73"
+   "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html": "72e197e35d8155a0"
   },
-  "research": "20dff3d4f5e8a9c2",
+  "research": "f8776f6c8599ca62",
   "rests": [
    "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html:f6879c35848621fc"
   ],
+  "triaged": "2026-11-22",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/compound/layout.rs::POST#gate posts": {
@@ -18425,38 +18648,42 @@
  "rust/mode_a/src/compound/layout.rs::building_rule#the buildings seated": {
   "body": "f250dabfcbd336db",
   "claim": "the buildings seated - the-size-of-a-compound-and-the-rank-of-its-buildings.drawing: buildings a fire gap apart along a wall, none on the named grounds",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "fd4c785263032e03",
   "core": "276a15f4e59cd5dd",
   "date": "2026-11-19",
   "note": "",
   "pages": {
-   "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html": "c70862e04bd35e73"
+   "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html": "72e197e35d8155a0"
   },
   "reads": "9a294659e687e9c2",
-  "research": "20dff3d4f5e8a9c2",
+  "research": "f8776f6c8599ca62",
   "rests": [
    "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html:f6879c35848621fc",
    "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html:fa6b53e2166eb519"
   ],
+  "triaged": "2026-11-22",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/compound/layout.rs::court_face#a building faces its court": {
   "body": "6dfa6c96640ef2d9",
   "claim": "a building faces its court - compound-walls-neribei-and-tsuijibei.drawing: a building backs onto its wall, so it faces away from it; the divider's two sides are the two courts of magistrates-compounds-jinya-and-yamen.drawing",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "8e7607f85d40312d",
   "core": "687fe460f2c11923",
   "date": "2026-11-22",
   "note": "a building on a side wall faces away from it (it backs onto the wall); on the divider, the inner (north) court's building faces N and the outer (south) court's faces S, each away from the divider, with the office in front and the residence behind",
   "pages": {
-   "0090-magistrates-compounds-jinya-and-yamen.drawing.html": "e77de71a959ea730",
+   "0090-magistrates-compounds-jinya-and-yamen.drawing.html": "e8883025d8e61f8b",
    "0092-compound-walls-neribei-and-tsuijibei.drawing.html": "aec0fef5c25a07e2"
   },
-  "research": "5d1b4abe8d7c6966",
+  "research": "b46844c0f395dd36",
   "rests": [
    "0090-magistrates-compounds-jinya-and-yamen.drawing.html:049a643bfa279d82",
    "0090-magistrates-compounds-jinya-and-yamen.drawing.html:b92fdf4980d4aceb",
    "0092-compound-walls-neribei-and-tsuijibei.drawing.html:02ce4c097038a77e"
   ],
+  "triaged": "2026-11-22",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/compound/layout.rs::court_range#each court a step clear of its walls": {
@@ -18465,18 +18692,16 @@
   "code": "912f37a96260a6bd",
   "core": "53c47eb63cc54dac",
   "date": "2026-11-22",
-  "note": "each court is inset by the wall's half-thickness (1.5, for a 3 ft plan wall) plus CLEAR 1.5 ft, which is within \"a foot or two\" off the wall; the inner court runs from the north wall to the divider, the outer from the divider to the south wall; this matches the hall standing \"1.5 ft off the divider\"",
+  "note": "WALL_HALF 1.5 ft (the 3 ft plan wall) plus CLEAR 1.5 ft, \"a foot or two\"; one range for each court either side of the divider",
   "pages": {
-   "0090-magistrates-compounds-jinya-and-yamen.drawing.html": "e77de71a959ea730",
+   "0090-magistrates-compounds-jinya-and-yamen.drawing.html": "e8883025d8e61f8b",
    "0092-compound-walls-neribei-and-tsuijibei.drawing.html": "aec0fef5c25a07e2"
   },
   "reads": "4c990785e8b986d5",
-  "research": "5d1b4abe8d7c6966",
+  "research": "b46844c0f395dd36",
   "rests": [
    "0090-magistrates-compounds-jinya-and-yamen.drawing.html:049a643bfa279d82",
-   "0090-magistrates-compounds-jinya-and-yamen.drawing.html:679531b3552eb3f3",
    "0090-magistrates-compounds-jinya-and-yamen.drawing.html:b92fdf4980d4aceb",
-   "0090-magistrates-compounds-jinya-and-yamen.drawing.html:d7d8574b7344ee9d",
    "0092-compound-walls-neribei-and-tsuijibei.drawing.html:02ce4c097038a77e",
    "0092-compound-walls-neribei-and-tsuijibei.drawing.html:bbba3419b31507b3"
   ],
@@ -18662,17 +18887,19 @@
  "rust/mode_a/src/compound/parts.rs::OPEN_ZONES#parts off the spine's grounds": {
   "body": "87c18c102a9f4bea",
   "claim": "parts off the spine's grounds - the-size-of-a-compound-and-the-rank-of-its-buildings.drawing: the named courts stay open, so no part stands in the garden, the hearing court (roofed: a tub there is inside a building), the practice ground or a worked bed except a part that belongs there (a garden's well, the practice ground's gear); the yards and the bare court ground take parts",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "e6d95cbe85a19168",
   "core": "832ec789efd54d78",
   "date": "2026-11-19",
   "note": "garden and hearing court kept clear; yards and court ground take parts",
   "pages": {
-   "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html": "c70862e04bd35e73"
+   "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html": "72e197e35d8155a0"
   },
-  "research": "20dff3d4f5e8a9c2",
+  "research": "f8776f6c8599ca62",
   "rests": [
    "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html:f6879c35848621fc"
   ],
+  "triaged": "2026-11-22",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/compound/parts.rs::Privy#the parts' plumbing": {
@@ -27321,18 +27548,6 @@
   "rests": [],
   "verdict": "IN-STEP"
  },
- "rust/mode_a/src/pool_sweep.rs::NO_SVG#the Mode A pool sweep": {
-  "body": "91032627e6de6b9e",
-  "claim": "the Mode A pool sweep - NONE: the pool's sheets put through the registered checks, deciding nothing about a building",
-  "code": "3c0dece780a9b184",
-  "core": "5b6a472a147cbff1",
-  "date": "2026-11-19",
-  "note": "failure message text",
-  "pages": {},
-  "research": "",
-  "rests": [],
-  "verdict": "IN-STEP"
- },
  "rust/mode_a/src/pool_sweep.rs::Pooled#the Mode A pool sweep": {
   "body": "fa20091b923d8605",
   "claim": "the Mode A pool sweep - NONE: the pool's sheets put through the registered checks, deciding nothing about a building",
@@ -27378,18 +27593,6 @@
   "note": "declaration audit test, plumbing",
   "pages": {},
   "reads": "1bdd582e823372c1",
-  "research": "",
-  "rests": [],
-  "verdict": "IN-STEP"
- },
- "rust/mode_a/src/pool_sweep.rs::compose#the Mode A pool sweep": {
-  "body": "3bf55a0682b6b980",
-  "claim": "the Mode A pool sweep - NONE: the pool's sheets put through the registered checks, deciding nothing about a building",
-  "code": "c246871e2e1350bb",
-  "core": "b80bf3b85e226369",
-  "date": "2026-11-19",
-  "note": "calls the generator and caption placer, decides nothing itself",
-  "pages": {},
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
@@ -27464,18 +27667,6 @@
   "core": "bc7e849dee78de8d",
   "date": "2026-11-19",
   "note": "maps a fixture name to its tier by stem prefix, plumbing",
-  "pages": {},
-  "research": "",
-  "rests": [],
-  "verdict": "IN-STEP"
- },
- "rust/mode_a/src/pool_sweep.rs::judge#the Mode A pool sweep": {
-  "body": "5a16b5d71a08f67e",
-  "claim": "the Mode A pool sweep - NONE: the pool's sheets put through the registered checks, deciding nothing about a building",
-  "code": "2dc7ebd412d5cec0",
-  "core": "73d64aa764b2d3b8",
-  "date": "2026-11-19",
-  "note": "runs checks and formats the findings",
   "pages": {},
   "research": "",
   "rests": [],
@@ -27577,18 +27768,6 @@
   "core": "090503b674b13984",
   "date": "2026-11-19",
   "note": "repository root path",
-  "pages": {},
-  "research": "",
-  "rests": [],
-  "verdict": "IN-STEP"
- },
- "rust/mode_a/src/pool_sweep.rs::with_context#the Mode A pool sweep": {
-  "body": "f9afabf2e80baa84",
-  "claim": "the Mode A pool sweep - NONE: the pool's sheets put through the registered checks, deciding nothing about a building",
-  "code": "d0665cb6868a67f0",
-  "core": "39a89451c58efeab",
-  "date": "2026-11-19",
-  "note": "builds the check context, plumbing",
   "pages": {},
   "research": "",
   "rests": [],
@@ -31472,6 +31651,199 @@
   "triaged": "2026-11-18",
   "verdict": "IN-STEP"
  },
+ "rust/mode_a/src/sweep.rs::NO_SVG#the one-sheet sweep": {
+  "body": "91032627e6de6b9e",
+  "claim": "the one-sheet sweep - NONE: a pool sheet put through the registered checks, deciding nothing about a building",
+  "code": "8e46576481839bb1",
+  "core": "5b6a472a147cbff1",
+  "date": "2026-11-22",
+  "note": "plumbing, output formatting, fixtures or assertions; decides nothing about a place",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/mode_a/src/sweep.rs::Sheet#the one-sheet sweep": {
+  "body": "e5d96a7367cf3fbf",
+  "claim": "the one-sheet sweep - NONE: a pool sheet put through the registered checks, deciding nothing about a building",
+  "code": "550f6051c11238e8",
+  "core": "4014b7106f335317",
+  "date": "2026-11-22",
+  "note": "plumbing, output formatting, fixtures or assertions; decides nothing about a place",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/mode_a/src/sweep.rs::USAGE#the one-sheet sweep": {
+  "body": "b2c4431bda4c1792",
+  "claim": "the one-sheet sweep - NONE: a pool sheet put through the registered checks, deciding nothing about a building",
+  "code": "eeea8d82859d378d",
+  "core": "19f64d2d7362800a",
+  "date": "2026-11-22",
+  "note": "plumbing, output formatting, fixtures or assertions; decides nothing about a place",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/mode_a/src/sweep.rs::compose#the one-sheet sweep": {
+  "body": "b22763eb00b9c926",
+  "claim": "the one-sheet sweep - NONE: a pool sheet put through the registered checks, deciding nothing about a building",
+  "code": "b0fea06fd0dc751f",
+  "core": "a56e39a88f8bd5c7",
+  "date": "2026-11-22",
+  "note": "plumbing, output formatting, fixtures or assertions; decides nothing about a place",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/mode_a/src/sweep.rs::judge#the one-sheet sweep": {
+  "body": "06ca869c4c2a26a4",
+  "claim": "the one-sheet sweep - NONE: a pool sheet put through the registered checks, deciding nothing about a building",
+  "code": "3854ff766b51d7a3",
+  "core": "49b51063603d6a09",
+  "date": "2026-11-22",
+  "note": "plumbing, output formatting, fixtures or assertions; decides nothing about a place",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/mode_a/src/sweep.rs::listed#the one-sheet sweep": {
+  "body": "17ca1122d7406bba",
+  "claim": "the one-sheet sweep - NONE: a pool sheet put through the registered checks, deciding nothing about a building",
+  "code": "13a83b92636d7ed5",
+  "core": "d1fdfd2ab5fd45a8",
+  "date": "2026-11-22",
+  "note": "plumbing, output formatting, fixtures or assertions; decides nothing about a place",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/mode_a/src/sweep.rs::main#the one-sheet sweep": {
+  "body": "b20ab139c2b507af",
+  "claim": "the one-sheet sweep - NONE: a pool sheet put through the registered checks, deciding nothing about a building",
+  "code": "e5d98e15f0760842",
+  "core": "192cc4fc58225e80",
+  "date": "2026-11-22",
+  "note": "plumbing, output formatting, fixtures or assertions; decides nothing about a place",
+  "pages": {},
+  "reads": "cc63881af5d33ea1",
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/mode_a/src/sweep.rs::sheet#the one-sheet sweep": {
+  "body": "517fdd44dbf13a77",
+  "claim": "the one-sheet sweep - NONE: a pool sheet put through the registered checks, deciding nothing about a building",
+  "code": "756414f61aed6692",
+  "core": "41670a97b3b02d2b",
+  "date": "2026-11-22",
+  "note": "plumbing, output formatting, fixtures or assertions; decides nothing about a place",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/mode_a/src/sweep.rs::with_context#the one-sheet sweep": {
+  "body": "46f7cfec26cae6c3",
+  "claim": "the one-sheet sweep - NONE: a pool sheet put through the registered checks, deciding nothing about a building",
+  "code": "225f856788a181f3",
+  "core": "9712babc2d484b49",
+  "date": "2026-11-22",
+  "note": "plumbing, output formatting, fixtures or assertions; decides nothing about a place",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/mode_a/src/sweep/tests.rs::a_generated_exception_is_composed_and_a_hand_sheet_read#the one-sheet sweep's tests": {
+  "body": "7de97642986959c2",
+  "claim": "the one-sheet sweep's tests - NONE: fixtures and assertions, deciding nothing about a building",
+  "code": "3485565a54f6a72a",
+  "core": "d797a7a72e96d788",
+  "date": "2026-11-22",
+  "note": "plumbing, output formatting, fixtures or assertions; decides nothing about a place",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/mode_a/src/sweep/tests.rs::a_pool_sheet_named_passes_its_tiers_checks#the one-sheet sweep's tests": {
+  "body": "ea2da0d8202431ca",
+  "claim": "the one-sheet sweep's tests - NONE: fixtures and assertions, deciding nothing about a building",
+  "code": "f628406eaa7a5ad7",
+  "core": "16904f7acf47dc0e",
+  "date": "2026-11-22",
+  "note": "plumbing, output formatting, fixtures or assertions; decides nothing about a place",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/mode_a/src/sweep/tests.rs::a_sheet_that_cannot_be_read_or_parsed_is_an_error#the one-sheet sweep's tests": {
+  "body": "42b48287daecc030",
+  "claim": "the one-sheet sweep's tests - NONE: fixtures and assertions, deciding nothing about a building",
+  "code": "9770af48a0de173f",
+  "core": "7001f31f7b9e832d",
+  "date": "2026-11-22",
+  "note": "plumbing, output formatting, fixtures or assertions; decides nothing about a place",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/mode_a/src/sweep/tests.rs::args#the one-sheet sweep's tests": {
+  "body": "9e1f749e7a2be534",
+  "claim": "the one-sheet sweep's tests - NONE: fixtures and assertions, deciding nothing about a building",
+  "code": "7ead030390db61e2",
+  "core": "f610bd421868d9bb",
+  "date": "2026-11-22",
+  "note": "plumbing, output formatting, fixtures or assertions; decides nothing about a place",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/mode_a/src/sweep/tests.rs::each_finding_is_a_line_and_fails#the one-sheet sweep's tests": {
+  "body": "640a9961af6da81f",
+  "claim": "the one-sheet sweep's tests - NONE: fixtures and assertions, deciding nothing about a building",
+  "code": "1d8940cabef2db2d",
+  "core": "63c2102f73e5fdd1",
+  "date": "2026-11-22",
+  "note": "plumbing, output formatting, fixtures or assertions; decides nothing about a place",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/mode_a/src/sweep/tests.rs::tree#the one-sheet sweep's tests": {
+  "body": "75e0572466dfa1e3",
+  "claim": "the one-sheet sweep's tests - NONE: fixtures and assertions, deciding nothing about a building",
+  "code": "4c7c7c9d5234a054",
+  "core": "090503b674b13984",
+  "date": "2026-11-22",
+  "note": "plumbing, output formatting, fixtures or assertions; decides nothing about a place",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/mode_a/src/sweep/tests.rs::what_is_not_a_mode_a_sheet_is_refused#the one-sheet sweep's tests": {
+  "body": "7630eda939aba3e1",
+  "claim": "the one-sheet sweep's tests - NONE: fixtures and assertions, deciding nothing about a building",
+  "code": "61861e2e97b02fb1",
+  "core": "c047c458330c374d",
+  "date": "2026-11-22",
+  "note": "plumbing, output formatting, fixtures or assertions; decides nothing about a place",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
  "rust/mode_a/src/tagged.rs::ATTR#the tagged marks": {
   "body": "2e570e7ee3e0ad21",
   "claim": "the tagged marks - NONE: a sheet's elements read with their tags and paint, deciding nothing about a building",
@@ -32762,6 +33134,18 @@
   "rests": [],
   "verdict": "IN-STEP"
  },
+ "rust/phases/src/bin/hamlet.rs::check#the driver's command": {
+  "body": "12c9552826b4b9a2",
+  "claim": "the driver's command - NONE: plumbing",
+  "code": "1b1fc6e4b25a800f",
+  "core": "e33e2d3e6355969e",
+  "date": "2026-11-22",
+  "note": "plumbing, output formatting, fixtures or assertions; decides nothing about a place",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
  "rust/phases/src/bin/hamlet.rs::cohort#the driver's command": {
   "body": "033e3d49a2a8b71d",
   "claim": "the driver's command - NONE: plumbing",
@@ -33042,22 +33426,24 @@
   "verdict": "IN-STEP"
  },
  "rust/phases/src/driver.rs::BELT_FAR_FT#the belt's ground kept": {
-  "body": "189cfb065b49cb93",
+  "body": "50e4db02b4a10f32",
   "claim": "the belt's ground kept - shelter-belts-on-a-villages-windward-side-bofurin.drawing: a clustered village shelters behind one belt at its windward edge, so the belt's ground is the settlement's too",
-  "code": "62f34a272a00c669",
-  "core": "bc703c1cab8506e5",
-  "date": "2026-11-08",
-  "note": "146 ft past the band sits inside the page's 150 ft hamlet reach and its 37-262 ft range; the band runs along the windward edge",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
+  "code": "1a04b4e9971e34a5",
+  "core": "638c8de480453438",
+  "date": "2026-11-22",
+  "note": "the belt's far edge (BELT_BAND.1) carried into the settlement's ground, one belt at the windward edge",
   "pages": {
-   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html": "ee3da5e20ce24835"
+   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html": "c5d46219ae0bd93f"
   },
-  "research": "5892781a1ab23bcb",
+  "reads": "a052a8f78d1e14c9",
+  "research": "483086b6aec3732e",
   "rests": [
-   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:31f1ea9e18204d6a",
    "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:5e9ac2daf3925f70",
-   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:c36f0698d70588dc",
+   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:8e692f283f7947e4",
    "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:dde93f148061b296"
   ],
+  "triaged": "2026-11-22",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/driver.rs::BROOK_SKIRT#the brook's course": {
@@ -33782,35 +34168,37 @@
  },
  "rust/phases/src/driver.rs::settlement_ground#the belt's ground kept": {
   "body": "50785c000eaa493f",
-  "claim": "the belt's ground kept - shelter-belts-on-a-villages-windward-side-bofurin.drawing: a clustered village shelters behind one belt at its windward edge, so its ground reaches past the band to the belt",
-  "code": "4116f3886d26cd46",
-  "core": "a1aaecc7e638dd07",
-  "date": "2026-11-08",
-  "note": "the ground reaches past the band in the out (windward, the settlement's back) direction to the belt's far edge",
+  "claim": "the belt's ground kept - shelter-belts-on-a-villages-windward-side-bofurin.drawing: a clustered village shelters behind one belt at its windward edge, so its ground reaches past the band to the belt on the band's windward side - behind it where its back faces the wind, between it and the field where a declared fall into the wind backs it to the hill (GUESS, clustered-and-scattered-villages-shuson-sanson.drawing)",
+  "code": "d3601c48446dc617",
+  "core": "f82862117804c3e9",
+  "date": "2026-11-22",
+  "note": "the ground runs from the anchor out past standoff, band and belt depth (BELT_FAR_FT), so it holds the belt on whichever side it stands: behind the houses on a back to the wind, between them and the field on a declared fall into the wind. That fall case is recorded as a GUESS (\"its back to the hill, its belt to windward, a GUESS\")",
   "pages": {
-   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html": "ee3da5e20ce24835"
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "847c5e82dae96330",
+   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html": "c5d46219ae0bd93f"
   },
-  "reads": "784a87b909a14692",
-  "research": "5892781a1ab23bcb",
+  "reads": "49dfcd9410aae564",
+  "research": "1d75cac6ad99e80f",
   "rests": [
-   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:31f1ea9e18204d6a",
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:793689483abf961a",
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:7e82a3d8b8b3ed66",
    "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:5e9ac2daf3925f70",
-   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:c36f0698d70588dc",
-   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:dde93f148061b296"
+   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:b34b2b861a81fc10",
+   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:e27cdaba5177821d"
   ],
   "verdict": "IN-STEP"
  },
  "rust/phases/src/driver.rs::settlement_ground#the settlement's ground": {
   "body": "50785c000eaa493f",
   "claim": "the settlement's ground - dry-fields-and-their-crops-hatake.drawing: the houses between the canal and the dry fields, so the hem keeps off the band where they stand",
-  "code": "71596f753b756f54",
-  "core": "a1aaecc7e638dd07",
-  "date": "2026-11-08",
-  "note": "the quad runs from the canal-side anchor over the standoff and the house band, so the hem keeps off where the houses stand",
+  "code": "7d64a48e6b64a9bb",
+  "core": "f82862117804c3e9",
+  "date": "2026-11-22",
+  "note": "the ground runs from the margin outward over the band, so the hem lies behind the houses",
   "pages": {
    "0006-dry-fields-and-their-crops-hatake.drawing.html": "219e17a0409d4953"
   },
-  "reads": "784a87b909a14692",
+  "reads": "49dfcd9410aae564",
   "research": "99a077469bb67bf5",
   "rests": [
    "0006-dry-fields-and-their-crops-hatake.drawing.html:3886e8252aae0e86"
@@ -33847,18 +34235,19 @@
  },
  "rust/phases/src/driver.rs::stage_seat#the seat's back to the wind": {
   "body": "b0b089e73e58938d",
-  "claim": "the seat's back to the wind - shelter-belts-on-a-villages-windward-side-bofurin.drawing: the settlement laid out with its back to the wind - on a comb; a polder hands its landward shore as the way the back faces (`Ground::back`, the claim at `polder::landward`)",
-  "code": "49f976fcdd263a99",
+  "claim": "the seat's back to the wind - shelter-belts-on-a-villages-windward-side-bofurin.drawing: the settlement laid out with its back to the wind - on a comb, but where a declared fall runs into the wind (the seat backs the hill, the claim at `seat::seat`; its belt still windward, at `margins::ranked`); a polder hands its landward shore as the way the back faces (`Ground::back`, the claim at `polder::landward`)",
+  "code": "7ef0fa6fdc17221c",
   "core": "734573c5a640ef03",
   "date": "2026-11-22",
-  "note": "a comb's back is turned to the wind; on a polder `g.back` hands the landward shore instead, as the claim says and as `landward` claims",
+  "note": "the wind (or the polder's handed back) and the 45-degree bar are passed to the seat; the declared-fall exception matches \"except where its map declares that the ground slopes down toward the wind\"",
   "pages": {
-   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html": "ee3da5e20ce24835"
+   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html": "c5d46219ae0bd93f"
   },
   "reads": "a47bdc5a6f179bec",
-  "research": "5892781a1ab23bcb",
+  "research": "483086b6aec3732e",
   "rests": [
-   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:c36f0698d70588dc"
+   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:5e9ac2daf3925f70",
+   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:b34b2b861a81fc10"
   ],
   "verdict": "IN-STEP"
  },
@@ -33904,15 +34293,16 @@
   "claim": "regional wind - shelter-belts-on-a-villages-windward-side-bofurin.drawing: the eight quarters, the northwest unless declared",
   "code": "a77007bc628f77d2",
   "core": "3673b387ce2d8866",
-  "date": "2026-11-07",
-  "note": "northwest by default",
+  "date": "2026-11-22",
+  "note": "eight quarters, any undeclared or unknown quarter taken as northwest (\"Every map takes the northwest wind unless it declares a local one\")",
   "pages": {
-   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html": "ee3da5e20ce24835"
+   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html": "c5d46219ae0bd93f"
   },
-  "research": "5892781a1ab23bcb",
+  "research": "483086b6aec3732e",
   "rests": [
    "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:0c9dba0334c6fdfb",
-   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:c36f0698d70588dc"
+   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:43aedefed41c4f79",
+   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:b34b2b861a81fc10"
   ],
   "verdict": "IN-STEP"
  },
@@ -34030,14 +34420,15 @@
   "code": "bf46784af75baeaa",
   "core": "2024c9a132a901b0",
   "date": "2026-11-22",
-  "note": "seat_on_field refuses a settlement middle inside any field ring, which keeps the seat beside the paddy",
+  "note": "refuses a settlement whose middle stands inside the field ring, matching \"on the higher, drier ground beside its paddy\"",
   "pages": {
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "0d2ef9c380f22cca"
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "847c5e82dae96330"
   },
   "reads": "08f68ce2dd847b69",
-  "research": "2e03a35afc2b85de",
+  "research": "430afdccc4c0e546",
   "rests": [
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:ec189f8cf46836ca"
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:793689483abf961a",
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:bc33ef71630b4b4c"
   ],
   "verdict": "IN-STEP"
  },
@@ -34230,17 +34621,19 @@
  "rust/phases/src/driver/plan.rs::BELT_REACH#the belt's reach": {
   "body": "993277afbe428df7",
   "claim": "the belt's reach - shelter-belts-on-a-villages-windward-side-bofurin.drawing: a stand within 150 ft of a farmhouse on a hamlet's; 146 ft, the deleted `BELT_REACH`, read as the room the canvas keeps past the band for it (`seat_room`)",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "c39d00784b36a56d",
   "core": "ddf1929101c40f43",
   "date": "2026-11-08",
   "note": "146 ft is a calibrated choice inside the page's \"within 150 ft on a hamlet's\"",
   "pages": {
-   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html": "ee3da5e20ce24835"
+   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html": "c5d46219ae0bd93f"
   },
-  "research": "5892781a1ab23bcb",
+  "research": "483086b6aec3732e",
   "rests": [
    "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:31f1ea9e18204d6a"
   ],
+  "triaged": "2026-11-22",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/driver/plan.rs::DIKE_CROPS#the dike crop's shares": {
@@ -34316,51 +34709,57 @@
  "rust/phases/src/driver/plan.rs::KNOBS#the cluster's shape": {
   "body": "adaf0910cc556575",
   "claim": "the cluster's shape - clustered-and-scattered-villages-shuson-sanson.drawing: the lump and the line along a levee or a road are the attested forms (round, elongated); the crescent a GUESS there",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "ceff01ea050c5c55",
   "core": "3a50375d75cd3753",
   "date": "2026-11-22",
   "note": "the table holds the attested round and elongated forms plus the crescent recorded as a GUESS, rolled per hamlet; no split, since a hamlet never splits",
   "pages": {
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "0d2ef9c380f22cca"
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "847c5e82dae96330"
   },
-  "research": "2e03a35afc2b85de",
+  "research": "430afdccc4c0e546",
   "rests": [
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:7d95dd13600b3685",
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:b0d4f27ae1dbec07"
   ],
+  "triaged": "2026-11-22",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/driver/plan.rs::KNOBS#the farm water": {
   "body": "adaf0910cc556575",
   "claim": "the farm water - GUESS: clustered-and-scattered-villages-shuson-sanson.drawing records a channel or a well at even odds as a guess",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "d99da27d40868faf",
   "core": "3a50375d75cd3753",
   "date": "2026-11-22",
   "note": "channel or well at even odds, only on dispersed settlements, as the page records the GUESS",
   "pages": {
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "0d2ef9c380f22cca"
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "847c5e82dae96330"
   },
-  "research": "2e03a35afc2b85de",
+  "research": "430afdccc4c0e546",
   "rests": [
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:2872c3eaba51aa4d",
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:f1b6bb70334abd0d"
   ],
+  "triaged": "2026-11-22",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/driver/plan.rs::KNOBS#the grain drift": {
   "body": "adaf0910cc556575",
   "claim": "the grain drift - clustered-and-scattered-villages-shuson-sanson.drawing: eight degrees either way on a hamlet's",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "8579496d116c473c",
   "core": "3a50375d75cd3753",
   "date": "2026-11-22",
   "note": "-8 to 8 degrees is within the hamlet's 8",
   "pages": {
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "0d2ef9c380f22cca"
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "847c5e82dae96330"
   },
-  "research": "2e03a35afc2b85de",
+  "research": "430afdccc4c0e546",
   "rests": [
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:1a172c27c2f08640"
   ],
+  "triaged": "2026-11-22",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/driver/plan.rs::KNOBS#the knobs' tables": {
@@ -34377,35 +34776,39 @@
  "rust/phases/src/driver/plan.rs::KNOBS#the lane forms": {
   "body": "adaf0910cc556575",
   "claim": "the lane forms - GUESS: clustered-and-scattered-villages-shuson-sanson.drawing records the spine, the T, the Y and the cross as guesses",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "8710ffe0fe67fe70",
   "core": "3a50375d75cd3753",
   "date": "2026-11-22",
   "note": "spine, T, Y and cross, which the page records as a GUESS; the lane along the water is gated by its own rule",
   "pages": {
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "0d2ef9c380f22cca"
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "847c5e82dae96330"
   },
-  "research": "2e03a35afc2b85de",
+  "research": "430afdccc4c0e546",
   "rests": [
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:88b0dc9025f38b30",
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:bf4801c5605ed9ea"
   ],
+  "triaged": "2026-11-22",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/driver/plan.rs::KNOBS#the settlement form's shares": {
   "body": "adaf0910cc556575",
   "claim": "the settlement form's shares - clustered-and-scattered-villages-shuson-sanson.drawing: half clustered, three in ten scattered, two in ten as rows",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "1146c60818fc3978",
   "core": "3a50375d75cd3753",
   "date": "2026-11-22",
   "note": "5, 3 and 2 of ten entries give half, three in ten and two in ten",
   "pages": {
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "0d2ef9c380f22cca"
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "847c5e82dae96330"
   },
-  "research": "2e03a35afc2b85de",
+  "research": "430afdccc4c0e546",
   "rests": [
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:1aa166d76e3e06fe",
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:3197321e78d71dc5"
   ],
+  "triaged": "2026-11-22",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/driver/plan.rs::LEFTOVER_FORMS#the leftover parcels": {
@@ -34493,18 +34896,17 @@
  },
  "rust/phases/src/driver/plan.rs::WIND_BACK_MIN_DOT#the back to the wind": {
   "body": "8bf1491144a851d9",
-  "claim": "the back to the wind - GUESS: shelter-belts-on-a-villages-windward-side-bofurin.drawing lays the settlement out with its back to the wind but gives no tolerance; within 45 degrees (the deleted `WIND_BACK_MIN_DOT`); it gates the seat's margin, not the fall",
-  "code": "15d75ba3d4d2c4b2",
+  "claim": "the back to the wind - GUESS shelter-belts-on-a-villages-windward-side-bofurin.drawing: the settlement laid out with its back to the wind, the page giving no tolerance; within 45 degrees, carried from the deleted Python `WIND_BACK_MIN_DOT`; it gates the seat's margin, not the fall",
+  "code": "d886791918b21824",
   "core": "6fcde736ada587a4",
   "date": "2026-11-22",
-  "note": "FRAC_1_SQRT_2 = cos 45 degrees; the page lays the settlement with its back to the wind and gives no tolerance, so this is a GUESS",
+  "note": "the page lays a settlement out \"with its back to that wind\" but gives no tolerance, so the 45-degree cutoff is a fair GUESS, and FRAC_1_SQRT_2 is cos 45 degrees; the wording no longer calls the live constant deleted",
   "pages": {
-   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html": "ee3da5e20ce24835"
+   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html": "c5d46219ae0bd93f"
   },
-  "research": "5892781a1ab23bcb",
+  "research": "483086b6aec3732e",
   "rests": [
-   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:43aedefed41c4f79",
-   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:c36f0698d70588dc"
+   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:b34b2b861a81fc10"
   ],
   "verdict": "IN-STEP"
  },
@@ -34560,18 +34962,20 @@
  "rust/phases/src/driver/plan.rs::pick#the plan's rolls": {
   "body": "f43189e6a3153923",
   "claim": "the plan's rolls - clustered-and-scattered-villages-shuson-sanson.drawing: each knob's form rolled per hamlet from the seed, only where the map's form uses it",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "72bf7f4f90c0ff72",
   "core": "6b5150488b17c8cd",
   "date": "2026-11-22",
   "note": "an even draw from the knob's table, seeded per hamlet and per knob",
   "pages": {
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "0d2ef9c380f22cca"
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "847c5e82dae96330"
   },
-  "research": "2e03a35afc2b85de",
+  "research": "430afdccc4c0e546",
   "rests": [
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:0d6651a49a9d1b62",
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:7c6e882522129755"
   ],
+  "triaged": "2026-11-22",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/driver/plan.rs::plan#no brook knobs on a polder": {
@@ -34598,17 +35002,15 @@
   "claim": "regional wind - shelter-belts-on-a-villages-windward-side-bofurin.drawing: the northwest unless declared",
   "code": "3bf5b6e3db649242",
   "core": "938073f82ef5b7f4",
-  "date": "2026-11-09",
-  "note": "northwest unless declared",
+  "date": "2026-11-22",
+  "note": "`windward` defaults to \"NW\" unless the spec declares one",
   "pages": {
-   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html": "ee3da5e20ce24835"
+   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html": "c5d46219ae0bd93f"
   },
   "reads": "ef98c6245b68085e",
-  "research": "5892781a1ab23bcb",
+  "research": "483086b6aec3732e",
   "rests": [
-   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:0c9dba0334c6fdfb",
-   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:43aedefed41c4f79",
-   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:c36f0698d70588dc"
+   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:b34b2b861a81fc10"
   ],
   "verdict": "IN-STEP"
  },
@@ -34618,14 +35020,14 @@
   "code": "b1779106d65d39d1",
   "core": "938073f82ef5b7f4",
   "date": "2026-11-22",
-  "note": "the rolled fall comes from admitted(windward, polder) only; the page records this as a deliberate deviation",
+  "note": "a rolled fall comes only from `admitted(&windward, polder)` and a declared fall overrides it, the recorded deviation \"the land falls away from the wind or across it ... chance never draws it\"",
   "pages": {
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "0d2ef9c380f22cca"
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "847c5e82dae96330"
   },
   "reads": "ef98c6245b68085e",
-  "research": "2e03a35afc2b85de",
+  "research": "430afdccc4c0e546",
   "rests": [
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:ec189f8cf46836ca"
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:793689483abf961a"
   ],
   "verdict": "IN-STEP"
  },
@@ -35061,22 +35463,20 @@
  "rust/phases/src/driver/polder.rs::landward#the shore over the wind": {
   "body": "ecdabdc5564a5478",
   "claim": "the shore over the wind - GUESS: the record is silent on weighing the two - shelter-belts-on-a-villages-windward-side-bofurin.drawing lays a settlement's back to the wind and polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing its polder village on the landward dry ground, and neither weighs one against the other, and the polder's page is the site's own rule, so the shore is kept and the seat recorded off the wind where its back does not face it (the algorithmically easier route: the seat's back handed the shore's normal)",
-  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "8a24e242df3dd426",
   "core": "dd1fb170ea1dc929",
   "date": "2026-11-22",
-  "note": "neither page weighs the shore against the wind; a guess, and the seat is recorded as off the wind in roll_polder",
+  "note": "the back is handed the landward cross flank, away from the wild pond. 0019 places the village on the dry landward shore and never mentions the wind; 0072's back-to-the-wind rule never weighs the polder shore, so the GUESS stands",
   "pages": {
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html": "3012a8eb9aff8c32",
-   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html": "ee3da5e20ce24835"
+   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html": "c5d46219ae0bd93f"
   },
-  "research": "1f6b8d14d817cfbc",
+  "research": "6ef8f682e394a714",
   "rests": [
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:152b5508568f62e5",
    "0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html:6b26009a944726e2",
-   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:c36f0698d70588dc"
+   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:b34b2b861a81fc10"
   ],
-  "triaged": "2026-11-22",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/driver/polder.rs::landward#the tie": {
@@ -36424,13 +36824,15 @@
  "rust/phases/src/driver/tests.rs::a_resting_field_drains_off_the_map#the driver's tests": {
   "body": "abe8792bc5c00833",
   "claim": "the driver's tests - NONE: fixtures and assertions; each rule's claim is at the unit it tests",
-  "code": "17f3c824063147da",
-  "core": "0c93e49e8b6fdb53",
+  "code": "48d4c1d035022022",
+  "core": "fbbd2a7888affb1f",
   "date": "2026-11-19",
   "note": "assertions only",
   "pages": {},
+  "reads": "2a5d8cc3e14df29e",
   "research": "",
   "rests": [],
+  "triaged": "2026-11-22",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/driver/tests.rs::each_stage_run_reports_its_counted_work_and_not_its_placements#the driver's tests": {
@@ -37823,18 +38225,20 @@
  "rust/phases/src/field/build.rs::rolled#knobs rolled from the seed": {
   "body": "104bf3c8bb5399c0",
   "claim": "knobs rolled from the seed - clustered-and-scattered-villages-shuson-sanson.drawing: each knob's form rolled per hamlet, never chosen",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "0ae2059c22ad198e",
   "core": "ed878889b80c3e81",
   "date": "2026-11-22",
   "note": "each knob is rolled from the seed unless a map pins it, as the page allows",
   "pages": {
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "0d2ef9c380f22cca"
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "847c5e82dae96330"
   },
-  "research": "2e03a35afc2b85de",
+  "research": "430afdccc4c0e546",
   "rests": [
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:0d6651a49a9d1b62",
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:7c6e882522129755"
   ],
+  "triaged": "2026-11-22",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/build.rs::rows_held#the basins' rules where decided": {
@@ -42814,18 +43218,20 @@
  "rust/phases/src/pyrand.rs::roll#knob rolls": {
   "body": "a51caa380e2f27be",
   "claim": "knob rolls - clustered-and-scattered-villages-shuson-sanson.drawing: each knob's form rolled per hamlet, never chosen",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "e861db643eca81af",
   "core": "535ecfe3c2a1351a",
   "date": "2026-11-22",
   "note": "a seeded roll per knob, even or weighted over its forms",
   "pages": {
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "0d2ef9c380f22cca"
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "847c5e82dae96330"
   },
-  "research": "2e03a35afc2b85de",
+  "research": "430afdccc4c0e546",
   "rests": [
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:0d6651a49a9d1b62",
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:7c6e882522129755"
   ],
+  "triaged": "2026-11-22",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/pyrand.rs::sha256#the draws": {
@@ -42916,8 +43322,8 @@
  "rust/phases/src/seat.rs::seat#a walled-in head gives way": {
   "body": "73a06dafe9276094",
   "claim": "a walled-in head gives way - village-lanes.drawing: lanes keep to dry ground, so a margin whose seat has no dry way out of the frame is dropped and the next in the ranking taken",
-  "code": "e41a42ccb3b98ca2",
-  "core": "aff77d4a832ad863",
+  "code": "3ece63040857f33d",
+  "core": "bc3862eb00609f88",
   "date": "2026-11-07",
   "note": "a head with no dry way off the frame is dropped and the next one taken, as \"Lanes keep to the bunds and dry ground\" and the track out runs off the map",
   "pages": {
@@ -42933,26 +43339,26 @@
   "verdict": "IN-STEP"
  },
  "rust/phases/src/seat.rs::seat#the back to the hill where the wind cannot be backed": {
-  "body": "1c61e56ddcae7471",
-  "claim": "the back to the hill where the wind cannot be backed - GUESS clustered-and-scattered-villages-shuson-sanson.drawing: where a map declares a fall toward the wind, no margin is both high and windward, so the cluster takes the high, dry one, its back to the hill and off the wind - the margins ranked again with the high side as the wind's, each seat recorded off the wind",
-  "code": "8ad7bb34ee036111",
-  "core": "aff77d4a832ad863",
+  "body": "6dcd5b3ae0c62015",
+  "claim": "the back to the hill where the wind cannot be backed - GUESS clustered-and-scattered-villages-shuson-sanson.drawing: where a map declares a fall toward the wind, no margin is both high and windward, so the cluster takes the high, dry one, its back to the hill and off the wind - the margins ranked again with the high side as the wind's, each seat recorded off the wind; its belt still on the windward side, between the houses and the paddy (`margins::ranked`)",
+  "code": "3a1d2b3964a2b45a",
+  "core": "bc3862eb00609f88",
   "date": "2026-11-22",
-  "note": "re-ranks with the high side as the wind's, and marks every seat off the wind, only when no margin faces the wind and the fall runs toward it; a fall across the wind is refused by name. This matches the recorded GUESS, and rolled falls never run toward the wind",
+  "note": "only on a fall into the wind with no windward margin: the margins are re-ranked uphill, the belt stays against the map's own wind, and each seat is marked offwind; recorded as a GUESS",
   "pages": {
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "0d2ef9c380f22cca"
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "847c5e82dae96330"
   },
-  "research": "2e03a35afc2b85de",
+  "research": "430afdccc4c0e546",
   "rests": [
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:ec189f8cf46836ca"
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:793689483abf961a"
   ],
   "verdict": "IN-STEP"
  },
  "rust/phases/src/seat.rs::seat#the fords before the seat": {
   "body": "73a06dafe9276094",
   "claim": "the fords before the seat - villages-beside-their-stream-one-bank-or-both.drawing: a way crosses the brook only at a crossing place, so the seat's way out is asked of the brook gapped at them",
-  "code": "09d5511b7a85dcd9",
-  "core": "aff77d4a832ad863",
+  "code": "d90449f5686df478",
+  "core": "bc3862eb00609f88",
   "date": "2026-11-07",
   "note": "the streams are gapped at the fords before the way-out test, as \"A way crosses the water only at one of them\"",
   "pages": {
@@ -43721,22 +44127,22 @@
   "verdict": "IN-STEP"
  },
  "rust/phases/src/seat/margins.rs::candidates#back faces the wind": {
-  "body": "40fe5e15f152345b",
+  "body": "0b84d3e135cc52e9",
   "claim": "back faces the wind - shelter-belts-on-a-villages-windward-side-bofurin.drawing: a clustered village shelters behind one belt at its windward edge - tier 0, the margin's own outward normal within 45 degrees of the wind",
   "code": "55627b0871ed7960",
   "core": "8fb42cd0bdd16788",
-  "date": "2026-11-04",
-  "note": "tier 0 is the outward normal within the bar of the wind, the band along the windward edge",
+  "date": "2026-11-22",
+  "note": "tier 0 is a margin whose outward normal has dot >= back_min_dot (within 45 degrees of the wind), so the houses stand on the windward edge with their belt behind them",
   "pages": {
-   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html": "ee3da5e20ce24835"
+   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html": "c5d46219ae0bd93f"
   },
   "reads": "8031ac794303597d",
-  "research": "5892781a1ab23bcb",
+  "research": "483086b6aec3732e",
   "rests": [
    "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:5e9ac2daf3925f70",
-   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:c36f0698d70588dc"
+   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:8e692f283f7947e4",
+   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:b34b2b861a81fc10"
   ],
-  "triaged": "2026-11-06",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/seat/margins.rs::candidates#back turned off a flank": {
@@ -43771,14 +44177,14 @@
   "verdict": "IN-STEP"
  },
  "rust/phases/src/seat/margins.rs::ranked#band on the canvas": {
-  "body": "285c51de3ab5fcc0",
+  "body": "63b59b2fe8d6d8b8",
   "claim": "band on the canvas - CONVENTION: the seat center at least the band's half-length inside the frame",
-  "code": "1205fc12debd3586",
-  "core": "227859d27d1bbf2d",
-  "date": "2026-11-04",
-  "note": "the center must sit at least lat inside the frame, a framing convention",
+  "code": "4e55b2a75657b8f7",
+  "core": "edc8f01caf5a1e9b",
+  "date": "2026-11-22",
+  "note": "the center, led out where the belt needs room, is kept lat inside the frame",
   "pages": {},
-  "reads": "f4a73934f78dca12",
+  "reads": "74b971aa51284165",
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
@@ -43786,131 +44192,157 @@
  "rust/phases/src/seat/margins.rs::ranked#brook across the band": {
   "body": "285c51de3ab5fcc0",
   "claim": "brook across the band - villages-beside-their-stream-one-bank-or-both.drawing: \"A hamlet site the brook does not cross is preferred when two sites are otherwise equally good\", the brook's share the tie-break, never refused",
-  "code": "c6a62de411cd7696",
-  "core": "227859d27d1bbf2d",
+  "code": "8abf79f55014373b",
+  "core": "edc8f01caf5a1e9b",
   "date": "2026-11-04",
   "note": "the brook's share only breaks ties after tier and score, and never refuses a seat",
   "pages": {
    "0035-villages-beside-their-stream-one-bank-or-both.drawing.html": "a04abcb1a9535c20"
   },
-  "reads": "f4a73934f78dca12",
+  "reads": "74b971aa51284165",
   "research": "2882cfeb4389da9a",
   "rests": [
    "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:09b499b11d9ab875",
    "0035-villages-beside-their-stream-one-bank-or-both.drawing.html:3ad87e3e98ea5542"
   ],
+  "triaged": "2026-11-22",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/seat/margins.rs::ranked#no drain rule at the seat": {
   "body": "285c51de3ab5fcc0",
   "claim": "no drain rule at the seat - ground-too-wet-to-build-on.drawing: the ground below a drain kept only from dispersed farmsteads, not a nucleated cluster",
-  "code": "3ec16fea9bd8efca",
-  "core": "227859d27d1bbf2d",
+  "code": "6d4ffc147513cbcd",
+  "core": "edc8f01caf5a1e9b",
   "date": "2026-11-04",
   "note": "no below-the-drain refusal for the nucleated cluster",
   "pages": {
    "0058-ground-too-wet-to-build-on.drawing.html": "d989d5be5b8d7839"
   },
-  "reads": "f4a73934f78dca12",
+  "reads": "74b971aa51284165",
   "research": "b2af2942f0a54e5d",
   "rests": [
    "0058-ground-too-wet-to-build-on.drawing.html:32fa9821335681fb",
    "0058-ground-too-wet-to-build-on.drawing.html:b9283c4db442e8c6"
   ],
+  "triaged": "2026-11-22",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/seat/margins.rs::ranked#not in the reed fringe": {
   "body": "285c51de3ab5fcc0",
   "claim": "not in the reed fringe - CANON: the GM's ruling of 2026-08-28, refused centered in a pond's reed fringe, scored down at an end; it departs from ground-too-wet-to-build-on.drawing, which does not count the fringe as marsh",
-  "code": "b3ee3d970eb5ba8b",
-  "core": "227859d27d1bbf2d",
+  "code": "48fb6474a26d345e",
+  "core": "edc8f01caf5a1e9b",
   "date": "2026-11-22",
   "note": "the code refuses a center inside a reed fringe and scores down the band's wet share (WEIGHTS.reeds); a CANON claim that names the GM's 2026-08-28 ruling, and it states correctly that it departs from 0058's rule that the fringe is not marsh",
   "pages": {
    "0058-ground-too-wet-to-build-on.drawing.html": "d989d5be5b8d7839"
   },
-  "reads": "f4a73934f78dca12",
+  "reads": "74b971aa51284165",
   "research": "b2af2942f0a54e5d",
   "rests": [
    "0058-ground-too-wet-to-build-on.drawing.html:0a7edc2c78add98c",
    "0058-ground-too-wet-to-build-on.drawing.html:b1d674ad9da16c31"
   ],
+  "triaged": "2026-11-22",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/seat/margins.rs::ranked#not on the wet toe": {
   "body": "285c51de3ab5fcc0",
   "claim": "not on the wet toe - ground-too-wet-to-build-on.drawing: seat and anchor off the marsh below the fields",
-  "code": "3ea12802336c5f2d",
-  "core": "227859d27d1bbf2d",
+  "code": "1c2b60430b08123a",
+  "core": "edc8f01caf5a1e9b",
   "date": "2026-11-04",
   "note": "a center or anchor inside the toe is refused",
   "pages": {
    "0058-ground-too-wet-to-build-on.drawing.html": "d989d5be5b8d7839"
   },
-  "reads": "f4a73934f78dca12",
+  "reads": "74b971aa51284165",
   "research": "b2af2942f0a54e5d",
   "rests": [
    "0058-ground-too-wet-to-build-on.drawing.html:b4a87b781a7d121a",
    "0058-ground-too-wet-to-build-on.drawing.html:f4e450ab6438f79c"
   ],
+  "triaged": "2026-11-22",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/seat/margins.rs::ranked#seat on the field's margin": {
   "body": "285c51de3ab5fcc0",
   "claim": "seat on the field's margin - clustered-and-scattered-villages-shuson-sanson.drawing: higher, drier ground beside the paddy, scored upslope",
-  "code": "e09c56cf406f44c2",
-  "core": "227859d27d1bbf2d",
+  "code": "4a26bcb7e639a5d3",
+  "core": "edc8f01caf5a1e9b",
   "date": "2026-11-22",
   "note": "a margin on the downhill side of the field's middle is scored down by the upslope weight, so the higher margin beside the paddy wins",
   "pages": {
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "0d2ef9c380f22cca"
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "847c5e82dae96330"
   },
-  "reads": "f4a73934f78dca12",
-  "research": "2e03a35afc2b85de",
+  "reads": "74b971aa51284165",
+  "research": "430afdccc4c0e546",
   "rests": [
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:ec189f8cf46836ca"
   ],
+  "triaged": "2026-11-22",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/seat/margins.rs::ranked#the back's width": {
-  "body": "285c51de3ab5fcc0",
+  "body": "63b59b2fe8d6d8b8",
   "claim": "the back's width - GUESS: no page sizes the ground behind a seat; one half-depth across the margin's midpoint, the strip behind the band's middle, which the belt cannot bend away from",
-  "code": "af26c279acd38355",
-  "core": "227859d27d1bbf2d",
-  "date": "2026-11-04",
-  "note": "the page does not size the ground behind a seat",
+  "code": "afa1f65b9415fd9b",
+  "core": "edc8f01caf5a1e9b",
+  "date": "2026-11-22",
+  "note": "±0.5*dep across the middle, moving with the band",
   "pages": {},
-  "reads": "f4a73934f78dca12",
+  "reads": "74b971aa51284165",
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
  },
  "rust/phases/src/seat/margins.rs::ranked#the band on open ground": {
-  "body": "285c51de3ab5fcc0",
+  "body": "63b59b2fe8d6d8b8",
   "claim": "the band on open ground - clustered-and-scattered-villages-shuson-sanson.drawing: beside its paddy, the band's points off the field",
-  "code": "6b059ae017244c40",
-  "core": "227859d27d1bbf2d",
+  "code": "beb997968772039f",
+  "core": "edc8f01caf5a1e9b",
   "date": "2026-11-22",
-  "note": "a margin is refused when any band sample point falls inside the field outline",
+  "note": "every sample point, led out with the band, is refused on the field outline",
   "pages": {
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "0d2ef9c380f22cca"
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "847c5e82dae96330"
   },
-  "reads": "f4a73934f78dca12",
-  "research": "2e03a35afc2b85de",
+  "reads": "74b971aa51284165",
+  "research": "430afdccc4c0e546",
   "rests": [
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:ec189f8cf46836ca"
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:793689483abf961a"
   ],
   "verdict": "IN-STEP"
  },
+ "rust/phases/src/seat/margins.rs::ranked#the belt between the houses and a windward field": {
+  "body": "63b59b2fe8d6d8b8",
+  "claim": "the belt between the houses and a windward field - GUESS clustered-and-scattered-villages-shuson-sanson.drawing: where a declared fall into the wind backs the cluster to the hill (`belt_wind`, the map's own wind), the belt still stands on the windward side (shelter-belts-on-a-villages-windward-side-bofurin.drawing: the wind decides the side), so a margin whose field lies within 45 degrees of the wind stands its band the belt's far edge (`BELT_BAND`) further off it, the belt's ground between the houses and the paddy, and every sample of the band moves with it; a wind along the band leaves the belt at a band end, no room added; the belt's room on the canvas is asked of the map's own wind",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
+  "code": "21890861a9752625",
+  "core": "edc8f01caf5a1e9b",
+  "date": "2026-11-22",
+  "note": "lead = BELT_BAND.1 only when belt_wind is set and the field lies within 45 degrees of it; center and every band_pt carry it; belt_off is asked of the map's wind",
+  "pages": {
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "847c5e82dae96330",
+   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html": "c5d46219ae0bd93f"
+  },
+  "reads": "74b971aa51284165",
+  "research": "b1f01b4ffe72f1b0",
+  "rests": [
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:793689483abf961a",
+   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:4b8db97a0ad26796"
+  ],
+  "triaged": "2026-11-22",
+  "verdict": "IN-STEP"
+ },
  "rust/phases/src/seat/margins.rs::ranked#the dry hem's reach": {
-  "body": "285c51de3ab5fcc0",
-  "claim": "the dry hem's reach - GUESS: no source could speak to it, a value of ours; a dry plot within two band half-depths of the margin, the band's own depth, scores the seat down",
-  "code": "d176a5aef64c0a91",
-  "core": "227859d27d1bbf2d",
-  "date": "2026-11-04",
-  "note": "`hem(mid, 2.0 * dep)` scored down, only where there are plots; a value of ours",
+  "body": "63b59b2fe8d6d8b8",
+  "claim": "the dry hem's reach - GUESS: no source could speak to it, a value of ours; a dry plot within two band half-depths of where the band's room starts - the margin, or the belt's room past it where the band is stood out for the belt - the band's own depth, scores the seat down",
+  "code": "61f40ec6e8777ec2",
+  "core": "edc8f01caf5a1e9b",
+  "date": "2026-11-22",
+  "note": "the hem is measured from band_pt(0.0, 0.0), which is the margin plus `lead` (BELT_BAND.1 only when the band is stood out for the belt), and reaches 2.0*dep. Here dep is the band's half-depth (center at dep+STANDOFF, samples to 2*dep), so the reach is the band's own depth. The penalty (1 - hem/(2dep)) scores a nearer dry plot down. The cited pages say nothing about this reach, so GUESS is the right label",
   "pages": {},
-  "reads": "f4a73934f78dca12",
+  "reads": "74b971aa51284165",
   "research": "",
   "rests": [],
   "verdict": "IN-STEP"
@@ -43918,18 +44350,19 @@
  "rust/phases/src/seat/margins.rs::ranked#the ladder": {
   "body": "285c51de3ab5fcc0",
   "claim": "the ladder - clustered-and-scattered-villages-shuson-sanson.drawing: a hamlet never splits, so the margins it falls back to are whole seats, ranked",
-  "code": "f2e1374f30d598e9",
-  "core": "227859d27d1bbf2d",
+  "code": "e2aa623c18ab3482",
+  "core": "edc8f01caf5a1e9b",
   "date": "2026-11-22",
   "note": "whole frames are ranked by tier, score and the brook's share, and no split seat is made",
   "pages": {
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "0d2ef9c380f22cca"
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "847c5e82dae96330"
   },
-  "reads": "f4a73934f78dca12",
-  "research": "2e03a35afc2b85de",
+  "reads": "74b971aa51284165",
+  "research": "430afdccc4c0e546",
   "rests": [
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:7d95dd13600b3685"
   ],
+  "triaged": "2026-11-22",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/seat/tests.rs::a_flank_turns_its_back_and_a_notch_or_a_cramped_belt_is_refused#the seat's tests": {
@@ -43983,13 +44416,14 @@
  "rust/phases/src/seat/tests.rs::only_a_fall_toward_the_wind_backs_the_hill#the seat's tests": {
   "body": "4e655a46d3ad5bb0",
   "claim": "the seat's tests - NONE: fixtures and assertions, deciding nothing about the place",
-  "code": "53f02c4d96760ff6",
-  "core": "f4d198bc02bdc3d6",
+  "code": "6f51a0f5c40d6546",
+  "core": "46eefa4602fcffa1",
   "date": "2026-11-22",
   "note": "test fixtures and assertions; decides nothing about the place",
   "pages": {},
   "research": "",
   "rests": [],
+  "triaged": "2026-11-22",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/seat/tests.rs::square#the seat's tests": {
@@ -45519,6 +45953,66 @@
   "triaged": "2026-11-04",
   "verdict": "IN-STEP"
  },
+ "rust/phases/src/spec_check.rs::listed#the spec check": {
+  "body": "23d759b000f33330",
+  "claim": "the spec check - NONE: plumbing over the driver's roll and its rule check, deciding nothing about a place",
+  "code": "d3d71f658fb2ada1",
+  "core": "2c71865214950e81",
+  "date": "2026-11-22",
+  "note": "plumbing, output formatting, fixtures or assertions; decides nothing about a place",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/spec_check.rs::problems#the spec check": {
+  "body": "0abcbc39e9d02491",
+  "claim": "the spec check - NONE: plumbing over the driver's roll and its rule check, deciding nothing about a place",
+  "code": "cfa54f870998a777",
+  "core": "b15f3dfe39516984",
+  "date": "2026-11-22",
+  "note": "plumbing, output formatting, fixtures or assertions; decides nothing about a place",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/spec_check/tests.rs::a_spec_that_does_not_parse_is_a_problem#the spec check's tests": {
+  "body": "68d40a6651a2f516",
+  "claim": "the spec check's tests - NONE: fixtures and assertions, deciding nothing about a place",
+  "code": "e05a237dddcd57ce",
+  "core": "d809471e88c76cbb",
+  "date": "2026-11-22",
+  "note": "plumbing, output formatting, fixtures or assertions; decides nothing about a place",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/spec_check/tests.rs::every_refusal_and_broken_rule_is_a_problem#the spec check's tests": {
+  "body": "0ffc020d0c0daec3",
+  "claim": "the spec check's tests - NONE: fixtures and assertions, deciding nothing about a place",
+  "code": "aa9dcba13de8cdde",
+  "core": "04606bf9e8c68fc8",
+  "date": "2026-11-22",
+  "note": "plumbing, output formatting, fixtures or assertions; decides nothing about a place",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/spec_check/tests.rs::the_reference_hamlet_rolls_clean#the spec check's tests": {
+  "body": "3dc33139f5a79c0e",
+  "claim": "the spec check's tests - NONE: fixtures and assertions, deciding nothing about a place",
+  "code": "f9505f8df9acf7e4",
+  "core": "b5b3fbfdc9d27100",
+  "date": "2026-11-22",
+  "note": "plumbing, output formatting, fixtures or assertions; decides nothing about a place",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
  "rust/phases/src/water_frame.rs::Counts#the counts": {
   "body": "5a67559bd0424e10",
   "claim": "the counts - NONE: the work-budget's own bookkeeping",
@@ -45558,17 +46052,19 @@
  "rust/phases/src/water_frame.rs::admitted#a polder's fall to the cardinals": {
   "body": "030b28237589aaa4",
   "claim": "a polder's fall to the cardinals - DEVIATION clustered-and-scattered-villages-shuson-sanson.drawing: the surveyed grid, usually laid north-south and east-west and not seldom tilted, drawn untilted",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "227fd6e554cef289",
   "core": "3c5d7747422d0f57",
   "date": "2026-11-22",
   "note": "a polder's falls are kept to the four 90-degree points; the page records the untilted surveyed grid as a deviation",
   "pages": {
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "0d2ef9c380f22cca"
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "847c5e82dae96330"
   },
-  "research": "2e03a35afc2b85de",
+  "research": "430afdccc4c0e546",
   "rests": [
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:1a172c27c2f08640"
   ],
+  "triaged": "2026-11-22",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/water_frame.rs::admitted#high side and windward side as one": {
@@ -45577,13 +46073,13 @@
   "code": "9fffcf2cc28cc510",
   "core": "3c5d7747422d0f57",
   "date": "2026-11-22",
-  "note": "a 180-degree half-circle of falls with both ends in (away from the wind or square across it), recorded as a deliberate deviation",
+  "note": "with fall f on the canvas (0 = east) and quarter w on the compass, (f - w) mod 360 <= 180 admits exactly the falls running away from the wind or square across it, both ends in (for NW: E, SE, S, NE, SW), the recorded deviation",
   "pages": {
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "0d2ef9c380f22cca"
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "847c5e82dae96330"
   },
-  "research": "2e03a35afc2b85de",
+  "research": "430afdccc4c0e546",
   "rests": [
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:ec189f8cf46836ca"
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:793689483abf961a"
   ],
   "verdict": "IN-STEP"
  },
@@ -45623,34 +46119,38 @@
  "rust/phases/src/water_frame.rs::roll_plan#each knob at even odds over its table": {
   "body": "6c6a04429783f7fd",
   "claim": "each knob at even odds over its table - clustered-and-scattered-villages-shuson-sanson.drawing: half clustered, three in ten scattered, two in ten as rows - a table's shares are its repeated entries (the settlement form's 5, 3 and 2 of ten), so an even draw keeps them",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "0fa5e6c8ebe09904",
   "core": "e5cf8474848affce",
   "date": "2026-11-22",
   "note": "randbelow(n) over the table keeps the shares its repeated entries carry",
   "pages": {
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "0d2ef9c380f22cca"
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "847c5e82dae96330"
   },
-  "research": "2e03a35afc2b85de",
+  "research": "430afdccc4c0e546",
   "rests": [
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:1aa166d76e3e06fe"
   ],
+  "triaged": "2026-11-22",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/water_frame.rs::roll_plan#knobs rolled from the seed": {
   "body": "6c6a04429783f7fd",
   "claim": "knobs rolled from the seed - clustered-and-scattered-villages-shuson-sanson.drawing: each knob's form rolled per hamlet, never chosen",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "a528c046ed32d6c4",
   "core": "e5cf8474848affce",
   "date": "2026-11-22",
   "note": "each knob is rolled from its own seed only where applies() lets its branch run under the rolled form; pinned knobs are left to the pin",
   "pages": {
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "0d2ef9c380f22cca"
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "847c5e82dae96330"
   },
-  "research": "2e03a35afc2b85de",
+  "research": "430afdccc4c0e546",
   "rests": [
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:0d6651a49a9d1b62",
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:7c6e882522129755"
   ],
+  "triaged": "2026-11-22",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/water_frame.rs::roll_plan#the fall at even odds": {
@@ -46259,271 +46759,6 @@
   "core": "1de20dfeed995513",
   "date": "2026-11-22",
   "note": "geometry assertions on each side's face",
-  "pages": {},
-  "research": "",
-  "rests": [],
-  "verdict": "IN-STEP"
- },
- "rust/mode_a/src/sweep.rs::NO_SVG#the one-sheet sweep": {
-  "body": "91032627e6de6b9e",
-  "claim": "the one-sheet sweep - NONE: a pool sheet put through the registered checks, deciding nothing about a building",
-  "code": "8e46576481839bb1",
-  "core": "5b6a472a147cbff1",
-  "date": "2026-11-22",
-  "note": "plumbing, output formatting, fixtures or assertions; decides nothing about a place",
-  "pages": {},
-  "research": "",
-  "rests": [],
-  "verdict": "IN-STEP"
- },
- "rust/mode_a/src/sweep.rs::Sheet#the one-sheet sweep": {
-  "body": "e5d96a7367cf3fbf",
-  "claim": "the one-sheet sweep - NONE: a pool sheet put through the registered checks, deciding nothing about a building",
-  "code": "550f6051c11238e8",
-  "core": "4014b7106f335317",
-  "date": "2026-11-22",
-  "note": "plumbing, output formatting, fixtures or assertions; decides nothing about a place",
-  "pages": {},
-  "research": "",
-  "rests": [],
-  "verdict": "IN-STEP"
- },
- "rust/mode_a/src/sweep.rs::USAGE#the one-sheet sweep": {
-  "body": "b2c4431bda4c1792",
-  "claim": "the one-sheet sweep - NONE: a pool sheet put through the registered checks, deciding nothing about a building",
-  "code": "eeea8d82859d378d",
-  "core": "19f64d2d7362800a",
-  "date": "2026-11-22",
-  "note": "plumbing, output formatting, fixtures or assertions; decides nothing about a place",
-  "pages": {},
-  "research": "",
-  "rests": [],
-  "verdict": "IN-STEP"
- },
- "rust/mode_a/src/sweep.rs::compose#the one-sheet sweep": {
-  "body": "b22763eb00b9c926",
-  "claim": "the one-sheet sweep - NONE: a pool sheet put through the registered checks, deciding nothing about a building",
-  "code": "b0fea06fd0dc751f",
-  "core": "a56e39a88f8bd5c7",
-  "date": "2026-11-22",
-  "note": "plumbing, output formatting, fixtures or assertions; decides nothing about a place",
-  "pages": {},
-  "research": "",
-  "rests": [],
-  "verdict": "IN-STEP"
- },
- "rust/mode_a/src/sweep.rs::judge#the one-sheet sweep": {
-  "body": "06ca869c4c2a26a4",
-  "claim": "the one-sheet sweep - NONE: a pool sheet put through the registered checks, deciding nothing about a building",
-  "code": "3854ff766b51d7a3",
-  "core": "49b51063603d6a09",
-  "date": "2026-11-22",
-  "note": "plumbing, output formatting, fixtures or assertions; decides nothing about a place",
-  "pages": {},
-  "research": "",
-  "rests": [],
-  "verdict": "IN-STEP"
- },
- "rust/mode_a/src/sweep.rs::listed#the one-sheet sweep": {
-  "body": "17ca1122d7406bba",
-  "claim": "the one-sheet sweep - NONE: a pool sheet put through the registered checks, deciding nothing about a building",
-  "code": "13a83b92636d7ed5",
-  "core": "d1fdfd2ab5fd45a8",
-  "date": "2026-11-22",
-  "note": "plumbing, output formatting, fixtures or assertions; decides nothing about a place",
-  "pages": {},
-  "research": "",
-  "rests": [],
-  "verdict": "IN-STEP"
- },
- "rust/mode_a/src/sweep.rs::main#the one-sheet sweep": {
-  "body": "b20ab139c2b507af",
-  "claim": "the one-sheet sweep - NONE: a pool sheet put through the registered checks, deciding nothing about a building",
-  "code": "e5d98e15f0760842",
-  "core": "192cc4fc58225e80",
-  "date": "2026-11-22",
-  "note": "plumbing, output formatting, fixtures or assertions; decides nothing about a place",
-  "pages": {},
-  "reads": "cc63881af5d33ea1",
-  "research": "",
-  "rests": [],
-  "verdict": "IN-STEP"
- },
- "rust/mode_a/src/sweep.rs::sheet#the one-sheet sweep": {
-  "body": "517fdd44dbf13a77",
-  "claim": "the one-sheet sweep - NONE: a pool sheet put through the registered checks, deciding nothing about a building",
-  "code": "756414f61aed6692",
-  "core": "41670a97b3b02d2b",
-  "date": "2026-11-22",
-  "note": "plumbing, output formatting, fixtures or assertions; decides nothing about a place",
-  "pages": {},
-  "research": "",
-  "rests": [],
-  "verdict": "IN-STEP"
- },
- "rust/mode_a/src/sweep.rs::with_context#the one-sheet sweep": {
-  "body": "46f7cfec26cae6c3",
-  "claim": "the one-sheet sweep - NONE: a pool sheet put through the registered checks, deciding nothing about a building",
-  "code": "225f856788a181f3",
-  "core": "9712babc2d484b49",
-  "date": "2026-11-22",
-  "note": "plumbing, output formatting, fixtures or assertions; decides nothing about a place",
-  "pages": {},
-  "research": "",
-  "rests": [],
-  "verdict": "IN-STEP"
- },
- "rust/mode_a/src/sweep/tests.rs::a_generated_exception_is_composed_and_a_hand_sheet_read#the one-sheet sweep's tests": {
-  "body": "7de97642986959c2",
-  "claim": "the one-sheet sweep's tests - NONE: fixtures and assertions, deciding nothing about a building",
-  "code": "3485565a54f6a72a",
-  "core": "d797a7a72e96d788",
-  "date": "2026-11-22",
-  "note": "plumbing, output formatting, fixtures or assertions; decides nothing about a place",
-  "pages": {},
-  "research": "",
-  "rests": [],
-  "verdict": "IN-STEP"
- },
- "rust/mode_a/src/sweep/tests.rs::a_pool_sheet_named_passes_its_tiers_checks#the one-sheet sweep's tests": {
-  "body": "ea2da0d8202431ca",
-  "claim": "the one-sheet sweep's tests - NONE: fixtures and assertions, deciding nothing about a building",
-  "code": "f628406eaa7a5ad7",
-  "core": "16904f7acf47dc0e",
-  "date": "2026-11-22",
-  "note": "plumbing, output formatting, fixtures or assertions; decides nothing about a place",
-  "pages": {},
-  "research": "",
-  "rests": [],
-  "verdict": "IN-STEP"
- },
- "rust/mode_a/src/sweep/tests.rs::a_sheet_that_cannot_be_read_or_parsed_is_an_error#the one-sheet sweep's tests": {
-  "body": "42b48287daecc030",
-  "claim": "the one-sheet sweep's tests - NONE: fixtures and assertions, deciding nothing about a building",
-  "code": "9770af48a0de173f",
-  "core": "7001f31f7b9e832d",
-  "date": "2026-11-22",
-  "note": "plumbing, output formatting, fixtures or assertions; decides nothing about a place",
-  "pages": {},
-  "research": "",
-  "rests": [],
-  "verdict": "IN-STEP"
- },
- "rust/mode_a/src/sweep/tests.rs::args#the one-sheet sweep's tests": {
-  "body": "9e1f749e7a2be534",
-  "claim": "the one-sheet sweep's tests - NONE: fixtures and assertions, deciding nothing about a building",
-  "code": "7ead030390db61e2",
-  "core": "f610bd421868d9bb",
-  "date": "2026-11-22",
-  "note": "plumbing, output formatting, fixtures or assertions; decides nothing about a place",
-  "pages": {},
-  "research": "",
-  "rests": [],
-  "verdict": "IN-STEP"
- },
- "rust/mode_a/src/sweep/tests.rs::each_finding_is_a_line_and_fails#the one-sheet sweep's tests": {
-  "body": "640a9961af6da81f",
-  "claim": "the one-sheet sweep's tests - NONE: fixtures and assertions, deciding nothing about a building",
-  "code": "1d8940cabef2db2d",
-  "core": "63c2102f73e5fdd1",
-  "date": "2026-11-22",
-  "note": "plumbing, output formatting, fixtures or assertions; decides nothing about a place",
-  "pages": {},
-  "research": "",
-  "rests": [],
-  "verdict": "IN-STEP"
- },
- "rust/mode_a/src/sweep/tests.rs::tree#the one-sheet sweep's tests": {
-  "body": "75e0572466dfa1e3",
-  "claim": "the one-sheet sweep's tests - NONE: fixtures and assertions, deciding nothing about a building",
-  "code": "4c7c7c9d5234a054",
-  "core": "090503b674b13984",
-  "date": "2026-11-22",
-  "note": "plumbing, output formatting, fixtures or assertions; decides nothing about a place",
-  "pages": {},
-  "research": "",
-  "rests": [],
-  "verdict": "IN-STEP"
- },
- "rust/mode_a/src/sweep/tests.rs::what_is_not_a_mode_a_sheet_is_refused#the one-sheet sweep's tests": {
-  "body": "7630eda939aba3e1",
-  "claim": "the one-sheet sweep's tests - NONE: fixtures and assertions, deciding nothing about a building",
-  "code": "61861e2e97b02fb1",
-  "core": "c047c458330c374d",
-  "date": "2026-11-22",
-  "note": "plumbing, output formatting, fixtures or assertions; decides nothing about a place",
-  "pages": {},
-  "research": "",
-  "rests": [],
-  "verdict": "IN-STEP"
- },
- "rust/phases/src/bin/hamlet.rs::check#the driver's command": {
-  "body": "12c9552826b4b9a2",
-  "claim": "the driver's command - NONE: plumbing",
-  "code": "1b1fc6e4b25a800f",
-  "core": "e33e2d3e6355969e",
-  "date": "2026-11-22",
-  "note": "plumbing, output formatting, fixtures or assertions; decides nothing about a place",
-  "pages": {},
-  "research": "",
-  "rests": [],
-  "verdict": "IN-STEP"
- },
- "rust/phases/src/spec_check.rs::listed#the spec check": {
-  "body": "23d759b000f33330",
-  "claim": "the spec check - NONE: plumbing over the driver's roll and its rule check, deciding nothing about a place",
-  "code": "d3d71f658fb2ada1",
-  "core": "2c71865214950e81",
-  "date": "2026-11-22",
-  "note": "plumbing, output formatting, fixtures or assertions; decides nothing about a place",
-  "pages": {},
-  "research": "",
-  "rests": [],
-  "verdict": "IN-STEP"
- },
- "rust/phases/src/spec_check.rs::problems#the spec check": {
-  "body": "0abcbc39e9d02491",
-  "claim": "the spec check - NONE: plumbing over the driver's roll and its rule check, deciding nothing about a place",
-  "code": "cfa54f870998a777",
-  "core": "b15f3dfe39516984",
-  "date": "2026-11-22",
-  "note": "plumbing, output formatting, fixtures or assertions; decides nothing about a place",
-  "pages": {},
-  "research": "",
-  "rests": [],
-  "verdict": "IN-STEP"
- },
- "rust/phases/src/spec_check/tests.rs::a_spec_that_does_not_parse_is_a_problem#the spec check's tests": {
-  "body": "68d40a6651a2f516",
-  "claim": "the spec check's tests - NONE: fixtures and assertions, deciding nothing about a place",
-  "code": "e05a237dddcd57ce",
-  "core": "d809471e88c76cbb",
-  "date": "2026-11-22",
-  "note": "plumbing, output formatting, fixtures or assertions; decides nothing about a place",
-  "pages": {},
-  "research": "",
-  "rests": [],
-  "verdict": "IN-STEP"
- },
- "rust/phases/src/spec_check/tests.rs::every_refusal_and_broken_rule_is_a_problem#the spec check's tests": {
-  "body": "0ffc020d0c0daec3",
-  "claim": "the spec check's tests - NONE: fixtures and assertions, deciding nothing about a place",
-  "code": "aa9dcba13de8cdde",
-  "core": "04606bf9e8c68fc8",
-  "date": "2026-11-22",
-  "note": "plumbing, output formatting, fixtures or assertions; decides nothing about a place",
-  "pages": {},
-  "research": "",
-  "rests": [],
-  "verdict": "IN-STEP"
- },
- "rust/phases/src/spec_check/tests.rs::the_reference_hamlet_rolls_clean#the spec check's tests": {
-  "body": "3dc33139f5a79c0e",
-  "claim": "the spec check's tests - NONE: fixtures and assertions, deciding nothing about a place",
-  "code": "f9505f8df9acf7e4",
-  "core": "b5b3fbfdc9d27100",
-  "date": "2026-11-22",
-  "note": "plumbing, output formatting, fixtures or assertions; decides nothing about a place",
   "pages": {},
   "research": "",
   "rests": [],

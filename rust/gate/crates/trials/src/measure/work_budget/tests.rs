@@ -113,7 +113,7 @@ fn a_roll_with_no_budget_shows_none() {
 #[test]
 fn the_run_file_sorts_its_keys() {
     let (counts, rolls) = parse(LINES).unwrap();
-    let got = run_file(&counts, &rolls, "T", "abc");
+    let got = run_file(&counts, &rolls, "T", "abc", "k");
     assert_eq!(
         got.as_object().unwrap().keys().collect::<Vec<_>>(),
         ["meta", "rows", "summary"]
@@ -140,6 +140,15 @@ fn world(tag: &str, body: &str) -> l7r_shared::tempdir::TempDir {
     root
 }
 
+fn git_init(root: &std::path::Path) {
+    let done = std::process::Command::new("git")
+        .args(["init", "-q"])
+        .current_dir(root)
+        .output()
+        .unwrap();
+    assert!(done.status.success());
+}
+
 fn driver() -> String {
     let esc = |s: &str| s.replace('\t', "\\t").replace('\n', "\\n");
     format!("#!/bin/sh\n[ \"$HAMLET_FEATURES\" = counters ] && [ \"$1\" = rust ] || exit 9\n[ \"$HAMLET_ARGS\" = --budget ] && printf '{}' && exit 0\n[ \"$HAMLET_ARGS\" = '--budget polder' ] && printf '{}' && exit 0\nexit 8\n", esc(LINES), esc(FORM))
@@ -161,6 +170,11 @@ fn a_run_prints_the_table_and_writes_nothing_unasked() {
 #[test]
 fn write_replaces_the_record_and_files_the_run() {
     let root = world("wb-write", &driver());
+    // the run is keyed on the tree's code, which git lists: outside a repository the write fails before it counts (feature 449 T259)
+    assert!(cli(&["--write".to_owned()], &root).stderr.contains("git"));
+    git_init(&root);
+    std::fs::create_dir_all(root.join("rust/phases/src")).unwrap();
+    std::fs::write(root.join("rust/phases/src/a.rs"), "fn a() {}\n").unwrap();
     let got = cli(&["--write".to_owned()], &root);
     assert_eq!(got.code, 0, "{}", got.stderr);
     let page = std::fs::read_to_string(root.join("dev/work-budget.md")).unwrap();
@@ -177,6 +191,7 @@ fn write_replaces_the_record_and_files_the_run() {
             LINES.replace('\t', "\\t").replace('\n', "\\n")
         ),
     );
+    git_init(&bare);
     assert_eq!(cli(&["--write".to_owned()], &bare).code, 0);
     let page = std::fs::read_to_string(bare.join("dev/work-budget.md")).unwrap();
     assert!(page.ends_with("through the cut |\n") && !page.contains("polder"));
@@ -186,6 +201,17 @@ fn write_replaces_the_record_and_files_the_run() {
         .collect();
     assert_eq!(filed.len(), 1);
     assert!(filed[0].file_name().to_string_lossy().contains("-rust-"));
+    // the run carries the key of the code it counted, the ratchet's key of the same reads
+    let run: Value =
+        serde_json::from_str(&std::fs::read_to_string(filed[0].path()).unwrap()).unwrap();
+    assert_eq!(
+        run["meta"]["code"],
+        super::code_key(&root).unwrap().as_str()
+    );
+    assert_ne!(
+        super::code_key(&root).unwrap(),
+        super::code_key(&bare).unwrap()
+    );
     assert!(got.stdout.contains("written"));
     std::fs::remove_dir_all(root.join("dev/work-budget")).unwrap();
     assert_eq!(cli(&["--write".to_owned()], &root).code, 1);

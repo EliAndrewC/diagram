@@ -123,6 +123,29 @@ pub(super) fn tree(root: &Path) {
     report
         .set_modified(SystemTime::now() + Duration::from_secs(3600))
         .unwrap();
+    rekey(root);
+}
+
+/// The tree a git repository and its run keyed on the code it holds now (feature 449 T259): the audit reads only a run of this code.
+pub(super) fn rekey(root: &Path) {
+    if !root.join(".git").exists() {
+        let done = std::process::Command::new("git")
+            .args(["init", "-q"])
+            .current_dir(root)
+            .output()
+            .unwrap();
+        assert!(done.status.success());
+    }
+    let key = crate::measure::work_budget::code_key(root).unwrap();
+    put(
+        root,
+        "dev/work-budget/20261102T000000Z-b.json",
+        RUN.replace(
+            "\"meta\": {}",
+            &format!("\"meta\": {{\"code\": \"{key}\"}}"),
+        )
+        .as_bytes(),
+    );
 }
 
 /// The stale report: the call-chain report older than every source.
@@ -554,6 +577,7 @@ fn an_audit_bundles_the_stage_its_counters_and_its_calls() {
         "work-budget-bundle: no `stage_nosuch` under rust or l7r/diagram/hamletgen\n"
     );
     std::fs::remove_file(d.join("rust/phases/src/sink.rs")).unwrap();
+    rekey(&d);
     assert_eq!(run(&d, &["audit", "sink"]).code, 0);
     std::fs::remove_dir_all(d.join("l7r/diagram/hamletgen")).unwrap();
     // no hamlet package, no Python stage
@@ -585,6 +609,74 @@ fn a_bundle_that_cannot_be_written_fails() {
     std::fs::set_permissions(d.join("ro"), std::fs::Permissions::from_mode(0o755)).unwrap();
     assert_eq!(got.code, 1);
     assert!(got.stderr.contains("ro/out: Permission denied"), "{got:?}");
+}
+
+#[test]
+fn an_audit_reads_only_a_run_of_the_code_the_tree_holds() {
+    let d = scratch("wbb-keyed");
+    tree(&d);
+    assert_eq!(run(&d, &["audit", "hem"]).code, 0);
+    // a newer run of other code is passed over, as one from another clone's code
+    put(
+        &d,
+        "dev/work-budget/20261105T000000Z-rust-c.json",
+        RUN.replace("\"meta\": {}", "\"meta\": {\"code\": \"other\"}")
+            .as_bytes(),
+    );
+    assert_eq!(run(&d, &["audit", "hem"]).code, 0);
+    assert!(std::fs::read_to_string(d.join("out/counts.json"))
+        .unwrap()
+        .contains("\"run\": \"20261102T000000Z-b.json\""));
+    // the stage's code moves: no run counted it, so the bundle refuses, naming the newest and the command that counts it (the
+    // waterward.polder audit read UNCOUNTED off a run two days older than its code)
+    put(
+        &d,
+        "rust/phases/src/course.rs",
+        b"pub fn drawn() { let _ = 1; }\n",
+    );
+    let stale = run(&d, &["audit", "hem"]);
+    assert_eq!(stale.code, 2, "{stale:?}");
+    assert_eq!(
+        stale.stderr,
+        "work-budget-bundle: no `make work-budget` run counted the code this tree holds (the newest, 20261105T000000Z-rust-c.json, \
+         counted other code or carries no key) - run `make work-budget WRITE=1`, then the bundle again\n"
+    );
+    // a `.py` under the reads is counted by no run, so it moves no key
+    rekey(&d);
+    put(&d, "rust/phases/tools/x.py", b"x = 1\n");
+    assert_eq!(run(&d, &["audit", "hem"]).code, 0);
+    // a run that names the key but was counted on other code (its own key another) is passed over
+    let key = crate::measure::work_budget::code_key(&d).unwrap();
+    put(
+        &d,
+        "dev/work-budget/20261105T000000Z-rust-c.json",
+        RUN.replace(
+            "\"meta\": {}",
+            &format!("\"meta\": {{\"code\": \"other\", \"note\": \"{key}\"}}"),
+        )
+        .as_bytes(),
+    );
+    assert_eq!(run(&d, &["audit", "hem"]).code, 0);
+    // a run with no key - every run written before T259 - is no run of this code
+    put(
+        &d,
+        "dev/work-budget/20261102T000000Z-b.json",
+        RUN.as_bytes(),
+    );
+    assert_eq!(run(&d, &["audit", "hem"]).code, 2);
+    // a run holding the key that does not read fails, as the newest did before
+    put(
+        &d,
+        "dev/work-budget/20261106T000000Z-rust-d.json",
+        format!("{{ {key}").as_bytes(),
+    );
+    assert_eq!(run(&d, &["audit", "hem"]).code, 1);
+    // outside a repository no key is taken, and the audit fails saying so
+    let bare = scratch("wbb-bare");
+    tree(&bare);
+    std::fs::remove_dir_all(bare.join(".git")).unwrap();
+    let got = run(&bare, &["audit", "hem"]);
+    assert_eq!(got.code, 1, "{got:?}");
 }
 
 #[test]
@@ -638,7 +730,20 @@ fn audits_answer(tag: &str, table: &[(&str, &str, i32)]) {
     for (rel, text, code) in table {
         let _ = std::fs::remove_dir_all(&*d);
         tree(&d);
+        // each malformed record keyed on the tree's code, so it is the run the audit reads (feature 449 T259); a stage's source
+        // changed, the run keyed again, so the audit reaches the source
+        let key = crate::measure::work_budget::code_key(&d).unwrap();
+        let text = match (*rel == RECORD, text.strip_prefix('{')) {
+            (true, Some(rest)) if rest.starts_with('"') => {
+                format!("{{\"meta\": {{\"code\": \"{key}\"}}, {rest}")
+            }
+            (true, _) => format!("{text} {key}"),
+            _ => (*text).to_owned(),
+        };
         put(&d, rel, text.as_bytes());
+        if rel.starts_with("rust/phases/") {
+            rekey(&d);
+        }
         assert_eq!(run(&d, &["audit", "hem"]).code, *code, "{rel}: {text}");
     }
 }
@@ -666,9 +771,11 @@ fn an_audit_fails_on_a_source_that_is_no_utf8_or_a_budget_or_rubric_it_cannot_re
     let d = scratch("wbb-raise-rest");
     tree(&d);
     put(&d, "rust/phases/src/z.rs", b"\xff");
+    rekey(&d);
     // a Rust source that is no UTF-8
     assert_eq!(run(&d, &["audit", "hem"]).code, 1,);
     std::fs::remove_file(d.join("rust/phases/src/z.rs")).unwrap();
+    rekey(&d);
     put(&d, "l7r/diagram/hamletgen/z.py", b"\xff");
     // a hamlet source that is no UTF-8
     assert_eq!(run(&d, &["audit", "top"]).code, 1,);
@@ -679,6 +786,7 @@ fn an_audit_fails_on_a_source_that_is_no_utf8_or_a_budget_or_rubric_it_cannot_re
     std::fs::remove_dir_all(d.join("rust")).unwrap();
     std::fs::remove_dir_all(d.join("l7r/diagram/settlement")).unwrap();
     put(&d, "docs/work-budget-rubric.md", b"r");
+    rekey(&d);
     assert_eq!(run(&d, &["audit", "top"]).code, 0);
 }
 

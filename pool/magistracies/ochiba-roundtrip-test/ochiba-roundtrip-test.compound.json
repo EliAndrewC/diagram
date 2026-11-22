@@ -9,6 +9,8 @@
     "its storehouses behind the house - research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html: the household's storehouses stand behind the house, in its rear strip on the north wall as Ochiba's sheet draws them (feature 449 T187)",
     "its lodgings' dwellings - research/questions/0097-staff-rowhouses-and-barracks-nagaya.drawing.html, research/questions/0106-the-chief-retainers-house-karo-yashiki.drawing.html: 16.5 (the barracks' two dwellings); 17 (the long-house's three dwellings); 34 (the same) - each inside 0097's bays of about 12 to 18 ft, a door to each, as Ochiba's sheet draws them (feature 449 T187)",
     "its doors at each dwelling's middle - GUESS: no page seats a dwelling's door along its face (feature 449 T187) - 0.25 (the barracks' court-face door); 0.5 (the barracks' end door, the long-house's middle door); 1 / 6 and 5 / 6 (the long-house's end doors, at its end dwellings' middles)"
+,
+    "the armory in the office hall's west end, its back row - research/questions/0123-the-magistrates-manor-in-a-town-where-it-stands-and-which-way-it-faces-jinya-and-yamen.html: Pingyao, with no standing barracks, kept its armory at its great hall's west end, and the program keeps one at every seat (knob 4), in the hall where the main gate is one bay; 14 x 20 ft inside the hall's 120 ft, as Ochiba's hand sheet carves it from the clerks' room's end (its size and the back row a GUESS: no source gives the depth of Pingyao's; feature 449 T276)"
   ],
   "envelope": {"w": 267, "h": 200, "divider": 100},
   "gates": [
@@ -48,7 +50,8 @@
     {"name": "Inari shrine", "kind": "compound shrine", "role": "shrine", "w": 37, "h": 31, "court": "inner", "wall": "E", "order": 5},
     {"name": "cinnabar workshop", "kind": "cinnabar workshop", "role": "shrine", "w": 37, "h": 24, "court": "inner", "wall": "E", "order": 4},
     {"name": "karo's house", "kind": "karo's house", "role": "lord", "w": 37, "h": 23, "court": "inner", "wall": "divider", "order": 3},
-    {"name": "office hall", "kind": "office hall", "role": "lord", "w": 120, "h": 28, "court": "outer", "wall": "divider", "order": 10},
+    {"name": "office hall", "kind": "office hall", "role": "lord", "w": 120, "h": 28, "court": "outer", "wall": "divider", "order": 10,
+     "rooms": [{"kind": "armory", "caption": "armory", "x": 0, "y": 0, "w": 14, "h": 20}]},
     {"name": "tax archive", "kind": "tax archive", "role": "kura", "w": 24, "h": 18, "court": "outer", "wall": "W", "order": 6},
     {"name": "senior retainers", "kind": "retainers' quarters", "role": "service", "w": 51, "h": 17, "court": "outer", "wall": "W", "order": 4,
      "bays": [17, 34], "doors": [{"face": "S", "at": 0.16666666666666666}, {"face": "S", "at": 0.5}, {"face": "S", "at": 0.8333333333333334}]},

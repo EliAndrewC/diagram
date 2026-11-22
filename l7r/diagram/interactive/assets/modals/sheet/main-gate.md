@@ -2,7 +2,7 @@ About: The main gate was the compound's formal entrance in its front wall, the w
 branch office of three officials had one, with a small gate and a gatekeepers' room beside it. Behind it a guest's arrival
 was staged: the gate, then open ground a palanquin could cross, then the step of the formal entrance.
 
-In Japan it took one of two forms. The nagaya-mon was a gate opened through the middle of a long range of rooms, its design
+In Japan its two best-known forms were these. The nagaya-mon was a gate opened through the middle of a long range of rooms, its design
 fixed by the standing of the house; the surviving ranges of a domain's seat at Kaibara and an intendant's office at Omori
 run about 80 and 110 ft long and 12 to 13 ft deep, and Kaibara's holds a guardroom of eight mats (about 140 sq ft) on one side of the gate. The yakuimon was a gate of one bay. Gatekeepers sat in a room of the gate range or, as at Takayama, in a gatehouse of their own, a gabled building of one story; at Matsue a samurai house's gate range housed its gatekeepers and servants.
 

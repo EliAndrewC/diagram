@@ -9,7 +9,7 @@
 //! code or its numbers in front of the judge.
 //!
 //! MODE AUDIT judges the landed code against its counters: the stage's modules (the file defining `stage_<name>`, and the files under
-//! the stage's own package), the newest `make work-budget` run's counts for the stage at each size by kind and by function, its
+//! the stage's own package), the newest `make work-budget WRITE=1` run of the code the tree holds (its `meta.code`, refused where none is: feature 449 T259) - its counts for the stage at each size by kind and by function, its
 //! call chains (the stage's section of the newest kept call-chain report, `dev/perf-log/*-fanout-*.txt`; nothing writes one now) and its budget
 //! (`dev/work-budget.json`, or `BUDGET=<file>` - the funnel fixture's, FR-009).
 //!
@@ -358,6 +358,33 @@ fn stage_rows(run: &Value, phase: &str) -> R<Vec<Value>> {
     Ok(out)
 }
 
+/// THE RUN OF THIS TREE'S CODE (feature 449 T259): the newest run keyed on the code the tree holds, never the newest by name - the
+/// waterward.polder audit read UNCOUNTED off a run two days older than its stage's code; the run files are tracked, so a newer one
+/// from another clone's code is passed over, not taken, and none of this code is the refusal's line.
+fn keyed_run(root: &Path) -> R<Result<(PathBuf, Value), String>> {
+    let runs = glob(&root.join(RUNS), "", ".json");
+    let Some(last) = runs.last() else {
+        return Ok(Err(
+            "work-budget-bundle: no `make work-budget` run is recorded - run it first".to_owned(),
+        ));
+    };
+    let key = super::work_budget::code_key(root)?;
+    for p in runs.iter().rev() {
+        // the key's text first, so the runs of other code are never parsed; one holding it that does not read fails, as before
+        if read(p)?.contains(&key) {
+            let run = load(p)?;
+            if run["meta"]["code"] == key.as_str() {
+                return Ok(Ok((p.clone(), run)));
+            }
+        }
+    }
+    Ok(Err(format!(
+        "work-budget-bundle: no `make work-budget` run counted the code this tree holds (the newest, {}, counted other code or \
+         carries no key) - run `make work-budget WRITE=1`, then the bundle again",
+        last.file_name().unwrap_or_default().to_string_lossy()
+    )))
+}
+
 /// The MODE AUDIT bundle: its exit status and its line.
 fn audit_bundle(root: &Path, phase: &str, out: &Path, budget: &str) -> R<(i32, String)> {
     let mut files = stage_files(root, phase)?;
@@ -371,13 +398,10 @@ fn audit_bundle(root: &Path, phase: &str, out: &Path, budget: &str) -> R<(i32, S
             ),
         ));
     }
-    let Some(newest) = glob(&root.join(RUNS), "", ".json").pop() else {
-        return Ok((
-            2,
-            "work-budget-bundle: no `make work-budget` run is recorded - run it first".to_owned(),
-        ));
+    let (newest, run) = match keyed_run(root)? {
+        Ok(found) => found,
+        Err(refusal) => return Ok((2, refusal)),
     };
-    let run = load(&newest)?;
     let counts = stage_rows(&run, phase)?;
     let table = load(&root.join(TABLE))?;
     let mut seeds: Vec<PathBuf> = files
@@ -448,7 +472,7 @@ fn audit_manifest(phase: &str, listed: &[String]) -> String {
         "# work-budget MODE AUDIT - {phase}\n\nMODE AUDIT: judge the landed code against its counters. Read, beside this file:\n\n\
          - `rubric.md` - the standards S1-S11;\n\
          - `code/` - the stage's modules and every module defining a function its counters name, each named by its path (`/` as `__`): {};\n\
-         - `counts.json` - the newest run's counted operations for the stage at each size, by kind and by function;\n\
+         - `counts.json` - the counted operations of the newest run of this code for the stage at each size, by kind and by function;\n\
          - `chains.txt` - the callers above each counted function;\n\
          - `budget.json` - the stage's pinned budget.\n\n\
          The first line of your reply is the verdict: WITHIN, LEEWAY (over the budget and at most twice it, the excess named and \

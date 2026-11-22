@@ -1239,5 +1239,40 @@
    "before-load": 16.6,
    "after-load": 25.0
   }
+ },
+ "t288-county-karo-door": {
+  "quantity": "the county example after T280/T288: the office hall, the tax archive, the hearing court and the middle gate's passage in ft, and the open court before the karo's long-house doors",
+  "observed": "2026-11-22",
+  "verifies": "E1",
+  "subject": "building-review--county-magistracy-example",
+  "answers": "6d0cb7befee0",
+  "source": "pool/magistracies/county-magistracy-example/county-magistracy-example.svg; rust/mode_a/src/compound/gen_tests_seat.rs the_county_examples_long_house_doors_front_open_court",
+  "command": "make map MAP=pool/magistracies/county-magistracy-example && make rust-test CRATE=rust/mode_a",
+  "method": "each rect's svg x read off the sheet, (x - 21) / 3 for ft (3 px per ft, the walls at x 21); the long-house test (no seat within APPROACH, 12 ft, of a door's step) green; the passage from the notes' T280/T288 entry",
+  "value": {
+   "hall_shift_ft": 12,
+   "hall_ft": [70.5, 197.5],
+   "gate_passage_ft": [201, 207],
+   "archive_ft": [46.5, 64.5],
+   "karo_door_open_court_ft": 19.5,
+   "hearing_court_ft": [100.5, 180.5],
+   "approach_ft": 12
+  }
+ },
+ "t276-armory-rects": {
+  "quantity": "each T276 sheet's armory rect and the room it was carved from, in ft",
+  "observed": "2026-11-22",
+  "subject": "hayakawa-magistracy, ochiba-magistracy, ubame-magistracy, ochiba-roundtrip-test",
+  "source": "pool/magistracies/<sheet>/<sheet>.svg, the rect tagged data-kind=\"armory\"; each sheet's notes.md T276 entry",
+  "command": "grep -o '<[^>]*data-kind=\"armory\"[^>]*>' pool/magistracies/<sheet>/<sheet>.svg",
+  "method": "width and height in px over 3 px per ft; the clerks' rooms' remaining widths from the notes' T276 entries",
+  "value": {
+   "hayakawa_armory_ft": [14, 16.7],
+   "hayakawa_clerks_room_ft": 23.7,
+   "ochiba_armory_ft": [14, 16.7],
+   "ochiba_clerks_room_ft": 26,
+   "ubame_armory_ft": [13.3, 12],
+   "roundtrip_armory_ft": [14, 20]
+  }
  }
 }

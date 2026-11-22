@@ -1,0 +1,7 @@
+{
+  "utc": "2026-11-22T16:05:01Z",
+  "target": "review-accept",
+  "commit": "30492b3d64",
+  "outcome": "permitted",
+  "why": "review-accept building-review--ochiba-magistracy E1: outside T276's armory change, filed as 449 T297"
+}

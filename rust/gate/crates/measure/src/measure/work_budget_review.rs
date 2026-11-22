@@ -24,7 +24,7 @@ use std::process::Command;
 use serde_json::Value;
 
 use super::commas;
-use super::work_budget::{budget_at, parse};
+use super::work_budget::{budget_at, parse, HAMLET_READS};
 use crate::codeid::common_git_dir;
 use l7r_gate_pool::{walk, Walk, LIVE, TREES};
 use l7r_gate_tree::delta::worktree_key;
@@ -117,9 +117,6 @@ const PIPELINE_READS: [&str; 12] = [
     "rust/guard/",
     "research/questions/",
 ];
-
-/// What the hamlet driver's counts read: its crate and the workspace's manifests.
-const HAMLET_READS: [&str; 3] = ["rust/phases/", "rust/Cargo.toml", "rust/Cargo.lock"];
 
 /// What `l7r-mode-a`'s counts read: its crate, the crates it builds on by path, the manifests, the pool sheets and the building types.
 const MODE_A_READS: [&str; 10] = [

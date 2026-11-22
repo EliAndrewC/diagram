@@ -1,0 +1,6 @@
+{
+  "utc": "20261122T160354Z",
+  "guard": "pair-hooks",
+  "what": "review prerequisites",
+  "reason": "REVIEW_PREREQ_OK: the figures are recorded at m:t276-armory-rects in specs/449-rust-codebase/measurements.json (hayakawa_armory_ft [14, 16.7], hayakawa_clerks_room_ft 23.7), which the prereq's figure match does not read; C6 and C7 accepted as confirmations"
+}

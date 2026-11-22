@@ -45,6 +45,18 @@ fn a_resting_field_drains_off_the_map() {
         .is_some_and(|s| s.pond.is_none() && !s.run.is_empty()));
     // its fall runs into the wind: the seat backs the hill, recorded off the wind
     assert!(r.refusals.is_empty() && r.seated.as_ref().is_some_and(|s| s.frames[0].offwind));
+    // its paddy lies to windward, so its belt's ground lies between the houses and the paddy, not uphill behind them (0072: the
+    // wind decides the side; 449 T277): the band stands the belt's depth off the margin, the kept ground no deeper than before
+    let f = &r.seated.as_ref().unwrap().frames[0];
+    let off = (f.center.0 - f.anchor.0) * f.out.0 + (f.center.1 - f.anchor.1) * f.out.1;
+    let owed = crate::seat::margins::STANDOFF + crate::seat::margins::BELT_BAND.1 + f.band.1;
+    assert!((off - owed).abs() < 1e-6, "{f:?}");
+    let ground = super::settlement_ground(f);
+    let deep = ground
+        .iter()
+        .map(|p| (p.0 - f.anchor.0) * f.out.0 + (p.1 - f.anchor.1) * f.out.1)
+        .fold(0.0, f64::max);
+    assert!((deep - (off + f.band.1)).abs() < 1e-6, "{deep} {off}");
     let mut kept_why = Vec::new();
     assert!(super::kept::<u8>(
         Err(super::Refused("the seat refused: x".into())),

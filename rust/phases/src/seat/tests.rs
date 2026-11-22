@@ -12,7 +12,7 @@ use std::collections::HashMap;
 use super::exit::{in_any, seg_seg, Exit};
 use super::fords::{fords, gapped};
 use super::index::{area, clipped, Cells, Strips};
-use super::margins::{belt_off, candidates, Brook};
+use super::margins::{belt_off, candidates, Brook, BELT_BAND, STANDOFF};
 use super::{seat, SeatIn};
 use crate::field::fan::Pt;
 
@@ -310,4 +310,16 @@ fn only_a_fall_toward_the_wind_backs_the_hill() {
     i.fall = (-s, -s);
     let h = seat(&i).unwrap();
     assert!(h.frames.iter().all(|f| f.offwind));
+    // the belt on the windward side, between the houses and the field (0072: the wind decides the side; 449 T277): a seat whose
+    // field lies to windward stands its band the belt's depth further off the margin, so its belt's ground is the near strip
+    for f in &h.frames {
+        let off = (f.center.0 - f.anchor.0) * f.out.0 + (f.center.1 - f.anchor.1) * f.out.1;
+        let windward = -(f.out.0 * i.wind.0 + f.out.1 * i.wind.1) >= i.back_min_dot;
+        let room = if windward { BELT_BAND.1 } else { 0.0 };
+        assert!((off - (STANDOFF + room + f.band.1)).abs() < 1e-6, "{off}");
+    }
+    assert!(h
+        .frames
+        .iter()
+        .any(|f| -(f.out.0 * i.wind.0 + f.out.1 * i.wind.1) >= i.back_min_dot));
 }

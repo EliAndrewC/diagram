@@ -9,6 +9,8 @@
 abatis	abatis
 ablution well	ablution well
 ablution wells	ablution well
+abolition of domains	abolition of the domains
+abolition of the domains	abolition of the domains
 abreuvoir	abreuvoir
 abreuvoirs	abreuvoir
 aburana	rape
@@ -1909,6 +1911,7 @@ horse-head gable wall	horse-head wall
 horse-head gable walls	horse-head wall
 horse-head wall	horse-head wall
 horse-head walls	horse-head wall
+horse-viewing room	horse-viewing room
 hot shoeing	hot-shoeing
 hot-shoe	hot-shoeing
 hot-shoeing	hot-shoeing

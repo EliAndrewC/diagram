@@ -374,13 +374,18 @@ impl<'a> Ground<'a> {
 ///     no drain rule at the seat - research/questions/0058-ground-too-wet-to-build-on.drawing.html: the ground below a drain kept only from dispersed farmsteads, not a nucleated cluster
 ///     brook across the band - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html: "A hamlet site the brook does not cross is preferred when two sites are otherwise equally good", the brook's share the tie-break, never refused
 ///     the back's width - GUESS: no page sizes the ground behind a seat; one half-depth across the margin's midpoint, the strip behind the band's middle, which the belt cannot bend away from
-///     the dry hem's reach - GUESS: no source could speak to it, a value of ours; a dry plot within two band half-depths of the margin, the band's own depth, scores the seat down
+///     the dry hem's reach - GUESS: no source could speak to it, a value of ours; a dry plot within two band half-depths of where the band's room starts - the margin, or the belt's room past it where the band is stood out for the belt - the band's own depth, scores the seat down
 ///     the ladder - research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: a hamlet never splits, so the margins it falls back to are whole seats, ranked
+///     the belt between the houses and a windward field - GUESS research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: where a declared fall into the wind backs the cluster to the hill (`belt_wind`, the map's own wind), the belt still stands on the windward side (research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html: the wind decides the side), so a margin whose field lies within 45 degrees of the wind stands its band the belt's far edge (`BELT_BAND`) further off it, the belt's ground between the houses and the paddy, and every sample of the band moves with it; a wind along the band leaves the belt at a band end, no room added; the belt's room on the canvas is asked of the map's own wind
 #[expect(
     clippy::too_many_lines,
     reason = "the refusals in order, cheapest first, then the score: one pass a candidate"
 )]
-pub fn ranked(inp: &SeatIn, counts: &mut HashMap<String, u64>) -> (Vec<Frame>, [u64; 6]) {
+pub fn ranked(
+    inp: &SeatIn,
+    belt_wind: Option<Pt>,
+    counts: &mut HashMap<String, u64>,
+) -> (Vec<Frame>, [u64; 6]) {
     let (dep, lat) = inp.band;
     let ground = Ground::new(inp, counts);
     let mut scan = 0;
@@ -393,17 +398,26 @@ pub fn ranked(inp: &SeatIn, counts: &mut HashMap<String, u64>) -> (Vec<Frame>, [
     let (mut refusal, mut scoring) = (0, 0);
     let mut kept: Vec<(f64, f64, u8, Frame)> = Vec::new();
     let mut stopped = [0u64; 6];
+    // the wind the belt stands against: the map's own, where the seat is ranked against another (the hill's, `seat`)
+    let wind = belt_wind.unwrap_or(inp.wind);
     for (mid, n, tier) in cands {
         let along = (-n.1, n.0);
+        // THE BELT'S ROOM ON A WINDWARD FIELD (449 T277): the band stood the belt's far edge further out, where the field below
+        // the margin lies to windward of the houses, so the belt has its ground between them
+        let lead = if belt_wind.is_some() && -(n.0 * wind.0 + n.1 * wind.1) >= inp.back_min_dot {
+            BELT_BAND.1
+        } else {
+            0.0
+        };
         let band_pt = |d: f64, t: f64| {
             (
-                mid.0 + n.0 * d + along.0 * lat * t,
-                mid.1 + n.1 * d + along.1 * lat * t,
+                mid.0 + n.0 * (d + lead) + along.0 * lat * t,
+                mid.1 + n.1 * (d + lead) + along.1 * lat * t,
             )
         };
         let center = (
-            mid.0 + n.0 * (dep + STANDOFF),
-            mid.1 + n.1 * (dep + STANDOFF),
+            mid.0 + n.0 * (dep + STANDOFF + lead),
+            mid.1 + n.1 * (dep + STANDOFF + lead),
         );
         refusal += 2;
         if !(lat <= center.0
@@ -415,7 +429,7 @@ pub fn ranked(inp: &SeatIn, counts: &mut HashMap<String, u64>) -> (Vec<Frame>, [
             continue;
         }
         refusal += 8;
-        let off = belt_off(center, along, n, inp.band, inp.wind, inp.canvas);
+        let off = belt_off(center, along, n, inp.band, wind, inp.canvas);
         if off > BELT_ROOM_MAX_OFF {
             stopped[1] += 1;
             continue;
@@ -461,7 +475,7 @@ pub fn ranked(inp: &SeatIn, counts: &mut HashMap<String, u64>) -> (Vec<Frame>, [
             - WEIGHTS.reeds * wet
             - WEIGHTS.belt * off;
         if !inp.plots.is_empty() {
-            let hem = ground.hem(mid, 2.0 * dep, &mut scoring);
+            let hem = ground.hem(band_pt(0.0, 0.0), 2.0 * dep, &mut scoring);
             score -= WEIGHTS.hem * (1.0 - hem / (2.0 * dep)).max(0.0) + WEIGHTS.back * foul;
         }
         let on_brook = SAMPLE_DEPTHS

@@ -114,11 +114,11 @@ const LANE_FT: f64 = 8.0;
 ///     the settlement's standoff - GUESS: research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html gives the order (the paddy, the houses, the dry fields) but no distance; 12 ft
 ///     on a polder - GUESS research/questions/0019-polders-fields-diked-against-the-fluctuating-water-weitian-waju.drawing.html: the village "a few steps off the dike", the page's own guess, with no distance; the same 12 ft off the seat's ring; the ring's side held straight at the outer face's widest, the houses stand further off the dike where the face pinches in (by up to the waves' spread, measured on Kuwabata and a grid polder 2026-11-22, feature 449 T240, its figures in the plan's T240 section)
 const STANDOFF_FT: f64 = 12.0;
-/// How far the settlement's ground reaches toward its belt (ft).
+/// How far the settlement's ground reaches toward its belt (ft): the seat's belt band's far edge, one figure (449 T277).
 ///
 /// Research:
 ///     the belt's ground kept - research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html: a clustered village shelters behind one belt at its windward edge, so the belt's ground is the settlement's too
-const BELT_FAR_FT: f64 = 146.0;
+const BELT_FAR_FT: f64 = crate::seat::margins::BELT_BAND.1;
 /// A dry plot's outline: its ink and width (ft).
 ///
 /// Research:
@@ -408,7 +408,7 @@ fn comb_ground<'a>(f: &'a Field, sunk: Option<&'a Sunk>) -> Ground<'a> {
 /// the tameike at its berth as the way out's walls, the ditches and the drain's run as its lines. It draws nothing.
 ///
 /// Research:
-///     the seat's back to the wind - research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html: the settlement laid out with its back to the wind - on a comb; a polder hands its landward shore as the way the back faces (`Ground::back`, the claim at `polder::landward`)
+///     the seat's back to the wind - research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html: the settlement laid out with its back to the wind - on a comb, but where a declared fall runs into the wind (the seat backs the hill, the claim at `seat::seat`; its belt still windward, at `margins::ranked`); a polder hands its landward shore as the way the back faces (`Ground::back`, the claim at `polder::landward`)
 ///     the way out's walls - research/questions/0081-village-lanes.drawing.html: a track keeps off wet ground and runs off the map - the wet toe and the reed fringe grown by the lane's width, the field, the pond at its berth; the drain's run and every watercourse lines it may not cross
 fn stage_seat(p: &Plan, g: &Ground) -> Result<Seated, Refused> {
     let rad = p.down_deg.to_radians();
@@ -476,11 +476,12 @@ fn seat_refused(e: crate::seat::SeatRefused) -> Refused {
 type Segment = ((f64, f64), (f64, f64), f64);
 
 /// The ground the seat chose for the settlement and its belt: from the margin out past the band and the belt, the band's length
-/// along it - the ground the dry hem keeps off (the deleted `settlement_ground`).
+/// along it - the ground the dry hem keeps off (the deleted `settlement_ground`). Where the seat stood the band the belt's depth
+/// off a windward field (`margins::ranked`), the same depth holds the belt first, then the houses, and nothing past their back.
 ///
 /// Research:
 ///     the settlement's ground - research/questions/0006-dry-fields-and-their-crops-hatake.drawing.html: the houses between the canal and the dry fields, so the hem keeps off the band where they stand
-///     the belt's ground kept - research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html: a clustered village shelters behind one belt at its windward edge, so its ground reaches past the band to the belt
+///     the belt's ground kept - research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html: a clustered village shelters behind one belt at its windward edge, so its ground reaches past the band to the belt on the band's windward side - behind it where its back faces the wind, between it and the field where a declared fall into the wind backs it to the hill (GUESS, research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html)
 fn settlement_ground(s: &crate::seat::Frame) -> Vec<(f64, f64)> {
     let ((ax, ay), (ox, oy), (lx, ly)) = (s.anchor, s.out, s.along);
     let (lat, deep) = (s.band.0, STANDOFF_FT + 2.0 * s.band.1 + BELT_FAR_FT);

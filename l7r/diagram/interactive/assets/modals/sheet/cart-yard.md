@@ -17,7 +17,7 @@ Guesses:
 - Its width, about 15 to 20 ft: no loading apron's width was found, so it is reckoned as no wider than carts and draft
   animals need to stand and turn.
 
-Depiction: The plan draws the yard as open court ground inside the cart gate, marked only by its label.
+Depiction: The plan draws the yard as open court ground inside the cart gate, its extent marked by a dashed line and its label.
 
 Name: cart yard
 Covers: the loading apron inside the cart gate

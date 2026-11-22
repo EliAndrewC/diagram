@@ -134,7 +134,7 @@ const FAN_OVERHANG: f64 = 0.22;
 /// The back within 45 degrees of the wind.
 ///
 /// Research:
-///     the back to the wind - GUESS: research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html lays the settlement out with its back to the wind but gives no tolerance; within 45 degrees (the deleted `WIND_BACK_MIN_DOT`); it gates the seat's margin, not the fall
+///     the back to the wind - GUESS research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html: the settlement laid out with its back to the wind, the page giving no tolerance; within 45 degrees, carried from the deleted Python `WIND_BACK_MIN_DOT`; it gates the seat's margin, not the fall
 pub const WIND_BACK_MIN_DOT: f64 = std::f64::consts::FRAC_1_SQRT_2;
 
 /// The resolved plan.

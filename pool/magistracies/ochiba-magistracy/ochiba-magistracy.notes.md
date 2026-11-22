@@ -57,6 +57,7 @@
 
 ## Review log
 
+- **2026-11-22 (feature 449 T276)**: an ARMORY drawn, the program's armory made required (knob 4: every seat keeps one): the main gate is one bay, so the armory is the office hall's west end in its back row, 14 x 16.7 ft (42 x 50 px), cut from the clerks' room (now 26 x 16.7 ft, 462-540 px); Pingyao's armory at its great hall's west end (research/questions/0123-the-magistrates-manor-in-a-town-where-it-stands-and-which-way-it-faces-jinya-and-yamen.html), its size and the back row a GUESS (no source gives the depth of Pingyao's).
 - **2026-10-12 (feature 374 wave 135)**: each well draws its lifting gear, rolled by the water's depth, and a roof on the wells that roll one (0196's drawing page; `well_gear` in pack_audit).
 - **2026-10-12 (feature 374 batch 6, waves 132-134)**: the main gate's 8.5 ft is its frontage, its passage 7.5 ft (0093); its posts about 2 ft square, a drawing convention (0092); every building a foot or two clear of the wall's face (0092).
 - **2026-10-12 (feature 374 waves 130-131, building-review round 1 of batch 5)**: the Inari hall at the hall-shrine ceiling, 30 x 26 ft (it was 37 x 31), moved into the inner court's north-east corner beside one tree; the workshop narrowed with it, below the tree; the garden's arm along the hall's west face gone, the ground below the workshop the inner garden's east end; the rear yard carried east to the hall's door (N1); the second kami's roll recorded (E2); the notes brought to the drawing (E1).

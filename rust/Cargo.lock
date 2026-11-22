@@ -1031,6 +1031,7 @@ dependencies = [
  "l7r_gate_core",
  "l7r_gate_owed",
  "l7r_gate_pool",
+ "l7r_gate_tree",
  "l7r_shared",
  "serde",
  "serde_json",

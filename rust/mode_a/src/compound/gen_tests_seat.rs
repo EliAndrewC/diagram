@@ -552,6 +552,74 @@ fn the_county_example_keeps_an_armory_and_its_granary_on_the_offices_side() {
     assert!(behind, "{why}");
 }
 
+/// The county example's long-house doors each front open court (449 T280, T288; building-review 2026-11-22 E1: T274's recentred hall
+/// pushed the tax archive to 7.5 ft off the senior retainers' long-house, so the karo's door and his neighbor's faced its blank wall down a
+/// dead-end lane): no other building stands within `APPROACH` (12 ft) before any of its doors, across the door's width.
+///
+/// Research: a dwelling door's frontage - GUESS: 12 ft, the gate approach's held depth reused (`layout::APPROACH`); no page states the
+/// ground before a compound rowhouse's doors (449 T280's research pass, 2026-11-22: the sources say only that the rows along a compound's
+/// edge were entered from inside it)
+#[test]
+fn the_county_examples_long_house_doors_front_open_court() {
+    let tree = tree();
+    let spec = tree.join(
+        "pool/magistracies/county-magistracy-example/county-magistracy-example.compound.json",
+    );
+    let (p, bands) = super::cli::load(&tree, &spec.to_string_lossy()).unwrap();
+    let (l, _) = super::generate(&p, &bands).unwrap();
+    let i = p
+        .buildings
+        .iter()
+        .position(|b| b.kind == "retainers' quarters")
+        .unwrap();
+    let depth = super::layout::APPROACH;
+    let fronts: Vec<super::spec::Bx> = l
+        .doors
+        .iter()
+        .filter(|d| d.b == i)
+        .map(|d| frontage(d.step, d.face, depth))
+        .collect();
+    let blocked: Vec<(&str, super::spec::Bx)> = fronts
+        .iter()
+        .flat_map(|&f| l.seats.iter().enumerate().map(move |(j, at)| (j, at, f)))
+        .filter_map(|(j, at, f)| {
+            let hit = j != i && at.is_some_and(|a| super::grid::overlaps(a, f));
+            hit.then_some((p.buildings[j].name.as_str(), f))
+        })
+        .collect();
+    assert!(!fronts.is_empty(), "the retainers' quarters have no door");
+    assert_eq!(blocked, Vec::new());
+}
+
+/// The ground a door's step fronts, `depth` deep, on the side its face opens to (the long-house test's frontage).
+fn frontage(s: super::spec::Bx, face: Face, depth: f64) -> super::spec::Bx {
+    match face {
+        Face::N => (s.0, s.3 - depth, s.2, s.3),
+        Face::S => (s.0, s.1, s.2, s.1 + depth),
+        Face::W => (s.2 - depth, s.1, s.2, s.3),
+        Face::E => (s.0, s.1, s.0 + depth, s.3),
+    }
+}
+
+/// Each face's frontage keeps the step's span along the wall and runs `depth` across it.
+#[test]
+fn a_doors_frontage_runs_depth_from_its_step_on_each_face() {
+    let s = (10.0, 20.0, 14.0, 30.0);
+    let got: Vec<super::spec::Bx> = [Face::N, Face::S, Face::W, Face::E]
+        .iter()
+        .map(|&f| frontage(s, f, 2.0))
+        .collect();
+    assert_eq!(
+        got,
+        [
+            (10.0, 28.0, 14.0, 30.0),
+            (10.0, 20.0, 14.0, 22.0),
+            (12.0, 20.0, 14.0, 30.0),
+            (10.0, 20.0, 12.0, 30.0)
+        ]
+    );
+}
+
 /// No court of a generated sheet leaves a corner bare (449 T274, building-review 2026-11-22 E2: the county example's barracks slid north
 /// and left a 31 x 31 ft corner of the office court holding nothing): each court's four corners, a perimeter band's square
 /// (`PERIMETER_FT`) inside its walls, each touch a building or a named ground.

@@ -1,0 +1,6 @@
+{
+  "utc": "20261122T160253Z",
+  "guard": "pair-hooks",
+  "what": "review prerequisites",
+  "reason": "REVIEW_PREREQ_OK: the figures are recorded at m:t288-county-karo-door in specs/449-rust-codebase/measurements.json, the ranges as two-element arrays the prereq's figure match does not read; E1 verified there, the other findings accepted"
+}

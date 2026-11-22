@@ -19459,5 +19459,18 @@
    "stippled",
    "stippling"
   ]
+ },
+ "horse-viewing room": {
+  "def": "A room in the gate range of a Japanese lord's seat, its name meaning a place for viewing horses.",
+  "variants": [
+   "horse-viewing room"
+  ]
+ },
+ "abolition of the domains": {
+  "def": "The Meiji government's replacement of the daimyo domains with prefectures in 1871, which ended each domain's government and its lord's rule.",
+  "variants": [
+   "abolition of the domains",
+   "abolition of domains"
+  ]
  }
 }

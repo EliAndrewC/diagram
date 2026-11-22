@@ -104,13 +104,13 @@ pub use crate::counts::tally;
 /// Research:
 ///     a walled-in head gives way - research/questions/0081-village-lanes.drawing.html: lanes keep to dry ground, so a margin whose seat has no dry way out of the frame is dropped and the next in the ranking taken
 ///     the fords before the seat - research/questions/0035-villages-beside-their-stream-one-bank-or-both.drawing.html: a way crosses the brook only at a crossing place, so the seat's way out is asked of the brook gapped at them
-///     the back to the hill where the wind cannot be backed - GUESS research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: where a map declares a fall toward the wind, no margin is both high and windward, so the cluster takes the high, dry one, its back to the hill and off the wind - the margins ranked again with the high side as the wind's, each seat recorded off the wind
+///     the back to the hill where the wind cannot be backed - GUESS research/questions/0031-clustered-and-scattered-villages-shuson-sanson.drawing.html: where a map declares a fall toward the wind, no margin is both high and windward, so the cluster takes the high, dry one, its back to the hill and off the wind - the margins ranked again with the high side as the wind's, each seat recorded off the wind; its belt still on the windward side, between the houses and the paddy (`margins::ranked`)
 pub fn seat(inp: &SeatIn) -> Result<Seated, SeatRefused> {
     let mut counts = HashMap::new();
     let (spacing, half, bend) = inp.ford;
     let fords = fords::fords(&inp.brook, spacing, half, bend, &mut counts);
     let stream_segs = fords::gapped(&inp.streams, &fords, half, &mut counts);
-    let (mut ranked, stopped) = margins::ranked(inp, &mut counts);
+    let (mut ranked, stopped) = margins::ranked(inp, None, &mut counts);
     // THE BACK TO THE HILL WHERE NO MARGIN CAN TURN IT TO THE WIND (feature 444 T27, Sawada's declared fall of 225 degrees into
     // its northwest wind; GUESS, recorded on 0031's drawing page by 449 T261): the margins ranked again as if the wind came
     // down from the high side, each seat recorded off the wind
@@ -121,7 +121,8 @@ pub fn seat(inp: &SeatIn) -> Result<Seated, SeatRefused> {
             wind: (-inp.fall.0, -inp.fall.1),
             ..inp.clone()
         };
-        ranked = margins::ranked(&uphill, &mut counts)
+        // the belt still against the map's own wind, on the windward side (449 T277)
+        ranked = margins::ranked(&uphill, Some(inp.wind), &mut counts)
             .0
             .into_iter()
             .map(|f| Frame { offwind: true, ..f })

@@ -16,7 +16,7 @@ Guesses:
 - How deep a stall is, and so its area: only a stall's width is recorded.
 - That the stable stays smaller than the barracks: no source says where a stable ranked among an office's buildings.
 
-Depiction: The plan draws the stable as a warrior's small stable, three bays long: three stalls one ken (about 6 ft) wide
+Depiction: The plan draws the stable as a warrior's small stable, a few bays long: a row of stalls one ken (about 6 ft) wide
 at the back, the earth-floored passage before them running its length with the door at its end, and the grooms' room
 across the passage from them. It stands at the edge of the
 outer court, against the compound wall. Each stall is one bay wide, as a warrior's stall was; the map takes a bay as one ken by convention.

@@ -1,0 +1,6 @@
+{
+  "utc": "20261122T160512Z",
+  "guard": "pair-hooks",
+  "what": "review prerequisites",
+  "reason": "REVIEW_PREREQ_OK: the figures are recorded at m:t276-armory-rects in specs/449-rust-codebase/measurements.json (ochiba_armory_ft [14, 16.7], ochiba_clerks_room_ft 26), which the prereq's figure match does not read; the last round's E1 filed as 449 T297, its confirmations accepted"
+}

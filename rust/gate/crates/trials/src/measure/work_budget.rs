@@ -26,6 +26,24 @@ const FORM_SIZES: [i64; 2] = [10, 20];
 /// The driver's two counting runs: the reference hamlet, and the polder form.
 const RUNS: [&str; 2] = ["--budget", "--budget polder"];
 
+/// What the hamlet driver's counts read: its crate and the workspace's manifests - the push's ratchet keys its kept counts on it
+/// (`work_budget_review`), and a run file carries its key, `meta.code`, so the audit bundle reads only counts of the tree it judges
+/// (feature 449 T259).
+///
+/// Research: plumbing - NONE: what the counting run builds from
+pub const HAMLET_READS: [&str; 3] = ["rust/phases/", "rust/Cargo.toml", "rust/Cargo.lock"];
+
+/// The key of the code the counting run counts: the working tree's files under [`HAMLET_READS`], a `.py` left out (no counting run
+/// reads one) - the key the ratchet keeps its counts by, so a run file and a kept count of the same code agree (feature 449 T259).
+///
+/// # Errors
+/// Where git cannot list or hash the files: the error says which.
+pub fn code_key(root: &Path) -> Result<String, String> {
+    l7r_gate_tree::delta::worktree_key(root, &HAMLET_READS, &|p| {
+        Path::new(p).extension().is_none_or(|e| e != "py")
+    })
+}
+
 /// A stage's (mean operations, rolled seeds) at each size.
 type PerSize = BTreeMap<i64, (i64, i64)>;
 /// Each stage in the order the driver first named it.
@@ -280,7 +298,7 @@ fn sorted(v: &Value) -> Value {
 /// The run's JSON in the deleted roll's shape: `work_budget_view.moved` reads `summary.stages.<stage>.per.<size>.ops`, the audit bundle
 /// `rows[].stages.<stage>.ops` (each counter).
 #[must_use]
-pub fn run_file(counts: &Counts, rolls: &Rolls, when: &str, head: &str) -> Value {
+pub fn run_file(counts: &Counts, rolls: &Rolls, when: &str, head: &str, code: &str) -> Value {
     let stage_of = |per: &PerSize| {
         let sizes: Map<String, Value> = per
             .iter()
@@ -297,7 +315,7 @@ pub fn run_file(counts: &Counts, rolls: &Rolls, when: &str, head: &str) -> Value
         .map(|((seed, size), st)| json!({"seed": seed, "households": size, "stages": st}))
         .collect();
     sorted(
-        &json!({"meta": {"when": when, "engine": head, "driver": "rust"}, "rows": rows, "summary": {"stages": stages}}),
+        &json!({"meta": {"when": when, "engine": head, "code": code, "driver": "rust"}, "rows": rows, "summary": {"stages": stages}}),
     )
 }
 
@@ -315,6 +333,7 @@ fn write(
     form: &[String],
     counts: &Counts,
     rolls: &Rolls,
+    code: &str,
 ) -> Result<String, String> {
     let head = crate::cohort::git(root, &["rev-parse", "--short", "HEAD"])
         .1
@@ -335,7 +354,7 @@ fn write(
     let run = format!("dev/work-budget/{stamp}-rust-{head}.json");
     std::fs::write(
         root.join(&run),
-        pretty(&run_file(counts, rolls, &when, &head)),
+        pretty(&run_file(counts, rolls, &when, &head, code)),
     )
     .map_err(text_err)?;
     Ok(format!(
@@ -349,6 +368,14 @@ fn run(args: &[String], root: &Path) -> Result<String, String> {
         .ok()
         .and_then(|t| serde_json::from_str(&t).ok())
         .ok_or_else(|| format!("work-budget: {} does not read", file.display()))?;
+    // THE KEY BEFORE THE COUNT (feature 449 T259): taken before the driver builds, so an edit made while it counts leaves the run
+    // keyed on the code before the edit, which the tree no longer is, and the audit refuses it; a key taken after would pass counts
+    // of the code before the edit as the edit's
+    let code = if args.iter().any(|a| a == "--write") {
+        code_key(root)?
+    } else {
+        String::new()
+    };
     let mut stdout = String::new();
     for args in RUNS {
         let done = Command::new(root.join("scripts/gates/l7r-gate.sh"))
@@ -385,7 +412,7 @@ fn run(args: &[String], root: &Path) -> Result<String, String> {
         );
     }
     if args.iter().any(|a| a == "--write") {
-        out += &write(root, &lines, &form, &counts, &rolls)?;
+        out += &write(root, &lines, &form, &counts, &rolls, &code)?;
     }
     Ok(out)
 }

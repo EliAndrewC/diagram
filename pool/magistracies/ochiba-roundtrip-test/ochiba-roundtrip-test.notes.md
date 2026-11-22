@@ -92,3 +92,7 @@ The shrine's tree stands in the ground held past the shrine's south end as the s
 water depth, each well's gear and roof rolled by the docs' formula (`random.Random(zlib.crc32(b"<sheet>:<knob>"))`), the wells numbered
 kitchen, garden, stables: water depth deep; well gear 1 pulley frame, well roof 1 roof; well gear 2 sweep, well roof 2 roof; well gear 3
 sweep, well roof 3 open.
+
+2026-11-22 (feature 449 T276): an armory room in the office hall's west end, its back row (14 x 20 ft, 0123's Pingyao; its size and the back row a GUESS),
+the program's armory made required (knob 4: every seat keeps one); the hall's 120 ft unchanged, as the hand sheet carves its armory from the
+clerks' room's end.
