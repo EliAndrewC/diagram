@@ -744,6 +744,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-22",
    "declared": "spec-fidelity"
+  },
+  "### T142 (the tool's incremental build linked a stale codegen unit, so every gate command failed until a source of that crate moved: rust-lld `undefined hidden symbol: anon.0482a95c....1.llvm.17705557342783902695` referenced from `l7r_gate_task-faf2a19073b9305a.ads6op1mfn3gc3gvm7k1udw55.rcgu.o`, 8 failed builds 2026-11-22 04:23-04:47Z, measured 2026-11-22 (session transcripts, `/tmp/t142/scan.py`))": {
+   "sha256": "dd2a3f12d86e4436877bc2c56180b9ef8009fd623aa74ee1f05bb9071f8aa8b3",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-22",
+   "declared": "spec-fidelity"
+  },
+  "### T142 Approach (checklist part A)": {
+   "sha256": "f94f65790a14ad32abff3ad24c8dbce1f2c168c1287facbb477add4c299a8a35",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-22",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -12395,6 +12407,59 @@
      "why": "This is a guard correctness fix. The cost measurement shows no rise (0.06% fewer instructions on ux)."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-22",
+   "blocks": [
+    "### T142 (the tool's incremental build linked a stale codegen unit, so every gate command failed until a source of that crate moved: rust-lld `undefined hidden symbol: anon.0482a95c....1.llvm.17705557342783902695` referenced from `l7r_gate_task-faf2a19073b9305a.ads6op1mfn3gc3gvm7k1udw55.rcgu.o`, 8 failed builds 2026-11-22 04:23-04:47Z, measured 2026-11-22 (session transcripts, `/tmp/t142/scan.py`))",
+    "### T142 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T142-heal",
+     "summary": "On a build error holding `undefined hidden symbol`, drop only the incremental session holding each `.rcgu.o` unit the linker names and that crate's `.fingerprint/<crate>-<meta>`, under cargo's own lock, print what was dropped, and rebuild once incrementally",
+     "class": "within",
+     "why": "This is the task line's own remedy, 'dropping that crate's incremental session', as the block quotes it. The fingerprint drop is what makes the heal work: 449 T244 cleared sessions but not fingerprints, cargo kept the broken rlib as fresh, and the scratch copy showed a stale rlib behind an out-of-date fingerprint recompiled and linked clean (e2e.log, 8.3 s). Its reach is no wider than the directories the linker names."
+    },
+    {
+     "id": "T142-fallback",
+     "summary": "A link error that names no unit rebuilds once with CARGO_INCREMENTAL=0; a second failure is refused as before, with the cargo text",
+     "class": "within",
+     "why": "A bounded fallback inside the same goal: a gate command that failed on stale link state runs on a freshly linked tool. It adds no behavior beyond one retry and keeps the existing refusal afterwards. In this path the stale incremental set is left as it is (the block's own finding is that a CARGO_INCREMENTAL=0 set is separate), so goal 1's 'next incremental build links with no retry' is guaranteed only for the named-unit path. That is a limit of a fallback for unrecognised failures and no narrowing of the task."
+    },
+    {
+     "id": "T142-keep-T41",
+     "summary": "An uncompiling file is still refused with no retry (T41 kept); only the link-error text triggers a retry",
+     "class": "within",
+     "why": "Keeps existing, separately approved behavior that T142's line does not ask to change; the detection is limited to rust-lld's own spelling."
+    },
+    {
+     "id": "T142-keep-incremental",
+     "summary": "Always-non-incremental and `lto = \"off\"` rejected: T95's incremental tool profile and default ThinLTO kept",
+     "class": "within",
+     "why": "Leaves T95's measured, GM-asked profile as it is. The alternative was measured to cost 83-116 s per rebuild of the core crates against about 5 s (time.sh, measured 2026-11-22), which works against the feature's performance purpose. Keeping an approved profile is no narrowing."
+    },
+    {
+     "id": "T142-output",
+     "summary": "Show the rust-lld lines and a line naming what was dropped, not the full link command line",
+     "class": "within",
+     "why": "Presentation of the refusal and the heal. It serves the defect statement in Approach item 12, where a wall of linker text is the symptom."
+    },
+    {
+     "id": "T142-scope-files",
+     "summary": "Change only scripts/gates/l7r-gate.sh, its hook test and this section; the real cache is never removed by hand; red-first test (FR-012)",
+     "class": "within",
+     "why": "Matches T142's line and FR-012's red-first requirement (13 FAIL lines on HEAD's launcher, then green, measured 2026-11-22)."
+    },
+    {
+     "id": "T142-found-and-left",
+     "summary": "The same stale-link exposure in scripts/hooks/l7r-guard.sh (l7r_guard, same incremental tool profile, l7r_shared units that failed l7r-rust twice) and in make rust-test's dev-profile builds is deferred to T146, which lands before T98",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The fix stops at the gate launcher although the same defect class is known in two other builds, so this is a narrowing, and it is a defect left rather than a difference. It is legitimate because the defect is not left: it is filed as T146 with a stated order (before T98, whose occupancy measurement a stalled build would skew). It also states why it is not fixed here (T142's line is the gate launcher's failure, and the guard fails open to its last good binary rather than refusing every gate command). FR-009 asks for exactly those three things: a reason, a filed id and an order. Nothing the GM asked is excepted: the request does not name this defect, and the GM's 2026-11-22 words favour filing small defects and bundling them over widening one task. One caution for T146: these two instances came from a scan of transcripts for link failures, which finds builds that FAILED, not every build exposed. T146's census should be drawn from the launchers that build with CARGO_INCREMENTAL or the tool or dev profile, for example a grep over scripts/ and the Makefiles, and not from this list."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -19187,6 +19252,57 @@
      "summary": "The task is classed as not performance work.",
      "class": "within",
      "why": "This is a guard correctness fix. The cost measurement shows no rise (0.06% fewer instructions on ux)."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T142": {
+   "section_sha256": "5ece35bcf6038c42f98c41467594bedafe80b374222892c3f8707f03baeb3a2f",
+   "reviewed": "2026-11-22",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T142-heal",
+     "summary": "On a build error holding `undefined hidden symbol`, drop only the incremental session holding each `.rcgu.o` unit the linker names and that crate's `.fingerprint/<crate>-<meta>`, under cargo's own lock, print what was dropped, and rebuild once incrementally",
+     "class": "within",
+     "why": "This is the task line's own remedy, 'dropping that crate's incremental session', as the block quotes it. The fingerprint drop is what makes the heal work: 449 T244 cleared sessions but not fingerprints, cargo kept the broken rlib as fresh, and the scratch copy showed a stale rlib behind an out-of-date fingerprint recompiled and linked clean (e2e.log, 8.3 s). Its reach is no wider than the directories the linker names."
+    },
+    {
+     "id": "T142-fallback",
+     "summary": "A link error that names no unit rebuilds once with CARGO_INCREMENTAL=0; a second failure is refused as before, with the cargo text",
+     "class": "within",
+     "why": "A bounded fallback inside the same goal: a gate command that failed on stale link state runs on a freshly linked tool. It adds no behavior beyond one retry and keeps the existing refusal afterwards. In this path the stale incremental set is left as it is (the block's own finding is that a CARGO_INCREMENTAL=0 set is separate), so goal 1's 'next incremental build links with no retry' is guaranteed only for the named-unit path. That is a limit of a fallback for unrecognised failures and no narrowing of the task."
+    },
+    {
+     "id": "T142-keep-T41",
+     "summary": "An uncompiling file is still refused with no retry (T41 kept); only the link-error text triggers a retry",
+     "class": "within",
+     "why": "Keeps existing, separately approved behavior that T142's line does not ask to change; the detection is limited to rust-lld's own spelling."
+    },
+    {
+     "id": "T142-keep-incremental",
+     "summary": "Always-non-incremental and `lto = \"off\"` rejected: T95's incremental tool profile and default ThinLTO kept",
+     "class": "within",
+     "why": "Leaves T95's measured, GM-asked profile as it is. The alternative was measured to cost 83-116 s per rebuild of the core crates against about 5 s (time.sh, measured 2026-11-22), which works against the feature's performance purpose. Keeping an approved profile is no narrowing."
+    },
+    {
+     "id": "T142-output",
+     "summary": "Show the rust-lld lines and a line naming what was dropped, not the full link command line",
+     "class": "within",
+     "why": "Presentation of the refusal and the heal. It serves the defect statement in Approach item 12, where a wall of linker text is the symptom."
+    },
+    {
+     "id": "T142-scope-files",
+     "summary": "Change only scripts/gates/l7r-gate.sh, its hook test and this section; the real cache is never removed by hand; red-first test (FR-012)",
+     "class": "within",
+     "why": "Matches T142's line and FR-012's red-first requirement (13 FAIL lines on HEAD's launcher, then green, measured 2026-11-22)."
+    },
+    {
+     "id": "T142-found-and-left",
+     "summary": "The same stale-link exposure in scripts/hooks/l7r-guard.sh (l7r_guard, same incremental tool profile, l7r_shared units that failed l7r-rust twice) and in make rust-test's dev-profile builds is deferred to T146, which lands before T98",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The fix stops at the gate launcher although the same defect class is known in two other builds, so this is a narrowing, and it is a defect left rather than a difference. It is legitimate because the defect is not left: it is filed as T146 with a stated order (before T98, whose occupancy measurement a stalled build would skew). It also states why it is not fixed here (T142's line is the gate launcher's failure, and the guard fails open to its last good binary rather than refusing every gate command). FR-009 asks for exactly those three things: a reason, a filed id and an order. Nothing the GM asked is excepted: the request does not name this defect, and the GM's 2026-11-22 words favour filing small defects and bundling them over widening one task. One caution for T146: these two instances came from a scan of transcripts for link failures, which finds builds that FAILED, not every build exposed. T146's census should be drawn from the launchers that build with CARGO_INCREMENTAL or the tool or dev profile, for example a grep over scripts/ and the Makefiles, and not from this list."
     }
    ],
    "verdict": "CLEAR"

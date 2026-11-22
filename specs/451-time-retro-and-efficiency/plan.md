@@ -1687,6 +1687,93 @@ its own files; not engine speed, so no performance-checklist answers.
 
 **Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
 
+### T142 (the tool's incremental build linked a stale codegen unit, so every gate command failed until a source of that crate moved: rust-lld `undefined hidden symbol: anon.0482a95c....1.llvm.17705557342783902695` referenced from `l7r_gate_task-faf2a19073b9305a.ads6op1mfn3gc3gvm7k1udw55.rcgu.o`, 8 failed builds 2026-11-22 04:23-04:47Z, measured 2026-11-22 (session transcripts, `/tmp/t142/scan.py`))
+
+- **Approach**: measured first, then the launcher heals the one crate the linker names:
+  - HOW OFTEN, measured 2026-11-22 (`/tmp/t142/scan.py` and `scan2.py` over `~/.claude/projects/**/*.jsonl`, tool results holding a
+    `rust-lld: error: undefined hidden symbol`, deduplicated by timestamp and symbol): the tool profile failed to link 10 times in one
+    night - `l7r-rust` twice (02:47Z and 04:20Z, `l7r_shared`'s units 1lmunt73iiew8o59oo8g4kasl and 2n3yaxv6qj1cgib5jtzvnsyqu) and
+    `l7r-gate` about 8 times (04:23-04:47Z, the one unit above, across the main session and five builders); before that only a test
+    build, `l7r_gate_archive`'s lib test on 2026-11-19 01:18-01:25Z (four builds, the dev profile, also incremental). The guard log
+    records no build (0 hits for `not built|build failed`, its newest 3,000 entries, measured 2026-11-22 (grep over `~/.claude/guard-log`)) and the launcher kept no build log; the guard's
+    `build.log` holds only its last build (00:17, a 45 s timeout, measured 2026-11-22 (reading `build.log`)).
+  - WHICH SESSION, measured 2026-11-22 (`llvm-nm -A` over every workspace rlib in `tool/deps`, `/tmp/t142/rlibcheck.sh`: an
+    undefined `.llvm.<n>` symbol no member of the same rlib defines): one rlib of 148 crates' sets, `libl7r_gate_task-faf2a19073b9305a`,
+    still broken at 00:15 local; its unit `ads6op1mfn3gc3gvm7k1udw55.o` is in session `incremental/l7r_gate_task-0y4ovoj4hibk7`
+    (of the crate's 5, one per build variant), the object dated 2026-11-21 12:01 and reused into the rebuilds of 23:53, 00:14 and
+    00:15. The CARGO_INCREMENTAL=0 build that "cleared it" made a separate set (`l7r_gate_task-295557feace9901b`, its fingerprint's
+    profile hash 7235404091355536516 against 5813646903328134276), so the bad incremental rlib kept a fresh fingerprint and came back
+    at the next incremental build. The cause is rustc 1.87's incremental release with local ThinLTO reusing a unit's post-LTO object
+    while the unit defining a symbol it imports is rebuilt under a new `.llvm.` suffix; nothing in this tree's code.
+  - CONCURRENCY ruled out, measured 2026-11-22 (`flock -n tool/.cargo-lock` while a scratch build ran: rc 1, held): cargo holds that
+    lock for each build, so two clones' landings, a builder and the main session serialize on one target dir; the guard's `timeout 45`
+    kills the build's whole process group, and rustc finalizes an incremental session only on success.
+  - REPRODUCED in a scratch copy of the cache (`/tmp/t142/target`, copied 2026-11-22 00:14, the real cache untouched): the copy's
+    `faf2a19073b9305a` rlib held the same undefined symbol; a rebuild after a neighbor's `l7r_shared` edit recompiled the crate and
+    cleared it (3 m 42 s, the whole chain, load 48, measured 2026-11-22 (`time cargo build`, `/tmp/t142/b1.log`)); the planted old rlib could not be relinked (`crate required to be available in
+    rlib format`: its SVH no longer matches), so the retry is pinned on a stub cargo, which prints rust-lld's text.
+  - THE FIX (`scripts/gates/l7r-gate.sh`): a build whose error holds `undefined hidden symbol` takes each `<crate>-<meta>.<unit>.rcgu.o`
+    the linker names, drops the incremental session holding that unit (`incremental/<crate>-*/s-*/<unit>.o`'s crate directory) and
+    `.fingerprint/<crate>-<meta>`, under cargo's own `tool/.cargo-lock`, prints what it dropped, and rebuilds once incrementally; a
+    link error that names no unit rebuilds once with CARGO_INCREMENTAL=0; a second failure is refused as before with the cargo text.
+    The rust-lld lines are shown, not the thousands-of-words link line. The drop is the task line's own "dropping that crate's
+    incremental session": only the directories the linker names, never `incremental/` or the target wholesale.
+  - REBUILD TIMES, measured 2026-11-22 (`/tmp/t142/time.sh`: a scratch copy of `rust/` at `/tmp/t142/clone` built into
+    `/tmp/t142/target2`, one real function appended to the crate, the launcher timed, load 15-22): the task crate 7.1-8.8 s through
+    HEAD's launcher, 6.2-8.2 s through T142's (unchanged: the new code runs only on a failed link); `l7r_gate_core` 5.3-8.3 s and
+    4.5-4.9 s, measured 2026-11-22 (`/tmp/t142/time.sh`); the heal itself, dropping `l7r_gate_task`'s session and fingerprint and rebuilding, 4.8 s (the real cache's copy, load
+    32), measured 2026-11-22 (`time cargo build`, `/tmp/t142/b3.log`). Always non-incremental, rejected on this measurement (T95's own call kept), measured 2026-11-22 (`/tmp/t142/time.sh` with CARGO_INCREMENTAL=0): the task crate, a leaf, 6.7-8.1 s, about the
+    same, but `l7r_gate_core` 83.0-106.8 s and `l7r_shared` 98.2-115.9 s against 4.9 s and 4.3 s incremental, and the first
+    CARGO_INCREMENTAL=0 build of a set 107.8 s. A test-file edit costs the tool build nothing (0.1 s, measured 2026-11-22 (`/tmp/t142/time.sh` on `set_down/tests.rs`): `#[cfg(test)]` modules are
+    not in its dep-info), so "only test files changed" was the neighbors' non-test edits recompiling the crate.
+  - WHY CLEARING THE CACHES DID NOT HELP 449 T244 (its builder's note, 449 T245 folded here), measured 2026-11-22 (its transcript's
+    commands, 04:20-04:21Z): it removed `incremental/l7r_shared-*`, `l7r_rust-*`, `l7r_gate_core-*` and the rest, but not their
+    fingerprints, so cargo kept the broken rlib as fresh, never recompiled it, and relinked the same undefined symbol; only a
+    separate CARGO_INCREMENTAL=0 set linked. The stale state is the rlib behind a fresh fingerprint, not the session alone: in the
+    scratch copy the broken `faf2a19073b9305a` rlib, restored with its stale session and an out-of-date fingerprint, was recompiled
+    incrementally and linked clean (8.3 s, `rlibcheck.sh` then empty), measured 2026-11-22 (`/tmp/t142/e2e.log`). No codegen or LTO
+    flag differs between builds of one crate: the two task-crate sets' fingerprints differ only in their profile hash (incremental
+    on or off), with the same rustflags, features and target, measured 2026-11-22 (`.fingerprint/*/lib-l7r_gate_task.json`); the
+    profile's `lto` default (local ThinLTO across 256 units) is what makes the `.llvm.` names, and `lto = "off"` stays rejected by
+    T95's measurement (15-40% slower to run, observed 2026-11-11, method: scratchpad/t95/bench.py, as `rust/Cargo.toml` records).
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+| a stale incremental unit dropped and the tool rebuilt once, saying so | n/a - no map | n/a | none | n/a |
+
+### T142 Approach (checklist part A)
+
+1. **The goal, in the world.** No map changes. A gate command after a link that fails on stale incremental state runs on a freshly
+   linked tool a few seconds later, the line saying what was dropped, and the next incremental build links with no retry.
+2. **The constraints.** T142's line; FR-012 (red first); T95's incremental tool profile kept (the GM's ask); T41's refusal of an
+   uncompiling file kept, with no retry; the real build cache never removed by hand; T142's files only - `scripts/gates/l7r-gate.sh`,
+   `tests/hooks/test-l7r-gate.1.sh`, this section; nothing committed or pushed.
+3. **Where each comes from.** O: the transcripts' failures, the rlib scan, the lock probe and the timings (Approach, each measured
+   2026-11-22 by the script named there); R: T142's line; the match on `undefined hidden symbol` and the `.rcgu.o` name are
+   CONVENTION, rust-lld's and rustc's own spellings.
+4. **Do they describe the world here?** The rlib scan ran over the real cache's every workspace rlib, and the failing unit was
+   found in the real cache's session, measured 2026-11-22 (`/tmp/t142/rlibcheck.sh`, `find incremental -name <unit>*`).
+5. **The order.** Any time; no other task's files.
+6. **The exits.** Green: the suite red on HEAD's launcher and green on T142's, the rebuild times unchanged on the normal path. Red:
+   what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None: one detection, the linker's own text, measured on the night's failures.
+8. **The budget.** One landing.
+9. **Done, measured.** Red: HEAD's launcher with T142's cases, 13 FAIL lines (a stale unit not dropped, no retry, no line), measured
+   2026-11-22 (`bash tests/hooks/test-l7r-gate.1.sh`); green: T142's launcher, shard 1 all passed, measured 2026-11-22 (same command).
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** A builder or the GM sees a gate command that failed with a wall of linker text now run, with one line naming
+   the crate's session it dropped; a wrong outcome (every make target that runs the gate refused on correct code), so a defect.
+
+**Found and left?**
+- The other builds of the same profiles keep the exposure: `scripts/hooks/l7r-guard.sh` builds `l7r_guard` in the same incremental tool
+  profile and links `l7r_shared`, whose units failed `l7r-rust` twice on 2026-11-22, and `make rust-test`'s dev-profile builds failed
+  the same way on 2026-11-19 (`l7r_gate_archive`'s lib test), measured 2026-11-22 (the transcript scan above). Not fixed here: T142's
+  ground rules keep it to the gate launcher, and the guard's build fails open to its last good binary. Filed as T146; lands before T98, whose builder-occupancy measurement a stalled tool build would skew.
+
+**Performance work?** No - a correctness task; its cost measured above.
+
+
 ### T143 (<why: the finding or measurement that files it>)
 
 - **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
@@ -1749,6 +1836,33 @@ its own files; not engine speed, so no performance-checklist answers.
 |---|---|---|---|---|
 
 ### T145 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+
+### T146 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T146 Approach (checklist part A)
 
 1. **The goal, in the world.** <the place as it should be>
 2. **The constraints.** <the FRs, decisions and pages it holds to>
