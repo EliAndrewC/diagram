@@ -9,6 +9,9 @@
 # had changed was under scripts/, which the stamp did not cover. A guard-script change must now
 # carry a green `make hooks-test` stamp exactly as engine Python must carry a green `make done`.
 set -uo pipefail
+# the suite's own builds start incremental: a session that exported CARGO_INCREMENTAL=0 (the work-around before 451 T142)
+# would otherwise hand it to every stub, and the stale-unit case's "one retry, incremental" read the session's value
+unset CARGO_INCREMENTAL
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 STAMP="$HERE/../../scripts/gates/l7r-gate.sh"  # the Rust gate; its ids of .py files come from codeid.py
 TMP=$(mktemp -d); trap 'rm -rf "$TMP"' EXIT
