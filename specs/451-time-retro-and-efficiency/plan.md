@@ -1195,31 +1195,249 @@ its own files; not engine speed, so no performance-checklist answers.
 <!-- plan-archive: T114 to T114 moved to plan-done.md, 2026-11-21 (feature 375 FR-044) -->
 <!-- plan-archive: T110 to T92 moved to plan-done.md, 2026-11-22 (feature 375 FR-044) -->
 <!-- plan-archive: T110 to T110 moved to plan-done.md, 2026-11-22 (feature 375 FR-044) -->
-### T115 (<why: the finding or measurement that files it>)
+### T115 (fixed sleeps in four hook suites waited 0.3 to 1.0 s for an event the next check reads, and `test-finished-run-hooks.sh`'s `settle` ran its check unready at a 1 or 2 s deadline, so a slow host could fail good work as the stall-watchdog suite's fixed 1 s did at T92's landing, observed 2026-11-21 (T111's sweep, as T115's line records it))
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: each fixed sleep before a check that needs an event becomes a wait for that event to a deadline, in case 3's form
+  (`for _ in $(seq "$WAIT_TRIES"); do <the state the check reads> && break; sleep 0.1; done`), and the check after it is unchanged, so a
+  state that never comes still fails it. One knob per suite, `WAIT_TRIES=300` (30 s) and `SETTLE_S=30` in the finished-run suite, a GUESS
+  only a red run pays, labeled at each, not derived from the shapes waited on, which measured a median of 0.008 and 0.012 s and at
+  most 0.071 s, measured 2026-11-21 (T111's `/tmp/t111-measure/shapes.sh`, n=200, a load of 16 to 17).
+  - THE FIX, `test-clone-sync-hooks.sh` (HEAD's 186, 273, 287) and `test-land-tooling.sh` (184), where HEAD's text slept 0.3 s
+    (observed 2026-11-22, method: `git show HEAD:tests/hooks/<suite>`): an `exec -a make` fixture is waited for until its
+    `/proc/<pid>/cmdline` argv0 reads `make` (`argv_make` in the clone-sync suite, the same loop inline in land-tooling's). Before its
+    exec the process is a copy of the suite, which the gate's `own-make` (argv0 and cwd) and the gate lock's `running_gate` (argv0 and a
+    word `done`) both read as no make, observed 2026-11-22, method: reading `rust/gate/crates/tree/src/lock.rs`, and the `cd` runs
+    before the `exec`, so an argv0 of `make` means its cwd is set. Land-tooling's case also ends the `sleep 120` child (`pkill -P`, as
+    clone-sync's case does), where a kill of the shell alone left it running for two minutes, observed 2026-11-22, method: reading the
+    case beside clone-sync's.
+  - THE FIX, `test-idle-tests-hooks.sh`, where HEAD's text slept 0.6, 0.5 and 1.0 s at 76, 83 and 202 (observed 2026-11-22, method:
+    `git show HEAD:tests/hooks/test-idle-tests-hooks.sh`): 76 waits until the arming file is gone and the timer's `/proc` entry with it,
+    the check's own two conditions, 83 until the arming file is gone, the timer's last step after its record (`run` in
+    `rust/guard/src/guards/idle_tests_hooks.rs`), and 202 until the gone session's timer has exited, its pid read from the arming file
+    right after the stop.
+  - A DEFECT FOUND AND FIXED HERE, 202's check: it read the timer's pid as `jq -r .timer_pid \"$CA/.git/idle-tests.json\"` inside the
+    `check` string, so `eval` handed jq a path with literal quotes, jq never opened it, and the half `[ ! -d /proc/$(... || echo
+    999999) ]` asked of /proc/999999, true of any timer, one that never exits too, observed 2026-11-22, method: the string run through
+    `eval` against a json naming a pid (jq "Could not open file", then 999999), and the old form green on a timer that never exits
+    (Red first, below). It now asks of the pid the stop recorded (`[ "$pid8" -gt 0 ] && [ ! -d "/proc/$pid8" ]`), and its "no run"
+    half, asked once the timer has exited, can no longer be "not yet".
+  - THE FIX, `test-closing-checks.sh` 101, where HEAD's text slept 0.3 s (observed 2026-11-22, method: `git show
+    HEAD:tests/hooks/test-closing-checks.sh`): it waits until `pgrep -f "$T/make"` finds no check, the check's own question, since
+    `stop` signals each tree and exits 130 without waiting for it (`stop` in `scripts/gates/closing-checks.sh`). Its other waits (25,
+    67, 98) were deadline waits already (T111's sweep) and stay.
+  - THE FIX, `settle`: its deadline is `SETTLE_S` for every call (the per-call 40 and 80 polls dropped), and at it settle prints `FAIL
+    settle: never held in <SETTLE_S> s: <condition>` and counts a failure, where it returned 0 at 1 or 2 s
+    (HEAD's text, observed 2026-11-22, method: `git show HEAD:tests/hooks/test-finished-run-hooks.sh`) and the check after it ran
+    unready. No settle of a good
+    run reached its old deadline, measured 2026-11-22 (`/tmp/t115-red/run.sh old finished-run timeouts`: the old suite with settle
+    printing at its deadline, 0 of its calls, 75 passed, at a load of 12), so a good run turns no settle red.
+- **Red first**, measured 2026-11-22 (`/tmp/t115-red/run2.sh <form> <suite> <mode>`, T111's harness's form: a copy of each suite, HEAD's
+  for the old form and the clone's for the new, only its own path pinned to the clone's `tests/hooks` (closing-checks' `SCRIPT`
+  swappable), `L7R_GUARD_FRESH` set, each run's log `/tmp/t115-red/logs/<form>-<suite>-<mode>.log`, the lines
+  `/tmp/t115-red/summary.txt`, at loads of 5 to 45 beside other builders' runs, each old slowed run made twice with the same
+  failures, each slowing a model of a loaded host's delay of the
+  one event, in both forms alike):
+  - `slowexec`, the copy's `exec -a make` 2 s late (a `sleep 2;` before each, the one edit, in both forms), measured 2026-11-22
+    (`run2.sh <form> clone-sync|land-tooling slowexec`): clone-sync old 4 failed, "main was merged under a running make" and "no
+    notice of the held merge" (186), "a clean clone with a live make was not held from the merge" (273), "the prompt path merged
+    under a gate lock" (287), new all passed, twice, and land-tooling old 51 passed and 1 failed, "a stale patch under a running gate
+    is refused, nothing merged (385 T30)" (184), new 52 and 0, twice, so every `exec -a make` line is red and none dropped.
+  - `slowexit`, the idle timer's exit, by TERM or by returning, 2 s late (`/tmp/t115-red/slow.so`, an `LD_PRELOAD` acting in the timer
+    alone, its descriptors closed first so only its `/proc` entry outlives the step), measured 2026-11-22 (`run2.sh <form> idle-tests
+    slowexit`): old 36 passed and 1 failed, "prompt disarms and the timer exits" (76), with 202 green on its vacuous check, the old form
+    with 202's check fixed and its 1.0 s kept (`/tmp/t115-red/fixcheck.py`) 35 and 2, 76 and "no run for a session that no longer
+    exists" (202), and new 37 and 0, twice.
+  - `slowunlink`, the timer's first removal of the arming file 2 s late (`slow.so`), measured 2026-11-22 (`run2.sh <form> idle-tests
+    slowunlink`): old 36 and 1, "arming consumed" (83), new 37 and 0, where a first run slowing every removal by 2 s also failed case
+    6's "three records" in both forms, its 12 s deadline wait not T115's, so the mode slows the first removal alone.
+  - `slowterm`, the TERMed checks held stopped 2 s (`/tmp/t115-red/cc-wrap.sh` as `SCRIPT`: on the suite's TERM it STOPs the stub
+    checks, so the TERM the real script sends each tree waits for a CONT), measured 2026-11-22 (`run2.sh <form> closing-checks
+    slowterm`): old 48 and 1, "a check outlived the TERM" (101), new 49 and 0, twice.
+  - `slowstart`, the finished-run suite's top-level `make` started 2.5 s late, its cwd away from the clone meanwhile (an exported `make`
+    function), measured 2026-11-22 (`run2.sh <form> finished-run slowstart`): old 63 passed and 12 failed, then 58 and 17, the first
+    both times "a live make in the clone is found, with its target (expected yes, got no)", new 75 and 0, twice.
+  - UNSLOWED, UNDER LOAD, measured 2026-11-22 (`timing.sh 3`, its log kept as `/tmp/t115-red/logs/old-finished-run-base-r2-red.log`, at
+    a load of 22): the old finished-run suite red in the timing's second round, 67 passed and 8 failed, the first "detached and
+    unwatched: the judge says so, naming the log (expected yes, got no)", case 6c's, whose settle waits for a detached make's start
+    (the old settle printed nothing at its deadline, so which wait gave up the log does not show), while the new form was green in all 3 rounds, and across the five suites' unslowed runs new 21 of 21 green and old 19 of 20
+    (`summary.txt`, its `base` lines).
+  - THE STATE THAT NEVER COMES, measured 2026-11-22 (`run2.sh new|old <suite> hang<event>`): `hangwaiter` (a `setsid` first on `PATH`
+    that never starts case 6c's waiter on `other.log`) left the old form 75 and 0, its check run unready and green on a waiter that
+    never started, and the new 69 and 7, the first "settle: never held in 30 s: pgrep -f "grep -q $NEVER $T/other.log" >/dev/null", the
+    rest that 30 s wait outliving the case's 12 s `sleeper`, `hangexec` (the exec 45 s late) the new clone-sync's same 4 and the new
+    land-tooling's same 1 failed at the deadline, `hangexit` (the exit 45 s late) idle new 76 and 202 failed at the deadline and old 76
+    alone, 202 green on a timer that never exits, `hangunlink` (the removal 45 s late) idle new 83 failed, and `hangterm` (never
+    continued) closing-checks new 101 failed.
+- **The time**, measured 2026-11-22 (`/tmp/t115-red/timing.sh 3`: each suite's old and new copy unslowed, interleaved, three rounds,
+  `/tmp/t115-red/timing.txt`, the median of three, at loads of 12 to 42): clone-sync old 27.7 s (6.0, 27.7, 47.7) and new 8.3 s (4.3,
+  15.6, 8.3), land-tooling old 36.9 s (34.8, 36.9, 39.8) and new 29.0 s (56.6, 14.6, 29.0), idle-tests old 20.0 s (38.4, 19.3, 20.0) and
+  new 19.6 s (37.4, 19.6, 17.0), closing-checks old 8.5 s (8.5, 12.3, 7.5) and new 12.1 s (19.3, 12.1, 7.9), finished-run old 12.6 s
+  (12.6, 21.6, 7.9) and new 9.7 s (22.0, 8.7, 9.7), the spread within one form, up to 8x, the load's, beside other builders' runs, and
+  wider than any difference between the forms. The waits removed 0.9, 0.3, 2.1 and 0.3 s of fixed sleep from the first four suites
+  (observed 2026-11-22, method: the diff), and a green settle returns where it did, measured 2026-11-22 (`run2.sh new
+  finished-run.timed base`, each call's polls logged, at a load of 12): of the new form's 28 settle calls all held at their first
+  poll but one, at its 41st, the phase change a 3 s fixture makes.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| each fixed sleep of the four suites before a check that needs an event becomes a wait for it to a deadline, settle fails at its deadline, case 8's vacuous check reads its timer | n/a - no map | n/a | none | n/a |
 
 ### T115 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** No map changes. `make hooks-test`'s clone-sync, land-tooling, idle-tests, closing-checks and
+   finished-run suites pass on good work under load, and still fail an `exec -a make` that never execs, a timer that never exits or
+   never removes its arming file, a check that outlives its TERM, and a fixture's state that never comes.
+2. **The constraints.** T115's line; FR-012 (red first); constitution XIII (no known regression: each suite's checks the same, case 8's
+   made able to fail) and XIV (a check that fails good work is a defect, and so is one that cannot fail, fixed here); the launcher's
+   ground rules: the five suites and this section alone, nothing of T118's (`tree/program.rs`, `gate_write_hooks`), T89's (`tree`'s
+   `py_c`) or T129's (`tree.rs`), nothing committed.
+3. **Where each comes from.** O: T111's sweep and shape timings (`plan-done.md`, T111); O: this task's red-first runs and timings
+   (item 4); O: reading the hooks each wait's state is read by (`lock.rs`, `idle_tests_hooks.rs`, `closing-checks.sh`).
+4. **Do they describe the world here?** Measured 2026-11-22, each by its method in the Approach: every site red on its slowed event in
+   the old form (202 once its check is fixed) and green in the new, twice for each new slowed mode, and red at its deadline in the new
+   form on the state that never comes. The slowings are models of a loaded host's delay of one event; one real-load red was seen as well: the
+   old finished-run suite, unslowed, in the timing's second round (Red first, UNSLOWED).
+5. **The order.** After T111, whose form it takes; beside T118, T89 and T129, touching none of their files; before T22.
+6. **The exits.** Green: the red-first runs above and this task's own `make closing-checks T=T115 F=451`. Red: what failed recorded and
+   the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None: the sites are T111's sweep of every `sleep` in the hook suites (not a sample), each re-read here; the
+   finished-run suite has no fixed sleep left before a check, its waits all `settle`.
+8. **The budget.** One landing. A green run waits only for its events: each suite's median of three interleaved runs, old and new, within the load's spread (The time, above), the fixed sleeps removed 0.9, 0.3, 2.1 and 0.3 s (observed 2026-11-22, method: the diff), and a red run pays at most the GUESS deadline of 30 s a site.
+9. **Done, measured.** Red first as above (measured 2026-11-22, `/tmp/t115-red/run2.sh`); this task's own closing run run 1 (`20261122T034559Z-1867699`, measured 2026-11-22, `make closing-checks T=T115 F=451`, 140 s wall): `make static` GREEN,
+   `make hooks-test` GREEN (no suite run: 59 unchanged since their last green run, observed 2026-11-22, method: the Makefile's
+   hooks-test keys each suite's stamp on its traced reads, and the five suites' stamps under `.git/hooks-test/`, rewritten at 03:50Z
+   by a later run, are newer than their last edit at 03:17Z), `make quick` GREEN; 8 of the clone's 20 uncommitted files judged as T115's, the other 12 (T118's,
+   T51's, T89's) reported apart.
+10. **Before moving a constant.** No research constant, observed 2026-11-22, method: the sweep's read: the sleeps were waits, replaced by
+    waits for their events, and the 30 s deadlines are a GUESS only a red run pays, labeled at each.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** A defect, fixed here: a hook suite red on good work under load (the slowed runs), and case 8's check unable to
+    fail; no map moves, no research claim reads these suites.
+
+**Found and left?**
+- `test-no-poll-hooks.sh`'s "two waiters on one quiet file and no run: still gone" failed T118's closing run under load (its
+  hooks-test log line 88, observed 2026-11-22), and no fixed sleep stands before it: the T71 case before it ends its call with
+  `pkill -P` (its `sleep`) and then `kill` (its shell), and a shell that runs on between the two forks its `echo | tee -a fresh.log`,
+  whose `tee` outlives `wait "$WA_RUN"` and writes or holds `fresh.log` after the case's `touch`: 3 of 3 red on a copy with the tee
+  slowed 2 s and `pkill -P`'s caller resumed 0.5 s late, 0 of 3 with the tee slowed alone, 0 of 2 unslowed, measured 2026-11-22
+  (`/tmp/t115-red/np/run.sh`). Not fixed here: another class than T115's (a leftover writer of the case before, not a fixed sleep),
+  in a suite outside the launcher's five, sent by the coordinator to be filed. Filed as T139; lands before T22.
+
+**Performance work?** no - a test's correctness under load; each suite's time is recorded in the Approach, a side effect.
+
+
+### T118 (shared::tree::program read three Python shapes as writes and gate-write's file test took a directory literal as a file written, so make-only, gate-write and the event log refused or listed correct work on the stdin and `-c` routes, and would on T51's script route - a read through a `/` join, an argv list bound to a name and run, a literal a test reads, a directory only read (found by T51, measured 2026-11-21, `/tmp/t51/probe-stdin.jsonl`, HEAD b4ab4e5a79); at HEAD 9bd338e244, 45 gate-write and 20 make-only refusals of correct work over T93's 9,646 commands, T33's 1,134 fixtures, T51's 455 script stand-ins and 6 probes, measured 2026-11-21 (the paired replay, `/tmp/t118/scripts/paired.sh`))
+
+- **Approach**: three readings of a literal's use and a narrower directory rule, each measured first over the corpora:
+  - THE MEASUREMENT, the paired replay - HEAD 9bd338e244 against T118's rule, both built from the clone's HEAD `rust/` (T118's
+    files laid over the after side), one process a corpus, peaks 12.9-24.3 MB - measured
+    2026-11-21 (`/tmp/t118/scripts/paired.sh`, `counts.py`, `shapes.py`; the after side rebuilt from T118's final files, split
+    layout included, and replayed again by `after.sh` after the plan review's round):
+    - refusals, HEAD -> T118: T93's commands make-only 56 -> 56, readme 0 -> 0, gate-write (a stand-in `make done` in the row's
+      tree) 794 -> 792; T33's fixtures 86 -> 86, 1 -> 1, 215 -> 212; T51's script stand-ins, each judged in its ORIGIN row's
+      tree (178 of T93's 430 had no tree when judged in the script's own directory, the harness's fix), T93's make-only 29 -> 16
+      and gate-write 107 -> 76, T33's 4 -> 1 and 5 -> 1; T51's probes 4 -> 0 and 6 -> 1;
+    - every moved verdict moved to a let-through, none to a refusal: gate-write 45 - an argv list run 17, a directory 18, a test
+      8, a join read 2 - and make-only 20 - an argv list run 13, a join read 6, an affix test 1 (T58's `commits.py`,
+      `f.startswith('rust/guard/src/')`);
+    - the event log's `writes`, measured 2026-11-21 (`compare.py`): 14 rows lose a name and none gains one - `scripts/hooks/l7r-guard.sh` on t67's 12 argv rows and
+      its probe (run, never written), and `/diagram/CLAUDE.md` on main-tree#18's script, where it is only tested:
+      `f.endswith(('SOURCES.md','README.md','CLAUDE.md'))` keeps it OUT of the files the program writes (`open(f, 'w')` over the
+      research glob of another clone) - a correction, no real write lost;
+    - 5 rows moved in their names alone, verdicts unchanged, measured 2026-11-21 (`compare.py`, each read by hand): window#54, #56
+      and #65 (`sys.path.insert(0, "scripts")` in a program writing no computed path), #388 (`"../" * n`, an href), refusals#80
+      (`"4c." not in t`); window#393's script, whose reader-reports root the first rule dropped, is named again beside its
+      `io.open(P, "w")`;
+    - each moved row read by hand, measured 2026-11-21 (the rows' programs, `unread.py`): every directory row only reads or runs its directory (`Path("specs")` globbed, `json.load(open(
+      f"{FX}/x.json"))`, a `git log -- rust/guard` argv, `sys.path.insert`; T93's 13 script rows are 3 scripts), and the 24 rows
+      whose directory T118 dropped hold no writer the reader does not read onto a computed path (`/tmp/t118/scripts/unread.py`:
+      1 hit, window#393's `io.open(P, "w")`, `P` a literal the guard still names); t46's `e.g` and `i.e` are a set bound to `AB`
+      and never used and an element of `w in {"e.g", ...}`, both tested. Every move a correction.
+  - THE FIX (`shared::tree::program`, `program/uses.rs`): `chain_read` - a literal that is a part of a `/` join read whole (its own
+    parenthesis or `Path(`'s, closed by `.read_text(` or `.read_bytes(`) is read; `display_run` - a literal of a list, tuple or set
+    bound to a name on its line, the name's every use a subprocess argv (`RUNS`), a `for` whose variable is only run, a test, or
+    none, is run (an f-string placeholder of the name fails closed); `tested` - `'x' in s`, `'x' not in s`, an element of what
+    `in` tests, an argument of `.startswith(`/`.endswith(` or an element of the tuple one takes - is text under `placed`
+    (gate-write, readme, the event log) and, for make-only, fail-closed, only in a program that writes no path it computes, which
+    the tested literal could name the landing of; and gate-write's `file_named(p, computed)` takes a directory only beside such a
+    write (`writes_computed`: a write target holding a name - `holds_name`: not `Path`, not a string prefix save an f-string's with
+    a placeholder - a method write on a receiver it cannot read, or a writer it does not read, `UNREAD_WRITERS` - `shutil.copy`,
+    `os.replace`, an extraction - or a dotted `open` with a write mode), so window#170's `p = R / path`, `p.write_text(..)` and
+    refusals#144's `rglob` rewrite, true writes into `research` and `l7r`, stay refused (the plain directory rule let both through
+    on the first replay). The plan review's first round (BLOCKED, 2026-11-21) found make-only still refusing T58's read-only
+    `commits.py` on `f.startswith('rust/guard/src/')`: the single-argument affix test and make-only's reading came from it, and
+    the writers it does not read from its note of the gap a `shutil.copy` into a named directory left.
+  - THE SPLIT, file-scale's 1,000-line bar (the coordinator's note, 2026-11-21): `program.rs` 1,276 lines -> 438, its parse on the
+    mask in `program/parse.rs` (601) and a literal's uses in `program/uses.rs` (265), moved by line range, measured 2026-11-21
+    (`wc -l`; `l7r-gate.sh check file-scale` exit 0).
+  - THE COST, measured 2026-11-21 (`/tmp/t118/scripts/cost.py`, T96's method: HEAD's and T118's release binaries alternating, 3
+    runs a command, user + sys CPU medians, load 6-21): the event log's end on 200 of T93's Python programs +0.00 ms median (T96's
+    bar 0.09 ms), p90 1.16, mean 0.03, on 200 of T93's commands +0.01 ms median, and make-only's start -0.03 ms median on the
+    Python programs and -0.01 on any command, measured 2026-11-21 (`cost.py` on T118's final binaries; the first version's run read
+    +0.02, -0.09, +0.04 and -0.04). The tail: make-only's p90 on the 151 moved and stand-in rows is 11.27 ms, measured 2026-11-21
+    (`cost.py`), and 8 of them add 13-19 ms, each a row HEAD refused and T118 lets through, measured 2026-11-21 (`cost_tail.py` on
+    the first version's binaries, 7 runs a binary),
+    and with window#305's guard-file literals renamed both binaries cost the same, 11.51 and 11.62 ms, measured 2026-11-21
+    (`cost_var.py`, 9 runs): the time is make-only reading each literal past the first guard file, where HEAD's refusal stopped,
+    not T118's scans (`BUILDS`: a join read builds its pair's pattern, an argv list or a test none).
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+| a read, a run, a test and a directory only read named by none of make-only, readme, gate-write and the event log | n/a - no map | n/a | none | n/a |
+
+### T118 Approach (checklist part A)
+
+1. **The goal, in the world.** No map changes. A correct Python program run from a heredoc or `-c` - a hook read through a `/`
+   join, an argv list bound to a name and run, a literal a test reads, a directory it only reads - passes make-only, readme and
+   gate-write while a gate runs, and the event log lists none of them as written; a true write into the tree stays refused.
+2. **The constraints.** T118's line; FR-012 (red first); T96's and T110's readings kept (their tests unchanged and green); T129's
+   `tree.rs` patterns and T89's `py_c` left alone; T118's files only - `tree/program.rs`, `tree/program/{parse,uses,tests}.rs`,
+   `gate_write_hooks.rs` and its tests, `docs/guards.md` row 67, `rust/guard/CLAUDE.md`'s `tree` entry, this section and T138's
+   line; nothing committed or pushed.
+3. **Where each comes from.** O: the replay's counts, the hand reads, the writer search and the cost (Approach, each measured
+   2026-11-21 by the script named there); R: T118's line and T51's probes; the call names `RUNS` and `UNREAD_WRITERS`, the string prefixes
+   `rRbBuUfF`, the mode letters `rwaxbt+` and the receiver `Path`/`pathlib` are CONVENTION knobs, Python's own spellings; the directory rule's `writes_computed` a GUESS
+   knob fitted on the replay's two true writes (window#170, refusals#144).
+4. **Do they describe the world here?** Measured over every row of T93's corpus, T33's fixtures, T51's script stand-ins (each in
+   its origin row's tree) and probes, each moved row read by hand, measured 2026-11-21 (`/tmp/t118/scripts/compare.py`,
+   `shapes.py`, `unread.py`).
+5. **The order.** After T110 (landed); before T51, whose script route reads through these readings, and T138 before T51 too.
+6. **The exits.** Green: the unit tests red on HEAD's code and green on T118's, the replay with no new refusal and every move a
+   correction, `make rust-test` and the lint of both crates, the cost's median under T96's bar. Red: what failed recorded
+   and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None: the shapes came from T51's probes and the replay's refusals, and the directory rule narrowed once,
+   on the plain rule's two regressions the replay showed.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** Red: HEAD's code with T118's tests, measured 2026-11-21 (`/tmp/t118/scripts/red.sh`, its stubs HEAD's own
+   readings under the new names, `/tmp/t118/red-rust.log`): `l7r_shared` 5 failed - the join read, the argv list, the dotted test,
+   `BUILDS`, `writes_computed`'s literal cases - and `l7r_guard` 2 - gate-write's let-through and file tests; the plan review's
+   round, each new case red on the code before it, measured 2026-11-21 (`/tmp/t118/red2-rust.log`: the writers it did not read
+   and make-only's tested literal, 2 failed; `/tmp/t118/red3-rust.log`, `red3.sh`: the single-argument affix test, 1 failed).
+   Green, measured 2026-11-21 (make): `make rust-test CRATE=rust/guard/shared` 417 passed, `CRATE=rust/guard` 446,
+   `l7r-gate.sh rust lint` clean on both, `make quick` green, `l7r-gate.sh check file-scale` clean.
+10. **Before moving a constant.** n/a - no constant moved; the knobs of item 3 are new.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** A session sees a correct program let through where it was refused - 45 gate-write and 20 make-only
+    refusals of the replay - and the event log no longer naming a hook it ran or a file it excluded as written; no check breaks.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?**
+- t79's stdin probe stays refused by gate-write (a correct replay driver refused while a gate runs) on three names: `tests/hooks/fixtures`,
+  a directory only read through f-string joins beside the program's computed writes into a tempdir; `run.`, a keyword argument
+  (`tempfile.mkdtemp(prefix="run.", dir="/tmp/t79")`); and `.gitignore`, an argument of a local wrapper of subprocess (`git =
+  lambda *a: subprocess.run(["git", *a])`), which the event log also lists as a write of the clone's `.gitignore`; T33's window#68
+  and #69 stay refused on `scripts`, a `shutil.copytree` source, for the first reason - each refused at HEAD too, measured
+  2026-11-21 (the paired replay, `/tmp/t118/pair-after`; the second and third shapes in that probe alone of its 11,241 rows).
+  Not fixed here: the keyword argument and the wrapper are none of T118's shapes, and the directory, one of them, sits beside computed writes
+  whose landing the reader does not follow, so the rule that keeps window#170's true write refused keeps it refused too.
+  Filed as T138; lands before T51.
+- A writer the reader did not read (`shutil.copy(a, 'l7r/')`, `os.replace`, a dotted `io.open(P, 'w')`) was no computed write, so
+  under the first version of the directory rule a directory beside one alone named none, where HEAD refused that program by the
+  directory's literal - 0 of the 24 rows whose directory T118 dropped held one onto a computed path, measured 2026-11-21
+  (`/tmp/t118/scripts/unread.py`), and the plan review named the gap: fixed here, each such writer counted a computed write
+  (`UNREAD_WRITERS`, `dotted_open_writes`), red first in `a_write_of_a_computed_path_is_told_from_a_literal_one`.
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** No - a correctness task; its cost measured above.
+
 
 ### T120 (<why: the finding or measurement that files it>)
 
@@ -1557,6 +1775,60 @@ its own files; not engine speed, so no performance-checklist answers.
 |---|---|---|---|---|
 
 ### T137 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+
+### T138 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T138 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+
+### T139 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T139 Approach (checklist part A)
 
 1. **The goal, in the world.** <the place as it should be>
 2. **The constraints.** <the FRs, decisions and pages it holds to>

@@ -714,6 +714,30 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-22",
    "declared": "spec-fidelity"
+  },
+  "### T118 (shared::tree::program read three Python shapes as writes and gate-write's file test took a directory literal as a file written, so make-only, gate-write and the event log refused or listed correct work on the stdin and `-c` routes, and would on T51's script route - a read through a `/` join, an argv list bound to a name and run, a literal a test reads, a directory only read (found by T51, measured 2026-11-21, `/tmp/t51/probe-stdin.jsonl`, HEAD b4ab4e5a79); at HEAD 9bd338e244, 45 gate-write and 20 make-only refusals of correct work over T93's 9,646 commands, T33's 1,134 fixtures, T51's 455 script stand-ins and 6 probes, measured 2026-11-21 (the paired replay, `/tmp/t118/scripts/paired.sh`))": {
+   "sha256": "5460e13acc2ab2266255c448cd1a9832f361dc05b8465ffb147f9007406f4cce",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-22",
+   "declared": "spec-fidelity"
+  },
+  "### T118 Approach (checklist part A)": {
+   "sha256": "7f2379d073abbbc0a0e907d1dccbdbeb5b9372bb109173a4530b80fc4128750a",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-22",
+   "declared": "spec-fidelity"
+  },
+  "### T115 (fixed sleeps in four hook suites waited 0.3 to 1.0 s for an event the next check reads, and `test-finished-run-hooks.sh`'s `settle` ran its check unready at a 1 or 2 s deadline, so a slow host could fail good work as the stall-watchdog suite's fixed 1 s did at T92's landing, observed 2026-11-21 (T111's sweep, as T115's line records it))": {
+   "sha256": "a5db453979ed31eb5811be9c902ee2bc93c95404eb9997a0646c1984146a2203",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-22",
+   "declared": "spec-fidelity"
+  },
+  "### T115 Approach (checklist part A)": {
+   "sha256": "447dafb0d8e6f3f1e99bbcdf40464915e26afd1c23ac925dc60a71eb7649c187",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-22",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -12013,6 +12037,200 @@
      "why": "A guard-verdict correctness fix, neither a performance improvement nor a measurement task in FR-013's sense."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-22",
+   "blocks": [
+    "### T118 (shared::tree::program read three Python shapes as writes and gate-write's file test took a directory literal as a file written, so make-only, gate-write and the event log refused or listed correct work on the stdin and `-c` routes, and would on T51's script route - a read through a `/` join, an argv list bound to a name and run, a literal a test reads, a directory only read (found by T51, measured 2026-11-21, `/tmp/t51/probe-stdin.jsonl`, HEAD b4ab4e5a79); at HEAD 9bd338e244, 45 gate-write and 20 make-only refusals of correct work over T93's 9,646 commands, T33's 1,134 fixtures, T51's 455 script stand-ins and 6 probes, measured 2026-11-21 (the paired replay, `/tmp/t118/scripts/paired.sh`))",
+    "### T118 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D1 the three readings",
+     "summary": "chain_read (a literal in a '/' join read whole by .read_text/.read_bytes is read), display_run (a literal of a list/tuple/set bound to a name whose every use is a subprocess argv, a run-only for, a test or none is run; an f-string placeholder fails closed), tested (a literal under in / not in / startswith / endswith is text) - so make-only, readme, gate-write and the event log stop refusing or listing correct work",
+     "class": "within",
+     "why": "This fixes the defect T118's line names: guards refusing correct work and the event log listing files as written when they are not. The constitution's fix-as-we-go rule asks for exactly that, and FR-001's event log has to be right for FR-005 and SC-002 to hold. The replay moved 45 gate-write and 20 make-only verdicts, all to a let-through, each read by hand; the per-corpus deltas add up to 45 and 20."
+    },
+    {
+     "id": "D2 make-only's tested literal fails closed beside a computed write",
+     "summary": "for make-only, a tested literal counts as text only in a program that writes no path it computes",
+     "class": "within",
+     "why": "This is a fail-closed design choice inside the fix. It keeps true writes refused, which is part of a guard doing its job (FR-012, 'real enforcement'). It was added after round one's finding on T58's commits.py, which now passes. It leaves no measured correct row refused beyond the found-and-left items ruled in D6 and D7."
+    },
+    {
+     "id": "D3 the directory rule: writes_computed",
+     "summary": "gate-write's file test takes a directory literal as a file written only beside a computed write (holds_name, a method write on a receiver it cannot read, an unread writer, a dotted open in a write mode), a GUESS knob fitted on window#170 and refusals#144",
+     "class": "within",
+     "why": "This narrows the plain directory rule only so that two true writes stay refused (window#170 and refusals#144, which the plain rule let through on the first replay). That keeps the enforcement real while fixing the 'directory only read' defect. Labeling the knob GUESS meets the measured-or-labeled rule."
+    },
+    {
+     "id": "D4 UNREAD_WRITERS and dotted open count as computed writes",
+     "summary": "shutil.copy, os.replace, extraction and dotted io.open(P,'w') are counted as computed writes, closing the gap the first plan round named",
+     "class": "within",
+     "why": "This fixes, in this task, the gap the review found. The first directory rule would have let a write HEAD refused go through. Its red-first test is a_write_of_a_computed_path_is_told_from_a_literal_one (FR-012)."
+    },
+    {
+     "id": "D5 the split of program.rs",
+     "summary": "program.rs goes from 1,276 to 438 lines, with parse.rs (601) and uses.rs (265) split off by line range to meet file-scale's 1,000-line bar",
+     "class": "within",
+     "why": "A mechanical move to meet the project's existing file-scale check, so the change can land. It changes no behavior and decides nothing the request left open."
+    },
+    {
+     "id": "D6 found and left: the directory shape (t79 probe's tests/hooks/fixtures, window#68/#69's scripts as a copytree source)",
+     "summary": "these correct programs stay refused by gate-write because the directory sits beside computed writes whose landing the reader does not follow; deferred to T138, which lands before T51",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This narrows T118's own line, which names 'a directory only read'. Two things make the deferral legitimate. First, the rule that tells these rows apart from window#170's true write is the rule that keeps real enforcement real, so letting them through with this reader would gut the GM's 'real enforcement' purpose. Second, the deferral meets every term FR-009 sets: why it is not fixed here, a filed task id (T138) and an order (lands before T51, the step whose script route reads through these readings). So no known defect is carried into the next step, as fix-as-we-go asks. Each row was also refused at HEAD, so this is not a regression."
+    },
+    {
+     "id": "D7 found and left: the keyword-argument and subprocess-wrapper shapes (t79's run. and .gitignore, the latter also an event-log write)",
+     "summary": "two shapes outside T118's three are left refused or listed, deferred to T138, which lands before T51",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Judged apart from D6 because they are a different class: neither is a shape T118's line names, so this task never undertook them. They are known defects, including a wrong event-log write entry, so fix-as-we-go applies. The plan files them as T138 with a reason and an order ahead of T51, as FR-009 asks, so they are fixed before the step that depends on them. They were refused at HEAD too, and they appear in that probe alone across 11,241 rows."
+    },
+    {
+     "id": "D8 constraints: T129's tree.rs patterns and T89's py_c left alone",
+     "summary": "the task touches only T118's files",
+     "class": "within",
+     "why": "This keeps the task to its own scope. No defect is shown in those files, so leaving them alone leaves nothing owed."
+    },
+    {
+     "id": "D9 the performance classification",
+     "summary": "'Performance work? No - a correctness task'",
+     "class": "within",
+     "why": "The task fixes guard refusals of correct work. The event-log corrections are a side effect of a shared reader, not a measurement task in the sense of the GM's 2026-11-20 words. FR-013's scheduling is not narrowed, because the cost of the change is measured and under T96's bar."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-22",
+   "blocks": [
+    "### T115 (fixed sleeps in four hook suites waited 0.3 to 1.0 s for an event the next check reads, and `test-finished-run-hooks.sh`'s `settle` ran its check unready at a 1 or 2 s deadline, so a slow host could fail good work as the stall-watchdog suite's fixed 1 s did at T92's landing, observed 2026-11-21 (T111's sweep, as T115's line records it))",
+    "### T115 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D1 waits-for-events",
+     "summary": "Each fixed sleep before a check that needs an event in the clone-sync, land-tooling, idle-tests and closing-checks suites becomes a wait for that event to a deadline, in T111's case-3 form, with the check after it unchanged",
+     "class": "within",
+     "why": "Carries T115's own line (fixed sleeps failing good work under load); the checks are unchanged, so a state that never comes still fails, as the hang runs show. Nothing asked is dropped."
+    },
+    {
+     "id": "D2 deadline knobs",
+     "summary": "One knob per suite, WAIT_TRIES=300 (30 s) and SETTLE_S=30, labeled GUESS, paid only by a red run",
+     "class": "within",
+     "why": "A tuning choice inside the fix. It is labeled as a guess with the measured event shapes beside it, and it narrows nothing asked."
+    },
+    {
+     "id": "D3 settle fails at deadline",
+     "summary": "settle's per-call 1/2 s deadlines are replaced by SETTLE_S for every call, and at the deadline it prints FAIL and counts a failure where it used to return 0 and let the check run unready",
+     "class": "within",
+     "why": "Fixes a check that could fail good work (and pass unready work) on purpose, as constitution XIV and the fix-as-we-go rule ask. A measured run shows no good run's settle reached the old deadline."
+    },
+    {
+     "id": "D4 case 202 vacuous check fixed",
+     "summary": "Fixes idle-tests 202's check, which handed jq a quoted path and asked of /proc/999999 (true of any timer), so that it reads the pid the stop recorded",
+     "class": "within",
+     "why": "A defect found in the task's own site, a check that could not fail. Fixing it in this task is the default the GM approved (improvement 4, fix in the task) and constitution XIV. It widens what the check catches, so it narrows nothing."
+    },
+    {
+     "id": "D5 land-tooling child cleanup",
+     "summary": "Land-tooling's case also ends its sleep 120 child with pkill -P, as clone-sync's case does",
+     "class": "within",
+     "why": "A leftover process in the same case being fixed. It makes the suite do its job and narrows nothing."
+    },
+    {
+     "id": "D6 closing-checks other waits stay",
+     "summary": "closing-checks 101 waits on pgrep for the check's own question; its other waits (25, 67, 98) were deadline waits already and stay",
+     "class": "within",
+     "why": "Leaving waits that are already in the target form leaves no defect. The sites come from T111's sweep of every sleep, which is a census and not a sample."
+    },
+    {
+     "id": "D7 scope bounds",
+     "summary": "Touch the five suites and this section alone, nothing of T118, T89 or T129's files, nothing committed; order after T111, before T22",
+     "class": "within",
+     "why": "Coordination bounds that leave every site of T115's line covered (the sweep found none outside the five suites)."
+    },
+    {
+     "id": "D8 no-poll flake filed as T139",
+     "summary": "test-no-poll-hooks.sh's 'two waiters on one quiet file' failure under load, a leftover tee writer from the case before rather than a fixed sleep, is not fixed here and is filed as T139, landing before T22",
+     "class": "within",
+     "why": "This is not a fixed sleep, so it falls outside T115's scope, and the defect is not left: FR-009's own terms for a found-and-left defect are met (why it is not fixed here, the filed task id T139, its order 'lands before T22'). T22 is the same point T115 itself lands before, so it is fixed before the next step, as fix-as-we-go asks. The spec settles this case, and it narrows nothing the GM asked."
+    },
+    {
+     "id": "D9 not performance work",
+     "summary": "T115 is classed as not performance work for FR-013 scheduling",
+     "class": "within",
+     "why": "A test-correctness fix under load. It is not a performance improvement, and it is not a measurement task under the GM's 2026-11-20 widening. The suite timings are recorded only as a side effect."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-22",
+   "blocks": [
+    "### T115 (fixed sleeps in four hook suites waited 0.3 to 1.0 s for an event the next check reads, and `test-finished-run-hooks.sh`'s `settle` ran its check unready at a 1 or 2 s deadline, so a slow host could fail good work as the stall-watchdog suite's fixed 1 s did at T92's landing, observed 2026-11-21 (T111's sweep, as T115's line records it))",
+    "### T115 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T115-D1 deadline waits",
+     "summary": "Each fixed sleep before a check that needs an event becomes a wait for that event to a deadline in case 3's loop form, the check after it unchanged; one knob per suite (WAIT_TRIES=300, SETTLE_S=30), a labeled GUESS only a red run pays.",
+     "class": "within",
+     "why": "This is the fix T115's own line names (fixed sleeps that let a slow host fail good work). The checks are kept, so a state that never comes still fails, and the hang runs show it does. That is FR-012's red first applied to a test fix."
+    },
+    {
+     "id": "T115-D2 argv0 wait in clone-sync and land-tooling",
+     "summary": "An exec -a make fixture is waited for until /proc/<pid>/cmdline argv0 reads make, the state own-make and running_gate read; land-tooling's case also ends its sleep 120 child with pkill -P, as clone-sync's does.",
+     "class": "within",
+     "why": "It waits on the exact state the check under test reads. The pkill -P cleanup is in the same case and stops a two-minute leftover. Neither touches anything outside the five suites the launcher's ground rules name."
+    },
+    {
+     "id": "T115-D3 idle-tests waits (76, 83, 202)",
+     "summary": "Each site waits for its check's own conditions: arming file gone and timer /proc entry gone, arming file gone, and the stopped session's timer exited by the pid read from the arming file.",
+     "class": "within",
+     "why": "The same fix as D1, at the sites T111's sweep found."
+    },
+    {
+     "id": "T115-D4 202's vacuous check fixed",
+     "summary": "Case 8 (line 202) read the timer pid through an eval'd string with literal quotes, so jq never opened the file and the check asked about /proc/999999, which is true of any timer. It now asks about the pid the stop recorded.",
+     "class": "within",
+     "why": "A check that cannot fail is a defect under constitution XIV and the GM's fix-as-we-go rule. It is found in the code being changed and fixed in the same task, and red first shows the old form green on a timer that never exits. This is enforcement of the work, not new behavior."
+    },
+    {
+     "id": "T115-D5 closing-checks 101 wait",
+     "summary": "The 0.3 s sleep becomes a wait until pgrep finds no check, the check's own question. Its other waits (25, 67, 98) were already deadline waits and stay.",
+     "class": "within",
+     "why": "The same fix as D1. It leaves alone the waits that already have the right form."
+    },
+    {
+     "id": "T115-D6 settle fails at its deadline",
+     "summary": "settle uses SETTLE_S for every call (the per-call 40 and 80 polls dropped), and at its deadline it prints a FAIL line and counts a failure, where before it returned 0 and the next check ran unready.",
+     "class": "within",
+     "why": "T115's line names settle running its check unready at a 1 or 2 s deadline. Measured, no good run reached the old deadline, so a good run turns no settle red. hangwaiter shows the new form catches a state the old one passed vacuously."
+    },
+    {
+     "id": "T115-D7 no-poll suite flake filed as T139",
+     "summary": "A failure of test-no-poll-hooks.sh under load, caused by a leftover tee from the case before it, is not fixed here. It is filed as T139, ordered to land before T22.",
+     "class": "within",
+     "why": "It is another class (a leftover writer, not a fixed sleep), in a suite outside the five that T115's line and the launcher name, so nothing T115 was asked to do is left undone. The defect is not carried forward: FR-009's three parts are present (why it is not fixed here, the filed id T139, and the order 'lands before T22'), which honors fix-as-we-go before the next step."
+    },
+    {
+     "id": "T115-D8 not performance work",
+     "summary": "T115 is classed as not performance work (a test's correctness under load), with suite timings recorded as a side effect.",
+     "class": "within",
+     "why": "FR-013 and the GM's 2026-11-20 and 2026-11-21 words make performance and measurement tasks first. A fix to tests failing good work under load is neither, and the GM's closing-checks filing concerned a different task. The classification narrows nothing asked."
+    },
+    {
+     "id": "T115-D9 scope and timing",
+     "summary": "No map changes; only the five suites and this section are touched, nothing of T118, T89 or T129; the suites' timings are recorded old against new, within the load's spread.",
+     "class": "within",
+     "why": "Neither the boundaries of the ground rules nor the recorded timings narrow the request. Under the no-exactness rule a timing difference within the load's spread is not something to rule on."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -18525,6 +18743,132 @@
      "summary": "Performance work? no.",
      "class": "within",
      "why": "A guard-verdict correctness fix, neither a performance improvement nor a measurement task in FR-013's sense."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T118": {
+   "section_sha256": "013db422a7cc1f46ec03e3670c7c4211956c9ea1f7a3e0b8bf50f3833bc08874",
+   "reviewed": "2026-11-22",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D1 the three readings",
+     "summary": "chain_read (a literal in a '/' join read whole by .read_text/.read_bytes is read), display_run (a literal of a list/tuple/set bound to a name whose every use is a subprocess argv, a run-only for, a test or none is run; an f-string placeholder fails closed), tested (a literal under in / not in / startswith / endswith is text) - so make-only, readme, gate-write and the event log stop refusing or listing correct work",
+     "class": "within",
+     "why": "This fixes the defect T118's line names: guards refusing correct work and the event log listing files as written when they are not. The constitution's fix-as-we-go rule asks for exactly that, and FR-001's event log has to be right for FR-005 and SC-002 to hold. The replay moved 45 gate-write and 20 make-only verdicts, all to a let-through, each read by hand; the per-corpus deltas add up to 45 and 20."
+    },
+    {
+     "id": "D2 make-only's tested literal fails closed beside a computed write",
+     "summary": "for make-only, a tested literal counts as text only in a program that writes no path it computes",
+     "class": "within",
+     "why": "This is a fail-closed design choice inside the fix. It keeps true writes refused, which is part of a guard doing its job (FR-012, 'real enforcement'). It was added after round one's finding on T58's commits.py, which now passes. It leaves no measured correct row refused beyond the found-and-left items ruled in D6 and D7."
+    },
+    {
+     "id": "D3 the directory rule: writes_computed",
+     "summary": "gate-write's file test takes a directory literal as a file written only beside a computed write (holds_name, a method write on a receiver it cannot read, an unread writer, a dotted open in a write mode), a GUESS knob fitted on window#170 and refusals#144",
+     "class": "within",
+     "why": "This narrows the plain directory rule only so that two true writes stay refused (window#170 and refusals#144, which the plain rule let through on the first replay). That keeps the enforcement real while fixing the 'directory only read' defect. Labeling the knob GUESS meets the measured-or-labeled rule."
+    },
+    {
+     "id": "D4 UNREAD_WRITERS and dotted open count as computed writes",
+     "summary": "shutil.copy, os.replace, extraction and dotted io.open(P,'w') are counted as computed writes, closing the gap the first plan round named",
+     "class": "within",
+     "why": "This fixes, in this task, the gap the review found. The first directory rule would have let a write HEAD refused go through. Its red-first test is a_write_of_a_computed_path_is_told_from_a_literal_one (FR-012)."
+    },
+    {
+     "id": "D5 the split of program.rs",
+     "summary": "program.rs goes from 1,276 to 438 lines, with parse.rs (601) and uses.rs (265) split off by line range to meet file-scale's 1,000-line bar",
+     "class": "within",
+     "why": "A mechanical move to meet the project's existing file-scale check, so the change can land. It changes no behavior and decides nothing the request left open."
+    },
+    {
+     "id": "D6 found and left: the directory shape (t79 probe's tests/hooks/fixtures, window#68/#69's scripts as a copytree source)",
+     "summary": "these correct programs stay refused by gate-write because the directory sits beside computed writes whose landing the reader does not follow; deferred to T138, which lands before T51",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This narrows T118's own line, which names 'a directory only read'. Two things make the deferral legitimate. First, the rule that tells these rows apart from window#170's true write is the rule that keeps real enforcement real, so letting them through with this reader would gut the GM's 'real enforcement' purpose. Second, the deferral meets every term FR-009 sets: why it is not fixed here, a filed task id (T138) and an order (lands before T51, the step whose script route reads through these readings). So no known defect is carried into the next step, as fix-as-we-go asks. Each row was also refused at HEAD, so this is not a regression."
+    },
+    {
+     "id": "D7 found and left: the keyword-argument and subprocess-wrapper shapes (t79's run. and .gitignore, the latter also an event-log write)",
+     "summary": "two shapes outside T118's three are left refused or listed, deferred to T138, which lands before T51",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Judged apart from D6 because they are a different class: neither is a shape T118's line names, so this task never undertook them. They are known defects, including a wrong event-log write entry, so fix-as-we-go applies. The plan files them as T138 with a reason and an order ahead of T51, as FR-009 asks, so they are fixed before the step that depends on them. They were refused at HEAD too, and they appear in that probe alone across 11,241 rows."
+    },
+    {
+     "id": "D8 constraints: T129's tree.rs patterns and T89's py_c left alone",
+     "summary": "the task touches only T118's files",
+     "class": "within",
+     "why": "This keeps the task to its own scope. No defect is shown in those files, so leaving them alone leaves nothing owed."
+    },
+    {
+     "id": "D9 the performance classification",
+     "summary": "'Performance work? No - a correctness task'",
+     "class": "within",
+     "why": "The task fixes guard refusals of correct work. The event-log corrections are a side effect of a shared reader, not a measurement task in the sense of the GM's 2026-11-20 words. FR-013's scheduling is not narrowed, because the cost of the change is measured and under T96's bar."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T115": {
+   "section_sha256": "0c08b39ff229f68a0375736b838340525d33b34db7aed4f07975610026aa1d9c",
+   "reviewed": "2026-11-22",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T115-D1 deadline waits",
+     "summary": "Each fixed sleep before a check that needs an event becomes a wait for that event to a deadline in case 3's loop form, the check after it unchanged; one knob per suite (WAIT_TRIES=300, SETTLE_S=30), a labeled GUESS only a red run pays.",
+     "class": "within",
+     "why": "This is the fix T115's own line names (fixed sleeps that let a slow host fail good work). The checks are kept, so a state that never comes still fails, and the hang runs show it does. That is FR-012's red first applied to a test fix."
+    },
+    {
+     "id": "T115-D2 argv0 wait in clone-sync and land-tooling",
+     "summary": "An exec -a make fixture is waited for until /proc/<pid>/cmdline argv0 reads make, the state own-make and running_gate read; land-tooling's case also ends its sleep 120 child with pkill -P, as clone-sync's does.",
+     "class": "within",
+     "why": "It waits on the exact state the check under test reads. The pkill -P cleanup is in the same case and stops a two-minute leftover. Neither touches anything outside the five suites the launcher's ground rules name."
+    },
+    {
+     "id": "T115-D3 idle-tests waits (76, 83, 202)",
+     "summary": "Each site waits for its check's own conditions: arming file gone and timer /proc entry gone, arming file gone, and the stopped session's timer exited by the pid read from the arming file.",
+     "class": "within",
+     "why": "The same fix as D1, at the sites T111's sweep found."
+    },
+    {
+     "id": "T115-D4 202's vacuous check fixed",
+     "summary": "Case 8 (line 202) read the timer pid through an eval'd string with literal quotes, so jq never opened the file and the check asked about /proc/999999, which is true of any timer. It now asks about the pid the stop recorded.",
+     "class": "within",
+     "why": "A check that cannot fail is a defect under constitution XIV and the GM's fix-as-we-go rule. It is found in the code being changed and fixed in the same task, and red first shows the old form green on a timer that never exits. This is enforcement of the work, not new behavior."
+    },
+    {
+     "id": "T115-D5 closing-checks 101 wait",
+     "summary": "The 0.3 s sleep becomes a wait until pgrep finds no check, the check's own question. Its other waits (25, 67, 98) were already deadline waits and stay.",
+     "class": "within",
+     "why": "The same fix as D1. It leaves alone the waits that already have the right form."
+    },
+    {
+     "id": "T115-D6 settle fails at its deadline",
+     "summary": "settle uses SETTLE_S for every call (the per-call 40 and 80 polls dropped), and at its deadline it prints a FAIL line and counts a failure, where before it returned 0 and the next check ran unready.",
+     "class": "within",
+     "why": "T115's line names settle running its check unready at a 1 or 2 s deadline. Measured, no good run reached the old deadline, so a good run turns no settle red. hangwaiter shows the new form catches a state the old one passed vacuously."
+    },
+    {
+     "id": "T115-D7 no-poll suite flake filed as T139",
+     "summary": "A failure of test-no-poll-hooks.sh under load, caused by a leftover tee from the case before it, is not fixed here. It is filed as T139, ordered to land before T22.",
+     "class": "within",
+     "why": "It is another class (a leftover writer, not a fixed sleep), in a suite outside the five that T115's line and the launcher name, so nothing T115 was asked to do is left undone. The defect is not carried forward: FR-009's three parts are present (why it is not fixed here, the filed id T139, and the order 'lands before T22'), which honors fix-as-we-go before the next step."
+    },
+    {
+     "id": "T115-D8 not performance work",
+     "summary": "T115 is classed as not performance work (a test's correctness under load), with suite timings recorded as a side effect.",
+     "class": "within",
+     "why": "FR-013 and the GM's 2026-11-20 and 2026-11-21 words make performance and measurement tasks first. A fix to tests failing good work under load is neither, and the GM's closing-checks filing concerned a different task. The classification narrows nothing asked."
+    },
+    {
+     "id": "T115-D9 scope and timing",
+     "summary": "No map changes; only the five suites and this section are touched, nothing of T118, T89 or T129; the suites' timings are recorded old against new, within the load's spread.",
+     "class": "within",
+     "why": "Neither the boundaries of the ground rules nor the recorded timings narrow the request. Under the no-exactness rule a timing difference within the load's spread is not something to rule on."
     }
    ],
    "verdict": "CLEAR"
