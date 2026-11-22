@@ -9,7 +9,7 @@ use serde_json::Value;
 
 use super::history::History;
 use super::lint;
-use super::sections::{ordered_sections, re, task_sections, wording_only, TASK_ID};
+use super::sections::{leading_tasks, ordered_sections, re, task_sections, wording_only, TASK_ID};
 use super::status::{judge_in, owed, owed_for, scope_of, section_clear, task_current, RECORD};
 use super::today;
 use crate::codeid::common_git_dir;
@@ -124,16 +124,21 @@ pub(super) fn task_refusal(root: &Path, feature: &str, task: &str) -> String {
 }
 
 /// The task sections `make plan-archive` may move (D62): every task their heading names ticked, and their verdict CLEAR.
-fn archivable(dir: &Path) -> Vec<String> {
-    let plan = dir.join("plan.md");
-    let text = read(&plan);
-    // a task archived in tasks-done.md is ticked (feature 449 T142): its section may move once its review turns CLEAR after the task did
+/// The feature's ticked tasks: a task archived in tasks-done.md is ticked (feature 449 T142), so its section may move once its review
+/// turns CLEAR after the task did.
+fn ticked(dir: &Path) -> BTreeSet<String> {
     let tasks = l7r_shared::speckit::tasks::all_text(dir).unwrap_or_default();
-    let done: BTreeSet<String> = re(r"(?m)^- \[[xX]\] (T\d+[a-z]?)\b")
+    re(r"(?m)^- \[[xX]\] (T\d+[a-z]?)\b")
         .captures_iter(&tasks)
         .map_while(Result::ok)
         .map(|c| c[1].to_owned())
-        .collect();
+        .collect()
+}
+
+fn archivable(dir: &Path) -> Vec<String> {
+    let plan = dir.join("plan.md");
+    let text = read(&plan);
+    let done = ticked(dir);
     let review = review_of(dir);
     let history = History::new(&plan, "HEAD");
     let mut sections: Vec<String> = Vec::new();
@@ -178,6 +183,22 @@ pub(super) fn archive(dir: &Path, when: Option<&str>) -> Vec<String> {
     let plan = dir.join("plan.md");
     let mut text = read(&plan);
     let sections = archivable(dir);
+    let done = ticked(dir);
+    // a bundle's block (451 T141: `### T158, T197, ... part B`) is in every listed task's section, so it moves only once every task it
+    // lists is ticked: 449's batch landing, 2026-11-22, archived T197's section with the shared part B 35 open tasks still owed, and
+    // each of their ticks refused for want of it
+    let open_bundle = |piece: &String| {
+        leading_tasks(
+            piece
+                .lines()
+                .next()
+                .unwrap_or("")
+                .trim_start_matches('#')
+                .trim(),
+        )
+        .iter()
+        .any(|t| !done.contains(*t))
+    };
     let day = when.map_or_else(today, str::to_owned);
     let split = re(r"(?m)^(?=#{2,4} )");
     let mut moved: Vec<(String, Vec<String>)> = Vec::new();
@@ -187,10 +208,12 @@ pub(super) fn archive(dir: &Path, when: Option<&str>) -> Vec<String> {
             .map_while(Result::ok)
             .map(|m| m.as_str().to_owned())
             .collect();
-        let pieces: Vec<String> = if text.contains(sec.as_str()) {
+        let pieces = pieces_of(&split, sec);
+        let pieces: Vec<String> = if text.contains(sec.as_str()) && !pieces.iter().any(open_bundle)
+        {
             vec![sec.clone()]
         } else {
-            pieces_of(&split, sec)
+            pieces.into_iter().filter(|p| !open_bundle(p)).collect()
         };
         for piece in pieces {
             if text.contains(&piece) {

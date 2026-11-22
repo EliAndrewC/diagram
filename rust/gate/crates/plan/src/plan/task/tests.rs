@@ -393,3 +393,19 @@ fn a_task_archived_in_tasks_done_is_ticked_for_the_archive_and_the_push() {
         .collect();
     assert_eq!(found, ["plan-review-missing"]);
 }
+
+#[test]
+fn a_bundle_block_stays_while_any_task_it_lists_is_open() {
+    // 449's batch landing (2026-11-22): ticking T197 archived its section, joined with the shared `### T158, T197, ... part B`
+    // block every listed task owned (451 T141), so the 35 still open lost the part B their red-gate trigger owed and every tick refused
+    let plan = "# p\n\n### T01 Approach\n\nfirst\n\n### T02 Approach\n\nsecond\n\n### T01, T02 part B (2026-01-01T00:00Z)\n\n1. shared\n";
+    let dir = ticked_feature(plan, "- [x] T01 a\n- [ ] T02 b\n");
+    assert_eq!(archive(&dir, Some("2026-01-01")), ["T01"]);
+    let text = std::fs::read_to_string(dir.join("plan.md")).unwrap();
+    let kept = text.contains("### T01, T02 part B") && text.contains("1. shared");
+    assert!(!text.contains("first") && kept);
+    std::fs::write(dir.join("tasks.md"), "- [x] T01 a\n- [x] T02 b\n").unwrap();
+    assert_eq!(archive(&dir, Some("2026-01-02")), ["T02"]);
+    let text = std::fs::read_to_string(dir.join("plan.md")).unwrap();
+    assert!(!text.contains("part B") && !text.contains("second"));
+}
