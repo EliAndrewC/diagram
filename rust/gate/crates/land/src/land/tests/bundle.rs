@@ -71,40 +71,7 @@ fn a_three_task_bundle_starts_closes_decides_and_lands_as_one() {
     ] {
         put(&root, f, t);
     }
-    // CLOSING CHECKS: every member's edit judged as the bundle's, the other task's file apart
-    let events = root.join(".git/l7r-events");
-    let now = "2099-01-01T00:00:00.000Z";
-    let line = |f: &str, t: &str| {
-        format!("{{\"t\":\"{now}\",\"ev\":\"PostToolUse\",\"tool\":\"Edit\",\"cat\":\"edit\",\"path\":\"{}/{f}\",\"task\":\"{t}\"}}\n", root.display())
-    };
-    let lines = [
-        line("docs/one.md", "T1"),
-        line("docs/two.md", "T2"),
-        line("docs/three.md", "T3"),
-        line("docs/four.md", "T4"),
-    ]
-    .concat();
-    put(&events, "449-x.jsonl", &lines);
-    let make = root.join(".git/stub-make");
-    write_executable(&make, "#!/usr/bin/env bash\necho \"output of $2\"\n");
-    let script =
-        Path::new(env!("CARGO_MANIFEST_DIR")).join("../../../../scripts/gates/closing-checks.sh");
-    let closed = Command::new("bash")
-        .arg(&script)
-        .current_dir(&root)
-        .env("CLOSING_MAKE", &make)
-        .env("CLOSING_TASK", "T1,T2,T3")
-        .env("CLOSING_FEATURE", "449")
-        .env("L7R_EVENTS_DIR", &events)
-        .output()
-        .unwrap();
-    let said = String::from_utf8_lossy(&closed.stdout).into_owned();
-    assert!(closed.status.success(), "{said}");
-    assert!(said.contains("judged as T1,T2,T3's"), "{said}");
-    let run = std::fs::read_link(root.join(".git/closing-checks/latest")).unwrap();
-    let others =
-        std::fs::read_to_string(root.join(".git/closing-checks").join(run).join("others")).unwrap();
-    assert_eq!(others, "docs/four.md\tT4@449-x\n");
+    closes_as_one(&root);
     // the work committed but T4's, which lands later
     std::fs::remove_file(root.join("docs/four.md")).unwrap();
     git(&root, &["add", "-A"]);
@@ -116,33 +83,7 @@ fn a_three_task_bundle_starts_closes_decides_and_lands_as_one() {
     assert_ne!(refused, Ok(0));
     let open = std::fs::read_to_string(root.join("specs/449-x/tasks.md")).unwrap();
     assert!(open.contains("- [ ] T2 two"), "{open}");
-    // DECIDE: one MODE 4 dispatch judging every task in it, and its one verdict recorded under the first task
-    let decided = plan(&root, &["decide", "449", "T1,T2,T3"]);
-    assert_eq!(decided.code, 0, "{}", decided.stderr);
-    let dispatches = decided.stdout.matches("MODE 4: PLAN REVIEW").count();
-    assert_eq!(dispatches, 1, "{}", decided.stdout);
-    assert!(
-        decided
-            .stdout
-            .contains("this one section is the plan of T1, T2, T3"),
-        "{}",
-        decided.stdout
-    );
-    let sha = plan(&root, &["section-sha", "449", "T1,T2,T3"])
-        .stdout
-        .trim()
-        .to_owned();
-    let review = serde_json::json!({"section_sha256": sha, "decisions": []});
-    let file = verdict(&root, "verdict.json", &review);
-    let kept = plan(
-        &root,
-        &["record-task", "449", "T1", &file, "--as", "spec-fidelity"],
-    );
-    assert_eq!(kept.code, 0, "{}", kept.stderr);
-    for t in ["T1", "T2", "T3"] {
-        let stop = plan(&root, &["decided", &root.to_string_lossy(), "449-x", t]);
-        assert_eq!(stop.code, 0, "{t}: {}", stop.stdout);
-    }
+    decides_as_one(&root);
     git(&root, &["add", "-A"]);
     git(&root, &["commit", "-qm", "the bundle's verdict"]);
     // LAND: the three ticked by one landing, pushed to the scratch origin
@@ -163,4 +104,71 @@ fn a_three_task_bundle_starts_closes_decides_and_lands_as_one() {
         "{}",
         fx.subjects()
     );
+}
+
+/// CLOSING CHECKS: every member's edit judged as the bundle's, the other task's file apart.
+fn closes_as_one(root: &Path) {
+    let events = root.join(".git/l7r-events");
+    let now = "2099-01-01T00:00:00.000Z";
+    let line = |f: &str, t: &str| {
+        format!("{{\"t\":\"{now}\",\"ev\":\"PostToolUse\",\"tool\":\"Edit\",\"cat\":\"edit\",\"path\":\"{}/{f}\",\"task\":\"{t}\"}}\n", root.display())
+    };
+    let lines = [
+        line("docs/one.md", "T1"),
+        line("docs/two.md", "T2"),
+        line("docs/three.md", "T3"),
+        line("docs/four.md", "T4"),
+    ]
+    .concat();
+    put(&events, "449-x.jsonl", &lines);
+    let make = root.join(".git/stub-make");
+    write_executable(&make, "#!/usr/bin/env bash\necho \"output of $2\"\n");
+    let script =
+        Path::new(env!("CARGO_MANIFEST_DIR")).join("../../../../scripts/gates/closing-checks.sh");
+    let closed = Command::new("bash")
+        .arg(&script)
+        .current_dir(root)
+        .env("CLOSING_MAKE", &make)
+        .env("CLOSING_TASK", "T1,T2,T3")
+        .env("CLOSING_FEATURE", "449")
+        .env("L7R_EVENTS_DIR", &events)
+        .output()
+        .unwrap();
+    let said = String::from_utf8_lossy(&closed.stdout).into_owned();
+    assert!(closed.status.success(), "{said}");
+    assert!(said.contains("judged as T1,T2,T3's"), "{said}");
+    let run = std::fs::read_link(root.join(".git/closing-checks/latest")).unwrap();
+    let others =
+        std::fs::read_to_string(root.join(".git/closing-checks").join(run).join("others")).unwrap();
+    assert_eq!(others, "docs/four.md\tT4@449-x\n");
+}
+
+/// DECIDE: one MODE 4 dispatch judging every task in it, and its one verdict recorded under the first task.
+fn decides_as_one(root: &Path) {
+    let decided = plan(root, &["decide", "449", "T1,T2,T3"]);
+    assert_eq!(decided.code, 0, "{}", decided.stderr);
+    let dispatches = decided.stdout.matches("MODE 4: PLAN REVIEW").count();
+    assert_eq!(dispatches, 1, "{}", decided.stdout);
+    assert!(
+        decided
+            .stdout
+            .contains("this one section is the plan of T1, T2, T3"),
+        "{}",
+        decided.stdout
+    );
+    let sha = plan(root, &["section-sha", "449", "T1,T2,T3"])
+        .stdout
+        .trim()
+        .to_owned();
+    let review = serde_json::json!({"section_sha256": sha, "decisions": []});
+    let file = verdict(root, "verdict.json", &review);
+    let kept = plan(
+        root,
+        &["record-task", "449", "T1", &file, "--as", "spec-fidelity"],
+    );
+    assert_eq!(kept.code, 0, "{}", kept.stderr);
+    for t in ["T1", "T2", "T3"] {
+        let stop = plan(root, &["decided", &root.to_string_lossy(), "449-x", t]);
+        assert_eq!(stop.code, 0, "{t}: {}", stop.stdout);
+    }
 }
