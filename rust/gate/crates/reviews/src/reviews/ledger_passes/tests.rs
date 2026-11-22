@@ -255,6 +255,38 @@ fn a_plan_review_that_recorded_itself_gets_its_row() {
     assert_eq!(again.stdout, "ledger-owed: 0 plan review row(s) written\n");
 }
 
+/// 451 T105: a hand write (`make ledger-owed WRITE=`, `--by-hand`) refuses a recorded plan review's row as the landing's own, every push
+/// route writing it itself, and writes the rest; the same write without it (the landing's, the page-session runner's) writes both.
+#[test]
+fn a_hand_write_refuses_the_landing_s_plan_review_rows() {
+    let log = [
+        pass(
+            "spec-fidelity",
+            "a3",
+            "MODE 4: PLAN REVIEW of feature 449-x task T5",
+            &json!({}),
+        ),
+        pass("quote-check", "a1", "not a plan review", &json!({})),
+    ];
+    let (_d, env) = world("by-hand", &log);
+    let got = cli(
+        &args(&[&L[..], &["--write", "dev/x", "--by-hand"]].concat()),
+        &env,
+    );
+    let want = "ledger-owed: 1 row(s) written for every session; 1 plan review row(s) refused as the landing's own - make land writes them (as make land-tooling and the push do, --write-plan-reviews, 385 T72); written here, uncommitted, a landing alone writes them again (451 T105)\n";
+    assert_eq!(got.stdout, want);
+    let text = ledger(&env);
+    assert!(text.contains("| quote-check |"), "{text}");
+    assert!(!text.contains("CLEAR recorded for T5"), "{text}");
+    let again = cli(&args(&[&L[..], &["--write", "dev/x"]].concat()), &env);
+    assert_eq!(
+        again.stdout,
+        "ledger-owed: 1 row(s) written for every session\n"
+    );
+    let text = ledger(&env);
+    assert!(text.contains("CLEAR recorded for T5"), "{text}");
+}
+
 #[test]
 fn what_the_python_raised_fails_the_run() {
     let (_d, env) = world(

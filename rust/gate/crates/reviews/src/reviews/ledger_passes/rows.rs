@@ -206,19 +206,29 @@ pub fn in_the_record(p: &Pass, repo: &Path) -> Result<bool, String> {
 pub fn plan_review_rows(owed: &[Pass], root: &Path, repo: &Path) -> Result<Vec<String>, String> {
     let mut out = Vec::new();
     for p in owed {
-        if !text(p, "subject").starts_with(PLAN_REVIEW) {
-            continue;
-        }
-        let quoted = transcript_of(p, root).is_some_and(|t| {
-            PLAN_RECORDED
-                .is_match(&reply_of(&t.to_string_lossy(), ""))
-                .unwrap_or(false)
-        });
-        if quoted || in_the_record(p, repo)? {
+        if recorded_plan_review(p, root, repo)? {
             out.push(filled_row(p, PLAN_WHERE, root)?);
         }
     }
     Ok(out)
+}
+
+/// A plan review whose reply shows `make plan-verdict` recorded it, or whose record holds it: the pass `--write-plan-reviews` writes a
+/// row for, which every push route runs itself (`make land`'s first pass, `make land-tooling`, `sync-with-main.sh`'s push; 385 T72).
+///
+/// # Errors
+///
+/// Where `in_the_record` raises.
+pub fn recorded_plan_review(p: &Pass, root: &Path, repo: &Path) -> Result<bool, String> {
+    if !text(p, "subject").starts_with(PLAN_REVIEW) {
+        return Ok(false);
+    }
+    let quoted = transcript_of(p, root).is_some_and(|t| {
+        PLAN_RECORDED
+            .is_match(&reply_of(&t.to_string_lossy(), ""))
+            .unwrap_or(false)
+    });
+    Ok(quoted || in_the_record(p, repo)?)
 }
 
 #[cfg(test)]

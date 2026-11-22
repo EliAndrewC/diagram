@@ -1,0 +1,39 @@
+<!-- plan-archive: T57 to T111 moved to plan-done.md, 2026-11-21 (feature 375 FR-044) -->
+### T112 (T108's Found and left: the quoted-string pattern T103 and T108 gave shape's scan stood also in two of T96's files, `tree.rs:70`'s `QUOTED` and the triple-quoted `TRIPLE` of `tree/program.rs:63`; measured 2026-11-21 (`/tmp/t108/probe`, the pattern alone under `timeout 10`, `/tmp/t108/probe-outside.txt`): each gave no answer in 10 s on a quote nothing closes before forty escapes, and the house style guard none through `tree::walk` on `echo <a listed word> > f.md; echo it's` and forty escapes (`hs_plain`))
+
+- **Approach**: both copies read their strings by shape's scans, each held to the pattern it replaced:
+  - THE HANG, measured 2026-11-21 (`/tmp/t112/scripts/probe.py`: each case a hook payload fed to the real binary,
+
+### T112 Approach (checklist part A)
+
+1. **The goal, in the world.** No map changes. A Bash call holding a quote nothing closes before many escapes - on the command
+   line, or as a triple quote in the Python program a heredoc or `-c` runs - is answered by every guard that walks it (the house
+
+### T113 (T108's Found and left: the quoted-string pattern T103 and T108 gave shape's scan stood also at `make_only_hooks.rs:125`'s `MASK_QUOTE`, `no_poll_hooks/pace.rs:36`'s `SHELL_STRING` and `readme_hooks.rs:51`'s triple-quoted `TRIPLE`; measured 2026-11-21 (`/tmp/t108/probe`, the pattern alone under `timeout 10`, `/tmp/t108/probe-outside.txt`): each gave no answer in 10 s on a quote nothing closes before forty escapes)
+
+- **Approach**: each of the three reads its strings by a linear scan, held to the pattern it replaced:
+  - THE HANG: every one hung through its guard. The probe (`/tmp/t113/scripts/probe.py`) feeds each case, a PreToolUse Bash
+
+### T113 Approach (checklist part A)
+
+1. **The goal, in the world.** No map changes. A Bash call holding a quote nothing closes before many escapes - after an engine
+   entry point, in a shell's `-c` string beside a POLL_OK-escaped wait, or as a stdin Python program's triple-quoted text beside a
+
+### T114 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+### T114 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+
+### T115 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+### T115 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+

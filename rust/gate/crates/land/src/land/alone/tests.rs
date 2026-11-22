@@ -11,6 +11,8 @@ use serde_json::Value;
 use super::super::tests::{fx, has, Fx, NOTE};
 use super::{INNER, REFUSED_FIRST, SCRIPT};
 
+mod take;
+
 /// The landing's `end` lines in the tree's event logs.
 fn ends(root: &Path) -> Vec<Value> {
     std::fs::read_dir(root.join(".git/l7r-events"))

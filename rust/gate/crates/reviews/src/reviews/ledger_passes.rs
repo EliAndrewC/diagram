@@ -16,6 +16,7 @@
 //!                                                      (the page-session runner, at each session's end)
 //! ledger-owed ... --refuse                             exit 1 while any is unanswered (the push)
 //! ledger-owed --write-plan-reviews                     append the row of each owed plan review that recorded its verdict (385 T72)
+//! ledger-owed --write ... --by-hand                    `make ledger-owed WRITE=`: the landing's own rows refused (451 T105, below)
 //! ledger-passes                                        the settled passes as JSON (what `measure feature-report` costs, in process)
 //! ```
 //!
@@ -161,7 +162,7 @@ fn row_of(cells: &[String]) -> String {
 fn usage(why: &str) -> Reply {
     reply(
         String::new(),
-        format!("usage: l7r-gate reviews ledger-owed [--log LOG] [--ledger LEDGER] [--refuse] [--transcripts DIR] [--write WHERE] [--session SID] [--write-plan-reviews]\nl7r-gate reviews ledger-owed: error: {why}\n"),
+        format!("usage: l7r-gate reviews ledger-owed [--log LOG] [--ledger LEDGER] [--refuse] [--transcripts DIR] [--write WHERE] [--session SID] [--write-plan-reviews] [--by-hand]\nl7r-gate reviews ledger-owed: error: {why}\n"),
         2,
     )
 }
@@ -198,6 +199,7 @@ pub fn cli(args: &[String], env: &Env) -> Reply {
         Spec::value("--write"),
         Spec::value("--session"),
         Spec::flag("--write-plan-reviews"),
+        Spec::flag("--by-hand"),
     ];
     let p = match parse(args, &specs) {
         Ok(p) => p,
@@ -212,6 +214,7 @@ pub fn cli(args: &[String], env: &Env) -> Reply {
         write: p.text("--write", ""),
         session: p.text("--session", ""),
         plan_reviews: p.on("--write-plan-reviews"),
+        by_hand: p.on("--by-hand"),
     };
     run(&opts, env).unwrap_or_else(|why| raised(String::new(), "ledger-owed", &why))
 }
@@ -268,6 +271,7 @@ struct Opts<'a> {
     write: &'a str,
     session: &'a str,
     plan_reviews: bool,
+    by_hand: bool,
 }
 
 /// `main` after its arguments.
@@ -368,13 +372,29 @@ fn write_owed(
         }
         mine = kept;
     }
+    // THE LANDING'S OWN ROWS, REFUSED BY HAND (451 T105): a recorded plan review's row is written by every push route itself
+    // (`--write-plan-reviews`), so a session's `make ledger-owed WRITE=` that writes it first, uncommitted, has it written twice - a
+    // landing alone writes it again in its worktree (measured 2026-11-21 at the T82-T101 landing: four rows on each side, the same four
+    // passes with different `applied or filed as` cells, and the clone could not take the tip)
+    let mut refused = 0;
+    if o.by_hand {
+        let mut kept = Vec::new();
+        for p in mine {
+            if rows::recorded_plan_review(&p, transcripts, repo)? {
+                refused += 1;
+            } else {
+                kept.push(p);
+            }
+        }
+        mine = kept;
+    }
     // the ledger is opened first and each row written as it is made, so a row that raises leaves the ones before it, as the
     // Python's `writelines` over a generator did
     let mut f = open_append(ledger)?;
     for p in &mine {
         write_row(&mut f, &rows::filled_row(p, o.write, transcripts)?)?;
     }
-    let left = owed.len() - mine.len();
+    let left = owed.len() - mine.len() - refused;
     record_usage(env, outcome(mine.is_empty()));
     let whom = if o.session.is_empty() {
         feat.map_or_else(|| "every session".to_owned(), |n| format!("feature {n}"))
@@ -386,9 +406,14 @@ fn write_owed(
     } else {
         String::new()
     };
+    let landing = if refused > 0 {
+        format!("; {refused} plan review row(s) refused as the landing's own - make land writes them (as make land-tooling and the push do, --write-plan-reviews, 385 T72); written here, uncommitted, a landing alone writes them again (451 T105)")
+    } else {
+        String::new()
+    };
     Ok(reply(
         format!(
-            "ledger-owed: {} row(s) written for {whom}{tail}\n",
+            "ledger-owed: {} row(s) written for {whom}{tail}{landing}\n",
             mine.len()
         ),
         String::new(),

@@ -21,8 +21,12 @@
 # worktree created, or reset to the clone's HEAD (it is the tool's: nobody's work lives there); (5) the clone's kept check results and
 # suite results seeded where newer (`cp -u`); (6) the landing in the worktree (`L7R_LAND_ALONE=1`: its tree is the landing, its `end` line
 # its own); (7) the clone takes the landed tip: HEAD moved, each changed file the clone holds no work in written from the tip, each one it
-# does merged three ways with its uncommitted edit kept on top - a sectioned file whose text merge conflicts merged piece by piece (the
-# tick's archive of one section beside another task's edit of the next conflicts in text alone); a conflict moves nothing and says so.
+# does merged three ways with its uncommitted edit kept on top - git's line merge, each hunk both sides only added to taken whole where
+# one side's lines hold the other's; a sectioned file (plan.md, tasks.md, plan-review.json, the review ledger) whose line merge
+# conflicts merged piece by piece: a section, a task's line, a verdict, a ledger row keyed by its pass (the tip's row kept where both
+# answer one), each archive mark a piece of its own (the tick's archive of one section beside another task's edit of the next
+# conflicts in text alone; 451 T105: the three shapes the take gave up on, 2026-11-21); only a piece both changed otherwise conflicts,
+# every conflict named at once, and a conflict moves nothing.
 # Exit: the landing's own code (0 landed, 3 landed with other sessions' edits merged, 2 refused), 6 refused before it ran (the clone's
 # landing writes that one's `end` line and exits 2), 4 landed but the clone could not take the tip (it says how to).
 set -u
@@ -39,9 +43,14 @@ lap() { local t=${EPOCHREALTIME/,/.}; awk -v a="$t0" -v b="$t" 'BEGIN { printf "
 
 # The script's Python, one program: `py <mode> <args>` - `stage` (step 2), `split` (step 3), `take` (step 7).
 read -r -d '' PYLIB <<'PY'
-import datetime, glob, json, os, re, subprocess, sys, time
+import datetime, glob, json, os, re, subprocess, sys, tempfile, time
 SECTIONED = ('plan.md', 'tasks.md', 'plan-review.json')
+# the review ledger, merged at the take by line (451 T105): the clone's `make ledger-owed` rows and the landing's beside them
+LEDGER = ('dev/review-ledger.md', 'review-ledger.md')
 HEADING = re.compile(r'#{2,4}\s')
+# the line a tick leaves where a landed task's section was (`plan/sections.rs`'s ARCHIVE_MARK, feature 375 FR-044): a piece of its
+# own, never the tail of the section before it, which the clone may be editing (451 T105, T113's landing)
+MARKER = '<!-- plan-archive: '
 OWN = re.compile(r'#{2,4}\s+(T\d+[a-z]?)\b')
 TASK = re.compile(r'(\s*)- \[[ xX]\] (T\d+[a-z]?)\b')
 FILED = re.compile(r'Filed as (T\d+[a-z]?)\b')
@@ -61,19 +70,29 @@ def dirty_of(root):
             i += r[0] in 'RC'
     return out
 
+def row_key(line):
+    # a measured ledger row's pass: its check and its cost cells, as `settle::unanswered` answers a pass by them (feature 371)
+    cells = [' '.join(c.split()) for c in line.strip()[1:-1].split('|')] if line.strip().startswith('|') else []
+    return f'row:{cells[1]}|{cells[8]}|{cells[9]}' if len(cells) == 10 else None
+
 def units(name, text):
     # [(key, text)]: plan.md cut at each heading - one opening with a task id is that task's (`task:T<n>`, plan_text.rs's rule) - and
-    # tasks.md at each task line with the lines indented under it; any other piece keyed by its heading or line, counted where repeated
+    # at each archive marker; tasks.md at each task line with the lines indented under it; the ledger at each line, a measured row
+    # keyed by its pass; any other piece keyed by its heading or line, counted where repeated
     out, seen, lines = [], {}, text.splitlines(keepends=True)
     def add(key, body):
         if not key.startswith('task:'):
             seen[key] = seen.get(key, 0) + 1
             key = f'{key}#{seen[key]}'
         out.append((key, body))
+    if name == LEDGER[1]:
+        for l in lines:
+            add(row_key(l) or l.rstrip('\n'), l)
+        return out
     if name == 'plan.md':
         key, body = 'preamble', []
         for l in lines:
-            if HEADING.match(l):
+            if HEADING.match(l) or l.startswith(MARKER):
                 add(key, ''.join(body))
                 m = OWN.match(l)
                 key, body = ('task:' + m.group(1)) if m else l.strip(), []
@@ -99,15 +118,19 @@ def grouped(us):
         out[k] = join([('', out[k]), ('', b)]) if k in out else b
     return list(out.items())
 
-def anchor(out, ours, key):
-    # where `key` goes in `out`: after the piece `ours` puts nearest before it
+def anchor(out, ours, key, past=()):
+    # where `key` goes in `out`: after the piece `ours` puts nearest before it, and after the pieces `past` names that follow it (the
+    # tip's own new pieces there - an archived section's markers - go before the clone's)
     first = next((i for i, (k, _) in enumerate(ours) if k == key), 0)
     for k, _ in reversed(ours[:first]):
         if not k.rsplit('#', 1)[0].strip():  # a blank line, repeated everywhere, places nothing
             continue
         at = [i for i, (o, _) in enumerate(out) if o == k]
         if at:
-            return at[-1] + 1
+            i = at[-1] + 1
+            while i < len(out) and out[i][0] in past:
+                i += 1
+            return i
     return 0
 
 def splice(name, head, work, keys):
@@ -120,6 +143,16 @@ def splice(name, head, work, keys):
         at = anchor(out, w, key) if at is None else at
         out[at:at] = mine
     return join(out)
+
+def piece_name(key):
+    # a conflicting piece as its file names it: a task's section or line, a ledger row's pass, a heading or line
+    if key.startswith('task:'):
+        return f"{key[5:]}'s section, changed otherwise on both sides"
+    if key.startswith('verdict:'):
+        return f"the verdict {key[8:]!r}, changed otherwise on both sides"
+    if key.startswith('row:'):
+        return f"the ledger row of the pass {key[4:].rsplit('#', 1)[0]!r}, changed otherwise on both sides"
+    return f"the piece {key.rsplit('#', 1)[0][:80]!r}, changed otherwise on both sides"
 
 def owner(key):
     m = OWN.match(key)
@@ -147,28 +180,77 @@ def stage_review(head, work, tasks):
         out['block_reviews'] = reviews
     return head if out == h else dump(out)
 
+def merge3(base, ours, theirs, hunks=True):
+    # git's line merge of three texts, and (`hunks`) of each hunk it leaves where both sides only added lines, the side whose added
+    # lines hold the other's in order (the same lines written on both sides, one side's with more: 451 T105); None while any is more
+    with tempfile.TemporaryDirectory() as d:
+        tmp = [os.path.join(d, k) for k in ('ours', 'base', 'theirs')]
+        for t, x in zip(tmp, (ours, base, theirs)):
+            open(t, 'wb').write(x)
+        r = subprocess.run(['git', 'merge-file', '-p', '--diff3', '--marker-size=31', *tmp], capture_output=True)
+    if r.returncode == 0:
+        return r.stdout
+    if not hunks:
+        return None
+    if r.returncode < 0 or r.returncode > 127:
+        sys.exit(f"land-alone: git merge-file: {r.stderr.decode(errors='replace').strip()}")
+    out, part, hunk = [], None, {}
+    for l in r.stdout.splitlines(keepends=True):
+        mark = l[:32]
+        if part is None and mark == b'<' * 31 + b' ':
+            part, hunk = 'ours', {'ours': [], 'base': [], 'theirs': []}
+        elif part == 'ours' and mark == b'|' * 31 + b' ':
+            part = 'base'
+        elif part in ('ours', 'base') and l.rstrip(b'\r\n') == b'=' * 31:
+            part = 'theirs'
+        elif part == 'theirs' and mark == b'>' * 31 + b' ':
+            o, t = hunk['ours'], hunk['theirs']
+            if hunk['base'] or not (holds(o, t) or holds(t, o)):
+                return None
+            out += o if holds(o, t) else t
+            part = None
+        elif part:
+            hunk[part].append(l)
+        else:
+            out.append(l)
+    return b''.join(out)
+
+def holds(big, small):
+    # `small`'s lines in `big`, in their order
+    it = iter(big)
+    return all(any(x == y for y in it) for x in small)
+
 def merge_pieces(name, base, ours, theirs):
-    # a three-way merge piece by piece: each piece the clone changed put on the tip's, unless the tip changed it otherwise (None)
+    # a three-way merge piece by piece: each piece the clone changed put on the tip's; a piece both changed, merged by line (merge3);
+    # (text, None), or (None, the piece's key) where the tip changed a piece the clone changed otherwise
     if name == 'plan-review.json':
         return merge_review(*(json.loads(x) if x.strip() else {} for x in (base, ours, theirs)))
     b, o, t = (dict(grouped(units(name, x))) for x in (base, ours, theirs))
     out, olist = list(t.items()), list(o.items())
+    past = {k for k in t if k not in b and k not in o}
     for k, v in olist:
-        if b.get(k) == v:
+        if b.get(k) == v or t.get(k) == v:
             continue
-        if t.get(k) not in (b.get(k), v):
-            return None
+        if k in b and k not in t:
+            return None, k  # the tip archived or removed a piece the clone changed
+        if k in t and t[k] != b.get(k):
+            if name == LEDGER[1] and k not in b and k.startswith('row:'):
+                continue  # one pass answered on both sides: the tip's row answers it, the clone's is dropped
+            v = merge3(*(x.encode() for x in (b.get(k, ''), v, t[k])))
+            if v is None:
+                return None, k
+            v = v.decode()
         at = [i for i, (key, _) in enumerate(out) if key == k]
         if at:
             out[at[0]] = (k, v)
         else:
-            out.insert(anchor(out, olist, k), (k, v))
+            out.insert(anchor(out, olist, k, past), (k, v))
     for k in b:
         if k not in o and k in t:
             if t[k] != b[k]:
-                return None
+                return None, k
             out = [u for u in out if u[0] != k]
-    return join(out)
+    return join(out), None
 
 def merge_review(b, o, t):
     out = dict(t)
@@ -181,7 +263,7 @@ def merge_review(b, o, t):
                 if op.get(kk) == bp.get(kk):
                     continue
                 if tp.get(kk) not in (bp.get(kk), op.get(kk)):
-                    return None
+                    return None, f'verdict:{k}:{kk}'
                 if kk in op:
                     tp[kk] = op[kk]
                 else:
@@ -189,9 +271,9 @@ def merge_review(b, o, t):
             out[k] = tp
         elif o.get(k) != b.get(k):
             if t.get(k) not in (b.get(k), o.get(k)):
-                return None
+                return None, f'verdict:{k}'
             out[k] = o[k]
-    return dump(out)
+    return dump(out), None
 
 def stage(root, feature, tasks):
     # step 2: the clone's HEAD takes the landing tasks' own pieces of the sectioned files, its working files untouched
@@ -300,22 +382,32 @@ def take(root, tip, feature):
     show = lambda c, p: git(root, 'show', f'{c}:{p}', ok=(0, 128)).stdout
     here = lambda p: open(os.path.join(root, p), 'rb').read() if os.path.isfile(os.path.join(root, p)) else b''
     sectioned = {f'specs/{feature}/{f}': f for f in SECTIONED}
+    sectioned[LEDGER[0]] = LEDGER[1]
     def merged(p, ours):
-        sides = (ours, show(old, p), show(new, p))
-        tmp = [os.path.join(root, '.git', f'land-alone-{k}') for k in ('ours', 'base', 'theirs')]
-        for t, b in zip(tmp, sides):
-            open(t, 'wb').write(b)
-        r = subprocess.run(['git', 'merge-file', '-p', *tmp], capture_output=True)
-        for t in tmp:
-            os.remove(t)
-        if r.returncode == 0:
-            return r.stdout
-        out = merge_pieces(sectioned[p], sides[1].decode(), sides[0].decode(), sides[2].decode()) if p in sectioned else None
-        if out is None:
-            sys.exit(f'land-alone: {p} - the landing\'s change and the clone\'s uncommitted edit conflict')
-        return out.encode()
-    # every merge first, so a conflict moves nothing
-    held = {p: (here(p), merged(p, here(p))) for p in changed if p in dirty}
+        # (the merged bytes, None), or (None, what conflicts): git's line merge; a sectioned file whose line merge conflicts merged
+        # piece by piece, its conflict named by the piece (a JSON or ledger hunk is never taken whole); any other, its pure-addition
+        # hunks taken (merge3)
+        base, theirs = show(old, p), show(new, p)
+        out = merge3(base, ours, theirs, p not in sectioned)
+        if out is not None:
+            return out, None
+        if p not in sectioned:
+            return None, 'a hunk both changed otherwise'
+        text, key = merge_pieces(sectioned[p], base.decode(), ours.decode(), theirs.decode())
+        if text is None:
+            return None, piece_name(key)
+        return text.encode(), None
+    # every merge first, so a conflict moves nothing, and every conflict named at once
+    held, conflicts = {}, []
+    for p in changed:
+        if p in dirty:
+            ours = here(p)
+            out, why = merged(p, ours)
+            held[p] = (ours, out)
+            if why:
+                conflicts.append(f'{p} - the landing\'s change and the clone\'s uncommitted edit conflict: {why}')
+    if conflicts:
+        sys.exit('land-alone: ' + '; '.join(conflicts))
     git(root, 'update-ref', '-m', f'land-alone: take {new[:10]}', 'HEAD', new, old)
     if changed:
         git(root, 'reset', '-q', '--', *changed)
@@ -328,7 +420,9 @@ def take(root, tip, feature):
         git(root, 'checkout-index', '-f', '--', *put)
     for p, (ours, out) in held.items():
         if here(p) != ours:  # a builder wrote it since it was read: merged again from what it holds now
-            out = merged(p, here(p))
+            out, why = merged(p, here(p))
+            if why:
+                sys.exit(f'land-alone: {p}, written while the clone took the tip, conflicts with the landing\'s change: {why} - the clone is at {new[:10]}, the file as it was')
         os.makedirs(os.path.dirname(os.path.join(root, p)) or root, exist_ok=True)
         t = os.path.join(root, p + '.land-alone')
         open(t, 'wb').write(out)

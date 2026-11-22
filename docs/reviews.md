@@ -84,7 +84,9 @@ author had missed it, and the run's cost from `make review-cost AGENT=<id>`; `ma
 check that never finds anything is a number. The row is OWED (feature 371): every return of a check is logged with its cost
 cells, a commit is told which passes have no row (`make ledger-owed` prints each row to add, its judgment cells `?`), and the
 push refuses until each has one (`LEDGER_ROWS_OK="<reason>"`). A resumed agent's `make review-cost` prints a line per return,
-one row each.
+one row each. A recorded plan review's row is the landing's own: `make land`, `make land-tooling` and the push each write it
+(`--write-plan-reviews`), so `make ledger-owed WRITE=` refuses it, as a row written first in the clone is written twice by a
+landing alone (451 T105).
 
 ## Invoking a review agent: launch it EARLY, in the background, and never wait on it
 
