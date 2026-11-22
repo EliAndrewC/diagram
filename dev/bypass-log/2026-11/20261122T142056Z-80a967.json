@@ -1,0 +1,6 @@
+{
+  "utc": "20261122T142056Z",
+  "guard": "pair-hooks",
+  "what": "review prerequisites",
+  "reason": "REVIEW_PREREQ_OK: the last round's findings (engine key 6d0cb7befee0) are left on purpose, filed as 449 T288-T291 to land before T244; this round is owed only because tooling-only commits since (the plan lint, land-alone, a history test) moved the engine key"
+}
