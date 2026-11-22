@@ -10,7 +10,6 @@ use crate::protocol::{Answer, Event, Guard};
 use crate::shared::checks;
 use crate::shared::checks::handle;
 use crate::shared::session::Session;
-use crate::shared::state::field;
 
 /// The guard.
 pub const GUARD: Guard = Guard {
@@ -22,9 +21,10 @@ pub const GUARD: Guard = Guard {
 
 const AFTER_TOOLS: [&str; 4] = ["Bash", "Write", "Edit", "MultiEdit"];
 
+/// Whether the call's check state holds a snapshot: read at the call's `cwd`, or where it names none at `handle`'s (451 T123: a test
+/// build's no tree, so no test's call reads a live clone's state).
 fn state_holds_snaps(input: &Value) -> bool {
-    let cwd = field(input, "cwd");
-    checks::state_path(if cwd.is_empty() { "." } else { cwd })
+    checks::state_path(&handle::cwd_of(input))
         .and_then(|p| std::fs::read_to_string(p).ok())
         .is_some_and(|s| s.contains("\"plan_snaps\""))
 }

@@ -77,28 +77,37 @@ pub fn escaped(token: &str, body: &str) -> bool {
     true
 }
 
-fn cwd_of(payload: &Value) -> &str {
+/// The directory a call with no `cwd` ran in (Claude Code sends one with every hook; a test's call may not): the process's working
+/// directory.
+#[cfg(not(any(test, feature = "test-env")))]
+fn here() -> String {
+    std::env::current_dir()
+        .map(|d| d.to_string_lossy().into_owned())
+        .unwrap_or_default()
+}
+
+/// A test build's: the test thread's own `PWD` (`crate::env`), and where the test names none no tree, so no test's call reaches a
+/// live clone's check state (451 T123: the guard's `PostToolUse` with no cwd, its tests run in the landing worktree while a review held
+/// a section of the clone, found the hold through the common dir, wrote it back and failed the landing).
+#[cfg(any(test, feature = "test-env"))]
+fn here() -> String {
+    crate::env::opt("PWD").unwrap_or_else(|| "/nonexistent-l7r-test-cwd".to_owned())
+}
+
+/// The directory of the call `payload` describes: its `cwd`, else [`here`].
+#[must_use]
+pub fn cwd_of(payload: &Value) -> String {
     let cwd = text(payload, "cwd");
     if cwd.is_empty() {
-        "."
+        here()
     } else {
-        cwd
+        cwd.to_owned()
     }
 }
 
 /// One hook event; a refusal message (the hook exits 2 with it) or "". Held under the state's lock.
 pub fn handle(mode: &str, payload: &Value, at: Option<f64>) -> String {
-    let cwd = {
-        let raw = text(payload, "cwd");
-        if raw.is_empty() {
-            std::env::current_dir()
-                .map(|d| d.to_string_lossy().into_owned())
-                .unwrap_or_default()
-        } else {
-            raw.to_owned()
-        }
-    };
-    let Some(path) = state_path(&cwd) else {
+    let Some(path) = state_path(&cwd_of(payload)) else {
         return String::new();
     };
     let held = locked(&path);
@@ -113,7 +122,7 @@ fn current_feature(path: &Path, payload: &Value) -> String {
     let owner = if name_of(parent) == ".git" {
         parent_of(parent).to_path_buf()
     } else {
-        Path::new(cwd_of(payload)).to_path_buf()
+        std::path::PathBuf::from(cwd_of(payload))
     };
     arbiter::feature_dir(&owner, "").map_or_else(String::new, |d| name_of(&d))
 }
@@ -200,7 +209,7 @@ fn handle_locked(mode: &str, payload: &Value, path: &Path, t: f64) -> String {
     if mode == "edit" && !falsy(state.get("plan_holds")) {
         planhold::snapshot(
             &mut state,
-            clone_root(cwd_of(payload)).as_deref(),
+            clone_root(&cwd_of(payload)).as_deref(),
             text(payload, "tool_use_id"),
             t,
         );
@@ -222,7 +231,7 @@ fn handle_locked(mode: &str, payload: &Value, path: &Path, t: f64) -> String {
             book_keep(mode, tool, &mut state, payload, &ti, path);
         }
         ("after", _) => {
-            let root = clone_root(cwd_of(payload));
+            let root = clone_root(&cwd_of(payload));
             let msg = planhold::restore(&mut state, root.as_deref(), text(payload, "tool_use_id"));
             let _ = save(path, &state);
             if !msg.is_empty() {
@@ -253,7 +262,7 @@ enum Flow {
 
 fn dispatch_mode(state: &mut Value, payload: &Value, ti: &Value, path: &Path, t: f64) -> Flow {
     let check = text(ti, "subagent_type").to_owned();
-    let root = clone_root(cwd_of(payload));
+    let root = clone_root(&cwd_of(payload));
     let prompt = text(ti, "prompt").to_owned();
     if check == "round-arbiter" {
         let (_, body) = manifest_of(&prompt);
@@ -276,7 +285,7 @@ fn dispatch_mode(state: &mut Value, payload: &Value, ti: &Value, path: &Path, t:
         } else {
             tid.to_owned()
         };
-        planhold::hold(state, &id, &prompt, t);
+        planhold::hold(state, &id, &prompt, t, root.as_deref());
         let _ = save(path, state);
     }
     if check == "work-budget" && root.is_some() && !escaped("ARBITER_OK", &prompt) {
@@ -452,7 +461,7 @@ fn batch_refusal(root: Option<&Path>, check: &str, body: &str, t: f64) -> Option
 }
 
 fn edit_mode(state: &Value, payload: &Value, ti: &Value, tool: &str, t: f64) -> String {
-    let root = clone_root(cwd_of(payload));
+    let root = clone_root(&cwd_of(payload));
     let held = planhold::refusal(
         state,
         root.as_deref(),

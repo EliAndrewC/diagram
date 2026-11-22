@@ -22,18 +22,18 @@ fn a_dispatch_takes_a_hold() {
     let bundle = d.join("plan-900-a-T01");
     std::fs::create_dir_all(&bundle).unwrap();
     let mut state = json!({});
-    hold(&mut state, "t0", "no bundle", 1.0);
+    hold(&mut state, "t0", "no bundle", 1.0, None);
     assert_eq!(state, json!({}));
-    hold(
-        &mut state,
-        "t1",
-        &format!("Read {}/MANIFEST.md", bundle.display()),
-        1.5,
-    );
+    let prompt = format!("Read {}/MANIFEST.md", bundle.display());
+    hold(&mut state, "t1", &prompt, 1.5, None);
     assert_eq!(
         state["plan_holds"]["t1"],
         json!({"feature": "900-a", "task": "T01", "blocks": [], "t": 1.5, "state": "pending"})
     );
+    // the tree its call ran in, the one its write-back runs in (451 T123)
+    hold(&mut state, "t4", &prompt, 1.5, Some(&d));
+    let root = state["plan_holds"]["t4"]["root"].clone();
+    assert_eq!(root, json!(d.to_string_lossy()));
     let blocks = d.join("plan-900-a-blocks-x");
     std::fs::create_dir_all(&blocks).unwrap();
     std::fs::write(blocks.join("blocks.md"), "<!-- block \"## A \\\"q\\\"\" sha256\nnot one\n<!-- block \"k\\\\z\\n\\t\\r\\a\\b\\f\\v\\'\\q\u{e9}\" sha256\n").unwrap();
@@ -42,6 +42,7 @@ fn a_dispatch_takes_a_hold() {
         "t2",
         &format!("x {}/MANIFEST.md y", blocks.display()),
         2.0,
+        None,
     );
     assert_eq!(
         state["plan_holds"]["t2"]["blocks"],
@@ -55,6 +56,7 @@ fn a_dispatch_takes_a_hold() {
         "t3",
         &format!("{}-gone/plan-900-a-blocks-y/MANIFEST.md", d.display()),
         2.0,
+        None,
     );
     assert_eq!(state["plan_holds"]["t3"]["blocks"], json!([]));
     launched(&mut state, "t1", "ag1");
@@ -595,4 +597,101 @@ fn a_place_no_write_back_can_find_is_named() {
     let nothing = msg.contains("NOTHING of it is written back")
         && !msg.contains("the held text is written back");
     assert!(nothing, "{msg}");
+}
+
+/// A hold is the tree's it was taken in (451 T123): a clone's worktrees share its check state, so a hold taken in the clone was
+/// snapshotted, written back and refused on a worktree's own plan, and a snapshot under no id taken in one tree was written over the
+/// other's plan (measured 2026-11-21, `/tmp/t123/measure.sh`). A hold that recorded no root, taken before T123, reaches every tree.
+#[test]
+fn a_hold_is_written_back_and_refused_in_its_own_tree_alone() {
+    let clone = clone_at("tree-clone");
+    let other = clone_at("tree-other");
+    let budget = "8. **The budget.** One landing.";
+    let ours = format!("# plan\n\n## T01 the bath\n\nheld body of the section stands here\n\n{budget}\n\n## T02 other\n\nother text\n\n{budget}\n");
+    let theirs = ours.replace("held body", "the other tree's body");
+    for (root, plan) in [(&clone, &ours), (&other, &theirs)] {
+        std::fs::create_dir_all(root.join("specs/900-a")).unwrap();
+        std::fs::write(root.join("specs/900-a/plan.md"), plan).unwrap();
+    }
+    let read = |root: &Path| std::fs::read_to_string(root.join("specs/900-a/plan.md")).unwrap();
+    let mut rooted = running("T01", &[], 900.0);
+    rooted["root"] = json!(clone.to_string_lossy());
+    let legacy = running("T01", &[], 900.0);
+    // the snapshot: none in the other tree, one in the clone
+    let mut state = json!({"plan_holds": {"h": rooted}});
+    snapshot(&mut state, Some(&other), "o", 1000.0);
+    let none_there = state.get("plan_snaps").is_none();
+    assert!(none_there, "{state}");
+    snapshot(&mut state, Some(&clone), "", 1000.0);
+    let taken = state["plan_snaps"][""]["h"][0]
+        .as_str()
+        .unwrap_or("")
+        .contains("held body");
+    assert!(taken, "{state}");
+    // the write-back: the clone's snapshot under no id is not written over the other tree's plan, and is in the clone
+    let mut cross = state.clone();
+    let said = restore(&mut cross, Some(&other), "");
+    let there = read(&other);
+    assert!(said.is_empty() && there == theirs, "{said}");
+    std::fs::write(
+        clone.join("specs/900-a/plan.md"),
+        ours.replace("held body", "CHANGED body"),
+    )
+    .unwrap();
+    let said = restore(&mut state, Some(&clone), "");
+    let restored = said.contains("the held text is written back") && read(&clone) == ours;
+    assert!(restored, "{said}");
+    // a hold with no root, today's: snapshotted and written back in the other tree
+    let mut old = json!({"plan_holds": {"h": legacy}});
+    snapshot(&mut old, Some(&other), "l", 1000.0);
+    std::fs::write(
+        other.join("specs/900-a/plan.md"),
+        theirs.replace("the other", "CHANGED other"),
+    )
+    .unwrap();
+    let said = restore(&mut old, Some(&other), "l");
+    let restored = said.contains("the held text is written back") && read(&other) == theirs;
+    assert!(restored, "{said}");
+    // the refusal judges the plan of the hold's tree: the other tree's own plan is not held, the clone's is from any tree
+    let rooted_state = json!({"plan_holds": {"h": state["plan_holds"]["h"].clone()}});
+    let edit = |root: &Path, old: &str| json!({"file_path": root.join("specs/900-a/plan.md"), "old_string": old});
+    let own = refusal(
+        &rooted_state,
+        Some(&other),
+        "Edit",
+        &edit(&other, "the other tree's body"),
+        1000.0,
+        false,
+    );
+    let held = refusal(
+        &rooted_state,
+        Some(&other),
+        "Edit",
+        &edit(&clone, "held body"),
+        1000.0,
+        false,
+    );
+    let today = refusal(
+        &old,
+        Some(&other),
+        "Edit",
+        &edit(&other, "the other tree's body"),
+        1000.0,
+        false,
+    );
+    let judged = own.is_empty() && !held.is_empty() && !today.is_empty();
+    assert!(judged, "{own} | {held} | {today}");
+    // a shell write in the clone: a held heading refuses it and shared text passes, the write-back behind it; one from another tree
+    // the clone's hold does not judge - by a relative path it writes that tree's own plan
+    let shared =
+        json!({"command": format!("printf '%s\\n' '{budget}' | tee -a specs/900-a/plan.md")});
+    let heading = json!({"command": "sed -i '/## T01 the bath/a x' specs/900-a/plan.md"});
+    let shell =
+        |root: &Path, ti: &Value| refusal(&rooted_state, Some(root), "Bash", ti, 1000.0, false);
+    let (here_heading, here_shared) = (shell(&clone, &heading), shell(&clone, &shared));
+    let (there_heading, there_shared) = (shell(&other, &heading), shell(&other, &shared));
+    let in_clone = !here_heading.is_empty() && here_shared.is_empty();
+    assert!(in_clone, "{here_heading} | {here_shared}");
+    let in_other = there_heading.is_empty() && there_shared.is_empty();
+    assert!(in_other, "{there_heading} | {there_shared}");
 }

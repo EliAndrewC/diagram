@@ -36,7 +36,33 @@ fn each_event_keeps_its_book() {
         &json!({"cwd": root, "tool_name": "Bash", "tool_use_id": "b", "tool_input": {}})
     )
     .is_empty());
+    // no cwd: a test build reads the tree its test names, none here (451 T123)
     assert!(run("PostToolUse", &json!({"tool_name": "Bash"})).is_empty());
+}
+
+/// A call with no cwd reads the tree its test names and no other (451 T123): the guard's tests ran in the landing worktree, whose
+/// `.git` file leads to the clone's check state, and their no-cwd `PostToolUse` found a live review's hold there and a snapshot under
+/// no id, wrote it back and failed the landing (2026-11-21, T80's). The tree named, the call is written back there; none named, the
+/// call reads no state, and the scratch state stands as it was.
+#[test]
+fn a_call_with_no_cwd_reads_only_the_tree_its_test_names() {
+    let root = clone_at("no-cwd");
+    let state_file = root.join(".git/checks-open.json");
+    std::fs::create_dir_all(root.join("specs/900-a")).unwrap();
+    let planted = json!({"feature": "999-x", "plan_holds": {"h": {"feature": "900-a", "task": "T01", "t": 1.0, "state": "running", "aid": "ag"}}, "plan_snaps": {"": {"h": ["## T01 x\n\nbefore\n"]}}}).to_string();
+    let bare = json!({"tool_name": "Bash"});
+    std::fs::write(root.join("specs/900-a/plan.md"), "# p\n\n## T01 x\n\nnow\n").unwrap();
+    std::fs::write(&state_file, &planted).unwrap();
+    let unnamed = run("PostToolUse", &bare);
+    let untouched = std::fs::read_to_string(&state_file).unwrap();
+    crate::shared::env::set("PWD", root.as_os_str());
+    let named = run("PostToolUse", &bare);
+    crate::shared::env::unset("PWD");
+    let plan = std::fs::read_to_string(root.join("specs/900-a/plan.md")).unwrap();
+    assert!(unnamed.is_empty() && untouched == planted, "{untouched}");
+    let refused = matches!(&named[..], [Answer::Refuse(t)] if t.contains("written back"));
+    assert!(refused, "{named:?}");
+    assert!(plan.contains("before"), "{plan}");
 }
 
 #[test]

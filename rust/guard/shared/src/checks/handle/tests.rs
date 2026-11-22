@@ -514,3 +514,21 @@ fn a_make_done_past_a_million_steps_is_seen() {
         Some(true)
     );
 }
+
+/// A plan review's dispatch records the tree its call ran in, a directory inside it read as the tree's root: the one tree its hold's
+/// write-back runs in (451 T123).
+#[test]
+fn a_dispatch_records_the_tree_its_hold_is_taken_in() {
+    let (root, _) = setup("dispatch-root");
+    let bundle = root.join("plan-900-a-T01");
+    std::fs::create_dir_all(&bundle).unwrap();
+    let prompt = format!("Read {}/MANIFEST.md", bundle.display());
+    let said = handle(
+        "dispatch",
+        &agent(&root.join("specs"), "spec-fidelity", &prompt, "d"),
+        Some(1.0),
+    );
+    let recorded = state(&root)["plan_holds"]["d"]["root"].clone();
+    let rooted = said.is_empty() && recorded == json!(root.to_string_lossy());
+    assert!(rooted, "{said} {recorded}");
+}

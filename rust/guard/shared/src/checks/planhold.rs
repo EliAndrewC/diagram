@@ -1,7 +1,9 @@
 //! A plan section or block is held while its review runs (feature 385 T85, from `hm_planhold.py`): a write that would change held text is refused, naming the running review; a `PLAN_EDIT_OK` passes only a dead hold.
+//! A hold is the tree's it was taken in (451 T123): a clone's worktrees share its check state (`state_path` reads the common dir, by
+//! design), so a hold taken in the clone was written back - and refused - on the landing worktree's or a scratch worktree's own plan.
 
 use std::collections::BTreeSet;
-use std::path::Path;
+use std::path::{Path, PathBuf};
 use std::sync::LazyLock;
 
 use fancy_regex::Regex;
@@ -62,8 +64,9 @@ fn unescape_key(key: &str) -> String {
     out
 }
 
-/// Record the hold a plan review's dispatch takes (at its `PreToolUse`).
-pub fn hold(state: &mut Value, tid: &str, prompt: &str, now: f64) {
+/// Record the hold a plan review's dispatch takes (at its `PreToolUse`), with `root`, the tree its call ran in: the plan the review
+/// reads, and the one tree its write-back runs in (451 T123).
+pub fn hold(state: &mut Value, tid: &str, prompt: &str, now: f64, root: Option<&Path>) {
     let Ok(Some(m)) = BUNDLE.captures(prompt) else {
         return;
     };
@@ -81,10 +84,24 @@ pub fn hold(state: &mut Value, tid: &str, prompt: &str, now: f64) {
             .map(|c| unescape_key(&c[1]))
             .collect()
     };
-    map_mut(state, "plan_holds").insert(
-        tid.to_owned(),
-        json!({"feature": feature, "task": task.unwrap_or_default(), "blocks": keys, "t": now, "state": "pending"}),
-    );
+    let mut h = json!({"feature": feature, "task": task.unwrap_or_default(), "blocks": keys, "t": now, "state": "pending"});
+    if let Some(r) = root {
+        h["root"] = json!(r.to_string_lossy());
+    }
+    map_mut(state, "plan_holds").insert(tid.to_owned(), h);
+}
+
+/// The tree hold `h` was taken in, or None for a hold taken before 451 T123 recorded it.
+fn taken_in(h: &Value) -> Option<PathBuf> {
+    let r = text(h, "root");
+    (!r.is_empty()).then(|| resolved(Path::new(r)))
+}
+
+/// Whether a call in `root` is written back for hold `h`: a call in the tree the hold was taken in, or in any tree for a hold that
+/// recorded none (today's, until it returns). A call in another worktree of the clone changes another plan than the one reviewed:
+/// written back, the hold refused that tree's own work and wrote one tree's text into the other (451 T123, measured 2026-11-21).
+fn reaches(h: &Value, root: &Path) -> bool {
+    taken_in(h).is_none_or(|t| t == resolved(root))
 }
 
 /// A hold's launch: its agent id.
@@ -149,7 +166,7 @@ pub fn snapshot(state: &mut Value, root: Option<&Path>, tid: &str, now: f64) {
         .and_then(Value::as_object)
         .into_iter()
         .flatten()
-        .filter(|(_, h)| live(h, now))
+        .filter(|(_, h)| live(h, now) && reaches(h, root))
         .map(|(id, h)| (id.clone(), json!(held_places(root, h))))
         .collect();
     if !snaps.is_empty() {
@@ -358,7 +375,8 @@ pub fn restore(state: &mut Value, root: Option<&Path>, tid: &str) -> String {
     };
     let holds = state.get("plan_holds").cloned().unwrap_or(Value::Null);
     for (hid, before) in snaps.as_object().into_iter().flatten() {
-        let Some(h) = holds.get(hid).filter(|h| !h.is_null()) else {
+        // a snapshot under a call's id is its own tree's; one under no id (a test's call) is any tree's, so the tree is asked here too
+        let Some(h) = holds.get(hid).filter(|h| !h.is_null() && reaches(h, root)) else {
             continue;
         };
         let before: Vec<String> = before
@@ -462,8 +480,11 @@ pub fn refusal(
         .map(|m| m.values().cloned().collect::<Vec<_>>())
         .unwrap_or_default()
     {
-        let plan = root.join("specs").join(text(&h, "feature")).join("plan.md");
-        let texts = held(root, &h);
+        // an Edit or Write is judged against the plan of the tree the hold was taken in, wherever the call runs: an edit of another
+        // tree's plan voids no verdict, and one of the held plan by its absolute path does (451 T123)
+        let tree = taken_in(&h).unwrap_or_else(|| root.to_path_buf());
+        let plan = tree.join("specs").join(text(&h, "feature")).join("plan.md");
+        let texts = held(&tree, &h);
         let never = text(&h, "state") == "pending" && now - t_of(&h) > PENDING_S;
         if texts.is_empty() || never || (escaped && dead(&h, now)) {
             continue;
@@ -477,8 +498,14 @@ pub fn refusal(
             } else {
                 edit_hits(&plan, &texts, text(ti, "old_string"))
             }
-        } else if tool == "Bash" {
-            // a live hold's foreground call is written back when it ends (`snapshot` keeps live holds alone; `restore` runs on its
+        } else if tool == "Bash" && reaches(&h, root) {
+            // a shell write from another tree the hold judges not, as no write-back runs there either: by a relative path it writes
+            // that tree's own plan (451 T123: judged against the held tree's text, a write of text every section shares to the landing
+            // worktree's own plan was refused, found by T123's plan review, measured 2026-11-21); one naming the held plan by its
+            // absolute path passes and is written back by nothing - accepted (451 T123's plan section: none of the transcripts' 161
+            // shell commands naming a plan by its absolute path wrote one of another tree sharing the call's state), the cost a verdict
+            // `make plan-verdict` refuses.
+            // A live hold's foreground call is written back when it ends (`snapshot` keeps live holds alone; `restore` runs on its
             // PostToolUse or PostToolUseFailure), so for it only text standing in the held section alone names a write there: text
             // every section shares named a write to ANOTHER section, 7 of the 18 replayed refusals (451 T78). A pending or dead hold
             // and a background call have no write-back behind them, and shared text still refuses them. A foreground call moved to
