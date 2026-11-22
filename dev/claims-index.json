@@ -27448,17 +27448,20 @@
   "claim": "windbreak toward the winter wind - shelter-belts-on-a-villages-windward-side-bofurin, shelter-belts-on-a-villages-windward-side-bofurin.drawing: the regional northwest unless a local wind is declared",
   "code": "f0411d82044f29b5",
   "core": "795adf0d54df1cee",
-  "date": "2026-11-18",
-  "note": "the northwest unless a local wind is declared",
+  "date": "2026-11-22",
+  "note": "the card puts the belt on the windward quarter. With a regional source it says the winter wind blows from the region's side. With a declared source it names the local wind as a departure from the northwesterly. Both match the regional northwest unless a local wind is declared",
   "pages": {
-   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html": "ee3da5e20ce24835",
+   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html": "c5d46219ae0bd93f",
    "0072-shelter-belts-on-a-villages-windward-side-bofurin.html": "186cb571d0ba4842"
   },
   "ported": "l7r/diagram/interactive/place.py::windbreak_default#windbreak toward the winter wind",
   "reads": "de73b077deddbdff",
-  "research": "50cbdc972d365eef",
+  "research": "eea07bb88ec913ea",
   "rests": [
-   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:c36f0698d70588dc",
+   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:0c9dba0334c6fdfb",
+   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:43aedefed41c4f79",
+   "0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:b34b2b861a81fc10",
+   "0072-shelter-belts-on-a-villages-windward-side-bofurin.html:18514af267f0ae81",
    "0072-shelter-belts-on-a-villages-windward-side-bofurin.html:5de26ce128fcb5a3",
    "0072-shelter-belts-on-a-villages-windward-side-bofurin.html:8fdc88b4a2df56ca"
   ],

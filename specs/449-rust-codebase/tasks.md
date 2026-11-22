@@ -109,6 +109,8 @@ MVP: T001-T005 and the first guard, `pair-hooks` (T006): the dispatcher in every
       research: rendering
 - [ ] T300 the rows the 2026-11-22 building-reviews filed outside their change (severity outside, engine key c4410982d921): county-magistracy-example's 90 x 35 ft open band north of the garden between the reception end and the shrine (x 159-249, y 0-35; what stood beside a middle-rank house's reception end); ochiba-roundtrip-test's office hall drawn as one floor but the armory, without 0113's dais band, day office and study (O1), and its bare 72 x 21 ft strip behind the residence at svg(157,45) (O2); and the size-audit's Neixiang great hall (12.37 m deep, China Daily cn) as a measured analog for the armory band's 40 ft, for T290
       research: rendering
+- [ ] T301 lands before T244: place.rs::windbreak_default's regional branch never checks that windward is NW, N or W (impl-drift 2026-11-22, outside 449 T277's change): a meta pairing wind_source regional with another quarter, as SE, would print a card saying the region's winter wind blows from the southeast, against 0072 §3 and the drawing page's north-and-west rule (§34, §39); measure whether any writer can pair them, then refuse the pair or derive the quarter
+      research: rendering
 - [ ] GM review (make gm-reviewed F=449) [lands-open]
       research: rendering
       verify: the GM reviewed every row (make gm-review lists them)
