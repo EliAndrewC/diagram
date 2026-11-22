@@ -1698,6 +1698,54 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-22",
    "declared": "spec-fidelity"
+  },
+  "### T288 (<why: the finding or measurement that files it>)": {
+   "sha256": "af0ca0d1b3bab4e194d7a4d1feba145dc7b1b8b23c197125451fdaf952af1642",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-22",
+   "declared": "spec-fidelity"
+  },
+  "### T288 Approach (checklist part A)": {
+   "sha256": "8286b665b028c0bae934c182f36b4bf2393eda2a7364fcc7630e45ef05b8fa46",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-22",
+   "declared": "spec-fidelity"
+  },
+  "### T289 (<why: the finding or measurement that files it>)": {
+   "sha256": "06fad1e187b2740c3b7824a19fef7cbb629a9374d27d475e282ac874b3d3f12f",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-22",
+   "declared": "spec-fidelity"
+  },
+  "### T289 Approach (checklist part A)": {
+   "sha256": "4fd1d78cd8af760e9787b382a567ed6d37036390116e489eb513967dad9383b6",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-22",
+   "declared": "spec-fidelity"
+  },
+  "### T290 (<why: the finding or measurement that files it>)": {
+   "sha256": "c9d0b1bdcb1b45c3644f3957173ee80995bb5b5e2d3f2afbf42d1d07866e3416",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-22",
+   "declared": "spec-fidelity"
+  },
+  "### T290 Approach (checklist part A)": {
+   "sha256": "00666f4678ce056cb86e51ae25e2fa3d27304c1e95d97d96645cfe43d987008c",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-22",
+   "declared": "spec-fidelity"
+  },
+  "### T291 (<why: the finding or measurement that files it>)": {
+   "sha256": "2d95f5cc3b5b40f169b86475a4075abe37778d0b7f7e111634105f36dd56c07b",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-22",
+   "declared": "spec-fidelity"
+  },
+  "### T291 Approach (checklist part A)": {
+   "sha256": "3c61d5485a65cb75ec9759234e35954ad31fe0c97cecd4f12dacdf182c388d60",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-22",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -20967,6 +21015,28 @@
      "summary": "Following the arbiter's accept ruling, the next step is make done under make verify again, with no routes offered",
      "class": "within",
      "why": "It carries out the ruling the block cites and decides nothing the spec or request left open"
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-22",
+   "blocks": [
+    "### T288 (<why: the finding or measurement that files it>)",
+    "### T288 Approach (checklist part A)",
+    "### T289 (<why: the finding or measurement that files it>)",
+    "### T289 Approach (checklist part A)",
+    "### T290 (<why: the finding or measurement that files it>)",
+    "### T290 Approach (checklist part A)",
+    "### T291 (<why: the finding or measurement that files it>)",
+    "### T291 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T288-T291 template defaults",
+     "summary": "The eight blocks are unfilled make task-add templates: every slot is a <placeholder>; the only fixed text is the template's own defaults (budget one landing; red exit recorded and set down, a cannot-be-done claim ruled through make arbiter-ask; the XIV defect test and found-and-left deferral form; the FR-013 performance-work question left unanswered).",
+     "class": "within",
+     "why": "Nothing task-specific is decided, so nothing narrows the GM's request or the accepted spec. The template defaults restate standing project procedure (constitution XIV, 451 FR-013) and leave every scope question open. When the placeholders are filled the block digests change and the filled text is owed its own review."
     }
    ]
   }
