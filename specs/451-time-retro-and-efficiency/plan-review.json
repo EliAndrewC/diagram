@@ -434,15 +434,15 @@
    "declared": "spec-fidelity"
   },
   "### T94 (the land crate's tests read the session's `PLAN_REVIEW_OK` and write the real guard log, measured 2026-11-21 by T84 (the guard log's `plan-gate` rows naming the land tests' fixture feature `449-x`: 20-odd `plan-review-stale 449-x` blocks and `plan-review-ok 449-x: 451 T41 and T43 reviewed CLEAR ...`, the session's own escape text, taken by a fixture's tick during a landing's `make done`))": {
-   "sha256": "92b236a2498657aa866abfc6f28b8c1cd6754d436376f2043df90d1b1735d907",
+   "sha256": "aefc56e41514ea8573308493ba3355d275333837b6106aac510cb16f1fbcdbde",
    "verdict": "CLEAR",
-   "reviewed": "2026-11-21",
+   "reviewed": "2026-11-22",
    "declared": "spec-fidelity"
   },
   "### T94 Approach (checklist part A)": {
-   "sha256": "b4000aa2eb40597b3a6fb3129a63ee4bbc3517f83c55e50cd15e13e7e22d009b",
+   "sha256": "c220c676b0109ee7267ab9673bc1b5b6d08df8b9125f0662a7e39bbc8f5d5e5b",
    "verdict": "CLEAR",
-   "reviewed": "2026-11-21",
+   "reviewed": "2026-11-22",
    "declared": "spec-fidelity"
   },
   "### T95 (<why: the finding or measurement that files it>)": {
@@ -12231,6 +12231,85 @@
      "why": "Neither the boundaries of the ground rules nor the recorded timings narrow the request. Under the no-exactness rule a timing difference within the load's spread is not something to rule on."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-22",
+   "blocks": [
+    "### T94 (the land crate's tests read the session's `PLAN_REVIEW_OK` and write the real guard log, measured 2026-11-21 by T84 (the guard log's `plan-gate` rows naming the land tests' fixture feature `449-x`: 20-odd `plan-review-stale 449-x` blocks and `plan-review-ok 449-x: 451 T41 and T43 reviewed CLEAR ...`, the session's own escape text, taken by a fixture's tick during a landing's `make done`))",
+    "### T94 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D-a",
+     "summary": "The fix reads the landing's escapes (tick_env's PLAN_REVIEW_OK; new_in's LAND_BOXES, ARBITER_OK, HOME) through the landing's own Rooted map in land.rs, not by a test-side change alone",
+     "class": "within",
+     "why": "The defect is test runs taking the session's escapes; the measured read sits in land.rs and the tests already hand their own map, so routing the read through it is the fix itself, not a scope change. The brief naming tests alone is the caller's wording, not the GM's."
+    },
+    {
+     "id": "D-a refusal",
+     "summary": "shared's test-env feature on the land crate's dev-dependency priced and refused",
+     "class": "within",
+     "why": "A choice between two ways of reaching the same fix; design, not fidelity."
+    },
+    {
+     "id": "D-a alone()",
+     "summary": "alone() removes LAND_BOXES and COVER_OK from land-alone.sh's environment",
+     "class": "within",
+     "why": "The same escape reaching the same crate's tests through the script; part of the measured defect."
+    },
+    {
+     "id": "D-b",
+     "summary": "The land tests' census is a process-wide GUARD_LOG_DIR set once in template() to beside_binary(\"land-census\"), as the plan and task crates do",
+     "class": "within",
+     "why": "How the fixture rows are kept off the live log; the measured writer takes no directory, and the census lives in the run's own temporary directory. Design only."
+    },
+    {
+     "id": "pin and red-first",
+     "summary": "One pin test, each of the four changes red alone off, green plain and with the escapes exported, the planted guard log left with no new file",
+     "class": "within",
+     "why": "Enforcement that the fix holds. The byte-identical planted log is a nothing-was-written check, not an exactness standard on an output."
+    },
+    {
+     "id": "item 7 env reads left",
+     "summary": "LAND_NOTE, scripts_of's and inproc::Real's L7R_GATE_TREE and replay_owing's L7R_GATE_TREE stay process reads",
+     "class": "within",
+     "why": "The plan names its search (grep -n std::env over the land crate, 2026-11-22) and gives each remaining read a reason: none is a session escape, so none is the defect."
+    },
+    {
+     "id": "Performance work? no",
+     "summary": "T94 is not counted as performance or measurement work",
+     "class": "within",
+     "why": "T94 fixes test isolation and the guard log's fixture rows. It does not measure where time goes, which is the measurement work the GM's 2026-11-20 words put first."
+    },
+    {
+     "id": "found-and-left: existing 988 rows",
+     "summary": "The live log's existing test-written rows stay",
+     "class": "within",
+     "why": "The log is append-only and the brief says to leave the rows. Removing them is not available, so leaving them narrows nothing."
+    },
+    {
+     "id": "found-and-left: audit does not set fixture rows apart",
+     "summary": "make audit's guards count (measure crate) keeps counting the fixture rows, reading plan-gate's escape rate as 43% where the real rows' is 65.5%; deferred to T143, lands before T22",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This is a defect, a wrong figure, and it is left by this task. Accepted FR-009 allows such a deferral when the section gives a why, a filed id and an order; the section gives all three (T143, lands before T22). Taking it into one bundle with the other leaks is what the GM's 2026-11-22 bundling words ask for. It is legitimate on those grounds, not on 'outside this task's files', which alone would not carry it. I took T143's existence and ordering on the block's word; the bundle does not carry it."
+    },
+    {
+     "id": "found-and-left: task crate's task_add tests read QUICK_OK",
+     "summary": "3 task-crate tests read QUICK_OK from the process (red with it exported) and can write the live log (9 rows); deferred to T143, lands before T22",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This is the same defect in another crate. The sweep that found it is labeled with its method (every crate's binary run plain and with all 59 *_OK names exported), which meets FR-009's class clause, and the deferral carries FR-009's why, id and order. Default-fix-in-task (improvement 4) is a default, and FR-009 is the accepted spec's allowance for this exception. Filing the leaks as one bundled task matches the GM's 2026-11-22 bundling words. T143 and T22 were taken on the block's word."
+    },
+    {
+     "id": "found-and-left: arbiter and cohort tests write the live log",
+     "summary": "arbiter's close_answers_its_usage_and_its_verdict (2 rows a run) and cohort's a_closing_refusal_ends_the_run (1 row a run) write the live guard log; deferred to T143, lands before T22",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "These are found by the same labeled sweep and deferred with FR-009's three elements. They are bundled with the other test-log leaks under the GM's 2026-11-22 bundling approval, and ordered before T22, so they are not left without a home. I took T143 and its order on the block's word."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -18869,6 +18948,83 @@
      "summary": "No map changes; only the five suites and this section are touched, nothing of T118, T89 or T129; the suites' timings are recorded old against new, within the load's spread.",
      "class": "within",
      "why": "Neither the boundaries of the ground rules nor the recorded timings narrow the request. Under the no-exactness rule a timing difference within the load's spread is not something to rule on."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T94": {
+   "section_sha256": "1812f6b4a40e24ba8ecaf8376d42321d73d583f45b239d978cbb7e9dba4c2772",
+   "reviewed": "2026-11-22",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D-a",
+     "summary": "The fix reads the landing's escapes (tick_env's PLAN_REVIEW_OK; new_in's LAND_BOXES, ARBITER_OK, HOME) through the landing's own Rooted map in land.rs, not by a test-side change alone",
+     "class": "within",
+     "why": "The defect is test runs taking the session's escapes; the measured read sits in land.rs and the tests already hand their own map, so routing the read through it is the fix itself, not a scope change. The brief naming tests alone is the caller's wording, not the GM's."
+    },
+    {
+     "id": "D-a refusal",
+     "summary": "shared's test-env feature on the land crate's dev-dependency priced and refused",
+     "class": "within",
+     "why": "A choice between two ways of reaching the same fix; design, not fidelity."
+    },
+    {
+     "id": "D-a alone()",
+     "summary": "alone() removes LAND_BOXES and COVER_OK from land-alone.sh's environment",
+     "class": "within",
+     "why": "The same escape reaching the same crate's tests through the script; part of the measured defect."
+    },
+    {
+     "id": "D-b",
+     "summary": "The land tests' census is a process-wide GUARD_LOG_DIR set once in template() to beside_binary(\"land-census\"), as the plan and task crates do",
+     "class": "within",
+     "why": "How the fixture rows are kept off the live log; the measured writer takes no directory, and the census lives in the run's own temporary directory. Design only."
+    },
+    {
+     "id": "pin and red-first",
+     "summary": "One pin test, each of the four changes red alone off, green plain and with the escapes exported, the planted guard log left with no new file",
+     "class": "within",
+     "why": "Enforcement that the fix holds. The byte-identical planted log is a nothing-was-written check, not an exactness standard on an output."
+    },
+    {
+     "id": "item 7 env reads left",
+     "summary": "LAND_NOTE, scripts_of's and inproc::Real's L7R_GATE_TREE and replay_owing's L7R_GATE_TREE stay process reads",
+     "class": "within",
+     "why": "The plan names its search (grep -n std::env over the land crate, 2026-11-22) and gives each remaining read a reason: none is a session escape, so none is the defect."
+    },
+    {
+     "id": "Performance work? no",
+     "summary": "T94 is not counted as performance or measurement work",
+     "class": "within",
+     "why": "T94 fixes test isolation and the guard log's fixture rows. It does not measure where time goes, which is the measurement work the GM's 2026-11-20 words put first."
+    },
+    {
+     "id": "found-and-left: existing 988 rows",
+     "summary": "The live log's existing test-written rows stay",
+     "class": "within",
+     "why": "The log is append-only and the brief says to leave the rows. Removing them is not available, so leaving them narrows nothing."
+    },
+    {
+     "id": "found-and-left: audit does not set fixture rows apart",
+     "summary": "make audit's guards count (measure crate) keeps counting the fixture rows, reading plan-gate's escape rate as 43% where the real rows' is 65.5%; deferred to T143, lands before T22",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This is a defect, a wrong figure, and it is left by this task. Accepted FR-009 allows such a deferral when the section gives a why, a filed id and an order; the section gives all three (T143, lands before T22). Taking it into one bundle with the other leaks is what the GM's 2026-11-22 bundling words ask for. It is legitimate on those grounds, not on 'outside this task's files', which alone would not carry it. I took T143's existence and ordering on the block's word; the bundle does not carry it."
+    },
+    {
+     "id": "found-and-left: task crate's task_add tests read QUICK_OK",
+     "summary": "3 task-crate tests read QUICK_OK from the process (red with it exported) and can write the live log (9 rows); deferred to T143, lands before T22",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This is the same defect in another crate. The sweep that found it is labeled with its method (every crate's binary run plain and with all 59 *_OK names exported), which meets FR-009's class clause, and the deferral carries FR-009's why, id and order. Default-fix-in-task (improvement 4) is a default, and FR-009 is the accepted spec's allowance for this exception. Filing the leaks as one bundled task matches the GM's 2026-11-22 bundling words. T143 and T22 were taken on the block's word."
+    },
+    {
+     "id": "found-and-left: arbiter and cohort tests write the live log",
+     "summary": "arbiter's close_answers_its_usage_and_its_verdict (2 rows a run) and cohort's a_closing_refusal_ends_the_run (1 row a run) write the live guard log; deferred to T143, lands before T22",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "These are found by the same labeled sweep and deferred with FR-009's three elements. They are bundled with the other test-log leaks under the GM's 2026-11-22 bundling approval, and ordered before T22, so they are not left without a home. I took T143 and its order on the block's word."
     }
    ],
    "verdict": "CLEAR"
