@@ -276,6 +276,9 @@
 - [x] T93 [perf] The event log's Bash lines carry no write paths, so T86's closing checks cannot subtract another task's shell-written files (found by T86, 2026-11-21: Edit/Write lines named 127 of the 796 files the night's landings changed, T58 0 of 619, Bash writes leaving no path) - event_log_hooks writes each Bash call's write targets (shared::tree's walk, already computed by the guards) on its PostToolUse line, red first; T86's subtraction reads them
       research: rendering
       verify: DONE. landed in batch T81+T88+T93: CPU-bounded timing test; rolling dispatch and landing alone; Bash write paths
+- [x] T94 The land crate's tests read the session's PLAN_REVIEW_OK and write the real guard log (found by T84, measured 2026-11-21 from the guard log's plan-gate rows naming the fixture feature 449-x)
+      research: rendering
+      verify: DONE. landed: the land tests' own escapes and census
 - [x] T95 make closing-checks' BLOCKED tag misses a coverage red (found by T86's builder, 2026-11-21: blocked() in scripts/gates/closing-checks.sh reads only --> and Diff in lines, not cover's 'lines no test reaches', so a guard-crate cover red on another task's files went untagged) - blocked() reads cover's file lines too, and a coverage red whose every uncovered line is another task's file is tagged BLOCKED, red first in tests/hooks/test-closing-checks.sh
       research: rendering
       verify: DONE. landed in batch T82+T95+T97+T101: dashless FR ids; cover reds tagged BLOCKED; the walk's patterns by literal; a ready task lands with its own section
