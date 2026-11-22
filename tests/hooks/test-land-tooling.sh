@@ -181,10 +181,16 @@ printf '1\n2\nTHREE\n' > "$C/scripts/c.sh"; git -C "$C" commit -qam "c here, lin
 printf 'ONE\n2\n3\n' > "$T/seed/scripts/c.sh"; git -C "$T/seed" commit -qam "c there, line 1"; git -C "$T/seed" push -q "$T/o.git" main
 mkdir -p "$C/scripts/gates"; printf '#!/usr/bin/env bash\nexec "%s" "$@"\n' "$HERE/../../scripts/gates/l7r-gate.sh" > "$C/scripts/gates/l7r-gate.sh"; chmod +x "$C/scripts/gates/l7r-gate.sh"; git -C "$C" add scripts/gates; git -C "$C" commit -qm "the lock"
 (exec -a make bash -c 'sleep 120; :' done) & GL=$!
-sleep 0.3; printf '{"pid": %s, "t": 0}' "$GL" > "$C/.git/gate.lock"
+# its argv waited for, to a deadline, never slept on (451 T115): before its exec the process is a copy of this suite, which the gate
+# lock's test reads as no gate, and a fixed 0.3 s went red on a slowed exec. WAIT_TRIES of 0.1 s (30 s) is a GUESS only a red run
+# pays (the exec measured at most 0.071 s at a load of 16-17, 451 T111); the check after it is unchanged.
+WAIT_TRIES=300
+for _ in $(seq "$WAIT_TRIES"); do a0=; IFS= read -r -d '' a0 2>/dev/null < "/proc/$GL/cmdline"; [ "$a0" = make ] && break; sleep 0.1; done
+printf '{"pid": %s, "t": 0}' "$GL" > "$C/.git/gate.lock"
 BEFORE=$(git -C "$C" rev-parse HEAD)
 land scripts/c.sh; rc=$?
-kill "$GL" 2>/dev/null; wait "$GL" 2>/dev/null
+# its `sleep 120` too, which a kill of the shell alone left running for two minutes (451 T115)
+pkill -P "$GL" 2>/dev/null; kill "$GL" 2>/dev/null; wait "$GL" 2>/dev/null
 ok "a stale patch under a running gate is refused, nothing merged (385 T30)" '[ "$rc" -ne 0 ] && grep "a gate is running in this clone" "$T/out" >/dev/null && [ "$(git -C "$C" rev-parse HEAD)" = "$BEFORE" ]'
 
 echo "3b. a landed test is run, and one needing the clone's unlanded engine work is refused"

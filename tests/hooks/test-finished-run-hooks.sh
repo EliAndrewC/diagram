@@ -25,9 +25,14 @@ check() { if [ "$2" = "$3" ]; then printf 'ok    %s\n' "$1"; PASS=$((PASS+1));
           else printf 'FAIL  %s (expected %s, got %s)\n' "$1" "$2" "$3"; FAIL=$((FAIL+1)); fi; }
 has() { case "$1" in *"$2"*) echo yes ;; *) echo no ;; esac; }
 # GUARD_EDIT_OK: feature 383 amendment 4 (plan D28) - a fixed settle sleep after starting or stopping a fixture's process
-# became a READINESS POLL: the condition the next check needs, asked every 0.05 s for at most the old sleep (20 polls = 1 s;
-# the second argument for a longer one). The suite was 39 s of wall for 5 s of work; the hook's own intervals are untouched.
-settle() { local i; for ((i = 0; i < ${2:-20}; i++)); do eval "$1" && return 0; sleep 0.05; done; return 0; }
+# became a READINESS POLL: the condition the next check needs, asked every 0.05 s. The suite was 39 s of wall for 5 s of work;
+# the hook's own intervals are untouched.
+# A STATE THAT NEVER COMES IS A FAILURE, NOT A CHECK RUN UNREADY (451 T115): at its 1 s (or 2 s) deadline settle returned 0 and the
+# check after it ran anyway, red on a slowed start and green on a waiter that never started. Its deadline is SETTLE_S (30 s, a
+# GUESS only a red run pays), one for every call, and at it settle fails, naming the condition.
+SETTLE_S=30
+settle() { local i; for ((i = 0; i < SETTLE_S * 20; i++)); do eval "$1" && return 0; sleep 0.05; done
+  printf 'FAIL  settle: never held in %s s: %s\n' "$SETTLE_S" "$1"; FAIL=$((FAIL+1)); return 1; }
 
 echo "--- 1. nothing to say when there is no run at all ---"
 check "no run-log, silent" "" "$(say prompt)"
@@ -152,7 +157,7 @@ settle '[ -n "$("$HOOK" live "$LV")" ]'
 check "the two-phase run shows ONE root (the child speaks through it)" 1 "$("$HOOK" judge "$LV" | wc -l)"
 FIRST=$("$HOOK" live "$LV" | tr '\n' ' ')
 lstop; check "refused once, with p1 live" 2 "$?"
-settle '[ "$("$HOOK" live "$LV" | tr "\n" " ")" != "$FIRST" ] && [ -n "$("$HOOK" live "$LV")" ]' 80
+settle '[ "$("$HOOK" live "$LV" | tr "\n" " ")" != "$FIRST" ] && [ -n "$("$HOOK" live "$LV")" ]'
 SECOND=$("$HOOK" live "$LV" | tr '\n' ' ')
 check "the live set has CHANGED (p2 is the child now)" no "$([ "$FIRST" = "$SECOND" ] && echo yes || echo no)"
 check "...and the same root does NOT refuse again" 0 "$(lstop; echo $?)"
@@ -219,7 +224,7 @@ echo "--- 7. a waiter spinning on a dead producer is reported (GM 2026-09-12) --
 DEAD=$T/deadlog.txt; echo stub > "$DEAD"; touch -d "2 hours ago" "$DEAD"
 check "no waiter, nothing reported" "" "$("$HOOK" stale "$CLONE")"
 ( cd "$CLONE" && setsid nohup bash -c "until grep -q $NEVER $DEAD; do sleep 3; done" </dev/null >/dev/null 2>&1 & )
-settle 'pgrep -f "grep -q $NEVER $DEAD;" >/dev/null' 40
+settle 'pgrep -f "grep -q $NEVER $DEAD;" >/dev/null'
 check "the spinning waiter is found, with the file it watches" yes "$(has "$("$HOOK" stale "$CLONE")" "$DEAD")"
 OUT=$(printf '{"session_id":"t","cwd":"%s"}' "$CLONE" | "$HOOK" stop 2>&1)
 check "...and it is reported at turn end" yes "$(has "$OUT" 'SPINNING ON A DEAD PRODUCER')"
@@ -228,13 +233,13 @@ check "it REPORTS rather than blocks (the loop is harmless; not knowing is not)"
 # a waiter whose producer is ALIVE must not be reported
 LIVEF=$T/livelog.txt; : > "$LIVEF"
 ( cd "$CLONE" && setsid nohup bash -c "exec 9>>$LIVEF; until grep -q $NEVER $LIVEF; do sleep 3; done" </dev/null >/dev/null 2>&1 & )
-settle 'pgrep -f "grep -q $NEVER $LIVEF;" >/dev/null' 40
+settle 'pgrep -f "grep -q $NEVER $LIVEF;" >/dev/null'
 check "a waiter whose file is still held open is NOT reported" no "$(has "$("$HOOK" stale "$CLONE")" "$LIVEF")"
 # GUARD_EDIT_OK: 2026-09-26 - a waiter in ANOTHER working tree is never this session's to report (the remedy says to
 # kill it by pid, and concurrent sessions each run their own).
 OTHER=$T/other-tree; mkdir -p "$OTHER"; git init -q "$OTHER"; DEAD2=$T/deadlog2.txt; echo stub > "$DEAD2"
 ( cd "$OTHER" && setsid nohup bash -c "until grep -q $NEVER $DEAD2; do sleep 3; done" </dev/null >/dev/null 2>&1 & )
-settle 'pgrep -f "grep -q $NEVER $DEAD2;" >/dev/null' 40
+settle 'pgrep -f "grep -q $NEVER $DEAD2;" >/dev/null'
 check "another tree's dead-producer waiter is not reported for this clone" no "$(has "$("$HOOK" stale "$CLONE")" "$DEAD2")"
 check "...while this clone's own still is" yes "$(has "$("$HOOK" stale "$CLONE")" "$DEAD")"
 # GUARD_EDIT_OK: 2026-10-02, fixing a guard that fires on correct work - THE HARNESS'S OWN SHAPE. Claude Code runs every
@@ -250,7 +255,7 @@ DEADH=$T/deadlog-harness.txt; echo stub > "$DEADH"; touch -d "2 hours ago" "$DEA
 # 451 T61: writer-alive.sh now asks whether a live run names the file - and a second waiter on the same dead log names it too, so
 # the walk that sets waiters aside is what keeps both reported (a waiter counted as the run would keep each alive for the other)
 ( cd "$CLONE" && setsid nohup bash -c "source $SNAP && eval 'while ! grep -q $NEVER $DEADH; do sleep 3; done'" </dev/null >/dev/null 2>&1 & )
-settle 'pgrep -f "grep -q $NEVER $DEADH;" >/dev/null && pgrep -f "while ! grep -q $NEVER $DEADH;" >/dev/null && pgrep -f "grep -q $NEVER $LIVEH" >/dev/null' 40
+settle 'pgrep -f "grep -q $NEVER $DEADH;" >/dev/null && pgrep -f "while ! grep -q $NEVER $DEADH;" >/dev/null && pgrep -f "grep -q $NEVER $LIVEH" >/dev/null'
 STALE_NOW=$("$HOOK" stale "$CLONE")
 check "a harness-shaped waiter on a live log is NOT reported for its snapshot" no "$(has "$STALE_NOW" "$SNAP")"
 check "...nor for the proof-of-life helper" no "$(has "$STALE_NOW" "writer-alive.sh")"

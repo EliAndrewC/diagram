@@ -53,6 +53,11 @@ wait_grep_n() { # wait_grep_n <pattern> <file> <n> <seconds> - until the pattern
 wait_grep() { # wait_grep <pattern> <file> <seconds>
   local i=0; while [ $i -lt $(( ${3:-5} * 10 )) ]; do grep -q "$1" "$2" 2>/dev/null && return 0; sleep 0.1; i=$((i+1)); done; return 1
 }
+# A TIMER'S EXIT AND ITS ARMING FILE'S REMOVAL ARE WAITED FOR, TO A DEADLINE, NEVER SLEPT ON (451 T115): a fixed 0.5-1.0 s went red
+# on a timer slowed to exit or to remove the file, and each check after a wait is unchanged, so a state that never comes still
+# fails. The deadline, WAIT_TRIES of 0.1 s (30 s), is a GUESS only a red run pays (a killed process measured gone in at most
+# 0.059 s at a load of 16-17, 451 T111).
+WAIT_TRIES=300
 # a clock that advances by itself while a timer waits: every 0.1 s adds 1 "second"
 ticker() { while [ -f "$TMP/ticking" ]; do tick_clock 1; sleep 0.1; done; }
 
@@ -73,14 +78,16 @@ pid1=$(jq -r .timer_pid "$CA/.git/idle-tests.json")
 sleep 0.3; check "timer alive" '[ -d /proc/$pid1 ]'
 hook stop "$CA"; pid2=$(jq -r .timer_pid "$CA/.git/idle-tests.json")
 check "re-arm is a no-op" '[ "$pid1" = "$pid2" ]'
-hook prompt "$CA"; sleep 0.6
+hook prompt "$CA"
+for _ in $(seq "$WAIT_TRIES"); do [ ! -f "$CA/.git/idle-tests.json" ] && [ ! -d /proc/$pid1 ] && break; sleep 0.1; done
 check "prompt disarms and the timer exits" '[ ! -f "$CA/.git/idle-tests.json" ] && [ ! -d /proc/$pid1 ]'
 
 # --- 4. the wait runs the tests once, records, surfaces once, does not re-arm
 export IDLE_WAIT_S=0.3; : > "$RUNLOG"; touch "$TMP/ticking"; ticker & TK=$!
 hook stop "$CA"
 check "record written after the wait" 'wait_for "$CA/dev/idle-log/*-sess-a.json" 8'
-sleep 0.5
+# the timer removes the arming file after its record, its last step
+for _ in $(seq "$WAIT_TRIES"); do [ ! -f "$CA/.git/idle-tests.json" ] && break; sleep 0.1; done
 check "arming consumed" '[ ! -f "$CA/.git/idle-tests.json" ]'
 check "the run happened once, in the clone" '[ "$(grep -c "^start" "$RUNLOG")" = 1 ] && grep -q "$CA" "$RUNLOG"'
 hook prompt "$CA"; check "verdict surfaced at the next prompt" 'printf "%s" "$OUT" | grep -q "idle-tests: ran .* clean"'
@@ -199,8 +206,12 @@ rm -f "$TMP/ticking"; wait $TK 2>/dev/null; export IDLE_BUSY_CMD="false"
 # --- 8. the session is gone: the timer exits without running
 export IDLE_WAIT_S=0.3; : > "$RUNLOG"; rm -f "$CA"/dev/idle-log/*.json
 touch "$TMP/ticking"; ticker & TK=$!
-hook stop "$CA" sid-gone; sleep 1.0
-check "no run for a session that no longer exists" '[ ! -s "$RUNLOG" ] && [ ! -d /proc/$(jq -r .timer_pid \"$CA/.git/idle-tests.json\" 2>/dev/null || echo 999999) ]'
+hook stop "$CA" sid-gone; pid8=$(jq -r .timer_pid "$CA/.git/idle-tests.json")
+# the timer's exit waited for, then no run asked: once it has exited none can come. The check read its pid as `\"$CA/...\"`,
+# quotes and all, so jq never found the file and the half asked of /proc/999999 held of any timer, one that never exits too
+# (451 T115); it asks of the pid the stop recorded.
+for _ in $(seq "$WAIT_TRIES"); do [ ! -d "/proc/$pid8" ] && break; sleep 0.1; done
+check "no run for a session that no longer exists" '[ ! -s "$RUNLOG" ] && [ "$pid8" -gt 0 ] 2>/dev/null && [ ! -d "/proc/$pid8" ]'
 rm -f "$TMP/ticking"; wait $TK 2>/dev/null; rm -f "$CA/.git/idle-tests.json"
 
 # --- 9. a prompt during a run aborts it (D9): a slow runner, a prompt mid-run, an aborted record, no end line

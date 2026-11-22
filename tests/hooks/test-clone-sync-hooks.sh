@@ -34,6 +34,12 @@ check() { # check <label> <expected-rc> <actual-rc>
     FAILED=1
   fi
 }
+# AN `exec -a make` FIXTURE IS WAITED FOR, TO A DEADLINE, NEVER SLEPT ON (451 T115): before its exec the process is a copy of this
+# suite, which the hook's live-make test and the gate lock's test both read as no make; a fixed 0.3 s went red on a slowed exec.
+# The deadline, WAIT_TRIES of 0.1 s (30 s), is a GUESS only a red run pays: the exec measured a median of 0.008 s and at most
+# 0.071 s at a load of 16-17 (451 T111). argv_make <pid>: until the process's argv0 reads make; the check after it is unchanged.
+WAIT_TRIES=300
+argv_make() { local a0; for _ in $(seq "$WAIT_TRIES"); do a0=; IFS= read -r -d '' a0 2>/dev/null < "/proc/$1/cmdline"; [ "$a0" = make ] && return 0; sleep 0.1; done; return 1; }
 
 # ---- fixtures ---------------------------------------------------------------------------------
 FMAIN=$TMP/main
@@ -183,7 +189,7 @@ case $OUT in *"merged in"*) echo "ok    ...and the session is told main was merg
 echo c > "$FMAIN2/f"; git -C "$FMAIN2" commit -qam c   # main moves again
 BEFORE=$(git -C "$FMAIN2/.clones/miscellaneous" rev-parse HEAD)
 (cd "$FMAIN2/.clones/miscellaneous" && exec -a make sleep 120) & GATEPID=$!
-sleep 0.3
+argv_make "$GATEPID"
 OUT=$(printf '{"session_id":"sid-me","tool_input":{"file_path":"%s/.clones/miscellaneous/a.txt"}}' "$FMAIN2" \
       | CLONE_MAIN="$FMAIN2" CLONE_SESSIONS_DIR="$SESS" "$HOOK" pretool 2>&1); RC=$?
 kill "$GATEPID" 2>/dev/null; wait "$GATEPID" 2>/dev/null
@@ -270,7 +276,7 @@ RUNC=$FMAIN4/.clones/runclone
 echo '*' >> "$RUNC/.git/info/exclude"   # the hook writes the clone's local settings, gitignored in a real clone
 printf '%s' "$RUNC" > "$FMAIN4/.clones/.session-clones/sid-run"
 (cd "$RUNC" && exec -a make sleep 120) & RUNPID=$!
-sleep 0.3
+argv_make "$RUNPID"
 OUT=$(printf '{"session_id":"sid-run"}' \
       | CLONE_MAIN="$FMAIN4" CLONE_GITHUB="$FMAIN4" CLONE_SESSIONS_DIR="$SESS" "$HOOK" prompt 2>&1); RC=$?
 kill "$RUNPID" 2>/dev/null; wait "$RUNPID" 2>/dev/null
@@ -284,7 +290,7 @@ case $OUT in *"make run going"*) printf 'FAIL  a clone with no run was held as i
 # feature 385 T30: the gate's OWN lock holds the merge too (a live gate named in <git dir>/gate.lock), HEAD unchanged
 mkdir -p "$RUNC/scripts/gates"; printf '#!/usr/bin/env bash\nexec "%s" "$@"\n' "$HERE/../../scripts/gates/l7r-gate.sh" > "$RUNC/scripts/gates/l7r-gate.sh"; chmod +x "$RUNC/scripts/gates/l7r-gate.sh"
 (exec -a make bash -c 'sleep 120; :' done) & GLPID=$!
-sleep 0.3
+argv_make "$GLPID"
 printf '{"pid": %s, "t": 0}' "$GLPID" > "$RUNC/.git/gate.lock"
 BEFORE=$(git -C "$RUNC" rev-parse HEAD)
 OUT=$(printf '{"session_id":"sid-run"}' \

@@ -98,7 +98,11 @@ STUB_SLEEP=30 "$SCRIPT" > "$T/term.out" 2>&1 & pid=$!
 for _ in $(seq 1 50); do [ "$(grep -c '^start' "$T/events" 2>/dev/null)" -eq 3 ] && break; sleep 0.1; done
 kill -TERM "$pid"; wait "$pid"; rc=$?
 [ "$rc" -eq 130 ] && ok "exit 130 on TERM" || no "exit $rc on TERM"
-sleep 0.3
+# the TERMed checks' exit waited for, to a deadline, never slept on (451 T115): `stop` signals each tree and exits 130 without
+# waiting for it, so a fixed 0.3 s went red on checks slowed to exit. WAIT_TRIES of 0.1 s (30 s) is a GUESS only a red run pays
+# (a killed process measured gone in at most 0.059 s at a load of 16-17, 451 T111); the check after it is unchanged.
+WAIT_TRIES=300
+for _ in $(seq "$WAIT_TRIES"); do pgrep -f "$T/make" > /dev/null || break; sleep 0.1; done
 pgrep -f "$T/make" > /dev/null && no "a check outlived the TERM" "$(pgrep -af "$T/make")" || ok "no check outlives it"
 grep -q 'stopped' "$T/term.out" && ok "says it stopped" || no "no stop line" "$(cat "$T/term.out")"
 
