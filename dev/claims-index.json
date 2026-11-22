@@ -16481,21 +16481,42 @@
  },
  "rust/mode_a/src/compound.rs::composition#a privy in each court zone": {
   "body": "5fc5ed3dac3aa840",
-  "claim": "a privy in each court zone - GUESS privies-setchin.drawing: about one privy to each part of the compound, the project's guess",
-  "code": "ac001daba2f9f532",
-  "core": "4cf4e84f9e54cded",
+  "claim": "a privy in each court zone - GUESS privies-setchin.drawing: the page guesses about one privy to each part of the compound (the barracks, the stables, the servants' row) and records no per-zone rule; the check holds only the minimum that guess implies, a privy in each of the two court zones the divider splits, and passes a program that draws no privy",
+  "code": "1e5ad40a92d88b29",
+  "core": "ea0ed91d7a452280",
   "date": "2026-11-22",
-  "note": "every zone on either side of the divider must hold a privy whenever the compound has any, which is the page's \"about one to each part\" and is recorded there as a GUESS",
+  "note": "the page records the per-part privy count as a guess and gives no per-zone rule; the code requires a privy centered in each of the two zones the divider splits, and passes a program with no privies (the `!s.privies.is_empty()` guard)",
   "pages": {
    "0101-privies-setchin.drawing.html": "03968c62149e28e2"
   },
-  "reads": "0c47d592ee7f10e5",
+  "reads": "aa361bfefe39a9c9",
   "research": "ad0c946c19e2af00",
   "rests": [
    "0101-privies-setchin.drawing.html:38960fd9975a6f1c",
-   "0101-privies-setchin.drawing.html:8299420f832f4bd1"
+   "0101-privies-setchin.drawing.html:79397bdd548ce631"
   ],
-  "triage": "touched",
+  "verdict": "IN-STEP"
+ },
+ "rust/mode_a/src/compound.rs::composition#the size ranks before writing": {
+  "body": "5fc5ed3dac3aa840",
+  "claim": "the size ranks before writing - the-size-of-a-compound-and-the-rank-of-its-buildings.drawing: for each pair of the audit's HIERARCHY and of RANKS, the largest seated building of the smaller kind has less floor area than the largest of the bigger kind, the bath measured by its seated box; the pairs' order is the one their own claims record",
+  "code": "2e6f2d9ab033ac0b",
+  "core": "ea0ed91d7a452280",
+  "date": "2026-11-22",
+  "note": "checks each HIERARCHY and RANKS pair strictly (the smaller kind's largest seated building must be smaller), measures the bath by its seated box, and leaves each pair's order to that pair's own claim",
+  "pages": {
+   "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html": "f252f3a63a8691e8"
+  },
+  "reads": "aa361bfefe39a9c9",
+  "research": "2a39d01ffe9d6d7e",
+  "rests": [
+   "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html:1cb5624cb2336cca",
+   "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html:88554d9e344db313",
+   "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html:8e60bf46e6b04c4a",
+   "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html:cb8826a5e182c9e9",
+   "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html:f04061862f18172a",
+   "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html:f6266a6b5f45273e"
+  ],
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/compound.rs::count#the compound engine's audit rules": {

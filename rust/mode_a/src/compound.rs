@@ -112,7 +112,9 @@ pub fn generate(
 
 /// The size sweep's pairs and a privy in each court.
 ///
-/// Research: a privy in each court zone - GUESS research/questions/0101-privies-setchin.drawing.html: about one privy to each part of the compound, the project's guess
+/// Research:
+///     a privy in each court zone - GUESS research/questions/0101-privies-setchin.drawing.html: the page guesses about one privy to each part of the compound (the barracks, the stables, the servants' row) and records no per-zone rule; the check holds only the minimum that guess implies, a privy in each of the two court zones the divider splits, and passes a program that draws no privy
+///     the size ranks before writing - research/questions/0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html: for each pair of the audit's HIERARCHY and of RANKS, the largest seated building of the smaller kind has less floor area than the largest of the bigger kind, the bath measured by its seated box; the pairs' order is the one their own claims record
 fn composition(p: &spec::Program, l: &layout::Layout, s: &parts::Seated) -> Result<(), Error> {
     let area = |kind: &str| -> Option<f64> {
         let mut best: Option<f64> = None;

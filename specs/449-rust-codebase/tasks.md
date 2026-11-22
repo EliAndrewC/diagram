@@ -24,6 +24,7 @@ nothing behind it in physical reality, so each is `research: rendering`.
 - layout-revised: ochiba-magistracy - T297, T299: the ground west of the house named a back yard, and a west door in the office hall's front band, m:t289-bundle-rects
 - layout-revised: ochiba-roundtrip-test - T299, T300: the office hall's rooms drawn as Ochiba's (armory, day office, study, dais, clerks' seats), a west door, and the strip behind the residence named a rear yard, m:t289-bundle-rects
 - layout-revised: county-magistracy-example - T309: the staff long-houses shortened to stand below the residence (0116's order, the HIERARCHY pairs): the barracks 22 x 60 ft (bays at 12, 24, 36, 48), the long-house 24 x 50 ft (bays at 14, 26, 38), and the granary deepened to 50 x 36 ft to keep the plan inside the jin'ya coverage band, m:t309-county-rects
+- none: T303 - the armory-site audit check (`rust/mode_a/src/audit/armory.rs`) and the form `armory as a store of its own` in types.json; no pool sheet moves (each keeps the site its seed rolls), so no element is re-placed or redrawn by this task
 
 ## Tasks
 
