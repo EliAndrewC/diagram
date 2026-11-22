@@ -7682,3 +7682,260 @@ performance checklist's answers are given in brief:
    files the pass left alone, a load average of 29.8 on 22 cores); before, the same pass named nothing.
 
 
+<!-- plan-archive: archived 2026-11-22 -->
+### T80 (the plan hold's write-back restored nothing for a task whose own headings stand apart in the plan, yet answered "the held text is written back", found by T78 reading the code, 2026-11-21)
+
+- **Approach**: one change, red first, after the measurement the task line asks for.
+  - the measurement: in a scratch clone (`/tmp/t80/c`), a live hold on 444's T22 - its three own headings in two places, `### T22` with `### T22 Approach`, and `### T22 part B` 229 lines on - and a write slipping through into either place: HEAD's binary kept one joined text in the snapshot, answered `the held text is written back` (exit 2), and left the change in the plan, for the far place and the near place alike; a section in one place (T25) was restored, measured 2026-11-21 (`/tmp/t80/measure.sh` through `/tmp/t80/bin-head`, a diff of the plan before and after; `/tmp/t80/head-split*.post.out`, `/tmp/t80/head-whole.post.out`).
+  - the reach: 8 of the 169 own task sections in `specs/*/plan.md`, the one file the hold reads, stand in more than one place, none in 451's, measured 2026-11-21 (`/tmp/t80/split.py`); over `specs/*/plan*.md` 53 of 931 by the same script, and 53 of 939 by T78's `/tmp/t78/split.py` on today's tree (its 51 of 898 when it filed T80), measured 2026-11-21 (both scripts).
+  - the fix: `plan_text::section_places` reads a task's section as the places it stands - its own headings' spans (`ordered_sections` now built on them, its output the same, pinned) with adjacent ones joined; the snapshot keeps one text a place (`planhold.rs` `held_places`), and `write_back` pairs each with where it stands now - by order where the plan holds as many places, else by its heading, never an old text holding a place's heading past its own first line, since writing it back would stand text twice - and writes back each changed place by its byte span, from the end. `held`, the section joined, stays what a write is judged against, so T78's refusals are unchanged (decision D-a).
+  - the answer: byte-identical where every changed place was written back and the section stands in one place, and for a block hold; a section in several places names the places written back (`the held text is written back in `### T22 part B (2026-11-04T07:16Z)` (1 of its 2 places changed)`); a held place it cannot find (`gone from the section`) or a place new since the call began it names after `NOT written back`, and a call that restored nothing reads `NOTHING of it is written back`, each with the `git -C <clone> diff` that shows the change and `make plan-verdict`'s refusal as what is left undone costs.
+  - found here, the same pairing: with a held heading gone, HEAD wrote the old text over the place left - the far place's heading gone stood the far part twice, the first heading gone stood the held body twice - and its block write-back zipped the held blocks left with the old ones by order, so one held heading renamed had T01's old text written over T02's block, T02's text gone; each pinned and fixed (decision D-b).
+  - red first: on HEAD's `planhold.rs` (with this task's `plan_text.rs` and tests) 4 of 391 failed - `a_split_section_is_written_back_in_each_place` (its far-place case, the plan still changed), `a_place_no_write_back_can_find_is_named` (the far part standing twice), `a_first_heading_gone_is_not_written_twice` and `a_held_block_is_written_back`'s renamed-block case (T02's block overwritten) - each test stopping at its first failing assert, so the near, both, renamed-heading, legacy-snapshot, gone-task and empty-before cases were not seen red; 387 passed, measured 2026-11-21 (`make rust-test CRATE=rust/guard/shared` in the scratch clone, `/tmp/t80/red3.log`; the first run in this clone, before the block and first-heading cases, 3 of 390 failed, `/tmp/t80/red.log`, its third the gone-task case saying "written back").
+  - green: every test of T80's files passes - 393 of the 395 in `rust/guard/shared`, the 2 failing `tree::tests::quotes`'s, another task's uncommitted `tree/tests/quotes.rs` - with lint clean, format clean on T80's files (the crate's one diff in `quotes.rs`) and 0 lines no test reaches, measured 2026-11-21 (`make rust-test`, then `l7r-gate.sh rust lint`, `format --check` and `cover --crate rust/guard/shared`, `/tmp/t80/green3.log`; the first closing check's one red, `held`'s unreadable-plan line no test reached once `restore` read `held_places`, fixed by building `held` on `held_places`, `/tmp/t80/closing2.log`); through the rebuilt binary (`/tmp/t80/bin-new`) 444's T22 is restored in either place and says which, and T25's answer is byte-identical to HEAD's, measured 2026-11-21 (`/tmp/t80/measure.sh`, `/tmp/t80/new-*.post.out`).
+  - the replay of 451's hold history: the transcripts hold 168 plan-review dispatches of 451 - 139 task holds and 29 block holds; of the 139 sections, on the last commit of `plan.md` before each dispatch, 128 stand in one place, 11 were not yet committed, none in several, measured 2026-11-21 (`/tmp/t80/replay_holds.py`). The one write-back 451's history records (T57's, 2026-11-21T06:01:04Z: its hook answer in the builder's transcript, and the tool-usage log's `planhold-restore` line that second) replayed with its real edit (`/tmp/t57/edit.py`, its old and new lines) on the first commit holding its new text (020185aed5) with the old put back: HEAD's binary and T80's give byte-identical answers and plans, both restored, measured 2026-11-21 (`/tmp/t80/replay_t57.sh`).
+  - decisions: D-a - the refusal keeps the joined section (T78's pin, reviewed today, a split section still refused on shared text) and the change is the write-back alone, as the task line asks; the refusal reading each place is filed as T120. D-b - the two pairing defects are fixed here: they are this write-back's own wrong outcomes (text standing twice, a block overwritten), found by its pins.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+| the write-back in each place a section stands | n/a - no map | n/a | none | n/a |
+
+<!-- plan-archive: archived 2026-11-22 -->
+### T80 Approach (checklist part A)
+
+1. **The goal, in the world.** No map changes. While a plan review runs, a write that slips through into any place a held task's section stands - its own headings together or apart - is written back when the call ends, and the answer says what was written back; a place it cannot find it names, and a call that restored nothing says so, not "written back".
+2. **The constraints.** T80's line (measured first in a scratch clone, then each held place restored through `plan_text`'s section reading and the answer saying what it restored, red first); its brief (only the plan hold's code, `plan_text`, their tests, `docs/guards.md`'s row and this section; T51's `make_only_hooks` and `gate_write_hooks` and T110's `tree::program` untouched; each assert on one line; a section not split unchanged in the replay).
+3. **Where each comes from.** O: this task's measurements of 2026-11-21 (the Approach) and T78's reading of the code (its plan-done.md section's Found item); G: none - the brief is the caller's.
+4. **Do they describe the world here?** Yes: the failure reproduces through HEAD's binary in a scratch clone for 444's T22 in either place while T25 is restored (`/tmp/t80/head-split*.post.out`, `/tmp/t80/head-whole.post.out`), measured 2026-11-21.
+5. **The order.** `plan_text`'s spans first (the same output, pinned), then the snapshot and write-back in `planhold.rs`, then the replay; the refusal path is untouched (D-a), T120 after.
+6. **The exits.** Green: `rust/guard/shared`'s and `rust/guard`'s tests, lint, format and cover clean, T22 restored in the scratch clone, the replay unchanged, `make closing-checks` green. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** none - the one write-back of a held plan is `planhold.rs`'s `restore` and `write_back`, the one snapshot `snapshot`: `grep -rln "plan_snaps\|write_back\|section_places" rust/ scripts/` (2026-11-21) names `plan_text.rs`, `planhold.rs`, `checks_hooks.rs`, their test files and `record_edit_gate/tests.rs`, and `event_log/refile.rs`'s own unrelated `write_back`.
+8. **The budget.** One landing.
+9. **Done, measured.** every test of T80's files green in `rust/guard/shared`, 393 of its 395, the 2 others another task's (`/tmp/t80/green3.log`, `make rust-test`), T22 restored in either place through the rebuilt binary (`/tmp/t80/new-split*.post.out`), T25's and T57's answers and plans byte-identical to HEAD's (`/tmp/t80/new-whole.post.out`, `/tmp/t80/new.r57.*`), and `make closing-checks T=T80 F=451`: hooks-test and quick green, static red on another task's file alone (`rust/guard/shared/src/tree/tests/quotes.rs`, T83's, nothing of T80's judged there), so it is run once more when that file is whole (`/tmp/t80/closing3.log`), measured 2026-11-21.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** A builder whose write slipped into a held section standing in several places was told its change was written back while it stayed, the review's verdict voided unseen until `make plan-verdict` refused it; and with a held heading gone or a held block renamed, the write-back stood text twice in the plan or wrote one block's text over another's - text a reader of the plan would see doubled or lost.
+
+**Found and left?**
+
+- The write-back restored nothing for a task whose own headings stand apart, and answered "the held text is written back" - fixed here, observed 2026-11-21, method: the scratch clone's live hold on 444's T22 (each place) through HEAD's binary, and `/tmp/t80/split.py` over every `specs/*/plan.md` (8 such sections); `section_places` is the one reading of where a section stands.
+- A held heading gone had the old text written over the place left, text standing twice (the far part, or the held body), and a held block renamed had another block's old text written over the block after it - fixed here, observed 2026-11-21, method: `a_place_no_write_back_can_find_is_named`, `a_first_heading_gone_is_not_written_twice` and `a_held_block_is_written_back` on HEAD's `planhold.rs` (`/tmp/t80/red3.log`); `paired` is the one pairing.
+- The refusal judges a section standing in several places by its joined text, which stands nowhere in the plan: a Write of 444's plan unchanged was refused under a live T22 hold and passed under T25's, measured 2026-11-21 (`/tmp/t80/write-T22.out`, `/tmp/t80/write-T25.out`, through HEAD's binary), and a live foreground shell write on text every section shares is still refused for such a section alone (T78's pin). Not fixed here: T80's line is the write-back, and the shell case flips a pin T78 set today. Filed as T120; lands before T22.
+
+**Performance work?** no.
+
+
+<!-- plan-archive: T81 to T79 moved to plan-done.md, 2026-11-21 (feature 375 FR-044) -->
+<!-- plan-archive: T81 to T81 moved to plan-done.md, 2026-11-21 (feature 375 FR-044) -->
+<!-- plan-archive: T82 to T48 moved to plan-done.md, 2026-11-21 (feature 375 FR-044) -->
+<!-- plan-archive: T82 to T82 moved to plan-done.md, 2026-11-21 (feature 375 FR-044) -->
+<!-- plan-archive: archived 2026-11-22 -->
+### T110 (the Python program reader placed a path a program builds from its own literals where the shell stood: T92's builder's heredoc `root='/diagram/.clones/diagram-backlog/rust/gate/crates/'`, `def sub(path, old, new, count=1): p=root+path; ... open(p,'w')`, `sub('plan/src/plan.rs', ...)`, so no event line named the files it wrote and land-alone's list missed three of T92's, found 2026-11-21 at T92's landing; the shape is 0 of T93's 9,646 commands, all 10 of T92's command's calls, and 82 literals in 22 of the session's 34,785 subagent Bash calls since 2026-11-12, measured 2026-11-21 (`/tmp/t110/scripts/measure.py`, each corpus streamed a line at a time in one process, 13 MB peak))
+
+- **Approach**: THE BINDING, in `shared::tree::program` (`bound`, plain code behind a `def ` gate): a call `F(<literal>, ...)` of a
+  function the program defines once, the literal bound by position or keyword to a parameter P, P reaching a write
+  (`open(X, <w, a or x>)`, `X.write_text(`, `X.write_bytes(`, `Path(X).write_..(`) through X a join of P and a module-level root
+  (`NAME = '<literal>'` or `Path('<literal>')` at a line's start, bound nowhere else) - `+` (concatenation), `/`, `os.path.join`,
+  `Path(a, b)`, or an f-string whose every placeholder is the root or P - inline or through a name the body binds once to it (P
+  rebound to its own join counts, as that name). The literal is named at that join; under `placed` (gate-write's, readme's, the
+  event log's) not also where the shell stands, where make-only, fail-closed, keeps both. Everything else fails open as at HEAD:
+  a root the program computes (`r = pathlib.Path(sys.argv[1])`, the 3 writes in 1 session command, T125) or binds twice, a function
+  defined twice, a `*args` parameter or a call's star, a parameter handed on or rebound to anything but its join, a shadowed root,
+  an f-string's expression, mixed or floor joins, another sink.
+  - THE MEASUREMENT, measured 2026-11-21 (`/tmp/t110/scripts/measure.py`, T49's `measure.py` with the f-string join and the
+    bound-once root added, over T93's `/tmp/t93/replay-cmd.jsonl`, one line at a time, 0.25 s, 13 MB): 144 Python programs define a
+    function and hand it 299 literals (T49's 303 less the 4 bound to a `*args` parameter), 45 the parameter written as given (T49's
+    45), 0 onto a root. T92's own command, measured 2026-11-21 (`measure.py` over `/tmp/t110/t92-cmd.txt`, from its builder's transcript, 20:34Z,
+    past the corpus's 17:09Z end): 10 of 10 calls onto `root` by `+`. The session's subagent Bash calls, measured 2026-11-21
+    (`measure.py` over `/tmp/t110/scripts/transcripts.py`'s 34,785 rows, 2026-11-12 to 2026-11-21): 82 literals in 22 commands onto a literal root, every one by `+` (inline `open(root+p,'w')` or
+    `p=root+path`), 3 in 1 command onto a computed one, 699 written as given.
+  - THE SIBLING, Found and left and fixed here: a write joining the root and literals alone, no function (`open(root+'docs/guards.md',
+    'w')`), which `joined_on` drops under `placed` as a tail on a base it cannot see: 3 writes in 1 of T93's commands, 36 in 27 of
+    the session's (`/tmp/t110/scripts/toplevel.py`), and through a name bound once to it (`p = root + 'x'; open(p, 'w')`) 0 and 18
+    in 8 (`toplevel-named.py`), measured 2026-11-21. Read by the same join (`constants`), gated on a line that could bind a root.
+  - T49'S API: `own_args` stays. Gate-write hands the reader its program with every literal of an own function's call blanked to
+    `$`, so the binding places none of them (a `$` is no path) and gate-write's verdicts on such calls are HEAD's; the sibling's
+    writes are not calls' literals, so gate-write now sees them (the replays' 10 moved calls, each a top-level write, measured
+    2026-11-21 (`compare.py`, `refusals.py`)). T49 lets
+    `own_args` spare the literals the binding places - a query T49 adds beside `bound`, in this module, when it lands.
+  - THE COST, measured 2026-11-21 (`/tmp/t110/scripts/cost.py`, T96's `cost5.py` method: HEAD's hook binary and T110's
+    alternating, 3 runs each a command, a command's time its median, CPU by `os.wait4`, samples, seed 110: 200 of T93's
+    Python-program commands, the 236 whose program defines a function, the session's 22 of T110's shape and T92's own, 200 of the
+    corpus, load average 27 to 31, `/proc/loadavg`, `/tmp/t110/cost.log`): the event log's end, the median CPU added a command
+    -0.21, -0.08, -0.00 and -0.05 ms (python, defs, shape, any), make-only's start 0.00, -0.05, -0.23 and 0.03 ms, the paired
+    differences' p90 1.5 to 5.2 ms - no difference resolved at this load, at most 0.03 ms at the median, inside T96's 0.09 ms bar
+    for a Python program's Bash end. The whole, measured 2026-11-21 (`/tmp/t110/scripts/cpu.sh`: the session's 1,381 rows holding
+    `def ` through HEAD's and T110's replay drivers at once, so both meet one load, `/usr/bin/time`): 52.85 s and 53.62 s of CPU
+    (user and sys), 0.56 ms a row, a row some 14 of the reader's readings (the event log's line, the walk's, three of the whole
+    text, nine guard verdicts), so some 0.04 ms a reading. The replays' own wall times, 46.1 s before and 145.8 s after, measured 2026-11-21 (`replay.sh`'s summaries), were load:
+    run apart, the second beside a crate's `cargo test`.
+  - THE REPLAY, measured 2026-11-21 (`/tmp/t110/scripts/replay.sh`: each side one process over a corpus, from a scratch git
+    repository beside a decoy `make done`, a row giving no answer in 30 s a hang; `compare.py`: each row's event log `writes`, the
+    walk's names, three readings of the whole text, and nine guard verdicts - make-only, readme and gate-write, each on the row,
+    with a write of its own appended, and as a program - compared; `/tmp/t110/compare-t93.txt`, `compare-session.txt`). T93's
+    9,646 rows, measured 2026-11-21 (`replay.sh`, `compare.py`), 0 hangs either side: 1 moved, row 773 (`toolu_01YLF76BsHcdPcWRcsxqEJa5`), the sibling
+    (`d="<clone>/rust/guard/src/shared/"`, `open(d+"tree/python.rs","w")` and two more at the top), its three writes named at `d`
+    by the placed reading where HEAD dropped them and refused by gate-write under the scratch repository's running `make done` (0
+    to 2), a correction; its event log `writes` unmoved, the three files gone from the tree since T58 moved the shared crate (the
+    line names a file that exists). The session's 1,381 rows holding `def `, measured 2026-11-21 (`replay.sh`, `compare.py`), 0 hangs either side: 24
+    moved. 14 rows' `writes` gain the files they wrote, measured 2026-11-21 (`compare.py`, each row's code read), each through a
+    module-level root, each a correction: T92's own command (row 207, its four
+    `rust/gate/crates/plan` and `arbiter` files beside the printf's one HEAD named) and rows 200, 464, 468, 469, 472, 497, 704,
+    706, 736, 743, 749, 811 and 1282. 3 rows' `writes` hold the same files in a new order (149, 712, 731: a literal the binding
+    places named after the first pass's), measured 2026-11-21 (`compare.py`), neither. Gate-write's verdict moved 0 to 2 on 8 rows (468, 469, 472, 703, 704, 743, 811,
+    and 1097, the call of T93's row 773 again), on 4 of them also as typed (their roots relative: `P='specs/451-.../'`), each
+    refusal naming a top-level write the row makes (`open(P+'plan.md','w')`, `open(root+'inner-rooms.md','w')`,
+    `open(root+'l7r/diagram/tools/pack_audit/roads.py','w')`, measured 2026-11-21, `/tmp/t110/scripts/refusals.py`, T110's binary
+    from inside the scratch repository), each a correction; none through a function's call. The rest moved in the readings of the
+    whole text alone: 145, 1097 and 1231 naming writes whose files are since deleted or that a script the shell runs later makes,
+    703, 728, 744 and 1117 the same names in a new order. No row lost a write; make-only's and readme's verdicts moved on none in
+    either corpus. Row 145's `grab('l7r/diagram/compound_model.py', ...)`, read through `open(root+path).read()`, is named
+    nowhere: a read is no write. The rows the sibling's gate alone reaches, measured 2026-11-21 (`replay.sh` over
+    `/tmp/t110/session-root.jsonl`, the session's 3,970 Bash calls running Python with a line that could bind a root and no
+    `def `; `/tmp/t110/compare-root.txt`): 0 hangs either side, 19 moved, each naming a write the row makes, each a correction -
+    12 rows' `writes` gain it (`open(S+'bisect10.py','w')`, `open(f"{B}/diff/cases.json","w")`, `p=d+'search/filter.rs'` then
+    `open(p,'w')`, `open(T + "/0242-draft.html", "w")` on six rows), gate-write's verdict 0 to 2 on 2 (267's top-level
+    `open(root+'l7r/diagram/tools/pack_audit/curves.py','w')`, and 2019's `filter.rs`, also as typed), and 6 in the walk's or the
+    whole text's readings alone (a file since moved or deleted: `open(p + '.new', 'w')`, then `mv`). No row lost a write.
+  - RED FIRST, measured 2026-11-21 (`/tmp/t110/scripts/red.sh`: HEAD's tree with T110's `program/tests.rs` alone, `cargo test -p
+    l7r_shared --lib tree::program` in a scratch target, `/tmp/t110/red-rust.log`): 8 passed, 2 failed - T92's whole command,
+    verbatim, walked as the event log walks it (HEAD named its five files at the shell's directory, `<clone>/plan/src/plan/record.rs`
+    for `<clone>/rust/gate/crates/plan/src/plan/record.rs`, and the four beside it), and the `BINDS` table (46 rows: each form, and
+    each fail-open neighbor).
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+| the binding and its sibling in `shared::tree::program`, red first on T92's own command | n/a - no map | n/a | none | n/a |
+
+<!-- plan-archive: archived 2026-11-22 -->
+### T110 Approach (checklist part A)
+
+1. **The goal, in the world.** No map changes. A Bash call whose Python program writes through a function of its own onto a
+   module-level literal root (T92's builder's `root='<clone>/rust/gate/crates/'; def sub(path, ...): p=root+path; open(p,'w')`,
+   `sub('plan/src/plan.rs', ...)`), or writes that root joined with literals alone (`open(root+'docs/guards.md','w')`), has each
+   file it writes named at that join: in the event log's `writes`, so land-alone's list holds it, in readme's placed reading, and
+   in gate-write's for the sibling's writes alone (a call's literals reach gate-write blanked to `$`, so its verdicts on them stay
+   HEAD's until T49); make-only, fail-closed, names both places; every other answer as before.
+2. **The constraints.** T110's line; FR-012 (red first, on T92's own command); constitution XIII (no known regression: each move
+   of the replay a correction) and XIV (the unnamed writes a defect, fixed here); T49 builds on the reading (the Approach's T49'S
+   API); the launcher's ground rules: `tree/program.rs` and its tests alone, with docs/guards.md's event-log row, nothing of
+   T80's (`checks/planhold.rs`, `plan_text.rs`) or T83's (`tree.rs`'s walk, `tree/bind.rs`, its tests), `make format FILE=` on the
+   two files alone, nothing committed.
+3. **Where each comes from.** O: T92's landing (T110's line: three of its builder's files missing from land-alone's list); O:
+   this task's measurements, pins and replays (the Approach, item 4); the task as filed (T110's line).
+4. **Do they describe the world here?** Measured 2026-11-21, each by its method. Both sides built from one snapshot of the
+   clone's HEAD `b4ab4e5a79`'s `rust/` (`git archive`, `/tmp/t110/scripts/snapshot.sh`, `/tmp/t110/snapshot-head.txt`, 22:51:18Z),
+   whose guard code is HEAD `aeb9a0b6b1`'s: the five commits since change only `rust/gate/crates/rustc`, which the guard binary does
+   not build, measured 2026-11-21 (`git diff --name-only b4ab4e5a79 aeb9a0b6b1 -- rust/`); the after side the snapshot plus T110's
+   two files alone (`/tmp/t110/scripts/after.sh`), its binaries built 23:16Z after their last edit and before `make format FILE=`
+   moved 3 lines of `program.rs`, whitespace only, measured 2026-11-21 (the two files compared with every space and newline
+   removed: the same). THE REPLAY's corpora and THE COST's samples each by its method (the Approach), the moved rows' code read
+   line by line (`refusals.py`). The pins red then green (item 9).
+5. **The order.** After T96 (the reader it extends, landed `ca0fb42e8e`); before T49 and T118, each waiting on T110 (T49 spares
+   the literals this binding places, T118 the reader's two misread shapes); beside T83, touching none of its files.
+6. **The exits.** Green: the pins red first and green, each move of the replay a correction, the crate's lint and cover after
+   `make format FILE=`, the cost inside T96's bar, and this task's own `make closing-checks T=T110 F=451`. Red: what failed recorded
+   and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None: the shape counted in three corpora before the reader was written (the Approach's THE
+   MEASUREMENT), and the sibling found and counted by the same reading (THE SIBLING).
+8. **The budget.** One landing. The pass reads a program only behind its gate (a `def ` in it, or a line that could bind a root):
+   one pass over the body for its definitions and roots, one per call of a definition; it builds no pattern. Its cost the
+   Approach's THE COST, measured 2026-11-21 (`cost.py`, `cpu.sh`): no difference resolved in a hook call, some 0.04 ms a reading
+   in the whole.
+9. **Done, measured.** Red first: 8 passed, 2 failed (the Approach). Fixed: the crate's tests on HEAD with T110's two files
+   alone, 389 passed, 0 failed, measured 2026-11-21 (`cargo test -p l7r_shared --lib` in the scratch tree `/tmp/t110/after`,
+   `/tmp/t110/after-alone-test2.log`); in the clone, 393 passed, 0 failed, measured 2026-11-21 (`make rust-test
+   CRATE=rust/guard/shared`, `/tmp/t110/iter-4.log`, compiled at 23:17Z after the reader's last edit at 23:13Z), and on its rerun
+   393 passed with T83's two red-first tests of `tree/tests/quotes.rs`, new in its uncommitted diff, failing apart, measured
+   2026-11-21 (`/tmp/t110/iter-5.log`), and with the final tests 400 passed, 0 failed, measured 2026-11-21
+   (`/tmp/t110/iter-7.log`). The crate's lint clean, measured 2026-11-21 (`scripts/gates/l7r-gate.sh rust lint --crate
+   rust/guard/shared`, `/tmp/t110/lint-3.log`). Its cover: the first run red on T83's two tests, its `0` the failed run's marker
+   and no count (`/tmp/t110/cover-1.log`); the second named two of T110's lines no test reached - `program.rs`'s return where a
+   caller stops at a bound write, and the `BINDS` test's push on a mismatch - measured 2026-11-21 (`rust cover`,
+   `/tmp/t110/cover-2.log`), so that test now asks `program_names` for its first row's write and gathers its mismatches by a
+   filter; then none of T110's lines unreached, the lines it names all T83's (`tree.rs`, `tree/quoted.rs`, `tree/split.rs`),
+   measured 2026-11-21 (`rust cover`, `/tmp/t110/cover-4.log`), and 0 of T110's two files' lines on HEAD with them alone,
+   measured 2026-11-21 (`cargo llvm-cov --ignore-run-fail` in `/tmp/t110/after`, `/tmp/t110/after-lcov.info`). The replays: 1 of 9,646, 24 of 1,381 and 19 of 3,970 rows moved, each a
+   correction or an order, 0 hangs, measured 2026-11-21 (`replay.sh`, `compare.py`, the Approach). This task's own closing runs: run 1 (`20261121T234110Z-507285`, 6 of the clone's 8 uncommitted files
+   judged T110's): RED on static alone, its one failure the crate's format check on T83's `tree/tests/quotes.rs` (the gate:
+   nothing of T110's judged there), hooks-test GREEN 131 s, quick GREEN 4 s, measured 2026-11-21 (`make closing-checks T=T110
+   F=451`, `/tmp/t110/closing1.log`). Run 2 (`20261121T235308Z-952115`, 5 of the clone's 10 uncommitted files judged T110's,
+   T83's `tree.rs`, `tree/tests.rs`, `tree/tests/quotes.rs` and `docs/guards.md` - which holds T110's event-log clause beside
+   T83's - set apart as T83's): RED on static and quick, each on `check-file-scale`'s one file, T83's
+   `rust/guard/shared/src/tree.rs` at 1,147 lines, hooks-test GREEN 288 s, measured 2026-11-21 (`make closing-checks T=T110
+   F=451`, `/tmp/t110/closing2.log`); the run names no cause for that red (T122).
+10. **Before moving a constant.** No constant: the binding reads the program's shapes and moves no number.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** A defect, fixed here: a reader sees the event log's line for such a Bash call name the files it wrote,
+    so land-alone's list holds them and a landing no longer leaves them uncommitted (T92's three), and gate-write holds the
+    sibling's top-level writes while a gate runs where it let them through (10 of the replays' calls, measured 2026-11-21 (`compare.py`,
+    `refusals.py`)); make-only's and readme's answers as before.
+
+**Found and left?**
+- The sibling: a write joining the module-level root and literals alone, inline or through a name bound once to it, dropped
+  under `placed` as a tail on a base the reader could not see - 3 writes in 1 of T93's commands, 36 in 27 of the session's, and
+  through a name 0 and 18 in 8, observed 2026-11-21, method: `/tmp/t110/scripts/toplevel.py` and `toplevel-named.py` over both
+  corpora, one line at a time. Fixed here (`constants`).
+- A crate-wide `make format` rewrites other builders' uncommitted files (found 2026-11-21 by T110's first builder's run over
+  `rust/guard/shared` beside T80's uncommitted `checks/planhold.rs` and `plan_text.rs`). Not fixed here: the format tool's, outside
+  T110's two files. Filed as T121; lands before T22.
+- `make closing-checks`' set-apart note reads only rustc's and rustfmt's file locations and the coverage marker, so run 2's
+  file-scale red on T83's `tree.rs` went unnamed where run 1's format errors in T83's `quotes.rs` were named, observed 2026-11-21,
+  method: `scripts/gates/closing-checks.sh`'s `blocked()` read against both runs' logs. Not fixed here: the closing tool's, outside
+  T110's two files. Filed as T122; lands before T22.
+- A root the program takes from its shell arguments: `C=<clone>/rust/gate/crates; python3 -I - $C <<'EOF'`, `r =
+  pathlib.Path(sys.argv[1])`, `sub('plan/src/plan/lint.rs', ...)` writing `r / rel` - 3 writes into the clone in 1 of the
+  session's commands (`toolu_01Lx6bv5ndC6P344KgUiTqyw`), which no event line names, so land-alone's list would miss them,
+  observed 2026-11-21, method: `/tmp/t110/scripts/measure.py` over the session's 34,785 Bash calls (its `computed` rows), the
+  command read. Not fixed here: the program's arguments are the walk's to hand the reader (`tree.rs`, T83's), outside T110's two
+  files. Filed as T125; lands before T22.
+
+**Performance work?** No: a correctness fix, its cost measured against T96's bar (the Approach's THE COST).
+
+
+<!-- plan-archive: T57 to T111 moved to plan-done.md, 2026-11-21 (feature 375 FR-044) -->
+<!-- plan-archive: archived 2026-11-22 -->
+### T123 (a plan hold reached a tree it was not taken in, and checks_hooks' test read the real one: at T80's landing, with T110's review holding T110's section, uncommitted in the clone alone, the landing worktree's guard tests ran `each_event_keeps_its_book`, whose `PostToolUse` of a Bash with no cwd resolved "." to the worktree, whose `.git` file leads to the clone's `checks-open.json`, and T80's write-back answered "NOTHING of it is written back" for a section that tree never had, found 2026-11-21 in `/home/agent/.claude/jobs/c6fd72d1/tmp/451-t80-land.log`)
+
+- **Approach**: measured first, then two changes, red first, on T80's committed code.
+  - the measurement, which trees a hold's write-back runs in: in a scratch clone (`/tmp/t123/m`, T01's section filled and uncommitted as T110's was, its committed text a placeholder), a hold taken through the dispatch's own hooks (`check-bundle-hooks` `PreToolUse`, `checks-hooks` `PostToolUse` of the Agent), and a call changing T01's body in each tree: HEAD's binary wrote it back and refused it (exit 2, "the held text is written back") in the clone, in its landing worktree (added as `land-alone.sh` adds it, `git worktree add --detach`) and in a scratch worktree, and not in a separate clone, its own state; an Edit of the landing worktree's own plan was refused ("an edit now voids its verdict") while an Edit of the clone's held plan from the landing worktree passed; a snapshot under no id taken in the landing worktree was written over the clone's uncommitted section (`filled by the builder` replaced by the committed `body placeholder`), and one taken in the clone over the landing worktree's plan, its text then the landing's to commit; with the section absent from the landing worktree, "NOTHING of it is written back" (exit 2), the landing's own answer, measured 2026-11-21 (`/tmp/t123/measure.sh` through `/tmp/t123/bin-head`, built from a scratch clone of the clone's HEAD `bd2e21c749`; `/tmp/t123/head.measure.txt`).
+  - what the landing's test met: HEAD's guard tests in a scratch clone (`/tmp/t123/rc`) whose state held a live hold on T110 and a snapshot under no id: `each_event_keeps_its_book` FAILED at `checks_hooks/tests.rs:39`, 437 passed, 1 failed, the landing's figures, the state rewritten and a `tool-usage.jsonl` written beside it; HEAD's shared tests on the same state rewrote the snapshot under no id (`handle/tests.rs:98`'s `handle("edit", {})`, which snapshots in whatever tree the test runs in) - the writer of the snapshot the guard test then wrote back, measured 2026-11-21 (`/tmp/t123/redrun.sh`, `/tmp/t123/out/red-head-guard2/summary.txt`, `/tmp/t123/out/red-head-shared/summary.txt`).
+  - designed or incidental: the check state's sharing across a clone's worktrees is designed - the Python hooks found it through the common dir (383, 385), 449 T86 ported it, and `the_state_file_is_found_from_a_clone_a_worktree_or_a_bad_git_file` pins it - so it stays; the plan hold (385 T85) read and wrote the plan of the call's own tree, never designed against a second tree, and T88's section and `scripts/land-alone.sh` never name `checks-open.json` or the hold (read 2026-11-21): the hold reaching the landing worktree is incidental.
+  - the recorded root on real history: of the 1,233 plan-review dispatches in the transcripts, 1,140 ran at a tree's root and 93 inside one (its root the nearest ancestor holding a `.git`); of the 824 Edit, Write and MultiEdit calls on a `specs/*/plan.md`, 814 wrote the plan of their own call's tree and 10 another tree's by its absolute path (8 from the clone into T11's scratch worktree `/tmp/t11/wt`, 2 from the mirror into the clone, a separate state), measured 2026-11-21 (`/tmp/t123/replay_writes.py`, each transcript streamed a line at a time, deduplicated by tool id, 29 MB peak, 43 s).
+  - the fix, (a): `planhold::hold` records `root`, the tree the dispatch's call ran in (`clone_root` of its cwd, as `handle`'s dispatch reads it); `reaches` asks whether a call's tree is that root, and a hold with none recorded, taken before T123, reaches every tree, today's behavior; `snapshot` keeps a live hold's text only for a call in its tree, and `restore` writes back only there - each closes one direction of the no-id case; `refusal` judges a write against the plan of the hold's tree (`taken_in`) wherever the call runs, so an Edit of another tree's own plan passes and one of the held plan by its absolute path from any tree is refused, and a shell write is judged in the hold's tree alone - there a foreground one on shared text passes, a write-back behind it - and from another tree not at all, as no write-back runs there (decision D-a).
+  - the fix, (b): a call with no `cwd` reads `handle::cwd_of`'s directory - the process's working directory, and in a test build the test thread's own `PWD` (`crate::env`, 451 T32's map), no tree where the test names none - so no test's call reaches a live clone's state; `checks_hooks`' `state_holds_snaps` reads the same; the no-cwd asserts of `each_event_keeps_its_book` and `handle/tests.rs:98` keep their shape and read nothing (decision D-b).
+  - red first: on HEAD's sources with T123's new tests alone, 3 of 3 failed - `a_hold_is_written_back_and_refused_in_its_own_tree_alone` (the snapshot in the other tree, `planhold/tests.rs:622`), `a_dispatch_records_the_tree_its_hold_is_taken_in` (no root), `a_call_with_no_cwd_reads_only_the_tree_its_test_names` (the named tree unread, `checks_hooks/tests.rs:63`), the 3 other `checks_hooks` tests passing, with no state in the scratch clone at all, so each red is deterministic; measured 2026-11-21 (`cargo test` in `/tmp/t123/rc`, `/tmp/t123/red-shared.log`, `/tmp/t123/red-guard.log`).
+  - each check alone off, the rest of T123 in place: the snapshot's tree check turns `a_hold_is_written_back_and_refused_in_its_own_tree_alone` red at its snapshot assert (`planhold/tests.rs:624`), the write-back's at its no-id cross-tree assert (`:635`), the refusal's tree at its Edit assert (`:683`), the shell write's tree gate (a call from another tree not judged) at its other-tree shell assert (`:696`), a hold with no root reaching no tree at its legacy write-back assert (`:654`), the dispatch's root `a_dispatch_records_the_tree_its_hold_is_taken_in` (`handle/tests.rs:533`), and the test build's no-cwd tree `a_call_with_no_cwd_reads_only_the_tree_its_test_names` (`checks_hooks/tests.rs:64`) - 7 of 7 red, each at its own assert, measured on round 2's code 2026-11-21 (`/tmp/t123/deletions2.sh` in the scratch clone `/tmp/t123/rc2`, `/tmp/t123/deletions2.out`).
+  - green: in the clone, with the other tasks' uncommitted work beside it, on round 2's code `rust/guard/shared` 402 passed and `rust/guard` 442 passed (`make rust-test CRATE=`, `/tmp/t123/green2-shared.log`, `/tmp/t123/green2-guard.log`), lint and format clean on both, cover clean on `rust/guard` and on `rust/guard/shared` red at `tree/split.rs:108` alone, T83's file, no line of T123's (`scripts/gates/l7r-gate.sh rust lint|format --check|cover --crate`, `/tmp/t123/cover-shared.log`); through T123's binary (`/tmp/t123/bin-new`, built from `/tmp/t123/rc2`) the same measurement: the clone's call written back and refused (exit 2), the landing worktree's, the scratch worktree's and the separate clone's calls passed with their change standing (exit 0), the Edit of the landing worktree's own plan passed and the Edit of the clone's held plan from the landing worktree refused, both no-id directions and the absent section exit 0 with the second tree's plan untouched, and a foreground shell write by a relative path - from the landing worktree, of a held heading and of text every section shares, both passed (HEAD refused the heading), and from the clone the heading refused and the shared text passed, as HEAD (`/tmp/t123/new.measure.txt`, rebuilt on round 2's code, `/tmp/t123/round2.out`); `make closing-checks T=T123 F=451` on round 2's code: hooks-test and quick green, static red on another task's line alone (`rust/guard/shared/src/tree/split.rs:108`, T83's, the closing check reporting every line of T123's covered), so it runs once more when that file is whole (`.git/closing-checks/20261122T010401Z-2611804/`, `/tmp/t123/closing3.log`), measured 2026-11-21.
+  - decisions: D-a - the refusal is judged by the hold's tree too: measured firing on the landing worktree's own plan, the same wrong outcome as the write-back's, and judging the held plan's path closes the Edit of it from another tree that HEAD passed; a shell write is judged only in the hold's tree, since by a relative path one from another tree writes that tree's own plan and no write-back runs there - judged against the held tree's text, a write of text every section shares to the landing worktree's own plan was refused where HEAD passed it (round 1 of the plan review, `/tmp/sfv123/m2.sh`; now exit 0 in its four cases, as HEAD, `/tmp/t123/round2-m2.txt`), and a held heading written to the landing worktree's own plan, which HEAD refused by that tree's own text, now passes (`/tmp/t123/new.measure.txt`); a shell write naming the held plan by its absolute path is left unjudged, found item 3. D-b - the no-cwd seam is in `handle.rs` beyond the hold's call site, since the brief's "the test sends a cwd of a scratch root, or reads a scratch state" for every no-cwd test of the hold is one place: `handle` and `checks_hooks` read it, and a test build reads the test's own tree; production reads the process's working directory as before.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+| a hold written back and refused in its own tree alone | each check alone off turns its pin red | n/a - no map | none | n/a |
+| no test's no-cwd call reads a live hold | the seam alone off turns its pin red | n/a - no map | none | n/a |
+
+<!-- plan-archive: archived 2026-11-22 -->
+### T123 Approach (checklist part A)
+
+1. **The goal, in the world.** No map changes. A plan review's hold protects the plan of the tree it was taken in, and only it: a call in the clone's landing worktree or a scratch worktree is neither written back nor refused for that tree's own plan, no tree's text is written into another's, and no test's call with no cwd reads a live clone's hold, so a landing does not fail while a review runs.
+2. **The constraints.** T123's line (measured first in scratch clones and worktrees - the clone, its landing worktree, a scratch worktree - then a hold recording its tree with its write-back there alone, a hold with no root today's, and the test reading a scratch state, red first on both); its brief (only the hold's code in `shared::checks`, `checks_hooks` and its tests, `docs/guards.md`'s row and this section; T80's committed code built on; T110's `tree/program.rs`, T83's `tree.rs` and T87's `guard_file_hooks` untouched; each assert on one line, values bound first; never the real clone's state).
+3. **Where each comes from.** O: this task's measurements of 2026-11-21 (the Approach) and T80's landing log; G: none - the brief is the caller's.
+4. **Do they describe the world here?** Yes: HEAD's binary reproduces each wrong outcome in `/tmp/t123/m` and its worktrees (`/tmp/t123/head.measure.txt`), and HEAD's guard tests reproduce the landing's red, 437 passed and 1 failed, in a scratch clone with a planted hold (`/tmp/t123/out/red-head-guard2/summary.txt`), measured 2026-11-21.
+5. **The order.** The measurement, then the hold's root and the three tree checks in `planhold.rs`, then the no-cwd seam in `handle.rs` and `checks_hooks.rs`, then the measurement again through the new binary; lands with T80.
+6. **The exits.** Green: `rust/guard/shared`'s and `rust/guard`'s tests, lint, format and cover clean, the new binary's measurement as below, both suites leaving a planted live state byte-identical, `make closing-checks` green. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** none - the hold is taken, snapshotted, written back and judged in `planhold.rs` alone, called from `handle.rs`: `grep -rln "plan_snaps\|plan_holds\|planhold::" rust/ scripts/` (2026-11-21) names `planhold.rs`, `handle.rs`, `checks_hooks.rs`, their tests, `record_edit_gate.rs` (a read-only prefilter that asks whether any hold stands, before `handle` judges) and the plan lint's tests; the one no-cwd fallback of the checks' handling is `handle::here`.
+8. **The budget.** One landing.
+9. **Done, measured.** the 7 checks each red alone off (`/tmp/t123/deletions2.out`, round 2's code), the 3 new tests red on HEAD's sources (`/tmp/t123/red-*.log`), both crates green in the clone (402 and 442, round 2's code) and in `/tmp/t123/rc2` on a planted live state left byte-identical (439 and 393), the new binary's measurement as the Approach says (`/tmp/t123/new.measure.txt`, `/tmp/t123/abs.out`), and `make closing-checks T=T123 F=451`: hooks-test and quick green, static red on T83's `tree/split.rs:108` alone (`.git/closing-checks/20261122T010401Z-2611804/`), measured 2026-11-21.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** A builder's uncommitted plan section in the clone could be overwritten by the committed placeholder - lost work - when a test's no-id snapshot taken in the landing worktree was written back in the clone (the measured `land-to-clone` case), and the clone's uncommitted text could be written into the landing worktree and committed by the landing; a call in the landing worktree that changed that tree's own plan was refused and written back; and every landing's gate failed while any review ran (T80's).
+
+**Found and left?**
+
+- A hold taken in the clone was written back and refused on the landing worktree's and a scratch worktree's own plan, one tree's snapshot was written over another's plan, and an Edit of the held plan from another tree passed - fixed here, observed 2026-11-21, method: `/tmp/t123/measure.sh` through HEAD's binary, a call in each tree sharing the clone's state and a separate clone; `planhold.rs` holds the one snapshot, write-back and refusal.
+- Tests whose call names no cwd read and wrote the live clone's state - `each_event_keeps_its_book` (`checks_hooks`) wrote a live hold back, `handle/tests.rs:98` snapshotted into it - fixed here for every no-cwd call into the checks' handling at once (`handle::cwd_of`), observed 2026-11-21, method: HEAD's two crates' suites run in a scratch clone whose state held a live hold and a snapshot under no id, the state compared after (rewritten by both suites, `/tmp/t123/out/red-head-*`), then T123's suites on the same planted state (`l7r_guard` 439 passed, `l7r_shared` 393, the state byte-identical to what was planted, no file new beside it, the plan untouched, `/tmp/t123/deletions.sh`, `/tmp/t123/deletions.out`, and again on round 2's code, `/tmp/t123/deletions2.out`).
+- A shell call in another tree that writes the hold's plan by its absolute path passes and is written back by nothing (the write-back runs in the hold's tree alone) - measured: from the landing worktree, `sed -i` of the held heading by the clone plan's absolute path passed through T123's binary and the write stood, where HEAD refused it, and the same write of text only the clone's section holds passed through both (`/tmp/t123/abs.sh`, `/tmp/t123/abs.out`), so HEAD's refusal came from the calling tree's own text, never from the path. Accepted, not a defect (constitution XIV): no wrong outcome survives it, since `make plan-verdict` refuses a verdict on a section changed while reviewed (`rust/gate/crates/plan/src/plan/record.rs:163`) and the review runs again - its cost, a review run again, as T78 priced for a foreground call moved to the background. On real history it does not arise: of the 161 shell commands in the transcripts naming a plan by its absolute path, 6 named another tree's than their call's, and none wrote a plan of a tree sharing the call's state (3 ran in the mirror after a `cd` into a clone, whose state the mirror does not share, 1 read a scratch worktree's plan, 1 was a heredoc into a test file the count's pattern misread, 1 this task's own measurement; `/tmp/t123/replay_shell.py`, `/tmp/t123/replay_shell.out`). The alternative priced: judging a shell call that names the held plan's absolute path, refusing shared text there too as no write-back stands behind it - one more check and its pin, missing a `cd`, a `git -C` or a variable naming the same file, and met by none of the replayed commands; chosen by T123's builder on that count, 2026-11-21. The Edit and Write calls of that shape, 10 of the 824 plan writes in the transcripts (the replay above), are now judged against the held tree's plan, refused where they would change held text.
+
+**Performance work?** no.
+
+
