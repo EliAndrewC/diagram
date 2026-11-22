@@ -1,0 +1,13 @@
+#
+# Locked for the diagram repository at the 2026-08-25 split, pinned to the versions gm-assistant's
+# webapp/requirements.txt carried then (the set every recorded green gate ran on).
+# Re-lock:  pip-compile --output-file=requirements.txt requirements.in
+#
+numpy==2.5.1
+    # via
+    #   scipy
+    #   shapely
+scipy==1.16.3
+    # via -r requirements.in
+shapely==2.1.2
+    # via -r requirements.in
