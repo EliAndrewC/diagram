@@ -14,7 +14,7 @@ use crate::Reply;
 
 const BOXES: &str = "# Tasks\n\n- [ ] T1 one\n      verify: \n- [ ] T2 two\n      verify: \n- [ ] T3 three\n      verify: \n- [ ] T4 four\n";
 const TEMPLATES: &str = "# Plan\n\nThe fixture's plan.\n\n### T1 (<why>)\n\n- one\n\n### T2 (<why>)\n\n- two\n\n### T3 (<why>)\n\n- three\n\n### T4 the next\n\n- four\n";
-const BUNDLE: &str = "# Plan\n\nThe fixture's plan.\n\n### T1, T2, T3 (bundle)\n\n- **Approach**: three small fixes in one pass.\n\n### T1, T2, T3 Approach (checklist part A)\n\n1. **The goal.** T1: one; T2: two; T3: three.\n\n### T4 the next\n\n- four\n";
+const BUNDLE: &str = "# Plan\n\nThe fixture's plan.\n\n### T1, T2, T3 (bundle)\n\n- **Approach**: three small fixes in one pass.\n\n### T1, T2, T3 Approach (checklist part A)\n\n1. **The goal.** T1: one; T2: two; T3: three.\n6. **The exits.** Green: landed. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.\n\n### T4 the next\n\n- four\n";
 
 fn plan(root: &Path, words: &[&str]) -> Reply {
     let owned: Vec<String> = words.iter().map(|s| (*s).to_owned()).collect();

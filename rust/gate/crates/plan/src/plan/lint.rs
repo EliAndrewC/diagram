@@ -76,7 +76,7 @@ static DECISION_LABEL: LazyLock<Regex> = LazyLock::new(|| {
 static RULE: LazyLock<Regex> =
     LazyLock::new(|| re(r"(?i)\b100\s*%\s+(?:code\s+|line\s+)?coverage\b"));
 static APPROACH_HEAD: LazyLock<Regex> =
-    LazyLock::new(|| re(r"(?m)^### (T\d+[a-z]?) Approach\b.*$"));
+    LazyLock::new(|| re(r"(?m)^### (T\d+[a-z]?(?:,\s*T\d+[a-z]?)*) Approach\b.*$"));
 static HEADING_LINE: LazyLock<Regex> = LazyLock::new(|| re(r"(?m)^#.*$"));
 static APPROACH_BLOCK: LazyLock<Regex> =
     LazyLock::new(|| re(r"(?i)^#{2,4}\s+T\d+[a-z]?\s+(?:Approach|part B)\b"));
@@ -430,7 +430,8 @@ fn missing_red_exits(section: &str) -> Vec<(usize, String)> {
     out
 }
 
-/// In a plan whose tasks owe approach blocks, each open task with no `### Txx Approach` block in the plan or plan-done.md (D5).
+/// In a plan whose tasks owe approach blocks, each open task with no `### Txx Approach` block in the plan or plan-done.md (D5); a bundle's
+/// block, `### T01, T02 Approach`, covers every task its heading lists (451 T141).
 fn tasks_without_approach(spec_dir: &Path, plan: &str) -> Vec<String> {
     let done = std::fs::read_to_string(spec_dir.join("plan-done.md")).unwrap_or_default();
     let joined = format!("{plan}\n{done}");
@@ -444,7 +445,11 @@ fn tasks_without_approach(spec_dir: &Path, plan: &str) -> Vec<String> {
     let have: Vec<String> = APPROACH_HEAD
         .captures_iter(&joined)
         .map_while(Result::ok)
-        .map(|c| c[1].to_owned())
+        .flat_map(|c| {
+            c[1].split(',')
+                .map(|t| t.trim().to_owned())
+                .collect::<Vec<_>>()
+        })
         .collect();
     OPEN_TASK
         .captures_iter(&tasks)

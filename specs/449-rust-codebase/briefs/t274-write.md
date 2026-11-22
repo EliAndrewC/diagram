@@ -18,7 +18,7 @@ First: `make research-claim Q="0123" FEATURE=449` (0090 is read, not edited) (re
 ## Your items
 
 No new registry key should be needed: the Pingyao source is already cited on 0123's findings page as the note
-`pingyao-yamen` (`research/questions/0123-...-jinya-and-yamen.notes.html`, line 14), its original in
+`pingyao-yamen` (`research/questions/0123-the-magistrates-manor-in-a-town-where-it-stands-and-which-way-it-faces-jinya-and-yamen.notes.html`, line 14), its original in
 `0123-...originals.html`: 「在兵、刑、工房后修有公廨房，以北修县仓」 ("Office buildings were built behind the offices of
 war, justice and works, and north of them the county granary", translated). Its archived text:
 `make archive-find KEY=pingyao-yamen` (or the archive copy under `.specify/source-archive/42/429e9a2d5a67/`).

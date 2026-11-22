@@ -6,7 +6,7 @@ use serde_json::{json, Value};
 use super::super::tick_gate;
 use super::{feature_at, repo, run, write_json};
 
-const BUNDLE: &str = "# plan\n\n**D1 - a decision.** Each tub by a door.\n\n### T05, T06, T07 (bundle)\n\n- **Approach**: three small fixes, one pass.\n\n### T05, T06, T07 Approach (checklist part A)\n\n1. **The goal.** T05: the bath; T06: the well; T07: the gate.\n\n### T08 the next\n\n- a lane\n";
+const BUNDLE: &str = "# plan\n\n**D1 - a decision.** Each tub by a door.\n\n### T05, T06, T07 (bundle)\n\n- **Approach**: three small fixes, one pass.\n\n### T05, T06, T07 Approach (checklist part A)\n\n1. **The goal.** T05: the bath; T06: the well; T07: the gate.\n6. **The exits.** Green: landed. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.\n\n### T08 the next\n\n- a lane\n";
 const BOXES: &str =
     "# Tasks\n\n- [ ] T05 the bath\n- [ ] T06 the well\n- [ ] T07 the gate\n- [ ] T08 the lane\n";
 
