@@ -59,6 +59,8 @@ MVP: T001-T005 and the first guard, `pair-hooks` (T006): the dispatcher in every
       research: rendering
 - [ ] T244 Stop before the parked hamlet stages, and talk first (the GM 2026-11-21, docs/gm-rulings.md: 'When you get to the point where you have ported everything else and then we're ready to go back to homesteads, then don't actually proceed. Why don't you go ahead and stop, and then we can talk more after everything else is done before you get started on that.') - a guard refuses a write that moves a parked stage (rust/parked/src/homesteads, track, appurtenances, law, ways) into rust/phases/src or declares it in rust/phases/src/lib.rs, and a make task-start of a feature-444 stage task, without GM_RESUMED="<the GM's words resuming it>" (recorded); and make set-down accepts the session's stop there, naming this ruling, so the set-down guard does not push the session into 444's open stage tasks; red first
       research: rendering
+- [ ] T246 The tool profile's incremental build links broken l7r-gate and l7r-rust binaries (rust-lld 'undefined hidden symbol', met by 449 T244 on 2026-11-22; CARGO_INCREMENTAL=0 builds both): its fix is 451 T142, so this box closes when 451 T142 lands, and is fixed before T158, the next step's deletion close, by the GM's rule that a step's known bugs are fixed before the next step's port
+      research: rendering
 - [ ] GM review (make gm-reviewed F=449) [lands-open]
       research: rendering
       verify: the GM reviewed every row (make gm-review lists them)
