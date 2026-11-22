@@ -4,7 +4,7 @@
 use std::path::Path;
 use std::process::Command;
 
-use super::{all_program_names, program_names, without_text};
+use super::{all_program_names, program_names, without_text, writes_computed};
 
 /// The variable naming the program a child run reads (`tree/tests/builds.rs`' form, 451 T97).
 const CHILD: &str = "L7R_PROGRAM_BUILDS_OF";
@@ -13,8 +13,12 @@ const CHILD: &str = "L7R_PROGRAM_BUILDS_OF";
 /// existing file: none for a program whose literals name no file or name one only assigned (its literals read by plain code), a `/`
 /// or a `join(` beside quotes that join no two literals among them; else only the patterns its uses reach - `open(`'s two, `Path(`'s
 /// two, a joined pair's (triple-quoted text read by shape's scan, which builds none, 451 T112); none for a program that defines a
-/// function, or names `def` in a string, its calls' literals bound by plain code (451 T110).
-const BUILDS: [(&str, usize); 12] = [
+/// function, or names `def` in a string, its calls' literals bound by plain code (451 T110); a joined pair read whole builds the pair's
+/// pattern alone, and a literal of an argv list bound and run, or one a test reads, none (451 T118's scans are plain code).
+const BUILDS: [(&str, usize); 15] = [
+    ("s = (root / 'src' / 'lib.rs').read_text()", 1),
+    ("old = ['Cargo.toml', '-x']\nsubprocess.run(old)", 0),
+    ("if 'Cargo.toml' in s: pass", 0),
     ("print(1)", 0),
     ("print('def f(p):')", 0),
     (
@@ -462,4 +466,168 @@ fn a_parameter_is_placed_by_each_form_and_fails_open_beside_them() {
     // the first a caller stops at: the bound write, the program's only one under `placed`
     let first = program_names(body, Some("/w"), true, true, &rs);
     assert_eq!(first.as_deref(), Some("/w/src/a.rs"), "{body}");
+}
+
+/// A hook's path as make-only's guard file reads it in these tests: a `-hooks.sh` or the dispatcher.
+fn hook(p: &str) -> bool {
+    p.ends_with("-hooks.sh") || p.ends_with("/l7r-guard.sh")
+}
+
+/// 451 T118 (window#305, #306, #309): a path joined by `/` and read whole - the join's parenthesis closed by `.read_text(` or
+/// `.read_bytes(` - is a read, its literals and its joined pairs alike, for make-only (fail-closed) and gate-write (placed); without
+/// `reads` it is named, as before. A write through a join, a join bound to a name, a join opened, a pair read on one line and written
+/// on another, and a tuple stay writes.
+#[test]
+fn a_read_through_a_join_is_a_read() {
+    let read = "root = pathlib.Path('/c')\nhook = (root / 'scripts' / 'house-style-hooks.sh').read_text()\n\
+                b = (root/\"scripts\"/\"x-hooks.sh\").read_bytes()\nc = pathlib.Path(root / 'scripts' / 'y-hooks.sh').read_text()";
+    let closed = all_program_names(read, Some("/w"), true, false, &hook);
+    assert!(closed.is_empty(), "{closed:?}");
+    let placed = all_program_names(read, Some("/w"), true, true, &hook);
+    assert!(placed.is_empty(), "{placed:?}");
+    let unread = all_program_names(read, Some("/w"), false, false, &hook);
+    let joined = "/w/scripts/house-style-hooks.sh".to_owned();
+    assert!(unread.contains(&joined), "{unread:?}");
+    let pair = "/w/scripts/a-hooks.sh".to_owned();
+    for body in [
+        "(root / 'scripts' / 'a-hooks.sh').write_text(s)",
+        "p = root / 'scripts' / 'a-hooks.sh'\ns = p.read_text()",
+        "f = open(root / 'scripts' / 'a-hooks.sh', 'w')",
+        "s = (root / 'scripts' / 'a-hooks.sh').read_text()\n(root / 'scripts' / 'a-hooks.sh').write_text(s)",
+        "(pathlib.Path('scripts') / 'a-hooks.sh').write_text(s)",
+        "x = (root / 'scripts' / 'a-hooks.sh', 2).read_text()",
+        "s = (root / 'scripts' / 'a-hooks.sh'\n).read_text()",
+        "s = (root / 'scripts' / 'a-hooks.sh'",
+    ] {
+        let closed = all_program_names(body, Some("/w"), true, false, &hook);
+        assert!(closed.contains(&pair), "{body}: {closed:?}");
+    }
+}
+
+/// 451 T118 (T93's corpus, 12 rows: t67's `corpus.py` and `replay-log.py`): a literal in a list bound to a name whose every use is
+/// a subprocess's argv - `run(old, ...)`, or an element of what a `for` iterates whose variable is only run - is a command run, not a
+/// file written; the name's text in a string is text. Any other use fails closed, as before: an element taken, the name in an
+/// f-string's placeholder, the name bound again, the list grown, the loop's variable written.
+#[test]
+fn an_argv_list_bound_to_a_name_and_run_is_a_command_run() {
+    let ran = "old = ['/c/scripts/hooks/l7r-guard.sh', '--only', 'readme-hooks', 'PreToolUse']\n\
+               new = ['/k/scripts/hooks/l7r-guard.sh', '--only', 'x']\n\
+               a = subprocess.run(old, input=d, capture_output=True)\nprint({f'old={k[0]} new={k[1]}': v})\n\
+               v = [subprocess.run(g, input=e) for g in (old, new)]\nsubprocess.check_output(new)";
+    let closed = all_program_names(ran, Some("/w"), true, false, &hook);
+    assert!(closed.is_empty(), "{closed:?}");
+    let placed = all_program_names(ran, Some("/w"), true, true, &hook);
+    assert!(placed.is_empty(), "{placed:?}");
+    let unread = all_program_names(ran, Some("/w"), false, false, &hook);
+    assert_eq!(unread.len(), 2, "{unread:?}");
+    let list = "old = ['/c/scripts/hooks/l7r-guard.sh', '--only']\n";
+    for tail in [
+        "open(old[0], 'w')",
+        "print(f'{old}')\nsubprocess.run(old)",
+        "old = ['x']\nsubprocess.run(old)",
+        "old.append('y')\nsubprocess.run(old)",
+        "subprocess.run(old + ['y'])",
+        "for g in (old,):\n    open(g[0], 'w')",
+    ] {
+        let body = format!("{list}{tail}");
+        let closed = all_program_names(&body, Some("/w"), true, false, &hook);
+        assert_eq!(closed, ["/c/scripts/hooks/l7r-guard.sh"], "{body}");
+    }
+}
+
+/// Any name with an extension, as gate-write's file test takes a file it does not find.
+fn dotted(p: &str) -> bool {
+    p.rsplit('/').next().is_some_and(|n| n.contains('.'))
+}
+
+/// 451 T118 (T93's `moved.py`, `variants.py`, `reds.py`, `resid.py`, `measure.py`; T33's window#305 and #309): under `placed` a
+/// literal a test reads is text - `'plan.md' in cmd`, `'static.log' not in t`, an element of what `in` tests (`w in {"e.g", ...}`),
+/// of a tuple `endswith` or `startswith` tests, or of a display bound to a name only tested or never used. Make-only, fail-closed,
+/// still counts each (the name tested may be the name written); a `for` over literals, and a display bound to a name and iterated,
+/// still write each.
+#[test]
+fn a_dotted_word_in_a_test_is_text() {
+    let tests = "if 'plan.md' in cmd and 'static.log' not in t: pass\nAB = {\"e.g\", \"i.e\"}\n\
+                 if w in {\"e.g\", \"i.e\"}: pass\nif s.endswith(('.log', '.out')): pass\n\
+                 sub = [l for l in c if 'subprocess.run' in l]\nif \"gm-request.md\" in path: pass\n\
+                 hook = [f for f in rest if f.startswith('src/lib.rs') and not f.endswith( 'x.py')]\nopen('/tmp/o.txt', 'w')";
+    let placed = all_program_names(tests, Some("/w"), true, true, &dotted);
+    assert_eq!(placed, ["/tmp/o.txt"], "{tests}");
+    // make-only fails closed only beside a write of a path the program computes, which the tested literal may name the landing of
+    // (the plan review's block: T58's `commits.py`, `f.startswith('rust/guard/src/')` in a program writing nothing, refused)
+    let closed = all_program_names(tests, Some("/w"), true, false, &dotted);
+    assert_eq!(closed, ["/tmp/o.txt"], "{tests}");
+    let computed = format!("{tests}\nfor f in fs:\n    open(f, 'w')");
+    let closed = all_program_names(&computed, Some("/w"), true, false, &dotted);
+    assert!(closed.contains(&"/w/plan.md".to_owned()), "{closed:?}");
+    for (body, want) in [
+        (
+            "for f in ['a.md', 'b.md']:\n    open(f, 'w')",
+            &["/w/a.md", "/w/b.md"][..],
+        ),
+        (
+            "AB = {'a.md'}\nfor f in AB:\n    open(f, 'w')",
+            &["/w/a.md"],
+        ),
+        ("x = [open(f, 'w') for f in ['a.md']]", &["/w/a.md"]),
+        ("if 'a.md' in s: open('a.md', 'w')", &["/w/a.md"]),
+        ("if x[0] in ('a.md', 'b.md'): pass", &[]),
+        (
+            "for k, v in {'a.md': 1}.items():\n    open(k, 'w')",
+            &["/w/a.md"],
+        ),
+    ] {
+        let placed = all_program_names(body, Some("/w"), true, true, &dotted);
+        assert_eq!(placed, want, "{body}");
+    }
+}
+
+/// 451 T118: a write of a path the program computes - a name, an f-string, a join holding a name, a method write on a receiver the
+/// reader cannot read (window#170's `p = R / path`, `p.write_text(..)`; refusals#144's `p.write_text(new)` over an `rglob`) - and
+/// not a literal path, a `Path` of literals, a join of literals, a read, text, or no write: gate-write counts a directory a program
+/// names only beside the first.
+#[test]
+fn a_write_of_a_computed_path_is_told_from_a_literal_one() {
+    let shapes = "R = pathlib.Path(\"research\")\np = R / path\np.write_text(t)";
+    for body in [
+        "p.write_text(s)",
+        "p.write_bytes(b)",
+        "open(f\"{M}/x\", \"w\")",
+        "open(rf'{d}/x', 'w')",
+        "open(out, 'w')",
+        "open(out, mode='a')",
+        "shutil.copy(a, 'l7r/')",
+        "shutil.copytree('a', d)",
+        "os.replace(a, b)",
+        "tarfile.open(t).extractall('l7r')",
+        "io.open(P, \"w\", encoding=\"utf-8\").write(s)",
+        "io.open(P, mode='w').write(s)",
+        "Path('a.md').open('w').write(s)",
+        "(d / 'a.py').write_text('x')",
+        "a.b.write_text(s)",
+        shapes,
+        "for p in pathlib.Path(\"l7r\").rglob(\"*.py\"):\n    p.write_text(new)",
+    ] {
+        let computed = writes_computed(body);
+        assert!(computed, "{body}");
+    }
+    for body in [
+        "open('/tmp/o', 'w')",
+        "open(r'/tmp/o', 'w')",
+        "open(f'/tmp/o', 'wb')",
+        "Path('a.md').write_text(s)",
+        "pathlib.Path('a.md').write_bytes(b)",
+        "(Path('a') / 'b.md').write_text(s)",
+        "open(p)",
+        "open(p, 'r')",
+        "print(open('x').read())",
+        "s = '''p.write_text(s)'''",
+        "import sys",
+        "s = io.open(P, encoding=\"utf-8\").read()",
+        "z = gzip.open('/tmp/wax.gz').read()",
+        "print(\"shutil.copy(a, b)\")",
+    ] {
+        let computed = writes_computed(body);
+        assert!(!computed, "{body}");
+    }
 }

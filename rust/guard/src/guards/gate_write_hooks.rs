@@ -22,6 +22,7 @@ use crate::shared::log;
 use crate::shared::session::Session;
 use crate::shared::state::field;
 use crate::shared::tool::{ask, ask_within};
+use crate::shared::tree::program::writes_computed;
 
 /// The guard.
 pub const GUARD: Guard = Guard {
@@ -378,12 +379,11 @@ fn shell_write(event: &Event, cmd: &str, c: &Ctx) -> Option<String> {
         }
         let rel = match t.program.as_deref() {
             Some(body) => {
-                // a literal names a file when it has an extension or the file is there: an open's mode (`'w'`), an encoding,
-                // a word of text resolves into the tree too
-                let file = |p: &str| {
-                    p.rsplit('/').next().is_some_and(|n| n.contains('.')) || Path::new(p).exists()
-                };
-                let wanted = |p: &str| file(p) && seen(p).is_some_and(|r| !r.is_empty());
+                // asked once a program, and only when a literal names a directory
+                let writes = std::cell::OnceCell::new();
+                let computed = || *writes.get_or_init(|| writes_computed(body));
+                let wanted =
+                    |p: &str| file_named(p, &computed) && seen(p).is_some_and(|r| !r.is_empty());
                 let named =
                     interp::program_names(&own_args(body), t.path.as_deref(), true, true, &wanted)?;
                 seen(&named)?
@@ -393,6 +393,19 @@ fn shell_write(event: &Event, cmd: &str, c: &Ctx) -> Option<String> {
         let shown = if rel.is_empty() { "." } else { rel.as_str() };
         Some(format!("a shell write of {shown} (`{}`)", t.segment))
     })
+}
+
+/// Whether a Python literal, resolved, names a file the program could write: one that is there, or a name with an extension it would
+/// make - an open's mode (`'w'`), an encoding, a word of text resolve into the tree too, and are neither - and a directory only when
+/// the program writes a path it computes (`computed`, `shared::tree::program::writes_computed`), which can land under it (451 T118,
+/// found by T51 and measured 2026-11-21: a directory named beside no such write - `sys.path.insert(0, "scripts")`,
+/// `Path("specs").glob(...)` read, a `git log -- rust/guard` argv - was refused as its write on 2 of T93's commands, 3 of T33's
+/// fixtures and 13 of the script runs T51 reads (3 scripts), each only read or run; one beside it - `R = Path("research")`, `p = R / path`, `p.write_text(..)` - is
+/// window#170's and refusals#144's true write into the tree, refused as at HEAD).
+fn file_named(p: &str, computed: &dyn Fn() -> bool) -> bool {
+    let path = Path::new(p);
+    let named = p.rsplit('/').next().is_some_and(|n| n.contains('.')) || path.exists();
+    named && (!path.is_dir() || computed())
 }
 
 /// The working tree a directory stands in, or the directory itself outside one.

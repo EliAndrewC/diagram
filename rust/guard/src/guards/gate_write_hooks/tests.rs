@@ -5,7 +5,7 @@ use std::path::{Path, PathBuf};
 
 use serde_json::{json, Value};
 
-use super::{decide, judge, own_args, top_of, Ctx};
+use super::{decide, file_named, judge, own_args, top_of, Ctx};
 use crate::guards::finished_run_hooks::runs::Procs;
 use crate::protocol::{Answer, Event};
 use crate::shared::session::Session;
@@ -396,6 +396,82 @@ fn a_running_gate_lets_through_what_writes_outside_the_tree() {
     ] {
         let got = w.bash(&cmd);
         assert!(refused(&got, "a shell write of l7r"), "{cmd}: {got:?}");
+    }
+}
+
+/// 451 T118 (T51's probes, `/tmp/t51/probe-stdin.jsonl`, refused here on 2026-11-21): a running gate lets through a program that
+/// reads through a join (window#306), runs a hook's argv list bound to a name (t67's `corpus.py`), tests a dotted word (window#305,
+/// t46's `resid.py`) or names a directory (t79's `stream.py`) - and still refuses one that writes through a join, writes a new
+/// file it names by its extension, or writes each literal a `for` iterates.
+#[test]
+fn a_running_gate_lets_through_a_read_a_run_a_test_and_a_directory() {
+    let w = world("t118");
+    std::fs::create_dir_all(w.top.join("tests/hooks/fixtures")).unwrap();
+    std::fs::create_dir_all(w.top.join("scripts/hooks")).unwrap();
+    w.make(61, "make", "done", &w.top);
+    let py = |body: &str| format!("python3 - <<'EOF'\n{body}\nEOF");
+    let fx = w.file("tests/hooks/fixtures");
+    for cmd in [
+        py("import pathlib\nroot = pathlib.Path('.')\nhook = (root / \"scripts\" / \"house-style-hooks.sh\").read_text()\nopen('/tmp/t118-o', 'w').write(hook)"),
+        py("import subprocess\nold = ['scripts/gates/l7r-gate.sh', '--only', 'x']\nnew = ['scripts/hooks/l7r-guard.sh']\na = subprocess.run(old, input=d)\nv = [subprocess.run(g) for g in (old, new)]\nopen('/tmp/t118-o', 'w').write(a)"),
+        py("if 'plan.md' in cmd and 'static.log' not in t and s.endswith(('.log', '.out')): pass\nAB = {\"e.g\", \"i.e\"}\nif w in {\"e.g\", \"i.e\"}: pass\nopen('/tmp/t118-o', 'w')"),
+        py(&format!("import json\nFX = '{fx}'\nd = json.load(open(f\"{{FX}}/a.json\"))\nopen('/tmp/t118-o', 'w').write(d)")),
+        py("import os\nd = 'tests/hooks/fixtures'\nn = len(os.listdir(d))\nopen('/tmp/t118-o', 'w').write(str(n))"),
+        // window#63: a directory beside no write the program computes
+        py("import sys\nsys.path.insert(0, 'scripts')\nopen('/tmp/t118-o', 'w').write('x')"),
+    ] {
+        let got = w.bash(&cmd);
+        assert!(got.is_empty(), "{cmd}: {got:?}");
+    }
+    for (cmd, file) in [
+        (
+            py("import pathlib\nroot = pathlib.Path('.')\n(root / 'l7r' / 'x.py').write_text('x')"),
+            "l7r/x.py",
+        ),
+        (py("open('l7r/x/new.py', 'w').write('x')"), "l7r/x/new.py"),
+        (
+            py("for f in ['l7r/x/a.md', 'l7r/x/b.md']:\n    open(f, 'w')"),
+            "l7r/x/a.md",
+        ),
+        // window#170 and refusals#144: a directory beside a write the program computes, which can land under it
+        (
+            py("import pathlib\nR = pathlib.Path('l7r')\ndef put(path):\n    p = R / path\n    p.write_text('x')\nput('x/a.py')"),
+            "l7r ",
+        ),
+        (
+            py("import pathlib\nfor p in pathlib.Path('l7r').rglob('*.py'):\n    p.write_text('x')"),
+            "l7r ",
+        ),
+    ] {
+        let got = w.bash(&cmd);
+        let words = format!("a shell write of {file}");
+        assert!(refused(&got, &words), "{cmd}: {got:?}");
+    }
+}
+
+/// 451 T118: gate-write's file test takes a file - one there, or a name with an extension it would make - and a directory only
+/// beside a write the program computes; never a word with no extension that is not there.
+#[test]
+fn the_file_test_takes_a_file_not_a_directory() {
+    let w = world("t118-file");
+    std::fs::write(w.top.join("Makefile"), "x").unwrap();
+    std::fs::create_dir_all(w.top.join("tests/hooks.d")).unwrap();
+    let cases = [
+        ("Makefile", true),
+        ("l7r/x/new.py", true),
+        ("l7r/x", false),
+        ("tests/hooks.d", false),
+        ("tests", false),
+        ("utf8", false),
+    ];
+    for (rel, want) in cases {
+        let got = file_named(&w.file(rel), &|| false);
+        assert_eq!(got, want, "{rel}");
+    }
+    let computed = [("l7r/x", true), ("tests/hooks.d", true), ("utf8", false)];
+    for (rel, want) in computed {
+        let got = file_named(&w.file(rel), &|| true);
+        assert_eq!(got, want, "{rel}");
     }
 }
 
