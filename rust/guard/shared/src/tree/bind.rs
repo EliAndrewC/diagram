@@ -1,8 +1,9 @@
 //! What a command's own text binds its variables to (451 T79's second round; its plan review, BLOCKED 2026-11-21, found the walk
 //! reading a write word of which it knew nothing as not the mirror's, which let `echo x > $n.txt` and `for i in 1 2; do echo x >
 //! $i.txt; done` write the mirror standing in it). Before the walk reads a command, each variable it reads is bound as bash binds
-//! it where the text says how: a loop's literal values, each in a binding of its own; a name the command assigns twice, each value
-//! in a binding of its own; a name no one assigns, empty (its value in the environment where that sets it; `CLAUDE_PROJECT_DIR`
+//! it where the text says how: a loop's literal values, each in a binding of its own; a name the command assigns twice, at each
+//! read the value straight-line code gives it there (451 T91: `D=<mirror>/x; D=/s/y; touch $D/f` writes scratch), else - a branch,
+//! a loop, a condition or a subshell between - each value in a binding of its own; a name no one assigns, empty (its value in the environment where that sets it; `CLAUDE_PROJECT_DIR`
 //! and `OLDPWD` are unset in the Bash tool's shell, read 2026-11-21). A name given its value where the walk cannot read it - by
 //! `read`, a loop over a substitution, a function's parameter, a sourced file - stays unknown, so the walk's one rule reads it
 //! where the shell was last known (spec 204's D6). A single quote and a `\$` keep a `$` literal, as bash does.
@@ -13,9 +14,17 @@ use super::{assignments, expand, is_word, look_refuses, re, strip_quote_chars, E
 use crate::regex::Lazy;
 use crate::shape::shlex;
 
-/// The most bindings the walk reads one command in: past it, the names that would multiply them further are unknown (a loop's
-/// nine values inside another's, 81, is past it).
+/// The most bindings the walk reads one command in where several names are many-valued: past it, the names that would multiply
+/// them further are unknown (a loop's nine values inside another's, 81, is past it). A product is never walked at one value of a
+/// name while another's are tried: `cd $a; touch $b` writes the mirror at one pair alone.
 const MAX_BINDINGS: usize = 64;
+
+/// The most bindings for a command's one many-valued name, each of its values in turn (451 T91: T79's 64 read a 65-value scratch
+/// loop's variable as unknown, D6's mirror). A CONVENTION, the walk's cost bound: each binding is a walk of the whole command, and
+/// the command grows with its values, so the cost is quadratic - a lone loop of 64 values 10.8 ms, 128 values 44.7 ms, 256 values
+/// 171 ms, measured 2026-11-22 (T83's timer, release, load near 30, `/tmp/t91/out/time.capprobe.fix.tsv`); past it the name is
+/// unknown, as before. No corpus loop is past 31 values (T79's ux, bx and tx corpora, measured 2026-11-22).
+pub(super) const MAX_VALUES: usize = 128;
 
 /// A value the walk cannot know: a name no command assigns, so every word holding it is unresolved.
 pub(super) const UNREAD: &str = "$__unread__";
@@ -141,6 +150,9 @@ enum Bound {
     Values(Vec<String>),
     /// Assigned more than once: each assignment (its name's offset) a binding of its own, the reads renamed to it.
     Assigned(Vec<usize>),
+    /// Assigned more than once in straight-line code (`straight`): one binding, each assignment (its name's offset and end) renamed
+    /// apart and each read to the one last before it; a read before any, the environment's value or empty (451 T91).
+    Straight(Vec<(usize, usize)>, String),
     Unknown,
     /// No one assigns it: the environment's value, or empty.
     Unset(String),
@@ -234,9 +246,12 @@ fn bindings(text: &str, read: &[Read]) -> HashMap<String, Bound> {
     };
     // the text's assignments scanned once, for their names and for the chains after them (451 T129)
     let assigned: Vec<_> = assignments(text).collect();
-    let clean: Vec<(String, usize)> = assigned
+    let clean: Vec<(String, usize, usize)> = assigned
         .iter()
-        .filter_map(|c| c.get(1).map(|m| (m.as_str().to_owned(), m.start())))
+        .filter_map(|c| {
+            let m = c.get(1)?;
+            Some((m.as_str().to_owned(), m.start(), c.get(0)?.end()))
+        })
         .collect();
     let mut unknown: HashSet<String> = names(&APPEND)
         .into_iter()
@@ -269,16 +284,19 @@ fn bindings(text: &str, read: &[Read]) -> HashMap<String, Bound> {
     let mut out = HashMap::new();
     for r in read {
         let n = r.name.as_str();
-        let all: Vec<usize> = clean
+        if out.contains_key(n) {
+            continue; // a name read again is bound as at its first read
+        }
+        let all: Vec<(usize, usize)> = clean
             .iter()
-            .filter(|(m, _)| m == n)
-            .map(|(_, at)| *at)
+            .filter(|(m, _, _)| m == n)
+            .map(|(_, at, end)| (*at, *end))
             .collect();
         // an assignment that reads its own name gives it no value of its own: it follows the one before, as the walk's assignments
         // read in order (451 T79's third round: `S=/tmp/q; S=$S/sub; touch $S/f` read S from itself in the binding picking it)
         let at: Vec<usize> = all
             .iter()
-            .copied()
+            .map(|(k, _)| *k)
             .filter(|k| !reads_itself(text, *k, n))
             .collect();
         let bound = if n.starts_with("__") || matches!(n, "HOME" | "PWD" | "OLDPWD") {
@@ -289,12 +307,25 @@ fn bindings(text: &str, read: &[Read]) -> HashMap<String, Bound> {
             // a loop's variable also assigned takes each literal value it is assigned beside its loop's (451 T79's third round:
             // ux#752's `f=research/...; sed -i ... $f` beside a `for f in ...` was read as unknown, its write of a gated tree unseen)
             let assigned: Option<Vec<String>> =
-                all.iter().map(|k| literal_value(text, *k, n)).collect();
+                all.iter().map(|k| literal_value(text, k.0, n)).collect();
+            // a value repeated is one binding: its text is the same (451 T91)
+            let mut seen = HashSet::new();
             assigned.map_or(Bound::Unknown, |a| {
-                Bound::Values(v.iter().cloned().chain(a).collect())
+                Bound::Values(
+                    v.iter()
+                        .cloned()
+                        .chain(a)
+                        .filter(|x| seen.insert(x.clone()))
+                        .collect(),
+                )
             })
         } else if at.len() > 1 && distinct_values(text, &at) {
-            Bound::Assigned(at)
+            straight(text, n, read, &all).map_or(Bound::Assigned(at), |bare| {
+                Bound::Straight(
+                    bare,
+                    crate::env::opt(n).map_or_else(String::new, |v| word_safe(&v)),
+                )
+            })
         } else if !all.is_empty() {
             Bound::Kept
         } else if sourced {
@@ -363,6 +394,192 @@ fn distinct_values(text: &str, at: &[usize]) -> bool {
     at.iter().any(|k| value(*k) != value(at[0]))
 }
 
+/// Where each byte of a command stands for the shell (451 T91): bare, or inside a quote, a comment or a `\` escape.
+#[derive(Clone, Copy, PartialEq, Eq)]
+enum Stands {
+    Bare,
+    Quoted(u8),
+    Comment,
+    Escaped,
+}
+
+fn stands(text: &str) -> Vec<Stands> {
+    let b = text.as_bytes();
+    let mut out = vec![Stands::Bare; b.len()];
+    let (mut now, mut i) = (Stands::Bare, 0);
+    while i < b.len() {
+        let c = b[i];
+        out[i] = match (now, c) {
+            (Stands::Quoted(q), _) if c == q => {
+                now = Stands::Bare;
+                Stands::Quoted(q) // a closing quote stands inside its quote
+            }
+            (Stands::Quoted(b'"') | Stands::Bare, b'\\') => {
+                let at = if now == Stands::Bare {
+                    Stands::Escaped
+                } else {
+                    now
+                };
+                if let Some(next) = out.get_mut(i + 1) {
+                    *next = at;
+                }
+                i += 1;
+                at
+            }
+            (Stands::Comment, b'\n') => {
+                now = Stands::Bare;
+                Stands::Bare
+            }
+            (Stands::Bare, b'\'' | b'"') => {
+                now = Stands::Quoted(c);
+                now
+            }
+            (Stands::Bare, b'#')
+                if i == 0 || (out[i - 1] == Stands::Bare && b" \t\n;&|(".contains(&b[i - 1])) =>
+            {
+                now = Stands::Comment;
+                now
+            }
+            _ => now,
+        };
+        i += 1;
+    }
+    out
+}
+
+/// The words of `text[from..to]` as the shell splits them, their quotes and escapes off; a comment is no word.
+fn words(text: &str, st: &[Stands], from: usize, to: usize) -> Vec<String> {
+    let b = text.as_bytes();
+    let mut out = vec![String::new()];
+    for i in from..to {
+        if st[i] == Stands::Comment || (st[i] == Stands::Bare && b" \t\n;()|&<>".contains(&b[i])) {
+            out.push(String::new());
+        } else if let (false, Some(w)) = (matches!(b[i], b'\'' | b'"' | b'\\'), out.last_mut()) {
+            w.push(char::from(b[i]));
+        }
+    }
+    out
+}
+
+/// The words no straight line holds anywhere in the command: a function's, and a builtin that changes how a name holds
+/// (`readonly D` makes a later `D=` fail; `local` outside a function sets nothing). A sourced file or an evaluated string is
+/// `sourced`'s, read where it runs, since `.` is also a word (`cd .`).
+const NEVER_STRAIGHT: [&str; 6] = [
+    "function", "readonly", "declare", "typeset", "local", "unset",
+];
+
+/// The words that end a straight stretch: a compound command's.
+const COMPOUND: [&str; 14] = [
+    "if", "then", "elif", "else", "fi", "case", "esac", "for", "select", "while", "until", "do",
+    "done", "coproc",
+];
+
+/// Whether `text[from..to]` is one straight stretch of the shell's commands: no compound command's word, group, comment, backtick,
+/// substitution inside double quotes, `${...}` holding more than a name and its operator, or `)` closing what opened before it.
+fn flat(text: &str, st: &[Stands], from: usize, to: usize) -> bool {
+    let b = text.as_bytes();
+    let (mut depth, mut i) = (0usize, from);
+    while i < to {
+        let bare = st[i] == Stands::Bare;
+        match (st[i], b[i]) {
+            (Stands::Comment, _) | (Stands::Bare | Stands::Quoted(b'"'), b'`') => return false,
+            (Stands::Bare | Stands::Quoted(b'"'), b'$') if b.get(i + 1) == Some(&b'{') => {
+                let inner = text[i + 2..].split('}').next().unwrap_or_default();
+                if inner.contains(['(', '{', '`', '$', '\'', '"']) {
+                    return false;
+                }
+                i += 2 + inner.len();
+            }
+            (Stands::Quoted(b'"'), b'$') if b.get(i + 1) == Some(&b'(') => return false,
+            (_, b'{' | b'}') if bare => return false,
+            (_, b'(') if bare => depth += 1,
+            (_, b')') if bare => match depth.checked_sub(1) {
+                Some(d) => depth = d,
+                None => return false,
+            },
+            _ => {}
+        }
+        i += 1;
+    }
+    !words(text, st, from, to.min(b.len()))
+        .iter()
+        .any(|w| COMPOUND.contains(&w.as_str()))
+}
+
+/// Whether the assignment at `s..e` holds for the commands after it: it stands bare at its command's start - after the text's
+/// start, a `;`, a newline, a `(`, a `{`, a `do`, a `then` or an `else`, an `export` between - and alone on it, only blanks and
+/// then the end, a `;`, a newline, `&&` or `||` after it. A prefix `D=a cmd` holds for its command alone; one after `&&` or `||`
+/// may not run; one in a pipe or a background runs in a subshell.
+fn held(text: &str, st: &[Stands], s: usize, e: usize) -> bool {
+    let blank = [' ', '\t'];
+    let before = text[..s].trim_end_matches(blank);
+    let before = before
+        .strip_suffix("export")
+        .map_or(before, |b| b.trim_end_matches(blank));
+    let opens = before.is_empty()
+        || (st[before.len() - 1] == Stands::Bare
+            && (before.ends_with([';', '\n', '(', '{'])
+                || ["do", "then", "else"].iter().any(|k| before.ends_with(*k))));
+    let after = text[e..].trim_start_matches(blank);
+    let alone = after.is_empty()
+        || after.starts_with([';', '\n'])
+        || after.starts_with("&&")
+        || after.starts_with("||");
+    st[s] == Stands::Bare && opens && alone
+}
+
+/// The assignment of `at` last before a read at `start`, its index.
+fn last_before(at: &[(usize, usize)], start: usize) -> Option<usize> {
+    at.iter().rposition(|(_, e)| *e <= start)
+}
+
+/// Whether each read of `name` takes the value of its assignment last before it (451 T91; T79's second plan review found
+/// `D=<mirror>/x; D=/s/y; touch $D/f` refused, judged at each value): no function and no `NEVER_STRAIGHT` word anywhere in the
+/// command; each read's assignment `held` and the stretch from it to the read `flat` - from the command's start for a read before
+/// any, so no loop brings a later value round; and no read that assigns (`${D:=W}`) or whose word turns on the value (`${D:-W}`, `${D+W}`). Anything else is judged at each value, as
+/// before: a branch, a loop, a condition or a subshell between may leave any of them. Where straight, its assignments that stand
+/// bare, the ones bash makes: a `a=...` inside a quoted program is no assignment, and is not renamed (bx#50157's `python3 -c`).
+fn straight(
+    text: &str,
+    name: &str,
+    read: &[Read],
+    at: &[(usize, usize)],
+) -> Option<Vec<(usize, usize)>> {
+    let st = stands(text);
+    let b = text.as_bytes();
+    let defines = (0..b.len()).any(|i| {
+        b[i] == b'(' && st[i] == Stands::Bare && text[i + 1..].trim_start().starts_with(')')
+    });
+    if defines
+        || sourced(text)
+        || words(text, &st, 0, b.len())
+            .iter()
+            .any(|w| NEVER_STRAIGHT.contains(&w.as_str()))
+    {
+        return None;
+    }
+    let each = read.iter().filter(|r| r.name == name).all(|r| {
+        // a read that assigns (`${D:=W}`), or whose word turns on the value (`${D:-W}`, `${D+W}`): T91's review found
+        // `D=<mirror>/x; D=; touch ${D:-<mirror>/z}/f` read as `/f`, where bash writes the default
+        let assigns = r.op.as_deref().is_some_and(|o| {
+            let o = o.strip_prefix(':').unwrap_or(o);
+            o.starts_with(['=', '-', '+'])
+        });
+        let from = match last_before(at, r.start) {
+            Some(k) if held(text, &st, at[k].0, at[k].1) => at[k].0,
+            Some(_) => return false,
+            None => 0,
+        };
+        !assigns && flat(text, &st, from, r.start)
+    });
+    each.then(|| {
+        at.iter()
+            .copied()
+            .filter(|(s, _)| st[*s] == Stands::Bare)
+            .collect()
+    })
+}
+
 /// What a read becomes in one binding, `pick` the index of its name's value or assignment there; None where it stays as written.
 /// `${NAME:?}` is NAME; `${NAME:-WORD}` WORD where no one assigns NAME; `${NAME%SUFFIX}`, a literal suffix holding no `/`, lies in
 /// NAME's directory (bx#31289's `"${f%.xls}.txt"`, measured 2026-11-21); any other expansion is unknown.
@@ -378,10 +595,14 @@ fn replaced(r: &Read, bound: &Bound, pick: usize, text: &str) -> Option<String> 
     let value = match bound {
         Bound::Values(v) => Some(v[pick].clone()),
         Bound::Unset(v) => Some(v.clone()),
+        Bound::Straight(at, unset) if last_before(at, r.start).is_none() => Some(unset.clone()),
         _ => None,
     };
     let name = match bound {
         Bound::Assigned(_) => format!("__v_{}", r.name),
+        Bound::Straight(at, _) => {
+            format!("__s{}_{}", last_before(at, r.start).unwrap_or(0), r.name)
+        }
         _ => r.name.clone(),
     };
     let new = match (bound, value) {
@@ -409,27 +630,52 @@ fn replaced(r: &Read, bound: &Bound, pick: usize, text: &str) -> Option<String> 
 }
 
 /// The command's text once a binding: each many-valued name it reads at one of its values (every combination, up to
-/// `MAX_BINDINGS`), each name no one assigns empty, each it cannot know `UNREAD`. One text where nothing it reads is many-valued.
+/// `MAX_BINDINGS`; a lone one's, up to `MAX_VALUES`), each straight-line assignment apart, each name no one assigns empty, each it
+/// cannot know `UNREAD`. One text where nothing it reads is many-valued.
 pub(super) fn bound_texts(text: &str) -> Vec<String> {
     let read = reads(text);
     if read.is_empty() {
         return vec![text.to_owned()];
     }
     let mut bound = bindings(text, &read);
-    let mut radix: Vec<(String, usize)> = Vec::new();
+    let mut many: Vec<(String, usize)> = Vec::new();
     for r in &read {
         let size = match &bound[&r.name] {
             Bound::Values(v) => v.len(),
             Bound::Assigned(a) => a.len(),
             _ => continue,
         };
-        if radix.iter().any(|(n, _)| *n == r.name) {
-        } else if radix.iter().map(|(_, s)| s).product::<usize>() * size > MAX_BINDINGS {
-            bound.insert(r.name.clone(), Bound::Unknown);
-        } else {
-            radix.push((r.name.clone(), size));
+        if !many.iter().any(|(n, _)| *n == r.name) {
+            many.push((r.name.clone(), size));
         }
     }
+    // the command's one many-valued name is read at each of its values, up to MAX_VALUES (451 T91)
+    let cap = if many.len() == 1 {
+        MAX_VALUES
+    } else {
+        MAX_BINDINGS
+    };
+    let mut radix: Vec<(String, usize)> = Vec::new();
+    for (n, size) in many {
+        if radix.iter().map(|(_, s)| s).product::<usize>() * size > cap {
+            bound.insert(n, Bound::Unknown);
+        } else {
+            radix.push((n, size));
+        }
+    }
+    // each straight-line assignment renamed apart, the same in every binding
+    let apart: Vec<(usize, usize, String)> = bound
+        .iter()
+        .filter_map(|(n, b)| match b {
+            Bound::Straight(at, _) => Some(
+                at.iter()
+                    .enumerate()
+                    .map(move |(k, (s, _))| (*s, s + n.len(), format!("__s{k}_{n}"))),
+            ),
+            _ => None,
+        })
+        .flatten()
+        .collect();
     let total: usize = radix.iter().map(|(_, s)| s).product();
     (0..total)
         .map(|mut k| {
@@ -450,6 +696,7 @@ pub(super) fn bound_texts(text: &str) -> Vec<String> {
                     edits.push((at[*p], at[*p] + n.len(), format!("__v_{n}")));
                 }
             }
+            edits.extend(apart.iter().cloned());
             edits.sort_by_key(|e| e.0);
             let mut out = String::with_capacity(text.len());
             let mut from = 0;

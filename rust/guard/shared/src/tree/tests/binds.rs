@@ -1,6 +1,7 @@
 //! 451 T79's second round (its plan review, BLOCKED 2026-11-21): the walk RESOLVES what the command's own text resolves - a loop's
 //! literal values, a variable no one assigns (empty, as bash reads it), a variable assigned in a loop's or a function's body, a name
-//! assigned twice (judged by every value), `$(dirname X)` and `$(basename X)` of a known X - and what stays truly unknown keeps
+//! assigned twice (judged by every value; in straight-line code, by the value it holds at each read, 451 T91), `$(dirname X)` and
+//! `$(basename X)` of a known X - and what stays truly unknown keeps
 //! spec 204's D6: it lands where the shell was last known, so standing in the mirror it is the mirror's. Before, a write word of
 //! which nothing was known was read as not the mirror's, which let the review's five probes write the mirror.
 
@@ -147,7 +148,8 @@ fn a_body_and_a_second_value_are_read() {
 #[test]
 fn what_stays_unknown_lands_where_the_shell_was_last_known() {
     let (_d, m, _c) = mirror("unknown");
-    // nine values a loop, two loops: 81 bindings, past the 64 the walk tries
+    // nine values a loop, two loops: 81 bindings, past the 64 the walk tries for a product of names (451 T91 left it so: walked at one
+    // value of `a` while `b`'s are tried, a pair that writes the mirror would be missed)
     let nine: Vec<String> = (0..9).map(|i| format!("v{i}")).collect();
     let wide = format!(
         "for a in {0}; do for b in {0}; do echo x > $a$b; done; done",
@@ -250,8 +252,11 @@ fn a_name_assigned_from_pwd_is_where_the_shell_stands_then() {
         writes(&wt, &m, &m),
         [at(&format!("{c}/f"), "clone", "named")]
     );
+    // reassigned in straight-line code, the read takes the value it holds there, as bash does (451 T91: T79 judged both)
     let twice = format!("cd {c} && WT=$PWD; echo; WT=/tmp/q/wt; touch $WT/x.py");
-    assert_eq!(classes(&twice, &m, &m), ["clone", "elsewhere"]);
+    assert_eq!(classes(&twice, &m, &m), ["elsewhere"]);
+    let both = format!("cd {c}; WT=$PWD; touch $WT/a; WT=/tmp/q/wt; touch $WT/x.py");
+    assert_eq!(classes(&both, &m, &m), ["clone", "elsewhere"]);
 }
 
 /// A name reassigned from its own value (`S=$S/sub`, `S=${S}/a`, a prefix `S=$S cmd`) gives it no value of its own: it follows the
@@ -299,4 +304,138 @@ fn a_loop_variable_also_assigned_takes_both() {
         ),
         ["elsewhere"]
     );
+}
+
+/// 451 T91: a name reassigned in straight-line code - no branch, loop, function, subshell or `&&` between its assignment and the
+/// read - reads the value it holds there, so `D=<mirror>/x; D=/s/y; touch $D/f` standing in the mirror writes scratch, as bash does
+/// (T79 judged it at each value and refused it).
+#[test]
+fn a_straight_reassignment_reads_its_last_value() {
+    let (_d, m, _c) = mirror("straight");
+    for (cmd, path) in [
+        (format!("D={m}/x; D=/s/y; touch $D/f"), "/s/y/f"),
+        (format!("cd /s && D={m}/x; D=/s/y; touch $D/f"), "/s/y/f"),
+        (format!("D={m}/x\nexport D=/s/y\necho x > $D/f"), "/s/y/f"),
+        (
+            format!("D={m}/x; D=/s/a; D=$D/b; echo x > $D/f"),
+            "/s/a/b/f",
+        ),
+        (format!("D={m}/x; D=/s/y && touch $D/f"), "/s/y/f"),
+        (format!("D={m}/x; D=/s/y; (touch $D/f)"), "/s/y/f"),
+        (format!("D={m}/x; D=/s/y; (true); touch $D/f"), "/s/y/f"),
+        (format!("D={m}/x; D=/s/y; touch \"$D/f\" 2>&1"), "/s/y/f"),
+        (
+            format!("for f in a; do D={m}/x; D=/s/$f; touch $D/g; done"),
+            "/s/a/g",
+        ),
+        (
+            format!("X=$(cat a | wc -l); D={m}/x; D=/s/y; touch $D/f"),
+            "/s/y/f",
+        ),
+        (
+            format!("D={m}/x; D=/s/y; echo \"a\\\"b\" ${{X}} \"${{X}}\" ${{#X}}; touch $D/f"),
+            "/s/y/f",
+        ),
+        ("D=/s/a; D=$D/b; D=/s/c; echo x > $D/f".to_owned(), "/s/c/f"),
+    ] {
+        let got = writes(&cmd, &m, &m);
+        assert_eq!(got, [at(path, "elsewhere", "named")], "{cmd}");
+    }
+    // an `a=` inside quotes is no assignment bash makes, and stays as written (bx#50157's `python3 -c "...; a=Image.open(...)"`)
+    let texts = super::super::bind::bound_texts("a=/s/x; a=/s/y; touch $a/f; echo \"; a=1\"");
+    assert_eq!(
+        texts,
+        ["__s0_a=/s/x; __s1_a=/s/y; touch ${__s1_a}/f; echo \"; a=1\""]
+    );
+    // a read before any assignment reads the environment or nothing, as bash does: `${D}f` is `f` where the shell stands
+    let early = writes("echo x > ${D}f; D=/s/a/; D=/s/b/", &m, &m);
+    assert_eq!(early, [at(&format!("{m}/f"), "main", "shell")]);
+    crate::env::set("D", "/s/e/");
+    let from_env = writes("echo x > ${D}f; D=/s/a/; D=/s/b/", &m, &m);
+    crate::env::unset("D");
+    let want = [at("/s/e/f", "elsewhere", "named")];
+    assert_eq!(from_env, want);
+}
+
+/// 451 T91: a mirror value at either end is still read: the first where it is read before the reassignment, the last where it is
+/// the last, and each value wherever the reassignment may not hold for the read - a prefix, a subshell, a pipe, a background, a
+/// condition, a substitution, a function, a loop's next pass, a branch, a quoted or escaped or commented `D=`, `readonly`, `local`,
+/// a read that assigns, and a read whose default word turns on the value (`${D:-W}`, `${D-W}`).
+#[test]
+fn a_mirror_value_at_either_end_is_still_read() {
+    let (_d, m, _c) = mirror("either-end");
+    for cmd in [
+        format!("F={m}/a; echo x > $F; F=/s/b"),
+        format!("D=/s/y; D={m}/x; touch $D/f"),
+        format!("D={m}/x; D=/s/y true; touch $D/f"),
+        format!("D={m}/x; (D=/s/y); touch $D/f"),
+        format!("D={m}/x; (D=/s/y; touch $D/g); touch $D/f"),
+        format!("D={m}/x; D=/s/y | cat; touch $D/f"),
+        format!("D={m}/x; D=/s/y & touch $D/f"),
+        format!("D={m}/x; false && D=/s/y; touch $D/f"),
+        format!("D={m}/x; true || D=/s/y; touch $D/f"),
+        format!("D={m}/x; X=$(D=/s/y); touch $D/f"),
+        format!("D={m}/x; X=\"$(D=/s/y)\"; touch $D/f"),
+        format!("D={m}/x; X=$(D=/s/y; echo); touch $D/f"),
+        format!("D={m}/x; D=/s/y; X=`date`; touch $D/f"),
+        format!("D={m}/x; D=/s/y; X=\"$(date)\"; touch $D/f"),
+        format!("D={m}/x; D=/s/y; echo ${{X:-$(pwd)}}; touch $D/f"),
+        format!("D={m}/x; D=/s/y\n# a note\ntouch $D/f"),
+        format!("D={m}/x; D=/s/y; . e.sh; touch $D/f"),
+        format!("f() {{ D={m}/x; }}; D=/s/y; f; touch $D/f"),
+        format!("function f {{ touch $D/f; }}; D=/s/y; D={m}/x; f"),
+        format!("D={m}/x; echo \"; D=/s/y\"; touch $D/f"),
+        format!("D={m}/x; echo '; D=/s/y'; touch $D/f"),
+        format!("D={m}/x; echo \\;D=/s/y; touch $D/f"),
+        format!("D={m}/x # ; D=/s/y\ntouch $D/f"),
+        format!("for i in 1 2; do touch $D/f; D=/s/a; D={m}/x; done"),
+        format!("D=/s/a; for i in 1 2; do touch $D/f; D={m}/x; done"),
+        format!("D=/s/a; if true; then D={m}/x; fi; touch $D/f"),
+        format!("D={m}/x; readonly D; D=/s/y; touch $D/f"),
+        format!("D={m}/x; local D=/s/y; touch $D/f"),
+        format!("D={m}/x; D=/s/y; echo x > ${{D:=/s/z}}/f"),
+        format!("D={m}/x; D=; touch ${{D:-{m}/z}}/f"),
+        format!("D={m}/x; D=; touch ${{D-/s/z}}/f"),
+        format!("D={m}/x; D=/s/y; {{ touch $D/f; }}"),
+    ] {
+        let from_tmp = classes(&cmd, "/tmp", &m);
+        assert!(from_tmp.contains(&"main"), "{cmd}");
+    }
+}
+
+/// 451 T91: a loop past the 64 bindings, its variable the command's only many-valued name, is judged at each of its values, so 65
+/// scratch values written standing in the mirror pass (T79 read the 65th as unknown, D6's mirror), and one mirror value among them,
+/// first, middle or last, is refused standing in the mirror and in `/tmp`; repeated values are one binding; past `MAX_VALUES`, and
+/// past 64 for a cross product of names, a name is unknown as before (D6), since a product walked at one value of the other names
+/// would miss the pair that writes the mirror.
+#[test]
+fn a_loop_past_the_cap_is_judged_value_by_value() {
+    let (_d, m, _c) = mirror("past-cap");
+    let values = |n: usize| -> Vec<String> { (0..n).map(|i| format!("/s/v{i}")).collect() };
+    let looped = |v: &[String]| format!("for f in {}; do touch $f; done", v.join(" "));
+    for n in [64, 65, super::super::bind::MAX_VALUES] {
+        let got = classes(&looped(&values(n)), &m, &m);
+        assert!(got.iter().all(|c| *c == "elsewhere"), "{n} values");
+    }
+    for at_k in [0, 40, 79] {
+        let mut v = values(80);
+        v[at_k] = format!("{m}/x");
+        let cmd = looped(&v);
+        let (inside, from_tmp) = (classes(&cmd, &m, &m), classes(&cmd, "/tmp", &m));
+        assert!(
+            inside.contains(&"main") && from_tmp.contains(&"main"),
+            "mirror at {at_k}"
+        );
+    }
+    let twice: Vec<String> = values(2).into_iter().cycle().take(70).collect();
+    let texts = super::super::bind::bound_texts(&looped(&twice)).len();
+    assert_eq!(texts, 2);
+    let past = classes(&looped(&values(super::super::bind::MAX_VALUES + 1)), &m, &m);
+    assert!(past.iter().all(|c| *c == "main"));
+    let pair = format!(
+        "for a in /s {m}; do for b in {}; do touch $a/$b; done; done",
+        values(65).join(" ")
+    );
+    let from_tmp = classes(&pair, "/tmp", &m);
+    assert!(from_tmp.contains(&"main"));
 }
