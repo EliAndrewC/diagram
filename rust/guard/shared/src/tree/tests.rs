@@ -939,6 +939,8 @@ mod binds;
 
 mod builds;
 
+mod looks;
+
 /// A hang pin's deadline (451 T103's form, T112): the test `name` (its path in this crate) run again as a child with `var` set, which
 /// does the work and prints its answer; whether it passed within `secs`, and what it printed. A search that never ends is killed at
 /// the deadline and fails its test, rather than holding the run.

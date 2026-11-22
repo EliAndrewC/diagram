@@ -9,7 +9,7 @@
 
 use std::collections::{HashMap, HashSet};
 
-use super::{expand, re, strip_quote_chars, Env, ASSIGN};
+use super::{assignments, expand, is_word, look_refuses, re, strip_quote_chars, Env};
 use crate::regex::Lazy;
 use crate::shape::shlex;
 
@@ -78,20 +78,59 @@ static READS: Lazy = Lazy::new(
     |t| t.contains("read") || t.contains("mapfile") || t.contains("getopts"),
     || re(r"(?:^|[^\w-])(?:read|mapfile|readarray|getopts)\s([^;&|\n)]*)"),
 );
-static PRINTF_V: Lazy = Lazy::new(
+/// A `printf -v` name. It was `\bprintf...`: the `\b` is read by `printf_v_names`, so the pattern runs in the regex crate's
+/// automaton (451 T129).
+pub(super) static PRINTF_V: Lazy = Lazy::new(
     |t| t.contains("printf"),
-    || re(r"\bprintf\s+-v\s+([A-Za-z_]\w*)"),
+    || re(r"printf\s+-v\s+([A-Za-z_]\w*)"),
 );
+
+/// Each `printf -v` name of `text` and where it stands, as `PRINTF_V` with its `\b` read it: a match a word character precedes
+/// tried again a character on (its first is the `p` of `printf`, one byte).
+pub(super) fn printf_v_names(text: &str) -> Vec<(String, usize)> {
+    let mut found = Vec::new();
+    let Some(r) = PRINTF_V.on(text) else {
+        return found;
+    };
+    let mut at = 0;
+    while let Some(c) = r.captures_from_pos(text, at).ok().flatten() {
+        let whole = c.get(0).map_or(text.len()..text.len(), |m| m.range());
+        if text[..whole.start].chars().next_back().is_some_and(is_word) {
+            at = whole.start + 1;
+            continue;
+        }
+        found.extend(c.get(1).map(|m| (m.as_str().to_owned(), m.start())));
+        at = whole.end;
+    }
+    found
+}
 /// A `for` or `select` header: its name, and its word list where it has one (none iterates `"$@"`).
 static LOOP: Lazy = Lazy::new(
     |t| t.contains("for") || t.contains("select"),
     || re(r"\b(?:for|select)\s+([A-Za-z_]\w*)(?:\s+in\b([^;\n]*))?"),
 );
-/// A file sourced or a string evaluated: any name may be set there.
-static SOURCED: Lazy = Lazy::new(
+/// A file sourced or a string evaluated: any name may be set there. It was `(?:^|[;&|\n({]|\b(?:do|then|else))` and the rest: the
+/// `\b` is read by `sourced`, so the pattern runs in the regex crate's automaton (451 T129).
+pub(super) static SOURCED: Lazy = Lazy::new(
     |t| t.contains('.') || t.contains("source") || t.contains("eval"),
-    || re(r"(?:^|[;&|\n({]|\b(?:do|then|else))\s*(?:source|\.|eval)\s"),
+    || re(r"(?:^|[;&|\n({]|(?:do|then|else))\s*(?:source|\.|eval)\s"),
 );
+
+/// Whether `text` sources a file or evaluates a string, as `SOURCED` with its `\b` read it: a match a word character before its
+/// `do`, `then` or `else` refuses tried again a character on.
+pub(super) fn sourced(text: &str) -> bool {
+    let Some(r) = SOURCED.on(text) else {
+        return false;
+    };
+    let mut at = 0;
+    while let Some(m) = r.find_from_pos(text, at).ok().flatten() {
+        if !look_refuses(text, m.start(), false) {
+            return true;
+        }
+        at = m.start() + 1;
+    }
+    false
+}
 
 /// How a read name is bound.
 #[derive(Debug, Clone)]
@@ -193,13 +232,18 @@ fn bindings(text: &str, read: &[Read]) -> HashMap<String, Bound> {
             .filter_map(|c| c.get(1).map(|m| (m.as_str().to_owned(), m.start())))
             .collect()
     };
-    let clean = names(&ASSIGN);
+    // the text's assignments scanned once, for their names and for the chains after them (451 T129)
+    let assigned: Vec<_> = assignments(text).collect();
+    let clean: Vec<(String, usize)> = assigned
+        .iter()
+        .filter_map(|c| c.get(1).map(|m| (m.as_str().to_owned(), m.start())))
+        .collect();
     let mut unknown: HashSet<String> = names(&APPEND)
         .into_iter()
-        .chain(names(&PRINTF_V))
+        .chain(printf_v_names(text))
         .map(|(n, _)| n)
         .collect();
-    for c in ASSIGN.captures_iter(text).map_while(Result::ok) {
+    for c in &assigned {
         let mut at = c.get(0).map_or(text.len(), |m| m.end());
         while let Some(m) = CHAIN.captures(&text[at..]) {
             unknown.extend(m.get(1).map(|n| n.as_str().to_owned()));
@@ -221,7 +265,7 @@ fn bindings(text: &str, read: &[Read]) -> HashMap<String, Bound> {
             unknown.insert(name);
         }
     }
-    let sourced = SOURCED.is_match(text);
+    let sourced = sourced(text);
     let mut out = HashMap::new();
     for r in read {
         let n = r.name.as_str();
@@ -266,7 +310,7 @@ fn bindings(text: &str, read: &[Read]) -> HashMap<String, Bound> {
 /// Each assignment in a segment whose value reads `$PWD` or `$OLDPWD`, read where the walk stands at it, not at the command's start
 /// (451 T79's third round: `cd <clone> && WT=$PWD; touch $WT/f` standing in the mirror was refused at HEAD, measured 2026-11-21).
 pub(super) fn read_where_it_stands(seg: &str, env: &mut Env, home: &str) {
-    for c in ASSIGN.captures_iter(seg).map_while(Result::ok) {
+    for c in assignments(seg) {
         let value = (2..=4).find_map(|i| c.get(i)).map_or("", |v| v.as_str());
         if let (Some(name), true) = (c.get(1), value.contains("PWD")) {
             if let Some(v) = expand(value, env, home) {

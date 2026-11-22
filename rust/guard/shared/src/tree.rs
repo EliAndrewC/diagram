@@ -49,25 +49,80 @@ const WRAPPERS: [&str; 9] = [
 
 // Each pattern of the walk is built only for a text that could match it (`Lazy`, 451 T97): its gate a literal every match holds.
 /// An assignment at a command's start - a loop's, an `if`'s and a function's body's too (451 T79's second round: `do
-/// D=/tmp/k-$q; mkdir -p $D` was read as nothing known), `export`, `local`, `declare`, `typeset` and `readonly` alike.
+/// D=/tmp/k-$q; mkdir -p $D` was read as nothing known), `export`, `local`, `declare`, `typeset` and `readonly` alike. Its opening
+/// was `(?:^|[;&|\n(]|(?<!\$)\{|\b(?:do|then|else)\s)`: the `(?<!\$)` and the `\b` are read by `assignments`, so the pattern runs
+/// in the regex crate's automaton, not fancy-regex's backtracking machine, which takes a word boundary as it takes a lookaround
+/// (451 T129; `tests/looks.rs` holds the two equal).
 static ASSIGN: Lazy = Lazy::new(
     |t| t.contains('='),
     || {
         re(
-            r#"(?:^|[;&|\n(]|(?<!\$)\{|\b(?:do|then|else)\s)\s*(?:(?:export|local|declare|typeset|readonly)\s+(?:-\w+\s+)*)?([A-Za-z_]\w*)=(?:"([^"\n]*)"|'([^'\n]*)'|([^\s;&|)]*))"#,
+            r#"(?:^|[;&|\n(]|\{|(?:do|then|else)\s)\s*(?:(?:export|local|declare|typeset|readonly)\s+(?:-\w+\s+)*)?([A-Za-z_]\w*)=(?:"([^"\n]*)"|'([^'\n]*)'|([^\s;&|)]*))"#,
         )
     },
 );
+
+/// Each assignment of `text`, in order, as `ASSIGN` with its `(?<!\$)` and `\b` read them: the leftmost match from where the last
+/// ended, a match the look before its start refuses tried again a character on (its first is a `{`, `d`, `t` or `e`, one byte).
+pub(super) fn assignments(text: &str) -> impl Iterator<Item = Captures<'_>> {
+    let r = ASSIGN.on(text);
+    let mut at = 0;
+    std::iter::from_fn(move || {
+        while let Some(c) = r?.captures_from_pos(text, at).ok().flatten() {
+            let whole = c.get(0).map_or(text.len()..text.len(), |m| m.range());
+            if look_refuses(text, whole.start, true) {
+                at = whole.start + 1;
+                continue;
+            }
+            at = whole.end;
+            return Some(c);
+        }
+        None
+    })
+}
+
+/// Whether the look before a match's start refuses it, for a pattern whose openings are a separator, a `{` and a `do`, `then` or
+/// `else`, each told by the match's first character: the word's `\b`, refusing a word character before it, and with `brace` the
+/// `{`'s `(?<!\$)`, refusing a `$` before it. The text's first character has nothing before it, so no look refuses there.
+pub(super) fn look_refuses(text: &str, start: usize, brace: bool) -> bool {
+    let before = text[..start].chars().next_back();
+    match text.as_bytes().get(start) {
+        Some(b'{') => brace && before == Some('$'),
+        Some(b'd' | b't' | b'e') => before.is_some_and(is_word),
+        _ => false,
+    }
+}
+
+/// A word character as a pattern's `\w` and `\b` read it - Unicode's, so `é` and a combining mark are and `²` is not.
+pub(super) fn is_word(c: char) -> bool {
+    if c.is_ascii() {
+        c.is_ascii_alphanumeric() || c == '_'
+    } else {
+        WORD.is_match(c.encode_utf8(&mut [0; 4]))
+    }
+}
+/// A word character beyond ASCII (`is_word`); no gate, a character `is_word` holds alone reaches it.
+static WORD: Lazy = Lazy::new(|_| true, || re(r"^\w$"));
 static VAR: Lazy = Lazy::new(|t| t.contains('$'), || re(r"\$\{(\w+)\}|\$(\w+)"));
 /// A `\` and the newline after it, which bash drops so the line goes on, past an even run of `\` before it - an escaped backslash,
 /// after which the newline ends the command (451 T79: the walk read `cp /tmp/a \` and the mirror's `b` on the next line as two
-/// commands, the write of `b` unseen, observed 2026-11-21).
-static CONTINUED: Lazy = Lazy::new(|t| t.contains("\\\n"), || re(r"(?<!\\)((?:\\\\)*)\\\n"));
-/// An assignment's value that is a `$(mktemp ...)` (or backquoted), its arguments the capture (451 T79).
+/// commands, the write of `b` unseen, observed 2026-11-21). It was `(?<!\\)((?:\\\\)*)\\\n`: the lookbehind is read by `joined`,
+/// so the pattern runs in the regex crate's automaton (451 T129).
+static CONTINUED: Lazy = Lazy::new(|t| t.contains("\\\n"), || re(r"((?:\\\\)*)\\\n"));
+/// An assignment's value that is a `$(mktemp ...)` (or backquoted), its arguments the capture (451 T79). It was `...mktemp\b(...`:
+/// the `\b` is read by `mktemp_call`, so the pattern runs in the regex crate's automaton (451 T129).
 static MKTEMP: Lazy = Lazy::new(
     |t| t.contains("mktemp"),
-    || re(r#"^["']?(?:\$\(|`)\s*mktemp\b([^()`\n]*?)\s*(?:\)|`)"#),
+    || re(r#"^["']?(?:\$\(|`)\s*mktemp([^()`\n]*?)\s*(?:\)|`)"#),
 );
+
+/// The `$(mktemp ...)` a value opens with, as `MKTEMP` with its `\b` read it: none where a word character follows `mktemp`, the
+/// pattern's one start (`^`) and the word's one place in it leaving nowhere else to try.
+fn mktemp_call(value: &str) -> Option<Captures<'_>> {
+    let c = MKTEMP.captures(value)?;
+    let after = c.get(1).and_then(|m| value[m.start()..].chars().next());
+    (!after.is_some_and(is_word)).then_some(c)
+}
 /// An assignment's value that is a `$(dirname ...)` or `$(basename ...)`, its text the capture (451 T79's second round).
 static DIR_BASE: Lazy = Lazy::new(
     |t| t.contains("dirname") || t.contains("basename"),
@@ -175,9 +230,24 @@ fn sanitize(carried: &str, programs: Vec<Program>) -> (String, Vec<Program>) {
     (DEV_NULL.replace_all(&text, " ").into_owned(), programs)
 }
 
-/// The text with each `\`-continued line joined to the next, as bash reads it (451 T79).
+/// The text with each `\`-continued line joined to the next, as bash reads it (451 T79): each match of `CONTINUED` whose start no
+/// `\` precedes gives way to its run of escaped backslashes, a match a `\` precedes tried again a character on.
 fn joined(text: &str) -> String {
-    CONTINUED.replace_all(text, "${1}").into_owned()
+    let Some(r) = CONTINUED.on(text) else {
+        return text.to_owned();
+    };
+    let (mut out, mut from, mut at) = (String::new(), 0, 0);
+    while let Some(c) = r.captures_from_pos(text, at).ok().flatten() {
+        let whole = c.get(0).map_or(text.len()..text.len(), |m| m.range());
+        if text[..whole.start].ends_with('\\') {
+            at = whole.start + 1;
+            continue;
+        }
+        out.push_str(&text[from..whole.start]);
+        out.push_str(c.get(1).map_or("", |m| m.as_str()));
+        (from, at) = (whole.end, whole.end);
+    }
+    out + &text[from..]
 }
 
 type Env = HashMap<String, String>;
@@ -349,7 +419,7 @@ fn env_from(cmd: &str, start: Option<&str>, home: &str) -> Env {
     } else {
         cmd.to_owned()
     });
-    for c in ASSIGN.captures_iter(&text).map_while(Result::ok) {
+    for c in assignments(&text) {
         let Some(named) = c.get(1) else { continue };
         let value = (2..=4)
             .find_map(|i| c.get(i))
@@ -357,8 +427,7 @@ fn env_from(cmd: &str, start: Option<&str>, home: &str) -> Env {
             .to_owned();
         // a `$(mktemp ...)` is the place mktemp makes (451 T79: `T=$(mktemp -d); git clone -q . $T/clone` standing in the mirror,
         // T50's tx#63, was read toward the mirror, observed 2026-11-21)
-        let made = MKTEMP
-            .captures(&text[named.end() + 1..])
+        let made = mktemp_call(&text[named.end() + 1..])
             .and_then(|k| mktemp_place(k.get(1).map_or("", |m| m.as_str()), &env, home))
             .or_else(|| {
                 DIR_BASE
