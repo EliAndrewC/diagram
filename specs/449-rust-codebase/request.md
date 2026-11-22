@@ -150,3 +150,7 @@ The GM: "When you get to the point where you have ported everything else and the
 ## 2026-11-22, Constitution VI's one self-scoping command (T252, 449#7)
 
 The session recommended retiring the one-command clause, since the Mode A sweep costs about 15 s. The GM: "Don't you think it will take longer once we implement villages, towns, provincial cities, and capital cities?" The session agreed and proposed option A instead: build the one self-scoping command over the Rust sweeps, the clause kept, the new command's name put in as upkeep. The GM: "okay good, please proceed on that basis then"
+
+## 2026-11-22, 449#4 and 449#5 closed (T171 and T150 had landed)
+
+The GM: "I'm not sure why you keep calling out " 449#4 and 449#5 are overtaken by work that has landed" as "open decisions" though sincethey are by definition not open"
