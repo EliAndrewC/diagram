@@ -19,7 +19,7 @@ $(foreach v,$(FREE_TEXT),$(if $(filter command line environment,$(origin $(v))),
 
 .PHONY: closing-checks modal-bundle modal-prepass done docs static format guard _reference bypass-audit quick page-check tick claim speckit-todo audit guard-edit context-ok guard-log scratch-sweep hooks-test citations fragment-move \
 	 switches _switch \
-	 map cohort cohort-landing hamlet placement-stages pool-index pool-index-if-stale compound render-sync idle-tests \
+	 map maps cohort cohort-landing hamlet placement-stages pool-index pool-index-if-stale compound render-sync idle-tests \
 	 pack-audit help \
 	 notes-census glossary page-lit picture-diff \
 	 ci-status gated-check
@@ -188,6 +188,15 @@ map:            ## [maps] draw ONE pool map through the generation cache (Rust s
 	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" pool map "$(MAP)"
 	@$(MAKE) --no-print-directory pool-index-if-stale
 	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" measure maps-moved $(if $(filter --all,$(MAP)),,--only "$(MAP)")
+
+# THE ONE SELF-SCOPING COMMAND (Constitution VI, GM 2026-08-23; rebuilt in Rust by feature 449 T252 on the GM's 2026-11-22 ruling): the
+# scope is read from how the last run went (.git/maps-state.json), never chosen by the session - the tier table and why are
+# rust/gate/crates/pool/src/maps.rs
+maps:           ## [maps] draw and check the pool, picking its own scope from how the last run went: after a failure (or none) each tier's reference map alone, stopping at the first problem and widening once clean; after a pass every tier whole, every failure reported (449 T252)   [SCOPE=reference|all] [TIER=hamlets|mode-a]
+##  SCOPE=reference|all  override the scope; by default it picks its own - the reference maps alone after a failed run, every tier whole after a clean one
+##  TIER=<row>           one row of the tier table (hamlets, mode-a)
+	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" pool maps $(if $(SCOPE),--scope "$(SCOPE)",) $(if $(TIER),--tier "$(TIER)",)
+	@$(MAKE) --no-print-directory pool-index-if-stale
 
 maps-moved:     ## [maps] which live maps' drawings (the generation cache's artifacts) moved against HEAD's - the mirror's render-sync drawing, wherever HEAD's inputs for a map are the mirror's; else NOT COMPARED with why, never unchanged (feature 429; 449 T230)
 	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" measure maps-moved --root "$$(git rev-parse --show-toplevel)"

@@ -12,6 +12,8 @@
 //!   Exit 1 where there is none.
 //! - `list`: every map folder, `tree tier name kind`, then what was reported.
 //! - `map <target>... | map --all` (T221): the maps drawn or served by the generation cache, `CACHED`, `REGENERATED` or `FROZEN` each.
+//! - `maps [--scope auto|reference|all] [--tier <row>]` (T252): `make maps`, the one self-scoping command over the tiers' draws and
+//!   checks ([`maps`]), its scope read from how the last run went.
 //! - `counts <tree>` (a counting build alone): the pipeline's counted work on that tree - the walk, the index and the cache over every
 //!   live map - on the SECOND of two runs back to back (the derivation's warm all-hit run; the first publishes what was not cached), one
 //!   JSON line with its `total`.
@@ -26,12 +28,13 @@ pub mod cache;
 pub mod counts;
 pub mod index;
 pub mod map;
+pub mod maps;
 pub mod walk;
 
 pub use walk::{walk, Kind, Map, Walk, DECLARATION, LEGACY, LIVE, TREES};
 
 const USAGE: &str =
-    "usage: pool index | find <map> [<suffix>] | list | map <map>... | map --all | counts <tree> (a counting build)\n";
+    "usage: pool index | find <map> [<suffix>] | list | map <map>... | map --all | maps [--scope auto|reference|all] [--tier <row>] | counts <tree> (a counting build)\n";
 
 /// What a command says: `(stdout, stderr, exit code)`.
 pub type Said = (String, String, i32);
@@ -253,6 +256,7 @@ pub fn cli(args: &[String], root: &Path) -> Said {
         ["find", name] => find_cli(root, name, None),
         ["find", name, suffix] => find_cli(root, name, Some(suffix)),
         ["list"] => list_cli(root),
+        ["maps", ref rest @ ..] => maps::cli(root, rest),
         ["map", ref rest @ ..] => map::cli(
             root,
             rest,

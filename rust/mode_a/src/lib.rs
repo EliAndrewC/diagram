@@ -56,12 +56,13 @@ pub mod reads;
 pub mod sheet;
 pub mod size_marks;
 pub mod size_table;
+pub mod sweep;
 pub mod tagged;
 pub mod tags;
 pub mod types;
 pub mod work_counts;
 
-const USAGE: &str = "usage: l7r-mode-a building-programs [--check] [--path PATH] | notes-census <manifest.json> [...] | sheet-counts <svg> | stale-sheet-counts <notes> <svg> | stale-counts <notes> <manifest.json> | size-table <plan> [--json JSON] | pack-audit <compound.svg> [...] | sheet-page <map.svg> [--with-raster | --no-raster] [--stdin] | hand-sheet <map.svg> [--placed OUT] | compound <map.compound.json> | sheet-render <map.svg> <out.png> | picture-diff a b [--page PAGE] [--svg SVG] [--threshold N] | page-lit <page.html> <key> [--vector] [--out OUT] | --version\n";
+const USAGE: &str = "usage: l7r-mode-a building-programs [--check] [--path PATH] | notes-census <manifest.json> [...] | sheet-counts <svg> | stale-sheet-counts <notes> <svg> | stale-counts <notes> <manifest.json> | size-table <plan> [--json JSON] | pack-audit <compound.svg> [...] | sweep <map>... | sheet-page <map.svg> [--with-raster | --no-raster] [--stdin] | hand-sheet <map.svg> [--placed OUT] | compound <map.compound.json> | sheet-render <map.svg> <out.png> | picture-diff a b [--page PAGE] [--svg SVG] [--threshold N] | page-lit <page.html> <key> [--vector] [--out OUT] | --version\n";
 
 /// The command: `building-programs [--check] [--path PATH]`, `notes-census <manifest.json> [...]` (`make notes-census`), the notes
 /// census's two checks and a sheet's counts as commands (the differential's doors onto what the retired pytest sweep once asked in
@@ -101,6 +102,8 @@ pub fn cli_in(args: &[String], tree: &Path, input: &mut dyn std::io::Read) -> Re
         (Some("notes-census"), _) => census::main(rest),
         (Some("size-table"), _) => size_table::cli::main(rest),
         (Some("pack-audit"), _) => audit::report::main(rest, tree),
+        // one pool sheet through its tier's checks, `make maps`' Mode A reference step (feature 449 T252)
+        (Some("sweep"), _) => sweep::main(rest, tree),
         (Some("sheet-counts"), 1) => door(|| {
             let counts = census::sheet_counts(&read(&rest[0])?)?;
             Ok(counts.iter().fold(String::new(), |mut out, (k, v)| {

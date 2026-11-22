@@ -11,5 +11,6 @@ mod hem;
 mod pyrand;
 mod seat;
 mod sink;
+pub mod spec_check;
 mod water_frame;
 mod waterward;

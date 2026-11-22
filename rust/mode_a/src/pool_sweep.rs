@@ -19,10 +19,9 @@ use std::sync::OnceLock;
 
 use l7r_gate_research::Error;
 
-use crate::audit::onmap::read_on_map;
-use crate::audit::registry::{checks_for, run_checks, Check, Context, CHECKS};
-use crate::audit::report::read_form;
-use crate::types::{by_tier, tiers};
+use crate::audit::registry::{checks_for, Check, CHECKS};
+use crate::sweep::{judge, with_context};
+use crate::types::tiers;
 
 fn tree() -> PathBuf {
     Path::new(env!("CARGO_MANIFEST_DIR")).join("../..")
@@ -37,11 +36,8 @@ struct Pooled {
     generated: bool,
 }
 
-const NO_SVG: &str =
-    "no svg and not a declared generated exception - draw it, or declare it generated";
-
 /// Every folder under each declared tier's pool folder, from the one pool walk (feature 449 T220), its sheet read or composed once for
-/// every test here.
+/// every test here ([`crate::sweep::sheet`], the one-sheet sweep's, feature 449 T252).
 fn pool() -> &'static [Pooled] {
     static POOL: OnceLock<Vec<Pooled>> = OnceLock::new();
     POOL.get_or_init(|| {
@@ -49,80 +45,22 @@ fn pool() -> &'static [Pooled] {
         let walked = l7r_gate_pool::walk(&tree);
         let mut out = Vec::new();
         for tier in tiers(&tree).unwrap() {
-            let generated = by_tier(&tier, &tree)
-                .unwrap()
-                .map(|t| t.generated_exceptions)
-                .unwrap_or_default();
             // a declared tier with no folder yet has no sheet
             for map in walked
                 .in_tree(l7r_gate_pool::LIVE)
                 .filter(|m| m.tier == tier)
             {
-                let stem = map.name.clone();
-                let svg = map.file(".svg");
-                let composed = generated.contains(&stem);
-                let spec = map.file(".compound.json");
-                let text = if composed {
-                    compose(&tree, &spec).unwrap()
-                } else {
-                    let read = l7r_gate_core::record::read_text(&svg).ok();
-                    assert_eq!((&stem, read.is_some(), NO_SVG), (&stem, true, NO_SVG));
-                    read.unwrap()
-                };
+                let s = crate::sweep::sheet(&tree, map).unwrap();
                 out.push(Pooled {
-                    tier: tier.clone(),
-                    stem,
-                    svg,
-                    text,
-                    generated: composed,
+                    tier: s.tier,
+                    stem: map.name.clone(),
+                    svg: s.svg,
+                    text: s.text,
+                    generated: s.generated,
                 });
             }
         }
         out
-    })
-}
-
-/// A generated exception's sheet as `l7r-mode-a compound` writes it: composed from its spec, its captions placed.
-fn compose(tree: &Path, spec: &Path) -> Result<String, Error> {
-    let (program, bands) = crate::compound::cli::load(tree, &spec.to_string_lossy())?;
-    let (text, _) = crate::compound::cli::compose(&program, &bands)?;
-    crate::caption_place::placed(&text)
-}
-
-/// A sheet's context: `text` read as the sheet at `svg` (its notes' form and map declaration beside it) under `tier`, handed to `f`.
-fn with_context<T>(
-    tree: &Path,
-    tier: &str,
-    svg: &Path,
-    text: &str,
-    f: impl FnOnce(&Context) -> Result<T, Error>,
-) -> Result<T, Error> {
-    let shown = svg.to_string_lossy();
-    let plan = crate::parse::parse_svg(text)?;
-    let btype = by_tier(tier, tree)?;
-    let (form, on_map) = (read_form(&shown)?, read_on_map(&shown)?);
-    let ctx = Context::new(
-        &plan,
-        text,
-        btype.as_ref(),
-        form.as_deref(),
-        on_map.as_ref(),
-        tree,
-    );
-    f(&ctx)
-}
-
-/// Every check `tier` owes, run on the sheet: each finding as `<check>: <finding> - fix: <fix>`. Empty is a pass.
-fn judge(tree: &Path, tier: &str, svg: &Path, text: &str) -> Result<Vec<String>, Error> {
-    with_context(tree, tier, svg, text, |ctx| {
-        Ok(run_checks(ctx, Some(tier))?
-            .into_iter()
-            .flat_map(|(ch, found)| {
-                found
-                    .into_iter()
-                    .map(move |f| format!("{}: {f} - fix: {}", ch.name, ch.fix))
-            })
-            .collect())
     })
 }
 

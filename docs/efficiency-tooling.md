@@ -112,7 +112,7 @@ Different in kind: each asks for a DECISION, which no substitution can supply.
 | refusal | what it wants |
 |---|---|
 | **the reference settlement gates everything expensive** | `test`, `done` and `maps` roll Inashiro FIRST and stop there if it is red. Escape `REF_OK`, which demands a written reason |
-| **`make maps` picked its own scope** (retired with the Python engine, feature 444 T39; its name with 449 T223) | after a failed run, the reference map alone; after a clean one, the whole tier. The pool sweep is `make rust-test CRATE=rust/mode_a` now |
+| **`make maps` picks its own scope** (the Python one retired with its engine, feature 444 T39; rebuilt over the Rust sweeps by 449 T252, `rust/gate/crates/pool/src/maps.rs`) | after a failed run (or none), each tier's reference map alone - Inashiro, county-magistracy-example - stopping at the first problem, widening once clean; after a clean one, every tier whole (the Mode A crate's tests and pool sweep, the pool hamlets and the cohort), every failure reported. `SCOPE=reference|all`, `TIER=` |
 | **`FULL=1` prompts and defaults to CANCEL** | a written justification, logged with the date, target and commit |
 | **the switches** (`claims-*` / `port-*`) | a `REASON=`, committed |
 | **the CodeBuild dispatcher** | five conditions before any paid run: an engine delta, a complete feature, a green local check, no existing verified record, and the spend breaker up |

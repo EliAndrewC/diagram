@@ -147,6 +147,37 @@ fn seeds(pool: &str, n: i64) {
     }
 }
 
+/// `hamlet --check <spec>...` (feature 449 T252, `make maps`' hamlet row): each spec rolled and judged, its problems one line each or its
+/// clean line, nothing written; exit 1 where any has a problem or cannot be read, 2 with no spec named.
+fn check(specs: &[String]) {
+    if specs.is_empty() {
+        eprintln!(
+            "hamlet: --check needs a spec - hamlet --check pool/hamlets/<name>/<name>.spec.json"
+        );
+        std::process::exit(2);
+    }
+    let mut bad = false;
+    for path in specs {
+        let found = std::fs::read_to_string(path).map_or_else(
+            |e| vec![format!("cannot be read: {e}")],
+            |text| l7r_phases::spec_check::problems(&text),
+        );
+        for f in &found {
+            println!(
+                "{path}: {}",
+                f.chars().take(200).collect::<String>().replace('\n', " ")
+            );
+        }
+        if found.is_empty() {
+            println!("{path}: clean");
+        }
+        bad |= !found.is_empty();
+    }
+    if bad {
+        std::process::exit(1);
+    }
+}
+
 fn main() {
     let args: Vec<String> = std::env::args().collect();
     if args.get(1).map(String::as_str) == Some("--cohort") {
@@ -159,6 +190,10 @@ fn main() {
             args.get(2).map_or("dev/known-seeds.txt", String::as_str),
             args.get(3).and_then(|v| v.parse().ok()).unwrap_or(200),
         );
+        return;
+    }
+    if args.get(1).map(String::as_str) == Some("--check") {
+        check(&args[2..]);
         return;
     }
     if args.get(1).map(String::as_str) == Some("--budget") {

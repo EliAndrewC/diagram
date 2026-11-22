@@ -42,7 +42,9 @@ Upkeep, no version (the obligation stands, a name retired): `make roll-audit` at
 its time-as-evidence sentence, `pyproject` in the Development Workflow's tooling hash. NOT amended, put to the GM through
 escalation-check (KEEP, 2026-11-22): VI's one self-scoping command, `make maps` (1.12.0, 1.12.1), whose tool went with the Python
 engine - today's are two commands, `make map MAP=` and the pool sweep `make rust-test CRATE=rust/mode_a`, which the clause
-forbids. Left for 449 T251: VI's Python bullet and roll census, X clauses 3, 5, 6 and 10 and whether X keeps a subject, the
+forbids. The GM ruled (2026-11-22, "okay good, please proceed on that basis then"): the clause kept, the one command built over the
+Rust sweeps - 449 T252 rebuilt `make maps` (`rust/gate/crates/pool/src/maps.rs`), and VI's tier-table sentence names it as upkeep,
+no version. Left for 449 T251: VI's Python bullet and roll census, X clauses 3, 5, 6 and 10 and whether X keeps a subject, the
 quick/gate test forms, the compliance line. Dependent: `.specify/templates/plan-template.md`'s X entry (✅ updated: lint, format,
 function cap); its performance table was already the work budget's (✅). MINOR (a principle's requirement changes, precedents
 2.33.0, 2.34.0).
@@ -956,7 +958,8 @@ artifacts. Specifically:
     times over across a feature.
 
     **This is the general pattern for every settlement tier**, not a hamlet
-    special case - `mapcheck.py` is a tier table, and villages, towns and cities
+    special case - `make maps`' tier table (`rust/gate/crates/pool/src/maps.rs`)
+    names a row and a reference map per tier, and villages, towns and cities
     each get a row and a named reference map as they gain live scripted gens.
   - **BYPASSING THE GATE COSTS A WRITTEN, AUDITED JUSTIFICATION** (GM 2026-08-24).
     `REF_OK=1` does not merely permit the expensive run: it demands a reason in

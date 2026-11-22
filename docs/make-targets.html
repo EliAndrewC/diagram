@@ -28,7 +28,7 @@ footer{margin-top:3rem;padding-top:1rem;border-top:1px solid var(--line);color:v
 </style>
 <main>
 <h1>make targets</h1>
-<p class=lede>Every target in the diagram skill's Makefile, grouped. 186 documented. Generated from the Makefile - edit the target's <code>##</code> line, not this page.</p>
+<p class=lede>Every target in the diagram skill's Makefile, grouped. 187 documented. Generated from the Makefile - edit the target's <code>##</code> line, not this page.</p>
 <h2>Tests</h2>
 <p class=sec>The four tiers, cheapest first. Where a test LIVES decides when it runs, so these differ by scope rather than by filter.</p>
 <div class=scroll><table><tr><th>target</th><th>arguments</th><th>what it is</th></tr>
@@ -47,7 +47,7 @@ footer{margin-top:3rem;padding-top:1rem;border-top:1px solid var(--line);color:v
 <tr><td class=n>make verify-wait</td><td class=a>&ndash;</td><td>wait for the gate `make verify` started, on ITS OWN log, and print its verdict - run it with run_in_background (exit 0 green, 1 red, 3 no log, 4 timed out, 5 the gate died)</td></tr>
 </table></div>
 <h2>Maps</h2>
-<p class=sec>Generating and checking the pool. `maps` picks its own scope - the reference hamlet alone after a failure, the whole tier after a clean run.</p>
+<p class=sec>Generating and checking the pool. `maps` picks its own scope - each tier&#x27;s reference map alone after a failure, every tier whole after a clean run.</p>
 <div class=scroll><table><tr><th>target</th><th>arguments</th><th>what it is</th></tr>
 <tr><td class=n>make cohort</td><td class=a>FIELD N SEED</td><td>roll N cohort seeds through the Rust driver, one line a seed, each refusal or broken rule named, the time taken (feature 444 T42)   [N=48] [SEED=1] [FIELD=polder_grid|mulberry_dike_fishpond]</td></tr>
 <tr><td class=n>make cohort-landing</td><td class=a>&ndash;</td><td>the landing cohort a GATED landing owes at the port switch&#x27;s `integrated` (feature 386, 444 FR-023): REFUSES - no roller writes its dev/cohort-log/ record since the Python driver was deleted (444 T39); at rust-only nothing owes it (449 T223)</td></tr>
@@ -55,6 +55,7 @@ footer{margin-top:3rem;padding-top:1rem;border-top:1px solid var(--line);color:v
 <tr><td class=n>make compound</td><td class=a><div class=ad><span class=an>SPEC=&lt;map&gt;.compound.json</span><span class=aw>the program; the sheet, its picture and its page are written beside it as &lt;map&gt;.svg, .png, .html</span></div></td><td>compose a Mode A compound sheet from its feet-based program, drawn whole by the compound generator (Rust since 449 T152, `l7r-mode-a`) - a starting point the GM then refines by hand</td></tr>
 <tr><td class=n>make hamlet</td><td class=a>SPEC</td><td>roll one pool hamlet with the Rust driver (feature 444 T42): its map and record written beside the spec, the wall time printed</td></tr>
 <tr><td class=n>make map</td><td class=a><div class=ad><span class=an>MAP=&lt;folder|spec&gt;</span><span class=aw>the map: its folder pool/&lt;tier&gt;/&lt;map&gt;, any file in it (its .spec.json, .compound.json or .svg), or its bare name</span></div></td><td>draw ONE pool map through the generation cache (Rust since 449 T221) - a hamlet, a generated compound or a hand sheet - and say CACHED, REGENERATED (with why) or FROZEN</td></tr>
+<tr><td class=n>make maps</td><td class=a><div class=ad><span class=an>SCOPE=reference|all</span><span class=aw>override the scope; by default it picks its own - the reference maps alone after a failed run, every tier whole after a clean one</span></div><div class=ad><span class=an>TIER=&lt;row&gt;</span><span class=aw>one row of the tier table (hamlets, mode-a)</span></div></td><td>draw and check the pool, picking its own scope from how the last run went: after a failure (or none) each tier&#x27;s reference map alone, stopping at the first problem and widening once clean; after a pass every tier whole, every failure reported (449 T252)   [SCOPE=reference|all] [TIER=hamlets|mode-a]</td></tr>
 <tr><td class=n>make maps-moved</td><td class=a>&ndash;</td><td>which live maps&#x27; drawings (the generation cache&#x27;s artifacts) moved against HEAD&#x27;s - the mirror&#x27;s render-sync drawing, wherever HEAD&#x27;s inputs for a map are the mirror&#x27;s; else NOT COMPARED with why, never unchanged (feature 429; 449 T230)</td></tr>
 <tr><td class=n>make placement-stages</td><td class=a>&ndash;</td><td>the stage-by-stage walk-through page - FROZEN (feature 444 amendment 11): generated from the deleted Python engine, kept as the Rust port&#x27;s reference until a page from the Rust driver replaces it</td></tr>
 <tr><td class=n>make placement-stages-if-classes<span class=b title='called by a recipe or a script - you would not type this'>internal</span></td><td class=a>&ndash;</td><td>a no-op since the walk-through page froze (feature 444 amendment 11); sync-in still calls it</td></tr>

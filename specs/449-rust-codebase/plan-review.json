@@ -1508,7 +1508,7 @@
    "declared": "spec-fidelity"
   },
   "### T252 Approach (checklist part A)": {
-   "sha256": "00fc8b4c9b4406b8f251932bb9c6c7c231e7e1f243a666a2428331981fdcffbb",
+   "sha256": "ff719d1842d78ac4506a4c767f69da681ce110e477b958125f794785d62a66e0",
    "verdict": "CLEAR",
    "reviewed": "2026-11-22",
    "declared": "spec-fidelity"
@@ -1743,6 +1743,36 @@
   },
   "### T291 Approach (checklist part A)": {
    "sha256": "3c61d5485a65cb75ec9759234e35954ad31fe0c97cecd4f12dacdf182c388d60",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-22",
+   "declared": "spec-fidelity"
+  },
+  "### T259, T277 (bundle)": {
+   "sha256": "4195d75efdf77e26e3a64aade35c8fc8e9707ff13a1069f4fa385f41706f1af4",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-22",
+   "declared": "spec-fidelity"
+  },
+  "### T259, T277 Approach (checklist part A)": {
+   "sha256": "68e6341e1d11511f740e47530a3a00bcbd913415c916578a481b02a567a6634e",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-22",
+   "declared": "spec-fidelity"
+  },
+  "### T252 (T228 found it, 2026-11-22; escalation-check KEEP; the GM ruled 2026-11-22, request.md \"Constitution VI's one self-scoping command\": \"okay good, please proceed on that basis then\")": {
+   "sha256": "0dfd3816969fc244e83caa092436f47984faf3bba737a10aa65821438fdffe09",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-22",
+   "declared": "spec-fidelity"
+  },
+  "### T275, T276, T278, T279, T280, T281, T288 (bundle)": {
+   "sha256": "382f58cf9d77be472293e13dabc46de5debb78bbf8d3964677c56b3220862877",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-22",
+   "declared": "spec-fidelity"
+  },
+  "### T275, T276, T278, T279, T280, T281, T288 Approach (checklist part A)": {
+   "sha256": "9090bf417e00d1cf8b2137e6937d7d54092b77c08ba5d1dc4682e12165ed8ff0",
    "verdict": "CLEAR",
    "reviewed": "2026-11-22",
    "declared": "spec-fidelity"
@@ -21039,6 +21069,253 @@
      "why": "Nothing task-specific is decided, so nothing narrows the GM's request or the accepted spec. The template defaults restate standing project procedure (constitution XIV, 451 FR-013) and leave every scope question open. When the placeholders are filled the block digests change and the filled text is owed its own review."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-22",
+   "blocks": [
+    "### T259, T277 (bundle)",
+    "### T259, T277 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T259-D1 key runs by content",
+     "summary": "T259: `make work-budget WRITE=1` writes `meta.code`, `tree`'s worktree_key of HAMLET_READS (the ratchet's key of the same reads), taken before the counting run starts; previously runs carried the Python `code_id` (114) or the Rust port's `rev-parse --short HEAD` (12).",
+     "class": "within",
+     "why": "The defect, measured 2026-11-22, is a wrong outcome: an audit judged counts of code other than the code it read (the waterward.polder round read a run 180 lines behind; the newest run was stale on the landed tree). Keying a run by the content it counts is the fix, and reusing the ratchet's key keeps one key, not a new one. Serves 443 FR-008 (MODE AUDIT judges the landed code's counters)."
+    },
+    {
+     "id": "T259-D2 HAMLET_READS moved into trials",
+     "summary": "T259: the HAMLET_READS constant moves down into `trials`, which gains the `tree` dependency.",
+     "class": "within",
+     "why": "An implementation placement needed so the writer and the ratchet share one key; narrows nothing asked."
+    },
+    {
+     "id": "T259-D3 newest matching run, refuse where none",
+     "summary": "T259: the audit bundle takes the newest run whose key is the tree's (key text searched first, other code's runs never parsed; a run holding the key that does not read fails), and refuses where none matches, naming the newest and `make work-budget WRITE=1`; it does not re-run.",
+     "class": "within",
+     "why": "Refusal is what the task line asks (per the block), and it gives the audit what FR-008 owes: counts of this code or no verdict, never a stale one. Newest matching rather than newest by name is the fix itself (tracked run files from another clone must not shadow this tree's run). No part of the request is dropped."
+    },
+    {
+     "id": "T259-D4 stage_sources keeps the newest run",
+     "summary": "T259: `stage_sources` (make task-start) keeps taking the newest run, unkeyed, so task-start does not refuse.",
+     "class": "within",
+     "why": "T259's subject, as the block states it, is the audit's run file - 443 FR-008's MODE AUDIT bundle, 'an audit reads this code's counts or is refused'. Leaving task-start's staging on the newest run, so task-start does not refuse, narrows nothing the request or the spec asks of the audit."
+    },
+    {
+     "id": "T259-D5 past audits not re-derived",
+     "summary": "T259: the ledger cannot recover how often an earlier audit read a stale run (no bundle but one names its run); no retrospective re-audit is planned.",
+     "class": "within",
+     "why": "A measured statement that the past is unrecoverable, not a narrowing of what was asked: the request and the spec ask for audits that judge the code they read, which the fix secures from here on, and an accepted stage stays held by the push's ratchet to its accepted figure on live counts (444 FR-022)."
+    },
+    {
+     "id": "T277-E1 belt to windward on a fall into the wind",
+     "summary": "T277: where a seat's field lies within 45 degrees of the map's wind (the uphill re-rank, Sawada), the belt stands to windward between the houses and the paddy, extending 0072's side rule, labeled a GUESS (research pass 2026-11-22: SILENT on a cluster backed to a hill with the wind off its paddy).",
+     "class": "within",
+     "why": "The old seat asked the belt's room of the hill's way, putting it to leeward, contrary to 0072's recorded 'the wind decides the belt's side' - a research finding contradicted is a defect (XIV), and fixing known defects as we go is the GM's rule (2026-11-18). The case 0072 does not reach is labeled a GUESS rather than presented as attested; the research ladder owns its standing, not this review."
+    },
+    {
+     "id": "T277-E2 houses set back BELT_BAND.1",
+     "summary": "T277: on such a frame the band and every sample of it stand BELT_BAND.1 (146 ft) further out and `belt_off` asks the belt's room of the real wind; room first.",
+     "class": "within",
+     "why": "Gives the belt its room before the houses are fitted, the GM's room-first rule (2026-10-12) applied to the fix; one existing figure reused."
+    },
+    {
+     "id": "T277-E3 belt_wind on the uphill re-rank alone",
+     "summary": "T277: `margins::ranked` receives the map's own wind only on the uphill re-rank; other seats are untouched.",
+     "class": "within",
+     "why": "Limits the change to the seats the measurement showed off-wind by that mechanism (Sawada); the seats already backing the wind (Inashiro, Mizuguchi, Kashikawa) have no defect to fix. The other off-wind seat, Kuwabata, is a separate mechanism and is decision T277-E7."
+    },
+    {
+     "id": "T277-E4 45-degree threshold, oblique fall adds no room",
+     "summary": "T277: room is added only where -(n . wind) >= WIND_BACK_MIN_DOT (within 45 degrees); a wind along the band adds no room, the belt standing at a band end.",
+     "class": "within",
+     "why": "With the wind along the band the windward edge is a band end, so the belt there is 0072's own side rule, not a case dropped; the threshold is how the fix tells the two apart."
+    },
+    {
+     "id": "T277-E5 settlement_ground depth unchanged, one figure",
+     "summary": "T277: settlement_ground's depth is unchanged; BELT_FAR_FT now reads BELT_BAND.1; on such a frame the kept ground holds the belt first, then the houses. Sawada's drawn ground and hem are unchanged (ring md5 unchanged, 2026-11-22).",
+     "class": "within",
+     "why": "Keeps one figure for one quantity and changes what the ground holds, not its extent; a drawn output that still passes its checks is owed nothing more (FR-002 as amended). The block touches no code of `stage_seat` or the roll (driver.rs hunks are docs) and leaves the homestead and belt stages parked, consistent with the GM's 2026-11-21 stop before the parked hamlet stages."
+    },
+    {
+     "id": "T277-E6 the record's words and the claims restated",
+     "summary": "T277: 0031 and 0072 drawing pages and 0031's note -9 labeled (the pages at the 20,000-byte cap, the detail in the note); the doc claims in driver.rs, seat and margins restated and re-checked by impl-drift; driver.rs hunks docs only.",
+     "class": "within",
+     "why": "Bookkeeping that keeps the research record and the code's claims in step with the fix; narrows nothing."
+    },
+    {
+     "id": "T277-E7 Kuwabata left, filed as T292",
+     "summary": "T277: the polder seat (Kuwabata, -0.71, its back to the landward shore) also asks the belt's room of the wrong way, but is not fixed here; filed as T292, to land before T158, because 0019 sets a polder's village a few steps off the dike, so the 146 ft room does not carry to a polder without its own ruling.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Presumed not legitimate and checked: Kuwabata is an off-wind seat by the plan's own measurement, so leaving it narrows T277. It is legitimate because applying T277's rule literally there would set the village 146 ft further off the dike, against 0019's recorded finding that a polder's village stands a few steps off it - the literal rule would trade one research contradiction for another, defeating the purpose (belts and houses where the research puts them); a polder's belt needs its own ruling. The defect is not dropped or carried forward unscheduled: the block states it is wrong only once the belt stage unparks, the homestead and belt stages are parked (and the GM said on 2026-11-21 to stop before them), and the plan commits T292 to land before T158."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-22",
+   "blocks": [
+    "### T252 (T228 found it, 2026-11-22; escalation-check KEEP; the GM ruled 2026-11-22, request.md \"Constitution VI's one self-scoping command\": \"okay good, please proceed on that basis then\")",
+    "### T252 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D1 option A, command named make maps",
+     "summary": "Build the one self-scoping command as `make maps` (the name the clause already uses, free since T223), over the Rust sweeps; the clause kept.",
+     "class": "within",
+     "why": "This is the GM's 2026-11-22 ruling as written: build the one self-scoping command over the Rust sweeps and keep the clause. Using the name the clause already holds is how the ruling is carried out, not a narrowing of it."
+    },
+    {
+     "id": "D2 one state record",
+     "summary": "One record, .git/maps-state.json per checkout, drives both the scope and the verbosity. One record, not one per row: a failure in any row narrows every row's next run.",
+     "class": "within",
+     "why": "The block quotes the clause's one-state rule, and a per-row record would depart from it, so taking one record keeps the clause the GM kept. Bundle gap: Constitution VI's text is not in the bundle, so this is checked against the block's own quotation of the clause. The half-second-a-row cost it cites is a proxy, because pool map was not timed, but the decision rests on the clause and not on that cost."
+    },
+    {
+     "id": "D3 scope rules",
+     "summary": "After a passed run, every row runs whole and every failure is collected. After a failed run, or with no last run, each row's reference runs, stopping at the first problem, and the same run widens once every reference is clean. SCOPE=reference|all overrides.",
+     "class": "within",
+     "why": "These are the clause's self-scoping and SCOPE= override, which the GM's ruling keeps. They are checked against the block's quotations of the clause (bundle gap as in D2)."
+    },
+    {
+     "id": "D4 TIER= one row",
+     "summary": "TIER=<row> runs a single row.",
+     "class": "within",
+     "why": "An extra explicit override. It removes nothing from the self-scoping default the ruling asks for, so it narrows nothing."
+    },
+    {
+     "id": "D5 tier rows now: hamlets and mode-a; larger tiers added as they land",
+     "summary": "TIERS holds two rows today. Villages, towns and cities add their rows when they land.",
+     "class": "within",
+     "why": "The GM's question ('once we implement villages, towns, provincial cities, and capital cities') is about tiers not yet built. The ruling asks for the command over the Rust sweeps that exist, and leaves a row for each later tier. Nothing that exists is left out."
+    },
+    {
+     "id": "D6 hamlet row",
+     "summary": "Reference: Inashiro, via pool map plus hamlet --check. Whole run: pool map of every pool hamlet, hamlet --check of each, and hamlet --cohort 1 48.",
+     "class": "within",
+     "why": "A reference and a whole run for the existing hamlet sweep. Inashiro is called the clause's canonical hamlet. Nothing in request.md or the spec names a different reference."
+    },
+    {
+     "id": "D7 Mode A reference map",
+     "summary": "county-magistracy-example, a generated compound, is the Mode A reference.",
+     "class": "within",
+     "why": "Choosing the reference a tier row needs is part of building the command. Neither request.md nor the spec names another Mode A reference (spec-index grep for reference/tier/shrine/magistr finds none). The plan's 'the session approved it' carries no authority and is not relied on; the choice is within either way."
+    },
+    {
+     "id": "D8 one mode-a row for magistracies and country-shrines",
+     "summary": "Every Mode A building type with a pool folder shares one row and one reference. Its whole run is pool map of every live Mode A map and then the mode_a crate tests, the pool sweep among them.",
+     "class": "within",
+     "why": "Purpose walk for a change that breaks only a country shrine. After a passed run, the whole run's pool sweep judges every live Mode A map, so it is caught. After a failed run or with no run, the magistracy reference is clean, the same run widens, and the whole run catches it. No state ends a bare `make maps` without judging the shrine, so only the early stop is lost and nothing goes unchecked. In words, the GM asked for the command 'over the Rust sweeps', and Mode A is one sweep (`make rust-test CRATE=rust/mode_a`). The tiers the GM named are settlement sizes, not Mode A building types. The spec carries no per-building-type reference requirement. Bundle gap: whether the clause's 'reference per tier' reaches Mode A building types is judged from the block's quotation only."
+    },
+    {
+     "id": "D9 ordering: reference first, narrow run a prefix of a wide one",
+     "summary": "Each whole run starts with its reference, and widening re-runs the references inside the whole runs.",
+     "class": "within",
+     "why": "An implementation of the clause's narrowing and widening, with no change of scope."
+    },
+    {
+     "id": "D10 two read-only judge commands",
+     "summary": "Add l7r-mode-a sweep <map> (the pool sweep's compose, with_context and judge moved out of cfg(test)) and hamlet --check <spec> (a new spec_check.rs), because a draw judges no rule.",
+     "class": "within",
+     "why": "Without a judge the reference step would prove nothing, since a draw passes a hamlet with refusals and a cached map runs nothing. So these serve the command the GM asked for. Both are read-only and add no behavior beyond judging what is already judged."
+    },
+    {
+     "id": "D11 Launch trait and fake in tests",
+     "summary": "Steps run through a Launch trait, so the tests drive a fake and meet the line-coverage floor without cargo or a map.",
+     "class": "within",
+     "why": "A test design that serves FR-004's coverage floor. It is not a scope decision."
+    },
+    {
+     "id": "D12 make map MAP= and make rust-test CRATE=rust/mode_a stay callable",
+     "summary": "The two existing commands remain beside make maps, and make maps calls their underlying launcher steps.",
+     "class": "within",
+     "why": "The ruling asks for the one self-scoping command to exist 'over the Rust sweeps'. It does not ask for the sweeps it runs to be removed, and make maps is built over them. The pair guard's assertion (no gate) stands unchanged."
+    },
+    {
+     "id": "D13 upkeep, no version",
+     "summary": "VI's tier-table sentence names maps.rs where it named mapcheck.py. T228's note says the clause was kept and the command rebuilt. The efficiency-tooling row and the make-docs prose are updated, and make-targets.html is regenerated. The pair-guard comment is updated. The 1.12.0 and 1.12.1 history entries keep their words.",
+     "class": "within",
+     "why": "The GM's ruling says to put the new command's name in as upkeep, and the plan does exactly that. Leaving the historical entries untouched is right: they are records, not operative text."
+    },
+    {
+     "id": "D14 pool map untimed; end-to-end make maps run after the commit",
+     "summary": "pool map is not timed, because it rewrites tracked pool files while other builders edit them. Done is shown by make maps SCOPE=reference running clean and a bare make maps then going wide.",
+     "class": "within",
+     "why": "A verification-timing choice that leaves out nothing the GM asked for. The end-to-end run is still owed and named in item 9."
+    },
+    {
+     "id": "D15 make cohort's slower cargo-run path left",
+     "summary": "make cohort takes 4.4-4.8 s against the launcher's 0.59 s for the same seeds. It is not filed.",
+     "class": "within",
+     "why": "Same outcome and slower time, so not a wrong outcome and not a defect under constitution XIV. The whole run uses the launcher's binary anyway."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-22",
+   "blocks": [
+    "### T275, T276, T278, T279, T280, T281, T288 (bundle)",
+    "### T275, T276, T278, T279, T280, T281, T288 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T275-no-geometry",
+     "summary": "T275: the armory's two questionables (Kaibara's share of the eight-mat rooms, Pingyao's hall/armory depth) settled with no geometry change; the armory stays in the hall's back row, labeled a GUESS that names the full-depth reading; the old 'one eight-mat room of about 12 ft square' GUESS restated as one or two of three rooms, sources silent",
+     "class": "within",
+     "why": "The research pass found the sources silent on both points, so there is no wrong outcome to fix: under constitution XIV and the GM 2026-11-19 ('don't spend a lot of time fixing things which are not actually wrong'), a silence is fixed by stating it in the record, not by changing the drawing. Not a defect left, so no narrowing."
+    },
+    {
+     "id": "T275-record-fix",
+     "summary": "T275: the record gains the room order, the silences, and a mislabel fix (0097's 'prefectural designation' corrected to the national historic-site text) via a page session on 0093, 0097, 0123",
+     "class": "within",
+     "why": "A wrong statement in the record is a defect and gets fixed as found, as the GM asked 2026-11-18 ('fix broken things as we find them')."
+    },
+    {
+     "id": "T276-armory-required",
+     "summary": "T276: 'optional' dropped from the armory item in types.json so program_complete refuses a seat with no armory; red first on exactly the four sheets that drew none",
+     "class": "within",
+     "why": "Knob 4 says every seat keeps an armory and four sheets drew none, so the research claim was contradicted and the check was passing bad work. Both are defects under XIV. The changed check only fails when the armory is absent, so it enforces the fix rather than adding scope (GM 2026-09-20)."
+    },
+    {
+     "id": "T276-sites",
+     "summary": "T276: each seat's armory placed by knob 4 and its gate form: one-bay-gate seats (Ochiba, the round-trip) take the hall's west end; gate-range seats (Hayakawa, Ubame) roll the armory-site knob from the map's seed (Hayakawa office hall, Ubame gate range's west room, formerly a gate-keepers' room whose use was a guess); every size inside the types.json band",
+     "class": "within",
+     "why": "This applies knob 4 as written: a gate range where one stands is a knob, the hall's west end where none does. The size differences between seats (14 x 16.7, 13.3 x 12, 14 x 20 ft, all measured 2026-11-22 and inside the band) are differences, not defects. Nothing the request asked for is narrowed."
+    },
+    {
+     "id": "T278-restate",
+     "summary": "T278: Ochiba's sheet already matches the procedure (granary at the head of the east column, guard building in the corner below it); 0116's drawing page restated, the sheet unchanged",
+     "class": "within",
+     "why": "The behavior is fine and only the page's wording misread it. The GM's rule (constitution XIV, 2026-11-19) is to fix that by restating the claim, never the code."
+    },
+    {
+     "id": "T279-restate",
+     "summary": "T279: docs/buildings.md's office-hall size and 0090's page restated to name which plan each figure measures (Hayakawa's drawn hall vs the county example's 127 x 38 now)",
+     "class": "within",
+     "why": "This corrects the words to match the measured sheets. No code changes, and no defect is left."
+    },
+    {
+     "id": "T280-T288-hall-east",
+     "summary": "T280/T288: the karo's long-house doors faced the tax archive within 12 ft (building-review N1, E1); fixed room-first by moving the office hall 12 ft east into the dead ground before the granary, re-seating the archive 19.5 ft off the long-house and re-cutting the hearing court under the dais; the test's 12 ft is the gate-approach GUESS (layout::APPROACH) reused, not a new constant; a 14-ft-wider compound priced and refused",
+     "class": "within",
+     "why": "A door opening onto a building a few feet away is a wrong outcome a reader of the map would see, so it is a defect, fixed as found (GM 2026-11-18). The red-first test only fails while the door is blocked, so it is enforcement. Room-first and the priced alternative are design choices, not fidelity questions."
+    },
+    {
+     "id": "T281-restate",
+     "summary": "T281: buildings.md's Granary bullet 'behind the offices' restated to 'on the office side', naming both the county example's head-of-column seat and the round-trip's granary below its barracks; swapping the round-trip's order priced and refused (no room for the barracks); the two Pingyao-describing phrases left as they are",
+     "class": "within",
+     "why": "The sheets read fine, and the claim that did not match them is restated (constitution XIV). The two phrases left alone describe Pingyao itself and are accurate, so leaving them is not a defect left."
+    },
+    {
+     "id": "order-and-exits",
+     "summary": "Ordering: lands before 449 T158 (T275, T276) and T244 (T288); exits by both red tests green, make map clean on the five sheets, pack-audit OK, claims IN-STEP; one claims re-check per moved claim",
+     "class": "within",
+     "why": "This fixes each step's known defects before the next step's port, as the GM asked 2026-11-18 ('fix all known bugs in each step before moving on'). It also respects the GM's 2026-11-21 stop before the parked hamlet stages (T244)."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -36708,6 +36985,700 @@
      "summary": "wood-kami-altar's tab called the wood color a map drawing convention, so no sentence takes it as the real finish; found.jsonl row closed",
      "class": "within",
      "why": "Fixed here, not deferred."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T259": {
+   "section_sha256": "a1cdadaaa48e2eb8ae45a8d0f6803f0574f11423362081ae676ae6e8de8e1493",
+   "reviewed": "2026-11-22",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T259-D1 key runs by content",
+     "summary": "T259: `make work-budget WRITE=1` writes `meta.code`, `tree`'s worktree_key of HAMLET_READS (the ratchet's key of the same reads), taken before the counting run starts; previously runs carried the Python `code_id` (114) or the Rust port's `rev-parse --short HEAD` (12).",
+     "class": "within",
+     "why": "The defect, measured 2026-11-22, is a wrong outcome: an audit judged counts of code other than the code it read (the waterward.polder round read a run 180 lines behind; the newest run was stale on the landed tree). Keying a run by the content it counts is the fix, and reusing the ratchet's key keeps one key, not a new one. Serves 443 FR-008 (MODE AUDIT judges the landed code's counters)."
+    },
+    {
+     "id": "T259-D2 HAMLET_READS moved into trials",
+     "summary": "T259: the HAMLET_READS constant moves down into `trials`, which gains the `tree` dependency.",
+     "class": "within",
+     "why": "An implementation placement needed so the writer and the ratchet share one key; narrows nothing asked."
+    },
+    {
+     "id": "T259-D3 newest matching run, refuse where none",
+     "summary": "T259: the audit bundle takes the newest run whose key is the tree's (key text searched first, other code's runs never parsed; a run holding the key that does not read fails), and refuses where none matches, naming the newest and `make work-budget WRITE=1`; it does not re-run.",
+     "class": "within",
+     "why": "Refusal is what the task line asks (per the block), and it gives the audit what FR-008 owes: counts of this code or no verdict, never a stale one. Newest matching rather than newest by name is the fix itself (tracked run files from another clone must not shadow this tree's run). No part of the request is dropped."
+    },
+    {
+     "id": "T259-D4 stage_sources keeps the newest run",
+     "summary": "T259: `stage_sources` (make task-start) keeps taking the newest run, unkeyed, so task-start does not refuse.",
+     "class": "within",
+     "why": "T259's subject, as the block states it, is the audit's run file - 443 FR-008's MODE AUDIT bundle, 'an audit reads this code's counts or is refused'. Leaving task-start's staging on the newest run, so task-start does not refuse, narrows nothing the request or the spec asks of the audit."
+    },
+    {
+     "id": "T259-D5 past audits not re-derived",
+     "summary": "T259: the ledger cannot recover how often an earlier audit read a stale run (no bundle but one names its run); no retrospective re-audit is planned.",
+     "class": "within",
+     "why": "A measured statement that the past is unrecoverable, not a narrowing of what was asked: the request and the spec ask for audits that judge the code they read, which the fix secures from here on, and an accepted stage stays held by the push's ratchet to its accepted figure on live counts (444 FR-022)."
+    },
+    {
+     "id": "T277-E1 belt to windward on a fall into the wind",
+     "summary": "T277: where a seat's field lies within 45 degrees of the map's wind (the uphill re-rank, Sawada), the belt stands to windward between the houses and the paddy, extending 0072's side rule, labeled a GUESS (research pass 2026-11-22: SILENT on a cluster backed to a hill with the wind off its paddy).",
+     "class": "within",
+     "why": "The old seat asked the belt's room of the hill's way, putting it to leeward, contrary to 0072's recorded 'the wind decides the belt's side' - a research finding contradicted is a defect (XIV), and fixing known defects as we go is the GM's rule (2026-11-18). The case 0072 does not reach is labeled a GUESS rather than presented as attested; the research ladder owns its standing, not this review."
+    },
+    {
+     "id": "T277-E2 houses set back BELT_BAND.1",
+     "summary": "T277: on such a frame the band and every sample of it stand BELT_BAND.1 (146 ft) further out and `belt_off` asks the belt's room of the real wind; room first.",
+     "class": "within",
+     "why": "Gives the belt its room before the houses are fitted, the GM's room-first rule (2026-10-12) applied to the fix; one existing figure reused."
+    },
+    {
+     "id": "T277-E3 belt_wind on the uphill re-rank alone",
+     "summary": "T277: `margins::ranked` receives the map's own wind only on the uphill re-rank; other seats are untouched.",
+     "class": "within",
+     "why": "Limits the change to the seats the measurement showed off-wind by that mechanism (Sawada); the seats already backing the wind (Inashiro, Mizuguchi, Kashikawa) have no defect to fix. The other off-wind seat, Kuwabata, is a separate mechanism and is decision T277-E7."
+    },
+    {
+     "id": "T277-E4 45-degree threshold, oblique fall adds no room",
+     "summary": "T277: room is added only where -(n . wind) >= WIND_BACK_MIN_DOT (within 45 degrees); a wind along the band adds no room, the belt standing at a band end.",
+     "class": "within",
+     "why": "With the wind along the band the windward edge is a band end, so the belt there is 0072's own side rule, not a case dropped; the threshold is how the fix tells the two apart."
+    },
+    {
+     "id": "T277-E5 settlement_ground depth unchanged, one figure",
+     "summary": "T277: settlement_ground's depth is unchanged; BELT_FAR_FT now reads BELT_BAND.1; on such a frame the kept ground holds the belt first, then the houses. Sawada's drawn ground and hem are unchanged (ring md5 unchanged, 2026-11-22).",
+     "class": "within",
+     "why": "Keeps one figure for one quantity and changes what the ground holds, not its extent; a drawn output that still passes its checks is owed nothing more (FR-002 as amended). The block touches no code of `stage_seat` or the roll (driver.rs hunks are docs) and leaves the homestead and belt stages parked, consistent with the GM's 2026-11-21 stop before the parked hamlet stages."
+    },
+    {
+     "id": "T277-E6 the record's words and the claims restated",
+     "summary": "T277: 0031 and 0072 drawing pages and 0031's note -9 labeled (the pages at the 20,000-byte cap, the detail in the note); the doc claims in driver.rs, seat and margins restated and re-checked by impl-drift; driver.rs hunks docs only.",
+     "class": "within",
+     "why": "Bookkeeping that keeps the research record and the code's claims in step with the fix; narrows nothing."
+    },
+    {
+     "id": "T277-E7 Kuwabata left, filed as T292",
+     "summary": "T277: the polder seat (Kuwabata, -0.71, its back to the landward shore) also asks the belt's room of the wrong way, but is not fixed here; filed as T292, to land before T158, because 0019 sets a polder's village a few steps off the dike, so the 146 ft room does not carry to a polder without its own ruling.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Presumed not legitimate and checked: Kuwabata is an off-wind seat by the plan's own measurement, so leaving it narrows T277. It is legitimate because applying T277's rule literally there would set the village 146 ft further off the dike, against 0019's recorded finding that a polder's village stands a few steps off it - the literal rule would trade one research contradiction for another, defeating the purpose (belts and houses where the research puts them); a polder's belt needs its own ruling. The defect is not dropped or carried forward unscheduled: the block states it is wrong only once the belt stage unparks, the homestead and belt stages are parked (and the GM said on 2026-11-21 to stop before them), and the plan commits T292 to land before T158."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T277": {
+   "section_sha256": "a1cdadaaa48e2eb8ae45a8d0f6803f0574f11423362081ae676ae6e8de8e1493",
+   "reviewed": "2026-11-22",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T259-D1 key runs by content",
+     "summary": "T259: `make work-budget WRITE=1` writes `meta.code`, `tree`'s worktree_key of HAMLET_READS (the ratchet's key of the same reads), taken before the counting run starts; previously runs carried the Python `code_id` (114) or the Rust port's `rev-parse --short HEAD` (12).",
+     "class": "within",
+     "why": "The defect, measured 2026-11-22, is a wrong outcome: an audit judged counts of code other than the code it read (the waterward.polder round read a run 180 lines behind; the newest run was stale on the landed tree). Keying a run by the content it counts is the fix, and reusing the ratchet's key keeps one key, not a new one. Serves 443 FR-008 (MODE AUDIT judges the landed code's counters)."
+    },
+    {
+     "id": "T259-D2 HAMLET_READS moved into trials",
+     "summary": "T259: the HAMLET_READS constant moves down into `trials`, which gains the `tree` dependency.",
+     "class": "within",
+     "why": "An implementation placement needed so the writer and the ratchet share one key; narrows nothing asked."
+    },
+    {
+     "id": "T259-D3 newest matching run, refuse where none",
+     "summary": "T259: the audit bundle takes the newest run whose key is the tree's (key text searched first, other code's runs never parsed; a run holding the key that does not read fails), and refuses where none matches, naming the newest and `make work-budget WRITE=1`; it does not re-run.",
+     "class": "within",
+     "why": "Refusal is what the task line asks (per the block), and it gives the audit what FR-008 owes: counts of this code or no verdict, never a stale one. Newest matching rather than newest by name is the fix itself (tracked run files from another clone must not shadow this tree's run). No part of the request is dropped."
+    },
+    {
+     "id": "T259-D4 stage_sources keeps the newest run",
+     "summary": "T259: `stage_sources` (make task-start) keeps taking the newest run, unkeyed, so task-start does not refuse.",
+     "class": "within",
+     "why": "T259's subject, as the block states it, is the audit's run file - 443 FR-008's MODE AUDIT bundle, 'an audit reads this code's counts or is refused'. Leaving task-start's staging on the newest run, so task-start does not refuse, narrows nothing the request or the spec asks of the audit."
+    },
+    {
+     "id": "T259-D5 past audits not re-derived",
+     "summary": "T259: the ledger cannot recover how often an earlier audit read a stale run (no bundle but one names its run); no retrospective re-audit is planned.",
+     "class": "within",
+     "why": "A measured statement that the past is unrecoverable, not a narrowing of what was asked: the request and the spec ask for audits that judge the code they read, which the fix secures from here on, and an accepted stage stays held by the push's ratchet to its accepted figure on live counts (444 FR-022)."
+    },
+    {
+     "id": "T277-E1 belt to windward on a fall into the wind",
+     "summary": "T277: where a seat's field lies within 45 degrees of the map's wind (the uphill re-rank, Sawada), the belt stands to windward between the houses and the paddy, extending 0072's side rule, labeled a GUESS (research pass 2026-11-22: SILENT on a cluster backed to a hill with the wind off its paddy).",
+     "class": "within",
+     "why": "The old seat asked the belt's room of the hill's way, putting it to leeward, contrary to 0072's recorded 'the wind decides the belt's side' - a research finding contradicted is a defect (XIV), and fixing known defects as we go is the GM's rule (2026-11-18). The case 0072 does not reach is labeled a GUESS rather than presented as attested; the research ladder owns its standing, not this review."
+    },
+    {
+     "id": "T277-E2 houses set back BELT_BAND.1",
+     "summary": "T277: on such a frame the band and every sample of it stand BELT_BAND.1 (146 ft) further out and `belt_off` asks the belt's room of the real wind; room first.",
+     "class": "within",
+     "why": "Gives the belt its room before the houses are fitted, the GM's room-first rule (2026-10-12) applied to the fix; one existing figure reused."
+    },
+    {
+     "id": "T277-E3 belt_wind on the uphill re-rank alone",
+     "summary": "T277: `margins::ranked` receives the map's own wind only on the uphill re-rank; other seats are untouched.",
+     "class": "within",
+     "why": "Limits the change to the seats the measurement showed off-wind by that mechanism (Sawada); the seats already backing the wind (Inashiro, Mizuguchi, Kashikawa) have no defect to fix. The other off-wind seat, Kuwabata, is a separate mechanism and is decision T277-E7."
+    },
+    {
+     "id": "T277-E4 45-degree threshold, oblique fall adds no room",
+     "summary": "T277: room is added only where -(n . wind) >= WIND_BACK_MIN_DOT (within 45 degrees); a wind along the band adds no room, the belt standing at a band end.",
+     "class": "within",
+     "why": "With the wind along the band the windward edge is a band end, so the belt there is 0072's own side rule, not a case dropped; the threshold is how the fix tells the two apart."
+    },
+    {
+     "id": "T277-E5 settlement_ground depth unchanged, one figure",
+     "summary": "T277: settlement_ground's depth is unchanged; BELT_FAR_FT now reads BELT_BAND.1; on such a frame the kept ground holds the belt first, then the houses. Sawada's drawn ground and hem are unchanged (ring md5 unchanged, 2026-11-22).",
+     "class": "within",
+     "why": "Keeps one figure for one quantity and changes what the ground holds, not its extent; a drawn output that still passes its checks is owed nothing more (FR-002 as amended). The block touches no code of `stage_seat` or the roll (driver.rs hunks are docs) and leaves the homestead and belt stages parked, consistent with the GM's 2026-11-21 stop before the parked hamlet stages."
+    },
+    {
+     "id": "T277-E6 the record's words and the claims restated",
+     "summary": "T277: 0031 and 0072 drawing pages and 0031's note -9 labeled (the pages at the 20,000-byte cap, the detail in the note); the doc claims in driver.rs, seat and margins restated and re-checked by impl-drift; driver.rs hunks docs only.",
+     "class": "within",
+     "why": "Bookkeeping that keeps the research record and the code's claims in step with the fix; narrows nothing."
+    },
+    {
+     "id": "T277-E7 Kuwabata left, filed as T292",
+     "summary": "T277: the polder seat (Kuwabata, -0.71, its back to the landward shore) also asks the belt's room of the wrong way, but is not fixed here; filed as T292, to land before T158, because 0019 sets a polder's village a few steps off the dike, so the 146 ft room does not carry to a polder without its own ruling.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Presumed not legitimate and checked: Kuwabata is an off-wind seat by the plan's own measurement, so leaving it narrows T277. It is legitimate because applying T277's rule literally there would set the village 146 ft further off the dike, against 0019's recorded finding that a polder's village stands a few steps off it - the literal rule would trade one research contradiction for another, defeating the purpose (belts and houses where the research puts them); a polder's belt needs its own ruling. The defect is not dropped or carried forward unscheduled: the block states it is wrong only once the belt stage unparks, the homestead and belt stages are parked (and the GM said on 2026-11-21 to stop before them), and the plan commits T292 to land before T158."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T252": {
+   "section_sha256": "b6172ed243d86f44bed45290d46eea90b36aba80ef3f8c6fd6763bcc1458b88d",
+   "reviewed": "2026-11-22",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D1 option A, command named make maps",
+     "summary": "Build the one self-scoping command as `make maps` (the name the clause already uses, free since T223), over the Rust sweeps; the clause kept.",
+     "class": "within",
+     "why": "This is the GM's 2026-11-22 ruling as written: build the one self-scoping command over the Rust sweeps and keep the clause. Using the name the clause already holds is how the ruling is carried out, not a narrowing of it."
+    },
+    {
+     "id": "D2 one state record",
+     "summary": "One record, .git/maps-state.json per checkout, drives both the scope and the verbosity. One record, not one per row: a failure in any row narrows every row's next run.",
+     "class": "within",
+     "why": "The block quotes the clause's one-state rule, and a per-row record would depart from it, so taking one record keeps the clause the GM kept. Bundle gap: Constitution VI's text is not in the bundle, so this is checked against the block's own quotation of the clause. The half-second-a-row cost it cites is a proxy, because pool map was not timed, but the decision rests on the clause and not on that cost."
+    },
+    {
+     "id": "D3 scope rules",
+     "summary": "After a passed run, every row runs whole and every failure is collected. After a failed run, or with no last run, each row's reference runs, stopping at the first problem, and the same run widens once every reference is clean. SCOPE=reference|all overrides.",
+     "class": "within",
+     "why": "These are the clause's self-scoping and SCOPE= override, which the GM's ruling keeps. They are checked against the block's quotations of the clause (bundle gap as in D2)."
+    },
+    {
+     "id": "D4 TIER= one row",
+     "summary": "TIER=<row> runs a single row.",
+     "class": "within",
+     "why": "An extra explicit override. It removes nothing from the self-scoping default the ruling asks for, so it narrows nothing."
+    },
+    {
+     "id": "D5 tier rows now: hamlets and mode-a; larger tiers added as they land",
+     "summary": "TIERS holds two rows today. Villages, towns and cities add their rows when they land.",
+     "class": "within",
+     "why": "The GM's question ('once we implement villages, towns, provincial cities, and capital cities') is about tiers not yet built. The ruling asks for the command over the Rust sweeps that exist, and leaves a row for each later tier. Nothing that exists is left out."
+    },
+    {
+     "id": "D6 hamlet row",
+     "summary": "Reference: Inashiro, via pool map plus hamlet --check. Whole run: pool map of every pool hamlet, hamlet --check of each, and hamlet --cohort 1 48.",
+     "class": "within",
+     "why": "A reference and a whole run for the existing hamlet sweep. Inashiro is called the clause's canonical hamlet. Nothing in request.md or the spec names a different reference."
+    },
+    {
+     "id": "D7 Mode A reference map",
+     "summary": "county-magistracy-example, a generated compound, is the Mode A reference.",
+     "class": "within",
+     "why": "Choosing the reference a tier row needs is part of building the command. Neither request.md nor the spec names another Mode A reference (spec-index grep for reference/tier/shrine/magistr finds none). The plan's 'the session approved it' carries no authority and is not relied on; the choice is within either way."
+    },
+    {
+     "id": "D8 one mode-a row for magistracies and country-shrines",
+     "summary": "Every Mode A building type with a pool folder shares one row and one reference. Its whole run is pool map of every live Mode A map and then the mode_a crate tests, the pool sweep among them.",
+     "class": "within",
+     "why": "Purpose walk for a change that breaks only a country shrine. After a passed run, the whole run's pool sweep judges every live Mode A map, so it is caught. After a failed run or with no run, the magistracy reference is clean, the same run widens, and the whole run catches it. No state ends a bare `make maps` without judging the shrine, so only the early stop is lost and nothing goes unchecked. In words, the GM asked for the command 'over the Rust sweeps', and Mode A is one sweep (`make rust-test CRATE=rust/mode_a`). The tiers the GM named are settlement sizes, not Mode A building types. The spec carries no per-building-type reference requirement. Bundle gap: whether the clause's 'reference per tier' reaches Mode A building types is judged from the block's quotation only."
+    },
+    {
+     "id": "D9 ordering: reference first, narrow run a prefix of a wide one",
+     "summary": "Each whole run starts with its reference, and widening re-runs the references inside the whole runs.",
+     "class": "within",
+     "why": "An implementation of the clause's narrowing and widening, with no change of scope."
+    },
+    {
+     "id": "D10 two read-only judge commands",
+     "summary": "Add l7r-mode-a sweep <map> (the pool sweep's compose, with_context and judge moved out of cfg(test)) and hamlet --check <spec> (a new spec_check.rs), because a draw judges no rule.",
+     "class": "within",
+     "why": "Without a judge the reference step would prove nothing, since a draw passes a hamlet with refusals and a cached map runs nothing. So these serve the command the GM asked for. Both are read-only and add no behavior beyond judging what is already judged."
+    },
+    {
+     "id": "D11 Launch trait and fake in tests",
+     "summary": "Steps run through a Launch trait, so the tests drive a fake and meet the line-coverage floor without cargo or a map.",
+     "class": "within",
+     "why": "A test design that serves FR-004's coverage floor. It is not a scope decision."
+    },
+    {
+     "id": "D12 make map MAP= and make rust-test CRATE=rust/mode_a stay callable",
+     "summary": "The two existing commands remain beside make maps, and make maps calls their underlying launcher steps.",
+     "class": "within",
+     "why": "The ruling asks for the one self-scoping command to exist 'over the Rust sweeps'. It does not ask for the sweeps it runs to be removed, and make maps is built over them. The pair guard's assertion (no gate) stands unchanged."
+    },
+    {
+     "id": "D13 upkeep, no version",
+     "summary": "VI's tier-table sentence names maps.rs where it named mapcheck.py. T228's note says the clause was kept and the command rebuilt. The efficiency-tooling row and the make-docs prose are updated, and make-targets.html is regenerated. The pair-guard comment is updated. The 1.12.0 and 1.12.1 history entries keep their words.",
+     "class": "within",
+     "why": "The GM's ruling says to put the new command's name in as upkeep, and the plan does exactly that. Leaving the historical entries untouched is right: they are records, not operative text."
+    },
+    {
+     "id": "D14 pool map untimed; end-to-end make maps run after the commit",
+     "summary": "pool map is not timed, because it rewrites tracked pool files while other builders edit them. Done is shown by make maps SCOPE=reference running clean and a bare make maps then going wide.",
+     "class": "within",
+     "why": "A verification-timing choice that leaves out nothing the GM asked for. The end-to-end run is still owed and named in item 9."
+    },
+    {
+     "id": "D15 make cohort's slower cargo-run path left",
+     "summary": "make cohort takes 4.4-4.8 s against the launcher's 0.59 s for the same seeds. It is not filed.",
+     "class": "within",
+     "why": "Same outcome and slower time, so not a wrong outcome and not a defect under constitution XIV. The whole run uses the launcher's binary anyway."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T275": {
+   "section_sha256": "19cd1cda0b41b47914cfcb9c26244b8d48a591c653b6a0e3745331d9ede25612",
+   "reviewed": "2026-11-22",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T275-no-geometry",
+     "summary": "T275: the armory's two questionables (Kaibara's share of the eight-mat rooms, Pingyao's hall/armory depth) settled with no geometry change; the armory stays in the hall's back row, labeled a GUESS that names the full-depth reading; the old 'one eight-mat room of about 12 ft square' GUESS restated as one or two of three rooms, sources silent",
+     "class": "within",
+     "why": "The research pass found the sources silent on both points, so there is no wrong outcome to fix: under constitution XIV and the GM 2026-11-19 ('don't spend a lot of time fixing things which are not actually wrong'), a silence is fixed by stating it in the record, not by changing the drawing. Not a defect left, so no narrowing."
+    },
+    {
+     "id": "T275-record-fix",
+     "summary": "T275: the record gains the room order, the silences, and a mislabel fix (0097's 'prefectural designation' corrected to the national historic-site text) via a page session on 0093, 0097, 0123",
+     "class": "within",
+     "why": "A wrong statement in the record is a defect and gets fixed as found, as the GM asked 2026-11-18 ('fix broken things as we find them')."
+    },
+    {
+     "id": "T276-armory-required",
+     "summary": "T276: 'optional' dropped from the armory item in types.json so program_complete refuses a seat with no armory; red first on exactly the four sheets that drew none",
+     "class": "within",
+     "why": "Knob 4 says every seat keeps an armory and four sheets drew none, so the research claim was contradicted and the check was passing bad work. Both are defects under XIV. The changed check only fails when the armory is absent, so it enforces the fix rather than adding scope (GM 2026-09-20)."
+    },
+    {
+     "id": "T276-sites",
+     "summary": "T276: each seat's armory placed by knob 4 and its gate form: one-bay-gate seats (Ochiba, the round-trip) take the hall's west end; gate-range seats (Hayakawa, Ubame) roll the armory-site knob from the map's seed (Hayakawa office hall, Ubame gate range's west room, formerly a gate-keepers' room whose use was a guess); every size inside the types.json band",
+     "class": "within",
+     "why": "This applies knob 4 as written: a gate range where one stands is a knob, the hall's west end where none does. The size differences between seats (14 x 16.7, 13.3 x 12, 14 x 20 ft, all measured 2026-11-22 and inside the band) are differences, not defects. Nothing the request asked for is narrowed."
+    },
+    {
+     "id": "T278-restate",
+     "summary": "T278: Ochiba's sheet already matches the procedure (granary at the head of the east column, guard building in the corner below it); 0116's drawing page restated, the sheet unchanged",
+     "class": "within",
+     "why": "The behavior is fine and only the page's wording misread it. The GM's rule (constitution XIV, 2026-11-19) is to fix that by restating the claim, never the code."
+    },
+    {
+     "id": "T279-restate",
+     "summary": "T279: docs/buildings.md's office-hall size and 0090's page restated to name which plan each figure measures (Hayakawa's drawn hall vs the county example's 127 x 38 now)",
+     "class": "within",
+     "why": "This corrects the words to match the measured sheets. No code changes, and no defect is left."
+    },
+    {
+     "id": "T280-T288-hall-east",
+     "summary": "T280/T288: the karo's long-house doors faced the tax archive within 12 ft (building-review N1, E1); fixed room-first by moving the office hall 12 ft east into the dead ground before the granary, re-seating the archive 19.5 ft off the long-house and re-cutting the hearing court under the dais; the test's 12 ft is the gate-approach GUESS (layout::APPROACH) reused, not a new constant; a 14-ft-wider compound priced and refused",
+     "class": "within",
+     "why": "A door opening onto a building a few feet away is a wrong outcome a reader of the map would see, so it is a defect, fixed as found (GM 2026-11-18). The red-first test only fails while the door is blocked, so it is enforcement. Room-first and the priced alternative are design choices, not fidelity questions."
+    },
+    {
+     "id": "T281-restate",
+     "summary": "T281: buildings.md's Granary bullet 'behind the offices' restated to 'on the office side', naming both the county example's head-of-column seat and the round-trip's granary below its barracks; swapping the round-trip's order priced and refused (no room for the barracks); the two Pingyao-describing phrases left as they are",
+     "class": "within",
+     "why": "The sheets read fine, and the claim that did not match them is restated (constitution XIV). The two phrases left alone describe Pingyao itself and are accurate, so leaving them is not a defect left."
+    },
+    {
+     "id": "order-and-exits",
+     "summary": "Ordering: lands before 449 T158 (T275, T276) and T244 (T288); exits by both red tests green, make map clean on the five sheets, pack-audit OK, claims IN-STEP; one claims re-check per moved claim",
+     "class": "within",
+     "why": "This fixes each step's known defects before the next step's port, as the GM asked 2026-11-18 ('fix all known bugs in each step before moving on'). It also respects the GM's 2026-11-21 stop before the parked hamlet stages (T244)."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T276": {
+   "section_sha256": "19cd1cda0b41b47914cfcb9c26244b8d48a591c653b6a0e3745331d9ede25612",
+   "reviewed": "2026-11-22",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T275-no-geometry",
+     "summary": "T275: the armory's two questionables (Kaibara's share of the eight-mat rooms, Pingyao's hall/armory depth) settled with no geometry change; the armory stays in the hall's back row, labeled a GUESS that names the full-depth reading; the old 'one eight-mat room of about 12 ft square' GUESS restated as one or two of three rooms, sources silent",
+     "class": "within",
+     "why": "The research pass found the sources silent on both points, so there is no wrong outcome to fix: under constitution XIV and the GM 2026-11-19 ('don't spend a lot of time fixing things which are not actually wrong'), a silence is fixed by stating it in the record, not by changing the drawing. Not a defect left, so no narrowing."
+    },
+    {
+     "id": "T275-record-fix",
+     "summary": "T275: the record gains the room order, the silences, and a mislabel fix (0097's 'prefectural designation' corrected to the national historic-site text) via a page session on 0093, 0097, 0123",
+     "class": "within",
+     "why": "A wrong statement in the record is a defect and gets fixed as found, as the GM asked 2026-11-18 ('fix broken things as we find them')."
+    },
+    {
+     "id": "T276-armory-required",
+     "summary": "T276: 'optional' dropped from the armory item in types.json so program_complete refuses a seat with no armory; red first on exactly the four sheets that drew none",
+     "class": "within",
+     "why": "Knob 4 says every seat keeps an armory and four sheets drew none, so the research claim was contradicted and the check was passing bad work. Both are defects under XIV. The changed check only fails when the armory is absent, so it enforces the fix rather than adding scope (GM 2026-09-20)."
+    },
+    {
+     "id": "T276-sites",
+     "summary": "T276: each seat's armory placed by knob 4 and its gate form: one-bay-gate seats (Ochiba, the round-trip) take the hall's west end; gate-range seats (Hayakawa, Ubame) roll the armory-site knob from the map's seed (Hayakawa office hall, Ubame gate range's west room, formerly a gate-keepers' room whose use was a guess); every size inside the types.json band",
+     "class": "within",
+     "why": "This applies knob 4 as written: a gate range where one stands is a knob, the hall's west end where none does. The size differences between seats (14 x 16.7, 13.3 x 12, 14 x 20 ft, all measured 2026-11-22 and inside the band) are differences, not defects. Nothing the request asked for is narrowed."
+    },
+    {
+     "id": "T278-restate",
+     "summary": "T278: Ochiba's sheet already matches the procedure (granary at the head of the east column, guard building in the corner below it); 0116's drawing page restated, the sheet unchanged",
+     "class": "within",
+     "why": "The behavior is fine and only the page's wording misread it. The GM's rule (constitution XIV, 2026-11-19) is to fix that by restating the claim, never the code."
+    },
+    {
+     "id": "T279-restate",
+     "summary": "T279: docs/buildings.md's office-hall size and 0090's page restated to name which plan each figure measures (Hayakawa's drawn hall vs the county example's 127 x 38 now)",
+     "class": "within",
+     "why": "This corrects the words to match the measured sheets. No code changes, and no defect is left."
+    },
+    {
+     "id": "T280-T288-hall-east",
+     "summary": "T280/T288: the karo's long-house doors faced the tax archive within 12 ft (building-review N1, E1); fixed room-first by moving the office hall 12 ft east into the dead ground before the granary, re-seating the archive 19.5 ft off the long-house and re-cutting the hearing court under the dais; the test's 12 ft is the gate-approach GUESS (layout::APPROACH) reused, not a new constant; a 14-ft-wider compound priced and refused",
+     "class": "within",
+     "why": "A door opening onto a building a few feet away is a wrong outcome a reader of the map would see, so it is a defect, fixed as found (GM 2026-11-18). The red-first test only fails while the door is blocked, so it is enforcement. Room-first and the priced alternative are design choices, not fidelity questions."
+    },
+    {
+     "id": "T281-restate",
+     "summary": "T281: buildings.md's Granary bullet 'behind the offices' restated to 'on the office side', naming both the county example's head-of-column seat and the round-trip's granary below its barracks; swapping the round-trip's order priced and refused (no room for the barracks); the two Pingyao-describing phrases left as they are",
+     "class": "within",
+     "why": "The sheets read fine, and the claim that did not match them is restated (constitution XIV). The two phrases left alone describe Pingyao itself and are accurate, so leaving them is not a defect left."
+    },
+    {
+     "id": "order-and-exits",
+     "summary": "Ordering: lands before 449 T158 (T275, T276) and T244 (T288); exits by both red tests green, make map clean on the five sheets, pack-audit OK, claims IN-STEP; one claims re-check per moved claim",
+     "class": "within",
+     "why": "This fixes each step's known defects before the next step's port, as the GM asked 2026-11-18 ('fix all known bugs in each step before moving on'). It also respects the GM's 2026-11-21 stop before the parked hamlet stages (T244)."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T278": {
+   "section_sha256": "19cd1cda0b41b47914cfcb9c26244b8d48a591c653b6a0e3745331d9ede25612",
+   "reviewed": "2026-11-22",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T275-no-geometry",
+     "summary": "T275: the armory's two questionables (Kaibara's share of the eight-mat rooms, Pingyao's hall/armory depth) settled with no geometry change; the armory stays in the hall's back row, labeled a GUESS that names the full-depth reading; the old 'one eight-mat room of about 12 ft square' GUESS restated as one or two of three rooms, sources silent",
+     "class": "within",
+     "why": "The research pass found the sources silent on both points, so there is no wrong outcome to fix: under constitution XIV and the GM 2026-11-19 ('don't spend a lot of time fixing things which are not actually wrong'), a silence is fixed by stating it in the record, not by changing the drawing. Not a defect left, so no narrowing."
+    },
+    {
+     "id": "T275-record-fix",
+     "summary": "T275: the record gains the room order, the silences, and a mislabel fix (0097's 'prefectural designation' corrected to the national historic-site text) via a page session on 0093, 0097, 0123",
+     "class": "within",
+     "why": "A wrong statement in the record is a defect and gets fixed as found, as the GM asked 2026-11-18 ('fix broken things as we find them')."
+    },
+    {
+     "id": "T276-armory-required",
+     "summary": "T276: 'optional' dropped from the armory item in types.json so program_complete refuses a seat with no armory; red first on exactly the four sheets that drew none",
+     "class": "within",
+     "why": "Knob 4 says every seat keeps an armory and four sheets drew none, so the research claim was contradicted and the check was passing bad work. Both are defects under XIV. The changed check only fails when the armory is absent, so it enforces the fix rather than adding scope (GM 2026-09-20)."
+    },
+    {
+     "id": "T276-sites",
+     "summary": "T276: each seat's armory placed by knob 4 and its gate form: one-bay-gate seats (Ochiba, the round-trip) take the hall's west end; gate-range seats (Hayakawa, Ubame) roll the armory-site knob from the map's seed (Hayakawa office hall, Ubame gate range's west room, formerly a gate-keepers' room whose use was a guess); every size inside the types.json band",
+     "class": "within",
+     "why": "This applies knob 4 as written: a gate range where one stands is a knob, the hall's west end where none does. The size differences between seats (14 x 16.7, 13.3 x 12, 14 x 20 ft, all measured 2026-11-22 and inside the band) are differences, not defects. Nothing the request asked for is narrowed."
+    },
+    {
+     "id": "T278-restate",
+     "summary": "T278: Ochiba's sheet already matches the procedure (granary at the head of the east column, guard building in the corner below it); 0116's drawing page restated, the sheet unchanged",
+     "class": "within",
+     "why": "The behavior is fine and only the page's wording misread it. The GM's rule (constitution XIV, 2026-11-19) is to fix that by restating the claim, never the code."
+    },
+    {
+     "id": "T279-restate",
+     "summary": "T279: docs/buildings.md's office-hall size and 0090's page restated to name which plan each figure measures (Hayakawa's drawn hall vs the county example's 127 x 38 now)",
+     "class": "within",
+     "why": "This corrects the words to match the measured sheets. No code changes, and no defect is left."
+    },
+    {
+     "id": "T280-T288-hall-east",
+     "summary": "T280/T288: the karo's long-house doors faced the tax archive within 12 ft (building-review N1, E1); fixed room-first by moving the office hall 12 ft east into the dead ground before the granary, re-seating the archive 19.5 ft off the long-house and re-cutting the hearing court under the dais; the test's 12 ft is the gate-approach GUESS (layout::APPROACH) reused, not a new constant; a 14-ft-wider compound priced and refused",
+     "class": "within",
+     "why": "A door opening onto a building a few feet away is a wrong outcome a reader of the map would see, so it is a defect, fixed as found (GM 2026-11-18). The red-first test only fails while the door is blocked, so it is enforcement. Room-first and the priced alternative are design choices, not fidelity questions."
+    },
+    {
+     "id": "T281-restate",
+     "summary": "T281: buildings.md's Granary bullet 'behind the offices' restated to 'on the office side', naming both the county example's head-of-column seat and the round-trip's granary below its barracks; swapping the round-trip's order priced and refused (no room for the barracks); the two Pingyao-describing phrases left as they are",
+     "class": "within",
+     "why": "The sheets read fine, and the claim that did not match them is restated (constitution XIV). The two phrases left alone describe Pingyao itself and are accurate, so leaving them is not a defect left."
+    },
+    {
+     "id": "order-and-exits",
+     "summary": "Ordering: lands before 449 T158 (T275, T276) and T244 (T288); exits by both red tests green, make map clean on the five sheets, pack-audit OK, claims IN-STEP; one claims re-check per moved claim",
+     "class": "within",
+     "why": "This fixes each step's known defects before the next step's port, as the GM asked 2026-11-18 ('fix all known bugs in each step before moving on'). It also respects the GM's 2026-11-21 stop before the parked hamlet stages (T244)."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T279": {
+   "section_sha256": "19cd1cda0b41b47914cfcb9c26244b8d48a591c653b6a0e3745331d9ede25612",
+   "reviewed": "2026-11-22",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T275-no-geometry",
+     "summary": "T275: the armory's two questionables (Kaibara's share of the eight-mat rooms, Pingyao's hall/armory depth) settled with no geometry change; the armory stays in the hall's back row, labeled a GUESS that names the full-depth reading; the old 'one eight-mat room of about 12 ft square' GUESS restated as one or two of three rooms, sources silent",
+     "class": "within",
+     "why": "The research pass found the sources silent on both points, so there is no wrong outcome to fix: under constitution XIV and the GM 2026-11-19 ('don't spend a lot of time fixing things which are not actually wrong'), a silence is fixed by stating it in the record, not by changing the drawing. Not a defect left, so no narrowing."
+    },
+    {
+     "id": "T275-record-fix",
+     "summary": "T275: the record gains the room order, the silences, and a mislabel fix (0097's 'prefectural designation' corrected to the national historic-site text) via a page session on 0093, 0097, 0123",
+     "class": "within",
+     "why": "A wrong statement in the record is a defect and gets fixed as found, as the GM asked 2026-11-18 ('fix broken things as we find them')."
+    },
+    {
+     "id": "T276-armory-required",
+     "summary": "T276: 'optional' dropped from the armory item in types.json so program_complete refuses a seat with no armory; red first on exactly the four sheets that drew none",
+     "class": "within",
+     "why": "Knob 4 says every seat keeps an armory and four sheets drew none, so the research claim was contradicted and the check was passing bad work. Both are defects under XIV. The changed check only fails when the armory is absent, so it enforces the fix rather than adding scope (GM 2026-09-20)."
+    },
+    {
+     "id": "T276-sites",
+     "summary": "T276: each seat's armory placed by knob 4 and its gate form: one-bay-gate seats (Ochiba, the round-trip) take the hall's west end; gate-range seats (Hayakawa, Ubame) roll the armory-site knob from the map's seed (Hayakawa office hall, Ubame gate range's west room, formerly a gate-keepers' room whose use was a guess); every size inside the types.json band",
+     "class": "within",
+     "why": "This applies knob 4 as written: a gate range where one stands is a knob, the hall's west end where none does. The size differences between seats (14 x 16.7, 13.3 x 12, 14 x 20 ft, all measured 2026-11-22 and inside the band) are differences, not defects. Nothing the request asked for is narrowed."
+    },
+    {
+     "id": "T278-restate",
+     "summary": "T278: Ochiba's sheet already matches the procedure (granary at the head of the east column, guard building in the corner below it); 0116's drawing page restated, the sheet unchanged",
+     "class": "within",
+     "why": "The behavior is fine and only the page's wording misread it. The GM's rule (constitution XIV, 2026-11-19) is to fix that by restating the claim, never the code."
+    },
+    {
+     "id": "T279-restate",
+     "summary": "T279: docs/buildings.md's office-hall size and 0090's page restated to name which plan each figure measures (Hayakawa's drawn hall vs the county example's 127 x 38 now)",
+     "class": "within",
+     "why": "This corrects the words to match the measured sheets. No code changes, and no defect is left."
+    },
+    {
+     "id": "T280-T288-hall-east",
+     "summary": "T280/T288: the karo's long-house doors faced the tax archive within 12 ft (building-review N1, E1); fixed room-first by moving the office hall 12 ft east into the dead ground before the granary, re-seating the archive 19.5 ft off the long-house and re-cutting the hearing court under the dais; the test's 12 ft is the gate-approach GUESS (layout::APPROACH) reused, not a new constant; a 14-ft-wider compound priced and refused",
+     "class": "within",
+     "why": "A door opening onto a building a few feet away is a wrong outcome a reader of the map would see, so it is a defect, fixed as found (GM 2026-11-18). The red-first test only fails while the door is blocked, so it is enforcement. Room-first and the priced alternative are design choices, not fidelity questions."
+    },
+    {
+     "id": "T281-restate",
+     "summary": "T281: buildings.md's Granary bullet 'behind the offices' restated to 'on the office side', naming both the county example's head-of-column seat and the round-trip's granary below its barracks; swapping the round-trip's order priced and refused (no room for the barracks); the two Pingyao-describing phrases left as they are",
+     "class": "within",
+     "why": "The sheets read fine, and the claim that did not match them is restated (constitution XIV). The two phrases left alone describe Pingyao itself and are accurate, so leaving them is not a defect left."
+    },
+    {
+     "id": "order-and-exits",
+     "summary": "Ordering: lands before 449 T158 (T275, T276) and T244 (T288); exits by both red tests green, make map clean on the five sheets, pack-audit OK, claims IN-STEP; one claims re-check per moved claim",
+     "class": "within",
+     "why": "This fixes each step's known defects before the next step's port, as the GM asked 2026-11-18 ('fix all known bugs in each step before moving on'). It also respects the GM's 2026-11-21 stop before the parked hamlet stages (T244)."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T280": {
+   "section_sha256": "19cd1cda0b41b47914cfcb9c26244b8d48a591c653b6a0e3745331d9ede25612",
+   "reviewed": "2026-11-22",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T275-no-geometry",
+     "summary": "T275: the armory's two questionables (Kaibara's share of the eight-mat rooms, Pingyao's hall/armory depth) settled with no geometry change; the armory stays in the hall's back row, labeled a GUESS that names the full-depth reading; the old 'one eight-mat room of about 12 ft square' GUESS restated as one or two of three rooms, sources silent",
+     "class": "within",
+     "why": "The research pass found the sources silent on both points, so there is no wrong outcome to fix: under constitution XIV and the GM 2026-11-19 ('don't spend a lot of time fixing things which are not actually wrong'), a silence is fixed by stating it in the record, not by changing the drawing. Not a defect left, so no narrowing."
+    },
+    {
+     "id": "T275-record-fix",
+     "summary": "T275: the record gains the room order, the silences, and a mislabel fix (0097's 'prefectural designation' corrected to the national historic-site text) via a page session on 0093, 0097, 0123",
+     "class": "within",
+     "why": "A wrong statement in the record is a defect and gets fixed as found, as the GM asked 2026-11-18 ('fix broken things as we find them')."
+    },
+    {
+     "id": "T276-armory-required",
+     "summary": "T276: 'optional' dropped from the armory item in types.json so program_complete refuses a seat with no armory; red first on exactly the four sheets that drew none",
+     "class": "within",
+     "why": "Knob 4 says every seat keeps an armory and four sheets drew none, so the research claim was contradicted and the check was passing bad work. Both are defects under XIV. The changed check only fails when the armory is absent, so it enforces the fix rather than adding scope (GM 2026-09-20)."
+    },
+    {
+     "id": "T276-sites",
+     "summary": "T276: each seat's armory placed by knob 4 and its gate form: one-bay-gate seats (Ochiba, the round-trip) take the hall's west end; gate-range seats (Hayakawa, Ubame) roll the armory-site knob from the map's seed (Hayakawa office hall, Ubame gate range's west room, formerly a gate-keepers' room whose use was a guess); every size inside the types.json band",
+     "class": "within",
+     "why": "This applies knob 4 as written: a gate range where one stands is a knob, the hall's west end where none does. The size differences between seats (14 x 16.7, 13.3 x 12, 14 x 20 ft, all measured 2026-11-22 and inside the band) are differences, not defects. Nothing the request asked for is narrowed."
+    },
+    {
+     "id": "T278-restate",
+     "summary": "T278: Ochiba's sheet already matches the procedure (granary at the head of the east column, guard building in the corner below it); 0116's drawing page restated, the sheet unchanged",
+     "class": "within",
+     "why": "The behavior is fine and only the page's wording misread it. The GM's rule (constitution XIV, 2026-11-19) is to fix that by restating the claim, never the code."
+    },
+    {
+     "id": "T279-restate",
+     "summary": "T279: docs/buildings.md's office-hall size and 0090's page restated to name which plan each figure measures (Hayakawa's drawn hall vs the county example's 127 x 38 now)",
+     "class": "within",
+     "why": "This corrects the words to match the measured sheets. No code changes, and no defect is left."
+    },
+    {
+     "id": "T280-T288-hall-east",
+     "summary": "T280/T288: the karo's long-house doors faced the tax archive within 12 ft (building-review N1, E1); fixed room-first by moving the office hall 12 ft east into the dead ground before the granary, re-seating the archive 19.5 ft off the long-house and re-cutting the hearing court under the dais; the test's 12 ft is the gate-approach GUESS (layout::APPROACH) reused, not a new constant; a 14-ft-wider compound priced and refused",
+     "class": "within",
+     "why": "A door opening onto a building a few feet away is a wrong outcome a reader of the map would see, so it is a defect, fixed as found (GM 2026-11-18). The red-first test only fails while the door is blocked, so it is enforcement. Room-first and the priced alternative are design choices, not fidelity questions."
+    },
+    {
+     "id": "T281-restate",
+     "summary": "T281: buildings.md's Granary bullet 'behind the offices' restated to 'on the office side', naming both the county example's head-of-column seat and the round-trip's granary below its barracks; swapping the round-trip's order priced and refused (no room for the barracks); the two Pingyao-describing phrases left as they are",
+     "class": "within",
+     "why": "The sheets read fine, and the claim that did not match them is restated (constitution XIV). The two phrases left alone describe Pingyao itself and are accurate, so leaving them is not a defect left."
+    },
+    {
+     "id": "order-and-exits",
+     "summary": "Ordering: lands before 449 T158 (T275, T276) and T244 (T288); exits by both red tests green, make map clean on the five sheets, pack-audit OK, claims IN-STEP; one claims re-check per moved claim",
+     "class": "within",
+     "why": "This fixes each step's known defects before the next step's port, as the GM asked 2026-11-18 ('fix all known bugs in each step before moving on'). It also respects the GM's 2026-11-21 stop before the parked hamlet stages (T244)."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T281": {
+   "section_sha256": "19cd1cda0b41b47914cfcb9c26244b8d48a591c653b6a0e3745331d9ede25612",
+   "reviewed": "2026-11-22",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T275-no-geometry",
+     "summary": "T275: the armory's two questionables (Kaibara's share of the eight-mat rooms, Pingyao's hall/armory depth) settled with no geometry change; the armory stays in the hall's back row, labeled a GUESS that names the full-depth reading; the old 'one eight-mat room of about 12 ft square' GUESS restated as one or two of three rooms, sources silent",
+     "class": "within",
+     "why": "The research pass found the sources silent on both points, so there is no wrong outcome to fix: under constitution XIV and the GM 2026-11-19 ('don't spend a lot of time fixing things which are not actually wrong'), a silence is fixed by stating it in the record, not by changing the drawing. Not a defect left, so no narrowing."
+    },
+    {
+     "id": "T275-record-fix",
+     "summary": "T275: the record gains the room order, the silences, and a mislabel fix (0097's 'prefectural designation' corrected to the national historic-site text) via a page session on 0093, 0097, 0123",
+     "class": "within",
+     "why": "A wrong statement in the record is a defect and gets fixed as found, as the GM asked 2026-11-18 ('fix broken things as we find them')."
+    },
+    {
+     "id": "T276-armory-required",
+     "summary": "T276: 'optional' dropped from the armory item in types.json so program_complete refuses a seat with no armory; red first on exactly the four sheets that drew none",
+     "class": "within",
+     "why": "Knob 4 says every seat keeps an armory and four sheets drew none, so the research claim was contradicted and the check was passing bad work. Both are defects under XIV. The changed check only fails when the armory is absent, so it enforces the fix rather than adding scope (GM 2026-09-20)."
+    },
+    {
+     "id": "T276-sites",
+     "summary": "T276: each seat's armory placed by knob 4 and its gate form: one-bay-gate seats (Ochiba, the round-trip) take the hall's west end; gate-range seats (Hayakawa, Ubame) roll the armory-site knob from the map's seed (Hayakawa office hall, Ubame gate range's west room, formerly a gate-keepers' room whose use was a guess); every size inside the types.json band",
+     "class": "within",
+     "why": "This applies knob 4 as written: a gate range where one stands is a knob, the hall's west end where none does. The size differences between seats (14 x 16.7, 13.3 x 12, 14 x 20 ft, all measured 2026-11-22 and inside the band) are differences, not defects. Nothing the request asked for is narrowed."
+    },
+    {
+     "id": "T278-restate",
+     "summary": "T278: Ochiba's sheet already matches the procedure (granary at the head of the east column, guard building in the corner below it); 0116's drawing page restated, the sheet unchanged",
+     "class": "within",
+     "why": "The behavior is fine and only the page's wording misread it. The GM's rule (constitution XIV, 2026-11-19) is to fix that by restating the claim, never the code."
+    },
+    {
+     "id": "T279-restate",
+     "summary": "T279: docs/buildings.md's office-hall size and 0090's page restated to name which plan each figure measures (Hayakawa's drawn hall vs the county example's 127 x 38 now)",
+     "class": "within",
+     "why": "This corrects the words to match the measured sheets. No code changes, and no defect is left."
+    },
+    {
+     "id": "T280-T288-hall-east",
+     "summary": "T280/T288: the karo's long-house doors faced the tax archive within 12 ft (building-review N1, E1); fixed room-first by moving the office hall 12 ft east into the dead ground before the granary, re-seating the archive 19.5 ft off the long-house and re-cutting the hearing court under the dais; the test's 12 ft is the gate-approach GUESS (layout::APPROACH) reused, not a new constant; a 14-ft-wider compound priced and refused",
+     "class": "within",
+     "why": "A door opening onto a building a few feet away is a wrong outcome a reader of the map would see, so it is a defect, fixed as found (GM 2026-11-18). The red-first test only fails while the door is blocked, so it is enforcement. Room-first and the priced alternative are design choices, not fidelity questions."
+    },
+    {
+     "id": "T281-restate",
+     "summary": "T281: buildings.md's Granary bullet 'behind the offices' restated to 'on the office side', naming both the county example's head-of-column seat and the round-trip's granary below its barracks; swapping the round-trip's order priced and refused (no room for the barracks); the two Pingyao-describing phrases left as they are",
+     "class": "within",
+     "why": "The sheets read fine, and the claim that did not match them is restated (constitution XIV). The two phrases left alone describe Pingyao itself and are accurate, so leaving them is not a defect left."
+    },
+    {
+     "id": "order-and-exits",
+     "summary": "Ordering: lands before 449 T158 (T275, T276) and T244 (T288); exits by both red tests green, make map clean on the five sheets, pack-audit OK, claims IN-STEP; one claims re-check per moved claim",
+     "class": "within",
+     "why": "This fixes each step's known defects before the next step's port, as the GM asked 2026-11-18 ('fix all known bugs in each step before moving on'). It also respects the GM's 2026-11-21 stop before the parked hamlet stages (T244)."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T288": {
+   "section_sha256": "19cd1cda0b41b47914cfcb9c26244b8d48a591c653b6a0e3745331d9ede25612",
+   "reviewed": "2026-11-22",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T275-no-geometry",
+     "summary": "T275: the armory's two questionables (Kaibara's share of the eight-mat rooms, Pingyao's hall/armory depth) settled with no geometry change; the armory stays in the hall's back row, labeled a GUESS that names the full-depth reading; the old 'one eight-mat room of about 12 ft square' GUESS restated as one or two of three rooms, sources silent",
+     "class": "within",
+     "why": "The research pass found the sources silent on both points, so there is no wrong outcome to fix: under constitution XIV and the GM 2026-11-19 ('don't spend a lot of time fixing things which are not actually wrong'), a silence is fixed by stating it in the record, not by changing the drawing. Not a defect left, so no narrowing."
+    },
+    {
+     "id": "T275-record-fix",
+     "summary": "T275: the record gains the room order, the silences, and a mislabel fix (0097's 'prefectural designation' corrected to the national historic-site text) via a page session on 0093, 0097, 0123",
+     "class": "within",
+     "why": "A wrong statement in the record is a defect and gets fixed as found, as the GM asked 2026-11-18 ('fix broken things as we find them')."
+    },
+    {
+     "id": "T276-armory-required",
+     "summary": "T276: 'optional' dropped from the armory item in types.json so program_complete refuses a seat with no armory; red first on exactly the four sheets that drew none",
+     "class": "within",
+     "why": "Knob 4 says every seat keeps an armory and four sheets drew none, so the research claim was contradicted and the check was passing bad work. Both are defects under XIV. The changed check only fails when the armory is absent, so it enforces the fix rather than adding scope (GM 2026-09-20)."
+    },
+    {
+     "id": "T276-sites",
+     "summary": "T276: each seat's armory placed by knob 4 and its gate form: one-bay-gate seats (Ochiba, the round-trip) take the hall's west end; gate-range seats (Hayakawa, Ubame) roll the armory-site knob from the map's seed (Hayakawa office hall, Ubame gate range's west room, formerly a gate-keepers' room whose use was a guess); every size inside the types.json band",
+     "class": "within",
+     "why": "This applies knob 4 as written: a gate range where one stands is a knob, the hall's west end where none does. The size differences between seats (14 x 16.7, 13.3 x 12, 14 x 20 ft, all measured 2026-11-22 and inside the band) are differences, not defects. Nothing the request asked for is narrowed."
+    },
+    {
+     "id": "T278-restate",
+     "summary": "T278: Ochiba's sheet already matches the procedure (granary at the head of the east column, guard building in the corner below it); 0116's drawing page restated, the sheet unchanged",
+     "class": "within",
+     "why": "The behavior is fine and only the page's wording misread it. The GM's rule (constitution XIV, 2026-11-19) is to fix that by restating the claim, never the code."
+    },
+    {
+     "id": "T279-restate",
+     "summary": "T279: docs/buildings.md's office-hall size and 0090's page restated to name which plan each figure measures (Hayakawa's drawn hall vs the county example's 127 x 38 now)",
+     "class": "within",
+     "why": "This corrects the words to match the measured sheets. No code changes, and no defect is left."
+    },
+    {
+     "id": "T280-T288-hall-east",
+     "summary": "T280/T288: the karo's long-house doors faced the tax archive within 12 ft (building-review N1, E1); fixed room-first by moving the office hall 12 ft east into the dead ground before the granary, re-seating the archive 19.5 ft off the long-house and re-cutting the hearing court under the dais; the test's 12 ft is the gate-approach GUESS (layout::APPROACH) reused, not a new constant; a 14-ft-wider compound priced and refused",
+     "class": "within",
+     "why": "A door opening onto a building a few feet away is a wrong outcome a reader of the map would see, so it is a defect, fixed as found (GM 2026-11-18). The red-first test only fails while the door is blocked, so it is enforcement. Room-first and the priced alternative are design choices, not fidelity questions."
+    },
+    {
+     "id": "T281-restate",
+     "summary": "T281: buildings.md's Granary bullet 'behind the offices' restated to 'on the office side', naming both the county example's head-of-column seat and the round-trip's granary below its barracks; swapping the round-trip's order priced and refused (no room for the barracks); the two Pingyao-describing phrases left as they are",
+     "class": "within",
+     "why": "The sheets read fine, and the claim that did not match them is restated (constitution XIV). The two phrases left alone describe Pingyao itself and are accurate, so leaving them is not a defect left."
+    },
+    {
+     "id": "order-and-exits",
+     "summary": "Ordering: lands before 449 T158 (T275, T276) and T244 (T288); exits by both red tests green, make map clean on the five sheets, pack-audit OK, claims IN-STEP; one claims re-check per moved claim",
+     "class": "within",
+     "why": "This fixes each step's known defects before the next step's port, as the GM asked 2026-11-18 ('fix all known bugs in each step before moving on'). It also respects the GM's 2026-11-21 stop before the parked hamlet stages (T244)."
     }
    ],
    "verdict": "CLEAR"

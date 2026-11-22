@@ -57,7 +57,7 @@ static TRAILING_ARGS: LazyLock<Regex> = LazyLock::new(|| re(r"\s{2,}[A-Z][A-Z0-9
 /// unrecognized tag is almost always a typo.
 const SECTIONS: [(&str, &str, &str); 6] = [
     ("tests", "Tests", "The four tiers, cheapest first. Where a test LIVES decides when it runs, so these differ by scope rather than by filter."),
-    ("maps", "Maps", "Generating and checking the pool. `maps` picks its own scope - the reference hamlet alone after a failure, the whole tier after a clean run."),
+    ("maps", "Maps", "Generating and checking the pool. `maps` picks its own scope - each tier's reference map alone after a failure, every tier whole after a clean run."),
     ("diagnostics", "Diagnostics", "Read-only questions about a finished map or a generator's decisions. None of these decides what ships."),
     ("performance", "Performance", "The bookends and the three bands. A run that got slower owes records before the push."),
     ("static", "Static checks", "What the gate runs before it spends anything on a map roll."),

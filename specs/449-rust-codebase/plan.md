@@ -549,32 +549,61 @@ tests/hooks/                 # the suites, the verdict replay through phase 1
 <!-- plan-archive: T249 to T241 moved to plan-done.md, 2026-11-22 (feature 375 FR-044) -->
 <!-- plan-archive: T250 to T240 moved to plan-done.md, 2026-11-22 (feature 375 FR-044) -->
 <!-- plan-archive: T251 to T228 moved to plan-done.md, 2026-11-22 (feature 375 FR-044) -->
-### T252 (<why: the finding or measurement that files it>)
+### T252 (T228 found it, 2026-11-22; escalation-check KEEP; the GM ruled 2026-11-22, request.md "Constitution VI's one self-scoping command": "okay good, please proceed on that basis then")
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: the GM's option A, built as the ruling says. Build the one self-scoping command over the Rust sweeps, keep Constitution VI's clause, and put the new command's name into the clause as upkeep, with no version. Since 444 T39 deleted the Python `mapcheck.py`, there have been two commands, `make map MAP=` and `make rust-test CRATE=rust/mode_a`, and the clause forbids two. `make maps` is that one command again: the name the clause already uses, and free since 449 T223 removed the target.
+  - **The command.** `make maps [SCOPE=reference|all] [TIER=<row>]` runs `l7r-gate pool maps` (`rust/gate/crates/pool/src/maps.rs`), then `pool-index-if-stale` as `make map` does. It reads ONE record, `.git/maps-state.json` (per checkout: a worktree's `.git` file is followed, as `tree/src/state.rs` follows it), as the clause says ("One piece of state drives both the scope and the verbosity") and as `mapcheck.py` kept it (`.mapcheck.json`, read at `git show ea5638968e^:l7r/diagram/tools/mapcheck.py`). The rules follow the clause word for word:
+    - **last run PASSED**: every row's whole run, every failure collected;
+    - **last run FAILED, or no last run**: each row's reference map, stopping at the first problem; once every reference is clean, the same run widens to every row whole;
+    - **`SCOPE=reference` / `SCOPE=all`**: says what is meant; `TIER=` runs one row.
+    - **One record, not one per row**: a failure in any row narrows every row's next run. The cost is about half a second of references a row (measured below). A record per row was priced and not taken: it would change the clause's one-state rule.
+  - **The tier table** (`TIERS` in `maps.rs`, one row a tier; a larger tier adds its row as it lands, as the clause says):
+    - **`hamlets`** (folder `hamlets`). Reference: `inashiro` (the clause's canonical hamlet). The reference run is `pool map` plus `hamlet --check <spec>`. The whole run is `pool map` of every pool hamlet, `hamlet --check` of each, and `hamlet --cohort 1 48` (`make cohort`'s seeds).
+    - **`mode-a`** (folders `magistracies`, `country-shrines`, every Mode A tier the building types declare with a pool folder). Reference: `county-magistracy-example`, a GENERATED compound, because the clause is about generator changes and a hand sheet does not move under one (the session approved it, 2026-11-22). The reference run is `pool map` plus `mode-a sweep <map>`. The whole run is `pool map` of every live Mode A map, then `rust test --crate rust/mode_a` (`make rust-test CRATE=rust/mode_a`'s: the crate's tests, 321 measured 2026-11-22 (`make rust-test CRATE=rust/mode_a`), the pool sweep among them, reused where nothing moved).
+    - **Ordering**: the reference comes first in each whole run, so a narrow run is a prefix of a wide one (mapcheck's rule). Widening re-runs the references inside the whole runs, a cached draw and a judge, so no separate path is needed.
+  - **Why the two judging commands.** A draw judges no rule, so the reference step needs a judge besides `make map`. Measured 2026-11-22 by reading `cache/draw.rs` and `rust/phases/src/bin/hamlet.rs`:
+    - `pool map` fails a hamlet only on a non-zero exit, and the one-spec roll exits 0 with refusals and never asks `driver::check::check`; only `--cohort` asks it;
+    - `pool map` fails a Mode A sheet only on an engine `error` reply, and `run_checks` is called only by `pack-audit` and the test-only pool sweep;
+    - a CACHED map runs nothing at all.
+    So two thin commands were added, both read-only:
+    - `l7r-mode-a sweep <map>...` (`rust/mode_a/src/sweep.rs`): the pool sweep's `compose`, `with_context` and `judge` moved out of `#[cfg(test)] pool_sweep.rs`, which now calls them;
+    - `hamlet --check <spec>...` (`rust/phases/src/spec_check.rs`, a new file and one `mod` line in `lib.rs`, so the T277 builder's `driver.rs` is untouched; the binary's arm is thin).
+  - **Steps are the launcher's own commands** (`scripts/gates/l7r-gate.sh <words>`), run through a `Launch` trait, so the tests drive a fake and the line-coverage floor is met with no cargo or map in a test.
+  - **Measured 2026-11-22, this clone, warm binaries, read-only (wall time of the make target or launcher command):**
+    - **References.** Hamlet: `make hamlet SPEC=pool/hamlets/inashiro/inashiro.spec.json` 0.68 s and 0.43 s, measured 2026-11-22 (wall time, two runs); `l7r-gate.sh hamlet --check` on Inashiro 0.05 s warm and 5.6 s on its first, building, call, measured 2026-11-22 (wall time); Mode A: `make pack-audit` on one sheet 0.09 s, measured 2026-11-22 (wall time, two sheets twice each); `l7r-gate.sh mode-a sweep county-magistracy-example` 0.08 s warm and 16.3 s building, measured 2026-11-22 (wall time).
+    - **Whole runs.** `make cohort` 4.4 s and 4.8 s, measured 2026-11-22 (wall time, two runs), and `l7r-gate.sh hamlet --cohort 1 48` in the tool profile 0.59 s, measured 2026-11-22 (wall time); `hamlet --check` of the five pool hamlets 0.15 s, measured 2026-11-22 (wall time); `make rust-test CRATE=rust/mode_a` 1.6 s with nothing moved, measured 2026-11-22 (wall time), and 29.9 s and 24.8 s fresh with 315 tests then, measured 2026-11-22 (wall time, `FRESH=1`, two runs).
+    - **`pool map`.** Not timed: it rewrites tracked pool files when a map is not current, and two other builders were editing pool sheets and engine code in this clone.
+  - **Counted cost.** Each run ends with its steps and rows: `make maps: <n> step(s) over <k> tier row(s), every one clean` (or `<m> failed: <labels>`). A reference run is two steps a row, one map drawn and one judged. A whole run is two steps for Mode A (every live map drawn, the crate's tests) and three for hamlets (every pool hamlet drawn, every one checked, the cohort's 48 seeds).
+  - **Upkeep, no version** (constitution, Governance: "UPKEEP is no amendment and takes no version: ... a retired command name"):
+    - VI's tier-table sentence names `make maps`' tier table at `rust/gate/crates/pool/src/maps.rs` where it named `mapcheck.py`;
+    - T228's note on the 2.37.0 amendment says the clause was kept and the command rebuilt;
+    - `docs/efficiency-tooling.md` (the refusal table's `make maps` row) and the make-docs section prose (`rust/gate/crates/cohort/src/make_docs.rs`, with `docs/make-targets.html` regenerated by `make docs`) name the command again;
+    - the pair guard test's comment on `make maps`, whose assertion (no gate) stands.
+    The 1.12.0 and 1.12.1 history entries keep their words.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| `make maps`, `pool maps`, `mode-a sweep`, `hamlet --check`, the upkeep | `maps/tests.rs` (10 tests), `sweep/tests.rs` (5), `spec_check/tests.rs` (3), measured 2026-11-22 (the files' `#[test]` count); each red first: the pool tests against a stub `run`, 8 of the 10 red, measured 2026-11-22 (`make rust-test CRATE=rust/gate/crates/pool`), the others by mutation (a composed sheet read from disk, a stage error dropped) | the two reference judges on the landed tree with the open builders' edits, 2026-11-22: `l7r-gate.sh hamlet --check` of the five pool hamlets and `l7r-gate.sh mode-a sweep county-magistracy-example` all clean; `make maps` end to end, drawing included, is the session's after the commit, as the draws rewrite tracked pool files | none: no engine changes what it draws; `mode-a sweep` and `hamlet --check` write nothing | a step that cannot run is that step's failure, named, never a pass |
 
 ### T252 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** A session changing a generator types one command. It proves the change on the reference map first, at about half a second, and only then pays for the whole tier. The tool chooses the scope, so the session cannot choose it wrong.
+2. **The constraints.** Constitution VI's clause (a single command whose scope follows the last run, one piece of state, `SCOPE=` overrides, a tier table with a named reference per tier); the GM's ruling of 2026-11-22; new Rust code owes 100% line coverage.
+3. **Where each comes from.** G: the clause (GM 2026-08-23) and the 2026-11-22 ruling in request.md. O: the timings above, and the reading of `draw.rs` and `hamlet.rs` that shows a draw judges nothing.
+4. **Do they describe the world here?** Yes: the five pool hamlets, the two Mode A tiers with pool folders (`magistracies`, `country-shrines`), and the two named references, Inashiro and county-magistracy-example. Both references are held live by `the_real_table_names_live_maps_and_covers_every_tier`.
+5. **The order.** After the batch landing at 65ede82bb6. Beside the T259/T277 builders (`rust/phases`: this task adds `spec_check.rs`, a `mod` line in `lib.rs` and the binary's arm, and leaves `driver.rs` alone) and the T275-T281 builders (`rust/mode_a/src/compound`, the sheets: this task touches neither).
+6. **The exits.** Green: the tests of the pool, mode_a and phases crates green at the line-coverage floor and `make closing-checks T=T252 F=449` green. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** The tests above green at 100%, and the reference judges clean on the real tree (measured 2026-11-22). After the commit, `make maps SCOPE=reference` runs both references clean and a bare `make maps` after it goes wide.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** No map changes. The fix is the clause's own command, which was missing.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?**
+- `make cohort` runs `cargo run --release` and takes 4.4-4.8 s, where the launcher's tool-profile binary takes 0.59 s for the same 48 seeds (measured 2026-11-22). Not a defect: the outcome is the same and timings are not a gate. Not filed.
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
-
+**Performance work?** no
 
 <!-- plan-archive: T253 to T250 moved to plan-done.md, 2026-11-22 (feature 375 FR-044) -->
 <!-- plan-archive: T254 to T272 moved to plan-done.md, 2026-11-22 (feature 375 FR-044) -->
