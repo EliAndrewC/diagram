@@ -9022,3 +9022,171 @@ the performance checklist's answers are given in brief:
 **Performance work?** No - a correctness task; its cost measured above.
 
 
+<!-- plan-archive: archived 2026-11-22 -->
+### T141 (each task pays the whole fixed cost whatever its fix's size - a builder, closing runs, a checklist section, `make decide`, its plan review rounds, a landing - and the GM asked that small tasks be bundled and worked at the same time, request.md "on bundling small tasks")
+
+- **Approach**: measured first, then `make task-start`, `make closing-checks` and `make decide` take `T=a,b,c` as `make land` already did
+  (451 T06, T18), the bundle's one section a heading listing its tasks, its one verdict each task's:
+  - THE FIXED COST A TASK PAYS, over this feature's landed tasks:
+    - builders (general-purpose agents) per task median 1, p75 2, max 4, 160 in all, measured 2026-11-22 (`make where-time F=451` and `make feature-report F=451`, the 107 landed tasks with a row, `/tmp/t141/med.py`).
+    - builder minutes per task median 9, p25 1, p75 25, max 68, and agent minutes per task median 38, p25 26, p75 57, max 186, measured 2026-11-22 (`make where-time F=451` and `make feature-report F=451`, the 107 landed tasks with a row, `/tmp/t141/med.py`).
+    - review rounds (spec-fidelity and spec-fidelity-verify dispatches) per task median 2, p25 1, p75 2, max 5, 194 in all, with 209
+      spec-fidelity dispatches (44 BLOCKED) and 9 tasks at three rounds or more, measured 2026-11-22 (`make where-time F=451` and `make feature-report F=451`, the 107 landed tasks with a row, `/tmp/t141/med.py`).
+    - session time waiting on the plan review per task median 0 min, p75 2, max 17, measured 2026-11-22 (`make where-time F=451` and `make feature-report F=451`, the 107 landed tasks with a row, `/tmp/t141/med.py`).
+    - closing runs per task median 2, 58 tasks with any closing run, max 6, measured 2026-11-22 (the event log's `make closing-checks` calls by task).
+    - a closing run's wall median 4.8 min, p25 2.5, p75 7.5, max 24.7, over 33 kept runs, measured 2026-11-22 (the slowest check's
+      `.exit` seconds in each `.git/closing-checks/*/` run directory).
+    - a landing's wall median 1.7 min, p25 0.9, p75 3.9, max 13.4, over the 49 that landed of 64, and 58 min spent on the 15 that did not,
+      measured 2026-11-22 (the event log's `land` Phase `end` lines).
+    - 31 of the 49 landings already carried more than one task, median 2 a landing, max 6, measured 2026-11-22 (the same `end` lines'
+      `tasks`), so a bundle saves little at the landing: its saving is the builder's reading in, the closing runs and the review
+      rounds, each paid once for the bundle.
+  - THE MARK: `task-start/bundle.rs` - every member's refusal first (not an open box, a phase task - a parked stage's task among them, its `phase:` line naming the stage - or a held feature),
+    nothing written while one stands; then `active-task` names the FIRST task as `task` (the one id every reader already reads) and
+    every member as `tasks`; each member's start logged, the first's last, so it is the task in force (`filed::in_force`) and each
+    member counts as started for land-alone (451 T101). PERFORMANCE FIRST (FR-013) is asked of EACH member: a member that is not
+    performance work is refused, as a single start is, while an open performance task waits - unless that waiting task is a member
+    of the bundle, which counts as started with it; a bundle of performance work only passes. FR-006 (a builder serves one task)
+    is read with the bundle as the task: one builder serves one bundle, its members started, closed and landed together; the landing
+    ticks every member, so whichever member the resume refusal (`context_cap_hooks::task_landed`, its brief's `T<n>` or its log's
+    task) reads is ticked, and a resume after the bundle lands is refused as for one task - no change to the guard. The event log files a `T=a,b,c` command under its first task (its `TASK`
+    pattern reads the list's first), so the static-runs guard counts the bundle's runs once and the plan-round tripwire its rounds once.
+  - THE SECTION: `shared::plan_text::leading_tasks` - a heading opening with a list of task ids followed by `(bundle)`, `Approach`,
+    `part B` or `Performance checklist` is every listed task's own, so each reads the one section byte for byte; a list followed by
+    anything else (feature 405's `## T17, T16, T27 - ...`, 15 headings in 405's plan and plan-done, measured 2026-11-22 (grep of
+    `specs/*/plan*.md` for a heading opening with two ids)) stays its first task's, as before.
+  - `make decide T=a,b,c`: refused while a member's section is not the first's (its own template headings standing apart: the fix is
+    named) or while `T=` is not its heading's list; the lint once, the checklist per member; one MODE 4 prompt, its bundle sentence
+    asking the reviewer to judge every task in it, each item for each task where they differ.
+  - THE VERDICT: `record-task` on the first task writes the same entry under each task its heading lists whose section is the same;
+    the tick (`owed_for`) and the push (`judge_in`) read a block inside several tasks' sections as in scope where any of them is;
+    the Approach gate reads `### Ta, Tb, Tc Approach` for each member; the plan-round count reads a bundle heading listing the task.
+  - `make closing-checks T=a,b,c`: its split's task a set, the members' edit lines the caller's.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+| the mark and the starts | `task_start/bundle/tests.rs` (the mark, the refusals, the held feature, performance first) | n/a - no engine code | none | n/a |
+| the section | `plan_text`'s `a_bundle_heading_is_each_listed_task_s_own` | n/a | none | n/a |
+| decide, the verdict, the tick | `plan/tests/bundle.rs` (decide, its refusals, the verdict, the Approach) | n/a | none | n/a |
+| the round count | `review_round_hooks`' `a_bundle_s_plan_rounds_are_counted_once_under_any_member` | n/a | none | n/a |
+| the closing split | `test-closing-checks.sh` section 6, the bundle case | n/a | none | n/a |
+| end to end | `land/tests/bundle.rs` | n/a | none | n/a |
+
+### T141 Approach (checklist part A)
+
+1. **The goal, in the world.** No map changes. A builder handed three tiny open tasks starts them as one, writes one section, runs one
+   closing check over their files, dispatches one MODE 4 review and lands them in one landing - the fixed cost paid once, not three
+   times - and a single task's flow is what it was.
+2. **The constraints.** T141's line; the GM's words (request.md, "on bundling small tasks"); FR-012 (red first); FR-013 (performance
+   first, asked of each member, a waiting performance task counted started when it is one); FR-006 (one builder per task, the
+   bundle its task); T101's land-alone (each member started, CLEAR, its files its own); T84's builder-stop question; T244's
+   `task_start.rs` change built on, not reverted; T142's `l7r-gate.sh` untouched.
+3. **Where each comes from.** G: the GM's two quotations. O: the medians above, each measured 2026-11-22 with its method. R: none -
+   tooling, no research question.
+4. **Do they describe the world here?** Yes: the medians are this feature's own 107 landed tasks; 31 of 49 landings already
+   multi-task, measured 2026-11-22 (the event log's land `end` lines), so the landing half was in place (T06) and this task adds the
+   rest.
+5. **The order.** Measured first; the tests red first (the closing split's case failed on the old script: 49 passed, 1 failed,
+   measured 2026-11-22 (`test-closing-checks.sh` run against `git show HEAD:scripts/gates/closing-checks.sh`); the Rust tests red on a
+   `leading_tasks` stub); then the section reader, the mark, decide, the verdict, the closing split, the docs.
+6. **The exits.** Green: the bundle tests and the end-to-end pin pass, and every existing test of the crates it touches and the hooks still
+   does. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None: each reader of the mark, the section and the verdict was found by grep (`active-task`, `task_sections`,
+   `tasks.<id>`), and those that read one task id are left reading the bundle's first.
+8. **The budget.** One landing.
+9. **Done, measured.** `make closing-checks T=T141 F=451` green; the end-to-end test lands a three-task bundle and ticks all three.
+10. **Before moving a constant.** n/a - no constant moves (`PLAN_ROUND_CAP` and `STATIC_RUNS_A_TASK` unchanged; a bundle counts once
+    under them).
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** Not a defect fix: a new form. A single task's mark, section, prompt and verdict are written as before (the
+    existing tests unchanged and passing).
+
+**Found and left?** none.
+
+**Performance work?** yes - a `[perf]` task (451 FR-013): it makes the builders' loop faster by paying the per-task fixed cost once a
+bundle. Not engine speed, so the checklist below answers in its terms.
+
+### T141 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)
+
+1. **Where does the time go?** Per task, measured 2026-11-22 (above): builder minutes median 9, closing runs 2 of median 4.8 min,
+   review rounds 2, landing 1.7 min.
+2. **Removes work, or only moves it?** Removes it: one builder reading in, one section, one set of closing runs, one review round set
+   and one landing for n tasks, where there were n of each.
+3. **What do you expect it to save, and why?** For a bundle of three tiny tasks about two thirds of their fixed cost - about 2 builders,
+   4 closing runs (some 19 min of wall) and 4 review rounds - a GUESS from the medians, to be measured on the first bundles landed.
+4. **How does the work grow with the settlement?** n/a - not the engine; the fixed cost grows with the bundle's tasks only through
+   its one section's length and its review's reading.
+5. **What did the before and after show, and under what conditions?** Before: the medians above. After: not yet measured on a real
+   bundle - the end-to-end test pins the flow, not its time; `make where-time` reports a bundle's time under its first task.
+6. **Did any map move, and does it still keep the research?** No map moves: no engine code.
+
+<!-- plan-archive: archived 2026-11-22 -->
+### T147 (a landing refused on another task's open plan-review passes, which only that task's landing writes; the first pass took no escape)
+
+- **Approach**: measured first, then the rule moved into the one owed set every refusal reads (`reviews`' `ledger_passes/left.rs`),
+  and `make land`'s first pass asks it with the tasks it lands:
+  - HOW THE PASSES WERE CHOSEN, measured 2026-11-22 (reading `cheap.rs`, `ledger_passes.rs`, `rows.rs`, `trace.rs`): never by the
+    landing's tasks. The first pass writes (`write_ledger`) every owed MODE 4 pass whose reply quotes a recorded verdict or whose
+    feature's `plan-review.json` holds its task's verdict dated that day (`--write-plan-reviews`, any feature, any task), then every
+    pass `trace::belongs` ties to the landing's feature (`--write specs/<n>-.../`, any task of it); then it refused on any `| ? |`
+    left, with no escape. The push's `ledger-owed --refuse` row and `make land-tooling` refuse on the same set, `LEDGER_ROWS_OK` their
+    escape. By hand, `make ledger-owed WRITE=` refuses a recorded plan review as the landing's own (451 T105).
+  - THE CROSS-FEATURE CASE, reproduced: 4 of 449's plan reviews (T158, T241, T250, T197) stayed owed after a 451 landing's two
+    writes, measured 2026-11-22 (a worktree at the clone's HEAD bdb111b827, the two writes run on its ledger): their verdicts are
+    uncommitted in the clone, so not in the landing worktree's record, their replies quote none, and 451's write traces none of them.
+  - THE WITHIN-FEATURE CASE, not reproduced as a plan-review refusal: the 449 T244 landing attempts' ledger commits wrote T158's,
+    T203's, T241's and T243's plan-review rows themselves (6 + 2 rows in 70a2773d0c, 4 + 1 in 4d2e56a7e9, 3 + 1 in a8b34d9e44,
+    3 + 1 in e73cf5fded), measured 2026-11-22 (`git show` of the landing worktree's reflog commits); a 449 landing at HEAD left 0
+    plan reviews owed and 86 other passes, measured 2026-11-22 (the same worktree, 449's two writes). Those 86 (impl-drift
+    `DECIDE_OK` dispatches, workflow units, modal and record checks no subject ties to a feature) are what refused - no landing
+    writes them; `make ledger-owed WRITE=` from the session that ran them does, and its rows must be committed before a landing
+    alone sees them (70 still owed with the clone's 46 uncommitted rows added, measured 2026-11-22, the same worktree).
+  - THE RULE (`left.rs`): a refusal (`--refuse`, or `--landing`) leaves out a MODE 4 pass whose subject names its feature and task
+    where that feature's specs directory is here, the task is ticked in neither `tasks.md` nor `tasks-done.md` (absence counts as
+    open: land-alone commits a task's own lines only, de7ecc7de4) and is not one the landing lands (`--landing <feature dir>
+    --tasks "<ids>"`); it says which open tasks it left, on stdout, refusing nothing for them. A block review (no task), a ticked
+    task's, a feature absent here, and every other pass still refuse, with `make ledger-owed WRITE=` named. The listing by hand
+    (no `--refuse`) names every pass. At the push the landing's tasks are ticked, so its own passes refuse there too.
+  - THE WRITES, unchanged (a decision, labeled): a feature's landing still writes every pass traced to it, another open task's
+    plan review among them, and `--write-plan-reviews` still writes any recorded one - harmless (land-alone merges the ledger by
+    row at the take, 451 T105) and the route that writes them earliest; "left to that task's landing" governs what refuses.
+  - `cheap.rs`: the first pass asks `--ledger ... --refuse --landing <feature> --tasks "<its tasks>"`; no escape added, so
+    `LEDGER_ROWS_OK` stays where it worked, the push and `make land-tooling`, untouched.
+  - AFTER, measured 2026-11-22 (a worktree at bdb111b827, a 451 landing of T147, the new binary): the 4 449 plan reviews are left
+    to their landings (named on stdout) and 0 plan reviews refuse; 133 other passes still refuse, for `make ledger-owed WRITE=`.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+| the rule | `ledger_passes/left/tests.rs` (T1 lands with T2's and another feature's open passes, its own row written; a ticked task's, a block review's, an absent feature's and another pass still refuse; two rounds of one task named once) - red with `left_to` stubbed to keep every pass (2 failed, measured 2026-11-22) | n/a - no engine code | none | n/a |
+| the first pass | `land/tests.rs`' `every_cheap_refusal_is_said_together_and_nothing_runs_long` (asks with `--refuse --landing 449-x --tasks T1`) | n/a | none | n/a |
+
+### T147 Approach (checklist part A)
+
+1. **The goal, in the world.** No map changes. A landing refuses for the ledger rows it owes - its own tasks' passes and every pass
+   no other landing will write - and lands past another task's open plan review, which that task's landing writes.
+2. **The constraints.** T147's line (both halves); 451 T105 (the by-hand refusal kept); 451 T101 and T88 (land-alone's worktree at
+   HEAD); 385 T72 (the plan reviews' rows written by every push route); FR-012 (red first); 449 T247's uncommitted `cheap.rs` edits
+   built on.
+3. **Where each comes from.** G: none beyond the task line. O: the measurements above, each dated with its method. R: none -
+   tooling, no research question.
+4. **Do they describe the world here?** Yes: the cross-feature pair measured on this clone's HEAD; the within-feature report checked
+   against the landing worktree's own commits.
+5. **The order.** Measured first; the pins written and shown red; the rule; the first pass's call; both crates' tests, lint, cover.
+6. **The exits.** Green: the pins pass and both crates' tests, lint and cover are clean. Red: what failed recorded and the task set
+   down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None: every refusal on owed rows found by grep (`ledger-owed` in `scripts/` and `rust/gate/crates/`):
+   `cheap.rs`, `push.rs`'s row, `land-tooling.sh`; the rule sits in the set all three read.
+8. **The budget.** One landing.
+9. **Done, measured.** `make closing-checks T=T147 F=451` green; the after-measurement above.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** A defect: a landing refused that its own work could not answer (the cross-feature pair measured above),
+    and nothing but `LEDGER_ROWS_OK` at the push let it through.
+
+**Found and left?**
+- The 86-133 passes no subject ties to a feature (impl-drift `DECIDE_OK` dispatches, workflow units, modal and record checks)
+  refuse every landing until the session that ran them writes and commits their rows (`make ledger-owed WRITE=`): working as
+  designed - no landing can know where they were acted on - so not a defect, and not filed.
+
+**Performance work?** no.
+
