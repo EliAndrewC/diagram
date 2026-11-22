@@ -1692,6 +1692,12 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-22",
    "declared": "spec-fidelity"
+  },
+  "### T158, T197, T203, T216, T228, T235, T240, T241, T243, T244, T246, T247, T248, T249, T250, T251, T253, T254, T255, T256, T257, T258, T261, T262, T263, T264, T265, T266, T267, T268, T269, T270, T271, T272, T273, T274 part B (2026-11-22T13:33Z)": {
+   "sha256": "bafa11e81238c0b5f9a6e2b9e898a6977714294b04e650481da23ede6db0b61b",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-22",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -20934,6 +20940,33 @@
      "summary": "T252, T259, T260 and T275-T287 are the unfilled make task-add template (both the task section and its checklist part A); T158, T197, T203, T216, T228, T235, T240, T241, T243 and T244 removed were the same unfilled template",
      "class": "within",
      "why": "Placeholder text only: a template filed or removed makes no decision"
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-22",
+   "blocks": [
+    "### T158, T197, T203, T216, T228, T235, T240, T241, T243, T244, T246, T247, T248, T249, T250, T251, T253, T254, T255, T256, T257, T258, T261, T262, T263, T264, T265, T266, T267, T268, T269, T270, T271, T272, T273, T274 part B (2026-11-22T13:33Z)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "partB-1",
+     "summary": "The red gate's cause is a rustfmt width slip in one plan-crate test (a_bundle_approach_block_covers_every_task_its_heading_lists); it is fixed by the gate's format rewrite (46af955365) and confirmed by make static then make verify",
+     "class": "within",
+     "why": "A formatting rewrite of a test changes no behavior, narrows nothing the GM asked for, and is the gate's own check doing its job; nothing in the request is touched"
+    },
+    {
+     "id": "partB-2",
+     "summary": "The earlier hooks-test red at 900bf1ad55 was settled before the second run and did not recur, so no work is taken on it here",
+     "class": "within",
+     "why": "Recording that a failure did not recur leaves nothing unfixed: no defect stays open and no requested work is dropped"
+    },
+    {
+     "id": "partB-3",
+     "summary": "Following the arbiter's accept ruling, the next step is make done under make verify again, with no routes offered",
+     "class": "within",
+     "why": "It carries out the ruling the block cites and decides nothing the spec or request left open"
     }
    ]
   }
