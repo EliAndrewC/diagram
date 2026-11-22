@@ -575,60 +575,229 @@ The T02 class, by kind (the grep's hits, each read):
 <!-- plan-archive: T47 to T47 moved to plan-done.md, 2026-11-21 (feature 375 FR-044) -->
 <!-- plan-archive: T48 to T46 moved to plan-done.md, 2026-11-21 (feature 375 FR-044) -->
 <!-- plan-archive: T77 to T77 moved to plan-done.md, 2026-11-21 (feature 375 FR-044) -->
-### T49 (<why: the finding or measurement that files it>)
+### T49 (gate-write's `own_args` blanks every literal handed to a function the program defines, so a write through that function into the tree passes a running gate: T33's after8 gate replay let through window#170's `replace_note("citations/urban-features.html", ...)`, writing `R / path` with `R = pathlib.Path("research")`, and window#172's `sub(<the built page of research/contents.json#trades-and-services>, ...)`, writing `pathlib.Path(f)`, under its stand-in `make done`, observed 2026-11-20, method: `/tmp/t33/scripts/cmp8.sh`; the shape is 16 of T93's 9,646 commands, 11 of them writing into a clone's tree, measured 2026-11-21 (`/tmp/t49/scripts/measure.py`, the corpus streamed in one process))
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: THE FIX WAITS ON T96, THEN T110. The reading it needs (a call's literal bound to the parameter of a function the
+  program defines, joined onto a module-level literal root) is T110's, in `shared::tree::program`, the one place it lives (the
+  session's note, 2026-11-21: T110 "binding a function's parameter to each call's literal and joining it to a module-level root";
+  T110's line: "T49 builds on the same reading"), so gate-write builds no second copy. The measured design:
+  - THE MEASUREMENT, measured 2026-11-21 (`/tmp/t49/scripts/measure.py` over T93's `/tmp/t93/replay-cmd.jsonl`, 2026-11-20 12:09Z
+    to 2026-11-21 17:09Z, one line at a time, and over T33's 1,134 fixture rows from `/tmp/t42/scripts/rows.py`; every hit's
+    function read by hand, `/tmp/t49/t93.txt`, `/tmp/t49/fx.txt`):
+    - T93's corpus: 144 Python programs define a function and hand it 303 string literals, 258 of them text that reaches no
+      write, so blanking those stays right; 45 literals in 16 commands are the path the function writes, each the parameter
+      written as given (`open(p, 'w')` 36, `p.write_text(` 9), none onto a root. 11 of the 16 write into a clone's tree (`cd
+      <clone>/rust/gate/crates/land/src && python3 - <<'EOF'` ... `def edit(p, pairs):` ... `open(p,'w').write(s)` ...
+      `edit('land.rs', ...)`), 5 into a `/tmp` worktree.
+    - The fixtures: 806 literals handed to a program's own function, 712 text; 77 in 20 commands the parameter written as
+      given; 8 in 2 commands (window#169, #170) onto a module-level literal root (`R = pathlib.Path("research")`, `p = R /
+      path`, `p.write_text(...)`); 9 in 1 command (window#72) onto an f-string (`p = f"{R}/{rel}"`), which stays let through.
+      The 94 writes' sinks: `.write_text(` 78, `open(.., 'w')` 9, `Path(p).write_text(` 7.
+    - No hit rebinds its parameter (`p = f"{R}/{p}"`, window#72's class of false refusal): 0 of the 17 hit functions in T93's
+      corpus, 0 of the 23 in the fixtures, measured 2026-11-21 (each hit function's body searched for an assignment to it).
+    - None of the 11 in-tree writes ran under a gate of this clone, measured 2026-11-21 (an approximation: the event logs'
+      `make done` and `make land` Phase lines of `diagram-backlog`, merged where 180 s apart or less, 35 runs, against each
+      command's time): the hole had no victim in the corpus; T33's stand-in replay is where it shows.
+  - THE READING, as these measurements need it of T110:
+    - the binding: a call `F(<literal>, ...)` of a function the program defines once (`def F(params)`, found on `masked`'s copy,
+      past strings and comments, as `own_args` finds it now), the literal bound by its position or its keyword to a parameter P;
+      a `*args` parameter, or a second `def F`, binds nothing.
+    - the reach: P, or a name the body assigns exactly `Path(P)`, `pathlib.Path(P)` or `P`, as a write's path: `open(N, <a mode
+      holding w, a or x>)`, `N.write_text(` or `N.write_bytes(`, `Path(N).write_text(` - the three forms that hold every hit
+      above. Another sink (`shutil.copy`, `os.replace`) is read as no write: a limit recorded, met 0 times in either corpus.
+    - the root: `N = ROOT / P`, `os.path.join(ROOT, P)` and T110's `ROOT + P` (T92's builder's `root='<clone>/rust/gate/crates/'`,
+      `p=root+path`), ROOT a top-level name bound once to a literal (`"x"`, `Path("x")`): the call's literal is placed at ROOT's
+      literal joined to it.
+    - the rest fails open, as `own_args` fails open now: an f-string (window#72), a root the program computes or binds twice, a
+      parameter rebound to anything else, a function that hands P on to another function.
+  - GATE-WRITE'S OWN PART, once T110 lands: `own_args`'s blanking (T33's window#72 rule) gives way to the reader's placement - a
+    literal handed to a program's own function counts only where the shared reader places it, at the path the function writes;
+    every other literal of such a call is blanked as now. Whether `own_args` stays for the unbound literals or retires into the
+    reader's `placed` reading is T110's API to settle; make-only, fail-closed, keeps counting any literal.
+  - RED FIRST, then: the case pinning window#172's shape as let through (`a_running_gate_lets_through_what_writes_outside_the_tree`,
+    `def edit(p): open(p, 'w')`, marked "Found and left, T49") moves to the refused list, beside #170's shape (`R =
+    pathlib.Path("l7r")`, `def f(path): p = R / path; p.write_text('x')`, `f("x/b.py")`); window#72's f-string case and a
+    parameter only read stay let through.
+  - THE REPLAY'S PREDICTION, measured 2026-11-21 (T33's after9 build's verdicts, `/tmp/t33/rp/gate-after9.t.gate-write-hooks.tsv`,
+    for the fixtures' 22 call-through commands): 7 are refused already for another literal (window#84, #169, #220, #223,
+    parse#142, #143, #196), so at most the file they name moves; 15 are let through, 13 of them because they `cd` into
+    `.clones/<name>`, which T33's replay mirror ignores, so the fix moves exactly window#170 and #172 allowed -> refused there.
+    T96's replay is vacuous for this guard: 0 of its 9,646 gate-write verdicts are other than silent, measured 2026-11-21
+    (`/tmp/t96/replay-now-fixed.jsonl`: no `make done` stands in the row's tree), so T93's 11 in-tree commands need T33's
+    stand-in gate in a git tree of the clone's shape to show their refusals.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| the design measured; the fix waits on T96, then T110's shared reading | n/a - no map | n/a | none | n/a |
 
 ### T49 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** No map changes. A running gate refuses a Python program's write into its tree made through a
+   function of the program's own, to a path the call names literally, as it refuses `open('<path>', 'w')`; every other verdict
+   is unchanged.
+2. **The constraints.** T49's line (the literal placed by reading the function's body; a base the program computes fails open,
+   so window#72 stays let through; red first on #170's and #172's shapes; the replay's moves accounted); T110's line (the
+   binding lives in `shared::tree::program`, and T49 builds on it); the brief (T96's reader not built on before it lands, its
+   module not edited; the files gate_write_hooks, its tests and suite, docs/guards.md's row and this section); the gate's rule
+   that a path it cannot resolve fails open; constitution XIII (no known regressions, by the replay); 100% line coverage of the
+   guard crate by its own tests.
+3. **Where each comes from.** O: the corpus counts, the sink forms, the rebinding search, the under-a-gate check and the after9
+   verdicts, each measured 2026-11-21 (Approach); R: T49's and T110's lines, T33's section (plan-done.md) and its after8 replay;
+   G: none (T110 as the reading's one place is the session's note of 2026-11-21, a process ruling).
+4. **Do they describe the world here?** The corpus is this clone's own builders' commands (T93's), read whole; each of the 16
+   hits' function bodies was read by hand and the 11 in-tree ones resolved against their `cd`, measured 2026-11-21
+   (`/tmp/t49/t93.txt` and its cwd join).
+5. **The order.** After T96 (the reader in `shared::tree::program`) and T110 (the binding there); T49 is gate-write's half of
+   T110's reading, landed on its own.
+6. **The exits.** Green: the red cases failing on HEAD and passing with the change, and the gate replay moving exactly window#170
+   and #172 under gate-write. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through
+   `make arbiter-ask`.
+7. **The search smell.** none - the shapes are few and regular: three sinks hold every hit, one root form in the corpora and
+   T92's `+` beside it; a sink outside them is a recorded limit.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** The red cases' log and the green one; the gate replay against HEAD: window#170 and #172 allowed ->
+   refused, every other row's verdict unchanged, a refused row's named file moving accounted row by row.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** A wrong outcome: under a running gate, a builder's heredoc that edits files through its own `edit(path,
+    ...)` rewrites the tree the gate checks, so the gate's verdict is void ("the tree moved while the gate ran") and the whole
+    gate is paid again, as T34's landing was by a `cp` (T33's line); the guard reads such a write as none.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?**
+- docs/guards.md has no row for the gate-write guard (`grep -n 'gate-write\|gate_write\|T024' docs/guards.md` finds only the
+  event log's row, measured 2026-11-21), so a session it refuses finds no rule, mechanism or escape there: fixed in this task,
+  the row written with the reading it lands, before this task's landing - not now, because an uncommitted hunk in
+  docs/guards.md would go into T96's commit of the same file, whose line-67 edit is uncommitted in this clone.
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** no.
 
 
 <!-- plan-archive: T50 to T33 moved to plan-done.md, 2026-11-21 (feature 375 FR-044) -->
 <!-- plan-archive: T50 to T50 moved to plan-done.md, 2026-11-21 (feature 375 FR-044) -->
-### T51 (<why: the finding or measurement that files it>)
+### T51 (a Python program run from a script file, `python3 <path>.py`, is read by neither make-only's guard-write nor the gate's shell-write check (T33's line); measured 2026-11-21 (`/tmp/t51/rp-src/main.rs`, T93's corpus and T33's fixtures each streamed in one process, 23.8 MB peak): reading the script's text at the call would move 16 make-only rows, none a correction - window#215 carries `GUARD_EDIT_OK` on its own run, so HEAD escapes it, not lets it through - and 80 gate-write rows under a stand-in running gate, 12 of them would-be corrections and 68 false, the false ones the reader's shapes, which HEAD refuses on the stdin route today)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: MEASURED, NOT BUILT; T51 waits on T118. The design: a script run's text - the command's own heredoc that writes
+  that path before the run, else the file at the call (a regular file of at most 1 MB, a CONVENTION) - handed to `program_names` unchanged at
+  the call site, in gate-write's `shell_write` beside the walk's targets, behind a test that the named file is a regular file
+  (the candidate: `/tmp/t51/cand/script.rs`, built into a scratch copy, never into the clone). Nothing lands from the call
+  site, because no call-site rule meets the let-through baseline. The 12 false gate-write rows the regular-file test keeps come
+  from a hook's argv list bound to a name and run (`old = ['<clone>/scripts/hooks/l7r-guard.sh', ...]` then
+  `subprocess.run(old)`). window#306's read through a join (`(root / "scripts" / "house-style-hooks.sh").read_text()`) would also
+  be refused at the call, and make-only refuses that read for window#305, #306 and #309. Both shapes sit inside
+  `shared::tree::program`'s reader, and HEAD refuses the same programs run from stdin today. T118 (filed here) teaches the reader
+  both shapes and counts gate-write's own file test, red first; T51 then replays and lands gate-write's script route. Make-only
+  gains the route only if that replay shows a correction: none here, and every guard-file write through a script in both
+  corpora carried `GUARD_EDIT_OK` (17 of 17). T112 landed during the measurement (`b4ab4e5a79`), which ends the brief's edit
+  collision but leaves the reader outside this task's files.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| the script route measured; the design waits on T118 | n/a - no map | n/a - nothing built | none | n/a |
 
 ### T51 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** No map changes. Under a running gate, a scratch Python script that rewrites a tracked file is
+   refused as `open('<file>', 'w')` from stdin is. A script that only reads, or runs a hook, is let through, and so are the four
+   shapes T33 named false (window#302, #305, #306, #309). Make-only's verdicts do not move until a measured correction asks them
+   to.
+2. **The constraints.** T51's line (measure first, the script file's text read at the call, the 4 false shapes the let-through
+   baseline, red first where a move is a correction). The brief: the files make_only_hooks, gate_write_hooks, their tests and
+   suites, docs/guards.md's rows and this section; `shared::tree`'s tree.rs and program.rs not edited; a computed or absent
+   script fails open, as HEAD does; no live fetch. Constitution XIII (no known regressions) and XIV (a defect is a wrong outcome).
+3. **Where each comes from.** O: the replays, probes and counts of item 4. R: T33's section (plan-done.md) and its pairs
+   (`/tmp/t33/sg/pairs.txt`). G: none.
+4. **Do they describe the world here?** Each measured 2026-11-21 by its method:
+   - THE HARNESS: `/tmp/t51/rp-src/main.rs` runs over a scratch copy of the guard (`git archive 4a282e258c`, with wrappers
+     `/tmp/t51/cand/t51.rs` and the candidate reader `/tmp/t51/cand/script.rs`), giving per row make-only's verdict, gate-write's
+     verdict and, for each script run read, both guards' readings of its text, ungated and gated by py_c's writer judgment (the
+     walk on a stdin stand-in), with gate-write under a stand-in gate - a fake `/proc` holding a `make done` in the row's tree,
+     `unseen` stubbed to "seen", the answer the gate's preflight gives with no snapshot (`would_write`) - and its rerun over
+     T112's landed HEAD (`b4ab4e5a79`) differs on 0 of 9,646 and 0 of 1,134 rows, at 23.8 MB and 21.5 MB peak, measured
+     2026-11-21 (`/tmp/t51/m2-*.jsonl` against `m-*.jsonl`, `/usr/bin/time -v`).
+   - THE TEXT AT THE CALL: 38 of T33's 48 script-and-writer pairs run the script in the command that writes it (`cat > P
+     <<'EOF'`, its body, then `python3 P`), so the file is absent or stale at PreToolUse and the reader takes the command's own
+     heredoc for that path first, else the file - T33's rows carrying the text earlier rows' heredocs left as the disk's
+     stand-in, T93's rows reading each file as it stands today as the stand-in for its text at the call - measured 2026-11-21
+     (`/tmp/t51/scripts/pairs.py`, `/tmp/t51/scripts/overlay.py`).
+   - THE DENOMINATORS: T93's corpus has 450 runs in 390 rows - 4 with a computed path, which fails open, 446 literal, of them
+     430 read and 16 not (absent at the call, or the run inside a body or a quote) - and T33's has 148 runs - 40 computed (19 of
+     them quoted, each holding `$`), 108 literal, 25 read and 83 not (43 the repository's own `scripts/`, `tests/`, `l7r/` or
+     `rust/` files, which T33's replay reads only from the overlay, never the disk, 21 scratch under `/tmp`, 19 elsewhere) -
+     so every figure below is over the 455 scripts read and the 83 are owed to the resumed replay, measured 2026-11-21
+     (`/tmp/t51/scripts/shapes.py`, the denominator probe over both m2 replays, the 83 bucketed by path).
+   - T33'S 41 RECOVERED BODIES AGAINST 25 READ: of its 48 pairs, 10 run outside their writer's row and 38 inside it - 8 of those
+     with a computed path, which fails open, 10 literal ones the candidate did not read (8 run after a `cd` the walk did not
+     place, 2 whose writing heredoc it did not match) and 20 read - so the 10 unread literal pairs are owed to the resumed
+     replay, measured 2026-11-21 (`/tmp/t51/scripts/pairs.py` against the m2 replay).
+   - MAKE-ONLY'S MOVES (HEAD `ok`, then a guard file named with reads exempted, every move gated by py_c too): 16 rows, 0
+     corrections, all false - T93's 13 are t67's `corpus.py` and `replay-log.py` running a hook's argv list (12) and t58's
+     `commits.py` using a path prefix in a filter (1), T33's 3 are window#305, #306 and #309 reading through a join, ungated 2
+     more are false (window#310, and t08's `hand.py` with reads not exempted), and window#302 fails open on `$S/walk.py` -
+     measured 2026-11-21 (`/tmp/t51/scripts/moves.py`, `judge.py`, each script's naming lines read by hand).
+   - NO CORRECTION FOR MAKE-ONLY: every row whose script names a guard file and whose HEAD verdict is not `ok` is
+     `guard-edit-ok`, 16 of T93's (t79's eight fix scripts, `own_args_edit.py`, `wire.py`, `edit_filed.py` and others) and
+     T33's window#215, whose `python3 <scratch>/desc195.py` carries `GUARD_EDIT_OK="feature 195 FR-002: <its reason>"`,
+     measured 2026-11-21 (the m2 replays, rows with `mo != ok` and a guard file named).
+   - GATE-WRITE'S MOVES (gated): 80 rows - T93's 75 hold 12 would-be corrections, scratch edit scripts each binding a tracked
+     file and writing it (the plan 4 times, `hookrun.sh` twice, `gate_write_hooks.rs`, `static_runs_hooks.rs`,
+     `test-static-runs-hooks.sh`, `filed.rs`, `dispatches.rs`, `rust/guard/CLAUDE.md`), and 63 false from 14 scripts (a
+     directory literal such as the fixtures, `specs` or `rust/guard`, a `~/` literal placed under the cwd, t67's argv lists, a
+     dotted word in a test such as `'plan.md' in cmd`, `"e.g"`, `'subprocess.run'`, `'.log'` or `'static.log'`), and T33's 5
+     are all false (main-tree#18 reads `SOURCES.md`, #132 uses `"fields.html"` as a key, window#305 and #309 test
+     `"gm-request.md" in path`, #306 is the joined read) - measured 2026-11-21 (`judge.py`, the scripts' write calls grepped).
+   - T33'S SEVEN GATE-SEEN PAIRS: none of their writes moved, each for its own reason (main-tree#18's row moved only on its
+     false read of `SOURCES.md`, counted above) - main-tree#18, #89, window#215, #392 and #393 run in the
+     mirror and write into another clone under the mirror's ignored `.clones/`, which this tree's gate never sees, main-tree#99
+     writes its script and does not run it, and window#80's run is `$S/restore_quotes.py`, computed - so no reader shape is owed
+     for them, measured 2026-11-21 (each body's binding and write lines).
+   - HEAD ALREADY REFUSES THE FALSE SHAPES FROM STDIN: window#305, #306, #309 and t67's `corpus.py` run as `python3 - <<EOF`
+     are refused by make-only and gate-write, and t79's `stream.py` and t46's `resid.py` by gate-write, measured 2026-11-21
+     (`/tmp/t51/probe-stdin.jsonl` through the scratch build).
+   - A CALL-SITE FILTER (the named file a regular file): it keeps 10 of the 12 corrections against today's tree and all 12 at
+     the call (the 2 lost, `filed.rs` and `dispatches.rs`, moved since), drops 51 of the 63 false and keeps 12, t67's argv
+     lists, and in T33's corpus drops all 5 against today's tree, but window#306's script read
+     `/diagram/scripts/house-style-hooks.sh` at the call, so that file stood then and the filter misses the baseline, measured
+     2026-11-21 (Python over the m2 replay).
+   - THE COST: `scripts` takes a median of 0.26 µs a command (one naming no `.py`) and 1.4 ms at p99 in the corpus run, the
+     four slowest took 80 to 162 ms in that run, a cause not identified, and re-timed warm 22 to 54 µs with a first call of 1.8
+     to 2.4 ms while the patterns build, measured 2026-11-21 (the harness's `ns`, `/tmp/t51/slow.jsonl` run twice).
+5. **The order.** After T118, which makes the reader read a join's read and a run argv list, and counts gate-write's own file
+   test. Then T51 replays and lands gate-write's script route.
+6. **The exits.** Green: after T118, the replay moves gate-write's 12 corrections' shapes from allowed to refused, red first, and
+   lets through window#302, #305, #306 and #309 in both guards. Red: what failed recorded and the task set down, a claim that it
+   cannot be done ruled through `make arbiter-ask`. This round's exit: the baseline fails at the call site, so the task is set
+   down, waiting on T118.
+7. **The search smell.** none. The false shapes are five and regular: a join's read, a run argv list, a directory literal, a
+   `~/` literal and a dotted word in a test. A sixth false shape found at T51's replay is fixed in T51 when it lies in T51's
+   files, else filed with its id and `lands before T51`, T51 set down through the red exit until that task lands; it is never
+   landed as a limit.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** The red cases' log and the green one, then the replay of both corpora against HEAD: the corrections
+   allowed then refused, the baseline's four allowed, and every other moved row accounted.
+10. **Before moving a constant.** n/a. The 1 MB read cap is a CONVENTION past every script the corpora read (the largest 37,480
+    bytes, measured 2026-11-21 (the harness's `len` over both m2 replays)), and it moves no claim.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** A wrong outcome for gate-write alone, would-be and not observed: under a running gate, a builder's scratch
+    edit script rewrites the plan or a guard source, so the gate's verdict is void and the whole gate is paid again (T33's line).
+    The 12 corrections are a stand-in gate's. Make-only shows no wrong outcome on this route: every guard-file write through a
+    script was escaped (17 of 17, measured 2026-11-21 (the m2 replays, rows with `mo != ok` and a guard file named)), so its
+    unread route is an accepted limitation. The cost is that an unescaped script write of a guard file
+    would pass unrecorded. Priced against it were the call-site reading (16 false refusals and 0 corrections) and the
+    regular-file filter (it still refuses t67's argv lists). Chosen by T51's builder on the measurement; the design asks again
+    after T118.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?**
+- HEAD refuses correct Python programs run from stdin or `-c`: a read through a join (window#305, #306, #309's shape), a hook's
+  argv list bound to a name and run (t67's `corpus.py`), a directory literal and a dotted word under a running gate (t79's
+  `stream.py`, t46's `resid.py`), each refused at once, measured 2026-11-21 (`/tmp/t51/probe-stdin.jsonl`). Not fixed here: the
+  reader is `shared::tree::program`, outside this task's files, and gate-write's file test moves HEAD's stdin and `-c` verdicts
+  uncounted. Filed as T118; lands before T51.
+- `make guard-edit FILE=<a path outside the tree>` wrote `l7r-guard-permits.jsonl` into the clone's root, an untracked file, and
+  its permit did not take: the Write of that path was refused again at once, observed 2026-11-21, method: T51's guard-edit of
+  `/tmp/t51/m/rust/guard/src/guards/make_only_hooks/script.rs`, then the Write, then `git status`; the stray file removed.
+  Not fixed here: the guard-edit route is outside this task's files. Filed as T119; lands before T22.
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** no.
 
 
 ### T52 (<why: the finding or measurement that files it>)
@@ -873,6 +1042,7 @@ docs/performance-checklist.md answers.
 
 <!-- plan-archive: T101 to T97 moved to plan-done.md, 2026-11-21 (feature 375 FR-044) -->
 <!-- plan-archive: T101 to T101 moved to plan-done.md, 2026-11-21 (feature 375 FR-044) -->
+
 ### T102 (the Stop hook's free-slot refusal named T22, which waits on a measured day, in each of its 4 refusals of 2026-11-21 18:48-19:39Z, each with 2 builders running, measured 2026-11-21 (the session transcript's refusal texts, deduplicated by time); T98, measured only after a night of rolling dispatch, the next it would name)
 
 - **Approach**: a task line carries its wait, and the one reading of "can this task start now" skips a task whose wait is not met:
@@ -1139,6 +1309,114 @@ its own files; not engine speed, so no performance-checklist answers.
 <!-- plan-archive: T110 to T110 moved to plan-done.md, 2026-11-22 (feature 375 FR-044) -->
 <!-- plan-archive: T115 to T115 moved to plan-done.md, 2026-11-22 (feature 375 FR-044) -->
 <!-- plan-archive: T115 to T115 moved to plan-done.md, 2026-11-22 (feature 375 FR-044) -->
+### T107 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T107 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+
+### T109 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T109 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+
+### T116 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T116 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+
+### T117 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T117 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+
 ### T118 (shared::tree::program read three Python shapes as writes and gate-write's file test took a directory literal as a file written, so make-only, gate-write and the event log refused or listed correct work on the stdin and `-c` routes, and would on T51's script route - a read through a `/` join, an argv list bound to a name and run, a literal a test reads, a directory only read (found by T51, measured 2026-11-21, `/tmp/t51/probe-stdin.jsonl`, HEAD b4ab4e5a79); at HEAD 9bd338e244, 45 gate-write and 20 make-only refusals of correct work over T93's 9,646 commands, T33's 1,134 fixtures, T51's 455 script stand-ins and 6 probes, measured 2026-11-21 (the paired replay, `/tmp/t118/scripts/paired.sh`))
 
 - **Approach**: three readings of a literal's use and a narrower directory rule, each measured first over the corpora:
@@ -1250,6 +1528,33 @@ its own files; not engine speed, so no performance-checklist answers.
   (`UNREAD_WRITERS`, `dotted_open_writes`), red first in `a_write_of_a_computed_path_is_told_from_a_literal_one`.
 
 **Performance work?** No - a correctness task; its cost measured above.
+
+
+### T119 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T119 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
 
 
 ### T120 (<why: the finding or measurement that files it>)
@@ -1580,6 +1885,60 @@ its own files; not engine speed, so no performance-checklist answers.
 **Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
 
 
+### T135 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T135 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+
+### T136 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T136 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+
 ### T137 (<why: the finding or measurement that files it>)
 
 - **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
@@ -1687,7 +2046,105 @@ its own files; not engine speed, so no performance-checklist answers.
 
 **Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
 
+
 <!-- plan-archive: T142 to T142 moved to plan-done.md, 2026-11-22 (feature 375 FR-044) -->
+### T141 (each task pays the whole fixed cost whatever its fix's size - a builder, closing runs, a checklist section, `make decide`, its plan review rounds, a landing - and the GM asked that small tasks be bundled and worked at the same time, request.md "on bundling small tasks")
+
+- **Approach**: measured first, then `make task-start`, `make closing-checks` and `make decide` take `T=a,b,c` as `make land` already did
+  (451 T06, T18), the bundle's one section a heading listing its tasks, its one verdict each task's:
+  - THE FIXED COST A TASK PAYS, over this feature's landed tasks:
+    - builders (general-purpose agents) per task median 1, p75 2, max 4, 160 in all, measured 2026-11-22 (`make where-time F=451` and `make feature-report F=451`, the 107 landed tasks with a row, `/tmp/t141/med.py`).
+    - builder minutes per task median 9, p25 1, p75 25, max 68, and agent minutes per task median 38, p25 26, p75 57, max 186, measured 2026-11-22 (`make where-time F=451` and `make feature-report F=451`, the 107 landed tasks with a row, `/tmp/t141/med.py`).
+    - review rounds (spec-fidelity and spec-fidelity-verify dispatches) per task median 2, p25 1, p75 2, max 5, 194 in all, with 209
+      spec-fidelity dispatches (44 BLOCKED) and 9 tasks at three rounds or more, measured 2026-11-22 (`make where-time F=451` and `make feature-report F=451`, the 107 landed tasks with a row, `/tmp/t141/med.py`).
+    - session time waiting on the plan review per task median 0 min, p75 2, max 17, measured 2026-11-22 (`make where-time F=451` and `make feature-report F=451`, the 107 landed tasks with a row, `/tmp/t141/med.py`).
+    - closing runs per task median 2, 58 tasks with any closing run, max 6, measured 2026-11-22 (the event log's `make closing-checks` calls by task).
+    - a closing run's wall median 4.8 min, p25 2.5, p75 7.5, max 24.7, over 33 kept runs, measured 2026-11-22 (the slowest check's
+      `.exit` seconds in each `.git/closing-checks/*/` run directory).
+    - a landing's wall median 1.7 min, p25 0.9, p75 3.9, max 13.4, over the 49 that landed of 64, and 58 min spent on the 15 that did not,
+      measured 2026-11-22 (the event log's `land` Phase `end` lines).
+    - 31 of the 49 landings already carried more than one task, median 2 a landing, max 6, measured 2026-11-22 (the same `end` lines'
+      `tasks`), so a bundle saves little at the landing: its saving is the builder's reading in, the closing runs and the review
+      rounds, each paid once for the bundle.
+  - THE MARK: `task-start/bundle.rs` - every member's refusal first (not an open box, a phase task - a parked stage's task among them, its `phase:` line naming the stage - or a held feature),
+    nothing written while one stands; then `active-task` names the FIRST task as `task` (the one id every reader already reads) and
+    every member as `tasks`; each member's start logged, the first's last, so it is the task in force (`filed::in_force`) and each
+    member counts as started for land-alone (451 T101). PERFORMANCE FIRST (FR-013) is asked of EACH member: a member that is not
+    performance work is refused, as a single start is, while an open performance task waits - unless that waiting task is a member
+    of the bundle, which counts as started with it; a bundle of performance work only passes. FR-006 (a builder serves one task)
+    is read with the bundle as the task: one builder serves one bundle, its members started, closed and landed together; the landing
+    ticks every member, so whichever member the resume refusal (`context_cap_hooks::task_landed`, its brief's `T<n>` or its log's
+    task) reads is ticked, and a resume after the bundle lands is refused as for one task - no change to the guard. The event log files a `T=a,b,c` command under its first task (its `TASK`
+    pattern reads the list's first), so the static-runs guard counts the bundle's runs once and the plan-round tripwire its rounds once.
+  - THE SECTION: `shared::plan_text::leading_tasks` - a heading opening with a list of task ids followed by `(bundle)`, `Approach`,
+    `part B` or `Performance checklist` is every listed task's own, so each reads the one section byte for byte; a list followed by
+    anything else (feature 405's `## T17, T16, T27 - ...`, 15 headings in 405's plan and plan-done, measured 2026-11-22 (grep of
+    `specs/*/plan*.md` for a heading opening with two ids)) stays its first task's, as before.
+  - `make decide T=a,b,c`: refused while a member's section is not the first's (its own template headings standing apart: the fix is
+    named) or while `T=` is not its heading's list; the lint once, the checklist per member; one MODE 4 prompt, its bundle sentence
+    asking the reviewer to judge every task in it, each item for each task where they differ.
+  - THE VERDICT: `record-task` on the first task writes the same entry under each task its heading lists whose section is the same;
+    the tick (`owed_for`) and the push (`judge_in`) read a block inside several tasks' sections as in scope where any of them is;
+    the Approach gate reads `### Ta, Tb, Tc Approach` for each member; the plan-round count reads a bundle heading listing the task.
+  - `make closing-checks T=a,b,c`: its split's task a set, the members' edit lines the caller's.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+| the mark and the starts | `task_start/bundle/tests.rs` (the mark, the refusals, the held feature, performance first) | n/a - no engine code | none | n/a |
+| the section | `plan_text`'s `a_bundle_heading_is_each_listed_task_s_own` | n/a | none | n/a |
+| decide, the verdict, the tick | `plan/tests/bundle.rs` (decide, its refusals, the verdict, the Approach) | n/a | none | n/a |
+| the round count | `review_round_hooks`' `a_bundle_s_plan_rounds_are_counted_once_under_any_member` | n/a | none | n/a |
+| the closing split | `test-closing-checks.sh` section 6, the bundle case | n/a | none | n/a |
+| end to end | `land/tests/bundle.rs` | n/a | none | n/a |
+
+### T141 Approach (checklist part A)
+
+1. **The goal, in the world.** No map changes. A builder handed three tiny open tasks starts them as one, writes one section, runs one
+   closing check over their files, dispatches one MODE 4 review and lands them in one landing - the fixed cost paid once, not three
+   times - and a single task's flow is what it was.
+2. **The constraints.** T141's line; the GM's words (request.md, "on bundling small tasks"); FR-012 (red first); FR-013 (performance
+   first, asked of each member, a waiting performance task counted started when it is one); FR-006 (one builder per task, the
+   bundle its task); T101's land-alone (each member started, CLEAR, its files its own); T84's builder-stop question; T244's
+   `task_start.rs` change built on, not reverted; T142's `l7r-gate.sh` untouched.
+3. **Where each comes from.** G: the GM's two quotations. O: the medians above, each measured 2026-11-22 with its method. R: none -
+   tooling, no research question.
+4. **Do they describe the world here?** Yes: the medians are this feature's own 107 landed tasks; 31 of 49 landings already
+   multi-task, measured 2026-11-22 (the event log's land `end` lines), so the landing half was in place (T06) and this task adds the
+   rest.
+5. **The order.** Measured first; the tests red first (the closing split's case failed on the old script: 49 passed, 1 failed,
+   measured 2026-11-22 (`test-closing-checks.sh` run against `git show HEAD:scripts/gates/closing-checks.sh`); the Rust tests red on a
+   `leading_tasks` stub); then the section reader, the mark, decide, the verdict, the closing split, the docs.
+6. **The exits.** Green: the bundle tests and the end-to-end pin pass, and every existing test of the crates it touches and the hooks still
+   does. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None: each reader of the mark, the section and the verdict was found by grep (`active-task`, `task_sections`,
+   `tasks.<id>`), and those that read one task id are left reading the bundle's first.
+8. **The budget.** One landing.
+9. **Done, measured.** `make closing-checks T=T141 F=451` green; the end-to-end test lands a three-task bundle and ticks all three.
+10. **Before moving a constant.** n/a - no constant moves (`PLAN_ROUND_CAP` and `STATIC_RUNS_A_TASK` unchanged; a bundle counts once
+    under them).
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** Not a defect fix: a new form. A single task's mark, section, prompt and verdict are written as before (the
+    existing tests unchanged and passing).
+
+**Found and left?** none.
+
+**Performance work?** yes - a `[perf]` task (451 FR-013): it makes the builders' loop faster by paying the per-task fixed cost once a
+bundle. Not engine speed, so the checklist below answers in its terms.
+
+### T141 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)
+
+1. **Where does the time go?** Per task, measured 2026-11-22 (above): builder minutes median 9, closing runs 2 of median 4.8 min,
+   review rounds 2, landing 1.7 min.
+2. **Removes work, or only moves it?** Removes it: one builder reading in, one section, one set of closing runs, one review round set
+   and one landing for n tasks, where there were n of each.
+3. **What do you expect it to save, and why?** For a bundle of three tiny tasks about two thirds of their fixed cost - about 2 builders,
+   4 closing runs (some 19 min of wall) and 4 review rounds - a GUESS from the medians, to be measured on the first bundles landed.
+4. **How does the work grow with the settlement?** n/a - not the engine; the fixed cost grows with the bundle's tasks only through
+   its one section's length and its review's reading.
+5. **What did the before and after show, and under what conditions?** Before: the medians above. After: not yet measured on a real
+   bundle - the end-to-end test pins the flow, not its time; `make where-time` reports a bundle's time under its first task.
+6. **Did any map move, and does it still keep the research?** No map moves: no engine code.
+
 ### T143 (<why: the finding or measurement that files it>)
 
 - **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
@@ -1795,4 +2252,244 @@ its own files; not engine speed, so no performance-checklist answers.
 
 **Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
 
+
+### T147 (a landing refused on another task's open plan-review passes, which only that task's landing writes; the first pass took no escape)
+
+- **Approach**: measured first, then the rule moved into the one owed set every refusal reads (`reviews`' `ledger_passes/left.rs`),
+  and `make land`'s first pass asks it with the tasks it lands:
+  - HOW THE PASSES WERE CHOSEN, measured 2026-11-22 (reading `cheap.rs`, `ledger_passes.rs`, `rows.rs`, `trace.rs`): never by the
+    landing's tasks. The first pass writes (`write_ledger`) every owed MODE 4 pass whose reply quotes a recorded verdict or whose
+    feature's `plan-review.json` holds its task's verdict dated that day (`--write-plan-reviews`, any feature, any task), then every
+    pass `trace::belongs` ties to the landing's feature (`--write specs/<n>-.../`, any task of it); then it refused on any `| ? |`
+    left, with no escape. The push's `ledger-owed --refuse` row and `make land-tooling` refuse on the same set, `LEDGER_ROWS_OK` their
+    escape. By hand, `make ledger-owed WRITE=` refuses a recorded plan review as the landing's own (451 T105).
+  - THE CROSS-FEATURE CASE, reproduced: 4 of 449's plan reviews (T158, T241, T250, T197) stayed owed after a 451 landing's two
+    writes, measured 2026-11-22 (a worktree at the clone's HEAD bdb111b827, the two writes run on its ledger): their verdicts are
+    uncommitted in the clone, so not in the landing worktree's record, their replies quote none, and 451's write traces none of them.
+  - THE WITHIN-FEATURE CASE, not reproduced as a plan-review refusal: the 449 T244 landing attempts' ledger commits wrote T158's,
+    T203's, T241's and T243's plan-review rows themselves (6 + 2 rows in 70a2773d0c, 4 + 1 in 4d2e56a7e9, 3 + 1 in a8b34d9e44,
+    3 + 1 in e73cf5fded), measured 2026-11-22 (`git show` of the landing worktree's reflog commits); a 449 landing at HEAD left 0
+    plan reviews owed and 86 other passes, measured 2026-11-22 (the same worktree, 449's two writes). Those 86 (impl-drift
+    `DECIDE_OK` dispatches, workflow units, modal and record checks no subject ties to a feature) are what refused - no landing
+    writes them; `make ledger-owed WRITE=` from the session that ran them does, and its rows must be committed before a landing
+    alone sees them (70 still owed with the clone's 46 uncommitted rows added, measured 2026-11-22, the same worktree).
+  - THE RULE (`left.rs`): a refusal (`--refuse`, or `--landing`) leaves out a MODE 4 pass whose subject names its feature and task
+    where that feature's specs directory is here, the task is ticked in neither `tasks.md` nor `tasks-done.md` (absence counts as
+    open: land-alone commits a task's own lines only, de7ecc7de4) and is not one the landing lands (`--landing <feature dir>
+    --tasks "<ids>"`); it says which open tasks it left, on stdout, refusing nothing for them. A block review (no task), a ticked
+    task's, a feature absent here, and every other pass still refuse, with `make ledger-owed WRITE=` named. The listing by hand
+    (no `--refuse`) names every pass. At the push the landing's tasks are ticked, so its own passes refuse there too.
+  - THE WRITES, unchanged (a decision, labeled): a feature's landing still writes every pass traced to it, another open task's
+    plan review among them, and `--write-plan-reviews` still writes any recorded one - harmless (land-alone merges the ledger by
+    row at the take, 451 T105) and the route that writes them earliest; "left to that task's landing" governs what refuses.
+  - `cheap.rs`: the first pass asks `--ledger ... --refuse --landing <feature> --tasks "<its tasks>"`; no escape added, so
+    `LEDGER_ROWS_OK` stays where it worked, the push and `make land-tooling`, untouched.
+  - AFTER, measured 2026-11-22 (a worktree at bdb111b827, a 451 landing of T147, the new binary): the 4 449 plan reviews are left
+    to their landings (named on stdout) and 0 plan reviews refuse; 133 other passes still refuse, for `make ledger-owed WRITE=`.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+| the rule | `ledger_passes/left/tests.rs` (T1 lands with T2's and another feature's open passes, its own row written; a ticked task's, a block review's, an absent feature's and another pass still refuse; two rounds of one task named once) - red with `left_to` stubbed to keep every pass (2 failed, measured 2026-11-22) | n/a - no engine code | none | n/a |
+| the first pass | `land/tests.rs`' `every_cheap_refusal_is_said_together_and_nothing_runs_long` (asks with `--refuse --landing 449-x --tasks T1`) | n/a | none | n/a |
+
+### T147 Approach (checklist part A)
+
+1. **The goal, in the world.** No map changes. A landing refuses for the ledger rows it owes - its own tasks' passes and every pass
+   no other landing will write - and lands past another task's open plan review, which that task's landing writes.
+2. **The constraints.** T147's line (both halves); 451 T105 (the by-hand refusal kept); 451 T101 and T88 (land-alone's worktree at
+   HEAD); 385 T72 (the plan reviews' rows written by every push route); FR-012 (red first); 449 T247's uncommitted `cheap.rs` edits
+   built on.
+3. **Where each comes from.** G: none beyond the task line. O: the measurements above, each dated with its method. R: none -
+   tooling, no research question.
+4. **Do they describe the world here?** Yes: the cross-feature pair measured on this clone's HEAD; the within-feature report checked
+   against the landing worktree's own commits.
+5. **The order.** Measured first; the pins written and shown red; the rule; the first pass's call; both crates' tests, lint, cover.
+6. **The exits.** Green: the pins pass and both crates' tests, lint and cover are clean. Red: what failed recorded and the task set
+   down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None: every refusal on owed rows found by grep (`ledger-owed` in `scripts/` and `rust/gate/crates/`):
+   `cheap.rs`, `push.rs`'s row, `land-tooling.sh`; the rule sits in the set all three read.
+8. **The budget.** One landing.
+9. **Done, measured.** `make closing-checks T=T147 F=451` green; the after-measurement above.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** A defect: a landing refused that its own work could not answer (the cross-feature pair measured above),
+    and nothing but `LEDGER_ROWS_OK` at the push let it through.
+
+**Found and left?**
+- The 86-133 passes no subject ties to a feature (impl-drift `DECIDE_OK` dispatches, workflow units, modal and record checks)
+  refuse every landing until the session that ran them writes and commits their rows (`make ledger-owed WRITE=`): working as
+  designed - no landing can know where they were acted on - so not a defect, and not filed.
+
+**Performance work?** no.
+
+### T148 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T148 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+
+### T149 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T149 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+
+### T150 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T150 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+
+### T151 (make ledger-owed traced no check-wave unit to the session that ran it: 35 impl-drift passes of 449 T249's re-check stayed owed after the session's write and refused every landing)
+
+- **Approach**: measured first, then the trace and the reply of a Workflow agent taught to `reviews`' `ledger_passes/rows.rs`:
+  - HOW A PASS IS TIED TO A SESSION, measured 2026-11-22 (reading `ledger_passes.rs`, `rows.rs`, `settle.rs`, `trace.rs` and the
+    guard's `ledger/cost.rs`): `make ledger-owed WRITE=` passes `--session $CLAUDE_CODE_SESSION_ID`, and `write_owed` keeps a pass
+    where `rows::session_of` names that session - the agent's transcript's parent's parent. The transcript is found by
+    `cost::transcript`, which lists `<project>/<session>/subagents/agent-*.jsonl` only. A check-wave unit's transcript sits at
+    `<session>/subagents/workflows/<run>/agent-<id>.jsonl`, measured 2026-11-22 (`ls` of the session's directory: 13 runs under
+    `subagents/workflows/wf_*`), so it was never found: `session_of` gave "", and the pass was "not traced to it". Had it been found,
+    its parent's parent is `workflows`, not the session.
+  - WHERE A UNIT'S REPLY STANDS, measured 2026-11-22 (`tail` of a unit's transcript and its run's `journal.jsonl`): the transcript
+    ends in the StructuredOutput call's tool result, no text; the run's `journal.jsonl` holds one `{"type":"result","agentId":...,
+    "result":{label, verdict, text}}` line per unit, `text` the unit's reply and `label` its bundle's name (`claims-rust-...`, the
+    same name as the `/tmp/l7r-check/<name>/` its prompt reads, checked on one unit's first user message).
+  - THE FIX (`rows.rs`): `wave_transcript` finds `<project>/<session>/subagents/workflows/<run>/agent-<id>.jsonl`; `session_of`
+    names a hand-dispatched agent's session as before and a wave unit's as the directory above `subagents/workflows/<run>/`;
+    `filled_row` takes a wave unit's reply and place from its run's journal (`journal_reply`: the last result line naming the agent,
+    its `text` and `label`, or the result itself where it is text), and fills the same cells a hand-dispatched pass gets - the
+    verdict by `verdict_of` on the reply, its first line, `nothing` or `judgment`, the acted-on cell from `WRITE=`.
+  - THE VERDICT CELL, a decision, labeled (parity): read from the reply as a hand-dispatched pass's is, not from the journal's
+    `verdict` field, so an all-IN-STEP impl-drift reply reads `findings` as the session's hand-dispatched impl-drift rows already do.
+  - THE COST CELLS, a decision, labeled (an accepted limitation): the costing (`settle::settled`, through `cost::subagent_files`) is
+    left looking where it looked, so a wave pass keeps its logged cells. Cost: a wave unit's cells are the hook's, not recomputed from
+    its finished transcript (how far they differ was not measured). The alternative priced: teaching the costing the wave directory
+    recomputes the cells of the ~342 wave passes already answered (377 in the log, 35 owed, measured 2026-11-22 by `grep -c` of the
+    clone's `check-passes.jsonl`), and a row answers a pass by its cost cells, so those rows would answer nothing and the passes
+    would be owed again. Chosen by the T151 builder.
+  - THE WRITE, measured 2026-11-22 (`make ledger-owed WRITE=` in the clone, the new binary): 41 rows written for c6fd72d1 - the 35
+    impl-drift units, each with its bundle's label and its reply's first line, and 6 passes launched after the brief (a
+    building-review, a glyph-check and a size-audit of 449 T265, two escalation-checks, one spec-fidelity `ARBITER_OK` dispatch); 40
+    plan reviews refused as their landings' own (451 T105). `WRITE=` was the session's earlier rows' full text, which begins with the
+    brief's ("each pass's verdict recorded by its tool: make claims-checked into dev/claims-index.json") and names where the other
+    checks' verdicts are recorded, so the 6 later rows' acted-on cells are true. After, `make ledger-owed` lists 40 passes, every
+    one a MODE 4 plan review, measured 2026-11-22 (its listing, `grep -vc "MODE 4"` = 0).
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+| the trace and the reply | `ledger_passes/tests.rs`' `a_sessions_write_takes_its_own_check_wave_units_from_the_journal` (a check-wave unit under `s/subagents/workflows/wf_r/` with its journal is written for session `s` from the journal's label, verdict and first line; another session's unit stays owed and is written for its own) - red before the fix, measured 2026-11-22 (`make rust-test CRATE=rust/gate/crates/reviews`: `0 row(s) written for s; 2 pass(es) not traced`); `rows/tests.rs`' `a_wave_unit_s_text_result_is_its_reply` (a text result, a structured result with no `text`, a journal with no result for the agent, a pass with no agent) | n/a - no engine code | none | n/a |
+
+### T151 Approach (checklist part A)
+
+1. **The goal, in the world.** No map changes. A session's `make ledger-owed WRITE=` writes the rows of the check-wave units it ran,
+   so they no longer refuse every landing.
+2. **The constraints.** T151's line; FR-012 (red first); 451 T105 (the by-hand write refuses the landing's plan reviews); 451 T147's
+   uncommitted `left.rs` built on; feature 371 (a row answers a pass by its check and cost cells).
+3. **Where each comes from.** G: none beyond the task line. O: the measurements above, each dated with its method. R: none -
+   tooling, no research question.
+4. **Do they describe the world here?** Yes: the session's own 13 runs and the 35 owed passes, measured 2026-11-22 (`ls` of its `subagents/workflows/`, `make ledger-owed` in this clone).
+5. **The order.** Measured first; the pin written and shown red; the fix; the crate's tests green; the write; the listing after.
+6. **The exits.** Green: the pins pass and the crate's tests, lint and cover are clean; the write leaves only plan reviews owed. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None: `transcript(` callers under `rust/gate/crates/reviews` found by grep; `trace.rs`' `unit_prompt` already
+   walks the wave directory for a feature's write and is unchanged.
+8. **The budget.** One landing.
+9. **Done, measured.** `make closing-checks T=T151 F=451` green; the after-listing above (40 owed, all MODE 4).
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** A defect: every landing refused on 35 passes no command could write, measured above.
+
+**Found and left?** none.
+
+**Performance work?** no.
+
+
+
+### T152 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T152 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
 

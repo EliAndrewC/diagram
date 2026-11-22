@@ -339,7 +339,6 @@ pub(super) fn fx(tag: &str) -> Fx {
     let bin = dir.join("bin");
     let answers = Rc::new(Answers::default());
     let mut land = Land::new_in(&l7r_shared::env::Rooted::with(root.clone(), &[]), &scripts);
-    land.python = bin.join("python").to_string_lossy().into_owned();
     land.make = bin.join("make").to_string_lossy().into_owned();
     land.said = Some(RefCell::default());
     // a clock that moves only when the wait sleeps (feature 449 T160's, every landing's since T167): a wait that runs out does so after
@@ -455,6 +454,8 @@ fn every_cheap_refusal_is_said_together_and_nothing_runs_long() {
     assert!(err.contains("uncommitted changes - commit them first"));
     assert!(err.contains("held by T9 nine"));
     assert!(err.contains("review passes with no ledger row"));
+    let asked = fx.answers.asked.borrow().join("\n");
+    assert!(asked.contains("/dev/review-ledger.md --refuse --landing 449-x --tasks T1"));
     assert!(err.contains("review-gate.sh: a review is owed"));
     assert!(!fx.log().contains("stamp --check"));
 }

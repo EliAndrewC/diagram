@@ -1,7 +1,7 @@
 //! The rows a pass owes: the one to add by hand (`row_for`), the one a session's end writes from the agent's own reply (`filled_row`),
 //! and a plan review's, which records itself (`plan_review_rows`, feature 385 T72).
 
-use std::path::Path;
+use std::path::{Path, PathBuf};
 use std::sync::LazyLock;
 
 use fancy_regex::Regex;
@@ -72,17 +72,74 @@ pub fn row_for(p: &Pass) -> String {
     row_of(&cells)
 }
 
-/// The session directory the pass's agent ran under, "" where it has no transcript (`_session_of`).
+/// A check-wave unit's transcript (451 T151): a Workflow agent's sits under `<session>/subagents/workflows/<run>/`, one level below where
+/// `transcript` looks (measured 2026-11-22: the session's 35 owed impl-drift units, every one under `workflows/wf_*/`); the last by path
+/// where two runs hold one id. The costing (`settle`) still looks only where `transcript` looks, so a wave pass keeps its logged cells
+/// and the wave rows already written still answer their passes.
+fn wave_transcript(p: &Pass, root: &Path) -> Option<PathBuf> {
+    let name = format!("agent-{}.jsonl", text(p, "agent"));
+    let mut hits = Vec::new();
+    for project in dirs(root) {
+        for session in dirs(&project) {
+            for run in dirs(&session.join("subagents").join("workflows")) {
+                hits.push(run.join(&name));
+            }
+        }
+    }
+    hits.retain(|t| t.is_file());
+    hits.pop().filter(|_| !text(p, "agent").is_empty())
+}
+
+/// The directories under `dir`, sorted, none where it is no directory.
+fn dirs(dir: &Path) -> Vec<PathBuf> {
+    let mut out: Vec<PathBuf> = std::fs::read_dir(dir)
+        .into_iter()
+        .flatten()
+        .flatten()
+        .map(|e| e.path())
+        .filter(|p| p.is_dir())
+        .collect();
+    out.sort();
+    out
+}
+
+/// A wave unit's reply and label from its run's journal (451 T151): the last result line naming the agent, its `text` and `label` where
+/// the unit returned structured output (`{label, verdict, text}`, the label its bundle's name), the result itself where it returned
+/// text. Its transcript ends in the `StructuredOutput` call, so the journal holds the reply a hand-dispatched agent's transcript holds.
+fn journal_reply(p: &Pass, wave: &Path) -> Option<(String, Option<String>)> {
+    let journal = wave.parent()?.join("journal.jsonl");
+    let body = std::fs::read_to_string(journal).ok()?;
+    let agent = text(p, "agent");
+    let line = py_lines(&body)
+        .into_iter()
+        .filter_map(|l| serde_json::from_str::<Value>(l).ok())
+        .filter(|v| v.get("type").and_then(Value::as_str) == Some("result"))
+        .rfind(|v| v.get("agentId").and_then(Value::as_str) == Some(agent))?;
+    let result = line.get("result")?;
+    let said = result.get("text").unwrap_or(result);
+    let reply = said
+        .as_str()
+        .map_or_else(|| said.to_string(), str::to_owned);
+    let label = result
+        .get("label")
+        .and_then(Value::as_str)
+        .map(str::to_owned);
+    Some((reply, label))
+}
+
+/// The session directory the pass's agent ran under, "" where it has no transcript (`_session_of`): a hand-dispatched agent's
+/// `<session>/subagents/agent-<id>.jsonl`, a check-wave unit's `<session>/subagents/workflows/<run>/agent-<id>.jsonl` (451 T151).
 #[must_use]
 pub fn session_of(p: &Pass, root: &Path) -> String {
-    transcript_of(p, root)
-        .and_then(|t| {
-            t.parent()?
-                .parent()?
-                .file_name()
-                .map(|n| n.to_string_lossy().into_owned())
-        })
-        .unwrap_or_default()
+    let name = |d: Option<&Path>| {
+        d.and_then(Path::file_name)
+            .map(|n| n.to_string_lossy().into_owned())
+    };
+    match transcript_of(p, root) {
+        Some(t) => name(t.ancestors().nth(2)),
+        None => wave_transcript(p, root).and_then(|t| name(t.ancestors().nth(4))),
+    }
+    .unwrap_or_default()
 }
 
 /// The row a headless page session's pass gets at the session's end, from the record alone: its verdict and first line from the
@@ -94,9 +151,18 @@ pub fn session_of(p: &Pass, root: &Path) -> String {
 ///
 /// Where the pass has no check, wall or tokens (the Python's `KeyError`).
 pub fn filled_row(p: &Pass, place: &str, root: &Path) -> Result<String, String> {
-    let reply = transcript_of(p, root)
-        .map(|t| reply_of(&t.to_string_lossy(), ""))
-        .unwrap_or_default();
+    // a check-wave unit's reply and place from its run's journal (451 T151), a hand-dispatched agent's from its transcript
+    let hand = transcript_of(p, root);
+    let wave = hand
+        .is_none()
+        .then(|| wave_transcript(p, root))
+        .flatten()
+        .and_then(|t| journal_reply(p, &t));
+    let (reply, label) = match (hand, wave) {
+        (Some(t), _) => (reply_of(&t.to_string_lossy(), ""), None),
+        (None, Some(w)) => w,
+        (None, None) => (String::new(), None),
+    };
     let said = verdict_of(&reply);
     let verdict = if said.is_empty() {
         "see reply".to_owned()
@@ -118,7 +184,8 @@ pub fn filled_row(p: &Pass, place: &str, root: &Path) -> Result<String, String> 
         l7r_shared::guards::house_style_hooks::americanize(first)
     };
     let subject = text(p, "subject");
-    let place_cell = group(&BUNDLE, subject)
+    let place_cell = label
+        .or_else(|| group(&BUNDLE, subject))
         .unwrap_or_else(|| head(if subject.is_empty() { "?" } else { subject }, 80).to_owned());
     let clean = CLEAN.contains(&verdict.as_str());
     let cells = [

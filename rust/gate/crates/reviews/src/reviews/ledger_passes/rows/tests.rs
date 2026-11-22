@@ -148,3 +148,63 @@ fn a_plan_record_after_many_recordeds_is_seen_in_linear_time() {
         Some(true)
     );
 }
+
+/// A check-wave unit whose run returned text, not structured output: the journal's result is its reply, the subject its place, and its
+/// session the directory above `subagents/workflows/<run>/` (451 T151); a journal with no result for the agent leaves the reply empty.
+#[test]
+fn a_wave_unit_s_text_result_is_its_reply() {
+    let (_d, env) = world("rows-wave", &[]);
+    let root = Path::new(&env.home).join(".claude/projects");
+    let journal = [
+        json!({"type": "result", "agentId": "w9", "result": "PASS - all fine"}),
+        json!({"type": "result", "agentId": "other", "result": "x"}),
+    ];
+    let body = journal
+        .iter()
+        .map(ToString::to_string)
+        .collect::<Vec<_>>()
+        .join("\n");
+    put(&root, "p/s9/subagents/workflows/wf_z/journal.jsonl", &body);
+    put(
+        &root,
+        "p/s9/subagents/workflows/wf_z/agent-w9.jsonl",
+        &transcript(&json!("go"), ""),
+    );
+    put(
+        &root,
+        "p/s9/subagents/workflows/wf_y/journal.jsonl",
+        "{\"type\": \"launched\"}",
+    );
+    put(
+        &root,
+        "p/s9/subagents/workflows/wf_y/agent-w8.jsonl",
+        &transcript(&json!("go"), ""),
+    );
+    let p = one(&pass("c", "w9", "subj", &json!({})));
+    let session = session_of(&p, &root);
+    assert_eq!(session, "s9");
+    let row = filled_row(&p, "here", &root).unwrap();
+    let starts = row.starts_with("| 2026-11-01 | c | subj | PASS | PASS - all fine | nothing |");
+    assert!(starts, "{row}");
+    let none = filled_row(&one(&pass("c", "w8", "subj", &json!({}))), "here", &root).unwrap();
+    let empty = none.contains("| subj | see reply | - | judgment |");
+    assert!(empty, "{none}");
+    // a structured result with no `text`: the result itself is the reply, its label the place
+    let bare = json!({"type": "result", "agentId": "w7", "result": {"label": "unit-7", "verdict": "PASS"}});
+    put(
+        &root,
+        "p/s9/subagents/workflows/wf_x/journal.jsonl",
+        &bare.to_string(),
+    );
+    put(
+        &root,
+        "p/s9/subagents/workflows/wf_x/agent-w7.jsonl",
+        &transcript(&json!("go"), ""),
+    );
+    let seven = filled_row(&one(&pass("c", "w7", "subj", &json!({}))), "here", &root).unwrap();
+    let whole =
+        seven.contains("| unit-7 | PASS | {\"label\":\"unit-7\",\"verdict\":\"PASS\"} | nothing |");
+    assert!(whole, "{seven}");
+    let nobody = session_of(&one(&pass("c", "", "subj", &json!({}))), &root);
+    assert_eq!(nobody, "");
+}

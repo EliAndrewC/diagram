@@ -15,6 +15,9 @@
 //!                                                      append each unanswered pass's row, filled from the agent's own reply
 //!                                                      (the page-session runner, at each session's end)
 //! ledger-owed ... --refuse                             exit 1 while any is unanswered (the push)
+//! ledger-owed ... --refuse --landing <feature dir> --tasks "<ids>"
+//!                                                      `make land`'s first pass: an open task's plan review left to its landing
+//!                                                      (451 T147, `left.rs`), as `--refuse` alone leaves it at the push
 //! ledger-owed --write-plan-reviews                     append the row of each owed plan review that recorded its verdict (385 T72)
 //! ledger-owed --write ... --by-hand                    `make ledger-owed WRITE=`: the landing's own rows refused (451 T105, below)
 //! ledger-passes                                        the settled passes as JSON (what `measure feature-report` costs, in process)
@@ -22,6 +25,7 @@
 //!
 //! Escape at the push: `LEDGER_ROWS_OK="<reason>"` in sync-with-main's environment, recorded in the bypass log.
 
+mod left;
 mod rows;
 mod settle;
 mod trace;
@@ -162,7 +166,7 @@ fn row_of(cells: &[String]) -> String {
 fn usage(why: &str) -> Reply {
     reply(
         String::new(),
-        format!("usage: l7r-gate reviews ledger-owed [--log LOG] [--ledger LEDGER] [--refuse] [--transcripts DIR] [--write WHERE] [--session SID] [--write-plan-reviews] [--by-hand]\nl7r-gate reviews ledger-owed: error: {why}\n"),
+        format!("usage: l7r-gate reviews ledger-owed [--log LOG] [--ledger LEDGER] [--refuse] [--transcripts DIR] [--write WHERE] [--session SID] [--write-plan-reviews] [--by-hand] [--landing FEATURE] [--tasks IDS]\nl7r-gate reviews ledger-owed: error: {why}\n"),
         2,
     )
 }
@@ -200,6 +204,8 @@ pub fn cli(args: &[String], env: &Env) -> Reply {
         Spec::value("--session"),
         Spec::flag("--write-plan-reviews"),
         Spec::flag("--by-hand"),
+        Spec::value("--landing"),
+        Spec::value("--tasks"),
     ];
     let p = match parse(args, &specs) {
         Ok(p) => p,
@@ -215,6 +221,8 @@ pub fn cli(args: &[String], env: &Env) -> Reply {
         session: p.text("--session", ""),
         plan_reviews: p.on("--write-plan-reviews"),
         by_hand: p.on("--by-hand"),
+        landing: p.text("--landing", ""),
+        tasks: p.text("--tasks", ""),
     };
     run(&opts, env).unwrap_or_else(|why| raised(String::new(), "ledger-owed", &why))
 }
@@ -272,6 +280,8 @@ struct Opts<'a> {
     session: &'a str,
     plan_reviews: bool,
     by_hand: bool,
+    landing: &'a str,
+    tasks: &'a str,
 }
 
 /// `main` after its arguments.
@@ -319,8 +329,19 @@ fn run(o: &Opts, env: &Env) -> Result<Reply, String> {
     if !o.write.is_empty() {
         return write_owed(o, env, &owed, (&ledger, &repo, &transcripts));
     }
+    // a refusal leaves an open task's plan review to that task's landing (451 T147, `left.rs`); a listing by hand names every pass
+    let (owed, note) = if o.refuse || !o.landing.is_empty() {
+        let landing = left::Landing {
+            feature: o.landing,
+            tasks: o.tasks.split_whitespace().collect(),
+        };
+        let (kept, whose) = left::split(&owed, &repo, &landing);
+        (kept, left::note(&whose))
+    } else {
+        (owed, String::new())
+    };
     if owed.is_empty() {
-        return Ok(reply(String::new(), String::new(), 0));
+        return Ok(reply(note, String::new(), 0));
     }
     let mut said = format!("ledger-owed: {} check pass(es) have no row in dev/review-ledger.md's measured table - write them from each agent's reply: make ledger-owed WRITE=\"<where you recorded what you did>\" (feature 385 FR-019); or add each by hand, filling the ?s:\n", owed.len());
     for p in &owed {
@@ -330,9 +351,9 @@ fn run(o: &Opts, env: &Env) -> Result<Reply, String> {
     }
     said += "  (a row answers a pass by its check and its cost cells, which are the pass's own `make review-cost` - feature 371; the push refuses until each has its row, or LEDGER_ROWS_OK=\"<reason>\")\n";
     Ok(if o.refuse {
-        reply(String::new(), said, 1)
+        reply(note, said, 1)
     } else {
-        reply(said, String::new(), 0)
+        reply(note + &said, String::new(), 0)
     })
 }
 

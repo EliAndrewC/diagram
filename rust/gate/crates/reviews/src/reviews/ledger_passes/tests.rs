@@ -224,6 +224,61 @@ fn a_sessions_write_takes_only_its_own_agents() {
     assert_eq!(got.stdout, "ledger-owed: 1 row(s) written for s; 1 pass(es) not traced to it stay owed for the feature that ran them\n");
 }
 
+/// A CHECK-WAVE UNIT IS ITS LAUNCHING SESSION'S (451 T151): a Workflow agent's transcript sits under `<session>/subagents/workflows/<run>/`,
+/// and its reply is the run's journal's result line (the transcript ends in a `StructuredOutput` call), so a session's write takes its own
+/// wave's units, each row's place (the unit's label, its bundle), verdict and first line from the journal, and leaves another session's
+/// wave owed. Its cost cells stay the logged ones: the costing finds no wave transcript, so the ~340 wave rows already written still
+/// answer their passes.
+#[test]
+fn a_sessions_write_takes_its_own_check_wave_units_from_the_journal() {
+    let framing = "[Workflow harness \u{2014} computed task] The task text below was computed at runtime by a workflow script.";
+    let log = [
+        pass("impl-drift", "w2", framing, &json!({})),
+        pass("impl-drift", "w3", framing, &json!({"wall": "6 s"})),
+    ];
+    let (d, env) = world("wave", &log);
+    let projects = d.join("home/.claude/projects/p");
+    let unit = json!({"label": "claims-rust-a-rs", "verdict": "IN-STEP 9, DRIFTED 1", "text": "impl-drift: 10 claims - IN-STEP 9, DRIFTED 1; UNCLAIMED 0\n\nVERDICT a.rs::f#x DRIFTED - off"});
+    let journal = [
+        json!({"type": "launched"}),
+        json!({"type": "started", "agentId": "w2", "label": "a-rs", "phase": "Checks"}),
+        json!({"type": "result", "agentId": "w2", "result": unit}),
+    ]
+    .iter()
+    .map(ToString::to_string)
+    .collect::<Vec<_>>()
+    .join("\n");
+    put(
+        &projects,
+        "s/subagents/workflows/wf_r/journal.jsonl",
+        &journal,
+    );
+    put(
+        &projects,
+        "s/subagents/workflows/wf_r/agent-w2.jsonl",
+        &transcript(&json!("unit"), ""),
+    );
+    put(
+        &projects,
+        "t/subagents/workflows/wf_q/agent-w3.jsonl",
+        &transcript(&json!("unit"), ""),
+    );
+    let got = cli(
+        &args(&[&L[..], &["--write", "the claims index", "--session", "s"]].concat()),
+        &env,
+    );
+    let said = "ledger-owed: 1 row(s) written for s; 1 pass(es) not traced to it stay owed for the feature that ran them\n";
+    assert_eq!(got.stdout, said);
+    let row = "| 2026-11-01 | impl-drift | claims-rust-a-rs | findings | impl-drift: 10 claims - IN-STEP 9, DRIFTED 1; UNCLAIMED 0 | judgment | - | applied or filed as the claims index records | 5 s |";
+    let written = ledger(&env);
+    assert!(written.contains(row), "{written}");
+    let other = cli(
+        &args(&[&L[..], &["--write", "x", "--session", "t"]].concat()),
+        &env,
+    );
+    assert_eq!(other.stdout, "ledger-owed: 1 row(s) written for t\n");
+}
+
 #[test]
 fn a_plan_review_that_recorded_itself_gets_its_row() {
     let log = [

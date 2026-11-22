@@ -152,10 +152,10 @@
    "declared": "round-arbiter"
   },
   "### T49 Approach (checklist part A)": {
-   "sha256": "91771b038d6b7402e2d1ccd49f9b796930b631e5e9c546645dfe80060cc2c169",
+   "sha256": "66d8db47d83d849a8037eb682ecb5f511d2498f9a76ede78d71b0350f6c69f11",
    "verdict": "CLEAR",
    "reviewed": "2026-11-21",
-   "declared": "round-arbiter"
+   "declared": "spec-fidelity"
   },
   "### T51 (<why: the finding or measurement that files it>)": {
    "sha256": "97932b9ded5a65f7188296f60d3722ba67e1e4c29274bd86951aee31d8cedaac",
@@ -565,6 +565,12 @@
    "reviewed": "2026-11-21",
    "declared": "spec-fidelity"
   },
+  "### T49 (gate-write's `own_args` blanks every literal handed to a function the program defines, so a write through that function into the tree passes a running gate: T33's after8 gate replay let through window#170's `replace_note(\"citations/urban-features.html\", ...)`, writing `R / path` with `R = pathlib.Path(\"research\")`, and window#172's `sub(\"research/urban-features.html\", ...)`, writing `pathlib.Path(f)`, under its stand-in `make done`, observed 2026-11-20, method: `/tmp/t33/scripts/cmp8.sh`; the shape is 16 of T93's 9,646 commands, 11 of them writing into a clone's tree, measured 2026-11-21 (`/tmp/t49/scripts/measure.py`, the corpus streamed in one process))": {
+   "sha256": "2bddfebcbef451e686b1c305f57f7a4ca25bd0e8e18bb321340d35fe92b8f0fa",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity"
+  },
   "### T96 (a Python program run from a heredoc or `-c` named no file in the event log's `writes`, so T86's closing checks still counted another builder's Python-written files as the caller's - T84's 5 plan- and task-crate files in T86's runs 2 and 3, and 15 of the night's 51 still-missed landed files, measured 2026-11-21 (T93's item 4, its replay); and land-alone's 'commit these' list read only Edit lines, so at T82-T101's landing it named 18 files and left out `bundle.rs`, `ready.rs`, `speckit.rs` and `land-alone.sh`, observed 2026-11-21 (the session's landing, T96's line))": {
    "sha256": "352af63891a8d0ac75720494b2962e1b8e0ad18cbb22d2af71033d6907da0f4c",
    "verdict": "CLEAR",
@@ -589,18 +595,6 @@
    "reviewed": "2026-11-21",
    "declared": "spec-fidelity"
   },
-  "### T106 (a builder the coordinator re-numbered mid-task kept its brief's task on every event-log line: T101's builder, briefed `451 T100` and told \"Your task is T101, not T100\" by a SendMessage 20 s into its run, filed all 229 of its own lines (227 tool lines, its start and its stop) under T100, its Write and Edit lines of `speckit.rs`, `ready.rs` and `land-alone.sh` among them, so land-alone's list at T82-T101's landing named none of them and its closing checks would have set them apart as T100's, a wrong green - measured 2026-11-21 (a streamed Python read of the 451 log's lines by `by`, against the session transcript's SendMessage calls))": {
-   "sha256": "0f370c2bdf21d411f44788d312d9aab07d3927c57a11ea310b5c390e709aa05e",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-21",
-   "declared": "spec-fidelity"
-  },
-  "### T106 Approach (checklist part A)": {
-   "sha256": "13914cab4af47b4b47bdf7f08fd894e317c9dec152e5e5e44c6c718e7f41012a",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-21",
-   "declared": "spec-fidelity"
-  },
   "### T113 (T108's Found and left: the quoted-string pattern T103 and T108 gave shape's scan stood also at `make_only_hooks.rs:125`'s `MASK_QUOTE`, `no_poll_hooks/pace.rs:36`'s `SHELL_STRING` and `readme_hooks.rs:51`'s triple-quoted `TRIPLE`; measured 2026-11-21 (`/tmp/t108/probe`, the pattern alone under `timeout 10`, `/tmp/t108/probe-outside.txt`): each gave no answer in 10 s on a quote nothing closes before forty escapes)": {
    "sha256": "1ff53eb98def2dade0e674c438f2edf72e52025a46e39e118282c96e9872462a",
    "verdict": "CLEAR",
@@ -609,6 +603,18 @@
   },
   "### T113 Approach (checklist part A)": {
    "sha256": "420f58bedd48b2aeebadcc6272bc7347250046d4a82c4f80516013300dc9ffc6",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity"
+  },
+  "### T106 (a builder the coordinator re-numbered mid-task kept its brief's task on every event-log line: T101's builder, briefed `451 T100` and told \"Your task is T101, not T100\" by a SendMessage 20 s into its run, filed all 229 of its own lines (227 tool lines, its start and its stop) under T100, its Write and Edit lines of `speckit.rs`, `ready.rs` and `land-alone.sh` among them, so land-alone's list at T82-T101's landing named none of them and its closing checks would have set them apart as T100's, a wrong green - measured 2026-11-21 (a streamed Python read of the 451 log's lines by `by`, against the session transcript's SendMessage calls))": {
+   "sha256": "0f370c2bdf21d411f44788d312d9aab07d3927c57a11ea310b5c390e709aa05e",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity"
+  },
+  "### T106 Approach (checklist part A)": {
+   "sha256": "13914cab4af47b4b47bdf7f08fd894e317c9dec152e5e5e44c6c718e7f41012a",
    "verdict": "CLEAR",
    "reviewed": "2026-11-21",
    "declared": "spec-fidelity"
@@ -655,6 +661,12 @@
    "reviewed": "2026-11-22",
    "declared": "spec-fidelity"
   },
+  "### T87 (make-only refused a guard file's name written in a scratch tree as a guard file written from the shell, found by T79 on 2026-11-21: `guard_file_hooks::held` held a path by its name alone (`/Makefile`, `/dev/work-budget.json`, ...), so `printf x > /tmp/q/Makefile`, a builder's `T=$(mktemp -d); ...; printf ... > $T/Makefile` (tx#953, ux#2204) and a copy of `dev/work-budget.json` into a `$(mktemp -d)` preview (ux#1106, ux#1107) were refused, measured 2026-11-21 (`/tmp/t79/probes-mk.jsonl` through T79's binaries); on the guard log, 110 of make-only's 745 guard-write refusals and 11 of guard-file's 180 held a guard file's name under `/tmp` alone, measured 2026-11-21 (item 4))": {
+   "sha256": "914ba3d8b23b8cd9153e0a90860bf51522070671defa1be61be11262ce77bcf8",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-22",
+   "declared": "spec-fidelity"
+  },
   "### T123 (a plan hold reached a tree it was not taken in, and checks_hooks' test read the real one: at T80's landing, with T110's review holding T110's section, uncommitted in the clone alone, the landing worktree's guard tests ran `each_event_keeps_its_book`, whose `PostToolUse` of a Bash with no cwd resolved \".\" to the worktree, whose `.git` file leads to the clone's `checks-open.json`, and T80's write-back answered \"NOTHING of it is written back\" for a section that tree never had, found 2026-11-21 in `/home/agent/.claude/jobs/c6fd72d1/tmp/451-t80-land.log`)": {
    "sha256": "4b3f7193770af6a50b5e6f322aac886f3dfe2f46399c198fbe791ebb137fa322",
    "verdict": "CLEAR",
@@ -675,12 +687,6 @@
   },
   "### T105 Approach (checklist part A)": {
    "sha256": "ad096359719cafe178c8e2cfd64fc689fdcb5874dde14058bf49b9795c603ca9",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-22",
-   "declared": "spec-fidelity"
-  },
-  "### T87 (make-only refused a guard file's name written in a scratch tree as a guard file written from the shell, found by T79 on 2026-11-21: `guard_file_hooks::held` held a path by its name alone (`/Makefile`, `/dev/work-budget.json`, ...), so `printf x > /tmp/q/Makefile`, a builder's `T=$(mktemp -d); ...; printf ... > $T/Makefile` (tx#953, ux#2204) and a copy of `dev/work-budget.json` into a `$(mktemp -d)` preview (ux#1106, ux#1107) were refused, measured 2026-11-21 (`/tmp/t79/probes-mk.jsonl` through T79's binaries); on the guard log, 110 of make-only's 745 guard-write refusals and 11 of guard-file's 180 held a guard file's name under `/tmp` alone, measured 2026-11-21 (item 4))": {
-   "sha256": "914ba3d8b23b8cd9153e0a90860bf51522070671defa1be61be11262ce77bcf8",
    "verdict": "CLEAR",
    "reviewed": "2026-11-22",
    "declared": "spec-fidelity"
@@ -753,6 +759,54 @@
   },
   "### T142 Approach (checklist part A)": {
    "sha256": "f94f65790a14ad32abff3ad24c8dbce1f2c168c1287facbb477add4c299a8a35",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-22",
+   "declared": "spec-fidelity"
+  },
+  "### T141 (each task pays the whole fixed cost whatever its fix's size - a builder, closing runs, a 12-item section, `make decide`, its MODE 4 rounds, a landing - and the GM asked that small tasks be bundled and worked at the same time, 2026-11-22, request.md \"on bundling small tasks\")": {
+   "sha256": "3a8061194b3352bf6282049a1d4956f0f00715ad20b0504b3e2d44510e57e526",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-22",
+   "declared": "spec-fidelity"
+  },
+  "### T141 Approach (checklist part A)": {
+   "sha256": "314852c00cd67fb80ca1932da8e9d84ba40fb06a8531c628dce5f1b73e069ad0",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-22",
+   "declared": "spec-fidelity"
+  },
+  "### T141 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)": {
+   "sha256": "490a846349acc2c841c3f3d36ee49b847ad76f45213e1d8828db5ad776cd2616",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-22",
+   "declared": "spec-fidelity"
+  },
+  "### T141 (each task pays the whole fixed cost whatever its fix's size - a builder, closing runs, a checklist section, `make decide`, its plan review rounds, a landing - and the GM asked that small tasks be bundled and worked at the same time, request.md \"on bundling small tasks\")": {
+   "sha256": "c7f2c3321fb5110d83bb1b965ea4a4a48cc0daad0f248c2be15a12c6f573fd85",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-22",
+   "declared": "spec-fidelity"
+  },
+  "### T147 (a landing refused on another task's open plan-review passes, which only that task's landing writes; the first pass took no escape)": {
+   "sha256": "71fca2d9ea63b1e74c39dc6fe524a062d65913fb201b70067c789d97ad2c8dcb",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-22",
+   "declared": "spec-fidelity"
+  },
+  "### T147 Approach (checklist part A)": {
+   "sha256": "59f472ce08c676c6b5fa03b817d9e20d730f2253f6e2afaf035e2bc0715bf6bd",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-22",
+   "declared": "spec-fidelity"
+  },
+  "### T151 (make ledger-owed traced no check-wave unit to the session that ran it: 35 impl-drift passes of 449 T249's re-check stayed owed after the session's write and refused every landing)": {
+   "sha256": "2f8eef25283e02b3c8480f2651c4462262956abb7f92f4df21a6816b967664e9",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-22",
+   "declared": "spec-fidelity"
+  },
+  "### T151 Approach (checklist part A)": {
+   "sha256": "13261e7933875a57265a5920e032f6ce1e454c8de958c5ad7816d5d2a70fe503",
    "verdict": "CLEAR",
    "reviewed": "2026-11-22",
    "declared": "spec-fidelity"
@@ -10344,6 +10398,228 @@
   {
    "reviewed": "2026-11-21",
    "blocks": [
+    "### T49 (gate-write's `own_args` blanks every literal handed to a function the program defines, so a write through that function into the tree passes a running gate: T33's after8 gate replay let through window#170's `replace_note(\"citations/urban-features.html\", ...)`, writing `R / path` with `R = pathlib.Path(\"research\")`, and window#172's `sub(\"research/urban-features.html\", ...)`, writing `pathlib.Path(f)`, under its stand-in `make done`, observed 2026-11-20, method: `/tmp/t33/scripts/cmp8.sh`; the shape is 16 of T93's 9,646 commands, 11 of them writing into a clone's tree, measured 2026-11-21 (`/tmp/t49/scripts/measure.py`, the corpus streamed in one process))",
+    "### T49 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D1 order",
+     "summary": "The fix waits on T96, then T110; T49 lands on its own as gate-write's half of T110's reading.",
+     "class": "within",
+     "why": "This sets the order and narrows nothing: the defect is still fixed in full, after the two tasks it depends on."
+    },
+    {
+     "id": "D2 one reader",
+     "summary": "The parameter-binding and root-joining reading lives only in shared::tree::program (T110), and gate-write builds no second copy.",
+     "class": "within",
+     "why": "This decides where the code lives. The outcome named in Approach item 1 is unchanged."
+    },
+    {
+     "id": "D3 binding",
+     "summary": "A literal binds, by position or keyword, to a parameter of a function defined once. A *args parameter or a second def binds nothing.",
+     "class": "within",
+     "why": "This is the gate's rule that a path it cannot resolve fails open (item 2's constraints). With two defs or *args, which body runs or which parameter is bound is not statically known."
+    },
+    {
+     "id": "D4 sinks",
+     "summary": "Only open(N, w/a/x), N.write_text/write_bytes and Path(N).write_text count as writes. shutil.copy and os.replace are read as no write, recorded as a limit.",
+     "class": "within",
+     "why": "The instrument could have seen the other sinks: /tmp/t49/scripts/measure.py's sinks() searches os.replace/os.rename/shutil.copy*/move and os.remove/unlink as forms 4 and 5, and found 0 of them in both corpora (t93.txt, fx.txt FORMS). That makes this a gap with no occurrence, not a known defect left (constitution XIV v2.36.0). The three forms hold every observed hit."
+    },
+    {
+     "id": "D5 roots",
+     "summary": "A literal is joined onto a root by ROOT / P, os.path.join(ROOT, P) or ROOT + P, where ROOT is a top-level name bound once to a literal.",
+     "class": "within",
+     "why": "This carries T49's line (#170's shape, R = pathlib.Path(...)) and T110's '+' form."
+    },
+    {
+     "id": "D6a fail-open f-string",
+     "summary": "An f-string root (window#72) stays let through.",
+     "class": "within",
+     "why": "T49's own line, as quoted in item 2, says 'a base the program computes fails open, so window#72 stays let through'."
+    },
+    {
+     "id": "D6b fail-open computed/twice-bound root",
+     "summary": "A root the program computes or binds twice fails open.",
+     "class": "within",
+     "why": "This is the gate's rule that a path it cannot resolve fails open, and T49's line on a computed base."
+    },
+    {
+     "id": "D6c fail-open rebound parameter",
+     "summary": "A parameter rebound to anything other than Path(P)/P fails open.",
+     "class": "within",
+     "why": "Measured 0 of 17 hit functions in T93's corpus and 0 of 23 in the fixtures, and it avoids window#72's class of false refusal. It is an unresolvable path under the gate's rule."
+    },
+    {
+     "id": "D6d fail-open hand-on",
+     "summary": "A function that hands P on to another function fails open.",
+     "class": "within",
+     "why": "T49's line places the literal by reading the function's body, so a write in another function is outside the mechanism the task names. The block gives no count. The reviewer measured one on 2026-11-21 with /tmp/fid-t49/handon.py (an own function called with a literal whose body passes its parameter to another own function that writes): 0 in T93's corpus (11 programs with 2+ defs) and 0 in T33's fixtures (58). This is a gap with no occurrence, not a known defect."
+    },
+    {
+     "id": "D7 own_args API",
+     "summary": "Whether own_args stays for unbound literals or retires into the reader's placed reading is left to T110's API.",
+     "class": "within",
+     "why": "This is an API choice. Item 1 fixes the behavior: other literals are blanked as now, and placed literals count."
+    },
+    {
+     "id": "D8 red first and exits",
+     "summary": "window#172's pinned let-through case moves to refused, beside #170's shape; #72 and a read-only parameter stay let through; the replay moves exactly #170 and #172; red means the task is set down and an inability claim goes to make arbiter-ask.",
+     "class": "within",
+     "why": "This enforces T49's line ('red first on #170's and #172's shapes; the replay's moves accounted'). 'Every other verdict unchanged' asks that a check still does its job. It is not an exactness standard on outputs."
+    },
+    {
+     "id": "D9 docs row",
+     "summary": "docs/guards.md's missing gate-write row is written in this task before landing, not now, because of T96's uncommitted hunk in the same file.",
+     "class": "within",
+     "why": "The defect is fixed in this task, not deferred. Only its timing inside the task is set."
+    },
+    {
+     "id": "D10 not performance work",
+     "summary": "'Performance work? no.'",
+     "class": "within",
+     "why": "The GM's 2026-11-20 words make performance improvements and measurement tasks first. FR-013 is cut in spec-index and the block does not cite it. On a plain reading this is a guard-correctness fix, and the block measures that the hole had no victim in the corpus (none of the 11 in-tree writes ran under a gate). It saves no measured time and is not a measurement task, so the classification narrows nothing."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-21",
+   "blocks": [
+    "### T49 (gate-write's `own_args` blanks every literal handed to a function the program defines, so a write through that function into the tree passes a running gate: T33's after8 gate replay let through window#170's `replace_note(\"citations/urban-features.html\", ...)`, writing `R / path` with `R = pathlib.Path(\"research\")`, and window#172's `sub(\"research/urban-features.html\", ...)`, writing `pathlib.Path(f)`, under its stand-in `make done`, observed 2026-11-20, method: `/tmp/t33/scripts/cmp8.sh`; the shape is 16 of T93's 9,646 commands, 11 of them writing into a clone's tree, measured 2026-11-21 (`/tmp/t49/scripts/measure.py`, the corpus streamed in one process))",
+    "### T49 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D1 order",
+     "summary": "The fix waits on T96, then T110; T49 lands on its own as gate-write's half of T110's reading.",
+     "class": "within",
+     "why": "This sets the order and narrows nothing: the defect is still fixed in full, after the two tasks it depends on."
+    },
+    {
+     "id": "D2 one reader",
+     "summary": "The parameter-binding and root-joining reading lives only in shared::tree::program (T110), and gate-write builds no second copy.",
+     "class": "within",
+     "why": "This decides where the code lives. The outcome named in Approach item 1 is unchanged."
+    },
+    {
+     "id": "D3 binding",
+     "summary": "A literal binds, by position or keyword, to a parameter of a function defined once. A *args parameter or a second def binds nothing.",
+     "class": "within",
+     "why": "This is the gate's rule that a path it cannot resolve fails open: with a second def it is not statically known which body runs. For *args the binding is knowable, so leaving it out is a gap. The reviewer measured on 2026-11-21 with /tmp/fid-t49/star.py (heredocs and python -c; a def with a starred parameter, called anywhere with a string literal, whose body holds a write or copy/replace sink): 0 in T93's corpus and 0 in T33's fixtures. This is a gap with no occurrence, not a known defect left."
+    },
+    {
+     "id": "D4 sinks",
+     "summary": "Only open(N, w/a/x), N.write_text/write_bytes and Path(N).write_text count as writes. shutil.copy and os.replace are read as no write, recorded as a limit.",
+     "class": "within",
+     "why": "The instrument could have seen the other sinks: /tmp/t49/scripts/measure.py's sinks() searches os.replace/os.rename/shutil.copy*/move (form 4) and os.remove/unlink (form 5). The reviewer re-ran it on 2026-11-21 on both corpora and got forms {0:36, 1:9} on T93's corpus and {0:9, 1:78, 3:7} on the fixtures, so 0 of forms 4 and 5 in either. That makes this a gap with no occurrence, not a known defect left (constitution XIV v2.36.0). The three forms hold every observed hit."
+    },
+    {
+     "id": "D5 roots",
+     "summary": "A literal is joined onto a root by ROOT / P, os.path.join(ROOT, P) or ROOT + P, where ROOT is a top-level name bound once to a literal.",
+     "class": "within",
+     "why": "This carries T49's line (#170's shape, R = pathlib.Path(...)) and T110's '+' form."
+    },
+    {
+     "id": "D6a fail-open f-string",
+     "summary": "An f-string root (window#72) stays let through.",
+     "class": "within",
+     "why": "T49's own line, as quoted in item 2, says 'a base the program computes fails open, so window#72 stays let through'."
+    },
+    {
+     "id": "D6b fail-open computed/twice-bound root",
+     "summary": "A root the program computes or binds twice fails open.",
+     "class": "within",
+     "why": "This is the gate's rule that a path it cannot resolve fails open, and T49's line on a computed base."
+    },
+    {
+     "id": "D6c fail-open rebound parameter",
+     "summary": "A parameter rebound to anything other than Path(P)/P fails open.",
+     "class": "within",
+     "why": "Measured 0 of 17 hit functions in T93's corpus and 0 of 23 in the fixtures, and it avoids window#72's class of false refusal. It is an unresolvable path under the gate's rule."
+    },
+    {
+     "id": "D6d fail-open hand-on",
+     "summary": "A function that hands P on to another function fails open.",
+     "class": "within",
+     "why": "T49's line places the literal by reading the function's body, so a write in another function is outside the mechanism the task names. The block gives no count. The reviewer measured one on 2026-11-21 with /tmp/fid-t49/star.py (heredocs and python -c; an own function called anywhere with a literal, at any position, whose body passes one of its parameters to another own function that writes): 0 in T93's corpus and 0 in T33's fixtures. This is a gap with no occurrence, not a known defect."
+    },
+    {
+     "id": "D7 own_args API",
+     "summary": "Whether own_args stays for unbound literals or retires into the reader's placed reading is left to T110's API.",
+     "class": "within",
+     "why": "This is an API choice. Item 1 fixes the behavior: other literals are blanked as now, and placed literals count."
+    },
+    {
+     "id": "D8 red first and exits",
+     "summary": "window#172's pinned let-through case moves to refused, beside #170's shape; #72 and a read-only parameter stay let through; the replay moves exactly #170 and #172; red means the task is set down and an inability claim goes to make arbiter-ask.",
+     "class": "within",
+     "why": "This enforces T49's line ('red first on #170's and #172's shapes; the replay's moves accounted'). 'Every other verdict unchanged' asks that a check still does its job. It is not an exactness standard on outputs."
+    },
+    {
+     "id": "D9 docs row",
+     "summary": "docs/guards.md's missing gate-write row is written in this task before landing, not now, because of T96's uncommitted hunk in the same file.",
+     "class": "within",
+     "why": "The defect is fixed in this task, not deferred. Only its timing inside the task is set."
+    },
+    {
+     "id": "D10 not performance work",
+     "summary": "'Performance work? no.'",
+     "class": "within",
+     "why": "The GM's 2026-11-20 words make performance improvements and measurement tasks first. FR-013 is cut in spec-index and the block does not cite it. On a plain reading this is a guard-correctness fix, and the block measures that the hole had no victim in the corpus (none of the 11 in-tree writes ran under a gate). It saves no measured time and is not a measurement task, so the classification narrows nothing."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-21",
+   "blocks": [
+    "### T96 (a Python program run from a heredoc or `-c` named no file in the event log's `writes`, so T86's closing checks still counted another builder's Python-written files as the caller's - T84's 5 plan- and task-crate files in T86's runs 2 and 3, and 15 of the night's 51 still-missed landed files, measured 2026-11-21 (T93's item 4, its replay); and land-alone's 'commit these' list read only Edit lines, so at T82-T101's landing it named 18 files and left out `bundle.rs`, `ready.rs`, `speckit.rs` and `land-alone.sh`, observed 2026-11-21 (the session's landing, T96's line))",
+    "### T96 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "THE MOVE",
+     "summary": "program_names and its helpers move from make_only_hooks/interp.rs to shared::tree::program behind one visitor `each`; interp.rs re-exports program_names so readme's and gate-write's callers are unedited; the caller's `wanted` is asked before joined_on's and only_read's scans (results unchanged, guard verdicts unchanged on 9,646 replayed commands).",
+     "class": "within",
+     "why": "An internal relocation so the event log can call the reader make-only already has; it serves T96's line (the closing checks, which the GM filed as a performance task on 2026-11-21) and narrows nothing. The unchanged-verdict replay shows the moved check still does its job; it is not held to an exactness standard."
+    },
+    {
+     "id": "THE FIELD",
+     "summary": "bash_writes adds, after a writing target's path, the files a Python program's literals name, resolved against the cwd, only when the literal names an existing regular file; a literal only read, or joined onto a computed base, names nothing (labeled fail direction).",
+     "class": "within",
+     "why": "This is the fix T96's line asks for (a heredoc or -c Python program named no file in writes). The fail direction is a design choice inside that fix: a missed name leaves a file judged as the caller's (a red, a lost saving), while an extra name would give a wrong green, so it removes nothing the GM asked for. The cost it states (a file a backgrounded program has not yet written is missed) is a trade-off it names, not a wrong outcome left unfixed."
+    },
+    {
+     "id": "THE BUILDS",
+     "summary": "The reader's 10 other patterns are each a shared::regex::Lazy behind a gate that is a necessary condition, and the literal pattern is read as plain code (a labeled addition past the brief); JOINED's gate is tightened; pinned by the build-count, gate-necessity and literal-equivalence tests.",
+     "class": "within",
+     "why": "It fixes, before landing, a cost the field added to every Python program's Bash end (measured from 3.67 ms down to 0.09 ms median CPU in one run, cost5.log). That is performance work the GM asked to come first (FR-013, request 2026-11-20). Going past the brief is a choice inside the task, not something taken out of what was asked."
+    },
+    {
+     "id": "THE LIST",
+     "summary": "land-alone.sh's 'commit these' list reads the closing checks' attribution (Edit paths and Bash writes from PostToolUse and PostToolUseFailure, exact path, no fallback, inside the commit and landing window), and lists another task's files under that task rather than landing them (labeled addition).",
+     "class": "within",
+     "why": "T96's line names this defect (the list read only Edit lines and left out four files at T82-T101's landing), and fixing a landing tool that leaves out a file its tests need fixes a wrong outcome. Listing another task's files by task only shows the session files it would otherwise not see, and it lands none of them, so it adds no behavior beyond the fix."
+    },
+    {
+     "id": "Found and left: re-numbered builder's attribution",
+     "summary": "A builder re-numbered mid-task keeps filing its lines under the old task id; T96 fixes only the visible effect on the list and files the attribution fix as T106, outside T96's files (filed.rs, dispatches.rs), to land before T22.",
+     "class": "within",
+     "why": "T96's line never asks for this defect to be fixed. It is not dropped: it is filed as T106 with the reason it is not fixed here, its id and its order ('lands before T22'), as FR-009 requires, so it is fixed inside the feature before the step it would harm. Nothing the GM asked for is narrowed."
+    },
+    {
+     "id": "Performance classification and the n/a rows",
+     "summary": "T96 is tagged [perf] as builders'-loop work with no performance checklist (not engine speed), and its step table is n/a (no map).",
+     "class": "within",
+     "why": "The GM's 2026-11-21 words ('yes please file that as a performance task'), about the closing checks, and FR-013's definition (the builders' loop) cover the tag. No map changes, so the map rows do not apply."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-21",
+   "blocks": [
     "### T108 (T103's Found and left: the quoted-string pattern T103 gave shape a scan for, `([\"'])(?:\\\\.|(?!\\1).)*\\1`, stood also at `wait.rs:53` and `house_style_hooks.rs:85`; measured 2026-11-21 (`/tmp/t108/probe`, a case a process under `timeout 10`, `/tmp/t108/probe-before.txt`): each gave no answer in 10 s on a quote nothing closes before forty escapes)",
     "### T108 Approach (checklist part A)"
    ],
@@ -10396,52 +10672,6 @@
      "summary": "After two closing runs went RED only on make static's format check, a third make static was refused by FR-007's guard, so the crate-scoped format check (exit 0) stands for it, with lint, tests and cover clean before a whitespace-only rustfmt rewrap",
      "class": "within",
      "why": "FR-007 refuses a third make static and names the crate-scoped checks as the compliant command. The GM approved exactly that (improvement 2: crate-scoped checks while iterating). The landing's own gate still runs in full, so following the spec's own guard narrows nothing."
-    }
-   ]
-  },
-  {
-   "reviewed": "2026-11-21",
-   "blocks": [
-    "### T96 (a Python program run from a heredoc or `-c` named no file in the event log's `writes`, so T86's closing checks still counted another builder's Python-written files as the caller's - T84's 5 plan- and task-crate files in T86's runs 2 and 3, and 15 of the night's 51 still-missed landed files, measured 2026-11-21 (T93's item 4, its replay); and land-alone's 'commit these' list read only Edit lines, so at T82-T101's landing it named 18 files and left out `bundle.rs`, `ready.rs`, `speckit.rs` and `land-alone.sh`, observed 2026-11-21 (the session's landing, T96's line))",
-    "### T96 Approach (checklist part A)"
-   ],
-   "verdict": "CLEAR",
-   "decisions": [
-    {
-     "id": "THE MOVE",
-     "summary": "program_names and its helpers move from make_only_hooks/interp.rs to shared::tree::program behind one visitor `each`; interp.rs re-exports program_names so readme's and gate-write's callers are unedited; the caller's `wanted` is asked before joined_on's and only_read's scans (results unchanged, guard verdicts unchanged on 9,646 replayed commands).",
-     "class": "within",
-     "why": "An internal relocation so the event log can call the reader make-only already has; it serves T96's line (the closing checks, which the GM filed as a performance task on 2026-11-21) and narrows nothing. The unchanged-verdict replay shows the moved check still does its job; it is not held to an exactness standard."
-    },
-    {
-     "id": "THE FIELD",
-     "summary": "bash_writes adds, after a writing target's path, the files a Python program's literals name, resolved against the cwd, only when the literal names an existing regular file; a literal only read, or joined onto a computed base, names nothing (labeled fail direction).",
-     "class": "within",
-     "why": "This is the fix T96's line asks for (a heredoc or -c Python program named no file in writes). The fail direction is a design choice inside that fix: a missed name leaves a file judged as the caller's (a red, a lost saving), while an extra name would give a wrong green, so it removes nothing the GM asked for. The cost it states (a file a backgrounded program has not yet written is missed) is a trade-off it names, not a wrong outcome left unfixed."
-    },
-    {
-     "id": "THE BUILDS",
-     "summary": "The reader's 10 other patterns are each a shared::regex::Lazy behind a gate that is a necessary condition, and the literal pattern is read as plain code (a labeled addition past the brief); JOINED's gate is tightened; pinned by the build-count, gate-necessity and literal-equivalence tests.",
-     "class": "within",
-     "why": "It fixes, before landing, a cost the field added to every Python program's Bash end (measured from 3.67 ms down to 0.09 ms median CPU in one run, cost5.log). That is performance work the GM asked to come first (FR-013, request 2026-11-20). Going past the brief is a choice inside the task, not something taken out of what was asked."
-    },
-    {
-     "id": "THE LIST",
-     "summary": "land-alone.sh's 'commit these' list reads the closing checks' attribution (Edit paths and Bash writes from PostToolUse and PostToolUseFailure, exact path, no fallback, inside the commit and landing window), and lists another task's files under that task rather than landing them (labeled addition).",
-     "class": "within",
-     "why": "T96's line names this defect (the list read only Edit lines and left out four files at T82-T101's landing), and fixing a landing tool that leaves out a file its tests need fixes a wrong outcome. Listing another task's files by task only shows the session files it would otherwise not see, and it lands none of them, so it adds no behavior beyond the fix."
-    },
-    {
-     "id": "Found and left: re-numbered builder's attribution",
-     "summary": "A builder re-numbered mid-task keeps filing its lines under the old task id; T96 fixes only the visible effect on the list and files the attribution fix as T106, outside T96's files (filed.rs, dispatches.rs), to land before T22.",
-     "class": "within",
-     "why": "T96's line never asks for this defect to be fixed. It is not dropped: it is filed as T106 with the reason it is not fixed here, its id and its order ('lands before T22'), as FR-009 requires, so it is fixed inside the feature before the step it would harm. Nothing the GM asked for is narrowed."
-    },
-    {
-     "id": "Performance classification and the n/a rows",
-     "summary": "T96 is tagged [perf] as builders'-loop work with no performance checklist (not engine speed), and its step table is n/a (no map).",
-     "class": "within",
-     "why": "The GM's 2026-11-21 words ('yes please file that as a performance task'), about the closing checks, and FR-013's definition (the builders' loop) cover the tag. No map changes, so the map rows do not apply."
     }
    ]
   },
@@ -10513,76 +10743,6 @@
      "summary": "The closing run's make static red (3 tests in guards::event_log_hooks::tests::renumbered in rust/guard/shared) is put down to another builder's uncommitted work that T111 does not touch.",
      "class": "within",
      "why": "This records the exit evidence and does not narrow the request. The timestamps show the files were written after the run started, and T111 changes no Rust. Whether the landing accepts that is for the land machinery, not a fidelity finding."
-    }
-   ]
-  },
-  {
-   "reviewed": "2026-11-21",
-   "blocks": [
-    "### T106 (a builder the coordinator re-numbered mid-task kept its brief's task on every event-log line: T101's builder, briefed `451 T100` and told \"Your task is T101, not T100\" by a SendMessage 20 s into its run, filed all 229 of its own lines (227 tool lines, its start and its stop) under T100, its Write and Edit lines of `speckit.rs`, `ready.rs` and `land-alone.sh` among them, so land-alone's list at T82-T101's landing named none of them and its closing checks would have set them apart as T100's, a wrong green - measured 2026-11-21 (a streamed Python read of the 451 log's lines by `by`, against the session transcript's SendMessage calls))",
-    "### T106 Approach (checklist part A)"
-   ],
-   "verdict": "CLEAR",
-   "decisions": [
-    {
-     "id": "T106-forward-only",
-     "summary": "A correction is kept per agent and applied to that agent's later lines; lines filed before it stay as filed, with no general rewrite of the live log.",
-     "class": "within",
-     "why": "The spec has no requirement on re-numbered builders; the task exists to stop a re-numbered builder's files being set apart under the old number. In the measured case all three writes came after the SendMessage and the 8 earlier lines wrote nothing, so the forward rule fixes the whole observed wrong outcome. No defect is left: those earlier lines were also re-filed by hand (Found and left). A builder writing before it is corrected was not observed among the 136."
-    },
-    {
-     "id": "T106-signal-order",
-     "summary": "Signals are the coordinator's delivered SendMessage matching `T<new>, not T<old>` first, then the builder's own closing-checks/decide/task-start T= naming a task outside its brief and current filing; a two-task brief's second task moves nothing.",
-     "class": "within",
-     "why": "This is how the fix detects the re-number. The replay measured both directions: the SendMessage is needed to catch writes before the closing step, and the brief rule stops the T28+T29 wrong move. The request is not narrowed."
-    },
-    {
-     "id": "T106-CORRECTION-knob",
-     "summary": "The correction's wording pattern is a GUESS knob fitted on the one observed case, and the negatives are the night's own non-correction messages.",
-     "class": "within",
-     "why": "It is an implementation parameter, labeled GUESS as the project requires. A correction worded another way falls through to the builder's own closing step."
-    },
-    {
-     "id": "T106-store",
-     "summary": "The correction is stored as one file per agent under <events dir>-dispatches/<sid>.tasks/<aid>, not as a row in the dispatches side file, because the side file's TAIL would drop a long builder's correction.",
-     "class": "within",
-     "why": "Where the correction is stored is an implementation choice. It narrows nothing that was asked."
-    },
-    {
-     "id": "T106-chain",
-     "summary": "The corrected task is placed in the filing chain after a command's own T= and an Agent call's own words and before the brief, and corrects the task only, not the feature, so events-refile's BY BRIEF rule leaves corrected lines alone.",
-     "class": "within",
-     "why": "It keeps T26's and T53's chain for every agent that no correction names. It is an implementation decision."
-    },
-    {
-     "id": "T106-files",
-     "summary": "Fixed at the writer (filed.rs, dispatches.rs) with land-alone.sh and closing-checks.sh untouched, because they are T96's files, and event_log_hooks.rs untouched.",
-     "class": "within",
-     "why": "Both splits read each line's raw task, so fixing the writer corrects what both readers see. The end-to-end replay through both real splits measured all three files judged as T101's."
-    },
-    {
-     "id": "T106-hand-refile",
-     "summary": "The 229 lines already misfiled under T100 are rewritten to T101 in place, one byte at an offset, and the coordinator's dispatch line keeps T100.",
-     "class": "within",
-     "why": "It fixes the defect's existing consequence in the per-task breakdown (where-time F=451), which the request's per-task time breakdown needs. The read-back is recorded with its method."
-    },
-    {
-     "id": "T106-handoff-name",
-     "summary": "context_cap_hooks' handoff file takes the corrected task number, because it reads filed_at's task from the same chain.",
-     "class": "within",
-     "why": "It fixes, in this task, a known defect of the same cause (fix as we go)."
-    },
-    {
-     "id": "T106-perf-class",
-     "summary": "Tagged [perf] under FR-013, as work on the event log's data that where-time and the closing checks read.",
-     "class": "within",
-     "why": "FR-013 counts work on the event log's data and where-time's readers as performance work for ordering (the GM 2026-11-20). Correct per-task attribution of event-log lines is that data."
-    },
-    {
-     "id": "T106-order",
-     "summary": "After T26, T53, T74 and T96, and lands before T22.",
-     "class": "within",
-     "why": "It orders the task. It narrows nothing."
     }
    ]
   },
@@ -10705,6 +10865,76 @@
      "summary": "T113 is booked as a [perf] task under FR-013 (the builders' loop: a Bash call's hooks that hung now answer in about 0.1 s)",
      "class": "within",
      "why": "FR-013 counts work that makes the builders' loop faster as performance work, and a hook that hangs for 10 s or more in place of answering is exactly that."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-21",
+   "blocks": [
+    "### T106 (a builder the coordinator re-numbered mid-task kept its brief's task on every event-log line: T101's builder, briefed `451 T100` and told \"Your task is T101, not T100\" by a SendMessage 20 s into its run, filed all 229 of its own lines (227 tool lines, its start and its stop) under T100, its Write and Edit lines of `speckit.rs`, `ready.rs` and `land-alone.sh` among them, so land-alone's list at T82-T101's landing named none of them and its closing checks would have set them apart as T100's, a wrong green - measured 2026-11-21 (a streamed Python read of the 451 log's lines by `by`, against the session transcript's SendMessage calls))",
+    "### T106 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T106-forward-only",
+     "summary": "A correction is kept per agent and applied to that agent's later lines; lines filed before it stay as filed, with no general rewrite of the live log.",
+     "class": "within",
+     "why": "The spec has no requirement on re-numbered builders; the task exists to stop a re-numbered builder's files being set apart under the old number. In the measured case all three writes came after the SendMessage and the 8 earlier lines wrote nothing, so the forward rule fixes the whole observed wrong outcome. No defect is left: those earlier lines were also re-filed by hand (Found and left). A builder writing before it is corrected was not observed among the 136."
+    },
+    {
+     "id": "T106-signal-order",
+     "summary": "Signals are the coordinator's delivered SendMessage matching `T<new>, not T<old>` first, then the builder's own closing-checks/decide/task-start T= naming a task outside its brief and current filing; a two-task brief's second task moves nothing.",
+     "class": "within",
+     "why": "This is how the fix detects the re-number. The replay measured both directions: the SendMessage is needed to catch writes before the closing step, and the brief rule stops the T28+T29 wrong move. The request is not narrowed."
+    },
+    {
+     "id": "T106-CORRECTION-knob",
+     "summary": "The correction's wording pattern is a GUESS knob fitted on the one observed case, and the negatives are the night's own non-correction messages.",
+     "class": "within",
+     "why": "It is an implementation parameter, labeled GUESS as the project requires. A correction worded another way falls through to the builder's own closing step."
+    },
+    {
+     "id": "T106-store",
+     "summary": "The correction is stored as one file per agent under <events dir>-dispatches/<sid>.tasks/<aid>, not as a row in the dispatches side file, because the side file's TAIL would drop a long builder's correction.",
+     "class": "within",
+     "why": "Where the correction is stored is an implementation choice. It narrows nothing that was asked."
+    },
+    {
+     "id": "T106-chain",
+     "summary": "The corrected task is placed in the filing chain after a command's own T= and an Agent call's own words and before the brief, and corrects the task only, not the feature, so events-refile's BY BRIEF rule leaves corrected lines alone.",
+     "class": "within",
+     "why": "It keeps T26's and T53's chain for every agent that no correction names. It is an implementation decision."
+    },
+    {
+     "id": "T106-files",
+     "summary": "Fixed at the writer (filed.rs, dispatches.rs) with land-alone.sh and closing-checks.sh untouched, because they are T96's files, and event_log_hooks.rs untouched.",
+     "class": "within",
+     "why": "Both splits read each line's raw task, so fixing the writer corrects what both readers see. The end-to-end replay through both real splits measured all three files judged as T101's."
+    },
+    {
+     "id": "T106-hand-refile",
+     "summary": "The 229 lines already misfiled under T100 are rewritten to T101 in place, one byte at an offset, and the coordinator's dispatch line keeps T100.",
+     "class": "within",
+     "why": "It fixes the defect's existing consequence in the per-task breakdown (where-time F=451), which the request's per-task time breakdown needs. The read-back is recorded with its method."
+    },
+    {
+     "id": "T106-handoff-name",
+     "summary": "context_cap_hooks' handoff file takes the corrected task number, because it reads filed_at's task from the same chain.",
+     "class": "within",
+     "why": "It fixes, in this task, a known defect of the same cause (fix as we go)."
+    },
+    {
+     "id": "T106-perf-class",
+     "summary": "Tagged [perf] under FR-013, as work on the event log's data that where-time and the closing checks read.",
+     "class": "within",
+     "why": "FR-013 counts work on the event log's data and where-time's readers as performance work for ordering (the GM 2026-11-20). Correct per-task attribution of event-log lines is that data."
+    },
+    {
+     "id": "T106-order",
+     "summary": "After T26, T53, T74 and T96, and lands before T22.",
+     "class": "within",
+     "why": "It orders the task. It narrows nothing."
     }
    ]
   },
@@ -11304,141 +11534,6 @@
   {
    "reviewed": "2026-11-22",
    "blocks": [
-    "### T123 (a plan hold reached a tree it was not taken in, and checks_hooks' test read the real one: at T80's landing, with T110's review holding T110's section, uncommitted in the clone alone, the landing worktree's guard tests ran `each_event_keeps_its_book`, whose `PostToolUse` of a Bash with no cwd resolved \".\" to the worktree, whose `.git` file leads to the clone's `checks-open.json`, and T80's write-back answered \"NOTHING of it is written back\" for a section that tree never had, found 2026-11-21 in `/home/agent/.claude/jobs/c6fd72d1/tmp/451-t80-land.log`)",
-    "### T123 Approach (checklist part A)"
-   ],
-   "verdict": "CLEAR",
-   "decisions": [
-    {
-     "id": "D-a (root)",
-     "summary": "planhold::hold records the tree the dispatch's call ran in (root); reaches asks whether a call's tree is that root; a hold with no root recorded, taken before T123, reaches every tree as today",
-     "class": "within",
-     "why": "Fixes a measured defect found at T80's landing (a hold written back and refused in trees it was never taken in, failing every landing while a review ran); fixing known defects as found is the standing rule, and keeping old holds' behavior narrows nothing the GM asked for."
-    },
-    {
-     "id": "D-a (snapshot and write-back)",
-     "summary": "snapshot keeps a live hold's text only for a call in its tree, restore writes back only there, closing both directions of the no-id overwrite",
-     "class": "within",
-     "why": "Removes the measured wrong outcome (one tree's text written over another's uncommitted section); the hold still protects the plan it was taken on."
-    },
-    {
-     "id": "D-a (refusal by the hold's tree)",
-     "summary": "a write is judged against the plan of the hold's tree wherever the call runs: an Edit of another tree's own plan passes, an Edit of the held plan by absolute path from any tree is refused",
-     "class": "within",
-     "why": "Stops refusing work on a plan nobody is reviewing (a check refusing good work is a defect) and widens protection of the held plan to the cross-tree Edit HEAD passed; serves the hold's purpose rather than narrowing it."
-    },
-    {
-     "id": "D-a (shell write gated to the hold's tree)",
-     "summary": "a shell write is judged only in the hold's tree; from another tree not at all, since by a relative path it writes that tree's own plan and no write-back runs there",
-     "class": "within",
-     "why": "Measured: judging it against the held tree's text refused a write of shared text to the landing worktree's own plan that HEAD passed (round 1); gating to the hold's tree removes that wrong refusal."
-    },
-    {
-     "id": "found-and-left 3 (absolute-path shell write from another tree)",
-     "summary": "a shell call in another tree that writes the held plan by its absolute path passes and is written back by nothing; accepted as not a defect",
-     "class": "within",
-     "why": "Not a defect under constitution XIV as the GM defined it 2026-11-19: no wrong outcome survives, since make plan-verdict refuses a verdict on a section changed while reviewed and the review runs again. HEAD caught it only by coincidence: /tmp/t123/abs.out shows HEAD refusing the heading write from the calling tree's own text and passing clone-only text, exactly as T123's binary does. The replay over real history (/tmp/t123/replay_shell.out) found no such write. The alternative and its cost are stated, and the section's deferral is reasoned rather than an unfiled defect."
-    },
-    {
-     "id": "D-b (no-cwd seam)",
-     "summary": "a call with no cwd reads handle::cwd_of: the process's working directory in production as before, the test thread's own PWD in a test build, so no test reaches a live clone's state; checks_hooks' state_holds_snaps reads the same",
-     "class": "within",
-     "why": "Fixes the measured defect (guard and shared tests reading and rewriting the live clone's hold, failing T80's landing) at the one place every no-cwd test passes through; production behavior unchanged."
-    },
-    {
-     "id": "order",
-     "summary": "lands with T80",
-     "class": "within",
-     "why": "Ordering of a defect fix with the task whose landing it unblocks; decides nothing the request or spec left to the GM."
-    },
-    {
-     "id": "performance classification",
-     "summary": "Performance work? no",
-     "class": "within",
-     "why": "A guard defect fix, not a performance or measurement task under FR-013; the classification narrows no requirement, and the fix goes ahead as known-defect work."
-    }
-   ]
-  },
-  {
-   "reviewed": "2026-11-22",
-   "blocks": [
-    "### T105 (land-alone's take-back gave up three times on 2026-11-21, each a hand merge: at the T82-T101 landing the session's `make ledger-owed` and the landing wrote rows for the same four passes and the clone could not take the tip - dev/review-ledger.md 'conflicts' - and plan.md and tasks.md then needed a hand three-way merge; at T113's landing the tick archived T113's section beside the clone's new sections and git's line merge called the adjacent hunks one conflict - measured 2026-11-21 (each shape replayed through the script's own step 7, below))",
-    "### T105 Approach (checklist part A)"
-   ],
-   "verdict": "CLEAR",
-   "decisions": [
-    {
-     "id": "T105-merge-order",
-     "summary": "Every held file through git's line merge first; a sectioned file (plan.md, tasks.md, plan-review.json, and now dev/review-ledger.md) merged piece by piece only when its line merge conflicts.",
-     "class": "within",
-     "why": "Carries the task line's 'the sectioned merge on every file it reports' and adds the ledger, the file shape 1 stopped on; it is the mechanism the task exists to fix, and leaves already-merging files on the path they take now."
-    },
-    {
-     "id": "T105-additions-superset",
-     "summary": "Any other file's hunks where both sides only added are taken whole when one side's added lines contain the other's in order (merge3 via git merge-file --diff3).",
-     "class": "within",
-     "why": "Widens 'identical additions merged' to a strict superset of additions, which loses nothing either side wrote; broader than the line, not narrower, and only changes a case that conflicts today."
-    },
-    {
-     "id": "T105-archive-mark-piece",
-     "summary": "In plan.md an archive mark is a piece of its own, not the tail of the section before it, and a clone's new piece goes after the tip's new pieces beside its anchor, so the marks stay where the archived section was.",
-     "class": "within",
-     "why": "Directly fixes the measured cause of shapes 2 and 3 (the tick's marks read as the tail of the preceding section); the replays show every clone piece kept and every tip mark kept in order."
-    },
-    {
-     "id": "T105-ledger-tip-wins",
-     "summary": "The ledger is cut at each line and a measured row keyed by its pass (check, wall, tokens); where both sides answer one pass the tip's row is kept and the clone's dropped.",
-     "class": "within",
-     "why": "The landing's rows are the record the push writes; keeping both was the duplicate-row defect (8 rows for 4 passes) the section also repairs. Dropping the clone's duplicate loses no pass, only a second copy of one."
-    },
-    {
-     "id": "T105-conflicts-still-stop",
-     "summary": "A piece both sides changed is line-merged first; a piece the tip archived that the clone changed still conflicts; every file merged before any exit, all conflicts named at once by piece, and a conflict moves nothing.",
-     "class": "within",
-     "why": "Keeps the take safe on the one shape where a choice would lose work, and improves the message (all conflicts, named by section) rather than narrowing anything."
-    },
-    {
-     "id": "T105-hand-write-refusal-scope",
-     "summary": "make ledger-owed WRITE= passes --by-hand and refuses only a recorded plan review's row as the landing's own, naming the count and writing the rest; a hand write of a pass traced to its feature (--write specs/<F>/) stays allowed, and a collision of such a row is left to the merge (tip kept).",
-     "class": "narrowing",
-     "ruling": "LEGITIMATE",
-     "why": "Narrows the task line's 'the hand rows refused as the landing's own' from both of the landing's sets to one. Refusing the per-feature traced set would be wrong on the measured facts: only make land writes those rows, while land-tooling.sh and sync-with-main.sh's push do not (grep of every ledger-owed caller, 2026-11-21), so on those routes the hand write is the only writer and refusing it would leave the passes unrecorded - defeating the purpose (a ledger with each pass once). The purpose of the refusal (no duplicate rows for the same pass) is still met for that set by the ledger merge's tip-wins rule, so nothing the refusal is for is given up. The rows that every push route writes itself (recorded plan reviews) are the ones refused."
-    },
-    {
-     "id": "T105-step2-marks",
-     "summary": "Step 2's splice moves for 4 of the replayed tasks: it now stages the task's own text and no longer an adjacent mark or blank line.",
-     "class": "within",
-     "why": "A difference from the previous staging that the section measures and explains as step 2 meaning the task's own pieces; constitution XIII asks that everything works, not that staging be unchanged, and the existing landing-alone tests are required green."
-    },
-    {
-     "id": "T105-merge-tree-left",
-     "summary": "The merge of the clone's own commits since the landing began (merge-tree) is not treated as one of the shapes.",
-     "class": "within",
-     "why": "Not a defect left: the measured T82-T101 timeline shows the clone committed after the take's exit-4 advice, which already gives the route (git merge once committed). The task line names three shapes and all three are carried."
-    },
-    {
-     "id": "T105-duplicate-rows-fixed",
-     "summary": "Main's ledger's 8 rows for the 4 T82-T101 plan reviews reduced to the tip's 4, review-census's spec-fidelity judgment 1,526 to 1,522, runs unchanged.",
-     "class": "within",
-     "why": "A known defect the task's own failure produced, fixed in this step as fix-as-we-go requires, by the same rule the new merge applies."
-    },
-    {
-     "id": "T105-not-performance",
-     "summary": "The section classes T105 as not performance work (a correctness fix of the landing's take).",
-     "class": "within",
-     "why": "It is neither a performance improvement nor a measurement of time in the sense of the GM's 2026-11-20 order; classing it so keeps FR-013's scheduling honest rather than narrowing it."
-    },
-    {
-     "id": "T105-mark-length",
-     "summary": "The conflict mark is 31 characters long, labeled a CONVENTION of the parse.",
-     "class": "within",
-     "why": "An implementation convention inside the fix, labeled at its point of use; no requirement speaks to it."
-    }
-   ]
-  },
-  {
-   "reviewed": "2026-11-22",
-   "blocks": [
     "### T87 (make-only refused a guard file's name written in a scratch tree as a guard file written from the shell, found by T79 on 2026-11-21: `guard_file_hooks::held` held a path by its name alone (`/Makefile`, `/dev/work-budget.json`, ...), so `printf x > /tmp/q/Makefile`, a builder's `T=$(mktemp -d); ...; printf ... > $T/Makefile` (tx#953, ux#2204) and a copy of `dev/work-budget.json` into a `$(mktemp -d)` preview (ux#1106, ux#1107) were refused, measured 2026-11-21 (`/tmp/t79/probes-mk.jsonl` through T79's binaries); on the guard log, 110 of make-only's 745 guard-write refusals and 11 of guard-file's 180 held a guard file's name under `/tmp` alone, measured 2026-11-21 (item 4))",
     "### T87 Approach (checklist part A)"
    ],
@@ -11497,6 +11592,64 @@
      "summary": "Performance work? no.",
      "class": "within",
      "why": "A labeling the plan makes for scheduling under FR-013; the task proceeds now either way, and the label narrows nothing the GM asked."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-22",
+   "blocks": [
+    "### T123 (a plan hold reached a tree it was not taken in, and checks_hooks' test read the real one: at T80's landing, with T110's review holding T110's section, uncommitted in the clone alone, the landing worktree's guard tests ran `each_event_keeps_its_book`, whose `PostToolUse` of a Bash with no cwd resolved \".\" to the worktree, whose `.git` file leads to the clone's `checks-open.json`, and T80's write-back answered \"NOTHING of it is written back\" for a section that tree never had, found 2026-11-21 in `/home/agent/.claude/jobs/c6fd72d1/tmp/451-t80-land.log`)",
+    "### T123 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D-a (root)",
+     "summary": "planhold::hold records the tree the dispatch's call ran in (root); reaches asks whether a call's tree is that root; a hold with no root recorded, taken before T123, reaches every tree as today",
+     "class": "within",
+     "why": "Fixes a measured defect found at T80's landing (a hold written back and refused in trees it was never taken in, failing every landing while a review ran); fixing known defects as found is the standing rule, and keeping old holds' behavior narrows nothing the GM asked for."
+    },
+    {
+     "id": "D-a (snapshot and write-back)",
+     "summary": "snapshot keeps a live hold's text only for a call in its tree, restore writes back only there, closing both directions of the no-id overwrite",
+     "class": "within",
+     "why": "Removes the measured wrong outcome (one tree's text written over another's uncommitted section); the hold still protects the plan it was taken on."
+    },
+    {
+     "id": "D-a (refusal by the hold's tree)",
+     "summary": "a write is judged against the plan of the hold's tree wherever the call runs: an Edit of another tree's own plan passes, an Edit of the held plan by absolute path from any tree is refused",
+     "class": "within",
+     "why": "Stops refusing work on a plan nobody is reviewing (a check refusing good work is a defect) and widens protection of the held plan to the cross-tree Edit HEAD passed; serves the hold's purpose rather than narrowing it."
+    },
+    {
+     "id": "D-a (shell write gated to the hold's tree)",
+     "summary": "a shell write is judged only in the hold's tree; from another tree not at all, since by a relative path it writes that tree's own plan and no write-back runs there",
+     "class": "within",
+     "why": "Measured: judging it against the held tree's text refused a write of shared text to the landing worktree's own plan that HEAD passed (round 1); gating to the hold's tree removes that wrong refusal."
+    },
+    {
+     "id": "found-and-left 3 (absolute-path shell write from another tree)",
+     "summary": "a shell call in another tree that writes the held plan by its absolute path passes and is written back by nothing; accepted as not a defect",
+     "class": "within",
+     "why": "Not a defect under constitution XIV as the GM defined it 2026-11-19: no wrong outcome survives, since make plan-verdict refuses a verdict on a section changed while reviewed and the review runs again. HEAD caught it only by coincidence: /tmp/t123/abs.out shows HEAD refusing the heading write from the calling tree's own text and passing clone-only text, exactly as T123's binary does. The replay over real history (/tmp/t123/replay_shell.out) found no such write. The alternative and its cost are stated, and the section's deferral is reasoned rather than an unfiled defect."
+    },
+    {
+     "id": "D-b (no-cwd seam)",
+     "summary": "a call with no cwd reads handle::cwd_of: the process's working directory in production as before, the test thread's own PWD in a test build, so no test reaches a live clone's state; checks_hooks' state_holds_snaps reads the same",
+     "class": "within",
+     "why": "Fixes the measured defect (guard and shared tests reading and rewriting the live clone's hold, failing T80's landing) at the one place every no-cwd test passes through; production behavior unchanged."
+    },
+    {
+     "id": "order",
+     "summary": "lands with T80",
+     "class": "within",
+     "why": "Ordering of a defect fix with the task whose landing it unblocks; decides nothing the request or spec left to the GM."
+    },
+    {
+     "id": "performance classification",
+     "summary": "Performance work? no",
+     "class": "within",
+     "why": "A guard defect fix, not a performance or measurement task under FR-013; the classification narrows no requirement, and the fix goes ahead as known-defect work."
     }
    ]
   },
@@ -11597,6 +11750,83 @@
      "summary": "T87 is classed not performance work",
      "class": "within",
      "why": "In the bundle the GM's words make performance improvements and measurement tasks performance work (2026-11-20). T87 is neither: it is a guard false-refusal fix, whose time saving is incidental. FR-013's own definition is cut in spec-index.md, so this rests on the GM's words alone. T87 is built and lands next, after T79 and before T116, so the class changes no schedule."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-22",
+   "blocks": [
+    "### T105 (land-alone's take-back gave up three times on 2026-11-21, each a hand merge: at the T82-T101 landing the session's `make ledger-owed` and the landing wrote rows for the same four passes and the clone could not take the tip - dev/review-ledger.md 'conflicts' - and plan.md and tasks.md then needed a hand three-way merge; at T113's landing the tick archived T113's section beside the clone's new sections and git's line merge called the adjacent hunks one conflict - measured 2026-11-21 (each shape replayed through the script's own step 7, below))",
+    "### T105 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T105-merge-order",
+     "summary": "Every held file through git's line merge first; a sectioned file (plan.md, tasks.md, plan-review.json, and now dev/review-ledger.md) merged piece by piece only when its line merge conflicts.",
+     "class": "within",
+     "why": "Carries the task line's 'the sectioned merge on every file it reports' and adds the ledger, the file shape 1 stopped on; it is the mechanism the task exists to fix, and leaves already-merging files on the path they take now."
+    },
+    {
+     "id": "T105-additions-superset",
+     "summary": "Any other file's hunks where both sides only added are taken whole when one side's added lines contain the other's in order (merge3 via git merge-file --diff3).",
+     "class": "within",
+     "why": "Widens 'identical additions merged' to a strict superset of additions, which loses nothing either side wrote; broader than the line, not narrower, and only changes a case that conflicts today."
+    },
+    {
+     "id": "T105-archive-mark-piece",
+     "summary": "In plan.md an archive mark is a piece of its own, not the tail of the section before it, and a clone's new piece goes after the tip's new pieces beside its anchor, so the marks stay where the archived section was.",
+     "class": "within",
+     "why": "Directly fixes the measured cause of shapes 2 and 3 (the tick's marks read as the tail of the preceding section); the replays show every clone piece kept and every tip mark kept in order."
+    },
+    {
+     "id": "T105-ledger-tip-wins",
+     "summary": "The ledger is cut at each line and a measured row keyed by its pass (check, wall, tokens); where both sides answer one pass the tip's row is kept and the clone's dropped.",
+     "class": "within",
+     "why": "The landing's rows are the record the push writes; keeping both was the duplicate-row defect (8 rows for 4 passes) the section also repairs. Dropping the clone's duplicate loses no pass, only a second copy of one."
+    },
+    {
+     "id": "T105-conflicts-still-stop",
+     "summary": "A piece both sides changed is line-merged first; a piece the tip archived that the clone changed still conflicts; every file merged before any exit, all conflicts named at once by piece, and a conflict moves nothing.",
+     "class": "within",
+     "why": "Keeps the take safe on the one shape where a choice would lose work, and improves the message (all conflicts, named by section) rather than narrowing anything."
+    },
+    {
+     "id": "T105-hand-write-refusal-scope",
+     "summary": "make ledger-owed WRITE= passes --by-hand and refuses only a recorded plan review's row as the landing's own, naming the count and writing the rest; a hand write of a pass traced to its feature (--write specs/<F>/) stays allowed, and a collision of such a row is left to the merge (tip kept).",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Narrows the task line's 'the hand rows refused as the landing's own' from both of the landing's sets to one. Refusing the per-feature traced set would be wrong on the measured facts: only make land writes those rows, while land-tooling.sh and sync-with-main.sh's push do not (grep of every ledger-owed caller, 2026-11-21), so on those routes the hand write is the only writer and refusing it would leave the passes unrecorded - defeating the purpose (a ledger with each pass once). The purpose of the refusal (no duplicate rows for the same pass) is still met for that set by the ledger merge's tip-wins rule, so nothing the refusal is for is given up. The rows that every push route writes itself (recorded plan reviews) are the ones refused."
+    },
+    {
+     "id": "T105-step2-marks",
+     "summary": "Step 2's splice moves for 4 of the replayed tasks: it now stages the task's own text and no longer an adjacent mark or blank line.",
+     "class": "within",
+     "why": "A difference from the previous staging that the section measures and explains as step 2 meaning the task's own pieces; constitution XIII asks that everything works, not that staging be unchanged, and the existing landing-alone tests are required green."
+    },
+    {
+     "id": "T105-merge-tree-left",
+     "summary": "The merge of the clone's own commits since the landing began (merge-tree) is not treated as one of the shapes.",
+     "class": "within",
+     "why": "Not a defect left: the measured T82-T101 timeline shows the clone committed after the take's exit-4 advice, which already gives the route (git merge once committed). The task line names three shapes and all three are carried."
+    },
+    {
+     "id": "T105-duplicate-rows-fixed",
+     "summary": "Main's ledger's 8 rows for the 4 T82-T101 plan reviews reduced to the tip's 4, review-census's spec-fidelity judgment 1,526 to 1,522, runs unchanged.",
+     "class": "within",
+     "why": "A known defect the task's own failure produced, fixed in this step as fix-as-we-go requires, by the same rule the new merge applies."
+    },
+    {
+     "id": "T105-not-performance",
+     "summary": "The section classes T105 as not performance work (a correctness fix of the landing's take).",
+     "class": "within",
+     "why": "It is neither a performance improvement nor a measurement of time in the sense of the GM's 2026-11-20 order; classing it so keeps FR-013's scheduling honest rather than narrowing it."
+    },
+    {
+     "id": "T105-mark-length",
+     "summary": "The conflict mark is 31 characters long, labeled a CONVENTION of the parse.",
+     "class": "within",
+     "why": "An implementation convention inside the fix, labeled at its point of use; no requirement speaks to it."
     }
    ]
   },
@@ -11999,66 +12229,6 @@
   {
    "reviewed": "2026-11-22",
    "blocks": [
-    "### T89 (shared::tree judged a `python3 -c` program that writes a place it computes from `sys.argv` as writing where the shell stands, found by T79 on 2026-11-21: `cd <mirror>/research/questions; python3 -I -c \"import sys; open(sys.argv[2],'w').write('x')\" a /tmp/q/txt/a.txt` and its two loop forms were rewritten (sid t) or refused (sid nobody) through HEAD's main-tree while `cp` and `echo >` to the same scratch place passed, measured 2026-11-21 (`/tmp/t79b/judge/probe-mt.jsonl` #2-#8 through HEAD 2653b8931a's binary `/tmp/t89/bin-head`, `/tmp/t89/out/head.probe.{t,nobody}.mt.tsv`); of the corpus's 852 commands running a `-c` program that indexes `sys.argv`, 11 write through `open(sys.argv[N], <mode>)` and HEAD's main-tree refuses 4 of them, each writing scratch standing in the mirror (bx#29969, bx#54240, bx#58694, ux#2209), measured 2026-11-21 (item 4))",
-    "### T89 Approach (checklist part A)"
-   ],
-   "verdict": "CLEAR",
-   "decisions": [
-    {
-     "id": "binding",
-     "summary": "A -c program's sys.argv[N] in a write is read as the command's N-th word after the program, placed as the walk places a word (py_c::argv_word); anything the binding cannot read keeps HEAD's reading (feature 204 D5).",
-     "class": "within",
-     "why": "This is T89 as filed (a -c program writing a place it computes from sys.argv judged as writing where the shell stands); the fallback to D5 keeps the accepted rule for every program it cannot read."
-    },
-    {
-     "id": "argv_writes",
-     "summary": "Writes through sys.argv[N] (open with a non-read mode, chained .write/.writelines, json.dump into that open) are read past and the rest must pass only_reads; argv must be plain sys.argv[N] reads and sys the imported module.",
-     "class": "within",
-     "why": "The mechanism of the fix; reads/only_reads unchanged in what they judge, and any other argv use falls back to HEAD's reading."
-    },
-    {
-     "id": "argv_inlined",
-     "summary": "A name bound once to sys.argv[N] and mentioned otherwise only as an open's path is read as sys.argv[N] (bx#58999); any other mention keeps HEAD's reading.",
-     "class": "within",
-     "why": "The review ruled bx#58999's -c form inside T89's own description (a program that writes a place it computes from sys.argv); it widens the fix toward the filed task, not away from it."
-    },
-    {
-     "id": "placement-tree-hunk",
-     "summary": "argv_places called from one hunk of writes_in's -c branch in tree.rs, outside the brief's file list: the bound program a READ where it stands plus a write of each word at path_write's place; a Known::Nothing place keeps HEAD's reading (feature 204 D6).",
-     "class": "within",
-     "why": "The -c write is pushed and path_write lives in tree.rs, so the fix cannot be placed elsewhere; the hunk is named and kept clear of T129's ASSIGN/sanitize hunks, and the unknown case keeps the accepted D6 rule."
-    },
-    {
-     "id": "may_split-option-A",
-     "summary": "A loop's or a read's value before the argv word (which bash may split; the walk holds quoted words without quotes and a loop value's blank as _) ends the count, so ux#2209 and bx#54240 (quoted \"$f\") and bx#58694 (bare $f, no blank in its matches) stay refused as at HEAD; the fuller fix is filed as T140, waits for T129, lands before T22.",
-     "class": "narrowing",
-     "ruling": "LEGITIMATE",
-     "why": "It narrows T89 (three of its corpus scratch writes stay refused). The measured alternative (fix2) passed real writes of the mirror through split loop values (/tmp/t89/b2 p3,p4), so the narrowing removes a verdict worse than HEAD's - applying the rule literally with the current walk would defeat the guard's own purpose. Telling \"$f\" from $f needs the walk to carry quote state (tree/bind.rs, another task's file); the defect left is HEAD's existing over-refusal, not a new one, and the deferral carries its reason, its filed id (T140) and its order (before T22), as FR-009 requires, so no known defect is carried past the next step."
-    },
-    {
-     "id": "stdin-deferral-T137",
-     "summary": "A stdin program writing through a name bound to sys.argv[N] (bx#52396) keeps HEAD's reading; filed as T137, lands before T22; argv_inlined stands alone so the stdin arm can call it.",
-     "class": "narrowing",
-     "ruling": "LEGITIMATE",
-     "why": "T89 is filed for a python3 -c program; the stdin route is a different arm of the walk outside this task's files, so the case is adjacent rather than T89's own. It is filed with its reason, id and order before T22 (FR-009), the shared function is built so the fix is a call, and the earlier review ruled the same deferral legitimate."
-    },
-    {
-     "id": "exits-budget-order",
-     "summary": "Green/red exits, one landing, ordering after T79/T83/T87, beside T129 and T118 (T129 first, alone), before T125 and the filed tasks.",
-     "class": "within",
-     "why": "Sequencing and exit conditions that decide nothing the request or the task leaves open."
-    },
-    {
-     "id": "not-performance",
-     "summary": "Performance work? no.",
-     "class": "within",
-     "why": "A guard-verdict correctness fix, neither a performance improvement nor a measurement task in FR-013's sense."
-    }
-   ]
-  },
-  {
-   "reviewed": "2026-11-22",
-   "blocks": [
     "### T118 (shared::tree::program read three Python shapes as writes and gate-write's file test took a directory literal as a file written, so make-only, gate-write and the event log refused or listed correct work on the stdin and `-c` routes, and would on T51's script route - a read through a `/` join, an argv list bound to a name and run, a literal a test reads, a directory only read (found by T51, measured 2026-11-21, `/tmp/t51/probe-stdin.jsonl`, HEAD b4ab4e5a79); at HEAD 9bd338e244, 45 gate-write and 20 make-only refusals of correct work over T93's 9,646 commands, T33's 1,134 fixtures, T51's 455 script stand-ins and 6 probes, measured 2026-11-21 (the paired replay, `/tmp/t118/scripts/paired.sh`))",
     "### T118 Approach (checklist part A)"
    ],
@@ -12119,6 +12289,66 @@
      "summary": "'Performance work? No - a correctness task'",
      "class": "within",
      "why": "The task fixes guard refusals of correct work. The event-log corrections are a side effect of a shared reader, not a measurement task in the sense of the GM's 2026-11-20 words. FR-013's scheduling is not narrowed, because the cost of the change is measured and under T96's bar."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-22",
+   "blocks": [
+    "### T89 (shared::tree judged a `python3 -c` program that writes a place it computes from `sys.argv` as writing where the shell stands, found by T79 on 2026-11-21: `cd <mirror>/research/questions; python3 -I -c \"import sys; open(sys.argv[2],'w').write('x')\" a /tmp/q/txt/a.txt` and its two loop forms were rewritten (sid t) or refused (sid nobody) through HEAD's main-tree while `cp` and `echo >` to the same scratch place passed, measured 2026-11-21 (`/tmp/t79b/judge/probe-mt.jsonl` #2-#8 through HEAD 2653b8931a's binary `/tmp/t89/bin-head`, `/tmp/t89/out/head.probe.{t,nobody}.mt.tsv`); of the corpus's 852 commands running a `-c` program that indexes `sys.argv`, 11 write through `open(sys.argv[N], <mode>)` and HEAD's main-tree refuses 4 of them, each writing scratch standing in the mirror (bx#29969, bx#54240, bx#58694, ux#2209), measured 2026-11-21 (item 4))",
+    "### T89 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "binding",
+     "summary": "A -c program's sys.argv[N] in a write is read as the command's N-th word after the program, placed as the walk places a word (py_c::argv_word); anything the binding cannot read keeps HEAD's reading (feature 204 D5).",
+     "class": "within",
+     "why": "This is T89 as filed (a -c program writing a place it computes from sys.argv judged as writing where the shell stands); the fallback to D5 keeps the accepted rule for every program it cannot read."
+    },
+    {
+     "id": "argv_writes",
+     "summary": "Writes through sys.argv[N] (open with a non-read mode, chained .write/.writelines, json.dump into that open) are read past and the rest must pass only_reads; argv must be plain sys.argv[N] reads and sys the imported module.",
+     "class": "within",
+     "why": "The mechanism of the fix; reads/only_reads unchanged in what they judge, and any other argv use falls back to HEAD's reading."
+    },
+    {
+     "id": "argv_inlined",
+     "summary": "A name bound once to sys.argv[N] and mentioned otherwise only as an open's path is read as sys.argv[N] (bx#58999); any other mention keeps HEAD's reading.",
+     "class": "within",
+     "why": "The review ruled bx#58999's -c form inside T89's own description (a program that writes a place it computes from sys.argv); it widens the fix toward the filed task, not away from it."
+    },
+    {
+     "id": "placement-tree-hunk",
+     "summary": "argv_places called from one hunk of writes_in's -c branch in tree.rs, outside the brief's file list: the bound program a READ where it stands plus a write of each word at path_write's place; a Known::Nothing place keeps HEAD's reading (feature 204 D6).",
+     "class": "within",
+     "why": "The -c write is pushed and path_write lives in tree.rs, so the fix cannot be placed elsewhere; the hunk is named and kept clear of T129's ASSIGN/sanitize hunks, and the unknown case keeps the accepted D6 rule."
+    },
+    {
+     "id": "may_split-option-A",
+     "summary": "A loop's or a read's value before the argv word (which bash may split; the walk holds quoted words without quotes and a loop value's blank as _) ends the count, so ux#2209 and bx#54240 (quoted \"$f\") and bx#58694 (bare $f, no blank in its matches) stay refused as at HEAD; the fuller fix is filed as T140, waits for T129, lands before T22.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "It narrows T89 (three of its corpus scratch writes stay refused). The measured alternative (fix2) passed real writes of the mirror through split loop values (/tmp/t89/b2 p3,p4), so the narrowing removes a verdict worse than HEAD's - applying the rule literally with the current walk would defeat the guard's own purpose. Telling \"$f\" from $f needs the walk to carry quote state (tree/bind.rs, another task's file); the defect left is HEAD's existing over-refusal, not a new one, and the deferral carries its reason, its filed id (T140) and its order (before T22), as FR-009 requires, so no known defect is carried past the next step."
+    },
+    {
+     "id": "stdin-deferral-T137",
+     "summary": "A stdin program writing through a name bound to sys.argv[N] (bx#52396) keeps HEAD's reading; filed as T137, lands before T22; argv_inlined stands alone so the stdin arm can call it.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "T89 is filed for a python3 -c program; the stdin route is a different arm of the walk outside this task's files, so the case is adjacent rather than T89's own. It is filed with its reason, id and order before T22 (FR-009), the shared function is built so the fix is a call, and the earlier review ruled the same deferral legitimate."
+    },
+    {
+     "id": "exits-budget-order",
+     "summary": "Green/red exits, one landing, ordering after T79/T83/T87, beside T129 and T118 (T129 first, alone), before T125 and the filed tasks.",
+     "class": "within",
+     "why": "Sequencing and exit conditions that decide nothing the request or the task leaves open."
+    },
+    {
+     "id": "not-performance",
+     "summary": "Performance work? no.",
+     "class": "within",
+     "why": "A guard-verdict correctness fix, neither a performance improvement nor a measurement task in FR-013's sense."
     }
    ]
   },
@@ -12458,6 +12688,424 @@
      "class": "narrowing",
      "ruling": "LEGITIMATE",
      "why": "The fix stops at the gate launcher although the same defect class is known in two other builds, so this is a narrowing, and it is a defect left rather than a difference. It is legitimate because the defect is not left: it is filed as T146 with a stated order (before T98, whose occupancy measurement a stalled build would skew). It also states why it is not fixed here (T142's line is the gate launcher's failure, and the guard fails open to its last good binary rather than refusing every gate command). FR-009 asks for exactly those three things: a reason, a filed id and an order. Nothing the GM asked is excepted: the request does not name this defect, and the GM's 2026-11-22 words favour filing small defects and bundling them over widening one task. One caution for T146: these two instances came from a scan of transcripts for link failures, which finds builds that FAILED, not every build exposed. T146's census should be drawn from the launchers that build with CARGO_INCREMENTAL or the tool or dev profile, for example a grep over scripts/ and the Makefiles, and not from this list."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-22",
+   "blocks": [
+    "### T141 (each task pays the whole fixed cost whatever its fix's size - a builder, closing runs, a 12-item section, `make decide`, its MODE 4 rounds, a landing - and the GM asked that small tasks be bundled and worked at the same time, 2026-11-22, request.md \"on bundling small tasks\")",
+    "### T141 Approach (checklist part A)",
+    "### T141 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T141-measure",
+     "summary": "Measure the per-task fixed cost (builders, builder and agent minutes, review rounds, plan-review waits, closing runs and their wall, landings) over the feature's 107 landed tasks before building",
+     "class": "within",
+     "why": "The GM's 2026-11-22 premise is that each task pays the same process; measuring it first is how the plan checks that premise (Principle: measured, not assumed). Every figure carries a 2026-11-22 one-shot label with its method."
+    },
+    {
+     "id": "T141-scope",
+     "summary": "Bundling = make task-start, make closing-checks and make decide take T=a,b,c as make land already does; one section, one review, one verdict entered for each member, one landing",
+     "class": "within",
+     "why": "Directly what the GM asked: small open tasks 'bundled together and worked at the same time' instead of each going through the same process, and 'let's do that'. The landing half already existed (T06); this adds the rest."
+    },
+    {
+     "id": "T141-mark",
+     "summary": "task-start bundle: every member's refusals checked first, nothing written while one stands; active-task names the first as task and all as tasks; each member's start logged, the first's last so it is the task in force; each counts as started for land-alone",
+     "class": "within",
+     "why": "Each member still passes every existing refusal (open box, phase task, held feature, parked stage, and FR-013's perf ordering by the same path), so the bundle does not open a way around them; it is the mechanism of working them at the same time."
+    },
+    {
+     "id": "T141-guards-count-once",
+     "summary": "The event log files a T=a,b,c command under its first task, so FR-007's static-runs guard counts the bundle's runs once and the plan-round tripwire its rounds once; PLAN_ROUND_CAP and STATIC_RUNS_A_TASK unchanged",
+     "class": "within",
+     "why": "A bundle is one unit of work and gets one task's budget under each guard - no looser than a single task, so FR-007's and the 2026-11-19 'real enforcement' are not weakened; the cost paid once is the request's point."
+    },
+    {
+     "id": "T141-section-reader",
+     "summary": "A heading opening with a task-id list followed by (bundle), Approach, part B or Performance checklist is each listed task's own; any other id list (feature 405's 15 headings) stays its first task's as before",
+     "class": "within",
+     "why": "Keeps existing plans' headings reading as they did, a compatibility choice, not a carve-out from bundling: any bundle written in the new form is read as each member's. It keeps no behavior the GM asked to change."
+    },
+    {
+     "id": "T141-decide",
+     "summary": "make decide T=a,b,c refused while a member's section is not the first's or T= is not the heading's list; lint once, checklist per member; one MODE 4 prompt asking the reviewer to judge every task in it",
+     "class": "within",
+     "why": "One section and one review for the bundle is what was asked; the refusals keep a member from being reviewed by another's section, and the per-member checklist and review keep each task judged."
+    },
+    {
+     "id": "T141-verdict",
+     "summary": "record-task on the first task writes the same entry under each member whose section is the same; tick (owed_for) and push (judge_in) read a block in several tasks' sections as in scope where any is; the Approach gate and the plan-round count read the bundle heading",
+     "class": "within",
+     "why": "Each member still carries a recorded verdict before its tick and push, so feature 243's gate holds for every task; only its cost is paid once."
+    },
+    {
+     "id": "T141-closing-split",
+     "summary": "make closing-checks T=a,b,c: the split's task is a set, the members' edit lines the caller's",
+     "class": "within",
+     "why": "One closing run over the bundle's files is one of the fixed costs the GM asked to pay once."
+    },
+    {
+     "id": "T141-selection-left-to-session",
+     "summary": "No automatic chooser of which tasks are tiny; a builder or session handed tiny open tasks starts them as one, and nothing limits a bundle's size",
+     "class": "within",
+     "why": "The GM asked that small tasks be able to be bundled and worked together and said 'let's do that'; he did not ask for an automatic selector or a size gate. The mechanism, plus the session picking tiny open tasks as he described, is the plain reading."
+    },
+    {
+     "id": "T141-filing-unchanged",
+     "summary": "Task filing is not cut back or changed",
+     "class": "within",
+     "why": "The GM's own words: 'not bother cutting back on new tasks filed'."
+    },
+    {
+     "id": "T141-single-task-unchanged",
+     "summary": "A single task's mark, section, prompt and verdict are written as before, existing tests unchanged",
+     "class": "within",
+     "why": "The request adds a bundle form; it asks nothing of the single-task flow."
+    },
+    {
+     "id": "T141-where-time-under-first",
+     "summary": "make where-time reports a bundle's time under its first task; the after-measurement of savings is a GUESS, to be measured on the first bundles landed",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This narrows the 2026-11-19 per-task breakdown for bundled tasks: the other members get no time of their own. Splitting it is physically impossible: one builder, one set of closing runs and one review serve all the members at once, so there is no per-member split to measure. The bundle's whole time is still reported and none is lost, which is what the breakdown is for. Calling the savings a GUESS until measured is the project's rule, not a gap."
+    },
+    {
+     "id": "T141-perf-tag",
+     "summary": "T141 is a [perf] task under FR-013 (speeds the builders' loop), its checklist answered in those terms",
+     "class": "within",
+     "why": "FR-013 names 'the builders' loop' as performance work; paying the fixed cost once per bundle speeds it, and the GM asked that performance work come first."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-22",
+   "blocks": [
+    "### T141 (each task pays the whole fixed cost whatever its fix's size - a builder, closing runs, a checklist section, `make decide`, its plan review rounds, a landing - and the GM asked that small tasks be bundled and worked at the same time, request.md \"on bundling small tasks\")",
+    "### T141 Approach (checklist part A)",
+    "### T141 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T141-measure-first",
+     "summary": "Measure the per-task fixed cost (builders, builder and agent minutes, review rounds, closing runs, landings) over 451's 107 landed tasks before building; conclude the saving is in builder reading-in, closing runs and review rounds, the landing already multi-task (T06).",
+     "class": "within",
+     "why": "Serves the GM's 'every individual task goes through the same process ... feels like it is itself the issue' by measuring that process; every figure carries a date and method. One wording oddity, not a finding: 'closing runs per task median 2, 58 tasks with one' reads only if 'with one' means 'with any run'."
+    },
+    {
+     "id": "T141-mark",
+     "summary": "make task-start T=a,b,c: every member's refusals checked first (not an open box, a phase task, a held feature) with nothing written while one stands; active-task names the first as task and all as tasks; each member's start logged, the first last, so it is in force and each member counts as started for land-alone (T101).",
+     "class": "within",
+     "why": "The GM asked that tiny open tasks be 'worked basically at the same time'; a bundle start is that. Applying each task's own refusals to every member keeps a single task's rules; refusing a phase task keeps the bundle to the small tasks the GM named."
+    },
+    {
+     "id": "T141-perf-first-per-member",
+     "summary": "FR-013 (performance first) asked of the bundle: ruled on the reading that FR-013's refusal is one of 'every member's refusal', so a non-performance member is refused while an open performance task exists, as it would be started alone.",
+     "class": "within",
+     "why": "The plan's constraint names FR-013 'asked of the bundle' and its test row 'performance first'; 'every member's refusal first' carries each member's task-start refusals, FR-013's among them. On this reading the bundle cannot carry a non-performance task past the queue the GM asked for ('prioritize performance improvements'). Had FR-013 been checked on the first member only, a non-performance task could ride in under a performance first task: that would narrow FR-013 and be NOT LEGITIMATE. The builder must implement the per-member reading."
+    },
+    {
+     "id": "T141-who-picks",
+     "summary": "The bundle is chosen by the session (a builder is 'handed' tiny open tasks), carried by T=a,b,c and the docs; no tool proposes the set or judges a task 'tiny', and nothing requires bundling.",
+     "class": "within",
+     "why": "The GM's words put the choosing in the session's hands: 'look at the current feature and say, hey, what set of tasks is currently open? All of which are very tiny'. Tininess is a judgment, not a mechanical property; the clause is carried by the T=a,b,c forms plus the docs step in Approach item 5. The 'real enforcement' sentence of 2026-11-19 approved the six improvements and four data ideas, not T141, and is not stretched here."
+    },
+    {
+     "id": "T141-counted-once",
+     "summary": "The event log files a T=a,b,c command under its first task, so the static-runs guard (FR-007) and the plan-round tripwire count a bundle's runs and rounds once; STATIC_RUNS_A_TASK and PLAN_ROUND_CAP unchanged.",
+     "class": "within",
+     "why": "No loosening: a bundle of n tasks gets one task's allowance of make static runs and plan rounds, not n. FR-007's purpose (stop make static as the edit loop) is kept whole."
+    },
+    {
+     "id": "T141-builder-serves-bundle",
+     "summary": "FR-006 'a builder serves one task' read as one bundle: the bundle's builder serves its members, keyed to the first task (the one id readers read); the context-threshold guard and the resume refusal still apply.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Implied by the GM's own later words: tiny tasks 'could all be worked basically at the same time', 'bundle them together when fixing them'. One builder over a bundle is that request; separate builders per member would defeat its stated purpose (the builder's reading-in paid once). FR-006's purpose (small builder contexts) is untouched: the context threshold still refuses past it, and the bundle is restricted to tiny tasks by the GM's own framing. The plan does not name FR-006 explicitly; it should, but the reading is sound."
+    },
+    {
+     "id": "T141-where-time-first",
+     "summary": "make where-time reports a bundle's time under its first task; the other members show no time of their own.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "FR-005 / the original request's per-task breakdown cannot be honoured member by member for a bundle: one builder's minutes, one closing run and one review round worked for all of them at once have no true split, and any allocation would be an invention rather than a measurement. The GM's bundling request itself makes the time joint. Booking it once, under the bundle's first task, is the honest measurement; it is what the retrospective should then show."
+    },
+    {
+     "id": "T141-section",
+     "summary": "plan_text::leading_tasks: a heading opening with a task-id list followed by (bundle), Approach, part B or Performance checklist is every listed task's own section; any other list heading (405's 15) stays its first task's.",
+     "class": "within",
+     "why": "One section for the bundle is the 'worked at the same time' request; leaving existing non-bundle list headings as they were keeps a single task's flow unchanged and is not a narrowing of anything the GM asked."
+    },
+    {
+     "id": "T141-decide",
+     "summary": "make decide T=a,b,c: refused while a member's section is not the first's or T= is not the heading's list; lint once, checklist per member; one MODE 4 prompt asking the reviewer to judge every task in it.",
+     "class": "within",
+     "why": "One review for the bundle is the fixed cost paid once; refusals keep the bundle coherent; every member still gets its checklist and its judgment, so no task escapes review."
+    },
+    {
+     "id": "T141-verdict-tick",
+     "summary": "record-task on the first writes the same verdict under each listed task with the same section; the tick (owed_for), push (judge_in), Approach gate and plan-round count read a bundle heading for each member.",
+     "class": "within",
+     "why": "Each member keeps its own recorded CLEAR verdict as the plan-stage gate requires; nothing ticks without one."
+    },
+    {
+     "id": "T141-closing",
+     "summary": "make closing-checks T=a,b,c: its split's task a set, the members' edit lines the caller's.",
+     "class": "within",
+     "why": "One closing run over the bundle's files is the GM's bundling; the members' edits are all checked."
+    },
+    {
+     "id": "T141-single-unchanged",
+     "summary": "A single task's mark, section, prompt and verdict are written as before; existing tests unchanged and passing; red-first tests (FR-012); budget one landing.",
+     "class": "within",
+     "why": "The GM asked to add bundling, not to change a single task's flow; red-first and the tests enforce the requested behavior."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-22",
+   "blocks": [
+    "### T141 (each task pays the whole fixed cost whatever its fix's size - a builder, closing runs, a checklist section, `make decide`, its plan review rounds, a landing - and the GM asked that small tasks be bundled and worked at the same time, request.md \"on bundling small tasks\")",
+    "### T141 Approach (checklist part A)",
+    "### T141 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D1 T= lists",
+     "summary": "make task-start, make closing-checks and make decide take T=a,b,c as make land already does; a bundle gets one section and one verdict that counts for each task.",
+     "class": "within",
+     "why": "This is how the GM's 2026-11-22 request is carried out: bundle the open small tasks and work them at the same time, which he approved with 'so let's do that then'."
+    },
+    {
+     "id": "D2 the mark",
+     "summary": "active-task names the first member as task and every member as tasks. Each member's start is logged, the first member's last, so it is the task in force. All of a bundle's refusals are checked before anything is written.",
+     "class": "within",
+     "why": "This is how a bundle is started. A single task's flow is unchanged (Approach 1, 12)."
+    },
+    {
+     "id": "D3 bundleable set",
+     "summary": "A member is refused when its box is not open, when it is a phase task (a parked stage's task included) or when its feature is held. The plan has no size test, so which tasks to bundle is the caller's choice.",
+     "class": "within",
+     "why": "The GM's words leave it to the session to look at the open tasks and pick the tiny ones, so leaving out a size test narrows nothing. A phase task is a stage of a staged plan, not one of the small defects the GM asked to bundle. A held feature or a closed box cannot be started alone either."
+    },
+    {
+     "id": "D4 FR-013 per member",
+     "summary": "Performance-first is checked for each member. A member that is not performance work is refused while an open performance task waits, unless that waiting task is a member of the same bundle. A performance task waiting outside the bundle still causes the refusal, with the same escape a single start has.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This is an exception to FR-013's literal start refusal. The GM's own words imply it: look at 'what set of tasks is currently open' and work them 'at the same time'. If the exception were refused, the performance member would have to go alone first, and every member would pay the fixed cost again, which is exactly what bundling exists to stop. It leaves FR-013's purpose intact, which is that performance work comes first and makes everything after it faster. The block says members are 'started, closed and landed together' and 'the landing ticks every member'. So a member that is not performance work can never land ahead of the performance member it shares a bundle with, and the end-to-end pin (land/tests/bundle.rs) lands the bundle as one unit. Counting each member as started for land-alone (T101) only lets the bundle land apart from other tasks. It does not let one member land apart from its own bundle. Any performance task outside the bundle still blocks as before."
+    },
+    {
+     "id": "D5 FR-006 bundle as the task",
+     "summary": "One builder serves one bundle. The resume refusal after landing still fires because the landing ticks every member, whichever member's id the guard reads. The context-cap guard is unchanged.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This is an exception to FR-006's 'serves one task'. The GM's words call for it: working the tiny tasks 'at the same time' with one builder is how the builder's reading-in cost is paid once, and that cost is one of the fixed costs bundling exists to cut. FR-006's purpose is to keep builder contexts small, and that is still enforced without change. The context threshold guard is untouched, and resuming a builder after its bundle lands is still refused, since every member is ticked. This ruling does not rest on the members being small: a large bundle reaches the same context cap as a large task."
+    },
+    {
+     "id": "D6 counted once",
+     "summary": "The event log files a T=a,b,c command under the first member, so the static-runs guard and the plan-round tripwire count a bundle once. PLAN_ROUND_CAP and STATIC_RUNS_A_TASK are unchanged.",
+     "class": "within",
+     "why": "A bundle gets the same allowance one task gets, which is tighter than n tasks would get, not a carve-out from FR-007 or the round cap."
+    },
+    {
+     "id": "D7 first-task attribution",
+     "summary": "make where-time reports a bundle's time under its first member (performance checklist 5). The other members carry no time of their own.",
+     "class": "within",
+     "why": "One builder's minute, one closing run and one review round in a bundle belong to the bundle, not to any one member. No per-member split could be true. The time is kept whole, so the categories (tests, compile, gate, land, review) and the totals the retrospective tooling exists to show are intact. This is a difference in how the time is reported, not a wrong answer from the tool."
+    },
+    {
+     "id": "D8 the section reader",
+     "summary": "A heading that opens with a list of task ids followed by (bundle), Approach, part B or Performance checklist belongs to every listed task. Any other list heading still belongs to its first task, which keeps feature 405's 15 existing headings as they were. The search space is stated: a grep of specs/*/plan*.md.",
+     "class": "within",
+     "why": "The bundle section needs this, and the plan does not change how past plans are read."
+    },
+    {
+     "id": "D9 decide",
+     "summary": "make decide T=a,b,c is refused while a member's section is not the first member's, or while T= differs from the heading's list, and the refusal names the fix. The lint runs once and the checklist once per member. One MODE 4 prompt asks the reviewer to judge every task in the bundle.",
+     "class": "within",
+     "why": "The bundle's single review, which the request implies."
+    },
+    {
+     "id": "D10 the verdict, tick and push",
+     "summary": "record-task on the first member writes the same entry under each listed member that shares the section. owed_for and judge_in treat a block as in scope when any of the tasks sharing it is. The Approach gate and the plan-round count read the bundle heading for each member.",
+     "class": "within",
+     "why": "One verdict that counts for each member, as the bundle needs."
+    },
+    {
+     "id": "D11 closing-checks split",
+     "summary": "The split in make closing-checks T=a,b,c takes a set of tasks, and the members' edit lines count as the caller's.",
+     "class": "within",
+     "why": "One set of closing runs per bundle, which is the fixed cost the GM asked to pay once."
+    },
+    {
+     "id": "D12 [perf] class",
+     "summary": "T141 is classed as performance work under FR-013 because it makes the builders' loop faster.",
+     "class": "within",
+     "why": "FR-013 defines performance work to include a task that makes the builders' loop faster, and the GM asked on 2026-11-20 for performance improvements to come first."
+    },
+    {
+     "id": "D13 measurement and order",
+     "summary": "The fixed cost is measured first, and each figure carries the date it was observed and its method. The tests go red before the change, the expected saving is marked GUESS, and the after-measurement waits for the first real bundles.",
+     "class": "within",
+     "why": "This is ordering and evidence, and it narrows nothing that was asked."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-22",
+   "blocks": [
+    "### T147 (a landing refused on another task's open plan-review passes, which only that task's landing writes; the first pass took no escape)",
+    "### T147 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "the rule (left.rs)",
+     "summary": "A ledger refusal (--refuse or --landing) leaves out a MODE 4 pass whose subject names a feature present here and a task ticked in neither tasks file and not among the landing's tasks; it names them on stdout. Block reviews, ticked tasks', absent features' and every other pass still refuse.",
+     "class": "within",
+     "why": "This is the fix the task names in its heading (a landing refused on another task's open plan-review passes) and serves the request's rework clause (refused landings, improvement 6 'smaller landing fixes'). The left-out pass is not dropped: it refuses at its own task's landing and push, where that task is in the landed set or ticked. The bundle holds the heading, not T147's task line verbatim; judged against request.md and the spec."
+    },
+    {
+     "id": "reach: the rule in the set all three refusals read",
+     "summary": "The rule sits in the one owed set the first pass, the push's ledger-owed --refuse row and make land-tooling read, so all three leave another open task's plan review out.",
+     "class": "within",
+     "why": "Same deferral as the rule. Each left-out pass still refuses at its own task's push, because that task is ticked by then (the plan says so explicitly). Enforcement moves to the landing that can answer it and is not lost, so 385 T72's 'plan reviews written by every push route' still holds for each task's own reviews."
+    },
+    {
+     "id": "absence counts as open",
+     "summary": "A task id in neither tasks.md nor tasks-done.md counts as open, so its pass is left out.",
+     "class": "within",
+     "why": "A design detail of the fix with a stated, measured-against-history reason: land-alone commits a task's own lines only (de7ecc7de4), so another task's line can be absent at the landing worktree's HEAD. It removes no requested behavior."
+    },
+    {
+     "id": "the writes, unchanged (labeled)",
+     "summary": "A feature's landing still writes every pass traced to it, another open task's plan review included, and --write-plan-reviews still writes any recorded one; 'left to that task's landing' governs refusal, not writing.",
+     "class": "within",
+     "why": "Measurement corrected the heading's premise ('which only that task's landing writes'). Keeping the earliest write route changes nothing asked and narrows nothing: more rows get written, none fewer."
+    },
+    {
+     "id": "no escape added at the first pass",
+     "summary": "cheap.rs asks --refuse --landing <feature> --tasks <ids>; LEDGER_ROWS_OK stays at the push and make land-tooling only.",
+     "class": "within",
+     "why": "The heading's second half is answered by removing the refusal the landing could not answer, rather than by adding a way past it. By the plan's own defect test (checklist item 12: a landing refused that its own work could not answer), the refusals left are the other passes. Its own session clears them with the named make ledger-owed WRITE= and a commit. The '70 still owed with the clone's 46 uncommitted rows added' sentence shows they are rows the session itself has not yet written, not rows a landing cannot reach. With no wrong outcome left there is no defect left (constitution XIV v2.36.0), and adding no bypass fits the GM's 'real enforcement and not just instructions'. FR-012's escape rule covers FR-006 to 009, 011 and 013, not this ledger refusal that predates the feature."
+    },
+    {
+     "id": "found and left: the 86-133 untied passes",
+     "summary": "The passes no subject ties to a feature (impl-drift DECIDE_OK dispatches, workflow units, modal and record checks) refuse every landing until the session writes and commits their rows; called working as designed, not filed.",
+     "class": "within",
+     "why": "Rises or falls with the escape decision, on the same reading. These are passes the landing's session ran and can write itself with the remedy the refusal names, so they are a refusal the landing's own work can answer, not a defect deferred. FR-009's deferral form is therefore not owed."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-22",
+   "blocks": [
+    "### T151 (make ledger-owed traced no check-wave unit to the session that ran it: 35 impl-drift passes of 449 T249's re-check stayed owed after the session's write and refused every landing)",
+    "### T151 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "the trace and the reply (THE FIX)",
+     "summary": "rows.rs finds a check-wave unit's transcript under <session>/subagents/workflows/<run>/, names its session as the directory above subagents/workflows/<run>/, and takes its reply and label from the run's journal.jsonl result line",
+     "class": "within",
+     "why": "This is the defect the task line names (no wave unit traced to its session, 35 passes owed and refusing every landing), fixed by the measured route; a hand-dispatched pass's tracing is unchanged."
+    },
+    {
+     "id": "THE VERDICT CELL (parity)",
+     "summary": "a wave pass's verdict cell is read from its reply by verdict_of, as a hand-dispatched pass's is, not from the journal's verdict field",
+     "class": "within",
+     "why": "Keeps the one existing rule for every row; nothing in the request or task line asks for a second source of verdicts, and the outcome matches the session's existing hand-dispatched impl-drift rows."
+    },
+    {
+     "id": "THE COST CELLS (accepted limitation)",
+     "summary": "costing (settle::settled via cost::subagent_files) is not taught the wave directory, so a wave pass keeps the hook's logged cost cells rather than cells recomputed from its finished transcript",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The task is the trace: a session's write must answer its own wave units so they stop refusing landings. Since a row answers a pass by its cost cells (feature 371), recomputing them would make the ~342 wave passes already answered owed again and refuse landings, which defeats the task's own stated purpose. No wrong outcome is shown in the logged cells (they are the cells the pass is keyed by), so this leaves a difference, not a known defect, and no task needs filing."
+    },
+    {
+     "id": "THE WRITE and the 40 plan reviews",
+     "summary": "the session's write records the 35 wave units and 6 later passes with WRITE= text that names where each check's verdict is recorded; 40 MODE 4 plan reviews stay owed as their landings' own (451 T105)",
+     "class": "within",
+     "why": "Applies the existing by-hand write rule (451 T105) unchanged; the acted-on text is stated true for the later passes, and the done measure (only MODE 4 plan reviews owed) is what the fix is for."
+    },
+    {
+     "id": "the pins",
+     "summary": "a_sessions_write_takes_its_own_check_wave_units_from_the_journal and a_wave_unit_s_text_result_is_its_reply, red before the fix",
+     "class": "within",
+     "why": "Tests whose only effect is to make the fix happen and keep happening; enforcement of the task, not added scope."
+    },
+    {
+     "id": "Performance work? no",
+     "summary": "the task is classed a defect fix, not performance work",
+     "class": "within",
+     "why": "It is a review-ledger trace defect blocking landings, not a time measurement or speed change; FR-013's ordering is not narrowed by it."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-22",
+   "blocks": [
+    "### T151 (make ledger-owed traced no check-wave unit to the session that ran it: 35 impl-drift passes of 449 T249's re-check stayed owed after the session's write and refused every landing)",
+    "### T151 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "THE FIX (trace and reply)",
+     "summary": "rows.rs gains wave_transcript to find <session>/subagents/workflows/<run>/agent-<id>.jsonl; session_of names a wave unit's session as the directory above subagents/workflows/<run>/; filled_row takes a wave unit's reply and label from its run's journal.jsonl result line and fills the same cells a hand-dispatched pass gets.",
+     "class": "within",
+     "why": "This is the task line itself: a session's make ledger-owed WRITE= must trace and write the check-wave units it ran so they stop refusing every landing. The mechanism follows from the measured transcript and journal layout; nothing asked is narrowed."
+    },
+    {
+     "id": "THE VERDICT CELL (parity)",
+     "summary": "A wave pass's verdict cell is read from its reply by verdict_of, as a hand-dispatched pass's is, not from the journal's verdict field; an all-IN-STEP impl-drift reply therefore reads 'findings' exactly as the session's hand-dispatched impl-drift rows already do.",
+     "class": "within",
+     "why": "Within the task: the task line is the trace, and choosing which source fills the verdict cell, the same reading verdict_of already gives every hand-dispatched pass, narrows nothing asked. Whether an all-IN-STEP impl-drift reply reading 'findings' is a wrong outcome: the bundle shows none. The plan's own constraint is that a row answers a pass by its check and cost cells (feature 371), and nothing in the bundle shows a consumer of the verdict cell that would refuse, let through or misreport work because of it. It is a pre-existing reading of verdict_of shared by the hand-dispatched rows, not introduced here; on what the bundle shows it is a difference, not a defect left (constitution XIV), so it needs no ruling."
+    },
+    {
+     "id": "THE COST CELLS (accepted limitation)",
+     "summary": "settle::settled / cost::subagent_files are not taught the wave directory, so a wave pass keeps the hook's logged cost cells rather than cells recomputed from its finished transcript; the size of any difference was not measured.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Wave passes' costing is left unlike hand-dispatched passes' (the hook's logged cells kept, not recomputed). Applying the fuller treatment would defeat the task's own stated purpose, concretely: by the plan's constraint a row answers a pass by its check and cost cells (feature 371), so recomputing the cells of the ~342 wave passes already answered (377 logged, 35 owed, measured 2026-11-22 by grep -c) would make those rows answer nothing and put the passes back on the owed list, refusing landings again - the exact failure T151 exists to end. The plan states the unmeasured size of the gap openly rather than claiming it is nil."
+    },
+    {
+     "id": "THE WRITE",
+     "summary": "The fix's binary runs make ledger-owed WRITE= with the session's earlier rows' full text, writing 41 rows (the 35 impl-drift units and 6 later passes), with the 40 plan reviews refused as their landings' own per 451 T105; after, only 40 MODE 4 plan reviews are owed.",
+     "class": "within",
+     "why": "Carrying out the task's goal under an existing rule (451 T105); the WRITE= text names where every check's verdict is recorded, so applying it to the 6 later passes asserts nothing false. Nothing asked is narrowed."
+    },
+    {
+     "id": "pins and order",
+     "summary": "Red-first pins in ledger_passes/tests.rs (a wave unit written for its own session from the journal, another session's unit left owed) and rows/tests.rs (text result, structured result without text, no result, no agent), shown red before the fix; then crate tests, lint, cover, closing checks.",
+     "class": "within",
+     "why": "Tests whose only effect is to make the requested fix happen and keep happening; enforcement of the task, not added scope."
+    },
+    {
+     "id": "search space",
+     "summary": "transcript( callers under rust/gate/crates/reviews found by grep; trace.rs unit_prompt already walks the wave directory and is unchanged; cost::transcript itself is not changed.",
+     "class": "within",
+     "why": "The enumeration states its search space; because the fix adds wave_transcript in rows.rs rather than changing cost::transcript, callers of cost::transcript outside that crate are not affected. No narrowing."
+    },
+    {
+     "id": "Found and left? none",
+     "summary": "The plan declares no defect found and left.",
+     "class": "within",
+     "why": "Consistent with the rulings above: the verdict-cell reading is shown by the bundle to be a difference with no wrong outcome, and the cost-cell limitation is a stated, purpose-justified choice, not a defect shown. Nothing else in the block is left."
+    },
+    {
+     "id": "Performance work? no",
+     "summary": "T151 is declared not performance work for FR-013's scheduling.",
+     "class": "within",
+     "why": "The task repairs the review ledger's tracing of check-wave passes to their session so landings stop being refused; it neither improves a measured time nor is the time-measurement work the GM asked on 2026-11-20 to count as performance. The declaration takes nothing from FR-013."
     }
    ]
   }
@@ -18085,6 +18733,92 @@
    ],
    "verdict": "CLEAR"
   },
+  "T49": {
+   "section_sha256": "d296efe401528ff65f901a48ed58e8e07497594f8f3161c54c8b5b4330252334",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D1 order",
+     "summary": "The fix waits on T96, then T110; T49 lands on its own as gate-write's half of T110's reading.",
+     "class": "within",
+     "why": "This sets the order and narrows nothing: the defect is still fixed in full, after the two tasks it depends on."
+    },
+    {
+     "id": "D2 one reader",
+     "summary": "The parameter-binding and root-joining reading lives only in shared::tree::program (T110), and gate-write builds no second copy.",
+     "class": "within",
+     "why": "This decides where the code lives. The outcome named in Approach item 1 is unchanged."
+    },
+    {
+     "id": "D3 binding",
+     "summary": "A literal binds, by position or keyword, to a parameter of a function defined once. A *args parameter or a second def binds nothing.",
+     "class": "within",
+     "why": "This is the gate's rule that a path it cannot resolve fails open: with a second def it is not statically known which body runs. For *args the binding is knowable, so leaving it out is a gap. The reviewer measured on 2026-11-21 with /tmp/fid-t49/star.py (heredocs and python -c; a def with a starred parameter, called anywhere with a string literal, whose body holds a write or copy/replace sink): 0 in T93's corpus and 0 in T33's fixtures. This is a gap with no occurrence, not a known defect left."
+    },
+    {
+     "id": "D4 sinks",
+     "summary": "Only open(N, w/a/x), N.write_text/write_bytes and Path(N).write_text count as writes. shutil.copy and os.replace are read as no write, recorded as a limit.",
+     "class": "within",
+     "why": "The instrument could have seen the other sinks: /tmp/t49/scripts/measure.py's sinks() searches os.replace/os.rename/shutil.copy*/move (form 4) and os.remove/unlink (form 5). The reviewer re-ran it on 2026-11-21 on both corpora and got forms {0:36, 1:9} on T93's corpus and {0:9, 1:78, 3:7} on the fixtures, so 0 of forms 4 and 5 in either. That makes this a gap with no occurrence, not a known defect left (constitution XIV v2.36.0). The three forms hold every observed hit."
+    },
+    {
+     "id": "D5 roots",
+     "summary": "A literal is joined onto a root by ROOT / P, os.path.join(ROOT, P) or ROOT + P, where ROOT is a top-level name bound once to a literal.",
+     "class": "within",
+     "why": "This carries T49's line (#170's shape, R = pathlib.Path(...)) and T110's '+' form."
+    },
+    {
+     "id": "D6a fail-open f-string",
+     "summary": "An f-string root (window#72) stays let through.",
+     "class": "within",
+     "why": "T49's own line, as quoted in item 2, says 'a base the program computes fails open, so window#72 stays let through'."
+    },
+    {
+     "id": "D6b fail-open computed/twice-bound root",
+     "summary": "A root the program computes or binds twice fails open.",
+     "class": "within",
+     "why": "This is the gate's rule that a path it cannot resolve fails open, and T49's line on a computed base."
+    },
+    {
+     "id": "D6c fail-open rebound parameter",
+     "summary": "A parameter rebound to anything other than Path(P)/P fails open.",
+     "class": "within",
+     "why": "Measured 0 of 17 hit functions in T93's corpus and 0 of 23 in the fixtures, and it avoids window#72's class of false refusal. It is an unresolvable path under the gate's rule."
+    },
+    {
+     "id": "D6d fail-open hand-on",
+     "summary": "A function that hands P on to another function fails open.",
+     "class": "within",
+     "why": "T49's line places the literal by reading the function's body, so a write in another function is outside the mechanism the task names. The block gives no count. The reviewer measured one on 2026-11-21 with /tmp/fid-t49/star.py (heredocs and python -c; an own function called anywhere with a literal, at any position, whose body passes one of its parameters to another own function that writes): 0 in T93's corpus and 0 in T33's fixtures. This is a gap with no occurrence, not a known defect."
+    },
+    {
+     "id": "D7 own_args API",
+     "summary": "Whether own_args stays for unbound literals or retires into the reader's placed reading is left to T110's API.",
+     "class": "within",
+     "why": "This is an API choice. Item 1 fixes the behavior: other literals are blanked as now, and placed literals count."
+    },
+    {
+     "id": "D8 red first and exits",
+     "summary": "window#172's pinned let-through case moves to refused, beside #170's shape; #72 and a read-only parameter stay let through; the replay moves exactly #170 and #172; red means the task is set down and an inability claim goes to make arbiter-ask.",
+     "class": "within",
+     "why": "This enforces T49's line ('red first on #170's and #172's shapes; the replay's moves accounted'). 'Every other verdict unchanged' asks that a check still does its job. It is not an exactness standard on outputs."
+    },
+    {
+     "id": "D9 docs row",
+     "summary": "docs/guards.md's missing gate-write row is written in this task before landing, not now, because of T96's uncommitted hunk in the same file.",
+     "class": "within",
+     "why": "The defect is fixed in this task, not deferred. Only its timing inside the task is set."
+    },
+    {
+     "id": "D10 not performance work",
+     "summary": "'Performance work? no.'",
+     "class": "within",
+     "why": "The GM's 2026-11-20 words make performance improvements and measurement tasks first. FR-013 is cut in spec-index and the block does not cite it. On a plain reading this is a guard-correctness fix, and the block measures that the hole had no victim in the corpus (none of the 11 in-tree writes ran under a gate). It saves no measured time and is not a measurement task, so the classification narrows nothing."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
   "T96": {
    "section_sha256": "1b2816c04e3ea23a21a481d94c1ea96e565aee8f6649e9847466d4185b27c35a",
    "reviewed": "2026-11-21",
@@ -18198,6 +18932,68 @@
    ],
    "verdict": "CLEAR"
   },
+  "T113": {
+   "section_sha256": "eb6b7eb3d3749d7368a6622f84dca6c116b6871de02a3e8c012f89d98aba8a2d",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T113-scope",
+     "summary": "Fix the three copies T108's Found and left named (make_only_hooks MASK_QUOTE, no_poll_hooks::pace SHELL_STRING, readme_hooks TRIPLE), the task as filed",
+     "class": "within",
+     "why": "Exactly the task line's scope; a guard hang stalls the builders' loop, which FR-013 counts as performance work (request: 'prioritize those remaining improvement fixes', 'priotitize performance improvements going forward')."
+    },
+    {
+     "id": "T113-linear-scans",
+     "summary": "Replace each backtracking pattern by a linear scan (mask_quotes over shape's quoted_spans with the lookbehind kept; shell_strings keeping SHELL_AT's non-backtracking head; triple_quoted_spans in shared::shape), the three patterns deleted, quoted_spans untouched",
+     "class": "within",
+     "why": "The mechanism of the fix; removes the exponential search rather than bounding it, so the defect is fixed, not deferred."
+    },
+    {
+     "id": "T113-shape-public",
+     "summary": "triple_quoted_spans made public in shared::shape, beside quoted_spans, for readme and for T112's tree::program",
+     "class": "within",
+     "why": "Placement of the fix's own code so the sibling copy's task can call it; adds no behavior the request or spec did not ask for."
+    },
+    {
+     "id": "T113-held-to-pattern",
+     "summary": "Each scan held by differential tests and the 9,646-row replay to the answers of the pattern it replaced",
+     "class": "within",
+     "why": "The author's own choice to keep every other answer as before; it is verification of the requested fix, not an exactness standard imposed on the work, and no reviewer asks for it."
+    },
+    {
+     "id": "T113-pins",
+     "summary": "One red-first hang pin per guard through its own entry plus shape's own pin, under T103's 10 s deadline (a GUESS)",
+     "class": "within",
+     "why": "FR-012's red-first test: enforcement of the fix, which serves the request."
+    },
+    {
+     "id": "T113-left-to-T112",
+     "summary": "The same core's two copies in shared::tree (tree.rs:70 QUOTED, tree/program.rs:64 TRIPLE) not fixed here, left to T112 (filed by T108, lands before T22, its builder already working in both files)",
+     "class": "within",
+     "why": "Those copies were never T113's: T108 filed them as T112, an open task actively in progress on those files; T113 touching them would collide with another task's uncommitted work. The Found and left gives the why, the filed id and the order FR-009 asks for, and the class search's method."
+    },
+    {
+     "id": "T113-not-the-class",
+     "summary": "interp.rs:27/:33, planhold.rs:28/:30, guard_file_hooks.rs:56 and tunables.rs:39 left as they are",
+     "class": "within",
+     "why": "Each read and shown to have branches that never read the same character, so they do not backtrack this way: not a defect, nothing left unfixed."
+    },
+    {
+     "id": "T113-closing-escape",
+     "summary": "Closing run 3 taken with STATIC_OK for run 2's red, which was T112's mid-edit tree.rs, a file judged no task's",
+     "class": "within",
+     "why": "A recorded escape of the guard's own designed form (FR-007/FR-012), for a red outside this task's files, followed by a green run; it narrows nothing the request asked for."
+    },
+    {
+     "id": "T113-perf-checklist-brief",
+     "summary": "Classed [perf] under FR-013 as builders'-loop work, performance checklist answered in brief since no engine speed is involved",
+     "class": "within",
+     "why": "FR-013 names 'the builders' loop' among performance work; the checklist's questions are each answered with a measurement."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
   "T106": {
    "section_sha256": "95bc62a80a7396b66e447ca56d1dc403fc6d5ee7a6ec02fd925ae85362c7407d",
    "reviewed": "2026-11-21",
@@ -18262,68 +19058,6 @@
      "summary": "After T26, T53, T74 and T96, and lands before T22.",
      "class": "within",
      "why": "It orders the task. It narrows nothing."
-    }
-   ],
-   "verdict": "CLEAR"
-  },
-  "T113": {
-   "section_sha256": "eb6b7eb3d3749d7368a6622f84dca6c116b6871de02a3e8c012f89d98aba8a2d",
-   "reviewed": "2026-11-21",
-   "declared": "spec-fidelity",
-   "decisions": [
-    {
-     "id": "T113-scope",
-     "summary": "Fix the three copies T108's Found and left named (make_only_hooks MASK_QUOTE, no_poll_hooks::pace SHELL_STRING, readme_hooks TRIPLE), the task as filed",
-     "class": "within",
-     "why": "Exactly the task line's scope; a guard hang stalls the builders' loop, which FR-013 counts as performance work (request: 'prioritize those remaining improvement fixes', 'priotitize performance improvements going forward')."
-    },
-    {
-     "id": "T113-linear-scans",
-     "summary": "Replace each backtracking pattern by a linear scan (mask_quotes over shape's quoted_spans with the lookbehind kept; shell_strings keeping SHELL_AT's non-backtracking head; triple_quoted_spans in shared::shape), the three patterns deleted, quoted_spans untouched",
-     "class": "within",
-     "why": "The mechanism of the fix; removes the exponential search rather than bounding it, so the defect is fixed, not deferred."
-    },
-    {
-     "id": "T113-shape-public",
-     "summary": "triple_quoted_spans made public in shared::shape, beside quoted_spans, for readme and for T112's tree::program",
-     "class": "within",
-     "why": "Placement of the fix's own code so the sibling copy's task can call it; adds no behavior the request or spec did not ask for."
-    },
-    {
-     "id": "T113-held-to-pattern",
-     "summary": "Each scan held by differential tests and the 9,646-row replay to the answers of the pattern it replaced",
-     "class": "within",
-     "why": "The author's own choice to keep every other answer as before; it is verification of the requested fix, not an exactness standard imposed on the work, and no reviewer asks for it."
-    },
-    {
-     "id": "T113-pins",
-     "summary": "One red-first hang pin per guard through its own entry plus shape's own pin, under T103's 10 s deadline (a GUESS)",
-     "class": "within",
-     "why": "FR-012's red-first test: enforcement of the fix, which serves the request."
-    },
-    {
-     "id": "T113-left-to-T112",
-     "summary": "The same core's two copies in shared::tree (tree.rs:70 QUOTED, tree/program.rs:64 TRIPLE) not fixed here, left to T112 (filed by T108, lands before T22, its builder already working in both files)",
-     "class": "within",
-     "why": "Those copies were never T113's: T108 filed them as T112, an open task actively in progress on those files; T113 touching them would collide with another task's uncommitted work. The Found and left gives the why, the filed id and the order FR-009 asks for, and the class search's method."
-    },
-    {
-     "id": "T113-not-the-class",
-     "summary": "interp.rs:27/:33, planhold.rs:28/:30, guard_file_hooks.rs:56 and tunables.rs:39 left as they are",
-     "class": "within",
-     "why": "Each read and shown to have branches that never read the same character, so they do not backtrack this way: not a defect, nothing left unfixed."
-    },
-    {
-     "id": "T113-closing-escape",
-     "summary": "Closing run 3 taken with STATIC_OK for run 2's red, which was T112's mid-edit tree.rs, a file judged no task's",
-     "class": "within",
-     "why": "A recorded escape of the guard's own designed form (FR-007/FR-012), for a red outside this task's files, followed by a green run; it narrows nothing the request asked for."
-    },
-    {
-     "id": "T113-perf-checklist-brief",
-     "summary": "Classed [perf] under FR-013 as builders'-loop work, performance checklist answered in brief since no engine speed is involved",
-     "class": "within",
-     "why": "FR-013 names 'the builders' loop' among performance work; the checklist's questions are each answered with a measurement."
     }
    ],
    "verdict": "CLEAR"
@@ -18428,6 +19162,75 @@
     }
    ],
    "verdict": "CLEAR"
+  },
+  "T51": {
+   "section_sha256": "50772510f113a8dd65d71eb82aabedffc105227c7c83ebcb6371d8ca95525a5c",
+   "reviewed": "2026-11-21",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T51-a set down on T118",
+     "summary": "T51 is measured, not built, and is set down until T118 teaches shared::tree::program's reader the join read and the run argv list and counts gate-write's own file test; then T51 replays and lands gate-write's script route.",
+     "class": "within",
+     "why": "Sequencing only. The call-site route measured now refuses correct work (16 make-only and 68 gate-write false rows), which would be a defect introduced; the blocking work is filed as T118 with its order ('lands before T51'), as FR-009 asks of a deferral. Nothing the task's line asks for is dropped by waiting."
+    },
+    {
+     "id": "T51-b text at the call",
+     "summary": "The script's text is the command's own heredoc for that path, else the file at the call (a regular file, at most 1 MB, a CONVENTION), handed to program_names in gate-write's shell_write behind a regular-file test.",
+     "class": "within",
+     "why": "This is the task's own line (the script file's text read at the call), with the 38-of-48 same-command pairs measured as the reason the heredoc is read first. The 1 MB cap sits above every script either corpus read (largest 37,480 bytes) and drops no measured case."
+    },
+    {
+     "id": "T51-c computed or absent path fails open",
+     "summary": "A script whose path is computed ($S/walk.py) or absent at the call fails open, as HEAD does.",
+     "class": "within",
+     "why": "Parity with HEAD, which is the brief's constraint. A path held in a shell variable cannot be read from the command text at PreToolUse. It moves no verdict HEAD gives today, so it leaves the guards exactly as they are on that shape rather than narrowing a fix."
+    },
+    {
+     "id": "T51-d1 make-only call-site route not landed now",
+     "summary": "Make-only's verdicts do not move in this round: reading scripts at its call site gives 16 moves, 0 corrections, all false.",
+     "class": "within",
+     "why": "Landing the route now would make make-only refuse correct work 16 times for no correction, which is a defect introduced (XIV: a check that refuses good work). Not landing it now is sequencing behind T118, the same as T51-a."
+    },
+    {
+     "id": "T51-d2 make-only's unread route an accepted limitation",
+     "summary": "Make-only gains the script route only if the post-T118 replay shows a correction (none in either corpus; 17 of 17 guard-file script writes carried GUARD_EDIT_OK), so its unread route is an accepted limitation; the cost named is that an unescaped script write of a guard file would pass unrecorded.",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "The block's own cost sentence describes a check that passes bad work: a script that writes a guard file with no escape gets past make-only's guard-write. That is a wrong outcome by XIV's definition, and it can be reproduced on demand from one constructed fixture. Corpus silence does not change that. The block is inconsistent here: item 12 treats gate-write's 'would-be and not observed' hole as worth fixing and make-only's identical hole as acceptable. The argument against landing now (16 false refusals) runs out at T118: by the block's own breakdown, 12 of the 16 are t67's run argv lists and 3 are joined reads (window#305, #306, #309), both shapes T118 teaches. That leaves 1 (t58's path-prefix filter). The condition 'only if the replay shows a correction' is set against the same corpora that showed none, so as written it settles the question rather than asking it again after T118. Leaving a known defect needs a filed id and an order (FR-009); this one has neither. What it should say instead: at T51's post-T118 replay, make-only also gains the script route. Its correction is shown red-first by a fixture, a script that writes a guard file with no escape, which make-only must refuse. Any false refusals that remain (the path-prefix shape) are fixed in T51's files or filed with 'lands before T51', under item 7's own rule that a shape is never landed as a limit. Or, if make-only's route really is outside T51, file it as its own task with an id and an order, and remove 'accepted limitation'."
+    },
+    {
+     "id": "T51-e let-through baseline and the sixth-shape rule",
+     "summary": "Window#302, #305, #306 and #309 must be let through in both guards; a sixth false shape found at the replay is fixed in T51's files or filed 'lands before T51', and never landed as a limit.",
+     "class": "within",
+     "why": "This is T33's baseline that the task's line names, and the rule leaves no defect behind. It does not narrow anything."
+    },
+    {
+     "id": "T51-f T33's seven gate-seen pairs owe no reader shape",
+     "summary": "None of the seven gate-seen pairs' writes moved: five write into another clone under the mirror's ignored .clones/, main-tree#99 never runs its script, and window#80 runs a computed path.",
+     "class": "within",
+     "why": "The five other-clone writes are outside this tree's gate, so they are no wrong outcome here, and #99 has no run. Window#80 is a different kind of case from the other six: it belongs with T51-c (computed path, fails open as HEAD does), and it does not show the hole is harmless. The block does not say whether window#80's script rewrote a tracked file under a running gate. If it did, that is an observed wrong outcome, which contradicts item 12's 'would-be and not observed'. The revision this verdict asks for should say what window#80 wrote, or class it under T51-c. It is not ruled a narrowing on this bundle, because the block's figures do not show a tracked-file write."
+    },
+    {
+     "id": "T51-g unread runs owed to the resumed replay",
+     "summary": "83 of T33's literal runs (43 the repository's own files read only from the overlay, 21 /tmp scratch, 19 elsewhere) and 10 unread literal pairs are owed to the resumed replay; every figure is over the 455 scripts read.",
+     "class": "within",
+     "why": "Nothing is dropped: they are carried into the replay that item 9's 'every other moved row accounted' closes. The figures are stated over their own denominator and the sums reconcile (455 = 430 + 25, 83 = 43 + 21 + 19, 38 = 8 + 10 + 20)."
+    },
+    {
+     "id": "T51-h found and left: T118 and T119",
+     "summary": "HEAD's false refusals of stdin and -c programs are filed as T118, lands before T51; make guard-edit's stray permits file and a permit that did not take are filed as T119, lands before T22.",
+     "class": "within",
+     "why": "Each states why it is outside T51's files, gives its filed id and gives its order, as FR-009 requires of a deferred defect. Neither is carried past a step without an order."
+    },
+    {
+     "id": "T51-i not performance work",
+     "summary": "The section answers 'Performance work? no'.",
+     "class": "within",
+     "why": "T51 fixes whether a guard is correct. The one time cost item 12 names (a gate paid again) is a consequence of that, not the task's purpose. Nothing in the GM's 2026-11-20 or 2026-11-21 words reaches a guard-reading task, so the label leaves nothing the GM asked to have go first."
+    }
+   ],
+   "verdict": "BLOCKED"
   },
   "T80": {
    "section_sha256": "559ecc5b4f343b35f95fd4ed6c7b4ef7c83183708f80b3c5503b705458d2143c",
@@ -18588,81 +19391,6 @@
      "summary": "Performance work? no",
      "class": "within",
      "why": "A guard defect fix, not a performance or measurement task under FR-013; the classification narrows no requirement, and the fix goes ahead as known-defect work."
-    }
-   ],
-   "verdict": "CLEAR"
-  },
-  "T105": {
-   "section_sha256": "27123866b6a5ba0372d896503e613335d00934e65c38b57740f64a4cfd0ddc3f",
-   "reviewed": "2026-11-22",
-   "declared": "spec-fidelity",
-   "decisions": [
-    {
-     "id": "T105-merge-order",
-     "summary": "Every held file through git's line merge first; a sectioned file (plan.md, tasks.md, plan-review.json, and now dev/review-ledger.md) merged piece by piece only when its line merge conflicts.",
-     "class": "within",
-     "why": "Carries the task line's 'the sectioned merge on every file it reports' and adds the ledger, the file shape 1 stopped on; it is the mechanism the task exists to fix, and leaves already-merging files on the path they take now."
-    },
-    {
-     "id": "T105-additions-superset",
-     "summary": "Any other file's hunks where both sides only added are taken whole when one side's added lines contain the other's in order (merge3 via git merge-file --diff3).",
-     "class": "within",
-     "why": "Widens 'identical additions merged' to a strict superset of additions, which loses nothing either side wrote; broader than the line, not narrower, and only changes a case that conflicts today."
-    },
-    {
-     "id": "T105-archive-mark-piece",
-     "summary": "In plan.md an archive mark is a piece of its own, not the tail of the section before it, and a clone's new piece goes after the tip's new pieces beside its anchor, so the marks stay where the archived section was.",
-     "class": "within",
-     "why": "Directly fixes the measured cause of shapes 2 and 3 (the tick's marks read as the tail of the preceding section); the replays show every clone piece kept and every tip mark kept in order."
-    },
-    {
-     "id": "T105-ledger-tip-wins",
-     "summary": "The ledger is cut at each line and a measured row keyed by its pass (check, wall, tokens); where both sides answer one pass the tip's row is kept and the clone's dropped.",
-     "class": "within",
-     "why": "The landing's rows are the record the push writes; keeping both was the duplicate-row defect (8 rows for 4 passes) the section also repairs. Dropping the clone's duplicate loses no pass, only a second copy of one."
-    },
-    {
-     "id": "T105-conflicts-still-stop",
-     "summary": "A piece both sides changed is line-merged first; a piece the tip archived that the clone changed still conflicts; every file merged before any exit, all conflicts named at once by piece, and a conflict moves nothing.",
-     "class": "within",
-     "why": "Keeps the take safe on the one shape where a choice would lose work, and improves the message (all conflicts, named by section) rather than narrowing anything."
-    },
-    {
-     "id": "T105-hand-write-refusal-scope",
-     "summary": "make ledger-owed WRITE= passes --by-hand and refuses only a recorded plan review's row as the landing's own, naming the count and writing the rest; a hand write of a pass traced to its feature (--write specs/<F>/) stays allowed, and a collision of such a row is left to the merge (tip kept).",
-     "class": "narrowing",
-     "ruling": "LEGITIMATE",
-     "why": "Narrows the task line's 'the hand rows refused as the landing's own' from both of the landing's sets to one. Refusing the per-feature traced set would be wrong on the measured facts: only make land writes those rows, while land-tooling.sh and sync-with-main.sh's push do not (grep of every ledger-owed caller, 2026-11-21), so on those routes the hand write is the only writer and refusing it would leave the passes unrecorded - defeating the purpose (a ledger with each pass once). The purpose of the refusal (no duplicate rows for the same pass) is still met for that set by the ledger merge's tip-wins rule, so nothing the refusal is for is given up. The rows that every push route writes itself (recorded plan reviews) are the ones refused."
-    },
-    {
-     "id": "T105-step2-marks",
-     "summary": "Step 2's splice moves for 4 of the replayed tasks: it now stages the task's own text and no longer an adjacent mark or blank line.",
-     "class": "within",
-     "why": "A difference from the previous staging that the section measures and explains as step 2 meaning the task's own pieces; constitution XIII asks that everything works, not that staging be unchanged, and the existing landing-alone tests are required green."
-    },
-    {
-     "id": "T105-merge-tree-left",
-     "summary": "The merge of the clone's own commits since the landing began (merge-tree) is not treated as one of the shapes.",
-     "class": "within",
-     "why": "Not a defect left: the measured T82-T101 timeline shows the clone committed after the take's exit-4 advice, which already gives the route (git merge once committed). The task line names three shapes and all three are carried."
-    },
-    {
-     "id": "T105-duplicate-rows-fixed",
-     "summary": "Main's ledger's 8 rows for the 4 T82-T101 plan reviews reduced to the tip's 4, review-census's spec-fidelity judgment 1,526 to 1,522, runs unchanged.",
-     "class": "within",
-     "why": "A known defect the task's own failure produced, fixed in this step as fix-as-we-go requires, by the same rule the new merge applies."
-    },
-    {
-     "id": "T105-not-performance",
-     "summary": "The section classes T105 as not performance work (a correctness fix of the landing's take).",
-     "class": "within",
-     "why": "It is neither a performance improvement nor a measurement of time in the sense of the GM's 2026-11-20 order; classing it so keeps FR-013's scheduling honest rather than narrowing it."
-    },
-    {
-     "id": "T105-mark-length",
-     "summary": "The conflict mark is 31 characters long, labeled a CONVENTION of the parse.",
-     "class": "within",
-     "why": "An implementation convention inside the fix, labeled at its point of use; no requirement speaks to it."
     }
    ],
    "verdict": "CLEAR"
@@ -18852,6 +19580,81 @@
      "summary": "The third closing-checks run escaped FR-007's third-make-static refusal because the first two stopped before static's later stages.",
      "class": "within",
      "why": "FR-012 provides a recorded escape with a reason; the stated reason (earlier runs did not reach static's later stages) is the case the escape exists for."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T105": {
+   "section_sha256": "27123866b6a5ba0372d896503e613335d00934e65c38b57740f64a4cfd0ddc3f",
+   "reviewed": "2026-11-22",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T105-merge-order",
+     "summary": "Every held file through git's line merge first; a sectioned file (plan.md, tasks.md, plan-review.json, and now dev/review-ledger.md) merged piece by piece only when its line merge conflicts.",
+     "class": "within",
+     "why": "Carries the task line's 'the sectioned merge on every file it reports' and adds the ledger, the file shape 1 stopped on; it is the mechanism the task exists to fix, and leaves already-merging files on the path they take now."
+    },
+    {
+     "id": "T105-additions-superset",
+     "summary": "Any other file's hunks where both sides only added are taken whole when one side's added lines contain the other's in order (merge3 via git merge-file --diff3).",
+     "class": "within",
+     "why": "Widens 'identical additions merged' to a strict superset of additions, which loses nothing either side wrote; broader than the line, not narrower, and only changes a case that conflicts today."
+    },
+    {
+     "id": "T105-archive-mark-piece",
+     "summary": "In plan.md an archive mark is a piece of its own, not the tail of the section before it, and a clone's new piece goes after the tip's new pieces beside its anchor, so the marks stay where the archived section was.",
+     "class": "within",
+     "why": "Directly fixes the measured cause of shapes 2 and 3 (the tick's marks read as the tail of the preceding section); the replays show every clone piece kept and every tip mark kept in order."
+    },
+    {
+     "id": "T105-ledger-tip-wins",
+     "summary": "The ledger is cut at each line and a measured row keyed by its pass (check, wall, tokens); where both sides answer one pass the tip's row is kept and the clone's dropped.",
+     "class": "within",
+     "why": "The landing's rows are the record the push writes; keeping both was the duplicate-row defect (8 rows for 4 passes) the section also repairs. Dropping the clone's duplicate loses no pass, only a second copy of one."
+    },
+    {
+     "id": "T105-conflicts-still-stop",
+     "summary": "A piece both sides changed is line-merged first; a piece the tip archived that the clone changed still conflicts; every file merged before any exit, all conflicts named at once by piece, and a conflict moves nothing.",
+     "class": "within",
+     "why": "Keeps the take safe on the one shape where a choice would lose work, and improves the message (all conflicts, named by section) rather than narrowing anything."
+    },
+    {
+     "id": "T105-hand-write-refusal-scope",
+     "summary": "make ledger-owed WRITE= passes --by-hand and refuses only a recorded plan review's row as the landing's own, naming the count and writing the rest; a hand write of a pass traced to its feature (--write specs/<F>/) stays allowed, and a collision of such a row is left to the merge (tip kept).",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Narrows the task line's 'the hand rows refused as the landing's own' from both of the landing's sets to one. Refusing the per-feature traced set would be wrong on the measured facts: only make land writes those rows, while land-tooling.sh and sync-with-main.sh's push do not (grep of every ledger-owed caller, 2026-11-21), so on those routes the hand write is the only writer and refusing it would leave the passes unrecorded - defeating the purpose (a ledger with each pass once). The purpose of the refusal (no duplicate rows for the same pass) is still met for that set by the ledger merge's tip-wins rule, so nothing the refusal is for is given up. The rows that every push route writes itself (recorded plan reviews) are the ones refused."
+    },
+    {
+     "id": "T105-step2-marks",
+     "summary": "Step 2's splice moves for 4 of the replayed tasks: it now stages the task's own text and no longer an adjacent mark or blank line.",
+     "class": "within",
+     "why": "A difference from the previous staging that the section measures and explains as step 2 meaning the task's own pieces; constitution XIII asks that everything works, not that staging be unchanged, and the existing landing-alone tests are required green."
+    },
+    {
+     "id": "T105-merge-tree-left",
+     "summary": "The merge of the clone's own commits since the landing began (merge-tree) is not treated as one of the shapes.",
+     "class": "within",
+     "why": "Not a defect left: the measured T82-T101 timeline shows the clone committed after the take's exit-4 advice, which already gives the route (git merge once committed). The task line names three shapes and all three are carried."
+    },
+    {
+     "id": "T105-duplicate-rows-fixed",
+     "summary": "Main's ledger's 8 rows for the 4 T82-T101 plan reviews reduced to the tip's 4, review-census's spec-fidelity judgment 1,526 to 1,522, runs unchanged.",
+     "class": "within",
+     "why": "A known defect the task's own failure produced, fixed in this step as fix-as-we-go requires, by the same rule the new merge applies."
+    },
+    {
+     "id": "T105-not-performance",
+     "summary": "The section classes T105 as not performance work (a correctness fix of the landing's take).",
+     "class": "within",
+     "why": "It is neither a performance improvement nor a measurement of time in the sense of the GM's 2026-11-20 order; classing it so keeps FR-013's scheduling honest rather than narrowing it."
+    },
+    {
+     "id": "T105-mark-length",
+     "summary": "The conflict mark is 31 characters long, labeled a CONVENTION of the parse.",
+     "class": "within",
+     "why": "An implementation convention inside the fix, labeled at its point of use; no requirement speaks to it."
     }
    ],
    "verdict": "CLEAR"
@@ -19303,6 +20106,195 @@
      "class": "narrowing",
      "ruling": "LEGITIMATE",
      "why": "The fix stops at the gate launcher although the same defect class is known in two other builds, so this is a narrowing, and it is a defect left rather than a difference. It is legitimate because the defect is not left: it is filed as T146 with a stated order (before T98, whose occupancy measurement a stalled build would skew). It also states why it is not fixed here (T142's line is the gate launcher's failure, and the guard fails open to its last good binary rather than refusing every gate command). FR-009 asks for exactly those three things: a reason, a filed id and an order. Nothing the GM asked is excepted: the request does not name this defect, and the GM's 2026-11-22 words favour filing small defects and bundling them over widening one task. One caution for T146: these two instances came from a scan of transcripts for link failures, which finds builds that FAILED, not every build exposed. T146's census should be drawn from the launchers that build with CARGO_INCREMENTAL or the tool or dev profile, for example a grep over scripts/ and the Makefiles, and not from this list."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T141": {
+   "section_sha256": "90f5ebe09a257539dfd854241f050e5706dcc39597640d9175d6090d299076dd",
+   "reviewed": "2026-11-22",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D1 T= lists",
+     "summary": "make task-start, make closing-checks and make decide take T=a,b,c as make land already does; a bundle gets one section and one verdict that counts for each task.",
+     "class": "within",
+     "why": "This is how the GM's 2026-11-22 request is carried out: bundle the open small tasks and work them at the same time, which he approved with 'so let's do that then'."
+    },
+    {
+     "id": "D2 the mark",
+     "summary": "active-task names the first member as task and every member as tasks. Each member's start is logged, the first member's last, so it is the task in force. All of a bundle's refusals are checked before anything is written.",
+     "class": "within",
+     "why": "This is how a bundle is started. A single task's flow is unchanged (Approach 1, 12)."
+    },
+    {
+     "id": "D3 bundleable set",
+     "summary": "A member is refused when its box is not open, when it is a phase task (a parked stage's task included) or when its feature is held. The plan has no size test, so which tasks to bundle is the caller's choice.",
+     "class": "within",
+     "why": "The GM's words leave it to the session to look at the open tasks and pick the tiny ones, so leaving out a size test narrows nothing. A phase task is a stage of a staged plan, not one of the small defects the GM asked to bundle. A held feature or a closed box cannot be started alone either."
+    },
+    {
+     "id": "D4 FR-013 per member",
+     "summary": "Performance-first is checked for each member. A member that is not performance work is refused while an open performance task waits, unless that waiting task is a member of the same bundle. A performance task waiting outside the bundle still causes the refusal, with the same escape a single start has.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This is an exception to FR-013's literal start refusal. The GM's own words imply it: look at 'what set of tasks is currently open' and work them 'at the same time'. If the exception were refused, the performance member would have to go alone first, and every member would pay the fixed cost again, which is exactly what bundling exists to stop. It leaves FR-013's purpose intact, which is that performance work comes first and makes everything after it faster. The block says members are 'started, closed and landed together' and 'the landing ticks every member'. So a member that is not performance work can never land ahead of the performance member it shares a bundle with, and the end-to-end pin (land/tests/bundle.rs) lands the bundle as one unit. Counting each member as started for land-alone (T101) only lets the bundle land apart from other tasks. It does not let one member land apart from its own bundle. Any performance task outside the bundle still blocks as before."
+    },
+    {
+     "id": "D5 FR-006 bundle as the task",
+     "summary": "One builder serves one bundle. The resume refusal after landing still fires because the landing ticks every member, whichever member's id the guard reads. The context-cap guard is unchanged.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This is an exception to FR-006's 'serves one task'. The GM's words call for it: working the tiny tasks 'at the same time' with one builder is how the builder's reading-in cost is paid once, and that cost is one of the fixed costs bundling exists to cut. FR-006's purpose is to keep builder contexts small, and that is still enforced without change. The context threshold guard is untouched, and resuming a builder after its bundle lands is still refused, since every member is ticked. This ruling does not rest on the members being small: a large bundle reaches the same context cap as a large task."
+    },
+    {
+     "id": "D6 counted once",
+     "summary": "The event log files a T=a,b,c command under the first member, so the static-runs guard and the plan-round tripwire count a bundle once. PLAN_ROUND_CAP and STATIC_RUNS_A_TASK are unchanged.",
+     "class": "within",
+     "why": "A bundle gets the same allowance one task gets, which is tighter than n tasks would get, not a carve-out from FR-007 or the round cap."
+    },
+    {
+     "id": "D7 first-task attribution",
+     "summary": "make where-time reports a bundle's time under its first member (performance checklist 5). The other members carry no time of their own.",
+     "class": "within",
+     "why": "One builder's minute, one closing run and one review round in a bundle belong to the bundle, not to any one member. No per-member split could be true. The time is kept whole, so the categories (tests, compile, gate, land, review) and the totals the retrospective tooling exists to show are intact. This is a difference in how the time is reported, not a wrong answer from the tool."
+    },
+    {
+     "id": "D8 the section reader",
+     "summary": "A heading that opens with a list of task ids followed by (bundle), Approach, part B or Performance checklist belongs to every listed task. Any other list heading still belongs to its first task, which keeps feature 405's 15 existing headings as they were. The search space is stated: a grep of specs/*/plan*.md.",
+     "class": "within",
+     "why": "The bundle section needs this, and the plan does not change how past plans are read."
+    },
+    {
+     "id": "D9 decide",
+     "summary": "make decide T=a,b,c is refused while a member's section is not the first member's, or while T= differs from the heading's list, and the refusal names the fix. The lint runs once and the checklist once per member. One MODE 4 prompt asks the reviewer to judge every task in the bundle.",
+     "class": "within",
+     "why": "The bundle's single review, which the request implies."
+    },
+    {
+     "id": "D10 the verdict, tick and push",
+     "summary": "record-task on the first member writes the same entry under each listed member that shares the section. owed_for and judge_in treat a block as in scope when any of the tasks sharing it is. The Approach gate and the plan-round count read the bundle heading for each member.",
+     "class": "within",
+     "why": "One verdict that counts for each member, as the bundle needs."
+    },
+    {
+     "id": "D11 closing-checks split",
+     "summary": "The split in make closing-checks T=a,b,c takes a set of tasks, and the members' edit lines count as the caller's.",
+     "class": "within",
+     "why": "One set of closing runs per bundle, which is the fixed cost the GM asked to pay once."
+    },
+    {
+     "id": "D12 [perf] class",
+     "summary": "T141 is classed as performance work under FR-013 because it makes the builders' loop faster.",
+     "class": "within",
+     "why": "FR-013 defines performance work to include a task that makes the builders' loop faster, and the GM asked on 2026-11-20 for performance improvements to come first."
+    },
+    {
+     "id": "D13 measurement and order",
+     "summary": "The fixed cost is measured first, and each figure carries the date it was observed and its method. The tests go red before the change, the expected saving is marked GUESS, and the after-measurement waits for the first real bundles.",
+     "class": "within",
+     "why": "This is ordering and evidence, and it narrows nothing that was asked."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T147": {
+   "section_sha256": "e028e11ce22dfad0051a4dce2e6d5ab8d959b46bbc9ce28c0c330ac7cced13a5",
+   "reviewed": "2026-11-22",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "the rule (left.rs)",
+     "summary": "A ledger refusal (--refuse or --landing) leaves out a MODE 4 pass whose subject names a feature present here and a task ticked in neither tasks file and not among the landing's tasks; it names them on stdout. Block reviews, ticked tasks', absent features' and every other pass still refuse.",
+     "class": "within",
+     "why": "This is the fix the task names in its heading (a landing refused on another task's open plan-review passes) and serves the request's rework clause (refused landings, improvement 6 'smaller landing fixes'). The left-out pass is not dropped: it refuses at its own task's landing and push, where that task is in the landed set or ticked. The bundle holds the heading, not T147's task line verbatim; judged against request.md and the spec."
+    },
+    {
+     "id": "reach: the rule in the set all three refusals read",
+     "summary": "The rule sits in the one owed set the first pass, the push's ledger-owed --refuse row and make land-tooling read, so all three leave another open task's plan review out.",
+     "class": "within",
+     "why": "Same deferral as the rule. Each left-out pass still refuses at its own task's push, because that task is ticked by then (the plan says so explicitly). Enforcement moves to the landing that can answer it and is not lost, so 385 T72's 'plan reviews written by every push route' still holds for each task's own reviews."
+    },
+    {
+     "id": "absence counts as open",
+     "summary": "A task id in neither tasks.md nor tasks-done.md counts as open, so its pass is left out.",
+     "class": "within",
+     "why": "A design detail of the fix with a stated, measured-against-history reason: land-alone commits a task's own lines only (de7ecc7de4), so another task's line can be absent at the landing worktree's HEAD. It removes no requested behavior."
+    },
+    {
+     "id": "the writes, unchanged (labeled)",
+     "summary": "A feature's landing still writes every pass traced to it, another open task's plan review included, and --write-plan-reviews still writes any recorded one; 'left to that task's landing' governs refusal, not writing.",
+     "class": "within",
+     "why": "Measurement corrected the heading's premise ('which only that task's landing writes'). Keeping the earliest write route changes nothing asked and narrows nothing: more rows get written, none fewer."
+    },
+    {
+     "id": "no escape added at the first pass",
+     "summary": "cheap.rs asks --refuse --landing <feature> --tasks <ids>; LEDGER_ROWS_OK stays at the push and make land-tooling only.",
+     "class": "within",
+     "why": "The heading's second half is answered by removing the refusal the landing could not answer, rather than by adding a way past it. By the plan's own defect test (checklist item 12: a landing refused that its own work could not answer), the refusals left are the other passes. Its own session clears them with the named make ledger-owed WRITE= and a commit. The '70 still owed with the clone's 46 uncommitted rows added' sentence shows they are rows the session itself has not yet written, not rows a landing cannot reach. With no wrong outcome left there is no defect left (constitution XIV v2.36.0), and adding no bypass fits the GM's 'real enforcement and not just instructions'. FR-012's escape rule covers FR-006 to 009, 011 and 013, not this ledger refusal that predates the feature."
+    },
+    {
+     "id": "found and left: the 86-133 untied passes",
+     "summary": "The passes no subject ties to a feature (impl-drift DECIDE_OK dispatches, workflow units, modal and record checks) refuse every landing until the session writes and commits their rows; called working as designed, not filed.",
+     "class": "within",
+     "why": "Rises or falls with the escape decision, on the same reading. These are passes the landing's session ran and can write itself with the remedy the refusal names, so they are a refusal the landing's own work can answer, not a defect deferred. FR-009's deferral form is therefore not owed."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T151": {
+   "section_sha256": "f202f1ba6a706ddce32d4158100eb2c912d950b3d1cd53ee081ff16b78799f1e",
+   "reviewed": "2026-11-22",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "THE FIX (trace and reply)",
+     "summary": "rows.rs gains wave_transcript to find <session>/subagents/workflows/<run>/agent-<id>.jsonl; session_of names a wave unit's session as the directory above subagents/workflows/<run>/; filled_row takes a wave unit's reply and label from its run's journal.jsonl result line and fills the same cells a hand-dispatched pass gets.",
+     "class": "within",
+     "why": "This is the task line itself: a session's make ledger-owed WRITE= must trace and write the check-wave units it ran so they stop refusing every landing. The mechanism follows from the measured transcript and journal layout; nothing asked is narrowed."
+    },
+    {
+     "id": "THE VERDICT CELL (parity)",
+     "summary": "A wave pass's verdict cell is read from its reply by verdict_of, as a hand-dispatched pass's is, not from the journal's verdict field; an all-IN-STEP impl-drift reply therefore reads 'findings' exactly as the session's hand-dispatched impl-drift rows already do.",
+     "class": "within",
+     "why": "Within the task: the task line is the trace, and choosing which source fills the verdict cell, the same reading verdict_of already gives every hand-dispatched pass, narrows nothing asked. Whether an all-IN-STEP impl-drift reply reading 'findings' is a wrong outcome: the bundle shows none. The plan's own constraint is that a row answers a pass by its check and cost cells (feature 371), and nothing in the bundle shows a consumer of the verdict cell that would refuse, let through or misreport work because of it. It is a pre-existing reading of verdict_of shared by the hand-dispatched rows, not introduced here; on what the bundle shows it is a difference, not a defect left (constitution XIV), so it needs no ruling."
+    },
+    {
+     "id": "THE COST CELLS (accepted limitation)",
+     "summary": "settle::settled / cost::subagent_files are not taught the wave directory, so a wave pass keeps the hook's logged cost cells rather than cells recomputed from its finished transcript; the size of any difference was not measured.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Wave passes' costing is left unlike hand-dispatched passes' (the hook's logged cells kept, not recomputed). Applying the fuller treatment would defeat the task's own stated purpose, concretely: by the plan's constraint a row answers a pass by its check and cost cells (feature 371), so recomputing the cells of the ~342 wave passes already answered (377 logged, 35 owed, measured 2026-11-22 by grep -c) would make those rows answer nothing and put the passes back on the owed list, refusing landings again - the exact failure T151 exists to end. The plan states the unmeasured size of the gap openly rather than claiming it is nil."
+    },
+    {
+     "id": "THE WRITE",
+     "summary": "The fix's binary runs make ledger-owed WRITE= with the session's earlier rows' full text, writing 41 rows (the 35 impl-drift units and 6 later passes), with the 40 plan reviews refused as their landings' own per 451 T105; after, only 40 MODE 4 plan reviews are owed.",
+     "class": "within",
+     "why": "Carrying out the task's goal under an existing rule (451 T105); the WRITE= text names where every check's verdict is recorded, so applying it to the 6 later passes asserts nothing false. Nothing asked is narrowed."
+    },
+    {
+     "id": "pins and order",
+     "summary": "Red-first pins in ledger_passes/tests.rs (a wave unit written for its own session from the journal, another session's unit left owed) and rows/tests.rs (text result, structured result without text, no result, no agent), shown red before the fix; then crate tests, lint, cover, closing checks.",
+     "class": "within",
+     "why": "Tests whose only effect is to make the requested fix happen and keep happening; enforcement of the task, not added scope."
+    },
+    {
+     "id": "search space",
+     "summary": "transcript( callers under rust/gate/crates/reviews found by grep; trace.rs unit_prompt already walks the wave directory and is unchanged; cost::transcript itself is not changed.",
+     "class": "within",
+     "why": "The enumeration states its search space; because the fix adds wave_transcript in rows.rs rather than changing cost::transcript, callers of cost::transcript outside that crate are not affected. No narrowing."
+    },
+    {
+     "id": "Found and left? none",
+     "summary": "The plan declares no defect found and left.",
+     "class": "within",
+     "why": "Consistent with the rulings above: the verdict-cell reading is shown by the bundle to be a difference with no wrong outcome, and the cost-cell limitation is a stated, purpose-justified choice, not a defect shown. Nothing else in the block is left."
+    },
+    {
+     "id": "Performance work? no",
+     "summary": "T151 is declared not performance work for FR-013's scheduling.",
+     "class": "within",
+     "why": "The task repairs the review ledger's tracing of check-wave passes to their session so landings stop being refused; it neither improves a measured time nor is the time-measurement work the GM asked on 2026-11-20 to count as performance. The declaration takes nothing from FR-013."
     }
    ],
    "verdict": "CLEAR"

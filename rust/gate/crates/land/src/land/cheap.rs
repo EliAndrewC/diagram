@@ -3,7 +3,7 @@
 //! the known drifts and its own escape records.
 
 use std::fmt::Write as _;
-use std::path::{Path, PathBuf};
+use std::path::Path;
 use std::sync::LazyLock;
 
 use fancy_regex::Regex;
@@ -228,11 +228,22 @@ impl Land {
             stops.push("uncommitted changes - commit them first".to_owned());
         }
         let ledger = self.root.join("dev/review-ledger.md");
-        let (_rc, owed) = self.ledger(&["--ledger", &ledger.to_string_lossy()]);
+        // the landing owes the rows of its own tasks' passes and every pass no other landing writes; another open task's plan review
+        // is left to that task's landing (451 T147, `reviews`' `ledger_passes/left.rs`), as the push's `--refuse` leaves it
+        let (name, ticks, at) = (name_of(d), tasks.join(" "), ledger.to_string_lossy());
+        let asked = [
+            "--ledger",
+            &at,
+            "--refuse",
+            "--landing",
+            &name,
+            "--tasks",
+            &ticks,
+        ];
+        let (_rc, owed) = self.ledger(&asked);
         if owed.contains("| ? |") {
             stops.push("review passes with no ledger row - make ledger-owed WRITE=\"<where you recorded what you did>\"".to_owned());
         }
-        let ticks = tasks.join(" ");
         // the mark's task holds, unless each task landed is ready beside it (451 T101, `ready.rs`)
         let held = self.hold(d, tasks)?;
         if !held.is_empty() {
@@ -369,9 +380,9 @@ impl Land {
     /// (`claims_scope`, FR-021 as amended 2026-11-01). '' otherwise. (`land.py`'s `file_left` branch, which filed the other findings to
     /// the open-claims feature, had no caller that set it, so it is not ported.)
     fn open_claims_refusal(&self, d: &Path, text: &str, task: &str) -> Result<String, String> {
-        let Some(stage) = phase_of(d, text, task) else {
+        if phase_of(d, text, task).is_none() {
             return Ok(String::new());
-        };
+        }
         let changed: Vec<String> = self
             .delta_names()?
             .into_iter()
@@ -380,12 +391,10 @@ impl Land {
         if changed.is_empty() {
             return Ok(String::new());
         }
-        let seam: Vec<String> = stage_seam(&self.root, &stage)?
-            .iter()
-            .map(|p| p.to_string_lossy().into_owned())
-            .collect();
+        // no seam: it was the `l7r/**/*.py` files defining `stage_<phase>`, and feature 449 T247 found none left (T158 deleted the
+        // engine's Python), so its walk was deleted
         let out = self.claims(&["report"]).1;
-        let (own, _left) = self.inproc.scope_split(&self.root, &out, &changed, &seam)?;
+        let (own, _left) = self.inproc.scope_split(&self.root, &out, &changed, &[])?;
         if own.is_empty() {
             return Ok(String::new());
         }
@@ -443,34 +452,6 @@ fn boxes_in(text: &str) -> Vec<(String, String)> {
         .map_while(Result::ok)
         .map(|m| (m[1].to_owned(), m[2].to_owned()))
         .collect()
-}
-
-/// The Python files that define `stage_<phase>` - the seam whose imports the Rust stage runs on: every `l7r/**/*.py`, in path order.
-fn stage_seam(root: &Path, phase: &str) -> Result<Vec<PathBuf>, String> {
-    let pat = re(&format!(r"(?m)^def stage_{}\(", fancy_regex::escape(phase)));
-    let mut files = Vec::new();
-    walk_py(&root.join("l7r"), &mut files);
-    files.sort_by(|a, b| a.components().cmp(b.components()));
-    let mut out = Vec::new();
-    for p in files {
-        if pat.is_match(&py_read(&p)?).unwrap_or(false) {
-            out.push(p);
-        }
-    }
-    Ok(out)
-}
-
-/// Every `*.py` under `dir` (`rglob`), symlinked directories not followed.
-fn walk_py(dir: &Path, out: &mut Vec<PathBuf>) {
-    for entry in std::fs::read_dir(dir).into_iter().flatten().flatten() {
-        let path = entry.path();
-        let real_dir = entry.file_type().is_ok_and(|t| t.is_dir());
-        if real_dir {
-            walk_py(&path, out);
-        } else if path.extension().is_some_and(|e| e == "py") && path.is_file() {
-            out.push(path);
-        }
-    }
 }
 
 #[cfg(test)]
