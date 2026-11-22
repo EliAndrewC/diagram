@@ -156,13 +156,12 @@ impl Land {
             claims_poll: Duration::from_secs_f64(CLAIMS_POLL_S),
             clock: std::rc::Rc::new(RealClock),
             cgroup: PathBuf::from("/sys/fs/cgroup"),
-            memwatch: PathBuf::from(std::env::var("HOME").unwrap_or_default())
-                .join(".claude/memwatch"),
+            memwatch: PathBuf::from(root.var("HOME")).join(".claude/memwatch"),
             meminfo: PathBuf::from("/proc/meminfo"),
             cpus: memory::cpus_online(Path::new("/sys/devices/system/cpu/online")),
-            boxes: set("LAND_BOXES"),
+            boxes: set(root, "LAND_BOXES"),
             box_open: RefCell::new(Vec::new()),
-            arbiter_ok: !std::env::var("ARBITER_OK").unwrap_or_default().is_empty(),
+            arbiter_ok: !root.var("ARBITER_OK").is_empty(),
             inproc: Box::new(inproc::Real),
             fetched: std::cell::Cell::new(false),
             make_target: phase::run_target(Path::new("/proc"), std::process::id()),
@@ -485,8 +484,9 @@ impl Land {
         }
     }
 
-    /// What the tick reads of the process: its environment, but the gate tree its tools are run from, which is this landing's own
-    /// (`scripts`' parent), as `tick-task.py` run by path from there had it.
+    /// What the tick reads of the process: the root's environment (a real run's the process's, a test's its own map, so no test takes a
+    /// session's `PLAN_REVIEW_OK`, 451 T94), but the gate tree its tools are run from, which is this landing's own (`scripts`' parent),
+    /// as `tick-task.py` run by path from there had it.
     fn tick_env(&self) -> impl Fn(&str) -> Option<String> + '_ {
         move |k: &str| {
             if k == "L7R_GATE_TREE" {
@@ -498,7 +498,7 @@ impl Land {
                         .into_owned(),
                 );
             }
-            std::env::var(k).ok()
+            self.root.opt(k)
         }
     }
 
@@ -603,10 +603,10 @@ fn reverted(rc: i32, out: &str, tick_sha: &str) -> String {
     format!("its ticks could NOT be reverted ({why}): the tick commit {short} stands in the clone. Resolve what the push left (a merge in progress: fix the conflicts and commit), then push it with scripts/sync-with-main.sh done - the tick goes with it - or drop it with git revert --no-edit {short}")
 }
 
-/// A variable set to something but blanks (`LAND_BOXES`, as `_boxes()` read it); `ARBITER_OK` was read with no strip, so a blank
-/// value counts there.
-fn set(key: &str) -> bool {
-    !strip(&std::env::var(key).unwrap_or_default()).is_empty()
+/// A variable of the root's environment set to something but blanks (`LAND_BOXES`, as `_boxes()` read it; 451 T94: never the
+/// process's in a test); `ARBITER_OK` was read with no strip, so a blank value counts there.
+fn set(root: &Rooted, key: &str) -> bool {
+    !strip(&root.var(key)).is_empty()
 }
 
 /// The exit code `subprocess` reports: the process's own, or minus the signal that ended it.

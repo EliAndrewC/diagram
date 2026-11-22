@@ -213,6 +213,19 @@ const TOOLS: [&str; 7] = [
     "bin/make",
 ];
 
+/// The guard census of these tests, never the live one (451 T94: a landing's tick wrote its fixture's `plan-gate` rows into
+/// `~/.claude/guard-log`, 978 of them by 2026-11-22): one directory for the process, set before the fixture is built, so every test
+/// whose landing ticks writes there (the plan and task crates' `quiet_census`).
+pub(super) fn quiet_census() -> PathBuf {
+    static DIR: std::sync::OnceLock<PathBuf> = std::sync::OnceLock::new();
+    DIR.get_or_init(|| {
+        let dir = l7r_shared::tempdir::beside_binary("land-census");
+        std::env::set_var("GUARD_LOG_DIR", &dir);
+        dir
+    })
+    .clone()
+}
+
 /// THE FIXTURE BUILT ONCE A TEST BINARY (feature 449 T167, as T164 built the owed crate's): a clone holding `specs/449-x/tasks.md` and
 /// its bare origin, and the stub tree, made by three git calls and one `install` where each landing's own took nine and seven - a
 /// third of a short landing test's time. The origin is the clone's objects and refs copied, as a local `clone --bare` lays them out,
@@ -221,6 +234,7 @@ const TOOLS: [&str; 7] = [
 fn template() -> &'static Path {
     static DIR: std::sync::OnceLock<PathBuf> = std::sync::OnceLock::new();
     DIR.get_or_init(|| {
+        quiet_census();
         let dir = l7r_shared::tempdir::beside_binary("land-template");
         let root = dir.join("repo");
         std::fs::create_dir_all(&root).unwrap();
@@ -645,7 +659,8 @@ fn the_helpers_read_as_the_python_did() {
     assert!(super::reverted(1, "error: x\nmore\n", "abc").contains("(error: x)"));
     assert!(super::decode(&[0xff]).is_err());
     assert!(super::spawn_error("p", &std::io::Error::other("x")).contains("'p'"));
-    assert!(!super::set("L7R_LAND_TEST_SURELY_UNSET"));
+    let blank = l7r_shared::env::Rooted::with(".", &[("LAND_BOXES", "  ")]);
+    assert!(!super::set(&blank, "LAND_BOXES"));
     let dir = scratch("land-read");
     put(&dir, "a.txt", "a\r\nb\rc");
     assert_eq!(super::py_read(&dir.join("a.txt")).unwrap(), "a\nb\nc");
@@ -793,4 +808,57 @@ fn a_command_that_cannot_start_or_speaks_no_text_is_a_raise() {
 fn the_process_landing_keeps_its_root() {
     let land = Land::new(Path::new("/r"), Path::new("/r/scripts"));
     assert_eq!(land.root.path(), Path::new("/r"));
+}
+
+/// The census's entries holding `needle`.
+fn census_holding(needle: &str) -> usize {
+    let dir = quiet_census();
+    let entries = std::fs::read_dir(dir).unwrap().flatten();
+    entries
+        .filter(|e| {
+            std::fs::read_to_string(e.path())
+                .unwrap_or_default()
+                .contains(needle)
+        })
+        .count()
+}
+
+/// 451 T94: a landing's escapes are its root's environment, never the process's - a test's own map, so a session's exported
+/// `PLAN_REVIEW_OK`, `ARBITER_OK` or `BOXES=1` reaches no test - and its tick's firings go to the census, never `~/.claude/guard-log`.
+#[test]
+fn a_landing_reads_its_own_escapes_and_logs_to_the_census() {
+    let mut fx = fx("land-own-escapes");
+    let d = fx.root.join("specs/449-x");
+    put(
+        &d,
+        "plan.md",
+        "# Plan\n\nThe fixture's plan, changed since its review.\n",
+    );
+    let refused = fx.land.tick(&d, "T1", NOTE).unwrap();
+    let (_, err) = fx.said();
+    assert_ne!(refused, 0, "{err}");
+    has(&err, "plan decisions have no current CLEAR review");
+    // read before this test names the census itself: the fixture's own build set it, or the tick wrote the live log
+    let logged = l7r_shared::log::dir();
+    let census = quiet_census();
+    assert_eq!(logged, census);
+    let why = "a test's own escape, 451 T94 pin";
+    fx.land.root = l7r_shared::env::Rooted::with(fx.root.clone(), &[("PLAN_REVIEW_OK", why)]);
+    let ticked = fx.land.tick(&d, "T1", NOTE).unwrap();
+    let (out, _) = fx.said();
+    assert_eq!(ticked, 0, "{out}");
+    has(&out, &format!("plan gate BYPASSED - {why}"));
+    let escaped = census_holding(why);
+    assert_eq!(escaped, 1);
+    let named = [("LAND_BOXES", "1"), ("ARBITER_OK", "a test's own")];
+    let own = Land::new_in(
+        &l7r_shared::env::Rooted::with(fx.root.clone(), &named),
+        Path::new("/s"),
+    );
+    let none = Land::new_in(
+        &l7r_shared::env::Rooted::with(fx.root.clone(), &[]),
+        Path::new("/s"),
+    );
+    let read = (own.boxes, own.arbiter_ok, none.boxes, none.arbiter_ok);
+    assert_eq!(read, (true, true, false, false));
 }

@@ -138,6 +138,10 @@ fn alone(dir: &Path, c: &Path, env: &[(&str, &str)]) -> (i32, String) {
         .arg(script())
         .args(["451-x", "T1"])
         .current_dir(c)
+        // the session's exports the script reads (`make land BOXES=1 COVER_OK=...`) never reach a test's script (451 T94: an exported
+        // LAND_BOXES turned `the_script_lands_the_clone_s_head_alone_and_the_clone_takes_the_tip` red)
+        .env_remove("LAND_BOXES")
+        .env_remove("COVER_OK")
         .env("LAND_ALONE_TREE", dir.join("wt"))
         .env("LAND_ALONE_MAKE", dir.join("make"))
         .env("L7R_EVENTS_DIR", dir.join("events"))
