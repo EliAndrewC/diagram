@@ -955,3 +955,5 @@ fn a_task_an_open_gm_question_names_is_never_the_next() {
     let fourth = text.contains("start the next (T04 on the GM's answer)");
     assert!(fourth, "{text}");
 }
+
+mod briefs;

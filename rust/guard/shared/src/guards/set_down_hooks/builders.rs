@@ -4,7 +4,10 @@
 use std::collections::HashMap;
 use std::fs::File;
 use std::io::{BufRead, BufReader};
-use std::path::Path;
+use std::path::{Path, PathBuf};
+use std::sync::LazyLock;
+
+use fancy_regex::Regex;
 
 use serde_json::Value;
 
@@ -38,15 +41,8 @@ pub(super) fn asks_the_gm(root: &Path, feature: &str, id: &str) -> Result<bool, 
 /// description, so the Stop hook counted 1 of 3 builders running while three ran. `builder_stop_hooks` (451 T84) reads it too.
 #[must_use]
 pub fn builder_brief(dir: &Path, id: &str) -> Option<(String, Vec<String>)> {
-    let meta: Value = serde_json::from_str(
-        &std::fs::read_to_string(dir.join(format!("agent-{id}.meta.json"))).ok()?,
-    )
-    .ok()?;
-    if meta.get("spawnDepth").and_then(Value::as_u64) != Some(1) {
-        return None;
-    }
-    let description = meta.get("description")?.as_str()?;
-    let number = BRIEF.captures(description).ok().flatten()?[1].to_owned();
+    let description = dispatched(dir, id)?;
+    let number = BRIEF.captures(&description).ok().flatten()?[1].to_owned();
     let head = description.split(':').next().unwrap_or_default();
     let mut tasks = task_ids(head);
     if tasks.is_empty() {
@@ -55,15 +51,69 @@ pub fn builder_brief(dir: &Path, id: &str) -> Option<(String, Vec<String>)> {
     (!tasks.is_empty()).then_some((number, tasks))
 }
 
-/// Every task id in `text`, in order, each once.
+/// The description of agent `id`, one the session dispatched (its meta's `spawnDepth` 1); None for any other.
+fn dispatched(dir: &Path, id: &str) -> Option<String> {
+    let meta: Value = serde_json::from_str(
+        &std::fs::read_to_string(dir.join(format!("agent-{id}.meta.json"))).ok()?,
+    )
+    .ok()?;
+    if meta.get("spawnDepth").and_then(Value::as_u64) != Some(1) {
+        return None;
+    }
+    Some(meta.get("description")?.as_str()?.to_owned())
+}
+
+/// A range's widest span read member by member (451 T156): a CONVENTION past every bundle seen (T289-T300, twelve); a longer one, or
+/// one written backwards or with a letter, is read as its two ends, as before.
+const SPAN: u64 = 200;
+
+/// Every task id in `text`, in order, each once; a range (`T278-T281`) is each of its members, its first id's width kept (`T02-T04`).
+/// WHY (451 T156, 2026-11-22): `449 T289-T300 bundle (fresh): ...` read as T289 and T300 alone, so the ten between were named free to
+/// start while their builder ran.
 fn task_ids(text: &str) -> Vec<String> {
     let mut out: Vec<String> = Vec::new();
     for c in TASK_ID.captures_iter(text).map_while(Result::ok) {
-        if !out.iter().any(|t| *t == c[1]) {
-            out.push(c[1].to_owned());
+        let (from, a) = (&c[1], &c[2]);
+        let mut each = vec![format!("T{from}{a}")];
+        if let Some(to) = c.get(3).map(|m| m.as_str()) {
+            let b = c.get(4).map_or("", |m| m.as_str());
+            let (lo, hi) = (from.parse().unwrap_or(0_u64), to.parse().unwrap_or(0_u64));
+            if a.is_empty() && b.is_empty() && hi > lo && hi - lo <= SPAN {
+                each = (lo..=hi)
+                    .map(|n| format!("T{n:0w$}", w = from.len()))
+                    .collect();
+            } else {
+                each.push(format!("T{to}{b}"));
+            }
+        }
+        for t in each {
+            if !out.contains(&t) {
+                out.push(t);
+            }
         }
     }
     out
+}
+
+/// A brief's head that names a landing (`449 batch landing: ...`), never `land-alone` or `land-tooling`.
+static LANDS: LazyLock<Regex> = LazyLock::new(|| re(r"\b(?:land|landing|lands)\b(?!-)"));
+/// A prompt's first line that runs `make land` (never `make land-tooling` or `make land-stop`).
+static MAKE_LAND: LazyLock<Regex> = LazyLock::new(|| re(r"\bmake land(?![-\w])"));
+
+/// Does agent `id` run a landing (451 T156): one the session dispatched whose description names a landing before its first colon, or
+/// whose prompt's first line runs `make land`. WHY (2026-11-22): `449 batch landing: clear the six refusals and land` named no task, so
+/// it read as no builder, and the Stop hook named a task-start through a 35-task landing - which the round arbiter's ruling
+/// (ask:set-down-449-mid-landing) forbids. A builder whose brief only mentions landing past its colon is not one: it fails toward
+/// naming the start, which the session sees.
+fn lander(dir: &Path, id: &str) -> bool {
+    dispatched(dir, id).is_some_and(|d| {
+        LANDS
+            .is_match(d.split(':').next().unwrap_or_default())
+            .unwrap_or(false)
+            || MAKE_LAND
+                .is_match(&prompt_head(&dir.join(format!("agent-{id}.jsonl"))))
+                .unwrap_or(false)
+    })
 }
 
 /// The first line of an agent's prompt: its own transcript's first record's text, "" where it has none.
@@ -92,21 +142,52 @@ fn prompt_head(transcript: &Path) -> String {
 pub(super) type Builder = (String, Vec<String>);
 
 /// The builders still running, each by [`still_running`]'s rule over ONE reading of the transcript (a transcript reached 206 MB): its
-/// (feature number, tasks), sorted - one a builder, a bundle's builder one however many tasks it holds. [`running`] alone would not do -
-/// it leaves out an interim agent whenever another plainly runs.
-pub(super) fn builders(path: &Path) -> std::io::Result<Vec<Builder>> {
+/// (feature number, tasks), sorted - one a builder, a bundle's builder one however many tasks it holds - and whether a running agent
+/// runs a landing ([`lander`], 451 T156). [`running`] alone would not do - it leaves out an interim agent whenever another plainly runs.
+pub(super) fn builders(path: &Path) -> std::io::Result<(Vec<Builder>, bool)> {
     let read = read_in_order(path, "")?;
     let dir = subagents(path);
     let mut known = HashMap::new();
     let mut out = Vec::new();
+    let mut landing = false;
     for id in read.ids.keys() {
-        if let Some(built) = builder_brief(&dir, id) {
-            if runs(&read, &dir, id, &mut known)? {
-                out.push(built);
-            }
+        let built = builder_brief(&dir, id);
+        let lands = lander(&dir, id);
+        if (built.is_some() || lands) && runs(&read, &dir, id, &mut known)? {
+            out.extend(built);
+            landing |= lands;
         }
     }
     out.sort();
     out.dedup();
-    Ok(out)
+    Ok((out, landing))
+}
+
+/// Does a landing run in this clone (451 T156): a process under `proc` (`/proc`) whose working directory is the clone `root`, or its
+/// landing worktree (`<root>-land`, land-alone's), running `l7r-gate land` (not `--stop`) or `land-alone.sh`. A landing a builder runs
+/// in the background shows in neither the session's transcript nor any agent's brief. A process whose files cannot be read is not one.
+pub(super) fn landing_process(root: &Path, proc: &Path) -> bool {
+    let canon = |p: &Path| p.canonicalize().unwrap_or_else(|_| p.to_path_buf());
+    let root = canon(root);
+    let worktree = PathBuf::from(format!("{}-land", root.display()));
+    let base = |a: &String| a.rsplit('/').next().unwrap_or_default().to_owned();
+    std::fs::read_dir(proc)
+        .into_iter()
+        .flatten()
+        .flatten()
+        .any(|entry| {
+            let Ok(cmdline) = std::fs::read(entry.path().join("cmdline")) else {
+                return false;
+            };
+            let cwd = canon(&entry.path().join("cwd"));
+            let args: Vec<String> = cmdline
+                .split(|b| *b == 0)
+                .map(|a| String::from_utf8_lossy(a).into_owned())
+                .collect();
+            let gate = base(&args[0]) == "l7r-gate"
+                && args.get(1).is_some_and(|a| a == "land")
+                && args.get(2).is_none_or(|a| a != "--stop");
+            (cwd == root || cwd == worktree)
+                && (gate || args.iter().any(|a| base(a) == "land-alone.sh"))
+        })
 }

@@ -271,8 +271,8 @@ const BUILDERS: usize = 3;
 /// A builder's brief: the description of an agent the session dispatched (its meta's `spawnDepth` 1) opening with its feature number
 /// ([`builder_brief`]; 449 T268 dropped the `T<n>` it had to follow, so a bundle's brief is one).
 static BRIEF: LazyLock<Regex> = LazyLock::new(|| re(r"^\s*(\d{3})\b"));
-/// A task id in a brief.
-static TASK_ID: LazyLock<Regex> = LazyLock::new(|| re(r"\b(T\d+[a-z]?)\b"));
+/// A task id in a brief, or a range of them (`T289-T300`, 451 T156): the first id's number and letter, the last's.
+static TASK_ID: LazyLock<Regex> = LazyLock::new(|| re(r"\bT(\d+)([a-z]?)(?:-T(\d+)([a-z]?))?\b"));
 /// What a task's line names of the tree: a file (a path, or a name with its extension) or a guard module (`*_hooks`).
 static NAMES: LazyLock<Regex> = LazyLock::new(|| {
     re(r"[A-Za-z0-9_./-]*[A-Za-z0-9_]\.(?:rs|sh|py|md|json|toml)\b|\b[a-z][a-z0-9_]*_hooks\b")
@@ -503,7 +503,7 @@ fn next_independent(
     root: &Path,
     git_dir: &Path,
     prefer: &str,
-    busy: &HashSet<String>,
+    (busy, running): (&HashSet<String>, &[Builder]),
     lands: &mut Lands,
 ) -> Result<Option<OpenTask>, String> {
     let downs = rows(&git_dir.join("set-downs.jsonl"))?;
@@ -531,7 +531,11 @@ fn next_independent(
                 .any(|n| busy.iter().any(|f| touches(n, f)));
             // the wait last: a day after a landing reads the feature's log
             // a parked stage's task waits for the GM (449 T244): never a slot's next
-            let held = crate::parked::held_task(root, git_dir, title).is_some();
+            // a running builder's own task, a bundle's member never task-started among them (451 T156: T289-T300's ten between)
+            let held = crate::parked::held_task(root, git_dir, title).is_some()
+                || running
+                    .iter()
+                    .any(|(n, ts)| n == number_of(&feature) && ts.contains(id));
             if started || held || overlaps || waits(root, &feature, &boxes, (id, title), lands)? {
                 continue;
             }
@@ -563,13 +567,16 @@ fn free_slot(
     let knob = crate::env::opt("L7R_BUILDERS")
         .and_then(|v| v.trim().parse().ok())
         .unwrap_or(BUILDERS);
-    let running = builders(path).map_err(|e| e.to_string())?;
-    if running.len() >= knob {
+    let (running, landing) = builders(path).map_err(|e| e.to_string())?;
+    // A LANDING IN FLIGHT HOLDS THE SLOTS (451 T156; the round arbiter's ask:set-down-449-mid-landing): no task-start named mid-landing
+    let proc = crate::env::opt("L7R_PROC_ROOT").unwrap_or_else(|| "/proc".to_owned());
+    if landing || running.len() >= knob || landing_process(root, Path::new(&proc)) {
         return Ok(None);
     }
     let busy = busy_files(root, &running)?;
     let mut lands = Lands::new();
-    let Some(next) = next_independent(root, git_dir, feature, &busy, &mut lands)? else {
+    let Some(next) = next_independent(root, git_dir, feature, (&busy, &running), &mut lands)?
+    else {
         return Ok(None);
     };
     let number = next
@@ -902,7 +909,7 @@ fn decide(event: &Event, session: &Session) -> Vec<Answer> {
 
 mod builders;
 pub use builders::builder_brief;
-use builders::{asks_the_gm, builders, Builder};
+use builders::{asks_the_gm, builders, landing_process, Builder};
 
 #[cfg(test)]
 mod tests;

@@ -2380,31 +2380,33 @@ its own files; not engine speed, so no performance-checklist answers.
 6. **Did any map move, and does it still keep the research?** <`make maps-moved`, the cohort>
 
 
-### T156 (<why: the finding or measurement that files it>)
+### T156 (the Stop hook's free-slot count misread five live builder descriptions on 2026-11-22, the session's note)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: the Stop hook's free-slot check (`set_down_hooks.rs` `free_slot`, its builders read by `set_down_hooks/builders.rs`) reads a builder's brief as the session writes it, and a landing in flight holds the slots. (a) `builder_brief` takes the feature number and every task id before the description's first colon, words between allowed (449 T268 already took `449 bundle T259, T277:`; pinned here), and a range `T289-T300` is each of its members, its first id's width kept (`T02-T04`); a range written backwards, with a letter, or wider than `SPAN` (200, a CONVENTION past the widest bundle seen, twelve) is its two ends, as before. (b) A running agent whose description names a landing before its colon (`449 batch landing: ...`), or whose prompt's first line runs `make land` (never `land-tooling` or `land-stop`), is a LANDER: `builders` returns it beside the builders, and `free_slot` names no task-start while one runs. A landing brief naming neither reads as no lander, by rule: it fails toward a start the session sees named, never a hidden hold. (c) A landing PROCESS in this clone holds the slots too: `landing_process` walks `/proc` (`L7R_PROC_ROOT` in tests) for a process whose working directory is the clone or its landing worktree (`<clone>-land`) running `l7r-gate land` (not `--stop`) or `land-alone.sh` - the land crate's `stop::landing_pids` shape; the land crate is not the shared crate's to import, so the few lines are read here. (d) Found while testing: a running builder's own tasks, a bundle member never task-started among them (T289-T300's ten between), could be named the next start; `next_independent` skips them now (fixed here).
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| brief, lander, landing process | n/a: guard code, no map | n/a | none | n/a |
 
 ### T156 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** The Stop hook counts every builder that runs and names a task-start only into a slot truly free; mid-landing it names none (the round arbiter's ruling, ask:set-down-449-mid-landing).
+2. **The constraints.** 451 T88 (rolling dispatch, `L7R_BUILDERS`), 449 T268 (`builder_brief`, the bundle's every member), the arbiter's ruling above.
+3. **Where each comes from.** O: the five descriptions the session recorded on 2026-11-22 (T156's brief); G/R: none - tooling.
+4. **Do they describe the world here?** Each of the session's recorded descriptions is a test case of `builder_brief` (`set_down_hooks/tests/briefs.rs`) and of the suite (`tests/hooks/test-set-down-hooks.sh` case eleven), measured 2026-11-22 (`make rust-test CRATE=rust/guard/shared`, the suite run).
+5. **The order.** Red first: the three new tests failed on the old reader (the range assertion, the landing agent, the landing process); then the fix.
+6. **The exits.** Green: `make rust-test CRATE=rust/guard/shared`, its cover, lint and format, and the suite. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** none.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** The five descriptions read as their builders (or a lander), the free slot silent while a landing agent or process runs and named again when it ends.
+10. **Before moving a constant.** n/a (`SPAN` is new, a CONVENTION).
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** A session at the cap no longer blocked at a stop to start a fourth builder, or a task mid-landing; nothing on a map.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?**
+- A range member never task-started could be named the next start while its bundle's builder ran (the free slot skipped started tasks and busy files only): fixed here, in `next_independent`.
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** no.
 
 
 <!-- plan-archive: T157 to T157 moved to plan-done.md, 2026-11-22 (feature 375 FR-044) -->

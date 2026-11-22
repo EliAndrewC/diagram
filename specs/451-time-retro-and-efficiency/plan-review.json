@@ -740,7 +740,7 @@
    "declared": "spec-fidelity"
   },
   "### T98 Approach (checklist part A)": {
-   "sha256": "15e8fbd03e41e55331bd5af9853a53d18c78acffc30449fff395d4c9db24ca54",
+   "sha256": "f41e63ddea4aaf10296a98b6b4f8ead09545b85ba5326fa38de63896587fd838",
    "verdict": "CLEAR",
    "reviewed": "2026-11-22",
    "declared": "spec-fidelity"
@@ -1155,6 +1155,24 @@
   },
   "### T157 Approach (checklist part A)": {
    "sha256": "318daa69bcbf2bdafed8349325f9d31dab5cc24805705a8bb4200263c30b26fe",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-22",
+   "declared": "spec-fidelity"
+  },
+  "### T98 (builders at three: 522 of the first night's 745 minutes counting 451's builders alone, 70%, a mean of 2.69, and 698, 94%, a mean of 2.99, counting every feature's, against before's 191 of 580, 33%, a mean of 1.66, measured 2026-11-22 (T88's replay, `/tmp/t88/occupancy.py`, over 2026-11-21T18:40:16Z to 2026-11-22T07:06:00Z))": {
+   "sha256": "76a6fc5d9e4520164dbed16886c66d8f509981c629a44f0634f295723e64ba0a",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-22",
+   "declared": "spec-fidelity"
+  },
+  "### T156 (the Stop hook's free-slot count misread five live builder descriptions on 2026-11-22, the session's note)": {
+   "sha256": "c49049f85c3d6ad46779193758283f5073bb751cab55e708cbd0d24fce2364e4",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-22",
+   "declared": "spec-fidelity"
+  },
+  "### T156 Approach (checklist part A)": {
+   "sha256": "d9c3fbb570f0561f2dc53adb3c4d5f0d75828c2061adbaa5b0e8d88c87fd55b1",
    "verdict": "CLEAR",
    "reviewed": "2026-11-22",
    "declared": "spec-fidelity"
@@ -13864,6 +13882,116 @@
      "why": "Enforcement of the task's own behavior (FR-012's red-first practice); serves the task, not unrequested scope."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-22",
+   "blocks": [
+    "### T98 (builders at three: 522 of the first night's 745 minutes counting 451's builders alone, 70%, a mean of 2.69, and 698, 94%, a mean of 2.99, counting every feature's, against before's 191 of 580, 33%, a mean of 1.66, measured 2026-11-22 (T88's replay, `/tmp/t88/occupancy.py`, over 2026-11-21T18:40:16Z to 2026-11-22T07:06:00Z))",
+    "### T98 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T98-approach",
+     "summary": "T98 is a measurement with no engine code: T88's replay rerun by T88's own method (builder spans from subagent metas, sampled at each minute's middle).",
+     "class": "within",
+     "why": "A [perf] measurement of the builders' loop counts as performance work under FR-013 and the GM's 2026-11-20 words on measurement tasks; reusing T88's method keeps before and after comparable. It narrows nothing asked."
+    },
+    {
+     "id": "T98-window",
+     "summary": "The window runs from T88's landing (2026-11-21T18:40:16Z) to the end of the last night builder (07:05:55Z), 745 minutes, and leaves out the 3-hour gap with no builder before T147.",
+     "class": "within",
+     "why": "It is chosen the way T88 chose its window (the builders' day from first start to last end). A gap with no builder at all is outside the builders' day by that rule, so leaving it out drops nothing the measurement is meant to cover."
+    },
+    {
+     "id": "T98-two-readings",
+     "summary": "Occupancy is reported twice, once for 451's builders alone (the before's method) and once for every feature's builders (what the Stop hook counts).",
+     "class": "within",
+     "why": "Both readings are reported and the 451-only row keeps the before's method. The second row adds the view the Stop hook actually acts on and hides nothing."
+    },
+    {
+     "id": "T98-causes",
+     "summary": "Each stretch below three is given a cause: 176 minutes were a 449 builder given the slot on purpose, it was not the weekly cap and not T156's miscount, and the remaining 47 minutes were landings and 30-80 s of dispatch latency.",
+     "class": "within",
+     "why": "Attributing the below-three time is the measurement itself, and each cause carries its observation and method. No requirement is narrowed by it."
+    },
+    {
+     "id": "T98-independent-count-rule",
+     "summary": "The independent-task count keeps T88's rule (a line naming no file a running task edits), which does not read 'after T<n>' and so over-reports for the 176 minutes of 449's slot.",
+     "class": "within",
+     "why": "The over-report is disclosed and the rule is kept so that before and after use one method. It is the replay script's counting rule, not a project check that passes bad work, so leaving it as it is leaves no defect (constitution XIV v2.36.0)."
+    },
+    {
+     "id": "T98-no-change",
+     "summary": "No code changes, L7R_BUILDERS stays at 3, nothing is found and left, and T98's ask is met (70% vs 33% at three, a mean of 2.69 vs 1.66, counting 451 alone).",
+     "class": "within",
+     "why": "The measurement finds no wrong outcome. The 449 slots were a recorded choice made when no 451 task could start, which FR-013 allows. The 10 minutes of dispatch latency are a gap, not a defect. With no defect, leaving the constant alone narrows nothing."
+    },
+    {
+     "id": "T98-order",
+     "summary": "T98 runs after T88 and a full day, and before T22, whose measured day follows it.",
+     "class": "within",
+     "why": "Ordering inside the feature, consistent with FR-013's performance-first rule; both tasks are measurement or performance work."
+    },
+    {
+     "id": "T98-perf-class",
+     "summary": "T98 is filed as [perf] work on the builders' loop but is not an engine-speed task, so no engine-speed checklist answers are owed.",
+     "class": "within",
+     "why": "FR-013 names the builders' loop as performance work and counts measurement as performance work for ordering. The classification matches the spec."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-22",
+   "blocks": [
+    "### T156 (the Stop hook's free-slot count misread five live builder descriptions on 2026-11-22, the session's note)",
+    "### T156 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T156-a",
+     "summary": "builder_brief reads the feature number and every task id before the description's first colon, words between allowed; a range T289-T300 is each member at its first id's width; a backwards, lettered or wider-than-SPAN range reads as its two ends.",
+     "class": "within",
+     "why": "A defect fix in this feature's rolling-dispatch tooling (451 T88, the bundling the GM asked for 2026-11-22, T141): the Stop hook miscounted five live builders. Fixing a known bug as found is the standing rule; a malformed range kept to its two ends is the prior behavior, not a narrowing of anything asked."
+    },
+    {
+     "id": "T156-b",
+     "summary": "A running agent whose description names a landing before its colon, or whose prompt's first line runs make land (not land-tooling/land-stop), is a lander; free_slot names no task-start while one runs. A landing brief naming neither reads as no lander, failing toward a visibly named start.",
+     "class": "within",
+     "why": "Carries the arbiter's ruling ask:set-down-449-mid-landing (no task-start while a landing runs) into the hook. The residual case (an unrecognizable landing brief) is backed by (c)'s process check for any landing actually running in the clone, and fails toward a named start the session can see rather than a hidden hold; the ruling binds the session's conduct, which a named suggestion does not override. No requested behavior is cut."
+    },
+    {
+     "id": "T156-c",
+     "summary": "A landing process in this clone or its -land worktree (l7r-gate land without --stop, or land-alone.sh), found by walking /proc (L7R_PROC_ROOT in tests), also holds the slots; the few lines of the land crate's landing_pids shape are re-read here rather than imported.",
+     "class": "within",
+     "why": "Same ruling, enforced on the process rather than the brief; where the code lives is design, not fidelity."
+    },
+    {
+     "id": "T156-d",
+     "summary": "next_independent skips a running builder's own tasks, including bundle members never task-started, so none is named the next start.",
+     "class": "within",
+     "why": "A defect found while testing and fixed in the task (fix as we go); it makes the hook's start-next correct for the bundles the GM asked for."
+    },
+    {
+     "id": "T156-SPAN",
+     "summary": "SPAN = 200, a CONVENTION past the widest bundle seen (twelve).",
+     "class": "within",
+     "why": "A labeled convention bounding range expansion; it narrows nothing asked, and a range beyond it keeps the old two-ends reading."
+    },
+    {
+     "id": "T156-exits",
+     "summary": "Green on make rust-test CRATE=rust/guard/shared, its cover, lint, format and the hook suite; red recorded and the task set down, a cannot-be-done claim ruled through make arbiter-ask; red-first tests for the three new cases.",
+     "class": "within",
+     "why": "Verification of the fix itself; enforcement of the requested behavior, not unrequested scope."
+    },
+    {
+     "id": "T156-found-and-left",
+     "summary": "Nothing left: the one defect found (range members named as next start) is fixed here.",
+     "class": "within",
+     "why": "No defect is deferred."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -21218,6 +21346,112 @@
      "summary": "Two pins (left/tests.rs reading test, land inproc.rs first-pass test), each shown red with clues.left_to stubbed",
      "class": "within",
      "why": "Enforcement of the task's own behavior (FR-012's red-first practice); serves the task, not unrequested scope."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T98": {
+   "section_sha256": "5142cb8f06fbb642afaa4ab3048eb8f0def3e628cb58c095f1af4475765de14c",
+   "reviewed": "2026-11-22",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T98-approach",
+     "summary": "T98 is a measurement with no engine code: T88's replay rerun by T88's own method (builder spans from subagent metas, sampled at each minute's middle).",
+     "class": "within",
+     "why": "A [perf] measurement of the builders' loop counts as performance work under FR-013 and the GM's 2026-11-20 words on measurement tasks; reusing T88's method keeps before and after comparable. It narrows nothing asked."
+    },
+    {
+     "id": "T98-window",
+     "summary": "The window runs from T88's landing (2026-11-21T18:40:16Z) to the end of the last night builder (07:05:55Z), 745 minutes, and leaves out the 3-hour gap with no builder before T147.",
+     "class": "within",
+     "why": "It is chosen the way T88 chose its window (the builders' day from first start to last end). A gap with no builder at all is outside the builders' day by that rule, so leaving it out drops nothing the measurement is meant to cover."
+    },
+    {
+     "id": "T98-two-readings",
+     "summary": "Occupancy is reported twice, once for 451's builders alone (the before's method) and once for every feature's builders (what the Stop hook counts).",
+     "class": "within",
+     "why": "Both readings are reported and the 451-only row keeps the before's method. The second row adds the view the Stop hook actually acts on and hides nothing."
+    },
+    {
+     "id": "T98-causes",
+     "summary": "Each stretch below three is given a cause: 176 minutes were a 449 builder given the slot on purpose, it was not the weekly cap and not T156's miscount, and the remaining 47 minutes were landings and 30-80 s of dispatch latency.",
+     "class": "within",
+     "why": "Attributing the below-three time is the measurement itself, and each cause carries its observation and method. No requirement is narrowed by it."
+    },
+    {
+     "id": "T98-independent-count-rule",
+     "summary": "The independent-task count keeps T88's rule (a line naming no file a running task edits), which does not read 'after T<n>' and so over-reports for the 176 minutes of 449's slot.",
+     "class": "within",
+     "why": "The over-report is disclosed and the rule is kept so that before and after use one method. It is the replay script's counting rule, not a project check that passes bad work, so leaving it as it is leaves no defect (constitution XIV v2.36.0)."
+    },
+    {
+     "id": "T98-no-change",
+     "summary": "No code changes, L7R_BUILDERS stays at 3, nothing is found and left, and T98's ask is met (70% vs 33% at three, a mean of 2.69 vs 1.66, counting 451 alone).",
+     "class": "within",
+     "why": "The measurement finds no wrong outcome. The 449 slots were a recorded choice made when no 451 task could start, which FR-013 allows. The 10 minutes of dispatch latency are a gap, not a defect. With no defect, leaving the constant alone narrows nothing."
+    },
+    {
+     "id": "T98-order",
+     "summary": "T98 runs after T88 and a full day, and before T22, whose measured day follows it.",
+     "class": "within",
+     "why": "Ordering inside the feature, consistent with FR-013's performance-first rule; both tasks are measurement or performance work."
+    },
+    {
+     "id": "T98-perf-class",
+     "summary": "T98 is filed as [perf] work on the builders' loop but is not an engine-speed task, so no engine-speed checklist answers are owed.",
+     "class": "within",
+     "why": "FR-013 names the builders' loop as performance work and counts measurement as performance work for ordering. The classification matches the spec."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T156": {
+   "section_sha256": "3313b35c5424f6ca19923f4ceb46c34ccba8e9fa71eac779cd4cfc1267bf6e46",
+   "reviewed": "2026-11-22",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T156-a",
+     "summary": "builder_brief reads the feature number and every task id before the description's first colon, words between allowed; a range T289-T300 is each member at its first id's width; a backwards, lettered or wider-than-SPAN range reads as its two ends.",
+     "class": "within",
+     "why": "A defect fix in this feature's rolling-dispatch tooling (451 T88, the bundling the GM asked for 2026-11-22, T141): the Stop hook miscounted five live builders. Fixing a known bug as found is the standing rule; a malformed range kept to its two ends is the prior behavior, not a narrowing of anything asked."
+    },
+    {
+     "id": "T156-b",
+     "summary": "A running agent whose description names a landing before its colon, or whose prompt's first line runs make land (not land-tooling/land-stop), is a lander; free_slot names no task-start while one runs. A landing brief naming neither reads as no lander, failing toward a visibly named start.",
+     "class": "within",
+     "why": "Carries the arbiter's ruling ask:set-down-449-mid-landing (no task-start while a landing runs) into the hook. The residual case (an unrecognizable landing brief) is backed by (c)'s process check for any landing actually running in the clone, and fails toward a named start the session can see rather than a hidden hold; the ruling binds the session's conduct, which a named suggestion does not override. No requested behavior is cut."
+    },
+    {
+     "id": "T156-c",
+     "summary": "A landing process in this clone or its -land worktree (l7r-gate land without --stop, or land-alone.sh), found by walking /proc (L7R_PROC_ROOT in tests), also holds the slots; the few lines of the land crate's landing_pids shape are re-read here rather than imported.",
+     "class": "within",
+     "why": "Same ruling, enforced on the process rather than the brief; where the code lives is design, not fidelity."
+    },
+    {
+     "id": "T156-d",
+     "summary": "next_independent skips a running builder's own tasks, including bundle members never task-started, so none is named the next start.",
+     "class": "within",
+     "why": "A defect found while testing and fixed in the task (fix as we go); it makes the hook's start-next correct for the bundles the GM asked for."
+    },
+    {
+     "id": "T156-SPAN",
+     "summary": "SPAN = 200, a CONVENTION past the widest bundle seen (twelve).",
+     "class": "within",
+     "why": "A labeled convention bounding range expansion; it narrows nothing asked, and a range beyond it keeps the old two-ends reading."
+    },
+    {
+     "id": "T156-exits",
+     "summary": "Green on make rust-test CRATE=rust/guard/shared, its cover, lint, format and the hook suite; red recorded and the task set down, a cannot-be-done claim ruled through make arbiter-ask; red-first tests for the three new cases.",
+     "class": "within",
+     "why": "Verification of the fix itself; enforcement of the requested behavior, not unrequested scope."
+    },
+    {
+     "id": "T156-found-and-left",
+     "summary": "Nothing left: the one defect found (range members named as next start) is fixed here.",
+     "class": "within",
+     "why": "No defect is deferred."
     }
    ],
    "verdict": "CLEAR"

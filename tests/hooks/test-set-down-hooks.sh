@@ -130,5 +130,29 @@ rc=$(printf '{"cwd": "%s", "transcript_path": "%s"}' "$P" "$T/tr9.jsonl" | SET_D
 printf '{"seven_day": 50}' > "$T/cap/latest-s-9.json"
 out=$(cd "$P" && CLAUDE_CODE_SESSION_ID=s-9 SET_DOWN_WHY="the parked stages wait for the GM" "$SETDOWN" set-down 444 2>&1) && echo "$out" | grep -q "the stop the GM asked for" && ok "set down under the cap, naming the ruling" || no "parked set-down" "$out"
 
+echo "11. a builder's brief read with words and ranges; a landing agent or process holds the slots (451 T156, 2026-11-22)"
+L="$T/land"; mkdir -p "$L/specs/449-x" "$L/scripts"; git -C "$L" init -q
+printf -- '- [ ] T259 a\n- [ ] T277 b\n- [ ] T289 c\n- [ ] T295 d\n- [ ] T301 e\n' > "$L/specs/449-x/tasks.md"
+printf '{"feature": "449-x", "task": "T259", "utc": "2026-11-22T10:00:00Z"}\n' > "$L/.git/task-starts.jsonl"
+: > "$T/trL.jsonl"; mkdir -p "$T/trL/subagents"
+builder() { launch agentId "Async agent launched successfully. agentId: $1 (internal ID)" "$1" >/dev/null
+  jq -nc '{"spawnDepth": 1, "description": $ARGS.positional[0]}' --args -- "$2" > "$T/trL/subagents/agent-$1.meta.json"; }
+stopL() { printf '{"cwd": "%s", "transcript_path": "%s"}' "$L" "$T/trL.jsonl" | SET_DOWN_ROOT="$L" "$HOOK" stop 2>"$T/err"; echo $?; }
+launch() { jq -nc '{"type": "user", "message": {"content": [{"type": "tool_result", "content": $ARGS.positional[1]}]}, "toolUseResult": {($ARGS.positional[0]): $ARGS.positional[2]}}' --args -- "$1" "$2" "$3" >> "$T/trL.jsonl"; }
+builder ab1 "449 bundle T259, T277: the two"
+builder ab2 "449 T289-T300 bundle (fresh): twelve"
+rc=$(stopL)
+[ "$rc" = 2 ] && grep -q "2 of 3 builders running (449 T259+T277, 449 T289+T290" "$T/err" && grep -q "make task-start F=449 T=T301," "$T/err" && ok "a word before the ids and a range: both builders read, T295 the range's, T301 named" || no "briefs" "rc=$rc $(cat "$T/err")"
+builder ab3 "449 batch landing: clear the six refusals and land"
+[ "$(stopL)" = 0 ] && ok "a landing agent running: no task-start named mid-landing" || no "landing agent" "$(cat "$T/err")"
+jq -nc '{"type": "user", "message": {"content": "<task-notification><task-id>ab3</task-id><status>completed</status></task-notification>"}}' >> "$T/trL.jsonl"
+[ "$(stopL)" = 2 ] && ok "the landing ended: the free slot named again" || no "landing ended"
+printf '#!/usr/bin/env bash\nsleep 30\n' > "$L/scripts/land-alone.sh"
+( cd "$L" && exec bash "$L/scripts/land-alone.sh" 449 T259 ) & lp=$!
+for _ in 1 2 3 4 5 6 7 8 9 10; do [ "$(readlink "/proc/$lp/cwd" 2>/dev/null)" = "$L" ] && break; sleep 0.1; done
+[ "$(stopL)" = 0 ] && ok "this clone's land-alone.sh running: no task-start named" || no "landing process" "$(cat "$T/err")"
+kill "$lp" 2>/dev/null; wait "$lp" 2>/dev/null
+[ "$(stopL)" = 2 ] && ok "it ended: the free slot named again" || no "landing process ended"
+
 echo "set-down-hooks: $PASS passed, $FAIL failed"
 [ "$FAIL" -eq 0 ]
