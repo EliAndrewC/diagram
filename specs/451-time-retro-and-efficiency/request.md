@@ -54,3 +54,7 @@ he approved):
 "I also wonder whether small defects can be bundled together and worked at the same time. Like, it sounds like what you're saying is that every individual task goes through the same process, but that feels like it is itself the issue. Because if we have found lots and lots of very small defects, then surely it makes sense for us to look at the current feature and say, hey, what set of tasks is currently open? All of which are very tiny, such that they could all be worked basically at the same time?"
 
 "Okay sounds good, so let's do that then, and not bother cutting back on new tasks filed.  It sounds like we canfilenew tasksjust as fast as we are now if we bundle them together when fixing them."
+
+## The GM, 2026-11-22, on measuring every phase (T153-T156)
+
+The GM: "okay, we should also make the hook suites measure their time so they won't be missing; we want everything measured so we know where our time goes, especially for compiling, running tests, and generating maps"
