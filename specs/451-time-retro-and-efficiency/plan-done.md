@@ -8043,3 +8043,381 @@ performance checklist's answers are given in brief:
 **Performance work?** No: a correctness fix of the landing's take; its cost measured (item 8).
 
 
+<!-- plan-archive: archived 2026-11-22 -->
+### T83 (shared::tree's walk blanked a quoted word that held a space or a shell character, and a file tool's destination was then read from the word before it, found by T79 2026-11-21: through HEAD's main-tree `cp /tmp/a "/diagram/x y"`, `echo x > "/diagram/a b"` and `mv /tmp/a "/diagram/(x)"` were let through while `cp /tmp/a /diagram/x` was refused, measured 2026-11-21 (`/tmp/t79/probes-q.jsonl` through HEAD's walk, `/tmp/t83/out/q.head.jsonl`: the three read `/tmp/a` or a place nothing is known of, `(None, elsewhere, shell)`))
+
+- **Approach**: a quoted body that is no plain word is HELD as the one word its quotes make, where it was blanked to `""`:
+  - THE WORD (`tree/quoted.rs`, `held`): each quote of the pair and each character of the body the walk splits at or reads as a
+    brace travels as a stand-in, `0xF0000 + c` (plane 15's private use: no command a session types holds one), so no segment,
+    word, redirect or brace rule reads it; `unheld` gives the shell's word back where a place is read (`substituted`), and
+    `blanked` shows each target's segment with the held word as its empty pair, the text every guard that reads a segment was shown
+    before. A double-quoted body's plain `$(...)` is left for the walk, the substitution it is outside quotes (`mkdir -p
+    "$(dirname $F)"` makes F's directory, read by 451 T79's `dir_base`); one holding a quote is hidden whole, and every `$(` after
+    it in the body - a deferral, Found and left's second item (T133).
+  - THE SIDE EFFECTS the corpus diff found, folded in, measured 2026-11-21 (the walker `/tmp/t83/scripts/walker/main.rs` over
+    T79's corpora, HEAD's walk beside the fix's, `/tmp/t83/out/{bx,ux,tx}.head-fix.cmp.txt`): a body whose parentheses or
+    backquotes do not pair is a piece of a substitution the quote scan pairs flat (`"$(dirname "$F")"` read as `"$(dirname "`,
+    `$F`, `")"`), so a command with one has every body read as before (`pairs_within`, a deferral, Found and left's first item,
+    T132); `touch -d DATE`, `-t STAMP` and `-r REF` are option values, no file (`touch -d "2 hours ago" $D/f.log`, bx#36744,
+    held, was a write of `2 hours ago`; `touch -r "$B"` was a write of the reference file at HEAD, bx#16356, #16747); a held `{`
+    and `}` (a held `'... "\${#passed'` read the rest of the command as one `${` word, its `cp` into the clone unseen, bx#45625).
+  - ESCAPES AND ARITHMETIC, found by the walk's diff 2026-11-21 (bx#57058) and pinned red first: in a held double-quoted body a
+    backslash escapes the character after it, so `\$(` is no substitution (`bash -c "...Y='\$(touch $W/out/RAN5)'..."`, a probe whose
+    marker shows the touch never runs, read as a write of RAN5) and `\\$(` is one; a `$((` is arithmetic, no substitution (held,
+    `"$((a > b))"` was a write of `b`). The same misreading stood before T83 outside quotes, fixed here (`tree/split.rs`,
+    `arithmetic`): a `$((...))`, and a `((...))` where a command stands, is one word whose operators are no separator, group or
+    redirect, a `$(...)` in it still a substitution; as bash 5.3.9 reads it, probed 2026-11-21 (`bash -c` on each form in
+    `/tmp/t83/bashprobe`), one whose inner parenthesis closes before its outer is subshells (`((cd x && touch a) && touch b)` made
+    both) and any other arithmetic (`((cd x; touch a))` made none). HEAD's walk read `$((o>200?o-200:1))` as a write of
+    `200?o-200:1`: bx#27391-27393 in scratch, ux#1441 in the clone, measured 2026-11-21 (HEAD's walk, `/tmp/t83/out/bx.head.jsonl`).
+  - THE SPLIT (file-scale, `tree.rs` 1,157 lines with the fix before it and 860 after, HEAD's 996, measured 2026-11-21 (`wc -l`)): the quoted reading moved whole to `tree/quoted.rs` and the split at
+    separators (`Piece`, `segments` and its helpers) to `tree/split.rs`, `tree.rs` re-importing what it and its tests call; the
+    misplaced doc line of `closing` put back on it.
+  - THE WALK DIFF, measured 2026-11-21 (the walker over T79's corpora, HEAD's walk beside the fix's, `/tmp/t83/out/{q,bx,ux,tx}.head-fix.cmp.txt`;
+    no stand-in in any path, segment or directory of any row, `grep -c` of U+F00xx's bytes 0 in each): the probes, 3 rows (0, 1, 4:
+    `/diagram/x y`, `/diagram/a b`, `/diagram/(x)` main, named, where HEAD read `/tmp/a` or a place nothing is known of);
+    bx 19 of 59,116 - each a correction: the place a quoted word makes (bx#21334, `mv` of a mirror file whose name holds blanks,
+    escaped `MAIN_TREE_OK`; bx#22339, bx#27140, a quoted destination in a clone; bx#27343, `> "$S/before-$(...).out"` now named under
+    scratch), a `"$(dirname $F)"` or `"$S/$(dirname $f)"` made where it is (bx#34981, bx#54745, bx#54951, bx#56956), a
+    `"$(make ...)"` and an `rm -rf "$(git ...)/x"` that run (bx#5154, bx#10193 make in the clone; bx#44294 a write nothing places,
+    where HEAD saw none), a phantom gone (bx#16356, bx#16747 `touch -r`'s reference file; bx#27391-27393 the arithmetic), and three
+    rows whose segment alone moved (bx#13610, bx#57220 an arithmetic shown as typed where HEAD showed `$__sub_0__`; bx#46555 a later
+    placeholder renumbered); ux 7 of 2,311 (ux#904, ux#905, ux#1106, ux#1107, ux#2272 the twins of bx#27343, bx#34981 and bx#54745;
+    ux#1441 the arithmetic phantom in the clone gone; ux#1913 its segment alone, item 12); tx 1 of T50's (tx#920, a quoted name with
+    a blank and an `é`, now its place).
+  - THE SPEED, measured 2026-11-21 (callgrind: `walk_judged`'s inclusive instructions over T79's ux corpus, 2,311 commands each
+    walked three times by `/tmp/t83/scripts/walker/time.rs`, read by `callgrind_annotate --inclusive=yes /tmp/t83/out/cg.<k>.ux.out`):
+    HEAD 56.63 G, the fix's first walk 59.81 G (+5.6%), with REDIRECT's lookbehind read by hand 59.31 G, +2.68 G or +4.7% over
+    HEAD. The rise is HEAD's own patterns reading the held words: a held body stands in the walked text where `""` stood, its
+    quotes and shell characters four-byte stand-ins, so `read_where_it_stands` (2.45 G to 3.83 G) and the substitution
+    `replace_all` (7.64 G to 8.14 G) read more. The REDIRECT rewrite was planned on a misreading of HEAD's profile: the 17.2 G
+    (30%) put on it was the whole capture-iterator frame inlined into `walk_text` (107,352 calls), REDIRECT's scan 41,052 of them,
+    measured 2026-11-21 (callgrind, `cg.head.ux.out` beside `cg.fix2.ux.out`), and out of line that scan is 0.12 G, the 16.41 G
+    left (66,294 calls) `env_from`'s ASSIGN scan, measured 2026-11-21 (callgrind, `env_from` kept out of line in a throwaway copy,
+    `/tmp/t83/inl`, `cg.inl.ux.out`, its walk 59.31 G as the fix's). The rewrite saves
+    0.50 G and is kept, a differential test pinning its targets to the old pattern's. No class of command is made several times
+    dearer: on the rows the wall run showed slowest (ux#1355-1520) the walk moved 3.25 G to 3.28 G (+1.2%), on a control range
+    (ux#100-265) 4.65 G to 4.88 G (+5.1%), measured 2026-11-21 (callgrind, `/tmp/t83/out/cgmini.<k>.<range>.out`). Wall time,
+    direction only, measured 2026-11-21 (`/tmp/t83/scripts/wall.sh`, three runs a side alternating, each row's least of three
+    walks, the shared host at load 17 to 30, `nice` and `chrt` denied in the container): a median per-row ratio of 1.146, the
+    corpus 2.21 s to 2.34 s (`/tmp/t83/out/wall-ux.log`, `ratio.py`). ACCEPTED, the builder's choice under this section's review:
+    the +4.7%, measured 2026-11-21 (callgrind, above), is the price of every quoted destination read as its place, and the
+    alternative priced, ASSIGN's lookbehind read by hand (its two scans 20.16 G or 34% of the walk, measured 2026-11-21
+    (callgrind, `cg.inl.ux.out`)), is HEAD's cost rather than T83's and a change to `bind.rs`'s scans that would void
+    this task's walk diff and replay - filed as T129.
+  - RED FIRST, measured 2026-11-21: HEAD's walk with the tests that compile on it (`cargo test -p l7r_shared --lib`, the scratch
+    tree `/tmp/t83/head`, `/tmp/t83/out/red2.log`): 51 passed, 6 failed - the five T83 pins and `window_307_runs_as_typed`, whose
+    fixture file the scratch tree lacks (not T83); the escape and arithmetic pins on the fix's first walk (`/tmp/t83/fix`,
+    `red3.log`, `red3c.log`): failed, each case's misreading printed. GREEN, measured 2026-11-21 (`make closing-checks T=T83 F=451`, T83 on
+    `ad98a3825c` in the clone, three runs): the first red only on T123's unformatted `checks/planhold/tests.rs`, reported apart,
+    and stopped there, the second's coverage naming `tree/split.rs`'s parenthesis inside an arithmetic (its line 108), now pinned
+    in `an_escaped_dollar_and_an_arithmetic_are_no_substitution` (a test alone, so `bin-fix3` and the replay stand), and the
+    third, run under `STATIC_OK` since the first two stopped before static's later stages, green in static, hooks-test and quick
+    (`.git/closing-checks/20261122T012124Z-3302276/`).
+  - THE REPLAY, measured 2026-11-21 (`/tmp/t83/scripts/runall.sh`: T79's corpora through each guard that reads the walk, alone
+    and all together, sessions `t` and `nobody`, and the gate's replay; HEAD's binary `/tmp/t83/bin-head` beside the fix's
+    `/tmp/t83/bin-fix3`, both on `aeb9a0b6b1`, the comment edited since changing no code; `scripts/moves.py head fix3`,
+    `/tmp/t83/out/moves-fix3.txt`): 48 files, 416,856 rows, 2 verdicts moved, 1 output reworded. Both moves are ux#1441 in the
+    gate's replay (all guards, and gate-write alone), refused at HEAD as `a shell write of rust/20?c-20:1 (c>20?c-20:1) while this
+    tree's make done runs` - the arithmetic's phantom - and allowed now: a correction (ESCAPES AND ARITHMETIC). The reworded
+    output, ux#1024 (allowed by both), is the replay's own race: its attempts note counts an attempt that ux#1026 and ux#1027 log,
+    rows after it that the replay's four workers run beside it; replayed alone (ux#1020-1027, one worker, each binary,
+    `/tmp/t83/scripts/stream1.py`), both print nothing - not T83's.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+| a quoted word held as the one word its quotes make, its escapes and every arithmetic read as the shell reads them, the redirect scan in the regex crate | n/a - no map | n/a | none | n/a |
+
+<!-- plan-archive: archived 2026-11-22 -->
+### T83 Approach (checklist part A)
+
+1. **The goal, in the world.** No map changes. A Bash call whose write lands on a quoted word holding a blank or a shell character
+   is judged by where that word is - main-tree refusing `cp /tmp/a "/diagram/x y"` as it refuses `cp /tmp/a /diagram/x` - and no
+   quoted text, escaped dollar or arithmetic reads as a write it is not.
+2. **The constraints.** T83's line; FR-012 (red first); constitution XIII (no known regressions: the walk runs on every Bash call's
+   hooks, so its work is measured beside HEAD's) and XIV (a defect is a wrong outcome: a moved verdict judged a correction or not);
+   constitution X clause 13 (file-scale, the split).
+3. **Where each comes from.** O: T79's probes and pattern count (the task's line); O: this task's walk diff, replay, callgrind
+   counts and bash probes, each dated below.
+4. **Do they describe the world here?** Measured 2026-11-21 on T79's corpora (`/tmp/t79/bx-all.jsonl`, 59,116 commands;
+   `ux-all.jsonl`, 2,311; T50's `tx`, `/tmp/t50/corpus.jsonl`), each through HEAD `aeb9a0b6b1`'s walk and the fix's, built from
+   one snapshot (`/tmp/t83/head`, `/tmp/t83/fix`: HEAD with T83's files laid over it; T110's and T87's uncommitted files left out).
+   T110 landed after the snapshot (`ad98a3825c`, `tree/program.rs` and its tests, the Python reader), so the walk diff and the
+   replay compare T83 alone on `aeb9a0b6b1`, and T83 on T110 is the closing run's, in the clone.
+5. **The order.** After T79 (`dir_base`, the `$(mktemp ...)` places, landed) and T112 (`quoted_spans`, landed); after T110
+   (`tree/program.rs`, landed `ad98a3825c`) and beside T87 (`guard_file_hooks`), whose files T83 does not touch.
+6. **The exits.** Green: the pins red first and green, the crate's tests, the walk diff and the replay each moved row judged a
+   correction, the walk's instructions at or under HEAD's (set on the misread REDIRECT share, the measured rise accepted in
+   THE SPEED). Red: what failed recorded and the task set down, a claim that it
+   cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None: the class found by T79's probes and measured on three corpora by the walk's own diff, every changed
+   row read. The diff shows only rows that moved, so the two readings left standing (Found and left, T132 and T133) were counted
+   apart over the three corpora, measured 2026-11-21 (`/tmp/t83/scripts/count_sf.py`, a Python mirror of `quoted.rs`).
+8. **The budget.** One landing.
+9. **Done, measured.** The pins red first on HEAD's walk and green on the fix's; the crate's tests green in the clone; the walk
+   diff's moved rows each judged (THE WALK DIFF); the replay's moved verdicts each judged (THE REPLAY); the walk's instructions
+   +4.7% over HEAD's, measured 2026-11-21 (callgrind), the one exit not met, accepted with its cost and the alternative priced (THE SPEED), T129 its cure.
+10. **Before moving a constant.** No research constant: `HELD` (0xF0000) is a stand-in's offset, chosen so every stand-in is a
+    plane-15 private-use character no typed command holds; a test reads each back and keeps one that hides nothing.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** A defect, fixed here: a reader sees main-tree refuse a write into the mirror through a quoted word with a
+    blank, as it refuses one without, and no phantom write where a quoted text, an escaped `\$(` or an arithmetic stood. The
+    segment-only change: ux#1913's three walks (main-tree's, house style's, the no-main walk) each show `$__sub_1__` where HEAD showed
+    `$__sub_0__`, measured 2026-11-21 (`/tmp/t83/out/ux.head-fix.cmp.txt`): the fix walks the `$(date -Is)` of `echo "phase6 ... $(date
+    -Is)"` as the substitution bash runs, so the later `$(basename $g .gen.py)` is the second; `mktemp_words`' `__sub_<n>__` and the
+    segment share the index, and no reader parses it (`.segment` is read by `verdict.rs` and `gate_write_hooks` to show it, and by
+    `gm_tree_hooks`, `readme_hooks` and `make_only_hooks` for its head word, a `touch`, or a README name; grep 2026-11-21): a
+    difference, not a defect (constitution XIV).
+
+**Found and left?**
+- An assignment's value whose word holds a quoted blank mid-word is cut at the blank: `D=/diagram/"a b"; cp /tmp/a $D/f` reads
+  as a write of `/diagram/"a/f` - its class main, so refused, the path the refusal names wrong - at HEAD and after T83, measured
+  2026-11-21 (`/tmp/t83/out/probe-head.log`, `probe-v2.log`: each walk printed by a scratch test). Not fixed here: `env_from` and
+  `bind` read a value from the command's raw text, and reading it as the walk reads the word changes every place a bound value is
+  expanded, a change of its own beside T83's quoted destinations. Filed as T127; lands before T118.
+- A command holding one quoted body whose parentheses or backquotes do not pair - the nested quotes of a `"$(dirname "$F")"`,
+  which the flat quote scan reads as `"$(dirname "`, `$F` and `")"` - has every quoted body blanked as before T83
+  (`pairs_within`), so its quoted destinations are read from the word before them: `cp /tmp/a "/diagram/x y"; echo "$(dirname
+  "$F")"` reads as a write of `/tmp/a` at HEAD and with T83, where `cp /tmp/a "/diagram/x y"` alone is main's, measured
+  2026-11-21 (the walker over `/tmp/t83/out/probes-sf/q.jsonl`, HEAD's walk beside the fix's). 2,603 of bx's 59,116 commands hold
+  such a body, 1,559 with another body T83 would hold, 2 of them a cp, mv, tee, install or rsync destination or a redirect target
+  (bx#16089, bx#35935), none naming /diagram (ux 275, 227 and 0, tx 58, 39 and 0), measured 2026-11-21
+  (`/tmp/t83/scripts/count_sf.py`, a Python mirror of `quoted.rs`'s scan, heredoc bodies carried out, an unclosed quote and the
+  `python -c` flags approximated). Not fixed here: holding these bodies needs a quote scan that nests through a `$(...)` as bash
+  does, in place of the flat one every guard reads: holding them under the flat scan would read them wrong (`"$(dirname "` a
+  word of its own). Filed as T132; lands before T133, whose substitutions it reads.
+- A held double-quoted body's `$(...)` that holds a quote is hidden whole, and every `$(` after it in the body, so their
+  commands go unwalked: `echo "$(touch '/diagram/x')"` reads as no write at HEAD and with T83, where `echo "$(touch /diagram/x)"`
+  is a write of `/diagram/x` with T83, measured 2026-11-21 (the walker over `/tmp/t83/out/probes-sf/q.jsonl`, HEAD's walk beside
+  the fix's). 472 of bx's 59,116 commands hold such a substitution, 14 of them a write tool's word or a redirect inside it
+  (`/dev/null` and `>&` aside, an upper bound), none of ux's 34 or tx's 11, measured 2026-11-21 (`/tmp/t83/scripts/count_sf.py`,
+  as above). Not fixed here: walking it needs its own quotes read by T132's nesting scan, and HEAD blanked such a body whole, so
+  T83 loses no reading HEAD had. Filed as T133; lands before T127, which reads an assignment's value as the walk reads its word,
+  so it lands on the walk's final reading of a quoted substitution.
+- The arithmetic class, fixed here: observed 2026-11-21, method: every `$((` and `((` of the three corpora counted
+  (`/tmp/t79/bx-all.jsonl` 595 and 1,011 rows, `ux-all.jsonl` 264 and 123, `tx` 31 and 4), those holding a `<` or `>` read
+  through HEAD's walk (bx#27391-27393 and ux#1441 phantom writes; `$((pyl+$(wc -l < f)))`, `$(( need > 0 && i + need < n ))` and
+  `for ((i=0;i<n;i++))` reads alone), and bash 5.3.9 probed on each form; the forms left out,
+  `[[ a > b ]]` and `$[...]`, stand in none of the three corpora, measured 2026-11-21 (a pattern count over each: `[[ ... > ... ]]`
+  0 rows, `$[` 2 hits, both a regex class, no arithmetic), and are the next item.
+- A `[[ ... ]]` test's `<` and `>`, and a `$[ ... ]` arithmetic's, read as redirects: `[[ a > b ]] && echo y` reads as a write of
+  `/tmp/b`, `if [[ $x > /diagram/q ]]; then echo y; fi` as a write of `/diagram/q`, main's, and `echo $[ 3 > 2 ]` as a write of
+  `/tmp/2`, at HEAD and with T83, measured 2026-11-21 (the walker over `/tmp/t83/out/probes-sf/q2.jsonl`, HEAD's walk beside
+  the fix's). Not fixed here: a `[[ ... ]]` is a grammar of its own (its `&&`, `||`, parentheses, `<` and `>` its own operators,
+  where an arithmetic's are numbers' operators), a reading beside T83's arithmetic, and no command of the three corpora holds
+  either form with a `<` or `>` (counted above), so no session has met it. Filed as T134; lands before T132, the split it
+  reads landing before the quote scan is rebuilt over it.
+
+**Performance work?** yes, in part - the walk runs on every Bash call's hooks (the builders' loop, 451 FR-013); not engine speed, so
+the performance checklist's answers are given in brief:
+1. **Where does the time go?** In fancy-regex's backtracking machine, 86.4% of the walk's 59.31 G with T83 and 88.6% of HEAD's
+   56.63 G, measured 2026-11-21 (callgrind, `/tmp/t83/out/cg.fix2.ux.out`, `cg.head.ux.out`): ASSIGN's scans the most
+   (`env_from`'s 16.41 G, `read_where_it_stands`' 3.75 G, `cg.inl.ux.out`), `py_c::reads` 12.24 G, the substitution
+   `replace_all` 8.14 G; REDIRECT's own scan 0.12 G.
+2. **Removes work, or only moves it?** Removes it: the redirect scan runs in the regex crate's automaton, the lookbehind one
+   comparison a match; the held words add work (THE SPEED).
+3. **What it was expected to save, and why.** About 17 G (30%), read from HEAD's profile as the redirect pattern's - a
+   misreading: that was the capture-iterator frame inlined into `walk_text`, REDIRECT's scan 41,052 of its 107,352 calls,
+   measured 2026-11-21 (callgrind, `cg.head.ux.out` beside `cg.fix2.ux.out`).
+   Measured 2026-11-21 (callgrind), the rewrite saved 0.50 G (59.81 G to 59.31 G); the 16.41 G left is `env_from`'s ASSIGN
+   scan, filed as T129.
+4. **How does the work grow?** Linearly in a segment's text, as before; the held words make the walked text longer where a quoted
+   body was `""`.
+5. **Before and after, and under what conditions.** HEAD 56.63 G, the fix 59.31 G (+4.7%): `walk_judged`'s inclusive
+   instructions under callgrind over T79's ux corpus, measured 2026-11-21. Wall, direction only: a median per-row ratio of
+   1.146, the corpus 2.21 s to 2.34 s, three alternating runs a side at load 17 to 30, measured 2026-11-21 (`wall.sh`).
+6. **Did any map move?** No: a hook's answer; no research claim reads the walk.
+
+
+<!-- plan-archive: T84 to T84 moved to plan-done.md, 2026-11-21 (feature 375 FR-044) -->
+<!-- plan-archive: T85 to T85 moved to plan-done.md, 2026-11-21 (feature 375 FR-044) -->
+<!-- plan-archive: T86 to T86 moved to plan-done.md, 2026-11-21 (feature 375 FR-044) -->
+<!-- plan-archive: archived 2026-11-22 -->
+### T87 (make-only refused a guard file's name written in a scratch tree as a guard file written from the shell, found by T79 on 2026-11-21: `guard_file_hooks::held` held a path by its name alone (`/Makefile`, `/dev/work-budget.json`, ...), so `printf x > /tmp/q/Makefile`, a builder's `T=$(mktemp -d); ...; printf ... > $T/Makefile` (tx#953, ux#2204) and a copy of `dev/work-budget.json` into a `$(mktemp -d)` preview (ux#1106, ux#1107) were refused, measured 2026-11-21 (`/tmp/t79/probes-mk.jsonl` through T79's binaries); on the guard log, 110 of make-only's 745 guard-write refusals and 11 of guard-file's 180 held a guard file's name under `/tmp` alone, measured 2026-11-21 (item 4))
+
+- **Approach**: `held` is now `named` (the list by name, HEAD's `held` unchanged) and not `scratch`
+  (`rust/guard/src/guards/guard_file_hooks.rs`): a path whose real path - its existing part's links resolved by
+  `shared::tree::realpath`, so a scratch link into a clone is the clone's - lies under `/tmp` or `$TMPDIR` (where `$(mktemp -d)`
+  makes one; a `$TMPDIR` of `/`, the home directory or a place holding it counts for none) and in no project tree (`TREES`:
+  `/diagram`, the mirror with its clones, and `/host-l7r-repo`, the mount; `CLONE_MAIN`, the mirror's seam, adds a test's world) is no
+  guard file. Every other place keeps the reading by name, so `/Makefile` - where the walk puts `$UNSET/Makefile` and
+  `$CLAUDE_PROJECT_DIR/Makefile`, a path the shell computes and the walk cannot place - and `~/.claude/settings.json` stay held.
+  make-only (`make_only_hooks.rs`'s `walked_write`, where it reads `held`) lets a write the walk placed in scratch
+  overrule the text patterns hit by hit (`scratch_hits_placed`): a hit stands unless its own statement - the text between two
+  separators, quotes blanked - pairs with a walk segment whose writes all landed on no guard file, one of them a guard file's name,
+  and with no segment that is not so; a statement and a segment pair when the segment holds the statement's words, quotes dropped,
+  in order under the same head (`pair_words`, `holds`), so the walk's rendering of a quoted word does not matter, and a write beside
+  it the walk cannot place (`F=$(ls); sed -i s/a/b/ $F/Makefile`) or cannot see (`ls | xargs sed -i s/a/b/ Makefile`) stays
+  refused as at HEAD. The Python patterns (`PY_WRITES`, a name bound to a guard path) no longer read a program the walk judged whose
+  guard files' names all land in scratch (`interp::program_names_scratch`), its body held once in the text; a program that
+  changes its own directory (`chdir`) is read from `/`, as one whose place is unknown, and never freed (`interp::moves`). A
+  command naming a `CDPATH` - which the walk does not read, so its `cd` can carry a write out of scratch into a clone - or a
+  `worktree add` - which makes a project's worktree in scratch before any pointer shows it - keeps HEAD's reading by name
+  throughout (`walked_write`'s `kept`: `named` beside `held`, `interp::program_names_named` beside `program_names_guard`, no hit
+  cleared and no program freed). And a git worktree in scratch of a project repository is a project tree, its commits reaching
+  that repository (`project_worktree`, `scratch`'s last test): the nearest `.git` at or under the scratch root is read once - a
+  directory is a repository of scratch's own - and a file's `gitdir:` (relative to its own directory) leads to the common git dir,
+  its `commondir` or, where none is read, the gitdir itself, held where its real path lies in a project tree. The reads fall on a
+  guard file's name under scratch alone: one `.git` stat an ancestor up to the scratch root and two small reads, on each of the 2
+  `held` calls a write target meets (`walked_write`, `scratch_hits_placed`), observed 2026-11-21, method: the code read, since the container refuses `strace`. `interp.rs`'s
+  `guard_path` calls `held` and follows unchanged. The tests' worlds (both modules' `world`, the guard-file suite's section 8
+  fixture) name themselves a project tree through `CLONE_MAIN`, as they stand in for one. T116's lines (`guard_file_hooks.rs`'s
+  permit store and reader) are not `held`'s and are untouched; its premise moved: a scratch copy is no longer held, so its Edit needs
+  no permit, while `make guard-edit` still grants one by name.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+| a guard file's name in scratch is no guard file (`held`), and overrules the text patterns hit by hit, only for a write the walk placed there | n/a - no map | n/a | none | n/a |
+| a command naming a `CDPATH` or a `worktree add` keeps the reading by name (MODE 4 round 2) | n/a - no map | n/a | none | n/a |
+| a git worktree in scratch of a project repository is a project tree (`project_worktree`, the session's ruling on round 2's note) | n/a - no map | n/a | none | n/a |
+
+<!-- plan-archive: archived 2026-11-22 -->
+### T87 Approach (checklist part A)
+
+1. **The goal, in the world.** No map changes. A builder's scratch fixture - a `Makefile`, a `dev/work-budget.json`, a
+   `.claude/settings.json`, a copy of a guard's source - written under `/tmp` or `$TMPDIR` (a `$(mktemp -d)` place among them),
+   by Edit, Write, the shell or a Python program standing there, is let through; a project tree's guard file is refused as before,
+   and so are a write the walk cannot place or cannot see, a place nothing marks as scratch (`/Makefile`, what the walk makes of
+   `$UNSET/Makefile` and `$CLAUDE_PROJECT_DIR/Makefile`) and `~/.claude/settings.json`, and a git worktree in scratch of a project
+   repository, whose commits reach it.
+2. **The constraints.** The one guard file list (feature 170, 449 T227, T229: layer 3 and make-only read it); the brief's three
+   rules (held only inside a project tree, read by its real path; a scratch path under `/tmp` or a mktemp place not held; a path the
+   shell computes and the walk cannot place keeps HEAD's reading); T79's walk and its mktemp place (`/tmp/tmp.XXXXXXXXXX`, or
+   `$TMPDIR/...`), left alone, as T83's and T110's builders work there (`shared::tree` is read, not changed); T116's permit lines left
+   alone; constitution XIV.
+3. **Where each comes from.** O: the guard log's firings (`/tmp/t87/scripts/logscan.py`), each make-only refusal walked from its
+   logged cwd by a probe over HEAD's `l7r_shared` (`/tmp/t87/probe`, `/tmp/t87/scripts/classify.py`, `text443.py`); O: HEAD's binary
+   and the fix's on the shapes (`/tmp/t87/scripts/shapes.sh`, `/tmp/t87/sh/probe.sh`, `/tmp/t87/out/shapes{1,2}.txt`,
+   `/tmp/t87/sh/shapes5.txt`); O: the red and green runs and both replays (item 9); G: the task as filed (T79's found-and-left);
+   R: none - a guard's rule, no research question.
+4. **Do they describe the world here?** Yes. The guard log holds 96,279 firings, measured 2026-11-21 (`~/.claude/guard-log`
+   streamed by `/tmp/t87/scripts/logscan.py`, 37 s, 11 MB peak). Of make-only's 745 guard-write refusals, 190 held a guard file in a
+   project tree, measured 2026-11-21 (each refusal walked from its logged cwd through `/tmp/t87/probe` over HEAD's `l7r_shared`,
+   `/tmp/t87/scripts/classify.py`). 110 of them, 27 distinct commands and 98 of them on 2026-11-21, held one under `/tmp` alone -
+   150 paths of guard sources, 17 `Makefile`s, 11 `settings.json`s, 1 `switches.json`, 1 hook script, under `/tmp/t42` (72),
+   `/tmp/t78` (32) and 15 more scratch roots - measured 2026-11-21 (the same walk). 25 of those 110 stood beside a write the walk
+   cannot place, a scratch log named through a loop's or a function's variable, measured 2026-11-21 (the same walk). 1 held a guard
+   file under the home directory (`~/.claude/jobs/<id>/tmp/rs-wt/Makefile`, a render worktree's copy) and 1 had no cwd and no place,
+   measured 2026-11-21 (the same walk). 443 held no target the walk placed (the text patterns or the program route), by their text 387
+   naming a project tree's file, 30 no guard file's name and 26 a scratch place or a variable, measured 2026-11-21
+   (`/tmp/t87/scripts/text443.py`). Of guard-file's 180 held-rule refusals, 167 named a project tree's file, 11 a scratch copy under
+   `/tmp` (Edits and Writes in `/tmp/t83/fix`, `/tmp/t113/after`, `/tmp/t51/m`, a scratchpad's `Makefile`) and 2
+   `~/.claude/settings.json` (2026-10-07), measured 2026-11-21 (`/tmp/t87/scripts/logscan.py`). No guard-file write the log holds
+   under `/tmp` resolves into a project tree - each a scratch copy, a fixture or a log - measured 2026-11-21 (each path's real path,
+   `/tmp/t87/scripts/classify.py`). `~/.claude/settings.json` is a real guard file outside the trees: it registers the GM's own hooks
+   on 8 events, their commands carrying `GUARD_EDIT_OK` markers, measured 2026-11-21 (the file read) - so it stays held, as do
+   the 2 edits and one Python write of it (2026-09-26) the log holds. And a positive list of project roots alone would let a write
+   the walk cannot place through: HEAD's binary refuses `echo x > $CLAUDE_PROJECT_DIR/Makefile`, which the walk reads as `/Makefile`,
+   measured 2026-11-21 (`/tmp/t87/out/shapes1.txt` through `/tmp/t87/tgt-head/tool/l7r-guard`) - so the rule frees scratch, and holds
+   every other place by name. Of the 110 held under `/tmp` alone, 43 wrote into a git worktree of this clone - `/tmp/t50/wt` (9)
+   and `/tmp/t79/wt` (9), their `.git` pointers on disk, and `/tmp/t78/t78wt` (16) and `/tmp/t77/wt` (9), gone, each named by a
+   `git -C /diagram/.clones/diagram-backlog worktree add` in T93's corpus or the log, 17 of those rows in the same command - and 5
+   of the corpus's 12 let-throughs did (3257, 4483; 6724 and 7307 with their `worktree add`; 6759), measured 2026-11-21
+   (`/tmp/t87/scripts/worktrees.py`, `wt_classes.py`: each pointer read, each `worktree add` in both corpora); none of the 18 with
+   no target the walk held, and none of guard-file's 11. 11 more rows (10 logged, 1 of the corpus) wrote under trees gone with no
+   `worktree add` naming them (`/tmp/t41-scratch`, `/tmp/claude-1000/x`), unknown, measured 2026-11-21 (`/tmp/t87/scripts/wt_classes.py`).
+5. **The order.** After T79 (its mktemp place) and before T116 (which waits on it) and T22; red first, the tests and suites before
+   the fix.
+6. **The exits.** Green: the new tests and the suites' new cases red on HEAD and green on the fix, the guard crate's tests green, and
+   the replay over T93's corpus changing no verdict but scratch refusals let through, each listed, and the worktrees of a project
+   repository that still stand held as at HEAD. Red: what failed recorded and the
+   task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** Five: three caught by a probe before they landed, two by the MODE 4 review's round 2. Freeing scratch in
+   `held` alone also freed what the patterns
+   caught beside it, as make-only's `cleared` was command-wide: a first fix that cleared only where no write was unplaced let
+   `cp Makefile /tmp/q/Makefile; ls | xargs sed -i s/a/b/ Makefile` through, which HEAD's binary refuses (`/tmp/t87/out/shapes3.txt`,
+   `shapes4.txt`, measured 2026-11-21). A second blanked each freed segment by its text, but the walk's segment is its own rendering
+   (`sed -i ''`, `python3 -c __py_c_0__`, quotes dropped), so every quoted scratch write stayed refused: the logged-refusal replay freed
+   56 of the 85 plain `/tmp` rows the first fix freed 83 of, measured 2026-11-21 (`/tmp/t87/scripts/replay_log.py`). The clear now
+   pairs each hit's statement with the walk's segment by its words, pinned by the quoted shapes in both directions. A third freed a
+   Python program by where it stands, so `cd /tmp/q && python3 -c "import os; os.chdir('/diagram/.clones/s'); open('Makefile','w')"`,
+   which HEAD's binary refuses, passed, measured 2026-11-21 (`/tmp/t87/sh/probe.sh` over `/tmp/t87/sh/shapes6.txt`); a program that
+   changes its directory is now read from `/`, pinned as refused, its stdin form too. A fourth, round 2's finding: the walk does
+   not read `CDPATH`, so from `/tmp/q` `CDPATH=/diagram/.clones cd s && printf x > Makefile` lands in a clone while the walk
+   places it in scratch - refused by HEAD's binary, let through by the third fix's, measured 2026-11-21 (`/tmp/t87/sh/probe.sh`
+   over `/tmp/t87/sh/shapes7.txt`); a command naming one keeps HEAD's reading by name, pinned red first (three shapes in
+   `make_only_hooks/tests.rs`, one suite case, failing on the third fix's tree, `/tmp/t87/out/red-unit.log`, `suite-red-pre.txt`).
+   A fifth, round 2's note, ruled by the session: a git worktree under `/tmp` of a project repository was freed as scratch, though
+   its commits reach that repository - 43 of the 110 logged let-throughs and 5 of the corpus's 12 (item 4); held now, pinned red
+   first the same way, and a `worktree add` in the same command, which no pointer shows yet, keeps the reading by name.
+8. **The budget.** One landing.
+9. **Done, measured.** The guard crate's tests green in the clone, 444 passed and 0 failed, measured 2026-11-21 after the CDPATH
+   keep and the worktree hold (`make rust-test CRATE=rust/guard`, `/tmp/t87/out/rust-test5.log`); before them 442 passed and 0
+   failed, measured 2026-11-21 (`make rust-test
+   CRATE=rust/guard`); over HEAD with the fix alone in scratch 440 of 441, the one failing `no_recipe_comment_in_the_repository_would_run`
+   for want of a git index there, as on HEAD in scratch, measured 2026-11-21 (`cargo test -p l7r_guard --lib` in `/tmp/t87/fix`). The
+   suites green in the clone, make-only 141 of 141 and guard-file 74 of 74, measured 2026-11-21 (`tests/hooks/test-make-only-hooks.sh`,
+   `test-guard-file-hooks.sh`); red on HEAD's binary, make-only's 6 new `ok` cases failing and its 6 new `blocked` cases passing as at
+   HEAD, guard-file's 3 new cases failing (with 2 Read-context cases that want a git index, green in the clone), measured 2026-11-21
+   (the same suites in `/tmp/t87/head`, `L7R_GUARD_TARGET=/tmp/t87/tgt-head`). The guard log's 925 held-rule refusals replayed through
+   HEAD's binary and the fix's, measured 2026-11-21 (`/tmp/t87/scripts/replay_log.py`, 1 min 6 s, 15.6 MB peak): make-only lets
+   through all 110 held under `/tmp` alone (85, and the 25 beside a write the walk cannot place, a scratch log named through a variable) and 18 of the
+   443 with no target the walk held, each a scratch write (programs and loops under `/tmp/t42` and `/tmp/t31`, a scratchpad's mutation
+   copy, heredocs into `/tmp/t83`, `/tmp/t113`, `/tmp/t103`); its 190 project-tree rows and the home directory's stay refused;
+   guard-file lets its 11 scratch copies through and holds the other 169 as before. T93's corpus replayed the same way, measured
+   2026-11-21 (`/tmp/t87/scripts/replay.py`, its 9,646 Bash rows and 1,391 Edit and Write rows, 4 min 56 s, 18.1 MB peak): 12
+   make-only verdicts changed, each a scratch write let through - copies of guard sources into `/tmp/t42`'s trees (4), worktrees
+   under `/tmp/t78` (2), `/tmp/t50`, `/tmp/t77` and `/tmp/t79`, a stand-in repository's `Makefile` under `/tmp/t85-measure`, a probe's
+   `settings.json` under `/tmp/t59`, a broken guard source in `/tmp/t41-scratch` - no guard-file verdict changed, and none outside
+   scratch. After the CDPATH keep and the worktree hold (the fix rebuilt in `/tmp/t87/fix`): its pins red before them, its 3 tests
+   failing (`a_guard_files_name_written_in_scratch_is_no_guard_write`'s CDPATH shapes and both worktree tests; the filter's fourth
+   match, `record_edit_gate`'s worktree test, no pin, passing) and the suites' 4 new make-only and 2 new guard-file `blocked`
+   cases failing, each let through, measured 2026-11-21 (`/tmp/t87/out/red-unit.log`,
+   `suite-red-pre.txt`, a copy of the suites' red lines, whose logs the green reruns overwrote), and green after, the 3 pins and
+   the fourth match, 4 of 4 (`green-unit.log`), the suites in that tree make-only 145 of 145 and guard-file
+   75 of 77 (its 2 Read-context cases, as on HEAD there); the suites green in the clone, make-only 145 of 145 and guard-file 77 of
+   77, measured 2026-11-21 (`/tmp/t87/out/suite-clone-*-6.log`, run after the last code edit). The probes: the two CDPATH shapes and five writes into the
+   standing worktrees `/tmp/t50/wt` and `/tmp/t79/wt` (a redirect, `cp`, `sed -i`, and a `cd` before `python3 -c` and before
+   `sed -i`) and an in-command
+   `worktree add`, refused by HEAD's binary and the fix's, and Edits there by guard-file the same; `/tmp/t85-measure/e2e` (its own
+   `.git` directory), `/tmp/t42/src-head` (an archive's tree) and `/tmp/q` let through, measured 2026-11-21
+   (`/tmp/t87/sh/probe.sh` over `shapes7.txt`, `probe_gf.sh`). The logged replay again (`replay_log.py`, 1 min 29 s, 15.6 MB
+   peak): make-only lets through 93 (75 of the 110 under `/tmp` alone and the 18), the 35 others held again - the 18 into the
+   standing worktrees and the 17 that make theirs in the command - and the 8 that write into `/tmp/t78/t78wt`, gone before the
+   replay with no `worktree add` in their command, freed only because the tree is gone, guard-file's 11 as before, no verdict
+   newly freed, measured 2026-11-21 (`/tmp/t87/out/replay-log5.jsonl`). The corpus again (`replay.py`, 6 min 33 s, 17.8 MB peak):
+   8 make-only verdicts changed, each a scratch write let through - the 4 into `/tmp/t42`'s trees, the stand-in repository under
+   `/tmp/t85-measure`, the probe under `/tmp/t59`, `/tmp/t41-scratch`'s broken source and 6759, a write into `/tmp/t78/t78wt`
+   freed only because that worktree is gone - the 4 others held again (3257 and 4483 into the standing worktrees, 6724 and 7307
+   making theirs in the command), no guard-file verdict changed, none newly freed and none outside scratch, measured 2026-11-21
+   (`/tmp/t87/out/replay-diff5.jsonl`).
+10. **Before moving a constant.** n/a: no constant moved. `TREES` is new - the project's two roots as `shared::session` (`/diagram`)
+    and `repo_safety_hooks` (`/host-l7r-repo`) already name them; `RESERVED`, the shell's reserved words a statement opens with, is
+    the shell's own list.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** A builder writing a scratch fixture under `/tmp` - a `Makefile` for a stand-in repository, a budget copied
+    into a preview, a scratch copy of a guard's source, a switch thrown in a scratch mirror by a Python one-liner - was refused as a
+    guard file written from the shell or edited without a marker (make-only 110 refusals, 27 commands; guard-file 11, on the log), each
+    a lost call and an escape typed; a fixture that is no project's worktree now passes - 75 of those 110, 8 of the 75 only
+    because their worktree was gone at the replay, measured 2026-11-21 (`/tmp/t87/out/replay-log5.jsonl`, item 9) - and the 35
+    written into a project repository's worktree stay refused. Nothing changes for a project tree's guard file, a place the walk
+    cannot resolve, or the home directory's settings (the replays: no verdict changed outside scratch, item 9).
+
+**Found and left?**
+
+- The shell walk does not read `CDPATH`, so from `/tmp/q` `CDPATH=/diagram/.clones cd s && printf x > Makefile` lands in a clone
+  while the walk places it in scratch: refused by HEAD's binary, let through by the fix's, measured 2026-11-21 (`/tmp/t87/sh/probe.sh`
+  over `/tmp/t87/sh/shapes7.txt`); `CDPATH` stands in none of T93's 9,646 Bash rows or the log's 925 refusals, measured 2026-11-21
+  (grep). The let-through is fixed here: a command naming a `CDPATH` keeps HEAD's reading by name (MODE 4 round 2: the
+  let-through was T87's to close), pinned in `make_only_hooks/tests.rs` and the make-only suite. The walk's own reading of `CDPATH`
+  is not fixed here: it is `shared::tree`'s, T83's and T110's files. Filed as T130; lands before T22.
+- make-only's by-name clear (HEAD's: a walked write named like a guard file that is none) still overrules the text patterns over the
+  whole command, so `cp a /tmp/q/settings.json; ls | xargs sed -i s/a/b/ .claude/settings.json` is let through (rc=0 on HEAD's binary
+  and the fix's, while the `xargs` write alone is refused, measured 2026-11-21 through `/tmp/t87/sh/probe.sh`) - a guard file written
+  from the shell slips past. Not fixed here: a let-through older than T87, not good work refused, and judging it hit by hit reaches
+  every command the by-name clear frees today (a suite written after a `cd`, a `settings.json` outside `.claude`), owed its own replay. Filed as T128; lands before T22.
+- The Python patterns refused a guard file's name a program writes in scratch: the guard log's 2026-11-20 row in a scratch mirror
+  (`cd /tmp/t232/m/.clones/w && ... python3 -c "...json.dump(d,open('dev/switches.json','w'))"`) was refused by HEAD's binary and by
+  the shell-only fix. Fixed here (`interp::program_names_scratch`), pinned in both directions (a relative `open('Makefile','w')` from
+  the clone still refused).
+- make-only's Python patterns read a program's string literals as its code: this task's own stdin program writing `plan.md`,
+  its replacement text quoting the `chdir` probe, was refused as a guard file written from the shell by the live guard, observed
+  2026-11-21, method: the refusal met in this session. Not fixed here: a mention in a project tree, outside the scratch rule T87 changes.
+  Filed as T131; lands before T22.
+- guard-file's Read reminder tells a scratch copy of a guard file it is a guard file (`read_context` reads the name alone).
+  Not fixed here: `read_context` is outside `held`, its reminder no refusal. Filed as T126; lands before T22.
+
+**Performance work?** no
+
+
+<!-- plan-archive: T88 to T88 moved to plan-done.md, 2026-11-21 (feature 375 FR-044) -->
