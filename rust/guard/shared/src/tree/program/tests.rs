@@ -12,9 +12,16 @@ const CHILD: &str = "L7R_PROGRAM_BUILDS_OF";
 /// Each program and the reader's patterns it builds, read as the event log reads it - every name, in the crate's directory, each an
 /// existing file: none for a program whose literals name no file or name one only assigned (its literals read by plain code), a `/`
 /// or a `join(` beside quotes that join no two literals among them; else only the patterns its uses reach - `open(`'s two, `Path(`'s
-/// two, a joined pair's (triple-quoted text read by shape's scan, which builds none, 451 T112).
-const BUILDS: [(&str, usize); 9] = [
+/// two, a joined pair's (triple-quoted text read by shape's scan, which builds none, 451 T112); none for a program that defines a
+/// function, or names `def` in a string, its calls' literals bound by plain code (451 T110).
+const BUILDS: [(&str, usize); 12] = [
     ("print(1)", 0),
+    ("print('def f(p):')", 0),
+    (
+        "root='src/'\ndef sub(p): open(root+p,'w').write('x')\nsub('lib.rs')",
+        0,
+    ),
+    ("root='src/'\nopen(root+'lib.rs','w').write('x')", 0),
     ("import json\nprint(json.dumps({'k': 1}))", 0),
     (
         "print('/'.join(x).split('/'), a + '/' + b, p.join(\"read.sh\"))",
@@ -301,4 +308,158 @@ fn triple_quoted_text_is_blanked_as_the_pattern_blanked_it() {
         );
         assert_eq!(scan, old, "{text:?}");
     }
+}
+
+/// T92's builder's command, whole (2026-11-21 20:34Z, its transcript's tool call `toolu_01MiKPTqkMFMHohRjnX9tfYu`): a heredoc's program
+/// whose `sub` writes `root+path`, `root` the module's literal (451 T110).
+const T92: &str = r###"printf '\nmod accept;\n' >> rust/gate/crates/plan/src/plan/record/tests.rs && python3 - <<'EOF'
+import re
+root='/diagram/.clones/diagram-backlog/rust/gate/crates/'
+def sub(path, old, new, count=1):
+    p=root+path; s=open(p).read()
+    assert s.count(old)>=1, (path, old)
+    s=s.replace(old,new,count); open(p,'w').write(s)
+# step 1: the type only, HEAD's behavior kept
+sub('plan/src/plan/record.rs', """/// Past the plan-round cap (feature 385 T16)""", """/// What an accept recorded (feature 451 T92): the blocks recorded CLEAR, the tasks whose verdict it now is, and whether its question was
+/// the whole plan.
+#[derive(Debug, Default, PartialEq, Eq)]
+pub struct Accepted {
+    pub blocks: Vec<String>,
+    pub tasks: Vec<String>,
+    pub whole: bool,
+}
+
+/// Past the plan-round cap (feature 385 T16)""")
+sub('plan/src/plan/record.rs', """    when: Option<&str>,
+) -> Result<Vec<String>, Stop> {
+    let lines = std::fs::read_to_string(spec_dir.join("arbiter.jsonl"))""", """    when: Option<&str>,
+) -> Result<Accepted, Stop> {
+    let lines = std::fs::read_to_string(spec_dir.join("arbiter.jsonl"))""")
+sub('plan/src/plan/record.rs', """    let _ = std::fs::write(spec_dir.join(RECORD), pretty(&out));
+    Ok(sorted)
+}""", """    let _ = std::fs::write(spec_dir.join(RECORD), pretty(&out));
+    Ok(Accepted {
+        blocks: sorted,
+        tasks: Vec::new(),
+        whole: true,
+    })
+}""")
+sub('plan/src/plan.rs', """                Ok(named) => said(format!("arbiter-accept: {} block(s) of {}'s plan recorded CLEAR on {}\\n", named.len(),""", """                Ok(named) => said(format!("arbiter-accept: {} block(s) of {}'s plan recorded CLEAR on {}\\n", named.blocks.len(),""")
+sub('plan/src/plan.rs', """pub fn arbiter_accept_listed(dir: &Path, trigger: &str) -> Vec<String> {""", """pub fn arbiter_accept_listed(dir: &Path, trigger: &str) -> Accepted {""")
+sub('plan/src/plan.rs', """mod record;\n""", """mod record;\npub use record::Accepted;\n""")
+sub('plan/src/plan/record/tests.rs', """    assert_eq!(named, ["## A", "preamble"]);""", """    assert_eq!(named.blocks, ["## A", "preamble"]);""")
+sub('plan/src/plan/record/tests.rs', """    assert_eq!(arbiter_accept(&dir, asked, None).unwrap(), ["preamble"]);""", """    assert_eq!(arbiter_accept(&dir, asked, None).unwrap().blocks, ["preamble"]);""")
+sub('plan/src/plan/tests.rs', """    assert!(super::arbiter_accept_listed(&root, "t").is_empty());""", """    assert!(super::arbiter_accept_listed(&root, "t").blocks.is_empty());""")
+sub('arbiter/src/arbiter.rs', """                named.len()
+            );""", """                named.blocks.len()
+            );""")
+EOF
+git -C /diagram/.clones/diagram-backlog diff --stat -- rust/gate/crates/plan rust/gate/crates/arbiter"###;
+
+/// 451 T110, red first on T92's own command, read as the event log reads it (the walk's program, resolved where it runs): each
+/// `sub(..)` call's path is placed on the module's `root`, where it was placed where the shell stood, naming no file of the three it
+/// wrote; make-only's reading, fail-closed, names both.
+#[test]
+fn a_parameter_written_onto_a_module_root_is_placed_there() {
+    let clone = "/diagram/.clones/diagram-backlog";
+    let walk = crate::tree::walk_judged(T92, Some(clone), "", "/home/x");
+    let found = walk
+        .targets
+        .iter()
+        .find_map(|t| t.program.clone().zip(t.path.clone()));
+    let (program, dir) = found.unwrap_or_default();
+    let got = all_program_names(&program, Some(&dir), true, true, &rs);
+    let files = [
+        "plan/record.rs",
+        "plan.rs",
+        "plan/record/tests.rs",
+        "plan/tests.rs",
+    ];
+    let mut want: Vec<String> = files
+        .iter()
+        .map(|f| format!("{clone}/rust/gate/crates/plan/src/{f}"))
+        .collect();
+    want.push(format!("{clone}/rust/gate/crates/arbiter/src/arbiter.rs"));
+    assert_eq!(got, want);
+    let closed = all_program_names(&program, Some(&dir), true, false, &rs);
+    let here = format!("{clone}/plan/src/plan.rs");
+    let both = closed.contains(&here) && closed.ends_with(&want);
+    assert!(both, "{closed:?}");
+}
+
+/// 451 T110: each form of a root, a join and a write the binding reads, placed, and each shape it leaves to the literal's own reading
+/// (in `/w`, `placed`): a root the program computes or binds twice, a function defined twice, a star, a parameter handed on or rebound,
+/// a read, another sink, a shadowed root, an f-string's expression, mixed or floor joins, a method's call, a call of another function;
+/// and a write joining a root and literals alone, with no function, placed as well (its literal a tail the plain reading drops).
+const BINDS: [(&str, &[&str]); 46] = [
+    ("root='src/'\ndef edit(p, old, new): s=open(root+p).read(); open(root+p,'w').write(s)\nedit('a.rs', 'x', 'y')", &["/w/src/a.rs"]),
+    ("root = '/r/'  # the crates\ndef sub(path, old, count=1):\n    p=root+path; s=open(p).read()\n\n    open(p, 'w').write(s)\nsub('b.rs', '')\nsub(path='c.rs', old='')\nx = 1", &["/r/b.rs", "/r/c.rs"]),
+    ("R = Path('l7r/')\ndef f(path):\n    p = R / path\n    p.write_text('x')\nf('x/b.py')\nf('/abs/d.py')", &["/w/l7r/x/b.py", "/abs/d.py"]),
+    ("R = pathlib.Path('/k')\ndef f(rel, *, mode):\n    open(os.path.join(R, rel), mode='a').write('x')\nf('e.json', mode=1)", &["/k/e.json"]),
+    ("R = \"/r\"\ndef edit(rel, old):\n    p=f\"{R}/{rel}\"; s=open(p).read()\n    open(p,'w').write(s)\nedit('v.html', 'o')", &["/r/v.html"]),
+    ("R = '/q'\ndef f(p, s):\n    Path(R, p).write_text(s)\n    (Path(R) / 'sub' / p).write_bytes(s)\n    return (R + '/' + p).write_text(s)\nf('g.rs', '')", &["/q/g.rs", "/q/sub/g.rs"]),
+    ("root='t/'\ndef f(p):\n    p = root + p\n    open(p, 'x')\nf('h.rs')", &["/w/t/h.rs"]),
+    ("def f(p, /, q): open('src/' + p, 'w'); open(f'{p}', 'w')\nf('i.rs', 1)", &["/w/src/i.rs"]),
+    ("R = '/q'\ndef f(p): (R / Path(p)).write_text(s)\nf('j.rs')", &["/q/j.rs"]),
+    ("r = pathlib.Path(sys.argv[1])\ndef sub(rel):\n    p = r/rel; p.write_text('x')\nsub('k1.rs')", &["/w/k1.rs"]),
+    ("root='a/'\nroot='b/'\ndef f(p): open(root+p,'w')\nf('k2.rs')", &["/w/k2.rs"]),
+    ("root='a/'\nfor root in xs: pass\ndef f(p): open(root+p,'w')\nf('k3.rs')", &["/w/k3.rs"]),
+    ("x = 1; root = 'a/'\nR = 'a' + 'b'\nQ = Path('a', 'b')\ndef f(p): open(root+p,'w'); open(R+p,'w'); open(Q/p,'w')\nf('k4.rs')", &["/w/k4.rs"]),
+    ("root='a/'\ndef f(p): open(root+p,'w')\ndef f(p): pass\nf('k5.rs')", &["/w/k5.rs"]),
+    ("root='a/'\ndef f(*ps): open(root+ps,'w')\nf('k6.rs')", &["/w/k6.rs"]),
+    ("root='a/'\ndef f(p): open(root+p,'w')\nf(*xs, 'k7.rs')", &["/w/k7.rs"]),
+    ("root='a/'\ndef f(*, p): open(root+p,'w')\nf('k8.rs')", &["/w/k8.rs"]),
+    ("root='a/'\ndef f(p): g(root + p)\nf('k9.rs')", &["/w/k9.rs"]),
+    ("root='a/'\ndef f(p):\n    p = p.strip()\n    open(root+p,'w')\nf('l1.rs')", &["/w/l1.rs"]),
+    ("root='a/'\ndef f(p):\n    q = root + p\n    q = q + 'x'\n    open(q,'w')\nf('l2.rs')", &["/w/l2.rs"]),
+    ("root='a/'\ndef f(p): return open(root+p).read() + open(root+p, 'r').read()\nf('l3.rs')", &["/w/l3.rs"]),
+    ("root='a/'\ndef f(p): os.open(root+p, 1); p.write_text(s); a.p.write_text(s); g(root+p).write_text(s)\nf('l4.rs')", &["/w/l4.rs"]),
+    ("root='a/'\ndef f(root, p): open(root+p,'w')\nf('x', 'l5.rs')", &["/w/l5.rs"]),
+    ("R='/r'\ndef f(p): open(f\"{R}/{p.upper()}\", 'w'); open(f\"{R}}}/{p}\", 'w'); open(f\"{R}/{p}}}\", 'w')\nf('l6.rs')", &["/w/l6.rs"]),
+    ("R='/r'\ndef f(p): open(f\"{R}\" + \"{p}\", 'w'); open(f\"\", 'w'); open(fx + p, 'w'); open(f'{R}', 'w')\nf('l7.rs')", &["/w/l7.rs"]),
+    ("R='/r'\ndef f(p): open(R + p / 'x', 'w'); open(R // p, 'w'); open((p), 'w'); open(Path(R) / 'x', 'w'); open(R / Path(p, 'b'), 'w')\nf('l8.rs')", &["/w/l8.rs"]),
+    ("root='a/'\ndef f(p): open(root+p,'w')\nobj.f('l9.rs'); subf('m1.rs'); f ('a.json', 'x')", &["/w/l9.rs", "/w/m1.rs", "/w/a/a.json"]),
+    ("root='a/'\n# def g(p): open(root+p,'w')\ndefine = 1\ndef x\ndef h(p) x\ndef f(p): open(root+p,'w')\ng('m2.rs'); f(", &["/w/m2.rs"]),
+    ("root='a/'\ndef f(p): open(", &[]),
+    ("def f(p", &[]),
+    ("root='a/'\ndef f(p):\n    x = (1,\n2)\n    open(root+p, 'w')\n  \nf('m3.rs')", &["/w/a/m3.rs"]),
+    ("root='a/'\nclass C:\n    def f(self, p):\n        open(root+p, 'w')\n    x = 1\nf(None, 'm4.rs')", &["/w/a/m4.rs"]),
+    ("root='a/'\ndef f(p): open(root+p, 'w')\nf()\nf(p)\nf(\"it's\", 'x')", &[]),
+    ("root='/a/'\ndef f(p): open(root + p, 'w')\nf('$HOME/x.rs'); f('{C}.rs')", &[]),
+    ("root='a#b/'\ndef f(p): open(root + p, 'w')\nf('m5.rs')", &[]),
+    ("root='/a/'\ndef f(p): open(root + p, 'w')\nf('m6.rs')\nopen('m6.rs', 'w')", &["/w/m6.rs", "/a/m6.rs"]),
+    ("root='/a/'\ndef f(p): open(root + p, 'w')\nopen('m7.rs', 'w')\nf('m7.rs')", &["/w/m7.rs", "/a/m7.rs"]),
+    ("root='/a/'\ndef f(p, q): open(root + p, 'w'); open(root + q, 'w')\nf('m8.rs', q='m9.rs')", &["/a/m8.rs", "/a/m9.rs"]),
+    ("root='/a/'\ndef f(p):\n    \"\"\"open(root + p, 'w')\"\"\"\n    open(root + p, 'w')\nf('n1.rs')", &["/a/n1.rs"]),
+    ("root='/a/'\ndef f(p): open(root + p, 'w')\nf('n2.py' 'x')", &["/w/n2.py"]),
+    ("root='/c/'\nopen(root+'x1.rs','w').write(s)\n(Path(root) / 'x2.rs').write_text(s)\ns=open(root+'x3.rs').read()", &["/c/x1.rs", "/c/x2.rs"]),
+    ("R='/c'\nopen(f\"{R}/x4.rs\", 'w'); open(f\"{R}\", 'w'); open(f\"{Q}/x5.rs\", 'w')", &["/c/x4.rs"]),
+    ("root='/c/'\ndef f(root): open(root + 'y.rs', 'w')", &[]),
+    ("x = 1\nopen(base + 'z.rs', 'w')", &[]),
+    ("root='/c/'\np = root + 'x6.rs'\nopen(p, 'w')\nq = root + 'x7.rs'\nq = 1\nopen(q, 'w')", &["/c/x6.rs"]),
+    ("root='/c/'\np = root + 'x8.rs'\ndef f(p): open(p, 'w')", &[]),
+];
+
+/// 451 T110: the binding's places, each `BINDS` program read as gate-write and the event log read it; make-only, fail-closed, names
+/// every literal where the shell stands too.
+#[test]
+fn a_parameter_is_placed_by_each_form_and_fails_open_beside_them() {
+    let wrong: Vec<_> = BINDS
+        .into_iter()
+        .map(|(body, want)| {
+            (
+                body,
+                all_program_names(body, Some("/w"), true, true, &rs),
+                want,
+            )
+        })
+        .filter(|(_, got, want)| got != want)
+        .collect();
+    assert!(wrong.is_empty(), "{wrong:#?}");
+    let body = BINDS[0].0;
+    let closed = all_program_names(body, Some("/w"), true, false, &rs);
+    assert_eq!(closed, ["/w/a.rs", "/w/src/a.rs"], "{body}");
+    // the first a caller stops at: the bound write, the program's only one under `placed`
+    let first = program_names(body, Some("/w"), true, true, &rs);
+    assert_eq!(first.as_deref(), Some("/w/src/a.rs"), "{body}");
 }
