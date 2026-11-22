@@ -5,9 +5,10 @@ use std::path::{Path, PathBuf};
 use serde_json::{json, Value};
 
 use super::{
-    aside, asked_feature, batch_triggers, blocking, cascade, cascade_state, closed, continues,
-    epoch, epoch_iso, feature_dir, feature_dir_from, iso_seconds, lapsed, owed, pop_owed, py_text,
-    refusal, reversal, round_no, rulings, spec_dirs, trip, unit_of,
+    aside, asked_feature, batch_triggers, blocking, blocking_for, cascade, cascade_state, closed,
+    continues, epoch, epoch_iso, feature_dir, feature_dir_from, iso_seconds, lapsed, owed,
+    pop_owed, py_text, refusal, reversal, round_no, rulings, spec_dirs, trip, trip_as, unit_of,
+    Who,
 };
 use crate::checks::testkit::clone_at;
 use crate::checks::{common_dir, OWED};
@@ -340,4 +341,82 @@ fn a_trigger_is_recorded_once_under_its_lock() {
         &json!(0),
         ""
     ));
+}
+
+#[test]
+fn a_reversal_holds_only_the_dispatches_of_the_session_and_builder_that_put_it_back() {
+    // 449 arbiter fix (451's rulings on reversal:<file>, 2026-11-22): a put-back by one builder refused every builder in the clone
+    let d = clone_at("reversal-who");
+    let b1 = Who {
+        sid: "s1",
+        by: "b1",
+    };
+    assert!(trip_as(
+        &d,
+        "reversal:/f",
+        "reversal",
+        "/f",
+        "A -> B -> A",
+        b1
+    ));
+    assert!(!trip_as(&d, "reversal:/f", "reversal", "/f", "again", b1));
+    assert!(trip_as(
+        &d,
+        "reversal:/g",
+        "reversal",
+        "/g",
+        "A -> B -> A",
+        Who { sid: "s1", by: "" }
+    ));
+    assert!(trip_as(
+        &d,
+        "reversal:/h",
+        "reversal",
+        "/h",
+        "A -> B -> A",
+        Who::default()
+    ));
+    let rows = owed(&d);
+    assert_eq!(
+        (
+            rows["reversal:/f"]["sid"].as_str(),
+            rows["reversal:/f"]["by"].as_str()
+        ),
+        (Some("s1"), Some("b1"))
+    );
+    assert!(rows["reversal:/g"].get("by").is_none() && rows["reversal:/h"].get("sid").is_none());
+    // its own builder is held; the session's own put-back holds the session; an authorless row holds everyone, as before
+    assert_eq!(blocking_for(&d, "", b1), ["reversal:/f", "reversal:/h"]);
+    assert_eq!(
+        blocking_for(&d, "", Who { sid: "s1", by: "" }),
+        ["reversal:/g", "reversal:/h"]
+    );
+    // another builder of the same session, and another session's builder of the same id, pass
+    assert_eq!(
+        blocking_for(
+            &d,
+            "",
+            Who {
+                sid: "s1",
+                by: "b2"
+            }
+        ),
+        ["reversal:/h"]
+    );
+    assert_eq!(
+        blocking_for(
+            &d,
+            "",
+            Who {
+                sid: "s2",
+                by: "b1"
+            }
+        ),
+        ["reversal:/h"]
+    );
+    // an asker the call does not know (the gate's read) is held by all of them
+    assert_eq!(
+        blocking(&d, "", false),
+        ["reversal:/f", "reversal:/g", "reversal:/h"]
+    );
 }

@@ -233,15 +233,48 @@ pub fn lapsed(root: &Path, prefix: &str, content: Option<&str>) -> u64 {
     u64::try_from(n).unwrap_or(0)
 }
 
+/// Who made an edit or asks for a dispatch: the hook payload's `session_id` and, for a subagent (a builder), its `agent_id` - ""
+/// for the main session's own call. The event log writes them as `sid` and `by`.
+#[derive(Clone, Copy, Debug, Default)]
+pub struct Who<'a> {
+    pub sid: &'a str,
+    pub by: &'a str,
+}
+
+/// Whether a trigger holds a dispatch asked by `who`. A reversal is owed only by the session, or the builder, whose own Edit made the
+/// put-back (its `sid` and `by`, stamped by [`trip_as`]): WHY - on 2026-11-22 a put-back by feature 451's builder on
+/// `rust/guard/shared/src/speckit.rs` refused every check dispatch of 449 T302's builder, which never touched the file (the round
+/// arbiter's rulings on `reversal:<file>` in 451's arbiter.jsonl). A row that names no author (one written before this) holds all,
+/// as before; so does a dispatch whose asker is unknown.
+fn holds_who(v: &Value, who: Option<Who>) -> bool {
+    let (sid, by) = (text(v, "sid"), text(v, "by"));
+    match who {
+        Some(w) if text(v, "kind") == "reversal" && !(sid.is_empty() && by.is_empty()) => {
+            sid == w.sid && by == w.by
+        }
+        _ => true,
+    }
+}
+
 /// The unruled triggers that hold the next dispatch on `unit`, or with `gate` the next `make done`.
 #[must_use]
 pub fn blocking(root: &Path, unit: &str, gate: bool) -> Vec<String> {
     blocking_in(root, unit, gate, &crate::env::opt)
 }
 
+/// [`blocking`] for a dispatch asked by `who`: a reversal another session or builder made does not hold it ([`holds_who`]).
+#[must_use]
+pub fn blocking_for(root: &Path, unit: &str, who: Who) -> Vec<String> {
+    blocking_core(root, unit, false, Some(who), &crate::env::opt)
+}
+
 /// [`blocking`] with its environment given (feature 451 T38).
 #[must_use]
 pub fn blocking_in(root: &Path, unit: &str, gate: bool, env: Env) -> Vec<String> {
+    blocking_core(root, unit, gate, None, env)
+}
+
+fn blocking_core(root: &Path, unit: &str, gate: bool, who: Option<Who>, env: Env) -> Vec<String> {
     let mut out: Vec<String> = owed(root)
         .iter()
         .filter(|(_, v)| mine(root, v, env))
@@ -250,7 +283,7 @@ pub fn blocking_in(root: &Path, unit: &str, gate: bool, env: Env) -> Vec<String>
             if gate {
                 kind == "red-gate"
             } else {
-                matches!(kind, "reversal" | "cascade")
+                (matches!(kind, "reversal" | "cascade") && holds_who(v, who))
                     || (kind == "round" && text(v, "unit") == unit)
             }
         })
@@ -527,6 +560,42 @@ pub fn try_trip_in(
     review: &str,
     env: Env,
 ) -> Result<bool, String> {
+    try_trip_row(
+        root,
+        trigger,
+        (kind, unit, detail),
+        when,
+        review,
+        Who::default(),
+        env,
+    )
+}
+
+/// [`trip`] for a reversal, its row naming the session and builder whose Edit made the put-back (`sid`, `by`), so it holds only
+/// their dispatches ([`holds_who`]). False where it is not new or could not be recorded.
+#[must_use]
+pub fn trip_as(root: &Path, trigger: &str, kind: &str, unit: &str, detail: &str, who: Who) -> bool {
+    try_trip_row(
+        root,
+        trigger,
+        (kind, unit, detail),
+        &Value::Null,
+        "",
+        who,
+        &crate::env::opt,
+    )
+    .unwrap_or(false)
+}
+
+fn try_trip_row(
+    root: &Path,
+    trigger: &str,
+    (kind, unit, detail): (&str, &str, &str),
+    when: &Value,
+    review: &str,
+    who: Who,
+    env: Env,
+) -> Result<bool, String> {
     if rulings_in(root, trigger, env).contains_key(trigger) {
         return Ok(false);
     }
@@ -558,6 +627,12 @@ pub fn try_trip_in(
         }
         if let Some(n) = dispatches_in(detail) {
             row.insert("dispatches".to_owned(), json!(n));
+        }
+        if !who.sid.is_empty() {
+            row.insert("sid".to_owned(), json!(who.sid));
+        }
+        if !who.by.is_empty() {
+            row.insert("by".to_owned(), json!(who.by));
         }
         map_mut(state, trigger);
         state[trigger] = Value::Object(row);

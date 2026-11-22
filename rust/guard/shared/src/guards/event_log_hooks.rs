@@ -750,14 +750,16 @@ pub fn append(
         && reversal(&path, field("path"), field("old"), field("new"))
     {
         let p = text_of(Some(field("path")));
-        let _ = checks::arbiter::trip(
+        // owed by the session and builder whose Edit put it back, and held against only their dispatches (449 arbiter fix,
+        // 451's rulings on `reversal:<file>` of 2026-11-22: it held every builder in the clone)
+        let (sid, by) = (text_of(row.get("sid")), text_of(row.get("by")));
+        let _ = checks::arbiter::trip_as(
             &root,
             &format!("reversal:{p}"),
             "reversal",
             &p,
             &format!("an Edit put back text an earlier Edit of {p} replaced (A -> B -> A)"),
-            &Value::Null,
-            "",
+            checks::arbiter::Who { sid: &sid, by: &by },
         );
     }
     let notice = (row.get("ev") == Some(&Value::from("UserPromptSubmit")))

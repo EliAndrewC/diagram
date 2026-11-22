@@ -229,6 +229,21 @@ fn an_edit_that_puts_back_replaced_text_owes_the_arbiter() {
     let owed = std::fs::read_to_string(d.join(".git/arbiter-owed.json")).unwrap();
     assert!(owed.contains("reversal:/f"));
     std::fs::remove_file(d.join(".git/arbiter-owed.json")).unwrap();
+    // the put-back's author is stamped on the trigger, so only its own dispatches are held (449 arbiter fix)
+    let by = |old: &str, new: &str| json!({"hook_event_name": "PreToolUse", "session_id": "s1", "agent_id": "b1", "cwd": d.to_string_lossy(), "tool_name": "Edit", "tool_input": {"file_path": "/g", "old_string": old, "new_string": new}});
+    append(&by("A", "B"), "4", &d, &none).unwrap();
+    append(&by("B", "A"), "5", &d, &none).unwrap();
+    let row: Value =
+        serde_json::from_str(&std::fs::read_to_string(d.join(".git/arbiter-owed.json")).unwrap())
+            .unwrap();
+    assert_eq!(
+        (
+            row["reversal:/g"]["sid"].as_str(),
+            row["reversal:/g"]["by"].as_str()
+        ),
+        (Some("s1"), Some("b1"))
+    );
+    std::fs::remove_file(d.join(".git/arbiter-owed.json")).unwrap();
     append(&edit("A", "C"), "3", &d, &none).unwrap();
     assert!(!d.join(".git/arbiter-owed.json").exists());
 }

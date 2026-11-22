@@ -524,6 +524,8 @@ pub struct Dispatch<'a> {
     pub root: Option<&'a Path>,
     pub freeze_ok: bool,
     pub arbiter_ok: bool,
+    /// The asking session and builder (the payload's `session_id`, `agent_id`): a reversal holds only its own author's dispatches.
+    pub who: arbiter::Who<'a>,
 }
 
 /// One subject's verdicts before the dispatch counts: whether it is a sibling batch, and the words its check reads now.
@@ -635,7 +637,7 @@ pub fn dispatch(state: &mut Value, ask: &Dispatch) -> String {
     };
     let notes = notes_of_manifest(ask.text);
     if let Some(root) = ask.root.filter(|_| !ask.arbiter_ok) {
-        let held = arbiter::blocking(root, "", false);
+        let held = arbiter::blocking_for(root, "", ask.who);
         if !held.is_empty() {
             return arbiter::refusal(&held, None);
         }

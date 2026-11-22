@@ -94,6 +94,20 @@ python3 -c 'import json,sys; print(json.dumps({"cwd":sys.argv[1],"tool_name":"Ag
   | "$H/check-bundle-hooks.sh" pretool >/dev/null 2>"$T/err"; rc=$?
 [ "$rc" = 0 ] && ok "STAYS QUIET: a claims triage beside the plan review (feature 430 T07)" || no "the claims triage was held by decide-first" "rc=$rc $(cat "$T/err")"
 
+# 449 arbiter fix (451's rulings on reversal:<file>, 2026-11-22): a put-back holds only the dispatches of the builder whose Edit made it
+R="$T/rclone"; git init -q "$R"; mkdir -p "$R/.specify" "$R/research/questions"
+printf '{"feature_directory": "specs/999-x"}\n' > "$R/.specify/feature.json"
+cp "$PAGE" "$R/research/questions/"
+printf 'owed-checks: quote-check\nunit: quote-check:0105.drawing#bath abc\n' > "$T/b/MANIFEST.md"
+printf '{"reversal:/f": {"kind": "reversal", "unit": "/f", "feature": "999-x", "sid": "s1", "by": "b1"}}' > "$R/.git/arbiter-owed.json"
+by() { # by <tool_use_id> <agent_id> -> a quote-check dispatched by that builder in the reversal's clone
+  python3 -c 'import json,sys; print(json.dumps({"cwd":sys.argv[1],"session_id":"s1","agent_id":sys.argv[3],"tool_name":"Agent","tool_use_id":sys.argv[2],"tool_input":{"subagent_type":"quote-check","prompt":"Read "+sys.argv[4]}}))' "$R" "$1" "$2" "$T/b/MANIFEST.md"
+}
+by r1 b2 | "$H/check-bundle-hooks.sh" pretool >/dev/null 2>"$T/err"; rc=$?
+[ "$rc" = 0 ] && ok "STAYS QUIET: another builder's check dispatch passes a reversal it never made" || no "another builder was held by the reversal" "rc=$rc $(cat "$T/err")"
+by r2 b1 | "$H/check-bundle-hooks.sh" pretool >/dev/null 2>"$T/err"; rc=$?
+[ "$rc" = 2 ] && grep -q "reversal:/f" "$T/err" && ok "IT FIRES: the builder whose Edit put the text back is held for the ruling" || no "the reversal's own builder went through" "rc=$rc $(cat "$T/err")"
+
 echo
 echo "checks-hooks: $PASS passed, $FAIL failed"
 [ "$FAIL" = 0 ]

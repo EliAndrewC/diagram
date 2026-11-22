@@ -330,6 +330,10 @@ fn dispatch_mode(state: &mut Value, payload: &Value, ti: &Value, path: &Path, t:
             root: root.as_deref(),
             freeze_ok,
             arbiter_ok,
+            who: arbiter::Who {
+                sid: text(payload, "session_id"),
+                by: text(payload, "agent_id"),
+            },
         },
     );
     if out.is_empty() && tid.starts_with("wave:") {

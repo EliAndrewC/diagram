@@ -32,6 +32,7 @@ fn req<'a>(tid: &'a str, check: &'a str, text: &'a str, root: Option<&'a Path>) 
         root,
         freeze_ok: false,
         arbiter_ok: false,
+        who: crate::checks::arbiter::Who::default(),
     }
 }
 
@@ -737,4 +738,27 @@ fn an_apply_edits_past_a_million_steps_or_many_makes_is_read() {
         });
         assert_eq!(from.as_deref(), Some("r.md"));
     }
+}
+
+#[test]
+fn a_reversal_refuses_its_own_builders_dispatch_and_lets_another_builders_through() {
+    // 449 arbiter fix: 449 T302's builder was refused over 451's builder's put-back on a file it never touched
+    let root = clone_at("reversal-dispatch");
+    std::fs::write(
+        root.join(".git/arbiter-owed.json"),
+        r#"{"reversal:/f": {"kind": "reversal", "unit": "/f", "feature": "999-x", "sid": "s1", "by": "b1"}}"#,
+    )
+    .unwrap();
+    let mut other = req("o", "quote-check", MANIFEST, Some(&root));
+    other.who = crate::checks::arbiter::Who {
+        sid: "s1",
+        by: "b2",
+    };
+    assert_eq!(dispatch(&mut json!({}), &other), "");
+    let mut own = req("n", "quote-check", MANIFEST, Some(&root));
+    own.who = crate::checks::arbiter::Who {
+        sid: "s1",
+        by: "b1",
+    };
+    assert!(dispatch(&mut json!({}), &own).contains("reversal:/f"));
 }

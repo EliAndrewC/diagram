@@ -58,6 +58,8 @@ old1="$(field old)"; new1="$(field new)"
   && ok "an Edit keeps its path and both strings' digests" || no "edit digests" "$(last)"
 fire '{"hook_event_name":"PreToolUse","session_id":"s1","cwd":"'"$CLONE"'","tool_name":"Edit","tool_use_id":"tu6","tool_input":{"file_path":"/x/a.md","old_string":"B","new_string":"A"}}'
 [ "$(field new)" = "$old1" ] && [ "$(field old)" = "$new1" ] && ok "a reversal reads as its digests swapped (the A -> B -> A wire)" || no "reversal" "$(last)"
+jq -e '."reversal:/x/a.md" | .sid == "s1" and (has("by") | not)' "$CLONE/.git/arbiter-owed.json" >/dev/null 2>&1 \
+  && ok "the reversal's trigger names the session whose Edit put it back (449 arbiter fix: it holds only its author)" || no "reversal author" "$(cat "$CLONE/.git/arbiter-owed.json" 2>&1)"
 
 fire '{"hook_event_name":"PreToolUse","session_id":"s1","cwd":"'"$CLONE"'","tool_name":"Agent","tool_use_id":"tu7","tool_input":{"subagent_type":"quote-check","prompt":"read /tmp/l7r-check/0100-quote-check/MANIFEST.md"}}'
 [ "$(field cat)" = "record check" ] && [ "$(field agent)" = quote-check ] && [ "$(field manifest)" = /tmp/l7r-check/0100-quote-check/MANIFEST.md ] \
