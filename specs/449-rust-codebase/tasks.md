@@ -149,6 +149,15 @@ MVP: T001-T005 and the first guard, `pair-hooks` (T006): the dispatcher in every
       research: rendering
 - [ ] T287 The country shrine dwelling's two known drifts, landed before the next port (found by 449 T254's claims round, 2026-11-22; the GM 2026-11-18: fix all known bugs in each step before porting the next): docs/building-programs.md's dwelling entry tags a plain earth-floored vestibule genkan, where the Edo genkan is an entrance with a shikidai (0104), so the monk's plain vestibule reads as a formal guests' entrance, and its kitchen is drawn all earth floor, where the kamado stood on the doma 'as a rule' and a kitchen of earth throughout is not attested (0107), so the kitchen reads as having no floored part; both are 417 T33's items (the genkan tag, the all-earth kitchen) - this box lands them, through 417 T33's own work or here, re-checks the two claims, and lands before T244
       research: rendering
+- [ ] T288 The county magistracy example's karo's door opens onto open court again (building-review 2026-11-22 E1, engine key 6d0cb7befee0): T274's recentred hall pushed the tax archive to 34.5-52.5 ft, 7.5 ft off the senior retainers' long-house face at 27 ft, so the karo's door and his neighbor's face its blank west wall down a dead-end lane (pack-audit 7.5 ft H at svg(113,358)); where the archive goes is the builder's call; lands before 449 T244
+      research: rendering
+- [ ] T289 Where a guarded seat with a standing barracks and no gate range kept its arms (building-review 2026-11-22 Q2): the record's one hall armory, Pingyao's, served a seat with no standing barracks, and Kaibara's gun store stood in its gate range across from the guardroom (0093); a research pass first, then docs/building-programs.md's knob 4 restated or the county example's armory re-seated; lands before 449 T244
+      research: physical
+      - [ ] research pass  - [ ] source-reader confirmed  - [ ] quote-check confirmed  - [ ] source-applicability confirmed  - [ ] recorded and cited
+- [ ] T290 The armory's size band held to its two forms (size-audit 2026-11-22 S3, S4): types.json's band (w 12-24, h 12-40, no area) admits 24 x 40 ft, about 6.7x the Kaibara room; record the audit's form bands (gate range w 11-13, h 11-25, 120-320 sq ft; hall end bay w 11-18, h 11-41, 120-740 sq ft) through RequiredItem.forms, and docs/building-programs.md's 'about 12 ft square' restated as 12 x 12 to 12 x 24 ft; lands before 449 T244
+      research: rendering
+- [ ] T291 The county magistracy example's office hall has no formal entrance facing the gate, as Takayama's has (building-review 2026-11-22 N2, outside the change): judged against the record, then drawn or recorded as a deviation; lands before 449 T244
+      research: rendering
 - [ ] GM review (make gm-reviewed F=449) [lands-open]
       research: rendering
       verify: the GM reviewed every row (make gm-review lists them)

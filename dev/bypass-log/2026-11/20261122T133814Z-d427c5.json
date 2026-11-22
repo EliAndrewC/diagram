@@ -1,0 +1,6 @@
+{
+  "utc": "20261122T133814Z",
+  "guard": "pair-hooks",
+  "what": "review prerequisites",
+  "reason": "REVIEW_PREREQ_OK: the earlier rounds were NOT-REVIEWABLE only because the paired gate was red; no fix to this sheet has been made since them, so their findings have nothing to verify; the gate is now green on this key"
+}
