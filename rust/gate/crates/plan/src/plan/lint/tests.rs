@@ -160,7 +160,11 @@ fn each_open_task_owes_an_approach_block_once_the_plan_holds_one() {
 #[test]
 fn a_bundle_approach_block_covers_every_task_its_heading_lists() {
     let dir = scratch("approach-owed-bundle");
-    std::fs::write(dir.join("tasks.md"), "- [ ] T01 a\n- [ ] T02 b\n- [ ] T03 c\n").unwrap();
+    std::fs::write(
+        dir.join("tasks.md"),
+        "- [ ] T01 a\n- [ ] T02 b\n- [ ] T03 c\n",
+    )
+    .unwrap();
     assert_eq!(
         tasks_without_approach(&dir, &format!("# Plan\n\n{}", approach("T01, T02", RED))),
         ["T03"]

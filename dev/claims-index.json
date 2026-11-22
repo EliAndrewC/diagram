@@ -27285,6 +27285,18 @@
   "rests": [],
   "verdict": "IN-STEP"
  },
+ "rust/mode_a/src/place/tests.rs::a_town_counts_its_farmhouses_and_a_city_none#the place card's tests": {
+  "body": "e5e7ba8e791c98fc",
+  "claim": "the place card's tests - NONE: fixtures and assertions, deciding nothing about a building",
+  "code": "5a8d7ee0178f046b",
+  "core": "2c48694f7e9bc352",
+  "date": "2026-11-22",
+  "note": "test fixtures and assertions; decides nothing about the place",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
  "rust/mode_a/src/place/tests.rs::kind#the place card's tests": {
   "body": "bd6b236a906af7e1",
   "claim": "the place card's tests - NONE: fixtures and assertions, deciding nothing about a building",
@@ -34017,16 +34029,15 @@
   "claim": "the settlement off the field - clustered-and-scattered-villages-shuson-sanson.drawing: the houses on the field's margin, beside the paddy",
   "code": "bf46784af75baeaa",
   "core": "2024c9a132a901b0",
-  "date": "2026-11-07",
-  "note": "the settlement's middle must lie outside every field ring; matches \"higher, drier ground beside its paddy\"",
+  "date": "2026-11-22",
+  "note": "seat_on_field refuses a settlement middle inside any field ring, which keeps the seat beside the paddy",
   "pages": {
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "03aeeb9f4f02c298"
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "0d2ef9c380f22cca"
   },
   "reads": "08f68ce2dd847b69",
-  "research": "7c2bf95c3c36f0e4",
+  "research": "2e03a35afc2b85de",
   "rests": [
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:4391a37aafe094b1",
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:971f1e8c12b6e94c"
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:ec189f8cf46836ca"
   ],
   "verdict": "IN-STEP"
  },
@@ -34305,60 +34316,51 @@
  "rust/phases/src/driver/plan.rs::KNOBS#the cluster's shape": {
   "body": "adaf0910cc556575",
   "claim": "the cluster's shape - clustered-and-scattered-villages-shuson-sanson.drawing: the lump and the line along a levee or a road are the attested forms (round, elongated); the crescent a GUESS there",
-  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "ceff01ea050c5c55",
   "core": "3a50375d75cd3753",
-  "date": "2026-11-08",
-  "note": "rolls round, elongated and crescent; the page attests the lump and the line, makes the crescent a GUESS, and says a hamlet never splits",
+  "date": "2026-11-22",
+  "note": "the table holds the attested round and elongated forms plus the crescent recorded as a GUESS, rolled per hamlet; no split, since a hamlet never splits",
   "pages": {
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "6d4f607a565c46e1"
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "0d2ef9c380f22cca"
   },
-  "research": "2a2fb95167894c66",
+  "research": "2e03a35afc2b85de",
   "rests": [
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:7c6e882522129755",
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:7d95dd13600b3685",
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:b0d4f27ae1dbec07"
   ],
-  "triaged": "2026-11-22",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/driver/plan.rs::KNOBS#the farm water": {
   "body": "adaf0910cc556575",
   "claim": "the farm water - GUESS: clustered-and-scattered-villages-shuson-sanson.drawing records a channel or a well at even odds as a guess",
-  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "d99da27d40868faf",
   "core": "3a50375d75cd3753",
   "date": "2026-11-22",
-  "note": "farm_water [\"channel\",\"well\"] gated \"dispersed\" rolls even odds, as the page records it: a GUESS per scattered settlement",
+  "note": "channel or well at even odds, only on dispersed settlements, as the page records the GUESS",
   "pages": {
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "6d4f607a565c46e1"
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "0d2ef9c380f22cca"
   },
-  "research": "2a2fb95167894c66",
+  "research": "2e03a35afc2b85de",
   "rests": [
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:164954258b520a6f",
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:2872c3eaba51aa4d",
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:f1b6bb70334abd0d"
   ],
-  "triaged": "2026-11-22",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/driver/plan.rs::KNOBS#the grain drift": {
   "body": "adaf0910cc556575",
   "claim": "the grain drift - clustered-and-scattered-villages-shuson-sanson.drawing: eight degrees either way on a hamlet's",
-  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "8579496d116c473c",
   "core": "3a50375d75cd3753",
-  "date": "2026-11-08",
-  "note": "-8 to 8 degrees, within \"8 on a hamlet's\"",
+  "date": "2026-11-22",
+  "note": "-8 to 8 degrees is within the hamlet's 8",
   "pages": {
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "6d4f607a565c46e1"
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "0d2ef9c380f22cca"
   },
-  "research": "2a2fb95167894c66",
+  "research": "2e03a35afc2b85de",
   "rests": [
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:1a172c27c2f08640",
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:7c6e882522129755"
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:1a172c27c2f08640"
   ],
-  "triaged": "2026-11-22",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/driver/plan.rs::KNOBS#the knobs' tables": {
@@ -34375,41 +34377,35 @@
  "rust/phases/src/driver/plan.rs::KNOBS#the lane forms": {
   "body": "adaf0910cc556575",
   "claim": "the lane forms - GUESS: clustered-and-scattered-villages-shuson-sanson.drawing records the spine, the T, the Y and the cross as guesses",
-  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "8710ffe0fe67fe70",
   "core": "3a50375d75cd3753",
   "date": "2026-11-22",
-  "note": "lane_skeleton [\"spine\",\"T\",\"Y\",\"cross\"] is the hamlet's own table, and the page records these four forms as GUESSes",
+  "note": "spine, T, Y and cross, which the page records as a GUESS; the lane along the water is gated by its own rule",
   "pages": {
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "6d4f607a565c46e1"
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "0d2ef9c380f22cca"
   },
-  "research": "2a2fb95167894c66",
+  "research": "2e03a35afc2b85de",
   "rests": [
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:08760ad7b1fd1e64",
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:7c6e882522129755",
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:88b0dc9025f38b30",
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:bf4801c5605ed9ea"
   ],
-  "triaged": "2026-11-22",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/driver/plan.rs::KNOBS#the settlement form's shares": {
   "body": "adaf0910cc556575",
   "claim": "the settlement form's shares - clustered-and-scattered-villages-shuson-sanson.drawing: half clustered, three in ten scattered, two in ten as rows",
-  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "1146c60818fc3978",
   "core": "3a50375d75cd3753",
-  "date": "2026-11-07",
-  "note": "5/3/2 in ten, as recorded",
+  "date": "2026-11-22",
+  "note": "5, 3 and 2 of ten entries give half, three in ten and two in ten",
   "pages": {
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "6d4f607a565c46e1"
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "0d2ef9c380f22cca"
   },
-  "research": "2a2fb95167894c66",
+  "research": "2e03a35afc2b85de",
   "rests": [
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:1aa166d76e3e06fe",
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:3197321e78d71dc5"
   ],
-  "triaged": "2026-11-22",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/driver/plan.rs::LEFTOVER_FORMS#the leftover parcels": {
@@ -34564,30 +34560,19 @@
  "rust/phases/src/driver/plan.rs::pick#the plan's rolls": {
   "body": "f43189e6a3153923",
   "claim": "the plan's rolls - clustered-and-scattered-villages-shuson-sanson.drawing: each knob's form rolled per hamlet from the seed, only where the map's form uses it",
-  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "72bf7f4f90c0ff72",
   "core": "6b5150488b17c8cd",
-  "date": "2026-11-07",
-  "note": "a seeded roll per knob name, shares set by repeated entries",
+  "date": "2026-11-22",
+  "note": "an even draw from the knob's table, seeded per hamlet and per knob",
   "pages": {
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "6d4f607a565c46e1"
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "0d2ef9c380f22cca"
   },
-  "research": "2a2fb95167894c66",
+  "research": "2e03a35afc2b85de",
   "rests": [
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:0d6651a49a9d1b62",
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:7c6e882522129755"
   ],
-  "triaged": "2026-11-22",
   "verdict": "IN-STEP"
- },
- "rust/phases/src/driver/plan.rs::plan#a rice polder's layout fixed to the grid, the pond layout, dike crop, leftover and fry forms rolled only on a dike-pond": {
-  "code": "938073f82ef5b7f4",
-  "core": "938073f82ef5b7f4",
-  "date": "2026-11-09",
-  "note": "a rice polder's layout fixed to the grid, the pond layout, dike crop, leftover and fry forms rolled only on a dike-pond",
-  "reads": "ef98c6245b68085e",
-  "research": "",
-  "verdict": "UNCLAIMED"
  },
  "rust/phases/src/driver/plan.rs::plan#no brook knobs on a polder": {
   "body": "9b5e4221af4c0298",
@@ -34632,15 +34617,15 @@
   "claim": "the fall backs the wind - DEVIATION clustered-and-scattered-villages-shuson-sanson.drawing: a rolled fall only from the falls that leave a windward margin (`water_frame::admitted`)",
   "code": "b1779106d65d39d1",
   "core": "938073f82ef5b7f4",
-  "date": "2026-11-09",
-  "note": "the recorded hamlet deviation",
+  "date": "2026-11-22",
+  "note": "the rolled fall comes from admitted(windward, polder) only; the page records this as a deliberate deviation",
   "pages": {
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "03aeeb9f4f02c298"
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "0d2ef9c380f22cca"
   },
   "reads": "ef98c6245b68085e",
-  "research": "7c2bf95c3c36f0e4",
+  "research": "2e03a35afc2b85de",
   "rests": [
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:971f1e8c12b6e94c"
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:ec189f8cf46836ca"
   ],
   "verdict": "IN-STEP"
  },
@@ -37838,21 +37823,18 @@
  "rust/phases/src/field/build.rs::rolled#knobs rolled from the seed": {
   "body": "104bf3c8bb5399c0",
   "claim": "knobs rolled from the seed - clustered-and-scattered-villages-shuson-sanson.drawing: each knob's form rolled per hamlet, never chosen",
-  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "0ae2059c22ad198e",
   "core": "ed878889b80c3e81",
-  "date": "2026-11-01",
-  "note": "each knob rolled from the seed by its weights; a hand-set pin overrides the roll",
+  "date": "2026-11-22",
+  "note": "each knob is rolled from the seed unless a map pins it, as the page allows",
   "pages": {
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "6d4f607a565c46e1"
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "0d2ef9c380f22cca"
   },
-  "research": "2a2fb95167894c66",
+  "research": "2e03a35afc2b85de",
   "rests": [
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:0d6651a49a9d1b62",
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:3197321e78d71dc5",
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:7c6e882522129755"
   ],
-  "triaged": "2026-11-22",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/field/build.rs::rows_held#the basins' rules where decided": {
@@ -42832,21 +42814,18 @@
  "rust/phases/src/pyrand.rs::roll#knob rolls": {
   "body": "a51caa380e2f27be",
   "claim": "knob rolls - clustered-and-scattered-villages-shuson-sanson.drawing: each knob's form rolled per hamlet, never chosen",
-  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "e861db643eca81af",
   "core": "535ecfe3c2a1351a",
-  "date": "2026-10-31",
-  "note": "picks a weighted form from a per-knob seeded rng (uniform when no weights are given), so each form is chosen by chance from the map's seed as the page rules; the weights come from the caller",
+  "date": "2026-11-22",
+  "note": "a seeded roll per knob, even or weighted over its forms",
   "pages": {
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "6d4f607a565c46e1"
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "0d2ef9c380f22cca"
   },
-  "research": "2a2fb95167894c66",
+  "research": "2e03a35afc2b85de",
   "rests": [
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:0d6651a49a9d1b62",
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:3197321e78d71dc5",
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:7c6e882522129755"
   ],
-  "triaged": "2026-11-22",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/pyrand.rs::sha256#the draws": {
@@ -42954,18 +42933,18 @@
   "verdict": "IN-STEP"
  },
  "rust/phases/src/seat.rs::seat#the back to the hill where the wind cannot be backed": {
-  "body": "73a06dafe9276094",
-  "claim": "the back to the hill where the wind cannot be backed - GUESS: clustered-and-scattered-villages-shuson-sanson.drawing weighs no hill against the wind - its rolled falls run away from the wind or square across it; 背山面水, the back to the hill and to the wind, the high side and the windward side one side; where a declared fall runs into the wind no margin backs both, and the hill is kept - the margins ranked with the high side as the wind's, each seat recorded off the wind (GUESS: the record draws no fall into the wind, the rolled falls never take one)",
-  "code": "d54dd870f09b9799",
-  "core": "f6d413a781b88fbf",
+  "body": "1c61e56ddcae7471",
+  "claim": "the back to the hill where the wind cannot be backed - GUESS clustered-and-scattered-villages-shuson-sanson.drawing: where a map declares a fall toward the wind, no margin is both high and windward, so the cluster takes the high, dry one, its back to the hill and off the wind - the margins ranked again with the high side as the wind's, each seat recorded off the wind",
+  "code": "8ad7bb34ee036111",
+  "core": "aff77d4a832ad863",
   "date": "2026-11-22",
-  "note": "the page rolls a fall only away from the wind or square across it, with the high side windward; a fall into the wind is not on the page, and the code then ranks the margins with the uphill side as the wind's and marks each seat `offwind`.",
+  "note": "re-ranks with the high side as the wind's, and marks every seat off the wind, only when no margin faces the wind and the fall runs toward it; a fall across the wind is refused by name. This matches the recorded GUESS, and rolled falls never run toward the wind",
   "pages": {
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "03aeeb9f4f02c298"
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "0d2ef9c380f22cca"
   },
-  "research": "7c2bf95c3c36f0e4",
+  "research": "2e03a35afc2b85de",
   "rests": [
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:971f1e8c12b6e94c"
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:ec189f8cf46836ca"
   ],
   "verdict": "IN-STEP"
  },
@@ -43881,15 +43860,15 @@
   "claim": "seat on the field's margin - clustered-and-scattered-villages-shuson-sanson.drawing: higher, drier ground beside the paddy, scored upslope",
   "code": "e09c56cf406f44c2",
   "core": "227859d27d1bbf2d",
-  "date": "2026-11-04",
-  "note": "margins scored up the slope against the fall",
+  "date": "2026-11-22",
+  "note": "a margin on the downhill side of the field's middle is scored down by the upslope weight, so the higher margin beside the paddy wins",
   "pages": {
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "03aeeb9f4f02c298"
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "0d2ef9c380f22cca"
   },
   "reads": "f4a73934f78dca12",
-  "research": "7c2bf95c3c36f0e4",
+  "research": "2e03a35afc2b85de",
   "rests": [
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:971f1e8c12b6e94c"
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:ec189f8cf46836ca"
   ],
   "verdict": "IN-STEP"
  },
@@ -43911,15 +43890,15 @@
   "claim": "the band on open ground - clustered-and-scattered-villages-shuson-sanson.drawing: beside its paddy, the band's points off the field",
   "code": "6b059ae017244c40",
   "core": "227859d27d1bbf2d",
-  "date": "2026-11-04",
-  "note": "a band with any sample point inside the outline is refused",
+  "date": "2026-11-22",
+  "note": "a margin is refused when any band sample point falls inside the field outline",
   "pages": {
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "03aeeb9f4f02c298"
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "0d2ef9c380f22cca"
   },
   "reads": "f4a73934f78dca12",
-  "research": "7c2bf95c3c36f0e4",
+  "research": "2e03a35afc2b85de",
   "rests": [
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:971f1e8c12b6e94c"
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:ec189f8cf46836ca"
   ],
   "verdict": "IN-STEP"
  },
@@ -43939,20 +43918,18 @@
  "rust/phases/src/seat/margins.rs::ranked#the ladder": {
   "body": "285c51de3ab5fcc0",
   "claim": "the ladder - clustered-and-scattered-villages-shuson-sanson.drawing: a hamlet never splits, so the margins it falls back to are whole seats, ranked",
-  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "f2e1374f30d598e9",
   "core": "227859d27d1bbf2d",
-  "date": "2026-11-04",
-  "note": "every margin kept is a whole seat, ranked best first; a hamlet never splits",
+  "date": "2026-11-22",
+  "note": "whole frames are ranked by tier, score and the brook's share, and no split seat is made",
   "pages": {
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "6d4f607a565c46e1"
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "0d2ef9c380f22cca"
   },
   "reads": "f4a73934f78dca12",
-  "research": "2a2fb95167894c66",
+  "research": "2e03a35afc2b85de",
   "rests": [
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:7d95dd13600b3685"
   ],
-  "triaged": "2026-11-22",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/seat/tests.rs::a_flank_turns_its_back_and_a_notch_or_a_cramped_belt_is_refused#the seat's tests": {
@@ -43998,6 +43975,18 @@
   "core": "2208325aa15e225e",
   "date": "2026-11-04",
   "note": "its band, ford and wind values are test inputs, not figures the generator uses",
+  "pages": {},
+  "research": "",
+  "rests": [],
+  "verdict": "IN-STEP"
+ },
+ "rust/phases/src/seat/tests.rs::only_a_fall_toward_the_wind_backs_the_hill#the seat's tests": {
+  "body": "4e655a46d3ad5bb0",
+  "claim": "the seat's tests - NONE: fixtures and assertions, deciding nothing about the place",
+  "code": "53f02c4d96760ff6",
+  "core": "f4d198bc02bdc3d6",
+  "date": "2026-11-22",
+  "note": "test fixtures and assertions; decides nothing about the place",
   "pages": {},
   "research": "",
   "rests": [],
@@ -45569,19 +45558,17 @@
  "rust/phases/src/water_frame.rs::admitted#a polder's fall to the cardinals": {
   "body": "030b28237589aaa4",
   "claim": "a polder's fall to the cardinals - DEVIATION clustered-and-scattered-villages-shuson-sanson.drawing: the surveyed grid, usually laid north-south and east-west and not seldom tilted, drawn untilted",
-  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "227fd6e554cef289",
   "core": "3c5d7747422d0f57",
-  "date": "2026-11-03",
-  "note": "the cardinal mode allows only 90-degree falls, so the paddy grid stays untilted, and the drawing page records that as a deviation (\"a tilted paddy grid is not drawn, a deviation\")",
+  "date": "2026-11-22",
+  "note": "a polder's falls are kept to the four 90-degree points; the page records the untilted surveyed grid as a deviation",
   "pages": {
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "6d4f607a565c46e1"
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "0d2ef9c380f22cca"
   },
-  "research": "2a2fb95167894c66",
+  "research": "2e03a35afc2b85de",
   "rests": [
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:1a172c27c2f08640"
   ],
-  "triaged": "2026-11-22",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/water_frame.rs::admitted#high side and windward side as one": {
@@ -45589,14 +45576,14 @@
   "claim": "high side and windward side as one - DEVIATION clustered-and-scattered-villages-shuson-sanson.drawing: the high windward margin, which the page calls one case among several, taken on every hamlet, both ends in, a fall away from the wind or square across it",
   "code": "9fffcf2cc28cc510",
   "core": "3c5d7747422d0f57",
-  "date": "2026-11-03",
-  "note": "quarter_deg gives compass bearings (N=0, E=90) and the falls are map angles (clockwise from east, 90 is south), so the filter (f - w) mod 360 <= 180 allows compass falls 90 to 270 degrees off the wind, both ends included: \"fall away from the wind or square across it\", recorded as a deliberate deviation",
+  "date": "2026-11-22",
+  "note": "a 180-degree half-circle of falls with both ends in (away from the wind or square across it), recorded as a deliberate deviation",
   "pages": {
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "03aeeb9f4f02c298"
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "0d2ef9c380f22cca"
   },
-  "research": "7c2bf95c3c36f0e4",
+  "research": "2e03a35afc2b85de",
   "rests": [
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:971f1e8c12b6e94c"
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:ec189f8cf46836ca"
   ],
   "verdict": "IN-STEP"
  },
@@ -45636,40 +45623,34 @@
  "rust/phases/src/water_frame.rs::roll_plan#each knob at even odds over its table": {
   "body": "6c6a04429783f7fd",
   "claim": "each knob at even odds over its table - clustered-and-scattered-villages-shuson-sanson.drawing: half clustered, three in ten scattered, two in ten as rows - a table's shares are its repeated entries (the settlement form's 5, 3 and 2 of ten), so an even draw keeps them",
-  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "0fa5e6c8ebe09904",
   "core": "e5cf8474848affce",
-  "date": "2026-11-03",
-  "note": "randbelow(n) draws evenly over the table's entries, and the settlement form's table (nucleated x5, dispersed x3, linear x2) keeps the page's \"Half... three in ten scattered and two in ten as rows\"",
+  "date": "2026-11-22",
+  "note": "randbelow(n) over the table keeps the shares its repeated entries carry",
   "pages": {
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "6d4f607a565c46e1"
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "0d2ef9c380f22cca"
   },
-  "research": "2a2fb95167894c66",
+  "research": "2e03a35afc2b85de",
   "rests": [
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:1aa166d76e3e06fe",
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:3197321e78d71dc5",
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:7c6e882522129755"
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:1aa166d76e3e06fe"
   ],
-  "triaged": "2026-11-22",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/water_frame.rs::roll_plan#knobs rolled from the seed": {
   "body": "6c6a04429783f7fd",
   "claim": "knobs rolled from the seed - clustered-and-scattered-villages-shuson-sanson.drawing: each knob's form rolled per hamlet, never chosen",
-  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "a528c046ed32d6c4",
   "core": "e5cf8474848affce",
-  "date": "2026-11-03",
-  "note": "each knob is rolled from its own seed unless pinned, and a map may fix one by hand",
+  "date": "2026-11-22",
+  "note": "each knob is rolled from its own seed only where applies() lets its branch run under the rolled form; pinned knobs are left to the pin",
   "pages": {
-   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "6d4f607a565c46e1"
+   "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html": "0d2ef9c380f22cca"
   },
-  "research": "2a2fb95167894c66",
+  "research": "2e03a35afc2b85de",
   "rests": [
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:0d6651a49a9d1b62",
    "0031-clustered-and-scattered-villages-shuson-sanson.drawing.html:7c6e882522129755"
   ],
-  "triaged": "2026-11-22",
   "verdict": "IN-STEP"
  },
  "rust/phases/src/water_frame.rs::roll_plan#the fall at even odds": {
