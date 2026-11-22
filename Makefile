@@ -17,7 +17,7 @@ FREE_TEXT = UNITS WITH KEYS KEY CLASS KIND SUBJECT REASON GROWTH_REASON SPREAD N
 	CHECK_ORDER_OK URLS MATCH NONE SHARD EXTRA IMAGES DIRS LAND SUITES PERF_LATER_OK DEFER_FORM_OK QUICK_OK
 $(foreach v,$(FREE_TEXT),$(if $(filter command line environment,$(origin $(v))),$(eval override $(v) := $$(value $(v)))$(eval export $(v))))
 
-.PHONY: closing-checks modal-bundle modal-prepass done docs static format guard _reference _quick bypass-audit quick page-check tick claim speckit-todo audit guard-edit context-ok guard-log scratch-sweep hooks-test citations fragment-move \
+.PHONY: closing-checks modal-bundle modal-prepass done docs static format guard _reference _quick bypass-audit quick page-check tick claim speckit-todo audit guard-edit context-ok guard-log scratch-sweep cache-clean hooks-test citations fragment-move \
 	 switches _switch \
 	 map maps cohort cohort-landing hamlet placement-stages pool-index pool-index-if-stale compound render-sync idle-tests \
 	 pack-audit help \
@@ -72,6 +72,7 @@ STATE = "$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" state writ
 # A run too fast to have worked is not stamped green (`l7r-gate check run-plausible`): make runs $(MAKE)
 # sub-invocations even under -n, so a dry run once wrote a green record the push honored.
 done:            ## [tests] tier 3, the whole gate: lint, the static checks, the reference map, every test and the 100% floors; run once at the end, backgrounded   FULL=1 INCREMENTAL=0
+	$(DISK_FLOOR)
 	$(if $(ARBITER_OK),$(LOGESCAPE) ARBITER_OK "$$ARBITER_OK",@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" arbiter gate-held || exit 1)
 	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" lock acquire "$$(git rev-parse --absolute-git-dir)" "$$PPID"
 	$(if $(PREFLIGHT_OK),$(LOGESCAPE) PREFLIGHT_OK "$$PREFLIGHT_OK",@:)
@@ -412,6 +413,20 @@ context-ok:     ## [project] let one builder past the context cap for an hour, a
 scratch-sweep:  ## [project] remove finished sessions' scratch under /tmp/claude-<uid> now - idle 3 days, held by no live process, never this session's (449 T103); DRY=1 lists what it would remove and the total   [DRY=1]
 	@"$$(git rev-parse --show-toplevel)/scripts/hooks/l7r-guard.sh" --scratch-sweep $(if $(DRY),dry,now)
 
+# THE DISK AND THE BUILD CACHE (451 T158, rust/guard/src/guards/scratch_sweep_hooks/disk.rs; the GM 2026-11-22: "make sure that we clean
+# up after ourselves in terms of the file system"): the cache's share of the sweep alone, idle past HOURS (12, a GUESS knob), never while a
+# cargo or rustc process runs; DISK_FLOOR, the first line of make done, make land and make closing-checks, refuses below the free-space
+# floor (L7R_DISK_FLOOR_GB, 15, a GUESS knob), naming the largest build directories and the scratch worktrees; DISK_OK="<reason>" escapes,
+# recorded. make land, once it lands, removes the landed tasks' own /tmp/t<N> scratch (`landed`; left to the age rule where another
+# feature started a task of that number within the day) and names every scratch worktree (a clone's worktree outside /diagram/.clones)
+# with the command removing it. The day's sweep (make scratch-sweep, and a session's first prompt) takes /tmp/t<N> and /tmp/tmp.* idle a
+# day, task outputs idle a day, and past the cache's size budget (L7R_CACHE_BUDGET_GB, 100) what in the cache is not in use, whatever its age.
+cache-clean:    ## [project] free the build cache (~/.cache/l7r-cargo-target): a build directory proven dead (no code path builds into its name, every tree its dep-info names gone) and a crate's variants past its newest 16, idle HOURS (12); never while a build runs; names the scratch worktrees to remove (451 T158)   [DRY=1] [HOURS=<n>]
+	@$(if $(HOURS),L7R_CACHE_IDLE_HOURS="$(HOURS)" ,)"$$(git rev-parse --show-toplevel)/scripts/hooks/l7r-guard.sh" --scratch-sweep $(if $(DRY),cache-dry,cache) </dev/null
+done land closing-checks: export DISK_OK := $(DISK_OK)
+DISK_FLOOR = $(if $(DISK_OK),$(LOGESCAPE) DISK_OK "$$DISK_OK",@"$$(git rev-parse --show-toplevel)/scripts/hooks/l7r-guard.sh" --scratch-sweep floor </dev/null)
+SCRATCH_TREES = "$$(git rev-parse --show-toplevel)/scripts/hooks/l7r-guard.sh" --scratch-sweep trees </dev/null
+
 guard-log:      ## [project] the guard firings, listed - GUARD=<name> SINCE=YYYY-MM-DD EVENT=blocked|rewrote|escaped|reminded FULL=1
 	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" measure guard-log $(if $(GUARD),--guard $(GUARD)) $(if $(SINCE),--since $(SINCE)) $(if $(EVENT),--event $(EVENT)) $(if $(FULL),--full)
 
@@ -587,8 +602,11 @@ land: export LAND_BOXES = $(BOXES)
 land: export COVER_OK := $(COVER_OK)
 land:           ## [project] land one task or several and tick them: every cheap refusal first and together (the changed modules' coverage among them), then make done and make cohort-landing where needed (neither cohort on a counter-only delta, feature 446), the push, the ticks (feature 405 T33); T= takes commas or spaces (451 T18)   F=405 T="T12 [T13]" (or T=T12,T13) NOTE="what was verified" [BOXES=1 ticks a physical task's research boxes] [COVER_OK="<reason>"]
 	@if [ -z "$(F)" ] || [ -z "$(T)" ]; then printf 'make land: F=<feature> and T="<task ids>" are required\n' >&2; exit 2; fi
+	$(DISK_FLOOR)
 	$(if $(COVER_OK),$(LOGESCAPE) COVER_OK "$$COVER_OK",@:)
-	@$(LAND_RUN) "$(F)" "$(T)"
+	@$(LAND_RUN) "$(F)" "$(T)"; rc=$$?; \
+	  if [ $$rc = 0 ]; then "$$(git rev-parse --show-toplevel)/scripts/hooks/l7r-guard.sh" --scratch-sweep landed "$(F)" "$$(git rev-parse --path-format=absolute --git-common-dir)/task-starts.jsonl" $(T) </dev/null; fi; \
+	  $(SCRATCH_TREES); exit $$rc
 
 coverage-exempt: ## [tests] the engine files the Rust port replaces, exempt from the coverage floor (dev/coverage-exempt.json; feature 448, the GM 2026-11-02); PRUNE=1 drops the stale entries   [PRUNE=1]
 	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" coverage-exempt list $(if $(PRUNE),--prune,)
@@ -997,6 +1015,7 @@ _quick:
 # THE CALLER'S TASK (451 T86): T= (F= when two features share a task number) judges the files and crates that task changed, another
 # task's red in the same clone reported apart and not counted (the script's header); with no T= the whole clone, as before.
 closing-checks:  ## [tests] make static, make hooks-test and make quick at once, one combined result (each verdict and log; red if any is): start it with run_in_background once the code is done, then write the plan section and run make decide while it runs (451 T55); T= judges that task's files and crates, another task's red reported apart, not counted (451 T86); T=a,b,c judges a bundle's files as one task's (451 T141)   T=<task> [F=<feature>] [FRESH=1 REASON="..."] [HOOKS_ALL=1]
+	$(DISK_FLOOR)
 	@CLOSING_TASK="$(T)" CLOSING_FEATURE="$(F)" "$$(git rev-parse --show-toplevel)/scripts/gates/closing-checks.sh"
 
 bypass-audit:    ## [project] every escape token taken, with the reason its user gave   (the FULL prompt reads this)

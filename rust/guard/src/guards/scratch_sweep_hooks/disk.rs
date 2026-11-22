@@ -1,0 +1,287 @@
+//! THE DISK AND THE BUILD CACHE (feature 451 T158; the GM 2026-11-22: "make sure that we clean up after ourselves in terms of the file
+//! system to not have 30 gigs of stuff suddenly get eaten without us realizing it"). On 2026-11-22 the disk (461 GB) reached 100% at
+//! about 17:05, 485 MB free, and every builder's coverage run failed "No space left on device": `~/.cache/l7r-cargo-target` held the
+//! clone's 86 GB, the landing worktree's 31 GB and ~30 GB of idle scratch worktrees' targets, which the session removed by hand. The
+//! day's sweep (`sweep/cargo.rs`) had removed none of it: its threshold is three days, and the scratch targets were hours old.
+//!
+//! Three modes of `--scratch-sweep`:
+//! - `floor`: `make done`, `make land` and `make closing-checks` refuse first when the cache's disk has less free than the floor,
+//!   naming the free space, the largest build directories, what `make cache-clean` would free and the scratch worktrees to remove.
+//! - `cache` / `cache-dry`: `make cache-clean`, the cache's share of the sweep alone, idle past `L7R_CACHE_IDLE_HOURS` (not three
+//!   days), and nothing at all while any cargo, rustc or clippy process runs.
+//! - `landed <feature> <task-starts.jsonl> <task>...`: `make land`'s last step once it lands, the landed tasks' own `/tmp/t<N>`
+//!   scratch removed (`sweep/tmp.rs`), and every clean scratch worktree idle past the scratch threshold (`sweep/trees.rs`).
+//! - `trees`: the scratch worktrees (a registered worktree of a clone or the mirror outside the clones directory), each with the
+//!   command that removes it; `make land` prints the ones left at its end (a modified or untracked file, a commit no ref holds,
+//!   touched lately, or held), so a builder's hand-made worktree is named when its task lands.
+
+use std::fmt::Write as _;
+use std::path::Path;
+use std::process::Command;
+use std::time::{SystemTime, UNIX_EPOCH};
+
+use serde_json::json;
+
+use super::sweep::{self, Item};
+use super::{locked_by, record, report, Config};
+use crate::protocol::Reply;
+
+/// THE FLOOR (GUESS, a knob: `L7R_DISK_FLOOR_GB`): above what one gate run writes with another builder's beside it. Measured
+/// 2026-11-22: one landing's warm gate (12:10-12:16) left 4.56 GB of new files in the landing target (method: `find -newermt` over
+/// the window, blocks summed), and that target took 24.77 GB since midnight; a cold coverage build of every crate is the landing
+/// target's 31 GB. Fifteen is three warm gates side by side; a cold full run needs more, which the refusal's listing frees.
+pub(super) const FLOOR_GB: f64 = 15.0;
+/// How long a dead tree's build directory or a crate's old variant sits idle before `make cache-clean` takes it (GUESS, a knob:
+/// `L7R_CACHE_IDLE_HOURS`): half a day, past any one builder's run (the longest closing run 601 s, 451 T55's measurement), short
+/// enough that a scratch tree's target from the morning is gone by the evening.
+pub(super) const IDLE_HOURS: f64 = 12.0;
+/// THE CACHE'S SIZE BUDGET (GUESS, a knob: `L7R_CACHE_BUDGET_GB`), from the day's figures (2026-11-22): the warm landing target, a
+/// full set of every crate's test, coverage and tool builds kept across a day of landings, is 31 GB; the clone's holds the same set
+/// plus its builders' variants (86 GB before the prune, 14 GB of it variants past the sixteen idle a day); the mirror's 5 GB and the
+/// research archive's 3 GB - a working set near 80 GB, and 20 over it for a cold build in flight. The other 37 GB that day was dead
+/// trees' targets and old variants.
+pub(super) const BUDGET_GB: f64 = 100.0;
+/// How long a `/tmp` scratch entry or a task output sits idle before the sweep takes it (GUESS, a knob: `SCRATCH_SWEEP_TMP_HOURS`,
+/// `SCRATCH_SWEEP_OUTPUT_HOURS`): a day - the host's measurement split 63 GB of scratch at "idle over a day" (27 GB), and a builder
+/// back at a trial's scratch after a night still finds it.
+pub(super) const TMP_HOURS: f64 = 24.0;
+/// How many of the largest build directories the refusal names.
+const NAMED: usize = 6;
+
+/// The free bytes of the filesystem holding `dir` (`df -B1 --output=avail`); None where df cannot say.
+pub(super) fn free(dir: &Path) -> Option<u64> {
+    let out = Command::new("df")
+        .args(["-B1", "--output=avail"])
+        .arg(dir)
+        .output()
+        .ok()?;
+    String::from_utf8_lossy(&out.stdout)
+        .lines()
+        .last()?
+        .trim()
+        .parse()
+        .ok()
+}
+
+/// `floor`: silent above the floor; below it, refused with what to clear; unchecked (said, not refused) where df cannot say.
+pub(super) fn floor(c: &Config, free: Option<u64>, now: SystemTime) -> Reply {
+    let say = |stderr: String, code: i32| Reply {
+        stdout: String::new(),
+        stderr,
+        code,
+    };
+    match free {
+        None => say(
+            format!(
+                "disk floor: the free space of {} could not be read (df); not checked\n",
+                c.cargo.display()
+            ),
+            0,
+        ),
+        Some(f) if f >= c.floor => say(String::new(), 0),
+        Some(f) => say(refusal(c, f, now), 1),
+    }
+}
+
+fn refusal(c: &Config, free: u64, now: SystemTime) -> String {
+    let mut out = vec![
+        format!(
+            "REFUSED: {} free on the build cache's disk, below the {} floor (L7R_DISK_FLOOR_GB, a GUESS knob; 451 T158) - a gate run \
+             writes gigabytes, and on 2026-11-22 a full disk failed every builder's coverage run.",
+            gb(free),
+            gb(c.floor)
+        ),
+        format!("The largest build directories under {}:", c.cargo.display()),
+    ];
+    for t in sweep::targets(c).into_iter().take(NAMED) {
+        let whose = if t.live {
+            "a live tree's: pruned of old variants, never removed whole"
+        } else {
+            "no live tree's: removed whole once idle"
+        };
+        out.push(format!(
+            "  {:>9}  {}  ({whose}; idle {})",
+            gb(t.bytes),
+            t.name,
+            hours(now, t.newest)
+        ));
+    }
+    let cutoff = now.checked_sub(c.cache_age).unwrap_or(UNIX_EPOCH);
+    out.push(match sweep::cache_plan(c, cutoff, now) {
+        Ok(plan) => format!(
+            "make cache-clean frees {} now ({} entries idle {} h or more; DRY=1 lists them, HOURS=<n> moves the threshold).",
+            gb(plan.iter().map(|i| i.bytes).sum()),
+            plan.len(),
+            c.cache_age.as_secs() / 3600
+        ),
+        Err(build) => format!(
+            "make cache-clean waits for the build that runs now ({build}); run it once that build ends."
+        ),
+    });
+    out.extend(trees(c, now));
+    out.push(
+        "Free space (make cache-clean; a scratch worktree by the command above), then run this again. Past the floor knowingly: \
+         DISK_OK=\"<reason>\", recorded."
+            .to_owned(),
+    );
+    out.join("\n") + "\n"
+}
+
+/// `cache` / `cache-dry`: the cache's share of the sweep, idle past `cache_age`, refused while a build runs or another sweep holds
+/// the lock; each removal and the total on the guard log; the scratch worktrees named after.
+pub(super) fn cache(c: &Config, now: SystemTime, dry: bool) -> Reply {
+    let cutoff = now.checked_sub(c.cache_age).unwrap_or(UNIX_EPOCH);
+    let run = || -> Result<String, String> {
+        let plan = sweep::cache_plan(c, cutoff, now)?;
+        if dry {
+            return Ok(report(&plan, "would remove"));
+        }
+        let removed: Vec<Item> = plan.into_iter().filter(sweep::remove).collect();
+        let input = json!({ "session_id": c.keep });
+        for item in &removed {
+            record(
+                &input,
+                "removed",
+                &item.path.to_string_lossy(),
+                json!({ "bytes": item.bytes, "why": item.why, "by": "cache-clean" }),
+            );
+        }
+        let total: u64 = removed.iter().map(|i| i.bytes).sum();
+        record(
+            &input,
+            "swept",
+            &format!(
+                "cache-clean: {} removed, {} freed",
+                removed.len(),
+                gb(total)
+            ),
+            json!({ "count": removed.len(), "bytes": total, "by": "cache-clean" }),
+        );
+        Ok(report(&removed, "removed"))
+    };
+    let result = if dry { Some(run()) } else { locked_by(c, run) };
+    let tail: String = trees(c, now).into_iter().map(|t| t + "\n").collect();
+    match result {
+        Some(Ok(text)) => Reply {
+            stdout: text + &tail,
+            stderr: String::new(),
+            code: 0,
+        },
+        Some(Err(build)) => Reply {
+            stdout: tail,
+            stderr: format!(
+                "cache-clean: a build runs ({build}), so nothing was removed: run it again once that build ends\n"
+            ),
+            code: 1,
+        },
+        None => Reply {
+            stdout: tail,
+            stderr: "cache-clean: another sweep holds the lock; run it again once it ends\n"
+                .to_owned(),
+            code: 1,
+        },
+    }
+}
+
+/// `landed <feature> <task-starts.jsonl> <task>...` (`make land`'s last step, after a landing that pushed): the landed tasks' own
+/// `/tmp/t<N>` scratch removed, each and the total on the guard log; a number another feature started within the day said and left.
+pub(super) fn landed(c: &Config, args: &[String], now: SystemTime) -> Reply {
+    let (Some(feature), Some(starts)) = (args.first(), args.get(1)) else {
+        return Reply {
+            stdout: String::new(),
+            stderr:
+                "usage: l7r-guard --scratch-sweep landed <feature> <task-starts.jsonl> <task>...\n"
+                    .to_owned(),
+            code: 2,
+        };
+    };
+    let numbers: Vec<u64> = args[2..]
+        .iter()
+        .flat_map(|a| a.split([',', ' ']))
+        .filter_map(|t| t.trim().trim_start_matches('T').parse().ok())
+        .collect();
+    let (gone, shared) = sweep::landed_plan(c, feature, &numbers, Path::new(starts), now);
+    let removed: Vec<Item> = gone.into_iter().filter(sweep::remove).collect();
+    let input = json!({ "session_id": c.keep });
+    for item in &removed {
+        record(
+            &input,
+            "removed",
+            &item.path.to_string_lossy(),
+            json!({ "bytes": item.bytes, "why": item.why, "by": "land" }),
+        );
+    }
+    let mut text = if removed.is_empty() {
+        String::new()
+    } else {
+        report(&removed, "removed")
+    };
+    // the clean scratch worktrees idle past the scratch threshold (451 T158's plan review): removed, not only named
+    for tree in sweep::clean_trees(c, now) {
+        record(
+            &input,
+            "removed",
+            &tree.to_string_lossy(),
+            json!({ "why": "a clean scratch worktree, idle, its HEAD on a ref", "by": "land" }),
+        );
+        let _ = writeln!(
+            text,
+            "removed the clean scratch worktree {} (idle, its HEAD on a ref; git worktree remove)",
+            tree.display()
+        );
+    }
+    for n in shared {
+        let _ = writeln!(
+            text,
+            "left /tmp/t{n}* to the sweep's age rule: another feature started a T{n} within the day"
+        );
+    }
+    Reply {
+        stdout: text,
+        stderr: String::new(),
+        code: 0,
+    }
+}
+
+/// One line a scratch worktree - a registered worktree of a clone or the mirror whose tree is outside the clones directory and is
+/// not the mirror - with its idle time, the build directory its name shares, and the command that removes it.
+pub(super) fn trees(c: &Config, now: SystemTime) -> Vec<String> {
+    let all = sweep::worktrees(c);
+    let name = |p: &Path| p.file_name().map(|n| n.to_string_lossy().into_owned());
+    all.iter()
+        .filter(|w| !w.tree.starts_with(&c.clones) && w.tree != c.mirror)
+        .map(|w| {
+            let shared = all
+                .iter()
+                .filter(|o| name(&o.tree) == name(&w.tree))
+                .count();
+            let idle = sweep::newest(&w.admin).unwrap_or(UNIX_EPOCH);
+            format!(
+                "scratch worktree {} (of {}, idle {}; builds into {}/{}, a name {shared} registered tree(s) share): once its task has \
+                 landed, remove it with  git -C {} worktree remove --force {}  - then make cache-clean takes its build directory",
+                w.tree.display(),
+                w.repo.display(),
+                hours(now, idle),
+                c.cargo.display(),
+                name(&w.tree).unwrap_or_default(),
+                w.repo.display(),
+                w.tree.display()
+            )
+        })
+        .collect()
+}
+
+/// Bytes as gigabytes, to one place.
+fn gb(bytes: u64) -> String {
+    let tenths = bytes / 100_000_000;
+    format!("{}.{} GB", tenths / 10, tenths % 10)
+}
+
+/// How long since `then`, in hours to one place (0 for a time ahead of `now`).
+fn hours(now: SystemTime, then: SystemTime) -> String {
+    let tenths = now.duration_since(then).map_or(0, |d| d.as_secs() / 360);
+    format!("{}.{} h", tenths / 10, tenths % 10)
+}
+
+#[cfg(test)]
+mod tests;

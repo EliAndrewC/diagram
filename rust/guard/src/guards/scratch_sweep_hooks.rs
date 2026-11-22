@@ -23,6 +23,7 @@ use crate::shared::log;
 use crate::shared::session::Session;
 use crate::shared::tool::flock;
 
+pub(crate) mod disk;
 pub(crate) mod sweep;
 
 /// The guard.
@@ -61,6 +62,19 @@ pub(crate) struct Config {
     pub proc: PathBuf,
     pub exe: PathBuf,
     pub off: bool,
+    /// The free space the gate, the landing and the closing checks ask of the cache's disk, in bytes (`L7R_DISK_FLOOR_GB`, 451 T158).
+    pub floor: u64,
+    /// Idle longer than this and `make cache-clean` takes a build directory or a variant (`L7R_CACHE_IDLE_HOURS`, 451 T158).
+    pub cache_age: Duration,
+    /// Past this many bytes in all, the cache's share takes what is not in use whatever its age (`L7R_CACHE_BUDGET_GB`, 451 T158).
+    pub budget: u64,
+    /// Where a builder's scratch and a `mktemp -d` land (`/tmp`, `SCRATCH_SWEEP_TMP`), and how long one sits idle before it goes
+    /// (`SCRATCH_SWEEP_TMP_HOURS`), and a task output (`SCRATCH_SWEEP_OUTPUT_HOURS`) (451 T158).
+    pub tmp: PathBuf,
+    pub tmp_age: Duration,
+    pub outputs_age: Duration,
+    /// This process's uid: only its own `/tmp` entries are judged.
+    pub uid: u32,
 }
 
 impl Config {
@@ -71,6 +85,14 @@ impl Config {
             .and_then(|v| v.parse().ok())
             .filter(|d: &f64| d.is_finite() && *d >= 0.0)
             .unwrap_or(3.0);
+        let knob = |k: &str, default: f64| {
+            set(k)
+                .and_then(|v| v.parse().ok())
+                .filter(|n: &f64| n.is_finite() && *n >= 0.0)
+                .unwrap_or(default)
+        };
+        let floor_gb = knob("L7R_DISK_FLOOR_GB", disk::FLOOR_GB);
+        let cache_hours = knob("L7R_CACHE_IDLE_HOURS", disk::IDLE_HOURS);
         Self {
             root: set("SCRATCH_SWEEP_ROOT").map_or_else(
                 || PathBuf::from(format!("/tmp/claude-{uid}")),
@@ -91,9 +113,32 @@ impl Config {
             age: Duration::from_secs_f64(days * DAY),
             period: Duration::from_secs_f64(DAY),
             keep: set("CLAUDE_CODE_SESSION_ID").unwrap_or_default(),
-            proc: PathBuf::from("/proc"),
+            // a hook suite's stand-in process table (451 T158), so a build running elsewhere on the machine holds no fixture's cleanup
+            proc: set("SCRATCH_SWEEP_PROC").map_or_else(|| PathBuf::from("/proc"), PathBuf::from),
             exe: std::env::current_exe().unwrap_or_default(),
             off: set("L7R_SELF_CHECK").is_some(),
+            // whole bytes of a gigabyte (10^9, df's and the refusal's unit); the float's cast saturates and the knob is finite
+            #[expect(
+                clippy::cast_possible_truncation,
+                clippy::cast_sign_loss,
+                reason = "a finite, non-negative knob"
+            )]
+            floor: (floor_gb * 1e9) as u64,
+            cache_age: Duration::from_secs_f64(cache_hours * 3600.0),
+            #[expect(
+                clippy::cast_possible_truncation,
+                clippy::cast_sign_loss,
+                reason = "a finite, non-negative knob"
+            )]
+            budget: (knob("L7R_CACHE_BUDGET_GB", disk::BUDGET_GB) * 1e9) as u64,
+            tmp: set("SCRATCH_SWEEP_TMP").map_or_else(|| PathBuf::from("/tmp"), PathBuf::from),
+            tmp_age: Duration::from_secs_f64(
+                knob("SCRATCH_SWEEP_TMP_HOURS", disk::TMP_HOURS) * 3600.0,
+            ),
+            outputs_age: Duration::from_secs_f64(
+                knob("SCRATCH_SWEEP_OUTPUT_HOURS", disk::TMP_HOURS) * 3600.0,
+            ),
+            uid,
         }
     }
 
@@ -134,18 +179,32 @@ pub(crate) fn judge(event: &Event, c: &Config, now: SystemTime) -> Vec<Answer> {
 /// detached sweeper appear, a wait past FR-008's tenth of a second that proved nothing a slower start would not also pass (feature 449
 /// T167).
 fn start(event: &Event, c: &Config, now: SystemTime) -> bool {
-    if c.off || !c.due(now) {
-        return false;
-    }
     let keep = event
         .input
         .get("session_id")
         .and_then(Value::as_str)
         .unwrap_or("");
+    // A SESSION'S FIRST PROMPT SWEEPS TOO (451 T158: "a sweep by age runs at session start ... for what a crash left"), on the same
+    // prompt event the clone-sync guard syncs on: a session seen for the first time (no `seen/<id>` mark) starts a sweep however
+    // recent the day's, as `now` (the lock, not the period); its marks go with the sweep once idle past the age.
+    let seen = c.state.join("seen").join(keep);
+    let first = !keep.is_empty() && !seen.exists();
+    if c.off || !(first || c.due(now)) {
+        return false;
+    }
+    if first {
+        let _ = std::fs::create_dir_all(c.state.join("seen"));
+        let _ = File::create(&seen);
+    }
     let _ = Command::new("setsid")
         .arg("-f")
         .arg(&c.exe)
-        .args(["--scratch-sweep", "run", "--keep", keep])
+        .args([
+            "--scratch-sweep",
+            if first { "now" } else { "run" },
+            "--keep",
+            keep,
+        ])
         .current_dir("/")
         .stdin(Stdio::null())
         .stdout(Stdio::null())
@@ -183,13 +242,32 @@ pub(crate) fn with(args: &[String], c: &mut Config, now: SystemTime) -> Reply {
                 0,
             ),
         },
+        // the disk and the build cache (451 T158, `disk.rs`)
+        Some("floor") => disk::floor(c, disk::free(&c.cargo), now),
+        Some(mode @ ("cache" | "cache-dry")) => disk::cache(c, now, mode == "cache-dry"),
+        Some("landed") => disk::landed(c, &args[1..], now),
+        Some("trees") => say(
+            disk::trees(c, now)
+                .into_iter()
+                .map(|t| t + "\n")
+                .collect(),
+            0,
+        ),
         _ => Reply {
             stdout: String::new(),
-            stderr: "usage: l7r-guard --scratch-sweep run | now | dry [--keep <session id>]\n"
+            stderr: "usage: l7r-guard --scratch-sweep run | now | dry | floor | cache | cache-dry | trees [--keep <session id>]\n"
                 .to_owned(),
             code: 2,
         },
     }
+}
+
+/// `work` under the sweep's lock, waited for a second at most; None where another sweep holds it or the state directory cannot be
+/// made. A second, not none: a process another thread forks inherits the lock's description until its exec, and a test's cleanup
+/// that met that instant was refused (observed 2026-11-22, one run in about five of the disk tests).
+fn locked_by<T>(c: &Config, work: impl FnOnce() -> T) -> Option<T> {
+    let _lock = crate::shared::tool::flock_within(&c.state.join("lock"), 1.0).ok()??;
+    Some(work())
 }
 
 /// Under the lock: the stamp written first (decision (b)), then the sweep, each removal and the total logged. None where another
@@ -201,9 +279,18 @@ fn locked(c: &Config, now: SystemTime, periodic: bool) -> Option<String> {
         return None;
     }
     File::create(c.stamp()).ok()?.set_modified(now).ok()?;
+    let input = json!({ "session_id": c.keep });
+    // the clean scratch worktrees first (451 T158), so their /tmp entries and build directories go in this same plan
+    for tree in sweep::clean_trees(c, now) {
+        record(
+            &input,
+            "removed",
+            &tree.to_string_lossy(),
+            json!({ "why": "a clean scratch worktree, idle, its HEAD on a ref" }),
+        );
+    }
     let plan = sweep::plan(c, now);
     let removed: Vec<sweep::Item> = plan.into_iter().filter(sweep::remove).collect();
-    let input = json!({ "session_id": c.keep });
     for item in &removed {
         record(
             &input,

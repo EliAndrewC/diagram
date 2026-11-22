@@ -33,6 +33,11 @@ fn world(tag: &str) -> (TempDir, Config) {
     c.projects = base.join("projects");
     c.sessions = base.join("sessions");
     c.state = base.join("state");
+    // never the machine's own (451 T158): a sweep here once removed a real clean scratch worktree and walked the real build cache
+    c.cargo = base.join("cargo");
+    c.clones = base.join("clones");
+    c.mirror = base.join("diagram");
+    c.tmp = base.join("tmp");
     c.exe = PathBuf::from("/bin/true");
     c.keep = "current".to_owned();
     (base, c)
@@ -258,7 +263,8 @@ fn a_day_passes_between_sweeps_and_one_sweep_holds_the_lock() {
     // polled every 2 ms, the 5 s ceiling kept: the detached sweeper is a shell's start away (feature 449 T167)
     assert!((0..2500).any(|_| {
         std::thread::sleep(Duration::from_millis(2));
-        std::fs::read_to_string(&marker).is_ok_and(|t| t.contains("run --keep sid"))
+        // a session's first prompt: `now`, however recent the day's (451 T158)
+        std::fs::read_to_string(&marker).is_ok_and(|t| t.contains("now --keep sid"))
     }));
     std::fs::remove_file(&marker).unwrap();
     let ran = with(&args(&["run"]), &mut c, now());
@@ -286,6 +292,23 @@ fn a_day_passes_between_sweeps_and_one_sweep_holds_the_lock() {
     assert!(!start(&e, &off, now()), "switched off, no sweep starts");
     let back = now() - Duration::from_secs(10 * DAY);
     assert!(c.due(back), "a stamp from the future is a clock set back");
+    // a new session's first prompt sweeps within the day; its second does not (451 T158); a mark a month old goes with the sweep
+    let e2 = Event {
+        name: "UserPromptSubmit".to_owned(),
+        input: json!({"session_id": "sid2"}),
+    };
+    assert!(start(&e2, &c, now()), "a session's first prompt");
+    assert!(!start(&e2, &c, now()), "its second, within the day");
+    let mark = c.state.join("seen/sid2");
+    File::options()
+        .write(true)
+        .open(&mark)
+        .unwrap()
+        .set_modified(now() - Duration::from_secs(40 * DAY))
+        .unwrap();
+    c.root = base.join("empty-root");
+    std::fs::create_dir_all(&c.root).unwrap();
+    assert!(plan(&c, now()).iter().any(|i| i.path == mark));
 }
 
 #[test]
@@ -381,4 +404,27 @@ fn the_environment_sets_the_paths_and_the_command_line_its_modes() {
         input: json!({}),
     };
     assert!(decide(&e, &Session::from_input(&e.input)).is_empty());
+}
+
+#[test]
+fn the_day_s_sweep_removes_a_clean_idle_scratch_worktree_and_a_live_session_s_idle_output() {
+    let (base, mut c) = world("trees");
+    let tree = super::sweep::fixture::clean(&c.clones, &base.join("tmp/t7/wt"), 9);
+    // the current session is kept whole, but its idle task output goes (451 T158)
+    put(&c.root.join("-proj/current/tasks/a.output"), false);
+    // a stand-in process table with no build in it, so the cache's share is planned too whatever runs this test
+    std::fs::create_dir_all(base.join("proc/1")).unwrap();
+    std::fs::write(base.join("proc/1/comm"), "bash\n").unwrap();
+    c.proc = base.join("proc");
+    assert_eq!(
+        names(&plan(&c, now()), &c),
+        ["-proj/current/tasks/a.output"]
+    );
+    let swept = with(&args(&["now", "--keep", "current"]), &mut c, now());
+    assert_eq!(swept.code, 0);
+    assert!(!tree.exists());
+    // where the process table cannot be read, no worktree is removed
+    let kept = super::sweep::fixture::clean(&c.clones, &base.join("tmp/t8/wt"), 9);
+    c.proc = base.join("no-proc");
+    assert!(super::sweep::clean_trees(&c, now()).is_empty() && kept.exists());
 }

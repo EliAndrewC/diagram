@@ -1160,7 +1160,7 @@
    "declared": "spec-fidelity"
   },
   "### T98 (builders at three: 522 of the first night's 745 minutes counting 451's builders alone, 70%, a mean of 2.69, and 698, 94%, a mean of 2.99, counting every feature's, against before's 191 of 580, 33%, a mean of 1.66, measured 2026-11-22 (T88's replay, `/tmp/t88/occupancy.py`, over 2026-11-21T18:40:16Z to 2026-11-22T07:06:00Z))": {
-   "sha256": "76a6fc5d9e4520164dbed16886c66d8f509981c629a44f0634f295723e64ba0a",
+   "sha256": "7b38e7fc735c23b3eb5a1283dee932300fafdbfee8958982c4d730e6db767c95",
    "verdict": "CLEAR",
    "reviewed": "2026-11-22",
    "declared": "spec-fidelity"
@@ -1173,6 +1173,24 @@
   },
   "### T156 Approach (checklist part A)": {
    "sha256": "d9c3fbb570f0561f2dc53adb3c4d5f0d75828c2061adbaa5b0e8d88c87fd55b1",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-22",
+   "declared": "spec-fidelity"
+  },
+  "### T158 (the disk reached 100% at about 17:05 and every builder's coverage run failed \"No space left on device\", observed 2026-11-22, method: the session's `df` and the runs' logs, and the host found 229 GB in this container's layer, measured 2026-11-22 (the host session's `du`))": {
+   "sha256": "284cd1462b7657c559c04ac66871637655c0128f39f16663466e363863a2c855",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-22",
+   "declared": "spec-fidelity"
+  },
+  "### T158 Approach (checklist part A)": {
+   "sha256": "f26c70b6e25f7c2389f98da602b3ee83bf7161579226a461e1923918113a0c8d",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-22",
+   "declared": "spec-fidelity"
+  },
+  "### T158 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)": {
+   "sha256": "45a5fb2618592ca5e5af1682fe558ff219e75bd446854c8edcb9e693b2631d8e",
    "verdict": "CLEAR",
    "reviewed": "2026-11-22",
    "declared": "spec-fidelity"
@@ -13992,6 +14010,150 @@
      "why": "No defect is deferred."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-22",
+   "blocks": [
+    "### T158 (the disk reached 100% at about 17:05 and every builder's coverage run failed \"No space left on device\", observed 2026-11-22, method: the session's `df` and the runs' logs, and the host found 229 GB in this container's layer, measured 2026-11-22 (the host session's `du`))",
+    "### T158 Approach (checklist part A)",
+    "### T158 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T158-one-sweeper",
+     "summary": "Every rule lives in the existing scratch-sweep guard, so the cache has one cleaner.",
+     "class": "within",
+     "why": "Where the cleanup lives is how it is built, not how much of it there is. It serves 'clean up after ourselves in terms of the file system' and drops nothing."
+    },
+    {
+     "id": "T158-floor",
+     "summary": "make done, make land and make closing-checks refuse below L7R_DISK_FLOOR_GB (15, GUESS) free. The refusal names the largest build directories, what cache-clean would free, the scratch worktrees and the DISK_OK escape, which is recorded.",
+     "class": "within",
+     "why": "This is the 'without us realizing it' half of the GM's words, enforced: a gate stops before the disk fills. The recorded escape is the project's standing guard rule. 15 is a knob marked GUESS, and the 4.56/24.77/31 GB figures that back it each carry a date and a method."
+    },
+    {
+     "id": "T158-cache-clean",
+     "summary": "make cache-clean [DRY=1] [HOURS=n] takes the cache's share of the sweep once idle past 12 h (GUESS). It is refused while any cargo/rustc/clippy/llvm-cov process runs, and a build directory a live process or a live run member holds is kept whole.",
+     "class": "within",
+     "why": "This is the cleanup the GM asked for. Not deleting under a running build is a physical constraint: deleting there would corrupt it and force the cold rebuild the GM's 'reusing the same build cache' point warns against. The floor still catches a machine that is never idle. The machine-wide refusal is broader than the per-target in_use check strictly needs, but that is a design choice and not a fidelity matter."
+    },
+    {
+     "id": "T158-live-names",
+     "summary": "A build directory is live when its name belongs to a clone, the mirror, a clone's -land/-tooling/-land-tooling, or a registered worktree whose tree exists. Because four worktrees share 'wt', its cache stays while any of them exists.",
+     "class": "within",
+     "why": "This fixes a measured defect, the old rule judging 'wt' dead, and keeps the cache that live work reuses, which is the GM's stated intention."
+    },
+    {
+     "id": "T158-proven-dead",
+     "summary": "A build directory goes whole only when no code path builds into its name AND every tree its dep-info names is gone. One with no dep-info cannot be proven dead and is kept. rc, clone and tree are kept; head is taken.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "It narrows the cleanup: some directories that may be dead are kept. The GM's own words imply the exception: 'your points about reusing the same build cache and whatnot are well taken... you have correctly understood my intention'. The measured case shows what the literal reading would do. Presumed-dead deletion would have taken rc (11 GB, a live scratch clone's checks target) plus clone and tree, which current code builds into, and that is the cold-rebuild cost the GM accepted as a reason. The purpose ('not have 30 gigs... eaten without us realizing it') is still met for what is kept, because the floor refuses and names the largest build directories, live or dead. The exception covers three cases, ruled separately: (a) a name a code path builds into is reused by construction, so legitimate; (b) a tree its dep-info names still exists is live by evidence, so legitimate; (c) no dep-info, so nothing to prove from, kept and surfaced by the floor's listing, legitimate on the same 'no loss of the cache' ground and bounded by the floor."
+    },
+    {
+     "id": "T158-variants-16",
+     "summary": "Keep each crate's newest SIXTEEN variants, not four, restating the task line's 'the newest per crate' as a count. KEPT 4 -> 16.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "It keeps more than the task line's literal 'newest' would. Applied literally, that rule defeats the purpose the GM endorsed, reusing the build cache. It was measured: one landing gate touched 13 live l7r_mode_a variants, so keeping one or four takes variants a live build is using and forces rebuilds. The size budget still takes every variant past sixteen when the cache is over 100 GB, and the floor still refuses, so the GM's 'without us realizing it' purpose is not gutted. The task line is the session's wording, not the GM's; the GM's words do not fix a count."
+    },
+    {
+     "id": "T158-size-budget",
+     "summary": "Past L7R_CACHE_BUDGET_GB (100, GUESS), the cleanup and the day's sweep take every dead tree's directory and every variant past sixteen, whatever its age. They never take one in use and never run while a build runs.",
+     "class": "within",
+     "why": "This adds cleanup in service of the request. The 100 GB knob is marked GUESS and is backed by dated du figures."
+    },
+    {
+     "id": "T158-tmp-outputs",
+     "summary": "The day's sweep removes this uid's /tmp/t<N>... and /tmp/tmp.* idle past 24 h (GUESS), and session task outputs idle past 24 h, a live session's included. A held-open output, and an entry holding a registered worktree, stay.",
+     "class": "within",
+     "why": "This is file-system cleanup the GM asked for. Keeping files that are held open or that hold a worktree prevents breaking live work; it is not a carve-out from 'clean up'. The 24 h split carries the host's dated measurement."
+    },
+    {
+     "id": "T158-session-start-hook",
+     "summary": "A session's first prompt starts the sweep. The plan hooks it on the same UserPromptSubmit event that clone-sync uses, but from the sweep's own guard rather than from a call inside clone_sync_hooks. The plan labels this a deviation from the task line's '(the clone-sync prompt hook)'.",
+     "class": "within",
+     "why": "Ruled as the plan asks. It narrows nothing: the trigger is the same (a session's first prompt), the effect is the same (the sweep starts however recent the day's sweep was), and only the file the call sits in differs. No case the task line covers goes unswept, so it is not an exception and needs no ruling. Keeping the period, lock and detached start in one place is a placement choice. The GM asked for the cleanup, not for its host module."
+    },
+    {
+     "id": "T158-landing-tmp",
+     "summary": "After a successful make land, the landed tasks' /tmp/t<N>* are removed. When another feature started a task of the same number within the day, removal is left to the 24 h age rule, and the plan says so.",
+     "class": "within",
+     "why": "The cleanup still happens, by the age rule within a day, so nothing is left uncleaned. Removing at once would delete another feature's live scratch (measured: 449 T158 and 451 T158 share /tmp/t158), which is destroying work, not cleaning up after ourselves."
+    },
+    {
+     "id": "T158-clean-worktree",
+     "summary": "A scratch worktree is removed only when it is idle 24 h, not held, its HEAD is on a ref, and git worktree remove takes it without --force. Every other worktree is named with its idle hours, its build directory and the --force command, not removed. The plan labels this decision.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "It narrows the cleanup: dirty or ref-less idle worktrees, and their build directories, which stay live through the registered-name rule, are named rather than removed. Removing a worktree with uncommitted files or a commit no ref holds destroys work that cannot be recovered. 'Clean up after ourselves' does not reach that, and the plan records that it cannot tell which task made a worktree, so it cannot tell whether anyone still wants it. The earlier review's concern, 'naming is an instruction, not the cleanup', is answered two ways. Every worktree that can be removed without loss now is removed. And the rest is not left to an instruction: the floor refuses done/land/closing-checks and names them, so 'without us realizing it' holds as real enforcement."
+    },
+    {
+     "id": "T158-test-fixture-paths",
+     "summary": "The scratch-sweep guard's unit tests now use fixture paths for the cache, clones, mirror and /tmp, not the machine's real ones. This fixes the real worktree /tmp/t216/wt that a test removed.",
+     "class": "within",
+     "why": "This fixes a defect found in the task, an instance of the cleanup reaching real data. It is fixed here and not deferred."
+    },
+    {
+     "id": "T158-guard-link-fix",
+     "summary": "The clone's guard build link failure was fixed by hand (tool-profile artifacts and incremental sessions removed, rebuilt). No rule is added because its cause is not proven.",
+     "class": "within",
+     "why": "The defect, a build that fails, is fixed in this task. Adding no rule for an unproven cause is not a defect left unfixed."
+    },
+    {
+     "id": "T158-not-performance",
+     "summary": "The task is classed 'Performance work? no' (disk hygiene); the gate's cost is one df.",
+     "class": "within",
+     "why": "The GM's words on T158 ask for cleanup and do not call it performance or measurement work. Classing it this way narrows nothing T158 was asked to do."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-22",
+   "blocks": [
+    "### T98 (builders at three: 522 of the first night's 745 minutes counting 451's builders alone, 70%, a mean of 2.69, and 698, 94%, a mean of 2.99, counting every feature's, against before's 191 of 580, 33%, a mean of 1.66, measured 2026-11-22 (T88's replay, `/tmp/t88/occupancy.py`, over 2026-11-21T18:40:16Z to 2026-11-22T07:06:00Z))",
+    "### T98 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T98-D1 measurement only",
+     "summary": "T98 is a measurement of builder-slot occupancy under T88's rolling dispatch; no engine or hook code changes and L7R_BUILDERS stays at 3.",
+     "class": "within",
+     "why": "A measurement task of the builders' loop, counted as performance work by FR-013 and the GM's 2026-11-20 words on measurement tasks; the measurement finds no wrong outcome to fix, so leaving the constant and code as they are narrows nothing."
+    },
+    {
+     "id": "T98-D2 the window",
+     "summary": "The night window runs from T88's landing (2026-11-21T18:40:16Z) to the last night builder's end (07:06Z), 745 minutes, and leaves out the 3-hour builder-free gap before T147.",
+     "class": "within",
+     "why": "Chosen by the same rule as T88's before window (the builders' day, first start to last end); the before is reproduced to the minute by the same script, so before and after are one method."
+    },
+    {
+     "id": "T98-D3 two readings",
+     "summary": "Occupancy is reported both for 451's builders alone (the before's method) and for every feature's builders (what the Stop hook counts).",
+     "class": "within",
+     "why": "Reports more, hides nothing; the before has no 449 builder so its row is the same in both readings."
+    },
+    {
+     "id": "T98-D4 replay rule kept",
+     "summary": "The replay's independent-task rule (a line naming no file a running task edits) is kept although it does not read 'after T<n>' and so over-reports for the 449-slot minutes.",
+     "class": "within",
+     "why": "Kept so before and after are one method, and the over-report is disclosed with its cause; a difference of method that is stated, not a defect left."
+    },
+    {
+     "id": "T98-D5 no defect found",
+     "summary": "The stretches below three are attributed to a recorded choice to give the slot to 449 when no 451 task could start, to landings, and to 30-80 s dispatch latency; the Stop hook's count is found correct for the window, and nothing is fixed.",
+     "class": "within",
+     "why": "Each cause is named with its source; none is a wrong outcome (the weekly cap and T156's miscount are each ruled out with evidence), so there is no known defect carried past this task."
+    },
+    {
+     "id": "T98-D6 order",
+     "summary": "T98 runs after T88 and a full day, and before T22.",
+     "class": "within",
+     "why": "Ordering inside the feature's own task list; narrows nothing the GM asked."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -21351,57 +21513,45 @@
    "verdict": "CLEAR"
   },
   "T98": {
-   "section_sha256": "5142cb8f06fbb642afaa4ab3048eb8f0def3e628cb58c095f1af4475765de14c",
+   "section_sha256": "0de09f959db4e0c47fedfba77007d87ea25585bbf98c6296e9679d44684e7ea2",
    "reviewed": "2026-11-22",
    "declared": "spec-fidelity",
    "decisions": [
     {
-     "id": "T98-approach",
-     "summary": "T98 is a measurement with no engine code: T88's replay rerun by T88's own method (builder spans from subagent metas, sampled at each minute's middle).",
+     "id": "T98-D1 measurement only",
+     "summary": "T98 is a measurement of builder-slot occupancy under T88's rolling dispatch; no engine or hook code changes and L7R_BUILDERS stays at 3.",
      "class": "within",
-     "why": "A [perf] measurement of the builders' loop counts as performance work under FR-013 and the GM's 2026-11-20 words on measurement tasks; reusing T88's method keeps before and after comparable. It narrows nothing asked."
+     "why": "A measurement task of the builders' loop, counted as performance work by FR-013 and the GM's 2026-11-20 words on measurement tasks; the measurement finds no wrong outcome to fix, so leaving the constant and code as they are narrows nothing."
     },
     {
-     "id": "T98-window",
-     "summary": "The window runs from T88's landing (2026-11-21T18:40:16Z) to the end of the last night builder (07:05:55Z), 745 minutes, and leaves out the 3-hour gap with no builder before T147.",
+     "id": "T98-D2 the window",
+     "summary": "The night window runs from T88's landing (2026-11-21T18:40:16Z) to the last night builder's end (07:06Z), 745 minutes, and leaves out the 3-hour builder-free gap before T147.",
      "class": "within",
-     "why": "It is chosen the way T88 chose its window (the builders' day from first start to last end). A gap with no builder at all is outside the builders' day by that rule, so leaving it out drops nothing the measurement is meant to cover."
+     "why": "Chosen by the same rule as T88's before window (the builders' day, first start to last end); the before is reproduced to the minute by the same script, so before and after are one method."
     },
     {
-     "id": "T98-two-readings",
-     "summary": "Occupancy is reported twice, once for 451's builders alone (the before's method) and once for every feature's builders (what the Stop hook counts).",
+     "id": "T98-D3 two readings",
+     "summary": "Occupancy is reported both for 451's builders alone (the before's method) and for every feature's builders (what the Stop hook counts).",
      "class": "within",
-     "why": "Both readings are reported and the 451-only row keeps the before's method. The second row adds the view the Stop hook actually acts on and hides nothing."
+     "why": "Reports more, hides nothing; the before has no 449 builder so its row is the same in both readings."
     },
     {
-     "id": "T98-causes",
-     "summary": "Each stretch below three is given a cause: 176 minutes were a 449 builder given the slot on purpose, it was not the weekly cap and not T156's miscount, and the remaining 47 minutes were landings and 30-80 s of dispatch latency.",
+     "id": "T98-D4 replay rule kept",
+     "summary": "The replay's independent-task rule (a line naming no file a running task edits) is kept although it does not read 'after T<n>' and so over-reports for the 449-slot minutes.",
      "class": "within",
-     "why": "Attributing the below-three time is the measurement itself, and each cause carries its observation and method. No requirement is narrowed by it."
+     "why": "Kept so before and after are one method, and the over-report is disclosed with its cause; a difference of method that is stated, not a defect left."
     },
     {
-     "id": "T98-independent-count-rule",
-     "summary": "The independent-task count keeps T88's rule (a line naming no file a running task edits), which does not read 'after T<n>' and so over-reports for the 176 minutes of 449's slot.",
+     "id": "T98-D5 no defect found",
+     "summary": "The stretches below three are attributed to a recorded choice to give the slot to 449 when no 451 task could start, to landings, and to 30-80 s dispatch latency; the Stop hook's count is found correct for the window, and nothing is fixed.",
      "class": "within",
-     "why": "The over-report is disclosed and the rule is kept so that before and after use one method. It is the replay script's counting rule, not a project check that passes bad work, so leaving it as it is leaves no defect (constitution XIV v2.36.0)."
+     "why": "Each cause is named with its source; none is a wrong outcome (the weekly cap and T156's miscount are each ruled out with evidence), so there is no known defect carried past this task."
     },
     {
-     "id": "T98-no-change",
-     "summary": "No code changes, L7R_BUILDERS stays at 3, nothing is found and left, and T98's ask is met (70% vs 33% at three, a mean of 2.69 vs 1.66, counting 451 alone).",
+     "id": "T98-D6 order",
+     "summary": "T98 runs after T88 and a full day, and before T22.",
      "class": "within",
-     "why": "The measurement finds no wrong outcome. The 449 slots were a recorded choice made when no 451 task could start, which FR-013 allows. The 10 minutes of dispatch latency are a gap, not a defect. With no defect, leaving the constant alone narrows nothing."
-    },
-    {
-     "id": "T98-order",
-     "summary": "T98 runs after T88 and a full day, and before T22, whose measured day follows it.",
-     "class": "within",
-     "why": "Ordering inside the feature, consistent with FR-013's performance-first rule; both tasks are measurement or performance work."
-    },
-    {
-     "id": "T98-perf-class",
-     "summary": "T98 is filed as [perf] work on the builders' loop but is not an engine-speed task, so no engine-speed checklist answers are owed.",
-     "class": "within",
-     "why": "FR-013 names the builders' loop as performance work and counts measurement as performance work for ordering. The classification matches the spec."
+     "why": "Ordering inside the feature's own task list; narrows nothing the GM asked."
     }
    ],
    "verdict": "CLEAR"
@@ -21452,6 +21602,101 @@
      "summary": "Nothing left: the one defect found (range members named as next start) is fixed here.",
      "class": "within",
      "why": "No defect is deferred."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T158": {
+   "section_sha256": "d40717211750e4462b769ba67d16b4ce35f356d7ddc538f5daffefccf85a78f0",
+   "reviewed": "2026-11-22",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T158-one-sweeper",
+     "summary": "Every rule lives in the existing scratch-sweep guard, so the cache has one cleaner.",
+     "class": "within",
+     "why": "Where the cleanup lives is how it is built, not how much of it there is. It serves 'clean up after ourselves in terms of the file system' and drops nothing."
+    },
+    {
+     "id": "T158-floor",
+     "summary": "make done, make land and make closing-checks refuse below L7R_DISK_FLOOR_GB (15, GUESS) free. The refusal names the largest build directories, what cache-clean would free, the scratch worktrees and the DISK_OK escape, which is recorded.",
+     "class": "within",
+     "why": "This is the 'without us realizing it' half of the GM's words, enforced: a gate stops before the disk fills. The recorded escape is the project's standing guard rule. 15 is a knob marked GUESS, and the 4.56/24.77/31 GB figures that back it each carry a date and a method."
+    },
+    {
+     "id": "T158-cache-clean",
+     "summary": "make cache-clean [DRY=1] [HOURS=n] takes the cache's share of the sweep once idle past 12 h (GUESS). It is refused while any cargo/rustc/clippy/llvm-cov process runs, and a build directory a live process or a live run member holds is kept whole.",
+     "class": "within",
+     "why": "This is the cleanup the GM asked for. Not deleting under a running build is a physical constraint: deleting there would corrupt it and force the cold rebuild the GM's 'reusing the same build cache' point warns against. The floor still catches a machine that is never idle. The machine-wide refusal is broader than the per-target in_use check strictly needs, but that is a design choice and not a fidelity matter."
+    },
+    {
+     "id": "T158-live-names",
+     "summary": "A build directory is live when its name belongs to a clone, the mirror, a clone's -land/-tooling/-land-tooling, or a registered worktree whose tree exists. Because four worktrees share 'wt', its cache stays while any of them exists.",
+     "class": "within",
+     "why": "This fixes a measured defect, the old rule judging 'wt' dead, and keeps the cache that live work reuses, which is the GM's stated intention."
+    },
+    {
+     "id": "T158-proven-dead",
+     "summary": "A build directory goes whole only when no code path builds into its name AND every tree its dep-info names is gone. One with no dep-info cannot be proven dead and is kept. rc, clone and tree are kept; head is taken.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "It narrows the cleanup: some directories that may be dead are kept. The GM's own words imply the exception: 'your points about reusing the same build cache and whatnot are well taken... you have correctly understood my intention'. The measured case shows what the literal reading would do. Presumed-dead deletion would have taken rc (11 GB, a live scratch clone's checks target) plus clone and tree, which current code builds into, and that is the cold-rebuild cost the GM accepted as a reason. The purpose ('not have 30 gigs... eaten without us realizing it') is still met for what is kept, because the floor refuses and names the largest build directories, live or dead. The exception covers three cases, ruled separately: (a) a name a code path builds into is reused by construction, so legitimate; (b) a tree its dep-info names still exists is live by evidence, so legitimate; (c) no dep-info, so nothing to prove from, kept and surfaced by the floor's listing, legitimate on the same 'no loss of the cache' ground and bounded by the floor."
+    },
+    {
+     "id": "T158-variants-16",
+     "summary": "Keep each crate's newest SIXTEEN variants, not four, restating the task line's 'the newest per crate' as a count. KEPT 4 -> 16.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "It keeps more than the task line's literal 'newest' would. Applied literally, that rule defeats the purpose the GM endorsed, reusing the build cache. It was measured: one landing gate touched 13 live l7r_mode_a variants, so keeping one or four takes variants a live build is using and forces rebuilds. The size budget still takes every variant past sixteen when the cache is over 100 GB, and the floor still refuses, so the GM's 'without us realizing it' purpose is not gutted. The task line is the session's wording, not the GM's; the GM's words do not fix a count."
+    },
+    {
+     "id": "T158-size-budget",
+     "summary": "Past L7R_CACHE_BUDGET_GB (100, GUESS), the cleanup and the day's sweep take every dead tree's directory and every variant past sixteen, whatever its age. They never take one in use and never run while a build runs.",
+     "class": "within",
+     "why": "This adds cleanup in service of the request. The 100 GB knob is marked GUESS and is backed by dated du figures."
+    },
+    {
+     "id": "T158-tmp-outputs",
+     "summary": "The day's sweep removes this uid's /tmp/t<N>... and /tmp/tmp.* idle past 24 h (GUESS), and session task outputs idle past 24 h, a live session's included. A held-open output, and an entry holding a registered worktree, stay.",
+     "class": "within",
+     "why": "This is file-system cleanup the GM asked for. Keeping files that are held open or that hold a worktree prevents breaking live work; it is not a carve-out from 'clean up'. The 24 h split carries the host's dated measurement."
+    },
+    {
+     "id": "T158-session-start-hook",
+     "summary": "A session's first prompt starts the sweep. The plan hooks it on the same UserPromptSubmit event that clone-sync uses, but from the sweep's own guard rather than from a call inside clone_sync_hooks. The plan labels this a deviation from the task line's '(the clone-sync prompt hook)'.",
+     "class": "within",
+     "why": "Ruled as the plan asks. It narrows nothing: the trigger is the same (a session's first prompt), the effect is the same (the sweep starts however recent the day's sweep was), and only the file the call sits in differs. No case the task line covers goes unswept, so it is not an exception and needs no ruling. Keeping the period, lock and detached start in one place is a placement choice. The GM asked for the cleanup, not for its host module."
+    },
+    {
+     "id": "T158-landing-tmp",
+     "summary": "After a successful make land, the landed tasks' /tmp/t<N>* are removed. When another feature started a task of the same number within the day, removal is left to the 24 h age rule, and the plan says so.",
+     "class": "within",
+     "why": "The cleanup still happens, by the age rule within a day, so nothing is left uncleaned. Removing at once would delete another feature's live scratch (measured: 449 T158 and 451 T158 share /tmp/t158), which is destroying work, not cleaning up after ourselves."
+    },
+    {
+     "id": "T158-clean-worktree",
+     "summary": "A scratch worktree is removed only when it is idle 24 h, not held, its HEAD is on a ref, and git worktree remove takes it without --force. Every other worktree is named with its idle hours, its build directory and the --force command, not removed. The plan labels this decision.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "It narrows the cleanup: dirty or ref-less idle worktrees, and their build directories, which stay live through the registered-name rule, are named rather than removed. Removing a worktree with uncommitted files or a commit no ref holds destroys work that cannot be recovered. 'Clean up after ourselves' does not reach that, and the plan records that it cannot tell which task made a worktree, so it cannot tell whether anyone still wants it. The earlier review's concern, 'naming is an instruction, not the cleanup', is answered two ways. Every worktree that can be removed without loss now is removed. And the rest is not left to an instruction: the floor refuses done/land/closing-checks and names them, so 'without us realizing it' holds as real enforcement."
+    },
+    {
+     "id": "T158-test-fixture-paths",
+     "summary": "The scratch-sweep guard's unit tests now use fixture paths for the cache, clones, mirror and /tmp, not the machine's real ones. This fixes the real worktree /tmp/t216/wt that a test removed.",
+     "class": "within",
+     "why": "This fixes a defect found in the task, an instance of the cleanup reaching real data. It is fixed here and not deferred."
+    },
+    {
+     "id": "T158-guard-link-fix",
+     "summary": "The clone's guard build link failure was fixed by hand (tool-profile artifacts and incremental sessions removed, rebuilt). No rule is added because its cause is not proven.",
+     "class": "within",
+     "why": "The defect, a build that fails, is fixed in this task. Adding no rule for an unproven cause is not a defect left unfixed."
+    },
+    {
+     "id": "T158-not-performance",
+     "summary": "The task is classed 'Performance work? no' (disk hygiene); the gate's cost is one df.",
+     "class": "within",
+     "why": "The GM's words on T158 ask for cleanup and do not call it performance or measurement work. Classing it this way narrows nothing T158 was asked to do."
     }
    ],
    "verdict": "CLEAR"

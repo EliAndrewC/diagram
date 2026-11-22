@@ -11,6 +11,8 @@ use std::time::{SystemTime, UNIX_EPOCH};
 use super::Config;
 
 mod cargo;
+mod tmp;
+mod trees;
 
 /// An entry the sweep removes: where, its size on disk, and why it is finished.
 pub(crate) struct Item {
@@ -56,8 +58,56 @@ pub(crate) fn plan(c: &Config, now: SystemTime) -> Vec<Item> {
             }
         }
     }
-    out.extend(cargo::plan(c, cutoff));
-    out.into_iter()
+    let ago = |d: std::time::Duration| now.checked_sub(d).unwrap_or(UNIX_EPOCH);
+    // an output inside a session already going whole is not listed twice
+    for output in tmp::outputs(&root, ago(c.outputs_age)) {
+        if !out.iter().any(|(p, _)| output.0.starts_with(p)) {
+            out.push(output);
+        }
+    }
+    out.extend(tmp::idle_scratch(c, ago(c.tmp_age)));
+    // a session's first-prompt mark (451 T158), kept a month: one gone too soon only sweeps once more
+    out.extend(
+        children(&c.state.join("seen"))
+            .into_iter()
+            .filter(|(p, _, _)| idle(p, ago(std::time::Duration::from_secs(30 * 86_400))))
+            .map(|(p, _, _)| (p, "a session's first-prompt mark")),
+    );
+    if building(&c.proc).is_none() {
+        out.extend(cargo::plan(c, budgeted(c, cutoff, now), &live));
+    }
+    items(out, &live)
+}
+
+/// THE CACHE'S SIZE BUDGET (451 T158): past `L7R_CACHE_BUDGET_GB` in all, the cache's share takes every dead tree's build directory
+/// and every variant past a crate's newest sixteen whatever its age - never one in use, never while a build runs - not only the idle.
+fn budgeted(c: &Config, cutoff: SystemTime, now: SystemTime) -> SystemTime {
+    let total: u64 = targets(c).iter().map(|t| t.bytes).sum();
+    if total > c.budget {
+        now
+    } else {
+        cutoff
+    }
+}
+
+/// The landed tasks' own `/tmp` scratch (`tmp::landed`), held by no live process; with the numbers another feature shares.
+pub(crate) fn landed_plan(
+    c: &Config,
+    feature: &str,
+    numbers: &[u64],
+    starts: &Path,
+    now: SystemTime,
+) -> (Vec<Item>, Vec<u64>) {
+    let Some(live) = live_paths(&c.proc) else {
+        return (Vec::new(), Vec::new());
+    };
+    let (gone, shared) = tmp::landed(c, feature, numbers, starts, now);
+    (items(gone, &live), shared)
+}
+
+fn items(found: Vec<(PathBuf, &'static str)>, live: &[PathBuf]) -> Vec<Item> {
+    found
+        .into_iter()
         .filter(|(p, _)| !live.iter().any(|l| l.starts_with(p)))
         .map(|(path, why)| Item {
             bytes: bytes(&path),
@@ -65,6 +115,82 @@ pub(crate) fn plan(c: &Config, now: SystemTime) -> Vec<Item> {
             why,
         })
         .collect()
+}
+
+/// `make cache-clean`'s share alone (451 T158): the cargo target cache's entries idle since `cutoff`, none while a build runs
+/// anywhere (Err names it) or where `/proc` cannot be read (Ok, nothing).
+pub(crate) fn cache_plan(
+    c: &Config,
+    cutoff: SystemTime,
+    now: SystemTime,
+) -> Result<Vec<Item>, String> {
+    if let Some(build) = building(&c.proc) {
+        return Err(build);
+    }
+    let Some(live) = live_paths(&c.proc) else {
+        return Ok(Vec::new());
+    };
+    Ok(items(
+        cargo::plan(c, budgeted(c, cutoff, now), &live),
+        &live,
+    ))
+}
+
+/// The first live cargo, rustc or clippy process (`/proc/<pid>/comm`), as `<pid> <name>`: a build runs, so the cache's share waits
+/// (451 T158; the run lock's record alone misses a bare `cargo build`).
+pub(crate) fn building(proc: &Path) -> Option<String> {
+    const BUILDERS: [&str; 4] = ["cargo", "rustc", "clippy-driver", "cargo-llvm-cov"];
+    std::fs::read_dir(proc)
+        .into_iter()
+        .flatten()
+        .flatten()
+        .find_map(|e| {
+            let comm = std::fs::read_to_string(e.path().join("comm")).unwrap_or_default();
+            let name = comm.trim();
+            BUILDERS
+                .contains(&name)
+                .then(|| format!("{} {name}", e.file_name().to_string_lossy()))
+        })
+}
+
+/// One build directory of the cache: its name, its size on disk, whether a live tree's (never removed whole), and when anything in
+/// it last changed.
+pub(crate) struct Target {
+    pub name: String,
+    pub bytes: u64,
+    pub live: bool,
+    pub newest: SystemTime,
+}
+
+/// Every build directory of the cache, largest first (the floor's refusal, 451 T158).
+pub(crate) fn targets(c: &Config) -> Vec<Target> {
+    let live = cargo::trees(c).unwrap_or_default();
+    let mut out: Vec<Target> = children(&c.cargo)
+        .into_iter()
+        .filter(|(_, _, m)| m.is_dir())
+        .map(|(path, name, _)| Target {
+            bytes: bytes(&path),
+            live: live.contains(&name),
+            newest: newest(&path).unwrap_or(UNIX_EPOCH),
+            name,
+        })
+        .collect();
+    out.sort_by(|a, b| b.bytes.cmp(&a.bytes));
+    out
+}
+
+pub(crate) use cargo::worktrees;
+use cargo::Worktree;
+#[cfg(test)]
+pub(crate) use trees::fixture;
+
+/// The clean, idle scratch worktrees, removed (451 T158, `sweep/trees.rs`): the trees that went; none where `/proc` cannot be read.
+pub(crate) fn clean_trees(c: &Config, now: SystemTime) -> Vec<PathBuf> {
+    let Some(live) = live_paths(&c.proc) else {
+        return Vec::new();
+    };
+    let cutoff = now.checked_sub(c.tmp_age).unwrap_or(UNIX_EPOCH);
+    trees::remove_clean(c, cutoff, &live)
 }
 
 /// Remove one entry, a directory's tree without following any symlink in it; whether it went.
@@ -125,7 +251,7 @@ fn lstat(p: &Path) -> Option<(PathBuf, Metadata)> {
 }
 
 /// The newest mtime at or under `path`; None where a directory in it cannot be read.
-fn newest(path: &Path) -> Option<SystemTime> {
+pub(crate) fn newest(path: &Path) -> Option<SystemTime> {
     let mut latest = UNIX_EPOCH;
     let read = walk(path, |m| {
         latest = latest.max(m.modified().unwrap_or(UNIX_EPOCH));
