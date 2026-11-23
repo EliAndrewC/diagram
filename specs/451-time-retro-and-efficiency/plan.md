@@ -2571,88 +2571,111 @@ engine speed, so no checklist.
 
 
 
-### T198 (<why: the finding or measurement that files it>)
+### T198, T199, T200 (bundle) (the GM's request of 2026-11-23, relayed by the task lines, to look for other gaps of this kind; the gap audit /home/agent/.claude/jobs/c6fd72d1/tmp/gap-audit.md items 10, 11 and 12b-d)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
-
-| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
-|---|---|---|---|---|
-
-### T198 Approach (checklist part A)
-
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
-8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
-
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
-
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
-
-
-
-### T199 (<why: the finding or measurement that files it>)
-
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
-
-| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
-|---|---|---|---|---|
-
-### T199 Approach (checklist part A)
-
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
-8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
-
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
-
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
-
-
-
-### T200 (<why: the finding or measurement that files it>)
-
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: four gaps closed and one shown already closed, each red first:
+  - T198, THE DERIVED FILES AT QUICK: `make quick`'s `_quick:` recipe gains `make-docs . --check`, `mode-a building-programs --check`
+    and `record check glossary`, the three derived files `make done`'s preflight regenerates (`measure/src/preflight.rs`'s `DERIVED`),
+    so the closing checks, which run quick counted whole (`closing-checks.sh`'s header, 451 T86), fail on a stale one. Each check's
+    stale message already names its regenerate command, pinned in its own crate (`mode_a`'s `programs/tests.rs` "is STALE - run `make
+    building-programs`", `research`'s `tools/glossary/tests.rs` "run `make glossary`", `cohort`'s `make_docs` tests "run `make docs`").
+    `checks/documents/derived_quick.rs` pins the recipe to preflight's `DERIVED`: a derived target quick does not check, or a new one
+    the table does not know, is red naming the line to add. Measured 2026-11-23 (`date +%s%N` around each command, the clone):
+    0.05, 0.12 and 0.06 s warm; `mode-a building-programs --check` 2.4 s cold after a `rust/mode_a` edit rebuilds the binary, once,
+    measured 2026-11-23 (`date +%s%N` around the command, after the `reads.rs` edit).
+    It fired on its first day: the clone's `docs/make-targets.html` is stale by another task's `modal-triage` `##` line (the handoff).
+  - T199, A STANDING VERDICT IS NO ROUND: measured first, 2026-11-23, over the 66 building-review rounds the session transcripts hold
+    (`~/.claude/projects/**/subagents/*.jsonl` naming `UNIT=building-review--`, their findings files and `review-verdict` lines,
+    `/tmp/t199/extract.py`): 60 later rounds, 12 after a round whose open findings were only nitpick or outside. Of the 7 whose two
+    prompts name review-tree commits, `git diff` of the sheet between them: 3 moved, each for a new task's layout change (T352/T367,
+    T392), and 4 were byte-identical (ochiba-magistracy 13:26 and 16:09, ubame-magistracy 13:26, hayakawa-magistracy 16:05) - their
+    verdicts carried (T176), yet `make verify` told the builder to dispatch every owed unit; 5 unattributable (a prompt names no review tree).
+    0 of the 7 attributable were owed by a nitpick fixed on the sheet alone, and 5 of the 12 are unknown. So the measured waste is at the dispatch: `reviews prereq standing` (`prereq/stands.rs`) names a
+    unit whose last PASS or NEEDS-WORK is carried to its sheet as just snapshotted and whose every open finding (not left by `make
+    review-accept`) is nitpick, outside or confirmation; `review-tree.sh` prints it `answered: ...` and leaves it out of the dispatch
+    count. A fixed error or questionable finding owes its round even on an unchanged sheet (ochiba-roundtrip-test's E1, fixed in the
+    docs), and a finding of no or an unknown severity owes one too, failing closed as T188 does.
+  - T199, A NITPICK FIXED ON THE SHEET OWES A ROUND OF ITS EDIT ALONE (the clause MODE 4 round 2 ruled could not be deferred; the
+    GM's route, request.md: "make only the smallest possible changes perhaps with some kind of adversarial subagent review process"):
+    the rule is the GM's, not a measured saving (0 of 7 attributable, 5 of 12 unknown, above). `write_verdict` keeps the sheet the
+    review read (`.git/review-verdicts/<unit>.reviewed/`, since the snapshot is replaced by the next `make verify`). After the edit
+    and `make verify`, `make review-fixed UNIT= FINDING="<ids>"` (`prereq/scoped.rs`' `declare`) is refused unless each named id is a
+    `nitpick` of the last PASS or NEEDS-WORK, every other open finding is minor or left by `make review-accept` (an error or
+    questionable one owes the full round), the kept sheet hashes to the verdict's `content_key` (else, a verdict before T199, the full
+    round) and the sheet moved; it writes the change-scoped prompt, the edit's runs before and after in T189's pairs, the pairing
+    lifted from `bundle::earlier` into `core::difflib::paired` so both call one copy. One building-review on it judges, adversarially,
+    only whether the edit did more than the named fixes, left one unfixed, or made anything wrong (`building-review.md`'s
+    change-scoped paragraph); its `make review-verdict ... SCOPE=change` (`record`) writes `scoped` into the verdict record, clean
+    only where PASS, every finding minor and its gate not red. `carried` accepts a clean `scoped` whose `from` is the verdict's
+    content key and `to` the sheet now, so `answered`, `standing`, the checkpoint and the push's review gate (its content-key branch
+    now `reviews prereq answered`, one copy of the rule) carry the verdict; a later edit moves `now` and owes again, a new full
+    verdict drops it. `make verify` names the route (`review-tree.sh`).
+  - T200 item 12b, AN ITEM'S PAGE NUMBER IS ITS HOME, NOT A BOND: `registry::items::Pages::locate` finds `{NNNN#id}` on question NNNN's
+    pages, else on the one other question whose pages tag `id`; two such questions are refused naming both. The claims' `item_labels`
+    FOLLOWS a claim whose item moved where the cited page's split pointers (`triage::change::follow`, T196's, the claims bundle's own
+    `read_pages`) reach the one page that now tags it: the claim owes no edit - the GM's "a split is a move" and "as long as the
+    original page being linked to directs a reader to the other page ... nothing needs to cascade simply because a split occurs" -
+    and is held to that tag's class (a mismatch names the flip, which owes no impl-drift); two reached pages tagging it are refused
+    naming the case. Only where no pointer directs the reader to it is the claim named with the pointer to write (`... is tagged on
+    <page> now - write its backing ...`): the GM's condition, the old page leading on, does not hold there. (MODE 4 round 3 BLOCKED
+    the rewrite-only form, 2026-11-23.)
+  - T200 item 12c, ALREADY DONE: `owed::record::modals::followed` calls `triage::change::follow`, which walks pointer targets to a
+    fixpoint since 451 T196, pinned by `change/tests.rs`' `a_split_s_target_split_again_is_followed_each_page_once`. Nothing changed.
+  - T200 item 12d, THE CACHE TOLD OF A REFERENCE'S PAGES: a Guesses reference is filled from its question's pages in the registry crate,
+    past `rust/mode_a`'s read log; `items.rs` logs every page it reads (`take_read`) and `l7r_mode_a::reads::take` drains it with its
+    own, so a relabel regenerates a cached sheet. Measured 2026-11-23 (grep of the modal files): 16 modals carry references, every
+    reference's question also in its Entry: or Drawing: line, so none was stale today; a moved item or a reference outside those
+    lines would have been. A page only named in About prose is never read, so it owes the cache nothing.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| T198 the derived lines | `derived_quick.rs`' `make_quick_checks_every_derived_file_preflight_regenerates` (red before the Makefile edit, each missing line named) | n/a - no engine code | none | n/a |
+| T199 the predicate | `stands/tests.rs`' `a_carried_verdict_with_only_minor_findings_stands_and_a_fixed_error_owes_its_round` (red with the severity rule off) | n/a | none | n/a |
+| T199 the dispatch count | `test-review-tree.sh` case 4b (the standing unit answered, one dispatched; the review-fixed route named) | n/a | none | n/a |
+| T199 the nitpick fixed on the sheet | `scoped/tests.rs`' `a_nitpick_fixed_on_the_sheet_is_carried_by_a_clean_change_scoped_round` (red with `carried`'s scoped arm off: tests.rs:69, the clean round not answered) and `an_error_fix_or_an_unclean_scoped_round_owes_the_full_round`; `test-review-gate.sh` case 3's "a clean change-scoped round of the edit ships it" (red on HEAD's review-gate.sh: expected ok, rc=1) | n/a | none | n/a |
+| T200 12b the move | `items/tests.rs`' `a_moved_item_is_found_on_the_one_other_question_that_tags_it`, `item_labels/tests.rs`' `a_moved_item_is_named_with_its_new_pointer` (each red on HEAD's "names no item"), `a_moved_item_the_cited_page_points_to_is_followed_and_owes_no_edit` (red with the follow off: tests.rs:109) | n/a | none | n/a |
+| T200 12d the reads | `reads.rs`' `a_page_a_guesses_reference_read_is_taken_with_the_writer_s_reads` (red with the drain off), `items/tests.rs`' `the_pages_a_reference_reads_are_told_to_the_cache` | `rust/mode_a/src/reads.rs` is engine code: a read added to the cache's key, no drawing changed | none (sheets' cache keys gain their reference pages, already read as Entry/Drawing pages) | n/a |
 
-### T200 Approach (checklist part A)
+### T198, T199, T200 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** No map changes. A stale derived file fails a builder's closing check naming its fix; `make verify`
+   dispatches no review whose verdict stands; a tagged item moved between questions still fills its pop-up's Guesses and names its
+   claims' new pointer; a relabel on a reference's page regenerates the cached sheet.
+2. **The constraints.** The three task lines; the GM's words above; T188's rule (only factual findings cascade); T176's carry; FR-012
+   (red first); FR-013 (performance first); T192's tagging and T195/T197's files (owed, claims commands and triage, record) left alone.
+3. **Where each comes from.** G: the GM's words. O: the timings, the transcript replay and the modal grep above. R: none - tooling.
+4. **Do they describe the world here?** Yes: the replay is this project's own review rounds of 2026-11-22/23; the grep is the tree.
+5. **The order.** Independent of T192, T195 and T197; T192's `modals::refs` should resolve through `Pages::locate` (the handoff).
+6. **The exits.** Green: the new tests and every existing test of `checks`, `registry`, `claims`, `reviews`, `mode_a` and the review
+   tree's suite. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None: the carry's readers found by grep of `content_key` (prereq, checkpoint, arbiter, review-gate.sh).
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** `make closing-checks T=T198,T199,T200 F=451` green; the next `make verify` with a standing unit prints it
+   answered.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** 12d is a defect fix in the safe direction (a cached sheet could go stale on a relabel); 12b turns a refusal
+    into a resolution; the rest are new rules.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?**
+- Fixed here: a building-review nitpick fixed ON THE SHEET still moved its content key and owed a full round, which T199's line forbids
+  (the change-scoped round above; T203, filed for it by round 1's deferral, withdrawn as built in T199). That the edit was only
+  the nitpick is judged by the adversarial scoped round, not mechanically: the sample's nitpicks include geometry (a privy standing
+  a few feet off a house, observed 2026-11-23, method: the transcript replay's findings).
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** yes - T198 and T199 are `[perf]` tasks (451 FR-013): fewer red `make done` runs and fewer review rounds. Not
+engine speed, so the checklist below answers in its terms.
 
+### T198, T199, T200 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)
+
+1. **Where does the time go?** T198: a red `make done` on a stale derived file, about an hour each (a GUESS, the gap audit's item 10 estimate; 372 wave
+   106 met building-programs.md stale twice). T199: 4 of 60 later building-review rounds, 152-336 s and 0.5-1.3M tokens each, measured 2026-11-23 (the replay above; the ledger's rows).
+2. **Removes work, or only moves it?** T198 moves the checks' fraction of a second (measured 2026-11-23, above) earlier to save a gate run; T199 removes a dispatch, and turns a nitpick-only sheet fix's full round into a round of its edit (a saving not measured: 0 of 7 attributable, 5 of 12 unknown).
+3. **What do you expect it to save, and why?** T198: each stale-derived red `make done`; T199: about 4 rounds a day at the wave's rate,
+   a GUESS from one day's replay.
+4. **How does the work grow with the settlement?** n/a - not the engine; `standing` reads one verdict and one content key per unit.
+5. **What did the before and after show, and under what conditions?** Before: the replay above. After: not yet measured on real waves.
+6. **Did any map move, and does it still keep the research?** No map moves.
 
 
 ### T201 (451 T193's MODE 4 round 2, 2026-11-23: a builder whose live work outlasts the idle check's wait, the session silent, is named only at the session's next Stop)
