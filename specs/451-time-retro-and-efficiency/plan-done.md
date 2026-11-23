@@ -10706,3 +10706,141 @@ engine speed, so the checklist below answers in its terms.
 6. **Did any map move, and does it still keep the research?** No: no engine code.
 
 
+<!-- plan-archive: archived 2026-11-23 -->
+### T184 (observed 2026-11-23: the 0009 and 0059 cuts under the 20,000-byte prose cap in cce80ca436 dropped content, measured by a word-level diff of each page against `git show cce80ca436^:<page>`; the GM 2026-11-23, request.md "the convergence talk": "no edit to maintain entry size should ever be substantive")
+
+- **Approach**: Three parts. (1) The repair: what the cuts lost restored into the current text (keeping 449 T371's corrections in the same commit) and each page split along its topics by page session (`specs/451-time-retro-and-efficiency/briefs/t184-write.md`, `t184-checks.md`), a pointer left where the section stood. (2) The guard: `l7r-gate check question-size` (`make quick`) refuses a SIZE EDIT - the page over its limit at the base, or the words the change removed putting it back over - that drops a claim-bearing token (a number, label, quoted passage or proper name no longer on the page or on a page its split pointer names - only T185's `<a class="moved" href="NNNN-<slug>.html">`, the one form the triage follows, the refusal and the three rule files (docs/research-record-rules.md, research/CLAUDE.md, scripts/container/page-session-rules.md) naming it (gap audit item 4, `/home/agent/.claude/jobs/c6fd72d1/tmp/gap-audit.md`: a plain link passed here and was owed as removed there); a negation or qualifier no longer in its own block), naming the split; escape `SIZE_EDIT_OK="<why>"` for a correction, printed with the run (`question_size/size_edit.rs`). (3) The exception: a page's own limit in `research/size-limits.json`, read only with the `size-exception` agent's INDIVISIBLE verdict, its date and ledger row (`question_size/limits.rs`, `.claude/agents/size-exception.md`).
+
+| step | figure | what it says |
+|---|---|---|
+| before | the cuts' losses, measured 2026-11-23 by a word diff (`/tmp/t184/wd.py cce80ca436 <pages>`): 0009 - "already", the 1975-76 survey's date and scope in its block, "for the period", "the transplanting period was long", the calendar's explication, "So every depth above is modern extension guidance.", "the present-day guide", "cannot be grown in a wet paddy"; 0059 - "half-river closures", the lecture named, "before Japan began to modernize in 1868", the Sengoku block's body restating its source ("were mostly small, of timber frames packed with stone"), two wordings of the weirs' age and build. Three changes the diff showed were earlier checks' corrections the same commit carried, not losses - the canal sentence's "division works", an absence note's "The Chinese articles ..." clause and the Edo weirs' "large rivers" (their source gives no river size): restored by the write session, the checks session took them out again (`t184-handoff.md`, `OPEN K2 undone twice` and quote-check 0333) | the cuts were substantive; a restore is checked like any other edit |
+| red | the stub run: 3 of the 6 new `size_edit` tests failed (`/tmp/t184/red-saved.log`, `make rust-test CRATE=rust/gate/crates/checks`, 149 passed, 4 failed - the fourth the regex-scan rule, fixed); the real commit: `l7r-gate check question-size --base cce80ca436^` in a worktree at cce80ca436 exit 1, naming 0009 (already, often, every, about) and 0059 (the 1902 quoted passage, mostly), and 0097 (none, not: its section moved to 0331 and rewritten from new research, the escape's case) (`/tmp/t184/real-red.log`); the pointer form: the split test with a plain `href` link exit 0 where it must refuse, 158 passed, 1 failed (`/tmp/t184/item4-red.log`, 2026-11-23) | the guard fires on the trims, and a plain link passed a split the triage cannot see |
+| after | every loss restored into the current text (449 T371's corrections kept), and each page split along its topics with a one-sentence pointer where the section stood: 0009 20,044 pre-trim, 19,853 trimmed, 13,766 now, its after-the-harvest sections on the new 0332 (7,761); 0059 20,065, 19,830, 12,664 now, its weir-building section and the two lead sentences summing it on the new 0333 (8,682); notes moved with their sentences, none in two places; `make record CHECK=1` clean and `make question-sizes` 0 over, measured 2026-11-23 (`specs/451-time-retro-and-efficiency/briefs/t184-handoff.md`); `l7r-gate check question-size` (delta) exit 0 on the repaired tree, the moved tokens standing on the linked pages | the repair keeps every claim, and the guard passes a split |
+
+### T184 Approach (checklist part A)
+
+1. **The goal, in the world.** No research page loses a claim to fit the size cap: a page over it is split with a pointer, or, one indivisible topic, carries an audited limit of its own.
+2. **The constraints.** The GM 2026-11-23 (request.md "the convergence talk": never cut; split; an audited per-page limit; a split's pointer means nothing cascades). docs/research-record-rules.md "A question has a size" (split along topics, joins point). Constitution XII (citations verbatim). Other builders' files (T188-T190) untouched.
+3. **Where each comes from.** G: request.md 2026-11-23. R: docs/research-record-rules.md. O: the word diff and the real-commit run above.
+4. **Do they describe the world here?** Yes: the guard was run on the real trim commit and on the repaired pages (the delta run green on the working tree).
+5. **The order.** The page sessions first (they were queued before the guard was built), the guard then run over their pages as the green fixture.
+6. **The exits.** Green: `make closing-checks T=T184 F=451` green, the record checks of the page sessions recorded, `make question-sizes` naming none. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** The token classes were tested on the real pre/post pairs before they were fixed; they miss a claim carried only in plain words ("the transplanting period was long"; of the cuts' fourteen losses the classes named six tokens, measured 2026-11-23 by the `--base cce80ca436^` run against the word diff), a scope word outside their classes ("large rivers") and a changed term ("diversion" to "division"), stated in the docs rather than tuned in.
+8. **The budget.** One landing.
+9. **Done, measured.** RED FIRST above; after: `make rust-test CRATE=rust/gate/crates/checks` 159 passed (a plain link refused, the `moved` form kept), 2026-11-23 (`/tmp/t184/item4-green.log`); the delta check green on the restored and split pages.
+10. **Before moving a constant.** n/a: the 20,000 cap unchanged; a page's own limit only through the record.
+11. **Before fitting things into room.** Room first: a split gives each topic its own page.
+12. **Before any fix.** A reader of 0009 and 0059 met weakened claims (a qualifier gone, a source's restatement cut to a pointer at its footnote, a question's date gloss gone): wrong outcomes, fixed.
+
+**Found and left?**
+- The guard also names 0097 on cce80ca436 (qualifiers `none`, `not`): not a defect - both claims stand restated, observed 2026-11-23, method: `grep` of the dropped sentences' words over 0097 and 0331 as they stand now. "None gives a count of the staff or says who else lived inside" stands on 0331 as "No page we read counts who lived inside one, or says whether all its staff did"; "a Beijing courtyard house lodged its servants not in a rowhouse but in one of the ranges of rooms around its courtyard" stands on 0097 as "A Beijing courtyard house lodged its servants in the south range, one of the ranges of rooms around its courtyard", in the paragraph opening "China shows the other form, several rooms behind one door" - a correction to the range the source names, not a cut. The escape `SIZE_EDIT_OK` is the route for such a correction.
+- Pop-ups whose `Entry:` names 0009 or 0059 for content now on 0332 or 0333 (weir_form, winter_crop choices): not a defect: the pointer on the source page carries the reader to the full text (the GM 2026-11-23: *"as long as the original page being linked to directs a reader to the other page where the full information can be found, then nothing needs to cascade simply because a split occurs"*), so no pop-up is edited.
+- The registry entry `hrr-agagawa-dento` called its weirs "on large rivers", a size its page does not state, and the new glossary term `true leaf` was drafted from general botany, not the record's text (the checks session's source-reader and record-format, 2026-11-23): fixed here, by page session (`briefs/t184-followups.md`).
+- 0009's heading still ends "and after the harvest", now on 0332: not a defect - the page's pointer sentence takes the reader there (the GM 2026-11-23 on a split's pointer), and a renamed heading would re-owe every `Entry:` link.
+
+**Performance work?** yes. It makes the record work faster: a trim that drops a claim no longer cascades into re-checks and restorations (this task's own repair cost two page sessions, measured 2026-11-23 (`.git/page-sessions/run-3faec974.log`)), and the refusal names the split at `make quick` rather than at a later review.
+
+### T184 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)
+
+1. **Where does the time go?** In the restoration a lossy trim forces: two page sessions and their record checks for 0009 and 0059, measured 2026-11-23 (`.git/page-sessions/run-3faec974.log`).
+2. **Removes work, or only moves it?** It removes it: the lossy trim is refused before it lands.
+3. **What do you expect it to save, and why?** One page session pair per lossy trim; two in this case.
+4. **How does the work grow with the settlement?** It does not: the record's tooling only; the check reads only the changed questions' base and working text.
+5. **What did the before and after show, and under what conditions?** Red on cce80ca436, green on the repaired tree, both by the same command (`l7r-gate check question-size`), this is evidence, not a pass.
+6. **Did any map move, and does it still keep the research?** No map moved: the record and its tooling only.
+
+<!-- plan-archive: T185 to T185 moved to plan-done.md, 2026-11-23 (feature 375 FR-044) -->
+<!-- plan-archive: T186 to T186 moved to plan-done.md, 2026-11-23 (feature 375 FR-044) -->
+### T194 (T184's split of 0009 to 0332 and 0059 to 0333, the cascade rules' first live test, re-owed 63 pop-up units (21 pop-ups) where 27 (9) follow from the rules: `/home/agent/.claude/jobs/c6fd72d1/tmp/t184-cascade.md`, a read-only re-run of the filter, 2026-11-23)
+
+- **Approach**: three defects of T185's and T186's filter, each fixed red first on a fixture of T184's shape (`triage::tests::split_like_t184`: a page split with its pointer, a marked block moved verbatim, a block moved with a small edit, a block moved with a gloss inserted). (1) `change::page_change`: a note key counts as gone only where neither the page now nor any block the reader reaches (`reached_now`, which carries each mark as `[^key]`) holds it, so the MANIFEST's keys line, built from the same list, follows; its label reads "Note keys no longer on the page or a page it points to". (2) `change::echo`: the nearest new sentence is sought on the page and in the reached sentences (each candidate's words read once, outside the loop over old sentences), so a sentence moved with an edit is compared with its moved self; the echo rule's wording is unchanged. (3) `replay_landing` reads each pop-up's pages and their pointers' targets at the commit and at its parent, and judges each changed page of that set through `judged`, the one judgment the bundle's `unit_changes` now calls too. And the MANIFEST: `Change.moved_edited` pairs a removed block with its closest block new on a reached page (there now, not at its last check) at `PAIR_RATIO`; the block stays in `removed` (owed as the echo reads it, the digest's), but the MANIFEST prints it under "Moved with edits (to a page these pop-ups reach)" with its OLD, NEW and WORD DIFF, not as removed; a pair whose claim words are equal (a marker edit) is a move, cleared. The `modal-triage` contract's MANIFEST paragraph names the new kind and the keys rule (not a guard file: `make guard-edit` said so).
+- **"Reached"**, one meaning, measured: the other pages the unit reads (`all`, the pop-up's own pages and their pointers' targets, `modals::followed`), the set the moves already used; it differs from "the source page's pointer targets" only where a key or a nearest sentence stands on another page of the pop-up's own Entry, which then reads as not gone, as a removal standing on such a page already reads as moved. The claims triage passes its pointer-reached set (`reached_by_pointers`), so its echo widens to the pointer targets alone; its 167 tests pass unchanged (measured 2026-11-23, `make rust-test CRATE=rust/gate/crates/claims`).
+- **A measured edge, not special-cased**: a moved sentence whose one edit is an inserted gloss (T184's "(seki)") fires where the pop-up repeats the gloss's neighbors - the echo rule marks an insertion's neighbors as written (`a_sentence_moved_with_an_edit_is_compared_with_its_moved_self` pins it).
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+| keys reached | `change::tests::a_note_key_moved_with_its_block_is_not_gone`, red on HEAD (2026-11-23, `.git/l7r-handoffs/T194-red.log`: 4 of 112 failed) | none: record tooling | none | n/a |
+| echo's nearest sentence | `change::tests::a_sentence_moved_with_an_edit_is_compared_with_its_moved_self`, red on HEAD | none: record tooling | none | n/a |
+| moved with edits in the MANIFEST | `change::tests::a_block_moved_with_an_edit_is_paired_with_its_moved_self`; `triage::tests::a_split_like_t184_s_owes_only_the_pop_up_repeating_changed_words`, red on HEAD | none: record tooling | none | n/a |
+| the replay follows pointers | `triage::tests::a_landing_s_replay_follows_a_split_s_pointers`, red on HEAD | none: record tooling | none | n/a |
+
+### T194 Approach (checklist part A)
+
+1. **The goal, in the world.** No map changes. A split re-owes a pop-up only where a moved block changed in words it repeats, as the GM's cascade rules say; a key or block that moved with its pointer owes nothing.
+2. **The constraints.** The task line; the coordinator's brief (the keys rule, the nearest sentence from the reached pages, a real replay, red first on the T184 shape, the echo rule's wording unchanged and the gloss case not special-cased, 100% coverage); T184's and T193's files untouched.
+3. **Where each comes from.** G: the GM's convergence talk (2026-11-23), through T185's and T186's rules. O: the diagnosis's re-run and this task's (item 9). R: none, tooling.
+4. **Do they describe the world here?** Yes: the re-run is the real bundle path over T184's uncommitted pages with the live answer store.
+5. **The order.** After T185, T186, T191; before T184 lands (its triage waits on this).
+6. **The exits.** Green: the T184 re-run owes the 9 pop-ups the rules give. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** One landing.
+9. **Done, measured.** The re-run, 2026-11-23, read only on the live clone: a `--shared` scratch clone at 31310c2b1b with T184's uncommitted pages and this task's four files copied in, a copy of the answer store with the 87 touched marks of the 21 pop-ups removed (`RECORD_CHECKS_DIR`), then `l7r-gate record modal-triage --root . bundle --out /tmp/t194-out`. Before (the diagnosis, HEAD's rules): 63 units sent, 0 cleared. After: 36 units cleared by the tool, 27 left - 9 pop-ups: hamlet/barley, hamlet/weir, choice/intake--open, --weir, choice/weir_form--crib, --frame, --gabion, choice/winter_crop--barley, --none; the 8 owed on substance and weir_form--frame on the "(seki)" gloss, as the rule is written. Its MANIFEST: 9 blocks under "Moved with edits", none under "Removed", no keys line.
+10. **Before moving a constant.** n/a: `PAIR_RATIO` and `ABSENCE` unmoved.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** The defect's visible effect: 36 pop-up units (12 pop-ups) sent to the triage agent, and its MANIFEST naming moved keys as gone and moved blocks as removed, which the agent relied on; no map changes.
+
+**Found and left?** none
+
+**Performance work?** yes: the triage agent sees only the pop-ups a split's changed words bear on.
+
+### T194 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)
+
+1. **Where does the time go?** In the `modal-triage` agent's dispatch and the pop-up checks it sends on after a split; not an engine stage.
+2. **Removes work, or only moves it?** Removes it: the pop-ups a split owes nothing are cleared by the tool before any agent.
+3. **What do you expect it to save, and why?** On T184's split, 36 of 63 units (12 of 21 pop-ups), the diagnosis's count.
+4. **How does the work grow with the settlement?** It does not: record tooling. The moved-with-edits pairing is a ratio per removed block per block new on a reached page, and the echo's candidates are read once per call.
+5. **What did the before and after show, and under what conditions?** See item 9: counts on the same tree and store, not wall time.
+6. **Did any map move, and does it still keep the research?** No: no engine code.
+
+<!-- plan-archive: archived 2026-11-23 -->
+### T196 (the gap audit 2026-11-23, items 5, 6 and 7, `/home/agent/.claude/jobs/c6fd72d1/tmp/gap-audit.md`: claims and later scoped rounds read only the page cited, not where T185's pointers moved its text; live case brook.rs's intake claims citing 0059, split by T184 to 0333)
+
+- **Approach**: one follower, shared. `change::follow` (owed crate, beside `pointer_targets`) is the core `modals::followed` now calls, following a target's own split too, each page once (the size rule may split 0333 again); the claims call it through `bundle::follow_names` (names under a `qdir`, the base tree's at `report.rs`) and `bundle::read_pages` (a claim's `cited_pages` plus their pointers' targets). (1) Claims: `read_pages` is used wherever a claim's research is fingerprinted or snapshotted - `index::current`'s `research`, `report`'s base comparison, `commands` (record), `triage` (both page maps), `bundle` (units.json pages and the cited questions written out, a dangling target skipped) and `impl_check`'s by-question map; `cited_pages` alone stays for the two "names no question file" refusals. `research_why` keeps `unread` on the raw citations and reads a rest `page:digest` as standing where it stands verbatim on a page that page's pointers reach, so a pure split's claim is owed `triage`, which `claims triage` clears with no dispatch (feature 432's `clear_page_moves`: every rest stands), recording the target in its pages; a claim with no rests is cleared by T191's filter, a verbatim move and a pointer being the tool's clears. Only a claim-bearing edit left after those reaches an agent. `findings_of` and `page_blocks` are per page and unchanged: the following is in the page list they are handed. A page with no pointer reads as itself alone, so no unsplit claim's fingerprint moves. (2) MANIFEST: `Moved::shown` drops `moved_edited` from the removed list and prints each under "Moved with edits (to a page its pointers reach)" with OLD, NEW and WORD DIFF, the rendering now shared with the pop-ups' (`change::moved_edited_lines`, `change::removed_unmoved`); the `claims-triage` contract names the kind. (3) Scoped rounds: `marks::subject_files` follows its files' pointers (`modals::followed`), a `q:` subject taking the target's notes and originals too; `earlier::pairs_since` diffs a file the last round was not bundled against the then-text of the pages pointing to it, showing no deletions there, so a line moved verbatim is no change and one restated as it moved pairs with its old self.
+- **Measured** 2026-11-23, `make claims-owed` on the live clone with this change and T184's uncommitted pages: "no claim is owed" - the transition owes nothing (the brook rows in `dev/claims-index.json` already carry 0333, recorded by T184's run in this clone).
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+| claims follow pointers | `claims::triage::tests::a_claim_follows_its_page_s_pointers`: red with `read_pages` as `cited_pages` ("rests changed" for a pure split, `.git/l7r-handoffs/T196-red1.log`) and with the research fingerprint unfollowed (a target edit owes nothing, `T196-red2.log`) | none: record tooling | none | n/a |
+| MANIFEST moved with edits | `claims::triage::tests::a_block_moved_with_an_edit_is_shown_moved_with_its_diff`, red with `shown` as before (`T196-red1.log`) | none: record tooling | none | n/a |
+| a pure split owes no dispatch | `claims::triage::tests::a_pure_split_is_cleared_without_a_dispatch`: `claims triage` clears it mechanically, no MANIFEST; red with the rest unfollowed (`T196-red5.log`) | none: record tooling | none | n/a |
+| a split's target split again | `change::tests::a_split_s_target_split_again_is_followed_each_page_once`, red one level deep (`T196-red6.log`) | none: record tooling | none | n/a |
+| subject files follow | `arbiter::bundle::marks::tests::a_subject_s_files_follow_its_pages_pointers`, red unfollowed (`T196-red3.log`) | none: record tooling | none | n/a |
+| a later round pairs on the target | `record::bundle::earlier::tests::a_later_round_pairs_a_change_on_a_split_s_target_page` ("An official handbook" to "A Japanese encyclopedia" paired, the verbatim line not shown), red unfollowed and red with the target diffed against "" (`T196-red3.log`, `T196-red4.log`) | none: record tooling | none | n/a |
+
+<!-- plan-archive: archived 2026-11-23 -->
+### T196 Approach (checklist part A)
+
+1. **The goal, in the world.** No map changes. After a split, an edit on the target page re-owes the claims and rounds that read the moved text, and the readers judge it where it now stands; a pure split owes no dispatch at all (the GM 2026-11-23 on a split's pointer, as T184's section quotes him).
+2. **The constraints.** The task line and the coordinator's brief (red first on T184's shape, 100% coverage, `modals::followed` reused, not copied); T184's and T193's files untouched.
+3. **Where each comes from.** G: the GM 2026-11-23, as T196's task line quotes him (the gap audit he asked for). O: the gap audit. R: none, tooling.
+4. **Do they describe the world here?** Yes: 0009 and 0059 are the tree's only pages with `class="moved"` pointers (grep, 2026-11-23), and `make claims-owed` was run over them.
+5. **The order.** After T185, T191 and T194; beside T184 (its split is the live case).
+6. **The exits.** Green: the tests in the table above and `make closing-checks T=T196 F=451`. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** One landing.
+9. **Done, measured.** The tests above, red then green; the claims (170), bundle (85) and owed (114) crates green, measured 2026-11-23 (`make rust-test CRATE=...`); `make claims-owed` "no claim is owed" on the live tree.
+10. **Before moving a constant.** n/a: `PAIR_RATIO` unmoved.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** Visible effect: a claim whose support moved to 0333 was never re-owed by an edit there and was judged against 0059, which no longer holds it; the claims MANIFEST showed moved blocks as removed, sending claims to impl-drift; a later round never showed a reviewer a restatement on 0333.
+
+**Found and left?**
+- A claim whose index row predates the following and whose cited page is unchanged is forced through its triage once a target it never read changes (the triage has no snapshot of that target to diff): not a defect - conservative, one `impl-drift` run, and the live tree has no such row (`make claims-owed`, 2026-11-23).
+- The following was one level, `modals::followed`'s too, so a target split again would have been judged where its text no longer stood (the plan review's aside): fixed here, `change::follow` follows every level, each page once.
+
+**Performance work?** yes: a split no longer sends its claims to `impl-drift` as removals, and later rounds stay scoped to the change on the page where it was made.
+
+### T196 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)
+
+1. **Where does the time go?** In the `claims-triage` and `impl-drift` dispatches after a split, and in a later review round that misses a target's change (a factual edit unjudged, or a round re-opened).
+2. **Removes work, or only moves it?** Removes it: a pure split is cleared by the tool with no dispatch (before, its claims owed a full `impl-drift` round, "rests changed"), and a moved-with-edit block is shown as moved, not removed.
+3. **What do you expect it to save, and why?** One `impl-drift` dispatch per claim citing a split page whose rest moved verbatim; on today's tree none are owed either way (`make claims-owed`).
+4. **How does the work grow with the settlement?** It does not: record tooling; one more page read per pointer on a cited page.
+5. **What did the before and after show, and under what conditions?** The red and green test runs above, on fixtures; counts, not wall time.
+6. **Did any map move, and does it still keep the research?** No: no engine code.
+
+
+<!-- plan-archive: T187 to T187 moved to plan-done.md, 2026-11-23 (feature 375 FR-044) -->
+<!-- plan-archive: T191 to T186 moved to plan-done.md, 2026-11-23 (feature 375 FR-044) -->
+<!-- plan-archive: T191 to T191 moved to plan-done.md, 2026-11-23 (feature 375 FR-044) -->
+
+<!-- plan-archive: T194 to T184 moved to plan-done.md, 2026-11-23 (feature 375 FR-044) -->
