@@ -137,3 +137,5 @@ landing on its own, each small; T22 last.
       research: rendering
 - [ ] T171 The same Stop message fires again and again where nothing changed (measured 2026-11-23: about 550 'A MAKE RUN THIS SESSION STARTED IS STILL GOING' and 150 'a builder slot is free' messages this session, most for a builder's own gate or a landing agent the count did not see): a run a builder started is the builder's to wait on, not the main session's; an agent whose description names no task still counts as a builder; and an unchanged block is said once, then summarized in a line until something changes
       research: rendering
+- [ ] T172 tests/hooks/test-l7r-guard.sh's case 'locked: no wait on another call's build' holds the call to a hard-coded 1 s of wall time (449 T004, f4d3d53c12); it failed once at load average about 22 (got waited) and passed alone (48/0), reported by the T341 builder 2026-11-23: scale the bound by a calibration loop, as l7r/diagram/CLAUDE.md asks of a CPU-time bound, never a hard-coded figure
+      research: rendering

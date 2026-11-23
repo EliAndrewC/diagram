@@ -45,10 +45,10 @@ static READ_GUARD: LazyLock<Regex> = LazyLock::new(|| {
 static SUITE: LazyLock<Regex> = LazyLock::new(|| re(r"/tests/hooks/test-[\w-]+-hooks\.sh$"));
 static HOOK_SCRIPT: LazyLock<Regex> = LazyLock::new(|| re(r"/scripts/.*-hooks\.sh$"));
 static HELD_SUITE: LazyLock<Regex> = LazyLock::new(|| re(r"/tests/hooks/test-.*-hooks\.sh$"));
-/// The guards' own sources (T229, ask:449-guard-sources-held): every file under `rust/guard/src/` (the `.rs` and the data files the guards read) but the test files, the crate's manifest and the dispatcher script.
+/// The guards' own sources (T229, ask:449-guard-sources-held): every file under `rust/guard/src/` (the `.rs` and the data files the guards read) but the test files, the crate's manifest, the dispatcher script and (451 T169) `scripts/hooks/l7r-hook`, the launcher every hook entry of the settings calls, which chooses the dispatcher the settings' commands chose before.
 static GUARD_SOURCE: LazyLock<Regex> = LazyLock::new(|| {
     re(
-        r"(/rust/guard/(?:shared/)?src/.+|/rust/guard/(?:shared/)?Cargo\.toml|/scripts/hooks/l7r-guard\.sh)$",
+        r"(/rust/guard/(?:shared/)?src/.+|/rust/guard/(?:shared/)?Cargo\.toml|/scripts/hooks/(?:l7r-guard\.sh|l7r-hook))$",
     )
 });
 static GUARD_TEST: LazyLock<Regex> = LazyLock::new(|| re(r"(/tests\.rs|/tests/[^ ]*)$"));
@@ -92,7 +92,7 @@ fn grantable(path: &str) -> bool {
         || context_cap
 }
 
-/// A guard's source: a file under `rust/guard/src/` (not its `tests.rs` or a `tests/` directory), the crate's `Cargo.toml`, `scripts/hooks/l7r-guard.sh`.
+/// A guard's source: a file under `rust/guard/src/` (not its `tests.rs` or a `tests/` directory), the crate's `Cargo.toml`, `scripts/hooks/l7r-guard.sh`, `scripts/hooks/l7r-hook`.
 fn guard_source(file: &str) -> bool {
     hit(&GUARD_SOURCE, file) && !hit(&GUARD_TEST, file)
 }

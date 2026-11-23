@@ -55,6 +55,8 @@ check blocked "$ROOT/rust/guard/src/agent_model_rule.txt"  # the data files a gu
 check blocked "$ROOT/rust/guard/src/guards/house_style_words.tsv"
 check blocked "$ROOT/scripts/hooks/l7r-guard.sh"
 check blocked "$ROOT/scripts/hooks/l7r-guard.sh" "x" "Write"
+check blocked "$ROOT/scripts/hooks/l7r-hook"  # feature 451 T169: the hook entries' launcher, which chooses the dispatcher
+check blocked "$ROOT/scripts/hooks/l7r-hook" "x" "Write"
 
 echo
 echo "2. IT STAYS QUIET on everything else (FR-016)"

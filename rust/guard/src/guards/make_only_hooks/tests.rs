@@ -406,7 +406,7 @@ fn the_storing_target_is_a_plain_word_and_the_terminator_is_as_bash_reads_it() {
 }
 
 /// The guard files `guard_file_hooks::held` names, each as (path, a directory a session `cd`s into, the name it then writes).
-const HELD: [(&str, &str, &str); 10] = [
+const HELD: [(&str, &str, &str); 11] = [
     ("Makefile", "/diagram/.clones/s", "Makefile"),
     ("scripts/hooks/a-hooks.sh", "scripts/hooks", "a-hooks.sh"),
     (".claude/settings.json", ".claude", "settings.json"),
@@ -430,6 +430,8 @@ const HELD: [(&str, &str, &str); 10] = [
         "scripts/hooks",
         "l7r-guard.sh",
     ),
+    // the hook entries' launcher (451 T169), which chooses the dispatcher the settings' commands chose before
+    ("scripts/hooks/l7r-hook", "scripts/hooks", "l7r-hook"),
 ];
 
 /// Every form a session writes a file with from the shell (T227, measured on 2026-11-19), `{F}` the guard file, `{D}` and `{B}`
@@ -537,6 +539,11 @@ fn a_guard_file_read_or_mentioned_and_a_non_guard_written_are_left_alone() {
         "cat > scripts/gates/review-gate.sh <<'EOF'\nx\nEOF",
         "cd .claude && cat > settings.local.json <<'EOF'\nx\nEOF",
         "cd tests/hooks && cat > test-a-hooks.sh <<'EOF'\nx\nEOF",
+        // 451 T169, observed 2026-11-23 (refused on this task's own suite edit): the dispatcher's suite is no dispatcher, nor is a
+        // hooks suite's scratch directory the launcher
+        "python3 - <<'EOF'\np='tests/hooks/test-l7r-guard.sh'; s=open(p).read()\nopen(p,'w').write(s)\nEOF",
+        "sed -i s/a/b/ tests/hooks/test-l7r-guard.sh",
+        "echo x > /tmp/l7r-hooks-suite-pair-hooks.sh-1/x",
     ] {
         assert_eq!(v(cmd), "ok", "{cmd}");
     }
@@ -548,6 +555,8 @@ fn the_guards_own_sources_are_guard_writes_from_the_shell_but_their_tests_are_no
     for cmd in [
         "sed -i s/a/b/ rust/guard/src/guards/make_only_hooks.rs",
         "cat > scripts/hooks/l7r-guard.sh <<'EOF'\nx\nEOF",
+        "cat > scripts/hooks/l7r-hook <<'EOF'\nx\nEOF",
+        "python3 - <<'EOF'\np='scripts/hooks/l7r-hook'; s=open(p).read()\nopen(p,'w').write(s)\nEOF",
         "cd rust/guard && cat >> Cargo.toml <<'EOF'\nx\nEOF",
         "cd rust/guard/src/shared && tee tree.rs",
         "cd rust/guard/shared/src && tee tree.rs",

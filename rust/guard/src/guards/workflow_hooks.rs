@@ -286,6 +286,10 @@ fn wave_verdict(event: &Event, ctx: &Ctx) -> String {
     } else {
         Path::new(cwd)
     };
+    // the commands are the settings of `ctx.root`, run with that tree as the project dir, as the harness runs a tree's own (451 T169:
+    // each entry is `"$CLAUDE_PROJECT_DIR"/scripts/hooks/l7r-hook <event>`, so under a session whose project dir is another tree, one
+    // without the launcher, a replay ran nothing, exit 127, and its unit went through unguarded)
+    let project = format!("CLAUDE_PROJECT_DIR={}", ctx.root.display());
     for launch in all {
         let unit = json!({
             "session_id": event.input.get("session_id"),
@@ -298,7 +302,12 @@ fn wave_verdict(event: &Event, ctx: &Ctx) -> String {
         })
         .to_string();
         for cmd in &hooks {
-            let said = ask(dir, "env", &["L7R_WAVE_UNIT=1", "bash", "-c", cmd], &unit);
+            let said = ask(
+                dir,
+                "env",
+                &["L7R_WAVE_UNIT=1", &project, "bash", "-c", cmd],
+                &unit,
+            );
             if said.code == 2 {
                 drop_run(event, &format!("wave:{run}:"), ctx);
                 return format!("UNIT {}\n{}", launch.label, said.err.trim());

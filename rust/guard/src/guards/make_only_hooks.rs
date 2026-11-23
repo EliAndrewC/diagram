@@ -31,8 +31,10 @@ pub const GUARD: Guard = Guard {
     decide,
 };
 
-/// The guard files by name, for the patterns over a command's text; T229 added the guards' own sources (every file there but a test file).
-const GUARD_FILE: &str = r"[\w./-]*(?:Makefile|[\w-]*-hooks\.sh|settings\.json|tests/rolls\.py|dev/(?:switches|work-budget)\.json|rust/guard/(?:shared/)?src/(?!(?:[\w.-]+/)*tests(?:\.rs|/))[\w./-]+|rust/guard/(?:shared/)?Cargo\.toml|l7r-guard\.sh)";
+/// The guard files by name, for the patterns over a command's text; T229 added the guards' own sources (every file there but a test file),
+/// 451 T169 the hook entries' launcher `l7r-hook`. The dispatcher and the launcher are whole names: a word or a dash before
+/// `l7r-guard.sh` made the dispatcher's suite `tests/hooks/test-l7r-guard.sh` a guard file (observed 2026-11-23, T169's own suite edit).
+const GUARD_FILE: &str = r"[\w./-]*(?:Makefile|[\w-]*-hooks\.sh|settings\.json|tests/rolls\.py|dev/(?:switches|work-budget)\.json|rust/guard/(?:shared/)?src/(?!(?:[\w.-]+/)*tests(?:\.rs|/))[\w./-]+|rust/guard/(?:shared/)?Cargo\.toml|(?<![\w-])l7r-guard\.sh|(?<![\w-])l7r-hook(?![\w.-]))";
 /// The names a command must hold before its writes are resolved: each guard file's last part, so a `cd` into its directory still
 /// names it (T227: `cd dev && cat > switches.json` held none of the old list, which had `tests/rolls.py` and no `dev/` file).
 const GUARD_NAMES: [&str; 6] = [
@@ -45,8 +47,14 @@ const GUARD_NAMES: [&str; 6] = [
 ];
 /// What else makes a command worth walking (T229): the guards' own sources, whose names are a directory and a script, not a suffix. They
 /// never "clear" a write by its name the way `GUARD_NAMES` do - a `.rs` overrules a pattern only where the walk placed it in scratch,
-/// for its own statement (451 T87).
-const SOURCE_NAMES: [&str; 4] = ["guard/src", "shared/src", "Cargo.toml", "l7r-guard.sh"];
+/// for its own statement (451 T87). `l7r-hook` (451 T169) is the launcher's whole name, distinct enough to screen by.
+const SOURCE_NAMES: [&str; 5] = [
+    "guard/src",
+    "shared/src",
+    "Cargo.toml",
+    "l7r-guard.sh",
+    "l7r-hook",
+];
 /// The tools that change a file's mode, times or directory but never its text: a guard file `chmod +x`ed is not rewritten.
 const NOT_TEXT: [&str; 5] = ["chmod", "chown", "touch", "mkdir", "rmdir"];
 const SUITE_NAME: &str = "<a-suite>";

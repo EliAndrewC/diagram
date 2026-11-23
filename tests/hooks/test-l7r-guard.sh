@@ -138,6 +138,53 @@ out=$(L7R_GUARD_FRESH="$W/elsewhere/l7r-guard.good" run ok v9)
 check "another name: walked and built as before" "$out" "v9 PreToolUse"
 check "another name: one more build" "$(calls)" 9
 
+# 8. THE SETTINGS' HOOK COMMANDS ARE SHORT (feature 451 T169, the GM 2026-11-23 "on hook output length"): the harness prints an
+# entry's command with every block or notice it emits, and the ~245-character commands were 1.66M characters of one session's
+# transcript (6,665 stored occurrences, measured 2026-11-23). Each entry is the launcher `scripts/hooks/l7r-hook` and its event; what the
+# commands carried - the mirror-or-tree choice, the escape marker's reasons - is the launcher's. The budget is a knob, GUESS: the
+# longest event's command (`PostToolUseFailure`, 63 characters) and one to spare.
+BUDGET=${HOOK_COMMAND_BUDGET:-64}
+S="$ROOT/.claude/settings.json"
+LAUNCH='"$CLAUDE_PROJECT_DIR"/scripts/hooks/l7r-hook'
+entries=$(jq -r '.hooks | to_entries[] | .key as $e | .value[].hooks[] | [$e, (.timeout // 0 | tostring), .command] | @tsv' "$S")
+long=$(printf '%s\n' "$entries" | awk -F'\t' -v b="$BUDGET" 'length($3) > b { printf "%s: %d characters\n", $1, length($3) }')
+check "settings: every hook command within $BUDGET characters (move what a longer one does into scripts/hooks/l7r-hook, its why into that file's header)" "$long" ""
+# ...and each is the launcher with one word, run here as the harness runs it - `sh -c`, CLAUDE_PROJECT_DIR the tree - in a tree of
+# stubs with no mirror, so the eight events still reach the dispatcher by their own names, stdin with them, and the setup its script
+L="$W/launch"; mkdir -p "$L/scripts/hooks" "$L/scripts/container" "$L/mirror/scripts/hooks" "$L/mirror/scripts/container"
+cp "$ROOT/scripts/hooks/l7r-hook" "$L/scripts/hooks/l7r-hook" 2>/dev/null
+stub() { printf '#!/usr/bin/env bash\nprintf "%s %%s|%%s" "$*" "$(cat)"; printf "said on stderr" >&2; exit ${STUB_RC:-0}\n' "$2" > "$1"; chmod +x "$1"; }
+stub "$L/scripts/hooks/l7r-guard.sh" tree; stub "$L/scripts/container/setup-dev-env.sh" tree-setup
+stub "$L/mirror/scripts/hooks/l7r-guard.sh" mirror; stub "$L/mirror/scripts/container/setup-dev-env.sh" mirror-setup
+fired=$(printf '%s\n' "$entries" | while IFS=$'\t' read -r ev secs cmd; do
+  word=${cmd#"$LAUNCH "}
+  case "$cmd:$word" in
+    "$LAUNCH "*:*[!A-Za-z]*|*:) printf '%s: not the launcher and one word [%s]\n' "$ev" "$cmd" ;;  # never run: another command may reach the real guards
+    "$LAUNCH "*) printf '%s: %s\n' "$ev" "$(printf '{"e": "%s"}' "$ev" | CLAUDE_PROJECT_DIR="$L" CLONE_MAIN="$L/none" sh -c "$cmd" 2>/dev/null)" ;;
+    *) printf '%s: not the launcher and one word [%s]\n' "$ev" "$cmd" ;;
+  esac
+done | sort)
+want=$(for ev in PostToolUse PostToolUseFailure PreToolUse SessionStart Stop SubagentStart SubagentStop UserPromptSubmit; do
+  printf '%s: tree %s|{"e": "%s"}\n' "$ev" "$ev" "$ev"; done; printf 'SessionStart: tree-setup --ensure|{"e": "SessionStart"}\n')
+check "settings: each entry reaches the dispatcher by its event, or the setup (write it as $LAUNCH <event>)" "$fired" "$(printf '%s\n' "$want" | sort)"
+# ...each dispatcher entry's timeout above the wrapper's build limit, so a bounded build ends before the harness kills the hook (449 T005)
+limit=$(grep -o 'L7R_GUARD_BUILD_SECS:-[0-9]*' "$ROOT/scripts/hooks/l7r-guard.sh" | head -1 | cut -d- -f2)
+short=$(printf '%s\n' "$entries" | awk -F'\t' -v l="${limit:-45}" '$3 !~ / setup$/ && $2 + 0 <= l + 0 { printf "%s: %s s\n", $1, $2 }')
+check "settings: every dispatcher entry's timeout above the wrapper's ${limit:-?} s build limit" "$short" ""
+# 8b. THE LAUNCHER: the mirror's copy where it is executable (its setup where it is a file), else the tree's own - stdin, the event,
+# the exit code and stderr passed through unchanged
+lr() { printf 'in' | CLAUDE_PROJECT_DIR="$L" "$@" sh -c "$LAUNCH PreToolUse"; }
+check "launcher: the mirror's dispatcher first" "$(lr env CLONE_MAIN="$L/mirror" 2>/dev/null)" "mirror PreToolUse|in"
+check "launcher: exit 2 passed through" "$(lr env CLONE_MAIN="$L/mirror" STUB_RC=2 >/dev/null 2>&1; echo $?)" 2
+check "launcher: stderr passed through" "$(lr env CLONE_MAIN="$L/mirror" 2>&1 >/dev/null)" "said on stderr"
+chmod -x "$L/mirror/scripts/hooks/l7r-guard.sh"
+check "launcher: a mirror copy not executable, the tree's own" "$(lr env CLONE_MAIN="$L/mirror" 2>/dev/null)" "tree PreToolUse|in"
+check "launcher: the mirror's setup first, by bash with --ensure" "$(printf '' | CLAUDE_PROJECT_DIR="$L" CLONE_MAIN="$L/mirror" sh -c "$LAUNCH setup" 2>/dev/null)" "mirror-setup --ensure|"
+chmod -x "$L/mirror/scripts/container/setup-dev-env.sh"
+check "launcher: a setup that is a file needs no exec bit" "$(printf '' | CLAUDE_PROJECT_DIR="$L" CLONE_MAIN="$L/mirror" sh -c "$LAUNCH setup" 2>/dev/null)" "mirror-setup --ensure|"
+rm "$L/mirror/scripts/container/setup-dev-env.sh"
+check "launcher: no mirror setup, the tree's own" "$(printf '' | CLAUDE_PROJECT_DIR="$L" CLONE_MAIN="$L/mirror" sh -c "$LAUNCH setup" 2>/dev/null)" "tree-setup --ensure|"
+
 # 7. the real crate, built by the real cargo into the clone's own target, answers through the wrapper
 CARGO_BIN=$( [ -x "$HOME/.cargo/bin/cargo" ] && echo "$HOME/.cargo/bin/cargo" || command -v cargo)
 if [ -n "$CARGO_BIN" ]; then

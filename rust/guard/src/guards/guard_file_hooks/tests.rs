@@ -279,6 +279,8 @@ fn the_guards_own_sources_are_held_and_granted_but_not_their_tests() {
         "/r/rust/guard/src/agent_model_rule.txt",
         "/r/rust/guard/src/guards/house_style_words.tsv",
         "/r/scripts/hooks/l7r-guard.sh",
+        // the hook entries' launcher (451 T169)
+        "/r/scripts/hooks/l7r-hook",
     ] {
         assert!(super::held(held), "{held} is held");
         assert!(super::grantable(held), "{held} is granted");
@@ -292,6 +294,8 @@ fn the_guards_own_sources_are_held_and_granted_but_not_their_tests() {
         "/r/rust/guard/src/guards/tests/words.tsv",
         "/r/tests/hooks/test-make-only-hooks.sh",
         "/r/rust/other/src/lib.rs",
+        "/r/scripts/hooks/l7r-hooks-suite-x",
+        "/r/scripts/l7r-hook",
     ] {
         assert!(!super::held(loose), "{loose} is not held");
         assert!(!super::grantable(loose), "{loose} is not granted");

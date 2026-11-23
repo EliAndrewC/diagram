@@ -1334,13 +1334,13 @@
    "declared": "spec-fidelity"
   },
   "### T169 Approach (checklist part A)": {
-   "sha256": "61495eca15bf3fe78b989b60d5a0049ed87297c159c2988617d12ba6f7355a36",
+   "sha256": "c81a257cd27fcd9cee73f34b772ceac3e56275cbcb378227320db22d33ce3cb2",
    "verdict": "CLEAR",
    "reviewed": "2026-11-23",
    "declared": "spec-fidelity"
   },
   "### T169 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)": {
-   "sha256": "804e4740d4fada4bba1ceae7eb6f978b213a08a6c50c7b8c5ed360d17dc4c21e",
+   "sha256": "185169e2944b746354488fcd94081a7d408af970b6ba4157da1b742b4a3c7483",
    "verdict": "CLEAR",
    "reviewed": "2026-11-23",
    "declared": "spec-fidelity"
@@ -1353,6 +1353,12 @@
   },
   "### T168 Approach (checklist part A)": {
    "sha256": "14fb6f84dcbdfe046588f51a9d683f81de9bf59b917e1fae689893a9779cc35c",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity"
+  },
+  "### T169 (observed 2026-11-23: the harness prints a hook entry's command with every block or notice it emits, and the coordinator's transcript, `~/.claude/projects/-diagram/c6fd72d1-....jsonl`, holds the dispatcher's 239-253 character command in 6,665 stored occurrences, 1,659,603 characters as stored, measured 2026-11-23 (a `grep -o` of the command's stored form, counted and summed by `awk`))": {
+   "sha256": "5b362e3640b15b8f5b7b1f21924fabcbcfbb6f4c5865f4569dc2f65b2d3ad652",
    "verdict": "CLEAR",
    "reviewed": "2026-11-23",
    "declared": "spec-fidelity"
@@ -14983,6 +14989,83 @@
      "why": "An operational precaution; narrows nothing."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-23",
+   "blocks": [
+    "### T169 (observed 2026-11-23: the harness prints a hook entry's command with every block or notice it emits, and the coordinator's transcript, `~/.claude/projects/-diagram/c6fd72d1-....jsonl`, holds the dispatcher's 239-253 character command in 6,665 stored occurrences, 1,659,603 characters as stored, measured 2026-11-23 (a `grep -o` of the command's stored form, counted and summed by `awk`))",
+    "### T169 Approach (checklist part A)",
+    "### T169 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T169-D1 launcher",
+     "summary": "Each of the nine hook entries in .claude/settings.json becomes \"$CLAUDE_PROJECT_DIR\"/scripts/hooks/l7r-hook <event> (or setup); a new POSIX sh launcher does what the inline commands did (mirror's l7r-guard.sh first if executable, else the copy beside it; setup runs the mirror's setup-dev-env.sh --ensure else the tree's), with the commands' reasons moved into its header.",
+     "class": "within",
+     "why": "The 2026-11-23 amendment asks whether hooks can 'accomplish the same thing with no loss of fidelity and fewer tokens'. The harness prints the entry's command with every block or notice, so the command is part of the hook output the GM named; shortening it from 239-330 to 49-63 characters while keeping the mirror-first dispatcher choice, the events and the behavior (hand comparison: all nine identical) is exactly 'the same thing ... fewer tokens'."
+    },
+    {
+     "id": "T169-D2 timeouts and status unchanged",
+     "summary": "Timeouts (60/600/900 s, above the wrapper's 45 s build limit) and the status message stay as they are.",
+     "class": "within",
+     "why": "Preserves behavior, as 'no loss of fidelity' requires; decides nothing the request left open."
+    },
+    {
+     "id": "T169-D3 escape marker out of the commands",
+     "summary": "The escape marker each command carried (so the guard-file guard would pass the settings edit) is dropped; the edit goes through make guard-edit and its reason into the guard log and commit message.",
+     "class": "within",
+     "why": "The marker was the permit mechanism, not information a hook message's reader needs; the guard-file guard still refuses an unpermitted settings edit, so enforcement is unchanged ('real enforcement', 2026-11-19) and only the repeated token cost goes."
+    },
+    {
+     "id": "T169-D4 launcher held as a guard file",
+     "summary": "scripts/hooks/l7r-hook is added to guard_file_hooks.rs GUARD_SOURCE and make_only_hooks.rs GUARD_FILE/SOURCE_NAMES; named l7r-hook rather than run so make-only's substring screen does not walk most commands.",
+     "class": "within",
+     "why": "The launcher now decides what the settings decided, so holding it as the settings were held keeps the protection the old commands had - no loss of fidelity. The name is an implementation choice inside the request."
+    },
+    {
+     "id": "T169-D5 wave replay sets CLAUDE_PROJECT_DIR",
+     "summary": "workflow_hooks.rs replays a tree's settings commands with CLAUDE_PROJECT_DIR set to that tree, since the new command depends on it and a missing launcher would exit 127 and let a unit through unguarded.",
+     "class": "within",
+     "why": "A defect the change itself would introduce (a guard silently passing work, a wrong outcome), fixed in the same task; keeps behavior the same, as asked."
+    },
+    {
+     "id": "T169-D11 launcher resolved through CLAUDE_PROJECT_DIR always",
+     "summary": "The old command read CLAUDE_PROJECT_DIR only when the mirror had no dispatcher; the new one always finds the launcher through it, so a session whose project directory lacks scripts/hooks/l7r-hook would run no hook.",
+     "class": "within",
+     "why": "The launcher lives in the same tree as the settings that name it, so any session loading these settings from a tree has it; the one consumer that ran settings against another tree (the wave replay) is fixed (D5), and page sessions are observed to run from the clone's root (pages/src/runner.rs current_dir(root)). The block shows no case where these settings load without the launcher, so no behavior is lost."
+    },
+    {
+     "id": "T169-D6 HOOK_COMMAND_BUDGET length test",
+     "summary": "The hooks suite gains a length case refusing any hook command over 64 characters (a knob, GUESS), plus an entry case requiring each entry to be the launcher and launcher cases.",
+     "class": "within",
+     "why": "A test whose only effect is to keep the requested shortening in place (delete the shortening and the check has nothing left to check) is enforcement of the request, not unrequested scope (GM 2026-09-20)."
+    },
+    {
+     "id": "T169-D7 GUARD_FILE whole-name fix",
+     "summary": "make-only's GUARD_FILE alternative l7r-guard\\.sh matched any name ending so and refused a Python write of tests/hooks/test-l7r-guard.sh; the dispatcher's and launcher's names become whole names, pinned by the left-alone case; the pattern's other alternatives were read for the same shape (method stated).",
+     "class": "within",
+     "why": "A check refusing good work is a defect (constitution XIV); fixing it as found, with the class searched and the method recorded, is fix-as-we-go, not a narrowing."
+    },
+    {
+     "id": "T169-D8 live-probe event lines left booked by fallback",
+     "summary": "The two live claude -p probes left 18 lines in 449's event log booked to T341 and 4 in 451's booked to T168 by the clone's mark (fallback), about a minute of where-time; left as the cost of a live test, not a defect. The first probe's one escalation-check pass has its ledger row written by hand, so no landing refuses on it; the second left no review pass.",
+     "class": "within",
+     "why": "The fallback attribution worked as designed on an untagged session; a minute of probe noise is a difference no reader of where-time's report would act on, not a wrong outcome of a tool, so leaving it needs no ruling. The section states it as found-and-left with its measurement."
+    },
+    {
+     "id": "T169-D9 verification shape",
+     "summary": "Hand comparison of all nine old vs new commands (same stdout, stderr, exit), red-first suite and crate tests, two live sessions; SessionStart, setup and PostToolUseFailure, which print nothing on a healthy call, are covered by the hand comparison and suite rather than live.",
+     "class": "within",
+     "why": "Verification of the requested 'no loss of fidelity'; events that emit nothing cannot be observed live, so covering them by the hand comparison narrows nothing the request asked for."
+    },
+    {
+     "id": "T169-D10 performance work",
+     "summary": "Classed as performance work under 451 FR-013 (the builders' loop), claimed in tokens, not time: per-call wall time is measured unchanged within noise.",
+     "class": "within",
+     "why": "The block claims a token saving, not a speed-up. That rests on request.md: the GM framed this amendment as a token cost (2026-11-23, 'That amount of output consumes tokens'), and the approved 2026-11-19 improvement 1 ties a builder's context size to its model calls' speed, so fewer stored characters per hook message serves the builders' loop FR-013 names. The scheduling label decides nothing the request left open."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -23004,69 +23087,75 @@
    "verdict": "CLEAR"
   },
   "T169": {
-   "section_sha256": "b4071094adab0cf4873a58999238abec883ad7e418cf36be644f5c957c65a8fa",
+   "section_sha256": "40374c34e9a338dcb479bf0412876dc3a8ea71a367c78efbc8fc26b4bb9a78d0",
    "reviewed": "2026-11-23",
    "declared": "spec-fidelity",
    "decisions": [
     {
-     "id": "launcher",
-     "summary": "The nine settings hook entries become \"$CLAUDE_PROJECT_DIR\"/scripts/hooks/l7r-hook <event> (or setup); timeouts and status message unchanged; the logic moves into a POSIX sh launcher the harness never echoes.",
+     "id": "T169-D1 launcher",
+     "summary": "Each of the nine hook entries in .claude/settings.json becomes \"$CLAUDE_PROJECT_DIR\"/scripts/hooks/l7r-hook <event> (or setup); a new POSIX sh launcher does what the inline commands did (mirror's l7r-guard.sh first if executable, else the copy beside it; setup runs the mirror's setup-dev-env.sh --ensure else the tree's), with the commands' reasons moved into its header.",
      "class": "within",
-     "why": "The GM 2026-11-23 asked whether the hooks' token cost could be cut 'with no loss of fidelity'. The echoed command is part of every hook message's transcript cost; moving it into a file with the same events, timeouts and dispatcher is the same thing in fewer tokens."
+     "why": "The 2026-11-23 amendment asks whether hooks can 'accomplish the same thing with no loss of fidelity and fewer tokens'. The harness prints the entry's command with every block or notice, so the command is part of the hook output the GM named; shortening it from 239-330 to 49-63 characters while keeping the mirror-first dispatcher choice, the events and the behavior (hand comparison: all nine identical) is exactly 'the same thing ... fewer tokens'."
     },
     {
-     "id": "mirror-first",
-     "summary": "The launcher runs the mirror's l7r-guard.sh if executable, else the tree's copy; setup runs the mirror's setup-dev-env.sh --ensure if present, else the tree's; CLONE_MAIN is its test seam.",
+     "id": "T169-D2 timeouts and status unchanged",
+     "summary": "Timeouts (60/600/900 s, above the wrapper's 45 s build limit) and the status message stay as they are.",
      "class": "within",
-     "why": "Reproduces the old commands' selection (449 R6) so behavior is unchanged, which is the 'no loss of fidelity' half of the request."
+     "why": "Preserves behavior, as 'no loss of fidelity' requires; decides nothing the request left open."
     },
     {
-     "id": "escape-marker",
-     "summary": "The GUARD_EDIT_OK marker and reasons leave the commands; the edit goes through make guard-edit, the reasons go in the guard log, the commit and the launcher's header.",
+     "id": "T169-D3 escape marker out of the commands",
+     "summary": "The escape marker each command carried (so the guard-file guard would pass the settings edit) is dropped; the edit goes through make guard-edit and its reason into the guard log and commit message.",
      "class": "within",
-     "why": "The marker served the guard-file guard, not the reader of a hook message; its supported form is kept and the reasons are retained in the launcher header, so nothing a hook does or says is lost."
+     "why": "The marker was the permit mechanism, not information a hook message's reader needs; the guard-file guard still refuses an unpermitted settings edit, so enforcement is unchanged ('real enforcement', 2026-11-19) and only the repeated token cost goes."
     },
     {
-     "id": "guard-file",
-     "summary": "The launcher is held as a guard file on both routes (guard_file_hooks GUARD_SOURCE; make_only GUARD_FILE and SOURCE_NAMES), and named l7r-hook rather than run so make-only's substring screen is not widened.",
+     "id": "T169-D4 launcher held as a guard file",
+     "summary": "scripts/hooks/l7r-hook is added to guard_file_hooks.rs GUARD_SOURCE and make_only_hooks.rs GUARD_FILE/SOURCE_NAMES; named l7r-hook rather than run so make-only's substring screen does not walk most commands.",
      "class": "within",
-     "why": "Keeps the protection the settings' commands had now that the launcher decides what they decided; preserves behavior rather than narrowing anything."
+     "why": "The launcher now decides what the settings decided, so holding it as the settings were held keeps the protection the old commands had - no loss of fidelity. The name is an implementation choice inside the request."
     },
     {
-     "id": "wave-replay",
-     "summary": "workflow_hooks.rs replays a tree's settings commands with CLAUDE_PROJECT_DIR set to that tree.",
+     "id": "T169-D5 wave replay sets CLAUDE_PROJECT_DIR",
+     "summary": "workflow_hooks.rs replays a tree's settings commands with CLAUDE_PROJECT_DIR set to that tree, since the new command depends on it and a missing launcher would exit 127 and let a unit through unguarded.",
      "class": "within",
-     "why": "Fixes a wrong outcome the change would otherwise introduce (a replay exiting 127 and a unit passing unguarded); required for no loss of behavior."
+     "why": "A defect the change itself would introduce (a guard silently passing work, a wrong outcome), fixed in the same task; keeps behavior the same, as asked."
     },
     {
-     "id": "budget-test",
-     "summary": "HOOK_COMMAND_BUDGET = 64 (a knob, GUESS) with suite cases for length, entry form, launcher behavior and timeouts.",
+     "id": "T169-D11 launcher resolved through CLAUDE_PROJECT_DIR always",
+     "summary": "The old command read CLAUDE_PROJECT_DIR only when the mirror had no dispatcher; the new one always finds the launcher through it, so a session whose project directory lacks scripts/hooks/l7r-hook would run no hook.",
      "class": "within",
-     "why": "Enforcement of what was asked: delete the shorter-command behavior and the check has nothing left to check. The GM's own message asks about mechanical enforcement of hook brevity."
+     "why": "The launcher lives in the same tree as the settings that name it, so any session loading these settings from a tree has it; the one consumer that ran settings against another tree (the wave replay) is fixed (D5), and page sessions are observed to run from the clone's root (pages/src/runner.rs current_dir(root)). The block shows no case where these settings load without the launcher, so no behavior is lost."
     },
     {
-     "id": "make-only-regex",
-     "summary": "make-only's GUARD_FILE alternatives for the dispatcher and launcher become whole names ((?<![\\w-])), fixing the refusal of a write to tests/hooks/test-l7r-guard.sh; other alternatives read and judged suffixes on purpose.",
+     "id": "T169-D6 HOOK_COMMAND_BUDGET length test",
+     "summary": "The hooks suite gains a length case refusing any hook command over 64 characters (a knob, GUESS), plus an entry case requiring each entry to be the launcher and launcher cases.",
      "class": "within",
-     "why": "A check refusing good work is a defect; fixed in the task with its search space stated (every alternative of the pattern read), per fix-as-we-go."
+     "why": "A test whose only effect is to keep the requested shortening in place (delete the shortening and the check has nothing left to check) is enforcement of the request, not unrequested scope (GM 2026-09-20)."
     },
     {
-     "id": "probe-lines",
-     "summary": "The live probe's 18 event-log lines, about a minute, stay booked to T341 by the clone's fallback mark; not treated as a defect.",
+     "id": "T169-D7 GUARD_FILE whole-name fix",
+     "summary": "make-only's GUARD_FILE alternative l7r-guard\\.sh matched any name ending so and refused a Python write of tests/hooks/test-l7r-guard.sh; the dispatcher's and launcher's names become whole names, pinned by the left-alone case; the pattern's other alternatives were read for the same shape (method stated).",
      "class": "within",
-     "why": "Leaves a record of a real event under the clone's fallback attribution; about a minute in where-time is a difference no reader of the report would see, not a wrong outcome of the kind the defect rule reaches, and it narrows nothing the GM asked."
+     "why": "A check refusing good work is a defect (constitution XIV); fixing it as found, with the class searched and the method recorded, is fix-as-we-go, not a narrowing."
     },
     {
-     "id": "verification",
-     "summary": "Live session ran under the launcher's first name run; the rename to l7r-hook is proven by the nine-command hand comparison and the suite; SessionStart, setup and PostToolUseFailure are covered by hand comparison and suite since they emit nothing live.",
+     "id": "T169-D8 live-probe event lines left booked by fallback",
+     "summary": "The two live claude -p probes left 18 lines in 449's event log booked to T341 and 4 in 451's booked to T168 by the clone's mark (fallback), about a minute of where-time; left as the cost of a live test, not a defect. The first probe's one escalation-check pass has its ledger row written by hand, so no landing refuses on it; the second left no review pass.",
      "class": "within",
-     "why": "A choice of verification method for 'fires as before', disclosed in full; it does not reduce what the task delivers or what the GM asked for."
+     "why": "The fallback attribution worked as designed on an untagged session; a minute of probe noise is a difference no reader of where-time's report would act on, not a wrong outcome of a tool, so leaving it needs no ruling. The section states it as found-and-left with its measurement."
     },
     {
-     "id": "perf-class",
-     "summary": "T169 is classed performance work under 451 FR-013, in tokens rather than wall time (the builders' loop).",
+     "id": "T169-D9 verification shape",
+     "summary": "Hand comparison of all nine old vs new commands (same stdout, stderr, exit), red-first suite and crate tests, two live sessions; SessionStart, setup and PostToolUseFailure, which print nothing on a healthy call, are covered by the hand comparison and suite rather than live.",
      "class": "within",
-     "why": "The GM's 2026-11-23 message frames hook output as a token cost; the request's own improvement 1 ties context growth to slower model calls, and FR-013 names the builders' loop. Classing a context-size reduction as performance work is inside FR-013's ordering."
+     "why": "Verification of the requested 'no loss of fidelity'; events that emit nothing cannot be observed live, so covering them by the hand comparison narrows nothing the request asked for."
+    },
+    {
+     "id": "T169-D10 performance work",
+     "summary": "Classed as performance work under 451 FR-013 (the builders' loop), claimed in tokens, not time: per-call wall time is measured unchanged within noise.",
+     "class": "within",
+     "why": "The block claims a token saving, not a speed-up. That rests on request.md: the GM framed this amendment as a token cost (2026-11-23, 'That amount of output consumes tokens'), and the approved 2026-11-19 improvement 1 ties a builder's context size to its model calls' speed, so fewer stored characters per hook message serves the builders' loop FR-013 names. The scheduling label decides nothing the request left open."
     }
    ],
    "verdict": "CLEAR"

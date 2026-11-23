@@ -130,7 +130,9 @@ fn a_waves_args_are_checked_before_any_unit_runs() {
 fn each_unit_meets_the_agent_hooks_and_the_first_refusal_refuses_the_run() {
     let (d, ctx) = world(
         "units",
-        "grep -q REFUSE && { echo its own words >&2; exit 2; } ; [ \"$L7R_WAVE_UNIT\" = 1 ]",
+        // CLAUDE_PROJECT_DIR the tree whose settings these are (451 T169: each entry is `"$CLAUDE_PROJECT_DIR"/scripts/hooks/run <event>`,
+        // so a replay under another tree's project dir ran nothing, exit 127, and the unit went through unguarded)
+        "grep -q REFUSE && { echo its own words >&2; exit 2; } ; [ \"$L7R_WAVE_UNIT\" = 1 ] && [ -f \"$CLAUDE_PROJECT_DIR/.claude/workflows/check-wave.js\" ] || { echo not this tree >&2; exit 2; }",
     );
     let good = wave(
         &json!([{"label": "a", "prompt": "p", "then": null}, {"label": "b", "prompt": "q", "then": [{"prompt": "v", "agentType": "source-reader"}]}]),

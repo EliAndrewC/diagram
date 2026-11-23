@@ -1,0 +1,32 @@
+#!/bin/sh
+# scripts/hooks/l7r-hook <event> | setup - the one command each hook entry of .claude/settings.json calls (feature 451 T169).
+#
+# WHY A LAUNCHER (the GM 2026-11-23, specs/451-time-retro-and-efficiency/request.md "on hook output length"): the harness prints an
+# entry's command with every block or notice it emits, and the entries' 239-330 character commands were 1.66M characters of one
+# session's transcript, 6,665 stored occurrences (measured 2026-11-23). So each entry is `"$CLAUDE_PROJECT_DIR"/scripts/hooks/l7r-hook <event>`,
+# held to 64 characters by tests/hooks/test-l7r-guard.sh, and what the commands carried is here:
+#
+# - THE MIRROR'S COPY FIRST: /diagram is main's mirror, so its scripts are what every session runs once they land (feature 449
+#   research R6); the copy beside this file only where the mirror has none. This file is the project tree's own, found by
+#   $CLAUDE_PROJECT_DIR, which the harness sets for every hook. CLONE_MAIN is the mirror's test seam, as in scripts/sync-with-main.sh.
+# - <event>: the Rust guards' one dispatcher, scripts/hooks/l7r-guard.sh (feature 449 T005). Each entry's timeout (60 s; PreToolUse
+#   600 s) stays above the wrapper's 45 s build limit (L7R_GUARD_BUILD_SECS), so the wrapper's bounded build ends before the harness
+#   kills the hook; the suite checks it.
+# - setup: scripts/container/setup-dev-env.sh --ensure, SessionStart's other entry - a NEW hook, not a relaxed guard (2026-10-04, the
+#   GM: a fresh container's setup built into our procedures as a quick no-op): it provisions a fresh container once and costs 30 ms
+#   after; its 900 s timeout is a first install's.
+#
+# The commands also carried the guard-file guard's escape marker and its reason: the marker is that guard's escape for an edit of the
+# settings, so it rode in the edited text. Its supported form is `make guard-edit FILE=.claude/settings.json WHY="<reason>"` (the
+# reason in the guard log and the commit message), never a command every hook message repeats. This file is a guard file too, on
+# both routes (rust/guard/src/guards/guard_file_hooks.rs, make_only_hooks.rs), its name distinct enough for make-only's name screen.
+#
+# POSIX sh, not bash: it runs before every guard call, and as dash it adds about 0.4 ms a call where bash added about 3 ms (100 calls
+# into a stub, best of 3, 2026-11-23).
+d=${0%/*} m=${CLONE_MAIN:-/diagram}
+if [ "${1:-}" = setup ]; then
+  s=$m/scripts/container/setup-dev-env.sh; [ -f "$s" ] || s=$d/../container/setup-dev-env.sh
+  exec bash "$s" --ensure
+fi
+h=$m/scripts/hooks/l7r-guard.sh; [ -x "$h" ] || h=$d/l7r-guard.sh
+exec "$h" "$@"

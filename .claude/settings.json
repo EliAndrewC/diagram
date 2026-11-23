@@ -12,7 +12,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "s=/diagram/scripts/container/setup-dev-env.sh; [ -f \"$s\" ] || s=\"$CLAUDE_PROJECT_DIR/scripts/container/setup-dev-env.sh\"; bash \"$s\" --ensure  # GUARD_EDIT_OK: a NEW hook, not a relaxed guard (2026-10-04, the GM: a fresh container's setup built into our procedures as a quick no-op) - provisions a fresh container once, 30 ms after",
+            "command": "\"$CLAUDE_PROJECT_DIR\"/scripts/hooks/l7r-hook setup",
             "timeout": 900,
             "statusMessage": "Checking the dev container's dependencies..."
           }
@@ -22,7 +22,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "h=/diagram/scripts/hooks/l7r-guard.sh; [ -x \"$h\" ] || h=\"$CLAUDE_PROJECT_DIR/scripts/hooks/l7r-guard.sh\"; exec \"$h\" SessionStart  # GUARD_EDIT_OK: feature 449 T005 - the Rust guards' one dispatcher, its timeout above the wrapper's 45 s build limit",
+            "command": "\"$CLAUDE_PROJECT_DIR\"/scripts/hooks/l7r-hook SessionStart",
             "timeout": 60
           }
         ]
@@ -33,7 +33,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "h=/diagram/scripts/hooks/l7r-guard.sh; [ -x \"$h\" ] || h=\"$CLAUDE_PROJECT_DIR/scripts/hooks/l7r-guard.sh\"; exec \"$h\" UserPromptSubmit  # GUARD_EDIT_OK: feature 449 T005 - the Rust guards' one dispatcher, its timeout above the wrapper's 45 s build limit",
+            "command": "\"$CLAUDE_PROJECT_DIR\"/scripts/hooks/l7r-hook UserPromptSubmit",
             "timeout": 60
           }
         ]
@@ -44,7 +44,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "h=/diagram/scripts/hooks/l7r-guard.sh; [ -x \"$h\" ] || h=\"$CLAUDE_PROJECT_DIR/scripts/hooks/l7r-guard.sh\"; exec \"$h\" PreToolUse  # GUARD_EDIT_OK: feature 449 T005 - the Rust guards' one dispatcher, its timeout above the wrapper's 45 s build limit",
+            "command": "\"$CLAUDE_PROJECT_DIR\"/scripts/hooks/l7r-hook PreToolUse",
             "timeout": 600
           }
         ]
@@ -55,7 +55,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "h=/diagram/scripts/hooks/l7r-guard.sh; [ -x \"$h\" ] || h=\"$CLAUDE_PROJECT_DIR/scripts/hooks/l7r-guard.sh\"; exec \"$h\" SubagentStart  # GUARD_EDIT_OK: feature 449 T005 - the Rust guards' one dispatcher, its timeout above the wrapper's 45 s build limit",
+            "command": "\"$CLAUDE_PROJECT_DIR\"/scripts/hooks/l7r-hook SubagentStart",
             "timeout": 60
           }
         ]
@@ -66,7 +66,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "h=/diagram/scripts/hooks/l7r-guard.sh; [ -x \"$h\" ] || h=\"$CLAUDE_PROJECT_DIR/scripts/hooks/l7r-guard.sh\"; exec \"$h\" SubagentStop  # GUARD_EDIT_OK: feature 449 T005 - the Rust guards' one dispatcher, its timeout above the wrapper's 45 s build limit",
+            "command": "\"$CLAUDE_PROJECT_DIR\"/scripts/hooks/l7r-hook SubagentStop",
             "timeout": 60
           }
         ]
@@ -77,7 +77,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "h=/diagram/scripts/hooks/l7r-guard.sh; [ -x \"$h\" ] || h=\"$CLAUDE_PROJECT_DIR/scripts/hooks/l7r-guard.sh\"; exec \"$h\" PostToolUseFailure  # GUARD_EDIT_OK: feature 449 T005 - the Rust guards' one dispatcher, its timeout above the wrapper's 45 s build limit",
+            "command": "\"$CLAUDE_PROJECT_DIR\"/scripts/hooks/l7r-hook PostToolUseFailure",
             "timeout": 60
           }
         ]
@@ -88,7 +88,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "h=/diagram/scripts/hooks/l7r-guard.sh; [ -x \"$h\" ] || h=\"$CLAUDE_PROJECT_DIR/scripts/hooks/l7r-guard.sh\"; exec \"$h\" PostToolUse  # GUARD_EDIT_OK: feature 449 T005 - the Rust guards' one dispatcher, its timeout above the wrapper's 45 s build limit",
+            "command": "\"$CLAUDE_PROJECT_DIR\"/scripts/hooks/l7r-hook PostToolUse",
             "timeout": 60
           }
         ]
@@ -99,7 +99,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "h=/diagram/scripts/hooks/l7r-guard.sh; [ -x \"$h\" ] || h=\"$CLAUDE_PROJECT_DIR/scripts/hooks/l7r-guard.sh\"; exec \"$h\" Stop  # GUARD_EDIT_OK: feature 449 T005 - the Rust guards' one dispatcher, its timeout above the wrapper's 45 s build limit",
+            "command": "\"$CLAUDE_PROJECT_DIR\"/scripts/hooks/l7r-hook Stop",
             "timeout": 60
           }
         ]
