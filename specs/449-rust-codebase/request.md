@@ -154,3 +154,7 @@ The session recommended retiring the one-command clause, since the Mode A sweep 
 ## 2026-11-22, 449#4 and 449#5 closed (T171 and T150 had landed)
 
 The GM: "I'm not sure why you keep calling out " 449#4 and 449#5 are overtaken by work that has landed" as "open decisions" though sincethey are by definition not open"
+
+## 2026-11-22, the talk waits for every follow-up
+
+The session offered the map-generation talk with the follow-ups filed and sorted by constitution XIV. The GM: "yes i would rather wait until everytihng is actually ready so please finish the remaining fixes- it sounds like there's still 23 remaining?"
