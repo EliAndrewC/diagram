@@ -257,6 +257,12 @@ fn a_running_gate_refuses_a_shell_write_into_the_tree() {
             "l7r/x/a.py",
         ),
         ("sed -i s/a/b/ l7r/x/a.py".to_owned(), "l7r/x/a.py"),
+        // a real write behind more than 120 characters of prefixes is still refused (451 T90)
+        (
+            format!("A={} cp /tmp/x l7r/x/a.py", "a".repeat(130)),
+            "l7r/x/a.py",
+        ),
+        (format!("A={} git apply /tmp/p.patch", "a".repeat(130)), "."),
         // a loop's body writes as its command does (451 T79)
         (
             "for f in l7r/x/a.py; do sed -i s/a/b/ $f; done".to_owned(),
@@ -287,6 +293,10 @@ fn a_running_gate_refuses_a_shell_write_into_the_tree() {
         "for F in a.md; do make append FILE=$F LINE=b; done".to_owned(),
         "if true; then touch l7r/x/a.py; fi".to_owned(),
         "timeout 60 make append LINE=x".to_owned(),
+        // a make behind more than the segment's 120 kept characters of prefixes is still the make (451 T90: T79's
+        // `L7R_FEATURE_DIRECTORY=... make rust-test` was refused as a shell write of `.`, measured 2026-11-21)
+        format!("A={} B={} make append LINE=x", "a".repeat(80), "b".repeat(80)),
+        format!("env A={} timeout 60 make append LINE=x", "a".repeat(130)),
         "git status --porcelain".to_owned(),
         "git log --oneline | head -3".to_owned(),
         "git push".to_owned(),

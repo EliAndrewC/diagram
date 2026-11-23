@@ -320,10 +320,10 @@
    "declared": "round-arbiter"
   },
   "### T90 Approach (checklist part A)": {
-   "sha256": "42636ff8d67392d0a504cff52ce6ebfb393ce0b0dcf326b7bcc9fa43c738f4ea",
+   "sha256": "8179980bc5b837beb8a83a393bd97de44fa4cf59ffc9c628765a181f54a0fd60",
    "verdict": "CLEAR",
-   "reviewed": "2026-11-21",
-   "declared": "round-arbiter"
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity"
   },
   "### T91 Approach (checklist part A)": {
    "sha256": "ba5bea93d7aaaee0ba3858f4137e13cf2983c09ccfb509369793cdd01bffdcae",
@@ -1263,6 +1263,12 @@
   },
   "### T164 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)": {
    "sha256": "1f3ab3b44044e3f4cd022d0ba68b57f12ec5bb3ec7453c66f0f6427a5dc0f5ae",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity"
+  },
+  "### T90 (gate-write read a target's command from its segment, which the walk cuts at 120 characters, so a `make` behind more than 120 characters of `VAR=value` prefixes was refused as a shell write of `.` under a running gate - found by T79, measured 2026-11-21 through HEAD's gate-write and T79's, `/tmp/t79b/judge/probe-gw5.jsonl`, gone by 2026-11-22)": {
+   "sha256": "a3e25f31574bba5582f71e57c975e4ddebcac1fee261aa6d738344480601485b",
    "verdict": "CLEAR",
    "reviewed": "2026-11-23",
    "declared": "spec-fidelity"
@@ -14602,6 +14608,58 @@
      "why": "a method choice for the red-first evidence; the red results are recorded."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-23",
+   "blocks": [
+    "### T90 (gate-write read a target's command from its segment, which the walk cuts at 120 characters, so a `make` behind more than 120 characters of `VAR=value` prefixes was refused as a shell write of `.` under a running gate - found by T79, measured 2026-11-21 through HEAD's gate-write and T79's, `/tmp/t79b/judge/probe-gw5.jsonl`, gone by 2026-11-22)",
+    "### T90 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T90 the task",
+     "summary": "Fix gate-write refusing a make behind more than 120 characters of VAR=value prefixes as a shell write of '.' while a gate runs.",
+     "class": "within",
+     "why": "A guard of this feature (451 T33's shell-write rule, T79's wrappers) refusing correct work is a defect - a check that refuses good work (constitution XIV) - and fix-as-we-go (GM 2026-11-18) owes its fix; the refusal is shown by the red test of 2026-11-22. Serves the request's 'real enforcement' clause (2026-11-19 approval) by keeping the enforcement from refusing compliant work."
+    },
+    {
+     "id": "Approach: Target.head via command_head",
+     "summary": "The walk's Target gains a head field, written from the same shown text as segment: leading VAR=value words dropped (also among HEAD_WRAPPERS and timeout, whose duration is kept), the rest kept, cut at 120 characters.",
+     "class": "within",
+     "why": "The mechanism of the fix; it reaches the stated case (the 120-character cut now falls after the prefixes, so the make is seen) and the red test pins it. Implementation choice, no part of what was asked is narrowed."
+    },
+    {
+     "id": "Approach: segment unchanged",
+     "summary": "segment keeps its present text and 120-character cut for every other reader and every message.",
+     "class": "within",
+     "why": "Leaves other behavior as it is; nothing the GM asked for is removed. The block names no other reader that derives a command head from segment, and 'Found and left? none' states no known defect is carried; if another reader shares the truncation it would be a separate defect to file, not a narrowing of this plan."
+    },
+    {
+     "id": "Approach: head_of reads t.head",
+     "summary": "gate-write's head_of reads t.head and skips only the wrappers, the = words being gone.",
+     "class": "within",
+     "why": "Completes the fix in the one reader the defect was found in; the refusals of real shell writes behind long prefixes (cp, git apply behind 130) are kept by the table's pinned cases, so the shell-write rule is not weakened."
+    },
+    {
+     "id": "Approach part A item 5: order after T118",
+     "summary": "Sequenced after T118 (landed), which last moved tree.rs and gate-write.",
+     "class": "within",
+     "why": "Scheduling, no scope effect."
+    },
+    {
+     "id": "Approach part A item 6: exits",
+     "summary": "Green on the guard crate's rust-test, cover, lint, format and gate-write's hook suite; red recorded and a cannot-be-done claim ruled through make arbiter-ask.",
+     "class": "within",
+     "why": "Verification of the requested enforcement and the standing 100% line coverage rule; no unrequested verification."
+    },
+    {
+     "id": "Approach part A item 10: 120-character cut stays",
+     "summary": "The 120-character constant is not moved; head takes the same cut after the prefixes.",
+     "class": "within",
+     "why": "Keeps an existing constant; the defect is fixed without it, so nothing defective is left."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -22517,6 +22575,56 @@
      "summary": "red-first run in the review tree at HEAD with only test files over it, reusing its warm target rather than a third cold build",
      "class": "within",
      "why": "a method choice for the red-first evidence; the red results are recorded."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T90": {
+   "section_sha256": "2c4750b9c143d3750b59bc3d5129347574997a54e6301477c50f665152be32fd",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T90 the task",
+     "summary": "Fix gate-write refusing a make behind more than 120 characters of VAR=value prefixes as a shell write of '.' while a gate runs.",
+     "class": "within",
+     "why": "A guard of this feature (451 T33's shell-write rule, T79's wrappers) refusing correct work is a defect - a check that refuses good work (constitution XIV) - and fix-as-we-go (GM 2026-11-18) owes its fix; the refusal is shown by the red test of 2026-11-22. Serves the request's 'real enforcement' clause (2026-11-19 approval) by keeping the enforcement from refusing compliant work."
+    },
+    {
+     "id": "Approach: Target.head via command_head",
+     "summary": "The walk's Target gains a head field, written from the same shown text as segment: leading VAR=value words dropped (also among HEAD_WRAPPERS and timeout, whose duration is kept), the rest kept, cut at 120 characters.",
+     "class": "within",
+     "why": "The mechanism of the fix; it reaches the stated case (the 120-character cut now falls after the prefixes, so the make is seen) and the red test pins it. Implementation choice, no part of what was asked is narrowed."
+    },
+    {
+     "id": "Approach: segment unchanged",
+     "summary": "segment keeps its present text and 120-character cut for every other reader and every message.",
+     "class": "within",
+     "why": "Leaves other behavior as it is; nothing the GM asked for is removed. The block names no other reader that derives a command head from segment, and 'Found and left? none' states no known defect is carried; if another reader shares the truncation it would be a separate defect to file, not a narrowing of this plan."
+    },
+    {
+     "id": "Approach: head_of reads t.head",
+     "summary": "gate-write's head_of reads t.head and skips only the wrappers, the = words being gone.",
+     "class": "within",
+     "why": "Completes the fix in the one reader the defect was found in; the refusals of real shell writes behind long prefixes (cp, git apply behind 130) are kept by the table's pinned cases, so the shell-write rule is not weakened."
+    },
+    {
+     "id": "Approach part A item 5: order after T118",
+     "summary": "Sequenced after T118 (landed), which last moved tree.rs and gate-write.",
+     "class": "within",
+     "why": "Scheduling, no scope effect."
+    },
+    {
+     "id": "Approach part A item 6: exits",
+     "summary": "Green on the guard crate's rust-test, cover, lint, format and gate-write's hook suite; red recorded and a cannot-be-done claim ruled through make arbiter-ask.",
+     "class": "within",
+     "why": "Verification of the requested enforcement and the standing 100% line coverage rule; no unrequested verification."
+    },
+    {
+     "id": "Approach part A item 10: 120-character cut stays",
+     "summary": "The 120-character constant is not moved; head takes the same cut after the prefixes.",
+     "class": "within",
+     "why": "Keeps an existing constant; the defect is fixed without it, so nothing defective is left."
     }
    ],
    "verdict": "CLEAR"

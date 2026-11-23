@@ -662,7 +662,8 @@ fn writes_in(
 
 /// One write found by the walk: where it lands, its class, how it was reached, the segment it is in, and the Python program it
 /// comes from (a `-c` program or one run from stdin, its body as the command line holds it; 451 T33: make-only reads which files a
-/// writer names), None for any other write.
+/// writer names), None for any other write. `head` is the segment from its command on (`command_head`): `segment` is cut at 120
+/// characters, so a command behind more than that of `VAR=value` prefixes was lost from it (451 T90).
 #[derive(Debug, Clone)]
 pub struct Target {
     pub path: Option<String>,
@@ -670,6 +671,7 @@ pub struct Target {
     pub how: &'static str,
     pub segment: String,
     pub program: Option<String>,
+    pub head: String,
 }
 
 /// The walk's answer (`walk`).
@@ -875,16 +877,15 @@ fn walk_text(
         }
         for (k, (path, how, known)) in writes.into_iter().enumerate() {
             let class = settled(path.as_deref(), &known, hint, main);
+            let blank = blanked(&showing);
+            let shown = HEREDOC_WORD.replace_all(bind::from_command(&blank), "<<BODY");
             targets.push(Target {
                 path,
                 class,
                 how,
-                segment: HEREDOC_WORD
-                    .replace_all(bind::from_command(&blanked(&showing)), "<<BODY")
-                    .chars()
-                    .take(120)
-                    .collect(),
+                segment: shown.chars().take(120).collect(),
                 program: if k == 0 { program.take() } else { None },
+                head: command_head(&shown),
             });
         }
     }
@@ -899,6 +900,33 @@ fn walk_text(
         cd_into_main,
         standing: classify(start, main),
     }
+}
+
+/// The wrappers a segment's command can stand behind, which a reader of its head reads past: the walk's own and `timeout`, with its
+/// duration (451 T79).
+pub const HEAD_WRAPPERS: [&str; 10] = [
+    "sudo", "nohup", "setsid", "env", "command", "exec", "time", "nice", "builtin", "timeout",
+];
+
+/// A segment from its command on, cut at 120 characters: its leading `VAR=value` words dropped, among the wrappers too, which are
+/// kept (451 T90: T79's `L7R_FEATURE_DIRECTORY=... L7R_PAGE_SESSION=... make rust-test` lost its `make` to the segment's cut and
+/// was refused as a shell write of `.` under a running gate, measured 2026-11-21).
+#[must_use]
+pub fn command_head(segment: &str) -> String {
+    let mut kept: Vec<&str> = Vec::new();
+    let mut rest = segment.trim_start();
+    let mut duration = false;
+    while let Some(w) = rest.split_whitespace().next() {
+        if duration || HEAD_WRAPPERS.contains(&w) {
+            kept.push(w);
+        } else if !w.contains('=') {
+            break;
+        }
+        duration = w == "timeout";
+        rest = rest[w.len()..].trim_start();
+    }
+    kept.push(rest);
+    kept.join(" ").trim().chars().take(120).collect()
 }
 
 /// `os.path.realpath`: a path that need not exist, its existing part's symlinks resolved.

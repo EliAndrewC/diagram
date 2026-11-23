@@ -299,15 +299,11 @@ fn gate_refusal(event: &Event, c: &Ctx) -> Option<String> {
 
 /// The command and, for git, its subcommand, of a walk target's segment: past `VAR=value` and the wrappers the walk reads past,
 /// `timeout` with its duration among them (451 T79: `timeout 60 make task-add` was refused as a shell write of `.`, 2026-11-21).
-fn head_of(segment: &str) -> (&str, &str) {
-    let mut words = segment.split_whitespace().peekable();
-    while let Some(w) = words.next_if(|w| {
-        w.contains('=')
-            || matches!(
-                *w,
-                "sudo" | "env" | "command" | "exec" | "nohup" | "time" | "timeout"
-            )
-    }) {
+/// It reads the target's `head`, not its `segment`, which the walk cuts at 120 characters (451 T90: a `make` behind more than that
+/// of `VAR=value` prefixes was refused as a shell write of `.`, measured 2026-11-21).
+fn head_of(head: &str) -> (&str, &str) {
+    let mut words = head.split_whitespace().peekable();
+    while let Some(w) = words.next_if(|w| crate::shared::tree::HEAD_WRAPPERS.contains(w)) {
         if w == "timeout" {
             words.next();
         }
@@ -370,7 +366,7 @@ fn shell_write(event: &Event, cmd: &str, c: &Ctx) -> Option<String> {
     };
     let walk = crate::shared::tree::walk_judged(cmd, Some(&here), "", &home);
     walk.targets.iter().find_map(|t| {
-        let (head, sub) = head_of(&t.segment);
+        let (head, sub) = head_of(&t.head);
         if t.how == "read"
             || matches!(head, "make" | "mkdir" | "rmdir" | "touch")
             || matches!(sub, "push" | "tag" | "branch")

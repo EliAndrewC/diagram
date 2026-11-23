@@ -451,6 +451,7 @@ fn a_rewrite_moves_the_write_and_is_re_judged() {
                 how: "named",
                 segment: "seg".into(),
                 program: None,
+                head: "seg".into(),
             }],
             ..named.walk.clone()
         },
@@ -491,6 +492,14 @@ fn the_walk_judges_a_python_program_run_from_stdin() {
     assert_eq!(hows(writer), ["shell"]);
     let w = walk_judged(writer, Some(&m), &m, h);
     assert_eq!(w.targets[0].segment, "python3 -  <<BODY");
+    assert_eq!(w.targets[0].head, "python3 -  <<BODY");
+    // 451 T90: the head keeps the command past more than the segment's 120 characters of `VAR=value` prefixes, the wrappers
+    // and `timeout`'s duration kept, the prefixes among them dropped
+    let long = format!("A={} env B=1 timeout 60 make x > out.log", "a".repeat(130));
+    let w = walk_judged(&long, Some(&m), &m, h);
+    assert!(!w.targets[0].segment.contains("make"));
+    assert_eq!(w.targets[0].head, "env timeout 60 make x > out.log");
+    assert_eq!(super::command_head("A=1 B=2"), "");
     // the readers of a walk's paths (house style, make-only, the bench) see no stdin program, as before: house style's D11
     assert!(walk(writer, Some(&m), &m, h).targets.is_empty());
     assert!(hows(reader).is_empty());
