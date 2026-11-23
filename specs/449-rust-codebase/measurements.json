@@ -1307,5 +1307,192 @@
    "granary_ft": [50, 36],
    "genkan_ft": [12, 9]
   }
- }
+ },
+  "t312-rt-e1": {
+    "quantity": "the office hall's south door against the magistrate's dais, in ft along the hall",
+    "observed": "2026-11-22",
+    "verifies": "E1",
+    "subject": "building-review--ochiba-roundtrip-test",
+    "answers": "8198de677351",
+    "source": "pool/magistracies/ochiba-roundtrip-test/ochiba-roundtrip-test.compound.json",
+    "command": "make map MAP=pool/magistracies/ochiba-roundtrip-test && make rust-test CRATE=rust/mode_a",
+    "method": "the hall's S door at 0.92 of its 120 ft and the dais room x 51 w 18 read from the compound.json; the door 41 ft east of the dais's end",
+    "value": {
+      "south_door_ft": 110.4,
+      "dais_ft": [
+        51,
+        69
+      ]
+    }
+  },
+  "t312-rt-n1": {
+    "quantity": "the armory as drawn against research[5]",
+    "observed": "2026-11-22",
+    "verifies": "N1",
+    "subject": "building-review--ochiba-roundtrip-test",
+    "answers": "8198de677351",
+    "source": "pool/magistracies/ochiba-roundtrip-test/ochiba-roundtrip-test.compound.json",
+    "command": "make map MAP=pool/magistracies/ochiba-roundtrip-test && make rust-test CRATE=rust/mode_a",
+    "method": "the armory room's w and h in the compound.json against research[5]'s restated 14 x 16.7 ft",
+    "value": {
+      "armory_ft": [
+        14,
+        16.7
+      ],
+      "research5_ft": [
+        14,
+        16.7
+      ]
+    }
+  },
+  "t312-rt-n2": {
+    "quantity": "docs/building-programs.md's two rear-yard lines agree",
+    "observed": "2026-11-22",
+    "verifies": "N2",
+    "subject": "building-review--ochiba-roundtrip-test",
+    "answers": "8198de677351",
+    "source": "docs/building-programs.md",
+    "command": "make building-programs",
+    "method": "the rear-yard claim and the rear service strip bullet of docs/building-programs.md read side by side: both cite the Higuchi rear yard",
+    "value": {
+      "agree": true
+    }
+  },
+  "t312-rt-o1": {
+    "quantity": "the clerks' room is a room of the office hall, no building of its own",
+    "observed": "2026-11-22",
+    "verifies": "O1",
+    "subject": "building-review--ochiba-roundtrip-test",
+    "answers": "8198de677351",
+    "source": "pool/magistracies/ochiba-roundtrip-test/ochiba-roundtrip-test.compound.json",
+    "command": "make map MAP=pool/magistracies/ochiba-roundtrip-test && make rust-test CRATE=rust/mode_a",
+    "method": "the compound.json's buildings listed: no clerks' room building; the hall's back row holds it at x 46 w 26",
+    "value": {
+      "clerks_room_buildings": 0,
+      "clerks_room_in_hall_ft": [
+        46,
+        72
+      ]
+    }
+  },
+  "t312-rt-o2": {
+    "quantity": "a rear door of the office hall toward the household gate",
+    "observed": "2026-11-22",
+    "verifies": "O2",
+    "subject": "building-review--ochiba-roundtrip-test",
+    "answers": "8198de677351",
+    "source": "pool/magistracies/ochiba-roundtrip-test/ochiba-roundtrip-test.compound.json",
+    "command": "make map MAP=pool/magistracies/ochiba-roundtrip-test && make rust-test CRATE=rust/mode_a",
+    "method": "the hall's doors in the compound.json: a N door at 0.95, toward the nakamon",
+    "value": {
+      "north_door_at": 0.95
+    }
+  },
+  "t312-rt-o3": {
+    "quantity": "a postern for the night-soil collector",
+    "observed": "2026-11-22",
+    "verifies": "O3",
+    "subject": "building-review--ochiba-roundtrip-test",
+    "answers": "8198de677351",
+    "source": "pool/magistracies/ochiba-roundtrip-test/ochiba-roundtrip-test.compound.json",
+    "command": "make map MAP=pool/magistracies/ochiba-roundtrip-test && make rust-test CRATE=rust/mode_a",
+    "method": "the compound.json's gates: a N-wall side gate at 60 ft, 6 ft wide, onto the rear yard (a GUESS, its research line)",
+    "value": {
+      "side_gate": {
+        "wall": "N",
+        "at_ft": 60,
+        "width_ft": 6
+      }
+    }
+  },
+  "t312-county-q2": {
+    "quantity": "a room behind the genkan porch",
+    "observed": "2026-11-22",
+    "verifies": "Q2",
+    "subject": "building-review--county-magistracy-example",
+    "answers": "3a196689bc83",
+    "source": "pool/magistracies/county-magistracy-example/county-magistracy-example.compound.json",
+    "command": "make map MAP=pool/magistracies/county-magistracy-example && make rust-test CRATE=rust/mode_a",
+    "method": "the hall's rooms in the compound.json (a genkan room at x 115 w 12, full depth) and the test the_county_examples_office_hall_has_its_genkan expecting 5 genkan-tagged elements, green",
+    "value": {
+      "genkan_room_ft": {
+        "x": 115,
+        "w": 12,
+        "h": 38
+      },
+      "genkan_tagged_elements": 5
+    }
+  },
+  "t312-county-n1": {
+    "quantity": "the rear ground's record against 0118",
+    "observed": "2026-11-22",
+    "verifies": "N1",
+    "subject": "building-review--county-magistracy-example",
+    "answers": "3a196689bc83",
+    "source": "pool/magistracies/county-magistracy-example/county-magistracy-example.notes.md",
+    "command": "make map MAP=pool/magistracies/county-magistracy-example && make rust-test CRATE=rust/mode_a",
+    "method": "the county notes' 2026-11-22 entry read: the rear ground named after 0118's sedo, the vegetable garden's site roll re-run with it admitted (lands west), its band recorded as the Higuchi rear yard's",
+    "value": {
+      "notes_entry": "2026-11-22, feature 449 T313-T316, T314, T320"
+    }
+  },
+  "t312-county-n2": {
+    "quantity": "who the barracks' fifteen are",
+    "observed": "2026-11-22",
+    "verifies": "N2",
+    "subject": "building-review--county-magistracy-example",
+    "answers": "3a196689bc83",
+    "source": "pool/magistracies/county-magistracy-example/county-magistracy-example.notes.md",
+    "command": "make map MAP=pool/magistracies/county-magistracy-example && make rust-test CRATE=rust/mode_a",
+    "method": "the county notes' 2026-11-22 entry read: the fifteen are the standing ashigaru contingent, apart from the ~15 working samurai of the staffing anchor",
+    "value": {
+      "notes_entry": "2026-11-22, feature 449 T320 N2"
+    }
+  },
+  "t312-county-e1": {
+    "quantity": "the county notes' R18 granary size against the drawn granary",
+    "observed": "2026-11-22",
+    "verifies": "E1",
+    "subject": "building-review--county-magistracy-example",
+    "answers": "3a196689bc83",
+    "source": "pool/magistracies/county-magistracy-example/county-magistracy-example.notes.md",
+    "command": "make map MAP=pool/magistracies/county-magistracy-example",
+    "method": "notes L63-65 read: R18 gives the granary 50 x 36 ft in the registry's band (types.json, feature 449 T309), as drawn (150 x 108 px at 3 px per ft)",
+    "value": {
+      "notes_ft": [
+        50,
+        36
+      ],
+      "drawn_ft": [
+        50,
+        36
+      ]
+    }
+  },
+  "t312-ubame-e1": {
+    "quantity": "Ubame's knob 4 against the drawn armory",
+    "observed": "2026-11-22",
+    "verifies": "E1",
+    "subject": "building-review--ubame-magistracy",
+    "answers": "c4410982d921",
+    "source": "pool/magistracies/ubame-magistracy/ubame-magistracy.notes.md",
+    "command": "make map MAP=pool/magistracies/ubame-magistracy",
+    "method": "notes knob 4 (L18) read: 'No watchtower, no azuchi; the armory is the gate range's west room, the armory-site knob rolled', as the sheet draws armory-1 in the gate range's west room",
+    "value": {
+      "knob4_names_armory": true
+    }
+  },
+  "t312-ubame-n1": {
+    "quantity": "Ubame's guardroom entry against the drawn west room",
+    "observed": "2026-11-22",
+    "verifies": "N1",
+    "subject": "building-review--ubame-magistracy",
+    "answers": "c4410982d921",
+    "source": "pool/magistracies/ubame-magistracy/ubame-magistracy.notes.md",
+    "command": "make map MAP=pool/magistracies/ubame-magistracy",
+    "method": "notes L43 read: the west room is the ARMORY by the armory-site knob's roll, citing 0093; the guess now names only its former use as a gate-keepers' room, the stale '(the west room's use a guess)' tail gone",
+    "value": {
+      "stale_tail": false
+    }
+  }
 }

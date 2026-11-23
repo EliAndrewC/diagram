@@ -1,19 +1,15 @@
-About: A tally office was most likely where goods passing through an office's hands were counted or weighed, sealed
-and written into a tally - the written account of goods the office oversaw but did not own. Such an office's hold on
-goods it neither carried nor owned was probably a written one: counts, seals and records.
+About: What a tally office did, whether it was a building of its own, what it looked like, how large it was and how many worked in it are not recorded.
 
-The trade it served is better known. On the sea route to Edo the shogunate's tax rice went on ships it hired directly,
-flying an official pennant, and the intendants set up stations at the ports of call to protect the ships and inspect
-their loads strictly. In Japan the ton'ya were wholesalers who were also warehouse-keepers and
-shipping agents, and charcoal was probably their stock. A bale of charcoal had no standard size, so charcoal was probably sold by weight, and a sealed record
-of what a load weighed was probably worth having.
-
-Whether a tally office was a building of its own, what it looked like, how large it was and how many worked in it are
-not recorded.
+On the sea route to Edo the shogunate's tax rice went on ships it hired directly, flying an official pennant, and the
+intendants set up stations at the ports of call to protect the ships and inspect their loads strictly. In Japan the
+ton'ya were wholesalers who were also warehouse-keepers and shipping agents, and charcoal was probably their stock; a
+bale of charcoal had no standard size.
 
 Guesses:
 - That the tally was made in an office or shed of its own on the goods' way out: no account describes one; it is
   inferred from the inspections and records the trade needed.
+- That goods passing through an office's hands were counted or weighed and written into a tally there - the written
+  account of goods the office oversaw but did not own: no account of such an office's work was found.
 
 Depiction: The plan draws the tally office as a small building on the route goods take, between the store and the way
 out, with the weighing floor beside it where there is one.

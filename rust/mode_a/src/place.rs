@@ -448,6 +448,7 @@ fn name_of(meta: &Map<String, Value>) -> String {
 /// Research:
 ///     windbreak toward the winter wind - research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.html, research/questions/0072-shelter-belts-on-a-villages-windward-side-bofurin.drawing.html:
 ///         the regional northwest unless a local wind is declared, the belt on the north and west or one of the two - so a regional quarter is NW, N or W
+///     a declared northwest wind - NONE: a declared wind from the quarter the region's own wind blows from names that wind, so its card reads as the regional one rather than as departing from itself (449 T317)
 #[must_use]
 pub fn windbreak_default(meta: &Map<String, Value>) -> String {
     let quarter = meta
@@ -457,7 +458,13 @@ pub fn windbreak_default(meta: &Map<String, Value>) -> String {
     let Some(&(_, wind)) = WIND_NAMES.iter().find(|(k, _)| *k == quarter) else {
         return String::new();
     };
-    match meta.get("wind_source").and_then(Value::as_str) {
+    // 449 T317: a declared wind from the northwest is the region's own wind, so it prints as the regional one rather than as departing
+    // from itself; a declared north or west wind still departs from the northwesterly one
+    let source = match meta.get("wind_source").and_then(Value::as_str) {
+        Some("declared") if quarter == REGIONAL_QUARTERS[0] => Some("regional"),
+        other => other,
+    };
+    match source {
         Some("regional") if !REGIONAL_QUARTERS.contains(&quarter.as_str()) => String::new(),
         Some("regional") => format!(
             "Here the belt stands toward the {wind} of the houses, the side the winter wind across this region blows from; {} has no local wind patterns that would call for a different orientation from the norm.",

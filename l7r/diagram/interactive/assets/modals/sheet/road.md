@@ -1,7 +1,7 @@
 About: The road at a magistrate's compound was the road or street the compound stood on, and its main gate opened onto
 it. A Japanese seat was often built beside a village or town already there, probably
 at its edge, while the Chinese county yamen stood inside its town, on the main street. Under the Qing a local government
-office faced south, by regulation; which way a Japanese seat's gate faced is not recorded.
+office faced south, after the old ritual idea of sitting to the north and facing south; which way a Japanese seat's gate faced is not recorded.
 
 Japan's great highways were lined with avenues of pine and cedar, with a mound raised at every ri, about 2.4 miles, to mark
 the distance. They were earth dressed with sand and gravel, though never everywhere, and rain turned them to mud; a lesser
@@ -18,7 +18,8 @@ Guesses:
 
 Depiction: The plan draws the road the compound stands on as a band of bare ground coming in from the sheet's edge, its main gate opening onto it, and narrower
 lanes to the lesser gates. A highway is drawn in the same earth tone as a lesser road: its dressing of sand and gravel was
-earth-colored at a plan's scale.
+earth-colored at a plan's scale. The light and dark bands across the road are a map drawing convention, a texture that
+marks the ground as road; they stand for no ruts, paving or steps, since the road itself was earth.
 
 Name: road
 Covers: the approach road or town street, the lanes to the lesser doors, and a road across a border

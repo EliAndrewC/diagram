@@ -141,3 +141,23 @@ fn a_regional_wind_is_the_northwest_or_one_of_its_two_sides() {
         assert!(declared, "{q}");
     }
 }
+
+/// FIXED (feature 449 T317): a record declaring a local wind from the northwest printed "a local wind from the northwest that departs
+/// from the region's northwesterly winter wind", the card contradicting itself. A declared wind from the region's own quarter is the
+/// regional wind, so its card says so; a declared north or west wind still departs from the northwesterly one.
+#[test]
+fn a_declared_northwest_wind_is_the_regions_own() {
+    let card = |q: &str, src: &str| {
+        super::windbreak_default(
+            json!({"windward": q, "wind_source": src, "name": "Kitamura"})
+                .as_object()
+                .unwrap(),
+        )
+    };
+    assert_eq!(card("NW", "declared"), card("NW", "regional"));
+    assert!(!card("NW", "declared").contains("departs"));
+    for q in ["N", "W"] {
+        let declared = card(q, "declared");
+        assert!(declared.contains("departs from the region's northwesterly"));
+    }
+}

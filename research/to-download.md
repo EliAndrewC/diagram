@@ -4232,3 +4232,19 @@ New items go here, newest at the bottom, so you can always resume from wherever 
 - Fallback: [a Google search for the page](https://www.google.com/search?q=%E4%B8%83%E5%A0%82%E4%BC%BD%E8%97%8D+%E3%83%9B%E3%83%BC%E3%83%A0%E3%83%A1%E3%82%A4%E3%83%88+%E5%A4%A7%E5%8B%A2%E3%81%AE%E5%83%A7%E4%BE%B6%E3%81%8C%E4%BD%8F%E3%82%80%E5%A4%A7%E3%81%8D%E3%81%AA%E3%81%8A%E5%AF%BA%E3%81%AE%E3%81%BF)
 - **Rests on it:** research/questions/0229-village-temples-tera.html - the note homemate-shichido-garan-5 (most village temples had only a main hall and a bell tower) is read today from the archived copy of 2026-10-02.
 - Blocked by: the site's host returns 503 to the container (2026-11-22); the archived copy reads verbatim, but a fresh copy keeps the citation readable if the host stays down.
+
+### 334. [diagram] Baidu Baike, 平遥县衙 ("The Pingyao county yamen", title translated), the encyclopedia entry
+
+- Mark: [ ] downloaded | [ ] partial (abstract or excerpt) | [ ] paywalled | [ ] not found
+- [ ] Found elsewhere (only with downloaded or partial) - where:
+- Saved as (optional, the file's name):
+
+- Mark: [ ] downloaded | [ ] partial (abstract or excerpt) | [ ] paywalled | [ ] not found
+- [ ] Found elsewhere (only with downloaded or partial) - where:
+- Saved as (optional, the file's name):
+
+- **[the page](https://baike.baidu.com/item/%E5%B9%B3%E9%81%A5%E5%8E%BF%E8%A1%99/2409876)**
+- The whole page as a saved web page (or a PDF print of it): its walk through the compound's gates, halls, offices and prisons as Yang Tingmo rebuilt it in 1619 - the great hall's end bays as the money-and-grain store and the armory, the county granary north of the official quarters, the drum under the main gate.
+- Fallback: [a Google search for the page](https://www.google.com/search?q=%E5%B9%B3%E9%81%A5%E5%8E%BF%E8%A1%99+%E7%99%BE%E5%BA%A6%E7%99%BE%E7%A7%91)
+- **Rests on it:** research/questions/0123-the-magistrates-manor-in-a-town-where-it-stands-and-which-way-it-faces-jinya-and-yamen.html and research/questions/0093-the-main-gate-and-its-gatekeepers-nagaya-mon.drawing.html - the pingyao-yamen notes are read today only from the archived copy of 2026-10-02 (quote-check on 0093, 2026-11-22).
+- Blocked by: baike.baidu.com returns 403 to the container (2026-11-22); the archived copy reads verbatim, but a fresh copy keeps the citation readable.

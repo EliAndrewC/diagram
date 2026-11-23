@@ -5,14 +5,15 @@ alongside, a watch hut at the head of the steps and a small shrine for the boatm
 In Edo-period Japan a river landing (kashi) was its boat moorings and an unloading ground, and from the Edo period on wholesalers
 and their storehouses gathered at one; new landings were set up under the lords to ship the tax rice to Edo and Osaka. The
 shogunate's own rice went by sea on ships it hired directly, flying an official pennant and inspected at the ports of call. A
-county office most likely did the same on its river, owning no boats and keeping its hold on the grain by counts and records.
+county office most likely did the same on its river, owning no boats.
 
 Samurai residences on Hiroshima's rivers stood back from the bank behind their walls, and are thought to have had no gate
-opening straight onto the steps.
+opening straight onto the steps, as this compound's does.
 
 Guesses:
 - That the landing is the compound's own rather than a public one: no account of an official's compound with a landing of its
   own was found.
+- That the office kept its hold on the grain it shipped by counts and records: no account of how a county office kept track of grain it did not carry was found.
 
 Depiction: The label names the landing as a whole; its faced bank with the steps cut into it, the barge, the watch hut and
 the boatmen's shrine are each drawn as their own feature. No pier is drawn: an official's compound gets one only where its

@@ -10,7 +10,7 @@ ft across; the Mikazuki domain's main gate was one, of timber, gabled and roofed
 Gatekeepers sat in a room of the gate range or, as at Takayama, in a gatehouse of their own, a gabled building of one story; at Matsue a samurai house's gate range housed its gatekeepers and servants. How many gatekeepers kept a Japanese office's gate is not recorded.
 
 A Chinese county office's gate was a roofed building, three bays wide at a county seat (a lesser office's one), with
-two black-lacquered leaves in each bay, and a Chinese office faced south by regulation. How wide a Chinese office's gate was is not recorded.
+two black-lacquered leaves in each bay, and a Chinese office faced south, as old ritual held it should. How wide a Chinese office's gate was is not recorded.
 
 Guesses:
 - A Chinese office's gate drawn 18 to 24 ft wide: no record gives such a gate's width.
