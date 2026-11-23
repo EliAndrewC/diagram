@@ -188,14 +188,21 @@ fn change_lines(c: &Change, parts: &mut Vec<String>) {
         ));
     }
     parts.extend(c.added.iter().map(|w| format!("New:\n  NEW: {w}\n")));
+    for (old, new) in &c.moved_edited {
+        parts.push(format!(
+            "Moved with edits (to a page these pop-ups reach):\n  OLD: {old}\n  NEW: {new}\n  WORD DIFF: {}\n",
+            change::word_diff(old, new)
+        ));
+    }
     parts.extend(
         c.removed
             .iter()
+            .filter(|w| !c.moved_edited.iter().any(|(o, _)| o == *w))
             .map(|w| format!("Removed (no longer on the page):\n  OLD: {w}\n")),
     );
     if !c.keys_gone.is_empty() {
         parts.push(format!(
-            "Note keys no longer on the page: {}\n",
+            "Note keys no longer on the page or a page it points to: {}\n",
             c.keys_gone.join(", ")
         ));
     }
@@ -207,7 +214,7 @@ fn manifest_parts(by_page: &ByPage, blocks: &Changed, modals: &[(String, Modal)]
     let mut parts = vec![
         "# Triage of pop-up checks (feature 375, FR-001; feature 451 T186)\n".to_owned(),
         "owed-checks: modal-triage\n".to_owned(),
-        "For the `modal-triage` agent: rule on each pop-up below as your contract says, and reply in its form. Comment, markup, link and footnote-marker edits, and blocks a split moved, were cleared by the tool and are not shown.\n".to_owned(),
+        "For the `modal-triage` agent: rule on each pop-up below as your contract says, and reply in its form. Comment, markup, link and footnote-marker edits, and blocks a split moved verbatim, were cleared by the tool and are not shown; a block a split moved with an edit is shown as moved, with its diff.\n".to_owned(),
     ];
     let mut shown: std::collections::BTreeSet<&str> = std::collections::BTreeSet::new();
     for (key, popups) in by_page {
@@ -331,12 +338,15 @@ fn unit_changes(
         if reading.before[i].1 == reading.now[i].1 {
             continue;
         }
-        let mut c = change::page_change(
-            &reading.before[i].1,
-            &reading.now[i].1,
-            &Reading::words(&reading.now, path),
+        let (old, fresh) = (&reading.before[i].1, &reading.now[i].1);
+        let reached = Reading::words(&reading.now, path);
+        let (mut c, why) = judged(
+            old,
+            fresh,
+            &reached,
             &Reading::words(&reading.before, path),
-            &[],
+            &|k| check != DEPICTION_CHECK && sources.contains(k),
+            &popup_text(m),
         );
         if !c.removed.is_empty() {
             let pages = u.elsewhere.get_or_insert_with(|| record_words(root));
@@ -356,33 +366,52 @@ fn unit_changes(
             u.unpointed
                 .extend(c.unpointed.iter().map(|(_, to)| format!("{path} -> {to}")));
         }
-        c.keys_gone
-            .retain(|k| check != DEPICTION_CHECK && sources.contains(k.as_str()));
-        let page_now: Vec<String> = read_page(&reading.now[i].1)
-            .blocks
-            .into_iter()
-            .map(|b| b.words)
-            .collect();
-        let reached = Reading::words(&reading.now, path);
-        if (c.is_clear() && c.keys_gone.is_empty())
-            || change::fires(
-                &c,
-                &page_now,
-                &reached,
-                &popup_text(m),
-                &change::new_findings(&reading.before[i].1, &reading.now[i].1),
-            )
-            .is_none()
-        {
+        if why.is_none() {
             continue;
         }
         let digest = super::units::digest(&[&format!(
             "{:?}",
-            (&c.pairs, &c.added, &c.removed, &c.keys_gone)
+            (
+                &c.pairs,
+                &c.added,
+                &c.removed,
+                &c.keys_gone,
+                &c.moved_edited
+            )
         )]);
         owed_pages.push(((path.clone(), baseline(store, slug, path), digest), c));
     }
     Ok(owed_pages)
+}
+
+/// One page's change for one pop-up reading `popup`, after the tool's clears and a split's moves, its note keys kept where `cited`,
+/// and why it still owes the pop-up its triage, or None: the one judgment the bundle and the landing's replay share (feature 451 T194).
+fn judged(
+    old: &str,
+    fresh: &str,
+    reached_now: &HashSet<String>,
+    reached_before: &HashSet<String>,
+    cited: &dyn Fn(&str) -> bool,
+    popup: &str,
+) -> (Change, Option<String>) {
+    let mut c = change::page_change(old, fresh, reached_now, reached_before, &[]);
+    c.keys_gone.retain(|k| cited(k));
+    if c.is_clear() && c.keys_gone.is_empty() {
+        return (c, None);
+    }
+    let page_now: Vec<String> = read_page(fresh)
+        .blocks
+        .into_iter()
+        .map(|b| b.words)
+        .collect();
+    let why = change::fires(
+        &c,
+        &page_now,
+        reached_now,
+        popup,
+        &change::new_findings(old, fresh),
+    );
+    (c, why)
 }
 
 /// Answer a unit the tool cleared, keeping the pages it read so its next triage diffs against them.
@@ -445,6 +474,16 @@ pub fn replay_landing(root: &Path, commit: &str) -> Result<String, Fail> {
     })
     .map(str::to_owned)
     .collect();
+    let mut texts: HashMap<(bool, String), String> = HashMap::new();
+    let mut text = |at_commit: bool, page: &str| -> String {
+        texts
+            .entry((at_commit, page.to_owned()))
+            .or_insert_with(|| {
+                let rev = if at_commit { commit } else { parent.as_str() };
+                git(root, &["show", &format!("{rev}:{page}")])
+            })
+            .clone()
+    };
     let mut out = String::new();
     for (uid, m) in modals::modals_at(root, &parent, false)?.iter() {
         let reads: Vec<String> = m
@@ -452,25 +491,38 @@ pub fn replay_landing(root: &Path, commit: &str) -> Result<String, Fail> {
             .into_iter()
             .chain(m.drawing_files())
             .collect();
-        let sources: HashSet<&str> = m.tag("Sources").split(',').map(str::trim).collect();
-        for page in changed.iter().filter(|p| reads.contains(p)) {
-            let (old, new) = (
-                git(root, &["show", &format!("{parent}:{page}")]),
-                git(root, &["show", &format!("{commit}:{page}")]),
-            );
-            let mut c = change::page_change(&old, &new, &HashSet::new(), &HashSet::new(), &[]);
-            c.keys_gone.retain(|k| sources.contains(k.as_str()));
-            let page_now: Vec<String> = read_page(&new)
-                .blocks
-                .into_iter()
-                .map(|b| b.words)
+        // the pages the pop-up reaches at each side: its own and their pointers' targets, as the bundle's `followed` reads them
+        let mut reach = |at_commit: bool| -> Vec<(String, String)> {
+            let mut pages: Vec<(String, String)> = reads
+                .iter()
+                .map(|p| (p.clone(), text(at_commit, p)))
                 .collect();
-            let why = change::fires(
-                &c,
-                &page_now,
-                &HashSet::new(),
+            let targets: Vec<String> = pages
+                .iter()
+                .flat_map(|(_, t)| change::pointer_targets(t))
+                .collect();
+            for t in targets {
+                if !pages.iter().any(|(p, _)| *p == t) {
+                    let body = text(at_commit, &t);
+                    pages.push((t, body));
+                }
+            }
+            pages
+        };
+        let (now, before) = (reach(true), reach(false));
+        let sources: HashSet<&str> = m.tag("Sources").split(',').map(str::trim).collect();
+        for (page, new) in now.iter().filter(|(p, _)| changed.contains(p)) {
+            let old = before
+                .iter()
+                .find(|(p, _)| p == page)
+                .map_or_else(|| text(false, page), |(_, t)| t.clone());
+            let (_, why) = judged(
+                &old,
+                new,
+                &Reading::words(&now, page),
+                &Reading::words(&before, page),
+                &|k| sources.contains(k),
                 &popup_text(m),
-                &change::new_findings(&old, &new),
             );
             let _ = writeln!(
                 out,

@@ -366,7 +366,7 @@ fn a_move_with_no_pointer_and_a_cited_key_gone_go_to_the_agent() {
     let (got, _) = super::bundle_in(&root, &root.join("tri"), "", &s).unwrap();
     let text = std::fs::read_to_string(got.unwrap().0).unwrap();
     assert!(
-        text.contains("Note keys no longer on the page: k")
+        text.contains("Note keys no longer on the page or a page it points to: k")
             && text.contains("OLD: An unmarked claim.")
             && text.contains(&format!("{PAGE} -> {other}"))
             && text.contains("<a class=\"moved\" href=\"NNNN-<slug>.html\">")
@@ -393,4 +393,55 @@ fn a_landing_replays_through_the_filter() {
         super::replay_landing(&root, "no-such-rev"),
         Ok(_) | Err(_)
     ));
+}
+
+/// T184's shape (feature 451 T194): a page split to a new one with its pointer - a marked block moved verbatim, a block moved with a
+/// small edit, a block moved with a gloss inserted. `hamlet/well` cites the moved key and repeats only unchanged words; `bamboo--both`
+/// repeats the glossed sentence's neighbors.
+fn split_like_t184(tag: &str) -> l7r_gate_core::checks::TempDir {
+    let root = fixture(tag);
+    put(&root, WELL, "Name: Well\nAbout: A well in the yard. It is lined with cedar planks.\nGuesses: - a guess\nSources: k2\nEntry: research/questions/0094-trade.html\nDepiction: Drawn round.\nDrawing: research/questions/0094-trade.drawing.html\n");
+    put(&root, "l7r/diagram/interactive/assets/modals/choice/bamboo--both.md", "Name: Bamboo\nAbout: The first wells were dug here.\nEntry: research/questions/0094-trade.html\n");
+    put(&root, PAGE, "<h2 id=\"t\">Trade</h2>\n<p class=\"intro\">Why it is asked.</p>\n<p>A short way apart.<sup class=\"fn\" data-note=\"k\"></sup> More here.</p>\n<p>The well was dug of stone by the elders.<sup class=\"fn\" data-note=\"k2\"></sup></p>\n<p>The yard well was lined with cedar planks long ago.</p>\n<p>The first wells were dug of whatever stone lay near.</p>\n");
+    let base = crate::record::testkit::commit(&root, "before the split");
+    put(&root, ".git/refs/remotes/origin/main", &format!("{base}\n"));
+    put(&root, PAGE, "<h2 id=\"t\">Trade</h2>\n<p class=\"intro\">Why it is asked.</p>\n<p>A short way apart.<sup class=\"fn\" data-note=\"k\"></sup> More here.</p>\n<p>Its account is now at <a class=\"moved\" href=\"0331-where.html\">Where</a>.</p>\n");
+    put(&root, SPLIT_TO, "<h2 id=\"w\">Where</h2>\n<p>The well was dug of stone by the elders.<sup class=\"fn\" data-note=\"k2\"></sup></p>\n<p>The yard well was lined with cedar planks in old times.</p>\n<p>The first wells (ido) were dug of whatever stone lay near.</p>\n");
+    root
+}
+
+/// Feature 451 T194, red first: T184's split re-owed every pop-up reading the source - its cited key read as gone though it moved with
+/// its block, and a block moved with an edit compared with an unrelated sentence - and the MANIFEST showed the moved blocks as removed.
+#[test]
+fn a_split_like_t184_s_owes_only_the_pop_up_repeating_changed_words() {
+    let root = split_like_t184("triage-t184");
+    let s = store(&root);
+    let (got, _) = super::bundle_in(&root, &root.join("tri"), "", &s).unwrap();
+    let text = std::fs::read_to_string(got.unwrap().0).unwrap();
+    assert!(units_of(&root, "hamlet/well").is_empty(), "{text}");
+    assert!(text.contains("UID `choice/bamboo--both`") && !text.contains("UID `hamlet/well`"));
+    assert!(text.contains("Moved with edits") && text.contains("wells {+(ido)+} were"));
+    assert!(!text.contains("Removed (no longer on the page):\n  OLD: The first wells"));
+    assert!(!text.contains("Note keys no longer on the page"));
+}
+
+/// Feature 451 T194, red first: the replay of a landing follows the source page's pointers, so it models a split as the bundle does.
+#[test]
+fn a_landing_s_replay_follows_a_split_s_pointers() {
+    let root = split_like_t184("triage-t184-replay");
+    let landing = crate::record::testkit::commit(&root, "the split");
+    let r = root.to_string_lossy().into_owned();
+    let out = cli(&args(&["--root", &r, "replay", "--landing", &landing])).stdout;
+    let bamboo = format!(
+        "choice/bamboo--both\tfires\t{PAGE}\tit repeats words changed in \"the first wells were"
+    );
+    let well = [
+        format!("hamlet/well\tcleared\t{PAGE}\t\n"),
+        format!("hamlet/well\tcleared\t{SPLIT_TO}\t\n"),
+    ];
+    let got = (
+        out.contains(&bamboo),
+        well.iter().all(|w| out.contains(w.as_str())),
+    );
+    assert_eq!(got, (true, true), "{out}");
 }

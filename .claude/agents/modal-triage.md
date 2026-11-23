@@ -22,8 +22,9 @@ only its pages and pop-ups (feature 383 amendment 6).
 
 Read the bundle's `MANIFEST.md` and nothing else unless it names a file beside it; never read anything in the repository. The
 MANIFEST has a section per page that changed since the pop-ups under it were last checked: each CHANGED block with its OLD and
-NEW text and a WORD DIFF (`[-removed-]`, `{+added+}`), each block NEW outright, each block REMOVED outright, and any note key no
-longer on the page that a pop-up's `Sources:` names; then the UIDs of the pop-ups reading it and the checks owed each. At the
+NEW text and a WORD DIFF (`[-removed-]`, `{+added+}`), each block NEW outright, each block REMOVED outright, each block MOVED WITH
+EDITS to a page the pop-up still reaches (its OLD, its NEW there and a WORD DIFF: only the diff's words changed), and any note key
+neither on the page nor on a page it points to that a pop-up's `Sources:` names; then the UIDs of the pop-ups reading it and the checks owed each. At the
 end, each pop-up WHOLE: its About, Guesses, Depiction, Sources, Entry and Drawing.
 
 ## How you decide

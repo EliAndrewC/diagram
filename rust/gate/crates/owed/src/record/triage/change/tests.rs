@@ -275,3 +275,64 @@ fn the_echo_fires_on_words_a_rewrite_gained_that_the_claim_repeats() {
         None
     );
 }
+
+/// Feature 451 T194, red first (T184's split of 0009 to 0332): a note key whose marked block moved to the page a pointer reaches is
+/// not gone; on no page the reader reaches, it is.
+#[test]
+fn a_note_key_moved_with_its_block_is_not_gone() {
+    let old = format!("<p>Kept.</p><p>The rick stood on a barley paddy.{MARK}</p>");
+    let fresh = "<p>Kept.</p><p>Now at <a class=\"moved\" href=\"0332-w.html\">where</a>.</p>";
+    let dest = format!("<p>The rick stood on a barley paddy.{MARK}</p>");
+    let c = page_change(&old, fresh, &block_words(&dest), &none(), &[]);
+    assert!(c.keys_gone.is_empty() && c.is_clear(), "{c:?}");
+    assert_eq!(change(&old, fresh).keys_gone, vec!["k".to_owned()]);
+}
+
+/// Feature 451 T194, red first (T184's split of 0059 to 0333): a sentence moved with a small edit is compared with its moved self, so
+/// only its changed words count; an inserted gloss marks its neighbors, the echo rule as written (T184's "(seki)", a measured edge).
+#[test]
+fn a_sentence_moved_with_an_edit_is_compared_with_its_moved_self() {
+    let old = vec!["The yard well was lined with cedar planks long ago.".to_owned()];
+    let page_now = vec!["An unrelated sentence of the source page stays.".to_owned()];
+    let reached: HashSet<String> =
+        ["The yard well was lined with cedar planks in old times.".to_owned()].into();
+    assert!(super::echo(&old, &page_now, &reached, "It is lined with cedar planks.").is_none());
+    assert!(super::echo(
+        &old,
+        &page_now,
+        &reached,
+        "Lined with cedar planks long ago."
+    )
+    .is_some());
+    let first = vec!["The first wells were dug of whatever stone lay near.".to_owned()];
+    let glossed: HashSet<String> =
+        ["The first wells (ido) were dug of whatever stone lay near.".to_owned()].into();
+    assert!(super::echo(
+        &first,
+        &page_now,
+        &glossed,
+        "The first wells were dug here."
+    )
+    .is_some());
+}
+
+/// Feature 451 T194: a block moved with an edit is shown as moved, paired with its version on the reached page, and stays owed; one
+/// whose only edit is a marker is moved whole; a block on the reached page before is no arrival.
+#[test]
+fn a_block_moved_with_an_edit_is_paired_with_its_moved_self() {
+    let old = "<p>Kept.</p><p>The first wells were dug of whatever stone lay near.</p>";
+    let fresh = "<p>Kept.</p><p>Now at <a class=\"moved\" href=\"0332-w.html\">where</a>.</p>";
+    let moved = "The first wells were dug of whatever stone lay near.".to_owned();
+    let glossed = "The first wells (ido) were dug of whatever stone lay near.".to_owned();
+    let farther = "The first wells (ido) were dug of whatever stone lay near here.".to_owned();
+    let dest: HashSet<String> = [glossed.clone(), farther, "Far off.".to_owned()].into();
+    let c = page_change(old, fresh, &dest, &none(), &[]);
+    assert_eq!(c.moved_edited, vec![(moved.clone(), glossed)]);
+    assert_eq!(c.removed, vec![moved.clone()]);
+    assert!(page_change(old, fresh, &dest, &dest, &[])
+        .moved_edited
+        .is_empty());
+    let marked: HashSet<String> = [format!("{moved} [^k]")].into();
+    let c = page_change(old, fresh, &marked, &none(), &[]);
+    assert!(c.is_clear() && c.moved == 1, "{c:?}");
+}

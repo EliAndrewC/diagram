@@ -29,6 +29,8 @@ static POINTER: LazyLock<Regex> = LazyLock::new(|| {
     )
 });
 static DIGIT: LazyLock<Regex> = LazyLock::new(|| re(r"\d"));
+/// A note mark's key as a block's words carry it, `[^key]`.
+static KEY: LazyLock<Regex> = LazyLock::new(|| re(r"\[\^([^\]\s]+)\]"));
 /// A Markdown link or image, `[text](target)`: its text kept.
 static MD_LINK: LazyLock<Regex> = LazyLock::new(|| re(r"!?\[([^\]]*)\]\([^)]*\)"));
 /// Code ticks.
@@ -115,7 +117,8 @@ pub struct Change {
     pub added: Vec<String>,
     /// Blocks removed outright, and not moved to a page the reader reaches.
     pub removed: Vec<String>,
-    /// Note keys the page no longer carries anywhere.
+    /// Note keys neither the page nor any page the reader reaches carries now (feature 451 T194: a key moved with its block to a
+    /// pointer's target is not gone).
     pub keys_gone: Vec<String>,
     /// Blocks cleared by the tool: their claim words unchanged (markers, markup), or a pointer.
     pub cleared: usize,
@@ -123,6 +126,9 @@ pub struct Change {
     pub moved: usize,
     /// Removed blocks that stand verbatim on a page this one does not point to: a split with no pointer, owed as removals.
     pub unpointed: Vec<(String, String)>,
+    /// Removed blocks that moved with an edit (feature 451 T194): (the old block, its version new on a page the reader reaches, paired
+    /// at [`PAIR_RATIO`]). Each stays in `removed`, owed as the echo rule reads it, and the MANIFEST shows it as moved, with its diff.
+    pub moved_edited: Vec<(String, String)>,
 }
 
 impl Change {
@@ -148,10 +154,20 @@ pub fn page_change<S: std::hash::BuildHasher>(
 ) -> Change {
     let was = read_page(old).blocks;
     let now = read_page(fresh).blocks;
-    let marks_now: HashSet<&String> = now.iter().flat_map(|b| &b.marks).collect();
+    let mut marks_now: HashSet<&str> = now
+        .iter()
+        .flat_map(|b| &b.marks)
+        .map(String::as_str)
+        .collect();
+    marks_now.extend(
+        reached_now
+            .iter()
+            .flat_map(|w| KEY.captures_iter(w).map_while(Result::ok))
+            .filter_map(|c| c.get(1).map(|m| m.as_str())),
+    );
     let mut keys_gone: Vec<String> = Vec::new();
     for k in was.iter().flat_map(|b| &b.marks) {
-        if !marks_now.contains(k) && !keys_gone.contains(k) {
+        if !marks_now.contains(k.as_str()) && !keys_gone.contains(k) {
             keys_gone.push(k.clone());
         }
     }
@@ -250,7 +266,47 @@ pub fn blocks_change<S: std::hash::BuildHasher>(
         }
     }
     change.removed = olds;
+    moved_with_edits(&mut change, reached_now, reached_before);
     change
+}
+
+/// Which of a change's removed blocks moved with an edit (feature 451 T194, T184's split): each paired with its closest block new on a
+/// page the reader reaches (there now, not at its last check) at [`PAIR_RATIO`]; one whose claim words are its pair's is moved whole.
+fn moved_with_edits<S: std::hash::BuildHasher>(
+    change: &mut Change,
+    reached_now: &HashSet<String, S>,
+    reached_before: &HashSet<String, S>,
+) {
+    let mut arrived: Vec<&String> = reached_now
+        .iter()
+        .filter(|w| !reached_before.contains(*w))
+        .collect();
+    if arrived.is_empty() {
+        return;
+    }
+    arrived.sort(); // a tie goes to the last in this order (`max_by`), never the hash set's
+    let arrived: Vec<(&String, Vec<&str>)> = arrived
+        .into_iter()
+        .map(|w| (w, w.split(' ').collect()))
+        .collect();
+    let mut kept: Vec<String> = Vec::new();
+    for old in std::mem::take(&mut change.removed) {
+        let ow: Vec<&str> = old.split(' ').collect();
+        let best = arrived
+            .iter()
+            .map(|(w, aw)| (*w, l7r_gate_core::difflib::ratio(&ow, aw)))
+            .filter(|(_, r)| *r >= PAIR_RATIO)
+            .max_by(|a, b| a.1.total_cmp(&b.1));
+        match best {
+            Some((w, _)) if claim_words(w) == claim_words(&old) => change.moved += 1,
+            Some((w, _)) => {
+                change.moved_edited.push((old.clone(), w.clone()));
+                kept.push(old);
+            }
+            None => kept.push(old),
+        }
+    }
+    change.removed = kept;
 }
 
 /// A word diff of a pair, `[-removed-]` and `{+added+}`, as the blind test's bundles showed it.
@@ -363,10 +419,26 @@ pub fn echo<S: std::hash::BuildHasher>(
     reached_now: &HashSet<String, S>,
     popup: &str,
 ) -> Option<String> {
-    let fresh = sentences(page_now.iter());
+    let mut fresh = sentences(page_now.iter());
     let standing: HashSet<String> = sentences(reached_now.iter())
         .into_iter()
         .chain(fresh.iter().cloned())
+        .collect();
+    // the nearest new sentence is sought on the page and the pages the reader reaches (feature 451 T194: a sentence moved with a small
+    // edit is compared with its moved self), each candidate's words read once
+    fresh.extend(
+        standing
+            .iter()
+            .filter(|s| !fresh.contains(s))
+            .cloned()
+            .collect::<Vec<_>>(),
+    );
+    let near_words: Vec<(String, Vec<String>)> = fresh
+        .into_iter()
+        .map(|n| {
+            let w = word_list(&n);
+            (n, w)
+        })
         .collect();
     let pop_words = word_list(popup);
     let pop: HashSet<[&str; 3]> = trigrams(&pop_words).into_iter().collect();
@@ -376,15 +448,14 @@ pub fn echo<S: std::hash::BuildHasher>(
     {
         let ow = word_list(&s);
         let og: HashSet<[&str; 3]> = trigrams(&ow).into_iter().collect();
-        let near = fresh
+        let near = near_words
             .iter()
-            .map(|n| {
-                let nw = word_list(n);
-                let shared = trigrams(&nw).into_iter().filter(|t| og.contains(t)).count();
-                (shared, n.clone(), nw)
+            .map(|(n, nw)| {
+                let shared = trigrams(nw).into_iter().filter(|t| og.contains(t)).count();
+                (shared, n, nw)
             })
-            .max_by(|a, b| (a.0, &a.1).cmp(&(b.0, &b.1)))
-            .map_or_else(Vec::new, |n| n.2);
+            .max_by(|a, b| (a.0, a.1).cmp(&(b.0, b.1)))
+            .map_or_else(Vec::new, |n| n.2.clone());
         let mut marked: HashSet<usize> = HashSet::new();
         for (tag, i1, i2, _, _) in l7r_gate_core::difflib::opcodes(&ow, &near) {
             match tag {

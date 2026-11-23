@@ -1008,6 +1008,24 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-23",
    "declared": "spec-fidelity"
+  },
+  "### T194 (T184's split of 0009 to 0332 and 0059 to 0333, the cascade rules' first live test, re-owed 63 pop-up units (21 pop-ups) where 27 (9) follow from the rules: `/home/agent/.claude/jobs/c6fd72d1/tmp/t184-cascade.md`, a read-only re-run of the filter, 2026-11-23)": {
+   "sha256": "c1a5d87a999eebeb813b8d4eb9a17de70e35a5ed64a98107dbaf3b0d06c6fb5c",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity"
+  },
+  "### T194 Approach (checklist part A)": {
+   "sha256": "9adf0a442f2d185743aca2ead1fab4e541f08c133cb20a49e0c3133305d41e03",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity"
+  },
+  "### T194 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)": {
+   "sha256": "22aec1f39278853543c8b07bb48e032f1481b9606b490dae445904a4ecf53cf0",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -16370,6 +16388,71 @@
      "why": "FR-013 and the GM's 'prioritize performance improvements'; the work removed is agent time, the GM's stated cost."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-23",
+   "blocks": [
+    "### T194 (T184's split of 0009 to 0332 and 0059 to 0333, the cascade rules' first live test, re-owed 63 pop-up units (21 pop-ups) where 27 (9) follow from the rules: `/home/agent/.claude/jobs/c6fd72d1/tmp/t184-cascade.md`, a read-only re-run of the filter, 2026-11-23)",
+    "### T194 Approach (checklist part A)",
+    "### T194 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "keys-reached",
+     "summary": "change::page_change counts a note key as gone only where neither the page now nor any reached block holds it; the MANIFEST keys line follows and is relabeled",
+     "class": "within",
+     "why": "The GM 2026-11-23: 'as long as the original page being linked to directs a reader to the other page ... nothing needs to cascade simply because a split occurs', and the approved rule 'a split is a move'. A key that moved with its block is not a removal."
+    },
+    {
+     "id": "echo-nearest-sentence",
+     "summary": "change::echo looks for the nearest new sentence on the page and in the reached sentences, so a sentence moved with an edit is compared with its moved self; the echo rule's wording is unchanged",
+     "class": "within",
+     "why": "This applies the approved echo check (T186's first filter) under 'a split is a move' and 'only a claim-changing edit triggers review'. The edit itself is still compared, so a changed claim still owes its review."
+    },
+    {
+     "id": "replay-follows-pointers",
+     "summary": "replay_landing reads each pop-up's pages and their pointers' targets at the commit and its parent, and judges every changed page of that set through the same judged() the bundle uses",
+     "class": "within",
+     "why": "The landing replay now gives the same judgment as the bundle, the cascade rules applied the same way at both points. This narrows nothing."
+    },
+    {
+     "id": "moved-with-edits-manifest",
+     "summary": "Change.moved_edited pairs a removed block with its closest new block on a reached page at PAIR_RATIO. The block stays owed as the echo reads it but is printed under 'Moved with edits' with OLD/NEW/WORD DIFF. A pair whose claim words are equal (a marker edit) is cleared as a move",
+     "class": "within",
+     "why": "The GM's rules: 'a split is a move', 'only a claim-changing edit triggers review', 'labels are data and propagate by regeneration', 're-reviews scoped to the change'. A moved block with an edit is still owed, and is shown to the triage as an edit rather than a deletion. Only an edit that leaves the claim words equal is cleared."
+    },
+    {
+     "id": "reached-meaning",
+     "summary": "'Reached' means all the pages the unit reads (the pop-up's own pages and their pointers' targets, modals::followed), wider than the source page's pointer targets only where a key or sentence sits on another page of the pop-up's own Entry",
+     "class": "within",
+     "why": "The GM's split condition is sufficient, not exclusive. His approved rule 'only a claim-changing edit triggers review' already clears a verbatim move between two pages the pop-up itself reads, because the pop-up's sources still hold the claim. An edited move is still compared and owed. The width was measured, and it matches the set the moves already used. It drops no review of a changed claim."
+    },
+    {
+     "id": "claims-triage-pointer-set",
+     "summary": "The claims triage passes reached_by_pointers, so its echo widens to pointer targets alone; its 167 tests pass unchanged",
+     "class": "within",
+     "why": "This is the GM's split condition as he worded it ('the original page ... directs a reader to the other page'), applied to the claims triage. It narrows nothing."
+    },
+    {
+     "id": "gloss-edge-not-special-cased",
+     "summary": "A moved sentence whose one edit is an inserted gloss fires wherever the pop-up repeats the gloss's neighbors (weir_form--frame on '(seki)'). It is pinned by a test and not special-cased",
+     "class": "within",
+     "why": "This keeps the echo rule the GM approved as worded: an insertion's neighbors count as written. The result owes one review more, never one less, so it carves nothing out of what was asked. Whether the gloss changes a claim stays the triage agent's call, as the approved plan (echo check first, agent triage after) says."
+    },
+    {
+     "id": "contract-paragraph",
+     "summary": "The modal-triage contract's MANIFEST paragraph names the new 'Moved with edits' kind and the keys rule",
+     "class": "within",
+     "why": "The triage agent has to read the MANIFEST's new kind correctly for the approved filter to work. This is no new behavior."
+    },
+    {
+     "id": "order-and-exit",
+     "summary": "Lands after T185, T186 and T191 and before T184; green when the T184 re-run owes the 9 pop-ups the rules give, red recorded and ruled through make arbiter-ask",
+     "class": "within",
+     "why": "This is the GM's 'we have to fix that before we move forward' on the cascade, applied to the split that tests the rules first."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -26075,6 +26158,68 @@
      "summary": "Classed as performance work: removes agent work before dispatch; no engine code, no map change; not a defect fix.",
      "class": "within",
      "why": "FR-013 and the GM's 'prioritize performance improvements'; the work removed is agent time, the GM's stated cost."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T194": {
+   "section_sha256": "6d6e9fc77a7c6dfb3436aae15245cd9d53a0ac142242245a344d5ec46962ee51",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "keys-reached",
+     "summary": "change::page_change counts a note key as gone only where neither the page now nor any reached block holds it; the MANIFEST keys line follows and is relabeled",
+     "class": "within",
+     "why": "The GM 2026-11-23: 'as long as the original page being linked to directs a reader to the other page ... nothing needs to cascade simply because a split occurs', and the approved rule 'a split is a move'. A key that moved with its block is not a removal."
+    },
+    {
+     "id": "echo-nearest-sentence",
+     "summary": "change::echo looks for the nearest new sentence on the page and in the reached sentences, so a sentence moved with an edit is compared with its moved self; the echo rule's wording is unchanged",
+     "class": "within",
+     "why": "This applies the approved echo check (T186's first filter) under 'a split is a move' and 'only a claim-changing edit triggers review'. The edit itself is still compared, so a changed claim still owes its review."
+    },
+    {
+     "id": "replay-follows-pointers",
+     "summary": "replay_landing reads each pop-up's pages and their pointers' targets at the commit and its parent, and judges every changed page of that set through the same judged() the bundle uses",
+     "class": "within",
+     "why": "The landing replay now gives the same judgment as the bundle, the cascade rules applied the same way at both points. This narrows nothing."
+    },
+    {
+     "id": "moved-with-edits-manifest",
+     "summary": "Change.moved_edited pairs a removed block with its closest new block on a reached page at PAIR_RATIO. The block stays owed as the echo reads it but is printed under 'Moved with edits' with OLD/NEW/WORD DIFF. A pair whose claim words are equal (a marker edit) is cleared as a move",
+     "class": "within",
+     "why": "The GM's rules: 'a split is a move', 'only a claim-changing edit triggers review', 'labels are data and propagate by regeneration', 're-reviews scoped to the change'. A moved block with an edit is still owed, and is shown to the triage as an edit rather than a deletion. Only an edit that leaves the claim words equal is cleared."
+    },
+    {
+     "id": "reached-meaning",
+     "summary": "'Reached' means all the pages the unit reads (the pop-up's own pages and their pointers' targets, modals::followed), wider than the source page's pointer targets only where a key or sentence sits on another page of the pop-up's own Entry",
+     "class": "within",
+     "why": "The GM's split condition is sufficient, not exclusive. His approved rule 'only a claim-changing edit triggers review' already clears a verbatim move between two pages the pop-up itself reads, because the pop-up's sources still hold the claim. An edited move is still compared and owed. The width was measured, and it matches the set the moves already used. It drops no review of a changed claim."
+    },
+    {
+     "id": "claims-triage-pointer-set",
+     "summary": "The claims triage passes reached_by_pointers, so its echo widens to pointer targets alone; its 167 tests pass unchanged",
+     "class": "within",
+     "why": "This is the GM's split condition as he worded it ('the original page ... directs a reader to the other page'), applied to the claims triage. It narrows nothing."
+    },
+    {
+     "id": "gloss-edge-not-special-cased",
+     "summary": "A moved sentence whose one edit is an inserted gloss fires wherever the pop-up repeats the gloss's neighbors (weir_form--frame on '(seki)'). It is pinned by a test and not special-cased",
+     "class": "within",
+     "why": "This keeps the echo rule the GM approved as worded: an insertion's neighbors count as written. The result owes one review more, never one less, so it carves nothing out of what was asked. Whether the gloss changes a claim stays the triage agent's call, as the approved plan (echo check first, agent triage after) says."
+    },
+    {
+     "id": "contract-paragraph",
+     "summary": "The modal-triage contract's MANIFEST paragraph names the new 'Moved with edits' kind and the keys rule",
+     "class": "within",
+     "why": "The triage agent has to read the MANIFEST's new kind correctly for the approved filter to work. This is no new behavior."
+    },
+    {
+     "id": "order-and-exit",
+     "summary": "Lands after T185, T186 and T191 and before T184; green when the T184 re-run owes the 9 pop-ups the rules give, red recorded and ruled through make arbiter-ask",
+     "class": "within",
+     "why": "This is the GM's 'we have to fix that before we move forward' on the cascade, applied to the split that tests the rules first."
     }
    ],
    "verdict": "CLEAR"
