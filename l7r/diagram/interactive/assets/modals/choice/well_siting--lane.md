@@ -14,7 +14,7 @@ Guesses:
 - That a hamlet sets its shared wells by the lane, or among the houses, at even odds: no account says how common each was.
 - That a village well stood by the lane at all: the wayside well is attested for roadsides in general, not for a village's
   own lanes.
-- The verge's width, the curb within about 8 ft of the tread: no source gives one.
+- {0196#verge-s-width-curb}
 
 Depiction: The map sets each shared well on a lane's verge, its curb clear of the tread, with a house near it. Where no lane
 near a well's houses has room beside it - the lanes running between the farmsteads' yards and beds - the well stands in the open

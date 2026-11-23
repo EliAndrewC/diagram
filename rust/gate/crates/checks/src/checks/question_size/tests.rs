@@ -16,6 +16,18 @@ fn a_question_s_size_is_its_prose_and_a_money_mark_counts_as_its_words() {
     assert_eq!(size(&dir.join(Q)), "20 mon and é".len());
 }
 
+/// An item tag is data, not prose: tagging a page moves its size by nothing (feature 451 T192).
+#[test]
+fn an_item_tag_counts_for_nothing() {
+    let dir = repo("size-item");
+    put(
+        &dir,
+        Q,
+        "<li>A gate, a GUESS.<span class=\"item\" data-item=\"gate\" data-label=\"GUESS\" data-guess=\"That it is guarded: no page says\"></span></li>",
+    );
+    assert_eq!(size(&dir.join(Q)), "<li>A gate, a GUESS.</li>".len());
+}
+
 #[test]
 fn only_questions_count_and_a_companion_names_its_question() {
     assert!(is_question(Q) && is_question("research/questions/0001-a.drawing.html"));

@@ -6,12 +6,17 @@
 //! goes through: `about::feature` and `choices::modal`) it becomes the tag's own bullet while the tag says GUESS, and is dropped while it
 //! says anything else. So a relabel is one edit on the page: the pop-up's file is unchanged and owes nothing, and its Guesses tab follows.
 //!
+//! A reference's NNNN is the item's HOME, not a bond (451 T200, the gap audit's item 12b): an item moved to another question's page is
+//! found there while exactly one other question tags its id, so moving a tagged item breaks no pop-up; two such questions make it
+//! ambiguous, refused naming both. Every page read for a reference is told to the Mode A generation cache ([`take_read`], drained by
+//! `l7r_mode_a::reads::take`, 451 T200 item 12d), so a relabel regenerates a cached sheet whose Guesses it fills.
+//!
 //! [`restated`] is the check that keeps the About honest beside it: a GUESS-tagged item of a page the pop-up cites, its bullet's head
 //! (the words before the first `: `) appearing in an About sentence that does not call it a guess, states a guess as a fact.
 
-use std::collections::HashMap;
+use std::collections::{BTreeMap, BTreeSet, HashMap};
 use std::path::{Path, PathBuf};
-use std::sync::LazyLock;
+use std::sync::{LazyLock, Mutex, PoisonError};
 
 use fancy_regex::Regex;
 use l7r_gate_research::pyre::py;
@@ -29,10 +34,30 @@ static PAGE: LazyLock<Regex> =
     LazyLock::new(|| py(r"research/questions/(\d{4})-[a-z0-9-]+?(?:\.drawing)?\.html"));
 static SENTENCE: LazyLock<Regex> = LazyLock::new(|| py(r"(?<=[.!?])\s+"));
 
+/// The question pages a reference read, since the last [`take_read`]: the Mode A page writer's reads for the generation cache.
+static READ: LazyLock<Mutex<BTreeSet<PathBuf>>> = LazyLock::new(|| Mutex::new(BTreeSet::new()));
+
+/// Every question page a reference read since the last call, the log emptied (`l7r_mode_a::reads::take` drains it into its own).
+#[must_use]
+pub fn take_read() -> Vec<PathBuf> {
+    std::mem::take(&mut *READ.lock().unwrap_or_else(PoisonError::into_inner))
+        .into_iter()
+        .collect()
+}
+
 /// A question's research and drawing pages, read once per question.
 #[derive(Default)]
 pub struct Pages {
     read: HashMap<String, Vec<Item>>,
+    /// every other question's tags, by number, read once and only where a reference missed its home
+    all: Option<BTreeMap<String, Vec<(PathBuf, Item)>>>,
+}
+
+/// A research or drawing page of the record (not its notes page), by its file name.
+fn is_page(name: &str) -> bool {
+    name.ends_with(".drawing.html")
+        || (Path::new(name).extension().is_some_and(|e| e == "html")
+            && !name.trim_end_matches(".html").contains('.'))
 }
 
 fn question_files(tree: &Path, number: &str) -> Vec<PathBuf> {
@@ -45,12 +70,21 @@ fn question_files(tree: &Path, number: &str) -> Vec<PathBuf> {
             let n = p
                 .file_name()
                 .map_or_else(String::new, |n| n.to_string_lossy().into_owned());
-            n.starts_with(&format!("{number}-"))
-                && (n.ends_with(".drawing.html") || !n.trim_end_matches(".html").contains('.'))
+            (number.is_empty() || n.starts_with(&format!("{number}-"))) && is_page(&n)
         })
         .collect();
     out.sort();
     out
+}
+
+fn tags_of(path: &Path) -> Vec<Item> {
+    items(&std::fs::read_to_string(path).unwrap_or_default())
+}
+
+fn note(path: &Path) {
+    READ.lock()
+        .unwrap_or_else(PoisonError::into_inner)
+        .insert(path.to_path_buf());
 }
 
 impl Pages {
@@ -59,10 +93,54 @@ impl Pages {
         self.read.entry(number.to_owned()).or_insert_with(|| {
             question_files(tree, number)
                 .iter()
-                .filter_map(|p| std::fs::read_to_string(p).ok())
-                .flat_map(|t| items(&t))
+                .inspect(|p| note(p))
+                .flat_map(|p| tags_of(p))
                 .collect()
         })
+    }
+
+    /// The item `{number#id}` names: on its home question's pages, else on the one other question whose pages tag `id` (451 T200).
+    ///
+    /// # Errors
+    /// No question tags `id`, or several besides its home do: the message's tail, after the reference.
+    pub fn locate(
+        &mut self,
+        tree: &Path,
+        number: &str,
+        id: &str,
+    ) -> std::result::Result<Item, String> {
+        if let Some(it) = self.of(tree, number).iter().find(|i| i.id == id) {
+            return Ok(it.clone());
+        }
+        let all = self.all.get_or_insert_with(|| {
+            let mut by: BTreeMap<String, Vec<(PathBuf, Item)>> = BTreeMap::new();
+            for p in question_files(tree, "") {
+                let n: String = p.file_name().map_or_else(String::new, |n| {
+                    n.to_string_lossy().chars().take(4).collect()
+                });
+                by.entry(n)
+                    .or_default()
+                    .extend(tags_of(&p).into_iter().map(|i| (p.clone(), i)));
+            }
+            by
+        });
+        let found: Vec<(&String, &(PathBuf, Item))> = all
+            .iter()
+            .filter(|(n, _)| n.as_str() != number)
+            .filter_map(|(n, tags)| tags.iter().find(|(_, i)| i.id == id).map(|t| (n, t)))
+            .collect();
+        match found.as_slice() {
+            [(_, (path, it))] => {
+                note(path);
+                Ok(it.clone())
+            }
+            [] => Err(format!("names no item: tag it on question {number}'s page (`<span class=\"item\" data-item=\"{id}\" data-label=\"...\" data-guess=\"...\"></span>`, research/questions/NNNN-*.drawing.html) or fix the reference")),
+            many => Err(format!(
+                "names no item on question {number}'s pages, and questions {} each tag `{id}` - write the one meant, `{{{}#{id}}}`",
+                many.iter().map(|(n, _)| n.as_str()).collect::<Vec<_>>().join(", "),
+                many[0].0
+            )),
+        }
     }
 }
 
@@ -89,12 +167,12 @@ pub fn bullets(tree: &Path, key: &str, guesses: Vec<String>) -> Result<Vec<Strin
             continue;
         };
         let (cond, number, id) = (&c[1], &c[2], &c[3]);
-        let Some(item) = pages.of(tree, number).iter().find(|i| i.id == id) else {
-            return Err(Error::new(
+        let item = pages.locate(tree, number, id).map_err(|why| {
+            Error::new(
                 "ValueError",
-                format!("{key}: the Guesses bullet {{{number}#{id}}} names no item: tag it on question {number}'s page (`<span class=\"item\" data-item=\"{id}\" data-label=\"...\" data-guess=\"...\"></span>`, research/questions/NNNN-*.drawing.html) or fix the reference"),
-            ));
-        };
+                format!("{key}: the Guesses bullet {{{number}#{id}}} {why}"),
+            )
+        })?;
         if item.label == "GUESS" {
             out.push(format!("{cond}{}", item.guess));
         }

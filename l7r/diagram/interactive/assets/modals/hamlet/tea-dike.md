@@ -11,8 +11,7 @@ How many bushes a dike carried is not recorded. Modern pond dikes are about 20 t
 ft above the water; a dike's width before modern times is not recorded.
 
 Guesses:
-- The tea's form on the map, two clipped hedges along the bank, each about 3 ft wide and broken every 7.5 ft or so: no
-  account says how tea stood on a pond dike, so the hedges are drawn from the tea bush's own habit.
+- {0026#tea-s-form-two}
 
 Depiction: The map draws the tea dike as two clipped hedges running along the bank, broken into short runs so they read
 as bushes set end to end, and so a reader can tell them at a glance from the mulberry's rows of round bushes and the fruit

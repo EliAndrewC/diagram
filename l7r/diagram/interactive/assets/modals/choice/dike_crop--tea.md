@@ -11,7 +11,7 @@ How many dikes carried tea, or how much a household picked from them, is not rec
 
 Guesses:
 - That about one dike-pond hamlet in six plants tea: no source counts the dikes of each kind, and tea is weighted least because it is only named in a list.
-- Two clipped hedges along each bank, each about 3 ft wide and broken every 7.5 ft or so: drawn from the tea bush's habit, since no source says how tea stood on a dike.
+- {0026#two-clipped-hedges-along}
 
 Depiction: The map plants every dike of the hamlet with tea alone, as two clipped hedges along each bank, broken at intervals
 so they read as bushes set end to end rather than one solid band. One crop to a hamlet is the map's choice, so each hamlet reads

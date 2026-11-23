@@ -41,11 +41,12 @@ fn question_of(rel: &str) -> String {
         .unwrap_or_else(|| rel.to_owned())
 }
 
-/// The question's prose in bytes: a money mark is markup around words already counted (feature 413).
+/// The question's prose in bytes: a money mark is markup around words already counted (feature 413), and an item tag is data no
+/// reader of the page reads, its label and its pop-up bullet (feature 451 T192: tagging 0196 put it over the cap by 1,838 bytes).
 fn size(path: &Path) -> usize {
     let text = std::fs::read_to_string(path).unwrap_or_default();
     let money = l7r_shared::regex::build(r#"(?s)<span class="money"[^>]*>(.*?)</span>"#).unwrap();
-    money.replace_all(&text, "$1").len()
+    l7r_gate_research::record::items::strip(&money.replace_all(&text, "$1")).len()
 }
 
 fn merge_base(root: &Path) -> String {

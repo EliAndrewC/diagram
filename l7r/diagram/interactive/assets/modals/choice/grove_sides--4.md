@@ -17,10 +17,8 @@ Guesses:
   counts farms by the shape of their grove, and the rise follows the Izumo ring's stated cause.
 - That the sides away from the wind are a band of lesser trees one tree deep, carrying the Tonami pattern round the ring: no
   source gives the depth of a ring's lee sides, and on the Izumo plain the pines went the whole way round; but an order of 1625 in the Takada domain set camellia and bamboo grass on the south, and in Okinawa, where a line of trees surrounds each house, fewer large trees are recorded on the south than on the north and east.
-- How deep the windward stand runs, about one and a half house depths: no source gives a grove's depth, so it is reckoned
-  from tree counts and crown sizes.
-- That the ring is broken once, at the middle of its front, for a way in about 36 ft wide: a farm must be reached, but no
-  source says where in a ring its opening stood or how wide it was.
+- {0036#deep-windward-stand-runs}
+- {0036#ring-broken-once-middle}
 
 Depiction: Every farm in the settlement takes the same shape of grove, since the shape went by region. The map draws each tree
 at its real size, but only its top layer: no tree is drawn under another's crown, though neighbors' crowns overlap at their edges so the stand reads as closed, where a real grove had lesser growth beneath its tall trees. It draws the windward sides as a deep stand and the others as a thinner band one tree deep; no tree stands in the

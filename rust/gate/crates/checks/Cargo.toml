@@ -14,6 +14,7 @@ fancy-regex = { workspace = true }
 l7r_gate_core = { path = "../core" }
 l7r_gate_downloads = { path = "../downloads" }
 l7r_gate_registry = { path = "../registry" }
+l7r_gate_research = { path = "../research" }
 l7r_gate_tree = { path = "../tree" }
 l7r_shared = { path = "../../../guard/shared" }
 serde = { workspace = true }

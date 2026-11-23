@@ -12,8 +12,8 @@ the mu, one to about 24 sq ft; the delta's root-cut bushes today stand about one
 to the square foot, their crowns touching. Whether a bush stripped for leaf bore fruit is not recorded.
 
 Guesses:
-- That about half the dike-pond hamlets plant mulberry: no source counts the dikes of each kind, so mulberry is weighted the commonest because it became the dominant dike of the Qing.
-- A bush about 4 to 7 ft across: no source gives the width of a mulberry bush's crown.
+- {0026#about-half-dike-pond}
+- {0026#bush-about-4-7}
 
 Depiction: The map plants every pond's bank in the hamlet with mulberry alone, as rows of round bushes at the late-Qing spacing of
 about one to 24 sq ft; the delta's far denser root-cut planting, which nothing places before modern times, is not drawn. One crop to a hamlet is the

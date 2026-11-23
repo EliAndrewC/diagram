@@ -68,3 +68,60 @@ fn a_convention_takes_only_items() {
         .contains("`CONVENTION` takes no pointer, or only items"));
     assert!(parse_claim("a - CONVENTION").is_ok());
 }
+
+/// 451 T200: an item moved to another question's page is named with the pointer to write there, its class held to the moved tag; an id
+/// two other pages tag is no move the tool can name.
+#[test]
+fn a_moved_item_is_named_with_its_new_pointer() {
+    let root = crate::claims::tests::fixture("claims-item-moved");
+    let to = "research/questions/0301-trees.drawing.html";
+    put(&root, to, &tagged("GUESS", "a GUESS"));
+    let claim = format!("shrine tree - GUESS {FILE}#tree: a tree beside the shrine");
+    let said = disagreements(&root, &[unit(&claim)]);
+    assert_eq!(said.len(), 1, "{said:?}");
+    assert!(said[0].contains(&format!("names {FILE}#tree, but the item is tagged on {to} now - write its backing `GUESS {to}#tree`")), "{said:?}");
+    put(
+        &root,
+        "research/questions/0302-more.html",
+        &tagged("ATTESTED", "accurate"),
+    );
+    put(
+        &root,
+        "research/questions/0302-more.notes.html",
+        &tagged("ATTESTED", "accurate"),
+    );
+    assert!(disagreements(&root, &[unit(&claim)])[0].contains("which no tag on that page carries"));
+}
+
+/// A split is a move (the GM 2026-11-23): where the cited page's split pointer directs the reader to the page that now tags the item,
+/// the claim is followed there and owes no edit; held to that tag's class; two reached pages tagging it are refused, naming the case.
+#[test]
+fn a_moved_item_the_cited_page_points_to_is_followed_and_owes_no_edit() {
+    let root = crate::claims::tests::fixture("claims-item-followed");
+    let to = "research/questions/0301-trees.drawing.html";
+    put(&root, to, &tagged("GUESS", "a GUESS"));
+    put(
+        &root,
+        FILE,
+        r#"<p>The tree moved: <a class="moved" href="0301-trees.drawing.html">its own page</a>.</p>"#,
+    );
+    let guess = format!("shrine tree - GUESS {FILE}#tree: a tree beside the shrine");
+    assert!(disagreements(&root, &[unit(&guess)]).is_empty());
+    let plain = format!("shrine tree - {FILE}#tree: a tree beside the shrine");
+    let said = disagreements(&root, &[unit(&plain)]);
+    let flip = said.len() == 1 && said[0].contains(&format!("moved to {to} by its split, is tagged GUESS there - write its backing `GUESS {FILE}#tree`"));
+    assert!(flip, "{said:?}");
+    put(
+        &root,
+        FILE,
+        r#"<a class="moved" href="0301-trees.drawing.html">one</a> <a class="moved" href="0302-more.html">two</a>"#,
+    );
+    put(
+        &root,
+        "research/questions/0302-more.html",
+        &tagged("GUESS", "a GUESS"),
+    );
+    let said = disagreements(&root, &[unit(&guess)]);
+    let two = said.len() == 1 && said[0].contains("which pages its split reaches each tag");
+    assert!(two, "{said:?}");
+}

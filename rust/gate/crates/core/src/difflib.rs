@@ -209,6 +209,24 @@ pub fn unified_diff(
     out
 }
 
+/// Each run of lines `b` changed from `a`, as a later review round is handed it (451 T189's pairs): `file`, its text before and after
+/// in fenced blocks. `deletes` false leaves out a run `b` only dropped (a split's target, whose source shows the deletion). Shared by
+/// the record checks' change section (`bundle::earlier`) and building-review's change-scoped round (`reviews::prereq::scoped`, T199).
+#[must_use]
+pub fn paired(file: &str, a: &[&str], b: &[&str], deletes: bool) -> Vec<String> {
+    opcodes(a, b)
+        .into_iter()
+        .filter(|op| op.0 != Tag::Equal && (deletes || op.0 != Tag::Delete))
+        .map(|op| {
+            format!(
+                "- `{file}`, before:\n```\n{}\n```\nafter:\n```\n{}\n```",
+                a[op.1..op.2].join("\n"),
+                b[op.3..op.4].join("\n")
+            )
+        })
+        .collect()
+}
+
 #[cfg(test)]
 mod tests {
     use super::unified_diff;
@@ -244,6 +262,19 @@ mod tests {
     }
 
     use super::{matching_blocks, opcodes, Tag};
+
+    #[test]
+    fn a_changed_run_is_paired_before_and_after_and_a_deletion_left_out_on_asking() {
+        let (a, b) = (["a", "b", "c", "d"], ["a", "B", "c"]);
+        assert_eq!(
+            super::paired("f", &a, &b, true),
+            [
+                "- `f`, before:\n```\nb\n```\nafter:\n```\nB\n```",
+                "- `f`, before:\n```\nd\n```\nafter:\n```\n\n```"
+            ]
+        );
+        assert_eq!(super::paired("f", &a, &b, false).len(), 1);
+    }
 
     #[test]
     fn opcodes_match_pythons_on_each_shape() {

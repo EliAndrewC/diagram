@@ -13,10 +13,8 @@ nearly half of them cedar. The plain's farmhouses stood in their groves by the 1
 Guesses:
 - That a settlement's groves take three sides three times in ten, two sides half the time and all four twice in ten: no
   source counts farms by the shape of their grove.
-- That the third side's band beside the house closes only the house's own side, leaving the yard and garden in the sun, and
-  is one tree deep: no source says how far it ran or how deep it was.
-- How deep the windward stand runs, about one and a half house depths: no source gives how deep a grove stood beside its house (the one old measure gives whole homestead woods' sides and area, not where the house stood in them), so it is reckoned
-  from tree counts and crown sizes.
+- {0036#third-side-s-band}
+- {0036#deep-windward-stand-runs-2}
 
 Depiction: Every farm in the settlement takes the same shape of grove, since the shape went by region; in a row village, the farms across the street from the wind may instead keep a windward grove one tree deep, with any bamboo they keep in a band of its own to the south; the title card says whether this village's do. The map draws each tree
 at its real size, the windward sides - those facing the map's winter wind, from the northwest unless the map declares a wind of its own - as a deep stand and the third side as a thinner band of lesser trees, one tree deep,

@@ -15,13 +15,12 @@ How many wells a residence kept is not recorded.
 Guesses:
 - How many wells a residence had and where in the grounds they stood - one by the kitchen, one by the stables, one in the garden: a well is
   known just inside one house's gate, another beside a main house and another indoors on its earth floor, but no account places a kitchen's or a stable's well.
-- The curb's exact size, about 4 ft: the one measured curb is undated, so the figure is fitted round a premodern shaft.
+- {0196#curb-s-exact-size}
 - That about three wells in four took the gear their water's depth favored, and about one in three had a roof: no count of
   the gear was found, and of roofs only a 1972 count in three Tohoku farm hamlets: about one well house to every five farms.
 - That a valley floor or river plain held shallow water and an upland or terrace deep: no source ties the depth to the ground
   this way, and the one upland named for its wells, the loam uplands of the Kanto, is given shallow ones.
-- That a well indoors on a kitchen's earth floor hung its pulley from the kitchen's beams: no account names the gear of a well
-  indoors.
+- {0196#well-indoors-kitchen-s}
 
 Depiction: The plan draws each well as a square curb with a dark mouth, a marker larger than the curb itself so that it
 shows where the well stands; an old curb of unknown date is about 4 ft square. Over each curb stands its lifting gear - a sweep, a

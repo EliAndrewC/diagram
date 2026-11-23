@@ -980,11 +980,17 @@ review-cost:     ## [project] a finished review agent's wall time and tokens - t
 review-census:   ## [project] is each review check pulling its weight? the ledger's totals by check (feature 294)
 	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" reviews census --root "$$(git rev-parse --show-toplevel)"
 
-review-verdict:  ## [project] a review check's LAST act - write the unit's verdict record   UNIT=<unit> VERDICT=PASS|NEEDS-WORK|NOT-REVIEWABLE [FINDINGS=<json file>]
+review-verdict:  ## [project] a review check's LAST act - write the unit's verdict record   UNIT=<unit> VERDICT=PASS|NEEDS-WORK|NOT-REVIEWABLE [FINDINGS=<json file>] [SCOPE=change]
 ##  UNIT=<unit>        the owed unit reviewed (its prompt's UNIT: line; MAP= is the same field)
 ##  VERDICT=<v>        PASS, NEEDS-WORK or NOT-REVIEWABLE
 ##  FINDINGS=<file>    a JSON list of {"id", "severity", "what"}; ids default to F1, F2, ...
-	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" reviews prereq verdict --clone "$$(git rev-parse --show-toplevel)" --unit "$(or $(UNIT),$(MAP))" --verdict "$(VERDICT)" $(if $(FINDINGS),--findings-file "$(FINDINGS)",)
+##  SCOPE=change       a change-scoped round's verdict (`make review-fixed`): written into the record as `scoped`, carrying it if clean
+	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" reviews prereq verdict --clone "$$(git rev-parse --show-toplevel)" --unit "$(or $(UNIT),$(MAP))" --verdict "$(VERDICT)" $(if $(FINDINGS),--findings-file "$(FINDINGS)",) $(if $(SCOPE),--scope "$(SCOPE)",)
+
+review-fixed:    ## [project] a sheet edit that fixed ONLY building-review nitpicks owes a change-scoped adversarial round, not a full one: writes its prompt (451 T199)   UNIT=<unit> FINDING="<ids>"
+##  UNIT=<unit>        the owed building-review unit, after `make verify` snapshotted the sheet as edited
+##  FINDING="<ids>"    the nitpick ids of its last verdict the edit fixed; refused if any is not a nitpick, or an error or questionable one is open
+	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" reviews prereq fixed --clone "$$(git rev-parse --show-toplevel)" --unit "$(or $(UNIT),$(MAP))" --finding "$$FINDING"
 
 review-discharge: ## [project] the round arbiter's accept recorded as the discharge of owed glyph-checks, each bound to its kind's marks as drawn now: the owed list drops them while those marks stay so (449 T377)   RULING=<trigger> UNITS="<unit> ..."
 ##  RULING=<trigger>   the arbiter's ruling, an `accept` in a specs/*/arbiter.jsonl (e.g. ask:glyph-occasions-emit-449-T351)
@@ -1007,12 +1013,17 @@ quick:           ## [tests] tier 2: the fast tree checks (no Python test remains
 	@$(call TIMED,quick,quick,$(MAKE) --no-print-directory _quick)
 
 # make quick's checks, timed whole by `quick` into its Phase line (feature 451 T153)
+# THE DERIVED FILES (451 T198): each file `make done`'s preflight regenerates is checked here too, so a stale one fails a builder's
+# closing checks naming its regenerate command instead of costing a red `make done` (0.05-0.11 s each; pinned by `derived_quick.rs`).
 _quick:
 	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" check house-style-delta --selftest >/dev/null
 	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" check house-style-delta .
 	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" check question-size
 	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" check file-scale .
 	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" check spec-lint --delta .
+	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" make-docs . --check
+	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" mode-a building-programs --check
+	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" record check glossary
 	@if "$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" check needs partial-citations; then "$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" check partial-citations .; fi
 	@printf '\n\033[1mquick: clean\033[0m - `make done` before pushing.\n'
 	@$(STATE) green-local quick

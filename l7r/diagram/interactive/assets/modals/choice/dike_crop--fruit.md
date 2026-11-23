@@ -12,9 +12,9 @@ How far apart the trees stood along a dike is not recorded. In a field turned to
 twice as many longan, one lychee to about 300 sq ft.
 
 Guesses:
-- That about one dike-pond hamlet in three plants fruit: no source counts the dikes of each kind, so mulberry, the dominant dike of the Qing, is weighted the commonest and fruit, the oldest, next.
-- Trees about 18 ft apart along the bank: the one spacing found is for a field turned to orchard, about 17 ft between trees on a square, and none is given along a dike.
-- A crown about 8 to 10 ft across: no source gives the crown of a lychee, longan or orange tree on a dike.
+- {0026#about-dike-pond-hamlet}
+- {0026#trees-about-18-ft}
+- {0026#crown-about-8-10}
 
 Depiction: The map plants every dike of the hamlet with fruit trees alone, as a single line of trees along the middle of each
 bank. One crop to a hamlet is the map's choice, so each hamlet reads as one kind of dike-pond village: in the 17th century

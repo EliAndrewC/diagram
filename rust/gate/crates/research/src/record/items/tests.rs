@@ -1,6 +1,6 @@
 //! The item tags (feature 451 T187).
 
-use super::{faults, items, Item};
+use super::{faults, items, strip, Item};
 
 fn tag(id: &str, label: &str, guess: &str) -> String {
     format!(
@@ -71,11 +71,16 @@ fn a_tag_whose_block_says_another_label_is_refused() {
         tag("c", "CONVENTION", "")
     );
     assert!(faults("p.html", &conv_ok).is_empty());
+    // a block holding a guess and a deviation tags each (451 T192: 27 such blocks on 22 drawing pages, measured 2026-11-23 by
+    // `.git/t192/tag.py`'s label words); the deviation's own word is what its tag needs
     let dev = format!(
-        "<li>Ours, a GUESS and a deviation.{}</li>",
-        tag("d", "DEVIATION", "")
+        "<li>Ours, a GUESS and a deviation.{}{}</li>",
+        tag("d", "DEVIATION", ""),
+        tag("g", "GUESS", "That it is ours: no page says")
     );
-    assert!(faults("p.html", &dev)[0].contains("says DEVIATION"));
+    assert!(faults("p.html", &dev).is_empty());
+    let no_word = format!("<li>Ours, a GUESS.{}</li>", tag("d", "DEVIATION", ""));
+    assert!(faults("p.html", &no_word)[0].contains("says DEVIATION"));
 }
 
 #[test]
@@ -94,4 +99,22 @@ fn a_bad_id_a_twice_tagged_id_an_unknown_label_and_a_guess_with_no_bullet_are_re
     assert!(f[1].contains("tagged twice"));
     assert!(f[2].contains("`MAYBE` is not one of"));
     assert!(f[3].contains("carries its Guesses bullet"));
+}
+
+/// Tagging moves nothing a pop-up's fingerprint reads (feature 451 T192): `strip` takes every well-formed tag out and leaves a malformed
+/// one, which then stays visible.
+#[test]
+fn strip_takes_out_each_well_formed_tag_and_leaves_a_malformed_one() {
+    let bare = "<li><strong>A gate.</strong> Guarded, a GUESS.</li>";
+    let tagged = bare.replace(
+        "</li>",
+        &format!(
+            "{}</li>",
+            tag("gate", "GUESS", "That it is guarded: no page says")
+        ),
+    );
+    assert_ne!(tagged, bare);
+    assert_eq!(strip(&tagged), bare);
+    let malformed = r#"<li>x<span class="item" data-item="g">y</span></li>"#;
+    assert_eq!(strip(malformed), malformed);
 }

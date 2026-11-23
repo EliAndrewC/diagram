@@ -59,6 +59,17 @@ most two rounds per unit per feature (one review and one fix-verification; a thi
 the stop hook holds the turn while an owed unit has no dispatch, run or record. An engine change that moves things under rules
 already judged owes nothing and gets no report - the GM looks at the map.
 
+**A nitpick fixed on the sheet owes a round of its edit alone** (451 T199, the GM 2026-11-23: *"make only the smallest possible
+changes perhaps with some kind of adversarial subagent review process"*). A building-review verdict whose sheet hashes as reviewed and
+whose open findings are only nitpick, outside or confirmation STANDS: `make verify` names it answered. A sheet edit that fixed ONLY
+nitpicks moves the hash, so after `make verify` the builder runs `make review-fixed UNIT=<unit> FINDING="<ids>"`: refused if a named
+finding is not a nitpick or an error or questionable one is open (not left by `make review-accept`), it writes a change-scoped prompt
+(`.git/review-scoped/<unit>/prompt.md`: the edit's lines before and after, as T189's later rounds are handed them, against the sheet the
+verdict's review read, kept beside it). One building-review dispatched on it judges adversarially only whether the edit did more than
+the named fixes or made anything wrong, and records `make review-verdict ... SCOPE=change`; a clean one (PASS, findings all minor, gate
+not red) carries the verdict to the sheet as edited, for `make verify`, the checkpoint and the push's review gate alike
+(`reviews/prereq/scoped.rs`). Anything else owes the full round.
+
 **A glyph check runs on the feature's hour** (feature 375 amendment 9, the GM 2026-10-12: *"run periodically rather than every
 time a map changes ... every feature which takes longer than 1 hour to implement is 'due' to run it once after every hour and
 the address findings all at once"*). Its units are found as above but are DUE only when an hour of the feature's time has passed

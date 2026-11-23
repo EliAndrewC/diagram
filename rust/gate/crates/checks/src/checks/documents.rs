@@ -11,6 +11,7 @@ mod agent_models;
 mod agent_waves;
 mod citation_inventory;
 mod claude_md_quotes;
+mod derived_quick;
 mod docs_mechanism;
 mod item_labels;
 mod modal_split_pointer;

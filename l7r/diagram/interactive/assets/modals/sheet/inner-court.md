@@ -19,7 +19,7 @@ Its size went with the house it held: at Takayama the intendant's residence, as 
 on grounds of about 0.8 acre.
 
 Guesses:
-- That the gate between the two courts was guarded: no record says so.
+- {0090#gate-between-two-courts}
 - That the court's open ground was bare earth: no page we read says what lay underfoot in the residence court of a magistrate's compound.
 
 Depiction: The plan always sets the inner court behind the office hall; for a

@@ -1064,19 +1064,19 @@
    "declared": "spec-fidelity"
   },
   "### T198, T199, T200 (bundle) (the GM's request of 2026-11-23, relayed by the task lines, to look for other gaps of this kind; the gap audit /home/agent/.claude/jobs/c6fd72d1/tmp/gap-audit.md items 10, 11 and 12b-d)": {
-   "sha256": "0b439a11509871b0e2ddbb996cc5eb22182630c5cc90a17b6b0b8f2f8754f8b2",
+   "sha256": "c16aba2d92b3bbf121597916138c89b51146894a2a8c578eb56b5304f325b979",
    "verdict": "CLEAR",
    "reviewed": "2026-11-23",
    "declared": "spec-fidelity"
   },
   "### T198, T199, T200 Approach (checklist part A)": {
-   "sha256": "1dd7537da2f63fad80605dde1b2bdb01b60158d26d43fab520e6aa4df008056d",
+   "sha256": "0a939a5c60ef6ebbc02b63d0a39efa66e5d8ee722a146f639040bb72a3e8f5e3",
    "verdict": "CLEAR",
    "reviewed": "2026-11-23",
    "declared": "spec-fidelity"
   },
   "### T198, T199, T200 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)": {
-   "sha256": "5f3346cd7d67e70d44caf4e1ea3b5df9bceff18c6b3d1c54402db46a6ec241fe",
+   "sha256": "095a930b5d69c5d0555d12dd1e9f35c6446088874d84c017f5c2c291f5a59cb4",
    "verdict": "CLEAR",
    "reviewed": "2026-11-23",
    "declared": "spec-fidelity"
@@ -1101,6 +1101,36 @@
   },
   "### T197 Approach (checklist part A)": {
    "sha256": "822173f6638d3c40bef788ffc6c5244435fc187180bb465940e3c050176b2645",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity"
+  },
+  "### T192 (the GM 2026-11-23, request.md: \"Yes please tag the rest of the record before resuming our port\"; filed by T187, which tagged one page, 0218)": {
+   "sha256": "12c8375548d783e7f88c704f818edbd0a48f48e92fac7b48cb47684f65be6a9f",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity"
+  },
+  "### T192 Approach (checklist part A)": {
+   "sha256": "a52edc0298494edfe733840c52361cf06fdb4498e2ed68703286293e3aba5db2",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity"
+  },
+  "### T192 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)": {
+   "sha256": "856eacfff3095aa12f61e342ec6d40623bfb9375e435347f30d753ea6a47a2c9",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity"
+  },
+  "### T204 (451 T192's sample, 2026-11-23: naming the item of 12 GUESS or DEVIATION claims citing 0090's and 0196's drawing pages owed all 12 impl-drift as `code changed`, while a plain pointer flipped to `GUESS ...#id` owed none; method: `make claims-owed` after `.git/t192/claims.py apply`)": {
+   "sha256": "e310b5c817f3cfa88aba1974111871c031379fe96c12ece8e660029511d3da39",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity"
+  },
+  "### T204 Approach (checklist part A)": {
+   "sha256": "c9f2ad1460a1c60e62d7407bc034d90191b700ea1a1a19fb52ffc2458784a45c",
    "verdict": "CLEAR",
    "reviewed": "2026-11-23",
    "declared": "spec-fidelity"
@@ -17015,6 +17045,256 @@
      "why": "The arbiter asked for this re-reading (ask:t197-rejudge-verb item 2). With part (4) gone, part (3) only adds owed work, so 'no' is the faithful reading under FR-013, and the [perf] tag is dropped to match. A small leftover not worth a block: step 2 still lists 'FR-013: the landings faster' as a constraint. Read with 'no', that is a limit (do not slow the landings), not a claim of speed."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-23",
+   "blocks": [
+    "### T192 (the GM 2026-11-23, request.md: \"Yes please tag the rest of the record before resuming our port\"; filed by T187, which tagged one page, 0218)",
+    "### T192 Approach (checklist part A)",
+    "### T192 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "strip",
+     "summary": "page_words drops every well-formed item tag (items::strip), a malformed one left visible, so a tag-only edit owes no pop-up triage",
+     "class": "within",
+     "why": "Serves the GM's approved 2026-11-23 rules (labels are data and propagate by regeneration; only a claim-changing edit triggers review) and is what makes 'tag the rest of the record' possible without a cascade; leaving a malformed tag visible only keeps a review owed, it removes none."
+    },
+    {
+     "id": "filled-references",
+     "summary": "Pop-up Guesses read as the reader meets them, each {NNNN#id} reference filled from its tag's data-guess whatever its label; a verbatim reference owes nothing, a reworded referenced data-guess owes the pop-up its checks, a relabel owes nothing",
+     "class": "within",
+     "why": "Implements the referencing half of tagging (T187's form) and keeps a claim-changing rewording owing review, as the approved rule 'only a claim-changing edit triggers review' requires; nothing the GM asked to be reviewed escapes review."
+    },
+    {
+     "id": "moved-item-locate",
+     "summary": "References resolved through T200's Pages::locate (own question first, else the one other question tagging the id), base from base pages and tree from tree pages",
+     "class": "within",
+     "why": "A fix, red first, of a found defect (a moved item's reworded data-guess would have reached its pop-ups owing no check); closes a hole rather than narrowing anything."
+    },
+    {
+     "id": "grammar-mixed-block",
+     "summary": "T187's rule that a CONVENTION/DEVIATION tag stands only in a block with no GUESS is relaxed: a block may hold both, each its own tag needing its own label word; a tag whose block says another label is refused",
+     "class": "within",
+     "why": "Widens to meet the request: the old rule left 27 measured blocks the GM asked tagged untaggable. The new refusal enforces constitution XII (a tag never says more than its block). It removes nothing from what was asked."
+    },
+    {
+     "id": "tag-not-prose",
+     "summary": "question_size counts an item tag for nothing toward the size cap",
+     "class": "within",
+     "why": "Without it, tagging pushed 0196 over its cap, which would force a size trim; the GM ruled 2026-11-23 that size limits must not cut details and no size edit is substantive. Serves the request and that rule."
+    },
+    {
+     "id": "bulk-script",
+     "summary": "The bulk is done by a clone-local script matching each pop-up bullet to a cited page's block at >=0.6 content-word overlap (GUESS blocks tagged with the bullet verbatim and the bullet made a reference), tagging fixed-form convention/deviation blocks, and listing the rest (643) for page sessions that confirm and write tags",
+     "class": "within",
+     "why": "A method for doing exactly what was asked, over the whole record; the rest is not excluded but sent to page sessions. Its 10-of-12 hand-read match rate means script matches must be confirmed by the page sessions, as the sample's were ('placed by the script and confirmed') and as performance item 1 states; that is how the plan reads, and it is a quality condition, not a narrowing."
+    },
+    {
+     "id": "claims-anchors",
+     "summary": "The 223 claims pointing at a drawing page without an item get their item named (claims.py proposes by overlap), after T204",
+     "class": "within",
+     "why": "Part of labels being data that propagate mechanically (the approved rule); the goal states it and step 5 puts it inside the bulk that lands before the port resumes, so it is neither dropped nor deferred past the GM's condition."
+    },
+    {
+     "id": "order",
+     "summary": "Strip and filled references land before or with the first tag batch; the whole bulk, claims included, lands before the port resumes",
+     "class": "within",
+     "why": "Matches the GM's condition verbatim: 'tag the rest of the record before resuming our port'."
+    },
+    {
+     "id": "sample-then-batches",
+     "summary": "One landing for the code and a four-page sample (15 pop-ups); the rest in batches at the page sessions' write cap, each its own landing",
+     "class": "within",
+     "why": "Staging of the same work, all of it before the port; no part of the record is excluded."
+    },
+    {
+     "id": "left-T204",
+     "summary": "Naming the item on a claim that already carries a class owes impl-drift (relabeled_only compares the stored claim with Claim::normalized); not fixed here, filed as T204, lands before T22; the sample's anchors reverted",
+     "class": "within",
+     "why": "A defect not left past the GM's condition: the claims' anchors wait on T204 and the bulk, claims included, lands before the port resumes, so it is fixed before the next step as FIX AS WE GO asks. It is deferred only because the file holds another builder's uncommitted hunks, with its reason, task and order stated."
+    },
+    {
+     "id": "left-T200-fixture",
+     "summary": "research_pointers test fails on T200's uncommitted fixture pointing at a nonexistent 0301 question file; left to T200, lands before T22",
+     "class": "within",
+     "why": "Not in T192's scope at all - another builder's uncommitted test fixture - and fixed in its own task before T22; nothing the GM asked of T192 is narrowed."
+    },
+    {
+     "id": "no-reader-change",
+     "summary": "Nothing a reader of a map or pop-up sees changes; each reference fills to its bullet's own words",
+     "class": "within",
+     "why": "Consistent with the request (tagging is bookkeeping, not content) and with the GM's convergence rules."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-23",
+   "blocks": [
+    "### T198, T199, T200 (bundle) (the GM's request of 2026-11-23, relayed by the task lines, to look for other gaps of this kind; the gap audit /home/agent/.claude/jobs/c6fd72d1/tmp/gap-audit.md items 10, 11 and 12b-d)",
+    "### T198, T199, T200 Approach (checklist part A)",
+    "### T198, T199, T200 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T198-quick-derived",
+     "summary": "make quick's _quick recipe gains make-docs --check, mode-a building-programs --check and record check glossary, the three derived files make done's preflight regenerates, so the closing checks fail on a stale one naming its regenerate command",
+     "class": "within",
+     "why": "The task's own subject (a red make done on a stale derived file), filed as performance work under FR-013 and the GM's 2026-11-20 'prioritize performance improvements'; it moves an existing check earlier, adds no behavior beyond refusing a stale file the gate already refuses."
+    },
+    {
+     "id": "T198-derived-quick-pin",
+     "summary": "checks/documents/derived_quick.rs pins the quick recipe to preflight's DERIVED table; a derived target quick does not check, or one the table does not know, is red naming the line to add",
+     "class": "within",
+     "why": "Enforcement of the requested behavior only: with the derived lines deleted from the spec the pin has nothing left to check (GM 2026-09-20 on checks that make the asked thing keep happening). FR-012 red-first is honored in the table."
+    },
+    {
+     "id": "T199-standing",
+     "summary": "reviews prereq standing names a unit whose last PASS/NEEDS-WORK is carried to the sheet as just snapshotted and whose every open finding (not review-accepted) is nitpick, outside or confirmation; review-tree.sh prints it answered and leaves it out of the dispatch count",
+     "class": "within",
+     "why": "Implements the GM's approved 2026-11-23 rules 'only factual findings cascade' and 'settled choices stay settled' and his 'style edits are just a different category of thing than factual inaccuracies' for building reviews; measured first (4 byte-identical sheets dispatched anyway), with one-shot labels on the figures."
+    },
+    {
+     "id": "T199-error-fixed-off-sheet",
+     "summary": "a fixed error or questionable finding owes its round even on an unchanged sheet (e.g. fixed in the docs)",
+     "class": "within",
+     "why": "An error or questionable finding is a factual one; 'only factual findings cascade' is the GM's rule, so a factual fix owing a round is the rule applied, not a carve-out from it. The sheet being unchanged does not show the fix was right."
+    },
+    {
+     "id": "T199-unknown-severity",
+     "summary": "a finding of no or an unknown severity owes a round, failing closed as T188 does",
+     "class": "within",
+     "why": "The standing rule exempts only findings shown to be non-factual; a finding whose class is unknown cannot be shown so, and failing closed keeps the GM's 'only factual findings cascade' from passing an unclassified factual finding."
+    },
+    {
+     "id": "T199-scoped-round",
+     "summary": "a nitpick fixed on the sheet owes only a change-scoped, adversarial building-review of the edit (make review-fixed UNIT= FINDING=, the kept reviewed sheet, T189's before/after pairs); a clean SCOPE=change verdict (PASS, every finding minor, gate not red) is carried by carried/answered/standing/checkpoint/push review gate",
+     "class": "within",
+     "why": "Directly the GM's words 'make only the smallest possible changes perhaps with some kind of adversarial subagent review process' and the approved rule 're-reviews scoped to the change'. The plan says plainly the saving is unmeasured and the rule is the GM's, which is correct framing."
+    },
+    {
+     "id": "T199-error-fix-on-sheet-full-round",
+     "summary": "an error or questionable finding fixed on the sheet is refused by make review-fixed and owes the full round, not a change-scoped one",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "In tension with 're-reviews scoped to the change', which the section itself applies to building reviews, so it is ruled. Legitimate on the GM's own words: 'style edits are just a different category of thing than factual inaccuracies. And it might be that when we are cascading, we are only interested in factual inaccuracies' - the scoped route he proposed was for the small, non-factual edits, and a factual fix is the class he said matters. Purpose test: the oscillation the GM described was rounds driven by style findings; under this same section any nitpick the full round raises then stands (T199-standing) and, if fixed, owes only a scoped round, so the full round cannot restart the oscillation. Nor is it a defect left: a full review after a real-flaw fix is not a wrong outcome. Resting this on the request's words, not on T199's task line, which the bundle does not carry."
+    },
+    {
+     "id": "T199-unclean-scoped-round",
+     "summary": "a change-scoped round that is not clean (not PASS, a finding above minor, or its gate red) owes the full round",
+     "class": "within",
+     "why": "The adversarial scoped round exists to catch an edit that did more than the named fix or made something wrong; when it finds that, the change is no longer the small one the GM's scoped route covers, so falling back is the route working, not an exception to it."
+    },
+    {
+     "id": "T199-pre-T199-verdict",
+     "summary": "a verdict recorded before T199 (no kept reviewed sheet hashing to its content_key) owes the full round",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Physically impossible otherwise: the change-scoped round reviews the diff between the sheet the verdict read and the sheet now, and before T199 the reviewed sheet was not kept (the snapshot is replaced by the next make verify), so there is no 'change' to scope a review to. It lapses on its own as verdicts are re-recorded."
+    },
+    {
+     "id": "T199-one-copy",
+     "summary": "the pairing lifted from bundle::earlier into core::difflib::paired; the push's review gate's content-key branch now calls reviews prereq answered; make verify names the route",
+     "class": "within",
+     "why": "Implementation structure serving the requested route (one copy of the carry rule for every reader); no scope added."
+    },
+    {
+     "id": "T200-12b-locate",
+     "summary": "Pages::locate finds {NNNN#id} on question NNNN's pages, else on the one other question whose pages tag id; two such questions are refused naming both",
+     "class": "within",
+     "why": "The GM's approved 'a split is a move': an item moved between questions keeps resolving. Refusing an ambiguous two-home case fails closed rather than guessing."
+    },
+    {
+     "id": "T200-12b-follow",
+     "summary": "a claim whose item moved is followed through the cited page's split pointers to the one page that now tags it, owes no edit, and is held to that tag's class (a flip owes no impl-drift)",
+     "class": "within",
+     "why": "The GM verbatim: 'as long as the original page being linked to directs a reader to the other page where the full information can be found, then nothing needs to cascade simply because a split occurs', and 'attested versus guess ... cascades mechanically' / labels are data propagated by regeneration."
+    },
+    {
+     "id": "T200-12b-two-reached",
+     "summary": "two pages reached by the pointers that both tag the item are refused naming the case",
+     "class": "within",
+     "why": "Outside the GM's condition (the old page does not direct the reader to THE page with the information); failing closed on ambiguity is not a carve-out from 'nothing needs to cascade'."
+    },
+    {
+     "id": "T200-12b-no-pointer",
+     "summary": "where no pointer from the cited page directs the reader to the item's new page, the claim is named with the pointer to write",
+     "class": "within",
+     "why": "Implied by the GM's own condition: 'as long as the original page ... directs a reader to the other page'. Where it does not, the condition fails and something must be written; the plan asks for the pointer, the smallest change, not a re-review."
+    },
+    {
+     "id": "T200-12c-already-done",
+     "summary": "item 12c changes nothing: owed::record::modals::followed calls triage::change::follow, which walks pointer targets to a fixpoint since 451 T196",
+     "class": "within",
+     "why": "Taken on the pinned test the block names (change/tests.rs' a_split_s_target_split_again_is_followed_each_page_once), which this bundle-only review cannot re-run; the closing checks run that test, so a false premise turns them red."
+    },
+    {
+     "id": "T200-12d-reads",
+     "summary": "items.rs logs every page a Guesses reference reads (take_read), drained by l7r_mode_a::reads::take, so a relabel regenerates a cached sheet; a page named only in About prose is never read and owes the cache nothing",
+     "class": "within",
+     "why": "A defect fix (a cache that could serve a stale sheet after a relabel), the GM's 'labels are data and propagate by regeneration'; the About-prose case is not an exception since nothing is read from it, so nothing it says reaches the sheet. Measured 2026-11-23 by grep, with its method."
+    },
+    {
+     "id": "T198-T199-perf",
+     "summary": "T198 and T199 counted as [perf] tasks under FR-013 (fewer red make done runs, fewer review rounds); T200 not",
+     "class": "within",
+     "why": "FR-013 counts work that speeds the gate, landings or builders' loop as performance work; the checklist's guesses are labeled GUESS and its measurements carry date and method."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-23",
+   "blocks": [
+    "### T204 (451 T192's sample, 2026-11-23: naming the item of 12 GUESS or DEVIATION claims citing 0090's and 0196's drawing pages owed all 12 impl-drift as `code changed`, while a plain pointer flipped to `GUESS ...#id` owed none; method: `make claims-owed` after `.git/t192/claims.py apply`)",
+    "### T204 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T204-D1",
+     "summary": "Naming the item of a claim whose class word is unchanged owes no impl-drift re-check: the claims crate reads a stored claim against Claim::unanchored (class kept, anchors dropped) as well as normalized, in a Rust unit's claim (index.rs relabeled_only)",
+     "class": "within",
+     "why": "Carries the GM's 2026-11-23 rules 'only a claim-changing edit triggers review' and 'labels are data and propagate by regeneration', and serves 'tag the rest of the record before resuming our port' (T192): without it every named claim owes an agent check for an edit that changes no meaning."
+    },
+    {
+     "id": "T204-D2",
+     "summary": "The same reading extended to a doc section's claim (index.rs owed_one, units.rs Unit::code_unanchored), whose row stores only code",
+     "class": "within",
+     "why": "Same purpose as D1 on the other unit kind the claims take; the before/after measurement shows the fix does not do what it is for without this arm (77 of 94 still owed)."
+    },
+    {
+     "id": "T204-D3",
+     "summary": "The stale-figure check (stale.rs label_free) given the same symmetry: a constant's doc that only named the item, class kept, is no change; fixed in this task",
+     "class": "within",
+     "why": "A defect found in the work (24 false stale flags on an edit that changes no claim) fixed in the task that found it, as the GM's fix-as-we-go rule requires; same request purpose as D1."
+    },
+    {
+     "id": "T204-D4",
+     "summary": "A class changed with the naming (GUESS p to DEVIATION p#id or plain p#id), or a changed account, still owes",
+     "class": "within",
+     "why": "A claim's own class word changing (GUESS to DEVIATION, or to a plain attested pointer) changes what the claim asserts about the code, so under the GM's 2026-11-23 rule 'only a claim-changing edit triggers review' it still owes; the GM's 'labels are data and propagate by regeneration' / 'cascade mechanically' concerns a page label echoing to the entries that cite it, not a claim changing its own class. The brief's 'its class word staying the same', as the block quotes it, draws the same line. Within, not a narrowing."
+    },
+    {
+     "id": "T204-D5",
+     "summary": "The tag's agreement with the class is left to the label check (item_labels.rs), which refuses a landing on its own, rather than repeated in owed",
+     "class": "within",
+     "why": "The brief's 'agreeing with the tag' condition, as the block quotes it, stays enforced: by the block's account the label check (item_labels.rs) refuses such a landing on its own, so a disagreeing tag cannot land owing nothing. Where the enforcement sits is design, not scope."
+    },
+    {
+     "id": "T204-D6",
+     "summary": "Red-first tests on the 12 sample shapes (both unit kinds) and 3 changed shapes, plus a measurement on a copy of the clone with all 94 unanchored classed drawing-page claims anchored: 94 owed + 24 stale before, 0 and 0 after",
+     "class": "within",
+     "why": "Verification of exactly the requested behavior (enforcement of the request, not unrequested scope). The 94 are, by the block's regex count over rust/mode_a and the two docs on 2026-11-23, every unanchored classed drawing-page claim; the already-anchored ones are already named."
+    },
+    {
+     "id": "T204-D7",
+     "summary": "Order (after T187/T197, before T192's claims pass and T22), exits (red recorded and set down, impossibility ruled through make arbiter-ask), budget one landing",
+     "class": "within",
+     "why": "Places the fix ahead of the T192 tagging the GM asked for before the port resumes; nothing the request settles is changed."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -27054,274 +27334,420 @@
    "verdict": "CLEAR"
   },
   "T198": {
-   "section_sha256": "9ba01fb9228c76e908a7dc2694374a3eb463dd908c49b64fc540c33ddc3537bb",
+   "section_sha256": "0c47ff783bf7c118d710666c1b4f36dfcfbbab03f254073ff9086a0af766fcbd",
    "reviewed": "2026-11-23",
    "declared": "spec-fidelity",
    "decisions": [
     {
-     "id": "T198-derived-lines",
-     "summary": "make quick's _quick recipe gains make-docs --check, mode-a building-programs --check and record check glossary, the three derived files make done's preflight regenerates",
+     "id": "T198-quick-derived",
+     "summary": "make quick's _quick recipe gains make-docs --check, mode-a building-programs --check and record check glossary, the three derived files make done's preflight regenerates, so the closing checks fail on a stale one naming its regenerate command",
      "class": "within",
-     "why": "Moves an existing check earlier so a stale derived file fails the closing checks instead of a full make done; serves the approved efficiency improvements ('doing those first makes everything after them faster', 2026-11-20) and FR-013's [perf] class. No behavior beyond the checks preflight already runs; timings are dated with their method."
+     "why": "The task's own subject (a red make done on a stale derived file), filed as performance work under FR-013 and the GM's 2026-11-20 'prioritize performance improvements'; it moves an existing check earlier, adds no behavior beyond refusing a stale file the gate already refuses."
     },
     {
-     "id": "T198-derived-pin",
-     "summary": "derived_quick.rs pins the quick recipe to preflight's DERIVED table, red naming the line to add",
+     "id": "T198-derived-quick-pin",
+     "summary": "checks/documents/derived_quick.rs pins the quick recipe to preflight's DERIVED table; a derived target quick does not check, or one the table does not know, is red naming the line to add",
      "class": "within",
-     "why": "Enforcement of the T198 change itself (delete the requested lines and the test has nothing to check); 'let's make sure all of the enforcement is real enforcement and not just instructions' (2026-11-19)."
+     "why": "Enforcement of the requested behavior only: with the derived lines deleted from the spec the pin has nothing left to check (GM 2026-09-20 on checks that make the asked thing keep happening). FR-012 red-first is honored in the table."
     },
     {
-     "id": "T199-standing-predicate",
-     "summary": "reviews prereq standing names a unit whose last PASS/NEEDS-WORK is carried to its sheet as just snapshotted and whose every open finding is nitpick, outside or confirmation; review-tree.sh prints it answered and leaves it out of the dispatch count",
+     "id": "T199-standing",
+     "summary": "reviews prereq standing names a unit whose last PASS/NEEDS-WORK is carried to the sheet as just snapshotted and whose every open finding (not review-accepted) is nitpick, outside or confirmation; review-tree.sh prints it answered and leaves it out of the dispatch count",
      "class": "within",
-     "why": "Carries the GM's approved rules of 2026-11-23 'only factual findings cascade; re-reviews scoped to the change' and 'when we are cascading, we are only interested in factual inaccuracies'. An unchanged sheet with only minor findings open needs no new round; measured 4 byte-identical re-rounds in the replay."
+     "why": "Implements the GM's approved 2026-11-23 rules 'only factual findings cascade' and 'settled choices stay settled' and his 'style edits are just a different category of thing than factual inaccuracies' for building reviews; measured first (4 byte-identical sheets dispatched anyway), with one-shot labels on the figures."
     },
     {
-     "id": "T199-fail-closed",
-     "summary": "a fixed error or questionable finding owes its round even on an unchanged sheet; a finding of no or unknown severity owes one too",
+     "id": "T199-error-fixed-off-sheet",
+     "summary": "a fixed error or questionable finding owes its round even on an unchanged sheet (e.g. fixed in the docs)",
      "class": "within",
-     "why": "Keeps factual findings in the review path, which is what 'only factual findings cascade' keeps; failing closed on unknown severity does not narrow the request, it holds the line the GM drew between style and factual inaccuracy."
+     "why": "An error or questionable finding is a factual one; 'only factual findings cascade' is the GM's rule, so a factual fix owing a round is the rule applied, not a carve-out from it. The sheet being unchanged does not show the fix was right."
     },
     {
-     "id": "T199-found-and-left-nitpick-fixed-on-sheet",
-     "summary": "a building-review nitpick fixed ON THE SHEET still moves the content key and owes a full round - which, by the block's own words, T199's line forbids - left unfixed and filed as T203, 'lands before T201'",
+     "id": "T199-unknown-severity",
+     "summary": "a finding of no or an unknown severity owes a round, failing closed as T188 does",
+     "class": "within",
+     "why": "The standing rule exempts only findings shown to be non-factual; a finding whose class is unknown cannot be shown so, and failing closed keeps the GM's 'only factual findings cascade' from passing an unclassified factual finding."
+    },
+    {
+     "id": "T199-scoped-round",
+     "summary": "a nitpick fixed on the sheet owes only a change-scoped, adversarial building-review of the edit (make review-fixed UNIT= FINDING=, the kept reviewed sheet, T189's before/after pairs); a clean SCOPE=change verdict (PASS, every finding minor, gate not red) is carried by carried/answered/standing/checkpoint/push review gate",
+     "class": "within",
+     "why": "Directly the GM's words 'make only the smallest possible changes perhaps with some kind of adversarial subagent review process' and the approved rule 're-reviews scoped to the change'. The plan says plainly the saving is unmeasured and the rule is the GM's, which is correct framing."
+    },
+    {
+     "id": "T199-error-fix-on-sheet-full-round",
+     "summary": "an error or questionable finding fixed on the sheet is refused by make review-fixed and owes the full round, not a change-scoped one",
      "class": "narrowing",
-     "ruling": "NOT LEGITIMATE",
-     "why": "The block says T199's own line forbids this, so ticking T199 leaves a clause of its own instruction undone; filing T203 moves it but does not make the exception legitimate, and FR-009's deferral form is for a defect found along the way, not a clause of the task being closed. Each reason fails separately: (1) '0 of the 7 attributable rounds were such' is 7 of 12 with 5 unknown, so the premise is not measured over the sample, and the GM's rule ('re-reviews scoped to the change', 'style edits are just a different category of thing than factual inaccuracies') does not depend on a measured saving anyway; (2) 'it needs a declaration verb whose key the push's review gate also accepts' is more code to change, which never makes an exception legitimate; (3) 'that the edit was only the nitpick cannot be checked mechanically' rules out one mechanism, not the rule: the GM himself named the route ('make only the smallest possible changes perhaps with some kind of adversarial subagent review process', 2026-11-23), i.e. a round scoped to the diff rather than a full round. Not physically impossible, not implied by the GM's words, and applying the rule does not defeat the request's purpose (fewer rounds that find no real flaw). Fix: do the nitpick-fixed-on-sheet case in this section (e.g. a fixed-nitpick edit owes a round scoped to the diff, by an adversarial check, not a full round, with the review gate accepting that key), or else take the clause out of T199's line with the GM's approval rather than tick T199 without it. 'Lands before T201' cannot be judged: neither T203's nor T201's line is in the bundle."
+     "ruling": "LEGITIMATE",
+     "why": "In tension with 're-reviews scoped to the change', which the section itself applies to building reviews, so it is ruled. Legitimate on the GM's own words: 'style edits are just a different category of thing than factual inaccuracies. And it might be that when we are cascading, we are only interested in factual inaccuracies' - the scoped route he proposed was for the small, non-factual edits, and a factual fix is the class he said matters. Purpose test: the oscillation the GM described was rounds driven by style findings; under this same section any nitpick the full round raises then stands (T199-standing) and, if fixed, owes only a scoped round, so the full round cannot restart the oscillation. Nor is it a defect left: a full review after a real-flaw fix is not a wrong outcome. Resting this on the request's words, not on T199's task line, which the bundle does not carry."
     },
     {
-     "id": "T200-12b-guesses-locate",
-     "summary": "Pages::locate finds {NNNN#id} on question NNNN's pages, else on the one other question whose pages tag id; two such questions refused naming both",
+     "id": "T199-unclean-scoped-round",
+     "summary": "a change-scoped round that is not clean (not PASS, a finding above minor, or its gate red) owes the full round",
      "class": "within",
-     "why": "Carries 'a split is a move' and 'as long as the original page being linked to directs a reader to the other page ... nothing needs to cascade simply because a split occurs' (2026-11-23): a moved item still fills its pop-up's Guesses. Refusing an ambiguous move (two candidates) is a correctness refusal, not a narrowing."
+     "why": "The adversarial scoped round exists to catch an edit that did more than the named fix or made something wrong; when it finds that, the change is no longer the small one the GM's scoped route covers, so falling back is the route working, not an exception to it."
     },
     {
-     "id": "T200-12b-claims-pointer-rewritten",
-     "summary": "claims' item_labels names a claim whose item moved with the pointer to write ('is tagged on <page> now - write its backing'), its class held to the moved tag; the pointer is rewritten, not followed",
+     "id": "T199-pre-T199-verdict",
+     "summary": "a verdict recorded before T199 (no kept reviewed sheet hashing to its content_key) owes the full round",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Physically impossible otherwise: the change-scoped round reviews the diff between the sheet the verdict read and the sheet now, and before T199 the reviewed sheet was not kept (the snapshot is replaced by the next make verify), so there is no 'change' to scope a review to. It lapses on its own as verdicts are re-recorded."
+    },
+    {
+     "id": "T199-one-copy",
+     "summary": "the pairing lifted from bundle::earlier into core::difflib::paired; the push's review gate's content-key branch now calls reviews prereq answered; make verify names the route",
      "class": "within",
-     "why": "The purpose reason holds: a claim cites a page and its round reads that page, so a silently followed pointer would leave the claim citing a page that no longer carries its item - a wrong citation, not a cascade. Replaces HEAD's refusal ('names no item') with a named mechanical fix and holds the label class to the moved tag ('labels are data and propagate by regeneration'). The GM's rule is that a split triggers no review; nothing in the block makes the rewrite owe a claims review beyond the claim's own existing round, and if T192/T203 work made it do so that would be the finding there."
+     "why": "Implementation structure serving the requested route (one copy of the carry rule for every reader); no scope added."
+    },
+    {
+     "id": "T200-12b-locate",
+     "summary": "Pages::locate finds {NNNN#id} on question NNNN's pages, else on the one other question whose pages tag id; two such questions are refused naming both",
+     "class": "within",
+     "why": "The GM's approved 'a split is a move': an item moved between questions keeps resolving. Refusing an ambiguous two-home case fails closed rather than guessing."
+    },
+    {
+     "id": "T200-12b-follow",
+     "summary": "a claim whose item moved is followed through the cited page's split pointers to the one page that now tags it, owes no edit, and is held to that tag's class (a flip owes no impl-drift)",
+     "class": "within",
+     "why": "The GM verbatim: 'as long as the original page being linked to directs a reader to the other page where the full information can be found, then nothing needs to cascade simply because a split occurs', and 'attested versus guess ... cascades mechanically' / labels are data propagated by regeneration."
+    },
+    {
+     "id": "T200-12b-two-reached",
+     "summary": "two pages reached by the pointers that both tag the item are refused naming the case",
+     "class": "within",
+     "why": "Outside the GM's condition (the old page does not direct the reader to THE page with the information); failing closed on ambiguity is not a carve-out from 'nothing needs to cascade'."
+    },
+    {
+     "id": "T200-12b-no-pointer",
+     "summary": "where no pointer from the cited page directs the reader to the item's new page, the claim is named with the pointer to write",
+     "class": "within",
+     "why": "Implied by the GM's own condition: 'as long as the original page ... directs a reader to the other page'. Where it does not, the condition fails and something must be written; the plan asks for the pointer, the smallest change, not a re-review."
     },
     {
      "id": "T200-12c-already-done",
-     "summary": "owed::record::modals::followed already walks pointer targets to a fixpoint since 451 T196, pinned by an existing test; nothing changed",
+     "summary": "item 12c changes nothing: owed::record::modals::followed calls triage::change::follow, which walks pointer targets to a fixpoint since 451 T196",
      "class": "within",
-     "why": "Decides that a gap audit item is already closed, citing its pin; no part of the request is dropped."
+     "why": "Taken on the pinned test the block names (change/tests.rs' a_split_s_target_split_again_is_followed_each_page_once), which this bundle-only review cannot re-run; the closing checks run that test, so a false premise turns them red."
     },
     {
-     "id": "T200-12d-reference-reads",
-     "summary": "items.rs logs every page a Guesses reference reads and mode_a's reads::take drains it, so a relabel on a reference's page regenerates a cached sheet; a page named only in About prose is never read and owes the cache nothing",
+     "id": "T200-12d-reads",
+     "summary": "items.rs logs every page a Guesses reference reads (take_read), drained by l7r_mode_a::reads::take, so a relabel regenerates a cached sheet; a page named only in About prose is never read and owes the cache nothing",
      "class": "within",
-     "why": "Carries 'labels are data and propagate by regeneration' (2026-11-23): a relabel must reach the cached sheet. A defect fix in the safe direction (a stale cache is a wrong outcome); the About-prose exclusion is by construction (an unread page cannot make the output stale), not a carve-out. Measured: 16 modals carry references, none stale today."
+     "why": "A defect fix (a cache that could serve a stale sheet after a relabel), the GM's 'labels are data and propagate by regeneration'; the About-prose case is not an exception since nothing is read from it, so nothing it says reaches the sheet. Measured 2026-11-23 by grep, with its method."
     },
     {
-     "id": "T198-T199-perf-class",
-     "summary": "T198 and T199 are [perf] tasks under FR-013",
+     "id": "T198-T199-perf",
+     "summary": "T198 and T199 counted as [perf] tasks under FR-013 (fewer red make done runs, fewer review rounds); T200 not",
      "class": "within",
-     "why": "'can we in general priotitize performance improvements going forward?' (2026-11-20); both reduce red gate runs and review rounds, which FR-013's 'the landings or the builders' loop faster' covers."
-    },
-    {
-     "id": "T200-T192-order-note",
-     "summary": "T192's modals::refs should resolve through Pages::locate, passed in the handoff; T198 left the clone's stale make-targets.html to the handoff",
-     "class": "within",
-     "why": "Ordering and handoff notes; no part of the request narrowed. The stale make-targets.html must still be regenerated for this section's own 'make closing-checks ... green' done line."
+     "why": "FR-013 counts work that speeds the gate, landings or builders' loop as performance work; the checklist's guesses are labeled GUESS and its measurements carry date and method."
     }
    ],
-   "verdict": "BLOCKED"
+   "verdict": "CLEAR"
   },
   "T199": {
-   "section_sha256": "9ba01fb9228c76e908a7dc2694374a3eb463dd908c49b64fc540c33ddc3537bb",
+   "section_sha256": "0c47ff783bf7c118d710666c1b4f36dfcfbbab03f254073ff9086a0af766fcbd",
    "reviewed": "2026-11-23",
    "declared": "spec-fidelity",
    "decisions": [
     {
-     "id": "T198-derived-lines",
-     "summary": "make quick's _quick recipe gains make-docs --check, mode-a building-programs --check and record check glossary, the three derived files make done's preflight regenerates",
+     "id": "T198-quick-derived",
+     "summary": "make quick's _quick recipe gains make-docs --check, mode-a building-programs --check and record check glossary, the three derived files make done's preflight regenerates, so the closing checks fail on a stale one naming its regenerate command",
      "class": "within",
-     "why": "Moves an existing check earlier so a stale derived file fails the closing checks instead of a full make done; serves the approved efficiency improvements ('doing those first makes everything after them faster', 2026-11-20) and FR-013's [perf] class. No behavior beyond the checks preflight already runs; timings are dated with their method."
+     "why": "The task's own subject (a red make done on a stale derived file), filed as performance work under FR-013 and the GM's 2026-11-20 'prioritize performance improvements'; it moves an existing check earlier, adds no behavior beyond refusing a stale file the gate already refuses."
     },
     {
-     "id": "T198-derived-pin",
-     "summary": "derived_quick.rs pins the quick recipe to preflight's DERIVED table, red naming the line to add",
+     "id": "T198-derived-quick-pin",
+     "summary": "checks/documents/derived_quick.rs pins the quick recipe to preflight's DERIVED table; a derived target quick does not check, or one the table does not know, is red naming the line to add",
      "class": "within",
-     "why": "Enforcement of the T198 change itself (delete the requested lines and the test has nothing to check); 'let's make sure all of the enforcement is real enforcement and not just instructions' (2026-11-19)."
+     "why": "Enforcement of the requested behavior only: with the derived lines deleted from the spec the pin has nothing left to check (GM 2026-09-20 on checks that make the asked thing keep happening). FR-012 red-first is honored in the table."
     },
     {
-     "id": "T199-standing-predicate",
-     "summary": "reviews prereq standing names a unit whose last PASS/NEEDS-WORK is carried to its sheet as just snapshotted and whose every open finding is nitpick, outside or confirmation; review-tree.sh prints it answered and leaves it out of the dispatch count",
+     "id": "T199-standing",
+     "summary": "reviews prereq standing names a unit whose last PASS/NEEDS-WORK is carried to the sheet as just snapshotted and whose every open finding (not review-accepted) is nitpick, outside or confirmation; review-tree.sh prints it answered and leaves it out of the dispatch count",
      "class": "within",
-     "why": "Carries the GM's approved rules of 2026-11-23 'only factual findings cascade; re-reviews scoped to the change' and 'when we are cascading, we are only interested in factual inaccuracies'. An unchanged sheet with only minor findings open needs no new round; measured 4 byte-identical re-rounds in the replay."
+     "why": "Implements the GM's approved 2026-11-23 rules 'only factual findings cascade' and 'settled choices stay settled' and his 'style edits are just a different category of thing than factual inaccuracies' for building reviews; measured first (4 byte-identical sheets dispatched anyway), with one-shot labels on the figures."
     },
     {
-     "id": "T199-fail-closed",
-     "summary": "a fixed error or questionable finding owes its round even on an unchanged sheet; a finding of no or unknown severity owes one too",
+     "id": "T199-error-fixed-off-sheet",
+     "summary": "a fixed error or questionable finding owes its round even on an unchanged sheet (e.g. fixed in the docs)",
      "class": "within",
-     "why": "Keeps factual findings in the review path, which is what 'only factual findings cascade' keeps; failing closed on unknown severity does not narrow the request, it holds the line the GM drew between style and factual inaccuracy."
+     "why": "An error or questionable finding is a factual one; 'only factual findings cascade' is the GM's rule, so a factual fix owing a round is the rule applied, not a carve-out from it. The sheet being unchanged does not show the fix was right."
     },
     {
-     "id": "T199-found-and-left-nitpick-fixed-on-sheet",
-     "summary": "a building-review nitpick fixed ON THE SHEET still moves the content key and owes a full round - which, by the block's own words, T199's line forbids - left unfixed and filed as T203, 'lands before T201'",
+     "id": "T199-unknown-severity",
+     "summary": "a finding of no or an unknown severity owes a round, failing closed as T188 does",
+     "class": "within",
+     "why": "The standing rule exempts only findings shown to be non-factual; a finding whose class is unknown cannot be shown so, and failing closed keeps the GM's 'only factual findings cascade' from passing an unclassified factual finding."
+    },
+    {
+     "id": "T199-scoped-round",
+     "summary": "a nitpick fixed on the sheet owes only a change-scoped, adversarial building-review of the edit (make review-fixed UNIT= FINDING=, the kept reviewed sheet, T189's before/after pairs); a clean SCOPE=change verdict (PASS, every finding minor, gate not red) is carried by carried/answered/standing/checkpoint/push review gate",
+     "class": "within",
+     "why": "Directly the GM's words 'make only the smallest possible changes perhaps with some kind of adversarial subagent review process' and the approved rule 're-reviews scoped to the change'. The plan says plainly the saving is unmeasured and the rule is the GM's, which is correct framing."
+    },
+    {
+     "id": "T199-error-fix-on-sheet-full-round",
+     "summary": "an error or questionable finding fixed on the sheet is refused by make review-fixed and owes the full round, not a change-scoped one",
      "class": "narrowing",
-     "ruling": "NOT LEGITIMATE",
-     "why": "The block says T199's own line forbids this, so ticking T199 leaves a clause of its own instruction undone; filing T203 moves it but does not make the exception legitimate, and FR-009's deferral form is for a defect found along the way, not a clause of the task being closed. Each reason fails separately: (1) '0 of the 7 attributable rounds were such' is 7 of 12 with 5 unknown, so the premise is not measured over the sample, and the GM's rule ('re-reviews scoped to the change', 'style edits are just a different category of thing than factual inaccuracies') does not depend on a measured saving anyway; (2) 'it needs a declaration verb whose key the push's review gate also accepts' is more code to change, which never makes an exception legitimate; (3) 'that the edit was only the nitpick cannot be checked mechanically' rules out one mechanism, not the rule: the GM himself named the route ('make only the smallest possible changes perhaps with some kind of adversarial subagent review process', 2026-11-23), i.e. a round scoped to the diff rather than a full round. Not physically impossible, not implied by the GM's words, and applying the rule does not defeat the request's purpose (fewer rounds that find no real flaw). Fix: do the nitpick-fixed-on-sheet case in this section (e.g. a fixed-nitpick edit owes a round scoped to the diff, by an adversarial check, not a full round, with the review gate accepting that key), or else take the clause out of T199's line with the GM's approval rather than tick T199 without it. 'Lands before T201' cannot be judged: neither T203's nor T201's line is in the bundle."
+     "ruling": "LEGITIMATE",
+     "why": "In tension with 're-reviews scoped to the change', which the section itself applies to building reviews, so it is ruled. Legitimate on the GM's own words: 'style edits are just a different category of thing than factual inaccuracies. And it might be that when we are cascading, we are only interested in factual inaccuracies' - the scoped route he proposed was for the small, non-factual edits, and a factual fix is the class he said matters. Purpose test: the oscillation the GM described was rounds driven by style findings; under this same section any nitpick the full round raises then stands (T199-standing) and, if fixed, owes only a scoped round, so the full round cannot restart the oscillation. Nor is it a defect left: a full review after a real-flaw fix is not a wrong outcome. Resting this on the request's words, not on T199's task line, which the bundle does not carry."
     },
     {
-     "id": "T200-12b-guesses-locate",
-     "summary": "Pages::locate finds {NNNN#id} on question NNNN's pages, else on the one other question whose pages tag id; two such questions refused naming both",
+     "id": "T199-unclean-scoped-round",
+     "summary": "a change-scoped round that is not clean (not PASS, a finding above minor, or its gate red) owes the full round",
      "class": "within",
-     "why": "Carries 'a split is a move' and 'as long as the original page being linked to directs a reader to the other page ... nothing needs to cascade simply because a split occurs' (2026-11-23): a moved item still fills its pop-up's Guesses. Refusing an ambiguous move (two candidates) is a correctness refusal, not a narrowing."
+     "why": "The adversarial scoped round exists to catch an edit that did more than the named fix or made something wrong; when it finds that, the change is no longer the small one the GM's scoped route covers, so falling back is the route working, not an exception to it."
     },
     {
-     "id": "T200-12b-claims-pointer-rewritten",
-     "summary": "claims' item_labels names a claim whose item moved with the pointer to write ('is tagged on <page> now - write its backing'), its class held to the moved tag; the pointer is rewritten, not followed",
+     "id": "T199-pre-T199-verdict",
+     "summary": "a verdict recorded before T199 (no kept reviewed sheet hashing to its content_key) owes the full round",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Physically impossible otherwise: the change-scoped round reviews the diff between the sheet the verdict read and the sheet now, and before T199 the reviewed sheet was not kept (the snapshot is replaced by the next make verify), so there is no 'change' to scope a review to. It lapses on its own as verdicts are re-recorded."
+    },
+    {
+     "id": "T199-one-copy",
+     "summary": "the pairing lifted from bundle::earlier into core::difflib::paired; the push's review gate's content-key branch now calls reviews prereq answered; make verify names the route",
      "class": "within",
-     "why": "The purpose reason holds: a claim cites a page and its round reads that page, so a silently followed pointer would leave the claim citing a page that no longer carries its item - a wrong citation, not a cascade. Replaces HEAD's refusal ('names no item') with a named mechanical fix and holds the label class to the moved tag ('labels are data and propagate by regeneration'). The GM's rule is that a split triggers no review; nothing in the block makes the rewrite owe a claims review beyond the claim's own existing round, and if T192/T203 work made it do so that would be the finding there."
+     "why": "Implementation structure serving the requested route (one copy of the carry rule for every reader); no scope added."
+    },
+    {
+     "id": "T200-12b-locate",
+     "summary": "Pages::locate finds {NNNN#id} on question NNNN's pages, else on the one other question whose pages tag id; two such questions are refused naming both",
+     "class": "within",
+     "why": "The GM's approved 'a split is a move': an item moved between questions keeps resolving. Refusing an ambiguous two-home case fails closed rather than guessing."
+    },
+    {
+     "id": "T200-12b-follow",
+     "summary": "a claim whose item moved is followed through the cited page's split pointers to the one page that now tags it, owes no edit, and is held to that tag's class (a flip owes no impl-drift)",
+     "class": "within",
+     "why": "The GM verbatim: 'as long as the original page being linked to directs a reader to the other page where the full information can be found, then nothing needs to cascade simply because a split occurs', and 'attested versus guess ... cascades mechanically' / labels are data propagated by regeneration."
+    },
+    {
+     "id": "T200-12b-two-reached",
+     "summary": "two pages reached by the pointers that both tag the item are refused naming the case",
+     "class": "within",
+     "why": "Outside the GM's condition (the old page does not direct the reader to THE page with the information); failing closed on ambiguity is not a carve-out from 'nothing needs to cascade'."
+    },
+    {
+     "id": "T200-12b-no-pointer",
+     "summary": "where no pointer from the cited page directs the reader to the item's new page, the claim is named with the pointer to write",
+     "class": "within",
+     "why": "Implied by the GM's own condition: 'as long as the original page ... directs a reader to the other page'. Where it does not, the condition fails and something must be written; the plan asks for the pointer, the smallest change, not a re-review."
     },
     {
      "id": "T200-12c-already-done",
-     "summary": "owed::record::modals::followed already walks pointer targets to a fixpoint since 451 T196, pinned by an existing test; nothing changed",
+     "summary": "item 12c changes nothing: owed::record::modals::followed calls triage::change::follow, which walks pointer targets to a fixpoint since 451 T196",
      "class": "within",
-     "why": "Decides that a gap audit item is already closed, citing its pin; no part of the request is dropped."
+     "why": "Taken on the pinned test the block names (change/tests.rs' a_split_s_target_split_again_is_followed_each_page_once), which this bundle-only review cannot re-run; the closing checks run that test, so a false premise turns them red."
     },
     {
-     "id": "T200-12d-reference-reads",
-     "summary": "items.rs logs every page a Guesses reference reads and mode_a's reads::take drains it, so a relabel on a reference's page regenerates a cached sheet; a page named only in About prose is never read and owes the cache nothing",
+     "id": "T200-12d-reads",
+     "summary": "items.rs logs every page a Guesses reference reads (take_read), drained by l7r_mode_a::reads::take, so a relabel regenerates a cached sheet; a page named only in About prose is never read and owes the cache nothing",
      "class": "within",
-     "why": "Carries 'labels are data and propagate by regeneration' (2026-11-23): a relabel must reach the cached sheet. A defect fix in the safe direction (a stale cache is a wrong outcome); the About-prose exclusion is by construction (an unread page cannot make the output stale), not a carve-out. Measured: 16 modals carry references, none stale today."
+     "why": "A defect fix (a cache that could serve a stale sheet after a relabel), the GM's 'labels are data and propagate by regeneration'; the About-prose case is not an exception since nothing is read from it, so nothing it says reaches the sheet. Measured 2026-11-23 by grep, with its method."
     },
     {
-     "id": "T198-T199-perf-class",
-     "summary": "T198 and T199 are [perf] tasks under FR-013",
+     "id": "T198-T199-perf",
+     "summary": "T198 and T199 counted as [perf] tasks under FR-013 (fewer red make done runs, fewer review rounds); T200 not",
      "class": "within",
-     "why": "'can we in general priotitize performance improvements going forward?' (2026-11-20); both reduce red gate runs and review rounds, which FR-013's 'the landings or the builders' loop faster' covers."
-    },
-    {
-     "id": "T200-T192-order-note",
-     "summary": "T192's modals::refs should resolve through Pages::locate, passed in the handoff; T198 left the clone's stale make-targets.html to the handoff",
-     "class": "within",
-     "why": "Ordering and handoff notes; no part of the request narrowed. The stale make-targets.html must still be regenerated for this section's own 'make closing-checks ... green' done line."
+     "why": "FR-013 counts work that speeds the gate, landings or builders' loop as performance work; the checklist's guesses are labeled GUESS and its measurements carry date and method."
     }
    ],
-   "verdict": "BLOCKED"
+   "verdict": "CLEAR"
   },
   "T200": {
-   "section_sha256": "9ba01fb9228c76e908a7dc2694374a3eb463dd908c49b64fc540c33ddc3537bb",
+   "section_sha256": "0c47ff783bf7c118d710666c1b4f36dfcfbbab03f254073ff9086a0af766fcbd",
    "reviewed": "2026-11-23",
    "declared": "spec-fidelity",
    "decisions": [
     {
-     "id": "T198-derived-lines",
-     "summary": "make quick's _quick recipe gains make-docs --check, mode-a building-programs --check and record check glossary, the three derived files make done's preflight regenerates",
+     "id": "T198-quick-derived",
+     "summary": "make quick's _quick recipe gains make-docs --check, mode-a building-programs --check and record check glossary, the three derived files make done's preflight regenerates, so the closing checks fail on a stale one naming its regenerate command",
      "class": "within",
-     "why": "Moves an existing check earlier so a stale derived file fails the closing checks instead of a full make done; serves the approved efficiency improvements ('doing those first makes everything after them faster', 2026-11-20) and FR-013's [perf] class. No behavior beyond the checks preflight already runs; timings are dated with their method."
+     "why": "The task's own subject (a red make done on a stale derived file), filed as performance work under FR-013 and the GM's 2026-11-20 'prioritize performance improvements'; it moves an existing check earlier, adds no behavior beyond refusing a stale file the gate already refuses."
     },
     {
-     "id": "T198-derived-pin",
-     "summary": "derived_quick.rs pins the quick recipe to preflight's DERIVED table, red naming the line to add",
+     "id": "T198-derived-quick-pin",
+     "summary": "checks/documents/derived_quick.rs pins the quick recipe to preflight's DERIVED table; a derived target quick does not check, or one the table does not know, is red naming the line to add",
      "class": "within",
-     "why": "Enforcement of the T198 change itself (delete the requested lines and the test has nothing to check); 'let's make sure all of the enforcement is real enforcement and not just instructions' (2026-11-19)."
+     "why": "Enforcement of the requested behavior only: with the derived lines deleted from the spec the pin has nothing left to check (GM 2026-09-20 on checks that make the asked thing keep happening). FR-012 red-first is honored in the table."
     },
     {
-     "id": "T199-standing-predicate",
-     "summary": "reviews prereq standing names a unit whose last PASS/NEEDS-WORK is carried to its sheet as just snapshotted and whose every open finding is nitpick, outside or confirmation; review-tree.sh prints it answered and leaves it out of the dispatch count",
+     "id": "T199-standing",
+     "summary": "reviews prereq standing names a unit whose last PASS/NEEDS-WORK is carried to the sheet as just snapshotted and whose every open finding (not review-accepted) is nitpick, outside or confirmation; review-tree.sh prints it answered and leaves it out of the dispatch count",
      "class": "within",
-     "why": "Carries the GM's approved rules of 2026-11-23 'only factual findings cascade; re-reviews scoped to the change' and 'when we are cascading, we are only interested in factual inaccuracies'. An unchanged sheet with only minor findings open needs no new round; measured 4 byte-identical re-rounds in the replay."
+     "why": "Implements the GM's approved 2026-11-23 rules 'only factual findings cascade' and 'settled choices stay settled' and his 'style edits are just a different category of thing than factual inaccuracies' for building reviews; measured first (4 byte-identical sheets dispatched anyway), with one-shot labels on the figures."
     },
     {
-     "id": "T199-fail-closed",
-     "summary": "a fixed error or questionable finding owes its round even on an unchanged sheet; a finding of no or unknown severity owes one too",
+     "id": "T199-error-fixed-off-sheet",
+     "summary": "a fixed error or questionable finding owes its round even on an unchanged sheet (e.g. fixed in the docs)",
      "class": "within",
-     "why": "Keeps factual findings in the review path, which is what 'only factual findings cascade' keeps; failing closed on unknown severity does not narrow the request, it holds the line the GM drew between style and factual inaccuracy."
+     "why": "An error or questionable finding is a factual one; 'only factual findings cascade' is the GM's rule, so a factual fix owing a round is the rule applied, not a carve-out from it. The sheet being unchanged does not show the fix was right."
     },
     {
-     "id": "T199-found-and-left-nitpick-fixed-on-sheet",
-     "summary": "a building-review nitpick fixed ON THE SHEET still moves the content key and owes a full round - which, by the block's own words, T199's line forbids - left unfixed and filed as T203, 'lands before T201'",
+     "id": "T199-unknown-severity",
+     "summary": "a finding of no or an unknown severity owes a round, failing closed as T188 does",
+     "class": "within",
+     "why": "The standing rule exempts only findings shown to be non-factual; a finding whose class is unknown cannot be shown so, and failing closed keeps the GM's 'only factual findings cascade' from passing an unclassified factual finding."
+    },
+    {
+     "id": "T199-scoped-round",
+     "summary": "a nitpick fixed on the sheet owes only a change-scoped, adversarial building-review of the edit (make review-fixed UNIT= FINDING=, the kept reviewed sheet, T189's before/after pairs); a clean SCOPE=change verdict (PASS, every finding minor, gate not red) is carried by carried/answered/standing/checkpoint/push review gate",
+     "class": "within",
+     "why": "Directly the GM's words 'make only the smallest possible changes perhaps with some kind of adversarial subagent review process' and the approved rule 're-reviews scoped to the change'. The plan says plainly the saving is unmeasured and the rule is the GM's, which is correct framing."
+    },
+    {
+     "id": "T199-error-fix-on-sheet-full-round",
+     "summary": "an error or questionable finding fixed on the sheet is refused by make review-fixed and owes the full round, not a change-scoped one",
      "class": "narrowing",
-     "ruling": "NOT LEGITIMATE",
-     "why": "The block says T199's own line forbids this, so ticking T199 leaves a clause of its own instruction undone; filing T203 moves it but does not make the exception legitimate, and FR-009's deferral form is for a defect found along the way, not a clause of the task being closed. Each reason fails separately: (1) '0 of the 7 attributable rounds were such' is 7 of 12 with 5 unknown, so the premise is not measured over the sample, and the GM's rule ('re-reviews scoped to the change', 'style edits are just a different category of thing than factual inaccuracies') does not depend on a measured saving anyway; (2) 'it needs a declaration verb whose key the push's review gate also accepts' is more code to change, which never makes an exception legitimate; (3) 'that the edit was only the nitpick cannot be checked mechanically' rules out one mechanism, not the rule: the GM himself named the route ('make only the smallest possible changes perhaps with some kind of adversarial subagent review process', 2026-11-23), i.e. a round scoped to the diff rather than a full round. Not physically impossible, not implied by the GM's words, and applying the rule does not defeat the request's purpose (fewer rounds that find no real flaw). Fix: do the nitpick-fixed-on-sheet case in this section (e.g. a fixed-nitpick edit owes a round scoped to the diff, by an adversarial check, not a full round, with the review gate accepting that key), or else take the clause out of T199's line with the GM's approval rather than tick T199 without it. 'Lands before T201' cannot be judged: neither T203's nor T201's line is in the bundle."
+     "ruling": "LEGITIMATE",
+     "why": "In tension with 're-reviews scoped to the change', which the section itself applies to building reviews, so it is ruled. Legitimate on the GM's own words: 'style edits are just a different category of thing than factual inaccuracies. And it might be that when we are cascading, we are only interested in factual inaccuracies' - the scoped route he proposed was for the small, non-factual edits, and a factual fix is the class he said matters. Purpose test: the oscillation the GM described was rounds driven by style findings; under this same section any nitpick the full round raises then stands (T199-standing) and, if fixed, owes only a scoped round, so the full round cannot restart the oscillation. Nor is it a defect left: a full review after a real-flaw fix is not a wrong outcome. Resting this on the request's words, not on T199's task line, which the bundle does not carry."
     },
     {
-     "id": "T200-12b-guesses-locate",
-     "summary": "Pages::locate finds {NNNN#id} on question NNNN's pages, else on the one other question whose pages tag id; two such questions refused naming both",
+     "id": "T199-unclean-scoped-round",
+     "summary": "a change-scoped round that is not clean (not PASS, a finding above minor, or its gate red) owes the full round",
      "class": "within",
-     "why": "Carries 'a split is a move' and 'as long as the original page being linked to directs a reader to the other page ... nothing needs to cascade simply because a split occurs' (2026-11-23): a moved item still fills its pop-up's Guesses. Refusing an ambiguous move (two candidates) is a correctness refusal, not a narrowing."
+     "why": "The adversarial scoped round exists to catch an edit that did more than the named fix or made something wrong; when it finds that, the change is no longer the small one the GM's scoped route covers, so falling back is the route working, not an exception to it."
     },
     {
-     "id": "T200-12b-claims-pointer-rewritten",
-     "summary": "claims' item_labels names a claim whose item moved with the pointer to write ('is tagged on <page> now - write its backing'), its class held to the moved tag; the pointer is rewritten, not followed",
+     "id": "T199-pre-T199-verdict",
+     "summary": "a verdict recorded before T199 (no kept reviewed sheet hashing to its content_key) owes the full round",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Physically impossible otherwise: the change-scoped round reviews the diff between the sheet the verdict read and the sheet now, and before T199 the reviewed sheet was not kept (the snapshot is replaced by the next make verify), so there is no 'change' to scope a review to. It lapses on its own as verdicts are re-recorded."
+    },
+    {
+     "id": "T199-one-copy",
+     "summary": "the pairing lifted from bundle::earlier into core::difflib::paired; the push's review gate's content-key branch now calls reviews prereq answered; make verify names the route",
      "class": "within",
-     "why": "The purpose reason holds: a claim cites a page and its round reads that page, so a silently followed pointer would leave the claim citing a page that no longer carries its item - a wrong citation, not a cascade. Replaces HEAD's refusal ('names no item') with a named mechanical fix and holds the label class to the moved tag ('labels are data and propagate by regeneration'). The GM's rule is that a split triggers no review; nothing in the block makes the rewrite owe a claims review beyond the claim's own existing round, and if T192/T203 work made it do so that would be the finding there."
+     "why": "Implementation structure serving the requested route (one copy of the carry rule for every reader); no scope added."
+    },
+    {
+     "id": "T200-12b-locate",
+     "summary": "Pages::locate finds {NNNN#id} on question NNNN's pages, else on the one other question whose pages tag id; two such questions are refused naming both",
+     "class": "within",
+     "why": "The GM's approved 'a split is a move': an item moved between questions keeps resolving. Refusing an ambiguous two-home case fails closed rather than guessing."
+    },
+    {
+     "id": "T200-12b-follow",
+     "summary": "a claim whose item moved is followed through the cited page's split pointers to the one page that now tags it, owes no edit, and is held to that tag's class (a flip owes no impl-drift)",
+     "class": "within",
+     "why": "The GM verbatim: 'as long as the original page being linked to directs a reader to the other page where the full information can be found, then nothing needs to cascade simply because a split occurs', and 'attested versus guess ... cascades mechanically' / labels are data propagated by regeneration."
+    },
+    {
+     "id": "T200-12b-two-reached",
+     "summary": "two pages reached by the pointers that both tag the item are refused naming the case",
+     "class": "within",
+     "why": "Outside the GM's condition (the old page does not direct the reader to THE page with the information); failing closed on ambiguity is not a carve-out from 'nothing needs to cascade'."
+    },
+    {
+     "id": "T200-12b-no-pointer",
+     "summary": "where no pointer from the cited page directs the reader to the item's new page, the claim is named with the pointer to write",
+     "class": "within",
+     "why": "Implied by the GM's own condition: 'as long as the original page ... directs a reader to the other page'. Where it does not, the condition fails and something must be written; the plan asks for the pointer, the smallest change, not a re-review."
     },
     {
      "id": "T200-12c-already-done",
-     "summary": "owed::record::modals::followed already walks pointer targets to a fixpoint since 451 T196, pinned by an existing test; nothing changed",
+     "summary": "item 12c changes nothing: owed::record::modals::followed calls triage::change::follow, which walks pointer targets to a fixpoint since 451 T196",
      "class": "within",
-     "why": "Decides that a gap audit item is already closed, citing its pin; no part of the request is dropped."
+     "why": "Taken on the pinned test the block names (change/tests.rs' a_split_s_target_split_again_is_followed_each_page_once), which this bundle-only review cannot re-run; the closing checks run that test, so a false premise turns them red."
     },
     {
-     "id": "T200-12d-reference-reads",
-     "summary": "items.rs logs every page a Guesses reference reads and mode_a's reads::take drains it, so a relabel on a reference's page regenerates a cached sheet; a page named only in About prose is never read and owes the cache nothing",
+     "id": "T200-12d-reads",
+     "summary": "items.rs logs every page a Guesses reference reads (take_read), drained by l7r_mode_a::reads::take, so a relabel regenerates a cached sheet; a page named only in About prose is never read and owes the cache nothing",
      "class": "within",
-     "why": "Carries 'labels are data and propagate by regeneration' (2026-11-23): a relabel must reach the cached sheet. A defect fix in the safe direction (a stale cache is a wrong outcome); the About-prose exclusion is by construction (an unread page cannot make the output stale), not a carve-out. Measured: 16 modals carry references, none stale today."
+     "why": "A defect fix (a cache that could serve a stale sheet after a relabel), the GM's 'labels are data and propagate by regeneration'; the About-prose case is not an exception since nothing is read from it, so nothing it says reaches the sheet. Measured 2026-11-23 by grep, with its method."
     },
     {
-     "id": "T198-T199-perf-class",
-     "summary": "T198 and T199 are [perf] tasks under FR-013",
+     "id": "T198-T199-perf",
+     "summary": "T198 and T199 counted as [perf] tasks under FR-013 (fewer red make done runs, fewer review rounds); T200 not",
      "class": "within",
-     "why": "'can we in general priotitize performance improvements going forward?' (2026-11-20); both reduce red gate runs and review rounds, which FR-013's 'the landings or the builders' loop faster' covers."
-    },
-    {
-     "id": "T200-T192-order-note",
-     "summary": "T192's modals::refs should resolve through Pages::locate, passed in the handoff; T198 left the clone's stale make-targets.html to the handoff",
-     "class": "within",
-     "why": "Ordering and handoff notes; no part of the request narrowed. The stale make-targets.html must still be regenerated for this section's own 'make closing-checks ... green' done line."
+     "why": "FR-013 counts work that speeds the gate, landings or builders' loop as performance work; the checklist's guesses are labeled GUESS and its measurements carry date and method."
     }
    ],
-   "verdict": "BLOCKED"
+   "verdict": "CLEAR"
   },
   "T192": {
-   "section_sha256": "8a1ae9564d8725c3625f2fa8276df0566aa0b89f306a906dc15247bfc448be2d",
+   "section_sha256": "7bba36f0568af66ce5d782d2864c0a02624fa956967bab9a61c15bae7481725f",
    "reviewed": "2026-11-23",
    "declared": "spec-fidelity",
    "decisions": [
     {
-     "id": "strip-and-filled-references",
-     "summary": "page_words drops every well-formed item tag; a pop-up's Guesses read with each reference filled from its tag's data-guess; a tag-only edit, a verbatim reference and a relabel owe nothing, a reworded referenced data-guess still owes the pop-up its checks",
+     "id": "strip",
+     "summary": "page_words drops every well-formed item tag (items::strip), a malformed one left visible, so a tag-only edit owes no pop-up triage",
      "class": "within",
-     "why": "Carried by the GM's approved convergence rules (labels are data and propagate by regeneration; only a claim-changing edit triggers review). A rewording of what a pop-up shows still owes its checks, so no review the rules keep is dropped. Without it the GM's T192 ask (tag the rest of the record) would itself set off the cascade he asked to end."
+     "why": "Serves the GM's approved 2026-11-23 rules (labels are data and propagate by regeneration; only a claim-changing edit triggers review) and is what makes 'tag the rest of the record' possible without a cascade; leaving a malformed tag visible only keeps a review owed, it removes none."
     },
     {
-     "id": "tag-counts-for-nothing-in-size",
-     "summary": "question_size counts an item tag as zero bytes",
+     "id": "filled-references",
+     "summary": "Pop-up Guesses read as the reader meets them, each {NNNN#id} reference filled from its tag's data-guess whatever its label; a verbatim reference owes nothing, a reworded referenced data-guess owes the pop-up its checks, a relabel owes nothing",
      "class": "within",
-     "why": "A tag is markup, not prose. Counting it would force size trims for tagging, and the GM said a size edit must never be substantive (or the limit is raised). This serves both asks and narrows neither."
+     "why": "Implements the referencing half of tagging (T187's form) and keeps a claim-changing rewording owing review, as the approved rule 'only a claim-changing edit triggers review' requires; nothing the GM asked to be reviewed escapes review."
     },
     {
-     "id": "bulk-by-script",
-     "summary": "tag.py matches a pop-up bullet to a cited page block at 0.6 content-word overlap, tags GUESS blocks with the bullet verbatim and makes the bullet a reference, tags fixed-form convention/deviation blocks, and lists the rest for page sessions, which confirm and write the tags",
+     "id": "moved-item-locate",
+     "summary": "References resolved through T200's Pages::locate (own question first, else the one other question tagging the id), base from base pages and tree from tree pages",
      "class": "within",
-     "why": "Method only. The goal (item 1) has no threshold: every labeled finding is tagged, and what the script does not place goes to a page session. I relied on the sessions confirming script-placed tags (Performance item 1; the sample's 24 were confirmed), since the hand-read found 10 of 12 matches right. Constitution XII's limit (a tag never says more than its block) is kept as a constraint."
+     "why": "A fix, red first, of a found defect (a moved item's reworded data-guess would have reached its pop-ups owing no check); closes a hole rather than narrowing anything."
     },
     {
-     "id": "claims-name-items-after-T204",
-     "summary": "claims on a tagged item name it, applied after T204 fixes relabeled_only; the sample's anchors reverted",
+     "id": "grammar-mixed-block",
+     "summary": "T187's rule that a CONVENTION/DEVIATION tag stands only in a block with no GUESS is relaxed: a block may hold both, each its own tag needing its own label word; a tag whose block says another label is refused",
      "class": "within",
-     "why": "Naming a claim's item belongs to the record's tagging under T187. Holding it until the tooling stops refusing correct work is ordering, and nothing is narrowed."
+     "why": "Widens to meet the request: the old rule left 27 measured blocks the GM asked tagged untaggable. The new refusal enforces constitution XII (a tag never says more than its block). It removes nothing from what was asked."
     },
     {
-     "id": "found-and-left-T204-T205-T200",
-     "summary": "three defects deferred: relabeled_only owes impl-drift on a classed claim naming its item (T204), refs.rs not following T200's Pages::locate fallback (T205), a failing research_pointers fixture in T200's uncommitted test (T200); each lands before T22",
+     "id": "tag-not-prose",
+     "summary": "question_size counts an item tag for nothing toward the size cap",
      "class": "within",
-     "why": "Each says why it is not fixed here (another builder's uncommitted file), names its filed task and its order. This is ordering, not a narrowing, ON THE PREMISE that 'lands before T22' means before the port resumes (fix as we go). The bundle does not say what T22 is. If T22 is not the port's next step, these orders do not keep the 'before resuming our port' condition and must be restated."
+     "why": "Without it, tagging pushed 0196 over its cap, which would force a size trim; the GM ruled 2026-11-23 that size limits must not cut details and no size edit is substantive. Serves the request and that rule."
     },
     {
-     "id": "convention-tag-only-in-a-block-with-no-guess",
-     "summary": "T187's rule kept: a CONVENTION or DEVIATION tag stands only in a block holding no GUESS, so such a finding in a block that also holds a GUESS stays untagged ('kept: an untagged item keeps the old review path, not a wrong outcome')",
-     "class": "narrowing",
-     "ruling": "NOT LEGITIMATE",
-     "why": "The GM's words: 'Yes please tag the rest of the record before resuming our port'. The section's own goal (item 1) is 'Every finding of a drawing page that states a label carries its tag'. This constraint leaves a class of labeled findings untagged. (1) Not impossible: T187's grammar is the project's own and is not in the bundle (spec-cited.md is empty), and nothing shown rules out a page session splitting the mixed block into two blocks so each finding carries its own tag. The GM ruled that a split is a move and cascades nothing. (2) Not implied by the GM: the reason given, that untagged labels keep the old review path, is what he was told before he said 'yes please tag the rest', so it cannot license leaving any untagged. (3) It goes against the purpose: a relabel of the untagged convention or deviation still sets off the review cascade the tagging exists to end. The defect clause (a difference that works is not a defect) covers differences left as they are, not requested work left undone. That the GM was sized only GUESS items and bullets bounds the estimate, not the sentence. The reach is not measured: '8 with two labels' may be this set, but the section does not say so. What would clear it: the count of mixed blocks, measured, and a stated treatment that tags every finding in them, such as split then tag, or a grammar change taken through its own review."
+     "id": "bulk-script",
+     "summary": "The bulk is done by a clone-local script matching each pop-up bullet to a cited page's block at >=0.6 content-word overlap (GUESS blocks tagged with the bullet verbatim and the bullet made a reference), tagging fixed-form convention/deviation blocks, and listing the rest (643) for page sessions that confirm and write tags",
+     "class": "within",
+     "why": "A method for doing exactly what was asked, over the whole record; the rest is not excluded but sent to page sessions. Its 10-of-12 hand-read match rate means script matches must be confirmed by the page sessions, as the sample's were ('placed by the script and confirmed') and as performance item 1 states; that is how the plan reads, and it is a quality condition, not a narrowing."
+    },
+    {
+     "id": "claims-anchors",
+     "summary": "The 223 claims pointing at a drawing page without an item get their item named (claims.py proposes by overlap), after T204",
+     "class": "within",
+     "why": "Part of labels being data that propagate mechanically (the approved rule); the goal states it and step 5 puts it inside the bulk that lands before the port resumes, so it is neither dropped nor deferred past the GM's condition."
+    },
+    {
+     "id": "order",
+     "summary": "Strip and filled references land before or with the first tag batch; the whole bulk, claims included, lands before the port resumes",
+     "class": "within",
+     "why": "Matches the GM's condition verbatim: 'tag the rest of the record before resuming our port'."
+    },
+    {
+     "id": "sample-then-batches",
+     "summary": "One landing for the code and a four-page sample (15 pop-ups); the rest in batches at the page sessions' write cap, each its own landing",
+     "class": "within",
+     "why": "Staging of the same work, all of it before the port; no part of the record is excluded."
+    },
+    {
+     "id": "left-T204",
+     "summary": "Naming the item on a claim that already carries a class owes impl-drift (relabeled_only compares the stored claim with Claim::normalized); not fixed here, filed as T204, lands before T22; the sample's anchors reverted",
+     "class": "within",
+     "why": "A defect not left past the GM's condition: the claims' anchors wait on T204 and the bulk, claims included, lands before the port resumes, so it is fixed before the next step as FIX AS WE GO asks. It is deferred only because the file holds another builder's uncommitted hunks, with its reason, task and order stated."
+    },
+    {
+     "id": "left-T200-fixture",
+     "summary": "research_pointers test fails on T200's uncommitted fixture pointing at a nonexistent 0301 question file; left to T200, lands before T22",
+     "class": "within",
+     "why": "Not in T192's scope at all - another builder's uncommitted test fixture - and fixed in its own task before T22; nothing the GM asked of T192 is narrowed."
+    },
+    {
+     "id": "no-reader-change",
+     "summary": "Nothing a reader of a map or pop-up sees changes; each reference fills to its bullet's own words",
+     "class": "within",
+     "why": "Consistent with the request (tagging is bookkeeping, not content) and with the GM's convergence rules."
     }
    ],
-   "verdict": "BLOCKED"
+   "verdict": "CLEAR"
   },
   "T197": {
    "section_sha256": "940429c1f67e050d34dffb12e6ad3c8c0c70b0f5afcbb0b1bd74a43f8cf0ab68",
@@ -27388,6 +27814,56 @@
      "summary": "Performance work? re-read as no: the task changes which answers a landing alone trusts, not how long anything takes",
      "class": "within",
      "why": "The arbiter asked for this re-reading (ask:t197-rejudge-verb item 2). With part (4) gone, part (3) only adds owed work, so 'no' is the faithful reading under FR-013, and the [perf] tag is dropped to match. A small leftover not worth a block: step 2 still lists 'FR-013: the landings faster' as a constraint. Read with 'no', that is a limit (do not slow the landings), not a claim of speed."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T204": {
+   "section_sha256": "d626dad291c770f3a1e5ecfe831940edb2d463443fa81f98957f2bcaaa4b789f",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T204-D1",
+     "summary": "Naming the item of a claim whose class word is unchanged owes no impl-drift re-check: the claims crate reads a stored claim against Claim::unanchored (class kept, anchors dropped) as well as normalized, in a Rust unit's claim (index.rs relabeled_only)",
+     "class": "within",
+     "why": "Carries the GM's 2026-11-23 rules 'only a claim-changing edit triggers review' and 'labels are data and propagate by regeneration', and serves 'tag the rest of the record before resuming our port' (T192): without it every named claim owes an agent check for an edit that changes no meaning."
+    },
+    {
+     "id": "T204-D2",
+     "summary": "The same reading extended to a doc section's claim (index.rs owed_one, units.rs Unit::code_unanchored), whose row stores only code",
+     "class": "within",
+     "why": "Same purpose as D1 on the other unit kind the claims take; the before/after measurement shows the fix does not do what it is for without this arm (77 of 94 still owed)."
+    },
+    {
+     "id": "T204-D3",
+     "summary": "The stale-figure check (stale.rs label_free) given the same symmetry: a constant's doc that only named the item, class kept, is no change; fixed in this task",
+     "class": "within",
+     "why": "A defect found in the work (24 false stale flags on an edit that changes no claim) fixed in the task that found it, as the GM's fix-as-we-go rule requires; same request purpose as D1."
+    },
+    {
+     "id": "T204-D4",
+     "summary": "A class changed with the naming (GUESS p to DEVIATION p#id or plain p#id), or a changed account, still owes",
+     "class": "within",
+     "why": "A claim's own class word changing (GUESS to DEVIATION, or to a plain attested pointer) changes what the claim asserts about the code, so under the GM's 2026-11-23 rule 'only a claim-changing edit triggers review' it still owes; the GM's 'labels are data and propagate by regeneration' / 'cascade mechanically' concerns a page label echoing to the entries that cite it, not a claim changing its own class. The brief's 'its class word staying the same', as the block quotes it, draws the same line. Within, not a narrowing."
+    },
+    {
+     "id": "T204-D5",
+     "summary": "The tag's agreement with the class is left to the label check (item_labels.rs), which refuses a landing on its own, rather than repeated in owed",
+     "class": "within",
+     "why": "The brief's 'agreeing with the tag' condition, as the block quotes it, stays enforced: by the block's account the label check (item_labels.rs) refuses such a landing on its own, so a disagreeing tag cannot land owing nothing. Where the enforcement sits is design, not scope."
+    },
+    {
+     "id": "T204-D6",
+     "summary": "Red-first tests on the 12 sample shapes (both unit kinds) and 3 changed shapes, plus a measurement on a copy of the clone with all 94 unanchored classed drawing-page claims anchored: 94 owed + 24 stale before, 0 and 0 after",
+     "class": "within",
+     "why": "Verification of exactly the requested behavior (enforcement of the request, not unrequested scope). The 94 are, by the block's regex count over rust/mode_a and the two docs on 2026-11-23, every unanchored classed drawing-page claim; the already-anchored ones are already named."
+    },
+    {
+     "id": "T204-D7",
+     "summary": "Order (after T187/T197, before T192's claims pass and T22), exits (red recorded and set down, impossibility ruled through make arbiter-ask), budget one landing",
+     "class": "within",
+     "why": "Places the fix ahead of the T192 tagging the GM asked for before the port resumes; nothing the request settles is changed."
     }
    ],
    "verdict": "CLEAR"

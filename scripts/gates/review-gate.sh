@@ -295,7 +295,9 @@ for unit in $owed_units; do
     fail="$fail $unit"; rules="$rules map-not-reviewable"
   elif [ -n "${tree_key:-}" ] && [ "$rec_key" = "$tree_key" ] && { [ "$verdict" = "PASS" ] || [ "$verdict" = "NEEDS-WORK" ]; }; then
     passed+=("$unit")   # the reviewer's record, at this content
-  elif [ "$rec_content" != "-" ] && [ "$rec_content" = "$now_content" ] && { [ "$verdict" = "PASS" ] || [ "$verdict" = "NEEDS-WORK" ]; }; then
+  elif [ "$rec_content" != "-" ] && "$RG_HERE/l7r-gate.sh" reviews prereq answered --clone "$ROOT" --unit "$unit" --key "" 2>/dev/null; then
+    # GUARD_EDIT_OK: feature 451 T199 - the content-key compare is the prereq reader's `carried`, one copy of the rule: the sheet is
+    # what the reviewer read, or moved only by an edit a clean change-scoped round judged (`make review-fixed`, a nitpick fixed)
     passed+=("$unit")   # the engine moved, but this unit's sheet is what the reviewer read
   elif [ -n "$now_content" ] && ( cd "$ROOT" && "$RG_HERE/l7r-gate.sh" arbiter unit-ruled "$unit" "$now_content" ) 2>/dev/null; then
     passed+=("$unit")   # GUARD_EDIT_OK: feature 374 batch 5 - the round arbiter ACCEPTED this unit on the sheet as it reads now: its ruling

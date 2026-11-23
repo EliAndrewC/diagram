@@ -219,15 +219,7 @@ fn pairs_since(root: &Path, was: &serde_json::Map<String, Value>, files: &[Strin
         };
         let now = read(f);
         let (a, b): (Vec<&str>, Vec<&str>) = (then.lines().collect(), now.lines().collect());
-        for op in crate::difflib::opcodes(&a, &b).into_iter().filter(|op| {
-            op.0 != crate::difflib::Tag::Equal && !(arrived && op.0 == crate::difflib::Tag::Delete)
-        }) {
-            out.push(format!(
-                "- `{f}`, before:\n```\n{}\n```\nafter:\n```\n{}\n```",
-                a[op.1..op.2].join("\n"),
-                b[op.3..op.4].join("\n")
-            ));
-        }
+        out.extend(crate::difflib::paired(f, &a, &b, !arrived));
     }
     out
 }

@@ -83,14 +83,23 @@ pub fn items(html: &str) -> Vec<Item> {
         .collect()
 }
 
+/// The page with every well-formed tag taken out (feature 451 T192): what a pop-up's fingerprint reads of a page, so tagging an item
+/// moves no pop-up that cites the page. A tag's `data-guess` is read where a pop-up shows it, by reference (`owed`'s `modals::refs`);
+/// a malformed tag is left in, so it stays visible.
+#[must_use]
+pub fn strip(html: &str) -> String {
+    TAG.replace_all(html, "").into_owned()
+}
+
 /// Whether the block's own words carry the label its tag names.
 fn says(item: &Item) -> bool {
     let guess = item.block.contains("GUESS");
     let found = |w: &Regex| w.is_match(&item.block).unwrap_or(false);
     match item.label.as_str() {
         "GUESS" => guess,
-        "CONVENTION" => !guess && found(&CONVENTION_WORD),
-        "DEVIATION" => !guess && found(&DEVIATION_WORD),
+        // a block may hold a guess beside a convention or a deviation, each its own tag (451 T192): the word is the label's
+        "CONVENTION" => found(&CONVENTION_WORD),
+        "DEVIATION" => found(&DEVIATION_WORD),
         _ => !guess,
     }
 }

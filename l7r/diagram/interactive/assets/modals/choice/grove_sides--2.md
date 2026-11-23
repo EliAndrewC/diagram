@@ -16,8 +16,7 @@ households' woods covered about 6,000, 10,700 and 28,000 sq ft. How many farms t
 Guesses:
 - That a settlement's groves take two sides half the time, three sides three times in ten and all four twice in ten, and
   four sides more often on flood-prone ground: no source counts farms by the shape of their grove.
-- How deep the windward stand runs, about one and a half house depths: no source gives a grove's depth, so it is reckoned
-  from tree counts and crown sizes.
+- {0036#deep-windward-stand-runs}
 
 Depiction: Every farm in the settlement takes the same shape of grove, since the shape went by region. The map draws the
 windward pair as a deep stand, tree by tree, every crown at its real size, keeps its trees out of the yard's and the kitchen

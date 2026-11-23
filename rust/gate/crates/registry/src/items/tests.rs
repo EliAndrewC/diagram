@@ -132,3 +132,61 @@ fn walk(dir: &Path) -> Vec<std::path::PathBuf> {
         .flat_map(|p| if p.is_dir() { walk(&p) } else { vec![p] })
         .collect()
 }
+
+/// 451 T200: an item moved to another question's page is found there while exactly one other question tags its id; two make the
+/// reference ambiguous, refused naming both.
+#[test]
+fn a_moved_item_is_found_on_the_one_other_question_that_tags_it() {
+    let root = scratch("registry-items-moved");
+    put(
+        &root,
+        "research/questions/0218-the-compounds-own-shrine-yashikigami.html",
+        "<p>The shrine.</p>",
+    );
+    put(
+        &root,
+        "research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html",
+        &page("GUESS", "a GUESS"),
+    );
+    assert_eq!(
+        guesses(&root),
+        [
+            "[layout=row] The tree beside the shrine: no account gives it as the custom",
+            "A garden: no account."
+        ]
+    );
+    put(
+        &root,
+        "research/questions/0026-mulberry-and-other-crops-on-pond-dikes-sangji-guoji.html",
+        &page("ATTESTED", "historically accurate"),
+    );
+    let said = resolve(&root, class(MODAL)).unwrap_err().message;
+    let ambiguous = said.contains("questions 0026, 0036 each tag `tree` - write the one meant");
+    assert!(ambiguous);
+}
+
+/// 451 T200: every page a reference read is told to the Mode A generation cache (`take_read`), so a relabel there regenerates a
+/// cached sheet; a moved item's new page too.
+#[test]
+fn the_pages_a_reference_reads_are_told_to_the_cache() {
+    let root = scratch("registry-items-read");
+    put(&root, PAGE, &page("GUESS", "a GUESS"));
+    put(
+        &root,
+        "research/questions/0218-the-compounds-own-shrine-yashikigami.html",
+        "<p>The shrine.</p>",
+    );
+    let _ = guesses(&root);
+    let read = super::take_read();
+    assert!(read.contains(&root.join(PAGE)), "{read:?}");
+    std::fs::remove_file(root.join(PAGE)).unwrap();
+    put(
+        &root,
+        "research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html",
+        &page("GUESS", "a GUESS"),
+    );
+    let _ = guesses(&root);
+    assert!(super::take_read().contains(&root.join(
+        "research/questions/0036-groves-of-trees-around-farmhouses-yashikirin.drawing.html"
+    )));
+}

@@ -14,9 +14,8 @@ to 300 sq ft. Modern pond dikes in the Pearl River delta are usually about 20 to
 width before modern times is not recorded.
 
 Guesses:
-- The trees' spacing on the map, about 18 ft apart in a single line along the middle of the bank: no spacing along a
-  dike was found, so it is reckoned from the orchard figure of one lychee to about 300 sq ft.
-- Each tree's crown, 8 to 10 ft across: no account gives the crown of a lychee, longan or orange tree on a dike.
+- {0026#trees-spacing-about-18}
+- {0026#tree-s-crown-8}
 - The bank's width on the map, as wide as the hamlet's split of water and dike leaves it, from about 15 ft to about 42 ft:
   no pond dike's width from before modern times was found, and the widest banks are broader than the modern 20 to 33 ft.
 

@@ -519,11 +519,15 @@ fn recorded(clone: &Path, names: &[String], key: &str) -> bool {
 /// and the checkpoint, `recorded`, `answered` and the review tree's busy check read it as the push does. What it does not see: a
 /// building-review also reads `docs/building-programs.md` and `docs/buildings.md`, so a change to those alone carries the verdict, as
 /// the push's gate has since 374. `now` is asked only of a record that carries a key to compare.
+///
+/// A clean change-scoped round (`make review-fixed`, 451 T199) carries it too: the sheet moved only by an edit that round judged.
 pub fn carried(v: &Value, now: impl FnOnce() -> String) -> bool {
     let at = text_of(v, "content_key", "");
-    matches!(text_of(v, "verdict", "").as_str(), "PASS" | "NEEDS-WORK")
-        && !at.is_empty()
-        && at == now()
+    if !matches!(text_of(v, "verdict", "").as_str(), "PASS" | "NEEDS-WORK") || at.is_empty() {
+        return false;
+    }
+    let now = now();
+    at == now || scoped::carries(v, &at, &now)
 }
 
 /// Is `unit` answered at `key`: its last verdict a PASS or NEEDS-WORK at that engine key, or [`carried`] to its sheet as it reads now
@@ -621,6 +625,16 @@ pub fn content_key_on(clone: &Path, unit: &str, on: impl FnOnce() -> String) -> 
     }
 }
 
+/// The folder whose files [`unit_content_key`] hashes, and the sheet's name: the snapshot's copy, else the sheet's pool folder.
+fn unit_folder(clone: &Path, unit: &str) -> Option<(PathBuf, String)> {
+    if let Some(snap) = tree::of_unit(clone, unit) {
+        return Some((snap.copy, snap.on));
+    }
+    let sheet = unit_sheet(clone, unit);
+    let dir = walk(clone).folder(&sheet).map(|m| m.dir.clone())?;
+    Some((dir, sheet))
+}
+
 /// Write the map's verdict record, the review's last act (FR-001): `(what was recorded, the record)`.
 fn write_verdict(
     clone: &Path,
@@ -653,9 +667,11 @@ fn write_verdict(
         Value::Array(findings.into_iter().map(Value::Object).collect()),
     );
     rec.insert("strict".to_owned(), json!(true));
-    let ck = unit_content_key(clone, name);
-    if !ck.is_empty() {
-        rec.insert("content_key".to_owned(), json!(ck));
+    // the content key's own folder, which [`unit_content_key`] hashes
+    if let Some((folder, on)) = unit_folder(clone, name) {
+        rec.insert("content_key".to_owned(), json!(folder_key(&folder, &on)));
+        // what the review read, kept: a later change-scoped round pairs it with the sheet as edited (451 T199)
+        scoped::keep(clone, name, &folder, &on);
     }
     if verdict != NR && state == "red" {
         rec.insert("verdict".to_owned(), json!(NR));
@@ -680,8 +696,10 @@ fn write_verdict(
     (text_of(&rec, "verdict", ""), rec)
 }
 
-const COMMANDS: [&str; 8] = [
+const COMMANDS: [&str; 10] = [
     "check",
+    "standing",
+    "fixed",
     "accept",
     "recorded",
     "answered",
@@ -712,8 +730,9 @@ fn read_prompt(file: &str) -> Result<String, Reply> {
 }
 
 /// The command line's options.
-fn specs() -> [Spec; 11] {
+fn specs() -> [Spec; 12] {
     [
+        Spec::value("--scope"),
         Spec::value("--verdict"),
         Spec::value("--findings-file"),
         Spec::value("--key"),
@@ -779,6 +798,23 @@ fn run(command: &str, p: &Parsed) -> Reply {
                 i32::from(!recorded(&clone, &maps, p.text("--key", ""))),
             )
         }
+        "fixed" => {
+            let named: Vec<String> = p
+                .text("--finding", "")
+                .split([' ', ','])
+                .filter(|s| !s.is_empty())
+                .map(str::to_owned)
+                .collect();
+            scoped::declare(&clone, &map, &named).map_or_else(
+                |why| reply(String::new(), format!("make review-fixed: {why}\n"), 1),
+                |prompt| reply(scoped::declared_text(&map, &prompt), String::new(), 0),
+            )
+        }
+        "standing" => reply(
+            stands::standing(&clone, p.text("--maps", "")),
+            String::new(),
+            0,
+        ),
         "answered" => reply(
             String::new(),
             String::new(),
@@ -829,6 +865,9 @@ fn verdict_cli(clone: &Path, map: &str, p: &Parsed) -> Reply {
         );
     };
     let verdict = p.text("--verdict", "");
+    if p.text("--scope", "") == "change" {
+        return scoped::record(clone, map, verdict, &findings);
+    }
     // the gate's state is read before the verdict is judged, as the Python's argument order read it (its stamp check is recorded)
     let state = unit_gate_state(clone, map);
     if !VERDICTS.contains(&verdict) {
@@ -913,6 +952,8 @@ fn check_asking(
     reply(out, String::new(), i32::from(!problems.is_empty()))
 }
 
+pub mod scoped;
+pub mod stands;
 pub mod tree;
 
 #[cfg(test)]

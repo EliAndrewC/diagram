@@ -18,7 +18,7 @@ Guesses:
   account gives a share between them, and every account found that writes the split as a ratio is modern.
 - A pond's bank as wide as the village's split leaves it, from about 15 ft to about 42 ft: no width of a pond dike before
   modern times was found, and the widest banks are broader than any modern figure but one village's former dikes.
-- [dike_crop=mulberry] A mulberry bush about 4 to 7 ft across: no source gives a bush's crown width.
+- [dike_crop=mulberry] {0026#mulberry-bush-about-4}
 
 Depiction: The map draws the block as a polder converted nearly or wholly wall to wall into ponds. The ponds
 are four-sided, set out for each settlement either as a mosaic, the lattice of canals bent out of line so the ponds skew to uneven shapes, or as a straight chessboard of ponds.

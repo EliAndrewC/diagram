@@ -21,8 +21,7 @@ Guesses:
   groves then are recorded as kept thick.
 - How often each shape is taken - two sides half the time, three sides three times in ten, and four sides twice in
   ten, or four times in ten on flood-prone ground: no source counts how many farms took each shape.
-- The windward stand's depth, about one and a half house depths: no source gives a grove's depth, so it is reckoned
-  from the tree counts and crown sizes.
+- {0036#windward-stand-s-depth}
 - The thinner band's depth, one tree; where the opening in a ring stood and how wide it was: no source
   gives them.
 - That a third or fourth side's band closes only the house's own side, leaving the yard and garden in the sun: no

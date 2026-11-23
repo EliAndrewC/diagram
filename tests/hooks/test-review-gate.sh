@@ -314,6 +314,13 @@ echo "{\"map\":\"glyph-check--well--m\",\"engine_key\":\"stale\",\"content_key\"
 check "a PASS record at another engine key whose sheet is unchanged ships" r1 ok
 ( cd "$T/r1" && echo "a later line" >> "$POOL/m.notes.md" && git add -A && git commit -qm notes )
 check "...and once the sheet's notes change, it is refused" r1 blocked
+# GUARD_EDIT_OK: feature 451 T199 - a clean change-scoped round (`make review-fixed`, a nitpick fixed on the sheet) carries the verdict
+# to the sheet as edited: the gate asks the prereq reader's `answered`, not a compare of its own
+CKN="$(cd "$T/r1" && "$HERE/../../scripts/gates/l7r-gate.sh" reviews prereq content-key --clone "$T/r1" --map glyph-check--well--m)"
+echo "{\"map\":\"glyph-check--well--m\",\"engine_key\":\"stale\",\"content_key\":\"$CK\",\"verdict\":\"NEEDS-WORK\",\"findings\":[{\"id\":\"N1\",\"severity\":\"nitpick\"}],\"scoped\":{\"clean\":false,\"from\":\"$CK\",\"to\":\"$CKN\"}}" > "$T/r1/$V"
+check "...a change-scoped round that was not clean carries nothing: refused" r1 blocked
+echo "{\"map\":\"glyph-check--well--m\",\"engine_key\":\"stale\",\"content_key\":\"$CK\",\"verdict\":\"NEEDS-WORK\",\"findings\":[{\"id\":\"N1\",\"severity\":\"nitpick\"}],\"scoped\":{\"clean\":true,\"from\":\"$CK\",\"to\":\"$CKN\"}}" > "$T/r1/$V"
+check "...and a clean change-scoped round of the edit ships it" r1 ok
 # GUARD_EDIT_OK: feature 374 batch 5 - the round arbiter's ACCEPT on a unit stands for its verdict while the sheet reads as ruled
 CK2="$(cd "$T/r1" && "$HERE/../../scripts/gates/l7r-gate.sh" reviews prereq content-key --clone "$T/r1" --map glyph-check--well--m)"
 ( cd "$T/r1" && mkdir -p .specify specs/902-a && echo '{"feature_directory":"specs/902-a"}' > .specify/feature.json \

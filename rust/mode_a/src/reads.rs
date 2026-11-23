@@ -46,9 +46,10 @@ pub fn taker() -> std::sync::MutexGuard<'static, ()> {
 /// Every file noted so far, in order, the log emptied.
 #[must_use]
 pub fn take() -> Vec<PathBuf> {
-    std::mem::take(&mut *READS.lock().unwrap_or_else(PoisonError::into_inner))
-        .into_iter()
-        .collect()
+    let mut reads = std::mem::take(&mut *READS.lock().unwrap_or_else(PoisonError::into_inner));
+    // the question pages a Guesses reference read in the registry crate (451 T200, the gap audit's item 12d)
+    reads.extend(l7r_gate_registry::items::take_read());
+    reads.into_iter().collect()
 }
 
 /// Whether `path` has been noted (and not yet taken): what a test asks, never draining another test's notes.
@@ -67,6 +68,24 @@ mod tests {
     /// A MISS IS A READ (feature 449 T221, T219's derivation, assumption 3): a file the writer looked for and did not find is noted as a
     /// file that exists is, so a looked-for file created later (a modal text a kind has none of yet, a map's notes) re-keys the sheet; a
     /// directory is no file the writer reads, and is not noted.
+    /// 451 T200 (the gap audit's item 12d): a Guesses reference `{NNNN#id}` fills its bullet from question NNNN's page, read in the
+    /// registry crate past this log; [`super::take`] drains the registry's own log too, so a relabel there regenerates the sheet.
+    #[test]
+    fn a_page_a_guesses_reference_read_is_taken_with_the_writer_s_reads() {
+        let _log = super::taker();
+        let dir = l7r_shared::tempdir::TempDir::new("reads-ref");
+        let page = dir
+            .path()
+            .join("research/questions/0218-the-compounds-own-shrine-yashikigami.drawing.html");
+        std::fs::create_dir_all(page.parent().unwrap()).unwrap();
+        std::fs::write(&page, r#"<p>A GUESS.<span class="item" data-item="tree" data-label="GUESS" data-guess="A tree"></span></p>"#).unwrap();
+        let shown =
+            l7r_gate_registry::items::bullets(dir.path(), "shrine", vec!["{0218#tree}".to_owned()])
+                .unwrap();
+        assert_eq!(shown, ["A tree"]);
+        assert!(super::take().contains(&page));
+    }
+
     #[test]
     fn a_file_and_a_missing_one_are_noted_and_a_directory_is_not() {
         let dir = l7r_shared::tempdir::TempDir::new("reads");

@@ -38,6 +38,8 @@ case "$1 $2" in
   "reviews prereq")
     # answered: a unit listed in $STUB/carried is answered by its verdict at an older key (451 T176)
     [ "$3" = answered ] && echo "$*" >> "$d/answered-args" && grep -qx -- "$7" "$d/carried" 2>/dev/null && exit 0
+    # standing: the units listed in $STUB/standing whose verdict stands (451 T199)
+    [ "$3" = standing ] && { cat "$d/standing" 2>/dev/null; exit 0; }
     exit 1 ;;
   "log bypass") echo "$*" >> "$d/bypasses"; exit 0 ;;
 esac
@@ -144,6 +146,16 @@ wait_state "$third"
 [ "$rc" = 0 ] && grep -q "REVIEW_TREE_OK" "$T/out" && grep -q "the GM asked" "$S/bypasses" && ok "the escape resets it, recorded" || no "the escape" "$(cat "$T/out")"
 [ "$(gate_rec "$third" state)" = red ] && ok "a red gate reads red" || no "a red gate read $(gate_rec "$third" state)"
 rm -f "$S/done.rc"
+
+echo "4b. a unit whose verdict stands is named answered and left out of the dispatch count (451 T199)"
+printf 'building-review--c\nbuilding-review--d\n' > "$S/owed"; printf 'building-review--d\n' > "$S/standing"
+rc=$(run)
+grep -q "answered: building-review--d - its last verdict stands" "$T/out" && grep -q "dispatch 1 review agent" "$T/out" \
+  && ok "the standing unit is answered, one dispatched" || no "standing unit" "$(grep -E 'answered|dispatch' "$T/out")"
+grep -q 'make review-fixed UNIT=<unit> FINDING="<ids>"' "$T/out" \
+  && ok "the change-scoped route for a nitpick fixed on the sheet is named" || no "review-fixed hint" "$(grep -E 'nitpick' "$T/out")"
+rm -f "$S/standing"
+wait_state "$(cat "$C/.git/review-trees/current")"
 
 echo "5. every map the cache does not serve is drawn first; a unit still hidden is refused, nothing snapshotted"
 printf 'map\tpool/compounds/c\n' > "$S/undrawn"; : > "$S/owed"; rm -f "$S/drawn" "$S/snapshot-args"

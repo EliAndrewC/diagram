@@ -11,6 +11,8 @@ use l7r_gate_registry::kinds::{by_file, REGISTRIES};
 use l7r_shared::py_text::{collapse, split, strip, SPACE_CLASS};
 use serde_json::{json, Map, Value};
 
+use l7r_gate_research::record::items;
+
 use super::delta::Delta;
 use super::repo::{cat_blobs, git, git_show, read_text, read_universal, Fail};
 use super::units::{digest, re, Keyed};
@@ -121,9 +123,26 @@ impl Modal {
 
     #[must_use]
     pub fn prose(&self) -> String {
-        ["Name", "About", "Guesses", "Form"]
-            .map(|t| self.tag(t))
-            .join("\n")
+        self.prose_with(self.tag("Guesses"))
+    }
+
+    /// [`Modal::prose`] with `guesses` in place of its Guesses: the pop-up as its reader meets it, each reference filled
+    /// (`refs::resolved`, feature 451 T192).
+    #[must_use]
+    pub fn prose_with(&self, guesses: &str) -> String {
+        [
+            self.tag("Name"),
+            self.tag("About"),
+            guesses,
+            self.tag("Form"),
+        ]
+        .join("\n")
+    }
+
+    /// [`Modal::prose`] with each reference filled from `tagged`.
+    #[must_use]
+    pub fn prose_read(&self, tagged: &refs::Tagged) -> String {
+        self.prose_with(&refs::resolved(self.tag("Guesses"), tagged))
     }
 
     #[must_use]
@@ -505,9 +524,10 @@ pub fn find<'a>(modals: &'a [Modal], kind: &str) -> Option<&'a Modal> {
     })
 }
 
-/// A research page's words for a fingerprint: comments out, whitespace folded.
+/// A research page's words for a fingerprint: comments and item tags out (feature 451 T192: tagging a page owes no pop-up; a tag's
+/// `data-guess` is read where a pop-up references it, `refs`), whitespace folded.
 fn page_words(text: &str) -> String {
-    collapse(&COMMENT.replace_all(text, ""))
+    collapse(&COMMENT.replace_all(&items::strip(text), ""))
 }
 
 fn page_words_unmarked(text: &str) -> String {
@@ -533,7 +553,8 @@ fn digest_owned(parts: &[String]) -> String {
 ///
 /// Where what it reads, writes or runs fails: the error says which and why.
 pub fn fingerprints(root: &Path, m: &Modal) -> Result<(String, String), Fail> {
-    let mut research = vec![m.uid(), m.prose(), m.entry().to_owned()];
+    let tagged = refs::tagged_now(root, &refs::references(m.tag("Guesses")));
+    let mut research = vec![m.uid(), m.prose_read(&tagged), m.entry().to_owned()];
     let form = digest_owned(&research);
     research.extend(pages(root, &followed(root, &m.entry_files()))?);
     Ok((form, digest_owned(&research)))
@@ -650,13 +671,19 @@ pub fn owed_in(
         modals_of(read_in(delta, base), true)?
     };
     let changed = changed_pages(delta, base)?;
-    let root = delta.root();
+    let was_tagged = tagged_at(delta, base, &before);
+    let root = delta.root().to_path_buf();
     let mut rows = Vec::new();
-    for m in modals_now(root, true)? {
+    for m in modals_now(&root, true)? {
         if !uid.is_empty() && m.uid() != uid {
             continue;
         }
-        rows.extend(owed_row(root, &m, before.get(&m.uid()), &changed)?);
+        let was = before.get(&m.uid());
+        let now_tagged = refs::tagged_now(&root, &refs::references(m.tag("Guesses")));
+        let moved = was.is_none_or(|w| {
+            w.prose_read(&was_tagged) != m.prose_read(&now_tagged) || w.entry() != m.entry()
+        });
+        rows.extend(owed_row(&root, &m, was, moved, &changed)?);
     }
     Ok(rows)
 }
@@ -673,16 +700,31 @@ fn name_list(files: &[String]) -> String {
         .join(" ")
 }
 
+/// The items the base's pop-ups reference, read from their questions' pages at `base` (the pages named as the tree names them now).
+fn tagged_at(delta: &mut Delta, base: &str, before: &Keyed<Modal>) -> refs::Tagged {
+    let mut wanted: Vec<(String, String)> = before
+        .iter()
+        .flat_map(|(_, m)| refs::references(m.tag("Guesses")))
+        .collect();
+    wanted.sort();
+    wanted.dedup();
+    let root = delta.root().to_path_buf();
+    refs::tagged_in(&root, &wanted, &mut |files: &[String]| {
+        delta.texts(base, files)
+    })
+}
+
+/// The rows `m` owes; `moved_text` whether its words as its reader meets them, or its Entry, moved.
 fn owed_row(
     root: &Path,
     m: &Modal,
     was: Option<&Modal>,
+    moved_text: bool,
     changed: &HashSet<String>,
 ) -> Result<Vec<(String, String, String)>, Fail> {
     let mut rows = Vec::new();
     let uid = m.uid();
     let (fp_form, fp_research) = fingerprints(root, m)?;
-    let moved_text = was.is_none_or(|w| w.prose() != m.prose() || w.entry() != m.entry());
     let moved_pages: Vec<String> = followed(root, &m.entry_files())
         .into_iter()
         .filter(|f| changed.contains(f))
@@ -816,6 +858,8 @@ pub fn cli(args: &[String]) -> crate::Reply {
         },
     }
 }
+
+pub mod refs;
 
 #[cfg(test)]
 mod tests;

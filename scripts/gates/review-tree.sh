@@ -194,6 +194,17 @@ else
     || die "the snapshot could not be taken (above)"
   n=$(printf '%s\n' $maps | wc -l)
   printf 'owed: %s\n%s\n' "$why" "$snap"
+  # A VERDICT THAT STANDS IS NO ROUND (451 T199): a unit whose last PASS or NEEDS-WORK is carried to its sheet as just snapshotted, its
+  # open findings only nitpick, outside or confirmation, owes no dispatch - 4 of 2026-11-23's 60 later building-review rounds were such
+  # (`reviews/prereq/stands.rs`); its prompt stays, should the builder judge otherwise.
+  # shellcheck disable=SC2086 # the units are slugs, one a word
+  for u in $("$GATE" reviews prereq standing --clone "$ROOT" --maps "$maps" 2>/dev/null); do
+    printf 'answered: %s - its last verdict stands on this sheet (carried, open findings only nitpick/outside): dispatch none (451 T199)\n' "$u"
+    n=$((n - 1))
+  done
+  # A NITPICK FIXED ON THE SHEET OWES A ROUND OF ITS EDIT ALONE (451 T199): the builder names the fixed nitpicks; the tool refuses an
+  # error or questionable one, and writes the change-scoped prompt (`reviews/prereq/scoped.rs`)
+  printf 'a unit whose sheet edit fixed ONLY nitpicks of its last verdict: `make review-fixed UNIT=<unit> FINDING="<ids>"`, then dispatch the change-scoped prompt it writes in place of that unit'"'"'s full round (451 T199)\n'
   printf '\n\033[1mWHEN THE GATE IS GREEN, dispatch %s review agent(s), ONE PER UNIT\033[0m - each Agent call is the unit'"'"'s check (its slug begins with it) and takes the contents of its prompt file named above (.git/review-snapshot/<unit>/dispatch.md). Each unit is judged by the review tree'"'"'s gate at %s, not the clone'"'"'s: another builder'"'"'s edit to the clone neither blocks nor voids it (451 T164).\n' "$n" "${commit:0:10}"
 fi
 
