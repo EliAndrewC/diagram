@@ -1,5 +1,5 @@
-About: The day office was the room of the office hall where the office's own officials did its daily business, drawing
-up its documents. At Takayama, the one intendant's office that survives, the officials sent by the shogunate worked in
+About: The day office was the room of the office hall where the office's own officials did its daily business.
+At Takayama, the one intendant's office that survives, the officials sent by the shogunate worked in
 such a room, with the room of the officials hired mostly from the district partitioned off beside it; documents for the
 shogunate were drawn up in a room kept for writing and bound in the room beside it. The working rooms were most
 likely one block with the hall where cases were heard.
