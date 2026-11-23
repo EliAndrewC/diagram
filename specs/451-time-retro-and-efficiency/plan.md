@@ -2544,29 +2544,43 @@ engine speed, so no checklist.
 
 
 <!-- plan-archive: T188 to T190 moved to plan-done.md, 2026-11-23 (feature 375 FR-044) -->
-### T191 (<why: the finding or measurement that files it>)
+### T191 (the GM 2026-11-23, the convergence talk; observed 2026-11-23 by 451 T186's builder: regenerating docs/building-programs.md for the garden-pond fix re-owed 73 of its claims a triage, though only the `inner_garden` row's Guesses text changed)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: the claims triage (`rust/gate/crates/claims/src/claims/triage.rs`) takes T186's filter, shared rather than copied. T186's `page_change` is split in `triage/change.rs`: its block-list half, `blocks_change`, pairs old and new block words after the tool's clears (markers, markup, links, comments, glossary marks, a split's moves and pointers) and is what the claims triage calls; `md_words` reads a procedure section's Markdown block as a page's words (a link's text kept, ticks and emphasis dropped, a `snake_case` name kept), so a markup edit of `docs/buildings.md` or `docs/building-programs.md` pairs equal. Each changed page and section is gathered once (`Moved`), then judged per claim by `change::fires` with the claim's label and account (its question paths left out) as the reader: the echo rule over a rewritten or removed sentence, and the new-finding arm where the claim states a single case (`ABSENCE`); no note key is a claim's, so the keys-gone arm never fires. One addition, `change::echo_rewritten`: the echo read from a rewrite's new side too, since a page that relabels a claim's fact rewrites it in words the claim repeats ("That they give it a tree beside it as well is a GUESS") - without it the replay below missed one DRIFTED claim. A claim every edit of whose text is cleared, with no code hunk and nothing forced, is recorded cleared at once (`record_cleared`, `cleared: by the tool ...`), its section and page snapshots stored, before the skip, the all-forced and the dispatch paths run on what is left; a generated doc's claims are touched only by the rows whose text changed in words they repeat. The MANIFEST keeps its form (the `claims-triage` contract is unchanged) and shows only the blocks left after the clears. `claims triage-replay --out DIR` is the triage read only, each owed claim's fate.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| the shared clears and the per-claim filter | `triage::tests::a_markup_link_tick_or_marker_edit_is_cleared_by_the_tool`, `a_rewrite_goes_to_the_agent_only_for_the_claim_repeating_its_changed_words`, `a_change_that_only_adds_is_cleared_by_the_tool`, `commands::tests::a_triage_the_tool_clears_whole_dispatches_nothing` and six more, red with the filter disabled (10 of 167 failed, 2026-11-23); `change::tests::a_section_s_markdown_reads_as_a_page_s_words`, `the_echo_fires_on_words_a_rewrite_gained_that_the_claim_repeats` | none: record tooling | none | n/a |
+| the replay | `commands::tests::the_triage_replay_names_each_claim_s_fate_and_writes_nothing` | none: record tooling | none | n/a |
 
 ### T191 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** No map changes. A claim is re-owed only where the text it rests on changed in a claim-bearing way, by the rule the pop-ups use; the rest cost no agent.
+2. **The constraints.** The task line; the coordinator's brief (the same rule for claims; a generated doc's rows; T186's code shared; red first with a replay, 0 misses on today's DRIFTED claims; 100% coverage); T186's rule and spec-fidelity's ruling on quotations (an original-language edit is never cleared); FR-012 (red first); T184's and T187's files untouched.
+3. **Where each comes from.** G: the GM's convergence talk, through T186's rule. O: the replays below, measured 2026-11-23. R: none, tooling.
+4. **Do they describe the world here?** Yes: the replays are the real code path over today's landings, each at its commit with its parent's claims index and store.
+5. **The order.** After T185 and T186 (whose change computation it shares) and T187 (which landed first; its claims grammar untouched here).
+6. **The exits.** Green: the garden landing's 73 cleared but what the echo names, and 0 misses of the DRIFTED claims whose drift lay in the text they rest on. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** The replay, 2026-11-23 (`/tmp/t191/replay.sh <commit>`: a `--shared` clone at the commit, its parent's `dev/claims-index.json` and `dev/claims-pages.json`, then `l7r-gate claims triage-replay`). The garden landing 604541c046: 73 owed a section triage (HEAD's count reproduced), 71 cleared by the tool and 2 sent (`walled enclosure` and `the granary at the head of an office-court column`, on function-word trigrams the rule counts, "one of the"); its agent had cleared all 73. Today's other landings: d4da911203 133 owed, 59 cleared by the tool, 53 by feature 432, 21 sent; 085f4598c3 158, 91, 38, 1 forced, 28 sent; cce80ca436 127, 68, 44, 15 sent; d8c7ee6978 73, 40, 33 sent; b75443dd85 24, all forced. The DRIFTED claims of those landings (`/tmp/t191/py/score.py`, every row turned DRIFTED on 2026-11-23): 19, of which 12 were owed for their code, as new or in full (no filter between), 4 sent (`the shrine in a corner beside a tree` by the new-side echo, `two-court zoning`, and two code triages), 1 forced, and 2 cleared: `tax archive strongroom role` (d8c7ee6978), a known drift since 417 T33 re-found, whose DRIFTED row the clear keeps; and `main gate posts` (d4da911203), a CONVENTION claim citing no page, whose drift was 0093's drawing page restating the drafts' posts (2 by 4.3 ft), a page it does not rest on, reached only because an unrelated cart-gate edit of its section owed it. So 0 misses: each of the 5 DRIFTED claims a triage met and whose drift an edit of its own text carried was sent on or forced; the known drift's verdict stands, and the one found by coincidence is named below.
+10. **Before moving a constant.** n/a: `PAIR_RATIO` and `ABSENCE` are T186's, unmoved.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** Not a defect fix: no claim's outcome was wrong; the work it removes is an agent's.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?**
+- `main gate posts` (docs/buildings.md, Walls and gates) rests on 0093's drawing page in fact but cites none, so no change to that page owes it; already restated at d4da911203 (fix: claim), its effect none: not a defect of a wrong outcome now, and the class (a CONVENTION claim whose figure a page states) is the claims grammar's, not the triage's.
+- `rust/gate/crates/owed/src/item_relabel.rs` (T187's test, its 0270a98d77 fix-up) failed `rustfmt --check` on two long `put` lines, so the owed crate's `make static` was red for any task touching it: fixed here (`make format FILE=`), formatting only.
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** yes: the claims triage's agent sees only the claims an edit still bears on, and none at all when the tool clears every one.
+
+### T191 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)
+
+1. **Where does the time go?** In the claims round's `claims-triage` agent (one dispatch a landing that moves a cited page or a procedure section) and the `impl-drift` claims it sends on; not an engine stage.
+2. **Removes work, or only moves it?** Removes it: a screen before the agent, T186's clears and echo, and the dispatch skipped where nothing is left.
+3. **What do you expect it to save, and why?** The garden landing's whole triage dispatch would have carried 2 claims, not 73; across today's five landings, 258 of the 515 owed claims cleared by the tool before any agent, beyond the 135 feature 432 already cleared.
+4. **How does the work grow with the settlement?** It does not: record tooling; each changed page or section is paired once, then a trigram test per claim citing it.
+5. **What did the before and after show, and under what conditions?** Before (HEAD): 73 claims to the agent at 604541c046. After: 2. The replay's commands are in item 9; counts, not wall time.
+6. **Did any map move, and does it still keep the research?** No: no engine code.
+
 
