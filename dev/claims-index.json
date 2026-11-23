@@ -433,9 +433,9 @@
   "date": "2026-11-22",
   "note": "an Edo genkan is an entrance with a shikidai, kept for the head of the house and honored guests, so a plain vestibule is not one",
   "pages": {
-   "0104-the-formal-entrance-and-a-guests-arrival-genkan.html": "406db5afb90af244"
+   "0104-the-formal-entrance-and-a-guests-arrival-genkan.html": "159463ab1e897283"
   },
-  "research": "10fe4973313cb8cd",
+  "research": "8310727e0f879d15",
   "rests": [
    "0104-the-formal-entrance-and-a-guests-arrival-genkan.html:38ce75614bcb4467",
    "0104-the-formal-entrance-and-a-guests-arrival-genkan.html:6a481055c981d54e",
@@ -877,9 +877,9 @@
   "date": "2026-11-22",
   "note": "the drawing page records 15 ft from any well as a GUESS, no separation distance in the record",
   "pages": {
-   "0101-privies-setchin.drawing.html": "9eeb3929d3bb8476"
+   "0101-privies-setchin.drawing.html": "03968c62149e28e2"
   },
-  "research": "667caaffbe2eca2d",
+  "research": "ad0c946c19e2af00",
   "rests": [
    "0101-privies-setchin.drawing.html:4b6fdf768707f4bb"
   ],
@@ -1457,12 +1457,17 @@
   "code": "525859772a41d3ea",
   "core": "e351b69d0b4efda4",
   "date": "2026-11-22",
-  "note": "accepted by the round arbiter (ask:t312-claims-accept), binding",
+  "note": "0104's drawing page records a garden in the court's place, and the lantern in that court, as a guess; 0103's drawing page records the lantern in the reception court as a guess",
   "pages": {
    "0103-ornamental-gardens-ponds-and-stone-lanterns-teien.drawing.html": "48d206623f86d1e3",
-   "0104-the-formal-entrance-and-a-guests-arrival-genkan.drawing.html": "8fd51ca6d7e98b3d"
+   "0104-the-formal-entrance-and-a-guests-arrival-genkan.drawing.html": "ca514303701f3f85"
   },
-  "research": "bc8adf5391e7c6eb",
+  "research": "7e857805482a60df",
+  "rests": [
+   "0103-ornamental-gardens-ponds-and-stone-lanterns-teien.drawing.html:bd9cbe65b5055f66",
+   "0104-the-formal-entrance-and-a-guests-arrival-genkan.drawing.html:8f8b12557da86306",
+   "0104-the-formal-entrance-and-a-guests-arrival-genkan.drawing.html:ad36b13336976f6e"
+  ],
   "section": "e351b69d0b4efda4",
   "verdict": "IN-STEP"
  },
@@ -1500,11 +1505,14 @@
   "code": "532d08e1ad770a3d",
   "core": "e351b69d0b4efda4",
   "date": "2026-11-22",
-  "note": "accepted by the round arbiter (ask:t312-claims-accept), binding",
+  "note": "the drawing page records no clerk housing as a deliberate deviation from the huts and row houses of the tetsuki and tedai",
   "pages": {
-   "0113-the-office-hall-and-its-clerks-goyakusho.drawing.html": "6a3ff27c32f70c64"
+   "0113-the-office-hall-and-its-clerks-goyakusho.drawing.html": "fd51338d2c8711cc"
   },
-  "research": "6423c9660db3a3e3",
+  "research": "902141a00466121a",
+  "rests": [
+   "0113-the-office-hall-and-its-clerks-goyakusho.drawing.html:42ca231b3f4511ce"
+  ],
   "section": "e351b69d0b4efda4",
   "verdict": "IN-STEP"
  },
@@ -1516,10 +1524,11 @@
   "date": "2026-11-22",
   "note": "accepted by the round arbiter (ask:t312-claims-accept), binding",
   "pages": {
-   "0123-the-magistrates-manor-in-a-town-where-it-stands-and-which-way-it-faces-jinya-and-yamen.html": "840961e62bd4218b"
+   "0123-the-magistrates-manor-in-a-town-where-it-stands-and-which-way-it-faces-jinya-and-yamen.html": "0346f5f7a4ae4296"
   },
-  "research": "01c7b4200d42871a",
+  "research": "5227980b3dacebf8",
   "section": "e351b69d0b4efda4",
+  "triaged": "2026-11-22",
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Magistrate's manor (county magistracy)#divider gate": {
@@ -1596,11 +1605,14 @@
   "code": "7d977d70881b8660",
   "core": "e351b69d0b4efda4",
   "date": "2026-11-22",
-  "note": "accepted by the round arbiter (ask:t312-claims-accept), binding",
+  "note": "the genkan is on the office in a shared compound, and the way to the residence runs on through it, as at Takayama",
   "pages": {
-   "0104-the-formal-entrance-and-a-guests-arrival-genkan.drawing.html": "8fd51ca6d7e98b3d"
+   "0104-the-formal-entrance-and-a-guests-arrival-genkan.drawing.html": "ca514303701f3f85"
   },
-  "research": "e6e79c5d09130cf1",
+  "research": "b624358b4afec396",
+  "rests": [
+   "0104-the-formal-entrance-and-a-guests-arrival-genkan.drawing.html:116aa236938eb510"
+  ],
   "section": "e351b69d0b4efda4",
   "verdict": "IN-STEP"
  },
@@ -1622,13 +1634,20 @@
   "code": "9c68139c3ef2b6be",
   "core": "e351b69d0b4efda4",
   "date": "2026-11-22",
-  "note": "accepted by the round arbiter (ask:t312-claims-accept), binding",
+  "note": "the armory takes one of three attested sites (the gate range, the hall's west end bay, a store of its own) by a seeded roll, with a one-bay gate offered only the bay or the store, as 0093's drawing page draws it; the bandit and quiet-county additions are labeled guesses",
   "pages": {
    "0093-the-main-gate-and-its-gatekeepers-nagaya-mon.drawing.html": "5cb45d9e883ee1b3",
    "0093-the-main-gate-and-its-gatekeepers-nagaya-mon.html": "6fd054db47890c91",
-   "0123-the-magistrates-manor-in-a-town-where-it-stands-and-which-way-it-faces-jinya-and-yamen.html": "840961e62bd4218b"
+   "0123-the-magistrates-manor-in-a-town-where-it-stands-and-which-way-it-faces-jinya-and-yamen.html": "0346f5f7a4ae4296"
   },
-  "research": "d338e4ea29ba3391",
+  "research": "e473d6477d6f1f07",
+  "rests": [
+   "0093-the-main-gate-and-its-gatekeepers-nagaya-mon.drawing.html:8926a28fa7cb1e17",
+   "0093-the-main-gate-and-its-gatekeepers-nagaya-mon.html:5888554a14ace3f9",
+   "0123-the-magistrates-manor-in-a-town-where-it-stands-and-which-way-it-faces-jinya-and-yamen.html:1e09edd8bc0a0345",
+   "0123-the-magistrates-manor-in-a-town-where-it-stands-and-which-way-it-faces-jinya-and-yamen.html:a99ddcd2ed3cb0ad",
+   "0123-the-magistrates-manor-in-a-town-where-it-stands-and-which-way-it-faces-jinya-and-yamen.html:b8ca07a7472b17fa"
+  ],
   "section": "e351b69d0b4efda4",
   "verdict": "IN-STEP"
  },
@@ -1640,10 +1659,11 @@
   "date": "2026-11-22",
   "note": "accepted by the round arbiter (ask:t312-claims-accept), binding",
   "pages": {
-   "0123-the-magistrates-manor-in-a-town-where-it-stands-and-which-way-it-faces-jinya-and-yamen.html": "840961e62bd4218b"
+   "0123-the-magistrates-manor-in-a-town-where-it-stands-and-which-way-it-faces-jinya-and-yamen.html": "0346f5f7a4ae4296"
   },
-  "research": "01c7b4200d42871a",
+  "research": "5227980b3dacebf8",
   "section": "e351b69d0b4efda4",
+  "triaged": "2026-11-22",
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Magistrate's manor (county magistracy)#granary weight knob": {
@@ -1666,13 +1686,21 @@
   "code": "86d02c3ccd9bc973",
   "core": "e351b69d0b4efda4",
   "date": "2026-11-22",
-  "note": "accepted by the round arbiter (ask:t312-claims-accept), binding",
+  "note": "guests step from the gate onto open ground; the kitchen door opens into work space, a project reading the page records",
   "pages": {
    "0103-ornamental-gardens-ponds-and-stone-lanterns-teien.drawing.html": "48d206623f86d1e3",
-   "0104-the-formal-entrance-and-a-guests-arrival-genkan.drawing.html": "8fd51ca6d7e98b3d",
-   "0104-the-formal-entrance-and-a-guests-arrival-genkan.html": "406db5afb90af244"
+   "0104-the-formal-entrance-and-a-guests-arrival-genkan.drawing.html": "ca514303701f3f85",
+   "0104-the-formal-entrance-and-a-guests-arrival-genkan.html": "159463ab1e897283"
   },
-  "research": "decfa54a52b3ace0",
+  "research": "9dddd61e2551b190",
+  "rests": [
+   "0104-the-formal-entrance-and-a-guests-arrival-genkan.drawing.html:096177a66b97c551",
+   "0104-the-formal-entrance-and-a-guests-arrival-genkan.drawing.html:3bd3b9974993d277",
+   "0104-the-formal-entrance-and-a-guests-arrival-genkan.drawing.html:a7771290ebe77a35",
+   "0104-the-formal-entrance-and-a-guests-arrival-genkan.drawing.html:ad36b13336976f6e",
+   "0104-the-formal-entrance-and-a-guests-arrival-genkan.html:459642a27a3630d1",
+   "0104-the-formal-entrance-and-a-guests-arrival-genkan.html:508d759fa76d492e"
+  ],
   "section": "e351b69d0b4efda4",
   "verdict": "IN-STEP"
  },
@@ -1682,11 +1710,14 @@
   "code": "9c6c161902d4d183",
   "core": "e351b69d0b4efda4",
   "date": "2026-11-22",
-  "note": "accepted by the round arbiter (ask:t312-claims-accept), binding",
+  "note": "no page names a night-soil gate at a samurai house; the katteguchi is the kitchen's own door, so the postern is rightly a guess",
   "pages": {
-   "0101-privies-setchin.drawing.html": "9eeb3929d3bb8476"
+   "0101-privies-setchin.drawing.html": "03968c62149e28e2"
   },
-  "research": "667caaffbe2eca2d",
+  "research": "ad0c946c19e2af00",
+  "rests": [
+   "0101-privies-setchin.drawing.html:4b9c7b16a2cddbfa"
+  ],
   "section": "e351b69d0b4efda4",
   "verdict": "IN-STEP"
  },
@@ -1712,10 +1743,11 @@
   "date": "2026-11-22",
   "note": "accepted by the round arbiter (ask:t312-claims-accept), binding",
   "pages": {
-   "0101-privies-setchin.drawing.html": "9eeb3929d3bb8476"
+   "0101-privies-setchin.drawing.html": "03968c62149e28e2"
   },
-  "research": "667caaffbe2eca2d",
+  "research": "ad0c946c19e2af00",
   "section": "e351b69d0b4efda4",
+  "triaged": "2026-11-22",
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Magistrate's manor (county magistracy)#manor kitchen garden by the sun": {
@@ -1793,11 +1825,14 @@
   "code": "efcc0998564ced2b",
   "core": "e351b69d0b4efda4",
   "date": "2026-11-22",
-  "note": "accepted by the round arbiter (ask:t312-claims-accept), binding",
+  "note": "the merchant's back gate is the nearest attested gate and none is named at a samurai house, so the gate is a guess",
   "pages": {
-   "0101-privies-setchin.drawing.html": "9eeb3929d3bb8476"
+   "0101-privies-setchin.drawing.html": "03968c62149e28e2"
   },
-  "research": "667caaffbe2eca2d",
+  "research": "ad0c946c19e2af00",
+  "rests": [
+   "0101-privies-setchin.drawing.html:4b9c7b16a2cddbfa"
+  ],
   "section": "e351b69d0b4efda4",
   "verdict": "IN-STEP"
  },
@@ -1892,10 +1927,11 @@
   "date": "2026-11-22",
   "note": "accepted by the round arbiter (ask:t312-claims-accept), binding",
   "pages": {
-   "0104-the-formal-entrance-and-a-guests-arrival-genkan.html": "406db5afb90af244"
+   "0104-the-formal-entrance-and-a-guests-arrival-genkan.html": "159463ab1e897283"
   },
-  "research": "10fe4973313cb8cd",
+  "research": "8310727e0f879d15",
   "section": "e351b69d0b4efda4",
+  "triaged": "2026-11-22",
   "verdict": "IN-STEP"
  },
  "docs/building-programs.md::Magistrate's manor (county magistracy)#residence size": {
@@ -2052,12 +2088,18 @@
   "code": "a27e7e424d674e37",
   "core": "e351b69d0b4efda4",
   "date": "2026-11-22",
-  "note": "accepted by the round arbiter (ask:t312-claims-accept), binding",
+  "note": "the hall bay's 18 by 41 ft ceilings are Neixiang's mean bay and measured depth; the gate range's 12 by 12 to 12 by 24 ft is one or two of Kaibara's eight-mat rooms, the sources silent on which; the store's band covers Nirayama's 5.4 by 3.7 m and matches 0093's drawing page",
   "pages": {
    "0093-the-main-gate-and-its-gatekeepers-nagaya-mon.html": "6fd054db47890c91",
-   "0123-the-magistrates-manor-in-a-town-where-it-stands-and-which-way-it-faces-jinya-and-yamen.html": "840961e62bd4218b"
+   "0123-the-magistrates-manor-in-a-town-where-it-stands-and-which-way-it-faces-jinya-and-yamen.html": "0346f5f7a4ae4296"
   },
-  "research": "eb30cb1410f48380",
+  "research": "956e18f0d4ebc19f",
+  "rests": [
+   "0093-the-main-gate-and-its-gatekeepers-nagaya-mon.html:5888554a14ace3f9",
+   "0123-the-magistrates-manor-in-a-town-where-it-stands-and-which-way-it-faces-jinya-and-yamen.html:a99ddcd2ed3cb0ad",
+   "0123-the-magistrates-manor-in-a-town-where-it-stands-and-which-way-it-faces-jinya-and-yamen.html:b8ca07a7472b17fa",
+   "0123-the-magistrates-manor-in-a-town-where-it-stands-and-which-way-it-faces-jinya-and-yamen.html:c476af45d17661ad"
+  ],
   "section": "e351b69d0b4efda4",
   "verdict": "IN-STEP"
  },
@@ -2121,11 +2163,14 @@
   "code": "d355001805ef6bc9",
   "core": "e351b69d0b4efda4",
   "date": "2026-11-22",
-  "note": "accepted by the round arbiter (ask:t312-claims-accept), binding",
+  "note": "both cited pages give the rooms no size; the 140-360 sq ft band matches 8-12 mats and 16-20 mats with the anteroom; the drawing page places the rooms behind the dais as a guess",
   "pages": {
-   "0113-the-office-hall-and-its-clerks-goyakusho.drawing.html": "6a3ff27c32f70c64"
+   "0113-the-office-hall-and-its-clerks-goyakusho.drawing.html": "fd51338d2c8711cc"
   },
-  "research": "6423c9660db3a3e3",
+  "research": "902141a00466121a",
+  "rests": [
+   "0113-the-office-hall-and-its-clerks-goyakusho.drawing.html:ca6e750720f63140"
+  ],
   "section": "e351b69d0b4efda4",
   "verdict": "IN-STEP"
  },
@@ -2138,10 +2183,10 @@
   "date": "2026-11-22",
   "note": "the rooms are attested only at Takayama (\"bound in the room beside it\"); the record says nothing of a county office's rooms, their seat west of the clerks' room or their size; the clerks' room beside the day office is the drawing page's, as at Takayama",
   "pages": {
-   "0113-the-office-hall-and-its-clerks-goyakusho.drawing.html": "6a3ff27c32f70c64",
-   "0113-the-office-hall-and-its-clerks-goyakusho.html": "cebe55795625915b"
+   "0113-the-office-hall-and-its-clerks-goyakusho.drawing.html": "fd51338d2c8711cc",
+   "0113-the-office-hall-and-its-clerks-goyakusho.html": "4bfcde15c857816c"
   },
-  "research": "bac0ae21a14d75a4",
+  "research": "4c4f9eecd51c71b9",
   "rests": [
    "0113-the-office-hall-and-its-clerks-goyakusho.drawing.html:45e428be060a17da",
    "0113-the-office-hall-and-its-clerks-goyakusho.html:0310cc2a4cf317a8",
@@ -2589,9 +2634,9 @@
   "date": "2026-10-11",
   "note": "open ground inside the gate, or the roji garden path; the kitchen door is the service door",
   "pages": {
-   "0104-the-formal-entrance-and-a-guests-arrival-genkan.html": "406db5afb90af244"
+   "0104-the-formal-entrance-and-a-guests-arrival-genkan.html": "159463ab1e897283"
   },
-  "research": "10fe4973313cb8cd",
+  "research": "8310727e0f879d15",
   "rests": [
    "0104-the-formal-entrance-and-a-guests-arrival-genkan.html:459642a27a3630d1",
    "0104-the-formal-entrance-and-a-guests-arrival-genkan.html:95160ff513e325fa",
@@ -2695,9 +2740,9 @@
   "note": "the house's two privies are attached to it, the guests' behind the reception and the family's at a back corner (the family's place a GUESS); about 3-4 a compound (a GUESS); the rear strip is filled or narrowed to an alley, and 0091's drawing page records both as GUESSes",
   "pages": {
    "0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html": "591a8dab5858eeea",
-   "0101-privies-setchin.drawing.html": "9eeb3929d3bb8476"
+   "0101-privies-setchin.drawing.html": "03968c62149e28e2"
   },
-  "research": "4d71211196ead0a5",
+  "research": "16f8406fe0e689d2",
   "rests": [
    "0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html:20e2f5e87070706a",
    "0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html:6adb1f4ed30e77e9",
@@ -3060,9 +3105,9 @@
   "note": "the tub beside the veranda stone is recorded; the roji leads to the zashiki's veranda",
   "pages": {
    "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html": "0d235f26a98929bc",
-   "0104-the-formal-entrance-and-a-guests-arrival-genkan.drawing.html": "8fd51ca6d7e98b3d"
+   "0104-the-formal-entrance-and-a-guests-arrival-genkan.drawing.html": "ca514303701f3f85"
   },
-  "research": "6de504cf2039d05f",
+  "research": "8ef7cdff6876b492",
   "rests": [
    "0100-fire-and-the-fireproof-storehouses-dozo.drawing.html:3bdb4664ace5320c",
    "0104-the-formal-entrance-and-a-guests-arrival-genkan.drawing.html:7e1a102957652671"
@@ -3278,9 +3323,9 @@
   "date": "2026-10-11",
   "note": "a knob between the two attested forms (Takayama's genkan, Koseki's roji); other blocks enter by the inner entrance",
   "pages": {
-   "0104-the-formal-entrance-and-a-guests-arrival-genkan.html": "406db5afb90af244"
+   "0104-the-formal-entrance-and-a-guests-arrival-genkan.html": "159463ab1e897283"
   },
-  "research": "10fe4973313cb8cd",
+  "research": "8310727e0f879d15",
   "rests": [
    "0104-the-formal-entrance-and-a-guests-arrival-genkan.html:6a481055c981d54e",
    "0104-the-formal-entrance-and-a-guests-arrival-genkan.html:8df3343eda86262e",
@@ -3297,14 +3342,13 @@
   "code": "8057b8d975933a4f",
   "core": "e274777dec821a78",
   "date": "2026-11-22",
-  "note": "known (417 T33): the porch is drawn ~40x14 px (~13x4.7 ft), as the section's \"small projection (~40×14)\" says, against \"About 12 by 9 ft, in the one example found measured\" (Sayama's shikidai); fix: code; effect: the formal entrance reads about half the depth of the one measured shikidai, though 4.7 ft falls within the timber step's attested \"40 cm (~1.3 ft) to 2 m (~6.5 ft) deep\"",
+  "note": "known (417 T33): the porch is drawn ~40x14 px (~13 x 4.7 ft) against the one measured shikidai of about 12 by 9 ft at Sayama; fix: code; effect: the formal entrance reads about half as deep as the one measured shikidai",
   "pages": {
-   "0104-the-formal-entrance-and-a-guests-arrival-genkan.html": "406db5afb90af244"
+   "0104-the-formal-entrance-and-a-guests-arrival-genkan.html": "159463ab1e897283"
   },
-  "research": "10fe4973313cb8cd",
+  "research": "8310727e0f879d15",
   "rests": [
-   "0104-the-formal-entrance-and-a-guests-arrival-genkan.html:e1ec5330d5eb4b91",
-   "0104-the-formal-entrance-and-a-guests-arrival-genkan.html:e9b9c898d9dc1328"
+   "0104-the-formal-entrance-and-a-guests-arrival-genkan.html:e1ec5330d5eb4b91"
   ],
   "section": "e274777dec821a78",
   "verdict": "DRIFTED"
@@ -3568,14 +3612,15 @@
   "code": "1af24b1087d014fd",
   "core": "85ad9bd2565f0fa8",
   "date": "2026-11-22",
-  "note": "the page's \"against the compound's service walls, near a gate\", by the service gate, stables or barracks",
+  "note": "the outer privies stand against service walls near a gate, by the barracks, the stables or the service gate, as the drawing page places them",
   "pages": {
-   "0101-privies-setchin.drawing.html": "9eeb3929d3bb8476"
+   "0101-privies-setchin.drawing.html": "03968c62149e28e2"
   },
-  "research": "667caaffbe2eca2d",
+  "research": "ad0c946c19e2af00",
   "rests": [
-   "0101-privies-setchin.drawing.html:0805ab498114f368",
-   "0101-privies-setchin.drawing.html:38960fd9975a6f1c"
+   "0101-privies-setchin.drawing.html:22aa0442ff4680a7",
+   "0101-privies-setchin.drawing.html:38960fd9975a6f1c",
+   "0101-privies-setchin.drawing.html:4b9c7b16a2cddbfa"
   ],
   "section": "85ad9bd2565f0fa8",
   "verdict": "IN-STEP"
@@ -3599,9 +3644,9 @@
   "date": "2026-10-10",
   "note": "at least 15 ft from a well, recorded as a GUESS",
   "pages": {
-   "0101-privies-setchin.drawing.html": "9eeb3929d3bb8476"
+   "0101-privies-setchin.drawing.html": "03968c62149e28e2"
   },
-  "research": "667caaffbe2eca2d",
+  "research": "ad0c946c19e2af00",
   "rests": [
    "0101-privies-setchin.drawing.html:4b6fdf768707f4bb"
   ],
@@ -3616,9 +3661,9 @@
   "date": "2026-10-10",
   "note": "about one per part, 3-4 at a county compound",
   "pages": {
-   "0101-privies-setchin.drawing.html": "9eeb3929d3bb8476"
+   "0101-privies-setchin.drawing.html": "03968c62149e28e2"
   },
-  "research": "667caaffbe2eca2d",
+  "research": "ad0c946c19e2af00",
   "rests": [
    "0101-privies-setchin.drawing.html:38960fd9975a6f1c",
    "0101-privies-setchin.drawing.html:8299420f832f4bd1"
@@ -3645,9 +3690,9 @@
   "date": "2026-10-10",
   "note": "5 ft square one-seat privy, a GUESS",
   "pages": {
-   "0101-privies-setchin.drawing.html": "9eeb3929d3bb8476"
+   "0101-privies-setchin.drawing.html": "03968c62149e28e2"
   },
-  "research": "667caaffbe2eca2d",
+  "research": "ad0c946c19e2af00",
   "rests": [
    "0101-privies-setchin.drawing.html:fc9cf897ba09ad11"
   ],
@@ -3706,9 +3751,9 @@
   "date": "2026-10-10",
   "note": "guests' privy behind the reception room, family's at a back corner (GUESS), pits toward the service edge (project rule)",
   "pages": {
-   "0101-privies-setchin.drawing.html": "9eeb3929d3bb8476"
+   "0101-privies-setchin.drawing.html": "03968c62149e28e2"
   },
-  "research": "667caaffbe2eca2d",
+  "research": "ad0c946c19e2af00",
   "rests": [
    "0101-privies-setchin.drawing.html:22aa0442ff4680a7",
    "0101-privies-setchin.drawing.html:721f2a29c982e0b4",
@@ -3924,12 +3969,18 @@
   "code": "e2432f3e17ab93ad",
   "core": "8fee1b726a8dc621",
   "date": "2026-11-22",
-  "note": "accepted by the round arbiter (ask:t312-claims-accept), binding",
+  "note": "the open ground just inside the main gate, which the entrance faces, as at Joge; the forecourt's share is a guess on 0116",
   "pages": {
-   "0104-the-formal-entrance-and-a-guests-arrival-genkan.html": "406db5afb90af244",
+   "0104-the-formal-entrance-and-a-guests-arrival-genkan.html": "159463ab1e897283",
    "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.html": "5d33f5f7fe19b26a"
   },
-  "research": "ea876fe65b164fb5",
+  "research": "efbe380cea587ba1",
+  "rests": [
+   "0104-the-formal-entrance-and-a-guests-arrival-genkan.html:00e89c1504591716",
+   "0104-the-formal-entrance-and-a-guests-arrival-genkan.html:459642a27a3630d1",
+   "0104-the-formal-entrance-and-a-guests-arrival-genkan.html:508d759fa76d492e",
+   "0116-the-size-of-a-compound-and-the-rank-of-its-buildings.html:294ade5001734dd1"
+  ],
   "section": "8fee1b726a8dc621",
   "verdict": "IN-STEP"
  },
@@ -4079,9 +4130,9 @@
   "date": "2026-11-22",
   "note": "120x28, 113x28, 110x28 and 127x38 ft (3,080 to 4,826 sq ft) all fall inside the 80-150 by 20-45 ft band and its 1,600-6,750 sq ft floor; 127 less 113 is the 14 ft armory bay; the clerks' room, day office and study behind and the dais in front are as §23 and §24 place them, and the writing and binding rooms are labeled a GUESS",
   "pages": {
-   "0113-the-office-hall-and-its-clerks-goyakusho.drawing.html": "6a3ff27c32f70c64"
+   "0113-the-office-hall-and-its-clerks-goyakusho.drawing.html": "fd51338d2c8711cc"
   },
-  "research": "6423c9660db3a3e3",
+  "research": "902141a00466121a",
   "rests": [
    "0113-the-office-hall-and-its-clerks-goyakusho.drawing.html:45e428be060a17da",
    "0113-the-office-hall-and-its-clerks-goyakusho.drawing.html:bedd579ac94bfd98",
@@ -4294,10 +4345,11 @@
   "date": "2026-11-22",
   "note": "accepted by the round arbiter (ask:t312-claims-accept), binding",
   "pages": {
-   "0123-the-magistrates-manor-in-a-town-where-it-stands-and-which-way-it-faces-jinya-and-yamen.html": "840961e62bd4218b"
+   "0123-the-magistrates-manor-in-a-town-where-it-stands-and-which-way-it-faces-jinya-and-yamen.html": "0346f5f7a4ae4296"
   },
-  "research": "01c7b4200d42871a",
+  "research": "5227980b3dacebf8",
   "section": "8fee1b726a8dc621",
+  "triaged": "2026-11-22",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Outer court (administrative / public)#the granary below a barracks": {
@@ -4323,10 +4375,11 @@
   "note": "accepted by the round arbiter (ask:t312-claims-accept), binding",
   "pages": {
    "0123-the-magistrates-manor-in-a-town-where-it-stands-and-which-way-it-faces-jinya-and-yamen.drawing.html": "e87dfc548bbdbe72",
-   "0123-the-magistrates-manor-in-a-town-where-it-stands-and-which-way-it-faces-jinya-and-yamen.html": "840961e62bd4218b"
+   "0123-the-magistrates-manor-in-a-town-where-it-stands-and-which-way-it-faces-jinya-and-yamen.html": "0346f5f7a4ae4296"
   },
-  "research": "38e0b3b1760814de",
+  "research": "a1f898e4d2757e59",
   "section": "8fee1b726a8dc621",
+  "triaged": "2026-11-22",
   "verdict": "IN-STEP"
  },
  "docs/buildings.md::Outer court (administrative / public)#the kura granary's vents not drawn": {
@@ -5416,9 +5469,9 @@
   "note": "names one of the three attested sites",
   "pages": {
    "0093-the-main-gate-and-its-gatekeepers-nagaya-mon.html": "6fd054db47890c91",
-   "0123-the-magistrates-manor-in-a-town-where-it-stands-and-which-way-it-faces-jinya-and-yamen.html": "840961e62bd4218b"
+   "0123-the-magistrates-manor-in-a-town-where-it-stands-and-which-way-it-faces-jinya-and-yamen.html": "0346f5f7a4ae4296"
   },
-  "research": "eb30cb1410f48380",
+  "research": "956e18f0d4ebc19f",
   "rests": [
    "0093-the-main-gate-and-its-gatekeepers-nagaya-mon.html:5888554a14ace3f9",
    "0123-the-magistrates-manor-in-a-town-where-it-stands-and-which-way-it-faces-jinya-and-yamen.html:a99ddcd2ed3cb0ad",
@@ -5449,9 +5502,9 @@
   "note": "the notes' form for the gate-range site",
   "pages": {
    "0093-the-main-gate-and-its-gatekeepers-nagaya-mon.html": "6fd054db47890c91",
-   "0123-the-magistrates-manor-in-a-town-where-it-stands-and-which-way-it-faces-jinya-and-yamen.html": "840961e62bd4218b"
+   "0123-the-magistrates-manor-in-a-town-where-it-stands-and-which-way-it-faces-jinya-and-yamen.html": "0346f5f7a4ae4296"
   },
-  "research": "eb30cb1410f48380",
+  "research": "956e18f0d4ebc19f",
   "rests": [
    "0093-the-main-gate-and-its-gatekeepers-nagaya-mon.html:5888554a14ace3f9"
   ],
@@ -5480,9 +5533,9 @@
   "note": "names the hall's end-bay site",
   "pages": {
    "0093-the-main-gate-and-its-gatekeepers-nagaya-mon.html": "6fd054db47890c91",
-   "0123-the-magistrates-manor-in-a-town-where-it-stands-and-which-way-it-faces-jinya-and-yamen.html": "840961e62bd4218b"
+   "0123-the-magistrates-manor-in-a-town-where-it-stands-and-which-way-it-faces-jinya-and-yamen.html": "0346f5f7a4ae4296"
   },
-  "research": "eb30cb1410f48380",
+  "research": "956e18f0d4ebc19f",
   "rests": [
    "0123-the-magistrates-manor-in-a-town-where-it-stands-and-which-way-it-faces-jinya-and-yamen.html:1e09edd8bc0a0345",
    "0123-the-magistrates-manor-in-a-town-where-it-stands-and-which-way-it-faces-jinya-and-yamen.html:a99ddcd2ed3cb0ad"
@@ -5505,20 +5558,22 @@
  "rust/mode_a/src/audit/armory.rs::KEY#one choice among the sites a sheet offers": {
   "body": "416dc1763ddbde2c",
   "claim": "one choice among the sites a sheet offers - the-magistrates-manor-in-a-town-where-it-stands-and-which-way-it-faces-jinya-and-yamen, the-main-gate-and-its-gatekeepers-nagaya-mon: three attested sites for a seat's arms - Kaibara's store of arms a room of its gate range (0093), Pingyao's armory its great hall's west end bay (0123), and a weapons store a building of its own at Nirayama, late Edo, and one named among Hamamashike's storehouses, finished 1860 (0123) - so a knob rolled from the map's seed (the round arbiter's ask:armory-store-ubame, route (a), 2026-11-22: one choice, no nested roll); the gate range is offered only where the main gate is drawn as one, so a one-bay gate's sheet rolls between the hall's bay and a store",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "4f7885ccbbf7375b",
   "core": "76939c5cb91bf54b",
   "date": "2026-11-22",
   "note": "the knob's name for the roll among the three attested sites",
   "pages": {
    "0093-the-main-gate-and-its-gatekeepers-nagaya-mon.html": "6fd054db47890c91",
-   "0123-the-magistrates-manor-in-a-town-where-it-stands-and-which-way-it-faces-jinya-and-yamen.html": "840961e62bd4218b"
+   "0123-the-magistrates-manor-in-a-town-where-it-stands-and-which-way-it-faces-jinya-and-yamen.html": "0346f5f7a4ae4296"
   },
-  "research": "eb30cb1410f48380",
+  "research": "956e18f0d4ebc19f",
   "rests": [
    "0093-the-main-gate-and-its-gatekeepers-nagaya-mon.html:5888554a14ace3f9",
    "0123-the-magistrates-manor-in-a-town-where-it-stands-and-which-way-it-faces-jinya-and-yamen.html:a99ddcd2ed3cb0ad",
    "0123-the-magistrates-manor-in-a-town-where-it-stands-and-which-way-it-faces-jinya-and-yamen.html:b8ca07a7472b17fa"
   ],
+  "triaged": "2026-11-22",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/audit/armory.rs::KEY#the drawn site read from the sheet": {
@@ -5543,9 +5598,9 @@
   "note": "names the store-of-its-own site (Nirayama, Hamamashike)",
   "pages": {
    "0093-the-main-gate-and-its-gatekeepers-nagaya-mon.html": "6fd054db47890c91",
-   "0123-the-magistrates-manor-in-a-town-where-it-stands-and-which-way-it-faces-jinya-and-yamen.html": "840961e62bd4218b"
+   "0123-the-magistrates-manor-in-a-town-where-it-stands-and-which-way-it-faces-jinya-and-yamen.html": "0346f5f7a4ae4296"
   },
-  "research": "eb30cb1410f48380",
+  "research": "956e18f0d4ebc19f",
   "rests": [
    "0123-the-magistrates-manor-in-a-town-where-it-stands-and-which-way-it-faces-jinya-and-yamen.html:b8ca07a7472b17fa"
   ],
@@ -5574,9 +5629,9 @@
   "note": "the notes' form for the store site",
   "pages": {
    "0093-the-main-gate-and-its-gatekeepers-nagaya-mon.html": "6fd054db47890c91",
-   "0123-the-magistrates-manor-in-a-town-where-it-stands-and-which-way-it-faces-jinya-and-yamen.html": "840961e62bd4218b"
+   "0123-the-magistrates-manor-in-a-town-where-it-stands-and-which-way-it-faces-jinya-and-yamen.html": "0346f5f7a4ae4296"
   },
-  "research": "eb30cb1410f48380",
+  "research": "956e18f0d4ebc19f",
   "rests": [
    "0123-the-magistrates-manor-in-a-town-where-it-stands-and-which-way-it-faces-jinya-and-yamen.html:b8ca07a7472b17fa"
   ],
@@ -5605,10 +5660,10 @@
   "note": "refuses a drawn site that is not the seed's roll among the offered sites, and a form that does not match the site",
   "pages": {
    "0093-the-main-gate-and-its-gatekeepers-nagaya-mon.html": "6fd054db47890c91",
-   "0123-the-magistrates-manor-in-a-town-where-it-stands-and-which-way-it-faces-jinya-and-yamen.html": "840961e62bd4218b"
+   "0123-the-magistrates-manor-in-a-town-where-it-stands-and-which-way-it-faces-jinya-and-yamen.html": "0346f5f7a4ae4296"
   },
   "reads": "09f074e93143c538",
-  "research": "eb30cb1410f48380",
+  "research": "956e18f0d4ebc19f",
   "rests": [
    "0093-the-main-gate-and-its-gatekeepers-nagaya-mon.html:5888554a14ace3f9",
    "0123-the-magistrates-manor-in-a-town-where-it-stands-and-which-way-it-faces-jinya-and-yamen.html:a99ddcd2ed3cb0ad",
@@ -5652,10 +5707,10 @@
   "note": "sorts a drawn armory into one of the three attested sites",
   "pages": {
    "0093-the-main-gate-and-its-gatekeepers-nagaya-mon.html": "6fd054db47890c91",
-   "0123-the-magistrates-manor-in-a-town-where-it-stands-and-which-way-it-faces-jinya-and-yamen.html": "840961e62bd4218b"
+   "0123-the-magistrates-manor-in-a-town-where-it-stands-and-which-way-it-faces-jinya-and-yamen.html": "0346f5f7a4ae4296"
   },
   "reads": "0206947654ed7eaf",
-  "research": "eb30cb1410f48380",
+  "research": "956e18f0d4ebc19f",
   "rests": [
    "0093-the-main-gate-and-its-gatekeepers-nagaya-mon.html:5888554a14ace3f9",
    "0123-the-magistrates-manor-in-a-town-where-it-stands-and-which-way-it-faces-jinya-and-yamen.html:a99ddcd2ed3cb0ad",
@@ -5680,21 +5735,23 @@
  "rust/mode_a/src/audit/armory.rs::form_of#one choice among the sites a sheet offers": {
   "body": "2de3469d8e53eabe",
   "claim": "one choice among the sites a sheet offers - the-magistrates-manor-in-a-town-where-it-stands-and-which-way-it-faces-jinya-and-yamen, the-main-gate-and-its-gatekeepers-nagaya-mon: three attested sites for a seat's arms - Kaibara's store of arms a room of its gate range (0093), Pingyao's armory its great hall's west end bay (0123), and a weapons store a building of its own at Nirayama, late Edo, and one named among Hamamashike's storehouses, finished 1860 (0123) - so a knob rolled from the map's seed (the round arbiter's ask:armory-store-ubame, route (a), 2026-11-22: one choice, no nested roll); the gate range is offered only where the main gate is drawn as one, so a one-bay gate's sheet rolls between the hall's bay and a store",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "fa9b3dc9e7139388",
   "core": "68f979f96843c1ee",
   "date": "2026-11-22",
   "note": "maps the gate-range site and the own-store site to their forms; the hall's bay is read from the hall's footprint",
   "pages": {
    "0093-the-main-gate-and-its-gatekeepers-nagaya-mon.html": "6fd054db47890c91",
-   "0123-the-magistrates-manor-in-a-town-where-it-stands-and-which-way-it-faces-jinya-and-yamen.html": "840961e62bd4218b"
+   "0123-the-magistrates-manor-in-a-town-where-it-stands-and-which-way-it-faces-jinya-and-yamen.html": "0346f5f7a4ae4296"
   },
   "reads": "cbfd0dd1facff945",
-  "research": "eb30cb1410f48380",
+  "research": "956e18f0d4ebc19f",
   "rests": [
    "0093-the-main-gate-and-its-gatekeepers-nagaya-mon.html:5888554a14ace3f9",
    "0123-the-magistrates-manor-in-a-town-where-it-stands-and-which-way-it-faces-jinya-and-yamen.html:a99ddcd2ed3cb0ad",
    "0123-the-magistrates-manor-in-a-town-where-it-stands-and-which-way-it-faces-jinya-and-yamen.html:b8ca07a7472b17fa"
   ],
+  "triaged": "2026-11-22",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/audit/armory.rs::form_of#the drawn site read from the sheet": {
@@ -5713,20 +5770,22 @@
  "rust/mode_a/src/audit/armory.rs::gate_range_drawn#one choice among the sites a sheet offers": {
   "body": "a6a6ef2d34a9ae41",
   "claim": "one choice among the sites a sheet offers - the-magistrates-manor-in-a-town-where-it-stands-and-which-way-it-faces-jinya-and-yamen, the-main-gate-and-its-gatekeepers-nagaya-mon: three attested sites for a seat's arms - Kaibara's store of arms a room of its gate range (0093), Pingyao's armory its great hall's west end bay (0123), and a weapons store a building of its own at Nirayama, late Edo, and one named among Hamamashike's storehouses, finished 1860 (0123) - so a knob rolled from the map's seed (the round arbiter's ask:armory-store-ubame, route (a), 2026-11-22: one choice, no nested roll); the gate range is offered only where the main gate is drawn as one, so a one-bay gate's sheet rolls between the hall's bay and a store",
+  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "3aa10114ecf9cefd",
   "core": "7f2ea04166c9053e",
   "date": "2026-11-22",
   "note": "offers the gate range only where rooms flank the main gate's passage, so a one-bay gate offers none",
   "pages": {
    "0093-the-main-gate-and-its-gatekeepers-nagaya-mon.html": "6fd054db47890c91",
-   "0123-the-magistrates-manor-in-a-town-where-it-stands-and-which-way-it-faces-jinya-and-yamen.html": "840961e62bd4218b"
+   "0123-the-magistrates-manor-in-a-town-where-it-stands-and-which-way-it-faces-jinya-and-yamen.html": "0346f5f7a4ae4296"
   },
-  "research": "eb30cb1410f48380",
+  "research": "956e18f0d4ebc19f",
   "rests": [
    "0093-the-main-gate-and-its-gatekeepers-nagaya-mon.html:5888554a14ace3f9",
    "0093-the-main-gate-and-its-gatekeepers-nagaya-mon.html:8209023b544dfc3b",
    "0123-the-magistrates-manor-in-a-town-where-it-stands-and-which-way-it-faces-jinya-and-yamen.html:b8ca07a7472b17fa"
   ],
+  "triaged": "2026-11-22",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/audit/armory.rs::gate_range_drawn#the drawn site read from the sheet": {
@@ -5763,9 +5822,9 @@
   "note": "a range is either a room the passage runs through or rooms on both sides of the passage, matching the attested rooms on both sides of the gate under one roof",
   "pages": {
    "0093-the-main-gate-and-its-gatekeepers-nagaya-mon.html": "6fd054db47890c91",
-   "0123-the-magistrates-manor-in-a-town-where-it-stands-and-which-way-it-faces-jinya-and-yamen.html": "840961e62bd4218b"
+   "0123-the-magistrates-manor-in-a-town-where-it-stands-and-which-way-it-faces-jinya-and-yamen.html": "0346f5f7a4ae4296"
   },
-  "research": "eb30cb1410f48380",
+  "research": "956e18f0d4ebc19f",
   "rests": [
    "0093-the-main-gate-and-its-gatekeepers-nagaya-mon.html:04ac23f9653e01fb",
    "0093-the-main-gate-and-its-gatekeepers-nagaya-mon.html:5888554a14ace3f9",
@@ -5796,10 +5855,10 @@
   "note": "one seeded choice among the offered sites, no nested roll",
   "pages": {
    "0093-the-main-gate-and-its-gatekeepers-nagaya-mon.html": "6fd054db47890c91",
-   "0123-the-magistrates-manor-in-a-town-where-it-stands-and-which-way-it-faces-jinya-and-yamen.html": "840961e62bd4218b"
+   "0123-the-magistrates-manor-in-a-town-where-it-stands-and-which-way-it-faces-jinya-and-yamen.html": "0346f5f7a4ae4296"
   },
   "reads": "34d28b5a8b4abdc6",
-  "research": "eb30cb1410f48380",
+  "research": "956e18f0d4ebc19f",
   "rests": [
    "0093-the-main-gate-and-its-gatekeepers-nagaya-mon.html:5888554a14ace3f9",
    "0123-the-magistrates-manor-in-a-town-where-it-stands-and-which-way-it-faces-jinya-and-yamen.html:a99ddcd2ed3cb0ad",
@@ -5818,10 +5877,10 @@
   "note": "all three sites with a drawn range, the hall and a store without one",
   "pages": {
    "0093-the-main-gate-and-its-gatekeepers-nagaya-mon.html": "6fd054db47890c91",
-   "0123-the-magistrates-manor-in-a-town-where-it-stands-and-which-way-it-faces-jinya-and-yamen.html": "840961e62bd4218b"
+   "0123-the-magistrates-manor-in-a-town-where-it-stands-and-which-way-it-faces-jinya-and-yamen.html": "0346f5f7a4ae4296"
   },
   "reads": "0206947654ed7eaf",
-  "research": "eb30cb1410f48380",
+  "research": "956e18f0d4ebc19f",
   "rests": [
    "0093-the-main-gate-and-its-gatekeepers-nagaya-mon.html:5888554a14ace3f9",
    "0123-the-magistrates-manor-in-a-town-where-it-stands-and-which-way-it-faces-jinya-and-yamen.html:a99ddcd2ed3cb0ad",
@@ -7924,9 +7983,9 @@
   "date": "2026-11-22",
   "note": "the page records the gray privy as a map drawing convention, set apart from the tan buildings, and says no source gives a privy's color",
   "pages": {
-   "0101-privies-setchin.drawing.html": "9eeb3929d3bb8476"
+   "0101-privies-setchin.drawing.html": "03968c62149e28e2"
   },
-  "research": "667caaffbe2eca2d",
+  "research": "ad0c946c19e2af00",
   "rests": [
    "0101-privies-setchin.drawing.html:e0c717d54ccc5220"
   ],
@@ -8294,9 +8353,9 @@
   "date": "2026-11-22",
   "note": "#7E726A gray is the privy's color as a map drawing convention; \"No source we read gives a privy's color\"",
   "pages": {
-   "0101-privies-setchin.drawing.html": "9eeb3929d3bb8476"
+   "0101-privies-setchin.drawing.html": "03968c62149e28e2"
   },
-  "research": "667caaffbe2eca2d",
+  "research": "ad0c946c19e2af00",
   "rests": [
    "0101-privies-setchin.drawing.html:e0c717d54ccc5220"
   ],
@@ -8312,9 +8371,9 @@
   "date": "2026-11-17",
   "note": "three, the low end of \"three or four\", which the page records as a GUESS",
   "pages": {
-   "0101-privies-setchin.drawing.html": "9eeb3929d3bb8476"
+   "0101-privies-setchin.drawing.html": "03968c62149e28e2"
   },
-  "research": "667caaffbe2eca2d",
+  "research": "ad0c946c19e2af00",
   "rests": [
    "0101-privies-setchin.drawing.html:38960fd9975a6f1c"
   ],
@@ -8330,9 +8389,9 @@
   "date": "2026-11-18",
   "note": "2",
   "pages": {
-   "0101-privies-setchin.drawing.html": "9eeb3929d3bb8476"
+   "0101-privies-setchin.drawing.html": "03968c62149e28e2"
   },
-  "research": "667caaffbe2eca2d",
+  "research": "ad0c946c19e2af00",
   "rests": [
    "0101-privies-setchin.drawing.html:35d401ea5514f4f8",
    "0101-privies-setchin.drawing.html:8299420f832f4bd1"
@@ -8521,11 +8580,11 @@
   "note": "an outer-wall entrance on every lodging block",
   "pages": {
    "0097-staff-rowhouses-and-barracks-nagaya.drawing.html": "746ec66395f459f8",
-   "0104-the-formal-entrance-and-a-guests-arrival-genkan.drawing.html": "8fd51ca6d7e98b3d",
+   "0104-the-formal-entrance-and-a-guests-arrival-genkan.drawing.html": "ca514303701f3f85",
    "0106-the-chief-retainers-house-karo-yashiki.drawing.html": "b1c24d21e65521fd"
   },
   "reads": "dc36e07e4dcaa412",
-  "research": "ee6e7d25feb33564",
+  "research": "207251aaaeb29a87",
   "rests": [
    "0097-staff-rowhouses-and-barracks-nagaya.drawing.html:06766b70728caeae",
    "0097-staff-rowhouses-and-barracks-nagaya.drawing.html:6d20e14e8c281ff8",
@@ -8590,10 +8649,10 @@
   "date": "2026-11-17",
   "note": "recorded as a guess; a court zone is not a courtyard",
   "pages": {
-   "0101-privies-setchin.drawing.html": "9eeb3929d3bb8476"
+   "0101-privies-setchin.drawing.html": "03968c62149e28e2"
   },
   "reads": "bc4276560837906a",
-  "research": "667caaffbe2eca2d",
+  "research": "ad0c946c19e2af00",
   "rests": [
    "0101-privies-setchin.drawing.html:38960fd9975a6f1c",
    "0101-privies-setchin.drawing.html:79397bdd548ce631"
@@ -8610,10 +8669,10 @@
   "date": "2026-11-18",
   "note": "the low end of the guessed three or four",
   "pages": {
-   "0101-privies-setchin.drawing.html": "9eeb3929d3bb8476"
+   "0101-privies-setchin.drawing.html": "03968c62149e28e2"
   },
   "reads": "bc4276560837906a",
-  "research": "667caaffbe2eca2d",
+  "research": "ad0c946c19e2af00",
   "rests": [
    "0101-privies-setchin.drawing.html:38960fd9975a6f1c"
   ],
@@ -8629,10 +8688,10 @@
   "date": "2026-11-18",
   "note": "built into the house",
   "pages": {
-   "0101-privies-setchin.drawing.html": "9eeb3929d3bb8476"
+   "0101-privies-setchin.drawing.html": "03968c62149e28e2"
   },
   "reads": "bc4276560837906a",
-  "research": "667caaffbe2eca2d",
+  "research": "ad0c946c19e2af00",
   "rests": [
    "0101-privies-setchin.drawing.html:8299420f832f4bd1"
   ],
@@ -8648,10 +8707,10 @@
   "date": "2026-11-18",
   "note": "fewer than 2 are refused",
   "pages": {
-   "0101-privies-setchin.drawing.html": "9eeb3929d3bb8476"
+   "0101-privies-setchin.drawing.html": "03968c62149e28e2"
   },
   "reads": "bc4276560837906a",
-  "research": "667caaffbe2eca2d",
+  "research": "ad0c946c19e2af00",
   "rests": [
    "0101-privies-setchin.drawing.html:35d401ea5514f4f8",
    "0101-privies-setchin.drawing.html:8299420f832f4bd1"
@@ -16290,10 +16349,10 @@
   "date": "2026-11-22",
   "note": "the page records the per-part privy count as a guess and gives no per-zone rule; the code requires a privy centered in each of the two zones the divider splits, and passes a program with no privies (the `!s.privies.is_empty()` guard)",
   "pages": {
-   "0101-privies-setchin.drawing.html": "9eeb3929d3bb8476"
+   "0101-privies-setchin.drawing.html": "03968c62149e28e2"
   },
   "reads": "aa361bfefe39a9c9",
-  "research": "667caaffbe2eca2d",
+  "research": "ad0c946c19e2af00",
   "rests": [
    "0101-privies-setchin.drawing.html:38960fd9975a6f1c",
    "0101-privies-setchin.drawing.html:79397bdd548ce631"
@@ -17340,9 +17399,9 @@
   "date": "2026-11-19",
   "note": "5 ft square, recorded as a GUESS",
   "pages": {
-   "0101-privies-setchin.drawing.html": "9eeb3929d3bb8476"
+   "0101-privies-setchin.drawing.html": "03968c62149e28e2"
   },
-  "research": "667caaffbe2eca2d",
+  "research": "ad0c946c19e2af00",
   "rests": [
    "0101-privies-setchin.drawing.html:fc9cf897ba09ad11"
   ],
@@ -17358,9 +17417,9 @@
   "date": "2026-11-19",
   "note": "15 ft from a well, recorded as a GUESS",
   "pages": {
-   "0101-privies-setchin.drawing.html": "9eeb3929d3bb8476"
+   "0101-privies-setchin.drawing.html": "03968c62149e28e2"
   },
-  "research": "667caaffbe2eca2d",
+  "research": "ad0c946c19e2af00",
   "rests": [
    "0101-privies-setchin.drawing.html:4b6fdf768707f4bb"
   ],
@@ -17392,9 +17451,9 @@
   "date": "2026-11-19",
   "note": "the page sets out the no-genkan form's path from the middle gate to the veranda; nothing it cites gives a stone count",
   "pages": {
-   "0104-the-formal-entrance-and-a-guests-arrival-genkan.drawing.html": "8fd51ca6d7e98b3d"
+   "0104-the-formal-entrance-and-a-guests-arrival-genkan.drawing.html": "ca514303701f3f85"
   },
-  "research": "e6e79c5d09130cf1",
+  "research": "b624358b4afec396",
   "rests": [
    "0104-the-formal-entrance-and-a-guests-arrival-genkan.drawing.html:00c78d4cbcd2ec17",
    "0104-the-formal-entrance-and-a-guests-arrival-genkan.drawing.html:7e1a102957652671",
@@ -17489,10 +17548,10 @@
   "date": "2026-11-19",
   "note": "2 ft wide, level with the privy's middle, through the wall (its burial under the wall's ink: UNCLAIMED on `sheet`)",
   "pages": {
-   "0101-privies-setchin.drawing.html": "9eeb3929d3bb8476"
+   "0101-privies-setchin.drawing.html": "03968c62149e28e2"
   },
   "reads": "502baf87db6f71e8",
-  "research": "667caaffbe2eca2d",
+  "research": "ad0c946c19e2af00",
   "rests": [
    "0101-privies-setchin.drawing.html:d7796df510aaf3bf"
   ],
@@ -17537,16 +17596,16 @@
   "code": "b02d991904daa24a",
   "core": "bde1414367690996",
   "date": "2026-11-22",
-  "note": "seated against the compound wall the building backs, nearest the building's middle, with a hatch; the drawing page records this rule (set \"beside the barracks, the stables and the servants' row\", \"against the compound's service walls\") and names the gate's nearness as the project's own reading",
+  "note": "the code seats each outer privy in a strip against the compound wall its building stands on (refusing the divider), nearest the building's midpoint, and seeks no gate, as the claim states; the drawing page sets the generated privies beside their buildings, and its near-a-gate rule is itself a project reading",
   "pages": {
-   "0101-privies-setchin.drawing.html": "9eeb3929d3bb8476"
+   "0101-privies-setchin.drawing.html": "03968c62149e28e2"
   },
   "reads": "8ebf8ba8b3acac78",
-  "research": "667caaffbe2eca2d",
+  "research": "ad0c946c19e2af00",
   "rests": [
-   "0101-privies-setchin.drawing.html:0805ab498114f368",
+   "0101-privies-setchin.drawing.html:22aa0442ff4680a7",
    "0101-privies-setchin.drawing.html:38960fd9975a6f1c",
-   "0101-privies-setchin.drawing.html:d7796df510aaf3bf"
+   "0101-privies-setchin.drawing.html:4b9c7b16a2cddbfa"
   ],
   "verdict": "IN-STEP"
  },
@@ -17559,10 +17618,10 @@
   "date": "2026-11-19",
   "note": "two house privies on the rear face: the guests' centered behind the reception room, the family's at the rear corner by the family's rooms",
   "pages": {
-   "0101-privies-setchin.drawing.html": "9eeb3929d3bb8476"
+   "0101-privies-setchin.drawing.html": "03968c62149e28e2"
   },
   "reads": "8ebf8ba8b3acac78",
-  "research": "667caaffbe2eca2d",
+  "research": "ad0c946c19e2af00",
   "rests": [
    "0101-privies-setchin.drawing.html:35d401ea5514f4f8",
    "0101-privies-setchin.drawing.html:721f2a29c982e0b4",
@@ -17581,10 +17640,10 @@
   "date": "2026-11-19",
   "note": "outer privies only, house privies none",
   "pages": {
-   "0101-privies-setchin.drawing.html": "9eeb3929d3bb8476"
+   "0101-privies-setchin.drawing.html": "03968c62149e28e2"
   },
   "reads": "8ebf8ba8b3acac78",
-  "research": "667caaffbe2eca2d",
+  "research": "ad0c946c19e2af00",
   "rests": [
    "0101-privies-setchin.drawing.html:d7796df510aaf3bf"
   ],
@@ -17612,10 +17671,10 @@
   "date": "2026-11-19",
   "note": "the no-genkan form behind a knob (p.parts.roji): a path from the middle gate to a stone at the reception room's court face",
   "pages": {
-   "0104-the-formal-entrance-and-a-guests-arrival-genkan.html": "406db5afb90af244"
+   "0104-the-formal-entrance-and-a-guests-arrival-genkan.html": "159463ab1e897283"
   },
   "reads": "368a6f19b15bd714",
-  "research": "10fe4973313cb8cd",
+  "research": "8310727e0f879d15",
   "rests": [
    "0104-the-formal-entrance-and-a-guests-arrival-genkan.html:508d759fa76d492e",
    "0104-the-formal-entrance-and-a-guests-arrival-genkan.html:a90ce998c259c2d5",
@@ -18731,10 +18790,10 @@
   "date": "2026-11-22",
   "note": "a granary in the inner court is refused, and each court's route is walked only from the gates on that court's side",
   "pages": {
-   "0123-the-magistrates-manor-in-a-town-where-it-stands-and-which-way-it-faces-jinya-and-yamen.html": "840961e62bd4218b"
+   "0123-the-magistrates-manor-in-a-town-where-it-stands-and-which-way-it-faces-jinya-and-yamen.html": "0346f5f7a4ae4296"
   },
   "reads": "1477b9203e7bad94",
-  "research": "01c7b4200d42871a",
+  "research": "5227980b3dacebf8",
   "rests": [
    "0123-the-magistrates-manor-in-a-town-where-it-stands-and-which-way-it-faces-jinya-and-yamen.html:a99ddcd2ed3cb0ad"
   ],
@@ -19031,9 +19090,9 @@
   "date": "2026-11-22",
   "note": "12 by 9 ft is the Sayama shikidai as the page reads and computes it; which side runs along the face is rightly a GUESS, since the page does not say",
   "pages": {
-   "0104-the-formal-entrance-and-a-guests-arrival-genkan.html": "406db5afb90af244"
+   "0104-the-formal-entrance-and-a-guests-arrival-genkan.html": "159463ab1e897283"
   },
-  "research": "10fe4973313cb8cd",
+  "research": "8310727e0f879d15",
   "rests": [
    "0104-the-formal-entrance-and-a-guests-arrival-genkan.html:e1ec5330d5eb4b91"
   ],
@@ -19161,9 +19220,9 @@
   "date": "2026-11-19",
   "note": "",
   "pages": {
-   "0104-the-formal-entrance-and-a-guests-arrival-genkan.html": "406db5afb90af244"
+   "0104-the-formal-entrance-and-a-guests-arrival-genkan.html": "159463ab1e897283"
   },
-  "research": "10fe4973313cb8cd",
+  "research": "8310727e0f879d15",
   "rests": [
    "0104-the-formal-entrance-and-a-guests-arrival-genkan.html:459642a27a3630d1",
    "0104-the-formal-entrance-and-a-guests-arrival-genkan.html:508d759fa76d492e",
@@ -19519,9 +19578,9 @@
   "date": "2026-11-19",
   "note": "",
   "pages": {
-   "0104-the-formal-entrance-and-a-guests-arrival-genkan.html": "406db5afb90af244"
+   "0104-the-formal-entrance-and-a-guests-arrival-genkan.html": "159463ab1e897283"
   },
-  "research": "10fe4973313cb8cd",
+  "research": "8310727e0f879d15",
   "rests": [
    "0104-the-formal-entrance-and-a-guests-arrival-genkan.html:459642a27a3630d1",
    "0104-the-formal-entrance-and-a-guests-arrival-genkan.html:508d759fa76d492e",
@@ -19564,10 +19623,10 @@
   "date": "2026-11-22",
   "note": "the porch projects from the face and its door is on the porch's outer face; the projecting board floor and the step-in from the palanquin are attested",
   "pages": {
-   "0104-the-formal-entrance-and-a-guests-arrival-genkan.html": "406db5afb90af244"
+   "0104-the-formal-entrance-and-a-guests-arrival-genkan.html": "159463ab1e897283"
   },
   "reads": "ff0a97d60434aaaa",
-  "research": "10fe4973313cb8cd",
+  "research": "8310727e0f879d15",
   "rests": [
    "0104-the-formal-entrance-and-a-guests-arrival-genkan.html:459642a27a3630d1",
    "0104-the-formal-entrance-and-a-guests-arrival-genkan.html:a3162f7d1b6545a0",
