@@ -580,3 +580,102 @@ fn the_command_line_answers_each_mode() {
     assert_eq!(with(&args(&["alive"]), &ctx).code, 2);
     assert_eq!(cli(&args(&[])).code, 2);
 }
+
+/// THE IDLE CHECK'S PROCESS TABLE (451 T193): a session's background shell is the one whose stdout or stderr is its
+/// `<session>/tasks/<id>.output`, another session's or a file elsewhere is none; a waiter on a dead producer is its pid and file; a
+/// table with no process cannot be read.
+#[test]
+fn the_idle_check_reads_which_shells_run_and_which_wait_on_the_dead() {
+    use crate::guards::set_down_hooks::Procs as _;
+    let w = world("idle-procs");
+    assert_eq!(w.ctx().writers("s1"), None, "an empty table");
+    let tasks = w.root.join("tmp/s1/tasks");
+    std::fs::create_dir_all(&tasks).unwrap();
+    let dead = w.root.join("run.log");
+    std::fs::write(&dead, "").unwrap();
+    let cmd = format!(
+        "until grep -q '^ALL DONE' {}; do sleep 60; done",
+        dead.display()
+    );
+    w.add(
+        300,
+        "bash",
+        1,
+        &w.clone,
+        &["bash", "-c", &cmd],
+        Some(&tasks.join("bw1.output")),
+    );
+    std::os::unix::fs::symlink(tasks.join("bw1.output"), w.proc.join("300/fd/2")).unwrap();
+    w.add(
+        301,
+        "sleep",
+        300,
+        &w.clone,
+        &["sleep", "60"],
+        Some(&tasks.join("bw1.output")),
+    );
+    w.add(
+        302,
+        "bash",
+        1,
+        &w.clone,
+        &["bash"],
+        Some(&w.root.join("tmp/s2/tasks/bo.output")),
+    );
+    w.add(
+        303,
+        "bash",
+        1,
+        &w.clone,
+        &["bash"],
+        Some(&w.root.join("tmp/s1/other/bq.output")),
+    );
+    w.add(
+        304,
+        "bash",
+        1,
+        &w.clone,
+        &["bash"],
+        Some(&w.root.join("tmp/s1/tasks/bq.log")),
+    );
+    w.add(305, "bash", 1, &w.clone, &["bash"], None);
+    let held = w.ctx().writers("s1").unwrap();
+    assert_eq!(held.len(), 1, "{held:?}");
+    assert_eq!(held["bw1"], vec![300, 301]);
+    assert_eq!(w.ctx().stale(), vec![(300, dead.display().to_string())]);
+}
+
+/// A Monitor told by its command line (451 T193): a live process holding the fragment, never this one, an ancestor or a zombie.
+#[test]
+fn a_running_command_is_found_by_its_command_line() {
+    use crate::guards::set_down_hooks::Procs as _;
+    let w = world("idle-running");
+    let line = "until grep -q '\"'\"'^ALL DONE'\"'\"' /c/run.log; do sleep 60; done";
+    w.add(
+        400,
+        "bash",
+        1,
+        &w.clone,
+        &["bash", "-c", &format!("eval '{line}'")],
+        None,
+    );
+    w.add(
+        401,
+        "bash",
+        1,
+        &w.clone,
+        &["bash", "-c", &format!("eval '{line}'")],
+        None,
+    );
+    std::fs::write(w.proc.join("401/stat"), "401 (bash) Z 1 0 0").unwrap();
+    w.add(
+        99_999,
+        "l7r-guard",
+        1,
+        &w.clone,
+        &["l7r-guard", "/c/run.log; do sleep 60; done"],
+        None,
+    );
+    assert_eq!(w.ctx().running("/c/run.log; do sleep 60; done"), vec![400]);
+    assert!(w.ctx().running("nothing runs this").is_empty());
+}

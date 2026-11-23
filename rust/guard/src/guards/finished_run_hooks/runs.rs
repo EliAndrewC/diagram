@@ -398,6 +398,17 @@ impl Procs {
 
     /// `<pid> <file>` per waiter loop whose producer is dead, this clone's alone when one is named. A waiter is a loop watching a file;
     /// when the thing writing that file dies, the loop spins for ever (the GM found three in their status line, eight hours old).
+    /// The live processes, not this one nor its ancestors, whose command line holds `fragment` (451 T193: a Monitor told by its
+    /// command, its stream a pipe).
+    pub(crate) fn running(&self, fragment: &str) -> Vec<u32> {
+        let mut skip = self.ancestors(self.mine);
+        skip.push(self.mine);
+        self.pids()
+            .into_iter()
+            .filter(|p| !skip.contains(p) && !self.gone(*p) && self.cmdline(*p).contains(fragment))
+            .collect()
+    }
+
     pub(crate) fn stale_waiters(&self, tree: &Path, clone: Option<&Path>) -> Vec<String> {
         let clone = clone.map(realpath);
         let mut ancestry = self.ancestors(self.mine);

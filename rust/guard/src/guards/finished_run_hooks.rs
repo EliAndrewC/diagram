@@ -7,6 +7,7 @@
 //! Plan T017's decisions: (a) every mode and all the shell's Python ported, the rest of the modes [`cli`]; (b) the script stays a
 //! forwarder until T051 for `review_prereq.py`'s `live`; (c) `writer-alive.sh` stays theirs.
 
+use std::collections::HashMap;
 use std::path::{Path, PathBuf};
 
 use serde_json::Value;
@@ -56,6 +57,59 @@ impl Ctx {
                 .into_owned(),
         }
     }
+}
+
+/// THE IDLE CHECK'S PROCESS TABLE (451 T193): which of a session's background shells still run, and which wait on a dead producer -
+/// the idle check's re-read of the Stop's list after its wait (`set_down_hooks::idle_check_with`).
+impl crate::guards::set_down_hooks::Procs for Ctx {
+    fn writers(&self, session: &str) -> Option<HashMap<String, Vec<u32>>> {
+        let pids = self.procs.pids();
+        if pids.is_empty() {
+            return None;
+        }
+        let mut out: HashMap<String, Vec<u32>> = HashMap::new();
+        for p in pids {
+            for fd in ["fd/1", "fd/2"] {
+                let Some(link) = self.procs.link(p, fd) else {
+                    continue;
+                };
+                let dir = link.parent().unwrap_or(&link);
+                let ours = link.extension().is_some_and(|e| e == "output")
+                    && dir.file_name().is_some_and(|n| n == "tasks")
+                    && dir
+                        .parent()
+                        .and_then(Path::file_name)
+                        .is_some_and(|n| n == session);
+                if let (true, Some(id)) = (ours, link.file_stem()) {
+                    let held = out.entry(id.to_string_lossy().into_owned()).or_default();
+                    if !held.contains(&p) {
+                        held.push(p);
+                    }
+                }
+            }
+        }
+        Some(out)
+    }
+
+    fn running(&self, fragment: &str) -> Vec<u32> {
+        self.procs.running(fragment)
+    }
+
+    fn stale(&self) -> Vec<(u32, String)> {
+        self.procs
+            .stale_waiters(&self.tree, None)
+            .iter()
+            .filter_map(|l| {
+                let (pid, file) = l.split_once(' ')?;
+                Some((pid.parse().ok()?, file.to_owned()))
+            })
+            .collect()
+    }
+}
+
+/// The process table the idle check reads (451 T193).
+pub(crate) fn idle_procs() -> impl crate::guards::set_down_hooks::Procs {
+    Ctx::real()
 }
 
 /// A duration a person reads.

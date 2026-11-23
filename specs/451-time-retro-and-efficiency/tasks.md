@@ -147,5 +147,5 @@ landing on its own, each small; T22 last.
       research: rendering
 - [ ] T200 Low-cost gaps from the audit (the GM 2026-11-23: 'check whether there are any other gaps like this'; /home/agent/.claude/jobs/c6fd72d1/tmp/gap-audit.md item 12b-d): {NNNN#id} and a claim's #id tied to a page number, so moving a tagged item fails loudly (registry/src/items.rs:95); modals::followed goes one hop only (owed/src/record/modals.rs:213); Mode A tells the cache only the Entry: and Drawing: pages (mode_a/src/page/explain.rs:87-100)
       research: rendering
-- [ ] T201 [perf] The idle check names a builder whose live work outlasts its wait (451 T193 MODE 4 round 2): measure the harness's hook-timeout cap, then cover a Monitor's 30-minute cap or hand the watch on
+- [ ] T201 [perf] The idle check names a builder whose live work outlasts its wait (451 T193 MODE 4 round 2): measure the harness's hook-timeout cap, then cover a Monitor's 30-minute cap or hand the watch on; and stalls.rs reads only whether a task's box is open, so a builder of a set-down task whose box is still open is still named with a wake command - it reads the set-down and the binding rulings' holds as T183's idle check does (MODE 4 on T193, 2026-11-23)
       research: rendering

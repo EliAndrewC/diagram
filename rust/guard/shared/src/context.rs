@@ -13,6 +13,12 @@ use serde_json::Value;
 /// no call the guard can see, and passes.
 pub const TAIL_BYTES: u64 = 16 << 20;
 
+/// The context, in tokens, past which a builder's next tool call is refused: GUESS, 300,000 (spec FR-006) - between the window's two
+/// figures, a 400k cap saving about 44 minutes and a 200k one about 95 (an estimate from a correlation, User Story 2); retuned from
+/// FR-004's per-agent token data (T22). The context-cap guard's (`context_cap_hooks::CONTEXT_CAP_TOKENS`), here since 451 T193 so the
+/// idle check tells a builder past it - which FR-006 resumes only by a fresh dispatch - from one a message wakes.
+pub const CAP_TOKENS: u64 = 300_000;
+
 /// The bytes read a step, backwards.
 const CHUNK: u64 = 64 << 10;
 

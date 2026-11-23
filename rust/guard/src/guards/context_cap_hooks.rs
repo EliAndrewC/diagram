@@ -66,10 +66,9 @@ pub const GUARD: Guard = Guard {
     decide,
 };
 
-/// The context, in tokens, past which a builder's next tool call is refused: GUESS, 300,000 (spec FR-006) - between the window's two
-/// figures, a 400k cap saving about 44 minutes and a 200k one about 95 (an estimate from a correlation, User Story 2); retuned from
-/// FR-004's per-agent token data (T22).
-pub const CONTEXT_CAP_TOKENS: u64 = 300_000;
+/// The context, in tokens, past which a builder's next tool call is refused: the shared crate's [`crate::shared::context::CAP_TOKENS`]
+/// (moved there by 451 T193, whose idle check tells a capped builder's wake from a stalled one's).
+pub const CONTEXT_CAP_TOKENS: u64 = crate::shared::context::CAP_TOKENS;
 
 const TOKEN: &str = "CONTEXT_OK";
 

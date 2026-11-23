@@ -128,7 +128,21 @@ pub fn cli(args: &[String], stdin: &str, all: &[Guard]) -> Reply {
         // the Stop's background idle check (451 T183): exit 2 wakes an idle session with the block on stderr, anything else is silent
         Some("--idle-check") => {
             let input = serde_json::from_str(stdin).unwrap_or_default();
-            guards::set_down_hooks::idle_check(&input).map_or_else(|| say(String::new(), 0), |t| say(t, 2))
+            guards::set_down_hooks::idle_check_with(&input, &guards::finished_run_hooks::idle_procs()).map_or_else(|| say(String::new(), 0), |t| say(t, 2))
+        }
+        // the status probe (451 T193): each builder of an open task working or stalled, by the idle check's own reading
+        Some("--builder-status") => {
+            let transcript = std::path::Path::new(args.get(1).map_or("", String::as_str));
+            let input = serde_json::json!({
+                "transcript_path": transcript,
+                "session_id": transcript.file_stem().unwrap_or_default().to_string_lossy(),
+                "cwd": std::env::current_dir().unwrap_or_default(),
+            });
+            Reply {
+                stdout: guards::set_down_hooks::status(&input, &guards::finished_run_hooks::idle_procs()) + "\n",
+                stderr: String::new(),
+                code: 0,
+            }
         }
         Some("--agent-stall") => guards::agent_stall_hooks::cli(&args[1..]),
         Some("--escalation") => guards::escalation_hooks::cli(&args[1..]),
@@ -216,9 +230,21 @@ mod tests {
         std::fs::write(d.join("tr.jsonl"), "").unwrap();
         crate::shared::env::set("SET_DOWN_ROOT", &c);
         crate::shared::env::set("L7R_IDLE_CHECK_SECS", "0");
-        let idle =
-            serde_json::json!({"transcript_path": d.join("tr.jsonl"), "background_tasks": []});
+        let idle = serde_json::json!({"transcript_path": d.join("tr.jsonl"), "background_tasks": [], "session_id": "tr"});
         let said = cli(&args(&["--idle-check"]), &idle.to_string(), &g);
+        // the status probe reads the list that Stop kept (451 T193)
+        let status = cli(
+            &args(&["--builder-status", &d.join("tr.jsonl").to_string_lossy()]),
+            "",
+            &g,
+        );
+        assert!(
+            status
+                .stdout
+                .contains("No builder of an open task reads as running."),
+            "{}",
+            status.stdout
+        );
         crate::shared::env::unset("L7R_IDLE_CHECK_SECS");
         crate::shared::env::unset("SET_DOWN_ROOT");
         assert_eq!(said.code, 2, "{}", said.stderr);

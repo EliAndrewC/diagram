@@ -38,9 +38,11 @@ static OPEN: LazyLock<Regex> = LazyLock::new(|| re(r"(?m)^- \[ \] (T\d+[a-z]?) (
 // A launch is the tool's own record, never its text (2026-10-28): the notice's words reach the transcript quoted, and each quote read as a launch
 // kept the guard silent. A workflow's launch is its own shape (2026-11-01). A SendMessage resume is a launch (451 T65: a resumed builder
 // read as finished, its turn refused as "nothing is running"): its result's `resumedAgentId`, unescaped in the tool's own record alone.
+// A Monitor's launch is its result opening `{"taskId": ..., "timeoutMs": ...}` (451 T193: T184's builder's watch `bx5gtybg3` read as no
+// work; the only result opening `taskId` in the transcripts of 2026-11-22 and 23, 214 of them, measured 2026-11-23).
 static LAUNCHED: LazyLock<Regex> = LazyLock::new(|| {
     re(
-        r#"(?:"(?:backgroundTaskId|agentId|resumedAgentId)"|"status":\s*"async_launched",\s*"taskId"):\s*"([A-Za-z0-9]+)""#,
+        r#"(?:"(?:backgroundTaskId|agentId|resumedAgentId)"|"status":\s*"async_launched",\s*"taskId"|"toolUseResult":\s*\{\s*"taskId"):\s*"([A-Za-z0-9]+)""#,
     )
 });
 // A FOREGROUND AGENT'S RESULT IS ITS END (449 T268): a synchronous Agent call's `toolUseResult` opens `"status":"completed"` and carries
@@ -765,11 +767,12 @@ fn decide(event: &Event, session: &Session) -> Vec<Answer> {
 mod builders;
 pub mod holds;
 mod idle;
+mod stalls;
 use builders::asks_the_gm;
 pub use builders::{
     agent_builder, builder_brief, page_session_brief, page_session_listed, session_dispatched,
 };
-pub use idle::idle_check;
+pub use idle::{idle_check, idle_check_with, status, Procs};
 
 #[cfg(test)]
 mod tests;

@@ -17,6 +17,8 @@ const START: &str = "{\"feature\": \"385-x\", \"task\": \"T03\", \"utc\": \"2026
 /// A clone with a started feature and an empty transcript; `closed` gives its spec a status line that closes it.
 fn world(tag: &str, closed: &str) -> (crate::tempdir::TempDir, PathBuf, PathBuf) {
     crate::log::quiet();
+    // the idle check looks again for up to `WAIT_SECS` while a builder may yet stall (451 T193): a test that means it to says so
+    crate::env::set("L7R_IDLE_WAIT_SECS", "0");
     let d = crate::tempdir::TempDir::new(&format!("guard-setdown-{tag}"));
     std::fs::create_dir_all(d.join("c/specs/385-x")).unwrap();
     let (keep, d) = {
@@ -759,3 +761,4 @@ fn a_task_an_open_gm_question_names_is_never_the_next() {
 mod briefs;
 mod idle;
 mod repeats;
+mod stalls;

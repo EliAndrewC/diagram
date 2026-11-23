@@ -1073,6 +1073,11 @@ idle-tests:     ## [tests] {inactive: arming is disabled - the GM turned it off 
 	  "$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" log usage --tool idle-tests --kind target --outcome "$$( [ $$rc -eq 0 ] && echo passed || echo failed )"; \
 	  exit $$rc
 
+builder-status:  ## [project] each builder of an open task the session reads as running, said working or stalled, and each dead-producer waiter, by the idle check's own reading: the session's last Stop list, re-read now (451 T193) - the coordinator's status of a builder, never its last message   [TRANSCRIPT=<the session's .jsonl; default the newest under ~/.claude/projects/-diagram>]
+	@t="$(TRANSCRIPT)"; [ -n "$$t" ] || t=$$(ls -t "$$HOME"/.claude/projects/-diagram/*.jsonl 2>/dev/null | head -1); \
+	  "$$(git rev-parse --show-toplevel)/scripts/hooks/l7r-guard.sh" --builder-status "$$t"
+
+.PHONY: builder-status
 .PHONY: review-yield cohort-seeds task-add set-down where-time land-batch fix-yield
 review-yield:     ## [performance] each review check's passes, findings acted on / dismissed / deferred, author-missed, hours and tokens, from the ledger   [SINCE=2026-09-26]
 	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" measure review-yield $(if $(SINCE),--since $(SINCE),)
