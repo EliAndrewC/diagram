@@ -27,8 +27,11 @@ Guesses:
 - The genkan room's size where a plan draws one, about 12 by 38 ft, some 25 mats: no account read gives a genkan room's
   size at an office; the only mat counts found, the Sayama council hall's genkan of 8 mats, shikidai of 6 and next room of
   8, are a list from a domain's hall, not rooms in their order on a plan, and the room is drawn larger than all three.
-- The genkan room drawn at the office hall's end, between the porch and the working rooms: Joge's drawing and Takayama's
+- The genkan room drawn at the office hall's end, between the porch and the working rooms: Jōge's drawing and Takayama's
   surviving room show a room behind the step, not where it stood in a county office's hall.
+- That where the office and the residence share a compound, the way to the residence runs on through the office: whether a
+  guest went on from the genkan to the residence indoors is not recorded, and it is drawn as the visitor's route runs at the
+  Takayama jin'ya.
 
 Depiction: Where the office and the residence share a compound, the plan draws the genkan on the office hall, and the way to
 the residence runs on through the office; where the residence stands alone, the genkan is on the residence. The genkan's door

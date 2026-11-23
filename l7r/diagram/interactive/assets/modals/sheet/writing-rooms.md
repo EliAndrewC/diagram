@@ -1,8 +1,8 @@
 About: The writing rooms were the two rooms of the office hall where the office's documents were made up: a room
 used only for writing, where they were drawn up, and the room beside it, where they were bound. At Takayama, the one
 intendant's office that survives, the documents sent to the shogunate were drawn up in such a writing room, the
-kakiyaku-beya, and bound in the room next to it, both rooms of the office hall. No period source gives a small office
-either room; the rebuilt Iijima jin'ya, a reconstruction of 1993, has a writing room as the first room in from the entrance.
+kakiyaku-beya, and bound in the room next to it, both rooms of the office hall. Whether a small office had
+either room is not recorded; the rebuilt Iijima jin'ya, a modern reconstruction, has a writing room as the first room in from the entrance.
 
 The writing room was worked by the office's apprentices, the kakiyaku: mostly the sons of officials and of village and town
 officials, taken on to learn the office's work before they rose to be its clerks. At Iijima they kept night duty in the

@@ -5,7 +5,7 @@ shogunate were drawn up in a room kept for writing and bound in the room beside 
 examination room were most likely one block with the hall where cases were heard.
 
 The villages' suits and petitions were received at one of Takayama's two hearing courts; at the other, those who had
-committed crimes were examined and judged. Takayama also had an examination room (ginmisho), roofed like its court, though its
+committed crimes were examined and judged. Takayama also had an examination room, roofed like its court, though its
 torture is reported to have been done in the jail in the town. In Rokugan torturers are extremely rare, and the law forbids torture as a
 way to win a confession, though it allows it on someone already found guilty.
 
