@@ -2691,3 +2691,4 @@ Over the coordinator's 1,731 subagent transcripts as they stood at 04:02 (2,057,
 5. **What did the before and after show, and under what conditions?** 2 files staged before and 0 after, measured 2026-11-23 (`/tmp/t180/replay-result.txt`), on the same working files in a scratch clone, read-only to the live clone. This is evidence, not a pass.
 6. **Did any map move, and does it still keep the research?** No map moved: the tooling only.
 
+
