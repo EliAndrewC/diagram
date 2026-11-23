@@ -1404,9 +1404,9 @@ fuki	fuki
 fukien	Fujian
 fukugi	fukugi
 fukuro-zeki	fukuro-zeki
-fully involved	fully-involved
 full tile	hongawara
 full-tile	hongawara
+fully involved	fully-involved
 fully-involved	fully-involved
 fumiguruma	treadle wheel
 fumoto	fumoto
