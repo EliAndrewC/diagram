@@ -2471,14 +2471,60 @@ Filed 2026-11-22: T160 by 451 T155's trial (pool's `maps::tests::the_launcher_ru
 **Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
 
 
-### T164 (<why: the finding or measurement that files it>)
+### T164 (observed 2026-11-22: with three builders in one clone, the 449 T312 bundle's verify gate went red or "tree moved" four times on other builders' half-done edits, and seven of its ten finished review verdicts were rewritten NOT-REVIEWABLE because a page session and a test-file edit wrote into the clone while they ran; the T289 bundle's reviews earlier waited hours on a stale engine another bundle's edit caused, which also dropped its new-element units without a word)
+
+- **Approach**: `make verify T=<task(s)> [F=] [FILES=] [REVIEW_TREE_OK=]` runs `scripts/gates/review-tree.sh`. It takes the bundle's own files using land-alone's attribution (`split`, read from `scripts/land-alone.sh` so the rule has one copy), makes a temporary commit on HEAD through a scratch index (the clone's HEAD and index untouched), and puts the clone's one review tree `<clone>-review` at it, adding it or resetting it. It draws every map `reviews owed --undrawn` names there, snapshots the owed units into the clone with `tree.json`, and starts `make done` detached there, with the record `.git/review-trees/<commit>.json`. `reviews prereq` and the pair guard judge a snapshotted unit by that record's gate at its key, and judge every other unit by the clone's stamp, as before. `reviews owed` names a map that is not current with its stale engine and the units it hides (`owed/hidden.rs`). The bare `make verify` is refused and names `T=`. The cost, measured on 2026-11-22 (method: each step's own timer in the log, `du -sh` of the target, `df`):
+
+| step | figure | what it says |
+|---|---|---|
+| first run, tree added (verify1, 21:44) | setup 130 s, worktree 2.0 s, seeding 19.2 s, 7 maps drawn 128.5 s (the engines' first build into the new target), measured 2026-11-22 (its step's own timer in the run's log) | the first tree's cost is the engines' build; the gate went red at preflight in seconds (owed.rs past the 1,000-line bar, docs/make-targets.html stale), both fixed here |
+| first full gate (verify3, 21:55) | setup 5.0 s and `make done` about 3 min to red (static, format, hooks-test), measured 2026-11-22 (its step's own timer in the run's log) | the kept check results seeded from the clone (`rust-checks`, `hooks-test`, keyed by content) serve every unchanged crate, so a "cold" review tree compiles only what the bundle changed |
+| warm runs (verify4-verify6, 22:00-22:16) | setup 3-6 s, gate 75 s to red on format (verify4), 256 s to red on cover (verify5), 60 s to GREEN (verify6, only owed.rs changed since verify5), measured 2026-11-22 (its step's own timer in the run's log) | the warm gate costs about a minute over the crates a fix touches, measured 2026-11-22 (its step's own timer in the run's log) |
+| the target's disk | 1.6 GB after verify1, 4.0 GB after verify3, 9.3 GB after verify5 and verify6 (the changed crates' coverage builds), 64-67 GB free throughout, measured 2026-11-22 (`du -sh` of the target, `df`) | not a third ~35 GB cache, measured 2026-11-22 (`du -sh` of the target, `df`): the kept results mean the review target holds only the tool builds and the changed crates' test and coverage builds |
+| sharing the landing target, measured on a scratch copy of its `tool/` | cargo names artifacts the same across worktree paths and judges freshness by mtime: after the review tree built l7r_guard, the landing tree's build read `Fresh l7r_guard` although `pair_hooks/review.rs` and `state.rs` differ between the two trees | REJECTED: a shared target serves one tree the other's binaries, which is a wrong outcome (the gate would judge other code). One review tree per clone, with its own target, reset each run, never piled up |
+| seeding the clone's 6.2 GB `.gencache` | 31 entries in the review tree were its own and 31,067 were seeded, and no seeded entry served a map, observed 2026-11-22, method: `find .gencache -type f -newermt` the tree's first run, counted each side. An entry is keyed by its engine binary's build id, and each tree's binary embeds its own source path (`strings tool/hamlet` names `diagram-backlog-review/rust/phases/...`), so the clone's build ids never match, observed 2026-11-22, method: `readelf -n` of each target's `tool/hamlet` and `tool/l7r-mode-a`, ids differing in every target | DROPPED (19.2 s and 6.2 GB a tree): the review tree's own `.gencache` is kept across resets (`clean -e .gencache`); the seeded entries were deleted (6.2 GB to 12 MB), measured 2026-11-22 (`du -sh` of the target, `df`) |
+
+### T164 Approach (checklist part A)
+
+1. **The goal, in the world.** A map review's verdict stands or falls on the bundle's own work. Another builder's edit in the clone neither turns its gate red, voids its key nor colors what it reads, and a stale engine is named, never silent.
+2. **The constraints.** FR-013 (the builders' loop faster). 451 T158's disk floor and cleanup: a worktree and its cache are reused or removed, never left to pile up. Land-alone's attribution in one copy. The review is paired with the gate (feature 151, the GM 2026-08-29). Verify keeps `T=` working for the 449 sheet bundle (T328-T340).
+3. **Where each comes from.** O: the T312 and T289 incidents (2026-11-22, the tasks.md line). G: T158's cleanup ("make sure that we clean up after ourselves in terms of the file system"). O: the cost table above.
+4. **Do they describe the world here?** Yes: the incidents are this clone's, the figures above were measured in it, and the gate was run five times in the review tree.
+5. **The order.** After T160/T161 (land-alone's `split`, which it reads), before the 449 sheet bundle's `make verify T=`.
+6. **The exits.** Green: the review tree's `make done` green on T164's commit, the new tests green, MODE 4 CLEAR. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** none.
+8. **The budget.** One landing.
+9. **Done, measured.** `make verify T=T164` green in the review tree (verify6, commit 9abb99a2f3). `make rust-test CRATE=rust/gate/crates/reviews` 181 pass, `CRATE=rust/guard` 469 pass, and `tests/hooks/test-review-tree.sh` 22/22. RED FIRST (2026-11-22, the review tree put at HEAD af418b90c5 with only the test files over it, reusing its warm target where a scratch tree would have been a third cold build; then reset to the green commit): `rust-test CRATE=rust/gate/crates/reviews` fails to compile (`no Sides in reviews::snapshot`), `CRATE=rust/guard` fails to compile (`cannot find function snapshot_key in module state`), and `tests/hooks/test-review-tree.sh` gives 3 passed, 19 failed. The 3 that pass are the negative cases (nothing written, the clone untouched), which hold vacuously with no script. The tests of `owed/hidden.rs` and `prereq/tree.rs` are child modules of files HEAD lacks, so they are red by absence.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** The finding: verdicts recorded NOT-REVIEWABLE, and a gate red on code the bundle did not touch (T312's four reds, seven voided verdicts). Both are wrong outcomes.
+
+**Found and left?**
+- `engine_freeze_hooks` still refuses every engine edit in the clone while a map review this session launched is running. A snapshotted review reads its review tree's gate, key and content now, so for such a review the freeze holds a builder's engine edits for the whole review and gains nothing. That is a cost, not a wrong verdict. Not fixed here: it is a guard's rule change with its own measurement (a review beside an engine edit that keeps its verdict), and this task has enough to land. Filed as T165; lands before T154.
+- The review tree's `make done` writes the shared `gate-green-<area>` stamps in the clone's common git directory (`stamp.rs` `stamp_path`, `common_git_dir`), as land-alone's landing worktree does. Each stamp is a content key of what that gate ran over, and the push compares it with HEAD's key, so a stamp the review commit wrote matches only where the pushed tree has the same content in the area. A stamp written over is a missed reuse at most, never a wrong pass: not a defect, the claim restated here.
+- `.claude/agents/{building-review,fix-check,glyph-check,settlement-review,size-audit}.md` told the reviewer to run a bare `make review-paired-gate`, which reads the clone's gate, not the unit's snapshot. A snapshotted unit would then read red under another builder's edit and write NOT-REVIEWABLE, which is the incident itself. Fixed here: each now reads `make review-paired-gate UNIT=<your unit>`, and the pair guard's two refusals name `UNIT=` and `make verify T=` (observed 2026-11-22, method: `grep -rn review-paired-gate` over `.claude/agents`, `rust/`, `scripts/`, every hit outside `specs/` and `dev/`).
+- `scripts/gates/review-tree.sh` recorded none of its runs (check-tool-signals, the gate's hooks-test). Fixed here: `# TOOL_RECORD:` names its record file and the event log.
+
+**Performance work?** yes. It makes the builders' loop faster: a review's gate no longer goes red and its verdicts are no longer voided by another builder's edits (T312: four reruns, seven verdicts of about 10 minutes each, observed 2026-11-22, method: the T312 bundle's gate logs and its review ledger rows).
+
+### T164 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)
+
+1. **Where does the time go?** In the reruns and the re-reviews the shared tree forced (T312: four gate reruns, seven reviews voided). In the review tree, the time goes to the gate itself (60 s warm) and, on a first tree only, to the engines' first build (128.5 s), measured 2026-11-22 (its step's own timer in the run's log).
+2. **Removes work, or only moves it?** It removes work: no gate is rerun and no review redone for an edit that is not the bundle's. The seeding that never served (19.2 s, 6.2 GB) is removed too, measured 2026-11-22 (its step's own timer in the run's log).
+3. **What do you expect it to save, and why?** Each voided review (about 10 minutes of an agent's time, observed 2026-11-22, method: the T312 bundle's review ledger rows) and each gate rerun that another builder's edit caused. For the cost: the review tree adds about 5 s of setup a run and 9.3 GB of disk, measured 2026-11-22 (its step's own timer in the run's log).
+4. **How does the work grow with the settlement?** It does not: the setup grows with the bundle's files and with the maps it redraws, not with the size of a settlement.
+5. **What did the before and after show, and under what conditions?** Before: the T312 incident (2026-11-22, the host shared with three builders). After: the cost table above, measured on the same host with the other builders running. This is evidence, not a pass.
+6. **Did any map move, and does it still keep the research?** No map moved: the tooling only, and the drawings it makes in the review tree stay there.
+
+
+### T165 (<why: the finding or measurement that files it>)
 
 - **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
 
-### T164 Approach (checklist part A)
+### T165 Approach (checklist part A)
 
 1. **The goal, in the world.** <the place as it should be>
 2. **The constraints.** <the FRs, decisions and pages it holds to>
@@ -2496,15 +2542,4 @@ Filed 2026-11-22: T160 by 451 T155's trial (pool's `maps::tests::the_launcher_ru
 **Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
 
 **Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
-
-### T164 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)
-
-1. **Where does the time go?** <the stage and the loop: its counted operations, `make work-budget` (a hamlet stage) or `make budget-sheets` (a Mode A stage)>
-2. **Removes work, or only moves it?** <fewer candidates, a screen, a kept result, an index, an early stop, a better algorithm,
-   a loop into C - or an inlining, a merge, a builtin written out: never the goal, only where the time evidence shows a gain>
-3. **What do you expect it to save, and why?** <a share of the stage's profiled time>
-4. **How does the work grow with the settlement?** <the growth exponent between sizes, and whether this bends it>
-5. **What did the before and after show, and under what conditions?** <the counted operations before and after, and any wall
-   time with the host's load - evidence, not a pass>
-6. **Did any map move, and does it still keep the research?** <`make maps-moved`, the cohort>
 
