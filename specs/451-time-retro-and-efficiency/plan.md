@@ -2502,31 +2502,45 @@ engine speed, so no checklist.
 
 <!-- plan-archive: T185 to T185 moved to plan-done.md, 2026-11-23 (feature 375 FR-044) -->
 <!-- plan-archive: T186 to T186 moved to plan-done.md, 2026-11-23 (feature 375 FR-044) -->
-### T187 (<why: the finding or measurement that files it>)
+### T187 (the GM 2026-11-23, request.md 'the convergence talk': "Shouldn't attested versus guess be something that cascades mechanically rather than requiring a review, though?"; 12 of the 18 page-caused pop-up corrections the blind re-classification caught carried a label change, reclassify.md, measured 2026-11-23)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: measured first, 2026-11-23, by grep: the 241 drawing pages hold 2921 `<li>` tags, 2895 items when paired to their `</li>` (a nested list's items read inside their parent's), 670 mentioning GUESS, 207 convention, 79 deviation, 187 attested or accurate, 1830 none of these; every `<li>` tag bare, with no attribute, and 240 pages carry a free-text `<!-- Evidence: accurate (...); guess (...) -->` comment no tool reads; the 284 pop-ups' Guesses tabs hold 613 hand-written bullets; the engine and Mode A claims are 3529, 415 `GUESS`, 242 `CONVENTION`, 24 `DEVIATION`, about 779 plain pointers (`dev/claims-index.json`); `docs/building-programs.md` is generated from `buildings/types.json`, not from pop-ups' Guesses, its claims hand-written comments. A label lived in three hand-written copies. Now it is DATA on the page: an empty token in the item's block, `<span class="item" data-item="<id>" data-label="ATTESTED|GUESS|CONVENTION|DEVIATION" data-guess="<the bullet>"></span>` (`research/src/record/items.rs`; inside the block, never on its `<li>`, because `style.rs` and `triage/change.rs` match a bare `<li>\s*<strong>`; empty, so no page check's words move), the block's own words held to the tag's label (`items::faults`). A pop-up's Guesses bullet `- {NNNN#<id>}` is filled from the tag at build, dropped while it is no GUESS (`registry/src/items.rs`, hooked into `about::feature` and `choices::modal`, so the page writer, `registry dump` and Mode A's guesses all read it, and the modal bundle's agent sees the filled text, `bundle/.../modal.rs`). An engine claim may name `...html#<id>` and its class is held to the tag (`claims/item_labels.rs`, a real-tree test in `checks/documents/item_labels.rs`); its fingerprint leaves the class word and the anchors out ONLY for such a claim, one whose pointer names an item and so is held to a tag (`grammar::Claim::normalized`, where `items` is empty the line is kept whole), so the flip a relabel asks for owes no impl-drift while an unanchored claim's class is still its own fingerprint (`item_labels::tests`, the `assert_ne!` on a GUESS and a plain pointer with no anchor); and the stale-figure check reads such a flip as no change to a constant (`grammar::label_free`, `stale::tests::a_relabel_of_a_claim_on_an_item_is_no_change`, red before: it flagged TREE_ROOM). A pop-up whose About states a GUESS-tagged item of a page it cites without calling it a guess (the bullet's head in an About sentence with no "guess") is named by the registry's real-tree test. Pilot: page 0218 (6 items tagged), `sheet/compound-shrine.md` (3 of its 4 bullets now references, their text unchanged) and the 4 claims on the shrine's tree (`compound/layout.rs` TREE_ROOM, `compound/fixtures.rs` tree, `audit/shared/grounds.rs` shrine_tree, `docs/buildings.md` "compound shrine tree"), which cited 0218 as attested since 085f4598c3 made the tree a GUESS - the uncascaded label the GM asked about, found by the check.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| the tag and its faults | `items::tests::*` (red: no reader of the tag on HEAD) | none: record tooling | none | n/a |
+| the reference bullet | `registry::items::tests::a_relabel_on_the_page_regenerates_the_bullet_and_the_pop_up_is_unchanged`, `owed::item_relabel::a_relabel_regenerates_the_bullet_and_owes_no_check` (the relabel cleared by the triage's first filter; the same guess in the pop-up's words sent on), `bundle ... a_guesses_reference_is_filled_from_its_tag` | none | none | n/a |
+| the About check and the claim check | `registry::items::tests::an_about_that_states_a_tagged_guess_as_a_fact_is_named`, `claims::item_labels::tests::*`, the two real-tree tests (proved red 2026-11-23 by flipping 0218's tree tag to ATTESTED: the page fault and all 4 claims named) | none | none | n/a |
 
 ### T187 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** No map changes. A relabel is one edit on its page; the pop-ups' Guesses tabs that reference the item follow by regeneration, the claims that name it are told the class to write, and neither owes a review for it.
+2. **The constraints.** The task line; the GM's words above; the coordinator's brief (the tag, the reference bullet, the claim read from or checked against the tag, red first, the About check); constitution XII (an unlabeled guess the one failure; untagged is unknown, never attested); FR-012 (red first); the other builders' files (T184's 0009 and 0059, T185 and T186's triage and the garden pop-ups, `docs/building-programs.md`).
+3. **Where each comes from.** G: the GM's words. O: the counts above and reclassify.md, measured 2026-11-23. R: page 0218 (the tree a GUESS since 085f4598c3).
+4. **Do they describe the world here?** Yes: the pilot is one of the two bundles' own label changes (compound-shrine, B1), replayed on its page.
+5. **The order.** After T186 (the triage's first filter, which clears a referenced relabel) and T185, whose `bundle/.../modal.rs` this edits in `guesses()` alone; before T192.
+6. **The exits.** Green: the tests above and the real-tree checks on the pilot. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** 2026-11-23: the 4 shrine-tree claims flipped to `GUESS ...#shrine-tree` and `make claims-owed` names none of them (their fingerprints unmoved); `make record-owed` owes the 6 pop-ups citing 0218 only its Drawing: page's move, and `make modal-triage` clears all 6 by the tool (24 cleared, 0218 absent from the bundle); compound-shrine owes its form and research checks once, for the reference form; `make building-programs CHECK=1` and `make record CHECK=1` clean.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** The 4 claims are restated, not the code (constitution XIV): the tree's drawing is unchanged, its label was wrong.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?**
+- `docs/building-programs.md`'s "the shrine in a corner beside a tree" cites 0218 as attested for the tree, which 0218 labels a GUESS: a claim's label wrong. Not fixed here: T186's uncommitted edit of the file is in this clone, and a hunk of mine in it would ride T186's landing or block it (T187 lands after T186, but is written before it lands). Filed as T192; lands before T22.
+- `make claims-owed` flagged TREE_ROOM's relabel as a changed constant ("stale figure ... states 2"), its value unchanged: fixed here, the stale check compares a constant's doc with the labels of claims on tagged items left out (`grammar::label_free`), red first.
+- The rest of the record untagged (the counts above): not a defect, since an untagged item keeps the old review path; T192 tags it.
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** yes: a relabel no longer costs a pop-up review for each pop-up that references the item, nor an impl-drift for each claim that names it - the label changes were 12 of the 18 page-caused pop-up corrections the two 2026-11-23 bundles needed (reclassify.md).
+
+### T187 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)
+
+1. **Where does the time go?** In the pop-up reviews and impl-drift checks a label change re-owed: 12 of 18 page-caused pop-up corrections in the 2026-11-23 bundles carried one (reclassify.md).
+2. **Removes work, or only moves it?** Removes it for a referenced item and a claim naming its item: regeneration and a mechanical check replace the review.
+3. **What do you expect it to save, and why?** Once T192 tags the record, a relabel's pop-up checks and claim re-checks; on the pilot, the compound-shrine relabel of B1 would have owed nothing.
+4. **How does the work grow with the settlement?** It does not: record tooling; the checks read each question's pages once.
+5. **What did the before and after show, and under what conditions?** Before: the B1 relabel needed a hand edit of compound-shrine and left 4 claims mislabeled. After: the fixture relabel regenerates the bullet and the triage clears it; flipping 0218's tag names every claim to flip. Evidence, not a pass.
 
 
 <!-- plan-archive: T188 to T190 moved to plan-done.md, 2026-11-23 (feature 375 FR-044) -->
