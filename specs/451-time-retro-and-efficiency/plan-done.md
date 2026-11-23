@@ -9672,3 +9672,78 @@ Owed by red-gate@2026-11-23T01:08:38Z, ruled continue by the round arbiter (`arb
 5. **What did the before and after show, and under what conditions?** Pair 2's landing at load 44-50 on 22 cores: lint plus cover 82 units, 177 s wall, in its own directory against 54 units, 80 s, at the clone's path, the minutes mixed with the load (10.2 s a unit against 1.8), measured 2026-11-22 (pair 2's rustc logs, `rustc-C2-*.tsv`, through `dup2.py`). sccache's stats: 0 hits, measured 2026-11-22 (`times.txt`, `scc-stats.txt`).
 6. **Did any map move, and does it still keep the research?** None. No code changed and no map was rolled.
 
+<!-- plan-archive: archived 2026-11-23 -->
+### T169 (observed 2026-11-23: the harness prints a hook entry's command with every block or notice it emits, and the coordinator's transcript, `~/.claude/projects/-diagram/c6fd72d1-....jsonl`, holds the dispatcher's 239-253 character command in 6,665 stored occurrences, 1,659,603 characters as stored, measured 2026-11-23 (a `grep -o` of the command's stored form, counted and summed by `awk`))
+
+- **Approach**: each of the nine hook entries of `.claude/settings.json` becomes `"$CLAUDE_PROJECT_DIR"/scripts/hooks/l7r-hook <event>`, or `... setup` for the container's setup entry. Timeouts and the status message are unchanged.
+  - **The launcher** (`scripts/hooks/l7r-hook`, new, POSIX sh) does what the commands did. It runs the mirror's `l7r-guard.sh` if that file is executable, else the copy beside itself. `setup` runs the mirror's `setup-dev-env.sh --ensure` by bash if that file exists, else the tree's. Its header holds the reasons the commands carried: the timeout above the wrapper's 45 s build limit (449 T005, `L7R_GUARD_BUILD_SECS`'s default in `l7r-guard.sh`, a knob), and the setup hook's 2026-10-04 ruling. `CLONE_MAIN` is its test seam for the mirror, as in `sync-with-main.sh`.
+  - **The escape marker.** Each command carried an escape marker because the guard-file guard lets a settings edit through only when the edited text holds one. Its supported form is `make guard-edit FILE=.claude/settings.json WHY=...`, which this task used. The reason goes in the guard log and the commit message, not in a command every hook message repeats.
+  - **The launcher is held as a guard file** on both routes, because it now decides what the settings' commands decided. `guard_file_hooks.rs` holds it through `GUARD_SOURCE`, beside `l7r-guard.sh`. `make_only_hooks.rs` holds it through `GUARD_FILE` and the `SOURCE_NAMES` screen. Its name is `l7r-hook`, not `run`: make-only screens a command by substring before walking it, and `run` would have sent most commands through the walk.
+  - **The wave replay** (`workflow_hooks.rs`) now runs a tree's settings commands with `CLAUDE_PROJECT_DIR` set to that tree. The new command reads that variable. The old one read it only when the mirror had no dispatcher. Without the change, a session whose project directory lacked the launcher would replay every command as exit 127, and the unit would go through unguarded.
+- **Before and after, in characters per occurrence** (the decoded command, measured 2026-11-23 by `jq` over the settings):
+  - Stop: 239 before, 49 after.
+  - PreToolUse: 245 before, 55 after.
+  - UserPromptSubmit: 251 before, 61 after.
+  - PostToolUseFailure, the longest: 253 before, 63 after.
+  - The setup entry: 330 before, 50 after.
+  - The same 6,665 stored occurrences (4,165 Stop, 1,944 UserPromptSubmit, 542 PreToolUse, 14 PostToolUse): 1,659,603 characters before, 366,593 after. That is 1.29M characters fewer in that one transcript, 78%, measured 2026-11-23 (one pass over a copy of the transcript, to the line where the total reached 6,665: each occurrence's stored length, against its event at the new command's stored length, 2 + 45 + the event's name).
+  - These are occurrences, not hook messages: the transcript stores a message's command more than once. In the second live session below, 2 Stop blocks stored the command 6 times (4 in the block texts, 2 in the Stop summary's hook list), the PreToolUse block 2 times and the UserPromptSubmit notice once.
+
+### T169 Approach (checklist part A)
+
+1. **The goal, in the world.** Every hook message carries a command of at most 64 characters, and every hook fires as before: the same dispatcher, chosen the same way, on the same events, with the same timeouts.
+2. **The constraints.** No loss of behavior (the GM 2026-11-23). The mirror's copy runs first (449 research R6). Each timeout stays above the wrapper's 45 s build limit (449 T005, `L7R_GUARD_BUILD_SECS`'s default, a knob). A settings edit is deliberate (the guard-file guard, feature 127). The settings change is live for every session that loads this clone's settings, so each command is tested by hand before it is written.
+3. **Where each comes from.** G: request.md "on hook output length" ("could we accomplish the same thing with no loss of fidelity and fewer tokens?"). O: the transcript count above. O: `l7r-guard.sh`'s `L7R_GUARD_BUILD_SECS:-45`. O: page sessions run `claude -p` from the clone's root (`pages/src/runner.rs`, `current_dir(root)`), so their project directory is the clone and holds the launcher.
+4. **Do they describe the world here?** Yes. `/tmp/t169/hand.sh` ran each old and each new command, as `sh -c` with `CLAUDE_PROJECT_DIR` set to the clone, against the real dispatcher with one payload per event and a working directory outside any tree. All nine gave the same stdout, stderr and exit code, measured 2026-11-23. UserPromptSubmit's clone-sync notice comes once per session, so whichever command ran first printed it; this was rerun with the new command first on a fresh session id.
+5. **The order.** The red suite first. Then `make guard-edit` for the settings and the guard sources. The launcher was created, made executable and run by hand before the first settings write. Each settings write was validated in scratch (`jq`, the commands run) and written whole with the Write tool, then compared byte for byte with the scratch copy. The superseded launcher name was deleted only after the settings stopped naming it.
+6. **The exits.** Green: the suites, the guard crate's tests, a live session firing the new commands, and MODE 4 CLEAR. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** none.
+8. **The budget.** One landing.
+9. **Done, measured.** RED FIRST (2026-11-23, on today's settings, `tests/hooks/test-l7r-guard.sh`, log `/tmp/t169/red.log`): 49 passed and 9 failed. The length case listed all nine commands at 239-330 characters. The entry case named each command as "not the launcher". The seven launcher cases failed with no launcher present. The timeout case passed, since today's timeouts are 60, 600 and 900 s, measured 2026-11-23 (`jq` over the settings). `make rust-test CRATE=rust/guard` failed 4 of 469 (`/tmp/t169/rt-red2.log`), run with the test files changed and `guard_file_hooks.rs` already holding the launcher, so it is no red for the guard-file case:
+   - make-only's write-forms test, on 50 forms of writing `scripts/hooks/l7r-hook`;
+   - make-only's guard-sources case, on the same file;
+   - the left-alone case, on a Python write of `tests/hooks/test-l7r-guard.sh`;
+   - the wave-unit test, which got "UNIT a / not this tree" instead of WAVE-PASSED.
+
+   The guard-file case's red came earlier, from `make guard-edit` itself. While `guard_file_hooks.rs` named only the launcher's first name, `run`, `make guard-edit FILE=scripts/hooks/l7r-hook` answered "is not a guard file, so its edits need no permit" (2026-11-23 05:28:54Z, the first builder's transcript). Once it named `l7r-hook`, the same command answered "may be edited until 01:47" (2026-11-23, for this section's header fix).
+
+   GREEN (2026-11-23): the suite passes 58 of 58 and the guard crate passes 469 of 469. `make closing-checks T=T169 F=451` runs `make static`, `make hooks-test` and `make quick`.
+
+   LIVE (2026-11-23): a `claude -p` session on haiku, started in the clone after the settings were written (`da688d32`, transcript under `~/.claude/projects/-diagram--clones-diagram-backlog/`), recorded these messages and lines:
+   - a PreToolUse refusal of its `cargo build`, stored as `["$CLAUDE_PROJECT_DIR"/scripts/hooks/run PreToolUse]: BLOCKED: cargo run outside make`;
+   - 10 Stop blocks (20 stored block texts) and a UserPromptSubmit notice through the new command;
+   - event-log lines for UserPromptSubmit, PreToolUse (3), PostToolUse (2), SubagentStart, SubagentStop and Stop (10).
+
+   That session ran under the launcher's first name, `run`. The rename to `l7r-hook` was proved by the hand comparison again (all nine the same) and by the suite.
+
+   A second session ran on the final settings (`fc0259db`, haiku, `--max-turns 3`, Agent and Task disallowed, 2026-11-23). Three events fired live under the final name:
+   - its `cargo build` refused, stored 2 times as `["$CLAUDE_PROJECT_DIR"/scripts/hooks/l7r-hook PreToolUse]: BLOCKED: cargo run outside make`;
+   - 2 Stop blocks, the command stored 6 times;
+   - the UserPromptSubmit clone-sync notice, stored once.
+
+   It left 4 event-log lines (UserPromptSubmit, PreToolUse, Stop twice) and no review pass, so no ledger row (`make ledger-owed`). PostToolUse, SubagentStart and SubagentStop were seen live only under `run`, in the first session. Under the final name they are covered by the hand comparison and by the suite's entry case. SessionStart, the setup entry and PostToolUseFailure print nothing on a healthy call and log no event line, so their live firing is not observable. They are covered by the hand comparison and by the suite's entry case.
+10. **Before moving a constant.** The budget, `HOOK_COMMAND_BUDGET`, is 64: the longest event's command (63) and one to spare. It is a knob, GUESS.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** Two are wrong outcomes:
+    - make-only's `GUARD_FILE` read the dispatcher's suite, `tests/hooks/test-l7r-guard.sh`, as the dispatcher. That refused this task's own suite edit.
+    - Once the command read `CLAUDE_PROJECT_DIR`, the wave replay could let a unit through unguarded.
+
+    The rest is no defect: the same behavior with a shorter command in every hook message.
+
+**Found and left?**
+- make-only's `GUARD_FILE` alternative `l7r-guard\.sh` matched any name ending so, so a Python write of `tests/hooks/test-l7r-guard.sh` was refused as a guard-file write. Fixed here: the dispatcher's and the launcher's names are whole names (`(?<![\w-])`). Pinned by the left-alone case, with the hooks suite's scratch directory `l7r-hooks-suite-*` beside it. Observed 2026-11-23, method: the refusal of this task's own edit, then every other alternative of the pattern read for the same shape. The others are suffixes on purpose (`-hooks.sh`) or carry their directory.
+- The wave replay's dependence on the session's project directory. Fixed here, as in the Approach.
+- The live probe left 18 lines in 449's event log, booked to T341 by the clone's mark (`fallback`), measured 2026-11-23 (a `grep` of its session id over `.git/l7r-events/`). That is about a minute of `make where-time` credited to T341. Its one escalation-check pass has its ledger row, written by hand, so no landing refuses on it. The second live session left 4 lines in 451's event log, booked to T168 by the clone's mark (`fallback`), measured 2026-11-23 the same way. Their timestamps span 8 seconds, and there is no review pass. Not a defect: it is the cost of a live test.
+
+**Performance work?** yes, in tokens, not time (451 FR-013: the builders' loop): every stored occurrence of a hook entry's command is 190 characters shorter. The launcher adds one `sh` start per hook call, about 0.4 ms as dash where a bash launcher added about 3 ms, measured 2026-11-23 (`/tmp/t169/time.sh`: 100 calls into a stub, best of 3, load 4.9). The whole command was 6.8-8.3 ms a call before and 8.3-8.5 ms after, inside the noise, measured 2026-11-23 (`/tmp/t169/time.sh`: 100 `--version` calls, best of 3).
+
+### T169 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)
+
+1. **Where does the time go?** Into tokens, not CPU: the harness prints each hook entry's command with every message it emits, 6,665 stored occurrences in the coordinator's transcript.
+2. **Removes work, or only moves it?** Removes it: about 190 characters of every stored occurrence of the command. The logic moved into a file the harness never prints.
+3. **What do you expect it to save, and why?** About 78% of those occurrences' characters, 1.29M characters in a transcript like the coordinator's, measured 2026-11-23 (the count in T169's Approach).
+4. **How does the work grow with the settlement?** It grows with the hook messages, not with the settlement. The change takes a fixed share of each one.
+5. **What did the before and after show, and under what conditions?** Per occurrence, 239-330 characters before and 49-63 after, as decoded. Wall time per call is unchanged within noise, 6.8-8.3 ms before and 8.3-8.5 ms after at load 4.9, measured 2026-11-23 (`/tmp/t169/time.sh`).
+6. **Did any map move, and does it still keep the research?** No map: no engine code changed.
+
+
