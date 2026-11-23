@@ -1195,6 +1195,48 @@
    "reviewed": "2026-11-22",
    "declared": "spec-fidelity"
   },
+  "### T154 (a TRIAL, measured 2026-11-22: the gate was said to compile each crate three times and run its tests twice - the Phase lines of 2026-11-22 01:00-08:15 gave a test build of 73 min, a coverage build of 78 min and clippy 54 min of machine time against about 45 min of tests run)": {
+   "sha256": "fa4de1cb6a40859cf30604d09e70d07038322844aabaf34e75b1f6613a4fcdc7",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity"
+  },
+  "### T154 Approach (checklist part A)": {
+   "sha256": "8506311a55a1343f6cb0e65ccc22bcc47cdf2d30e3efaaded63b89fa4288e2f1",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity"
+  },
+  "### T154 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)": {
+   "sha256": "eddfe757ca008c7eb3e88cf8f2cbf70f308e277b2f82870a5cb46823ab1bf51b",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity"
+  },
+  "### T155 (a TRIAL, measured 2026-11-22: the task line said a landing recompiles what the clone already built - 117 min of make land phases over 6 landings, 28 of them coverage builds - because cargo's fingerprints carry each tree's absolute path, so the landing worktree's own target directory cannot use the clone's builds)": {
+   "sha256": "d7caa3298487402f8befed94e49bd228956918f70454901c7e1646e0bf5f6abc",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity"
+  },
+  "### T155 Approach (checklist part A)": {
+   "sha256": "97729aab6ee4c3254ad2b93283ac2a7d6dd833852a205c0d6ca00226e3857bb7",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity"
+  },
+  "### T155 part B (2026-11-23T01:16Z)": {
+   "sha256": "64f8beda142d3c62273991ed075695c8f48b496d0cf4b3f044197c7519ad3782",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity"
+  },
+  "### T155 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)": {
+   "sha256": "9a03255881dc58aac9343e9d0903d547b8ccbd6b484b0fdfc8d6c4e6c8ae9923",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity"
+  },
   "### T160, T161 (bundle)": {
    "sha256": "a0b3d5f2648c9780b91b9a9f465b03b9122a9b15d667f86dc6bf69468d995aed",
    "verdict": "CLEAR",
@@ -14170,6 +14212,129 @@
   {
    "reviewed": "2026-11-23",
    "blocks": [
+    "### T154 (a TRIAL, measured 2026-11-22: the gate was said to compile each crate three times and run its tests twice - the Phase lines of 2026-11-22 01:00-08:15 gave a test build of 73 min, a coverage build of 78 min and clippy 54 min of machine time against about 45 min of tests run)",
+    "### T154 Approach (checklist part A)",
+    "### T154 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T154-verdict",
+     "summary": "The trial's verdict: do not build. The gate (make done / make land) runs no plain `rust test` build; coverage already answers for the plain run (449 T111 keep_tests, 451 T57 unit_tests_only), so the candidate saves 0 min.",
+     "class": "within",
+     "why": "The task was a trial (measure first) on whether a plain test build could be dropped where coverage runs the same tests. Finding it already dropped and saying so is the green exit, measured by recipe reads and Phase lines with no build line under done/land but the counting crates'. It answers the GM's 'how much time are we spending on recompiling things' and narrows nothing."
+    },
+    {
+     "id": "T154-keep-counting-build",
+     "summary": "The counting build (test-counters on pool, phases, mode_a) is kept, not dropped: it runs 13 tests the default build does not and is the counters-inert check's job.",
+     "class": "within",
+     "why": "The candidate was to drop a build where coverage runs the SAME tests. The counting build does not run the same tests (counted 59/54, 339/335, 134/130), so it is outside the candidate by its own terms. Keeping it keeps an existing check working and does not narrow what was asked."
+    },
+    {
+     "id": "T154-builder-builds-not-pursued",
+     "summary": "The builders' own `make rust-test` builds (61.1 of the window's 75.7 build machine-minutes) are outside the gate; whether they could share the coverage build is not measured here and nothing is proposed.",
+     "class": "within",
+     "why": "T154's question is the gate's build. Stating where the rest of the build time sits, and declining to propose a change on an unmeasured premise, keeps to the trial form and to the measure-first rule. The time is already measured by the Phase lines (FR-003), so 'everything measured' is not narrowed. Whether to file a follow-up on builder builds is scheduling, not a fidelity question for this section."
+    },
+    {
+     "id": "T154-figures-side-by-side",
+     "summary": "The task line's 78 / 54 machine-minutes and this window's 122 / 121 are given side by side, not reconciled, because the task line's method is not recorded.",
+     "class": "within",
+     "why": "A presentation choice about a premise that does not decide the verdict (the verdict rests on the recipes read and on no plain build Phase line in the gate). Both figures carry a date and a method or say that none is recorded. Nothing the GM asked for is narrowed."
+    },
+    {
+     "id": "T154-method-gate-steps-not-make-done",
+     "summary": "The cold run used `scripts/gates/l7r-gate.sh rust <step>` in the gate's order in a detached worktree, not `make done`, so that the trial commits no run record.",
+     "class": "within",
+     "why": "A choice of measuring method that keeps the trial from committing. It measures the same phases, and the worktree and its 19 GB target directory were removed afterwards. Not a narrowing."
+    },
+    {
+     "id": "T154-found-and-left-T159",
+     "summary": "A fresh tree's coverage run is red on rust/mode_a (armory test reads two .gitignored generated SVGs, NotFound). Not fixed here; filed as T159, ordered to land before T148.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This is a defect (a check that refuses good work in a new tree), so leaving it unfixed in this task is a narrowing and is ruled on. It is legitimate: the section is a trial that changes no code, the defect is not dropped but filed as T159 with a stated reason and a stated order ('lands before T148', the first task that builds in fresh trees, so the defect cannot bite before it is fixed), which meets FR-009's form. Fix-as-we-go asks that a step's known defects be fixed before the next step begins, and that order does exactly that."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-23",
+   "blocks": [
+    "### T155 (a TRIAL, measured 2026-11-22: the task line said a landing recompiles what the clone already built - 117 min of make land phases over 6 landings, 28 of them coverage builds - because cargo's fingerprints carry each tree's absolute path, so the landing worktree's own target directory cannot use the clone's builds)",
+    "### T155 Approach (checklist part A)",
+    "### T155 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)",
+    "### T155 part B (2026-11-23T01:16Z)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T155-D1 trial form",
+     "summary": "T155 is run as a trial: measure a landing's duplicate build and two candidates (sccache, building at the clone's path), no code changed.",
+     "class": "within",
+     "why": "Measuring where the time goes is performance work by FR-013 and the GM's 2026-11-20 and 2026-11-22 words ('we want everything measured so we know where our time goes, especially for compiling'). Measuring before building narrows nothing."
+    },
+    {
+     "id": "T155-D2a sccache not built",
+     "summary": "Verdict (a): no content-keyed compilation cache is built, because it hit 0 times across the two paths, coverage units are uncacheable under it, and 0.13 has no base-directory option.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The task's own goal (Approach item 1: a landing compiles nothing the clone already compiled) is left unmet by this candidate, so it is a narrowing; but the candidate is measured to be physically unable to deliver: 0 hits at the second path, every coverage unit 'multiple input files', and even with a base-directory option the ceiling is rlibs only, bought with CARGO_INCREMENTAL=0 in every builder's loop, which would slow the loop the GM asked to speed. Physically impossible as it stands, not merely awkward."
+    },
+    {
+     "id": "T155-D2b same-path build not built",
+     "summary": "Verdict (b): the landing is not built at the clone's path in the clone's target directory, because mtime freshness across two trees reuses the clone's build of a different copy - a red tree passed cover clean.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Adjudicated separately from (a). Building it would defeat the request's own purpose: the GM asked for performance improvements and for enforcement that is real, and a landing whose tests run the clone builders' code instead of the commit's is a check that passes bad work - a defect, measured on a deliberate hazard (red probe passes at the clone's path, fails in its own directory). The saving it offers is exactly the units it can reuse wrongly. Refusing a change that weakens the gate is not carving out a case contrary to what was asked."
+    },
+    {
+     "id": "T155-D3 no follow-up filed",
+     "summary": "The residual duplicate (the l7r-rust tool binary rebuilt per target directory, 0.66 min on pair 1 when a gate crate moved; pair 2's 5.15 ceiling, partly the setup's hand edit) is judged too little and too narrow for a follow-up; none is proposed.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "It leaves a measured cost, not a defect: no map reads wrong, no check passes bad work or refuses good work. FR-013 orders performance work first; it does not oblige filing every measured residue, and the GM's request asks for numbers to decide on, which this trial gives with methods. The 5.15 is reachable only through sccache with an option it lacks plus incremental off everywhere (D2a), so it is not an open route. The figures are recorded, so the call can be revisited."
+    },
+    {
+     "id": "T155-D4 Text-file-busy defect deferred",
+     "summary": "pool's maps::tests::the_launcher_runs_the_gate_script failing 'Text file busy' under load is left unfixed in this trial, filed as T160, to land before T148.",
+     "class": "within",
+     "why": "A defect (a gate red on a test that is not broken) found by the trial, deferred in FR-009's own form: why not here (a trial changes no engine code), its filed id (T160) and its order ('lands before T148', the task whose side-by-side gates would raise the race). FR-009 is the spec's provision for exactly this; nothing in the request requires a measurement task to fix a defect it stumbled on in another crate."
+    },
+    {
+     "id": "T155-D5 constraints listed",
+     "summary": "Constraints: the trial form, FR-013, kept results keyed by contents and seeded by land-alone.sh, constitution XIII, and 'a copied cache is no answer' attributed to the GM's 2026-11-22 words.",
+     "class": "within",
+     "why": "The constraint decides nothing here: no candidate examined or excluded is a copied cache, and the heading's own premise (fingerprints carry absolute paths) makes a copied target directory moot. Note for the author: 'a copied cache is no answer' is a reading of the GM accepting the session's unquoted points ('your points about reusing the same build cache ... are well taken'), not his words; labeling it G overstates it, but it narrows nothing in this section."
+    },
+    {
+     "id": "T155-D6 order, exits, budget",
+     "summary": "After 451 T154, before any build follow-up (none proposed); green exit = measurement recorded with its verdict; red exit = set down with an arbiter-ask; budget one landing.",
+     "class": "within",
+     "why": "Ordering and exits of a measurement task; nothing the request or spec constrains is narrowed."
+    },
+    {
+     "id": "T155-D7 scratch cleanup, apt package kept",
+     "summary": "Scratch worktrees, their target directories, the sccache directory and server removed; the apt sccache package stays installed, recorded.",
+     "class": "within",
+     "why": "The GM's 2026-11-22 purpose is that disk is not eaten 'without us realizing it'; the large artifacts (target directories, cache) were removed and checked, and the package left is recorded, so it does not gut that purpose. Aside: since the verdict is not to use sccache, removing the package would be the tidier end."
+    },
+    {
+     "id": "T155-D8 part B red-gate owed",
+     "summary": "Part B answers a red-gate preflight owed by another builder's make done; arbiter ruled continue; nothing of T155's refused.",
+     "class": "within",
+     "why": "Procedure record with the arbiter's continue; decides nothing about scope."
+    },
+    {
+     "id": "T155-D9 performance classification",
+     "summary": "T155 is classed performance work under FR-013, verdict nothing to build.",
+     "class": "within",
+     "why": "FR-013 counts measurement of where time goes as performance work for ordering."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-23",
+   "blocks": [
     "### T160, T161 (bundle)",
     "### T160, T161 Approach (checklist part A)"
    ],
@@ -21865,6 +22030,122 @@
      "summary": "The task is classed 'Performance work? no' (disk hygiene); the gate's cost is one df.",
      "class": "within",
      "why": "The GM's words on T158 ask for cleanup and do not call it performance or measurement work. Classing it this way narrows nothing T158 was asked to do."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T154": {
+   "section_sha256": "f549fcc3e1cf16e486d10a88af8f9171ade9073d2eb69edefc9633b753765f53",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T154-verdict",
+     "summary": "The trial's verdict: do not build. The gate (make done / make land) runs no plain `rust test` build; coverage already answers for the plain run (449 T111 keep_tests, 451 T57 unit_tests_only), so the candidate saves 0 min.",
+     "class": "within",
+     "why": "The task was a trial (measure first) on whether a plain test build could be dropped where coverage runs the same tests. Finding it already dropped and saying so is the green exit, measured by recipe reads and Phase lines with no build line under done/land but the counting crates'. It answers the GM's 'how much time are we spending on recompiling things' and narrows nothing."
+    },
+    {
+     "id": "T154-keep-counting-build",
+     "summary": "The counting build (test-counters on pool, phases, mode_a) is kept, not dropped: it runs 13 tests the default build does not and is the counters-inert check's job.",
+     "class": "within",
+     "why": "The candidate was to drop a build where coverage runs the SAME tests. The counting build does not run the same tests (counted 59/54, 339/335, 134/130), so it is outside the candidate by its own terms. Keeping it keeps an existing check working and does not narrow what was asked."
+    },
+    {
+     "id": "T154-builder-builds-not-pursued",
+     "summary": "The builders' own `make rust-test` builds (61.1 of the window's 75.7 build machine-minutes) are outside the gate; whether they could share the coverage build is not measured here and nothing is proposed.",
+     "class": "within",
+     "why": "T154's question is the gate's build. Stating where the rest of the build time sits, and declining to propose a change on an unmeasured premise, keeps to the trial form and to the measure-first rule. The time is already measured by the Phase lines (FR-003), so 'everything measured' is not narrowed. Whether to file a follow-up on builder builds is scheduling, not a fidelity question for this section."
+    },
+    {
+     "id": "T154-figures-side-by-side",
+     "summary": "The task line's 78 / 54 machine-minutes and this window's 122 / 121 are given side by side, not reconciled, because the task line's method is not recorded.",
+     "class": "within",
+     "why": "A presentation choice about a premise that does not decide the verdict (the verdict rests on the recipes read and on no plain build Phase line in the gate). Both figures carry a date and a method or say that none is recorded. Nothing the GM asked for is narrowed."
+    },
+    {
+     "id": "T154-method-gate-steps-not-make-done",
+     "summary": "The cold run used `scripts/gates/l7r-gate.sh rust <step>` in the gate's order in a detached worktree, not `make done`, so that the trial commits no run record.",
+     "class": "within",
+     "why": "A choice of measuring method that keeps the trial from committing. It measures the same phases, and the worktree and its 19 GB target directory were removed afterwards. Not a narrowing."
+    },
+    {
+     "id": "T154-found-and-left-T159",
+     "summary": "A fresh tree's coverage run is red on rust/mode_a (armory test reads two .gitignored generated SVGs, NotFound). Not fixed here; filed as T159, ordered to land before T148.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This is a defect (a check that refuses good work in a new tree), so leaving it unfixed in this task is a narrowing and is ruled on. It is legitimate: the section is a trial that changes no code, the defect is not dropped but filed as T159 with a stated reason and a stated order ('lands before T148', the first task that builds in fresh trees, so the defect cannot bite before it is fixed), which meets FR-009's form. Fix-as-we-go asks that a step's known defects be fixed before the next step begins, and that order does exactly that."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T155": {
+   "section_sha256": "c3cf5e24746b9ad06cb0cfe04f95026d6d42025d90a282457bc2bb847a8df9fb",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T155-D1 trial form",
+     "summary": "T155 is run as a trial: measure a landing's duplicate build and two candidates (sccache, building at the clone's path), no code changed.",
+     "class": "within",
+     "why": "Measuring where the time goes is performance work by FR-013 and the GM's 2026-11-20 and 2026-11-22 words ('we want everything measured so we know where our time goes, especially for compiling'). Measuring before building narrows nothing."
+    },
+    {
+     "id": "T155-D2a sccache not built",
+     "summary": "Verdict (a): no content-keyed compilation cache is built, because it hit 0 times across the two paths, coverage units are uncacheable under it, and 0.13 has no base-directory option.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The task's own goal (Approach item 1: a landing compiles nothing the clone already compiled) is left unmet by this candidate, so it is a narrowing; but the candidate is measured to be physically unable to deliver: 0 hits at the second path, every coverage unit 'multiple input files', and even with a base-directory option the ceiling is rlibs only, bought with CARGO_INCREMENTAL=0 in every builder's loop, which would slow the loop the GM asked to speed. Physically impossible as it stands, not merely awkward."
+    },
+    {
+     "id": "T155-D2b same-path build not built",
+     "summary": "Verdict (b): the landing is not built at the clone's path in the clone's target directory, because mtime freshness across two trees reuses the clone's build of a different copy - a red tree passed cover clean.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Adjudicated separately from (a). Building it would defeat the request's own purpose: the GM asked for performance improvements and for enforcement that is real, and a landing whose tests run the clone builders' code instead of the commit's is a check that passes bad work - a defect, measured on a deliberate hazard (red probe passes at the clone's path, fails in its own directory). The saving it offers is exactly the units it can reuse wrongly. Refusing a change that weakens the gate is not carving out a case contrary to what was asked."
+    },
+    {
+     "id": "T155-D3 no follow-up filed",
+     "summary": "The residual duplicate (the l7r-rust tool binary rebuilt per target directory, 0.66 min on pair 1 when a gate crate moved; pair 2's 5.15 ceiling, partly the setup's hand edit) is judged too little and too narrow for a follow-up; none is proposed.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "It leaves a measured cost, not a defect: no map reads wrong, no check passes bad work or refuses good work. FR-013 orders performance work first; it does not oblige filing every measured residue, and the GM's request asks for numbers to decide on, which this trial gives with methods. The 5.15 is reachable only through sccache with an option it lacks plus incremental off everywhere (D2a), so it is not an open route. The figures are recorded, so the call can be revisited."
+    },
+    {
+     "id": "T155-D4 Text-file-busy defect deferred",
+     "summary": "pool's maps::tests::the_launcher_runs_the_gate_script failing 'Text file busy' under load is left unfixed in this trial, filed as T160, to land before T148.",
+     "class": "within",
+     "why": "A defect (a gate red on a test that is not broken) found by the trial, deferred in FR-009's own form: why not here (a trial changes no engine code), its filed id (T160) and its order ('lands before T148', the task whose side-by-side gates would raise the race). FR-009 is the spec's provision for exactly this; nothing in the request requires a measurement task to fix a defect it stumbled on in another crate."
+    },
+    {
+     "id": "T155-D5 constraints listed",
+     "summary": "Constraints: the trial form, FR-013, kept results keyed by contents and seeded by land-alone.sh, constitution XIII, and 'a copied cache is no answer' attributed to the GM's 2026-11-22 words.",
+     "class": "within",
+     "why": "The constraint decides nothing here: no candidate examined or excluded is a copied cache, and the heading's own premise (fingerprints carry absolute paths) makes a copied target directory moot. Note for the author: 'a copied cache is no answer' is a reading of the GM accepting the session's unquoted points ('your points about reusing the same build cache ... are well taken'), not his words; labeling it G overstates it, but it narrows nothing in this section."
+    },
+    {
+     "id": "T155-D6 order, exits, budget",
+     "summary": "After 451 T154, before any build follow-up (none proposed); green exit = measurement recorded with its verdict; red exit = set down with an arbiter-ask; budget one landing.",
+     "class": "within",
+     "why": "Ordering and exits of a measurement task; nothing the request or spec constrains is narrowed."
+    },
+    {
+     "id": "T155-D7 scratch cleanup, apt package kept",
+     "summary": "Scratch worktrees, their target directories, the sccache directory and server removed; the apt sccache package stays installed, recorded.",
+     "class": "within",
+     "why": "The GM's 2026-11-22 purpose is that disk is not eaten 'without us realizing it'; the large artifacts (target directories, cache) were removed and checked, and the package left is recorded, so it does not gut that purpose. Aside: since the verdict is not to use sccache, removing the package would be the tidier end."
+    },
+    {
+     "id": "T155-D8 part B red-gate owed",
+     "summary": "Part B answers a red-gate preflight owed by another builder's make done; arbiter ruled continue; nothing of T155's refused.",
+     "class": "within",
+     "why": "Procedure record with the arbiter's continue; decides nothing about scope."
+    },
+    {
+     "id": "T155-D9 performance classification",
+     "summary": "T155 is classed performance work under FR-013, verdict nothing to build.",
+     "class": "within",
+     "why": "FR-013 counts measurement of where time goes as performance work for ordering."
     }
    ],
    "verdict": "CLEAR"
