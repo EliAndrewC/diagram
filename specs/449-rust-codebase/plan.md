@@ -1167,3 +1167,30 @@ Filed by the building-reviews of 2026-11-23 (T375: Ubame Q1, the round trip Q1, 
 
 **Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
 
+
+### T409 (modal-research 2026-11-23 on sheet/official-study, ACCURACY 1 and GAPS 1, on About text the T375 bundle did not change)
+
+- **Approach**: the round's EDITs, as it gave them: About's opening restated from "The official study was a magistrate's own working room in the office hall, where the office's papers would be read and answered; no account names such a room in an office hall." to "A magistrate did the office's day-to-day business in a working room on the household's side of the compound, not among the clerks; no account names such a room inside an office hall." (0113: Edo's yobeya at the join, Takayama's ima in the residence); and, before "In a private house", "At Takayama the intendant's living room had a tea room beside it and looked onto the same garden as the great hall, with stepping stones leading down into it." with 0103 added to Entry: (0103's Takayama garden bullet, attested in its Evidence comment). Not yet measured; the modal's checks re-run on the edit.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T409 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+

@@ -136,6 +136,8 @@ MVP: T001-T005 and the first guard, `pair-hooks` (T006): the dispatcher in every
       research: rendering
 - [ ] T408 lands before T158: Ubame's kitchen-garden bed stands 1.3 ft off Koharu's veranda and off the writing pavilion, so the household's way from its rooms to the household door runs round the pavilion, about 104 ft (building-review 2026-11-23 of ubame-magistracy, O1, outside the T375 change; the bed's seat a feature 283 knob)
       research: rendering
+- [ ] T409 lands before T158: the official study modal's About brought to its research (modal-research 2026-11-23 on sheet/official-study, outside the T375 bundle's Guesses change): ACCURACY 1, its first sentence states as history a working room in the office hall that its own Guesses bullet and 0113 record as a guess - the record supports only a working room on the household's side (Edo's yobeya at the join, Takayama's ima); GAPS 1, 0103 records the Takayama intendant's room's tea room and garden outlook, so add it to Entry: and to About; the round's EDITs are in its reply; modal-form's M11 NOTE (the Guesses bullet's why for the household's end) beside them
+      research: rendering
 - [ ] GM review (make gm-reviewed F=449) [lands-open]
       research: rendering
       verify: the GM reviewed every row (make gm-review lists them)
