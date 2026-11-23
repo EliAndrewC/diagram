@@ -2584,3 +2584,44 @@ engine speed, so no checklist.
 6. **Did any map move, and does it still keep the research?** No: no engine code.
 
 
+### T194 (T184's split of 0009 to 0332 and 0059 to 0333, the cascade rules' first live test, re-owed 63 pop-up units (21 pop-ups) where 27 (9) follow from the rules: `/home/agent/.claude/jobs/c6fd72d1/tmp/t184-cascade.md`, a read-only re-run of the filter, 2026-11-23)
+
+- **Approach**: three defects of T185's and T186's filter, each fixed red first on a fixture of T184's shape (`triage::tests::split_like_t184`: a page split with its pointer, a marked block moved verbatim, a block moved with a small edit, a block moved with a gloss inserted). (1) `change::page_change`: a note key counts as gone only where neither the page now nor any block the reader reaches (`reached_now`, which carries each mark as `[^key]`) holds it, so the MANIFEST's keys line, built from the same list, follows; its label reads "Note keys no longer on the page or a page it points to". (2) `change::echo`: the nearest new sentence is sought on the page and in the reached sentences (each candidate's words read once, outside the loop over old sentences), so a sentence moved with an edit is compared with its moved self; the echo rule's wording is unchanged. (3) `replay_landing` reads each pop-up's pages and their pointers' targets at the commit and at its parent, and judges each changed page of that set through `judged`, the one judgment the bundle's `unit_changes` now calls too. And the MANIFEST: `Change.moved_edited` pairs a removed block with its closest block new on a reached page (there now, not at its last check) at `PAIR_RATIO`; the block stays in `removed` (owed as the echo reads it, the digest's), but the MANIFEST prints it under "Moved with edits (to a page these pop-ups reach)" with its OLD, NEW and WORD DIFF, not as removed; a pair whose claim words are equal (a marker edit) is a move, cleared. The `modal-triage` contract's MANIFEST paragraph names the new kind and the keys rule (not a guard file: `make guard-edit` said so).
+- **"Reached"**, one meaning, measured: the other pages the unit reads (`all`, the pop-up's own pages and their pointers' targets, `modals::followed`), the set the moves already used; it differs from "the source page's pointer targets" only where a key or a nearest sentence stands on another page of the pop-up's own Entry, which then reads as not gone, as a removal standing on such a page already reads as moved. The claims triage passes its pointer-reached set (`reached_by_pointers`), so its echo widens to the pointer targets alone; its 167 tests pass unchanged (measured 2026-11-23, `make rust-test CRATE=rust/gate/crates/claims`).
+- **A measured edge, not special-cased**: a moved sentence whose one edit is an inserted gloss (T184's "(seki)") fires where the pop-up repeats the gloss's neighbors - the echo rule marks an insertion's neighbors as written (`a_sentence_moved_with_an_edit_is_compared_with_its_moved_self` pins it).
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+| keys reached | `change::tests::a_note_key_moved_with_its_block_is_not_gone`, red on HEAD (2026-11-23, `.git/l7r-handoffs/T194-red.log`: 4 of 112 failed) | none: record tooling | none | n/a |
+| echo's nearest sentence | `change::tests::a_sentence_moved_with_an_edit_is_compared_with_its_moved_self`, red on HEAD | none: record tooling | none | n/a |
+| moved with edits in the MANIFEST | `change::tests::a_block_moved_with_an_edit_is_paired_with_its_moved_self`; `triage::tests::a_split_like_t184_s_owes_only_the_pop_up_repeating_changed_words`, red on HEAD | none: record tooling | none | n/a |
+| the replay follows pointers | `triage::tests::a_landing_s_replay_follows_a_split_s_pointers`, red on HEAD | none: record tooling | none | n/a |
+
+### T194 Approach (checklist part A)
+
+1. **The goal, in the world.** No map changes. A split re-owes a pop-up only where a moved block changed in words it repeats, as the GM's cascade rules say; a key or block that moved with its pointer owes nothing.
+2. **The constraints.** The task line; the coordinator's brief (the keys rule, the nearest sentence from the reached pages, a real replay, red first on the T184 shape, the echo rule's wording unchanged and the gloss case not special-cased, 100% coverage); T184's and T193's files untouched.
+3. **Where each comes from.** G: the GM's convergence talk (2026-11-23), through T185's and T186's rules. O: the diagnosis's re-run and this task's (item 9). R: none, tooling.
+4. **Do they describe the world here?** Yes: the re-run is the real bundle path over T184's uncommitted pages with the live answer store.
+5. **The order.** After T185, T186, T191; before T184 lands (its triage waits on this).
+6. **The exits.** Green: the T184 re-run owes the 9 pop-ups the rules give. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** One landing.
+9. **Done, measured.** The re-run, 2026-11-23, read only on the live clone: a `--shared` scratch clone at 31310c2b1b with T184's uncommitted pages and this task's four files copied in, a copy of the answer store with the 87 touched marks of the 21 pop-ups removed (`RECORD_CHECKS_DIR`), then `l7r-gate record modal-triage --root . bundle --out /tmp/t194-out`. Before (the diagnosis, HEAD's rules): 63 units sent, 0 cleared. After: 36 units cleared by the tool, 27 left - 9 pop-ups: hamlet/barley, hamlet/weir, choice/intake--open, --weir, choice/weir_form--crib, --frame, --gabion, choice/winter_crop--barley, --none; the 8 owed on substance and weir_form--frame on the "(seki)" gloss, as the rule is written. Its MANIFEST: 9 blocks under "Moved with edits", none under "Removed", no keys line.
+10. **Before moving a constant.** n/a: `PAIR_RATIO` and `ABSENCE` unmoved.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** The defect's visible effect: 36 pop-up units (12 pop-ups) sent to the triage agent, and its MANIFEST naming moved keys as gone and moved blocks as removed, which the agent relied on; no map changes.
+
+**Found and left?** none
+
+**Performance work?** yes: the triage agent sees only the pop-ups a split's changed words bear on.
+
+### T194 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)
+
+1. **Where does the time go?** In the `modal-triage` agent's dispatch and the pop-up checks it sends on after a split; not an engine stage.
+2. **Removes work, or only moves it?** Removes it: the pop-ups a split owes nothing are cleared by the tool before any agent.
+3. **What do you expect it to save, and why?** On T184's split, 36 of 63 units (12 of 21 pop-ups), the diagnosis's count.
+4. **How does the work grow with the settlement?** It does not: record tooling. The moved-with-edits pairing is a ratio per removed block per block new on a reached page, and the echo's candidates are read once per call.
+5. **What did the before and after show, and under what conditions?** See item 9: counts on the same tree and store, not wall time.
+6. **Did any map move, and does it still keep the research?** No: no engine code.
+
