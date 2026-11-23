@@ -1,8 +1,14 @@
 //! `engine-freeze-hooks` (feature 429; ported from the shell of the same name and `lib/hm_engine_freeze.py`, feature 449 T018): NO
-//! ENGINE EDIT WHILE A MAP REVIEW THIS SESSION LAUNCHED IS STILL RUNNING. A review's verdict is recorded against the engine it reviewed;
-//! engine code edited under running reviews made each record NOT-REVIEWABLE, a whole extra round each time (features 261 and 317). No
-//! escape: the compliant routes are to wait, or to stop the review (`TaskStop`) and ack it. A roll in the clone freezes the engine too
-//! (feature 444, 2026-11-05: a crate edit rebuilt the extension under the rolls still to come).
+//! ENGINE EDIT IN THE TREE A MAP REVIEW THIS SESSION LAUNCHED READS, WHILE IT IS STILL RUNNING. A review's verdict is recorded against the
+//! engine it reviewed; engine code edited under running reviews made each record NOT-REVIEWABLE, a whole extra round each time (features
+//! 261 and 317). No escape: the compliant routes are to wait, or to stop the review (`TaskStop`) and ack it. A roll in the clone freezes
+//! the clone too (feature 444, 2026-11-05: a crate edit rebuilt the extension under the rolls still to come).
+//!
+//! THE TREE A REVIEW READS (451 T175). Since 451 T164 a review reads its own review tree, `<clone>-review`, a worktree at a commit, named
+//! by its dispatch prompt's `Review tree: <tree>, a worktree at <commit>` line, which an edit in the clone cannot change; so a review holds
+//! only an edit inside that tree, and a review whose prompt names no tree (a snapshot taken in the clone), or a tree that is no worktree
+//! now, holds every tree the session owns, as before. Observed 2026-11-23: 451 T170's builder was refused every `rust/` edit in the clone
+//! by 449's building-reviews, which read the review tree. A roll runs in the clone itself and keeps freezing it.
 //!
 //! FINISHED, read from the agent's own files: its `meta.json` says `"finished": true`, its transcript's last record ended its turn
 //! (`stop_reason: end_turn`), or the session acked it. Anything else is live, stalled or not, however old (a slow review looks exactly
@@ -83,8 +89,34 @@ pub(crate) fn live_rolls(procs: &Procs, root: &Path) -> Vec<String> {
         .collect()
 }
 
-/// One line for every unfinished map-review agent of this session: `<id> <type> live|stalled <age>s`.
-pub(crate) fn live_reviews(subagents: &Path, stale: u64) -> Vec<String> {
+/// One unfinished map review: its line, `<id> <type> live|stalled <age>s`, and the tree it reads where its prompt names one.
+pub(crate) struct Review {
+    pub line: String,
+    pub tree: Option<PathBuf>,
+}
+
+/// The tree a review reads (451 T164): its dispatch prompt's `Review tree: <tree>, a worktree at <commit>` line, the first record of
+/// its transcript; `None` where the prompt names none (a snapshot taken in the clone, a prompt not the tooling's) or the tree named is
+/// not a worktree, so that review holds every tree, as before T175.
+fn review_tree(transcript: &Path) -> Option<PathBuf> {
+    let file = std::fs::File::open(transcript).ok()?;
+    let first = std::io::BufRead::lines(std::io::BufReader::new(file))
+        .next()?
+        .ok()?;
+    let record: Value = serde_json::from_str(&first).ok()?;
+    let prompt = record.get("message")?.get("content")?.as_str()?;
+    let tree = PathBuf::from(
+        prompt
+            .split_once("Review tree: ")?
+            .1
+            .split_once(", a worktree at ")?
+            .0,
+    );
+    (tree.is_absolute() && tree.join(".git").exists()).then_some(tree)
+}
+
+/// Every unfinished map-review agent of this session.
+pub(crate) fn live_reviews(subagents: &Path, stale: u64) -> Vec<Review> {
     let mut names: Vec<String> = std::fs::read_dir(subagents)
         .map(|d| {
             d.filter_map(Result::ok)
@@ -127,14 +159,17 @@ pub(crate) fn live_reviews(subagents: &Path, stale: u64) -> Vec<String> {
             {
                 return None;
             }
-            Some(format!(
-                "{id} {kind} {} {age}s",
-                if age >= stale && record == "user" {
-                    "stalled"
-                } else {
-                    "live"
-                }
-            ))
+            Some(Review {
+                line: format!(
+                    "{id} {kind} {} {age}s",
+                    if age >= stale && record == "user" {
+                        "stalled"
+                    } else {
+                        "live"
+                    }
+                ),
+                tree: review_tree(&path),
+            })
         })
         .collect()
 }
@@ -196,7 +231,19 @@ pub(crate) fn judge(event: &Event, session: &Session, c: &Ctx) -> Vec<Answer> {
         .extension()
         .is_some_and(|x| x == "jsonl")
     {
-        live.extend(live_reviews(Path::new(&subagents), c.stale));
+        // a review holds the edit only inside the tree it reads, or anywhere when it names none (451 T175); held before the engine-edit
+        // question, so a clone edit under reviews that read their own tree asks nothing
+        let here = realpath(Path::new(path));
+        live.extend(
+            live_reviews(Path::new(&subagents), c.stale)
+                .into_iter()
+                .filter(|r| {
+                    r.tree
+                        .as_ref()
+                        .is_none_or(|t| here.starts_with(realpath(t)))
+                })
+                .map(|r| r.line),
+        );
     }
     if live.is_empty() {
         return Vec::new();

@@ -162,3 +162,31 @@ fn a_directory_that_is_no_repository_still_answers() {
     let dir = crate::shared::tempdir::TempDir::new("guard-dropped-plain");
     assert_eq!(super::gitdir(&dir), dir.join(".git"));
 }
+
+/// 451 T170: the refusal grows a pair of lines a dispatch left; past the first few of each it names the file holding them all.
+#[test]
+fn many_dispatches_left_name_the_first_few_and_the_files_holding_them_all() {
+    let dir = clone("many");
+    let mut rows = vec![turn_end("1")];
+    for i in 0..10 {
+        let id = format!("a{i}");
+        rows.push(agent(
+            "2",
+            &id,
+            "impl-drift",
+            &format!("read /tmp/l7r-check/b{i}/MANIFEST.md"),
+        ));
+        rows.push(refused(&id));
+    }
+    let why = refusal_for(&dir, &transcript(&dir, &rows)).unwrap();
+    assert!(why.starts_with("BLOCKED: 10 dispatch(es)"), "{why}");
+    assert_eq!(why.matches("    and 8 more: `cat ").count(), 1, "{why}");
+    assert!(why.contains("b1/MANIFEST.md") && !why.contains("b2/MANIFEST.md"));
+    assert!(why.ends_with("make dispatch-dropped TYPE=<type> BUNDLE=\"<its key, as listed above>\" WHY=\"<why it is not owed>\""));
+    let kept: Vec<String> = why
+        .split("more: `cat ")
+        .skip(1)
+        .map(|s| std::fs::read_to_string(s.split('`').next().unwrap()).unwrap())
+        .collect();
+    assert!(kept[0].contains("b9/MANIFEST.md - refused: not decided"));
+}

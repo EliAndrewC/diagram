@@ -347,10 +347,12 @@ fn no_reason(token: &str) -> String {
     )
 }
 
-fn stale_refusal(feature: &str, rendered: &str) -> String {
-    let number = feature.split('-').next().unwrap_or(feature);
+pub(crate) fn stale_refusal(feature: &str, rendered: &str) -> String {
+    // 451 T170, message-check's cut: why the check runs before a round - a later spec-fidelity round costs nearly what a first
+    // reading does, and the commonest thing it finds is text left saying the old thing (feature 253, the GM 2026-09-19) - is the
+    // code's; a dispatch sent again re-runs the search, and a long list names `make stale-terms` for the rest.
     format!(
-        "\n\u{1b}[1mBLOCKED: specs/{feature} still carries the OLD value of something this change moved - look before a review round is spent on it.\u{1b}[0m\n{rendered}\n\nA later spec-fidelity round costs nearly what a first reading does, and the commonest thing it finds is text left saying the\nold thing (feature 253, the GM 2026-09-19). Nothing was dispatched and no round was counted. Either:\n  - fix the lines above (and anything else the change made untrue), then dispatch again; or\n  - if they are NOT stale, dispatch again with {STALE_TOKEN}=\"<why they stand>\" in the prompt.\n`make stale-terms F={number}` re-runs the search. (scripts/reviews/stale_terms.py, rust/guard/src/guards/review_round_hooks.rs)\n"
+        "\n\u{1b}[1mBLOCKED: specs/{feature} still carries the OLD value of something this change moved - look before a review round is spent on it.\u{1b}[0m\n{rendered}\n\nNothing was dispatched and no round was counted. Either:\n  - fix the lines above (and anything else the change made untrue), then dispatch again; or\n  - if they are NOT stale, dispatch again with {STALE_TOKEN}=\"<why they stand>\" in the prompt.\n"
     )
 }
 
@@ -569,6 +571,11 @@ fn later_round(
         note = format!(" {STALE_TOKEN}: {why}");
     } else {
         let gate = ctx.tree.join("scripts/gates/l7r-gate.sh");
+        // the first few candidates and the command for the rest (451 T170: 25 reached a session at 10,345 characters)
+        let rest = format!(
+            "make stale-terms F={}",
+            feature.split('-').next().unwrap_or(feature)
+        );
         let said = ask(
             root,
             &gate.to_string_lossy(),
@@ -577,6 +584,7 @@ fn later_round(
                 "stale-dirs",
                 &snap.to_string_lossy(),
                 &feature_dir.to_string_lossy(),
+                &rest,
             ],
             "",
         );

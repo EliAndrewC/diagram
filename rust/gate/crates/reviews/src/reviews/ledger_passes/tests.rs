@@ -145,6 +145,27 @@ fn the_owed_passes_are_reported_refused_and_kept() {
         .stdout
         .starts_with("ledger-owed: 2 check pass(es) have no row"));
     assert!(got.stdout.contains("| 2026-11-01 | quote-check | Check /tmp/l7r-check/q1/ please | ? | ? | ? | ? | ? | 12 s | 1k in (0k cached) / 1.6k out |"));
+    // a commit's notice (451 T170): the count, the first row and the command that lists the rest; the fix and the escape in full
+    let brief = cli(&args(&[&L[..], &["--brief"]].concat()), &env);
+    assert_eq!(brief.code, 0);
+    let rows = got
+        .stdout
+        .lines()
+        .filter(|l| l.starts_with("  | "))
+        .collect::<Vec<_>>();
+    assert_eq!(rows.len(), 2);
+    assert!(
+        brief
+            .stdout
+            .starts_with("ledger-owed: 2 check pass(es) have no row")
+            && brief.stdout.contains(rows[0])
+            && !brief.stdout.contains(rows[1])
+            && brief.stdout.contains("make ledger-owed WRITE=")
+            && brief.stdout.contains("LEDGER_ROWS_OK")
+            && brief.stdout.contains("`make ledger-owed` lists all 2"),
+        "{}",
+        brief.stdout
+    );
     let kept = std::fs::read_to_string(env.cwd.join(".git/l7r-cache/ledger-settled.json")).unwrap();
     assert!(kept.contains("\"a1#0#quote-check#5 s\": {\"path\": "));
     let refused = cli(&args(&[&L[..], &["--refuse"]].concat()), &env);

@@ -10,7 +10,7 @@
 //! (b) the engine key is asked only on the branches that read it; (c) its own state is in-process (`state`).
 
 pub mod dropped;
-mod review;
+pub(crate) mod review;
 mod state;
 
 use std::path::{Path, PathBuf};

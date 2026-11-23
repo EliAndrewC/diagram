@@ -19,6 +19,7 @@ use serde_json::{json, Value};
 
 use crate::protocol::Reply;
 use crate::shared::escape::enough;
+use crate::shared::listed;
 use crate::shared::state::field;
 use crate::shared::tool::ask;
 
@@ -103,12 +104,12 @@ fn last_turn_end(rows: &[Value]) -> String {
 }
 
 #[derive(Clone, Debug, PartialEq, Eq)]
-struct Call {
-    t: String,
-    kind: String,
-    key: String,
-    refused: bool,
-    why: String,
+pub(crate) struct Call {
+    pub(crate) t: String,
+    pub(crate) kind: String,
+    pub(crate) key: String,
+    pub(crate) refused: bool,
+    pub(crate) why: String,
 }
 
 /// Every Agent call in order.
@@ -179,26 +180,37 @@ fn unanswered(rows: &[Value], since: &str, gone: &HashSet<(String, String)>) -> 
     left
 }
 
-fn refusal(left: &[Call]) -> String {
-    let mut lines = vec![format!("BLOCKED: {} dispatch(es) a guard refused this turn were neither sent again nor recorded dropped:", left.len())];
-    for c in left {
-        let why = if c.why.is_empty() {
-            String::new()
-        } else {
-            format!(" - refused: {}", c.why)
-        };
-        lines.push(format!("    {} on {}{why}", c.kind, c.key));
-    }
-    lines
-        .push("Send each again once its refusal is met, or, if it is no longer wanted:".to_owned());
-    for c in left {
-        lines.push(format!(
+/// The refusal: each dispatch left and its drop command - the first few of each and the file holding them all past them (451 T170: a
+/// turn's three left reached a session at 1,591 characters, 2026-11-23, and the list grows a pair of lines a dispatch).
+pub(crate) fn refusal(left: &[Call], git_dir: &Path) -> String {
+    let sent: Vec<String> = left
+        .iter()
+        .map(|c| {
+            let why = if c.why.is_empty() {
+                String::new()
+            } else {
+                format!(" - refused: {}", c.why)
+            };
+            format!("    {} on {}{why}", c.kind, c.key)
+        })
+        .collect();
+    // One dispatch left: its drop command as it runs; several: one form over the list above (451 T170, message-check's cut, where a
+    // second list repeated the first). Why the block exists - a refused impl-drift never re-sent, the session idle 5 h waiting on it
+    // (feature 385 T22) - is the code's.
+    let drop = match left {
+        [c] => format!(
             "    make dispatch-dropped TYPE={} BUNDLE=\"{}\" WHY=\"<why it is not owed>\"",
             c.kind, c.key
-        ));
-    }
-    lines.push("(feature 385 T22: a refused impl-drift was never re-sent and the session idled 5 h waiting on it)".to_owned());
-    lines.join("\n")
+        ),
+        _ => "    make dispatch-dropped TYPE=<type> BUNDLE=\"<its key, as listed above>\" WHY=\"<why it is not owed>\"".to_owned(),
+    };
+    [
+        format!("BLOCKED: {} dispatch(es) a guard refused this turn were neither sent again nor recorded dropped:", left.len()),
+        listed::capped_kept(&sent, "    ", git_dir),
+        "Send each again once its refusal is met, or, if it is no longer wanted:".to_owned(),
+        drop,
+    ]
+    .join("\n")
 }
 
 /// The refusal for a turn's end, or None when every refused dispatch is answered.
@@ -209,7 +221,7 @@ pub(crate) fn refusal_for(root: &Path, payload: &Value) -> Option<String> {
     }
     let rows = rows_of(transcript);
     let left = unanswered(&rows, &last_turn_end(&rows), &dropped(root));
-    (!left.is_empty()).then(|| refusal(&left))
+    (!left.is_empty()).then(|| refusal(&left, &gitdir(root)))
 }
 
 fn drop_one(root: &Path, kind: &str, bundle: &str, why: &str) -> Reply {

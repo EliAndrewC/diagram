@@ -220,7 +220,15 @@ pub(crate) fn judge(event: &Event, session: &Session, c: &Ctx) -> Vec<Answer> {
     let owed = ask(
         Path::new(&root),
         "bash",
-        &[&c.gate(&root), "reviews", "ledger-owed", "--ledger", &path],
+        // a commit's notice: the count, the first row and the command for the rest (451 T170)
+        &[
+            &c.gate(&root),
+            "reviews",
+            "ledger-owed",
+            "--ledger",
+            &path,
+            "--brief",
+        ],
         "",
     )
     .out;

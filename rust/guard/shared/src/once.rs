@@ -40,9 +40,22 @@ fn record(file: &Path) -> serde_json::Map<String, Value> {
 /// for `guard` is this one, when its one-line summary.
 #[must_use]
 pub fn say(file: Option<&Path>, guard: &str, text: &str, now: i64) -> String {
-    let Some(file) = file else {
+    let Some(since) = repeat(file, guard, text, now) else {
         return text.to_owned();
     };
+    let head: Vec<&str> = text.split_whitespace().take(WORDS).collect();
+    format!(
+        "still: {} - unchanged since {}",
+        head.join(" "),
+        hhmm(since)
+    )
+}
+
+/// When `guard`'s `text` was said in full, where the text recorded for `guard` is this one; else None, and `text` is recorded as
+/// said at `now`. A guard whose repeat is its own short line (the clone-sync notice, 451 T170) asks this rather than [`say`].
+#[must_use]
+pub fn repeat(file: Option<&Path>, guard: &str, text: &str, now: i64) -> Option<i64> {
+    let file = file?;
     let hash = crate::sha256::hex(text.as_bytes());
     let mut kept = record(file);
     if let Some(since) = kept
@@ -50,18 +63,18 @@ pub fn say(file: Option<&Path>, guard: &str, text: &str, now: i64) -> String {
         .filter(|k| k.get("hash").and_then(Value::as_str) == Some(hash.as_str()))
         .and_then(|k| k.get("since").and_then(Value::as_i64))
     {
-        let head: Vec<&str> = text.split_whitespace().take(WORDS).collect();
-        let day = since.rem_euclid(86_400);
-        return format!(
-            "still: {} - unchanged since {:02}:{:02}",
-            head.join(" "),
-            day / 3600,
-            day % 3600 / 60
-        );
+        return Some(since);
     }
     kept.insert(guard.to_owned(), json!({"hash": hash, "since": now}));
     let _ = std::fs::write(file, Value::Object(kept).to_string());
-    text.to_owned()
+    None
+}
+
+/// `HH:MM` (UTC) of `at`, seconds past the epoch.
+#[must_use]
+pub fn hhmm(at: i64) -> String {
+    let day = at.rem_euclid(86_400);
+    format!("{:02}:{:02}", day / 3600, day % 3600 / 60)
 }
 
 /// The `SessionStart` sources after which the context may no longer hold a block said in full (Claude Code's `source`: `compact` after
@@ -92,7 +105,7 @@ pub fn clear(file: Option<&Path>, guard: &str) {
 mod tests {
     use serde_json::json;
 
-    use super::{clear, file, forget, say};
+    use super::{clear, file, forget, hhmm, repeat, say};
 
     const BLOCK: &str = "BLOCKED: a builder slot is free - 2 of 3 builders running (449 T341) - start the next: make task-start F=451 T=T90";
 
@@ -121,6 +134,18 @@ mod tests {
         clear(Some(&f), "set-down");
         assert_eq!(say(Some(&f), "set-down", &changed, at), changed);
         assert!(say(Some(&f), "finished-run", "A RUN", at).starts_with("still: "));
+    }
+
+    #[test]
+    fn repeat_gives_the_time_an_unchanged_text_was_said_and_records_a_changed_one() {
+        let d = crate::tempdir::TempDir::new("guard-once-repeat");
+        let f = file(&d, &json!({"session_id": "s1"})).unwrap();
+        assert_eq!(repeat(Some(&f), "clone-sync", "MID", 60), None);
+        assert_eq!(repeat(Some(&f), "clone-sync", "MID", 900), Some(60));
+        assert_eq!(repeat(Some(&f), "clone-sync", "OTHER", 960), None);
+        assert_eq!(repeat(Some(&f), "clone-sync", "OTHER", 990), Some(960));
+        assert_eq!(repeat(None, "clone-sync", "MID", 0), None);
+        assert_eq!(hhmm(3_660), "01:01");
     }
 
     #[test]

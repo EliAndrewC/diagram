@@ -8,6 +8,7 @@
 //! `l7r-gate reviews checkpoint open|hold|status|due|switch [on|off] [--why W] [--root DIR] [--tool T] [--agent A]`.
 
 use l7r_shared::env::Rooted;
+use std::collections::BTreeMap;
 use std::path::{Path, PathBuf};
 
 use serde_json::{json, Map, Value};
@@ -340,8 +341,9 @@ fn nowhere(root: &Path) -> PathBuf {
     gitdir(root).unwrap_or(PathBuf::from("/nonexistent"))
 }
 
-/// Does the unit's verdict record answer it at `key` - PASS or NEEDS-WORK at the engine key the tree has now?
-fn answered(root: &Path, slug: &str, key: &str) -> bool {
+/// Does the unit's verdict record answer it at `key` - PASS or NEEDS-WORK at the engine key the tree has now, or at another key while
+/// its sheet `on` hashes as the review read it (`prereq::carried`, 451 T176)?
+fn answered(root: &Path, slug: &str, on: &str, key: &str) -> bool {
     let rec = read_object(Some(
         &nowhere(root)
             .join("review-verdicts")
@@ -353,7 +355,10 @@ fn answered(root: &Path, slug: &str, key: &str) -> bool {
         .filter(|v| crate::cohort::truthy(v))
         .map(crate::record::bundle::py_str)
         .unwrap_or_default();
-    !key.is_empty() && matches!(verdict, "PASS" | "NEEDS-WORK") && at == key
+    (!key.is_empty() && matches!(verdict, "PASS" | "NEEDS-WORK") && at == key)
+        || super::prereq::carried(&Value::Object(rec), || {
+            super::prereq::content_key_on(root, slug, || on.to_owned())
+        })
 }
 
 /// The checkpoint's units still owed, not dispatched since it opened and not answered at the tree's engine key.
@@ -361,17 +366,18 @@ fn undispatched(root: &Path, units: &[String], since: f64) -> Vec<String> {
     if units.is_empty() {
         return Vec::new();
     }
-    let owed_now: Vec<String> = all_owed(root)
+    // each owed unit and the sheet it is judged on, which a verdict at another key is carried to (451 T176)
+    let owed_now: BTreeMap<String, String> = all_owed(root)
         .1
-        .iter()
-        .map(super::owed::Unit::slug)
+        .into_iter()
+        .map(|u| (u.slug(), u.on))
         .collect();
     let pairing = read_object(Some(&nowhere(root).join(PAIRING)));
     let disp = pairing.get("dispatched").cloned().unwrap_or(Value::Null);
     let at = |s: &str| as_float(disp.get(s).and_then(|d| d.get("at")));
     let left: Vec<String> = units
         .iter()
-        .filter(|s| owed_now.contains(s) && at(s) < since)
+        .filter(|s| owed_now.contains_key(s.as_str()) && at(s) < since)
         .cloned()
         .collect();
     if left.is_empty() {
@@ -379,7 +385,7 @@ fn undispatched(root: &Path, units: &[String], since: f64) -> Vec<String> {
     }
     let key = current_key(root);
     left.into_iter()
-        .filter(|s| !answered(root, s, &key))
+        .filter(|s| !answered(root, s, &owed_now[s.as_str()], &key))
         .collect()
 }
 

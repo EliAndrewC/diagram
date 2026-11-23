@@ -60,8 +60,10 @@ pub fn edit_refusal(state: &Value, path: &str, old: &str, new: &str, now: f64) -
         } else {
             String::new()
         };
+        // Feature 375 FR-003b, here and in the returned-edits refusal below; both citations left the messages at 451 T170
+        // (message-check: a feature number is the code's).
         return format!(
-            "{s} is frozen while its checks run ({}) - edit it once every check of the round has returned{tail} (feature 375 FR-003b)",
+            "{s} is frozen while its checks run ({}) - edit it once every check of the round has returned{tail}",
             names.into_iter().collect::<Vec<_>>().join(", ")
         );
     }
@@ -72,7 +74,7 @@ pub fn edit_refusal(state: &Value, path: &str, old: &str, new: &str, now: f64) -
     if blocks.is_empty() {
         format!("{s}'s checks returned no edit to apply; answer them (`make record-checked`) before editing it (FR-003b)")
     } else {
-        format!("{s}'s checks have returned, and this edit is none of the {} edit(s) they proposed - apply those (`make apply-edits REPLY=<the reply>`, or by hand), answer the checks, and make any other change after (FR-003b)", blocks.len())
+        format!("{s}'s checks have returned, and this edit is none of the {} edit(s) they proposed - apply those (`make apply-edits REPLY=<the reply>`, or by hand), answer the checks, and make any other change after", blocks.len())
     }
 }
 

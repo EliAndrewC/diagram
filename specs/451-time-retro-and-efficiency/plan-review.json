@@ -139,12 +139,6 @@
    "reviewed": "2026-11-21",
    "declared": "spec-fidelity"
   },
-  "### T48 Approach (checklist part A)": {
-   "sha256": "ea075e52ce73b58e495b7d93d8f35de4f207198079efc7357bc149b52c41cc23",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-21",
-   "declared": "spec-fidelity"
-  },
   "### T49 Approach (checklist part A)": {
    "sha256": "66d8db47d83d849a8037eb682ecb5f511d2498f9a76ede78d71b0350f6c69f11",
    "verdict": "CLEAR",
@@ -175,18 +169,6 @@
    "reviewed": "2026-11-21",
    "declared": "spec-fidelity"
   },
-  "### T57 (the finding as filed, restated by its measurement: `make static` builds and runs no plain test binary - the plain `build` and `test` time is `make rust-test`'s, the builders' loop, measured 2026-11-21 over the event log's Phase lines since 2026-11-20T12:35Z; what is built twice is a crate's tests in `make rust-test` and again in the coverage run, which answers for the plain run only where T111's `unit_tests_only` says the coverage run ran every test `cargo test` runs)": {
-   "sha256": "4204c596ab4982dcfdfbbe0f2627fbe805958931ead7a6c7e00821c8337e15e2",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-21",
-   "declared": "spec-fidelity"
-  },
-  "### T57 Approach (checklist part A)": {
-   "sha256": "dd16a6fbbadbd61e39aab4f985d63af98f97a4439b4811adefe2f28bff55ca13",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-21",
-   "declared": "spec-fidelity"
-  },
   "### T71 Approach (checklist part A)": {
    "sha256": "77d504856d0b2b90292106442cb3e12eab94a3e0b8fa130c519ec69394c166ea",
    "verdict": "CLEAR",
@@ -195,246 +177,6 @@
   },
   "### T71 (the finding as filed, restated by its measurement: the 2 `phases.log` waits T61 left as \"an agent's own separate calls, no process between them\" each had a live producer, measured 2026-11-21 (each wait's launching transcript read for the Bash calls that write the file, with each call's `backgroundTaskId` and `timedOutAfterMs`): T178's a script run in the background, which T61's walk already reads alive, and T151 part B's the agent's own foreground call that the harness moved to the background at 180 s, which the walk read gone because the call OPENS with its assignment (`B=<dir>, ... | tee -a $B/phases.log`) after the quote of the harness's `eval '...'`, measured 2026-11-21 (the two producers replayed as stand-ins on the real `/proc`, `/tmp/t71/replay.sh` and `/tmp/t71/probe.sh`))": {
    "sha256": "de6b77e5d919baf98d45802e43214f53c733318b9a5a4a204183b363f9e503b3",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-21",
-   "declared": "spec-fidelity"
-  },
-  "### T76 (the mirror's `.git/l7r-events/_unassigned.jsonl`, written from /diagram before T74 filed a call under its session's clone, held 15 lines the refile's rules place: 1 to 405, 11 to 430 and 1 to 449, none of them in this clone's logs, and 2 to 451 that T74's merge had already put in the clone's 451 log in their re-filed form, measured 2026-11-21 (the refile run without `--from` on a scratch copy, `/tmp/t76/scratch-refile.log`, and an exact-line count of each moved line in each clone's log); and, once T74 landed, no 451 log in the mirror to re-merge, measured 2026-11-21 (`ls` of the mirror's `.git/l7r-events/`))": {
-   "sha256": "dc0a39c766a6c63cc489cbe0774d3713550b7d2f90b0117a63378a7310e95d89",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-21",
-   "declared": "round-arbiter"
-  },
-  "### T76 Approach (checklist part A)": {
-   "sha256": "5be81b498823f10bafe1d81a8013861c7801a790a4641e3252acfe6002094b7b",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-21",
-   "declared": "spec-fidelity"
-  },
-  "### T77 (the plan hold refused an Edit of the heading after a held section, found by T73's builder on 2026-11-21: `edit_hits` in `rust/guard/shared/src/checks/planhold.rs` read `a <= start + t.len()`; the guard log holds 3 refusals of that shape, measured 2026-11-21, method below)": {
-   "sha256": "110906582e93af02d4048632e0da7fecb9dbcd459903f950dd41d308b931d519",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-21",
-   "declared": "round-arbiter"
-  },
-  "### T77 Approach (checklist part A)": {
-   "sha256": "6c0d3c1ddaf1dc51a34ba96112fcef4a81db8f891b15d0bc6b5c8e3354203a7c",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-21",
-   "declared": "spec-fidelity"
-  },
-  "### T48 (the bundle read ids inside a clause naming another feature by its number as the reviewed feature's, filed by the round arbiter on `ask:451-T46-fourth-round` (accept, 2026-11-20) to be measured first; measured 2026-11-21: 4 of the 5 real such clauses across every plan handed the reviewer the reviewed feature's same-named id, unmarked, method below)": {
-   "sha256": "45058eaaf52aa657c4bf0eb8dc2dbc04c2d43e13703d6acb515437f95e3ee074",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-21",
-   "declared": "spec-fidelity"
-  },
-  "### T78 (the plan hold refused a shell write that shares only template text with the held section, found by T77 on 2026-11-21: 7 of the 18 replayed task-held Bash refusals matched only text every section shares, each a live hold and a foreground call; and its write-back ran on `PostToolUse` alone, so a command that changed held text and then exited non-zero was written back by nothing)": {
-   "sha256": "8601b83b00fc896cadebc52c181547a035cd8dc1b83c26c1b3a8fbfe46bb4bd5",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-21",
-   "declared": "spec-fidelity"
-  },
-  "### T78 Approach (checklist part A)": {
-   "sha256": "3c0f72a304deb13f186dbb7fbf00cdbb23acc384b29bafb67b83b539c9d6bbcc",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-21",
-   "declared": "spec-fidelity"
-  },
-  "### T79 (shared::tree's walk split a `\\`-continued line, a `${VAR}`'s braces and a `$(...)` inside a word into segments of their own, and read a `$(mktemp)` directory toward the mirror, found by T50 on 2026-11-21; and it settled a place it could not resolve two ways - a cp's toward where the shell was last known, one of T50's git forms not placed at all (T50's D-d and D-e) - found by T50's plan review, 2026-11-21)": {
-   "sha256": "851852af2a9afd3d97a198028bf6e3e17f66143b42291160ac61d7cddf769b89",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-21",
-   "declared": "round-arbiter"
-  },
-  "### T79 Approach (checklist part A)": {
-   "sha256": "695fff9c9b611234a1f6f0d970cf6631d3af50fcdd8bb20d450fa148210bb248",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-21",
-   "declared": "round-arbiter"
-  },
-  "### T80 Approach (checklist part A)": {
-   "sha256": "85feec55a4ba6e6e2beb0c672a3fee11b6e7891df52b07dce96e60753b4bb3fa",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-21",
-   "declared": "spec-fidelity"
-  },
-  "### T81 Approach (checklist part A)": {
-   "sha256": "39eabe52957909c3d162e6fd0ecb523e423dd27a85ddae24a77d7cc3d1b764e1",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-21",
-   "declared": "spec-fidelity"
-  },
-  "### T82 Approach (checklist part A)": {
-   "sha256": "f4c53f29edea42862e32560272a748aaee3b0a38983cae52bdeb7679ec33dfaa",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-21",
-   "declared": "spec-fidelity"
-  },
-  "### T83 Approach (checklist part A)": {
-   "sha256": "486d531bc94fcdc1e2e0948385e5288dd22d2cf88afb008f2b75b263419bafcc",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-22",
-   "declared": "spec-fidelity"
-  },
-  "### T84 Approach (checklist part A)": {
-   "sha256": "ea6a6f5da153576e15a4907fdda1bc65a66986243b01b640bce1633871f5d739",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-21",
-   "declared": "spec-fidelity"
-  },
-  "### T85 Approach (checklist part A)": {
-   "sha256": "349ddd2c28994fa97a028ab65a060da5df6e8491fbef82cb815caa5d35f136c4",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-21",
-   "declared": "spec-fidelity"
-  },
-  "### T86 Approach (checklist part A)": {
-   "sha256": "955e0727c44617fe4d08fc3a4bb56e42933620674d824f127ec032ddca8e76d4",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-21",
-   "declared": "spec-fidelity"
-  },
-  "### T87 Approach (checklist part A)": {
-   "sha256": "c2c6a6aa2158570fbaffa227205c847e3be8940e99e986bf5814bcbf8a95a8da",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-22",
-   "declared": "spec-fidelity"
-  },
-  "### T88 Approach (checklist part A)": {
-   "sha256": "86932edd641283922cf3bd079d8e073d602639aa674f0fbb07e0105322a1c79e",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-21",
-   "declared": "spec-fidelity"
-  },
-  "### T89 Approach (checklist part A)": {
-   "sha256": "364578b592967c4675652a0956e19716291a3f9fa95c12b5689486d32ada23d8",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-22",
-   "declared": "spec-fidelity"
-  },
-  "### T90 Approach (checklist part A)": {
-   "sha256": "8179980bc5b837beb8a83a393bd97de44fa4cf59ffc9c628765a181f54a0fd60",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-23",
-   "declared": "spec-fidelity"
-  },
-  "### T91 Approach (checklist part A)": {
-   "sha256": "ba5bea93d7aaaee0ba3858f4137e13cf2983c09ccfb509369793cdd01bffdcae",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-22",
-   "declared": "spec-fidelity"
-  },
-  "### T85 (the finding as filed, restated by its measurement: of the main session's 24 run-still-going refusals of 2026-11-21 00:00-08:00 UTC, 14 named a run a builder still running had started and 10 the session's own background call's run, which the harness tracks but the guard did not see, and none a run whose builder had stopped, measured 2026-11-21 (each guard-log row matched to the event log's Stop line, its in-flight shells' launch lines and each builder's last notice in the session's transcript, `/tmp/t85-measure/final.py`))": {
-   "sha256": "bd32e4a1e054692783e12a024f59523add61d28b04aac62eb02cd463827f7b3e",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-21",
-   "declared": "spec-fidelity"
-  },
-  "### T86 (a builder's closing checks went red on another builder's half-done files in the same clone: about 12 of the night's closing runs red only on another task's in-flight files, measured 2026-11-21 (the main session's reading of the night's runs, T86's line); 13 such red runs of 5 shapes, measured 2026-11-21 (item 4))": {
-   "sha256": "b5799a32defbebd8a61884044dfd19d15bee7a04407078a6ace75603a84d7bae",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-21",
-   "declared": "spec-fidelity"
-  },
-  "### T84 (the finding as filed, measured 2026-11-21 over the night's 29 tasks: 43 builders, about 16 builder reports asking the session to file a task, and every MODE 4 plan review left to it; four causes, each measured in item 4: two concurrent `make task-add` runs could lose both filings, nothing held a builder's stop, only the briefs kept a builder from its own review, and the tick's and the push's plan gate judged the whole feature, so every landing took `PLAN_REVIEW_OK`)": {
-   "sha256": "d59818a1d51b3a37e94bb40c74b67c78e1a6ee624a225b9315d307115030d9b1",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-21",
-   "declared": "spec-fidelity"
-  },
-  "### T92 Approach (checklist part A)": {
-   "sha256": "63755b94e380f0bf9c37cafc032deef36eaf8346f0f0ed1bc3a107060324432a",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-21",
-   "declared": "spec-fidelity"
-  },
-  "### T93 Approach (checklist part A)": {
-   "sha256": "95e77f86a6cbd9d88b4cfcc03aeeabec3a1105275770f50673d3d6f47319a562",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-21",
-   "declared": "spec-fidelity"
-  },
-  "### T94 (the land crate's tests read the session's `PLAN_REVIEW_OK` and write the real guard log, measured 2026-11-21 by T84 (the guard log's `plan-gate` rows naming the land tests' fixture feature `449-x`: 20-odd `plan-review-stale 449-x` blocks and `plan-review-ok 449-x: 451 T41 and T43 reviewed CLEAR ...`, the session's own escape text, taken by a fixture's tick during a landing's `make done`))": {
-   "sha256": "aefc56e41514ea8573308493ba3355d275333837b6106aac510cb16f1fbcdbde",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-22",
-   "declared": "spec-fidelity"
-  },
-  "### T94 Approach (checklist part A)": {
-   "sha256": "c220c676b0109ee7267ab9673bc1b5b6d08df8b9125f0662a7e39bbc8f5d5e5b",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-22",
-   "declared": "spec-fidelity"
-  },
-  "### T95 Approach (checklist part A)": {
-   "sha256": "3fe3f0c885984762e98c75a11edc1f2b82e696419f6d84cd849ce97143b5c48d",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-21",
-   "declared": "spec-fidelity"
-  },
-  "### T93 (T86's closing checks could not set aside another task's shell-written files: the event log's Bash lines carried no write path, its Edit and Write lines naming 127 of the 796 files 2026-11-21's landings had changed, measured 2026-11-21 (T86's `/tmp/t86/recall.py`, T86's Found and left); T86's closing run 2 red only on such a file, another builder's `rust/gate/crates/task/src/task_add/tests.rs`)": {
-   "sha256": "1d9fa08d9eeb3d3e104fae12021e08bffe7010026124b54c07d56e9692bf415f",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-21",
-   "declared": "spec-fidelity"
-  },
-  "### T81 (the million-step spelling test's 20 s wall bound failed good work under load, measured 2026-11-21: of the 69 `test` Phase lines on `rust/guard/shared` since T58 made it a crate, 7 red runs lasted 20 s or more (13:33Z to 14:08Z), 6 of them this test by name in the builders' transcripts (`--- FAILED`, panicked at its `recv_timeout` line), at a load average of 82.78 (T79's builder's `uptime`, 13:45Z); reproduced, measured 2026-11-21 (`/tmp/t81/slow.sh` and `load.sh 88`), on one CPU shared 16 ways (red at 20.08 s, the scan cut off after 1.25 s of CPU) and with 88 copies at once (33 of 88 red))": {
-   "sha256": "f7a4768104fdb25628330904937a3b9d5c8aa95e23d0208aa40db1a77a8b2221",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-21",
-   "declared": "spec-fidelity"
-  },
-  "### T88 (builders ran three at once only 26% of the night's 580 minutes, a mean of 1.65, measured 2026-11-21 (each agent's span, T88's line): a landing refused any uncommitted file, so tasks landed in batches, and the Stop hook was silent whenever anything ran, so a freed builder slot sat empty)": {
-   "sha256": "e7e64a4d673b579ac8af2ea2e3da3260e286835dd9808214f784f84f24b48b2d",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-21",
-   "declared": "spec-fidelity"
-  },
-  "### T95 (the closing checks' BLOCKED tag missed a coverage red: `blocked()` read only `-->` and `Diff in` lines, not cover's lines no test reaches, found by T86's builder, 2026-11-21; T81's second closing run red on cover alone, 3 files of T88's, measured 2026-11-21 (its kept run directory, item 4))": {
-   "sha256": "63b077c690c9fb43e0ad09ea23f1988e19f0a54c2aef7c2d36dd4a9d526cfe4c",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-21",
-   "declared": "spec-fidelity"
-  },
-  "### T82 (the plan bundle's requirement reader read only `- **FR-NNN**`, so a block citing a requirement a spec writes as a bold paragraph with no list dash got a NOT FOUND line though its text exists - filed by T48, 2026-11-21; measured 2026-11-21: 2 real citations of one by another feature's number across every plan, 449's plan-done.md line 967 (\"FR-007 of feature 239\", 449 open) and 383's plan.md line 503 (\"256's FR-004\", 383 closed), each bundled NOT FOUND on the plan crate unedited)": {
-   "sha256": "7fc674963675fb44ceaa1b5c009128d5231af0663d5c47562acbe45bd3da4226",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-21",
-   "declared": "spec-fidelity"
-  },
-  "### T97 (T93's Found and left: the walk's first use in a hook process cost 3.2-8.6 ms against 9-57 us a walk after, 3.89 ms of each Bash end's 7.30 ms in the event log, measured 2026-11-21 (T93's item 4: `/tmp/t93/cost.py`, and its scratch binary's `-first` mode, 5 commands twice each in fresh processes); main-tree's walk paid the same on every Bash start)": {
-   "sha256": "fabbaafb0d49f1e34aa8f0774880b33bbba2f3c28acb0c62b69049750b519ba5",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-21",
-   "declared": "spec-fidelity"
-  },
-  "### T97 Approach (checklist part A)": {
-   "sha256": "6af7af9f6a0be5309ade0ba5d6330c7c3e029d1bcc4f1ee04d7fd800a8b81016",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-21",
-   "declared": "spec-fidelity"
-  },
-  "### T101 (a ready task was refused \"held by\" the task started after it: T81, T88 and T93, each CLEAR and closing-checked, refused \"held by T97\" at 18:32:27Z, T97 started 61 s before, and landed only after the mark was moved by hand, measured 2026-11-21 (the 451 event log's land `end` lines, the clone's `task-starts.jsonl`); and T95, CLEAR, could not land alone because plan.md also held T82's and T97's unreviewed sections)": {
-   "sha256": "417815bb0d1abbc4f3a0ff3d42598be8e129a6a6ee8efa89af452f0b22da7c13",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-21",
-   "declared": "spec-fidelity"
-  },
-  "### T101 Approach (checklist part A)": {
-   "sha256": "d11622769c168be700439480bc765f90070f3311d4589b35a042a7c887d231ff",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-21",
-   "declared": "spec-fidelity"
-  },
-  "### T99 (the idle-tests suite's case 5 check \"the run started a FULL wait after the jump\" failed good work: red in T88's closing run `20261121T180015Z-555985` (33 of 34, at a load of 16.5 beside a make done; `/tmp/t88/closing-1.log` is the same run), green on the rerun unchanged; measured 2026-11-21 over this clone's 24 closing-check runs (12:46Z on), the suite ran in at least 15 (its name on the log's timing line or a failure; the rest skipped on an unchanged key) and that was case 5's one red; reproduced the same day, 8 of 8 copies red with the suite's own `date` started 0.5 s late and 1 of 8 at 0.2 s, measured 2026-11-21 (`slowrun.sh` over HEAD))": {
-   "sha256": "795dedfc87cdf7c29ce4f832fa6512f3a91db9d47269a88cb7ce7ab44d3c940f",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-21",
-   "declared": "spec-fidelity"
-  },
-  "### T99 Approach (checklist part A)": {
-   "sha256": "7cb892d7286fc52d1eb6f66aea9325f8480e42ef5e01b8c35cf2089bac36490d",
    "verdict": "CLEAR",
    "reviewed": "2026-11-21",
    "declared": "spec-fidelity"
@@ -451,72 +193,6 @@
    "reviewed": "2026-11-21",
    "declared": "spec-fidelity"
   },
-  "### T103 (T97's Found and left: shape's `strip_heredocs` and `strip_quotes` searched ungated, so the guards that strip a command built shape's patterns on every Bash call; measured 2026-11-21 (`/tmp/t103/scripts/run.py`, T93's 9,646 commands each a hook process of its own through an instrumented `l7r-guard`): every Bash start built 5 of shape's 6 patterns at the median (p90 5), every Bash end 1)": {
-   "sha256": "bb9947be124372f212474205d691032296298feee06d5296151244b4b32e04d3",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-21",
-   "declared": "spec-fidelity"
-  },
-  "### T103 Approach (checklist part A)": {
-   "sha256": "56642bc8a4fd934a299eb34f92fe1b6098ae9b2bd43af568c753184209415a24",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-21",
-   "declared": "spec-fidelity"
-  },
-  "### T92 (an arbiter's accept with REVIEW=plan on one task's round recorded CLEAR for every changed block of the plan - `make arbiter-ruled` on `ask:451-T79-third-plan-round` replied \"28 plan block(s) recorded CLEAR\", 2 of them T79's - and wrote no task verdict, so the store the tick, the push, `plan decided` and T84's builder-stop guard read held T33's, T46's, T67's and T79's BLOCKED though each landed on an accept, measured 2026-11-21 (plan-review.json's history; T84's replay, its item 4))": {
-   "sha256": "bd58e329141e68b23c3817af491ff67c0497f1c478f122c8614d25be4aa4f2ed",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-21",
-   "declared": "spec-fidelity"
-  },
-  "### T108 (T103's Found and left: the quoted-string pattern T103 gave shape a scan for, `([\"'])(?:\\\\.|(?!\\1).)*\\1`, stood also at `wait.rs:53` and `house_style_hooks.rs:85`; measured 2026-11-21 (`/tmp/t108/probe`, a case a process under `timeout 10`, `/tmp/t108/probe-before.txt`): each gave no answer in 10 s on a quote nothing closes before forty escapes)": {
-   "sha256": "1c946ce8e7677a24554e9b0e5012f3bb9e6ffce97729e4acffd48c43f5f7cc9c",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-21",
-   "declared": "spec-fidelity"
-  },
-  "### T108 Approach (checklist part A)": {
-   "sha256": "25171dd9bb107f4c234de044906ac5d98dcd014d07d96f03a9ab9e3c6a243ed8",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-21",
-   "declared": "spec-fidelity"
-  },
-  "### T96 (a Python program run from a heredoc or `-c` named no file in the event log's `writes`, so T86's closing checks still counted another builder's Python-written files as the caller's - T84's 5 plan- and task-crate files in T86's runs 2 and 3, and 15 of the night's 51 still-missed landed files, measured 2026-11-21 (T93's item 4, its replay); and land-alone's 'commit these' list read only Edit lines, so at T82-T101's landing it named 18 files and left out `bundle.rs`, `ready.rs`, `speckit.rs` and `land-alone.sh`, observed 2026-11-21 (the session's landing, T96's line))": {
-   "sha256": "352af63891a8d0ac75720494b2962e1b8e0ad18cbb22d2af71033d6907da0f4c",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-21",
-   "declared": "spec-fidelity"
-  },
-  "### T96 Approach (checklist part A)": {
-   "sha256": "340de67cdeb5ceb55025d928e96f19b7f69bc5deba9ee1a8309cb2be6c26f993",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-21",
-   "declared": "spec-fidelity"
-  },
-  "### T111 (the stall-watchdog suite's case 4 slept a fixed 1 s and then asked whether a loop started by hand had exited on the lock: red at T92's landing, \"expected no, got yes\" at a load near 28 beside three builders, green on 2 of 2 reruns in the same worktree, observed 2026-11-21 (T92's landing log, as T111's line records it))": {
-   "sha256": "943012a2a77b1fc8c583f7971a1dc5b8db6a0254dd85e6c62d573b15c4221403",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-21",
-   "declared": "spec-fidelity"
-  },
-  "### T111 Approach (checklist part A)": {
-   "sha256": "38387b1add08f2e059df1d3df1e4db84ba8b64263d9f55e16991cb08ca18224a",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-21",
-   "declared": "spec-fidelity"
-  },
-  "### T113 (T108's Found and left: the quoted-string pattern T103 and T108 gave shape's scan stood also at `make_only_hooks.rs:125`'s `MASK_QUOTE`, `no_poll_hooks/pace.rs:36`'s `SHELL_STRING` and `readme_hooks.rs:51`'s triple-quoted `TRIPLE`; measured 2026-11-21 (`/tmp/t108/probe`, the pattern alone under `timeout 10`, `/tmp/t108/probe-outside.txt`): each gave no answer in 10 s on a quote nothing closes before forty escapes)": {
-   "sha256": "1ff53eb98def2dade0e674c438f2edf72e52025a46e39e118282c96e9872462a",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-21",
-   "declared": "spec-fidelity"
-  },
-  "### T113 Approach (checklist part A)": {
-   "sha256": "420f58bedd48b2aeebadcc6272bc7347250046d4a82c4f80516013300dc9ffc6",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-21",
-   "declared": "spec-fidelity"
-  },
   "### T106 (a builder the coordinator re-numbered mid-task kept its brief's task on every event-log line: T101's builder, briefed `451 T100` and told \"Your task is T101, not T100\" by a SendMessage 20 s into its run, filed all 229 of its own lines (227 tool lines, its start and its stop) under T100, its Write and Edit lines of `speckit.rs`, `ready.rs` and `land-alone.sh` among them, so land-alone's list at T82-T101's landing named none of them and its closing checks would have set them apart as T100's, a wrong green - measured 2026-11-21 (a streamed Python read of the 451 log's lines by `by`, against the session transcript's SendMessage calls))": {
    "sha256": "0f370c2bdf21d411f44788d312d9aab07d3927c57a11ea310b5c390e709aa05e",
    "verdict": "CLEAR",
@@ -529,108 +205,6 @@
    "reviewed": "2026-11-21",
    "declared": "spec-fidelity"
   },
-  "### T112 (T108's Found and left: the quoted-string pattern T103 and T108 gave shape's scan stood also in two of T96's files, `tree.rs:70`'s `QUOTED` and the triple-quoted `TRIPLE` of `tree/program.rs:63`; measured 2026-11-21 (`/tmp/t108/probe`, the pattern alone under `timeout 10`, `/tmp/t108/probe-outside.txt`): each gave no answer in 10 s on a quote nothing closes before forty escapes, and the house style guard none through `tree::walk` on `echo <a listed word> > f.md; echo it's` and forty escapes (`hs_plain`))": {
-   "sha256": "88fe508fe81db87a17bbfd760ef8e56783b3774aff4933337701f3ba65bd4518",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-21",
-   "declared": "spec-fidelity"
-  },
-  "### T112 Approach (checklist part A)": {
-   "sha256": "29409feadac88a5cda3f1fcccf34afcb813aabcc6f658c879bd86a14616b75fd",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-21",
-   "declared": "spec-fidelity"
-  },
-  "### T114 (T108's landing: its builder's lint, tests and cover ran green, then `make format` split three asserts so each message stood on a line of its own, and the landing's cover refused them and a fourth line after 274 s, measured 2026-11-21 (`grep` of the feature's 57 landing logs under the coordinator's job directory): the only landing log of the 57 that named lines)": {
-   "sha256": "76d1fe66021239b6504e0813245670971c6a063b24dcff2a9baaaac5f8c1e357",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-21",
-   "declared": "spec-fidelity"
-  },
-  "### T114 Approach (checklist part A)": {
-   "sha256": "76fae507153267628936a558be91bfe0a05bbf5fe32527da72146bee6728f6a2",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-21",
-   "declared": "spec-fidelity"
-  },
-  "### T80 (the plan hold's write-back restored nothing for a task whose own headings stand apart in the plan, yet answered \"the held text is written back\", found by T78 reading the code, 2026-11-21)": {
-   "sha256": "9feee74b78c58e43ecfb640c33baacb0839d09fa24635ae434a1a702a4d60fa7",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-21",
-   "declared": "spec-fidelity"
-  },
-  "### T110 (the Python program reader placed a path a program builds from its own literals where the shell stood: T92's builder's heredoc `root='/diagram/.clones/diagram-backlog/rust/gate/crates/'`, `def sub(path, old, new, count=1): p=root+path; ... open(p,'w')`, `sub('plan/src/plan.rs', ...)`, so no event line named the files it wrote and land-alone's list missed three of T92's, found 2026-11-21 at T92's landing; the shape is 0 of T93's 9,646 commands, all 10 of T92's command's calls, and 82 literals in 22 of the session's 34,785 subagent Bash calls since 2026-11-12, measured 2026-11-21 (`/tmp/t110/scripts/measure.py`, each corpus streamed a line at a time in one process, 13 MB peak))": {
-   "sha256": "c211f444888155da13f269f5d6f6ccbc57c2eef0da3354d0195a804167a484b2",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-22",
-   "declared": "spec-fidelity"
-  },
-  "### T110 Approach (checklist part A)": {
-   "sha256": "a7b3fdd142ae4bf6b5e8368c5b61ecca22f8fe726e2cadc8c7be81f6235b18ef",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-22",
-   "declared": "spec-fidelity"
-  },
-  "### T87 (make-only refused a guard file's name written in a scratch tree as a guard file written from the shell, found by T79 on 2026-11-21: `guard_file_hooks::held` held a path by its name alone (`/Makefile`, `/dev/work-budget.json`, ...), so `printf x > /tmp/q/Makefile`, a builder's `T=$(mktemp -d); ...; printf ... > $T/Makefile` (tx#953, ux#2204) and a copy of `dev/work-budget.json` into a `$(mktemp -d)` preview (ux#1106, ux#1107) were refused, measured 2026-11-21 (`/tmp/t79/probes-mk.jsonl` through T79's binaries); on the guard log, 110 of make-only's 745 guard-write refusals and 11 of guard-file's 180 held a guard file's name under `/tmp` alone, measured 2026-11-21 (item 4))": {
-   "sha256": "914ba3d8b23b8cd9153e0a90860bf51522070671defa1be61be11262ce77bcf8",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-22",
-   "declared": "spec-fidelity"
-  },
-  "### T123 (a plan hold reached a tree it was not taken in, and checks_hooks' test read the real one: at T80's landing, with T110's review holding T110's section, uncommitted in the clone alone, the landing worktree's guard tests ran `each_event_keeps_its_book`, whose `PostToolUse` of a Bash with no cwd resolved \".\" to the worktree, whose `.git` file leads to the clone's `checks-open.json`, and T80's write-back answered \"NOTHING of it is written back\" for a section that tree never had, found 2026-11-21 in `/home/agent/.claude/jobs/c6fd72d1/tmp/451-t80-land.log`)": {
-   "sha256": "4b3f7193770af6a50b5e6f322aac886f3dfe2f46399c198fbe791ebb137fa322",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-22",
-   "declared": "spec-fidelity"
-  },
-  "### T123 Approach (checklist part A)": {
-   "sha256": "7c6611810a70dfae835130e5656531d19108140f72461f24ce575fe634d4fcc9",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-22",
-   "declared": "spec-fidelity"
-  },
-  "### T105 (land-alone's take-back gave up three times on 2026-11-21, each a hand merge: at the T82-T101 landing the session's `make ledger-owed` and the landing wrote rows for the same four passes and the clone could not take the tip - dev/review-ledger.md 'conflicts' - and plan.md and tasks.md then needed a hand three-way merge; at T113's landing the tick archived T113's section beside the clone's new sections and git's line merge called the adjacent hunks one conflict - measured 2026-11-21 (each shape replayed through the script's own step 7, below))": {
-   "sha256": "d8bed83d65bee8abdef9358e5dee86c51a5025ebc3aaa357be952e192150b069",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-22",
-   "declared": "spec-fidelity"
-  },
-  "### T105 Approach (checklist part A)": {
-   "sha256": "ad096359719cafe178c8e2cfd64fc689fdcb5874dde14058bf49b9795c603ca9",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-22",
-   "declared": "spec-fidelity"
-  },
-  "### T83 (shared::tree's walk blanked a quoted word that held a space or a shell character, and a file tool's destination was then read from the word before it, found by T79 2026-11-21: through HEAD's main-tree `cp /tmp/a \"/diagram/x y\"`, `echo x > \"/diagram/a b\"` and `mv /tmp/a \"/diagram/(x)\"` were let through while `cp /tmp/a /diagram/x` was refused, measured 2026-11-21 (`/tmp/t79/probes-q.jsonl` through HEAD's walk, `/tmp/t83/out/q.head.jsonl`: the three read `/tmp/a` or a place nothing is known of, `(None, elsewhere, shell)`))": {
-   "sha256": "8a31425e687d376430a87a92e9df229809f002456d412b2a92fc4485aa573797",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-22",
-   "declared": "spec-fidelity"
-  },
-  "### T129 (shared::tree's ASSIGN pattern keeps its `(?<!\\$)\\{` lookbehind, so each of its scans runs on fancy-regex's backtracking machine at every position, found by T83 2026-11-21: over T79's ux corpus the walk is 59.31 G instructions with T83, env_from's ASSIGN scan 16.41 G of it (66,294 calls) and read_where_it_stands' 3.75 G (121,284 calls), 34% together, measured 2026-11-21 (callgrind, `/tmp/t83/out/cg.inl.ux.out`, env_from kept out of line in a throwaway copy))": {
-   "sha256": "102041040dbb38290e01aa5ecd9cb19d51bd3515d0dea01b51a55e6191dc644d",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-22",
-   "declared": "spec-fidelity"
-  },
-  "### T129 Approach (checklist part A)": {
-   "sha256": "f8adb92b589abf5dc7b860b6bdc1ff012189fb310f09047b19fcb148595e51b7",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-22",
-   "declared": "spec-fidelity"
-  },
-  "### T129 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)": {
-   "sha256": "dd5c1771fce477ba774c74b02f664e73488c30badf20474f1fb89999e5042f6d",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-22",
-   "declared": "spec-fidelity"
-  },
-  "### T89 (shared::tree judged a `python3 -c` program that writes a place it computes from `sys.argv` as writing where the shell stands, found by T79 on 2026-11-21: `cd <mirror>/research/questions; python3 -I -c \"import sys; open(sys.argv[2],'w').write('x')\" a /tmp/q/txt/a.txt` and its two loop forms were rewritten (sid t) or refused (sid nobody) through HEAD's main-tree while `cp` and `echo >` to the same scratch place passed, measured 2026-11-21 (`/tmp/t79b/judge/probe-mt.jsonl` #2-#8 through HEAD 2653b8931a's binary `/tmp/t89/bin-head`, `/tmp/t89/out/head.probe.{t,nobody}.mt.tsv`); of the corpus's 852 commands running a `-c` program that indexes `sys.argv`, 11 write through `open(sys.argv[N], <mode>)` and HEAD's main-tree refuses 4 of them, each writing scratch standing in the mirror (bx#29969, bx#54240, bx#58694, ux#2209), measured 2026-11-21 (item 4))": {
-   "sha256": "d2681577d2f0ae4c9b25d5931289d614a15159e3c2e1c850297b6762f6ea4de2",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-22",
-   "declared": "spec-fidelity"
-  },
   "### T118 (shared::tree::program read three Python shapes as writes and gate-write's file test took a directory literal as a file written, so make-only, gate-write and the event log refused or listed correct work on the stdin and `-c` routes, and would on T51's script route - a read through a `/` join, an argv list bound to a name and run, a literal a test reads, a directory only read (found by T51, measured 2026-11-21, `/tmp/t51/probe-stdin.jsonl`, HEAD b4ab4e5a79); at HEAD 9bd338e244, 45 gate-write and 20 make-only refusals of correct work over T93's 9,646 commands, T33's 1,134 fixtures, T51's 455 script stand-ins and 6 probes, measured 2026-11-21 (the paired replay, `/tmp/t118/scripts/paired.sh`))": {
    "sha256": "5460e13acc2ab2266255c448cd1a9832f361dc05b8465ffb147f9007406f4cce",
    "verdict": "CLEAR",
@@ -639,66 +213,6 @@
   },
   "### T118 Approach (checklist part A)": {
    "sha256": "7f2379d073abbbc0a0e907d1dccbdbeb5b9372bb109173a4530b80fc4128750a",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-22",
-   "declared": "spec-fidelity"
-  },
-  "### T115 (fixed sleeps in four hook suites waited 0.3 to 1.0 s for an event the next check reads, and `test-finished-run-hooks.sh`'s `settle` ran its check unready at a 1 or 2 s deadline, so a slow host could fail good work as the stall-watchdog suite's fixed 1 s did at T92's landing, observed 2026-11-21 (T111's sweep, as T115's line records it))": {
-   "sha256": "a5db453979ed31eb5811be9c902ee2bc93c95404eb9997a0646c1984146a2203",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-22",
-   "declared": "spec-fidelity"
-  },
-  "### T115 Approach (checklist part A)": {
-   "sha256": "447dafb0d8e6f3f1e99bbcdf40464915e26afd1c23ac925dc60a71eb7649c187",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-22",
-   "declared": "spec-fidelity"
-  },
-  "### T91 (T79's bind rule refuses two kinds of scratch write HEAD allowed, found by T79's second plan review, 2026-11-21: a name assigned twice in straight-line code is judged at each value, and past the 64-binding cap a lone loop falls back to T79's unknown reading, the mirror)": {
-   "sha256": "9f8a3b8f9059ee795e86eacac73584eb4f5829ef56ebf43ef4923b98a11dfa08",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-22",
-   "declared": "spec-fidelity"
-  },
-  "### T142 (the tool's incremental build linked a stale codegen unit, so every gate command failed until a source of that crate moved: rust-lld `undefined hidden symbol: anon.0482a95c....1.llvm.17705557342783902695` referenced from `l7r_gate_task-faf2a19073b9305a.ads6op1mfn3gc3gvm7k1udw55.rcgu.o`, 8 failed builds 2026-11-22 04:23-04:47Z, measured 2026-11-22 (session transcripts, `/tmp/t142/scan.py`))": {
-   "sha256": "dd2a3f12d86e4436877bc2c56180b9ef8009fd623aa74ee1f05bb9071f8aa8b3",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-22",
-   "declared": "spec-fidelity"
-  },
-  "### T142 Approach (checklist part A)": {
-   "sha256": "f94f65790a14ad32abff3ad24c8dbce1f2c168c1287facbb477add4c299a8a35",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-22",
-   "declared": "spec-fidelity"
-  },
-  "### T141 Approach (checklist part A)": {
-   "sha256": "314852c00cd67fb80ca1932da8e9d84ba40fb06a8531c628dce5f1b73e069ad0",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-22",
-   "declared": "spec-fidelity"
-  },
-  "### T141 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)": {
-   "sha256": "490a846349acc2c841c3f3d36ee49b847ad76f45213e1d8828db5ad776cd2616",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-22",
-   "declared": "spec-fidelity"
-  },
-  "### T141 (each task pays the whole fixed cost whatever its fix's size - a builder, closing runs, a checklist section, `make decide`, its plan review rounds, a landing - and the GM asked that small tasks be bundled and worked at the same time, request.md \"on bundling small tasks\")": {
-   "sha256": "c7f2c3321fb5110d83bb1b965ea4a4a48cc0daad0f248c2be15a12c6f573fd85",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-22",
-   "declared": "spec-fidelity"
-  },
-  "### T147 (a landing refused on another task's open plan-review passes, which only that task's landing writes; the first pass took no escape)": {
-   "sha256": "71fca2d9ea63b1e74c39dc6fe524a062d65913fb201b70067c789d97ad2c8dcb",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-22",
-   "declared": "spec-fidelity"
-  },
-  "### T147 Approach (checklist part A)": {
-   "sha256": "59f472ce08c676c6b5fa03b817d9e20d730f2253f6e2afaf035e2bc0715bf6bd",
    "verdict": "CLEAR",
    "reviewed": "2026-11-22",
    "declared": "spec-fidelity"
@@ -727,12 +241,6 @@
    "reviewed": "2026-11-22",
    "declared": "spec-fidelity"
   },
-  "### T98 Approach (checklist part A)": {
-   "sha256": "f41e63ddea4aaf10296a98b6b4f8ead09545b85ba5326fa38de63896587fd838",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-22",
-   "declared": "spec-fidelity"
-  },
   "### T100 (<why: the finding or measurement that files it>)": {
    "sha256": "1ee0c3bd7e2e555bd0a9450992a32b8092e119fef3dffdb8be1388ace729f970",
    "verdict": "CLEAR",
@@ -740,9 +248,9 @@
    "declared": "spec-fidelity"
   },
   "### T100 Approach (checklist part A)": {
-   "sha256": "89a7d9f65ddd10750dceae6d30e797bd26562d136f1a0f80be50cd35d33b0e1b",
+   "sha256": "aea166f60a704e358e7e303ffd69d4ae7d3754e8f985b0e4df53e4b85434f686",
    "verdict": "CLEAR",
-   "reviewed": "2026-11-22",
+   "reviewed": "2026-11-23",
    "declared": "spec-fidelity"
   },
   "### T104 (<why: the finding or measurement that files it>)": {
@@ -1117,126 +625,6 @@
    "reviewed": "2026-11-22",
    "declared": "spec-fidelity"
   },
-  "### T153 (only the checks' wrapper and make land wrote Phase lines, so the hook suites, make map, record, quick, preflight, the gate's seeds and counters, make cohort and the page sessions were invisible to make where-time)": {
-   "sha256": "c412e2d11c1288d0f29a13f65843ceaf9f4fd4d444188c2a38bdaaf6c2f5f8f5",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-22",
-   "declared": "spec-fidelity"
-  },
-  "### T153 Approach (checklist part A)": {
-   "sha256": "c3dd6cc7a29c07d239110a4719c7b537e07cb826bccdea83162417a690568702",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-22",
-   "declared": "spec-fidelity"
-  },
-  "### T153 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)": {
-   "sha256": "8f010bf4d0427f70f68e16c89a97550b6987cfb6999fee3c22e6f83ab4bedbce",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-22",
-   "declared": "spec-fidelity"
-  },
-  "### T157 (a landing refused on other started tasks' record and pop-up check passes, which `make ledger-owed WRITE=` cannot write as the landing session's and `LEDGER_ROWS_OK` does not reach in the first pass)": {
-   "sha256": "13c0c6a3c1e3575df22636589550443a21afaf4cc5e4d5bf94571bdbcce9a12b",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-22",
-   "declared": "spec-fidelity"
-  },
-  "### T157 Approach (checklist part A)": {
-   "sha256": "318daa69bcbf2bdafed8349325f9d31dab5cc24805705a8bb4200263c30b26fe",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-22",
-   "declared": "spec-fidelity"
-  },
-  "### T98 (builders at three: 522 of the first night's 745 minutes counting 451's builders alone, 70%, a mean of 2.69, and 698, 94%, a mean of 2.99, counting every feature's, against before's 191 of 580, 33%, a mean of 1.66, measured 2026-11-22 (T88's replay, `/tmp/t88/occupancy.py`, over 2026-11-21T18:40:16Z to 2026-11-22T07:06:00Z))": {
-   "sha256": "7b38e7fc735c23b3eb5a1283dee932300fafdbfee8958982c4d730e6db767c95",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-22",
-   "declared": "spec-fidelity"
-  },
-  "### T156 (the Stop hook's free-slot count misread five live builder descriptions on 2026-11-22, the session's note)": {
-   "sha256": "c49049f85c3d6ad46779193758283f5073bb751cab55e708cbd0d24fce2364e4",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-22",
-   "declared": "spec-fidelity"
-  },
-  "### T156 Approach (checklist part A)": {
-   "sha256": "d9c3fbb570f0561f2dc53adb3c4d5f0d75828c2061adbaa5b0e8d88c87fd55b1",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-22",
-   "declared": "spec-fidelity"
-  },
-  "### T158 (the disk reached 100% at about 17:05 and every builder's coverage run failed \"No space left on device\", observed 2026-11-22, method: the session's `df` and the runs' logs, and the host found 229 GB in this container's layer, measured 2026-11-22 (the host session's `du`))": {
-   "sha256": "284cd1462b7657c559c04ac66871637655c0128f39f16663466e363863a2c855",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-22",
-   "declared": "spec-fidelity"
-  },
-  "### T158 Approach (checklist part A)": {
-   "sha256": "f26c70b6e25f7c2389f98da602b3ee83bf7161579226a461e1923918113a0c8d",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-22",
-   "declared": "spec-fidelity"
-  },
-  "### T158 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)": {
-   "sha256": "45a5fb2618592ca5e5af1682fe558ff219e75bd446854c8edcb9e693b2631d8e",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-22",
-   "declared": "spec-fidelity"
-  },
-  "### T154 (a TRIAL, measured 2026-11-22: the gate was said to compile each crate three times and run its tests twice - the Phase lines of 2026-11-22 01:00-08:15 gave a test build of 73 min, a coverage build of 78 min and clippy 54 min of machine time against about 45 min of tests run)": {
-   "sha256": "fa4de1cb6a40859cf30604d09e70d07038322844aabaf34e75b1f6613a4fcdc7",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-23",
-   "declared": "spec-fidelity"
-  },
-  "### T154 Approach (checklist part A)": {
-   "sha256": "8506311a55a1343f6cb0e65ccc22bcc47cdf2d30e3efaaded63b89fa4288e2f1",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-23",
-   "declared": "spec-fidelity"
-  },
-  "### T154 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)": {
-   "sha256": "eddfe757ca008c7eb3e88cf8f2cbf70f308e277b2f82870a5cb46823ab1bf51b",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-23",
-   "declared": "spec-fidelity"
-  },
-  "### T155 (a TRIAL, measured 2026-11-22: the task line said a landing recompiles what the clone already built - 117 min of make land phases over 6 landings, 28 of them coverage builds - because cargo's fingerprints carry each tree's absolute path, so the landing worktree's own target directory cannot use the clone's builds)": {
-   "sha256": "d7caa3298487402f8befed94e49bd228956918f70454901c7e1646e0bf5f6abc",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-23",
-   "declared": "spec-fidelity"
-  },
-  "### T155 Approach (checklist part A)": {
-   "sha256": "97729aab6ee4c3254ad2b93283ac2a7d6dd833852a205c0d6ca00226e3857bb7",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-23",
-   "declared": "spec-fidelity"
-  },
-  "### T155 part B (2026-11-23T01:16Z)": {
-   "sha256": "64f8beda142d3c62273991ed075695c8f48b496d0cf4b3f044197c7519ad3782",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-23",
-   "declared": "spec-fidelity"
-  },
-  "### T155 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)": {
-   "sha256": "9a03255881dc58aac9343e9d0903d547b8ccbd6b484b0fdfc8d6c4e6c8ae9923",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-23",
-   "declared": "spec-fidelity"
-  },
-  "### T160, T161 (bundle)": {
-   "sha256": "a0b3d5f2648c9780b91b9a9f465b03b9122a9b15d667f86dc6bf69468d995aed",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-23",
-   "declared": "spec-fidelity"
-  },
-  "### T160, T161 Approach (checklist part A)": {
-   "sha256": "01a3d4367e9be24f9cef33b75f381186da7d01398732bc77125b9b0523cab6ce",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-23",
-   "declared": "spec-fidelity"
-  },
   "### T164 (observed 2026-11-22: with three builders in one clone, the 449 T312 bundle's verify gate went red or \"tree moved\" four times on other builders' half-done edits, and seven of its ten finished review verdicts were rewritten NOT-REVIEWABLE because a page session and a test-file edit wrote into the clone while they ran; the T289 bundle's reviews earlier waited hours on a stale engine another bundle's edit caused, which also dropped its new-element units without a word)": {
    "sha256": "ebaaf197028686f0a35c28315da6085bbdac019697a0630b130621fb11f82989",
    "verdict": "CLEAR",
@@ -1251,18 +639,6 @@
   },
   "### T164 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)": {
    "sha256": "1f3ab3b44044e3f4cd022d0ba68b57f12ec5bb3ec7453c66f0f6427a5dc0f5ae",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-23",
-   "declared": "spec-fidelity"
-  },
-  "### T90 (gate-write read a target's command from its segment, which the walk cuts at 120 characters, so a `make` behind more than 120 characters of `VAR=value` prefixes was refused as a shell write of `.` under a running gate - found by T79, measured 2026-11-21 through HEAD's gate-write and T79's, `/tmp/t79b/judge/probe-gw5.jsonl`, gone by 2026-11-22)": {
-   "sha256": "a3e25f31574bba5582f71e57c975e4ddebcac1fee261aa6d738344480601485b",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-23",
-   "declared": "spec-fidelity"
-  },
-  "### T154, T155 part B (2026-11-23T03:16Z)": {
-   "sha256": "32e8852f22560418f9b95b634a40bd67310dac36becaa635a8f0f5c03fd1fd68",
    "verdict": "CLEAR",
    "reviewed": "2026-11-23",
    "declared": "spec-fidelity"
@@ -1327,24 +703,6 @@
    "reviewed": "2026-11-23",
    "declared": "spec-fidelity"
   },
-  "### T169 (observed 2026-11-23: the harness prints a hook entry's command with every block or notice it emits, and the coordinator's transcript, `~/.claude/projects/-diagram/c6fd72d1-....jsonl`, holds the dispatcher's 239-253 character command 6,665 times, 1,659,603 characters as stored, measured 2026-11-23 (a `grep -o` of the command's stored form, counted and summed by `awk`))": {
-   "sha256": "a76dfe8208e8a01b02d513a8fe4b465e6c093f9ca3048f62d95a4f2703b20199",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-23",
-   "declared": "spec-fidelity"
-  },
-  "### T169 Approach (checklist part A)": {
-   "sha256": "c81a257cd27fcd9cee73f34b772ceac3e56275cbcb378227320db22d33ce3cb2",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-23",
-   "declared": "spec-fidelity"
-  },
-  "### T169 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)": {
-   "sha256": "185169e2944b746354488fcd94081a7d408af970b6ba4157da1b742b4a3c7483",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-23",
-   "declared": "spec-fidelity"
-  },
   "### T168 (observed 2026-11-23, 451 T167's plan section: 449 T330's page sessions' lines sat under T312 and T328 in the 449 log, and `make events-refile` moves lines across features but never re-tasks one within a feature)": {
    "sha256": "4c6742cd54f243245369ca334bb2269ae6942518c395263c895969429e0ded81",
    "verdict": "CLEAR",
@@ -1357,29 +715,83 @@
    "reviewed": "2026-11-23",
    "declared": "spec-fidelity"
   },
-  "### T169 (observed 2026-11-23: the harness prints a hook entry's command with every block or notice it emits, and the coordinator's transcript, `~/.claude/projects/-diagram/c6fd72d1-....jsonl`, holds the dispatcher's 239-253 character command in 6,665 stored occurrences, 1,659,603 characters as stored, measured 2026-11-23 (a `grep -o` of the command's stored form, counted and summed by `awk`))": {
-   "sha256": "5b362e3640b15b8f5b7b1f21924fabcbcfbb6f4c5865f4569dc2f65b2d3ad652",
+  "### T176 (observed 2026-11-23, 449's T351 bundle: the county's spec edit moved the engine key, which covers every pool sheet's spec, and re-owed the building-reviews of the four PASS sheets whose drawing and notes did not change - hayakawa, ochiba, ubame and the round trip)": {
+   "sha256": "f93e2fefaf7c3f4e678870743297b741a97d73e892c509521ad2c85cba007a67",
    "verdict": "CLEAR",
    "reviewed": "2026-11-23",
    "declared": "spec-fidelity"
   },
-  "### T171 (observed 2026-11-23: the coordinator's Stops were refused again and again in the same words - 268 make-run refusals (\"A MAKE RUN THIS SESSION STARTED IS STILL GOING\") in its session, each stored twice in its transcript, which the task line counted as about 550, and 134 set-down refusals since 2026-11-20, measured 2026-11-23 (the session transcript's `stop_hook_summary` records of `l7r-guard`, `/tmp/t171/stops.py`); most named a builder's own gate or a builder the slot count did not see)": {
-   "sha256": "98e0280efd695045398aba1fb17acf3dc72d4cd0ca2c6713f7367b91642025f6",
+  "### T176 Approach (checklist part A)": {
+   "sha256": "d6ac2f6d012f8eff88d5e7f4c13a474d125d9797595ac0cc8a588897159ea0b9",
    "verdict": "CLEAR",
    "reviewed": "2026-11-23",
-   "declared": "round-arbiter"
+   "declared": "spec-fidelity"
   },
-  "### T171 Approach (checklist part A)": {
-   "sha256": "85a26ce1e1c72c582f09ce7cb5240961606f0121468d548627ec53403ca47798",
+  "### T176 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)": {
+   "sha256": "7762051b12a7759645706f44efd077bcde0566e9a38522c6c3f178fde8e20fd4",
    "verdict": "CLEAR",
    "reviewed": "2026-11-23",
-   "declared": "round-arbiter"
+   "declared": "spec-fidelity"
   },
-  "### T171 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)": {
-   "sha256": "bbd61007419b3aece0d01a41634f3a591055519924eac641884a1c9b1c42db10",
+  "### T170 (observed 2026-11-23: the GM, request.md \"on hook output length\", asked for fewer tokens with no loss of fidelity, enforced mechanically; the coordinator's transcript, `~/.claude/projects/-diagram/c6fd72d1-....jsonl`, holds 891,521 characters of guard messages the model read, 2,848 texts each counted once, measured 2026-11-23 by `/tmp/t170/rank.py`)": {
+   "sha256": "29bb3dd8c3679bc5ab6f4ec8c7c498cbe3941be4f33b6b7e04b11373defd123c",
    "verdict": "CLEAR",
    "reviewed": "2026-11-23",
-   "declared": "round-arbiter"
+   "declared": "spec-fidelity"
+  },
+  "### T170 Approach (checklist part A)": {
+   "sha256": "8065e7b2962e0386969f58875d68211a58c195d2f8694119ffb2f2462c169520",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity"
+  },
+  "### T170 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)": {
+   "sha256": "afa327bef2811614a825fa330aeb497668c40e46e4ca7422089f03e3decb0cc7",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity"
+  },
+  "### T175 (observed 2026-11-23: 451 T170's builder was refused every `rust/` edit in the clone by 449's building-reviews, which read the review tree `<clone>-review` since 451 T164; the guard log holds 20 engine-freeze refusals that day, all edits in the clone, 18 of them while every live review read the review tree, measured 2026-11-23 by `make guard-log GUARD=engine-freeze SINCE=2026-11-23` against each review transcript's first and last record and its prompt's `Review tree:` line, `/tmp/t175/firings.log`)": {
+   "sha256": "85510a86bf67d96926c3fc684afa5db5c20e2f6048c7a9efaf44e950d9c3d289",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity"
+  },
+  "### T175 Approach (checklist part A)": {
+   "sha256": "3d6cc873cedf24f709de74678774747de8a9533b9b82b3e2d7976a8d63435da7",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity"
+  },
+  "### T175 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)": {
+   "sha256": "e31088b446ac10dc7ab001d6223fd71c29c9e51ba0c016b2663ab2a1b8adb98b",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity"
+  },
+  "### T180 (observed 2026-11-23, 449's T351 and T358 bundles landing alone: land-alone's commit 832cedd0fc held 449 T377's filled plan section and its BLOCKED plan-review verdict, though the landing's T= named 21 tasks and not T377, and 7 of the 21 ticks were then refused on T377's heading block, measured 2026-11-23 from `git show --stat 832cedd0fc` and `/tmp/land351/land1.log`)": {
+   "sha256": "4be3c66d2cfdde49a3ec3c4edd3b35895c0af8238fd08300ad0c4e958f4d8064",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity"
+  },
+  "### T180 Approach (checklist part A)": {
+   "sha256": "84099309561eab0dcbd3942e1c30da9f6831aaec57ac6c222b6157eb56a5bc4d",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity"
+  },
+  "### T180 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)": {
+   "sha256": "06f9e8d0e2c279763fd77a1e330c17b8bb39feeebecbe850c272cb101852a6fc",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity"
+  },
+  "### T100 (as filed, restated by its measurement: at the set-down refusal of 2026-11-21 18:31:07Z, T88's close-out builder had already ended - its final notice was queued in the session's transcript 2.9 s before the Stop, after the interim one the coordinator had read - so \"nothing is running\" was right, and the two finished-run refusals the line names, `make guard-edit` (pid 3707075, 2026-11-21 20:10:38Z) and `make format` (pid 1490566, 2026-11-22 00:17:07Z, 19:17 local on 2026-11-21), were each `output in (no file)`, a run that ended while `/proc` was read, which T171 fixed, measured 2026-11-23 (the session transcript `c6fd72d1-...jsonl`, its agents' own transcripts and the 451 event log, `/tmp/t100/agents.py`, `lines.py`, `makerun.py`))": {
+   "sha256": "37212e1cfb22e55f4f1b2e3de8f8c3643bda51a606255c6c7bea661641d66457",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -15218,6 +14630,368 @@
    "tasks": [
     "T171"
    ]
+  },
+  {
+   "reviewed": "2026-11-23",
+   "blocks": [
+    "### T176 (observed 2026-11-23, 449's T351 bundle: the county's spec edit moved the engine key, which covers every pool sheet's spec, and re-owed the building-reviews of the four PASS sheets whose drawing and notes did not change - hayakawa, ochiba, ubame and the round trip)",
+    "### T176 Approach (checklist part A)",
+    "### T176 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T176-route",
+     "summary": "Of the two routes the task offered (per-sheet engine key, or carry a verdict whose recorded content_key equals the sheet's key now), carry is chosen",
+     "class": "within",
+     "why": "The task line itself offers both routes; choosing one of them narrows nothing. The goal stated (one sheet's spec edit re-owes no review of an unchanged sheet, at tick, verify or push) is met in full by the after measure, 0 re-owed against 4 before (one-shot labeled 2026-11-23, method stated)."
+    },
+    {
+     "id": "T176-predicate",
+     "summary": "One predicate prereq::carried(v, now): a PASS or NEEDS-WORK with a non-empty content_key equal to the sheet's key now, asked only of a record that has one",
+     "class": "within",
+     "why": "It is the push gate's existing carry (374 batch 4) given to the other readers, so every reader reads a verdict the same way; it removes no case the task asked to keep owed. A record with no content_key is still owed, which is the conservative side."
+    },
+    {
+     "id": "T176-wiring",
+     "summary": "Wired into prereq recorded (FR-002's reviews prereq recorded), a new verb reviews prereq answered, the checkpoint's answered (make tick, owed units' sheets kept from all_owed) and review-tree.sh's busy check (make verify, only while the tree's gate is green); content_key_on shared, reading T164's snapshot copy else the pool sheet",
+     "class": "within",
+     "why": "These are the three readers the incident showed re-owing plus the verb the busy check calls; covering all three is exactly the goal's 'at the tick, at make verify or at the push'. The new verb is plumbing for that reader, not new behavior beyond the ask."
+    },
+    {
+     "id": "T176-docs-not-seen",
+     "summary": "A building-review also reads docs/building-programs.md and docs/buildings.md; a change to those alone still carries the verdict",
+     "class": "within",
+     "why": "Stated as a limit, and it is the push gate's behavior since 374 batch 4, the gate that finally decides; T176 makes the earlier readers agree with it rather than introducing it. The task asked to stop re-owing unchanged sheets, not to widen what a building-review's key covers, and no wrong outcome (a map reading wrong, a check passing bad work the push would otherwise refuse) is shown, so it is not a defect left."
+    },
+    {
+     "id": "T176-perf-class",
+     "summary": "Classed as performance work under FR-013",
+     "class": "within",
+     "why": "FR-013 names work that makes the builders' loop faster; removing redispatches of reviews on unchanged sheets is that, with the before/after on the same live record."
+    },
+    {
+     "id": "T176-left-T178",
+     "summary": "tests/hooks/test-review-tree.sh runs in no gate (hooks-test's roster lacks review-tree.sh); not fixed here, filed as T178, lands before T22, because hooks-test is the target T170 is editing now",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "A real defect (a regression in make verify's busy check would land unseen) is left out of this task, so it is ruled. It is legitimate on the accepted spec's own terms, which the GM's approval carries: FR-009 permits a found-and-left defect that states why it is not fixed here, its filed task id and its order, and all three are present (a concrete reason - the same roster is under edit by T170 in flight - T178, 'lands before T22'). The defect is not left unfixed but ordered, consistent with the GM's 2026-11-22 instruction to bundle small defects; and this task's own exit still runs that suite by hand (24/24, red first 22/2), so T176's change is not landed unverified."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-23",
+   "blocks": [
+    "### T170 (observed 2026-11-23: the GM, request.md \"on hook output length\", asked for fewer tokens with no loss of fidelity, enforced mechanically; the coordinator's transcript, `~/.claude/projects/-diagram/c6fd72d1-....jsonl`, holds 891,521 characters of guard messages the model read, 2,848 texts each counted once, measured 2026-11-23 by `/tmp/t170/rank.py`)",
+    "### T170 Approach (checklist part A)",
+    "### T170 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D1",
+     "summary": "rank guard messages by frequency x length, each text once, from the records that reach the model (coordinator and its 1,731 subagent transcripts)",
+     "class": "within",
+     "why": "the measurement behind 'fewer tokens'"
+    },
+    {
+     "id": "D2",
+     "summary": "clone-sync mid-task notice in full once, then a 53-character line while unchanged; full again after a sync, a failed refresh or a SessionStart (the guard now taking SessionStart)",
+     "class": "within",
+     "why": "no loss of fidelity: a compacted or cleared context gets the full text back"
+    },
+    {
+     "id": "D3",
+     "summary": "ledger-owed commit notice: count, first row, make ledger-owed for the rest, fix command and LEDGER_ROWS_OK in full (--brief); citation and cost-note history moved to the code's comment",
+     "class": "within",
+     "why": "every row one command away, the actions unchanged"
+    },
+    {
+     "id": "D4",
+     "summary": "no-poll's seven rewrite notices and batching's notice cut, each rule's history moved to the code's comment; BACKGROUNDED's 'whatever follows the loop' kept against round 1's suggestion",
+     "class": "within",
+     "why": "fix commands and escapes kept (FR-008, FR-012); the kept clause keeps fidelity"
+    },
+    {
+     "id": "D5",
+     "summary": "finished-run's Stop NOTICES left",
+     "class": "within",
+     "why": "measured never to reach the model (none of 8,728 request blobs)"
+    },
+    {
+     "id": "D6",
+     "summary": "house-style notices put words in code spans; the record's head column masked and never ends inside a code span; 'someone elses' corrected",
+     "class": "within",
+     "why": "defects found while doing the work, fixed"
+    },
+    {
+     "id": "D7",
+     "summary": "a list in a guard message shows its first two items (SHOWN, GUESS) and 'and N more:' with the command printing them all, or a cat of a kept file; the whole list where no shorter; fix commands and escapes in full",
+     "class": "within",
+     "why": "every item stays whole and one command away; the cap never hides an item to save nothing; the reviews passed each wording for fidelity"
+    },
+    {
+     "id": "D8",
+     "summary": "static-runs' refusal names one new target, make crate-checks CRATE=\"<crates>\" (test, lint, format --check, cover)",
+     "class": "within",
+     "why": "still names the crate-scoped checks for each crate the delta changes (FR-007); the target exists only so the shortened refusal keeps that"
+    },
+    {
+     "id": "D9",
+     "summary": "make stale-terms prints every candidate (it stopped at 25 with no way to the rest); blocked-fetch's notice shows one attempt and make attempts URL=",
+     "class": "within",
+     "why": "the commands the capped lists point to, so nothing is lost; the 25-cap was a defect, fixed"
+    },
+    {
+     "id": "D10",
+     "summary": "the census of list-growing wordings (transcript renderings past 600 and 1.5x their shortest, each confirmed from source) finds eight; each capped and held at its worst case by suite_tools/messages/worst.rs, which make guard-messages checks against budget and verdict",
+     "class": "within",
+     "why": "answers round 1's N3: enforcement of the request at the length sessions read; search space stated; the two other groups the filter keeps (check-wave, round-cap) wrap the tripwire refusal, one of the eight"
+    },
+    {
+     "id": "D11",
+     "summary": "a content-keyed record (dev/guard-messages.tsv: length, budget, review verdict) in place of the per-hook comment; characters, not words",
+     "class": "within",
+     "why": "the GM asked 'What do you think?'; the record keeps each message's size and the review that passed it, as the comment would, without drifting from the text"
+    },
+    {
+     "id": "D12",
+     "summary": "the review: message-check's rubric as an ad-hoc Sonnet agent, seven rounds, each FAILED BREVITY acted on and the declined suggestion reasoned",
+     "class": "within",
+     "why": "the subagent check the GM named"
+    },
+    {
+     "id": "D13",
+     "summary": "check refusals drop the line repeating the escape and the dead scripts/hooks/lib/hm_checks.py path; feature-number citations cut from check-bundle and record-edit refusals",
+     "class": "within",
+     "why": "brevity with the escape still named; a dead path is a defect, fixed"
+    },
+    {
+     "id": "D14",
+     "summary": "NOTICE_BUDGET 900, REFUSE_BUDGET 1,800 (GUESS) from the longest renderings after the cuts, not the 90th percentile",
+     "class": "within",
+     "why": "a knob value; with T177 the baseline it tolerates is time-limited"
+    },
+    {
+     "id": "D15",
+     "summary": "left: finished-run's detached-run block's repeats (distinct runs), set-down's blocks to T171's rule, the persisted context (9)",
+     "class": "within",
+     "why": "each with a stated cost-level reason"
+    },
+    {
+     "id": "D16",
+     "summary": "ordered after T169 and T171; T174 before T173; classed [perf] under FR-013",
+     "class": "within",
+     "why": "order and class under FR-013 and the GM's 2026-11-20 ordering"
+    },
+    {
+     "id": "N1",
+     "summary": "255 wordings stay BASELINE unreviewed (the costliest finished-run's block and make-only's refusal), the pair-hooks citation round 6 failed, and two list-growing messages not held at worst case (pop-ups' batch refusal, set-down's open-task blocks): filed as T177, the next performance work after T170, lands before T22",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "sequencing, not exemption: round 1's N1 fix allowed a filed task ordered as the next performance work and named in found-and-left; T177 is filed (task-add log 03:48) and ordered; the GM's 'each hook ... reviewed' still binds every wording when it lands; holds only while T177 stays filed and ordered"
+    },
+    {
+     "id": "N2",
+     "summary": "the budget check holds only what the suites drive through protocol::run; repo-safety, shell-check and source-block (and, as the block states it, finished-run's and set-down's blocks) deferred to T174, after T170 and before T173",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "unchanged from round 1: the rule still binds those guards, T174 is filed in the same feature with its order and reason; holds only while T174 stays filed and ordered"
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-23",
+   "blocks": [
+    "### T175 (observed 2026-11-23: 451 T170's builder was refused every `rust/` edit in the clone by 449's building-reviews, which read the review tree `<clone>-review` since 451 T164; the guard log holds 20 engine-freeze refusals that day, all edits in the clone, 18 of them while every live review read the review tree, measured 2026-11-23 by `make guard-log GUARD=engine-freeze SINCE=2026-11-23` against each review transcript's first and last record and its prompt's `Review tree:` line, `/tmp/t175/firings.log`)",
+    "### T175 Approach (checklist part A)",
+    "### T175 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T175-perf",
+     "summary": "The task is filed and scheduled as performance work: it makes the builders' loop faster by ending engine-edit refusals that hold a builder while another bundle's reviews read their own review tree.",
+     "class": "within",
+     "why": "FR-013 names 'the builders' loop faster' as performance work in so many words, and the GM asked that performance work come first (2026-11-20). The 18 refusals measured on 2026-11-23 are the waits the request's purpose is to remove."
+    },
+    {
+     "id": "T175-tree-filter",
+     "summary": "engine_freeze_hooks reads each live review's tree from its dispatch prompt's 'Review tree: ' line (the transcript's first record) and keeps a review as holding an edit only when it names no tree or the edit's realpath lies inside that tree, compared by path components.",
+     "class": "within",
+     "why": "This is the mechanism of the fix. It keeps feature 429's rule (no edit to what a review reads) and its purpose: a review that reads a worktree at a commit cannot see an edit in the clone, so refusing that edit protected nothing. Comparing by components so that <clone> is not a prefix of <clone>-review keeps edits inside the review tree refused. No part of the rule's purpose is given up."
+    },
+    {
+     "id": "T175-malformed-tree",
+     "summary": "A tree that is not absolute or has no .git counts as no tree, so the guard falls back to today's rule and refuses.",
+     "class": "within",
+     "why": "Fails closed. Every case the fix cannot read with confidence keeps the existing protection, so nothing feature 429 guards is loosened past the cases measured."
+    },
+    {
+     "id": "T175-filter-first",
+     "summary": "The tree filter runs before the engine-edit question, so a clone edit under reviews that read only their own trees starts no l7r-gate process.",
+     "class": "within",
+     "why": "Ordering inside the guard. It changes no outcome and removes a process start, which serves FR-013."
+    },
+    {
+     "id": "T175-rolls-unchanged",
+     "summary": "Feature 444's rolls keep freezing the clone; only map reviews are filtered by tree.",
+     "class": "within",
+     "why": "Rolls run in the clone and do read edits made there, so leaving them as they are keeps the freeze where it still protects something. The fix's reach is the incident's shape (reviews reading their own tree) and no wider. This is not a carve-out from anything asked."
+    },
+    {
+     "id": "T175-message-unchanged",
+     "summary": "The refusal's wording is unchanged (it still lists the reviews and rolls holding the edit), so no message-check is owed.",
+     "class": "within",
+     "why": "No new or longer hook output is added, so the GM's 2026-11-23 point about hook output length is not touched. The text listed is the same refusal, now naming only the reviews that really hold the edit."
+    },
+    {
+     "id": "T175-docs-row-handoff",
+     "summary": "The docs/guards.md row is left for the session to apply once 451 T170 lands; its text is kept in the handoff file.",
+     "class": "within",
+     "why": "Sequencing around another task's landing that touches the same file. The documentation change is still made, with its text already written, and nothing the request asks for is dropped. No defect is left behind: 'Found and left: none'."
+    },
+    {
+     "id": "T175-exits-and-figures",
+     "summary": "Done means make crate-checks CRATE=rust/guard green and the engine-freeze shell suite 41/41, red first on the unfixed guard, with the two refused cases proved by a mutant. Before/after figures carry one-shot labels (2026-11-23 plus method).",
+     "class": "within",
+     "why": "Tests whose only effect is to make the fix happen and keep happening serve the request (enforcement, not unrequested scope). The figures carry their dated method, so no NOT-REVIEWABLE return is owed."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-23",
+   "blocks": [
+    "### T180 (observed 2026-11-23, 449's T351 and T358 bundles landing alone: land-alone's commit 832cedd0fc held 449 T377's filled plan section and its BLOCKED plan-review verdict, though the landing's T= named 21 tasks and not T377, and 7 of the 21 ticks were then refused on T377's heading block, measured 2026-11-23 from `git show --stat 832cedd0fc` and `/tmp/land351/land1.log`)",
+    "### T180 Approach (checklist part A)",
+    "### T180 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T180-1 filed task lands its line only",
+     "summary": "land-alone's stage no longer widens the landing to every 'Filed as T<n>' task's plan section and plan-review verdict; a filed task contributes only its tasks.md line (kept for 451 T17's deferral rule), and the commit subject names filed tasks apart from the T= tasks.",
+     "class": "within",
+     "why": "Fixes a wrong outcome (a landing committed another builder's unreviewed section and BLOCKED verdict, then refused its own ticks on it). It keeps 451 T17 (the filed task's line open in the landed tree) and restores 451 T101 (a task's own sections committed apart). It narrows nothing the GM asked for; it is the landing fix FR-013 counts as performance work (the landings faster)."
+    },
+    {
+     "id": "T180-2 tick scope ownership",
+     "summary": "in_scope (status.rs, 451 T84): a block inside a task's own section answers only for that section's tasks; a heading that merely names a task owns a block for it only where that task has no own section.",
+     "class": "within",
+     "why": "Fixes a wrong outcome: a tick refused on another task's heading block because a ticked, archived task was mentioned in it. 451 T84's scope (the asked task, the ticked ones, the shared blocks) is kept whole; only the leaked ownership is removed. No requirement or request clause is narrowed."
+    },
+    {
+     "id": "T180-3 fix placed in the plan crate",
+     "summary": "The ownership fix is made in rust/gate/crates/plan, not in plan_text's section_spans in rust/guard/shared (451 T170's files).",
+     "class": "within",
+     "why": "A placement choice that avoids another open task's files; the defect found (the tick's refusal) is fixed where it occurs, and the plan records no other wrong outcome left in plan_text. Design, not fidelity."
+    },
+    {
+     "id": "T180-4 order",
+     "summary": "Independent of T170, T175 and 449 T377; lands before the 449 bundles' next landing alone.",
+     "class": "within",
+     "why": "Sequencing so the defect is fixed before the next landing it would hit; consistent with fixing known defects before moving on."
+    },
+    {
+     "id": "T180-5 exits and evidence",
+     "summary": "Green: crate-checks for land and plan green and the stage replay at 0 files; red tests written first for both defects; a cannot-be-done claim goes to make arbiter-ask.",
+     "class": "within",
+     "why": "Enforcement of the fix itself (red-first tests that fail only when the defect is present); verification of what is asked, not added scope."
+    },
+    {
+     "id": "T180-6 counted as performance work",
+     "summary": "The task is declared performance work: it removes a failed landing (499 s gate run, undo, held lander) each time a landing's section files a task whose builder has started.",
+     "class": "within",
+     "why": "FR-013 defines performance work as a task that makes the landings faster; removing a failed landing and its rerun falls inside that definition. The figures carry dated one-shot labels with methods."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-23",
+   "blocks": [
+    "### T100 (as filed, restated by its measurement: at the set-down refusal of 2026-11-21 18:31:07Z, T88's close-out builder had already ended - its final notice was queued in the session's transcript 2.9 s before the Stop, after the interim one the coordinator had read - so \"nothing is running\" was right, and the two finished-run refusals the line names, `make guard-edit` (pid 3707075, 2026-11-21 20:10:38Z) and `make format` (pid 1490566, 2026-11-22 00:17:07Z, 19:17 local on 2026-11-21), were each `output in (no file)`, a run that ended while `/proc` was read, which T171 fixed, measured 2026-11-23 (the session transcript `c6fd72d1-...jsonl`, its agents' own transcripts and the 451 event log, `/tmp/t100/agents.py`, `lines.py`, `makerun.py`))",
+    "### T100 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T100-D1 set-down half withdrawn as no defect",
+     "summary": "The 'nothing is running' Stop refusal at 2026-11-21 18:31:07Z is restated, by replay through the live guard binary on fixtures of the session's and agents' transcripts, as correct: T88's builder had already ended (final notice queued 2.9 s before the Stop); cut at the interim notice the guard reads the builder as running. No code change.",
+     "class": "within",
+     "why": "Constitution XIV: a defect is a wrong outcome; the refusal's answer was right and only the task line's premise (that the builder still ran) was wrong, which is fixed by restating it, as done. The replay outputs cited (fx-stop.out 'nothing is running', replay-noproc.log cut 56447 '1 of 3 builders running (451 T88)') match. Leaving a non-defect unchanged narrows nothing in request.md or the spec."
+    },
+    {
+     "id": "T100-D2 finished-run half left to T171",
+     "summary": "The two 'output in (no file)' make-run refusals (make guard-edit, make format) are the vanished-pid race, fixed by T171's Procs::gone (253f81afa7), pinned by a_run_that_ends_while_it_is_read_is_no_run; T100 adds nothing of its own.",
+     "class": "within",
+     "why": "The defect is fixed and pinned by a test already landed, not deferred; 33 Stops since T171's binary show no recurrence of the signature. Withdrawing a duplicate of a landed fix is not a narrowing."
+    },
+    {
+     "id": "T100-D3 done measured by replay, no landing beyond the tick",
+     "summary": "Exit and done criteria are the replays and the post-T171 Stop census, with L7R_PROC_ROOT empty because a landing in the clone holds every slot; order after T171.",
+     "class": "within",
+     "why": "Verification method and ordering for a task with no code change; nothing the GM asked for is dropped."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-23",
+   "blocks": [
+    "### T175 (observed 2026-11-23: 451 T170's builder was refused every `rust/` edit in the clone by 449's building-reviews, which read the review tree `<clone>-review` since 451 T164; the guard log holds 20 engine-freeze refusals that day, all edits in the clone, 18 of them while every live review read the review tree, measured 2026-11-23 by `make guard-log GUARD=engine-freeze SINCE=2026-11-23` against each review transcript's first and last record and its prompt's `Review tree:` line, `/tmp/t175/firings.log`)",
+    "### T175 Approach (checklist part A)",
+    "### T175 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T175-1 review-tree filter",
+     "summary": "engine_freeze_hooks reads each live review's tree from its dispatch prompt's `Review tree:` line and holds an edit only when the review names no tree or the edit's realpath lies inside that tree (component-wise compare, so <clone> is not a prefix of <clone>-review).",
+     "class": "within",
+     "why": "Performance work under FR-013 (it makes the builders' loop faster, a kind FR-013 names; the GM 2026-11-20 'in general priotitize performance improvements'). It does not narrow feature 429's rule as the block states it ('no edit the review reads'): a review reading its own worktree at a commit cannot read a clone edit, and an edit inside the review tree is still refused, so the rule's purpose is untouched. Grounded on measured refusals (18 of 20 on 2026-11-23)."
+    },
+    {
+     "id": "T175-2 malformed or absent tree refuses",
+     "summary": "A tree that is not absolute or has no .git counts as no tree, so today's refuse rule applies.",
+     "class": "within",
+     "why": "Fails closed; keeps the existing guard's behavior wherever the new premise cannot be confirmed."
+    },
+    {
+     "id": "T175-3 filter before engine-edit question",
+     "summary": "The tree filter runs before the l7r-gate engine-edit question, so a clone edit under tree-reading reviews starts no process.",
+     "class": "within",
+     "why": "Implementation order that removes work; no behavior beyond T175-1."
+    },
+    {
+     "id": "T175-4 rolls unchanged",
+     "summary": "Feature 444's rolls run in the clone and keep freezing it, including under tree-reading reviews.",
+     "class": "within",
+     "why": "Leaves an existing rule exactly as it is; a roll does read the clone, so the freeze still serves its purpose."
+    },
+    {
+     "id": "T175-5 refusal words unchanged",
+     "summary": "The refusal text is unchanged (only the holders listed differ), so no message-check is owed.",
+     "class": "within",
+     "why": "No new hook output; nothing in the 2026-11-23 hook-output request is touched."
+    },
+    {
+     "id": "T175-6 docs/guards.md row via handoff",
+     "summary": "The docs/guards.md row is applied by the session once 451 T170 lands, its text held in a handoff file.",
+     "class": "within",
+     "why": "An ordering choice to avoid colliding with T170's edit of the same file; the row is written, not dropped."
+    },
+    {
+     "id": "T175-7 performance classification",
+     "summary": "Filed as performance work (Performance work? yes).",
+     "class": "within",
+     "why": "FR-013 names 'the builders' loop faster' as performance work, which is what T175 does."
+    },
+    {
+     "id": "T175-8 second-run red outside T175",
+     "summary": "The second crate-checks run's one red, make_only_hooks::tests::an_escape_is_recorded_with_its_reason, is recorded as outside T175 (green in the first run and under cover); Found and left says none.",
+     "class": "within",
+     "why": "No decision narrows the request: a single intermittent red in an unrelated test on a shared container is not shown to be a wrong outcome, and the task reports it rather than hiding it. Aside: if it recurs it is a check refusing good work and should be filed."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -23437,6 +23211,295 @@
     ],
     "verdict": "CLEAR"
    }
+  },
+  "T170": {
+   "section_sha256": "113d2c8a8f31eea2a15241b3bd12adb85fa2442a59c95412ac37dc598577cc86",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D1",
+     "summary": "rank guard messages by frequency x length, each text once, from the records that reach the model (coordinator and its 1,731 subagent transcripts)",
+     "class": "within",
+     "why": "the measurement behind 'fewer tokens'"
+    },
+    {
+     "id": "D2",
+     "summary": "clone-sync mid-task notice in full once, then a 53-character line while unchanged; full again after a sync, a failed refresh or a SessionStart (the guard now taking SessionStart)",
+     "class": "within",
+     "why": "no loss of fidelity: a compacted or cleared context gets the full text back"
+    },
+    {
+     "id": "D3",
+     "summary": "ledger-owed commit notice: count, first row, make ledger-owed for the rest, fix command and LEDGER_ROWS_OK in full (--brief); citation and cost-note history moved to the code's comment",
+     "class": "within",
+     "why": "every row one command away, the actions unchanged"
+    },
+    {
+     "id": "D4",
+     "summary": "no-poll's seven rewrite notices and batching's notice cut, each rule's history moved to the code's comment; BACKGROUNDED's 'whatever follows the loop' kept against round 1's suggestion",
+     "class": "within",
+     "why": "fix commands and escapes kept (FR-008, FR-012); the kept clause keeps fidelity"
+    },
+    {
+     "id": "D5",
+     "summary": "finished-run's Stop NOTICES left",
+     "class": "within",
+     "why": "measured never to reach the model (none of 8,728 request blobs)"
+    },
+    {
+     "id": "D6",
+     "summary": "house-style notices put words in code spans; the record's head column masked and never ends inside a code span; 'someone elses' corrected",
+     "class": "within",
+     "why": "defects found while doing the work, fixed"
+    },
+    {
+     "id": "D7",
+     "summary": "a list in a guard message shows its first two items (SHOWN, GUESS) and 'and N more:' with the command printing them all, or a cat of a kept file; the whole list where no shorter; fix commands and escapes in full",
+     "class": "within",
+     "why": "every item stays whole and one command away; the cap never hides an item to save nothing; the reviews passed each wording for fidelity"
+    },
+    {
+     "id": "D8",
+     "summary": "static-runs' refusal names one new target, make crate-checks CRATE=\"<crates>\" (test, lint, format --check, cover)",
+     "class": "within",
+     "why": "still names the crate-scoped checks for each crate the delta changes (FR-007); the target exists only so the shortened refusal keeps that"
+    },
+    {
+     "id": "D9",
+     "summary": "make stale-terms prints every candidate (it stopped at 25 with no way to the rest); blocked-fetch's notice shows one attempt and make attempts URL=",
+     "class": "within",
+     "why": "the commands the capped lists point to, so nothing is lost; the 25-cap was a defect, fixed"
+    },
+    {
+     "id": "D10",
+     "summary": "the census of list-growing wordings (transcript renderings past 600 and 1.5x their shortest, each confirmed from source) finds eight; each capped and held at its worst case by suite_tools/messages/worst.rs, which make guard-messages checks against budget and verdict",
+     "class": "within",
+     "why": "answers round 1's N3: enforcement of the request at the length sessions read; search space stated; the two other groups the filter keeps (check-wave, round-cap) wrap the tripwire refusal, one of the eight"
+    },
+    {
+     "id": "D11",
+     "summary": "a content-keyed record (dev/guard-messages.tsv: length, budget, review verdict) in place of the per-hook comment; characters, not words",
+     "class": "within",
+     "why": "the GM asked 'What do you think?'; the record keeps each message's size and the review that passed it, as the comment would, without drifting from the text"
+    },
+    {
+     "id": "D12",
+     "summary": "the review: message-check's rubric as an ad-hoc Sonnet agent, seven rounds, each FAILED BREVITY acted on and the declined suggestion reasoned",
+     "class": "within",
+     "why": "the subagent check the GM named"
+    },
+    {
+     "id": "D13",
+     "summary": "check refusals drop the line repeating the escape and the dead scripts/hooks/lib/hm_checks.py path; feature-number citations cut from check-bundle and record-edit refusals",
+     "class": "within",
+     "why": "brevity with the escape still named; a dead path is a defect, fixed"
+    },
+    {
+     "id": "D14",
+     "summary": "NOTICE_BUDGET 900, REFUSE_BUDGET 1,800 (GUESS) from the longest renderings after the cuts, not the 90th percentile",
+     "class": "within",
+     "why": "a knob value; with T177 the baseline it tolerates is time-limited"
+    },
+    {
+     "id": "D15",
+     "summary": "left: finished-run's detached-run block's repeats (distinct runs), set-down's blocks to T171's rule, the persisted context (9)",
+     "class": "within",
+     "why": "each with a stated cost-level reason"
+    },
+    {
+     "id": "D16",
+     "summary": "ordered after T169 and T171; T174 before T173; classed [perf] under FR-013",
+     "class": "within",
+     "why": "order and class under FR-013 and the GM's 2026-11-20 ordering"
+    },
+    {
+     "id": "N1",
+     "summary": "255 wordings stay BASELINE unreviewed (the costliest finished-run's block and make-only's refusal), the pair-hooks citation round 6 failed, and two list-growing messages not held at worst case (pop-ups' batch refusal, set-down's open-task blocks): filed as T177, the next performance work after T170, lands before T22",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "sequencing, not exemption: round 1's N1 fix allowed a filed task ordered as the next performance work and named in found-and-left; T177 is filed (task-add log 03:48) and ordered; the GM's 'each hook ... reviewed' still binds every wording when it lands; holds only while T177 stays filed and ordered"
+    },
+    {
+     "id": "N2",
+     "summary": "the budget check holds only what the suites drive through protocol::run; repo-safety, shell-check and source-block (and, as the block states it, finished-run's and set-down's blocks) deferred to T174, after T170 and before T173",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "unchanged from round 1: the rule still binds those guards, T174 is filed in the same feature with its order and reason; holds only while T174 stays filed and ordered"
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T176": {
+   "section_sha256": "f00d3fa01c2e956d5e5e152870a7753fc3a3a2ad688dd6de247a1a4a6c30d95e",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T176-route",
+     "summary": "Of the two routes the task offered (per-sheet engine key, or carry a verdict whose recorded content_key equals the sheet's key now), carry is chosen",
+     "class": "within",
+     "why": "The task line itself offers both routes; choosing one of them narrows nothing. The goal stated (one sheet's spec edit re-owes no review of an unchanged sheet, at tick, verify or push) is met in full by the after measure, 0 re-owed against 4 before (one-shot labeled 2026-11-23, method stated)."
+    },
+    {
+     "id": "T176-predicate",
+     "summary": "One predicate prereq::carried(v, now): a PASS or NEEDS-WORK with a non-empty content_key equal to the sheet's key now, asked only of a record that has one",
+     "class": "within",
+     "why": "It is the push gate's existing carry (374 batch 4) given to the other readers, so every reader reads a verdict the same way; it removes no case the task asked to keep owed. A record with no content_key is still owed, which is the conservative side."
+    },
+    {
+     "id": "T176-wiring",
+     "summary": "Wired into prereq recorded (FR-002's reviews prereq recorded), a new verb reviews prereq answered, the checkpoint's answered (make tick, owed units' sheets kept from all_owed) and review-tree.sh's busy check (make verify, only while the tree's gate is green); content_key_on shared, reading T164's snapshot copy else the pool sheet",
+     "class": "within",
+     "why": "These are the three readers the incident showed re-owing plus the verb the busy check calls; covering all three is exactly the goal's 'at the tick, at make verify or at the push'. The new verb is plumbing for that reader, not new behavior beyond the ask."
+    },
+    {
+     "id": "T176-docs-not-seen",
+     "summary": "A building-review also reads docs/building-programs.md and docs/buildings.md; a change to those alone still carries the verdict",
+     "class": "within",
+     "why": "Stated as a limit, and it is the push gate's behavior since 374 batch 4, the gate that finally decides; T176 makes the earlier readers agree with it rather than introducing it. The task asked to stop re-owing unchanged sheets, not to widen what a building-review's key covers, and no wrong outcome (a map reading wrong, a check passing bad work the push would otherwise refuse) is shown, so it is not a defect left."
+    },
+    {
+     "id": "T176-perf-class",
+     "summary": "Classed as performance work under FR-013",
+     "class": "within",
+     "why": "FR-013 names work that makes the builders' loop faster; removing redispatches of reviews on unchanged sheets is that, with the before/after on the same live record."
+    },
+    {
+     "id": "T176-left-T178",
+     "summary": "tests/hooks/test-review-tree.sh runs in no gate (hooks-test's roster lacks review-tree.sh); not fixed here, filed as T178, lands before T22, because hooks-test is the target T170 is editing now",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "A real defect (a regression in make verify's busy check would land unseen) is left out of this task, so it is ruled. It is legitimate on the accepted spec's own terms, which the GM's approval carries: FR-009 permits a found-and-left defect that states why it is not fixed here, its filed task id and its order, and all three are present (a concrete reason - the same roster is under edit by T170 in flight - T178, 'lands before T22'). The defect is not left unfixed but ordered, consistent with the GM's 2026-11-22 instruction to bundle small defects; and this task's own exit still runs that suite by hand (24/24, red first 22/2), so T176's change is not landed unverified."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T175": {
+   "section_sha256": "1f1c0454c2a3550f029e63886cb3fc91ebadb6d67886638f636c2dd24e8afc63",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T175-1 review-tree filter",
+     "summary": "engine_freeze_hooks reads each live review's tree from its dispatch prompt's `Review tree:` line and holds an edit only when the review names no tree or the edit's realpath lies inside that tree (component-wise compare, so <clone> is not a prefix of <clone>-review).",
+     "class": "within",
+     "why": "Performance work under FR-013 (it makes the builders' loop faster, a kind FR-013 names; the GM 2026-11-20 'in general priotitize performance improvements'). It does not narrow feature 429's rule as the block states it ('no edit the review reads'): a review reading its own worktree at a commit cannot read a clone edit, and an edit inside the review tree is still refused, so the rule's purpose is untouched. Grounded on measured refusals (18 of 20 on 2026-11-23)."
+    },
+    {
+     "id": "T175-2 malformed or absent tree refuses",
+     "summary": "A tree that is not absolute or has no .git counts as no tree, so today's refuse rule applies.",
+     "class": "within",
+     "why": "Fails closed; keeps the existing guard's behavior wherever the new premise cannot be confirmed."
+    },
+    {
+     "id": "T175-3 filter before engine-edit question",
+     "summary": "The tree filter runs before the l7r-gate engine-edit question, so a clone edit under tree-reading reviews starts no process.",
+     "class": "within",
+     "why": "Implementation order that removes work; no behavior beyond T175-1."
+    },
+    {
+     "id": "T175-4 rolls unchanged",
+     "summary": "Feature 444's rolls run in the clone and keep freezing it, including under tree-reading reviews.",
+     "class": "within",
+     "why": "Leaves an existing rule exactly as it is; a roll does read the clone, so the freeze still serves its purpose."
+    },
+    {
+     "id": "T175-5 refusal words unchanged",
+     "summary": "The refusal text is unchanged (only the holders listed differ), so no message-check is owed.",
+     "class": "within",
+     "why": "No new hook output; nothing in the 2026-11-23 hook-output request is touched."
+    },
+    {
+     "id": "T175-6 docs/guards.md row via handoff",
+     "summary": "The docs/guards.md row is applied by the session once 451 T170 lands, its text held in a handoff file.",
+     "class": "within",
+     "why": "An ordering choice to avoid colliding with T170's edit of the same file; the row is written, not dropped."
+    },
+    {
+     "id": "T175-7 performance classification",
+     "summary": "Filed as performance work (Performance work? yes).",
+     "class": "within",
+     "why": "FR-013 names 'the builders' loop faster' as performance work, which is what T175 does."
+    },
+    {
+     "id": "T175-8 second-run red outside T175",
+     "summary": "The second crate-checks run's one red, make_only_hooks::tests::an_escape_is_recorded_with_its_reason, is recorded as outside T175 (green in the first run and under cover); Found and left says none.",
+     "class": "within",
+     "why": "No decision narrows the request: a single intermittent red in an unrelated test on a shared container is not shown to be a wrong outcome, and the task reports it rather than hiding it. Aside: if it recurs it is a check refusing good work and should be filed."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T180": {
+   "section_sha256": "6521835891e1c4c99ea74595a8d8cd29d6c6318f441d3221b675237803ac0ec5",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T180-1 filed task lands its line only",
+     "summary": "land-alone's stage no longer widens the landing to every 'Filed as T<n>' task's plan section and plan-review verdict; a filed task contributes only its tasks.md line (kept for 451 T17's deferral rule), and the commit subject names filed tasks apart from the T= tasks.",
+     "class": "within",
+     "why": "Fixes a wrong outcome (a landing committed another builder's unreviewed section and BLOCKED verdict, then refused its own ticks on it). It keeps 451 T17 (the filed task's line open in the landed tree) and restores 451 T101 (a task's own sections committed apart). It narrows nothing the GM asked for; it is the landing fix FR-013 counts as performance work (the landings faster)."
+    },
+    {
+     "id": "T180-2 tick scope ownership",
+     "summary": "in_scope (status.rs, 451 T84): a block inside a task's own section answers only for that section's tasks; a heading that merely names a task owns a block for it only where that task has no own section.",
+     "class": "within",
+     "why": "Fixes a wrong outcome: a tick refused on another task's heading block because a ticked, archived task was mentioned in it. 451 T84's scope (the asked task, the ticked ones, the shared blocks) is kept whole; only the leaked ownership is removed. No requirement or request clause is narrowed."
+    },
+    {
+     "id": "T180-3 fix placed in the plan crate",
+     "summary": "The ownership fix is made in rust/gate/crates/plan, not in plan_text's section_spans in rust/guard/shared (451 T170's files).",
+     "class": "within",
+     "why": "A placement choice that avoids another open task's files; the defect found (the tick's refusal) is fixed where it occurs, and the plan records no other wrong outcome left in plan_text. Design, not fidelity."
+    },
+    {
+     "id": "T180-4 order",
+     "summary": "Independent of T170, T175 and 449 T377; lands before the 449 bundles' next landing alone.",
+     "class": "within",
+     "why": "Sequencing so the defect is fixed before the next landing it would hit; consistent with fixing known defects before moving on."
+    },
+    {
+     "id": "T180-5 exits and evidence",
+     "summary": "Green: crate-checks for land and plan green and the stage replay at 0 files; red tests written first for both defects; a cannot-be-done claim goes to make arbiter-ask.",
+     "class": "within",
+     "why": "Enforcement of the fix itself (red-first tests that fail only when the defect is present); verification of what is asked, not added scope."
+    },
+    {
+     "id": "T180-6 counted as performance work",
+     "summary": "The task is declared performance work: it removes a failed landing (499 s gate run, undo, held lander) each time a landing's section files a task whose builder has started.",
+     "class": "within",
+     "why": "FR-013 defines performance work as a task that makes the landings faster; removing a failed landing and its rerun falls inside that definition. The figures carry dated one-shot labels with methods."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T100": {
+   "section_sha256": "37672245721b754a77876c9c5549aca17affa4f4ab79db9d7e2d36d3ab2d5279",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T100-D1 set-down half withdrawn as no defect",
+     "summary": "The 'nothing is running' Stop refusal at 2026-11-21 18:31:07Z is restated, by replay through the live guard binary on fixtures of the session's and agents' transcripts, as correct: T88's builder had already ended (final notice queued 2.9 s before the Stop); cut at the interim notice the guard reads the builder as running. No code change.",
+     "class": "within",
+     "why": "Constitution XIV: a defect is a wrong outcome; the refusal's answer was right and only the task line's premise (that the builder still ran) was wrong, which is fixed by restating it, as done. The replay outputs cited (fx-stop.out 'nothing is running', replay-noproc.log cut 56447 '1 of 3 builders running (451 T88)') match. Leaving a non-defect unchanged narrows nothing in request.md or the spec."
+    },
+    {
+     "id": "T100-D2 finished-run half left to T171",
+     "summary": "The two 'output in (no file)' make-run refusals (make guard-edit, make format) are the vanished-pid race, fixed by T171's Procs::gone (253f81afa7), pinned by a_run_that_ends_while_it_is_read_is_no_run; T100 adds nothing of its own.",
+     "class": "within",
+     "why": "The defect is fixed and pinned by a test already landed, not deferred; 33 Stops since T171's binary show no recurrence of the signature. Withdrawing a duplicate of a landed fix is not a narrowing."
+    },
+    {
+     "id": "T100-D3 done measured by replay, no landing beyond the tick",
+     "summary": "Exit and done criteria are the replays and the post-T171 Stop census, with L7R_PROC_ROOT empty because a landing in the clone holds every slot; order after T171.",
+     "class": "within",
+     "why": "Verification method and ordering for a task with no code change; nothing the GM asked for is dropped."
+    }
+   ],
+   "verdict": "CLEAR"
   }
  }
 }

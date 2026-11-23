@@ -104,6 +104,10 @@ trap 'pkill -P $$ 2>/dev/null; exit 143' TERM
 # GUARD_EDIT_OK: feature 383 amendment 3 (plan D27), adding an operation - under the C-library recorder when make hooks-test built
 # it, so a green suite's reads are kept (`l7r-guard trace`): a fixture's copy of scripts/ counts as the file it copies,
 # the fixture's cp does not
+# feature 451 T170: every message the suite's guards render is kept (`protocol::keep`), and a green suite's set replaces its last in
+# <git dir>/hooks-test/messages/, which `make hooks-test` holds to the budget and the review (`l7r-guard messages check`)
+rm -rf "$WORK/$ID.messages"
+export L7R_MESSAGE_CORPUS="$WORK/$ID.messages"
 if [ -n "${HOOKS_SHIM:-}" ] && [ -n "${HOOKS_ROOT:-}" ]; then
   rm -f "$WORK/$ID.reads"
   env TMPDIR="$SUITE_TMP" LD_PRELOAD="$HOOKS_SHIM${LD_PRELOAD:+ $LD_PRELOAD}" UV_USE_IO_URING=0 L7R_TEST_DEP_LOG="$WORK/$ID.reads" L7R_TEST_DEP_ROOT="$HOOKS_ROOT" \
@@ -137,6 +141,7 @@ if [ "$rc" -eq 0 ] && [ -n "${HOOKS_SHIM:-}" ] && grep -q "$(printf '\tc-tree\t'
   done >> "$WORK/$ID.reads"
 fi
 if [ "$rc" -eq 0 ]; then
+  mkdir -p "$GITDIR/hooks-test/messages" && cat "$WORK/$ID.messages/messages.jsonl" > "$GITDIR/hooks-test/messages/$ID.jsonl" 2>/dev/null || : > "$GITDIR/hooks-test/messages/$ID.jsonl"
   # a shard stamps nothing: its suite is stamped by --close once every shard is green
   [ -n "$K" ] || { mkdir -p "$GITDIR/hooks-test" && printf '%s' "$SHA" > "$GITDIR/hooks-test/$GUARD"; }
   [ -z "$K" ] && [ -n "${HOOKS_SHIM:-}" ] && "$HERE/../../scripts/hooks/l7r-guard.sh" trace stamp "$GITDIR" "$GUARD" "$WORK/$ID.reads" "$HOOKS_ROOT" >/dev/null 2>&1

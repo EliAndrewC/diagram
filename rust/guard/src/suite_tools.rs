@@ -3,5 +3,6 @@
 
 pub mod bench;
 pub mod deps;
+pub mod messages;
 pub use l7r_shared::suite_tools::pylex;
 pub mod trace;

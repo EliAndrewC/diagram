@@ -35,6 +35,10 @@ case "$1 $2" in
     case " $* " in *" --stale-renders "*) exit 0 ;; esac
     echo "$*" > "$d/snapshot-args"; echo "snapshot taken"; exit 0 ;;
   "delta key") cat "$d/key"; exit 0 ;;
+  "reviews prereq")
+    # answered: a unit listed in $STUB/carried is answered by its verdict at an older key (451 T176)
+    [ "$3" = answered ] && echo "$*" >> "$d/answered-args" && grep -qx -- "$7" "$d/carried" 2>/dev/null && exit 0
+    exit 1 ;;
   "log bypass") echo "$*" >> "$d/bypasses"; exit 0 ;;
 esac
 echo "stub gate: unexpected $*" >&2; exit 9
@@ -105,7 +109,18 @@ wait_state "$commit"
 echo "3. the tree is left alone while its units wait for their verdicts, and while its gate runs"
 rc=$(run)
 [ "$rc" = 2 ] && grep -q "units have no verdict at its key yet: building-review--c" "$T/out" && ok "a reset under waiting units is refused" || no "not refused" "$(cat "$T/out")"
-mkdir -p "$C/.git/review-verdicts"; printf '{"engine_key": "K1"}' > "$C/.git/review-verdicts/building-review--c.json"
+# 451 T176: a verdict at an older key answers while its sheet hashes as the review read it (the gate's `reviews prereq answered`)
+mkdir -p "$C/.git/review-verdicts"; printf '{"engine_key": "K0", "verdict": "PASS"}' > "$C/.git/review-verdicts/building-review--c.json"
+rc=$(run)
+[ "$rc" = 2 ] && grep -q "units have no verdict at its key yet: building-review--c" "$T/out" \
+  && grep -q -- "answered --clone $C --unit building-review--c --key K1" "$S/answered-args" 2>/dev/null \
+  && ok "a verdict at an older key whose sheet moved still waits" || no "an older key's verdict" "$(cat "$T/out")"
+printf 'building-review--c\n' > "$S/carried"
+rc=$(run)
+[ "$rc" = 0 ] && ! grep -q "no verdict at its key" "$T/out" && ok "a verdict carried to its sheet as reviewed frees it (451 T176)" \
+  || no "a carried verdict did not free it" "$(cat "$T/out")"
+wait_state "$(cat "$C/.git/review-trees/current")"; rm -f "$S/carried"
+printf '{"engine_key": "K1"}' > "$C/.git/review-verdicts/building-review--c.json"
 : > "$S/done.hold"; echo K2 > "$S/key"
 rc=$(run)
 second=$(cat "$C/.git/review-trees/current")

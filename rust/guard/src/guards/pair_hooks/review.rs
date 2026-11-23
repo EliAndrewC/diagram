@@ -2,6 +2,7 @@
 //! prerequisites met, under the round cap, and a green gate for the content it reviews - each refusal in the shell's words.
 
 use std::fmt::Write as _;
+use std::path::Path;
 use std::sync::LazyLock;
 use std::time::SystemTime;
 
@@ -377,16 +378,24 @@ fn prerequisites(
         .copied()
         .collect::<Vec<_>>()
         .join("\n");
-    let listed = problems.lines().fold(String::new(), |mut s, l| {
-        let _ = writeln!(s, "  - {l}");
-        s
-    });
     cx.log("blocked", atype, "review-prerequisites-unmet");
-    Some(Answer::Refuse(format!(
+    Some(Answer::Refuse(prereq_refusal(
+        atype,
+        &problems,
+        &checks::common_dir(&cx.clone),
+    )))
+}
+
+/// The prerequisites' refusal: each problem - the first few and the file holding them all (451 T170: a refusal's items reached a
+/// session at 1,870 characters, 2026-11-23) - and the escape.
+pub(crate) fn prereq_refusal(atype: &str, problems: &str, git_dir: &Path) -> String {
+    let items: Vec<String> = problems.lines().map(|l| format!("  - {l}")).collect();
+    let listed = crate::shared::listed::capped_kept(&items, "  ", git_dir) + "\n";
+    format!(
         "\n\x1b[1mBLOCKED: this {atype} would spend its round on work that has not been verified.\x1b[0m\n\
          A review round costs minutes; each item below costs seconds to fix (feature 240):\n\n{listed}\n\
          Deliberately reviewing a map left in this state? Put REVIEW_PREREQ_OK=\"<why>\" in the dispatch prompt.\n"
-    )))
+    )
 }
 
 /// A review unit's sheet as it reads now (`l7r-gate reviews prereq content-key`), or "" where it has none.

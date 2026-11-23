@@ -151,11 +151,16 @@ fn a_command_written_outside_is_silent_and_one_with_both_is_a_warning() {
         Report::Silent
     );
     let both = report(&bash(&format!("echo {WORD} {WORD_FIXED} >> a.md")));
-    assert!(matches!(both, Report::Warned(t) if t.contains("BOTH spellings")));
+    assert!(matches!(both, Report::Warned(ref t) if t.contains("BOTH spellings")));
     let got = report(&bash(&format!("echo {WORD} >> a.md")));
     assert_eq!(
         updated(&got, "command"),
         Some(format!("echo {WORD_FIXED} >> a.md"))
+    );
+    // 451 T170: each notice names a word in a code span, so a record keeping the notice holds no bare British word
+    assert!(matches!(both, Report::Warned(t) if t.contains(&format!("payload: `{WORD}`."))));
+    assert!(
+        matches!(got, Report::Corrected(_, ref n, _) if n.contains(&format!("(`{WORD}` -> `{WORD_FIXED}`)")))
     );
     assert_eq!(report(&bash(&format!("grep {WORD} a.md"))), Report::Silent);
     assert_eq!(report(&bash(&format!("cat 'a {WORD}/b'"))), Report::Silent);

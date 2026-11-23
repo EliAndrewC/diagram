@@ -100,8 +100,9 @@ diagnosed and the tooling improved.
   render-sync one, so a map whose HEAD inputs are not the mirror's (a local commit of `rust/` or of its spec) is NOT COMPARED,
   never unchanged. Record that, never a scratch copy, which a test or `make map` may already have regenerated (feature 328
   wave 68 recorded Sawada unchanged after its board moved 76 degrees).
-- **No engine edit while a map review runs** (the `engine_freeze_hooks` guard, feature 429): a review's verdict is keyed to the
-  engine it read, so draft a fix outside the clone until every review has returned.
+- **No engine edit in the tree a running map review reads** (the `engine_freeze_hooks` guard, feature 429): a review's verdict is
+  keyed to the engine it read. One reading its own review tree (`<clone>-review`, 451 T164) leaves the clone free (451 T175); one
+  naming no tree, or a roll in the clone, freezes the clone, so draft a fix outside it until they have returned.
 - **Deleting a repair step** is measured on a fresh block rolled BEFORE the change, seed by seed
   (`make cohort N=48 SEED=<that block's first seed> FRESH=0 JOBS=3`), bisecting any new failure: the landing cohort's
   fixed seeds passed feature 417 T41's deletion while a fresh seed regressed.

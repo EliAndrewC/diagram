@@ -155,7 +155,9 @@ fn correct_plain(text: &str) -> (String, Vec<String>) {
     for (pattern, brit, amer) in PAIR_PATTERNS.iter() {
         if found(pattern, &text) {
             text = sub_all(pattern, &text, &|m| cased(m, amer));
-            notes.push(format!("{brit} -> {amer}"));
+            // each word in a code span, which names it: a notice quoting `colour` bare carried a British word into every record
+            // that keeps the notice (451 T170: `dev/guard-messages.tsv`, which the push's delta check reads)
+            notes.push(format!("`{brit}` -> `{amer}`"));
         }
     }
     (text, notes)
@@ -410,6 +412,11 @@ fn first_six(items: &[String]) -> String {
     items.iter().take(6).cloned().collect::<Vec<_>>().join(", ")
 }
 
+/// Each word in a code span, as a notice names it (see `correct_plain`'s notes).
+fn spans(words: &[String]) -> Vec<String> {
+    words.iter().map(|w| format!("`{w}`")).collect()
+}
+
 /// Whether the call lands wholly outside the project: decided by where the write lands, the paths it merely mentions the fall-back.
 fn lands_outside(cmd: &str, is_bash: bool, start: Option<&str>, path: &str) -> bool {
     let home = std::env::var("HOME").unwrap_or_default();
@@ -445,9 +452,11 @@ fn bash_report(input: &Value, cmd: &str, hits: &[String], gm: bool) -> Report {
         let tail = if warned.is_empty() {
             String::new()
         } else {
-            format!(" Left as typed and NOT corrected, because this command carries both spellings and is therefore a fix: {}.", first_six(&warned))
+            format!(" Left as typed and NOT corrected, because this command carries both spellings and is therefore a fix: {}.", first_six(&spans(&warned)))
         };
-        return Report::Corrected(payload, format!("House style was applied to this command for you ({}). A write that travels through a Bash payload owes CLAUDE.md exactly as an Edit does. What the command only NAMES was left as typed: a search pattern, a path, a code span and a quotation of someone elses text.{tail}", first_six(&notes)), "corrected-command");
+        // why a command is corrected at all - a write through a Bash payload owes CLAUDE.md exactly as an Edit does - is the code's to
+        // keep, not the reader's: 451 T170's message-check cut it from the notice
+        return Report::Corrected(payload, format!("House style was applied to this command for you ({}). What the command only NAMES was left as typed: a search pattern, a path, a code span and a quotation of someone else's text.{tail}", first_six(&notes)), "corrected-command");
     }
     if warned.is_empty() {
         return Report::Silent;
@@ -457,7 +466,7 @@ fn bash_report(input: &Value, cmd: &str, hits: &[String], gm: bool) -> Report {
     } else {
         "this command carries BOTH spellings of a word (or is the sed shape), which is how a replacement pair looks - correcting it could replace a word with itself and make the fix silently do nothing. If it is not a fix, the word is yours to correct"
     };
-    Report::Warned(format!("House style, in this command payload: {}. Not corrected for you: {why}. `make quick` fails on a British spelling in the delta, so it is cheaper to fix now than at the gate.", first_six(&warned)))
+    Report::Warned(format!("House style, in this command payload: {}. Not corrected for you: {why}. `make quick` fails on a British spelling in the delta, so it is cheaper to fix now than at the gate.", first_six(&spans(&warned))))
 }
 
 fn word_hits(visible: &str) -> Vec<String> {
@@ -545,7 +554,7 @@ pub(crate) fn report(event: &Event) -> Report {
     }
     let still_bad = !word_hits(&sub_all(spans, &written, &|_| " ".to_owned())).is_empty();
     if !notes.is_empty() && !still_bad && !gm {
-        return Report::Corrected(payload, format!("House style was applied to this edit for you ({}). Both rules are exact substitutions from CLAUDE.md, so the correction is made rather than the edit refused - a refusal costs a model round trip to say the same thing. Text inside backticks was left alone: a word in a code span is being named, not used. Text inside quotation marks was left alone too: a quotation is someone else text (GM 2026-09-06).", first_six(&notes)), "corrected-edit");
+        return Report::Corrected(payload, format!("House style was applied to this edit for you ({}). Both rules are exact substitutions from CLAUDE.md, so the correction is made rather than the edit refused - a refusal costs a model round trip to say the same thing. Text inside backticks was left alone: a word in a code span is being named, not used. Text inside quotation marks was left alone too: a quotation is someone else's text (GM 2026-09-06).", first_six(&notes)), "corrected-edit");
     }
     let shown: Vec<&str> = hits.iter().take(6).map(String::as_str).collect();
     Report::Refused(format!(

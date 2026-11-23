@@ -4,7 +4,7 @@ use std::path::Path;
 
 use super::{
     all_found, cli, criteria_left_behind, dirs_cli, read_dir, render, stale_candidates, tokens,
-    watched_lines, Files,
+    watched_lines, Candidate, Files,
 };
 
 fn files(list: &[(&str, &str)]) -> Files {
@@ -35,7 +35,7 @@ fn a_line_naming_the_subject_with_the_old_value_is_a_candidate() {
         ("plan.md", 1, "tier")
     );
     assert_eq!(found[0].old_values, ["sonnet"]);
-    assert!(render(&found).contains("plan.md:1  `tier` still with sonnet\n      keep `tier` on Sonnet\n      (changed in spec.md to: the `tier` runs on Opus here)"));
+    assert!(render(&found, "").contains("plan.md:1  `tier` still with sonnet\n      keep `tier` on Sonnet\n      (changed in spec.md to: the `tier` runs on Opus here)"));
 }
 
 #[test]
@@ -110,7 +110,7 @@ fn a_criterion_citing_a_rewritten_requirement_and_left_untouched_is_named() {
     );
     assert_eq!(found.len(), 1);
     assert_eq!(found[0].old_values, ["FR-001"]);
-    let shown = render(&found);
+    let shown = render(&found, "");
     assert!(shown.contains("spec.md:3  `SC-001` cites FR-001, which the change rewrote - the criterion was not touched"), "{shown}");
     let touched = "- **FR-001**: must do two\n- **SC-001** (FR-001): holds, changed\n";
     assert!(criteria_left_behind(
@@ -136,9 +136,10 @@ fn lines(one: impl Fn(usize) -> String) -> String {
     (0..30).map(one).collect::<Vec<_>>().join("\n") + "\n"
 }
 
+/// 451 T170: the hand listing prints every candidate, where it stopped at 25 with no way to the rest.
 #[test]
-fn the_report_says_none_and_trims_past_twenty_five() {
-    assert!(render(&[]).starts_with("stale-terms: no candidate"));
+fn the_report_says_none_and_lists_every_candidate() {
+    assert!(render(&[], "").starts_with("stale-terms: no candidate"));
     let old = lines(|i| format!("`s{i}` value{i}x"));
     let new = lines(|i| format!("`s{i}` other{i}y"));
     let also = lines(|i| format!("`s{i}` value{i}x again"));
@@ -147,7 +148,8 @@ fn the_report_says_none_and_trims_past_twenty_five() {
         &files(&[("a.md", &new), ("b.md", &also)]),
     );
     assert_eq!(found.len(), 30);
-    assert!(render(&found).ends_with("... and 5 more"));
+    let all = render(&found, "");
+    assert!(all.starts_with("stale-terms: 30 candidate(s)") && !all.contains(" more"));
 }
 
 fn write(root: &Path, name: &str, text: &[u8]) {
@@ -238,6 +240,41 @@ fn the_guards_question_gives_the_count_and_the_report_or_nothing() {
     );
     assert_eq!(dirs_cli(&words(&[&new, &new])).stdout, "");
     assert_eq!(dirs_cli(&[]).code, 2);
+}
+
+/// 451 T170: the guard's refusal showed up to 25 candidates and reached a session at 10,345 characters; given the command that lists
+/// them all, the report shows the first few and names it, and the hand listing shows every one.
+#[test]
+fn the_guards_report_shows_a_few_candidates_and_the_command_for_the_rest() {
+    let many: Vec<Candidate> = (1..=40)
+        .map(|line| Candidate {
+            file: "plan.md".to_owned(),
+            line,
+            subject: "tier".to_owned(),
+            old_values: vec!["sonnet".to_owned()],
+            text: "keep `tier` on Sonnet".to_owned(),
+            changed_in: "spec.md".to_owned(),
+            changed_to: "the `tier` runs on Opus here".to_owned(),
+            criterion: false,
+        })
+        .collect();
+    let short = render(&many, "make stale-terms F=451");
+    assert!(short.contains("plan.md:2 ") && !short.contains("plan.md:3 "));
+    assert!(short.ends_with("\n  and 38 more: `make stale-terms F=451`"));
+    let all = render(&many, "");
+    assert!(all.contains("plan.md:40 ") && !all.contains(" more"));
+    let root = crate::checks::scratch("stale-dirs-rest");
+    write(&root, "old/s.md", OLD.as_bytes());
+    write(&root, "old/p.md", b"keep `tier` on Sonnet\n");
+    write(&root, "new/s.md", NEW.as_bytes());
+    write(&root, "new/p.md", b"keep `tier` on Sonnet\n");
+    let (old, new) = (
+        root.join("old").display().to_string(),
+        root.join("new").display().to_string(),
+    );
+    assert!(dirs_cli(&words(&[&old, &new, "make stale-terms F=451"]))
+        .stdout
+        .starts_with("1\n"));
 }
 
 /// 451 T54: the FR-013 amendment's spec review was refused with 66 candidates, every one the backticked `end` (the event log's `end`

@@ -7,7 +7,6 @@
 //! value. A candidate is a line to look at, never a verdict.
 
 use std::collections::{BTreeMap, BTreeSet, HashMap, HashSet};
-use std::fmt::Write as _;
 use std::path::{Path, PathBuf};
 use std::process::Command;
 use std::sync::LazyLock;
@@ -363,33 +362,40 @@ pub fn criteria_left_behind(old: &Files, new: &Files) -> Vec<Candidate> {
     found
 }
 
-pub fn render(found: &[Candidate]) -> String {
+/// The candidates as a report: every one, or - given the command that prints them all (`rest`, the review-round guard's refusal) -
+/// the first few and "and N more:" with `rest` (451 T170: the guard's refusal showed 25 and reached a session at 10,345 characters,
+/// 2026-11-23; `make stale-terms`, the command it names, now prints every one, where it stopped at 25 with no way to the rest).
+#[must_use]
+pub fn render(found: &[Candidate], rest: &str) -> String {
     if found.is_empty() {
         return "stale-terms: no candidate - no line names a changed line's subject and still carries its old value".to_owned();
     }
-    let mut out = format!("stale-terms: {} candidate(s) - each names a subject whose value CHANGED and still carries the old value:", found.len());
-    for c in found.iter().take(25) {
-        let values = c
-            .old_values
-            .iter()
-            .take(4)
-            .cloned()
-            .collect::<Vec<_>>()
-            .join(", ");
-        if c.criterion {
-            let _ = write!(out, "\n  {}:{}  `{}` cites {values}, which the change rewrote - the criterion was not touched\n      {}", c.file, c.line, c.subject, c.text);
-        } else {
-            let _ = write!(
-                out,
-                "\n  {}:{}  `{}` still with {values}\n      {}\n      (changed in {} to: {})",
-                c.file, c.line, c.subject, c.text, c.changed_in, c.changed_to
-            );
-        }
-    }
-    if found.len() > 25 {
-        let _ = write!(out, "\n  ... and {} more", found.len() - 25);
-    }
-    out
+    let blocks: Vec<String> = found
+        .iter()
+        .map(|c| {
+            let values = c
+                .old_values
+                .iter()
+                .take(4)
+                .cloned()
+                .collect::<Vec<_>>()
+                .join(", ");
+            if c.criterion {
+                format!("  {}:{}  `{}` cites {values}, which the change rewrote - the criterion was not touched\n      {}", c.file, c.line, c.subject, c.text)
+            } else {
+                format!(
+                    "  {}:{}  `{}` still with {values}\n      {}\n      (changed in {} to: {})",
+                    c.file, c.line, c.subject, c.text, c.changed_in, c.changed_to
+                )
+            }
+        })
+        .collect();
+    let listed = if rest.is_empty() {
+        blocks.join("\n")
+    } else {
+        l7r_shared::listed::capped(&blocks, "  ", rest)
+    };
+    format!("stale-terms: {} candidate(s) - each names a subject whose value CHANGED and still carries the old value:\n{listed}", found.len())
 }
 
 /// Every text file under `root`, under a million bytes, `__pycache__` aside.
@@ -509,22 +515,25 @@ pub fn cli(args: &[String]) -> Reply {
     };
     let found = all_found(&old, &read_dir(&dir));
     reply(
-        render(&found) + "\n",
+        render(&found, "") + "\n",
         String::new(),
         i32::from(!found.is_empty()),
     )
 }
 
-/// `record stale-dirs <old dir> <new dir>`: the review-round guard's question: the count and the rendered candidates, or nothing.
+/// `record stale-dirs <old dir> <new dir> [<rest>]`: the review-round guard's question: the count and the rendered candidates - the
+/// first few and `<rest>` for the others where it is given ([`render`]) - or nothing.
 pub fn dirs_cli(args: &[String]) -> Reply {
-    let [old, new] = args else {
-        return refused("usage: l7r-gate record stale-dirs <old dir> <new dir>");
+    let (old, new, rest) = match args {
+        [old, new] => (old, new, ""),
+        [old, new, rest] => (old, new, rest.as_str()),
+        _ => return refused("usage: l7r-gate record stale-dirs <old dir> <new dir> [<the command that lists every candidate>]"),
     };
     let found = all_found(&read_dir(Path::new(old)), &read_dir(Path::new(new)));
     let out = if found.is_empty() {
         String::new()
     } else {
-        format!("{}\n{}\n", found.len(), render(&found))
+        format!("{}\n{}\n", found.len(), render(&found, rest))
     };
     reply(out, String::new(), 0)
 }

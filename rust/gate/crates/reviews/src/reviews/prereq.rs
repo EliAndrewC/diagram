@@ -498,15 +498,41 @@ fn accept(clone: &Path, name: &str, finding: &str, reason: &str) -> Option<Strin
     None
 }
 
-/// Has every one of these maps a PASS or NEEDS-WORK verdict for THIS engine key? (FR-002)
+/// Has every one of these maps a PASS or NEEDS-WORK verdict for THIS engine key, or one [`carried`] to its sheet as it reads now? (FR-002)
 fn recorded(clone: &Path, names: &[String], key: &str) -> bool {
     if names.is_empty() || key.is_empty() {
         return false;
     }
     names.iter().all(|name| {
         latest_verdict(clone, name).is_some_and(|v| {
-            get(&v, "verdict") != Some(&json!(NR)) && text_of(&v, "engine_key", "") == key
+            get(&v, "verdict") != Some(&json!(NR))
+                && (text_of(&v, "engine_key", "") == key
+                    || carried(&v, || unit_content_key(clone, name)))
         })
+    })
+}
+
+/// Does the verdict record `v`, written at another engine key, still answer for its sheet - a PASS or NEEDS-WORK whose recorded
+/// `content_key` is the sheet's drawing and notes as they hash `now` (451 T176)? The engine key covers every pool sheet's spec, so one
+/// sheet's spec edit moved it and re-owed every other sheet's review on a drawing that had not changed (449 T351's bundle: the county's
+/// edit re-owed the four PASS sheets); the push's review gate already carried such a verdict (`review-gate.sh`, feature 374 batch 4),
+/// and the checkpoint, `recorded`, `answered` and the review tree's busy check read it as the push does. What it does not see: a
+/// building-review also reads `docs/building-programs.md` and `docs/buildings.md`, so a change to those alone carries the verdict, as
+/// the push's gate has since 374. `now` is asked only of a record that carries a key to compare.
+pub fn carried(v: &Value, now: impl FnOnce() -> String) -> bool {
+    let at = text_of(v, "content_key", "");
+    matches!(text_of(v, "verdict", "").as_str(), "PASS" | "NEEDS-WORK")
+        && !at.is_empty()
+        && at == now()
+}
+
+/// Is `unit` answered at `key`: its last verdict a PASS or NEEDS-WORK at that engine key, or [`carried`] to its sheet as it reads now
+/// (`reviews prereq answered`, the review tree's busy check, 451 T176)?
+fn answered(clone: &Path, unit: &str, key: &str) -> bool {
+    latest_verdict(clone, unit).is_some_and(|v| {
+        let judged = matches!(text_of(&v, "verdict", "").as_str(), "PASS" | "NEEDS-WORK");
+        (judged && !key.is_empty() && text_of(&v, "engine_key", "") == key)
+            || carried(&v, || unit_content_key(clone, unit))
     })
 }
 
@@ -582,11 +608,17 @@ fn folder_key(folder: &Path, sheet: &str) -> String {
 /// A unit's content key, its sheet looked up (`content-key`): what the review gate and the round arbiter ask.
 #[must_use]
 pub fn unit_content_key(clone: &Path, unit: &str) -> String {
+    content_key_on(clone, unit, || unit_sheet(clone, unit))
+}
+
+/// [`unit_content_key`] where the caller knows the sheet the unit is judged `on`, which is asked only where the review tree did not
+/// snapshot the unit (the checkpoint, which has every owed unit in hand, 451 T176).
+pub fn content_key_on(clone: &Path, unit: &str, on: impl FnOnce() -> String) -> String {
     // a unit the review tree snapshotted: what its review read, the snapshot's copy (451 T164)
-    if let Some(snap) = tree::of_unit(clone, unit) {
-        return folder_key(&snap.copy, &snap.on);
+    match tree::of_unit(clone, unit) {
+        Some(snap) => folder_key(&snap.copy, &snap.on),
+        None => content_key(clone, &on()),
     }
-    content_key(clone, &unit_sheet(clone, unit))
 }
 
 /// Write the map's verdict record, the review's last act (FR-001): `(what was recorded, the record)`.
@@ -648,10 +680,11 @@ fn write_verdict(
     (text_of(&rec, "verdict", ""), rec)
 }
 
-const COMMANDS: [&str; 7] = [
+const COMMANDS: [&str; 8] = [
     "check",
     "accept",
     "recorded",
+    "answered",
     "gate-state",
     "verdict",
     "named",
@@ -746,6 +779,11 @@ fn run(command: &str, p: &Parsed) -> Reply {
                 i32::from(!recorded(&clone, &maps, p.text("--key", ""))),
             )
         }
+        "answered" => reply(
+            String::new(),
+            String::new(),
+            i32::from(!answered(&clone, &map, p.text("--key", ""))),
+        ),
         "named" => {
             let maps = p.text("--maps", "");
             let pool: Vec<String> = if maps.is_empty() {

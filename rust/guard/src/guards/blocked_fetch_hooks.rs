@@ -4,6 +4,7 @@
 //! starts. Every other `WebFetch` or shell fetch is an attempt on the clone's log, and the URL's earlier attempts come back as context. A mention is
 //! not a fetch. There is no escape, deliberately: a domain leaves the list only by the GM's edit of `research/blocked-domains.json`.
 
+use std::fmt::Write as _;
 use std::path::{Path, PathBuf};
 use std::sync::LazyLock;
 
@@ -14,7 +15,9 @@ use crate::guards::finished_run_hooks::runs::realpath;
 use crate::protocol::{Answer, Event, Guard};
 use crate::shared::attempts;
 use crate::shared::blocked::{blocked, domains, refusal, Rule};
+use crate::shared::checks;
 use crate::shared::cited_url::url_id;
+use crate::shared::listed;
 use crate::shared::log;
 use crate::shared::session::Session;
 use crate::shared::state::field;
@@ -234,23 +237,66 @@ pub(crate) fn judge(event: &Event, session: &Session, ctx: &Ctx) -> Vec<Answer> 
     let Some(reports) = earlier(&root, &urls, &fetch, &tool.to_lowercase(), ctx) else {
         return Vec::new();
     };
-    let mut lines = Vec::new();
+    let mut blocks = Vec::new();
     for (url, report) in urls.iter().zip(reports) {
-        let said = report.get("lines").and_then(Value::as_array);
-        lines.extend(
-            said.into_iter()
-                .flatten()
-                .filter_map(Value::as_str)
-                .map(str::to_owned),
-        );
+        let said: Vec<String> = report
+            .get("lines")
+            .and_then(Value::as_array)
+            .into_iter()
+            .flatten()
+            .filter_map(Value::as_str)
+            .map(str::to_owned)
+            .collect();
+        let mut block = attempts_said(url, &said);
         if archived(&root, field(&report, "plain")) {
-            lines.push(format!("archive: a copy of {url} is archived - read it with `make archive-find URL='{url}'` before the web"));
+            if !block.is_empty() {
+                block.push('\n');
+            }
+            let _ = write!(block, "archive: a copy of {url} is archived - read it with `make archive-find URL='{url}'` before the web");
+        }
+        if !block.is_empty() {
+            blocks.push(block);
         }
     }
-    if lines.is_empty() {
+    if blocks.is_empty() {
         return Vec::new();
     }
-    vec![Answer::Notice(lines.join("\n"))]
+    // one URL's said, every one's kept (451 T170: a command fetching several URLs said every one's)
+    let rest = if blocks.len() > 1 {
+        listed::kept(&checks::common_dir(&root), &blocks)
+    } else {
+        String::new()
+    };
+    let said = if rest.is_empty() {
+        blocks.join("\n")
+    } else {
+        format!(
+            "{}\nand {} more URL(s)' attempts: `{rest}`",
+            blocks[0],
+            blocks.len() - 1
+        )
+    };
+    vec![Answer::Notice(said)]
+}
+
+/// One URL's attempts as the notice says them: its head and the filter's verdict, then its first attempt and `make attempts` for
+/// every one (451 T170: one URL's 30-odd attempts reached a builder at 6,077 characters, 2026-11-23).
+pub(crate) fn attempts_said(url: &str, said: &[String]) -> String {
+    let heads = 1 + usize::from(
+        said.get(1)
+            .is_some_and(|l| l.starts_with("  filter verdict:")),
+    );
+    let (head, tried) = said.split_at(heads.min(said.len()));
+    let mut out = head.to_vec();
+    if !tried.is_empty() {
+        out.push(listed::capped_n(
+            tried,
+            1,
+            "  ",
+            &format!("make attempts URL='{url}'"),
+        ));
+    }
+    out.join("\n")
 }
 
 fn decide(event: &Event, session: &Session) -> Vec<Answer> {

@@ -12,6 +12,7 @@ use super::super::tests::{fx, has, Fx, NOTE};
 use super::{INNER, REFUSED_FIRST, SCRIPT};
 
 mod booked;
+mod filed;
 mod take;
 
 /// The landing's `end` lines in the tree's event logs.

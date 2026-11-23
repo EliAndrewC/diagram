@@ -28,13 +28,14 @@ footer{margin-top:3rem;padding-top:1rem;border-top:1px solid var(--line);color:v
 </style>
 <main>
 <h1>make targets</h1>
-<p class=lede>Every target in the diagram skill's Makefile, grouped. 189 documented. Generated from the Makefile - edit the target's <code>##</code> line, not this page.</p>
+<p class=lede>Every target in the diagram skill's Makefile, grouped. 191 documented. Generated from the Makefile - edit the target's <code>##</code> line, not this page.</p>
 <h2>Tests</h2>
 <p class=sec>The four tiers, cheapest first. Where a test LIVES decides when it runs, so these differ by scope rather than by filter.</p>
 <div class=scroll><table><tr><th>target</th><th>arguments</th><th>what it is</th></tr>
 <tr><td class=n>make closing-checks</td><td class=a>F FRESH HOOKS_ALL REASON T</td><td>make static, make hooks-test and make quick at once, one combined result (each verdict and log; red if any is): start it with run_in_background once the code is done, then write the plan section and run make decide while it runs (451 T55); T= judges that task&#x27;s files and crates, another task&#x27;s red reported apart, not counted (451 T86); T=a,b,c judges a bundle&#x27;s files as one task&#x27;s (451 T141)</td></tr>
 <tr><td class=n>make coverage-exempt</td><td class=a>PRUNE</td><td>the engine files the Rust port replaces, exempt from the coverage floor (dev/coverage-exempt.json; feature 448, the GM 2026-11-02); PRUNE=1 drops the stale entries   [PRUNE=1]</td></tr>
 <tr><td class=n>make done</td><td class=a>FULL INCREMENTAL</td><td>tier 3, the whole gate: lint, the static checks, the reference map, every test and the 100% floors; run once at the end, backgrounded</td></tr>
+<tr><td class=n>make guard-messages</td><td class=a>BUNDLE BY KEY OVER VERDICT</td><td>the guard messages the suites rendered that owe a review or a cut (451 T170); BUNDLE=1 writes message-check&#x27;s units; KEY= VERDICT=PASS|FAIL BY=&quot;&lt;agent id&gt;&quot; [OVER=&quot;&lt;why&gt;&quot;] records a verdict   [BUNDLE=1] [KEY= VERDICT= BY= OVER=]</td></tr>
 <tr><td class=n>make hooks-test</td><td class=a>&ndash;</td><td>run every tests/hooks/test-*-hooks.sh, and prove each guard still has a companion</td></tr>
 <tr><td class=n>make idle-tests<span class='b off' title="arming is disabled - the GM turned it off 2026-09-06; the target still runs by hand">inactive</span></td><td class=a>&ndash;</td><td>what an idle session runs unattended (feature 136): the whole gate, never FULL, recorded as `idle-done` <span class=w>arming is disabled - the GM turned it off 2026-09-06; the target still runs by hand</span></td></tr>
 <tr><td class=n>make inline-census</td><td class=a>&ndash;</td><td>phase 1&#x27;s share of feature 449&#x27;s second census: every inline Python site under scripts/hooks/ and tests/hooks/, each under a group FR-001 names; a site outside them fails</td></tr>
@@ -91,6 +92,7 @@ footer{margin-top:3rem;padding-top:1rem;border-top:1px solid var(--line);color:v
 <h2>Static checks</h2>
 <p class=sec>What the gate runs before it spends anything on a map roll.</p>
 <div class=scroll><table><tr><th>target</th><th>arguments</th><th>what it is</th></tr>
+<tr><td class=n>make crate-checks</td><td class=a>CRATE</td><td>a task&#x27;s crate-scoped checks while iterating - test, lint, format --check and cover, each over every crate CRATE= names, all reported, red if any is - the edit loop in place of a third make static (451 FR-007, T170)</td></tr>
 <tr><td class=n>make format</td><td class=a>CRATE FILE</td><td>rustfmt over the Rust phases&#x27; crates (feature 444 T17), or over CRATE=&lt;dir&gt;&#x27;s alone, or FILE=&lt;path&gt;&#x27;s alone - that file, not its mod children, with its crate&#x27;s edition (451 T34)   [CRATE=&lt;dir&gt;] [FILE=&quot;&lt;path&gt; ...&quot;]</td></tr>
 <tr><td class=n>make guard<span class=b title='called by a recipe or a script - you would not type this'>internal</span></td><td class=a>&ndash;</td><td>refuse to run in main&#x27;s tree - main is the integration point, never a workspace</td></tr>
 <tr><td class=n>make static</td><td class=a>FRESH REASON</td><td>the static checks: file-scale, the Rust crates&#x27; checks (was `lint`), each crate&#x27;s kept green result reused while its inputs stand (449 T93)   [FRESH=1 REASON=&quot;...&quot;]</td></tr>

@@ -229,7 +229,8 @@ Send the lookups you already know you need TOGETHER, as parallel tool calls in o
     let mut out = Vec::new();
     if st.calls == 1 && n + 1 >= st.rearm {
         out.push(Answer::Notice(format!(
-            "BATCHING NOTICE: {n} of your last {turns} turns were a single bare read each (a folded command does not count). The next bare Read/Grep/Glob or single-command Bash on its own is refused. Send calls you already know you need as PARALLEL tool calls in one message. Nothing is refused yet."
+            // 451 T170: said 389 times over the coordinator's subagents and 48 in its own session, measured 2026-11-23
+            "BATCHING NOTICE: {n} of your last {turns} turns were one bare read each (a folded command does not count); the next bare Read/Grep/Glob or single-command Bash alone is refused. Send the calls you already know you need as PARALLEL tool calls in one message."
         )));
         let detail = format!("{n} of the last {turns} turns were single bare reads - at or above one below the bar (history {}, bar {})", st.hist, st.rearm);
         log::fire(

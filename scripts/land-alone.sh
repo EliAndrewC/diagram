@@ -13,7 +13,8 @@
 #
 # Steps, each refusing with what to do: (1) one landing alone at a time (a lock); (2) THE TASK'S OWN SECTIONS COMMITTED APART (451 T101):
 # the feature's plan.md, tasks.md and plan-review.json hold every open task's section, line and verdict, so the clone's HEAD takes a
-# commit of each built from HEAD's file with only the landing tasks' own pieces replaced (and those of a task their section files) - the
+# commit of each built from HEAD's file with only the landing tasks' own pieces replaced (and the tasks.md line of a task their section
+# files, never its section or verdict, 451 T180) - the
 # clone's other uncommitted text stays in its files, and the landing's commit holds none of it (T95, CLEAR, could not land alone on
 # 2026-11-21: plan.md also held T82's and T97's unreviewed sections); (3) the landing tasks' own other files still uncommitted - a line
 # filed under the task names them, an edit's path or a Bash call's `writes` (451 T96: the closing checks' attribution) - refused, named;
@@ -282,14 +283,18 @@ def stage(root, feature, tasks):
     read = lambda p: open(os.path.join(root, p), encoding='utf-8').read() if os.path.isfile(os.path.join(root, p)) else None
     plan = read(f'{rel}/plan.md') or ''
     own = [u for u in units('plan.md', plan) if u[0] in {'task:' + t for t in tasks}]
-    tasks = list(dict.fromkeys([*tasks, *(f for _, b in own for f in FILED.findall(b))]))
+    # a task the landing's sections file (`Filed as T<n>`) lands its tasks.md line alone, which the deferral rule needs open in the
+    # landed tree (451 T17); its plan section and verdict are its own builder's, never this landing's (451 T180: 449 T351's landing
+    # committed T377's filled section and BLOCKED verdict, and its tick refused on that block)
+    filed = [f for f in dict.fromkeys(f for _, b in own for f in FILED.findall(b)) if f not in tasks]
     staged = {}
     for f in SECTIONED:
         p, work = f'{rel}/{f}', read(f'{rel}/{f}')
         old = show(p)
         if work is None or work == old:
             continue
-        new = stage_review(old, work, tasks) if f.endswith('.json') else splice(f, old, work, ['task:' + t for t in tasks])
+        lines = tasks + filed if f == 'tasks.md' else tasks
+        new = stage_review(old, work, tasks) if f.endswith('.json') else splice(f, old, work, ['task:' + t for t in lines])
         if new != old:
             staged[p] = new
     if not staged:
@@ -301,7 +306,8 @@ def stage(root, feature, tasks):
         git(root, 'update-index', '--add', '--cacheinfo', f'100644,{blob},{p}', env=env)
     tree = git(root, 'write-tree', env=env).stdout.decode().strip()
     os.remove(env['GIT_INDEX_FILE'])
-    msg = f"{feature} {' '.join(tasks)}: their own plan sections, tasks.md lines and verdicts, apart from the other open tasks' (land-alone, 451 T101)"
+    lines = f" and the tasks.md lines of the tasks they file ({' '.join(filed)})" if filed else ''
+    msg = f"{feature} {' '.join(tasks)}: their own plan sections, tasks.md lines and verdicts{lines}, apart from the other open tasks' (land-alone, 451 T101)"
     new = git(root, 'commit-tree', tree, '-p', head, '-m', msg).stdout.decode().strip()
     # compare and swap: a landing that moved HEAD meanwhile leaves this one refused, the working files as they were
     git(root, 'update-ref', '-m', 'land-alone: the task\'s own sections', 'HEAD', new, head)

@@ -28,7 +28,8 @@ use crate::shared::tool::{ask, within, Said};
 /// tests - never reached a session; the Bash call is added here as the defect's fix (constitution XIV, T013).
 pub const GUARD: Guard = Guard {
     name: "clone-sync-hooks",
-    events: &["PreToolUse", "UserPromptSubmit"],
+    // SessionStart: a compaction forgets the mid-task notice said in one line (451 T170, `once::forget`)
+    events: &["PreToolUse", "UserPromptSubmit", "SessionStart"],
     matcher: "Edit|Write|NotebookEdit|Bash",
     decide,
 };
@@ -265,6 +266,12 @@ fn decide(event: &Event, session: &Session) -> Vec<Answer> {
 }
 
 pub(crate) fn judge(cx: &Ctx) -> Vec<Answer> {
+    if cx.event.name == "SessionStart" {
+        if let Some(clone) = claimed(cx) {
+            crate::shared::once::forget(said(cx, &clone).as_deref(), cx.input("source"));
+        }
+        return Vec::new();
+    }
     if cx.event.name == "UserPromptSubmit" {
         let lines = prompt(cx);
         return if lines.is_empty() {
@@ -520,16 +527,28 @@ fn tail(out: &str, n: usize) -> String {
 }
 
 /// The lines the prompt mode says: the unnamed-session notice, the tracked-pointer notice, and the sync's outcome.
+/// The clone this session's claim names, or None for a session with none.
+fn claimed(cx: &Ctx) -> Option<PathBuf> {
+    let sid = cx.input("session_id");
+    (!sid.is_empty())
+        .then(|| std::fs::read_to_string(cx.mapdir().join(sid)).ok())
+        .flatten()
+        .map(PathBuf::from)
+}
+
+/// The session's record of what was said once (`shared::once`), in the clone's git directory beside set-down's.
+fn said(cx: &Ctx, clone: &Path) -> Option<PathBuf> {
+    crate::shared::once::file(&clone.join(".git"), &cx.event.input)
+}
+
 fn prompt(cx: &Ctx) -> Vec<String> {
     let sid = cx.input("session_id");
     if sid.is_empty() {
         return Vec::new();
     }
-    let map = cx.mapdir().join(sid);
-    let Ok(claimed) = std::fs::read_to_string(&map) else {
+    let Some(clone) = claimed(cx) else {
         return unnamed(cx, sid);
     };
-    let clone = PathBuf::from(claimed);
     if !clone.join(".git").is_dir() {
         return Vec::new();
     }
@@ -614,6 +633,8 @@ fn sync(cx: &Ctx, clone: &Path) -> Vec<String> {
     if !midtask.is_empty() {
         return refresh_mirror(cx, clone, midtask);
     }
+    // a sync: the mid-task notice, when it comes back, is said in full
+    crate::shared::once::clear(said(cx, clone).as_deref(), GUARD.name);
     let out = ask(clone, script, &["sync-in", "--background-render"], "");
     let text = both(&out);
     if !out.ok() {
@@ -663,13 +684,31 @@ fn refresh_mirror(cx: &Ctx, clone: &Path, midtask: &str) -> Vec<String> {
         "",
     );
     let text = both(&out);
+    let record = said(cx, clone);
     if !out.ok() {
+        crate::shared::once::clear(record.as_deref(), GUARD.name);
         return vec![format!(
             "clone-sync: {c} {midtask} - clone merge skipped; mirror refresh FAILED: {}",
             tail(&text, 1)
         )];
     }
-    let mut lines = vec![format!("clone-sync: {c} {midtask} - clone merge skipped; mirror refreshed from GitHub main. Finish and run sync-with-main.sh done")];
+    // AN UNCHANGED MID-TASK NOTICE IS SAID ONCE (451 T170): in full, then in one line until it changes, a sync or a failed refresh
+    // comes between, or a compaction forgets it; the coordinator's 1,870 prompts each carried its 172 characters, measured
+    // 2026-11-23 over its transcript (`/tmp/t170/rank.py`)
+    let full = format!("clone-sync: {c} {midtask} - clone merge skipped; mirror refreshed from GitHub main. Finish and run sync-with-main.sh done");
+    let now = SystemTime::now()
+        .duration_since(UNIX_EPOCH)
+        .map_or(0, |d| i64::try_from(d.as_secs()).unwrap_or(0));
+    let mut lines =
+        vec![
+            match crate::shared::once::repeat(record.as_deref(), GUARD.name, &full, now) {
+                Some(since) => format!(
+                    "clone-sync: still mid-task since {}, merge skipped",
+                    crate::shared::once::hhmm(since)
+                ),
+                None => full,
+            },
+        ];
     if git(
         clone,
         &[

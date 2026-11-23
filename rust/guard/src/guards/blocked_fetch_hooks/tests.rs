@@ -234,3 +234,70 @@ fn the_small_readers() {
     let e = event("Bash", &json!({"command": "ls"}), "/");
     assert!(decide(&e, &Session::from_input(&e.input)).is_empty());
 }
+
+#[test]
+fn a_url_tried_many_times_says_its_first_attempt_and_the_command_for_the_rest() {
+    let head = "attempts: https://a.org/1 - 40 earlier attempt(s):".to_owned();
+    let verdict = "  filter verdict: KEEP".to_owned();
+    let tried: Vec<String> = (1..=40)
+        .map(|i| format!("  2026-10-01 Q 00{i:02}: not-found - the dike"))
+        .collect();
+    let said = super::attempts_said(
+        "https://a.org/1",
+        &[vec![head.clone(), verdict.clone()], tried.clone()].concat(),
+    );
+    assert_eq!(
+        said,
+        [
+            head.clone(),
+            verdict,
+            tried[0].clone(),
+            "  and 39 more: `make attempts URL='https://a.org/1'`".to_owned()
+        ]
+        .join("\n")
+    );
+    let one = super::attempts_said("https://a.org/1", &[head.clone(), tried[0].clone()]);
+    assert_eq!(one, [head, tried[0].clone()].join("\n"));
+    assert_eq!(super::attempts_said("https://a.org/1", &[]), "");
+}
+
+/// 451 T170: a command fetching several URLs tried before says the first one's attempts and keeps every one's in a file.
+#[test]
+fn several_urls_tried_before_say_the_first_and_keep_the_rest() {
+    let row = |n: u32| {
+        format!(
+            r#"{{"url": "a.org/{n}", "raw": "https://a.org/{n}", "key": "", "question": "0012", "sought": "the dike", "outcome": "not-found", "date": "2026-10-01", "feature": "312", "route": "webfetch"}}"#
+        )
+    };
+    let (d, at) = world("several", &format!("{}\n{}\n", row(1), row(2)));
+    let got = bash(&d, "curl -sL https://a.org/1 https://a.org/2", &at);
+    let first_and_kept = |t: &str| {
+        let kept = t
+            .split("more URL(s)' attempts: `cat ")
+            .nth(1)
+            .unwrap_or_default()
+            .trim_end_matches('`');
+        t.starts_with("attempts: https://a.org/1 - 1 earlier attempt(s):")
+            && !t.contains("a.org/2 -")
+            && std::fs::read_to_string(kept)
+                .unwrap_or_default()
+                .contains("attempts: https://a.org/2 - 1 earlier attempt(s):")
+    };
+    let said = matches!(&got[..], [Answer::Notice(t)] if first_and_kept(t));
+    assert!(said, "{got:?}");
+}
+
+/// 451 T170: a URL tried before and archived says both, the archive's pointer on a line of its own after the attempts.
+#[test]
+fn a_url_tried_before_and_archived_says_its_attempts_then_the_archive() {
+    let row = r#"{"url": "held.org/q", "raw": "https://held.org/q", "key": "", "question": "0012", "sought": "the dike", "outcome": "not-found", "date": "2026-10-01", "feature": "312", "route": "webfetch"}"#;
+    let (d, at) = world("arch-tried", &format!("{row}\n"));
+    let uid = sha256::hex(b"https://held.org/q");
+    let dir = Path::new(&at).join("research/archive").join(&uid[..2]);
+    std::fs::create_dir_all(&dir).unwrap();
+    std::fs::write(dir.join(format!("{}.json", &uid[..12])), "{}").unwrap();
+    let got = web(&d, "https://held.org/q", &at);
+    let said = matches!(&got[..], [Answer::Notice(t)] if t.starts_with("attempts: https://held.org/q - 1 earlier attempt(s):")
+        && t.contains("\narchive: a copy of https://held.org/q is archived"));
+    assert!(said, "{got:?}");
+}

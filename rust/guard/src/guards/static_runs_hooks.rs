@@ -21,7 +21,6 @@
 //! A call whose line carries no task is passed, the pass recorded as `no-task` (plan D10's precedent): there is nothing to count by.
 
 use std::collections::{BTreeSet, HashSet};
-use std::fmt::Write as _;
 use std::path::Path;
 
 use serde_json::Value;
@@ -305,7 +304,7 @@ fn delta_crates(root: &Path) -> Vec<String> {
     crates_of(root, paths.lines())
 }
 
-fn crates_of<'a>(root: &Path, paths: impl Iterator<Item = &'a str>) -> Vec<String> {
+pub(crate) fn crates_of<'a>(root: &Path, paths: impl Iterator<Item = &'a str>) -> Vec<String> {
     let mut out = BTreeSet::new();
     for p in paths.filter(|p| p.starts_with("rust/")) {
         let found = Path::new(p).ancestors().skip(1).find(|a| {
@@ -319,27 +318,20 @@ fn crates_of<'a>(root: &Path, paths: impl Iterator<Item = &'a str>) -> Vec<Strin
     out.into_iter().collect()
 }
 
-/// The refusal: the count, the crate-scoped checks for each crate, `make static` once before the landing, the escape.
-fn refusal(feature: &str, task: &str, runs: usize, crates: &[String]) -> String {
+/// The refusal: the count, the crate-scoped checks for the crates as ONE command, its list said once (`make crate-checks`, 451 T170:
+/// four lines a crate reached builders at up to 7,909 characters over 25 crates, 4,054 on average, measured 2026-11-23; held at its
+/// worst case, every crate of the workspace, by `suite_tools/messages/worst.rs`), `make static` once before the landing, the escape.
+pub(crate) fn refusal(feature: &str, task: &str, runs: usize, crates: &[String]) -> String {
     let checks = if crates.is_empty() {
         "  This task's delta changes no Rust crate (against origin/main's merge base): `make quick` is its edit loop.\n".to_owned()
     } else {
-        crates.iter().fold(String::new(), |mut out, c| {
-            let _ = write!(
-                out,
-                "  make rust-test CRATE={c}\n  \
-                 scripts/gates/l7r-gate.sh rust lint --crate {c}\n  \
-                 scripts/gates/l7r-gate.sh rust format --check --crate {c}\n  \
-                 scripts/gates/l7r-gate.sh rust cover --crate {c}\n"
-            );
-            out
-        })
+        format!("  make crate-checks CRATE=\"{}\"\n", crates.join(" "))
     };
     let run = order::closing_run(feature, Some(task));
     format!(
         "\n\u{1b}[1mBLOCKED: {task} of {feature} has run `make static` {runs} times since its last landing (feature 451 FR-007).\u{1b}[0m\n\n\
 `make static` is the check before a landing, not the edit loop: it runs every crate's checks. While iterating, run the\n\
-checks of the crates this task changes:\n\n{checks}\n\
+test, lint, format and cover checks of the crates this task changes:\n\n{checks}\n\
 then `make static` once, before `make land` (or `{run}` in the background: it runs make static, make hooks-test\n\
 and make quick at once, and is one run of `make static`) - a landing of {task} that goes out starts the count again; a later\n\
 `make task-start` does not.\n\n\

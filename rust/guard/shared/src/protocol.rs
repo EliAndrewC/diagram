@@ -2,6 +2,8 @@
 //! R3): the event read once, each guard's answers, and their merge into one reply - every refusal together, the rewrites in order,
 //! the notices joined.
 
+use std::path::Path;
+
 use serde_json::{json, Value};
 
 use crate::session::Session;
@@ -77,9 +79,13 @@ pub fn run(event: &mut Event, guards: &[Guard]) -> Reply {
     let takers: Vec<&Guard> = guards.iter().filter(|g| g.takes(event)).collect();
     // the session's facts, read once for every guard (D6)
     let session = Session::from_input(&event.input);
+    let corpus = crate::env::opt("L7R_MESSAGE_CORPUS");
     for guard in takers {
         let answers = (guard.decide)(event, &session);
         for answer in answers {
+            if let Some(dir) = corpus.as_deref() {
+                keep(Path::new(dir), guard.name, &event.name, &answer);
+            }
             match answer {
                 Answer::Refuse(why) => refusals.push(why),
                 Answer::Rewrite(input) => {
@@ -138,6 +144,31 @@ pub fn run(event: &mut Event, guards: &[Guard]) -> Reply {
         stdout: json!({"hookSpecificOutput": out}).to_string(),
         stderr: String::new(),
         code: 0,
+    }
+}
+
+/// EVERY MESSAGE A SUITE RENDERS IS KEPT FOR ITS BUDGET (451 T170): with `L7R_MESSAGE_CORPUS` set - by `tests/hooks/hookrun.sh`,
+/// for a suite's run, never by a session - each refusal, block, notice and prompt text is a line of `<dir>/messages.jsonl`, which
+/// `l7r-guard messages check` holds to its budget and its review (`suite_tools::messages`). A rewrite says nothing to the reader, and
+/// a hand-run mode's printed answer is no hook's.
+fn keep(dir: &Path, guard: &str, event: &str, answer: &Answer) {
+    let (kind, text) = match answer {
+        Answer::Refuse(t) => ("refuse", t),
+        Answer::StopBlock(t) => ("block", t),
+        Answer::Notice(t) => ("notice", t),
+        Answer::Print(t) if ["UserPromptSubmit", "SessionStart"].contains(&event) => ("notice", t),
+        _ => return,
+    };
+    let line =
+        json!({"guard": guard, "event": event, "kind": kind, "text": text}).to_string() + "\n";
+    let _ = std::fs::create_dir_all(dir);
+    if let Ok(mut f) = std::fs::OpenOptions::new()
+        .create(true)
+        .append(true)
+        .open(dir.join("messages.jsonl"))
+    {
+        // one write a line, so the suite's parallel parts never interleave within one
+        let _ = std::io::Write::write_all(&mut f, line.as_bytes());
     }
 }
 

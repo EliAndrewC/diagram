@@ -103,6 +103,36 @@ kill "$ROLL" 2>/dev/null; wait "$ROLL" 2>/dev/null
 rolling "$ROLL" l7r.diagram.tools.cohort
 edit2 "$ENG" "return 1" "return 2";           check "a roll in another tree does not freeze this clone" 0 "$RC"
 kill "$ROLL" 2>/dev/null; wait "$ROLL" 2>/dev/null
+# A REVIEW THAT READS ITS OWN REVIEW TREE HOLDS THAT TREE ALONE (451 T175; since 451 T164 a review reads <clone>-review, a worktree at a
+# commit, named by its prompt's `Review tree:` line, which an edit in the clone cannot change - observed 2026-11-23, 451 T170's builder
+# blocked on every rust/ edit in the clone by 449's building-reviews); a review naming no tree holds every tree, and a roll in the clone
+# still freezes it
+RT=$T/clone-review
+git init -q "$RT"
+mkdir -p "$RT/l7r/diagram/settlement" "$RT/scripts/gates"; : > "$RT/scripts/gates/l7r-gate.sh"
+printf 'def f():\n    return 1\n' > "$RT/l7r/diagram/settlement/lanes.py"
+agent_tree() { # agent_tree <id> <type> <last record json> <review tree>
+  printf '{"agentType":"%s"}' "$2" > "$SUB/agent-$1.meta.json"
+  printf '{"type":"user","message":{"content":"UNIT: u\\nClone: %s ... Review tree: %s, a worktree at abc123def4, the bundle own work"}}\n%s\n' \
+    "$C" "$4" "$3" > "$SUB/agent-$1.jsonl"
+}
+lacks() { case "$OUT" in *"$2"*) printf 'FAIL  %s - text has: %s\n      out: %s\n' "$1" "$2" "$OUT"; FAIL=$((FAIL+1));; *) printf 'ok    %s\n' "$1"; PASS=$((PASS+1));; esac; }
+agent_tree a6 glyph-check "$MIDTOOL" "$RT"
+edit2 "$ENG" "return 1" "return 2";           check "a clone edit while the review reads its own review tree passes" 0 "$RC"
+edit2 "$RT/l7r/diagram/settlement/lanes.py" "return 1" "return 2"; check "an edit in the tree a live review reads is refused" 2 "$RC"
+says "the refusal names the review reading that tree" "a6 glyph-check live"
+agent a7 glyph-check "$MIDTOOL"
+edit2 "$ENG" "return 1" "return 2";           check "a review with no review tree on record still freezes the clone" 2 "$RC"
+says "the refusal names the review with no tree" "a7 glyph-check live"
+lacks "...and not the review reading its own tree" "a6 glyph-check"
+touch "$SESSION/stall-ack/a7"
+(cd "$C" && exec -a python3 bash -c 'sleep 30; :' l7r.diagram.tools.rust_gate) & ROLL=$!
+rolling "$ROLL" l7r.diagram.tools.rust_gate
+edit2 "$ENG" "return 1" "return 2";           check "a roll in the clone still freezes it under a tree-reading review" 2 "$RC"
+says "the refusal names the roll" "rust_gate rolling"
+lacks "...and not the review reading its own tree" "a6 glyph-check"
+kill "$ROLL" 2>/dev/null; wait "$ROLL" 2>/dev/null
+touch "$SESSION/stall-ack/a6"
 [ -n "$(ls "$GUARD_LOG_DIR" 2>/dev/null)" ] && { echo "ok    firings are recorded"; PASS=$((PASS+1)); } || { echo "FAIL  no guard-log entry"; FAIL=$((FAIL+1)); }
 
 printf '\n%d passed, %d failed\n' "$PASS" "$FAIL"

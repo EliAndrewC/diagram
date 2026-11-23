@@ -142,3 +142,21 @@ fn the_escape_needs_a_reason_and_the_entry_reads_the_cwd() {
     };
     assert!(decide(&e, &Session::from_input(&e.input)).is_empty());
 }
+
+/// 451 T170: a `git checkout .` names every modified file of the tree; the refusal names the first few and `git status --short`.
+#[test]
+fn a_checkout_of_many_modified_files_names_the_first_few_and_the_command_for_the_rest() {
+    let at = repo("many");
+    for i in 0..9 {
+        let f = std::path::Path::new(&*at).join(format!("m{i}.py"));
+        std::fs::write(&f, "a\n").unwrap();
+    }
+    git(&at, &["add", "."]);
+    git(&at, &["commit", "-q", "-m", "more"]);
+    for i in 0..9 {
+        std::fs::write(std::path::Path::new(&*at).join(format!("m{i}.py")), "b\n").unwrap();
+    }
+    let got = run("git checkout -- .", &at);
+    assert!(refused(&got, "  and 7 more: `git status --short`"));
+    assert!(refused(&got, "DISCARD_OK"));
+}

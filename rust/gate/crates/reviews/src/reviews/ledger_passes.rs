@@ -14,6 +14,7 @@
 //! ledger-owed --write "<where the session recorded what it did>" [--session <sid>]
 //!                                                      append each unanswered pass's row, filled from the agent's own reply
 //!                                                      (the page-session runner, at each session's end)
+//! ledger-owed ... --brief                              the count, the first row and the command for the rest (a commit's notice)
 //! ledger-owed ... --refuse                             exit 1 while any is unanswered (the push)
 //! ledger-owed ... --refuse --landing <feature dir> --tasks "<ids>"
 //!                                                      `make land`'s first pass: an open task's plan review left to its landing
@@ -30,6 +31,7 @@ mod rows;
 mod settle;
 mod trace;
 
+use std::fmt::Write as _;
 use std::path::{Path, PathBuf};
 use std::process::Command;
 
@@ -166,7 +168,7 @@ fn row_of(cells: &[String]) -> String {
 fn usage(why: &str) -> Reply {
     reply(
         String::new(),
-        format!("usage: l7r-gate reviews ledger-owed [--log LOG] [--ledger LEDGER] [--refuse] [--transcripts DIR] [--write WHERE] [--session SID] [--write-plan-reviews] [--by-hand] [--landing FEATURE] [--tasks IDS]\nl7r-gate reviews ledger-owed: error: {why}\n"),
+        format!("usage: l7r-gate reviews ledger-owed [--log LOG] [--ledger LEDGER] [--refuse] [--transcripts DIR] [--write WHERE] [--session SID] [--write-plan-reviews] [--by-hand] [--landing FEATURE] [--tasks IDS] [--brief]\nl7r-gate reviews ledger-owed: error: {why}\n"),
         2,
     )
 }
@@ -206,6 +208,7 @@ pub fn cli(args: &[String], env: &Env) -> Reply {
         Spec::flag("--by-hand"),
         Spec::value("--landing"),
         Spec::value("--tasks"),
+        Spec::flag("--brief"),
     ];
     let p = match parse(args, &specs) {
         Ok(p) => p,
@@ -223,6 +226,7 @@ pub fn cli(args: &[String], env: &Env) -> Reply {
         by_hand: p.on("--by-hand"),
         landing: p.text("--landing", ""),
         tasks: p.text("--tasks", ""),
+        shown: if p.on("--brief") { 1 } else { usize::MAX },
     };
     run(&opts, env).unwrap_or_else(|why| raised(String::new(), "ledger-owed", &why))
 }
@@ -282,6 +286,8 @@ struct Opts<'a> {
     by_hand: bool,
     landing: &'a str,
     tasks: &'a str,
+    /// how many owed rows the listing shows: every one, or the first under `--brief` (a commit's notice, 451 T170)
+    shown: usize,
 }
 
 /// `main` after its arguments.
@@ -343,13 +349,20 @@ fn run(o: &Opts, env: &Env) -> Result<Reply, String> {
     if owed.is_empty() {
         return Ok(reply(note, String::new(), 0));
     }
-    let mut said = format!("ledger-owed: {} check pass(es) have no row in dev/review-ledger.md's measured table - write them from each agent's reply: make ledger-owed WRITE=\"<where you recorded what you did>\" (feature 385 FR-019); or add each by hand, filling the ?s:\n", owed.len());
-    for p in &owed {
+    let mut said = format!("ledger-owed: {} check pass(es) have no row in dev/review-ledger.md's measured table - write them from each agent's reply: make ledger-owed WRITE=\"<where you recorded what you did>\"; or add each by hand, filling the ?s:\n", owed.len());
+    // A COMMIT'S NOTICE IS THE COUNT, THE FIRST ROW AND THE COMMAND FOR THE REST (451 T170, `--brief`, the ledger guard's): every
+    // row on each commit was 1,695 characters a notice, 122 times in the coordinator's session, up to 7,547, measured 2026-11-23. The
+    // history the notice no longer says: `WRITE=` is feature 385 FR-019's, a row's cost cells (`make review-cost`) feature 371's.
+    let shown = &owed[..o.shown.min(owed.len())];
+    for p in shown {
         said.push_str("  ");
         said.push_str(&rows::row_for(p));
         said.push('\n');
     }
-    said += "  (a row answers a pass by its check and its cost cells, which are the pass's own `make review-cost` - feature 371; the push refuses until each has its row, or LEDGER_ROWS_OK=\"<reason>\")\n";
+    if shown.len() < owed.len() {
+        let _ = writeln!(said, "  ... `make ledger-owed` lists all {}", owed.len());
+    }
+    said += "  (its cost cells: `make review-cost`; the push refuses until each pass has its row, or LEDGER_ROWS_OK=\"<reason>\")\n";
     Ok(if o.refuse {
         reply(note, said, 1)
     } else {

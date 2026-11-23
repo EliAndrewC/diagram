@@ -326,20 +326,42 @@ pub fn batch_triggers_in(root: &Path, extra: &[String], env: Env) -> Vec<String>
 /// The refusal a tripwire owes, naming the batch where one is owed together.
 #[must_use]
 pub fn refusal(triggers: &[String], root: Option<&Path>) -> String {
+    said(triggers, root, root)
+}
+
+/// [`refusal`] with no batch asked of `root`, its list of triggers kept under `root`'s git directory past the first few.
+#[must_use]
+pub fn refusal_unbatched(triggers: &[String], root: &Path) -> String {
+    said(triggers, None, Some(root))
+}
+
+/// A list of triggers as a refusal says it: the first few and the `cat` of a file holding them all where `root` is known and there
+/// are more (451 T170: a tripwire refusal's list reached a session at 1,358 characters, 2026-11-23).
+fn named(triggers: &[String], root: Option<&Path>) -> String {
+    let rest = root
+        .filter(|_| triggers.len() > crate::listed::SHOWN)
+        .map(|r| crate::listed::kept(&common_dir(r), triggers))
+        .unwrap_or_default();
+    crate::listed::inline(triggers, &rest)
+}
+
+fn said(triggers: &[String], batch_root: Option<&Path>, list_root: Option<&Path>) -> String {
     let Some(t) = triggers.first() else {
         return String::new();
     };
-    let batched = root.map_or_else(Vec::new, |r| batch_triggers(r, triggers));
+    let batched = batch_root.map_or_else(Vec::new, |r| batch_triggers(r, triggers));
     if batched.len() > 1 && batched.contains(t) {
         return format!(
             "{} round triggers are owed together ({}; feature 375 FR-017): ONE ruling for the batch - make arbiter-bundle BATCH=1, dispatch `round-arbiter` on the MANIFEST it prints, then make arbiter-ruled BATCH=1 FILE=<its JSON> AS=round-arbiter. A round you mean to ask about ahead of its cap joins it with TRIGGERS=\"<trigger> ...\". The feature goes on elsewhere meanwhile.",
             batched.len(),
-            batched.join(", ")
+            named(&batched, list_root)
         );
     }
+    // 451 T170, message-check's cut: the rule's sources (feature 375 FR-010/FR-011, amendment 2 for the batch) and why the escape
+    // is rare - Claude Code picks up a new agent file mid-session, as this one was on 2026-10-10 - are the code's, not the reader's.
     format!(
-        "a tripwire is owed its ruling first ({}; feature 375 FR-010/FR-011): make arbiter-bundle TRIGGER=\"{t}\", dispatch `round-arbiter` on the MANIFEST it prints, then make arbiter-ruled TRIGGER=\"{t}\" FILE=<its JSON> AS=round-arbiter. Several units at their cap together (a batch of pop-ups or pages)? `make arbiter-bundle BATCH=1` puts every owed round trigger to ONE ruling (feature 375 amendment 2). The feature goes on elsewhere meanwhile. (Claude Code picks up a new agent file mid-session - this one did on 2026-10-10 - so only if `round-arbiter` is missing from the session's agent list: restart it, or carry ARBITER_OK=\"<reason>\" on the gate or in the check's prompt - logged.)",
-        triggers.join(", ")
+        "a tripwire is owed its ruling first ({}): make arbiter-bundle TRIGGER=\"{t}\", dispatch `round-arbiter` on the MANIFEST it prints, then make arbiter-ruled TRIGGER=\"{t}\" FILE=<its JSON> AS=round-arbiter. Several units at their cap together (a batch of pop-ups or pages)? `make arbiter-bundle BATCH=1` puts every owed round trigger to ONE ruling. Escape (only if `round-arbiter` is missing from the agent list): ARBITER_OK=\"<reason>\" on the gate or in the check's prompt - logged.",
+        named(triggers, list_root)
     )
 }
 

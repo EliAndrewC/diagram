@@ -14,6 +14,7 @@ pub mod escape;
 pub mod html_text;
 pub mod iso;
 pub mod ledger;
+pub mod listed;
 pub mod log;
 pub mod make;
 pub mod once;

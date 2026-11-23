@@ -176,22 +176,25 @@ pub(crate) fn judge(event: &Event, session: &Session, base: &str) -> Vec<Answer>
         &event.input,
         session,
     );
-    let listed = found
-        .iter()
-        .map(|p| format!("  {p}"))
-        .collect::<Vec<_>>()
-        .join("\n");
-    vec![Answer::Refuse(format!(
+    vec![Answer::Refuse(refusal(&found))]
+}
+
+/// The refusal: the files it would discard - the first few and `git status --short` for the rest (451 T170: a `git checkout .` names
+/// every modified file of the tree) - and the two ways on.
+pub(crate) fn refusal(found: &[String]) -> String {
+    let listed = crate::shared::listed::capped(
+        &found.iter().map(|p| format!("  {p}")).collect::<Vec<_>>(),
+        "  ",
+        "git status --short",
+    );
+    format!(
         "BLOCKED (discard): this command would throw away UNCOMMITTED work in:\n{listed}\n\n\
 A checkout or restore of a modified file cannot be undone - git keeps no copy of what it\n\
-overwrites. On 2026-08-27 (feature 133 T31) a session lost its whole working diff to a\n\
-`git checkout -- ways.py` typed into a command as a NOTE, and spent five minutes recovering it from\n\
-the transcript; the ten-minute task took thirty-nine.\n\n\
+overwrites.\n\n\
 If you mean it: commit first (mid-task commits inside your clone are always fine), or put\n\
 DISCARD_OK in the command with a note saying why. If you did not mean it, the command was carrying\n\
-text the shell read as an instruction - rewrite it without the checkout.\n\
-(rust/guard/src/guards/discard_hooks.rs; feature 133 T33)"
-    ))]
+text the shell read as an instruction - rewrite it without the checkout."
+    )
 }
 
 #[cfg(test)]

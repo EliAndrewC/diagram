@@ -67,8 +67,8 @@ PY
 exec 9>"$COMMON/review-tree.lock"
 flock -n 9 || die "another review tree is being set up ($COMMON/review-tree.lock) - run make verify again once it has started"
 if [ -f "$RECS/current" ]; then
-  busy=$(python3 -I - "$RECS/$(cat "$RECS/current").json" "$ROOT/.git/review-verdicts" <<'PY'
-import json, os, sys
+  busy=$(python3 -I - "$RECS/$(cat "$RECS/current").json" "$ROOT/.git/review-verdicts" "$GATE" "$ROOT" <<'PY'
+import json, os, subprocess, sys
 try:
     d = json.load(open(sys.argv[1]))
 except (OSError, ValueError):
@@ -77,15 +77,20 @@ pid = d.get('pid') or 0
 if d.get('state') == 'running' and pid and os.path.exists(f'/proc/{pid}'):
     print(f"its gate for {d.get('tasks')} is still running (pid {pid}) - wait for it: make verify-wait, run_in_background")
     sys.exit(0)
+def carried(u):
+    # 451 T176: a PASS or NEEDS-WORK at another key still answers while its sheet's drawing and notes hash as the review read them
+    # (the gate's `reviews prereq answered`, which the checkpoint and the push's review gate read alike)
+    ask = [sys.argv[3], 'reviews', 'prereq', 'answered', '--clone', sys.argv[4], '--unit', u, '--key', d.get('key') or '']
+    return subprocess.run(ask, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL).returncode == 0
 waiting = []
-for u in d.get('units') or []:
+for u in (d.get('units') or []) if d.get('state') == 'green' else []:
     try:
         v = json.load(open(os.path.join(sys.argv[2], u + '.json')))
     except (OSError, ValueError):
         v = {}
-    if v.get('engine_key') != d.get('key'):
+    if v.get('engine_key') != d.get('key') and not (v and carried(u)):
         waiting.append(u)
-if waiting and d.get('state') == 'green':
+if waiting:
     print(f"{d.get('tasks')}'s units have no verdict at its key yet: {' '.join(waiting)} - dispatch them, or wait for them")
 PY
 )

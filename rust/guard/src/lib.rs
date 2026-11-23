@@ -137,6 +137,8 @@ pub fn cli(args: &[String], stdin: &str, all: &[Guard]) -> Reply {
         Some("deps") => suite_tools::deps::cli(&args[1..]),
         Some("trace") => suite_tools::trace::cli(&args[1..]),
         Some("bench") => suite_tools::bench::cli(&args[1..]),
+        // every guard message the suites render, held to its budget and its review (451 T170)
+        Some("messages") => suite_tools::messages::cli(&args[1..]),
         Some(event) => decide(event, stdin, all),
         None => say(
             "l7r-guard: <event> | --only <guard> <event> | --idle-tests <mode> | --agent-stall <mode> | --stall-watchdog <mode> | --scratch-sweep <mode> | --finished-run <mode> | --self-check | --version".to_owned(),
@@ -200,6 +202,7 @@ mod tests {
         }];
         let input = r#"{"tool_name": "Bash", "tool_input": {"command": "ls"}}"#;
         assert_eq!(cli(&args(&["--version"]), "", &g).stdout, "l7r-guard 0.1.0");
+        assert_eq!(cli(&args(&["messages"]), "", &g).code, 64);
         assert!(cli(&args(&["--self-check"]), "", &g)
             .stdout
             .contains("1 guard(s) answered"));

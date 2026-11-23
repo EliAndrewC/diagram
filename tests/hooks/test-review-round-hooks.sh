@@ -178,7 +178,7 @@ before=$(state 301-fixture)
 out=$(agent spec-fidelity "MODE 3 of specs/301-fixture")
 [ "$(rc)" -eq 2 ] && [ -z "$out" ] && ok "the table moved to opus and FR-009 still says Sonnet: the dispatch is REFUSED" || no "a stale value was dispatched to a reviewer" "(rc=$(rc))"
 grep -q 'spec.md:[0-9]' "$T/err" && grep -q 'gizmo' "$T/err" && grep -qi 'sonnet' "$T/err" && ok "...naming the line, the subject and the old value" || no "the refusal does not name the candidate"
-grep -q 'STALE_TERMS_OK' "$T/err" && grep -q 'make stale-terms' "$T/err" && ok "...and both ways on" || no "the refusal does not say what to do"
+grep -q 'STALE_TERMS_OK' "$T/err" && grep -q 'then dispatch again' "$T/err" && ok "...and both ways on" || no "the refusal does not say what to do"
 [ "$(state 301-fixture)" = "$before" ] && grep -q 'sonnet | high' "$FIX/.git/review-round/301-fixture/snapshot/spec.md" && ok "...with no round counted and the snapshot unmoved" || no "a refused dispatch moved the state"
 logged stale-terms && ok "...recorded blocked/stale-terms" || no "stale-terms not recorded"
 out=$(agent spec-fidelity 'MODE 3 of specs/301-fixture STALE_TERMS_OK')

@@ -797,27 +797,26 @@ is pure waste: a backgrounded Bash command notifies you the moment it exits.";
 const DISGUISED_WHY: &str = "The harness blocks foreground `sleep` on purpose; `command sleep`, `/bin/sleep` and `env sleep`
 are the same thing wearing a hat. Whatever you were about to wait for, there is a better signal for
 it - a completion notification for harness-tracked work, or POLL_OK for genuinely external state.";
-const BRACKETED: &str = "The process-match pattern was bracketed for you: a literal pattern is an argument of the command line being \
-searched, so it always finds the searching shell itself and the wait never ends. Corrected rather than refused - the refusal used to \
-cost a round trip to say the same thing.";
-const ESCAPED_BRACKET: &str = "POLL_OK permitted this wait, and its process-match pattern was bracketed for you: a literal pattern is \
-an argument of the command line being searched, so it always finds the searching shell itself and the loop never ends (2026-09-08: an \
-escaped waiter on a detached page-check looped for hours on a gate that finished in 7 s). The escape decides whether you may wait; it \
-does not make the pattern correct.";
-const ESCAPED_CEILING: &str = "POLL_OK permitted this wait, and a ceiling was added to its loop: past 90 minutes it prints WAIT TIMED \
-OUT and exits 4, so a wait that can never end still wakes you (2026-09-30: four hours lost to one that never ended).";
-const SCOPED: &str = "A wait on a make run was scoped to this working tree (l7r-gate.sh own-make <target>): pgrep searches the whole host, and \
-other sessions' runs of the same target held a waiter open for six hours after its own run had ended. A harness-tracked run \
-(run_in_background) needs no waiter at all.";
-const BACKGROUNDED: &str = "This file-watching wait was BACKGROUNDED for you (run_in_background): in the foreground it would have held \
-the whole turn at model-turn cost. Its output - including whatever follows the loop - arrives as a completion notification, so spend \
-the turn on the next thing.";
-const PROOF: &str = "A PROOF-OF-LIFE check was added to the loop: `writer-alive.sh <the file you are watching>`, which asks the kernel \
-whether anything still holds that file open, when it was last written, and whether a live run names it (451 T61). Without it the wait outlives its producer - a detached run \
-that is killed (this container OOM-kills them) stops writing, the pattern never appears, and the loop runs until somebody notices. \
-When the loop ends, read what the log DOES have: if the helper printed a line, the run is gone and the log is truncated, not finished.";
+// THE REWRITE NOTICES SAY WHAT WAS DONE AND WHAT TO DO (451 T170): a builder's file wait carried BACKGROUNDED, PROOF and CEILING
+// together, 1,071 characters 201 times over the coordinator's subagents, measured 2026-11-23. The history each rewrite rests on is
+// the code's, kept here: a literal pattern looped an escaped waiter on a detached page-check for hours on a gate that finished in
+// 7 s (2026-09-08); a wait that could never end lost four hours (2026-09-30); other sessions' runs of the same target held a waiter
+// open six hours after its own run ended; the proof-of-life helper is 451 T61's, since a killed detached run (this container
+// OOM-kills them) stops writing and its pattern never comes.
+const BRACKETED: &str = "The process-match pattern was bracketed for you: a literal pattern finds the searching shell itself, so the \
+wait would never end.";
+const ESCAPED_BRACKET: &str = "POLL_OK permitted this wait, and its process-match pattern was bracketed for you: a literal pattern \
+finds the searching shell itself, so the loop would never end. The escape permits the wait; it does not fix the pattern.";
+const ESCAPED_CEILING: &str = "POLL_OK permitted this wait, and a ceiling was added: past 90 minutes it prints WAIT TIMED OUT and \
+exits 4.";
+const SCOPED: &str = "A wait on a make run was scoped to this working tree (l7r-gate.sh own-make <target>): pgrep searches the whole \
+host, so another session's run would hold it open. A run_in_background run needs no waiter.";
+const BACKGROUNDED: &str = "This file-watching wait was BACKGROUNDED for you (run_in_background): its output, and whatever follows the \
+loop, arrives as a completion notification - spend the turn on the next thing.";
+const PROOF: &str = "A PROOF-OF-LIFE check was added to the loop: `writer-alive.sh <the file you are watching>` ends the wait when \
+nothing holds the file open and no live run names it; if it printed a line, the run is gone and the log is truncated, not finished.";
 const CEILING: &str = "A CEILING was added to the loop: past 90 minutes it prints WAIT TIMED OUT and exits 4, so a wait whose line \
-never comes still ends and wakes you (2026-09-30: four hours lost to a wait that could not end).";
+never comes still wakes you.";
 
 mod pace;
 #[cfg(test)]

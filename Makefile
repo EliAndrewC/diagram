@@ -14,10 +14,10 @@
 FREE_TEXT = UNITS WITH KEYS KEY CLASS KIND SUBJECT REASON GROWTH_REASON SPREAD NOTE WHY WORDS TITLE MSG FINDING OLD NEW RESULT \
 	FIXED_BY OUTCOME SOUGHT SOURCE STATUS WRITE LINE Q Q_JA Q_ZH Q_KO QUESTION TERMS K MARK URL REVIEW APPROVED REREAD \
 	ARBITER_OK PREFLIGHT_OK REF_WHY SET_DOWN_OK HOLD_OK MISSING_OK COVER_OK NOT_OWED_OK PLAN_REVIEW_OK KEY_CAP_OK WRITE_CAP_OK \
-	CHECK_ORDER_OK URLS MATCH NONE SHARD EXTRA IMAGES DIRS LAND SUITES PERF_LATER_OK DEFER_FORM_OK QUICK_OK
+	CHECK_ORDER_OK URLS MATCH NONE SHARD EXTRA IMAGES DIRS LAND SUITES PERF_LATER_OK DEFER_FORM_OK QUICK_OK BY OVER
 $(foreach v,$(FREE_TEXT),$(if $(filter command line environment,$(origin $(v))),$(eval override $(v) := $$(value $(v)))$(eval export $(v))))
 
-.PHONY: closing-checks modal-bundle modal-prepass done docs static format guard _reference _quick bypass-audit quick page-check tick claim speckit-todo audit guard-edit context-ok guard-log scratch-sweep cache-clean hooks-test citations fragment-move \
+.PHONY: closing-checks modal-bundle modal-prepass done docs static format guard _reference _quick bypass-audit quick page-check tick claim speckit-todo audit guard-edit context-ok guard-log scratch-sweep cache-clean hooks-test guard-messages citations fragment-move \
 	 switches _switch \
 	 map maps cohort cohort-landing hamlet placement-stages pool-index pool-index-if-stale compound render-sync idle-tests \
 	 pack-audit help \
@@ -341,11 +341,13 @@ hooks-test:     ## [tests] run every tests/hooks/test-*-hooks.sh, and prove each
 	    printf 'fires - or whether it fires on correct work, which is the more expensive failure.\n\n'; \
 	    fail="$$fail $$b"; continue; \
 	  fi; \
-	  case "$$traced" in *" $$b "*) if [ "$$jobs" = "$$t" ] || [ "$$(cat "$$gitdir/hooks-test/$$b.jobs" 2>/dev/null | tr '\n' ' ')" = "$$jobs " ]; then skipped=$$((skipped+1)); continue; fi ;; esac; \
+	  : "A SUITE IS SKIPPED ONLY WITH ITS MESSAGES KEPT (feature 451 T170): the budget check reads each suite's last green renderings, so a suite with none reruns"; \
+	  kept=; ls "$$gitdir/hooks-test/messages/$$b."*jsonl >/dev/null 2>&1 && kept=1; \
+	  case "$$traced" in *" $$b "*) if [ -n "$$kept" ] && { [ "$$jobs" = "$$t" ] || [ "$$(cat "$$gitdir/hooks-test/$$b.jobs" 2>/dev/null | tr '\n' ' ')" = "$$jobs " ]; }; then skipped=$$((skipped+1)); continue; fi ;; esac; \
 	  sha=$$(printf '%s\n' "$$keys" | awk -v b="$$b" '$$1 == b { print $$2 }'); mkdir -p "$$gitdir/hooks-test"; \
 	  [ -n "$$sha" ] || sha=unkeyed-$$RANDOM; \
 	  if [ "$$jobs" != "$$t" ]; then sha=$$( { echo "$$sha"; for j in $$jobs; do printf '%s\n' "$$keys" | awk -v b="$$j" '$$1 == b { print $$2 }'; done; } | sha256sum | cut -c1-16); fi; \
-	  if [ -z "$(HOOKS_ALL)" ] && [ "$$(cat "$$gitdir/hooks-test/$$b" 2>/dev/null)" = "$$sha" ]; then skipped=$$((skipped+1)); continue; fi; \
+	  if [ -z "$(HOOKS_ALL)" ] && [ -n "$$kept" ] && [ "$$(cat "$$gitdir/hooks-test/$$b" 2>/dev/null)" = "$$sha" ]; then skipped=$$((skipped+1)); continue; fi; \
 	  n=$$((n+1)); for j in $$jobs; do printf '%s %s %s\n' "$$b" "$$j" "$$sha" >> "$$work/todo"; done; \
 	  [ "$$jobs" = "$$t" ] || printf '%s %s %s\n' "$$b" "$$sha" "$$jobs" >> "$$work/close"; \
 	done; \
@@ -380,11 +382,19 @@ hooks-test:     ## [tests] run every tests/hooks/test-*-hooks.sh, and prove each
 	fi; \
 	if ! "$$root/scripts/gates/l7r-gate.sh" check tool-signals; then fail="$$fail check-tool-signals"; fi; \
 	if ! "$$root/scripts/gates/l7r-gate.sh" check rust-tooling --root "$$root"; then fail="$$fail rust-tooling"; fi; \
+	: "EVERY GUARD MESSAGE WITHIN ITS BUDGET AND REVIEWED (feature 451 T170): the suites' renderings against dev/guard-messages.tsv"; \
+	if ! "$$root/scripts/hooks/l7r-guard.sh" messages check "$$gitdir/hooks-test/messages" "$$root/dev/guard-messages.tsv"; then fail="$$fail guard-messages"; fi; \
 	if [ -n "$$fail" ]; then printf '\n\033[1mhooks-test FAILED:%s\033[0m\n\n' "$$fail"; exit 1; fi; \
 	"$$root/scripts/gates/l7r-gate.sh" stamp --write hooks; \
 	printf 'hooks-test: %s guard suites green, %s unchanged since they last went green (hooks area stamped)\n' "$$n" "$$skipped"; \
 	ran=$$(for s in "$$work"/*.s; do [ -f "$$s" ] && printf '%s %s\n' "$$(cat "$$s")" "$$(basename "$$s" .s)"; done | sort -rn | awk '{printf "%s%s %ss", (NR>1?", ":""), $$2, $$1}'); \
 	[ -z "$$ran" ] || printf 'hooks-test: ran %s\n' "$$ran"
+
+guard-messages: ## [tests] the guard messages the suites rendered that owe a review or a cut (451 T170); BUNDLE=1 writes message-check's units; KEY= VERDICT=PASS|FAIL BY="<agent id>" [OVER="<why>"] records a verdict   [BUNDLE=1] [KEY= VERDICT= BY= OVER=]
+	@root=$$(git rev-parse --show-toplevel); gitdir=$$(git rev-parse --path-format=absolute --git-common-dir); g="$$root/scripts/hooks/l7r-guard.sh"; c="$$gitdir/hooks-test/messages"; r="$$root/dev/guard-messages.tsv"; \
+	if [ -n "$$KEY" ]; then "$$g" messages verdict "$$c" "$$r" "$$KEY" "$(VERDICT)" "$$BY" $${OVER:+"$$OVER"}; \
+	elif [ -n "$(BUNDLE)" ]; then mkdir -p /tmp/l7r-check/guard-messages && "$$g" messages owed "$$c" "$$r" /tmp/l7r-check/guard-messages/MANIFEST.md; \
+	else "$$g" messages check "$$c" "$$r"; fi
 
 inline-census:  ## [tests] phase 1's share of feature 449's second census: every inline Python site under scripts/hooks/ and tests/hooks/, each under a group FR-001 names; a site outside them fails
 	@bash "$$(git rev-parse --show-toplevel)/scripts/measure/inline-census.sh"
@@ -1105,6 +1115,13 @@ static:        ## [static] the static checks: file-scale, the Rust crates' check
 rust-test:       ## [project] cargo test over the Rust phases' crates (or CRATE=<dir>), in the shared target directory - a bare cargo is refused like a bare pytest (feature 444 T17); only the crates whose sources, test binary or declared reads moved since their last green run, the rest's result reused (449 T93)   [CRATE=tests/fixtures/rust/fixture] [FRESH=1 REASON="..."]
 	$(FRESH_ESCAPE)
 	"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" rust test $(if $(CRATE),--crate "$(CRATE)",)
+
+# THE EDIT LOOP OF A TASK'S CRATES IN ONE COMMAND (451 T170): static-runs' refusal (451 FR-007) names this with the delta's crates
+# said once, where it named four commands a crate and reached builders at up to 7,909 characters; each step runs every crate at once.
+crate-checks:    ## [static] a task's crate-scoped checks while iterating - test, lint, format --check and cover, each over every crate CRATE= names, all reported, red if any is - the edit loop in place of a third make static (451 FR-007, T170)   CRATE="<dir> ..."
+	@if [ -z "$(CRATE)" ]; then printf 'make crate-checks: CRATE="<crate dir> ..." is required - e.g. make crate-checks CRATE="rust/guard rust/guard/shared"\n' >&2; exit 2; fi
+	@g="$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh"; rc=0; \
+	for step in test lint "format --check" cover; do "$$g" rust $$step $(foreach c,$(CRATE),--crate "$(c)") || rc=1; done; exit $$rc
 
 # FR-008's timer (feature 449 T169): T99's method - each test alone, best of three, a fresh TMPDIR, timed around the process - which
 # T160, T164, T167 and T168 each ran by hand. It reports and never refuses: time is never a gate (the GM's performance rule).

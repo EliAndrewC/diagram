@@ -123,11 +123,7 @@ fn the_third_run_since_the_first_start_is_refused_naming_the_crates_checks() {
     );
     for want in [
         "T06 of 451-x has run `make static` 2 times",
-        "make rust-test CRATE=rust/guard\n",
-        "scripts/gates/l7r-gate.sh rust lint --crate rust/guard\n",
-        "scripts/gates/l7r-gate.sh rust format --check --crate rust/guard\n",
-        "scripts/gates/l7r-gate.sh rust cover --crate rust/guard\n",
-        "make rust-test CRATE=rust/gate/crates/land\n",
+        "make crate-checks CRATE=\"rust/guard rust/gate/crates/land\"\n",
         "STATIC_OK=\"<reason>\"",
     ] {
         assert!(text.contains(want), "{want} in {text}");
@@ -443,11 +439,19 @@ fn through_the_chain_the_calls_own_line_is_no_run_and_the_named_checks_pass() {
         crate::guards::make_only_hooks::GUARD,
         crate::guards::shell_check_hooks::GUARD,
     ];
-    for cmd in refusal(F, "T06", 2, &["rust/guard".to_owned()])
+    let text = refusal(
+        F,
+        "T06",
+        2,
+        &["rust/guard".to_owned(), "rust/phases".to_owned()],
+    );
+    let named: Vec<&str> = text
         .lines()
         .map(str::trim)
-        .filter(|l| l.starts_with("make rust-test") || l.starts_with("scripts/gates/"))
-    {
+        .filter(|l| l.starts_with("make crate-checks"))
+        .collect();
+    assert_eq!(named.len(), 1, "one scoped command: {text}");
+    for cmd in named {
         let mut e = Event {
             name: "PreToolUse".to_owned(),
             input: input(&d, cmd),

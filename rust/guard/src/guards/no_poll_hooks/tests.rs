@@ -844,3 +844,25 @@ fn the_shell_strings_are_the_ones_the_pattern_found() {
         assert_eq!(super::pace::shell_strings(&text), found, "{text:?}");
     }
 }
+
+#[test]
+fn each_rewrite_notice_says_what_was_done_and_what_to_do_in_few_words() {
+    // 451 T170: a builder's file wait carried BACKGROUNDED, PROOF and CEILING together, 1,071 characters 201 times, measured
+    // 2026-11-23 over the coordinator's subagents; the history behind each rewrite is the code's, not the reader's
+    for (said, words, most) in [
+        (super::BRACKETED, "bracketed for you", 160),
+        (
+            super::ESCAPED_BRACKET,
+            "POLL_OK permitted this wait, and its process-match pattern was bracketed",
+            230,
+        ),
+        (super::ESCAPED_CEILING, "POLL_OK permitted this wait", 130),
+        (super::SCOPED, "scoped to this working tree", 230),
+        (super::BACKGROUNDED, "BACKGROUNDED", 200),
+        (super::PROOF, "PROOF-OF-LIFE", 340),
+        (super::CEILING, "CEILING", 150),
+    ] {
+        let (fits, n) = (said.contains(words) && said.len() <= most, said.len());
+        assert!(fits, "{n} > {most}: {said}");
+    }
+}

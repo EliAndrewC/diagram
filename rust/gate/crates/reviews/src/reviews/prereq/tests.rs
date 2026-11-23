@@ -197,6 +197,65 @@ fn a_review_is_recorded_only_at_its_engine_key() {
     assert_eq!(rec("settlement-review--m", "K"), 1);
 }
 
+/// RED FIRST (451 T176): a review at an older engine key still answers for its sheet while the sheet's drawing and notes hash as the
+/// review read them - `recorded` and `answered` (the review tree's busy check) as the push's review gate already reads it.
+#[test]
+fn a_verdict_at_an_older_key_is_carried_while_its_sheet_hashes_as_reviewed() {
+    let r = repo("carried");
+    sheet(&r, "legacy-hand-authored-pool", "s", &["gate"]);
+    let v = ".git/review-verdicts/building-review--s.json";
+    let reviewed = content_key(&r, "s");
+    let at = |verdict: &str, key: &str, content: &str| {
+        put(
+            &r,
+            v,
+            &json!({"verdict": verdict, "engine_key": key, "content_key": content}).to_string(),
+        );
+    };
+    let rec = |key: &str| {
+        run_in(
+            &r,
+            &["recorded", "--maps", "building-review--s", "--key", key],
+        )
+        .code
+    };
+    let answered = |key: &str| {
+        run_in(
+            &r,
+            &["answered", "--unit", "building-review--s", "--key", key],
+        )
+        .code
+    };
+    let both = |key: &str| (rec(key), answered(key));
+    // carried at K1: a PASS or a NEEDS-WORK, its sheet as reviewed
+    at("PASS", "K0", &reviewed);
+    assert_eq!(both("K1"), (0, 0));
+    at("NEEDS-WORK", "K0", &reviewed);
+    assert_eq!(both("K1"), (0, 0));
+    // no judgment to carry
+    at("NOT-REVIEWABLE", "K0", &reviewed);
+    assert_eq!(both("K1"), (1, 1));
+    // at its key
+    at("PASS", "K1", "");
+    assert_eq!(both("K1"), (0, 0));
+    assert_eq!(answered(""), 1);
+    // no content key recorded
+    at("PASS", "K0", "");
+    assert_eq!(both("K1"), (1, 1));
+    // the sheet moved
+    at("PASS", "K0", &reviewed);
+    put(
+        &r,
+        "legacy-hand-authored-pool/compounds/s/s.notes.md",
+        "notes moved\n",
+    );
+    assert_eq!(both("K1"), (1, 1));
+    assert_eq!(
+        run_in(&r, &["answered", "--unit", "nope", "--key", "K1"]).code,
+        1
+    );
+}
+
 #[test]
 fn a_dispatch_names_its_units_else_its_maps() {
     let r = repo("named");

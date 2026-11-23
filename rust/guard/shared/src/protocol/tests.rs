@@ -164,3 +164,64 @@ fn a_hand_run_mode_prints_its_text_as_it_is() {
     };
     assert_eq!(run(&mut e, &[g]).stdout, "subset_pending=0");
 }
+
+fn every(_: &Event, _: &Session) -> Vec<Answer> {
+    vec![
+        Answer::Refuse("no".to_owned()),
+        Answer::StopBlock("held".to_owned()),
+        Answer::Notice("a notice".to_owned()),
+        Answer::Print("printed".to_owned()),
+        Answer::Rewrite(json!({})),
+    ]
+}
+
+#[test]
+fn a_suite_run_keeps_each_message_for_its_budget_and_a_session_keeps_none() {
+    let d = crate::tempdir::TempDir::new("protocol-corpus");
+    let g = |events: &'static [&'static str]| Guard {
+        name: "kept-hooks",
+        events,
+        matcher: "*",
+        decide: every,
+    };
+    // no corpus named: nothing is written
+    let _ = run(&mut bash("x"), &[g(&["PreToolUse"])]);
+    assert!(!d.join("messages.jsonl").exists());
+    crate::env::set("L7R_MESSAGE_CORPUS", d.join("m").as_os_str());
+    let _ = run(&mut bash("x"), &[g(&["PreToolUse"])]);
+    let mut prompt = Event {
+        name: "UserPromptSubmit".to_owned(),
+        input: json!({}),
+    };
+    let _ = run(&mut prompt, &[g(&["UserPromptSubmit"])]);
+    crate::env::unset("L7R_MESSAGE_CORPUS");
+    let kept = std::fs::read_to_string(d.join("m/messages.jsonl")).unwrap();
+    let lines: Vec<Value> = kept
+        .lines()
+        .map(|l| serde_json::from_str(l).unwrap())
+        .collect();
+    let kinds: Vec<(&str, &str)> = lines
+        .iter()
+        .map(|l| (l["event"].as_str().unwrap(), l["kind"].as_str().unwrap()))
+        .collect();
+    // a hand-run mode's printed answer is no hook's; a prompt's is its context
+    assert_eq!(
+        kinds,
+        [
+            ("PreToolUse", "refuse"),
+            ("PreToolUse", "block"),
+            ("PreToolUse", "notice"),
+            ("UserPromptSubmit", "refuse"),
+            ("UserPromptSubmit", "block"),
+            ("UserPromptSubmit", "notice"),
+            ("UserPromptSubmit", "notice"),
+        ]
+    );
+    assert_eq!(lines[6]["text"], "printed");
+    assert_eq!(lines[0]["guard"], "kept-hooks");
+    // a corpus that cannot be opened keeps nothing and decides as before
+    std::fs::write(d.join("file"), "").unwrap();
+    crate::env::set("L7R_MESSAGE_CORPUS", d.join("file").as_os_str());
+    assert_eq!(run(&mut bash("x"), &[g(&["PreToolUse"])]).code, 2);
+    crate::env::unset("L7R_MESSAGE_CORPUS");
+}

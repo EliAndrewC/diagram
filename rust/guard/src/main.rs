@@ -24,6 +24,7 @@ fn main() {
                 | "deps"
                 | "trace"
                 | "bench"
+                | "messages"
         )
     ) {
         let _ = std::io::stdin().read_to_string(&mut stdin);

@@ -176,7 +176,13 @@ fn escapes_and_their_rules() {
     assert_eq!(escape_for("a, batched"), "BATCH_OK");
     assert_eq!(escape_for("the arbiter said"), "ARBITER_OK");
     assert_eq!(escape_for("a freeze"), "FREEZE_OK");
-    assert!(blocked_text("the arbiter").ends_with("(scripts/hooks/lib/hm_checks.py; escape ARBITER_OK=\"<reason>\" in the prompt or the edit)\n"));
+    assert!(blocked_text("the arbiter")
+        .ends_with("\n(escape ARBITER_OK=\"<reason>\" in the prompt or the edit)\n"));
+    let named = blocked_text("the arbiter, or ARBITER_OK=\"<reason>\" - logged");
+    assert_eq!(
+        named,
+        "BLOCKED: the arbiter, or ARBITER_OK=\"<reason>\" - logged\n"
+    );
     let prompt = format!("Read {} BATCH_OK=\"a single pop-up here\" FREEZE_OK=\"a hand fix here\" ARBITER_OK=\"the arbiter ruled it\"", manifest.display());
     assert_eq!(
         handle(

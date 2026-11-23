@@ -639,7 +639,7 @@ pub fn dispatch(state: &mut Value, ask: &Dispatch) -> String {
     if let Some(root) = ask.root.filter(|_| !ask.arbiter_ok) {
         let held = arbiter::blocking_for(root, "", ask.who);
         if !held.is_empty() {
-            return arbiter::refusal(&held, None);
+            return arbiter::refusal_unbatched(&held, root);
         }
         let loop_held = fixloop::hold(state, root, ask.check, ask.text, ask.now);
         if !loop_held.is_empty() {
@@ -658,8 +658,9 @@ pub fn dispatch(state: &mut Value, ask: &Dispatch) -> String {
                 .iter()
                 .any(|d| text(d, "state") == "running")
         {
+            // Feature 375 FR-003c; the citation left the message at 451 T170 (message-check: a feature number is the code's).
             return format!(
-                "`{}` is already in {s}'s round and that round has a check still running - all of a round's checks return, their edits go in in one pass, then the page is checked once (feature 375 FR-003c)",
+                "`{}` is already in {s}'s round and that round has a check still running - all of a round's checks return, their edits go in in one pass, then the page is checked once",
                 ask.check
             );
         }

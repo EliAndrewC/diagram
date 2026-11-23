@@ -86,6 +86,13 @@ printf 'y\n' > "$FIX/other.md"; git -C "$FIX" add other.md
 run 'git commit -m other'
 [ "$RC" -eq 0 ] && ok "an unrelated commit is not refused" || no "the report refused a commit" "(rc=$RC) $OUT"
 case "$OUT" in *"ledger-owed: 1 check pass"*"| 2026-10-10 | glyph-check | copse | ? |"*) ok "...and names the pass with the row to add" ;; *) no "no report" "$OUT" ;; esac
+# 451 T170: many owed passes are their count, the first row and the command for the rest - one commit's notice had been 7,547 characters
+for i in $(seq 2 23); do printf '{"date": "2026-10-10", "check": "glyph-check", "subject": "copse-%s", "agent": "a%s", "wall": "80 s", "tokens": "244k in (199k cached) / 7.8k out"}\n' "$i" "$i"; done >> "$FIX/.git/check-passes.jsonl"
+run 'git commit -m other'
+case "$OUT" in *"ledger-owed: 23 check pass"*"| glyph-check | copse | ? |"*'`make ledger-owed` lists all 23'*) ok "...23 owed: the count, the first row and the command for the rest" ;; *) no "23 owed not summarized" "$OUT" ;; esac
+case "$OUT" in *"copse-2 "*|*"copse-23"*) no "a row past the first was printed" "$OUT" ;; *) ok "...and no row past the first" ;; esac
+[ "${#OUT}" -lt 1000 ] && ok "...in under 1,000 characters" || no "23 owed took ${#OUT} characters" "$OUT"
+head -1 "$FIX/.git/check-passes.jsonl" > "$FIX/.git/check-passes.jsonl.1" && mv "$FIX/.git/check-passes.jsonl.1" "$FIX/.git/check-passes.jsonl"
 printf '%s%s\n' "$HEAD_TXT" '| 2026-10-10 | glyph-check | copse | PASS | caught nothing | nothing | - | nothing | 80 s | 244k in (199k cached) / 7.8k out |' > "$FIX/dev/review-ledger.md"
 run 'git commit -m other'
 case "$OUT" in *"ledger-owed"*) no "a pass with its row is still reported" "$OUT" ;; *) ok "a pass with its row is not reported" ;; esac

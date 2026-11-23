@@ -7,7 +7,6 @@
 //! Plan T017's decisions: (a) every mode and all the shell's Python ported, the rest of the modes [`cli`]; (b) the script stays a
 //! forwarder until T051 for `review_prereq.py`'s `live`; (c) `writer-alive.sh` stays theirs.
 
-use std::fmt::Write as _;
 use std::path::{Path, PathBuf};
 
 use serde_json::Value;
@@ -320,7 +319,10 @@ fn hold(
         .collect::<Vec<_>>()
         .join("\n");
     fire("blocked", &listed, "run-still-going");
-    Some(refusal(&unwatched))
+    Some(refusal(
+        &unwatched,
+        &crate::shared::checks::common_dir(clone),
+    ))
 }
 
 /// One line for a run that will wake the session, recorded.
@@ -339,22 +341,32 @@ fn woken(r: &Root, lines: &mut Vec<String>, fire: &dyn Fn(&str, &str, &str)) {
     fire("permitted", &format!("{pid} {target} {}", r.detail()), rule);
 }
 
-fn refusal(unwatched: &[&Root]) -> String {
-    let mut text = String::from("A MAKE RUN THIS SESSION STARTED IS STILL GOING, DETACHED, AND NOTHING WILL WAKE THIS SESSION FOR IT:\n");
-    for r in unwatched {
-        let detail = r.detail();
-        let _ = writeln!(
-            text,
-            "  pid {} `make {}`, output in {detail}",
-            r.pid, r.target
-        );
-        if detail.contains("/verify-gate") {
-            text += "  wait on it: `make verify-wait`, run_in_background - it ends when the gate does\n";
-        } else {
-            let _ = writeln!(text, "  wait on it in the background: until grep -qE \"gate green|GATE NOT GREEN|GATE FAILED\" {detail}; do sleep 20; done");
-        }
-    }
-    text + "Then REPORT WHAT IT SAID. (A run started with run_in_background needs NO loop.) Ending the turn on purpose: end it again."
+fn refusal(unwatched: &[&Root], git_dir: &Path) -> String {
+    let runs: Vec<String> = unwatched
+        .iter()
+        .map(|r| run_said(r.pid, &r.target, &r.detail()))
+        .collect();
+    refusal_of(&runs, git_dir)
+}
+
+/// One run left unwatched: its pid, target and output, and the wait on it.
+pub(crate) fn run_said(pid: u32, target: &str, detail: &str) -> String {
+    let wait = if detail.contains("/verify-gate") {
+        "  wait on it: `make verify-wait`, run_in_background - it ends when the gate does"
+            .to_owned()
+    } else {
+        format!("  wait on it in the background: until grep -qE \"gate green|GATE NOT GREEN|GATE FAILED\" {detail}; do sleep 20; done")
+    };
+    format!("  pid {pid} `make {target}`, output in {detail}\n{wait}")
+}
+
+/// The block over the runs said: the first few and the file holding them all (451 T170: the list grows two lines a run).
+pub(crate) fn refusal_of(runs: &[String], git_dir: &Path) -> String {
+    format!(
+        "A MAKE RUN THIS SESSION STARTED IS STILL GOING, DETACHED, AND NOTHING WILL WAKE THIS SESSION FOR IT:\n{}\n\
+Then REPORT WHAT IT SAID. (A run started with run_in_background needs NO loop.) Ending the turn on purpose: end it again.",
+        crate::shared::listed::capped_kept(runs, "  ", git_dir)
+    )
 }
 
 /// `--finished-run check <clone>`, `seen <clone>`, `live <clone>`, `judge <clone>`, `stale [clone]`, `alive <file>`.

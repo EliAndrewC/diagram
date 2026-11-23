@@ -573,6 +573,54 @@ fn an_unnamed_session_is_told_once() {
 }
 
 #[test]
+fn an_unchanged_mid_task_notice_is_said_once_then_in_one_line() {
+    // 451 T170: the coordinator's 1,870 prompts each carried the 172-character mid-task notice, measured 2026-11-23
+    let w = World::new("midtask-once");
+    w.claim("s", &w.clone);
+    std::fs::write(w.clone.join("wip.txt"), "mid-task").unwrap();
+    let full = w.prompt("s", "");
+    assert!(full.contains("has uncommitted work (mid-task) - clone merge skipped; mirror refreshed from GitHub main. Finish and run"));
+    let again = w.prompt("s", "");
+    let first = again.lines().next().unwrap();
+    let short = first.starts_with("clone-sync: still mid-task since ")
+        && first.ends_with(", merge skipped");
+    assert!(short && first.len() < 60, "{again}");
+    // another session in the same clone is told in full
+    w.claim("t", &w.clone);
+    assert!(w.prompt("t", "").contains("Finish and run"));
+    // a compaction, a clear or a resume forgets it: the next prompt says it in full
+    assert!(w
+        .run(
+            "SessionStart",
+            json!({"session_id": "s", "source": "startup"})
+        )
+        .is_empty());
+    assert!(w.prompt("s", "").contains("clone-sync: still mid-task"));
+    assert!(w
+        .run(
+            "SessionStart",
+            json!({"session_id": "s", "source": "compact"})
+        )
+        .is_empty());
+    assert!(w.prompt("s", "").contains("Finish and run"));
+    // a failed refresh is said in full, and so is the notice after it
+    std::fs::write(w.clone.join(".git/sync-rc"), "1").unwrap();
+    assert!(w.prompt("s", "").contains("mirror refresh FAILED"));
+    std::fs::remove_file(w.clone.join(".git/sync-rc")).unwrap();
+    assert!(w.prompt("s", "").contains("Finish and run"));
+    // a session with no clone, or an unnamed one, starts with nothing to forget
+    assert!(w
+        .run(
+            "SessionStart",
+            json!({"session_id": "nobody", "source": "compact"})
+        )
+        .is_empty());
+    assert!(w
+        .run("SessionStart", json!({"source": "compact"}))
+        .is_empty());
+}
+
+#[test]
 fn a_mid_task_prompt_refreshes_only_the_mirror() {
     let w = World::new("midtask");
     w.claim("s", &w.clone);

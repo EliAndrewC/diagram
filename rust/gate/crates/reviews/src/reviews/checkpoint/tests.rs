@@ -268,6 +268,38 @@ fn the_hold_names_the_units_the_last_checkpoint_owed_until_each_is_answered_or_d
     assert_eq!(cp(&r, &["hold"]).code, 0);
 }
 
+/// RED FIRST (451 T176): a verdict is written at the engine key that covers every pool sheet, so one sheet's spec edit re-owed the
+/// unchanged sheets' reviews (449 T351's bundle: the county's edit re-owed four PASS sheets). A PASS or NEEDS-WORK at an older key
+/// answers while its sheet's drawing and notes hash as the review read them (`content_key`); a moved sheet, or no key recorded, does not.
+#[test]
+fn a_verdict_at_an_older_key_answers_while_its_sheet_hashes_as_reviewed() {
+    let r = repo("hold-carried");
+    hamlet(&r, "m", &["well"]);
+    feature(&r, "900-x", "- [ ] T1\n");
+    worked(&r, 7200);
+    let t = int_of(now());
+    put(&r, ".git/glyph-clock.json", &json!({"900-x": {"checkpoint_at": t, "checkpoint_units": ["settlement-review--m"], "units_since": t - 60}}).to_string());
+    put(&r, ".git/key", "K1");
+    let at = |verdict: &str, content: &str| {
+        put(
+            &r,
+            ".git/review-verdicts/settlement-review--m.json",
+            &json!({"verdict": verdict, "engine_key": "K0", "content_key": content}).to_string(),
+        );
+        hold(&r, None)
+    };
+    let reviewed = super::super::prereq::content_key(&r, "m");
+    assert_eq!(reviewed.len(), 16);
+    // the sheet hashes as the review read it
+    assert_eq!(at("PASS", &reviewed), "");
+    assert_eq!(at("NEEDS-WORK", &reviewed), "");
+    let held = "the last checkpoint owed 1 review unit(s) not yet dispatched: settlement-review--m";
+    assert!(at("NOT-REVIEWABLE", &reviewed).starts_with(held));
+    // the sheet moved, and no content key recorded
+    assert!(at("PASS", "0123456789abcdef").starts_with(held));
+    assert!(at("PASS", "").starts_with(held));
+}
+
 #[test]
 fn past_the_hour_a_gate_or_a_dispatch_is_refused_until_the_step_back() {
     let r = repo("due");

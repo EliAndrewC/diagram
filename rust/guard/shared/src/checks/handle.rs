@@ -486,7 +486,7 @@ fn edit_mode(state: &Value, payload: &Value, ti: &Value, tool: &str, t: f64) -> 
         {
             let blocking = arbiter::blocking(r, "", true);
             if !blocking.is_empty() && !escaped("ARBITER_OK", command) {
-                return arbiter::refusal(&blocking, None);
+                return arbiter::refusal_unbatched(&blocking, r);
             }
         }
         return if escaped("FREEZE_OK", command) {
@@ -526,10 +526,17 @@ pub fn escape_for(msg: &str) -> &'static str {
     }
 }
 
-/// The refusal as the hook's stderr writes it: `BLOCKED: <msg>` and the escape line.
+/// The refusal as the hook's stderr writes it: `BLOCKED: <msg>` and the escape line, which a message naming its escape already
+/// goes without (451 T170, message-check: the tripwire refusal says `ARBITER_OK` in full; the line's source path,
+/// `scripts/hooks/lib/hm_checks.py`, named a file deleted with the Python guards).
 #[must_use]
 pub fn blocked_text(msg: &str) -> String {
-    format!("BLOCKED: {msg}\n(scripts/hooks/lib/hm_checks.py; escape {}=\"<reason>\" in the prompt or the edit)\n", escape_for(msg))
+    let escape = escape_for(msg);
+    if msg.contains(&format!("{escape}=")) {
+        format!("BLOCKED: {msg}\n")
+    } else {
+        format!("BLOCKED: {msg}\n(escape {escape}=\"<reason>\" in the prompt or the edit)\n")
+    }
 }
 
 /// `make check-closed`: `(exit code, stdout, stderr)`.

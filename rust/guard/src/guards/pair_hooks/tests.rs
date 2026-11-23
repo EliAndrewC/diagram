@@ -498,3 +498,24 @@ fn the_clone_is_the_sessions_else_the_cwds_tree() {
     );
     assert_eq!(super::tree(None, Path::new("/c")), PathBuf::from("/c"));
 }
+
+/// 451 T170: a prerequisite refusal's items reached a session at 1,870 characters; past the first few it names the file holding them all.
+#[test]
+fn many_unmet_prerequisites_name_the_first_few_and_the_file_holding_them_all() {
+    let f = Fixture::new("prereq-many", "Agent", &review("m1"));
+    let problems: Vec<String> = (1..=12).map(|i| format!("map m{i} is stale")).collect();
+    f.set("named", "m1\n").set("problems", &problems.join("\n"));
+    let why = refusal(&f.judge());
+    assert!(why.contains("  - map m2 is stale\n  and 11 more: `cat ") && !why.contains("m3 is"));
+    let kept = why
+        .split("more: `cat ")
+        .nth(1)
+        .unwrap()
+        .split('`')
+        .next()
+        .unwrap();
+    assert!(std::fs::read_to_string(kept)
+        .unwrap()
+        .contains("  - map m12 is stale\n  - on stderr\n"));
+    assert!(why.contains("REVIEW_PREREQ_OK"));
+}

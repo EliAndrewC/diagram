@@ -321,16 +321,22 @@ pub(super) fn owed_for(spec_dir: &Path, asked: &[&str]) -> Option<(&'static str,
 /// a filled template's old heading among them) only where `scope` holds the task and its section carries no CLEAR task verdict, which
 /// answers for every block it had. WHY: measured 2026-11-21 (feature 451's 16 landings of 2026-11-20/21, each replayed on its tick's
 /// tree): 14 were refused on the whole feature, 6 of them on other open tasks' sections or a filled template's old heading alone - an
-/// open task's section is reviewed when its own task is decided (feature 375 FR-003a), not before another task's tick.
+/// open task's section is reviewed when its own task is decided (feature 375 FR-003a), not before another task's tick. A heading that
+/// only names a task makes it the owner of no block inside another task's own section (451 T180).
 fn in_scope(
     keys: Vec<String>,
     review: &Value,
     plan: &str,
     scope: &BTreeSet<String>,
 ) -> Vec<String> {
-    let spans: Vec<(String, (usize, usize))> = task_sections(plan)
+    // each section's place, and whether it is its task's own (its first heading opens with the id) or a heading that only names it
+    let spans: Vec<(String, bool, (usize, usize))> = task_sections(plan)
         .into_iter()
-        .filter_map(|(t, s)| span_of(plan, &s).map(|at| (t, at)))
+        .filter_map(|(t, s)| {
+            let first = heading_text(s.lines().next().unwrap_or_default());
+            let own = leading_tasks(&first).contains(&t.as_str());
+            span_of(plan, &s).map(|at| (t, own, at))
+        })
         .collect();
     let offsets: BTreeMap<String, usize> =
         blocks(plan).into_iter().map(|(k, _, at)| (k, at)).collect();
@@ -348,13 +354,19 @@ fn in_scope(
                 let own = leading_tasks(&title);
                 return own.is_empty() || own.iter().any(|t| scope.contains(*t) && !cleared(t));
             }
-            // a block inside no task's section always; inside several (a bundle's, 451 T141) where `scope` holds any of them
+            // a block inside no task's section always; inside several (a bundle's, 451 T141) where `scope` holds any of them; inside a
+            // task's own section, never for a task a heading there only names (451 T180: 449 T377's heading names T351, whose section
+            // the tick archived, so T351's "section" was T377's heading and every later tick of the landing was refused on it)
             offsets.get(key).is_none_or(|at| {
-                let mut owners = spans
+                let owners: Vec<&(String, bool, (usize, usize))> = spans
                     .iter()
-                    .filter(|(_, span)| inside(&[*span], *at))
-                    .peekable();
-                owners.peek().is_none() || owners.any(|(t, _)| scope.contains(t))
+                    .filter(|(_, _, span)| inside(&[*span], *at))
+                    .collect();
+                let owned = owners.iter().any(|(_, own, _)| *own);
+                owners.is_empty()
+                    || owners
+                        .iter()
+                        .any(|(t, own, _)| (*own || !owned) && scope.contains(t))
             })
         })
         .collect()

@@ -138,7 +138,7 @@ echo "2. the block explains the fault and the alternative"
 # rewrite's own context rather than as a refusal. The busy-wait block below still owes its message.
 SELF=$(run 'pgrep -f "cherryd"' 2>/dev/null)
 printf '%s' "$SELF" | grep -q "finds the searching shell itself" && { echo "  ok      the correction names the self-match fault"; PASS=$((PASS+1)); } || { echo "  FAIL    self-match not explained"; FAIL=$((FAIL+1)); }
-printf '%s' "$SELF" | grep -q "Corrected rather than refused" && { echo "  ok      ...and says why it was corrected rather than refused"; PASS=$((PASS+1)); } || { echo "  FAIL    the correction does not say why"; FAIL=$((FAIL+1)); }
+printf '%s' "$SELF" | grep -q "was bracketed for you" && { echo "  ok      ...and says it was corrected for you (451 T170: the history behind it is the code's comment)"; PASS=$((PASS+1)); } || { echo "  FAIL    the correction does not say it was made"; FAIL=$((FAIL+1)); }
 run 'while :; do sleep 5; done' >/dev/null
 grep -q "completion notification" "$HOOK_ERR" && { echo "  ok      a real busy-wait still points at the notification"; PASS=$((PASS+1)); } || { echo "  FAIL    no alternative offered"; FAIL=$((FAIL+1)); }
 run 'while :; do sleep 5; done' >/dev/null
@@ -265,6 +265,11 @@ else
   echo "  FAIL    the escaped-and-corrected wait did not record both entries"; FAIL=$((FAIL+1))
 fi
 check "an escaped wait with a bracketed pattern is untouched" ok 'until ! pgrep -f "[c]herryd" >/dev/null; do sleep 5; done  # POLL_OK: a daemon another session started'
+# 451 T170: an escaped wait with a literal pattern that names no make run is bracketed, and its notice (ESCAPED_BRACKET) says the
+# escape permits the wait but does not fix the pattern - rendered here so the message budget check holds that wording
+ESC_LIT='until ! pgrep -f "cherryd" >/dev/null; do sleep 5; done  # POLL_OK: a daemon another session started'
+rewritten "an escaped wait with a literal pattern is bracketed" "$ESC_LIT" '[c]herryd'
+run "$ESC_LIT" 2>/dev/null | grep -q "it does not fix the pattern" && { echo "  ok      ...and the notice says the escape does not fix the pattern"; PASS=$((PASS+1)); } || { echo "  FAIL    the escaped bracket's notice is missing"; FAIL=$((FAIL+1)); }
 rewritten "two literal patterns are BOTH bracketed" 'pgrep -f "cherryd"; pgrep -f "resvg"' '[r]esvg'
 rewritten "...and the first of them too" 'pgrep -f "cherryd"; pgrep -f "resvg"' '[c]herryd'
 rewritten "two make-run waits are BOTH scoped" 'pgrep -f "make done"; pgrep -f "make quick"' 'l7r-gate.sh own-make quick'

@@ -26,7 +26,7 @@ pub const MEASURED_HEADING: &str = "## Review checks, measured (feature 294 on)"
 /// The checks a row may name - the five map reviews (feature 294's occasions) and the record and plan checks the ledger also logs:
 /// `intro-check` (feature 311), `impl-drift` (feature 316), `work-budget` (feature 443 T05), and every agent that judges the work
 /// (feature 371, spec round 2: the three modal checks and `source-filter`).
-pub const CHECKS: [&str; 23] = [
+pub const CHECKS: [&str; 24] = [
     "building-review",
     "entry-drift",
     "escalation-check",
@@ -34,6 +34,8 @@ pub const CHECKS: [&str; 23] = [
     "glyph-check",
     "impl-drift",
     "intro-check",
+    // 451 T170: a changed guard message's fidelity and brevity
+    "message-check",
     "modal-depiction",
     "modal-form",
     "modal-research",

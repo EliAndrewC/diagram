@@ -169,7 +169,7 @@ fn a_held_gate_and_a_batch_are_told_apart() {
     assert_eq!(refusal(&[], Some(&d)), "");
     let one = refusal(&["cascade@1".to_owned()], Some(&d));
     assert!(
-        one.contains("a tripwire is owed its ruling first (cascade@1;")
+        one.contains("a tripwire is owed its ruling first (cascade@1):")
             && one.contains("TRIGGER=\"cascade@1\"")
     );
     let many = refusal(&batch, Some(&d));
@@ -419,4 +419,28 @@ fn a_reversal_holds_only_the_dispatches_of_the_session_and_builder_that_put_it_b
         blocking(&d, "", false),
         ["reversal:/f", "reversal:/g", "reversal:/h"]
     );
+}
+
+/// 451 T170: a refusal's list of triggers reached a session at 1,358 characters; past the first few it names the file holding them all.
+#[test]
+fn a_long_list_of_triggers_names_its_first_few_and_the_file_holding_them_all() {
+    let d = clone_at("many-triggers");
+    let many: Vec<String> = (1..=12)
+        .map(|i| format!("reversal:/c/rust/f{i}.rs"))
+        .collect();
+    let said = super::refusal_unbatched(&many, &d);
+    assert!(said.contains("reversal:/c/rust/f2.rs, and 10 more: `cat "));
+    assert!(!said.contains("f3.rs") && said.contains("ARBITER_OK"));
+    let kept = said
+        .split("more: `cat ")
+        .nth(1)
+        .unwrap()
+        .split('`')
+        .next()
+        .unwrap();
+    assert_eq!(
+        std::fs::read_to_string(kept).unwrap(),
+        many.join("\n") + "\n"
+    );
+    assert!(super::refusal(&many, None).contains("f12.rs"));
 }

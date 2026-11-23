@@ -308,6 +308,22 @@ check "the only session -> prompt exits 0" 0 "$RC"
 case $OUT in *"clone-sync:"*) printf 'FAIL  the only session was synced\n      out: %s\n' "$OUT"; FAILED=1 ;;
              *) [ "$(git -C "$RUNC" rev-parse HEAD)" = "$BEFORE" ] && printf 'ok    the only session syncs nothing and says nothing (444 T36)\n' || { printf 'FAIL  HEAD moved for the only session\n'; FAILED=1; } ;; esac
 
+# 451 T170: an unchanged mid-task notice is said in full once, then in one line - rendered here so the message budget check holds
+# both wordings (the guard's own test pins the rule). The clone's sync script is a stub that succeeds, so the mirror refresh is
+# reported done, not FAILED as in the cases above; the stub, untracked, makes the clone mid-task.
+git clone -q "$FMAIN4" "$FMAIN4/.clones/midclone"
+MIDC=$FMAIN4/.clones/midclone
+mkdir -p "$MIDC/scripts"; printf '#!/usr/bin/env bash\nexit 0\n' > "$MIDC/scripts/sync-with-main.sh"; chmod +x "$MIDC/scripts/sync-with-main.sh"
+printf '%s' "$MIDC" > "$FMAIN4/.clones/.session-clones/sid-mid"
+OUT=$(printf '{"session_id":"sid-mid"}' \
+      | CLONE_MAIN="$FMAIN4" CLONE_GITHUB="$FMAIN4" CLONE_SESSIONS_DIR="$SESS" "$HOOK" prompt 2>&1)
+case $OUT in *"has uncommitted work (mid-task) - clone merge skipped; mirror refreshed from GitHub main"*) printf 'ok    a mid-task prompt says the notice in full first (451 T170)\n' ;;
+             *) printf 'FAIL  the first mid-task prompt did not say the notice in full\n      out: %s\n' "$OUT"; FAILED=1 ;; esac
+OUT=$(printf '{"session_id":"sid-mid"}' \
+      | CLONE_MAIN="$FMAIN4" CLONE_GITHUB="$FMAIN4" CLONE_SESSIONS_DIR="$SESS" "$HOOK" prompt 2>&1)
+case $OUT in "clone-sync: still mid-task since "[0-9][0-9]:[0-9][0-9]", merge skipped") printf 'ok    ...and the unchanged notice on the next prompt in one line\n' ;;
+             *) printf 'FAIL  the unchanged mid-task notice was not said in one line\n      out: %s\n' "$OUT"; FAILED=1 ;; esac
+
 # once per session - a warning that repeats every prompt is noise the GM learns to skip
 OUT=$(printf '{"session_id":"sid-fj"}' \
       | CLONE_MAIN="$FMAIN4" CLONE_GITHUB="$FMAIN4" CLONE_SESSIONS_DIR="$SESS" "$HOOK" prompt 2>&1)

@@ -44,6 +44,11 @@ fn world(tag: &str) -> World {
 
 impl World {
     fn agent(&self, id: &str, kind: &str, last: &str, extra: &str) {
+        self.agent_first(id, kind, r#"{"type":"user"}"#, last, extra);
+    }
+
+    /// An agent whose transcript opens on `first`, its dispatch prompt's record.
+    fn agent_first(&self, id: &str, kind: &str, first: &str, last: &str, extra: &str) {
         std::fs::write(
             self.sub.join(format!("agent-{id}.meta.json")),
             format!("{{\"agentType\":\"{kind}\"{extra}}}"),
@@ -51,9 +56,33 @@ impl World {
         .unwrap();
         std::fs::write(
             self.sub.join(format!("agent-{id}.jsonl")),
-            format!("{{\"type\":\"user\"}}\n{last}\n"),
+            format!("{first}\n{last}\n"),
         )
         .unwrap();
+    }
+
+    /// A review dispatched to read `tree` (451 T164's prompt: `Review tree: <tree>, a worktree at <commit>`).
+    fn reviewing(&self, id: &str, kind: &str, tree: &Path) {
+        let prompt = format!(
+            "UNIT: u\nClone: {} ... Review tree: {}, a worktree at abc123def4, the bundle's own work on HEAD",
+            self.clone.display(),
+            tree.display()
+        );
+        self.agent_first(
+            id,
+            kind,
+            &json!({"type": "user", "message": {"content": prompt}}).to_string(),
+            MID,
+            "",
+        );
+    }
+
+    /// The clone's review tree, a worktree beside it.
+    fn review_tree(&self) -> PathBuf {
+        let t = self.root.join("clone-review");
+        std::fs::create_dir_all(&t).unwrap();
+        std::fs::write(t.join(".git"), "gitdir: elsewhere\n").unwrap();
+        t.canonicalize().unwrap()
     }
 
     fn ctx(&self) -> Ctx {
@@ -201,4 +230,100 @@ fn what_is_not_the_guards_business_passes() {
         input: json!({"tool_name": "Edit", "tool_input": {"file_path": "/tmp/x"}}),
     };
     assert!(decide(&e, &Session::from_input(&e.input)).is_empty());
+}
+
+/// 451 T175: a review that reads its own review tree holds only an edit inside that tree; one with no tree on record holds every tree.
+#[test]
+fn a_review_reading_its_own_tree_holds_that_tree_alone() {
+    let w = world("tree");
+    let rt = w.review_tree();
+    w.reviewing("b1", "building-review", &rt);
+    let clone_edit = w.edit(&w.clone.join("rust/guard/src/x.rs"));
+    assert!(clone_edit.is_empty(), "the clone is free: {clone_edit:?}");
+    let got = w.edit(&rt.join("rust/phases/src/x.rs"));
+    let held = refused(&got, "a map review is still running")
+        && refused(&got, "  running: b1 building-review live");
+    assert!(held, "the tree the review reads is held: {got:?}");
+    w.agent("b2", "glyph-check", MID, "");
+    let got = w.edit(&w.clone.join("x.rs"));
+    let held = refused(&got, "  running: b2 glyph-check live") && !refused(&got, "b1");
+    assert!(held, "a review naming no tree holds the clone: {got:?}");
+}
+
+#[test]
+fn a_roll_in_the_clone_still_freezes_it_under_a_tree_reading_review() {
+    let w = world("treeroll");
+    let rt = w.review_tree();
+    w.reviewing("b1", "building-review", &rt);
+    w.roll(501, "l7r.diagram.tools.rust_gate", &w.clone);
+    let got = w.edit(&w.clone.join("x.rs"));
+    let held = refused(&got, "rebuilt under the rolls still to come")
+        && refused(&got, "501 rust_gate rolling")
+        && !refused(&got, "b1");
+    assert!(held, "{got:?}");
+}
+
+#[test]
+fn a_prompt_naming_no_usable_tree_holds_every_tree() {
+    let w = world("notree");
+    let rt = w.review_tree();
+    let line = |content: serde_json::Value| {
+        json!({"type": "user", "message": {"content": content}}).to_string()
+    };
+    w.agent_first("c1", "glyph-check", "not json", MID, "");
+    let named = format!("Review tree: {}, a worktree at a", rt.display());
+    let blocks = line(json!([{"type": "text", "text": named}]));
+    w.agent_first("c2", "glyph-check", &blocks, MID, "");
+    w.agent_first(
+        "c3",
+        "glyph-check",
+        &line(json!("UNIT: u, no tree")),
+        MID,
+        "",
+    );
+    w.agent_first(
+        "c4",
+        "glyph-check",
+        &line(json!(format!("Review tree: {}", rt.display()))),
+        MID,
+        "",
+    );
+    w.agent_first(
+        "c5",
+        "glyph-check",
+        &line(json!("Review tree: clone-review, a worktree at a")),
+        MID,
+        "",
+    );
+    let gone = w.root.join("gone-review");
+    w.agent_first(
+        "c6",
+        "glyph-check",
+        &line(json!(format!(
+            "Review tree: {}, a worktree at a",
+            gone.display()
+        ))),
+        MID,
+        "",
+    );
+    std::fs::write(
+        w.sub.join("agent-c7.meta.json"),
+        r#"{"agentType":"glyph-check"}"#,
+    )
+    .unwrap();
+    std::fs::write(w.sub.join("agent-c7.jsonl"), "").unwrap();
+    let all = live_reviews(&w.sub, 300);
+    assert_eq!(all.len(), 7);
+    assert!(all.iter().all(|r| r.tree.is_none()));
+    let got = w.edit(&w.clone.join("x.rs"));
+    let held = (1..=7).all(|n| refused(&got, &format!("  running: c{n} glyph-check live")));
+    assert!(held, "{got:?}");
+    w.reviewing("c8", "glyph-check", &rt);
+    let mine = live_reviews(&w.sub, 300);
+    assert_eq!(
+        mine.iter()
+            .filter_map(|r| r.tree.as_ref())
+            .collect::<Vec<_>>(),
+        [&rt]
+    );
 }

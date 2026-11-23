@@ -321,7 +321,7 @@ fn an_old_value_refuses_the_round_before_it_is_spent() {
     spec("MODE 2 of specs/301-x", &d, &c);
     let o = spec("MODE 3 of specs/301-x", &d, &c);
     assert_eq!(o.rule, "stale-terms");
-    assert!(refused(&o, "the rendered lines") && refused(&o, "make stale-terms F=301"));
+    assert!(refused(&o, "the rendered lines") && refused(&o, "then dispatch again"));
     assert_eq!(
         std::fs::read_to_string(round_file(&d, "301-x")).unwrap(),
         "1\n"
