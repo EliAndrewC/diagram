@@ -90,9 +90,9 @@ fn each_kind_of_change_is_shown_and_its_reply_recorded() {
     )
     .unwrap();
     let text = std::fs::read_to_string(manifest).unwrap();
+    // the section's edit is cleared by the tool: no claim in it repeats a word it changed (feature 451 T191)
+    assert!(!text.contains("## docs/buildings.md::Walls"), "{text}");
     for want in [
-        "## docs/buildings.md::Walls (a procedure section; the claims' own lines did not change)\n\nNew or changed blocks:\n\n> Walls stand, rebuilt.\n",
-        "Removed blocks (no longer in the section):\n\n> - a list item continued\n",
         "## rust/phases/src/lib.rs::Thing.m (a unit of code; its diff against origin/main)\n\n```diff\n@@",
         "## research/questions/0001-gap.html\n\n(against the version these claims were last checked at,",
         "New or changed blocks:\n\n> A new block.\n",
@@ -130,7 +130,14 @@ fn each_kind_of_change_is_shown_and_its_reply_recorded() {
         ],
     );
     assert_eq!(msgs.len(), 2);
-    assert_eq!(new["docs/buildings.md::Walls#walls"]["triaged"], "d");
+    assert!(data["cleared"]
+        .as_object()
+        .unwrap()
+        .contains_key("docs/buildings.md::Walls#walls"));
+    assert_ne!(
+        new["docs/buildings.md::Walls#walls"].get("triaged"),
+        Some(&json!("d"))
+    );
     assert_eq!(new["rust/phases/src/lib.rs::GAP#gap"]["triage"], "touched");
 }
 
@@ -292,8 +299,10 @@ fn manifest_of(
     std::fs::read_to_string(m).unwrap()
 }
 
+/// Feature 451 T191: an addition alone owes no claim its triage - none of these states a single case a new block could falsify - so
+/// both are cleared by the tool and the MANIFEST names neither.
 #[test]
-fn a_change_that_only_adds_shows_no_removed_blocks() {
+fn a_change_that_only_adds_is_cleared_by_the_tool() {
     let (root, ix, store) = recorded();
     put(&root, "research/questions/0001-gap.html", "<h2 id=\"gap\">The gap</h2>\n<p class=\"intro\">Why.</p>\n<p>The gap is 12 ft.</p>\n<p>A second block.</p>\n<p>Added.</p>\n");
     let b = std::fs::read_to_string(root.join("docs/buildings.md")).unwrap();
@@ -302,20 +311,29 @@ fn a_change_that_only_adds_shows_no_removed_blocks() {
         b.replace("Walls stand.\n", "Walls stand.\n\nAdded too.\n"),
     )
     .unwrap();
-    let text = manifest_of(
-        &root,
-        &ix,
-        &store,
-        &[
-            "rust/phases/src/lib.rs::GAP#gap",
-            "docs/buildings.md::Walls#walls",
-        ],
-    );
-    assert!(
-        text.contains("New or changed blocks:\n\n> Added too.\n\nClaims in it:")
-            && text.contains("> Added.\n\nClaims citing it:")
-    );
-    assert!(!text.contains("Removed blocks"));
+    let keys = [
+        "rust/phases/src/lib.rs::GAP#gap",
+        "docs/buildings.md::Walls#walls",
+    ];
+    let text = manifest_of(&root, &ix, &store, &keys);
+    assert!(!text.contains("Added"), "{text}");
+    assert_eq!(cleared_of(&root), keys);
+}
+
+/// The keys a triage bundle at `root/t` cleared by the tool.
+fn cleared_of(root: &std::path::Path) -> Vec<String> {
+    let data: Value =
+        serde_json::from_str(&std::fs::read_to_string(root.join("t/triage.json")).unwrap())
+            .unwrap();
+    let mut keys: Vec<String> = data["cleared"]
+        .as_object()
+        .unwrap()
+        .keys()
+        .cloned()
+        .collect();
+    keys.sort();
+    keys.reverse();
+    keys
 }
 
 #[test]
@@ -356,7 +374,9 @@ fn a_change_that_only_removes_shows_none_new_and_a_lost_block_owes_in_full() {
         ],
     );
     assert!(text.contains("New or changed blocks:\n\n(none)\n\nRemoved blocks (no longer in the section):\n\n> Walls stand.\n"));
-    assert!(text.contains("New or changed blocks:\n\n(none)\n\nRemoved blocks (no longer on the page):\n\n> A second block.\n"));
+    // the page's removal is no sentence the gap claim repeats: cleared by the tool (feature 451 T191)
+    assert!(!text.contains("A second block."));
+    assert_eq!(cleared_of(&root), ["rust/phases/src/lib.rs::GAP#gap"]);
     assert!(text.contains("last verdict 3: "));
     let data: Value =
         serde_json::from_str(&std::fs::read_to_string(root.join("t/triage.json")).unwrap())
@@ -365,4 +385,104 @@ fn a_change_that_only_removes_shows_none_new_and_a_lost_block_owes_in_full() {
         .as_array()
         .unwrap()
         .contains(&json!("docs/buildings.md::Walls#walls")));
+    // forced, a block of its page the history no longer shows: the page's removal shown to the agent with it
+    let fp = ix["rust/phases/src/lib.rs::GAP#gap"]["pages"]["0001-gap.html"]
+        .as_str()
+        .unwrap()
+        .to_owned();
+    store[&fp].as_array_mut().unwrap().push(json!("lost"));
+    let text = manifest_of(&root, &ix, &store, &["rust/phases/src/lib.rs::GAP#gap"]);
+    assert!(text.contains("New or changed blocks:\n\n(none)\n\nRemoved blocks (no longer on the page):\n\n> A second block.\n"));
+}
+
+/// Feature 451 T191: with no kept text of the page as it was checked, an added block counts as a new finding - here none the claim's
+/// single case meets, so the addition is cleared.
+#[test]
+fn with_no_kept_text_an_added_block_counts_as_a_finding() {
+    let (root, ix, store) = recorded();
+    std::fs::remove_file(root.join(".git").join(super::BLOBS)).unwrap();
+    put(&root, "research/questions/0001-gap.html", "<h2 id=\"gap\">The gap</h2>\n<p class=\"intro\">Why.</p>\n<p>The gap is 12 ft.</p>\n<p>A second block.</p>\n<p>Every plan keeps 12 ft here.</p>\n");
+    let text = manifest_of(&root, &ix, &store, &["rust/phases/src/lib.rs::GAP#gap"]);
+    assert!(!text.contains("Every plan"));
+    assert_eq!(cleared_of(&root), ["rust/phases/src/lib.rs::GAP#gap"]);
+}
+
+/// Feature 451 T191, red on 604541c046: a link, emphasis, code-tick or note-marker edit of a section or a cited page is cleared by the
+/// tool (T186's clears, shared), no agent.
+#[test]
+fn a_markup_link_tick_or_marker_edit_is_cleared_by_the_tool() {
+    let (root, ix, store) = recorded();
+    put(&root, "research/questions/0001-gap.html", "<h2 id=\"gap\">The gap</h2>\n<p class=\"intro\">Why.</p>\n<p>The gap is <a href=\"x.html\">12 ft</a>.<sup class=\"fn\" data-note=\"k\"></sup></p>\n<p>A <em>second</em> block.</p>\n");
+    let b = std::fs::read_to_string(root.join("docs/buildings.md")).unwrap();
+    std::fs::write(
+        root.join("docs/buildings.md"),
+        b.replace("Walls stand.\n", "**Walls** [stand](x.md)`.`\n")
+            .replace("- a list item\n", "- a _list_ item\n"),
+    )
+    .unwrap();
+    let keys = [
+        "rust/phases/src/lib.rs::GAP#gap",
+        "docs/buildings.md::Walls#walls",
+        "docs/buildings.md::Walls#wall height",
+    ];
+    let text = manifest_of(&root, &ix, &store, &keys);
+    assert!(!text.contains("## "), "{text}");
+    assert_eq!(cleared_of(&root), keys);
+}
+
+/// Feature 451 T191: a rewritten block goes to the agent for the claim that repeats a three-word run over its changed words, on either
+/// side of the rewrite (`gap`'s "kept 12 ft", `wall height`'s "wall height 12 ft"), shown paired; the claims citing the same text that
+/// do not are cleared by the tool.
+#[test]
+fn a_rewrite_goes_to_the_agent_only_for_the_claim_repeating_its_changed_words() {
+    let (root, ix, store) = recorded();
+    put(&root, "research/questions/0001-gap.html", "<h2 id=\"gap\">The gap</h2>\n<p class=\"intro\">Why.</p>\n<p>The gap is kept 12 ft wide.</p>\n<p>A second block.</p>\n");
+    let b = std::fs::read_to_string(root.join("docs/buildings.md")).unwrap();
+    std::fs::write(
+        root.join("docs/buildings.md"),
+        b.replace("  continued\n", "  continued to wall height 12 ft\n"),
+    )
+    .unwrap();
+    let text = manifest_of(
+        &root,
+        &ix,
+        &store,
+        &[
+            "rust/phases/src/lib.rs::GAP#gap",
+            "rust/phases/src/lib.rs::reach#reach",
+            "docs/buildings.md::Walls#walls",
+            "docs/buildings.md::Walls#wall height",
+        ],
+    );
+    for want in [
+        "New or changed blocks:\n\n> The gap is kept 12 ft wide.\n\nRemoved blocks (no longer on the page):\n\n> The gap is 12 ft.\n",
+        "New or changed blocks:\n\n> - a list item continued to wall height 12 ft\n\nRemoved blocks (no longer in the section):\n\n> - a list item continued\n",
+        "- KEY `rust/phases/src/lib.rs::GAP#gap`",
+        "- KEY `docs/buildings.md::Walls#wall height`",
+    ] {
+        assert!(text.contains(want), "{want}\n----\n{text}");
+    }
+    assert_eq!(
+        cleared_of(&root),
+        [
+            "rust/phases/src/lib.rs::reach#reach",
+            "docs/buildings.md::Walls#walls"
+        ]
+    );
+}
+
+/// Feature 451 T191: a cleared claim recorded as a triage clears it, at the text as it stands, saying the tool cleared it.
+#[test]
+fn a_claim_the_tool_cleared_is_recorded_cleared() {
+    let ix: Map<String, Value> =
+        serde_json::from_value(json!({"k": {"triage": "touched", "verdict": "IN-STEP"}})).unwrap();
+    let cleared: Map<String, Value> = serde_json::from_value(
+        json!({"k": {"research": "r", "pages": {"p": "f"}, "section": "s"}}),
+    )
+    .unwrap();
+    let out = super::record_cleared(&ix, &cleared, "d");
+    assert_eq!(
+        out["k"],
+        json!({"verdict": "IN-STEP", "research": "r", "pages": {"p": "f"}, "triaged": "d", "section": "s", "cleared": super::TOOL_CLEARED})
+    );
 }

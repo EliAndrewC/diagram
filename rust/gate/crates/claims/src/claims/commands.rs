@@ -7,7 +7,7 @@
     reason = "Python's `str.endswith`, which this port keeps, is case-sensitive"
 )]
 
-use std::collections::{HashMap, HashSet};
+use std::collections::{BTreeMap, HashMap, HashSet};
 use std::fmt::Write as _;
 use std::io::Write as _;
 use std::path::{Path, PathBuf};
@@ -25,7 +25,9 @@ use super::report::{
     split_keys,
 };
 use super::scope::all_units;
-use super::triage::{clear_page_moves, keep_texts, read_reply, record_triage, triage_bundle, vet};
+use super::triage::{
+    clear_page_moves, keep_texts, read_reply, record_cleared, record_triage, triage_bundle, vet,
+};
 use super::units::{sha, Pair};
 use crate::record::args::Parsed;
 use crate::record::repo::{fail, Fail};
@@ -508,16 +510,31 @@ fn triage_cmd(
         return Ok(0);
     }
     let out = p.text("--out", "");
-    if keys.len() <= TRIAGE_SKIP_MAX {
-        return small_triage(root, &keys, out, o);
-    }
     let tout = if out.is_empty() {
         l7r_gate_core::record::bundle::default_root().join("claims-triage")
     } else {
         PathBuf::from(path_text(out))
     };
+    // T186's filter first (feature 451 T191): a claim no edit of whose text is claim-bearing is cleared by the tool, no agent
     let manifest = triage_bundle(cur, &index, store, &keys, &qdir, &tout)?;
     let data = Value::Object(load_map(&tout.join("triage.json"))?);
+    let tool = data["cleared"].as_object().cloned().unwrap_or_default();
+    if !tool.is_empty() {
+        index = record_cleared(&index, &tool, &today);
+        save_index(&root.join(INDEX), &live_rows(cur, &index))?;
+        let mut merged = store.clone();
+        merged.extend(data["snapshots"].as_object().cloned().unwrap_or_default());
+        save_store(&root.join(STORE), &merged)?;
+        keep_texts(&qdir, &tool)?;
+        o.say(&format!("claims-triage: {} claim(s) cleared by the tool - no edit of the text each rests on is claim-bearing (feature 451 T191: comments, markup, links, marks and moves; a rewritten or removed sentence only where the claim repeats its changed words)", tool.len()));
+    }
+    let keys: Vec<String> = keys.into_iter().filter(|k| !tool.contains_key(k)).collect();
+    if keys.is_empty() {
+        return Ok(0);
+    }
+    if keys.len() <= TRIAGE_SKIP_MAX {
+        return small_triage(root, &keys, out, o);
+    }
     let forced: Vec<String> = data["forced"]
         .as_array()
         .into_iter()
@@ -538,6 +555,61 @@ fn triage_cmd(
     o.say(&manifest.to_string_lossy());
     super::flight::mark(root, &tout)?;
     o.say(&format!("claims-triage: {} claim(s); dispatch the `claims-triage` agent on the MANIFEST (a session started before 2026-10-17's amendment 6 landed: restart to load it), save its reply, then `make claims-triaged BUNDLE=<dir> REPLY=<file>`", keys.len()));
+    Ok(0)
+}
+
+/// `claims triage-replay --out DIR` (feature 451 T191's replay): what `claims triage` would do at this tree, read only - each claim owed
+/// a triage, `<key>\t<why owed>\t<sent|forced|cleared by the tool|cleared, feature 432>`, then the counts; the bundle written to
+/// `DIR`, nothing else written (no index, store, kept blob or flight mark).
+fn replay_cmd(
+    root: &Path,
+    cur: &Cur,
+    index: &Index,
+    store: &Store,
+    p: &Parsed,
+    o: &mut Out,
+) -> Result<i32, Fail> {
+    let qdir = root.join(QUESTIONS);
+    let due: Vec<(String, String)> = owed(cur, index, Some(&qdir), Some(store))?
+        .into_iter()
+        .filter(|(_, why)| TRIAGED.contains(&why.as_str()))
+        .collect();
+    let rests =
+        |k: &str, why: &str| why == "triage" && truthy(index.get(k).and_then(|r| r.get("rests")));
+    let keys: Vec<String> = due
+        .iter()
+        .filter(|(k, why)| !rests(k, why))
+        .map(|(k, _)| k.clone())
+        .collect();
+    let out = PathBuf::from(path_text(p.text("--out", "")));
+    triage_bundle(cur, index, store, &keys, &qdir, &out)?;
+    let data = Value::Object(load_map(&out.join("triage.json"))?);
+    let forced: Vec<&str> = data["forced"]
+        .as_array()
+        .into_iter()
+        .flatten()
+        .filter_map(Value::as_str)
+        .collect();
+    let mut counts: BTreeMap<&str, usize> = BTreeMap::new();
+    for (k, why) in &due {
+        let is = if rests(k, why) {
+            "cleared, feature 432"
+        } else if data["cleared"].get(k).is_some() {
+            "cleared by the tool"
+        } else if forced.contains(&k.as_str()) {
+            "forced"
+        } else {
+            "sent"
+        };
+        *counts.entry(is).or_default() += 1;
+        o.say(&format!("{k}\t{why}\t{is}"));
+    }
+    let tally: Vec<String> = counts.iter().map(|(k, n)| format!("{n} {k}")).collect();
+    o.say(&format!(
+        "claims-triage-replay: {} claim(s) owed a triage: {}",
+        due.len(),
+        tally.join(", ")
+    ));
     Ok(0)
 }
 
@@ -889,6 +961,7 @@ pub fn run(cmd: &str, p: &Parsed, root: &Path, o: &mut Out) -> Result<i32, Fail>
             Ok(0)
         }
         "triage" => triage_cmd(root, &cur, index, &store, p, o),
+        "triage-replay" => replay_cmd(root, &cur, &index, &store, p, o),
         "triaged" => triaged_cmd(root, &cur, &index, &store, p, o),
         "report" => {
             let deferred = load_deferred(&root.join(DEFERRED))?;

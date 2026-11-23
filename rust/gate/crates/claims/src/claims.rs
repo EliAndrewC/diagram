@@ -157,6 +157,7 @@ fn specs(cmd: &str) -> Option<(Vec<Spec>, &'static [&'static str])> {
         ),
         "record" | "triaged" => (vec![v("--bundle"), v("--reply")], &["--bundle", "--reply"]),
         "triage" => (vec![v("--out")], &[]),
+        "triage-replay" => (vec![v("--out")], &["--out"]),
         "report" => (vec![Spec::flag("--all")], &[]),
         "carry" => (
             vec![v("--feature"), v("--task"), v("--keys"), v("--ruling")],

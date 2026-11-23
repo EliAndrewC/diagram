@@ -61,10 +61,18 @@ fn a_relabel_regenerates_the_bullet_and_owes_no_check() {
         )
         .unwrap()
     };
-    put(&root, "research/questions/0218-the-compounds-own-shrine-yashikigami.drawing.html", &old);
+    put(
+        &root,
+        "research/questions/0218-the-compounds-own-shrine-yashikigami.drawing.html",
+        &old,
+    );
     // attested: no bullet
     assert!(resolve(&root, fc()).unwrap().guesses.is_empty());
-    put(&root, "research/questions/0218-the-compounds-own-shrine-yashikigami.drawing.html", &fresh);
+    put(
+        &root,
+        "research/questions/0218-the-compounds-own-shrine-yashikigami.drawing.html",
+        &fresh,
+    );
     // a GUESS: the bullet is the tag's
     let tree = "The tree beside the shrine: no account gives a household's shrine a tree beside it as the custom";
     assert_eq!(resolve(&root, fc()).unwrap().guesses, [tree]);

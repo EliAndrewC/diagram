@@ -363,20 +363,24 @@ fn recorded(tag: &str) -> l7r_shared::tempdir::TempDir {
     root
 }
 
-/// [`recorded`] with two Rust claims' code and a procedure section changed.
+/// [`recorded`] with three Rust claims' code and a procedure section changed: a list item rewritten in words the `wall height` claim
+/// repeats, and the walls' own sentence in words no claim does (feature 451 T191: the `walls` claim cleared by the tool).
 fn changed(tag: &str) -> l7r_shared::tempdir::TempDir {
     let root = recorded(tag);
     let lib = std::fs::read_to_string(root.join("rust/phases/src/lib.rs")).unwrap();
     std::fs::write(
         root.join("rust/phases/src/lib.rs"),
         lib.replace("let y = 3.25;", "let y = 3.5;")
-            .replace("a[1] + 42", "a[1] + 43"),
+            .replace("a[1] + 42", "a[1] + 43")
+            .replace("GAP: f64 = 12.0", "GAP: f64 = 12.5"),
     )
     .unwrap();
     let buildings = std::fs::read_to_string(root.join("docs/buildings.md")).unwrap();
     std::fs::write(
         root.join("docs/buildings.md"),
-        buildings.replace("Walls stand.", "Walls stand tall."),
+        buildings
+            .replace("Walls stand.", "Walls stand tall.")
+            .replace("  continued\n", "  continued to wall height 12 ft\n"),
     )
     .unwrap();
     root
@@ -390,6 +394,13 @@ fn triaged(root: &Path) -> String {
     assert!(got
         .stdout
         .contains("claims-triage: 4 claim(s); dispatch the `claims-triage` agent"));
+    assert!(got
+        .stdout
+        .contains("claims-triage: 1 claim(s) cleared by the tool"));
+    assert_eq!(
+        index(root)["docs/buildings.md::Walls#walls"]["cleared"],
+        crate::claims::triage::TOOL_CLEARED
+    );
     let manifest = std::fs::read_to_string(t.join("MANIFEST.md")).unwrap_or_default();
     assert!(
         manifest.contains("(a procedure section; the claims' own lines did not change)")
@@ -412,12 +423,12 @@ fn the_triage_s_reply_sends_on_what_it_names_and_refuses_the_rest() {
     let to = triaged(&root);
     let r = reply(
         &root,
-        "TOUCHES `docs/buildings.md::Walls#walls` - it bears\nTOUCHES nope#x - refused\n",
+        "TOUCHES `docs/buildings.md::Walls#wall height` - it bears\nTOUCHES nope#x - refused\n",
     );
     let got = claims(&root, &["triaged", "--bundle", &to, "--reply", &r]);
     assert!(
         got.stdout
-            .contains("claims-triaged: touched: docs/buildings.md::Walls#walls - it bears")
+            .contains("claims-triaged: touched: docs/buildings.md::Walls#wall height - it bears")
             && got
                 .stdout
                 .contains("claims-triaged: refused: `nope#x` is not a claim of this triage"),
@@ -431,9 +442,85 @@ fn the_triage_s_reply_sends_on_what_it_names_and_refuses_the_rest() {
         2
     );
     assert_eq!(
-        index(&root)["docs/buildings.md::Walls#walls"]["triage"],
+        index(&root)["docs/buildings.md::Walls#wall height"]["triage"],
         "touched"
     );
+}
+
+/// Feature 451 T191's replay: what `claims triage` would do, read only - each claim owed a triage and its fate, then the counts - and
+/// nothing of the index written.
+#[test]
+fn the_triage_replay_names_each_claim_s_fate_and_writes_nothing() {
+    let root = changed("claims-cmd-replay");
+    let before = std::fs::read_to_string(root.join("dev/claims-index.json")).unwrap();
+    let to = root.join("r").to_string_lossy().into_owned();
+    let got = claims(&root, &["triage-replay", "--out", &to]);
+    for want in [
+        "docs/buildings.md::Walls#walls\tsection triage\tcleared by the tool\n",
+        "docs/buildings.md::Walls#wall height\tsection triage\tsent\n",
+        "claims-triage-replay: 5 claim(s) owed a triage: 1 cleared by the tool, 4 sent\n",
+    ] {
+        assert!(got.stdout.contains(want), "{want}\n----\n{}", got.stdout);
+    }
+    assert_eq!(
+        std::fs::read_to_string(root.join("dev/claims-index.json")).unwrap(),
+        before
+    );
+    // a page move alone (feature 432) and a section whose removed block the history no longer shows (forced)
+    let root = recorded("claims-cmd-replay-forced");
+    let page = root.join("research/questions/0001-gap.html");
+    std::fs::write(&page, "<h2 id=\"gap\">The gap</h2>\n<p class=\"intro\">Why.</p>\n<p>The gap is 12 ft.</p>\n<p>A second block.</p>\n<p>A third, new.</p>\n").unwrap();
+    let b = std::fs::read_to_string(root.join("docs/buildings.md")).unwrap();
+    std::fs::write(
+        root.join("docs/buildings.md"),
+        b.replace("Walls stand.\n", ""),
+    )
+    .unwrap();
+    let ix = index(&root);
+    let section = ix["docs/buildings.md::Walls#walls"]["section"]
+        .as_str()
+        .unwrap()
+        .to_owned();
+    let store_path = root.join("dev/claims-pages.json");
+    let mut store: Value =
+        serde_json::from_str(&std::fs::read_to_string(&store_path).unwrap()).unwrap();
+    store[&section].as_array_mut().unwrap().push(json!("lost"));
+    std::fs::write(&store_path, store.to_string()).unwrap();
+    let got = claims(&root, &["triage-replay", "--out", &to]);
+    assert!(
+        got.stdout.contains("\tcleared, feature 432\n")
+            && got.stdout.contains("\tsection triage\tforced\n"),
+        "{}",
+        got.stdout
+    );
+}
+
+/// Feature 451 T191: a triage the tool clears whole dispatches nothing, and owes nothing after; a small one whose bundle cannot be
+/// written says nothing of a skip.
+#[test]
+fn a_triage_the_tool_clears_whole_dispatches_nothing() {
+    let root = recorded("claims-cmd-tool-clears");
+    let b = std::fs::read_to_string(root.join("docs/buildings.md")).unwrap();
+    std::fs::write(
+        root.join("docs/buildings.md"),
+        b.replace("Walls stand.\n", "**Walls** `stand`.\n"),
+    )
+    .unwrap();
+    let to = root.join("t").to_string_lossy().into_owned();
+    let got = claims(&root, &["triage", "--out", &to]);
+    assert!(
+        got.stdout
+            .contains("claims-triage: 2 claim(s) cleared by the tool")
+            && !got.stdout.contains("dispatch"),
+        "{}",
+        got.stdout
+    );
+    assert_eq!(claims(&root, &["triage-owed"]).stdout, "0\n");
+    let mut o = super::Out::default();
+    let code =
+        super::small_triage(&root, &["no#such".to_owned()], "/proc/no/such/dir", &mut o).unwrap();
+    assert_ne!(code, 0);
+    assert!(!o.out.contains("the skip is in"));
 }
 
 #[test]

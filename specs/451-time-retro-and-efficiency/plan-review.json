@@ -990,6 +990,24 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-23",
    "declared": "spec-fidelity"
+  },
+  "### T191 (the GM 2026-11-23, the convergence talk; observed 2026-11-23 by 451 T186's builder: regenerating docs/building-programs.md for the garden-pond fix re-owed 73 of its claims a triage, though only the `inner_garden` row's Guesses text changed)": {
+   "sha256": "5c46b049fa90dbfa953154f880e087385be65d9b01288171cabf05386e6a8199",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity"
+  },
+  "### T191 Approach (checklist part A)": {
+   "sha256": "576674558434ffce6e22da8d6616aaf214aba80defe81193abd1fba733621ebe",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity"
+  },
+  "### T191 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)": {
+   "sha256": "aa2904d9581e126de61d1fbf7d69141efc3559f307fa8af35d132d9a6ebe636b",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -16269,6 +16287,89 @@
      "why": "Sequencing. Nothing the request asks for is narrowed."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-23",
+   "blocks": [
+    "### T191 (the GM 2026-11-23, the convergence talk; observed 2026-11-23 by 451 T186's builder: regenerating docs/building-programs.md for the garden-pond fix re-owed 73 of its claims a triage, though only the `inner_garden` row's Guesses text changed)",
+    "### T191 Approach (checklist part A)",
+    "### T191 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D1 scope",
+     "summary": "Apply T186's pop-up change filter (clears, echo rule, ABSENCE arm) to the claims triage, so a page or procedure-section edit re-owes only the claims whose text it changed in a claim-bearing way; a generated doc's claims are touched only by rows whose text changed in words they repeat.",
+     "class": "within",
+     "why": "The GM's convergence talk approved 'only a claim-changing edit triggers review' and 're-reviews scoped to the change' ('Please do all of that'); the observed 73-claims-for-one-row re-owe is the cascade the GM said must be fixed before anything else."
+    },
+    {
+     "id": "D2 shared code",
+     "summary": "T186's page_change split in triage/change.rs; blocks_change shared by both triages rather than copied; md_words reads a procedure section's Markdown as page words so markup edits pair equal.",
+     "class": "within",
+     "why": "Implementation of D1; the same rule as the pop-ups, which is what the GM approved."
+    },
+    {
+     "id": "D3 per-claim reader",
+     "summary": "Each changed page/section paired once, then judged per claim by change::fires with the claim's label and account as reader (question paths left out); no note key is a claim's, so the keys-gone arm never fires.",
+     "class": "within",
+     "why": "Applies T186's rule to the claim as its reader; the keys-gone arm not firing is a consequence of claims carrying no note keys, not a carve-out."
+    },
+    {
+     "id": "D4 new-side echo",
+     "summary": "Add change::echo_rewritten: the echo also read from a rewrite's new side, because a relabel rewrites a fact in words the claim repeats; without it the replay missed one DRIFTED claim.",
+     "class": "within",
+     "why": "Widens what is sent to the agent, so it narrows nothing; it keeps factual/label changes cascading as the GM's 'only factual findings cascade' intends."
+    },
+    {
+     "id": "D5 cleared at once",
+     "summary": "A claim whose every text edit is cleared, with no code hunk and nothing forced, is recorded cleared by the tool (record_cleared) with snapshots before skip/all-forced/dispatch paths run on the rest; the dispatch is skipped when nothing is left.",
+     "class": "within",
+     "why": "This is the 'cost no agent' outcome the GM asked for; code-hunk and forced claims still go on, and the quotation ruling (an original-language edit is never cleared) is kept."
+    },
+    {
+     "id": "D6 contract and manifest",
+     "summary": "The claims-triage contract and MANIFEST form are unchanged; the MANIFEST shows only blocks left after the clears.",
+     "class": "within",
+     "why": "Scopes the remaining review to the change, as the GM asked."
+    },
+    {
+     "id": "D7 replay",
+     "summary": "claims triage-replay --out DIR: a read-only replay of each owed claim's fate, used as the red-first and 0-misses measurement over today's landings.",
+     "class": "within",
+     "why": "Verification that the requested filter does what was asked (no DRIFTED claim whose drift lay in its own text is dropped); enforcement of the request, not new behavior."
+    },
+    {
+     "id": "D8 exit measure",
+     "summary": "Green exit stated as 0 misses of DRIFTED claims whose drift lay in the text they rest on; the two DRIFTED claims the tool clears are the known 'tax archive strongroom role' (its DRIFTED row kept) and 'main gate posts', reached only by an unrelated cart-gate edit of its section.",
+     "class": "within",
+     "why": "Clearing a claim on an edit that does not touch what it rests on is exactly the GM's rule ('the ones that never could have plausibly needed this kind of cascade'); the measure matches the GM's rule rather than narrowing it. Both are named, and the known drift's verdict stands."
+    },
+    {
+     "id": "D9 left: main gate posts cites no page",
+     "summary": "Leave the claims-grammar class (a CONVENTION claim whose figure a page states but which cites no page) to the claims grammar; the one instance was already restated at d4da911203.",
+     "class": "within",
+     "why": "Not something this request or T191 asks for (cascade scoping, not citation coverage); its one instance's wrong outcome is already fixed, so no wrong outcome is left by this task. Aside for the GM: worth a filed observation if other such claims are measured."
+    },
+    {
+     "id": "D10 constants unmoved",
+     "summary": "PAIR_RATIO and ABSENCE stay T186's; function-word trigrams ('one of the') still count, sending 2 extra claims at the garden landing.",
+     "class": "within",
+     "why": "Over-sending two claims to an agent is no wrong outcome; leaving T186's approved rule as it is narrows nothing."
+    },
+    {
+     "id": "D11 rustfmt fix of T187's file",
+     "summary": "Fix formatting only in rust/gate/crates/owed/src/item_relabel.rs, whose rustfmt failure turned the owed crate's make static red.",
+     "class": "within",
+     "why": "A tool refusing valid work is a defect fixed as found; formatting only, no behavior change. (It departs from the plan's own 'T187's files untouched' constraint, which is the coordinator's, not the GM's.)"
+    },
+    {
+     "id": "D12 performance class",
+     "summary": "Classed as performance work: removes agent work before dispatch; no engine code, no map change; not a defect fix.",
+     "class": "within",
+     "why": "FR-013 and the GM's 'prioritize performance improvements'; the work removed is agent time, the GM's stated cost."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -25894,6 +25995,86 @@
      "summary": "Lands after T186 (the triage's first filter, which clears a referenced relabel) and T185 (whose modal.rs this task edits in guesses() only), and before T192.",
      "class": "within",
      "why": "Sequencing. Nothing the request asks for is narrowed."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T191": {
+   "section_sha256": "451a6a54428a0545f499bfac8903c4a90702d8410e13750c4157df1d8a92fa29",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D1 scope",
+     "summary": "Apply T186's pop-up change filter (clears, echo rule, ABSENCE arm) to the claims triage, so a page or procedure-section edit re-owes only the claims whose text it changed in a claim-bearing way; a generated doc's claims are touched only by rows whose text changed in words they repeat.",
+     "class": "within",
+     "why": "The GM's convergence talk approved 'only a claim-changing edit triggers review' and 're-reviews scoped to the change' ('Please do all of that'); the observed 73-claims-for-one-row re-owe is the cascade the GM said must be fixed before anything else."
+    },
+    {
+     "id": "D2 shared code",
+     "summary": "T186's page_change split in triage/change.rs; blocks_change shared by both triages rather than copied; md_words reads a procedure section's Markdown as page words so markup edits pair equal.",
+     "class": "within",
+     "why": "Implementation of D1; the same rule as the pop-ups, which is what the GM approved."
+    },
+    {
+     "id": "D3 per-claim reader",
+     "summary": "Each changed page/section paired once, then judged per claim by change::fires with the claim's label and account as reader (question paths left out); no note key is a claim's, so the keys-gone arm never fires.",
+     "class": "within",
+     "why": "Applies T186's rule to the claim as its reader; the keys-gone arm not firing is a consequence of claims carrying no note keys, not a carve-out."
+    },
+    {
+     "id": "D4 new-side echo",
+     "summary": "Add change::echo_rewritten: the echo also read from a rewrite's new side, because a relabel rewrites a fact in words the claim repeats; without it the replay missed one DRIFTED claim.",
+     "class": "within",
+     "why": "Widens what is sent to the agent, so it narrows nothing; it keeps factual/label changes cascading as the GM's 'only factual findings cascade' intends."
+    },
+    {
+     "id": "D5 cleared at once",
+     "summary": "A claim whose every text edit is cleared, with no code hunk and nothing forced, is recorded cleared by the tool (record_cleared) with snapshots before skip/all-forced/dispatch paths run on the rest; the dispatch is skipped when nothing is left.",
+     "class": "within",
+     "why": "This is the 'cost no agent' outcome the GM asked for; code-hunk and forced claims still go on, and the quotation ruling (an original-language edit is never cleared) is kept."
+    },
+    {
+     "id": "D6 contract and manifest",
+     "summary": "The claims-triage contract and MANIFEST form are unchanged; the MANIFEST shows only blocks left after the clears.",
+     "class": "within",
+     "why": "Scopes the remaining review to the change, as the GM asked."
+    },
+    {
+     "id": "D7 replay",
+     "summary": "claims triage-replay --out DIR: a read-only replay of each owed claim's fate, used as the red-first and 0-misses measurement over today's landings.",
+     "class": "within",
+     "why": "Verification that the requested filter does what was asked (no DRIFTED claim whose drift lay in its own text is dropped); enforcement of the request, not new behavior."
+    },
+    {
+     "id": "D8 exit measure",
+     "summary": "Green exit stated as 0 misses of DRIFTED claims whose drift lay in the text they rest on; the two DRIFTED claims the tool clears are the known 'tax archive strongroom role' (its DRIFTED row kept) and 'main gate posts', reached only by an unrelated cart-gate edit of its section.",
+     "class": "within",
+     "why": "Clearing a claim on an edit that does not touch what it rests on is exactly the GM's rule ('the ones that never could have plausibly needed this kind of cascade'); the measure matches the GM's rule rather than narrowing it. Both are named, and the known drift's verdict stands."
+    },
+    {
+     "id": "D9 left: main gate posts cites no page",
+     "summary": "Leave the claims-grammar class (a CONVENTION claim whose figure a page states but which cites no page) to the claims grammar; the one instance was already restated at d4da911203.",
+     "class": "within",
+     "why": "Not something this request or T191 asks for (cascade scoping, not citation coverage); its one instance's wrong outcome is already fixed, so no wrong outcome is left by this task. Aside for the GM: worth a filed observation if other such claims are measured."
+    },
+    {
+     "id": "D10 constants unmoved",
+     "summary": "PAIR_RATIO and ABSENCE stay T186's; function-word trigrams ('one of the') still count, sending 2 extra claims at the garden landing.",
+     "class": "within",
+     "why": "Over-sending two claims to an agent is no wrong outcome; leaving T186's approved rule as it is narrows nothing."
+    },
+    {
+     "id": "D11 rustfmt fix of T187's file",
+     "summary": "Fix formatting only in rust/gate/crates/owed/src/item_relabel.rs, whose rustfmt failure turned the owed crate's make static red.",
+     "class": "within",
+     "why": "A tool refusing valid work is a defect fixed as found; formatting only, no behavior change. (It departs from the plan's own 'T187's files untouched' constraint, which is the coordinator's, not the GM's.)"
+    },
+    {
+     "id": "D12 performance class",
+     "summary": "Classed as performance work: removes agent work before dispatch; no engine code, no map change; not a defect fix.",
+     "class": "within",
+     "why": "FR-013 and the GM's 'prioritize performance improvements'; the work removed is agent time, the GM's stated cost."
     }
    ],
    "verdict": "CLEAR"

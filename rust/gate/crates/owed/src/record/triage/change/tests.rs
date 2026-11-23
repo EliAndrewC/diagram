@@ -2,7 +2,10 @@
 
 use std::collections::HashSet;
 
-use super::{block_words, claim_words, page_change, pointer_targets, word_diff, Change};
+use super::{
+    block_words, blocks_change, claim_words, echo_rewritten, md_words, page_change,
+    pointer_targets, word_diff, Change,
+};
 
 fn none() -> HashSet<String> {
     HashSet::new()
@@ -225,4 +228,50 @@ fn a_new_finding_fires_where_the_pop_up_states_a_single_case() {
         .unwrap()
         .contains("Sources key k"));
     assert!(super::says_absence("Every plan draws it."));
+}
+
+/// Feature 451 T191: a procedure section's Markdown read as a page's words - a link's text kept, ticks and emphasis dropped, a
+/// `snake_case` name kept whole - so a markup edit of a section pairs equal and is cleared.
+#[test]
+fn a_section_s_markdown_reads_as_a_page_s_words() {
+    assert_eq!(
+        md_words(
+            "**Walls** [stand](x.md) `inner_garden` *here* and __there__, ![a](b.png) <b>c</b>."
+        ),
+        "Walls stand inner_garden here and there, a c."
+    );
+    assert_eq!(
+        md_words("snake_case_name and 2 * 3 * 4"),
+        "snake_case_name and 2 * 3 * 4"
+    );
+    let was = vec![md_words("**Walls** stand.")];
+    let c = blocks_change(
+        &was,
+        &[md_words("Walls `stand`.")],
+        &[],
+        &none(),
+        &none(),
+        &[],
+    );
+    assert!(c.is_clear() && c.keys_gone.is_empty());
+}
+
+/// Feature 451 T191: the echo read from a rewrite's new side - a claim repeating the words a rewritten block gained (a label the page
+/// now gives) fires; one repeating only words both sides hold does not.
+#[test]
+fn the_echo_fires_on_words_a_rewrite_gained_that_the_claim_repeats() {
+    let c = change(
+        "<p>Our maps set the shrine where a household's stood, and give it the tree as well.</p>",
+        "<p>Our maps set the shrine where a household's stood. That they give it a tree beside it as well is a GUESS.</p>",
+    );
+    assert_eq!(c.pairs.len(), 1);
+    let hit = echo_rewritten(&c, "the shrine stands in a corner with a tree beside it");
+    assert_eq!(
+        hit.as_deref(),
+        Some("that they give it a tree beside it as well is a guess.")
+    );
+    assert_eq!(
+        echo_rewritten(&c, "our maps set the shrine in a corner"),
+        None
+    );
 }

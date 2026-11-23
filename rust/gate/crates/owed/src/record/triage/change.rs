@@ -29,6 +29,13 @@ static POINTER: LazyLock<Regex> = LazyLock::new(|| {
     )
 });
 static DIGIT: LazyLock<Regex> = LazyLock::new(|| re(r"\d"));
+/// A Markdown link or image, `[text](target)`: its text kept.
+static MD_LINK: LazyLock<Regex> = LazyLock::new(|| re(r"!?\[([^\]]*)\]\([^)]*\)"));
+/// Code ticks.
+static MD_TICKS: LazyLock<Regex> = LazyLock::new(|| re(r"`+"));
+/// Emphasis, `**x**`, `__x__`, `*x*` or `_x_`, opening and closing at a word's edge (a `snake_case` name keeps its underscores).
+static MD_EMPHASIS: LazyLock<Regex> =
+    LazyLock::new(|| re(r"(?<![\w*])(\*\*|__|\*|_)(?=\S)(.+?)(?<=\S)\1(?![\w*])"));
 
 /// The words a pointer block may carry beyond its link's own (a GUESS, a knob: "The full account of X is now at <link>." is about a
 /// dozen; a claim beside a pointer is longer, carries a figure or a note mark, and goes to the agent).
@@ -47,6 +54,17 @@ pub fn claim_words(block_words: &str) -> String {
     SPACE_BEFORE.replace_all(&t, "$1").trim().to_owned()
 }
 
+/// A procedure section's block (Markdown, its comments out) as a page's block words read: a link's text kept and its target dropped,
+/// code ticks and emphasis dropped, inline HTML read as a page's, so a link, markup or code-tick edit of a section is cleared by the
+/// tool as a page's is (feature 451 T191).
+#[must_use]
+pub fn md_words(block: &str) -> String {
+    let t = MD_LINK.replace_all(block, "$1");
+    let t = MD_TICKS.replace_all(&t, "");
+    let t = MD_EMPHASIS.replace_all(&t, "$2");
+    words(&t)
+}
+
 /// The question pages a page's pointers name (repository paths), each once, in order.
 #[must_use]
 pub fn pointer_targets(html: &str) -> Vec<String> {
@@ -61,7 +79,8 @@ pub fn pointer_targets(html: &str) -> Vec<String> {
 }
 
 /// The words of each pointer's link text on a page.
-fn pointer_texts(html: &str) -> Vec<String> {
+#[must_use]
+pub fn pointer_texts(html: &str) -> Vec<String> {
     POINTER
         .captures_iter(html)
         .map_while(Result::ok)
@@ -129,15 +148,6 @@ pub fn page_change<S: std::hash::BuildHasher>(
 ) -> Change {
     let was = read_page(old).blocks;
     let now = read_page(fresh).blocks;
-    let mut gone: Vec<String> = Vec::new();
-    let mut fresh_blocks: Vec<String> = now.iter().map(|b| b.words.clone()).collect();
-    for b in &was {
-        if let Some(i) = fresh_blocks.iter().position(|w| *w == b.words) {
-            fresh_blocks.remove(i);
-        } else {
-            gone.push(b.words.clone());
-        }
-    }
     let marks_now: HashSet<&String> = now.iter().flat_map(|b| &b.marks).collect();
     let mut keys_gone: Vec<String> = Vec::new();
     for k in was.iter().flat_map(|b| &b.marks) {
@@ -145,11 +155,41 @@ pub fn page_change<S: std::hash::BuildHasher>(
             keys_gone.push(k.clone());
         }
     }
-    let mut change = Change {
+    Change {
         keys_gone,
-        ..Change::default()
-    };
-    let links = pointer_texts(fresh);
+        ..blocks_change(
+            &was.iter().map(|b| b.words.clone()).collect::<Vec<_>>(),
+            &now.iter().map(|b| b.words.clone()).collect::<Vec<_>>(),
+            &pointer_texts(fresh),
+            reached_now,
+            reached_before,
+            elsewhere,
+        )
+    }
+}
+
+/// [`page_change`]'s half over block words, the one a claim's triage shares (feature 451 T191): `was` and `now` the blocks' words
+/// before and after (a page's, or a procedure section's through [`md_words`]), `links` the pointers' link texts on the page now; no
+/// note key is read here, so `keys_gone` is empty.
+#[must_use]
+pub fn blocks_change<S: std::hash::BuildHasher>(
+    was: &[String],
+    now: &[String],
+    links: &[String],
+    reached_now: &HashSet<String, S>,
+    reached_before: &HashSet<String, S>,
+    elsewhere: &[(String, HashSet<String, S>)],
+) -> Change {
+    let mut gone: Vec<String> = Vec::new();
+    let mut fresh_blocks: Vec<String> = now.to_vec();
+    for b in was {
+        if let Some(i) = fresh_blocks.iter().position(|w| w == b) {
+            fresh_blocks.remove(i);
+        } else {
+            gone.push(b.clone());
+        }
+    }
+    let mut change = Change::default();
     gone.retain(|g| {
         let moved = reached_now.contains(g);
         change.moved += usize::from(moved);
@@ -170,14 +210,14 @@ pub fn page_change<S: std::hash::BuildHasher>(
     let mut left: Vec<String> = Vec::new();
     for f in fresh_blocks {
         let claim = claim_words(&f);
-        let bare = without_pointers(&f, &links);
+        let bare = without_pointers(&f, links);
         let same = old_claims
             .iter()
             .position(|(c, _)| *c == claim || (!links.is_empty() && *c == bare));
         if let Some(i) = same {
             old_claims.remove(i);
             change.cleared += 1;
-        } else if claim.is_empty() || is_pointer(&f, &links) {
+        } else if claim.is_empty() || is_pointer(&f, links) {
             change.cleared += 1;
         } else {
             left.push(f);
@@ -362,6 +402,15 @@ pub fn echo<S: std::hash::BuildHasher>(
         }
     }
     None
+}
+
+/// THE ECHO RULE read from a rewrite's new side (feature 451 T191, the claims' measured miss): a sentence a rewritten block holds that
+/// its old self did not, whose changed words `reader` repeats as a word trigram ([`echo`] with the pair's sides swapped); the sentence,
+/// or None. A claim whose label a page rewrites ("a tree beside it ... is a GUESS") repeats the new words, not the dropped ones.
+#[must_use]
+pub fn echo_rewritten(c: &Change, reader: &str) -> Option<String> {
+    let (old, new): (Vec<String>, Vec<String>) = c.pairs.iter().cloned().unzip();
+    echo(&new, &old, &HashSet::<String>::new(), reader)
 }
 
 /// Whether the pop-up states a single case ([`ABSENCE`]).

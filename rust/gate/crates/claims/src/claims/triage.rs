@@ -27,6 +27,9 @@ pub const BLOBS: &str = "claims-page-blobs.json";
 /// What a claim cleared without a triage records (feature 432, FR-005 a, plan D7).
 pub const CLEARED: &str =
     "mechanically: a page it cites moved and no block it rests on did (feature 432)";
+/// What a claim T186's filter cleared records (feature 451 T191).
+pub const TOOL_CLEARED: &str =
+    "by the tool: no edit of the text it rests on is claim-bearing (feature 451 T191)";
 
 static TOUCHES: LazyLock<Regex> = LazyLock::new(|| re(r"\ATOUCHES\s+(\S.*?)\s+-\s+(.*)\z"));
 pub static HUNK: LazyLock<Regex> =
@@ -216,19 +219,65 @@ pub fn code_hunks(root: &Path, path: &str, lo: usize, hi: usize, base: &str) -> 
     out
 }
 
-/// A procedure section's (new or changed blocks, removed blocks, claims).
-type Section = (Vec<String>, Vec<String>, Vec<String>);
+/// One changed page or procedure section as the claims citing it read it (feature 451 T191): what is left of its edit after the tool's
+/// clears ([`change::blocks_change`], T186's, shared), its blocks now, the pages its pointers reach, and the new findings it adds.
+#[derive(Default)]
+struct Moved {
+    change: change::Change,
+    now: Vec<String>,
+    reached: HashSet<String>,
+    found: Vec<String>,
+}
+
+impl Moved {
+    /// Why this edit still owes the claim reading `claim` its triage, or None: T186's first filter, [`change::fires`], the claim the
+    /// reader (no note key is a claim's, so none gone counts), and the echo read from a rewrite's new side too,
+    /// [`change::echo_rewritten`].
+    fn fires(&self, claim: &str) -> Option<String> {
+        if self.change.is_clear() {
+            return None;
+        }
+        change::fires(&self.change, &self.now, &self.reached, claim, &self.found)
+            .or_else(|| change::echo_rewritten(&self.change, claim))
+    }
+
+    /// Its blocks for the MANIFEST: (new or changed, removed or changed from).
+    fn shown(&self) -> (Vec<String>, Vec<String>) {
+        let c = &self.change;
+        (
+            c.pairs
+                .iter()
+                .map(|p| p.1.clone())
+                .chain(c.added.iter().cloned())
+                .collect(),
+            c.pairs
+                .iter()
+                .map(|p| p.0.clone())
+                .chain(c.removed.iter().cloned())
+                .collect(),
+        )
+    }
+}
 
 /// What the triage bundle gathers of each kind of change.
 #[derive(Default)]
 struct Gathered {
+    /// (page, the snapshot its claims were checked at) -> the claims citing it.
     by_page: BTreeMap<(String, String), Vec<String>>,
-    changed: HashMap<String, Vec<String>>,
-    gone: HashMap<String, Vec<String>>,
+    pages: HashMap<String, Moved>,
     lost: HashMap<(String, String), bool>,
     forced: BTreeSet<String>,
-    sections: BTreeMap<String, Section>,
+    /// `path::section` -> (its change, the claims in it).
+    sections: BTreeMap<String, (Moved, Vec<String>)>,
     codes: BTreeMap<String, (Vec<String>, Vec<String>)>,
+}
+
+/// What a claim states, as the echo rule reads it: its label and account, without the question paths it cites.
+fn claim_text(cur: &Cur, key: &str) -> String {
+    let claim = &cur.get(key).unwrap_or_else(|| unreachable!()).claim;
+    QUESTION_PATH
+        .replace_all(&format!("{}. {}", claim.label, claim.account), " ")
+        .into_owned()
 }
 
 fn last_verdict(index: &Index, k: &str) -> (String, String) {
@@ -329,21 +378,35 @@ fn gather_section(
     if words.len() < missing.len() {
         g.forced.insert(key.to_owned());
     }
-    let got = g
-        .sections
-        .entry(format!("{}::{}", unit.path, unit.qualname))
-        .or_default();
-    for w in fresh {
-        if !got.0.contains(w) {
-            got.0.push(w.clone());
-        }
-    }
-    for w in words.values() {
-        if !got.1.contains(w) {
-            got.1.push(w.clone());
-        }
-    }
-    got.2.push(key.to_owned());
+    let place = format!(
+        "{}::{}|{}",
+        unit.path,
+        unit.qualname,
+        section.and_then(Value::as_str).unwrap_or_default()
+    );
+    let got = g.sections.entry(place).or_insert_with(|| {
+        // a section's Markdown read as a page's words, so a link, markup or code-tick edit is cleared by the tool (feature 451 T191)
+        let md = |w: &String| change::md_words(w);
+        let was: Vec<String> = words.values().map(md).collect();
+        let empty = HashSet::new();
+        let c = change::blocks_change(
+            &was,
+            &fresh.iter().map(|w| md(w)).collect::<Vec<_>>(),
+            &[],
+            &empty,
+            &empty,
+            &[],
+        );
+        let found = c.added.clone();
+        let moved = Moved {
+            change: c,
+            now: unit.blocks.iter().map(md).collect(),
+            reached: HashSet::new(),
+            found,
+        };
+        (moved, Vec::new())
+    });
+    got.1.push(key.to_owned());
 }
 
 fn gather_pages(
@@ -376,18 +439,9 @@ fn gather_pages(
                     .collect()
             })
             .unwrap_or_default();
-        let now: HashSet<&String> = blocks.iter().map(|(d, _)| d).collect();
-        // a split is a move (feature 451 T185): its pointer is no claim, and a block it moved is read where its pointer leads
-        let html = crate::record::repo::read_text(&qdir.join(&name)).unwrap_or_default();
-        let reached = change::reached_by_pointers(&html, qdir);
-        let fresh: Vec<String> = blocks
-            .iter()
-            .filter(|(d, w)| !before.contains(d) && !change::is_pointer_block(w, &html))
-            .map(|(_, w)| w.clone())
-            .collect();
         let pair = (name.clone(), old.clone());
-        let tag = format!("{name}|{old}");
         if !g.lost.contains_key(&pair) {
+            let now: HashSet<&String> = blocks.iter().map(|(d, _)| d).collect();
             let missing: HashSet<String> = before
                 .iter()
                 .filter(|d| !now.contains(d))
@@ -400,25 +454,85 @@ fn gather_pages(
             };
             let mut ordered: Vec<&String> = missing.iter().collect();
             ordered.sort();
-            g.gone.insert(
-                tag.clone(),
-                ordered
-                    .iter()
-                    .filter_map(|d| words.get(*d).cloned())
-                    .filter(|w| !reached.contains(w))
-                    .collect(),
+            let was: Vec<String> = ordered
+                .iter()
+                .filter_map(|d| words.get(*d).cloned())
+                .collect();
+            let fresh: Vec<String> = blocks
+                .iter()
+                .filter(|(d, _)| !before.contains(d))
+                .map(|(_, w)| w.clone())
+                .collect();
+            // a split is a move (feature 451 T185), and a marker, markup or link edit no claim (T186), both T186's change, shared
+            let html = crate::record::repo::read_text(&qdir.join(&name)).unwrap_or_default();
+            let reached = change::reached_by_pointers(&html, qdir);
+            let c = change::blocks_change(
+                &was,
+                &fresh,
+                &change::pointer_texts(&html),
+                &reached,
+                &HashSet::new(),
+                &[],
             );
+            let old_text = kept_text(qdir, &old)?;
+            let found = if old_text.is_empty() {
+                c.added.clone()
+            } else {
+                change::new_findings(&old_text, &html)
+            };
+            let moved = Moved {
+                change: c,
+                now: blocks.iter().map(|(_, w)| w.clone()).collect(),
+                reached,
+                found,
+            };
+            g.pages.insert(format!("{name}|{old}"), moved);
             g.lost.insert(pair.clone(), words.len() < missing.len());
         }
         if g.lost[&pair] {
             g.forced.insert(key.to_owned());
         }
-        if !fresh.is_empty() || !g.gone[&tag].is_empty() {
-            g.changed.insert(tag, fresh);
-            g.by_page.entry(pair).or_default().push(key.to_owned());
-        }
+        g.by_page.entry(pair).or_default().push(key.to_owned());
     }
     Ok(())
+}
+
+/// T186's first filter over the gathered changes, per claim (feature 451 T191; the GM 2026-11-23, the convergence talk): a page's or a
+/// section's edit stays in the MANIFEST only for the claims it still owes - a forced claim, or one [`Moved::fires`] names; the claims
+/// every edit of which is cleared, and no code hunk or forced check holds, are returned, cleared by the tool.
+fn filter(g: &mut Gathered, cur: &Cur, index: &Index) -> BTreeSet<String> {
+    let (mut held, mut seen) = (HashSet::new(), BTreeSet::new());
+    let mut owes = |m: &Moved, ks: &mut Vec<String>, forced: &BTreeSet<String>| {
+        ks.retain(|k| {
+            seen.insert(k.clone());
+            let keep = if forced.contains(k) {
+                !m.change.is_clear()
+            } else {
+                m.fires(&claim_text(cur, k)).is_some()
+            };
+            if keep {
+                held.insert(k.clone());
+            }
+            keep
+        });
+    };
+    for ((name, old), ks) in &mut g.by_page {
+        owes(&g.pages[&format!("{name}|{old}")], ks, &g.forced);
+    }
+    for (m, ks) in g.sections.values_mut() {
+        owes(m, ks, &g.forced);
+    }
+    g.by_page.retain(|_, ks| !ks.is_empty());
+    g.sections.retain(|_, s| !s.1.is_empty());
+    held.extend(
+        g.codes
+            .values()
+            .filter(|c| !c.0.is_empty())
+            .flat_map(|c| c.1.iter().cloned()),
+    );
+    seen.into_iter()
+        .filter(|k| !held.contains(k) && !g.forced.contains(k) && index.contains_key(k))
+        .collect()
 }
 
 fn claims_list(parts: &mut Vec<String>, cur: &Cur, index: &Index, keys: &[String]) {
@@ -444,9 +558,11 @@ fn manifest(g: &Gathered, cur: &Cur, index: &Index) -> String {
         "owed-checks: claims-triage\n".to_owned(),
         "For the `claims-triage` agent: rule on each claim below as your contract says, and reply in its form.\n".to_owned(),
     ];
-    for (place, (fresh, lost, ks)) in &g.sections {
+    for (place, (m, ks)) in &g.sections {
+        let (fresh, lost) = m.shown();
+        let place = place.rsplit_once('|').map_or(place.as_str(), |p| p.0);
         parts.push(format!("## {place} (a procedure section; the claims' own lines did not change)\n\nNew or changed blocks:\n"));
-        let shown = quoted(fresh);
+        let shown = quoted(&fresh);
         parts.extend(if shown.is_empty() {
             vec!["(none)\n".to_owned()]
         } else {
@@ -454,7 +570,7 @@ fn manifest(g: &Gathered, cur: &Cur, index: &Index) -> String {
         });
         if !lost.is_empty() {
             parts.push("Removed blocks (no longer in the section):\n".to_owned());
-            parts.extend(quoted(lost));
+            parts.extend(quoted(&lost));
         }
         parts.push("Claims in it:\n".to_owned());
         claims_list(&mut parts, cur, index, ks);
@@ -474,15 +590,16 @@ fn manifest(g: &Gathered, cur: &Cur, index: &Index) -> String {
         let tag = format!("{name}|{old}");
         let short: String = old.chars().take(12).collect();
         parts.push(format!("## {QUESTIONS}/{name}\n\n(against the version these claims were last checked at, {short})\n\nNew or changed blocks:\n"));
-        let shown = quoted(&g.changed[&tag]);
+        let (fresh, gone) = g.pages[&tag].shown();
+        let shown = quoted(&fresh);
         parts.extend(if shown.is_empty() {
             vec!["(none)\n".to_owned()]
         } else {
             shown
         });
-        if g.gone.get(&tag).is_some_and(|v| !v.is_empty()) {
+        if !gone.is_empty() {
             parts.push("Removed blocks (no longer on the page):\n".to_owned());
-            parts.extend(quoted(&g.gone[&tag]));
+            parts.extend(quoted(&gone));
         }
         parts.push("Claims citing it:\n".to_owned());
         claims_list(&mut parts, cur, index, ks);
@@ -490,7 +607,8 @@ fn manifest(g: &Gathered, cur: &Cur, index: &Index) -> String {
     parts.join("\n") + "\n"
 }
 
-/// The triage bundle for `keys`: MANIFEST.md, and triage.json (each claim's fingerprints now, today's snapshots, the forced claims).
+/// The triage bundle for `keys`: MANIFEST.md, and triage.json (each claim's fingerprints now, today's snapshots, the forced claims;
+/// under `cleared`, the claims T186's filter cleared by the tool, feature 451 T191, which the MANIFEST does not name).
 pub fn triage_bundle(
     cur: &Cur,
     index: &Index,
@@ -519,8 +637,10 @@ pub fn triage_bundle(
         gather_section(&mut g, cur, index, store, key, &root);
         gather_pages(&mut g, index, store, key, qdir, &mut memo)?;
     }
+    let cleared = filter(&mut g, cur, index);
     let mut shown: HashSet<&String> = g.by_page.values().flatten().collect();
-    shown.extend(g.sections.values().flat_map(|s| &s.2));
+    shown.extend(cleared.iter());
+    shown.extend(g.sections.values().flat_map(|s| &s.1));
     shown.extend(
         g.codes
             .values()
@@ -561,6 +681,10 @@ pub fn triage_bundle(
         }
         units.insert(k.clone(), Value::Object(u));
     }
+    let tool: Map<String, Value> = cleared
+        .iter()
+        .filter_map(|k| units.shift_remove(k).map(|u| (k.clone(), u)))
+        .collect();
     let mut snaps = memo.snapshots();
     for k in keys {
         let row = cur.get(k).unwrap_or_else(|| unreachable!());
@@ -576,7 +700,7 @@ pub fn triage_bundle(
             );
         }
     }
-    let data = json!({"units": units, "snapshots": snaps, "forced": g.forced.into_iter().collect::<Vec<_>>()});
+    let data = json!({"units": units, "cleared": tool, "snapshots": snaps, "forced": g.forced.into_iter().collect::<Vec<_>>()});
     std::fs::write(
         out.join("triage.json"),
         dumps(&sorted(&data), Some(1), true) + "\n",
@@ -638,6 +762,18 @@ pub fn record_triage(
         out.insert(key.clone(), Value::Object(row));
     }
     (out, msgs)
+}
+
+/// The index with the claims the filter cleared (a triage bundle's `cleared`) cleared at the text as it stands, as a triage clears
+/// them, each saying why (feature 451 T191).
+pub fn record_cleared(index: &Index, cleared: &Map<String, Value>, today: &str) -> Index {
+    let (mut out, _) = record_triage(index, cleared, "", today, &[]);
+    for k in cleared.keys() {
+        if let Some(r) = out.get_mut(k).and_then(Value::as_object_mut) {
+            r.insert("cleared".into(), json!(TOOL_CLEARED));
+        }
+    }
+    out
 }
 
 /// (the index with `keys` cleared, the page snapshots to store): each claim owed a triage only because a cited page moved while every block it rests on stands (feature 432).
