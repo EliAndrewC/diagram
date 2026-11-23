@@ -76,8 +76,12 @@
     <!-- the cart lane to the cart gate, 6 ft (18 px), 0082's allowance over the hand cart's bed
          (research/questions/0082-moving-goods-carts-packhorses-and-river-landings-kashi.drawing.html; feature 372 wave 100:
          it was 9 ft, matching the cart gate; feature 267 pass 2 had it at 12 ft) -->
-    <path d="M 1280 666.5 L 1074 666.5" stroke="#B89060" stroke-width="18" stroke-linecap="butt" opacity="0.55"/>
-    <path d="M 1170 666 L 1170 503 L 1113 503" stroke="#B89060" stroke-width="18" fill="none" stroke-linecap="butt" opacity="0.5"/>
+    <!-- the lane and the parley-room path drawn as one layer at the highway's one opacity, so the fork where their strokes meet reads
+         as the same flat earth, not a darker square (449 T357: two strokes at 0.55 and 0.5 doubled where they crossed) -->
+    <g opacity="0.55">
+      <path d="M 1280 666.5 L 1074 666.5" stroke="#B89060" stroke-width="18" stroke-linecap="butt"/>
+      <path d="M 1170 666 L 1170 503 L 1113 503" stroke="#B89060" stroke-width="18" fill="none" stroke-linecap="butt"/>
+    </g>
   </g>
 
   <!-- Title block (just above the compound) -->

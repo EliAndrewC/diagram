@@ -17,11 +17,13 @@ The frames measured at two post towns on the Tokaido stood about 10 to 11 ft hig
 Guesses:
 - That a magistracy kept a freestanding board at its own gate: it joins the Japanese board to the Chinese office's gate
   walls, since no board at an intendant's office or a magistracy was found.
+- A second board beside it, wherever the magistrate has a bounty out: no board kept for a bounty alone was found, and a
+  Chinese office posted its wanted notices on its gate walls among its other notices.
 - Its size, a frame 16 ft long and 6 ft deep, within the sizes of those measured at two post towns on the Tokaido: no office's or
   village's board was measured.
 
 Depiction: The plan stands the board just outside the main gate, within a few paces of the gateway, where everyone who
-comes to the court passes it.
+comes to the court passes it. Where the magistrate has a bounty out, a second board stands beside it for the bounty.
 
 Name: notice board
 Covers: the board outside the main gate and its label

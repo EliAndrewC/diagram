@@ -19,7 +19,7 @@ Guesses:
 
 Depiction: The plan draws the sacred tree as the biggest crown in the precinct, standing apart from the wood beside the
 approach, with a ring round its trunk for its rope. On a government office's plan, one crown stands beside the office's
-shrine in its corner, with no rope drawn: a household's god-tree is not recorded as roped.
+shrine in its corner, with no rope drawn.
 
 Name: sacred tree
 Covers: the sacred tree and its rope

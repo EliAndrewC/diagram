@@ -21,11 +21,12 @@ Guesses:
 
 Depiction: The plans follow the scale of a shogunal intendant's office, the kind of office the magistracies are modeled on,
 so each plan lodges the karo inside the walls, in a bay of the senior retainers' long-house with a door of its own or
-in a small house of their own in the residence court, never in the magistrate's own wing. Every plan labels it with the
-gloss "the house elder", so the word is met with its meaning.
+in a small house of their own in the residence court, never in the magistrate's own wing. Its label names the karo's house,
+or the karo's quarters in a long-house bay; some plans add the gloss "the house elder" beneath it, so the word is met with
+its meaning.
 
 Name: karo's house
-Covers: the karo's house and its label with the "house elder" gloss
+Covers: the karo's house and its label, with the "house elder" gloss where a plan gives one
 Sources: l7r-budgets, bukeyashiki-wiki, aizu-saigo-karo, jinya-kotobank, mapple-takayama-jinya, daikan-tetsuki-jawiki, edo-hantei-jawiki, shibata-ashigaru-nagaya, kaibara-jinya-tamba, kanra-ashigaru-nagaya, mitamura-nagaya-tcpip
 Entry: research/questions/0106-the-chief-retainers-house-karo-yashiki.html, research/questions/0097-staff-rowhouses-and-barracks-nagaya.html
 Drawing: research/questions/0106-the-chief-retainers-house-karo-yashiki.drawing.html

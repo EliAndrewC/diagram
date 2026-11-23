@@ -1,6 +1,6 @@
 //! The compound generator's parts tests (feature 449 T152): each part's rule and each refusal on a small program - the bath, the wells and
 //! their rolls, the tubs, the privies, the board, the shrine's tree, the practice ground's gear, the roji, the garden's sun, the size
-//! sweep, the knobs and the command (the open ground's void and cart route are `gen_tests_ground.rs`'s).
+//! sweep, the knobs and the command (the open ground's void and cart route are `gen_tests_ground.rs`'s, the drawing tests `gen_tests_draw.rs`'s).
 //!
 //! Research: the generator's parts tests - NONE: fixtures and assertions, deciding nothing about a building
 
@@ -837,74 +837,4 @@ fn the_centered_search_reads_past_its_reach_and_a_sheet_unwritable_is_refused() 
         &known,
     );
     assert_eq!(r.code, 1);
-}
-
-/// The interiors drawn on any wall - a stable's stalls and a cell's bars measured from their court face - and gate posts on every wall.
-#[test]
-fn the_interiors_and_the_gate_posts_draw_on_any_wall() {
-    let gates = r#""gates": [{"kind": "main gate", "wall": "S", "at": 50, "width": 6}, {"kind": "side gate", "wall": "N", "at": 50, "width": 6}, {"kind": "side gate", "wall": "E", "at": 25, "width": 6}]"#;
-    let src = super::gen_tests::small(&format!(
-        r#", "buildings": [{}, {}, {}]"#,
-        b(
-            "stables",
-            "stables",
-            "service",
-            (24.0, 18.0),
-            "inner",
-            "N",
-            r#", "interior": "stables""#
-        ),
-        b(
-            "cell",
-            "cell",
-            "cell",
-            (10.0, 12.0),
-            "inner",
-            "W",
-            r#", "interior": "cell""#
-        ),
-        b(
-            "stable2",
-            "stables",
-            "service",
-            (18.0, 24.0),
-            "outer",
-            "W",
-            r#", "interior": "stables""#
-        )
-    ));
-    let p = super::spec::read(&src.replacen(
-        r#""gates": [{"kind": "main gate", "wall": "S", "at": 50, "width": 6}]"#,
-        gates,
-        1,
-    ))
-    .unwrap();
-    let l = seated(&p).unwrap();
-    let text = super::sheet(&p, &l, &Seated::default());
-    assert_eq!(text.matches(r#"data-kind="side gate""#).count(), 2);
-    assert_eq!(text.matches("stroke-dasharray=\"3 2\"").count(), 2);
-}
-
-/// A dais's caption reads wherever the placer seats it: the hand sheets' dark ink at 7 px, never the light ink that read only on the
-/// dais (449 T338: the county example's white caption sat wholly off its 18 ft dais on the hall's light floor, about 1.8:1).
-#[test]
-fn a_dais_caption_is_dark_ink_that_reads_on_or_off_the_dais() {
-    let dais = r#", "rooms": [{"kind": "q", "caption": "dais", "x": 11, "y": 10, "w": 18, "h": 10, "style": "dais"}]"#;
-    let p = with(
-        &[b(
-            "hall",
-            "k",
-            "lord",
-            (40.0, 20.0),
-            "outer",
-            "divider",
-            dais,
-        )],
-        "",
-    );
-    let text = super::sheet(&p, &seated(&p).unwrap(), &Seated::default());
-    assert!(text.contains(
-        r##"<text font-size="7" font-weight="bold" fill="#3A2E1C" data-kind="q" data-names="##
-    ));
-    assert!(!text.contains("#FFFAE6"));
 }

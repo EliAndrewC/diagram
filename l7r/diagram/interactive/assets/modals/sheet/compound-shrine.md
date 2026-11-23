@@ -20,6 +20,8 @@ Guesses:
   shrine among a compound's buildings.
 - A garden around the shrine, wherever a plan draws one: no account describes a garden around a household's or an office's
   shrine.
+- The tree beside the shrine: a household's god was kept at a small shrine or at an old tree or a stone, and no account
+  gives a household's or an office's shrine a tree beside it as the custom.
 
 Depiction: The plan draws one shrine inside every compound, since what the offices known had in common was a shrine, not
 how many each kept. It stands in a corner of the grounds, where a household kept its god, beside a tree: a household might keep its god at an old

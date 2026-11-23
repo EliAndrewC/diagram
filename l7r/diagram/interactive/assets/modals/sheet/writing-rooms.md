@@ -16,9 +16,9 @@ Guesses:
   which governed a whole province, and, with a writing room only, Iijima's modern reconstruction; a county office's hall is far smaller.
 - Their size on the plan, each room about 6 to 13 ft wide by 10 to 20 ft deep and 100 to 210 sq ft, some 6 to 12 tatami mats at about 18 sq ft a mat: no measured writing room was found.
 
-
-Depiction: The plan draws the writing room and the binding room as two rooms of the office hall's back row, west of the
-clerks' room, side by side between it and the armory, their floors drawn in the hall's own color.
+Depiction: The plan draws the writing room and the binding room as two rooms of the office hall's back row, between the
+clerks' room and the armory, or the row's end where the hall holds no armory, side by side, their
+floors drawn in the hall's own color.
 
 Name: writing rooms
 Covers: the writing room's and the binding room's floors and their labels

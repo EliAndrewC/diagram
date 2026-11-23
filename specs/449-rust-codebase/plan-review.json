@@ -1698,6 +1698,42 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-23",
    "declared": "spec-fidelity"
+  },
+  "### T351, T352, T353, T354, T355, T356, T357, T359, T363, T364, T365, T366, T367, T368 (bundle)": {
+   "sha256": "758358c2a9d9230e83e5385ad2ceba423fcefb1f9141bf0088d45091559cde7c",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity"
+  },
+  "### T351, T352, T353, T354, T355, T356, T357, T359, T363, T364, T365, T366, T367, T368 Approach (checklist part A)": {
+   "sha256": "cce5f21484abb4a3a24d78c13a47e8575f155a797804a894459a39f806f1145f",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity"
+  },
+  "### T358, T360, T361, T362, T369, T370 (bundle)": {
+   "sha256": "68d8abae6d4c8cea4503bed0b40712573e9d4087f733978294b0fe337f5b79d9",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity"
+  },
+  "### T358, T360, T361, T362, T369, T370 Approach (checklist part A)": {
+   "sha256": "8879e3db48ba316e843918e4a8ce4dffc76dbacffa4e8142c98a2ee1bd35755d",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity"
+  },
+  "### T379 (withdrawn: fixed in the T358 bundle; record-format and translation-check of 2026-11-23 on 0093's netease-pingyao-yamen #5, brief D)": {
+   "sha256": "bffd4ccb6bdc8450d8436a9e90e76c03e9e6ba34ad28f4a03e94a3808143eb48",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity"
+  },
+  "### T379 Approach (checklist part A)": {
+   "sha256": "61da2ac8f22f574b692aebd7cd409f1f6db4b5412447174d7d400e92550f3c85",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -24061,6 +24097,344 @@
      "summary": "0190's drawing page tells of one board, not the second board drawn with a bounty out; filed as T370, lands before T158.",
      "class": "within",
      "why": "The second board is already claimed as a GUESS in this bundle (T350-bounty-board); the page's own text is deferred, filed and ordered before T158."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-23",
+   "blocks": [
+    "### T351, T352, T353, T354, T355, T356, T357, T359, T363, T364, T365, T366, T367, T368 (bundle)",
+    "### T351, T352, T353, T354, T355, T356, T357, T359, T363, T364, T365, T366, T367, T368 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T366 refusal text",
+     "summary": "cart_route's refusal of a granary in the household's court points at an office-court flank column's head beside the office hall, citing 0123's drawing page; pinned by a test.",
+     "class": "within",
+     "why": "Fixes a defect (a refusal text pointing at a seat 0123 rejects): a tool answering wrongly. The GM's 2026-11-22 'please finish the remaining fixes' and 2026-11-18 'fix all known bugs in each step'."
+    },
+    {
+     "id": "T354 mats on the dais axis",
+     "summary": "The hearing court's mats keyed to the dais's axis (court middle only where no dais stands, a labeled GUESS); the round trip's 102 ft claim restated to the 94 ft drawn.",
+     "class": "within",
+     "why": "Fixes a wrong outcome a reader sees (the accused kneeling 8 ft off the magistrate against 0099). Restating the 102 ft claim to the drawn 94 ft is the GM's 2026-11-19 rule (a claim the drawing does not literally match, behavior fine, is fixed by restating the claim), not an exactness narrowing."
+    },
+    {
+     "id": "T359 open shed",
+     "summary": "An open-shed interior (colonnade hatch, six posts, no door); the round trip's cinnabar workshop drawn with it.",
+     "class": "within",
+     "why": "Fixes a reader-visible defect (a workshop drawn as a shrine with a door). Remaining-fixes scope."
+    },
+    {
+     "id": "T367 end-bay roll (the plan's MODE 4 question)",
+     "summary": "A second knob, armory end bay [west, east] at even odds, rolled only where the site roll gives the hall bay; armory_site refuses a hall armory in the unrolled bay; hayakawa and the round trip draw east (mirrored), county and ochiba west.",
+     "class": "within",
+     "why": "Ruled against rulings.md verbatim, not the armory.rs paraphrase: 'no nested roll' is the code claim's wording, not the arbiter's. The arbiter refused route (b) because it 'puts a nested roll and its 1-in-3 odds behind a guessed knob' and kept route (a) as 'one choice from the map's seed among the sites the sheet offers' that 'adds no new GUESS and no rule a source lacks'. Test 1 (does it change the one choice among the sites?): no. The site roll stays one three-way choice; the end bay picks between two forms of the hall-bay site once that site is chosen, and it turns no site into another. Test 2 (does it add a GUESS or a rule a source lacks?): the two forms are attested (0123: Pingyao west, Jiexiu both and later east, Zhenping east and west), so no rule a source lacks. The even odds are the ordinary weighting of a knob over attested forms (the 'several attested forms a knob' constraint), not a guessed choice standing in front of a site the way (b)'s sub-roll was. The plan's 'G: none new' leaves the odds unmentioned; they are a weighting, not a guess about the world. So the ruling does not reach T367, and T367 needs no arbiter. Its 'what' also says a moved armory 'is not a reversal and does not come back here'. CONDITION, owed in this landing: the two armory.rs claims (the module claim and rolled's 'one choice ... no nested roll') must be restated to say the site choice is one choice with no nested roll among the sites, and the end bay is a separate knob of two attested forms. The Approach does not list this work; only the 'claims IN-STEP' exit implies it, so it is named here. The every-hall-armory-west finding is fixed against 0123's 'the armory's side varied'; the GM's 2026-11-19 not-a-defect rule would at most make this optional work, and it narrows nothing."
+    },
+    {
+     "id": "T368 dais required",
+     "summary": "types.json drops optional on magistrates_dais (all five sheets draw one); pinned by a refusal test; make building-programs regenerates the table.",
+     "class": "within",
+     "why": "Fixes a check that passes bad work (a magistracy hall without a dais passes, against 0099). This is enforcement the fixes ask for, not new behavior beyond them."
+    },
+    {
+     "id": "T353 county gatehouse",
+     "summary": "The gatehouse flush west of the gate's post at 146-186 ft; the forecourt 31 -> 19 ft deep.",
+     "class": "within",
+     "why": "Fixes the reader-visible defect of a gatekeepers' lodge 40 ft from its gate (0093)."
+    },
+    {
+     "id": "T364 county granary",
+     "summary": "The granary 50 x 36 -> 50 x 26 ft (1,300 sq ft, under the residence's 1,344), inside 0098's 25-36 ft band.",
+     "class": "within",
+     "why": "Fixes a research contradiction (a tax store larger than the magistrate's house, against 0116's ordering)."
+    },
+    {
+     "id": "T356 junior quarters, three dwellings",
+     "summary": "A junior retainers' rowhouse of three 12 x 18 ft dwellings on the south wall (93-129 ft); a fourth dwelling refused for room; seat, dwelling turn and men a dwelling labeled GUESS.",
+     "class": "within",
+     "why": "The defect is eleven samurai with nowhere to sleep. Three dwellings at 0097's few men a dwelling (the plan's GUESS is three or four) house eleven at about four a dwelling, so the defect is fixed, not cut back. A fourth dwelling cannot fit (measured: a 47 ft free run against 58 ft needed), and the other walls are full or belong to the household. Room was measured before packing. The coverage cost of a wider envelope is a second reason, not the deciding one. Labeling the seat as a GUESS where the sources are SILENT for an intendancy is what Principle XII asks."
+    },
+    {
+     "id": "T356 Q2 cell seat",
+     "summary": "The cell turned 10 x 12 and joined to the rowhouse's east end at 129-139 ft, below the hearing court; the join is SILENT and labeled.",
+     "class": "within",
+     "why": "Answers the defect of a cell at the main gate by seating it below the hearing court, per 0096's court quarter. UNVERIFIED PREMISE, for the building-review named in the plan's exits (not a block): the cell stands on the gate's own south wall, about 7 ft west of the gatehouse's fire gap. Whether that ground reads as the court quarter rather than the gate is not measurable from this bundle and rests on the plan's 'below the hearing court'. If the map review reads it as still at the gate, that is a NEEDS-WORK the exits already require to be fixed or filed."
+    },
+    {
+     "id": "T355 ochiba practice ground",
+     "summary": "The practice ground moved against the west wall below the tax archive, the same ground turned (42 x 28.7 ft).",
+     "class": "within",
+     "why": "A building-review fix, with the same area kept."
+    },
+    {
+     "id": "T357 ubame lane grouping",
+     "summary": "The cart lane and the parley path drawn in one group at one opacity.",
+     "class": "within",
+     "why": "A glyph-check rendering fix in the remaining-fixes scope."
+    },
+    {
+     "id": "T351 T352 notes",
+     "summary": "Notes on all five sheets brought to what is drawn, one dated entry a sheet.",
+     "class": "within",
+     "why": "Notes untrue of the drawing are restated: the GM's rule that a claim is restated where the drawing is fine."
+    },
+    {
+     "id": "T363 latrine claims",
+     "summary": "The latrine row's claims: the residence's two privies (0101) and the four UNCLAIMED decisions claimed.",
+     "class": "within",
+     "why": "Claim upkeep left over from the T328/T330 landing. Remaining-fixes scope."
+    },
+    {
+     "id": "T365 claims and pop-ups",
+     "summary": "The gate posts' claim in docs/buildings.md and layout.rs; the study's seat claim at the fork; the day-office pop-up's off-topic hearing-court and torture paragraph cut with its 0096 references; writing-rooms' blank line.",
+     "class": "within",
+     "why": "Claims and pop-up text brought to the drawing and the record (impl-drift fixes). Remaining-fixes scope."
+    },
+    {
+     "id": "writing-rooms Depiction for a mirrored row",
+     "summary": "The Depiction restated so it holds for the mirrored back rows that T367 draws.",
+     "class": "within",
+     "why": "A defect T367 itself introduces (text untrue of the hayakawa and round-trip drawings), fixed in the same landing, as fix-as-we-go asks."
+    },
+    {
+     "id": "left: county cell's tub",
+     "summary": "The 10 ft joined cell leaves no seat for a tub; restated in the notes and not built.",
+     "class": "within",
+     "why": "A difference, not a defect: per the plan, the cell is not one of the buildings 0100's drawing page holds to a tub, so no research finding is contradicted. Restating it in the notes is the 2026-11-19 rule."
+    },
+    {
+     "id": "left: T371, 0104 porch fill",
+     "summary": "0104's page says the porch is in the hall's fill at about 12 x 9 ft where Ochiba draws a darker fill at about 10 x 6 ft; filed as T371, lands before T158.",
+     "class": "within",
+     "why": "A mismatch between the research page's description and the drawing, with no wrong outcome shown: the GM's rule fixes such a mismatch by restating the claim. It is filed as its own task with a landing point rather than left, and editing a research page is outside this bundle."
+    },
+    {
+     "id": "left: T372, research passes on no page",
+     "summary": "The 2026-11-22/23 research passes behind T356's junior quarters and cell claims are on no page; filed as T372, lands before T158.",
+     "class": "within",
+     "why": "A record gap, not a wrong outcome in a map or a tool. The claims stand on passes already run and labeled. It is filed with a landing point, so it is not left unfixed, and editing a research page is outside this bundle."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-23",
+   "blocks": [
+    "### T358, T360, T361, T362, T369, T370 (bundle)",
+    "### T358, T360, T361, T362, T369, T370 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "approach-page-sessions",
+     "summary": "All six tasks are worked as record page-session pairs in briefs A-D, then the pop-up edits, the pop-up checks in order, the claims round, and one closing-checks run.",
+     "class": "within",
+     "why": "This is the method for doing the fixes the GM asked to have finished before the talk (2026-11-22, 'please finish the remaining fixes'). It drops nothing those tasks ask for."
+    },
+    {
+     "id": "T358-record-restated",
+     "summary": "The research pass (KEY t358-roka) is done. 0113's findings carry the household entrances, the Edo magistracies' corridors and the jin'ya corridors. Its drawing page labels the plans' lack of a corridor a GUESS bounded by the Edo magistracies, with an absence note.",
+     "class": "within",
+     "why": "This is what T358 as filed asks for, a research pass and the record restated to what it found. It follows constitution XIV: a reader who cannot tell the record's form from ours is fixed by labeling."
+    },
+    {
+     "id": "T358-redraw-filed-T375",
+     "summary": "The redraw of Ubame's and the round-trip plan's way through working rooms, and the ruling on Ochiba's, is filed as T375 and is not done here. It lands before T158, because the drawing files are the sheet bundle's live files (T351-T368).",
+     "class": "within",
+     "why": "The redraw was not in T358 as filed (research pass plus record restatement). It is a defect found by that pass, and it is filed with its visible effect named. It lands before T158 and so before the talk, which waits for every follow-up (GM 2026-11-22). It is routed to the work that owns the files, not left unfixed, so 'fix all known bugs in each step' (GM 2026-11-18) is honored."
+    },
+    {
+     "id": "T360-0106-restated",
+     "summary": "0106's drawing page is restated to the county example as drawn (22 by 60 ft long-house, the karo's north 24 ft, measured 2026-11-23 from compound.json and SVG text), with the gloss on the hand-drawn plans only.",
+     "class": "within",
+     "why": "This fixes a reader-visible wrong statement by restating the record to the drawing (constitution XIV, GM 2026-11-19). Nothing drawn changes."
+    },
+    {
+     "id": "T361-pages-and-T374",
+     "summary": "0091's grounds and the bare-earth court are labeled a GUESS, and 0082's cart gate is in the 5-8 ft band as a GUESS. 车御门 is shown to be an OCR misreading, and the docs/buildings.md Kochi clause that rests on it is filed as T374 (sheet bundle's live file, lands before T158). 0093 keeps the grievance drum as not drawn. The inner-court and main-gate pop-ups tell all this.",
+     "class": "within",
+     "why": "These are T361's found items, fixed in the record. The docs defect is filed with its visible effect to the task that owns the file, lands before T158 and is not dropped."
+    },
+    {
+     "id": "T362-gloss",
+     "summary": "The Koka shunju is glossed by glossary term 28340 and registry 37210.",
+     "class": "within",
+     "why": "This is the record-format finding as filed, fixed."
+    },
+    {
+     "id": "T369-T370-labels",
+     "summary": "0218's tree beside the shrine and 0190's second bounty board are each labeled a GUESS with their sources and absences. The DRIFTED building-programs.md claim is filed as T378 (sheet bundle's live file, lands before T158).",
+     "class": "within",
+     "why": "These are the impl-drift findings as filed, fixed by restating the record. The resulting claim drift is filed to the owner of the file with its effect named, and lands before the close."
+    },
+    {
+     "id": "left-side-gate-floor",
+     "summary": "The side-gate band's 5 ft floor, below 0082's 6 ft cart lane, is left because every drawn side gate is 6 ft or more (observed 2026-11-23 from the posts in all five sheets' SVG at 3 px/ft, checked against compound.json).",
+     "class": "within",
+     "why": "This is a difference and not a wrong outcome, measured. Constitution XIV / GM 2026-11-19: it is not a defect and needs no ruling."
+    },
+    {
+     "id": "left-0091-cap",
+     "summary": "0091 at 19,998 of 20,000 bytes is left, and the next edit splits it.",
+     "class": "within",
+     "why": "Not a wrong outcome: the page reads whole and passes question-sizes."
+    },
+    {
+     "id": "left-0113-unverified-gloss",
+     "summary": "0113's gloss on edo-ashigaru-bugyosho-2 is UNVERIFIED (the crop does not reach the residence) but not contradicted. It is left, and T375 re-reads the plan.",
+     "class": "within",
+     "why": "No finding is contradicted and nothing drawn rests on it, so it is not a defect under XIV. The re-read is carried by the filed redraw."
+    },
+    {
+     "id": "left-minor-record",
+     "summary": "Left: the comment on 0218's note fuchu-joge-pamphlet-6, sacred-tree's unrecorded rope, the unlinked 'Morse' in 0091, 0106's silence on Ochiba's small karo house, and the missing glossary term for sun.",
+     "class": "within",
+     "why": "Each is shown to change nothing a reader is told and to leave nothing false. These are differences, not defects (GM 2026-11-19)."
+    },
+    {
+     "id": "left-popup-look-T376",
+     "summary": "The garden-pond banks and the kitchen's walls, roof and door are open look questions, filed as T376 (each needs a research pass first, constitution XII). It lands before T158, and the pond-frequency bullet is aligned there.",
+     "class": "within",
+     "why": "The defect is filed with its visible effect, needs research before it can be fixed, lands before the close and the talk, and is not dropped."
+    },
+    {
+     "id": "glossary-li-fixed-T379-withdrawn",
+     "summary": "The glossary term li gets the senses the record uses (mile, ward of 110 households, 厘) and is cased. A Kang Pil-li term is added. T379 is withdrawn as done here. Observed 2026-11-23 with a whole-word census (459 lowercase, 147 capitalized hits read in context), and glossary and record built clean.",
+     "class": "within",
+     "why": "This fixes a wrong outcome found by this bundle's own checks (a distance tooltip on a household ward, and a mile on surnames), so the fix rides with the work that found it (GM 2026-11-18, fix as we go). It adds no behavior beyond the fix."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-23",
+   "blocks": [
+    "### T379 (withdrawn: fixed in the T358 bundle; record-format and translation-check of 2026-11-23 on 0093's netease-pingyao-yamen #5, brief D)",
+    "### T379 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T379-withdrawn",
+     "summary": "T379 takes no approach of its own and is withdrawn as fixed in the T358 bundle, landing with it",
+     "class": "within",
+     "why": "The finding (a reader hovering li in 0093's notes told only a mile) is fixed, not left: the fix is carried by another task's landing. Folding a fix into the bundle that already carries it removes nothing the GM asked for; the 2026-11-22 'finish the remaining fixes' and 2026-11-18 'fix all known bugs' are honored. The red exit (record what failed, rule a cannot-be-done claim through make arbiter-ask) keeps it from being quietly dropped."
+    },
+    {
+     "id": "T379-fix",
+     "summary": "3760-li.json's definition gives the three senses the record uses (the ward of 110 households, the li of distance, the li of silver) and the term is cased; Kang Pil-li gets its own term file so the name's li does not resolve to the glossary li",
+     "class": "within",
+     "why": "A wrong outcome a reader would see (a ward glossed as a mile) fixed from the record's own text per the research glossary rule; the second file is the direct means of not mis-glossing a personal name. No scope beyond the defect."
+    },
+    {
+     "id": "T379-done",
+     "summary": "Done measured by the built glossary.js carrying the definition and cased flag, make record-owed and make claims-owed owing nothing new, and a dated whole-word search for li over fragments, notes, registry and pop-ups",
+     "class": "within",
+     "why": "Verification that the requested fix happened and broke nothing; enforcement of the fix, not unrequested scope. Figures are dated one-shot observations (2026-11-23) with their method."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-23",
+   "blocks": [
+    "### T351, T352, T353, T354, T355, T356, T357, T359, T363, T364, T365, T366, T367, T368 (bundle)",
+    "### T351, T352, T353, T354, T355, T356, T357, T359, T363, T364, T365, T366, T367, T368 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T366",
+     "summary": "cart_route's granary refusal points at an office-court flank column's head (0123's drawing page), pinned by a test",
+     "class": "within",
+     "why": "A refusal pointing at a seat 0123 rejects is a wrong outcome (XIV); fixing it is the GM's fix-as-we-go (2026-11-18)."
+    },
+    {
+     "id": "T354",
+     "summary": "hearing court mats keyed to the dais axis; the round trip's '102 ft' claim restated to the 94 ft drawn",
+     "class": "within",
+     "why": "The accused kneeling 8 ft off the magistrate contradicts 0099. Restating the 102 ft claim, not the code, is the GM's 2026-11-19 rule."
+    },
+    {
+     "id": "T359",
+     "summary": "an open-shed interior (hatched roof, six posts, no door) for the cinnabar workshop",
+     "class": "within",
+     "why": "The workshop drawn as a shrine with a door is a map that reads wrong; this is a defect fix."
+    },
+    {
+     "id": "T367",
+     "summary": "knob 4's second roll, armory end bay [west, east], taken only under the hall site; armory.rs claims restated to ask:armory-store-ubame route (a)'s reach, with the end bay given a claim of its own",
+     "class": "within",
+     "why": "Judged against the ruling's own why: (b) was refused because it put a nested 1-in-3 roll behind a GUESSED knob that turns one site into another, and (a) adds no new GUESS and no rule a source lacks. The end-bay roll turns no site into another. It chooses between two forms 0123 attests (Pingyao, Jiexiu, Zhenping) under the one site route (a) picks, and a knob of several attested forms is the project's rule. Every hall armory drawn on the west contradicts 0123's varied side, which is a defect. The ruling's 'what' already allows an armory to move under a later engine change as no reversal, provided its pop-up says what it draws, and the pop-up is confirmed to name no fixed end (hayakawa x 638-680 px, round trip 549-591 px, observed 2026-11-23)."
+    },
+    {
+     "id": "T368",
+     "summary": "types.json drops optional on magistrates_dais; a magistracy drawn without its dais is refused",
+     "class": "within",
+     "why": "A hall without a dais passing is a check that passes bad work, a defect under XIV."
+    },
+    {
+     "id": "T353-T356-T364",
+     "summary": "county: gatehouse flush west of the gate post, granary 50x26 under the residence, junior retainers' quarters, cell turned and joined",
+     "class": "within",
+     "why": "Each answers a wrong outcome a reader saw: the gatekeepers' lodge 40 ft from its gate, the tax store larger than the house, eleven samurai with no lodging, the cell at the main gate. The placements (the free run, the 12x24 dwelling, three men a dwelling, the cell's join) are labeled GUESS or SILENT where no page settles them. Room was measured before packing (the 47 ft run)."
+    },
+    {
+     "id": "T351-E1",
+     "summary": "four rowhouse dwellings of 12x24 ft; the servants' dwellings 15 -> 12 ft and the stables 12 ft west to make room",
+     "class": "within",
+     "why": "About 59 sq ft a man, below the barracks' 88, is a defect a review found. Eight options were measured on trial specs before drawing. The servants' 15 ft was a GUESS no page sizes, so changing it narrows nothing the GM or a page asked for."
+    },
+    {
+     "id": "T351-cell-lattice",
+     "summary": "emit.rs cell draws a bar beside a court-face door that holds none, pinned by a_cells_bars_show_beside_its_door",
+     "class": "within",
+     "why": "This carries out ask:cell-lattice-hidden-449-T351 (CONTINUE): the north door is kept, the fewest sheets change (the round trip's svg sha256 is unchanged), legibility is judged on the PNG and the fix is pinned by a test. The cell's round-two glyph-check PASS covers F1 and F2."
+    },
+    {
+     "id": "T355-T357-T351-T352-T363-T365",
+     "summary": "ochiba practice ground turned to the west wall; ubame's cart lane and parley path in one group; notes and docs claims brought to the drawing; the off-topic day-office paragraph cut; the writing-rooms Depiction restated for mirrored rows",
+     "class": "within",
+     "why": "Notes and claims untrue of the drawing are defects under XIV, and fixing them is fix-as-we-go."
+    },
+    {
+     "id": "glyph-discharge-remeasured",
+     "summary": "ask:glyph-occasions-emit-449-T351's discharge of 48 units restated to the landing drawing, re-measured per data-kind with data-id stripped",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This answers round one's condition. The ruling's own last clause governs: a kind whose marks change after it is 'owed again under the rule', and the rule owes a check for a new element, a redrawn glyph or a substantially changed placement rule. After 07:30Z only the county's spec (E1) and emit.rs fn cell changed (ask:glyph-pass-carried-cell-fix-449-T351's diff), so no placement rule changed. That makes the stables and wells, displaced with their shapes kept, class C by the ruling's own wording ('the same glyphs displaced'), though the ruling's named C list did not carry them. The fourth dwelling's door is class C ('doors and tubs following their buildings'). The latrines' leaders are caption-only, a class the ruling discharged. Every kind whose shape changed has a PASS on a drawing at or after its last change: the servants' quarters (owed and checked PASS), the cell (round two PASS at the landing key), and the retainers' quarters, granary and gatehouse (PASS at cef72b9db8d3, carried). Every other kind's marks are unchanged."
+    },
+    {
+     "id": "glyph-pass-carried",
+     "summary": "four glyph PASSes from cef72b9db8d3 carried to landing key 0e6a69cceff6",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "ask:glyph-pass-carried-cell-fix-449-T351 grants exactly this carry, bound to the 9bd9e35ca4..7e08b45d82 diff in which only fn cell, a test and the county's notes changed. The round trip's svg sha256 is unchanged, and nothing since reaches beyond fn cell."
+    },
+    {
+     "id": "building-reviews-carried",
+     "summary": "hayakawa, ochiba, ubame and the round trip keep their PASS at the new engine key",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "ask:reowed-reviews-unchanged-449-T351 binds each to its content key, and the block re-measured them as unchanged in the clone (l7r-gate reviews prereq content-key, 2026-11-23). The county's own review was run as owed and passed."
+    },
+    {
+     "id": "lander-carries-rulings",
+     "summary": "the push reads no arbiter accept on a glyph unit or a carried review, so the lander cites the rulings; T377 builds the route with the whole-legend fallback's fix",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This answers round one's condition: the route is named. ask:glyph-occasions-emit-449-T351 says the discharge is 'cited by its trigger id' at this landing, and that where the push has no route, 'that route is built with the fix and its test'. The fix is the whole-legend fallback, which T377 owns. Building the route with it is what the ruling orders, not a carve-out."
+    },
+    {
+     "id": "found-and-left",
+     "summary": "T369, T371-T373, T377, T380-T384, T386-T391 filed, each landing before T158",
+     "class": "within",
+     "why": "Each is outside this bundle's files (research pages, tooling, rows of types.json this bundle did not change), or is a nitpick or outside finding on a PASS sheet whose fix would re-owe its review. Taken separately, the county's two latrine leaders are this bundle's own change on a sheet that was NEEDS-WORK at the time, not a PASS sheet. They still stay within: the landing-key county building-review PASSed and raised nothing on the change, and the latrines' marks are discharged as caption-only, so no reader-visible wrong outcome is left. Premise not verifiable from the bundle: that T158 is the next step's port, which would make 'lands before T158' the GM's 'fix all known bugs in each step before moving on' (2026-11-18). The 0104 porch and 0113 back-row items are differences between a page's wording and a drawing, not defects in the drawing."
+    },
+    {
+     "id": "FR-003-attribution",
+     "summary": "the review prerequisite attributed to feature 240's FR-003; 14 verifying records and 31 review-accepts dispose its 45 findings",
+     "class": "within",
+     "why": "This answers round one's condition and decides nothing new."
     }
    ]
   }
@@ -46694,6 +47068,1976 @@
      "summary": "0190's drawing page tells of one board, not the second board drawn with a bounty out; filed as T370, lands before T158.",
      "class": "within",
      "why": "The second board is already claimed as a GUESS in this bundle (T350-bounty-board); the page's own text is deferred, filed and ordered before T158."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T351": {
+   "section_sha256": "b5c61a5105169555af7cb160a3a01062f4bd33a45c6e6edb2f43ecdb9117ab05",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T366",
+     "summary": "cart_route's granary refusal points at an office-court flank column's head (0123's drawing page), pinned by a test",
+     "class": "within",
+     "why": "A refusal pointing at a seat 0123 rejects is a wrong outcome (XIV); fixing it is the GM's fix-as-we-go (2026-11-18)."
+    },
+    {
+     "id": "T354",
+     "summary": "hearing court mats keyed to the dais axis; the round trip's '102 ft' claim restated to the 94 ft drawn",
+     "class": "within",
+     "why": "The accused kneeling 8 ft off the magistrate contradicts 0099. Restating the 102 ft claim, not the code, is the GM's 2026-11-19 rule."
+    },
+    {
+     "id": "T359",
+     "summary": "an open-shed interior (hatched roof, six posts, no door) for the cinnabar workshop",
+     "class": "within",
+     "why": "The workshop drawn as a shrine with a door is a map that reads wrong; this is a defect fix."
+    },
+    {
+     "id": "T367",
+     "summary": "knob 4's second roll, armory end bay [west, east], taken only under the hall site; armory.rs claims restated to ask:armory-store-ubame route (a)'s reach, with the end bay given a claim of its own",
+     "class": "within",
+     "why": "Judged against the ruling's own why: (b) was refused because it put a nested 1-in-3 roll behind a GUESSED knob that turns one site into another, and (a) adds no new GUESS and no rule a source lacks. The end-bay roll turns no site into another. It chooses between two forms 0123 attests (Pingyao, Jiexiu, Zhenping) under the one site route (a) picks, and a knob of several attested forms is the project's rule. Every hall armory drawn on the west contradicts 0123's varied side, which is a defect. The ruling's 'what' already allows an armory to move under a later engine change as no reversal, provided its pop-up says what it draws, and the pop-up is confirmed to name no fixed end (hayakawa x 638-680 px, round trip 549-591 px, observed 2026-11-23)."
+    },
+    {
+     "id": "T368",
+     "summary": "types.json drops optional on magistrates_dais; a magistracy drawn without its dais is refused",
+     "class": "within",
+     "why": "A hall without a dais passing is a check that passes bad work, a defect under XIV."
+    },
+    {
+     "id": "T353-T356-T364",
+     "summary": "county: gatehouse flush west of the gate post, granary 50x26 under the residence, junior retainers' quarters, cell turned and joined",
+     "class": "within",
+     "why": "Each answers a wrong outcome a reader saw: the gatekeepers' lodge 40 ft from its gate, the tax store larger than the house, eleven samurai with no lodging, the cell at the main gate. The placements (the free run, the 12x24 dwelling, three men a dwelling, the cell's join) are labeled GUESS or SILENT where no page settles them. Room was measured before packing (the 47 ft run)."
+    },
+    {
+     "id": "T351-E1",
+     "summary": "four rowhouse dwellings of 12x24 ft; the servants' dwellings 15 -> 12 ft and the stables 12 ft west to make room",
+     "class": "within",
+     "why": "About 59 sq ft a man, below the barracks' 88, is a defect a review found. Eight options were measured on trial specs before drawing. The servants' 15 ft was a GUESS no page sizes, so changing it narrows nothing the GM or a page asked for."
+    },
+    {
+     "id": "T351-cell-lattice",
+     "summary": "emit.rs cell draws a bar beside a court-face door that holds none, pinned by a_cells_bars_show_beside_its_door",
+     "class": "within",
+     "why": "This carries out ask:cell-lattice-hidden-449-T351 (CONTINUE): the north door is kept, the fewest sheets change (the round trip's svg sha256 is unchanged), legibility is judged on the PNG and the fix is pinned by a test. The cell's round-two glyph-check PASS covers F1 and F2."
+    },
+    {
+     "id": "T355-T357-T351-T352-T363-T365",
+     "summary": "ochiba practice ground turned to the west wall; ubame's cart lane and parley path in one group; notes and docs claims brought to the drawing; the off-topic day-office paragraph cut; the writing-rooms Depiction restated for mirrored rows",
+     "class": "within",
+     "why": "Notes and claims untrue of the drawing are defects under XIV, and fixing them is fix-as-we-go."
+    },
+    {
+     "id": "glyph-discharge-remeasured",
+     "summary": "ask:glyph-occasions-emit-449-T351's discharge of 48 units restated to the landing drawing, re-measured per data-kind with data-id stripped",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This answers round one's condition. The ruling's own last clause governs: a kind whose marks change after it is 'owed again under the rule', and the rule owes a check for a new element, a redrawn glyph or a substantially changed placement rule. After 07:30Z only the county's spec (E1) and emit.rs fn cell changed (ask:glyph-pass-carried-cell-fix-449-T351's diff), so no placement rule changed. That makes the stables and wells, displaced with their shapes kept, class C by the ruling's own wording ('the same glyphs displaced'), though the ruling's named C list did not carry them. The fourth dwelling's door is class C ('doors and tubs following their buildings'). The latrines' leaders are caption-only, a class the ruling discharged. Every kind whose shape changed has a PASS on a drawing at or after its last change: the servants' quarters (owed and checked PASS), the cell (round two PASS at the landing key), and the retainers' quarters, granary and gatehouse (PASS at cef72b9db8d3, carried). Every other kind's marks are unchanged."
+    },
+    {
+     "id": "glyph-pass-carried",
+     "summary": "four glyph PASSes from cef72b9db8d3 carried to landing key 0e6a69cceff6",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "ask:glyph-pass-carried-cell-fix-449-T351 grants exactly this carry, bound to the 9bd9e35ca4..7e08b45d82 diff in which only fn cell, a test and the county's notes changed. The round trip's svg sha256 is unchanged, and nothing since reaches beyond fn cell."
+    },
+    {
+     "id": "building-reviews-carried",
+     "summary": "hayakawa, ochiba, ubame and the round trip keep their PASS at the new engine key",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "ask:reowed-reviews-unchanged-449-T351 binds each to its content key, and the block re-measured them as unchanged in the clone (l7r-gate reviews prereq content-key, 2026-11-23). The county's own review was run as owed and passed."
+    },
+    {
+     "id": "lander-carries-rulings",
+     "summary": "the push reads no arbiter accept on a glyph unit or a carried review, so the lander cites the rulings; T377 builds the route with the whole-legend fallback's fix",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This answers round one's condition: the route is named. ask:glyph-occasions-emit-449-T351 says the discharge is 'cited by its trigger id' at this landing, and that where the push has no route, 'that route is built with the fix and its test'. The fix is the whole-legend fallback, which T377 owns. Building the route with it is what the ruling orders, not a carve-out."
+    },
+    {
+     "id": "found-and-left",
+     "summary": "T369, T371-T373, T377, T380-T384, T386-T391 filed, each landing before T158",
+     "class": "within",
+     "why": "Each is outside this bundle's files (research pages, tooling, rows of types.json this bundle did not change), or is a nitpick or outside finding on a PASS sheet whose fix would re-owe its review. Taken separately, the county's two latrine leaders are this bundle's own change on a sheet that was NEEDS-WORK at the time, not a PASS sheet. They still stay within: the landing-key county building-review PASSed and raised nothing on the change, and the latrines' marks are discharged as caption-only, so no reader-visible wrong outcome is left. Premise not verifiable from the bundle: that T158 is the next step's port, which would make 'lands before T158' the GM's 'fix all known bugs in each step before moving on' (2026-11-18). The 0104 porch and 0113 back-row items are differences between a page's wording and a drawing, not defects in the drawing."
+    },
+    {
+     "id": "FR-003-attribution",
+     "summary": "the review prerequisite attributed to feature 240's FR-003; 14 verifying records and 31 review-accepts dispose its 45 findings",
+     "class": "within",
+     "why": "This answers round one's condition and decides nothing new."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T352": {
+   "section_sha256": "b5c61a5105169555af7cb160a3a01062f4bd33a45c6e6edb2f43ecdb9117ab05",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T366",
+     "summary": "cart_route's granary refusal points at an office-court flank column's head (0123's drawing page), pinned by a test",
+     "class": "within",
+     "why": "A refusal pointing at a seat 0123 rejects is a wrong outcome (XIV); fixing it is the GM's fix-as-we-go (2026-11-18)."
+    },
+    {
+     "id": "T354",
+     "summary": "hearing court mats keyed to the dais axis; the round trip's '102 ft' claim restated to the 94 ft drawn",
+     "class": "within",
+     "why": "The accused kneeling 8 ft off the magistrate contradicts 0099. Restating the 102 ft claim, not the code, is the GM's 2026-11-19 rule."
+    },
+    {
+     "id": "T359",
+     "summary": "an open-shed interior (hatched roof, six posts, no door) for the cinnabar workshop",
+     "class": "within",
+     "why": "The workshop drawn as a shrine with a door is a map that reads wrong; this is a defect fix."
+    },
+    {
+     "id": "T367",
+     "summary": "knob 4's second roll, armory end bay [west, east], taken only under the hall site; armory.rs claims restated to ask:armory-store-ubame route (a)'s reach, with the end bay given a claim of its own",
+     "class": "within",
+     "why": "Judged against the ruling's own why: (b) was refused because it put a nested 1-in-3 roll behind a GUESSED knob that turns one site into another, and (a) adds no new GUESS and no rule a source lacks. The end-bay roll turns no site into another. It chooses between two forms 0123 attests (Pingyao, Jiexiu, Zhenping) under the one site route (a) picks, and a knob of several attested forms is the project's rule. Every hall armory drawn on the west contradicts 0123's varied side, which is a defect. The ruling's 'what' already allows an armory to move under a later engine change as no reversal, provided its pop-up says what it draws, and the pop-up is confirmed to name no fixed end (hayakawa x 638-680 px, round trip 549-591 px, observed 2026-11-23)."
+    },
+    {
+     "id": "T368",
+     "summary": "types.json drops optional on magistrates_dais; a magistracy drawn without its dais is refused",
+     "class": "within",
+     "why": "A hall without a dais passing is a check that passes bad work, a defect under XIV."
+    },
+    {
+     "id": "T353-T356-T364",
+     "summary": "county: gatehouse flush west of the gate post, granary 50x26 under the residence, junior retainers' quarters, cell turned and joined",
+     "class": "within",
+     "why": "Each answers a wrong outcome a reader saw: the gatekeepers' lodge 40 ft from its gate, the tax store larger than the house, eleven samurai with no lodging, the cell at the main gate. The placements (the free run, the 12x24 dwelling, three men a dwelling, the cell's join) are labeled GUESS or SILENT where no page settles them. Room was measured before packing (the 47 ft run)."
+    },
+    {
+     "id": "T351-E1",
+     "summary": "four rowhouse dwellings of 12x24 ft; the servants' dwellings 15 -> 12 ft and the stables 12 ft west to make room",
+     "class": "within",
+     "why": "About 59 sq ft a man, below the barracks' 88, is a defect a review found. Eight options were measured on trial specs before drawing. The servants' 15 ft was a GUESS no page sizes, so changing it narrows nothing the GM or a page asked for."
+    },
+    {
+     "id": "T351-cell-lattice",
+     "summary": "emit.rs cell draws a bar beside a court-face door that holds none, pinned by a_cells_bars_show_beside_its_door",
+     "class": "within",
+     "why": "This carries out ask:cell-lattice-hidden-449-T351 (CONTINUE): the north door is kept, the fewest sheets change (the round trip's svg sha256 is unchanged), legibility is judged on the PNG and the fix is pinned by a test. The cell's round-two glyph-check PASS covers F1 and F2."
+    },
+    {
+     "id": "T355-T357-T351-T352-T363-T365",
+     "summary": "ochiba practice ground turned to the west wall; ubame's cart lane and parley path in one group; notes and docs claims brought to the drawing; the off-topic day-office paragraph cut; the writing-rooms Depiction restated for mirrored rows",
+     "class": "within",
+     "why": "Notes and claims untrue of the drawing are defects under XIV, and fixing them is fix-as-we-go."
+    },
+    {
+     "id": "glyph-discharge-remeasured",
+     "summary": "ask:glyph-occasions-emit-449-T351's discharge of 48 units restated to the landing drawing, re-measured per data-kind with data-id stripped",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This answers round one's condition. The ruling's own last clause governs: a kind whose marks change after it is 'owed again under the rule', and the rule owes a check for a new element, a redrawn glyph or a substantially changed placement rule. After 07:30Z only the county's spec (E1) and emit.rs fn cell changed (ask:glyph-pass-carried-cell-fix-449-T351's diff), so no placement rule changed. That makes the stables and wells, displaced with their shapes kept, class C by the ruling's own wording ('the same glyphs displaced'), though the ruling's named C list did not carry them. The fourth dwelling's door is class C ('doors and tubs following their buildings'). The latrines' leaders are caption-only, a class the ruling discharged. Every kind whose shape changed has a PASS on a drawing at or after its last change: the servants' quarters (owed and checked PASS), the cell (round two PASS at the landing key), and the retainers' quarters, granary and gatehouse (PASS at cef72b9db8d3, carried). Every other kind's marks are unchanged."
+    },
+    {
+     "id": "glyph-pass-carried",
+     "summary": "four glyph PASSes from cef72b9db8d3 carried to landing key 0e6a69cceff6",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "ask:glyph-pass-carried-cell-fix-449-T351 grants exactly this carry, bound to the 9bd9e35ca4..7e08b45d82 diff in which only fn cell, a test and the county's notes changed. The round trip's svg sha256 is unchanged, and nothing since reaches beyond fn cell."
+    },
+    {
+     "id": "building-reviews-carried",
+     "summary": "hayakawa, ochiba, ubame and the round trip keep their PASS at the new engine key",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "ask:reowed-reviews-unchanged-449-T351 binds each to its content key, and the block re-measured them as unchanged in the clone (l7r-gate reviews prereq content-key, 2026-11-23). The county's own review was run as owed and passed."
+    },
+    {
+     "id": "lander-carries-rulings",
+     "summary": "the push reads no arbiter accept on a glyph unit or a carried review, so the lander cites the rulings; T377 builds the route with the whole-legend fallback's fix",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This answers round one's condition: the route is named. ask:glyph-occasions-emit-449-T351 says the discharge is 'cited by its trigger id' at this landing, and that where the push has no route, 'that route is built with the fix and its test'. The fix is the whole-legend fallback, which T377 owns. Building the route with it is what the ruling orders, not a carve-out."
+    },
+    {
+     "id": "found-and-left",
+     "summary": "T369, T371-T373, T377, T380-T384, T386-T391 filed, each landing before T158",
+     "class": "within",
+     "why": "Each is outside this bundle's files (research pages, tooling, rows of types.json this bundle did not change), or is a nitpick or outside finding on a PASS sheet whose fix would re-owe its review. Taken separately, the county's two latrine leaders are this bundle's own change on a sheet that was NEEDS-WORK at the time, not a PASS sheet. They still stay within: the landing-key county building-review PASSed and raised nothing on the change, and the latrines' marks are discharged as caption-only, so no reader-visible wrong outcome is left. Premise not verifiable from the bundle: that T158 is the next step's port, which would make 'lands before T158' the GM's 'fix all known bugs in each step before moving on' (2026-11-18). The 0104 porch and 0113 back-row items are differences between a page's wording and a drawing, not defects in the drawing."
+    },
+    {
+     "id": "FR-003-attribution",
+     "summary": "the review prerequisite attributed to feature 240's FR-003; 14 verifying records and 31 review-accepts dispose its 45 findings",
+     "class": "within",
+     "why": "This answers round one's condition and decides nothing new."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T353": {
+   "section_sha256": "b5c61a5105169555af7cb160a3a01062f4bd33a45c6e6edb2f43ecdb9117ab05",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T366",
+     "summary": "cart_route's granary refusal points at an office-court flank column's head (0123's drawing page), pinned by a test",
+     "class": "within",
+     "why": "A refusal pointing at a seat 0123 rejects is a wrong outcome (XIV); fixing it is the GM's fix-as-we-go (2026-11-18)."
+    },
+    {
+     "id": "T354",
+     "summary": "hearing court mats keyed to the dais axis; the round trip's '102 ft' claim restated to the 94 ft drawn",
+     "class": "within",
+     "why": "The accused kneeling 8 ft off the magistrate contradicts 0099. Restating the 102 ft claim, not the code, is the GM's 2026-11-19 rule."
+    },
+    {
+     "id": "T359",
+     "summary": "an open-shed interior (hatched roof, six posts, no door) for the cinnabar workshop",
+     "class": "within",
+     "why": "The workshop drawn as a shrine with a door is a map that reads wrong; this is a defect fix."
+    },
+    {
+     "id": "T367",
+     "summary": "knob 4's second roll, armory end bay [west, east], taken only under the hall site; armory.rs claims restated to ask:armory-store-ubame route (a)'s reach, with the end bay given a claim of its own",
+     "class": "within",
+     "why": "Judged against the ruling's own why: (b) was refused because it put a nested 1-in-3 roll behind a GUESSED knob that turns one site into another, and (a) adds no new GUESS and no rule a source lacks. The end-bay roll turns no site into another. It chooses between two forms 0123 attests (Pingyao, Jiexiu, Zhenping) under the one site route (a) picks, and a knob of several attested forms is the project's rule. Every hall armory drawn on the west contradicts 0123's varied side, which is a defect. The ruling's 'what' already allows an armory to move under a later engine change as no reversal, provided its pop-up says what it draws, and the pop-up is confirmed to name no fixed end (hayakawa x 638-680 px, round trip 549-591 px, observed 2026-11-23)."
+    },
+    {
+     "id": "T368",
+     "summary": "types.json drops optional on magistrates_dais; a magistracy drawn without its dais is refused",
+     "class": "within",
+     "why": "A hall without a dais passing is a check that passes bad work, a defect under XIV."
+    },
+    {
+     "id": "T353-T356-T364",
+     "summary": "county: gatehouse flush west of the gate post, granary 50x26 under the residence, junior retainers' quarters, cell turned and joined",
+     "class": "within",
+     "why": "Each answers a wrong outcome a reader saw: the gatekeepers' lodge 40 ft from its gate, the tax store larger than the house, eleven samurai with no lodging, the cell at the main gate. The placements (the free run, the 12x24 dwelling, three men a dwelling, the cell's join) are labeled GUESS or SILENT where no page settles them. Room was measured before packing (the 47 ft run)."
+    },
+    {
+     "id": "T351-E1",
+     "summary": "four rowhouse dwellings of 12x24 ft; the servants' dwellings 15 -> 12 ft and the stables 12 ft west to make room",
+     "class": "within",
+     "why": "About 59 sq ft a man, below the barracks' 88, is a defect a review found. Eight options were measured on trial specs before drawing. The servants' 15 ft was a GUESS no page sizes, so changing it narrows nothing the GM or a page asked for."
+    },
+    {
+     "id": "T351-cell-lattice",
+     "summary": "emit.rs cell draws a bar beside a court-face door that holds none, pinned by a_cells_bars_show_beside_its_door",
+     "class": "within",
+     "why": "This carries out ask:cell-lattice-hidden-449-T351 (CONTINUE): the north door is kept, the fewest sheets change (the round trip's svg sha256 is unchanged), legibility is judged on the PNG and the fix is pinned by a test. The cell's round-two glyph-check PASS covers F1 and F2."
+    },
+    {
+     "id": "T355-T357-T351-T352-T363-T365",
+     "summary": "ochiba practice ground turned to the west wall; ubame's cart lane and parley path in one group; notes and docs claims brought to the drawing; the off-topic day-office paragraph cut; the writing-rooms Depiction restated for mirrored rows",
+     "class": "within",
+     "why": "Notes and claims untrue of the drawing are defects under XIV, and fixing them is fix-as-we-go."
+    },
+    {
+     "id": "glyph-discharge-remeasured",
+     "summary": "ask:glyph-occasions-emit-449-T351's discharge of 48 units restated to the landing drawing, re-measured per data-kind with data-id stripped",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This answers round one's condition. The ruling's own last clause governs: a kind whose marks change after it is 'owed again under the rule', and the rule owes a check for a new element, a redrawn glyph or a substantially changed placement rule. After 07:30Z only the county's spec (E1) and emit.rs fn cell changed (ask:glyph-pass-carried-cell-fix-449-T351's diff), so no placement rule changed. That makes the stables and wells, displaced with their shapes kept, class C by the ruling's own wording ('the same glyphs displaced'), though the ruling's named C list did not carry them. The fourth dwelling's door is class C ('doors and tubs following their buildings'). The latrines' leaders are caption-only, a class the ruling discharged. Every kind whose shape changed has a PASS on a drawing at or after its last change: the servants' quarters (owed and checked PASS), the cell (round two PASS at the landing key), and the retainers' quarters, granary and gatehouse (PASS at cef72b9db8d3, carried). Every other kind's marks are unchanged."
+    },
+    {
+     "id": "glyph-pass-carried",
+     "summary": "four glyph PASSes from cef72b9db8d3 carried to landing key 0e6a69cceff6",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "ask:glyph-pass-carried-cell-fix-449-T351 grants exactly this carry, bound to the 9bd9e35ca4..7e08b45d82 diff in which only fn cell, a test and the county's notes changed. The round trip's svg sha256 is unchanged, and nothing since reaches beyond fn cell."
+    },
+    {
+     "id": "building-reviews-carried",
+     "summary": "hayakawa, ochiba, ubame and the round trip keep their PASS at the new engine key",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "ask:reowed-reviews-unchanged-449-T351 binds each to its content key, and the block re-measured them as unchanged in the clone (l7r-gate reviews prereq content-key, 2026-11-23). The county's own review was run as owed and passed."
+    },
+    {
+     "id": "lander-carries-rulings",
+     "summary": "the push reads no arbiter accept on a glyph unit or a carried review, so the lander cites the rulings; T377 builds the route with the whole-legend fallback's fix",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This answers round one's condition: the route is named. ask:glyph-occasions-emit-449-T351 says the discharge is 'cited by its trigger id' at this landing, and that where the push has no route, 'that route is built with the fix and its test'. The fix is the whole-legend fallback, which T377 owns. Building the route with it is what the ruling orders, not a carve-out."
+    },
+    {
+     "id": "found-and-left",
+     "summary": "T369, T371-T373, T377, T380-T384, T386-T391 filed, each landing before T158",
+     "class": "within",
+     "why": "Each is outside this bundle's files (research pages, tooling, rows of types.json this bundle did not change), or is a nitpick or outside finding on a PASS sheet whose fix would re-owe its review. Taken separately, the county's two latrine leaders are this bundle's own change on a sheet that was NEEDS-WORK at the time, not a PASS sheet. They still stay within: the landing-key county building-review PASSed and raised nothing on the change, and the latrines' marks are discharged as caption-only, so no reader-visible wrong outcome is left. Premise not verifiable from the bundle: that T158 is the next step's port, which would make 'lands before T158' the GM's 'fix all known bugs in each step before moving on' (2026-11-18). The 0104 porch and 0113 back-row items are differences between a page's wording and a drawing, not defects in the drawing."
+    },
+    {
+     "id": "FR-003-attribution",
+     "summary": "the review prerequisite attributed to feature 240's FR-003; 14 verifying records and 31 review-accepts dispose its 45 findings",
+     "class": "within",
+     "why": "This answers round one's condition and decides nothing new."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T354": {
+   "section_sha256": "b5c61a5105169555af7cb160a3a01062f4bd33a45c6e6edb2f43ecdb9117ab05",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T366",
+     "summary": "cart_route's granary refusal points at an office-court flank column's head (0123's drawing page), pinned by a test",
+     "class": "within",
+     "why": "A refusal pointing at a seat 0123 rejects is a wrong outcome (XIV); fixing it is the GM's fix-as-we-go (2026-11-18)."
+    },
+    {
+     "id": "T354",
+     "summary": "hearing court mats keyed to the dais axis; the round trip's '102 ft' claim restated to the 94 ft drawn",
+     "class": "within",
+     "why": "The accused kneeling 8 ft off the magistrate contradicts 0099. Restating the 102 ft claim, not the code, is the GM's 2026-11-19 rule."
+    },
+    {
+     "id": "T359",
+     "summary": "an open-shed interior (hatched roof, six posts, no door) for the cinnabar workshop",
+     "class": "within",
+     "why": "The workshop drawn as a shrine with a door is a map that reads wrong; this is a defect fix."
+    },
+    {
+     "id": "T367",
+     "summary": "knob 4's second roll, armory end bay [west, east], taken only under the hall site; armory.rs claims restated to ask:armory-store-ubame route (a)'s reach, with the end bay given a claim of its own",
+     "class": "within",
+     "why": "Judged against the ruling's own why: (b) was refused because it put a nested 1-in-3 roll behind a GUESSED knob that turns one site into another, and (a) adds no new GUESS and no rule a source lacks. The end-bay roll turns no site into another. It chooses between two forms 0123 attests (Pingyao, Jiexiu, Zhenping) under the one site route (a) picks, and a knob of several attested forms is the project's rule. Every hall armory drawn on the west contradicts 0123's varied side, which is a defect. The ruling's 'what' already allows an armory to move under a later engine change as no reversal, provided its pop-up says what it draws, and the pop-up is confirmed to name no fixed end (hayakawa x 638-680 px, round trip 549-591 px, observed 2026-11-23)."
+    },
+    {
+     "id": "T368",
+     "summary": "types.json drops optional on magistrates_dais; a magistracy drawn without its dais is refused",
+     "class": "within",
+     "why": "A hall without a dais passing is a check that passes bad work, a defect under XIV."
+    },
+    {
+     "id": "T353-T356-T364",
+     "summary": "county: gatehouse flush west of the gate post, granary 50x26 under the residence, junior retainers' quarters, cell turned and joined",
+     "class": "within",
+     "why": "Each answers a wrong outcome a reader saw: the gatekeepers' lodge 40 ft from its gate, the tax store larger than the house, eleven samurai with no lodging, the cell at the main gate. The placements (the free run, the 12x24 dwelling, three men a dwelling, the cell's join) are labeled GUESS or SILENT where no page settles them. Room was measured before packing (the 47 ft run)."
+    },
+    {
+     "id": "T351-E1",
+     "summary": "four rowhouse dwellings of 12x24 ft; the servants' dwellings 15 -> 12 ft and the stables 12 ft west to make room",
+     "class": "within",
+     "why": "About 59 sq ft a man, below the barracks' 88, is a defect a review found. Eight options were measured on trial specs before drawing. The servants' 15 ft was a GUESS no page sizes, so changing it narrows nothing the GM or a page asked for."
+    },
+    {
+     "id": "T351-cell-lattice",
+     "summary": "emit.rs cell draws a bar beside a court-face door that holds none, pinned by a_cells_bars_show_beside_its_door",
+     "class": "within",
+     "why": "This carries out ask:cell-lattice-hidden-449-T351 (CONTINUE): the north door is kept, the fewest sheets change (the round trip's svg sha256 is unchanged), legibility is judged on the PNG and the fix is pinned by a test. The cell's round-two glyph-check PASS covers F1 and F2."
+    },
+    {
+     "id": "T355-T357-T351-T352-T363-T365",
+     "summary": "ochiba practice ground turned to the west wall; ubame's cart lane and parley path in one group; notes and docs claims brought to the drawing; the off-topic day-office paragraph cut; the writing-rooms Depiction restated for mirrored rows",
+     "class": "within",
+     "why": "Notes and claims untrue of the drawing are defects under XIV, and fixing them is fix-as-we-go."
+    },
+    {
+     "id": "glyph-discharge-remeasured",
+     "summary": "ask:glyph-occasions-emit-449-T351's discharge of 48 units restated to the landing drawing, re-measured per data-kind with data-id stripped",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This answers round one's condition. The ruling's own last clause governs: a kind whose marks change after it is 'owed again under the rule', and the rule owes a check for a new element, a redrawn glyph or a substantially changed placement rule. After 07:30Z only the county's spec (E1) and emit.rs fn cell changed (ask:glyph-pass-carried-cell-fix-449-T351's diff), so no placement rule changed. That makes the stables and wells, displaced with their shapes kept, class C by the ruling's own wording ('the same glyphs displaced'), though the ruling's named C list did not carry them. The fourth dwelling's door is class C ('doors and tubs following their buildings'). The latrines' leaders are caption-only, a class the ruling discharged. Every kind whose shape changed has a PASS on a drawing at or after its last change: the servants' quarters (owed and checked PASS), the cell (round two PASS at the landing key), and the retainers' quarters, granary and gatehouse (PASS at cef72b9db8d3, carried). Every other kind's marks are unchanged."
+    },
+    {
+     "id": "glyph-pass-carried",
+     "summary": "four glyph PASSes from cef72b9db8d3 carried to landing key 0e6a69cceff6",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "ask:glyph-pass-carried-cell-fix-449-T351 grants exactly this carry, bound to the 9bd9e35ca4..7e08b45d82 diff in which only fn cell, a test and the county's notes changed. The round trip's svg sha256 is unchanged, and nothing since reaches beyond fn cell."
+    },
+    {
+     "id": "building-reviews-carried",
+     "summary": "hayakawa, ochiba, ubame and the round trip keep their PASS at the new engine key",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "ask:reowed-reviews-unchanged-449-T351 binds each to its content key, and the block re-measured them as unchanged in the clone (l7r-gate reviews prereq content-key, 2026-11-23). The county's own review was run as owed and passed."
+    },
+    {
+     "id": "lander-carries-rulings",
+     "summary": "the push reads no arbiter accept on a glyph unit or a carried review, so the lander cites the rulings; T377 builds the route with the whole-legend fallback's fix",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This answers round one's condition: the route is named. ask:glyph-occasions-emit-449-T351 says the discharge is 'cited by its trigger id' at this landing, and that where the push has no route, 'that route is built with the fix and its test'. The fix is the whole-legend fallback, which T377 owns. Building the route with it is what the ruling orders, not a carve-out."
+    },
+    {
+     "id": "found-and-left",
+     "summary": "T369, T371-T373, T377, T380-T384, T386-T391 filed, each landing before T158",
+     "class": "within",
+     "why": "Each is outside this bundle's files (research pages, tooling, rows of types.json this bundle did not change), or is a nitpick or outside finding on a PASS sheet whose fix would re-owe its review. Taken separately, the county's two latrine leaders are this bundle's own change on a sheet that was NEEDS-WORK at the time, not a PASS sheet. They still stay within: the landing-key county building-review PASSed and raised nothing on the change, and the latrines' marks are discharged as caption-only, so no reader-visible wrong outcome is left. Premise not verifiable from the bundle: that T158 is the next step's port, which would make 'lands before T158' the GM's 'fix all known bugs in each step before moving on' (2026-11-18). The 0104 porch and 0113 back-row items are differences between a page's wording and a drawing, not defects in the drawing."
+    },
+    {
+     "id": "FR-003-attribution",
+     "summary": "the review prerequisite attributed to feature 240's FR-003; 14 verifying records and 31 review-accepts dispose its 45 findings",
+     "class": "within",
+     "why": "This answers round one's condition and decides nothing new."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T355": {
+   "section_sha256": "b5c61a5105169555af7cb160a3a01062f4bd33a45c6e6edb2f43ecdb9117ab05",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T366",
+     "summary": "cart_route's granary refusal points at an office-court flank column's head (0123's drawing page), pinned by a test",
+     "class": "within",
+     "why": "A refusal pointing at a seat 0123 rejects is a wrong outcome (XIV); fixing it is the GM's fix-as-we-go (2026-11-18)."
+    },
+    {
+     "id": "T354",
+     "summary": "hearing court mats keyed to the dais axis; the round trip's '102 ft' claim restated to the 94 ft drawn",
+     "class": "within",
+     "why": "The accused kneeling 8 ft off the magistrate contradicts 0099. Restating the 102 ft claim, not the code, is the GM's 2026-11-19 rule."
+    },
+    {
+     "id": "T359",
+     "summary": "an open-shed interior (hatched roof, six posts, no door) for the cinnabar workshop",
+     "class": "within",
+     "why": "The workshop drawn as a shrine with a door is a map that reads wrong; this is a defect fix."
+    },
+    {
+     "id": "T367",
+     "summary": "knob 4's second roll, armory end bay [west, east], taken only under the hall site; armory.rs claims restated to ask:armory-store-ubame route (a)'s reach, with the end bay given a claim of its own",
+     "class": "within",
+     "why": "Judged against the ruling's own why: (b) was refused because it put a nested 1-in-3 roll behind a GUESSED knob that turns one site into another, and (a) adds no new GUESS and no rule a source lacks. The end-bay roll turns no site into another. It chooses between two forms 0123 attests (Pingyao, Jiexiu, Zhenping) under the one site route (a) picks, and a knob of several attested forms is the project's rule. Every hall armory drawn on the west contradicts 0123's varied side, which is a defect. The ruling's 'what' already allows an armory to move under a later engine change as no reversal, provided its pop-up says what it draws, and the pop-up is confirmed to name no fixed end (hayakawa x 638-680 px, round trip 549-591 px, observed 2026-11-23)."
+    },
+    {
+     "id": "T368",
+     "summary": "types.json drops optional on magistrates_dais; a magistracy drawn without its dais is refused",
+     "class": "within",
+     "why": "A hall without a dais passing is a check that passes bad work, a defect under XIV."
+    },
+    {
+     "id": "T353-T356-T364",
+     "summary": "county: gatehouse flush west of the gate post, granary 50x26 under the residence, junior retainers' quarters, cell turned and joined",
+     "class": "within",
+     "why": "Each answers a wrong outcome a reader saw: the gatekeepers' lodge 40 ft from its gate, the tax store larger than the house, eleven samurai with no lodging, the cell at the main gate. The placements (the free run, the 12x24 dwelling, three men a dwelling, the cell's join) are labeled GUESS or SILENT where no page settles them. Room was measured before packing (the 47 ft run)."
+    },
+    {
+     "id": "T351-E1",
+     "summary": "four rowhouse dwellings of 12x24 ft; the servants' dwellings 15 -> 12 ft and the stables 12 ft west to make room",
+     "class": "within",
+     "why": "About 59 sq ft a man, below the barracks' 88, is a defect a review found. Eight options were measured on trial specs before drawing. The servants' 15 ft was a GUESS no page sizes, so changing it narrows nothing the GM or a page asked for."
+    },
+    {
+     "id": "T351-cell-lattice",
+     "summary": "emit.rs cell draws a bar beside a court-face door that holds none, pinned by a_cells_bars_show_beside_its_door",
+     "class": "within",
+     "why": "This carries out ask:cell-lattice-hidden-449-T351 (CONTINUE): the north door is kept, the fewest sheets change (the round trip's svg sha256 is unchanged), legibility is judged on the PNG and the fix is pinned by a test. The cell's round-two glyph-check PASS covers F1 and F2."
+    },
+    {
+     "id": "T355-T357-T351-T352-T363-T365",
+     "summary": "ochiba practice ground turned to the west wall; ubame's cart lane and parley path in one group; notes and docs claims brought to the drawing; the off-topic day-office paragraph cut; the writing-rooms Depiction restated for mirrored rows",
+     "class": "within",
+     "why": "Notes and claims untrue of the drawing are defects under XIV, and fixing them is fix-as-we-go."
+    },
+    {
+     "id": "glyph-discharge-remeasured",
+     "summary": "ask:glyph-occasions-emit-449-T351's discharge of 48 units restated to the landing drawing, re-measured per data-kind with data-id stripped",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This answers round one's condition. The ruling's own last clause governs: a kind whose marks change after it is 'owed again under the rule', and the rule owes a check for a new element, a redrawn glyph or a substantially changed placement rule. After 07:30Z only the county's spec (E1) and emit.rs fn cell changed (ask:glyph-pass-carried-cell-fix-449-T351's diff), so no placement rule changed. That makes the stables and wells, displaced with their shapes kept, class C by the ruling's own wording ('the same glyphs displaced'), though the ruling's named C list did not carry them. The fourth dwelling's door is class C ('doors and tubs following their buildings'). The latrines' leaders are caption-only, a class the ruling discharged. Every kind whose shape changed has a PASS on a drawing at or after its last change: the servants' quarters (owed and checked PASS), the cell (round two PASS at the landing key), and the retainers' quarters, granary and gatehouse (PASS at cef72b9db8d3, carried). Every other kind's marks are unchanged."
+    },
+    {
+     "id": "glyph-pass-carried",
+     "summary": "four glyph PASSes from cef72b9db8d3 carried to landing key 0e6a69cceff6",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "ask:glyph-pass-carried-cell-fix-449-T351 grants exactly this carry, bound to the 9bd9e35ca4..7e08b45d82 diff in which only fn cell, a test and the county's notes changed. The round trip's svg sha256 is unchanged, and nothing since reaches beyond fn cell."
+    },
+    {
+     "id": "building-reviews-carried",
+     "summary": "hayakawa, ochiba, ubame and the round trip keep their PASS at the new engine key",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "ask:reowed-reviews-unchanged-449-T351 binds each to its content key, and the block re-measured them as unchanged in the clone (l7r-gate reviews prereq content-key, 2026-11-23). The county's own review was run as owed and passed."
+    },
+    {
+     "id": "lander-carries-rulings",
+     "summary": "the push reads no arbiter accept on a glyph unit or a carried review, so the lander cites the rulings; T377 builds the route with the whole-legend fallback's fix",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This answers round one's condition: the route is named. ask:glyph-occasions-emit-449-T351 says the discharge is 'cited by its trigger id' at this landing, and that where the push has no route, 'that route is built with the fix and its test'. The fix is the whole-legend fallback, which T377 owns. Building the route with it is what the ruling orders, not a carve-out."
+    },
+    {
+     "id": "found-and-left",
+     "summary": "T369, T371-T373, T377, T380-T384, T386-T391 filed, each landing before T158",
+     "class": "within",
+     "why": "Each is outside this bundle's files (research pages, tooling, rows of types.json this bundle did not change), or is a nitpick or outside finding on a PASS sheet whose fix would re-owe its review. Taken separately, the county's two latrine leaders are this bundle's own change on a sheet that was NEEDS-WORK at the time, not a PASS sheet. They still stay within: the landing-key county building-review PASSed and raised nothing on the change, and the latrines' marks are discharged as caption-only, so no reader-visible wrong outcome is left. Premise not verifiable from the bundle: that T158 is the next step's port, which would make 'lands before T158' the GM's 'fix all known bugs in each step before moving on' (2026-11-18). The 0104 porch and 0113 back-row items are differences between a page's wording and a drawing, not defects in the drawing."
+    },
+    {
+     "id": "FR-003-attribution",
+     "summary": "the review prerequisite attributed to feature 240's FR-003; 14 verifying records and 31 review-accepts dispose its 45 findings",
+     "class": "within",
+     "why": "This answers round one's condition and decides nothing new."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T356": {
+   "section_sha256": "b5c61a5105169555af7cb160a3a01062f4bd33a45c6e6edb2f43ecdb9117ab05",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T366",
+     "summary": "cart_route's granary refusal points at an office-court flank column's head (0123's drawing page), pinned by a test",
+     "class": "within",
+     "why": "A refusal pointing at a seat 0123 rejects is a wrong outcome (XIV); fixing it is the GM's fix-as-we-go (2026-11-18)."
+    },
+    {
+     "id": "T354",
+     "summary": "hearing court mats keyed to the dais axis; the round trip's '102 ft' claim restated to the 94 ft drawn",
+     "class": "within",
+     "why": "The accused kneeling 8 ft off the magistrate contradicts 0099. Restating the 102 ft claim, not the code, is the GM's 2026-11-19 rule."
+    },
+    {
+     "id": "T359",
+     "summary": "an open-shed interior (hatched roof, six posts, no door) for the cinnabar workshop",
+     "class": "within",
+     "why": "The workshop drawn as a shrine with a door is a map that reads wrong; this is a defect fix."
+    },
+    {
+     "id": "T367",
+     "summary": "knob 4's second roll, armory end bay [west, east], taken only under the hall site; armory.rs claims restated to ask:armory-store-ubame route (a)'s reach, with the end bay given a claim of its own",
+     "class": "within",
+     "why": "Judged against the ruling's own why: (b) was refused because it put a nested 1-in-3 roll behind a GUESSED knob that turns one site into another, and (a) adds no new GUESS and no rule a source lacks. The end-bay roll turns no site into another. It chooses between two forms 0123 attests (Pingyao, Jiexiu, Zhenping) under the one site route (a) picks, and a knob of several attested forms is the project's rule. Every hall armory drawn on the west contradicts 0123's varied side, which is a defect. The ruling's 'what' already allows an armory to move under a later engine change as no reversal, provided its pop-up says what it draws, and the pop-up is confirmed to name no fixed end (hayakawa x 638-680 px, round trip 549-591 px, observed 2026-11-23)."
+    },
+    {
+     "id": "T368",
+     "summary": "types.json drops optional on magistrates_dais; a magistracy drawn without its dais is refused",
+     "class": "within",
+     "why": "A hall without a dais passing is a check that passes bad work, a defect under XIV."
+    },
+    {
+     "id": "T353-T356-T364",
+     "summary": "county: gatehouse flush west of the gate post, granary 50x26 under the residence, junior retainers' quarters, cell turned and joined",
+     "class": "within",
+     "why": "Each answers a wrong outcome a reader saw: the gatekeepers' lodge 40 ft from its gate, the tax store larger than the house, eleven samurai with no lodging, the cell at the main gate. The placements (the free run, the 12x24 dwelling, three men a dwelling, the cell's join) are labeled GUESS or SILENT where no page settles them. Room was measured before packing (the 47 ft run)."
+    },
+    {
+     "id": "T351-E1",
+     "summary": "four rowhouse dwellings of 12x24 ft; the servants' dwellings 15 -> 12 ft and the stables 12 ft west to make room",
+     "class": "within",
+     "why": "About 59 sq ft a man, below the barracks' 88, is a defect a review found. Eight options were measured on trial specs before drawing. The servants' 15 ft was a GUESS no page sizes, so changing it narrows nothing the GM or a page asked for."
+    },
+    {
+     "id": "T351-cell-lattice",
+     "summary": "emit.rs cell draws a bar beside a court-face door that holds none, pinned by a_cells_bars_show_beside_its_door",
+     "class": "within",
+     "why": "This carries out ask:cell-lattice-hidden-449-T351 (CONTINUE): the north door is kept, the fewest sheets change (the round trip's svg sha256 is unchanged), legibility is judged on the PNG and the fix is pinned by a test. The cell's round-two glyph-check PASS covers F1 and F2."
+    },
+    {
+     "id": "T355-T357-T351-T352-T363-T365",
+     "summary": "ochiba practice ground turned to the west wall; ubame's cart lane and parley path in one group; notes and docs claims brought to the drawing; the off-topic day-office paragraph cut; the writing-rooms Depiction restated for mirrored rows",
+     "class": "within",
+     "why": "Notes and claims untrue of the drawing are defects under XIV, and fixing them is fix-as-we-go."
+    },
+    {
+     "id": "glyph-discharge-remeasured",
+     "summary": "ask:glyph-occasions-emit-449-T351's discharge of 48 units restated to the landing drawing, re-measured per data-kind with data-id stripped",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This answers round one's condition. The ruling's own last clause governs: a kind whose marks change after it is 'owed again under the rule', and the rule owes a check for a new element, a redrawn glyph or a substantially changed placement rule. After 07:30Z only the county's spec (E1) and emit.rs fn cell changed (ask:glyph-pass-carried-cell-fix-449-T351's diff), so no placement rule changed. That makes the stables and wells, displaced with their shapes kept, class C by the ruling's own wording ('the same glyphs displaced'), though the ruling's named C list did not carry them. The fourth dwelling's door is class C ('doors and tubs following their buildings'). The latrines' leaders are caption-only, a class the ruling discharged. Every kind whose shape changed has a PASS on a drawing at or after its last change: the servants' quarters (owed and checked PASS), the cell (round two PASS at the landing key), and the retainers' quarters, granary and gatehouse (PASS at cef72b9db8d3, carried). Every other kind's marks are unchanged."
+    },
+    {
+     "id": "glyph-pass-carried",
+     "summary": "four glyph PASSes from cef72b9db8d3 carried to landing key 0e6a69cceff6",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "ask:glyph-pass-carried-cell-fix-449-T351 grants exactly this carry, bound to the 9bd9e35ca4..7e08b45d82 diff in which only fn cell, a test and the county's notes changed. The round trip's svg sha256 is unchanged, and nothing since reaches beyond fn cell."
+    },
+    {
+     "id": "building-reviews-carried",
+     "summary": "hayakawa, ochiba, ubame and the round trip keep their PASS at the new engine key",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "ask:reowed-reviews-unchanged-449-T351 binds each to its content key, and the block re-measured them as unchanged in the clone (l7r-gate reviews prereq content-key, 2026-11-23). The county's own review was run as owed and passed."
+    },
+    {
+     "id": "lander-carries-rulings",
+     "summary": "the push reads no arbiter accept on a glyph unit or a carried review, so the lander cites the rulings; T377 builds the route with the whole-legend fallback's fix",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This answers round one's condition: the route is named. ask:glyph-occasions-emit-449-T351 says the discharge is 'cited by its trigger id' at this landing, and that where the push has no route, 'that route is built with the fix and its test'. The fix is the whole-legend fallback, which T377 owns. Building the route with it is what the ruling orders, not a carve-out."
+    },
+    {
+     "id": "found-and-left",
+     "summary": "T369, T371-T373, T377, T380-T384, T386-T391 filed, each landing before T158",
+     "class": "within",
+     "why": "Each is outside this bundle's files (research pages, tooling, rows of types.json this bundle did not change), or is a nitpick or outside finding on a PASS sheet whose fix would re-owe its review. Taken separately, the county's two latrine leaders are this bundle's own change on a sheet that was NEEDS-WORK at the time, not a PASS sheet. They still stay within: the landing-key county building-review PASSed and raised nothing on the change, and the latrines' marks are discharged as caption-only, so no reader-visible wrong outcome is left. Premise not verifiable from the bundle: that T158 is the next step's port, which would make 'lands before T158' the GM's 'fix all known bugs in each step before moving on' (2026-11-18). The 0104 porch and 0113 back-row items are differences between a page's wording and a drawing, not defects in the drawing."
+    },
+    {
+     "id": "FR-003-attribution",
+     "summary": "the review prerequisite attributed to feature 240's FR-003; 14 verifying records and 31 review-accepts dispose its 45 findings",
+     "class": "within",
+     "why": "This answers round one's condition and decides nothing new."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T357": {
+   "section_sha256": "b5c61a5105169555af7cb160a3a01062f4bd33a45c6e6edb2f43ecdb9117ab05",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T366",
+     "summary": "cart_route's granary refusal points at an office-court flank column's head (0123's drawing page), pinned by a test",
+     "class": "within",
+     "why": "A refusal pointing at a seat 0123 rejects is a wrong outcome (XIV); fixing it is the GM's fix-as-we-go (2026-11-18)."
+    },
+    {
+     "id": "T354",
+     "summary": "hearing court mats keyed to the dais axis; the round trip's '102 ft' claim restated to the 94 ft drawn",
+     "class": "within",
+     "why": "The accused kneeling 8 ft off the magistrate contradicts 0099. Restating the 102 ft claim, not the code, is the GM's 2026-11-19 rule."
+    },
+    {
+     "id": "T359",
+     "summary": "an open-shed interior (hatched roof, six posts, no door) for the cinnabar workshop",
+     "class": "within",
+     "why": "The workshop drawn as a shrine with a door is a map that reads wrong; this is a defect fix."
+    },
+    {
+     "id": "T367",
+     "summary": "knob 4's second roll, armory end bay [west, east], taken only under the hall site; armory.rs claims restated to ask:armory-store-ubame route (a)'s reach, with the end bay given a claim of its own",
+     "class": "within",
+     "why": "Judged against the ruling's own why: (b) was refused because it put a nested 1-in-3 roll behind a GUESSED knob that turns one site into another, and (a) adds no new GUESS and no rule a source lacks. The end-bay roll turns no site into another. It chooses between two forms 0123 attests (Pingyao, Jiexiu, Zhenping) under the one site route (a) picks, and a knob of several attested forms is the project's rule. Every hall armory drawn on the west contradicts 0123's varied side, which is a defect. The ruling's 'what' already allows an armory to move under a later engine change as no reversal, provided its pop-up says what it draws, and the pop-up is confirmed to name no fixed end (hayakawa x 638-680 px, round trip 549-591 px, observed 2026-11-23)."
+    },
+    {
+     "id": "T368",
+     "summary": "types.json drops optional on magistrates_dais; a magistracy drawn without its dais is refused",
+     "class": "within",
+     "why": "A hall without a dais passing is a check that passes bad work, a defect under XIV."
+    },
+    {
+     "id": "T353-T356-T364",
+     "summary": "county: gatehouse flush west of the gate post, granary 50x26 under the residence, junior retainers' quarters, cell turned and joined",
+     "class": "within",
+     "why": "Each answers a wrong outcome a reader saw: the gatekeepers' lodge 40 ft from its gate, the tax store larger than the house, eleven samurai with no lodging, the cell at the main gate. The placements (the free run, the 12x24 dwelling, three men a dwelling, the cell's join) are labeled GUESS or SILENT where no page settles them. Room was measured before packing (the 47 ft run)."
+    },
+    {
+     "id": "T351-E1",
+     "summary": "four rowhouse dwellings of 12x24 ft; the servants' dwellings 15 -> 12 ft and the stables 12 ft west to make room",
+     "class": "within",
+     "why": "About 59 sq ft a man, below the barracks' 88, is a defect a review found. Eight options were measured on trial specs before drawing. The servants' 15 ft was a GUESS no page sizes, so changing it narrows nothing the GM or a page asked for."
+    },
+    {
+     "id": "T351-cell-lattice",
+     "summary": "emit.rs cell draws a bar beside a court-face door that holds none, pinned by a_cells_bars_show_beside_its_door",
+     "class": "within",
+     "why": "This carries out ask:cell-lattice-hidden-449-T351 (CONTINUE): the north door is kept, the fewest sheets change (the round trip's svg sha256 is unchanged), legibility is judged on the PNG and the fix is pinned by a test. The cell's round-two glyph-check PASS covers F1 and F2."
+    },
+    {
+     "id": "T355-T357-T351-T352-T363-T365",
+     "summary": "ochiba practice ground turned to the west wall; ubame's cart lane and parley path in one group; notes and docs claims brought to the drawing; the off-topic day-office paragraph cut; the writing-rooms Depiction restated for mirrored rows",
+     "class": "within",
+     "why": "Notes and claims untrue of the drawing are defects under XIV, and fixing them is fix-as-we-go."
+    },
+    {
+     "id": "glyph-discharge-remeasured",
+     "summary": "ask:glyph-occasions-emit-449-T351's discharge of 48 units restated to the landing drawing, re-measured per data-kind with data-id stripped",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This answers round one's condition. The ruling's own last clause governs: a kind whose marks change after it is 'owed again under the rule', and the rule owes a check for a new element, a redrawn glyph or a substantially changed placement rule. After 07:30Z only the county's spec (E1) and emit.rs fn cell changed (ask:glyph-pass-carried-cell-fix-449-T351's diff), so no placement rule changed. That makes the stables and wells, displaced with their shapes kept, class C by the ruling's own wording ('the same glyphs displaced'), though the ruling's named C list did not carry them. The fourth dwelling's door is class C ('doors and tubs following their buildings'). The latrines' leaders are caption-only, a class the ruling discharged. Every kind whose shape changed has a PASS on a drawing at or after its last change: the servants' quarters (owed and checked PASS), the cell (round two PASS at the landing key), and the retainers' quarters, granary and gatehouse (PASS at cef72b9db8d3, carried). Every other kind's marks are unchanged."
+    },
+    {
+     "id": "glyph-pass-carried",
+     "summary": "four glyph PASSes from cef72b9db8d3 carried to landing key 0e6a69cceff6",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "ask:glyph-pass-carried-cell-fix-449-T351 grants exactly this carry, bound to the 9bd9e35ca4..7e08b45d82 diff in which only fn cell, a test and the county's notes changed. The round trip's svg sha256 is unchanged, and nothing since reaches beyond fn cell."
+    },
+    {
+     "id": "building-reviews-carried",
+     "summary": "hayakawa, ochiba, ubame and the round trip keep their PASS at the new engine key",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "ask:reowed-reviews-unchanged-449-T351 binds each to its content key, and the block re-measured them as unchanged in the clone (l7r-gate reviews prereq content-key, 2026-11-23). The county's own review was run as owed and passed."
+    },
+    {
+     "id": "lander-carries-rulings",
+     "summary": "the push reads no arbiter accept on a glyph unit or a carried review, so the lander cites the rulings; T377 builds the route with the whole-legend fallback's fix",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This answers round one's condition: the route is named. ask:glyph-occasions-emit-449-T351 says the discharge is 'cited by its trigger id' at this landing, and that where the push has no route, 'that route is built with the fix and its test'. The fix is the whole-legend fallback, which T377 owns. Building the route with it is what the ruling orders, not a carve-out."
+    },
+    {
+     "id": "found-and-left",
+     "summary": "T369, T371-T373, T377, T380-T384, T386-T391 filed, each landing before T158",
+     "class": "within",
+     "why": "Each is outside this bundle's files (research pages, tooling, rows of types.json this bundle did not change), or is a nitpick or outside finding on a PASS sheet whose fix would re-owe its review. Taken separately, the county's two latrine leaders are this bundle's own change on a sheet that was NEEDS-WORK at the time, not a PASS sheet. They still stay within: the landing-key county building-review PASSed and raised nothing on the change, and the latrines' marks are discharged as caption-only, so no reader-visible wrong outcome is left. Premise not verifiable from the bundle: that T158 is the next step's port, which would make 'lands before T158' the GM's 'fix all known bugs in each step before moving on' (2026-11-18). The 0104 porch and 0113 back-row items are differences between a page's wording and a drawing, not defects in the drawing."
+    },
+    {
+     "id": "FR-003-attribution",
+     "summary": "the review prerequisite attributed to feature 240's FR-003; 14 verifying records and 31 review-accepts dispose its 45 findings",
+     "class": "within",
+     "why": "This answers round one's condition and decides nothing new."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T359": {
+   "section_sha256": "b5c61a5105169555af7cb160a3a01062f4bd33a45c6e6edb2f43ecdb9117ab05",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T366",
+     "summary": "cart_route's granary refusal points at an office-court flank column's head (0123's drawing page), pinned by a test",
+     "class": "within",
+     "why": "A refusal pointing at a seat 0123 rejects is a wrong outcome (XIV); fixing it is the GM's fix-as-we-go (2026-11-18)."
+    },
+    {
+     "id": "T354",
+     "summary": "hearing court mats keyed to the dais axis; the round trip's '102 ft' claim restated to the 94 ft drawn",
+     "class": "within",
+     "why": "The accused kneeling 8 ft off the magistrate contradicts 0099. Restating the 102 ft claim, not the code, is the GM's 2026-11-19 rule."
+    },
+    {
+     "id": "T359",
+     "summary": "an open-shed interior (hatched roof, six posts, no door) for the cinnabar workshop",
+     "class": "within",
+     "why": "The workshop drawn as a shrine with a door is a map that reads wrong; this is a defect fix."
+    },
+    {
+     "id": "T367",
+     "summary": "knob 4's second roll, armory end bay [west, east], taken only under the hall site; armory.rs claims restated to ask:armory-store-ubame route (a)'s reach, with the end bay given a claim of its own",
+     "class": "within",
+     "why": "Judged against the ruling's own why: (b) was refused because it put a nested 1-in-3 roll behind a GUESSED knob that turns one site into another, and (a) adds no new GUESS and no rule a source lacks. The end-bay roll turns no site into another. It chooses between two forms 0123 attests (Pingyao, Jiexiu, Zhenping) under the one site route (a) picks, and a knob of several attested forms is the project's rule. Every hall armory drawn on the west contradicts 0123's varied side, which is a defect. The ruling's 'what' already allows an armory to move under a later engine change as no reversal, provided its pop-up says what it draws, and the pop-up is confirmed to name no fixed end (hayakawa x 638-680 px, round trip 549-591 px, observed 2026-11-23)."
+    },
+    {
+     "id": "T368",
+     "summary": "types.json drops optional on magistrates_dais; a magistracy drawn without its dais is refused",
+     "class": "within",
+     "why": "A hall without a dais passing is a check that passes bad work, a defect under XIV."
+    },
+    {
+     "id": "T353-T356-T364",
+     "summary": "county: gatehouse flush west of the gate post, granary 50x26 under the residence, junior retainers' quarters, cell turned and joined",
+     "class": "within",
+     "why": "Each answers a wrong outcome a reader saw: the gatekeepers' lodge 40 ft from its gate, the tax store larger than the house, eleven samurai with no lodging, the cell at the main gate. The placements (the free run, the 12x24 dwelling, three men a dwelling, the cell's join) are labeled GUESS or SILENT where no page settles them. Room was measured before packing (the 47 ft run)."
+    },
+    {
+     "id": "T351-E1",
+     "summary": "four rowhouse dwellings of 12x24 ft; the servants' dwellings 15 -> 12 ft and the stables 12 ft west to make room",
+     "class": "within",
+     "why": "About 59 sq ft a man, below the barracks' 88, is a defect a review found. Eight options were measured on trial specs before drawing. The servants' 15 ft was a GUESS no page sizes, so changing it narrows nothing the GM or a page asked for."
+    },
+    {
+     "id": "T351-cell-lattice",
+     "summary": "emit.rs cell draws a bar beside a court-face door that holds none, pinned by a_cells_bars_show_beside_its_door",
+     "class": "within",
+     "why": "This carries out ask:cell-lattice-hidden-449-T351 (CONTINUE): the north door is kept, the fewest sheets change (the round trip's svg sha256 is unchanged), legibility is judged on the PNG and the fix is pinned by a test. The cell's round-two glyph-check PASS covers F1 and F2."
+    },
+    {
+     "id": "T355-T357-T351-T352-T363-T365",
+     "summary": "ochiba practice ground turned to the west wall; ubame's cart lane and parley path in one group; notes and docs claims brought to the drawing; the off-topic day-office paragraph cut; the writing-rooms Depiction restated for mirrored rows",
+     "class": "within",
+     "why": "Notes and claims untrue of the drawing are defects under XIV, and fixing them is fix-as-we-go."
+    },
+    {
+     "id": "glyph-discharge-remeasured",
+     "summary": "ask:glyph-occasions-emit-449-T351's discharge of 48 units restated to the landing drawing, re-measured per data-kind with data-id stripped",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This answers round one's condition. The ruling's own last clause governs: a kind whose marks change after it is 'owed again under the rule', and the rule owes a check for a new element, a redrawn glyph or a substantially changed placement rule. After 07:30Z only the county's spec (E1) and emit.rs fn cell changed (ask:glyph-pass-carried-cell-fix-449-T351's diff), so no placement rule changed. That makes the stables and wells, displaced with their shapes kept, class C by the ruling's own wording ('the same glyphs displaced'), though the ruling's named C list did not carry them. The fourth dwelling's door is class C ('doors and tubs following their buildings'). The latrines' leaders are caption-only, a class the ruling discharged. Every kind whose shape changed has a PASS on a drawing at or after its last change: the servants' quarters (owed and checked PASS), the cell (round two PASS at the landing key), and the retainers' quarters, granary and gatehouse (PASS at cef72b9db8d3, carried). Every other kind's marks are unchanged."
+    },
+    {
+     "id": "glyph-pass-carried",
+     "summary": "four glyph PASSes from cef72b9db8d3 carried to landing key 0e6a69cceff6",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "ask:glyph-pass-carried-cell-fix-449-T351 grants exactly this carry, bound to the 9bd9e35ca4..7e08b45d82 diff in which only fn cell, a test and the county's notes changed. The round trip's svg sha256 is unchanged, and nothing since reaches beyond fn cell."
+    },
+    {
+     "id": "building-reviews-carried",
+     "summary": "hayakawa, ochiba, ubame and the round trip keep their PASS at the new engine key",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "ask:reowed-reviews-unchanged-449-T351 binds each to its content key, and the block re-measured them as unchanged in the clone (l7r-gate reviews prereq content-key, 2026-11-23). The county's own review was run as owed and passed."
+    },
+    {
+     "id": "lander-carries-rulings",
+     "summary": "the push reads no arbiter accept on a glyph unit or a carried review, so the lander cites the rulings; T377 builds the route with the whole-legend fallback's fix",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This answers round one's condition: the route is named. ask:glyph-occasions-emit-449-T351 says the discharge is 'cited by its trigger id' at this landing, and that where the push has no route, 'that route is built with the fix and its test'. The fix is the whole-legend fallback, which T377 owns. Building the route with it is what the ruling orders, not a carve-out."
+    },
+    {
+     "id": "found-and-left",
+     "summary": "T369, T371-T373, T377, T380-T384, T386-T391 filed, each landing before T158",
+     "class": "within",
+     "why": "Each is outside this bundle's files (research pages, tooling, rows of types.json this bundle did not change), or is a nitpick or outside finding on a PASS sheet whose fix would re-owe its review. Taken separately, the county's two latrine leaders are this bundle's own change on a sheet that was NEEDS-WORK at the time, not a PASS sheet. They still stay within: the landing-key county building-review PASSed and raised nothing on the change, and the latrines' marks are discharged as caption-only, so no reader-visible wrong outcome is left. Premise not verifiable from the bundle: that T158 is the next step's port, which would make 'lands before T158' the GM's 'fix all known bugs in each step before moving on' (2026-11-18). The 0104 porch and 0113 back-row items are differences between a page's wording and a drawing, not defects in the drawing."
+    },
+    {
+     "id": "FR-003-attribution",
+     "summary": "the review prerequisite attributed to feature 240's FR-003; 14 verifying records and 31 review-accepts dispose its 45 findings",
+     "class": "within",
+     "why": "This answers round one's condition and decides nothing new."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T363": {
+   "section_sha256": "b5c61a5105169555af7cb160a3a01062f4bd33a45c6e6edb2f43ecdb9117ab05",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T366",
+     "summary": "cart_route's granary refusal points at an office-court flank column's head (0123's drawing page), pinned by a test",
+     "class": "within",
+     "why": "A refusal pointing at a seat 0123 rejects is a wrong outcome (XIV); fixing it is the GM's fix-as-we-go (2026-11-18)."
+    },
+    {
+     "id": "T354",
+     "summary": "hearing court mats keyed to the dais axis; the round trip's '102 ft' claim restated to the 94 ft drawn",
+     "class": "within",
+     "why": "The accused kneeling 8 ft off the magistrate contradicts 0099. Restating the 102 ft claim, not the code, is the GM's 2026-11-19 rule."
+    },
+    {
+     "id": "T359",
+     "summary": "an open-shed interior (hatched roof, six posts, no door) for the cinnabar workshop",
+     "class": "within",
+     "why": "The workshop drawn as a shrine with a door is a map that reads wrong; this is a defect fix."
+    },
+    {
+     "id": "T367",
+     "summary": "knob 4's second roll, armory end bay [west, east], taken only under the hall site; armory.rs claims restated to ask:armory-store-ubame route (a)'s reach, with the end bay given a claim of its own",
+     "class": "within",
+     "why": "Judged against the ruling's own why: (b) was refused because it put a nested 1-in-3 roll behind a GUESSED knob that turns one site into another, and (a) adds no new GUESS and no rule a source lacks. The end-bay roll turns no site into another. It chooses between two forms 0123 attests (Pingyao, Jiexiu, Zhenping) under the one site route (a) picks, and a knob of several attested forms is the project's rule. Every hall armory drawn on the west contradicts 0123's varied side, which is a defect. The ruling's 'what' already allows an armory to move under a later engine change as no reversal, provided its pop-up says what it draws, and the pop-up is confirmed to name no fixed end (hayakawa x 638-680 px, round trip 549-591 px, observed 2026-11-23)."
+    },
+    {
+     "id": "T368",
+     "summary": "types.json drops optional on magistrates_dais; a magistracy drawn without its dais is refused",
+     "class": "within",
+     "why": "A hall without a dais passing is a check that passes bad work, a defect under XIV."
+    },
+    {
+     "id": "T353-T356-T364",
+     "summary": "county: gatehouse flush west of the gate post, granary 50x26 under the residence, junior retainers' quarters, cell turned and joined",
+     "class": "within",
+     "why": "Each answers a wrong outcome a reader saw: the gatekeepers' lodge 40 ft from its gate, the tax store larger than the house, eleven samurai with no lodging, the cell at the main gate. The placements (the free run, the 12x24 dwelling, three men a dwelling, the cell's join) are labeled GUESS or SILENT where no page settles them. Room was measured before packing (the 47 ft run)."
+    },
+    {
+     "id": "T351-E1",
+     "summary": "four rowhouse dwellings of 12x24 ft; the servants' dwellings 15 -> 12 ft and the stables 12 ft west to make room",
+     "class": "within",
+     "why": "About 59 sq ft a man, below the barracks' 88, is a defect a review found. Eight options were measured on trial specs before drawing. The servants' 15 ft was a GUESS no page sizes, so changing it narrows nothing the GM or a page asked for."
+    },
+    {
+     "id": "T351-cell-lattice",
+     "summary": "emit.rs cell draws a bar beside a court-face door that holds none, pinned by a_cells_bars_show_beside_its_door",
+     "class": "within",
+     "why": "This carries out ask:cell-lattice-hidden-449-T351 (CONTINUE): the north door is kept, the fewest sheets change (the round trip's svg sha256 is unchanged), legibility is judged on the PNG and the fix is pinned by a test. The cell's round-two glyph-check PASS covers F1 and F2."
+    },
+    {
+     "id": "T355-T357-T351-T352-T363-T365",
+     "summary": "ochiba practice ground turned to the west wall; ubame's cart lane and parley path in one group; notes and docs claims brought to the drawing; the off-topic day-office paragraph cut; the writing-rooms Depiction restated for mirrored rows",
+     "class": "within",
+     "why": "Notes and claims untrue of the drawing are defects under XIV, and fixing them is fix-as-we-go."
+    },
+    {
+     "id": "glyph-discharge-remeasured",
+     "summary": "ask:glyph-occasions-emit-449-T351's discharge of 48 units restated to the landing drawing, re-measured per data-kind with data-id stripped",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This answers round one's condition. The ruling's own last clause governs: a kind whose marks change after it is 'owed again under the rule', and the rule owes a check for a new element, a redrawn glyph or a substantially changed placement rule. After 07:30Z only the county's spec (E1) and emit.rs fn cell changed (ask:glyph-pass-carried-cell-fix-449-T351's diff), so no placement rule changed. That makes the stables and wells, displaced with their shapes kept, class C by the ruling's own wording ('the same glyphs displaced'), though the ruling's named C list did not carry them. The fourth dwelling's door is class C ('doors and tubs following their buildings'). The latrines' leaders are caption-only, a class the ruling discharged. Every kind whose shape changed has a PASS on a drawing at or after its last change: the servants' quarters (owed and checked PASS), the cell (round two PASS at the landing key), and the retainers' quarters, granary and gatehouse (PASS at cef72b9db8d3, carried). Every other kind's marks are unchanged."
+    },
+    {
+     "id": "glyph-pass-carried",
+     "summary": "four glyph PASSes from cef72b9db8d3 carried to landing key 0e6a69cceff6",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "ask:glyph-pass-carried-cell-fix-449-T351 grants exactly this carry, bound to the 9bd9e35ca4..7e08b45d82 diff in which only fn cell, a test and the county's notes changed. The round trip's svg sha256 is unchanged, and nothing since reaches beyond fn cell."
+    },
+    {
+     "id": "building-reviews-carried",
+     "summary": "hayakawa, ochiba, ubame and the round trip keep their PASS at the new engine key",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "ask:reowed-reviews-unchanged-449-T351 binds each to its content key, and the block re-measured them as unchanged in the clone (l7r-gate reviews prereq content-key, 2026-11-23). The county's own review was run as owed and passed."
+    },
+    {
+     "id": "lander-carries-rulings",
+     "summary": "the push reads no arbiter accept on a glyph unit or a carried review, so the lander cites the rulings; T377 builds the route with the whole-legend fallback's fix",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This answers round one's condition: the route is named. ask:glyph-occasions-emit-449-T351 says the discharge is 'cited by its trigger id' at this landing, and that where the push has no route, 'that route is built with the fix and its test'. The fix is the whole-legend fallback, which T377 owns. Building the route with it is what the ruling orders, not a carve-out."
+    },
+    {
+     "id": "found-and-left",
+     "summary": "T369, T371-T373, T377, T380-T384, T386-T391 filed, each landing before T158",
+     "class": "within",
+     "why": "Each is outside this bundle's files (research pages, tooling, rows of types.json this bundle did not change), or is a nitpick or outside finding on a PASS sheet whose fix would re-owe its review. Taken separately, the county's two latrine leaders are this bundle's own change on a sheet that was NEEDS-WORK at the time, not a PASS sheet. They still stay within: the landing-key county building-review PASSed and raised nothing on the change, and the latrines' marks are discharged as caption-only, so no reader-visible wrong outcome is left. Premise not verifiable from the bundle: that T158 is the next step's port, which would make 'lands before T158' the GM's 'fix all known bugs in each step before moving on' (2026-11-18). The 0104 porch and 0113 back-row items are differences between a page's wording and a drawing, not defects in the drawing."
+    },
+    {
+     "id": "FR-003-attribution",
+     "summary": "the review prerequisite attributed to feature 240's FR-003; 14 verifying records and 31 review-accepts dispose its 45 findings",
+     "class": "within",
+     "why": "This answers round one's condition and decides nothing new."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T364": {
+   "section_sha256": "b5c61a5105169555af7cb160a3a01062f4bd33a45c6e6edb2f43ecdb9117ab05",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T366",
+     "summary": "cart_route's granary refusal points at an office-court flank column's head (0123's drawing page), pinned by a test",
+     "class": "within",
+     "why": "A refusal pointing at a seat 0123 rejects is a wrong outcome (XIV); fixing it is the GM's fix-as-we-go (2026-11-18)."
+    },
+    {
+     "id": "T354",
+     "summary": "hearing court mats keyed to the dais axis; the round trip's '102 ft' claim restated to the 94 ft drawn",
+     "class": "within",
+     "why": "The accused kneeling 8 ft off the magistrate contradicts 0099. Restating the 102 ft claim, not the code, is the GM's 2026-11-19 rule."
+    },
+    {
+     "id": "T359",
+     "summary": "an open-shed interior (hatched roof, six posts, no door) for the cinnabar workshop",
+     "class": "within",
+     "why": "The workshop drawn as a shrine with a door is a map that reads wrong; this is a defect fix."
+    },
+    {
+     "id": "T367",
+     "summary": "knob 4's second roll, armory end bay [west, east], taken only under the hall site; armory.rs claims restated to ask:armory-store-ubame route (a)'s reach, with the end bay given a claim of its own",
+     "class": "within",
+     "why": "Judged against the ruling's own why: (b) was refused because it put a nested 1-in-3 roll behind a GUESSED knob that turns one site into another, and (a) adds no new GUESS and no rule a source lacks. The end-bay roll turns no site into another. It chooses between two forms 0123 attests (Pingyao, Jiexiu, Zhenping) under the one site route (a) picks, and a knob of several attested forms is the project's rule. Every hall armory drawn on the west contradicts 0123's varied side, which is a defect. The ruling's 'what' already allows an armory to move under a later engine change as no reversal, provided its pop-up says what it draws, and the pop-up is confirmed to name no fixed end (hayakawa x 638-680 px, round trip 549-591 px, observed 2026-11-23)."
+    },
+    {
+     "id": "T368",
+     "summary": "types.json drops optional on magistrates_dais; a magistracy drawn without its dais is refused",
+     "class": "within",
+     "why": "A hall without a dais passing is a check that passes bad work, a defect under XIV."
+    },
+    {
+     "id": "T353-T356-T364",
+     "summary": "county: gatehouse flush west of the gate post, granary 50x26 under the residence, junior retainers' quarters, cell turned and joined",
+     "class": "within",
+     "why": "Each answers a wrong outcome a reader saw: the gatekeepers' lodge 40 ft from its gate, the tax store larger than the house, eleven samurai with no lodging, the cell at the main gate. The placements (the free run, the 12x24 dwelling, three men a dwelling, the cell's join) are labeled GUESS or SILENT where no page settles them. Room was measured before packing (the 47 ft run)."
+    },
+    {
+     "id": "T351-E1",
+     "summary": "four rowhouse dwellings of 12x24 ft; the servants' dwellings 15 -> 12 ft and the stables 12 ft west to make room",
+     "class": "within",
+     "why": "About 59 sq ft a man, below the barracks' 88, is a defect a review found. Eight options were measured on trial specs before drawing. The servants' 15 ft was a GUESS no page sizes, so changing it narrows nothing the GM or a page asked for."
+    },
+    {
+     "id": "T351-cell-lattice",
+     "summary": "emit.rs cell draws a bar beside a court-face door that holds none, pinned by a_cells_bars_show_beside_its_door",
+     "class": "within",
+     "why": "This carries out ask:cell-lattice-hidden-449-T351 (CONTINUE): the north door is kept, the fewest sheets change (the round trip's svg sha256 is unchanged), legibility is judged on the PNG and the fix is pinned by a test. The cell's round-two glyph-check PASS covers F1 and F2."
+    },
+    {
+     "id": "T355-T357-T351-T352-T363-T365",
+     "summary": "ochiba practice ground turned to the west wall; ubame's cart lane and parley path in one group; notes and docs claims brought to the drawing; the off-topic day-office paragraph cut; the writing-rooms Depiction restated for mirrored rows",
+     "class": "within",
+     "why": "Notes and claims untrue of the drawing are defects under XIV, and fixing them is fix-as-we-go."
+    },
+    {
+     "id": "glyph-discharge-remeasured",
+     "summary": "ask:glyph-occasions-emit-449-T351's discharge of 48 units restated to the landing drawing, re-measured per data-kind with data-id stripped",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This answers round one's condition. The ruling's own last clause governs: a kind whose marks change after it is 'owed again under the rule', and the rule owes a check for a new element, a redrawn glyph or a substantially changed placement rule. After 07:30Z only the county's spec (E1) and emit.rs fn cell changed (ask:glyph-pass-carried-cell-fix-449-T351's diff), so no placement rule changed. That makes the stables and wells, displaced with their shapes kept, class C by the ruling's own wording ('the same glyphs displaced'), though the ruling's named C list did not carry them. The fourth dwelling's door is class C ('doors and tubs following their buildings'). The latrines' leaders are caption-only, a class the ruling discharged. Every kind whose shape changed has a PASS on a drawing at or after its last change: the servants' quarters (owed and checked PASS), the cell (round two PASS at the landing key), and the retainers' quarters, granary and gatehouse (PASS at cef72b9db8d3, carried). Every other kind's marks are unchanged."
+    },
+    {
+     "id": "glyph-pass-carried",
+     "summary": "four glyph PASSes from cef72b9db8d3 carried to landing key 0e6a69cceff6",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "ask:glyph-pass-carried-cell-fix-449-T351 grants exactly this carry, bound to the 9bd9e35ca4..7e08b45d82 diff in which only fn cell, a test and the county's notes changed. The round trip's svg sha256 is unchanged, and nothing since reaches beyond fn cell."
+    },
+    {
+     "id": "building-reviews-carried",
+     "summary": "hayakawa, ochiba, ubame and the round trip keep their PASS at the new engine key",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "ask:reowed-reviews-unchanged-449-T351 binds each to its content key, and the block re-measured them as unchanged in the clone (l7r-gate reviews prereq content-key, 2026-11-23). The county's own review was run as owed and passed."
+    },
+    {
+     "id": "lander-carries-rulings",
+     "summary": "the push reads no arbiter accept on a glyph unit or a carried review, so the lander cites the rulings; T377 builds the route with the whole-legend fallback's fix",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This answers round one's condition: the route is named. ask:glyph-occasions-emit-449-T351 says the discharge is 'cited by its trigger id' at this landing, and that where the push has no route, 'that route is built with the fix and its test'. The fix is the whole-legend fallback, which T377 owns. Building the route with it is what the ruling orders, not a carve-out."
+    },
+    {
+     "id": "found-and-left",
+     "summary": "T369, T371-T373, T377, T380-T384, T386-T391 filed, each landing before T158",
+     "class": "within",
+     "why": "Each is outside this bundle's files (research pages, tooling, rows of types.json this bundle did not change), or is a nitpick or outside finding on a PASS sheet whose fix would re-owe its review. Taken separately, the county's two latrine leaders are this bundle's own change on a sheet that was NEEDS-WORK at the time, not a PASS sheet. They still stay within: the landing-key county building-review PASSed and raised nothing on the change, and the latrines' marks are discharged as caption-only, so no reader-visible wrong outcome is left. Premise not verifiable from the bundle: that T158 is the next step's port, which would make 'lands before T158' the GM's 'fix all known bugs in each step before moving on' (2026-11-18). The 0104 porch and 0113 back-row items are differences between a page's wording and a drawing, not defects in the drawing."
+    },
+    {
+     "id": "FR-003-attribution",
+     "summary": "the review prerequisite attributed to feature 240's FR-003; 14 verifying records and 31 review-accepts dispose its 45 findings",
+     "class": "within",
+     "why": "This answers round one's condition and decides nothing new."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T365": {
+   "section_sha256": "b5c61a5105169555af7cb160a3a01062f4bd33a45c6e6edb2f43ecdb9117ab05",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T366",
+     "summary": "cart_route's granary refusal points at an office-court flank column's head (0123's drawing page), pinned by a test",
+     "class": "within",
+     "why": "A refusal pointing at a seat 0123 rejects is a wrong outcome (XIV); fixing it is the GM's fix-as-we-go (2026-11-18)."
+    },
+    {
+     "id": "T354",
+     "summary": "hearing court mats keyed to the dais axis; the round trip's '102 ft' claim restated to the 94 ft drawn",
+     "class": "within",
+     "why": "The accused kneeling 8 ft off the magistrate contradicts 0099. Restating the 102 ft claim, not the code, is the GM's 2026-11-19 rule."
+    },
+    {
+     "id": "T359",
+     "summary": "an open-shed interior (hatched roof, six posts, no door) for the cinnabar workshop",
+     "class": "within",
+     "why": "The workshop drawn as a shrine with a door is a map that reads wrong; this is a defect fix."
+    },
+    {
+     "id": "T367",
+     "summary": "knob 4's second roll, armory end bay [west, east], taken only under the hall site; armory.rs claims restated to ask:armory-store-ubame route (a)'s reach, with the end bay given a claim of its own",
+     "class": "within",
+     "why": "Judged against the ruling's own why: (b) was refused because it put a nested 1-in-3 roll behind a GUESSED knob that turns one site into another, and (a) adds no new GUESS and no rule a source lacks. The end-bay roll turns no site into another. It chooses between two forms 0123 attests (Pingyao, Jiexiu, Zhenping) under the one site route (a) picks, and a knob of several attested forms is the project's rule. Every hall armory drawn on the west contradicts 0123's varied side, which is a defect. The ruling's 'what' already allows an armory to move under a later engine change as no reversal, provided its pop-up says what it draws, and the pop-up is confirmed to name no fixed end (hayakawa x 638-680 px, round trip 549-591 px, observed 2026-11-23)."
+    },
+    {
+     "id": "T368",
+     "summary": "types.json drops optional on magistrates_dais; a magistracy drawn without its dais is refused",
+     "class": "within",
+     "why": "A hall without a dais passing is a check that passes bad work, a defect under XIV."
+    },
+    {
+     "id": "T353-T356-T364",
+     "summary": "county: gatehouse flush west of the gate post, granary 50x26 under the residence, junior retainers' quarters, cell turned and joined",
+     "class": "within",
+     "why": "Each answers a wrong outcome a reader saw: the gatekeepers' lodge 40 ft from its gate, the tax store larger than the house, eleven samurai with no lodging, the cell at the main gate. The placements (the free run, the 12x24 dwelling, three men a dwelling, the cell's join) are labeled GUESS or SILENT where no page settles them. Room was measured before packing (the 47 ft run)."
+    },
+    {
+     "id": "T351-E1",
+     "summary": "four rowhouse dwellings of 12x24 ft; the servants' dwellings 15 -> 12 ft and the stables 12 ft west to make room",
+     "class": "within",
+     "why": "About 59 sq ft a man, below the barracks' 88, is a defect a review found. Eight options were measured on trial specs before drawing. The servants' 15 ft was a GUESS no page sizes, so changing it narrows nothing the GM or a page asked for."
+    },
+    {
+     "id": "T351-cell-lattice",
+     "summary": "emit.rs cell draws a bar beside a court-face door that holds none, pinned by a_cells_bars_show_beside_its_door",
+     "class": "within",
+     "why": "This carries out ask:cell-lattice-hidden-449-T351 (CONTINUE): the north door is kept, the fewest sheets change (the round trip's svg sha256 is unchanged), legibility is judged on the PNG and the fix is pinned by a test. The cell's round-two glyph-check PASS covers F1 and F2."
+    },
+    {
+     "id": "T355-T357-T351-T352-T363-T365",
+     "summary": "ochiba practice ground turned to the west wall; ubame's cart lane and parley path in one group; notes and docs claims brought to the drawing; the off-topic day-office paragraph cut; the writing-rooms Depiction restated for mirrored rows",
+     "class": "within",
+     "why": "Notes and claims untrue of the drawing are defects under XIV, and fixing them is fix-as-we-go."
+    },
+    {
+     "id": "glyph-discharge-remeasured",
+     "summary": "ask:glyph-occasions-emit-449-T351's discharge of 48 units restated to the landing drawing, re-measured per data-kind with data-id stripped",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This answers round one's condition. The ruling's own last clause governs: a kind whose marks change after it is 'owed again under the rule', and the rule owes a check for a new element, a redrawn glyph or a substantially changed placement rule. After 07:30Z only the county's spec (E1) and emit.rs fn cell changed (ask:glyph-pass-carried-cell-fix-449-T351's diff), so no placement rule changed. That makes the stables and wells, displaced with their shapes kept, class C by the ruling's own wording ('the same glyphs displaced'), though the ruling's named C list did not carry them. The fourth dwelling's door is class C ('doors and tubs following their buildings'). The latrines' leaders are caption-only, a class the ruling discharged. Every kind whose shape changed has a PASS on a drawing at or after its last change: the servants' quarters (owed and checked PASS), the cell (round two PASS at the landing key), and the retainers' quarters, granary and gatehouse (PASS at cef72b9db8d3, carried). Every other kind's marks are unchanged."
+    },
+    {
+     "id": "glyph-pass-carried",
+     "summary": "four glyph PASSes from cef72b9db8d3 carried to landing key 0e6a69cceff6",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "ask:glyph-pass-carried-cell-fix-449-T351 grants exactly this carry, bound to the 9bd9e35ca4..7e08b45d82 diff in which only fn cell, a test and the county's notes changed. The round trip's svg sha256 is unchanged, and nothing since reaches beyond fn cell."
+    },
+    {
+     "id": "building-reviews-carried",
+     "summary": "hayakawa, ochiba, ubame and the round trip keep their PASS at the new engine key",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "ask:reowed-reviews-unchanged-449-T351 binds each to its content key, and the block re-measured them as unchanged in the clone (l7r-gate reviews prereq content-key, 2026-11-23). The county's own review was run as owed and passed."
+    },
+    {
+     "id": "lander-carries-rulings",
+     "summary": "the push reads no arbiter accept on a glyph unit or a carried review, so the lander cites the rulings; T377 builds the route with the whole-legend fallback's fix",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This answers round one's condition: the route is named. ask:glyph-occasions-emit-449-T351 says the discharge is 'cited by its trigger id' at this landing, and that where the push has no route, 'that route is built with the fix and its test'. The fix is the whole-legend fallback, which T377 owns. Building the route with it is what the ruling orders, not a carve-out."
+    },
+    {
+     "id": "found-and-left",
+     "summary": "T369, T371-T373, T377, T380-T384, T386-T391 filed, each landing before T158",
+     "class": "within",
+     "why": "Each is outside this bundle's files (research pages, tooling, rows of types.json this bundle did not change), or is a nitpick or outside finding on a PASS sheet whose fix would re-owe its review. Taken separately, the county's two latrine leaders are this bundle's own change on a sheet that was NEEDS-WORK at the time, not a PASS sheet. They still stay within: the landing-key county building-review PASSed and raised nothing on the change, and the latrines' marks are discharged as caption-only, so no reader-visible wrong outcome is left. Premise not verifiable from the bundle: that T158 is the next step's port, which would make 'lands before T158' the GM's 'fix all known bugs in each step before moving on' (2026-11-18). The 0104 porch and 0113 back-row items are differences between a page's wording and a drawing, not defects in the drawing."
+    },
+    {
+     "id": "FR-003-attribution",
+     "summary": "the review prerequisite attributed to feature 240's FR-003; 14 verifying records and 31 review-accepts dispose its 45 findings",
+     "class": "within",
+     "why": "This answers round one's condition and decides nothing new."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T366": {
+   "section_sha256": "b5c61a5105169555af7cb160a3a01062f4bd33a45c6e6edb2f43ecdb9117ab05",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T366",
+     "summary": "cart_route's granary refusal points at an office-court flank column's head (0123's drawing page), pinned by a test",
+     "class": "within",
+     "why": "A refusal pointing at a seat 0123 rejects is a wrong outcome (XIV); fixing it is the GM's fix-as-we-go (2026-11-18)."
+    },
+    {
+     "id": "T354",
+     "summary": "hearing court mats keyed to the dais axis; the round trip's '102 ft' claim restated to the 94 ft drawn",
+     "class": "within",
+     "why": "The accused kneeling 8 ft off the magistrate contradicts 0099. Restating the 102 ft claim, not the code, is the GM's 2026-11-19 rule."
+    },
+    {
+     "id": "T359",
+     "summary": "an open-shed interior (hatched roof, six posts, no door) for the cinnabar workshop",
+     "class": "within",
+     "why": "The workshop drawn as a shrine with a door is a map that reads wrong; this is a defect fix."
+    },
+    {
+     "id": "T367",
+     "summary": "knob 4's second roll, armory end bay [west, east], taken only under the hall site; armory.rs claims restated to ask:armory-store-ubame route (a)'s reach, with the end bay given a claim of its own",
+     "class": "within",
+     "why": "Judged against the ruling's own why: (b) was refused because it put a nested 1-in-3 roll behind a GUESSED knob that turns one site into another, and (a) adds no new GUESS and no rule a source lacks. The end-bay roll turns no site into another. It chooses between two forms 0123 attests (Pingyao, Jiexiu, Zhenping) under the one site route (a) picks, and a knob of several attested forms is the project's rule. Every hall armory drawn on the west contradicts 0123's varied side, which is a defect. The ruling's 'what' already allows an armory to move under a later engine change as no reversal, provided its pop-up says what it draws, and the pop-up is confirmed to name no fixed end (hayakawa x 638-680 px, round trip 549-591 px, observed 2026-11-23)."
+    },
+    {
+     "id": "T368",
+     "summary": "types.json drops optional on magistrates_dais; a magistracy drawn without its dais is refused",
+     "class": "within",
+     "why": "A hall without a dais passing is a check that passes bad work, a defect under XIV."
+    },
+    {
+     "id": "T353-T356-T364",
+     "summary": "county: gatehouse flush west of the gate post, granary 50x26 under the residence, junior retainers' quarters, cell turned and joined",
+     "class": "within",
+     "why": "Each answers a wrong outcome a reader saw: the gatekeepers' lodge 40 ft from its gate, the tax store larger than the house, eleven samurai with no lodging, the cell at the main gate. The placements (the free run, the 12x24 dwelling, three men a dwelling, the cell's join) are labeled GUESS or SILENT where no page settles them. Room was measured before packing (the 47 ft run)."
+    },
+    {
+     "id": "T351-E1",
+     "summary": "four rowhouse dwellings of 12x24 ft; the servants' dwellings 15 -> 12 ft and the stables 12 ft west to make room",
+     "class": "within",
+     "why": "About 59 sq ft a man, below the barracks' 88, is a defect a review found. Eight options were measured on trial specs before drawing. The servants' 15 ft was a GUESS no page sizes, so changing it narrows nothing the GM or a page asked for."
+    },
+    {
+     "id": "T351-cell-lattice",
+     "summary": "emit.rs cell draws a bar beside a court-face door that holds none, pinned by a_cells_bars_show_beside_its_door",
+     "class": "within",
+     "why": "This carries out ask:cell-lattice-hidden-449-T351 (CONTINUE): the north door is kept, the fewest sheets change (the round trip's svg sha256 is unchanged), legibility is judged on the PNG and the fix is pinned by a test. The cell's round-two glyph-check PASS covers F1 and F2."
+    },
+    {
+     "id": "T355-T357-T351-T352-T363-T365",
+     "summary": "ochiba practice ground turned to the west wall; ubame's cart lane and parley path in one group; notes and docs claims brought to the drawing; the off-topic day-office paragraph cut; the writing-rooms Depiction restated for mirrored rows",
+     "class": "within",
+     "why": "Notes and claims untrue of the drawing are defects under XIV, and fixing them is fix-as-we-go."
+    },
+    {
+     "id": "glyph-discharge-remeasured",
+     "summary": "ask:glyph-occasions-emit-449-T351's discharge of 48 units restated to the landing drawing, re-measured per data-kind with data-id stripped",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This answers round one's condition. The ruling's own last clause governs: a kind whose marks change after it is 'owed again under the rule', and the rule owes a check for a new element, a redrawn glyph or a substantially changed placement rule. After 07:30Z only the county's spec (E1) and emit.rs fn cell changed (ask:glyph-pass-carried-cell-fix-449-T351's diff), so no placement rule changed. That makes the stables and wells, displaced with their shapes kept, class C by the ruling's own wording ('the same glyphs displaced'), though the ruling's named C list did not carry them. The fourth dwelling's door is class C ('doors and tubs following their buildings'). The latrines' leaders are caption-only, a class the ruling discharged. Every kind whose shape changed has a PASS on a drawing at or after its last change: the servants' quarters (owed and checked PASS), the cell (round two PASS at the landing key), and the retainers' quarters, granary and gatehouse (PASS at cef72b9db8d3, carried). Every other kind's marks are unchanged."
+    },
+    {
+     "id": "glyph-pass-carried",
+     "summary": "four glyph PASSes from cef72b9db8d3 carried to landing key 0e6a69cceff6",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "ask:glyph-pass-carried-cell-fix-449-T351 grants exactly this carry, bound to the 9bd9e35ca4..7e08b45d82 diff in which only fn cell, a test and the county's notes changed. The round trip's svg sha256 is unchanged, and nothing since reaches beyond fn cell."
+    },
+    {
+     "id": "building-reviews-carried",
+     "summary": "hayakawa, ochiba, ubame and the round trip keep their PASS at the new engine key",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "ask:reowed-reviews-unchanged-449-T351 binds each to its content key, and the block re-measured them as unchanged in the clone (l7r-gate reviews prereq content-key, 2026-11-23). The county's own review was run as owed and passed."
+    },
+    {
+     "id": "lander-carries-rulings",
+     "summary": "the push reads no arbiter accept on a glyph unit or a carried review, so the lander cites the rulings; T377 builds the route with the whole-legend fallback's fix",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This answers round one's condition: the route is named. ask:glyph-occasions-emit-449-T351 says the discharge is 'cited by its trigger id' at this landing, and that where the push has no route, 'that route is built with the fix and its test'. The fix is the whole-legend fallback, which T377 owns. Building the route with it is what the ruling orders, not a carve-out."
+    },
+    {
+     "id": "found-and-left",
+     "summary": "T369, T371-T373, T377, T380-T384, T386-T391 filed, each landing before T158",
+     "class": "within",
+     "why": "Each is outside this bundle's files (research pages, tooling, rows of types.json this bundle did not change), or is a nitpick or outside finding on a PASS sheet whose fix would re-owe its review. Taken separately, the county's two latrine leaders are this bundle's own change on a sheet that was NEEDS-WORK at the time, not a PASS sheet. They still stay within: the landing-key county building-review PASSed and raised nothing on the change, and the latrines' marks are discharged as caption-only, so no reader-visible wrong outcome is left. Premise not verifiable from the bundle: that T158 is the next step's port, which would make 'lands before T158' the GM's 'fix all known bugs in each step before moving on' (2026-11-18). The 0104 porch and 0113 back-row items are differences between a page's wording and a drawing, not defects in the drawing."
+    },
+    {
+     "id": "FR-003-attribution",
+     "summary": "the review prerequisite attributed to feature 240's FR-003; 14 verifying records and 31 review-accepts dispose its 45 findings",
+     "class": "within",
+     "why": "This answers round one's condition and decides nothing new."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T367": {
+   "section_sha256": "b5c61a5105169555af7cb160a3a01062f4bd33a45c6e6edb2f43ecdb9117ab05",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T366",
+     "summary": "cart_route's granary refusal points at an office-court flank column's head (0123's drawing page), pinned by a test",
+     "class": "within",
+     "why": "A refusal pointing at a seat 0123 rejects is a wrong outcome (XIV); fixing it is the GM's fix-as-we-go (2026-11-18)."
+    },
+    {
+     "id": "T354",
+     "summary": "hearing court mats keyed to the dais axis; the round trip's '102 ft' claim restated to the 94 ft drawn",
+     "class": "within",
+     "why": "The accused kneeling 8 ft off the magistrate contradicts 0099. Restating the 102 ft claim, not the code, is the GM's 2026-11-19 rule."
+    },
+    {
+     "id": "T359",
+     "summary": "an open-shed interior (hatched roof, six posts, no door) for the cinnabar workshop",
+     "class": "within",
+     "why": "The workshop drawn as a shrine with a door is a map that reads wrong; this is a defect fix."
+    },
+    {
+     "id": "T367",
+     "summary": "knob 4's second roll, armory end bay [west, east], taken only under the hall site; armory.rs claims restated to ask:armory-store-ubame route (a)'s reach, with the end bay given a claim of its own",
+     "class": "within",
+     "why": "Judged against the ruling's own why: (b) was refused because it put a nested 1-in-3 roll behind a GUESSED knob that turns one site into another, and (a) adds no new GUESS and no rule a source lacks. The end-bay roll turns no site into another. It chooses between two forms 0123 attests (Pingyao, Jiexiu, Zhenping) under the one site route (a) picks, and a knob of several attested forms is the project's rule. Every hall armory drawn on the west contradicts 0123's varied side, which is a defect. The ruling's 'what' already allows an armory to move under a later engine change as no reversal, provided its pop-up says what it draws, and the pop-up is confirmed to name no fixed end (hayakawa x 638-680 px, round trip 549-591 px, observed 2026-11-23)."
+    },
+    {
+     "id": "T368",
+     "summary": "types.json drops optional on magistrates_dais; a magistracy drawn without its dais is refused",
+     "class": "within",
+     "why": "A hall without a dais passing is a check that passes bad work, a defect under XIV."
+    },
+    {
+     "id": "T353-T356-T364",
+     "summary": "county: gatehouse flush west of the gate post, granary 50x26 under the residence, junior retainers' quarters, cell turned and joined",
+     "class": "within",
+     "why": "Each answers a wrong outcome a reader saw: the gatekeepers' lodge 40 ft from its gate, the tax store larger than the house, eleven samurai with no lodging, the cell at the main gate. The placements (the free run, the 12x24 dwelling, three men a dwelling, the cell's join) are labeled GUESS or SILENT where no page settles them. Room was measured before packing (the 47 ft run)."
+    },
+    {
+     "id": "T351-E1",
+     "summary": "four rowhouse dwellings of 12x24 ft; the servants' dwellings 15 -> 12 ft and the stables 12 ft west to make room",
+     "class": "within",
+     "why": "About 59 sq ft a man, below the barracks' 88, is a defect a review found. Eight options were measured on trial specs before drawing. The servants' 15 ft was a GUESS no page sizes, so changing it narrows nothing the GM or a page asked for."
+    },
+    {
+     "id": "T351-cell-lattice",
+     "summary": "emit.rs cell draws a bar beside a court-face door that holds none, pinned by a_cells_bars_show_beside_its_door",
+     "class": "within",
+     "why": "This carries out ask:cell-lattice-hidden-449-T351 (CONTINUE): the north door is kept, the fewest sheets change (the round trip's svg sha256 is unchanged), legibility is judged on the PNG and the fix is pinned by a test. The cell's round-two glyph-check PASS covers F1 and F2."
+    },
+    {
+     "id": "T355-T357-T351-T352-T363-T365",
+     "summary": "ochiba practice ground turned to the west wall; ubame's cart lane and parley path in one group; notes and docs claims brought to the drawing; the off-topic day-office paragraph cut; the writing-rooms Depiction restated for mirrored rows",
+     "class": "within",
+     "why": "Notes and claims untrue of the drawing are defects under XIV, and fixing them is fix-as-we-go."
+    },
+    {
+     "id": "glyph-discharge-remeasured",
+     "summary": "ask:glyph-occasions-emit-449-T351's discharge of 48 units restated to the landing drawing, re-measured per data-kind with data-id stripped",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This answers round one's condition. The ruling's own last clause governs: a kind whose marks change after it is 'owed again under the rule', and the rule owes a check for a new element, a redrawn glyph or a substantially changed placement rule. After 07:30Z only the county's spec (E1) and emit.rs fn cell changed (ask:glyph-pass-carried-cell-fix-449-T351's diff), so no placement rule changed. That makes the stables and wells, displaced with their shapes kept, class C by the ruling's own wording ('the same glyphs displaced'), though the ruling's named C list did not carry them. The fourth dwelling's door is class C ('doors and tubs following their buildings'). The latrines' leaders are caption-only, a class the ruling discharged. Every kind whose shape changed has a PASS on a drawing at or after its last change: the servants' quarters (owed and checked PASS), the cell (round two PASS at the landing key), and the retainers' quarters, granary and gatehouse (PASS at cef72b9db8d3, carried). Every other kind's marks are unchanged."
+    },
+    {
+     "id": "glyph-pass-carried",
+     "summary": "four glyph PASSes from cef72b9db8d3 carried to landing key 0e6a69cceff6",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "ask:glyph-pass-carried-cell-fix-449-T351 grants exactly this carry, bound to the 9bd9e35ca4..7e08b45d82 diff in which only fn cell, a test and the county's notes changed. The round trip's svg sha256 is unchanged, and nothing since reaches beyond fn cell."
+    },
+    {
+     "id": "building-reviews-carried",
+     "summary": "hayakawa, ochiba, ubame and the round trip keep their PASS at the new engine key",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "ask:reowed-reviews-unchanged-449-T351 binds each to its content key, and the block re-measured them as unchanged in the clone (l7r-gate reviews prereq content-key, 2026-11-23). The county's own review was run as owed and passed."
+    },
+    {
+     "id": "lander-carries-rulings",
+     "summary": "the push reads no arbiter accept on a glyph unit or a carried review, so the lander cites the rulings; T377 builds the route with the whole-legend fallback's fix",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This answers round one's condition: the route is named. ask:glyph-occasions-emit-449-T351 says the discharge is 'cited by its trigger id' at this landing, and that where the push has no route, 'that route is built with the fix and its test'. The fix is the whole-legend fallback, which T377 owns. Building the route with it is what the ruling orders, not a carve-out."
+    },
+    {
+     "id": "found-and-left",
+     "summary": "T369, T371-T373, T377, T380-T384, T386-T391 filed, each landing before T158",
+     "class": "within",
+     "why": "Each is outside this bundle's files (research pages, tooling, rows of types.json this bundle did not change), or is a nitpick or outside finding on a PASS sheet whose fix would re-owe its review. Taken separately, the county's two latrine leaders are this bundle's own change on a sheet that was NEEDS-WORK at the time, not a PASS sheet. They still stay within: the landing-key county building-review PASSed and raised nothing on the change, and the latrines' marks are discharged as caption-only, so no reader-visible wrong outcome is left. Premise not verifiable from the bundle: that T158 is the next step's port, which would make 'lands before T158' the GM's 'fix all known bugs in each step before moving on' (2026-11-18). The 0104 porch and 0113 back-row items are differences between a page's wording and a drawing, not defects in the drawing."
+    },
+    {
+     "id": "FR-003-attribution",
+     "summary": "the review prerequisite attributed to feature 240's FR-003; 14 verifying records and 31 review-accepts dispose its 45 findings",
+     "class": "within",
+     "why": "This answers round one's condition and decides nothing new."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T368": {
+   "section_sha256": "b5c61a5105169555af7cb160a3a01062f4bd33a45c6e6edb2f43ecdb9117ab05",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T366",
+     "summary": "cart_route's granary refusal points at an office-court flank column's head (0123's drawing page), pinned by a test",
+     "class": "within",
+     "why": "A refusal pointing at a seat 0123 rejects is a wrong outcome (XIV); fixing it is the GM's fix-as-we-go (2026-11-18)."
+    },
+    {
+     "id": "T354",
+     "summary": "hearing court mats keyed to the dais axis; the round trip's '102 ft' claim restated to the 94 ft drawn",
+     "class": "within",
+     "why": "The accused kneeling 8 ft off the magistrate contradicts 0099. Restating the 102 ft claim, not the code, is the GM's 2026-11-19 rule."
+    },
+    {
+     "id": "T359",
+     "summary": "an open-shed interior (hatched roof, six posts, no door) for the cinnabar workshop",
+     "class": "within",
+     "why": "The workshop drawn as a shrine with a door is a map that reads wrong; this is a defect fix."
+    },
+    {
+     "id": "T367",
+     "summary": "knob 4's second roll, armory end bay [west, east], taken only under the hall site; armory.rs claims restated to ask:armory-store-ubame route (a)'s reach, with the end bay given a claim of its own",
+     "class": "within",
+     "why": "Judged against the ruling's own why: (b) was refused because it put a nested 1-in-3 roll behind a GUESSED knob that turns one site into another, and (a) adds no new GUESS and no rule a source lacks. The end-bay roll turns no site into another. It chooses between two forms 0123 attests (Pingyao, Jiexiu, Zhenping) under the one site route (a) picks, and a knob of several attested forms is the project's rule. Every hall armory drawn on the west contradicts 0123's varied side, which is a defect. The ruling's 'what' already allows an armory to move under a later engine change as no reversal, provided its pop-up says what it draws, and the pop-up is confirmed to name no fixed end (hayakawa x 638-680 px, round trip 549-591 px, observed 2026-11-23)."
+    },
+    {
+     "id": "T368",
+     "summary": "types.json drops optional on magistrates_dais; a magistracy drawn without its dais is refused",
+     "class": "within",
+     "why": "A hall without a dais passing is a check that passes bad work, a defect under XIV."
+    },
+    {
+     "id": "T353-T356-T364",
+     "summary": "county: gatehouse flush west of the gate post, granary 50x26 under the residence, junior retainers' quarters, cell turned and joined",
+     "class": "within",
+     "why": "Each answers a wrong outcome a reader saw: the gatekeepers' lodge 40 ft from its gate, the tax store larger than the house, eleven samurai with no lodging, the cell at the main gate. The placements (the free run, the 12x24 dwelling, three men a dwelling, the cell's join) are labeled GUESS or SILENT where no page settles them. Room was measured before packing (the 47 ft run)."
+    },
+    {
+     "id": "T351-E1",
+     "summary": "four rowhouse dwellings of 12x24 ft; the servants' dwellings 15 -> 12 ft and the stables 12 ft west to make room",
+     "class": "within",
+     "why": "About 59 sq ft a man, below the barracks' 88, is a defect a review found. Eight options were measured on trial specs before drawing. The servants' 15 ft was a GUESS no page sizes, so changing it narrows nothing the GM or a page asked for."
+    },
+    {
+     "id": "T351-cell-lattice",
+     "summary": "emit.rs cell draws a bar beside a court-face door that holds none, pinned by a_cells_bars_show_beside_its_door",
+     "class": "within",
+     "why": "This carries out ask:cell-lattice-hidden-449-T351 (CONTINUE): the north door is kept, the fewest sheets change (the round trip's svg sha256 is unchanged), legibility is judged on the PNG and the fix is pinned by a test. The cell's round-two glyph-check PASS covers F1 and F2."
+    },
+    {
+     "id": "T355-T357-T351-T352-T363-T365",
+     "summary": "ochiba practice ground turned to the west wall; ubame's cart lane and parley path in one group; notes and docs claims brought to the drawing; the off-topic day-office paragraph cut; the writing-rooms Depiction restated for mirrored rows",
+     "class": "within",
+     "why": "Notes and claims untrue of the drawing are defects under XIV, and fixing them is fix-as-we-go."
+    },
+    {
+     "id": "glyph-discharge-remeasured",
+     "summary": "ask:glyph-occasions-emit-449-T351's discharge of 48 units restated to the landing drawing, re-measured per data-kind with data-id stripped",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This answers round one's condition. The ruling's own last clause governs: a kind whose marks change after it is 'owed again under the rule', and the rule owes a check for a new element, a redrawn glyph or a substantially changed placement rule. After 07:30Z only the county's spec (E1) and emit.rs fn cell changed (ask:glyph-pass-carried-cell-fix-449-T351's diff), so no placement rule changed. That makes the stables and wells, displaced with their shapes kept, class C by the ruling's own wording ('the same glyphs displaced'), though the ruling's named C list did not carry them. The fourth dwelling's door is class C ('doors and tubs following their buildings'). The latrines' leaders are caption-only, a class the ruling discharged. Every kind whose shape changed has a PASS on a drawing at or after its last change: the servants' quarters (owed and checked PASS), the cell (round two PASS at the landing key), and the retainers' quarters, granary and gatehouse (PASS at cef72b9db8d3, carried). Every other kind's marks are unchanged."
+    },
+    {
+     "id": "glyph-pass-carried",
+     "summary": "four glyph PASSes from cef72b9db8d3 carried to landing key 0e6a69cceff6",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "ask:glyph-pass-carried-cell-fix-449-T351 grants exactly this carry, bound to the 9bd9e35ca4..7e08b45d82 diff in which only fn cell, a test and the county's notes changed. The round trip's svg sha256 is unchanged, and nothing since reaches beyond fn cell."
+    },
+    {
+     "id": "building-reviews-carried",
+     "summary": "hayakawa, ochiba, ubame and the round trip keep their PASS at the new engine key",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "ask:reowed-reviews-unchanged-449-T351 binds each to its content key, and the block re-measured them as unchanged in the clone (l7r-gate reviews prereq content-key, 2026-11-23). The county's own review was run as owed and passed."
+    },
+    {
+     "id": "lander-carries-rulings",
+     "summary": "the push reads no arbiter accept on a glyph unit or a carried review, so the lander cites the rulings; T377 builds the route with the whole-legend fallback's fix",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "This answers round one's condition: the route is named. ask:glyph-occasions-emit-449-T351 says the discharge is 'cited by its trigger id' at this landing, and that where the push has no route, 'that route is built with the fix and its test'. The fix is the whole-legend fallback, which T377 owns. Building the route with it is what the ruling orders, not a carve-out."
+    },
+    {
+     "id": "found-and-left",
+     "summary": "T369, T371-T373, T377, T380-T384, T386-T391 filed, each landing before T158",
+     "class": "within",
+     "why": "Each is outside this bundle's files (research pages, tooling, rows of types.json this bundle did not change), or is a nitpick or outside finding on a PASS sheet whose fix would re-owe its review. Taken separately, the county's two latrine leaders are this bundle's own change on a sheet that was NEEDS-WORK at the time, not a PASS sheet. They still stay within: the landing-key county building-review PASSed and raised nothing on the change, and the latrines' marks are discharged as caption-only, so no reader-visible wrong outcome is left. Premise not verifiable from the bundle: that T158 is the next step's port, which would make 'lands before T158' the GM's 'fix all known bugs in each step before moving on' (2026-11-18). The 0104 porch and 0113 back-row items are differences between a page's wording and a drawing, not defects in the drawing."
+    },
+    {
+     "id": "FR-003-attribution",
+     "summary": "the review prerequisite attributed to feature 240's FR-003; 14 verifying records and 31 review-accepts dispose its 45 findings",
+     "class": "within",
+     "why": "This answers round one's condition and decides nothing new."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T358": {
+   "section_sha256": "68ab4fb4d130ee9720a512b93a28f4ea525f47242d0baae110c196c79e95fe12",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "approach-page-sessions",
+     "summary": "All six tasks are worked as record page-session pairs in briefs A-D, then the pop-up edits, the pop-up checks in order, the claims round, and one closing-checks run.",
+     "class": "within",
+     "why": "This is the method for doing the fixes the GM asked to have finished before the talk (2026-11-22, 'please finish the remaining fixes'). It drops nothing those tasks ask for."
+    },
+    {
+     "id": "T358-record-restated",
+     "summary": "The research pass (KEY t358-roka) is done. 0113's findings carry the household entrances, the Edo magistracies' corridors and the jin'ya corridors. Its drawing page labels the plans' lack of a corridor a GUESS bounded by the Edo magistracies, with an absence note.",
+     "class": "within",
+     "why": "This is what T358 as filed asks for, a research pass and the record restated to what it found. It follows constitution XIV: a reader who cannot tell the record's form from ours is fixed by labeling."
+    },
+    {
+     "id": "T358-redraw-filed-T375",
+     "summary": "The redraw of Ubame's and the round-trip plan's way through working rooms, and the ruling on Ochiba's, is filed as T375 and is not done here. It lands before T158, because the drawing files are the sheet bundle's live files (T351-T368).",
+     "class": "within",
+     "why": "The redraw was not in T358 as filed (research pass plus record restatement). It is a defect found by that pass, and it is filed with its visible effect named. It lands before T158 and so before the talk, which waits for every follow-up (GM 2026-11-22). It is routed to the work that owns the files, not left unfixed, so 'fix all known bugs in each step' (GM 2026-11-18) is honored."
+    },
+    {
+     "id": "T360-0106-restated",
+     "summary": "0106's drawing page is restated to the county example as drawn (22 by 60 ft long-house, the karo's north 24 ft, measured 2026-11-23 from compound.json and SVG text), with the gloss on the hand-drawn plans only.",
+     "class": "within",
+     "why": "This fixes a reader-visible wrong statement by restating the record to the drawing (constitution XIV, GM 2026-11-19). Nothing drawn changes."
+    },
+    {
+     "id": "T361-pages-and-T374",
+     "summary": "0091's grounds and the bare-earth court are labeled a GUESS, and 0082's cart gate is in the 5-8 ft band as a GUESS. 车御门 is shown to be an OCR misreading, and the docs/buildings.md Kochi clause that rests on it is filed as T374 (sheet bundle's live file, lands before T158). 0093 keeps the grievance drum as not drawn. The inner-court and main-gate pop-ups tell all this.",
+     "class": "within",
+     "why": "These are T361's found items, fixed in the record. The docs defect is filed with its visible effect to the task that owns the file, lands before T158 and is not dropped."
+    },
+    {
+     "id": "T362-gloss",
+     "summary": "The Koka shunju is glossed by glossary term 28340 and registry 37210.",
+     "class": "within",
+     "why": "This is the record-format finding as filed, fixed."
+    },
+    {
+     "id": "T369-T370-labels",
+     "summary": "0218's tree beside the shrine and 0190's second bounty board are each labeled a GUESS with their sources and absences. The DRIFTED building-programs.md claim is filed as T378 (sheet bundle's live file, lands before T158).",
+     "class": "within",
+     "why": "These are the impl-drift findings as filed, fixed by restating the record. The resulting claim drift is filed to the owner of the file with its effect named, and lands before the close."
+    },
+    {
+     "id": "left-side-gate-floor",
+     "summary": "The side-gate band's 5 ft floor, below 0082's 6 ft cart lane, is left because every drawn side gate is 6 ft or more (observed 2026-11-23 from the posts in all five sheets' SVG at 3 px/ft, checked against compound.json).",
+     "class": "within",
+     "why": "This is a difference and not a wrong outcome, measured. Constitution XIV / GM 2026-11-19: it is not a defect and needs no ruling."
+    },
+    {
+     "id": "left-0091-cap",
+     "summary": "0091 at 19,998 of 20,000 bytes is left, and the next edit splits it.",
+     "class": "within",
+     "why": "Not a wrong outcome: the page reads whole and passes question-sizes."
+    },
+    {
+     "id": "left-0113-unverified-gloss",
+     "summary": "0113's gloss on edo-ashigaru-bugyosho-2 is UNVERIFIED (the crop does not reach the residence) but not contradicted. It is left, and T375 re-reads the plan.",
+     "class": "within",
+     "why": "No finding is contradicted and nothing drawn rests on it, so it is not a defect under XIV. The re-read is carried by the filed redraw."
+    },
+    {
+     "id": "left-minor-record",
+     "summary": "Left: the comment on 0218's note fuchu-joge-pamphlet-6, sacred-tree's unrecorded rope, the unlinked 'Morse' in 0091, 0106's silence on Ochiba's small karo house, and the missing glossary term for sun.",
+     "class": "within",
+     "why": "Each is shown to change nothing a reader is told and to leave nothing false. These are differences, not defects (GM 2026-11-19)."
+    },
+    {
+     "id": "left-popup-look-T376",
+     "summary": "The garden-pond banks and the kitchen's walls, roof and door are open look questions, filed as T376 (each needs a research pass first, constitution XII). It lands before T158, and the pond-frequency bullet is aligned there.",
+     "class": "within",
+     "why": "The defect is filed with its visible effect, needs research before it can be fixed, lands before the close and the talk, and is not dropped."
+    },
+    {
+     "id": "glossary-li-fixed-T379-withdrawn",
+     "summary": "The glossary term li gets the senses the record uses (mile, ward of 110 households, 厘) and is cased. A Kang Pil-li term is added. T379 is withdrawn as done here. Observed 2026-11-23 with a whole-word census (459 lowercase, 147 capitalized hits read in context), and glossary and record built clean.",
+     "class": "within",
+     "why": "This fixes a wrong outcome found by this bundle's own checks (a distance tooltip on a household ward, and a mile on surnames), so the fix rides with the work that found it (GM 2026-11-18, fix as we go). It adds no behavior beyond the fix."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T360": {
+   "section_sha256": "68ab4fb4d130ee9720a512b93a28f4ea525f47242d0baae110c196c79e95fe12",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "approach-page-sessions",
+     "summary": "All six tasks are worked as record page-session pairs in briefs A-D, then the pop-up edits, the pop-up checks in order, the claims round, and one closing-checks run.",
+     "class": "within",
+     "why": "This is the method for doing the fixes the GM asked to have finished before the talk (2026-11-22, 'please finish the remaining fixes'). It drops nothing those tasks ask for."
+    },
+    {
+     "id": "T358-record-restated",
+     "summary": "The research pass (KEY t358-roka) is done. 0113's findings carry the household entrances, the Edo magistracies' corridors and the jin'ya corridors. Its drawing page labels the plans' lack of a corridor a GUESS bounded by the Edo magistracies, with an absence note.",
+     "class": "within",
+     "why": "This is what T358 as filed asks for, a research pass and the record restated to what it found. It follows constitution XIV: a reader who cannot tell the record's form from ours is fixed by labeling."
+    },
+    {
+     "id": "T358-redraw-filed-T375",
+     "summary": "The redraw of Ubame's and the round-trip plan's way through working rooms, and the ruling on Ochiba's, is filed as T375 and is not done here. It lands before T158, because the drawing files are the sheet bundle's live files (T351-T368).",
+     "class": "within",
+     "why": "The redraw was not in T358 as filed (research pass plus record restatement). It is a defect found by that pass, and it is filed with its visible effect named. It lands before T158 and so before the talk, which waits for every follow-up (GM 2026-11-22). It is routed to the work that owns the files, not left unfixed, so 'fix all known bugs in each step' (GM 2026-11-18) is honored."
+    },
+    {
+     "id": "T360-0106-restated",
+     "summary": "0106's drawing page is restated to the county example as drawn (22 by 60 ft long-house, the karo's north 24 ft, measured 2026-11-23 from compound.json and SVG text), with the gloss on the hand-drawn plans only.",
+     "class": "within",
+     "why": "This fixes a reader-visible wrong statement by restating the record to the drawing (constitution XIV, GM 2026-11-19). Nothing drawn changes."
+    },
+    {
+     "id": "T361-pages-and-T374",
+     "summary": "0091's grounds and the bare-earth court are labeled a GUESS, and 0082's cart gate is in the 5-8 ft band as a GUESS. 车御门 is shown to be an OCR misreading, and the docs/buildings.md Kochi clause that rests on it is filed as T374 (sheet bundle's live file, lands before T158). 0093 keeps the grievance drum as not drawn. The inner-court and main-gate pop-ups tell all this.",
+     "class": "within",
+     "why": "These are T361's found items, fixed in the record. The docs defect is filed with its visible effect to the task that owns the file, lands before T158 and is not dropped."
+    },
+    {
+     "id": "T362-gloss",
+     "summary": "The Koka shunju is glossed by glossary term 28340 and registry 37210.",
+     "class": "within",
+     "why": "This is the record-format finding as filed, fixed."
+    },
+    {
+     "id": "T369-T370-labels",
+     "summary": "0218's tree beside the shrine and 0190's second bounty board are each labeled a GUESS with their sources and absences. The DRIFTED building-programs.md claim is filed as T378 (sheet bundle's live file, lands before T158).",
+     "class": "within",
+     "why": "These are the impl-drift findings as filed, fixed by restating the record. The resulting claim drift is filed to the owner of the file with its effect named, and lands before the close."
+    },
+    {
+     "id": "left-side-gate-floor",
+     "summary": "The side-gate band's 5 ft floor, below 0082's 6 ft cart lane, is left because every drawn side gate is 6 ft or more (observed 2026-11-23 from the posts in all five sheets' SVG at 3 px/ft, checked against compound.json).",
+     "class": "within",
+     "why": "This is a difference and not a wrong outcome, measured. Constitution XIV / GM 2026-11-19: it is not a defect and needs no ruling."
+    },
+    {
+     "id": "left-0091-cap",
+     "summary": "0091 at 19,998 of 20,000 bytes is left, and the next edit splits it.",
+     "class": "within",
+     "why": "Not a wrong outcome: the page reads whole and passes question-sizes."
+    },
+    {
+     "id": "left-0113-unverified-gloss",
+     "summary": "0113's gloss on edo-ashigaru-bugyosho-2 is UNVERIFIED (the crop does not reach the residence) but not contradicted. It is left, and T375 re-reads the plan.",
+     "class": "within",
+     "why": "No finding is contradicted and nothing drawn rests on it, so it is not a defect under XIV. The re-read is carried by the filed redraw."
+    },
+    {
+     "id": "left-minor-record",
+     "summary": "Left: the comment on 0218's note fuchu-joge-pamphlet-6, sacred-tree's unrecorded rope, the unlinked 'Morse' in 0091, 0106's silence on Ochiba's small karo house, and the missing glossary term for sun.",
+     "class": "within",
+     "why": "Each is shown to change nothing a reader is told and to leave nothing false. These are differences, not defects (GM 2026-11-19)."
+    },
+    {
+     "id": "left-popup-look-T376",
+     "summary": "The garden-pond banks and the kitchen's walls, roof and door are open look questions, filed as T376 (each needs a research pass first, constitution XII). It lands before T158, and the pond-frequency bullet is aligned there.",
+     "class": "within",
+     "why": "The defect is filed with its visible effect, needs research before it can be fixed, lands before the close and the talk, and is not dropped."
+    },
+    {
+     "id": "glossary-li-fixed-T379-withdrawn",
+     "summary": "The glossary term li gets the senses the record uses (mile, ward of 110 households, 厘) and is cased. A Kang Pil-li term is added. T379 is withdrawn as done here. Observed 2026-11-23 with a whole-word census (459 lowercase, 147 capitalized hits read in context), and glossary and record built clean.",
+     "class": "within",
+     "why": "This fixes a wrong outcome found by this bundle's own checks (a distance tooltip on a household ward, and a mile on surnames), so the fix rides with the work that found it (GM 2026-11-18, fix as we go). It adds no behavior beyond the fix."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T361": {
+   "section_sha256": "68ab4fb4d130ee9720a512b93a28f4ea525f47242d0baae110c196c79e95fe12",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "approach-page-sessions",
+     "summary": "All six tasks are worked as record page-session pairs in briefs A-D, then the pop-up edits, the pop-up checks in order, the claims round, and one closing-checks run.",
+     "class": "within",
+     "why": "This is the method for doing the fixes the GM asked to have finished before the talk (2026-11-22, 'please finish the remaining fixes'). It drops nothing those tasks ask for."
+    },
+    {
+     "id": "T358-record-restated",
+     "summary": "The research pass (KEY t358-roka) is done. 0113's findings carry the household entrances, the Edo magistracies' corridors and the jin'ya corridors. Its drawing page labels the plans' lack of a corridor a GUESS bounded by the Edo magistracies, with an absence note.",
+     "class": "within",
+     "why": "This is what T358 as filed asks for, a research pass and the record restated to what it found. It follows constitution XIV: a reader who cannot tell the record's form from ours is fixed by labeling."
+    },
+    {
+     "id": "T358-redraw-filed-T375",
+     "summary": "The redraw of Ubame's and the round-trip plan's way through working rooms, and the ruling on Ochiba's, is filed as T375 and is not done here. It lands before T158, because the drawing files are the sheet bundle's live files (T351-T368).",
+     "class": "within",
+     "why": "The redraw was not in T358 as filed (research pass plus record restatement). It is a defect found by that pass, and it is filed with its visible effect named. It lands before T158 and so before the talk, which waits for every follow-up (GM 2026-11-22). It is routed to the work that owns the files, not left unfixed, so 'fix all known bugs in each step' (GM 2026-11-18) is honored."
+    },
+    {
+     "id": "T360-0106-restated",
+     "summary": "0106's drawing page is restated to the county example as drawn (22 by 60 ft long-house, the karo's north 24 ft, measured 2026-11-23 from compound.json and SVG text), with the gloss on the hand-drawn plans only.",
+     "class": "within",
+     "why": "This fixes a reader-visible wrong statement by restating the record to the drawing (constitution XIV, GM 2026-11-19). Nothing drawn changes."
+    },
+    {
+     "id": "T361-pages-and-T374",
+     "summary": "0091's grounds and the bare-earth court are labeled a GUESS, and 0082's cart gate is in the 5-8 ft band as a GUESS. 车御门 is shown to be an OCR misreading, and the docs/buildings.md Kochi clause that rests on it is filed as T374 (sheet bundle's live file, lands before T158). 0093 keeps the grievance drum as not drawn. The inner-court and main-gate pop-ups tell all this.",
+     "class": "within",
+     "why": "These are T361's found items, fixed in the record. The docs defect is filed with its visible effect to the task that owns the file, lands before T158 and is not dropped."
+    },
+    {
+     "id": "T362-gloss",
+     "summary": "The Koka shunju is glossed by glossary term 28340 and registry 37210.",
+     "class": "within",
+     "why": "This is the record-format finding as filed, fixed."
+    },
+    {
+     "id": "T369-T370-labels",
+     "summary": "0218's tree beside the shrine and 0190's second bounty board are each labeled a GUESS with their sources and absences. The DRIFTED building-programs.md claim is filed as T378 (sheet bundle's live file, lands before T158).",
+     "class": "within",
+     "why": "These are the impl-drift findings as filed, fixed by restating the record. The resulting claim drift is filed to the owner of the file with its effect named, and lands before the close."
+    },
+    {
+     "id": "left-side-gate-floor",
+     "summary": "The side-gate band's 5 ft floor, below 0082's 6 ft cart lane, is left because every drawn side gate is 6 ft or more (observed 2026-11-23 from the posts in all five sheets' SVG at 3 px/ft, checked against compound.json).",
+     "class": "within",
+     "why": "This is a difference and not a wrong outcome, measured. Constitution XIV / GM 2026-11-19: it is not a defect and needs no ruling."
+    },
+    {
+     "id": "left-0091-cap",
+     "summary": "0091 at 19,998 of 20,000 bytes is left, and the next edit splits it.",
+     "class": "within",
+     "why": "Not a wrong outcome: the page reads whole and passes question-sizes."
+    },
+    {
+     "id": "left-0113-unverified-gloss",
+     "summary": "0113's gloss on edo-ashigaru-bugyosho-2 is UNVERIFIED (the crop does not reach the residence) but not contradicted. It is left, and T375 re-reads the plan.",
+     "class": "within",
+     "why": "No finding is contradicted and nothing drawn rests on it, so it is not a defect under XIV. The re-read is carried by the filed redraw."
+    },
+    {
+     "id": "left-minor-record",
+     "summary": "Left: the comment on 0218's note fuchu-joge-pamphlet-6, sacred-tree's unrecorded rope, the unlinked 'Morse' in 0091, 0106's silence on Ochiba's small karo house, and the missing glossary term for sun.",
+     "class": "within",
+     "why": "Each is shown to change nothing a reader is told and to leave nothing false. These are differences, not defects (GM 2026-11-19)."
+    },
+    {
+     "id": "left-popup-look-T376",
+     "summary": "The garden-pond banks and the kitchen's walls, roof and door are open look questions, filed as T376 (each needs a research pass first, constitution XII). It lands before T158, and the pond-frequency bullet is aligned there.",
+     "class": "within",
+     "why": "The defect is filed with its visible effect, needs research before it can be fixed, lands before the close and the talk, and is not dropped."
+    },
+    {
+     "id": "glossary-li-fixed-T379-withdrawn",
+     "summary": "The glossary term li gets the senses the record uses (mile, ward of 110 households, 厘) and is cased. A Kang Pil-li term is added. T379 is withdrawn as done here. Observed 2026-11-23 with a whole-word census (459 lowercase, 147 capitalized hits read in context), and glossary and record built clean.",
+     "class": "within",
+     "why": "This fixes a wrong outcome found by this bundle's own checks (a distance tooltip on a household ward, and a mile on surnames), so the fix rides with the work that found it (GM 2026-11-18, fix as we go). It adds no behavior beyond the fix."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T362": {
+   "section_sha256": "68ab4fb4d130ee9720a512b93a28f4ea525f47242d0baae110c196c79e95fe12",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "approach-page-sessions",
+     "summary": "All six tasks are worked as record page-session pairs in briefs A-D, then the pop-up edits, the pop-up checks in order, the claims round, and one closing-checks run.",
+     "class": "within",
+     "why": "This is the method for doing the fixes the GM asked to have finished before the talk (2026-11-22, 'please finish the remaining fixes'). It drops nothing those tasks ask for."
+    },
+    {
+     "id": "T358-record-restated",
+     "summary": "The research pass (KEY t358-roka) is done. 0113's findings carry the household entrances, the Edo magistracies' corridors and the jin'ya corridors. Its drawing page labels the plans' lack of a corridor a GUESS bounded by the Edo magistracies, with an absence note.",
+     "class": "within",
+     "why": "This is what T358 as filed asks for, a research pass and the record restated to what it found. It follows constitution XIV: a reader who cannot tell the record's form from ours is fixed by labeling."
+    },
+    {
+     "id": "T358-redraw-filed-T375",
+     "summary": "The redraw of Ubame's and the round-trip plan's way through working rooms, and the ruling on Ochiba's, is filed as T375 and is not done here. It lands before T158, because the drawing files are the sheet bundle's live files (T351-T368).",
+     "class": "within",
+     "why": "The redraw was not in T358 as filed (research pass plus record restatement). It is a defect found by that pass, and it is filed with its visible effect named. It lands before T158 and so before the talk, which waits for every follow-up (GM 2026-11-22). It is routed to the work that owns the files, not left unfixed, so 'fix all known bugs in each step' (GM 2026-11-18) is honored."
+    },
+    {
+     "id": "T360-0106-restated",
+     "summary": "0106's drawing page is restated to the county example as drawn (22 by 60 ft long-house, the karo's north 24 ft, measured 2026-11-23 from compound.json and SVG text), with the gloss on the hand-drawn plans only.",
+     "class": "within",
+     "why": "This fixes a reader-visible wrong statement by restating the record to the drawing (constitution XIV, GM 2026-11-19). Nothing drawn changes."
+    },
+    {
+     "id": "T361-pages-and-T374",
+     "summary": "0091's grounds and the bare-earth court are labeled a GUESS, and 0082's cart gate is in the 5-8 ft band as a GUESS. 车御门 is shown to be an OCR misreading, and the docs/buildings.md Kochi clause that rests on it is filed as T374 (sheet bundle's live file, lands before T158). 0093 keeps the grievance drum as not drawn. The inner-court and main-gate pop-ups tell all this.",
+     "class": "within",
+     "why": "These are T361's found items, fixed in the record. The docs defect is filed with its visible effect to the task that owns the file, lands before T158 and is not dropped."
+    },
+    {
+     "id": "T362-gloss",
+     "summary": "The Koka shunju is glossed by glossary term 28340 and registry 37210.",
+     "class": "within",
+     "why": "This is the record-format finding as filed, fixed."
+    },
+    {
+     "id": "T369-T370-labels",
+     "summary": "0218's tree beside the shrine and 0190's second bounty board are each labeled a GUESS with their sources and absences. The DRIFTED building-programs.md claim is filed as T378 (sheet bundle's live file, lands before T158).",
+     "class": "within",
+     "why": "These are the impl-drift findings as filed, fixed by restating the record. The resulting claim drift is filed to the owner of the file with its effect named, and lands before the close."
+    },
+    {
+     "id": "left-side-gate-floor",
+     "summary": "The side-gate band's 5 ft floor, below 0082's 6 ft cart lane, is left because every drawn side gate is 6 ft or more (observed 2026-11-23 from the posts in all five sheets' SVG at 3 px/ft, checked against compound.json).",
+     "class": "within",
+     "why": "This is a difference and not a wrong outcome, measured. Constitution XIV / GM 2026-11-19: it is not a defect and needs no ruling."
+    },
+    {
+     "id": "left-0091-cap",
+     "summary": "0091 at 19,998 of 20,000 bytes is left, and the next edit splits it.",
+     "class": "within",
+     "why": "Not a wrong outcome: the page reads whole and passes question-sizes."
+    },
+    {
+     "id": "left-0113-unverified-gloss",
+     "summary": "0113's gloss on edo-ashigaru-bugyosho-2 is UNVERIFIED (the crop does not reach the residence) but not contradicted. It is left, and T375 re-reads the plan.",
+     "class": "within",
+     "why": "No finding is contradicted and nothing drawn rests on it, so it is not a defect under XIV. The re-read is carried by the filed redraw."
+    },
+    {
+     "id": "left-minor-record",
+     "summary": "Left: the comment on 0218's note fuchu-joge-pamphlet-6, sacred-tree's unrecorded rope, the unlinked 'Morse' in 0091, 0106's silence on Ochiba's small karo house, and the missing glossary term for sun.",
+     "class": "within",
+     "why": "Each is shown to change nothing a reader is told and to leave nothing false. These are differences, not defects (GM 2026-11-19)."
+    },
+    {
+     "id": "left-popup-look-T376",
+     "summary": "The garden-pond banks and the kitchen's walls, roof and door are open look questions, filed as T376 (each needs a research pass first, constitution XII). It lands before T158, and the pond-frequency bullet is aligned there.",
+     "class": "within",
+     "why": "The defect is filed with its visible effect, needs research before it can be fixed, lands before the close and the talk, and is not dropped."
+    },
+    {
+     "id": "glossary-li-fixed-T379-withdrawn",
+     "summary": "The glossary term li gets the senses the record uses (mile, ward of 110 households, 厘) and is cased. A Kang Pil-li term is added. T379 is withdrawn as done here. Observed 2026-11-23 with a whole-word census (459 lowercase, 147 capitalized hits read in context), and glossary and record built clean.",
+     "class": "within",
+     "why": "This fixes a wrong outcome found by this bundle's own checks (a distance tooltip on a household ward, and a mile on surnames), so the fix rides with the work that found it (GM 2026-11-18, fix as we go). It adds no behavior beyond the fix."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T369": {
+   "section_sha256": "68ab4fb4d130ee9720a512b93a28f4ea525f47242d0baae110c196c79e95fe12",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "approach-page-sessions",
+     "summary": "All six tasks are worked as record page-session pairs in briefs A-D, then the pop-up edits, the pop-up checks in order, the claims round, and one closing-checks run.",
+     "class": "within",
+     "why": "This is the method for doing the fixes the GM asked to have finished before the talk (2026-11-22, 'please finish the remaining fixes'). It drops nothing those tasks ask for."
+    },
+    {
+     "id": "T358-record-restated",
+     "summary": "The research pass (KEY t358-roka) is done. 0113's findings carry the household entrances, the Edo magistracies' corridors and the jin'ya corridors. Its drawing page labels the plans' lack of a corridor a GUESS bounded by the Edo magistracies, with an absence note.",
+     "class": "within",
+     "why": "This is what T358 as filed asks for, a research pass and the record restated to what it found. It follows constitution XIV: a reader who cannot tell the record's form from ours is fixed by labeling."
+    },
+    {
+     "id": "T358-redraw-filed-T375",
+     "summary": "The redraw of Ubame's and the round-trip plan's way through working rooms, and the ruling on Ochiba's, is filed as T375 and is not done here. It lands before T158, because the drawing files are the sheet bundle's live files (T351-T368).",
+     "class": "within",
+     "why": "The redraw was not in T358 as filed (research pass plus record restatement). It is a defect found by that pass, and it is filed with its visible effect named. It lands before T158 and so before the talk, which waits for every follow-up (GM 2026-11-22). It is routed to the work that owns the files, not left unfixed, so 'fix all known bugs in each step' (GM 2026-11-18) is honored."
+    },
+    {
+     "id": "T360-0106-restated",
+     "summary": "0106's drawing page is restated to the county example as drawn (22 by 60 ft long-house, the karo's north 24 ft, measured 2026-11-23 from compound.json and SVG text), with the gloss on the hand-drawn plans only.",
+     "class": "within",
+     "why": "This fixes a reader-visible wrong statement by restating the record to the drawing (constitution XIV, GM 2026-11-19). Nothing drawn changes."
+    },
+    {
+     "id": "T361-pages-and-T374",
+     "summary": "0091's grounds and the bare-earth court are labeled a GUESS, and 0082's cart gate is in the 5-8 ft band as a GUESS. 车御门 is shown to be an OCR misreading, and the docs/buildings.md Kochi clause that rests on it is filed as T374 (sheet bundle's live file, lands before T158). 0093 keeps the grievance drum as not drawn. The inner-court and main-gate pop-ups tell all this.",
+     "class": "within",
+     "why": "These are T361's found items, fixed in the record. The docs defect is filed with its visible effect to the task that owns the file, lands before T158 and is not dropped."
+    },
+    {
+     "id": "T362-gloss",
+     "summary": "The Koka shunju is glossed by glossary term 28340 and registry 37210.",
+     "class": "within",
+     "why": "This is the record-format finding as filed, fixed."
+    },
+    {
+     "id": "T369-T370-labels",
+     "summary": "0218's tree beside the shrine and 0190's second bounty board are each labeled a GUESS with their sources and absences. The DRIFTED building-programs.md claim is filed as T378 (sheet bundle's live file, lands before T158).",
+     "class": "within",
+     "why": "These are the impl-drift findings as filed, fixed by restating the record. The resulting claim drift is filed to the owner of the file with its effect named, and lands before the close."
+    },
+    {
+     "id": "left-side-gate-floor",
+     "summary": "The side-gate band's 5 ft floor, below 0082's 6 ft cart lane, is left because every drawn side gate is 6 ft or more (observed 2026-11-23 from the posts in all five sheets' SVG at 3 px/ft, checked against compound.json).",
+     "class": "within",
+     "why": "This is a difference and not a wrong outcome, measured. Constitution XIV / GM 2026-11-19: it is not a defect and needs no ruling."
+    },
+    {
+     "id": "left-0091-cap",
+     "summary": "0091 at 19,998 of 20,000 bytes is left, and the next edit splits it.",
+     "class": "within",
+     "why": "Not a wrong outcome: the page reads whole and passes question-sizes."
+    },
+    {
+     "id": "left-0113-unverified-gloss",
+     "summary": "0113's gloss on edo-ashigaru-bugyosho-2 is UNVERIFIED (the crop does not reach the residence) but not contradicted. It is left, and T375 re-reads the plan.",
+     "class": "within",
+     "why": "No finding is contradicted and nothing drawn rests on it, so it is not a defect under XIV. The re-read is carried by the filed redraw."
+    },
+    {
+     "id": "left-minor-record",
+     "summary": "Left: the comment on 0218's note fuchu-joge-pamphlet-6, sacred-tree's unrecorded rope, the unlinked 'Morse' in 0091, 0106's silence on Ochiba's small karo house, and the missing glossary term for sun.",
+     "class": "within",
+     "why": "Each is shown to change nothing a reader is told and to leave nothing false. These are differences, not defects (GM 2026-11-19)."
+    },
+    {
+     "id": "left-popup-look-T376",
+     "summary": "The garden-pond banks and the kitchen's walls, roof and door are open look questions, filed as T376 (each needs a research pass first, constitution XII). It lands before T158, and the pond-frequency bullet is aligned there.",
+     "class": "within",
+     "why": "The defect is filed with its visible effect, needs research before it can be fixed, lands before the close and the talk, and is not dropped."
+    },
+    {
+     "id": "glossary-li-fixed-T379-withdrawn",
+     "summary": "The glossary term li gets the senses the record uses (mile, ward of 110 households, 厘) and is cased. A Kang Pil-li term is added. T379 is withdrawn as done here. Observed 2026-11-23 with a whole-word census (459 lowercase, 147 capitalized hits read in context), and glossary and record built clean.",
+     "class": "within",
+     "why": "This fixes a wrong outcome found by this bundle's own checks (a distance tooltip on a household ward, and a mile on surnames), so the fix rides with the work that found it (GM 2026-11-18, fix as we go). It adds no behavior beyond the fix."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T370": {
+   "section_sha256": "68ab4fb4d130ee9720a512b93a28f4ea525f47242d0baae110c196c79e95fe12",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "approach-page-sessions",
+     "summary": "All six tasks are worked as record page-session pairs in briefs A-D, then the pop-up edits, the pop-up checks in order, the claims round, and one closing-checks run.",
+     "class": "within",
+     "why": "This is the method for doing the fixes the GM asked to have finished before the talk (2026-11-22, 'please finish the remaining fixes'). It drops nothing those tasks ask for."
+    },
+    {
+     "id": "T358-record-restated",
+     "summary": "The research pass (KEY t358-roka) is done. 0113's findings carry the household entrances, the Edo magistracies' corridors and the jin'ya corridors. Its drawing page labels the plans' lack of a corridor a GUESS bounded by the Edo magistracies, with an absence note.",
+     "class": "within",
+     "why": "This is what T358 as filed asks for, a research pass and the record restated to what it found. It follows constitution XIV: a reader who cannot tell the record's form from ours is fixed by labeling."
+    },
+    {
+     "id": "T358-redraw-filed-T375",
+     "summary": "The redraw of Ubame's and the round-trip plan's way through working rooms, and the ruling on Ochiba's, is filed as T375 and is not done here. It lands before T158, because the drawing files are the sheet bundle's live files (T351-T368).",
+     "class": "within",
+     "why": "The redraw was not in T358 as filed (research pass plus record restatement). It is a defect found by that pass, and it is filed with its visible effect named. It lands before T158 and so before the talk, which waits for every follow-up (GM 2026-11-22). It is routed to the work that owns the files, not left unfixed, so 'fix all known bugs in each step' (GM 2026-11-18) is honored."
+    },
+    {
+     "id": "T360-0106-restated",
+     "summary": "0106's drawing page is restated to the county example as drawn (22 by 60 ft long-house, the karo's north 24 ft, measured 2026-11-23 from compound.json and SVG text), with the gloss on the hand-drawn plans only.",
+     "class": "within",
+     "why": "This fixes a reader-visible wrong statement by restating the record to the drawing (constitution XIV, GM 2026-11-19). Nothing drawn changes."
+    },
+    {
+     "id": "T361-pages-and-T374",
+     "summary": "0091's grounds and the bare-earth court are labeled a GUESS, and 0082's cart gate is in the 5-8 ft band as a GUESS. 车御门 is shown to be an OCR misreading, and the docs/buildings.md Kochi clause that rests on it is filed as T374 (sheet bundle's live file, lands before T158). 0093 keeps the grievance drum as not drawn. The inner-court and main-gate pop-ups tell all this.",
+     "class": "within",
+     "why": "These are T361's found items, fixed in the record. The docs defect is filed with its visible effect to the task that owns the file, lands before T158 and is not dropped."
+    },
+    {
+     "id": "T362-gloss",
+     "summary": "The Koka shunju is glossed by glossary term 28340 and registry 37210.",
+     "class": "within",
+     "why": "This is the record-format finding as filed, fixed."
+    },
+    {
+     "id": "T369-T370-labels",
+     "summary": "0218's tree beside the shrine and 0190's second bounty board are each labeled a GUESS with their sources and absences. The DRIFTED building-programs.md claim is filed as T378 (sheet bundle's live file, lands before T158).",
+     "class": "within",
+     "why": "These are the impl-drift findings as filed, fixed by restating the record. The resulting claim drift is filed to the owner of the file with its effect named, and lands before the close."
+    },
+    {
+     "id": "left-side-gate-floor",
+     "summary": "The side-gate band's 5 ft floor, below 0082's 6 ft cart lane, is left because every drawn side gate is 6 ft or more (observed 2026-11-23 from the posts in all five sheets' SVG at 3 px/ft, checked against compound.json).",
+     "class": "within",
+     "why": "This is a difference and not a wrong outcome, measured. Constitution XIV / GM 2026-11-19: it is not a defect and needs no ruling."
+    },
+    {
+     "id": "left-0091-cap",
+     "summary": "0091 at 19,998 of 20,000 bytes is left, and the next edit splits it.",
+     "class": "within",
+     "why": "Not a wrong outcome: the page reads whole and passes question-sizes."
+    },
+    {
+     "id": "left-0113-unverified-gloss",
+     "summary": "0113's gloss on edo-ashigaru-bugyosho-2 is UNVERIFIED (the crop does not reach the residence) but not contradicted. It is left, and T375 re-reads the plan.",
+     "class": "within",
+     "why": "No finding is contradicted and nothing drawn rests on it, so it is not a defect under XIV. The re-read is carried by the filed redraw."
+    },
+    {
+     "id": "left-minor-record",
+     "summary": "Left: the comment on 0218's note fuchu-joge-pamphlet-6, sacred-tree's unrecorded rope, the unlinked 'Morse' in 0091, 0106's silence on Ochiba's small karo house, and the missing glossary term for sun.",
+     "class": "within",
+     "why": "Each is shown to change nothing a reader is told and to leave nothing false. These are differences, not defects (GM 2026-11-19)."
+    },
+    {
+     "id": "left-popup-look-T376",
+     "summary": "The garden-pond banks and the kitchen's walls, roof and door are open look questions, filed as T376 (each needs a research pass first, constitution XII). It lands before T158, and the pond-frequency bullet is aligned there.",
+     "class": "within",
+     "why": "The defect is filed with its visible effect, needs research before it can be fixed, lands before the close and the talk, and is not dropped."
+    },
+    {
+     "id": "glossary-li-fixed-T379-withdrawn",
+     "summary": "The glossary term li gets the senses the record uses (mile, ward of 110 households, 厘) and is cased. A Kang Pil-li term is added. T379 is withdrawn as done here. Observed 2026-11-23 with a whole-word census (459 lowercase, 147 capitalized hits read in context), and glossary and record built clean.",
+     "class": "within",
+     "why": "This fixes a wrong outcome found by this bundle's own checks (a distance tooltip on a household ward, and a mile on surnames), so the fix rides with the work that found it (GM 2026-11-18, fix as we go). It adds no behavior beyond the fix."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T379": {
+   "section_sha256": "bf2ff43d18246587a7c6b6519b253f44cff76961766dc650189e8fcfab620681",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T379-withdrawn",
+     "summary": "T379 takes no approach of its own and is withdrawn as fixed in the T358 bundle, landing with it",
+     "class": "within",
+     "why": "The finding (a reader hovering li in 0093's notes told only a mile) is fixed, not left: the fix is carried by another task's landing. Folding a fix into the bundle that already carries it removes nothing the GM asked for; the 2026-11-22 'finish the remaining fixes' and 2026-11-18 'fix all known bugs' are honored. The red exit (record what failed, rule a cannot-be-done claim through make arbiter-ask) keeps it from being quietly dropped."
+    },
+    {
+     "id": "T379-fix",
+     "summary": "3760-li.json's definition gives the three senses the record uses (the ward of 110 households, the li of distance, the li of silver) and the term is cased; Kang Pil-li gets its own term file so the name's li does not resolve to the glossary li",
+     "class": "within",
+     "why": "A wrong outcome a reader would see (a ward glossed as a mile) fixed from the record's own text per the research glossary rule; the second file is the direct means of not mis-glossing a personal name. No scope beyond the defect."
+    },
+    {
+     "id": "T379-done",
+     "summary": "Done measured by the built glossary.js carrying the definition and cased flag, make record-owed and make claims-owed owing nothing new, and a dated whole-word search for li over fragments, notes, registry and pop-ups",
+     "class": "within",
+     "why": "Verification that the requested fix happened and broke nothing; enforcement of the fix, not unrequested scope. Figures are dated one-shot observations (2026-11-23) with their method."
     }
    ],
    "verdict": "CLEAR"

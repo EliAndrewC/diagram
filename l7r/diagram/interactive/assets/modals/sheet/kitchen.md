@@ -18,7 +18,7 @@ Guesses:
 - A second outside door, or a way of its own to carry food to the rooms, wherever a plan draws one: no source shows either.
 - The kitchen's size on the plan: one kitchen is measured, by one of two measures that disagree.
 - That the kitchen and its service ground stand to the side and rear of the house, away from the gate: the kitchen is
-  recorded within the house, to its side, but no source names a kitchen yard or the side of the lot it took, and at one middle-rank retainer's house, at Shiroishi, the gate leads along the wall straight to the kitchen entrance.
+  recorded within the house, to its side, and a secondhand summary of one book counts a kitchen yard among the four kinds of Kanazawa's samurai gardens, but no source says which side of the lot it took, and at one middle-rank retainer's house, at Shiroishi, the gate leads along the wall straight to the kitchen entrance.
 
 Depiction: A residence's plan draws the kitchen board-floored, cooking on a kamado that stands either on a small doma at the
 kitchen's edge or, on legs, on the boards - each plan takes one - and never on a sunken hearth. Its door opens into the work space of

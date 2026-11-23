@@ -49,8 +49,8 @@ knobs re-rolled from the seed by the generator and held to the forms recorded he
   (Pass 5 wrote "~2,400 sq ft" for a house of 1,980 + 480 + 120 = 2,580 sq ft, ~72 tsubo; pass 4 drew ~4,700.) The
   residence kind entry's "about 180 to 200 ft" was corrected at its source (`interactive/compound_kinds/household.py`)
   and docs/buildings.md's scale doctrine no longer calls those wings validated. The mass the house gave up went to the
-  lodgings, stores and office (as drawn since feature 374 wave 128: the office hall 113 x 38 (127 x 38 since feature 449 T265's armory bay, 118.5 x 38 since T336 stacked the writing and binding rooms in one 20 ft bay), the tax archive 18 x 24 (its size research 0100's records-store ceiling since feature 372 wave 105, its proportions a GUESS), the granary 50 x 36 (the registry's band, inside 0098's drawing page's 43-50 by 25-36 ft; 27 deep until feature 449 T309), the barracks
-  22 x 60 (five dwellings of 12 ft since feature 449 T309; 23 x 70 before), the staff long-house 22 x 60 (the karo's bay of 24 ft and two dwellings of 18 ft since feature 449 T329; 24 x 50 with three dwellings of 12 ft from T309; 24 x 82 before), the servants' row 60 x 19 (60 x 15 until feature 449 T336), the stables 18 x 24, two storehouses 16 x 19 and
+  lodgings, stores and office (as drawn since feature 374 wave 128: the office hall 113 x 38 (127 x 38 since feature 449 T265's armory bay, 118.5 x 38 since T336 stacked the writing and binding rooms in one 20 ft bay), the tax archive 18 x 24 (its size research 0100's records-store ceiling since feature 372 wave 105, its proportions a GUESS), the granary 50 x 26 (the registry's band, inside 0098's drawing page's 43-50 by 25-36 ft; 27 deep until feature 449 T309, 36 until T364), the barracks
+  22 x 60 (five dwellings of 12 ft since feature 449 T309; 23 x 70 before), the staff long-house 22 x 60 (the karo's bay of 24 ft and two dwellings of 18 ft since feature 449 T329; 24 x 50 with three dwellings of 12 ft from T309; 24 x 82 before), the servants' row 48 x 19 (60 x 15 until feature 449 T336, 60 x 19 until T351), the stables 18 x 24, two storehouses 16 x 19 and
   12 x 18 (unequal, as the Yokota pair), the gatehouse 40 x 12 and the guest house 40 x 42 (42 since wave 134, every building a foot or two clear of the wall's face)), which holds coverage in the jin'ya band without shrinking the envelope; each of those
   sizes is a GUESS in its band.
 - **R07 approach**: a GENKAN on the office hall (feature 449 T291): the formal entrance form is a knob between 0104's two forms, rolled from the map's seed - exactly `random.Random(zlib.crc32(b"county-magistracy-example:formal entrance form")).choice(["a genkan on the office hall", "the roji, no genkan"])` = a genkan on the office hall - so the hall draws a porch of about 12 x 9 ft (0104's one shikidai measured) built out from its south face at its east end, east of the hearing court, onto the outer court the forecourt opens into; the guest's way runs on through the office (0104's drawing page), and the roji to the reception's shoe stone (the Koseki form, drawn until T291) is not drawn. The household's own doors: the kitchen's
@@ -60,11 +60,13 @@ knobs re-rolled from the seed by the generator and held to the forms recorded he
   (research buildings 370). Note 300 says of the Koseki house that the everyday door is the kitchen entrance, while
   370 gives the family an inner entrance apart from it; the draft draws both doors.
 - **R18 granary**: 0098's form knob, rolled exactly `random.Random(zlib.crc32(b"county-magistracy-example:granary form")).choice(["raised
-  timber storehouse", "earth-walled kura"])` = earth-walled kura: on the ground, no posts (the dozo form), 50 x 36 ft in
+  timber storehouse", "earth-walled kura"])` = earth-walled kura: on the ground, no posts (the dozo form), 50 x 26 ft in
   0098's drawing page's ~43-50 x 25-36 ft county granary (its size a GUESS) and the registry's 30-60 by 14-36 ft band
-  (types.json) (feature 449 T309; 50 x 27 ft since feature 374 wave 128, and 60 x 30 before).
+  (types.json), its 1,300 sq ft below the residence's house block of 1,344 as 0116's drawing page keeps a staging store's
+  granary below the residence (feature 449 T364; 50 x 36 ft from T309, 50 x 27 ft since feature 374 wave 128, and 60 x 30 before).
 - **R19 guardroom**: a freestanding gatehouse BESIDE the gate (Takayama's form), ~40 x 12 ft as 0093's drawing page draws a
-  gatehouse of its own (its length a GUESS; 2 ken deep, measured), flush west of the gate's post - the gatekeepers' place
+  gatehouse of its own (its length a GUESS; 2 ken deep, measured), flush west of the gate's post (146 to 186 ft, the post 186
+  to 188; seated there again by feature 449 T353 after T329's gate move left it 40 ft west) - the gatekeepers' place
   follows from the one-bay gate, which has no range to hold a guardroom (feature 374 wave 128; it was 18 x 12 ft).
 - **R26 main gate**: 0093's form knob, rolled exactly `random.Random(zlib.crc32(b"county-magistracy-example:main gate form")).choice(["one-bay
   gate", "gate range"])` = one-bay gate: a yakuimon with an 8 ft frontage (research 0093: 6-8.5 ft, its 間口 read as the pillar-center span), its passage 7 ft between its posts - the frontage less one ~1 ft pillar, a GUESS (feature 374 wave 132; it was an 8 ft passage). Its posts are drawn about 2 ft square OUTSIDE that passage, a map drawing convention (wave 133), so the drawn posts' centers stand about 9 ft apart, wider than the real frontage.
@@ -72,19 +74,41 @@ knobs re-rolled from the seed by the generator and held to the forms recorded he
   sand are left to the hand refinement.
 - **R34 striking posts**: two upright posts as location markers (the ~4.5 ft standing timber); the practice-weapon rack
   at the ground's edge is a GUESS.
+- **R35 armory end bay** (2026-11-23, feature 449 T367): where the armory's site rolls the office hall, which end bay is a second roll,
+  since the armory's side varied across county offices (0123) - exactly `random.Random(zlib.crc32(b"county-magistracy-example:armory
+  end bay")).choice(["west", "east"])` = west, recorded in the spec's knobs and held by the generator, so the back row stays drawn from
+  the hall's west end.
 - **Staff housing**: option (a) of docs/building-programs.md knob 5 - everyone lives inside the walls, the platoon in the
   barracks - WITH A DEVIATION from its letter ("everyone in the barracks and residence wing"): the senior retainers
   keep a long-house of their own in the outer court, because docs/buildings.md ("Only the lord's household lives here")
   gives senior retainers separate structures, never bays of the lord's wing. The KARO lodges in a bay of that staff
-  long-house, its north 14 ft with a door of its own - R11's attested form (captioned `karo's quarters` - a bay, not a house; its kind stays `karo's house`, the registry's) (research 0106: at an intendancy
+  long-house, its north 24 ft (4 ken, since 449 T329) with a door of its own - R11's attested form (captioned `karo's quarters` - a bay, not a house; its kind stays `karo's house`, the registry's) (research 0106: at an intendancy
   the staff lived inside the compound in small houses or long-houses; a chief retainer's house inside the lord's own
   compound was not found). Pass 5's karo's house of its own in the inner court, its door on the lord's private court,
   is gone. The grooms lodge in the stable's grooms' room (0108: a warrior's stable held its grooms' quarters), beside
   the servants' row of the menservants. The barracks and the
   long-house are divided into dwellings, a door each (0097; feature 374 batch 4). The servants' row's entry form is 0097's knob,
   rolled exactly `random.Random(zlib.crc32(b"county-magistracy-example:servants' quarters form")).choice(["common room under one
-  door", "a door to each dwelling"])` = a door to each dwelling: four dwellings of 15 ft, a door each (the row 60 ft since wave 128, the gatehouse taking
-  the wall's room).
+  door", "a door to each dwelling"])` = a door to each dwelling: four dwellings of 12 ft, a door each, 2 ken, the foot soldier's frontage (a GUESS: no page sizes a
+  servant's dwelling; 15 ft in a 60 ft row from wave 128, the gatehouse taking the wall's room, until 449 T351 gave the row's 12 ft
+  to the junior retainers' fourth dwelling - lodging was ordered by station, so the servants' frontage is no wider than the
+  foot soldiers', building-review 2026-11-23 E1). The about eleven JUNIOR BUSHI (the about fifteen working samurai of the staffing anchor, less the
+  magistrate, the karo and the two senior retainers) lodge in the JUNIOR RETAINERS' QUARTERS, a rowhouse of their own on
+  the south wall between the stables and the cell, 48 x 24 ft in four dwellings of 12 ft, a door each (449 T356,
+  building-review 2026-11-22 O1; 449 T351): 0097's drawing page, a rural intendant's office kept the huts and rowhouses of
+  its junior officials on its grounds. Each dwelling is 12 x 24 ft, 288 sq ft: 2 ken across, Obata's foot soldier's
+  frontage, and 24 ft deep, 0097's "no more than about 24 ft deep"; at most three men to a dwelling (three, three, three
+  and two), so each junior samurai has at least 96 sq ft, above the barracks' 88 for a foot soldier (three to a 12 x 22 ft
+  dwelling). Lodging was ordered by station: the Sayama jin'ya's rowhouses ran 4-6 ken by rank and the Kii rule gave a
+  20-30 koku retainer 3 ken against the foot soldier's 2 (T320 Q5 above, outside the record), and the Sakai town
+  magistracy gave each doshin a dwelling of his own of 2 by 3 ken, about 216 sq ft (research-pass 2026-11-23, not yet on a
+  page). The men to a dwelling are a GUESS, 0097's few (its one case is three retainers sharing in 1860; eleven Sakai
+  dwellings would run 132 ft where the wall leaves 59). Until the building-review of 2026-11-23 (E1) the rowhouse was 36 x
+  18 ft in three dwellings of 12 x 18 ft, three or four men to each, about 59 sq ft a man - the samurai lodged below the
+  ashigaru. Its seat a GUESS: at Sakai and the Sayama domain jin'ya the
+  officials' rowhouses stood inside the grounds in the side or rear parts, apart from the gate (research-pass 2026-11-23),
+  silent for an intendant's office; the outer court's side walls are full and the rear court is the household's, so the
+  front wall's free run, 57 ft west of the main gate's west post.
 - **Rear yard**: the open ground between the storehouses and the kitchen, 37 x 22 ft, the Higuchi house's rear (research 0091); its size a GUESS in the 18-45 by 12-30 ft band the size-audits of 2026-10-12 set from two storehouses of the common 2 x 3 ken and the open ground before them (no rear yard was found measured); its 12 ft (2 ken) floor keeps it apart from the 6-10 ft service alley, the rear strip's other form.
 - **Tenure**: a freshly appointed, standardized office - no ancestral alcove, no accreted particulars (knob 6).
 - **Vegetable garden**: 0109's two knobs. Its SITE is rolled among the four the record gives, in its order, those the
@@ -119,10 +143,24 @@ knobs re-rolled from the seed by the generator and held to the forms recorded he
   the first stretch of divider no building backs (`compound_parts._middle_gate`); the hall still screens the house
   from the hearing court. A deliberate DEVIATION from the customary seat, recorded.
 - **Lesser gates**: the kitchen postern in the west wall (6 ft) and the outer court's service gate in the south wall
-  (6 ft) at the cart yard's south end, the cell just east of it - muck and night-soil skip the main gate, its use a
+  (6 ft) at the cart yard's south end - muck and night-soil skip the main gate, its use a
   GUESS (feature 374 batch 4: at 244 ft the cell and the barracks sealed it; `postern_approach` holds it now); prisoners
   come by the main gate, as Pingyao's went through a side door of its ceremonial gate, not a gate of their own (0093,
-  0096; 449 T350).
+  0096; 449 T350). The service gate stands 21 ft east of the main gate (71 ft before T329 moved the main gate onto the
+  genkan's line), labeled, not moved: a small gate beside a magistrate's main gate is drawn at Joge in 1869 (0093: a main
+  gate, a small gate, a gatekeepers' room and stone steps together at its east wall), with no distance given, so 21 ft
+  is a GUESS (research-pass 2026-11-22, 449 T356).
+- **Cell**: on the south wall below the hearing court, 10 x 12 ft, joined to the junior retainers' quarters' east end (129
+  to 139 ft, 47 ft west of the main gate's west post) - 0096: a magistracy's temporary cell stood in the quarter that held its
+  court rooms (Edo's town magistracy); joined to the lodging because its own seat and a fire gap would not fit in the 59
+  ft of wall the stables and the gatehouse leave beside the rowhouse's 48 (47 beside its 36 until 449 T351), a GUESS (research-pass 2026-11-23: no source says whether a cell stood
+  joined to a guardroom, a rowhouse or the gatehouse, or alone; Naruto's domain jin'ya kept its jail on the west side,
+  its gate on the south). The seat matches 0096's Chinese case most closely: the Neixiang county yamen set its prison on
+  the west side of its first courtyard, in the south-west, inside the main gate with the runners' quarters, short of the
+  court where cases were heard (building-review 2026-11-23 N2); this cell stands in the front court, west of the
+  gate-to-genkan axis, short of the hearing court. It stood 3 ft off the main gate's east post from T329 until 449 T356 (building-review
+  2026-11-22 Q2: the seat a gatekeeper's lodge takes, the prisoners' way crossing the gate-to-genkan axis); its prisoners'
+  way now runs north to the hearing court, west of that axis.
 
 Guesses the draft carries beyond those: a **detached guest house** (R10, research buildings 330: guests were received
 in the main house; a guest house apart was not found). (The karo's house of its own, a GUESS through pass 5, is now
@@ -306,9 +344,16 @@ Coverage 32%, perimeter-hugging 71%, nothing overflows; every registered check p
   the door's - a CONVENTION, the distance the kitchen's second tub needs beside its first; the kitchen's two either side of its
   door where both sides are clear.
 - **The gatehouse's tub round the corner nearest its door**, on the north face: the 12 ft east face leaves no seat beside the door
-  clear of the main gate's track (UNRESEARCHED).
+  clear of the main gate's track (UNRESEARCHED). Superseded: the freestanding gatehouse's door faces north, onto the forecourt, and
+  its tub stands beside it on that face, as every other building's does (building-review 2026-11-23 N1).
 - **The bath's tub on its yard side**, judged by no door: the bath is entered from the house.
-- **The cell draws a door**, as every building with a tub does; the guests' way in is the office hall's genkan (T291).
+- **The cell draws a door**, as every building with a tub does; the guests' way in is the office hall's genkan (T291). Since
+  449 T356 turned it 10 ft wide and joined it to the junior retainers' quarters, its north face leaves no seat beside the door
+  and its west end is the rowhouse's, so it takes no tub (the generator reports it); it is not one of the major wooden buildings
+  0100's drawing page holds to a tub (`program_rules::TUB_KINDS`), and the rowhouse's tub stands about 43 ft west of its door.
+- **The cell's lattice beside its door**: the 6 ft door on the 10 ft north face is drawn over the lattice bars, so one bar
+  stands in each margin beside it, at 1 and 9 ft, and the lattice reads on either side of the door (a CONVENTION, `emit.rs`
+  `cell`; glyph-check 2026-11-23 F1, the round arbiter's `ask:cell-lattice-hidden-449-T351`).
 
 Coverage 32%, perimeter-hugging 71%, nothing overflows; every registered check passes (pack_audit).
 
@@ -469,3 +514,46 @@ Supersedes the entry above's hall at 58.5 to 185.5 ft, archive at 34.5 to 52.5 f
   plan), and the earlier '26 mats, a GUESS from Sayama's three' is withdrawn. The GARRISON PRIVY 0.5 ft off the granary's south face
   (T331) is labeled, not moved: the T331 pass found no rule keeping a privy off a store's wall (docs/buildings.md, privies beside
   stores).
+- **2026-11-23 (feature 449 T351 bundle: T353, T356, T364, T352)**: the building-review of 2026-11-22 after T329's gate move.
+  The GATEHOUSE seated flush west of the main gate's west post again, 146 to 186 ft (T353, E1: it stood 40 ft west of the
+  post), the forecourt cut to 19 ft deep (166 to 185) so the gatehouse's row is free. The GRANARY 50 x 26 ft, 1,300 sq ft, below
+  the residence's house block of 1,344 (T364: 0116's drawing page keeps a staging store's granary below the residence, and the
+  granary pop-up says so; it was 50 x 36, 1,800 sq ft). The cut took coverage to 29%, under the jin'ya band's 30% floor, so the
+  JUNIOR RETAINERS' QUARTERS (T356 O1, the about eleven junior bushi lodged nowhere) are drawn, 36 x 18 ft in three dwellings
+  of 12 ft on the south wall between the stables and the cell (the staff-housing bullet above gives its sizes, men and seat,
+  each labeled). The CELL left the main gate's east post for the south wall below the hearing court, turned 10 x 12 ft and
+  joined to the rowhouse's east end (T356 Q2; the Cell bullet above); the service gate's 21 ft from the main gate labeled,
+  not moved (the Lesser gates bullet). The karo's bay restated in the staff-housing bullet as 24 ft (T352 E2: it said 14).
+  Measured before drawing: the south wall's free run between the stables' fire gap (93 ft) and the gatehouse's (140) is 47 ft,
+  so the rowhouse's 36 and the turned cell's 10 fit joined, where the cell on a seat of its own (36 + a 6 ft gap + 12 = 54 ft) and a
+  fourth dwelling (48 + 10 = 58 ft) did not. `make pack-audit`: every check OK, coverage 31%.
+  The granary's cut let the BARRACKS move 10 ft north, to 124.5 to 184.5 ft (134.5 to 194.5 before), and the GARRISON PRIVY
+  went with it to the barracks' south end, against the east wall at 185 to 190 ft, its hatch through that wall on the muck
+  side by the cart yard and the service gate (the spec's claim restated, building-review 2026-11-23 N1).
+  Then the building-review of 2026-11-23 (E1): the rowhouse lodged its eleven at about 59 sq ft a man, below the barracks'
+  88 for a foot soldier, where lodging was ordered by station. Room was measured first (observed 2026-11-23, method: the
+  generator and `make pack-audit` on trial copies of the spec): deeper dwellings alone, three of 12 x 24 ft (0097's depth
+  cap), give 72 sq ft a man at four to a dwelling; a fourth dwelling on the wall (48 + the cell's 10 = 58 ft in 47) is
+  refused by the placer; a second row before the rowhouse has 16 ft, its doors' 12 ft frontage; a one-dwelling hut on the
+  divider beside the tax archive is refused by the audit as an undivided retainers' quarters (LODGING_ENTRANCES), and one on
+  the west wall below the long-house stands 7.5 ft before the servants' doors; the envelope 12 ft wider fits, but leaves the
+  outer court's west column 41 x 107 ft, the sheet's largest vacancy, and coverage at 30%, the band's floor, with every
+  building off the west wall moved 12 ft. So the SERVANTS' ROW's dwellings went from 15 ft to the foot soldier's 12 (48 x
+  19 ft; no page sizes a servant's dwelling, and by station the servants lodge no wider than the foot soldiers), the
+  stables and their two privies 12 ft west (the stables 57 to 75 ft), and the JUNIOR RETAINERS' QUARTERS are 48 x 24 ft
+  (81 to 129 ft) in four dwellings of 12 x 24 ft, at most three men to each, at least 96 sq ft a man; the cell and the
+  gatehouse are unmoved. The rowhouse's caption is given on three lines (a CONVENTION, as the storehouses' two-line names),
+  so the placer seats it directly above the rowhouse, not over the cell and the gatehouse (N3), and the stables' privy is
+  declared before the servants' (a CONVENTION: the captions are seated in declaration order), so its caption stands over
+  its own gap and no leader crosses the rowhouse. Two leaders remain for the caption placer (filed): the stables' privy's
+  runs down the stables' east wall, half a pixel off its stroke, and the servants' privy's crosses the stables, as before (the
+  stable well stands over that gap). `make pack-audit`: every check OK, coverage 31%. Figures above this entry that it
+  supersedes: the barracks at 125.5 to 195.5 ft with its privy at its north end (the T274 entry), the garrison privy 0.5 ft
+  off the granary's south face (the T328 entry), the servants' row of 60 ft in four dwellings of 15 ft, the junior
+  retainers' quarters of 36 x 18 ft in three dwellings, and the gatehouse's tub round the corner from its door (the
+  wave-106 line).
+  Then the glyph-check of 2026-11-23 (cell F1): the cell's 6 ft door covered all four lattice bars of its 10 ft north
+  face, so one bar now stands in each margin beside the door, at 1 and 9 ft (a CONVENTION; the round arbiter's
+  `ask:cell-lattice-hidden-449-T351`; the Knob settings' lattice bullet); the cell is unmoved. The cell's tub bullet
+  restated: the rowhouse's tub stands about 43 ft west of the cell's door, where it said 30 (building-review 2026-11-23
+  N1). `make pack-audit`: every check OK, coverage 31%.

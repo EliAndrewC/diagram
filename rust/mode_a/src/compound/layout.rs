@@ -44,7 +44,7 @@ pub const FIRE_GAP: f64 = 6.0;
 pub const APPROACH: f64 = 12.0;
 /// A gate post's side (feet), drawn outside the passage.
 ///
-/// Research: gate posts - CONVENTION: a gate's posts drawn about 2 ft square, each post's inner face on the passage (docs/buildings.md, Main gate)
+/// Research: gate posts - CONVENTION: a gate's posts drawn outside its passage, each post's inner face on the passage, 2 ft along the wall and about 4.3 ft across it on the generated plans, past the wall's ink on both faces (0093's drawing page; 449 T349, T365)
 pub const POST: f64 = 2.0;
 /// A door's width and depth (feet).
 ///
@@ -630,15 +630,21 @@ pub fn ell_box(hb: Bx, back: Face, end: Face, w: f64, h: f64) -> Bx {
     }
 }
 
-/// The doors a building opens by: the program's, or one at each dwelling's middle on its court face, or one at its court face's middle.
+/// The doors a building opens by: the program's, or none for an open shed, or one at each dwelling's middle on its court face, or one at
+/// its court face's middle.
 ///
 /// Research:
+///     an open shed doorless - CONVENTION: an open-sided workshop under a roof on posts is entered between its posts, so it is drawn with no door, as the hand sheet's cinnabar workshop is (ochiba-magistracy.svg; 449 T359)
 ///     a door at each dwelling's middle - GUESS: no page seats a dwelling's door along its face (feature 449 T187); a building's one door at its face's middle
 ///     the default door on the court face - research/questions/0104-the-formal-entrance-and-a-guests-arrival-genkan.html: guest doors feed courts and service doors work space; a building the program gives no door opens through the face toward its court
 #[must_use]
 pub fn door_specs(b: &Building) -> Vec<super::spec::DoorSpec> {
     if !b.doors.is_empty() {
         return b.doors.clone();
+    }
+    if b.interior.as_deref() == Some(super::emit::OPEN_SHED) {
+        // an open-sided shed is entered between its posts: no door (449 T359)
+        return Vec::new();
     }
     let face = court_face(b);
     let len = if face.along_x() { b.w } else { b.h };

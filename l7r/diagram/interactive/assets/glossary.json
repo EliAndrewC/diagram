@@ -2547,10 +2547,11 @@
   ]
  },
  "li": {
-  "def": "A Chinese mile, about 500 meters.",
+  "def": "A Chinese mile, about 500 meters. The same word (里) also named a ward of 110 households in the Ming and Qing registers, headed by a li zhang. After fen, in a length or a price, li is another word (厘): a hundredth of a li of distance, or a thousandth of a tael of silver.",
   "variants": [
    "li"
-  ]
+  ],
+  "cased": true
  },
  "lifang": {
   "def": "The walled residential ward of a Tang Chinese city, its gates opened and closed by officials to the morning and evening drums; torn down under the Song.",
@@ -17342,7 +17343,8 @@
   "variants": [
    "beka cart",
    "beka carts",
-   "bekaguruma"
+   "bekaguruma",
+   "beka-guruma"
   ]
  },
  "Board of Works": {
@@ -19532,6 +19534,21 @@
   "def": "The six clerks' offices of a Chinese county yamen: personnel, revenue, rites, war, justice and works. At Pingyao the first three stood on the east under the county assistant, and the last three on the west under the jail warden.",
   "variants": [
    "six offices"
+  ]
+ },
+ "Kōka shunjū": {
+  "def": "A Japanese farming book in seven volumes, completed in 1707 by Tsuchiya Matasaburō of Kaga province, describing from his own experience the farming and farm tools of the Kaga region.",
+  "variants": [
+   "Kōka shunjū",
+   "Kôka Shunjû",
+   "Koka Shunju",
+   "耕稼春秋"
+  ]
+ },
+ "Kang Pil-li": {
+  "def": "A Korean magistrate of Dongnae who, after Yi Gwang-ryeo's own trials failed, had some success growing the sweet potato there and wrote Korea's first book on the plant.",
+  "variants": [
+   "Kang Pil-li"
   ]
  }
 }

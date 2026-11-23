@@ -1,0 +1,7 @@
+{
+  "utc": "2026-11-23T08:24:54Z",
+  "target": "review-accept",
+  "commit": "253f81afa7",
+  "outcome": "permitted",
+  "why": "review-accept glyph-check--cinnabar-workshop--ochiba-roundtrip-test F4: not a defect: drawn at its own legend's guess of about 37 by 24 ft, and docs/buildings.md caps the hall and the whole complex, not the workshop alone"
+}

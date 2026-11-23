@@ -627,8 +627,11 @@
     <text font-size="10" font-style="italic" fill="#7A6A4A" data-names="forecourt-1">forecourt</text>
   </g>
 
-  <!-- West to east the writing and binding rooms stand before the clerks' room, so the clerks' room adjoins the day office as 0113
-       places it at Takayama (impl-drift 2026-11-22; the writing rooms' place a GUESS: Takayama attests them, not where they stood). -->
+  <!-- From the armory's end the writing and binding rooms stand before the clerks' room, so the clerks' room adjoins the day office as
+       0113 places it at Takayama (impl-drift 2026-11-22; the writing rooms' place a GUESS: Takayama attests them, not where they
+       stood). The armory's end bay is a roll (449 T367): random.Random(zlib.crc32(b"hayakawa-magistracy:armory end bay")).choice(["west",
+       "east"]) = east, so the row runs east to west - armory 14, writing 12, binding 10, clerks' room 27.3, day office 29 ft, the
+       official study 21 ft at the west end, away from the armory (a GUESS, 0113 silent on the study's seat). -->
   <!-- The hall's back row (feature 449 T313, T315, T336; size-audits 2026-11-22): the armory 14 ft, the writing room 12 ft and the
        binding room 10 ft (0113: Takayama's kakiyaku-beya, where documents were drawn up, and the room beside it where they were
        bound; that a county office kept them a GUESS; 200 and 167 sq ft, inside the size-audit's 6-12 mats each, an ESTIMATE - they
@@ -637,7 +640,7 @@
        residences' day rooms), all 16.7 ft deep: the day office and study given what their bands allow of the freed width and the
        last 3.7 ft to the clerks' room (inside its 24-40 ft statement, about Ochiba's 26), the hall's length kept - shortening it
        3.7 ft put the sheet's coverage under the 30% floor (pool sweep, 2026-11-22). -->
-  <!-- Office hall: the working block. Six rear rooms west to east (armory, writing and binding rooms, clerks' room, day office,
+  <!-- Office hall: the working block. Six rear rooms east to west (armory, writing and binding rooms, clerks' room, day office,
        official study), front dais band overlooking the court - the courtroom is a room OF the office hall, not a freestanding
        stage. The clerks' room stands behind the dais: which room backed the seat at a jin'ya is unrecorded, a GUESS (449 T337
        research pass, 2026-11-22: Edo's town magistracies put an examiners' working room there). -->
@@ -646,20 +649,20 @@
     <rect x="340" y="488" width="340" height="84" fill="#DDB87A"/>
     <!-- the clerks' room is a room of the hall (feature 267 R20, buildings 430: clerks worked in rooms of the
          office; no page gives them a building). It was a freestanding duty room in the west yard. -->
-    <!-- the ARMORY, the hall's west end in its back row (feature 449 T276): the program keeps one at every seat; where a gate range stands, the gate range or the office hall's west end bay is a knob rolled from the map's seed, and the armory site rolled office hall here (random.Random(zlib.crc32(b"hayakawa-magistracy:armory site")).choice(["gate range", "office hall"])), as Pingyao, with no standing barracks, kept its armory at its great hall's west end (research/questions/0123-the-magistrates-manor-in-a-town-where-it-stands-and-which-way-it-faces-jinya-and-yamen.html); 14 x 16.7 ft, the back row's west end; its size and the back row (no source gives the depth of Pingyao's) a GUESS -->
-    <rect data-id="armory-1" x="340" y="488" width="42" height="50" fill="#DDB87A" data-kind="armory"/>
-    <rect data-id="clerks-room-1" x="448" y="488" width="82" height="50" fill="#DDB87A" data-kind="clerks' room"/>
-    <rect data-id="day-office-1" x="530" y="488" width="87" height="50" fill="#DDB87A" data-kind="day office"/>
-    <rect data-id="official-study-1" x="617" y="488" width="63" height="50" fill="#DDB87A" data-kind="official study"/>
-    <rect data-id="writing-rooms-1" x="382" y="488" width="36" height="50" fill="#DDB87A" data-kind="writing rooms"/>
-    <rect data-id="writing-rooms-2" x="418" y="488" width="30" height="50" fill="#DDB87A" data-kind="writing rooms"/>
+    <!-- the ARMORY, the hall's east end in its back row (feature 449 T276, T367): the program keeps one at every seat; where a gate range stands, the gate range or an end bay of the office hall is a knob rolled from the map's seed, and the armory site rolled office hall here (random.Random(zlib.crc32(b"hayakawa-magistracy:armory site")).choice(["gate range", "office hall"])); which end bay is a second roll, east here (random.Random(zlib.crc32(b"hayakawa-magistracy:armory end bay")).choice(["west", "east"])), since the armory's side varied across county offices - Pingyao's west end bay, Jiexiu's both end bays, Zhenping's east and west stores (research/questions/0123-the-magistrates-manor-in-a-town-where-it-stands-and-which-way-it-faces-jinya-and-yamen.html); 14 x 16.7 ft, the back row's east end; its size and the back row (no source gives the depth of Pingyao's) a GUESS -->
+    <rect data-id="armory-1" x="638" y="488" width="42" height="50" fill="#DDB87A" data-kind="armory"/>
+    <rect data-id="clerks-room-1" x="490" y="488" width="82" height="50" fill="#DDB87A" data-kind="clerks' room"/>
+    <rect data-id="day-office-1" x="403" y="488" width="87" height="50" fill="#DDB87A" data-kind="day office"/>
+    <rect data-id="official-study-1" x="340" y="488" width="63" height="50" fill="#DDB87A" data-kind="official study"/>
+    <rect data-id="writing-rooms-1" x="602" y="488" width="36" height="50" fill="#DDB87A" data-kind="writing rooms"/>
+    <rect data-id="writing-rooms-2" x="572" y="488" width="30" height="50" fill="#DDB87A" data-kind="writing rooms"/>
     <rect x="340" y="488" width="340" height="84" fill="none" stroke="#5A3F1E" stroke-width="2.5"/>
     <line x1="340" y1="538" x2="680" y2="538" stroke="#6B4F2A" stroke-width="0.8" stroke-dasharray="4 3"/>
-    <line x1="382" y1="488" x2="382" y2="538" stroke="#6B4F2A" stroke-width="0.8" stroke-dasharray="4 3"/>
-    <line x1="418" y1="488" x2="418" y2="538" stroke="#6B4F2A" stroke-width="0.8" stroke-dasharray="4 3"/>
-    <line x1="448" y1="488" x2="448" y2="538" stroke="#6B4F2A" stroke-width="0.8" stroke-dasharray="4 3"/>
-    <line x1="530" y1="488" x2="530" y2="538" stroke="#6B4F2A" stroke-width="0.8" stroke-dasharray="4 3"/>
-    <line x1="617" y1="488" x2="617" y2="538" stroke="#6B4F2A" stroke-width="0.8" stroke-dasharray="4 3"/>
+    <line x1="403" y1="488" x2="403" y2="538" stroke="#6B4F2A" stroke-width="0.8" stroke-dasharray="4 3"/>
+    <line x1="490" y1="488" x2="490" y2="538" stroke="#6B4F2A" stroke-width="0.8" stroke-dasharray="4 3"/>
+    <line x1="572" y1="488" x2="572" y2="538" stroke="#6B4F2A" stroke-width="0.8" stroke-dasharray="4 3"/>
+    <line x1="602" y1="488" x2="602" y2="538" stroke="#6B4F2A" stroke-width="0.8" stroke-dasharray="4 3"/>
+    <line x1="638" y1="488" x2="638" y2="538" stroke="#6B4F2A" stroke-width="0.8" stroke-dasharray="4 3"/>
     <text font-size="8" font-weight="bold" fill="#3A2E1C" data-kind="armory" data-names="armory-1">armory</text>
     <text font-size="10" font-weight="bold" fill="#3A2E1C" data-kind="clerks' room" data-names="clerks-room-1"><tspan>clerks'</tspan><tspan>room</tspan></text>
     <text font-size="11" font-weight="bold" fill="#3A2E1C" data-kind="day office" data-names="day-office-1">day office</text>
@@ -680,11 +683,15 @@
     <!-- The business visitors' entrance (feature 267 pass 3: the hall had no door; business visitors are received in
          the hall and go no deeper - notes, "Deliberate choices"). The hearing court covers the whole south face, so the
          door is on the east face at the dais band, onto the open ground reached from the forecourt past the court's
-         east side, toward the tally office. -->
+         east side, toward the tally office. Since 449 T367 rolled the armory into the east end bay it is the armory's way
+         out too, its arms leaving by the hall's east end, not across the clerks' seats and the dais (a GUESS: no source
+         states an armory's or an end bay's doors). -->
     <rect x="674" y="544" width="6" height="24" fill="#4A3318" data-kind="door"/>
   <!-- the hall's WEST door (feature 449 T299; building-review 2026-11-22 E2): in the front band, the mirror of the east business door,
-       so the armory's arms leave by the hall's west end onto the outer court's open ground west of it, not across the clerks' seats and
-       the dais. A GUESS: no source states an armory's or a hall end bay's doors (449 T289/T299 research pass, 2026-11-22: silent) -->
+       onto the outer court's open ground west of the hall, at the official study's end. It was drawn for the armory's arms when the
+       armory stood in the west end bay; since 449 T367 rolled the armory east it is kept as the hall's west way out, so a clerk or the
+       magistrate leaves the west end without crossing the seats and the dais. A GUESS: no source states a hall end bay's doors (449
+       T289/T299 research pass, 2026-11-22: silent) -->
   <rect x="340" y="544" width="6" height="24" fill="#4A3318" data-kind="door"/>
   </g>
 

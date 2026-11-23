@@ -15,7 +15,7 @@ Guesses:
 - The pond's size: no residence pond's size is recorded, so it is drawn small, within sight of the rooms that face
   the garden.
 - How often a small posting kept a pond rather than a dry garden: no figure weighs the two for an office (Chiran's
-  samurai gardens were mostly dry, Matsushiro's mostly had a pond, and the two offices whose gardens survive both kept a pond), so neither form is taken as the grander, and how often a map draws each is our own choice.
+  samurai gardens were mostly dry, Matsushiro's mostly had a pond, and the two offices whose gardens could be read both kept a pond, Okutono's as restored from an Edo-period drawing), so neither form is taken as the grander, and how often a map draws each is our own choice.
 - A pond on the way from the gate to the entrance, where a plan draws one: no account describes a pond there, so putting it there is our guess.
 
 Depiction: Each plan takes one of the two forms, a small pond or a dry garden of white gravel and stones standing for water,

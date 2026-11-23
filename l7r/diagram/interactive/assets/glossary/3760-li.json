@@ -1,7 +1,8 @@
 {
  "term": "li",
- "def": "A Chinese mile, about 500 meters.",
+ "def": "A Chinese mile, about 500 meters. The same word (里) also named a ward of 110 households in the Ming and Qing registers, headed by a li zhang. After fen, in a length or a price, li is another word (厘): a hundredth of a li of distance, or a thousandth of a tael of silver.",
  "variants": [
   "li"
- ]
+ ],
+ "cased": true
 }

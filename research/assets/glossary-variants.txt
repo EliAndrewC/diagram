@@ -265,6 +265,7 @@ beishan mianshui	beishan mianshui
 beitang	beitang
 beka cart	beka cart
 beka carts	beka cart
+beka-guruma	beka cart
 bekaguruma	beka cart
 bell-and-drum tower	gulou
 bencao gangmu	Bencao gangmu
@@ -2336,6 +2337,7 @@ kanamori	Kanamori
 kanbun	Kanbun
 kanden	kanden
 kang	kang
+kang pil-li	Kang Pil-li
 kangs	kang
 kangxi	Kangxi
 kanjo bugyo	finance commissioner
@@ -2506,6 +2508,7 @@ koike	koike
 koishikawa yojosho	Yojosho
 koji	koji
 kojiki	Kojiki
+koka shunju	Kōka shunjū
 koke	koke
 kokera	kokera
 kokera shingle	kokera
@@ -2627,10 +2630,12 @@ kyōhō	Kyoho
 kyōmasu	Kyōmasu
 kyūnin	kyunin
 kyūyō	Kyuyo
+kôka shunjû	Kōka shunjū
 kō	kō
 kō group	kō
 kōeki kokusan kō	Koeki Kokusanko
 kōhai	worship porch
+kōka shunjū	Kōka shunjū
 kōri	kori
 kōsatsu	kosatsuba
 kōsatsu-ba	kosatsuba
@@ -5429,6 +5434,7 @@ zōkibayashi	zokibayashi
 笞	笞
 築地松	tsuijimatsu
 纤道	qiandao
+耕稼春秋	Kōka shunjū
 背山面水	beishan mianshui
 花代	flower money
 農業全書	Nogyo Zensho

@@ -619,7 +619,7 @@ pub const CHECKS: [Check; 44] = [
         run: |ctx| Ok(super::armory::armory_site(ctx.plan, ctx.sheet, ctx.form)),
         shared: false,
         fixture: "hayakawa-armory-misplaced-red.svg",
-        fix: "draw the armory where `<sheet>:armory site` rolls it among the sites the sheet offers - a room of the gate range, the office hall's west end bay, or a store of its own in the outer court - and declare its form (`**Form**: armory in the gate range` or `armory as a store of its own`; none for the hall's bay)",
+        fix: "draw the armory where `<sheet>:armory site` rolls it among the sites the sheet offers - a room of the gate range, an end bay of the office hall (the west or east one `<sheet>:armory end bay` rolls, the back row drawn from that end), or a store of its own in the outer court - and declare its form (`**Form**: armory in the gate range` or `armory as a store of its own`; none for the hall's bay)",
         skipped: never,
     },
     Check {

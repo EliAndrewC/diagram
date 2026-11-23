@@ -104,7 +104,9 @@ clerks' room's end.
 2026-11-22 (feature 449 T312, T313, T315, T316, T326; building-review and size-audits 2026-11-22): the office hall's back row as Ochiba's
 hand sheet now draws it - the armory 14 ft, the CLERKS' ROOM 26 ft brought into the hall (it stood as its own 28 x 18 ft building on the
 outer court's west wall, where the program makes it a room of the hall; O1), the writing room and the binding room 16 ft each (0113's,
-Takayama's; that a county office kept them, and their size, a GUESS), the day office 28 ft and the official study 20 ft, all 16.7 ft
+Takayama's; that a county office kept them, and their size, a GUESS), the day office 28 ft and the official study 20 ft (since T336
+and T367 the hall 112 ft, the writing room 12, the binding room 12.5, the day office 26.5 and the study 21 ft, mirrored; the
+2026-11-23 entries below), all 16.7 ft
 deep, where the day office and the study were the row's remainder split two ways (53 ft each); the magistrate's dais 18 x 10 ft, the
 hall's forecourt door moved off it to the front band's east end (0.92, where the hand sheet's genkan stands; E1), and a rear door at
 the hall's east end toward the nakamon (O2). The ground the clerks' room left before the senior retainers' doors, 46 x 15 ft, named
@@ -115,3 +117,25 @@ drawn as a 6 ft one-bay gate inside the side gate's 5-8 ft band, not a wicket, 4
 or both (Pingyao and Wuyang west, Jiexiu east after 1677, both end bays in 1591) and nothing that set the side, so the end is a GUESS,
 and from the west door the arms reach this sheet's east-side garrison along the hall's front or round the forecourt.
 2026-11-22 (feature 449 T312 bundle): the back row's order (impl-drift 2026-11-22 on the writing and binding rooms' claim, DRIFTED): west to east the armory, the writing room, the binding room, the clerks' room and the day office, so the clerks' room adjoins the day office as research/questions/0113-the-office-hall-and-its-clerks-goyakusho.drawing.html places it at Takayama; where the two new rooms stand is a GUESS (Takayama attests them, not their place).
+2026-11-23 (feature 449 T367; impl-drift 2026-11-22 on docs/building-programs.md, OUTSIDE THE CHANGE): the armory's end bay is a
+second roll of knob 4, since the armory's side varied across county offices (0123) and the end the Q1 line above kept was a GUESS -
+exactly `random.Random(zlib.crc32(b"ochiba-roundtrip-test:armory end bay")).choice(["west", "east"])` = east, recorded in the spec's
+knobs and held by the generator (the hand sheet's own roll gives west). The back row is drawn mirrored from the armory's end: east to
+west the armory 14 ft, the writing room 12 ft, the binding room 12.5 ft, the clerks' room 26 ft (still behind the dais), the day office
+26.5 ft and the official study 21 ft at the west end, away from the armory (its seat a GUESS, 0113 silent), all 16.7 ft deep, each
+room at its width before. The household's rear door moves from the study's east face to the hall's east face in its front band (E at
+0.8), onto the same lane under the nakamon, so the way to the house runs through no working room, and the armory's arms leave by it;
+the west door is kept at the study's end, onto the tax archive's apron (both GUESSES: no source states an end bay's doors). The hall,
+the dais, the seats and the hearing court are unchanged; coverage 33% (`make pack-audit`, 2026-11-23).
+
+2026-11-23 (feature 449 T351 bundle: T352, T354, T359; building-review and glyph-check 2026-11-22): the notes brought to the T328
+bundle's drawing (E2). The OFFICE HALL 112 ft, 78 to 190 ft (120 ft until T336 cut the writing and binding rooms to the hand sheet's
+12 and 10 ft, the binding room drawn 12.5 so its two-line caption seats inside it, and shortened the hall at its west end), its back
+row as the T367 entry above gives it; the HEARING COURT cut to the hand sheet's 94 ft, 78 to 172 ft, so the forecourt door at the
+front band's east end faces open ground inside the main gate, not the court's back (T335 E5); the spec's research string said 102
+ft, measured from the hall's end before T336, and now says 94 (T354 E3). The STRAW MATS keyed to the dais's axis, not the court's
+middle (T354 E1: re-centered on the shortened court they stood 8 ft west of the magistrate; 0099's oshirasu, the accused kneeling
+before the dais; the generator now seats them on the dais's axis, and on the court's middle only where no dais stands, a GUESS on
+0099's drawing page). The CINNABAR WORKSHOP drawn as the hand sheet's open shed - a colonnade-hatched roof on six posts, no door,
+not the compound shrine's paint (T359, glyph-check NEEDS-WORK: it was drawn with the shrine's exact fill and stroke and a door);
+with no door it takes no fire-water tub. `make pack-audit`: every check OK.

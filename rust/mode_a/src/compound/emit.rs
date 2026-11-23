@@ -12,7 +12,7 @@
 use std::fmt::Write as _;
 
 use super::count;
-use super::layout::{back_face, Layout, DIVIDER_HALF, POST, WALL_HALF};
+use super::layout::{back_face, door_specs, Layout, DIVIDER_HALF, DOOR, POST, WALL_HALF};
 use super::spec::{Building, Bx, Court, Face, Program, Room};
 
 /// The sheet's margin left of the compound and above it (px): the scale bar and the title stand above it.
@@ -32,8 +32,8 @@ pub const PX: f64 = 3.0;
 
 /// The patterns every sheet's grounds are filled with (docs/buildings.md, Pattern library).
 ///
-/// Research: pattern library - CONVENTION: court earth, sand, river cobbles, garden stipple, vegetable rows, granary slats and practice earth, the hand sheets' patterns and the cobbled court's
-pub const DEFS: &str = r##"<defs><pattern id="court-earth" patternUnits="userSpaceOnUse" width="16" height="16"><rect width="16" height="16" fill="#D9C28E"/><circle cx="4" cy="6" r="0.6" fill="#A88E58"/><circle cx="12" cy="2" r="0.6" fill="#A88E58"/></pattern><pattern id="oshirasu-sand" patternUnits="userSpaceOnUse" width="12" height="12"><rect width="12" height="12" fill="#F2EAD0"/><circle cx="3" cy="4" r="0.5" fill="#C9B884"/><circle cx="8" cy="2" r="0.5" fill="#C9B884"/></pattern><pattern id="vegetable-rows" patternUnits="userSpaceOnUse" width="8" height="8"><rect width="8" height="8" fill="#CDBF95"/><rect y="2.5" width="8" height="3" fill="#8FA36A"/></pattern><pattern id="garden-stipple" patternUnits="userSpaceOnUse" width="14" height="14"><rect width="14" height="14" fill="#BFCFA0"/><circle cx="3" cy="3" r="0.8" fill="#7A8C5C"/><circle cx="10" cy="9" r="0.8" fill="#7A8C5C"/></pattern><pattern id="granary-slats" patternUnits="userSpaceOnUse" width="14" height="6"><rect width="14" height="6" fill="#D9B47A"/><line x1="0" y1="0" x2="14" y2="0" stroke="#7A5430" stroke-width="0.8"/><line x1="0" y1="3" x2="14" y2="3" stroke="#A88454" stroke-width="0.5"/></pattern><pattern id="court-cobbles" patternUnits="userSpaceOnUse" width="12" height="12"><rect width="12" height="12" fill="#D8D2C2"/><ellipse cx="3" cy="3" rx="2.2" ry="1.6" fill="#B8B0A0" stroke="#8A8274" stroke-width="0.4"/><ellipse cx="9" cy="8.5" rx="2" ry="1.5" fill="#B8B0A0" stroke="#8A8274" stroke-width="0.4"/></pattern><pattern id="keiko-earth" patternUnits="userSpaceOnUse" width="16" height="16"><rect width="16" height="16" fill="#E2CE9E"/><line x1="0" y1="5" x2="16" y2="5" stroke="#C2A46C" stroke-width="0.5"/><line x1="0" y1="13" x2="16" y2="13" stroke="#C2A46C" stroke-width="0.5"/></pattern></defs>"##;
+/// Research: pattern library - CONVENTION: court earth, sand, river cobbles, garden stipple, vegetable rows, granary slats, practice earth and the colonnade hatch of an open-sided shed (449 T359, ochiba-magistracy.svg's), the hand sheets' patterns and the cobbled court's
+pub const DEFS: &str = r##"<defs><pattern id="court-earth" patternUnits="userSpaceOnUse" width="16" height="16"><rect width="16" height="16" fill="#D9C28E"/><circle cx="4" cy="6" r="0.6" fill="#A88E58"/><circle cx="12" cy="2" r="0.6" fill="#A88E58"/></pattern><pattern id="oshirasu-sand" patternUnits="userSpaceOnUse" width="12" height="12"><rect width="12" height="12" fill="#F2EAD0"/><circle cx="3" cy="4" r="0.5" fill="#C9B884"/><circle cx="8" cy="2" r="0.5" fill="#C9B884"/></pattern><pattern id="vegetable-rows" patternUnits="userSpaceOnUse" width="8" height="8"><rect width="8" height="8" fill="#CDBF95"/><rect y="2.5" width="8" height="3" fill="#8FA36A"/></pattern><pattern id="garden-stipple" patternUnits="userSpaceOnUse" width="14" height="14"><rect width="14" height="14" fill="#BFCFA0"/><circle cx="3" cy="3" r="0.8" fill="#7A8C5C"/><circle cx="10" cy="9" r="0.8" fill="#7A8C5C"/></pattern><pattern id="granary-slats" patternUnits="userSpaceOnUse" width="14" height="6"><rect width="14" height="6" fill="#D9B47A"/><line x1="0" y1="0" x2="14" y2="0" stroke="#7A5430" stroke-width="0.8"/><line x1="0" y1="3" x2="14" y2="3" stroke="#A88454" stroke-width="0.5"/></pattern><pattern id="court-cobbles" patternUnits="userSpaceOnUse" width="12" height="12"><rect width="12" height="12" fill="#D8D2C2"/><ellipse cx="3" cy="3" rx="2.2" ry="1.6" fill="#B8B0A0" stroke="#8A8274" stroke-width="0.4"/><ellipse cx="9" cy="8.5" rx="2" ry="1.5" fill="#B8B0A0" stroke="#8A8274" stroke-width="0.4"/></pattern><pattern id="keiko-earth" patternUnits="userSpaceOnUse" width="16" height="16"><rect width="16" height="16" fill="#E2CE9E"/><line x1="0" y1="5" x2="16" y2="5" stroke="#C2A46C" stroke-width="0.5"/><line x1="0" y1="13" x2="16" y2="13" stroke="#C2A46C" stroke-width="0.5"/></pattern><pattern id="colonnade-hatch" patternUnits="userSpaceOnUse" width="10" height="10" patternTransform="rotate(45)"><rect width="10" height="10" fill="#C97A5C"/><line x1="0" y1="0" x2="0" y2="10" stroke="#8C4A30" stroke-width="1.2"/></pattern></defs>"##;
 
 /// A number as the sheet writes it: two places at most, no trailing zeros.
 #[must_use]
@@ -214,13 +214,28 @@ fn zone_paint(kind: &str, floor: Option<&str>) -> &'static str {
     }
 }
 
-/// The hearing court's posts along its open side, two ken apart, and the parties' mats in the Edo arrangement.
+/// The line through the middle of the magistrate's seat over a hearing court: the first dais room of a seated building whose middle
+/// stands over the court's span, if any.
+///
+/// Research:
+///     the mats keyed to the dais - GUESS research/questions/0099-the-hearing-court-shirasu.drawing.html: the accused kneels at the center, a third of the way in from the dais, facing the magistrate; where a court is cut short of the hall's door, so that its middle and the dais's no longer meet, "the center" is read as the line through the dais's middle, the page silent on such a court (449 T354)
+fn dais_axis(p: &Program, l: &Layout, z: Bx) -> Option<f64> {
+    p.buildings.iter().zip(&l.seats).find_map(|(b, at)| {
+        let at = (*at)?;
+        b.rooms
+            .iter()
+            .filter(|r| r.style == "dais")
+            .map(|r| at.0 + f64::midpoint(r.bx.0, r.bx.2))
+            .find(|&c| z.0 <= c && c <= z.2)
+    })
+}
+
+/// The hearing court's posts along its open side, two ken apart, and the parties' mats in the Edo arrangement, the accused's on `cx`.
 ///
 /// Research:
 ///     hearing court posts - research/questions/0099-the-hearing-court-shirasu.drawing.html: posts along the roofed court's open side, two ken (~12 ft) apart and 1 ft square, their size and spacing a GUESS
-///     hearing mats - GUESS research/questions/0099-the-hearing-court-shirasu.drawing.html: the accused's mat 6 x 3 ft at the center a third of the way in from the dais, the plaintiff's 6 x 3 ft behind to one side, the village officials' 12 ft mat behind to the other
-fn hearing(s: &mut Svg, z: Bx) {
-    let cx = f64::midpoint(z.0, z.2);
+///     hearing mats - GUESS research/questions/0099-the-hearing-court-shirasu.drawing.html: the accused's mat 6 x 3 ft at the center a third of the way in from the dais (on the dais's axis, `dais_axis`, the court's middle where no dais stands over it), the plaintiff's 6 x 3 ft behind to one side, the village officials' 12 ft mat behind to the other
+fn hearing(s: &mut Svg, z: Bx, cx: f64) {
     let y = z.1 + (z.3 - z.1) / 3.0;
     let mat = r##"fill="#C8B078" stroke="#7A5430" stroke-width="0.6""##;
     s.put(r##"<g data-kind="kneeling positions"><g fill="#C8B078" stroke="#7A5430" stroke-width="0.6">"##);
@@ -261,7 +276,7 @@ fn hearing(s: &mut Svg, z: Bx) {
 /// Research:
 ///     the plan scale - research/questions/0090-magistrates-compounds-jinya-and-yamen.drawing.html: 3 px = 1 ft, set so drawn compounds fall between Joge and Takayama
 ///     office front, residence rear - DEVIATION research/questions/0090-magistrates-compounds-jinya-and-yamen.drawing.html: the inner court drawn north of the divider and the outer court south of it, the residence behind the office
-pub fn grounds(s: &mut Svg, p: &Program) {
+pub fn grounds(s: &mut Svg, p: &Program, l: &Layout) {
     for (court, b) in [
         (Court::Inner, (0.0, 0.0, p.w, p.divider)),
         (Court::Outer, (0.0, p.divider, p.w, p.h)),
@@ -288,7 +303,8 @@ pub fn grounds(s: &mut Svg, p: &Program) {
             s.caption(c, &z.kind, GROUND, &[id]);
         }
         if z.kind == "hearing court" {
-            hearing(s, z.bx);
+            let cx = dais_axis(p, l, z.bx).unwrap_or_else(|| f64::midpoint(z.bx.0, z.bx.2));
+            hearing(s, z.bx, cx);
         }
     }
 }
@@ -388,9 +404,15 @@ pub fn building(s: &mut Svg, b: &Building, at: Bx) {
         } else {
             format!(r#" data-kind="{k}""#)
         };
+        // an open-sided shed's roof hatched over its open sides, as the hand sheets draw a workshop colonnade (449 T359)
+        let body = if b.interior.as_deref() == Some(OPEN_SHED) {
+            "url(#colonnade-hatch)"
+        } else {
+            fill
+        };
         s.rect(
             at,
-            &format!(r#"fill="{fill}" stroke="{stroke}" stroke-width="2"{own} data-id="{id}""#),
+            &format!(r#"fill="{body}" stroke="{stroke}" stroke-width="2"{own} data-id="{id}""#),
         );
         names.push(id);
     } else {
@@ -419,6 +441,7 @@ pub fn building(s: &mut Svg, b: &Building, at: Bx) {
     match b.interior.as_deref() {
         Some("stables") => stables(s, b, at),
         Some("cell") => cell(s, b, at),
+        Some(OPEN_SHED) => shed_posts(s, at),
         _ => {}
     }
     if !b.rooms.is_empty() {
@@ -586,22 +609,65 @@ fn stables(s: &mut Svg, b: &Building, at: Bx) {
     );
 }
 
-/// The cell's lattice: short bars across its court face, linework at visible stroke width.
+/// The cell's lattice: short bars across its court face, linework at visible stroke width, and a bar beside its door wherever the
+/// door leaves a margin with none clear of it.
 ///
 /// Research:
 ///     cell's bars - GUESS: short lattice bars across the cell's court face, 2 ft apart and about 1.3 ft long, linework; no page records a holding cell's bars
+///     cell's bars beside its door - CONVENTION: the doors are drawn over the bars, so a margin of 1 ft or more beside a door on the court face with no bar clear of the door takes one at its middle, and the lattice reads on either side of the door (0096's drawing page: a cell drawn with bars across its front; 449 T351, the round arbiter's ask:cell-lattice-hidden-449-T351: on the county's 10 ft face the 6 ft door covered all four bars)
 fn cell(s: &mut Svg, b: &Building, at: Bx) {
     let court = back_face(b).opposite();
     let len = if court.along_x() { b.w } else { b.h };
-    let mut x = 2.0;
-    while x < len - 1.0 {
+    let bar = |s: &mut Svg, x: f64| {
         let r = from_court(at, court, (0.0, 4.0 / 3.0), (x, x));
         s.line(
             (r.0, r.1),
             (r.2, r.3),
             r##"stroke="#3A2010" stroke-width="0.8""##,
         );
+    };
+    let mut bars = Vec::new();
+    let mut x = 2.0;
+    while x < len - 1.0 {
+        bar(s, x);
+        bars.push(x);
         x += 2.0;
+    }
+    let half = DOOR.0 / 2.0;
+    for d in door_specs(b).iter().filter(|d| d.face == court) {
+        let c = (d.at * len).clamp(half, (len - half).max(half));
+        for (m0, m1) in [(0.0, c - half), (c + half, len)] {
+            if m1 - m0 >= 1.0 && !bars.iter().any(|&x| x > m0 && x < m1) {
+                bar(s, f64::midpoint(m0, m1));
+            }
+        }
+    }
+}
+
+/// The interior that draws a building as an open-sided shed: a hatched roof on posts, with no door (`layout::door_specs`).
+pub const OPEN_SHED: &str = "open shed";
+
+/// An open shed's six posts: one at each corner, set in from it, and one at the middle of each long side.
+///
+/// Research:
+///     the open shed on six posts - GUESS: no page counts or places a workshop shed's posts; six, one at each corner set 10 px (about 3 ft) in from the roof's corners and one at the middle of each long side, follow the hand sheet's cinnabar workshop (ochiba-magistracy.svg) (449 T359)
+///     the post mark - CONVENTION: the hand sheet's mark, its roof hatched over open sides and a dark dot for each post, r 3 px (a 1 ft radius, 2 ft across); no page draws a workshop shed's posts (449 T359)
+fn shed_posts(s: &mut Svg, at: Bx) {
+    let inset = 10.0 / PX;
+    let (x0, x1, y0, y1) = (at.0 + inset, at.2 - inset, at.1 + inset, at.3 - inset);
+    let (xm, ym) = (f64::midpoint(x0, x1), f64::midpoint(y0, y1));
+    let posts = if at.2 - at.0 >= at.3 - at.1 {
+        [(x0, y0), (xm, y0), (x1, y0), (x0, y1), (xm, y1), (x1, y1)]
+    } else {
+        [(x0, y0), (x0, ym), (x0, y1), (x1, y0), (x1, ym), (x1, y1)]
+    };
+    for (x, y) in posts {
+        let (cx, cy) = px(x, y);
+        s.put(&format!(
+            r##"<circle cx="{}" cy="{}" r="3" fill="#3A1810"/>"##,
+            n(cx),
+            n(cy)
+        ));
     }
 }
 

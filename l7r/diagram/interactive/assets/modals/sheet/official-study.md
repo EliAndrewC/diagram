@@ -14,13 +14,13 @@ In China, at the governor-general's seat at Baoding, the official's study and in
 gate, on the residence's side of the line between the court of business and the home. In a Japanese lord's palace the lord's own rooms, a room for daytime work and a bedroom, lay behind the formal front, and Edo-period drawings of the shogun's palace count the shogun's own office as part of that front.
 
 Guesses:
-- That the magistrate had a working room of their own in the office hall, in the back row behind the dais band, at its
-  east end: no account names or places such a room; it is reckoned
+- That the magistrate had a working room of their own in the office hall, in the back row behind the dais band, at the
+  end away from the armory: no account names or places such a room; it is reckoned
   from where an office's paperwork had to be done, since a private study in the residence would stand on the household's
   side of the line between office and home.
 
-Depiction: The plan draws the official study as a room of the office hall's back row, behind the dais band, east of the day office, its
-floor drawn in the hall's own color.
+Depiction: The plan draws the official study as a room of the office hall's back row, behind the dais band, beside the day office at
+the end of the row away from the armory, its floor drawn in the hall's own color.
 
 Name: official study
 Covers: the official study's floor and its label

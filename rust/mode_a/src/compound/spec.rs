@@ -156,7 +156,7 @@ pub struct Building {
     pub bays: Vec<f64>,
     /// Its doors; empty takes the default.
     pub doors: Vec<DoorSpec>,
-    /// A drawn interior by rule: `stables` or `cell`.
+    /// A drawn interior by rule: `stables`, `cell` or `open shed` (a hatched roof on six posts, no door; 449 T359).
     pub interior: Option<String>,
 }
 

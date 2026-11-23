@@ -5,8 +5,8 @@ of the officials hired mostly from the district, the goyoba, was partitioned off
 the shogunate worked, and a room used only for writing had a binding room beside it. It was a place of work, not of
 lodging: an intendant's staff lived in huts and rowhouses elsewhere in the compound, and the papers were stored in an
 earth-walled storehouse. In Rokugan a county office's clerks are three or four heimen scribes hired from the county town,
-who live in town and come in each day; as the office's permanent staff they probably carry its business from one
-magistrate to the next.
+who live in town and come in each day. In China, clerks who were permanent locals were probably an office's memory under one
+magistrate after another.
 
 The room was of timber, like the hall it lay in: Takayama's office was a single-story wooden hall roofed with wooden
 shingles. What the room itself looked like beyond its partitions is not recorded.

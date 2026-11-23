@@ -1,10 +1,11 @@
 //! The armory's SITE (feature 449 T303; docs/building-programs.md knob 4): one choice rolled from the map's seed among the sites a sheet
-//! offers - the gate range where the main gate is drawn as one, the office hall's west end bay, or a store of its own - and the sheet
+//! offers - the gate range where the main gate is drawn as one, an end bay of the office hall, or a store of its own - and the sheet
 //! drawing its armory where the roll says, its `**Form**:` line naming the form. Where a store of its own stands is the sheet's: no
-//! source places one, and a seat rule would forbid what the round arbiter's ruling allows (spec-fidelity MODE 4, 2026-11-22).
+//! source places one, and a seat rule would forbid what the round arbiter's ruling allows (spec-fidelity MODE 4, 2026-11-22). Where the
+//! site is the hall, WHICH end bay is a second roll, west or east (449 T367: 0123 finds the armory's side varied across county offices).
 //!
 //! Research:
-//!     one choice among the sites a sheet offers - research/questions/0123-the-magistrates-manor-in-a-town-where-it-stands-and-which-way-it-faces-jinya-and-yamen.html, research/questions/0093-the-main-gate-and-its-gatekeepers-nagaya-mon.html: three attested sites for a seat's arms - Kaibara's store of arms a room of its gate range (0093), Pingyao's armory its great hall's west end bay (0123), and a weapons store a building of its own at Nirayama, late Edo, and one named among Hamamashike's storehouses, finished 1860 (0123) - so a knob rolled from the map's seed (the round arbiter's ask:armory-store-ubame, route (a), 2026-11-22: one choice, no nested roll); the gate range is offered only where the main gate is drawn as one, so a one-bay gate's sheet rolls between the hall's bay and a store
+//!     one choice among the sites a sheet offers - research/questions/0123-the-magistrates-manor-in-a-town-where-it-stands-and-which-way-it-faces-jinya-and-yamen.html, research/questions/0093-the-main-gate-and-its-gatekeepers-nagaya-mon.html: three attested sites for a seat's arms - Kaibara's store of arms a room of its gate range (0093), Pingyao's armory its great hall's west end bay (0123), and a weapons store a building of its own at Nirayama, late Edo, and one named among Hamamashike's storehouses, finished 1860 (0123) - so a knob rolled from the map's seed (the round arbiter's ask:armory-store-ubame, route (a), 2026-11-22: one choice among the sites, no nested roll that turns one site into another; which end bay a hall site takes is a separate knob of two attested forms, `rolled_end`, 449 T367, spec-fidelity MODE 4 2026-11-23); the gate range is offered only where the main gate is drawn as one, so a one-bay gate's sheet rolls between the hall's bay and a store
 //!     the drawn site read from the sheet - NONE: an armory inside the office hall's footprint is the hall's bay, a room of the gate range the main gate's passage runs through is the range's, else a store of its own (a gatehouse beside a one-bay gate offers no range)
 
 use super::checks::main_gate_passage;
@@ -37,7 +38,7 @@ pub fn stem(path: &str) -> &str {
 /// store of its own - the order that keeps every pool sheet's two-way roll of 449 T276 (measured 2026-11-22).
 ///
 /// Research:
-///     the sites offered - research/questions/0123-the-magistrates-manor-in-a-town-where-it-stands-and-which-way-it-faces-jinya-and-yamen.html, research/questions/0093-the-main-gate-and-its-gatekeepers-nagaya-mon.html: the one choice among the sites a sheet offers - the gate range (0093) only where the main gate is drawn as one, the hall's west end bay (0123), a store of its own (0123)
+///     the sites offered - research/questions/0123-the-magistrates-manor-in-a-town-where-it-stands-and-which-way-it-faces-jinya-and-yamen.html, research/questions/0093-the-main-gate-and-its-gatekeepers-nagaya-mon.html: the one choice among the sites a sheet offers - the gate range (0093) only where the main gate is drawn as one, an end bay of the hall (0123; which end, west or east, its own knob), a store of its own (0123)
 #[must_use]
 pub fn sites(gate_range: bool) -> Vec<String> {
     let all: &[&str] = if gate_range {
@@ -51,12 +52,53 @@ pub fn sites(gate_range: bool) -> Vec<String> {
 /// The site the sheet's seed rolls: `random.Random(zlib.crc32(b"<sheet>:armory site")).choice(sites)`.
 ///
 /// Research:
-///     the site rolled - research/questions/0123-the-magistrates-manor-in-a-town-where-it-stands-and-which-way-it-faces-jinya-and-yamen.html, research/questions/0093-the-main-gate-and-its-gatekeepers-nagaya-mon.html: the one choice among the sites a sheet offers, rolled from the map's seed as several attested forms are, one choice and no nested roll
+///     the site rolled - research/questions/0123-the-magistrates-manor-in-a-town-where-it-stands-and-which-way-it-faces-jinya-and-yamen.html, research/questions/0093-the-main-gate-and-its-gatekeepers-nagaya-mon.html: the one choice among the sites a sheet offers, rolled from the map's seed as several attested forms are, one choice among the sites and no nested roll that turns one site into another; the hall's end bay is a separate knob of two attested forms (`rolled_end`, 449 T367)
 #[must_use]
 pub fn rolled(sheet: &str, gate_range: bool) -> String {
     roll::choice(sheet, KEY, &sites(gate_range))
         .cloned()
         .unwrap_or_default()
+}
+
+/// The end bay's roll key, `<sheet>:armory end bay` (449 T367), read only where the site is the hall.
+pub const END_KEY: &str = "armory end bay";
+/// The hall's two end bays, by the names the sheets' notes roll them under.
+pub const WEST: &str = "west";
+pub const EAST: &str = "east";
+
+/// The end bays, in the roll's order.
+///
+/// Research:
+///     the end bays offered - research/questions/0123-the-magistrates-manor-in-a-town-where-it-stands-and-which-way-it-faces-jinya-and-yamen.html: the armory's side varied across county offices, so the hall's west and east end bays are both offered, west first
+#[must_use]
+pub fn end_bays() -> Vec<String> {
+    vec![WEST.to_owned(), EAST.to_owned()]
+}
+
+/// The end bay the sheet's seed rolls.
+///
+/// Research:
+///     the end bay rolled - research/questions/0123-the-magistrates-manor-in-a-town-where-it-stands-and-which-way-it-faces-jinya-and-yamen.html: the armory's side varied, so a knob rolled from the map's seed
+#[must_use]
+pub fn rolled_end(sheet: &str) -> String {
+    roll::choice(sheet, END_KEY, &end_bays())
+        .cloned()
+        .unwrap_or_default()
+}
+
+/// The hall's end bay the sheet draws its armory in: None where the armory is not the hall's.
+///
+/// Research:
+///     the end bay read from the sheet - NONE: the armory's center west or east of the hall's, deciding nothing
+#[must_use]
+pub fn drawn_end(plan: &ParsedPlan) -> Option<&'static str> {
+    let (site, a) = drawn_site(plan)?;
+    let hall = footprint(plan, "office hall").filter(|_| site == HALL)?;
+    Some(if center(a).0 < center(hall).0 {
+        WEST
+    } else {
+        EAST
+    })
 }
 
 /// The `**Form**:` line the site's band is read under: None for the hall's bay, the default band.
@@ -191,6 +233,15 @@ pub fn armory_site(plan: &ParsedPlan, sheet: &str, form: Option<&str>) -> Vec<St
             "the armory at {at} is drawn as {site:?}, but the sheet's seed rolls {want:?} among {:?} (`{sheet}:{KEY}`)",
             sites(range)
         ));
+    }
+    if let Some(end) = drawn_end(plan).filter(|_| want == HALL) {
+        let bay = rolled_end(sheet);
+        if end != bay {
+            out.push(format!(
+                "the armory at {at} stands in the office hall's {end} end bay, but the sheet's seed rolls {bay:?} among {:?} (`{sheet}:{END_KEY}`): draw the hall's back row from its {bay} end, the armory in that end bay",
+                end_bays()
+            ));
+        }
     }
     let declared = form.filter(|f| [GATE_RANGE_FORM, STORE_FORM].contains(f));
     if declared != form_of(site) {

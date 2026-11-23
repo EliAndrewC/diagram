@@ -1,0 +1,7 @@
+{
+  "utc": "2026-11-23T08:54:22Z",
+  "target": "review-accept",
+  "commit": "253f81afa7",
+  "outcome": "permitted",
+  "why": "review-accept glyph-check--cell--county-magistracy-example F5: a confirmation, nothing to fix: the round two check judges only whether the error and the questionable item are fixed"
+}

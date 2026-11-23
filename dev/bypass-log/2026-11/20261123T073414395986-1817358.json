@@ -1,0 +1,7 @@
+{
+  "utc": "2026-11-23T07:34:14Z",
+  "target": "review-accept",
+  "commit": "253f81afa7",
+  "outcome": "permitted",
+  "why": "review-accept building-review--ochiba-roundtrip-test N1: the reviewer's own note: no norm requires a change, a working apron below the open-void threshold, left for the next pack pass"
+}

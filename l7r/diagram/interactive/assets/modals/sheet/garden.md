@@ -5,7 +5,7 @@ room, with stepping stones into it from each, so the private rooms shared it. A 
 gate and along a walled garden path, the roji, straight to the reception room's veranda.
 
 A Japanese garden was made of a pond and its water, set stones, made hills and planting, furnished with stepping stones,
-paving, stone lanterns and fences. Beside samurai rooms stood gardens both with water and without: a pond garden built around real water, as
+paving, stone lanterns and fences. Its lead tree was the black pine, its new shoots pinched and worked twice a year, and a pine could be planted at the edge of the wall to be seen from outside. Beside samurai rooms stood gardens both with water and without: a pond garden built around real water, as
 at Takayama and at a small domain's seat at Okutono, or a dry garden that showed water without using any, as six of the
 seven protected samurai-house gardens at Chiran are. The stone lantern, first a votive light before shrines and temples,
 came into ordinary gardens from the Momoyama period.
@@ -21,7 +21,7 @@ Guesses:
   taken as the office's form, since both government offices whose gardens could be read, Takayama and Okutono, had one.
 - That the private rooms share the one garden at humbler postings too: it is recorded at Takayama alone.
 - A garden drawn where a guest crosses from a gate to an entrance, or round a compound's shrine: the ground a guest crossed to a formal entrance
-  was an open court, and no garden round a compound's shrine was found.
+  is open on the two drawings that show it, and the one garden approach to such an entrance found is a loosely dated plate; no garden round a compound's shrine was found.
 - How many stone lanterns a garden held, and where: no record gives either.
 
 Depiction: The plan draws one ornamental garden in each compound, before the great hall where its buildings allow, with the private rooms reaching it
@@ -34,5 +34,5 @@ lanterns came in many named kinds, the Kasuga, the snow-viewing, the Enshū and 
 Name: garden
 Covers: the inner garden, a garden path, a shrine garden and a guest garden, and their labels
 Sources: kotobank-teien, shoinzukuri-jawiki, matsushiro-bukeyashiki, oniwa-takayama-jinya, takayama-jinya-jawiki, shiroishi-koseki, okutono-jinya-garden, chiran-bukeyashiki-gardens, kotobank-ishidoro, fuchu-joge-pamphlet
-Entry: research/questions/0103-ornamental-gardens-ponds-and-stone-lanterns-teien.html, research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.html, research/questions/0104-the-formal-entrance-and-a-guests-arrival-genkan.html, research/questions/0218-the-compounds-own-shrine-yashikigami.html
-Drawing: research/questions/0103-ornamental-gardens-ponds-and-stone-lanterns-teien.drawing.html, research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html, research/questions/0104-the-formal-entrance-and-a-guests-arrival-genkan.drawing.html, research/questions/0218-the-compounds-own-shrine-yashikigami.drawing.html, research/questions/0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html
+Entry: research/questions/0103-ornamental-gardens-ponds-and-stone-lanterns-teien.html, research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.html, research/questions/0104-the-formal-entrance-and-a-guests-arrival-genkan.html, research/questions/0218-the-compounds-own-shrine-yashikigami.html, research/questions/0076-black-pines-in-japanese-gardens-kuromatsu.html
+Drawing: research/questions/0103-ornamental-gardens-ponds-and-stone-lanterns-teien.drawing.html, research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html, research/questions/0104-the-formal-entrance-and-a-guests-arrival-genkan.drawing.html, research/questions/0218-the-compounds-own-shrine-yashikigami.drawing.html, research/questions/0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html, research/questions/0076-black-pines-in-japanese-gardens-kuromatsu.drawing.html

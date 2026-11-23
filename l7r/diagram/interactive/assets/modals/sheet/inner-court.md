@@ -4,7 +4,9 @@ service ground that kept the household running. The office was also a home, and 
 inner residence gate, divided it from the office; in Japan a town magistrate's residence stood inside the magistracy too, though
 at the intendant's office at Takayama the residence stood beside the office rather than behind it.
 
-What lay underfoot in the court is not recorded, nor what the wall between it and the office was built of. The formal garden lay on the sunny south side, before the reception rooms; at Takayama the
+What lay underfoot in the court is not recorded, nor what the wall between it and the office was built of. Samurai
+houses at Kanazawa kept gardens of four kinds: a forecourt, a kitchen yard, a viewing garden and a rear plot of fruit trees and vegetables, and
+a daimyo's residence at Osaka, in the Edo period, walled off the garden before its living rooms. The formal garden lay on the sunny south side, before the reception rooms; at Takayama the
 great hall of the office and the intendant's own room looked onto one garden. The house itself was one block under one
 roof, with its guest rooms inside it.
 
@@ -26,6 +28,6 @@ open, its earth showing through unfilled, and the service ground behind the hous
 
 Name: inner court
 Covers: the inner court's ground and its label
-Sources: neixiang-yamen-zhwiki, yamen-enwiki, machi-bugyo-jawiki, takayama-jinya-city, shoinzukuri-jawiki, oniwa-takayama-jinya, boso-no-mura-takei, kojodan-higuchi, matsushiro-bukeyashiki, matsue-bukeyashiki, kotobank-yashikigami
+Sources: neixiang-yamen-zhwiki, yamen-enwiki, machi-bugyo-jawiki, takayama-jinya-city, shoinzukuri-jawiki, oniwa-takayama-jinya, boso-no-mura-takei, kojodan-higuchi, matsushiro-bukeyashiki, matsue-bukeyashiki, kotobank-yashikigami, archiscape-kanazawa-sedo, kochi-hantei-jstage
 Entry: research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.html, research/questions/0090-magistrates-compounds-jinya-and-yamen.html, research/questions/0116-the-size-of-a-compound-and-the-rank-of-its-buildings.html, research/questions/0103-ornamental-gardens-ponds-and-stone-lanterns-teien.html, research/questions/0218-the-compounds-own-shrine-yashikigami.html, research/questions/0101-privies-setchin.html
 Drawing: research/questions/0090-magistrates-compounds-jinya-and-yamen.drawing.html, research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html, research/questions/0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html, research/questions/0103-ornamental-gardens-ponds-and-stone-lanterns-teien.drawing.html, research/questions/0218-the-compounds-own-shrine-yashikigami.drawing.html, research/questions/0101-privies-setchin.drawing.html

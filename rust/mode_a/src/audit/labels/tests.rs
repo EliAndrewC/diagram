@@ -97,3 +97,29 @@ fn a_labeled_item_s_band_is_held_on_its_tagged_footprint() {
     // an item of a kind no registry knows is refused where its band fails
     assert!(check_bands(&plan, &types[1], None, &mut kinds).is_err());
 }
+
+/// The magistrate's dais is required (449 T368: 0099's drawing page makes it the front of the office hall over every hearing court):
+/// Ochiba's hand sheet passes with its dais and is refused with it taken out.
+#[test]
+fn a_magistracy_drawn_without_its_dais_is_refused() {
+    let tree = tree();
+    let types = crate::types::load_types(&tree).unwrap();
+    let manor = types.iter().find(|t| t.tier == "magistracies").unwrap();
+    let svg = std::fs::read_to_string(
+        tree.join("pool/magistracies/ochiba-magistracy/ochiba-magistracy.svg"),
+    )
+    .unwrap();
+    let dais = |plan: &crate::parse::ParsedPlan| {
+        check_program(plan, manor, None, None)
+            .into_iter()
+            .filter(|m| m.contains("magistrates_dais"))
+            .count()
+    };
+    assert_eq!(dais(&parse_svg(&svg).unwrap()), 0);
+    let without: String = svg
+        .lines()
+        .filter(|l| !l.contains("magistrate's dais"))
+        .collect::<Vec<_>>()
+        .join("\n");
+    assert_eq!(dais(&parse_svg(&without).unwrap()), 1);
+}

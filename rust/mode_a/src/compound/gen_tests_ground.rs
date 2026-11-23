@@ -139,5 +139,10 @@ fn a_granary_stands_on_the_offices_side_of_the_divider() {
     let household = err(laid_out(&[granary("inner", "E")]));
     let office = err(laid_out(&[hall, granary("outer", "divider")]));
     assert!(household.contains("household's court"), "{household}");
+    // the fix the refusal names is 0123's drawing page's seat, an office-court flanking column beside the hall, never behind the
+    // office hall, where the household's court lies (449 T366)
+    let flank = "one of the office court's flank columns beside the office hall";
+    assert!(household.contains(flank), "{household}");
+    assert!(!household.contains("behind the office hall"), "{household}");
     assert!(office.is_empty(), "{office}");
 }

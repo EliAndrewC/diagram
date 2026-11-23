@@ -11,6 +11,8 @@ Gatekeepers sat in a room of the gate range or, as at Takayama, in a gatehouse o
 
 A Chinese county office's gate was a roofed building, three bays wide at a county seat (a lesser office's one), with
 two black-lacquered leaves in each bay, and a Chinese office faced south, as old ritual held it should. How wide a Chinese office's gate was is not recorded.
+At Pingyao a drum was set up under the gate's porch for the people to beat with a grievance, and at Neixiang
+one stood in the front half of the gate's east end bay.
 
 Guesses:
 - A Chinese office's gate drawn 18 to 24 ft wide: no record gives such a gate's width.
@@ -22,9 +24,11 @@ Depiction: The plan draws a Japanese office's gate in one of its two forms, a on
 nagaya-mon opening about 12 ft, each plan taking one, and a Chinese office's as a roofed building of three bays. Its
 gatekeepers sit in a gatehouse beside it or a guardroom in the range, about 12 ft deep either way, each plan taking one.
 Its posts are drawn as dark blocks in the wall's near-black ink, set outside the opening rather than on its edges, so the opening reads on the plan, and on some plans run out across the wall so they stand past it on both faces; a one-bay gate is therefore drawn wider than the real one, whose 6 to 8.5 ft ran between its pillars' centers, and the dark is the drawing's, not the posts' color.
+Every plan's gate keeps a grievance drum under its roof, as the Chinese county offices at Pingyao and Neixiang did, but the drum is not drawn as a
+mark of its own.
 
 Name: main gate
 Covers: the posts flanking the main opening
-Sources: fuchu-joge-pamphlet, kominkai-genkan, nagayamon-jawiki, tamba-kashiwara-jinya, bunka-saito-nagayamon, bunka-adachi-yakuimon, bunka-omi-yakuimon, bunka-fujioka-yakuimon, takayama-jinya-city, matsue-bukeyashiki, sohu-yamen-gate, neixiang-xianya-zhwiki, kitain-bansho, omori-daikansho-kunishitei, kotobank-nagayamon, bunka-mikazuki-omotemon, gujin-xie-yamen
+Sources: fuchu-joge-pamphlet, kominkai-genkan, nagayamon-jawiki, tamba-kashiwara-jinya, bunka-saito-nagayamon, bunka-adachi-yakuimon, bunka-omi-yakuimon, bunka-fujioka-yakuimon, takayama-jinya-city, matsue-bukeyashiki, sohu-yamen-gate, neixiang-xianya-zhwiki, kitain-bansho, omori-daikansho-kunishitei, kotobank-nagayamon, bunka-mikazuki-omotemon, gujin-xie-yamen, netease-pingyao-yamen, neixiang-yamen-baike-weixin
 Entry: research/questions/0093-the-main-gate-and-its-gatekeepers-nagaya-mon.html, research/questions/0104-the-formal-entrance-and-a-guests-arrival-genkan.html, research/questions/0123-the-magistrates-manor-in-a-town-where-it-stands-and-which-way-it-faces-jinya-and-yamen.html, research/questions/0097-staff-rowhouses-and-barracks-nagaya.html
 Drawing: research/questions/0093-the-main-gate-and-its-gatekeepers-nagaya-mon.drawing.html, research/questions/0092-compound-walls-neribei-and-tsuijibei.drawing.html, research/questions/0104-the-formal-entrance-and-a-guests-arrival-genkan.drawing.html, research/questions/0123-the-magistrates-manor-in-a-town-where-it-stands-and-which-way-it-faces-jinya-and-yamen.drawing.html

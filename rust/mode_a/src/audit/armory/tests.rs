@@ -6,8 +6,8 @@
 use std::path::{Path, PathBuf};
 
 use super::{
-    armory_site, drawn_site, gate_range_drawn, rolled, sites, stem, GATE_RANGE, GATE_RANGE_FORM,
-    HALL, STORE, STORE_FORM,
+    armory_site, drawn_end, drawn_site, end_bays, gate_range_drawn, rolled, rolled_end, sites,
+    stem, EAST, GATE_RANGE, GATE_RANGE_FORM, HALL, STORE, STORE_FORM, WEST,
 };
 use crate::parse::parse_svg;
 
@@ -41,6 +41,9 @@ const SPLIT_ARMORY: &str =
     r##"<rect x="150" y="268" width="36" height="24" fill="#8C6F3E" data-kind="armory"/>"##;
 const IN_HALL: &str =
     r##"<rect x="100" y="180" width="42" height="30" fill="#DDB87A" data-kind="armory"/>"##;
+/// The hall's east end bay (449 T367).
+const IN_HALL_EAST: &str =
+    r##"<rect x="258" y="180" width="42" height="30" fill="#DDB87A" data-kind="armory"/>"##;
 const IN_RANGE: &str =
     r##"<rect x="152" y="270" width="26" height="20" fill="#8C6F3E" data-kind="armory"/>"##;
 const STORE_OUTER: &str =
@@ -82,13 +85,21 @@ fn every_pool_magistracy_draws_its_armory_where_its_seed_rolls_it() {
         ("ochiba-roundtrip-test", false, HALL),
         ("county-magistracy-example", false, HALL),
     ];
-    for (sheet, range, site) in sheets {
+    let ends = [
+        ("ubame-magistracy", None),
+        ("hayakawa-magistracy", Some(EAST)),
+        ("ochiba-magistracy", Some(WEST)),
+        ("ochiba-roundtrip-test", Some(EAST)),
+        ("county-magistracy-example", Some(WEST)),
+    ];
+    for ((sheet, range, site), (_, end)) in sheets.into_iter().zip(ends) {
         let svg = tree.join(format!("pool/magistracies/{sheet}/{sheet}.svg"));
         let text = std::fs::read_to_string(&svg).unwrap();
         let plan = parse_svg(&text).unwrap();
         let form = crate::audit::report::read_form(&svg.to_string_lossy()).unwrap();
         assert_eq!(gate_range_drawn(&plan), range, "{sheet}");
         assert_eq!(drawn_site(&plan).map(|(s, _)| s), Some(site), "{sheet}");
+        assert_eq!(drawn_end(&plan), end, "{sheet}");
         let found = armory_site(&plan, sheet, form.as_deref());
         assert!(found.is_empty(), "{sheet}: {found:?}");
     }
@@ -119,9 +130,9 @@ fn each_site_passes_where_its_seed_rolls_it() {
     // a sheet with no main gate drawn has no gate range
     let ungated = yard(RANGE, IN_RANGE).replace(r#"data-kind="main gate""#, r#"data-kind="-""#);
     assert!(!gate_range_drawn(&parse_svg(&ungated).unwrap()));
-    // `e` rolls the gate range among three; `c` the hall among three; `b` a store among two
+    // `e` rolls the gate range among three; `h` the hall among three, its west end bay; `b` a store among two
     assert!(armory_site(&range_room, "e", Some(GATE_RANGE_FORM)).is_empty());
-    assert!(armory_site(&plan(RANGE, IN_HALL), "c", None).is_empty());
+    assert!(armory_site(&plan(RANGE, IN_HALL), "h", None).is_empty());
     assert!(armory_site(&plan(ONE_BAY, STORE_OUTER), "b", Some(STORE_FORM)).is_empty());
     assert!(armory_site(&plan(ONE_BAY, ""), "b", None).is_empty());
 }
@@ -138,6 +149,48 @@ fn an_armory_off_its_roll_or_its_form_is_refused() {
     assert!(unformed[0].contains("notes declare None"), "{unformed:?}");
     // a store of its own stands where the sheet draws it: in the inner court too, or on a sheet with no divider or no main gate
     assert!(armory_site(&plan(ONE_BAY, STORE_INNER), "b", Some(STORE_FORM)).is_empty());
+}
+
+/// The hall's end bay is a second roll (449 T367; 0123: the armory's side varied across county offices - Pingyao's west end bay,
+/// Jiexiu's both, Neixiang's on the left, Wuyang's to the right of its hall, Zhenping's east and west stores), keyed
+/// `<sheet>:armory end bay` among west and east in that order, read only where the site is the hall: the pool's four hall-bay sheets
+/// roll county and Ochiba west, Hayakawa and the round trip east (measured 2026-11-23 against Python's `random`).
+#[test]
+fn the_end_bay_is_rolled_from_the_seed() {
+    assert_eq!(end_bays(), [WEST, EAST]);
+    for (sheet, want) in [
+        ("county-magistracy-example", WEST),
+        ("ochiba-magistracy", WEST),
+        ("hayakawa-magistracy", EAST),
+        ("ochiba-roundtrip-test", EAST),
+        ("e", WEST),
+        ("a", EAST),
+    ] {
+        assert_eq!(rolled_end(sheet), want, "{sheet}");
+    }
+}
+
+/// An armory in the hall's other end bay is refused, the refusal naming the roll and the fix; one in its rolled end bay passes, and
+/// an armory elsewhere has no end bay.
+#[test]
+fn an_armory_in_the_other_end_bay_is_refused() {
+    let plan = |g, a| parse_svg(&yard(g, a)).unwrap();
+    // `a` rolls the hall among two and its east end bay; `e` the hall among two and its west end bay
+    assert_eq!(drawn_end(&plan(ONE_BAY, IN_HALL)), Some(WEST));
+    assert_eq!(drawn_end(&plan(ONE_BAY, IN_HALL_EAST)), Some(EAST));
+    assert_eq!(drawn_end(&plan(ONE_BAY, STORE_OUTER)), None);
+    assert_eq!(drawn_end(&plan(ONE_BAY, "")), None);
+    assert!(armory_site(&plan(ONE_BAY, IN_HALL_EAST), "a", None).is_empty());
+    assert!(armory_site(&plan(ONE_BAY, IN_HALL), "e", None).is_empty());
+    let west = armory_site(&plan(ONE_BAY, IN_HALL), "a", None);
+    assert_eq!(west.len(), 1, "{west:?}");
+    assert!(west[0].contains("west end bay"), "{west:?}");
+    assert!(west[0].contains("rolls \"east\""), "{west:?}");
+    assert!(west[0].contains("`a:armory end bay`"), "{west:?}");
+    assert!(west[0].contains("from its east end"), "{west:?}");
+    let east = armory_site(&plan(ONE_BAY, IN_HALL_EAST), "e", None);
+    assert_eq!(east.len(), 1, "{east:?}");
+    assert!(east[0].contains("rolls \"west\""), "{east:?}");
 }
 
 /// A gate in a north-south wall: the range's two rooms stand north and south of its passage, across the passage's line.

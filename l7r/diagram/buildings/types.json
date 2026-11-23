@@ -85,8 +85,7 @@
           "w": [12, 20],
           "h": [8, 12],
           "area": [100, 240]
-        },
-        "optional": true
+        }
       },
       {
         "id": "tax_archive",

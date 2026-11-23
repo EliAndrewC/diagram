@@ -168,7 +168,7 @@ fn composition(p: &spec::Program, l: &layout::Layout, s: &parts::Seated) -> Resu
 pub fn sheet(p: &spec::Program, l: &layout::Layout, s: &parts::Seated) -> String {
     let mut svg = emit::Svg::new();
     emit::head(&mut svg, p);
-    emit::grounds(&mut svg, p);
+    emit::grounds(&mut svg, p, l);
     emit::buildings(&mut svg, p, l);
     emit::frame(&mut svg, p, l);
     emit_parts::parts(&mut svg, s);
@@ -261,6 +261,8 @@ pub fn board_by_a_gate(board: FtBox, openings: &[(f64, f64)]) -> bool {
 
 #[cfg(test)]
 mod gen_tests;
+#[cfg(test)]
+mod gen_tests_draw;
 #[cfg(test)]
 mod gen_tests_ground;
 #[cfg(test)]

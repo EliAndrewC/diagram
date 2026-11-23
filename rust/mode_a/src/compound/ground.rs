@@ -258,6 +258,7 @@ pub fn open_ground(p: &Program, l: &Layout) -> Result<(), Error> {
 /// Research:
 ///     the granary's cart route - research/questions/0082-moving-goods-carts-packhorses-and-river-landings-kashi.drawing.html: the granary's door reached by cart from a gate
 ///     the granary on the offices' side - research/questions/0123-the-magistrates-manor-in-a-town-where-it-stands-and-which-way-it-faces-jinya-and-yamen.html: Pingyao built its granary north of the official quarters behind the war, justice and works offices, on the office side and not in the residence's court, so a granary seated in the household's court is refused; each building's cart route is walked in its own court, from the gates on that court's side of the divider, never through the middle gate
+///     the seat the refusal names - GUESS research/questions/0123-the-magistrates-manor-in-a-town-where-it-stands-and-which-way-it-faces-jinya-and-yamen.drawing.html: on the manor's own map the granary takes one of the office court's flanking columns beside the office hall, at the column's head against the wall between the two courts or just below a building that heads it, never the household's inner court; behind the office hall lies the household's court, so the refusal sends the author to the flanking column (449 T366)
 ///     the stables' cart route - GUESS: the stables' door reached by cart too (feature 417 T36 pass P4: no source could speak to it)
 fn cart_route(p: &Program, l: &Layout, court: Court, g: &Ground) -> Result<(), Error> {
     let inset = WALL_HALF + CLEAR;
@@ -283,7 +284,7 @@ fn cart_route(p: &Program, l: &Layout, court: Court, g: &Ground) -> Result<(), E
             return Err(Error::new(
                 "ValueError",
                 format!(
-                    "the {} stands in the household's court - Pingyao built its granary north of the offices on the office side (0123); seat it in the office court, behind the office hall",
+                    "the {} stands in the household's court - Pingyao built its granary north of the offices on the office side (0123); seat it in one of the office court's flank columns beside the office hall, at the column's head against the divider or below the building that heads it (0123's drawing page)",
                     b.name
                 ),
             ));

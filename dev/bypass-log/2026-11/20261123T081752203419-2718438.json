@@ -1,0 +1,7 @@
+{
+  "utc": "2026-11-23T08:17:52Z",
+  "target": "review-accept",
+  "commit": "253f81afa7",
+  "outcome": "permitted",
+  "why": "review-accept building-review--county-magistracy-example C2: a confirmation of the 2026-11-23 review, nothing to fix; the re-review reads the E1 fix afresh"
+}
