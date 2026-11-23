@@ -1,0 +1,6 @@
+{
+  "utc": "20261123T155324Z",
+  "guard": "pair-hooks",
+  "what": "review prerequisites",
+  "reason": "REVIEW_PREREQ_OK: the 49 ft figure is recorded as m:t392-ochiba-lane in specs/449-rust-codebase/measurements.json, value 49.3; the guard did not pair the key quoted after the figure"
+}

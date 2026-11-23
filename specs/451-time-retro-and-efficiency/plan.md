@@ -2279,6 +2279,33 @@ engine speed, so no checklist.
 <!-- plan-archive: T175 to T175 moved to plan-done.md, 2026-11-23 (feature 375 FR-044) -->
 <!-- plan-archive: T174 to T177 moved to plan-done.md, 2026-11-23 (feature 375 FR-044) -->
 <!-- plan-archive: T174 to T174 moved to plan-done.md, 2026-11-23 (feature 375 FR-044) -->
+### T173 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T173 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+
 ### T176 (observed 2026-11-23, 449's T351 bundle: the county's spec edit moved the engine key, which covers every pool sheet's spec, and re-owed the building-reviews of the four PASS sheets whose drawing and notes did not change - hayakawa, ochiba, ubame and the round trip)
 
 - **Approach**: The task offered two routes: key a sheet's review to the engine code and that sheet's own inputs, or carry a verdict forward when the sheet's output is the one reviewed. Carrying was chosen. The push's review gate already carries a verdict whose recorded `content_key` (a hash of the sheet's svg and notes, written by `make review-verdict`) equals the sheet's key now (`review-gate.sh`, feature 374 batch 4), so only the three readers that held a verdict to the engine key alone re-owed it. Re-keying would need a new per-sheet engine key in the `tree` crate, in `make engine-key` and in every guard reader, and it would still re-owe a sheet when an engine edit leaves its drawing alone. The change is one predicate, `prereq::carried(v, now)`: a PASS or NEEDS-WORK whose `content_key` is non-empty and equal to the sheet's key now, which is asked only of a record that has one. It is wired into four places. `prereq.rs` `recorded` (FR-002's `reviews prereq recorded`) reads it. A new verb, `reviews prereq answered --clone C --unit U --key K` (exit 0 when answered), reads it. The checkpoint's `answered`, which holds `make tick`, reads it, keeping the owed units' sheets from `all_owed` so that no second owed lookup is made. `review-tree.sh`'s busy check, which holds `make verify`, asks the gate's `answered` about a unit whose verdict is at another key, and only while the tree's gate is green. `unit_content_key` and the checkpoint share `content_key_on`: the review tree's snapshot copy where it took the unit (451 T164), else the pool's sheet. What it does not see: a building-review also reads `docs/building-programs.md` and `docs/buildings.md`, so a change to those alone still carries the verdict, as the push's gate has since 374 batch 4.
@@ -2349,6 +2376,33 @@ engine speed, so no checklist.
 **Performance work?** no - a wrong outcome of the arbiter's record; the time it cost (dispatches refused for days) goes with it.
 
 <!-- plan-archive: T182 to T177 moved to plan-done.md, 2026-11-23 (feature 375 FR-044) -->
+### T178 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T178 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+
 ### T180 (observed 2026-11-23, 449's T351 and T358 bundles landing alone: land-alone's commit 832cedd0fc held 449 T377's filled plan section and its BLOCKED plan-review verdict, though the landing's T= named 21 tasks and not T377, and 7 of the 21 ticks were then refused on T377's heading block, measured 2026-11-23 from `git show --stat 832cedd0fc` and `/tmp/land351/land1.log`)
 
 - **Approach**: Two defects, both fixed. (1) `scripts/land-alone.sh`'s step 2 (`stage`) widened the landing's tasks by every `Filed as T<n>` in their own sections, then took plan.md's sections, tasks.md's lines and plan-review.json's verdicts for the widened set. T351's section files T377, so T377's builder's uncommitted section and verdict went into the commit (its subject lists 9 tasks the T= did not: T371-T373, T377, T380, T386, T389-T391). Now a filed task lands only its tasks.md line, which the deferral rule needs open in the landed tree (451 T17). Its plan section and verdict are never taken, and the subject names the filed tasks apart. (2) The tick's scope (`rust/gate/crates/plan/src/plan/status.rs`, `in_scope`, 451 T84) is right to judge the asked task, the tasks ticked before it and the blocks outside every task's section, but its notion of ownership leaked. `plan_text`'s sections make a task with no heading of its own the owner of every heading that names it. T377's filled heading names T351 (`ask:glyph-occasions-emit-449-T351`). Once T368's tick archived T351's section, T351's "section" was T377's heading block, and T351, ticked, is in every later tick's scope. So T358, T360, T361, T362, T369, T370 and T379 were refused on `### T377 (the round arbiter's ...`: the heading block alone, never T377's Approach block, which the mention's span does not reach. Now a block inside a task's own section answers only for its own tasks, and a heading that only names a task owns a block only where no own section does. The fix is in the plan crate, not in `plan_text` (`rust/guard/shared`, 451 T170's files).
@@ -2390,3 +2444,31 @@ engine speed, so no checklist.
 
 
 <!-- plan-archive: T183 to T183 moved to plan-done.md, 2026-11-23 (feature 375 FR-044) -->
+### T181 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T181 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
+
+

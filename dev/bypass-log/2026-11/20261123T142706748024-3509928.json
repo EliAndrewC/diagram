@@ -1,0 +1,7 @@
+{
+  "utc": "2026-11-23T14:27:06Z",
+  "target": "review-accept",
+  "commit": "d8c7ee6978",
+  "outcome": "permitted",
+  "why": "review-accept glyph-check--cell--county-magistracy-example F3: a nitpick at round 2 PASS: the two-bar treatment is the arbiter's ruled CONVENTION (ask:cell-lattice-hidden-449-T351) recorded in the county notes, no norm sets a bar count"
+}
