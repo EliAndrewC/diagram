@@ -407,7 +407,19 @@ fn check(
     if names.iter().any(|n| has_findings(clone, n)) && !gate_green {
         problems.push("FR-004 this is a review of FIXES, and the gate is not green for this engine key - run `make done` first".to_owned());
     }
-    let on = unit_maps(clone);
+    // a unit the review tree snapshotted is judged on its snapshot, drawn current in that tree at its commit: whole there, never asked
+    // of the clone, where another builder's edit can stale the engine or drop the unit (451 T164)
+    let (snapped, names): (Vec<&String>, Vec<&String>) = names
+        .iter()
+        .partition(|n| tree::of_unit(clone, n).is_some());
+    for n in snapped {
+        problems.extend(tree::lacking(clone, n).map(|gone| format!("FR-005 {gone}")));
+    }
+    let on = if names.is_empty() {
+        BTreeMap::new()
+    } else {
+        unit_maps(clone)
+    };
     let mut snapshot_of = BTreeMap::new();
     let mut maps = BTreeSet::new();
     for n in names {
@@ -498,6 +510,11 @@ fn recorded(clone: &Path, names: &[String], key: &str) -> bool {
     })
 }
 
+/// The paired gate of `unit`: its snapshot's gate where the review tree took it (451 T164, `tree.rs`), else the clone's.
+fn unit_gate_state(clone: &Path, unit: &str) -> &'static str {
+    tree::of_unit(clone, unit).map_or_else(|| gate_state(clone), |snap| tree::gate(clone, &snap))
+}
+
 /// `green` (a green gate has seen this engine content), `running` (a gate target is live in this clone) or `red`.
 fn gate_state(clone: &Path) -> &'static str {
     let fresh = Command::new(clone.join("scripts/gates/l7r-gate.sh"))
@@ -547,6 +564,11 @@ pub fn content_key(clone: &Path, sheet: &str) -> String {
     let Some(folder) = pool.folder(sheet).map(|m| &m.dir) else {
         return String::new();
     };
+    folder_key(folder, sheet)
+}
+
+/// [`content_key`] of the sheet's files in `folder`.
+fn folder_key(folder: &Path, sheet: &str) -> String {
     let mut data = Vec::new();
     for name in [format!("{sheet}.svg"), format!("{sheet}.notes.md")] {
         data.extend_from_slice(name.as_bytes());
@@ -560,6 +582,10 @@ pub fn content_key(clone: &Path, sheet: &str) -> String {
 /// A unit's content key, its sheet looked up (`content-key`): what the review gate and the round arbiter ask.
 #[must_use]
 pub fn unit_content_key(clone: &Path, unit: &str) -> String {
+    // a unit the review tree snapshotted: what its review read, the snapshot's copy (451 T164)
+    if let Some(snap) = tree::of_unit(clone, unit) {
+        return folder_key(&snap.copy, &snap.on);
+    }
     content_key(clone, &unit_sheet(clone, unit))
 }
 
@@ -572,7 +598,10 @@ fn write_verdict(
     state: &str,
 ) -> (String, Value) {
     let pairing = read_json(&clone.join(".git").join("pairing-state.json")).unwrap_or(Value::Null);
-    let key = if pairing.is_object() {
+    // a unit the review tree snapshotted is keyed to that tree's engine key, never the clone's last dispatch (451 T164)
+    let key = if let Some(snap) = tree::of_unit(clone, name) {
+        snap.key
+    } else if pairing.is_object() {
         text_of(&pairing, "review_dispatch_key", "")
     } else {
         String::new()
@@ -699,7 +728,11 @@ fn run(command: &str, p: &Parsed) -> Reply {
     let map = p.last_of(&["--map", "--unit"], "").to_owned();
     match command {
         "content-key" => reply(unit_content_key(&clone, &map) + "\n", String::new(), 0),
-        "gate-state" => reply(format!("{}\n", gate_state(&clone)), String::new(), 0),
+        "gate-state" => reply(
+            format!("{}\n", unit_gate_state(&clone, &map)),
+            String::new(),
+            0,
+        ),
         "verdict" => verdict_cli(&clone, &map, p),
         "recorded" => {
             let maps: Vec<String> = p
@@ -759,7 +792,7 @@ fn verdict_cli(clone: &Path, map: &str, p: &Parsed) -> Reply {
     };
     let verdict = p.text("--verdict", "");
     // the gate's state is read before the verdict is judged, as the Python's argument order read it (its stamp check is recorded)
-    let state = gate_state(clone);
+    let state = unit_gate_state(clone, map);
     if !VERDICTS.contains(&verdict) {
         return reply(
             String::new(),
@@ -841,6 +874,8 @@ fn check_asking(
     }
     reply(out, String::new(), i32::from(!problems.is_empty()))
 }
+
+pub mod tree;
 
 #[cfg(test)]
 mod tests;

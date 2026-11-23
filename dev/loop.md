@@ -86,7 +86,8 @@ implementation: a VERTEX-only test misses what passes BETWEEN the vertices (a st
 
 ## The paired gate
 
-`make verify` starts the gate and the settlement-review together, and `pair-hooks.sh` refuses either alone
+`make verify T=<task(s)>` starts the gate and the settlement-review together, both in the review tree at a commit of the bundle's own
+files (feature 451 T164, `docs/reviews.md`), and `pair-hooks.sh` refuses either alone
 (`PAIR_OK="<reason>"` takes a one-sided case and logs it) - the review dispatched from memory, LAST, once cost a
 17-minute wait at the end of a fix (feature 151).
 

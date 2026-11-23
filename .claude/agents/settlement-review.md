@@ -26,7 +26,7 @@ Send the reads, greps and fetches you already know you need in ONE message.
 ## First stage
 
 From the clone's root (the clone holds `.git/review-snapshot/`; never `/diagram`, a read-only mirror):
-`make review-paired-gate` must print `green`, else write NOT-REVIEWABLE naming it and stop. If the unit has a previous verdict,
+`make review-paired-gate UNIT=<your unit>` must print `green`, else write NOT-REVIEWABLE naming it and stop. If the unit has a previous verdict,
 each finding it raised must be disposed of by a record that read the thing the finding is about (not a proxy); otherwise
 NOT-REVIEWABLE. Re-run the gate read immediately before your verdict. You keep the right to measure independently: anything you doubt, from the artifact.
 

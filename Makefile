@@ -152,32 +152,18 @@ _switch:
 # THE OWED LIST IS READ AGAIN AFTER THE REDRAW (449 T289, 2026-11-22): a compound not current has no legend now, so the list read before
 # `make map` redrew it held none of the units its new elements owe; the snapshot took that list and dropped the genkan's glyph-check
 # and size-audit and the round-trip's ten. Don't snapshot the first reading once a map was redrawn.
-verify:        ## [tests] THE PAIRED RUN: start the gate and dispatch the settlement-review together (feature 151)
+# THE REVIEW TREE (451 T164, 2026-11-22): the gate and the snapshot judged the clone's shared working tree, so three builders' half-done
+# edits turned the 449 T312 bundle's gate red or "tree moved" four times and seven finished verdicts NOT-REVIEWABLE. Both build in a
+# worktree at a temporary commit of the bundle's own files on HEAD (scripts/gates/review-tree.sh, which keeps the redraw rule above);
+# each unit is judged by that gate's record, never the clone's stamp.
+verify:        ## [tests] THE PAIRED RUN: the gate and the review snapshot built together in the review tree, a worktree at a commit of the bundle's own files (feature 151; 451 T164)   T=<task(s)> [F=<feature>] [FILES="<paths no task's edit names>"] [REVIEW_TREE_OK="<why>"]
+##  T=<task(s)>      the bundle whose work is reviewed: the files lines filed under its tasks name go into the review commit
+##  F=<feature>      the tasks' feature (default: $SPECIFY_FEATURE)
+##  FILES="<paths>"  the bundle's files no task's line names (a make target's write), taken in too
 	@printf '\033[1mverify\033[0m: the gate and the independent review run TOGETHER - neither alone (GM 2026-08-29).\n'
-	@root=$$(git rev-parse --show-toplevel) && "$$root/scripts/gates/l7r-gate.sh" delta key worktree > "$$root/.git/pairing-key" || true
-	@root=$$(git rev-parse --show-toplevel) && printf 'engine key %s\n' "$$(cut -c1-12 "$$root/.git/pairing-key" 2>/dev/null)"
-	  @root=$$(git rev-parse --show-toplevel); undeclared=$$("$$root/scripts/gates/l7r-gate.sh" reviews owed --root "$$root" --check-declared); \
-	  [ -z "$$undeclared" ] || printf '\n\033[1mOCCASIONS NOT DECLARED\033[0m: %s\n' "$$undeclared"
-	  @root=$$(git rev-parse --show-toplevel); \
-	  maps=$$("$$root/scripts/gates/l7r-gate.sh" reviews owed --root "$$root" | tr '\n' ' ' | sed 's/ $$//'); \
-	  why=$$("$$root/scripts/gates/l7r-gate.sh" reviews owed --root "$$root" --why); \
-	  if [ -z "$$maps" ]; then \
-	    printf '\n\033[1mNO REVIEW CHECK OWED\033[0m: %s (feature 294: a check is owed on its occasion, never because a manifest moved). The gate runs alone; the GM looks at the map.\n' "$$why"; \
-	  else \
-	    mirror=""; case "$$root" in */.clones/*) mirror="$${root%%/.clones/*}";; esac; \
-	    for gen in $$("$$root/scripts/gates/l7r-gate.sh" reviews snapshot --root "$$root" --stale-renders $$maps); do \
-	      case "$$gen" in sheet:*) svg="$${gen#sheet:}"; printf 'verify: %s has no generator and no render - make sheet-render SHEET=%s OUT=%s, then make verify again\n' "$$svg" "$$svg" "$${svg%.svg}.png" >&2; exit 2;; esac; \
-	      printf 'verify: rendering %s (the generation cache does not serve it as it stands)\n' "$$gen"; $(MAKE) --no-print-directory map MAP="$$gen" >/dev/null || { printf 'verify: make map MAP=%s failed - run it by hand, then make verify again\n' "$$gen" >&2; exit 2; }; redrawn=1; done; \
-	    if [ -n "$$redrawn" ]; then maps=$$("$$root/scripts/gates/l7r-gate.sh" reviews owed --root "$$root" | tr '\n' ' ' | sed 's/ $$//'); why=$$("$$root/scripts/gates/l7r-gate.sh" reviews owed --root "$$root" --why); fi; \
-	    snap=$$("$$root/scripts/gates/l7r-gate.sh" reviews snapshot --root "$$root" $${mirror:+--mirror "$$mirror"} --key "$$(cat "$$root/.git/pairing-key" 2>/dev/null)" $$maps); \
-	    n=$$(printf '%s\n' $$maps | wc -l); \
-	    printf 'owed: %s\n%s\n' "$$why" "$$snap"; \
-	    printf '\n\033[1mWHEN THE GATE IS GREEN, dispatch %s review agent(s), ONE PER UNIT\033[0m - each Agent call is the unit'"'"'s check (its slug begins with it) and takes the contents of its prompt file named above (.git/review-snapshot/<unit>/dispatch.md). A dispatch beside a running gate, or naming more than one unit, is refused (feature 294); a turn may not end with the gate green and an owed unit undispatched.\n' "$$n"; \
-	  fi
-	  @bash "$$(git rev-parse --show-toplevel)/scripts/gates/one-gate.sh"
-	@printf '\nstarting the gate in the background, in a log of its own (.git/verify-gate.log links to it): WAIT WITH `make verify-wait`, run_in_background - its exit is the notification.\n\n'
-	  @root=$$(git rev-parse --show-toplevel); log="$$root/.git/verify-gate-$$(date +%s).log"; ln -sfn "$$log" "$$root/.git/verify-gate.log"; \
-	  PAIR_OK="started by make verify - the review is dispatched in the same turn" nohup $(MAKE) --no-print-directory done > "$$log" 2>&1 &
+	@if [ -z "$(T)" ]; then printf 'make verify: T= is required - the task(s) whose work is reviewed, so the review tree holds their files and no other builder'"'"'s (451 T164): make verify T=<task(s)> [F=<feature>] [FILES="<paths>"]\n' >&2; exit 2; fi
+	@f="$(or $(F),$(SPECIFY_FEATURE))"; [ -n "$$f" ] || { printf 'make verify: F= is required (no SPECIFY_FEATURE exported): make verify F=<feature> T=$(T)\n' >&2; exit 2; }; \
+	  REVIEW_TREE_OK="$(REVIEW_TREE_OK)" bash "$$(git rev-parse --show-toplevel)/scripts/gates/review-tree.sh" "$$f" "$(T)" $(FILES)
 
 verify-wait:    ## [tests] wait for the gate `make verify` started, on ITS OWN log, and print its verdict - run it with run_in_background (exit 0 green, 1 red, 3 no log, 4 timed out, 5 the gate died)
 	@bash "$$(git rev-parse --show-toplevel)/scripts/gates/verify_wait.sh"
@@ -966,8 +952,8 @@ review-accept:  ## [project] record a review finding as deliberately LEFT, with 
 ##  REASON="..."     why it is left; at least two words and eight characters
 	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" reviews prereq accept --clone "$$(git rev-parse --show-toplevel)" --map "$(MAP)" --finding "$$FINDING" --reason "$$REASON" && $(LOGBYPASS) permitted "review-accept $(MAP) $${FINDING}: $$REASON"
 
-review-paired-gate:  ## [project] the settlement-review's paired gate - green, running or red (exit 1 on red)
-	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" reviews prereq gate-state --clone "$$(git rev-parse --show-toplevel)"
+review-paired-gate:  ## [project] the settlement-review's paired gate - green, running or red (exit 1 on red); UNIT= a unit's own, its review tree snapshot's gate where `make verify` took one (451 T164)   [UNIT=<unit>]
+	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" reviews prereq gate-state --clone "$$(git rev-parse --show-toplevel)" $(if $(UNIT),--unit "$(UNIT)",)
 
 ledger-owed:     ## [project] every check pass logged in this clone with no row in the review ledger, each with the row to add (feature 371); WRITE= writes them from each reply   [WRITE="<where you recorded what you did>"]
 	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" reviews ledger-owed --ledger "$$(git rev-parse --show-toplevel)/dev/review-ledger.md" $(if $(WRITE),--write "$$WRITE" --by-hand $(if $(CLAUDE_CODE_SESSION_ID),--session "$(CLAUDE_CODE_SESSION_ID)",),)

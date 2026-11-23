@@ -10,6 +10,7 @@ use super::super::tests::{
     tools,
 };
 use super::*;
+use crate::Reply;
 
 // Each test reads its own environment, never the session's exports (feature 451 T38): the readers below shadow the crate's.
 fn own(root: &Path) -> Rooted {
@@ -243,7 +244,8 @@ fn a_hamlet_drawing_not_current_or_with_no_census_is_a_problem() {
     assert_eq!(
         problems,
         ["pool/hamlets/m: its Rust drawing is not current, so the elements it draws are not known - `make map MAP=pool/hamlets/m` \
-          draws it, and the reviews it owes are read from that"]
+          draws it, and the reviews it owes are read from that; the units it HIDES until it is drawn, at least (its last drawing's; a \
+          drawing older than the change hides more): glyph-check--weir--m"]
     );
     drawn_as(&r, "m", "{}");
     let problems = all_owed(&r).2;
@@ -275,7 +277,8 @@ fn a_compound_drawing_not_current_is_a_problem_not_a_stale_legend() {
     assert_eq!(
         problems,
         ["pool/compounds/c: its drawing is not current, so the elements it draws are not known - `make map MAP=pool/compounds/c` \
-          draws it, and the reviews it owes are read from that"]
+          draws it, and the reviews it owes are read from that; the units it HIDES until it is drawn, at least (its last drawing's; a \
+          drawing older than the change hides more): glyph-check--bell--c, size-audit--bell"]
     );
     // a legacy compound is frozen, never drawn by the cache: what it has is read as it stands (here no `.svg`, so no legend), no problem
     put(

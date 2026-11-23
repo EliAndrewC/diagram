@@ -21,7 +21,7 @@ const TOOLS: [(&str, &str); 2] = [
          case $tool in\n\
          checkpoint) cat \"$3/.git/due\" 2>/dev/null; exit 0 ;;\n\
          prereq) if [ \"$1\" = content-key ]; then printf ck; exit 0; fi\n\
-           if [ \"$1\" = gate-state ]; then cat \"$3/.git/gate-state\" 2>/dev/null; exit 0; fi\n\
+           if [ \"$1\" = gate-state ]; then f=\"$3/.git/gate-state\"; [ -f \"$f-$5\" ] && f=\"$f-$5\"; cat \"$f\" 2>/dev/null; exit 0; fi\n\
            if [ \"$1\" = named ]; then cat \"$3/.git/named\" 2>/dev/null; exit 0; fi\n\
            [ -f \"$3/.git/problems\" ] || exit 0; cat \"$3/.git/problems\"; echo; echo 'on stderr' >&2; exit 1 ;;\n\
          owed) c=$2\n\
@@ -356,6 +356,33 @@ fn pair_ok_lets_a_review_go_and_a_gate_with_no_key_is_not_green() {
 /// The 449 arbiter fix (round:building-review|building-review--county-magistracy-example@3): `PAIR_OK` and `REVIEW_PREREQ_OK` let two
 /// building-reviews run on a RED paired gate on 2026-11-22, and the verdict tool recorded each NOT-REVIEWABLE (687 s and 558 s thrown
 /// away); a red gate refuses the dispatch whatever those say, a running one does not, and only `GATE_RED_OK="<why>"` escapes it.
+/// RED FIRST (451 T164): a unit the review tree snapshotted is keyed and gated by its snapshot - with the clone's stamp red (another
+/// builder's edit) it was refused "no green gate" and its rounds keyed to the clone's tree; now its snapshot's green gate lets it go at
+/// the snapshot's key, and its snapshot's red refuses it whatever the clone reads.
+#[test]
+fn a_snapshotted_unit_is_judged_by_its_snapshots_gate() {
+    let f = Fixture::new("snap", "Agent", &review("m1"));
+    f.set("named", "m1\n").set("gate-state-m1", "green\n");
+    std::fs::create_dir_all(f.clone.join(".git/review-snapshot/m1")).unwrap();
+    f.set(
+        "review-snapshot/m1/tree.json",
+        r#"{"commit": "c1", "key": "SNAPKEY"}"#,
+    );
+    // no .git/green: the clone's stamp is red
+    assert!(f.judge().is_empty(), "{:?}", f.judge());
+    let state: Value = serde_json::from_str(
+        &std::fs::read_to_string(f.clone.join(".git/pairing-state.json")).unwrap(),
+    )
+    .unwrap();
+    assert_eq!(state["dispatched"]["m1"]["key"].as_str(), Some("SNAPKEY"));
+    f.set("gate-state-m1", "red\n").set("green", "");
+    assert!(refusal(&f.judge()).contains("no green gate"));
+    // a record with no commit, or an empty unit, is no snapshot
+    f.set("review-snapshot/m1/tree.json", r#"{"key": "SNAPKEY"}"#);
+    assert_eq!(super::state::snapshot_key(&f.clone, "m1"), None);
+    assert_eq!(super::state::snapshot_key(&f.clone, ""), None);
+}
+
 #[test]
 fn a_red_paired_gate_refuses_a_review_pair_ok_or_not() {
     let both = r#"m1 PAIR_OK REVIEW_PREREQ_OK="the earlier rounds were not reviewable""#;

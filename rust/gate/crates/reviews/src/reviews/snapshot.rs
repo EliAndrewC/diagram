@@ -19,6 +19,10 @@
 //!   <CLONE>/.git/review-snapshot/UNIT/clone/ and main's from the mirror into .../UNIT/main/, clearing the unit's previous snapshot
 //!   first; writes .../UNIT/dispatch.md; prints one line per unit naming both directories, every file the clone did not have, and the
 //!   prompt file
+//! reviews snapshot --root TREE --state CLONE --commit SHA --key ENGINE_KEY UNIT...
+//!   the review tree's snapshot (451 T164, `scripts/gates/review-tree.sh`): read from the review tree TREE, a worktree at commit SHA,
+//!   written into CLONE's `.git/review-snapshot/UNIT/`, each with `tree.json` (the commit, the key, the tree, the unit's map), which
+//!   `prereq/tree.rs` judges the unit's gate, verdict key and content key by
 //! reviews snapshot --root CLONE --stale-renders UNIT...
 //!   the folder of each unit's live map the generation cache does not serve as it stands (385 T26; 449 T221), one a line, and stops
 //! ```
@@ -92,8 +96,32 @@ fn shown(p: Option<&PathBuf>, none: &str) -> String {
     p.map_or_else(|| none.to_owned(), |d| d.display().to_string())
 }
 
+/// Where a snapshot is read from and written to: the tree the maps are read from, the clone whose `.git` keeps it, and the review
+/// tree's commit (empty for a snapshot taken in the clone).
+struct Sides<'a> {
+    root: &'a Path,
+    state: &'a Path,
+    commit: &'a str,
+}
+
+/// Who runs what, in the prompt: the clone alone, or the review tree beside it (451 T164).
+fn where_text(at: &Sides, slug: &str) -> String {
+    let clone = at.state.display();
+    if at.commit.is_empty() {
+        return format!("Clone: {clone} (the directory holding `.git/review-snapshot/`; run the `make` targets from its\nroot).");
+    }
+    format!(
+        "Clone: {clone} (the directory holding `.git/review-snapshot/`): run `make review-paired-gate UNIT={slug}` and\n\
+         `make review-verdict` there. Review tree: {tree}, a worktree at {commit:.10}, the bundle's own work on HEAD - other\n\
+         builders' edits to the clone are not in it; run every other `make` target (`make -C {tree} pack-audit ...`,\n\
+         `size-table`, ...) from it, never from the clone.",
+        tree = at.root.display(),
+        commit = at.commit,
+    )
+}
+
 /// The one-unit prompt a session hands the Agent tool (feature 248 FR-002, per unit since feature 294).
-fn dispatch_text(rec: &Rec, ask: &str, check: &str, root: &Path, key: &str) -> String {
+fn dispatch_text(rec: &Rec, ask: &str, check: &str, at: &Sides, key: &str) -> String {
     let note = missing_note(rec);
     let missing = if note.is_empty() {
         note
@@ -103,13 +131,12 @@ fn dispatch_text(rec: &Rec, ask: &str, check: &str, root: &Path, key: &str) -> S
     format!(
         "UNIT: {slug}\n{check} - {ask}\n\nThis prompt was written by the tooling (feature 294): one agent per owed unit, and the pair guard refuses a dispatch that\n\
          names more than one. Do not review anything else - its own agent has it - and wait for nothing but your own work.\n\n\
-         Clone: {clone} (the directory holding `.git/review-snapshot/`; run the `make` targets from its\n\
-         root). Engine key: {key}. The gate went green on this content before this dispatch.\n\n\
+         {place} Engine key: {key}. The gate went green on this content before this dispatch.\n\n\
          Snapshot - read THESE:\n  after (the clone): {after}{missing}\n  before (main):     {before}\n\n\
          Follow your contract end to end, then `make review-verdict UNIT={slug} VERDICT=<PASS|NEEDS-WORK|NOT-REVIEWABLE> [FINDINGS=<json file>]`\n\
          as your last act, and quote the line it prints.\n",
         slug = rec.slug,
-        clone = root.display(),
+        place = where_text(at, &rec.slug),
         key = if key.is_empty() { "not computed" } else { key },
         after = shown(rec.clone.as_ref(), NO_CLONE),
         before = shown(rec.main.as_ref(), NO_MAIN),
@@ -197,16 +224,17 @@ fn os_error(p: &Path) -> impl Fn(std::io::Error) -> String + '_ {
 /// and write its `dispatch.md`; one line a unit, as [`describe`] writes it. A unit whose check has no prompt raises after its copies, as
 /// the Python's `KeyError` did.
 fn snapshot(
-    root: &Path,
+    at: &Sides,
     mirror: Option<&Path>,
     units: &[&Unit],
     key: &str,
 ) -> Result<Vec<String>, String> {
+    let root = at.root;
     let mut out = Vec::new();
     let pools = [walk(root), mirror.map(walk).unwrap_or_default()];
     for unit in units {
         let slug = unit.slug();
-        let dest = root.join(".git").join("review-snapshot").join(&slug);
+        let dest = at.state.join(".git").join("review-snapshot").join(&slug);
         if dest.exists() {
             std::fs::remove_dir_all(&dest).map_err(os_error(&dest))?;
         }
@@ -254,8 +282,13 @@ fn snapshot(
         let Some(ask) = ask_of(unit) else {
             return Err(format!("KeyError: {}", repr(&unit.check)));
         };
+        if !at.commit.is_empty() {
+            let tree = dest.join("tree.json");
+            let rec = serde_json::json!({"commit": at.commit, "key": key, "tree": root.display().to_string(), "on": unit.on});
+            std::fs::write(&tree, format!("{rec}\n")).map_err(os_error(&tree))?;
+        }
         let prompt = dest.join("dispatch.md");
-        std::fs::write(&prompt, dispatch_text(&rec, &ask, &unit.check, root, key))
+        std::fs::write(&prompt, dispatch_text(&rec, &ask, &unit.check, at, key))
             .map_err(os_error(&prompt))?;
         rec.dispatch = Some(prompt);
         out.push(describe(&rec));
@@ -269,11 +302,21 @@ struct Asked {
     root: Option<String>,
     mirror: Option<String>,
     key: String,
+    state: Option<String>,
+    commit: String,
     stale: bool,
     units: Vec<String>,
 }
 
-const OPTIONS: [&str; 5] = ["--root", "--mirror", "--key", "--stale-renders", "--help"];
+const OPTIONS: [&str; 7] = [
+    "--root",
+    "--mirror",
+    "--key",
+    "--stale-renders",
+    "--help",
+    "--state",
+    "--commit",
+];
 
 /// `argparse`'s negative number (`^-\d+$|^-\d*\.\d+$`), its dash dropped, which it reads as a value, never a flag, when no option looks like one.
 fn negative_number(body: &str) -> bool {
@@ -330,7 +373,7 @@ fn parse(args: &[String]) -> Result<Asked, String> {
         let hits = matching(w);
         let opt = match hits.as_slice() {
             _ if w == "-h" => "--help",
-            // no two options share a prefix, so a word names one option or none
+            // a word names one option, or none where its prefix is two options' (`--sta`: `--state`, `--stale-renders`)
             [one] => *one,
             _ => return Err(format!("unrecognized arguments: {w}")),
         };
@@ -358,6 +401,8 @@ fn parse(args: &[String]) -> Result<Asked, String> {
         match opt {
             "--root" => a.root = Some(value),
             "--mirror" => a.mirror = Some(value),
+            "--state" => a.state = Some(value),
+            "--commit" => a.commit = value,
             _ => a.key = value,
         }
     }
@@ -378,7 +423,7 @@ fn parse(args: &[String]) -> Result<Asked, String> {
 }
 
 /// The usage `--help` prints (the Python printed argparse's help; `--help` is not a malformed invocation, and no caller reads it).
-const HELP: &str = "usage: l7r-gate reviews snapshot --root CLONE [--mirror MAIN] [--key ENGINE_KEY] [--stale-renders] UNIT...\n";
+const HELP: &str = "usage: l7r-gate reviews snapshot --root CLONE [--mirror MAIN] [--key ENGINE_KEY] [--state CLONE --commit SHA] [--stale-renders] UNIT...\n";
 
 /// `l7r-gate reviews snapshot ...`.
 #[must_use]
@@ -430,10 +475,19 @@ pub fn cli(args: &[String]) -> Reply {
         .iter()
         .filter_map(|s| units.iter().rev().find(|u| u.slug() == *s))
         .collect();
+    let state = a
+        .state
+        .as_deref()
+        .map_or_else(|| root.clone(), crate::record::bundle::resolve);
+    let at = Sides {
+        root: &root,
+        state: &state,
+        commit: &a.commit,
+    };
     let said = if a.stale {
         Ok(stale_renders(&root, &asked).join("\n") + "\n")
     } else {
-        snapshot(&root, mirror.as_deref(), &asked, &a.key)
+        snapshot(&at, mirror.as_deref(), &asked, &a.key)
             .map(|lines| lines.iter().flat_map(|l| [l.as_str(), "\n"]).collect())
     };
     match said {

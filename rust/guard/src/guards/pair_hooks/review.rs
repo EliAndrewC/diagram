@@ -65,6 +65,31 @@ fn owed(cx: &Ctx) -> Vec<String> {
     words(&reviews(cx, &["owed", "--root", &cx.clone.to_string_lossy()]).out)
 }
 
+/// One agent asked for several units: refused, naming each unit's own prompt file (feature 248 D1, no escape).
+fn multi_unit(cx: &Ctx, atype: &str, named: &[String]) -> Answer {
+    let mut text = format!(
+        "\n\x1b[1mBLOCKED: this {atype} asks for {} units in ONE agent - one unit per agent, all in this same message.\x1b[0m\n\
+         The sweeps share no work across maps, so one agent serializes them (feature 247: four maps, 11 of 36 minutes).\n\
+         Dispatch one agent per unit now, each with the contents of its prompt file:\n",
+        named.len()
+    );
+    for m in named {
+        let pf = cx
+            .clone
+            .join(".git/review-snapshot")
+            .join(m)
+            .join("dispatch.md");
+        let _ = if pf.is_file() {
+            writeln!(text, "    {}", pf.display())
+        } else {
+            writeln!(text, "    {m}: no prompt file (not owed, or the snapshot was never taken - `make verify T=<task(s)>` writes it)")
+        };
+    }
+    text += "There is no escape for this shape (feature 248 D1).\n";
+    cx.log("blocked", atype, "review-multi-map");
+    Answer::Refuse(text)
+}
+
 pub(super) fn dispatch(cx: &Ctx, atype: &str) -> Vec<Answer> {
     let ptext = cx.field("prompt");
     if let Some(refused) = decided(cx, atype, ptext) {
@@ -87,36 +112,23 @@ pub(super) fn dispatch(cx: &Ctx, atype: &str) -> Vec<Answer> {
         .out,
     );
     if named.len() > 1 {
-        let mut text = format!(
-            "\n\x1b[1mBLOCKED: this {atype} asks for {} units in ONE agent - one unit per agent, all in this same message.\x1b[0m\n\
-             The sweeps share no work across maps, so one agent serializes them (feature 247: four maps, 11 of 36 minutes).\n\
-             Dispatch one agent per unit now, each with the contents of its prompt file:\n",
-            named.len()
-        );
-        for m in &named {
-            let pf = cx
-                .clone
-                .join(".git/review-snapshot")
-                .join(m)
-                .join("dispatch.md");
-            let _ = if pf.is_file() {
-                writeln!(text, "    {}", pf.display())
-            } else {
-                writeln!(text, "    {m}: no prompt file (not owed, or the snapshot was never taken - `make verify` writes it)")
-            };
-        }
-        text += "There is no escape for this shape (feature 248 D1).\n";
-        cx.log("blocked", atype, "review-multi-map");
-        return vec![Answer::Refuse(text)];
+        return vec![multi_unit(cx, atype, &named)];
     }
     let glyph_escaped = match glyph(cx, atype, ptext, &named) {
         Ok(escaped) => escaped,
         Err(refused) => return vec![refused],
     };
-    if let Some(refused) = prerequisites(cx, atype, ptext, &named, &pf) {
+    // THE REVIEW TREE'S UNIT (451 T164): keyed and gated by its snapshot, so another builder's edit to the clone neither blocks nor colors it
+    let unit = if named.len() == 1 {
+        named[0].as_str()
+    } else {
+        ""
+    };
+    let snap = state::snapshot_key(&cx.clone, unit);
+    if let Some(refused) = prerequisites(cx, atype, ptext, &named, &pf, snap.is_some()) {
         return vec![refused];
     }
-    let key = state::engine_key(&cx.clone);
+    let key = snap.clone().unwrap_or_else(|| state::engine_key(&cx.clone));
     if let Some(refused) = rounds(cx, atype, &named, &key) {
         return vec![refused];
     }
@@ -130,7 +142,7 @@ pub(super) fn dispatch(cx: &Ctx, atype: &str) -> Vec<Answer> {
         .map(ToString::to_string)
         .unwrap_or_default();
     if prompt.contains("PAIR_OK") {
-        if let Some(refused) = gate_red(cx, atype, ptext) {
+        if let Some(refused) = gate_red(cx, atype, ptext, unit) {
             return vec![refused];
         }
         cx.log("escaped", atype, "pair-ok-review");
@@ -143,7 +155,12 @@ pub(super) fn dispatch(cx: &Ctx, atype: &str) -> Vec<Answer> {
         dispatched(cx, atype, &named, &key, glyph_escaped);
         return Vec::new();
     }
-    if state::gate_green(&cx.clone, &key) {
+    let green = if snap.is_some() {
+        snap_gate(cx, unit) == "green"
+    } else {
+        state::gate_green(&cx.clone, &key)
+    };
+    if green {
         dispatched(cx, atype, &named, &key, glyph_escaped);
         return Vec::new();
     }
@@ -151,7 +168,7 @@ pub(super) fn dispatch(cx: &Ctx, atype: &str) -> Vec<Answer> {
         "\n\x1b[1mBLOCKED: a {atype} with no green gate for this content.\x1b[0m\n\
          A review is dispatched once the gate is GREEN on the content it reviews (feature 294, US6): a gate that\n\
          goes red under a running review makes the round NOT-REVIEWABLE, and that round is the cost this avoids.\n\n    \
-         make verify        # starts the gate and writes the owed prompts; dispatch when it reports green\n\n\
+         make verify T=<task(s)>   # the gate and the owed prompts, in the review tree (451 T164); dispatch when it reports green\n\n\
          Deliberately one-sided? Put PAIR_OK and the reason in the dispatch prompt.\n"
     );
     if cx.fell_back {
@@ -165,7 +182,7 @@ pub(super) fn dispatch(cx: &Ctx, atype: &str) -> Vec<Answer> {
 /// `reviews prereq verdict` records any verdict NOT-REVIEWABLE while `gate-state` reads red, so `PAIR_OK` - one-sided beside a gate
 /// that is running - lets no review go on a red one, unless `GATE_RED_OK="<why>"`. On 2026-11-22 two building-reviews dispatched with
 /// `PAIR_OK` and `REVIEW_PREREQ_OK` ran 687 s and 558 s on a red gate and were both recorded NOT-REVIEWABLE.
-fn gate_red(cx: &Ctx, atype: &str, ptext: &str) -> Option<Answer> {
+fn gate_red(cx: &Ctx, atype: &str, ptext: &str, unit: &str) -> Option<Answer> {
     if ptext.contains("GATE_RED_OK=") {
         let why = match reasoned(cx, atype, &GATE_RED_OK, "GATE_RED_OK", ptext, "gate-red") {
             Ok(why) => why,
@@ -180,9 +197,7 @@ fn gate_red(cx: &Ctx, atype: &str, ptext: &str) -> Option<Answer> {
         );
         return None;
     }
-    let clone = cx.clone.to_string_lossy();
-    let state = reviews(cx, &["prereq", "gate-state", "--clone", &clone]).out;
-    if state.trim() != "red" {
+    if snap_gate(cx, unit) != "red" {
         return None;
     }
     cx.log("blocked", atype, "review-gate-red");
@@ -190,8 +205,8 @@ fn gate_red(cx: &Ctx, atype: &str, ptext: &str) -> Option<Answer> {
         "\n\x1b[1mBLOCKED: this {atype}'s paired gate reads RED, so its verdict would be recorded NOT-REVIEWABLE.\x1b[0m\n\
          `reviews prereq verdict` writes any verdict NOT-REVIEWABLE while the gate reads red, whatever PAIR_OK or REVIEW_PREREQ_OK\n\
          say - two building-reviews (687 s and 558 s) were thrown away so on 2026-11-22. Fix the gate first:\n\n    \
-         make review-paired-gate   # green, running or red\n    \
-         make verify               # the gate; dispatch once it is green or running\n\n\
+         make review-paired-gate UNIT={unit}   # green, running or red: this unit's own gate (451 T164)\n    \
+         make verify T=<task(s)>   # the gate, in the review tree; dispatch once it is green or running\n\n\
          A read with no verdict wanted: GATE_RED_OK=\"<why>\" in the dispatch prompt.\n"
     )))
 }
@@ -286,12 +301,23 @@ fn glyph(cx: &Ctx, atype: &str, ptext: &str, named: &[String]) -> Result<bool, A
 }
 
 /// The round is not spent on unverified work (feature 240), unless `REVIEW_PREREQ_OK="<why>"`.
+/// The paired gate of `unit` (`reviews prereq gate-state`): its snapshot's where the review tree took it, else the clone's (451 T164).
+fn snap_gate(cx: &Ctx, unit: &str) -> String {
+    let clone = cx.clone.to_string_lossy();
+    let mut args = vec!["prereq", "gate-state", "--clone", &clone];
+    if !unit.is_empty() {
+        args.extend(["--unit", unit]);
+    }
+    reviews(cx, &args).out.trim().to_owned()
+}
+
 fn prerequisites(
     cx: &Ctx,
     atype: &str,
     ptext: &str,
     named: &[String],
     pf: &PromptFile,
+    snapped: bool,
 ) -> Option<Answer> {
     if ptext.contains("REVIEW_PREREQ_OK=") {
         let why = match reasoned(
@@ -314,11 +340,12 @@ fn prerequisites(
         );
         return None;
     }
-    let green = if state::stamp_fresh(&cx.clone) {
-        "yes"
+    let fresh = if snapped {
+        snap_gate(cx, &named[0]) == "green"
     } else {
-        "no"
+        state::stamp_fresh(&cx.clone)
     };
+    let green = if fresh { "yes" } else { "no" };
     let maps = if named.is_empty() {
         owed(cx)
     } else {

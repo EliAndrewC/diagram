@@ -1248,6 +1248,24 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-23",
    "declared": "spec-fidelity"
+  },
+  "### T164 (observed 2026-11-22: with three builders in one clone, the 449 T312 bundle's verify gate went red or \"tree moved\" four times on other builders' half-done edits, and seven of its ten finished review verdicts were rewritten NOT-REVIEWABLE because a page session and a test-file edit wrote into the clone while they ran; the T289 bundle's reviews earlier waited hours on a stale engine another bundle's edit caused, which also dropped its new-element units without a word)": {
+   "sha256": "ebaaf197028686f0a35c28315da6085bbdac019697a0630b130621fb11f82989",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity"
+  },
+  "### T164 Approach (checklist part A)": {
+   "sha256": "b6c5006cdc38a35657f2d9099ff4e6d5d804fe1522de4ef130292d8e52fd2045",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity"
+  },
+  "### T164 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)": {
+   "sha256": "1f3ab3b44044e3f4cd022d0ba68b57f12ec5bb3ec7453c66f0f6427a5dc0f5ae",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -14487,6 +14505,103 @@
      "why": "This leaves the history of the incident T161 was filed on unfixed, so it is a narrowing. It is legitimate because it is a deferral that meets FR-009 (reason, filed task id, order), not a drop. It needs a different mechanism (a re-tasking tool) from this bundle's writer fix. The symptom that refused the landing has also gone: the sheet bundle committed those files at 82e6b38326, as the plan's own T162 note records. The plan's clause 'until those files are committed by the sheet bundle' is stale on that point, which is a wording note and not a ruling."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-23",
+   "blocks": [
+    "### T164 (observed 2026-11-22: with three builders in one clone, the 449 T312 bundle's verify gate went red or \"tree moved\" four times on other builders' half-done edits, and seven of its ten finished review verdicts were rewritten NOT-REVIEWABLE because a page session and a test-file edit wrote into the clone while they ran; the T289 bundle's reviews earlier waited hours on a stale engine another bundle's edit caused, which also dropped its new-element units without a word)",
+    "### T164 Approach (checklist part A)",
+    "### T164 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T164-scope",
+     "summary": "make verify T= runs the bundle's own files in a separate review tree so other builders' edits in the clone cannot turn its gate red, void its verdicts or hide a stale engine; classed performance work",
+     "class": "within",
+     "why": "FR-013 counts work making the builders' loop or the gate faster as performance work; the observed T312/T289 incidents (gate reruns, seven voided reviews, hours waiting on a stale engine) are time lost in the loop of the bundled work the GM asked for (2026-11-22, T141). All four harms in the header (red/tree-moved gate, voided verdicts, stale-engine wait, silently dropped units) are each answered by the Approach."
+    },
+    {
+     "id": "attribution-one-copy",
+     "summary": "the bundle's files are taken by land-alone's split, read from scripts/land-alone.sh, not re-implemented",
+     "class": "within",
+     "why": "an implementation choice inside the task; narrows nothing the GM asked."
+    },
+    {
+     "id": "scratch-index-commit",
+     "summary": "temporary commit on HEAD through a scratch index; clone HEAD and index untouched",
+     "class": "within",
+     "why": "mechanism of the task; serves the goal that the review stands on the bundle's own work."
+    },
+    {
+     "id": "one-review-tree-own-target-kept",
+     "summary": "one review tree per clone (<clone>-review) with its own cargo target and its own .gencache, added once then reset each run and kept, never piled up (9.3 GB, 64-67 GB free throughout, measured 2026-11-22)",
+     "class": "within",
+     "why": "the GM's 2026-11-22 purpose is that disk is not eaten 'without us realizing it'; the tree is bounded to one per clone, reused rather than multiplied, its size measured and stated, and T158's floor and cleanup named as a constraint. Keeping it is what makes the warm gate about a minute rather than a cold build, so keeping is the reuse the GM endorsed, not a departure."
+    },
+    {
+     "id": "shared-target-rejected",
+     "summary": "the review tree does not share the landing target",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "it stands against the GM's 2026-11-22 'your points about reusing the same build cache and whatnot are well taken' (the session's points themselves are not quoted in the bundle). Ground: measured on a scratch copy, cargo judged l7r_guard Fresh across worktrees whose pair_hooks/review.rs and state.rs differ, so a shared target makes the gate judge other code - applying reuse here would defeat the gate's own purpose and the GM's 2026-11-22 cleanup aim is still met by bounding the tree to one. Reuse is kept where it is sound: the content-keyed rust-checks and hooks-test results are seeded from the clone."
+    },
+    {
+     "id": "gencache-seeding-dropped",
+     "summary": "the clone's 6.2 GB .gencache is no longer seeded into the review tree; the tree keeps its own across resets",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "also against 'reusing the same build cache' (the session's points not quoted in the bundle). Ground: impossibility, observed - entries are keyed by the engine binary's build id, which embeds the tree's source path, so ids never match across trees; of 31,067 seeded entries none served a map. Removing it removes 19.2 s and 6.2 GB of work that reused nothing, which serves both the cleanup and performance requests."
+    },
+    {
+     "id": "prereq-pair-guard-snapshot",
+     "summary": "reviews prereq and the pair guard judge a snapshotted unit by the review tree's record (gate at its key), every other unit by the clone's stamp as before; agent files read review-paired-gate UNIT=",
+     "class": "within",
+     "why": "keeps the review paired with the gate (feature 151) while judging the bundle's own tree; the agent-file fix closes the path by which the incident would recur. Note: the search for bare review-paired-gate callers is stated as grep -rn over .claude/agents, rust/, scripts/ - the Makefile, docs/, tests/, CLAUDE.md and the rest of .claude/ are not shown as searched; a reach gap in the enumeration, not a narrowing."
+    },
+    {
+     "id": "owed-hidden-stale-engine",
+     "summary": "reviews owed names a map not current with its stale engine and the units it hides (owed/hidden.rs)",
+     "class": "within",
+     "why": "answers the T289 harm (a stale engine waited on and new-element units dropped without a word)."
+    },
+    {
+     "id": "bare-verify-refused",
+     "summary": "bare make verify refused, naming T=; REVIEW_TREE_OK= escape",
+     "class": "within",
+     "why": "a refusal naming the compliant command with a reason escape per the project's guard rules; T= kept working for the 449 sheet bundle."
+    },
+    {
+     "id": "order",
+     "summary": "after T160/T161, before the 449 sheet bundle's make verify T=",
+     "class": "within",
+     "why": "dependency order; narrows nothing."
+    },
+    {
+     "id": "freeze-deferred-T165",
+     "summary": "engine_freeze_hooks still holds engine edits during a snapshotted review; not changed here, filed T165, lands before T154",
+     "class": "within",
+     "why": "T164 does not make the freeze worse: the freeze's existing hold becomes unnecessary for snapshotted reviews only, a cost and not a wrong verdict, and changing a guard's rule needs its own measurement (a review beside an engine edit keeping its verdict). FR-009's three parts are present: why not here, filed id T165, and its order 'lands before T154'. Deferral to a filed, ordered performance task narrows nothing the GM asked."
+    },
+    {
+     "id": "shared-stamps-claim-restated",
+     "summary": "the review tree's make done writes the shared gate-green stamps; left as is and the claim restated",
+     "class": "within",
+     "why": "each stamp is a content key compared with HEAD's key at push, so an overwritten stamp is a missed reuse at most, never a wrong pass - a difference, not a defect (constitution XIV), and restating the claim is the prescribed handling."
+    },
+    {
+     "id": "tool-record",
+     "summary": "review-tree.sh gains # TOOL_RECORD: naming its record file and the event log",
+     "class": "within",
+     "why": "the GM 2026-11-22: 'we want everything measured so we know where our time goes'."
+    },
+    {
+     "id": "red-first-in-warm-tree",
+     "summary": "red-first run in the review tree at HEAD with only test files over it, reusing its warm target rather than a third cold build",
+     "class": "within",
+     "why": "a method choice for the red-first evidence; the red results are recorded."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -22308,6 +22423,100 @@
      "class": "narrowing",
      "ruling": "LEGITIMATE",
      "why": "This leaves the history of the incident T161 was filed on unfixed, so it is a narrowing. It is legitimate because it is a deferral that meets FR-009 (reason, filed task id, order), not a drop. It needs a different mechanism (a re-tasking tool) from this bundle's writer fix. The symptom that refused the landing has also gone: the sheet bundle committed those files at 82e6b38326, as the plan's own T162 note records. The plan's clause 'until those files are committed by the sheet bundle' is stale on that point, which is a wording note and not a ruling."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T164": {
+   "section_sha256": "409d5507b71d9eb03972c9f5182b0569ebc5dec975b4a993465852d52154d3e9",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T164-scope",
+     "summary": "make verify T= runs the bundle's own files in a separate review tree so other builders' edits in the clone cannot turn its gate red, void its verdicts or hide a stale engine; classed performance work",
+     "class": "within",
+     "why": "FR-013 counts work making the builders' loop or the gate faster as performance work; the observed T312/T289 incidents (gate reruns, seven voided reviews, hours waiting on a stale engine) are time lost in the loop of the bundled work the GM asked for (2026-11-22, T141). All four harms in the header (red/tree-moved gate, voided verdicts, stale-engine wait, silently dropped units) are each answered by the Approach."
+    },
+    {
+     "id": "attribution-one-copy",
+     "summary": "the bundle's files are taken by land-alone's split, read from scripts/land-alone.sh, not re-implemented",
+     "class": "within",
+     "why": "an implementation choice inside the task; narrows nothing the GM asked."
+    },
+    {
+     "id": "scratch-index-commit",
+     "summary": "temporary commit on HEAD through a scratch index; clone HEAD and index untouched",
+     "class": "within",
+     "why": "mechanism of the task; serves the goal that the review stands on the bundle's own work."
+    },
+    {
+     "id": "one-review-tree-own-target-kept",
+     "summary": "one review tree per clone (<clone>-review) with its own cargo target and its own .gencache, added once then reset each run and kept, never piled up (9.3 GB, 64-67 GB free throughout, measured 2026-11-22)",
+     "class": "within",
+     "why": "the GM's 2026-11-22 purpose is that disk is not eaten 'without us realizing it'; the tree is bounded to one per clone, reused rather than multiplied, its size measured and stated, and T158's floor and cleanup named as a constraint. Keeping it is what makes the warm gate about a minute rather than a cold build, so keeping is the reuse the GM endorsed, not a departure."
+    },
+    {
+     "id": "shared-target-rejected",
+     "summary": "the review tree does not share the landing target",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "it stands against the GM's 2026-11-22 'your points about reusing the same build cache and whatnot are well taken' (the session's points themselves are not quoted in the bundle). Ground: measured on a scratch copy, cargo judged l7r_guard Fresh across worktrees whose pair_hooks/review.rs and state.rs differ, so a shared target makes the gate judge other code - applying reuse here would defeat the gate's own purpose and the GM's 2026-11-22 cleanup aim is still met by bounding the tree to one. Reuse is kept where it is sound: the content-keyed rust-checks and hooks-test results are seeded from the clone."
+    },
+    {
+     "id": "gencache-seeding-dropped",
+     "summary": "the clone's 6.2 GB .gencache is no longer seeded into the review tree; the tree keeps its own across resets",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "also against 'reusing the same build cache' (the session's points not quoted in the bundle). Ground: impossibility, observed - entries are keyed by the engine binary's build id, which embeds the tree's source path, so ids never match across trees; of 31,067 seeded entries none served a map. Removing it removes 19.2 s and 6.2 GB of work that reused nothing, which serves both the cleanup and performance requests."
+    },
+    {
+     "id": "prereq-pair-guard-snapshot",
+     "summary": "reviews prereq and the pair guard judge a snapshotted unit by the review tree's record (gate at its key), every other unit by the clone's stamp as before; agent files read review-paired-gate UNIT=",
+     "class": "within",
+     "why": "keeps the review paired with the gate (feature 151) while judging the bundle's own tree; the agent-file fix closes the path by which the incident would recur. Note: the search for bare review-paired-gate callers is stated as grep -rn over .claude/agents, rust/, scripts/ - the Makefile, docs/, tests/, CLAUDE.md and the rest of .claude/ are not shown as searched; a reach gap in the enumeration, not a narrowing."
+    },
+    {
+     "id": "owed-hidden-stale-engine",
+     "summary": "reviews owed names a map not current with its stale engine and the units it hides (owed/hidden.rs)",
+     "class": "within",
+     "why": "answers the T289 harm (a stale engine waited on and new-element units dropped without a word)."
+    },
+    {
+     "id": "bare-verify-refused",
+     "summary": "bare make verify refused, naming T=; REVIEW_TREE_OK= escape",
+     "class": "within",
+     "why": "a refusal naming the compliant command with a reason escape per the project's guard rules; T= kept working for the 449 sheet bundle."
+    },
+    {
+     "id": "order",
+     "summary": "after T160/T161, before the 449 sheet bundle's make verify T=",
+     "class": "within",
+     "why": "dependency order; narrows nothing."
+    },
+    {
+     "id": "freeze-deferred-T165",
+     "summary": "engine_freeze_hooks still holds engine edits during a snapshotted review; not changed here, filed T165, lands before T154",
+     "class": "within",
+     "why": "T164 does not make the freeze worse: the freeze's existing hold becomes unnecessary for snapshotted reviews only, a cost and not a wrong verdict, and changing a guard's rule needs its own measurement (a review beside an engine edit keeping its verdict). FR-009's three parts are present: why not here, filed id T165, and its order 'lands before T154'. Deferral to a filed, ordered performance task narrows nothing the GM asked."
+    },
+    {
+     "id": "shared-stamps-claim-restated",
+     "summary": "the review tree's make done writes the shared gate-green stamps; left as is and the claim restated",
+     "class": "within",
+     "why": "each stamp is a content key compared with HEAD's key at push, so an overwritten stamp is a missed reuse at most, never a wrong pass - a difference, not a defect (constitution XIV), and restating the claim is the prescribed handling."
+    },
+    {
+     "id": "tool-record",
+     "summary": "review-tree.sh gains # TOOL_RECORD: naming its record file and the event log",
+     "class": "within",
+     "why": "the GM 2026-11-22: 'we want everything measured so we know where our time goes'."
+    },
+    {
+     "id": "red-first-in-warm-tree",
+     "summary": "red-first run in the review tree at HEAD with only test files over it, reusing its warm target rather than a third cold build",
+     "class": "within",
+     "why": "a method choice for the red-first evidence; the red results are recorded."
     }
    ],
    "verdict": "CLEAR"

@@ -6,7 +6,16 @@ use std::path::{Path, PathBuf};
 
 use super::super::owed::Unit;
 use super::super::tests::{dir, map, put, repo, sheet};
-use super::{cli, copy2, flag_like, map_dir, parse, snapshot, stale_renders};
+use super::{cli, copy2, flag_like, map_dir, parse, snapshot, stale_renders, Sides};
+
+/// A snapshot taken in the clone itself, as before the review tree (451 T164).
+fn here(root: &Path) -> Sides<'_> {
+    Sides {
+        root,
+        state: root,
+        commit: "",
+    }
+}
 
 fn unit(check: &str, subject: &str, on: &str) -> Unit {
     Unit {
@@ -110,7 +119,7 @@ fn each_check_is_asked_its_own_question() {
         unit("glyph-check", "well", ""),
     ];
     let refs: Vec<&Unit> = units.iter().collect();
-    let lines = snapshot(&root, None, &refs, "").unwrap();
+    let lines = snapshot(&here(&root), None, &refs, "").unwrap();
     // a sheet lacks no manifest; the render it has is copied
     assert!(
         lines[0].contains("(missing in the clone: .html .notes.md - regenerate it with make map)")
@@ -137,7 +146,7 @@ fn each_check_is_asked_its_own_question() {
     assert!(well.contains("after (the clone): not in the clone's pool\n"));
     // a check with no prompt raises after its copies, as the Python's KeyError did
     let odd = unit("odd-check", "s", "s");
-    let raised = snapshot(&root, None, &[&odd], "").unwrap_err();
+    let raised = snapshot(&here(&root), None, &[&odd], "").unwrap_err();
     assert_eq!(raised, "KeyError: 'odd-check'");
     assert!(root
         .join(".git/review-snapshot/odd-check--s/clone/s.svg")
@@ -145,7 +154,7 @@ fn each_check_is_asked_its_own_question() {
     // a snapshot that cannot be cleared or written raises
     std::fs::remove_dir_all(root.join(".git")).unwrap();
     std::fs::write(root.join(".git"), "gitdir: x\n").unwrap();
-    assert!(snapshot(&root, None, &refs, "")
+    assert!(snapshot(&here(&root), None, &refs, "")
         .unwrap_err()
         .starts_with("OSError"));
 }
@@ -281,4 +290,53 @@ fn a_raise_is_a_trace_and_exit_one() {
         "settlement-review--m",
     ]));
     assert_eq!(stale.stdout, "pool/hamlets/m\n");
+}
+
+/// THE REVIEW TREE'S SNAPSHOT (451 T164): read from the review tree, written into the clone's `.git`, each unit with its `tree.json`, and
+/// a prompt sending every `make` target but the clone's two to the review tree.
+#[test]
+fn a_review_trees_snapshot_is_kept_in_the_clone_with_its_tree() {
+    let tree = repo("snapshot-tree");
+    let clone = repo("snapshot-state");
+    sheet(&tree, "pool", "c", &["gate"]);
+    let (t, c) = (
+        tree.to_string_lossy().into_owned(),
+        clone.to_string_lossy().into_owned(),
+    );
+    // a prefix two options share names neither
+    assert_eq!(
+        cli(&words(&["--root", &t, "--sta", &c, "building-review--c"])).code,
+        2
+    );
+    let got = cli(&words(&[
+        "--root",
+        &t,
+        "--state",
+        &c,
+        "--commit",
+        "abc123def4567",
+        "--key",
+        "K9",
+        "--mirror",
+        "",
+        "building-review--c",
+    ]));
+    assert_eq!(got.code, 0, "{}", got.stderr);
+    let snap = clone.join(".git/review-snapshot/building-review--c");
+    assert!(snap.join("clone/c.svg").is_file());
+    assert!(!tree.join(".git/review-snapshot").exists());
+    let rec: serde_json::Value =
+        serde_json::from_str(&std::fs::read_to_string(snap.join("tree.json")).unwrap()).unwrap();
+    assert_eq!(
+        rec,
+        serde_json::json!({"commit": "abc123def4567", "key": "K9", "tree": t, "on": "c"})
+    );
+    let prompt = std::fs::read_to_string(snap.join("dispatch.md")).unwrap();
+    for want in [
+        "make review-paired-gate UNIT=building-review--c",
+        &format!("Review tree: {t}, a worktree at abc123def4"),
+        &format!("make -C {t} pack-audit"),
+    ] {
+        assert!(prompt.contains(want), "{want} not in {prompt}");
+    }
 }

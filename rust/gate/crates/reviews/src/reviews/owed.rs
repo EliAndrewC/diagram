@@ -16,11 +16,9 @@ use std::sync::LazyLock;
 use fancy_regex::Regex;
 use serde_json::Value;
 
-use super::{git, glyph, py_path, reply};
-use crate::record::args::{parse, Spec};
+use super::{git, glyph};
 use crate::record::bundle::py_repr;
 use crate::record::repo::cat_blobs;
-use crate::Reply;
 
 pub use l7r_gate_pool::TREES;
 use l7r_gate_pool::{walk, Kind, Map, LEGACY};
@@ -392,28 +390,37 @@ impl Legends {
     }
 }
 
-/// `legends`: each non-exempt folder's elements now, and a problem for each live hamlet or compound whose elements are not known; a folder the pool
-/// walk could not classify is no map and draws nothing (feature 449 T220).
+/// `legends`: each non-exempt folder's elements now, and a problem for each live hamlet or compound whose elements are not known (with
+/// the folder's name, `hidden.rs` adding the units it hides); a folder the pool walk could not classify is no map and draws nothing
+/// (feature 449 T220). `stale` names an engine whose binary is older than its sources (451 T164): every map it draws is not current, and
+/// the problem says so, where it read as one map's drawing.
 pub fn legends(
     root: &Path,
     all: &[Folder],
     current: &mut dyn FnMut(&Folder) -> bool,
-) -> (Legends, Vec<String>) {
+    stale: &mut dyn FnMut(&Folder) -> Option<String>,
+) -> (Legends, Vec<String>, Vec<(usize, String)>) {
     let mut out = Legends::default();
     let mut problems = Vec::new();
+    let mut unknown = Vec::new();
     for d in all.iter().filter(|d| !d.exempt() && d.drawn()) {
         match legend_of(d, current) {
             Ok(Some(set)) => out.put(&d.name, set),
             Ok(None) => {}
             Err(why) => {
                 let at = rel(root, &d.path);
+                let why = match stale(d) {
+                    Some(engine) => format!("{why}: {engine}"),
+                    None => why,
+                };
+                unknown.push((problems.len(), d.name.clone()));
                 problems.push(format!(
                     "{at}: {why} - `make map MAP={at}` draws it, and the reviews it owes are read from that"
                 ));
             }
         }
     }
-    (out, problems)
+    (out, problems, unknown)
 }
 
 /// The live maps whose drawing is a render the generation cache keeps and does not serve as current (449 T231), `(kind, folder)`: a
@@ -439,6 +446,8 @@ pub struct Tree<'a> {
     pub folders: Vec<Folder>,
     pub legends: Legends,
     pub problems: Vec<String>,
+    /// Each folder whose legend is not known: its problem line's index and its name (451 T164, `hidden.rs`).
+    pub unknown: Vec<(usize, String)>,
 }
 
 impl<'a> Tree<'a> {
@@ -448,14 +457,19 @@ impl<'a> Tree<'a> {
     pub fn read(root: &'a Path) -> Self {
         let folders = folders(root);
         let mut currency = l7r_gate_pool::Currency::new(root);
-        let (legends, problems) = legends(root, &folders, &mut |d| {
-            currency.of(&d.path.display().to_string())
-        });
+        let mut engines = hidden::Engines::new(root);
+        let (legends, problems, unknown) = legends(
+            root,
+            &folders,
+            &mut |d| currency.of(&d.path.display().to_string()),
+            &mut |d| engines.stale(d.kind),
+        );
         Self {
             root,
             folders,
             legends,
             problems,
+            unknown,
         }
     }
 }
@@ -516,9 +530,9 @@ fn base_legends(root: &Path, at: &mut AtBase, order: Vec<(String, AtBaseOrNow)>)
     before
 }
 
-/// The occasions the delta itself shows: maps and sheets new to the pool, and elements new to a map or sheet.
-#[must_use]
-pub fn detected(tree: &Tree, base: &str) -> Vec<Unit> {
+/// The occasions the delta itself shows - maps and sheets new to the pool, and elements new to a map or sheet - with each standing
+/// folder's legend at the base, which `hidden.rs` reads the units a stale map hides against.
+fn detected_at(tree: &Tree, base: &str) -> (Vec<Unit>, Legends) {
     let root = tree.root;
     let mut at = AtBase::new(root, base);
     let live: Vec<&Folder> = tree
@@ -602,7 +616,7 @@ pub fn detected(tree: &Tree, base: &str) -> Vec<Unit> {
         .collect();
     units.extend(element_units(&owed, &sheets));
     units.extend(redrawn::units(tree, base, &before));
-    units
+    (units, before)
 }
 
 /// The spec a folder of this kind is drawn from, the file that names it: a hamlet's `.spec.json`, a compound's `.compound.json`, a hand
@@ -666,8 +680,9 @@ pub fn all_owed(root: &Path) -> (String, Vec<Unit>, Vec<String>) {
     let (base, desc) = base_of(root);
     let tree = Tree::read(root);
     let declared = declared(&tree, &base);
+    let (found, before) = detected_at(&tree, &base);
     let mut seen: Vec<Unit> = Vec::new();
-    for u in detected(&tree, &base).into_iter().chain(declared.units) {
+    for u in found.into_iter().chain(declared.units) {
         let slug = u.slug();
         let Some(i) = seen.iter().position(|p| p.slug() == slug) else {
             seen.push(u);
@@ -700,7 +715,7 @@ pub fn all_owed(root: &Path) -> (String, Vec<Unit>, Vec<String>) {
         }
     }
     seen.sort_by(|a, b| (rank(a), &a.subject).cmp(&(rank(b), &b.subject)));
-    let mut problems = tree.problems;
+    let mut problems = hidden::named(&tree, &before);
     problems.extend(declared.problems);
     (desc, seen, problems)
 }
@@ -808,172 +823,11 @@ pub fn ruling(desc: &str, units: &[Unit], problems: &[String]) -> String {
     }
 }
 
-const MODES: [&str; 8] = [
-    "--why",
-    "--units",
-    "--undrawn",
-    "--check-declared",
-    "--check-drawn",
-    "--glyph-gate",
-    "--glyph-dispatched",
-    "--landing-mark",
-];
-
-fn usage(why: &str) -> Reply {
-    reply(String::new(), format!("l7r-gate reviews owed: {why}\n"), 2)
-}
-
-/// `review_owed.py`'s command line.
-#[must_use]
-pub fn cli(args: &[String]) -> Reply {
-    cli_in(args, &Rooted::process("."))
-}
-
-/// [`cli`] with the environment its root is read with: `base`'s (feature 451 T38: a test's own, never a session's exports).
-#[must_use]
-pub fn cli_in(args: &[String], base: &Rooted) -> Reply {
-    let specs = [
-        Spec::value("--root"),
-        Spec::flag("--why"),
-        Spec::flag("--units"),
-        Spec::flag("--undrawn"),
-        Spec::flag("--check-declared"),
-        Spec::flag("--check-drawn"),
-        Spec::value("--glyph-gate"),
-        Spec::value("--glyph-dispatched"),
-        Spec::value("--landing-mark"),
-        Spec::flag("--landing"),
-        Spec::flag("--escaped"),
-        Spec::flag("--help"),
-    ];
-    let p = match parse(args, &specs) {
-        Ok(p) => p,
-        Err(why) => return usage(&why),
-    };
-    if p.on("--help") {
-        return reply(
-            "usage: l7r-gate reviews owed [--root DIR] [--why | --units | --undrawn | --check-declared | --check-drawn | --glyph-gate SLUG | --glyph-dispatched SLUG | --landing-mark {on,off}] [--landing] [--escaped]\n".to_owned(),
-            String::new(),
-            0,
-        );
-    }
-    let given: Vec<&str> = MODES
-        .iter()
-        .copied()
-        .filter(|m| p.on(m) || p.has(m))
-        .collect();
-    if given.len() > 1 {
-        return usage(&format!(
-            "argument {}: not allowed with argument {}",
-            given[1], given[0]
-        ));
-    }
-    let mark = p.text("--landing-mark", "");
-    if p.has("--landing-mark") && !matches!(mark, "on" | "off") {
-        return usage(&format!(
-            "argument --landing-mark: invalid choice: {}",
-            py_repr(mark)
-        ));
-    }
-    let asked = p.text("--root", ".");
-    let Some(top) =
-        git(&py_path(asked), &["rev-parse", "--show-toplevel"]).filter(|t| !t.is_empty())
-    else {
-        return reply(
-            String::new(),
-            format!("_review_owed: {asked} is not a git repository\n"),
-            1,
-        );
-    };
-    let root = base.at(top);
-    run(&root, &p, mark)
-}
-
-fn run(root: &Rooted, p: &crate::record::args::Parsed, mark: &str) -> Reply {
-    let check = if p.on("--check-declared") {
-        Some(check_declared as fn(&Path) -> Option<String>)
-    } else if p.on("--check-drawn") {
-        Some(check_drawn as fn(&Path) -> Option<String>)
-    } else {
-        None
-    };
-    if let Some(check) = check {
-        return check(root).map_or_else(
-            || reply(String::new(), String::new(), 0),
-            |r| reply(r + "\n", String::new(), 1),
-        );
-    }
-    if p.on("--undrawn") {
-        // the folders alone, no base read and no legend: what a gate run with nothing stale pays for the question
-        let mut currency = l7r_gate_pool::Currency::new(root);
-        let out = undrawn(root, &folders(root), &mut |d| {
-            currency.of(&d.path.display().to_string())
-        })
-        .into_iter()
-        .fold(String::new(), |mut o, (kind, at)| {
-            let _ = writeln!(o, "{kind}\t{at}");
-            o
-        });
-        return reply(out, String::new(), 0);
-    }
-    if !mark.is_empty() {
-        glyph::mark_landing(root, mark == "on");
-        return reply(String::new(), String::new(), 0);
-    }
-    let (gate, dispatched) = (p.text("--glyph-gate", ""), p.text("--glyph-dispatched", ""));
-    if !gate.is_empty() || !dispatched.is_empty() {
-        let slug = if gate.is_empty() { dispatched } else { gate };
-        let (code, out) = glyph::glyph_cli(root, slug, !gate.is_empty(), p.on("--escaped"));
-        return reply(out, String::new(), code);
-    }
-    let landing = p.on("--landing");
-    let (desc, all, problems) = all_owed(root);
-    let (due, waiting) = if landing {
-        (all.clone(), Vec::new())
-    } else {
-        glyph::glyph_due(root, &all, None)
-    };
-    let units: Vec<Unit> = all
-        .into_iter()
-        .filter(|u| landing || u.check != "glyph-check" || due.contains(u))
-        .collect();
-    let mut out = String::new();
-    if p.on("--why") {
-        out += &ruling(&desc, &units, &problems);
-        out.push('\n');
-        if !waiting.is_empty() {
-            let each: Vec<String> = waiting
-                .iter()
-                .map(|(u, when)| format!("{} ({when})", u.slug()))
-                .collect();
-            let _ = writeln!(
-                out,
-                "glyph checks owed and not yet due (feature 375 amendment 9 - on the feature's hour, or at landing): {}",
-                each.join(", ")
-            );
-        }
-    } else if p.on("--units") {
-        for u in &units {
-            let _ = writeln!(
-                out,
-                "{}\t{}\t{}\t{}\t{}",
-                u.slug(),
-                u.check,
-                u.subject,
-                u.on,
-                u.occasion
-            );
-        }
-    } else {
-        for u in &units {
-            let _ = writeln!(out, "{}", u.slug());
-        }
-    }
-    reply(out, String::new(), 0)
-}
-
+mod cli;
+pub use cli::{cli, cli_in};
 mod declared;
 pub mod deferred;
+mod hidden;
 mod redrawn;
 #[cfg(test)]
 pub use declared::occasions_section;

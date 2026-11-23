@@ -254,6 +254,25 @@ fn newer_py(dir: &Path, t: SystemTime) -> bool {
     })
 }
 
+/// The engine key of `unit`'s snapshot where the review tree took it (feature 451 T164, `.git/review-snapshot/<unit>/tree.json`, written
+/// by `l7r-gate reviews snapshot --commit`), or None: such a unit is keyed and gated by its snapshot, never the clone's working tree,
+/// which every builder's edit moves.
+#[must_use]
+pub fn snapshot_key(clone: &Path, unit: &str) -> Option<String> {
+    if unit.is_empty() {
+        return None;
+    }
+    let rec = object(
+        &clone
+            .join(".git/review-snapshot")
+            .join(unit)
+            .join("tree.json"),
+    );
+    let has = |k: &str| rec.get(k).and_then(Value::as_str).filter(|v| !v.is_empty());
+    has("commit")?;
+    has("key").map(str::to_owned)
+}
+
 /// The clock, unseamed: the seconds since the epoch.
 #[must_use]
 pub fn wall() -> i64 {

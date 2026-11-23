@@ -62,7 +62,7 @@ pub(super) fn tools(root: &Path) {
     std::fs::create_dir_all(root.join("scripts/gates")).unwrap();
     l7r_gate_core::write_executable(
         &root.join("scripts/gates/l7r-gate.sh"),
-        "#!/bin/sh\nd=$(dirname \"$0\")/../..\ncase \"$1\" in hamlet|mode-a) echo \"$(cd \"$d\" && pwd)/.git/engine.bin\"; exit 0;; esac\nif [ \"$1\" = check ]; then [ -f \"$d/.git/no-pattern\" ] && { echo no pattern >&2; exit 1; }; echo '(?<![\\w.])\\d[\\d,]*(?:\\.\\d+)?\\s*(?:px|s)(?![\\w-])'; exit 0; fi\n[ -f .git/green ]\n",
+        "#!/bin/sh\nd=$(dirname \"$0\")/../..\ncase \"$1\" in hamlet|mode-a) [ -f \"$d/.git/stale-$1\" ] && exit 1; echo \"$(cd \"$d\" && pwd)/.git/engine.bin\"; exit 0;; esac\nif [ \"$1\" = check ]; then [ -f \"$d/.git/no-pattern\" ] && { echo no pattern >&2; exit 1; }; echo '(?<![\\w.])\\d[\\d,]*(?:\\.\\d+)?\\s*(?:px|s)(?![\\w-])'; exit 0; fi\n[ -f .git/green ]\n",
     );
     put(
         root,

@@ -27,13 +27,13 @@ greps and fetches you already know you need in ONE message.
 The clone is the directory the dispatch names (it holds `.git/review-snapshot/`); run `make` targets from its
 root, never in `/diagram` (a read-only mirror).
 
-1. `make review-paired-gate` must print `green` - the tooling dispatches you only on a green gate (feature 294, US6). On `red`
+1. `make review-paired-gate UNIT=<your unit>` must print `green` - the tooling dispatches you only on a green gate (feature 294, US6). On `red`
    or `running`, write the verdict NOT-REVIEWABLE naming it and stop.
 2. If this unit has a previous verdict (`<clone>/.git/review-verdicts/<unit>.json`), each finding it raised must be disposed of
    by a record whose `source` read the thing the finding is about, not a proxy for it (the canopy case of feature 240: a
    clearance measured against clump CENTERS cannot verify a finding about drawn crowns). Where one cannot, return
    NOT-REVIEWABLE naming it. You keep the right to measure anything yourself from the artifact.
-3. Re-run `make review-paired-gate` immediately before writing your verdict.
+3. Re-run `make review-paired-gate UNIT=<your unit>` immediately before writing your verdict.
 
 ## Inputs
 

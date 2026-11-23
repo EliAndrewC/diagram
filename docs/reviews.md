@@ -50,8 +50,10 @@ behind the table is `specs/294-settlement-review-rethink/research.md` R1: every 
 needs and when its answer changes, and what a placer or a test now holds instead.
 
 **The shape, enforced** (the pair guard): one owed UNIT per agent (`<check>:<subject>`), each dispatched from the prompt file
-`make verify` writes (`.git/review-snapshot/<unit>/dispatch.md`, with its `UNIT:` line); dispatched once the gate is GREEN for the
-content (a review beside a running gate is refused - a gate going red mid-review cost ~36 NOT-REVIEWABLE runs, research R0); at
+`make verify T=<task(s)>` writes (`.git/review-snapshot/<unit>/dispatch.md`, with its `UNIT:` line); dispatched once the gate is GREEN for the
+content - the REVIEW TREE's gate (feature 451 T164): the gate and the snapshot build in `<clone>-review`, a worktree at a temporary
+commit of the bundle's own files on HEAD (`scripts/gates/review-tree.sh`), and each unit's gate, verdict key and content key are its
+snapshot's (`tree.json`, `reviews/prereq/tree.rs`), so another builder's edit to the clone neither blocks nor voids it (a review beside a running gate is refused - a gate going red mid-review cost ~36 NOT-REVIEWABLE runs, research R0); at
 most two rounds per unit per feature (one review and one fix-verification; a third waits for the round arbiter's ruling - feature 375, the GM's-words waiver retired by feature 379);
 the stop hook holds the turn while an owed unit has no dispatch, run or record. An engine change that moves things under rules
 already judged owes nothing and gets no report - the GM looks at the map.
