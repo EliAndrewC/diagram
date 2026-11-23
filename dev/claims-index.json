@@ -32575,12 +32575,12 @@
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/reads.rs::take#the page's reads": {
-  "body": "e536fe1dd30a5f2e",
+  "body": "39c5a39011fe71a0",
   "claim": "the page's reads - NONE: bookkeeping for the generation cache, no map decision",
-  "code": "2f1f2bd92ddb659d",
-  "core": "831f2a04bbaf4caa",
-  "date": "2026-11-18",
-  "note": "cache bookkeeping",
+  "code": "84787cd55692dd69",
+  "core": "86d33c6454fb3b1a",
+  "date": "2026-11-23",
+  "note": "NONE holds: this function only drains the set of paths it has recorded, adds the question pages the registry crate read, and returns them as a list for the generation cache; it makes no map decision",
   "pages": {},
   "reads": "17564bbde1fa2fc7",
   "research": "",

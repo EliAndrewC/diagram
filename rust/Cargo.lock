@@ -765,6 +765,7 @@ dependencies = [
  "l7r_gate_core",
  "l7r_gate_downloads",
  "l7r_gate_registry",
+ "l7r_gate_research",
  "l7r_gate_tree",
  "l7r_shared",
  "serde",
