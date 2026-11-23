@@ -137,9 +137,3 @@ landing on its own, each small; T22 last.
       research: rendering
 - [ ] T187 [perf] Labels are data (the GM 2026-11-23, request.md 'the convergence talk'): an item's attested, GUESS, CONVENTION or deviation label is a machine-readable tag on its page; a pop-up's Guesses tab is generated from the tags of the items it cites and an engine claim reads its label from the same tag, so a relabel propagates by regeneration with no review; a pop-up's own prose never restates a guess as a fact
       research: rendering
-- [ ] T188 [perf] Only factual findings cascade (the GM 2026-11-23, request.md 'the convergence talk'): a check's finding that something is wrong (an accuracy error, a drifted claim, a wrong outcome) may force another round and re-owe what depends on it; a style or wording finding is applied once or declined and never re-owes a round or cascades - the categories the checks already give (modal-research ACCURACY/REFERENCES/GAPS, modal-depiction COVERAGE/TRUTH/LINKS, building-review severities, impl-drift verdicts, EDIT/NOTE) read by the machinery that re-owes
-      research: rendering
-- [ ] T189 [perf] A later review round is scoped to the change (the GM 2026-11-23, request.md 'the convergence talk'): the reviewer gets the old and new text paired and the whole unit for context, and judges only whether the change made anything wrong, re-opening nothing it did not touch
-      research: rendering
-- [ ] T190 [perf] Settled choices stay settled (the GM 2026-11-23, request.md 'the convergence talk'): a finding an earlier round accepted, or a wording it ruled on, binds later rounds; an edit restoring text an earlier round replaced (the reversal detection) is refused before it is applied unless it carries a factual error with its evidence - measured: 25 A-B-A reversals on 2026-11-23, all in guard hooks, bind.rs and 451's plan.md (the round arbiter's list)
-      research: rendering
