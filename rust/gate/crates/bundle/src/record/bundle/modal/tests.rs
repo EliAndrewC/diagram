@@ -124,6 +124,21 @@ fn wells(tag: &str) -> l7r_shared::tempdir::TempDir {
     root
 }
 
+/// Feature 451 T185: a split's pointer on an Entry page puts the page it names in the research bundle, read as an Entry page.
+#[test]
+fn a_research_bundle_follows_a_splits_pointer() {
+    let root = wells("modal-bundle-split");
+    put(&root, "research/questions/0094-trade.html", "<h2 id=\"t\">Trade</h2>\n<p>Now at <a class=\"moved\" href=\"0097-dry.html\">Dry</a>.</p>\n");
+    let o = root.join("out").to_string_lossy().into_owned();
+    let mut run = run_on(&root);
+    let to = format!("{o}/r");
+    let asked = ask("modal-research", &to, "a backfill asked", "");
+    assert_eq!(bundle(&mut run, &root, "hamlet/well", &asked).unwrap(), 0);
+    assert!(root.join("out/r/entry/0097-dry.html").is_file());
+    let text = std::fs::read_to_string(root.join("out/r/MANIFEST.md")).unwrap();
+    assert!(text.contains("a page a split moved part of an Entry page to"));
+}
+
 /// The modal-research bundle of a hamlet pop-up. What was one test of each check's bundle is eight, each on a scratch
 /// record of its own - its ten bundles together were nearly three times FR-008's tenth of a second (feature 449 T167); the name kept on
 /// the first.

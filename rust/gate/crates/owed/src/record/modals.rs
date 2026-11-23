@@ -207,6 +207,22 @@ fn unique_paths(text: &str) -> Vec<String> {
     out
 }
 
+/// The pages a check of `files` reads: each, then the pages a split's pointers on it name (feature 451 T185: a block moved to another
+/// page is read there, so a later edit of it re-owes its readers), each once.
+#[must_use]
+pub fn followed(root: &Path, files: &[String]) -> Vec<String> {
+    let mut out = files.to_vec();
+    for f in files {
+        let text = std::fs::read_to_string(root.join(f)).unwrap_or_default();
+        for t in super::triage::change::pointer_targets(&text) {
+            if !out.contains(&t) {
+                out.push(t);
+            }
+        }
+    }
+    out
+}
+
 /// The file stem of a repository-relative path.
 pub fn stem(path: &str) -> String {
     Path::new(path)
@@ -524,7 +540,7 @@ fn digest_owned(parts: &[String]) -> String {
 pub fn fingerprints(root: &Path, m: &Modal) -> Result<(String, String), Fail> {
     let mut research = vec![m.uid(), m.prose(), m.entry().to_owned()];
     let form = digest_owned(&research);
-    research.extend(pages(root, &m.entry_files())?);
+    research.extend(pages(root, &followed(root, &m.entry_files()))?);
     Ok((form, digest_owned(&research)))
 }
 
@@ -535,7 +551,7 @@ pub fn fingerprints(root: &Path, m: &Modal) -> Result<(String, String), Fail> {
 /// Where what it reads, writes or runs fails: the error says which and why.
 pub fn depiction_fingerprint(root: &Path, m: &Modal) -> Result<String, Fail> {
     let mut parts = vec![m.uid(), m.entry().to_owned(), m.depiction()];
-    parts.extend(pages(root, &m.drawing_files())?);
+    parts.extend(pages(root, &followed(root, &m.drawing_files()))?);
     Ok(digest_owned(&parts))
 }
 
@@ -672,8 +688,7 @@ fn owed_row(
     let uid = m.uid();
     let (fp_form, fp_research) = fingerprints(root, m)?;
     let moved_text = was.is_none_or(|w| w.prose() != m.prose() || w.entry() != m.entry());
-    let moved_pages: Vec<String> = m
-        .entry_files()
+    let moved_pages: Vec<String> = followed(root, &m.entry_files())
         .into_iter()
         .filter(|f| changed.contains(f))
         .collect();
@@ -697,8 +712,7 @@ fn owed_row(
                 .map(|c| (format!("{c}:{uid}"), why.clone(), fp_research.clone())),
         );
     }
-    let moved_drawing: Vec<String> = m
-        .drawing_files()
+    let moved_drawing: Vec<String> = followed(root, &m.drawing_files())
         .into_iter()
         .filter(|f| changed.contains(f))
         .collect();

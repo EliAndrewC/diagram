@@ -960,6 +960,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-23",
    "declared": "spec-fidelity"
+  },
+  "### T186 (the GM 2026-11-23, request.md 'the convergence talk': \"I want to figure out what the difference is between the ones that might plausibly have required that and the ones that were just straightforward adjustments that never could have plausibly needed this kind of cascade\"; the blind re-classification, reclassify.md)": {
+   "sha256": "870e83b8f8bc12b8138a27e57fc04d8848f320fec387dd2339f4ea7a6a442a06",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity"
+  },
+  "### T186 Approach (checklist part A)": {
+   "sha256": "088d243d25745329287ef88a20a7e64ffd83dc023d7b2b3b1ec29bf06e1ee532",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -15931,6 +15943,195 @@
      "why": "Sequencing; FR-013 and the GM's 2026-11-20 words put performance work first, and a split no longer re-owing every citing pop-up is performance work."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-23",
+   "blocks": [
+    "### T186 (the GM 2026-11-23, request.md 'the convergence talk': \"I want to figure out what the difference is between the ones that might plausibly have required that and the ones that were just straightforward adjustments that never could have plausibly needed this kind of cascade\"; the blind re-classification, reclassify.md)",
+    "### T186 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "tool-clears",
+     "summary": "Footnote markers and markup are taken out of a block's claim words. A block whose claim words are unchanged, or empty, is cleared by the tool with no agent.",
+     "class": "within",
+     "why": "This carries the GM's approved rule 'only a claim-changing edit triggers review' and his question about edits 'that never could have plausibly needed this kind of cascade'. A marker or markup edit leaves every claim word the same. A key that goes away is still caught by arm (1)."
+    },
+    {
+     "id": "quotations-kept",
+     "summary": "Original-language quotations are NOT taken out of claim words. Round 1's BLOCKED finding is honored and the stripping is removed from the code.",
+     "class": "within",
+     "why": "This sends more edits on than the round-1 form did. A corrected quotation changes what a page says a source says, so it stays a claim change. It narrows nothing that was asked."
+    },
+    {
+     "id": "pairing",
+     "summary": "Old and new blocks are paired: exact matches first, then the tool's clears, then pairs at difflib ratio 0.6 or more.",
+     "class": "within",
+     "why": "This is how the change is computed. It decides nothing the request or spec states, and unpaired blocks still reach the triage as new or removed."
+    },
+    {
+     "id": "first-filter",
+     "summary": "change::fires is the first filter. A pop-up is owed triage only on (1) a Sources key gone, (2) the ECHO rule, or (3) a new bold-opened finding plus a pop-up that states a single case. A unit where no page fires is cleared by the tool, its pages kept.",
+     "class": "within",
+     "why": "The GM approved 'the echo check as T186's first filter, the agent triage after it'. Arms (1) and (3) only add to what the echo sends on. The landing replay measured 0 of the 17 page-caused corrections missed (one-shot label, 2026-11-23, replay --landing on both commits, scored against needed.md)."
+    },
+    {
+     "id": "absence-knob",
+     "summary": "ABSENCE is narrowed from the coordinator's five phrases to three. 'not recorded' and 'no source' are dropped: 104 of 114 fire with them, 56 of 114 without, 0 of 17 missed either way.",
+     "class": "within",
+     "why": "The longer phrase list came from the coordinator's brief, not from the GM's request or the accepted spec. request.md asks only for the echo check first and the agent after, and has no absence arm. Narrowing a session-added arm narrows nothing the GM asked for. The choice is measured, with 0 of 17 missed at each setting, and the knob is labeled as one."
+    },
+    {
+     "id": "manifest-form",
+     "summary": "The triage MANIFEST shows each changed block as OLD, NEW and a word diff, the new and removed blocks, and each pop-up whole once, never cut at 400 characters.",
+     "class": "within",
+     "why": "This shows the agent the change and the claims it may affect, so it can judge whether a claim changed. It only adds information."
+    },
+    {
+     "id": "contract-A-C",
+     "summary": "modal-triage.md states the contract once as (A) a fact the pop-up states, (B) a label of one, (C) a passage its references point at removed. (D) is dropped.",
+     "class": "within",
+     "why": "The GM approved 'the gap-fill clause dropped'. (A)-(C) match his approved rules: only a claim-changing edit triggers review, labels are data, and only factual findings cascade."
+    },
+    {
+     "id": "unsure-default-dropped",
+     "summary": "The old triage contract's rule to name a pop-up when unsure is dropped.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The GM's own words already imply this. His approved rules are 'only a claim-changing edit triggers review' and 'only factual findings cascade', and he asked that edits that 'never could have plausibly needed this kind of cascade' not cascade. A default that sends on whatever the agent cannot place is what produced the cascade he asked to end: bundle 2's triage sent 79 of 114 on. Under (A)-(C) the agent still has to judge every pop-up the filter sends. The section says plainly that the contract has not been run on these bundles."
+    },
+    {
+     "id": "notes-originals",
+     "summary": ".notes.html and .originals.html never reached a pop-up's checks, because the fingerprint reads only the Entry and Drawing pages. This is pinned by the replay's first class.",
+     "class": "within",
+     "why": "This records and pins existing behavior. A test that pins it serves the request."
+    },
+    {
+     "id": "replay-verbs",
+     "summary": "Two verbs: replay --edits replays the tool's clears over recorded edits, and replay --landing replays the whole live filter over a landed commit's edits.",
+     "class": "within",
+     "why": "Both check that the filter clears without missing a needed correction. This is enforcement of what was asked, not unrequested scope."
+    },
+    {
+     "id": "left-comment-labels",
+     "summary": "Found and left: an Evidence or Grounds comment's label change is cleared by the tool, as it never re-owed a pop-up on HEAD. Labels propagating is T187.",
+     "class": "within",
+     "why": "There is no wrong outcome and no change from HEAD. The GM's label rule (labels are data, propagated mechanically) is T187's, which comes after this task. All three cases were measured as caught through a visible edit in the replay."
+    },
+    {
+     "id": "left-claims-triage",
+     "summary": "Found and left: the claims triage gets T185's moves but not T186's clears and pairing.",
+     "class": "within",
+     "why": "Its agent still sees every changed block, so no wrong outcome is left. The GM's T186 approval addresses the pop-up cascade."
+    },
+    {
+     "id": "garden-pond-fix",
+     "summary": "The sentence 'the pond is taken as the office's form' is restated to 0103's drawing page knob (pond or dry garden) in garden-pond.md, garden.md and building-programs.md's inner_garden row. modal-form and modal-research are owed on both pop-ups.",
+     "class": "within",
+     "why": "The GM approved 'the garden-pond sentence fixed in its three places'. Those three places are fixed and nothing further."
+    },
+    {
+     "id": "order-exits",
+     "summary": "Order: before T185, with T187 waiting on the garden fix. Green: the landing replay misses none of the 17 and the tests pass. Red: narrow the arm that cleared a miss.",
+     "class": "within",
+     "why": "This is scheduling and an exit test. Neither narrows what was asked."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-23",
+   "blocks": [
+    "### T186 (the GM 2026-11-23, request.md 'the convergence talk': \"I want to figure out what the difference is between the ones that might plausibly have required that and the ones that were just straightforward adjustments that never could have plausibly needed this kind of cascade\"; the blind re-classification, reclassify.md)",
+    "### T186 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D1 change.rs and pairing",
+     "summary": "The change computation moves to triage/change.rs; blocks are paired old with new (exact matches dropped, then tool clears, then difflib ratio >= 0.6, PAIR_RATIO taken from the blind test).",
+     "class": "within",
+     "why": "Mechanism for the approved first filter and paired-block triage; it decides how to do what was asked, not what is reviewed."
+    },
+    {
+     "id": "D2 tool clears markup-only edits",
+     "summary": "A block whose claim words, after removing footnote markers and markup (comments, tags, links, glossary marks already gone), are unchanged or empty is cleared by the tool.",
+     "class": "within",
+     "why": "This is the GM's own split, verbatim in request.md: 'straightforward adjustments that never could have plausibly needed this kind of cascade', and his approved rule 'only a claim-changing edit triggers review'. An edit that leaves no claim word changed is exactly that case."
+    },
+    {
+     "id": "D3 quotations not cleared",
+     "summary": "An original-language quotation is NOT taken out of claim words, so a corrected quotation still reaches the triage (round 1's BLOCKED ruling, reversed).",
+     "class": "within",
+     "why": "Keeps under review an edit that changes what a page says a source says; it restricts the tool's clearing and narrows nothing the GM asked."
+    },
+    {
+     "id": "D4 the first filter's three arms",
+     "summary": "change::fires sends a page's change on only where (1) a cited note key is gone, (2) the ECHO rule holds, or (3) a new bold-opened finding is added and the pop-up states a single case; a unit with no firing page is answered 'triage: cleared by the tool', no agent.",
+     "class": "within",
+     "why": "The GM approved 'the echo check as T186's first filter, the agent triage after it' (request.md, the narrowest check). Arms (1) and (3) only add to what reaches the agent beyond echo alone, and arm (1) keeps rule (C) reachable. Clearing a unit where nothing fires is the approved filter itself."
+    },
+    {
+     "id": "D5 ABSENCE knob",
+     "summary": "The absence arm's phrases leave out 'not recorded' and 'no source' (the coordinator's wording) and keep 'the one case', 'only one case', 'every plan': 56 of 114 pop-ups fire instead of 104, 0 of 17 page-caused corrections missed either way (measured 2026-11-23, the landing replay and score).",
+     "class": "within",
+     "why": "The plan calls this a narrowing of the COORDINATOR's wording; that brief is neither the GM's request nor the accepted spec: a grep of request.md, spec-cited.md and spec-index.md for 'not recorded|no source|absence' finds no hit. The GM's words name only the echo check as the first filter, and the absence arm is an addition to it, so trimming the addition narrows nothing he asked. Purpose check: with the two phrases the arm fires on 104 of 114 pop-ups, which would gut the filter the GM approved to end needless cascades; the trimmed form shows no measured miss among the 17 page-caused corrections (the knob is chosen and scored on the same 17, as the green exit and the red exit in the section state)."
+    },
+    {
+     "id": "D6 MANIFEST form",
+     "summary": "The triage MANIFEST shows each changed block OLD, NEW and WORD DIFF, the new and removed blocks, and each pop-up whole once (never cut at 400 characters).",
+     "class": "within",
+     "why": "Presentation for the approved agent triage after the filter; showing more, never less."
+    },
+    {
+     "id": "D7 (A)-(C) in the agent, (D) dropped",
+     "summary": "modal-triage.md states (A) a fact the pop-up states, (B) a label of one, (C) a passage its references point at removed; the code states none of it; (D) is dropped.",
+     "class": "within",
+     "why": "The GM approved the plan in which 'the gap-fill clause [is] dropped' (request.md, the narrowest check); the section names this drop as (D), the GM's later form. Stating the rule in one place adds nothing and removes nothing."
+    },
+    {
+     "id": "D8 when unsure, name it",
+     "summary": "The rule to name a pop-up when unsure whether a block meets (A)-(C) is kept in modal-triage.md.",
+     "class": "within",
+     "why": "Round 2 ruled its drop NOT LEGITIMATE because the GM's approval dropped only the gap-fill clause; keeping it is the status quo that ruling required."
+    },
+    {
+     "id": "D9 notes and originals outside the fingerprint",
+     "summary": "The section states .notes.html and .originals.html never reached a pop-up's checks (fingerprint reads only the Entry: and Drawing: pages), pinned by the replay's first class.",
+     "class": "within",
+     "why": "Describes and pins existing behavior; it changes no reach of review."
+    },
+    {
+     "id": "D10 two replay verbs",
+     "summary": "record modal-triage replay --edits and --landing, the latter calling the same change::fires.",
+     "class": "within",
+     "why": "Verification that the approved filter does what it says (misses no page-caused correction); enforcement of the request, not scope."
+    },
+    {
+     "id": "D11 order and exits",
+     "summary": "Before T185; T187 waits for the garden fix; green is the landing replay missing none of the 17 page-caused corrections; red narrows the arm that cleared a needed correction.",
+     "class": "within",
+     "why": "Sequencing and an exit that measures the GM's own criterion (catch every page-caused correction); nothing narrowed."
+    },
+    {
+     "id": "D12 comment label changes cleared, left",
+     "summary": "An Evidence/Grounds comment's label change is cleared by the tool and was never re-owed on HEAD; not a defect, since each page states the label in visible words the triage sees; T187 (labels are data) is the label rule.",
+     "class": "within",
+     "why": "The GM's label question ('should attested versus guess be something that cascades mechanically rather than requiring a review') is answered by the approved rule 'labels are data and propagate by regeneration', carried by T187 by name. T186 leaves HEAD's behavior on comments as it was, the visible label is still reviewed, and no wrong outcome is left."
+    },
+    {
+     "id": "D13 claims triage not given T186's clears",
+     "summary": "The claims triage gets T185's moves but not T186's tool clears and pairing; its agent still sees every changed block; said in the report.",
+     "class": "within",
+     "why": "Scope: the cascade the GM described is a page edit re-owing checks on every pop-up citing it, and his approval for this task names T186's filter on pop-up triage. The claims triage left as it is gives correct outcomes (its agent sees every changed block); a speed gap with correct outcomes is not a defect left (constitution XIV's defect rule), so nothing asked is given up here."
+    },
+    {
+     "id": "D14 garden-pond fix",
+     "summary": "The 'pond is taken as the office's form' sentence is restated in sheet/garden-pond.md, sheet/garden.md and docs/building-programs.md's inner_garden row (via make building-programs), to a garden's water being a knob; modal-form and modal-research owed on the two pop-ups through make record-owed.",
+     "class": "within",
+     "why": "The GM approved 'the garden-pond sentence fixed in its three places'; these are the three. Owing the two pop-ups' own checks directly adds review."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -25412,99 +25613,96 @@
    "verdict": "CLEAR"
   },
   "T186": {
-   "section_sha256": "7ed7168c6ae09b590c4a933587c683ac937a192d47b20dd80237f16a502f2bb5",
+   "section_sha256": "94ae0eeca10adf3f8b4e28001bc7ef3e8bb463af984dad4b292f1146e7f3b4ee",
    "reviewed": "2026-11-23",
    "declared": "spec-fidelity",
    "decisions": [
     {
-     "id": "D1-pairing",
-     "summary": "A page's blocks are paired old with new: exact matches dropped, then the tool's clears, then pairs at difflib ratio 0.6 or more (PAIR_RATIO taken from the blind test).",
+     "id": "D1 change.rs and pairing",
+     "summary": "The change computation moves to triage/change.rs; blocks are paired old with new (exact matches dropped, then tool clears, then difflib ratio >= 0.6, PAIR_RATIO taken from the blind test).",
      "class": "within",
-     "why": "Mechanism for showing the triage what changed. It decides nothing about which edits trigger review."
+     "why": "Mechanism for the approved first filter and paired-block triage; it decides how to do what was asked, not what is reviewed."
     },
     {
-     "id": "D2a-markup",
-     "summary": "Markup is taken out of a block's claim words. Comments, tags, links and glossary marks are already out (pages::words).",
+     "id": "D2 tool clears markup-only edits",
+     "summary": "A block whose claim words, after removing footnote markers and markup (comments, tags, links, glossary marks already gone), are unchanged or empty is cleared by the tool.",
      "class": "within",
-     "why": "Markup carries no claim, so an edit to it alone is the kind the GM said 'never could have plausibly needed this kind of cascade'. That is the rule 'only a claim-changing edit triggers review' applied as written."
+     "why": "This is the GM's own split, verbatim in request.md: 'straightforward adjustments that never could have plausibly needed this kind of cascade', and his approved rule 'only a claim-changing edit triggers review'. An edit that leaves no claim word changed is exactly that case."
     },
     {
-     "id": "D2b-footnote-marker",
-     "summary": "A footnote marker is taken out of a block's claim words. Rule C still sends a note key that is gone from the page when the pop-up's Sources: names it exactly.",
+     "id": "D3 quotations not cleared",
+     "summary": "An original-language quotation is NOT taken out of claim words, so a corrected quotation still reaches the triage (round 1's BLOCKED ruling, reversed).",
      "class": "within",
-     "why": "A marker states no claim. Rule C covers the case where it matters to a pop-up: a source it names disappears. A marker that moves while its key stays on the page changes no claim the pop-up makes, and the GM limited cascades to factual inaccuracies."
+     "why": "Keeps under review an edit that changes what a page says a source says; it restricts the tool's clearing and narrows nothing the GM asked."
     },
     {
-     "id": "D2c-cjk-quotation",
-     "summary": "An original-language quotation in 「」 or 『』 is taken out of a block's claim words, so an edit only to the quoted original text is cleared by the tool with no agent.",
-     "class": "narrowing",
-     "ruling": "NOT LEGITIMATE",
-     "why": "The GM's rule is that only a claim-changing edit triggers review, and the line he drew is edits that 'might plausibly have required' a cascade against those that 'never could have plausibly needed' one. A correction to the quoted wording of a source changes what the page says the source says. That is evidence, and plausibly a factual inaccuracy if repeated elsewhere, which is the class the GM said cascades. The bundle has no sentence or measurement showing such a quotation cannot carry a claim. Item 9's replay does not show it either: there the tool alone cleared no pop-up, so '0 of 24 missed' measures the frozen judging calls, not this clear, and its '3 marker, link or quotation edits' is not broken down by kind. Applying the rule literally is possible, does not defeat the request's purpose (the triage agent judges such an edit under (A)-(D)), and nothing in the GM's words implies this exception. To clear it: send such edits to the triage, or measure that no pop-up can carry or depend on the quoted original text and record that as the premise."
-    },
-    {
-     "id": "D2d-cjk-run",
-     "summary": "Any run of CJK script, quoted or not, is taken out of a block's claim words, so an edit only to CJK characters (a name, a term, a date) is cleared by the tool with no agent.",
-     "class": "narrowing",
-     "ruling": "NOT LEGITIMATE",
-     "why": "This is not a quotation, though the plan files it under one. A bare CJK run is a name, a term or a written date stated as fact on the page. Correcting it, for example to a different character with the same reading, leaves the romanized words unchanged and still changes a fact. That is the factual-inaccuracy class the GM said cascades, and an edit that 'might plausibly have required' review. The bundle shows no measurement that such an edit cannot change a claim (see D2c on what the replay does and does not measure). The exception is neither impossible to avoid, implied by the GM's words, nor needed by the request's purpose. To clear it: drop the bare-CJK-run strip, or measure the premise and record it."
-    },
-    {
-     "id": "D2e-empty-claim-words",
-     "summary": "A block whose claim words are empty after stripping is cleared by the tool whatever changed in it.",
+     "id": "D4 the first filter's three arms",
+     "summary": "change::fires sends a page's change on only where (1) a cited note key is gone, (2) the ECHO rule holds, or (3) a new bold-opened finding is added and the pop-up states a single case; a unit with no firing page is answered 'triage: cleared by the tool', no agent.",
      "class": "within",
-     "why": "Only markup and markers count as stripped once D2c and D2d are corrected, and a block made of nothing else carries no claim. As written, the clause also clears a block made wholly of CJK text, which inherits D2c and D2d's ruling. It needs no separate ruling."
+     "why": "The GM approved 'the echo check as T186's first filter, the agent triage after it' (request.md, the narrowest check). Arms (1) and (3) only add to what reaches the agent beyond echo alone, and arm (1) keeps rule (C) reachable. Clearing a unit where nothing fires is the approved filter itself."
     },
     {
-     "id": "D3-unit-cleared",
-     "summary": "A unit every page of which is cleared is answered 'triage: cleared by the tool' with its pages kept, and no agent runs.",
+     "id": "D5 ABSENCE knob",
+     "summary": "The absence arm's phrases leave out 'not recorded' and 'no source' (the coordinator's wording) and keep 'the one case', 'only one case', 'every plan': 56 of 114 pop-ups fire instead of 104, 0 of 17 page-caused corrections missed either way (measured 2026-11-23, the landing replay and score).",
      "class": "within",
-     "why": "This is the GM's 'only a claim-changing edit triggers review' carried out at the unit level. Its reach depends only on what counts as a clear (D2)."
+     "why": "The plan calls this a narrowing of the COORDINATOR's wording; that brief is neither the GM's request nor the accepted spec: a grep of request.md, spec-cited.md and spec-index.md for 'not recorded|no source|absence' finds no hit. The GM's words name only the echo check as the first filter, and the absence arm is an addition to it, so trimming the addition narrows nothing he asked. Purpose check: with the two phrases the arm fires on 104 of 114 pop-ups, which would gut the filter the GM approved to end needless cascades; the trimmed form shows no measured miss among the 17 page-caused corrections (the knob is chosen and scored on the same 17, as the green exit and the red exit in the section state)."
     },
     {
-     "id": "D4-manifest-form",
-     "summary": "The MANIFEST shows each changed block as OLD, NEW and WORD DIFF, plus the new and removed blocks, and each pop-up whole once (never cut at 400 characters).",
+     "id": "D6 MANIFEST form",
+     "summary": "The triage MANIFEST shows each changed block OLD, NEW and WORD DIFF, the new and removed blocks, and each pop-up whole once (never cut at 400 characters).",
      "class": "within",
-     "why": "It gives the triage what it needs to tell a claim-changing edit from an adjustment. Nothing is narrowed."
+     "why": "Presentation for the approved agent triage after the filter; showing more, never less."
     },
     {
-     "id": "D5-drop-when-unsure",
-     "summary": "modal-triage.md states rules (A)-(D) once, the code states none of them, and the default 'when unsure, name it' is dropped.",
-     "class": "narrowing",
-     "ruling": "LEGITIMATE",
-     "why": "Dropping a conservative default narrows what reaches review. Applied literally, though, the default defeats the request's stated purpose: bundle 2's triage sent 79 of 114 on (t371h, a figure read from the bundle and not re-run). That is the cascade 'mostly not finding actual problems' the GM said must be fixed before anything else. The GM approved the rule 'only a claim-changing edit triggers review' and the re-classification test that (A)-(D) come from. The text of (A)-(D) is not in this bundle and was NOT judged by this verdict, so this ruling does not cover their content."
-    },
-    {
-     "id": "D6-originals-and-notes",
-     "summary": ".notes.html and .originals.html never reached a pop-up's checks (modals::fingerprints reads only the Entry: and Drawing: pages). This is pinned by the replay's first class.",
+     "id": "D7 (A)-(C) in the agent, (D) dropped",
+     "summary": "modal-triage.md states (A) a fact the pop-up states, (B) a label of one, (C) a passage its references point at removed; the code states none of it; (D) is dropped.",
      "class": "within",
-     "why": "It records and pins HEAD's existing behavior and changes nothing."
+     "why": "The GM approved the plan in which 'the gap-fill clause [is] dropped' (request.md, the narrowest check); the section names this drop as (D), the GM's later form. Stating the rule in one place adds nothing and removes nothing."
     },
     {
-     "id": "D7-replay-command",
-     "summary": "'record modal-triage replay --edits F' replays the tool's half over recorded edits.",
+     "id": "D8 when unsure, name it",
+     "summary": "The rule to name a pop-up when unsure whether a block meets (A)-(C) is kept in modal-triage.md.",
      "class": "within",
-     "why": "It verifies that the requested change cuts the cascade without missing needed pop-ups. It enforces the request."
+     "why": "Round 2 ruled its drop NOT LEGITIMATE because the GM's approval dropped only the gap-fill clause; keeping it is the status quo that ruling required."
     },
     {
-     "id": "D8-order",
-     "summary": "Lands before T185, which extends its change computation.",
+     "id": "D9 notes and originals outside the fingerprint",
+     "summary": "The section states .notes.html and .originals.html never reached a pop-up's checks (fingerprint reads only the Entry: and Drawing: pages), pinned by the replay's first class.",
      "class": "within",
-     "why": "Scheduling only."
+     "why": "Describes and pins existing behavior; it changes no reach of review."
     },
     {
-     "id": "D9-left-comment-labels",
-     "summary": "Found and left: a label change inside an Evidence or Grounds comment is cleared by the tool. It never re-owed a pop-up on HEAD, and T187 (labels are data) makes labels propagate.",
+     "id": "D10 two replay verbs",
+     "summary": "record modal-triage replay --edits and --landing, the latter calling the same change::fires.",
      "class": "within",
-     "why": "HEAD already behaves this way, and the GM's own words send labels by mechanism rather than review ('Shouldn't attested versus guess be something that cascades mechanically rather than requiring a review'), which is T187's rule. The bundle shows no wrong outcome."
+     "why": "Verification that the approved filter does what it says (misses no page-caused correction); enforcement of the request, not scope."
     },
     {
-     "id": "D10-left-claims-triage",
-     "summary": "Found and left: the claims triage gets T185's moves but not T186's tool clears and pairing. This is said in the report.",
+     "id": "D11 order and exits",
+     "summary": "Before T185; T187 waits for the garden fix; green is the landing replay missing none of the 17 page-caused corrections; red narrows the arm that cleared a needed correction.",
      "class": "within",
-     "why": "Nothing goes wrong as a result: the claims triage's agent still sees every changed block. It leaves a saving for later and does not narrow the request."
+     "why": "Sequencing and an exit that measures the GM's own criterion (catch every page-caused correction); nothing narrowed."
+    },
+    {
+     "id": "D12 comment label changes cleared, left",
+     "summary": "An Evidence/Grounds comment's label change is cleared by the tool and was never re-owed on HEAD; not a defect, since each page states the label in visible words the triage sees; T187 (labels are data) is the label rule.",
+     "class": "within",
+     "why": "The GM's label question ('should attested versus guess be something that cascades mechanically rather than requiring a review') is answered by the approved rule 'labels are data and propagate by regeneration', carried by T187 by name. T186 leaves HEAD's behavior on comments as it was, the visible label is still reviewed, and no wrong outcome is left."
+    },
+    {
+     "id": "D13 claims triage not given T186's clears",
+     "summary": "The claims triage gets T185's moves but not T186's tool clears and pairing; its agent still sees every changed block; said in the report.",
+     "class": "within",
+     "why": "Scope: the cascade the GM described is a page edit re-owing checks on every pop-up citing it, and his approval for this task names T186's filter on pop-up triage. The claims triage left as it is gives correct outcomes (its agent sees every changed block); a speed gap with correct outcomes is not a defect left (constitution XIV's defect rule), so nothing asked is given up here."
+    },
+    {
+     "id": "D14 garden-pond fix",
+     "summary": "The 'pond is taken as the office's form' sentence is restated in sheet/garden-pond.md, sheet/garden.md and docs/building-programs.md's inner_garden row (via make building-programs), to a garden's water being a knob; modal-form and modal-research owed on the two pop-ups through make record-owed.",
+     "class": "within",
+     "why": "The GM approved 'the garden-pond sentence fixed in its three places'; these are the three. Owing the two pop-ups' own checks directly adds review."
     }
    ],
-   "verdict": "BLOCKED"
+   "verdict": "CLEAR"
   }
  }
 }

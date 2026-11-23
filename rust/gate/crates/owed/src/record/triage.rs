@@ -17,6 +17,9 @@ use super::owed::{self, answered as is_answered, merge_base, read_answer, write_
 use super::repo::{fail, git, read_text, read_universal, Fail};
 use super::units::re;
 use crate::Reply;
+use change::Change;
+
+pub mod change;
 
 /// A subcommand of the triage.
 type Runner = fn(&Path, &Parsed) -> Result<Reply, Fail>;
@@ -137,34 +140,15 @@ fn baseline(store: &Path, slug: &str, path: &str) -> String {
         .to_owned()
 }
 
-/// (blocks new or changed, blocks removed) between two versions of a page.
-fn changed_blocks(old: &str, fresh: &str) -> (Vec<String>, Vec<String>) {
-    let was: Vec<String> = read_page(old).blocks.into_iter().map(|b| b.words).collect();
-    let now: Vec<String> = read_page(fresh)
-        .blocks
-        .into_iter()
-        .map(|b| b.words)
-        .collect();
-    let (old_set, new_set): (HashSet<&String>, HashSet<&String>) =
-        (was.iter().collect(), now.iter().collect());
-    (
-        now.iter()
-            .filter(|w| !old_set.contains(w))
-            .cloned()
-            .collect(),
-        was.iter()
-            .filter(|w| !new_set.contains(w))
-            .cloned()
-            .collect(),
+fn pages_of(root: &Path, m: &Modal, check: &str) -> Vec<String> {
+    modals::followed(
+        root,
+        &if check == DEPICTION_CHECK {
+            m.drawing_files()
+        } else {
+            m.entry_files()
+        },
     )
-}
-
-fn pages_of(m: &Modal, check: &str) -> Vec<String> {
-    if check == DEPICTION_CHECK {
-        m.drawing_files()
-    } else {
-        m.entry_files()
-    }
 }
 
 fn clear_dir(dir: &Path) -> Result<(), Fail> {
@@ -176,64 +160,77 @@ fn clear_dir(dir: &Path) -> Result<(), Fail> {
     Ok(())
 }
 
-fn truncated(text: &str) -> String {
-    text.chars().take(400).collect()
-}
-
-/// A page's changed blocks and the pop-ups naming it, keyed `(path, baseline)` (sorted), each pop-up's checks sorted.
+/// The pop-ups under one page's change, keyed `(path, baseline, the change's digest)` (sorted), each pop-up's checks sorted.
 type ByPage = std::collections::BTreeMap<
-    (String, String),
+    (String, String, String),
     std::collections::BTreeMap<String, std::collections::BTreeSet<String>>,
 >;
 
-/// What a page changed: its blocks new or changed, and removed, keyed as [`ByPage`] is.
-type Changed = std::collections::HashMap<(String, String), (Vec<String>, Vec<String>)>;
+/// What a page changed for its readers, keyed as [`ByPage`] is.
+type Changed = std::collections::HashMap<(String, String, String), Change>;
 
-/// The bundle's `MANIFEST.md`, part by part: each moved page's changed blocks and the pop-ups naming it.
+/// A pop-up whole, as its checks read it: every tag in its file's order (feature 451 T186: never cut at 400 characters).
+fn whole(m: &Modal) -> String {
+    m.tags
+        .iter()
+        .filter(|(_, v)| !v.trim().is_empty())
+        .map(|(k, v)| format!("{k}: {}", v.trim()))
+        .collect::<Vec<_>>()
+        .join("\n")
+}
+
+/// One change's lines in the MANIFEST: each changed block with its old self and a word diff, then the new and the removed.
+fn change_lines(c: &Change, parts: &mut Vec<String>) {
+    for (old, new) in &c.pairs {
+        parts.push(format!(
+            "Changed:\n  OLD: {old}\n  NEW: {new}\n  WORD DIFF: {}\n",
+            change::word_diff(old, new)
+        ));
+    }
+    parts.extend(c.added.iter().map(|w| format!("New:\n  NEW: {w}\n")));
+    parts.extend(
+        c.removed
+            .iter()
+            .map(|w| format!("Removed (no longer on the page):\n  OLD: {w}\n")),
+    );
+    if !c.keys_gone.is_empty() {
+        parts.push(format!(
+            "Note keys no longer on the page: {}\n",
+            c.keys_gone.join(", ")
+        ));
+    }
+}
+
+/// The bundle's `MANIFEST.md`, part by part: each moved page's change and the pop-ups it reaches, then each pop-up whole, once.
 fn manifest_parts(by_page: &ByPage, blocks: &Changed, modals: &[(String, Modal)]) -> Vec<String> {
     let find = |uid: &str| modals.iter().find(|(u, _)| u == uid).map(|(_, m)| m);
     let mut parts = vec![
-        "# Triage of pop-up checks (feature 375, FR-001)\n".to_owned(),
+        "# Triage of pop-up checks (feature 375, FR-001; feature 451 T186)\n".to_owned(),
         "owed-checks: modal-triage\n".to_owned(),
-        "For the `modal-triage` agent: rule on each pop-up below as your contract says, and reply in its form.\n".to_owned(),
+        "For the `modal-triage` agent: rule on each pop-up below as your contract says, and reply in its form. Comment, markup, link and footnote-marker edits, and blocks a split moved, were cleared by the tool and are not shown.\n".to_owned(),
     ];
+    let mut shown: std::collections::BTreeSet<&str> = std::collections::BTreeSet::new();
     for (key, popups) in by_page {
-        let (path, base_blob) = key;
-        let (fresh, gone) = &blocks[key];
+        let (path, base_blob, _) = key;
         let against = if base_blob.is_empty() {
             "against the merge base (no check has read it yet)"
         } else {
             "against the version these pop-ups' last check read"
         };
-        parts.push(format!(
-            "## {path}\n\n({against})\n\nNew or changed blocks:\n"
-        ));
-        if fresh.is_empty() {
-            parts.push("(none)\n".to_owned());
-        } else {
-            parts.extend(fresh.iter().map(|w| format!("> {w}\n")));
-        }
-        if !gone.is_empty() {
-            parts.push("Removed blocks (no longer on the page):\n".to_owned());
-            parts.extend(gone.iter().map(|w| format!("> {w}\n")));
-        }
-        parts.push("Pop-ups naming it:\n".to_owned());
+        parts.push(format!("## {path}\n\n({against})\n"));
+        change_lines(&blocks[key], &mut parts);
+        parts.push("Pop-ups reading it:\n".to_owned());
         for (uid, checks) in popups {
-            let m = find(uid).map_or_else(Modal::default, Clone::clone);
             let checks: Vec<&str> = checks.iter().map(String::as_str).collect();
-            let depiction = m.tag("Depiction");
-            let tail = if depiction.is_empty() {
-                String::new()
-            } else {
-                format!(" | Depiction - {}", truncated(depiction))
-            };
-            parts.push(format!(
-                "- UID `{uid}` ({}): About - {}{tail}",
-                checks.join(", "),
-                truncated(m.tag("About"))
-            ));
+            parts.push(format!("- UID `{uid}` ({})", checks.join(", ")));
+            shown.insert(uid.as_str());
         }
         parts.push(String::new());
+    }
+    parts.push("# The pop-ups, whole\n".to_owned());
+    for uid in shown {
+        let m = find(uid).map_or_else(Modal::default, Clone::clone);
+        parts.push(format!("## UID `{uid}`\n\n{}\n", whole(&m)));
     }
     parts
 }
@@ -244,11 +241,251 @@ fn manifest_parts(by_page: &ByPage, blocks: &Changed, modals: &[(String, Modal)]
 ///
 /// Where what it reads, writes or runs fails: the error says which and why.
 pub fn bundle(root: &Path, out: &Path, base: &str) -> Result<Option<(PathBuf, usize)>, Fail> {
-    bundle_in(root, out, base, &owed::store(root))
+    Ok(bundle_in(root, out, base, &owed::store(root))?.0)
+}
+
+/// A unit's reading of its pages: each page's text now and at its baseline.
+struct Reading {
+    now: Vec<(String, String)>,
+    before: Vec<(String, String)>,
+}
+
+impl Reading {
+    fn words(texts: &[(String, String)], but: &str) -> HashSet<String> {
+        texts
+            .iter()
+            .filter(|(p, _)| p != but)
+            .flat_map(|(_, t)| change::block_words(t))
+            .collect()
+    }
+}
+
+/// Every question page's block words, read once a bundle and only where a removal asks (a split with no pointer).
+fn record_words(root: &Path) -> Vec<(String, HashSet<String>)> {
+    let dir = root.join("research/questions");
+    let mut names: Vec<String> = std::fs::read_dir(&dir)
+        .into_iter()
+        .flatten()
+        .flatten()
+        .map(|e| e.file_name().to_string_lossy().into_owned())
+        .filter(|n| {
+            Path::new(n).extension().is_some_and(|e| e == "html")
+                && !n.ends_with(".notes.html")
+                && !n.ends_with(".originals.html")
+        })
+        .collect();
+    names.sort();
+    names
+        .into_iter()
+        .map(|n| {
+            let text = std::fs::read_to_string(dir.join(&n)).unwrap_or_default();
+            (
+                format!("research/questions/{n}"),
+                change::block_words(&text),
+            )
+        })
+        .collect()
+}
+
+/// A page still owing a unit the agent: its key in the MANIFEST and its change.
+type PageOwed = ((String, String, String), Change);
+
+/// What one unit's triage reads beside its own pages: the store, the base and its reader, the record's pages (read once a bundle, only
+/// where a removal asks), and the splits with no pointer it has met.
+struct Unit<'a> {
+    root: &'a Path,
+    store: &'a Path,
+    base: &'a str,
+    read: &'a mut modals::RevReader,
+    elsewhere: &'a mut Option<Vec<(String, HashSet<String>)>>,
+    unpointed: &'a mut Vec<String>,
+}
+
+/// Each page of a unit's that still owes it the agent: its key in the MANIFEST and its change, after the tool's clears and a split's
+/// moves (feature 451 T185, T186).
+fn unit_changes(
+    u: &mut Unit<'_>,
+    slug: &str,
+    check: &str,
+    m: &Modal,
+    all: &[String],
+) -> Result<Vec<PageOwed>, Fail> {
+    let (root, store) = (u.root, u.store);
+    let mut reading = Reading {
+        now: Vec::new(),
+        before: Vec::new(),
+    };
+    for path in all {
+        reading.now.push((
+            path.clone(),
+            read_universal(&root.join(path))?.unwrap_or_default(),
+        ));
+        reading.before.push((
+            path.clone(),
+            page_before(root, store, slug, path, u.base, u.read),
+        ));
+    }
+    let sources: HashSet<&str> = m.tag("Sources").split(',').map(str::trim).collect();
+    let mut owed_pages: Vec<PageOwed> = Vec::new();
+    for (i, path) in all.iter().enumerate() {
+        if reading.before[i].1 == reading.now[i].1 {
+            continue;
+        }
+        let mut c = change::page_change(
+            &reading.before[i].1,
+            &reading.now[i].1,
+            &Reading::words(&reading.now, path),
+            &Reading::words(&reading.before, path),
+            &[],
+        );
+        if !c.removed.is_empty() {
+            let pages = u.elsewhere.get_or_insert_with(|| record_words(root));
+            let others: Vec<(String, HashSet<String>)> = pages
+                .iter()
+                .filter(|(p, _)| !all.contains(p))
+                .cloned()
+                .collect();
+            c.unpointed = change::page_change(
+                &reading.before[i].1,
+                &reading.now[i].1,
+                &HashSet::new(),
+                &HashSet::new(),
+                &others,
+            )
+            .unpointed;
+            u.unpointed
+                .extend(c.unpointed.iter().map(|(_, to)| format!("{path} -> {to}")));
+        }
+        c.keys_gone
+            .retain(|k| check != DEPICTION_CHECK && sources.contains(k.as_str()));
+        let page_now: Vec<String> = read_page(&reading.now[i].1)
+            .blocks
+            .into_iter()
+            .map(|b| b.words)
+            .collect();
+        let reached = Reading::words(&reading.now, path);
+        if (c.is_clear() && c.keys_gone.is_empty())
+            || change::fires(
+                &c,
+                &page_now,
+                &reached,
+                &popup_text(m),
+                &change::new_findings(&reading.before[i].1, &reading.now[i].1),
+            )
+            .is_none()
+        {
+            continue;
+        }
+        let digest = super::units::digest(&[&format!(
+            "{:?}",
+            (&c.pairs, &c.added, &c.removed, &c.keys_gone)
+        )]);
+        owed_pages.push(((path.clone(), baseline(store, slug, path), digest), c));
+    }
+    Ok(owed_pages)
+}
+
+/// Answer a unit the tool cleared, keeping the pages it read so its next triage diffs against them.
+fn answer_cleared(store: &Path, slug: &str, fp: &str, read: Option<&Value>) -> Result<(), Fail> {
+    let mut kept = read_answer(store, slug)
+        .get("pages")
+        .and_then(Value::as_object)
+        .cloned()
+        .unwrap_or_default();
+    for (k, v) in read.and_then(Value::as_object).into_iter().flatten() {
+        kept.insert(k.clone(), v.clone());
+    }
+    write_answer(
+        store,
+        slug,
+        fp,
+        "triage: cleared by the tool (no claim-bearing change)",
+        Some(&Value::Object(kept)),
+    )
+}
+
+/// What a pop-up states, as the echo rule reads it: every tag but its references and its name.
+fn popup_text(m: &Modal) -> String {
+    m.tags
+        .iter()
+        .filter(|(k, _)| {
+            !matches!(
+                k.as_str(),
+                "Sources" | "Entry" | "Drawing" | "Covers" | "Name"
+            )
+        })
+        .map(|(_, v)| v.as_str())
+        .collect::<Vec<_>>()
+        .join("\n")
+}
+
+/// The whole filter replayed over a landing (feature 451 T186's replay): each pop-up at its parent that reads a question or drawing
+/// page the landing changed, and whether that page's change still owes it its triage; `<uid>\tfires|cleared\t<page>\t<why>`.
+///
+/// # Errors
+///
+/// Where the parent's pop-ups cannot be read.
+pub fn replay_landing(root: &Path, commit: &str) -> Result<String, Fail> {
+    let parent = format!("{commit}^");
+    let changed: Vec<String> = git(
+        root,
+        &[
+            "diff",
+            "--name-only",
+            &format!("{parent}..{commit}"),
+            "--",
+            "research/questions",
+        ],
+    )
+    .lines()
+    .filter(|f| {
+        Path::new(f).extension().is_some_and(|e| e == "html")
+            && !f.ends_with(".notes.html")
+            && !f.ends_with(".originals.html")
+    })
+    .map(str::to_owned)
+    .collect();
+    let mut out = String::new();
+    for (uid, m) in modals::modals_at(root, &parent, false)?.iter() {
+        let reads: Vec<String> = m
+            .entry_files()
+            .into_iter()
+            .chain(m.drawing_files())
+            .collect();
+        let sources: HashSet<&str> = m.tag("Sources").split(',').map(str::trim).collect();
+        for page in changed.iter().filter(|p| reads.contains(p)) {
+            let (old, new) = (
+                git(root, &["show", &format!("{parent}:{page}")]),
+                git(root, &["show", &format!("{commit}:{page}")]),
+            );
+            let mut c = change::page_change(&old, &new, &HashSet::new(), &HashSet::new(), &[]);
+            c.keys_gone.retain(|k| sources.contains(k.as_str()));
+            let page_now: Vec<String> = read_page(&new)
+                .blocks
+                .into_iter()
+                .map(|b| b.words)
+                .collect();
+            let why = change::fires(
+                &c,
+                &page_now,
+                &HashSet::new(),
+                &popup_text(m),
+                &change::new_findings(&old, &new),
+            );
+            let _ = writeln!(
+                out,
+                "{uid}\t{}\t{page}\t{}",
+                if why.is_some() { "fires" } else { "cleared" },
+                why.unwrap_or_default()
+            );
+        }
+    }
+    Ok(out)
 }
 
 /// [`bundle`] reading the answer records `store` (feature 451 T38: a landing's replay names its own store here, where it set
-/// `RECORD_CHECKS_DIR` in the process's environment around the call).
+/// `RECORD_CHECKS_DIR` in the process's environment around the call); also how many units the tool cleared with no agent (feature
+/// 451 T186), each answered as `triage: cleared by the tool`.
 ///
 /// # Errors
 ///
@@ -258,7 +495,7 @@ pub fn bundle_in(
     out: &Path,
     base: &str,
     store: &Path,
-) -> Result<Option<(PathBuf, usize)>, Fail> {
+) -> Result<(Option<(PathBuf, usize)>, usize), Fail> {
     let base = if base.is_empty() {
         merge_base(root)
     } else {
@@ -266,7 +503,7 @@ pub fn bundle_in(
     };
     let units = pending(root, &base, store, None)?;
     if units.is_empty() {
-        return Ok(None);
+        return Ok((None, 0));
     }
     let modals_now: Vec<(String, Modal)> = modals::modals_now(root, false)?
         .into_iter()
@@ -277,62 +514,78 @@ pub fn bundle_in(
     let mut by_page: ByPage = ByPage::new();
     let mut blocks = Changed::new();
     let (mut reads, mut blobs) = (Map::new(), Map::new());
-    // each page written to the object store once a bundle: the several pop-ups that read one page kept it with a `hash-object -w` each,
-    // the same blob every time (feature 449 T164)
     let mut kept_ids: HashMap<String, String> = HashMap::new();
-    for (slug, why, _fp) in &units {
+    let mut elsewhere: Option<Vec<(String, HashSet<String>)>> = None;
+    let (mut sent, mut cleared) = (Vec::new(), 0usize);
+    let mut unpointed: Vec<String> = Vec::new();
+    for (slug, _why, fp) in &units {
         let (check, uid) = slug.split_once(':').unwrap_or((slug, ""));
-        let named = |p: &String| why.contains(&name_of(p));
-        for path in find(uid)
-            .map(|m| pages_of(m, check))
-            .unwrap_or_default()
-            .into_iter()
-            .filter(named)
-        {
-            let now = read_universal(&root.join(&path))?.unwrap_or_default();
-            let key = (path.clone(), baseline(store, slug, &path));
-            if !blocks.contains_key(&key) {
-                let before = page_before(root, store, slug, &path, &base, &mut read);
-                blocks.insert(key.clone(), changed_blocks(&before, &now));
-            }
+        let m = find(uid).cloned().unwrap_or_default();
+        let all = pages_of(root, &m, check);
+        let owed_pages = unit_changes(
+            &mut Unit {
+                root,
+                store,
+                base: &base,
+                read: &mut read,
+                elsewhere: &mut elsewhere,
+                unpointed: &mut unpointed,
+            },
+            slug,
+            check,
+            &m,
+            &all,
+        )?;
+        let mut row = Map::new();
+        for path in &all {
+            let id = kept_ids
+                .entry(path.clone())
+                .or_insert_with(|| keep(root, path));
+            row.insert(path.clone(), json!(id));
+        }
+        blobs.insert(slug.clone(), Value::Object(row));
+        if owed_pages.is_empty() {
+            answer_cleared(store, slug, fp, blobs.get(slug))?;
+            cleared += 1;
+            continue;
+        }
+        sent.push((slug.clone(), fp.clone()));
+        reads.insert(slug.clone(), json!(all));
+        for (key, c) in owed_pages {
+            blocks.entry(key.clone()).or_insert(c);
             by_page
                 .entry(key)
                 .or_default()
                 .entry(uid.to_owned())
                 .or_default()
                 .insert(check.to_owned());
-            if let Some(a) = reads
-                .entry(slug.clone())
-                .or_insert_with(|| json!([]))
-                .as_array_mut()
-            {
-                a.push(json!(path));
-            }
-            let row = blobs.entry(slug.clone()).or_insert_with(|| json!({}));
-            if let Some(m) = row.as_object_mut() {
-                let id = kept_ids
-                    .entry(path.clone())
-                    .or_insert_with(|| keep(root, &path));
-                m.insert(path.clone(), json!(id));
-            }
         }
     }
     clear_dir(out)?;
+    unpointed.sort();
+    unpointed.dedup();
+    if sent.is_empty() {
+        return Ok((None, cleared));
+    }
     std::fs::create_dir_all(out).map_err(fail)?;
-    let parts = manifest_parts(&by_page, &blocks, &modals_now);
+    let mut parts = manifest_parts(&by_page, &blocks, &modals_now);
+    if !unpointed.is_empty() {
+        parts.push(format!(
+            "(for the session, not the agent) blocks removed that stand verbatim on a page these pop-ups do not reach: {}. A split owes nothing when the source page points to where the text now lives: `<a class=\"moved\" href=\"NNNN-<slug>.html\">...</a>` (feature 451 T185).\n",
+            unpointed.join("; ")
+        ));
+    }
     let manifest = out.join("MANIFEST.md");
     std::fs::write(&manifest, parts.join("\n") + "\n").map_err(fail)?;
-    let units_map: Map<String, Value> = units
-        .iter()
-        .map(|(s, _, fp)| (s.clone(), json!(fp)))
-        .collect();
+    let units_map: Map<String, Value> = sent.iter().map(|(s, fp)| (s.clone(), json!(fp))).collect();
+    blobs.retain(|k, _| units_map.contains_key(k));
     let data = json!({"units": units_map, "pages": reads, "blobs": blobs});
     std::fs::write(
         out.join("triage.json"),
         pyjson::dumps(&pyjson::sorted(&data), Some(1), true) + "\n",
     )
     .map_err(fail)?;
-    Ok(Some((manifest, units.len())))
+    Ok((Some((manifest, sent.len())), cleared))
 }
 
 fn name_of(p: &str) -> String {
@@ -521,13 +774,29 @@ fn run_bundle(root: &Path, parsed: &Parsed) -> Result<Reply, Fail> {
         PathBuf::from(out_arg)
     };
     Ok(Reply {
-        stdout: match bundle(root, &out, "")? {
-            None => "modal-triage: no pop-up is owed a triage\n".to_owned(),
-            Some((manifest, n)) => format!(
-                "{}\nmodal-triage: {n} unit(s); dispatch the `modal-triage` agent on the MANIFEST (a session started before 2026-10-17's amendment 6 landed: restart to load it), save its reply, then `make modal-triaged BUNDLE=<dir> REPLY=<file>`\n",
+        stdout: match bundle_in(root, &out, "", &owed::store(root))? {
+            (None, 0) => "modal-triage: no pop-up is owed a triage\n".to_owned(),
+            (None, c) => format!("modal-triage: {c} unit(s) cleared by the tool (no claim-bearing change); no agent is owed\n"),
+            (Some((manifest, n)), c) => format!(
+                "{}\nmodal-triage: {c} unit(s) cleared by the tool; {n} unit(s) left; dispatch the `modal-triage` agent on the MANIFEST (a session started before 2026-10-17's amendment 6 landed: restart to load it), save its reply, then `make modal-triaged BUNDLE=<dir> REPLY=<file>`\n",
                 manifest.display()
             ),
         },
+        stderr: String::new(),
+        code: 0,
+    })
+}
+
+/// `replay --edits F`: the tool's half of the triage over recorded edits (feature 451 T186).
+fn run_replay(root: &Path, parsed: &Parsed) -> Result<Reply, Fail> {
+    let landing = parsed.text("--landing", "");
+    let stdout = if landing.is_empty() {
+        change::replay(&read_text(Path::new(parsed.text("--edits", "")))?)?
+    } else {
+        replay_landing(root, landing)?
+    };
+    Ok(Reply {
+        stdout,
         stderr: String::new(),
         code: 0,
     })
@@ -593,7 +862,13 @@ pub fn cli(args: &[String]) -> Reply {
             &[Spec::value("--bundle"), Spec::value("--reply")],
             run_record,
         ),
-        _ => return usage("usage: l7r-gate record modal-triage bundle | record"),
+        "replay" => (
+            &[Spec::value("--edits"), Spec::value("--landing")],
+            run_replay,
+        ),
+        _ => {
+            return usage("usage: l7r-gate record modal-triage bundle | record | replay --edits F")
+        }
     };
     let parsed = match parse(rest, specs) {
         Ok(p) if verb != "record" || (!p.text("--bundle", "").is_empty() && !p.text("--reply", "").is_empty()) => p,

@@ -522,7 +522,7 @@ pub fn parts(
     put: &mut Put,
     grep_targets: &mut Vec<String>,
 ) -> Result<(), Fail> {
-    for f in m.drawing_files() {
+    for f in modals::followed(root, &m.drawing_files()) {
         let p = root.join(&f);
         if p.is_file() {
             let text = read_text(&p)?;

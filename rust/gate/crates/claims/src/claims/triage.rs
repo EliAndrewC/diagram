@@ -6,6 +6,7 @@ use std::fmt::Write as _;
 use std::path::Path;
 use std::sync::LazyLock;
 
+use crate::record::triage::change;
 use fancy_regex::Regex;
 use l7r_shared::checks::pages::read_page;
 use l7r_shared::pyjson::{dumps, sorted};
@@ -376,9 +377,12 @@ fn gather_pages(
             })
             .unwrap_or_default();
         let now: HashSet<&String> = blocks.iter().map(|(d, _)| d).collect();
+        // a split is a move (feature 451 T185): its pointer is no claim, and a block it moved is read where its pointer leads
+        let html = crate::record::repo::read_text(&qdir.join(&name)).unwrap_or_default();
+        let reached = change::reached_by_pointers(&html, qdir);
         let fresh: Vec<String> = blocks
             .iter()
-            .filter(|(d, _)| !before.contains(d))
+            .filter(|(d, w)| !before.contains(d) && !change::is_pointer_block(w, &html))
             .map(|(_, w)| w.clone())
             .collect();
         let pair = (name.clone(), old.clone());
@@ -401,6 +405,7 @@ fn gather_pages(
                 ordered
                     .iter()
                     .filter_map(|d| words.get(*d).cloned())
+                    .filter(|w| !reached.contains(w))
                     .collect(),
             );
             g.lost.insert(pair.clone(), words.len() < missing.len());

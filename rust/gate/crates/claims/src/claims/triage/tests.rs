@@ -134,6 +134,34 @@ fn each_kind_of_change_is_shown_and_its_reply_recorded() {
     assert_eq!(new["rust/phases/src/lib.rs::GAP#gap"]["triage"], "touched");
 }
 
+/// Feature 451 T185: a split of a cited page - a block moved verbatim to the page its pointer names - shows neither the moved block as
+/// removed nor the pointer as new.
+#[test]
+fn a_split_of_a_cited_page_shows_no_removal_and_no_pointer() {
+    let (root, ix, store) = changed_everything();
+    put(&root, "research/questions/0001-gap.html", "<h2 id=\"gap\">The gap</h2>\n<p class=\"intro\">Why.</p>\n<p>The gap is 12 ft.</p>\n<p>Now at <a class=\"moved\" href=\"0002-moved.html\">Moved</a>.</p>\n");
+    put(
+        &root,
+        "research/questions/0002-moved.html",
+        "<h2 id=\"moved\">Moved</h2>\n<p>A second block.</p>\n",
+    );
+    let cur = current(&root, &root.join("research/questions")).unwrap();
+    let keys = vec!["rust/phases/src/lib.rs::GAP#gap".to_owned()];
+    let out = root.join("t");
+    std::fs::create_dir_all(&out).unwrap();
+    let manifest = triage_bundle(
+        &cur,
+        &ix,
+        &store,
+        &keys,
+        &root.join("research/questions"),
+        &out,
+    )
+    .unwrap();
+    let text = std::fs::read_to_string(manifest).unwrap();
+    assert!(!text.contains("A second block.") && !text.contains("Now at Moved."));
+}
+
 #[test]
 fn a_page_s_snapshot_is_kept_and_its_removed_words_found() {
     let root = fixture("claims-triage-words");

@@ -51,6 +51,8 @@ const BARRED: [&str; 10] = [
 const TOP: usize = 10;
 const ME: &str = "scripts/record/modal_bundle.py";
 const ENTRY_PAGE: &str = "a page the modal's Entry names - what its statements must rest on";
+const MOVED_PAGE: &str =
+    "a page a split moved part of an Entry page to (its pointer, feature 451 T185) - read as an Entry page";
 
 static COMMENT: LazyLock<Regex> = LazyLock::new(|| pyre(r"(?s)<!--.*?-->"));
 static TAG: LazyLock<Regex> = LazyLock::new(|| pyre(r"<[^>]+>"));
@@ -512,7 +514,8 @@ fn research_parts(
     put: &mut Put,
     grep_targets: &mut Vec<String>,
 ) -> Result<(), Fail> {
-    for f in m.entry_files() {
+    let named = m.entry_files();
+    for f in modals::followed(root, &named) {
         let p = root.join(&f);
         if p.is_file() {
             let name = format!(
@@ -521,7 +524,12 @@ fn research_parts(
                     .map_or_else(String::new, |n| n.to_string_lossy().into_owned())
             );
             let text = read_text(&p)?;
-            put.put(&name, &text, &f, ENTRY_PAGE)?;
+            let why = if named.contains(&f) {
+                ENTRY_PAGE
+            } else {
+                MOVED_PAGE
+            };
+            put.put(&name, &text, &f, why)?;
         }
     }
     let cands = if m.form() == "standard" {

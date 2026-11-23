@@ -137,3 +137,5 @@ landing on its own, each small; T22 last.
       research: rendering
 - [ ] T187 [perf] Labels are data (the GM 2026-11-23, request.md 'the convergence talk'): an item's attested, GUESS, CONVENTION or deviation label is a machine-readable tag on its page; a pop-up's Guesses tab is generated from the tags of the items it cites and an engine claim reads its label from the same tag, so a relabel propagates by regeneration with no review; a pop-up's own prose never restates a guess as a fact
       research: rendering
+- [ ] T191 [perf] The claims triage gets T186's filter (the GM 2026-11-23, the convergence talk): regenerating docs/building-programs.md for the garden-pond fix re-owed 73 of its claims a triage (observed 2026-11-23, 451 T186's builder) though only two Guesses bullets changed; T185 gave the claims triage move handling but not T186's mechanical clears or echo filter, so its agent still sees every changed block - a claim is re-owed only when the text it rests on changed a claim-bearing way, by the same rule the pop-ups now use
+      research: rendering
