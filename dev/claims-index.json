@@ -17623,43 +17623,41 @@
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/compound/emit.rs::building#dwelling walls across the long side": {
-  "body": "f065a575afa22277",
+  "body": "490d505cf312423b",
   "claim": "dwelling walls across the long side - staff-rowhouses-and-barracks-nagaya.drawing: a rowhouse divided into dwellings along its length, each wall across its long side",
   "code": "89d9ea6838e99ab6",
   "core": "cddb75b521295dbe",
-  "date": "2026-11-19",
-  "note": "the bay lines cross the long axis",
+  "date": "2026-11-23",
+  "note": "the bay lines run across the building's short span at offsets along its long axis (along_x = w >= h), which divides a rowhouse into dwellings along its length",
   "pages": {
-   "0097-staff-rowhouses-and-barracks-nagaya.drawing.html": "746ec66395f459f8"
+   "0097-staff-rowhouses-and-barracks-nagaya.drawing.html": "00e9e07782d55568"
   },
   "reads": "9c25a9e9eef7f06c",
-  "research": "39c1e863da7ba510",
+  "research": "d61f5d52ce332ce7",
   "rests": [
-   "0097-staff-rowhouses-and-barracks-nagaya.drawing.html:40d18dac4b203306",
    "0097-staff-rowhouses-and-barracks-nagaya.drawing.html:6d20e14e8c281ff8",
-   "0097-staff-rowhouses-and-barracks-nagaya.drawing.html:921e9524e0a5f213"
+   "0097-staff-rowhouses-and-barracks-nagaya.drawing.html:921e9524e0a5f213",
+   "0097-staff-rowhouses-and-barracks-nagaya.drawing.html:f7d2dbe31bdd173e"
   ],
-  "triaged": "2026-11-23",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/compound/emit.rs::building#the plan scale": {
-  "body": "f065a575afa22277",
+  "body": "490d505cf312423b",
   "claim": "the plan scale - magistrates-compounds-jinya-and-yamen.drawing: 3 px = 1 ft, set so drawn compounds fall between Joge and Takayama",
-  "cleared": "mechanically: a page it cites moved and no block it rests on did (feature 432)",
   "code": "ba9cd3ac11a7f957",
   "core": "cddb75b521295dbe",
-  "date": "2026-11-22",
-  "note": "footprint drawn at the scale; the rest is how it is drawn",
+  "date": "2026-11-23",
+  "note": "the building is drawn in feet through the sheet's 3 px to the foot scale, which is what the page states and justifies",
   "pages": {
-   "0090-magistrates-compounds-jinya-and-yamen.drawing.html": "6acdcdb7ca8a52a2"
+   "0090-magistrates-compounds-jinya-and-yamen.drawing.html": "0ca8ec5d92f0bdea"
   },
   "reads": "9c25a9e9eef7f06c",
-  "research": "a926439db6b57444",
+  "research": "61e8f7ae35b7e908",
   "rests": [
    "0090-magistrates-compounds-jinya-and-yamen.drawing.html:b7aa78898c6ee5bb",
-   "0090-magistrates-compounds-jinya-and-yamen.drawing.html:b92fdf4980d4aceb"
+   "0090-magistrates-compounds-jinya-and-yamen.drawing.html:b92fdf4980d4aceb",
+   "0090-magistrates-compounds-jinya-and-yamen.drawing.html:c859cd34a60be9c0"
   ],
-  "triaged": "2026-11-23",
   "verdict": "IN-STEP"
  },
  "rust/mode_a/src/compound/emit.rs::buildings#a genkan (entrance porch) drawn and captioned at an office hall's door, built out from the wall in the hall's own paint. This is a choice of building form that the drawing page never mentions, so it should be claimed as UNRESEARCHED or GUESS, or cite a page that records the genkan.": {
@@ -19685,14 +19683,15 @@
   "code": "f2c81e88e97e2074",
   "core": "1196cd2e08994064",
   "date": "2026-11-23",
-  "note": "names the flank column's head against the divider, or below the building that heads it, as the page's GUESS",
+  "note": "the refusal sends the author to an office-court flanking column beside the hall, at the column's head against the divider or below the building that heads it, and never to the household's court; the drawing page records that seat as a guess",
   "pages": {
-   "0123-the-magistrates-manor-in-a-town-where-it-stands-and-which-way-it-faces-jinya-and-yamen.drawing.html": "e87dfc548bbdbe72"
+   "0123-the-magistrates-manor-in-a-town-where-it-stands-and-which-way-it-faces-jinya-and-yamen.drawing.html": "e6af4547032e86b0"
   },
   "reads": "1477b9203e7bad94",
-  "research": "73fc3258dad63dd7",
+  "research": "fec546b26ae12ab1",
   "rests": [
-   "0123-the-magistrates-manor-in-a-town-where-it-stands-and-which-way-it-faces-jinya-and-yamen.drawing.html:4534f8a25269426e"
+   "0123-the-magistrates-manor-in-a-town-where-it-stands-and-which-way-it-faces-jinya-and-yamen.drawing.html:60b831c18bb05408",
+   "0123-the-magistrates-manor-in-a-town-where-it-stands-and-which-way-it-faces-jinya-and-yamen.drawing.html:b4b1aaff93b05d61"
   ],
   "verdict": "IN-STEP"
  },
