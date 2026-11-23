@@ -2500,67 +2500,8 @@ engine speed, so no checklist.
 **Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
 
 
-### T185 (the GM 2026-11-23, request.md 'the convergence talk': "as long as the original page being linked to directs a reader to the other page where the full information can be found, then nothing needs to cascade simply because a split occurs")
-
-- **Approach**: a split leaves a pointer of one marked form on its source page, `<a class="moved" href="NNNN-<slug>[.drawing].html">` (`triage/change.rs`'s `POINTER`; the site build's link reader takes an attribute before `href`, `site_links.rs`, so it builds as any question link). A pop-up's checks read the pages its `Entry:` and `Drawing:` name and the pages their pointers name (`modals::followed`: in its fingerprints, its owed rows, the triage's pages and the research and depiction bundles), so a later edit of a moved block on its new page re-owes the pop-up. The triage counts a removed block that stands verbatim on a page the pop-up reaches as moved, a new block that stood on a page it reached at its last check as moved in, and a block carrying only the pointer (no note mark, no figure, at most `POINTER_WORDS` words beside the link, a GUESS knob) as no claim; the claims triage drops the same moves and pointer blocks. The record checks needed nothing: `units.rs` indexes the base's blocks and notes across every page, so a block moved verbatim already owes no record check (measured on the fixture: none owed for the moved block). A move with no pointer stays a removal, and the MANIFEST tells the session the pointer's form. Measured 2026-11-23: no page carries the form yet (`grep -rlE '<a\s+class="moved"' research/questions`: 0), so every pop-up's fingerprint and owed row stands as it was.
-
-| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
-|---|---|---|---|---|
-| move detection and the pointer | `triage::tests::a_split_with_its_pointer_re_owes_nothing_and_an_edit_of_the_moved_block_re_owes`, `change::tests::a_split_with_its_pointer_re_owes_nothing` (its HEAD form asserted beside it: the removal sent), `claims::triage::tests::a_split_of_a_cited_page_shows_no_removal_and_no_pointer`, `modal::tests::a_research_bundle_follows_a_splits_pointer` | none: record tooling | none | n/a |
-
-### T185 Approach (checklist part A)
-
-1. **The goal, in the world.** No map changes. A page split by moving blocks verbatim, its source pointing to the new page, re-owes no pop-up's and no claim's check; the moved text is still read through the pointer, so a later change to it re-owes what rests on it.
-2. **The constraints.** The task line; the GM's words above, approving the 0009/0059 repair; FR-012 (red first); T184's split of 0009 and 0059 marked with the pointer form before its re-owed checks run (Found and left, below).
-3. **Where each comes from.** G: the GM's words. O: the fixture split; the pointer-form grep above. R: none, tooling.
-4. **Do they describe the world here?** Yes: 0097's move to 0331 in cce80ca436 is this shape (a block moved, a link left), and T184's 0009 and 0059 splits link 0332 and 0333 with plain links today.
-5. **The order.** After T186's change computation, which it extends.
-6. **The exits.** Green: the tests named in the table above and the crates' coverage. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** None.
-8. **The budget.** One landing.
-9. **Done, measured.** The fixture split answers every unit of the citing pop-up with no agent and writes no bundle; editing the moved block on its new page re-owes the pop-up with that page in its MANIFEST.
-10. **Before moving a constant.** n/a: `POINTER_WORDS` (25) is new, a GUESS, a knob.
-11. **Before fitting things into room.** n/a.
-12. **Before any fix.** n/a.
-
-**Found and left?**
-- A split's new page brings a new heading and intro, which owe intro-check and record-format on the new page: new prose, owed by design, not suppressed. Not a defect.
-- T184's 0009 and 0059 splits link 0332 and 0333 with plain `<a href>`, which would re-owe the pop-ups citing 0009 and 0059 for text that moved word for word: fixed here, by one of two routes, before any check those splits re-owed is run. If T184 has not landed when T185 lands, T184's builder marks both links `class="moved"` (the form is in this task's handoff, `.git/l7r-handoffs/T185-a-builder.md`, addressed to T184's builder; both pages are T184's files in the clone today). If T184 has landed first, T185 marks them in its own landing. Either way the pointer form is checked by running `make modal-triage` on the clone after the mark: the pop-ups citing 0009 and 0059 for the moved blocks are cleared by the tool. 0097's earlier move to 0331 (cce80ca436) has the same plain-link shape and its checks have already run, so nothing it re-owed is open.
-
-**Performance work?** yes: a split no longer re-owes every pop-up and claim citing its source page (bundle 2 of 2026-11-23 re-owed barracks, retainers' quarters, gatehouse and granary on 0097's move to 0331, cascade-edits.md).
-
-### T186 (the GM 2026-11-23, request.md 'the convergence talk': "I want to figure out what the difference is between the ones that might plausibly have required that and the ones that were just straightforward adjustments that never could have plausibly needed this kind of cascade"; the blind re-classification, reclassify.md)
-
-- **Approach**: the triage's change computation moved to `triage/change.rs`: a page's blocks are paired old with new (exact matches dropped, then the tool's clears, then pairs at `difflib` ratio 0.6 or more); a footnote marker and markup are taken out of a block's claim words (comments, tags, links and glossary marks are already gone from a block's words, `pages::words`), and a block whose claim words are unchanged, or empty, is cleared by the tool. An original-language quotation is NOT taken out (spec-fidelity MODE 4 round 1, 2026-11-23, BLOCKED: correcting a quotation's wording or a character changes what a page says a source says, and the GM's list does not name it; removed). Then the GM's first filter (2026-11-23, needed.md), `change::fires`: a page's change left after the clears owes a pop-up its triage only where (1) a note key its `Sources:` names exactly is gone from the page (rule C kept reachable), (2) the ECHO rule holds (`change::echo`: a sentence the page held that no page the reader reaches still holds, removed or rewritten, whose changed words the pop-up repeats as a word trigram), or (3) the edit adds a new finding (`change::new_findings`, a bold-opened list item) and the pop-up states a single case (`change::says_absence` over `ABSENCE`). A unit no page of which fires is answered `triage: cleared by the tool` with its pages kept, no agent. The MANIFEST shows each changed block as OLD, NEW and a WORD DIFF, the new and the removed blocks, and each pop-up whole once at its end (never cut at 400 characters). `.claude/agents/modal-triage.md` states (A)-(C) once - (A) a fact the pop-up states, (B) a label of one, (C) a passage its references point at removed - the code none of it; (D) is dropped (the GM's later form, 2026-11-23), and the rule to name a pop-up when unsure is kept (spec-fidelity MODE 4 round 2, 2026-11-23, BLOCKED its drop: the GM's line puts the burden on clearing, and his approval named only (D)). `.notes.html` and `.originals.html` never reached a pop-up's checks (its fingerprint reads only the pages its `Entry:` and `Drawing:` name, `modals::fingerprints`), pinned by the replay's first class. Two replay verbs: `record modal-triage replay --edits F` replays the tool's clears over recorded edits, and `replay --landing C` replays the whole filter, the live code path (`replay_landing` calls the same `change::fires`), over a landed commit's page edits.
-
-| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
-|---|---|---|---|---|
-| the tool's clears and the pairing | `triage::tests::a_marker_link_or_comment_edit_is_cleared_by_the_tool` (red on HEAD: the edit sent to the agent), `change::tests::*`, `triage::tests::a_move_with_no_pointer_and_a_cited_key_gone_go_to_the_agent`, the MANIFEST's form in the three earlier triage tests | none: record tooling | none | n/a |
-| the first filter (echo, absence, keys gone) | `change::tests::*` (the echo, the absence arm, a key gone), the landing replay's tests in `triage::tests` | none: record tooling | none | n/a |
-
-### T186 Approach (checklist part A)
-
-1. **The goal, in the world.** No map changes. A page edit that cannot change what a pop-up states costs no agent; one that can reaches the triage paired with its old text, beside each pop-up whole, judged by (A)-(C).
-2. **The constraints.** The task line; the GM's words above; the coordinator's brief (the rule in one place, the contract) and the GM's later form of it (2026-11-23: the echo first filter, (A)-(C), (D) dropped); spec-fidelity's ruling on quotations (round 1); FR-012 (red first).
-3. **Where each comes from.** G: the GM's words and his later form. O: cascade-edits.md, reclassify.md and needed.md (the 460 edits, the frozen blind calls, the 17 page-caused corrections), measured 2026-11-23. R: none, tooling.
-4. **Do they describe the world here?** Yes: the replays are the two bundles' own edits and the two landings' own commits.
-5. **The order.** Before T185, which extends its change computation; T187 (label tags) waits for this task's garden fix below.
-6. **The exits.** Green: the landing replay missing none of the 17 page-caused corrections, and the tests. Red: a needed correction caught only through an edit the filter clears narrows the filter's arm that cleared it; what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** None.
-8. **The budget.** One landing.
-9. **Done, measured.** The edit replay, measured 2026-11-23 (`l7r-gate record modal-triage replay --edits rc/edits.json`): of 460 edits, 305 are on notes or originals files no pop-up reads and 41 of the 155 page edits are cleared by the tool. The landing replay, the real code path, measured 2026-11-23 (`scripts/gates/l7r-gate.sh record modal-triage replay --landing 085f4598c3` and `--landing cce80ca436`, scored against needed.md's 17 page-caused corrections (bundle 1's karo-s-house and bundle 2's 16) by `/tmp/t186/py/score2.py`): 56 of the 114 pop-ups fire and go on to the triage, and 0 of the 17 page-caused corrections are missed; HEAD, without the filter, sends all 114 to the agent. The (A)-(C) contract itself has not been run on these bundles: the judging stage after the filter is the agent's.
-10. **Before moving a constant.** `PAIR_RATIO` (0.6) is the blind test's. `ABSENCE`, the absence arm's phrases, is a KNOB, a measured choice (a deliberate narrowing of the coordinator's wording, which named "not recorded" and "no source" as well): with those two in it the arm fired on 104 of 114 pop-ups, since most Guesses tabs say "not recorded"; without "not recorded", 71 of 114; with the three kept, "the one case", "only one case" and "every plan", 56 of 114 - each with 0 of the 17 missed, measured 2026-11-23 (the same landing replay and score). The three are kept: no miss either way, and 56 sent on against 104.
-11. **Before fitting things into room.** n/a.
-12. **Before any fix.** The garden defect below: a pop-up's own claim restated to the record, no engine code.
-
-**Found and left?**
-- An Evidence or Grounds comment's label change (E142, E232, E050: tagged B or A by the blind judges) never re-owed a pop-up on HEAD, since comments are outside its fingerprint, and the tool clears it: not a defect, since a page states each label in its visible words too ("a GUESS"), which the triage sees, and each of those pop-ups was caught through a visible edit in the replay; T187 (labels are data) is the rule that makes the label itself propagate.
-- The claims triage gets T185's moves but not T186's tool clears and pairing: not a defect of a wrong outcome (its agent still sees every changed block); said in the report.
-
-**Fixed here (XIV):** the sentence "the pond is taken as the office's form" in `l7r/diagram/interactive/assets/modals/sheet/garden-pond.md` (Guesses) and `sheet/garden.md` (Guesses), and through them `docs/building-programs.md`'s `inner_garden` row (`make building-programs`), was wrong: 0103's drawing page makes a garden's water a knob, pond or dry garden, each map taking one of the two, both accurate, its note saying which. Restated to that, keeping that both offices read, Takayama and Okutono, kept a pond. Owed: modal-form and modal-research on the two pop-ups (`make record-owed`, their own text changed, so not through the filter).
-
-**Performance work?** yes: an edit that cannot change what a pop-up states costs no agent, and the triage judges paired blocks against whole pop-ups by three rules, naming a pop-up when unsure (bundle 2's agent triage sent 79 of its 114 pop-ups on, as the t371h round's reply records; the filter sends 56 of 114 to the agent, measured 2026-11-23 above, a count of pop-ups, not of (pop-up, page) pairs).
-
+<!-- plan-archive: T185 to T185 moved to plan-done.md, 2026-11-23 (feature 375 FR-044) -->
+<!-- plan-archive: T186 to T186 moved to plan-done.md, 2026-11-23 (feature 375 FR-044) -->
 ### T187 (<why: the finding or measurement that files it>)
 
 - **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
