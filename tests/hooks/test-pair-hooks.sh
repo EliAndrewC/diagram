@@ -40,6 +40,13 @@ MAPDIR_F="$SKILL/pool/hamlets/testmap"
 # GUARD_EDIT_OK: feature 240 - spec-lint imports `_spec_figures` since feature 239 (the figure pattern's one home)
 "$(dirname "$HOOK")/../../scripts/gates/l7r-gate.sh" check spec-lint --figure-pattern > "$CLONE/figure-pattern"   # the one definition of a figure, the Rust spec lint's
 REAL_GATE="$(cd "$(dirname "$HOOK")/../.." && pwd)/scripts/gates/l7r-gate.sh"
+# GUARD_EDIT_OK: 451 T170's landing - THE SUITE'S OWN PROBES RUN THE GUARD THE HOOK RUNS. `reviews prereq gate-state` asks the
+# clone's copied `scripts/hooks/l7r-guard.sh`, which finds its binary under L7R_GUARD_TARGET or else under the tree's own name
+# (`l7r-cargo-target/clone`), where none is ever built: the fixture has no rust/ to build from. The hook's calls got the real
+# target from guard-shim.sh; the suite's did not, so its poll read red every time (`live` failed open) and waited out its whole
+# bound (the case below says what that cost; measured 2026-11-23).
+REAL_TREE=${REAL_GATE%/scripts/gates/l7r-gate.sh}
+export L7R_GUARD_TARGET="${L7R_GUARD_TARGET:-$(getent passwd "$(id -u)" | cut -d: -f6)/.cache/l7r-cargo-target/${REAL_TREE##*/}}"
 printf '#!/usr/bin/env bash\n[ "$1" = check ] && exec cat "%s/figure-pattern"\n[ "$1" = reviews ] && exec "%s" "$@"   # feature 449 T89: the reviews are the real gate binary (the checks door left with T132)\n[ "$1" = hamlet ] && { echo "%s/stand-in-hamlet"; exit 0; }\n[ -f "$(git rev-parse --show-toplevel)/.git/stub-gate-green" ]\n' "$CLONE" "$REAL_GATE" "$CLONE" >"$CLONE/scripts/gates/l7r-gate.sh"; chmod +x "$CLONE/scripts/gates/l7r-gate.sh"
 # GUARD_EDIT_OK: feature 449 T221 - THE GENERATION CACHE IS RUST, asked in process by the review gate: the fixture's stub launcher names a
 # stand-in hamlet engine (`l7r-gate.sh hamlet`), and `cached` writes a real cache entry for each map - its engine id the stand-in's whole
@@ -239,9 +246,15 @@ check "...under its own rule" 'grep -rq "review-gate-red" "$GUARD_LOG_ROOT"'
 RED_OK=$(stdin_for Agent '{"subagent_type":"settlement-review","prompt":"PAIR_OK GATE_RED_OK=\"a fixture read with no verdict wanted\" review the map"}')
 check "...and GATE_RED_OK with a reason lets it run" '[ "$(rc_pretool "$RED_OK")" -eq 0 ] && grep -rql "a fixture read with no verdict wanted" "$SKILL/dev/bypass-log"'
 rm -f "$CLONE/.git/pairing-state.json"
-printf 'verify:\n\tsleep 30\n' > "$TMP/hold.mk"
+# GUARD_EDIT_OK: 451 T170's landing - the wait lasts while the held run lives and ends when it reads running, and the case first
+# checks that it did, so a probe that cannot see the run fails here by name, not as a refused review. Before the suite exported
+# L7R_GUARD_TARGET (above) this poll never read running: its 50 tries were a dead wait that grew with load (10 s alone, 16 s under hooks-test's
+# read recorder, 23 s under it beside a full hooks-test, measured 2026-11-23) against a 30 s hold, and where it outlasted the hold the hook's
+# own probe read red (102/103 in the gate's full runs since 2026-11-22; 103/103 alone).
+printf 'verify:\n\tsleep 120\n' > "$TMP/hold.mk"
 ( cd "$CLONE" && exec make -s -f"$TMP/hold.mk" verify ) >/dev/null 2>&1 & HOLD=$!
-for _ in $(seq 50); do [ "$(cd "$CLONE" && "$REAL_GATE" reviews prereq gate-state --clone "$CLONE")" = running ] && break; sleep 0.1; done
+while kill -0 "$HOLD" 2>/dev/null && [ "$(cd "$CLONE" && "$REAL_GATE" reviews prereq gate-state --clone "$CLONE")" != running ]; do sleep 0.1; done
+check "...the held verify reads running before the escaped review is judged" '[ "$(cd "$CLONE" && "$REAL_GATE" reviews prereq gate-state --clone "$CLONE")" = running ]'
 check "a review escaped with a reason runs" '[ "$(rc_pretool "$ESCREV")" -eq 0 ]'
 # GUARD_EDIT_OK: feature 240 FR-002 - the dispatch records WHICH content it reviews, and the review counts
 # at its VERDICT. What 231 fixed stays fixed: once that review writes its verdict, the stop branch is quiet.
