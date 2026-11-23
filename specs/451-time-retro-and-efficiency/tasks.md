@@ -129,3 +129,5 @@ landing on its own, each small; T22 last.
       research: rendering
 - [ ] T165 The engine freeze lifted for a review the review tree judges (451 T164 found and left, observed 2026-11-22): engine_freeze_hooks still refuses every engine edit in the clone while a map review this session launched runs, though since T164 the review's gate, key and content are its review tree snapshot's and a clone edit can neither void nor color it; the freeze then costs a builder the whole review's wait for nothing. Narrow it to reviews with no review-tree snapshot (and the rolls), measured by a review running beside an engine edit that keeps its verdict
       research: rendering
+- [ ] T166 make verify T= (451 T164's review tree) prints 'OCCASIONS NOT DECLARED: ... no task of an active feature is started' while .git/active-task names a started task and tasks.md holds its layout-revised lines (observed 2026-11-23 by 449's T328 bundle on both of its verify runs): the review tree's worktree has no active-task of its own, so the occasions check read in it finds none; it reads the clone's mark and Occasions as the snapshot's own
+      research: rendering
