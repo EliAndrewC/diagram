@@ -7,8 +7,8 @@ use l7r_shared::tempdir::TempDir;
 use serde_json::json;
 
 use super::{
-    archived_text, cached, entry_dir, parts, put, refresh_wanted, wrapped, CachedPages, Inner,
-    Stored,
+    archived_text, bot_check, cached, entry_dir, parts, put, refresh_wanted, wrapped, CachedPages,
+    Inner, Stored,
 };
 use crate::verbatim::fetch::{Pages, Response, Transport};
 
@@ -269,4 +269,96 @@ fn the_cache_before_the_network_and_the_archive_behind_it() {
     std::fs::write(d.join("blocked-home"), "a file").unwrap();
     assert!(store_fails.get("http://w.org/p").is_err());
     assert!(!refresh_wanted());
+}
+
+/// A host's bot-check page (an Anubis challenge, 449 T345: journals.openedition.org served one for tajima-2007-night-soil) is not the
+/// page: a cached one is passed over, a fetched one is never stored, and the archive's capture is read behind it.
+#[test]
+fn a_bot_check_page_is_not_the_page_and_the_archive_is_read_behind_it() {
+    const ANUBIS: &[u8] = b"<p>Loading... Anubis could not load its JavaScript. This site uses Anubis, a tool which filters out harmful bots. We\xe2\x80\x99re currently verifying that you\xe2\x80\x99re not a robot.</p>";
+    assert!(bot_check(&String::from_utf8_lossy(ANUBIS)));
+    assert!(bot_check(
+        "Just a moment... Enable JavaScript and cookies to continue"
+    ));
+    assert!(!bot_check(
+        "Anubis, the jackal god, guards the dead; robots are a modern word."
+    ));
+    assert!(!bot_check(&format!(
+        "{} verifying that you're not a robot",
+        "a real page. ".repeat(400)
+    )));
+    let d = TempDir::new("research-bot-check");
+    let rec = record(&d);
+    let home = d.join("home");
+    let url = "https://j.org/eue/1039";
+    let uid = l7r_shared::cited_url::url_id(url);
+    std::fs::create_dir_all(d.join("research/archive").join(&uid[..2])).unwrap();
+    std::fs::write(
+        d.join("research/archive")
+            .join(&uid[..2])
+            .join(format!("{uid}.json")),
+        r#"{"path": "t", "captured": "2026-10-02T00:00:00Z"}"#,
+    )
+    .unwrap();
+    std::fs::create_dir_all(home.join("source-archive/t")).unwrap();
+    std::fs::write(
+        home.join("source-archive/t/text.txt"),
+        "the passage verbatim",
+    )
+    .unwrap();
+    let how = Stored {
+        fetched: None,
+        exact: true,
+        origin: "fetch",
+    };
+    put(&home, url, &String::from_utf8_lossy(ANUBIS), &how, &rec).unwrap();
+    let net = Answers(vec![(url, Ok(("text/html", ANUBIS)))]);
+    let mut pages = CachedPages::new(
+        Inner::Pages(Pages::new(None, Box::new(net))),
+        &home,
+        false,
+        false,
+        &d,
+        &rec,
+    );
+    let got = pages.get(url).unwrap();
+    assert_eq!(
+        (
+            got.text.as_str(),
+            got.archived.as_deref(),
+            got.cached.is_none(),
+            got.live
+        ),
+        ("the passage verbatim", Some("2026-10-02"), true, true)
+    );
+    let none = CachedPages::new(Inner::NotCached, &home, false, false, &d, &rec)
+        .get(url)
+        .unwrap();
+    assert_eq!(
+        (none.text.as_str(), none.archived.as_deref()),
+        ("the passage verbatim", Some("2026-10-02"))
+    );
+    let mut bare_cache = CachedPages::new(Inner::NotCached, &home, false, false, &d, &rec);
+    std::fs::remove_dir_all(d.join("research/archive")).unwrap();
+    let challenged = bare_cache.get(url).unwrap();
+    assert!(
+        challenged.state == "UNFETCHABLE"
+            && challenged
+                .why
+                .starts_with("the page cache holds a bot-check page")
+    );
+    let bare = Answers(vec![("https://k.org/x", Ok(("text/html", ANUBIS)))]);
+    let mut no_archive = CachedPages::new(
+        Inner::Pages(Pages::new(None, Box::new(bare))),
+        &d.join("home2"),
+        false,
+        false,
+        &d,
+        &rec,
+    );
+    let refused = no_archive.get("https://k.org/x").unwrap();
+    assert!(refused.state == "UNFETCHABLE" && refused.why.starts_with("a bot-check page"));
+    assert!(cached(&d.join("home2"), "https://k.org/x", 7.0, false)
+        .unwrap()
+        .is_none());
 }

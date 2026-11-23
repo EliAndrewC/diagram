@@ -134,3 +134,31 @@ fn a_reply_from_the_agents_own_transcript() {
         "from the transcript"
     );
 }
+
+#[test]
+fn a_wave_round_reads_its_agent_s_reply_over_a_wrong_kept_copy() {
+    // 449 T349: the inner-court round's kept reply was a request blob (a truncated manifest view); its wave agent's transcript, under the
+    // session's subagents/workflows/<run>/, holds the reply it gave through StructuredOutput
+    let root = crate::checks::scratch("marks-wave");
+    put(&root, "kept.md", "[Truncated: PARTIAL view - MANIFEST.md");
+    put(
+        &root,
+        "h/a/b/subagents/workflows/wf_1/agent-w1.jsonl",
+        "{\"type\": \"api-request-blob\", \"message\": {\"content\": [{\"type\": \"text\", \"text\": \"[Truncated: PARTIAL view - MANIFEST.md\"}]}}\n{\"type\": \"assistant\", \"message\": {\"content\": [{\"type\": \"tool_use\", \"name\": \"StructuredOutput\", \"input\": {\"text\": \"modal-depiction: x - COVERAGE 0\"}}]}}\n",
+    );
+    let kept = root.join("kept.md").to_string_lossy().into_owned();
+    assert_eq!(
+        reply_in(&json!({"aid": "w1", "reply": kept}), &root.join("h")),
+        "modal-depiction: x - COVERAGE 0"
+    );
+    // a transcript that gives no reply leaves the kept copy standing
+    put(
+        &root,
+        "h/a/b/subagents/agent-e1.jsonl",
+        "{\"type\": \"user\", \"message\": {\"content\": [{\"type\": \"text\", \"text\": \"the brief\"}]}}\n",
+    );
+    assert_eq!(
+        reply_in(&json!({"aid": "e1", "reply": kept}), &root.join("h")),
+        "[Truncated: PARTIAL view - MANIFEST.md"
+    );
+}

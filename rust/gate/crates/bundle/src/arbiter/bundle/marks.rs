@@ -251,16 +251,23 @@ pub fn transcripts() -> PathBuf {
     crate::measure::home().join(".claude").join("projects")
 }
 
-/// `sorted(TRANSCRIPTS.glob("*/*/subagents/agent-<aid>.jsonl"))`'s first.
+/// `sorted(TRANSCRIPTS.glob("*/*/subagents/agent-<aid>.jsonl"))`'s first, a wave agent's `*/*/subagents/workflows/*/agent-<aid>.jsonl` among them.
 #[must_use]
 pub fn transcript_of(base: &Path, aid: &str) -> Option<PathBuf> {
     let name = format!("agent-{aid}.jsonl");
     let mut found: Vec<PathBuf> = Vec::new();
     for a in std::fs::read_dir(base).into_iter().flatten().flatten() {
         for b in std::fs::read_dir(a.path()).into_iter().flatten().flatten() {
-            let p = b.path().join("subagents").join(&name);
-            if p.is_file() {
-                found.push(p);
+            let sub = b.path().join("subagents");
+            // a check-wave's agents keep theirs a level down, under the Workflow run's own folder (449 T349)
+            let runs = std::fs::read_dir(sub.join("workflows"))
+                .into_iter()
+                .flatten()
+                .flatten();
+            for p in std::iter::once(sub.join(&name)).chain(runs.map(|w| w.path().join(&name))) {
+                if p.is_file() {
+                    found.push(p);
+                }
             }
         }
     }
@@ -268,7 +275,10 @@ pub fn transcript_of(base: &Path, aid: &str) -> Option<PathBuf> {
     found.into_iter().next()
 }
 
-/// A round's reply: the one the hook kept, else the last text of the agent's own transcript (`reply_of`).
+/// A round's reply: the agent's own, read from its transcript while it lives, else the copy the hook kept.
+///
+/// The transcript comes first because the kept copy can be wrong: before 449 T349 a wave agent's kept reply was the request blob before its
+/// `StructuredOutput` call (334 of 341 kept wave replies), so the next round's earlier-round file held a truncated manifest, not round 1's reply.
 #[must_use]
 pub fn reply_of(v: &Value) -> String {
     reply_in(v, &transcripts())
@@ -276,23 +286,27 @@ pub fn reply_of(v: &Value) -> String {
 
 /// [`reply_of`], the transcripts under `base`.
 pub fn reply_in(v: &Value, base: &Path) -> String {
-    let kept = v
-        .get("reply")
-        .and_then(Value::as_str)
-        .filter(|r| !r.is_empty());
-    if let Some(path) = kept.map(Path::new).filter(|p| p.is_file()) {
-        return read_text(path).unwrap_or_default();
-    }
     let aid = match v.get("aid") {
         Some(Value::String(s)) => s.clone(),
         Some(Value::Null) | None => String::new(),
         Some(other) => other.to_string(),
     };
-    if aid.is_empty() {
-        return String::new();
+    let own = if aid.is_empty() {
+        String::new()
+    } else {
+        transcript_of(base, &aid)
+            .map_or_else(String::new, |t| reply::reply_of(&t.to_string_lossy(), ""))
+    };
+    if !own.is_empty() {
+        return own;
     }
-    transcript_of(base, &aid)
-        .map_or_else(String::new, |t| reply::reply_of(&t.to_string_lossy(), ""))
+    v.get("reply")
+        .and_then(Value::as_str)
+        .filter(|r| !r.is_empty())
+        .map(Path::new)
+        .filter(|p| p.is_file())
+        .and_then(|p| read_text(p).ok())
+        .unwrap_or_default()
 }
 
 static LINKED: LazyLock<Regex> = LazyLock::new(|| pyre(r"research/questions/[^\s,;]+?\.html"));

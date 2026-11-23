@@ -1,6 +1,6 @@
 //! The translated quotations a delta owes, read in process by the `research` crate (feature 449 T145).
 
-use super::{cli, owed};
+use super::{cli, language_of, owed, report};
 use crate::record::testkit::{commit, edit_everything, git, put, record};
 use std::os::unix::fs::PermissionsExt as _;
 
@@ -76,6 +76,29 @@ fn a_pair_the_base_holds_is_owed_no_more() {
     )
     .unwrap();
     assert_eq!(owed(&root).unwrap().len(), rows.len());
+}
+
+/// A pair whose note names no language (`(translated; original: ...)`, the record's usual form) is headed by the language its original's
+/// script shows, never an empty `()` (feature 449 T345, found by translation-check 2026-11-22).
+#[test]
+fn a_pair_names_its_source_language() {
+    assert_eq!(language_of("the Chinese", "\u{4e00}"), "the Chinese");
+    assert_eq!(language_of("", "\u{5793}\u{6839}\u{306e}"), "Japanese");
+    assert_eq!(language_of("", "\u{30ab}\u{30ca}"), "Japanese");
+    assert_eq!(language_of("", "\u{d55c}\u{ae00}"), "Korean");
+    assert_eq!(
+        language_of("", "\u{5793}\u{6839}"),
+        "Chinese characters, no kana"
+    );
+    assert_eq!(language_of("", "me"), "language not named");
+    let rows = vec![(
+        "n".to_owned(),
+        "t".to_owned(),
+        String::new(),
+        "q".to_owned(),
+        "\u{5793}\u{6839}\u{306e}".to_owned(),
+    )];
+    assert!(report(&rows).contains("== n - `t` (Japanese)\n"));
 }
 
 #[test]

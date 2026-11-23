@@ -6,7 +6,7 @@ domain's council hall had two upper privies, each with a board veranda. The row 
 gathered in a small building nearby.
 
 What collected beneath a privy had a price. Night soil was the farmer's fertilizer, bought from town households -
-around Kanazawa a household of seven to ten sold its year's night soil for about 24 gallons (90 liters) of rice - and carted away by
+around Kanazawa a household of seven to ten sold its year's night soil for about 24 gallons (90 liters) of rice - and carried off by
 collectors from outside; around Edo, farmers supplied firewood and charcoal to the castle and the daimyo estates for the
 right to empty their privies.
 
@@ -33,4 +33,4 @@ Name: latrine
 Covers: every privy building and its label
 Sources: kotobank-benjo, sinyoken-madori, nagano-shishi-yokota, sayama-jinya-uematsu, guernica-night-soil, tajima-2007-night-soil, oamishirasato-choshi-kaoku
 Entry: research/questions/0101-privies-setchin.html, research/questions/0047-farm-privies-and-their-night-soil-benjo.html
-Drawing: research/questions/0101-privies-setchin.drawing.html, research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html, research/questions/0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.drawing.html
+Drawing: research/questions/0101-privies-setchin.drawing.html, research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html, research/questions/0222-inside-a-village-shrines-precinct-halls-basin-sacred-tree-and-offerings-keidai.drawing.html, research/questions/0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html

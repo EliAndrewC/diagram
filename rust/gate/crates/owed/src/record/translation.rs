@@ -308,10 +308,30 @@ fn no_directory(root: &Path) -> Option<String> {
     }
 }
 
+/// The source language a pair's header names: the note's own (`translated from X by Y`), else what its original's script shows - the
+/// record's usual `(translated; original: ...)` names none, and a header of `()` told translation-check nothing (feature 449 T345).
+fn language_of(named: &str, original: &str) -> String {
+    let any = |lo: u32, hi: u32| original.chars().any(|c| (lo..=hi).contains(&u32::from(c)));
+    if !named.is_empty() {
+        named.to_owned()
+    } else if any(0x3040, 0x30ff) || any(0x31f0, 0x31ff) || any(0xff66, 0xff9f) {
+        "Japanese".to_owned()
+    } else if any(0xac00, 0xd7af) || any(0x1100, 0x11ff) || any(0x3130, 0x318f) {
+        "Korean".to_owned()
+    } else if any(0x3400, 0x9fff) || any(0xf900, 0xfaff) || any(0x2_0000, 0x3_134f) {
+        "Chinese characters, no kana".to_owned()
+    } else {
+        "language not named".to_owned()
+    }
+}
+
 fn report(rows: &[Row]) -> String {
     let mut lines = vec![format!("translation-owed: {} translated quotation(s) new or changed since the merge base - each owes a translation-check", rows.len())];
     for (f, key, lang, quote, original) in rows {
-        lines.push(format!("== {f} - `{key}` ({lang})"));
+        lines.push(format!(
+            "== {f} - `{key}` ({})",
+            language_of(lang, original)
+        ));
         lines.push(format!("  TRANSLATION: {quote}"));
         lines.push(format!("  ORIGINAL:    {original}"));
     }

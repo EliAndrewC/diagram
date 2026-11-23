@@ -119,8 +119,10 @@ knobs re-rolled from the seed by the generator and held to the forms recorded he
   the first stretch of divider no building backs (`compound_parts._middle_gate`); the hall still screens the house
   from the hearing court. A deliberate DEVIATION from the customary seat, recorded.
 - **Lesser gates**: the kitchen postern in the west wall (6 ft) and the outer court's service gate in the south wall
-  (6 ft) at the cart yard's south end, the cell just east of it - muck, night-soil and prisoners skip the ceremonial
-  gate (feature 374 batch 4: at 244 ft the cell and the barracks sealed it; `postern_approach` holds it now).
+  (6 ft) at the cart yard's south end, the cell just east of it - muck and night-soil skip the main gate, its use a
+  GUESS (feature 374 batch 4: at 244 ft the cell and the barracks sealed it; `postern_approach` holds it now); prisoners
+  come by the main gate, as Pingyao's went through a side door of its ceremonial gate, not a gate of their own (0093,
+  0096; 449 T350).
 
 Guesses the draft carries beyond those: a **detached guest house** (R10, research buildings 330: guests were received
 in the main house; a guest house apart was not found). (The karo's house of its own, a GUESS through pass 5, is now

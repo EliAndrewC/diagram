@@ -36,6 +36,11 @@ fixture() {
   # T40 plan section). A gate that comes to read a path outside SPARSE reads it as absent here: widen SPARSE with it.
   git clone -q --no-checkout "$REAL" "$ROOT" && git -C "$ROOT" sparse-checkout set --cone $SPARSE && git -C "$ROOT" checkout -q ||
     { echo "test-entry-gate: could not clone $REAL"; exit 1; }
+  # ITS origin/main IS ITS HEAD, set rather than assumed (449 T341, 2026-11-23): a tree at a detached commit - `make verify`'s review
+  # tree, a bundle's files committed on main (451 T164) - is cloned at that commit while the clone's origin/main is the source's main,
+  # so the gate read the bundle's own record and pop-up edits as the clone's delta and cases 1, 2 and 8 went red (the gate at
+  # 710e86ef1d: "no record change is quiet: got 1 want 0"); with it set, the delta is the suite's own edits wherever it runs.
+  git -C "$ROOT" update-ref refs/remotes/origin/main HEAD
   PAGE="$ROOT/research/questions/0094-rooms-for-a-parley-across-a-border.html"
   BL="$ROOT/dev/bypass-log"
   BAK="$d/page.bak"; cp "$PAGE" "$BAK"

@@ -170,7 +170,7 @@
   <!-- move is a DEVIATION recorded on 0116's drawing page.         -->
   <!-- Main gate: the 12 ft passage x=490..526 through the gate range -->
   <!-- (x=334..574), the south wall broken along the range; the east  -->
-  <!-- landing gate y=500..530 (10 ft) - feature 267 pass 2.          -->
+  <!-- landing gate y=503..527 (8 ft) - feature 267 pass 2, 449 T341. -->
   <!-- ============================================================ -->
   <!-- compound interior fill (earth) -->
   <!-- The precinct as one rect per court (feature 262) so the page can light each court's
@@ -185,19 +185,21 @@
   <g stroke="#2D2A24" stroke-width="9" fill="none" stroke-linecap="square" data-kind="compound wall">
     <!-- North -->
     <line x1="140" y1="240" x2="880" y2="240"/>
-    <!-- West (broken by the kitchen postern at y=294..320 and the
-         stable-yard service gate at y=662..692 - feature 374 wave 124 moved it 28 px north, so the servants' street
-         range below it leaves the carts a clear way in) -->
-    <line x1="140" y1="240" x2="140" y2="289.5"/>
-    <line x1="140" y1="324.5" x2="140" y2="657.5"/>
-    <line x1="140" y1="696.5" x2="140" y2="750"/>
+    <!-- West (broken by the kitchen postern at y=296.5..317.5, 7 ft, and the
+         stable-yard service gate at y=665..689, 8 ft - feature 374 wave 124 moved it 28 px north, so the servants' street
+         range below it leaves the carts a clear way in; 449 T341 narrowed both into the side gate's 5-8 ft band
+         (docs/buildings.md, Side gate: no page gives a cart gate's width, and 0082's 6 ft cart lane passes an 8 ft gate),
+         the postern a foot under the service gate to keep their order) -->
+    <line x1="140" y1="240" x2="140" y2="292"/>
+    <line x1="140" y1="322" x2="140" y2="660.5"/>
+    <line x1="140" y1="693.5" x2="140" y2="750"/>
     <!-- Annex perimeter (the accreted guest wing) -->
     <line x1="880" y1="240" x2="1000" y2="240"/>
     <line x1="1000" y1="460" x2="880" y2="460"/>
-    <!-- East, annex to postern (landing gate 500..530 = 10 ft: one bale cart at a time, the cart lane 6 ft (wave 100), and
+    <!-- East, annex to postern (landing gate 503..527 = 8 ft: one bale cart at a time, the cart lane 6 ft (wave 100), and
          narrower than the ~12 ft main gate - feature 267 pass 2; it was 12.7 ft, which left the ceremonial gate
-         barely the widest) -->
-    <line x1="880" y1="460" x2="880" y2="495.5"/>
+         barely the widest, then 10 ft until 449 T341 put it in the side gate's 5-8 ft band) -->
+    <line x1="880" y1="460" x2="880" y2="498.5"/>
     <!-- (annex east wall is broken by the guests' river door at y=392..416 - an
          ~8 ft formal guest gate, no cart uses it, so it is narrower than the
          bale-cart landing gate; size-audit opening-vs-purpose 2026-07 - opening
@@ -205,7 +207,7 @@
     <line x1="1000" y1="240" x2="1000" y2="387.5"/>
     <line x1="1000" y1="420.5" x2="1000" y2="460"/>
     <!-- East, postern to SE corner -->
-    <line x1="880" y1="534.5" x2="880" y2="750"/>
+    <line x1="880" y1="531.5" x2="880" y2="750"/>
     <!-- South: the wall is BROKEN along the gate range (x 334..574), whose south face stands on the wall line and is
          the wall there - a nagaya-mon, "a long building with the gate through its middle" (feature 267 pass 2,
          research buildings 420; docs/buildings.md: a structure that is part of the wall has the wall broken around it).
@@ -220,20 +222,20 @@
 
   <!-- Postern posts (east landing gate - the working bale gate to the landing steps across the bank street) -->
   <g fill="#2D2A24" data-kind="side gate">
-    <rect x="874" y="492" width="12" height="8"/>
-    <rect x="874" y="530" width="12" height="8"/>
+    <rect x="874" y="495" width="12" height="8"/>
+    <rect x="874" y="527" width="12" height="8"/>
   </g>
   <!-- Kitchen postern posts (west service door, opening onto the lane past the karo's door toward the kitchen yard - feature 433) -->
   <g fill="#2D2A24" data-kind="side gate">
-    <rect x="134" y="286" width="12" height="8"/>
-    <rect x="134" y="320" width="12" height="8"/>
+    <rect x="134" y="288.5" width="12" height="8"/>
+    <rect x="134" y="317.5" width="12" height="8"/>
   </g>
   <!-- kitchen postern (west wall), flanking, outside (west) -->
   <!-- Service-gate posts (west wall by the stable yard - a service door,
        so opening into work space is correct) -->
   <g fill="#2D2A24" data-kind="side gate">
-    <rect x="134" y="654" width="12" height="8"/>
-    <rect x="134" y="692" width="12" height="8"/>
+    <rect x="134" y="657" width="12" height="8"/>
+    <rect x="134" y="689" width="12" height="8"/>
   </g>
   <!-- Guests' river door (annex east wall, opening into the guest garden) -->
   <g fill="#2D2A24" data-kind="side gate">

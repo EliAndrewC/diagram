@@ -21,7 +21,7 @@ Guesses:
 Depiction: The plan draws a Japanese office's gate in one of its two forms, a one-bay gate whose pillar centers stand about 6 to 8.5 ft apart or a
 nagaya-mon opening about 12 ft, each plan taking one, and a Chinese office's as a roofed building of three bays. Its
 gatekeepers sit in a gatehouse beside it or a guardroom in the range, about 12 ft deep either way, each plan taking one.
-Its posts are drawn as dark blocks in the wall's near-black ink, set outside the opening rather than on its edges, so the opening reads on the plan; a one-bay gate is therefore drawn wider than the real one, whose 6 to 8.5 ft ran between its pillars' centers, and the dark is the drawing's, not the posts' color.
+Its posts are drawn as dark blocks in the wall's near-black ink, set outside the opening rather than on its edges, so the opening reads on the plan, and on some plans run out across the wall so they stand past it on both faces; a one-bay gate is therefore drawn wider than the real one, whose 6 to 8.5 ft ran between its pillars' centers, and the dark is the drawing's, not the posts' color.
 
 Name: main gate
 Covers: the posts flanking the main opening

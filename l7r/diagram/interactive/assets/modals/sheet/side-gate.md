@@ -3,7 +3,7 @@ branch office of three officials, at the end of the shogunate, had a small gate 
 was kept for the head of the household and honored guests, the family came and went by an inner entrance, and the
 kitchen had its own door from outside, the katteguchi.
 
-Night soil was a good with a price. Farmers bought a town household's night soil - around Kanazawa by the year - and came with carts to
+Night soil was a good with a price. Farmers bought a town household's night soil - around Kanazawa by the year - and came to
 collect it, and a merchant house on a back street kept a back gate for them. At Edo, farmers paid in firewood, charcoal and seedlings
 for the right to empty the privies of the daimyo estates. A samurai residence had a wicket at its rear, the fujomon, for carrying out night soil, the dead and criminals, though by which gate the estates' farmers came in is not recorded. In Rokugan the night soil is handled by the owaiya, a trade of the burakumin, the setting's outcasts.
 
@@ -28,7 +28,7 @@ Depiction: The plan draws each side gate as a pair of posts in the compound wall
 postern, a service gate by the stables or the stores, a gate to a river landing (opening onto the bank street, with the
 landing's steps across it), a cart gate, or a guests' door. A cart gate has a cart yard inside it and a cart lane leading to it, and a guests' door opens inside onto open ground a palanquin can cross (or, where a plan draws one, a garden), never against the side of a building. Service
 gates stand near the outer privies, which are set against the service walls so the night-soil collectors reach them from outside without crossing the inner court where
-the household lives.
+the household lives. Each gate's posts are drawn as dark blocks, drawn large so they read at the plan's scale, standing past the wall on both faces.
 
 Name: side gate
 Covers: the posts of the posterns, service gates, landing gate, cart gate and guests' door

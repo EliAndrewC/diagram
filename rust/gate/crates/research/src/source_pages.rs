@@ -371,6 +371,10 @@ pub fn save(
                     ", from the page cache (fetched {day}; REFRESH=1 fetches it again)"
                 );
             }
+            if let Some(day) = got.archived.as_ref().filter(|d| !d.is_empty()) {
+                // the link answered with no page (a bot check, 449 T345): what is saved is the archive's capture, said so
+                let _ = write!(row.why, ", from the archive's capture of {day}");
+            }
             if let Some(l) = ledger {
                 let line = consulted::line(&l.ctx, url, "pending", &l.questions);
                 consulted::append(&l.home, &[line], &record_dir).map_err(fault)?;

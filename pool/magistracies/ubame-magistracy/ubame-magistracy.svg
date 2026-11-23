@@ -117,29 +117,31 @@
     <line x1="200" y1="150" x2="200" y2="301.5"/>
     <line x1="200" y1="330.5" x2="200" y2="750"/>
     <!-- East: BROKEN around the parley room (y=470..536), which is part of the wall,
-         and again for the cart gate (y=653..680, 9 ft: a one-way bale-cart passage, narrower than the 12 ft main
-         gate so the ceremonial gate is the widest opening - feature 267 pass 2; it was 12 ft and tied the main gate) -->
+         and again for the cart gate (y=654.5..678.5, 8 ft: a one-way bale-cart passage, narrower than the 12 ft main
+         gate so the ceremonial gate is the widest opening - feature 267 pass 2; it was 12 ft and tied the main gate,
+         then 9 ft until 449 T341 put it in the side gate's 5-8 ft band: no page gives a cart gate's width, and 0082's
+         6 ft cart lane passes it) -->
     <line data-id="east-wall-1" x1="1070" y1="150" x2="1070" y2="465.5"/>
-    <line data-id="east-wall-2" x1="1070" y1="540.5" x2="1070" y2="648.5"/>
-    <line data-id="east-wall-3" x1="1070" y1="684.5" x2="1070" y2="750"/>
-    <!-- South: service gate x=380..412; then BROKEN along the gate range (x=575..790), a nagaya-mon whose south face
+    <line data-id="east-wall-2" x1="1070" y1="540.5" x2="1070" y2="650"/>
+    <line data-id="east-wall-3" x1="1070" y1="683" x2="1070" y2="750"/>
+    <!-- South: service gate x=384..408, 8 ft (10.7 ft until 449 T341, the side gate's band); then BROKEN along the gate range (x=575..790), a nagaya-mon whose south face
          IS the wall line, the 12 ft main-gate passage (x=615..651, the nagaya-mon's two-ken opening, R26, buildings
          480) running through it (feature 267 pass 2, buildings 420: the wall drawn broken around a structure that is
          part of it; the range stood inside the wall until then) -->
-    <line x1="200" y1="750" x2="375.5" y2="750"/>
+    <line x1="200" y1="750" x2="379.5" y2="750"/>
     <!-- and broken along the servants' common room at the range's west end (x 489..575, feature 374 wave 124) -->
-    <line x1="416.5" y1="750" x2="484.5" y2="750"/>
+    <line x1="412.5" y1="750" x2="484.5" y2="750"/>
     <line x1="794.5" y1="750" x2="1070" y2="750"/>
   </g>
 
   <!-- Gate posts -->
   <g fill="#2D2A24" data-kind="side gate">
-    <rect x="364" y="744" width="16" height="14"/>
-    <rect x="412" y="744" width="16" height="14"/>
+    <rect x="368" y="744" width="16" height="14"/>
+    <rect x="408" y="744" width="16" height="14"/>
     <rect x="194" y="298" width="12" height="8"/>
     <rect x="194" y="326" width="12" height="8"/>
-    <rect x="1064" y="639" width="14" height="14"/>
-    <rect x="1064" y="680" width="14" height="14"/>
+    <rect x="1064" y="640.5" width="14" height="14"/>
+    <rect x="1064" y="678.5" width="14" height="14"/>
   </g>
 
   <!-- Internal divider wall between outer (south) and inner (north) courts. Two openings (feature 267 pass 3,

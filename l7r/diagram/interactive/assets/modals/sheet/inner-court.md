@@ -4,7 +4,7 @@ service ground that kept the household running. The office was also a home, and 
 inner residence gate, divided it from the office; in Japan a town magistrate's residence stood inside the magistracy too, though
 at the intendant's office at Takayama the residence stood beside the office rather than behind it.
 
-The formal garden lay on the sunny south side, before the reception rooms; at Takayama the
+What lay underfoot in the court is not recorded, nor what the wall between it and the office was built of. The formal garden lay on the sunny south side, before the reception rooms; at Takayama the
 great hall of the office and the intendant's own room looked onto one garden. The house itself was one block under one
 roof, with its guest rooms inside it.
 
@@ -18,6 +18,7 @@ on grounds of about 0.8 acre.
 
 Guesses:
 - That the gate between the two courts was guarded: no record says so.
+- That the court's open ground was bare earth: no page we read says what lay underfoot in the residence court of a magistrate's compound.
 
 Depiction: The plan always sets the inner court behind the office hall; for a
 Japanese office that is a simplification, since at Takayama the residence stood beside the office. A gate in the wall between the two courts leads into it. Its ground is kept

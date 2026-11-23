@@ -1676,13 +1676,25 @@
    "declared": "spec-fidelity"
   },
   "### T342, T343, T344, T349 (bundle)": {
-   "sha256": "3c7fda17a36087e310bb521a4435b4fee37012f97a5aa14fb556852611f2b7ec",
+   "sha256": "78605e7773c8a854ab9390dfa867ce5295a06efd0b618c950ca6396307ae6884",
    "verdict": "CLEAR",
    "reviewed": "2026-11-23",
    "declared": "spec-fidelity"
   },
   "### T342, T343, T344, T349 Approach (checklist part A)": {
-   "sha256": "d5bfed6d638dd0b03110fa983a655087ff8d4c15b05075d7d8520ccf16faf9e0",
+   "sha256": "15791d125dc2ac5b5293038fb53ed684dbd49b8b1b6b12291fb893788b7c70d4",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity"
+  },
+  "### T341, T345, T346, T347, T348, T350 (bundle)": {
+   "sha256": "8eb644f1105ec19852b5a0dbb0754021cf782dd8762968b948f47827d142135b",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity"
+  },
+  "### T341, T345, T346, T347, T348, T350 Approach (checklist part A)": {
+   "sha256": "c3ae0a303eb66c59b6813074332cf5a920548dfd34c1e808095c17f4a14ee116",
    "verdict": "CLEAR",
    "reviewed": "2026-11-23",
    "declared": "spec-fidelity"
@@ -23681,6 +23693,376 @@
      "why": "The pop-up check order the project already runs; filing another bundle's fix keeps it owned and fixed, not dropped."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-23",
+   "blocks": [
+    "### T341, T345, T346, T347, T348, T350 (bundle)",
+    "### T341, T345, T346, T347, T348, T350 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T341-gates",
+     "summary": "T341: Hayakawa's and Ubame's lesser gates narrowed into docs/buildings.md's 5-8 ft side-gate band, posts moved in by half to keep the 6 ft cart lanes centered; the cart gate drawn as a side gate (no new kind, glyph or pop-up), labeled a GUESS in docs/buildings.md with a claim citing 0082's drawing page",
+     "class": "within",
+     "why": "A fix of a size-audit finding filed before the talk, which the GM asked to have finished first ('please finish the remaining fixes', 2026-11-22). Nothing the request or the spec asks for is narrowed: drawing the cart gate in the existing band rather than inventing a kind is the conservative choice where the pass found no width, and it is labeled a GUESS. The figures carry one-shot labels (make size-table before, make pack-audit after, 2026-11-22)."
+    },
+    {
+     "id": "T345-bot-check",
+     "summary": "T345: pages.rs bot_check recognises an Anubis/Cloudflare challenge page (at most 4,000 characters); CachedPages::get skips a cached one, never stores a fetched one, and reads the archive's capture behind it, for the fetch and the cache-only read alike; a challenge counts as live (the page is public, behind a check), so an archived confirmation is READABLE; source_pages.rs records a page saved from the archive as the archive's capture; a page the archive lacks stays UNFETCHABLE",
+     "class": "within",
+     "why": "Fixes a defect: quote-verbatim read a 492-character challenge page as the source and called verbatim passages missing (measured 2026-11-22). Counting a challenge as live and an archived capture as READABLE is the one place the section loosens what a record tool accepts. It still reads the page's real text (the archive's capture of it) and never the challenge, so the tool now answers correctly rather than accepting less. Red-first and green test runs are recorded with dates."
+    },
+    {
+     "id": "T345-translation-language",
+     "summary": "T345: translation.rs language_of heads each pair with its note's language, otherwise the language its original's script shows (kana Japanese, Hangul Korean, Han alone 'Chinese characters, no kana', otherwise 'language not named')",
+     "class": "within",
+     "why": "Fixes a tool that answered wrongly: a header of '()'. Measured 2026-11-22: 48 pairs headed, none '()'. Nothing is narrowed."
+    },
+    {
+     "id": "T346-fujomon",
+     "summary": "T346: the walled-enclosure bullet in docs/building-programs.md restated to 0101: the fujomon is the rear wicket of a samurai residence, used for night soil (described in general terms only); the program's requiring it, its taking the kitchen's deliveries, and its size and seat are labeled GUESSES",
+     "class": "within",
+     "why": "The rule presented an unsourced route as research, which is a contradicted research claim. It is restated to what the page says, and the code is not changed. That is the GM's own remedy for drift (2026-11-19)."
+    },
+    {
+     "id": "T347-restatements",
+     "summary": "T347: building-programs.md restated on the writing and binding rooms, the granary's second seat (0123), 'wells by use' (drops 'not by a kitchen', cites 0104 beside 0091), and the shrine in a corner by a tree (0218), with 'never in a grove or a garden' restated",
+     "class": "within",
+     "why": "Each change brings the procedure's prose in line with the pages it cites (impl-drift findings: the prose said things no page says) and changes no code. That is the GM's own remedy for drift (2026-11-19). Nothing is narrowed."
+    },
+    {
+     "id": "T347-T336-claim-rewording",
+     "summary": "Found during T347's work (2026-11-23), on 449 T336's writing-rooms band claim: '0113 gives no room's mats' reworded to '0113 does not give any room's mats' so the claims-owed label check stops flagging a bare GUESS that names 0113",
+     "class": "within",
+     "why": "In the block's words it is the same statement: 0113's drawing page records the rooms' places as a GUESS and gives no size, so the bare GUESS stands. Per make claims-owed on 2026-11-23 the claims-label line is gone. The claim's meaning and the research it rests on are unchanged. Nothing is narrowed and no wrong outcome is left."
+    },
+    {
+     "id": "T347-required-rooms",
+     "summary": "T347: the official study and the day office made required items in types.json (they were optional), so the program check refuses a hall without them; all five sheets already draw both (grep of data-kind, 2026-11-22)",
+     "class": "within",
+     "why": "0113's drawing page has our maps draw both rooms behind the dais, so a check that passed a hall without them passed work the research says is wrong. Under constitution XIV that is a defect. The new refusal reaches only that case, no sheet moves, and the fallback (record the knob on 0113's page instead) is stated."
+    },
+    {
+     "id": "T350-justice-front",
+     "summary": "T350: the justice-front knob keeps the attested gate drum at every seat, under the gate's roof and not drawn as its own mark (a CONVENTION, claimed), and offers no petition window or bell, which no page attests; the outer service gate takes muck and night soil (a GUESS); no prisoners' gate is drawn (0093, 0096, China first, 0101 as tiebreaker only); the county example's notes restated; no sheet moves (grep, 2026-11-22)",
+     "class": "within",
+     "why": "The knob and its claim are brought in line with the attested record (impl-drift on /tmp/t330/id-reply.md). Dropping the unattested petition window and bell removes options no page supports. It narrows nothing the GM or the spec asked for, and no sheet draws either one."
+    },
+    {
+     "id": "T348-inner-court-popup",
+     "summary": "T348: sheet/inner-court's About opens its look paragraph with what is unrecorded (the court's ground and the material of the wall to the office), and its Guesses tab names the drawn bare earth a GUESS",
+     "class": "within",
+     "why": "A modal-form finding (FIX M6.2), fixed under dev/modals.md's rule that a guess goes on the Guesses tab. The research pass found the record silent on the surface for every type in question, so 'unrecorded' is true of the record."
+    },
+    {
+     "id": "T348-left-inner-court-findings",
+     "summary": "T348: the inner court's surface and enclosure findings (the Kochi daimyo's Osaka residence's walled garden, Kanazawa's grounds, Morse's 1880s fence) are left off a record page; filed as T361",
+     "class": "within",
+     "why": "No wrong outcome today. The record page is silent, so the pop-up's 'unrecorded' is true of the record as it stands, and the drawn bare earth is labeled a GUESS. The plan's own words: 'Not fixed here: a research-page edit, which this bundle may not make (the session, 2026-11-22 ...). Filed as T361; lands before T158.' This is ordering, not a narrowing: the item is filed with a landing point, not dropped."
+    },
+    {
+     "id": "T341-left-cart-gate-finding",
+     "summary": "T341: the cart-gate finding (no width found; a cart gate named only at a Kochi residence and at Himeji) is put in docs/buildings.md and not on 0082's drawing page; filed as T361",
+     "class": "within",
+     "why": "No wrong outcome today. The finding and its GUESS label are stated in docs/buildings.md, with a claim citing 0082's drawing page, so neither the map nor the procedure states anything false. The plan's own words: 'Not fixed here: a research-page edit, which this bundle may not make (the session, 2026-11-22 ...). Filed as T361; lands before T158.' This is ordering, not a narrowing: the item is filed with a landing point, not dropped."
+    },
+    {
+     "id": "T350-left-main-gate-drum",
+     "summary": "T350: the main gate's pop-up does not mention the gate drum the procedure now keeps at every seat, because that rests on 0093's drawing page saying the drum is not drawn; filed as T361",
+     "class": "within",
+     "why": "A gap, not a wrong statement. The drum is not drawn as its own mark (a CONVENTION, claimed), and a pop-up silent on an undrawn element tells the reader nothing false. The plan's own words: 'Not fixed here: a research-page edit, which this bundle may not make (the session, 2026-11-22 ...). Filed as T361; lands before T158.' This is ordering, not a narrowing: the item is filed with a landing point, not dropped."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-23",
+   "blocks": [
+    "### T341, T345, T346, T347, T348, T350 (bundle)",
+    "### T341, T345, T346, T347, T348, T350 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T341-side-gate-band",
+     "summary": "T341: every lesser gate of Hayakawa and Ubame narrowed into docs/buildings.md's side gate 5-8 ft band (a GUESS), posts moved in by half to keep the 6 ft cart lanes centered; the cart gate drawn as a side gate, no new kind, glyph or pop-up, labeled a GUESS in docs/buildings.md",
+     "class": "within",
+     "why": "Fixes a size-audit finding (a wrong outcome: gates wider than any attested side gate under that name) in this step, as the GM asked on 2026-11-18 ('fix all known bugs in each step') and 2026-11-22 ('please finish the remaining fixes'). Drawing the cart gate in the existing band rather than inventing a new kind is a design choice inside the fix, the silence of the record labeled a GUESS; no requested behavior is narrowed."
+    },
+    {
+     "id": "T345-bot-check",
+     "summary": "T345: pages.rs bot_check recognizes a bot-check page; CachedPages::get never stores one and reads the archive's capture behind it; source_pages.rs says a saved archived page is the archive's capture",
+     "class": "within",
+     "why": "Fixes a tool that answered wrongly (quote-verbatim read a 492-character Anubis page as the source and reported passages missing): a defect in the ported Rust tooling, fixed as found, pinned by a red-first test. Serves the port's 'everything works' standard."
+    },
+    {
+     "id": "T345-translation-language",
+     "summary": "T345: translation.rs language_of heads each pair with its note's language, else the language its original's script shows, else 'language not named'",
+     "class": "within",
+     "why": "Fixes a tool output that named no language ('()') on every unnamed pair; a defect fix in ported tooling, pinned by a test."
+    },
+    {
+     "id": "T346-fujomon",
+     "summary": "T346: docs/building-programs.md's walled-enclosure bullet restated to 0101 (the fujomon rear wicket), its program requirement, kitchen deliveries, size and seat labeled a GUESS",
+     "class": "within",
+     "why": "The procedure presented an unsourced route as research; restating it to the record is a known-defect fix (a research claim misstated), with no code change."
+    },
+    {
+     "id": "T347-procedure-restated",
+     "summary": "T347: building-programs.md's writing/binding rooms, granary's second seat (0123), wells by use (0104, 0091), shrine beside a tree (0218) restated to the record pages; the writing rooms' band claim reworded so the label check reads the page's silence",
+     "class": "within",
+     "why": "Each restatement brings a claim in line with the research it cites, which is the GM's rule for a claim the code does not literally match (restate the claim); the label-check rewording keeps the same statement. Nothing the GM asked for is narrowed."
+    },
+    {
+     "id": "T347-required-rooms",
+     "summary": "T347: the official study and the day office made required in types.json, so the program check refuses a hall without them; all five sheets already draw both",
+     "class": "within",
+     "why": "A check that passed bad work (a hall lacking rooms 0113's page has our maps draw) is a defect under the GM's 2026-11-19 definition; making it refuse is fixing that check, and no sheet moves. It is enforcement of what the research already requires, not new behavior beyond the fix."
+    },
+    {
+     "id": "T350-justice-front",
+     "summary": "T350: knob 8 keeps the attested gate drum at every seat under the gate's roof (not drawn, a CONVENTION), offers no petition window or bell, outer service gate takes muck and night soil (a GUESS), no prisoners' gate (prisoners by the main gate, China first); bounty board given a GUESS claim; Ubame's notes restated about the drum",
+     "class": "within",
+     "why": "Brings the procedure into line with 0093/0096/0101/0190 and covers an UNCLAIMED drift found in the claims round; no sheet draws any removed option, so no map changes. Fixes of known drift, inside 'finish the remaining fixes'."
+    },
+    {
+     "id": "T348-inner-court-popup",
+     "summary": "T348: inner-court About opens its look paragraph with what is unrecorded (ground surface, wall material), Guesses tab names the bare earth a GUESS; modal-form M16 rewording applied",
+     "class": "within",
+     "why": "A reader-facing gap (the pop-up did not say what was unknown) fixed per the modal guidelines; text only."
+    },
+    {
+     "id": "claims-round-full",
+     "summary": "The claims round sent every claim of the section on in full (106 checked, all IN-STEP) because a removed table block lives in no commit",
+     "class": "within",
+     "why": "Verification that the requested fixes leave the claims in step; process, not scope."
+    },
+    {
+     "id": "found-and-left-research-pages",
+     "summary": "Research-page edits (inner court findings, cart gate finding, main gate pop-up drum, 0218's tree-pairing label) not made in this bundle, filed as T361 and T369 to land before T158",
+     "class": "within",
+     "why": "Not dropped: each is filed as its own task that lands before the next step, so no known defect is carried past the step (GM 2026-11-18). Several (findings recorded in docs rather than on a drawing page, a pairing unlabeled) are record placement, not wrong outcomes on any map. Booking research-page edits to their own session is ordering, not a narrowing of what was asked."
+    },
+    {
+     "id": "found-and-left-dais",
+     "summary": "The magistrate's dais kept optional in the program table though 0099's drawing page makes it the front of every office hall; filed as T368, to land before T158",
+     "class": "within",
+     "why": "An OUTSIDE THE CHANGE finding, filed as its own fix landing before the next step rather than left unfixed; deferring it to avoid re-sending the section's claims is sequencing within the 'fix all known bugs in each step' rule, not a refusal to fix."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-23",
+   "blocks": [
+    "### T342, T343, T344, T349 (bundle)",
+    "### T342, T343, T344, T349 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T342-no-edit",
+     "summary": "T342: no edit owed; 0088 already restated by T330 B8 and landed (f62250f89f), grep finds only the flat-tone bullet",
+     "class": "within",
+     "why": "Unchanged since its CLEAR verdict; the defect the task named is already fixed on main, observed by grep with method stated."
+    },
+    {
+     "id": "T343-claim-follows",
+     "summary": "T343: record silent on privy-storehouse spacing, so 0116/0101 restate the fire gap as not binding an attached privy, a GUESS with an absence note; sheets unchanged",
+     "class": "within",
+     "why": "Unchanged; restating the record line where the behavior is fine is what constitution XIV and the GM's 2026-11-19 words prescribe."
+    },
+    {
+     "id": "T344-record-edits",
+     "summary": "T344: 0101 heading, 0116 sentence with grounds, 0123 encyclopedia linked, 9971 unsupported facts resourced to 25200, 0113 cites the 1842 plan",
+     "class": "within",
+     "why": "Each fixes the finding that filed it; nothing beyond the named items."
+    },
+    {
+     "id": "T349-record",
+     "summary": "T349: 0093's drawing page records the gate posts as measured on hand and generated sheets, a CONVENTION; 'about 2 ft square' restated (same subject)",
+     "class": "within",
+     "why": "Records the drawn convention the task asked labeled; restates the record, not the sheets, per XIV."
+    },
+    {
+     "id": "T349-tool-fix-and-repair",
+     "summary": "T349 tool: last_text_of reads assistant lines and StructuredOutput text; reply_in prefers the transcript; transcript_of searches subagents/workflows; kept copies repaired, the repair re-run before landing because the mirror's unfixed reader runs until then",
+     "class": "within",
+     "why": "Fixes the defect at its measured source with red-first tests; the changed sentence (re-run before landing) only corrects an earlier overclaim and adds no scope."
+    },
+    {
+     "id": "briefC",
+     "summary": "Brief C: same-subject findings met by A and B's checks fixed - 0093 findings 6 to 8.5 ft, 0116 absence note names and links read articles and drops claims no read page gives, 5220 and 14050 restated",
+     "class": "within",
+     "why": "Each is a wrong statement in the record found by this bundle's checks on the same subject; dropping a claim no readable page carries is the record's rule, not a narrowing of any request."
+    },
+    {
+     "id": "gloss-left",
+     "summary": "The absence note's kaso-zu gloss present on 0101's copy, absent on 0116's, left so",
+     "class": "within",
+     "why": "A difference no reader is misled by, not a defect (constitution XIV v2.36.0); unchanged since CLEAR."
+    },
+    {
+     "id": "modal-form-notes",
+     "summary": "modal-form NOTEs (latrine 2, side gate 3) not applied",
+     "class": "within",
+     "why": "Style notes with no FIX on text outside the change: differences, not defects."
+    },
+    {
+     "id": "side-gate-row-not-filed",
+     "summary": "The 'side gate posts not recorded' depiction row not filed",
+     "class": "within",
+     "why": "0093 and the pop-up already say so; no visible effect, no finding broken - not a defect."
+    },
+    {
+     "id": "md3-extra-round",
+     "summary": "An extra modal-depiction round on the three edited pop-ups, on the lead's instruction",
+     "class": "within",
+     "why": "A second read of the posts text T349 asked for; enforces the request, adds no behavior."
+    },
+    {
+     "id": "inner-court-and-claims-to-T341",
+     "summary": "The inner court's depiction and the docs/building-programs.md claims left to the T341 bundle's live round",
+     "class": "within",
+     "why": "Owed checks, not known defects, done by the bundle editing those files against the pages as they stand; nothing is left unchecked before the talk."
+    },
+    {
+     "id": "filed-T362-T364-T365-T366-T367",
+     "summary": "Found and left: glossary source (T362), granary larger than residence (T364), buildings.md posts claim and unclaimed study seat (T365), cart_route fix text (T366), armory end-bay side (T367), each filed to land before T158",
+     "class": "within",
+     "why": "Each is a separate defect found outside these tasks' change, filed as its own task landing before T158 rather than carried past the step; the GM's 'finish the remaining fixes' and 'fix all known bugs in each step' are honored by the filing order, and none narrows what T342/T343/T344/T349 asked."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-23",
+   "blocks": [
+    "### T341, T345, T346, T347, T348, T350 (bundle)",
+    "### T341, T345, T346, T347, T348, T350 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T341-gates",
+     "summary": "Hayakawa's and Ubame's lesser gates narrowed into the side gate's 5-8 ft band, posts moved in by half so the 6 ft cart lanes stay centered; the kitchen postern's order kept.",
+     "class": "within",
+     "why": "Fixes a size-audit finding: gates drawn wider than any attested side gate, a check outcome the GM's 'fix all known bugs in each step' (2026-11-18) reaches. The lanes (6 ft) still fit every gate (7-8 ft); every check OK, measured 2026-11-22."
+    },
+    {
+     "id": "T341-cart-gate-kind",
+     "summary": "The cart gate gets no kind, glyph or pop-up of its own; drawn in the side gate's band as a GUESS, docs/buildings.md says so with a claim citing 0082's drawing page.",
+     "class": "within",
+     "why": "The research pass found no width for a cart gate at any comparable compound, so the record is silent and a labeled GUESS is the rule's own remedy; adding a new kind would be scope the GM did not ask for. No requirement is narrowed."
+    },
+    {
+     "id": "T345-bot-check",
+     "summary": "pages.rs bot_check names an Anubis/Cloudflare challenge; CachedPages::get never stores one, passes a cached one over and reads the archive's capture behind it; a challenge counts live, so an archived confirmation is READABLE; source_pages.rs says an archived save is the archive's capture.",
+     "class": "within",
+     "why": "A tool giving a wrong answer (quote-verbatim reporting verbatim passages missing because a challenge page was cached as the page) is a defect under XIV; the fix makes the tool read the real text and says where it came from. Red first and green recorded 2026-11-22."
+    },
+    {
+     "id": "T345-language-of",
+     "summary": "translation.rs language_of heads a pair with its note's language, else the language its original's script shows, else 'language not named'.",
+     "class": "within",
+     "why": "A header printing '()' is a tool answering wrongly; fixed, 48 pairs headed and none '()', measured 2026-11-22. No requirement narrowed."
+    },
+    {
+     "id": "T346-night-soil",
+     "summary": "docs/building-programs.md's walled-enclosure bullet restated to 0101: the fujomon in general terms; the requirement, the kitchen's deliveries, its size and seat a GUESS.",
+     "class": "within",
+     "why": "The procedure presented an unsourced route as research - a contradicted research claim, fixed by restating the claim, which is exactly the remedy XIV v2.36.0 names."
+    },
+    {
+     "id": "T347-procedure-restatements",
+     "summary": "The writing and binding rooms, the granary's second seat (0123), wells by use (drops 'not by a kitchen', cites 0104 beside 0091), the shrine's corner claim (0218) and 'never in a grove or a garden' restated.",
+     "class": "within",
+     "why": "impl-drift found the procedure misstating the record; each fix restates prose to what the pages say, labeling the unrecorded parts GUESS. Restating a claim is the GM's preferred remedy (2026-11-19)."
+    },
+    {
+     "id": "T347-required-rooms",
+     "summary": "types.json makes the official study and the day office required items, so the program check refuses an office hall without them; all five sheets already draw both.",
+     "class": "within",
+     "why": "This is refusing behavior, and it is in scope only because it fixes a defect: the check passed a hall that 0113's drawing page says our maps draw with both, i.e. a check passing bad work (XIV v2.36.0). Its reach is exactly that hall's two rooms, no other kind; no sheet moves (grep of data-kind, 2026-11-22)."
+    },
+    {
+     "id": "T347-claim-reword",
+     "summary": "The writing rooms' band claim reworded from '0113 gives no room's mats' to '0113 does not give any room's mats' so claims-owed's label check reads it as the page's silence; the bare GUESS stands.",
+     "class": "within",
+     "why": "Same statement, put in the phrasing the claims grammar's label check recognizes; conforming to the grammar is not a narrowing and changes no behavior. Neither fixed in the check nor filed: if the label check's silence phrases are later judged too narrow (refusing correct claims), that is a check defect for its own task; not blocking here."
+    },
+    {
+     "id": "T350-knob8-drum",
+     "summary": "Knob 8 keeps the attested gate drum at every seat under the gate's roof, not drawn (a CONVENTION, claimed); offers no petition window or bell; the outer service gate takes muck and night soil (GUESS); no prisoners' gate; the county example's notes restated.",
+     "class": "within",
+     "why": "Removes options no page attests and states the attested drum - fixing a procedure that could draw unattested things. No sheet draws a petition window, bell or prisoners' gate (grep, 2026-11-22), so no map moves. Whether Chinese evidence should seat a drum at a Japanese-named sheet is historical accuracy, not fidelity."
+    },
+    {
+     "id": "T350-bounty-board",
+     "summary": "The bounty board knob 8 posts outside the gate gets a GUESS claim citing 0190's drawing page, including the second board no page records; Ubame's notes restated to the drum under the gate range's roof.",
+     "class": "within",
+     "why": "Covers an UNCLAIMED finding (impl-drift) with a labeled claim, and corrects notes the drum change made untrue. Existing behavior labeled, no behavior added; impl-drift read it IN-STEP 2026-11-23."
+    },
+    {
+     "id": "T348-popup",
+     "summary": "sheet/inner-court's About opens with what is unrecorded (the court's ground, the wall's material); the Guesses tab names the drawn bare earth a GUESS; modal-form and modal-research edits applied.",
+     "class": "within",
+     "why": "A pop-up that tells what stood but not what is unknown of its ground was a modal-form finding; the fix follows dev/modals.md (a guess on the Guesses tab). Rounds recorded, record-owed owes nothing (observed 2026-11-23)."
+    },
+    {
+     "id": "entry-gate-fixture",
+     "summary": "tests/hooks/test-entry-gate.sh's fixture sets the clone's origin/main to its HEAD (git update-ref), fixing cases 1, 2 and 8 red in the review tree.",
+     "class": "within",
+     "why": "The suite's premise (a clone's origin/main is its HEAD) was false in the review tree, so the bundle's own edit read as the clone's delta: a test giving a wrong outcome. The fix restores the premise; it does not loosen what cases 1, 2 and 8 assert. Suite 13 passed, 0 failed, 2026-11-23."
+    },
+    {
+     "id": "claims-round",
+     "summary": "Every claim of the section sent on in full because a removed table row is held by no commit; 39 claims via T342's impl-drift and 67 via this bundle's three, all IN-STEP; OUTSIDE THE CHANGE findings filed.",
+     "class": "within",
+     "why": "Procedure, not scope: it checks more, not less, and narrows nothing the GM asked."
+    },
+    {
+     "id": "session-no-research-page-edit",
+     "summary": "The session's 2026-11-22 constraint that this bundle makes no research-page edit (page sessions booked to the clone's mark), which drives five of the Found-and-left items.",
+     "class": "within",
+     "why": "A session's rule, not the GM's; it would be a narrowing only if it carried known defects past the step. Each item it defers is filed (T361, T369, T370) with an order to land before T158, so the GM's 'fix all known bugs in each step before moving on' (2026-11-18) and 'finish the remaining fixes' (2026-11-22) are still met. This rests on the plan's stated landing order, which the bundle cannot show."
+    },
+    {
+     "id": "left-T361-inner-court-findings",
+     "summary": "The inner court's surface and enclosure findings are not put on a record page; filed as T361, lands before T158.",
+     "class": "within",
+     "why": "Not a map defect: the record page is silent and the pop-up truthfully says unrecorded. Filed and ordered before T158."
+    },
+    {
+     "id": "left-T361-cart-gate-finding",
+     "summary": "The cart gate's no-width finding is in docs/buildings.md, not on 0082's drawing page; filed as T361, lands before T158.",
+     "class": "within",
+     "why": "The finding is recorded in docs and the GUESS is labeled; moving it onto the drawing page is deferred within the step, filed and ordered before T158."
+    },
+    {
+     "id": "left-T361-main-gate-drum",
+     "summary": "The main gate's pop-up does not mention the gate drum; filed as T361, lands before T158.",
+     "class": "within",
+     "why": "The drum is not drawn; a pop-up's silence on an undrawn feature is at most a gap, and it is filed and ordered before T158."
+    },
+    {
+     "id": "left-T368-dais-optional",
+     "summary": "The program table keeps the magistrate's dais optional while 0099's drawing page makes it the front of every office hall; filed as T368, lands before T158.",
+     "class": "within",
+     "why": "This is a real defect of the same class T347 fixes (a check passing a hall the record says has a dais), and its stated reason for deferral is cost, which this review does not weigh. It stays within only because it is filed and ordered to land before T158, so it is fixed within the step rather than carried past it; the ruling rests on that stated order."
+    },
+    {
+     "id": "left-T369-shrine-tree",
+     "summary": "0218's drawing page pairs the shrine with a tree without labeling it a GUESS; filed as T369, lands before T158.",
+     "class": "within",
+     "why": "A research-page label, deferred under the session's page-edit constraint, filed and ordered before T158."
+    },
+    {
+     "id": "left-T370-second-board",
+     "summary": "0190's drawing page tells of one board, not the second board drawn with a bounty out; filed as T370, lands before T158.",
+     "class": "within",
+     "why": "The second board is already claimed as a GUESS in this bundle (T350-bounty-board); the page's own text is deferred, filed and ordered before T158."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -45229,273 +45611,1089 @@
    "verdict": "CLEAR"
   },
   "T342": {
-   "section_sha256": "b30844f88aec8d8e0ba9d7727186084428449afd3028d77696f478108ab91495",
+   "section_sha256": "bfa6041ffe6b02ec34fb9cc02d16c09fe04dec47d9933a93e011cf16c1e7e63e",
    "reviewed": "2026-11-23",
    "declared": "spec-fidelity",
    "decisions": [
     {
      "id": "T342-no-edit",
-     "summary": "T342 owes no edit: T330 bundle B8 already restated 0088 to the flat road and the Hagi 1742 line, checked clean, landed f62250f89f; the grep finds only the flat-tone bullet.",
+     "summary": "T342: no edit owed; 0088 already restated by T330 B8 and landed (f62250f89f), grep finds only the flat-tone bullet",
      "class": "within",
-     "why": "The defect T342 names was fixed and checked by another landed bundle (observed 2026-11-22, method stated); recording that is the task done, not narrowed."
+     "why": "Unchanged since its CLEAR verdict; the defect the task named is already fixed on main, observed by grep with method stated."
     },
     {
      "id": "T343-claim-follows",
-     "summary": "T331 pass is silent on a privy beside a storehouse, so 0116's fire gap is restated (a kura and the buildings round it, not binding a privy built onto a building's end) as a GUESS with an absence note, 0101 says the same; the sheets are unchanged.",
+     "summary": "T343: record silent on privy-storehouse spacing, so 0116/0101 restate the fire gap as not binding an attached privy, a GUESS with an absence note; sheets unchanged",
      "class": "within",
-     "why": "Not a carve-out from a research finding: the T331 pass found no plan, inventory or rule separating a privy from a storehouse, and the one text naming both puts them in the same sector, so nothing in the record says the drawn privy 0.5 ft off the granary is wrong. The earlier fire-gap line claimed more than its sources carry for an attached privy; restating it to the evidence, labeled a GUESS with its searches and an absence note, is the XIV correction (a claim the behavior does not literally match, the behavior fine, is fixed by restating the claim). The plan's 'algorithmically easier route' carries no weight here: moving privies on no evidence would be the unsupported change."
+     "why": "Unchanged; restating the record line where the behavior is fine is what constitution XIV and the GM's 2026-11-19 words prescribe."
     },
     {
-     "id": "T343-gloss-apart",
-     "summary": "The absence note's 0101 copy carries '(kaso-zu)', its 0116 copy plain 'house-siting plans'; left so.",
+     "id": "T344-record-edits",
+     "summary": "T344: 0101 heading, 0116 sentence with grounds, 0123 encyclopedia linked, 9971 unsupported facts resourced to 25200, 0113 cites the 1842 plan",
      "class": "within",
-     "why": "A difference no reader is misled by is not a defect (XIV v2.36.0); each copy passed record-format on its own page."
+     "why": "Each fixes the finding that filed it; nothing beyond the named items."
     },
     {
-     "id": "T344-items",
-     "summary": "0101's heading narrowed to its one case; 0116's earlier-plans sentence restated with its grounds and an unsupported passage dropped; 0123's encyclopedia linked and named; registry 9971's '1717' and 'Iwami Omori' moved to a source that carries them; 0113 cites the 1842 South plan.",
+     "id": "T349-record",
+     "summary": "T349: 0093's drawing page records the gate posts as measured on hand and generated sheets, a CONVENTION; 'about 2 ft square' restated (same subject)",
      "class": "within",
-     "why": "Each is the check finding that filed T344, fixed in the record; the last resorts (an unsupported fact cut, an unreadable source to to-download.md) are the research record's own rules."
+     "why": "Records the drawn convention the task asked labeled; restates the record, not the sheets, per XIV."
     },
     {
-     "id": "T349-record-gate-posts",
-     "summary": "0093 records the drawn gate posts as measured on the SVGs (hand main 2 ft square; generated main 2 ft along by about 4.3 ft across; side posts 4 ft across by 2.7 ft along on hand sheets, about 4.3 across by 2 along on generated) as a CONVENTION, and restates the hand-only 'about 2 ft square'.",
+     "id": "T349-tool-fix-and-repair",
+     "summary": "T349 tool: last_text_of reads assistant lines and StructuredOutput text; reply_in prefers the transcript; transcript_of searches subagents/workflows; kept copies repaired, the repair re-run before landing because the mirror's unfixed reader runs until then",
      "class": "within",
-     "why": "The task's finding was an unlabeled drawn convention; the page now states what both sheet forms draw, orientation given across and along the wall as round 1 asked, each figure carrying its date and method. The sheets are not changed, correctly, since the posts read fine."
+     "why": "Fixes the defect at its measured source with red-first tests; the changed sentence (re-run before landing) only corrects an earlier overclaim and adds no scope."
     },
     {
-     "id": "T349-tool-fix",
-     "summary": "reply.rs last_text_of takes only assistant lines and a StructuredOutput call's text as the reply; marks.rs reply_in reads the agent's transcript first (transcript_of finding wave agents under subagents/workflows/<run>/) and the kept copy only when the transcript gives nothing; red-first tests on both crates.",
+     "id": "briefC",
+     "summary": "Brief C: same-subject findings met by A and B's checks fixed - 0093 findings 6 to 8.5 ft, 0116 absence note names and links read articles and drops claims no read page gives, 5220 and 14050 restated",
      "class": "within",
-     "why": "Fixes the check-tool defect T349 names at its source (the recorded reply was wrong, not the copy step), with tests that fail when the defect returns."
+     "why": "Each is a wrong statement in the record found by this bundle's checks on the same subject; dropping a claim no readable page carries is the record's rule, not a narrowing of any request."
     },
     {
-     "id": "T349-last-resort-kept-copy",
-     "summary": "A reply with no transcript keeps its kept copy; every one of the 341 kept wave copies was first rewritten from its transcript by the fixed rule (rewritten 341, already right 0, none without a reply; measured 2026-11-22 by the repair script, old copies backed up).",
+     "id": "gloss-left",
+     "summary": "The absence note's kaso-zu gloss present on 0101's copy, absent on 0116's, left so",
      "class": "within",
-     "why": "Round 1's block is answered: the known-bad kept copies are repaired (341 rewritten from their transcripts by the fixed rule, measured 2026-11-22 by the repair script), and the source fix that writes new copies is pinned by red-first tests on both crates, so the no-transcript fallback reaches a copy written by the fixed rule, not a known-bad one."
+     "why": "A difference no reader is misled by, not a defect (constitution XIV v2.36.0); unchanged since CLEAR."
     },
     {
-     "id": "brief-C-same-subject",
-     "summary": "Brief C fixes the same-subject findings briefs A and B's checks met outside their change (0093 findings page's 6-9 ft gate vs 8.5, the fire gap's absence note overstating unread articles, registry 5220's 'one range' and dropped rows, registry 14050's 'sent from the intendant's seat').",
+     "id": "modal-form-notes",
+     "summary": "modal-form NOTEs (latrine 2, side gate 3) not applied",
      "class": "within",
-     "why": "The GM 2026-11-18 and 2026-11-22: fix known bugs as found, finish every remaining fix; these are wrong statements in the record met by this bundle's checks."
+     "why": "Style notes with no FIX on text outside the change: differences, not defects."
     },
     {
-     "id": "found-and-left-T362",
-     "summary": "0101's note names the Koka Shunju with no glossary term; filed as T362, landing before T158, because a term needs its own source read.",
+     "id": "side-gate-row-not-filed",
+     "summary": "The 'side gate posts not recorded' depiction row not filed",
      "class": "within",
-     "why": "Not left: filed and ordered ahead of the next step, as the fix-as-we-go rule and the GM's 2026-11-22 'finish the remaining fixes' require; inventing the definition from the check's own knowledge would break the record's sourcing rule."
+     "why": "0093 and the pop-up already say so; no visible effect, no finding broken - not a defect."
     },
     {
-     "id": "popups-owed",
-     "summary": "Modal triage then form, research and depiction checks on what the moved pages name; a fix in another bundle's pop-up filed, not applied.",
+     "id": "md3-extra-round",
+     "summary": "An extra modal-depiction round on the three edited pop-ups, on the lead's instruction",
      "class": "within",
-     "why": "The pop-up check order the project already runs; filing another bundle's fix keeps it owned and fixed, not dropped."
+     "why": "A second read of the posts text T349 asked for; enforces the request, adds no behavior."
+    },
+    {
+     "id": "inner-court-and-claims-to-T341",
+     "summary": "The inner court's depiction and the docs/building-programs.md claims left to the T341 bundle's live round",
+     "class": "within",
+     "why": "Owed checks, not known defects, done by the bundle editing those files against the pages as they stand; nothing is left unchecked before the talk."
+    },
+    {
+     "id": "filed-T362-T364-T365-T366-T367",
+     "summary": "Found and left: glossary source (T362), granary larger than residence (T364), buildings.md posts claim and unclaimed study seat (T365), cart_route fix text (T366), armory end-bay side (T367), each filed to land before T158",
+     "class": "within",
+     "why": "Each is a separate defect found outside these tasks' change, filed as its own task landing before T158 rather than carried past the step; the GM's 'finish the remaining fixes' and 'fix all known bugs in each step' are honored by the filing order, and none narrows what T342/T343/T344/T349 asked."
     }
    ],
    "verdict": "CLEAR"
   },
   "T343": {
-   "section_sha256": "b30844f88aec8d8e0ba9d7727186084428449afd3028d77696f478108ab91495",
+   "section_sha256": "bfa6041ffe6b02ec34fb9cc02d16c09fe04dec47d9933a93e011cf16c1e7e63e",
    "reviewed": "2026-11-23",
    "declared": "spec-fidelity",
    "decisions": [
     {
      "id": "T342-no-edit",
-     "summary": "T342 owes no edit: T330 bundle B8 already restated 0088 to the flat road and the Hagi 1742 line, checked clean, landed f62250f89f; the grep finds only the flat-tone bullet.",
+     "summary": "T342: no edit owed; 0088 already restated by T330 B8 and landed (f62250f89f), grep finds only the flat-tone bullet",
      "class": "within",
-     "why": "The defect T342 names was fixed and checked by another landed bundle (observed 2026-11-22, method stated); recording that is the task done, not narrowed."
+     "why": "Unchanged since its CLEAR verdict; the defect the task named is already fixed on main, observed by grep with method stated."
     },
     {
      "id": "T343-claim-follows",
-     "summary": "T331 pass is silent on a privy beside a storehouse, so 0116's fire gap is restated (a kura and the buildings round it, not binding a privy built onto a building's end) as a GUESS with an absence note, 0101 says the same; the sheets are unchanged.",
+     "summary": "T343: record silent on privy-storehouse spacing, so 0116/0101 restate the fire gap as not binding an attached privy, a GUESS with an absence note; sheets unchanged",
      "class": "within",
-     "why": "Not a carve-out from a research finding: the T331 pass found no plan, inventory or rule separating a privy from a storehouse, and the one text naming both puts them in the same sector, so nothing in the record says the drawn privy 0.5 ft off the granary is wrong. The earlier fire-gap line claimed more than its sources carry for an attached privy; restating it to the evidence, labeled a GUESS with its searches and an absence note, is the XIV correction (a claim the behavior does not literally match, the behavior fine, is fixed by restating the claim). The plan's 'algorithmically easier route' carries no weight here: moving privies on no evidence would be the unsupported change."
+     "why": "Unchanged; restating the record line where the behavior is fine is what constitution XIV and the GM's 2026-11-19 words prescribe."
     },
     {
-     "id": "T343-gloss-apart",
-     "summary": "The absence note's 0101 copy carries '(kaso-zu)', its 0116 copy plain 'house-siting plans'; left so.",
+     "id": "T344-record-edits",
+     "summary": "T344: 0101 heading, 0116 sentence with grounds, 0123 encyclopedia linked, 9971 unsupported facts resourced to 25200, 0113 cites the 1842 plan",
      "class": "within",
-     "why": "A difference no reader is misled by is not a defect (XIV v2.36.0); each copy passed record-format on its own page."
+     "why": "Each fixes the finding that filed it; nothing beyond the named items."
     },
     {
-     "id": "T344-items",
-     "summary": "0101's heading narrowed to its one case; 0116's earlier-plans sentence restated with its grounds and an unsupported passage dropped; 0123's encyclopedia linked and named; registry 9971's '1717' and 'Iwami Omori' moved to a source that carries them; 0113 cites the 1842 South plan.",
+     "id": "T349-record",
+     "summary": "T349: 0093's drawing page records the gate posts as measured on hand and generated sheets, a CONVENTION; 'about 2 ft square' restated (same subject)",
      "class": "within",
-     "why": "Each is the check finding that filed T344, fixed in the record; the last resorts (an unsupported fact cut, an unreadable source to to-download.md) are the research record's own rules."
+     "why": "Records the drawn convention the task asked labeled; restates the record, not the sheets, per XIV."
     },
     {
-     "id": "T349-record-gate-posts",
-     "summary": "0093 records the drawn gate posts as measured on the SVGs (hand main 2 ft square; generated main 2 ft along by about 4.3 ft across; side posts 4 ft across by 2.7 ft along on hand sheets, about 4.3 across by 2 along on generated) as a CONVENTION, and restates the hand-only 'about 2 ft square'.",
+     "id": "T349-tool-fix-and-repair",
+     "summary": "T349 tool: last_text_of reads assistant lines and StructuredOutput text; reply_in prefers the transcript; transcript_of searches subagents/workflows; kept copies repaired, the repair re-run before landing because the mirror's unfixed reader runs until then",
      "class": "within",
-     "why": "The task's finding was an unlabeled drawn convention; the page now states what both sheet forms draw, orientation given across and along the wall as round 1 asked, each figure carrying its date and method. The sheets are not changed, correctly, since the posts read fine."
+     "why": "Fixes the defect at its measured source with red-first tests; the changed sentence (re-run before landing) only corrects an earlier overclaim and adds no scope."
     },
     {
-     "id": "T349-tool-fix",
-     "summary": "reply.rs last_text_of takes only assistant lines and a StructuredOutput call's text as the reply; marks.rs reply_in reads the agent's transcript first (transcript_of finding wave agents under subagents/workflows/<run>/) and the kept copy only when the transcript gives nothing; red-first tests on both crates.",
+     "id": "briefC",
+     "summary": "Brief C: same-subject findings met by A and B's checks fixed - 0093 findings 6 to 8.5 ft, 0116 absence note names and links read articles and drops claims no read page gives, 5220 and 14050 restated",
      "class": "within",
-     "why": "Fixes the check-tool defect T349 names at its source (the recorded reply was wrong, not the copy step), with tests that fail when the defect returns."
+     "why": "Each is a wrong statement in the record found by this bundle's checks on the same subject; dropping a claim no readable page carries is the record's rule, not a narrowing of any request."
     },
     {
-     "id": "T349-last-resort-kept-copy",
-     "summary": "A reply with no transcript keeps its kept copy; every one of the 341 kept wave copies was first rewritten from its transcript by the fixed rule (rewritten 341, already right 0, none without a reply; measured 2026-11-22 by the repair script, old copies backed up).",
+     "id": "gloss-left",
+     "summary": "The absence note's kaso-zu gloss present on 0101's copy, absent on 0116's, left so",
      "class": "within",
-     "why": "Round 1's block is answered: the known-bad kept copies are repaired (341 rewritten from their transcripts by the fixed rule, measured 2026-11-22 by the repair script), and the source fix that writes new copies is pinned by red-first tests on both crates, so the no-transcript fallback reaches a copy written by the fixed rule, not a known-bad one."
+     "why": "A difference no reader is misled by, not a defect (constitution XIV v2.36.0); unchanged since CLEAR."
     },
     {
-     "id": "brief-C-same-subject",
-     "summary": "Brief C fixes the same-subject findings briefs A and B's checks met outside their change (0093 findings page's 6-9 ft gate vs 8.5, the fire gap's absence note overstating unread articles, registry 5220's 'one range' and dropped rows, registry 14050's 'sent from the intendant's seat').",
+     "id": "modal-form-notes",
+     "summary": "modal-form NOTEs (latrine 2, side gate 3) not applied",
      "class": "within",
-     "why": "The GM 2026-11-18 and 2026-11-22: fix known bugs as found, finish every remaining fix; these are wrong statements in the record met by this bundle's checks."
+     "why": "Style notes with no FIX on text outside the change: differences, not defects."
     },
     {
-     "id": "found-and-left-T362",
-     "summary": "0101's note names the Koka Shunju with no glossary term; filed as T362, landing before T158, because a term needs its own source read.",
+     "id": "side-gate-row-not-filed",
+     "summary": "The 'side gate posts not recorded' depiction row not filed",
      "class": "within",
-     "why": "Not left: filed and ordered ahead of the next step, as the fix-as-we-go rule and the GM's 2026-11-22 'finish the remaining fixes' require; inventing the definition from the check's own knowledge would break the record's sourcing rule."
+     "why": "0093 and the pop-up already say so; no visible effect, no finding broken - not a defect."
     },
     {
-     "id": "popups-owed",
-     "summary": "Modal triage then form, research and depiction checks on what the moved pages name; a fix in another bundle's pop-up filed, not applied.",
+     "id": "md3-extra-round",
+     "summary": "An extra modal-depiction round on the three edited pop-ups, on the lead's instruction",
      "class": "within",
-     "why": "The pop-up check order the project already runs; filing another bundle's fix keeps it owned and fixed, not dropped."
+     "why": "A second read of the posts text T349 asked for; enforces the request, adds no behavior."
+    },
+    {
+     "id": "inner-court-and-claims-to-T341",
+     "summary": "The inner court's depiction and the docs/building-programs.md claims left to the T341 bundle's live round",
+     "class": "within",
+     "why": "Owed checks, not known defects, done by the bundle editing those files against the pages as they stand; nothing is left unchecked before the talk."
+    },
+    {
+     "id": "filed-T362-T364-T365-T366-T367",
+     "summary": "Found and left: glossary source (T362), granary larger than residence (T364), buildings.md posts claim and unclaimed study seat (T365), cart_route fix text (T366), armory end-bay side (T367), each filed to land before T158",
+     "class": "within",
+     "why": "Each is a separate defect found outside these tasks' change, filed as its own task landing before T158 rather than carried past the step; the GM's 'finish the remaining fixes' and 'fix all known bugs in each step' are honored by the filing order, and none narrows what T342/T343/T344/T349 asked."
     }
    ],
    "verdict": "CLEAR"
   },
   "T344": {
-   "section_sha256": "b30844f88aec8d8e0ba9d7727186084428449afd3028d77696f478108ab91495",
+   "section_sha256": "bfa6041ffe6b02ec34fb9cc02d16c09fe04dec47d9933a93e011cf16c1e7e63e",
    "reviewed": "2026-11-23",
    "declared": "spec-fidelity",
    "decisions": [
     {
      "id": "T342-no-edit",
-     "summary": "T342 owes no edit: T330 bundle B8 already restated 0088 to the flat road and the Hagi 1742 line, checked clean, landed f62250f89f; the grep finds only the flat-tone bullet.",
+     "summary": "T342: no edit owed; 0088 already restated by T330 B8 and landed (f62250f89f), grep finds only the flat-tone bullet",
      "class": "within",
-     "why": "The defect T342 names was fixed and checked by another landed bundle (observed 2026-11-22, method stated); recording that is the task done, not narrowed."
+     "why": "Unchanged since its CLEAR verdict; the defect the task named is already fixed on main, observed by grep with method stated."
     },
     {
      "id": "T343-claim-follows",
-     "summary": "T331 pass is silent on a privy beside a storehouse, so 0116's fire gap is restated (a kura and the buildings round it, not binding a privy built onto a building's end) as a GUESS with an absence note, 0101 says the same; the sheets are unchanged.",
+     "summary": "T343: record silent on privy-storehouse spacing, so 0116/0101 restate the fire gap as not binding an attached privy, a GUESS with an absence note; sheets unchanged",
      "class": "within",
-     "why": "Not a carve-out from a research finding: the T331 pass found no plan, inventory or rule separating a privy from a storehouse, and the one text naming both puts them in the same sector, so nothing in the record says the drawn privy 0.5 ft off the granary is wrong. The earlier fire-gap line claimed more than its sources carry for an attached privy; restating it to the evidence, labeled a GUESS with its searches and an absence note, is the XIV correction (a claim the behavior does not literally match, the behavior fine, is fixed by restating the claim). The plan's 'algorithmically easier route' carries no weight here: moving privies on no evidence would be the unsupported change."
+     "why": "Unchanged; restating the record line where the behavior is fine is what constitution XIV and the GM's 2026-11-19 words prescribe."
     },
     {
-     "id": "T343-gloss-apart",
-     "summary": "The absence note's 0101 copy carries '(kaso-zu)', its 0116 copy plain 'house-siting plans'; left so.",
+     "id": "T344-record-edits",
+     "summary": "T344: 0101 heading, 0116 sentence with grounds, 0123 encyclopedia linked, 9971 unsupported facts resourced to 25200, 0113 cites the 1842 plan",
      "class": "within",
-     "why": "A difference no reader is misled by is not a defect (XIV v2.36.0); each copy passed record-format on its own page."
+     "why": "Each fixes the finding that filed it; nothing beyond the named items."
     },
     {
-     "id": "T344-items",
-     "summary": "0101's heading narrowed to its one case; 0116's earlier-plans sentence restated with its grounds and an unsupported passage dropped; 0123's encyclopedia linked and named; registry 9971's '1717' and 'Iwami Omori' moved to a source that carries them; 0113 cites the 1842 South plan.",
+     "id": "T349-record",
+     "summary": "T349: 0093's drawing page records the gate posts as measured on hand and generated sheets, a CONVENTION; 'about 2 ft square' restated (same subject)",
      "class": "within",
-     "why": "Each is the check finding that filed T344, fixed in the record; the last resorts (an unsupported fact cut, an unreadable source to to-download.md) are the research record's own rules."
+     "why": "Records the drawn convention the task asked labeled; restates the record, not the sheets, per XIV."
     },
     {
-     "id": "T349-record-gate-posts",
-     "summary": "0093 records the drawn gate posts as measured on the SVGs (hand main 2 ft square; generated main 2 ft along by about 4.3 ft across; side posts 4 ft across by 2.7 ft along on hand sheets, about 4.3 across by 2 along on generated) as a CONVENTION, and restates the hand-only 'about 2 ft square'.",
+     "id": "T349-tool-fix-and-repair",
+     "summary": "T349 tool: last_text_of reads assistant lines and StructuredOutput text; reply_in prefers the transcript; transcript_of searches subagents/workflows; kept copies repaired, the repair re-run before landing because the mirror's unfixed reader runs until then",
      "class": "within",
-     "why": "The task's finding was an unlabeled drawn convention; the page now states what both sheet forms draw, orientation given across and along the wall as round 1 asked, each figure carrying its date and method. The sheets are not changed, correctly, since the posts read fine."
+     "why": "Fixes the defect at its measured source with red-first tests; the changed sentence (re-run before landing) only corrects an earlier overclaim and adds no scope."
     },
     {
-     "id": "T349-tool-fix",
-     "summary": "reply.rs last_text_of takes only assistant lines and a StructuredOutput call's text as the reply; marks.rs reply_in reads the agent's transcript first (transcript_of finding wave agents under subagents/workflows/<run>/) and the kept copy only when the transcript gives nothing; red-first tests on both crates.",
+     "id": "briefC",
+     "summary": "Brief C: same-subject findings met by A and B's checks fixed - 0093 findings 6 to 8.5 ft, 0116 absence note names and links read articles and drops claims no read page gives, 5220 and 14050 restated",
      "class": "within",
-     "why": "Fixes the check-tool defect T349 names at its source (the recorded reply was wrong, not the copy step), with tests that fail when the defect returns."
+     "why": "Each is a wrong statement in the record found by this bundle's checks on the same subject; dropping a claim no readable page carries is the record's rule, not a narrowing of any request."
     },
     {
-     "id": "T349-last-resort-kept-copy",
-     "summary": "A reply with no transcript keeps its kept copy; every one of the 341 kept wave copies was first rewritten from its transcript by the fixed rule (rewritten 341, already right 0, none without a reply; measured 2026-11-22 by the repair script, old copies backed up).",
+     "id": "gloss-left",
+     "summary": "The absence note's kaso-zu gloss present on 0101's copy, absent on 0116's, left so",
      "class": "within",
-     "why": "Round 1's block is answered: the known-bad kept copies are repaired (341 rewritten from their transcripts by the fixed rule, measured 2026-11-22 by the repair script), and the source fix that writes new copies is pinned by red-first tests on both crates, so the no-transcript fallback reaches a copy written by the fixed rule, not a known-bad one."
+     "why": "A difference no reader is misled by, not a defect (constitution XIV v2.36.0); unchanged since CLEAR."
     },
     {
-     "id": "brief-C-same-subject",
-     "summary": "Brief C fixes the same-subject findings briefs A and B's checks met outside their change (0093 findings page's 6-9 ft gate vs 8.5, the fire gap's absence note overstating unread articles, registry 5220's 'one range' and dropped rows, registry 14050's 'sent from the intendant's seat').",
+     "id": "modal-form-notes",
+     "summary": "modal-form NOTEs (latrine 2, side gate 3) not applied",
      "class": "within",
-     "why": "The GM 2026-11-18 and 2026-11-22: fix known bugs as found, finish every remaining fix; these are wrong statements in the record met by this bundle's checks."
+     "why": "Style notes with no FIX on text outside the change: differences, not defects."
     },
     {
-     "id": "found-and-left-T362",
-     "summary": "0101's note names the Koka Shunju with no glossary term; filed as T362, landing before T158, because a term needs its own source read.",
+     "id": "side-gate-row-not-filed",
+     "summary": "The 'side gate posts not recorded' depiction row not filed",
      "class": "within",
-     "why": "Not left: filed and ordered ahead of the next step, as the fix-as-we-go rule and the GM's 2026-11-22 'finish the remaining fixes' require; inventing the definition from the check's own knowledge would break the record's sourcing rule."
+     "why": "0093 and the pop-up already say so; no visible effect, no finding broken - not a defect."
     },
     {
-     "id": "popups-owed",
-     "summary": "Modal triage then form, research and depiction checks on what the moved pages name; a fix in another bundle's pop-up filed, not applied.",
+     "id": "md3-extra-round",
+     "summary": "An extra modal-depiction round on the three edited pop-ups, on the lead's instruction",
      "class": "within",
-     "why": "The pop-up check order the project already runs; filing another bundle's fix keeps it owned and fixed, not dropped."
+     "why": "A second read of the posts text T349 asked for; enforces the request, adds no behavior."
+    },
+    {
+     "id": "inner-court-and-claims-to-T341",
+     "summary": "The inner court's depiction and the docs/building-programs.md claims left to the T341 bundle's live round",
+     "class": "within",
+     "why": "Owed checks, not known defects, done by the bundle editing those files against the pages as they stand; nothing is left unchecked before the talk."
+    },
+    {
+     "id": "filed-T362-T364-T365-T366-T367",
+     "summary": "Found and left: glossary source (T362), granary larger than residence (T364), buildings.md posts claim and unclaimed study seat (T365), cart_route fix text (T366), armory end-bay side (T367), each filed to land before T158",
+     "class": "within",
+     "why": "Each is a separate defect found outside these tasks' change, filed as its own task landing before T158 rather than carried past the step; the GM's 'finish the remaining fixes' and 'fix all known bugs in each step' are honored by the filing order, and none narrows what T342/T343/T344/T349 asked."
     }
    ],
    "verdict": "CLEAR"
   },
   "T349": {
-   "section_sha256": "b30844f88aec8d8e0ba9d7727186084428449afd3028d77696f478108ab91495",
+   "section_sha256": "bfa6041ffe6b02ec34fb9cc02d16c09fe04dec47d9933a93e011cf16c1e7e63e",
    "reviewed": "2026-11-23",
    "declared": "spec-fidelity",
    "decisions": [
     {
      "id": "T342-no-edit",
-     "summary": "T342 owes no edit: T330 bundle B8 already restated 0088 to the flat road and the Hagi 1742 line, checked clean, landed f62250f89f; the grep finds only the flat-tone bullet.",
+     "summary": "T342: no edit owed; 0088 already restated by T330 B8 and landed (f62250f89f), grep finds only the flat-tone bullet",
      "class": "within",
-     "why": "The defect T342 names was fixed and checked by another landed bundle (observed 2026-11-22, method stated); recording that is the task done, not narrowed."
+     "why": "Unchanged since its CLEAR verdict; the defect the task named is already fixed on main, observed by grep with method stated."
     },
     {
      "id": "T343-claim-follows",
-     "summary": "T331 pass is silent on a privy beside a storehouse, so 0116's fire gap is restated (a kura and the buildings round it, not binding a privy built onto a building's end) as a GUESS with an absence note, 0101 says the same; the sheets are unchanged.",
+     "summary": "T343: record silent on privy-storehouse spacing, so 0116/0101 restate the fire gap as not binding an attached privy, a GUESS with an absence note; sheets unchanged",
      "class": "within",
-     "why": "Not a carve-out from a research finding: the T331 pass found no plan, inventory or rule separating a privy from a storehouse, and the one text naming both puts them in the same sector, so nothing in the record says the drawn privy 0.5 ft off the granary is wrong. The earlier fire-gap line claimed more than its sources carry for an attached privy; restating it to the evidence, labeled a GUESS with its searches and an absence note, is the XIV correction (a claim the behavior does not literally match, the behavior fine, is fixed by restating the claim). The plan's 'algorithmically easier route' carries no weight here: moving privies on no evidence would be the unsupported change."
+     "why": "Unchanged; restating the record line where the behavior is fine is what constitution XIV and the GM's 2026-11-19 words prescribe."
     },
     {
-     "id": "T343-gloss-apart",
-     "summary": "The absence note's 0101 copy carries '(kaso-zu)', its 0116 copy plain 'house-siting plans'; left so.",
+     "id": "T344-record-edits",
+     "summary": "T344: 0101 heading, 0116 sentence with grounds, 0123 encyclopedia linked, 9971 unsupported facts resourced to 25200, 0113 cites the 1842 plan",
      "class": "within",
-     "why": "A difference no reader is misled by is not a defect (XIV v2.36.0); each copy passed record-format on its own page."
+     "why": "Each fixes the finding that filed it; nothing beyond the named items."
     },
     {
-     "id": "T344-items",
-     "summary": "0101's heading narrowed to its one case; 0116's earlier-plans sentence restated with its grounds and an unsupported passage dropped; 0123's encyclopedia linked and named; registry 9971's '1717' and 'Iwami Omori' moved to a source that carries them; 0113 cites the 1842 South plan.",
+     "id": "T349-record",
+     "summary": "T349: 0093's drawing page records the gate posts as measured on hand and generated sheets, a CONVENTION; 'about 2 ft square' restated (same subject)",
      "class": "within",
-     "why": "Each is the check finding that filed T344, fixed in the record; the last resorts (an unsupported fact cut, an unreadable source to to-download.md) are the research record's own rules."
+     "why": "Records the drawn convention the task asked labeled; restates the record, not the sheets, per XIV."
     },
     {
-     "id": "T349-record-gate-posts",
-     "summary": "0093 records the drawn gate posts as measured on the SVGs (hand main 2 ft square; generated main 2 ft along by about 4.3 ft across; side posts 4 ft across by 2.7 ft along on hand sheets, about 4.3 across by 2 along on generated) as a CONVENTION, and restates the hand-only 'about 2 ft square'.",
+     "id": "T349-tool-fix-and-repair",
+     "summary": "T349 tool: last_text_of reads assistant lines and StructuredOutput text; reply_in prefers the transcript; transcript_of searches subagents/workflows; kept copies repaired, the repair re-run before landing because the mirror's unfixed reader runs until then",
      "class": "within",
-     "why": "The task's finding was an unlabeled drawn convention; the page now states what both sheet forms draw, orientation given across and along the wall as round 1 asked, each figure carrying its date and method. The sheets are not changed, correctly, since the posts read fine."
+     "why": "Fixes the defect at its measured source with red-first tests; the changed sentence (re-run before landing) only corrects an earlier overclaim and adds no scope."
     },
     {
-     "id": "T349-tool-fix",
-     "summary": "reply.rs last_text_of takes only assistant lines and a StructuredOutput call's text as the reply; marks.rs reply_in reads the agent's transcript first (transcript_of finding wave agents under subagents/workflows/<run>/) and the kept copy only when the transcript gives nothing; red-first tests on both crates.",
+     "id": "briefC",
+     "summary": "Brief C: same-subject findings met by A and B's checks fixed - 0093 findings 6 to 8.5 ft, 0116 absence note names and links read articles and drops claims no read page gives, 5220 and 14050 restated",
      "class": "within",
-     "why": "Fixes the check-tool defect T349 names at its source (the recorded reply was wrong, not the copy step), with tests that fail when the defect returns."
+     "why": "Each is a wrong statement in the record found by this bundle's checks on the same subject; dropping a claim no readable page carries is the record's rule, not a narrowing of any request."
     },
     {
-     "id": "T349-last-resort-kept-copy",
-     "summary": "A reply with no transcript keeps its kept copy; every one of the 341 kept wave copies was first rewritten from its transcript by the fixed rule (rewritten 341, already right 0, none without a reply; measured 2026-11-22 by the repair script, old copies backed up).",
+     "id": "gloss-left",
+     "summary": "The absence note's kaso-zu gloss present on 0101's copy, absent on 0116's, left so",
      "class": "within",
-     "why": "Round 1's block is answered: the known-bad kept copies are repaired (341 rewritten from their transcripts by the fixed rule, measured 2026-11-22 by the repair script), and the source fix that writes new copies is pinned by red-first tests on both crates, so the no-transcript fallback reaches a copy written by the fixed rule, not a known-bad one."
+     "why": "A difference no reader is misled by, not a defect (constitution XIV v2.36.0); unchanged since CLEAR."
     },
     {
-     "id": "brief-C-same-subject",
-     "summary": "Brief C fixes the same-subject findings briefs A and B's checks met outside their change (0093 findings page's 6-9 ft gate vs 8.5, the fire gap's absence note overstating unread articles, registry 5220's 'one range' and dropped rows, registry 14050's 'sent from the intendant's seat').",
+     "id": "modal-form-notes",
+     "summary": "modal-form NOTEs (latrine 2, side gate 3) not applied",
      "class": "within",
-     "why": "The GM 2026-11-18 and 2026-11-22: fix known bugs as found, finish every remaining fix; these are wrong statements in the record met by this bundle's checks."
+     "why": "Style notes with no FIX on text outside the change: differences, not defects."
     },
     {
-     "id": "found-and-left-T362",
-     "summary": "0101's note names the Koka Shunju with no glossary term; filed as T362, landing before T158, because a term needs its own source read.",
+     "id": "side-gate-row-not-filed",
+     "summary": "The 'side gate posts not recorded' depiction row not filed",
      "class": "within",
-     "why": "Not left: filed and ordered ahead of the next step, as the fix-as-we-go rule and the GM's 2026-11-22 'finish the remaining fixes' require; inventing the definition from the check's own knowledge would break the record's sourcing rule."
+     "why": "0093 and the pop-up already say so; no visible effect, no finding broken - not a defect."
     },
     {
-     "id": "popups-owed",
-     "summary": "Modal triage then form, research and depiction checks on what the moved pages name; a fix in another bundle's pop-up filed, not applied.",
+     "id": "md3-extra-round",
+     "summary": "An extra modal-depiction round on the three edited pop-ups, on the lead's instruction",
      "class": "within",
-     "why": "The pop-up check order the project already runs; filing another bundle's fix keeps it owned and fixed, not dropped."
+     "why": "A second read of the posts text T349 asked for; enforces the request, adds no behavior."
+    },
+    {
+     "id": "inner-court-and-claims-to-T341",
+     "summary": "The inner court's depiction and the docs/building-programs.md claims left to the T341 bundle's live round",
+     "class": "within",
+     "why": "Owed checks, not known defects, done by the bundle editing those files against the pages as they stand; nothing is left unchecked before the talk."
+    },
+    {
+     "id": "filed-T362-T364-T365-T366-T367",
+     "summary": "Found and left: glossary source (T362), granary larger than residence (T364), buildings.md posts claim and unclaimed study seat (T365), cart_route fix text (T366), armory end-bay side (T367), each filed to land before T158",
+     "class": "within",
+     "why": "Each is a separate defect found outside these tasks' change, filed as its own task landing before T158 rather than carried past the step; the GM's 'finish the remaining fixes' and 'fix all known bugs in each step' are honored by the filing order, and none narrows what T342/T343/T344/T349 asked."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T341": {
+   "section_sha256": "58e6fb4a396baebfb1fe403012f2966cdb7c071a22220f03aae3397c622e59dd",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T341-gates",
+     "summary": "Hayakawa's and Ubame's lesser gates narrowed into the side gate's 5-8 ft band, posts moved in by half so the 6 ft cart lanes stay centered; the kitchen postern's order kept.",
+     "class": "within",
+     "why": "Fixes a size-audit finding: gates drawn wider than any attested side gate, a check outcome the GM's 'fix all known bugs in each step' (2026-11-18) reaches. The lanes (6 ft) still fit every gate (7-8 ft); every check OK, measured 2026-11-22."
+    },
+    {
+     "id": "T341-cart-gate-kind",
+     "summary": "The cart gate gets no kind, glyph or pop-up of its own; drawn in the side gate's band as a GUESS, docs/buildings.md says so with a claim citing 0082's drawing page.",
+     "class": "within",
+     "why": "The research pass found no width for a cart gate at any comparable compound, so the record is silent and a labeled GUESS is the rule's own remedy; adding a new kind would be scope the GM did not ask for. No requirement is narrowed."
+    },
+    {
+     "id": "T345-bot-check",
+     "summary": "pages.rs bot_check names an Anubis/Cloudflare challenge; CachedPages::get never stores one, passes a cached one over and reads the archive's capture behind it; a challenge counts live, so an archived confirmation is READABLE; source_pages.rs says an archived save is the archive's capture.",
+     "class": "within",
+     "why": "A tool giving a wrong answer (quote-verbatim reporting verbatim passages missing because a challenge page was cached as the page) is a defect under XIV; the fix makes the tool read the real text and says where it came from. Red first and green recorded 2026-11-22."
+    },
+    {
+     "id": "T345-language-of",
+     "summary": "translation.rs language_of heads a pair with its note's language, else the language its original's script shows, else 'language not named'.",
+     "class": "within",
+     "why": "A header printing '()' is a tool answering wrongly; fixed, 48 pairs headed and none '()', measured 2026-11-22. No requirement narrowed."
+    },
+    {
+     "id": "T346-night-soil",
+     "summary": "docs/building-programs.md's walled-enclosure bullet restated to 0101: the fujomon in general terms; the requirement, the kitchen's deliveries, its size and seat a GUESS.",
+     "class": "within",
+     "why": "The procedure presented an unsourced route as research - a contradicted research claim, fixed by restating the claim, which is exactly the remedy XIV v2.36.0 names."
+    },
+    {
+     "id": "T347-procedure-restatements",
+     "summary": "The writing and binding rooms, the granary's second seat (0123), wells by use (drops 'not by a kitchen', cites 0104 beside 0091), the shrine's corner claim (0218) and 'never in a grove or a garden' restated.",
+     "class": "within",
+     "why": "impl-drift found the procedure misstating the record; each fix restates prose to what the pages say, labeling the unrecorded parts GUESS. Restating a claim is the GM's preferred remedy (2026-11-19)."
+    },
+    {
+     "id": "T347-required-rooms",
+     "summary": "types.json makes the official study and the day office required items, so the program check refuses an office hall without them; all five sheets already draw both.",
+     "class": "within",
+     "why": "This is refusing behavior, and it is in scope only because it fixes a defect: the check passed a hall that 0113's drawing page says our maps draw with both, i.e. a check passing bad work (XIV v2.36.0). Its reach is exactly that hall's two rooms, no other kind; no sheet moves (grep of data-kind, 2026-11-22)."
+    },
+    {
+     "id": "T347-claim-reword",
+     "summary": "The writing rooms' band claim reworded from '0113 gives no room's mats' to '0113 does not give any room's mats' so claims-owed's label check reads it as the page's silence; the bare GUESS stands.",
+     "class": "within",
+     "why": "Same statement, put in the phrasing the claims grammar's label check recognizes; conforming to the grammar is not a narrowing and changes no behavior. Neither fixed in the check nor filed: if the label check's silence phrases are later judged too narrow (refusing correct claims), that is a check defect for its own task; not blocking here."
+    },
+    {
+     "id": "T350-knob8-drum",
+     "summary": "Knob 8 keeps the attested gate drum at every seat under the gate's roof, not drawn (a CONVENTION, claimed); offers no petition window or bell; the outer service gate takes muck and night soil (GUESS); no prisoners' gate; the county example's notes restated.",
+     "class": "within",
+     "why": "Removes options no page attests and states the attested drum - fixing a procedure that could draw unattested things. No sheet draws a petition window, bell or prisoners' gate (grep, 2026-11-22), so no map moves. Whether Chinese evidence should seat a drum at a Japanese-named sheet is historical accuracy, not fidelity."
+    },
+    {
+     "id": "T350-bounty-board",
+     "summary": "The bounty board knob 8 posts outside the gate gets a GUESS claim citing 0190's drawing page, including the second board no page records; Ubame's notes restated to the drum under the gate range's roof.",
+     "class": "within",
+     "why": "Covers an UNCLAIMED finding (impl-drift) with a labeled claim, and corrects notes the drum change made untrue. Existing behavior labeled, no behavior added; impl-drift read it IN-STEP 2026-11-23."
+    },
+    {
+     "id": "T348-popup",
+     "summary": "sheet/inner-court's About opens with what is unrecorded (the court's ground, the wall's material); the Guesses tab names the drawn bare earth a GUESS; modal-form and modal-research edits applied.",
+     "class": "within",
+     "why": "A pop-up that tells what stood but not what is unknown of its ground was a modal-form finding; the fix follows dev/modals.md (a guess on the Guesses tab). Rounds recorded, record-owed owes nothing (observed 2026-11-23)."
+    },
+    {
+     "id": "entry-gate-fixture",
+     "summary": "tests/hooks/test-entry-gate.sh's fixture sets the clone's origin/main to its HEAD (git update-ref), fixing cases 1, 2 and 8 red in the review tree.",
+     "class": "within",
+     "why": "The suite's premise (a clone's origin/main is its HEAD) was false in the review tree, so the bundle's own edit read as the clone's delta: a test giving a wrong outcome. The fix restores the premise; it does not loosen what cases 1, 2 and 8 assert. Suite 13 passed, 0 failed, 2026-11-23."
+    },
+    {
+     "id": "claims-round",
+     "summary": "Every claim of the section sent on in full because a removed table row is held by no commit; 39 claims via T342's impl-drift and 67 via this bundle's three, all IN-STEP; OUTSIDE THE CHANGE findings filed.",
+     "class": "within",
+     "why": "Procedure, not scope: it checks more, not less, and narrows nothing the GM asked."
+    },
+    {
+     "id": "session-no-research-page-edit",
+     "summary": "The session's 2026-11-22 constraint that this bundle makes no research-page edit (page sessions booked to the clone's mark), which drives five of the Found-and-left items.",
+     "class": "within",
+     "why": "A session's rule, not the GM's; it would be a narrowing only if it carried known defects past the step. Each item it defers is filed (T361, T369, T370) with an order to land before T158, so the GM's 'fix all known bugs in each step before moving on' (2026-11-18) and 'finish the remaining fixes' (2026-11-22) are still met. This rests on the plan's stated landing order, which the bundle cannot show."
+    },
+    {
+     "id": "left-T361-inner-court-findings",
+     "summary": "The inner court's surface and enclosure findings are not put on a record page; filed as T361, lands before T158.",
+     "class": "within",
+     "why": "Not a map defect: the record page is silent and the pop-up truthfully says unrecorded. Filed and ordered before T158."
+    },
+    {
+     "id": "left-T361-cart-gate-finding",
+     "summary": "The cart gate's no-width finding is in docs/buildings.md, not on 0082's drawing page; filed as T361, lands before T158.",
+     "class": "within",
+     "why": "The finding is recorded in docs and the GUESS is labeled; moving it onto the drawing page is deferred within the step, filed and ordered before T158."
+    },
+    {
+     "id": "left-T361-main-gate-drum",
+     "summary": "The main gate's pop-up does not mention the gate drum; filed as T361, lands before T158.",
+     "class": "within",
+     "why": "The drum is not drawn; a pop-up's silence on an undrawn feature is at most a gap, and it is filed and ordered before T158."
+    },
+    {
+     "id": "left-T368-dais-optional",
+     "summary": "The program table keeps the magistrate's dais optional while 0099's drawing page makes it the front of every office hall; filed as T368, lands before T158.",
+     "class": "within",
+     "why": "This is a real defect of the same class T347 fixes (a check passing a hall the record says has a dais), and its stated reason for deferral is cost, which this review does not weigh. It stays within only because it is filed and ordered to land before T158, so it is fixed within the step rather than carried past it; the ruling rests on that stated order."
+    },
+    {
+     "id": "left-T369-shrine-tree",
+     "summary": "0218's drawing page pairs the shrine with a tree without labeling it a GUESS; filed as T369, lands before T158.",
+     "class": "within",
+     "why": "A research-page label, deferred under the session's page-edit constraint, filed and ordered before T158."
+    },
+    {
+     "id": "left-T370-second-board",
+     "summary": "0190's drawing page tells of one board, not the second board drawn with a bounty out; filed as T370, lands before T158.",
+     "class": "within",
+     "why": "The second board is already claimed as a GUESS in this bundle (T350-bounty-board); the page's own text is deferred, filed and ordered before T158."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T345": {
+   "section_sha256": "58e6fb4a396baebfb1fe403012f2966cdb7c071a22220f03aae3397c622e59dd",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T341-gates",
+     "summary": "Hayakawa's and Ubame's lesser gates narrowed into the side gate's 5-8 ft band, posts moved in by half so the 6 ft cart lanes stay centered; the kitchen postern's order kept.",
+     "class": "within",
+     "why": "Fixes a size-audit finding: gates drawn wider than any attested side gate, a check outcome the GM's 'fix all known bugs in each step' (2026-11-18) reaches. The lanes (6 ft) still fit every gate (7-8 ft); every check OK, measured 2026-11-22."
+    },
+    {
+     "id": "T341-cart-gate-kind",
+     "summary": "The cart gate gets no kind, glyph or pop-up of its own; drawn in the side gate's band as a GUESS, docs/buildings.md says so with a claim citing 0082's drawing page.",
+     "class": "within",
+     "why": "The research pass found no width for a cart gate at any comparable compound, so the record is silent and a labeled GUESS is the rule's own remedy; adding a new kind would be scope the GM did not ask for. No requirement is narrowed."
+    },
+    {
+     "id": "T345-bot-check",
+     "summary": "pages.rs bot_check names an Anubis/Cloudflare challenge; CachedPages::get never stores one, passes a cached one over and reads the archive's capture behind it; a challenge counts live, so an archived confirmation is READABLE; source_pages.rs says an archived save is the archive's capture.",
+     "class": "within",
+     "why": "A tool giving a wrong answer (quote-verbatim reporting verbatim passages missing because a challenge page was cached as the page) is a defect under XIV; the fix makes the tool read the real text and says where it came from. Red first and green recorded 2026-11-22."
+    },
+    {
+     "id": "T345-language-of",
+     "summary": "translation.rs language_of heads a pair with its note's language, else the language its original's script shows, else 'language not named'.",
+     "class": "within",
+     "why": "A header printing '()' is a tool answering wrongly; fixed, 48 pairs headed and none '()', measured 2026-11-22. No requirement narrowed."
+    },
+    {
+     "id": "T346-night-soil",
+     "summary": "docs/building-programs.md's walled-enclosure bullet restated to 0101: the fujomon in general terms; the requirement, the kitchen's deliveries, its size and seat a GUESS.",
+     "class": "within",
+     "why": "The procedure presented an unsourced route as research - a contradicted research claim, fixed by restating the claim, which is exactly the remedy XIV v2.36.0 names."
+    },
+    {
+     "id": "T347-procedure-restatements",
+     "summary": "The writing and binding rooms, the granary's second seat (0123), wells by use (drops 'not by a kitchen', cites 0104 beside 0091), the shrine's corner claim (0218) and 'never in a grove or a garden' restated.",
+     "class": "within",
+     "why": "impl-drift found the procedure misstating the record; each fix restates prose to what the pages say, labeling the unrecorded parts GUESS. Restating a claim is the GM's preferred remedy (2026-11-19)."
+    },
+    {
+     "id": "T347-required-rooms",
+     "summary": "types.json makes the official study and the day office required items, so the program check refuses an office hall without them; all five sheets already draw both.",
+     "class": "within",
+     "why": "This is refusing behavior, and it is in scope only because it fixes a defect: the check passed a hall that 0113's drawing page says our maps draw with both, i.e. a check passing bad work (XIV v2.36.0). Its reach is exactly that hall's two rooms, no other kind; no sheet moves (grep of data-kind, 2026-11-22)."
+    },
+    {
+     "id": "T347-claim-reword",
+     "summary": "The writing rooms' band claim reworded from '0113 gives no room's mats' to '0113 does not give any room's mats' so claims-owed's label check reads it as the page's silence; the bare GUESS stands.",
+     "class": "within",
+     "why": "Same statement, put in the phrasing the claims grammar's label check recognizes; conforming to the grammar is not a narrowing and changes no behavior. Neither fixed in the check nor filed: if the label check's silence phrases are later judged too narrow (refusing correct claims), that is a check defect for its own task; not blocking here."
+    },
+    {
+     "id": "T350-knob8-drum",
+     "summary": "Knob 8 keeps the attested gate drum at every seat under the gate's roof, not drawn (a CONVENTION, claimed); offers no petition window or bell; the outer service gate takes muck and night soil (GUESS); no prisoners' gate; the county example's notes restated.",
+     "class": "within",
+     "why": "Removes options no page attests and states the attested drum - fixing a procedure that could draw unattested things. No sheet draws a petition window, bell or prisoners' gate (grep, 2026-11-22), so no map moves. Whether Chinese evidence should seat a drum at a Japanese-named sheet is historical accuracy, not fidelity."
+    },
+    {
+     "id": "T350-bounty-board",
+     "summary": "The bounty board knob 8 posts outside the gate gets a GUESS claim citing 0190's drawing page, including the second board no page records; Ubame's notes restated to the drum under the gate range's roof.",
+     "class": "within",
+     "why": "Covers an UNCLAIMED finding (impl-drift) with a labeled claim, and corrects notes the drum change made untrue. Existing behavior labeled, no behavior added; impl-drift read it IN-STEP 2026-11-23."
+    },
+    {
+     "id": "T348-popup",
+     "summary": "sheet/inner-court's About opens with what is unrecorded (the court's ground, the wall's material); the Guesses tab names the drawn bare earth a GUESS; modal-form and modal-research edits applied.",
+     "class": "within",
+     "why": "A pop-up that tells what stood but not what is unknown of its ground was a modal-form finding; the fix follows dev/modals.md (a guess on the Guesses tab). Rounds recorded, record-owed owes nothing (observed 2026-11-23)."
+    },
+    {
+     "id": "entry-gate-fixture",
+     "summary": "tests/hooks/test-entry-gate.sh's fixture sets the clone's origin/main to its HEAD (git update-ref), fixing cases 1, 2 and 8 red in the review tree.",
+     "class": "within",
+     "why": "The suite's premise (a clone's origin/main is its HEAD) was false in the review tree, so the bundle's own edit read as the clone's delta: a test giving a wrong outcome. The fix restores the premise; it does not loosen what cases 1, 2 and 8 assert. Suite 13 passed, 0 failed, 2026-11-23."
+    },
+    {
+     "id": "claims-round",
+     "summary": "Every claim of the section sent on in full because a removed table row is held by no commit; 39 claims via T342's impl-drift and 67 via this bundle's three, all IN-STEP; OUTSIDE THE CHANGE findings filed.",
+     "class": "within",
+     "why": "Procedure, not scope: it checks more, not less, and narrows nothing the GM asked."
+    },
+    {
+     "id": "session-no-research-page-edit",
+     "summary": "The session's 2026-11-22 constraint that this bundle makes no research-page edit (page sessions booked to the clone's mark), which drives five of the Found-and-left items.",
+     "class": "within",
+     "why": "A session's rule, not the GM's; it would be a narrowing only if it carried known defects past the step. Each item it defers is filed (T361, T369, T370) with an order to land before T158, so the GM's 'fix all known bugs in each step before moving on' (2026-11-18) and 'finish the remaining fixes' (2026-11-22) are still met. This rests on the plan's stated landing order, which the bundle cannot show."
+    },
+    {
+     "id": "left-T361-inner-court-findings",
+     "summary": "The inner court's surface and enclosure findings are not put on a record page; filed as T361, lands before T158.",
+     "class": "within",
+     "why": "Not a map defect: the record page is silent and the pop-up truthfully says unrecorded. Filed and ordered before T158."
+    },
+    {
+     "id": "left-T361-cart-gate-finding",
+     "summary": "The cart gate's no-width finding is in docs/buildings.md, not on 0082's drawing page; filed as T361, lands before T158.",
+     "class": "within",
+     "why": "The finding is recorded in docs and the GUESS is labeled; moving it onto the drawing page is deferred within the step, filed and ordered before T158."
+    },
+    {
+     "id": "left-T361-main-gate-drum",
+     "summary": "The main gate's pop-up does not mention the gate drum; filed as T361, lands before T158.",
+     "class": "within",
+     "why": "The drum is not drawn; a pop-up's silence on an undrawn feature is at most a gap, and it is filed and ordered before T158."
+    },
+    {
+     "id": "left-T368-dais-optional",
+     "summary": "The program table keeps the magistrate's dais optional while 0099's drawing page makes it the front of every office hall; filed as T368, lands before T158.",
+     "class": "within",
+     "why": "This is a real defect of the same class T347 fixes (a check passing a hall the record says has a dais), and its stated reason for deferral is cost, which this review does not weigh. It stays within only because it is filed and ordered to land before T158, so it is fixed within the step rather than carried past it; the ruling rests on that stated order."
+    },
+    {
+     "id": "left-T369-shrine-tree",
+     "summary": "0218's drawing page pairs the shrine with a tree without labeling it a GUESS; filed as T369, lands before T158.",
+     "class": "within",
+     "why": "A research-page label, deferred under the session's page-edit constraint, filed and ordered before T158."
+    },
+    {
+     "id": "left-T370-second-board",
+     "summary": "0190's drawing page tells of one board, not the second board drawn with a bounty out; filed as T370, lands before T158.",
+     "class": "within",
+     "why": "The second board is already claimed as a GUESS in this bundle (T350-bounty-board); the page's own text is deferred, filed and ordered before T158."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T346": {
+   "section_sha256": "58e6fb4a396baebfb1fe403012f2966cdb7c071a22220f03aae3397c622e59dd",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T341-gates",
+     "summary": "Hayakawa's and Ubame's lesser gates narrowed into the side gate's 5-8 ft band, posts moved in by half so the 6 ft cart lanes stay centered; the kitchen postern's order kept.",
+     "class": "within",
+     "why": "Fixes a size-audit finding: gates drawn wider than any attested side gate, a check outcome the GM's 'fix all known bugs in each step' (2026-11-18) reaches. The lanes (6 ft) still fit every gate (7-8 ft); every check OK, measured 2026-11-22."
+    },
+    {
+     "id": "T341-cart-gate-kind",
+     "summary": "The cart gate gets no kind, glyph or pop-up of its own; drawn in the side gate's band as a GUESS, docs/buildings.md says so with a claim citing 0082's drawing page.",
+     "class": "within",
+     "why": "The research pass found no width for a cart gate at any comparable compound, so the record is silent and a labeled GUESS is the rule's own remedy; adding a new kind would be scope the GM did not ask for. No requirement is narrowed."
+    },
+    {
+     "id": "T345-bot-check",
+     "summary": "pages.rs bot_check names an Anubis/Cloudflare challenge; CachedPages::get never stores one, passes a cached one over and reads the archive's capture behind it; a challenge counts live, so an archived confirmation is READABLE; source_pages.rs says an archived save is the archive's capture.",
+     "class": "within",
+     "why": "A tool giving a wrong answer (quote-verbatim reporting verbatim passages missing because a challenge page was cached as the page) is a defect under XIV; the fix makes the tool read the real text and says where it came from. Red first and green recorded 2026-11-22."
+    },
+    {
+     "id": "T345-language-of",
+     "summary": "translation.rs language_of heads a pair with its note's language, else the language its original's script shows, else 'language not named'.",
+     "class": "within",
+     "why": "A header printing '()' is a tool answering wrongly; fixed, 48 pairs headed and none '()', measured 2026-11-22. No requirement narrowed."
+    },
+    {
+     "id": "T346-night-soil",
+     "summary": "docs/building-programs.md's walled-enclosure bullet restated to 0101: the fujomon in general terms; the requirement, the kitchen's deliveries, its size and seat a GUESS.",
+     "class": "within",
+     "why": "The procedure presented an unsourced route as research - a contradicted research claim, fixed by restating the claim, which is exactly the remedy XIV v2.36.0 names."
+    },
+    {
+     "id": "T347-procedure-restatements",
+     "summary": "The writing and binding rooms, the granary's second seat (0123), wells by use (drops 'not by a kitchen', cites 0104 beside 0091), the shrine's corner claim (0218) and 'never in a grove or a garden' restated.",
+     "class": "within",
+     "why": "impl-drift found the procedure misstating the record; each fix restates prose to what the pages say, labeling the unrecorded parts GUESS. Restating a claim is the GM's preferred remedy (2026-11-19)."
+    },
+    {
+     "id": "T347-required-rooms",
+     "summary": "types.json makes the official study and the day office required items, so the program check refuses an office hall without them; all five sheets already draw both.",
+     "class": "within",
+     "why": "This is refusing behavior, and it is in scope only because it fixes a defect: the check passed a hall that 0113's drawing page says our maps draw with both, i.e. a check passing bad work (XIV v2.36.0). Its reach is exactly that hall's two rooms, no other kind; no sheet moves (grep of data-kind, 2026-11-22)."
+    },
+    {
+     "id": "T347-claim-reword",
+     "summary": "The writing rooms' band claim reworded from '0113 gives no room's mats' to '0113 does not give any room's mats' so claims-owed's label check reads it as the page's silence; the bare GUESS stands.",
+     "class": "within",
+     "why": "Same statement, put in the phrasing the claims grammar's label check recognizes; conforming to the grammar is not a narrowing and changes no behavior. Neither fixed in the check nor filed: if the label check's silence phrases are later judged too narrow (refusing correct claims), that is a check defect for its own task; not blocking here."
+    },
+    {
+     "id": "T350-knob8-drum",
+     "summary": "Knob 8 keeps the attested gate drum at every seat under the gate's roof, not drawn (a CONVENTION, claimed); offers no petition window or bell; the outer service gate takes muck and night soil (GUESS); no prisoners' gate; the county example's notes restated.",
+     "class": "within",
+     "why": "Removes options no page attests and states the attested drum - fixing a procedure that could draw unattested things. No sheet draws a petition window, bell or prisoners' gate (grep, 2026-11-22), so no map moves. Whether Chinese evidence should seat a drum at a Japanese-named sheet is historical accuracy, not fidelity."
+    },
+    {
+     "id": "T350-bounty-board",
+     "summary": "The bounty board knob 8 posts outside the gate gets a GUESS claim citing 0190's drawing page, including the second board no page records; Ubame's notes restated to the drum under the gate range's roof.",
+     "class": "within",
+     "why": "Covers an UNCLAIMED finding (impl-drift) with a labeled claim, and corrects notes the drum change made untrue. Existing behavior labeled, no behavior added; impl-drift read it IN-STEP 2026-11-23."
+    },
+    {
+     "id": "T348-popup",
+     "summary": "sheet/inner-court's About opens with what is unrecorded (the court's ground, the wall's material); the Guesses tab names the drawn bare earth a GUESS; modal-form and modal-research edits applied.",
+     "class": "within",
+     "why": "A pop-up that tells what stood but not what is unknown of its ground was a modal-form finding; the fix follows dev/modals.md (a guess on the Guesses tab). Rounds recorded, record-owed owes nothing (observed 2026-11-23)."
+    },
+    {
+     "id": "entry-gate-fixture",
+     "summary": "tests/hooks/test-entry-gate.sh's fixture sets the clone's origin/main to its HEAD (git update-ref), fixing cases 1, 2 and 8 red in the review tree.",
+     "class": "within",
+     "why": "The suite's premise (a clone's origin/main is its HEAD) was false in the review tree, so the bundle's own edit read as the clone's delta: a test giving a wrong outcome. The fix restores the premise; it does not loosen what cases 1, 2 and 8 assert. Suite 13 passed, 0 failed, 2026-11-23."
+    },
+    {
+     "id": "claims-round",
+     "summary": "Every claim of the section sent on in full because a removed table row is held by no commit; 39 claims via T342's impl-drift and 67 via this bundle's three, all IN-STEP; OUTSIDE THE CHANGE findings filed.",
+     "class": "within",
+     "why": "Procedure, not scope: it checks more, not less, and narrows nothing the GM asked."
+    },
+    {
+     "id": "session-no-research-page-edit",
+     "summary": "The session's 2026-11-22 constraint that this bundle makes no research-page edit (page sessions booked to the clone's mark), which drives five of the Found-and-left items.",
+     "class": "within",
+     "why": "A session's rule, not the GM's; it would be a narrowing only if it carried known defects past the step. Each item it defers is filed (T361, T369, T370) with an order to land before T158, so the GM's 'fix all known bugs in each step before moving on' (2026-11-18) and 'finish the remaining fixes' (2026-11-22) are still met. This rests on the plan's stated landing order, which the bundle cannot show."
+    },
+    {
+     "id": "left-T361-inner-court-findings",
+     "summary": "The inner court's surface and enclosure findings are not put on a record page; filed as T361, lands before T158.",
+     "class": "within",
+     "why": "Not a map defect: the record page is silent and the pop-up truthfully says unrecorded. Filed and ordered before T158."
+    },
+    {
+     "id": "left-T361-cart-gate-finding",
+     "summary": "The cart gate's no-width finding is in docs/buildings.md, not on 0082's drawing page; filed as T361, lands before T158.",
+     "class": "within",
+     "why": "The finding is recorded in docs and the GUESS is labeled; moving it onto the drawing page is deferred within the step, filed and ordered before T158."
+    },
+    {
+     "id": "left-T361-main-gate-drum",
+     "summary": "The main gate's pop-up does not mention the gate drum; filed as T361, lands before T158.",
+     "class": "within",
+     "why": "The drum is not drawn; a pop-up's silence on an undrawn feature is at most a gap, and it is filed and ordered before T158."
+    },
+    {
+     "id": "left-T368-dais-optional",
+     "summary": "The program table keeps the magistrate's dais optional while 0099's drawing page makes it the front of every office hall; filed as T368, lands before T158.",
+     "class": "within",
+     "why": "This is a real defect of the same class T347 fixes (a check passing a hall the record says has a dais), and its stated reason for deferral is cost, which this review does not weigh. It stays within only because it is filed and ordered to land before T158, so it is fixed within the step rather than carried past it; the ruling rests on that stated order."
+    },
+    {
+     "id": "left-T369-shrine-tree",
+     "summary": "0218's drawing page pairs the shrine with a tree without labeling it a GUESS; filed as T369, lands before T158.",
+     "class": "within",
+     "why": "A research-page label, deferred under the session's page-edit constraint, filed and ordered before T158."
+    },
+    {
+     "id": "left-T370-second-board",
+     "summary": "0190's drawing page tells of one board, not the second board drawn with a bounty out; filed as T370, lands before T158.",
+     "class": "within",
+     "why": "The second board is already claimed as a GUESS in this bundle (T350-bounty-board); the page's own text is deferred, filed and ordered before T158."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T347": {
+   "section_sha256": "58e6fb4a396baebfb1fe403012f2966cdb7c071a22220f03aae3397c622e59dd",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T341-gates",
+     "summary": "Hayakawa's and Ubame's lesser gates narrowed into the side gate's 5-8 ft band, posts moved in by half so the 6 ft cart lanes stay centered; the kitchen postern's order kept.",
+     "class": "within",
+     "why": "Fixes a size-audit finding: gates drawn wider than any attested side gate, a check outcome the GM's 'fix all known bugs in each step' (2026-11-18) reaches. The lanes (6 ft) still fit every gate (7-8 ft); every check OK, measured 2026-11-22."
+    },
+    {
+     "id": "T341-cart-gate-kind",
+     "summary": "The cart gate gets no kind, glyph or pop-up of its own; drawn in the side gate's band as a GUESS, docs/buildings.md says so with a claim citing 0082's drawing page.",
+     "class": "within",
+     "why": "The research pass found no width for a cart gate at any comparable compound, so the record is silent and a labeled GUESS is the rule's own remedy; adding a new kind would be scope the GM did not ask for. No requirement is narrowed."
+    },
+    {
+     "id": "T345-bot-check",
+     "summary": "pages.rs bot_check names an Anubis/Cloudflare challenge; CachedPages::get never stores one, passes a cached one over and reads the archive's capture behind it; a challenge counts live, so an archived confirmation is READABLE; source_pages.rs says an archived save is the archive's capture.",
+     "class": "within",
+     "why": "A tool giving a wrong answer (quote-verbatim reporting verbatim passages missing because a challenge page was cached as the page) is a defect under XIV; the fix makes the tool read the real text and says where it came from. Red first and green recorded 2026-11-22."
+    },
+    {
+     "id": "T345-language-of",
+     "summary": "translation.rs language_of heads a pair with its note's language, else the language its original's script shows, else 'language not named'.",
+     "class": "within",
+     "why": "A header printing '()' is a tool answering wrongly; fixed, 48 pairs headed and none '()', measured 2026-11-22. No requirement narrowed."
+    },
+    {
+     "id": "T346-night-soil",
+     "summary": "docs/building-programs.md's walled-enclosure bullet restated to 0101: the fujomon in general terms; the requirement, the kitchen's deliveries, its size and seat a GUESS.",
+     "class": "within",
+     "why": "The procedure presented an unsourced route as research - a contradicted research claim, fixed by restating the claim, which is exactly the remedy XIV v2.36.0 names."
+    },
+    {
+     "id": "T347-procedure-restatements",
+     "summary": "The writing and binding rooms, the granary's second seat (0123), wells by use (drops 'not by a kitchen', cites 0104 beside 0091), the shrine's corner claim (0218) and 'never in a grove or a garden' restated.",
+     "class": "within",
+     "why": "impl-drift found the procedure misstating the record; each fix restates prose to what the pages say, labeling the unrecorded parts GUESS. Restating a claim is the GM's preferred remedy (2026-11-19)."
+    },
+    {
+     "id": "T347-required-rooms",
+     "summary": "types.json makes the official study and the day office required items, so the program check refuses an office hall without them; all five sheets already draw both.",
+     "class": "within",
+     "why": "This is refusing behavior, and it is in scope only because it fixes a defect: the check passed a hall that 0113's drawing page says our maps draw with both, i.e. a check passing bad work (XIV v2.36.0). Its reach is exactly that hall's two rooms, no other kind; no sheet moves (grep of data-kind, 2026-11-22)."
+    },
+    {
+     "id": "T347-claim-reword",
+     "summary": "The writing rooms' band claim reworded from '0113 gives no room's mats' to '0113 does not give any room's mats' so claims-owed's label check reads it as the page's silence; the bare GUESS stands.",
+     "class": "within",
+     "why": "Same statement, put in the phrasing the claims grammar's label check recognizes; conforming to the grammar is not a narrowing and changes no behavior. Neither fixed in the check nor filed: if the label check's silence phrases are later judged too narrow (refusing correct claims), that is a check defect for its own task; not blocking here."
+    },
+    {
+     "id": "T350-knob8-drum",
+     "summary": "Knob 8 keeps the attested gate drum at every seat under the gate's roof, not drawn (a CONVENTION, claimed); offers no petition window or bell; the outer service gate takes muck and night soil (GUESS); no prisoners' gate; the county example's notes restated.",
+     "class": "within",
+     "why": "Removes options no page attests and states the attested drum - fixing a procedure that could draw unattested things. No sheet draws a petition window, bell or prisoners' gate (grep, 2026-11-22), so no map moves. Whether Chinese evidence should seat a drum at a Japanese-named sheet is historical accuracy, not fidelity."
+    },
+    {
+     "id": "T350-bounty-board",
+     "summary": "The bounty board knob 8 posts outside the gate gets a GUESS claim citing 0190's drawing page, including the second board no page records; Ubame's notes restated to the drum under the gate range's roof.",
+     "class": "within",
+     "why": "Covers an UNCLAIMED finding (impl-drift) with a labeled claim, and corrects notes the drum change made untrue. Existing behavior labeled, no behavior added; impl-drift read it IN-STEP 2026-11-23."
+    },
+    {
+     "id": "T348-popup",
+     "summary": "sheet/inner-court's About opens with what is unrecorded (the court's ground, the wall's material); the Guesses tab names the drawn bare earth a GUESS; modal-form and modal-research edits applied.",
+     "class": "within",
+     "why": "A pop-up that tells what stood but not what is unknown of its ground was a modal-form finding; the fix follows dev/modals.md (a guess on the Guesses tab). Rounds recorded, record-owed owes nothing (observed 2026-11-23)."
+    },
+    {
+     "id": "entry-gate-fixture",
+     "summary": "tests/hooks/test-entry-gate.sh's fixture sets the clone's origin/main to its HEAD (git update-ref), fixing cases 1, 2 and 8 red in the review tree.",
+     "class": "within",
+     "why": "The suite's premise (a clone's origin/main is its HEAD) was false in the review tree, so the bundle's own edit read as the clone's delta: a test giving a wrong outcome. The fix restores the premise; it does not loosen what cases 1, 2 and 8 assert. Suite 13 passed, 0 failed, 2026-11-23."
+    },
+    {
+     "id": "claims-round",
+     "summary": "Every claim of the section sent on in full because a removed table row is held by no commit; 39 claims via T342's impl-drift and 67 via this bundle's three, all IN-STEP; OUTSIDE THE CHANGE findings filed.",
+     "class": "within",
+     "why": "Procedure, not scope: it checks more, not less, and narrows nothing the GM asked."
+    },
+    {
+     "id": "session-no-research-page-edit",
+     "summary": "The session's 2026-11-22 constraint that this bundle makes no research-page edit (page sessions booked to the clone's mark), which drives five of the Found-and-left items.",
+     "class": "within",
+     "why": "A session's rule, not the GM's; it would be a narrowing only if it carried known defects past the step. Each item it defers is filed (T361, T369, T370) with an order to land before T158, so the GM's 'fix all known bugs in each step before moving on' (2026-11-18) and 'finish the remaining fixes' (2026-11-22) are still met. This rests on the plan's stated landing order, which the bundle cannot show."
+    },
+    {
+     "id": "left-T361-inner-court-findings",
+     "summary": "The inner court's surface and enclosure findings are not put on a record page; filed as T361, lands before T158.",
+     "class": "within",
+     "why": "Not a map defect: the record page is silent and the pop-up truthfully says unrecorded. Filed and ordered before T158."
+    },
+    {
+     "id": "left-T361-cart-gate-finding",
+     "summary": "The cart gate's no-width finding is in docs/buildings.md, not on 0082's drawing page; filed as T361, lands before T158.",
+     "class": "within",
+     "why": "The finding is recorded in docs and the GUESS is labeled; moving it onto the drawing page is deferred within the step, filed and ordered before T158."
+    },
+    {
+     "id": "left-T361-main-gate-drum",
+     "summary": "The main gate's pop-up does not mention the gate drum; filed as T361, lands before T158.",
+     "class": "within",
+     "why": "The drum is not drawn; a pop-up's silence on an undrawn feature is at most a gap, and it is filed and ordered before T158."
+    },
+    {
+     "id": "left-T368-dais-optional",
+     "summary": "The program table keeps the magistrate's dais optional while 0099's drawing page makes it the front of every office hall; filed as T368, lands before T158.",
+     "class": "within",
+     "why": "This is a real defect of the same class T347 fixes (a check passing a hall the record says has a dais), and its stated reason for deferral is cost, which this review does not weigh. It stays within only because it is filed and ordered to land before T158, so it is fixed within the step rather than carried past it; the ruling rests on that stated order."
+    },
+    {
+     "id": "left-T369-shrine-tree",
+     "summary": "0218's drawing page pairs the shrine with a tree without labeling it a GUESS; filed as T369, lands before T158.",
+     "class": "within",
+     "why": "A research-page label, deferred under the session's page-edit constraint, filed and ordered before T158."
+    },
+    {
+     "id": "left-T370-second-board",
+     "summary": "0190's drawing page tells of one board, not the second board drawn with a bounty out; filed as T370, lands before T158.",
+     "class": "within",
+     "why": "The second board is already claimed as a GUESS in this bundle (T350-bounty-board); the page's own text is deferred, filed and ordered before T158."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T348": {
+   "section_sha256": "58e6fb4a396baebfb1fe403012f2966cdb7c071a22220f03aae3397c622e59dd",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T341-gates",
+     "summary": "Hayakawa's and Ubame's lesser gates narrowed into the side gate's 5-8 ft band, posts moved in by half so the 6 ft cart lanes stay centered; the kitchen postern's order kept.",
+     "class": "within",
+     "why": "Fixes a size-audit finding: gates drawn wider than any attested side gate, a check outcome the GM's 'fix all known bugs in each step' (2026-11-18) reaches. The lanes (6 ft) still fit every gate (7-8 ft); every check OK, measured 2026-11-22."
+    },
+    {
+     "id": "T341-cart-gate-kind",
+     "summary": "The cart gate gets no kind, glyph or pop-up of its own; drawn in the side gate's band as a GUESS, docs/buildings.md says so with a claim citing 0082's drawing page.",
+     "class": "within",
+     "why": "The research pass found no width for a cart gate at any comparable compound, so the record is silent and a labeled GUESS is the rule's own remedy; adding a new kind would be scope the GM did not ask for. No requirement is narrowed."
+    },
+    {
+     "id": "T345-bot-check",
+     "summary": "pages.rs bot_check names an Anubis/Cloudflare challenge; CachedPages::get never stores one, passes a cached one over and reads the archive's capture behind it; a challenge counts live, so an archived confirmation is READABLE; source_pages.rs says an archived save is the archive's capture.",
+     "class": "within",
+     "why": "A tool giving a wrong answer (quote-verbatim reporting verbatim passages missing because a challenge page was cached as the page) is a defect under XIV; the fix makes the tool read the real text and says where it came from. Red first and green recorded 2026-11-22."
+    },
+    {
+     "id": "T345-language-of",
+     "summary": "translation.rs language_of heads a pair with its note's language, else the language its original's script shows, else 'language not named'.",
+     "class": "within",
+     "why": "A header printing '()' is a tool answering wrongly; fixed, 48 pairs headed and none '()', measured 2026-11-22. No requirement narrowed."
+    },
+    {
+     "id": "T346-night-soil",
+     "summary": "docs/building-programs.md's walled-enclosure bullet restated to 0101: the fujomon in general terms; the requirement, the kitchen's deliveries, its size and seat a GUESS.",
+     "class": "within",
+     "why": "The procedure presented an unsourced route as research - a contradicted research claim, fixed by restating the claim, which is exactly the remedy XIV v2.36.0 names."
+    },
+    {
+     "id": "T347-procedure-restatements",
+     "summary": "The writing and binding rooms, the granary's second seat (0123), wells by use (drops 'not by a kitchen', cites 0104 beside 0091), the shrine's corner claim (0218) and 'never in a grove or a garden' restated.",
+     "class": "within",
+     "why": "impl-drift found the procedure misstating the record; each fix restates prose to what the pages say, labeling the unrecorded parts GUESS. Restating a claim is the GM's preferred remedy (2026-11-19)."
+    },
+    {
+     "id": "T347-required-rooms",
+     "summary": "types.json makes the official study and the day office required items, so the program check refuses an office hall without them; all five sheets already draw both.",
+     "class": "within",
+     "why": "This is refusing behavior, and it is in scope only because it fixes a defect: the check passed a hall that 0113's drawing page says our maps draw with both, i.e. a check passing bad work (XIV v2.36.0). Its reach is exactly that hall's two rooms, no other kind; no sheet moves (grep of data-kind, 2026-11-22)."
+    },
+    {
+     "id": "T347-claim-reword",
+     "summary": "The writing rooms' band claim reworded from '0113 gives no room's mats' to '0113 does not give any room's mats' so claims-owed's label check reads it as the page's silence; the bare GUESS stands.",
+     "class": "within",
+     "why": "Same statement, put in the phrasing the claims grammar's label check recognizes; conforming to the grammar is not a narrowing and changes no behavior. Neither fixed in the check nor filed: if the label check's silence phrases are later judged too narrow (refusing correct claims), that is a check defect for its own task; not blocking here."
+    },
+    {
+     "id": "T350-knob8-drum",
+     "summary": "Knob 8 keeps the attested gate drum at every seat under the gate's roof, not drawn (a CONVENTION, claimed); offers no petition window or bell; the outer service gate takes muck and night soil (GUESS); no prisoners' gate; the county example's notes restated.",
+     "class": "within",
+     "why": "Removes options no page attests and states the attested drum - fixing a procedure that could draw unattested things. No sheet draws a petition window, bell or prisoners' gate (grep, 2026-11-22), so no map moves. Whether Chinese evidence should seat a drum at a Japanese-named sheet is historical accuracy, not fidelity."
+    },
+    {
+     "id": "T350-bounty-board",
+     "summary": "The bounty board knob 8 posts outside the gate gets a GUESS claim citing 0190's drawing page, including the second board no page records; Ubame's notes restated to the drum under the gate range's roof.",
+     "class": "within",
+     "why": "Covers an UNCLAIMED finding (impl-drift) with a labeled claim, and corrects notes the drum change made untrue. Existing behavior labeled, no behavior added; impl-drift read it IN-STEP 2026-11-23."
+    },
+    {
+     "id": "T348-popup",
+     "summary": "sheet/inner-court's About opens with what is unrecorded (the court's ground, the wall's material); the Guesses tab names the drawn bare earth a GUESS; modal-form and modal-research edits applied.",
+     "class": "within",
+     "why": "A pop-up that tells what stood but not what is unknown of its ground was a modal-form finding; the fix follows dev/modals.md (a guess on the Guesses tab). Rounds recorded, record-owed owes nothing (observed 2026-11-23)."
+    },
+    {
+     "id": "entry-gate-fixture",
+     "summary": "tests/hooks/test-entry-gate.sh's fixture sets the clone's origin/main to its HEAD (git update-ref), fixing cases 1, 2 and 8 red in the review tree.",
+     "class": "within",
+     "why": "The suite's premise (a clone's origin/main is its HEAD) was false in the review tree, so the bundle's own edit read as the clone's delta: a test giving a wrong outcome. The fix restores the premise; it does not loosen what cases 1, 2 and 8 assert. Suite 13 passed, 0 failed, 2026-11-23."
+    },
+    {
+     "id": "claims-round",
+     "summary": "Every claim of the section sent on in full because a removed table row is held by no commit; 39 claims via T342's impl-drift and 67 via this bundle's three, all IN-STEP; OUTSIDE THE CHANGE findings filed.",
+     "class": "within",
+     "why": "Procedure, not scope: it checks more, not less, and narrows nothing the GM asked."
+    },
+    {
+     "id": "session-no-research-page-edit",
+     "summary": "The session's 2026-11-22 constraint that this bundle makes no research-page edit (page sessions booked to the clone's mark), which drives five of the Found-and-left items.",
+     "class": "within",
+     "why": "A session's rule, not the GM's; it would be a narrowing only if it carried known defects past the step. Each item it defers is filed (T361, T369, T370) with an order to land before T158, so the GM's 'fix all known bugs in each step before moving on' (2026-11-18) and 'finish the remaining fixes' (2026-11-22) are still met. This rests on the plan's stated landing order, which the bundle cannot show."
+    },
+    {
+     "id": "left-T361-inner-court-findings",
+     "summary": "The inner court's surface and enclosure findings are not put on a record page; filed as T361, lands before T158.",
+     "class": "within",
+     "why": "Not a map defect: the record page is silent and the pop-up truthfully says unrecorded. Filed and ordered before T158."
+    },
+    {
+     "id": "left-T361-cart-gate-finding",
+     "summary": "The cart gate's no-width finding is in docs/buildings.md, not on 0082's drawing page; filed as T361, lands before T158.",
+     "class": "within",
+     "why": "The finding is recorded in docs and the GUESS is labeled; moving it onto the drawing page is deferred within the step, filed and ordered before T158."
+    },
+    {
+     "id": "left-T361-main-gate-drum",
+     "summary": "The main gate's pop-up does not mention the gate drum; filed as T361, lands before T158.",
+     "class": "within",
+     "why": "The drum is not drawn; a pop-up's silence on an undrawn feature is at most a gap, and it is filed and ordered before T158."
+    },
+    {
+     "id": "left-T368-dais-optional",
+     "summary": "The program table keeps the magistrate's dais optional while 0099's drawing page makes it the front of every office hall; filed as T368, lands before T158.",
+     "class": "within",
+     "why": "This is a real defect of the same class T347 fixes (a check passing a hall the record says has a dais), and its stated reason for deferral is cost, which this review does not weigh. It stays within only because it is filed and ordered to land before T158, so it is fixed within the step rather than carried past it; the ruling rests on that stated order."
+    },
+    {
+     "id": "left-T369-shrine-tree",
+     "summary": "0218's drawing page pairs the shrine with a tree without labeling it a GUESS; filed as T369, lands before T158.",
+     "class": "within",
+     "why": "A research-page label, deferred under the session's page-edit constraint, filed and ordered before T158."
+    },
+    {
+     "id": "left-T370-second-board",
+     "summary": "0190's drawing page tells of one board, not the second board drawn with a bounty out; filed as T370, lands before T158.",
+     "class": "within",
+     "why": "The second board is already claimed as a GUESS in this bundle (T350-bounty-board); the page's own text is deferred, filed and ordered before T158."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T350": {
+   "section_sha256": "58e6fb4a396baebfb1fe403012f2966cdb7c071a22220f03aae3397c622e59dd",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T341-gates",
+     "summary": "Hayakawa's and Ubame's lesser gates narrowed into the side gate's 5-8 ft band, posts moved in by half so the 6 ft cart lanes stay centered; the kitchen postern's order kept.",
+     "class": "within",
+     "why": "Fixes a size-audit finding: gates drawn wider than any attested side gate, a check outcome the GM's 'fix all known bugs in each step' (2026-11-18) reaches. The lanes (6 ft) still fit every gate (7-8 ft); every check OK, measured 2026-11-22."
+    },
+    {
+     "id": "T341-cart-gate-kind",
+     "summary": "The cart gate gets no kind, glyph or pop-up of its own; drawn in the side gate's band as a GUESS, docs/buildings.md says so with a claim citing 0082's drawing page.",
+     "class": "within",
+     "why": "The research pass found no width for a cart gate at any comparable compound, so the record is silent and a labeled GUESS is the rule's own remedy; adding a new kind would be scope the GM did not ask for. No requirement is narrowed."
+    },
+    {
+     "id": "T345-bot-check",
+     "summary": "pages.rs bot_check names an Anubis/Cloudflare challenge; CachedPages::get never stores one, passes a cached one over and reads the archive's capture behind it; a challenge counts live, so an archived confirmation is READABLE; source_pages.rs says an archived save is the archive's capture.",
+     "class": "within",
+     "why": "A tool giving a wrong answer (quote-verbatim reporting verbatim passages missing because a challenge page was cached as the page) is a defect under XIV; the fix makes the tool read the real text and says where it came from. Red first and green recorded 2026-11-22."
+    },
+    {
+     "id": "T345-language-of",
+     "summary": "translation.rs language_of heads a pair with its note's language, else the language its original's script shows, else 'language not named'.",
+     "class": "within",
+     "why": "A header printing '()' is a tool answering wrongly; fixed, 48 pairs headed and none '()', measured 2026-11-22. No requirement narrowed."
+    },
+    {
+     "id": "T346-night-soil",
+     "summary": "docs/building-programs.md's walled-enclosure bullet restated to 0101: the fujomon in general terms; the requirement, the kitchen's deliveries, its size and seat a GUESS.",
+     "class": "within",
+     "why": "The procedure presented an unsourced route as research - a contradicted research claim, fixed by restating the claim, which is exactly the remedy XIV v2.36.0 names."
+    },
+    {
+     "id": "T347-procedure-restatements",
+     "summary": "The writing and binding rooms, the granary's second seat (0123), wells by use (drops 'not by a kitchen', cites 0104 beside 0091), the shrine's corner claim (0218) and 'never in a grove or a garden' restated.",
+     "class": "within",
+     "why": "impl-drift found the procedure misstating the record; each fix restates prose to what the pages say, labeling the unrecorded parts GUESS. Restating a claim is the GM's preferred remedy (2026-11-19)."
+    },
+    {
+     "id": "T347-required-rooms",
+     "summary": "types.json makes the official study and the day office required items, so the program check refuses an office hall without them; all five sheets already draw both.",
+     "class": "within",
+     "why": "This is refusing behavior, and it is in scope only because it fixes a defect: the check passed a hall that 0113's drawing page says our maps draw with both, i.e. a check passing bad work (XIV v2.36.0). Its reach is exactly that hall's two rooms, no other kind; no sheet moves (grep of data-kind, 2026-11-22)."
+    },
+    {
+     "id": "T347-claim-reword",
+     "summary": "The writing rooms' band claim reworded from '0113 gives no room's mats' to '0113 does not give any room's mats' so claims-owed's label check reads it as the page's silence; the bare GUESS stands.",
+     "class": "within",
+     "why": "Same statement, put in the phrasing the claims grammar's label check recognizes; conforming to the grammar is not a narrowing and changes no behavior. Neither fixed in the check nor filed: if the label check's silence phrases are later judged too narrow (refusing correct claims), that is a check defect for its own task; not blocking here."
+    },
+    {
+     "id": "T350-knob8-drum",
+     "summary": "Knob 8 keeps the attested gate drum at every seat under the gate's roof, not drawn (a CONVENTION, claimed); offers no petition window or bell; the outer service gate takes muck and night soil (GUESS); no prisoners' gate; the county example's notes restated.",
+     "class": "within",
+     "why": "Removes options no page attests and states the attested drum - fixing a procedure that could draw unattested things. No sheet draws a petition window, bell or prisoners' gate (grep, 2026-11-22), so no map moves. Whether Chinese evidence should seat a drum at a Japanese-named sheet is historical accuracy, not fidelity."
+    },
+    {
+     "id": "T350-bounty-board",
+     "summary": "The bounty board knob 8 posts outside the gate gets a GUESS claim citing 0190's drawing page, including the second board no page records; Ubame's notes restated to the drum under the gate range's roof.",
+     "class": "within",
+     "why": "Covers an UNCLAIMED finding (impl-drift) with a labeled claim, and corrects notes the drum change made untrue. Existing behavior labeled, no behavior added; impl-drift read it IN-STEP 2026-11-23."
+    },
+    {
+     "id": "T348-popup",
+     "summary": "sheet/inner-court's About opens with what is unrecorded (the court's ground, the wall's material); the Guesses tab names the drawn bare earth a GUESS; modal-form and modal-research edits applied.",
+     "class": "within",
+     "why": "A pop-up that tells what stood but not what is unknown of its ground was a modal-form finding; the fix follows dev/modals.md (a guess on the Guesses tab). Rounds recorded, record-owed owes nothing (observed 2026-11-23)."
+    },
+    {
+     "id": "entry-gate-fixture",
+     "summary": "tests/hooks/test-entry-gate.sh's fixture sets the clone's origin/main to its HEAD (git update-ref), fixing cases 1, 2 and 8 red in the review tree.",
+     "class": "within",
+     "why": "The suite's premise (a clone's origin/main is its HEAD) was false in the review tree, so the bundle's own edit read as the clone's delta: a test giving a wrong outcome. The fix restores the premise; it does not loosen what cases 1, 2 and 8 assert. Suite 13 passed, 0 failed, 2026-11-23."
+    },
+    {
+     "id": "claims-round",
+     "summary": "Every claim of the section sent on in full because a removed table row is held by no commit; 39 claims via T342's impl-drift and 67 via this bundle's three, all IN-STEP; OUTSIDE THE CHANGE findings filed.",
+     "class": "within",
+     "why": "Procedure, not scope: it checks more, not less, and narrows nothing the GM asked."
+    },
+    {
+     "id": "session-no-research-page-edit",
+     "summary": "The session's 2026-11-22 constraint that this bundle makes no research-page edit (page sessions booked to the clone's mark), which drives five of the Found-and-left items.",
+     "class": "within",
+     "why": "A session's rule, not the GM's; it would be a narrowing only if it carried known defects past the step. Each item it defers is filed (T361, T369, T370) with an order to land before T158, so the GM's 'fix all known bugs in each step before moving on' (2026-11-18) and 'finish the remaining fixes' (2026-11-22) are still met. This rests on the plan's stated landing order, which the bundle cannot show."
+    },
+    {
+     "id": "left-T361-inner-court-findings",
+     "summary": "The inner court's surface and enclosure findings are not put on a record page; filed as T361, lands before T158.",
+     "class": "within",
+     "why": "Not a map defect: the record page is silent and the pop-up truthfully says unrecorded. Filed and ordered before T158."
+    },
+    {
+     "id": "left-T361-cart-gate-finding",
+     "summary": "The cart gate's no-width finding is in docs/buildings.md, not on 0082's drawing page; filed as T361, lands before T158.",
+     "class": "within",
+     "why": "The finding is recorded in docs and the GUESS is labeled; moving it onto the drawing page is deferred within the step, filed and ordered before T158."
+    },
+    {
+     "id": "left-T361-main-gate-drum",
+     "summary": "The main gate's pop-up does not mention the gate drum; filed as T361, lands before T158.",
+     "class": "within",
+     "why": "The drum is not drawn; a pop-up's silence on an undrawn feature is at most a gap, and it is filed and ordered before T158."
+    },
+    {
+     "id": "left-T368-dais-optional",
+     "summary": "The program table keeps the magistrate's dais optional while 0099's drawing page makes it the front of every office hall; filed as T368, lands before T158.",
+     "class": "within",
+     "why": "This is a real defect of the same class T347 fixes (a check passing a hall the record says has a dais), and its stated reason for deferral is cost, which this review does not weigh. It stays within only because it is filed and ordered to land before T158, so it is fixed within the step rather than carried past it; the ruling rests on that stated order."
+    },
+    {
+     "id": "left-T369-shrine-tree",
+     "summary": "0218's drawing page pairs the shrine with a tree without labeling it a GUESS; filed as T369, lands before T158.",
+     "class": "within",
+     "why": "A research-page label, deferred under the session's page-edit constraint, filed and ordered before T158."
+    },
+    {
+     "id": "left-T370-second-board",
+     "summary": "0190's drawing page tells of one board, not the second board drawn with a bounty out; filed as T370, lands before T158.",
+     "class": "within",
+     "why": "The second board is already claimed as a GUESS in this bundle (T350-bounty-board); the page's own text is deferred, filed and ordered before T158."
     }
    ],
    "verdict": "CLEAR"

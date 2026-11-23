@@ -366,3 +366,33 @@ fn what_save_refuses() {
     )
     .is_err());
 }
+
+/// A page saved from the archive's capture says so in its manifest row (feature 449 T345: a link that answered with a bot check).
+#[test]
+fn a_page_from_the_archive_says_so() {
+    let (d, root) = world("research-source-pages-archived");
+    let uid = l7r_shared::cited_url::url_id("http://down.org/x");
+    let row = root.join("research/archive").join(&uid[..2]);
+    std::fs::create_dir_all(&row).unwrap();
+    std::fs::write(
+        row.join(format!("{uid}.json")),
+        r#"{"path": "k", "captured": "2026-10-02T00:00:00Z"}"#,
+    )
+    .unwrap();
+    std::fs::create_dir_all(d.join("home/source-archive/k")).unwrap();
+    std::fs::write(d.join("home/source-archive/k/text.txt"), "Kept. Text.").unwrap();
+    let out = d.join("out");
+    save(
+        &["http://down.org/x".to_owned()],
+        &out,
+        &mut cache(&d, &root),
+        None,
+        None,
+        &mut String::new(),
+    )
+    .unwrap();
+    let manifest = std::fs::read_to_string(out.join("MANIFEST.txt")).unwrap();
+    assert!(manifest.contains(
+        "http://down.org/x | 01-down.org.txt | FETCHED - 11 chars, from the archive's capture of 2026-10-02\n"
+    ));
+}

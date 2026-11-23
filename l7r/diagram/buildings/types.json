@@ -59,8 +59,7 @@
           "w": [8, 22],
           "h": [10, 18],
           "area": [140, 360]
-        },
-        "optional": true
+        }
       },
       {
         "id": "writing_rooms",
@@ -77,8 +76,7 @@
         "kind": "day office",
         "band_ft": {
           "area": [0, 490]
-        },
-        "optional": true
+        }
       },
       {
         "id": "magistrates_dais",

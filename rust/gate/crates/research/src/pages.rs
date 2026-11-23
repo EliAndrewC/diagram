@@ -29,6 +29,21 @@ static SENTENCES: LazyLock<Regex> = LazyLock::new(|| {
     ))
 });
 static PART_NUMBER: LazyLock<Regex> = LazyLock::new(|| re(r"\.p(\d+)\.txt$"));
+/// The words of a host's bot-check page served in place of the page (feature 449 T345: journals.openedition.org's Anubis challenge sat
+/// in the cache for tajima-2007-night-soil, so quote-verbatim read every passage NOT-ON-PAGE though the archive's capture carries them).
+static BOT_CHECK: LazyLock<Regex> = LazyLock::new(|| {
+    re(
+        r"(?i)uses anubis|verifying that you.{0,3}re not a robot|checking your browser before|enable javascript and cookies to continue|verify you are (a )?human|attention required! \| cloudflare",
+    )
+});
+/// A bot-check page is short; a page longer than this that names one is a page about it, read as a page.
+const BOT_CHECK_MAX: usize = 4_000;
+
+/// `bot_check`: the text is a host's bot-check page, not the page asked for.
+#[must_use]
+pub fn bot_check(text: &str) -> bool {
+    text.chars().count() <= BOT_CHECK_MAX && BOT_CHECK.is_match(text).unwrap_or(false)
+}
 
 fn fault(f: l7r_shared::blocked::Fault) -> Error {
     Error::new(f.kind, f.message)
@@ -380,20 +395,40 @@ impl CachedPages {
             got.blocked = true;
             return Ok(got);
         }
+        let mut challenged = false;
         if !self.refresh {
             if let Some(hit) = cached(&self.home, url, self.max_age, self.exact)? {
-                let mut got = Got::fetched(hit.text.clone());
-                got.cached = Some(hit.fetched());
-                return Ok(got);
+                if !bot_check(&hit.text) {
+                    let mut got = Got::fetched(hit.text.clone());
+                    got.cached = Some(hit.fetched());
+                    return Ok(got);
+                }
+                challenged = true;
             }
         }
-        let got = match &mut self.inner {
+        let mut got = match &mut self.inner {
             Inner::Pages(p) => p.get(url).map_err(|e| Error::new("ValueError", e))?,
+            Inner::NotCached if challenged => {
+                let mut got = Got::state(
+                    "UNFETCHABLE",
+                    "the page cache holds a bot-check page, not the page - fetch it yourself",
+                );
+                got.live = true;
+                got
+            }
             Inner::NotCached => Got::state(
                 "NOT-CACHED",
                 "not in the page cache (quote-verbatim could not save it) - fetch it yourself",
             ),
         };
+        if got.state == "FETCHED" && bot_check(&got.text) {
+            // the host answered with a challenge, never stored: a public page behind a bot check is live, read from the archive
+            got = Got::state(
+                "UNFETCHABLE",
+                "a bot-check page, not the page - the host answered with a challenge",
+            );
+            got.live = true;
+        }
         if got.state == "FETCHED" {
             let how = Stored {
                 fetched: None,

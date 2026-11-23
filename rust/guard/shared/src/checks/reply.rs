@@ -54,18 +54,37 @@ pub fn read_lossy(path: &Path) -> Option<String> {
         .map(|b| String::from_utf8_lossy(&b).into_owned())
 }
 
+/// The text of one transcript line when the line is the agent's own: an assistant's text block, or the `text` a wave agent hands back through its
+/// `StructuredOutput` call.
+///
+/// A line of another kind (a request blob or a user turn, whose text is a tool's output or the session's instructions) is never the reply: a wave's
+/// agent ends on a `StructuredOutput` call with no text block, and the reverse scan took the request blob before it as the reply (449 T349: 334 of
+/// the 341 wave replies kept were a truncated manifest view or the MCP instructions, so a check's next round saw no earlier round).
 fn last_text_of(line: &Value) -> Option<String> {
+    if line
+        .get("type")
+        .and_then(Value::as_str)
+        .is_some_and(|t| t != "assistant")
+    {
+        return None;
+    }
     let content = line.get("message")?.get("content")?.as_array()?;
-    content.iter().find_map(|b| {
-        (b.get("type").and_then(Value::as_str) == Some("text"))
-            .then(|| {
-                b.get("text")
-                    .and_then(Value::as_str)
-                    .filter(|t| !t.is_empty())
-            })
-            .flatten()
+    let nonempty = |v: Option<&Value>| {
+        v.and_then(Value::as_str)
+            .filter(|t| !t.is_empty())
             .map(str::to_owned)
-    })
+    };
+    content
+        .iter()
+        .find_map(|b| match b.get("type").and_then(Value::as_str) {
+            Some("text") => nonempty(b.get("text")),
+            Some("tool_use")
+                if b.get("name").and_then(Value::as_str) == Some("StructuredOutput") =>
+            {
+                nonempty(b.get("input").and_then(|i| i.get("text")))
+            }
+            _ => None,
+        })
 }
 
 /// A returned agent's reply: `last`, else the last text of its own transcript (`hm_checks._reply_of`).
@@ -188,6 +207,42 @@ mod tests {
         )
         .unwrap();
         assert_eq!(reply_file(&no_text.to_string_lossy()), "");
+    }
+
+    #[test]
+    fn a_wave_agent_s_reply_is_its_structured_output_never_a_request_blob() {
+        // the shape of 449 T349's inner-court round: the agent ends on a StructuredOutput call, with a request blob before it
+        let d = dir("reply-wave");
+        let t = d.join("agent.jsonl");
+        std::fs::write(
+            &t,
+            [
+                r#"{"type": "user", "message": {"role": "user", "content": [{"type": "text", "text": "the brief"}]}}"#,
+                r#"{"type": "assistant", "message": {"content": [{"type": "text", "text": "an early aside"}]}}"#,
+                r#"{"type": "api-request-blob", "message": {"content": [{"type": "text", "text": "[Truncated: PARTIAL view - MANIFEST.md"}]}}"#,
+                r#"{"type": "assistant", "message": {"content": [{"type": "tool_use", "name": "StructuredOutput", "input": {"label": "x", "verdict": "COVERAGE 0", "text": "modal-depiction: x - COVERAGE 0"}}]}}"#,
+                r#"{"type": "user", "message": {"content": [{"type": "tool_result", "content": "Structured output provided successfully"}]}}"#,
+            ]
+            .join("\n"),
+        )
+        .unwrap();
+        assert_eq!(
+            reply_of(&t.to_string_lossy(), ""),
+            "modal-depiction: x - COVERAGE 0"
+        );
+        // another tool's call, or a StructuredOutput with no text, is not the reply: the scan goes on to the agent's last text
+        let other = d.join("other.jsonl");
+        std::fs::write(
+            &other,
+            [
+                r#"{"type": "assistant", "message": {"content": [{"type": "text", "text": "said"}]}}"#,
+                r#"{"type": "api-request-blob", "message": {"content": [{"type": "text", "text": "blob"}]}}"#,
+                r#"{"type": "assistant", "message": {"content": [{"type": "tool_use", "name": "StructuredOutput", "input": {"text": ""}}, {"type": "tool_use", "name": "Read", "input": {"text": "no"}}]}}"#,
+            ]
+            .join("\n"),
+        )
+        .unwrap();
+        assert_eq!(reply_of(&other.to_string_lossy(), ""), "said");
     }
 
     #[test]
