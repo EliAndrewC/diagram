@@ -2320,6 +2320,20 @@ its own files; not engine speed, so no performance-checklist answers.
 6. **Did any map move, and does it still keep the research?** None. No code changed and no map was rolled.
 
 
+### T154, T155 part B (2026-11-23T03:16Z)
+
+One answer for both trials the red-gate@2026-11-23T01:08:38Z tripwire charged (the round arbiter ruled continue on it, 2026-11-23): that red gate was another builder's run in the clone (449's sheet bundle's verify), nothing in either trial's work, which ran in worktrees of their own and edited no clone file.
+
+1. **What exactly is refusing?** Nothing of T154's or T155's: the red gate was the clone's `make done` under 449's sheet bundle, red on that bundle's then-unfinished files (its verify log, 2026-11-23).
+2. **A3 again, for that rule.** O: the gate's own checks; nothing of the research or the GM's words.
+3. **A4 again.** Yes for that bundle's files; the trials changed no clone file, so nothing of theirs was red.
+4. **Is the next fix moving something placed earlier to suit something placed later?** No: no fix is owed by either trial.
+5. **Tuning or changing?** Neither: both trials measured and built nothing.
+6. **The one-sentence test.** "Another builder's gate went red while two measurement trials ran in their own worktrees" - no question to answer first.
+7. **The next step is a measurement.** Already taken: each trial's figures are in its section, measured in its own worktree.
+8. **Before offering routes.** No routes: both trials concluded nothing to build.
+9. **After a ruling.** The ruling (continue) names the next step, landing the trials' records, and that is the step taken.
+
 ### T155 (a TRIAL, measured 2026-11-22: the task line said a landing recompiles what the clone already built - 117 min of make land phases over 6 landings, 28 of them coverage builds - because cargo's fingerprints carry each tree's absolute path, so the landing worktree's own target directory cannot use the clone's builds)
 
 - **Approach**: a measurement, no code changed. The question: how much of a landing's build recompiles what the clone's closing checks already built for the same content, and does a content-keyed compilation cache (sccache) or building the landing at the clone's own path remove it? **Verdict: build neither.** (a) sccache removes nothing: it hit 0 times across the two paths, and the coverage build, which is most of a landing's compile, is uncacheable under it. (b) Building at the clone's path saves little: every file the landing's checkout writes is newer than the clone's build, so it is rebuilt anyway. And it is unsound: a file the checkout did not write, older than the clone's build of a different copy, is reused silently - a tree holding a failing test passed coverage clean. Every figure below is machine minutes summed over rustc calls, which overlap. The host was at load 44-50 on 22 cores, so per-unit times run 2-5x an idle host's, measured 2026-11-22 (`uptime` during the runs, and the same units' times across the pairs' logs).
@@ -2404,20 +2418,6 @@ Owed by red-gate@2026-11-23T01:08:38Z, ruled continue by the round arbiter (`arb
 
 **Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
 
-
-### T154, T155 part B (2026-11-23T03:16Z)
-
-One answer for both trials the red-gate@2026-11-23T01:08:38Z tripwire charged (the round arbiter ruled continue on it, 2026-11-23): that red gate was another builder's run in the clone (449's sheet bundle's verify), nothing in either trial's work, which ran in worktrees of their own and edited no clone file.
-
-1. **What exactly is refusing?** Nothing of T154's or T155's: the red gate was the clone's `make done` under 449's sheet bundle, red on that bundle's then-unfinished files (its verify log, 2026-11-23).
-2. **A3 again, for that rule.** O: the gate's own checks; nothing of the research or the GM's words.
-3. **A4 again.** Yes for that bundle's files; the trials changed no clone file, so nothing of theirs was red.
-4. **Is the next fix moving something placed earlier to suit something placed later?** No: no fix is owed by either trial.
-5. **Tuning or changing?** Neither: both trials measured and built nothing.
-6. **The one-sentence test.** "Another builder's gate went red while two measurement trials ran in their own worktrees" - no question to answer first.
-7. **The next step is a measurement.** Already taken: each trial's figures are in its section, measured in its own worktree.
-8. **Before offering routes.** No routes: both trials concluded nothing to build.
-9. **After a ruling.** The ruling (continue) names the next step, landing the trials' records, and that is the step taken.
 
 ### T160, T161 (bundle)
 
