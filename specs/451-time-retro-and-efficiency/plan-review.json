@@ -1326,6 +1326,36 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-23",
    "declared": "spec-fidelity"
+  },
+  "### T169 (observed 2026-11-23: the harness prints a hook entry's command with every block or notice it emits, and the coordinator's transcript, `~/.claude/projects/-diagram/c6fd72d1-....jsonl`, holds the dispatcher's 239-253 character command 6,665 times, 1,659,603 characters as stored, measured 2026-11-23 (a `grep -o` of the command's stored form, counted and summed by `awk`))": {
+   "sha256": "a76dfe8208e8a01b02d513a8fe4b465e6c093f9ca3048f62d95a4f2703b20199",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity"
+  },
+  "### T169 Approach (checklist part A)": {
+   "sha256": "61495eca15bf3fe78b989b60d5a0049ed87297c159c2988617d12ba6f7355a36",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity"
+  },
+  "### T169 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)": {
+   "sha256": "804e4740d4fada4bba1ceae7eb6f978b213a08a6c50c7b8c5ed360d17dc4c21e",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity"
+  },
+  "### T168 (observed 2026-11-23, 451 T167's plan section: 449 T330's page sessions' lines sat under T312 and T328 in the 449 log, and `make events-refile` moves lines across features but never re-tasks one within a feature)": {
+   "sha256": "4c6742cd54f243245369ca334bb2269ae6942518c395263c895969429e0ded81",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity"
+  },
+  "### T168 Approach (checklist part A)": {
+   "sha256": "14fb6f84dcbdfe046588f51a9d683f81de9bf59b917e1fae689893a9779cc35c",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -14824,6 +14854,135 @@
      "why": "Sequencing and verification of the fix itself; tests that fail only when the requested booking is absent are enforcement of the request, not added scope."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-23",
+   "blocks": [
+    "### T169 (observed 2026-11-23: the harness prints a hook entry's command with every block or notice it emits, and the coordinator's transcript, `~/.claude/projects/-diagram/c6fd72d1-....jsonl`, holds the dispatcher's 239-253 character command 6,665 times, 1,659,603 characters as stored, measured 2026-11-23 (a `grep -o` of the command's stored form, counted and summed by `awk`))",
+    "### T169 Approach (checklist part A)",
+    "### T169 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "launcher",
+     "summary": "The nine settings hook entries become \"$CLAUDE_PROJECT_DIR\"/scripts/hooks/l7r-hook <event> (or setup); timeouts and status message unchanged; the logic moves into a POSIX sh launcher the harness never echoes.",
+     "class": "within",
+     "why": "The GM 2026-11-23 asked whether the hooks' token cost could be cut 'with no loss of fidelity'. The echoed command is part of every hook message's transcript cost; moving it into a file with the same events, timeouts and dispatcher is the same thing in fewer tokens."
+    },
+    {
+     "id": "mirror-first",
+     "summary": "The launcher runs the mirror's l7r-guard.sh if executable, else the tree's copy; setup runs the mirror's setup-dev-env.sh --ensure if present, else the tree's; CLONE_MAIN is its test seam.",
+     "class": "within",
+     "why": "Reproduces the old commands' selection (449 R6) so behavior is unchanged, which is the 'no loss of fidelity' half of the request."
+    },
+    {
+     "id": "escape-marker",
+     "summary": "The GUARD_EDIT_OK marker and reasons leave the commands; the edit goes through make guard-edit, the reasons go in the guard log, the commit and the launcher's header.",
+     "class": "within",
+     "why": "The marker served the guard-file guard, not the reader of a hook message; its supported form is kept and the reasons are retained in the launcher header, so nothing a hook does or says is lost."
+    },
+    {
+     "id": "guard-file",
+     "summary": "The launcher is held as a guard file on both routes (guard_file_hooks GUARD_SOURCE; make_only GUARD_FILE and SOURCE_NAMES), and named l7r-hook rather than run so make-only's substring screen is not widened.",
+     "class": "within",
+     "why": "Keeps the protection the settings' commands had now that the launcher decides what they decided; preserves behavior rather than narrowing anything."
+    },
+    {
+     "id": "wave-replay",
+     "summary": "workflow_hooks.rs replays a tree's settings commands with CLAUDE_PROJECT_DIR set to that tree.",
+     "class": "within",
+     "why": "Fixes a wrong outcome the change would otherwise introduce (a replay exiting 127 and a unit passing unguarded); required for no loss of behavior."
+    },
+    {
+     "id": "budget-test",
+     "summary": "HOOK_COMMAND_BUDGET = 64 (a knob, GUESS) with suite cases for length, entry form, launcher behavior and timeouts.",
+     "class": "within",
+     "why": "Enforcement of what was asked: delete the shorter-command behavior and the check has nothing left to check. The GM's own message asks about mechanical enforcement of hook brevity."
+    },
+    {
+     "id": "make-only-regex",
+     "summary": "make-only's GUARD_FILE alternatives for the dispatcher and launcher become whole names ((?<![\\w-])), fixing the refusal of a write to tests/hooks/test-l7r-guard.sh; other alternatives read and judged suffixes on purpose.",
+     "class": "within",
+     "why": "A check refusing good work is a defect; fixed in the task with its search space stated (every alternative of the pattern read), per fix-as-we-go."
+    },
+    {
+     "id": "probe-lines",
+     "summary": "The live probe's 18 event-log lines, about a minute, stay booked to T341 by the clone's fallback mark; not treated as a defect.",
+     "class": "within",
+     "why": "Leaves a record of a real event under the clone's fallback attribution; about a minute in where-time is a difference no reader of the report would see, not a wrong outcome of the kind the defect rule reaches, and it narrows nothing the GM asked."
+    },
+    {
+     "id": "verification",
+     "summary": "Live session ran under the launcher's first name run; the rename to l7r-hook is proven by the nine-command hand comparison and the suite; SessionStart, setup and PostToolUseFailure are covered by hand comparison and suite since they emit nothing live.",
+     "class": "within",
+     "why": "A choice of verification method for 'fires as before', disclosed in full; it does not reduce what the task delivers or what the GM asked for."
+    },
+    {
+     "id": "perf-class",
+     "summary": "T169 is classed performance work under 451 FR-013, in tokens rather than wall time (the builders' loop).",
+     "class": "within",
+     "why": "The GM's 2026-11-23 message frames hook output as a token cost; the request's own improvement 1 ties context growth to slower model calls, and FR-013 names the builders' loop. Classing a context-size reduction as performance work is inside FR-013's ordering."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-23",
+   "blocks": [
+    "### T168 (observed 2026-11-23, 451 T167's plan section: 449 T330's page sessions' lines sat under T312 and T328 in the 449 log, and `make events-refile` moves lines across features but never re-tasks one within a feature)",
+    "### T168 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T168-1 retask mode of the existing refile",
+     "summary": "Re-tasking is a new --retask / RETASK= mode of make events-refile (refile/retask.rs, called from refile::cli_in), not a new tool.",
+     "class": "within",
+     "why": "Serves the request's per-task breakdown ('for each task ... where our time went', 2026-11-19) and the tooling question's 'no new tool to learn' (the approved proposal); correcting misbooked lines is what makes FR-005's per-task columns and SC-002 true for 449. Placement in the existing command narrows nothing."
+    },
+    {
+     "id": "T168-2 the brief's task via the shared reader",
+     "summary": "The feature and task a session is re-booked to come from set_down_hooks::page_session_brief (T161), the same reader the writer uses.",
+     "class": "within",
+     "why": "An implementation choice that keeps the correction and the writer (T167) agreeing; nothing asked is narrowed."
+    },
+    {
+     "id": "T168-3 idempotent, DRY=1, write_back, unlisted and task-less sessions reported and left",
+     "summary": "A line already on its brief's task is not rewritten; DRY=1 writes nothing; the rewrite uses refile's write_back to keep lines a live hook appends; a session not in the index or whose brief names no task is reported and left.",
+     "class": "within",
+     "why": "Safety properties of a rewrite of a live log. Leaving a session whose brief names no task is not a carve-out: there is no task to book it to, and it is reported, not silently dropped."
+    },
+    {
+     "id": "T168-4 2647 and f1d2 book to T333, not T330",
+     "summary": "Two of the three sessions the observation calls T330's are booked to T333 because their briefs' first lines name T333.",
+     "class": "within",
+     "why": "The direct consequence of the stated rule (minutes credited to the task the brief names), measured from the briefs' first lines; it applies the rule rather than excepting a case from it."
+    },
+    {
+     "id": "T168-5 where-time's first table T330 row stays 0",
+     "summary": "After the re-booking, the agents table credits T330 (180 agents, 76.2 agent minutes) and T333; the first table's T330 row stays 0 because that table books the main session's own wall time.",
+     "class": "within",
+     "why": "A statement of what each table measures (FR-005 keeps the critical-path wall clock apart from summed agent-minutes, as the approved proposal asked), not a defect left: the fix is to page-session (agent) lines, and the first table never counted those."
+    },
+    {
+     "id": "T168-6 order and [perf] class",
+     "summary": "Lands after T167 and before any landing that reads 449's per-task time; tagged [perf] as measurement work, with no engine-speed checklist.",
+     "class": "within",
+     "why": "The GM 2026-11-20: 'this kind of measurement task [is] to be counted as a performance task for the purpose of scheduling and coming first'; the order follows the dependency on T167."
+    },
+    {
+     "id": "T168-7 tests written with the code",
+     "summary": "No red run recorded; the tests assert the re-booked counts, untouched lines, the second run's 0, the dry run's unchanged bytes, the unlisted and task-less sessions, and a missing log's exit 1.",
+     "class": "within",
+     "why": "FR-012's red-first requirement covers the refusals of FR-006 to FR-009, FR-011 and FR-013; this is a correction tool, not one of those refusals, so no requirement of the spec is narrowed. Test discipline beyond that is not a fidelity question."
+    },
+    {
+     "id": "T168-8 backup before the real run",
+     "summary": "The 449 log was backed up to .git/l7r-events/449-rust-codebase.jsonl.pre-t168 before the run.",
+     "class": "within",
+     "why": "An operational precaution; narrows nothing."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -22840,6 +22999,130 @@
      "summary": "Order after T161 and T157; exits (two red-first tests, crate suites, coverage, lint, format, hook suites, MODE 4 CLEAR); fixtures copying this clone's shapes (t05a-checks.md naming T05 under mark T09; -t2a/-t2b bundles naming T2 and T4).",
      "class": "within",
      "why": "Sequencing and verification of the fix itself; tests that fail only when the requested booking is absent are enforcement of the request, not added scope."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T169": {
+   "section_sha256": "b4071094adab0cf4873a58999238abec883ad7e418cf36be644f5c957c65a8fa",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "launcher",
+     "summary": "The nine settings hook entries become \"$CLAUDE_PROJECT_DIR\"/scripts/hooks/l7r-hook <event> (or setup); timeouts and status message unchanged; the logic moves into a POSIX sh launcher the harness never echoes.",
+     "class": "within",
+     "why": "The GM 2026-11-23 asked whether the hooks' token cost could be cut 'with no loss of fidelity'. The echoed command is part of every hook message's transcript cost; moving it into a file with the same events, timeouts and dispatcher is the same thing in fewer tokens."
+    },
+    {
+     "id": "mirror-first",
+     "summary": "The launcher runs the mirror's l7r-guard.sh if executable, else the tree's copy; setup runs the mirror's setup-dev-env.sh --ensure if present, else the tree's; CLONE_MAIN is its test seam.",
+     "class": "within",
+     "why": "Reproduces the old commands' selection (449 R6) so behavior is unchanged, which is the 'no loss of fidelity' half of the request."
+    },
+    {
+     "id": "escape-marker",
+     "summary": "The GUARD_EDIT_OK marker and reasons leave the commands; the edit goes through make guard-edit, the reasons go in the guard log, the commit and the launcher's header.",
+     "class": "within",
+     "why": "The marker served the guard-file guard, not the reader of a hook message; its supported form is kept and the reasons are retained in the launcher header, so nothing a hook does or says is lost."
+    },
+    {
+     "id": "guard-file",
+     "summary": "The launcher is held as a guard file on both routes (guard_file_hooks GUARD_SOURCE; make_only GUARD_FILE and SOURCE_NAMES), and named l7r-hook rather than run so make-only's substring screen is not widened.",
+     "class": "within",
+     "why": "Keeps the protection the settings' commands had now that the launcher decides what they decided; preserves behavior rather than narrowing anything."
+    },
+    {
+     "id": "wave-replay",
+     "summary": "workflow_hooks.rs replays a tree's settings commands with CLAUDE_PROJECT_DIR set to that tree.",
+     "class": "within",
+     "why": "Fixes a wrong outcome the change would otherwise introduce (a replay exiting 127 and a unit passing unguarded); required for no loss of behavior."
+    },
+    {
+     "id": "budget-test",
+     "summary": "HOOK_COMMAND_BUDGET = 64 (a knob, GUESS) with suite cases for length, entry form, launcher behavior and timeouts.",
+     "class": "within",
+     "why": "Enforcement of what was asked: delete the shorter-command behavior and the check has nothing left to check. The GM's own message asks about mechanical enforcement of hook brevity."
+    },
+    {
+     "id": "make-only-regex",
+     "summary": "make-only's GUARD_FILE alternatives for the dispatcher and launcher become whole names ((?<![\\w-])), fixing the refusal of a write to tests/hooks/test-l7r-guard.sh; other alternatives read and judged suffixes on purpose.",
+     "class": "within",
+     "why": "A check refusing good work is a defect; fixed in the task with its search space stated (every alternative of the pattern read), per fix-as-we-go."
+    },
+    {
+     "id": "probe-lines",
+     "summary": "The live probe's 18 event-log lines, about a minute, stay booked to T341 by the clone's fallback mark; not treated as a defect.",
+     "class": "within",
+     "why": "Leaves a record of a real event under the clone's fallback attribution; about a minute in where-time is a difference no reader of the report would see, not a wrong outcome of the kind the defect rule reaches, and it narrows nothing the GM asked."
+    },
+    {
+     "id": "verification",
+     "summary": "Live session ran under the launcher's first name run; the rename to l7r-hook is proven by the nine-command hand comparison and the suite; SessionStart, setup and PostToolUseFailure are covered by hand comparison and suite since they emit nothing live.",
+     "class": "within",
+     "why": "A choice of verification method for 'fires as before', disclosed in full; it does not reduce what the task delivers or what the GM asked for."
+    },
+    {
+     "id": "perf-class",
+     "summary": "T169 is classed performance work under 451 FR-013, in tokens rather than wall time (the builders' loop).",
+     "class": "within",
+     "why": "The GM's 2026-11-23 message frames hook output as a token cost; the request's own improvement 1 ties context growth to slower model calls, and FR-013 names the builders' loop. Classing a context-size reduction as performance work is inside FR-013's ordering."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T168": {
+   "section_sha256": "427a70121219f04665d1fbbaa742995ecc63ef00a6936ee6399a46f0a809ac00",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T168-1 retask mode of the existing refile",
+     "summary": "Re-tasking is a new --retask / RETASK= mode of make events-refile (refile/retask.rs, called from refile::cli_in), not a new tool.",
+     "class": "within",
+     "why": "Serves the request's per-task breakdown ('for each task ... where our time went', 2026-11-19) and the tooling question's 'no new tool to learn' (the approved proposal); correcting misbooked lines is what makes FR-005's per-task columns and SC-002 true for 449. Placement in the existing command narrows nothing."
+    },
+    {
+     "id": "T168-2 the brief's task via the shared reader",
+     "summary": "The feature and task a session is re-booked to come from set_down_hooks::page_session_brief (T161), the same reader the writer uses.",
+     "class": "within",
+     "why": "An implementation choice that keeps the correction and the writer (T167) agreeing; nothing asked is narrowed."
+    },
+    {
+     "id": "T168-3 idempotent, DRY=1, write_back, unlisted and task-less sessions reported and left",
+     "summary": "A line already on its brief's task is not rewritten; DRY=1 writes nothing; the rewrite uses refile's write_back to keep lines a live hook appends; a session not in the index or whose brief names no task is reported and left.",
+     "class": "within",
+     "why": "Safety properties of a rewrite of a live log. Leaving a session whose brief names no task is not a carve-out: there is no task to book it to, and it is reported, not silently dropped."
+    },
+    {
+     "id": "T168-4 2647 and f1d2 book to T333, not T330",
+     "summary": "Two of the three sessions the observation calls T330's are booked to T333 because their briefs' first lines name T333.",
+     "class": "within",
+     "why": "The direct consequence of the stated rule (minutes credited to the task the brief names), measured from the briefs' first lines; it applies the rule rather than excepting a case from it."
+    },
+    {
+     "id": "T168-5 where-time's first table T330 row stays 0",
+     "summary": "After the re-booking, the agents table credits T330 (180 agents, 76.2 agent minutes) and T333; the first table's T330 row stays 0 because that table books the main session's own wall time.",
+     "class": "within",
+     "why": "A statement of what each table measures (FR-005 keeps the critical-path wall clock apart from summed agent-minutes, as the approved proposal asked), not a defect left: the fix is to page-session (agent) lines, and the first table never counted those."
+    },
+    {
+     "id": "T168-6 order and [perf] class",
+     "summary": "Lands after T167 and before any landing that reads 449's per-task time; tagged [perf] as measurement work, with no engine-speed checklist.",
+     "class": "within",
+     "why": "The GM 2026-11-20: 'this kind of measurement task [is] to be counted as a performance task for the purpose of scheduling and coming first'; the order follows the dependency on T167."
+    },
+    {
+     "id": "T168-7 tests written with the code",
+     "summary": "No red run recorded; the tests assert the re-booked counts, untouched lines, the second run's 0, the dry run's unchanged bytes, the unlisted and task-less sessions, and a missing log's exit 1.",
+     "class": "within",
+     "why": "FR-012's red-first requirement covers the refusals of FR-006 to FR-009, FR-011 and FR-013; this is a correction tool, not one of those refusals, so no requirement of the spec is narrowed. Test discipline beyond that is not a fidelity question."
+    },
+    {
+     "id": "T168-8 backup before the real run",
+     "summary": "The 449 log was backed up to .git/l7r-events/449-rust-codebase.jsonl.pre-t168 before the run.",
+     "class": "within",
+     "why": "An operational precaution; narrows nothing."
     }
    ],
    "verdict": "CLEAR"

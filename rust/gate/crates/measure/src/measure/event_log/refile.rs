@@ -46,7 +46,7 @@ use super::reply;
 use crate::measure::events::ts;
 use crate::Reply;
 
-const USAGE: &str = "usage: l7r-gate measure event-log refile --root <tree> [--dir <events dir>] [--from <events dir>] [--projects <dir>] [--dry-run]\n";
+const USAGE: &str = "usage: l7r-gate measure event-log refile --root <tree> [--dir <events dir>] [--from <events dir>] [--projects <dir>] [--retask <session id>]... [--dry-run]\n";
 /// The commands whose `T=` a line carries as its own (`event_log_hooks::tool_fields`).
 const CARRYING: [&str; 4] = ["tick", "task-start", "decide", "land"];
 /// A task start's own lines come before its row (the `PreToolUse`) or within its call: a start this soon after the line still counts.
@@ -66,6 +66,8 @@ struct Given {
     from: PathBuf,
     projects: PathBuf,
     dry: bool,
+    /// page-session ids whose lines are re-booked to their brief's task (451 T168)
+    retask: Vec<String>,
 }
 
 fn given(args: &[String], env: &Reader) -> Option<Given> {
@@ -74,6 +76,7 @@ fn given(args: &[String], env: &Reader) -> Option<Given> {
     let mut from = None;
     let mut projects = None;
     let mut dry = false;
+    let mut retask = Vec::new();
     let mut it = args.iter();
     while let Some(a) = it.next() {
         match a.as_str() {
@@ -81,6 +84,7 @@ fn given(args: &[String], env: &Reader) -> Option<Given> {
             "--dir" => dir = Some(PathBuf::from(it.next()?)),
             "--from" => from = Some(PathBuf::from(it.next()?)),
             "--projects" => projects = Some(PathBuf::from(it.next()?)),
+            "--retask" => retask.push(it.next()?.clone()),
             "--dry-run" => dry = true,
             _ => return None,
         }
@@ -100,6 +104,7 @@ fn given(args: &[String], env: &Reader) -> Option<Given> {
         from,
         projects,
         dry,
+        retask,
     })
 }
 
@@ -414,6 +419,9 @@ pub fn cli_in(args: &[String], env: &Reader) -> Reply {
     let Some(g) = given(args, env) else {
         return reply(String::new(), USAGE.to_owned(), 2);
     };
+    if !g.retask.is_empty() {
+        return retask::cli(&g.root, &g.from, &g.retask, g.dry);
+    }
     let mut facts = Facts::new(&g.root, &g.projects);
     let mut tally = Tally::default();
     let logs: Vec<String> = super::super::events::names(&g.from)
@@ -465,5 +473,6 @@ pub fn cli_in(args: &[String], env: &Reader) -> Reply {
     reply(out, String::new(), 0)
 }
 
+mod retask;
 #[cfg(test)]
 mod tests;

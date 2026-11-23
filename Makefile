@@ -491,8 +491,8 @@ fix-yield:      ## [project] did each tooling fix save what it was meant to: its
 tool-yield:     ## [project] every tool measured: how often it runs, how often it changed something, its misfires and what the record cannot see yet (feature 406)   [KIND=guard|target|check|step|review]
 	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" measure tool-yield --root "$$(git rev-parse --show-toplevel)" $(if $(KIND),--kind "$$KIND")
 
-events-refile:  ## [project] re-file the event-log lines written before 451 T26 under the feature of the task each carries (its dispatch's brief, else its task id), idempotent, its counts printed (feature 451 T26); FROM=<events dir> refiles another directory's logs into this clone's (451 T76)   [DRY=1] [FROM=<dir>]
-	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" measure event-log refile --root "$$(git rev-parse --show-toplevel)" $(if $(DRY),--dry-run,) $(if $(FROM),--dir "$$(git rev-parse --show-toplevel)/.git/l7r-events" --from "$(FROM)",)
+events-refile:  ## [project] re-file the event-log lines written before 451 T26 under the feature of the task each carries (its dispatch's brief, else its task id), idempotent, its counts printed (feature 451 T26); FROM=<events dir> refiles another directory's logs into this clone's (451 T76); RETASK="<session id> ..." re-books those page sessions' lines, within their log, to the task their brief names (451 T168)   [DRY=1] [FROM=<dir>] [RETASK="<session id> ..."]
+	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" measure event-log refile --root "$$(git rev-parse --show-toplevel)" $(if $(DRY),--dry-run,) $(foreach s,$(RETASK),--retask $(s)) $(if $(FROM),--dir "$$(git rev-parse --show-toplevel)/.git/l7r-events" --from "$(FROM)",)
 
 where-time:     ## [project] where a feature's time went, by task: the time by bucket and the agents by kind (feature 385 T77); BY=tick books each tick-to-tick window (T115)   F=<feature> [SINCE=<ISO UTC>] [UNTIL=<ISO UTC>] [BY=tick]
 	@if [ -z "$(F)" ]; then printf 'make where-time: F=<feature> is required\n' >&2; exit 2; fi
