@@ -38,9 +38,9 @@
    "declared": "spec-fidelity"
   },
   "## Decisions": {
-   "sha256": "6408eb8f34fa46a9070c550c86dcf90ddd50a5ba8cc8b9b40c888ae913b73923",
+   "sha256": "574f37f6fa97d7254639264bfb8027fa9ded2801762998d447a26c3f049e277f",
    "verdict": "CLEAR",
-   "reviewed": "2026-11-21",
+   "reviewed": "2026-11-23",
    "declared": "spec-fidelity"
   },
   "## Task sections": {
@@ -312,12 +312,6 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-22",
    "declared": "spec-fidelity"
-  },
-  "### T90 (<why: the finding or measurement that files it>)": {
-   "sha256": "fabae7ab5cae61d7235cdc67b4983d5ed907440669991cfcdbffbda49c4158cc",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-21",
-   "declared": "round-arbiter"
   },
   "### T90 Approach (checklist part A)": {
    "sha256": "8179980bc5b837beb8a83a393bd97de44fa4cf59ffc9c628765a181f54a0fd60",
@@ -729,12 +723,6 @@
   },
   "### T51 (a Python program run from a script file, `python3 <path>.py`, is read by neither make-only's guard-write nor the gate's shell-write check (T33's line); measured 2026-11-21 (`/tmp/t51/rp-src/main.rs`, T93's corpus and T33's fixtures each streamed in one process, 23.8 MB peak): reading the script's text at the call would move 16 make-only rows, none a correction - window#215 carries `GUARD_EDIT_OK` on its own run, so HEAD escapes it, not lets it through - and 80 gate-write rows under a stand-in running gate, 12 of them would-be corrections and 68 false, the false ones the reader's shapes, which HEAD refuses on the stdin route today)": {
    "sha256": "5979bc86ce6a4d5f0cab55938ae8ee820c23c251d47c17ac3c5fabac6aa903fc",
-   "verdict": "CLEAR",
-   "reviewed": "2026-11-22",
-   "declared": "spec-fidelity"
-  },
-  "### T98 (<why: the finding or measurement that files it>)": {
-   "sha256": "b449a7a7029718fa118a3b1eaef952d59d0189449779f48f02411deace9f78aa",
    "verdict": "CLEAR",
    "reviewed": "2026-11-22",
    "declared": "spec-fidelity"
@@ -1269,6 +1257,60 @@
   },
   "### T90 (gate-write read a target's command from its segment, which the walk cuts at 120 characters, so a `make` behind more than 120 characters of `VAR=value` prefixes was refused as a shell write of `.` under a running gate - found by T79, measured 2026-11-21 through HEAD's gate-write and T79's, `/tmp/t79b/judge/probe-gw5.jsonl`, gone by 2026-11-22)": {
    "sha256": "a3e25f31574bba5582f71e57c975e4ddebcac1fee261aa6d738344480601485b",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity"
+  },
+  "### T154, T155 part B (2026-11-23T03:16Z)": {
+   "sha256": "32e8852f22560418f9b95b634a40bd67310dac36becaa635a8f0f5c03fd1fd68",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity"
+  },
+  "### T159 (<why: the finding or measurement that files it>)": {
+   "sha256": "58e6d0b4c8909e7f84a5ff34af32e663d4d0d1b192ac308b4cc005eb49b20997",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity"
+  },
+  "### T159 Approach (checklist part A)": {
+   "sha256": "62d6696f0267b3d34ee30f2f4aadaeedfc4341d8ce3a68b2124d72ffd58204c7",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity"
+  },
+  "### T163 (<why: the finding or measurement that files it>)": {
+   "sha256": "eb6abbbb9ba33a28224de8de9bd074ecfa59c163eb0b7af2723cdbff2f73cc97",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity"
+  },
+  "### T163 Approach (checklist part A)": {
+   "sha256": "2b23efb7f5d0cf1a832631f7c428cfff2a3e1fa3a0a26df2cb3a37d3e63953df",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity"
+  },
+  "### T165 (<why: the finding or measurement that files it>)": {
+   "sha256": "65a6f44a2e6c55d8d68bafb912412aa6b050945e7668322ad47a201e502c84d4",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity"
+  },
+  "### T165 Approach (checklist part A)": {
+   "sha256": "b6bbbfc59a8b91a6e19ae352708cb193e88fdc7a5986081c54cb4feaba526cd7",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity"
+  },
+  "### T166 (<why: the finding or measurement that files it>)": {
+   "sha256": "a558f2a4f6e448b5f8abedd82f60a7f4a8abfb0d86e2e8a5c05a3e61cf8f3c97",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity"
+  },
+  "### T166 Approach (checklist part A)": {
+   "sha256": "45d2f0e4ff29db4081f52c378ec4eb74f6aadd0bc40008b3bfd11761b649da1a",
    "verdict": "CLEAR",
    "reviewed": "2026-11-23",
    "declared": "spec-fidelity"
@@ -14658,6 +14700,63 @@
      "summary": "The 120-character constant is not moved; head takes the same cut after the prefixes.",
      "class": "within",
      "why": "Keeps an existing constant; the defect is fixed without it, so nothing defective is left."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-23",
+   "blocks": [
+    "## Decisions",
+    "### T154, T155 part B (2026-11-23T03:16Z)",
+    "### T159 (<why: the finding or measurement that files it>)",
+    "### T159 Approach (checklist part A)",
+    "### T163 (<why: the finding or measurement that files it>)",
+    "### T163 Approach (checklist part A)",
+    "### T165 (<why: the finding or measurement that files it>)",
+    "### T165 Approach (checklist part A)",
+    "### T166 (<why: the finding or measurement that files it>)",
+    "### T166 Approach (checklist part A)",
+    "(removed) ### T90 (<why: the finding or measurement that files it>)",
+    "(removed) ### T98 (<why: the finding or measurement that files it>)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D2 amended by T161 (a): last rung main-session only",
+     "summary": "The clone's last task-starts.jsonl entry, D2's last rung, stamps the main session's lines only; an agent's line whose description names no T<n> takes its builder's reading (its prompt's first line, else its dispatching builder's), a page session's line its brief's.",
+     "class": "within",
+     "why": "This fixes a wrong outcome the block records: with parallel lanes the clone's last task-start is another lane's task, so it booked another builder's four edits to T317 and refused a CLEAR, committed bundle at landing (a check refusing good work). Taking the task from the builder's own brief serves the GM's per-task breakdown (request 2026-11-19, FR-005) and FR-007's 'in one task' more truly. It removes no category, column or refusal that was asked for."
+    },
+    {
+     "id": "D2 amended by T161 (b): a line none names carries no task",
+     "summary": "An agent's or page session's line whose description, prompt's first line, dispatching builder and brief all name no task carries no task, where before it took the clone's last task-start.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "It narrows what D11 (FR-007) can count: a builder whose dispatch names its task nowhere now has make static calls with no task to count them under, and before it had a (guessed) one. Against the request: attributing such a call to a task is impossible when no source names one, and the only alternative was a guess that the block shows refusing good work in parallel lanes, a defect, not enforcement. The purpose test holds: FR-007 exists to stop make static being used as the edit loop, and the runs that motivated it (T152, T227, T229, request 2026-11-19 improvement 2) were builders of named tasks, which the amended chain still finds through the description, the prompt's first line or the dispatching builder. The main session's lines keep the last rung. What is left out is a builder with no task named anywhere, which D8 already treats as an edge, and D10's 'No task found at all' bullet handles the same gap for the resume check the same way. The exception does not gut the rule. Each case was judged separately: (a) is within, and only (b) narrows."
+    },
+    {
+     "id": "D16 wording",
+     "summary": "'the two runs' reworded to 'both runs' twice.",
+     "class": "within",
+     "why": "Wording only; the comparison it describes is unchanged."
+    },
+    {
+     "id": "T154/T155 part B tripwire answer",
+     "summary": "The red gate charged at 2026-11-23T01:08:38Z was another builder's make done under 449's sheet bundle; the two trials ran in their own worktrees and changed no clone file; following the arbiter's 'continue' ruling, the next step is landing the trials' records.",
+     "class": "within",
+     "why": "This block's own decisions are the diagnosis (the red gate was 449's sheet-bundle verify in the clone, not either trial's work, which ran in its own worktrees and changed no clone file) and the next step the arbiter's 'continue' ruling names (land the trials' records). Items 5 and 8 restate the trials' conclusion ('measured and built nothing', 'concluded nothing to build'). Whether 'nothing to build' honors the GM's 2026-11-22 words (the hook suites timing themselves, and 'proceed with whatever... clean up after ourselves' on the disk) is decided in the trials' own sections, which are not in this bundle and are not judged here. Restating them here narrows nothing."
+    },
+    {
+     "id": "T159, T163, T165, T166 template blocks",
+     "summary": "Plan sections and checklist part A for four new tasks, still the unfilled template.",
+     "class": "within",
+     "why": "Placeholders only; they decide nothing. Each task's real decisions are owed review when the sections are filled."
+    },
+    {
+     "id": "Removal of T90 and T98",
+     "summary": "Two blocks deleted by hand, each when last judged (CLEAR) the unfilled template with no decision.",
+     "class": "within",
+     "why": "The earlier text was an empty template, so deleting it removes no decision and no commitment to the request."
     }
    ]
   }

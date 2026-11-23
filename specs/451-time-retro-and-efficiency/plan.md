@@ -232,13 +232,13 @@ the escape records it in the guard log naming the feature and the task, and `mak
 open section of any plan is refused by it today (R9).
 
 **D16 - The landing's commas and task-add's quick check** (FR-011; R7, R8). `land.rs::main` splits `T=` on commas and whitespace.
-`task-add` runs `make quick`'s checks after it writes; on a red it withdraws what it wrote and runs them again, and COMPARES the two
+`task-add` runs `make quick`'s checks after it writes; on a red it withdraws what it wrote and runs them again, and COMPARES both
 runs' failures: where the with-line run has any failure the without-line run lacks, the line stays withdrawn and task-add refuses,
 naming those failures and that the line was withdrawn; only where the failures are the same is the line restored, the failure
 reported as already there. Two things make the comparison real:
 
 - **Every check runs to its own end in both runs.** The `quick:` recipe is sequential lines, and make stops at the first that fails, so
-  a failure already there in an earlier check (ruff, say) would hide the line's own in a later one (spec-lint) and the two runs would
+  a failure already there in an earlier check (ruff, say) would hide the line's own in a later one (spec-lint) and both runs would
   look the same. task-add takes the check lines from `make -n quick` (the recipe stays the one list), sets aside the `$(STATE)
   green-local` stamp and the closing `printf`, and runs each line as its own process. Not `make -i quick`: it would still stamp quick
   green.
