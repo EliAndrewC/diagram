@@ -57,6 +57,11 @@
 
 ## Review log
 
+- **2026-11-23 (feature 449 T395)**: the outer-court latrine by the west wall moved 3.5 ft south (y 641 to 651.5), level with the 6 ft
+  strip between the retainers' quarters and the stables: its name, 30.8 px wide, had no free place beside the privy (the strip above
+  it, wall to quarters, is 27.5 px) and was led 68.7 px across the stables, where a reader took it for the stables' (observed
+  2026-11-23, method: the placer's seat read by a temporary test - swept, lower right, its leader through the stables); it now stands at
+  the usual gap to the privy's right, no leader, half a foot off the stables' north face (a drawing choice; room first, nothing packed).
 - **2026-11-23 (feature 449 T351 bundle: T355, T352, T367)**: the PRACTICE GROUND moved against the west wall below the tax
   archive, 42 x 28.7 ft (the same ground turned; svg x 209-335, y 511-597), its striking posts and weapon rack with it, so
   the band of about 39 x 29 ft T332 left bare below the archive (building-review 2026-11-22 E1, pack-audit's loosest gap) is
@@ -164,3 +169,12 @@
 - **vegetable garden**: The household's bed stands in the inner court below the karo's house, within the inner garden.
 - **storehouse**: Ochiba keeps two, side by side behind the house, in the shade where the vegetable garden could not grow.
 - **rear yard**: Ochiba's rear yard is the open ground behind the karo's house, before the household's storehouses, running on west of them over the ground the servants' range left, its west arm north of the kitchen ell where the family's door and privy open, and east to the shrine hall's door.
+
+2026-11-23 (feature 449 T392, T375): the OFFICIAL STUDY given its own back door (svg x 738-758 in the hall's north face), onto the
+8 ft lane under the divider, so the magistrate's way from the nakamon to his study runs along the lane and through no working room
+(it ran in by the rear door through the clerks' room and the day office, 35.7 ft). Research:
+research/questions/0113-the-office-hall-and-its-clerks-goyakusho.drawing.html, pass t381-study-seat (the Edo North and South Town
+Magistracies, 1841 and 1842: the yobeya at the join of office and residence); the lane as the corridor a GUESS. The household's own
+way from the main gate to the nakamon runs round the hall's ends by that lane and enters no hall room (traced 2026-11-23). The
+visitors' way from the genkan room to the rear door through the day office and the clerks' room (building-review O1) is KEPT, a
+labeled GUESS: no jin'ya plan states it.

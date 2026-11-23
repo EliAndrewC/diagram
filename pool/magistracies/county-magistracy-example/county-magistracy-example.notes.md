@@ -70,6 +70,10 @@ knobs re-rolled from the seed by the generator and held to the forms recorded he
   follows from the one-bay gate, which has no range to hold a guardroom (feature 374 wave 128; it was 18 x 12 ft).
 - **R26 main gate**: 0093's form knob, rolled exactly `random.Random(zlib.crc32(b"county-magistracy-example:main gate form")).choice(["one-bay
   gate", "gate range"])` = one-bay gate: a yakuimon with an 8 ft frontage (research 0093: 6-8.5 ft, its 間口 read as the pillar-center span), its passage 7 ft between its posts - the frontage less one ~1 ft pillar, a GUESS (feature 374 wave 132; it was an 8 ft passage). Its posts are drawn about 2 ft square OUTSIDE that passage, a map drawing convention (wave 133), so the drawn posts' centers stand about 9 ft apart, wider than the real frontage.
+- **Gatehouse site**: 0093's two attested seats for a gatekeepers' house of its own (against the side of the gate; inside,
+  behind it, on a plan of 1841), a knob rolled exactly `random.Random(zlib.crc32(b"county-magistracy-example:gatehouse site")).choice(["beside
+  the gate", "behind the gate"])` = beside the gate, recorded in the spec's knobs and rolled by the generator itself (449 T398), so the
+  gatehouse stands against the south wall beside the main gate, as before.
 - **R30 garden**: no pond drawn - the draft's garden is ground only, which reads as the dry-garden form; its stones and
   sand are left to the hand refinement.
 - **R34 striking posts**: two upright posts as location markers (the ~4.5 ft standing timber); the practice-weapon rack

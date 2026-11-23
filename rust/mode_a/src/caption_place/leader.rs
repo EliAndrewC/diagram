@@ -171,14 +171,19 @@ fn stroke_end(quad: &[Pt; 4], s: &Shape) -> (f64, Pt, Pt, Slide) {
     // a slide stays on the dash its span's middle is on; an end moved off a gap stands at a dash's end, flat there as a line's own end
     // is, and slides nowhere
     let (mut at, mut dash_end) = (s_at, false);
-    match dash_part(s_at, &s.dash, s.offset) {
+    // read just inside the line at its ends, so a gap ending on the line's own end is that gap, not a dash that starts past it
+    let probe = s_at.clamp(1e-9, (walked - 1e-9).max(1e-9));
+    match dash_part(probe, &s.dash, s.offset) {
         Some((i, d0, d1)) if i % 2 == 0 => {
             slide = slide.map(|(u, by)| (u, by.min(s_at - d0).min(d1 - s_at)));
         }
         Some((_, g0, g1)) => {
             let near = |g: f64| dist(p, at_length(&s.poly, g));
-            at = [g0.max(0.0), g1.min(walked)]
+            // a gap's start is a dash's end only with the line before it, and its end only with the line after it: a gap end at or
+            // past the line's own end is bare paper (449 T402); a line of one gap, no ink, keeps its own nearest point
+            at = [(g0, g0 > 1e-9), (g1, g1 < walked - 1e-9)]
                 .into_iter()
+                .filter_map(|(g, ink)| ink.then_some(g))
                 .min_by(|x, y| near(*x).total_cmp(&near(*y)))
                 .unwrap_or(s_at);
             (slide, dash_end, q) = (None, true, at_length(&s.poly, at));
@@ -401,6 +406,30 @@ mod tests {
         assert!(on_dash, "{end:?}");
     }
 
+    /// 0330 (449 T402): a dashed line whose last or first stretch is a gap has no ink at its own end there, so a leader to it ends on
+    /// the gap's inner end, the last (or first) dash's end - never on the line's end in bare paper.
+    #[test]
+    fn a_leader_to_a_line_ending_in_a_gap_ends_on_the_last_dash() {
+        // dashes of 4 and gaps of 4 from x = 0 on a line 38 long: its last stretch, 36..38, is a gap, so the block past its end is led
+        // to the dash ending at x = 36
+        let mut s = stroke(vec![(0.0, 0.0), (38.0, 0.0)], 0.5);
+        s.dash = vec![4.0, 4.0];
+        let (_, end) = leader((42.0, 6.0), (2.0, 2.0, 0.0), &[s.clone()], &[0]).unwrap();
+        assert!(end.0 <= 36.0 + 0.6, "{end:?}");
+        // offset 6: its first stretch, 0..2, is a gap, so the block before its start is led to the dash starting at x = 2
+        s.offset = 6.0;
+        let (_, end) = leader((-4.0, 6.0), (2.0, 2.0, 0.0), &[s], &[0]).unwrap();
+        assert!(end.0 >= 2.0 - 0.6, "{end:?}");
+        // a line 40 long: its last gap, 36..40, ends exactly on the line's end, which is bare paper whether the block's nearest point
+        // falls inside that gap or on the line's end itself, where the next dash would begin
+        let mut s = stroke(vec![(0.0, 0.0), (40.0, 0.0)], 0.5);
+        s.dash = vec![4.0, 4.0];
+        for block in [(39.0, 6.0), (44.0, 6.0)] {
+            let (_, end) = leader(block, (2.0, 2.0, 0.0), &[s.clone()], &[0]).unwrap();
+            assert!(end.0 <= 36.0 + 0.6, "{block:?}: {end:?}");
+        }
+    }
+
     /// 0330: equally near, a closed outline is taken before a stroke, and the wider stroke before the thinner.
     #[test]
     fn ties_go_to_a_closed_outline_then_the_wider_stroke() {
@@ -467,7 +496,8 @@ mod tests {
         bent.dash = vec![3.0, 1.0];
         let (_, end) = leader((20.0, 8.0), (4.0, 2.0, 0.0), &[far, bent.clone()], &[0, 1]).unwrap();
         assert!((end.0 - 10.5).abs() < 0.1, "{end:?}");
-        let (start, end) = leader((10.0, 12.0), (4.0, 4.0, 0.0), &[bent.clone()], &[0]).unwrap();
+        // touching a dash (16..19); the line's own end, at 20, is in its last gap (19..20), bare paper (449 T402)
+        let (start, end) = leader((10.0, 10.0), (4.0, 4.0, 0.0), &[bent.clone()], &[0]).unwrap();
         assert_eq!(start, end, "touching: no length");
         assert_eq!(super::at_length(&bent.poly, 100.0), (10.0, 10.0));
         let far = stroke(vec![(0.0, 50.0), (10.0, 50.0)], 0.5);

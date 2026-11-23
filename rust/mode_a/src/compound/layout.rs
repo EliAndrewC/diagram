@@ -347,15 +347,19 @@ impl Layout {
     /// Research:
     ///     packed from the wall's low end - GUESS: a row or column seats each building at the first free span from its wall's low end, so the north and south rows own the corners (docs/buildings.md, Composition, a value of the project's)
     ///     the divider's first building centered - GUESS: centered in the free ground holding the wall's middle (docs/buildings.md: the divider hall flows centered between the columns)
-    ///     gatehouse beside the gate - research/questions/0093-the-main-gate-and-its-gatekeepers-nagaya-mon.html: the gatekeepers in a gatehouse of their own beside a one-bay gate, seated nearest the main gate
+    ///     gatehouse beside the gate - research/questions/0093-the-main-gate-and-its-gatekeepers-nagaya-mon.html: the gatekeepers in a gatehouse of their own beside a one-bay gate, seated nearest the main gate, against its wall beside the gate or inside behind it as the sheet's `gatehouse site` knob rolls ([`GATEHOUSE_SITES`])
     ///     the program's start - GUESS: a building the program starts at a point along its wall takes the free span nearest it, the derivation's start-end knob
     ///     second rank - research/questions/0115-servants-in-a-samurai-household-where-they-sleep-and-how-they-were-hired-hokonin.drawing.html, research/questions/0091-samurai-residences-and-their-rooms-buke-yashiki.drawing.html: the rear rank holds stores, set behind its wall's rank-1 row by a fire gap; servants lodge on the street edge, never in a rear rank
     ///     the shrine in its corner - research/questions/0218-the-compounds-own-shrine-yashikigami.drawing.html: a compound shrine in a corner of its grounds beside one tree, the tree's ground held past the shrine's far end
-    ///     a cart's lane past a door's tub - GUESS research/questions/0082-moving-goods-carts-packhorses-and-river-landings-kashi.drawing.html: a granary or stable whose door is on its end along its row is seated with `CART_LANE` of ground on that end, held as it is seated, so a neighbor seated before or after it, or the wall or divider ending its row, stands a cart's width past the door's tub (449 T388)
+    ///     a cart's lane past a door's tub - GUESS research/questions/0082-moving-goods-carts-packhorses-and-river-landings-kashi.drawing.html: a granary or stable whose door is on an end along its row is seated with `CART_LANE` of ground on that end, each end a door is on (449 T397), held as it is seated, so a neighbor seated before or after it, or the wall or divider ending its row, stands a cart's width past the door's tub (449 T388)
     fn seat_one(&mut self, p: &Program, i: usize, divider_first: bool) -> Result<Bx, Error> {
         let b = &p.buildings[i];
         let key = row_key(b);
-        let inset = if b.rank == 2 {
+        let behind = b.beside_gate && gatehouse_site(p) == GATEHOUSE_SITES[1];
+        let inset = if behind {
+            // inside, set back past the gate's held approach, so the way in runs from the gate past its end
+            APPROACH + b.inset
+        } else if b.rank == 2 {
             if !matches!(b.role.as_str(), "kura" | "takakura") {
                 return Err(refuse(format!(
                     "the {} takes the second rank, which holds stores only - servants lodge on the street edge (0115)",
@@ -370,21 +374,18 @@ impl Layout {
         // a cart-route door on an end along the row: the span sought holds the lane's extra ground on that end, and is kept
         // FIRE_GAP - CLEAR off the row's end there, so the wall or divider past the strip's CLEAR stands as far off as a neighbor's fire
         // gap would - a whole lane at a row's end too, whichever way the building is seated
-        let lane = door_lane(p, i, strip.along_x);
+        let (lo_lane, hi_lane) = door_lane(p, i, strip.along_x).unwrap_or_default();
         let end_off = FIRE_GAP - CLEAR;
+        let on = |door: bool, v: f64| if door { v } else { 0.0 };
+        let extra = (CART_LANE - FIRE_GAP).max(0.0);
+        let (lo_extra, hi_extra) = (on(lo_lane, extra), on(hi_lane, extra));
         let ask = Ask {
-            strip: match lane {
-                Some((_, true)) => Strip {
-                    hi: strip.hi - end_off,
-                    ..strip
-                },
-                Some((_, false)) => Strip {
-                    lo: strip.lo + end_off,
-                    ..strip
-                },
-                None => strip,
+            strip: Strip {
+                lo: strip.lo + on(lo_lane, end_off),
+                hi: strip.hi - on(hi_lane, end_off),
+                ..strip
             },
-            len: len + lane.map_or(0.0, |l| l.0),
+            len: len + lo_extra + hi_extra,
             rule: &building_rule,
             reach: FIRE_GAP,
             f: "compound_building",
@@ -395,7 +396,9 @@ impl Layout {
             Vec::new()
         };
         let mid = f64::midpoint(strip.lo, strip.hi);
-        let at = if b.beside_gate {
+        let at = if behind {
+            behind_gate(&mut self.grid, &ask, &p.gates[0])
+        } else if b.beside_gate {
             let g = &p.gates[0];
             nearest(&mut self.grid, &ask, g.at - ask.len / 2.0)
         } else if let Some(near) = b.near {
@@ -430,23 +433,16 @@ impl Layout {
                 b.name, b.w, b.h
             )));
         };
-        let Some((extra, high)) = lane else {
-            return Ok(strip.bx(s, s + len, 0.0));
-        };
-        // the building at the span's far end from its door, and the lane held from its door's end, so a neighbor seated later keeps its
-        // CLEAR past the held ground and stands the whole lane off
-        let (b0, b1) = if high {
-            (s, s + len)
-        } else {
-            (s + extra, s + extra + len)
-        };
+        // the building past the low lane's extra, and each door end's lane held from it, so a neighbor seated later keeps its CLEAR past
+        // the held ground and stands the whole lane off
+        let (b0, b1) = (s + lo_extra, s + lo_extra + len);
         let hold = CART_LANE - CLEAR;
-        let (h0, h1) = if high {
-            (b1, b1 + hold)
-        } else {
-            (b0 - hold, b0)
-        };
-        self.grid.file(strip.bx(h0, h1, 0.0), What::Held(i));
+        if lo_lane {
+            self.grid.file(strip.bx(b0 - hold, b0, 0.0), What::Held(i));
+        }
+        if hi_lane {
+            self.grid.file(strip.bx(b1, b1 + hold, 0.0), What::Held(i));
+        }
         Ok(strip.bx(b0, b1, 0.0))
     }
 
@@ -671,22 +667,56 @@ pub fn ell_box(hb: Bx, back: Face, end: Face, w: f64, h: f64) -> Bx {
     }
 }
 
-/// The ground a building holds along its row past its fire gap for the lane its door opens on, and whether that end is the row's high
-/// one: a granary or stable that takes a tub, its door on an end of the building along the row (the first such door), so the door's tub
-/// stands in the gap between it and its neighbor.
+/// The two seats 0093 attests for a gatekeepers' house of its own: against the side of the gate, and inside, behind it.
 ///
-/// Research: a cart's lane past a door's tub - GUESS research/questions/0082-moving-goods-carts-packhorses-and-river-landings-kashi.drawing.html: the lane for the cart route's doors (`ground::CART_KINDS`), the cart's width past the tub (`CART_LANE`); a door on the court or rear face opens on open ground and holds none
-fn door_lane(p: &Program, i: usize, along_x: bool) -> Option<(f64, bool)> {
+/// Research: two seats of a gatehouse - research/questions/0093-the-main-gate-and-its-gatekeepers-nagaya-mon.html: the Kita-in guardroom now stands against the side of the temple's gate, but a plan of 1841 draws it inside, behind the gate - two attested forms, so a knob rolled from the sheet's seed (the root CLAUDE.md's research rule), never a choice (449 T398)
+pub const GATEHOUSE_SITES: [&str; 2] = ["beside the gate", "behind the gate"];
+
+/// The sheet's gatehouse site, rolled from its seed: `random.Random(zlib.crc32(b"<sheet>:gatehouse site")).choice(GATEHOUSE_SITES)`.
+///
+/// Research: two seats of a gatehouse - CANON: the root CLAUDE.md's research rule (the GM's): several attested forms are a knob rolled from the map's seed, never a choice
+#[must_use]
+pub fn gatehouse_site(p: &Program) -> &'static str {
+    let forms = GATEHOUSE_SITES.map(str::to_owned);
+    let got = super::roll::choice(&p.name, "gatehouse site", &forms);
+    GATEHOUSE_SITES
+        .into_iter()
+        .find(|f| got.is_some_and(|g| g == f))
+        .unwrap_or(GATEHOUSE_SITES[0])
+}
+
+/// A gatehouse's span inside, behind the gate: the free span nearest the gate's passage on either side of it, its end at a post's
+/// outer face or past it, so it stands beside the way in and never across it (east first on a tie).
+///
+/// Research: behind the gate - GUESS: 0093's plan of 1841 draws the guardroom inside, behind the gate, but the page gives no offset; set back past the gate's held approach (`APPROACH`), to one side of its passage, so the way in from the gate runs past its end, the algorithmically easier of the two sides taken by distance
+fn behind_gate(grid: &mut Grid, ask: &Ask, g: &super::spec::Gate) -> Option<f64> {
+    let (a0, a1) = (g.at - g.width / 2.0 - POST, g.at + g.width / 2.0 + POST);
+    let east = walk(grid, ask, &[], a1, 1.0);
+    let west = walk(grid, ask, &[], a0, -1.0);
+    match (east, west) {
+        (Some(e), Some(w)) => Some(if e - a1 <= a0 - (w + ask.len) { e } else { w }),
+        (e, w) => e.or(w),
+    }
+}
+
+/// The ground a building holds along its row past its fire gap for the lanes its doors open on, at its low and its high end: a granary
+/// or stable that takes a tub, a door on an end of the building along the row, so the door's tub stands in the gap between it and its
+/// neighbor - each end a door is on, so a building with doors on both ends holds a lane at both (449 T397).
+///
+/// Research: a cart's lane past a door's tub - GUESS research/questions/0082-moving-goods-carts-packhorses-and-river-landings-kashi.drawing.html: the lane for the cart route's doors (`ground::CART_KINDS`), the cart's width past the tub (`CART_LANE`), at every end door; a door on the court or rear face opens on open ground and holds none
+fn door_lane(p: &Program, i: usize, along_x: bool) -> Option<(bool, bool)> {
     let b = &p.buildings[i];
     if !super::ground::CART_KINDS.contains(&b.kind.as_str()) || super::parts::tubs_owed(p, i) == 0 {
         return None;
     }
-    let extra = (CART_LANE - FIRE_GAP).max(0.0);
-    door_specs(b).iter().find_map(|d| match (along_x, d.face) {
-        (true, Face::W) | (false, Face::N) => Some((extra, false)),
-        (true, Face::E) | (false, Face::S) => Some((extra, true)),
-        _ => None,
-    })
+    let doors = door_specs(b);
+    let on = |f: Face| doors.iter().any(|d| d.face == f);
+    let (lo, hi) = if along_x {
+        (on(Face::W), on(Face::E))
+    } else {
+        (on(Face::N), on(Face::S))
+    };
+    (lo || hi).then_some((lo, hi))
 }
 
 /// The doors a building opens by: the program's, or none for an open shed, or one on a stable's gable into its passage, or one at each

@@ -565,7 +565,7 @@ fn from_court(at: Bx, court: Face, d: (f64, f64), a: (f64, f64)) -> Bx {
 
 /// The stable's grooms' room's depth from its court face, and the earth passage's depth behind it (feet).
 ///
-/// Research: the stable's depths - GUESS: the grooms' room 9 ft and the passage 6 ft deep from the court face, the stalls the rest; 0108's drawing page is silent on both depths (it draws the grooms' quarters and the earth-floored passage before the stalls)
+/// Research: the stable's depths - GUESS: the grooms' room 9 ft and the passage 6 ft deep from the court face, the stalls the rest; 0108's drawing page is silent on both depths (it draws the grooms' quarters and the earth-floored passage before the stalls). The search pass of 2026-11-23 (449 T401, keys t401-umaya, t401-umaya-b) found the three-bay warrior's stable gable-entered with its ridge along the stall row, as drawn, the depth of the form with a grooms' room silent, and the stables measured longer than deep only for stables without one, so the depths are not shrunk; its one depth, JAANUS's grooms' room 2 bays across, is not yet on 0108's page and is filed to reach it before this guess moves
 pub const STABLE_DEPTHS: (f64, f64) = (9.0, 6.0);
 
 /// The interior that draws a building as a stable: the grooms' room, the passage and the stalls (`layout::door_specs` enters it at a

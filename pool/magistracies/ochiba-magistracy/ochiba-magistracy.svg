@@ -268,6 +268,14 @@
          office to the house (0104) -->
     <rect x="444" y="478" width="336" height="84" fill="none" stroke="#5A3F1E" stroke-width="2.5"/>
     <rect x="590" y="478" width="20" height="6" fill="#B89868" stroke="#6B4F2A" stroke-width="0.8" data-kind="door"/>
+    <!-- the official study's own back door (feature 449 T392): in its north face onto the lane under the divider, so the magistrate
+         comes from the nakamon along the lane (8 ft clear, about 49 ft, measured 2026-11-23, m:t392-ochiba-lane) into his study and passes no working room; before, his way ran
+         in by the rear door through the clerks' room and the day office (35.7 ft). Research: research/questions/0113-the-office-hall-and-its-clerks-goyakusho.drawing.html,
+         pass t381-study-seat (the Edo North and South Town Magistracies' plans of 1841 and 1842: the yobeya at the join of office and
+         residence, the inner entrance one corridor away or adjoining); the lane as that corridor and the door's place along the face
+         a GUESS. The visitors' way from the genkan room to the rear door still runs through the day office and the clerks' room (449
+         T375, building-review O1): a GUESS, kept - no plan of a jin'ya states the visitors' way through its office hall. -->
+    <rect x="738" y="478" width="20" height="6" fill="#B89868" stroke="#6B4F2A" stroke-width="0.8" data-kind="door"/>
     <!-- the hall's WEST door (feature 449 T299; building-review 2026-11-22 Q1): in the front band, below the armory, onto the open
          ground before the practice ground, so arms leave by the hall's west end, not across the clerks' seats and the dais. A GUESS:
          no source states an armory's or a hall end bay's doors (449 T289/T299 research pass, 2026-11-22: silent) -->
@@ -382,9 +390,9 @@
     <text font-size="7.5" font-style="italic" fill="#5C4830">latrine</text>
   </g>
 
-  <!-- Outer-court latrine, tucked along W wall between tax archive and stables -->
+  <!-- Outer-court latrine, tucked along W wall between the retainers' quarters and stables, set level with the 6 ft strip between them so its name stands beside it (449 T395) -->
   <g data-kind="latrine">
-    <rect x="208.5" y="641" width="15" height="15" fill="#7E726A" stroke="#3A2E1C" stroke-width="0.8"/>
+    <rect x="208.5" y="651.5" width="15" height="15" fill="#7E726A" stroke="#3A2E1C" stroke-width="0.8"/>
     <text font-size="8" font-style="italic" fill="#5C4830">latrine</text>
   </g>
 

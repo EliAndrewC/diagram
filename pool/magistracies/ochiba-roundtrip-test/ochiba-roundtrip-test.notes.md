@@ -144,3 +144,10 @@ with no door it takes no fire-water tub. `make pack-audit`: every check OK.
 had run past the face's west end); the stables' GROOMS' ROOM opens onto the passage, its edge to it drawn dashed as the stalls' is
 (the county's building-review of 2026-11-23, E1: drawn solid, the room had no way in; a GUESS, no wall between them,
 research/questions/0108 silent on what stood between the tozamurai and the earth passage).
+
+2026-11-23 (feature 449 T392): the OFFICIAL STUDY re-seated at the hall's east end beside the armory, 14 ft along the front band from
+the rear door under the nakamon, the household's way into the office (it stood at the west end, about 91 ft from that door, the
+magistrate's way to it past his own dais; m:t392-roundtrip-study, m:t392-roundtrip-before; building-review 2026-11-23, Q1). The back row east to west: armory, study, clerks' room,
+day office, binding room, writing room; the clerks' room still beside the day office (0113, Takayama) and behind 13 ft of the dais's
+18. Research: research/questions/0113-the-office-hall-and-its-clerks-goyakusho.drawing.html, pass t381-study-seat (the Edo North and
+South Town Magistracies, 1841 and 1842: the yobeya at the join of office and residence); the front band as the corridor a GUESS.

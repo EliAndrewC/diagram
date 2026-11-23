@@ -332,7 +332,7 @@ fn an_ell_takes_a_free_end_of_its_host_or_is_refused() {
     }
 }
 
-/// The gatehouse beside the main gate; a building's own start along its wall; the middle gate beside the office hall.
+/// The gatehouse by the main gate; a building's own start along its wall; the middle gate beside the office hall.
 #[test]
 fn a_building_may_start_beside_the_gate_or_at_its_own_point() {
     let p = with(
@@ -368,7 +368,8 @@ fn a_building_may_start_beside_the_gate_or_at_its_own_point() {
         "",
     );
     let l = seated(&p).unwrap();
-    assert_eq!(l.seats[0], Some((55.0, 91.0, 75.0, 97.0)));
+    // the fixture's sheet "t" rolls its gatehouse behind the gate (449 T398): past the gate's east post, set back past its approach
+    assert_eq!(l.seats[0], Some((55.0, 79.0, 75.0, 85.0)));
     assert_eq!(l.seats[1], Some((60.0, 3.0, 70.0, 9.0)));
     assert_eq!(l.middle, Some((73.5, 79.5)));
     let p = with(
@@ -515,6 +516,44 @@ fn the_pool_sheets_compose_in_their_courts() {
             s.wells.len(),
         );
         assert_eq!(owed, (true, true, 5, 3), "{name}");
+    }
+}
+
+/// The official study stands at the household's end of the office hall (449 T392): the Edo North and South Town Magistracies' plans of
+/// 1841 and 1842 put the magistrate's own working room, the yobeya, at the join of office and residence, the inner entrance one corridor
+/// away or adjoining (research pass t381-study-seat, on research/questions/0113-the-office-hall-and-its-clerks-goyakusho.drawing.html),
+/// so on each generated pool sheet no room of the hall stands between the study and the hall's end nearest the middle gate save the
+/// armory (its end bay rolled, 0123) or the genkan, and the magistrate's way from the house to the study runs through no working room.
+#[test]
+fn the_official_study_stands_at_the_households_end_of_the_office_hall() {
+    let tree = tree();
+    for name in ["ochiba-roundtrip-test", "county-magistracy-example"] {
+        let spec = tree.join(format!("pool/magistracies/{name}/{name}.compound.json"));
+        let (p, bands) = super::cli::load(&tree, &spec.to_string_lossy()).unwrap();
+        let (l, _) = super::generate(&p, &bands).unwrap();
+        let i = p
+            .buildings
+            .iter()
+            .position(|b| b.kind == "office hall")
+            .unwrap();
+        let (hall, (g0, g1)) = (l.seats[i].unwrap(), l.middle.unwrap());
+        let toward = (f64::midpoint(g0, g1) - f64::midpoint(hall.0, hall.2)).signum();
+        let rooms = &p.buildings[i].rooms;
+        let study = rooms
+            .iter()
+            .find(|r| r.kind == "official study")
+            .unwrap()
+            .bx;
+        let between: Vec<&str> = rooms
+            .iter()
+            .filter(|r| r.style == "room")
+            .filter(|r| {
+                (f64::midpoint(r.bx.0, r.bx.2) - f64::midpoint(study.0, study.2)) * toward > 0.0
+            })
+            .map(|r| r.kind.as_str())
+            .filter(|k| !["armory", "genkan"].contains(k))
+            .collect();
+        assert_eq!(between, Vec::<&str>::new(), "{name}");
     }
 }
 
@@ -825,4 +864,69 @@ fn the_county_example_without_its_genkan_lays_a_roji_to_the_shoe_stone() {
         text.matches("<ellipse").count() > 0,
     );
     assert_eq!(stones, (true, true));
+}
+
+/// 0093 (449 T398): a gatekeepers' house of its own stands against its wall beside the gate or inside behind it, as the sheet's seed
+/// rolls its `gatehouse site` - behind, it stands past the gate's held approach, to the side of the way in and never across it.
+#[test]
+fn a_gatehouse_stands_beside_or_behind_its_gate_as_the_seed_rolls() {
+    use super::layout::{gatehouse_site, APPROACH, GATEHOUSE_SITES};
+    let gatehouse = |more: &str| {
+        b(
+            "gatehouse",
+            "gatehouse",
+            "dark",
+            (20.0, 6.0),
+            "outer",
+            "S",
+            &format!(r#", "beside": "main gate"{more}"#),
+        )
+    };
+    // sheet "t" rolls behind and "w" beside (zlib.crc32 of "<sheet>:gatehouse site" seeding Python's choice)
+    let behind = with(&[gatehouse("")], "");
+    let mut beside = behind.clone();
+    beside.name = "w".to_owned();
+    assert_eq!(
+        (gatehouse_site(&behind), gatehouse_site(&beside)),
+        (GATEHOUSE_SITES[1], GATEHOUSE_SITES[0])
+    );
+    let (inside, against) = (
+        seated(&behind).unwrap().seats[0].unwrap(),
+        seated(&beside).unwrap().seats[0].unwrap(),
+    );
+    // against the wall beside the gate, and set back past the approach behind it
+    assert_eq!(against, (55.0, 91.0, 75.0, 97.0));
+    let back = against.1 - inside.1;
+    assert!((back - APPROACH).abs() < 1e-9, "{inside:?}");
+    // the gate's passage (47..53) and posts (45..55) stay clear of it either side: with a garden taking the ground just east of the
+    // way in, the nearer free span is west of it, ending at the west post
+    let zone =
+        r#", "zones": [{"kind": "garden", "caption": "g", "x": 56, "y": 70, "w": 20, "h": 20}]"#;
+    let west = seated(&with(&[gatehouse("")], zone)).unwrap().seats[0].unwrap();
+    assert_eq!((west.0, west.2), (25.0, 45.0), "west of the way in");
+    // a gatehouse too long for the ground left east of the garden has the west side alone
+    let mut long = with(&[gatehouse("")], zone);
+    long.buildings[0].w = 40.0;
+    let west = seated(&long).unwrap().seats[0].unwrap();
+    assert_eq!((west.0, west.2), (5.0, 45.0), "the west side alone");
+}
+
+/// 0093 (449 T398): the county example's program under a sheet whose seed rolls its gatehouse behind the gate is refused aloud - the
+/// set-back gatehouse takes the ground its deep south-row neighbor's span needs - never drawn squeezed (room first: the envelope is the
+/// program's to move); the county's own seed rolls it beside the gate.
+#[test]
+fn the_county_program_rolled_behind_the_gate_is_refused_aloud() {
+    use super::layout::{gatehouse_site, GATEHOUSE_SITES};
+    let tree = tree();
+    let spec = tree.join(
+        "pool/magistracies/county-magistracy-example/county-magistracy-example.compound.json",
+    );
+    let (mut p, bands) = super::cli::load(&tree, &spec.to_string_lossy()).unwrap();
+    assert_eq!(gatehouse_site(&p), GATEHOUSE_SITES[0]);
+    p.name = "county-magistracy-behind".to_owned();
+    p.knobs.clear();
+    assert_eq!(gatehouse_site(&p), GATEHOUSE_SITES[1]);
+    let why = err(super::generate(&p, &bands));
+    let room = "no room on its wall for the junior retainers' quarters";
+    assert!(why.starts_with(room), "{why}");
 }

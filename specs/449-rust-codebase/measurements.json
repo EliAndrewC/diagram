@@ -2042,5 +2042,116 @@
     "command": "make map MAP=pool/magistracies/county-magistracy-example",
     "method": "svg read: the grooms' room's edge to the passage, the line at y 591 from x 201.8 to 255.8, now carries stroke-dasharray 3 2 at width 0.8 as the stalls' edge at y 609 does, where the reviewed drawing drew it solid at width 1; the svg differs from the reviewed snapshot's in that line alone (emit.rs stables, 449 T388's E1 fix; red test a_stables_grooms_room_opens_onto_its_passage)",
     "value": 2
+  },
+  "t392-hayakawa-lane": {
+    "quantity": "Hayakawa: the magistrate's way from the nakamon's middle to the official study's new back door's middle along the lane under the divider, ft",
+    "observed": "2026-11-23",
+    "source": "pool/magistracies/hayakawa-magistracy/hayakawa-magistracy.svg",
+    "command": "svg read",
+    "method": "the nakamon's opening x 498-522 (middle 510) and the study's back door x 362.5-380.5 (middle 371.5), both on the lane under the divider at y 460-488; 138.5 px at 3 px a ft",
+    "value": 46.2
+  },
+  "t392-hayakawa-before": {
+    "quantity": "Hayakawa before T392: the magistrate's way from the nakamon's middle round the hall's west end to its west door's middle, ft",
+    "observed": "2026-11-23",
+    "source": "pool/magistracies/hayakawa-magistracy/hayakawa-magistracy.svg",
+    "command": "svg read",
+    "method": "(510,474) west along the lane to x 337 (173 px), then south to the west door's middle at y 556 (82 px): 255 px at 3 px a ft",
+    "value": 85.0
+  },
+  "t392-ochiba-lane": {
+    "quantity": "Ochiba: the magistrate's way from the nakamon's middle to the official study's new back door's middle along the lane under the divider, ft",
+    "observed": "2026-11-23",
+    "source": "pool/magistracies/ochiba-magistracy/ochiba-magistracy.svg",
+    "command": "svg read",
+    "method": "the nakamon's opening x 591-609 (middle 600) and the study's back door x 738-758 (middle 748); 148 px at 3 px a ft",
+    "value": 49.3
+  },
+  "t395-ochiba-privy": {
+    "quantity": "Ochiba: the outer-court latrine's privy moved south, ft",
+    "observed": "2026-11-23",
+    "source": "pool/magistracies/ochiba-magistracy/ochiba-magistracy.svg",
+    "command": "git diff of the svg",
+    "method": "its rect's y 641 to 651.5 px, 10.5 px at 3 px a ft",
+    "value": 3.5
+  },
+  "t392-roundtrip-study": {
+    "quantity": "the round trip: the official study's east edge to the office hall's east face, where its rear door under the nakamon opens, ft",
+    "observed": "2026-11-23",
+    "source": "pool/magistracies/ochiba-roundtrip-test/ochiba-roundtrip-test.compound.json",
+    "command": "compound.json read",
+    "method": "the hall 112 ft long; the study's room offset x 77 w 21 ends at 98 (it was x 0 w 21, ending at 21): 112 - 98",
+    "value": 14.0
+  },
+  "t392-roundtrip-before": {
+    "quantity": "the round trip before T392: the official study's east edge to the office hall's east face, ft",
+    "observed": "2026-11-23",
+    "source": "pool/magistracies/ochiba-roundtrip-test/ochiba-roundtrip-test.compound.json",
+    "command": "git show HEAD of the compound.json",
+    "method": "the study's room offset x 0 w 21 ending at 21, the hall 112 ft: 112 - 21",
+    "value": 91.0
+  },
+  "t375-ubame-doors": {
+    "quantity": "Ubame: the household door's opening in the divider and the hall's back door, east end, px (both span 640 to it)",
+    "observed": "2026-11-23",
+    "source": "pool/magistracies/ubame-magistracy/ubame-magistracy.svg",
+    "command": "svg read",
+    "method": "the divider's lines 200-640 and 658-690 at y 450, the posts at 630-640 and 658-668; the hall's back door rect x 640 w 18 at y 478 inside the official study (630-690); before, both at 516-534 inside the clerks' room (426-546)",
+    "value": 658
+  },
+  "t392-rt-e1": {
+    "quantity": "the finding's fix, statements",
+    "observed": "2026-11-23",
+    "verifies": "E1",
+    "subject": "building-review--ochiba-roundtrip-test",
+    "answers": "f551f9dce05f",
+    "source": "docs/building-programs.md",
+    "command": "grep of the office hall bullet, the official study's seat claim and the official_study row",
+    "method": "the bullet seats the writing and binding rooms at the far end beside the day office where the study takes the armory's end; the seat claim and the row put the study at the household's end (449 T392); 0 statements left giving the old row",
+    "value": 0
+  },
+  "t392-rt-n1": {
+    "quantity": "the finding's fix, statements",
+    "observed": "2026-11-23",
+    "verifies": "N1",
+    "subject": "building-review--ochiba-roundtrip-test",
+    "answers": "f551f9dce05f",
+    "source": "research/questions/0113-the-office-hall-and-its-clerks-goyakusho.drawing.html",
+    "command": "grep of the Evidence comment and bullet 9",
+    "method": "the Evidence comment no longer calls the study far from the household's door; bullet 9 reads 'In the back row behind the magistrate's dais band'; 0 stale phrases",
+    "value": 0
+  },
+  "t375-ub-e1": {
+    "quantity": "the finding's fix, statements",
+    "observed": "2026-11-23",
+    "verifies": "E1",
+    "subject": "building-review--ubame-magistracy",
+    "answers": "f551f9dce05f",
+    "source": "pool/magistracies/ubame-magistracy/ubame-magistracy.notes.md",
+    "command": "grep of the notes for the old household door",
+    "method": "line 40 and the gate-widths line now say the old opening was walled by 449 T392/T375 and the household door stands behind the study at x 640-658; the Review log carries the T392/T375 entry; 0 statements left placing it behind the clerks' room",
+    "value": 0
+  },
+  "t375-ub-n1": {
+    "quantity": "the finding's fix, statements",
+    "observed": "2026-11-23",
+    "verifies": "N1",
+    "subject": "building-review--ubame-magistracy",
+    "answers": "f551f9dce05f",
+    "source": "pool/magistracies/ubame-magistracy/ubame-magistracy.svg",
+    "command": "grep of the divider comment",
+    "method": "the comment now says the old opening stayed until T392/T375 walled it; 0 present-tense 'stays'",
+    "value": 0
+  },
+  "t375-ub-q1": {
+    "quantity": "the finding's fix, statements",
+    "observed": "2026-11-23",
+    "verifies": "Q1",
+    "subject": "building-review--ubame-magistracy",
+    "answers": "f551f9dce05f",
+    "source": "pool/magistracies/ubame-magistracy/ubame-magistracy.notes.md",
+    "command": "grep of the T392/T375 Review-log entry",
+    "method": "the household's longer way from its rooms round the writing pavilion (or across the bed) recorded as a labeled GUESS, the record silent on a garden path to a household gate",
+    "value": 1
   }
 }

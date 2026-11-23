@@ -20,7 +20,7 @@ Guesses:
   or at the join of office and residence (Edo), not in the hall.
 
 Depiction: The plan draws the official study as a room of the office hall's back row, behind the dais band, beside the day office at
-an end of the row, its floor drawn in the hall's own color.
+an end of the row, its floor drawn in the hall's own color. That end is the household's: every plan keeps the study at the join of office and residence, where the household's way into the office meets it, as the magistrate's office room stood at Edo; the other form, the Takayama intendant working in a living room of the residence, is not drawn.
 
 Name: official study
 Covers: the official study's floor and its label

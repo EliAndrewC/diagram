@@ -102,6 +102,7 @@
     {"key": "servants' quarters form", "options": ["common room under one door", "a door to each dwelling"], "value": "a door to each dwelling"},
     {"key": "vegetable garden site", "options": ["west of the residence", "on a parcel of its own"], "value": "west of the residence"},
     {"key": "formal entrance form", "options": ["a genkan on the office hall", "the roji, no genkan"], "value": "a genkan on the office hall"},
-    {"key": "armory end bay", "options": ["west", "east"], "value": "west"}
+    {"key": "armory end bay", "options": ["west", "east"], "value": "west"},
+    {"key": "gatehouse site", "options": ["beside the gate", "behind the gate"], "value": "beside the gate"}
   ]
 }

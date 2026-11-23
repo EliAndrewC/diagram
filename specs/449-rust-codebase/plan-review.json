@@ -1770,6 +1770,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-23",
    "declared": "spec-fidelity"
+  },
+  "### T375, T392, T395, T397, T398, T401, T402 (bundle)": {
+   "sha256": "9f848e61addd6079cf4092c5e973f29aad12e6cbccb0da92d6c149eb1b7c0eb0",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity"
+  },
+  "### T375, T392, T395, T397, T398, T401, T402 Approach (checklist part A)": {
+   "sha256": "122f92f0e3acccac06037f90c0cf2faebf0bf293a6a69a2d580d0543463ca3ea",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -24880,6 +24892,218 @@
     "T384",
     "T388",
     "T391"
+   ]
+  },
+  {
+   "reviewed": "2026-11-23",
+   "blocks": [
+    "### T375, T392, T395, T397, T398, T401, T402 (bundle)",
+    "### T375, T392, T395, T397, T398, T401, T402 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T402-stroke-end",
+     "summary": "stroke_end treats a gap ending at or past the line's end as bare paper and takes the last/first dash's inner end; nearest point read just inside the line's ends; pinned by a red-first test",
+     "class": "within",
+     "why": "Fixes the defect T402 names (a leader ending off ink, 0330) and nothing else; the test only fails while the defect is present."
+    },
+    {
+     "id": "T402-moved-test-case",
+     "summary": "the_nearest_part_and_segment_win's touching block moved off the bent line's last gap, the old case having asserted the defect",
+     "class": "within",
+     "why": "A check changed because it asserted the bug being fixed is fix-as-we-go (GM 2026-11-18), not a narrowing."
+    },
+    {
+     "id": "T397-lane-both-ends",
+     "summary": "door_lane returns both ends a cart-route door is on and seat_one holds a lane at each; 0082's lane width stays a GUESS; no pool sheet moves",
+     "class": "within",
+     "why": "The T397 defect fixed whole, red-first with a mutant for the high-end hold; leaving the existing GUESS label as it was is not a narrowing."
+    },
+    {
+     "id": "T398-gatehouse-knob",
+     "summary": "a gatehouse seated by the main gate stands beside it or behind it as the sheet's seeded 'gatehouse site' knob rolls (the docs' formula); behind is set back past APPROACH to the nearer side, setback and side a GUESS",
+     "class": "within",
+     "why": "Brings the code to the documented behavior T398 (impl-drift) named, backed by 0093's Kita-in guardroom on both seats; the GUESS labels sit at the point of change (XII). No pool sheet's drawing moves (county rolls beside)."
+    },
+    {
+     "id": "T398-refused-aloud",
+     "summary": "the county's program under a seed rolling behind is refused aloud rather than drawn squeezed; pinned by a test",
+     "class": "within",
+     "why": "No pool sheet is refused (the county's own seed rolls beside); refusing a program that has no room, rather than drawing it wrong, leaves no wrong outcome on any sheet, and the plan names moving the program's envelope as the room-first route."
+    },
+    {
+     "id": "T398-round-trip-and-fixture",
+     "summary": "the round trip's gatehouse is seated by order, not by the gate, so the knob does not reach it; the fixture sheet 't' rolls behind so its test now asserts the behind seat; docs/buildings.md restated",
+     "class": "within",
+     "why": "The knob applies where the gate seats the gatehouse, which is what T398 is about; the round trip has no such seat. The fixture assertion follows the fixed behavior."
+    },
+    {
+     "id": "T398-T406-filed",
+     "summary": "0093's drawing page (one-bay gate's gatekeepers' house beside only) left for a page session, filed as T406",
+     "class": "within",
+     "why": "A research-record edit, the class the arbiter's ruling (ask:set-down-449-rows-gm-stop-for-convergence-talk) says is filed and not started; the bundle shows no pool sheet drawn behind, so no drawn map contradicts the page."
+    },
+    {
+     "id": "T401-claim-restated",
+     "summary": "after the t401-umaya pass, nothing shrinks; STABLE_DEPTHS' claim restated with the pass",
+     "class": "within",
+     "why": "The pass finds the shrinking condition does not hold, so the behavior is fine and the claim is what was wrong; restating the claim is exactly constitution XIV's rule for that case."
+    },
+    {
+     "id": "T401-N3-9ft-kept",
+     "summary": "JAANUS's grooms' room '2 bays in cross section' is not on 0108's page, so the drawn 9 ft stays a labeled GUESS and the page edit and the stables' redraw are filed (T405)",
+     "class": "within",
+     "why": "The bundle shows no finding on the research record that the drawing contradicts: the source is outside 0108's page, and deciding whether that passage governs this stable form and outranks the page is the research ladder's call (XII), not this review's. The same rule is applied both ways in the section: T398 moves the drawing because its page attests both seats, N3 does not because its page lacks the source. A research-record edit is filed and not started under the arbiter's ruling. A recorded finding that the 9 ft contradicts would flip this."
+    },
+    {
+     "id": "T395-privy-moved",
+     "summary": "Ochiba's outer-court privy moved 3.5 ft south on the sheet so its name stands at the usual gap with no leader, rather than a placer rule; pack-audit clean",
+     "class": "within",
+     "why": "Room first on the sheet fixes the T395 defect (a caption led across the stables) without new placer behavior."
+    },
+    {
+     "id": "T395-hayakawa-leader-left",
+     "summary": "Hayakawa's compound shrine caption's leader crosses its garden, a ground leader_crosses ignores on purpose; left",
+     "class": "within",
+     "why": "Not among the seven, and the plan states no wrong outcome (a leader over open garden); under XIV a difference that reads fine is not a defect, and anything else found is filed under the arbiter's ruling."
+    },
+    {
+     "id": "T392-study-moves-not-gate",
+     "summary": "the handoff's design (the generator seats the middle gate at the study's end) measured and set down; the round trip's study moved east within the back row instead, the clerks' room kept beside the day office (Takayama), offsets restated as a GUESS",
+     "class": "within",
+     "why": "A choice between two fixes of the same defect; the chosen one fixes it on both generated sheets, red-first, and the rejected one was measured to send the household through the study (the T375 defect) and to collide with audit/armory.rs's rolled bay."
+    },
+    {
+     "id": "T392-no-new-knobs",
+     "summary": "the armory knob and the Takayama residence study (a second attested form) not made knobs",
+     "class": "within",
+     "why": "Not asked by any of the seven; declining to add a feature is not a narrowing."
+    },
+    {
+     "id": "T375-hand-sheet-doors",
+     "summary": "Ochiba and Hayakawa give the study its own back door onto the lane; Ubame's household door and the hall's back door move onto the study's back wall; the household's way traced on every sheet entering no hall room; county unchanged",
+     "class": "within",
+     "why": "Fixes T375's Ubame Q1 and the round trip Q1 (the household crossing an office room) and T392 on the hand sheets, measured on each svg."
+    },
+    {
+     "id": "T375-ochiba-O1-kept",
+     "summary": "Ochiba's visitors' way from the genkan room through the day office and the clerks' room (O1) kept as a labeled GUESS",
+     "class": "within",
+     "why": "It is the visitors' way, not the household's (T375's goal, checklist item 1) or the magistrate's (T392), and no research finding is cited against it, so the bundle shows no wrong outcome left. The block's 'as T375 allows' rests on a task row the bundle does not hold and is not the GM's words; this ruling does not rest on it. If the building-review re-reads O1 as a wrong outcome, the arbiter's ruling makes it part of finishing T375."
+    },
+    {
+     "id": "T375-0113-bullets",
+     "summary": "0113's drawing bullets 11-13 restated to what is drawn, no citation added",
+     "class": "within",
+     "why": "A claim brought to the drawn behavior, which is XIV's rule; it adds no scope."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-23",
+   "blocks": [
+    "### T375, T392, T395, T397, T398, T401, T402 (bundle)",
+    "### T375, T392, T395, T397, T398, T401, T402 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T402-stroke-end",
+     "summary": "stroke_end takes the last (or first) dash's inner end for a gap at or past the line's end; nearest point read just inside the ends; pinned by a red test",
+     "class": "within",
+     "why": "The defect itself (0330, a leader ends on ink), fixed and pinned red-first."
+    },
+    {
+     "id": "T402-old-test-moved",
+     "summary": "the_nearest_part_and_segment_win's touching block moved off the bent line's last gap",
+     "class": "within",
+     "why": "The old case asserted the defect being fixed; changing it as fixed is FIX AS WE GO, not a narrowing."
+    },
+    {
+     "id": "T397-both-ends",
+     "summary": "door_lane returns both ends a cart-route door is on and seat_one holds a lane at each; cart lane still a labeled GUESS (0082); no pool sheet moves",
+     "class": "within",
+     "why": "The defect fixed and pinned (red test plus the high-end mutant); the GUESS label is unchanged from before."
+    },
+    {
+     "id": "T398-knob",
+     "summary": "gatehouse by the main gate seated beside or behind its gate by a seeded 'gatehouse site' knob; behind set back past APPROACH to the nearer side (setback and side a GUESS); fixture 't' now asserts behind; docs restated",
+     "class": "within",
+     "why": "Both seats rest on 0093's Kita-in guardroom per the plan; the knob's formula is the docs' own; the unattested parts are labeled GUESS at the point of change."
+    },
+    {
+     "id": "T398-refusal",
+     "summary": "a county program rolled behind with no room is refused aloud, not drawn squeezed",
+     "class": "within",
+     "why": "No sheet is refused: the county's own seed rolls beside and its drawing is unchanged; the round trip is seated by order. The refusal is a hypothetical seed's last resort pinned by a test, not a valid input of any sheet refused, so no wrong outcome is left."
+    },
+    {
+     "id": "T398-0093-page",
+     "summary": "0093's drawing page, which seats a one-bay gate's gatekeepers' house beside only, left to T406",
+     "class": "within",
+     "why": "A research record row, not a wrong outcome (constitution XIV); the drawing rests on 0093's own Kita-in attestation of both seats. The arbiter's ruling files such rows rather than starting them."
+    },
+    {
+     "id": "T401-Q1",
+     "summary": "the research pass finds no stable-with-grooms'-room depth and the longer-than-deep stables attested only without one, so nothing shrinks and STABLE_DEPTHS' claim is restated",
+     "class": "within",
+     "why": "Exactly the XIV rule: where behavior is fine and the claim does not literally match, restate the claim, not the code."
+    },
+    {
+     "id": "T401-N3",
+     "summary": "the grooms' room stays a labeled 9 ft GUESS; JAANUS's '2 bays in cross section with a peripheral veranda' and the redraw filed as T405",
+     "class": "within",
+     "why": "The bundle states the passage is not on 0108's page, so the research record is silent on this depth, not contradicted; the 9 ft is a labeled GUESS no reader at fit zoom would see as wrong. Whether that passage governs this room is the research ladder's call (Principle XII), not a defect left. The same rule runs the other way in T398, which draws behind because the record (0093) attests it. Filing it, rather than starting it, is what the arbiter's ruling orders for anything that is not one of the seven's wrong outcomes."
+    },
+    {
+     "id": "T395-room-first",
+     "summary": "Ochiba's privy moved 3.5 ft south so its name stands at the usual gap with no leader, instead of a placer rule; pack-audit clean",
+     "class": "within",
+     "why": "The defect (a caption led across the stables) fixed by giving the sheet room, the constitution's room-first order."
+    },
+    {
+     "id": "T395-hayakawa-shrine-leader",
+     "summary": "Hayakawa's shrine caption leader across its garden left as is",
+     "class": "within",
+     "why": "leader_crosses ignores garden ground on purpose and the plan names no wrong outcome; a difference that reads fine is not a defect (XIV)."
+    },
+    {
+     "id": "T392-study-moves",
+     "summary": "the study moves to the household's end of the office hall (round trip's back row reordered), not the middle gate; the handoff's gate rule measured and set down",
+     "class": "within",
+     "why": "A choice of mechanism for the defect (the magistrate walking past working rooms to his study), made on measurement (the gate site off the garden and armory.rs's rolled bay); the defect is fixed on both generated sheets and pinned red-first."
+    },
+    {
+     "id": "T392-clerks-room-guess",
+     "summary": "the clerks' room still beside the day office (Takayama) and behind 13 ft of the dais's 18, a GUESS restated in the spec",
+     "class": "within",
+     "why": "Labeled at the point of change; keeps 0113's attested adjacency."
+    },
+    {
+     "id": "T392-hand-sheet-doors",
+     "summary": "Ochiba and Hayakawa give the study its own back door onto the lane; shared rear door kept so no traveler crosses the study",
+     "class": "within",
+     "why": "Fixes the defect on the hand sheets on measured-clear lanes, without routing anyone else through the study."
+    },
+    {
+     "id": "T392-takayama-not-knob",
+     "summary": "Takayama's residence study (a second attested form) and the armory not made knobs",
+     "class": "within",
+     "why": "Not asked; the join form drawn is attested on both Edo plans. Adding a knob would be scope the GM did not ask for."
+    },
+    {
+     "id": "T375-household-doors",
+     "summary": "Ubame's household door and the hall's back door moved onto the study's back wall; household way traced clear on every sheet; county unchanged",
+     "class": "within",
+     "why": "The defect itself (the household entering through the clerks' room), fixed and traced on each sheet."
+    },
+    {
+     "id": "T375-O1",
+     "summary": "Ochiba's visitors' way from the genkan room through the day office and clerks' room kept, a labeled GUESS",
+     "class": "within",
+     "why": "T375's defect, as the plan's goal states it, is the household's way, and that way is traced clear on Ochiba. O1 is the visitors' way through public office rooms; the bundle names no wrong outcome against it, and it is labeled a GUESS."
+    }
    ]
   }
  ],
@@ -50845,6 +51069,734 @@
      "summary": "Left without a task: the misread barracks count; form-only NOTEs; the hearing-court clause resting on 0096; garden.md's 'the pond is the office's form' beside Ubame's dry garden; the barracks' 'about fifteen', the project's own; the kitchen row's 'often at the rear', resting on uncited 0107",
      "class": "within",
      "why": "Each is a difference or a citation gap, not a wrong outcome (XIV v2.36.0). garden.md's line states the default form, and the plan says its Depiction covers Ubame's departure. The study's 'away from the armory', by contrast, was a false statement about every plan. 'About fifteen' correctly keeps the GM's ~15 (the town's whole samurai) apart from the barracks' lodgers."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T375": {
+   "section_sha256": "cc1b179268b40828a4373c1be442ca73c0ca1c982cb244aa2656cac8b982cbe7",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T402-stroke-end",
+     "summary": "stroke_end takes the last (or first) dash's inner end for a gap at or past the line's end; nearest point read just inside the ends; pinned by a red test",
+     "class": "within",
+     "why": "The defect itself (0330, a leader ends on ink), fixed and pinned red-first."
+    },
+    {
+     "id": "T402-old-test-moved",
+     "summary": "the_nearest_part_and_segment_win's touching block moved off the bent line's last gap",
+     "class": "within",
+     "why": "The old case asserted the defect being fixed; changing it as fixed is FIX AS WE GO, not a narrowing."
+    },
+    {
+     "id": "T397-both-ends",
+     "summary": "door_lane returns both ends a cart-route door is on and seat_one holds a lane at each; cart lane still a labeled GUESS (0082); no pool sheet moves",
+     "class": "within",
+     "why": "The defect fixed and pinned (red test plus the high-end mutant); the GUESS label is unchanged from before."
+    },
+    {
+     "id": "T398-knob",
+     "summary": "gatehouse by the main gate seated beside or behind its gate by a seeded 'gatehouse site' knob; behind set back past APPROACH to the nearer side (setback and side a GUESS); fixture 't' now asserts behind; docs restated",
+     "class": "within",
+     "why": "Both seats rest on 0093's Kita-in guardroom per the plan; the knob's formula is the docs' own; the unattested parts are labeled GUESS at the point of change."
+    },
+    {
+     "id": "T398-refusal",
+     "summary": "a county program rolled behind with no room is refused aloud, not drawn squeezed",
+     "class": "within",
+     "why": "No sheet is refused: the county's own seed rolls beside and its drawing is unchanged; the round trip is seated by order. The refusal is a hypothetical seed's last resort pinned by a test, not a valid input of any sheet refused, so no wrong outcome is left."
+    },
+    {
+     "id": "T398-0093-page",
+     "summary": "0093's drawing page, which seats a one-bay gate's gatekeepers' house beside only, left to T406",
+     "class": "within",
+     "why": "A research record row, not a wrong outcome (constitution XIV); the drawing rests on 0093's own Kita-in attestation of both seats. The arbiter's ruling files such rows rather than starting them."
+    },
+    {
+     "id": "T401-Q1",
+     "summary": "the research pass finds no stable-with-grooms'-room depth and the longer-than-deep stables attested only without one, so nothing shrinks and STABLE_DEPTHS' claim is restated",
+     "class": "within",
+     "why": "Exactly the XIV rule: where behavior is fine and the claim does not literally match, restate the claim, not the code."
+    },
+    {
+     "id": "T401-N3",
+     "summary": "the grooms' room stays a labeled 9 ft GUESS; JAANUS's '2 bays in cross section with a peripheral veranda' and the redraw filed as T405",
+     "class": "within",
+     "why": "The bundle states the passage is not on 0108's page, so the research record is silent on this depth, not contradicted; the 9 ft is a labeled GUESS no reader at fit zoom would see as wrong. Whether that passage governs this room is the research ladder's call (Principle XII), not a defect left. The same rule runs the other way in T398, which draws behind because the record (0093) attests it. Filing it, rather than starting it, is what the arbiter's ruling orders for anything that is not one of the seven's wrong outcomes."
+    },
+    {
+     "id": "T395-room-first",
+     "summary": "Ochiba's privy moved 3.5 ft south so its name stands at the usual gap with no leader, instead of a placer rule; pack-audit clean",
+     "class": "within",
+     "why": "The defect (a caption led across the stables) fixed by giving the sheet room, the constitution's room-first order."
+    },
+    {
+     "id": "T395-hayakawa-shrine-leader",
+     "summary": "Hayakawa's shrine caption leader across its garden left as is",
+     "class": "within",
+     "why": "leader_crosses ignores garden ground on purpose and the plan names no wrong outcome; a difference that reads fine is not a defect (XIV)."
+    },
+    {
+     "id": "T392-study-moves",
+     "summary": "the study moves to the household's end of the office hall (round trip's back row reordered), not the middle gate; the handoff's gate rule measured and set down",
+     "class": "within",
+     "why": "A choice of mechanism for the defect (the magistrate walking past working rooms to his study), made on measurement (the gate site off the garden and armory.rs's rolled bay); the defect is fixed on both generated sheets and pinned red-first."
+    },
+    {
+     "id": "T392-clerks-room-guess",
+     "summary": "the clerks' room still beside the day office (Takayama) and behind 13 ft of the dais's 18, a GUESS restated in the spec",
+     "class": "within",
+     "why": "Labeled at the point of change; keeps 0113's attested adjacency."
+    },
+    {
+     "id": "T392-hand-sheet-doors",
+     "summary": "Ochiba and Hayakawa give the study its own back door onto the lane; shared rear door kept so no traveler crosses the study",
+     "class": "within",
+     "why": "Fixes the defect on the hand sheets on measured-clear lanes, without routing anyone else through the study."
+    },
+    {
+     "id": "T392-takayama-not-knob",
+     "summary": "Takayama's residence study (a second attested form) and the armory not made knobs",
+     "class": "within",
+     "why": "Not asked; the join form drawn is attested on both Edo plans. Adding a knob would be scope the GM did not ask for."
+    },
+    {
+     "id": "T375-household-doors",
+     "summary": "Ubame's household door and the hall's back door moved onto the study's back wall; household way traced clear on every sheet; county unchanged",
+     "class": "within",
+     "why": "The defect itself (the household entering through the clerks' room), fixed and traced on each sheet."
+    },
+    {
+     "id": "T375-O1",
+     "summary": "Ochiba's visitors' way from the genkan room through the day office and clerks' room kept, a labeled GUESS",
+     "class": "within",
+     "why": "T375's defect, as the plan's goal states it, is the household's way, and that way is traced clear on Ochiba. O1 is the visitors' way through public office rooms; the bundle names no wrong outcome against it, and it is labeled a GUESS."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T392": {
+   "section_sha256": "cc1b179268b40828a4373c1be442ca73c0ca1c982cb244aa2656cac8b982cbe7",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T402-stroke-end",
+     "summary": "stroke_end takes the last (or first) dash's inner end for a gap at or past the line's end; nearest point read just inside the ends; pinned by a red test",
+     "class": "within",
+     "why": "The defect itself (0330, a leader ends on ink), fixed and pinned red-first."
+    },
+    {
+     "id": "T402-old-test-moved",
+     "summary": "the_nearest_part_and_segment_win's touching block moved off the bent line's last gap",
+     "class": "within",
+     "why": "The old case asserted the defect being fixed; changing it as fixed is FIX AS WE GO, not a narrowing."
+    },
+    {
+     "id": "T397-both-ends",
+     "summary": "door_lane returns both ends a cart-route door is on and seat_one holds a lane at each; cart lane still a labeled GUESS (0082); no pool sheet moves",
+     "class": "within",
+     "why": "The defect fixed and pinned (red test plus the high-end mutant); the GUESS label is unchanged from before."
+    },
+    {
+     "id": "T398-knob",
+     "summary": "gatehouse by the main gate seated beside or behind its gate by a seeded 'gatehouse site' knob; behind set back past APPROACH to the nearer side (setback and side a GUESS); fixture 't' now asserts behind; docs restated",
+     "class": "within",
+     "why": "Both seats rest on 0093's Kita-in guardroom per the plan; the knob's formula is the docs' own; the unattested parts are labeled GUESS at the point of change."
+    },
+    {
+     "id": "T398-refusal",
+     "summary": "a county program rolled behind with no room is refused aloud, not drawn squeezed",
+     "class": "within",
+     "why": "No sheet is refused: the county's own seed rolls beside and its drawing is unchanged; the round trip is seated by order. The refusal is a hypothetical seed's last resort pinned by a test, not a valid input of any sheet refused, so no wrong outcome is left."
+    },
+    {
+     "id": "T398-0093-page",
+     "summary": "0093's drawing page, which seats a one-bay gate's gatekeepers' house beside only, left to T406",
+     "class": "within",
+     "why": "A research record row, not a wrong outcome (constitution XIV); the drawing rests on 0093's own Kita-in attestation of both seats. The arbiter's ruling files such rows rather than starting them."
+    },
+    {
+     "id": "T401-Q1",
+     "summary": "the research pass finds no stable-with-grooms'-room depth and the longer-than-deep stables attested only without one, so nothing shrinks and STABLE_DEPTHS' claim is restated",
+     "class": "within",
+     "why": "Exactly the XIV rule: where behavior is fine and the claim does not literally match, restate the claim, not the code."
+    },
+    {
+     "id": "T401-N3",
+     "summary": "the grooms' room stays a labeled 9 ft GUESS; JAANUS's '2 bays in cross section with a peripheral veranda' and the redraw filed as T405",
+     "class": "within",
+     "why": "The bundle states the passage is not on 0108's page, so the research record is silent on this depth, not contradicted; the 9 ft is a labeled GUESS no reader at fit zoom would see as wrong. Whether that passage governs this room is the research ladder's call (Principle XII), not a defect left. The same rule runs the other way in T398, which draws behind because the record (0093) attests it. Filing it, rather than starting it, is what the arbiter's ruling orders for anything that is not one of the seven's wrong outcomes."
+    },
+    {
+     "id": "T395-room-first",
+     "summary": "Ochiba's privy moved 3.5 ft south so its name stands at the usual gap with no leader, instead of a placer rule; pack-audit clean",
+     "class": "within",
+     "why": "The defect (a caption led across the stables) fixed by giving the sheet room, the constitution's room-first order."
+    },
+    {
+     "id": "T395-hayakawa-shrine-leader",
+     "summary": "Hayakawa's shrine caption leader across its garden left as is",
+     "class": "within",
+     "why": "leader_crosses ignores garden ground on purpose and the plan names no wrong outcome; a difference that reads fine is not a defect (XIV)."
+    },
+    {
+     "id": "T392-study-moves",
+     "summary": "the study moves to the household's end of the office hall (round trip's back row reordered), not the middle gate; the handoff's gate rule measured and set down",
+     "class": "within",
+     "why": "A choice of mechanism for the defect (the magistrate walking past working rooms to his study), made on measurement (the gate site off the garden and armory.rs's rolled bay); the defect is fixed on both generated sheets and pinned red-first."
+    },
+    {
+     "id": "T392-clerks-room-guess",
+     "summary": "the clerks' room still beside the day office (Takayama) and behind 13 ft of the dais's 18, a GUESS restated in the spec",
+     "class": "within",
+     "why": "Labeled at the point of change; keeps 0113's attested adjacency."
+    },
+    {
+     "id": "T392-hand-sheet-doors",
+     "summary": "Ochiba and Hayakawa give the study its own back door onto the lane; shared rear door kept so no traveler crosses the study",
+     "class": "within",
+     "why": "Fixes the defect on the hand sheets on measured-clear lanes, without routing anyone else through the study."
+    },
+    {
+     "id": "T392-takayama-not-knob",
+     "summary": "Takayama's residence study (a second attested form) and the armory not made knobs",
+     "class": "within",
+     "why": "Not asked; the join form drawn is attested on both Edo plans. Adding a knob would be scope the GM did not ask for."
+    },
+    {
+     "id": "T375-household-doors",
+     "summary": "Ubame's household door and the hall's back door moved onto the study's back wall; household way traced clear on every sheet; county unchanged",
+     "class": "within",
+     "why": "The defect itself (the household entering through the clerks' room), fixed and traced on each sheet."
+    },
+    {
+     "id": "T375-O1",
+     "summary": "Ochiba's visitors' way from the genkan room through the day office and clerks' room kept, a labeled GUESS",
+     "class": "within",
+     "why": "T375's defect, as the plan's goal states it, is the household's way, and that way is traced clear on Ochiba. O1 is the visitors' way through public office rooms; the bundle names no wrong outcome against it, and it is labeled a GUESS."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T395": {
+   "section_sha256": "cc1b179268b40828a4373c1be442ca73c0ca1c982cb244aa2656cac8b982cbe7",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T402-stroke-end",
+     "summary": "stroke_end takes the last (or first) dash's inner end for a gap at or past the line's end; nearest point read just inside the ends; pinned by a red test",
+     "class": "within",
+     "why": "The defect itself (0330, a leader ends on ink), fixed and pinned red-first."
+    },
+    {
+     "id": "T402-old-test-moved",
+     "summary": "the_nearest_part_and_segment_win's touching block moved off the bent line's last gap",
+     "class": "within",
+     "why": "The old case asserted the defect being fixed; changing it as fixed is FIX AS WE GO, not a narrowing."
+    },
+    {
+     "id": "T397-both-ends",
+     "summary": "door_lane returns both ends a cart-route door is on and seat_one holds a lane at each; cart lane still a labeled GUESS (0082); no pool sheet moves",
+     "class": "within",
+     "why": "The defect fixed and pinned (red test plus the high-end mutant); the GUESS label is unchanged from before."
+    },
+    {
+     "id": "T398-knob",
+     "summary": "gatehouse by the main gate seated beside or behind its gate by a seeded 'gatehouse site' knob; behind set back past APPROACH to the nearer side (setback and side a GUESS); fixture 't' now asserts behind; docs restated",
+     "class": "within",
+     "why": "Both seats rest on 0093's Kita-in guardroom per the plan; the knob's formula is the docs' own; the unattested parts are labeled GUESS at the point of change."
+    },
+    {
+     "id": "T398-refusal",
+     "summary": "a county program rolled behind with no room is refused aloud, not drawn squeezed",
+     "class": "within",
+     "why": "No sheet is refused: the county's own seed rolls beside and its drawing is unchanged; the round trip is seated by order. The refusal is a hypothetical seed's last resort pinned by a test, not a valid input of any sheet refused, so no wrong outcome is left."
+    },
+    {
+     "id": "T398-0093-page",
+     "summary": "0093's drawing page, which seats a one-bay gate's gatekeepers' house beside only, left to T406",
+     "class": "within",
+     "why": "A research record row, not a wrong outcome (constitution XIV); the drawing rests on 0093's own Kita-in attestation of both seats. The arbiter's ruling files such rows rather than starting them."
+    },
+    {
+     "id": "T401-Q1",
+     "summary": "the research pass finds no stable-with-grooms'-room depth and the longer-than-deep stables attested only without one, so nothing shrinks and STABLE_DEPTHS' claim is restated",
+     "class": "within",
+     "why": "Exactly the XIV rule: where behavior is fine and the claim does not literally match, restate the claim, not the code."
+    },
+    {
+     "id": "T401-N3",
+     "summary": "the grooms' room stays a labeled 9 ft GUESS; JAANUS's '2 bays in cross section with a peripheral veranda' and the redraw filed as T405",
+     "class": "within",
+     "why": "The bundle states the passage is not on 0108's page, so the research record is silent on this depth, not contradicted; the 9 ft is a labeled GUESS no reader at fit zoom would see as wrong. Whether that passage governs this room is the research ladder's call (Principle XII), not a defect left. The same rule runs the other way in T398, which draws behind because the record (0093) attests it. Filing it, rather than starting it, is what the arbiter's ruling orders for anything that is not one of the seven's wrong outcomes."
+    },
+    {
+     "id": "T395-room-first",
+     "summary": "Ochiba's privy moved 3.5 ft south so its name stands at the usual gap with no leader, instead of a placer rule; pack-audit clean",
+     "class": "within",
+     "why": "The defect (a caption led across the stables) fixed by giving the sheet room, the constitution's room-first order."
+    },
+    {
+     "id": "T395-hayakawa-shrine-leader",
+     "summary": "Hayakawa's shrine caption leader across its garden left as is",
+     "class": "within",
+     "why": "leader_crosses ignores garden ground on purpose and the plan names no wrong outcome; a difference that reads fine is not a defect (XIV)."
+    },
+    {
+     "id": "T392-study-moves",
+     "summary": "the study moves to the household's end of the office hall (round trip's back row reordered), not the middle gate; the handoff's gate rule measured and set down",
+     "class": "within",
+     "why": "A choice of mechanism for the defect (the magistrate walking past working rooms to his study), made on measurement (the gate site off the garden and armory.rs's rolled bay); the defect is fixed on both generated sheets and pinned red-first."
+    },
+    {
+     "id": "T392-clerks-room-guess",
+     "summary": "the clerks' room still beside the day office (Takayama) and behind 13 ft of the dais's 18, a GUESS restated in the spec",
+     "class": "within",
+     "why": "Labeled at the point of change; keeps 0113's attested adjacency."
+    },
+    {
+     "id": "T392-hand-sheet-doors",
+     "summary": "Ochiba and Hayakawa give the study its own back door onto the lane; shared rear door kept so no traveler crosses the study",
+     "class": "within",
+     "why": "Fixes the defect on the hand sheets on measured-clear lanes, without routing anyone else through the study."
+    },
+    {
+     "id": "T392-takayama-not-knob",
+     "summary": "Takayama's residence study (a second attested form) and the armory not made knobs",
+     "class": "within",
+     "why": "Not asked; the join form drawn is attested on both Edo plans. Adding a knob would be scope the GM did not ask for."
+    },
+    {
+     "id": "T375-household-doors",
+     "summary": "Ubame's household door and the hall's back door moved onto the study's back wall; household way traced clear on every sheet; county unchanged",
+     "class": "within",
+     "why": "The defect itself (the household entering through the clerks' room), fixed and traced on each sheet."
+    },
+    {
+     "id": "T375-O1",
+     "summary": "Ochiba's visitors' way from the genkan room through the day office and clerks' room kept, a labeled GUESS",
+     "class": "within",
+     "why": "T375's defect, as the plan's goal states it, is the household's way, and that way is traced clear on Ochiba. O1 is the visitors' way through public office rooms; the bundle names no wrong outcome against it, and it is labeled a GUESS."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T397": {
+   "section_sha256": "cc1b179268b40828a4373c1be442ca73c0ca1c982cb244aa2656cac8b982cbe7",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T402-stroke-end",
+     "summary": "stroke_end takes the last (or first) dash's inner end for a gap at or past the line's end; nearest point read just inside the ends; pinned by a red test",
+     "class": "within",
+     "why": "The defect itself (0330, a leader ends on ink), fixed and pinned red-first."
+    },
+    {
+     "id": "T402-old-test-moved",
+     "summary": "the_nearest_part_and_segment_win's touching block moved off the bent line's last gap",
+     "class": "within",
+     "why": "The old case asserted the defect being fixed; changing it as fixed is FIX AS WE GO, not a narrowing."
+    },
+    {
+     "id": "T397-both-ends",
+     "summary": "door_lane returns both ends a cart-route door is on and seat_one holds a lane at each; cart lane still a labeled GUESS (0082); no pool sheet moves",
+     "class": "within",
+     "why": "The defect fixed and pinned (red test plus the high-end mutant); the GUESS label is unchanged from before."
+    },
+    {
+     "id": "T398-knob",
+     "summary": "gatehouse by the main gate seated beside or behind its gate by a seeded 'gatehouse site' knob; behind set back past APPROACH to the nearer side (setback and side a GUESS); fixture 't' now asserts behind; docs restated",
+     "class": "within",
+     "why": "Both seats rest on 0093's Kita-in guardroom per the plan; the knob's formula is the docs' own; the unattested parts are labeled GUESS at the point of change."
+    },
+    {
+     "id": "T398-refusal",
+     "summary": "a county program rolled behind with no room is refused aloud, not drawn squeezed",
+     "class": "within",
+     "why": "No sheet is refused: the county's own seed rolls beside and its drawing is unchanged; the round trip is seated by order. The refusal is a hypothetical seed's last resort pinned by a test, not a valid input of any sheet refused, so no wrong outcome is left."
+    },
+    {
+     "id": "T398-0093-page",
+     "summary": "0093's drawing page, which seats a one-bay gate's gatekeepers' house beside only, left to T406",
+     "class": "within",
+     "why": "A research record row, not a wrong outcome (constitution XIV); the drawing rests on 0093's own Kita-in attestation of both seats. The arbiter's ruling files such rows rather than starting them."
+    },
+    {
+     "id": "T401-Q1",
+     "summary": "the research pass finds no stable-with-grooms'-room depth and the longer-than-deep stables attested only without one, so nothing shrinks and STABLE_DEPTHS' claim is restated",
+     "class": "within",
+     "why": "Exactly the XIV rule: where behavior is fine and the claim does not literally match, restate the claim, not the code."
+    },
+    {
+     "id": "T401-N3",
+     "summary": "the grooms' room stays a labeled 9 ft GUESS; JAANUS's '2 bays in cross section with a peripheral veranda' and the redraw filed as T405",
+     "class": "within",
+     "why": "The bundle states the passage is not on 0108's page, so the research record is silent on this depth, not contradicted; the 9 ft is a labeled GUESS no reader at fit zoom would see as wrong. Whether that passage governs this room is the research ladder's call (Principle XII), not a defect left. The same rule runs the other way in T398, which draws behind because the record (0093) attests it. Filing it, rather than starting it, is what the arbiter's ruling orders for anything that is not one of the seven's wrong outcomes."
+    },
+    {
+     "id": "T395-room-first",
+     "summary": "Ochiba's privy moved 3.5 ft south so its name stands at the usual gap with no leader, instead of a placer rule; pack-audit clean",
+     "class": "within",
+     "why": "The defect (a caption led across the stables) fixed by giving the sheet room, the constitution's room-first order."
+    },
+    {
+     "id": "T395-hayakawa-shrine-leader",
+     "summary": "Hayakawa's shrine caption leader across its garden left as is",
+     "class": "within",
+     "why": "leader_crosses ignores garden ground on purpose and the plan names no wrong outcome; a difference that reads fine is not a defect (XIV)."
+    },
+    {
+     "id": "T392-study-moves",
+     "summary": "the study moves to the household's end of the office hall (round trip's back row reordered), not the middle gate; the handoff's gate rule measured and set down",
+     "class": "within",
+     "why": "A choice of mechanism for the defect (the magistrate walking past working rooms to his study), made on measurement (the gate site off the garden and armory.rs's rolled bay); the defect is fixed on both generated sheets and pinned red-first."
+    },
+    {
+     "id": "T392-clerks-room-guess",
+     "summary": "the clerks' room still beside the day office (Takayama) and behind 13 ft of the dais's 18, a GUESS restated in the spec",
+     "class": "within",
+     "why": "Labeled at the point of change; keeps 0113's attested adjacency."
+    },
+    {
+     "id": "T392-hand-sheet-doors",
+     "summary": "Ochiba and Hayakawa give the study its own back door onto the lane; shared rear door kept so no traveler crosses the study",
+     "class": "within",
+     "why": "Fixes the defect on the hand sheets on measured-clear lanes, without routing anyone else through the study."
+    },
+    {
+     "id": "T392-takayama-not-knob",
+     "summary": "Takayama's residence study (a second attested form) and the armory not made knobs",
+     "class": "within",
+     "why": "Not asked; the join form drawn is attested on both Edo plans. Adding a knob would be scope the GM did not ask for."
+    },
+    {
+     "id": "T375-household-doors",
+     "summary": "Ubame's household door and the hall's back door moved onto the study's back wall; household way traced clear on every sheet; county unchanged",
+     "class": "within",
+     "why": "The defect itself (the household entering through the clerks' room), fixed and traced on each sheet."
+    },
+    {
+     "id": "T375-O1",
+     "summary": "Ochiba's visitors' way from the genkan room through the day office and clerks' room kept, a labeled GUESS",
+     "class": "within",
+     "why": "T375's defect, as the plan's goal states it, is the household's way, and that way is traced clear on Ochiba. O1 is the visitors' way through public office rooms; the bundle names no wrong outcome against it, and it is labeled a GUESS."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T398": {
+   "section_sha256": "cc1b179268b40828a4373c1be442ca73c0ca1c982cb244aa2656cac8b982cbe7",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T402-stroke-end",
+     "summary": "stroke_end takes the last (or first) dash's inner end for a gap at or past the line's end; nearest point read just inside the ends; pinned by a red test",
+     "class": "within",
+     "why": "The defect itself (0330, a leader ends on ink), fixed and pinned red-first."
+    },
+    {
+     "id": "T402-old-test-moved",
+     "summary": "the_nearest_part_and_segment_win's touching block moved off the bent line's last gap",
+     "class": "within",
+     "why": "The old case asserted the defect being fixed; changing it as fixed is FIX AS WE GO, not a narrowing."
+    },
+    {
+     "id": "T397-both-ends",
+     "summary": "door_lane returns both ends a cart-route door is on and seat_one holds a lane at each; cart lane still a labeled GUESS (0082); no pool sheet moves",
+     "class": "within",
+     "why": "The defect fixed and pinned (red test plus the high-end mutant); the GUESS label is unchanged from before."
+    },
+    {
+     "id": "T398-knob",
+     "summary": "gatehouse by the main gate seated beside or behind its gate by a seeded 'gatehouse site' knob; behind set back past APPROACH to the nearer side (setback and side a GUESS); fixture 't' now asserts behind; docs restated",
+     "class": "within",
+     "why": "Both seats rest on 0093's Kita-in guardroom per the plan; the knob's formula is the docs' own; the unattested parts are labeled GUESS at the point of change."
+    },
+    {
+     "id": "T398-refusal",
+     "summary": "a county program rolled behind with no room is refused aloud, not drawn squeezed",
+     "class": "within",
+     "why": "No sheet is refused: the county's own seed rolls beside and its drawing is unchanged; the round trip is seated by order. The refusal is a hypothetical seed's last resort pinned by a test, not a valid input of any sheet refused, so no wrong outcome is left."
+    },
+    {
+     "id": "T398-0093-page",
+     "summary": "0093's drawing page, which seats a one-bay gate's gatekeepers' house beside only, left to T406",
+     "class": "within",
+     "why": "A research record row, not a wrong outcome (constitution XIV); the drawing rests on 0093's own Kita-in attestation of both seats. The arbiter's ruling files such rows rather than starting them."
+    },
+    {
+     "id": "T401-Q1",
+     "summary": "the research pass finds no stable-with-grooms'-room depth and the longer-than-deep stables attested only without one, so nothing shrinks and STABLE_DEPTHS' claim is restated",
+     "class": "within",
+     "why": "Exactly the XIV rule: where behavior is fine and the claim does not literally match, restate the claim, not the code."
+    },
+    {
+     "id": "T401-N3",
+     "summary": "the grooms' room stays a labeled 9 ft GUESS; JAANUS's '2 bays in cross section with a peripheral veranda' and the redraw filed as T405",
+     "class": "within",
+     "why": "The bundle states the passage is not on 0108's page, so the research record is silent on this depth, not contradicted; the 9 ft is a labeled GUESS no reader at fit zoom would see as wrong. Whether that passage governs this room is the research ladder's call (Principle XII), not a defect left. The same rule runs the other way in T398, which draws behind because the record (0093) attests it. Filing it, rather than starting it, is what the arbiter's ruling orders for anything that is not one of the seven's wrong outcomes."
+    },
+    {
+     "id": "T395-room-first",
+     "summary": "Ochiba's privy moved 3.5 ft south so its name stands at the usual gap with no leader, instead of a placer rule; pack-audit clean",
+     "class": "within",
+     "why": "The defect (a caption led across the stables) fixed by giving the sheet room, the constitution's room-first order."
+    },
+    {
+     "id": "T395-hayakawa-shrine-leader",
+     "summary": "Hayakawa's shrine caption leader across its garden left as is",
+     "class": "within",
+     "why": "leader_crosses ignores garden ground on purpose and the plan names no wrong outcome; a difference that reads fine is not a defect (XIV)."
+    },
+    {
+     "id": "T392-study-moves",
+     "summary": "the study moves to the household's end of the office hall (round trip's back row reordered), not the middle gate; the handoff's gate rule measured and set down",
+     "class": "within",
+     "why": "A choice of mechanism for the defect (the magistrate walking past working rooms to his study), made on measurement (the gate site off the garden and armory.rs's rolled bay); the defect is fixed on both generated sheets and pinned red-first."
+    },
+    {
+     "id": "T392-clerks-room-guess",
+     "summary": "the clerks' room still beside the day office (Takayama) and behind 13 ft of the dais's 18, a GUESS restated in the spec",
+     "class": "within",
+     "why": "Labeled at the point of change; keeps 0113's attested adjacency."
+    },
+    {
+     "id": "T392-hand-sheet-doors",
+     "summary": "Ochiba and Hayakawa give the study its own back door onto the lane; shared rear door kept so no traveler crosses the study",
+     "class": "within",
+     "why": "Fixes the defect on the hand sheets on measured-clear lanes, without routing anyone else through the study."
+    },
+    {
+     "id": "T392-takayama-not-knob",
+     "summary": "Takayama's residence study (a second attested form) and the armory not made knobs",
+     "class": "within",
+     "why": "Not asked; the join form drawn is attested on both Edo plans. Adding a knob would be scope the GM did not ask for."
+    },
+    {
+     "id": "T375-household-doors",
+     "summary": "Ubame's household door and the hall's back door moved onto the study's back wall; household way traced clear on every sheet; county unchanged",
+     "class": "within",
+     "why": "The defect itself (the household entering through the clerks' room), fixed and traced on each sheet."
+    },
+    {
+     "id": "T375-O1",
+     "summary": "Ochiba's visitors' way from the genkan room through the day office and clerks' room kept, a labeled GUESS",
+     "class": "within",
+     "why": "T375's defect, as the plan's goal states it, is the household's way, and that way is traced clear on Ochiba. O1 is the visitors' way through public office rooms; the bundle names no wrong outcome against it, and it is labeled a GUESS."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T401": {
+   "section_sha256": "cc1b179268b40828a4373c1be442ca73c0ca1c982cb244aa2656cac8b982cbe7",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T402-stroke-end",
+     "summary": "stroke_end takes the last (or first) dash's inner end for a gap at or past the line's end; nearest point read just inside the ends; pinned by a red test",
+     "class": "within",
+     "why": "The defect itself (0330, a leader ends on ink), fixed and pinned red-first."
+    },
+    {
+     "id": "T402-old-test-moved",
+     "summary": "the_nearest_part_and_segment_win's touching block moved off the bent line's last gap",
+     "class": "within",
+     "why": "The old case asserted the defect being fixed; changing it as fixed is FIX AS WE GO, not a narrowing."
+    },
+    {
+     "id": "T397-both-ends",
+     "summary": "door_lane returns both ends a cart-route door is on and seat_one holds a lane at each; cart lane still a labeled GUESS (0082); no pool sheet moves",
+     "class": "within",
+     "why": "The defect fixed and pinned (red test plus the high-end mutant); the GUESS label is unchanged from before."
+    },
+    {
+     "id": "T398-knob",
+     "summary": "gatehouse by the main gate seated beside or behind its gate by a seeded 'gatehouse site' knob; behind set back past APPROACH to the nearer side (setback and side a GUESS); fixture 't' now asserts behind; docs restated",
+     "class": "within",
+     "why": "Both seats rest on 0093's Kita-in guardroom per the plan; the knob's formula is the docs' own; the unattested parts are labeled GUESS at the point of change."
+    },
+    {
+     "id": "T398-refusal",
+     "summary": "a county program rolled behind with no room is refused aloud, not drawn squeezed",
+     "class": "within",
+     "why": "No sheet is refused: the county's own seed rolls beside and its drawing is unchanged; the round trip is seated by order. The refusal is a hypothetical seed's last resort pinned by a test, not a valid input of any sheet refused, so no wrong outcome is left."
+    },
+    {
+     "id": "T398-0093-page",
+     "summary": "0093's drawing page, which seats a one-bay gate's gatekeepers' house beside only, left to T406",
+     "class": "within",
+     "why": "A research record row, not a wrong outcome (constitution XIV); the drawing rests on 0093's own Kita-in attestation of both seats. The arbiter's ruling files such rows rather than starting them."
+    },
+    {
+     "id": "T401-Q1",
+     "summary": "the research pass finds no stable-with-grooms'-room depth and the longer-than-deep stables attested only without one, so nothing shrinks and STABLE_DEPTHS' claim is restated",
+     "class": "within",
+     "why": "Exactly the XIV rule: where behavior is fine and the claim does not literally match, restate the claim, not the code."
+    },
+    {
+     "id": "T401-N3",
+     "summary": "the grooms' room stays a labeled 9 ft GUESS; JAANUS's '2 bays in cross section with a peripheral veranda' and the redraw filed as T405",
+     "class": "within",
+     "why": "The bundle states the passage is not on 0108's page, so the research record is silent on this depth, not contradicted; the 9 ft is a labeled GUESS no reader at fit zoom would see as wrong. Whether that passage governs this room is the research ladder's call (Principle XII), not a defect left. The same rule runs the other way in T398, which draws behind because the record (0093) attests it. Filing it, rather than starting it, is what the arbiter's ruling orders for anything that is not one of the seven's wrong outcomes."
+    },
+    {
+     "id": "T395-room-first",
+     "summary": "Ochiba's privy moved 3.5 ft south so its name stands at the usual gap with no leader, instead of a placer rule; pack-audit clean",
+     "class": "within",
+     "why": "The defect (a caption led across the stables) fixed by giving the sheet room, the constitution's room-first order."
+    },
+    {
+     "id": "T395-hayakawa-shrine-leader",
+     "summary": "Hayakawa's shrine caption leader across its garden left as is",
+     "class": "within",
+     "why": "leader_crosses ignores garden ground on purpose and the plan names no wrong outcome; a difference that reads fine is not a defect (XIV)."
+    },
+    {
+     "id": "T392-study-moves",
+     "summary": "the study moves to the household's end of the office hall (round trip's back row reordered), not the middle gate; the handoff's gate rule measured and set down",
+     "class": "within",
+     "why": "A choice of mechanism for the defect (the magistrate walking past working rooms to his study), made on measurement (the gate site off the garden and armory.rs's rolled bay); the defect is fixed on both generated sheets and pinned red-first."
+    },
+    {
+     "id": "T392-clerks-room-guess",
+     "summary": "the clerks' room still beside the day office (Takayama) and behind 13 ft of the dais's 18, a GUESS restated in the spec",
+     "class": "within",
+     "why": "Labeled at the point of change; keeps 0113's attested adjacency."
+    },
+    {
+     "id": "T392-hand-sheet-doors",
+     "summary": "Ochiba and Hayakawa give the study its own back door onto the lane; shared rear door kept so no traveler crosses the study",
+     "class": "within",
+     "why": "Fixes the defect on the hand sheets on measured-clear lanes, without routing anyone else through the study."
+    },
+    {
+     "id": "T392-takayama-not-knob",
+     "summary": "Takayama's residence study (a second attested form) and the armory not made knobs",
+     "class": "within",
+     "why": "Not asked; the join form drawn is attested on both Edo plans. Adding a knob would be scope the GM did not ask for."
+    },
+    {
+     "id": "T375-household-doors",
+     "summary": "Ubame's household door and the hall's back door moved onto the study's back wall; household way traced clear on every sheet; county unchanged",
+     "class": "within",
+     "why": "The defect itself (the household entering through the clerks' room), fixed and traced on each sheet."
+    },
+    {
+     "id": "T375-O1",
+     "summary": "Ochiba's visitors' way from the genkan room through the day office and clerks' room kept, a labeled GUESS",
+     "class": "within",
+     "why": "T375's defect, as the plan's goal states it, is the household's way, and that way is traced clear on Ochiba. O1 is the visitors' way through public office rooms; the bundle names no wrong outcome against it, and it is labeled a GUESS."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T402": {
+   "section_sha256": "cc1b179268b40828a4373c1be442ca73c0ca1c982cb244aa2656cac8b982cbe7",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T402-stroke-end",
+     "summary": "stroke_end takes the last (or first) dash's inner end for a gap at or past the line's end; nearest point read just inside the ends; pinned by a red test",
+     "class": "within",
+     "why": "The defect itself (0330, a leader ends on ink), fixed and pinned red-first."
+    },
+    {
+     "id": "T402-old-test-moved",
+     "summary": "the_nearest_part_and_segment_win's touching block moved off the bent line's last gap",
+     "class": "within",
+     "why": "The old case asserted the defect being fixed; changing it as fixed is FIX AS WE GO, not a narrowing."
+    },
+    {
+     "id": "T397-both-ends",
+     "summary": "door_lane returns both ends a cart-route door is on and seat_one holds a lane at each; cart lane still a labeled GUESS (0082); no pool sheet moves",
+     "class": "within",
+     "why": "The defect fixed and pinned (red test plus the high-end mutant); the GUESS label is unchanged from before."
+    },
+    {
+     "id": "T398-knob",
+     "summary": "gatehouse by the main gate seated beside or behind its gate by a seeded 'gatehouse site' knob; behind set back past APPROACH to the nearer side (setback and side a GUESS); fixture 't' now asserts behind; docs restated",
+     "class": "within",
+     "why": "Both seats rest on 0093's Kita-in guardroom per the plan; the knob's formula is the docs' own; the unattested parts are labeled GUESS at the point of change."
+    },
+    {
+     "id": "T398-refusal",
+     "summary": "a county program rolled behind with no room is refused aloud, not drawn squeezed",
+     "class": "within",
+     "why": "No sheet is refused: the county's own seed rolls beside and its drawing is unchanged; the round trip is seated by order. The refusal is a hypothetical seed's last resort pinned by a test, not a valid input of any sheet refused, so no wrong outcome is left."
+    },
+    {
+     "id": "T398-0093-page",
+     "summary": "0093's drawing page, which seats a one-bay gate's gatekeepers' house beside only, left to T406",
+     "class": "within",
+     "why": "A research record row, not a wrong outcome (constitution XIV); the drawing rests on 0093's own Kita-in attestation of both seats. The arbiter's ruling files such rows rather than starting them."
+    },
+    {
+     "id": "T401-Q1",
+     "summary": "the research pass finds no stable-with-grooms'-room depth and the longer-than-deep stables attested only without one, so nothing shrinks and STABLE_DEPTHS' claim is restated",
+     "class": "within",
+     "why": "Exactly the XIV rule: where behavior is fine and the claim does not literally match, restate the claim, not the code."
+    },
+    {
+     "id": "T401-N3",
+     "summary": "the grooms' room stays a labeled 9 ft GUESS; JAANUS's '2 bays in cross section with a peripheral veranda' and the redraw filed as T405",
+     "class": "within",
+     "why": "The bundle states the passage is not on 0108's page, so the research record is silent on this depth, not contradicted; the 9 ft is a labeled GUESS no reader at fit zoom would see as wrong. Whether that passage governs this room is the research ladder's call (Principle XII), not a defect left. The same rule runs the other way in T398, which draws behind because the record (0093) attests it. Filing it, rather than starting it, is what the arbiter's ruling orders for anything that is not one of the seven's wrong outcomes."
+    },
+    {
+     "id": "T395-room-first",
+     "summary": "Ochiba's privy moved 3.5 ft south so its name stands at the usual gap with no leader, instead of a placer rule; pack-audit clean",
+     "class": "within",
+     "why": "The defect (a caption led across the stables) fixed by giving the sheet room, the constitution's room-first order."
+    },
+    {
+     "id": "T395-hayakawa-shrine-leader",
+     "summary": "Hayakawa's shrine caption leader across its garden left as is",
+     "class": "within",
+     "why": "leader_crosses ignores garden ground on purpose and the plan names no wrong outcome; a difference that reads fine is not a defect (XIV)."
+    },
+    {
+     "id": "T392-study-moves",
+     "summary": "the study moves to the household's end of the office hall (round trip's back row reordered), not the middle gate; the handoff's gate rule measured and set down",
+     "class": "within",
+     "why": "A choice of mechanism for the defect (the magistrate walking past working rooms to his study), made on measurement (the gate site off the garden and armory.rs's rolled bay); the defect is fixed on both generated sheets and pinned red-first."
+    },
+    {
+     "id": "T392-clerks-room-guess",
+     "summary": "the clerks' room still beside the day office (Takayama) and behind 13 ft of the dais's 18, a GUESS restated in the spec",
+     "class": "within",
+     "why": "Labeled at the point of change; keeps 0113's attested adjacency."
+    },
+    {
+     "id": "T392-hand-sheet-doors",
+     "summary": "Ochiba and Hayakawa give the study its own back door onto the lane; shared rear door kept so no traveler crosses the study",
+     "class": "within",
+     "why": "Fixes the defect on the hand sheets on measured-clear lanes, without routing anyone else through the study."
+    },
+    {
+     "id": "T392-takayama-not-knob",
+     "summary": "Takayama's residence study (a second attested form) and the armory not made knobs",
+     "class": "within",
+     "why": "Not asked; the join form drawn is attested on both Edo plans. Adding a knob would be scope the GM did not ask for."
+    },
+    {
+     "id": "T375-household-doors",
+     "summary": "Ubame's household door and the hall's back door moved onto the study's back wall; household way traced clear on every sheet; county unchanged",
+     "class": "within",
+     "why": "The defect itself (the household entering through the clerks' room), fixed and traced on each sheet."
+    },
+    {
+     "id": "T375-O1",
+     "summary": "Ochiba's visitors' way from the genkan room through the day office and clerks' room kept, a labeled GUESS",
+     "class": "within",
+     "why": "T375's defect, as the plan's goal states it, is the household's way, and that way is traced clear on Ochiba. O1 is the visitors' way through public office rooms; the bundle names no wrong outcome against it, and it is labeled a GUESS."
     }
    ],
    "verdict": "CLEAR"

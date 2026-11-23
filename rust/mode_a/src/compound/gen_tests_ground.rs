@@ -218,6 +218,57 @@ fn a_cart_route_door_on_an_end_keeps_a_carts_width_past_its_tub() {
     assert_eq!(lanes, 2, "the county's and the round trip's stables");
 }
 
+/// 0082 (449 T397): a stables with a door on each end along its row holds a cart's lane at both ends, so seated at either end of its
+/// row the wall past that door stands a whole lane off, not at the first door's end alone.
+#[test]
+fn a_door_on_each_end_keeps_a_carts_lane_at_both() {
+    use super::layout::{CART_LANE, WALL_HALF};
+    let doors =
+        r#""interior": "stables", "doors": [{"face": "W", "at": 0.5}, {"face": "E", "at": 0.5}]"#;
+    for near in [0, 200] {
+        let extra = format!(r#", "near": {near}, {doors}"#);
+        let spec = b(
+            "stables",
+            "stables",
+            "service",
+            (18.0, 24.0),
+            "outer",
+            "S",
+            &extra,
+        );
+        let p = with(&[spec], "");
+        let l = seated(&p).unwrap();
+        let (x0, _, x1, _) = l.seats[0].unwrap();
+        let (west, east) = (x0 - WALL_HALF, p.w - WALL_HALF - x1);
+        let lane = west.min(east);
+        assert!(lane >= CART_LANE - 1e-9, "near {near}: {lane:.2} ft");
+    }
+    // mid-row on the 100 ft fixture (its gate's approach at 45..55), a smaller neighbor seated after it nearest the second door's end
+    // stands a whole lane off that door: the high end's held ground as well as the low's
+    let stables = b(
+        "stables",
+        "stables",
+        "service",
+        (18.0, 24.0),
+        "outer",
+        "S",
+        &format!(r#", "near": 60, {doors}"#),
+    );
+    let shed = b(
+        "shed",
+        "shed",
+        "plain",
+        (5.0, 5.0),
+        "outer",
+        "S",
+        r#", "near": 85"#,
+    );
+    let l = seated(&with(&[stables, shed], "")).unwrap();
+    let ((_, _, s1, _), (n0, _, _, _)) = (l.seats[0].unwrap(), l.seats[1].unwrap());
+    let lane = n0 - s1;
+    assert!(lane >= CART_LANE - 1e-9, "{lane:.2} ft past the east door");
+}
+
 #[test]
 fn a_cart_route_door_at_its_rows_end_keeps_a_carts_lane_to_the_wall() {
     use super::layout::{court_range, CART_LANE, CLEAR, WALL_HALF};

@@ -67,6 +67,12 @@
 
 ## Review log
 
+- **2026-11-23 (feature 449 T392, T375)**: the OFFICIAL STUDY given its own back door (svg x 362.5-380.5 in the hall's north face),
+  onto the lane under the divider, so the magistrate's way from the nakamon to his study is about 46 ft along the lane (it ran on
+  round the hall's west end to the west door, about 85 ft; m:t392-hayakawa-lane, m:t392-hayakawa-before). Research:
+  research/questions/0113-the-office-hall-and-its-clerks-goyakusho.drawing.html, pass t381-study-seat (the Edo North and South Town
+  Magistracies, 1841 and 1842: the yobeya at the join of office and residence); the lane as the corridor a GUESS. The household's
+  way from the main gate to the nakamon runs by that lane and enters no hall room (traced 2026-11-23): nothing else moved.
 - **2026-11-23 (feature 449 T352: the T328 bundle's drawing, building-review 2026-11-22 N1)**: every road and lane one flat earth
   tone, the dashed overlay gone (T328: period plans drew a road a flat color, 0088's drawing page). The writing and binding rooms
   cut to 12 and 10 ft (200 and 167 sq ft, inside the size-audit's 6-12 mats each, an ESTIMATE; they were 16 and 15.3 ft), the
