@@ -2473,32 +2473,47 @@ engine speed, so no checklist.
 
 
 
-### T184 (<why: the finding or measurement that files it>)
+### T184 (observed 2026-11-23: the 0009 and 0059 cuts under the 20,000-byte prose cap in cce80ca436 dropped content, measured by a word-level diff of each page against `git show cce80ca436^:<page>`; the GM 2026-11-23, request.md "the convergence talk": "no edit to maintain entry size should ever be substantive")
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: Three parts. (1) The repair: what the cuts lost restored into the current text (keeping 449 T371's corrections in the same commit) and each page split along its topics by page session (`specs/451-time-retro-and-efficiency/briefs/t184-write.md`, `t184-checks.md`), a pointer left where the section stood. (2) The guard: `l7r-gate check question-size` (`make quick`) refuses a SIZE EDIT - the page over its limit at the base, or the words the change removed putting it back over - that drops a claim-bearing token (a number, label, quoted passage or proper name no longer on the page or on a page its split pointer names - only T185's `<a class="moved" href="NNNN-<slug>.html">`, the one form the triage follows, the refusal and the three rule files (docs/research-record-rules.md, research/CLAUDE.md, scripts/container/page-session-rules.md) naming it (gap audit item 4, `/home/agent/.claude/jobs/c6fd72d1/tmp/gap-audit.md`: a plain link passed here and was owed as removed there); a negation or qualifier no longer in its own block), naming the split; escape `SIZE_EDIT_OK="<why>"` for a correction, printed with the run (`question_size/size_edit.rs`). (3) The exception: a page's own limit in `research/size-limits.json`, read only with the `size-exception` agent's INDIVISIBLE verdict, its date and ledger row (`question_size/limits.rs`, `.claude/agents/size-exception.md`).
 
-| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
-|---|---|---|---|---|
+| step | figure | what it says |
+|---|---|---|
+| before | the cuts' losses, measured 2026-11-23 by a word diff (`/tmp/t184/wd.py cce80ca436 <pages>`): 0009 - "already", the 1975-76 survey's date and scope in its block, "for the period", "the transplanting period was long", the calendar's explication, "So every depth above is modern extension guidance.", "the present-day guide", "cannot be grown in a wet paddy"; 0059 - "half-river closures", the lecture named, "before Japan began to modernize in 1868", the Sengoku block's body restating its source ("were mostly small, of timber frames packed with stone"), two wordings of the weirs' age and build. Three changes the diff showed were earlier checks' corrections the same commit carried, not losses - the canal sentence's "division works", an absence note's "The Chinese articles ..." clause and the Edo weirs' "large rivers" (their source gives no river size): restored by the write session, the checks session took them out again (`t184-handoff.md`, `OPEN K2 undone twice` and quote-check 0333) | the cuts were substantive; a restore is checked like any other edit |
+| red | the stub run: 3 of the 6 new `size_edit` tests failed (`/tmp/t184/red-saved.log`, `make rust-test CRATE=rust/gate/crates/checks`, 149 passed, 4 failed - the fourth the regex-scan rule, fixed); the real commit: `l7r-gate check question-size --base cce80ca436^` in a worktree at cce80ca436 exit 1, naming 0009 (already, often, every, about) and 0059 (the 1902 quoted passage, mostly), and 0097 (none, not: its section moved to 0331 and rewritten from new research, the escape's case) (`/tmp/t184/real-red.log`); the pointer form: the split test with a plain `href` link exit 0 where it must refuse, 158 passed, 1 failed (`/tmp/t184/item4-red.log`, 2026-11-23) | the guard fires on the trims, and a plain link passed a split the triage cannot see |
+| after | every loss restored into the current text (449 T371's corrections kept), and each page split along its topics with a one-sentence pointer where the section stood: 0009 20,044 pre-trim, 19,853 trimmed, 13,766 now, its after-the-harvest sections on the new 0332 (7,761); 0059 20,065, 19,830, 12,664 now, its weir-building section and the two lead sentences summing it on the new 0333 (8,682); notes moved with their sentences, none in two places; `make record CHECK=1` clean and `make question-sizes` 0 over, measured 2026-11-23 (`specs/451-time-retro-and-efficiency/briefs/t184-handoff.md`); `l7r-gate check question-size` (delta) exit 0 on the repaired tree, the moved tokens standing on the linked pages | the repair keeps every claim, and the guard passes a split |
 
 ### T184 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** No research page loses a claim to fit the size cap: a page over it is split with a pointer, or, one indivisible topic, carries an audited limit of its own.
+2. **The constraints.** The GM 2026-11-23 (request.md "the convergence talk": never cut; split; an audited per-page limit; a split's pointer means nothing cascades). docs/research-record-rules.md "A question has a size" (split along topics, joins point). Constitution XII (citations verbatim). Other builders' files (T188-T190) untouched.
+3. **Where each comes from.** G: request.md 2026-11-23. R: docs/research-record-rules.md. O: the word diff and the real-commit run above.
+4. **Do they describe the world here?** Yes: the guard was run on the real trim commit and on the repaired pages (the delta run green on the working tree).
+5. **The order.** The page sessions first (they were queued before the guard was built), the guard then run over their pages as the green fixture.
+6. **The exits.** Green: `make closing-checks T=T184 F=451` green, the record checks of the page sessions recorded, `make question-sizes` naming none. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** The token classes were tested on the real pre/post pairs before they were fixed; they miss a claim carried only in plain words ("the transplanting period was long"; of the cuts' fourteen losses the classes named six tokens, measured 2026-11-23 by the `--base cce80ca436^` run against the word diff), a scope word outside their classes ("large rivers") and a changed term ("diversion" to "division"), stated in the docs rather than tuned in.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** RED FIRST above; after: `make rust-test CRATE=rust/gate/crates/checks` 159 passed (a plain link refused, the `moved` form kept), 2026-11-23 (`/tmp/t184/item4-green.log`); the delta check green on the restored and split pages.
+10. **Before moving a constant.** n/a: the 20,000 cap unchanged; a page's own limit only through the record.
+11. **Before fitting things into room.** Room first: a split gives each topic its own page.
+12. **Before any fix.** A reader of 0009 and 0059 met weakened claims (a qualifier gone, a source's restatement cut to a pointer at its footnote, a question's date gloss gone): wrong outcomes, fixed.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?**
+- The guard also names 0097 on cce80ca436 (qualifiers `none`, `not`): not a defect - both claims stand restated, observed 2026-11-23, method: `grep` of the dropped sentences' words over 0097 and 0331 as they stand now. "None gives a count of the staff or says who else lived inside" stands on 0331 as "No page we read counts who lived inside one, or says whether all its staff did"; "a Beijing courtyard house lodged its servants not in a rowhouse but in one of the ranges of rooms around its courtyard" stands on 0097 as "A Beijing courtyard house lodged its servants in the south range, one of the ranges of rooms around its courtyard", in the paragraph opening "China shows the other form, several rooms behind one door" - a correction to the range the source names, not a cut. The escape `SIZE_EDIT_OK` is the route for such a correction.
+- Pop-ups whose `Entry:` names 0009 or 0059 for content now on 0332 or 0333 (weir_form, winter_crop choices): not a defect: the pointer on the source page carries the reader to the full text (the GM 2026-11-23: *"as long as the original page being linked to directs a reader to the other page where the full information can be found, then nothing needs to cascade simply because a split occurs"*), so no pop-up is edited.
+- The registry entry `hrr-agagawa-dento` called its weirs "on large rivers", a size its page does not state, and the new glossary term `true leaf` was drafted from general botany, not the record's text (the checks session's source-reader and record-format, 2026-11-23): fixed here, by page session (`briefs/t184-followups.md`).
+- 0009's heading still ends "and after the harvest", now on 0332: not a defect - the page's pointer sentence takes the reader there (the GM 2026-11-23 on a split's pointer), and a renamed heading would re-owe every `Entry:` link.
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** yes. It makes the record work faster: a trim that drops a claim no longer cascades into re-checks and restorations (this task's own repair cost two page sessions, measured 2026-11-23 (`.git/page-sessions/run-3faec974.log`)), and the refusal names the split at `make quick` rather than at a later review.
 
+### T184 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)
+
+1. **Where does the time go?** In the restoration a lossy trim forces: two page sessions and their record checks for 0009 and 0059, measured 2026-11-23 (`.git/page-sessions/run-3faec974.log`).
+2. **Removes work, or only moves it?** It removes it: the lossy trim is refused before it lands.
+3. **What do you expect it to save, and why?** One page session pair per lossy trim; two in this case.
+4. **How does the work grow with the settlement?** It does not: the record's tooling only; the check reads only the changed questions' base and working text.
+5. **What did the before and after show, and under what conditions?** Red on cce80ca436, green on the repaired tree, both by the same command (`l7r-gate check question-size`), this is evidence, not a pass.
+6. **Did any map move, and does it still keep the research?** No map moved: the record and its tooling only.
 
 <!-- plan-archive: T185 to T185 moved to plan-done.md, 2026-11-23 (feature 375 FR-044) -->
 <!-- plan-archive: T186 to T186 moved to plan-done.md, 2026-11-23 (feature 375 FR-044) -->
