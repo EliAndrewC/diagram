@@ -45,6 +45,68 @@ fn agent(kind: &str, prompt: &str, d: &Path) -> Vec<Answer> {
     judge(&e, &Session::from_input(&e.input), d)
 }
 
+/// The `SubagentStop` of agent `id` of `kind`, its meta written at `depth` beside the session's transcript `d/tr.jsonl`.
+fn back(kind: &str, id: &str, depth: u64, d: &Path) -> Vec<Answer> {
+    let dir = d.join("tr/subagents");
+    std::fs::create_dir_all(&dir).unwrap();
+    std::fs::write(
+        dir.join(format!("agent-{id}.meta.json")),
+        json!({"spawnDepth": depth}).to_string(),
+    )
+    .unwrap();
+    let e = Event {
+        name: "SubagentStop".to_owned(),
+        input: json!({"agent_id": id, "agent_type": kind, "transcript_path": d.join("tr.jsonl")}),
+    };
+    judge(&e, &Session::from_input(&e.input), d)
+}
+
+/// 451 T183, the shapes of 2026-11-23: a builder's own building-review (its dispatch carries the builder's `agent_id`) neither arms nor
+/// disarms the session's filter; the session's own review is out until it returns - a sub-agent's of its type, another type's, or one
+/// with no meta does not end it - and its return, read from the agent's own transcript path too, is refused once.
+#[test]
+fn only_the_session_s_own_review_arms_and_only_once_it_has_returned() {
+    let d = world("own");
+    ledger(&d, "");
+    let by_builder = |kind: &str| {
+        let e = Event {
+            name: "PreToolUse".to_owned(),
+            input: json!({"tool_name": "Agent", "agent_id": "b1", "tool_input": {"subagent_type": kind, "prompt": "go"}}),
+        };
+        judge(&e, &Session::from_input(&e.input), &d)
+    };
+    assert!(by_builder("building-review").is_empty());
+    assert_eq!(armed(&d), "");
+    assert!(stop(&d).is_empty());
+    agent("building-review", "go", &d);
+    assert!(by_builder("escalation-check").is_empty());
+    // a builder's filter disarms nothing
+    assert_eq!(armed(&d), "building-review");
+    assert!(back("building-review", "h1", 2, &d).is_empty());
+    assert!(back("settlement-review", "s1", 1, &d).is_empty());
+    let e = Event {
+        name: "SubagentStop".to_owned(),
+        input: json!({"agent_id": "n1", "agent_type": "building-review", "agent_transcript_path": d.join("none/agent-n1.jsonl")}),
+    };
+    assert!(judge(&e, &Session::from_input(&e.input), &d).is_empty());
+    assert!(stop(&d).is_empty(), "still out");
+    let dir = d.join("own");
+    std::fs::create_dir_all(&dir).unwrap();
+    std::fs::write(dir.join("agent-r2.meta.json"), r#"{"spawnDepth": 1}"#).unwrap();
+    let e = Event {
+        name: "SubagentStop".to_owned(),
+        input: json!({"agent_id": "r2", "agent_type": "building-review", "agent_transcript_path": dir.join("agent-r2.jsonl")}),
+    };
+    assert!(judge(&e, &Session::from_input(&e.input), &d).is_empty());
+    assert!(refused(&stop(&d), "FINDINGS UNFILTERED: building-review"));
+    assert!(stop(&d).is_empty(), "once");
+    // a return with nothing out, or nothing armed, changes nothing
+    assert!(back("building-review", "r3", 1, &d).is_empty());
+    assert!(agent("escalation-check", "draft", &d).is_empty());
+    assert!(back("building-review", "r4", 1, &d).is_empty());
+    assert!(stop(&d).is_empty());
+}
+
 fn stop_with(input: &Value, d: &Path) -> Vec<Answer> {
     let e = Event {
         name: "Stop".to_owned(),
@@ -96,6 +158,9 @@ fn a_review_arms_the_filter_disarms_and_the_refusal_comes_once() {
         read_state(&d).get("ledger_rows").and_then(Value::as_str),
         Some("7")
     );
+    // out: the Stop that waits on it passes (451 T183); its return arms the refusal
+    assert!(stop(&d).is_empty());
+    back("settlement-review", "r1", 1, &d);
     assert!(refused(&stop(&d), "FINDINGS UNFILTERED: settlement-review"));
     assert!(stop(&d).is_empty());
     assert!(agent("escalation-check", "draft", &d).is_empty());

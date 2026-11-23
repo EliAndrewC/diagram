@@ -2,7 +2,8 @@
 //! IT IS SET DOWN (the GM, 2026-10-18: "stopping with tasks partially done is a constant problem with the Opus line of models"). At a turn's end,
 //! for the clone's last `make task-start`: an open box, nothing the session started still running, no `make set-down` since - refused. A turn ending
 //! on a question is no way out (the plan review, 2026-10-19). A read error lets the turn end, recorded: a Stop guard that fails closed can hold a
-//! session.
+//! session. Since 451 T183 the block is said by the background idle check (`idle.rs`), never a Stop that waits on running work, nor
+//! for a feature or a task a ruling holds (`holds.rs`); nothing names a free builder slot while builders run (T183's MODE 4, D10).
 
 use std::collections::{HashMap, HashSet};
 use std::fs::File;
@@ -22,8 +23,9 @@ use crate::tool::ask;
 /// The guard.
 pub const GUARD: Guard = Guard {
     name: "set-down-hooks",
-    // SessionStart: a compaction forgets what was said in one line (451 T171, `once::forget`)
-    events: &["Stop", "SessionStart"],
+    // SessionStart: a compaction forgets what was said in one line (451 T171, `once::forget`). A Stop is no longer decided here: its
+    // block is the idle check's (451 T183), and nothing names a free builder slot while a builder runs (T183's MODE 4, D10)
+    events: &["SessionStart"],
     matcher: "*",
     decide,
 };
@@ -292,34 +294,13 @@ fn subagents(path: &Path) -> PathBuf {
     path.with_extension("").join("subagents")
 }
 
-/// ROLLING DISPATCH (feature 451 T88): how many builders run at once before the Stop hook stops naming the next task - `L7R_BUILDERS`,
-/// a GUESS of 3, the three at once T88's occupancy was measured against (3 builders 26% of 580 minutes, a mean of 1.65, measured
-/// 2026-11-21 from each agent's span).
-const BUILDERS: usize = 3;
-
 /// A builder's brief: the description of an agent the session dispatched (its meta's `spawnDepth` 1) opening with its feature number
 /// ([`builder_brief`]; 449 T268 dropped the `T<n>` it had to follow, so a bundle's brief is one).
 static BRIEF: LazyLock<Regex> = LazyLock::new(|| re(r"^\s*(\d{3})\b"));
 /// A task id in a brief, or a range of them (`T289-T300`, 451 T156): the first id's number and letter, the last's.
 static TASK_ID: LazyLock<Regex> = LazyLock::new(|| re(r"\bT(\d+)([a-z]?)(?:-T(\d+)([a-z]?))?\b"));
-/// What a task's line names of the tree: a file (a path, or a name with its extension) or a guard module (`*_hooks`).
-static NAMES: LazyLock<Regex> = LazyLock::new(|| {
-    re(r"[A-Za-z0-9_./-]*[A-Za-z0-9_]\.(?:rs|sh|py|md|json|toml)\b|\b[a-z][a-z0-9_]*_hooks\b")
-});
 /// A task its line says it comes after (`after T86`).
 static AFTER: LazyLock<Regex> = LazyLock::new(|| re(r"\bafter (T\d+[a-z]?)\b"));
-/// A name too common to tell one task's file from another's, unless its path is given.
-const GENERIC: &[&str] = &[
-    "tests.rs",
-    "lib.rs",
-    "mod.rs",
-    "main.rs",
-    "plan.md",
-    "tasks.md",
-    "spec.md",
-    "CLAUDE.md",
-];
-
 /// A WAIT THE HOOK READS (451 T102): a task line's `(waits: <when>)`, right after its id's bracketed tags as FR-013's `[perf]` is, so a
 /// line that only quotes the clause in its prose (T102's own) waits on nothing. `<when>` is a landing, `T88 lands` (no task it names
 /// still open), or a day after one, `a full day after T02-T21 land` (24 hours past the latest landing of the tasks it names, a
@@ -390,7 +371,7 @@ fn landings(root: &Path, feature: &str) -> Result<HashMap<String, i64>, String> 
 }
 
 /// Can a task not start yet (451 T102)? Its `(waits: ...)` clause is unmet ([`WAITS`]), it comes `after T<n>` an open task (451 T88's
-/// rule), or an open task's line says it `lands before` it. The one reading the free slot, the nothing-running refusal and `make
+/// rule), or an open task's line says it `lands before` it. The one reading the nothing-running refusal and `make
 /// task-start`'s performance-first picker ([`next_performance`]) share - FR-013's "a performance task waiting on another task's
 /// landing", read rather than escaped. `boxes` are the feature's open boxes; the log is read only for a day after a landing.
 fn waits(
@@ -451,206 +432,6 @@ fn waits(
         .max();
     let now = now();
     Ok(last.is_some_and(|at| now < at + DAY_MICROS))
-}
-
-/// The feature directory a number names, or None.
-fn feature_dir(root: &Path, number: &str) -> Option<String> {
-    let mut names: Vec<String> = std::fs::read_dir(root.join("specs"))
-        .ok()?
-        .flatten()
-        .map(|e| e.file_name().to_string_lossy().into_owned())
-        .filter(|n| n.split('-').next() == Some(number))
-        .collect();
-    names.sort();
-    names.into_iter().next()
-}
-
-/// The files the running tasks' own edits name (451 T86's reading, the other way round): each `PostToolUse` Edit, Write or `NotebookEdit`
-/// line of the task's feature log, not a `fallback` one, filed under the task - relative to the root, those under `specs/` and `.git/`
-/// and the review ledger left out, since every task writes them.
-fn busy_files(root: &Path, running: &[Builder]) -> Result<HashSet<String>, String> {
-    let pre = format!("{}/", root.to_string_lossy().trim_end_matches('/'));
-    let mut out = HashSet::new();
-    for (number, tasks) in running {
-        let Some(feature) = feature_dir(root, number) else {
-            continue;
-        };
-        let log = super::event_log_hooks::log_path(root, &feature);
-        if !log.is_file() {
-            continue;
-        }
-        let text = std::fs::read_to_string(&log).map_err(|e| format!("{}: {e}", log.display()))?;
-        for line in text
-            .lines()
-            .filter(|l| l.contains(r#""cat":"edit""#) && l.contains(r#""PostToolUse""#))
-        {
-            let Ok(row) = serde_json::from_str::<Value>(line) else {
-                continue;
-            };
-            let rel = field(&row, "path").strip_prefix(&pre).unwrap_or("");
-            if row.get("fallback").and_then(Value::as_bool) == Some(true)
-                || !tasks.iter().any(|t| field(&row, "task") == t)
-                || rel.is_empty()
-                || rel.starts_with("specs/")
-                || rel.starts_with(".git/")
-                || rel == "dev/review-ledger.md"
-            {
-                continue;
-            }
-            out.insert(rel.to_owned());
-        }
-    }
-    Ok(out)
-}
-
-/// What a task's line names of the tree ([`NAMES`]), a name in [`GENERIC`] kept only with its path.
-fn names(title: &str) -> Vec<String> {
-    NAMES
-        .find_iter(title)
-        .map_while(Result::ok)
-        .map(|m| m.as_str().trim_matches(|c| c == '.' || c == '/').to_owned())
-        .filter(|n| n.contains('/') || !GENERIC.contains(&n.as_str()))
-        .collect()
-}
-
-/// Does a name a task's line gives reach a file: a path its suffix (or a directory above it), a bare name one of its parts.
-fn touches(name: &str, file: &str) -> bool {
-    if name.contains('/') {
-        return file.ends_with(name) || file.starts_with(&format!("{name}/"));
-    }
-    file.split('/')
-        .any(|p| p == name || p == format!("{name}.rs"))
-}
-
-/// The open task to start in a free builder slot (451 T88): performance work first across every active feature (FR-013), then the
-/// rest - each pass of `prefer` first, then of each other active feature by its last task-start (the order [`next_performance`]
-/// reads), in tasks.md's order - a task never
-/// started in this clone (one started is running, waiting to land, or set down: resumed or landed, never started again), whose line
-/// names no file a running task's edits name ([`busy_files`]; a line naming nothing touches nothing it can tell) and that does not wait
-/// ([`waits`]: its clause, `after T<n>` an open task, or an open task landing before it; 451 T102).
-fn next_independent(
-    root: &Path,
-    git_dir: &Path,
-    prefer: &str,
-    (busy, running): (&HashSet<String>, &[Builder]),
-    lands: &mut Lands,
-) -> Result<Option<OpenTask>, String> {
-    let downs = rows(&git_dir.join("set-downs.jsonl"))?;
-    let starts = rows(&git_dir.join("task-starts.jsonl"))?;
-    let mut order = started(git_dir)?;
-    order.retain(|(f, _)| f != prefer);
-    order.insert(0, (prefer.to_owned(), String::new()));
-    // performance work first across every active feature (FR-013; T88's plan review): the first other task is kept, not returned
-    let mut rest = None;
-    for (feature, since) in order {
-        let boxes = active(root, &downs, &feature, &since, feature == prefer)?;
-        let plan_path = root.join("specs").join(&feature).join("plan.md");
-        let plan = if plan_path.is_file() {
-            read(&plan_path)?
-        } else {
-            String::new()
-        };
-        let mut free = Vec::new();
-        for (id, title) in &boxes {
-            let started = starts
-                .iter()
-                .any(|r| field(r, "feature") == feature && field(r, "task") == id);
-            let overlaps = names(title)
-                .iter()
-                .any(|n| busy.iter().any(|f| touches(n, f)));
-            // the wait last: a day after a landing reads the feature's log
-            // a parked stage's task waits for the GM (449 T244): never a slot's next
-            // a running builder's own task, a bundle's member never task-started among them (451 T156: T289-T300's ten between)
-            let held = crate::parked::held_task(root, git_dir, title).is_some()
-                || running
-                    .iter()
-                    .any(|(n, ts)| n == number_of(&feature) && ts.contains(id));
-            if started || held || overlaps || waits(root, &feature, &boxes, (id, title), lands)? {
-                continue;
-            }
-            free.push((id, title));
-        }
-        let task = |(id, title): &(&String, &String)| OpenTask {
-            feature: feature.clone(),
-            id: (*id).clone(),
-            title: (*title).clone(),
-        };
-        if let Some(perf) = free.iter().find(|(id, t)| performance(id, t, &plan)) {
-            return Ok(Some(task(perf)));
-        }
-        rest = rest.or_else(|| free.first().map(task));
-    }
-    Ok(rest)
-}
-
-/// A free builder slot's refusal (451 T88), or None: fewer than [`BUILDERS`] (`L7R_BUILDERS`) builders running and an independent open
-/// task to start ([`next_independent`]). A task that is not performance work, where an open one could start ([`next_performance`], which
-/// skips one that waits, 451 T102), gets `task-start`'s escape in its command, since that start refuses it otherwise (FR-013): every
-/// open performance task that does not wait is started or touches a running task's files.
-fn free_slot(
-    root: &Path,
-    git_dir: &Path,
-    feature: &str,
-    path: &Path,
-) -> Result<Option<String>, String> {
-    let knob = crate::env::opt("L7R_BUILDERS")
-        .and_then(|v| v.trim().parse().ok())
-        .unwrap_or(BUILDERS);
-    let builders::Running {
-        named: running,
-        unnamed,
-        landing,
-    } = builders(path).map_err(|e| e.to_string())?;
-    // A LANDING IN FLIGHT HOLDS THE SLOTS (451 T156; the round arbiter's ask:set-down-449-mid-landing): no task-start named mid-landing
-    let proc = crate::env::opt("L7R_PROC_ROOT").unwrap_or_else(|| "/proc".to_owned());
-    if landing || running.len() + unnamed >= knob || landing_process(root, Path::new(&proc)) {
-        return Ok(None);
-    }
-    let busy = busy_files(root, &running)?;
-    let mut lands = Lands::new();
-    let Some(next) = next_independent(root, git_dir, feature, (&busy, &running), &mut lands)?
-    else {
-        return Ok(None);
-    };
-    let number = next
-        .feature
-        .split('-')
-        .next()
-        .unwrap_or(&next.feature)
-        .to_owned();
-    let plan = std::fs::read_to_string(root.join("specs").join(&next.feature).join("plan.md"))
-        .unwrap_or_default();
-    let later = match next_performance_in(root, git_dir, &next.feature, &mut lands)
-        .ok()
-        .flatten()
-    {
-        Some(p) if !performance(&next.id, &next.title, &plan) => format!(
-            "PERF_LATER_OK=\"{} {}, the open performance work, is started or touches a running task's files\" ",
-            number_of(&p.feature),
-            p.id
-        ),
-        _ => String::new(),
-    };
-    // a builder no brief names holds its slot under its own words (451 T171)
-    let who: Vec<String> = running
-        .iter()
-        .map(|(f, t)| builder_said(f, t, git_dir))
-        .chain((0..unnamed).map(|_| "a builder (no task named)".to_owned()))
-        .collect();
-    let short: String = next.title.chars().take(80).collect();
-    Ok(Some(slot_said(
-        running.len() + unnamed,
-        knob,
-        &who,
-        (&next.id, &short),
-        &later,
-        &number,
-        number_of(feature),
-    )))
-}
-
-fn number_of(feature: &str) -> &str {
-    feature.split('-').next().unwrap_or(feature)
 }
 
 /// The feature's open boxes, the GM's review box left out.
@@ -756,14 +537,16 @@ pub fn next_performance(
     git_dir: &Path,
     prefer: &str,
 ) -> Result<Option<OpenTask>, String> {
-    next_performance_in(root, git_dir, prefer, &mut Lands::new())
+    next_performance_in(root, git_dir, prefer, false, &mut Lands::new())
 }
 
-/// [`next_performance`] with the landings already read this Stop.
+/// [`next_performance`] with the landings already read this Stop; `idle`, the idle check's reading, skips a task a ruling holds by name
+/// ([`holds::named`], T183's MODE 4, D6), which `make task-start`'s does not.
 fn next_performance_in(
     root: &Path,
     git_dir: &Path,
     prefer: &str,
+    idle: bool,
     lands: &mut Lands,
 ) -> Result<Option<OpenTask>, String> {
     let downs = rows(&git_dir.join("set-downs.jsonl"))?;
@@ -773,6 +556,11 @@ fn next_performance_in(
         order.insert(0, (prefer.to_owned(), String::new()));
     }
     for (feature, since) in order {
+        // another feature a ruling holds offers no performance work to start (451 T183); the feature being started is never skipped,
+        // so a start the GM approved under a hold is refused only as it was before
+        if feature != prefer && holds::held(root, &feature).is_some() {
+            continue;
+        }
         let boxes = active(root, &downs, &feature, &since, feature == prefer)?;
         if boxes.is_empty() {
             continue;
@@ -783,8 +571,14 @@ fn next_performance_in(
         } else {
             String::new()
         };
+        let named = if idle {
+            holds::named(root, &feature)
+        } else {
+            Vec::new()
+        };
         for (id, title) in &boxes {
             if performance(id, title, &plan)
+                && !named.contains(id)
                 && crate::parked::held_task(root, git_dir, title).is_none()
                 && !waits(root, &feature, &boxes, (id, title), lands)?
             {
@@ -800,43 +594,35 @@ fn next_performance_in(
 }
 
 /// None to let the turn end, else the refusal; an Err is a read error, which lets it end too.
-pub(crate) fn verdict(root: &Path, transcript: &str) -> Result<Option<String>, String> {
-    let at = root.to_string_lossy();
-    let said = ask(
-        Path::new("/"),
-        "git",
-        &[
-            "-C",
-            &at,
-            "rev-parse",
-            "--path-format=absolute",
-            "--git-common-dir",
-        ],
-        "",
-    );
-    if !said.ok() {
-        return Err(said.err);
-    }
-    let git_dir = PathBuf::from(said.out.trim());
-    let starts = rows(&git_dir.join("task-starts.jsonl"))?;
-    let Some(last) = starts.last() else {
+/// `listed_idle`: the Stop's own `background_tasks` (the harness's list of what it runs, 451 T183) was given and empty, so the
+/// transcript's reading of what runs is not asked.
+pub(crate) fn verdict(
+    root: &Path,
+    transcript: &str,
+    listed_idle: bool,
+) -> Result<Option<String>, String> {
+    let Some((git_dir, feature, since)) = idle::last_start(root)? else {
         return Ok(None);
     };
-    let (feature, since) = (field(last, "feature"), field(last, "utc"));
+    let (feature, since) = (feature.as_str(), since.as_str());
     let downs = rows(&git_dir.join("set-downs.jsonl"))?;
     let boxes = active(root, &downs, feature, since, false)?;
-    if boxes.is_empty() {
+    // A RULING THAT HOLDS NEW WORK lets the session wait (451 T183, `holds`), and so does one that holds every open task by name
+    // (T183's MODE 4, D6): a held task is never named, though a wait still reads it as open
+    let named = holds::named(root, feature);
+    let free: Vec<&(String, String)> = boxes.iter().filter(|(id, _)| !named.contains(id)).collect();
+    if free.is_empty() || holds::held(root, feature).is_some() {
         return Ok(None);
     }
-    // the transcript last: the costly read (206 MB on 2026-10-26), where the status line is one small file
+    // the transcript last: the costly read (206 MB on 2026-10-26), where the status line is one small file. Something running is
+    // waited on, its end waking the session (451 T183); the harness's own empty list of what runs is taken at its word
     let path = Path::new(transcript);
-    if path.is_file() && !running(path).map_err(|e| e.to_string())?.is_empty() {
-        // something runs: the turn ends, but where a builder slot is free and an independent task waits (451 T88: dispatch rolls)
-        return free_slot(root, &git_dir, feature, path);
+    if !listed_idle && path.is_file() && !running(path).map_err(|e| e.to_string())?.is_empty() {
+        return Ok(None);
     }
     let number = |f: &str| f.split('-').next().unwrap_or(f).to_owned();
     // ONLY PARKED STAGES LEFT (449 T244): the stop the GM asked for, which `make set-down` takes; never one of them named as the next
-    if boxes
+    if free
         .iter()
         .all(|(_, t)| crate::parked::held_task(root, &git_dir, t).is_some())
     {
@@ -850,7 +636,7 @@ pub(crate) fn verdict(root: &Path, transcript: &str) -> Result<Option<String>, S
     // PERFORMANCE WORK FIRST (feature 451 FR-013): the next named is an open performance task where an active feature holds one; a
     // reader's error names the feature's first box, as before, rather than let the refusal go
     let mut lands = Lands::new();
-    let next = match next_performance_in(root, &git_dir, feature, &mut lands)
+    let next = match next_performance_in(root, &git_dir, feature, true, &mut lands)
         .ok()
         .flatten()
     {
@@ -869,7 +655,7 @@ pub(crate) fn verdict(root: &Path, transcript: &str) -> Result<Option<String>, S
             )
         }
         // the first task that can start (451 T102), a wait's read error counted as none, a parked stage's never (449 T244)
-        None => boxes
+        None => free
             .iter()
             .filter(|(_, t)| crate::parked::held_task(root, &git_dir, t).is_none())
             .find(|(id, t)| !waits(root, feature, &boxes, (id, t), &mut lands).unwrap_or(false))
@@ -918,40 +704,55 @@ pub(crate) fn judge(event: &Event, session: &Session, seam: Option<String>) -> V
         crate::once::forget(said.as_deref(), field(&event.input, "source"));
         return Vec::new();
     }
-    let got = verdict(&root, field(&event.input, "transcript_path"));
+    let transcript = field(&event.input, "transcript_path");
+    let read_error = |why: String, detail: &str| {
+        let _ = log::write(&Entry {
+            guard: "set-down",
+            event: "error",
+            detail,
+            rule: "read-error",
+            context: Some(Value::String(why)),
+            input: &event.input,
+            session_name: &session.name(),
+        });
+        Vec::new()
+    };
+    // THE IDLE CHECK (451 T183, [`idle_check`]): the open-task block, said once while its text is unchanged - a repeat would only wake
+    // a session that already heard it and chose to wait
+    let listed_idle = event
+        .input
+        .get("background_tasks")
+        .and_then(Value::as_array)
+        .is_some_and(Vec::is_empty);
+    let got = verdict(&root, transcript, listed_idle);
     if !matches!(got, Ok(Some(_))) {
         crate::once::clear(said.as_deref(), "set-down");
     }
     match got {
         Ok(None) => Vec::new(),
-        Err(why) => {
-            let _ = log::write(&Entry {
-                guard: "set-down",
-                event: "error",
-                detail: "stop",
-                rule: "read-error",
-                context: Some(Value::String(why)),
-                input: &event.input,
-                session_name: &session.name(),
-            });
-            Vec::new()
-        }
+        Err(why) => read_error(why, "stop"),
         Ok(Some(text)) => {
-            let words = crate::once::say(said.as_deref(), "set-down", &text, now() / 1_000_000);
-            let detail = if words == text {
-                "stop"
-            } else {
-                "stop, unchanged: said in one line"
-            };
+            if crate::once::repeat(said.as_deref(), "set-down", &text, now() / 1_000_000).is_some()
+            {
+                log::fire(
+                    "set-down",
+                    "permitted",
+                    "idle, unchanged: said before",
+                    "said-once",
+                    &event.input,
+                    session,
+                );
+                return Vec::new();
+            }
             log::fire(
                 "set-down",
                 "blocked",
-                detail,
+                "idle",
                 "not-set-down",
                 &event.input,
                 session,
             );
-            vec![Answer::Refuse(words)]
+            vec![Answer::Refuse(text)]
         }
     }
 }
@@ -962,10 +763,13 @@ fn decide(event: &Event, session: &Session) -> Vec<Answer> {
 }
 
 mod builders;
-mod said;
-pub use builders::{agent_builder, builder_brief, page_session_brief, page_session_listed};
-use builders::{asks_the_gm, builders, landing_process, Builder};
-pub use said::{builder_said, slot_said};
+pub mod holds;
+mod idle;
+use builders::asks_the_gm;
+pub use builders::{
+    agent_builder, builder_brief, page_session_brief, page_session_listed, session_dispatched,
+};
+pub use idle::idle_check;
 
 #[cfg(test)]
 mod tests;

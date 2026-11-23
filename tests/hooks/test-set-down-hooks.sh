@@ -2,7 +2,7 @@
 # Tests for the set-down guard (rust/guard, replayed through its link) - a feature is worked until it is set down (feature 385 T70, plan D89/D90).
 # Run: tests/hooks/test-set-down-hooks.sh   (exit 0 = all green)
 #
-# Each case drives the REAL hook with a Stop payload (`cwd`, `transcript_path`) on a fixture clone: its `task-starts.jsonl`,
+# Each case drives the REAL hook - a Stop payload through the idle check (451 T183) (`cwd`, `transcript_path`) on a fixture clone: its `task-starts.jsonl`,
 # a feature's `tasks.md`, and a transcript in the harness's JSONL form, whose background launches and task notifications say
 # what is still running.
 set -uo pipefail
@@ -139,63 +139,45 @@ rc=$(printf '{"cwd": "%s", "transcript_path": "%s"}' "$P" "$T/tr9.jsonl" | SET_D
 printf '{"seven_day": 50}' > "$T/cap/latest-s-9.json"
 out=$(cd "$P" && CLAUDE_CODE_SESSION_ID=s-9 SET_DOWN_WHY="the parked stages wait for the GM" "$SETDOWN" set-down 444 2>&1) && echo "$out" | grep -q "the stop the GM asked for" && ok "set down under the cap, naming the ruling" || no "parked set-down" "$out"
 
-echo "11. a builder's brief read with words and ranges; a landing agent or process holds the slots (451 T156, 2026-11-22)"
+echo "11. builders running: the Stop is silent, and a report back names no free slot (451 T183's MODE 4, D10: a free slot is named only by the idle check, once nothing runs)"
 L="$T/land"; mkdir -p "$L/specs/449-x" "$L/scripts"; git -C "$L" init -q
 printf -- '- [ ] T259 a\n- [ ] T277 b\n- [ ] T289 c\n- [ ] T295 d\n- [ ] T301 e\n' > "$L/specs/449-x/tasks.md"
 printf '{"feature": "449-x", "task": "T259", "utc": "2026-11-22T10:00:00Z"}\n' > "$L/.git/task-starts.jsonl"
 : > "$T/trL.jsonl"; mkdir -p "$T/trL/subagents"
 builder() { launch agentId "Async agent launched successfully. agentId: $1 (internal ID)" "$1" >/dev/null
   jq -nc '{"spawnDepth": 1, "description": $ARGS.positional[0]}' --args -- "$2" > "$T/trL/subagents/agent-$1.meta.json"; }
+NOTE='<task-notification><task-id>x</task-id></task-notification>'
+# a report back: the prompt with a notice; whatever it is told, or nothing
+reportL() { jq -nc --arg c "$L" --arg t "$T/trL.jsonl" --arg p "$NOTE" '{cwd: $c, transcript_path: $t, prompt: $p}' \
+  | SET_DOWN_ROOT="$L" "$HOOK" prompt 2>"$T/err" > "$T/out"; cat "$T/out"; }
 stopL() { printf '{"cwd": "%s", "transcript_path": "%s"}' "$L" "$T/trL.jsonl" | SET_DOWN_ROOT="$L" "$HOOK" stop 2>"$T/err"; echo $?; }
 launch() { jq -nc '{"type": "user", "message": {"content": [{"type": "tool_result", "content": $ARGS.positional[1]}]}, "toolUseResult": {($ARGS.positional[0]): $ARGS.positional[2]}}' --args -- "$1" "$2" "$3" >> "$T/trL.jsonl"; }
 builder ab1 "449 bundle T259, T277: the two"
 builder ab2 "449 T289-T300 bundle (fresh): twelve"
-rc=$(stopL)
-[ "$rc" = 2 ] && grep -q "2 of 3 builders running (449 T259+T277, 449 T289+T290" "$T/err" && grep -q "make task-start F=449 T=T301," "$T/err" && ok "a word before the ids and a range: both builders read, T295 the range's, T301 named" || no "briefs" "rc=$rc $(cat "$T/err")"
-builder ab3 "449 batch landing: clear the six refusals and land"
-[ "$(stopL)" = 0 ] && ok "a landing agent running: no task-start named mid-landing" || no "landing agent" "$(cat "$T/err")"
-jq -nc '{"type": "user", "message": {"content": "<task-notification><task-id>ab3</task-id><status>completed</status></task-notification>"}}' >> "$T/trL.jsonl"
-[ "$(stopL)" = 2 ] && ok "the landing ended: the free slot named again" || no "landing ended"
-printf '#!/usr/bin/env bash\nsleep 30\n' > "$L/scripts/land-alone.sh"
-( cd "$L" && exec bash "$L/scripts/land-alone.sh" 449 T259 ) & lp=$!
-for _ in 1 2 3 4 5 6 7 8 9 10; do [ "$(readlink "/proc/$lp/cwd" 2>/dev/null)" = "$L" ] && break; sleep 0.1; done
-[ "$(stopL)" = 0 ] && ok "this clone's land-alone.sh running: no task-start named" || no "landing process" "$(cat "$T/err")"
-kill "$lp" 2>/dev/null; wait "$lp" 2>/dev/null
-[ "$(stopL)" = 2 ] && ok "it ended: the free slot named again" || no "landing process ended"
+[ "$(stopL)" = 0 ] && [ ! -s "$T/err" ] && ok "builders running: the Stop is silent, their end wakes the session" || no "a Stop over running builders" "$(cat "$T/err")"
+[ -z "$(reportL)" ] && ok "a report back with a slot free: nothing said" || no "a report back's notice" "$(cat "$T/out")"
 
-echo "12. a general-purpose agent no brief names holds a slot; an unchanged refusal is said once, then in one line (451 T171, 2026-11-23)"
-typed() { launch agentId "Async agent launched successfully. agentId: $1 (internal ID)" "$1" >/dev/null
-  jq -nc '{"spawnDepth": 1, "agentType": $ARGS.positional[1], "description": $ARGS.positional[0]}' --args -- "$2" "$3" > "$T/trL/subagents/agent-$1.meta.json"; }
-stopS() { printf '{"session_id": "s12", "cwd": "%s", "transcript_path": "%s"}' "$L" "$T/trL.jsonl" | SET_DOWN_ROOT="$L" "$HOOK" stop 2>"$T/err"; echo $?; }
-typed ar1 "round-arbiter: set 449 down mid-landing" round-arbiter
-rc=$(stopL)
-[ "$rc" = 2 ] && grep -q "2 of 3 builders running (449 T259+T277, 449 T289" "$T/err" && ok "a check the session dispatched holds no slot" || no "a check counted" "rc=$rc $(cat "$T/err")"
-typed ag1 "449: finish T330, combined verify, five reviews, land both" general-purpose
-[ "$(stopL)" = 0 ] && ok "a finisher whose brief names its task past the colon fills the third slot" || no "unnamed builder" "$(cat "$T/err")"
-export L7R_BUILDERS=4
-rc=$(stopS)
-[ "$rc" = 2 ] && grep -q "3 of 4 builders running (449 T259+T277, 449 T289+.*+T300, a builder (no task named)) - " "$T/err" && grep -q "make task-start F=449 T=T301," "$T/err" && ok "...counted and named as a builder with no task, the block in full" || no "unnamed named" "rc=$rc $(cat "$T/err")"
-rc=$(stopS)
-[ "$rc" = 2 ] && grep -qx "still: BLOCKED: a builder slot is free - 3 - unchanged since [0-2][0-9]:[0-5][0-9]" "$T/err" && ok "the same block again: refused in one line" || no "one line" "rc=$rc $(cat "$T/err")"
-# A COMPACTION FORGETS WHAT WAS SAID (451 T171, the GM's "no loss of fidelity"): the context may have lost the full block, so after a
-# SessionStart whose source is "compact" the next Stop says it in full, its command with it.
+echo "12. a compaction's SessionStart says nothing (451 T171)"
 startS() { printf '{"session_id": "s12", "cwd": "%s", "source": "%s"}' "$L" "$1" | SET_DOWN_ROOT="$L" "$HOOK" SessionStart 2>"$T/err"; echo $?; }
 rc=$(startS compact)
 [ "$rc" = 0 ] && [ ! -s "$T/err" ] && ok "a SessionStart after a compaction says nothing" || no "session start" "rc=$rc $(cat "$T/err")"
-rc=$(stopS)
-[ "$rc" = 2 ] && grep -q "make task-start F=449 T=T301," "$T/err" && ok "...and the next Stop says the block in full, its command with it" || no "after a compaction" "rc=$rc $(cat "$T/err")"
-rc=$(stopS)
-[ "$rc" = 2 ] && grep -q "^still: BLOCKED: a builder slot is free" "$T/err" && ok "...then in one line again" || no "one line after" "rc=$rc $(cat "$T/err")"
-[ "$(stopL)" = 2 ] && grep -q "make task-start F=449 T=T301," "$T/err" && ok "a payload with no session id: in full" || no "no session" "$(cat "$T/err")"
-jq -nc '{"type": "user", "message": {"content": "<task-notification><task-id>ag1</task-id><status>completed</status></task-notification>"}}' >> "$T/trL.jsonl"
-rc=$(stopS)
-[ "$rc" = 2 ] && grep -q "2 of 4 builders running" "$T/err" && grep -q "make set-down F=449" "$T/err" && ok "changed: in full again" || no "changed" "rc=$rc $(cat "$T/err")"
-export L7R_BUILDERS=2
-[ "$(stopS)" = 0 ] && ok "every slot full: the turn ends" || no "full" "$(cat "$T/err")"
-export L7R_BUILDERS=4
-rc=$(stopS)
-[ "$rc" = 2 ] && grep -q "make task-start F=449 T=T301," "$T/err" && ok "after a Stop that passed, the block's return is said in full" || no "return" "rc=$rc $(cat "$T/err")"
-unset L7R_BUILDERS
+
+echo "13. a ruling that holds new work (451 T183, today's ask:set-down-451-gm-stop-for-convergence-talk): the idle check names no task"
+printf '{"trigger": "ask:set-down-449-gm-stop-for-convergence-talk", "kind": "ask", "ruling": "continue", "what": "Go on as the question proposes. 449 starts no new task, and the set-down hook stops asking 449 for one.", "utc": "2026-11-23T14:42:15Z"}\n' > "$L/specs/449-x/arbiter.jsonl"
+for id in ab1 ab2; do jq -nc --arg i "$id" '{"type": "user", "message": {"content": ("<task-notification><task-id>" + $i + "</task-id><status>completed</status></task-notification>")}}' >> "$T/trL.jsonl"; done
+[ "$(stopL)" = 0 ] && [ ! -s "$T/err" ] && ok "idle with open tasks under the hold: the idle check is silent" || no "held idle" "$(cat "$T/err")"
+printf '{"trigger": "ask:set-down-449-after-talk", "kind": "ask", "ruling": "continue", "what": "Do not set down. Resume the work now.", "utc": "2026-11-23T18:00:00Z"}\n' >> "$L/specs/449-x/arbiter.jsonl"
+[ "$(stopL)" = 2 ] && grep -q "make set-down F=449" "$T/err" && ok "a later ruling sends the work on: the idle check speaks" || no "released" "$(cat "$T/err")"
+
+echo "14. the idle check: silent for what the harness tracks, and for a session that turned while it waited (451 T183)"
+printf '{"cwd": "%s", "transcript_path": "%s", "background_tasks": [{"id": "b9", "type": "subagent", "status": "running"}]}' "$L" "$T/trL.jsonl" | SET_DOWN_ROOT="$L" "$HOOK" stop >/dev/null 2>&1
+[ $? = 0 ] && ok "a tracked run: silent" || no "tracked run"
+( sleep 0.5; jq -nc '{"type": "user", "message": {"content": "the GM answers"}}' >> "$T/trL.jsonl" ) &
+rc=$(printf '{"cwd": "%s", "transcript_path": "%s", "background_tasks": []}' "$L" "$T/trL.jsonl" | L7R_IDLE_CHECK_SECS=2 SET_DOWN_ROOT="$L" "$HOOK" stop 2>"$T/err"; echo $?)
+wait
+[ "$rc" = 0 ] && [ ! -s "$T/err" ] && ok "a prompt while it waited: silent, that turn's Stop arms the next" || no "turned" "rc=$rc $(cat "$T/err")"
+rc=$(printf '{"cwd": "%s", "transcript_path": "%s", "background_tasks": []}' "$L" "$T/trL.jsonl" | L7R_IDLE_CHECK_SECS=1 SET_DOWN_ROOT="$L" "$HOOK" stop 2>"$T/err"; echo $?)
+[ "$rc" = 2 ] && grep -q "make set-down F=449" "$T/err" && ok "idle through its wait: the block, exit 2 (asyncRewake wakes the session)" || no "idle" "rc=$rc $(cat "$T/err")"
 
 echo "set-down-hooks: $PASS passed, $FAIL failed"
 [ "$FAIL" -eq 0 ]

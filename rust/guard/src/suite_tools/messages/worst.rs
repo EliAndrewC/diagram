@@ -129,17 +129,7 @@ pub fn worst(crates: &[String], root: &Path) -> Vec<(Message, String)> {
     let files =
         many(|i| format!("l7r/diagram/interactive/assets/modals/sheet/writing-rooms-{i:02}.md"));
     let kinds = many(|i| format!("choice/byre_form--detached_common{i:02}"));
-    // set-down's builder slot at its bound: the knob's 3 less the free one, each a bundle of MANY tasks (449's T351 bundle held 21)
-    let bundle = |f: &str| {
-        let tasks: Vec<String> = (1..=MANY).map(|i| format!("T{}", 300 + i)).collect();
-        crate::guards::set_down_hooks::builder_said(f, &tasks, &git_dir)
-    };
-    let who = [
-        bundle("449-rust-codebase"),
-        bundle("451-time-retro-and-efficiency"),
-    ];
-    let title = "x".repeat(80);
-    let later = "PERF_LATER_OK=\"451 T177, the open performance work, is started or touches a running task's files\" ";
+    // set-down's builder-slot words left with the slot notice itself (451 T183's MODE 4, D10)
     vec![
         {
             let (m, _) = message(
@@ -184,19 +174,6 @@ pub fn worst(crates: &[String], root: &Path) -> Vec<(Message, String)> {
             "check-bundle-hooks",
             "refuse",
             checks::handle::blocked_text(&checks::handle::batch_said("modal-depiction", &kinds)),
-        ),
-        message(
-            "set-down-hooks",
-            "refuse",
-            crate::guards::set_down_hooks::slot_said(
-                2,
-                3,
-                &who,
-                ("T177", &title),
-                later,
-                "451",
-                "451",
-            ),
         ),
     ]
 }

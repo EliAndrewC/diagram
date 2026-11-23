@@ -29,4 +29,6 @@ if [ "${1:-}" = setup ]; then
   exec bash "$s" --ensure
 fi
 h=$m/scripts/hooks/l7r-guard.sh; [ -x "$h" ] || h=$d/l7r-guard.sh
+# Idle: the Stop's background idle check (451 T183), an asyncRewake entry - its exit 2 wakes an idle session
+[ "${1:-}" = Idle ] && exec "$h" --idle-check
 exec "$h" "$@"

@@ -176,7 +176,8 @@ fired=$(printf '%s\n' "$entries" | while IFS=$'\t' read -r ev secs cmd; do
   esac
 done | sort)
 want=$(for ev in PostToolUse PostToolUseFailure PreToolUse SessionStart Stop SubagentStart SubagentStop UserPromptSubmit; do
-  printf '%s: tree %s|{"e": "%s"}\n' "$ev" "$ev" "$ev"; done; printf 'SessionStart: tree-setup --ensure|{"e": "SessionStart"}\n')
+  printf '%s: tree %s|{"e": "%s"}\n' "$ev" "$ev" "$ev"; done; printf 'SessionStart: tree-setup --ensure|{"e": "SessionStart"}\n'
+  printf 'Stop: tree --idle-check|{"e": "Stop"}\n')  # the Stop's background idle check (451 T183)
 check "settings: each entry reaches the dispatcher by its event, or the setup (write it as $LAUNCH <event>)" "$fired" "$(printf '%s\n' "$want" | sort)"
 # ...each dispatcher entry's timeout above the wrapper's build limit, so a bounded build ends before the harness kills the hook (449 T005)
 limit=$(grep -o 'L7R_GUARD_BUILD_SECS:-[0-9]*' "$ROOT/scripts/hooks/l7r-guard.sh" | head -1 | cut -d- -f2)

@@ -37,6 +37,8 @@ esac
 # a guard's entries that are no hook event, by guard, because `check` is not the same mode in each (T014-T017 decisions (a))
 case "$guard:$event" in
   idle-tests-hooks:stagger) exec "$tree/scripts/hooks/l7r-guard.sh" --idle-tests "$@" ;;
+  # set-down's Stop is the background idle check (451 T183), its wait none unless a case asks
+  set-down-hooks:Stop) L7R_IDLE_CHECK_SECS=${L7R_IDLE_CHECK_SECS:-0} exec "$tree/scripts/hooks/l7r-guard.sh" --idle-check ;;
   guard-file-hooks:permit|pair-hooks:dropped) exec "$tree/scripts/hooks/l7r-guard.sh" "$@" ;;
   review-round-hooks:state|review-round-hooks:verdict-of) exec "$tree/scripts/hooks/l7r-guard.sh" --review-round "$@" ;;
   escalation-hooks:state|escalation-hooks:arm|escalation-hooks:disarm) exec "$tree/scripts/hooks/l7r-guard.sh" --escalation "$@" ;;

@@ -33,6 +33,10 @@ stop_call() { # run the stop hook in the fixture, return its exit code, stderr t
   printf '{"session_id":"t1"}' | ( cd "$FIX" && "$HOOK" stop 2>"$HOOK_ERR" );
 }
 armed_by() { ( cd "$FIX" && "$HOOK" state ) | awk '/^armed by/{print $3}'; }
+returned() { # returned <subagent_type> <id> [spawnDepth] -> its SubagentStop, its meta beside the session's transcript (451 T183)
+  mkdir -p "$FIX/tr/subagents"; printf '{"spawnDepth": %s}' "${3:-1}" > "$FIX/tr/subagents/agent-$2.meta.json"
+  jq -nc --arg k "$1" --arg i "$2" --arg t "$FIX/tr.jsonl" '{session_id: "t1", agent_id: $i, agent_type: $k, transcript_path: $t}' \
+    | ( cd "$FIX" && "$HOOK" SubagentStop >/dev/null 2>&1 ); }
 
 echo "1. a review dispatch ARMS the requirement, and says so for free"
 out=$(agent settlement-review "DELTA review of Inashiro")
@@ -40,7 +44,19 @@ out=$(agent settlement-review "DELTA review of Inashiro")
 printf '%s' "$out" | grep -q additionalContext && ok "...and the dispatch carries the context, costing no round trip" || no "no additionalContext on the dispatch"
 printf '%s' "$out" | grep -q "escalation-check" && ok "...naming the filter to dispatch" || no "the context does not name the filter"
 
-echo "2. the turn cannot close while findings are unfiltered"
+echo "1b. a builder's own review dispatch arms nothing (451 T183: 2026-11-23's FINDINGS UNFILTERED for a builder's building-review)"
+( cd "$FIX" && "$HOOK" disarm "$FIX" >/dev/null 2>&1 )
+jq -nc '{"session_id":"t1","agent_id":"b1","tool_name":"Agent","tool_input":{"subagent_type":"building-review","prompt":"go"}}' | ( cd "$FIX" && "$HOOK" pretool >/dev/null 2>&1 )
+[ -z "$(armed_by)" ] && ok "a sub-agent's building-review dispatch: not armed" || no "a builder's review armed the session"
+agent settlement-review "DELTA review of Inashiro" >/dev/null
+
+echo "2. the turn cannot close while findings are unfiltered - once the review is back (451 T183)"
+stop_call; rc=$?
+[ "$rc" -eq 0 ] && ok "a Stop while the review is out passes: its return wakes the session" || no "refused while the review was out" "(rc=$rc)"
+returned settlement-review h1 2
+stop_call; rc=$?
+[ "$rc" -eq 0 ] && ok "a builder's own sub-agent of that type returning ends nothing" || no "a depth-2 return counted" "(rc=$rc)"
+returned settlement-review r1
 stop_call; rc=$?
 [ "$rc" -ne 0 ] && ok "stop refuses with a review armed" || no "stop allowed the turn to close" "(rc=$rc)"
 grep -q "FINDINGS UNFILTERED" "$HOOK_ERR" && ok "...and says what is wrong" || no "the refusal does not say what is wrong"
@@ -95,6 +111,7 @@ rc=0; stop_call || rc=$?
 printf '%s\n' "$LEDGER_HEAD" > "$FIX/dev/review-ledger.md"
 agent settlement-review "DELTA review of x" >/dev/null
 printf '%s\n' '| 2026-10-11 | settlement-review | bath on ochiba | NEEDS-WORK | the door band | judgment | yes | held for the GM | 90 s | 300k in (250k cached) / 8.0k out |' >> "$FIX/dev/review-ledger.md"
+returned settlement-review r2
 rc=0; stop_call || rc=$?
 [ "$rc" -eq 2 ] && [ "$(armed_by)" = "settlement-review" ] && ok "a finding left for the GM still owes the filter" || no "an open finding was let through" "(rc=$rc)"
 ( cd "$FIX" && "$HOOK" disarm "$FIX" >/dev/null 2>&1 ); rm -f "$FIX/dev/review-ledger.md"

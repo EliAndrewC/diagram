@@ -47,8 +47,9 @@ fn world(tag: &str, closed: &str) -> (crate::tempdir::TempDir, PathBuf, PathBuf)
     (keep, c, d.join("tr.jsonl"))
 }
 
+/// What the session is told: the idle check's block (451 T183; a free slot is named by nothing while a builder runs, T183's MODE 4).
 fn said(c: &Path, tr: &Path) -> Option<String> {
-    verdict(c, &tr.to_string_lossy()).unwrap()
+    verdict(c, &tr.to_string_lossy(), false).unwrap()
 }
 
 fn append(tr: &Path, line: &str) {
@@ -297,7 +298,7 @@ fn no_feature_begun_or_only_the_gms_box_passes() {
     assert_eq!(said(&c, &tr), None);
     std::fs::remove_file(c.join(".git/task-starts.jsonl")).unwrap();
     assert_eq!(said(&c, &tr), None);
-    assert_eq!(verdict(&c, "/no/such/transcript").unwrap(), None);
+    assert_eq!(verdict(&c, "/no/such/transcript", false).unwrap(), None);
     assert_eq!(open_boxes(TASKS).len(), 2);
 }
 
@@ -310,14 +311,14 @@ fn a_read_error_lets_the_turn_end_recorded() {
         input: json!({"cwd": c, "transcript_path": tr}),
     };
     let session = Session::from_input(&e.input);
-    assert!(verdict(&c, "").is_err());
+    assert!(verdict(&c, "", false).is_err());
     assert!(judge(&e, &session, Some(c.to_string_lossy().into_owned())).is_empty());
     std::fs::write(c.join("specs/385-x/tasks.md"), TASKS).unwrap();
     std::fs::write(c.join(".git/task-starts.jsonl"), [0xff_u8]).unwrap();
-    assert!(verdict(&c, "").is_err());
-    assert!(verdict(Path::new("/no/such/place"), "").is_err());
+    assert!(verdict(&c, "", false).is_err());
+    assert!(verdict(Path::new("/no/such/place"), "", false).is_err());
     std::fs::write(c.join(".git/task-starts.jsonl"), START).unwrap();
-    assert!(verdict(&c, "/proc/self/mem").is_err());
+    assert!(verdict(&c, "/proc/self/mem", false).is_err());
 }
 
 #[test]
@@ -427,6 +428,13 @@ fn another_active_feature_s_performance_task_is_named_until_it_is_set_down_or_cl
         next_performance(&c, &git, "385-x").unwrap(),
         Some(open("386-y", "T04", "[perf] split the suite"))
     );
+    // another feature a ruling holds offers none (451 T183), though its own start still finds it
+    let hold = r#"{"trigger": "ask:set-down-386-talk", "ruling": "continue", "what": "386 starts no new task.", "utc": "2026-11-23T14:42:15Z"}"#;
+    std::fs::write(c.join("specs/386-y/arbiter.jsonl"), format!("{hold}\n")).unwrap();
+    assert_eq!(next_performance(&c, &git, "385-x").unwrap(), None);
+    let own = next_performance(&c, &git, "386-y").unwrap().map(|t| t.id);
+    assert_eq!(own.as_deref(), Some("T04"));
+    std::fs::remove_file(c.join("specs/386-y/arbiter.jsonl")).unwrap();
     // the feature preferred first, then the most recent start
     std::fs::write(
         c.join("specs/385-x/tasks.md"),
@@ -508,183 +516,22 @@ fn agent(tr: &Path, id: &str, depth: u64, description: &str) {
     .unwrap();
 }
 
-/// 451 T88: ROLLING DISPATCH. Two builders run (T02 editing `rust/x/alpha.rs`, T03); a review agent and a builder's own helper are not
-/// builders. Of the open tasks never started, T04 (performance work) names T02's file and T05 comes after T04, so T06 is named - with
-/// task-start's escape, since T04 is open performance work - until a third builder runs, the knob is met, or no task is left.
-#[test]
-fn a_free_builder_slot_names_the_next_independent_open_task() {
-    let (_dir, c, tr) = world("roll", "no");
-    let events = c.join("events");
-    std::fs::create_dir_all(&events).unwrap();
-    crate::env::set("L7R_EVENTS_DIR", &events);
-    crate::env::unset("L7R_BUILDERS");
-    let edit = |task: &str, rel: &str, extra: &str| {
-        format!(
-            r#"{{"t":"2026-10-18T23:10:00Z","ev":"PostToolUse","tool":"Edit","cat":"edit","by":"a1","path":"{}/{rel}","task":"{task}"{extra}}}"#,
-            c.display()
-        )
-    };
-    std::fs::write(
-        events.join("385-x.jsonl"),
-        [
-            edit("T02", "rust/x/alpha.rs", ""),
-            edit("T02", "specs/385-x/plan.md", ""),
-            edit("T03", "rust/x/delta.rs", r#","fallback":true"#),
-            r#"{"ev":"PostToolUse","cat":"edit","not json"#.to_owned(),
-            edit("T09", "rust/x/epsilon.rs", ""),
-        ]
-        .join("\n"),
-    )
-    .unwrap();
-    std::fs::write(
-        c.join("specs/385-x/tasks.md"),
-        "- [x] T01 done\n- [ ] T02 the next thing\n- [ ] T03 later\n- [ ] T04 [perf] a faster `rust/x/alpha.rs`\n- [ ] T05 tidy after T04\n- [ ] T06 the gamma tool in `scripts/gamma.sh` and delta.rs and tests.rs\n- [ ] T07 epsilon.rs\n- [ ] GM review (make gm-reviewed F=385)\n",
-    )
-    .unwrap();
-    agent(&tr, "a1", 1, "385 T02: the next thing");
-    agent(&tr, "a2", 1, "385 T03 (fresh): later");
-    agent(&tr, "r1", 1, "spec-fidelity on 385's changed blocks");
-    agent(&tr, "h1", 2, "385 T02: a builder's own helper");
-    let text = said(&c, &tr).unwrap();
-    let free = text.contains("a builder slot is free - 2 of 3 builders running (385 T02, 385 T03)");
-    assert!(free, "{text}");
-    assert!(text.contains("(T06 the gamma tool"), "{text}");
-    assert!(text.contains("PERF_LATER_OK=\"385 T04, the open performance work, is started or touches a running task's files\" make task-start F=385 T=T06"), "{text}");
-    assert!(text.contains("make set-down F=385 WHY="), "{text}");
-    // a performance task free to start is named first, with no escape
-    std::fs::write(
-        c.join("specs/385-x/tasks.md"),
-        "- [ ] T02 the next thing\n- [ ] T03 later\n- [ ] T06 the gamma tool\n- [ ] T08 [perf] a faster beta\n",
-    )
-    .unwrap();
-    let text = said(&c, &tr).unwrap();
-    let first = text.contains("(T08 [perf] a faster beta): make task-start F=385 T=T08,");
-    assert!(first, "{text}");
-    // the knob met: two builders of two
-    crate::env::set("L7R_BUILDERS", "2");
-    assert_eq!(said(&c, &tr), None);
-    crate::env::set("L7R_BUILDERS", "3");
-    // a third builder running: no slot free
-    agent(&tr, "a3", 1, "385 T08: a faster beta");
-    assert_eq!(said(&c, &tr), None);
-    append(&tr, &notice("a3", FINISHED));
-    assert!(said(&c, &tr).unwrap().contains("2 of 3 builders running"));
-    // nothing left never started
-    let starts = std::fs::read_to_string(c.join(".git/task-starts.jsonl")).unwrap();
-    std::fs::write(
-        c.join(".git/task-starts.jsonl"),
-        format!("{starts}{{\"feature\": \"385-x\", \"task\": \"T06\", \"utc\": \"2026-10-19T00:00:00Z\"}}\n{{\"feature\": \"385-x\", \"task\": \"T08\", \"utc\": \"2026-10-19T00:00:00Z\"}}\n"),
-    )
-    .unwrap();
-    assert_eq!(said(&c, &tr), None);
-    crate::env::unset("L7R_EVENTS_DIR");
-}
-
-/// 451 T88: a running builder whose feature has no directory or no log names no file; one in another feature is counted all the same.
-#[test]
-fn a_running_builder_with_no_log_names_no_file() {
-    let (_dir, c, tr) = world("roll-nolog", "no");
-    crate::env::set("L7R_EVENTS_DIR", c.join("no-events"));
-    crate::env::unset("L7R_BUILDERS");
-    std::fs::write(
-        c.join("specs/385-x/tasks.md"),
-        "- [ ] T02 the next thing\n- [ ] T03 later\n- [ ] T04 alpha.rs\n",
-    )
-    .unwrap();
-    agent(&tr, "a1", 1, "385 T02: the next thing");
-    agent(&tr, "a2", 1, "999 T01: a feature with no directory");
-    let text = said(&c, &tr).unwrap();
-    let counted = text.contains("2 of 3 builders running (385 T02, 999 T01)");
-    assert!(counted, "{text}");
-    assert!(text.contains("make task-start F=385 T=T04,"), "{text}");
-    crate::env::unset("L7R_EVENTS_DIR");
-}
-
-/// 451 T88 (its plan review, 2026-11-21): PERFORMANCE WORK FIRST ACROSS EVERY ACTIVE FEATURE (FR-013) - another active feature's open
-/// performance task is named before the started feature's own task that is not performance work.
-#[test]
-fn a_free_slot_names_another_feature_s_performance_task_first() {
-    let (_dir, c, tr) = world("roll-perf", "no");
-    let events = c.join("events");
-    std::fs::create_dir_all(&events).unwrap();
-    crate::env::set("L7R_EVENTS_DIR", &events);
-    crate::env::unset("L7R_BUILDERS");
-    std::fs::write(
-        c.join("specs/385-x/tasks.md"),
-        "- [ ] T02 the next thing\n- [ ] T03 later\n- [ ] T04 a plain tool\n",
-    )
-    .unwrap();
-    std::fs::create_dir_all(c.join("specs/386-y")).unwrap();
-    std::fs::write(
-        c.join("specs/386-y/tasks.md"),
-        "- [ ] T01 [perf] a faster gate\n",
-    )
-    .unwrap();
-    std::fs::write(
-        c.join("specs/386-y/spec.md"),
-        "# F\n\n**Status**: Implemented\n",
-    )
-    .unwrap();
-    let other = r#"{"feature": "386-y", "task": "T00", "utc": "2026-10-18T21:00:00Z"}"#;
-    std::fs::write(
-        c.join(".git/task-starts.jsonl"),
-        format!("{other}\n{START}"),
-    )
-    .unwrap();
-    agent(&tr, "a1", 1, "385 T02: the next thing");
-    let text = said(&c, &tr).unwrap();
-    let first = text.contains("(T01 [perf] a faster gate): make task-start F=386 T=T01,");
-    assert!(first, "{text}");
-    crate::env::unset("L7R_EVENTS_DIR");
-}
-
-/// 451 T88: what `free_slot` cannot read is an error, never a free slot: a running task's event log that is not text, the feature's
-/// plan that is not text, and an interim builder's own transcript that cannot be opened.
-#[test]
-fn a_free_slot_s_unreadable_reads_are_errors() {
-    use std::os::unix::fs::PermissionsExt;
-    let (_dir, c, tr) = world("roll-errors", "no");
-    let events = c.join("events");
-    std::fs::create_dir_all(&events).unwrap();
-    crate::env::set("L7R_EVENTS_DIR", &events);
-    crate::env::unset("L7R_BUILDERS");
-    agent(&tr, "a1", 1, "385 T02: the next thing");
-    let at = tr.to_string_lossy().into_owned();
-    std::fs::write(events.join("385-x.jsonl"), b"\xff\xfe\n").unwrap();
-    assert!(verdict(&c, &at).is_err());
-    std::fs::remove_file(events.join("385-x.jsonl")).unwrap();
-    std::fs::write(c.join("specs/385-x/plan.md"), b"\xff\xfe\n").unwrap();
-    assert!(verdict(&c, &at).is_err());
-    std::fs::remove_file(c.join("specs/385-x/plan.md")).unwrap();
-    assert!(verdict(&c, &at).is_ok());
-    agent(&tr, "a2", 1, "385 T03: later");
-    append(&tr, &notice("a2", WAITING));
-    let own = tr.with_extension("").join("subagents/agent-a2.jsonl");
-    std::fs::write(&own, "").unwrap();
-    std::fs::set_permissions(&own, std::fs::Permissions::from_mode(0o000)).unwrap();
-    assert!(verdict(&c, &at).is_err());
-    std::fs::set_permissions(&own, std::fs::Permissions::from_mode(0o644)).unwrap();
-    crate::env::unset("L7R_EVENTS_DIR");
-}
-
-/// 451 T102: a land `end` line of the feature's event log, as `make land` writes one (its `tasks`, or `task` alone).
 fn landed(tasks: &str, t1: &str, ok: bool) -> String {
     format!(
         r#"{{"ev":"Phase","src":"land","step":"end","t1":"{t1}","code":0,"make":"land",{tasks},"landed":{ok}}}"#
     )
 }
 
-/// 451 T102: A WAIT THE HOOK READS. A task line's `(waits: <when>)` right after its tags holds it from the free-slot reading until its
-/// wait is met - a full day after the latest landing of the tasks it names (T11 landed twice, T12's line names it by `task` alone, T13
-/// landed before the log carried end lines, a refused landing counts for nothing), or a landing - and so do `after T<n>` an open task
-/// and an open task's line saying it `lands before` it; a clause the line only quotes in its prose is no wait.
+/// 451 T102: A WAIT THE HOOK READS. A task line's `(waits: <when>)` right after its tags holds it from being named next until its wait
+/// is met - a full day after the latest landing of the tasks it names (T11 landed twice, T12's line names it by `task` alone, T13
+/// landed before the log carried end lines, a refused landing counts for nothing), or a landing - and so does an open task's line saying
+/// it `lands before` it; a clause the line only quotes in its prose is no wait. (The free slot read it too until T183's MODE 4, D10.)
 #[test]
-fn a_free_slot_skips_a_task_whose_wait_is_not_met() {
+fn the_next_named_skips_a_task_whose_wait_is_not_met() {
     let (_dir, c, tr) = world("roll-waits", "no");
     let events = c.join("events");
     std::fs::create_dir_all(&events).unwrap();
     crate::env::set("L7R_EVENTS_DIR", &events);
-    crate::env::unset("L7R_BUILDERS");
     crate::env::set("L7R_WAITS_NOW", "2026-11-21T20:00:00Z");
     std::fs::write(
         events.join("385-x.jsonl"),
@@ -698,49 +545,24 @@ fn a_free_slot_skips_a_task_whose_wait_is_not_met() {
         .join("\n"),
     )
     .unwrap();
-    let tasks = |seventh: &str| {
-        format!("- [x] T01 done\n- [ ] T02 the next thing\n- [ ] T03 later\n- [ ] T04 [perf] (waits: a full day after T11-T13 land) the measured day\n- [ ] T05 [perf] (waits: T03 lands) the third's follow-up\n- [ ] T06 [perf] (waits: T07 lands) the seventh's follow-up\n- [{seventh}] T07 the landing T06 waits on, which lands before T08\n- [ ] T08 [perf] held by the seventh's line\n- [ ] T09 a line that quotes a (waits: 2999-01-01) clause in its prose\n- [x] T11 eleven\n- [x] T12 twelve\n- [x] T13 thirteen\n")
+    let tasks = |seventh: &str, sixth: &str| {
+        format!("- [ ] T04 [perf] (waits: a full day after T11-T13 land) the measured day\n- [{sixth}] T06 [perf] (waits: T07 lands) the seventh's follow-up\n- [ ] T09 a line that quotes a (waits: 2999-01-01) clause in its prose\n- [{seventh}] T07 the landing T06 waits on, which lands before T08\n- [{sixth}] T08 [perf] held by the seventh's line\n- [x] T11 eleven\n- [x] T12 twelve\n- [x] T13 thirteen\n")
     };
-    std::fs::write(c.join("specs/385-x/tasks.md"), tasks(" ")).unwrap();
-    agent(&tr, "a1", 1, "385 T02: the next thing");
-    // every performance task waits, so the first other task is named, with no escape: no open performance task can start
-    let text = said(&c, &tr).unwrap();
-    let seventh = text.contains(
-        "(T07 the landing T06 waits on, which lands before T08): make task-start F=385 T=T07,",
-    );
-    assert!(seventh, "{text}");
-    assert!(!text.contains("PERF_LATER_OK"), "{text}");
-    let start = |task: &str| {
-        let starts = std::fs::read_to_string(c.join(".git/task-starts.jsonl")).unwrap();
-        let row =
-            format!(r#"{{"feature": "385-x", "task": "{task}", "utc": "2026-11-21T19:00:00Z"}}"#);
-        std::fs::write(c.join(".git/task-starts.jsonl"), format!("{starts}{row}\n")).unwrap();
+    let named = |seventh: &str, sixth: &str, id: &str| {
+        std::fs::write(c.join("specs/385-x/tasks.md"), tasks(seventh, sixth)).unwrap();
+        let text = said(&c, &tr).unwrap();
+        let ok = text.contains(&format!("start the next ({id} "));
+        assert!(ok, "{id}: {text}");
     };
-    // a clause quoted in the prose is no wait
-    start("T07");
-    let ninth = said(&c, &tr)
-        .unwrap()
-        .contains("make task-start F=385 T=T09,");
-    assert!(ninth);
+    // every performance task waits, and a clause quoted in the prose is no wait
+    named(" ", " ", "T09");
     // the seventh landed: its follow-up and the task its line held are free, performance work first
-    std::fs::write(c.join("specs/385-x/tasks.md"), tasks("x")).unwrap();
-    let sixth = said(&c, &tr)
-        .unwrap()
-        .contains("make task-start F=385 T=T06,");
-    assert!(sixth);
-    start("T06");
-    start("T08");
+    named("x", " ", "T06");
     // a full day after the latest landing of T11-T13 (T12's, 08:00:27.560Z): not met 0.56 s short of it, met at it
     crate::env::set("L7R_WAITS_NOW", "2026-11-22T08:00:27Z");
-    let short = said(&c, &tr)
-        .unwrap()
-        .contains("make task-start F=385 T=T09,");
-    assert!(short);
+    named("x", "x", "T09");
     crate::env::set("L7R_WAITS_NOW", "2026-11-22T08:00:27.560Z");
-    let met = said(&c, &tr)
-        .unwrap()
-        .contains("make task-start F=385 T=T04,");
-    assert!(met);
+    named("x", "x", "T04");
     crate::env::unset("L7R_WAITS_NOW");
     crate::env::unset("L7R_EVENTS_DIR");
 }
@@ -803,7 +625,7 @@ fn nothing_running_names_the_first_task_that_can_start() {
     assert!(none, "{text}");
 }
 
-/// 449 T244: a parked stage's task is never named as the next, nor a free slot's; with only those open, the refusal names the GM's
+/// 449 T244: a parked stage's task is never named as the next; with only those open, the refusal names the GM's
 /// ruling and the set-down that takes it - until a row resumes the stage.
 #[test]
 fn a_parked_stage_s_task_is_never_the_next_and_only_those_left_name_the_ruling() {
@@ -828,15 +650,6 @@ fn a_parked_stage_s_task_is_never_the_next_and_only_those_left_name_the_ruling()
     let ok3 = text.contains("Stop before homesteads, and talk first");
     assert!(ok3, "{text}");
     assert!(text.contains("make set-down F=385 WHY="), "{text}");
-    // a free slot: no parked stage's task to start, so the turn ends
-    std::fs::write(
-        c.join(".git/task-starts.jsonl"),
-        "{\"feature\": \"385-x\", \"task\": \"T09\", \"utc\": \"2026-10-18T23:00:00Z\"}\n",
-    )
-    .unwrap();
-    agent(&tr, "a1", 1, "385 T09: something else");
-    crate::env::unset("L7R_BUILDERS");
-    assert_eq!(said(&c, &tr), None);
     // resumed: the stage's task is work again
     std::fs::write(
         c.join(".git/parked-resumed.jsonl"),
@@ -844,7 +657,7 @@ fn a_parked_stage_s_task_is_never_the_next_and_only_those_left_name_the_ruling()
     )
     .unwrap();
     let text = said(&c, &tr).unwrap();
-    assert!(text.contains("a builder slot is free"), "{text}");
+    assert!(text.contains("start the next (T03 "), "{text}");
 }
 
 /// 449 T268: a foreground Agent call's result, as Claude Code writes it (read 2026-11-22 from T197 G2's check session's transcript,
@@ -856,7 +669,7 @@ fn foreground(id: &str) -> String {
 }
 
 /// 449 T268: A FOREGROUND RESULT IS AN END. The page session's foreground checks were read as launches no notice ever ended, so the turn
-/// was refused "a builder slot is free" while nothing ran; a background launch still runs until its notice.
+/// was refused while nothing ran; a background launch still runs until its notice.
 #[test]
 fn a_foreground_agent_s_result_is_its_end_and_a_background_launch_still_runs() {
     let (_dir, c, tr) = world("foreground", "no");
@@ -874,29 +687,12 @@ fn a_foreground_agent_s_result_is_its_end_and_a_background_launch_still_runs() {
     assert!(again.is_some(), "{again:?}");
 }
 
-/// 449 T268 (the session's note, 2026-11-22): A BUNDLE'S BUILDER COUNTS, ONCE. Its description names its tasks before its colon, or none
-/// (`<n> record bundle: ...`) and its prompt's first line names them; either is one builder, its tasks' edits busy. An agent whose brief
-/// names no task anywhere is no builder.
+/// 449 T268 (the session's note, 2026-11-22): A BUNDLE'S BUILDER IS ONE, FOR ALL ITS TASKS. Its description names its tasks before its
+/// colon, or none (`<n> record bundle: ...`) and its prompt's first line names them; an agent whose brief names no task there is no
+/// builder.
 #[test]
-fn a_bundle_s_builder_counts_once_for_all_its_tasks() {
-    let (_dir, c, tr) = world("roll-bundle", "no");
-    let events = c.join("events");
-    std::fs::create_dir_all(&events).unwrap();
-    crate::env::set("L7R_EVENTS_DIR", &events);
-    crate::env::unset("L7R_BUILDERS");
-    let edit = format!(
-        r#"{{"t":"2026-10-18T23:10:00Z","ev":"PostToolUse","tool":"Edit","cat":"edit","by":"b2","path":"{}/rust/x/alpha.rs","task":"T05"}}"#,
-        c.display()
-    );
-    std::fs::write(events.join("385-x.jsonl"), edit).unwrap();
-    std::fs::write(
-        c.join("specs/385-x/tasks.md"),
-        "- [ ] T02 two\n- [ ] T03 three\n- [ ] T04 four\n- [ ] T05 five\n- [ ] T06 a faster `rust/x/alpha.rs`\n- [ ] T07 seven\n",
-    )
-    .unwrap();
-    let starts = std::fs::read_to_string(c.join(".git/task-starts.jsonl")).unwrap();
-    let more = "{\"feature\": \"385-x\", \"task\": \"T04\", \"utc\": \"2026-10-18T23:00:00Z\"}\n{\"feature\": \"385-x\", \"task\": \"T05\", \"utc\": \"2026-10-18T23:00:00Z\"}\n";
-    std::fs::write(c.join(".git/task-starts.jsonl"), format!("{starts}{more}")).unwrap();
+fn a_bundle_s_builder_is_read_once_for_all_its_tasks() {
+    let (_dir, _c, tr) = world("roll-bundle", "no");
     agent(&tr, "b1", 1, "385 bundle T02, T03: two tooling follow-ups");
     agent(&tr, "b2", 1, "385 record bundle: two pop-up follow-ups");
     own(
@@ -911,14 +707,18 @@ fn a_bundle_s_builder_counts_once_for_all_its_tasks() {
         r#"{"type":"user","message":{"role":"user","content":"Read the notes and report.\nT07 is named on a later line."}}"#,
     );
     agent(&tr, "b4", 1, "385 record bundle: no transcript of its own");
-    let text = said(&c, &tr).unwrap();
-    let counted = text.contains("2 of 3 builders running (385 T02+T03, 385 T04+T05)");
-    assert!(counted, "{text}");
-    let next = text.contains("make task-start F=385 T=T07,");
-    assert!(next, "{text}");
-    agent(&tr, "a3", 1, "385 T07: seven");
-    assert_eq!(said(&c, &tr), None);
-    crate::env::unset("L7R_EVENTS_DIR");
+    let dir = tr.with_extension("").join("subagents");
+    let brief = |id: &str| super::builder_brief(&dir, id);
+    let tasks = |ts: &[&str]| {
+        Some((
+            "385".to_owned(),
+            ts.iter().map(|t| (*t).to_owned()).collect(),
+        ))
+    };
+    assert_eq!(brief("b1"), tasks(&["T02", "T03"]));
+    assert_eq!(brief("b2"), tasks(&["T04", "T05"]));
+    assert_eq!(brief("b3"), None);
+    assert_eq!(brief("b4"), None);
 }
 
 /// 449 T268 (the session's note, 2026-11-22): A TASK THE GM IS ASKED ABOUT WAITS. An open question of the GM-review queue naming the task
@@ -956,36 +756,6 @@ fn a_task_an_open_gm_question_names_is_never_the_next() {
     assert!(fourth, "{text}");
 }
 
-/// 451 T177 (message-check): a running builder's bundle is said whole while that is the shorter, else as its first few tasks, how
-/// many more and the `cat` of the file holding them all - and whole again where that file cannot be written. The slot block cites
-/// no feature.
-#[test]
-fn a_builders_bundle_is_capped_only_where_that_shortens_it() {
-    let d = crate::tempdir::TempDir::new("guard-setdown-bundle");
-    let git_dir = d.path().join(".git");
-    let few: Vec<String> = ["T1", "T2", "T3", "T4"].map(str::to_owned).to_vec();
-    assert_eq!(
-        super::builder_said("451-x", &few, &git_dir),
-        "451-x T1+T2+T3+T4"
-    );
-    let many: Vec<String> = (1..=40).map(|i| format!("T{}", 300 + i)).collect();
-    let said = super::builder_said("451-x", &many, &git_dir);
-    let kept = std::fs::read_dir(git_dir.join("l7r-lists"))
-        .map(Iterator::count)
-        .unwrap_or(0);
-    let listed = said.starts_with("451-x T301+T302 and 38 more: `cat ") && kept == 1;
-    assert!(listed, "{said}");
-    let blocked = d.path().join("a-file");
-    std::fs::write(&blocked, "").unwrap();
-    assert_eq!(
-        super::builder_said("451-x", &many, &blocked),
-        format!("451-x {}", many.join("+"))
-    );
-    let block = super::slot_said(1, 3, &[said], ("T9", "a task"), "", "451", "451");
-    let dispatch = block.contains("then dispatch its builder; or set the feature down");
-    let cut = !block.contains("feature 451 T88");
-    assert!(dispatch && cut, "{block}");
-}
-
 mod briefs;
+mod idle;
 mod repeats;

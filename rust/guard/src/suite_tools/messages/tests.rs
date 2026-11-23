@@ -412,7 +412,7 @@ fn every_list_growing_message_at_its_worst_case_is_within_its_budget() {
         .map(|i| format!("rust/gate/crates/crate_{i:02}"))
         .collect();
     let said = super::worst::worst(&crates, &d);
-    assert_eq!(said.len(), 10);
+    assert_eq!(said.len(), 9);
     for (m, keyed) in &said {
         let budget = if m.kind == "notice" {
             NOTICE_BUDGET
@@ -430,18 +430,6 @@ fn every_list_growing_message_at_its_worst_case_is_within_its_budget() {
             assert!(
                 m.text.contains("common40\" FOR=modal-depiction, batched")
                     && m.text.contains("BATCH_OK="),
-                "{}",
-                m.text
-            );
-            assert_eq!(&m.text, keyed);
-        } else if m.guard == "set-down-hooks" {
-            // 451 T177: the builder-slot block names its running builders, at most the knob's 3 less the free one, a bundle past
-            // the cap as its first tasks and the file holding them all (message-check's first review), no feature cited
-            assert!(
-                m.text.contains("(449-rust-codebase T301+T302 and 38 more: `cat ")
-                    && m.text.contains("`, 451-time-retro-and-efficiency T301+T302 and 38 more: `cat ")
-                    && m.text.contains("then dispatch its builder; or set the feature down: make set-down F=451 WHY=")
-                    && !m.text.contains("T88"),
                 "{}",
                 m.text
             );
@@ -490,7 +478,7 @@ fn the_worst_cases_are_checked_in_the_tree_holding_the_record() {
     assert_eq!(first.code, 1);
     assert!(
         first.stderr.contains("make crate-checks CRATE=\"rust/x\"")
-            && first.stderr.contains("10 of 10 wordings"),
+            && first.stderr.contains("9 of 9 wordings"),
         "{}",
         first.stderr
     );

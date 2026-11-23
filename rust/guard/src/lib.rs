@@ -125,6 +125,11 @@ pub fn cli(args: &[String], stdin: &str, all: &[Guard]) -> Reply {
         }
         // the detached timer and the printed stagger, the guard's two entries that are not a hook event (T014 decision (a))
         Some("--idle-tests") => guards::idle_tests_hooks::cli(&args[1..]),
+        // the Stop's background idle check (451 T183): exit 2 wakes an idle session with the block on stderr, anything else is silent
+        Some("--idle-check") => {
+            let input = serde_json::from_str(stdin).unwrap_or_default();
+            guards::set_down_hooks::idle_check(&input).map_or_else(|| say(String::new(), 0), |t| say(t, 2))
+        }
         Some("--agent-stall") => guards::agent_stall_hooks::cli(&args[1..]),
         Some("--escalation") => guards::escalation_hooks::cli(&args[1..]),
         Some("--review-round") => guards::review_round_hooks::cli(&args[1..]),
@@ -192,6 +197,33 @@ mod tests {
         a.iter().map(|s| (*s).to_owned()).collect()
     }
 
+    /// The idle check's block reaches the command line as exit 2 and its words on stderr (451 T183: asyncRewake wakes the session).
+    #[test]
+    fn the_idle_check_s_block_is_exit_2() {
+        let g: [Guard; 0] = [];
+        let d = crate::shared::tempdir::TempDir::new("cli-idle-check");
+        let c = d.join("c");
+        std::fs::create_dir_all(c.join("specs/385-x")).unwrap();
+        let init = std::process::Command::new("git")
+            .args(["init", "-q"])
+            .arg(&c)
+            .status();
+        assert!(init.is_ok_and(|s| s.success()));
+        std::fs::write(c.join("specs/385-x/tasks.md"), "- [ ] T02 the next thing\n").unwrap();
+        std::fs::write(c.join("specs/385-x/spec.md"), "# F\n\n**Status**: Draft\n").unwrap();
+        let start = r#"{"feature": "385-x", "task": "T02", "utc": "2026-10-18T23:00:00Z"}"#;
+        std::fs::write(c.join(".git/task-starts.jsonl"), format!("{start}\n")).unwrap();
+        std::fs::write(d.join("tr.jsonl"), "").unwrap();
+        crate::shared::env::set("SET_DOWN_ROOT", &c);
+        crate::shared::env::set("L7R_IDLE_CHECK_SECS", "0");
+        let idle =
+            serde_json::json!({"transcript_path": d.join("tr.jsonl"), "background_tasks": []});
+        let said = cli(&args(&["--idle-check"]), &idle.to_string(), &g);
+        crate::shared::env::unset("L7R_IDLE_CHECK_SECS");
+        crate::shared::env::unset("SET_DOWN_ROOT");
+        assert_eq!(said.code, 2, "{}", said.stderr);
+    }
+
     #[test]
     fn the_command_line_answers_each_form() {
         let g = [Guard {
@@ -203,6 +235,11 @@ mod tests {
         let input = r#"{"tool_name": "Bash", "tool_input": {"command": "ls"}}"#;
         assert_eq!(cli(&args(&["--version"]), "", &g).stdout, "l7r-guard 0.1.0");
         assert_eq!(cli(&args(&["messages"]), "", &g).code, 64);
+        // the idle check: a sub-agent's stop is silent at once (451 T183)
+        assert_eq!(
+            cli(&args(&["--idle-check"]), r#"{"agent_id": "a1"}"#, &g).code,
+            0
+        );
         assert!(cli(&args(&["--self-check"]), "", &g)
             .stdout
             .contains("1 guard(s) answered"));

@@ -894,6 +894,24 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-23",
    "declared": "spec-fidelity"
+  },
+  "### T183 (observed 2026-11-23, the coordinator's transcript `c6fd72d1-...jsonl`: 31 Stop-hook blocks since 14:42, every one answered by a model turn while the session correctly waited - the free-slot block under the two convergence-talk rulings that held new work, and FINDINGS UNFILTERED for builders' own building-reviews)": {
+   "sha256": "edc3f3182036d5d9704ed9baa75ea1d5213629a00c286bfe3286a5a9fb706b4a",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-23",
+   "declared": "round-arbiter"
+  },
+  "### T183 Approach (checklist part A)": {
+   "sha256": "92f535af7daceaa9c19424211471fdddd8d9ae34e681b60c93c61d7d95f59669",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-23",
+   "declared": "round-arbiter"
+  },
+  "### T183 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)": {
+   "sha256": "fbd5d79a5b362d89aeacf5a8cf996f28b3acc2686fa1c1fae46f339abecedc68",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-23",
+   "declared": "round-arbiter"
   }
  },
  "block_reviews": [
@@ -15592,6 +15610,26 @@
      "why": "The goal is a suite that fails only when a call waits on another's build. The bound keeps the 1 s as its floor, so it is no looser idle, and the waiting mutant (flock -w 5) still fails it idle; red 10/10 unfixed and green 10/10 fixed under a pinned load (measured 2026-11-23). The check still catches what it is for; nothing asked is dropped."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-23",
+   "blocks": [
+    "### T183 (observed 2026-11-23, the coordinator's transcript `c6fd72d1-...jsonl`: 31 Stop-hook blocks since 14:42, every one answered by a model turn while the session correctly waited - the free-slot block under the two convergence-talk rulings that held new work, and FINDINGS UNFILTERED for builders' own building-reviews)",
+    "### T183 Approach (checklist part A)",
+    "### T183 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)"
+   ],
+   "verdict": "CLEAR",
+   "declared": "round-arbiter",
+   "decisions": [
+    {
+     "id": "round:spec-fidelity|plan:451-time-retro-and-efficiency#T183@3",
+     "class": "within",
+     "summary": "the round arbiter accepted T183's section as it stands"
+    }
+   ],
+   "tasks": [
+    "T183"
+   ]
   }
  ],
  "tasks": {
@@ -24522,6 +24560,94 @@
     }
    ],
    "verdict": "CLEAR"
+  },
+  "T183": {
+   "section_sha256": "c9bed92f3b3165195e72212973ceaab800069953fdd6afe8eaf158848ddecc2d",
+   "reviewed": "2026-11-23",
+   "declared": "round-arbiter",
+   "decisions": [
+    {
+     "id": "round:spec-fidelity|plan:451-time-retro-and-efficiency#T183@3",
+     "class": "within",
+     "summary": "the round arbiter accepted T183's section as it stands"
+    }
+   ],
+   "verdict": "CLEAR",
+   "accepted_over": {
+    "section_sha256": "46c8849c8703f4cee3d252f89968988128f21b5d3698b3be2ffe80a55dd1ff0e",
+    "reviewed": "2026-11-23",
+    "declared": "spec-fidelity",
+    "decisions": [
+     {
+      "id": "D1 inventory",
+      "summary": "Every Stop/SubagentStop answer is classed as (a) must-do-before-stopping or (b) a nudge. The free-slot, open-task and parked-stages answers are (b) and leave the Stop block, and the free slot also gets no notice. QUESTION/OFFER UNFILTERED, kept-unnamed, run-still-going, dispatch-dropped, wakeup and builder-stop stay unchanged.",
+      "class": "within",
+      "why": "The approved offer is 'Stop hooks block only for what the session must do before stopping'. Each kept block concerns something to settle before stopping: the final message, a run nothing will wake, a dropped dispatch, a stale wakeup, or a builder's own SubagentStop. The (b) blocks are the 'keep working' nudges the GM wanted off the Stop. Unchanged from round 1 except that the free slot now has no notice (see D10)."
+     },
+     {
+      "id": "D2 idle check via asyncRewake",
+      "summary": "The periodic check is a second Stop entry with asyncRewake, where exit 2 wakes the session. It is not a cron.",
+      "class": "within",
+      "why": "Unchanged from round 1. A cron fire always submits a prompt, which would defeat the GM's 'does nothing and adds nothing to the context if we are still active'. asyncRewake is the documented way to stay silent and wake only when idle."
+     },
+     {
+      "id": "D3 one check per Stop, 300 s wait, 420 s timeout",
+      "summary": "Each Stop arms one check that waits L7R_IDLE_CHECK_SECS, a GUESS of 300 s. The check is silent if the transcript gained a user or assistant record since, and the timeout is 420 s.",
+      "class": "within",
+      "why": "Unchanged from round 1. This is the GM's 'every 5 minutes'. Every idle stretch begins at a Stop, and each Stop arms one check."
+     },
+     {
+      "id": "D4 silent for any background_tasks entry and for a sub-agent stop",
+      "summary": "The check is silent at once when background_tasks names a shell, subagent, monitor or workflow, and on a sub-agent's stop.",
+      "class": "within",
+      "why": "Unchanged from round 1. The offer says 'silent while ... waiting on a tracked agent', and each of these tracked runs wakes the session when it ends. The plan prices the long-lived-monitor seam."
+     },
+     {
+      "id": "D5 feature holds from the newest ask:set-down ruling, read by prose",
+      "summary": "A feature is held when its newest ask:set-down-... ruling (continue or accept) says no new, other or further task starts, or sets the feature down. Only a later set-down ruling ends the hold.",
+      "class": "within",
+      "why": "Unchanged from round 1. This carries 'respects binding rulings and set-downs' for feature-wide holds. How the reader classes one particular ruling on record is ruled separately as D11."
+     },
+     {
+      "id": "D6 named-task hold",
+      "summary": "A task the newest set-down ruling holds by name, through its do-not-start clause, is never the idle check's next task. A range counts each member. With only held tasks open the check is silent, and a later set-down ruling ends the hold. This is holds::named, pinned in tests/idle.rs. make task-start's picker does not read it.",
+      "class": "within",
+      "why": "Round 1's cure is applied as asked. The held task can no longer be named as 'the next', and a feature whose only open tasks are held stays silent. That carries 'respects binding rulings' for named tasks. Leaving task-start alone adds no refusal the GM did not ask for. The rule that a task named elsewhere in a ruling is not held is right in general: the 451 and 449-rows rulings name the tasks to go on with. Whether one particular ruling's other clauses hold its tasks or its feature is D11."
+     },
+     {
+      "id": "D7 task-start never reads a hold",
+      "summary": "Holds silence the nudges only. make task-start's refusal does not consult them.",
+      "class": "within",
+      "why": "Unchanged from round 1. The GM asked for the nudges to respect rulings, not for a new task-start refusal."
+     },
+     {
+      "id": "D8 findings guard on the session's own dispatch, once",
+      "summary": "FINDINGS UNFILTERED arms only on a review the main session dispatched. It is silent while that review is out and fires once after it returns.",
+      "class": "within",
+      "why": "Unchanged from round 1. This is the approved offer word for word."
+     },
+     {
+      "id": "D9 open-task nudge once while unchanged",
+      "summary": "The open-task words are said only when the session is idle with nothing tracked and no ruling or set-down holding, and only once while the state is unchanged. They name the next task in FR-013's performance-first order.",
+      "class": "within",
+      "why": "Unchanged from round 1. This matches 'speaks only when it is idle with actionable work and respects binding rulings and set-downs'."
+     },
+     {
+      "id": "D10 free slot named by nothing while builders run",
+      "summary": "The free-slot nudge is removed entirely: no Stop block and no report-back notice. A freed slot goes unnamed until the session is idle with nothing tracked running, when the open-task block names the next task. This retires 451 T88's rolling-dispatch block, L7R_BUILDERS and the busy-file reading, and the occupancy cost is recorded as unmeasured.",
+      "class": "within",
+      "why": "Round 1's cure is applied. The inventory row, the after-row, the performance checklist and the Accepted limitation all say no block and no notice. This is the approved offer's own silence 'while ... waiting on a tracked agent' and the GM's 'adds nothing to the context if we are still active'. Retiring T88's nudge follows from that, and no requirement in spec-cited.md or spec-index.md carries a rolling dispatch or a builder count (a grep for slot, rolling and BUILDERS finds none). The lower occupancy is a cost recorded honestly, not a fidelity finding."
+     },
+     {
+      "id": "D11 the 449-pilot ruling's set-down and T171 read as no hold",
+      "summary": "The Holds paragraph pins ask:set-down-449-pilot as 'the named-task hold'. It is not among the 6 feature holds, it holds only T150-T158, and T171 is never held ('never a task named elsewhere in the ruling (its T171)').",
+      "class": "narrowing",
+      "ruling": "NOT LEGITIMATE",
+      "why": "That ruling's what says, in item 2, 'Leave T171 open as filed' (its why: 'leaving the line as it is for a few hours costs nothing'). Item 4 says 'Then set down. The work resumes from the GM's reply to the pilot report and to the for_gm question below.' Item 4 sets the feature down until the GM replies, and the plan's own hold test in D5 is 'or sets the feature down'. As the paragraph is written and pinned, with this ruling newest and T171 or any other 449 task open, the idle check would say 'start' a task the ruling held. That is round 1's D6 failure one task over, against the approved 'respects binding rulings and set-downs'. No route makes it legitimate. Reading item 4 is not impossible, since the reader already matches 'sets the feature down'. Nothing in the GM's words implies a set-down clause be ignored. And honoring it defeats nothing: silence is what the request asks for. The ruling is no longer 449's newest, since the 2026-11-23 rows ruling supersedes it, so this costs nothing today. But it is the pinned reading of a set-down ruling on record, and a ruling of the same shape would be misread. Cure, either: (1) count this ruling among the feature holds by its item 4 'Then set down' and pin it that way in tests/idle.rs, which also keeps T171 from being named; or (2) state in the Holds paragraph why item 4 does not set the feature down and why item 2's 'Leave T171 open as filed' does not hold T171. Do not change the general rule about tasks named elsewhere, which (2) does not ask for."
+     }
+    ],
+    "verdict": "BLOCKED"
+   }
   }
  }
 }

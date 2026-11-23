@@ -2,6 +2,12 @@
 //! INDEPENDENT CHECK HAS FILTERED THEM. A review agent's dispatch arms a requirement and an `escalation-check` dispatch disarms it; the turn may not close between (once per armed review, never a loop).
 //! A question or offer in the final message with no review behind it owes the filter too (feature 429), and a question kept for the GM is named the turn it is kept (feature 432). `ESCALATION_OK` with
 //! a reason in the dispatch prompt is the escape.
+//!
+//! THE SESSION'S OWN REVIEWS, ONCE EACH, AFTER THEY RETURN (451 T183; the GM 2026-11-23, request.md "Stop hooks that keep the session
+//! busy"): a sub-agent's dispatch (its payload's `agent_id`) neither arms nor disarms - a builder's own building-review is the builder's
+//! to dispose, and armed the session's turn three times on 2026-11-23 with findings it never relays; a review the session dispatched
+//! is `out` until its `SubagentStop` (an agent the session dispatched, `spawnDepth` 1, of the armed type), and a Stop while it is out
+//! passes, since its return wakes the session; then the turn is refused once for it.
 
 use std::collections::BTreeSet;
 use std::fs::File;
@@ -24,7 +30,7 @@ use crate::shared::state::field;
 /// The guard.
 pub const GUARD: Guard = Guard {
     name: "escalation-hooks",
-    events: &["PreToolUse", "Stop"],
+    events: &["PreToolUse", "SubagentStop", "Stop"],
     matcher: "Agent",
     decide,
 };
@@ -365,8 +371,31 @@ fn message_key(input: &Value) -> String {
     sha1::hex(field(input, "last_assistant_message").as_bytes())
 }
 
+/// A review the session dispatched has returned: no longer `out` (451 T183).
+fn returned(event: &Event, clone: &Path) {
+    let input = &event.input;
+    let state = read_state(clone);
+    let (armed, id) = (get(&state, "armed_by"), field(input, "agent_id"));
+    if armed.is_empty() || field(input, "agent_type") != armed || get(&state, "out").is_empty() {
+        return;
+    }
+    let dir = match field(input, "agent_transcript_path") {
+        "" => Path::new(field(input, "transcript_path"))
+            .with_extension("")
+            .join("subagents"),
+        own => Path::new(own)
+            .parent()
+            .map(Path::to_path_buf)
+            .unwrap_or_default(),
+    };
+    if crate::shared::guards::set_down_hooks::session_dispatched(&dir, id) {
+        write_fields(clone, &[("out", String::new())]);
+    }
+}
+
 fn pretool(event: &Event, session: &Session, clone: &Path) -> Vec<Answer> {
-    if event.tool() != "Agent" {
+    // a sub-agent's own dispatch is its own to filter (451 T183)
+    if event.tool() != "Agent" || !field(&event.input, "agent_id").is_empty() {
         return Vec::new();
     }
     let null = Value::Null;
@@ -388,6 +417,8 @@ fn pretool(event: &Event, session: &Session, clone: &Path) -> Vec<Answer> {
         return Vec::new();
     }
     arm(clone, kind);
+    let at = get(&read_state(clone), "armed_at");
+    write_fields(clone, &[("out", at)]);
     fire("armed", "review-dispatched");
     vec![Answer::Notice(TOLD_AT_DISPATCH.to_owned())]
 }
@@ -441,7 +472,8 @@ fn stop(event: &Event, session: &Session, clone: &Path) -> Vec<Answer> {
         return Vec::new();
     }
     let key = get(&state, "armed_at");
-    if get(&state, "told") == key {
+    // still out: its return wakes the session, and the turn that relays it is the one refused (451 T183)
+    if get(&state, "told") == key || get(&state, "out") == key {
         return Vec::new();
     }
     write_fields(clone, &[("told", key)]);
@@ -454,6 +486,9 @@ pub(crate) fn judge(event: &Event, session: &Session, here: &Path) -> Vec<Answer
     };
     if event.name == "Stop" {
         stop(event, session, &clone)
+    } else if event.name == "SubagentStop" {
+        returned(event, &clone);
+        Vec::new()
     } else {
         pretool(event, session, &clone)
     }

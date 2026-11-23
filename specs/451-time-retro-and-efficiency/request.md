@@ -66,3 +66,13 @@ The GM: "Okay, that sounds good. So I guess proceed with whatever it is that is 
 ## The GM, 2026-11-23, on hook output length
 
 The GM: "A lot of our hooks have somewhat long output ... That amount of output consumes tokens, so could we accomplish the same thing with no loss of fidelity and fewer tokens?  If so then should that be a general project guideline about hooks?  Maybe even something mechanically enforced, where each hook must contain a comment explaining how many words it uses and mentioning the subagent check that reviewed it for brevity and fidelity?  What do you think?"
+
+## 2026-11-23, Stop hooks that keep the session busy, and a timer in their place
+
+Shown a Stop block that fired while the session correctly waited ("still: BLOCKED: a builder slot is free" under a round-arbiter ruling that held new work, and "FINDINGS UNFILTERED" for a builder's own review), the GM asked:
+
+> Do we think that much text needs to be there? For that matter, do we think that these kinds of hooks are even the right approach, as opposed to something like a cron that fires every 5 minutes and does nothing and adds nothing to the context if we are still active, and only injects data into the session if we are stopped?
+
+Told that 23 of the session's turns since 14:42 were spent only answering such blocks, and offered: Stop hooks block only for what the session must do before stopping; a periodic check, silent while the session is active or waiting on a tracked agent, speaks only when it is idle with actionable work and respects binding rulings and set-downs; the findings guard fires only for reviews the main session dispatched, once - the GM said:
+
+> Yes, please go ahead and implement that. Thank you. That seems worth doing before we do our stop and talking more about things. Thanks.
