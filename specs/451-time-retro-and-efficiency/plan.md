@@ -2277,52 +2277,101 @@ its own files; not engine speed, so no performance-checklist answers.
 
 
 <!-- plan-archive: T153 to T153 moved to plan-done.md, 2026-11-22 (feature 375 FR-044) -->
-### T154 (<why: the finding or measurement that files it>)
+### T154 (a TRIAL, measured 2026-11-22: the gate was said to compile each crate three times and run its tests twice - the Phase lines of 2026-11-22 01:00-08:15 gave a test build of 73 min, a coverage build of 78 min and clippy 54 min of machine time against about 45 min of tests run)
 
-- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+- **Approach**: a measurement, no code changed. The question: drop the gate's plain test build and run wherever the coverage run executes the same tests. **Verdict: do not build - the branch "already there" taken.** The gate has no plain test build to drop. `make done` runs `static` (`rust lint`, `rust cover`, `rust dead`), `hooks-test` and `counters-inert` (`rust test-counters`), and never `rust test` (read 2026-11-22: the Makefile's `done`, `static` and `counters-inert` recipes; `land` runs `make done`, and its cheap pass runs cover, never `rust test`). The coverage pass already answers for the plain run: 449 T111's `keep_tests` and 451 T57's `unit_tests_only` (`rustc/kept.rs`). The one build and run of tests outside coverage is `test-counters`, and only on the three crates with a `counters` feature (pool, phases, mode_a; `--all-features`, every target), measured 2026-11-22 (each `Cargo.toml` read for a `counters` feature; the worktree run's `test-counters.out`). That is a different build, the counting one, and its job is the counters-inert check (features 443, 444): every test passes with the counters compiled in.
+  - **Where the 73 min was** (re-measured 2026-11-22). Method: the `Phase` lines of every feature's event log under the clone's `.git/l7r-events/`, `src` rust, `t0` from 2026-11-22T01:00Z to 08:15Z, summed by `make` target and step (machine minutes, overlapping). `build` came to 75.7 min: 61.1 under `make rust-test` (builders' own runs while iterating, 108 builds) and 14.5 under `make land` (14 builds, every one `test-counters` on pool or mode_a), measured 2026-11-22 (the window's Phase lines, by target and step). `cover-build` came to 122.4 min (closing-checks 32.1, land 56.4, rust-cover 34.0), `lint` 121.2, `cover-run` 69.2 and `test` 11.9, measured 2026-11-22 (the window's Phase lines, by target and step). The task line's 78 and 54 are lower than these 122 and 121. This window counts every feature's log and every target, and the task line's method is not recorded, so the two are given side by side, not reconciled. `make where-time F=451 SINCE=2026-11-22T01:00:00Z UNTIL=2026-11-22T08:15:00Z`, which reads feature 451's log alone, books compile at 52.6 machine min and tests at 339.6 across 2497 runs, measured 2026-11-22 (its runs table).
+  - **Today's gate, by phase, cold** (measured 2026-11-22 18:41-19:13 EST). A detached worktree `/tmp/t154/wt` at 1dffe4d5af, its own target directory (`~/.cache/l7r-cargo-target/wt`, cold), `L7R_RUST_FRESH=1`. The Rust phases were run in the gate's order as `scripts/gates/l7r-gate.sh rust <step>`, not as `make done`, because `make done` commits its run record (`commit-run-record.sh`) and this trial commits nothing. Host load 17-27 on 22 cores, other builders running. Wall clock: lint 196 s, cover 803 s, test-counters 204 s, measured 2026-11-22 (the worktree run's Phase lines and `times.txt`). Phase lines (machine): cover-build 11.1 min over 6 families, cover-run 6.3, lint 3.2, the counting build 3.3 (mode_a 147 s, pool 37 s), its tests 0.1, measured 2026-11-22 (the worktree run's Phase lines and `times.txt`). A plain `rust test` after these, which is the build a builder's `make rust-test` makes and the gate does not: 696 s wall, build 10.9 machine min over 34 crates, tests 0.7, measured 2026-11-22 (the worktree run's Phase lines and `times.txt`).
+  - **Today's gate, by phase, per landing** (measured 2026-11-22). Method: the same `Phase` lines with `make` = land, from 2026-11-21T00:00Z. There were 58 gated landings (a `src` land `gate` line), 269.7 min of gate wall clock, measured 2026-11-22 (the land Phase lines since 2026-11-21T00:00Z). Their Rust steps: cover-build 116.5 machine min, cover-run 54.3, lint 74.6, the counting build 33.4, the counting tests 5.6. Per gated landing that is 2.0, 0.94, 1.29, 0.58 and 0.10 min, measured 2026-11-22 (the land Phase lines since 2026-11-21T00:00Z).
+  - **The candidate, held to the rules.** Same tests (counted 2026-11-22): the plain run's `test result:` lines summed 3,660 passed, 0 ignored, over 34 crates. The coverage binaries' `--list --format terse` came to 3,659. The one test missing is checks' `every_pointer_in_the_repository_resolves_to_a_fragment`, `#[cfg(not(coverage))]`; its real-tree check runs at the push as the `research-pointers` row (`cohort/src/push.rs`), so nothing is lost there. The counting build runs 13 tests the default build does not: pool 59 against 54, mode_a 339 against 335, phases 134 against 130 measured 2026-11-22 (`test-counters.out` against `test.out`). Same failures (2026-11-22): `assert_eq!(1 + 1, 3, "T154 red probe")` was added to tree's `a_rust_only_change_starts_none_of_the_python_checks`. `rust cover --crate rust/gate/crates/tree` exited 1 with "57 passed; 1 failed ... cover FAILED on rust/gate/crates/tree", and `rust test` on the same crate failed too. Restored, cover was clean. Coverage reads the same: nothing changed.
+  - **Minutes saved.** The candidate as asked saves 0 min per gate and 0 per landing, because it is already built (449 T111, 451 T57), measured 2026-11-22 (the gate's recipes read, and no `build` Phase line under `done` or `land` but the counting crates'). The only test build left to drop is the counting one: 0.58 machine min of build and 0.10 of tests per gated landing (warm), or 3.3 min cold, measured 2026-11-22 (the land Phase lines since 2026-11-21T00:00Z) and measured 2026-11-22 (the worktree run's Phase lines and `times.txt`). Dropping it WEAKENS counters-inert, so it is not proposed: the 13 counters-only tests would never run in the gate, and nothing would show the counting build passes. The builders' `make rust-test` builds, 61.1 of the window's 75.7 build minutes, are outside the gate. A follow-up there would have to measure first whether a builder's run could share the coverage build. That is not measured here, and nothing is proposed on it.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
+| measure the gate's phases and the candidate (no code) | n/a - a trial, no code | n/a | none - no map rolled | n/a |
 
 ### T154 Approach (checklist part A)
 
-1. **The goal, in the world.** <the place as it should be>
-2. **The constraints.** <the FRs, decisions and pages it holds to>
-3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
-4. **Do they describe the world here?** <how it was measured>
-5. **The order.** <before and after what>
-6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
-7. **The search smell.** <none, or what the probes showed>
+1. **The goal, in the world.** The gate compiles and runs each test once wherever one build can answer for two, with every test still run, coverage still measured, and every red fixture still failing.
+2. **The constraints.** The trial form (docs/spec-kit-and-reviews.md, "The trial form", feature 438): measure first, no engine code on net. FR-013 (performance work). The counters-inert check (features 443, 444): every test passes in the counting build. No port held to its bytes (constitution XIII).
+3. **Where each comes from.** G: the GM's "how much time are we spending on recompiling things" (451 T05). O: the Phase lines and the worktree run above.
+4. **Do they describe the world here?** Yes, measured 2026-11-22: the gate's recipes were read and its Phase lines summed by target, and the worktree run was counted per crate.
+5. **The order.** After 451 T153, which writes every phase's line. Before any build follow-up, and none is proposed.
+6. **The exits.** Green: the measurement recorded with its verdict. That branch was taken: the candidate already stands, and the counting build is not the same tests. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
 8. **The budget.** One landing.
-9. **Done, measured.** <the measurement that says it is done>
-10. **Before moving a constant.** <n/a, or the claim it moves>
-11. **Before fitting things into room.** <n/a, or the room given first>
-12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+9. **Done, measured.** The figures above, dated with their methods. The red probe failed under coverage. 3,659 of the plain run's 3,660 tests ran under coverage, the one left out covered by the push's row, measured 2026-11-22 (the plain run's `test result:` lines against the coverage binaries' `--list`). The worktree and its 19 GB target directory were removed, measured 2026-11-22 (`du -sh` before, `git worktree list` naming no `t154` after).
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** Nothing: no code changes.
 
-**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+**Found and left?**
+- A brand-new tree's coverage run is red on rust/mode_a. `audit::armory::tests::every_pool_magistracy_draws_its_armory_where_its_seed_rolls_it` reads `ochiba-roundtrip-test.svg` and `county-magistracy-example.svg`, which `.gitignore` re-ignores as generated, so the fresh worktree failed it with NotFound (334 passed, 1 failed). The clone and its `-land` worktree hold both files, observed 2026-11-22. Its visible effect: a gate run in a new tree fails on a test that is not broken. Not fixed here: a trial changes no engine code. Filed as T159; lands before T148 (its tree-of-its-own option builds in fresh trees).
 
-**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+**Performance work?** Yes, a trial on the gate's time (FR-013). Its verdict: nothing to build.
 
 ### T154 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)
 
-1. **Where does the time go?** <the stage and the loop: its counted operations, `make work-budget` (a hamlet stage) or `make budget-sheets` (a Mode A stage)>
-2. **Removes work, or only moves it?** <fewer candidates, a screen, a kept result, an index, an early stop, a better algorithm,
-   a loop into C - or an inlining, a merge, a builtin written out: never the goal, only where the time evidence shows a gain>
-3. **What do you expect it to save, and why?** <a share of the stage's profiled time>
-4. **How does the work grow with the settlement?** <the growth exponent between sizes, and whether this bends it>
-5. **What did the before and after show, and under what conditions?** <the counted operations before and after, and any wall
-   time with the host's load - evidence, not a pass>
-6. **Did any map move, and does it still keep the research?** <`make maps-moved`, the cohort>
+1. **Where does the time go?** In the gate's Rust steps, per gated landing (2026-11-21 to 22, Phase lines): cover-build 2.0 machine min, lint 1.29, cover-run 0.94, the counting build 0.58, the counting tests 0.10. There is no plain test build.
+2. **Removes work, or only moves it?** The candidate's work is already removed (449 T111, 451 T57). Dropping the counting build would remove a check, not work.
+3. **What do you expect it to save, and why?** 0 min: the plain build it would drop is not in the gate, measured 2026-11-22 (the gate's recipes read, its Phase lines summed).
+4. **How does the work grow with the settlement?** n/a: the gate's checks, not a stage.
+5. **What did the before and after show, and under what conditions?** Before and after are the same gate: lint 196 s, cover 803 s and test-counters 204 s wall, cold, host load 17-27 on 22 cores, measured 2026-11-22 (the worktree run's Phase lines and `times.txt`).
+6. **Did any map move, and does it still keep the research?** None. No code changed and no map was rolled.
 
 
-### T155 (<why: the finding or measurement that files it>)
+### T155 (a TRIAL, measured 2026-11-22: the task line said a landing recompiles what the clone already built - 117 min of make land phases over 6 landings, 28 of them coverage builds - because cargo's fingerprints carry each tree's absolute path, so the landing worktree's own target directory cannot use the clone's builds)
+
+- **Approach**: a measurement, no code changed. The question: how much of a landing's build recompiles what the clone's closing checks already built for the same content, and does a content-keyed compilation cache (sccache) or building the landing at the clone's own path remove it? **Verdict: build neither.** (a) sccache removes nothing: it hit 0 times across the two paths, and the coverage build, which is most of a landing's compile, is uncacheable under it. (b) Building at the clone's path saves little: every file the landing's checkout writes is newer than the clone's build, so it is rebuilt anyway. And it is unsound: a file the checkout did not write, older than the clone's build of a different copy, is reused silently - a tree holding a failing test passed coverage clean. Every figure below is machine minutes summed over rustc calls, which overlap. The host was at load 44-50 on 22 cores, so per-unit times run 2-5x an idle host's.
+  - **Why a landing compiles at all** (measured 2026-11-22). Method: the clone's event logs, every `Phase` line with `t0` from 2026-11-22T05:00Z. For each `land gate` (17), each `rust` lint, cover-build or build line inside it was matched against the clone's own green (code 0) lint or cover-build lines that ran between the previous landing's end and this one's start and named any of the same crates. The landings' Rust build steps came to 90.6 min. 49.3 min were on crates the clone had checked green in that window. 30.9 min were on crates it never checked green there. 10.4 min were the counting build (`test-counters`), which no closing check runs. Only the 49.3 is reachable by sharing the clone's builds, about 2.9 min a gate. Even that is not all duplicate, because a kept result is keyed by contents (`rustc/kept.rs`) and `land-alone.sh` step 5 seeds the clone's kept results: a crate the clone checked green with the landing's contents is not run or compiled at the landing at all. A landing compiles a crate for one of three reasons: the clone's tree held other tasks' uncommitted edits in it or a crate it builds on; the clone's run of it was red; or a crate the landing must run builds on it. The 17 gates' wall time was 103.9 min, of which the union of their Rust phases was 85.8, measured 2026-11-22 (the gate lines against the union of the phase spans inside them). The other 18 min is unbooked: the gate tool builds and the non-Rust phases.
+  - **The controlled pairs** (measured 2026-11-22 19:20-20:10 EST). The clone itself was dirty: 10 uncommitted files in `rust/gate/crates/registry` and `rust/mode_a`, observed 2026-11-22 (`git status --short -- rust/`). So two scratch worktrees stood in for the two sides: `/tmp/t155/t155clone` played the clone and `/tmp/t155/t155land` played the landing, each with its own target directory (`~/.cache/l7r-cargo-target/<basename>`). Both were warmed at 61e8b7b20f (the landing before HEAD: lint, cover, dead, and test-counters on the landing side) and then moved to 1dffe4d5af (HEAD, the last landing). Each step ran as `scripts/gates/l7r-gate.sh rust <step>`, not `make done`, because `make done` commits its run record. The clone side ran closing checks' Rust steps (lint, cover, dead). The landing side was seeded from the clone side's kept results as `land-alone.sh` step 5 does (`cp -a -u`), then ran lint, cover, dead and test-counters. Every rustc call was logged by a `RUSTC_WRAPPER` in front of the gate's own wrappers (`/tmp/t155/bin/logrustc`), with crate, kind, `--test`, wrapper, features and span, and from pair 2 on the profile (pair 1's tool and debug units were told apart by hand from the crates and the step). A landing unit counts as a DUPLICATE when the clone side compiled the same crate, kind, mode, features and profile and neither the crate nor any workspace crate it builds on differed between the two trees (`/tmp/t155/bin/dup2.py`). The two ignored magistracy sheets 451 T159 names were copied in from the clone. `mode_a`'s pool sweep was still red in both trees at both commits on those copies (`county-magistracy-example.svg`, left `(Some(0), Some(1))`), so its result was never kept. That is T159's family (an ignored generated sheet a test reads), not filed again.
+    - Pair 1, a clean clone at the landing's commit: the landing compiled 4.2 min, and the duplicate was 0.66 - the `l7r-rust` tool binary, rebuilt in each target directory (shared, core, tree and rustc crates in the tool profile). Another 1.70 was `mode_a`'s coverage build again, because the clone side's run was red on the copied sheets; a crate red in the clone does not land, so that is not counted as a duplicate. The other 1.5 was its own: the counting build. Lint and every green crate's cover compiled nothing: each was reused from the seeded results. Wall: landing lint 34 s and cover 64 s, against the clone side's 110 s and 169 s, measured 2026-11-22 (`rustc-C1-*.tsv`, `times.txt`).
+    - Pair 2, a dirty clone. Both trees took the same task edit, a comment appended to `gate/crates/core/src/lib.rs`. The clone side also took the clone's real uncommitted `registry` and `mode_a` diff of 19:20, and the landing a red probe in a registry test. The landing compiled 82 units, 14.2 min, in lint and cover: 5.15 duplicate (30 rlibs of crates the dirty pair does not reach), 7.82 on crates built against the other registry (same names, different inputs), 1.24 its own. The core comment was appended by hand to both trees before the clone side built, where a real landing gets the task's edit by checkout, newer than the clone's build; that part of the duplicate is the setup's. Wall: lint 8 s and cover 169 s, measured 2026-11-22 (`rustc-C2-*.tsv`, `times.txt`).
+  - **(a) sccache** (measured 2026-11-22). sccache 0.13.0+ds-3build1, not in the container before: Ubuntu's archive package, installed for this trial (`apt-get install sccache`), with nothing else downloaded, `SCCACHE_DIR` under `/tmp/t155`. A toy workspace of two path crates, built at two paths: incremental builds are never cached ("incremental": 4 of 4), test binaries never ("crate-type"), and a second path missed every unit that a second build at the first path hit (2 of 2). The real gate, `rust cover --crate rust/gate/crates/tree` with `CARGO_INCREMENTAL=0` and sccache inside the logging wrapper, at the clone side's path and then the landing side's: 4 cacheable misses at each path (the tool profile's four rlibs) and 0 hits at the second. Every coverage unit was "multiple input files", not cached: cargo hands sccache the gate's `RUSTC_WORKSPACE_WRAPPER` script (`cover.rs`'s `workspace_only`, 449 T100) as the compiler and rustc as an input. The run's verdicts were unchanged. Lint under sccache was not measured. The red probe (`assert_eq!(1 + 1, 3, "T155 red probe")` in tree's `a_rust_only_change_starts_none_of_the_python_checks`) failed cover, exit 1. Restored, it was clean, and both paths' runs were clean, measured 2026-11-22 (`scc-stats.txt`, `scc-*.out`). sccache 0.13 has no base-directory option (`strings` of the binary: no `BASEDIR`). Even with one, and with the coverage flags moved back to every crate, only rlibs could hit: the duplicate's ceiling is pair 1's 0.66 min (the tool binary's rlibs) and pair 2's 5.1, at the price of `CARGO_INCREMENTAL=0` in every builder's loop as well. **Saves 0 min per landing as it stands. Weakens nothing, because it never hits.**
+  - **(b) Building at the clone's path** (measured 2026-11-22). There is no mount namespace in this container (`unshare -m`: Operation not permitted), so the trees swapped paths by `mv`, which keeps mtimes. The landing tree then sat at the clone's path, and `l7r-gate.sh` keyed it the clone's target directory. On pair 2's state the landing's lint and cover compiled 54 units against its own directory's 82, a third fewer. Its minutes (1.6 against 14.0, 80 s wall against 177 s) are not a saving: they mix the host's load, 1.8 s a unit against 10.2, with what each directory had already built. `l7r_shared` was rebuilt at the clone's path though no pair-2 edit touched it, because the landing tree's copy came from its checkout of 1dffe4d5af at 19:55:15, after the clone side's builds of it (19:50-19:54), measured 2026-11-22 (`rustc-C2-same.tsv`, `rustc-C1-clone.tsv`, `times.txt`). That is the general case: a landing's checkout writes the commit's changed files new, so at the clone's path they and everything built on them are rebuilt - only files the checkout did not write could be reused. The clone's next run then recompiled 0.8 min that its own tree had built before (registry's test binary, research), measured 2026-11-22 (`rustc-C2-same.tsv`, `rustc-C2-clone-after.tsv`). **It is unsound.** Cargo judges a path crate fresh when no source file is newer than its last build, and the two trees' files at one path break that. The hazard was set up deliberately: the landing's `tree` test file held the red probe and was written first; the clone's copy of the same file took a different edit 2 s later and was built. The landing at the clone's path compiled nothing, ran the clone's test binary, and passed: "cover clean on 1 crate(s)". In its own target directory the same landing tree failed: "57 passed; 1 failed ... T155 red probe ... cover FAILED on rust/gate/crates/tree", measured 2026-11-22 (`hz-same.out` against `hz-B.out`). The landing's tests would run the clone builders' code, not the commit's. On pair 2 the registry probe was caught because `l7r_shared`, which registry builds on, was rebuilt from the newer checkout, not because cargo saw the probe; the tree test shows the case with nothing upstream to rescue it. Stable cargo 1.87 has no content-keyed freshness (`-Zchecksum-freshness` is nightly). **Saves at most the units built only from files the checkout did not write - a third of pair 2's, an upper bound with the setup's hand edit in it - and exactly those are the units it can reuse wrongly. Weakens the gate: a red tree lands green.** Not proposed.
+  - **Minutes saved per landing, against the remaining cost.** (a) 0 of a landing's 2.0 min cover-build and 1.29 lint (451 T154's per-gated-landing figures). (b) at most the 49.3 min of 90.6 (about 2.9 min a gate) the classification above leaves reachable, less everything the checkout rewrites; on pair 2, 54 units built against 82, and the units it skips are the ones it can reuse wrongly. What stays duplicate under either: the `l7r-rust` tool binary's rebuild in each target directory (0.66 min on pair 1, when a gate crate moved), and the recompiles of a crate whose clone run was red. That is too little and too narrow for a follow-up, so none is proposed.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+| measure a landing's duplicate build and the two candidates (no code) | n/a - a trial, no code | n/a | none - no map rolled | n/a |
+
+### T155 Approach (checklist part A)
+
+1. **The goal, in the world.** A landing compiles nothing the clone already compiled from the same inputs, and its every verdict is still about the commit it lands: the same tests, the same failures, the same coverage.
+2. **The constraints.** The trial form (docs/spec-kit-and-reviews.md, "The trial form", feature 438): measure first, no engine code on net. FR-013 (performance work). The GM 2026-11-22 (request.md, "on the disk and build caches"): a copied cache is no answer. Kept results are keyed by contents (449 T93), and `land-alone.sh` seeds them (451 T88). No port held to its bytes (constitution XIII).
+3. **Where each comes from.** G: the GM's request.md words above. O: the Phase-line classification, the two controlled pairs, the sccache arm and the same-path arm above.
+4. **Do they describe the world here?** Yes, measured 2026-11-22: the clone's dirty `rust/` tree was read, and the pairs ran today's last landing's two commits with the clone's real uncommitted diff.
+5. **The order.** After 451 T154 (the gate's phases per landing). Before any build follow-up, and none is proposed.
+6. **The exits.** Green: the measurement recorded with its verdict, which is the branch taken - neither candidate is built: (a) never hits, (b) lands a red tree green. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** One landing.
+9. **Done, measured.** The figures above, dated with their methods. The red probe failed cover in a landing tree's own target directory, and passed at the clone's path, which is the reason (b) is refused. Under sccache it failed too, but that run had no hits, so it says nothing about a hit's soundness. The worktrees `/tmp/t155/t155clone` and `/tmp/t155/t155land`, their target directories, the sccache directory and its server were removed, measured 2026-11-22 (`git worktree list` naming no `t155`, `ls ~/.cache/l7r-cargo-target` naming none). The apt package stays installed.
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** Nothing: no code changes.
+
+**Found and left?**
+- `pool`'s `maps::tests::the_launcher_runs_the_gate_script` failed "Text file busy (os error 26)" in both scratch worktrees' coverage runs at 61e8b7b20f, 53 passed, 1 failed, under load 44-50 on 22 cores, observed 2026-11-22. The test writes its fake `l7r-gate.sh` in process and runs it, the race that 449's `write_executable` closed in the other crates' tests. Its visible effect: a gate is red on a test that is not broken. Not fixed here: a trial changes no engine code. Filed as T160; lands before T148 (its tree-of-its-own option runs more gates side by side).
+
+**Performance work?** Yes, a trial on the landings' time (FR-013). Its verdict: nothing to build.
+
+### T155 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)
+
+1. **Where does the time go?** In a landing's Rust builds: today 90.6 machine min over 17 gates. 49.3 were on crates the clone had checked green in the window, 30.9 on crates it never had, 10.4 on the counting build. In the controlled pairs: 0.66 of 4.2 min duplicate when the clone was clean (the tool binary), 5.15 of 14.2 when it was dirty.
+2. **Removes work, or only moves it?** (a) removes none: 0 hits across paths. (b) removes it by trusting mtimes across two trees, so it removes a check as well.
+3. **What do you expect it to save, and why?** (a) 0 min. (b) a third of pair 2's units at most, less every file a landing's checkout writes, and none of it safely.
+4. **How does the work grow with the settlement?** n/a: the gate's builds, not a stage.
+5. **What did the before and after show, and under what conditions?** Pair 2's landing at load 44-50 on 22 cores: lint plus cover 82 units, 177 s wall, in its own directory against 54 units, 80 s, at the clone's path, the minutes mixed with the load (10.2 s a unit against 1.8). sccache's stats: 0 hits, measured 2026-11-22 (`times.txt`, `scc-stats.txt`).
+6. **Did any map move, and does it still keep the research?** None. No code changed and no map was rolled.
+
+### T159 (<why: the finding or measurement that files it>)
 
 - **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
 
 | step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
 |---|---|---|---|---|
 
-### T155 Approach (checklist part A)
+### T159 Approach (checklist part A)
 
 1. **The goal, in the world.** <the place as it should be>
 2. **The constraints.** <the FRs, decisions and pages it holds to>
@@ -2341,17 +2390,57 @@ its own files; not engine speed, so no performance-checklist answers.
 
 **Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
 
-### T155 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)
 
-1. **Where does the time go?** <the stage and the loop: its counted operations, `make work-budget` (a hamlet stage) or `make budget-sheets` (a Mode A stage)>
-2. **Removes work, or only moves it?** <fewer candidates, a screen, a kept result, an index, an early stop, a better algorithm,
-   a loop into C - or an inlining, a merge, a builtin written out: never the goal, only where the time evidence shows a gain>
-3. **What do you expect it to save, and why?** <a share of the stage's profiled time>
-4. **How does the work grow with the settlement?** <the growth exponent between sizes, and whether this bends it>
-5. **What did the before and after show, and under what conditions?** <the counted operations before and after, and any wall
-   time with the host's load - evidence, not a pass>
-6. **Did any map move, and does it still keep the research?** <`make maps-moved`, the cohort>
+### T160 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T160 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
 
 
-<!-- plan-archive: T156 to T156 moved to plan-done.md, 2026-11-22 (feature 375 FR-044) -->
-<!-- plan-archive: T158 to T158 moved to plan-done.md, 2026-11-22 (feature 375 FR-044) -->
+### T161 (<why: the finding or measurement that files it>)
+
+- **Approach**: <what changes, where, and how it was measured - each figure dated with its method>.
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+
+### T161 Approach (checklist part A)
+
+1. **The goal, in the world.** <the place as it should be>
+2. **The constraints.** <the FRs, decisions and pages it holds to>
+3. **Where each comes from.** <G: the GM's words; R: a page; O: a measurement>
+4. **Do they describe the world here?** <how it was measured>
+5. **The order.** <before and after what>
+6. **The exits.** Green: <the measurement that lands it>. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** <none, or what the probes showed>
+8. **The budget.** One landing.
+9. **Done, measured.** <the measurement that says it is done>
+10. **Before moving a constant.** <n/a, or the claim it moves>
+11. **Before fitting things into room.** <n/a, or the room given first>
+12. **Before any fix.** <what a reader of the map would see differently, or the finding or check it breaks; nothing: not a defect, restate the claim (constitution XIV)>
+
+**Found and left?** <none - or a `- ` item each, with its visible effect or the research finding it breaks (an item with neither is not a defect and is not filed), fixed in this task by default and saying `fixed here`; a deferral says `Not fixed here: <why>. Filed as T<n>; lands before T<m>.`, both open tasks of tasks.md (`make task-add`); a fix of a class of defect (every writer, every form) carries `observed <YYYY-MM-DD>, method: <how every instance was found>` (451 T17, D15)>
+
+**Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
+
