@@ -43,6 +43,7 @@ One line per claim the changes bear on, and nothing for the rest:
     TOUCHES <key> - <which block, a few words>
 
 A claim you do not name is cleared without a re-check. When no claim is touched, reply with the one line `NONE`: an empty reply is
-refused as no reply at all (feature 451, 2026-11-21: a reply of nothing, as this file once asked, was refused). No preamble, no
+refused as no reply at all (feature 451, 2026-11-21: a reply of nothing, as this file once asked, was refused), and so is a reply
+holding any line not in this form - a bullet, bold, a dash other than ` - ` (feature 451 T195). No preamble, no
 summary, no other lines: the session saves your reply and
 `make claims-triaged BUNDLE=<dir> REPLY=<file>` reads it line by line.

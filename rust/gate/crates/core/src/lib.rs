@@ -3,6 +3,7 @@
 //! module names they had in the one crate, so a path such as `crate::checks::py_repr` still names them. The `testkit` feature carries
 //! the test helpers the other crates' tests build on.
 
+pub mod build;
 pub mod checks;
 pub mod checks_door;
 pub mod codeid;

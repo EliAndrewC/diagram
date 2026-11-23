@@ -250,7 +250,7 @@ fn a_bundle_missing_its_blocks_records_and_a_triage_reply_naming_nothing_owes_th
     let got = claims(&root, &["record", "--bundle", &o, "--reply", &r]);
     assert!(got.stdout.contains("claims-checked: 1 of 1 recorded"));
     put(&root, "b/triage.json", "{\"units\": {\"rust/phases/src/lib.rs::GAP#gap\": {\"research\": \"r\", \"pages\": {}}, \"rust/phases/src/lib.rs::reach#reach\": {\"research\": \"r\", \"pages\": {}}}, \"snapshots\": {}, \"forced\": [\"rust/phases/src/lib.rs::reach#reach\", 3]}");
-    let r = reply(&root, "nothing named\n");
+    let r = reply(&root, "NONE\n");
     let got = claims(&root, &["triaged", "--bundle", &o, "--reply", &r]);
     assert!(got.stdout.ends_with("claims-triaged: 1 of 2 sent on to impl-drift (0 named by the reply, 1 cx.owed in full: a removed block's words could not be shown); the rest cleared\n"));
 }

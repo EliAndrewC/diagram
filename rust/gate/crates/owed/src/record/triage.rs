@@ -7,7 +7,6 @@ use std::sync::LazyLock;
 
 use fancy_regex::Regex;
 use l7r_shared::checks::pages::read_page;
-use l7r_shared::py_text::strip;
 use l7r_shared::pyjson;
 use serde_json::{json, Map, Value};
 
@@ -20,6 +19,9 @@ use crate::Reply;
 use change::Change;
 
 pub mod change;
+mod reply;
+
+use reply::read_reply;
 
 /// A subcommand of the triage.
 type Runner = fn(&Path, &Parsed) -> Result<Reply, Fail>;
@@ -669,36 +671,14 @@ pub fn record(
     pages: Option<&Value>,
     blobs: Option<&Value>,
 ) -> Result<Vec<String>, Fail> {
-    let mut named: Vec<(String, Vec<(String, String)>)> = Vec::new();
-    for raw in reply.split('\n') {
-        if let Ok(Some(c)) = TOUCHES.captures(strip(raw).trim_matches('`')) {
-            let uid = c[1].trim_matches('`').to_owned();
-            let row = (
-                c.get(2).map_or_else(String::new, |g| g.as_str().to_owned()),
-                c[3].to_owned(),
-            );
-            match named.iter_mut().find(|(u, _)| *u == uid) {
-                Some((_, rows)) => rows.push(row),
-                None => named.push((uid, vec![row])),
-            }
-        }
-    }
     let mut slugs: Vec<&String> = units.keys().collect();
     slugs.sort();
     let uids: HashSet<&str> = slugs
         .iter()
         .map(|s| s.split_once(':').map_or("", |p| p.1))
         .collect();
-    let mut refused: Vec<&str> = named
-        .iter()
-        .map(|(u, _)| u.as_str())
-        .filter(|u| !uids.contains(u))
-        .collect();
-    refused.sort_unstable();
-    let mut msgs: Vec<String> = refused
-        .iter()
-        .map(|u| format!("refused: `{u}` is not a pop-up of this triage"))
-        .collect();
+    let named = read_reply(reply, &uids)?;
+    let mut msgs: Vec<String> = Vec::new();
     let mut mark = touched(store)?;
     let known: Vec<String> = pages
         .and_then(Value::as_object)

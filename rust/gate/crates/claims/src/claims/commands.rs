@@ -641,6 +641,11 @@ fn triaged_cmd(
         .flatten()
         .filter_map(|v| v.as_str().map(str::to_owned))
         .collect();
+    if let Some(why) = super::triage::refused(&reply, &units) {
+        o.err.push_str(&why);
+        o.err.push('\n');
+        return Ok(2);
+    }
     let (new, msgs) = record_triage(
         index,
         &units,

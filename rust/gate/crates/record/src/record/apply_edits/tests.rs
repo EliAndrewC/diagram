@@ -272,3 +272,28 @@ pub(super) fn assemblable(root: &Path) {
     );
     let _ = std::fs::remove_file(root.join("research/sources/010-works-cited/README.md"));
 }
+
+/// A reply holding an EDIT line the parser cannot read is refused whole, the line and the form named, and nothing of it applied -
+/// never its readable blocks applied and the unread one dropped (feature 451 T195, gap audit item 12a).
+#[test]
+fn a_reply_with_an_unread_edit_is_refused_and_applies_nothing() {
+    let root = record("apply-edits-unread");
+    let before = page(&root);
+    let changed = ONCE.replace("apart", "apart, near");
+    let unread = format!("EDIT `{PAGE}` (TRUTH)\n<<<\nMore here.\n===\nMore.\n>>>\n");
+    let said = run(
+        &root,
+        &format!(
+            "quote-check: 0094 - 2\n{}{unread}",
+            edit(PAGE, ONCE, Some(&changed))
+        ),
+        &[],
+    );
+    assert_eq!(said.code, 2, "{said:?}");
+    assert!(
+        said.stderr
+            .contains("line 8: EDIT `research/questions/0094-trade.html` (TRUTH)")
+            && said.stderr.contains("EDIT [(CATEGORY)] <path>")
+    );
+    assert_eq!(page(&root), before);
+}

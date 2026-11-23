@@ -148,7 +148,21 @@ elif stale; then
   fi
   rm -f "$err"
   touch "$BIN"  # cargo leaves an up-to-date binary's time alone, and a source newer than it would ask again on every call
+  # THE BUILD'S ID (feature 451 T197): HEAD and each uncommitted file the binary is built from at its blob ("deleted" where gone),
+  # written beside it, so an answer it records says what judged it - this tree holds other builders' uncommitted code
+  {
+    printf '{"commit": "%s", "dirty": {' "$(git -C "$TREE" rev-parse HEAD 2>/dev/null)"; sep=
+    while IFS= read -r p; do
+      b=deleted; [ -e "$TREE/$p" ] && b=$(git -C "$TREE" hash-object -- "$TREE/$p")
+      p=${p//\\/\\\\}; printf '%s"%s": "%s"' "$sep" "${p//\"/\\\"}" "$b"; sep=', '
+    done < <(git -C "$TREE" -c core.quotePath=false status --porcelain=v1 -uall -- "${SOURCES[@]}" "$TREE/rust/guard" "$TREE/rust/Cargo.toml" \
+      "$TREE/rust/Cargo.lock" "$TREE/.cargo/config.toml" 2>/dev/null | cut -c4- | sed 's/.* -> //')
+    printf '}}'
+  } > "$BIN.build.json"
 fi
+L7R_GATE_BUILD=
+[ -r "$BIN.build.json" ] && L7R_GATE_BUILD=$(cat "$BIN.build.json")
+export L7R_GATE_BUILD  # empty for a binary built before T197: it records no build
 # GUARD_EDIT_OK: feature 449 T205 - L7R_GATE_PRINT_FRESH=1: the binary, built above when stale, printed where it is now fresh
 # (exit 1 where it is not: a failed build, or STALE_OK's stale binary), for `make hooks-test` to export as L7R_GATE_FRESH
 if [ -n "${L7R_GATE_PRINT_FRESH:-}" ]; then stale && exit 1; printf '%s\n' "$BIN"; exit 0; fi

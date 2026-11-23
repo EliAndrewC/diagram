@@ -423,16 +423,12 @@ fn the_triage_s_reply_sends_on_what_it_names_and_refuses_the_rest() {
     let to = triaged(&root);
     let r = reply(
         &root,
-        "TOUCHES `docs/buildings.md::Walls#wall height` - it bears\nTOUCHES nope#x - refused\n",
+        "TOUCHES `docs/buildings.md::Walls#wall height` - it bears\n",
     );
     let got = claims(&root, &["triaged", "--bundle", &to, "--reply", &r]);
-    assert!(
-        got.stdout
-            .contains("claims-triaged: touched: docs/buildings.md::Walls#wall height - it bears")
-            && got
-                .stdout
-                .contains("claims-triaged: refused: `nope#x` is not a claim of this triage"),
-    );
+    assert!(got
+        .stdout
+        .contains("claims-triaged: touched: docs/buildings.md::Walls#wall height - it bears"));
     assert!(got
         .stdout
         .contains("sent on to impl-drift (1 named by the reply"),);
@@ -445,6 +441,111 @@ fn the_triage_s_reply_sends_on_what_it_names_and_refuses_the_rest() {
         index(&root)["docs/buildings.md::Walls#wall height"]["triage"],
         "touched"
     );
+}
+
+/// A reply line the triage cannot read refuses the whole reply, the line and the form named, and the index is left as it was: never
+/// a claim cleared because its TOUCHES line wore a bullet, bold or a non-ASCII dash (feature 451 T195, gap audit item 3).
+#[test]
+fn a_triage_reply_the_parser_cannot_read_is_refused_and_clears_nothing() {
+    let root = changed("claims-cmd-triaged-closed");
+    let to = triaged(&root);
+    let before = std::fs::read_to_string(root.join(crate::claims::index::INDEX)).unwrap();
+    let key = "docs/buildings.md::Walls#wall height";
+    for (text, says) in [
+        (
+            format!("- TOUCHES `{key}` - it bears\n"),
+            "line 1: `- TOUCHES",
+        ),
+        (
+            format!("**TOUCHES** `{key}` - it bears\n"),
+            "line 1: `**TOUCHES**",
+        ),
+        (
+            format!("TOUCHES {key} \u{2013} it bears\n"),
+            "is not in the form",
+        ),
+        (
+            format!("TOUCHES {key} \u{2013} it bears - more\n"),
+            "is not a claim of this triage",
+        ),
+        (
+            format!("TOUCHES `{key}` - it bears\nTOUCHES nope#x - stray\n"),
+            "`nope#x` is not a claim of this triage",
+        ),
+        (
+            format!("Here is the triage.\nTOUCHES `{key}` - it bears\n"),
+            "line 1: `Here is the triage.`",
+        ),
+        (
+            format!("NONE\nTOUCHES `{key}` - it bears\n"),
+            "`NONE` stands beside",
+        ),
+    ] {
+        let r = reply(&root, &text);
+        let got = claims(&root, &["triaged", "--bundle", &to, "--reply", &r]);
+        assert!(
+            got.code == 2
+                && got.stderr.contains(says)
+                && got.stderr.contains("TOUCHES <key> - <which block")
+        );
+        assert_eq!(
+            std::fs::read_to_string(root.join(crate::claims::index::INDEX)).unwrap(),
+            before
+        );
+    }
+    let none = reply(&root, "NONE\n");
+    assert_eq!(
+        claims(&root, &["triaged", "--bundle", &to, "--reply", &none]).code,
+        0
+    );
+}
+
+/// A claim the triage cleared under a build holding other builders' uncommitted code carries that build, and a landing alone owes it
+/// again, naming the files; a clean build stamps no row, and outside a landing the clear stands (feature 451 T197, gap audit item 9).
+#[test]
+fn a_triage_clear_by_a_mixed_build_is_owed_again_in_a_landing_alone() {
+    use l7r_gate_core::build::with;
+    let root = changed("claims-cmd-triaged-build");
+    let to = triaged(&root);
+    let key = "docs/buildings.md::Walls#wall height";
+    let r = reply(&root, "NONE\n");
+    let out = std::process::Command::new("git")
+        .arg("-C")
+        .arg(&root)
+        .args(["rev-parse", "HEAD:docs/buildings.md"])
+        .output()
+        .unwrap();
+    let blob = String::from_utf8_lossy(&out.stdout).trim().to_owned();
+    // a file as landed, one deleted then and absent now, and one other builder's
+    let mixed = format!("{{\"commit\": \"c1\", \"dirty\": {{\"docs/buildings.md\": \"{blob}\", \"rust/gone.rs\": \"deleted\", \"rust/gate/x.rs\": \"b7\"}}}}");
+    let mixed = mixed.as_str();
+    assert_eq!(
+        with(Some(mixed), false, || claims(
+            &root,
+            &["triaged", "--bundle", &to, "--reply", &r]
+        ))
+        .code,
+        0
+    );
+    assert_eq!(index(&root)[key]["build"]["dirty"]["rust/gate/x.rs"], "b7");
+    assert!(!with(None, false, || claims(&root, &["owed"]))
+        .stdout
+        .contains(key));
+    let got = with(None, true, || claims(&root, &["owed"]));
+    assert!(got.stdout.contains(key) && got.stdout.contains("rust/gate/x.rs"));
+    let root = changed("claims-cmd-triaged-clean");
+    let to = triaged(&root);
+    let r = reply(&root, "NONE\n");
+    let clean = "{\"commit\": \"c1\", \"dirty\": {}}";
+    assert_eq!(
+        with(Some(clean), false, || claims(
+            &root,
+            &["triaged", "--bundle", &to, "--reply", &r]
+        ))
+        .code,
+        0
+    );
+    assert!(index(&root)[key].get("build").is_none());
 }
 
 /// Feature 451 T191's replay: what `claims triage` would do, read only - each claim owed a triage and its fate, then the counts - and

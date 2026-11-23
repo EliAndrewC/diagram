@@ -523,6 +523,7 @@ pub fn owed(
     let mut memo = PageMemo::default();
     let moves = moved(cur, index);
     let empty = Store::new();
+    let mut landing = Landing::of(qdir);
     for row in cur.sorted() {
         let own = index.get(&row.key);
         let was = if truthy(own) {
@@ -535,11 +536,55 @@ pub fn owed(
             continue;
         };
         let why = owed_one(row, was, qdir, store.unwrap_or(&empty), &mut memo)?;
-        if let Some(why) = why {
+        if let Some(why) = why.or_else(|| landing.as_mut().and_then(|l| l.mixed(was))) {
             out.push((row.key.clone(), why));
         }
     }
     Ok(out)
+}
+
+/// A landing alone's reading of the builds its clears were made by (feature 451 T197): a clear by a build holding uncommitted code
+/// other than the landing's own is owed again; outside a landing, and with no tree to read the landing's blobs from, none is.
+struct Landing<'a> {
+    root: &'a Path,
+    blobs: BTreeMap<String, String>,
+}
+
+impl<'a> Landing<'a> {
+    fn of(qdir: Option<&'a Path>) -> Option<Self> {
+        let root = qdir.and_then(Path::parent).and_then(Path::parent)?;
+        l7r_gate_core::build::landing().then(|| Self {
+            root,
+            blobs: BTreeMap::new(),
+        })
+    }
+
+    fn mixed(&mut self, was: &Value) -> Option<String> {
+        let (root, blobs) = (self.root, &mut self.blobs);
+        let paths = l7r_gate_core::build::mixed(was.get("build"), &mut |p: &str| {
+            blobs
+                .entry(p.to_owned())
+                .or_insert_with(|| {
+                    let b = crate::record::repo::git(
+                        root,
+                        &["rev-parse", "--verify", "--quiet", &format!("HEAD:{p}")],
+                    );
+                    let b = b.trim();
+                    if b.is_empty() {
+                        l7r_gate_core::build::DELETED.to_owned()
+                    } else {
+                        b.to_owned()
+                    }
+                })
+                .clone()
+        });
+        (!paths.is_empty()).then(|| {
+            format!(
+                "triaged by an l7r-gate built with other builders' uncommitted code ({}), not this landing's: re-judge it here (451 T197)",
+                paths.join(", ")
+            )
+        })
+    }
 }
 
 fn owed_one(

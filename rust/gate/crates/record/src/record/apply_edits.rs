@@ -409,6 +409,11 @@ pub fn cli_in(args: &[String], cwd: &Rooted) -> Reply {
             }
         }
     };
+    // fail closed (451 T195): an EDIT line the parser cannot read refuses the reply before any block is applied or settled
+    let unread = l7r_shared::checks::reply::unread_edits(&report);
+    if !unread.is_empty() {
+        return Reply { stdout: String::new(), stderr: format!("apply-edits: refused, nothing applied - each EDIT block is {} (451 T195); these lines stand in no block it reads:\n  {}\nput each in the form and run it again\n", l7r_shared::checks::reply::EDIT_FORM, unread.join("\n  ")), code: 2 };
+    }
     let mut found = blocks(&report);
     let form = l7r_shared::checks::reply::py_lines(&report)
         .into_iter()

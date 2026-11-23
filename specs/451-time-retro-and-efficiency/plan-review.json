@@ -1062,6 +1062,48 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-23",
    "declared": "spec-fidelity"
+  },
+  "### T198, T199, T200 (bundle) (the GM's request of 2026-11-23, relayed by the task lines, to look for other gaps of this kind; the gap audit /home/agent/.claude/jobs/c6fd72d1/tmp/gap-audit.md items 10, 11 and 12b-d)": {
+   "sha256": "0b439a11509871b0e2ddbb996cc5eb22182630c5cc90a17b6b0b8f2f8754f8b2",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity"
+  },
+  "### T198, T199, T200 Approach (checklist part A)": {
+   "sha256": "1dd7537da2f63fad80605dde1b2bdb01b60158d26d43fab520e6aa4df008056d",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity"
+  },
+  "### T198, T199, T200 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)": {
+   "sha256": "5f3346cd7d67e70d44caf4e1ea3b5df9bceff18c6b3d1c54402db46a6ec241fe",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity"
+  },
+  "### T195 (the gap audit of 2026-11-23, items 3 and 12a, `/home/agent/.claude/jobs/c6fd72d1/tmp/gap-audit.md`: both triage reply parsers and the EDIT parser read only the lines that matched them, so an unread line's pop-up was answered `triage: untouched`, its claim cleared, or its EDIT dropped, with no word said)": {
+   "sha256": "47c1420fec3e1e88908f6795d98f4c423632be1ee4fca203ddad30d946434a1c",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity"
+  },
+  "### T195 Approach (checklist part A)": {
+   "sha256": "86902947d938a493ced710337827ac0b4d6be6e3dc2c1c6df8113e4e12f431b7",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity"
+  },
+  "### T197 (the gap audit of 2026-11-23, item 9: `scripts/gates/l7r-gate.sh` builds from the clone's working tree, so triage and apply-edits answers were judged with other builders' uncommitted code and landed with no build id, T184's first two triage runs on T185/T186's unlanded code; the 81 stale TOUCHES marks on T184's 21 pop-ups stand under `ask:t184-stale-triage-marks`, and no withdrawal verb is built, `ask:t197-rejudge-verb`)": {
+   "sha256": "6da792c1712a8026c9dc16cc6f00249cb409a551bd9ff6016502f99f3ce7d112",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity"
+  },
+  "### T197 Approach (checklist part A)": {
+   "sha256": "822173f6638d3c40bef788ffc6c5244435fc187180bb465940e3c050176b2645",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -16760,6 +16802,219 @@
      "why": "Enforces and measures the task's own goal; nothing outside it."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-23",
+   "blocks": [
+    "### T198, T199, T200 (bundle) (the GM's request of 2026-11-23, relayed by the task lines, to look for other gaps of this kind; the gap audit /home/agent/.claude/jobs/c6fd72d1/tmp/gap-audit.md items 10, 11 and 12b-d)",
+    "### T198, T199, T200 Approach (checklist part A)",
+    "### T198, T199, T200 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T198-quick-derived",
+     "summary": "T198: make quick's _quick recipe gains make-docs --check, mode-a building-programs --check and record check glossary, the three derived files preflight's DERIVED regenerates",
+     "class": "within",
+     "why": "T198. A performance fix (FR-013) that moves sub-second checks earlier so that a stale derived file fails the closing checks rather than a full make done. It adds no behavior the request does not cover."
+    },
+    {
+     "id": "T198-derived-quick-pin",
+     "summary": "T198: checks/documents/derived_quick.rs pins the recipe to preflight's DERIVED table, red on a derived target quick misses or one the table does not know",
+     "class": "within",
+     "why": "T198. Enforcement of the requested behavior. With the three lines deleted from quick it has nothing left to check, so it serves the request (FR-012 red first)."
+    },
+    {
+     "id": "T199-standing-predicate",
+     "summary": "T199: reviews prereq standing names a unit whose last PASS or NEEDS-WORK is carried to the sheet as just snapshotted and whose every open finding is nitpick, outside or confirmation. review-tree.sh prints it answered and leaves it out of the dispatch count",
+     "class": "within",
+     "why": "T199. This puts the GM's convergence rules into practice (2026-11-23: 'only factual findings cascade', 'style edits are just a different category of thing than factual inaccuracies'), along with T188 and T176's carry. Counting confirmation findings and NEEDS-WORK verdicts goes past what the replay measured (only nitpick and outside), but in the direction those words point: no factual finding is left open. It applies only to a byte-identical carried sheet."
+    },
+    {
+     "id": "T199-fail-closed",
+     "summary": "T199: a fixed error or questionable finding still owes its round on an unchanged sheet, and a finding of no or unknown severity owes one (fails closed as T188 does)",
+     "class": "within",
+     "why": "T199. It keeps factual findings cascading, which the GM's rule requires, and fails closed in the safe direction."
+    },
+    {
+     "id": "T199-found-and-left-T203",
+     "summary": "T199: a building-review nitpick fixed ON THE SHEET still moves the content key and owes a full round, which T199's own line forbids. It is not fixed here and is re-homed to T203, which lands before T201",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "T199. This narrows T199's own task line, not the GM's request. The GM's words that reach it (2026-11-23: 're-reviews scoped to the change', 'make only the smallest possible changes perhaps with some kind of adversarial subagent review process') are still carried by this feature: T203 is a filed task in the same feature, ordered before T201, in FR-009's three-part form (why, task id, order). So the rule is re-homed, not carved out. Neither stated reason makes it legitimate by itself. 'Needs a declaration verb the push's review gate accepts' is cost. 'That the edit was only the nitpick cannot be checked mechanically' argues against standing a verdict over a changed sheet with no check at all, but the GM asked for a scoped re-review, not no review, so it does not make the rule impossible. T203 must deliver a re-review scoped to the change, not merely a trusted declaration. The supporting figure also claims more than was measured: 'No round was owed by a nitpick fixed on the sheet alone' rests on 0 of 7 attributable rounds, with 5 of the 12 unattributable, and should say so. LEGITIMATE only as a re-homing. Were T203 withdrawn, or ordered after T201, this would be NOT LEGITIMATE."
+    },
+    {
+     "id": "T200-12b-locate",
+     "summary": "T200 12b: Pages::locate finds {NNNN#id} on question NNNN's pages, else on the one other question whose pages tag id. Two such questions are refused, naming both",
+     "class": "within",
+     "why": "T200 item 12b. It puts into practice the GM's 'a split is a move' (2026-11-23): an item moved between questions still fills its pop-up's Guesses with no cascade. An ambiguous move is refused in the safe direction."
+    },
+    {
+     "id": "T200-12b-claims-pointer",
+     "summary": "T200 12b: for claims, item_labels does not follow the move. It names the claim with the new pointer to write, its class held to the moved tag",
+     "class": "within",
+     "why": "T200 item 12b. On HEAD such a claim is refused with 'names no item', so this turns a dead-end refusal into one that names its fix, and adds no review the tree does not already owe. Following the move would leave the claim's round reading a page that no longer carries the item, so the citation would be wrong. That is a purpose-level reason the claims half differs from the pop-up half. The plan does not make the pointer rewrite owe a round. Under the GM's 'nothing needs to cascade simply because a split occurs', it must not (that machinery is T195/T197's, left alone here)."
+    },
+    {
+     "id": "T200-12c-already-done",
+     "summary": "T200 12c: shown already closed by 451 T196's fixpoint walk, pinned by change/tests.rs, and nothing changed",
+     "class": "within",
+     "why": "T200 item 12c. No work is needed and no defect is left. The existing pin is named."
+    },
+    {
+     "id": "T200-12d-reads",
+     "summary": "T200 12d: items.rs logs every page a Guesses reference reads (take_read) and l7r_mode_a::reads::take drains it, so a relabel regenerates a cached sheet. A page named only in About prose is not read and owes the cache nothing",
+     "class": "within",
+     "why": "T200 item 12d. A defect fixed in the safe direction (a stale cache after a relabel), with no drawing changed. Leaving out the About-prose pages follows from the mechanism, since an unread page cannot stale the output, so it narrows nothing."
+    },
+    {
+     "id": "scope-left-alone",
+     "summary": "Approach 2 and 5: T192's tagging and T195/T197's files are left alone. T192's modals::refs should resolve through Pages::locate, passed on in the handoff",
+     "class": "within",
+     "why": "T198, T199, T200. A boundary between tasks in flight, not a deferral of a defect these tasks own. The tie to T192 is named and passed on."
+    },
+    {
+     "id": "perf-after-unmeasured",
+     "summary": "Performance checklist 3 and 5: the saving is a GUESS, and the after is not yet measured on real waves",
+     "class": "within",
+     "why": "T198, T199. Labeled honestly as a GUESS and as unmeasured. That is a statement of the record, not a narrowing."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-23",
+   "blocks": [
+    "### T195 (the gap audit of 2026-11-23, items 3 and 12a, `/home/agent/.claude/jobs/c6fd72d1/tmp/gap-audit.md`: both triage reply parsers and the EDIT parser read only the lines that matched them, so an unread line's pop-up was answered `triage: untouched`, its claim cleared, or its EDIT dropped, with no word said)",
+    "### T195 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D1",
+     "summary": "The pop-up triage (read_reply) reads the reply whole before record writes anything and refuses a line outside the form, a foreign uid, an empty reply, and NONE beside a TOUCHES line, naming the line and form.",
+     "class": "within",
+     "why": "Fixes the fail-open defect the task is filed for (an unread line answered 'triage: untouched' with no word said) in the triage machinery the GM approved on 2026-11-23 (the agent triage after the echo check). A wrong outcome, fixed in the task."
+    },
+    {
+     "id": "D2",
+     "summary": "The claims triage gets the same rules via `refused`, called by `claims triaged` before record_triage so save_index never runs on a refused reply; record_triage is left unchanged for its \"\" callers (observed, grep of its callers); its now-unreachable unknown-key message is removed.",
+     "class": "within",
+     "why": "Same defect on the claims side; leaving record_triage's internal-caller path alone is the scope of the fix, not a narrowing of it, since those callers pass no agent reply. Removing dead code follows from the fix."
+    },
+    {
+     "id": "D3",
+     "summary": "A claim key may hold spaces, so a non-ASCII dash with a later ' - ' reads as an unknown key and is refused.",
+     "class": "within",
+     "why": "A consequence of refusing unknown keys whole; it refuses, never records wrongly, so it cannot reintroduce the fail-open path."
+    },
+    {
+     "id": "D4",
+     "summary": "EDIT: unread_edits/EDIT_FORM finds a line shaped as an EDIT header (first word EDIT past bullet, quote or bold, not EDITS) or a <<< fence outside any parsed block; record apply-edits refuses on it before any block is applied or settled.",
+     "class": "within",
+     "why": "Fixes the dropped-EDIT defect (audit item 12a) at the point where a block is applied."
+    },
+    {
+     "id": "D5",
+     "summary": "Only record apply-edits refuses; the guard's own readers (round state rounds.rs:856, freeze.rs:88) and the bundles' displays keep the existing parse, on the observation (grep of reply::blocks|categorized( over rust/, each caller read) that apply-edits is the one reader that applies or settles a block.",
+     "class": "within",
+     "why": "The defect is an EDIT lost with no one told; every path by which an EDIT takes effect goes through apply-edits, which now refuses the whole reply, so a dropped line in a display or round count cannot become a lost EDIT. The reach is labeled with its search space. Not a narrowing of what was asked."
+    },
+    {
+     "id": "D6",
+     "summary": "Agent files: modal-triage.md asks for NONE when nothing is touched (an empty reply is now refused); claims-triage.md says a line outside the form is refused.",
+     "class": "within",
+     "why": "Keeps the agents' instructions in step with D1/D2 so a correct no-touch reply is not refused."
+    },
+    {
+     "id": "D7",
+     "summary": "Order: before T197's REJUDGE on T184's pop-ups; independent of T198-T200 and T192.",
+     "class": "within",
+     "why": "Sequencing only; a re-triage must not run on the fail-open readers."
+    },
+    {
+     "id": "D8",
+     "summary": "Performance work? no - it changes what the readers refuse, not how long anything takes.",
+     "class": "within",
+     "why": "Corrected from round 1: the task is neither performance nor measurement work under FR-013, so it does not claim the ordering's priority. The round-1 gloss on FR-013 is struck; item 2 now cites FR-013 only as the ordering constraint."
+    },
+    {
+     "id": "D9",
+     "summary": "Found and left: the empty pop-up reply clearing every unit, and an unknown uid or claim key exiting 0 and clearing the rest, both fixed here (observed, every reader of a triage reply read for its unmatched-line path).",
+     "class": "within",
+     "why": "Known defects found by the task are fixed in it, none deferred, as the GM's fix-as-we-go rule asks."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-23",
+   "blocks": [
+    "### T197 (the gap audit of 2026-11-23, item 9: `scripts/gates/l7r-gate.sh` builds from the clone's working tree, so triage and apply-edits answers were judged with other builders' uncommitted code and landed with no build id, T184's first two triage runs on T185/T186's unlanded code; the 81 stale TOUCHES marks on T184's 21 pop-ups stand under `ask:t184-stale-triage-marks`, and no withdrawal verb is built, `ask:t197-rejudge-verb`)",
+    "### T197 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T197-1a",
+     "summary": "Part (1): after each build the launcher writes $BIN.build.json {commit, dirty}. The dirty set covers only the binary's SOURCES, rust/guard, the Cargo files and .cargo/config.toml, untracked files included",
+     "class": "within",
+     "why": "This is gap-audit item 9's build id, which the arbiter confirmed is what item 9 asks for (ask:t197-rejudge-verb). The scoping only decides which files count as the build's input, so a busy clone's unrelated edits do not mark a clean build dirty. It narrows nothing that was asked."
+    },
+    {
+     "id": "T197-1b",
+     "summary": "Part (1): the id is written at build time, not on each run, and exported as L7R_GATE_BUILD (empty for a binary built before T197)",
+     "class": "within",
+     "why": "Mechanism. A per-run id would misname a binary run under L7R_GATE_STALE_OK or L7R_GATE_FRESH, so writing it at build time is the faithful choice."
+    },
+    {
+     "id": "T197-2a",
+     "summary": "Part (2): write_answer keeps builds {fingerprint: build}. A settled answer keeps its judge's build, a pending settle takes its answer's build, and an adopted sibling brings its own",
+     "class": "within",
+     "why": "It records the build that actually judged each answer, which is the section's goal. The found-and-left item gives its census method (every write_answer caller read), as FR-009 requires."
+    },
+    {
+     "id": "T197-2b",
+     "summary": "Part (2): a claims-triage clear records build only where the build was dirty; a clean build removes the stamp, so the tracked dev/claims-index.json moves only then",
+     "class": "within",
+     "why": "A clean build holds no uncommitted code, so it cannot be mixed in part (3)'s sense, and leaving its stamp out loses nothing the re-owe test reads. Step 2 gives the constraint behind it (the index is tracked)."
+    },
+    {
+     "id": "T197-3a",
+     "summary": "Part (3): under L7R_LAND_ALONE, unanswered_in and the claims owed re-owe an answer whose build held an uncommitted file whose blob differs from the landing's HEAD:<path>, naming the files. A file deleted then and absent now counts as landed",
+     "class": "within",
+     "why": "This is the gap's own fix, and the arbiter's ruling states it as item 9's ask: land-alone stops trusting answers from mixed trees. Counting deleted-and-absent as landed is simply what HEAD is."
+    },
+    {
+     "id": "T197-3b",
+     "summary": "Part (3) exception: an answer with no build (recorded before T197) stands as it always did",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Physically required: nothing is recorded to compare against HEAD, so the mixed test cannot be applied. Re-owing every such answer would refuse every landing in every clone, the cascade that changes nothing which the GM asked to stop (2026-11-23: 'a cascading set of reviews ... not fixing any real flaws'). That defeats the request's purpose, and the rule still governs every answer from T197 on. The round arbiter also ruled it explicitly (ask:t197-rejudge-verb item 4: 'so does 3b: answers with no build stand'). The seam with part (4) is gone now that part (4) is cut. Taken by class, the known-mixed T184 triage runs fall under ask:t184-stale-triage-marks, which the section's heading now cites: the 81 marks stand and T184 takes the batched modal-research route. Letting them stand is that ruling, not a carve-out."
+    },
+    {
+     "id": "T197-cut",
+     "summary": "Part (4), the REJUDGE withdrawal verb, is cut. The heading states the 81 marks stand under ask:t184-stale-triage-marks and that no withdrawal verb is built. The goal (step 1), step 3's R source, step 5, the red-first list (step 9) and step 12 are restated without the verb",
+     "class": "within",
+     "why": "This applies ask:t197-rejudge-verb option (b) as ruled. The verb's withdrawal of marks was what round 1 found NOT LEGITIMATE, and removing it restores the standing ruling ask:t184-stale-triage-marks ('No re-triage verb is built, in T184 or as a separate task'; 'The 81 marks stand as recorded'). I read the section through for leftovers and found none: no 'covers all 81 stale marks', no 'REJUDGE on T184's pop-ups', no 'sanctioned way out', and no rejudge test in the red-first list."
+    },
+    {
+     "id": "T197-3src",
+     "summary": "Step 3: the S source is restated as the session's task line (tasks.md T197, filed from the 2026-11-23 gap audit), not a GM quote, with the two arbiter rulings as R",
+     "class": "within",
+     "why": "An accurate statement of where the task came from narrows nothing. It also fixes round 1's point that the gap-audit ask is not in request.md. The scope the task keeps (build ids and the mixed-tree re-owe) is the scope the arbiter found item 9 asks for."
+    },
+    {
+     "id": "T197-5",
+     "summary": "Constraints and order: modals.rs and the registry are left alone (other builders' files); the task lands after T195 in the same landing; its exits run through closing-checks or arbiter-ask",
+     "class": "within",
+     "why": "Sequencing and non-interference. Nothing asked for is narrowed."
+    },
+    {
+     "id": "T197-6",
+     "summary": "Performance work? re-read as no: the task changes which answers a landing alone trusts, not how long anything takes",
+     "class": "within",
+     "why": "The arbiter asked for this re-reading (ask:t197-rejudge-verb item 2). With part (4) gone, part (3) only adds owed work, so 'no' is the faithful reading under FR-013, and the [perf] tag is dropped to match. A small leftover not worth a block: step 2 still lists 'FR-013: the landings faster' as a constraint. Read with 'no', that is a limit (do not slow the landings), not a claim of speed."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -26732,6 +26987,407 @@
      "summary": "Classed as performance work",
      "class": "within",
      "why": "The convergence work exists to stop reviews that change nothing (the GM 2026-11-23) and FR-013 puts performance work first; removing an impl-drift dispatch per pure split is that."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T195": {
+   "section_sha256": "ca2d303437c743d5ec1b937b58ca7bb207186842819631f1b5c1ec11e8eb312a",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D1",
+     "summary": "The pop-up triage (read_reply) reads the reply whole before record writes anything and refuses a line outside the form, a foreign uid, an empty reply, and NONE beside a TOUCHES line, naming the line and form.",
+     "class": "within",
+     "why": "Fixes the fail-open defect the task is filed for (an unread line answered 'triage: untouched' with no word said) in the triage machinery the GM approved on 2026-11-23 (the agent triage after the echo check). A wrong outcome, fixed in the task."
+    },
+    {
+     "id": "D2",
+     "summary": "The claims triage gets the same rules via `refused`, called by `claims triaged` before record_triage so save_index never runs on a refused reply; record_triage is left unchanged for its \"\" callers (observed, grep of its callers); its now-unreachable unknown-key message is removed.",
+     "class": "within",
+     "why": "Same defect on the claims side; leaving record_triage's internal-caller path alone is the scope of the fix, not a narrowing of it, since those callers pass no agent reply. Removing dead code follows from the fix."
+    },
+    {
+     "id": "D3",
+     "summary": "A claim key may hold spaces, so a non-ASCII dash with a later ' - ' reads as an unknown key and is refused.",
+     "class": "within",
+     "why": "A consequence of refusing unknown keys whole; it refuses, never records wrongly, so it cannot reintroduce the fail-open path."
+    },
+    {
+     "id": "D4",
+     "summary": "EDIT: unread_edits/EDIT_FORM finds a line shaped as an EDIT header (first word EDIT past bullet, quote or bold, not EDITS) or a <<< fence outside any parsed block; record apply-edits refuses on it before any block is applied or settled.",
+     "class": "within",
+     "why": "Fixes the dropped-EDIT defect (audit item 12a) at the point where a block is applied."
+    },
+    {
+     "id": "D5",
+     "summary": "Only record apply-edits refuses; the guard's own readers (round state rounds.rs:856, freeze.rs:88) and the bundles' displays keep the existing parse, on the observation (grep of reply::blocks|categorized( over rust/, each caller read) that apply-edits is the one reader that applies or settles a block.",
+     "class": "within",
+     "why": "The defect is an EDIT lost with no one told; every path by which an EDIT takes effect goes through apply-edits, which now refuses the whole reply, so a dropped line in a display or round count cannot become a lost EDIT. The reach is labeled with its search space. Not a narrowing of what was asked."
+    },
+    {
+     "id": "D6",
+     "summary": "Agent files: modal-triage.md asks for NONE when nothing is touched (an empty reply is now refused); claims-triage.md says a line outside the form is refused.",
+     "class": "within",
+     "why": "Keeps the agents' instructions in step with D1/D2 so a correct no-touch reply is not refused."
+    },
+    {
+     "id": "D7",
+     "summary": "Order: before T197's REJUDGE on T184's pop-ups; independent of T198-T200 and T192.",
+     "class": "within",
+     "why": "Sequencing only; a re-triage must not run on the fail-open readers."
+    },
+    {
+     "id": "D8",
+     "summary": "Performance work? no - it changes what the readers refuse, not how long anything takes.",
+     "class": "within",
+     "why": "Corrected from round 1: the task is neither performance nor measurement work under FR-013, so it does not claim the ordering's priority. The round-1 gloss on FR-013 is struck; item 2 now cites FR-013 only as the ordering constraint."
+    },
+    {
+     "id": "D9",
+     "summary": "Found and left: the empty pop-up reply clearing every unit, and an unknown uid or claim key exiting 0 and clearing the rest, both fixed here (observed, every reader of a triage reply read for its unmatched-line path).",
+     "class": "within",
+     "why": "Known defects found by the task are fixed in it, none deferred, as the GM's fix-as-we-go rule asks."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T198": {
+   "section_sha256": "9ba01fb9228c76e908a7dc2694374a3eb463dd908c49b64fc540c33ddc3537bb",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T198-derived-lines",
+     "summary": "make quick's _quick recipe gains make-docs --check, mode-a building-programs --check and record check glossary, the three derived files make done's preflight regenerates",
+     "class": "within",
+     "why": "Moves an existing check earlier so a stale derived file fails the closing checks instead of a full make done; serves the approved efficiency improvements ('doing those first makes everything after them faster', 2026-11-20) and FR-013's [perf] class. No behavior beyond the checks preflight already runs; timings are dated with their method."
+    },
+    {
+     "id": "T198-derived-pin",
+     "summary": "derived_quick.rs pins the quick recipe to preflight's DERIVED table, red naming the line to add",
+     "class": "within",
+     "why": "Enforcement of the T198 change itself (delete the requested lines and the test has nothing to check); 'let's make sure all of the enforcement is real enforcement and not just instructions' (2026-11-19)."
+    },
+    {
+     "id": "T199-standing-predicate",
+     "summary": "reviews prereq standing names a unit whose last PASS/NEEDS-WORK is carried to its sheet as just snapshotted and whose every open finding is nitpick, outside or confirmation; review-tree.sh prints it answered and leaves it out of the dispatch count",
+     "class": "within",
+     "why": "Carries the GM's approved rules of 2026-11-23 'only factual findings cascade; re-reviews scoped to the change' and 'when we are cascading, we are only interested in factual inaccuracies'. An unchanged sheet with only minor findings open needs no new round; measured 4 byte-identical re-rounds in the replay."
+    },
+    {
+     "id": "T199-fail-closed",
+     "summary": "a fixed error or questionable finding owes its round even on an unchanged sheet; a finding of no or unknown severity owes one too",
+     "class": "within",
+     "why": "Keeps factual findings in the review path, which is what 'only factual findings cascade' keeps; failing closed on unknown severity does not narrow the request, it holds the line the GM drew between style and factual inaccuracy."
+    },
+    {
+     "id": "T199-found-and-left-nitpick-fixed-on-sheet",
+     "summary": "a building-review nitpick fixed ON THE SHEET still moves the content key and owes a full round - which, by the block's own words, T199's line forbids - left unfixed and filed as T203, 'lands before T201'",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "The block says T199's own line forbids this, so ticking T199 leaves a clause of its own instruction undone; filing T203 moves it but does not make the exception legitimate, and FR-009's deferral form is for a defect found along the way, not a clause of the task being closed. Each reason fails separately: (1) '0 of the 7 attributable rounds were such' is 7 of 12 with 5 unknown, so the premise is not measured over the sample, and the GM's rule ('re-reviews scoped to the change', 'style edits are just a different category of thing than factual inaccuracies') does not depend on a measured saving anyway; (2) 'it needs a declaration verb whose key the push's review gate also accepts' is more code to change, which never makes an exception legitimate; (3) 'that the edit was only the nitpick cannot be checked mechanically' rules out one mechanism, not the rule: the GM himself named the route ('make only the smallest possible changes perhaps with some kind of adversarial subagent review process', 2026-11-23), i.e. a round scoped to the diff rather than a full round. Not physically impossible, not implied by the GM's words, and applying the rule does not defeat the request's purpose (fewer rounds that find no real flaw). Fix: do the nitpick-fixed-on-sheet case in this section (e.g. a fixed-nitpick edit owes a round scoped to the diff, by an adversarial check, not a full round, with the review gate accepting that key), or else take the clause out of T199's line with the GM's approval rather than tick T199 without it. 'Lands before T201' cannot be judged: neither T203's nor T201's line is in the bundle."
+    },
+    {
+     "id": "T200-12b-guesses-locate",
+     "summary": "Pages::locate finds {NNNN#id} on question NNNN's pages, else on the one other question whose pages tag id; two such questions refused naming both",
+     "class": "within",
+     "why": "Carries 'a split is a move' and 'as long as the original page being linked to directs a reader to the other page ... nothing needs to cascade simply because a split occurs' (2026-11-23): a moved item still fills its pop-up's Guesses. Refusing an ambiguous move (two candidates) is a correctness refusal, not a narrowing."
+    },
+    {
+     "id": "T200-12b-claims-pointer-rewritten",
+     "summary": "claims' item_labels names a claim whose item moved with the pointer to write ('is tagged on <page> now - write its backing'), its class held to the moved tag; the pointer is rewritten, not followed",
+     "class": "within",
+     "why": "The purpose reason holds: a claim cites a page and its round reads that page, so a silently followed pointer would leave the claim citing a page that no longer carries its item - a wrong citation, not a cascade. Replaces HEAD's refusal ('names no item') with a named mechanical fix and holds the label class to the moved tag ('labels are data and propagate by regeneration'). The GM's rule is that a split triggers no review; nothing in the block makes the rewrite owe a claims review beyond the claim's own existing round, and if T192/T203 work made it do so that would be the finding there."
+    },
+    {
+     "id": "T200-12c-already-done",
+     "summary": "owed::record::modals::followed already walks pointer targets to a fixpoint since 451 T196, pinned by an existing test; nothing changed",
+     "class": "within",
+     "why": "Decides that a gap audit item is already closed, citing its pin; no part of the request is dropped."
+    },
+    {
+     "id": "T200-12d-reference-reads",
+     "summary": "items.rs logs every page a Guesses reference reads and mode_a's reads::take drains it, so a relabel on a reference's page regenerates a cached sheet; a page named only in About prose is never read and owes the cache nothing",
+     "class": "within",
+     "why": "Carries 'labels are data and propagate by regeneration' (2026-11-23): a relabel must reach the cached sheet. A defect fix in the safe direction (a stale cache is a wrong outcome); the About-prose exclusion is by construction (an unread page cannot make the output stale), not a carve-out. Measured: 16 modals carry references, none stale today."
+    },
+    {
+     "id": "T198-T199-perf-class",
+     "summary": "T198 and T199 are [perf] tasks under FR-013",
+     "class": "within",
+     "why": "'can we in general priotitize performance improvements going forward?' (2026-11-20); both reduce red gate runs and review rounds, which FR-013's 'the landings or the builders' loop faster' covers."
+    },
+    {
+     "id": "T200-T192-order-note",
+     "summary": "T192's modals::refs should resolve through Pages::locate, passed in the handoff; T198 left the clone's stale make-targets.html to the handoff",
+     "class": "within",
+     "why": "Ordering and handoff notes; no part of the request narrowed. The stale make-targets.html must still be regenerated for this section's own 'make closing-checks ... green' done line."
+    }
+   ],
+   "verdict": "BLOCKED"
+  },
+  "T199": {
+   "section_sha256": "9ba01fb9228c76e908a7dc2694374a3eb463dd908c49b64fc540c33ddc3537bb",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T198-derived-lines",
+     "summary": "make quick's _quick recipe gains make-docs --check, mode-a building-programs --check and record check glossary, the three derived files make done's preflight regenerates",
+     "class": "within",
+     "why": "Moves an existing check earlier so a stale derived file fails the closing checks instead of a full make done; serves the approved efficiency improvements ('doing those first makes everything after them faster', 2026-11-20) and FR-013's [perf] class. No behavior beyond the checks preflight already runs; timings are dated with their method."
+    },
+    {
+     "id": "T198-derived-pin",
+     "summary": "derived_quick.rs pins the quick recipe to preflight's DERIVED table, red naming the line to add",
+     "class": "within",
+     "why": "Enforcement of the T198 change itself (delete the requested lines and the test has nothing to check); 'let's make sure all of the enforcement is real enforcement and not just instructions' (2026-11-19)."
+    },
+    {
+     "id": "T199-standing-predicate",
+     "summary": "reviews prereq standing names a unit whose last PASS/NEEDS-WORK is carried to its sheet as just snapshotted and whose every open finding is nitpick, outside or confirmation; review-tree.sh prints it answered and leaves it out of the dispatch count",
+     "class": "within",
+     "why": "Carries the GM's approved rules of 2026-11-23 'only factual findings cascade; re-reviews scoped to the change' and 'when we are cascading, we are only interested in factual inaccuracies'. An unchanged sheet with only minor findings open needs no new round; measured 4 byte-identical re-rounds in the replay."
+    },
+    {
+     "id": "T199-fail-closed",
+     "summary": "a fixed error or questionable finding owes its round even on an unchanged sheet; a finding of no or unknown severity owes one too",
+     "class": "within",
+     "why": "Keeps factual findings in the review path, which is what 'only factual findings cascade' keeps; failing closed on unknown severity does not narrow the request, it holds the line the GM drew between style and factual inaccuracy."
+    },
+    {
+     "id": "T199-found-and-left-nitpick-fixed-on-sheet",
+     "summary": "a building-review nitpick fixed ON THE SHEET still moves the content key and owes a full round - which, by the block's own words, T199's line forbids - left unfixed and filed as T203, 'lands before T201'",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "The block says T199's own line forbids this, so ticking T199 leaves a clause of its own instruction undone; filing T203 moves it but does not make the exception legitimate, and FR-009's deferral form is for a defect found along the way, not a clause of the task being closed. Each reason fails separately: (1) '0 of the 7 attributable rounds were such' is 7 of 12 with 5 unknown, so the premise is not measured over the sample, and the GM's rule ('re-reviews scoped to the change', 'style edits are just a different category of thing than factual inaccuracies') does not depend on a measured saving anyway; (2) 'it needs a declaration verb whose key the push's review gate also accepts' is more code to change, which never makes an exception legitimate; (3) 'that the edit was only the nitpick cannot be checked mechanically' rules out one mechanism, not the rule: the GM himself named the route ('make only the smallest possible changes perhaps with some kind of adversarial subagent review process', 2026-11-23), i.e. a round scoped to the diff rather than a full round. Not physically impossible, not implied by the GM's words, and applying the rule does not defeat the request's purpose (fewer rounds that find no real flaw). Fix: do the nitpick-fixed-on-sheet case in this section (e.g. a fixed-nitpick edit owes a round scoped to the diff, by an adversarial check, not a full round, with the review gate accepting that key), or else take the clause out of T199's line with the GM's approval rather than tick T199 without it. 'Lands before T201' cannot be judged: neither T203's nor T201's line is in the bundle."
+    },
+    {
+     "id": "T200-12b-guesses-locate",
+     "summary": "Pages::locate finds {NNNN#id} on question NNNN's pages, else on the one other question whose pages tag id; two such questions refused naming both",
+     "class": "within",
+     "why": "Carries 'a split is a move' and 'as long as the original page being linked to directs a reader to the other page ... nothing needs to cascade simply because a split occurs' (2026-11-23): a moved item still fills its pop-up's Guesses. Refusing an ambiguous move (two candidates) is a correctness refusal, not a narrowing."
+    },
+    {
+     "id": "T200-12b-claims-pointer-rewritten",
+     "summary": "claims' item_labels names a claim whose item moved with the pointer to write ('is tagged on <page> now - write its backing'), its class held to the moved tag; the pointer is rewritten, not followed",
+     "class": "within",
+     "why": "The purpose reason holds: a claim cites a page and its round reads that page, so a silently followed pointer would leave the claim citing a page that no longer carries its item - a wrong citation, not a cascade. Replaces HEAD's refusal ('names no item') with a named mechanical fix and holds the label class to the moved tag ('labels are data and propagate by regeneration'). The GM's rule is that a split triggers no review; nothing in the block makes the rewrite owe a claims review beyond the claim's own existing round, and if T192/T203 work made it do so that would be the finding there."
+    },
+    {
+     "id": "T200-12c-already-done",
+     "summary": "owed::record::modals::followed already walks pointer targets to a fixpoint since 451 T196, pinned by an existing test; nothing changed",
+     "class": "within",
+     "why": "Decides that a gap audit item is already closed, citing its pin; no part of the request is dropped."
+    },
+    {
+     "id": "T200-12d-reference-reads",
+     "summary": "items.rs logs every page a Guesses reference reads and mode_a's reads::take drains it, so a relabel on a reference's page regenerates a cached sheet; a page named only in About prose is never read and owes the cache nothing",
+     "class": "within",
+     "why": "Carries 'labels are data and propagate by regeneration' (2026-11-23): a relabel must reach the cached sheet. A defect fix in the safe direction (a stale cache is a wrong outcome); the About-prose exclusion is by construction (an unread page cannot make the output stale), not a carve-out. Measured: 16 modals carry references, none stale today."
+    },
+    {
+     "id": "T198-T199-perf-class",
+     "summary": "T198 and T199 are [perf] tasks under FR-013",
+     "class": "within",
+     "why": "'can we in general priotitize performance improvements going forward?' (2026-11-20); both reduce red gate runs and review rounds, which FR-013's 'the landings or the builders' loop faster' covers."
+    },
+    {
+     "id": "T200-T192-order-note",
+     "summary": "T192's modals::refs should resolve through Pages::locate, passed in the handoff; T198 left the clone's stale make-targets.html to the handoff",
+     "class": "within",
+     "why": "Ordering and handoff notes; no part of the request narrowed. The stale make-targets.html must still be regenerated for this section's own 'make closing-checks ... green' done line."
+    }
+   ],
+   "verdict": "BLOCKED"
+  },
+  "T200": {
+   "section_sha256": "9ba01fb9228c76e908a7dc2694374a3eb463dd908c49b64fc540c33ddc3537bb",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T198-derived-lines",
+     "summary": "make quick's _quick recipe gains make-docs --check, mode-a building-programs --check and record check glossary, the three derived files make done's preflight regenerates",
+     "class": "within",
+     "why": "Moves an existing check earlier so a stale derived file fails the closing checks instead of a full make done; serves the approved efficiency improvements ('doing those first makes everything after them faster', 2026-11-20) and FR-013's [perf] class. No behavior beyond the checks preflight already runs; timings are dated with their method."
+    },
+    {
+     "id": "T198-derived-pin",
+     "summary": "derived_quick.rs pins the quick recipe to preflight's DERIVED table, red naming the line to add",
+     "class": "within",
+     "why": "Enforcement of the T198 change itself (delete the requested lines and the test has nothing to check); 'let's make sure all of the enforcement is real enforcement and not just instructions' (2026-11-19)."
+    },
+    {
+     "id": "T199-standing-predicate",
+     "summary": "reviews prereq standing names a unit whose last PASS/NEEDS-WORK is carried to its sheet as just snapshotted and whose every open finding is nitpick, outside or confirmation; review-tree.sh prints it answered and leaves it out of the dispatch count",
+     "class": "within",
+     "why": "Carries the GM's approved rules of 2026-11-23 'only factual findings cascade; re-reviews scoped to the change' and 'when we are cascading, we are only interested in factual inaccuracies'. An unchanged sheet with only minor findings open needs no new round; measured 4 byte-identical re-rounds in the replay."
+    },
+    {
+     "id": "T199-fail-closed",
+     "summary": "a fixed error or questionable finding owes its round even on an unchanged sheet; a finding of no or unknown severity owes one too",
+     "class": "within",
+     "why": "Keeps factual findings in the review path, which is what 'only factual findings cascade' keeps; failing closed on unknown severity does not narrow the request, it holds the line the GM drew between style and factual inaccuracy."
+    },
+    {
+     "id": "T199-found-and-left-nitpick-fixed-on-sheet",
+     "summary": "a building-review nitpick fixed ON THE SHEET still moves the content key and owes a full round - which, by the block's own words, T199's line forbids - left unfixed and filed as T203, 'lands before T201'",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "The block says T199's own line forbids this, so ticking T199 leaves a clause of its own instruction undone; filing T203 moves it but does not make the exception legitimate, and FR-009's deferral form is for a defect found along the way, not a clause of the task being closed. Each reason fails separately: (1) '0 of the 7 attributable rounds were such' is 7 of 12 with 5 unknown, so the premise is not measured over the sample, and the GM's rule ('re-reviews scoped to the change', 'style edits are just a different category of thing than factual inaccuracies') does not depend on a measured saving anyway; (2) 'it needs a declaration verb whose key the push's review gate also accepts' is more code to change, which never makes an exception legitimate; (3) 'that the edit was only the nitpick cannot be checked mechanically' rules out one mechanism, not the rule: the GM himself named the route ('make only the smallest possible changes perhaps with some kind of adversarial subagent review process', 2026-11-23), i.e. a round scoped to the diff rather than a full round. Not physically impossible, not implied by the GM's words, and applying the rule does not defeat the request's purpose (fewer rounds that find no real flaw). Fix: do the nitpick-fixed-on-sheet case in this section (e.g. a fixed-nitpick edit owes a round scoped to the diff, by an adversarial check, not a full round, with the review gate accepting that key), or else take the clause out of T199's line with the GM's approval rather than tick T199 without it. 'Lands before T201' cannot be judged: neither T203's nor T201's line is in the bundle."
+    },
+    {
+     "id": "T200-12b-guesses-locate",
+     "summary": "Pages::locate finds {NNNN#id} on question NNNN's pages, else on the one other question whose pages tag id; two such questions refused naming both",
+     "class": "within",
+     "why": "Carries 'a split is a move' and 'as long as the original page being linked to directs a reader to the other page ... nothing needs to cascade simply because a split occurs' (2026-11-23): a moved item still fills its pop-up's Guesses. Refusing an ambiguous move (two candidates) is a correctness refusal, not a narrowing."
+    },
+    {
+     "id": "T200-12b-claims-pointer-rewritten",
+     "summary": "claims' item_labels names a claim whose item moved with the pointer to write ('is tagged on <page> now - write its backing'), its class held to the moved tag; the pointer is rewritten, not followed",
+     "class": "within",
+     "why": "The purpose reason holds: a claim cites a page and its round reads that page, so a silently followed pointer would leave the claim citing a page that no longer carries its item - a wrong citation, not a cascade. Replaces HEAD's refusal ('names no item') with a named mechanical fix and holds the label class to the moved tag ('labels are data and propagate by regeneration'). The GM's rule is that a split triggers no review; nothing in the block makes the rewrite owe a claims review beyond the claim's own existing round, and if T192/T203 work made it do so that would be the finding there."
+    },
+    {
+     "id": "T200-12c-already-done",
+     "summary": "owed::record::modals::followed already walks pointer targets to a fixpoint since 451 T196, pinned by an existing test; nothing changed",
+     "class": "within",
+     "why": "Decides that a gap audit item is already closed, citing its pin; no part of the request is dropped."
+    },
+    {
+     "id": "T200-12d-reference-reads",
+     "summary": "items.rs logs every page a Guesses reference reads and mode_a's reads::take drains it, so a relabel on a reference's page regenerates a cached sheet; a page named only in About prose is never read and owes the cache nothing",
+     "class": "within",
+     "why": "Carries 'labels are data and propagate by regeneration' (2026-11-23): a relabel must reach the cached sheet. A defect fix in the safe direction (a stale cache is a wrong outcome); the About-prose exclusion is by construction (an unread page cannot make the output stale), not a carve-out. Measured: 16 modals carry references, none stale today."
+    },
+    {
+     "id": "T198-T199-perf-class",
+     "summary": "T198 and T199 are [perf] tasks under FR-013",
+     "class": "within",
+     "why": "'can we in general priotitize performance improvements going forward?' (2026-11-20); both reduce red gate runs and review rounds, which FR-013's 'the landings or the builders' loop faster' covers."
+    },
+    {
+     "id": "T200-T192-order-note",
+     "summary": "T192's modals::refs should resolve through Pages::locate, passed in the handoff; T198 left the clone's stale make-targets.html to the handoff",
+     "class": "within",
+     "why": "Ordering and handoff notes; no part of the request narrowed. The stale make-targets.html must still be regenerated for this section's own 'make closing-checks ... green' done line."
+    }
+   ],
+   "verdict": "BLOCKED"
+  },
+  "T192": {
+   "section_sha256": "8a1ae9564d8725c3625f2fa8276df0566aa0b89f306a906dc15247bfc448be2d",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "strip-and-filled-references",
+     "summary": "page_words drops every well-formed item tag; a pop-up's Guesses read with each reference filled from its tag's data-guess; a tag-only edit, a verbatim reference and a relabel owe nothing, a reworded referenced data-guess still owes the pop-up its checks",
+     "class": "within",
+     "why": "Carried by the GM's approved convergence rules (labels are data and propagate by regeneration; only a claim-changing edit triggers review). A rewording of what a pop-up shows still owes its checks, so no review the rules keep is dropped. Without it the GM's T192 ask (tag the rest of the record) would itself set off the cascade he asked to end."
+    },
+    {
+     "id": "tag-counts-for-nothing-in-size",
+     "summary": "question_size counts an item tag as zero bytes",
+     "class": "within",
+     "why": "A tag is markup, not prose. Counting it would force size trims for tagging, and the GM said a size edit must never be substantive (or the limit is raised). This serves both asks and narrows neither."
+    },
+    {
+     "id": "bulk-by-script",
+     "summary": "tag.py matches a pop-up bullet to a cited page block at 0.6 content-word overlap, tags GUESS blocks with the bullet verbatim and makes the bullet a reference, tags fixed-form convention/deviation blocks, and lists the rest for page sessions, which confirm and write the tags",
+     "class": "within",
+     "why": "Method only. The goal (item 1) has no threshold: every labeled finding is tagged, and what the script does not place goes to a page session. I relied on the sessions confirming script-placed tags (Performance item 1; the sample's 24 were confirmed), since the hand-read found 10 of 12 matches right. Constitution XII's limit (a tag never says more than its block) is kept as a constraint."
+    },
+    {
+     "id": "claims-name-items-after-T204",
+     "summary": "claims on a tagged item name it, applied after T204 fixes relabeled_only; the sample's anchors reverted",
+     "class": "within",
+     "why": "Naming a claim's item belongs to the record's tagging under T187. Holding it until the tooling stops refusing correct work is ordering, and nothing is narrowed."
+    },
+    {
+     "id": "found-and-left-T204-T205-T200",
+     "summary": "three defects deferred: relabeled_only owes impl-drift on a classed claim naming its item (T204), refs.rs not following T200's Pages::locate fallback (T205), a failing research_pointers fixture in T200's uncommitted test (T200); each lands before T22",
+     "class": "within",
+     "why": "Each says why it is not fixed here (another builder's uncommitted file), names its filed task and its order. This is ordering, not a narrowing, ON THE PREMISE that 'lands before T22' means before the port resumes (fix as we go). The bundle does not say what T22 is. If T22 is not the port's next step, these orders do not keep the 'before resuming our port' condition and must be restated."
+    },
+    {
+     "id": "convention-tag-only-in-a-block-with-no-guess",
+     "summary": "T187's rule kept: a CONVENTION or DEVIATION tag stands only in a block holding no GUESS, so such a finding in a block that also holds a GUESS stays untagged ('kept: an untagged item keeps the old review path, not a wrong outcome')",
+     "class": "narrowing",
+     "ruling": "NOT LEGITIMATE",
+     "why": "The GM's words: 'Yes please tag the rest of the record before resuming our port'. The section's own goal (item 1) is 'Every finding of a drawing page that states a label carries its tag'. This constraint leaves a class of labeled findings untagged. (1) Not impossible: T187's grammar is the project's own and is not in the bundle (spec-cited.md is empty), and nothing shown rules out a page session splitting the mixed block into two blocks so each finding carries its own tag. The GM ruled that a split is a move and cascades nothing. (2) Not implied by the GM: the reason given, that untagged labels keep the old review path, is what he was told before he said 'yes please tag the rest', so it cannot license leaving any untagged. (3) It goes against the purpose: a relabel of the untagged convention or deviation still sets off the review cascade the tagging exists to end. The defect clause (a difference that works is not a defect) covers differences left as they are, not requested work left undone. That the GM was sized only GUESS items and bullets bounds the estimate, not the sentence. The reach is not measured: '8 with two labels' may be this set, but the section does not say so. What would clear it: the count of mixed blocks, measured, and a stated treatment that tags every finding in them, such as split then tag, or a grammar change taken through its own review."
+    }
+   ],
+   "verdict": "BLOCKED"
+  },
+  "T197": {
+   "section_sha256": "940429c1f67e050d34dffb12e6ad3c8c0c70b0f5afcbb0b1bd74a43f8cf0ab68",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T197-1a",
+     "summary": "Part (1): after each build the launcher writes $BIN.build.json {commit, dirty}. The dirty set covers only the binary's SOURCES, rust/guard, the Cargo files and .cargo/config.toml, untracked files included",
+     "class": "within",
+     "why": "This is gap-audit item 9's build id, which the arbiter confirmed is what item 9 asks for (ask:t197-rejudge-verb). The scoping only decides which files count as the build's input, so a busy clone's unrelated edits do not mark a clean build dirty. It narrows nothing that was asked."
+    },
+    {
+     "id": "T197-1b",
+     "summary": "Part (1): the id is written at build time, not on each run, and exported as L7R_GATE_BUILD (empty for a binary built before T197)",
+     "class": "within",
+     "why": "Mechanism. A per-run id would misname a binary run under L7R_GATE_STALE_OK or L7R_GATE_FRESH, so writing it at build time is the faithful choice."
+    },
+    {
+     "id": "T197-2a",
+     "summary": "Part (2): write_answer keeps builds {fingerprint: build}. A settled answer keeps its judge's build, a pending settle takes its answer's build, and an adopted sibling brings its own",
+     "class": "within",
+     "why": "It records the build that actually judged each answer, which is the section's goal. The found-and-left item gives its census method (every write_answer caller read), as FR-009 requires."
+    },
+    {
+     "id": "T197-2b",
+     "summary": "Part (2): a claims-triage clear records build only where the build was dirty; a clean build removes the stamp, so the tracked dev/claims-index.json moves only then",
+     "class": "within",
+     "why": "A clean build holds no uncommitted code, so it cannot be mixed in part (3)'s sense, and leaving its stamp out loses nothing the re-owe test reads. Step 2 gives the constraint behind it (the index is tracked)."
+    },
+    {
+     "id": "T197-3a",
+     "summary": "Part (3): under L7R_LAND_ALONE, unanswered_in and the claims owed re-owe an answer whose build held an uncommitted file whose blob differs from the landing's HEAD:<path>, naming the files. A file deleted then and absent now counts as landed",
+     "class": "within",
+     "why": "This is the gap's own fix, and the arbiter's ruling states it as item 9's ask: land-alone stops trusting answers from mixed trees. Counting deleted-and-absent as landed is simply what HEAD is."
+    },
+    {
+     "id": "T197-3b",
+     "summary": "Part (3) exception: an answer with no build (recorded before T197) stands as it always did",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Physically required: nothing is recorded to compare against HEAD, so the mixed test cannot be applied. Re-owing every such answer would refuse every landing in every clone, the cascade that changes nothing which the GM asked to stop (2026-11-23: 'a cascading set of reviews ... not fixing any real flaws'). That defeats the request's purpose, and the rule still governs every answer from T197 on. The round arbiter also ruled it explicitly (ask:t197-rejudge-verb item 4: 'so does 3b: answers with no build stand'). The seam with part (4) is gone now that part (4) is cut. Taken by class, the known-mixed T184 triage runs fall under ask:t184-stale-triage-marks, which the section's heading now cites: the 81 marks stand and T184 takes the batched modal-research route. Letting them stand is that ruling, not a carve-out."
+    },
+    {
+     "id": "T197-cut",
+     "summary": "Part (4), the REJUDGE withdrawal verb, is cut. The heading states the 81 marks stand under ask:t184-stale-triage-marks and that no withdrawal verb is built. The goal (step 1), step 3's R source, step 5, the red-first list (step 9) and step 12 are restated without the verb",
+     "class": "within",
+     "why": "This applies ask:t197-rejudge-verb option (b) as ruled. The verb's withdrawal of marks was what round 1 found NOT LEGITIMATE, and removing it restores the standing ruling ask:t184-stale-triage-marks ('No re-triage verb is built, in T184 or as a separate task'; 'The 81 marks stand as recorded'). I read the section through for leftovers and found none: no 'covers all 81 stale marks', no 'REJUDGE on T184's pop-ups', no 'sanctioned way out', and no rejudge test in the red-first list."
+    },
+    {
+     "id": "T197-3src",
+     "summary": "Step 3: the S source is restated as the session's task line (tasks.md T197, filed from the 2026-11-23 gap audit), not a GM quote, with the two arbiter rulings as R",
+     "class": "within",
+     "why": "An accurate statement of where the task came from narrows nothing. It also fixes round 1's point that the gap-audit ask is not in request.md. The scope the task keeps (build ids and the mixed-tree re-owe) is the scope the arbiter found item 9 asks for."
+    },
+    {
+     "id": "T197-5",
+     "summary": "Constraints and order: modals.rs and the registry are left alone (other builders' files); the task lands after T195 in the same landing; its exits run through closing-checks or arbiter-ask",
+     "class": "within",
+     "why": "Sequencing and non-interference. Nothing asked for is narrowed."
+    },
+    {
+     "id": "T197-6",
+     "summary": "Performance work? re-read as no: the task changes which answers a landing alone trusts, not how long anything takes",
+     "class": "within",
+     "why": "The arbiter asked for this re-reading (ask:t197-rejudge-verb item 2). With part (4) gone, part (3) only adds owed work, so 'no' is the faithful reading under FR-013, and the [perf] tag is dropped to match. A small leftover not worth a block: step 2 still lists 'FR-013: the landings faster' as a constraint. Read with 'no', that is a limit (do not slow the landings), not a claim of speed."
     }
    ],
    "verdict": "CLEAR"

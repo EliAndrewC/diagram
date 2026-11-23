@@ -274,5 +274,27 @@ OUT=$(L7R_GATE_TARGET="$HT" L7R_GATE_CARGO="$TMP/cargo" L7R_GATE_PRINT_FRESH=1 "
 OUT=$(L7R_GATE_TARGET="$HT" L7R_GATE_CARGO="$TMP/cargo" "$STAMP" rust hamlet --crate x 2>&1)
 [ "$OUT" = "l7r-rust hamlet --crate x" ]; check "rust hamlet: the Rust checks' runner, not the hamlet arm ($OUT)" 0 $?
 
+# ---- the build an answer was judged by (feature 451 T197): a build writes its id beside the binary - the tree's HEAD and each uncommitted
+# file it is built from at its blob - and every run hands it to the binary in L7R_GATE_BUILD, so a recorded answer can say what judged it --
+BT="$TMP/build-target"; mkdir -p "$BT/tool"
+cat > "$TMP/cargo-id" <<'EOF2'
+#!/usr/bin/env bash
+printf '#!/usr/bin/env bash\nprintf "%%s" "$L7R_GATE_BUILD"\n' > "$CARGO_TARGET_DIR/tool/l7r-gate"; chmod +x "$CARGO_TARGET_DIR/tool/l7r-gate"
+EOF2
+chmod +x "$TMP/cargo-id"
+OUT=$(L7R_GATE_TARGET="$BT" L7R_GATE_CARGO="$TMP/cargo-id" "$STAMP" x 2>&1); check "build id: the build runs" 0 $?
+REPO=$(cd "$HERE/../.." && pwd)
+case $OUT in "{\"commit\": \"$(git -C "$REPO" rev-parse HEAD)\", \"dirty\": {"*"}}") : ;; *) echo "FAIL  the binary is handed the build's id: $OUT"; FAILED=1 ;; esac
+[ "$OUT" = "$(cat "$BT/tool/l7r-gate.build.json")" ]; check "build id: the one written beside the binary" 0 $?
+ok=0
+while IFS= read -r p; do
+  want=deleted; [ -e "$REPO/$p" ] && want=$(git -C "$REPO" hash-object -- "$REPO/$p")
+  case $OUT in *"\"$p\": \"$want\""*) : ;; *) ok=1; echo "FAIL  the uncommitted $p at its blob $want: $OUT" ;; esac
+done < <(git -C "$REPO" status --porcelain=v1 -uall -- rust/gate rust/guard rust/Cargo.toml rust/Cargo.lock .cargo/config.toml | cut -c4- | sed 's/.* -> //')
+check "build id: every uncommitted source at its blob" 0 $ok
+rm -f "$BT/tool/l7r-gate.build.json"; touch -d '2100-01-01' "$BT/tool/l7r-gate"
+OUT=$(L7R_GATE_TARGET="$BT" L7R_GATE_CARGO="$TMP/cargo-id" "$STAMP" x 2>&1); check "build id: a binary built before T197 runs" 0 $?
+[ -z "$OUT" ]; check "build id: ...and is handed none ($OUT)" 0 $?
+
 echo -----
 if [ "$FAILED" -eq 0 ]; then echo "all gate-stamp tests passed (shard 1)"; exit 0; else echo "SOME TESTS FAILED"; exit 1; fi

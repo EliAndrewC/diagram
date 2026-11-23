@@ -74,9 +74,8 @@ fn a_triage_bundles_the_moved_pages_and_records_a_reply() {
     let data: Value =
         serde_json::from_str(&std::fs::read_to_string(out.join("triage.json")).unwrap()).unwrap();
     let units = data["units"].as_object().unwrap().clone();
-    let reply = "TOUCHES `hamlet/well` @ 0094-trade.drawing - its line\nTOUCHES choice/bamboo--both - no page\nTOUCHES hamlet/nope - stray\nTOUCHES choice/bamboo--both @ elsewhere.html - unknown page\n";
+    let reply = "TOUCHES `hamlet/well` @ 0094-trade.drawing - its line\nTOUCHES choice/bamboo--both - no page\nTOUCHES choice/bamboo--both @ elsewhere.html - unknown page\n";
     let msgs = record(&s, &units, reply, data.get("pages"), data.get("blobs")).unwrap();
-    assert!(msgs.iter().any(|m| m.starts_with("refused: `hamlet/nope`")));
     assert!(msgs
         .iter()
         .any(|m| m == "touched: modal-depiction:hamlet/well - its line"));
@@ -89,7 +88,7 @@ fn a_triage_bundles_the_moved_pages_and_records_a_reply() {
     assert!(
         crate::record::owed::read_answer(&s, "modal-accuracy:hamlet/well").contains_key("pages")
     );
-    assert!(record(&s, &units, "", None, None).unwrap().is_empty());
+    assert!(record(&s, &units, "", None, None).is_err());
     assert!(s.join("modal-triage-touched.json").is_file());
 }
 
@@ -444,4 +443,55 @@ fn a_landing_s_replay_follows_a_split_s_pointers() {
         well.iter().all(|w| out.contains(w.as_str())),
     );
     assert_eq!(got, (true, true), "{out}");
+}
+
+/// A reply line the parser cannot read refuses the whole reply, the line and the form named, and nothing is recorded: never a pop-up
+/// answered `triage: untouched` because its TOUCHES line wore a bullet, bold or a non-ASCII dash (feature 451 T195, gap audit item 3).
+#[test]
+fn a_triage_reply_the_parser_cannot_read_is_refused_and_records_nothing() {
+    let root = fixture("triage-fail-closed");
+    let s = store(&root);
+    let units: serde_json::Map<String, Value> =
+        [("modal-depiction:hamlet/well".to_owned(), json!("fp1"))]
+            .into_iter()
+            .collect();
+    for (reply, says) in [
+        (
+            "- TOUCHES hamlet/well @ 0094-trade.drawing.html - A: its line\n",
+            "line 1: `- TOUCHES",
+        ),
+        (
+            "**TOUCHES** hamlet/well @ 0094-trade.drawing.html - A: its line\n",
+            "line 1: `**TOUCHES**",
+        ),
+        (
+            "TOUCHES hamlet/well @ 0094-trade.drawing.html \u{2013} A: its line\n",
+            "is not in the form",
+        ),
+        (
+            "TOUCHES hamlet/well @ 0094-trade.drawing.html\n",
+            "is not in the form",
+        ),
+        (
+            "Here is my triage.\nTOUCHES hamlet/well - A: x\n",
+            "line 1: `Here is my triage.`",
+        ),
+        (
+            "TOUCHES hamlet/nope - A: stray\n",
+            "`hamlet/nope` is not a pop-up of this triage",
+        ),
+        ("", "the reply is empty"),
+        ("NONE\nTOUCHES hamlet/well - A: x\n", "`NONE` stands beside"),
+    ] {
+        let why = record(&s, &units, reply, None, None).unwrap_err();
+        assert!(why.contains(says) && why.contains("TOUCHES <uid> @ <page file name>"));
+        assert!(!s.exists());
+    }
+    assert!(record(&s, &units, "NONE\n", None, None).unwrap().is_empty());
+    assert!(crate::record::owed::answered(
+        &s,
+        "modal-depiction:hamlet/well",
+        "fp1",
+        ""
+    ));
 }

@@ -182,11 +182,17 @@ fn an_answer_elsewhere_or_under_an_older_formula_still_answers() {
         .iter()
         .find(|u| u.slug == "record-format:0094")
         .unwrap();
-    write_answer(&sib, &rf.slug, &rf.fingerprint, "elsewhere", None).unwrap();
+    l7r_gate_core::build::with(Some("{\"commit\": \"c9\"}"), false, || {
+        write_answer(&sib, &rf.slug, &rf.fingerprint, "elsewhere", None)
+    })
+    .unwrap();
     keep_reading(&sib, &rf.slug, "r9", "readings").unwrap();
     let left = unanswered(&root).unwrap();
     assert!(!left.iter().any(|u| u.slug == "record-format:0094"));
-    assert!(read_answer(&store(&root), "record-format:0094").contains_key("readings"));
+    let mine = read_answer(&store(&root), "record-format:0094");
+    assert!(mine.contains_key("readings"));
+    // the judge's build comes with an adopted answer (451 T197)
+    assert_eq!(mine["builds"][&rf.fingerprint]["commit"], "c9");
 }
 
 /// A depiction answered under the formula before amendment 1, or under amendment 1's, still answers; a record of another unit, or of
@@ -776,4 +782,60 @@ fn a_translated_pair_and_a_gloss_are_owed_units() {
     let slugs: Vec<&str> = got.iter().map(|u| u.slug.as_str()).collect();
     assert!(slugs.contains(&"translation-check:0094#t"));
     assert!(slugs.contains(&"translation-check:0094#gloss"));
+}
+
+/// Each answer records the build that judged it, a settled one keeps its judge's, and a landing alone re-owes an answer whose build
+/// held an uncommitted file other than the landing's own, naming it (a file deleted then and absent from the landing is as landed);
+/// outside a landing, or with the build's files as landed, it stands (feature 451 T197, gap audit item 9).
+#[test]
+fn an_answer_records_its_build_and_a_landing_alone_re_owes_a_mixed_one() {
+    use l7r_gate_core::build::with;
+    let root = record("owed-build");
+    edit_everything(&root);
+    let rows = units(&root, None, None, &FAMILIES, "").unwrap();
+    let rf = rows
+        .iter()
+        .find(|u| u.slug == "record-format:0094")
+        .unwrap()
+        .clone();
+    let s = store(&root);
+    let blob = git(&root, &["rev-parse", &format!("HEAD:{PAGE}")])
+        .trim()
+        .to_owned();
+    let own = format!("{{\"commit\": \"c1\", \"dirty\": {{\"{PAGE}\": \"{blob}\"}}}}");
+    let others = "{\"commit\": \"c1\", \"dirty\": {\"rust/gate/x.rs\": \"b7\", \"rust/gone.rs\": \"deleted\"}}";
+    let owes = |landing: bool| {
+        with(None, landing, || unanswered(&root))
+            .unwrap()
+            .into_iter()
+            .find(|u| u.slug == rf.slug)
+    };
+    with(Some(&own), false, || {
+        write_answer(&s, &rf.slug, &rf.fingerprint, "r", None)
+    })
+    .unwrap();
+    assert_eq!(
+        read_answer(&s, &rf.slug)["builds"][&rf.fingerprint]["commit"],
+        "c1"
+    );
+    assert!(owes(true).is_none());
+    with(Some(others), false, || {
+        write_answer(&s, &rf.slug, &rf.fingerprint, "r", None)
+    })
+    .unwrap();
+    assert!(owes(false).is_none());
+    let u = owes(true).expect("a mixed answer re-owed in a landing alone");
+    assert!(
+        u.occasion.contains("(rust/gate/x.rs)") && u.occasion.contains("re-judge"),
+        "{}",
+        u.occasion
+    );
+    with(Some(&own), false, || {
+        settle(&s, &rf.slug, &rf.fingerprint, "fp2")
+    })
+    .unwrap();
+    let rec = read_answer(&s, &rf.slug);
+    assert_eq!(rec["builds"]["fp2"], rec["builds"][&rf.fingerprint]);
+    with(None, false, || write_answer(&s, &rf.slug, "fp3", "r", None)).unwrap();
+    assert!(read_answer(&s, &rf.slug)["builds"].get("fp3").is_none());
 }

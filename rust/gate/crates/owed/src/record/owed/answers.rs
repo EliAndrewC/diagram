@@ -6,6 +6,7 @@ use std::path::{Path, PathBuf};
 use std::sync::LazyLock;
 
 use fancy_regex::Regex;
+use l7r_gate_core::build;
 use l7r_shared::checks;
 use l7r_shared::env::Rooted;
 use l7r_shared::escape::enough;
@@ -177,8 +178,33 @@ pub fn write_answer(
     result: &str,
     pages: Option<&Value>,
 ) -> Result<(), Fail> {
+    write_judged(
+        store_dir,
+        slug,
+        fp,
+        result,
+        pages,
+        build::current().as_ref(),
+    )
+}
+
+/// [`write_answer`] judged by `judge`, the build whose answer it is (feature 451 T197): kept under `builds`, by fingerprint, so a
+/// landing alone can tell an answer judged by other builders' uncommitted code; `None` (a build the launcher named not) records none.
+fn write_judged(
+    store_dir: &Path,
+    slug: &str,
+    fp: &str,
+    result: &str,
+    pages: Option<&Value>,
+    judge: Option<&Value>,
+) -> Result<(), Fail> {
     std::fs::create_dir_all(store_dir).map_err(fail)?;
     let old = read_answer(store_dir, slug);
+    let mut builds = old
+        .get("builds")
+        .and_then(Value::as_object)
+        .cloned()
+        .unwrap_or_default();
     let mut seen: Vec<Value> = old
         .get("answered")
         .and_then(Value::as_array)
@@ -193,7 +219,15 @@ pub fn write_answer(
         .and_then(Value::as_object)
         .cloned()
         .unwrap_or_default();
-    if let Some(after) = settles.remove(fp) {
+    let settled = settles.remove(fp);
+    for f in std::iter::once(json!(fp)).chain(settled.iter().cloned()) {
+        let f = f.as_str().unwrap_or("").to_owned();
+        match judge {
+            Some(b) => builds.insert(f, b.clone()),
+            None => builds.remove(&f),
+        };
+    }
+    if let Some(after) = settled {
         seen.push(after);
     }
     let mut rec = Map::new();
@@ -207,6 +241,9 @@ pub fn write_answer(
     }
     if !settles.is_empty() {
         rec.insert("settles".to_owned(), Value::Object(settles));
+    }
+    if !builds.is_empty() {
+        rec.insert("builds".to_owned(), Value::Object(builds));
     }
     for k in ["readings", "passages", "hrefs", "reply_quotes"] {
         if let Some(v) = old
@@ -235,7 +272,9 @@ pub fn settle(store_dir: &Path, slug: &str, before: &str, after: &str) -> Result
                 "{SETTLED}; was: {}",
                 rec.get("result").and_then(Value::as_str).unwrap_or("")
             );
-            write_answer(store_dir, slug, after, &result, rec.get("pages"))?;
+            // a settled answer is its judge's, never the settling build's: nothing judged it again (451 T197)
+            let judge = rec.get("builds").and_then(|b| b.get(before));
+            write_judged(store_dir, slug, after, &result, rec.get("pages"), judge)?;
         }
         return Ok("answered".to_owned());
     }
@@ -343,6 +382,22 @@ fn adopt(s: &Path, others: &[PathBuf], slug: &str, fp: &str, reading: &str) -> R
         readings.sort();
         readings.dedup();
         mine.insert("readings".to_owned(), json!(readings));
+        let mut builds = mine
+            .get("builds")
+            .and_then(Value::as_object)
+            .cloned()
+            .unwrap_or_default();
+        for (f, b) in rec
+            .get("builds")
+            .and_then(Value::as_object)
+            .into_iter()
+            .flatten()
+        {
+            builds.entry(f.clone()).or_insert_with(|| b.clone());
+        }
+        if !builds.is_empty() {
+            mine.insert("builds".to_owned(), Value::Object(builds));
+        }
         if !mine.contains_key("fingerprint") {
             mine.insert(
                 "fingerprint".to_owned(),
@@ -500,6 +555,57 @@ pub fn keep_reading(store_dir: &Path, slug: &str, reading: &str, field: &str) ->
     write_record(store_dir, slug, &rec, Some(1), true)
 }
 
+/// A landing alone's reading of the builds its answers were judged by (feature 451 T197): outside a landing it judges nothing, so an
+/// answer stands as it always did.
+struct Judged<'a> {
+    root: &'a Path,
+    landing: bool,
+    blobs: std::collections::HashMap<String, String>,
+}
+
+impl<'a> Judged<'a> {
+    fn new(root: &'a Path) -> Self {
+        Self {
+            root,
+            landing: build::landing(),
+            blobs: std::collections::HashMap::new(),
+        }
+    }
+
+    /// Why `u`, answered at its fingerprint by a build holding uncommitted files other than the landing's own, is owed again.
+    fn mixed(&mut self, store_dir: &Path, u: &Unit) -> Option<String> {
+        if !self.landing {
+            return None;
+        }
+        let rec = read_answer(store_dir, &u.slug);
+        let judge = rec.get("builds").and_then(|b| b.get(&u.fingerprint));
+        let (root, blobs) = (self.root, &mut self.blobs);
+        let paths = build::mixed(judge, &mut |p: &str| {
+            blobs
+                .entry(p.to_owned())
+                .or_insert_with(|| {
+                    let b = git(
+                        root,
+                        &["rev-parse", "--verify", "--quiet", &format!("HEAD:{p}")],
+                    );
+                    let b = b.trim();
+                    if b.is_empty() {
+                        build::DELETED.to_owned()
+                    } else {
+                        b.to_owned()
+                    }
+                })
+                .clone()
+        });
+        (!paths.is_empty()).then(|| {
+            format!(
+                "answered by an l7r-gate built with other builders' uncommitted code ({}), not this landing's: re-judge it here (451 T197)",
+                paths.join(", ")
+            )
+        })
+    }
+}
+
 /// Every owed unit with no current answer.
 ///
 /// # Errors
@@ -522,12 +628,16 @@ pub fn unanswered_in(delta: &mut Delta, rows: Vec<Unit>) -> Result<Vec<Unit>, Fa
     let others = sibling_stores(root);
     let modals_now = modals::modals_now(root, true)?;
     let mut owed: Vec<Unit> = Vec::new();
+    let mut judged = Judged::new(root);
     for u in rows {
         if answered(&s, &u.slug, &u.fingerprint, &u.reading)
             || adopt(&s, &others, &u.slug, &u.fingerprint, &u.reading)?
             || legacy_depiction_answered(root, &s, &u.slug, &modals_now)?
             || amendment1_depiction_answered(root, &s, &u.slug, &modals_now)?
         {
+            if let Some(why) = judged.mixed(&s, &u) {
+                owed.push(Unit { occasion: why, ..u });
+            }
             continue;
         }
         owed.push(u);

@@ -140,6 +140,40 @@ pub fn categorized(reply: &str) -> Vec<(String, String, String, String)> {
         .collect()
 }
 
+/// The form of an EDIT block, as a refusal of an unread one names it.
+pub const EDIT_FORM: &str = "EDIT [(CATEGORY)] <path>, then the lines <<<, the old text, ===, the new text and >>>, each fence at the header's indent (plain text: no bullet or bold, the path alone or in one pair of backticks, the category before it)";
+
+/// Each line of `reply` that is shaped as an EDIT block's header or its `<<<` fence but stands in no block the parser reads
+/// (`line N: <text>`), FAIL CLOSED (feature 451 T195, gap audit item 12a). WHY: `` EDIT `p` (TRUTH) `` - its category after the
+/// path - matched nothing and was dropped without a word, as were a bulleted or bold header and a fence at another indent; the
+/// reader that writes refuses a reply holding one, the line and [`EDIT_FORM`] named. A header-shaped line is one whose first word,
+/// past any bullet, quote or bold, is `EDIT` (not `EDITS`, `EDITED`); prose that merely holds the word is no header.
+#[must_use]
+pub fn unread_edits(reply: &str) -> Vec<String> {
+    let spans: Vec<(usize, usize)> = EDIT
+        .find_iter(reply)
+        .map_while(Result::ok)
+        .map(|m| (m.start(), m.end()))
+        .collect();
+    let mut out = Vec::new();
+    let mut at = 0;
+    for (i, line) in reply.split('\n').enumerate() {
+        let start = at;
+        at += line.len() + 1;
+        let word = line.trim_start_matches(|c: char| {
+            c.is_whitespace() || matches!(c, '-' | '*' | '>' | '#' | '+' | '\u{2022}')
+        });
+        let header = word
+            .strip_prefix("EDIT")
+            .is_some_and(|rest| !rest.starts_with(|c: char| c.is_alphanumeric() || c == '_'));
+        if (header || line.trim() == "<<<") && !spans.iter().any(|(s, e)| (*s..*e).contains(&start))
+        {
+            out.push(format!("line {}: {}", i + 1, line.trim()));
+        }
+    }
+    out
+}
+
 /// The checks whose every finding is one of form or wording, never of fact (451 T188, the GM 2026-11-23: "style edits are just a
 /// different category of thing than factual inaccuracies"): modal-form's replacement "only rewords" (its contract), record-format's
 /// VOCABULARY, SESSION NOTE and HISTORY are how a reader meets the words, record-style is presentation, intro-check a question's opening.
@@ -191,8 +225,27 @@ pub fn response_text(resp: &Value) -> String {
 mod tests {
     use serde_json::json;
 
-    use super::{blocks, categorized, factual, reply_file, reply_of, response_text};
+    use super::{blocks, categorized, factual, reply_file, reply_of, response_text, unread_edits};
     use crate::checks::testkit::dir;
+
+    /// An EDIT header or fence the parser does not read is named, never dropped (feature 451 T195, gap audit item 12a): the
+    /// category after the path, a bullet, bold, a fence at another indent; a block read, prose naming EDIT and `EDITS:` are not.
+    #[test]
+    fn an_edit_line_the_parser_cannot_read_is_named() {
+        for (reply, line) in [
+            ("EDIT `l7r/m.md` (TRUTH)\n<<<\na\n===\nb\n>>>\n", 1),
+            ("note\n- EDIT l7r/m.md\n<<<\na\n===\nb\n>>>\n", 2),
+            ("**EDIT** `l7r/m.md`\n<<<\na\n===\nb\n>>>\n", 1),
+            ("EDIT l7r/m.md\n  <<<\na\n===\nb\n>>>\n", 1),
+        ] {
+            let (got, at) = (unread_edits(reply), format!("line {line}: "));
+            assert!(!got.is_empty() && got[0].starts_with(&at), "{reply:?}");
+            assert!(blocks(reply).is_empty(), "{reply:?}");
+        }
+        let fine = "Two EDIT blocks follow.\nEDITS:\nEDIT (LINKS) `l7r/m.md`\n<<<\na\n===\nb\n>>>\n  EDIT l7r/n.md\n  <<<\n  c\n  ===\n  >>>\n";
+        assert_eq!(unread_edits(fine), Vec::<String>::new());
+        assert_eq!(blocks(fine).len(), 2);
+    }
 
     #[test]
     fn an_edit_block_is_read_with_its_indent_dropped() {

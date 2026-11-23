@@ -713,6 +713,47 @@ pub fn triage_bundle(
     Ok(out.join("MANIFEST.md"))
 }
 
+/// The form of a triage reply's line, as a refusal names it (the agent file's `## Your reply`).
+const FORM: &str = "`TOUCHES <key> - <which block, a few words>` (plain text: no bullet, no bold, an ASCII ` - `), or the one line `NONE`";
+
+/// Why a triage reply is refused, or `None` for a reply every line of which reads, FAIL CLOSED (feature 451 T195, gap audit item 3):
+/// a line not blank, not `NONE` and not in the form, a key not of this triage, or `NONE` beside a TOUCHES line refuses the whole
+/// reply, each line named with the form, before anything is recorded. WHY: a `- TOUCHES` bullet, `**TOUCHES**` or a non-ASCII dash
+/// matched nothing, and every claim it meant was cleared as triaged - its re-check skipped, durably, with no one told.
+#[must_use]
+pub fn refused(reply: &str, units: &Map<String, Value>) -> Option<String> {
+    let mut bad: Vec<String> = Vec::new();
+    let (mut none, mut named) = (false, false);
+    for (i, raw) in reply.split('\n').enumerate() {
+        let line = l7r_shared::py_text::strip(raw);
+        if line.is_empty() {
+            continue;
+        }
+        if line == "NONE" {
+            none = true;
+            continue;
+        }
+        match TOUCHES.captures(bare(raw)).ok().flatten() {
+            None => bad.push(format!("line {}: `{line}` is not in the form", i + 1)),
+            Some(m) if !units.contains_key(m[1].trim_matches('`')) => bad.push(format!(
+                "line {}: `{}` is not a claim of this triage",
+                i + 1,
+                m[1].trim_matches('`')
+            )),
+            Some(_) => named = true,
+        }
+    }
+    if none && named {
+        bad.push("`NONE` stands beside TOUCHES lines: say one or the other".to_owned());
+    }
+    (!bad.is_empty()).then(|| {
+        format!(
+            "claims-triaged: refused, nothing recorded - each line of the reply is {FORM} (451 T195):\n  {}\nput each line in the form and run it again",
+            bad.join("\n  ")
+        )
+    })
+}
+
 /// The index with a triage reply applied: a named or forced claim owed `impl-drift`, every other one cleared at the pages as they stand.
 pub fn record_triage(
     index: &Index,
@@ -727,11 +768,8 @@ pub fn record_triage(
             touched.insert(m[1].trim_matches('`').to_owned(), m[2].to_owned());
         }
     }
-    let mut msgs: Vec<String> = touched
-        .keys()
-        .filter(|k| !units.contains_key(*k))
-        .map(|k| format!("refused: `{k}` is not a claim of this triage"))
-        .collect();
+    // a key not of this triage is refused before this, by `refused` (451 T195)
+    let mut msgs: Vec<String> = Vec::new();
     for k in forced {
         if units.contains_key(k) && !touched.contains_key(k) {
             touched.insert(
@@ -762,6 +800,13 @@ pub fn record_triage(
             }
             super::reads::stamp(&mut row, fp.get("reads").and_then(Value::as_str));
             row.shift_remove("triage");
+            // the build that cleared it, kept only where it held uncommitted code, so the tracked index moves only then (451 T197)
+            match l7r_gate_core::build::current()
+                .filter(|b| !l7r_gate_core::build::dirty(b).is_empty())
+            {
+                Some(b) => row.insert("build".into(), b),
+                None => row.shift_remove("build"),
+            };
         }
         out.insert(key.clone(), Value::Object(row));
     }

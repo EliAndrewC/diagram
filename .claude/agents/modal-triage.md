@@ -51,5 +51,7 @@ One line per (pop-up, page) whose blocks meet the rule, and nothing for the rest
 
     TOUCHES <uid> @ <page file name> - <A|B|C>: <which block, a few words>
 
-A pop-up you do not name is cleared without its checks. No preamble, no summary, no other lines: the session saves your reply
+A pop-up you do not name is cleared without its checks. When no pop-up is touched, reply with the one line `NONE`: an empty reply,
+or any line not in this form (a bullet, bold, a dash other than ` - `), is refused whole (feature 451 T195). No preamble, no
+summary, no other lines: the session saves your reply
 and `make modal-triaged BUNDLE=<dir> REPLY=<file>` reads it line by line.
