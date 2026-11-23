@@ -2713,3 +2713,39 @@ engine speed, so the checklist below answers in its terms.
 
 **Performance work?** <no - or yes (a `[perf]` task, 451 FR-013: it makes the engine, the checks, the gate, the landings or the builders' loop faster), and for an engine-speed task its answers to docs/performance-checklist.md below (`make task-add ... PERF=1` writes them)>
 
+### T204 (451 T192's sample, 2026-11-23: naming the item of 12 GUESS or DEVIATION claims citing 0090's and 0196's drawing pages owed all 12 impl-drift as `code changed`, while a plain pointer flipped to `GUESS ...#id` owed none; method: `make claims-owed` after `.git/t192/claims.py apply`)
+
+- **Approach**: A claim recorded before it named its items stored its class word. `Claim::normalized` drops the class once the claim names an item (T187), so the claim no longer matched its row. Three places read it that way, all in the claims crate, and each now also takes the claim with its anchors left out and its class word kept (`grammar.rs`: `Claim::unanchored`, `anchors_free`, `same_but_items`).
+  - **(1) A Rust unit's claim** (`index.rs` `relabeled_only`): the stored `claim` is read against `unanchored()` as well as `normalized()`.
+  - **(2) A doc section's claim** (`index.rs` `owed_one`, `units.rs` `Unit::code_unanchored`): such a row stores no `body` and no `claim`, and its `code` is the claim alone. So the stored `code` is read against the code of the unanchored claim too. Without this arm, 77 of the 94 still owed. The advisor predicted it before the first fix, and the measurement found it.
+  - **(3) The stale-figure check** (`stale.rs`): a constant's doc that only named the item, class kept, is no change. This is a bug found in the work: the same asymmetry in `label_free` flagged 24 stale figures on the 94 anchors. Fixed here.
+  - A class changed with the naming (`GUESS p` to `DEVIATION p#id` or to a plain `p#id`), or an account changed, still owes. The brief says "its class word staying the same". The tag's agreement with the class stays with the label check (`item_labels.rs`), which refuses a landing on its own, so `owed` does not repeat it.
+
+| step | figure | what it says |
+|---|---|---|
+| red | `index/tests.rs` `naming_the_item_of_a_classed_claim_owes_nothing` (the 12 sample claims as a Rust unit and as a doc section; 3 changed shapes still owing) and `stale/tests.rs` `naming_the_item_of_a_classed_claim_is_no_change` failed at their naming asserts, 2026-11-23 (`.git/t204/red.log`); the doc arm red alone with (2) disabled (`.git/t204/red2.log`, tests.rs:397) | the defect, pinned on its shapes |
+| before | 94 classed drawing-page claims (83 GUESS, 11 DEVIATION) anchored `#t204-<n>` in a copy of the clone (`.git/t204/tree`, T192's uncommitted pages kept) owed 94 `code changed` + 24 stale figures, the unfixed binary, 2026-11-23 (`.git/t204/owed-red.txt`) | every named claim re-checked |
+| after | the same copy owes 0 of the 94 and 0 stale figures; only the baseline's `reads.rs::take` triage (T200's) remains, as it did before the anchors (`.git/t204/owed-after.txt`, `owed-base.txt`) | naming owes nothing |
+
+The brief's 99 (88 GUESS, 11 DEVIATION): HEAD holds 83 unanchored GUESS, 11 unanchored DEVIATION and 2 anchored GUESS, and the working tree holds 3 anchored GUESS (T192's), a regex count over `rust/mode_a` and the two docs on 2026-11-23. So 94 were left to anchor and 97 in all. The 99 is T192's count; its source is not re-derived here.
+
+### T204 Approach (checklist part A)
+
+1. **The goal, in the world.** T192 names the items of the classed drawing-page claims, and no claim owes an impl-drift re-check for naming alone.
+2. **The constraints.** T187's rule: the tag holds the label. The brief: "an edit that only adds or changes a claim's item reference, its class word staying the same and agreeing with the tag, owes no implementation re-check". Coverage stays at the crate's full line coverage (`make closing-checks`).
+3. **Where each comes from.** G: the brief relays the task line. O: T192's sample (12 of 12) and this task's 94-claim measurement.
+4. **Do they describe the world here?** Yes. The 12 sample shapes are tested as both unit kinds they took (10 doc sections and 2 Rust items), and the 94 were measured on a copy of the real tree, measured 2026-11-23 (`claims owed` on `.git/t204/tree`).
+5. **The order.** After T187 and T197 (index.rs committed at 58d77915bf). Before T192's claims pass, and before T22.
+6. **The exits.** Green: the claims crate's tests and the 94-claim measurement at 0 owed. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** One landing.
+9. **Done, measured.** 0 of 94 owed and 0 stale figures on the anchored copy (`.git/t204/owed-after.txt`).
+10. **Before moving a constant.** n/a.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** A wrong outcome: 94 impl-drift checks and 24 stale-figure flags would be owed for an edit that changes no claim's meaning. T192's pass would cost about 94 agent checks.
+
+**Found and left?**
+- The stale-figure check flagged the constant's figures when a classed claim only named its item (24 lines on the 94 anchors, observed 2026-11-23, method: `claims owed` on the anchored copy). Fixed here (3).
+
+**Performance work?** no
+
