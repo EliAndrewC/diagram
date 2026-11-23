@@ -2517,6 +2517,51 @@ engine speed, so no checklist.
 
 <!-- plan-archive: T185 to T185 moved to plan-done.md, 2026-11-23 (feature 375 FR-044) -->
 <!-- plan-archive: T186 to T186 moved to plan-done.md, 2026-11-23 (feature 375 FR-044) -->
+### T196 (the gap audit 2026-11-23, items 5, 6 and 7, `/home/agent/.claude/jobs/c6fd72d1/tmp/gap-audit.md`: claims and later scoped rounds read only the page cited, not where T185's pointers moved its text; live case brook.rs's intake claims citing 0059, split by T184 to 0333)
+
+- **Approach**: one follower, shared. `change::follow` (owed crate, beside `pointer_targets`) is the core `modals::followed` now calls, following a target's own split too, each page once (the size rule may split 0333 again); the claims call it through `bundle::follow_names` (names under a `qdir`, the base tree's at `report.rs`) and `bundle::read_pages` (a claim's `cited_pages` plus their pointers' targets). (1) Claims: `read_pages` is used wherever a claim's research is fingerprinted or snapshotted - `index::current`'s `research`, `report`'s base comparison, `commands` (record), `triage` (both page maps), `bundle` (units.json pages and the cited questions written out, a dangling target skipped) and `impl_check`'s by-question map; `cited_pages` alone stays for the two "names no question file" refusals. `research_why` keeps `unread` on the raw citations and reads a rest `page:digest` as standing where it stands verbatim on a page that page's pointers reach, so a pure split's claim is owed `triage`, which `claims triage` clears with no dispatch (feature 432's `clear_page_moves`: every rest stands), recording the target in its pages; a claim with no rests is cleared by T191's filter, a verbatim move and a pointer being the tool's clears. Only a claim-bearing edit left after those reaches an agent. `findings_of` and `page_blocks` are per page and unchanged: the following is in the page list they are handed. A page with no pointer reads as itself alone, so no unsplit claim's fingerprint moves. (2) MANIFEST: `Moved::shown` drops `moved_edited` from the removed list and prints each under "Moved with edits (to a page its pointers reach)" with OLD, NEW and WORD DIFF, the rendering now shared with the pop-ups' (`change::moved_edited_lines`, `change::removed_unmoved`); the `claims-triage` contract names the kind. (3) Scoped rounds: `marks::subject_files` follows its files' pointers (`modals::followed`), a `q:` subject taking the target's notes and originals too; `earlier::pairs_since` diffs a file the last round was not bundled against the then-text of the pages pointing to it, showing no deletions there, so a line moved verbatim is no change and one restated as it moved pairs with its old self.
+- **Measured** 2026-11-23, `make claims-owed` on the live clone with this change and T184's uncommitted pages: "no claim is owed" - the transition owes nothing (the brook rows in `dev/claims-index.json` already carry 0333, recorded by T184's run in this clone).
+
+| step | alone off: fixed and pinned | fresh block vs HEAD | pool manifests moved | the last resort |
+|---|---|---|---|---|
+| claims follow pointers | `claims::triage::tests::a_claim_follows_its_page_s_pointers`: red with `read_pages` as `cited_pages` ("rests changed" for a pure split, `.git/l7r-handoffs/T196-red1.log`) and with the research fingerprint unfollowed (a target edit owes nothing, `T196-red2.log`) | none: record tooling | none | n/a |
+| MANIFEST moved with edits | `claims::triage::tests::a_block_moved_with_an_edit_is_shown_moved_with_its_diff`, red with `shown` as before (`T196-red1.log`) | none: record tooling | none | n/a |
+| a pure split owes no dispatch | `claims::triage::tests::a_pure_split_is_cleared_without_a_dispatch`: `claims triage` clears it mechanically, no MANIFEST; red with the rest unfollowed (`T196-red5.log`) | none: record tooling | none | n/a |
+| a split's target split again | `change::tests::a_split_s_target_split_again_is_followed_each_page_once`, red one level deep (`T196-red6.log`) | none: record tooling | none | n/a |
+| subject files follow | `arbiter::bundle::marks::tests::a_subject_s_files_follow_its_pages_pointers`, red unfollowed (`T196-red3.log`) | none: record tooling | none | n/a |
+| a later round pairs on the target | `record::bundle::earlier::tests::a_later_round_pairs_a_change_on_a_split_s_target_page` ("An official handbook" to "A Japanese encyclopedia" paired, the verbatim line not shown), red unfollowed and red with the target diffed against "" (`T196-red3.log`, `T196-red4.log`) | none: record tooling | none | n/a |
+
+### T196 Approach (checklist part A)
+
+1. **The goal, in the world.** No map changes. After a split, an edit on the target page re-owes the claims and rounds that read the moved text, and the readers judge it where it now stands; a pure split owes no dispatch at all (the GM 2026-11-23 on a split's pointer, as T184's section quotes him).
+2. **The constraints.** The task line and the coordinator's brief (red first on T184's shape, 100% coverage, `modals::followed` reused, not copied); T184's and T193's files untouched.
+3. **Where each comes from.** G: the GM 2026-11-23, as T196's task line quotes him (the gap audit he asked for). O: the gap audit. R: none, tooling.
+4. **Do they describe the world here?** Yes: 0009 and 0059 are the tree's only pages with `class="moved"` pointers (grep, 2026-11-23), and `make claims-owed` was run over them.
+5. **The order.** After T185, T191 and T194; beside T184 (its split is the live case).
+6. **The exits.** Green: the tests in the table above and `make closing-checks T=T196 F=451`. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** One landing.
+9. **Done, measured.** The tests above, red then green; the claims (170), bundle (85) and owed (114) crates green, measured 2026-11-23 (`make rust-test CRATE=...`); `make claims-owed` "no claim is owed" on the live tree.
+10. **Before moving a constant.** n/a: `PAIR_RATIO` unmoved.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** Visible effect: a claim whose support moved to 0333 was never re-owed by an edit there and was judged against 0059, which no longer holds it; the claims MANIFEST showed moved blocks as removed, sending claims to impl-drift; a later round never showed a reviewer a restatement on 0333.
+
+**Found and left?**
+- A claim whose index row predates the following and whose cited page is unchanged is forced through its triage once a target it never read changes (the triage has no snapshot of that target to diff): not a defect - conservative, one `impl-drift` run, and the live tree has no such row (`make claims-owed`, 2026-11-23).
+- The following was one level, `modals::followed`'s too, so a target split again would have been judged where its text no longer stood (the plan review's aside): fixed here, `change::follow` follows every level, each page once.
+
+**Performance work?** yes: a split no longer sends its claims to `impl-drift` as removals, and later rounds stay scoped to the change on the page where it was made.
+
+### T196 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)
+
+1. **Where does the time go?** In the `claims-triage` and `impl-drift` dispatches after a split, and in a later review round that misses a target's change (a factual edit unjudged, or a round re-opened).
+2. **Removes work, or only moves it?** Removes it: a pure split is cleared by the tool with no dispatch (before, its claims owed a full `impl-drift` round, "rests changed"), and a moved-with-edit block is shown as moved, not removed.
+3. **What do you expect it to save, and why?** One `impl-drift` dispatch per claim citing a split page whose rest moved verbatim; on today's tree none are owed either way (`make claims-owed`).
+4. **How does the work grow with the settlement?** It does not: record tooling; one more page read per pointer on a cited page.
+5. **What did the before and after show, and under what conditions?** The red and green test runs above, on fixtures; counts, not wall time.
+6. **Did any map move, and does it still keep the research?** No: no engine code.
+
+
 <!-- plan-archive: T187 to T187 moved to plan-done.md, 2026-11-23 (feature 375 FR-044) -->
 <!-- plan-archive: T191 to T186 moved to plan-done.md, 2026-11-23 (feature 375 FR-044) -->
 <!-- plan-archive: T191 to T191 moved to plan-done.md, 2026-11-23 (feature 375 FR-044) -->
