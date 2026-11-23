@@ -1734,6 +1734,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-23",
    "declared": "spec-fidelity"
+  },
+  "### T377 (the round arbiter's `ask:glyph-occasions-emit-449-T351`, 2026-11-23, ruled a tool fault: 48 of the T351 bundle's 53 glyph-check units were owed on marks unchanged or only displaced, observed 2026-11-23, method: the review tree's main and clone svgs per data-kind, data-id stripped)": {
+   "sha256": "0d3c37c58b95bbb5f2f5889a7325fb476a67c334b866c258f3e271968d7a82a2",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity"
+  },
+  "### T377 Approach (checklist part A)": {
+   "sha256": "a7791ba086cb072eae3c25af0d86bc7011e647ec2eb01b49afe7ca8c9a5fadb5",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -24435,6 +24447,83 @@
      "summary": "the review prerequisite attributed to feature 240's FR-003; 14 verifying records and 31 review-accepts dispose its 45 findings",
      "class": "within",
      "why": "This answers round one's condition and decides nothing new."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-23",
+   "blocks": [
+    "### T377 (the round arbiter's `ask:glyph-occasions-emit-449-T351`, 2026-11-23, ruled a tool fault: 48 of the T351 bundle's 53 glyph-check units were owed on marks unchanged or only displaced, observed 2026-11-23, method: the review tree's main and clone svgs per data-kind, data-id stripped)",
+    "### T377 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D1-marks-compare",
+     "summary": "Where redrawn.rs cannot tell which kinds a change redraws (a kind chosen at run time, emit.rs building; a line of the sheet's roll, compound.rs sheet), each compound map's drawing is compared kind by kind with its drawing at the base in a new owed/marks.rs, and a kind is owed only where its marks differ.",
+     "class": "within",
+     "why": "This is the tooling fix the arbiter's accept on ask:glyph-occasions-emit-449-T351 calls for: (2) rules the whole-legend fallback a tool fault, and the why says it sends checks to byte-identical marks. Owing a kind where its marks differ applies the glyph-check occasion rule (new, redrawn, placement changed) to what was actually drawn. It is also what the GM asked for on 2026-11-16 (process time) and 2026-11-22 (finish the remaining fixes)."
+    },
+    {
+     "id": "D2-attribution",
+     "summary": "Each token goes to its own data-kind or data-part-of, else to the enclosing element's. data-id is stripped. A changed <defs> entry owes every kind that uses it, transitively.",
+     "class": "within",
+     "why": "Data-id stripped and per-kind attribution are the method the ruling measured with ('data-id stripped, each line attributed to its kind'). The transitive defs rule makes sure a glyph redrawn through a shared definition is still owed, so it enforces the occasion rule and narrows nothing."
+    },
+    {
+     "id": "D3-first-map",
+     "summary": "A kind whose marks differ is owed on the first map where they differ, which moves the office hall's back-row kinds from the county (unchanged there) to the round trip (changed there).",
+     "class": "within",
+     "why": "A kind is owed once across the maps both before and after (the before row: the county's legend plus only the round-trip kinds the county does not draw). The plan now picks the first map where the marks differ, which matches the ruling's 'each on the map where its change shows'. No unit whose marks differ is dropped."
+    },
+    {
+     "id": "D4-base-text",
+     "summary": "The base text is the base commit's blob, else the mirror's copy, read as base_legends reads it.",
+     "class": "within",
+     "why": "This is how the comparison is implemented. It decides nothing about scope."
+    },
+    {
+     "id": "D5-fallback-kept",
+     "summary": "Where the marks cannot be compared, the whole legend is still owed: the hamlet driver (its marks are not read by kind), a drawing that is not current, a drawing the base does not hold, or a difference no kind owns. The occasion says which.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The ruling calls the whole-legend fallback a tool fault in general, and the fix leaves it in these cases, so I treat this as a narrowing. It is legitimate because per-kind comparison is physically impossible in each case: no attribution by kind (the hamlet driver), no current drawing, no base drawing, or a difference with no owning kind. In every one the fallback owes more checks, never fewer, so a glyph the occasion rule owes is never missed. The ruling measured only compound maps, so no defect is measured or known in these cases, and nothing a reader sees on a map is wrong. Each such occasion is named, so the fallback stays visible."
+    },
+    {
+     "id": "D6-code-told-kept",
+     "summary": "What the code itself tells (a literal data-kind in a changed mark, or a writer method whose uses reach one) stays owed as before (T237, T289). This is pinned by the_compound_engines_marks_owe_their_kinds_on_the_compound.",
+     "class": "within",
+     "why": "It keeps the existing reading of the code and owes more, never less. The ruling does not ask for code-told units to be dropped: it lets the caption-only and kneeling units 'still be listed' and discharges them itself."
+    },
+    {
+     "id": "D7-discharge-verb",
+     "summary": "New verb l7r-gate reviews discharge --root R --ruling TRIGGER UNIT... (owed/discharged.rs; make review-discharge RULING= UNITS=). It records an arbiter accept against each owed glyph unit, bound to the digest of that kind's current marks, all or none. all_owed drops a unit only while its ruling still reads accept and its marks keep the digest. reviews owed --why names each discharged unit and its ruling.",
+     "class": "within",
+     "why": "The ruling asks for this route in its own words: 'If the push has no route that reads an arbiter accept as a glyph unit's discharge, that route is built with the fix and its test.' Binding to the marks digest implements 'If a sheet changes again before the push, any kind whose marks change is owed again under the rule.' The make target keeps make as the one entry point (FR-005)."
+    },
+    {
+     "id": "D8-verb-refusals",
+     "summary": "Before it writes anything, the verb refuses a ruling that is not an accept in some specs/*/arbiter.jsonl, a unit not owed now, a unit that is not a glyph check, and a unit on a map that draws no mark of its kind.",
+     "class": "within",
+     "why": "These refusals keep the route inside what the ruling authorizes, an arbiter accept discharging glyph units bound to marks. They block nothing the GM or the ruling asked to happen."
+    },
+    {
+     "id": "D9-push-procedure",
+     "summary": "The verb cannot tell which units a ruling discharged, or whether the marks are the ones the ruling measured. So a push names only the units the cited ruling discharged, by name or by a class the ruling states, and only where that kind's marks are unchanged (marks.rs rule) between the drawing the ruling measured and the drawing being recorded. The push states both, unit by unit, in its own plan section. Units the ruling kept owed, units an unrelated accept does not name, and units whose marks differ stay owed.",
+     "class": "within",
+     "why": "It holds the discharge to exactly the ruling's scope ('the 48 units named above', 'bound to the drawn sheets as measured') where the tool cannot check it, and it keeps owed everything the ruling keeps owed. A digest taken at record time could otherwise bind to marks that changed after the ruling, and this closes that gap. It widens nothing."
+    },
+    {
+     "id": "D10-T351-no-discharge",
+     "summary": "The T351 bundle's landing carries its three arbiter rulings at its own push and records no discharge through this verb, so the unit list such a discharge would have named is moot and dropped from this section.",
+     "class": "within",
+     "why": "The ruling requires the route to exist, and D7 builds it. It does not require T377 to use the route for T351. How T351's push carries its rulings belongs to T351's own landing, and not using the verb leaves units owed rather than unowed. None of the ruling's five owed units, and no unit whose marks changed, is discharged by this choice."
+    },
+    {
+     "id": "D11-found-make-target",
+     "summary": "A make target review-discharge was added (Makefile block after review-verdict, row in docs/make-targets.html) so a landing reaches the verb without calling the gate binary directly.",
+     "class": "within",
+     "why": "It serves FR-005 (make the one entry point) and only exposes the route the ruling asked for."
     }
    ]
   }
@@ -49043,61 +49132,79 @@
    "verdict": "CLEAR"
   },
   "T377": {
-   "section_sha256": "9a2aa04537ff3873151376517746c47a19cc9cfa81f5a77279647ed7072d29c2",
+   "section_sha256": "399221673fccf61e43602fc0f73bce1a4668c2d7bad3f23bd7f59a8b79041423",
    "reviewed": "2026-11-23",
    "declared": "spec-fidelity",
    "decisions": [
     {
-     "id": "T377-1 per-kind marks comparison",
-     "summary": "Where the code cannot tell which kinds a change redraws, owed/marks.rs compares each compound map's drawing with its drawing at the base, kind by kind (data-kind / data-part-of / enclosing element, data-id stripped, changed defs owed transitively), and owes a kind only where its marks differ. This replaces the whole-legend fallback.",
+     "id": "D1-marks-compare",
+     "summary": "Where redrawn.rs cannot tell which kinds a change redraws (a kind chosen at run time, emit.rs building; a line of the sheet's roll, compound.rs sheet), each compound map's drawing is compared kind by kind with its drawing at the base in a new owed/marks.rs, and a kind is owed only where its marks differ.",
      "class": "within",
-     "why": "This is the ruling's tooling fix, (2): 'the whole-legend fallback is a tool fault'. Its attribution method is the one the ruling measured with: 'data-id stripped, each line attributed to its kind'. It brings the owed set down to the glyph-check occasion rule; no map changes."
+     "why": "This is the tooling fix the arbiter's accept on ask:glyph-occasions-emit-449-T351 calls for: (2) rules the whole-legend fallback a tool fault, and the why says it sends checks to byte-identical marks. Owing a kind where its marks differ applies the glyph-check occasion rule (new, redrawn, placement changed) to what was actually drawn. It is also what the GM asked for on 2026-11-16 (process time) and 2026-11-22 (finish the remaining fixes)."
     },
     {
-     "id": "T377-2 code-told kinds kept",
-     "summary": "A literal data-kind in a changed mark, or a writer method whose uses reach one, stays owed as before (T237/T289), pinned by the_compound_engines_marks_owe_their_kinds_on_the_compound.",
+     "id": "D2-attribution",
+     "summary": "Each token goes to its own data-kind or data-part-of, else to the enclosing element's. data-id is stripped. A changed <defs> entry owes every kind that uses it, transitively.",
      "class": "within",
-     "why": "Nothing here narrows the request. It keeps owing what the code names. Hearing court and kneeling positions stay listed, which the ruling foresaw: 'the caption-only kinds and the county's kneeling positions may still be listed; this ruling discharges them'."
+     "why": "Data-id stripped and per-kind attribution are the method the ruling measured with ('data-id stripped, each line attributed to its kind'). The transitive defs rule makes sure a glyph redrawn through a shared definition is still owed, so it enforces the occasion rule and narrows nothing."
     },
     {
-     "id": "T377-3 whole legend where marks cannot be compared",
-     "summary": "The whole legend is still owed for the hamlet driver, a drawing that is not current, a drawing the base does not hold, or a difference no kind owns, and the occasion says which.",
+     "id": "D3-first-map",
+     "summary": "A kind whose marks differ is owed on the first map where they differ, which moves the office hall's back-row kinds from the county (unchanged there) to the round trip (changed there).",
      "class": "within",
-     "why": "The ruling found a fault in the fallback where per-kind comparison is possible, because it sent checks to byte-identical marks. Where marks cannot be compared, the tool cannot tell, and owing more keeps every review the rule asks for. Nothing the request or the ruling asks for is cut."
+     "why": "A kind is owed once across the maps both before and after (the before row: the county's legend plus only the round-trip kinds the county does not draw). The plan now picks the first map where the marks differ, which matches the ruling's 'each on the map where its change shows'. No unit whose marks differ is dropped."
     },
     {
-     "id": "T377-4 first map where marks differ",
-     "summary": "A kind is owed once, on the first map where its marks differ. Of the 11 round-trip kinds that differ, 7 are owed there and 4 on the county.",
+     "id": "D4-base-text",
+     "summary": "The base text is the base commit's blob, else the mirror's copy, read as base_legends reads it.",
      "class": "within",
-     "why": "Before the fix a unit was already one kind, owed once across maps: 51 county units plus 'the two round-trip kinds the county does not draw'. The rule changes which kinds are owed, not what a unit is. It also matches the ruling's 'each on the map where its change shows': the cinnabar workshop and the back-row kinds land on the round trip, where their change shows."
+     "why": "This is how the comparison is implemented. It decides nothing about scope."
     },
     {
-     "id": "T377-5 back-row kinds owed on the round trip",
-     "summary": "Six back-row kinds (armory, clerks' room, day office, office hall, official study, writing rooms) are now owed on ochiba-roundtrip-test, where their marks differ. The residence corridor drops off.",
-     "class": "within",
-     "why": "The ruling found these six 'byte-identical in marks and caption' on the county, with their mirroring showing 'only on the round trip, where they are not listed'. It did not discharge them on the round trip. Owing them where their marks differ applies the occasion rule. The residence corridor dropping off is what the ruling found ('byte-identical')."
-    },
-    {
-     "id": "T377-6 discharge verb",
-     "summary": "l7r-gate reviews discharge --ruling TRIGGER UNIT... records an arbiter accept against owed glyph units. The ruling must be an accept in some specs/*/arbiter.jsonl, recording is all or none, and each record is bound to the digest of that kind's marks when recorded. all_owed drops a unit while the accept stands and the digest holds, so the push, the checkpoint and make verify agree. reviews owed --why names each discharged unit.",
-     "class": "within",
-     "why": "The ruling (3) asks for this: 'If the push has no route that reads an arbiter accept as a glyph unit's discharge, that route is built with the fix and its test.' Binding to the marks' digest carries out 'If a sheet changes again before the push, any kind whose marks change is owed again'. The checkpoint and make verify read the same owed list as the push; letting them still owe what the push no longer owes would be a disagreement, not added behavior."
-    },
-    {
-     "id": "T377-7 make review-discharge target and docs row",
-     "summary": "Adds make review-discharge RULING= UNITS= and its row in docs/make-targets.html.",
-     "class": "within",
-     "why": "Under FR-005 make is the one entry point, and this target is how the landing reaches the route the ruling asked for."
-    },
-    {
-     "id": "T377-8 the nine-unit UNITS= list discharged at the T351 landing",
-     "summary": "The T351 landing discharges nine county units under ask:glyph-occasions-emit-449-T351: barracks, weapon rack, latrine, fire-water tubs, door, outer court, hearing court, practice ground, kneeling positions. It keeps owed the ruling's five, the six back-row kinds, and servants' quarters, stables and well, which the later county E1 fix moved after the ruling measured them.",
+     "id": "D5-fallback-kept",
+     "summary": "Where the marks cannot be compared, the whole legend is still owed: the hamlet driver (its marks are not read by kind), a drawing that is not current, a drawing the base does not hold, or a difference no kind owns. The occasion says which.",
      "class": "narrowing",
-     "ruling": "NOT LEGITIMATE",
-     "why": "Dropping owed glyph checks is a narrowing. Its only license is the ruling, and the ruling binds itself: 'The ruling is bound to the drawn sheets as measured. If a sheet changes again before the push, any kind whose marks change is owed again under the rule.' The block applies that test to servants' quarters, stables and well, which it can see moved because they were byte-identical against base then and differ now. It states no measurement that the nine are unchanged between the tree the ruling measured and now. The prototype's base-versus-now diff cannot show it, because all nine already differed from base. The block's own words make the gap concrete: doors and tubs 'following their buildings', and the E1 fix 'has since moved' three buildings, so door and fire-water tubs (and the outer court, 'cut') are exactly the units most likely to have moved with them. The verb binds to marks as they are at recording, so a unit that moved since the ruling would be discharged on marks no one ruled on, and the block itself says 'the verb cannot make up for a wrong list'. Cure: before the discharge is recorded, compare each of the nine units' marks, by kind with data-id stripped (the marks.rs rule), between the review tree the ruling measured and the review tree as it is when the discharge is recorded. State that measurement with its date and method in the section, and keep owed any unit whose marks differ. This is not an exactness demand on the maps. It is the ruling's own condition for its discharge, and it is checked by measurement instead of assumed."
+     "ruling": "LEGITIMATE",
+     "why": "The ruling calls the whole-legend fallback a tool fault in general, and the fix leaves it in these cases, so I treat this as a narrowing. It is legitimate because per-kind comparison is physically impossible in each case: no attribution by kind (the hamlet driver), no current drawing, no base drawing, or a difference with no owning kind. In every one the fallback owes more checks, never fewer, so a glyph the occasion rule owes is never missed. The ruling measured only compound maps, so no defect is measured or known in these cases, and nothing a reader sees on a map is wrong. Each such occasion is named, so the fallback stays visible."
+    },
+    {
+     "id": "D6-code-told-kept",
+     "summary": "What the code itself tells (a literal data-kind in a changed mark, or a writer method whose uses reach one) stays owed as before (T237, T289). This is pinned by the_compound_engines_marks_owe_their_kinds_on_the_compound.",
+     "class": "within",
+     "why": "It keeps the existing reading of the code and owes more, never less. The ruling does not ask for code-told units to be dropped: it lets the caption-only and kneeling units 'still be listed' and discharges them itself."
+    },
+    {
+     "id": "D7-discharge-verb",
+     "summary": "New verb l7r-gate reviews discharge --root R --ruling TRIGGER UNIT... (owed/discharged.rs; make review-discharge RULING= UNITS=). It records an arbiter accept against each owed glyph unit, bound to the digest of that kind's current marks, all or none. all_owed drops a unit only while its ruling still reads accept and its marks keep the digest. reviews owed --why names each discharged unit and its ruling.",
+     "class": "within",
+     "why": "The ruling asks for this route in its own words: 'If the push has no route that reads an arbiter accept as a glyph unit's discharge, that route is built with the fix and its test.' Binding to the marks digest implements 'If a sheet changes again before the push, any kind whose marks change is owed again under the rule.' The make target keeps make as the one entry point (FR-005)."
+    },
+    {
+     "id": "D8-verb-refusals",
+     "summary": "Before it writes anything, the verb refuses a ruling that is not an accept in some specs/*/arbiter.jsonl, a unit not owed now, a unit that is not a glyph check, and a unit on a map that draws no mark of its kind.",
+     "class": "within",
+     "why": "These refusals keep the route inside what the ruling authorizes, an arbiter accept discharging glyph units bound to marks. They block nothing the GM or the ruling asked to happen."
+    },
+    {
+     "id": "D9-push-procedure",
+     "summary": "The verb cannot tell which units a ruling discharged, or whether the marks are the ones the ruling measured. So a push names only the units the cited ruling discharged, by name or by a class the ruling states, and only where that kind's marks are unchanged (marks.rs rule) between the drawing the ruling measured and the drawing being recorded. The push states both, unit by unit, in its own plan section. Units the ruling kept owed, units an unrelated accept does not name, and units whose marks differ stay owed.",
+     "class": "within",
+     "why": "It holds the discharge to exactly the ruling's scope ('the 48 units named above', 'bound to the drawn sheets as measured') where the tool cannot check it, and it keeps owed everything the ruling keeps owed. A digest taken at record time could otherwise bind to marks that changed after the ruling, and this closes that gap. It widens nothing."
+    },
+    {
+     "id": "D10-T351-no-discharge",
+     "summary": "The T351 bundle's landing carries its three arbiter rulings at its own push and records no discharge through this verb, so the unit list such a discharge would have named is moot and dropped from this section.",
+     "class": "within",
+     "why": "The ruling requires the route to exist, and D7 builds it. It does not require T377 to use the route for T351. How T351's push carries its rulings belongs to T351's own landing, and not using the verb leaves units owed rather than unowed. None of the ruling's five owed units, and no unit whose marks changed, is discharged by this choice."
+    },
+    {
+     "id": "D11-found-make-target",
+     "summary": "A make target review-discharge was added (Makefile block after review-verdict, row in docs/make-targets.html) so a landing reaches the verb without calling the gate binary directly.",
+     "class": "within",
+     "why": "It serves FR-005 (make the one entry point) and only exposes the route the ruling asked for."
     }
    ],
-   "verdict": "BLOCKED"
+   "verdict": "CLEAR"
   }
  }
 }

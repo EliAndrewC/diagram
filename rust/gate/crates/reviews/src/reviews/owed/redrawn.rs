@@ -20,9 +20,12 @@
 //! - a type, an import or a test redraws nothing by itself: the code that fills or reads it is what changes a mark.
 //!
 //! Each element told is owed on the first map of the engine's kind (live pool first) whose legend draws it - the declared route's
-//! choice, so the two share a slug and merge; where it cannot be told, the whole legend of each such map is owed, each element once,
-//! and the occasion says so. A map's legend is its drawing now, else (not current: the change itself made it stale) its drawing at the
-//! base. No size-audit is owed: a redrawn glyph is judged, its size is not new to the map. A change that redraws an element is refused
+//! choice, so the two share a slug and merge; where it cannot be told, each element of a compound's legend whose drawn marks differ
+//! between its drawing at the base and now is owed, on the first map where they differ (`marks.rs`, 449 T377: the whole legend owed 53
+//! units on 449 T351's bundle, 48 on marks unchanged or only displaced), and the whole legend of each such map, each element once, only
+//! where the marks cannot be compared - the hamlet driver's (its marks are not read by kind), a drawing not current or not known at the
+//! base, a difference no kind owns - and the occasion says which. A map's legend is its drawing now, else (not current: the change
+//! itself made it stale) its drawing at the base. No size-audit is owed: a redrawn glyph is judged, its size is not new to the map. A change that redraws an element is refused
 //! nothing for want of a declaration: what it owes is read from the change itself. A change of this code that redraws NO element (a
 //! stage function in the driver, a roll's line handing the stages their ground) places or plumbs, and is refused undeclared, as a
 //! stage's change is (`placed`, 449 T238).
@@ -36,9 +39,9 @@ use l7r_gate_core::codeid::rust_tokens;
 use l7r_gate_core::difflib::matching_blocks;
 use l7r_gate_pool::{Kind, LEGACY};
 
-use super::{found, git, re, Legends, Tree, Unit, NOT_ELEMENTS};
+use super::{found, git, marks, re, Folder, Legends, Tree, Unit, NOT_ELEMENTS};
 use crate::record::bundle::py_repr;
-use crate::record::repo::cat_blobs;
+use crate::record::repo::{cat_blobs, universal};
 
 /// How an engine names the kind of a mark: the hamlet driver's writer is told it before the marks (`svg.kind("weir")`), the Mode A
 /// compound's tags each mark (`data-kind="well"`).
@@ -816,6 +819,35 @@ fn engine_reach(
     }
 }
 
+/// The kinds whose drawn marks on compound `d` differ between its drawing at the base and now (`marks.rs`, 449 T377), or why they
+/// cannot be compared: the hamlet driver's marks are not read by kind, a drawing not current is known only by its base legend, one with
+/// no drawing at the base (its blob, else the mirror's copy, as `base_legends` reads it) has nothing to compare, and a difference no kind
+/// owns cannot be told.
+fn compared(
+    tree: &Tree,
+    base: &str,
+    e: &Engine,
+    d: &Folder,
+    current: bool,
+) -> Result<BTreeSet<String>, &'static str> {
+    if e.kind != Kind::Compound {
+        return Err("its marks are not read by kind");
+    }
+    if !current {
+        return Err("its drawing is not current, so only its legend at the base is known");
+    }
+    let path = super::rel(tree.root, &d.file(".svg"));
+    let was = cat_blobs(tree.root, &[format!("{base}:{path}")])
+        .pop()
+        .filter(|t| !t.is_empty())
+        .map(|t| universal(&t))
+        .or_else(|| super::mirror_copy(tree.root, &path))
+        .ok_or("its drawing at the base is not known")?;
+    let now = super::read_replace(&d.file(".svg"));
+    marks::differing(&marks::read(&was), &marks::read(&now))
+        .ok_or("what differs in its drawing is drawn under no kind")
+}
+
 /// The glyph-checks the delta's change to an engine's drawing code owes (`before`: each standing folder's legend at the base).
 pub(super) fn units(tree: &Tree, base: &str, before: &Legends) -> Vec<Unit> {
     if base.is_empty() {
@@ -830,13 +862,14 @@ pub(super) fn units(tree: &Tree, base: &str, before: &Legends) -> Vec<Unit> {
         }
         let (now, was) = sides(tree.root, base, e);
         let EngineReach { told, whole, .. } = engine_reach(e, &now, &was, &mine);
-        let maps: Vec<(&str, &BTreeSet<String>)> = tree
+        // each map of the engine's kind with its legend: its drawing now where current, else its drawing at the base
+        let maps: Vec<(&Folder, &BTreeSet<String>, bool)> = tree
             .folders
             .iter()
             .filter(|d| d.kind == e.kind && d.tree != LEGACY)
-            .filter_map(|d| {
-                let legend = tree.legends.get(&d.name).or_else(|| before.get(&d.name))?;
-                Some((d.name.as_str(), legend))
+            .filter_map(|d| match tree.legends.get(&d.name) {
+                Some(legend) => Some((d, legend, true)),
+                None => before.get(&d.name).map(|legend| (d, legend, false)),
             })
             .collect();
         let mut push = |element: &str, on: &str, why: String| {
@@ -846,7 +879,7 @@ pub(super) fn units(tree: &Tree, base: &str, before: &Legends) -> Vec<Unit> {
             }
         };
         for (element, by) in &told {
-            if let Some((on, _)) = maps.iter().find(|(_, l)| l.contains(element)) {
+            if let Some((d, _, _)) = maps.iter().find(|(_, l, _)| l.contains(element)) {
                 let by: Vec<&str> = by.iter().map(String::as_str).collect();
                 let why = format!(
                     "{} is redrawn: {}'s drawing code changed ({})",
@@ -854,26 +887,36 @@ pub(super) fn units(tree: &Tree, base: &str, before: &Legends) -> Vec<Unit> {
                     e.what,
                     by.join(", ")
                 );
-                push(element, on, why);
+                push(element, &d.name, why);
             }
         }
         if whole.is_empty() {
             continue;
         }
         let by: Vec<&str> = whole.iter().map(String::as_str).collect();
+        let changed = format!(
+            "{}'s drawing code changed ({}) and the elements it redraws cannot be told from the code (a kind chosen at run time, or \
+             the document every mark is written into)",
+            e.what,
+            by.join(", ")
+        );
         let mut seen: BTreeSet<&str> = BTreeSet::new();
-        for (on, legend) in &maps {
+        for (d, legend, current) in &maps {
+            let (on, differ) = (d.name.as_str(), compared(tree, base, e, d, *current));
             for element in legend
                 .iter()
                 .filter(|k| !NOT_ELEMENTS.contains(&k.as_str()))
             {
+                if differ.as_ref().is_ok_and(|kinds| !kinds.contains(element)) {
+                    continue;
+                }
                 if seen.insert(element.as_str()) {
-                    let why = format!(
-                        "{}'s drawing code changed ({}) and the elements it redraws cannot be told (a kind chosen at run time, or the \
-                         document every mark is written into), so the whole legend of {on} is owed",
-                        e.what,
-                        by.join(", ")
-                    );
+                    let why = match &differ {
+                        Ok(_) => format!(
+                            "{changed}, and its drawn marks on {on} differ from the base's drawing (449 T377)"
+                        ),
+                        Err(cannot) => format!("{changed}, so the whole legend of {on} is owed: {cannot}"),
+                    };
                     push(element, on, why);
                 }
             }

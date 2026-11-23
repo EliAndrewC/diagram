@@ -4,7 +4,7 @@
 use std::path::Path;
 
 use super::super::super::tests::{
-    commit, compound, drawn, feature, hamlet, put, repo, sh, started,
+    commit, compound, drawn, feature, hamlet, put, redraw, repo, sh, started,
 };
 use super::super::{all_owed, check_declared, Unit};
 use super::*;
@@ -210,6 +210,9 @@ pub fn sheet(k: &str) -> String {
 
 const DRIVER: &str = "rust/phases/src/driver";
 
+/// Compound `c`'s drawing at the base, as `world` draws it (`compound`'s sheet of its three kinds).
+const C: &str = r#"<svg><g data-kind="hall"/><g data-kind="well"/><g data-kind="-"/></svg>"#;
+
 /// Two hamlets - the polder Kuwabata and the comb Inashiro - and a generated compound, the engines that draw them, all at the base.
 fn world(name: &str) -> l7r_shared::tempdir::Held<std::path::PathBuf> {
     let r = repo(name);
@@ -401,7 +404,8 @@ fn where_the_elements_cannot_be_told_the_whole_legend_is_owed() {
     assert_eq!(
         units[0].occasion,
         "the hamlet driver's drawing code changed (rust/phases/src/driver/polder.rs draw_polder) and the elements it redraws cannot \
-         be told (a kind chosen at run time, or the document every mark is written into), so the whole legend of inashiro is owed"
+         be told from the code (a kind chosen at run time, or the document every mark is written into), so the whole legend of inashiro \
+         is owed: its marks are not read by kind"
     );
     // the writer's document, through its tile: every mark is written into it
     reset(&r);
@@ -503,14 +507,17 @@ fn the_compound_engines_marks_owe_their_kinds_on_the_compound() {
     let r = world("compound");
     edit(&r, "rust/mode_a/src/compound/emit.rs", "#9C8C70", "#9C8C71");
     assert_eq!(owed(&r), ["glyph-check--well--c"]);
+    // a mark tagging its caller's kind: what it redraws is read from the drawing (449 T377), here the hall's mark recolored
     reset(&r);
     edit(&r, "rust/mode_a/src/compound/emit.rs", "#E8D2A8", "#E8D2A9");
+    redraw(&r, "c", &C.replace("\"hall\"", "\"hall\" fill=\"#E8D2A9\""));
     let units = all_owed(&r).1;
     assert_eq!(
         units.iter().map(Unit::slug).collect::<Vec<_>>(),
-        ["glyph-check--hall--c", "glyph-check--well--c"]
+        ["glyph-check--hall--c"]
     );
     assert!(units[0].occasion.starts_with("the Mode A compound engine's drawing code changed (rust/mode_a/src/compound/emit.rs building)"));
+    redraw(&r, "c", C);
     reset(&r);
     edit(
         &r,
@@ -518,7 +525,8 @@ fn the_compound_engines_marks_owe_their_kinds_on_the_compound() {
         "emit::building(&mut svg, k);",
         "emit::building(&mut svg, \"hall\");",
     );
-    assert_eq!(owed(&r), ["glyph-check--hall--c", "glyph-check--well--c"]);
+    // the sheet's call of a mark tagging its caller's kind: read from the drawing, here unchanged (449 T377)
+    assert!(owed(&r).is_empty());
     // a mark that calls another draws what that one draws too
     reset(&r);
     edit(
@@ -534,13 +542,15 @@ fn the_compound_engines_marks_owe_their_kinds_on_the_compound() {
     assert!(owed(&r).is_empty());
     // no size-audit: a redrawn glyph is judged, its size is not new
     reset(&r);
+    // a writer method, its drawing unchanged: its uses reach the well's own mark, which the code tells, and `building`'s kind chosen at
+    // run time, which it cannot - judged on the drawing, the hall is not redrawn (449 T377)
     edit(
         &r,
         "rust/mode_a/src/compound/emit.rs",
         "self.out.push_str(attrs);",
         "self.out.push_str(attrs.trim());",
     );
-    assert_eq!(owed(&r), ["glyph-check--hall--c", "glyph-check--well--c"]);
+    assert_eq!(owed(&r), ["glyph-check--well--c"]);
 }
 
 /// RED FIRST (449 T289, the round arbiter's `ask:glyph-wave-449-T289`): T291's genkan porch - a branch added to `buildings`, whose
@@ -595,7 +605,7 @@ fn a_changed_line_naming_its_kind_owes_that_kind_alone() {
         "data-kind=\"{}\"\"##, \"well\");",
     );
     assert_eq!(owed(&r), ["glyph-check--well--c"]);
-    // a placeholder is no kind named: read whole, a run-time kind's whole legend
+    // a placeholder is no kind named: read whole, a run-time kind's - judged on the drawing, here unchanged (449 T377)
     reset(&r);
     edit(
         &r,
@@ -603,7 +613,7 @@ fn a_changed_line_naming_its_kind_owes_that_kind_alone() {
         runtime,
         &format!("    s.rect(r#\"data-kind=\"-\"\"#);\n{runtime}"),
     );
-    assert_eq!(owed(&r), ["glyph-check--hall--c", "glyph-check--well--c"]);
+    assert!(owed(&r).is_empty());
 }
 
 /// The legend an element is judged on is the map's drawing now, else (not current: the change itself made it stale) its drawing at
@@ -728,4 +738,82 @@ fn a_change_to_the_drivers_placement_is_refused_until_an_occasion_is_declared() 
     );
     edit(&r, &format!("{DRIVER}/tests.rs"), "\"x\"", "\"y\"");
     assert!(check_declared(&r).is_none());
+}
+
+/// RED FIRST (449 T377, the round arbiter's `ask:glyph-occasions-emit-449-T351`): where the code cannot tell which kinds a change
+/// redraws (`building`'s kind chosen at run time), each compound's whole legend was owed - 53 units on 449 T351's bundle, 48 of them on
+/// marks unchanged or only displaced; it owes each kind whose drawn marks differ between the base's drawing and now's, on the first map
+/// where they differ, and the whole legend only where the marks cannot be compared.
+#[test]
+fn where_the_code_cannot_tell_the_kinds_whose_marks_differ_are_owed() {
+    let r = world("marks");
+    compound(&r, "d", &["hall", "kiln", "-"]);
+    commit(&r, "a second compound");
+    sh(&r, "git update-ref refs/remotes/origin/main HEAD");
+    edit(&r, "rust/mode_a/src/compound/emit.rs", "#E8D2A8", "#E8D2A9");
+    // nothing drawn differs: nothing owed
+    assert!(owed(&r).is_empty());
+    // the hall redrawn on c: the hall alone, where the fallback owed both legends
+    redraw(&r, "c", &C.replace(r#""hall""#, r#""hall" fill="x""#));
+    let units = all_owed(&r).1;
+    assert_eq!(
+        units.iter().map(Unit::slug).collect::<Vec<_>>(),
+        ["glyph-check--hall--c"]
+    );
+    assert!(units[0].occasion.ends_with(
+        "cannot be told from the code (a kind chosen at run time, or the document every mark is written into), and its drawn marks \
+         on c differ from the base's drawing (449 T377)"
+    ));
+    // drawn the same on c and redrawn on d: owed on d, the first map where it differs
+    redraw(&r, "c", C);
+    redraw(
+        &r,
+        "d",
+        r#"<svg><g data-kind="hall" fill="x"/><g data-kind="kiln"/><g data-kind="-"/></svg>"#,
+    );
+    assert_eq!(owed(&r), ["glyph-check--hall--d"]);
+    // what differs is drawn under no kind (the document's own tag): the whole legend of c, and d judged on its marks
+    redraw(
+        &r,
+        "d",
+        r#"<svg><g data-kind="hall"/><g data-kind="kiln"/><g data-kind="-"/></svg>"#,
+    );
+    redraw(&r, "c", &C.replace("<svg>", r#"<svg viewBox="0 0 1 1">"#));
+    let units = all_owed(&r).1;
+    assert_eq!(
+        units.iter().map(Unit::slug).collect::<Vec<_>>(),
+        ["glyph-check--hall--c", "glyph-check--well--c"]
+    );
+    assert!(units[0].occasion.ends_with(
+        "so the whole legend of c is owed: what differs in its drawing is drawn under no kind"
+    ));
+    // a drawing not current is known only by its legend at the base: its whole legend
+    redraw(&r, "c", C);
+    put(&r, "pool/compounds/c/c.svg", &C.replace("hall", "hall2"));
+    let units = all_owed(&r).1;
+    assert!(units.iter().any(|u| u.slug() == "glyph-check--well--c"
+        && u.occasion
+            .ends_with("its drawing is not current, so only its legend at the base is known")));
+}
+
+/// A compound whose drawing the base does not hold (no blob, no mirror copy) has nothing to compare: its whole legend is owed.
+#[test]
+fn a_drawing_the_base_does_not_hold_owes_its_whole_legend() {
+    let r = world("unheld");
+    sh(
+        &r,
+        "git rm -q --cached pool/compounds/c/c.svg && git commit -qm untracked",
+    );
+    sh(&r, "git update-ref refs/remotes/origin/main HEAD");
+    edit(&r, "rust/mode_a/src/compound/emit.rs", "#E8D2A8", "#E8D2A9");
+    // read alone: in the whole lookup each is owed first as new to c, its legend at the base read empty
+    let (tree, base) = (super::super::Tree::read(&r), super::super::base_of(&r).0);
+    let units = units(&tree, &base, &super::super::Legends::default());
+    assert_eq!(
+        units.iter().map(Unit::slug).collect::<Vec<_>>(),
+        ["glyph-check--hall--c", "glyph-check--well--c"]
+    );
+    assert!(units[0]
+        .occasion
+        .ends_with("so the whole legend of c is owed: its drawing at the base is not known"));
 }

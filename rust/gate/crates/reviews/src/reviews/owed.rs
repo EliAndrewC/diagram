@@ -677,6 +677,16 @@ fn moved_only(root: &Path, base: &str, names: &[String]) -> BTreeSet<String> {
 /// Every owed unit, detected and declared, deduplicated, in dispatch order: `(the base's description, units, problems)`.
 #[must_use]
 pub fn all_owed(root: &Path) -> (String, Vec<Unit>, Vec<String>) {
+    let (desc, units, problems, _) = owed_discharged(root);
+    (desc, units, problems)
+}
+
+/// A unit the round arbiter's accept discharged (449 T377): its slug and the ruling's trigger.
+pub type Discharged = (String, String);
+
+/// [`all_owed`], with the glyph units a round arbiter's accept discharged taken out of its units and named (`discharged.rs`).
+#[must_use]
+pub fn owed_discharged(root: &Path) -> (String, Vec<Unit>, Vec<String>, Vec<Discharged>) {
     let (base, desc) = base_of(root);
     let tree = Tree::read(root);
     let declared = declared(&tree, &base);
@@ -715,9 +725,10 @@ pub fn all_owed(root: &Path) -> (String, Vec<Unit>, Vec<String>) {
         }
     }
     seen.sort_by(|a, b| (rank(a), &a.subject).cmp(&(rank(b), &b.subject)));
+    let taken = discharged::take(&tree, &mut seen);
     let mut problems = hidden::named(&tree, &before);
     problems.extend(declared.problems);
-    (desc, seen, problems)
+    (desc, seen, problems, taken)
 }
 
 /// The units DUE: every non-glyph unit, and the glyph units the feature's hour makes due; at `landing`, every owed unit.
@@ -827,7 +838,9 @@ mod cli;
 pub use cli::{cli, cli_in};
 mod declared;
 pub mod deferred;
+pub mod discharged;
 mod hidden;
+mod marks;
 mod redrawn;
 #[cfg(test)]
 pub use declared::occasions_section;

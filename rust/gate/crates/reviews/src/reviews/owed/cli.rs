@@ -9,7 +9,7 @@ use std::path::Path;
 use l7r_shared::env::Rooted;
 
 use super::super::{git, glyph, py_path, reply};
-use super::{all_owed, check_declared, check_drawn, folders, ruling, undrawn, Unit};
+use super::{check_declared, check_drawn, folders, owed_discharged, ruling, undrawn, Unit};
 use crate::record::args::{parse, Spec};
 use crate::record::bundle::py_repr;
 use crate::Reply;
@@ -133,7 +133,7 @@ fn run(root: &Rooted, p: &crate::record::args::Parsed, mark: &str) -> Reply {
         return reply(out, String::new(), code);
     }
     let landing = p.on("--landing");
-    let (desc, all, problems) = all_owed(root);
+    let (desc, all, problems, taken) = owed_discharged(root);
     let (due, waiting) = if landing {
         (all.clone(), Vec::new())
     } else {
@@ -147,6 +147,14 @@ fn run(root: &Rooted, p: &crate::record::args::Parsed, mark: &str) -> Reply {
     if p.on("--why") {
         out += &ruling(&desc, &units, &problems);
         out.push('\n');
+        if !taken.is_empty() {
+            let each: Vec<String> = taken.iter().map(|(s, by)| format!("{s} ({by})")).collect();
+            let _ = writeln!(
+                out,
+                "glyph checks discharged by the round arbiter's accept, their marks as it bound them (449 T377): {}",
+                each.join(", ")
+            );
+        }
         if !waiting.is_empty() {
             let each: Vec<String> = waiting
                 .iter()

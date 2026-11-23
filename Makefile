@@ -974,6 +974,12 @@ review-verdict:  ## [project] a review check's LAST act - write the unit's verdi
 ##  FINDINGS=<file>    a JSON list of {"id", "severity", "what"}; ids default to F1, F2, ...
 	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" reviews prereq verdict --clone "$$(git rev-parse --show-toplevel)" --unit "$(or $(UNIT),$(MAP))" --verdict "$(VERDICT)" $(if $(FINDINGS),--findings-file "$(FINDINGS)",)
 
+review-discharge: ## [project] the round arbiter's accept recorded as the discharge of owed glyph-checks, each bound to its kind's marks as drawn now: the owed list drops them while those marks stay so (449 T377)   RULING=<trigger> UNITS="<unit> ..."
+##  RULING=<trigger>   the arbiter's ruling, an `accept` in a specs/*/arbiter.jsonl (e.g. ask:glyph-occasions-emit-449-T351)
+##  UNITS="<u> ..."    the owed glyph-check units it accepts; all or none are recorded
+	@if [ -z "$(RULING)" ] || [ -z "$$UNITS" ]; then printf 'make review-discharge: RULING=<trigger> and UNITS="<unit> ..." are required - e.g. make review-discharge RULING=ask:glyph-occasions-emit-449-T351 UNITS="glyph-check--well--county-magistracy-example"\n' >&2; exit 2; fi
+	@"$$(git rev-parse --show-toplevel)/scripts/gates/l7r-gate.sh" reviews discharge --root "$$(git rev-parse --show-toplevel)" --ruling "$(RULING)" $$UNITS
+
 parts-sweep:     ## [tests] run each split guard suite at 1, 2, 3 and 8 parts and report any count whose result differs - after a suite's cases change; never in the gate   [SUITES="test-pair-hooks.sh ..."]
 	@set -f; bash tests/hooks/parts_sweep.sh $$SUITES
 

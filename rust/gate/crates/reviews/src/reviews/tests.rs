@@ -167,6 +167,12 @@ pub(super) fn compound(root: &Path, name: &str, kinds: &[&str]) {
     entry(root, "compounds", name, "mode-a", ".compound.json", ".svg");
 }
 
+/// Generated compound `name` drawn again as `svg`, and current (449 T377: a change the code cannot tell is judged on the drawn marks).
+pub(super) fn redraw(root: &Path, name: &str, svg: &str) {
+    put(root, &format!("pool/compounds/{name}/{name}.svg"), svg);
+    entry(root, "compounds", name, "mode-a", ".compound.json", ".svg");
+}
+
 /// The generation cache's entry for `pool/<tier>/<name>`, drawn by `engine` (the stand-in the stub launcher names) from its spec, with
 /// its one artifact, so the drawing is served as current.
 fn entry(root: &Path, tier: &str, name: &str, engine: &str, spec: &str, artifact: &str) {
