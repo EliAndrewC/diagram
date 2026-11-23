@@ -13,7 +13,7 @@ fn real() -> PathBuf {
 #[test]
 fn the_table_counts_its_kinds_in_its_order() {
     assert_eq!(HAMLET.iter().map(|f| f.kinds.len()).sum::<usize>(), 61);
-    assert_eq!(SHEET.iter().map(|f| f.kinds.len()).sum::<usize>(), 100);
+    assert_eq!(SHEET.iter().map(|f| f.kinds.len()).sum::<usize>(), 101);
     assert_eq!(HAMLET_REGISTRY.kinds()[0].1.key, "farmhouse");
     assert_eq!(by_file(&HAMLET_REGISTRY)[0].0, "dikepond");
 }
@@ -42,6 +42,6 @@ fn every_kind_has_its_file_and_no_file_is_an_orphan() {
     }
     // and every file is one the registry loads (the Python's import)
     assert_eq!(classes(&real()).unwrap().len(), 61);
-    assert_eq!(compound_classes(&real()).unwrap().len(), 100);
+    assert_eq!(compound_classes(&real()).unwrap().len(), 101);
     assert_eq!(SHEET_REGISTRY.dir, "sheet");
 }

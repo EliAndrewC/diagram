@@ -49,7 +49,7 @@ pub(crate) fn count_at(kind: &str, f: &str, n: u64) {
 /// The size sweep's pairs the generator holds before it writes: the audit's, and the bath under the house.
 ///
 /// Research:
-///     size hierarchy - research/questions/0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html: the residence the largest domestic building and the small storehouses well below the rowhouse - the generator holds the audit's nine pairs (a storehouse and the tax archive under the barracks among them) and one more as strictly smaller in area, the bath under the residence; the office hall, residence and rowhouse order is held only as far as the audit's nine pairs hold it
+///     size hierarchy - research/questions/0116-the-size-of-a-compound-and-the-rank-of-its-buildings.drawing.html: the residence the largest domestic building and the small storehouses below the rowhouse, the order only - the generator holds the audit's eleven pairs (a storehouse and the tax archive under the barracks among them) and one more as strictly smaller in area, the bath under the residence; the office hall, residence and rowhouse order is held only as far as the audit's eleven pairs hold it
 pub const RANKS: [(&str, &str); 1] = [("bath", "residence")];
 
 /// The knobs the program records, each re-rolled from the sheet's seed by the docs' formula and held to the form recorded.

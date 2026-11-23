@@ -411,6 +411,16 @@ fn check(
     let mut snapshot_of = BTreeMap::new();
     let mut maps = BTreeSet::new();
     for n in names {
+        if !on.contains_key(n) && super::owed::is_unit_slug(n) {
+            // a unit's slug is no map name (449 T312): the unit is not owed now, most often because a generated compound the cache does
+            // not serve has no legend, so the elements new to it owe nothing until it is redrawn
+            problems.push(format!(
+                "FR-005 {n}: no review unit of that name is owed now - a generated compound the generation cache does not serve has no \
+                 legend, so its glyph-check and size-audit units drop out until it is drawn: `make verify` redraws the maps and re-takes \
+                 the snapshots; `scripts/gates/l7r-gate.sh reviews owed --root <clone> --units` lists the units owed and their slugs"
+            ));
+            continue;
+        }
         let map = on.get(n).unwrap_or(n);
         if on.get(n).is_some_and(|m| !m.is_empty()) {
             snapshot_of.insert(map.clone(), n.clone());

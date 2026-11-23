@@ -237,29 +237,42 @@
     <text font-size="9" font-style="italic" fill="#3A2E1C">well</text>
   </g>
 
+  <!-- West to east the writing and binding rooms stand before the clerks' room, so the clerks' room adjoins the day office as 0113
+       places it at Takayama (impl-drift 2026-11-22; the writing rooms' place a GUESS: Takayama attests them, not where they stood). -->
+  <!-- The hall's back row (feature 449 T313, T315; size-audits 2026-11-22): the clerks' room 40 ft, the writing room 14 ft and the
+       binding room 12 ft (0113: Takayama's kakiyaku-beya, where documents were drawn up, and the room beside it where they were bound;
+       that a county office kept them, and their size, a GUESS), the day office 26 ft (at most ~490 sq ft, Takayama's goyakusho room
+       of 26-28 mats, a province's ceiling) and the official study 18 ft (the study with its anteroom, 16-20 mats; the Kochi domain
+       residences' day rooms), all 16.7 ft deep: the rooms at their sizes, not the row's remainder split two ways. -->
   <!-- Office hall: rear day rooms (clerks, day office, official study) with the dais band
        on the south face overlooking the sand. The clerks' room is a bay of the hall,
        enlarged here: the charcoal tallies are most of this county's paperwork. -->
   <g data-kind="office hall">
     <!-- Each room is its own floor over the hall's fill, the outline on top (feature 264; Ochiba's office hall) -->
     <rect x="360" y="478" width="330" height="84" fill="#DDB87A"/>
-    <rect data-id="clerks-room-1" x="360" y="478" width="120" height="50" fill="#DDB87A" data-kind="clerks' room"/>
-    <rect data-id="day-office-1" x="480" y="478" width="105" height="50" fill="#DDB87A" data-kind="day office"/>
-    <rect data-id="official-study-1" x="585" y="478" width="105" height="50" fill="#DDB87A" data-kind="official study"/>
+    <rect data-id="clerks-room-1" x="438" y="478" width="120" height="50" fill="#DDB87A" data-kind="clerks' room"/>
+    <rect data-id="day-office-1" x="558" y="478" width="78" height="50" fill="#DDB87A" data-kind="day office"/>
+    <rect data-id="official-study-1" x="636" y="478" width="54" height="50" fill="#DDB87A" data-kind="official study"/>
+    <rect data-id="writing-rooms-1" x="360" y="478" width="42" height="50" fill="#DDB87A" data-kind="writing rooms"/>
+    <rect data-id="writing-rooms-2" x="402" y="478" width="36" height="50" fill="#DDB87A" data-kind="writing rooms"/>
     <!-- No genkan (feature 267 pass 2, R07, 0104): the one on this hall's west end faced a strip the granary
          closes, and no face of the hall fronts open ground reached from the forecourt, so Ubame takes the attested
          other form - the middle gate and a stepping-stone path (roji) across the inner garden to the reception. -->
     <rect x="360" y="478" width="330" height="84" fill="none" stroke="#5A3F1E" stroke-width="2.5"/>
     <rect x="360" y="538" width="4" height="14" fill="#4A3318" data-kind="door"/><!-- feature 372 wave 106: its door, so its fire-water tub stands at its entrance (0100) -->
     <line x1="360" y1="528" x2="690" y2="528" stroke="#6B4F2A" stroke-width="0.8" stroke-dasharray="4 3"/>
-    <line x1="480" y1="478" x2="480" y2="528" stroke="#6B4F2A" stroke-width="0.8" stroke-dasharray="4 3"/>
-    <line x1="585" y1="478" x2="585" y2="528" stroke="#6B4F2A" stroke-width="0.8" stroke-dasharray="4 3"/>
+    <line x1="402" y1="478" x2="402" y2="528" stroke="#6B4F2A" stroke-width="0.8" stroke-dasharray="4 3"/>
+    <line x1="438" y1="478" x2="438" y2="528" stroke="#6B4F2A" stroke-width="0.8" stroke-dasharray="4 3"/>
+    <line x1="558" y1="478" x2="558" y2="528" stroke="#6B4F2A" stroke-width="0.8" stroke-dasharray="4 3"/>
+    <line x1="636" y1="478" x2="636" y2="528" stroke="#6B4F2A" stroke-width="0.8" stroke-dasharray="4 3"/>
     <text font-size="11" font-weight="bold" fill="#3A2E1C" data-kind="clerks' room" data-names="clerks-room-1">clerks' room</text>
     <text font-size="11" font-weight="bold" fill="#3A2E1C" data-kind="day office" data-names="day-office-1">day office</text>
-    <text font-size="11" font-weight="bold" fill="#3A2E1C" data-kind="official study" data-names="official-study-1">official study</text>
-    <!-- The magistrate's tatami dais (centered on the court face) -->
-    <rect data-id="magistrate-s-dais-1" x="480" y="530" width="90" height="30" fill="#8C6F3E" stroke="#4A3318" stroke-width="1" data-kind="magistrate's dais"/>
-    <text font-size="9" font-weight="bold" fill="#3A2E1C" data-kind="magistrate's dais" data-names="magistrate-s-dais-1"><tspan>magistrate's</tspan><tspan>dais</tspan></text>
+    <text font-size="9" font-weight="bold" fill="#3A2E1C" data-kind="official study" data-names="official-study-1"><tspan>official</tspan><tspan>study</tspan></text>
+    <text font-size="8" font-weight="bold" fill="#3A2E1C" data-kind="writing rooms" data-names="writing-rooms-1"><tspan>writing</tspan><tspan>room</tspan></text>
+    <text font-size="8" font-weight="bold" fill="#3A2E1C" data-kind="writing rooms" data-names="writing-rooms-2"><tspan>binding</tspan><tspan>room</tspan></text>
+    <!-- The magistrate's tatami dais (centered, on the court face): 18 x 10 ft (feature 449 T316; size-audit 2026-11-22: about the frontage of an 8-12 mat magistrate's room, 12-20 ft wide, an ESTIMATE from the 1810 South Town Magistracy kujiba layout and Kaibara jin'ya's 8-mat 2-ken rooms; its label wrapped and set at 7 px rather than the room widened to fit it) -->
+    <rect data-id="magistrate-s-dais-1" x="498" y="530" width="54" height="30" fill="#8C6F3E" stroke="#4A3318" stroke-width="1" data-kind="magistrate's dais"/>
+    <text font-size="7" font-weight="bold" fill="#3A2E1C" data-kind="magistrate's dais" data-names="magistrate-s-dais-1"><tspan>magistrate's</tspan><tspan>dais</tspan></text>
     <g data-kind="clerks' seats">
       <rect data-id="clerks-seats-1" x="380" y="533" width="80" height="21" fill="#B89868" stroke="#5C4830" stroke-width="0.5"/>
       <text font-size="9" fill="#3A2E1C" data-names="clerks-seats-1">clerk</text>

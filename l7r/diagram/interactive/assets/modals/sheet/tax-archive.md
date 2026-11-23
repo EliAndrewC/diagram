@@ -19,8 +19,8 @@ Guesses:
 - The proportions the plan draws: no account gives a records storehouse's length and depth.
 
 Depiction: The plan draws the archive as a solid plastered storehouse. No fire-water tub stands at it: the tubs
-stand at the wooden buildings, and the archive, like every plastered storehouse, was built not to burn. It stands well below the
-staff's rowhouse in size, as Takayama's small storehouses did. Its door is one small dark block on its wall, standing for
+stand at the wooden buildings, and the archive, like every plastered storehouse, was built not to burn. It stands below the
+staff's rowhouse in size, as Takayama's small storehouses did, though not by Takayama's wide margin: a county office's rowhouse is far smaller than that of an office that governed a whole province. Its door is one small dark block on its wall, standing for
 the pair of plastered leaves that closed a storehouse. Like every building on the plan, it stands a little further from its neighbors than a real office's buildings did, so that each reads apart.
 
 Name: tax archive

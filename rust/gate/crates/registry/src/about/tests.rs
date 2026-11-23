@@ -165,7 +165,7 @@ fn the_registries_load_from_their_files() {
         hamlet[0].json()["siblings"],
         serde_json::json!({"storage shed": "shared"})
     );
-    assert_eq!(compound_classes(&root).unwrap().len(), 100);
+    assert_eq!(compound_classes(&root).unwrap().len(), 101);
     put(
         &root,
         "l7r/diagram/interactive/assets/siblings.json",

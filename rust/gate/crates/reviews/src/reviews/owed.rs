@@ -33,6 +33,14 @@ const CHECKS: [&str; 5] = [
     "size-audit",
     "fix-check",
 ];
+/// Whether a name has a review unit's slug form, `<check>--<subject>` (449 T312): no map's name, since none starts with a check's.
+#[must_use]
+pub fn is_unit_slug(name: &str) -> bool {
+    CHECKS.iter().any(|c| {
+        name.strip_prefix(c)
+            .is_some_and(|rest| rest.starts_with("--"))
+    })
+}
 /// The declarable occasions and the checks each owes (`new-program` owes two).
 pub(super) const DECLARED: [(&str, &[&str]); 8] = [
     ("glyph-redrawn", &["glyph-check"]),

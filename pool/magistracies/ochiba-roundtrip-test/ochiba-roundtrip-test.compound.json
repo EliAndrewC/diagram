@@ -10,11 +10,15 @@
     "its lodgings' dwellings - research/questions/0097-staff-rowhouses-and-barracks-nagaya.drawing.html, research/questions/0106-the-chief-retainers-house-karo-yashiki.drawing.html: 16.5 (the barracks' two dwellings); 17 (the long-house's three dwellings); 34 (the same) - each inside 0097's bays of about 12 to 18 ft, a door to each, as Ochiba's sheet draws them (feature 449 T187)",
     "its doors at each dwelling's middle - GUESS: no page seats a dwelling's door along its face (feature 449 T187) - 0.25 (the barracks' court-face door); 0.5 (the barracks' end door, the long-house's middle door); 1 / 6 and 5 / 6 (the long-house's end doors, at its end dwellings' middles)"
 ,
-    "the armory in the office hall's west end, its back row - research/questions/0123-the-magistrates-manor-in-a-town-where-it-stands-and-which-way-it-faces-jinya-and-yamen.html: Pingyao, with no standing barracks, kept its armory at its great hall's west end, and the program keeps one at every seat (knob 4), in the hall where the main gate is one bay; 14 x 20 ft inside the hall's 120 ft, as Ochiba's hand sheet carves it from the clerks' room's end (its size and the back row a GUESS: no source gives the depth of Pingyao's; feature 449 T276)"
+    "the armory in the office hall's west end, its back row - research/questions/0123-the-magistrates-manor-in-a-town-where-it-stands-and-which-way-it-faces-jinya-and-yamen.html: Pingyao, with no standing barracks, kept its armory at its great hall's west end, and the program keeps one at every seat (knob 4), in the hall where the main gate is one bay; 14 x 16.7 ft, the hand sheet's back row, inside the hall's 120 ft (its size and the back row a GUESS: no source gives the depth of Pingyao's; feature 449 T276); its WEST end the hand sheet's, a GUESS: the record's county halls keep their arms at either end or both (Pingyao and Wuyang west, Jiexiu after 1677 east, Jiexiu in 1591 both end bays; Gujin tushu jicheng, 449 T312 research pass 2026-11-22), and no source says what set the side",
+    "the office hall's back row - research/questions/0113-the-office-hall-and-its-clerks-goyakusho.html: as Ochiba's hand sheet draws it since feature 449 T313 - west to east the armory 14 ft, the writing room and the binding room 16 ft each (Takayama's kakiyaku-beya, where documents were drawn up, and the room beside it where they were bound; that a county office kept them, their place and their size, a GUESS), the clerks' room 26 ft beside the day office, as 0113 places it at Takayama (a room of the hall, as the program makes it, no building of its own, 449 T326), the day office 28 ft (at most about 490 sq ft, Takayama's goyakusho room of 26-28 mats, a province's ceiling; size-audit 2026-11-22) and the official study 20 ft (the study with its anteroom, 16-20 mats; size-audit 2026-11-22), all 16.7 ft deep; the magistrate's dais 18 x 10 ft, about an 8-12 mat room's frontage (size-audit 2026-11-22, an ESTIMATE)",
+    "the rear wicket on the north wall - GUESS: a lesser gate at the rear of the household's court, onto the rear yard, so the night-soil collector reaches the house's privies without crossing the public court (building-review 2026-11-22 O3, 449 T326); the 449 T326 research pass (2026-11-22) found the fujomon, a wicket gate at the rear of a samurai residence for carrying out night soil, the dead and criminals, in three Japanese dictionaries, not yet in the record (filed), and no source for the collector's way through a kitchen or service court; its 6 ft width, as the county example's side gates, and its seat a GUESS",
+    "the office hall's doors - research/questions/0104-the-formal-entrance-and-a-guests-arrival-genkan.drawing.html: the forecourt door at the front band's east end, where the hand sheet's genkan stands, clear of the dais (building-review 2026-11-22 E1, 449 T312); a rear door toward the nakamon at the hall's east end, as the visitors' way runs on through the office to the house (0104; the hand sheet's rear door, feature 267 pass 2; 449 T326); the west door below the armory (a GUESS: no source states an armory's doors, 449 T299)"
   ],
   "envelope": {"w": 267, "h": 200, "divider": 100},
   "gates": [
-    {"kind": "main gate", "wall": "S", "at": 133.5, "width": 13.3}
+    {"kind": "main gate", "wall": "S", "at": 133.5, "width": 13.3},
+    {"kind": "side gate", "wall": "N", "at": 60, "width": 6}
   ],
   "middle_gate": 6,
   "zones": [
@@ -24,7 +28,8 @@
     {"kind": "practice ground", "caption": "practice ground", "x": 200, "y": 104, "w": 30, "h": 30},
     {"kind": "inner court", "caption": "inner court", "x": 3, "y": 73, "w": 64, "h": 24},
     {"kind": "inner court", "caption": "service yard", "x": 119, "y": 3, "w": 106, "h": 48},
-    {"kind": "rear yard", "caption": "rear yard", "x": 47, "y": 3, "w": 70, "h": 16}
+    {"kind": "rear yard", "caption": "rear yard", "x": 47, "y": 3, "w": 70, "h": 16},
+    {"kind": "outer court", "caption": "outer court", "x": 26, "y": 147, "w": 46, "h": 15}
   ],
   "buildings": [
     {"name": "residence", "kind": "residence", "role": "lord", "w": 90, "h": 50, "court": "inner", "wall": "N", "order": 10, "inset": 17.7,
@@ -52,12 +57,15 @@
     {"name": "cinnabar workshop", "kind": "cinnabar workshop", "role": "shrine", "w": 37, "h": 24, "court": "inner", "wall": "E", "order": 4},
     {"name": "karo's house", "kind": "karo's house", "role": "lord", "w": 37, "h": 23, "court": "inner", "wall": "divider", "order": 3},
     {"name": "office hall", "kind": "office hall", "role": "lord", "w": 120, "h": 28, "court": "outer", "wall": "divider", "order": 10,
-     "doors": [{"face": "S", "at": 0.5}, {"face": "W", "at": 0.8}],
+     "doors": [{"face": "S", "at": 0.92}, {"face": "W", "at": 0.8}, {"face": "N", "at": 0.95}],
      "rooms": [
        {"kind": "armory", "caption": "armory", "x": 0, "y": 0, "w": 14, "h": 16.7},
-       {"kind": "day office", "caption": "day office", "x": 14, "y": 0, "w": 53, "h": 16.7},
-       {"kind": "official study", "caption": "official study", "x": 67, "y": 0, "w": 53, "h": 16.7},
-       {"kind": "magistrate's dais", "caption": "magistrate's dais", "x": 45, "y": 18, "w": 30, "h": 10, "style": "dais"},
+       {"kind": "clerks' room", "caption": "clerks' room", "x": 46, "y": 0, "w": 26, "h": 16.7},
+       {"kind": "writing rooms", "caption": "writing room", "x": 14, "y": 0, "w": 16, "h": 16.7},
+       {"kind": "writing rooms", "caption": "binding room", "x": 30, "y": 0, "w": 16, "h": 16.7},
+       {"kind": "day office", "caption": "day office", "x": 72, "y": 0, "w": 28, "h": 16.7},
+       {"kind": "official study", "caption": "official study", "x": 100, "y": 0, "w": 20, "h": 16.7},
+       {"kind": "magistrate's dais", "caption": "magistrate's dais", "x": 51, "y": 18, "w": 18, "h": 10, "style": "dais"},
        {"kind": "clerks' seats", "caption": "clerk", "x": 35, "y": 23, "w": 8, "h": 5, "style": "seat"},
        {"kind": "clerks' seats", "caption": "clerk", "x": 77, "y": 23, "w": 8, "h": 5, "style": "seat"}
      ]},
@@ -70,8 +78,7 @@
     {"name": "cell", "kind": "cell", "role": "cell", "w": 18, "h": 15, "court": "outer", "wall": "E", "order": 1, "interior": "cell"},
     {"name": "gatehouse", "kind": "gatehouse", "role": "dark", "w": 40, "h": 14, "court": "outer", "wall": "S", "order": 8},
     {"name": "stables", "kind": "stables", "role": "service", "w": 18, "h": 24, "court": "outer", "wall": "S", "order": 5, "interior": "stables",
-     "doors": [{"face": "E", "at": 0.5}]},
-    {"name": "clerks' room", "kind": "clerks' room", "role": "plain", "w": 28, "h": 18, "court": "outer", "wall": "W", "order": 3}
+     "doors": [{"face": "E", "at": 0.5}]}
   ],
   "parts": {
     "bath": {"w": 10, "h": 8},

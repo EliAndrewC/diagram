@@ -363,6 +363,13 @@ fn a_map_missing_a_render_or_no_live_map_is_refused_and_a_whole_one_passes() {
     put(&r, "pool/hamlets/m/m.png", "x");
     let clean = check(&["--maps", "m"]);
     assert_eq!((clean.code, clean.stdout.as_str()), (0, ""));
+    // a unit's slug no owed unit bears is no map name: it is refused as a unit not owed now, with how to see the owed ones (449 T312:
+    // a generated compound the cache did not serve had no legend, so its glyph-check and size-audit units were not owed and their
+    // slugs were refused as "no live pool map by that name")
+    let gone = check(&["--maps", "size-audit--side-gate"]).stdout;
+    assert!(gone.contains("size-audit--side-gate: no review unit of that name is owed now"));
+    assert!(gone.contains("l7r-gate.sh reviews owed --root <clone> --units"));
+    assert!(!gone.contains("no live pool map"));
 }
 
 /// A Mode A sheet has no manifest to miss; a unit names the map it is reviewed on (split from the test above, feature 449 T167).

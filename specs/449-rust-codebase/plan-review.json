@@ -1848,6 +1848,18 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-23",
    "declared": "spec-fidelity"
+  },
+  "### T330, T333 (bundle)": {
+   "sha256": "c02a3c12586b82c1905e7071490e4c692e080d10ff0e48ae809e35001123de95",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity"
+  },
+  "### T330, T333 Approach (checklist part A)": {
+   "sha256": "d02f4626526b64546ef30000a1be369f827a40e2863307d0d2edf0218d4a0efc",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -22922,6 +22934,71 @@
      "why": "Ordering, plus fixes to findings that these checks raised on units this change touched."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-23",
+   "blocks": [
+    "### T330, T333 (bundle)",
+    "### T330, T333 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T330/T333 approach: page sessions, two briefs",
+     "summary": "Record edits only, in page sessions under the cap: brief A (0101, 0104, 0113, 0123, registry 14040's Used-for line) for T330, brief B (0098, 0088, 0116's notes, registry 37100) for T333; one queue, A write/check then B write/check, record-owed, modal triage, one closing-checks.",
+     "class": "within",
+     "why": "How the filed follow-ups are worked; the GM's 2026-11-22 'please finish the remaining fixes' asks for exactly these fixes, and the order settles nothing the request left open."
+    },
+    {
+     "id": "T330: passes' reports recovered, passages re-read from the page",
+     "summary": "The four 2026-11-22 passes' reports recovered verbatim from transcripts; each passage re-read from its page (archive copy or make source-pages) before it is cited; the reports' caveats (Kotobank modern definitions, Joge's drawn labels, Sayama's list, Iijima/Suibara rebuilds, Neixiang's reading of 左, Takayama's 書役 reading) carried onto the pages.",
+     "class": "within",
+     "why": "The record's own verbatim-source rule applied to the fix; carrying each source's limits is what step 1 says the record must say. Nothing asked is dropped."
+    },
+    {
+     "id": "T330: Kotobank URL and Japan Heritage portal",
+     "summary": "Use the ledger's raw Kotobank URL, not the pass report's mis-encoded one; the portal still serves a maintenance notice, so the archive's onkura copy is read.",
+     "class": "within",
+     "why": "A measured fact about which copy of a source can be opened; it serves the request's fix (a citation a reader can open) and narrows nothing."
+    },
+    {
+     "id": "T330/T333: the pop-up, county-note, round-trip and docs/buildings.md edits split to T334",
+     "summary": "T330 is narrowed to the record half; the genkan and writing-rooms pop-ups' About gaps, the county notes' genkan-room size, the round trip's rear-wicket pointer and docs/buildings.md's study claim are filed as T334, after the pages, landing before T158; a fix found in a sheet-bundle pop-up is filed into T334, not applied.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Each case adjudicated: the pop-ups' About text, the county notes' room size, the round-trip pointer and the buildings.md claim all state what the pages this bundle writes will say, so they cannot be written correctly before those pages exist (physically ordered, not merely awkward), and those files are held by the live T312-T326 sheet bundle, so editing them here would collide with another session's work. The request's purpose (2026-11-22: finish every remaining fix before the talk; 2026-11-18: fix known bugs before moving on) is kept because no defect is dropped: each is named, filed as T334 and ordered before T158. Nothing is carried past a step unfixed; it is moved one task later behind its own dependency."
+    },
+    {
+     "id": "T330 last resort: a passage the page does not carry",
+     "summary": "Not cited; the finding is stated as the pass's lead in a session comment.",
+     "class": "within",
+     "why": "The research record's rule that only a verbatim passage is cited; refusing to cite an unread passage is a constraint on how the fix is made, not a narrowing of it, and the lead is kept rather than lost."
+    },
+    {
+     "id": "T333 last resort: an unreadable source",
+     "summary": "Put on research/to-download.md via make download-add, never cited.",
+     "class": "within",
+     "why": "The record's GM-only-source rule (step 2's constraint), applied as written."
+    },
+    {
+     "id": "T333 scope: the T317 page checks' findings",
+     "summary": "Fix an unreadable citation, unlinked page names, an unconfirmed romanization, macrons against the record's style and registry 37100/14040 Used-for lines short of their uses.",
+     "class": "within",
+     "why": "Exactly the OUTSIDE THE CHANGE and NOTE findings T317's checks filed; the GM asked that the remaining filed fixes be finished. Nothing filed is left out."
+    },
+    {
+     "id": "T330/T333: drawing pages' labels as GUESSes",
+     "summary": "Where a sheet draws beyond the record (rear wicket, genkan room, writing and binding rooms, the study's place) the drawing pages' labels say so as GUESSes on the record's silence.",
+     "class": "within",
+     "why": "Describes the record honestly where its sources are silent; adds no requirement and narrows none."
+    },
+    {
+     "id": "T330/T333 exits and done",
+     "summary": "Green: every record check recorded, record-owed and modal-bundle owing none of these units, make record CHECK=1 clean; red: the failure recorded and a cannot-be-done claim ruled through make arbiter-ask; one landing.",
+     "class": "within",
+     "why": "Measured completion of the fixes asked for; the red exit routes a refusal to the arbiter rather than quietly dropping work."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -43192,6 +43269,132 @@
      "summary": "Research passes' findings (0101, 0104, 0113, 0123) recorded in the sheets' notes but not yet in the record pages; labels cite the passes; filed as T330 for a page session, landing before T158",
      "class": "within",
      "why": "Not a wrong outcome: the labels cite their sources and no map reads wrong; the record lagging the notes is a filing task, not a defect under constitution XIV v2.36.0."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T330": {
+   "section_sha256": "968d7bb9d9a287976ea28a5146b6122a2dd58806ae91dd79bc4cd16617c16832",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T330/T333 approach: page sessions, two briefs",
+     "summary": "Record edits only, in page sessions under the cap: brief A (0101, 0104, 0113, 0123, registry 14040's Used-for line) for T330, brief B (0098, 0088, 0116's notes, registry 37100) for T333; one queue, A write/check then B write/check, record-owed, modal triage, one closing-checks.",
+     "class": "within",
+     "why": "How the filed follow-ups are worked; the GM's 2026-11-22 'please finish the remaining fixes' asks for exactly these fixes, and the order settles nothing the request left open."
+    },
+    {
+     "id": "T330: passes' reports recovered, passages re-read from the page",
+     "summary": "The four 2026-11-22 passes' reports recovered verbatim from transcripts; each passage re-read from its page (archive copy or make source-pages) before it is cited; the reports' caveats (Kotobank modern definitions, Joge's drawn labels, Sayama's list, Iijima/Suibara rebuilds, Neixiang's reading of 左, Takayama's 書役 reading) carried onto the pages.",
+     "class": "within",
+     "why": "The record's own verbatim-source rule applied to the fix; carrying each source's limits is what step 1 says the record must say. Nothing asked is dropped."
+    },
+    {
+     "id": "T330: Kotobank URL and Japan Heritage portal",
+     "summary": "Use the ledger's raw Kotobank URL, not the pass report's mis-encoded one; the portal still serves a maintenance notice, so the archive's onkura copy is read.",
+     "class": "within",
+     "why": "A measured fact about which copy of a source can be opened; it serves the request's fix (a citation a reader can open) and narrows nothing."
+    },
+    {
+     "id": "T330/T333: the pop-up, county-note, round-trip and docs/buildings.md edits split to T334",
+     "summary": "T330 is narrowed to the record half; the genkan and writing-rooms pop-ups' About gaps, the county notes' genkan-room size, the round trip's rear-wicket pointer and docs/buildings.md's study claim are filed as T334, after the pages, landing before T158; a fix found in a sheet-bundle pop-up is filed into T334, not applied.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Each case adjudicated: the pop-ups' About text, the county notes' room size, the round-trip pointer and the buildings.md claim all state what the pages this bundle writes will say, so they cannot be written correctly before those pages exist (physically ordered, not merely awkward), and those files are held by the live T312-T326 sheet bundle, so editing them here would collide with another session's work. The request's purpose (2026-11-22: finish every remaining fix before the talk; 2026-11-18: fix known bugs before moving on) is kept because no defect is dropped: each is named, filed as T334 and ordered before T158. Nothing is carried past a step unfixed; it is moved one task later behind its own dependency."
+    },
+    {
+     "id": "T330 last resort: a passage the page does not carry",
+     "summary": "Not cited; the finding is stated as the pass's lead in a session comment.",
+     "class": "within",
+     "why": "The research record's rule that only a verbatim passage is cited; refusing to cite an unread passage is a constraint on how the fix is made, not a narrowing of it, and the lead is kept rather than lost."
+    },
+    {
+     "id": "T333 last resort: an unreadable source",
+     "summary": "Put on research/to-download.md via make download-add, never cited.",
+     "class": "within",
+     "why": "The record's GM-only-source rule (step 2's constraint), applied as written."
+    },
+    {
+     "id": "T333 scope: the T317 page checks' findings",
+     "summary": "Fix an unreadable citation, unlinked page names, an unconfirmed romanization, macrons against the record's style and registry 37100/14040 Used-for lines short of their uses.",
+     "class": "within",
+     "why": "Exactly the OUTSIDE THE CHANGE and NOTE findings T317's checks filed; the GM asked that the remaining filed fixes be finished. Nothing filed is left out."
+    },
+    {
+     "id": "T330/T333: drawing pages' labels as GUESSes",
+     "summary": "Where a sheet draws beyond the record (rear wicket, genkan room, writing and binding rooms, the study's place) the drawing pages' labels say so as GUESSes on the record's silence.",
+     "class": "within",
+     "why": "Describes the record honestly where its sources are silent; adds no requirement and narrows none."
+    },
+    {
+     "id": "T330/T333 exits and done",
+     "summary": "Green: every record check recorded, record-owed and modal-bundle owing none of these units, make record CHECK=1 clean; red: the failure recorded and a cannot-be-done claim ruled through make arbiter-ask; one landing.",
+     "class": "within",
+     "why": "Measured completion of the fixes asked for; the red exit routes a refusal to the arbiter rather than quietly dropping work."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T333": {
+   "section_sha256": "968d7bb9d9a287976ea28a5146b6122a2dd58806ae91dd79bc4cd16617c16832",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T330/T333 approach: page sessions, two briefs",
+     "summary": "Record edits only, in page sessions under the cap: brief A (0101, 0104, 0113, 0123, registry 14040's Used-for line) for T330, brief B (0098, 0088, 0116's notes, registry 37100) for T333; one queue, A write/check then B write/check, record-owed, modal triage, one closing-checks.",
+     "class": "within",
+     "why": "How the filed follow-ups are worked; the GM's 2026-11-22 'please finish the remaining fixes' asks for exactly these fixes, and the order settles nothing the request left open."
+    },
+    {
+     "id": "T330: passes' reports recovered, passages re-read from the page",
+     "summary": "The four 2026-11-22 passes' reports recovered verbatim from transcripts; each passage re-read from its page (archive copy or make source-pages) before it is cited; the reports' caveats (Kotobank modern definitions, Joge's drawn labels, Sayama's list, Iijima/Suibara rebuilds, Neixiang's reading of 左, Takayama's 書役 reading) carried onto the pages.",
+     "class": "within",
+     "why": "The record's own verbatim-source rule applied to the fix; carrying each source's limits is what step 1 says the record must say. Nothing asked is dropped."
+    },
+    {
+     "id": "T330: Kotobank URL and Japan Heritage portal",
+     "summary": "Use the ledger's raw Kotobank URL, not the pass report's mis-encoded one; the portal still serves a maintenance notice, so the archive's onkura copy is read.",
+     "class": "within",
+     "why": "A measured fact about which copy of a source can be opened; it serves the request's fix (a citation a reader can open) and narrows nothing."
+    },
+    {
+     "id": "T330/T333: the pop-up, county-note, round-trip and docs/buildings.md edits split to T334",
+     "summary": "T330 is narrowed to the record half; the genkan and writing-rooms pop-ups' About gaps, the county notes' genkan-room size, the round trip's rear-wicket pointer and docs/buildings.md's study claim are filed as T334, after the pages, landing before T158; a fix found in a sheet-bundle pop-up is filed into T334, not applied.",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Each case adjudicated: the pop-ups' About text, the county notes' room size, the round-trip pointer and the buildings.md claim all state what the pages this bundle writes will say, so they cannot be written correctly before those pages exist (physically ordered, not merely awkward), and those files are held by the live T312-T326 sheet bundle, so editing them here would collide with another session's work. The request's purpose (2026-11-22: finish every remaining fix before the talk; 2026-11-18: fix known bugs before moving on) is kept because no defect is dropped: each is named, filed as T334 and ordered before T158. Nothing is carried past a step unfixed; it is moved one task later behind its own dependency."
+    },
+    {
+     "id": "T330 last resort: a passage the page does not carry",
+     "summary": "Not cited; the finding is stated as the pass's lead in a session comment.",
+     "class": "within",
+     "why": "The research record's rule that only a verbatim passage is cited; refusing to cite an unread passage is a constraint on how the fix is made, not a narrowing of it, and the lead is kept rather than lost."
+    },
+    {
+     "id": "T333 last resort: an unreadable source",
+     "summary": "Put on research/to-download.md via make download-add, never cited.",
+     "class": "within",
+     "why": "The record's GM-only-source rule (step 2's constraint), applied as written."
+    },
+    {
+     "id": "T333 scope: the T317 page checks' findings",
+     "summary": "Fix an unreadable citation, unlinked page names, an unconfirmed romanization, macrons against the record's style and registry 37100/14040 Used-for lines short of their uses.",
+     "class": "within",
+     "why": "Exactly the OUTSIDE THE CHANGE and NOTE findings T317's checks filed; the GM asked that the remaining filed fixes be finished. Nothing filed is left out."
+    },
+    {
+     "id": "T330/T333: drawing pages' labels as GUESSes",
+     "summary": "Where a sheet draws beyond the record (rear wicket, genkan room, writing and binding rooms, the study's place) the drawing pages' labels say so as GUESSes on the record's silence.",
+     "class": "within",
+     "why": "Describes the record honestly where its sources are silent; adds no requirement and narrows none."
+    },
+    {
+     "id": "T330/T333 exits and done",
+     "summary": "Green: every record check recorded, record-owed and modal-bundle owing none of these units, make record CHECK=1 clean; red: the failure recorded and a cannot-be-done claim ruled through make arbiter-ask; one landing.",
+     "class": "within",
+     "why": "Measured completion of the fixes asked for; the red exit routes a refusal to the arbiter rather than quietly dropping work."
     }
    ],
    "verdict": "CLEAR"

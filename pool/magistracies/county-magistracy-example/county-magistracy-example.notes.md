@@ -102,7 +102,7 @@ knobs re-rolled from the seed by the generator and held to the forms recorded he
   reception and the guest house both, guests being received in the garden-facing rooms (research buildings 330).
   Pass 5's 188 ft garden ran on beside the servants' row with a bare strip; pass 6 cut it to the house's 68 ft and
   left ~62 x 66 ft of bare inner court east of it. Its size is a GUESS. The band of inner court north of
-  it, east of the house to the shrine's tree (the alley's east end), was open ground until feature 449 T265 seated the granary in it (170 to 220 by 3 to 30 ft), and is again since T274 moved it to the office court.
+  it, east of the house to the shrine's tree (the alley's east end), was open ground until feature 449 T265 seated the granary in it (170 to 220 by 3 to 30 ft), and since T274 moved it to the office court it is the REAR GROUND (T300; 449 T314).
 - **Compound shrine**: a modest shrine, 18 x 14 ft (a GUESS in the 40-1,150 sq ft band) - the hall-shrine ceiling of
   ~30 ft is Ochiba's particular, not the generic post's (docs/building-programs.md: "The shrine is universal
   equipment ... Scale and dedication are the per-manor particular"). It stands in the inner court's north-east corner
@@ -402,7 +402,7 @@ house and the shrine in a back corner. Coverage 31%, every registered check pass
 T265's granary seat, its north gate, its barracks move, the hall at 72 to 199 ft, the hearing court at 102.5 to 182.5 ft and the tax archive
 at 48 to 66 ft.
 
-2026-11-22 (feature 449 T291, T300): the office hall's GENKAN (the formal entrance form's roll; R07 above), a porch of about 12 x 9 ft on its south face at its east end; the roji to the reception no longer drawn. The open band north of the garden, between the reception's end and the shrine, named a REAR GROUND (84 x 30 ft; building-review 2026-11-22, outside its change), Kanazawa's sedo behind the lot (0118, secondhand; what stood on it a GUESS).
+2026-11-22 (feature 449 T291, T300): the office hall's GENKAN (the formal entrance form's roll; R07 above), a porch of about 12 x 9 ft on its south face at its east end; the roji to the reception no longer drawn. The open band north of the garden, between the reception's end and the shrine, named a REAR GROUND (84 x 30 ft; building-review 2026-11-22, outside its change), Kanazawa's sedo behind the lot (0118, secondhand: the ground behind the lot where fruit trees and vegetables grew); drawn bare, the vegetable plot drawn west of the residence by its site roll (the Vegetable garden bullet; 449 T314).
 2026-11-22 (feature 449 T280, T288; building-review 2026-11-22 E1 on T274's sheet): **the karo's door fronts open court again**. T274's
 recentred hall had pushed the tax archive to 34.5 to 52.5 ft, 7.5 ft off the senior retainers' long-house face at 27 ft, so the karo's
 door and his neighbor's opened onto a dead-end lane against the archive's blank west wall. Room first: the office hall now starts at
@@ -418,3 +418,33 @@ Supersedes the entry above's hall at 58.5 to 185.5 ft, archive at 34.5 to 52.5 f
 
 - **2026-11-22 (feature 449 T309)**: the two staff long-houses recounted so both stand below the residence's house block (1,344 sq ft), as 0116's drawing page ranks them (the office hall, then the residence, then the staff's rowhouse - the one office measured, Takayama): the barracks five dwellings of 12 ft, three men a dwelling (0097's one case; Obata's 2-ken foot soldier's dwelling), 22 x 60 ft = 1,320 sq ft; the senior retainers' long-house the karo's 14 ft bay and three dwellings of 12 ft, 24 x 50 ft = 1,200 sq ft; their lengths are GUESSES, the residence the researched Yokota house (0091), so the guesses moved. The ground they gave back left the sheet under the jin'ya coverage band's 30% (0116), so the granary, which 0116 lets be the largest building, is drawn 50 x 36 ft (1,800 sq ft, in the registry's 30-60 by 14-36 ft band, types.json, and 0098's drawing page's 43-50 by 25-36 ft, a GUESS) - a longer residence was priced and refused (past the Yokota house's 49 tsubo), and a larger stable refused by the placer (no room left on the east wall for the barracks). The audit now holds both pairs (HIERARCHY: barracks and retainers' quarters under the residence) on every sheet. `make pack-audit`: every check OK, coverage 30%.
 - **2026-11-22 (feature 449 T303)**: the armory's site is now rolled rather than derived. The sheet draws no gate range, so the roll is between the office hall and a store of its own, exactly `random.Random(zlib.crc32(b"county-magistracy-example:armory site")).choice(["office hall", "a store of its own"])` = office hall. That is where the sheet already draws it (the hall's west end bay, since feature 449 T265), so nothing moved; T303's armory_site check holds the sheet to the roll.
+- **2026-11-22 (feature 449 T313-T316, T314, T320; size-audits and building-reviews of 2026-11-22)**: the office hall's back row at
+  its rooms' sizes, not the old remainder split two ways: the armory 14 ft, the clerks' room 30 ft, the WRITING ROOM 16 ft and the
+  BINDING ROOM 14 ft (0113: Takayama's kakiyaku-beya, where documents were drawn up, and the room beside it where they were bound;
+  that a county office kept them, and their size, a GUESS), the day office 24 ft (at most about 490 sq ft, Takayama's goyakusho room
+  of 26-28 mats, a province's ceiling) and the official study 17 ft (the study with its anteroom, 16-20 mats), all 20 ft deep; the
+  magistrate's dais 18 x 10 ft (about an 8-12 mat room's frontage, an ESTIMATE), centered where the 30 ft dais was, a clerk's seat
+  each side. The hall's east end, 12 ft at its full depth, is a GENKAN ROOM behind the porch (the T314 research pass, 2026-11-22:
+  ATTESTED - a room stood between the step and the working rooms at Joge, 1869, and at Takayama, whose genkan room survives as
+  rebuilt in 1816; Sayama's council hall, 1775, a genkan of 8 mats, a shikidai of 6 and a next room of 8; its 12 x 38 ft, about
+  26 mats, a GUESS from Sayama's three), so the porch no longer opens onto the dais's front band; the porch moved 4 ft east with it
+  (its door at 0.953), 5 ft off the roofed hearing court's east side, where it stood 1 ft off (building-review N1).
+  The REAR GROUND (T300) is the ground 0118 calls the sedo, where fruit trees and vegetables grew; the vegetable garden's site roll
+  with it admitted, `random.Random(zlib.crc32(b"county-magistracy-example:vegetable garden site")).choice(["west of the residence",
+  "on the rear service ground", "on a parcel of its own"])`, lands west of the residence as before (index 0 of two or of three), so
+  the plot stays west and the rear ground is drawn bare (building-review E1). It carries the rear yard's kind but not its band:
+  the 18-45 by 12-30 ft band is the Higuchi rear yard's, between the storehouses and the house; the rear ground's 84 x 30 ft is the
+  sedo's, which 0118 gives no size (a GUESS; N2).
+  The research passes of T314 (2026-11-22), recorded where the plan does not yet follow them: the guest's way to the house ran
+  INDOORS where it is attested (the Edo town magistracies' residence at the back of one connected building, an inner entrance
+  between; no gate or step stone found on the way), so the 46 ft of garden from the middle gate to the veranda is a GUESS (Q1);
+  every Japanese case puts the genkan straight ahead of the main gate with the shirasu to one side (Iwama 1827, Joge 1869, both Edo
+  magistracies), where this plan's gate line leads onto the hearing court and its genkan stands about 40 ft east of it - a
+  DEVIATION this plan carries until the re-composition filed with it (Q2); no source says by what way a jin'ya's tax rice left its
+  store, so the carts' way past the genkan is a GUESS (Q3, SILENT). The re-composition - the genkan on the gate's line, the
+  long-house's 27 x 27 ft dead corner (T320 E2) and the senior retainers' frontage (T320 Q5: the Kii domain's Edo rule gave a
+  married 20-30 koku retainer 3 ken, the Sayama jin'ya's rowhouses 4-6 ken by rank, against the 2-ken foot soldier's dwelling these
+  12 ft bays copy) - is filed as one layout pass, 449 T329; the passes' findings go into the record by T330. The barracks' fifteen are the standing ashigaru contingent, apart from the about
+  15 working samurai (the magistrate, the karo and the senior retainers among them) the staffing anchor counts (building-programs.md;
+  T320 N2).
+- **2026-11-22 (feature 449 T312 bundle)**: the back row's order (impl-drift 2026-11-22 on the writing and binding rooms' claim, DRIFTED): west to east the armory, the writing room, the binding room, the clerks' room and the day office, so the clerks' room adjoins the day office as research/questions/0113-the-office-hall-and-its-clerks-goyakusho.drawing.html places it at Takayama; where the two new rooms stand is a GUESS (Takayama attests them, not their place).

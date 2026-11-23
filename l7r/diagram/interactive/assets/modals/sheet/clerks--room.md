@@ -4,24 +4,25 @@ administration; most were the children of village and town officials, taken on f
 of the officials hired mostly from the district, the goyoba, was partitioned off beside the room where the officials sent by
 the shogunate worked, and a room used only for writing had a binding room beside it. It was a place of work, not of
 lodging: an intendant's staff lived in huts and rowhouses elsewhere in the compound, and the papers were stored in an
-earth-walled storehouse.
+earth-walled storehouse. In Rokugan a county office's clerks are three or four heimen scribes hired from the county town,
+who live in town and come in each day; as the office's permanent staff they probably carry its business from one
+magistrate to the next.
 
 The room was of timber, like the hall it lay in: Takayama's office was a single-story wooden hall roofed with wooden
 shingles. What the room itself looked like beyond its partitions is not recorded.
 
-A Chinese county office kept its clerks in six chambers, by statute two or three men to each, though in practice a
-chamber often ran past that, even to more than a hundred. In Rokugan a county office's clerks are three or four heimen
-scribes hired from the county town, who live in town and come in each day; as the office's permanent staff they probably carry
-its business from one magistrate to the next. How large a clerks' room was is not recorded.
+A Chinese county office kept its clerks in six chambers, by statute two or three men to each, though in practice the
+chambers often ran past that, even to more than a hundred men. At a Chinese yamen each of the six clerks' rooms was generally two bays; how large a clerks' room in a Japanese office hall was is not recorded.
 
 Guesses:
-- Its size on the plan, about 40 by 17 ft for three or four clerks: no measured clerks' room was found.
+- Its size on the plan, about 24 to 40 ft long by the 17 to 20 ft depth of the hall's back row for three or four clerks, varying by
+  sheet: no measured clerks' room was found.
 
-Depiction: The plan draws the clerks' room as a room of the office hall, beside the day office, its floor
-drawn in the hall's own color. No building of their own is drawn for the clerks, to work or to live in.
+Depiction: The plan draws the clerks' room as a room of the office hall's back row, between the binding room and the day office, its
+floor drawn in the hall's own color. No building of their own is drawn for the clerks, to work or to live in.
 
 Name: clerks' room
 Covers: the clerks' room inside the office hall, its floor and its label
 Sources: tedai-jawiki, mapple-takayama-jinya, jinya-kotobank, neixiang-yamen, takayama-jinya-gifu, takayama-jinya-city
-Entry: research/questions/0113-the-office-hall-and-its-clerks-goyakusho.html, research/questions/0100-fire-and-the-fireproof-storehouses-dozo.html
+Entry: research/questions/0113-the-office-hall-and-its-clerks-goyakusho.html, research/questions/0100-fire-and-the-fireproof-storehouses-dozo.html, research/questions/0163-the-provincial-governments-seat-the-governors-compound-and-where-it-stands-yamen.html
 Drawing: research/questions/0113-the-office-hall-and-its-clerks-goyakusho.drawing.html

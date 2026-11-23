@@ -53,6 +53,34 @@
         "band_ft": {}
       },
       {
+        "id": "official_study",
+        "kind": "official study",
+        "band_ft": {
+          "w": [8, 22],
+          "h": [10, 18],
+          "area": [140, 360]
+        },
+        "optional": true
+      },
+      {
+        "id": "day_office",
+        "kind": "day office",
+        "band_ft": {
+          "area": [0, 490]
+        },
+        "optional": true
+      },
+      {
+        "id": "magistrates_dais",
+        "kind": "magistrate's dais",
+        "band_ft": {
+          "w": [12, 20],
+          "h": [8, 12],
+          "area": [100, 240]
+        },
+        "optional": true
+      },
+      {
         "id": "tax_archive",
         "kind": "tax archive",
         "band_ft": {

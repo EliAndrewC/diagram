@@ -105,6 +105,8 @@ areca palm	areca
 ares	are
 arresting tools	three arresting tools
 arrow bamboo	yadake
+arrow lane	archery strip
+arrow lanes	archery strip
 artemisia	artemisia
 artesian	artesian
 arum	arum
@@ -1403,6 +1405,8 @@ fukien	Fujian
 fukugi	fukugi
 fukuro-zeki	fukuro-zeki
 fully involved	fully-involved
+full tile	hongawara
+full-tile	hongawara
 fully-involved	fully-involved
 fumiguruma	treadle wheel
 fumoto	fumoto

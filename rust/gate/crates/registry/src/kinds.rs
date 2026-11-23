@@ -524,6 +524,10 @@ pub const SHEET: [Family; 5] = [
                 key: "official study",
             },
             Kind {
+                class: "WritingRooms",
+                key: "writing rooms",
+            },
+            Kind {
                 class: "ClerksSeats",
                 key: "clerks' seats",
             },

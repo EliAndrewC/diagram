@@ -802,7 +802,8 @@ fn the_county_examples_office_hall_has_its_genkan() {
     assert_eq!(hit, 0, "a building stands on the genkan");
     let (text, _) = super::cli::compose(&p, &bands).unwrap();
     let drawn = text.matches(r#"data-kind="genkan""#).count();
-    assert_eq!(drawn, 3, "the porch, its door and its caption");
+    let want = 5; // the porch, its door and its caption; the genkan room behind it and its caption (449 T314 Q4)
+    assert_eq!(drawn, want, "porch, door, caption; genkan room, caption");
 }
 
 #[test]
