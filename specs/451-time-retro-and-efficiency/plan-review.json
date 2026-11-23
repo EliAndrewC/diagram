@@ -810,6 +810,78 @@
    "verdict": "CLEAR",
    "reviewed": "2026-11-23",
    "declared": "round-arbiter"
+  },
+  "### T182 (observed 2026-11-23, 451 T177 and `ask:guard-wordings-sleep-and-slot`: a round-arbiter tooling fix built in Rust inside the task being landed could not be settled - `make arbiter-fix-done` wanted its test on main, `LAND=` goes through `make land-tooling`, which rightly refuses `rust/`, and the task's own `make land` was refused by `fix_hold` until the fix was settled)": {
+   "sha256": "35e6fcaa04862826e1ee2b13b61b2495c2cc99452e407b6d9d90b3c6049dd3ce",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity"
+  },
+  "### T182 Approach (checklist part A)": {
+   "sha256": "132ad60f753b7fd78fd6f1e1408d0b82fd04516d3488afaef591a4d6001603c4",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity"
+  },
+  "### T182 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)": {
+   "sha256": "5a0f1c7665d523ede2fcd47788e1fe6ba694786f45fd11706f2047d701ff6876",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity"
+  },
+  "### T182 (<why: the finding or measurement that files it>)": {
+   "sha256": "bb474d48c4c627758e8973640e84ea6946fd074a0602d918f4b9e100f985d16b",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity"
+  },
+  "### T182 Approach (checklist part A)#2": {
+   "sha256": "67edb4d9a212600303aedf9e5acca10a99de1ddb55190a16fe35c649de4523bc",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity"
+  },
+  "### T179 (observed 2026-11-23, 449 T377's builder: `round:spec-fidelity|plan:specs/449-rust-codebase#T377@3` - the feature's path where its directory name is the form - was ruled in 451's log and its accept recorded 18 of 451's owed plan blocks CLEAR; and T177's builder: the mirror's feature \"\" entry for `reversal:.../context_cap_hooks.rs`, ruled in the clone, held every builder's check dispatch for days)": {
+   "sha256": "6d0a876e394146b0c0993ebd3703b1c8938b4e86f4ba4688653b491f354dfd41",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity"
+  },
+  "### T179 Approach (checklist part A)": {
+   "sha256": "94bacc820c05643d984d57e80a3ed69ce1394320921fdbec93b81240894df5be",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity"
+  },
+  "### T179 (<why: the finding or measurement that files it>)": {
+   "sha256": "a7d2808423b7d85bb60ef2cd7164fc181716602b61b32588d2e3a4bdaf91b56e",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity"
+  },
+  "### T179 Approach (checklist part A)#2": {
+   "sha256": "2e7783c6e5fff2b93e81b8c55fd44ac7510e44c30dfa5e601b971b796f3580d6",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity"
+  },
+  "### T174 (observed 2026-11-23, 451 T170's census: 17 of the 58 corpus files of `make hooks-test HOOKS_ALL=1` empty, repo-safety's, shell-check's and source-block's among them; 451 T177's ranking: guard-file's notice on a Read of a guard file rendered by no suite)": {
+   "sha256": "14347e2b94c97d108f008b66e37e747d6c17c10ab378741aa4098fed4fc9ae58",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity"
+  },
+  "### T174 Approach (checklist part A)": {
+   "sha256": "92c54a901be9ce8461c6629033e46bf2830fc826d2bb42421438934c8298d0ea",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity"
+  },
+  "### T174 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)": {
+   "sha256": "c270406bf8d2d3afa3d6fde16e13c2f6ed6be23795020b9722e75bd9f49fa557",
+   "verdict": "CLEAR",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity"
   }
  },
  "block_reviews": [
@@ -15133,6 +15205,341 @@
    "tasks": [
     "T177"
    ]
+  },
+  {
+   "reviewed": "2026-11-23",
+   "blocks": [
+    "### T182 (<why: the finding or measurement that files it>)",
+    "### T182 (observed 2026-11-23, 451 T177 and `ask:guard-wordings-sleep-and-slot`: a round-arbiter tooling fix built in Rust inside the task being landed could not be settled - `make arbiter-fix-done` wanted its test on main, `LAND=` goes through `make land-tooling`, which rightly refuses `rust/`, and the task's own `make land` was refused by `fix_hold` until the fix was settled)",
+    "### T182 Approach (checklist part A)",
+    "### T182 Approach (checklist part A)#2",
+    "### T182 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T182-route",
+     "summary": "make arbiter-fix-done gains LANDING=<task> FILES= [F=]: checks the fix is done with its test, its files and test committed in the clone, and the task an open task of F; writes no done row but keeps the fix pending in the clone's git dir (arbiter-fix-landing.json); make land writes each pending fix's done row into its home's arbiter.jsonl in the tick commit and forgets the entry once the push lands",
+     "class": "within",
+     "why": "A process fix to the landings, found in this feature's own T177 landing (three commits and a refused landing where one would do); FR-013 counts work that makes the landings faster as performance work, the request asks for efficiency and process improvements and that performance work come first, and the plan's measured before row shows the defect. It adds a route and narrows nothing the GM asked."
+    },
+    {
+     "id": "T182-before-ticks",
+     "summary": "DECISION: the done rows are written BEFORE the ticks, not after as the handoff drafted, because the closing check at a feature's last tick reads open fixes",
+     "class": "within",
+     "why": "An ordering inside the new route chosen so the route works for a landing that closes its feature; writing after would leave that case refused. It makes the route reach every landing rather than fewer."
+    },
+    {
+     "id": "T182-first-pass",
+     "summary": "The land's first pass reads its tasks' hold with the fixes pending on those tasks left out (fix_hold_landing via Ask.landing); a plain make tick is still held",
+     "class": "within",
+     "why": "Feature 379's hold (a fix holds the tick until settled) keeps its purpose: the fix's done row and the tick go out in one commit and one push, or neither does (refused tick undoes the logs, failed push's revert removes the rows). The hold is lifted only for a fix this landing itself settles; every other tick is held as before."
+    },
+    {
+     "id": "T182-undo",
+     "summary": "A refused tick puts the logs back (Settled::undo) and a failed push's revert takes the rows out; the fix stays pending either way",
+     "class": "within",
+     "why": "Keeps the append-only log and the 379 hold honest on failure; no request clause is narrowed."
+    },
+    {
+     "id": "T182-engine-replaced",
+     "summary": "ENGINE=1 (settled a fix committed in the clone at once, so its done row reached main ahead of its code while the landing was still refused) is replaced by LANDING=",
+     "class": "within",
+     "why": "Removes a route whose outcome was wrong (a settled row on main naming code not yet there) in favor of one that carries row and code together; nothing in request.md or the cited requirements asks for ENGINE=1, so its replacement narrows nothing the GM asked."
+    },
+    {
+     "id": "T182-messages",
+     "summary": "fix_hold's message and the on-main refusal name the LANDING= route",
+     "class": "within",
+     "why": "The project's guard rule that a refusal names the compliant command (FR-012's form); serves the route."
+    },
+    {
+     "id": "T182-perf-and-order",
+     "summary": "Filed as performance work; ordered after T179 (same arbiter crate) and lands beside it; exits on make crate-checks over reviews, task, land and arbiter crates with cover at 100%",
+     "class": "within",
+     "why": "FR-013 names work that makes the landings faster as performance work; the order and exits are scheduling and verification of the task's own behavior, not a narrowing."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-23",
+   "blocks": [
+    "### T179 (<why: the finding or measurement that files it>)",
+    "### T179 (observed 2026-11-23, 449 T377's builder: `round:spec-fidelity|plan:specs/449-rust-codebase#T377@3` - the feature's path where its directory name is the form - was ruled in 451's log and its accept recorded 18 of 451's owed plan blocks CLEAR; and T177's builder: the mirror's feature \"\" entry for `reversal:.../context_cap_hooks.rs`, ruled in the clone, held every builder's check dispatch for days)",
+    "### T179 Approach (checklist part A)",
+    "### T179 Approach (checklist part A)#2"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T179-a-named",
+     "summary": "home.rs `named` reads the feature a trigger's words name (plan round NNN-slug#Tnn, spec round NNN-slug, ask:NNN-) and refuses, naming the form, a trigger whose feature or task does not resolve; arbiter-ask, arbiter-bundle and arbiter-ruled ask it before writing; the old refusal's text now gives the plan:<NNN-slug>#<Tnn>@<n> form",
+     "class": "within",
+     "why": "Fixes the observed wrong outcome (449 T377's malformed trigger ruled in 451's log); the refusal reaches only malformed triggers - replay of 693 recorded triggers refuses the one malformed (dated, method stated)."
+    },
+    {
+     "id": "T179-a-resolve",
+     "summary": "`resolve` files a ruling in the named feature, else the feature its owed row was owed in, else the active one, else refuses",
+     "class": "within",
+     "why": "Fixes the observed ruling filed in the wrong feature; refuses only where no feature exists to file in."
+    },
+    {
+     "id": "T179-a-plan-ask-scope",
+     "summary": "an ask with REVIEW=plan may name only tasks of its own feature",
+     "class": "within",
+     "why": "Its only reach is the incident's class (a plan accept in one feature's log clearing another's blocks); refuses no valid ask - 29 recorded REVIEW=plan asks replayed, none refused."
+    },
+    {
+     "id": "T179-b-accept_scope",
+     "summary": "a task with no section is read as the whole plan only where every named task is a task of this feature (feature_task: a box line of its tasks.md or tasks-done.md)",
+     "class": "within",
+     "why": "Fixes 18 of 451's blocks recorded CLEAR by an accept on 449's T377; a feature's own sectionless task keeps its behavior."
+    },
+    {
+     "id": "T179-b-T92-kept",
+     "summary": "DECISION: T92's whole-plan reading of a feature's own task with no section stays as T92 ruled",
+     "class": "within",
+     "why": "Keeps an earlier ruling unchanged; narrows nothing asked."
+    },
+    {
+     "id": "T179-c-pop_everywhere",
+     "summary": "a ruling clears its trigger from the clone's owed file and the mirror's where the entry is this feature's or feature \"\"",
+     "class": "within",
+     "why": "Fixes the observed wrong outcome (the mirror's \"\" entry holding every builder's check dispatch 2026-11-20 to 2026-11-23). The block's wording 'every owed file that holds it' and its goal 'holds no builder anywhere' overstate the reach (sibling clones' files are not cleared, as Found-and-left item 2 says); that is the plan's own claim, not the request's or the spec's, and is to be restated, not a narrowing."
+    },
+    {
+     "id": "T179-c-try_trip_row",
+     "summary": "a tripwire is filed under a resolved feature (root's active, the one its words name, or for a reversal the feature the event log filed the Edit under) or refused and not filed; Found-and-left item 1: a round tripwire in a root with no active feature (the mirror) is now refused at filing",
+     "class": "within",
+     "why": "Filing under feature \"\" is what produced the observed hold; the observed mirror entry was a reversal, which trip_as now files under the Edit's feature. The bundle shows no wrong outcome on the left path: the mirror is never a workspace and has no log to rule in."
+    },
+    {
+     "id": "T179-c-asked_feature",
+     "summary": "asked_feature reads a spec round's feature so its readers read the log where its ruling is filed",
+     "class": "within",
+     "why": "Part of the same fix (red-first: shared crate's spec-round-feature test)."
+    },
+    {
+     "id": "T179-found-left-2",
+     "summary": "a trigger owed in a sibling clone's own owed file stays there when another clone rules it; not filed, as no wrong outcome was observed",
+     "class": "within",
+     "why": "Neither request.md nor the accepted spec states T179's goal, so falling short of the plan's own 'anywhere' wording narrows nothing asked; and the bundle shows no wrong outcome on this path (both recorded incidents are covered by (b) and (c)), so by constitution XIV it is not a known defect left."
+    },
+    {
+     "id": "T179-perf-no",
+     "summary": "Performance work? no - a wrong outcome of the arbiter's record",
+     "class": "within",
+     "why": "FR-013's performance work is a task that makes the loop faster or measures where time goes; a correctness fix of the arbiter's record whose time cost is a side effect of the defect is reasonably classed not-perf, and the classification removes nothing asked."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-23",
+   "blocks": [
+    "### T174 (observed 2026-11-23, 451 T170's census: 17 of the 58 corpus files of `make hooks-test HOOKS_ALL=1` empty, repo-safety's, shell-check's and source-block's among them; 451 T177's ranking: guard-file's notice on a Read of a guard file rendered by no suite)",
+    "### T174 Approach (checklist part A)",
+    "### T174 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D1 suites render through the hook path",
+     "summary": "case_tables::drive names the process's corpus in the test thread's env, so repo-safety, shell-check, source-block and house-style's table render into the corpus via cli -> protocol::run -> keep",
+     "class": "within",
+     "why": "Carries the task's approach and the GM's 2026-11-23 ask that hook output be held for brevity and fidelity; a message no suite renders is held by nothing. Enforcement of what was asked."
+    },
+    {
+     "id": "D2 guard-file, set-down, finished-run fixtures",
+     "summary": "guard-file's case reads a guard script so the generic Read notice renders; set-down section 4b and finished-run section 4 add the missing forms",
+     "class": "within",
+     "why": "Brings unrendered forms of hook messages to the check; no behavior change."
+    },
+    {
+     "id": "D3 Stop printed lines not held",
+     "summary": "A Stop's printed line (finished-run's 'do not end a turn', 'is still going', the dead-producer waiter) reaches no model per T170's request blobs, so it is not held; the Refuse answers (hookErrors) are held",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Implied by the GM's own stated purpose, 'That amount of output consumes tokens': text that reaches no model consumes none, and the premise carries a measurement (T170's request blobs). The Refuse answers that do reach a model are held and priced."
+    },
+    {
+     "id": "D4 30 keys BASELINE by break-even, root Makefile notice left",
+     "summary": "Only guard-file's Read notice clears T177's break-even (31,680 characters a key, measured 2026-11-23) and is reviewed; the other 30 newly held wordings are recorded BASELINE with their per-session figure; the root Makefile's notice keeps the cut clause (64 x 436 = 27,904 < 31,680)",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The GM's review-of-each-hook idea was put as a question ('Maybe even ... What do you think?'); his purpose is fewer tokens with no loss of fidelity. A review costing more than the wording costs a session defeats that purpose (0 to 10,368 a session per family against 31,680 or more a review). Each wording stays held to its budget and none changes, so no fidelity is lost."
+    },
+    {
+     "id": "D5 BASELINE door",
+     "summary": "make guard-messages VERDICT=BASELINE BY=<figure> records a wording no row holds; refuses a held key, an over-budget wording, a why with no number",
+     "class": "within",
+     "why": "The only means of 'record the rest BASELINE with its figure'; its refusals enforce exactly that. Red first."
+    },
+    {
+     "id": "D6 guard-file notice cut",
+     "summary": "375 -> 312 characters after message-check BREVITY FAIL, FIDELITY PASS; round 2 PASS; superseded FAIL row deleted by key",
+     "class": "within",
+     "why": "Exactly the GM's 'same thing with no loss of fidelity and fewer tokens', reviewed by the subagent check he named."
+    },
+    {
+     "id": "D7 house-style refusal fix",
+     "summary": "Reported words set in code spans; refusal rewritten 977 -> 477 after a FIDELITY FAIL, round 2 PASS; superseded rows deleted",
+     "class": "within",
+     "why": "A defect found in-task (a wrong outcome: the push refused the record) fixed red first, fix as we go; the rewrite reviewed for fidelity."
+    },
+    {
+     "id": "D8 found-and-left: per-word keys; corpus test under guard-cases.sh",
+     "summary": "house-style and shell-check wordings keyed per quoted word; the corpus test would fail if a suite named it under guard-cases.sh, none does",
+     "class": "within",
+     "why": "Neither is a wrong outcome: the same fixed wording keyed by a different quoted word, re-keyed together by one cut; no suite names the test. Differences, not defects."
+    },
+    {
+     "id": "D9 perf class and order",
+     "summary": "[perf] under FR-013; after T170/T177, before T173 and T22; reds left are T179's uncommitted work",
+     "class": "within",
+     "why": "Less context a builder call reads is builders'-loop performance work under FR-013; the reds lie in another task's files, not a decision T174 makes."
+    },
+    {
+     "id": "D10 the corpus files still empty, accounted",
+     "summary": "Re-census 2026-11-23: 15 of 61 corpus files empty; 13 are suites of scripts no hook runs (settings.json's one hook command, l7r-hook, calls none; their output reaches a model as a command result; sync-with-main's reaches a session only via clone-sync's notice, which its own suite renders); 2 are guards that build no Answer (event-log, stall-watchdog)",
+     "class": "within",
+     "why": "Round 1's finding (the 14 left unaccounted) is met by a dated, method-labeled observation covering every empty file. Judged by class: the 13 are not hooks, the GM's noun ('A lot of our hooks have somewhat long output'), so leaving them is outside the request rather than an exception to it, and pulling command output in would be unrequested scope; the 2 guards say nothing, so nothing is left unheld. The census moved 58 -> 61 files and 14 -> 15 empties between T170 and today; all 15 of today's are named, so the extra one is accounted."
+    },
+    {
+     "id": "D11 the task line's premise restated",
+     "summary": "finished-run's and set-down's Stop blocks do not bypass protocol::run (both answer Refuse through decide; their corpus files were not empty); what those suites missed were three forms, filled by D2",
+     "class": "within",
+     "why": "A premise restated to what was measured (corpus lines, record rows by guard, check2.out), with the actual gap still fixed; nothing asked is dropped."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-23",
+   "blocks": [
+    "### T182 (observed 2026-11-23, 451 T177 and `ask:guard-wordings-sleep-and-slot`: a round-arbiter tooling fix built in Rust inside the task being landed could not be settled - `make arbiter-fix-done` wanted its test on main, `LAND=` goes through `make land-tooling`, which rightly refuses `rust/`, and the task's own `make land` was refused by `fix_hold` until the fix was settled)",
+    "### T182 Approach (checklist part A)",
+    "### T182 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T182-route",
+     "summary": "make arbiter-fix-done LANDING=<task> FILES=... checks the fix is done with its test, its files and test committed in the clone, and the task open in F; writes no done row and keeps the fix pending in the clone's git dir (arbiter-fix-landing.json); make land's first pass reads the hold with fixes pending on its tasks left out, writes each pending fix's done row into its home's arbiter.jsonl in the tick commit, and forgets the entries once the push lands",
+     "class": "within",
+     "why": "A process-efficiency fix to the project's own landing tooling, found by this feature's own work (T177), and the request asks for process improvements and that performance work go first (2026-11-19, 2026-11-20); filing more such tasks is approved (2026-11-22). Feature 379's rule is kept, not narrowed: the fix still needs its test, a plain make tick stays held, and the done row reaches main only in the same push as the fix's code and the tick, which the full gate of make land has checked."
+    },
+    {
+     "id": "T182-order-before-ticks",
+     "summary": "the done rows are written before the ticks, not after as the handoff drafted, because the closing check at a feature's last tick reads open fixes",
+     "class": "within",
+     "why": "An implementation order inside the route; it keeps a landing that closes its feature from being refused and drops nothing the request or spec asks for."
+    },
+    {
+     "id": "T182-undo-on-refusal",
+     "summary": "a refused tick restores the logs (Settled::undo) and a failed push's revert removes the rows; the fix stays pending either way",
+     "class": "within",
+     "why": "Keeps the invariant that a fix is settled only when its code reaches main; drops nothing asked for."
+    },
+    {
+     "id": "T182-engine-replaced",
+     "summary": "ENGINE=1, which settled a fix committed in the clone at once so its done row reached main ahead of its code, is replaced by LANDING=",
+     "class": "within",
+     "why": "ENGINE=1 produced a wrong outcome (a settled fix whose code was not on main while its landing was still refused); its replacement covers the same case, a fix committed in the clone, with the row tied to the push. Nothing in the request or spec asks for the old route kept."
+    },
+    {
+     "id": "T182-messages",
+     "summary": "fix_hold's message and the on-main refusal name the LANDING= route",
+     "class": "within",
+     "why": "Points the held session at the new compliant command; adds no behavior."
+    },
+    {
+     "id": "T182-sequencing",
+     "summary": "built after T179 (same arbiter crate) and lands beside it; exit is make crate-checks over reviews, task, land and arbiter crates, cover at 100%",
+     "class": "within",
+     "why": "Scheduling and verification of the task's own change only."
+    }
+   ]
+  },
+  {
+   "reviewed": "2026-11-23",
+   "blocks": [
+    "### T179 (observed 2026-11-23, 449 T377's builder: `round:spec-fidelity|plan:specs/449-rust-codebase#T377@3` - the feature's path where its directory name is the form - was ruled in 451's log and its accept recorded 18 of 451's owed plan blocks CLEAR; and T177's builder: the mirror's feature \"\" entry for `reversal:.../context_cap_hooks.rs`, ruled in the clone, held every builder's check dispatch for days)",
+    "### T179 Approach (checklist part A)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "T179-a-home",
+     "summary": "A trigger's feature is resolved once in the arbiter crate's home.rs: `named` reads the feature (and task) the trigger's words name and refuses, naming the form, a trigger whose feature or task does not resolve; `resolve` files a ruling in the named feature, else the owed row's feature, else the active one, else refuses; arbiter-ask, arbiter-bundle and arbiter-ruled ask it before writing.",
+     "class": "within",
+     "why": "Fixes the observed wrong outcome (449 T377's ruling filed in 451's log). The replay (693 triggers, 692 accepted, 1 refused - the malformed one; measured 2026-11-23, method stated) shows no valid trigger in the record is refused, so no valid input is turned away."
+    },
+    {
+     "id": "T179-a-plan-ask-tasks",
+     "summary": "An ask with REVIEW=plan may name only tasks of its own feature.",
+     "class": "within",
+     "why": "The same fix's guard against a ruling clearing another feature's blocks; the replay read 29 REVIEW=plan asks and refused none."
+    },
+    {
+     "id": "T179-a-message",
+     "summary": "The old refusal's `plan:<feature dir>` wording, which misled the 449 builder, now reads `plan:<NNN-slug>#<Tnn>@<n>`.",
+     "class": "within",
+     "why": "Corrects a message that caused the observed wrong outcome."
+    },
+    {
+     "id": "T179-b-accept-scope",
+     "summary": "`accept_scope` reads a task with no section as the whole plan's only where every named task is a task of this feature (`plan::feature_task`); T377 of 449 now clears nothing in 451.",
+     "class": "within",
+     "why": "Directly fixes 18 of 451's plan blocks recorded CLEAR by another feature's accept (observed 2026-11-23)."
+    },
+    {
+     "id": "T179-b-task-ids-case",
+     "summary": "Task ids are read in either case (`plan::task_ids`), shared by the ask's filing check.",
+     "class": "within",
+     "why": "Fixes the observed ask:449-t383-plan-round3 accept read as the whole plan's (39 tasks' blocks CLEAR, 264 archived rows dropped, observed 2026-11-23), and carries the round arbiter's own tooling fix; the replay still refuses only the malformed trigger."
+    },
+    {
+     "id": "T179-b-T92-kept",
+     "summary": "DECISION, a kept earlier ruling: T92's whole-plan reading of a feature's own task with no section (its plan-stage review) stays as T92 ruled it.",
+     "class": "within",
+     "why": "Leaves an earlier ruled behavior unchanged. Both observed wrong outcomes came from a task of ANOTHER feature, or from an id not read because of its case, and both are fixed by the decisions above. No wrong outcome is shown from a feature's own sectionless task being read as the whole plan, so leaving it is not a known defect left. It does not narrow what was asked."
+    },
+    {
+     "id": "T179-c-pop-everywhere",
+     "summary": "A ruling clears its trigger from the ruling clone's owed file and from the mirror's, where the mirror's entry is this feature's or feature \"\"; another feature's entry of the same id stays.",
+     "class": "within",
+     "why": "Fixes the observed mirror entry that held every builder's check dispatch from 2026-11-20 to 2026-11-23. Keeping another feature's same-id entry avoids clearing work this ruling did not rule."
+    },
+    {
+     "id": "T179-c-sibling-left",
+     "summary": "Found and left: a trigger owed in a sibling clone's own owed file is not cleared when another clone rules it.",
+     "class": "within",
+     "why": "Neither request.md nor the spec index asks for anything about owed files, so leaving this case does not narrow what was asked. On the defect test: the section says it was not observed, and the bundle shows no builder held by a sibling's entry, so no wrong outcome is known and no known defect is left. It is the same mechanism as the T177 mirror incident; it stays within only because nothing shows it happening. If a builder is ever seen held by a sibling's entry, that becomes a defect to file."
+    },
+    {
+     "id": "T179-c-trip-feature",
+     "summary": "A tripwire is filed under a feature or not at all (`try_trip_row`): the root's active feature, the one its words name, or for a reversal the feature the event log filed the Edit under; where none resolves it is refused, and a root with no active feature (the mirror) is now refused where it filed feature \"\" (Found and left).",
+     "class": "within",
+     "why": "Removes the source of the feature \"\" entries behind the observed hold. The newly refused case is a root with no active feature (the mirror), which the section says has no log to rule in and hosts no work, so no valid work is turned away; the section says the round guard there still refuses (naming make arbiter-bundle). The bundle does not say what happens to a reversal whose feature does not resolve; the request does not reach feature 375's tripwires either way, so that is not a fidelity finding."
+    },
+    {
+     "id": "T179-c-asked-feature",
+     "summary": "`asked_feature` reads a spec round's feature too, so its readers read the log where its ruling is filed.",
+     "class": "within",
+     "why": "Completes (a): a spec round's ruling must be found where (a) now files it; red-first test listed."
+    },
+    {
+     "id": "T179-exits-done",
+     "summary": "Exits and done: `make crate-checks` over the plan, arbiter, shared, reviews, task, land and guard crates green with cover at 100%, red-first counts recorded, the replay refusing the malformed trigger alone; independent of T174 and T182; one landing.",
+     "class": "within",
+     "why": "Enforcement and verification of the fix the task names; no added scope."
+    },
+    {
+     "id": "T179-not-performance",
+     "summary": "Performance work? no - classed as a fix of a wrong outcome in the arbiter's record.",
+     "class": "within",
+     "why": "The section classes the task as a fix of a wrong outcome (blocks recorded CLEAR that no review read, a ruled trigger refusing dispatches) and gives that reason. The label removes nothing the GM asked for from the fix. FR-013's text is cut in the bundle's index, so this ruling does not judge the label against it."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -23749,6 +24156,206 @@
     ],
     "verdict": "BLOCKED"
    }
+  },
+  "T174": {
+   "section_sha256": "bbb9baf1e6ade015ba759e12e670af187cb537cbc65197d1b3d878a31031ec84",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "D1 suites render through the hook path",
+     "summary": "case_tables::drive names the process's corpus in the test thread's env, so repo-safety, shell-check, source-block and house-style's table render into the corpus via cli -> protocol::run -> keep",
+     "class": "within",
+     "why": "Carries the task's approach and the GM's 2026-11-23 ask that hook output be held for brevity and fidelity; a message no suite renders is held by nothing. Enforcement of what was asked."
+    },
+    {
+     "id": "D2 guard-file, set-down, finished-run fixtures",
+     "summary": "guard-file's case reads a guard script so the generic Read notice renders; set-down section 4b and finished-run section 4 add the missing forms",
+     "class": "within",
+     "why": "Brings unrendered forms of hook messages to the check; no behavior change."
+    },
+    {
+     "id": "D3 Stop printed lines not held",
+     "summary": "A Stop's printed line (finished-run's 'do not end a turn', 'is still going', the dead-producer waiter) reaches no model per T170's request blobs, so it is not held; the Refuse answers (hookErrors) are held",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Implied by the GM's own stated purpose, 'That amount of output consumes tokens': text that reaches no model consumes none, and the premise carries a measurement (T170's request blobs). The Refuse answers that do reach a model are held and priced."
+    },
+    {
+     "id": "D4 30 keys BASELINE by break-even, root Makefile notice left",
+     "summary": "Only guard-file's Read notice clears T177's break-even (31,680 characters a key, measured 2026-11-23) and is reviewed; the other 30 newly held wordings are recorded BASELINE with their per-session figure; the root Makefile's notice keeps the cut clause (64 x 436 = 27,904 < 31,680)",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The GM's review-of-each-hook idea was put as a question ('Maybe even ... What do you think?'); his purpose is fewer tokens with no loss of fidelity. A review costing more than the wording costs a session defeats that purpose (0 to 10,368 a session per family against 31,680 or more a review). Each wording stays held to its budget and none changes, so no fidelity is lost."
+    },
+    {
+     "id": "D5 BASELINE door",
+     "summary": "make guard-messages VERDICT=BASELINE BY=<figure> records a wording no row holds; refuses a held key, an over-budget wording, a why with no number",
+     "class": "within",
+     "why": "The only means of 'record the rest BASELINE with its figure'; its refusals enforce exactly that. Red first."
+    },
+    {
+     "id": "D6 guard-file notice cut",
+     "summary": "375 -> 312 characters after message-check BREVITY FAIL, FIDELITY PASS; round 2 PASS; superseded FAIL row deleted by key",
+     "class": "within",
+     "why": "Exactly the GM's 'same thing with no loss of fidelity and fewer tokens', reviewed by the subagent check he named."
+    },
+    {
+     "id": "D7 house-style refusal fix",
+     "summary": "Reported words set in code spans; refusal rewritten 977 -> 477 after a FIDELITY FAIL, round 2 PASS; superseded rows deleted",
+     "class": "within",
+     "why": "A defect found in-task (a wrong outcome: the push refused the record) fixed red first, fix as we go; the rewrite reviewed for fidelity."
+    },
+    {
+     "id": "D8 found-and-left: per-word keys; corpus test under guard-cases.sh",
+     "summary": "house-style and shell-check wordings keyed per quoted word; the corpus test would fail if a suite named it under guard-cases.sh, none does",
+     "class": "within",
+     "why": "Neither is a wrong outcome: the same fixed wording keyed by a different quoted word, re-keyed together by one cut; no suite names the test. Differences, not defects."
+    },
+    {
+     "id": "D9 perf class and order",
+     "summary": "[perf] under FR-013; after T170/T177, before T173 and T22; reds left are T179's uncommitted work",
+     "class": "within",
+     "why": "Less context a builder call reads is builders'-loop performance work under FR-013; the reds lie in another task's files, not a decision T174 makes."
+    },
+    {
+     "id": "D10 the corpus files still empty, accounted",
+     "summary": "Re-census 2026-11-23: 15 of 61 corpus files empty; 13 are suites of scripts no hook runs (settings.json's one hook command, l7r-hook, calls none; their output reaches a model as a command result; sync-with-main's reaches a session only via clone-sync's notice, which its own suite renders); 2 are guards that build no Answer (event-log, stall-watchdog)",
+     "class": "within",
+     "why": "Round 1's finding (the 14 left unaccounted) is met by a dated, method-labeled observation covering every empty file. Judged by class: the 13 are not hooks, the GM's noun ('A lot of our hooks have somewhat long output'), so leaving them is outside the request rather than an exception to it, and pulling command output in would be unrequested scope; the 2 guards say nothing, so nothing is left unheld. The census moved 58 -> 61 files and 14 -> 15 empties between T170 and today; all 15 of today's are named, so the extra one is accounted."
+    },
+    {
+     "id": "D11 the task line's premise restated",
+     "summary": "finished-run's and set-down's Stop blocks do not bypass protocol::run (both answer Refuse through decide; their corpus files were not empty); what those suites missed were three forms, filled by D2",
+     "class": "within",
+     "why": "A premise restated to what was measured (corpus lines, record rows by guard, check2.out), with the actual gap still fixed; nothing asked is dropped."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T182": {
+   "section_sha256": "c5fcbc920da3190548c5f7a4bd40cc4d5a08a904441e8a55b7f65b6c264321a4",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T182-route",
+     "summary": "make arbiter-fix-done LANDING=<task> FILES=... checks the fix is done with its test, its files and test committed in the clone, and the task open in F; writes no done row and keeps the fix pending in the clone's git dir (arbiter-fix-landing.json); make land's first pass reads the hold with fixes pending on its tasks left out, writes each pending fix's done row into its home's arbiter.jsonl in the tick commit, and forgets the entries once the push lands",
+     "class": "within",
+     "why": "A process-efficiency fix to the project's own landing tooling, found by this feature's own work (T177), and the request asks for process improvements and that performance work go first (2026-11-19, 2026-11-20); filing more such tasks is approved (2026-11-22). Feature 379's rule is kept, not narrowed: the fix still needs its test, a plain make tick stays held, and the done row reaches main only in the same push as the fix's code and the tick, which the full gate of make land has checked."
+    },
+    {
+     "id": "T182-order-before-ticks",
+     "summary": "the done rows are written before the ticks, not after as the handoff drafted, because the closing check at a feature's last tick reads open fixes",
+     "class": "within",
+     "why": "An implementation order inside the route; it keeps a landing that closes its feature from being refused and drops nothing the request or spec asks for."
+    },
+    {
+     "id": "T182-undo-on-refusal",
+     "summary": "a refused tick restores the logs (Settled::undo) and a failed push's revert removes the rows; the fix stays pending either way",
+     "class": "within",
+     "why": "Keeps the invariant that a fix is settled only when its code reaches main; drops nothing asked for."
+    },
+    {
+     "id": "T182-engine-replaced",
+     "summary": "ENGINE=1, which settled a fix committed in the clone at once so its done row reached main ahead of its code, is replaced by LANDING=",
+     "class": "within",
+     "why": "ENGINE=1 produced a wrong outcome (a settled fix whose code was not on main while its landing was still refused); its replacement covers the same case, a fix committed in the clone, with the row tied to the push. Nothing in the request or spec asks for the old route kept."
+    },
+    {
+     "id": "T182-messages",
+     "summary": "fix_hold's message and the on-main refusal name the LANDING= route",
+     "class": "within",
+     "why": "Points the held session at the new compliant command; adds no behavior."
+    },
+    {
+     "id": "T182-sequencing",
+     "summary": "built after T179 (same arbiter crate) and lands beside it; exit is make crate-checks over reviews, task, land and arbiter crates, cover at 100%",
+     "class": "within",
+     "why": "Scheduling and verification of the task's own change only."
+    }
+   ],
+   "verdict": "CLEAR"
+  },
+  "T179": {
+   "section_sha256": "8b162e9da172d5457b95f37241c47b0dcf176d6a20bdbf6f0f12fb85fe0a196f",
+   "reviewed": "2026-11-23",
+   "declared": "spec-fidelity",
+   "decisions": [
+    {
+     "id": "T179-a-home",
+     "summary": "A trigger's feature is resolved once in the arbiter crate's home.rs: `named` reads the feature (and task) the trigger's words name and refuses, naming the form, a trigger whose feature or task does not resolve; `resolve` files a ruling in the named feature, else the owed row's feature, else the active one, else refuses; arbiter-ask, arbiter-bundle and arbiter-ruled ask it before writing.",
+     "class": "within",
+     "why": "Fixes the observed wrong outcome (449 T377's ruling filed in 451's log). The replay (693 triggers, 692 accepted, 1 refused - the malformed one; measured 2026-11-23, method stated) shows no valid trigger in the record is refused, so no valid input is turned away."
+    },
+    {
+     "id": "T179-a-plan-ask-tasks",
+     "summary": "An ask with REVIEW=plan may name only tasks of its own feature.",
+     "class": "within",
+     "why": "The same fix's guard against a ruling clearing another feature's blocks; the replay read 29 REVIEW=plan asks and refused none."
+    },
+    {
+     "id": "T179-a-message",
+     "summary": "The old refusal's `plan:<feature dir>` wording, which misled the 449 builder, now reads `plan:<NNN-slug>#<Tnn>@<n>`.",
+     "class": "within",
+     "why": "Corrects a message that caused the observed wrong outcome."
+    },
+    {
+     "id": "T179-b-accept-scope",
+     "summary": "`accept_scope` reads a task with no section as the whole plan's only where every named task is a task of this feature (`plan::feature_task`); T377 of 449 now clears nothing in 451.",
+     "class": "within",
+     "why": "Directly fixes 18 of 451's plan blocks recorded CLEAR by another feature's accept (observed 2026-11-23)."
+    },
+    {
+     "id": "T179-b-task-ids-case",
+     "summary": "Task ids are read in either case (`plan::task_ids`), shared by the ask's filing check.",
+     "class": "within",
+     "why": "Fixes the observed ask:449-t383-plan-round3 accept read as the whole plan's (39 tasks' blocks CLEAR, 264 archived rows dropped, observed 2026-11-23), and carries the round arbiter's own tooling fix; the replay still refuses only the malformed trigger."
+    },
+    {
+     "id": "T179-b-T92-kept",
+     "summary": "DECISION, a kept earlier ruling: T92's whole-plan reading of a feature's own task with no section (its plan-stage review) stays as T92 ruled it.",
+     "class": "within",
+     "why": "Leaves an earlier ruled behavior unchanged. Both observed wrong outcomes came from a task of ANOTHER feature, or from an id not read because of its case, and both are fixed by the decisions above. No wrong outcome is shown from a feature's own sectionless task being read as the whole plan, so leaving it is not a known defect left. It does not narrow what was asked."
+    },
+    {
+     "id": "T179-c-pop-everywhere",
+     "summary": "A ruling clears its trigger from the ruling clone's owed file and from the mirror's, where the mirror's entry is this feature's or feature \"\"; another feature's entry of the same id stays.",
+     "class": "within",
+     "why": "Fixes the observed mirror entry that held every builder's check dispatch from 2026-11-20 to 2026-11-23. Keeping another feature's same-id entry avoids clearing work this ruling did not rule."
+    },
+    {
+     "id": "T179-c-sibling-left",
+     "summary": "Found and left: a trigger owed in a sibling clone's own owed file is not cleared when another clone rules it.",
+     "class": "within",
+     "why": "Neither request.md nor the spec index asks for anything about owed files, so leaving this case does not narrow what was asked. On the defect test: the section says it was not observed, and the bundle shows no builder held by a sibling's entry, so no wrong outcome is known and no known defect is left. It is the same mechanism as the T177 mirror incident; it stays within only because nothing shows it happening. If a builder is ever seen held by a sibling's entry, that becomes a defect to file."
+    },
+    {
+     "id": "T179-c-trip-feature",
+     "summary": "A tripwire is filed under a feature or not at all (`try_trip_row`): the root's active feature, the one its words name, or for a reversal the feature the event log filed the Edit under; where none resolves it is refused, and a root with no active feature (the mirror) is now refused where it filed feature \"\" (Found and left).",
+     "class": "within",
+     "why": "Removes the source of the feature \"\" entries behind the observed hold. The newly refused case is a root with no active feature (the mirror), which the section says has no log to rule in and hosts no work, so no valid work is turned away; the section says the round guard there still refuses (naming make arbiter-bundle). The bundle does not say what happens to a reversal whose feature does not resolve; the request does not reach feature 375's tripwires either way, so that is not a fidelity finding."
+    },
+    {
+     "id": "T179-c-asked-feature",
+     "summary": "`asked_feature` reads a spec round's feature too, so its readers read the log where its ruling is filed.",
+     "class": "within",
+     "why": "Completes (a): a spec round's ruling must be found where (a) now files it; red-first test listed."
+    },
+    {
+     "id": "T179-exits-done",
+     "summary": "Exits and done: `make crate-checks` over the plan, arbiter, shared, reviews, task, land and guard crates green with cover at 100%, red-first counts recorded, the replay refusing the malformed trigger alone; independent of T174 and T182; one landing.",
+     "class": "within",
+     "why": "Enforcement and verification of the fix the task names; no added scope."
+    },
+    {
+     "id": "T179-not-performance",
+     "summary": "Performance work? no - classed as a fix of a wrong outcome in the arbiter's record.",
+     "class": "within",
+     "why": "The section classes the task as a fix of a wrong outcome (blocks recorded CLEAR that no review read, a ruled trigger refusing dispatches) and gives that reason. The label removes nothing the GM asked for from the fix. FR-013's text is cut in the bundle's index, so this ruling does not judge the label against it."
+    }
+   ],
+   "verdict": "CLEAR"
   }
  }
 }

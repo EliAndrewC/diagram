@@ -55,6 +55,9 @@ OUT=$(say stop)
 check "a new finished run is surfaced" yes "$(has "$OUT" 'finished-run:')"
 check "...a green one still says it is not running" yes "$(has "$OUT" 'NOT still running')"
 check "...and at turn end it says not to report it as going" yes "$(has "$OUT" 'do not end a turn')"
+# 451 T174: a green run surfaced at a prompt, the form a session reads (a Stop's printed line reaches no model), rendered for the budget check
+rec 20260830T121000 "$(date -u +%Y-%m-%dT%H:%M:%SZ)" quick green 12
+check "...and at a prompt a green one says it is not running" yes "$(has "$(say prompt)" 'green (12s). It is NOT still running.')"
 
 echo "--- 5. it reports, it never blocks ---"
 say stop >/dev/null; check "stop exits 0 even with a red run" 0 "$?"

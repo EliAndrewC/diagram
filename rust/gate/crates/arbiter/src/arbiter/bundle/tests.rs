@@ -23,6 +23,11 @@ fn feature(root: &Path) {
     put(root, "specs/500-f/request.md", "the GM's words");
     put(root, "specs/500-f/plan-review.json", &json!({"block_reviews": [{"blocks": ["T1"], "verdict": "CLEAR", "reviewed": "d", "decisions": []}]}).to_string());
     put(root, "specs/500-f/plan.md", "the plan");
+    put(
+        root,
+        "specs/500-f/tasks.md",
+        "# Tasks\n\n- [ ] T1 the plan's task\n",
+    );
 }
 
 fn owed(root: &Path, value: &serde_json::Value) {
@@ -364,4 +369,63 @@ fn the_rare_paths_of_the_arbiters_bundle() {
     );
     std::fs::set_permissions(&spec, std::os::unix::fs::PermissionsExt::from_mode(0o644)).unwrap();
     assert_eq!(failed.code, 1);
+}
+
+#[test]
+fn a_trigger_naming_a_feature_or_task_it_cannot_resolve_is_refused_naming_the_form() {
+    // RED FIRST (451 T179): `round:spec-fidelity|plan:specs/449-rust-codebase#T377@3` - the feature's path, not its directory name -
+    // was bundled, then ruled in the active feature's log, whose accept cleared 18 of its blocks (observed 2026-11-23)
+    no_owed();
+    let root = scratch("arbiter-bundle-form");
+    feature(&root);
+    let o = root.join("out").to_string_lossy().into_owned();
+    for (trigger, said) in [
+        (
+            "round:spec-fidelity|plan:specs/500-f#T1@3",
+            "names no feature",
+        ),
+        (
+            "round:spec-fidelity|plan:500-f#T377@3",
+            "names no task of 500-f",
+        ),
+        ("round:spec-fidelity|specs/500-f#1@3", "names no feature"),
+        (
+            "ask:501-elsewhere",
+            "names feature 501, which 0 directories",
+        ),
+    ] {
+        let r = bundle_cli(&root, &[trigger, "--out", &o]);
+        assert_eq!(r.code, 2, "{trigger}: {}", r.stderr);
+        assert!(r.stderr.contains(said), "{trigger}: {}", r.stderr);
+        let form = [
+            "`round:spec-fidelity|plan:<NNN-slug>#<Tnn>@<n>`",
+            "`round:spec-fidelity|<NNN-slug>#<pass>@<n>`",
+            "`ask:<NNN>-<slug>`",
+        ]
+        .iter()
+        .any(|f| r.stderr.contains(f));
+        assert!(form, "{trigger}: {}", r.stderr);
+    }
+    // a batch's named round is checked too, and an owed ask's REVIEW=plan task
+    let r = bundle_cli(
+        &root,
+        &[
+            "--batch",
+            "--triggers",
+            "round:spec-fidelity|plan:specs/500-f#T1@3",
+            "--out",
+            &o,
+        ],
+    );
+    assert!(r.stderr.contains("names no feature"), "{}", r.stderr);
+    owed(
+        &root,
+        &json!({"ask:500-T9-q": {"kind": "ask", "unit": "", "feature": "500-f", "review": "plan"}}),
+    );
+    let r = bundle_cli(&root, &["ask:500-T9-q", "--out", &o]);
+    assert!(
+        r.stderr.contains("names T9, no task of 500-f"),
+        "{}",
+        r.stderr
+    );
 }

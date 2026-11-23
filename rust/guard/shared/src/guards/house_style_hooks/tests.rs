@@ -137,8 +137,13 @@ fn an_edit_is_corrected_with_its_spans_held_out() {
 #[test]
 fn the_gms_own_words_are_only_reported() {
     let path = "specs/100-x/request.md";
+    // the word it names in a code span (451 T174): the record keeps the text, and the push's house-style delta check refused it bare
+    let named = format!("`{WORD}` [the GM own words");
+    assert!(matches!(report(&edit(path, WORD)), Report::Refused(t) if t.contains(&named)));
+    // ...and a dash, named in words, bare
+    let dash = report(&edit(path, "a \u{2014} b"));
     assert!(
-        matches!(report(&edit(path, WORD)), Report::Refused(t) if t.contains("[the GM own words"))
+        matches!(dash, Report::Refused(t) if t.starts_with("em-dash (U+2014) [the GM own words"))
     );
     let warned = report(&bash(&format!("echo {WORD} >> specs/100-x/request.md")));
     assert!(matches!(warned, Report::Warned(t) if t.contains("records the GM speaking")));

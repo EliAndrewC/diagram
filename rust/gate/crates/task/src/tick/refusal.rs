@@ -33,6 +33,9 @@ pub struct Ask<'a> {
     pub note: &'a str,
     pub escaped: Option<String>,
     pub tree: PathBuf,
+    /// The tasks the land's first pass asks about (451 T182): a round-arbiter tooling fix pending on one of them (`make arbiter-fix-done
+    /// ... LANDING=`) holds none of them, its done row going out in their tick commit; empty for a plain `make tick`, which it holds.
+    pub landing: Vec<String>,
 }
 
 impl<'a> Ask<'a> {
@@ -49,6 +52,7 @@ impl<'a> Ask<'a> {
             note,
             escaped: env("PLAN_REVIEW_OK"),
             tree,
+            landing: Vec::new(),
         }
     }
 }
@@ -259,8 +263,8 @@ pub fn refusal(ask: &Ask, landed: bool, boxes: bool) -> Raise<(String, String)> 
     let asked = [
         boxes_refusal(&text, task, boxes),
         waits(root, dir)?,
-        // 379: an open tooling fix; 383: the hour
-        l7r_gate_reviews::reviews::closing::fix_hold(dir),
+        // 379: an open tooling fix, but one landing with this landing's tasks (451 T182); 383: the hour
+        l7r_gate_reviews::reviews::closing::landing::fix_hold_landing(dir, root, &ask.landing),
         l7r_gate_reviews::reviews::checkpoint::hold(root, None),
         l7r_gate_plan::plan::approach_refusal(dir, root, task).unwrap_or_default(),
         wording::refusal(root, dir, task, section.as_deref())?,

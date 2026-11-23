@@ -59,6 +59,15 @@ echo "4. a question is no way out (the plan review, 2026-10-19)"
 jq -nc '{"type": "assistant", "message": {"content": [{"type": "text", "text": "Shall I go on to the next task?"}]}}' >> "$T/tr.jsonl"
 [ "$(stop)" = 2 ] && ok "a turn ending on a question is refused" || no "question"
 
+echo "4b. the next named: a performance task first, or none where each waits (451 T174: both forms rendered for the budget check)"
+printf -- '- [x] T01 done\n- [ ] T02 the next thing\n- [ ] T03 [perf] a faster loop\n- [ ] GM review (make gm-reviewed F=385)\n' > "$C/specs/385-x/tasks.md"
+rc=$(stop)
+[ "$rc" = 2 ] && grep -q 'start the next (T03 \[perf\] a faster loop - performance work first, FR-013: make task-start F=385 T=T03)' "$T/err" && ok "a performance task is named first" || no "performance first" "rc=$rc $(cat "$T/err")"
+printf -- '- [x] T01 done\n- [ ] T02 the next thing, after T03\n- [ ] T03 the other thing, after T02\n- [ ] GM review (make gm-reviewed F=385)\n' > "$C/specs/385-x/tasks.md"
+rc=$(stop)
+[ "$rc" = 2 ] && grep -q 'start the next (none can start yet: each waits on a day or a landing' "$T/err" && ok "each waits: none named" || no "none can start" "rc=$rc $(cat "$T/err")"
+printf -- '- [x] T01 done\n- [ ] T02 the next thing\n- [ ] GM review (make gm-reviewed F=385)\n' > "$C/specs/385-x/tasks.md"
+
 echo "5. make set-down: a reason of two words or more, recorded; it counts after the task-start only"
 ( cd "$C" && SET_DOWN_WHY="waiting" "$SETDOWN" set-down 385 >/dev/null 2>&1 ); [ $? -ne 0 ] && ok "a one-word reason is refused" || no "one-word reason"
 printf '{"feature": "385-x", "why": "an old one", "utc": "2026-10-18T22:00:00Z"}\n' > "$G/set-downs.jsonl"

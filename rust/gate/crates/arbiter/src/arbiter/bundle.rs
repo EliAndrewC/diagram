@@ -441,8 +441,8 @@ pub fn bundle(
         .get(trigger)
         .cloned()
         .unwrap_or_else(|| Value::Object(Map::new()));
-    let d = trigger_feature_dir(root, trigger)
-        .or_else(|| core::feature_dir_in(root, trigger, root.reader()));
+    // the feature its ruling is filed in: the trigger's own, else where it was owed, else the active one (feature 451 T179)
+    let d = trigger_feature_dir(root, trigger).or_else(|| super::home::resolve(root, trigger).ok());
     if out.exists() {
         remove_tree(out)?;
     }
@@ -685,7 +685,7 @@ pub fn cli_in(args: &[String], base: &Rooted) -> Reply {
         .map(str::to_owned)
         .collect();
     if hit(&MADE_UP, &trigger) {
-        return reply_of_run(String::new(), format!("arbiter-bundle: {} is no trigger - a plan review's round is `round:spec-fidelity|plan:<feature dir>#<task>@<n>`, and a guard's refusal names it. For a process question: make arbiter-ask SUBJECT=<slug> WHY=<what>\n", crate::record::bundle::py_repr(&trigger)), 2);
+        return reply_of_run(String::new(), format!("arbiter-bundle: {} is no trigger - a plan review's round is `round:spec-fidelity|plan:<NNN-slug>#<Tnn>@<n>` (the feature's directory name, never its path), and a guard's refusal names it. For a process question: make arbiter-ask SUBJECT=<slug> WHY=<what>\n", crate::record::bundle::py_repr(&trigger)), 2);
     }
     let check_ask = p.text("--check-ask", "");
     if !check_ask.is_empty() {
@@ -708,12 +708,34 @@ pub fn cli_in(args: &[String], base: &Rooted) -> Reply {
         return reply_of_run(String::new(), "arbiter-bundle: name the TRIGGER the refusal named, or BATCH=1 for every owed round trigger at once\n".to_owned(), 2);
     }
     let out_arg = p.text("--out", "");
+    let extra: Vec<String> = split(p.text("--triggers", ""))
+        .into_iter()
+        .map(str::to_owned)
+        .collect();
+    // a trigger naming a feature or a task that does not resolve is refused, naming the form (feature 451 T179:
+    // `round:spec-fidelity|plan:specs/449-rust-codebase#T377@3` was bundled, then ruled in 451's log)
+    let named: Vec<&String> = if p.on("--batch") {
+        extra.iter().collect()
+    } else {
+        vec![&trigger]
+    };
+    for t in named {
+        let review = core::owed(&root)
+            .get(t.as_str())
+            .and_then(|v| v.get("review"))
+            .and_then(Value::as_str)
+            .unwrap_or("")
+            .to_owned();
+        if let Err(why) = super::home::named(&root, t, &review) {
+            return reply_of_run(
+                String::new(),
+                format!("arbiter-bundle: refused - {why}\n"),
+                2,
+            );
+        }
+    }
     let run = Run::new(&root);
     let done = if p.on("--batch") {
-        let extra: Vec<String> = split(p.text("--triggers", ""))
-            .into_iter()
-            .map(str::to_owned)
-            .collect();
         let out = if out_arg.is_empty() {
             default_root().join("arbiter-batch")
         } else {

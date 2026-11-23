@@ -282,6 +282,71 @@ fn a_second_review_failing_on_brevity_alone_passes_and_a_first_is_refused() {
     }
 }
 
+/// 451 T174: a wording a suite renders newly - one sessions already read, brought to the check - is baselined where T177's break-even
+/// says its review would not repay, with the measured figure; a reviewed wording, or one past its budget, is not.
+#[test]
+fn a_newly_rendered_wording_is_baselined_with_its_figure_and_a_reviewed_or_long_one_is_not() {
+    let d = TempDir::new("messages-new-baseline");
+    let (c, rec) = (d.join("c"), d.join("r.tsv"));
+    let (cs, rs) = (
+        c.to_string_lossy().into_owned(),
+        rec.to_string_lossy().into_owned(),
+    );
+    let (reviewed, fresh) = ("BLOCKED: no. Fix: make x", "BLOCKED: also no. Fix: make y");
+    put(&c, "s.jsonl", &[("g-hooks", "refuse", reviewed.to_owned())]);
+    let k1 = super::key("g-hooks", "refuse", reviewed);
+    assert_eq!(run(&["verdict", &cs, &rs, &k1, "PASS", "agent-1"]).code, 0);
+    put(
+        &c,
+        "s.jsonl",
+        &[
+            ("g-hooks", "refuse", reviewed.to_owned()),
+            ("g-hooks", "refuse", fresh.to_owned()),
+        ],
+    );
+    let k2 = super::key("g-hooks", "refuse", fresh);
+    let figure = "1,200 characters a session, under the break-even 31,680 a key (451 T177)";
+    // a reason with no measured figure is refused, naming the form
+    let bare = run(&["verdict", &cs, &rs, &k2, "BASELINE", "not worth it"]);
+    assert!(
+        bare.code == 1
+            && bare
+                .stderr
+                .contains("BY=\"<its measured characters a session"),
+        "{}",
+        bare.stderr
+    );
+    let unknown = run(&["verdict", &cs, &rs, "0000", "BASELINE", figure]);
+    assert!(unknown.code == 1 && unknown.stderr.contains("no message rendered has key 0000"));
+    // a reviewed wording keeps its verdict
+    let undone = run(&["verdict", &cs, &rs, &k1, "BASELINE", figure]);
+    assert!(
+        undone.code == 1 && undone.stderr.contains("already holds PASS"),
+        "{}",
+        undone.stderr
+    );
+    let said = run(&["verdict", &cs, &rs, &k2, "BASELINE", figure]);
+    assert!(
+        said.code == 0 && said.stdout.contains("recorded BASELINE"),
+        "{}",
+        said.stderr
+    );
+    let rows = record(&rec);
+    assert!(rows[&k2].verdict == "BASELINE" && rows[&k2].by == format!("unreviewed - {figure}"));
+    assert_eq!(rows[&k1].verdict, "PASS");
+    assert_eq!(run(&["check", &cs, &rs]).code, 0);
+    // past its budget a wording is cut or ruled needed, never baselined
+    let long = "word ".repeat(REFUSE_BUDGET / 5 + 1);
+    put(&c, "s.jsonl", &[("g-hooks", "refuse", long.clone())]);
+    let k3 = super::key("g-hooks", "refuse", long.trim());
+    let over = run(&["verdict", &cs, &rs, &k3, "BASELINE", figure]);
+    assert!(
+        over.code == 1 && over.stderr.contains(&format!("budget {REFUSE_BUDGET}")),
+        "{}",
+        over.stderr
+    );
+}
+
 #[test]
 fn past_its_budget_a_wording_passes_only_on_a_review_that_ruled_every_word_needed() {
     let d = TempDir::new("messages-budget");

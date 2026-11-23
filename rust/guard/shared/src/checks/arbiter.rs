@@ -21,6 +21,9 @@ fn re(pattern: &str) -> Regex {
 
 static ASK_FEATURE: LazyLock<Regex> = LazyLock::new(|| re(r"^ask:(\d{3})-"));
 static PLAN_FEATURE: LazyLock<Regex> = LazyLock::new(|| re(r"\|(?:plan|spec):(\d{3})-"));
+/// A spec review's round as the review-round guard writes it, `round:spec-fidelity|<NNN-slug>#<pass>@<n>`: its ruling is filed in
+/// that feature (feature 451 T179), so its readers read it there.
+static SPEC_ROUND: LazyLock<Regex> = LazyLock::new(|| re(r"^round:spec-fidelity\|(\d{3})-"));
 static DISPATCHES: LazyLock<Regex> = LazyLock::new(|| re(r"^(\d+) check dispatches"));
 static EPOCH: LazyLock<Regex> =
     LazyLock::new(|| re(r"^(\d{4})-(\d{1,2})-(\d{1,2})T(\d{1,2}):(\d{1,2}):(\d{1,2})Z$"));
@@ -55,7 +58,9 @@ pub fn spec_dirs(root: &Path, prefix: &str) -> Vec<PathBuf> {
 /// The feature an ask or a plan round names by its number, when exactly one directory has it (`hm_arbiter.asked_feature`).
 #[must_use]
 pub fn asked_feature(root: &Path, trigger: &str) -> Option<PathBuf> {
-    let number = group(trigger, &ASK_FEATURE).or_else(|| group(trigger, &PLAN_FEATURE))?;
+    let number = group(trigger, &ASK_FEATURE)
+        .or_else(|| group(trigger, &PLAN_FEATURE))
+        .or_else(|| group(trigger, &SPEC_ROUND))?;
     let dirs = spec_dirs(root, &format!("{number}-"));
     (dirs.len() == 1).then(|| dirs[0].clone())
 }
@@ -588,25 +593,41 @@ pub fn try_trip_in(
         (kind, unit, detail),
         when,
         review,
-        Who::default(),
+        Filer::default(),
         env,
     )
 }
 
 /// [`trip`] for a reversal, its row naming the session and builder whose Edit made the put-back (`sid`, `by`), so it holds only
-/// their dispatches ([`holds_who`]). False where it is not new or could not be recorded.
+/// their dispatches ([`holds_who`]), and its feature the root's or, where the root names none (the mirror), `filed`: the feature the
+/// event log filed the Edit under (feature 451 T179). False where it is not new, no feature resolves, or it could not be recorded.
 #[must_use]
-pub fn trip_as(root: &Path, trigger: &str, kind: &str, unit: &str, detail: &str, who: Who) -> bool {
+pub fn trip_as(
+    root: &Path,
+    trigger: &str,
+    kind: &str,
+    unit: &str,
+    detail: &str,
+    who: Who,
+    filed: &str,
+) -> bool {
     try_trip_row(
         root,
         trigger,
         (kind, unit, detail),
         &Value::Null,
         "",
-        who,
+        Filer { who, filed },
         &crate::env::opt,
     )
     .unwrap_or(false)
+}
+
+/// Who filed a trigger, and the feature to file it under where its root names none.
+#[derive(Clone, Copy, Default)]
+struct Filer<'a> {
+    who: Who<'a>,
+    filed: &'a str,
 }
 
 fn try_trip_row(
@@ -615,11 +636,19 @@ fn try_trip_row(
     (kind, unit, detail): (&str, &str, &str),
     when: &Value,
     review: &str,
-    who: Who,
+    filer: Filer,
     env: Env,
 ) -> Result<bool, String> {
+    let who = filer.who;
     if rulings_in(root, trigger, env).contains_key(trigger) {
         return Ok(false);
+    }
+    // FILED UNDER A FEATURE OR NOT AT ALL (feature 451 T179): a row with feature "" is every feature's to `mine` - the mirror's
+    // `reversal:...context_cap_hooks.rs`, filed so on 2026-11-20, held every builder's check dispatch for days (observed 2026-11-23)
+    let feature =
+        feature_dir_in(root, trigger, env).map_or_else(|| filer.filed.to_owned(), |d| name_of(&d));
+    if feature.is_empty() {
+        return Err(format!("{trigger}: no feature to file it under - none is active here (.specify/feature.json) and the trigger names none"));
     }
     let common = common_dir(root);
     let mut new = false;
@@ -627,7 +656,6 @@ fn try_trip_row(
         if state.get(trigger).is_some() {
             return false;
         }
-        let d = feature_dir_in(root, trigger, env);
         let mut row = Map::new();
         row.insert("kind".to_owned(), json!(kind));
         row.insert("unit".to_owned(), json!(unit));
@@ -640,10 +668,7 @@ fn try_trip_row(
                 when.clone()
             },
         );
-        row.insert(
-            "feature".to_owned(),
-            json!(d.map_or_else(String::new, |d| name_of(&d))),
-        );
+        row.insert("feature".to_owned(), json!(feature));
         if !review.is_empty() {
             row.insert("review".to_owned(), json!(review));
         }

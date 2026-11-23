@@ -21,6 +21,7 @@
 //! ([`ImplCheck`]) - the binary for `l7r-gate close-check` and `l7r-gate gm-review`, `task`, which builds on `claims`, for the tick - as
 //! `plan::cli` takes the claims tool. T127 ran `impl_check.py --missing-json DIR...` by path here; nothing reaches Python now.
 
+pub mod landing;
 #[cfg(test)]
 mod tests;
 
@@ -221,7 +222,12 @@ pub fn open_fixes(d: &Path) -> Vec<(String, String)> {
 /// Why feature `d` may not move on while an arbiter tooling fix is open, or "" (feature 379 FR-004).
 #[must_use]
 pub fn fix_hold(d: &Path) -> String {
-    let fixes = open_fixes(d);
+    hold_of(&open_fixes(d))
+}
+
+/// The hold of these open fixes, or "" for none. A fix made in `rust/` inside the task being landed lands with it (451 T182):
+/// `land-tooling` refuses `rust/`, so `LANDING=` leaves it pending for that task's `make land`, whose tick commit carries its done row.
+fn hold_of(fixes: &[(String, String)]) -> String {
     if fixes.is_empty() {
         return String::new();
     }
@@ -231,7 +237,7 @@ pub fn fix_hold(d: &Path) -> String {
         .collect::<Vec<_>>()
         .join("\n");
     format!(
-        "the round arbiter's tooling fix is open - make it, with its test, in this feature before going on (feature 379):\n{listed}\n  made:     make arbiter-fix-done ID=\"<trigger>\" NOTE=\"<what was built>\" TEST=<its test under tests/> LAND=\"<the fix's files>\" F=<feature> TICK=<the task> (lands them, settles the fix, ticks the task)\n  overhaul: make arbiter-fix-declined ID=\"<trigger>\" REASON=\"<why it overhauls a process>\" (a question for the GM, owed escalation-check)"
+        "the round arbiter's tooling fix is open - make it, with its test, in this feature before going on (feature 379):\n{listed}\n  made:     make arbiter-fix-done ID=\"<trigger>\" NOTE=\"<what was built>\" TEST=<its test under tests/> LAND=\"<the fix's files>\" F=<feature> TICK=<the task> (lands them, settles the fix, ticks the task)\n  made in rust/, which land-tooling refuses: commit the fix and its test, then the same with LANDING=<the task> FILES=\"<the fix's files>\" in place of LAND= and TICK= - make land F=<feature> T=<the task> settles it in its tick commit\n  overhaul: make arbiter-fix-declined ID=\"<trigger>\" REASON=\"<why it overhauls a process>\" (a question for the GM, owed escalation-check)"
     )
 }
 

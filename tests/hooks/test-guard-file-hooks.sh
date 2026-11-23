@@ -122,8 +122,11 @@ ctx=$(ev "$ROSTER" "" "Read" | "$HOOK" pretool 2>/dev/null)
 if ! printf '%s' "$ctx" | grep -q "roll-audit" && printf '%s' "$ctx" | grep -q "constitution VI" && printf '%s' "$ctx" | grep -q "tests/soak/"; then
   echo "  ok      the Read of the roster names the doctrine and the exits, and no deleted command (feature 449 T225)"; PASS=$((PASS+1))
 else echo "  FAIL    the roster's Read-time context is missing the doctrine or the command: $ctx"; FAIL=$((FAIL+1)); fi
-ctx=$(ev "$ROOT/Makefile" "" "Read" | "$HOOK" pretool 2>/dev/null)
-if printf '%s' "$ctx" | grep -q "GUARD file" && ! printf '%s' "$ctx" | grep -q "roll-audit"; then
+# 451 T174: a guard file that is neither the Makefile nor the roster, since the Makefile takes its own context and so this case never
+# rendered the generic one, which sessions read most (153 times over the coordinator's builders, observed 2026-11-23)
+ctx=$(ev "$ROOT/scripts/hooks/make-only-hooks.sh" "" "Read" | "$HOOK" pretool 2>/dev/null)
+if printf '%s' "$ctx" | grep -q "GUARD_EDIT_OK" && printf '%s' "$ctx" | grep -q 'make guard-edit FILE=' \
+   && ! printf '%s' "$ctx" | grep -qi "root Makefile\|roll-audit\|ROSTER"; then
   echo "  ok      another guard's Read keeps the generic context"; PASS=$((PASS+1))
 else echo "  FAIL    the generic Read context changed: $ctx"; FAIL=$((FAIL+1)); fi
 # GUARD_EDIT_OK: feature 329 - the project Makefile is the one at the repository root; a Makefile below it is not the guard

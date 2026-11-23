@@ -141,7 +141,13 @@ fn the_question_names_its_scope_and_an_archived_section_clears_nothing() {
     let got = arbiter_accept(&dir, trigger, None).unwrap();
     assert!(got.blocks.is_empty() && got.tasks.is_empty() && !got.whole);
     assert!(!dir.join("plan-review.json").exists() || read(&dir).get("tasks").is_none());
-    // a task with no section anywhere is judged by the plan-stage review, as `plan decided` reads it: the whole plan
+    // a task of this feature with no section anywhere is judged by the plan-stage review, as `plan decided` reads it: the whole plan
+    // (T92's ruling, kept by T179)
+    std::fs::write(
+        dir.join("tasks.md"),
+        "# Tasks\n\n- [ ] T01 a\n- [ ] T02 b\n- [ ] T09 c\n",
+    )
+    .unwrap();
     let trigger = "ask:243-T09-third-round";
     std::fs::write(
         dir.join("arbiter.jsonl"),
@@ -154,6 +160,61 @@ fn the_question_names_its_scope_and_an_archived_section_clears_nothing() {
     let got = arbiter_accept(&dir, trigger, None).unwrap();
     assert!(got.whole && got.tasks.is_empty());
     assert_eq!(got.blocks.len(), blocks(AFTER).len());
+}
+
+#[test]
+fn a_task_this_feature_does_not_hold_clears_nothing() {
+    // RED FIRST (451 T179): `round:spec-fidelity|plan:specs/449-rust-codebase#T377@3`, filed in 451's log, named T377 - no task of 451,
+    // no section in its plan or its plan-done - and its accept recorded 18 of 451's owed blocks CLEAR as the whole plan's (observed
+    // 2026-11-23, 449 T377's builder). A named task outside the feature's tasks.md and tasks-done.md is no question about this plan.
+    let dir = feature(Some(AFTER), None);
+    for trigger in [
+        "ask:243-T377-third-round",
+        "round:spec-fidelity|plan:243-x#T377@3",
+    ] {
+        std::fs::write(
+            dir.join("arbiter.jsonl"),
+            format!(
+                "{}\n",
+                json!({"trigger": trigger, "ruling": "accept", "review": "plan"})
+            ),
+        )
+        .unwrap();
+        let got = arbiter_accept(&dir, trigger, None).unwrap();
+        assert!(
+            got.blocks.is_empty() && got.tasks.is_empty() && !got.whole,
+            "{trigger}: {got:?}"
+        );
+        assert!(!dir.join("plan-review.json").exists());
+    }
+    // ...and a task archived in tasks-done.md is still this feature's
+    std::fs::write(
+        dir.join("tasks-done.md"),
+        "# Done\n\n- [x] T377 the archived one\n",
+    )
+    .unwrap();
+    let trigger = "ask:243-T377-third-round";
+    std::fs::write(
+        dir.join("arbiter.jsonl"),
+        format!(
+            "{}\n",
+            json!({"trigger": trigger, "ruling": "accept", "review": "plan"})
+        ),
+    )
+    .unwrap();
+    let got = arbiter_accept(&dir, trigger, None).unwrap();
+    assert!(got.whole, "{got:?}");
+}
+
+#[test]
+fn a_task_named_in_lowercase_is_that_task() {
+    // RED FIRST (451 T179, the round arbiter's fix on 449): `ask:449-t383-plan-round3`'s accept read no task in "t383", so it was read
+    // as the whole plan's, marking 39 other tasks' blocks CLEAR and dropping 264 archived rows of 449's plan-review.json (observed
+    // 2026-11-23, restored by hand). A task id is read in either case: "t01" is T01.
+    let (dir, got) = accepted_on("ask:243-t01-plan-round3", "plan");
+    assert_eq!(got["blocks"], json!(["## T01 the bath"]));
+    assert_eq!(got["tasks"], json!(["T01"]));
+    assert_eq!(owed_now(&dir), ["## Shared", "## T02 the wells"]);
 }
 
 #[test]

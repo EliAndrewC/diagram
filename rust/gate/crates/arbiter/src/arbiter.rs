@@ -421,10 +421,24 @@ pub fn record_ruling(
     now: Option<&str>,
     batch: bool,
 ) -> Result<Value, Stop> {
+    ruling_at(root, trigger, ruling, declared, now, batch).map(|(row, _)| row)
+}
+
+/// [`record_ruling`], and the feature it was filed in: its trigger's, resolved once ([`home::resolve`], feature 451 T179), which the
+/// plan's accept is applied in.
+fn ruling_at(
+    root: &Rooted,
+    trigger: &str,
+    ruling: &Value,
+    declared: &str,
+    now: Option<&str>,
+    batch: bool,
+) -> Result<(Value, PathBuf), Stop> {
     if declared != ROUND_ARBITER {
         return Err(Stop::Declined("declined: only the `round-arbiter` subagent records a ruling (AS=round-arbiter) - a declaration, recorded, not a proof".to_owned()));
     }
-    if let Some(prior) = core::rulings_in(root, trigger, root.reader()).get(trigger) {
+    let d = home::resolve(root, trigger).map_err(Stop::Refused)?;
+    if let Some(prior) = home::ruled_in(&d).get(trigger) {
         if !rekeys(prior, trigger, ruling)
             || unit_content_key(root, &core::unit_of(trigger)).is_empty()
         {
@@ -442,11 +456,6 @@ pub fn record_ruling(
     }
     let hour = trigger.starts_with("hour:");
     let (fix, fix_on, measure) = validate_ruling(ruling, hour, batch)?;
-    let d = core::feature_dir_in(root, trigger, root.reader()).ok_or_else(|| {
-        Stop::Refused(
-            "no active feature (.specify/feature.json) to record the ruling in".to_owned(),
-        )
-    })?;
     let when = now.map_or_else(utc_now, str::to_owned);
     let trig = core::owed(root)
         .get(trigger)
@@ -481,8 +490,8 @@ pub fn record_ruling(
             &format!("accepted by the round arbiter ({trigger})"),
         )?;
     }
-    core::pop_owed(&checks::common_dir(root), trigger).map_err(Stop::Refused)?;
-    Ok(value)
+    home::pop_everywhere(root, trigger, &home::name_of(&d)).map_err(Stop::Refused)?;
+    Ok((value, d))
 }
 
 fn batch_plan(ruling: &Value, triggers: &[String]) -> Result<Vec<(String, Value)>, Stop> {
@@ -545,6 +554,17 @@ pub fn record_batch(
     declared: &str,
     now: Option<&str>,
 ) -> Result<Vec<Value>, Stop> {
+    batch_at(root, ruling, declared, now).map(|rows| rows.into_iter().map(|(r, _)| r).collect())
+}
+
+/// [`record_batch`], each row with the feature it was filed in; a trigger whose feature does not resolve refuses the batch before
+/// any row is written (feature 451 T179).
+fn batch_at(
+    root: &Rooted,
+    ruling: &Value,
+    declared: &str,
+    now: Option<&str>,
+) -> Result<Vec<(Value, PathBuf)>, Stop> {
     let triggers: Vec<String> = ruling
         .get("triggers")
         .and_then(Value::as_array)
@@ -588,8 +608,13 @@ pub fn record_batch(
     if declared != ROUND_ARBITER {
         return Err(Stop::Declined("declined: only the `round-arbiter` subagent records a ruling (AS=round-arbiter) - a declaration, recorded, not a proof".to_owned()));
     }
-    let ruled = core::rulings_in(root, "", root.reader());
-    let mut done: Vec<&String> = triggers.iter().filter(|t| ruled.contains_key(*t)).collect();
+    let mut done: Vec<&String> = Vec::new();
+    for t in &triggers {
+        let d = home::resolve(root, t).map_err(|why| Stop::Refused(format!("{t}: {why}")))?;
+        if home::ruled_in(&d).contains_key(t) {
+            done.push(t);
+        }
+    }
     done.sort();
     if !done.is_empty() {
         return Err(Stop::Refused(format!(
@@ -614,7 +639,7 @@ pub fn record_batch(
     }
     let mut rows = Vec::new();
     for (t, one) in plan {
-        rows.push(record_ruling(root, &t, &one, declared, now, true)?);
+        rows.push(ruling_at(root, &t, &one, declared, now, true)?);
     }
     Ok(rows)
 }
@@ -625,8 +650,9 @@ fn join_refs(v: &[&String]) -> String {
 
 pub mod bundle;
 mod fixes;
+mod home;
 pub use crate::reviews::closing::{fix_hold, open_fixes};
-use fixes::{fix_home, nit_answers, settle_fix};
+use fixes::{fix_home, nit_answers, settle_fix, Landing};
 
 /// A string as Python's `repr` quotes it (`{old!r}` in `nit_answers`): single quotes unless the text has one and no double quote.
 fn py_repr(s: &str) -> String {
@@ -672,15 +698,15 @@ fn feature_label(root: &Rooted) -> String {
 }
 
 fn ruled_cli(root: &Rooted, trigger: &str, file: &str, who: &str) -> Reply {
-    let row =
-        match load_ruling(file).and_then(|r| record_ruling(root, trigger, &r, who, None, false)) {
+    let (row, d) =
+        match load_ruling(file).and_then(|r| ruling_at(root, trigger, &r, who, None, false)) {
             Ok(r) => r,
             Err(stop) => return stop.reply("arbiter-ruled"),
         };
     let t = text(&row, "trigger");
-    let mut out = format!("arbiter-ruled: {t} - {} (binding; recorded in arbiter.jsonl; a for_gm question goes to escalation-check: make gm-review)\n", text(&row, "ruling"));
+    let mut out = format!("arbiter-ruled: {t} - {} (binding; recorded in {}'s arbiter.jsonl; a for_gm question goes to escalation-check: make gm-review)\n", text(&row, "ruling"), home::name_of(&d));
     let owed = crate::plan::approach_ruled(root, t);
-    out.push_str(&plan_accept(root, &row));
+    out.push_str(&plan_accept(&d, &row));
     let claims_review = text(&row, "review");
     if let Some(keys) = claims_review
         .strip_prefix("claims:")
@@ -694,16 +720,15 @@ fn ruled_cli(root: &Rooted, trigger: &str, file: &str, who: &str) -> Reply {
 
 /// A plan review's accept or process-fault applied as its verdict (feature 385 T16, feature 409), a line, or nothing: the blocks and the
 /// tasks its question names (feature 451 T92), each block's heading listed - a bare count hid 28 blocks recorded CLEAR for one task's
-/// question (`ask:451-T79-third-plan-round`, measured 2026-11-21).
-fn plan_accept(root: &Rooted, row: &Value) -> String {
+/// question (`ask:451-T79-third-plan-round`, measured 2026-11-21) - applied in `d`, the feature the ruling was filed in, never one
+/// resolved again (feature 451 T179).
+fn plan_accept(d: &Path, row: &Value) -> String {
     let t = text(row, "trigger");
     let plan_review = t.starts_with("round:spec-fidelity|plan:") || text(row, "review") == "plan";
     if !plan_review || !matches!(text(row, "ruling"), "accept" | "process-fault") {
         return String::new();
     }
-    core::feature_dir_in(root, t, root.reader()).map_or_else(String::new, |d| {
-        accepted_line(&crate::plan::arbiter_accept_listed(&d, t))
-    })
+    accepted_line(&crate::plan::arbiter_accept_listed(d, t))
 }
 
 /// What [`plan_accept`] says the accept recorded: its scope, each heading, the task verdict.
@@ -752,16 +777,16 @@ fn claims_accept(root: &Path, keys: &str, trigger: &str) -> String {
 }
 
 fn ruled_batch_cli(root: &Rooted, file: &str, who: &str) -> Reply {
-    let rows = match load_ruling(file).and_then(|r| record_batch(root, &r, who, None)) {
+    let rows = match load_ruling(file).and_then(|r| batch_at(root, &r, who, None)) {
         Ok(r) => r,
         Err(stop) => return stop.reply("arbiter-ruled"),
     };
     let mut out = String::new();
-    for row in &rows {
+    for (row, d) in &rows {
         let t = text(row, "trigger");
         let _ = writeln!(out, "arbiter-ruled: {t} - {}", text(row, "ruling"));
         // a batch's plan-review accept is that review's verdict as a single ruling's is (feature 451 T92: it was recorded, never applied)
-        out.push_str(&plan_accept(root, row));
+        out.push_str(&plan_accept(d, row));
         out.push_str(&owed_line(crate::plan::approach_ruled(root, t)));
     }
     let _ = writeln!(out, "arbiter-ruled: the batch's {} triggers recorded (binding; each in arbiter.jsonl; a for_gm question goes to escalation-check: make gm-review)", rows.len());
@@ -784,7 +809,15 @@ fn ask_cli(root: &Rooted, args: &[String]) -> Reply {
         return fail(format!("arbiter-ask: REVIEW= is spec, plan or claims:<key>;<key> (the review whose verdict the ruling stands as), or left out - not {}\n", py_repr(review)), 2);
     }
     let trigger = format!("ask:{subject}");
-    if core::rulings_in(root, &trigger, root.reader()).contains_key(&trigger) {
+    // an ask is filed in the feature it names, or the active one, or refused - never feature "" (feature 451 T179)
+    let named = match home::named(root, &trigger, review) {
+        Ok(d) => d,
+        Err(why) => return fail(format!("arbiter-ask: refused - {why}\n"), 2),
+    };
+    let Some(d) = named.or_else(|| core::feature_dir_in(root, &trigger, root.reader())) else {
+        return fail(format!("arbiter-ask: refused - no feature to file {trigger} under: none is active (.specify/feature.json) and its SUBJECT names none (`<NNN>-...`)\n"), 2);
+    };
+    if home::ruled_in(&d).contains_key(&trigger) {
         return fail(format!("arbiter-ask: {trigger} is already ruled - one ruling per trigger, binding; ask a new SUBJECT for a new question\n"), 1);
     }
     let stands = if review.is_empty() {
@@ -793,7 +826,7 @@ fn ask_cli(root: &Rooted, args: &[String]) -> Reply {
         format!("(REVIEW={review}: an accept stands as the {review} review's verdict)")
     };
     let detail = format!("{why} {stands}");
-    let _ = core::trip_in(
+    if let Err(why) = core::try_trip_in(
         root,
         &trigger,
         "ask",
@@ -802,7 +835,9 @@ fn ask_cli(root: &Rooted, args: &[String]) -> Reply {
         &Value::Null,
         review,
         root.reader(),
-    );
+    ) {
+        return fail(format!("arbiter-ask: {trigger} was not filed - {why}\n"), 1);
+    }
     let mut out = format!("arbiter-ask: {trigger} recorded - the round arbiter rules on it, not the GM (its ruling reaches him only as a kept for_gm question, feature 432); dispatch `round-arbiter` with the MANIFEST below\n");
     if !stands.is_empty() {
         let _ = writeln!(out, "arbiter-ask: {stands}");
@@ -814,11 +849,38 @@ fn ask_cli(root: &Rooted, args: &[String]) -> Reply {
     ok(out)
 }
 
+/// `fix done|declined <ids> <note> [<test>] [--landing <task> --files "<paths>" [--feature <f>]]`: the test and the landing's flags
+/// (451 T182) after the note, or None for an argument it does not take.
+fn fix_args(rest: &[String]) -> Option<(&str, Option<Landing>)> {
+    let mut test = "";
+    let (mut task, mut feature, mut files) = (None, String::new(), Vec::new());
+    let mut it = rest.iter();
+    while let Some(a) = it.next() {
+        match a.as_str() {
+            "--landing" => task = Some(it.next()?.clone()),
+            "--feature" => it.next()?.clone_into(&mut feature),
+            "--files" => files = it.next()?.split_whitespace().map(str::to_owned).collect(),
+            t if test.is_empty() && !t.starts_with("--") => test = t,
+            _ => return None,
+        }
+    }
+    Some((
+        test,
+        task.map(|task| Landing {
+            task,
+            feature,
+            files,
+        }),
+    ))
+}
+
 fn fix_cli(root: &Rooted, args: &[String]) -> Reply {
     let status = args[0].as_str();
     let ids: Vec<&str> = args[1].split_whitespace().collect();
     let note = &args[2];
-    let test = args.get(3).map_or("", String::as_str);
+    let Some((test, landing)) = fix_args(&args[3..]) else {
+        return fail(format!("usage: fix {status} <trigger(s)> <note> [<test>] [--landing <task> --files \"<the fix's files>\" [--feature <f>]]\n"), 2);
+    };
     let label = format!("arbiter-fix-{status}");
     let unknown: Vec<&str> = ids
         .iter()
@@ -842,14 +904,23 @@ fn fix_cli(root: &Rooted, args: &[String]) -> Reply {
         };
         return fail(format!("{label}: refused - no open tooling fix: {wanted}; searched the active feature ({}), the feature an hour trigger names, and every feature; open now: {open_now}\n", feature_label(root)), 1);
     }
+    let mut last = Value::Null;
     for id in &ids {
-        if let Err(stop) = settle_fix(root, id, status, note, test) {
-            return match stop {
-                Stop::Declined(why) | Stop::Refused(why) => {
-                    fail(format!("{label}: refused - {why}\n"), 1)
-                }
-            };
+        match settle_fix(root, id, status, note, test, landing.as_ref()) {
+            Ok(row) => last = row,
+            Err(Stop::Declined(why) | Stop::Refused(why)) => {
+                return fail(format!("{label}: refused - {why}\n"), 1)
+            }
         }
+    }
+    if let Some(l) = &landing {
+        return ok(format!(
+            "{label}: {} fix(es) pending - {}: each settles as `make land F={} T={}` pushes, its done row in that landing's tick commit\n",
+            ids.len(),
+            ids.join(", "),
+            text(&last, "feature"),
+            l.task
+        ));
     }
     let tail = if status == "declined" {
         " - each a question owed escalation-check (make gm-review)"
@@ -905,10 +976,10 @@ fn cli_in(args: &[String], root: &Rooted) -> Reply {
         ("spec-ruled", 2) => Reply { code: i32::from(spec_ruled(Path::new(&args[1])).is_empty()), stdout: String::new(), stderr: String::new() },
         ("unit-ruled", 3) => Reply { code: i32::from(core::feature_dir_in(root, "", root.reader()).is_none_or(|d| unit_ruled(&d, &args[1], &args[2]).is_empty())), stdout: String::new(), stderr: String::new() },
         ("ask", 3 | 4) => ask_cli(root, &args[1..]),
-        ("fix", 4 | 5) if matches!(args[1].as_str(), "done" | "declined") => fix_cli(root, &args[1..]),
+        ("fix", n) if n >= 4 && matches!(args[1].as_str(), "done" | "declined") => fix_cli(root, &args[1..]),
         ("nit", 4) => nit_cli(root, &args[1..]),
         ("bundle", _) => bundle::cli(&args[1..]),
-        _ => fail("usage: hm_arbiter.py ruled <trigger> <json> --as round-arbiter | fix done|declined <trigger> <note> [<test>] | nit <trigger> <old> <new>\n".to_owned(), 2),
+        _ => fail("usage: hm_arbiter.py ruled <trigger> <json> --as round-arbiter | fix done|declined <trigger> <note> [<test>] [--landing <task> --files <paths> [--feature <f>]] | nit <trigger> <old> <new>\n".to_owned(), 2),
     }
 }
 

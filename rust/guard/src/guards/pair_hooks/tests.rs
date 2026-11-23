@@ -273,13 +273,20 @@ fn a_review_is_not_spent_on_unverified_work() {
     assert!(refusal(&bare.judge()).contains("REVIEW_PREREQ_OK needs a REASON"));
 }
 
-/// A fixture at its third round of `m1`.
+/// A fixture at its third round of `m1`, in its feature `specs/900-x`: a tripwire is filed under a feature or not at all (451 T179).
 fn third_round(tag: &str) -> Fixture {
     let f = Fixture::new(tag, "Agent", &review("m1"));
     f.set("named", "m1\n").set("green", "");
+    std::fs::create_dir_all(f.clone.join(".specify")).unwrap();
+    std::fs::create_dir_all(f.clone.join("specs/900-x")).unwrap();
+    std::fs::write(
+        f.clone.join(".specify/feature.json"),
+        r#"{"feature_directory": "specs/900-x"}"#,
+    )
+    .unwrap();
     std::fs::write(
         f.clone.join(".git/review-rounds.json"),
-        r#"{"none": {"m1": ["a@1", "b@2"]}}"#,
+        r#"{"specs/900-x": {"m1": ["a@1", "b@2"]}}"#,
     )
     .unwrap();
     f

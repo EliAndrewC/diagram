@@ -463,14 +463,26 @@ fn named_tasks(trigger: &str) -> Vec<String> {
                     .map_or("", |(_, t)| t.split('@').next().unwrap_or(""))
             },
         );
+    task_ids(words)
+}
+
+/// The task ids `words` name, in either case and each once, written as tasks.md writes them: "t383" is T383 (feature 451 T179). WHY:
+/// `ask:449-t383-plan-round3`'s accept read no task in "t383" and was read as the whole plan's, marking 39 other tasks' blocks CLEAR and
+/// dropping 264 archived rows of 449's plan-review.json (observed 2026-11-23, the round arbiter's fix). The ask's filing reads it too.
+#[must_use]
+pub fn task_ids(words: &str) -> Vec<String> {
     let mut named: Vec<String> = Vec::new();
-    for id in TASK_ID.find_iter(words).map_while(Result::ok) {
-        if !named.iter().any(|t| t == id.as_str()) {
-            named.push(id.as_str().to_owned());
+    for id in ANY_CASE_ID.find_iter(words).map_while(Result::ok) {
+        let id = format!("T{}", id.as_str()[1..].to_ascii_lowercase());
+        if !named.contains(&id) {
+            named.push(id);
         }
     }
     named
 }
+
+static ANY_CASE_ID: std::sync::LazyLock<fancy_regex::Regex> =
+    std::sync::LazyLock::new(|| re(r"(?i)\b(T\d+[a-z]?)\b"));
 
 /// The offsets of `task`'s section in `plan`, as `task_sections` joins it: each heading whose title opens with the id, to the next heading
 /// at its level or above; or, with none, the first heading that names it.
@@ -511,7 +523,26 @@ fn section_spans(plan: &str, task: &str) -> Vec<(usize, usize)> {
         .collect()
 }
 
-/// (the named tasks with a section in plan.md, whether the question is the whole plan's), or None where it names only archived sections.
+/// Is `task` one of the feature's own tasks: a box line of its tasks.md or tasks-done.md (feature 451 T179)?
+#[must_use]
+pub fn feature_task(spec_dir: &Path, task: &str) -> bool {
+    let all = l7r_shared::speckit::tasks::all_text(spec_dir).unwrap_or_default();
+    all.lines().any(|l| {
+        TASK_BOX
+            .captures(l)
+            .ok()
+            .flatten()
+            .is_some_and(|c| &c[1] == task)
+    })
+}
+
+static TASK_BOX: std::sync::LazyLock<fancy_regex::Regex> =
+    std::sync::LazyLock::new(|| re(r"^\s*- \[[ xX]\] (T\d+[a-z]?)\b"));
+
+/// (the named tasks with a section in plan.md, whether the question is the whole plan's), or None where it names only archived sections
+/// or no task of this feature. WHY the last (feature 451 T179): `round:spec-fidelity|plan:specs/449-rust-codebase#T377@3`, filed in 451's
+/// log, named T377 - in neither 451's plan nor its plan-done - and was read as the whole plan's, recording 18 of 451's owed blocks CLEAR
+/// (observed 2026-11-23); the whole-plan reading of a task with no section stays for the feature's own tasks (T92's plan-stage review).
 fn accept_scope(spec_dir: &Path, trigger: &str, text: &str) -> Option<(Vec<String>, bool)> {
     let done = std::fs::read_to_string(spec_dir.join("plan-done.md")).unwrap_or_default();
     let named = named_tasks(trigger);
@@ -522,7 +553,10 @@ fn accept_scope(spec_dir: &Path, trigger: &str, text: &str) -> Option<(Vec<Strin
         .cloned()
         .collect();
     let whole = named.is_empty()
-        || (tasks.is_empty() && named.iter().all(|t| !task_sections(&done).contains_key(t)));
+        || (tasks.is_empty()
+            && named
+                .iter()
+                .all(|t| !task_sections(&done).contains_key(t) && feature_task(spec_dir, t)));
     (whole || !tasks.is_empty()).then_some((tasks, whole))
 }
 

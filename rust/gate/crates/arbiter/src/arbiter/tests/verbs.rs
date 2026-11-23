@@ -102,7 +102,7 @@ fn every_verb_answers_on_a_clone() {
     );
 }
 
-fn committed(root: &Path, rel: &str) {
+pub(super) fn committed(root: &Path, rel: &str) {
     let run_git = |args: &[&str]| {
         assert!(std::process::Command::new("git")
             .arg("-C")
@@ -277,28 +277,5 @@ fn fixes_are_settled_and_nits_answered() {
     std::fs::write(nit_root.join(".fake-answer"), "fail").unwrap();
     let broken = run(&nit_root, &["nit", rid, "OLD", "NEW"]);
     assert!(broken.code == 1 && broken.stderr.contains("record-owed said"));
-    std::env::set_var("ARBITER_FIX_ENGINE", "1");
-    let engine = clone_at("engine");
-    std::fs::write(
-        engine.join("specs/999-x/arbiter.jsonl"),
-        format!(
-            "{}\n",
-            json!({"trigger": "ask:e1", "fix": "open", "tooling_fix": "e"})
-        ),
-    )
-    .unwrap();
-    std::fs::create_dir_all(engine.join("tests")).unwrap();
-    std::fs::write(engine.join("tests/e.sh"), "x").unwrap();
-    committed(&engine, "tests/e.sh");
-    let e = run(
-        &engine,
-        &["fix", "done", "ask:e1", "an engine note", "tests/e.sh"],
-    );
-    std::env::remove_var("ARBITER_FIX_ENGINE");
-    assert_eq!(e.code, 0, "{}", e.stderr);
-    assert!(
-        std::fs::read_to_string(engine.join("specs/999-x/arbiter.jsonl"))
-            .unwrap()
-            .contains("(an engine fix")
-    );
+    // ENGINE=1's settling of a fix committed here gave way to LANDING= (451 T182), whose test is `tests/landing.rs`
 }

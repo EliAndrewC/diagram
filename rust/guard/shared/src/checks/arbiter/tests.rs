@@ -44,6 +44,11 @@ fn the_feature_is_read_in_its_order() {
         asked_feature(&d, "round:x|spec:414-a#1@3"),
         Some(d.join("specs/414-a"))
     );
+    // a spec review's round names its feature as the review-round guard writes it (451 T179: its ruling is filed there, so read there)
+    assert_eq!(
+        asked_feature(&d, "round:spec-fidelity|414-a#1@6"),
+        Some(d.join("specs/414-a"))
+    );
     assert_eq!(asked_feature(&d, "ask:415-x"), None);
     assert_eq!(asked_feature(&d, "ask:9x"), None);
     assert_eq!(
@@ -327,10 +332,34 @@ fn a_trigger_is_recorded_once_under_its_lock() {
     assert!(!owed(&d).contains_key("cascade@1"));
     pop_owed(&common_dir(&d), "missing").unwrap();
     assert!(pop_owed(Path::new("/proc/nonexistent/x"), "a").is_err());
+    // RED FIRST (451 T179): a trigger no feature resolves is refused at filing, never filed as feature "", which every feature's
+    // dispatches read as their own - the mirror's `reversal:...context_cap_hooks.rs` held every builder for days (observed 2026-11-23)
     let orphan = clone_at("trip-orphan");
     std::fs::remove_file(orphan.join(".specify/feature.json")).unwrap();
-    assert!(trip(&orphan, "x", "k", "", "d", &json!(0), ""));
-    assert_eq!(owed(&orphan)["x"]["feature"], json!(""));
+    assert!(!trip(&orphan, "x", "k", "", "d", &json!(0), ""));
+    assert!(!owed(&orphan).contains_key("x"));
+    // ...but a reversal resolves its feature from the feature the event log filed its Edit under
+    let who = Who { sid: "s", by: "" };
+    assert!(trip_as(
+        &orphan,
+        "reversal:/f",
+        "reversal",
+        "/f",
+        "d",
+        who,
+        "451-x"
+    ));
+    assert_eq!(owed(&orphan)["reversal:/f"]["feature"], json!("451-x"));
+    assert!(!trip_as(
+        &orphan,
+        "reversal:/g",
+        "reversal",
+        "/g",
+        "d",
+        who,
+        ""
+    ));
+    assert!(!owed(&orphan).contains_key("reversal:/g"));
     std::fs::remove_file(common_dir(&d).join("arbiter-owed.json")).ok();
     assert!(!trip(
         Path::new("/proc/nonexistent-l7r"),
@@ -357,16 +386,26 @@ fn a_reversal_holds_only_the_dispatches_of_the_session_and_builder_that_put_it_b
         "reversal",
         "/f",
         "A -> B -> A",
-        b1
+        b1,
+        ""
     ));
-    assert!(!trip_as(&d, "reversal:/f", "reversal", "/f", "again", b1));
+    assert!(!trip_as(
+        &d,
+        "reversal:/f",
+        "reversal",
+        "/f",
+        "again",
+        b1,
+        ""
+    ));
     assert!(trip_as(
         &d,
         "reversal:/g",
         "reversal",
         "/g",
         "A -> B -> A",
-        Who { sid: "s1", by: "" }
+        Who { sid: "s1", by: "" },
+        ""
     ));
     assert!(trip_as(
         &d,
@@ -374,7 +413,8 @@ fn a_reversal_holds_only_the_dispatches_of_the_session_and_builder_that_put_it_b
         "reversal",
         "/h",
         "A -> B -> A",
-        Who::default()
+        Who::default(),
+        ""
     ));
     let rows = owed(&d);
     assert_eq!(

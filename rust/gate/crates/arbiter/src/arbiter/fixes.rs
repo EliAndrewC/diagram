@@ -13,7 +13,14 @@ use super::{
 
 // `open_fixes` and `fix_hold` moved to `reviews::closing` (feature 449 T127): the closing check reads them in process, and `reviews`
 // cannot build on this crate; `arbiter.rs` re-exports them.
-use l7r_gate_reviews::reviews::closing::open_fixes;
+use l7r_gate_reviews::reviews::closing::{landing, open_fixes};
+
+/// `make arbiter-fix-done ... LANDING=<task> FILES="<the fix's files>" [F=<feature>]` (feature 451 T182): the fix lands with that task.
+pub(super) struct Landing {
+    pub task: String,
+    pub feature: String,
+    pub files: Vec<String>,
+}
 
 pub(super) fn fix_home(root: &Rooted, trigger: &str) -> Option<PathBuf> {
     let active = core::feature_dir_in(root, "", root.reader());
@@ -97,13 +104,15 @@ fn is_test_file(root: &Path, test: &str) -> bool {
     t.ancestors().skip(1).any(|p| p == tests) || rust_test
 }
 
-/// `hm_arbiter.settle_fix`: close an open tooling fix in the feature that holds it; a declined one becomes a question for the GM.
+/// `hm_arbiter.settle_fix`: close an open tooling fix in the feature that holds it; a declined one becomes a question for the GM; one
+/// that lands with its task ([`Landing`]) is left pending for that landing ([`pend_fix`]).
 pub(super) fn settle_fix(
     root: &Rooted,
     trigger: &str,
     status: &str,
     note: &str,
     test: &str,
+    landing: Option<&Landing>,
 ) -> Result<Value, Stop> {
     let home = fix_home(root, trigger).or_else(|| core::feature_dir_in(root, "", root.reader()));
     let d =
@@ -126,20 +135,20 @@ pub(super) fn settle_fix(
                 .to_owned(),
         ));
     }
-    let mut note = note.to_owned();
+    if status == "done" && !is_test_file(root, test) {
+        return Err(Stop::Refused(format!(
+            "TEST={} is not a file under tests/ or a Rust crate's tests - a fix is done with the test that proves it",
+            if test.is_empty() { "<none>" } else { test }
+        )));
+    }
+    if let Some(l) = landing {
+        return pend_fix(root, &d, trigger, (status, note, test), l);
+    }
     if status == "done" {
-        if !is_test_file(root, test) {
-            return Err(Stop::Refused(format!(
-                "TEST={} is not a file under tests/ or a Rust crate's tests - a fix is done with the test that proves it",
-                if test.is_empty() { "<none>" } else { test }
-            )));
-        }
+        // ENGINE=1, which settled a fix committed here before it landed, gave way to LANDING= (451 T182): its done row was on main
+        // before its code, and the task's landing was still refused until then
         if !on_main(root, test) {
-            let engine = std::env::var("ARBITER_FIX_ENGINE").is_ok_and(|v| !v.is_empty());
-            if !(engine && committed_here(root, test)) {
-                return Err(Stop::Refused(format!("{test} is not on main as it is here - land and settle it in one command: the same make arbiter-fix-done with LAND=\"<the fix's files>\" (it runs make land-tooling on them first) (an ENGINE fix, which land-tooling refuses, lands with its feature: commit it and its test, then the same command with ENGINE=1)")));
-            }
-            note.push_str(" (an engine fix: it lands with the feature)");
+            return Err(Stop::Refused(format!("{test} is not on main as it is here - land and settle it in one command: the same make arbiter-fix-done with LAND=\"<the fix's files>\" (it runs make land-tooling on them first); a fix in rust/, which land-tooling refuses, lands with its task: commit it and its test, then the same command with LANDING=<the task> FILES=\"<the fix's files>\" in place of LAND=")));
         }
     } else if status != "declined" {
         return Err(Stop::Refused("status is done or declined".to_owned()));
@@ -159,6 +168,81 @@ pub(super) fn settle_fix(
         gm_question(&d, &format!("Build this tooling fix the round arbiter asked for, which the session declined? The fix: {fix} Declined because: {note}"), trigger, &when)?;
     }
     Ok(value)
+}
+
+/// The open task `task` of the feature `named` (its directory name or number; the fix's `home` when empty), or why not.
+fn landing_feature(root: &Path, named: &str, home: &Path, task: &str) -> Result<PathBuf, Stop> {
+    let d = if named.is_empty() {
+        home.to_path_buf()
+    } else if root.join("specs").join(named).is_dir() {
+        root.join("specs").join(named)
+    } else {
+        let dirs = core::spec_dirs(root, &format!("{named}-"));
+        match dirs.as_slice() {
+            [one] => one.clone(),
+            _ => {
+                return Err(Stop::Refused(format!(
+                "no feature {named} under specs/ - F= names the feature whose task lands the fix"
+            )))
+            }
+        }
+    };
+    let open = std::fs::read_to_string(d.join("tasks.md"))
+        .unwrap_or_default()
+        .lines()
+        .any(|l| {
+            l.trim_start()
+                .strip_prefix("- [ ] ")
+                .is_some_and(|r| r.split_whitespace().next() == Some(task))
+        });
+    if !open {
+        return Err(Stop::Refused(format!(
+            "{task} is no open task of {} - LANDING= names the task whose make land carries the fix",
+            d.file_name().unwrap_or_default().to_string_lossy()
+        )));
+    }
+    Ok(d)
+}
+
+/// A fix that lands with its task (feature 451 T182): its files and test committed here as they stand, its task open, it is kept
+/// pending in the clone ([`landing::add`]) - no done row yet: `make land` of that task writes it into its own tick commit.
+fn pend_fix(
+    root: &Rooted,
+    home: &Path,
+    trigger: &str,
+    (status, note, test): (&str, &str, &str),
+    l: &Landing,
+) -> Result<Value, Stop> {
+    if status != "done" {
+        return Err(Stop::Refused(
+            "LANDING= settles a fix that is done - a declined fix is a question for the GM, never a landing".to_owned(),
+        ));
+    }
+    if l.files.is_empty() {
+        return Err(Stop::Refused("FILES= names the fix's files - LANDING= settles a fix whose files and test its task's landing carries".to_owned()));
+    }
+    if let Some(p) = l
+        .files
+        .iter()
+        .map(String::as_str)
+        .chain([test])
+        .find(|p| !committed_here(root, p))
+    {
+        return Err(Stop::Refused(format!("{p} is not committed as it stands - commit the fix and its test first, then the same make arbiter-fix-done")));
+    }
+    let d = landing_feature(root, &l.feature, home, &l.task)?;
+    let entry = json!({
+        "trigger": trigger,
+        "feature": super::home::name_of(&d),
+        "task": l.task,
+        "home": super::home::name_of(home),
+        "note": note,
+        "test": test,
+        "files": l.files,
+        "utc": utc_now(),
+    });
+    landing::add(root, entry.clone()).map_err(Stop::Refused)?;
+    Ok(entry)
 }
 
 /// `hm_arbiter.nit_answers`: the wording an `accept` ruling asked to fix in passing, made, answers the accepted unit again.

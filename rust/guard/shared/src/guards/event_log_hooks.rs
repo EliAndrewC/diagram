@@ -754,6 +754,8 @@ pub fn append(
         // owed by the session and builder whose Edit put it back, and held against only their dispatches (449 arbiter fix,
         // 451's rulings on `reversal:<file>` of 2026-11-22: it held every builder in the clone)
         let (sid, by) = (text_of(row.get("sid")), text_of(row.get("by")));
+        // ...filed under the feature this line is filed under where the root names none (451 T179: the mirror's feature "" row held
+        // every builder for days)
         let _ = checks::arbiter::trip_as(
             &root,
             &format!("reversal:{p}"),
@@ -761,6 +763,7 @@ pub fn append(
             &p,
             &format!("an Edit put back text an earlier Edit of {p} replaced (A -> B -> A)"),
             checks::arbiter::Who { sid: &sid, by: &by },
+            &to.feature,
         );
     }
     let notice = (row.get("ev") == Some(&Value::from("UserPromptSubmit")))

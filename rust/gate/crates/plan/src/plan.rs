@@ -13,7 +13,7 @@ mod engine_edit;
 mod history;
 mod lint;
 mod record;
-pub use record::Accepted;
+pub use record::{feature_task, task_ids, Accepted};
 mod sections;
 mod status;
 mod task;

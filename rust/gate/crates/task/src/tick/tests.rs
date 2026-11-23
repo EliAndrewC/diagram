@@ -356,3 +356,45 @@ fn the_archive_form_moves_the_ticked_tasks_alone() {
     assert_eq!(failed.code, 1);
     assert!(failed.stderr.starts_with("tick --archive: "));
 }
+
+/// RED FIRST (feature 451 T182): a round-arbiter tooling fix recorded as landing with a task (`make arbiter-fix-done ... LANDING=`)
+/// holds the land's first pass of that task no longer - its done row goes out in the landing's own tick commit - while a landing of
+/// another task, and a plain `make tick`, are still held (observed 2026-11-23: 451 T177's land refused by the fix it carried).
+#[test]
+fn a_fix_landing_with_its_task_holds_that_landing_s_first_pass_no_longer() {
+    let dir = repo("checks-fix");
+    let root = root_of(&dir);
+    let d = root.join("specs/9001-x");
+    put(
+        &d,
+        "arbiter.jsonl",
+        &format!(
+            "{}\n",
+            serde_json::json!({"trigger": "ask:9001-f", "fix": "open", "tooling_fix": "build it"})
+        ),
+    );
+    let env = env_of(&[
+        ("PLAN_REVIEW_OK", REASON),
+        ("L7R_GATE_TREE", &root.to_string_lossy()),
+    ]);
+    let held = |task: &str| {
+        checks(&root, &d, "n", &words(&[task]), false, &env).unwrap()[0]
+            .refusal
+            .contains("tooling fix is open")
+    };
+    assert!(held("T01"));
+    put(
+        &root,
+        ".git/arbiter-fix-landing.json",
+        &serde_json::json!([{"trigger": "ask:9001-f", "feature": "9001-x", "task": "T01", "home": "9001-x"}]).to_string(),
+    );
+    assert!(!held("T01"));
+    assert!(held("T02"));
+    let plain = tick(&ask(&root, &d, "T01", "n"), false, false);
+    assert_eq!(plain.code, 2);
+    assert!(
+        plain.stderr.contains("tooling fix is open"),
+        "{}",
+        plain.stderr
+    );
+}

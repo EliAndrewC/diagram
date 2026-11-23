@@ -124,7 +124,9 @@ kept (`protocol::keep`, under `tests/hooks/hookrun.sh`, in `<git dir>/hooks-test
 `l7r-guard messages check` (`rust/guard/src/suite_tools/messages.rs`): each wording - the text with its paths, ids and numbers
 masked, keyed by a SHA-256 of guard, kind and wording - must be within its kind's budget (a notice 900 characters, a refusal or
 block 1,800, both a GUESS set from the longest of the 279 wordings measured after T170's cuts, its plan section) and have a verdict in `dev/guard-messages.tsv`:
-`PASS` from the `message-check` agent, or `BASELINE` (stood before T170, unreviewed). A new or changed wording fails it,
+`PASS` from the `message-check` agent, or `BASELINE` (stood before T170, unreviewed; or a wording sessions already read that a
+suite renders newly, whose review would not repay itself - T177's break-even, 31,680 characters a key - recorded with its measured
+figure, `make guard-messages KEY=<key> VERDICT=BASELINE BY="<its characters a session>"`, 451 T174). A new or changed wording fails it,
 printing the message, its length, its budget and the fix: `make guard-messages BUNDLE=1`, one `message-check` dispatch on the bundle,
 `make guard-messages KEY=<key> VERDICT=PASS BY="<agent id>"` (past the budget, only with `OVER="<why every word is needed>"`
 from the check). Writing one: say what was refused or done and what to do; keep the fix command and the escape in full the first

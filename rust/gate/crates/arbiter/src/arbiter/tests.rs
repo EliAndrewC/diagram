@@ -650,7 +650,7 @@ fn a_failed_tool_leaves_the_ruling_half_recorded_and_refuses() {
     )
     .unwrap();
     refused(
-        super::settle_fix(&own(&root), "ask:f", "declined", "a note here", ""),
+        super::settle_fix(&own(&root), "ask:f", "declined", "a note here", "", None),
         "gm-review said: 'utf-8' codec can't decode byte 0xff in position 0: invalid start byte",
     );
 }
@@ -712,13 +712,13 @@ fn a_ruling_owed_nothing_and_its_rarer_shapes() {
 fn a_fix_that_cannot_be_settled_says_why() {
     let root = clone_at("settle");
     refused(
-        super::settle_fix(&own(&root), "ask:nope", "done", "a note here", ""),
+        super::settle_fix(&own(&root), "ask:nope", "done", "a note here", "", None),
         "ask:nope has no open tooling fix",
     );
     let nofeature = clone_at("settle-nofeature");
     std::fs::remove_file(nofeature.join(".specify/feature.json")).unwrap();
     refused(
-        super::settle_fix(&own(&nofeature), "ask:x", "done", "a note here", ""),
+        super::settle_fix(&own(&nofeature), "ask:x", "done", "a note here", "", None),
         "no active feature",
     );
     std::fs::write(
@@ -730,7 +730,7 @@ fn a_fix_that_cannot_be_settled_says_why() {
     )
     .unwrap();
     refused(
-        super::settle_fix(&own(&root), "ask:f", "weird", "a note here", ""),
+        super::settle_fix(&own(&root), "ask:f", "weird", "a note here", "", None),
         "status is done or declined",
     );
     let nit = run(&root, &["nit", "ask:nothing", "a", "b"]);
@@ -740,5 +740,7 @@ fn a_fix_that_cannot_be_settled_says_why() {
     assert!(qnit.stderr.contains("q:0105 must hold NEW"));
 }
 
+mod home;
+mod landing;
 mod plan_accept;
 mod verbs;

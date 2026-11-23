@@ -122,7 +122,8 @@ pub fn checks(
                 box_open,
             },
             Ok(_) => {
-                let ask = Ask::with_env(root, dir, task, note, env);
+                let mut ask = Ask::with_env(root, dir, task, note, env);
+                ask.landing = tasks.to_vec();
                 Checked {
                     task: task.clone(),
                     tick: String::new(),

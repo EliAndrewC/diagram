@@ -556,7 +556,16 @@ pub(crate) fn report(event: &Event) -> Report {
     if !notes.is_empty() && !still_bad && !gm {
         return Report::Corrected(payload, format!("House style was applied to this edit for you ({}). Both rules are exact substitutions from CLAUDE.md, so the correction is made rather than the edit refused - a refusal costs a model round trip to say the same thing. Text inside backticks was left alone: a word in a code span is being named, not used. Text inside quotation marks was left alone too: a quotation is someone else's text (GM 2026-09-06).", first_six(&notes)), "corrected-edit");
     }
-    let shown: Vec<&str> = hits.iter().take(6).map(String::as_str).collect();
+    // a word it names goes in a code span, as the notices name theirs (451 T174): the record of guard messages keeps the text, and the
+    // push's house-style delta check refused the bare British word it held; a dash, named in words, stands bare
+    let span = |h: &String| {
+        if h.contains("(U+") {
+            h.clone()
+        } else {
+            format!("`{h}`")
+        }
+    };
+    let shown: Vec<String> = hits.iter().take(6).map(span).collect();
     Report::Refused(format!(
         "{}{}",
         shown.join(" | "),
@@ -565,27 +574,16 @@ pub(crate) fn report(event: &Event) -> Report {
     ))
 }
 
+/// The refusal. 451 T174 (message-check, acae655332fe5aa6c, which failed it on FIDELITY, for never naming the way to keep a
+/// quotation, and on BREVITY): it named no way out but "if this fired on a legitimate quotation of the GM, that is a bug in this hook worth
+/// fixing rather than working around", which pointed its reader away from the quotation the guard leaves alone, so that line and the
+/// "NOT flagged, deliberately" paragraph became what the guard leaves alone and how to use it; the rule's thirty spellings became five,
+/// "CLAUDE.md, project-wide and for everything - generated content, prose, docs, specs, tests, comments and code identifiers alike"
+/// became "everything here", and the source footer was cut (the files that quote the rule to state it are exempt, as before).
 fn refusal(report: &str) -> String {
     let forbidden = concat!("deme", "sne");
     format!(
-        "BLOCKED: house style ({report}).
-
-CLAUDE.md, project-wide and for everything - generated content, prose, docs, specs, tests, comments
-and code identifiers alike:
-
-  - HYPHENS ONLY. No em-dash (U+2014), no en-dash (U+2013). Use \" - \".
-  - AMERICAN SPELLINGS. color, center, gray, honor, judgment, catalog, labeled, behavior, neighbor,
-    analyze/organize/recognize, artifact, defense, license, practice, skeptic, story, while,
-    traveled, modeled, program, meter, liter, mold, plow, curb, draft, aging, marvelous, jewelry,
-    skillful. And \"domain\", never \"{forbidden}\".
-
-NOT flagged, deliberately: the GM's own writing (a SOURCE block, l7r.md, or a direct quotation of
-either), and the files that must quote the rule to state it.
-
-If this fired on a legitimate quotation of the GM, that is a bug in this hook worth fixing rather
-than working around.
-
-(rust/guard/shared/src/guards/house_style_hooks.rs; CLAUDE.md \"House style\")"
+        "BLOCKED: house style ({report}). Everything here takes hyphens only (\" - \", never an em-dash or en-dash) and American spellings (color, center, gray, license, judgment; \"domain\", never \"{forbidden}\"): write those. Text quoting someone else - the GM's own words above all - keeps its own: put it in quotation marks (\u{201c}\u{201d} or \u{300c}\u{300d}), <q> or <blockquote>, or the GM's notes in a SOURCE block; this guard leaves those, and code spans, alone."
     )
 }
 

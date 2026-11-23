@@ -47,6 +47,7 @@ use std::time::Duration;
 use l7r_shared::py_text::strip;
 
 use crate::Reply;
+use l7r_gate_reviews::reviews::closing::landing;
 
 /// How long the landing waits for the claims round after its gate, asking every `CLAIMS_POLL_S` (405 T50, D23).
 const CLAIMS_WAIT_S: f64 = 1200.0;
@@ -394,6 +395,15 @@ impl Land {
         self.export("SPECIFY_FEATURE", &name_of(d));
         // ...AND THE RULING THAT THEY LAND BESIDE ANOTHER STARTED TASK (451 T101): the push and the CI merge ask the mark's hold again
         self.export_ready(d, tasks)?;
+        // THE FIX THAT LANDS WITH ITS TASK (451 T182): a round-arbiter tooling fix left pending on one of these tasks (`make
+        // arbiter-fix-done ... LANDING=`) gets its done row now, so the tick commit carries it and fix and tick reach main in one push;
+        // before the ticks, because the closing check at a feature's last tick reads the open fixes too
+        let settled = landing::settle_landing(
+            &self.root,
+            d,
+            tasks,
+            &l7r_gate_core::record::repo::utc_now(),
+        )?;
         let mut failed = Vec::new();
         for task in tasks {
             let rc = self.tick(d, task, &format!("{how}: {note}"))?;
@@ -418,14 +428,23 @@ impl Land {
                 ],
                 &[],
             )?;
+            // ...and the fixes' rows, a log in another feature's directory among them: still pending, for the landing that pushes
+            settled.undo()?;
             self.warn(&format!(
                 "land: {} refused its tick (above) - nothing landed, nothing ticked",
                 failed.join(", ")
             ));
             return Ok(2);
         }
-        // a tick's honored escape writes its record too (feature 408)
-        self.run(&["git", "add", "--", &rel, "dev/bypass-log"], &[])?;
+        // a tick's honored escape writes its record too (feature 408), and a fix's row its home's log (451 T182)
+        let homes: Vec<String> = settled
+            .homes
+            .iter()
+            .map(|(p, _)| rel_of(&self.root, p))
+            .collect();
+        let mut add = vec!["git", "add", "--", &rel, "dev/bypass-log"];
+        add.extend(homes.iter().map(String::as_str));
+        self.run(&add, &[])?;
         let message = format!("{}: {} ticked (make land)", name_of(d), tasks.join(" "));
         self.run(&["git", "commit", "-q", "-m", &message], &[])?;
         let tick_sha = strip(&self.run(&["git", "rev-parse", "HEAD"], &[])?.1).to_owned();
@@ -434,6 +453,13 @@ impl Land {
             &[("L7R_LAND_TICKS", &tasks.join(" "))],
         )?;
         self.pushed.set(rc == 0 || rc == MERGED);
+        if rc == 0 || rc == MERGED {
+            landing::forget(&self.root, &settled.triggers)?;
+            let said = settled.said();
+            if !said.is_empty() {
+                self.say(said.trim_end());
+            }
+        }
         if rc == MERGED {
             // PUSHED, WITH OTHER SESSIONS' EDITS MERGED INTO FILES IT TOUCHED (405 T107: T107's landing pushed its tick, then reverted it
             // in the clone as if nothing had landed, so the clone's next push would have unticked main): the ticks stand

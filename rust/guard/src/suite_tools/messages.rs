@@ -14,6 +14,8 @@
 //! l7r-guard messages verdict <corpus dir> <record> <key> <PASS|FAIL|BREVITY:<failed key>> <by> [<over>]   a review's verdict by its key
 //!                                         (BREVITY:<failed key>: a second review failing on brevity alone, <failed key> the failed wording
 //!                                         this text replaced - the text stands, 451 T177)
+//! l7r-guard messages verdict <corpus dir> <record> <key> BASELINE <why>   a wording newly rendered left unreviewed, <why> its measured
+//!                                         characters a session under T177's break-even (451 T174)
 //! l7r-guard messages baseline <corpus dir> <record> <why>   the first record: every message rendered, BASELINE, unreviewed
 //! l7r-guard messages rehead <corpus dir> <record>           every stored head written again, its paths masked; no other column moves
 //! ```
@@ -412,6 +414,7 @@ pub fn cli(args: &[String]) -> Reply {
     match (*verb, &a[3..]) {
         ("check", []) => check(&found, &rows),
         ("owed", [bundle]) => owed(&found, &rows, Path::new(bundle)),
+        ("verdict", [k, "BASELINE", why]) => baselined(&found, rows, path, k, why),
         ("verdict", [k, v, by, over @ ..])
             if over.len() <= 1 && (matches!(*v, "PASS" | "FAIL") || v.starts_with("BREVITY")) =>
         {
@@ -468,6 +471,49 @@ pub fn cli(args: &[String]) -> Reply {
         ),
         _ => usage(),
     }
+}
+
+/// `verdict <key> BASELINE <why>` (451 T174): a wording a suite renders newly - one sessions already read, brought to the check by a
+/// suite that rendered none of its guard's messages - left unreviewed where its review would not repay itself, T177's break-even (one
+/// review, 31,680 characters, against what the wording costs a session). `why` carries that measured figure, a number in it. A wording
+/// with a verdict keeps it, and one past its budget is cut or ruled needed: neither is baselined.
+fn baselined(
+    found: &BTreeMap<String, Message>,
+    mut rows: BTreeMap<String, Row>,
+    path: &Path,
+    k: &str,
+    why: &str,
+) -> Reply {
+    let refuse = |why: String| reply(String::new(), format!("guard-messages: {why}\n"), 1);
+    let Some(m) = found.get(k) else {
+        return refuse(format!(
+            "no message rendered has key {k} - make guard-messages lists them"
+        ));
+    };
+    if let Some(r) = rows.get(k) {
+        return refuse(format!("{k} already holds {} - a wording's verdict is not undone; a changed wording is reviewed: make guard-messages BUNDLE=1", r.verdict));
+    }
+    if m.chars > m.budget() {
+        return refuse(format!("{k} is {} characters, past its budget {} - cut it and have it reviewed: make guard-messages BUNDLE=1", m.chars, m.budget()));
+    }
+    if !why.chars().any(|c| c.is_ascii_digit()) {
+        return refuse(format!("a baselined wording names what its review would not repay: make guard-messages KEY={k} VERDICT=BASELINE BY=\"<its measured characters a session> - under the break-even 31,680 a key (451 T177)\""));
+    }
+    rows.insert(
+        k.to_owned(),
+        row(
+            &Masks::new(),
+            m,
+            "BASELINE",
+            &format!("unreviewed - {why}"),
+            "",
+        ),
+    );
+    written(
+        path,
+        &rows,
+        &format!("guard-messages: {k} recorded BASELINE\n"),
+    )
 }
 
 /// The messages that grow with a list at their worst case ([`worst::worst`]), in the repository holding `record` - static-runs' at

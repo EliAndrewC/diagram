@@ -101,7 +101,9 @@ the GM 2026-10-26) - `make gm-review` lists his kept questions, `make gm-reviewe
 A ruling's `tooling_fix` is made, not lost (feature 379, the GM 2026-10-10: *"always implement this kind of tooling change
 when recommended by the arbiter"*): it is an open item that holds every `make tick` and the closing check until `make
 arbiter-fix-done` (what was built, its test), which stays in the arbiter's log, or, for an overhaul of a process, `make
-arbiter-fix-declined`, a question for the GM owed escalation-check (feature 432) - never a feature filed.
+arbiter-fix-declined`, a question for the GM owed escalation-check (feature 432) - never a feature filed. A fix built in `rust/`
+inside the task being landed (which `make land-tooling` refuses) takes `LANDING=<the task> FILES="<the fix's files>"`: pending in
+the clone until `make land` of that task writes its done row into its own tick commit, fix and tick in one push (451 T182).
 
 ## Review subagents
 

@@ -390,7 +390,7 @@ hooks-test:     ## [tests] run every tests/hooks/test-*-hooks.sh, and prove each
 	ran=$$(for s in "$$work"/*.s; do [ -f "$$s" ] && printf '%s %s\n' "$$(cat "$$s")" "$$(basename "$$s" .s)"; done | sort -rn | awk '{printf "%s%s %ss", (NR>1?", ":""), $$2, $$1}'); \
 	[ -z "$$ran" ] || printf 'hooks-test: ran %s\n' "$$ran"
 
-guard-messages: ## [tests] the guard messages the suites rendered that owe a review or a cut (451 T170); BUNDLE=1 writes message-check's units; KEY= VERDICT=PASS|FAIL BY="<agent id>" [OVER="<why>"] records a verdict; REHEAD=1 writes every stored head again with its paths masked, no other column moved   [BUNDLE=1] [KEY= VERDICT= BY= OVER=] [REHEAD=1]
+guard-messages: ## [tests] the guard messages the suites rendered that owe a review or a cut (451 T170); BUNDLE=1 writes message-check's units; KEY= VERDICT=PASS|FAIL BY="<agent id>" [OVER="<why>"] records a verdict, VERDICT=BASELINE BY="<its measured characters a session>" leaves a newly rendered wording unreviewed under T177's break-even (451 T174); REHEAD=1 writes every stored head again with its paths masked, no other column moved   [BUNDLE=1] [KEY= VERDICT= BY= OVER=] [REHEAD=1]
 	@root=$$(git rev-parse --show-toplevel); gitdir=$$(git rev-parse --path-format=absolute --git-common-dir); g="$$root/scripts/hooks/l7r-guard.sh"; c="$$gitdir/hooks-test/messages"; r="$$root/dev/guard-messages.tsv"; \
 	if [ -n "$$KEY" ]; then "$$g" messages verdict "$$c" "$$r" "$$KEY" "$(VERDICT)" "$$BY" $${OVER:+"$$OVER"}; \
 	elif [ -n "$(BUNDLE)" ]; then mkdir -p /tmp/l7r-check/guard-messages && "$$g" messages owed "$$c" "$$r" /tmp/l7r-check/guard-messages/MANIFEST.md; \
@@ -566,10 +566,11 @@ arbiter-nit:  ## [project] answer an accepted unit again after the wording fix i
 	@if [ -z "$(TRIGGER)" ] || [ -z "$$OLD" ] || [ -z "$$NEW" ]; then printf 'make arbiter-nit: TRIGGER=, OLD= and NEW= are required\n' >&2; exit 2; fi
 	@cd "$$(git rev-parse --show-toplevel)" && scripts/gates/l7r-gate.sh arbiter nit "$(TRIGGER)" "$$OLD" "$$NEW"
 
-arbiter-fix-done:  ## [project] the round arbiter's tooling fix is MADE: what was built and its test (feature 379); LAND= lands its files first, TICK= ticks the task after   ID="<trigger> [<trigger> ...]" NOTE="<what was built>" TEST=tests/... [LAND="<the fix's files>"] [F=<feature> TICK=<Txx>]
+arbiter-fix-done:  ## [project] the round arbiter's tooling fix is MADE: what was built and its test (feature 379); LAND= lands its files first, TICK= ticks the task after; a fix in rust/ committed with its task takes LANDING= instead, settled as make land of that task pushes (451 T182)   ID="<trigger> [<trigger> ...]" NOTE="<what was built>" TEST=<its test> [LAND="<the fix's files>"] [F=<feature> TICK=<Txx>] | [LANDING=<Txx> FILES="<the fix's files>" F=<feature>]
 	@if [ -z "$(ID)" ] || [ -z "$$NOTE" ] || [ -z "$(TEST)" ]; then printf 'make arbiter-fix-done: ID=, NOTE= and TEST= are required\n' >&2; exit 2; fi
 	@if [ -n "$(TICK)" ] && [ -z "$(F)" ]; then printf 'make arbiter-fix-done: TICK= ticks a task of F=<feature> - name the feature\n' >&2; exit 2; fi
-	@cd "$$(git rev-parse --show-toplevel)" && $(if $(LAND),set -f && scripts/land-tooling.sh $$LAND $(TEST) && set +f && git fetch -q origin &&,) ARBITER_FIX_ENGINE="$(ENGINE)" scripts/gates/l7r-gate.sh arbiter fix done "$(ID)" "$$NOTE" "$(TEST)"$(if $(TICK), && $(MAKE) --no-print-directory tick F="$(F)" T="$(TICK)",)
+	@if [ -n "$(LANDING)" ] && [ -n "$$LAND$(TICK)" ]; then printf 'make arbiter-fix-done: LANDING= settles the fix as make land F=<feature> T=$(LANDING) pushes - drop LAND= and TICK=\n' >&2; exit 2; fi
+	@cd "$$(git rev-parse --show-toplevel)" && $(if $(LAND),set -f && scripts/land-tooling.sh $$LAND $(TEST) && set +f && git fetch -q origin &&,) scripts/gates/l7r-gate.sh arbiter fix done "$(ID)" "$$NOTE" "$(TEST)"$(if $(LANDING), --landing "$(LANDING)" --files "$$FILES"$(if $(F), --feature "$(F)",),)$(if $(TICK), && $(MAKE) --no-print-directory tick F="$(F)" T="$(TICK)",)
 
 use-feature:  ## [project] make F the clone's active feature for the hooks (.specify/feature.json) - instead of writing the file by hand (the round arbiter on hour:396@1)   F=<feature number>
 	@if [ -z "$(F)" ]; then printf 'make use-feature: F=<feature number> is required - e.g. make use-feature F=396\n' >&2; exit 2; fi

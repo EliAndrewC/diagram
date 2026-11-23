@@ -26,8 +26,19 @@ pub(super) fn write(path: &str, content: &str) -> String {
     json!({"tool_name": "Write", "tool_input": {"file_path": path, "content": content}}).to_string()
 }
 
+/// THE TABLES' MESSAGES REACH THE BUDGET CHECK (451 T174): a table's suite (`tests/hooks/guard-cases.sh`, under `hookrun.sh`) runs
+/// this crate's tests, whose environment is the test thread's own (`shared::env`, 451 T32), so the corpus `hookrun.sh` exports never
+/// reached `protocol::keep`: repo-safety's, shell-check's, source-block's and house-style's tables rendered none of their messages
+/// (observed 2026-11-23, 451 T170: their corpus files empty). The process's corpus, where a suite names one, is named in the thread's.
+fn kept(corpus: Option<std::ffi::OsString>) {
+    if let Some(dir) = corpus {
+        crate::shared::env::set("L7R_MESSAGE_CORPUS", dir);
+    }
+}
+
 fn drive(guard: &str, payload: &str) -> Reply {
     quiet();
+    kept(std::env::var_os("L7R_MESSAGE_CORPUS"));
     cli(
         &[
             String::from("--only"),
@@ -70,6 +81,22 @@ fn replay(guard: &str, cases: &[Case]) {
     let wrong: Vec<(&str, &str, String)> =
         rows.filter(|(_, want, got)| !matches(got, want)).collect();
     assert_eq!(wrong, Vec::new()); // every wrong case: (label, wanted, got)
+}
+
+#[test]
+fn a_suites_corpus_keeps_what_a_table_renders() {
+    let dir = crate::shared::tempdir::TempDir::new("case-table-corpus");
+    kept(None);
+    assert_eq!(crate::shared::env::opt("L7R_MESSAGE_CORPUS"), None);
+    kept(Some(dir.join("m").into_os_string()));
+    assert_eq!(
+        verdict(&drive("repo-safety-hooks", &cmd("git push -f"))),
+        "blocked"
+    );
+    let said = std::fs::read_to_string(dir.join("m").join("messages.jsonl")).unwrap_or_default();
+    let refused =
+        said.contains("\"guard\":\"repo-safety-hooks\"") && said.contains("\"kind\":\"refuse\"");
+    assert!(refused, "{said}");
 }
 
 #[test]

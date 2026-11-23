@@ -207,7 +207,9 @@ pub(crate) fn read_context(path: &str) -> Option<&'static str> {
     } else if path.ends_with("/Makefile") {
         "This is the root Makefile, a GUARD file. It takes no GUARD_EDIT_OK comment: before editing it, run make guard-edit FILE=Makefile WHY=\"<why this edit is legitimate>\" - the reason goes in the guard log, and belongs in the commit message. Say which you are doing: fixing a guard that fires on correct work, adding a guard or an operation, or making a guard stop blocking something you want (that last one is what the rule exists to catch)."
     } else {
-        "This is a GUARD file. An edit to it is refused unless the edit itself contains GUARD_EDIT_OK and a short reason, or make guard-edit FILE=<this file> WHY=\"<reason>\" ran first. Say which you are doing: fixing a guard that fires on correct work, adding a guard or an operation, or making a guard stop blocking something you want (that last one is what the rule exists to catch)."
+        // 451 T174 (message-check, ad346be4b7b040828): "Say which you are doing" became "Say which", and "(that last one is what the
+        // rule exists to catch)" was cut - the rule's why, which changes nothing its reader does; the last choice still names it
+        "This is a GUARD file. An edit to it is refused unless the edit itself contains GUARD_EDIT_OK and a short reason, or make guard-edit FILE=<this file> WHY=\"<reason>\" ran first. Say which: fixing a guard that fires on correct work, adding a guard or an operation, or making a guard stop blocking something you want."
     })
 }
 
