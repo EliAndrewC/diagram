@@ -734,7 +734,7 @@
    "declared": "spec-fidelity"
   },
   "### T170 (observed 2026-11-23: the GM, request.md \"on hook output length\", asked for fewer tokens with no loss of fidelity, enforced mechanically; the coordinator's transcript, `~/.claude/projects/-diagram/c6fd72d1-....jsonl`, holds 891,521 characters of guard messages the model read, 2,848 texts each counted once, measured 2026-11-23 by `/tmp/t170/rank.py`)": {
-   "sha256": "29bb3dd8c3679bc5ab6f4ec8c7c498cbe3941be4f33b6b7e04b11373defd123c",
+   "sha256": "54ea3b7196a406dff282528cc2f5f0a3963f6916e45d1354894534dda427977a",
    "verdict": "CLEAR",
    "reviewed": "2026-11-23",
    "declared": "spec-fidelity"
@@ -14992,6 +14992,109 @@
      "why": "No decision narrows the request: a single intermittent red in an unrelated test on a shared container is not shown to be a wrong outcome, and the task reports it rather than hiding it. Aside: if it recurs it is a check refusing good work and should be filed."
     }
    ]
+  },
+  {
+   "reviewed": "2026-11-23",
+   "blocks": [
+    "### T170 (observed 2026-11-23: the GM, request.md \"on hook output length\", asked for fewer tokens with no loss of fidelity, enforced mechanically; the coordinator's transcript, `~/.claude/projects/-diagram/c6fd72d1-....jsonl`, holds 891,521 characters of guard messages the model read, 2,848 texts each counted once, measured 2026-11-23 by `/tmp/t170/rank.py`)",
+    "### T170 Approach (checklist part A)",
+    "### T170 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)"
+   ],
+   "verdict": "CLEAR",
+   "decisions": [
+    {
+     "id": "D1 approach",
+     "summary": "Measure which guard messages cost most (count x length), shorten the top ones keeping every fix command and escape, and hold every suite-rendered message to a budget and a content-keyed review instead of a per-hook comment",
+     "class": "within",
+     "why": "The GM asked for fewer tokens with no loss of fidelity, mechanically enforced, and asked 'What do you think?' about the comment form. A budget check plus a content-keyed review enforces the same thing mechanically and cannot drift from the text the way a comment can. Every new or changed wording is held to it."
+    },
+    {
+     "id": "D2 clone-sync repeat",
+     "summary": "Mid-task notice in full once, then a 53-character line while unchanged; said in full again after a sync, a failed refresh or a SessionStart",
+     "class": "within",
+     "why": "Fewer tokens. A repeat carries no new information and the full text comes back whenever the state changes."
+    },
+    {
+     "id": "D3 ledger-owed brief",
+     "summary": "A commit's notice gives the count, the first row and make ledger-owed for the rest, with the fix and LEDGER_ROWS_OK in full; history cut to the code comment",
+     "class": "within",
+     "why": "Fewer tokens. The command for the rest, the fix and the escape are all kept."
+    },
+    {
+     "id": "D4 no-poll rewrites",
+     "summary": "Seven rewrite notices say what was done and what to do; the history moves to the code comment",
+     "class": "within",
+     "why": "Fewer tokens. The actionable content is kept."
+    },
+    {
+     "id": "D5 batching",
+     "summary": "Notice trimmed from 278 to 248 characters",
+     "class": "within",
+     "why": "Fewer tokens."
+    },
+    {
+     "id": "D6 house-style code spans",
+     "summary": "House-style notices put each word in a code span, so the record no longer trips the house-style delta check",
+     "class": "within",
+     "why": "A defect the work itself exposed (the push failed), fixed in the task. It costs a few characters."
+    },
+    {
+     "id": "D7 head column",
+     "summary": "The record's head column is the start of the hashed wording, with paths, ids and numbers masked, and it never ends inside a code span",
+     "class": "within",
+     "why": "Keeps the enforcement record stable and keeps it passing the delta check. Fixes a defect the closing checks found."
+    },
+    {
+     "id": "D8 stored head masks relative paths (changed since CLEAR)",
+     "summary": "Masks::stored masks relative paths in the head at the record's one write. Keys are unchanged. REHEAD=1 rewrote the 290 heads, the other columns did not change, and the test went red first",
+     "class": "within",
+     "why": "Fixes a defect found at landing: the preflight refused a head that carried a built research page's path. It changes neither which wordings are enforced nor their keys, so the request's enforcement is untouched. It narrows nothing."
+    },
+    {
+     "id": "D9 list caps",
+     "summary": "A list in a guard message shows its first two items and 'and N more:' with a command (or a kept file) that prints all of them, and the whole list wherever that is no longer. Eight list-growing wordings found by a stated census are capped and held at their worst case. Adds make crate-checks CRATE= and makes stale-terms print every candidate",
+     "class": "within",
+     "why": "Fewer tokens with no loss of fidelity: every item can still be reached in full by the named command, and the fix commands and escapes are kept. The census names its search space. The new target keeps FR-007's naming of each changed crate's checks."
+    },
+    {
+     "id": "D10 review rounds",
+     "summary": "Every changed wording is reviewed by message-check through round 7. One BREVITY suggestion (BACKGROUNDED's clause) was not taken, and round 2 then passed that clause",
+     "class": "within",
+     "why": "This is the subagent review the GM asked for. Declining one cut keeps a piece of information the reader needs (no loss of fidelity), and the reviewer later passed it."
+    },
+    {
+     "id": "D11 budgets",
+     "summary": "NOTICE_BUDGET 900 and REFUSE_BUDGET 1,800, labeled GUESS and set from the longest rendered wordings rounded up",
+     "class": "within",
+     "why": "The mechanical limit the request implies. The knobs are labeled and measured."
+    },
+    {
+     "id": "D12 top-ten items left",
+     "summary": "Left unshortened here: finished-run's detached-run block (3), the set-down blocks (4, 7, 10, T171's), review-round's long refusal (8, seen twice), the persisted context (9, not a guard message whose source is named), and finished-run's Stop notices (they never reach the model)",
+     "class": "within",
+     "why": "Each has a measured reason: each run's text is distinct, the work belongs to another task, it was seen twice, or it costs nothing. None is a wrong outcome left in place."
+    },
+    {
+     "id": "D13 255 wordings baselined unreviewed, filed T177",
+     "summary": "Wordings that stood before T170 are marked BASELINE without review. The pop-ups' batch refusal and set-down's blocks are not held at their worst case. T177 is filed as the next performance work, before T22",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "The enforcement the GM asked for exists and holds every new or changed wording. Each baselined wording is within budget and is one sessions already read today, so nothing is a wrong outcome. The rest of the review is a filed and ordered task in the same feature, not dropped. The pop-ups' list is its fix command's own argument, so capping it would lose fidelity."
+    },
+    {
+     "id": "D14 silent suites, filed T174",
+     "summary": "repo-safety, shell-check and source-block render nothing to the check, and the finished-run and set-down blocks bypass protocol::run, so the budget check does not hold them yet. T174 is filed after T170 and before T173",
+     "class": "narrowing",
+     "ruling": "LEGITIMATE",
+     "why": "Reaching them needs each of those suites to drive the binary's hook path, which is outside T170's guards. The gap is measured (17 of 58 corpus files empty), named, filed and ordered in the same feature, so the mechanical enforcement is completed rather than given up."
+    },
+    {
+     "id": "D15 order",
+     "summary": "Runs after T169 and T171. T174 before T173. T177 before T22",
+     "class": "within",
+     "why": "Sequencing that follows FR-013's performance-first rule. Nothing the request asked for is removed."
+    }
+   ]
   }
  ],
  "tasks": {
@@ -23213,119 +23316,101 @@
    }
   },
   "T170": {
-   "section_sha256": "113d2c8a8f31eea2a15241b3bd12adb85fa2442a59c95412ac37dc598577cc86",
+   "section_sha256": "bf1e903a0f0bcca1c259ae0978830dbfac30268519587370c9255c7363ea050e",
    "reviewed": "2026-11-23",
    "declared": "spec-fidelity",
    "decisions": [
     {
-     "id": "D1",
-     "summary": "rank guard messages by frequency x length, each text once, from the records that reach the model (coordinator and its 1,731 subagent transcripts)",
+     "id": "D1 approach",
+     "summary": "Measure which guard messages cost most (count x length), shorten the top ones keeping every fix command and escape, and hold every suite-rendered message to a budget and a content-keyed review instead of a per-hook comment",
      "class": "within",
-     "why": "the measurement behind 'fewer tokens'"
+     "why": "The GM asked for fewer tokens with no loss of fidelity, mechanically enforced, and asked 'What do you think?' about the comment form. A budget check plus a content-keyed review enforces the same thing mechanically and cannot drift from the text the way a comment can. Every new or changed wording is held to it."
     },
     {
-     "id": "D2",
-     "summary": "clone-sync mid-task notice in full once, then a 53-character line while unchanged; full again after a sync, a failed refresh or a SessionStart (the guard now taking SessionStart)",
+     "id": "D2 clone-sync repeat",
+     "summary": "Mid-task notice in full once, then a 53-character line while unchanged; said in full again after a sync, a failed refresh or a SessionStart",
      "class": "within",
-     "why": "no loss of fidelity: a compacted or cleared context gets the full text back"
+     "why": "Fewer tokens. A repeat carries no new information and the full text comes back whenever the state changes."
     },
     {
-     "id": "D3",
-     "summary": "ledger-owed commit notice: count, first row, make ledger-owed for the rest, fix command and LEDGER_ROWS_OK in full (--brief); citation and cost-note history moved to the code's comment",
+     "id": "D3 ledger-owed brief",
+     "summary": "A commit's notice gives the count, the first row and make ledger-owed for the rest, with the fix and LEDGER_ROWS_OK in full; history cut to the code comment",
      "class": "within",
-     "why": "every row one command away, the actions unchanged"
+     "why": "Fewer tokens. The command for the rest, the fix and the escape are all kept."
     },
     {
-     "id": "D4",
-     "summary": "no-poll's seven rewrite notices and batching's notice cut, each rule's history moved to the code's comment; BACKGROUNDED's 'whatever follows the loop' kept against round 1's suggestion",
+     "id": "D4 no-poll rewrites",
+     "summary": "Seven rewrite notices say what was done and what to do; the history moves to the code comment",
      "class": "within",
-     "why": "fix commands and escapes kept (FR-008, FR-012); the kept clause keeps fidelity"
+     "why": "Fewer tokens. The actionable content is kept."
     },
     {
-     "id": "D5",
-     "summary": "finished-run's Stop NOTICES left",
+     "id": "D5 batching",
+     "summary": "Notice trimmed from 278 to 248 characters",
      "class": "within",
-     "why": "measured never to reach the model (none of 8,728 request blobs)"
+     "why": "Fewer tokens."
     },
     {
-     "id": "D6",
-     "summary": "house-style notices put words in code spans; the record's head column masked and never ends inside a code span; 'someone elses' corrected",
+     "id": "D6 house-style code spans",
+     "summary": "House-style notices put each word in a code span, so the record no longer trips the house-style delta check",
      "class": "within",
-     "why": "defects found while doing the work, fixed"
+     "why": "A defect the work itself exposed (the push failed), fixed in the task. It costs a few characters."
     },
     {
-     "id": "D7",
-     "summary": "a list in a guard message shows its first two items (SHOWN, GUESS) and 'and N more:' with the command printing them all, or a cat of a kept file; the whole list where no shorter; fix commands and escapes in full",
+     "id": "D7 head column",
+     "summary": "The record's head column is the start of the hashed wording, with paths, ids and numbers masked, and it never ends inside a code span",
      "class": "within",
-     "why": "every item stays whole and one command away; the cap never hides an item to save nothing; the reviews passed each wording for fidelity"
+     "why": "Keeps the enforcement record stable and keeps it passing the delta check. Fixes a defect the closing checks found."
     },
     {
-     "id": "D8",
-     "summary": "static-runs' refusal names one new target, make crate-checks CRATE=\"<crates>\" (test, lint, format --check, cover)",
+     "id": "D8 stored head masks relative paths (changed since CLEAR)",
+     "summary": "Masks::stored masks relative paths in the head at the record's one write. Keys are unchanged. REHEAD=1 rewrote the 290 heads, the other columns did not change, and the test went red first",
      "class": "within",
-     "why": "still names the crate-scoped checks for each crate the delta changes (FR-007); the target exists only so the shortened refusal keeps that"
+     "why": "Fixes a defect found at landing: the preflight refused a head that carried a built research page's path. It changes neither which wordings are enforced nor their keys, so the request's enforcement is untouched. It narrows nothing."
     },
     {
-     "id": "D9",
-     "summary": "make stale-terms prints every candidate (it stopped at 25 with no way to the rest); blocked-fetch's notice shows one attempt and make attempts URL=",
+     "id": "D9 list caps",
+     "summary": "A list in a guard message shows its first two items and 'and N more:' with a command (or a kept file) that prints all of them, and the whole list wherever that is no longer. Eight list-growing wordings found by a stated census are capped and held at their worst case. Adds make crate-checks CRATE= and makes stale-terms print every candidate",
      "class": "within",
-     "why": "the commands the capped lists point to, so nothing is lost; the 25-cap was a defect, fixed"
+     "why": "Fewer tokens with no loss of fidelity: every item can still be reached in full by the named command, and the fix commands and escapes are kept. The census names its search space. The new target keeps FR-007's naming of each changed crate's checks."
     },
     {
-     "id": "D10",
-     "summary": "the census of list-growing wordings (transcript renderings past 600 and 1.5x their shortest, each confirmed from source) finds eight; each capped and held at its worst case by suite_tools/messages/worst.rs, which make guard-messages checks against budget and verdict",
+     "id": "D10 review rounds",
+     "summary": "Every changed wording is reviewed by message-check through round 7. One BREVITY suggestion (BACKGROUNDED's clause) was not taken, and round 2 then passed that clause",
      "class": "within",
-     "why": "answers round 1's N3: enforcement of the request at the length sessions read; search space stated; the two other groups the filter keeps (check-wave, round-cap) wrap the tripwire refusal, one of the eight"
+     "why": "This is the subagent review the GM asked for. Declining one cut keeps a piece of information the reader needs (no loss of fidelity), and the reviewer later passed it."
     },
     {
-     "id": "D11",
-     "summary": "a content-keyed record (dev/guard-messages.tsv: length, budget, review verdict) in place of the per-hook comment; characters, not words",
+     "id": "D11 budgets",
+     "summary": "NOTICE_BUDGET 900 and REFUSE_BUDGET 1,800, labeled GUESS and set from the longest rendered wordings rounded up",
      "class": "within",
-     "why": "the GM asked 'What do you think?'; the record keeps each message's size and the review that passed it, as the comment would, without drifting from the text"
+     "why": "The mechanical limit the request implies. The knobs are labeled and measured."
     },
     {
-     "id": "D12",
-     "summary": "the review: message-check's rubric as an ad-hoc Sonnet agent, seven rounds, each FAILED BREVITY acted on and the declined suggestion reasoned",
+     "id": "D12 top-ten items left",
+     "summary": "Left unshortened here: finished-run's detached-run block (3), the set-down blocks (4, 7, 10, T171's), review-round's long refusal (8, seen twice), the persisted context (9, not a guard message whose source is named), and finished-run's Stop notices (they never reach the model)",
      "class": "within",
-     "why": "the subagent check the GM named"
+     "why": "Each has a measured reason: each run's text is distinct, the work belongs to another task, it was seen twice, or it costs nothing. None is a wrong outcome left in place."
     },
     {
-     "id": "D13",
-     "summary": "check refusals drop the line repeating the escape and the dead scripts/hooks/lib/hm_checks.py path; feature-number citations cut from check-bundle and record-edit refusals",
-     "class": "within",
-     "why": "brevity with the escape still named; a dead path is a defect, fixed"
-    },
-    {
-     "id": "D14",
-     "summary": "NOTICE_BUDGET 900, REFUSE_BUDGET 1,800 (GUESS) from the longest renderings after the cuts, not the 90th percentile",
-     "class": "within",
-     "why": "a knob value; with T177 the baseline it tolerates is time-limited"
-    },
-    {
-     "id": "D15",
-     "summary": "left: finished-run's detached-run block's repeats (distinct runs), set-down's blocks to T171's rule, the persisted context (9)",
-     "class": "within",
-     "why": "each with a stated cost-level reason"
-    },
-    {
-     "id": "D16",
-     "summary": "ordered after T169 and T171; T174 before T173; classed [perf] under FR-013",
-     "class": "within",
-     "why": "order and class under FR-013 and the GM's 2026-11-20 ordering"
-    },
-    {
-     "id": "N1",
-     "summary": "255 wordings stay BASELINE unreviewed (the costliest finished-run's block and make-only's refusal), the pair-hooks citation round 6 failed, and two list-growing messages not held at worst case (pop-ups' batch refusal, set-down's open-task blocks): filed as T177, the next performance work after T170, lands before T22",
+     "id": "D13 255 wordings baselined unreviewed, filed T177",
+     "summary": "Wordings that stood before T170 are marked BASELINE without review. The pop-ups' batch refusal and set-down's blocks are not held at their worst case. T177 is filed as the next performance work, before T22",
      "class": "narrowing",
      "ruling": "LEGITIMATE",
-     "why": "sequencing, not exemption: round 1's N1 fix allowed a filed task ordered as the next performance work and named in found-and-left; T177 is filed (task-add log 03:48) and ordered; the GM's 'each hook ... reviewed' still binds every wording when it lands; holds only while T177 stays filed and ordered"
+     "why": "The enforcement the GM asked for exists and holds every new or changed wording. Each baselined wording is within budget and is one sessions already read today, so nothing is a wrong outcome. The rest of the review is a filed and ordered task in the same feature, not dropped. The pop-ups' list is its fix command's own argument, so capping it would lose fidelity."
     },
     {
-     "id": "N2",
-     "summary": "the budget check holds only what the suites drive through protocol::run; repo-safety, shell-check and source-block (and, as the block states it, finished-run's and set-down's blocks) deferred to T174, after T170 and before T173",
+     "id": "D14 silent suites, filed T174",
+     "summary": "repo-safety, shell-check and source-block render nothing to the check, and the finished-run and set-down blocks bypass protocol::run, so the budget check does not hold them yet. T174 is filed after T170 and before T173",
      "class": "narrowing",
      "ruling": "LEGITIMATE",
-     "why": "unchanged from round 1: the rule still binds those guards, T174 is filed in the same feature with its order and reason; holds only while T174 stays filed and ordered"
+     "why": "Reaching them needs each of those suites to drive the binary's hook path, which is outside T170's guards. The gap is measured (17 of 58 corpus files empty), named, filed and ordered in the same feature, so the mechanical enforcement is completed rather than given up."
+    },
+    {
+     "id": "D15 order",
+     "summary": "Runs after T169 and T171. T174 before T173. T177 before T22",
+     "class": "within",
+     "why": "Sequencing that follows FR-013's performance-first rule. Nothing the request asked for is removed."
     }
    ],
    "verdict": "CLEAR"

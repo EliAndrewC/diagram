@@ -390,10 +390,11 @@ hooks-test:     ## [tests] run every tests/hooks/test-*-hooks.sh, and prove each
 	ran=$$(for s in "$$work"/*.s; do [ -f "$$s" ] && printf '%s %s\n' "$$(cat "$$s")" "$$(basename "$$s" .s)"; done | sort -rn | awk '{printf "%s%s %ss", (NR>1?", ":""), $$2, $$1}'); \
 	[ -z "$$ran" ] || printf 'hooks-test: ran %s\n' "$$ran"
 
-guard-messages: ## [tests] the guard messages the suites rendered that owe a review or a cut (451 T170); BUNDLE=1 writes message-check's units; KEY= VERDICT=PASS|FAIL BY="<agent id>" [OVER="<why>"] records a verdict   [BUNDLE=1] [KEY= VERDICT= BY= OVER=]
+guard-messages: ## [tests] the guard messages the suites rendered that owe a review or a cut (451 T170); BUNDLE=1 writes message-check's units; KEY= VERDICT=PASS|FAIL BY="<agent id>" [OVER="<why>"] records a verdict; REHEAD=1 writes every stored head again with its paths masked, no other column moved   [BUNDLE=1] [KEY= VERDICT= BY= OVER=] [REHEAD=1]
 	@root=$$(git rev-parse --show-toplevel); gitdir=$$(git rev-parse --path-format=absolute --git-common-dir); g="$$root/scripts/hooks/l7r-guard.sh"; c="$$gitdir/hooks-test/messages"; r="$$root/dev/guard-messages.tsv"; \
 	if [ -n "$$KEY" ]; then "$$g" messages verdict "$$c" "$$r" "$$KEY" "$(VERDICT)" "$$BY" $${OVER:+"$$OVER"}; \
 	elif [ -n "$(BUNDLE)" ]; then mkdir -p /tmp/l7r-check/guard-messages && "$$g" messages owed "$$c" "$$r" /tmp/l7r-check/guard-messages/MANIFEST.md; \
+	elif [ -n "$(REHEAD)" ]; then "$$g" messages rehead "$$c" "$$r"; \
 	else "$$g" messages check "$$c" "$$r"; fi
 
 inline-census:  ## [tests] phase 1's share of feature 449's second census: every inline Python site under scripts/hooks/ and tests/hooks/, each under a group FR-001 names; a site outside them fails

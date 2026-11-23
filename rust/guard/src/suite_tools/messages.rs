@@ -13,6 +13,7 @@
 //! l7r-guard messages owed <corpus dir> <record> <bundle>    the unreviewed messages, one unit each, written for message-check
 //! l7r-guard messages verdict <corpus dir> <record> <key> <PASS|FAIL> <by> [<over>]   a review's verdict recorded by its key
 //! l7r-guard messages baseline <corpus dir> <record> <why>   the first record: every message rendered, BASELINE, unreviewed
+//! l7r-guard messages rehead <corpus dir> <record>           every stored head written again, its paths masked; no other column moves
 //! ```
 
 use std::collections::BTreeMap;
@@ -72,6 +73,7 @@ struct Masks {
     hex: Regex,
     digits: Regex,
     space: Regex,
+    relative: Regex,
 }
 
 impl Masks {
@@ -83,7 +85,19 @@ impl Masks {
             hex: b(r"\b[0-9a-f]{7,}\b"),
             digits: b(r"\d+"),
             space: b(r"\s+"),
+            // a relative path (`research/questions/`, `lNr/diagram/m.py`), which the wording leaves, since a key stands on it; one
+            // with a lowercase letter, so `N/N` and `PASS/FAIL` stay words
+            relative: b(
+                r"(?<![\w.@+~*$/<>-])(?=[\w.@+~*$/-]*[a-z])[\w.@+~*$-]+/(?:[\w.@+~*$-]+/)*[\w.@+~*$-]*",
+            ),
         }
+    }
+
+    /// A head as the record stores it: its relative paths masked too, so no stored row is a pointer a check resolves (451 T170 at
+    /// its landing: record-edit's notice, rendered with its fixture's edited path, a built research page, failed the gate's pointer
+    /// check). Neither a space nor a backtick is masked, so a head's words and code spans stand.
+    fn stored(&self, head: &str) -> String {
+        self.relative.replace_all(head, "<path>").into_owned()
     }
 
     /// The wording: `text` with its paths, ids and numbers masked and its whitespace one space - what a suite's fixture or clock
@@ -177,19 +191,27 @@ pub fn record(path: &Path) -> BTreeMap<String, Row> {
 }
 
 fn write_record(path: &Path, rows: &BTreeMap<String, Row>) -> std::io::Result<()> {
+    let masks = Masks::new();
     let mut out = format!("{HEADER}\n");
     for (k, r) in rows {
         let _ = writeln!(
             out,
             "{k}\t{}\t{}\t{}\t{}\t{}\t{}\t{}",
-            r.verdict, r.chars, r.guard, r.kind, r.by, r.over, r.head
+            r.verdict,
+            r.chars,
+            r.guard,
+            r.kind,
+            r.by,
+            r.over,
+            masks.stored(&r.head)
         );
     }
     std::fs::write(path, out)
 }
 
 /// The first words of a message's wording - its paths, ids and numbers masked as its key masks them, so a suite's temporary
-/// directories and pids never reach the record - as the record's `head` shows it. It never ends inside a code span: the push's
+/// directories and pids never reach the record - as the record's `head` shows it, where its relative paths are masked too
+/// ([`Masks::stored`]), which a key leaves so that no key moves. It never ends inside a code span: the push's
 /// house-style delta check pairs a file's backticks across its lines, so a head cut mid-span left the next row's named word bare
 /// (451 T170: three cut heads turned `centre` in a later row's code span into a British spelling).
 fn head(masks: &Masks, text: &str) -> String {
@@ -352,7 +374,7 @@ pub fn cli(args: &[String]) -> Reply {
     let usage = || {
         reply(
             String::new(),
-            "usage: l7r-guard messages check|owed|verdict|baseline <corpus dir> <record> ...\n"
+            "usage: l7r-guard messages check|owed|verdict|baseline|rehead <corpus dir> <record> ...\n"
                 .to_owned(),
             64,
         )
@@ -402,6 +424,14 @@ pub fn cli(args: &[String]) -> Reply {
                 &format!("guard-messages: {} wordings baselined\n", rows.len()),
             )
         }
+        ("rehead", []) => written(
+            path,
+            &rows,
+            &format!(
+                "guard-messages: {} heads written, their paths masked\n",
+                rows.len()
+            ),
+        ),
         _ => usage(),
     }
 }

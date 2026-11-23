@@ -309,3 +309,69 @@ fn the_worst_cases_are_checked_in_the_tree_holding_the_record() {
     assert_eq!(run(&["baseline", &c, &r, "a fixture"]).code, 0);
     assert_eq!(run(&["check", &c, &r]).code, 0);
 }
+
+/// A stored head names no path (451 T170, at its landing): record-edit's notice rendered with its fixture's edited path, a built
+/// page, put a research pointer in the record that the gate's pointer check refused. The key leaves a relative path in the wording,
+/// so two such messages keep their two keys; the record's head masks it, and `rehead` re-masks a record written before.
+#[test]
+fn a_stored_head_masks_a_relative_path_and_its_key_does_not_move() {
+    let d = TempDir::new("messages-head-path");
+    let (c, rec) = (d.join("c"), d.join("guard-messages.tsv"));
+    let (cs, rs) = (
+        c.to_string_lossy().into_owned(),
+        rec.to_string_lossy().into_owned(),
+    );
+    // the built page's path assembled, so this file carries no pointer of its own
+    let page = concat!("research", "/fields.html");
+    put(
+        &c,
+        "s.jsonl",
+        &[
+            (
+                "g-hooks",
+                "notice",
+                format!("{page} is assembled from `research/questions/`, never hand-edited"),
+            ),
+            (
+                "g-hooks",
+                "notice",
+                "docs/usage.md is assembled from `research/questions/`, never hand-edited"
+                    .to_owned(),
+            ),
+            (
+                "g-hooks",
+                "refuse",
+                "BLOCKED: N/N passed, PASS/FAIL, see https://x.org/a/b and ~/.claude/x".to_owned(),
+            ),
+        ],
+    );
+    assert_eq!(run(&["baseline", &cs, &rs, "x"]).code, 0);
+    let rows = record(&rec);
+    let heads: Vec<&str> = rows.values().map(|r| r.head.as_str()).collect();
+    assert_eq!(rows.len(), 3, "a relative path stays in the key: {heads:?}");
+    let masked = "<path> is assembled from `<path>`, never hand-edited";
+    let words = "BLOCKED: N/N passed, PASS/FAIL, see https:/<path> and <path>";
+    let (n, kept) = (
+        heads.iter().filter(|h| **h == masked).count(),
+        heads.contains(&words),
+    );
+    assert!(n == 2 && kept, "{heads:?}");
+    assert!(!std::fs::read_to_string(&rec).unwrap().contains(page));
+    // a record written before the mask: `rehead` re-masks its heads and moves no other column
+    let text = std::fs::read_to_string(&rec).unwrap();
+    let old = text.replacen("<path> is assembled", &format!("{page} is assembled"), 1);
+    std::fs::write(&rec, &old).unwrap();
+    let said = run(&["rehead", &cs, &rs]);
+    assert_eq!(
+        (said.code, said.stdout.as_str()),
+        (0, "guard-messages: 3 heads written, their paths masked\n")
+    );
+    let now = std::fs::read_to_string(&rec).unwrap();
+    assert_eq!(now, text);
+    let cut = |t: &str| {
+        t.lines()
+            .map(|l| l.rsplit_once('\t').unwrap().0.to_owned())
+            .collect::<Vec<_>>()
+    };
+    assert_eq!(cut(&now), cut(&old));
+}
