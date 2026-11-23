@@ -10385,3 +10385,62 @@ Three tooling follow-ups of 451 T164's review tree and 449 T004's guard wrapper,
 **Performance work?** no.
 
 
+<!-- plan-archive: archived 2026-11-23 -->
+### T183 (observed 2026-11-23, the coordinator's transcript `c6fd72d1-...jsonl`: 31 Stop-hook blocks since 14:42, every one answered by a model turn while the session correctly waited - the free-slot block under the two convergence-talk rulings that held new work, and FINDINGS UNFILTERED for builders' own building-reviews)
+
+- **Approach**: The Stop hooks block only for what the session must do before stopping; the "keep working" nudge moved to a background idle check that is silent while the session is active or waiting on a tracked run; a binding set-down ruling silences it, for its feature or the tasks it names; the findings guard arms only for the session's own reviews, once each, after they return. Measured by replaying the day's 214 Stops of the event log against the transcript's 69 Stop-hook blocks (213 and 68 at the first replay) (`/tmp/t183/replay.py`, a script that classifies each block by the new rules: it tests the rules' reading of the record, the Rust suites test the code).
+
+**The inventory** (every Stop or SubagentStop answer in `rust/guard`; firings: `make guard-log SINCE=2026-11-01 EVENT=blocked`, and since 2026-11-23):
+
+| block | guard, rule | class | firings since 11-01 / today | after T183 |
+|---|---|---|---|---|
+| free builder slot (`BLOCKED: a builder slot is free`) | set-down, `not-set-down` | (b) a nudge | 57 of today's 68 transcript blocks (the rule's 354 / 89 log firings hold both set-down blocks) | no Stop block and no notice: nothing names a free slot while a builder runs; once idle, the open-task block below names the next (MODE 4, D10) |
+| open tasks, nothing running (`... and nothing is running - start the next`) | set-down, `not-set-down` | (b) a nudge | 1 of today's 68 | the idle check's: said only when idle with nothing tracked, held by no ruling or set-down, once while unchanged |
+| only parked stages left | set-down | (b) | (in the same rule) | the idle check's, as above |
+| FINDINGS UNFILTERED | escalation, `findings-unfiltered` | (a) findings about to be relayed | 28 / 11; today's 10 blocks all armed by builders' dispatches (71 building-review and size-audit dispatches today, every one with a builder's `by`) | arms only on the session's own dispatch; silent while that review is out; once after it returns |
+| QUESTION / OFFER UNFILTERED, QUESTION KEPT NOT NAMED | escalation, `question-unfiltered`, `offer-unfiltered`, `kept-unnamed` | (a) the final message's own text | 45 + 16 / 2 | unchanged: once per message |
+| a make run still going that nothing wakes | finished-run, `run-still-going` | (a) a turn may not close over a run nothing will wake | 277 / 5 (4 of today's transcript blocks) | unchanged |
+| a refused dispatch never re-sent | pair, `dispatch-dropped` | (a) | 20 / 0 | unchanged |
+| a wakeup pending | wakeup, `unreadable` and its pending rule | (a) a wakeup outliving its purpose | 65 / 0 | unchanged |
+| a builder not ready to land (T84) | builder-stop, `not-ready` (SubagentStop) | (a) for a builder: uncommitted CLEAR work, an unreviewed section | 246 / 71 | unchanged (a builder's stop, no session turn) |
+| idle tests armed | idle-tests | none: arms a timer, never blocks | - | unchanged |
+
+**The idle-check mechanism and its evidence** (the hooks reference, `https://code.claude.com/docs/en/hooks.md`, read 2026-11-23, and the claude-code-guide agent's reading of the scheduled-tasks, tools and plugin pages): a cron's fire "submits a prompt" - always a turn, no "only if non-empty" mode; `Notification` `idle_prompt` "can't block or modify notifications" and cannot inject; a Stop hook's `additionalContext` still continues the turn; a plugin monitor is model- or plugin-started, with no settings route. One documented mechanism stays silent: a command hook with `asyncRewake: true` "runs in the background and wakes Claude on exit code 2", and "an `asyncRewake` hook that exits with code 2 wakes Claude immediately even when the session is idle". So the idle check is a second Stop entry, `"$CLAUDE_PROJECT_DIR"/scripts/hooks/l7r-hook Idle` (asyncRewake, timeout 420 s, a CONVENTION: above the wait's 300 s GUESS), which runs `l7r-guard --idle-check`: silent at once for a sub-agent's stop or a Stop whose `background_tasks` (the harness's own list: shell, subagent, monitor, workflow) names anything; else it waits `L7R_IDLE_CHECK_SECS` (a GUESS of 300 s, the GM's "every 5 minutes"), is silent where the transcript gained a `user` or `assistant` record since (the session was active, and that turn's Stop arms the next check), and otherwise says the set-down block on stderr with exit 2. Periodic by construction: every idle stretch begins at a Stop, and each Stop arms one check.
+
+**Holds** (`set_down_hooks/holds.rs`): the feature's newest `ask:set-down-...` ruling in its own `arbiter.jsonl`, ruled `continue` or `accept`, whose `what` says no new, other or further task starts, or sets the feature down (a CONVENTION: the arbiter's prose is read; matched against every set-down ruling on record - the 7 holds read as holds - the pilot's `4. Then set down. The work resumes from the GM's reply` (ask:set-down-449-pilot) among them, its set-down holding T171 and the rest of 449 (MODE 4 round 2, D11) - and the 8 go-ons, a bare do-not-start clause and the mid-landing waiver do not, pinned in `tests/idle.rs`). Only a later set-down ruling ends a hold, never a task-start (T183 itself was started under the 451 hold); a task-start's own refusal never reads a hold. **A task a ruling holds by name is never the idle check's next** (MODE 4, D6): the same newest ruling's do-not-start clause (`Do not start T150-T158`, the pilot's form) holds each task it names, a range each member and never a task named elsewhere in the ruling; on record every such clause stands beside a set-down (the pilot's, `Set feature 449 down now and do not start T83`, `Set 444 down now; do not start T19's build`), so the feature hold covers those too, and the clause alone holds its tasks under a ruling that sends other work on; with only held tasks open the check is silent, and a later set-down ruling ends it as it ends a feature's (`holds::named`, pinned in `tests/idle.rs`; `make task-start`'s picker does not read it, so a start the GM approved is never refused).
+
+| step | figure | what it says |
+|---|---|---|
+| before | 69 Stop-hook blocks in the coordinator's transcript on 2026-11-23 (58 free-slot, 10 FINDINGS UNFILTERED, 4 a make run still going, 1 open-task; a block can carry two), 32 of them since 14:42 (68 and 31 at the first replay, the transcript since grown), measured 2026-11-23 by `/tmp/t183/replay.py` over the transcript and `.git/l7r-events` | the session's own count of 23 turns since 14:42 counted turns that answered only blocks; the transcript's block records count each refusal, two in one turn included |
+| after | 4 blocks: the 4 make-run-still-going refusals (01:14, 01:52, 05:45, 06:28, class (a), kept); 0 free-slot (each Stop's `inflight` named 1-7 tracked runs), 0 FINDINGS (every arm was a builder's), 0 open-task (the 451 hold from 14:42:15); since 14:42, 0 of 32; and 0 free-slot notices by construction, where the report-back notice of the first design was unmeasured (MODE 4, D10) | same replay, the new rules |
+| the real code on today's state | `l7r-guard --idle-check` on the clone with an empty `background_tasks` and `L7R_IDLE_CHECK_SECS=0`: silent (the 451 hold) | the suites' case 13 pins the same shape on a fixture |
+
+**Accepted limitation** (chosen by spec-fidelity MODE 4's cure, D10, under the GM's "does nothing and adds nothing to the context if we are still active, and only injects data into the session if we are stopped"): a builder slot freed while any builder still runs is named by nothing - no Stop block, no notice - until the session is idle with nothing tracked running, when the idle check's open-task block names the next task. This retires 451 T88's rolling dispatch (its block, `L7R_BUILDERS`, the builder count and the busy-file reading). What it costs: T88 measured three builders at once 26% of 580 minutes, a mean of 1.65 (2026-11-21), with the nudge; without it the slots refill only at idle, so occupancy may fall - unmeasured until a session runs under it. The alternatives priced: keep the Stop block (one turn per wait - today's 58); a notice at each report back (no extra turn, but the nudge's words in the context while builders run, which the approved design keeps silent - MODE 4 ruled it out); a question to the GM (his request did not ask to keep the nudge).
+
+### T183 Approach (checklist part A)
+
+1. **The goal, in the world.** A session waiting on its builders, or held by a ruling, spends no turn on hooks; an idle session with work it may start hears it once.
+2. **The constraints.** The GM's words, 451's request.md "Stop hooks that keep the session busy"; the rulings `ask:set-down-451-gm-stop-for-convergence-talk` and `ask:set-down-449-rows-gm-stop-for-convergence-talk`; 100% coverage; house style.
+3. **Where each comes from.** G: request.md 2026-11-23; R: the hooks reference (asyncRewake, Stop input `background_tasks`); O: the replay above.
+4. **Do they describe the world here?** The event log's `inflight` carries the harness's `background_tasks` on 2,838 shell, 2,440 subagent, 308 monitor and 5 workflow entries, measured 2026-11-23 (a grep of every Stop line's `inflight` types in `.git/l7r-events/*.jsonl`), so the list is present on this harness.
+5. **The order.** Holds and the findings fix first (red first in `tests/idle.rs` and the escalation tests), then the idle check, then the settings entry.
+6. **The exits.** Green: `make closing-checks T=T183 F=451`, `make hooks-test HOOKS_ALL=1`, the message-check reviews. Red: what failed recorded and the task set down, a claim that it cannot be done ruled through `make arbiter-ask`.
+7. **The search smell.** None.
+8. **The budget.** One landing.
+9. **Done, measured.** The replay: 69 blocks before, 4 after (all class (a)); 32 since 14:42 before, 0 after; no notice.
+10. **Before moving a constant.** `L7R_IDLE_CHECK_SECS` 300 is new, a GUESS from the GM's "every 5 minutes", held under the entry's 420 s timeout.
+11. **Before fitting things into room.** n/a.
+12. **Before any fix.** A defect: the free-slot block fired under rulings that held the work, and FINDINGS UNFILTERED for reviews the session never relays - each a wasted turn (a wrong outcome, constitution XIV).
+
+**Found and left?** None. (A monitor in `background_tasks` keeps the idle check silent while it lives, as any tracked run does - a monitor wakes the session on its output; a long-lived one would hold the nudge until it ends, which today's record never showed: its 308 monitor entries each ended.)
+
+**Performance work?** Yes (`[perf]`, 451 FR-013): it makes the builders' loop cheaper in turns.
+
+### T183 Performance checklist (docs/performance-checklist.md - prompts, never a gate; time is the goal, calls the measure)
+
+1. **Where does the time go?** In model turns spent answering Stop blocks while the session correctly waited: 31 since 14:42 on 2026-11-23.
+2. **Removes work, or only moves it?** Removes it: the free-slot words are gone (MODE 4, D10); the open-task words wait for idle and are said once; a held feature, a held task and a builder's review say nothing.
+3. **What do you expect it to save, and why?** Every turn whose only content was a (b) block or a builder-armed FINDINGS: 65 of today's 69.
+4. **How does the work grow with the settlement?** It does not: it grows with the number of the session's waits, and this removes the per-wait turn.
+5. **What did the before and after show, and under what conditions?** 69 blocks before, 4 after (the make-run refusals, class (a)), on the replay of 2026-11-23's 214 Stops; since 14:42, 32 before and 0 after. Evidence, not a pass.
+6. **Did any map move, and does it still keep the research?** No map moved: the tooling only.
